@@ -29,7 +29,7 @@ NETINFO_LIST::~NETINFO_LIST()
  */
 NETINFO_ITEM* NETINFO_LIST::GetNetItem( int aNetcode )
 {
-    if( aNetcode < 0 || ( aNetcode > (int) ( GetNetsCount() - 1 ) ) )
+    if( aNetcode < 0 || ( aNetcode > (int) ( GetCount() - 1 ) ) )
         return NULL;
     return m_NetBuffer[aNetcode];
 }
@@ -40,7 +40,7 @@ NETINFO_ITEM* NETINFO_LIST::GetNetItem( int aNetcode )
  */
 void NETINFO_LIST::DeleteData()
 {
-    for( unsigned ii = 0; ii < GetNetsCount(); ii++ )
+    for( unsigned ii = 0; ii < GetCount(); ii++ )
         delete m_NetBuffer[ii];
 
     m_NetBuffer.clear();
@@ -125,7 +125,8 @@ void NETINFO_LIST::BuildListOfNets()
     }
 
     m_Parent->m_NbNodes = nodes_count;
-    m_Parent->TransfertDesignRulesToNets( );
+
+    m_Parent->SynchronizeNetsAndNetClasses( );
 
     m_Parent->m_Status_Pcb |= NET_CODES_OK;
 

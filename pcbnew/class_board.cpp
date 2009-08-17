@@ -20,7 +20,7 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 /* Constructor */
 BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
     BOARD_ITEM( (BOARD_ITEM*)parent, TYPE_PCB ),
-    m_NetClassesList(this)
+    m_NetClasses(this)
 {
     m_PcbFrame = frame;
     m_Status_Pcb    = 0;                        // Mot d'etat: Bit 1 = Chevelu calcule
@@ -37,10 +37,6 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
         m_Layer[layer].m_Name = ReturnPcbLayerName( layer, true );
         m_Layer[layer].m_Type = LT_SIGNAL;
     }
-
-    // Add the default Netclass to list
-    NETCLASS * default_netclass = new NETCLASS(this);
-    m_NetClassesList.AddNetclass( default_netclass );
 }
 
 
@@ -538,7 +534,7 @@ void BOARD::DisplayInfo( WinEDA_DrawFrame* frame )
     txt.Printf( wxT( "%d" ), GetNodesCount() );
     Affiche_1_Parametre( frame, POS_AFF_NBNODES, _( "Nodes" ), txt, DARKCYAN );
 
-    txt.Printf( wxT( "%d" ), m_NetInfo->GetNetsCount() );
+    txt.Printf( wxT( "%d" ), m_NetInfo->GetCount() );
     Affiche_1_Parametre( frame, POS_AFF_NBNETS, _( "Nets" ), txt, RED );
 
     /* These parameters are known only if the full ratsnest is available,
@@ -822,7 +818,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
  */
 NETINFO_ITEM* BOARD::FindNet( int anetcode ) const
 {
-    // the first valid netcode is 1 and the last is m_NetInfo->GetNetsCount()-1.
+    // the first valid netcode is 1 and the last is m_NetInfo->GetCount()-1.
     // zero is reserved for "no connection" and is not used.
     // NULL is returned for non valid netcodes
     NETINFO_ITEM* item = m_NetInfo->GetNetItem( anetcode );
@@ -850,7 +846,7 @@ NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
     // zero is reserved for "no connection" and is not used.
     if( !aNetname.IsEmpty() )
     {
-        for( unsigned ii = 1;  ii <  m_NetInfo->GetNetsCount();  ii++ )
+        for( unsigned ii = 1;  ii <  m_NetInfo->GetCount();  ii++ )
         {
             NETINFO_ITEM* item = m_NetInfo->GetNetItem( ii );
             if( item && item->GetNetname() == aNetname )
@@ -909,15 +905,15 @@ static bool s_SortByNodes( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
  */
 int BOARD::ReturnSortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
 {
-    if( m_NetInfo->GetNetsCount() == 0 )
+    if( m_NetInfo->GetCount() == 0 )
         return 0;
 
     // Build the list
     std::vector <NETINFO_ITEM*> netBuffer;
 
-    netBuffer.reserve( m_NetInfo->GetNetsCount() );
+    netBuffer.reserve( m_NetInfo->GetCount() );
 
-    for( unsigned ii = 1; ii < m_NetInfo->GetNetsCount(); ii++ )
+    for( unsigned ii = 1; ii < m_NetInfo->GetCount(); ii++ )
     {
         if( m_NetInfo->GetNetItem( ii )->GetNet() > 0 )
             netBuffer.push_back( m_NetInfo->GetNetItem( ii ) );
@@ -941,13 +937,13 @@ bool BOARD::Save( FILE* aFile ) const
     bool        rc = false;
     BOARD_ITEM* item;
 
-    // save the netclasses
-    m_NetClassesList.Save( aFile );
-
     // save the nets
-    for( unsigned ii = 0; ii < m_NetInfo->GetNetsCount(); ii++ )
+    for( unsigned ii = 0; ii < m_NetInfo->GetCount(); ii++ )
         if( !m_NetInfo->GetNetItem( ii )->Save( aFile ) )
             goto out;
+
+    // Saved nets do not include netclass names, so save netclasses after nets.
+    m_NetClasses.Save( aFile );
 
     // save the modules
     for( item = m_Modules;  item;  item = item->Next() )

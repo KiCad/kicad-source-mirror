@@ -85,11 +85,12 @@ public:
      */
     NETINFO_ITEM* GetNetItem( int aNetcode );
 
-    /** Function GetCount()
+    /**
+     * Function GetCount
      * @return the number of nets ( always >= 1 )
      * becuse the first net is the "not connected" net and always exists
      */
-    unsigned GetNetsCount() { return m_NetBuffer.size(); }
+    unsigned GetCount() { return m_NetBuffer.size(); }
 
     /**
      * Function Append
@@ -152,12 +153,15 @@ class NETINFO_ITEM
 private:
     int               m_NetCode;        // this is a number equivalent to the net name
                                         // Used for fast comparisons in rastnest and DRC computations.
+
     wxString          m_Netname;        // Full net name like /mysheet/mysubsheet/vout used by eeschema
+
     wxString          m_ShortNetname;   // short net name, like vout from /mysheet/mysubsheet/vout
+
     wxString          m_NetClassName;   // Net Class name. if void this is equivalent to "default" (the first
                                         // item of the net classes list
 
-    NET_DESIGN_PARAMS m_NetParams;      // values of net classes parameters
+    NETCLASS*         m_NetClass;
 
 
 public:
@@ -177,83 +181,97 @@ public:
     NETINFO_ITEM( BOARD_ITEM* aParent );
     ~NETINFO_ITEM();
 
-
-    /** Functions SetClassParameters
-     * copy the class parameters in the locale buffer m_NetParams
+    /**
+     * Function SetClass
+     * sets \a aNetclass into this NET
      */
-    void SetClassParameters(const NET_DESIGN_PARAMS& aParams )
+    void SetClass( const NETCLASS* aNetClass )
     {
-        m_NetParams = aParams;
+        m_NetClass     = (NETCLASS*) aNetClass;
+        if( aNetClass )
+            m_NetClassName = aNetClass->GetName();
+        else
+            m_NetClassName = NETCLASS::Default;
     }
 
-    /** Functions SetClass
-     * copy the class Name and class parmeters
-     */
-    void SetClass(const NETCLASS& aNetclass )
+    NETCLASS* GetNetClass()
     {
-        m_NetParams = aNetclass.m_NetParams;
-        m_NetClassName = aNetclass.m_Name;
+        return m_NetClass;
     }
 
-    /** Functions GetClassName
-     * @return the class Name
+    /**
+     * Function GetClassName
+     * returns the class name
      */
-    wxString GetClassName( ) const
+    const wxString& GetClassName( ) const
     {
         return m_NetClassName;
     }
 
-    /** function GetTracksWidth()
-     *            @return the "default" value for tracks thickness used to route this net
+
+    /**
+     * Function GetTrackWidth
+     * returns the width of tracks used to route this net.
      */
-    int GetTracksWidth()
+    int GetTrackWidth()
     {
-        return m_NetParams.m_TracksWidth;
+        wxASSERT( m_NetClass );
+        return m_NetClass->GetTrackWidth();
     }
 
 
-    /** Function GetTracksMinWidth()
-     *  @return the Minimum value for tracks thickness (used in DRC)
+    /**
+     * Function GetTrackMinWidth
+     * returns the Minimum value for tracks thickness (used in DRC)
      */
-    int GetTracksMinWidth()
+    int GetTrackMinWidth()
     {
-        return m_NetParams.m_TracksMinWidth = 150;
+        wxASSERT( m_NetClass );
+        return m_NetClass->GetTrackMinWidth();
     }
 
 
-    /** Function
-     *   @return the "Default" value for vias sizes used to route this net
+    /**
+     * Function GetViaSize
+     * returns the size of vias used to route this net
      */
-    int GetViasSize()
+    int GetViaSize()
     {
-        return m_NetParams.m_ViasSize;
+        wxASSERT( m_NetClass );
+        return m_NetClass->GetViaSize();
     }
 
 
-    /** Function GetViasMinSize()
-     *  @return the Minimum value for  vias sizes (used in DRC)
+    /**
+     * Function GetViaDrillSize
+     * returns the size of via drills used to route this net
      */
-    int  GetViasMinSize()
+    int GetViaDrillSize()
     {
-        return m_NetParams.m_ViasMinSize;
+        wxASSERT( m_NetClass );
+        return m_NetClass->GetViaDrillSize();
     }
 
 
-    /** Function GetClearance()
-     *          @return the "Default" clearance when routing
+    /**
+     * Function GetViaMinSize
+     * returns the Minimum value for via sizes (used in DRC)
      */
-    int  GetClearance()
+    int GetViaMinSize()
     {
-        return m_NetParams.m_Clearance;
+        wxASSERT( m_NetClass );
+        return m_NetClass->GetViaMinSize();
     }
 
 
-    /** Function GetMinClearance()
-     *         @return the  Minimum value for clearance (used in DRC)
+    /**
+     * Function GetClearance
+     * returns the clearance when routing near aBoardItem
      */
-    int  GetMinClearance()
+    int GetClearance( BOARD_ITEM* aBoardItem )
     {
-        return m_NetParams.m_MinClearance;
+        wxASSERT( m_NetClass );
+        return m_NetClass->GetClearance();
     }
 
 

@@ -119,7 +119,7 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
 
     if( display_status_pcb )
     {
-        msg.Printf( wxT( " %d" ), m_Pcb->m_NetInfo->GetNetsCount() );
+        msg.Printf( wxT( " %d" ), m_Pcb->m_NetInfo->GetCount() );
         Affiche_1_Parametre( this, 8, wxT( "Nets" ), msg, CYAN );
     }
 
@@ -427,7 +427,7 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
     unsigned current_net_code = 1;    // 1er net_code a analyser (net_code = 0 -> no connect)
     noconn = 0;
 
-    for( ; current_net_code < m_Pcb->m_NetInfo->GetNetsCount(); current_net_code++ )
+    for( ; current_net_code < m_Pcb->m_NetInfo->GetCount(); current_net_code++ )
     {
         NETINFO_ITEM* net = m_Pcb->FindNet( current_net_code );
         if( net == NULL )       //Should not occur
@@ -661,7 +661,7 @@ void WinEDA_BasePcbFrame::Tst_Ratsnest( wxDC* DC, int ref_netcode )
     if( (m_Pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
         Build_Board_Ratsnest( DC );
 
-    for( int net_code = 1; net_code < (int) m_Pcb->m_NetInfo->GetNetsCount(); net_code++ )
+    for( int net_code = 1; net_code < (int) m_Pcb->m_NetInfo->GetCount(); net_code++ )
     {
         net = m_Pcb->FindNet( net_code );
         if( net == NULL )       //Should not occur

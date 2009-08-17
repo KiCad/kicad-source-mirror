@@ -637,7 +637,7 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
     fprintf( File, "LayerThickness %d\n", GetBoard()->m_BoardSettings->m_LayerThickness );
 
     fprintf( File, "Nmodule %d\n", NbModules );
-    fprintf( File, "Nnets %d\n", GetBoard()->m_NetInfo->GetNetsCount() );
+    fprintf( File, "Nnets %d\n", GetBoard()->m_NetInfo->GetCount() );
 
     fprintf( File, "$EndGENERAL\n\n" );
     return TRUE;
@@ -787,11 +787,14 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
     wxBusyCursor    dummy;
 
     // Switch the locale to standard C (needed to read floating point numbers like 1.3)
-    SetLocaleTo_C_standard( );
+    SetLocaleTo_C_standard();
+
+    BOARD*      board = GetBoard();
 
     NbDraw = NbTrack = NbZone = NbMod = NbNets = -1;
-    GetBoard()->m_Status_Pcb = 0;
-    GetBoard()->m_NetClassesList.ClearList();
+
+    board->m_Status_Pcb = 0;
+    board->m_NetClasses.Clear();
 
     while( GetLine( File, Line, &LineNum ) != NULL )
     {
@@ -827,73 +830,72 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 
         if( strnicmp( Line, "$EQUIPOT", 7 ) == 0 )
         {
-            NETINFO_ITEM* net = new NETINFO_ITEM( GetBoard() );
-            GetBoard()->m_NetInfo->AppendNet( net );
+            NETINFO_ITEM* net = new NETINFO_ITEM( board );
+            board->m_NetInfo->AppendNet( net );
             net->ReadDescr( File, &LineNum );
             continue;
         }
 
         if( strnicmp( Line, "$NETCLASS", 8 ) == 0 )
         {
-            NETCLASS* netclass = new NETCLASS( GetBoard() );
-            netclass->ReadDescr( File, &LineNum );
+            NETCLASS netclass( board, wxEmptyString );
 
-            if( ! GetBoard()->m_NetClassesList.AddNetclass( netclass ) )
-                delete netclass;
+            netclass.ReadDescr( File, &LineNum );
 
+            board->m_NetClasses.Add( netclass );
             continue;
         }
 
         if( strnicmp( Line, "$CZONE_OUTLINE", 7 ) == 0 )
         {
-            ZONE_CONTAINER * zone_descr = new ZONE_CONTAINER(GetBoard());
+            ZONE_CONTAINER * zone_descr = new ZONE_CONTAINER(board);
             zone_descr->ReadDescr( File, &LineNum );
             if ( zone_descr->GetNumCorners( ) > 2 )     // should always occur
-                GetBoard()->Add(zone_descr);
+                board->Add(zone_descr);
             else delete zone_descr;
             continue;
         }
 
         if( strnicmp( Line, "$MODULE", 7 ) == 0 )
         {
-            MODULE* Module = new MODULE( GetBoard() );
+            MODULE* Module = new MODULE( board );
 
             if( Module == NULL )
                 continue;
 
-            GetBoard()->Add( Module, ADD_APPEND );
+            board->Add( Module, ADD_APPEND );
             Module->ReadDescr( File, &LineNum );
             continue;
         }
 
         if( strnicmp( Line, "$TEXTPCB", 8 ) == 0 )
         {
-            TEXTE_PCB* pcbtxt = new TEXTE_PCB( GetBoard() );
-            GetBoard()->Add( pcbtxt, ADD_APPEND );
+            TEXTE_PCB* pcbtxt = new TEXTE_PCB( board );
+            board->Add( pcbtxt, ADD_APPEND );
             pcbtxt->ReadTextePcbDescr( File, &LineNum );
             continue;
         }
 
         if( strnicmp( Line, "$DRAWSEGMENT", 10 ) == 0 )
         {
-            DRAWSEGMENT* DrawSegm = new DRAWSEGMENT( GetBoard() );
-            GetBoard()->Add( DrawSegm, ADD_APPEND );
+            DRAWSEGMENT* DrawSegm = new DRAWSEGMENT( board );
+            board->Add( DrawSegm, ADD_APPEND );
             DrawSegm->ReadDrawSegmentDescr( File, &LineNum );
             continue;
         }
 
         if( strnicmp( Line, "$COTATION", 9 ) == 0 )
         {
-            COTATION* Cotation = new COTATION( GetBoard() );
-            GetBoard()->Add( Cotation, ADD_APPEND );
+            COTATION* Cotation = new COTATION( board );
+            board->Add( Cotation, ADD_APPEND );
             Cotation->ReadCotationDescr( File, &LineNum );
             continue;
         }
 
         if( strnicmp( Line, "$MIREPCB", 8 ) == 0 )
         {
-            MIREPCB* Mire = new MIREPCB( GetBoard() );
-            GetBoard()->Add( Mire, ADD_APPEND );
+            MIREPCB* Mire = new MIREPCB( board );
+            board->Add( Mire, ADD_APPEND );
             Mire->ReadMirePcbDescr( File, &LineNum );
             continue;
         }
@@ -901,7 +903,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
         if( strnicmp( Line, "$TRACK", 6 ) == 0 )
         {
 #ifdef PCBNEW
-            TRACK* insertBeforeMe = Append ? NULL : GetBoard()->m_Track.GetFirst();
+            TRACK* insertBeforeMe = Append ? NULL : board->m_Track.GetFirst();
             ReadListeSegmentDescr( File, insertBeforeMe, TYPE_TRACK,
                                             &LineNum, NbTrack );
 #endif
@@ -911,7 +913,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
         if( strnicmp( Line, "$ZONE", 5 ) == 0 )
         {
 #ifdef PCBNEW
-            SEGZONE* insertBeforeMe = Append ? NULL : GetBoard()->m_Zone.GetFirst();
+            SEGZONE* insertBeforeMe = Append ? NULL : board->m_Zone.GetFirst();
 
             ReadListeSegmentDescr( File, insertBeforeMe, TYPE_ZONE,
                                             &LineNum, NbZone );
@@ -926,16 +928,8 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 
     BestZoom();
 
-    // One netclass *must* exists (the default netclass)
-    if( GetBoard()->m_NetClassesList.GetNetClassCount() == 0 )
-    {
-        NETCLASS* ncdefault =  new NETCLASS(GetBoard());
-        GetBoard()->m_NetClassesList.AddNetclass( ncdefault );
-    }
-
-
-    GetBoard()->TransfertDesignRulesToNets( );
-    GetBoard()->m_Status_Pcb = 0;
+    board->SynchronizeNetsAndNetClasses( );
+    board->m_Status_Pcb = 0;
     return 1;
 }
 
@@ -969,6 +963,8 @@ int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* aFile )
     WriteGeneralDescrPcb( aFile );
     WriteSheetDescr( GetScreen(), aFile );
     WriteSetup( aFile, this, GetBoard() );
+
+    GetBoard()->SynchronizeNetsAndNetClasses();
 
     rc = GetBoard()->Save( aFile );
 

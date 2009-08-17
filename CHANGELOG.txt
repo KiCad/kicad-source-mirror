@@ -4,6 +4,24 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-Aug-16 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew
+  * first of my work on NETCLASSes, more to come.
+    wrote: BOARD* BOARD_ITEM::GetBoard(), int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* ),
+    rewrote: classes NETCLASS, NETCLASSES, BOARD::SynchronizeNetsAndNetClasses(),
+    added: NETCLASS::m_ViaDrillSize, NETCLASS::m_Description.  Removed netname from
+    EQUIPOTs in *.brd file (were redundant with NETCLASSes in *.brd file).  NETCLASSes
+    now follow EQUIPOTs in *.brd file.
+    NETs and NETCLASSes are linked by pointer from class NET.
+    BOARD::SynchronizeNetsAndNetClasses() will validate pointers, NETs and NETCLASSes.
+  * Pay particular attention to the new:
+    int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
+    which considers two netclasses and finds the largest distance from the two
+    involved.
+  * I would love to see class NETINFO_ITEM renamed to NET.
+
+
 2009-Aug-6 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++pcbnew

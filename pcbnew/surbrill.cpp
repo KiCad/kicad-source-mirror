@@ -37,7 +37,7 @@ void WinEDA_PcbFrame::ListNetsAndSelect( wxCommandEvent& event )
 
     WinEDA_TextFrame List( this, _( "List Nets" ) );
 
-    for( unsigned ii = 0; ii < GetBoard()->m_NetInfo->GetNetsCount(); ii++ )
+    for( unsigned ii = 0; ii < GetBoard()->m_NetInfo->GetCount(); ii++ )
     {
         net = GetBoard()->m_NetInfo->GetNetItem( ii );
         wxString Line;
@@ -58,7 +58,7 @@ void WinEDA_PcbFrame::ListNetsAndSelect( wxCommandEvent& event )
     unsigned netcode = (unsigned) selection;
 
     // Search for the net selected.
-    for( unsigned ii = 0; ii < GetBoard()->m_NetInfo->GetNetsCount(); ii++ )
+    for( unsigned ii = 0; ii < GetBoard()->m_NetInfo->GetCount(); ii++ )
     {
         net = GetBoard()->m_NetInfo->GetNetItem( ii );
         if( !WildCompareString( netFilter, net->GetNetname(), false ) )

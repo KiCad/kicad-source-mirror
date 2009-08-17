@@ -189,6 +189,7 @@ public:
     {
         wxMessageBox(wxT("virtual BOARD_ITEM::Move used, should not occur"), GetClass());
     }
+
     /**
      * Function Rotate
      * Rotate this object.
@@ -199,6 +200,7 @@ public:
     {
         wxMessageBox(wxT("virtual BOARD_ITEM::Rotate used, should not occur"), GetClass());
     }
+
     /**
      * Function Flip
      * Flip this object, i.e. change the board side for this object
@@ -208,8 +210,16 @@ public:
     {
         wxMessageBox(wxT("virtual BOARD_ITEM::Flip used, should not occur"), GetClass());
     }
+
+
+    /**
+     * Function GetBoard
+     * returns the BOARD in which this BOARD_ITEM resides, or NULL if none.
+     */
+    virtual BOARD* GetBoard() const;
 };
 
+class NETCLASS;
 
 /**
  * Class BOARD_CONNECTED_ITEM
@@ -253,6 +263,19 @@ public:
      */
     int GetZoneSubNet() const;
     void SetZoneSubNet( int aSubNetCode );
+
+
+    /**
+     * Function GetClearance
+     * returns the clearance in 1/10000 inches to aItem from this BOARD_CONNECTED_ITEM.
+     */
+     virtual int GetClearance( BOARD_CONNECTED_ITEM* aItem ) const;
+
+     /**
+      * Function GetNetClass
+      * returns the NETCLASS for this item.
+      */
+     virtual NETCLASS* GetNetClass() const;
 };
 
 

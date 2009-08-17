@@ -68,3 +68,50 @@ void BOARD_CONNECTED_ITEM::SetZoneSubNet( int aSubNetCode )
 {
     m_ZoneSubnet = aSubNetCode;
 }
+
+
+int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
+{
+    NETCLASS*   hisclass = aItem->GetNetClass();
+    NETCLASS*   myclass  = GetNetClass();
+
+    wxASSERT( hisclass );
+    wxASSERT( myclass );
+
+    if( myclass )
+    {
+        if( hisclass )
+            return MAX( hisclass->GetClearance(), myclass->GetClearance() );
+        else
+            return myclass->GetClearance();
+    }
+    else if( hisclass )
+    {
+        return hisclass->GetClearance();
+    }
+
+    return 0;
+}
+
+
+NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
+{
+    // It is important that this be implemented without any sequential searching.
+    // Simple array lookups should be fine, performance-wise.
+
+    BOARD*  board = GetBoard();
+    wxASSERT( board );
+    if( board )
+    {
+        NETINFO_ITEM* net = board->FindNet( GetNet() );
+        wxASSERT( net );
+        if( net )
+        {
+            NETCLASS* netclass = net->GetNetClass();
+            wxASSERT( netclass );
+            return netclass;
+        }
+    }
+
+    return NULL;
+}

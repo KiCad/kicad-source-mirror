@@ -437,7 +437,7 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
 
     fputs( "$SIGNALS\n", file );
 
-    for( unsigned ii = 0; ii < pcb->m_NetInfo->GetNetsCount() ; ii++ )
+    for( unsigned ii = 0; ii < pcb->m_NetInfo->GetCount() ; ii++ )
     {
         net =  pcb->m_NetInfo->GetNetItem(ii);
         if( net->GetNetname() == wxEmptyString )  // dummy equipot (non connexion)

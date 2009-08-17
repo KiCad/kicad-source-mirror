@@ -202,39 +202,44 @@ void DIALOG_DESIGN_RULES::SetRoutableLayerStatus()
  */
 void DIALOG_DESIGN_RULES::InitRulesList()
 {
-    for( int ii = 0;  ; ii++ )
+    NETCLASSES& netclasses = m_Pcb->m_NetClasses;
+
+    int ii = 0;
+    for( NETCLASSES::iterator i=netclasses.begin();  i!=netclasses.end();  ++i, ++ii )
     {
-        const NETCLASS* netclass = m_Pcb->m_NetClassesList.GetNetClass( ii );
-        if( netclass == NULL )
-            break;
+        NETCLASS* netclass = i->second;
 
         // Creates one entry if needed
         if( ii >= m_gridNetClassesProperties->GetNumberRows() )
             m_gridNetClassesProperties->AppendRows();
 
         // Init name
-        m_gridNetClassesProperties->SetRowLabelValue( ii, netclass->m_Name );
+        m_gridNetClassesProperties->SetRowLabelValue( ii, netclass->GetName() );
 
         // Init data
         wxString msg;
         msg = ReturnStringFromValue( g_UnitMetric,
-                                     netclass->m_NetParams.m_TracksWidth,
+                                     netclass->GetTrackWidth(),
                                      m_Parent->m_InternalUnits, false );
         m_gridNetClassesProperties->SetCellValue( ii, RULE_GRID_TRACKSIZE_POSITION, msg );
+
         msg = ReturnStringFromValue( g_UnitMetric,
-                                     netclass->m_NetParams.m_ViasSize,
+                                     netclass->GetViaSize(),
                                      m_Parent->m_InternalUnits, false );
         m_gridNetClassesProperties->SetCellValue( ii, RULE_GRID_VIASIZE_POSITION, msg );
+
         msg = ReturnStringFromValue( g_UnitMetric,
-                                     netclass->m_NetParams.m_Clearance,
+                                     netclass->GetClearance(),
                                      m_Parent->m_InternalUnits, false );
         m_gridNetClassesProperties->SetCellValue( ii, RULE_GRID_CLEARANCE_POSITION, msg );
+
         msg = ReturnStringFromValue( g_UnitMetric,
-                                     netclass->m_NetParams.m_TracksMinWidth,
+                                     netclass->GetTrackMinWidth(),
                                      m_Parent->m_InternalUnits, false );
         m_gridNetClassesProperties->SetCellValue( ii, RULE_GRID_MINTRACKSIZE_POSITION, msg );
+
         msg = ReturnStringFromValue( g_UnitMetric,
-                                     netclass->m_NetParams.m_ViasMinSize,
+                                     netclass->GetViaMinSize(),
                                      m_Parent->m_InternalUnits, false );
         m_gridNetClassesProperties->SetCellValue( ii, RULE_GRID_MINVIASIZE_POSITION, msg );
     }
@@ -245,53 +250,57 @@ void DIALOG_DESIGN_RULES::InitRulesList()
  */
 void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
 {
-    m_Pcb->m_NetClassesList.ClearList();
+    NETCLASSES& netclasses = m_Pcb->m_NetClasses;
+
+    netclasses.Clear();
+
     for( int ii = 0; ii < m_gridNetClassesProperties->GetNumberRows(); ii++ )
     {
-        NETCLASS* netclass = new NETCLASS( m_Pcb,
-                                          m_gridNetClassesProperties->GetRowLabelValue( ii ) );
-        m_Pcb->m_NetClassesList.AddNetclass( netclass );
+        NETCLASS netclass( m_Pcb, m_gridNetClassesProperties->GetRowLabelValue( ii ) );
 
         // Init data
-        netclass->m_NetParams.m_TracksWidth =
+        netclass.SetTrackWidth(
             ReturnValueFromString( g_UnitMetric,
                                    m_gridNetClassesProperties->GetCellValue( ii,
                                                                              RULE_GRID_TRACKSIZE_POSITION ),
-                                   m_Parent->m_InternalUnits );
+                                   m_Parent->m_InternalUnits ));
 
-        netclass->m_NetParams.m_ViasSize =
+        netclass.SetViaSize(
             ReturnValueFromString( g_UnitMetric,
                                    m_gridNetClassesProperties->GetCellValue( ii,
                                                                              RULE_GRID_VIASIZE_POSITION ),
-                                   m_Parent->m_InternalUnits );
+                                   m_Parent->m_InternalUnits ));
 
-        netclass->m_NetParams.m_Clearance =
+        netclass.SetClearance(
             ReturnValueFromString( g_UnitMetric,
                                    m_gridNetClassesProperties->GetCellValue( ii,
                                                                              RULE_GRID_CLEARANCE_POSITION ),
-                                   m_Parent->m_InternalUnits );
+                                   m_Parent->m_InternalUnits ));
 
-        netclass->m_NetParams.m_TracksMinWidth =
+        netclass.SetTrackMinWidth(
             ReturnValueFromString( g_UnitMetric,
                                    m_gridNetClassesProperties->GetCellValue( ii,
                                                                              RULE_GRID_MINTRACKSIZE_POSITION ),
-                                   m_Parent->m_InternalUnits );
+                                   m_Parent->m_InternalUnits ));
 
-        netclass->m_NetParams.m_ViasMinSize =
+        netclass.SetViaMinSize(
             ReturnValueFromString( g_UnitMetric,
                                    m_gridNetClassesProperties->GetCellValue( ii,
                                                                              RULE_GRID_MINVIASIZE_POSITION ),
-                                   m_Parent->m_InternalUnits );
+                                   m_Parent->m_InternalUnits ));
 
         // Copy the list of nets associated to this netclass:
         for( unsigned idx = 0; idx < m_StockNets.size(); idx++ )
         {
             if( m_NetsLinkToClasses[idx] == ii )
-                netclass->AddMember( m_StockNets[idx]->GetNetname() );
+                netclass.Add( m_StockNets[idx]->GetNetname() );
         }
+
+        // this calls copy constructor, so all data must be in 'netclass' before Add()ing.
+        m_Pcb->m_NetClasses.Add( netclass );
     }
 
-    m_Pcb->TransfertDesignRulesToNets();
+    m_Pcb->SynchronizeNetsAndNetClasses();
 }
 
 

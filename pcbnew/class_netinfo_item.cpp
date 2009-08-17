@@ -23,13 +23,16 @@ NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent )
     m_Flag = 0;
     m_RatsnestStartIdx = 0;    // Starting point of ratsnests of this net in a general buffer of ratsnest
     m_RatsnestEndIdx   = 0;    // Ending point of ratsnests of this net
+
+    m_NetClassName = NETCLASS::Default;
+
+    m_NetClass = 0;
 }
 
 
-/* destructor */
-
 NETINFO_ITEM::~NETINFO_ITEM()
 {
+    // m_NetClass is not owned by me.
 }
 
 
@@ -60,12 +63,14 @@ int NETINFO_ITEM:: ReadDescr( FILE* File, int* LineNum )
             continue;
         }
 
+        /*
         if( strncmp( Line, "NetClass", 8 ) == 0 )
         {
             ReadDelimitedText( Ltmp, Line + 8, sizeof(Ltmp) );
             m_NetClassName = CONV_FROM_UTF8( Ltmp );
             continue;
         }
+        */
     }
 
     return 1;
@@ -86,7 +91,7 @@ bool NETINFO_ITEM::Save( FILE* aFile ) const
     fprintf( aFile, "Na %d \"%s\"\n", GetNet(), CONV_TO_UTF8( m_Netname ) );
     fprintf( aFile, "St %s\n", "~" );
 
-    fprintf( aFile, "NetClass \"%s\"\n", CONV_TO_UTF8(m_NetClassName) );
+    // fprintf( aFile, "NetClass \"%s\"\n", CONV_TO_UTF8(m_NetClassName) );
 
     if( fprintf( aFile, "$EndEQUIPOT\n" ) != sizeof("$EndEQUIPOT\n") - 1 )
         goto out;

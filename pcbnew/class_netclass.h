@@ -1,101 +1,156 @@
-/*************************************/
-/* class to Net Classes */
-/**************************************/
 
+/*
+ * This program source code file is part of KICAD, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@inpg.fr
+ * Copyright (C) 2009 Kicad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 
 #ifndef CLASS_NETCLASS_H
 #define CLASS_NETCLASS_H
 
-
-/**
- * Class NET_DESIGN_PARAMS
- * handles netclass parameters.
- *
- * This is a separate class because these parameters are also duplicated
- * (for calculation time consideration) in each NETINFO_ITEM when making
- * tests DRC and routing
- */
-class NET_DESIGN_PARAMS
-{
-public:
-    int m_TracksWidth;              // "Default" value for tracks thickness used to route this net
-    int m_TracksMinWidth;           // Minimum value for tracks thickness (used in DRC)
-    int m_ViasSize;                 // "Default" value for vias sizes used to route this net
-    int m_ViasMinSize;              // Minimum value for vias sizes (used in DRC)
-    int m_Clearance;                // "Default" clearance when routing
-    int m_MinClearance;             // Minimum value for clearance (used in DRC)
-
-public:
-    NET_DESIGN_PARAMS();
-    // ~NET_DESIGN_PARAMS() {}
-
-
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
-    bool Save( FILE* aFile ) const;
-
-
-    /**
-     * Function ReadDescr
-     * reads the data structures for this object from a FILE in "*.brd" format.
-     * @param aFile The FILE to read to.
-     * @return bool - true if success reading else false.
-     */
-    bool ReadDescr( FILE* aFile, int* aLineNum );
-};
+#include <set>
+#include <map>
 
 
 /**
  * Class NETCLASS
- * handles a list of nets and the parameters used to route or test these nets
+ * handles a collection of nets and the parameters used to route or
+ * test these nets.
  */
 class NETCLASS
 {
-public:
-    BOARD*            m_Parent;
-    wxString          m_Name;               // Name of the net class
-    wxArrayString     m_MembersNetNames;    // List of nets members of this class
-    NET_DESIGN_PARAMS m_NetParams;          // values of net classes parameters
+protected:
 
+    BOARD*      m_Parent;
+    wxString    m_Name;                 ///< Name of the net class
+    wxString    m_Description;          ///< what this NETCLASS is for.
+
+    typedef std::set<wxString>       STRINGSET;
+
+    STRINGSET   m_Members;              ///< names of NET members of this class
+
+    /// The units on these parameters is 1/10000 of an inch.
+
+    int         m_TrackWidth;           ///< value for tracks thickness used to route this net
+    int         m_TrackMinWidth;        ///< minimum value for tracks thickness (used in DRC)
+    int         m_ViaSize;              ///< default via size used to route this net
+    int         m_ViaDrillSize;         ///< default via drill size used to create vias in this net
+    int         m_ViaMinSize;           ///< minimum size for vias (used in DRC)
+    int         m_Clearance;            ///< clearance when routing
 
 public:
-    NETCLASS( BOARD* aParent, const wxString& aName = wxT( "default" ) );
+
+    static const wxString Default;      ///< the name of the default NETCLASS
+
+    NETCLASS( BOARD* aParent, const wxString& aName );
     ~NETCLASS();
 
+    wxString GetClass() const
+    {
+        return wxT( "NETCLASS" );
+    }
+
+    const wxString& GetName() const
+    {
+        return m_Name;
+    }
+
     /**
-     * Function GetMembersCount
-     * returns the number of nets using this rule
+     * Function GetCount
+     * returns the number of nets in this NETCLASS, i.e. using these rules.
      */
-    unsigned GetMembersCount() const
+    unsigned GetCount() const
     {
-        return m_MembersNetNames.GetCount();
+        return m_Members.size();
     }
 
 
-    void ClearMembersList()
+    /**
+     * Function Clear
+     * empties the collection of members.
+     */
+    void Clear()
     {
-        m_MembersNetNames.Clear();
+        m_Members.clear();
     }
 
 
-    void AddMember( const wxString& aNetname )
+    /**
+     * Function AddMember
+     * adds \a aNetname to this NETCLASS if it is not already in this NETCLASS.
+     * It is harmless to try and add a second identical name.
+     */
+    void Add( const wxString& aNetname )
     {
-        m_MembersNetNames.Add( aNetname );
+        m_Members.insert( aNetname );
     }
 
+    typedef STRINGSET::iterator iterator;
+    iterator begin() { return m_Members.begin(); }
+    iterator end()   { return m_Members.end();   }
 
-    wxString GetMemberName( unsigned aIdx ) const
+    typedef STRINGSET::const_iterator const_iterator;
+    const_iterator begin() const { return m_Members.begin(); }
+    const_iterator end()   const { return m_Members.end();   }
+
+    /**
+     * Function Remove
+     * will remove NET name \a aName from the collection of members.
+     */
+    void Remove( iterator aName )
     {
-        if( aIdx < GetMembersCount() )
-            return m_MembersNetNames[aIdx];
-        else
-            return wxEmptyString;
+        m_Members.erase( aName );
     }
+
+    /**
+     * Function Remove
+     * will remove NET name \a aName from the collection of members.
+     */
+    void Remove( const wxString& aName )
+    {
+        m_Members.erase( aName );
+    }
+
+    const wxString& GetDescription() const  { return m_Description; }
+    void    SetDescription( const wxString& aDesc ) { m_Description = aDesc; }
+
+    int     GetTrackWidth() const           { return m_TrackWidth; }
+    void    SetTrackWidth( int aWidth )     { m_TrackWidth = aWidth; }
+
+    int     GetTrackMinWidth() const        { return m_TrackMinWidth; }
+    void    SetTrackMinWidth( int aWidth )  { m_TrackMinWidth = aWidth; }
+
+    int     GetViaSize() const              { return m_ViaSize; }
+    void    SetViaSize( int aSize )         { m_ViaSize = aSize; }
+
+    int     GetViaDrillSize() const         { return m_ViaDrillSize; }
+    void    SetViaDrillSize( int aSize )    { m_ViaDrillSize = aSize; }
+
+    int     GetViaMinSize() const           { return m_ViaMinSize; }
+    void    SetViaMinSize( int aSize )      { m_ViaMinSize = aSize; }
+
+    int     GetClearance() const            { return m_Clearance; }
+    void    SetClearance( int aClearance )  { m_Clearance = aClearance; }
 
 
     /**
@@ -113,55 +168,99 @@ public:
      * @return bool - true if success reading else false.
      */
     bool ReadDescr( FILE* aFile, int* aLineNum );
+
+#if defined(DEBUG)
+
+    /**
+     * Function Show
+     * is used to output the object tree, currently for debugging only.
+     * @param nestLevel An aid to prettier tree indenting, and is the level
+     *  of nesting of this object within the overall tree.
+     * @param os The ostream& to output to.
+     */
+    void Show( int nestLevel, std::ostream& os );
+
+#endif
 };
 
 
 /**
- * Class NETCLASS_LIST handles the list of NETCLASS for the board
- * Note: the NETCLASS_LIST is owner of all NETCLASS in list
+ * Class NETCLASSES
+ * is a containter for NETCLASS instances.  It owns all its NETCLASSes
+ * (=> it will delete them at time of destruction).  This container will always have
+ * a default NETCLASS with the name given by const NETCLASS::Default.
  */
-class NETCLASS_LIST
+class NETCLASSES
 {
-protected:
-    BOARD* m_Parent;
-    std::vector <NETCLASS*> m_Netclass_List;
+private:
+    BOARD*                  m_Parent;
 
+    typedef std::map<wxString, NETCLASS*>   NETCLASSMAP;
+
+    /// all the NETCLASSes except the default one.
+    NETCLASSMAP             m_NetClasses;
+
+    /// the default NETCLASS.
+    NETCLASS                m_Default;
 
 public:
-    NETCLASS_LIST( BOARD* aParent = NULL );
-    ~NETCLASS_LIST();
-
-
-    void ClearList();
+    NETCLASSES( BOARD* aParent = NULL );
+    ~NETCLASSES();
 
     /**
-     * Function GetNetClassCount()
-     * @return the number of existing netclasses
+     * Function Clear
+     * destroys any constained NETCLASS instances except the Default one.
      */
-    unsigned GetNetClassCount()
+    void Clear();
+
+    typedef NETCLASSMAP::iterator       iterator;
+    iterator begin() { return m_NetClasses.begin(); }
+    iterator end()   { return m_NetClasses.end(); }
+
+    typedef NETCLASSMAP::const_iterator const_iterator;
+    const_iterator begin() const { return m_NetClasses.begin(); }
+    const_iterator end()   const { return m_NetClasses.end(); }
+
+
+    /**
+     * Function GetCount
+     * @return the number of netclasses, excluding the default one.
+     */
+    unsigned GetCount() const
     {
-        return m_Netclass_List.size();
+        return m_NetClasses.size();
+    }
+
+    NETCLASS* GetDefault() const
+    {
+        return (NETCLASS*) &m_Default;
     }
 
 
-    /** Function GetNetClass()
-     * @param aIdx = the index in netclass list
-     * @return a NETCLASS* pointer on the netclass
+    /**
+     * Function Add
+     * @param aNetclass is netclass to add
+     * @return true if Ok, false if cannot be added (mainly because a
+     *  netclass with the same name exists)
      */
-    NETCLASS* GetNetClass( unsigned aIdx )
-    {
-        if( GetNetClassCount() && aIdx < GetNetClassCount() )
-            return m_Netclass_List[aIdx];
-        else
-            return NULL;
-    }
+    bool Add( const NETCLASS& aNetclass );
 
-
-    /** Function AddNetclass()
-     * @param aNetclass = a pointer to the netclass to add
-     * @return true if Ok, false if cannot be added (mainly because a netclass with the same name exists)
+    /**
+     * Function Remove
+     * removes a NETCLASS from this container but does not destroy/delete it.
+     * @param aNetName is the name of the net to delete, and it may not be NETCLASS::Default.
+     * @return NETCLASS* - the NETCLASS associated with aNetName if found and removed, else NULL.
+     * You have to delete the returned value if you intend to destroy the NETCLASS.
      */
-    bool AddNetclass( NETCLASS* aNetclass );
+    NETCLASS* Remove( const wxString& aNetName );
+
+    /**
+     * Function Find
+     * searches this container for a NETCLASS given by \a aName.
+     * @param aName is the name of the NETCLASS to search for.
+     * @return NETCLASS* - if found, else NULL.
+     */
+    NETCLASS* Find( const wxString& aName ) const;
 
     /**
      * Function Save
@@ -172,5 +271,5 @@ public:
     bool Save( FILE* aFile ) const;
 };
 
-
 #endif  // CLASS_NETCLASS_H
+

@@ -315,3 +315,11 @@ void BOARD_ITEM::UnLink()
         list->Remove( this );
 }
 
+
+BOARD* BOARD_ITEM::GetBoard() const
+{
+    // overload this function as needed.
+
+    return (BOARD*) GetParent();
+}
+
