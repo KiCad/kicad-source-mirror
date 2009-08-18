@@ -9,7 +9,7 @@
 #define CONV_TO_UTF8( wxstring )     ( (const char*) wxConvCurrent->cWX2MB( wxstring ) )
 #define CONV_FROM_UTF8( utf8string ) ( wxConvCurrent->cMB2WC( utf8string ) )
 #else
-#define CONV_TO_UTF8( wxstring )     ( (const char*) ( wxstring.c_str() ) )
+#define CONV_TO_UTF8( wxstring )     ( (const char*) ( (wxstring).c_str() ) )
 #define CONV_FROM_UTF8( utf8string ) (utf8string)
 #endif
 
