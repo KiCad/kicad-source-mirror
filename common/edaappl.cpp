@@ -1013,26 +1013,21 @@ wxString WinEDA_App::ReturnFilenameWithRelativePathInLibPath( const wxString& aF
      */
     wxFileName fn = aFullFilename;
     wxString   filename = aFullFilename;
-    int        pathlen  = -1;                                                   // path len, used to find the better subpath within defualts paths
+    unsigned   pathlen  = fn.GetPath().Len();         /* path len, used to find the better (shortest) subpath
+                                                       * within defaults paths */
 
-    if( m_libSearchPaths.Index( fn.GetPath() ) != wxNOT_FOUND )                 // Ok, trivial case
-        filename = fn.GetName();
-    else                                                                        // not in the default, : see if this file is in a subpath:
+    for( unsigned kk = 0; kk < m_libSearchPaths.GetCount(); kk++ )
     {
-        filename = fn.GetPathWithSep() + fn.GetFullName();
-        for( unsigned kk = 0; kk < m_libSearchPaths.GetCount(); kk++ )
+        fn = aFullFilename;
+        // Search for the shortest subpath within m_libSearchPaths:
+        if( fn.MakeRelativeTo( m_libSearchPaths[kk] ) )
         {
-            if( fn.MakeRelativeTo( m_libSearchPaths[kk] ) )
+            if( fn.GetPathWithSep().StartsWith( wxT("..") ) )  // Path outside kicad libs paths
+                continue;
+            if( pathlen > fn.GetPath().Len() )    // A better (shortest) subpath is found
             {
-                if( fn.GetPathWithSep().StartsWith( wxT("..") ) )  // Path outside kicad libs paths
-                    continue;
-                if( pathlen < 0                             // a first subpath is found
-                   || pathlen > (int) fn.GetPath().Len() )  // or a better subpath if found
-                {
-                    filename = fn.GetPathWithSep() + fn.GetFullName();
-                    pathlen  = fn.GetPath().Len();
-                }
-                fn = aFullFilename;  //Try to find a better subpath
+                filename = fn.GetPathWithSep() + fn.GetFullName();
+                pathlen  = fn.GetPath().Len();
             }
         }
     }

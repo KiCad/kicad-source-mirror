@@ -183,11 +183,13 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
 
     while( draw3D )
     {
-        S3D_MASTER* draw3DCopy = new S3D_MASTER(NULL);
-        draw3DCopy->Copy( draw3D );
-        m_Shapes3D_list.push_back( draw3DCopy );
-        m_3D_ShapeNameListBox->Append(draw3DCopy->m_Shape3DName);
-
+        if( !draw3D->m_Shape3DName.IsEmpty() )
+        {
+            S3D_MASTER* draw3DCopy = new S3D_MASTER(NULL);
+            draw3DCopy->Copy( draw3D );
+            m_Shapes3D_list.push_back( draw3DCopy );
+            m_3D_ShapeNameListBox->Append(draw3DCopy->m_Shape3DName);
+        }
         draw3D = (S3D_MASTER*) draw3D->Next();
     }
 
@@ -297,7 +299,7 @@ void DIALOG_MODULE_BOARD_EDITOR::On3DShapeNameSelected(wxCommandEvent& event)
         TransfertDisplayTo3DValues( m_LastSelected3DShapeIndex );
     m_LastSelected3DShapeIndex = m_3D_ShapeNameListBox->GetSelection();
 
-    if( m_LastSelected3DShapeIndex < 0 )    // happens under wxGTK when deleting an item in m_3D_ShapeNameListBox wxListBox 
+    if( m_LastSelected3DShapeIndex < 0 )    // happens under wxGTK when deleting an item in m_3D_ShapeNameListBox wxListBox
        return;
 
     if( m_LastSelected3DShapeIndex >= (int) m_Shapes3D_list.size() )
