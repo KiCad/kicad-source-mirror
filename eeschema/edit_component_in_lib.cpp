@@ -14,16 +14,6 @@
 
 #include "protos.h"
 
-enum id_libedit {
-    ID_PANEL_ALIAS,
-    ID_COPY_DOC_TO_ALIAS,
-    ID_BROWSE_DOC_FILES,
-    ID_ADD_ALIAS,
-    ID_DELETE_ONE_ALIAS,
-    ID_DELETE_ALL_ALIAS,
-    ID_ON_SELECT_FIELD
-};
-
 
 extern int CurrentUnit;
 
@@ -34,18 +24,18 @@ extern int CurrentUnit;
  *  Doc and keys words
  *  Parts per package
  *  General properties
- * Fileds are NOT edited here. There is a specific dialog box to do that
+ * Fields are NOT edited here. There is a specific dialog box to do that
  */
 
-#include "dialog_edit_component_in_lib.cpp"
+#include "dialog_edit_component_in_lib.h"
 
 
 /*****************************************************************/
 void WinEDA_LibeditFrame::InstallLibeditFrame( void )
 /*****************************************************************/
 {
-    WinEDA_PartPropertiesFrame* frame =
-        new WinEDA_PartPropertiesFrame( this );
+    DIALOG_EDIT_COMPONENT_IN_LIBRARY* frame =
+        new DIALOG_EDIT_COMPONENT_IN_LIBRARY( this );
 
     int IsModified = frame->ShowModal(); frame->Destroy();
 
@@ -54,179 +44,9 @@ void WinEDA_LibeditFrame::InstallLibeditFrame( void )
 }
 
 
-/*****************************************************/
-void WinEDA_PartPropertiesFrame::InitBuffers()
-/*****************************************************/
-
-/* Init the buffers to a default value,
- *  or to values from CurrentLibEntry if CurrentLibEntry != NULL
- */
-{
-    m_AliasLocation = -1;
-    if( CurrentLibEntry == NULL )
-    {
-        m_Title = _( "Lib Component Properties" );
-        return;
-    }
-
-    wxString msg_text = _( "Properties for " );
-    if( !CurrentAliasName.IsEmpty() )
-    {
-        m_AliasLocation = LocateAlias( CurrentLibEntry->m_AliasList, CurrentAliasName );
-        m_Title = msg_text + CurrentAliasName +
-                  _( "(alias of " ) +
-                  wxString( CurrentLibEntry->m_Name.m_Text )
-                  + wxT( ")" );
-    }
-    else
-    {
-        m_Title = msg_text + CurrentLibEntry->m_Name.m_Text;
-        CurrentAliasName.Empty();
-    }
-}
-
 
 /*****************************************************/
-void WinEDA_PartPropertiesFrame::BuildPanelAlias()
-/*****************************************************/
-
-/* create the panel for component alias list editing
- */
-{
-    wxButton*   Button;
-
-    wxBoxSizer* PanelAliasBoxSizer = new    wxBoxSizer( wxHORIZONTAL );
-
-    m_PanelAlias->SetSizer( PanelAliasBoxSizer );
-    wxBoxSizer* LeftBoxSizer = new          wxBoxSizer( wxVERTICAL );
-
-    PanelAliasBoxSizer->Add( LeftBoxSizer, 0, wxGROW | wxALL, 5 );
-
-    wxStaticText* Msg = new                 wxStaticText( m_PanelAlias, -1, _( "Alias" ) );
-
-    LeftBoxSizer->Add( Msg, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
-
-    m_PartAliasList = new                   wxListBox( m_PanelAlias,
-                                                       -1,
-                                                       wxDefaultPosition, wxSize( 200, 250 ),
-                                                       0, NULL,
-                                                       wxLB_ALWAYS_SB | wxLB_SINGLE );
-
-    LeftBoxSizer->Add( m_PartAliasList, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
-
-    wxBoxSizer* RightBoxSizer = new wxBoxSizer( wxVERTICAL );
-
-    PanelAliasBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
-
-    Button = new                    wxButton( m_PanelAlias, ID_ADD_ALIAS, _( "Add" ) );
-
-    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
-
-    m_ButtonDeleteOneAlias = new    wxButton( m_PanelAlias, ID_DELETE_ONE_ALIAS,
-                                             _( "Delete" ) );
-
-    RightBoxSizer->Add( m_ButtonDeleteOneAlias, 0, wxGROW | wxALL, 5 );
-
-    m_ButtonDeleteAllAlias = new wxButton( m_PanelAlias, ID_DELETE_ALL_ALIAS,
-                                          _( "Delete All" ) );
-
-    if( !CurrentAliasName.IsEmpty() )
-        m_ButtonDeleteAllAlias->Enable( FALSE );
-    RightBoxSizer->Add( m_ButtonDeleteAllAlias, 0, wxGROW | wxALL, 5 );
-
-
-    /* lecture des noms des alias */
-    if( CurrentLibEntry )
-    {
-        for( unsigned ii = 0; ii < CurrentLibEntry->m_AliasList.GetCount(); ii += ALIAS_NEXT )
-            m_PartAliasList->Append( CurrentLibEntry->m_AliasList[ii + ALIAS_NAME] );
-    }
-
-    if( (CurrentLibEntry == NULL) || (CurrentLibEntry->m_AliasList.GetCount() == 0) )
-    {
-        m_ButtonDeleteAllAlias->Enable( FALSE );
-        m_ButtonDeleteOneAlias->Enable( FALSE );
-    }
-}
-
-
-/*****************************************************************/
-void WinEDA_PartPropertiesFrame::BuildPanelFootprintFilter()
-/*****************************************************************/
-
-/* create the panel for footprint filtering in cvpcb list
- */
-{
-    m_PanelFootprintFilter = new wxPanel( m_NoteBook,
-                                          -1,
-                                          wxDefaultPosition,
-                                          wxDefaultSize,
-                                          wxSUNKEN_BORDER | wxTAB_TRAVERSAL );
-
-    m_NoteBook->AddPage( m_PanelFootprintFilter, _( "Footprint Filter" ) );
-
-    wxBoxSizer* PanelFpFilterBoxSizer = new wxBoxSizer( wxHORIZONTAL );
-
-    m_PanelFootprintFilter->SetSizer( PanelFpFilterBoxSizer );
-    wxBoxSizer* LeftBoxSizer = new          wxBoxSizer( wxVERTICAL );
-
-    PanelFpFilterBoxSizer->Add( LeftBoxSizer, 0, wxGROW | wxALL, 5 );
-
-    wxStaticText* Msg = new                 wxStaticText( m_PanelFootprintFilter, -1, _(
-                                                             "Footprints" ) );
-
-    LeftBoxSizer->Add( Msg, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
-
-    m_FootprintFilterListBox = new          wxListBox( m_PanelFootprintFilter,
-                                                       -1,
-                                                       wxDefaultPosition, wxSize( 200, 250 ),
-                                                       0, NULL,
-                                                       wxLB_ALWAYS_SB | wxLB_SINGLE );
-
-    LeftBoxSizer->Add( m_FootprintFilterListBox, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
-
-    wxBoxSizer* RightBoxSizer = new         wxBoxSizer( wxVERTICAL );
-
-    PanelFpFilterBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
-
-    wxButton* Button = new                  wxButton( m_PanelFootprintFilter,
-                                                     ID_ADD_FOOTPRINT_FILTER, _(
-                                                         "Add" ) );
-
-    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
-
-    m_ButtonDeleteOneFootprintFilter = new  wxButton( m_PanelFootprintFilter,
-                                                     ID_DELETE_ONE_FOOTPRINT_FILTER,
-                                                     _(
-                                                         "Delete" ) );
-
-    RightBoxSizer->Add( m_ButtonDeleteOneFootprintFilter, 0, wxGROW | wxALL, 5 );
-
-    m_ButtonDeleteAllFootprintFilter = new wxButton( m_PanelFootprintFilter,
-                                                    ID_DELETE_ALL_FOOTPRINT_FILTER,
-                                                    _(
-                                                        "Delete All" ) );
-
-    RightBoxSizer->Add( m_ButtonDeleteAllFootprintFilter, 0, wxGROW | wxALL, 5 );
-
-
-    /* Read the Footprint Filter list */
-    if( CurrentLibEntry )
-    {
-        for( unsigned ii = 0; ii < CurrentLibEntry->m_FootprintList.GetCount(); ii++ )
-            m_FootprintFilterListBox->Append( CurrentLibEntry->m_FootprintList[ii] );
-    }
-
-    if( (CurrentLibEntry == NULL) || (CurrentLibEntry->m_FootprintList.GetCount() == 0) )
-    {
-        m_ButtonDeleteAllFootprintFilter->Enable( FALSE );
-        m_ButtonDeleteOneFootprintFilter->Enable( FALSE );
-    }
-}
-
-
-/*****************************************************/
-void WinEDA_PartPropertiesFrame::BuildPanelDoc()
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitPanelDoc()
 /*****************************************************/
 
 /* create the panel for component doc editing
@@ -269,41 +89,30 @@ void WinEDA_PartPropertiesFrame::BuildPanelDoc()
 
 
 /*****************************************************/
-void WinEDA_PartPropertiesFrame::BuildPanelBasic()
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitBasicPanel()
 /*****************************************************/
 
 /* create the basic panel for component properties editing
  */
 {
-    AsConvertButt = new wxCheckBox( m_PanelBasic, -1, _( "As Convert" ) );
-
     if( g_AsDeMorgan )
-        AsConvertButt->SetValue( TRUE );
-    m_OptionsBoxSizer->Add( AsConvertButt, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
-
-    ShowPinNumButt = new  wxCheckBox( m_PanelBasic, -1, _( "Show Pin Num" ) );
-
+        m_AsConvertButt->SetValue( TRUE );
     if( CurrentLibEntry )
     {
         if( CurrentLibEntry->m_DrawPinNum )
-            ShowPinNumButt->SetValue( TRUE );
+            m_ShowPinNumButt->SetValue( TRUE );
     }
     else
-        ShowPinNumButt->SetValue( TRUE );
-    m_OptionsBoxSizer->Add( ShowPinNumButt, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
-
-    ShowPinNameButt = new wxCheckBox( m_PanelBasic, -1, _( "Show Pin Name" ) );
+        m_ShowPinNumButt->SetValue( TRUE );
 
     if( CurrentLibEntry )
     {
         if( CurrentLibEntry->m_DrawPinName )
-            ShowPinNameButt->SetValue( TRUE );
+            m_ShowPinNameButt->SetValue( TRUE );
     }
     else
-        ShowPinNameButt->SetValue( TRUE );
-    m_OptionsBoxSizer->Add( ShowPinNameButt, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
+        m_ShowPinNameButt->SetValue( TRUE );
 
-    m_PinsNameInsideButt = new wxCheckBox( m_PanelBasic, -1, _( "Pin Name Inside" ) );
 
     if( CurrentLibEntry )
     {
@@ -312,14 +121,13 @@ void WinEDA_PartPropertiesFrame::BuildPanelBasic()
     }
     else
         m_PinsNameInsideButt->SetValue( TRUE );
-    m_OptionsBoxSizer->Add( m_PinsNameInsideButt, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
     int number, number_of_units;
     if( CurrentLibEntry )
         number_of_units = CurrentLibEntry->m_UnitCount;
     else
         number_of_units = 1;
-    SelNumberOfUnits->SetValue( number_of_units );
+    m_SelNumberOfUnits->SetValue( number_of_units );
 
     if( CurrentLibEntry && CurrentLibEntry->m_TextInside )
         number = CurrentLibEntry->m_TextInside;
@@ -342,7 +150,7 @@ void WinEDA_PartPropertiesFrame::BuildPanelBasic()
 
 
 /**************************************************************************/
-void WinEDA_PartPropertiesFrame::PartPropertiesAccept( wxCommandEvent& event )
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
 /**************************************************************************/
 
 /* Updaye the current component parameters
@@ -411,11 +219,11 @@ void WinEDA_PartPropertiesFrame::PartPropertiesAccept( wxCommandEvent& event )
         }
     }
 
-    ii = SelNumberOfUnits->GetValue();
+    ii = m_SelNumberOfUnits->GetValue();
     if( ChangeNbUnitsPerPackage( ii ) )
         m_RecreateToolbar = TRUE;
 
-    if( AsConvertButt->GetValue() )
+    if( m_AsConvertButt->GetValue() )
     {
         if( !g_AsDeMorgan )
         {
@@ -434,8 +242,8 @@ void WinEDA_PartPropertiesFrame::PartPropertiesAccept( wxCommandEvent& event )
         }
     }
 
-    CurrentLibEntry->m_DrawPinNum  = ShowPinNumButt->GetValue() ? 1 : 0;
-    CurrentLibEntry->m_DrawPinName = ShowPinNameButt->GetValue() ? 1 : 0;
+    CurrentLibEntry->m_DrawPinNum  = m_ShowPinNumButt->GetValue() ? 1 : 0;
+    CurrentLibEntry->m_DrawPinName = m_ShowPinNameButt->GetValue() ? 1 : 0;
 
     if( m_PinsNameInsideButt->GetValue() == FALSE )
         CurrentLibEntry->m_TextInside = 0;
@@ -469,7 +277,7 @@ void WinEDA_PartPropertiesFrame::PartPropertiesAccept( wxCommandEvent& event )
 
 
 /*******************************************************************************/
-void WinEDA_PartPropertiesFrame::CopyDocToAlias( wxCommandEvent& WXUNUSED (event) )
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::CopyDocToAlias( wxCommandEvent& WXUNUSED (event) )
 /******************************************************************************/
 {
     if( CurrentLibEntry == NULL )
@@ -484,7 +292,7 @@ void WinEDA_PartPropertiesFrame::CopyDocToAlias( wxCommandEvent& WXUNUSED (event
 
 
 /**********************************************************/
-void WinEDA_PartPropertiesFrame::DeleteAllAliasOfPart(
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllAliasOfPart(
     wxCommandEvent& WXUNUSED (event) )
 /**********************************************************/
 {
@@ -503,7 +311,7 @@ void WinEDA_PartPropertiesFrame::DeleteAllAliasOfPart(
 
 
 /*******************************************************************************/
-void WinEDA_PartPropertiesFrame::AddAliasOfPart( wxCommandEvent& WXUNUSED (event) )
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& WXUNUSED (event) )
 /*******************************************************************************/
 
 /* Add a new name to the alias list box
@@ -548,7 +356,7 @@ void WinEDA_PartPropertiesFrame::AddAliasOfPart( wxCommandEvent& WXUNUSED (event
 
 
 /********************************************************/
-void WinEDA_PartPropertiesFrame::DeleteAliasOfPart(
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAliasOfPart(
     wxCommandEvent& WXUNUSED (event) )
 /********************************************************/
 {
@@ -576,7 +384,7 @@ void WinEDA_PartPropertiesFrame::DeleteAliasOfPart(
 
 
 /********************************************************************/
-bool WinEDA_PartPropertiesFrame::ChangeNbUnitsPerPackage( int MaxUnit )
+bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::ChangeNbUnitsPerPackage( int MaxUnit )
 /********************************************************************/
 
 /* Routine de modification du nombre d'unites par package pour le
@@ -657,7 +465,7 @@ bool WinEDA_PartPropertiesFrame::ChangeNbUnitsPerPackage( int MaxUnit )
 
 
 /*****************************************************/
-bool WinEDA_PartPropertiesFrame::SetUnsetConvert()
+bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
 /*****************************************************/
 
 /* cr�e ou efface (selon option AsConvert) les �l�ments
@@ -735,7 +543,7 @@ bool WinEDA_PartPropertiesFrame::SetUnsetConvert()
 
 
 /****************************************************************************/
-void WinEDA_PartPropertiesFrame::BrowseAndSelectDocFile( wxCommandEvent& event )
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::BrowseAndSelectDocFile( wxCommandEvent& event )
 /****************************************************************************/
 {
     wxString FullFileName, mask;
@@ -771,7 +579,7 @@ void WinEDA_PartPropertiesFrame::BrowseAndSelectDocFile( wxCommandEvent& event )
 
 
 /**********************************************************/
-void WinEDA_PartPropertiesFrame::DeleteAllFootprintFilter(
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllFootprintFilter(
     wxCommandEvent& WXUNUSED (event) )
 /**********************************************************/
 {
@@ -785,7 +593,7 @@ void WinEDA_PartPropertiesFrame::DeleteAllFootprintFilter(
 
 
 /*******************************************************************************/
-void WinEDA_PartPropertiesFrame::AddFootprintFilter( wxCommandEvent& WXUNUSED (event) )
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& WXUNUSED (event) )
 /*******************************************************************************/
 
 /* Add a new name to the alias list box
@@ -820,7 +628,7 @@ void WinEDA_PartPropertiesFrame::AddFootprintFilter( wxCommandEvent& WXUNUSED (e
 
 
 /********************************************************/
-void WinEDA_PartPropertiesFrame::DeleteOneFootprintFilter(
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteOneFootprintFilter(
     wxCommandEvent& WXUNUSED (event) )
 /********************************************************/
 {

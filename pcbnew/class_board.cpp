@@ -893,7 +893,7 @@ MODULE* BOARD::FindModuleByReference( const wxString& aReference ) const
 // Sort nets by decreasing pad count
 static bool s_SortByNodes( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
 {
-    return a->GetNodesCount() < b->GetNodesCount();
+    return b->GetNodesCount() < a->GetNodesCount();
 }
 
 

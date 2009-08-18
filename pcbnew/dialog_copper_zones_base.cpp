@@ -40,7 +40,7 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	wxString m_FillModeCtrlChoices[] = { _("Use polygons"), _("Use segments") };
 	int m_FillModeCtrlNChoices = sizeof( m_FillModeCtrlChoices ) / sizeof( wxString );
 	m_FillModeCtrl = new wxRadioBox( this,  ID_RADIOBOX_FILL_MODE_SELECTION, _("Filling Mode:"), wxDefaultPosition, wxDefaultSize, m_FillModeCtrlNChoices, m_FillModeCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_FillModeCtrl->SetSelection( 1 );
+	m_FillModeCtrl->SetSelection( 0 );
 	m_FillModeCtrl->SetToolTip( _("Filled areas can use solid polygons or segments.\nDepending on the complexity and the size of the zone,\nsometimes polygons are better and sometimes segments are better.") );
 	
 	m_FillOptionsBox->Add( m_FillModeCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -48,7 +48,7 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	wxString m_ArcApproximationOptChoices[] = { _("16 segments / 360 deg"), _("32 segments / 360 deg") };
 	int m_ArcApproximationOptNChoices = sizeof( m_ArcApproximationOptChoices ) / sizeof( wxString );
 	m_ArcApproximationOpt = new wxRadioBox( this, wxID_ARC_APPROX, _("Arcs Approximation:"), wxDefaultPosition, wxDefaultSize, m_ArcApproximationOptNChoices, m_ArcApproximationOptChoices, 1, wxRA_SPECIFY_COLS );
-	m_ArcApproximationOpt->SetSelection( 1 );
+	m_ArcApproximationOpt->SetSelection( 0 );
 	m_ArcApproximationOpt->SetToolTip( _("Number of segments to approximate a circle in filling calculations.\n16 segment is faster to calculate and when redraw screen.\n32 segment give a better quality") );
 	
 	m_FillOptionsBox->Add( m_ArcApproximationOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -56,7 +56,7 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	wxString m_PadInZoneOptChoices[] = { _("Include pads"), _("Thermal relief"), _("Exclude pads") };
 	int m_PadInZoneOptNChoices = sizeof( m_PadInZoneOptChoices ) / sizeof( wxString );
 	m_PadInZoneOpt = new wxRadioBox( this, wxID_PADS_IN_ZONE_OPTIONS, _("Pad in Zone:"), wxDefaultPosition, wxDefaultSize, m_PadInZoneOptNChoices, m_PadInZoneOptChoices, 1, wxRA_SPECIFY_COLS );
-	m_PadInZoneOpt->SetSelection( 0 );
+	m_PadInZoneOpt->SetSelection( 1 );
 	m_FillOptionsBox->Add( m_PadInZoneOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxStaticBoxSizer* m_ThermalShapesParamsSizer;
@@ -69,25 +69,25 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	m_AntipadSizeValue = new wxTextCtrl( this, wxID_ANTIPAD_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_AntipadSizeValue->SetToolTip( _("Define the gap around the pad") );
 	
-	m_ThermalShapesParamsSizer->Add( m_AntipadSizeValue, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_ThermalShapesParamsSizer->Add( m_AntipadSizeValue, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_CopperBridgeWidthText = new wxStaticText( this, wxID_ANY, _("Copper Width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CopperBridgeWidthText->Wrap( -1 );
-	m_ThermalShapesParamsSizer->Add( m_CopperBridgeWidthText, 0, wxRIGHT|wxLEFT, 5 );
+	m_ThermalShapesParamsSizer->Add( m_CopperBridgeWidthText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_CopperWidthValue = new wxTextCtrl( this, wxID_COPPER_BRIDGE_VALUE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_CopperWidthValue->SetToolTip( _("Define the tickness of copper in thermal reliefs") );
 	
-	m_ThermalShapesParamsSizer->Add( m_CopperWidthValue, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_ThermalShapesParamsSizer->Add( m_CopperWidthValue, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_FillOptionsBox->Add( m_ThermalShapesParamsSizer, 0, wxEXPAND, 5 );
 	
 	m_LeftBoxSizer->Add( m_FillOptionsBox, 1, wxEXPAND, 5 );
 	
-	m_ExportableSetupSizer->Add( m_LeftBoxSizer, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	m_ExportableSetupSizer->Add( m_LeftBoxSizer, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	m_ExportableSetupSizer->Add( 5, 5, 0, wxEXPAND, 5 );
+	m_ExportableSetupSizer->Add( 20, 20, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* m_MiddleBox;
 	m_MiddleBox = new wxBoxSizer( wxVERTICAL );
@@ -135,14 +135,14 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	
 	m_MiddleBoxSizer->Add( m_OutilinesBoxOpt, 1, wxEXPAND, 5 );
 	
-	m_MiddleBox->Add( m_MiddleBoxSizer, 0, 0, 5 );
+	m_MiddleBox->Add( m_MiddleBoxSizer, 0, wxEXPAND, 5 );
 	
 	m_ExportableSetupSizer->Add( m_MiddleBox, 1, wxEXPAND, 5 );
 	
 	m_OptionsBoxSizer->Add( m_ExportableSetupSizer, 1, wxEXPAND, 5 );
 	
 	
-	m_OptionsBoxSizer->Add( 0, 0, 0, wxEXPAND, 5 );
+	m_OptionsBoxSizer->Add( 20, 20, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* m_RightBoxSizer;
 	m_RightBoxSizer = new wxBoxSizer( wxVERTICAL );
@@ -160,7 +160,7 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	m_RightBoxSizer->Add( m_ButtonCancel, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	
-	m_RightBoxSizer->Add( 5, 20, 0, wxEXPAND, 5 );
+	m_RightBoxSizer->Add( 20, 20, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* m_NetSortOptSizer;
 	m_NetSortOptSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Nets Display Options:") ), wxVERTICAL );
@@ -184,28 +184,40 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	
 	m_RightBoxSizer->Add( m_NetSortOptSizer, 1, wxEXPAND, 5 );
 	
-	m_OptionsBoxSizer->Add( m_RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_OptionsBoxSizer->Add( m_RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
-	m_MainBoxSize->Add( m_OptionsBoxSizer, 0, 0, 5 );
+	m_MainBoxSize->Add( m_OptionsBoxSizer, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* m_NetAndLayersLiastBoxSizer;
-	m_NetAndLayersLiastBoxSizer = new wxBoxSizer( wxVERTICAL );
+	m_NetAndLayersLiastBoxSizer = new wxBoxSizer( wxHORIZONTAL );
+	
+	wxBoxSizer* bSizerNets;
+	bSizerNets = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Net:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
-	m_NetAndLayersLiastBoxSizer->Add( m_staticText2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerNets->Add( m_staticText2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ListNetNameSelection = new wxListBox( this, ID_NETNAME_SELECTION, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	m_NetAndLayersLiastBoxSizer->Add( m_ListNetNameSelection, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_ListNetNameSelection->SetMinSize( wxSize( -1,150 ) );
+	
+	bSizerNets->Add( m_ListNetNameSelection, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_NetAndLayersLiastBoxSizer->Add( bSizerNets, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizerLayers;
+	bSizerLayers = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticText3 = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
-	m_NetAndLayersLiastBoxSizer->Add( m_staticText3, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerLayers->Add( m_staticText3, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_LayerSelectionCtrl = new wxListBox( this, ID_LAYER_CHOICE, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	m_NetAndLayersLiastBoxSizer->Add( m_LayerSelectionCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerLayers->Add( m_LayerSelectionCtrl, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_MainBoxSize->Add( m_NetAndLayersLiastBoxSizer, 0, wxEXPAND, 5 );
+	m_NetAndLayersLiastBoxSizer->Add( bSizerLayers, 1, wxEXPAND, 5 );
+	
+	m_MainBoxSize->Add( m_NetAndLayersLiastBoxSizer, 1, wxEXPAND, 5 );
 	
 	this->SetSizer( m_MainBoxSize );
 	this->Layout();
