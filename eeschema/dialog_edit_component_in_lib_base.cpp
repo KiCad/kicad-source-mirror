@@ -161,10 +161,10 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	bRightBoxSizerPanelAlias = new wxBoxSizer( wxVERTICAL );
 	
 	m_ButtonAddeAlias = new wxButton( m_PanelAlias, ID_ADD_ALIAS, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightBoxSizerPanelAlias->Add( m_ButtonAddeAlias, 0, wxALL, 5 );
+	bRightBoxSizerPanelAlias->Add( m_ButtonAddeAlias, 0, wxALL|wxEXPAND, 5 );
 	
 	m_ButtonDeleteOneAlias = new wxButton( m_PanelAlias, ID_DELETE_ONE_ALIAS, _("Delete"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightBoxSizerPanelAlias->Add( m_ButtonDeleteOneAlias, 0, wxALL, 5 );
+	bRightBoxSizerPanelAlias->Add( m_ButtonDeleteOneAlias, 0, wxALL|wxEXPAND, 5 );
 	
 	m_ButtonDeleteAllAlias = new wxButton( m_PanelAlias, ID_DELETE_ALL_ALIAS, _("Delete All"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightBoxSizerPanelAlias->Add( m_ButtonDeleteAllAlias, 0, wxALL, 5 );
@@ -195,13 +195,13 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	bFpFilterRightBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_buttonAddFpF = new wxButton( m_PanelFootprintFilter, ID_ADD_FOOTPRINT_FILTER, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
-	bFpFilterRightBoxSizer->Add( m_buttonAddFpF, 0, wxALL, 5 );
+	bFpFilterRightBoxSizer->Add( m_buttonAddFpF, 0, wxALL|wxEXPAND, 5 );
 	
 	m_ButtonDeleteOneFootprintFilter = new wxButton( m_PanelFootprintFilter, ID_DELETE_ONE_FOOTPRINT_FILTER, _("Delete"), wxDefaultPosition, wxDefaultSize, 0 );
-	bFpFilterRightBoxSizer->Add( m_ButtonDeleteOneFootprintFilter, 0, wxALL, 5 );
+	bFpFilterRightBoxSizer->Add( m_ButtonDeleteOneFootprintFilter, 0, wxALL|wxEXPAND, 5 );
 	
 	m_ButtonDeleteAllFootprintFilter = new wxButton( m_PanelFootprintFilter, ID_DELETE_ALL_FOOTPRINT_FILTER, _("Delete All"), wxDefaultPosition, wxDefaultSize, 0 );
-	bFpFilterRightBoxSizer->Add( m_ButtonDeleteAllFootprintFilter, 0, wxALL, 5 );
+	bFpFilterRightBoxSizer->Add( m_ButtonDeleteAllFootprintFilter, 0, wxALL|wxEXPAND, 5 );
 	
 	bPanelFpFilterBoxSizer->Add( bFpFilterRightBoxSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	

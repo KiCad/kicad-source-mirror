@@ -73,10 +73,10 @@ WinEDA_DisplayFrame::WinEDA_DisplayFrame( WinEDA_CvpcbFrame* father,
 WinEDA_DisplayFrame::~WinEDA_DisplayFrame()
 /******************************************/
 {
+    delete GetBoard();
+
     delete GetBaseScreen();
     SetBaseScreen( 0 );
-
-    delete GetBoard();
 
     ( (WinEDA_CvpcbFrame*) wxGetApp().GetTopWindow() )->DrawFrame = NULL;
 }
@@ -310,7 +310,7 @@ void WinEDA_DisplayFrame::Show3D_Frame( wxCommandEvent& event )
 }
 
 /* Virtual fonction needed by the PCB_SCREEN class derived from BASE_SCREEN
-* this is a virtaul pure function in BASE_SCREEN
+* this is a virtual pure function in BASE_SCREEN
 * do nothing in cvpcb
 * could be removed later
 */

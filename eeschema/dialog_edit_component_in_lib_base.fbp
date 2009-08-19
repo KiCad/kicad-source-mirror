@@ -1511,7 +1511,7 @@
                                             <property name="permission">none</property>
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
-                                                <property name="flag">wxALL</property>
+                                                <property name="flag">wxALL|wxEXPAND</property>
                                                 <property name="proportion">0</property>
                                                 <object class="wxButton" expanded="1">
                                                     <property name="bg"></property>
@@ -1563,7 +1563,7 @@
                                             </object>
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
-                                                <property name="flag">wxALL</property>
+                                                <property name="flag">wxALL|wxEXPAND</property>
                                                 <property name="proportion">0</property>
                                                 <object class="wxButton" expanded="1">
                                                     <property name="bg"></property>
@@ -1846,7 +1846,7 @@
                                             <property name="permission">none</property>
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
-                                                <property name="flag">wxALL</property>
+                                                <property name="flag">wxALL|wxEXPAND</property>
                                                 <property name="proportion">0</property>
                                                 <object class="wxButton" expanded="1">
                                                     <property name="bg"></property>
@@ -1898,7 +1898,7 @@
                                             </object>
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
-                                                <property name="flag">wxALL</property>
+                                                <property name="flag">wxALL|wxEXPAND</property>
                                                 <property name="proportion">0</property>
                                                 <object class="wxButton" expanded="1">
                                                     <property name="bg"></property>
@@ -1950,7 +1950,7 @@
                                             </object>
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
-                                                <property name="flag">wxALL</property>
+                                                <property name="flag">wxALL|wxEXPAND</property>
                                                 <property name="proportion">0</property>
                                                 <object class="wxButton" expanded="1">
                                                     <property name="bg"></property>

@@ -45,7 +45,8 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
 /***************/
 BOARD::~BOARD()
 {
-    m_PcbFrame->GetScreen()->ClearUndoRedoList();
+    if( m_PcbFrame->GetScreen() )
+        m_PcbFrame->GetScreen()->ClearUndoRedoList();
 
     while( m_ZoneDescriptorList.size() )
     {
