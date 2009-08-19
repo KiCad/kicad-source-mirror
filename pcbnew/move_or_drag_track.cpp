@@ -827,7 +827,7 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC
     if( TrackToEndPoint )
     {
         TrackToEndPoint->SetState( BUSY, ON );
-        if( (TrackToStartPoint->Type() == TYPE_VIA) ||
+        if( (TrackToEndPoint->Type() == TYPE_VIA) ||
             Locate_Piste_Connectee( track, GetBoard()->m_Track, NULL, END ) )
             error = true;
         TrackToEndPoint->SetState( BUSY, OFF );
