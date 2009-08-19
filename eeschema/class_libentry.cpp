@@ -350,7 +350,7 @@ bool EDA_LibComponentStruct::Load( FILE* file, char* line, int* lineNum,
 
     if( strcmp( p, "DEF" ) != 0 )
     {
-        errorMsg.Printf( wxT( "DEF command expected in line %d, aborted." ),
+        errorMsg.Printf( _( "DEF command expected in line %d, aborted." ),
                          *lineNum );
         return false;
     }
@@ -372,7 +372,7 @@ bool EDA_LibComponentStruct::Load( FILE* file, char* line, int* lineNum,
         || ( p = strtok( NULL, " \t\n" ) ) == NULL       /* m_UnitCount: */
         || sscanf( p, "%d", &m_UnitCount ) != 1 )
     {
-        errorMsg.Printf( wxT( "Wrong DEF format in line %d, skipped." ),
+        errorMsg.Printf( _( "Wrong DEF format in line %d, skipped." ),
                          *lineNum );
         while( GetLine( file, line, lineNum, 1024 ) )
         {
@@ -422,29 +422,27 @@ bool EDA_LibComponentStruct::Load( FILE* file, char* line, int* lineNum,
         if( (line[0] == 'T') && (line[1] == 'i') )
             Res = LoadDateAndTime( line );
         else if( line[0] == 'F' )
-            Res = LoadField( strcat( p, line ), errorMsg );
+            Res = LoadField( line, Msg );
         else if( strcmp( p, "ENDDEF" ) == 0 )
             break;
         else if( strcmp( p, "DRAW" ) == 0 )
-            Res = LoadDrawEntries( file, line, lineNum, errorMsg );
+            Res = LoadDrawEntries( file, line, lineNum, Msg );
         else if( strncmp( p, "ALIAS", 5 ) == 0 )
         {
             p = strtok( NULL, "\r\n" );
             Res = LoadAliases( p, errorMsg );
         }
         else if( strncmp( p, "$FPLIST", 5 ) == 0 )
-            Res = LoadFootprints( file, line, lineNum, errorMsg );
+            Res = LoadFootprints( file, line, lineNum, Msg );
 
         /* End line or block analysis: test for an error */
         if( !Res )
         {
-            Msg.Printf( wxT( "%d " ), *lineNum );
-
-            if( errorMsg.IsEmpty() )
-                errorMsg = wxT( "error at line " ) + Msg;
+            if( Msg.IsEmpty() )
+                errorMsg.Printf( wxT( "error occurred at line %d " ), *lineNum );
             else
-                errorMsg = wxT( "error <" ) + errorMsg +
-                    wxT( "> at line " ) + Msg;
+                errorMsg.Printf( wxT( "error <%s> occurred at line %d " ),
+                                 ( const wxChar* ) Msg, *lineNum );
             return false;
         }
     }
@@ -459,7 +457,6 @@ bool EDA_LibComponentStruct::Load( FILE* file, char* line, int* lineNum,
 bool EDA_LibComponentStruct::LoadDrawEntries( FILE* f, char* line,
                                               int* lineNum, wxString& errorMsg )
 {
-    bool               entryLoaded;
     LibEDA_BaseStruct* newEntry = NULL;
     LibEDA_BaseStruct* headEntry = NULL;
     LibEDA_BaseStruct* tailEntry = NULL;
@@ -468,7 +465,7 @@ bool EDA_LibComponentStruct::LoadDrawEntries( FILE* f, char* line,
     {
         if( GetLine( f, line, lineNum, 1024 ) == NULL )
         {
-            errorMsg = wxT( "File ended prematurely" );
+            errorMsg = _( "file ended prematurely loading component draw element" );
             return false;
         }
 
@@ -481,46 +478,38 @@ bool EDA_LibComponentStruct::LoadDrawEntries( FILE* f, char* line,
         {
         case 'A':    /* Arc */
             newEntry = ( LibEDA_BaseStruct* ) new LibDrawArc(this);
-            entryLoaded = newEntry->Load( line, errorMsg );
             break;
 
         case 'C':    /* Circle */
             newEntry = ( LibEDA_BaseStruct* ) new LibDrawCircle(this);
-            entryLoaded = newEntry->Load( line, errorMsg );
             break;
 
         case 'T':    /* Text */
             newEntry = ( LibEDA_BaseStruct* ) new LibDrawText(this);
-            entryLoaded = newEntry->Load( line, errorMsg );
             break;
 
         case 'S':    /* Square */
             newEntry = ( LibEDA_BaseStruct* ) new LibDrawSquare(this);
-            entryLoaded = newEntry->Load( line, errorMsg );
             break;
 
         case 'X':    /* Pin Description */
             newEntry = ( LibEDA_BaseStruct* ) new LibDrawPin(this);
-            entryLoaded = newEntry->Load( line, errorMsg );
             break;
 
         case 'P':    /* Polyline */
             newEntry = ( LibEDA_BaseStruct* ) new LibDrawPolyline(this);
-            entryLoaded = newEntry->Load( line, errorMsg );
             break;
 
         default:
-            errorMsg.Printf( wxT( "Undefined DRAW command in line %d\n%s, aborted." ),
-                             *lineNum, line );
+            errorMsg.Printf( _( "undefined DRAW command %c" ), line[0] );
             m_Drawings = headEntry;
             return false;
         }
 
-        if( !entryLoaded )
+        if( !newEntry->Load( line, errorMsg ) )
         {
-            errorMsg.Printf( wxT( "> in DRAW command %c in line %d" ), line[0],
-                             *lineNum );
-            errorMsg = wxT( "Error <" ) + errorMsg + wxT( ", aborted." );
+            errorMsg.Printf( _( "error <%s> in DRAW command %c" ),
+                             ( const wxChar* ) errorMsg, line[0] );
             SAFE_DELETE( newEntry );
 
             /* Flush till end of draw section */
@@ -528,12 +517,11 @@ bool EDA_LibComponentStruct::LoadDrawEntries( FILE* f, char* line,
             {
                 if( GetLine( f, line, lineNum, 1024 ) == NULL )
                 {
-                    errorMsg = wxT( "File ended prematurely while attempting \
+                    errorMsg = _( "file ended prematurely while attempting \
 to flush to end of drawing section." );
                     return false;
                 }
             } while( strncmp( line, "ENDDRAW", 7 ) != 0 );
-
 
             SAFE_DELETE( headEntry );
             return false;
@@ -550,13 +538,14 @@ to flush to end of drawing section." );
         }
     }
 
+    m_Drawings = headEntry;
     return true;
 }
 
 
 bool EDA_LibComponentStruct::LoadAliases( char* line, wxString& errorMsg )
 {
-    char* text  = strtok( line, " \t\r\n" );
+    char* text = strtok( line, " \t\r\n" );
 
     while( text )
     {
@@ -570,7 +559,7 @@ bool EDA_LibComponentStruct::LoadAliases( char* line, wxString& errorMsg )
 
 bool EDA_LibComponentStruct::LoadField( char* line, wxString& errorMsg )
 {
-    LibDrawField* field = new LibDrawField(this);
+    LibDrawField* field = new LibDrawField( this );
 
     if ( !field->Load( line, errorMsg ) )
     {
@@ -579,11 +568,19 @@ bool EDA_LibComponentStruct::LoadField( char* line, wxString& errorMsg )
     }
 
     if( field->m_FieldId == REFERENCE )
-        field = &m_Prefix;
+    {
+        m_Prefix = *field;
+        SAFE_DELETE( field );
+    }
     else if ( field->m_FieldId == VALUE )
-        field = &m_Name;
+    {
+        m_Name = *field;
+        SAFE_DELETE( field );
+    }
     else
+    {
         m_Fields.PushBack( field );
+    }
 
     return true;
 }
@@ -592,13 +589,16 @@ bool EDA_LibComponentStruct::LoadField( char* line, wxString& errorMsg )
 bool EDA_LibComponentStruct::LoadFootprints( FILE* file, char* line,
                                              int* lineNum, wxString& errorMsg )
 {
-    while( stricmp( line, "$ENDFPLIST" ) != 0 )
+    while( true )
     {
         if( GetLine( file, line, lineNum, 1024 ) == NULL )
         {
             errorMsg = wxT( "file ended prematurely while loading footprints" );
             return false;
         }
+
+        if( stricmp( line, "$ENDFPLIST" ) == 0 )
+            break;
 
         m_FootprintList.Add( CONV_FROM_UTF8( line + 1 ) );
     }
@@ -690,7 +690,7 @@ void EDA_LibComponentStruct::SetFields( const std::vector <LibDrawField> aFields
     aFields[REFERENCE].Copy( &m_Prefix );
 
     // Remove others fields:
-    CurrentLibEntry->m_Fields.DeleteAll();
+    m_Fields.DeleteAll();
 
     for( unsigned ii = FOOTPRINT; ii < aFields.size(); ii++ )
     {
@@ -704,7 +704,7 @@ void EDA_LibComponentStruct::SetFields( const std::vector <LibDrawField> aFields
         {
             LibDrawField*Field = new LibDrawField( this, ii );
             aFields[ii].Copy( Field );
-            CurrentLibEntry->m_Fields.PushBack( Field );
+            m_Fields.PushBack( Field );
         }
     }
 
@@ -714,8 +714,7 @@ void EDA_LibComponentStruct::SetFields( const std::vector <LibDrawField> aFields
      * text is like a void text and for non editable names, remove the name
      * (set to the default name)
      */
-    for( LibDrawField* Field = CurrentLibEntry->m_Fields; Field;
-         Field = Field->Next() )
+    for( LibDrawField* Field = m_Fields; Field; Field = Field->Next() )
     {
         Field->SetParent( this );
         if( Field->m_FieldId >= FIELD1 )

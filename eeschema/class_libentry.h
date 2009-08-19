@@ -1,6 +1,6 @@
-/****************************************************************/
-/*	Headers fo lib component (or libentry) definitions */
-/****************************************************************/
+/******************************************/
+/*  Library component object definitions. */
+/******************************************/
 
 #ifndef CLASS_LIBENTRY_H
 #define CLASS_LIBENTRY_H
@@ -25,18 +25,21 @@ enum  LibrEntryOptions {
 };
 
 
-/* basic class to describe components in libraries (true component or alias),
- * non used directly */
+/**
+ * Base class to describe library components and aliases.
+ *
+ * This class is not to be  used directly.
+ */
 class LibCmpEntry : public EDA_BaseStruct
 {
 public:
     LibrEntryType    Type;      /* Type = ROOT;
                                  *      = ALIAS pour struct LibraryAliasType */
-    LibDrawField     m_Name;    // name	(74LS00 ..) in lib ( = VALUE )
+    LibDrawField     m_Name;    // name (74LS00 ..) in lib ( = VALUE )
     wxString         m_Doc;     /* documentation for info */
     wxString         m_KeyWord; /* keyword list (used to select a group of
                                  * components by keyword) */
-    wxString         m_DocFile; /* Associed doc filename */
+    wxString         m_DocFile; /* Associate doc file name */
     LibrEntryOptions m_Options; // special features (i.e. Entry is a POWER)
 
 public:
@@ -49,18 +52,23 @@ public:
 
 
     /**
-     * Function SaveDoc
-     * writes the doc info out to a FILE in "*.dcm" format.
+     * Writes the doc info out to a FILE in "*.dcm" format.
+     *
      * @param aFile The FILE to write to.
+     *
      * @return bool - true if success writing else false.
      */
     bool SaveDoc( FILE* aFile );
 };
 
 
-/*********************************************/
-/* class to handle an usual component in lib */
-/*********************************************/
+/**
+ * Library component object definition.
+ *
+ * A library component object is typically save and loaded in a component
+ * library file (.lib).  Library components are different from schematic
+ * components.
+ */
 class EDA_LibComponentStruct : public LibCmpEntry
 {
 public:
@@ -70,7 +78,7 @@ public:
                                           * for the component (wildcard names
                                           * accepted) */
     int                m_UnitCount;      /* Units (or sections) per package */
-    bool               m_UnitSelectionLocked;  /* True if units are differents
+    bool               m_UnitSelectionLocked;  /* True if units are different
                                                 * and their selection is
                                                 * locked (i.e. if part A cannot
                                                 * be automatically changed in
@@ -81,10 +89,9 @@ public:
                                           * m_TextInside in mils */
     bool               m_DrawPinNum;
     bool               m_DrawPinName;
-    DLIST<LibDrawField> m_Fields;         /* Auxiliairy Field list (id >= 2 ) */
+    DLIST<LibDrawField> m_Fields;         /* Auxiliary Field list (id >= 2 ) */
     LibEDA_BaseStruct* m_Drawings;        /* How to draw this part */
     long               m_LastDate;        // Last change Date
-    DLIST<LibEDA_BaseStruct> m_DrawItems;
 
 public:
     virtual wxString GetClass() const
@@ -104,10 +111,10 @@ public:
     bool LoadDateAndTime( char* Line );
 
     /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.lib"
-     * format.
-     * @param aFile The FILE to write to.
+     * Write the data structures out to a FILE in "*.lib" format.
+     *
+     * @param aFile - The FILE to write to.
+     *
      * @return bool - true if success writing else false.
      */
     bool Save( FILE* aFile );
@@ -115,10 +122,10 @@ public:
     /**
      * Load component definition from file.
      *
-     * @param file - File discriptor of file to load form.
+     * @param file - File descriptor of file to load form.
      * @param line - The first line of the component definition.
      * @param lineNum - The current line number in the file.
-     * @param parent - The parent window for displaying message boxes.
+     * @param errorMsg - Description of error on load failure.
      *
      * @return bool - Result of the load, false if there was an error.
      */
@@ -130,17 +137,25 @@ public:
     bool LoadFootprints( FILE* file, char* line,
                          int* lineNum, wxString& errorMsg );
 
-    /** Function SetFields
-     * initialize fields from a vector of fields
-     * @param aFields a std::vector <LibDrawField> to import.
+    /**
+     * Initialize fields from a vector of fields.
+     *
+     * @param aFields - a std::vector <LibDrawField> to import.
      */
     void SetFields( const std::vector <LibDrawField> aFields );
 };
 
 
-/**************************************************************************/
-/* class to handle an alias of an usual component in lib (root component) */
-/**************************************************************************/
+/**
+ * Component library alias object definition.
+ *
+ * Component aliases are not really components.  They are references
+ * to an actual component object.
+ *
+ * @todo Alias objects should really be defined as children of a component
+ *       object not as children of a library object.  This would greatly
+ *       simply searching for components in libraries.
+ */
 class EDA_LibCmpAliasStruct : public LibCmpEntry
 {
 public:
@@ -149,6 +164,7 @@ public:
 public:
     EDA_LibCmpAliasStruct( const wxChar* CmpName, const wxChar* CmpRootName );
     ~EDA_LibCmpAliasStruct();
+
     virtual wxString GetClass() const
     {
         return wxT( "EDA_LibCmpAliasStruct" );

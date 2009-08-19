@@ -60,9 +60,6 @@ void DrawLibraryDrawStruct(WinEDA_DrawPanel * aPanel, wxDC * aDC,
 
 bool MapAngles(int *Angle1, int *Angle2, const int TransMat[2][2]);
 
-EDA_LibComponentStruct * Read_Component_Definition(WinEDA_DrawFrame * frame, char * Line,
-        FILE *f, int *LineNum);
-/* Routine to Read a DEF/ENDDEF part entry from given open file. */
 
 /** Function TransformCoordinate
  * Calculate the wew coordinate from the old one, according to the transform matrix.

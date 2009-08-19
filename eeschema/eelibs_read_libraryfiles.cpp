@@ -1,13 +1,10 @@
 /*****************************************************************/
-/*	Functions to handle component library files : read functions */
+/*  Functions to handle component library files : read functions */
 /*****************************************************************/
-
-#include <iostream>
 
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
-#include "trigo.h"
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
@@ -21,21 +18,16 @@
 #include "dialog_load_error.h"
 
 /* Local Functions */
-static LibEDA_BaseStruct* ReadDrawEntryItemDescription( EDA_LibComponentStruct* aParent, FILE* f,
-                                        char* Line, int* LineNum );
-static bool AddAliasNames( EDA_LibComponentStruct* LibEntry, char* line );
 static void InsertAlias( PriorQue** PQ, EDA_LibComponentStruct* LibEntry,
                          int* NumOfParts );
-static int AddFootprintFilterList( EDA_LibComponentStruct* LibEntryLibEntry,
-                                   FILE* f, char* Line, int* LineNum );
 
 
 // If this code was written in C++ then this would not be needed.
 static wxString currentLibraryName;
 
 
-
 /****************************************************************************/
+
 /** Function LoadLibraryName
  * Routine to load the given library name. FullLibName should hold full path
  * of file name to open, while LibName should hold only its name.
@@ -44,8 +36,8 @@ static wxString currentLibraryName;
  */
 /****************************************************************************/
 LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
-                                const wxString& FullLibName,
-                                const wxString& LibName )
+                                const wxString&   FullLibName,
+                                const wxString&   LibName )
 {
     int            NumOfParts;
     FILE*          f;
@@ -111,10 +103,10 @@ LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
  */
 void LoadLibraries( WinEDA_SchematicFrame* frame )
 {
-    wxFileName fn;
-    wxString msg, tmp;
-    wxString libraries_not_found;
-    unsigned ii, iimax = frame->m_ComponentLibFiles.GetCount();
+    wxFileName     fn;
+    wxString       msg, tmp;
+    wxString       libraries_not_found;
+    unsigned       ii, iimax = frame->m_ComponentLibFiles.GetCount();
 
     // Free the unwanted libraries (i.e. not in list) but keep the cache lib
     LibraryStruct* nextlib, * lib = g_LibraryList;
@@ -144,7 +136,7 @@ void LoadLibraries( WinEDA_SchematicFrame* frame )
             tmp = wxGetApp().FindLibraryPath( fn );
             if( !tmp )
             {
-		libraries_not_found += fn.GetName() + _("\n");
+                libraries_not_found += fn.GetName() + _( "\n" );
                 continue;
             }
         }
@@ -155,7 +147,6 @@ void LoadLibraries( WinEDA_SchematicFrame* frame )
 
         // Loaded library statusbar message
         msg = _( "Library " ) + tmp;
-        frame->PrintMsg( msg );
 
         if( LoadLibraryName( frame, tmp, fn.GetName() ) )
             msg += _( " loaded" );
@@ -165,21 +156,20 @@ void LoadLibraries( WinEDA_SchematicFrame* frame )
         frame->PrintMsg( msg );
     }
 
-	/* Print the libraries not found */
-	if( !libraries_not_found.IsEmpty() )
-	{
-		DIALOG_LOAD_ERROR dialog(frame);
-		dialog.MessageSet(_("The following libraries could not be found:"));
-		dialog.ListSet(libraries_not_found);
-		libraries_not_found.empty();
-		dialog.ShowModal();
-	}
-
-
+    /* Print the libraries not found */
+    if( !libraries_not_found.IsEmpty() )
+    {
+        DIALOG_LOAD_ERROR dialog( frame );
+        dialog.MessageSet( _( "The following libraries could not be found:" ) );
+        dialog.ListSet( libraries_not_found );
+        libraries_not_found.empty();
+        dialog.ShowModal();
+    }
 
     // reorder the linked list to match the order filename list:
-    int            NumOfLibs;
-    for( NumOfLibs = 0, lib = g_LibraryList; lib != NULL; lib = lib->m_Pnext )
+    int NumOfLibs = 0;
+
+    for( lib = g_LibraryList; lib != NULL; lib = lib->m_Pnext )
     {
         lib->m_Flags = 0;
         NumOfLibs++;
@@ -191,12 +181,13 @@ void LoadLibraries( WinEDA_SchematicFrame* frame )
     LibraryStruct** libs =
         (LibraryStruct**) MyZMalloc( sizeof(LibraryStruct*) * (NumOfLibs + 2) );
 
-    int             jj = 0;
+    int jj = 0;
+
     for( ii = 0; ii < frame->m_ComponentLibFiles.GetCount(); ii++ )
     {
         if( jj >= NumOfLibs )
             break;
-        fn = frame->m_ComponentLibFiles[ii];
+        fn  = frame->m_ComponentLibFiles[ii];
         lib = FindLibrary( fn.GetName() );
         if( lib )
         {
@@ -228,11 +219,12 @@ void LoadLibraries( WinEDA_SchematicFrame* frame )
 
 
 /**************************************************************/
+
 /** Function FreeCmpLibrary
  * Routine to remove and free a library from the current loaded libraries.
  */
 /**************************************************************/
-void FreeCmpLibrary (wxWindow* frame, const wxString& LibName)
+void FreeCmpLibrary( wxWindow* frame, const wxString& LibName )
 {
     int            NumOfLibs = NumOfLibraries();
     LibraryStruct* Lib, * TempLib;
@@ -267,7 +259,7 @@ void FreeCmpLibrary (wxWindow* frame, const wxString& LibName)
     SAFE_DELETE( Lib );
 
     /* The removed librairy can be the current library in libedit.
-      * If so, clear the current library in libedit */
+     * If so, clear the current library in libedit */
     if( Lib == CurrentLib )
         CurrentLib = NULL;
 }
@@ -277,8 +269,8 @@ void FreeCmpLibrary (wxWindow* frame, const wxString& LibName)
  * Routine to compare two EDA_LibComponentStruct for the PriorQue module.
  * Comparison (insensitive  case) is based on Part name.
  */
-int LibraryEntryCompare (EDA_LibComponentStruct* LE1,
-                         EDA_LibComponentStruct* LE2)
+int LibraryEntryCompare( EDA_LibComponentStruct* LE1,
+                         EDA_LibComponentStruct* LE2 )
 {
     return LE1->m_Name.m_Text.CmpNoCase( LE2->m_Name.m_Text );
 }
@@ -302,15 +294,16 @@ PriorQue* LoadLibraryAux( WinEDA_DrawFrame* frame, LibraryStruct* Library,
 
     if( GetLine( libfile, Line, &LineNum, sizeof(Line) ) == NULL )
     {
-        msg = _( "File <" ) + Library->m_Name + _( "> is empty!" );
+        msg.Printf( _( "File <%s> is empty!" ),
+                    (const wxChar*) Library->m_Name );
         DisplayError( frame, msg );
         return NULL;
     }
 
     if( strnicmp( Line, LIBFILE_IDENT, 10 ) != 0 )
     {
-        msg = _( "File <" ) + Library->m_Name +
-            _( "> is NOT EESCHEMA library!" );
+        msg.Printf( _( "File <%s> is NOT an EESCHEMA library!" ),
+                    (const wxChar*) Library->m_Name );
         DisplayError( frame, msg );
         return NULL;
     }
@@ -327,8 +320,8 @@ PriorQue* LoadLibraryAux( WinEDA_DrawFrame* frame, LibraryStruct* Library,
         {
             if( Library && !Library->ReadHeader( libfile, &LineNum ) )
             {
-                msg = _( "Library <" ) + Library->m_Name +
-                    _( "> header read error" );
+                msg.Printf( _( "Library <%s> header read error" ),
+                            (const wxChar*) Library->m_Name );
                 DisplayError( frame, msg, 30 );
             }
             continue;
@@ -337,14 +330,22 @@ PriorQue* LoadLibraryAux( WinEDA_DrawFrame* frame, LibraryStruct* Library,
         if( strnicmp( Line, "DEF", 3 ) == 0 )
         {
             /* Read one DEF/ENDDEF part entry from library: */
-            LibEntry = Read_Component_Definition( frame, Line, libfile,
-                                                  &LineNum );
-            if( LibEntry )
+            LibEntry = new EDA_LibComponentStruct( NULL );
+
+            if( LibEntry->Load( libfile, Line, &LineNum, msg ) )
             {
                 /* If we are here, this part is O.k. - put it in: */
-                ++ * NumOfParts;
+                ++*NumOfParts;
                 PQInsert( &PQ, LibEntry );
                 InsertAlias( &PQ, LibEntry, NumOfParts );
+            }
+            else
+            {
+                wxLogWarning( _( "Library <%s> component load error %s." ),
+                              (const wxChar*) Library->m_Name,
+                              (const wxChar*) msg );
+                msg.Clear();
+                delete LibEntry;
             }
         }
     }
@@ -353,315 +354,10 @@ PriorQue* LoadLibraryAux( WinEDA_DrawFrame* frame, LibraryStruct* Library,
 }
 
 
-/*****************************************************************************/
-/* Analyse la ligne de description du champ de la forme:
- *  Fn "CA3130" 150 -200 50 H V
- *  ou n = 0 (REFERENCE), 1 (VALUE) , 2 .. 11 = autres champs, facultatifs
- */
-/*****************************************************************************/
-static bool GetLibEntryField ( EDA_LibComponentStruct* LibEntry, char* line,
-                               wxString& errorMsg )
-{
-    LibDrawField* field = new LibDrawField();
-
-    if ( !field->Load( line, errorMsg ) )
-    {
-        SAFE_DELETE( field );
-        return false;
-    }
-
-    switch( field->m_FieldId )
-    {
-    case REFERENCE:
-        LibEntry->m_Prefix = *field;
-        SAFE_DELETE( field );
-        break;
-
-    case VALUE:
-        LibEntry->m_Name = *field;
-        SAFE_DELETE( field );
-        break;
-
-    default:
-        LibEntry->m_Fields.PushBack( field );
-        break;
-    }
-
-    return true;
-}
-
-
-/*****************************************************************************/
-/* Routine to Read a DEF/ENDDEF part entry from given open file.
- */
-/*****************************************************************************/
-EDA_LibComponentStruct* Read_Component_Definition( WinEDA_DrawFrame* frame,
-                                                   char* Line,
-                                                   FILE* f,
-                                                   int* LineNum )
-{
-    int      unused;
-    char*    p;
-    char*    name;
-    char*    prefix = NULL;
-
-    EDA_LibComponentStruct* LibEntry = NULL;
-    bool     Res;
-    wxString Msg, errorMsg;
-
-    p = strtok( Line, " \t\r\n" );
-
-    if( strcmp( p, "DEF" ) != 0 )
-    {
-        Msg.Printf( wxT( "DEF command expected in line %d, aborted." ),
-                    *LineNum );
-        DisplayError( frame, Msg );
-        return NULL;
-    }
-
-    /* Read DEF line: */
-    char drawnum = 0;
-    char drawname = 0;
-
-    LibEntry = new EDA_LibComponentStruct( NULL );
-
-    if( ( name = strtok( NULL, " \t\n" ) ) == NULL      /* Part name: */
-        || ( prefix = strtok( NULL, " \t\n" ) ) == NULL  /* Prefix name: */
-        || ( p = strtok( NULL, " \t\n" ) ) == NULL       /* NumOfPins: */
-        || sscanf( p, "%d", &unused ) != 1
-        || ( p = strtok( NULL, " \t\n" ) ) == NULL       /* TextInside: */
-        || sscanf( p, "%d", &LibEntry->m_TextInside ) != 1
-        || ( p = strtok( NULL, " \t\n" ) ) == NULL       /* DrawNums: */
-        || sscanf( p, "%c", &drawnum ) != 1
-        || ( p = strtok( NULL, " \t\n" ) ) == NULL       /* DrawNums: */
-        || sscanf( p, "%c", &drawname ) != 1
-        || ( p = strtok( NULL, " \t\n" ) ) == NULL       /* m_UnitCount: */
-        || sscanf( p, "%d", &LibEntry->m_UnitCount ) != 1 )
-    {
-        Msg.Printf( wxT( "Wrong DEF format in line %d, skipped." ), *LineNum );
-        DisplayError( frame, Msg );
-        while( GetLine( f, Line, LineNum, 1024 ) )
-        {
-            p = strtok( Line, " \t\n" );
-            if( stricmp( p, "ENDDEF" ) == 0 )
-                break;
-        }
-
-        return NULL;
-    }
-    else    /* Update infos read from the line "DEF" */
-    {
-        LibEntry->m_DrawPinNum  = (drawnum == 'N') ? FALSE : TRUE;
-        LibEntry->m_DrawPinName = (drawname == 'N') ? FALSE : TRUE;
-
-        /* Copy part name and prefix. */
-        strupper( name );
-        if( name[0] != '~' )
-            LibEntry->m_Name.m_Text = CONV_FROM_UTF8( name );
-        else
-        {
-            LibEntry->m_Name.m_Text       = CONV_FROM_UTF8( &name[1] );
-            LibEntry->m_Name.m_Attributs |= TEXT_NO_VISIBLE;
-        }
-
-        if( strcmp( prefix, "~" ) == 0 )
-        {
-            LibEntry->m_Prefix.m_Text.Empty();
-            LibEntry->m_Prefix.m_Attributs |= TEXT_NO_VISIBLE;
-        }
-        else
-            LibEntry->m_Prefix.m_Text = CONV_FROM_UTF8( prefix );
-
-        // Copy optional infos
-        // m_UnitSelectionLocked param
-        if( ( p = strtok( NULL, " \t\n" ) ) != NULL )
-        {
-            if( *p == 'L' )
-                LibEntry->m_UnitSelectionLocked = TRUE;
-        }
-        if( ( p = strtok( NULL, " \t\n" ) ) != NULL )     /* Type Of Component */
-        {
-            if( *p == 'P' )
-                LibEntry->m_Options = ENTRY_POWER;
-        }
-    }
-
-    /* Read next lines */
-    while( GetLine( f, Line, LineNum, 1024 ) )
-    {
-        p = strtok( Line, " \t\n" );
-
-        /* This is the error flag ( if an error occurs, Res = FALSE) */
-        Res = TRUE;
-
-        if( (Line[0] == 'T') && (Line[1] == 'i') )
-        {
-            Res = LibEntry->LoadDateAndTime( Line );
-        }
-        else if( Line[0] == 'F' )
-        {
-            Res = GetLibEntryField( LibEntry, Line, errorMsg );
-        }
-        else if( strcmp( p, "ENDDEF" ) == 0 )
-        {
-            p = strtok( Line, " \t\n" );
-            break;
-        }
-        else if( strcmp( p, "DRAW" ) == 0 )
-        {
-            LibEntry->m_Drawings = ReadDrawEntryItemDescription( LibEntry, f, Line, LineNum );
-        }
-        else if( strncmp( p, "ALIAS", 5 ) == 0 )
-        {
-            p = strtok( NULL, "\r\n" );
-            Res = AddAliasNames( LibEntry, p );
-        }
-        else if( strncmp( p, "$FPLIST", 5 ) == 0 )
-        {
-            Res = AddFootprintFilterList( LibEntry, f, Line, LineNum );
-        }
-        else
-        {
-            Msg.Printf( wxT( "Undefined command \"%s\" in line %d, skipped." ),
-                        p, *LineNum );
-            frame->PrintMsg( Msg );
-        }
-
-        /* End line or block analysis: test for an error */
-        if( !Res )
-        {           /* Something went wrong there. */
-            if( errorMsg.IsEmpty() )
-                Msg.Printf( wxT( "Error at line %d of library \n\"%s\",\nlibrary not loaded" ),
-                            *LineNum, currentLibraryName.GetData() );
-            else
-                Msg.Printf( wxT( "Error <%s> at line %d of library \n\"%s\",\nlibrary not loaded" ),
-                            errorMsg.c_str(), *LineNum,
-                            currentLibraryName.GetData() );
-            DisplayError( frame, Msg );
-            SAFE_DELETE( LibEntry );
-            return NULL;
-        }
-    }
-
-    /* If we are here, this part is O.k. - put it in: */
-    LibEntry->SortDrawItems();
-    return LibEntry;
-}
-
-
 /*****************************************************************************
-* Routine to load a DRAW definition from given file. Note "DRAW" line has	 *
-* been read already. Reads upto and include ENDDRAW, or an error (NULL ret). *
+* Routine to find the library given its name.                            *
 *****************************************************************************/
-
-static LibEDA_BaseStruct* ReadDrawEntryItemDescription (EDA_LibComponentStruct* aParent, FILE* f,
-                                        char* Line, int* LineNum)
-{
-    wxString           MsgLine, errorMsg;
-    bool               entryLoaded;
-    LibEDA_BaseStruct* Tail = NULL;
-    LibEDA_BaseStruct* New = NULL;
-    LibEDA_BaseStruct* Head = NULL;
-
-    while( TRUE )
-    {
-        if( GetLine( f, Line, LineNum, 1024 ) == NULL )
-        {
-            DisplayError( NULL, wxT( "File ended prematurely" ) );
-            return Head;
-        }
-
-        if( strncmp( Line, "ENDDRAW", 7 ) == 0 )
-        {
-            break;
-        }
-
-        New = NULL;
-
-        switch( Line[0] )
-        {
-        case 'A':    /* Arc */
-            New = ( LibEDA_BaseStruct* ) new LibDrawArc(aParent);
-            entryLoaded = New->Load( Line, errorMsg );
-            break;
-
-        case 'C':    /* Circle */
-            New = ( LibEDA_BaseStruct* ) new LibDrawCircle(aParent);
-            entryLoaded = New->Load( Line, errorMsg );
-            break;
-
-        case 'T':    /* Text */
-            New = ( LibEDA_BaseStruct* ) new LibDrawText(aParent);
-            entryLoaded = New->Load( Line, errorMsg );
-            break;
-
-        case 'S':    /* Square */
-            New = ( LibEDA_BaseStruct* ) new LibDrawSquare(aParent);
-            entryLoaded = New->Load( Line, errorMsg );
-            break;
-
-        case 'X':    /* Pin Description */
-            New = ( LibEDA_BaseStruct* ) new LibDrawPin(aParent);
-            entryLoaded = New->Load( Line, errorMsg );
-            break;
-
-        case 'P':    /* Polyline */
-            New = ( LibEDA_BaseStruct* ) new LibDrawPolyline(aParent);
-            entryLoaded = New->Load( Line, errorMsg );
-            break;
-
-        case 'B':    /* Bezier */
-            New = ( LibEDA_BaseStruct* ) new LibDrawBezier(aParent);
-            entryLoaded = New->Load( Line, errorMsg );
-            break;
-
-        default:
-            MsgLine.Printf( wxT( "Undefined DRAW command in line %d\n%s, aborted." ),
-                            *LineNum, Line );
-            DisplayError( NULL, MsgLine );
-            return Head;
-        }
-
-        if( !entryLoaded )
-        {
-            MsgLine.Printf( wxT( "Error <%s %s> in DRAW command %c in line %d, aborted." ),
-                            errorMsg.c_str(), MsgLine.c_str(),
-                            Line[0], *LineNum );
-            DisplayError( NULL, MsgLine );
-            SAFE_DELETE( New );
-
-            /* FLush till end of draw: */
-            do
-            {
-                if( GetLine( f, Line, LineNum, 1024 ) == NULL )
-                {
-                    DisplayError( NULL, wxT( "File ended prematurely" ) );
-                    return Head;
-                }
-            } while( strncmp( Line, "ENDDRAW", 7 ) != 0 );
-
-            return Head;
-        }
-        else
-        {
-            if( Head == NULL )
-                Head = Tail = New;
-            else
-            {
-                Tail->SetNext( New );
-                Tail = New;
-            }
-        }
-    }
-
-    return Head;
-}
-
-
-/*****************************************************************************
-* Routine to find the library given its name.		                     *
-*****************************************************************************/
-LibraryStruct* FindLibrary (const wxString& Name)
+LibraryStruct* FindLibrary( const wxString& Name )
 {
     LibraryStruct* Lib = g_LibraryList;
 
@@ -677,7 +373,7 @@ LibraryStruct* FindLibrary (const wxString& Name)
 
 
 /*****************************************************************************
-* Routine to find the number of libraries currently loaded.	             *
+* Routine to find the number of libraries currently loaded.              *
 *****************************************************************************/
 int NumOfLibraries()
 {
@@ -692,47 +388,21 @@ int NumOfLibraries()
 
 
 /********************************************************************/
-/* Read the alias names (in buffer line) and add them in alias list
- *  names are separated by spaces
- */
-/********************************************************************/
-static bool AddAliasNames (EDA_LibComponentStruct* LibEntry, char* line )
-{
-    char*    text;
-    wxString name;
-
-    text = strtok( line, " \t\r\n" );
-
-    while( text )
-    {
-        name = CONV_FROM_UTF8( text );
-        LibEntry->m_AliasList.Add( name );
-        text = strtok( NULL, " \t\r\n" );
-    }
-
-    return TRUE;
-}
-
-
-/********************************************************************/
 /* create in library (in list PQ) aliases of the "root" component LibEntry*/
 /********************************************************************/
-static void InsertAlias (PriorQue** PQ, EDA_LibComponentStruct* LibEntry,
-                         int* NumOfParts)
+static void InsertAlias( PriorQue** PQ, EDA_LibComponentStruct* LibEntry,
+                         int* NumOfParts )
 {
     EDA_LibCmpAliasStruct* AliasEntry;
     unsigned ii;
-
-    if( LibEntry->m_AliasList.GetCount() == 0 )
-        return; /* No alias for this component */
 
     for( ii = 0; ii < LibEntry->m_AliasList.GetCount(); ii++ )
     {
         AliasEntry =
             new EDA_LibCmpAliasStruct( LibEntry->m_AliasList[ii],
-                                       LibEntry->m_Name.m_Text.GetData() );
+                                      LibEntry->m_Name.m_Text.GetData() );
 
-        ++ * NumOfParts;
+        ++*NumOfParts;
         PQInsert( PQ, AliasEntry );
     }
 }
@@ -785,7 +455,7 @@ int LoadDocLib( WinEDA_DrawFrame* frame, const wxString& FullDocLibName,
         Name = strtok( Line + 5, "\n\r" );
         wxString cmpname;
         cmpname = CONV_FROM_UTF8( Name );
-        Entry = FindLibPart( cmpname.GetData(), Libname, FIND_ALIAS );
+        Entry   = FindLibPart( cmpname.GetData(), Libname, FIND_ALIAS );
         while( GetLine( f, Line, &LineNum, sizeof(Line) ) )
         {
             if( strncmp( Line, "$ENDCMP", 7 ) == 0 )
@@ -813,35 +483,5 @@ int LoadDocLib( WinEDA_DrawFrame* frame, const wxString& FullDocLibName,
     }
 
     fclose( f );
-    return 1;
-}
-
-
-/*****************************************************************************/
-/* read the FootprintFilter List stating with:
- *  FPLIST
- *  and ending with:
- *  ENDFPLIST
- */
-/*****************************************************************************/
-int AddFootprintFilterList(EDA_LibComponentStruct* LibEntryLibEntry,
-                           FILE* f, char* Line, int* LineNum)
-{
-    for( ; ; )
-    {
-        if( GetLine( f, Line, LineNum, 1024 ) == NULL )
-        {
-            DisplayError( NULL, wxT( "File ended prematurely" ) );
-            return 0;
-        }
-
-        if( stricmp( Line, "$ENDFPLIST" ) == 0 )
-        {
-            break;  /*normal exit on end of list */
-        }
-
-        LibEntryLibEntry->m_FootprintList.Add( CONV_FROM_UTF8( Line + 1 ) );
-    }
-
     return 1;
 }

@@ -108,7 +108,10 @@ bool LibDrawField::Load( char* line, wxString& errorMsg )
 
     if( sscanf( line + 1, "%d", &m_FieldId ) != 1
         || m_FieldId < REFERENCE || m_FieldId >= NUMBER_OF_FIELDS )
+    {
+        errorMsg = _( "invalid field number defined" );
         return false;
+    }
 
     /* Recherche du debut des donnees (debut du texte suivant) */
     while( *line != 0 )
@@ -144,7 +147,12 @@ bool LibDrawField::Load( char* line, wxString& errorMsg )
                   &textOrient, &textVisible, &textHJustify, textVJustify );
 
     if( cnt < 5 )
+    {
+        errorMsg.Printf( _( "field %d does not have the correct number of \
+parameters" ),
+                         m_FieldId );
         return false;
+    }
 
     m_Text = CONV_FROM_UTF8( text );
     m_Size.x = m_Size.y;
@@ -154,14 +162,24 @@ bool LibDrawField::Load( char* line, wxString& errorMsg )
     else if( textOrient == 'V' )
         m_Orient = TEXT_ORIENT_VERT;
     else
+    {
+        errorMsg.Printf( _( "field %d text orientation parameter <%c> is \
+not valid" ),
+                         textOrient );
         return false;
+    }
 
     if( textVisible == 'V' )
         m_Attributs &= ~TEXT_NO_VISIBLE;
     else if ( textVisible == 'I' )
         m_Attributs |= TEXT_NO_VISIBLE;
     else
+    {
+        errorMsg.Printf( _( "field %d text visible parameter <%c> is not \
+valid" ),
+                         textVisible );
         return false;
+    }
 
     m_HJustify = GR_TEXT_HJUSTIFY_CENTER;
     m_VJustify = GR_TEXT_VJUSTIFY_CENTER;
@@ -175,7 +193,12 @@ bool LibDrawField::Load( char* line, wxString& errorMsg )
         else if( textHJustify == 'R' )
             m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
         else
+        {
+            errorMsg.Printf( _( "field %d text horizontal justification \
+parameter <%c> is not valid" ),
+                             textHJustify );
             return false;
+        }
 
         if( textVJustify[0] == 'C' )
             m_VJustify = GR_TEXT_VJUSTIFY_CENTER;
@@ -184,7 +207,12 @@ bool LibDrawField::Load( char* line, wxString& errorMsg )
         else if( textVJustify[0] == 'T' )
             m_VJustify = GR_TEXT_VJUSTIFY_TOP;
         else
+        {
+            errorMsg.Printf( _( "field %d text vertical justification \
+parameter <%c> is not valid" ),
+                             textVJustify[0] );
             return false;
+        }
 
         if ( textVJustify[1] == 'I' )  // Italic
             m_Italic = true;
