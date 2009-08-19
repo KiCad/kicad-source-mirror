@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-17 22:02+0100\n"
-"PO-Revision-Date: 2009-08-17 22:02+0100\n"
+"POT-Creation-Date: 2009-08-19 16:53+0100\n"
+"PO-Revision-Date: 2009-08-19 16:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -2165,7 +2165,7 @@ msgstr "Pas en Netliste:"
 msgid "File <%s> not found, use Netlist for lib module selection"
 msgstr "Fichier <%s> non trouvé, Netliste utilisée pour sélection des  modules en lib."
 
-#: pcbnew/netlist.cpp:1007
+#: pcbnew/netlist.cpp:1003
 #, c-format
 msgid "Component [%s]: footprint <%s> not found"
 msgstr "Composant [%s]: Module <%s> non trouvé en librairie"
@@ -3960,7 +3960,7 @@ msgstr ""
 "Modèle en mode avancé, pour filtrer les noms de net en liste\n"
 "Les noms de net correspondant à ce modèle ne sont pas listés"
 
-#: pcbnew/dialog_copper_zones_base.cpp:194
+#: pcbnew/dialog_copper_zones_base.cpp:197
 msgid "Net:"
 msgstr "Net:"
 
@@ -4452,6 +4452,97 @@ msgstr "Visible"
 msgid "Invisible"
 msgstr "Invisible"
 
+#: pcbnew/class_board_item.cpp:27
+msgid "Bezier Curve"
+msgstr "Courbe de Bezier"
+
+#: pcbnew/class_board_item.cpp:58
+msgid "Footprint"
+msgstr "Module"
+
+#: pcbnew/class_board_item.cpp:64
+msgid "Pad"
+msgstr "Pad"
+
+#: pcbnew/class_board_item.cpp:67
+msgid "all copper layers"
+msgstr "Toutes Couches Cuivre"
+
+#: pcbnew/class_board_item.cpp:72
+msgid "???"
+msgstr "???"
+
+#: pcbnew/class_board_item.cpp:73
+msgid ") of "
+msgstr ") de "
+
+#: pcbnew/class_board_item.cpp:77
+msgid "Pcb Graphic"
+msgstr "Pcb Graphic"
+
+#: pcbnew/class_board_item.cpp:79
+#: pcbnew/class_board_item.cpp:131
+msgid "Length:"
+msgstr "Long.:"
+
+#: pcbnew/class_board_item.cpp:80
+#: pcbnew/class_board_item.cpp:89
+#: pcbnew/class_board_item.cpp:129
+#: pcbnew/class_board_item.cpp:165
+#: pcbnew/class_board_item.cpp:181
+#: pcbnew/class_board_item.cpp:209
+#: pcbnew/class_board_item.cpp:226
+msgid " on "
+msgstr " sur "
+
+#: pcbnew/class_board_item.cpp:84
+msgid "Pcb Text"
+msgstr "Texte Pcb"
+
+#: pcbnew/class_board_item.cpp:96
+#: pcbnew/dialog_netlist_fbp.cpp:25
+msgid "Reference"
+msgstr "Référence"
+
+#: pcbnew/class_board_item.cpp:100
+#: pcbnew/class_board_item.cpp:106
+#: pcbnew/class_board_item.cpp:116
+msgid " of "
+msgstr " de "
+
+#: pcbnew/class_board_item.cpp:113
+msgid "Graphic"
+msgstr "Graphique"
+
+#: pcbnew/class_board_item.cpp:150
+msgid "Not on copper layer"
+msgstr "Pas sur Couches Cuivre"
+
+#: pcbnew/class_board_item.cpp:169
+#: pcbnew/class_track.cpp:904
+msgid "Zone"
+msgstr "Zone"
+
+#: pcbnew/class_board_item.cpp:191
+msgid "Blind/Buried"
+msgstr "Borgne/Aveugle"
+
+#: pcbnew/class_board_item.cpp:193
+msgid "Micro Via"
+msgstr "Micro Via"
+
+#: pcbnew/class_board_item.cpp:221
+msgid "Dimension"
+msgstr "Dimension"
+
+#: pcbnew/class_board_item.cpp:226
+msgid "Target"
+msgstr "Mire"
+
+#: pcbnew/class_board_item.cpp:227
+msgid "size"
+msgstr "dimension"
+
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:22
 msgid "No Display"
 msgstr "Pas d'affichage"
@@ -4710,97 +4801,6 @@ msgstr "Texte PCB"
 #: pcbnew/dialog_netlist.cpp:68
 msgid "Netlist Selection:"
 msgstr "Sélection de la netliste"
-
-#: pcbnew/class_board_item.cpp:27
-msgid "Bezier Curve"
-msgstr "Courbe de Bezier"
-
-#: pcbnew/class_board_item.cpp:58
-msgid "Footprint"
-msgstr "Module"
-
-#: pcbnew/class_board_item.cpp:64
-msgid "Pad"
-msgstr "Pad"
-
-#: pcbnew/class_board_item.cpp:67
-msgid "all copper layers"
-msgstr "Toutes Couches Cuivre"
-
-#: pcbnew/class_board_item.cpp:72
-msgid "???"
-msgstr "???"
-
-#: pcbnew/class_board_item.cpp:73
-msgid ") of "
-msgstr ") de "
-
-#: pcbnew/class_board_item.cpp:77
-msgid "Pcb Graphic"
-msgstr "Pcb Graphic"
-
-#: pcbnew/class_board_item.cpp:79
-#: pcbnew/class_board_item.cpp:131
-msgid "Length:"
-msgstr "Long.:"
-
-#: pcbnew/class_board_item.cpp:80
-#: pcbnew/class_board_item.cpp:89
-#: pcbnew/class_board_item.cpp:129
-#: pcbnew/class_board_item.cpp:165
-#: pcbnew/class_board_item.cpp:181
-#: pcbnew/class_board_item.cpp:209
-#: pcbnew/class_board_item.cpp:226
-msgid " on "
-msgstr " sur "
-
-#: pcbnew/class_board_item.cpp:84
-msgid "Pcb Text"
-msgstr "Texte Pcb"
-
-#: pcbnew/class_board_item.cpp:96
-#: pcbnew/dialog_netlist_fbp.cpp:25
-msgid "Reference"
-msgstr "Référence"
-
-#: pcbnew/class_board_item.cpp:100
-#: pcbnew/class_board_item.cpp:106
-#: pcbnew/class_board_item.cpp:116
-msgid " of "
-msgstr " de "
-
-#: pcbnew/class_board_item.cpp:113
-msgid "Graphic"
-msgstr "Graphique"
-
-#: pcbnew/class_board_item.cpp:150
-msgid "Not on copper layer"
-msgstr "Pas sur Couches Cuivre"
-
-#: pcbnew/class_board_item.cpp:169
-#: pcbnew/class_track.cpp:904
-msgid "Zone"
-msgstr "Zone"
-
-#: pcbnew/class_board_item.cpp:191
-msgid "Blind/Buried"
-msgstr "Borgne/Aveugle"
-
-#: pcbnew/class_board_item.cpp:193
-msgid "Micro Via"
-msgstr "Micro Via"
-
-#: pcbnew/class_board_item.cpp:221
-msgid "Dimension"
-msgstr "Dimension"
-
-#: pcbnew/class_board_item.cpp:226
-msgid "Target"
-msgstr "Mire"
-
-#: pcbnew/class_board_item.cpp:227
-msgid "size"
-msgstr "dimension"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:35
 msgid "Exclude Edges_Pcb Layer"
@@ -5215,23 +5215,23 @@ msgstr "Change Perçage"
 msgid "Change Orientation"
 msgstr "Change Orientation"
 
-#: pcbnew/class_board.cpp:535
+#: pcbnew/class_board.cpp:536
 msgid "Nodes"
 msgstr "Nodes"
 
-#: pcbnew/class_board.cpp:538
+#: pcbnew/class_board.cpp:539
 msgid "Nets"
 msgstr "Nets"
 
-#: pcbnew/class_board.cpp:546
+#: pcbnew/class_board.cpp:547
 msgid "Links"
 msgstr "Liens"
 
-#: pcbnew/class_board.cpp:549
+#: pcbnew/class_board.cpp:550
 msgid "Connect"
 msgstr "Connect"
 
-#: pcbnew/class_board.cpp:552
+#: pcbnew/class_board.cpp:553
 msgid "NoConn"
 msgstr "Non Conn"
 
@@ -5259,7 +5259,7 @@ msgstr "Chemin déjà en usage"
 msgid "Footprint document file:"
 msgstr "Documentation des Modules:"
 
-#: pcbnew/dialog_edit_module_text.cpp:97
+#: pcbnew/dialog_edit_module_text.cpp:99
 msgid "Value:"
 msgstr "Valeur:"
 
@@ -5727,9 +5727,8 @@ msgstr "Déplacement et Placement Automatique"
 
 #: pcbnew/dialog_edit_module_for_Modedit_base.cpp:85
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:117
-#, fuzzy
 msgid "Auto Move and Place"
-msgstr "Move et Place Globaux"
+msgstr "Move et Place Automatiques"
 
 #: pcbnew/dialog_edit_module_for_Modedit_base.cpp:87
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:119
@@ -5776,13 +5775,13 @@ msgstr "Suppr. Forme 3D:"
 msgid "3D settings"
 msgstr "3D Caract"
 
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:81
-#: pcbnew/dialog_edit_module_for_BoardEditor.cpp:203
+#: pcbnew/dialog_edit_module_for_Modedit.cpp:83
+#: pcbnew/dialog_edit_module_for_BoardEditor.cpp:205
 msgid "Use this attribute for most non smd components"
 msgstr "Utiliser cet attribut pour la plupart des composants"
 
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:84
-#: pcbnew/dialog_edit_module_for_BoardEditor.cpp:206
+#: pcbnew/dialog_edit_module_for_Modedit.cpp:86
+#: pcbnew/dialog_edit_module_for_BoardEditor.cpp:208
 msgid ""
 "Use this attribute for smd components.\n"
 "Only components with this option are put in the footprint position list file"
@@ -5790,38 +5789,38 @@ msgstr ""
 "Uiliser cet attribut pour les composants CMS.\n"
 "Seuls les composants avec cette option sont mis dans le fichier de position des composants"
 
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:87
-#: pcbnew/dialog_edit_module_for_BoardEditor.cpp:209
+#: pcbnew/dialog_edit_module_for_Modedit.cpp:89
+#: pcbnew/dialog_edit_module_for_BoardEditor.cpp:211
 msgid "Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)"
 msgstr "Uiliser cet attribut pour les composants \"virtuels\" directement dessinés sur le PCB (tel que les vieux connecteurs ISA de PC)"
 
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:113
-#: pcbnew/dialog_edit_module_for_BoardEditor.cpp:235
+#: pcbnew/dialog_edit_module_for_Modedit.cpp:115
+#: pcbnew/dialog_edit_module_for_BoardEditor.cpp:237
 msgid "Enable hotkey move commands and Auto Placement"
 msgstr "Autoriser les commandes clavier de déplacement et l'auto placement"
 
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:114
-#: pcbnew/dialog_edit_module_for_BoardEditor.cpp:236
+#: pcbnew/dialog_edit_module_for_Modedit.cpp:116
+#: pcbnew/dialog_edit_module_for_BoardEditor.cpp:238
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr "Interdire les commandes clavier de déplacement et l'auto placement"
 
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:123
-#: pcbnew/dialog_edit_module_for_BoardEditor.cpp:245
+#: pcbnew/dialog_edit_module_for_Modedit.cpp:125
+#: pcbnew/dialog_edit_module_for_BoardEditor.cpp:247
 msgid "Shape Scale:"
 msgstr "Echelle de la forme:"
 
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:127
-#: pcbnew/dialog_edit_module_for_BoardEditor.cpp:249
+#: pcbnew/dialog_edit_module_for_Modedit.cpp:129
+#: pcbnew/dialog_edit_module_for_BoardEditor.cpp:251
 msgid "Shape Offset:"
 msgstr "Offset forme:"
 
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:131
-#: pcbnew/dialog_edit_module_for_BoardEditor.cpp:253
+#: pcbnew/dialog_edit_module_for_Modedit.cpp:133
+#: pcbnew/dialog_edit_module_for_BoardEditor.cpp:255
 msgid "Shape Rotation:"
 msgstr "Rot de la forme"
 
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:235
-#: pcbnew/dialog_edit_module_for_BoardEditor.cpp:357
+#: pcbnew/dialog_edit_module_for_Modedit.cpp:237
+#: pcbnew/dialog_edit_module_for_BoardEditor.cpp:359
 msgid "3D Shape:"
 msgstr "Forme 3D:"
 
@@ -8426,92 +8425,62 @@ msgstr "Fond Plein"
 msgid "Fill:"
 msgstr "Remplissage:"
 
-#: eeschema/edit_component_in_lib.cpp:68
-msgid "Lib Component Properties"
-msgstr "Propriétés du composant librairie"
-
-#: eeschema/edit_component_in_lib.cpp:72
-msgid "Properties for "
-msgstr "Propriétés pour "
-
-#: eeschema/edit_component_in_lib.cpp:77
-msgid "(alias of "
-msgstr "(alias de "
-
-#: eeschema/edit_component_in_lib.cpp:105
-msgid "Alias"
-msgstr "Alias"
-
-#: eeschema/edit_component_in_lib.cpp:131
-#: eeschema/edit_component_in_lib.cpp:208
-msgid "Delete All"
-msgstr "Tout Supprimer"
-
-#: eeschema/edit_component_in_lib.cpp:166
-#: eeschema/edit_component_in_lib.cpp:800
-msgid "Footprint Filter"
-msgstr "Filtrage Modules"
-
-#: eeschema/edit_component_in_lib.cpp:176
-msgid "Footprints"
-msgstr "Modules"
-
-#: eeschema/edit_component_in_lib.cpp:284
-msgid "Show Pin Num"
-msgstr "Montre Numéro de Pin"
-
-#: eeschema/edit_component_in_lib.cpp:494
+#: eeschema/edit_component_in_lib.cpp:302
 msgid "Ok to Delete Alias LIST"
 msgstr "Ok pour effacer la LISTE des Alias"
 
-#: eeschema/edit_component_in_lib.cpp:519
+#: eeschema/edit_component_in_lib.cpp:327
 msgid "New alias:"
 msgstr "Noveau alias"
 
-#: eeschema/edit_component_in_lib.cpp:519
+#: eeschema/edit_component_in_lib.cpp:327
 msgid "Component Alias"
 msgstr "Alias de Composant"
 
-#: eeschema/edit_component_in_lib.cpp:527
+#: eeschema/edit_component_in_lib.cpp:335
 msgid "This is the Root Part"
 msgstr "Ceci est le composant racine"
 
-#: eeschema/edit_component_in_lib.cpp:536
-#: eeschema/edit_component_in_lib.cpp:811
+#: eeschema/edit_component_in_lib.cpp:344
+#: eeschema/edit_component_in_lib.cpp:619
 msgid "Already in use"
 msgstr "Déjà en usage"
 
-#: eeschema/edit_component_in_lib.cpp:561
+#: eeschema/edit_component_in_lib.cpp:369
 msgid " is Current Selected Alias!"
 msgstr " est l' Alias actuellement sélectionné!"
 
-#: eeschema/edit_component_in_lib.cpp:614
+#: eeschema/edit_component_in_lib.cpp:422
 msgid "Delete units"
 msgstr "Supprimer  unité"
 
-#: eeschema/edit_component_in_lib.cpp:684
+#: eeschema/edit_component_in_lib.cpp:492
 msgid "Create pins for Convert items"
 msgstr "Créér les pins des unitées converties"
 
-#: eeschema/edit_component_in_lib.cpp:688
+#: eeschema/edit_component_in_lib.cpp:496
 msgid "Part as \"De Morgan\" anymore"
 msgstr "Le composant a une représentation convertie"
 
-#: eeschema/edit_component_in_lib.cpp:713
+#: eeschema/edit_component_in_lib.cpp:521
 msgid "Delete Convert items"
 msgstr "Suppression des éléments convertis"
 
-#: eeschema/edit_component_in_lib.cpp:747
+#: eeschema/edit_component_in_lib.cpp:555
 msgid "Doc Files"
 msgstr "Fichiers de Doc"
 
-#: eeschema/edit_component_in_lib.cpp:778
+#: eeschema/edit_component_in_lib.cpp:586
 msgid "Ok to Delete FootprintFilter LIST"
 msgstr "Ok pour effacer la LISTE des filtres de modules"
 
-#: eeschema/edit_component_in_lib.cpp:800
+#: eeschema/edit_component_in_lib.cpp:608
 msgid "New FootprintFilter:"
 msgstr "Nouveau Filtre de Modules:"
+
+#: eeschema/edit_component_in_lib.cpp:608
+msgid "Footprint Filter"
+msgstr "Filtrage Modules"
 
 #: eeschema/dialog_eeschema_config_fbp.cpp:20
 msgid "Component library files"
@@ -8947,37 +8916,17 @@ msgstr "Courant"
 msgid "All"
 msgstr "Tout"
 
-#: eeschema/dialog_edit_component_in_lib.cpp:134
-msgid "General :"
-msgstr "Général :"
+#: eeschema/dialog_edit_component_in_lib.cpp:49
+msgid "Lib Component Properties"
+msgstr "Propriétés du composant librairie"
 
-#: eeschema/dialog_edit_component_in_lib.cpp:142
-msgid "Number of Units:"
-msgstr "Nombre de Parts:"
+#: eeschema/dialog_edit_component_in_lib.cpp:53
+msgid "Properties for "
+msgstr "Propriétés pour "
 
-#: eeschema/dialog_edit_component_in_lib.cpp:170
-msgid "Description:"
-msgstr "Description:"
-
-#: eeschema/dialog_edit_component_in_lib.cpp:176
-msgid "Keywords:"
-msgstr "Mots Clés:"
-
-#: eeschema/dialog_edit_component_in_lib.cpp:182
-msgid "DocFileName:"
-msgstr "Fichier de Doc:"
-
-#: eeschema/dialog_edit_component_in_lib.cpp:190
-msgid "Copy Doc"
-msgstr "Copie Doc"
-
-#: eeschema/dialog_edit_component_in_lib.cpp:193
-msgid "Browse DocFiles"
-msgstr "Examen Fichiers de Doc"
-
-#: eeschema/dialog_edit_component_in_lib.cpp:196
-msgid "Description"
-msgstr "Description"
+#: eeschema/dialog_edit_component_in_lib.cpp:58
+msgid "(alias of "
+msgstr "(alias de "
 
 #: eeschema/dialog_edit_label.cpp:68
 msgid "Global Label Properties"
@@ -9078,8 +9027,6 @@ msgstr "Un symbole de non connexion est connecté à plus de une pin"
 
 #: eeschema/dialog_edit_component_in_schematic.cpp:94
 #: eeschema/dialog_edit_component_in_schematic.cpp:99
-#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:159
-#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:164
 msgid "Pos "
 msgstr "Pos "
 
@@ -9091,6 +9038,93 @@ msgstr "Pas de nom de composant!"
 #, c-format
 msgid "Component [%s] not found!"
 msgstr "Composant [%s] non trouvé!"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:25
+msgid "General :"
+msgstr "Général :"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:29
+msgid ""
+"Check this option for components that have a De Morgan representation.\n"
+"This is usual for gates."
+msgstr ""
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:33
+msgid "Show Pin Num"
+msgstr "Montre Numéro de Pin"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:35
+msgid "Show or hide pin numbers"
+msgstr "Affichage ou non des numéroes de pins"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:41
+msgid "Show or hide pin names"
+msgstr "Affichage ou non des noms des pins"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:47
+msgid ""
+"Check this option to have pin names inside the body and pin number outside.\n"
+"If not checked pins names and pins numbers are outside."
+msgstr ""
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:62
+msgid "Number of Units:"
+msgstr "Nombre de Parts:"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:90
+msgid ""
+"Check this option for power symbols.\n"
+"Power symbols have specific properties"
+msgstr ""
+"Activer cete option pour les symboles d'alimentation.\n"
+"Les symboles d'alimentation ont des propriétés spécifiques"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:96
+msgid ""
+"Check this option if Eeschema cannot change parts selections inside a given package\n"
+"This happens when parts are differents in this package."
+msgstr ""
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:108
+msgid "Description:"
+msgstr "Description:"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:115
+msgid "Keywords:"
+msgstr "Mots Clés:"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:122
+msgid "DocFileName:"
+msgstr "Fichier de Doc:"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:132
+msgid "Copy Doc"
+msgstr "Copie Doc"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:135
+msgid "Browse DocFiles"
+msgstr "Examen Fichiers de Doc"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:143
+msgid "Description"
+msgstr "Description"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:151
+msgid "Alias List:"
+msgstr "Liste des Alias:"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:169
+#: eeschema/dialog_edit_component_in_lib_base.cpp:203
+msgid "Delete All"
+msgstr "Tout Supprimer"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:177
+msgid "Alias"
+msgstr "Alias"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:185
+msgid "Footprints"
+msgstr "Modules"
 
 #: eeschema/load_one_schematic_file.cpp:70
 msgid "Failed to open "
@@ -11492,9 +11526,9 @@ msgstr "Afficher Modules Cmp"
 msgid "Show Modules Cu"
 msgstr "Afficher Modules Cu"
 
-#: pcbnew/dialog_edit_module_text_base.h:64
+#: pcbnew/dialog_edit_module_text_base.h:63
 msgid "Footprint text properties"
-msgstr "Propriétés du texts sur module"
+msgstr "Propriétés du texte du module"
 
 #: pcbnew/dialog_exchange_modules_base.h:57
 msgid "Exchange Modules"

@@ -55,7 +55,6 @@ class DialogEditModuleText_base : public wxDialog
 		wxButton* m_buttonCANCEL;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnInitDialog( wxInitDialogEvent& event ){ event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
 		

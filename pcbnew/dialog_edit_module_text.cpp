@@ -33,7 +33,7 @@ public:
     ~DialogEditModuleText() {};
 
 private:
-    void OnInitDialog( wxInitDialogEvent& event );
+    void Init( );
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
 };
@@ -58,20 +58,22 @@ DialogEditModuleText::DialogEditModuleText( WinEDA_BasePcbFrame* parent,  TEXTE_
     m_Module = NULL;
     m_CurrentTextMod = TextMod;
     if( m_CurrentTextMod )
-    {
         m_Module = (MODULE*) m_CurrentTextMod->GetParent();
-    }
+    Init( );
+
+    GetSizer()->Fit( this );
+    GetSizer()->SetSizeHints( this );
 }
 
 
 void DialogEditModuleText::OnCancelClick( wxCommandEvent& event )
 {
-    event.Skip();
+   EndModal(0);
 }
 
 
 /********************************************************/
-void DialogEditModuleText::OnInitDialog( wxInitDialogEvent& event )
+void DialogEditModuleText::Init( )
 /********************************************************/
 {
     SetFocus();
@@ -84,7 +86,7 @@ void DialogEditModuleText::OnInitDialog( wxInitDialogEvent& event )
         msg.Printf( format,
             m_Module->m_Reference->m_Text.GetData(),
             m_Module->m_Value->m_Text.GetData(),
-            (float) (m_Module->m_Orient / 10) );
+            (float) m_Module->m_Orient / 10 );
     }
 
     else
@@ -132,8 +134,6 @@ void DialogEditModuleText::OnInitDialog( wxInitDialogEvent& event )
     if( m_CurrentTextMod->m_NoShow )
         m_Show->SetSelection( 1 );;
 
-    GetSizer()->Fit( this );
-    GetSizer()->SetSizeHints( this );
 }
 
 
@@ -184,7 +184,7 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     int maxthickness = Clamp_Text_PenSize(width, m_CurrentTextMod->m_Size );
     if( width > maxthickness )
     {
-        DisplayError(this, _("The text thickness is too large for the text size. It will be clamped"));
+        DisplayError(NULL, _("The text thickness is too large for the text size. It will be clamped"));
         width = maxthickness;
     }
     m_CurrentTextMod->SetWidth( width );
@@ -203,5 +203,5 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     if( m_Module )
         m_Module->m_LastEdit_Time = time( NULL );
 
-    Close( TRUE );
+    EndModal(1);
 }

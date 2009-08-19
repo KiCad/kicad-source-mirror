@@ -90,7 +90,7 @@ static MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
                               int              TstOnly,
                               bool             Select_By_Timestamp,
                               bool             aChangeFootprint );
-static void LoadListeModules( WinEDA_PcbFrame* aPcbFrame, wxDC* DC );
+static void LoadListeModules( WinEDA_PcbFrame* aPcbFrame );
 
 
 /* Variables locales */
@@ -230,7 +230,7 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
     /* Load new footprints */
     if( s_NbNewModules )
     {
-        LoadListeModules( aFrame, NULL );
+        LoadListeModules( aFrame );
 
         // Free module list:
         MODULEtoLOAD* item, * next_item;
@@ -340,7 +340,7 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
                         if( !IsOK( NULL, _( "Ok to delete footprints not in netlist ?" ) ) )
                             break;
                     }
-                    aFrame->Delete_Module( Module, NULL, false );
+                    Module->DeleteStructure();
                 }
             }
         }
@@ -961,7 +961,7 @@ void AddToList( const wxString& NameLibCmp, const wxString& CmpName, const wxStr
 
 
 /***************************************************************/
-void LoadListeModules( WinEDA_PcbFrame* aPcbFrame, wxDC* DC )
+void LoadListeModules( WinEDA_PcbFrame* aPcbFrame )
 /***************************************************************/
 
 /* Routine de chargement des nouveaux modules en une seule lecture des
@@ -973,7 +973,7 @@ void LoadListeModules( WinEDA_PcbFrame* aPcbFrame, wxDC* DC )
     MODULEtoLOAD* ref, * cmp;
     int           ii;
     MODULE*       Module = NULL;
-    wxPoint       OldPos = aPcbFrame->GetScreen()->m_Curseur;
+    wxPoint       ModuleBestPosition;
 
     if( s_NbNewModules == 0 )
         return;
@@ -984,15 +984,11 @@ void LoadListeModules( WinEDA_PcbFrame* aPcbFrame, wxDC* DC )
     // Calculate the footprint "best" position:
     if( aPcbFrame->SetBoardBoundaryBoxFromEdgesOnly() )
     {
-        aPcbFrame->GetScreen()->m_Curseur.x = aPcbFrame->GetBoard()->m_BoundaryBox.GetRight() +
-                                              5000;
-        aPcbFrame->GetScreen()->m_Curseur.y = aPcbFrame->GetBoard()->m_BoundaryBox.GetBottom() +
-                                              10000;
+        ModuleBestPosition.x = aPcbFrame->GetBoard()->m_BoundaryBox.GetRight() + 5000;
+        ModuleBestPosition.y = aPcbFrame->GetBoard()->m_BoundaryBox.GetBottom() + 10000;
     }
     else
-    {
-        aPcbFrame->GetScreen()->m_Curseur = wxPoint( 0, 0 );
-    }
+        ModuleBestPosition = wxPoint( 0, 0 );
 
     for( ii = 0; ii < s_NbNewModules; ii++, cmp = cmp->Next() )
     {
@@ -1009,7 +1005,7 @@ void LoadListeModules( WinEDA_PcbFrame* aPcbFrame, wxDC* DC )
                 DisplayError( NULL, msg );
                 continue;
             }
-            aPcbFrame->Place_Module( Module, DC );
+            Module->SetPosition( ModuleBestPosition );
 
             /* Update schematic links : reference "Time Stamp" and schematic hierarchical path */
             Module->m_Reference->m_Text = cmp->m_CmpName;
@@ -1034,8 +1030,6 @@ void LoadListeModules( WinEDA_PcbFrame* aPcbFrame, wxDC* DC )
             Module->m_Path = cmp->m_TimeStampPath;
         }
     }
-
-    aPcbFrame->GetScreen()->m_Curseur = OldPos;
 }
 
 
