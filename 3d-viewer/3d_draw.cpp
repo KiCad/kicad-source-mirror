@@ -57,7 +57,8 @@ void Pcb3D_GLCanvas::Redraw( bool finish )
     // handler, changing the size of one canvas causes a viewport setting that
     // is wrong when next another canvas is repainted.
     const wxSize ClientSize = GetClientSize();
-    // *MUST* be called after  SetCurrent( ):
+
+    // *MUST* be called *after*  SetCurrent( ):
     glViewport( 0, 0, ClientSize.x, ClientSize.y );
 
     InitGL();

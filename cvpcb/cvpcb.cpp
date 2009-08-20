@@ -73,7 +73,7 @@ bool WinEDA_App::OnInit()
 
     frame->LoadProjectFile( fn.GetFullPath() );
     frame->Show( TRUE );
-    frame->BuildFootprintListBox();
+    frame->BuildFOOTPRINTS_LISTBOX();
 
     if( fn.IsOk() && fn.FileExists() )
     {

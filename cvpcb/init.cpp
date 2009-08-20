@@ -98,7 +98,7 @@ bool WinEDA_CvpcbFrame::ReadNetList()
 
     LoadProjectFile( m_NetlistFileName.GetFullPath() );
     LoadFootprintFiles( m_ModuleLibNames, m_footprints );
-    BuildFootprintListBox();
+    BuildFOOTPRINTS_LISTBOX();
 
     m_ListCmp->Clear();
     m_undefinedComponentCnt = 0;

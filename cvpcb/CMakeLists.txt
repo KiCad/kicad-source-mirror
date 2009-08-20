@@ -11,6 +11,8 @@ set(CVPCB_SRCS
     autosel.cpp
     cfg.cpp
     class_cvpcb.cpp
+	class_components_listbox.cpp
+	class_footprints_listbox.cpp
     cvframe.cpp
     cvpcb.cpp
     dialog_cvpcb_config.cpp

@@ -84,7 +84,7 @@ BEGIN_EVENT_TABLE( WinEDA_CvpcbFrame, WinEDA_BasicFrame )
               WinEDA_CvpcbFrame::OnSelectFilteringFootprint )
 
 // Frame events
-    EVT_CHAR_HOOK( WinEDA_CvpcbFrame::OnChar )
+    EVT_CHAR( WinEDA_CvpcbFrame::OnChar )
     EVT_CLOSE( WinEDA_CvpcbFrame::OnCloseWindow )
     EVT_SIZE( WinEDA_CvpcbFrame::OnSize )
 
@@ -155,7 +155,7 @@ WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title, long  style ) :
     // Creation des listes de modules disponibles et des composants du schema
     // Create child subwindows.
     BuildCmpListBox();
-    BuildFootprintListBox();
+    BuildFOOTPRINTS_LISTBOX();
 
     /* Creation des contraintes de dimension de la fenetre d'affichage des
      * composants du schema */
@@ -319,7 +319,22 @@ void WinEDA_CvpcbFrame::OnCloseWindow( wxCloseEvent& Event )
 void WinEDA_CvpcbFrame::OnChar( wxKeyEvent& event )
 /************************************************/
 {
-    event.Skip();
+    switch( event.GetKeyCode() )
+    {
+        case WXK_LEFT:
+        case WXK_NUMPAD_LEFT:
+            m_ListCmp->SetFocus();
+            break;
+
+        case WXK_RIGHT:
+        case WXK_NUMPAD_RIGHT:
+            m_FootprintList->SetFocus();;
+            break;
+
+        default:
+            event.Skip();
+            break;
+    }
 }
 
 

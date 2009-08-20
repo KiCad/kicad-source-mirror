@@ -77,12 +77,8 @@ Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent ) :
 #if wxCHECK_VERSION( 2, 9, 0 )
     // Explicitly create a new rendering context instance for this canvas.
     m_glRC = new wxGLContext(this);
-
-    // Make the new context current (activate it for use) with this canvas.
-    SetCurrent(*m_glRC);
-#else
-    SetCurrent( );
 #endif
+
     DisplayStatus();
 }
 
@@ -636,25 +632,13 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
 
     Redraw( true );
 
-    struct vieport_params
-    {
-        GLint originx;
-        GLint originy;
-        GLint x;
-        GLint y;
-    } viewport;
-
-    glGetIntegerv( GL_VIEWPORT, (GLint*) &viewport );
-
-    unsigned char* pixelbuffer = (unsigned char*) malloc( 3 * viewport.x * viewport.y );
-    glReadPixels( 0, 0, viewport.x, viewport.y, GL_RGB, GL_UNSIGNED_BYTE, pixelbuffer );
-
-    wxImage        image( viewport.x, viewport.y );
-
-    image.SetData( pixelbuffer );
-    image = image.Mirror();
-    image = image.Rotate90().Rotate90();
-    wxBitmap bitmap( image, -1 );
+    wxSize     image_size = GetClientSize();
+    wxClientDC dc( this );
+    wxBitmap   bitmap( image_size.x, image_size.y );
+    wxMemoryDC memdc;
+    memdc.SelectObject( bitmap );
+    memdc.Blit( 0, 0, image_size.x, image_size.y, &dc, 0, 0 );
+    memdc.SelectObject( wxNullBitmap );
 
     if( event.GetId() == ID_TOOL_SCREENCOPY_TOCLIBBOARD )
     {
@@ -671,6 +655,8 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
     }
     else
     {
+        wxImage image = bitmap.ConvertToImage();
+
         if( !image.SaveFile( FullFileName,
                              fmt_is_jpeg ? wxBITMAP_TYPE_JPEG : wxBITMAP_TYPE_PNG ) )
             wxLogError( wxT( "Can't save file" ) );

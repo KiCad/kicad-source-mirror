@@ -130,7 +130,7 @@ void DIALOG_CVPCB_CONFIG::OnOkClick( wxCommandEvent& event )
 
         LoadFootprintFiles( m_Parent->m_ModuleLibNames,
                             m_Parent->m_footprints );
-        m_Parent->BuildFootprintListBox();
+        m_Parent->BuildFOOTPRINTS_LISTBOX();
     }
 
     m_Parent->SaveProjectFile( m_Parent->m_NetlistFileName.GetFullPath() );
