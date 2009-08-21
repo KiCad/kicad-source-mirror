@@ -72,20 +72,40 @@ void PS_Plotter::set_color( int color )
  */
 {
     wxASSERT(output_file);
-    if ((color >= 0 && color_mode)
-	    || (color == BLACK)
-	    || (color == WHITE))
+
+	/* Return at invalid color index */
+	if(color < 0)
+		return;
+
+    if(color_mode)
     {
-	if (negative_mode)
-	    fprintf( output_file, "%.3g %.3g %.3g setrgbcolor\n",
-		    (double) 1.0-ColorRefs[color].m_Red / 255,
-		    (double) 1.0-ColorRefs[color].m_Green / 255,
-		    (double) 1.0-ColorRefs[color].m_Blue / 255 );
-	else
-	    fprintf( output_file, "%.3g %.3g %.3g setrgbcolor\n",
-		    (double) ColorRefs[color].m_Red / 255,
-		    (double) ColorRefs[color].m_Green / 255,
-		    (double) ColorRefs[color].m_Blue / 255 );
+    	if (negative_mode)
+    	{
+    		fprintf( output_file, "%.3g %.3g %.3g setrgbcolor\n",
+    				(double) 1.0-ColorRefs[color].m_Red / 255,
+    				(double) 1.0-ColorRefs[color].m_Green / 255,
+    				(double) 1.0-ColorRefs[color].m_Blue / 255 );
+    	} else
+    	{
+       		fprintf( output_file, "%.3g %.3g %.3g setrgbcolor\n",
+        				(double) ColorRefs[color].m_Red / 255,
+        				(double) ColorRefs[color].m_Green / 255,
+        				(double) ColorRefs[color].m_Blue / 255 );
+    	}
+    }
+    else /* B/W Mode - Use BLACK for all items */
+    {
+    	/* Why invert in this mode. Does anyway WHITE! */
+    	if (negative_mode)
+    		fprintf( output_file, "%.3g %.3g %.3g setrgbcolor\n",
+    				(double) 1.0-ColorRefs[BLACK].m_Red / 255,
+    				(double) 1.0-ColorRefs[BLACK].m_Green / 255,
+    				(double) 1.0-ColorRefs[BLACK].m_Blue / 255 );
+    	else
+       		fprintf( output_file, "%.3g %.3g %.3g setrgbcolor\n",
+        				(double) ColorRefs[BLACK].m_Red / 255,
+        				(double) ColorRefs[BLACK].m_Green / 255,
+        				(double) ColorRefs[BLACK].m_Blue / 255 );
     }
 }
 
