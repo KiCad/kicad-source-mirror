@@ -282,21 +282,42 @@ void InstallPineditFrame(WinEDA_LibeditFrame * parent, wxDC * DC, const wxPoint 
 /* SELPART.CPP */
 /**************/
 
+/**
+ * Function DisplayComponentsNamesInLib
+ * Routine de selection d'un composant en librairie, par affichage de la
+ *   liste des composants de cette librairie
+ *   Si Library == NULL, selection de librairie demandee
+ *   sinon recherche uniquement dans library
+ *   Retourne
+ *       1 si composant selectionne
+ *       0 si commande annulee
+ */
 int DisplayComponentsNamesInLib(WinEDA_DrawFrame * frame,
                  LibraryStruct *Library, wxString & Buffer, wxString &  OldName);
-LibraryStruct * SelectLibraryFromList(WinEDA_DrawFrame * frame);
-        /* Routine pour selectionner une librairie a partir d'une liste */
 
+
+/**
+ * Function SelectLibraryFromList
+ * displays a list of current loaded libraries, and allows the user to select a library
+ * This list is sorted, with the library cache always at end of the list
+ */
+LibraryStruct * SelectLibraryFromList(WinEDA_DrawFrame * frame);
+
+
+/**
+ * Function GetNameOfPartToLoad
+ *   Routine de selection du nom d'un composant en librairie pour chargement,
+ *   dans la librairie Library.
+ *   Si Library == NULL, il y aura demande de selection d'une librairie
+ *  Retourne
+ *   1 si composant selectionne
+ *   0 si commande annulee
+ *   place le nom du composant a charger, selectionne a partir d'une liste dans
+ *   BufName
+ */
 int GetNameOfPartToLoad(WinEDA_DrawFrame * frame, LibraryStruct * Lib,
         wxString & BufName);
-    /* Routine de selection du nom d'un composant en librairie pour chargement,
-    dans la librairie Library.
-    Si Library == NULL, il y aura demande de selection d'une librairie
-    Retourne
-    1 si composant selectionne
-    0 si commande annulee
-    place le nom du composant a charger, selectionne a partir d'une liste dans
-    BufName */
+
 
     /**************/
     /* LIBARCH.CPP */
