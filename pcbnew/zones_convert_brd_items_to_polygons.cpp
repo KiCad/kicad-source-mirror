@@ -356,8 +356,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     }
 
 // Now we remove all unused thermal stubs.
-//define REMOVE_UNUSED_THERMAL_STUBS // Can be commented to skip unused thermal stubs calculations
-//#ifdef REMOVE_UNUSED_THERMAL_STUBS
+#define REMOVE_UNUSED_THERMAL_STUBS // Can be commented to skip unused thermal stubs calculations
+#ifdef REMOVE_UNUSED_THERMAL_STUBS
 
 /* Add the main (corrected) polygon (i.e. the filled area using only one outline)
  * in GroupA in Bool_Engine to do a BOOL_A_SUB_B operation
@@ -500,7 +500,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
     delete booleng;
 
-//#endif
+#endif
 }
 
 
@@ -807,7 +807,7 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         // this seems a bug in kbool polygon (exists in 1.9 kbool version)
         // angle = 450 (45.0 degrees orientation) seems work fine.
         // angle = 0 with thermal shapes without angle < 90 deg has problems in rare circumstances
-        // Note: with the 2 step build ( thermal shpaes after correr areas build), 0 seems work
+        // Note: with the 2 step build ( thermal shapes added after areas are built), 0 seems work
         angle = 450;
         int angle_pad = aPad.m_Orient;              // Pad orientation
         for( unsigned ihole = 0; ihole < 4; ihole++ )
@@ -1247,7 +1247,7 @@ void    AddTextBoxWithClearancePolygon( Bool_Engine* aBooleng,
     corners[3].y = corners[2].y;
     corners[3].x = corners[0].x;
 
- 
+
     if( aBooleng->StartPolygonAdd( GROUP_B ) )
     {
         for( int ii = 0; ii < 4; ii ++ )

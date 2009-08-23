@@ -42,7 +42,7 @@ public:
     int                   m_ZoneClearance;                  // clearance value
     int                   m_ZoneMinThickness;               // Min thickness value in filled areas
     int                   m_FillMode;                       // How to fillingareas: 0 = use polygonal areas , != 0 fill with segments
-    int                   m_ArcToSegmentsCount;             // number of segments to convert a cirlce to a polygon (uses 16 or 32)
+    int                   m_ArcToSegmentsCount;             // number of segments to convert a circle to a polygon (uses 16 or 32)
     int                   m_PadOption;                      //
     int                   m_ThermalReliefGapValue;          // tickness of the gap in thermal reliefs
     int                   m_ThermalReliefCopperBridgeValue; // tickness of the copper bridge in thermal reliefs
@@ -369,6 +369,13 @@ public:
     {
         return m_Poly->GetHatchStyle();
     }
+    /** function IsSame()
+     * test is 2 zones are equivalent:
+     * 2 zones are equivalent if they have same parameters and same outlines
+     * info relative to filling is not take in account
+     * @param aZoneToCompare = zone to compare with "this"
+     */
+    bool IsSame( const ZONE_CONTAINER &aZoneToCompare);
 };
 
 

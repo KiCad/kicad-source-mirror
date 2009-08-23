@@ -609,8 +609,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
          */
         zone_cont->Draw( DrawPanel, &dc, GR_XOR );
         zone_cont->m_Poly->InsertCorner( zone_cont->m_CornerSelection,
-                                         pos.x,
-                                         pos.y );
+                                         pos.x, pos.y );
         zone_cont->m_CornerSelection++;
         zone_cont->Draw( DrawPanel, &dc, GR_XOR );
         DrawPanel->m_AutoPAN_Request = true;
@@ -669,7 +668,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_FILL_ZONE:
         DrawPanel->MouseToCursorSchema();
-        Fill_Zone( NULL, (ZONE_CONTAINER*) GetCurItem() );
+        Fill_Zone( (ZONE_CONTAINER*) GetCurItem() );
         test_1_net_connexion( NULL, ( (ZONE_CONTAINER*) GetCurItem() )->GetNet() );
         GetBoard()->DisplayInfo( this );
         DrawPanel->Refresh();

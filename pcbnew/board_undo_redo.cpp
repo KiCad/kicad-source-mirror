@@ -424,7 +424,8 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
              */
             if( commandToUndo->GetPickedItemLink( ii ) == NULL )
                 commandToUndo->SetPickedItemLink( DuplicateStruct( item ), ii );
-            wxASSERT( commandToUndo->GetPickedItemLink( ii ) );
+            if( commandToUndo->GetPickedItemLink( ii ) == NULL )
+                 wxMessageBox( wxT( "SaveCopyInUndoList() in UR_CHANGED mode: NULL link" ) );
             break;
 
         case UR_MOVED:

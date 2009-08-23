@@ -1,6 +1,6 @@
-/**************************************************************/
+/*************************************************/
 /* class_board.h - Class BOARD to handle a board */
-/**************************************************************/
+/*************************************************/
 
 #ifndef CLASS_BOARD_H
 #define CLASS_BOARD_H
@@ -474,19 +474,18 @@ public:
 
     /* Functions used in test, merge and cut outlines */
 
-    /**
-     * Function AddArea
-     * add empty copper area to net
+    /** Function AddArea
+     * Add an empty copper area to board areas list
+     * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new areas  pickers (useful in undo commands)
+     *                      can be NULL
+     * @param aNetcode = the necode of the copper area (0 = no net)
+     * @param aLayer = the layer of area
+     * @param aStartPointPosition = position of the first point of the polygon outline of this area
+     * @param aHatch = hacth option
      * @return pointer to the new area
      */
-    ZONE_CONTAINER* AddArea( int netcode, int layer, int x, int y, int hatch );
-
-    /**
-     * remove copper area from net
-     * @param  area = area to remove
-     * @return 0
-     */
-    int             RemoveArea( ZONE_CONTAINER* area_to_remove );
+    ZONE_CONTAINER* AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode,
+                int aLayer, wxPoint aStartPointPosition, int aHatch );
 
     /**
      * Function InsertArea
@@ -522,15 +521,20 @@ public:
      * Function ClipAreaPolygon
      * Process an area that has been modified, by clipping its polygon against itself.
      * This may change the number and order of copper areas in the net.
-     * @param bMessageBoxInt == TRUE, shows message when clipping occurs.
-     * @param  bMessageBoxArc == TRUE, shows message when clipping can't be done due to arcs.
+     * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new areas pickers (useful in undo commands)
+     *                      can be NULL
+     * @param aCurrArea = the zone to process
+     * @param bMessageBoxInt == true, shows message when clipping occurs.
+     * @param  bMessageBoxArc == true, shows message when clipping can't be done due to arcs.
+     * @param bRetainArcs = true to handle arcs (not really used in kicad)
      * @return:
      *	-1 if arcs intersect other sides, so polygon can't be clipped
      *	 0 if no intersecting sides
      *	 1 if intersecting sides
      * Also sets areas->utility1 flags if areas are modified
      */
-    int             ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
+    int             ClipAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
+                                     ZONE_CONTAINER* aCurrArea,
                                      bool            bMessageBoxArc,
                                      bool            bMessageBoxInt,
                                      bool            bRetainArcs = TRUE );
@@ -539,6 +543,8 @@ public:
      * Process an area that has been modified, by clipping its polygon against
      * itself and the polygons for any other areas on the same net.
      * This may change the number and order of copper areas in the net.
+     * @param aModifiedZonesList = a PICKED_ITEMS_LIST * where to store deleted or added areas
+     *                      (useful in undo commands. Can be NULL
      * @param modified_area = area to test
      * @param bMessageBox : if TRUE, shows message boxes when clipping occurs.
      * @return :
@@ -546,20 +552,31 @@ public:
      *  0 if no intersecting sides
      *  1 if intersecting sides, polygon clipped
      */
-    int  AreaPolygonModified( ZONE_CONTAINER* modified_area,
+    int  AreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
+                              ZONE_CONTAINER* modified_area,
                               bool            bMessageBoxArc,
                               bool            bMessageBoxInt );
 
     /**
      * Function CombineAllAreasInNet
      * Checks all copper areas in net for intersections, combining them if found
+     * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful in undo commands
+     *                      can be NULL
      * @param aNetCode = net to consider
      * @param bMessageBox : if true display warning message box
      * @param bUseUtility : if true, don't check areas if both utility flags are 0
      * Sets utility flag = 1 for any areas modified
      * If an area has self-intersecting arcs, doesn't try to combine it
      */
-    int  CombineAllAreasInNet( int aNetCode, bool bMessageBox, bool bUseUtility );
+    int  CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode, bool bMessageBox, bool bUseUtility );
+
+    /** Function RemoveArea
+     * remove copper area from net, and put it in a deleted list (if exists)
+     * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful in undo commands
+     *                      can be NULL
+     * @param  area_to_remove = area to delete or put in deleted list
+     */
+    void RemoveArea( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_to_remove );
 
     /**
      * Function TestAreaIntersections
@@ -583,13 +600,17 @@ public:
     /**
      * Function CombineAreas
      * If possible, combine 2 copper areas
+     * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful in undo commands
+     *                      can be NULL
+     * @param area_ref = tje main area (zone)
+     * @param area_to_combine = the zone that can be merged with area_ref
      * area_ref must be BEFORE area_to_combine
      * area_to_combine will be deleted, if areas are combined
      * @return : 0 if no intersection
      *         1 if intersection
      *         2 if arcs intersect
      */
-    int  CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combine );
+    int  CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combine );
 
     /**
      * Function Test_Drc_Areas_Outlines_To_Areas_Outlines

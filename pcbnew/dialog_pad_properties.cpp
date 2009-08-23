@@ -66,13 +66,14 @@ public:
 
 public:
     DialogPadProperties( WinEDA_BasePcbFrame* parent, D_PAD* Pad, wxDC* DC );
-    void InitDialog( wxInitDialogEvent& event );
+    void Init( );
     void OnPadShapeSelection( wxCommandEvent& event );
     void OnDrillShapeSelected( wxCommandEvent& event );
     void PadOrientEvent( wxCommandEvent& event );
     void PadTypeSelected( wxCommandEvent& event );
     void PadPropertiesAccept( wxCommandEvent& event );
     void SetPadLayersList( long layer_mask );
+	void OnCancelButtonClick( wxCommandEvent& event );
 };
 
 
@@ -90,6 +91,12 @@ DialogPadProperties::DialogPadProperties( WinEDA_BasePcbFrame* parent, D_PAD* Pa
         Current_PadNetName = m_CurrentPad->GetNetname();
         g_Current_PadName  = m_CurrentPad->ReturnStringPadName();
     }
+
+    Init( );
+    if( GetSizer() )
+    {
+        GetSizer()->SetSizeHints( this );
+    }
 }
 
 
@@ -104,7 +111,7 @@ void WinEDA_BasePcbFrame::InstallPadOptionsFrame( D_PAD* Pad, wxDC* DC, const wx
 
 
 /**************************************************************/
-void DialogPadProperties::InitDialog( wxInitDialogEvent& event )
+void DialogPadProperties::Init( )
 /**************************************************************/
 {
     int            tmp;
@@ -234,11 +241,6 @@ void DialogPadProperties::InitDialog( wxInitDialogEvent& event )
     {
         cmd_event.SetId( m_PadType->GetSelection() );
         PadTypeSelected( cmd_event );
-    }
-
-    if( GetSizer() )
-    {
-        GetSizer()->SetSizeHints( this );
     }
 }
 
@@ -475,8 +477,8 @@ void DialogPadProperties::PadPropertiesAccept( wxCommandEvent& event )
 
     if( m_CurrentPad )   // Set Pad Name & Num
     {
-        m_Parent->SaveCopyInUndoList( m_Parent->GetBoard()->m_Modules, UR_CHANGED );
         MODULE* Module = (MODULE*) m_CurrentPad->GetParent();
+        m_Parent->SaveCopyInUndoList( Module, UR_CHANGED );
         Module->m_LastEdit_Time = time( NULL );
 
         if( m_DC ) // redraw the area where the pad was, without pad (delete pad on screen)
@@ -580,10 +582,18 @@ void DialogPadProperties::PadPropertiesAccept( wxCommandEvent& event )
         m_Parent->GetScreen()->SetModify();
     }
 
-    Close();
+    EndModal(1);
 
     if( m_DC )
         m_Parent->DrawPanel->CursorOn( m_DC );
     if( RastnestIsChanged )  // The net ratsnest must be recalculated
         m_Parent->GetBoard()->m_Status_Pcb = 0;
 }
+
+/*********************************************************************/
+void DialogPadProperties::OnCancelButtonClick( wxCommandEvent& event )
+/*********************************************************************/
+{
+    EndModal(0);
+}
+

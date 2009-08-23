@@ -166,21 +166,21 @@ DialogPadPropertiesBase::DialogPadPropertiesBase( wxWindow* parent, wxWindowID i
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DialogPadPropertiesBase::InitDialog ) );
 	m_PadShape->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DialogPadPropertiesBase::OnPadShapeSelection ), NULL, this );
 	m_DrillShapeCtrl->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DialogPadPropertiesBase::OnDrillShapeSelected ), NULL, this );
 	m_PadOrient->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DialogPadPropertiesBase::PadOrientEvent ), NULL, this );
 	m_PadType->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DialogPadPropertiesBase::PadTypeSelected ), NULL, this );
 	m_buttonOk->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogPadPropertiesBase::PadPropertiesAccept ), NULL, this );
+	m_buttonCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogPadPropertiesBase::OnCancelButtonClick ), NULL, this );
 }
 
 DialogPadPropertiesBase::~DialogPadPropertiesBase()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DialogPadPropertiesBase::InitDialog ) );
 	m_PadShape->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DialogPadPropertiesBase::OnPadShapeSelection ), NULL, this );
 	m_DrillShapeCtrl->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DialogPadPropertiesBase::OnDrillShapeSelected ), NULL, this );
 	m_PadOrient->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DialogPadPropertiesBase::PadOrientEvent ), NULL, this );
 	m_PadType->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DialogPadPropertiesBase::PadTypeSelected ), NULL, this );
 	m_buttonOk->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogPadPropertiesBase::PadPropertiesAccept ), NULL, this );
+	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogPadPropertiesBase::OnCancelButtonClick ), NULL, this );
 }

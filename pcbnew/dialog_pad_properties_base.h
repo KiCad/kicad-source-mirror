@@ -78,12 +78,12 @@ class DialogPadPropertiesBase : public wxDialog
 		wxCheckBox* m_PadLayerDraft;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void InitDialog( wxInitDialogEvent& event ){ event.Skip(); }
 		virtual void OnPadShapeSelection( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnDrillShapeSelected( wxCommandEvent& event ){ event.Skip(); }
 		virtual void PadOrientEvent( wxCommandEvent& event ){ event.Skip(); }
 		virtual void PadTypeSelected( wxCommandEvent& event ){ event.Skip(); }
 		virtual void PadPropertiesAccept( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnCancelButtonClick( wxCommandEvent& event ){ event.Skip(); }
 		
 	
 	public:

@@ -102,6 +102,12 @@ public:
     int  y;
     bool end_contour;
     int  utility;
+
+    bool operator == (const CPolyPt& cpt2 ) const
+    { return (x == cpt2.x) && (y == cpt2.y) && (end_contour == cpt2.end_contour); }
+
+    bool operator != (CPolyPt& cpt2 ) const
+    { return (x != cpt2.x) || (y != cpt2.y) || (end_contour != cpt2.end_contour); }
 };
 
 #include "polygon_test_point_inside.h"

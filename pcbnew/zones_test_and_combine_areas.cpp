@@ -18,29 +18,52 @@ bool bDontShowIntersectionArcsWarning;
 bool bDontShowIntersectionWarning;
 
 
-/**
- * Function AddArea
- * add empty copper area to net
+/** Function AddArea
+ * Add an empty copper area to board areas list
+ * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new areas pickers (useful in undo commands)
+ *                      can be NULL
+ * @param aNetcode = the necode of the copper area (0 = no net)
+ * @param aLayer = the layer of area
+ * @param aStartPointPosition = position of the first point of the polygon outline of this area
+ * @param aHatch = hacth option
  * @return pointer to the new area
  */
-ZONE_CONTAINER* BOARD::AddArea( int netcode, int layer, int x, int y, int hatch )
+ZONE_CONTAINER* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode,
+            int aLayer, wxPoint aStartPointPosition, int aHatch )
 {
-    ZONE_CONTAINER* new_area = InsertArea( netcode, m_ZoneDescriptorList.size(
-                                               ) - 1, layer, x, y, hatch );
+    ZONE_CONTAINER* new_area = InsertArea( aNetcode,
+                        m_ZoneDescriptorList.size( ) - 1,
+                        aLayer, aStartPointPosition.x, aStartPointPosition.y, aHatch );
 
+    if( aNewZonesList )
+    {
+        ITEM_PICKER picker( new_area, UR_NEW );
+        picker.m_PickedItemType = new_area->Type();
+        aNewZonesList->PushItem( picker );
+    }
     return new_area;
 }
 
 
-/**
- * remove copper area from net
- * @param  area = area to remove
- * @return 0
+/** Function RemoveArea
+ * remove copper area from net, and put it in a deleted list (if exists)
+ * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful in undo commands)
+ *                      can be NULL
+ * @param  area_to_remove = area to delete or put in deleted list
  */
-int BOARD::RemoveArea( ZONE_CONTAINER* area_to_remove )
+void BOARD::RemoveArea( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_to_remove )
 {
-    Delete( area_to_remove );
-    return 0;
+    if( area_to_remove == NULL )
+        return;
+    if( aDeletedList )
+    {
+        ITEM_PICKER picker( area_to_remove, UR_DELETED );
+        picker.m_PickedItemType = area_to_remove->Type();
+        aDeletedList->PushItem( picker );
+        Remove( area_to_remove );   // remove from zone list, but does not delete it
+    }
+    else
+        Delete( area_to_remove );
 }
 
 
@@ -82,9 +105,8 @@ int BOARD::CompleteArea( ZONE_CONTAINER* area_to_complete, int style )
         return 1;
     }
     else
-    {
-        RemoveArea( area_to_complete );
-    }
+        Delete( area_to_complete );
+
     return 0;
 }
 
@@ -206,19 +228,24 @@ int BOARD::TestAreaPolygon( ZONE_CONTAINER* CurrArea )
  * Function ClipAreaPolygon
  * Process an area that has been modified, by clipping its polygon against itself.
  * This may change the number and order of copper areas in the net.
+ * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new areas pickers (useful in undo commands)
+ *                      can be NULL
+ * @param aCurrArea = the zone to process
  * @param bMessageBoxInt == true, shows message when clipping occurs.
  * @param  bMessageBoxArc == true, shows message when clipping can't be done due to arcs.
+ * @param bRetainArcs = true to handle arcs (not really used in kicad)
  * @return:
  *	-1 if arcs intersect other sides, so polygon can't be clipped
  *	 0 if no intersecting sides
  *	 1 if intersecting sides
  * Also sets areas->utility1 flags if areas are modified
  */
-int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
+int BOARD::ClipAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
+                            ZONE_CONTAINER* aCurrArea,
                             bool bMessageBoxArc, bool bMessageBoxInt, bool bRetainArcs )
 {
-    CPolyLine* curr_polygon = CurrArea->m_Poly;
-    int        test = TestAreaPolygon( CurrArea ); // this sets utility2 flag
+    CPolyLine* curr_polygon = aCurrArea->m_Poly;
+    int        test = TestAreaPolygon( aCurrArea ); // this sets utility2 flag
 
     if( test == -1 && !bRetainArcs )
         test = 1;
@@ -229,7 +256,7 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
         {
             wxString str;
             str.Printf( wxT( "Area %8.8X of net \"%s\" has arcs intersecting other sides.\n" ),
-                       CurrArea->m_TimeStamp, CurrArea->m_Netname.GetData() );
+                       aCurrArea->m_TimeStamp, aCurrArea->m_Netname.GetData() );
             str += wxT( "This may cause problems with other editing operations,\n" );
             str += wxT( "such as adding cutouts. It can't be fixed automatically.\n" );
             str += wxT( "Manual correction is recommended." );
@@ -242,7 +269,7 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
     for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
         m_ZoneDescriptorList[ia]->utility = 0;
 
-    CurrArea->utility = 1;
+    aCurrArea->utility = 1;
 
     if( test == 1 )
     {
@@ -252,7 +279,7 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
             wxString str;
             str.Printf( wxT(
                            "Area %8.8X of net \"%s\" is self-intersecting and will be clipped.\n" ),
-                       CurrArea->m_TimeStamp, CurrArea->m_Netname.GetData() );
+                       aCurrArea->m_TimeStamp, aCurrArea->m_Netname.GetData() );
             str += wxT( "This may result in splitting the area.\n" );
             str += wxT( "If the area is complex, this may take a few seconds." );
             wxMessageBox( str );
@@ -266,7 +293,7 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
     {
         std::vector<CPolyLine*>* pa = new std::vector<CPolyLine*>;
         curr_polygon->Undraw();
-        int n_poly = CurrArea->m_Poly->NormalizeAreaOutlines( pa, bRetainArcs );
+        int n_poly = aCurrArea->m_Poly->NormalizeAreaOutlines( pa, bRetainArcs );
         if( n_poly > 1 )    // i.e if clipping has created some polygons, we must add these new copper areas
         {
             ZONE_CONTAINER* NewArea;
@@ -274,7 +301,8 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
             {
                 // create new copper area and copy poly into it
                 CPolyLine* new_p = (*pa)[ip - 1];
-                NewArea = AddArea( CurrArea->GetNet(), CurrArea->GetLayer(), 0, 0, 0 );
+                NewArea = AddArea( aNewZonesList, aCurrArea->GetNet(), aCurrArea->GetLayer(),
+                                wxPoint(0, 0), CPolyLine::NO_HATCH );
 
                 // remove the poly that was automatically created for the new area
                 // and replace it with a poly from NormalizeWithKbool
@@ -295,6 +323,8 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
  * Process an area that has been modified, by clipping its polygon against
  * itself and the polygons for any other areas on the same net.
  * This may change the number and order of copper areas in the net.
+ * @param aModifiedZonesList = a PICKED_ITEMS_LIST * where to store deleted or added areas (useful in undo commands
+ *                      can be NULL
  * @param modified_area = area to test
  * @param bMessageBoxInt == true, shows message when clipping occurs.
  * @param  bMessageBoxArc == true, shows message when clipping can't be done due to arcs.
@@ -303,12 +333,13 @@ int BOARD::ClipAreaPolygon( ZONE_CONTAINER* CurrArea,
  *  0 if no intersecting sides
  *  1 if intersecting sides, polygon clipped
  */
-int BOARD::AreaPolygonModified( ZONE_CONTAINER* modified_area,
+int BOARD::AreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
+                                ZONE_CONTAINER* modified_area,
                                 bool            bMessageBoxArc,
                                 bool            bMessageBoxInt )
 {
     // clip polygon against itself
-    int test = ClipAreaPolygon( modified_area, bMessageBoxArc, bMessageBoxInt );
+    int test = ClipAreaPolygon( aModifiedZonesList, modified_area, bMessageBoxArc, bMessageBoxInt );
 
     if( test == -1 )
         return test;
@@ -321,7 +352,7 @@ int BOARD::AreaPolygonModified( ZONE_CONTAINER* modified_area,
     else
         bCheckAllAreas = TestAreaIntersections( modified_area );
     if( bCheckAllAreas )
-        CombineAllAreasInNet( modified_area->GetNet(), bMessageBoxInt, true );
+        CombineAllAreasInNet( aModifiedZonesList, modified_area->GetNet(), bMessageBoxInt, true );
 
     if( layer >= FIRST_NO_COPPER_LAYER )    // Refill non copper zones on this layer
     {
@@ -343,7 +374,7 @@ int BOARD::AreaPolygonModified( ZONE_CONTAINER* modified_area,
 
         // Remove zone because it is incorrect:
         else
-            RemoveArea( zone );
+            RemoveArea( aModifiedZonesList, zone );
     }
 
     return test;
@@ -353,13 +384,15 @@ int BOARD::AreaPolygonModified( ZONE_CONTAINER* modified_area,
 /**
  * Function CombineAllAreasInNet
  * Checks all copper areas in net for intersections, combining them if found
+ * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful in undo commands
+ *                      can be NULL
  * @param aNetCode = net to consider
  * @param bMessageBox : if true display warning message box
  * @param bUseUtility : if true, don't check areas if both utility flags are 0
  * Sets utility flag = 1 for any areas modified
  * If an area has self-intersecting arcs, doesn't try to combine it
  */
-int BOARD::CombineAllAreasInNet( int aNetCode, bool bMessageBox, bool bUseUtility )
+int BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode, bool bMessageBox, bool bUseUtility )
 {
     if( m_ZoneDescriptorList.size() <= 1 )
         return 0;
@@ -397,7 +430,7 @@ int BOARD::CombineAllAreasInNet( int aNetCode, bool bMessageBox, bool bUseUtilit
                     {
                         int ret = TestAreaIntersection( curr_area, area2 );
                         if( ret == 1 )
-                            ret = CombineAreas( curr_area, area2 );
+                            ret = CombineAreas( aDeletedList, curr_area, area2 );
                         if( ret == 1 )
                         {
                             mod_ia1 = true;
@@ -671,13 +704,17 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
 /**
  * Function CombineAreas
  * If possible, combine 2 copper areas
- * area_ref must be BEFORE area_to_combine in m_ZoneDescriptorList
+ * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful in undo commands
+ *                      can be NULL
+ * @param area_ref = tje main area (zone)
+ * @param area_to_combine = the zone that can be merged with area_ref
+ * area_ref must be BEFORE area_to_combine
  * area_to_combine will be deleted, if areas are combined
  * @return : 0 if no intersection
  *         1 if intersection
  *         2 if arcs intersect
  */
-int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combine )
+int BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combine )
 {
     if( area_ref == area_to_combine )
     {
@@ -780,7 +817,7 @@ int BOARD::CombineAreas( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combi
     }
 
     if( !keep_area_to_combine )
-        RemoveArea( area_to_combine );
+        RemoveArea( aDeletedList, area_to_combine );
 
     area_ref->utility = 1;
     area_ref->m_Poly->RestoreArcs( &arc_array1 );

@@ -6,7 +6,7 @@
 /// Licence:     GNU License
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined (__GNUG__) && !defined (NO_GCC_PRAGMA)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "zones.h"
 #endif
 
@@ -33,6 +33,8 @@ dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* z
     m_Config = wxGetApp().m_EDA_Config;
     m_Zone_Setting = zone_setting;
     m_NetSorting   = 1;     // 0 = alphabetic sort, 1 = pad count sort, and filtering net names
+    m_OnExitCode = ZONE_ABORT;
+
     if( m_Config )
     {
         m_NetSorting = m_Config->Read( ZONE_NET_SORT_OPTION_KEY, 1l );
@@ -207,7 +209,7 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
 void dialog_copper_zone::OnButtonCancelClick( wxCommandEvent& event )
 /********************************************************************/
 {
-    EndModal( ZONE_ABORT );
+    EndModal( m_OnExitCode );
 }
 
 
@@ -270,7 +272,7 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     // Test if this is a reasonnable value for this parameter
     // A too large value can hang pcbnew
     #define CLEARANCE_MAX_VALUE 5000    // in 1/10000 inch
-    if ( m_Zone_Setting->m_ZoneClearance > CLEARANCE_MAX_VALUE )
+    if( m_Zone_Setting->m_ZoneClearance > CLEARANCE_MAX_VALUE )
     {
         DisplayError( this, _( "Error : Zone clearance is set to an unreasonnable value" ) );
         return false;
@@ -336,13 +338,13 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
         return false;
     }
 
-    if ( ii == 0 )  // the not connected option was selected: this is not a good practice: warn:
+    if( ii == 0 )   // the not connected option was selected: this is not a good practice: warn:
     {
-       if( ! IsOK( this, _(
-           "You have chosen the \"not connected\" option. This will create insulated copper islands. Are you sure ?") )
+        if( !IsOK( this, _(
+                      "You have chosen the \"not connected\" option. This will create insulated copper islands. Are you sure ?" ) )
             )
-        return false;
-     }
+            return false;
+    }
 
     wxString net_name = m_ListNetNameSelection->GetString( ii );
 
@@ -351,7 +353,7 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     /* Search net_code for this net, if a net was selected */
     if( m_ListNetNameSelection->GetSelection() > 0 )
     {
-        NETINFO_ITEM* net = m_Parent->GetBoard()->FindNet(net_name);
+        NETINFO_ITEM* net = m_Parent->GetBoard()->FindNet( net_name );
         if( net )
             g_Zone_Default_Setting.m_NetcodeSelection = net->GetNet();
     }
@@ -435,6 +437,7 @@ void dialog_copper_zone::ExportSetupToOtherCopperZones( wxCommandEvent& event )
         m_Zone_Setting->ExportSetting( *zone, false );  // false = partiel export
         m_Parent->GetScreen()->SetModify();
     }
+    m_OnExitCode = ZONE_EXPORT_VALUES;     // values are exported to others zones
 }
 
 

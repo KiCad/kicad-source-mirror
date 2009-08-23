@@ -252,7 +252,14 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
 
     // other types may use linked list
     default:
-        wxFAIL_MSG( wxT( "BOARD::Add() needs work: BOARD_ITEM type not handled" ) );
+    {
+        wxString msg;
+        msg.Printf(
+            wxT( "BOARD::Add() needs work: BOARD_ITEM type (%d) not handled" ),
+            aBoardItem->Type() );
+        wxFAIL_MSG(msg );
+    }
+        break;
     }
 }
 

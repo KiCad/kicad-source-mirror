@@ -1133,13 +1133,19 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
     m_Layer  = src->m_Layer;
     SetNet( src->GetNet() );
     m_TimeStamp = src->m_TimeStamp;
+    m_Poly->RemoveAllContours();
     m_Poly->Copy( src->m_Poly );                // copy outlines
     m_CornerSelection = -1;                     // For corner moving, corner index to drag, or -1 if no selection
     m_ZoneClearance   = src->m_ZoneClearance;   // clearance value
-    m_FillMode   = src->m_FillMode;   // Grid used for filling
+    m_FillMode   = src->m_FillMode;             // Filling mode (segments/polygons)
+    m_ArcToSegmentsCount   = src->m_ArcToSegmentsCount;
     m_PadOption = src->m_PadOption;
+    m_ThermalReliefGapValue   = src->m_ThermalReliefGapValue;
+    m_ThermalReliefCopperBridgeValue   = src->m_ThermalReliefCopperBridgeValue;
     m_Poly->SetHatch( src->m_Poly->GetHatchStyle() );
+    m_FilledPolysList.clear();
     m_FilledPolysList = src->m_FilledPolysList;
+    m_FillSegmList.clear();
     m_FillSegmList = src->m_FillSegmList;
 }
 

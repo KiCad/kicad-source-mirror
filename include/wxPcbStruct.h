@@ -479,12 +479,11 @@ public:
      *  The zone outline is a frontier, and can be complex (with holes)
      *  The filling starts from starting points like pads, tracks.
      * If exists the old filling is removed
-     * @param DC = current Device Context
      * @param zone_container = zone to fill
      * @param verbose = true to show error messages
      * @return error level (0 = no error)
      */
-    int              Fill_Zone( wxDC* DC, ZONE_CONTAINER* zone_container, bool verbose = TRUE );
+    int              Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose = TRUE );
 
     /** Function Fill_All_Zones()
      *  Fill all zones on the board

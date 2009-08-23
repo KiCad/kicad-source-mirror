@@ -16,9 +16,11 @@
 #define ZONE_THERMAL_RELIEF_GAP_STRING_KEY          wxT( "Zone_TH_Gap" )
 #define ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY wxT( "Zone_TH_Copper_Width" )
 
+// Exit codes for dialog edit zones
 enum zone_cmd {
-    ZONE_ABORT,
-    ZONE_OK
+    ZONE_ABORT,         //  if no change
+    ZONE_OK,            //  if new values accepted
+    ZONE_EXPORT_VALUES  //  if values are exported to others zones
 };
 
 

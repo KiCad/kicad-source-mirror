@@ -149,8 +149,10 @@ set(PCBNEW_SRCS
     work.cpp
     xchgmod.cpp
     zones_by_polygon.cpp
+    zones_by_polygon_fill_functions.cpp
     zones_convert_brd_items_to_polygons.cpp
     zone_filling_algorithm.cpp
+    zones_functions_for_undo_redo.cpp
     zones_polygons_insulated_copper_islands.cpp
     zones_polygons_test_connections.cpp
     zones_test_and_combine_areas.cpp

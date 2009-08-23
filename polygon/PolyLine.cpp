@@ -1489,14 +1489,11 @@ bool CPolyLine::TestPointInsideContour( int icont, int px, int py )
 void CPolyLine::Copy( CPolyLine* src )
 {
     Undraw();
-
-    // copy corners
-    for( unsigned ii = 0; ii < src->corner.size(); ii++ )
-        corner.push_back( src->corner[ii] );
-
-    // copy side styles
-    for( unsigned ii = 0; ii < src->side_style.size(); ii++ )
-        side_style.push_back( src->side_style[ii] );
+    m_HatchStyle = src->m_HatchStyle;
+    // copy corners, using vector copy
+    corner = src->corner;
+    // copy side styles, using vector copy
+    side_style = src->side_style;
 }
 
 
