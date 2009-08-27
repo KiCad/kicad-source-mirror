@@ -338,10 +338,10 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_BREAK_WIRE:
     {
         DrawPanel->MouseToCursorSchema();
-        PICKED_ITEMS_LIST picklistForUndo;
-        BreakSegment( screen, screen->m_Curseur, &picklistForUndo );
-        if( picklistForUndo.GetCount() )
-            SaveCopyInUndoList( picklistForUndo, UR_UNSPECIFIED );
+        SCH_ITEM* oldWiresList = screen->ExtractWires( true );
+        BreakSegment( screen, screen->m_Curseur );
+        if( oldWiresList )
+            SaveCopyInUndoList( oldWiresList, UR_WIRE_IMAGE );
         TestDanglingEnds( screen->EEDrawList, &dc );
     }
         break;

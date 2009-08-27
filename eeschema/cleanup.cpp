@@ -134,8 +134,7 @@ void BreakSegmentOnJunction( SCH_SCREEN* Screen )
  * ( excluding ends)
  * fill aPicklist with modified items if non null
  */
-void BreakSegment(SCH_SCREEN * aScreen, wxPoint aBreakpoint,
-            PICKED_ITEMS_LIST * aPicklist)
+void BreakSegment(SCH_SCREEN * aScreen, wxPoint aBreakpoint )
 {
     EDA_DrawLineStruct* segment, * NewSegment;
     for( SCH_ITEM* DrawList = aScreen->EEDrawList;DrawList; DrawList = DrawList->Next() )
@@ -153,23 +152,12 @@ void BreakSegment(SCH_SCREEN * aScreen, wxPoint aBreakpoint,
         if( (segment->m_Start == aBreakpoint) || (segment->m_End == aBreakpoint ) )
             continue;
         /* Ici il faut couper le segment en 2 */
-        if( aPicklist )         // First: put copy of the old segment in undo list
-        {
-            ITEM_PICKER picker((SCH_ITEM*) segment->GenCopy(), UR_CHANGED);
-            picker.m_Link = segment;
-            aPicklist->PushItem(picker);
-        }
         NewSegment = segment->GenCopy();
         NewSegment->m_Start = aBreakpoint;
         segment->m_End = NewSegment->m_Start;
         NewSegment->SetNext( segment->Next() );
         segment->SetNext( NewSegment );
         DrawList = NewSegment;
-        if( aPicklist )
-        {
-            ITEM_PICKER picker(NewSegment, UR_NEW);
-            aPicklist->PushItem(picker);
-        }
     }
 }
 

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-19 16:53+0100\n"
-"PO-Revision-Date: 2009-08-19 16:58+0100\n"
+"POT-Creation-Date: 2009-08-23 18:26+0100\n"
+"PO-Revision-Date: 2009-08-23 18:28+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -940,7 +940,7 @@ msgstr "Surbrillance des équipotentielles"
 msgid "Local Ratsnest"
 msgstr "Montrer le chevelu général"
 
-#: pcbnew/edit.cpp:679
+#: pcbnew/edit.cpp:678
 msgid "Delete item"
 msgstr "Suppression d'éléments"
 
@@ -1665,11 +1665,11 @@ msgstr ""
 "Votre PCB a un mauvais numero de couche  %u pour le module\n"
 " %s's \"texte module\" de %s."
 
-#: pcbnew/dialog_copper_zones.cpp:275
+#: pcbnew/dialog_copper_zones.cpp:277
 msgid "Error : Zone clearance is set to an unreasonnable value"
 msgstr "Erreur: l'isolation de zone est réglée à une valeur déraisonnable."
 
-#: pcbnew/dialog_copper_zones.cpp:286
+#: pcbnew/dialog_copper_zones.cpp:288
 msgid ""
 "Error :\n"
 "you must choose a copper min thickness value bigger than 0.001 inch (or 0.0254 mm)"
@@ -1677,7 +1677,7 @@ msgstr ""
 "Erreur :\n"
 "vous devez choisir une valeur pour l'épaisseur de cuivre dans les freins thermiques plus grande que 0,001 pouce (ou 0,0254 mm)"
 
-#: pcbnew/dialog_copper_zones.cpp:311
+#: pcbnew/dialog_copper_zones.cpp:313
 msgid ""
 "Error :\n"
 "you must choose a copper bridge value for thermal reliefs bigger than the min zone thickness"
@@ -1685,15 +1685,15 @@ msgstr ""
 "Erreur :\n"
 "vous devez choisir une valeur pour l'épaisseur de cuivre dans les freins thermiques plus grande que l'épaisseur de cuivre minimum des zones"
 
-#: pcbnew/dialog_copper_zones.cpp:323
+#: pcbnew/dialog_copper_zones.cpp:325
 msgid "Error : you must choose a layer"
 msgstr "Erreur. Vous devez choisir une couche"
 
-#: pcbnew/dialog_copper_zones.cpp:335
+#: pcbnew/dialog_copper_zones.cpp:337
 msgid "Error : you must choose a net name"
 msgstr "Erreur. Vous devez choisir une équipotentielle"
 
-#: pcbnew/dialog_copper_zones.cpp:342
+#: pcbnew/dialog_copper_zones.cpp:344
 msgid "You have chosen the \"not connected\" option. This will create insulated copper islands. Are you sure ?"
 msgstr "Vous avez choisi l'option \"non connecté\". Cela créera des blocs non connectés. Etes vous sûr ?"
 
@@ -2170,35 +2170,35 @@ msgstr "Fichier <%s> non trouvé, Netliste utilisée pour sélection des  module
 msgid "Component [%s]: footprint <%s> not found"
 msgstr "Composant [%s]: Module <%s> non trouvé en librairie"
 
-#: pcbnew/dialog_pad_properties.cpp:121
+#: pcbnew/dialog_pad_properties.cpp:128
 msgid "Pad Position"
 msgstr "Position Pad"
 
-#: pcbnew/dialog_pad_properties.cpp:126
+#: pcbnew/dialog_pad_properties.cpp:133
 msgid "Pad Size"
 msgstr "Taille Pad"
 
-#: pcbnew/dialog_pad_properties.cpp:131
+#: pcbnew/dialog_pad_properties.cpp:138
 msgid "Delta"
 msgstr "Delta"
 
-#: pcbnew/dialog_pad_properties.cpp:136
+#: pcbnew/dialog_pad_properties.cpp:143
 msgid "Offset"
 msgstr "Offset"
 
-#: pcbnew/dialog_pad_properties.cpp:142
+#: pcbnew/dialog_pad_properties.cpp:149
 msgid "Pad drill"
 msgstr "Diam perçage"
 
-#: pcbnew/dialog_pad_properties.cpp:428
+#: pcbnew/dialog_pad_properties.cpp:430
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
 msgstr "Valeur incorrecte pour diamètre de perçage: perçage plus grand que la taille du pad"
 
-#: pcbnew/dialog_pad_properties.cpp:434
+#: pcbnew/dialog_pad_properties.cpp:436
 msgid "Incorrect value for pad offset"
 msgstr "Valeur incorrecte pour offset du pad"
 
-#: pcbnew/dialog_pad_properties.cpp:532
+#: pcbnew/dialog_pad_properties.cpp:534
 msgid "Unknown netname, no change"
 msgstr "Net inconnu, pas de changement"
 
@@ -3130,23 +3130,19 @@ msgstr "&Au sujet de Pcbnew"
 msgid "About pcbnew PCB designer"
 msgstr "Au sujet de Pcbnew, concption de PCB"
 
-#: pcbnew/zones_by_polygon.cpp:332
-#: pcbnew/zones_by_polygon.cpp:388
-#: pcbnew/zones_by_polygon.cpp:718
+#: pcbnew/zones_by_polygon.cpp:309
+#: pcbnew/zones_by_polygon.cpp:372
+#: pcbnew/zones_by_polygon.cpp:709
 msgid "Area: DRC outline error"
 msgstr "Zone; Erreur DRC sur contour"
 
-#: pcbnew/zones_by_polygon.cpp:601
+#: pcbnew/zones_by_polygon.cpp:583
 msgid "DRC error: this start point is inside or too close an other area"
 msgstr "Erreur DRC: ce point de départ est à l'intérieur d'une autre zone ou trop proche"
 
-#: pcbnew/zones_by_polygon.cpp:663
+#: pcbnew/zones_by_polygon.cpp:645
 msgid "DRC error: closing this area creates a drc error with an other area"
 msgstr "Erreur DRC: la fermeture de cette zone crée une erreur DRC avec une autre zone"
-
-#: pcbnew/zones_by_polygon.cpp:903
-msgid "No Net"
-msgstr "No Net"
 
 #: pcbnew/move-drag_pads.cpp:259
 #, c-format
@@ -5215,23 +5211,23 @@ msgstr "Change Perçage"
 msgid "Change Orientation"
 msgstr "Change Orientation"
 
-#: pcbnew/class_board.cpp:536
+#: pcbnew/class_board.cpp:543
 msgid "Nodes"
 msgstr "Nodes"
 
-#: pcbnew/class_board.cpp:539
+#: pcbnew/class_board.cpp:546
 msgid "Nets"
 msgstr "Nets"
 
-#: pcbnew/class_board.cpp:547
+#: pcbnew/class_board.cpp:554
 msgid "Links"
 msgstr "Liens"
 
-#: pcbnew/class_board.cpp:550
+#: pcbnew/class_board.cpp:557
 msgid "Connect"
 msgstr "Connect"
 
-#: pcbnew/class_board.cpp:553
+#: pcbnew/class_board.cpp:560
 msgid "NoConn"
 msgstr "Non Conn"
 
@@ -5864,6 +5860,10 @@ msgstr "Y"
 msgid "Change Module(s)"
 msgstr "Change module(s)"
 
+#: pcbnew/zones_by_polygon_fill_functions.cpp:130
+msgid "No Net"
+msgstr "No Net"
+
 #: eeschema/libedit.cpp:35
 msgid " Part:   "
 msgstr "Composant   "
@@ -6430,6 +6430,7 @@ msgid "Library editor"
 msgstr "Editeur de librairies"
 
 #: eeschema/tool_sch.cpp:53
+#: eeschema/viewlibs.cpp:122
 msgid "Library browser"
 msgstr "Visualisateur des librairies"
 
@@ -7409,7 +7410,6 @@ msgstr ""
 "Pour les portes, ceci est la conversion \"De Morgan\""
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:79
-#: eeschema/dialog_create_component.cpp:178
 msgid "Parts are locked"
 msgstr "Les parts sont verrouillées"
 
@@ -8501,9 +8501,33 @@ msgstr ""
 msgid "User defined search path"
 msgstr "Chemin de recherche défini par l'utilisateur"
 
-#: eeschema/class_libentry_fields.cpp:369
-msgid "Datasheet"
-msgstr "Documentation"
+#: eeschema/class_libentry.cpp:353
+#, c-format
+msgid "DEF command expected in line %d, aborted."
+msgstr ""
+
+#: eeschema/class_libentry.cpp:375
+#, c-format
+msgid "Wrong DEF format in line %d, skipped."
+msgstr ""
+
+#: eeschema/class_libentry.cpp:468
+msgid "file ended prematurely loading component draw element"
+msgstr ""
+
+#: eeschema/class_libentry.cpp:504
+#, c-format
+msgid "undefined DRAW command %c"
+msgstr ""
+
+#: eeschema/class_libentry.cpp:511
+#, c-format
+msgid "error <%s> in DRAW command %c"
+msgstr ""
+
+#: eeschema/class_libentry.cpp:520
+msgid "file ended prematurely while attempting to flush to end of drawing section."
+msgstr ""
 
 #: eeschema/pinedit-dialog.cpp:148
 msgid "Pin Name :"
@@ -9319,39 +9343,71 @@ msgstr "RefLib"
 msgid "Lib"
 msgstr "Lib"
 
-#: eeschema/eelibs_read_libraryfiles.cpp:69
+#: eeschema/class_libentry_fields.cpp:112
+msgid "invalid field number defined"
+msgstr ""
+
+#: eeschema/class_libentry_fields.cpp:151
+#, c-format
+msgid "field %d does not have the correct number of parameters"
+msgstr ""
+
+#: eeschema/class_libentry_fields.cpp:166
+#, fuzzy, c-format
+msgid "field %d text orientation parameter <%c> is not valid"
+msgstr "le nombre de paramètes (%d) de la courbe de Bezier est mauvais"
+
+#: eeschema/class_libentry_fields.cpp:178
+#, fuzzy, c-format
+msgid "field %d text visible parameter <%c> is not valid"
+msgstr "le nombre de paramètes (%d) de la courbe de Bezier est mauvais"
+
+#: eeschema/class_libentry_fields.cpp:197
+#, c-format
+msgid "field %d text horizontal justification parameter <%c> is not valid"
+msgstr ""
+
+#: eeschema/class_libentry_fields.cpp:211
+#, c-format
+msgid "field %d text vertical justification parameter <%c> is not valid"
+msgstr ""
+
+#: eeschema/class_libentry_fields.cpp:397
+msgid "Datasheet"
+msgstr "Documentation"
+
+#: eeschema/eelibs_read_libraryfiles.cpp:61
 #, c-format
 msgid "Library <%s> not found"
 msgstr "Librairie %s non trouvée"
 
-#: eeschema/eelibs_read_libraryfiles.cpp:163
+#: eeschema/eelibs_read_libraryfiles.cpp:154
 msgid " error!"
 msgstr " erreur!"
 
-#: eeschema/eelibs_read_libraryfiles.cpp:172
+#: eeschema/eelibs_read_libraryfiles.cpp:163
 msgid "The following libraries could not be found:"
 msgstr "Les librairies suivantes n'ont pas pu être trouvées:"
 
-#: eeschema/eelibs_read_libraryfiles.cpp:305
-#: eeschema/eelibs_read_libraryfiles.cpp:312
-msgid "File <"
-msgstr "Fichier <"
+#: eeschema/eelibs_read_libraryfiles.cpp:297
+#, c-format
+msgid "File <%s> is empty!"
+msgstr "Fichier <%s> vide!"
 
 #: eeschema/eelibs_read_libraryfiles.cpp:305
-msgid "> is empty!"
-msgstr "> est vide"
+#, c-format
+msgid "File <%s> is NOT an EESCHEMA library!"
+msgstr "Le fichier <%s> n'est PAS une librairie EESCHEMA !"
 
-#: eeschema/eelibs_read_libraryfiles.cpp:313
-msgid "> is NOT EESCHEMA library!"
-msgstr "> n'est PAS une librairie EESCHEMA !"
+#: eeschema/eelibs_read_libraryfiles.cpp:323
+#, c-format
+msgid "Library <%s> header read error"
+msgstr "Fichier librairie <%s> erreur lecture entête"
 
-#: eeschema/eelibs_read_libraryfiles.cpp:330
-msgid "Library <"
-msgstr "Librairie <"
-
-#: eeschema/eelibs_read_libraryfiles.cpp:331
-msgid "> header read error"
-msgstr "> erreur lecture entête"
+#: eeschema/eelibs_read_libraryfiles.cpp:344
+#, c-format
+msgid "Library <%s> component load error %s."
+msgstr "Librairie <%s> erreur de chargement du composant %s."
 
 #: eeschema/component_wizard/dialog_component_setup.cpp:137
 msgid "Quick KICAD Library Component Builder"
@@ -9464,7 +9520,6 @@ msgid "Active Low Output"
 msgstr "Sortie Active Bas"
 
 #: cvpcb/tool_cvpcb.cpp:31
-#: cvpcb/menucfg.cpp:39
 msgid "Open a NetList file"
 msgstr "Lire un Fichier Netliste"
 
@@ -9628,20 +9683,34 @@ msgstr "<%s> est un fichier composant de version ancienne."
 msgid "%s %s pin %s : Different Nets"
 msgstr "%s %s pin %s :  Nets Differents"
 
-#: cvpcb/listboxes.cpp:310
+#: cvpcb/listboxes.cpp:127
 #, c-format
 msgid "Footprints: %d"
 msgstr "Modules: %d"
 
-#: cvpcb/listboxes.cpp:434
-#, c-format
-msgid "Footprints (All): %d"
-msgstr "Modules (Tous): %d"
+#: cvpcb/cvframe.cpp:266
+msgid ""
+"Net and component list modified.\n"
+"Save before exit ?"
+msgstr ""
+"Netlist et liste composants modifiés,\n"
+"Sauver avant de quitter ?"
 
-#: cvpcb/listboxes.cpp:437
-#, c-format
-msgid "Footprints (filtered): %d"
-msgstr "Modules (filtrés): %d"
+#: cvpcb/cvframe.cpp:289
+msgid "Problem when saving files, exit anyway ?"
+msgstr "Problème en sauvant les fichiers, quitter quand même"
+
+#: cvpcb/cvframe.cpp:425
+msgid "Delete selections"
+msgstr "Effacement des associations existantes"
+
+#: cvpcb/cvframe.cpp:461
+msgid "unnamed"
+msgstr "non nommé"
+
+#: cvpcb/cvframe.cpp:463
+msgid "Open Net List"
+msgstr "Ouvrir Fichier Netliste"
 
 #: cvpcb/loadcmp.cpp:50
 #, c-format
@@ -9662,30 +9731,6 @@ msgstr "<%s> in'est pas un fichier de module PCB  Kicad valide."
 #, c-format
 msgid "Module %s not found"
 msgstr "Module %s non trouvé"
-
-#: cvpcb/cvframe.cpp:266
-msgid ""
-"Net and component list modified.\n"
-"Save before exit ?"
-msgstr ""
-"Netlist et liste composants modifiés,\n"
-"Sauver avant de quitter ?"
-
-#: cvpcb/cvframe.cpp:289
-msgid "Problem when saving files, exit anyway ?"
-msgstr "Problème en sauvant les fichiers, quitter quand même"
-
-#: cvpcb/cvframe.cpp:410
-msgid "Delete selections"
-msgstr "Effacement des associations existantes"
-
-#: cvpcb/cvframe.cpp:446
-msgid "unnamed"
-msgstr "non nommé"
-
-#: cvpcb/cvframe.cpp:448
-msgid "Open Net List"
-msgstr "Ouvrir Fichier Netliste"
 
 #: cvpcb/listlib.cpp:62
 msgid "No PCB foot print libraries are listed in the current project file."
@@ -9714,6 +9759,16 @@ msgstr "Certains fichiers n'ont pas pu être trouvés!"
 #: cvpcb/listlib.cpp:150
 msgid "Some files are invalid!"
 msgstr "Certains fichiers sont invalides!"
+
+#: cvpcb/class_footprints_listbox.cpp:230
+#, c-format
+msgid "Footprints (All): %d"
+msgstr "Modules (Tous): %d"
+
+#: cvpcb/class_footprints_listbox.cpp:233
+#, c-format
+msgid "Footprints (filtered): %d"
+msgstr "Modules (filtrés): %d"
 
 #: cvpcb/autosel.cpp:93
 #, c-format
@@ -9776,7 +9831,12 @@ msgstr "Redessin (F3)"
 msgid "1:1 zoom"
 msgstr "1:1 zoom"
 
+#: cvpcb/readschematicnetlist.cpp:113
+msgid "File <"
+msgstr "Fichier <"
+
 #: cvpcb/readschematicnetlist.cpp:114
+#: kicad/prjconfig.cpp:94
 msgid "> not found"
 msgstr ">  non trouvé"
 
@@ -10432,7 +10492,6 @@ msgid "D code File Ext:"
 msgstr "Ext. Fichiers DCodes:"
 
 #: gerbview/select_layers_to_pcb.cpp:220
-#: gerbview/tool_gerber.cpp:244
 msgid "Layer "
 msgstr "Couche "
 
@@ -11178,59 +11237,59 @@ msgstr "Le fichier 3D <%s> n'a pu être trouvé."
 msgid "Vertex "
 msgstr "Vertex "
 
-#: 3d-viewer/3d_canvas.cpp:340
+#: 3d-viewer/3d_canvas.cpp:336
 msgid "Zoom +"
 msgstr "Zoom +"
 
-#: 3d-viewer/3d_canvas.cpp:345
+#: 3d-viewer/3d_canvas.cpp:341
 msgid "Zoom -"
 msgstr "Zoom -"
 
-#: 3d-viewer/3d_canvas.cpp:351
+#: 3d-viewer/3d_canvas.cpp:347
 msgid "Top View"
 msgstr "Vue de dessus"
 
-#: 3d-viewer/3d_canvas.cpp:356
+#: 3d-viewer/3d_canvas.cpp:352
 msgid "Bottom View"
 msgstr "Vue de dessous"
 
-#: 3d-viewer/3d_canvas.cpp:362
+#: 3d-viewer/3d_canvas.cpp:358
 msgid "Right View"
 msgstr "Vue à Droite"
 
-#: 3d-viewer/3d_canvas.cpp:367
+#: 3d-viewer/3d_canvas.cpp:363
 msgid "Left View"
 msgstr "Vue à Gauche"
 
-#: 3d-viewer/3d_canvas.cpp:374
+#: 3d-viewer/3d_canvas.cpp:370
 msgid "Front View"
 msgstr "Vue de face"
 
-#: 3d-viewer/3d_canvas.cpp:379
+#: 3d-viewer/3d_canvas.cpp:375
 msgid "Back View"
 msgstr "Vue arrière"
 
-#: 3d-viewer/3d_canvas.cpp:385
+#: 3d-viewer/3d_canvas.cpp:381
 #: 3d-viewer/3d_toolbar.cpp:85
 msgid "Move left <-"
 msgstr "Vers la gauche <-"
 
-#: 3d-viewer/3d_canvas.cpp:390
+#: 3d-viewer/3d_canvas.cpp:386
 #: 3d-viewer/3d_toolbar.cpp:88
 msgid "Move right ->"
 msgstr "Vers la droite ->"
 
-#: 3d-viewer/3d_canvas.cpp:395
+#: 3d-viewer/3d_canvas.cpp:391
 #: 3d-viewer/3d_toolbar.cpp:91
 msgid "Move Up ^"
 msgstr "Vers le haut ^"
 
-#: 3d-viewer/3d_canvas.cpp:400
+#: 3d-viewer/3d_canvas.cpp:396
 #: 3d-viewer/3d_toolbar.cpp:94
 msgid "Move Down"
 msgstr "Vers le bas"
 
-#: 3d-viewer/3d_canvas.cpp:624
+#: 3d-viewer/3d_canvas.cpp:620
 msgid "3D Image filename:"
 msgstr "Nom fichier Image 3D:"
 
@@ -11835,6 +11894,10 @@ msgstr "DCodes id."
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "> is empty!"
+#~ msgstr "> est vide"
+#~ msgid "Library <"
+#~ msgstr "Librairie <"
 #~ msgid "Segment is being edited"
 #~ msgstr "Segment en cours d'édition"
 #~ msgid "Copper"

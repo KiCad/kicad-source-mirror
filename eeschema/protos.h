@@ -342,10 +342,8 @@ void BreakSegmentOnJunction( SCH_SCREEN * Screen );
 /* Break a segment ( BUS, WIRE ) int 2 segments at location aBreakpoint,
  * if aBreakpoint in on segment segment
  * ( excluding ends)
- * fill aPicklist with modified items if non null
  */
-void BreakSegment(SCH_SCREEN * aScreen, wxPoint aBreakpoint,
-            PICKED_ITEMS_LIST * aPicklist = NULL);
+void BreakSegment(SCH_SCREEN * aScreen, wxPoint aBreakpoint );
 
     /**************/
     /* EECLASS.CPP */
