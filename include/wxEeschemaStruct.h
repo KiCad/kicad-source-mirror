@@ -20,6 +20,7 @@ class SCH_ITEM;
 class DrawNoConnectStruct;
 class LibraryStruct;
 class EDA_LibComponentStruct;
+class LibCmpEntry;
 class LibEDA_BaseStruct;
 class EDA_BaseStruct;
 class DrawBusEntryStruct;
@@ -507,9 +508,8 @@ private:
     bool               LoadOneLibraryPart();
     void               SaveActiveLibrary();
 
-    int                LoadOneLibraryPartAux( EDA_LibComponentStruct* LibEntry,
-                                              LibraryStruct*          Library,
-                                              int                     noMsg = 0 );
+    bool               LoadOneLibraryPartAux( LibCmpEntry*   LibEntry,
+                                              LibraryStruct* Library );
 
     void               DisplayCmpDoc( const wxString& Name );
     void               InstallLibeditFrame();
@@ -560,7 +560,6 @@ public:
     void               HandleBlockPlace( wxDC* DC );
     int                HandleBlockEnd( wxDC* DC );
 
-    void               DeletePartInLib( LibraryStruct* Library, EDA_LibComponentStruct* Entry );
     void               PlacePin( wxDC* DC );
     void               InitEditOnePin();
     void               GlobalSetPins( wxDC* DC, LibDrawPin* MasterPin, int id );

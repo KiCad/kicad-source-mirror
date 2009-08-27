@@ -722,7 +722,8 @@ LibDrawPin* LocatePinByNumber( const wxString& ePin_Number,
     LibDrawPin* Pin;
     int Unit, Convert;
 
-    Entry = FindLibPart( eComponent->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+    Entry = ( EDA_LibComponentStruct* )FindLibPart( eComponent->m_ChipName );
+
     if( Entry == NULL )
         return NULL;
 
@@ -858,7 +859,8 @@ LibDrawPin* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos,
         if( DrawStruct->Type() != TYPE_SCH_COMPONENT )
             continue;
         LibItem = (SCH_COMPONENT*) DrawStruct;
-        Entry   = FindLibPart( LibItem->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+        Entry   = ( EDA_LibComponentStruct* ) FindLibPart( LibItem->m_ChipName );
+
         if( Entry == NULL )
             continue;
         Pin = (LibDrawPin*) LocatePin( RefPos, Entry, LibItem->m_Multi,

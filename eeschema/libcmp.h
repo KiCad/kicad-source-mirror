@@ -34,11 +34,6 @@ enum LocateDrawStructType {
 
 #define LOCATE_ALL_DRAW_ITEM 0xFFFFFFFF
 
-/* flags utilises dans FindLibPart() : */
-#define FIND_ROOT  0    /* Used to search for a root component by its name
-                         *  if the name is an alias name, FindLibPart() returns the root component */
-#define FIND_ALIAS 1    /* Used to search for a component by its name
-                         *  FindLibPart() returns the component (root or alias ) */
 
 #include "class_library.h"
 

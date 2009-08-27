@@ -869,10 +869,12 @@ static LibEDA_BaseStruct* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
     if( aDrawLibItem )
     {
         NextItem = NULL;
-        if( ( Entry =
-                 FindLibPart( aDrawLibItem->m_ChipName.GetData(), wxEmptyString,
-                              FIND_ROOT ) ) == NULL )
+        Entry =
+            ( EDA_LibComponentStruct* )FindLibPart( aDrawLibItem->m_ChipName );
+
+        if( Entry == NULL )
             return NULL;
+
         DEntry      = Entry->m_Drawings;
         Multi       = aDrawLibItem->m_Multi;
         convert     = aDrawLibItem->m_Convert;

@@ -452,7 +452,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::ChangeNbUnitsPerPackage( int MaxUnit )
             {
                 for( ii = OldNumUnits + 1; ii <= MaxUnit; ii++ )
                 {
-                    NextDrawItem = CopyDrawEntryStruct( this, DrawItem );
+                    NextDrawItem = CopyDrawEntryStruct( DrawItem );
                     NextDrawItem->SetNext( CurrentLibEntry->m_Drawings );
                     CurrentLibEntry->m_Drawings = NextDrawItem;
                     NextDrawItem->m_Unit = ii;
@@ -499,7 +499,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
                         g_AsDeMorgan = 0; return FALSE;
                     }
                 }
-                NextDrawItem = CopyDrawEntryStruct( this, DrawItem );
+                NextDrawItem = CopyDrawEntryStruct( DrawItem );
                 NextDrawItem->SetNext( CurrentLibEntry->m_Drawings );
                 CurrentLibEntry->m_Drawings = NextDrawItem;
                 NextDrawItem->m_Convert     = 2;

@@ -649,7 +649,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 
         Multi = 0;
         Unit  = ' ';
-        Entry = FindLibPart( DrawLibItem->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+        Entry = ( EDA_LibComponentStruct* ) FindLibPart( DrawLibItem->m_ChipName );
         if( Entry )
             Multi = Entry->m_UnitCount;
 
@@ -749,7 +749,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal(
 
         Multi = 0;
         Unit  = ' ';
-        Entry = FindLibPart( DrawLibItem->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+        Entry = ( EDA_LibComponentStruct* ) FindLibPart( DrawLibItem->m_ChipName );
         if( Entry )
             Multi = Entry->m_UnitCount;
 

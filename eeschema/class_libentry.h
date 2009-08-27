@@ -10,6 +10,9 @@
 #include "classes_body_items.h"
 #include "class_libentry_fields.h"
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
+
 /* Types for components in libraries
  * components can be a true component or an alias of a true component.
  */
@@ -52,14 +55,30 @@ public:
 
 
     /**
-     * Writes the doc info out to a FILE in "*.dcm" format.
+     * Write the entry document information to a FILE in "*.dcm" format.
      *
      * @param aFile The FILE to write to.
      *
      * @return bool - true if success writing else false.
      */
     bool SaveDoc( FILE* aFile );
+
+    /**
+     * Case insensitive comparison of the component entry name.
+     */
+    bool operator==( const wxChar* name ) const;
+    bool operator!=( const wxChar* name ) const
+    {
+        return !( *this == name );
+    }
 };
+
+
+typedef boost::ptr_vector< LibCmpEntry > LIB_ENTRY_LIST;
+
+extern bool operator<( LibCmpEntry& item1, LibCmpEntry& item2 );
+
+extern int LibraryEntryCompare( LibCmpEntry* LE1, LibCmpEntry* LE2 );
 
 
 /**

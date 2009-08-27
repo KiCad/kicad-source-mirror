@@ -22,10 +22,8 @@
 #include "dialog_create_component.h"
 
 
-/**********************************************/
-void WinEDA_LibeditFrame::DisplayLibInfos()
-/**********************************************/
 /* Affiche dans la zone messages la librairie , et le composant edite */
+void WinEDA_LibeditFrame::DisplayLibInfos()
 {
     wxString msg = wxT( "Libedit: " );
 
@@ -58,12 +56,8 @@ void WinEDA_LibeditFrame::DisplayLibInfos()
 }
 
 
-/**************************************************/
+/* Function to select the current library (working library) */
 void WinEDA_LibeditFrame::SelectActiveLibrary()
-/**************************************************/
-
-/* Function to select the current library (working library)
- */
 {
     LibraryStruct* Lib;
 
@@ -76,8 +70,6 @@ void WinEDA_LibeditFrame::SelectActiveLibrary()
 }
 
 
-bool WinEDA_LibeditFrame::LoadOneLibraryPart()
-
 /**
  * Function LoadOneLibraryPart()
  * load a library component from the current selected library
@@ -85,11 +77,12 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPart()
  * If there is no current selected library,
  * prompt user for library name and make the selected library the current lib.
  */
+bool WinEDA_LibeditFrame::LoadOneLibraryPart()
 {
-    int      i;
-    wxString msg;
-    wxString CmpName;
-    EDA_LibComponentStruct* LibEntry = NULL;
+    int          i;
+    wxString     msg;
+    wxString     CmpName;
+    LibCmpEntry* LibEntry = NULL;
 
     if( g_ScreenLib->IsModify() )
     {
@@ -97,7 +90,7 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPart()
             return FALSE;
     }
 
-    if( CurrentLib == NULL )    // No current lib, ask user for the library to use
+    if( CurrentLib == NULL ) // No current lib, ask user for the library to use
     {
         SelectActiveLibrary();
         if( CurrentLib == NULL )
@@ -118,17 +111,20 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPart()
     }
 
     /* Load the new library component */
-    LibEntry = FindLibPart( CmpName.GetData(), CurrentLib->m_Name, FIND_ALIAS );
+    LibEntry = CurrentLib->FindEntry( CmpName, ALIAS );
 
     if( LibEntry == NULL )
     {
         msg = _( "Component \"" ); msg << CmpName << _( "\" not found." );
-        DisplayError( this, msg, 20 );
+        DisplayError( this, msg );
         return FALSE;
     }
 
     GetScreen()->ClearUndoRedoList();
-    LoadOneLibraryPartAux( LibEntry, CurrentLib );
+
+    if( !LoadOneLibraryPartAux( LibEntry, CurrentLib ) )
+        return false;
+
     ReCreateHToolbar();
     Zoom_Automatique( FALSE );
     DrawPanel->Refresh();
@@ -136,46 +132,52 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPart()
 }
 
 
-/**************************************************************************/
-int WinEDA_LibeditFrame::LoadOneLibraryPartAux(
-    EDA_LibComponentStruct* LibEntry,
-    LibraryStruct*          Library,
-    int                     noMsg )
-/**************************************************************************/
-
-/* Routine Pour Charger en memoire la copie de 1 libpart.
+/*
+ * Routine Pour Charger en memoire la copie de 1 libpart.
  *  retourne
  *  0 si OK
  *  1 si err
  *  CurrentLibEntry pointe la copie ainsi creee
  */
+bool WinEDA_LibeditFrame::LoadOneLibraryPartAux( LibCmpEntry*   LibEntry,
+                                                 LibraryStruct* Library )
 {
-    wxString      msg;
-    const wxChar* CmpName, * RootName = NULL;
+    wxString msg, cmpName, rootName;
 
     if( (LibEntry == NULL) || (Library == NULL) )
-        return 1;
+        return false;
 
-    CmpName = LibEntry->m_Name.m_Text.GetData();
+    if( LibEntry->m_Name.m_Text.IsEmpty() )
+    {
+        wxLogWarning( wxT( "Entry in library <%s> has empty name field." ),
+                      (const wxChar*) LibEntry );
+        return false;
+    }
+
+    cmpName = LibEntry->m_Name.m_Text;
     CurrentAliasName.Empty();
+
     if( LibEntry->Type != ROOT )
     {
-        RootName = ( (EDA_LibCmpAliasStruct*) LibEntry )->m_RootName.GetData();
-        if( !noMsg )
-        {
-            msg.Printf( wxT( "\"<%s>\" is Alias of \"<%s>\"" ), CmpName,
-                        RootName );
-        }
+        rootName = ( (EDA_LibCmpAliasStruct*) LibEntry )->m_RootName;
+        wxASSERT( !rootName.IsEmpty() );
+        wxLogDebug( wxT( "\"<%s>\" is alias of \"<%s>\"" ),
+                    (const wxChar*) cmpName, (const wxChar*) rootName );
 
-        LibEntry = FindLibPart( RootName, Library->m_Name, FIND_ROOT );
+        LibEntry = Library->FindEntry( rootName, ROOT );
 
         if( LibEntry == NULL )
         {
-            msg.Printf( wxT( "Root Part \"<%s>\" not found." ), RootName );
-            DisplayError( this, msg, 20 );
-            return 1;
+            msg.Printf( wxT( "Root entry <%s> for alias <%s> not found in \
+library <%s>." ),
+                        (const wxChar*) rootName,
+                        (const wxChar*) cmpName,
+                        (const wxChar*) Library->m_Name );
+            DisplayError( this, msg );
+            return false;
         }
-        CurrentAliasName = CmpName;
+
+        CurrentAliasName = cmpName;
     }
 
     if( CurrentLibEntry )
@@ -183,8 +185,9 @@ int WinEDA_LibeditFrame::LoadOneLibraryPartAux(
         SAFE_DELETE( CurrentLibEntry );
     }
 
-    CurrentLibEntry = CopyLibEntryStruct( this, LibEntry );
-    CurrentUnit     = 1; CurrentConvert = 1;
+    CurrentLibEntry = CopyLibEntryStruct( (EDA_LibComponentStruct*) LibEntry );
+    CurrentUnit    = 1;
+    CurrentConvert = 1;
     DisplayLibInfos();
 
     BuildAliasData( Library, CurrentLibEntry );
@@ -195,15 +198,12 @@ int WinEDA_LibeditFrame::LoadOneLibraryPartAux(
     if( LookForConvertPart( CurrentLibEntry ) > 1 )
         g_AsDeMorgan = 1;
 
-    return 0;
+    return true;
 }
 
 
-/*********************************************************************/
+/* Function to redraw the current loaded library component */
 void WinEDA_LibeditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
-/*********************************************************************/
-/* Function to redraw the current loaded library component
-*/
 {
     if( GetScreen() == NULL )
         return;
@@ -217,7 +217,7 @@ void WinEDA_LibeditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     DrawPanel->CursorOff( DC ); // erase cursor
     if( DrawPanel->ManageCurseur )
     {
-        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE ); // effacement affichage lie au curseur
+        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
     }
 
     if( EraseBg )
@@ -242,16 +242,14 @@ void WinEDA_LibeditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 }
 
 
-/*************************************************/
-void WinEDA_LibeditFrame::SaveActiveLibrary()
-/*************************************************/
-
-/* Save (on disk) the current library
+/*
+ * Save (on disk) the current library
  *  if exists the old file is renamed (.bak)
  */
+void WinEDA_LibeditFrame::SaveActiveLibrary()
 {
     wxFileName fn;
-    wxString msg;
+    wxString   msg;
 
     if( CurrentLib == NULL )
     {
@@ -273,7 +271,7 @@ void WinEDA_LibeditFrame::SaveActiveLibrary()
     if( !success )
     {
         msg = _( "Error while saving Library File \"" ) + fn.GetFullPath() +
-            _( "\"." );
+              _( "\"." );
         Affiche_1_Parametre( this, 1, wxT( " *** ERROR : **" ), msg, BLUE );
         DisplayError( this, msg );
     }
@@ -282,27 +280,25 @@ void WinEDA_LibeditFrame::SaveActiveLibrary()
         msg = _( "Library File \"" ) + fn.GetFullName() + wxT( "\" Ok" );
         fn.SetExt( DOC_EXT );
         wxString msg1 = _( "Document File \"" ) + fn.GetFullPath() +
-            wxT( "\" Ok" );
+                        wxT( "\" Ok" );
         Affiche_1_Parametre( this, 1, msg, msg1, BLUE );
     }
 }
 
 
-/**************************************************************/
-void WinEDA_LibeditFrame::DisplayCmpDoc( const wxString& Name )
-/**************************************************************/
-
 /*
  *  Affiche la documentation du composant selectionne
- *  Utilisï¿½e lors de l'affichage de la liste des composants en librairie
+ *  Utilisïe lors de l'affichage de la liste des composants en librairie
  */
+void WinEDA_LibeditFrame::DisplayCmpDoc( const wxString& Name )
 {
     LibCmpEntry* CmpEntry;
 
     if( CurrentLib == NULL )
         return;
+
     MsgPanel->EraseMsgBox();
-    CmpEntry = FindLibPart( Name.GetData(), CurrentLib->m_Name, FIND_ALIAS );
+    CmpEntry = CurrentLib->FindEntry( Name );
 
     if( CmpEntry == NULL )
         return;
@@ -311,11 +307,8 @@ void WinEDA_LibeditFrame::DisplayCmpDoc( const wxString& Name )
 }
 
 
-/*********************************************/
-void WinEDA_LibeditFrame::DeleteOnePart()
-/*********************************************/
-
-/* Routine de suppression d'un composant dans la librairie courante
+/*
+ * Routine de suppression d'un composant dans la librairie courante
  *  (effacement en memoire uniquement, le fichier n'est pas modifie)
  *  Le composant peut etre un alias, ou la definition de base.
  *  Si c'est un alias:
@@ -326,94 +319,80 @@ void WinEDA_LibeditFrame::DeleteOnePart()
  *  Sinon le premier alias devient le composant de base, et les autres
  *  alias deviennent dependants de celui ci.
  */
+void WinEDA_LibeditFrame::DeleteOnePart()
 {
-    wxString                CmpName;
-    int                     NumOfParts;
-    EDA_LibComponentStruct* LibEntry;
-    WinEDAListBox*          ListBox;
-    const wxChar**          ListNames;
-    wxString                msg;
+    wxString      CmpName;
+    LibCmpEntry*  LibEntry;
+    wxArrayString ListNames;
+    wxString      msg;
 
     CurrentDrawItem = NULL;
 
     if( CurrentLib == NULL )
     {
         SelectActiveLibrary();
+
         if( CurrentLib == NULL )
         {
-            DisplayError( this, _( "No Active Library" ), 20 );
+            DisplayError( this, _( "Please select a component library." ) );
             return;
         }
     }
 
-    NumOfParts = 0;
-    PQCompFunc( (PQCompFuncType) LibraryEntryCompare );
-    LibEntry = (EDA_LibComponentStruct*) PQFirst( &CurrentLib->m_Entries,
-                                                  FALSE );
-    while( LibEntry != NULL )
+    CurrentLib->GetEntryNames( ListNames );
+
+    if( ListNames.IsEmpty() )
     {
-        NumOfParts++;
-        LibEntry = (EDA_LibComponentStruct*)
-                   PQNext( CurrentLib->m_Entries, LibEntry, NULL );
+        msg.Printf( _( "Component library <%s> does not have any entries to delete." ),
+                    ( const wxChar* ) CurrentLib->m_Name );
+        wxMessageBox( msg, _( "Delete Entry Error" ),
+                      wxID_OK | wxICON_EXCLAMATION, this );
+        return;
     }
 
-    ListNames = (const wxChar**) MyZMalloc( (NumOfParts + 1) * sizeof(wxChar*) );
-    LibEntry  = (EDA_LibComponentStruct*) PQFirst( &CurrentLib->m_Entries,
-                                                   FALSE );
-    msg.Printf( _( "Select Component (%d items)" ), NumOfParts );
-    NumOfParts = 0;
-    while( LibEntry != NULL )
+    msg.Printf( _( "Select 1 of %d components to\ndelete from library <%s>." ),
+                ListNames.GetCount(), ( const wxChar* ) CurrentLib->m_Name );
+
+    wxSingleChoiceDialog dlg( this, msg, _( "Delete Component" ), ListNames );
+
+    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetStringSelection().IsEmpty() )
+        return;
+
+    LibEntry = CurrentLib->FindEntry( dlg.GetStringSelection() );
+
+    if( LibEntry == NULL )
     {
-        ListNames[NumOfParts] = LibEntry->m_Name.m_Text.GetData();
-        NumOfParts++;
-        LibEntry = (EDA_LibComponentStruct*)
-                   PQNext( CurrentLib->m_Entries, LibEntry, NULL );
+        msg.Printf( _( "Entry <%s> not found in library <%s>." ),
+                    ( const wxChar* ) dlg.GetStringSelection(),
+                    ( const wxChar* ) CurrentLib->m_Name );
+        DisplayError( this, msg );
+        return;
     }
 
-    ListBox = new WinEDAListBox( this, msg, ListNames, wxEmptyString, NULL,
-                                wxColour( 255, 255, 255 ) );
+    msg = _( "Delete component \"" ) + LibEntry->m_Name.m_Text +
+        _( "\" from library \"" ) + CurrentLib->m_Name + wxT( "\"?" );
 
-
-    int ii = ListBox->ShowModal();
-    ListBox->Destroy();
-
-    if( ii >= 0 )
+    if( IsOK( this, msg ) )
     {
-        CmpName  = ListNames[ii];
-        LibEntry = FindLibPart( CmpName.GetData(), CurrentLib->m_Name,
-                                FIND_ALIAS );
-
-        if( LibEntry == NULL )
-            DisplayError( this, _( "Component not found" ), 20 );
-        else
-        {
-            msg = _( "Delete component \"" ) + LibEntry->m_Name.m_Text +
-                  _( "\" from library \"" ) + CurrentLib->m_Name + wxT( "\"?" );
-            if( IsOK( this, msg ) )
-            {
-                DeletePartInLib( CurrentLib, LibEntry );
-            }
-        }
+        CurrentLib->RemoveEntry( LibEntry );
     }
-
-    free( ListNames );
 }
 
 
-/****************************************************/
-void WinEDA_LibeditFrame::CreateNewLibraryPart()
-/****************************************************/
-
-/* Routine to create a new library component
- *  If an old component is currently in edit, it is deleted.
+/*
+ * Routine to create a new library component
+ *
+ * If an old component is currently in edit, it is deleted.
  */
+void WinEDA_LibeditFrame::CreateNewLibraryPart()
 {
     wxString msg;
     EDA_LibComponentStruct* NewStruct;
     int      diag;
 
     if( CurrentLibEntry
-       && !IsOK( this, _( "Clear old component from screen (changes will be lost)?" ) ) )
+       && !IsOK( this,
+                _( "Clear old component from screen (changes will be lost)?" ) ) )
         return;
 
     CurrentDrawItem = NULL;
@@ -431,7 +410,7 @@ void WinEDA_LibeditFrame::CreateNewLibraryPart()
     /* Test: y a t-il un composant deja de ce nom */
     if( CurrentLib )
     {
-        if( FindLibPart( msg.GetData(), CurrentLib->m_Name, FIND_ALIAS ) )
+        if( CurrentLib->FindEntry( msg ) )
         {
             wxString msg;
             msg << _( "Component \"" ) << Dialogbox.ReturnCmpName() <<
@@ -462,166 +441,23 @@ void WinEDA_LibeditFrame::CreateNewLibraryPart()
 }
 
 
-/*******************************************************************/
-void WinEDA_LibeditFrame::DeletePartInLib( LibraryStruct*          Library,
-                                           EDA_LibComponentStruct* Entry )
-/*******************************************************************/
-
-/* Suppression du composant Entry en librairie Library.
- *  (effacement en memoire uniquement, le fichier n'est pas modifie)
- *  Le composant peut etre un alias, ou la definition de base.
- *  Si c'est un alias:
- *  il est supprime, et la liste des alias de la definition
- *  de base est modifiee
- *  Si c'est le composant de base:
- *  Si la liste des alias est nulle, il est supprime
- *  Sinon le premier alias devient le composant de base, et les autres
- *  alias deviennent dependants de celui ci.
+/*
+ * Routine de sauvegarde de la "partlib" courante dans la librairie courante
+ *
+ * Sauvegarde en memoire uniquement, et PAS sur fichier
+ * La routine efface l'ancien composant ( ou / et les alias ) a remplacer
+ * s'il existe, et sauve le nouveau et cree les alias correspondants.
  */
-{
-    EDA_LibComponentStruct* RootEntry;
-    EDA_LibCmpAliasStruct*  AliasEntry;
-
-    if( ( Library == NULL ) || ( Entry == NULL ) )
-        return;
-
-    PQCompFunc( (PQCompFuncType) LibraryEntryCompare );
-    Library->m_Modified = 1;
-
-    if( Entry->Type == ALIAS )
-    {
-        RootEntry = FindLibPart(
-            ( (EDA_LibCmpAliasStruct*) Entry )->m_RootName.GetData(),
-            Library->m_Name, FIND_ROOT );
-        /* Remove alias name from the root component alias list */
-        if( RootEntry == NULL )
-        {
-            DisplayError( this, wxT( "Warning: for Alias, root not found" ),
-                          30 );
-        }
-        else
-        {
-            int index = wxNOT_FOUND;
-            if( RootEntry->m_AliasList.GetCount() != 0 )
-            {
-                index = RootEntry->m_AliasList.Index( Entry->m_Name.m_Text.GetData(),
-                                                      FALSE );
-                if( index != wxNOT_FOUND )
-                    RootEntry->m_AliasList.RemoveAt( index );
-            }
-            if( index == wxNOT_FOUND )
-                DisplayError( this,
-                              wxT( "Warning: Root for Alias as no alias list" ),
-                              30 );
-        }
-
-        /* Effacement memoire pour cet alias */
-        PQDelete( &Library->m_Entries, (void*) Entry );
-        SAFE_DELETE( Entry );
-        if( Library->m_NumOfParts > 0 )
-            CurrentLib->m_NumOfParts--;
-        return;
-    }
-
-    /* Entry is a standard component (not an alias) */
-    if( Entry->m_AliasList.GetCount() == 0 ) // Trivial case: no alias, we can safety delete e=this entry
-    {
-        PQDelete( &Library->m_Entries, Entry );
-        SAFE_DELETE( Entry );
-        if( Library->m_NumOfParts > 0 )
-            Library->m_NumOfParts--;
-        return;
-    }
-
-    /* Entry is a component with alias
-     *  We must change the first alias to a "root" component, and for all the aliases
-     *  we must change the root component (which is deleted) by the first alias */
-    wxString AliasName = Entry->m_AliasList[0];
-
-    /* The root component is not really deleted, it is renamed with the first alias name */
-    AliasEntry = (EDA_LibCmpAliasStruct*) FindLibPart(
-        AliasName.GetData(), Library->m_Name, FIND_ALIAS );
-    if( AliasEntry == NULL )
-    {
-        wxString msg;
-        msg.Printf( wxT( "Warning: Alias <%s> not found" ),
-                   AliasName.GetData() );
-        DisplayError( this, msg, 30 );
-    }
-    else
-    {
-        if( Library->m_NumOfParts > 0 )
-            Library->m_NumOfParts--;
-
-        /* remove the root component from library */
-        PQDelete( &Library->m_Entries, Entry );
-
-        /* remove the first alias from library*/
-        PQDelete( &Library->m_Entries, AliasEntry );
-
-        /* remove the first alias name from alias list: */
-        Entry->m_AliasList.RemoveAt( 0 );
-        /* change the old name. New name for "root" is the name of the first alias */
-        Entry->m_Name.m_Text = AliasName;
-        Entry->m_Doc = AliasEntry->m_Doc;
-
-        Entry->m_KeyWord = AliasEntry->m_KeyWord;
-
-        FreeLibraryEntry( (EDA_LibComponentStruct*) AliasEntry );
-
-        /* root component (renamed) placed in library */
-        PQInsert( &Library->m_Entries, Entry );
-    }
-
-    /* Change the "RootName", for other aliases */
-    for( unsigned ii = 0; ii < Entry->m_AliasList.GetCount(); ii++ )
-    {
-        AliasName = Entry->m_AliasList[ii];
-
-        AliasEntry = (EDA_LibCmpAliasStruct*) FindLibPart( AliasName.GetData(),
-                                                           Library->m_Name,
-                                                           FIND_ALIAS );
-        if( AliasEntry == NULL )
-        {
-            // Should not occurs. If happens, this is an error (or bug)
-            wxString msg;
-            msg.Printf( wxT( "Warning: Alias <%s> not found" ),
-                       AliasName.GetData() );
-            DisplayError( this, msg, 30 );
-            continue;
-        }
-        if( AliasEntry->Type != ALIAS )
-        {
-            // Should not occurs. If happens, this is an error (or bug)
-            wxString msg;
-            msg.Printf( wxT( "Warning: <%s> is not an Alias" ),
-                       AliasName.GetData() );
-            DisplayError( this, msg, 30 );
-            continue;
-        }
-        AliasEntry->m_RootName = Entry->m_Name.m_Text;
-    }
-}
-
-
-/***************************************************/
 void WinEDA_LibeditFrame::SaveOnePartInMemory()
-/***************************************************/
-
-/* Routine de sauvegarde de la "partlib" courante dans la librairie courante
- *  Sauvegarde en memoire uniquement, et PAS sur fichier
- *  La routine efface l'ancien composant ( ou / et les alias ) a remplacer
- *  s'il existe, et sauve le nouveau et cree les alias correspondants.
- */
 {
-    EDA_LibComponentStruct* Entry;
-    EDA_LibCmpAliasStruct*  AliasEntry;
+    LibCmpEntry*            Entry;
+    EDA_LibComponentStruct* Component;
     wxString msg;
     bool     NewCmp = TRUE;
 
     if( CurrentLibEntry == NULL )
     {
-        DisplayError( this, _( "No component to Save." ) );
+        DisplayError( this, _( "No component to save." ) );
         return;
     }
 
@@ -630,69 +466,50 @@ void WinEDA_LibeditFrame::SaveOnePartInMemory()
 
     if( CurrentLib == NULL )
     {
-        DisplayError( this, _( "No Library specified." ), 20 );
+        DisplayError( this, _( "No Library specified." ) );
         return;
     }
 
-    CurrentLib->m_Modified = 1;
     g_ScreenLib->ClrModify();
 
-    PQCompFunc( (PQCompFuncType) LibraryEntryCompare );
+    Entry = CurrentLib->FindEntry( CurrentLibEntry->m_Name.m_Text, ROOT );
 
-    if( ( Entry = FindLibPart( CurrentLibEntry->m_Name.m_Text.GetData(),
-                               CurrentLib->m_Name, FIND_ROOT ) ) != NULL )
+    if( Entry != NULL )
     {
         msg.Printf( _( "Component \"%s\" exists. Change it?" ),
-                   Entry->m_Name.m_Text.GetData() );
+                    (const wxChar*) Entry->m_Name.m_Text );
         if( !IsOK( this, msg ) )
             return;
         NewCmp = FALSE;
     }
+
+    wxASSERT( CurrentLibEntry->Type == ROOT );
 
     /* Effacement des alias deja existants en librairie */
     for( unsigned ii = 0;
          ii <  CurrentLibEntry->m_AliasList.GetCount();
          ii += ALIAS_NEXT )
     {
-        EDA_LibComponentStruct* LocalEntry;
-        wxString aliasname = CurrentLibEntry->m_AliasList[ii + ALIAS_NAME];
-        while( ( LocalEntry = FindLibPart( aliasname.GetData(),
-                                           CurrentLib->m_Name,
-                                           FIND_ALIAS ) ) != NULL )
+        LibCmpEntry* LocalEntry;
+        wxString     aliasname = CurrentLibEntry->m_AliasList[ii];
+        LocalEntry = CurrentLib->FindEntry( aliasname, ALIAS );
+
+        while( LocalEntry != NULL && LocalEntry->Type == ALIAS )
         {
-            DeletePartInLib( CurrentLib, LocalEntry );
+            CurrentLib->RemoveEntry( LocalEntry );
         }
     }
 
     if( !NewCmp )
-        DeletePartInLib( CurrentLib, Entry );
+        CurrentLib->RemoveEntry( Entry );
 
-    Entry = CopyLibEntryStruct( this, CurrentLibEntry );
-    Entry->m_AliasList.Clear();
-    PQInsert( &CurrentLib->m_Entries, (void*) Entry );
-    CurrentLib->m_NumOfParts++;
+    Component = CurrentLib->AddComponent( CurrentLibEntry );
 
-    /* Creation des nouveaux alias */
-    for( unsigned ii = 0;
-         ii <  CurrentLibEntry->m_AliasList.GetCount();
-         ii += ALIAS_NEXT )
-    {
-        wxString aliasname = CurrentLibEntry->m_AliasList[ii + ALIAS_NAME];
-        Entry->m_AliasList.Add( aliasname );
-        AliasEntry = new EDA_LibCmpAliasStruct( aliasname.GetData(),
-                                                Entry->m_Name.m_Text );
-        AliasEntry->m_Doc     = CurrentLibEntry->m_AliasList[ii + ALIAS_DOC];
-        AliasEntry->m_KeyWord =
-            CurrentLibEntry->m_AliasList[ii + ALIAS_KEYWORD];
-        AliasEntry->m_DocFile =
-            CurrentLibEntry->m_AliasList[ii + ALIAS_DOC_FILENAME];
+    if( Component == NULL )
+        return;
 
-        /* Placement en liste des composants de l'Alias */
-        PQInsert( &CurrentLib->m_Entries, (void*) AliasEntry );
-        CurrentLib->m_NumOfParts++;
-    }
-
-    msg.Printf( _( "Component %s saved in %s" ),
-               Entry->m_Name.m_Text.GetData(), CurrentLib->m_Name.GetData() );
+    msg.Printf( _( "Component %s saved in library %s" ),
+                ( const wxChar* ) Component->m_Name.m_Text,
+                ( const wxChar* ) CurrentLib->m_Name );
     Affiche_Message( msg );
 }

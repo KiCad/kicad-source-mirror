@@ -512,7 +512,7 @@ void CopyMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
         if( item->m_Selected == 0 )
             continue;
         item->m_Selected = 0;
-        LibEDA_BaseStruct* newitem = CopyDrawEntryStruct( NULL, item );
+        LibEDA_BaseStruct* newitem = CopyDrawEntryStruct( item );
         newitem->m_Selected = IS_SELECTED;
         newitem->SetNext( LibEntry->m_Drawings );
         LibEntry->m_Drawings = newitem;

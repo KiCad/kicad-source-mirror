@@ -164,23 +164,12 @@ void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
  *  Alias = FIND_ROOT, ou Alias = FIND_ALIAS
  */
 /*****************************************************************************/
-EDA_LibComponentStruct* FindLibPart( const wxChar*   Name,
-                                     const wxString& LibName,
-                                     int             Alias )
+LibCmpEntry* FindLibPart( const wxChar* Name, const wxString& LibName,
+                          LibrEntryType type )
 {
-    EDA_LibComponentStruct*       Entry;
-
-    /* Used only to call PQFind. */
-    static EDA_LibComponentStruct DummyEntry( wxEmptyString );
-
+    LibCmpEntry*   Entry = NULL;
     LibraryStruct* Lib = g_LibraryList;
 
-    DummyEntry.m_Drawings    = NULL; /* Used only to call PQFind. */
-    DummyEntry.m_Name.m_Text = Name;
-
-    PQCompFunc( (PQCompFuncType) LibraryEntryCompare );
-
-    Entry = NULL;
     FindLibName.Empty();
 
     while( Lib )
@@ -197,7 +186,8 @@ EDA_LibComponentStruct* FindLibPart( const wxChar*   Name,
         if( Lib == NULL )
             break;
 
-        Entry = (EDA_LibComponentStruct*) PQFind( Lib->m_Entries, &DummyEntry );
+        Entry = Lib->FindEntry( Name, type );
+
         if( Entry != NULL )
         {
             FindLibName = Lib->m_Name;
@@ -205,15 +195,6 @@ EDA_LibComponentStruct* FindLibPart( const wxChar*   Name,
         }
 
         Lib = Lib->m_Pnext;
-    }
-
-    /* Si le nom est un alias, recherche du vrai composant */
-    if( Entry )
-    {
-        if( (Entry->Type != ROOT ) && (Alias == FIND_ROOT) )
-            Entry = FindLibPart(
-                 ( (EDA_LibCmpAliasStruct*) Entry )->m_RootName.GetData(),
-                Lib->m_Name, FIND_ROOT );
     }
 
     return Entry;

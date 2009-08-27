@@ -83,7 +83,7 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
         Library = g_LibraryList;
         while( Library )
         {
-            if( Library->m_Name == libname )
+            if( Library->GetName().CmpNoCase( libname ) == 0 )
             {
                 CmpCount = Library->m_NumOfParts;
                 break;
@@ -118,7 +118,8 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
     {
         AllowWildSeach = FALSE;
         keys = Name.AfterFirst( '=' );
-        if( DataBaseGetName( this, keys, Name ) == 0 )
+        Name = DataBaseGetName( this, keys, Name );
+        if( Name.IsEmpty() )
         {
             DrawPanel->m_IgnoreMouseEvents = FALSE;
             DrawPanel->MouseToCursorSchema();
@@ -138,7 +139,8 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
     else if( Name.Contains( wxT( "?" ) ) || Name.Contains( wxT( "*" ) ) )
     {
         AllowWildSeach = FALSE;
-        if( DataBaseGetName( this, keys, Name ) == 0 )
+        Name = DataBaseGetName( this, keys, Name );
+        if( Name.IsEmpty() )
         {
             DrawPanel->m_IgnoreMouseEvents = FALSE;
             DrawPanel->MouseToCursorSchema();
@@ -146,14 +148,18 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
         }
     }
 
-    Entry = FindLibPart( Name.GetData(), libname, FIND_ROOT );
+    Entry = ( EDA_LibComponentStruct* ) FindLibPart( Name, libname );
+
     if( (Entry == NULL) && AllowWildSeach ) /* Attemp to search with wildcard */
     {
         AllowWildSeach = FALSE;
         wxString wildname = wxChar( '*' ) + Name + wxChar( '*' );
         Name = wildname;
-        if( DataBaseGetName( this, keys, Name ) )
-            Entry = FindLibPart( Name.GetData(), libname, FIND_ROOT );
+        Name = DataBaseGetName( this, keys, Name );
+
+        if( !Name.IsEmpty() )
+            Entry = ( EDA_LibComponentStruct* ) FindLibPart( Name, libname );
+
         if( Entry == NULL )
         {
             DrawPanel->m_IgnoreMouseEvents = FALSE;
@@ -352,8 +358,8 @@ void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
     if( DrawComponent == NULL )
         return;
 
-    LibEntry = FindLibPart(
-        DrawComponent->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+    LibEntry = ( EDA_LibComponentStruct* ) FindLibPart( DrawComponent->m_ChipName );
+
     if( LibEntry == NULL )
         return;
 
@@ -401,8 +407,8 @@ void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
     if( DrawComponent == NULL )
         return;
 
-    LibEntry = FindLibPart(
-        DrawComponent->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+    LibEntry = ( EDA_LibComponentStruct* ) FindLibPart( DrawComponent->m_ChipName );
+
     if( LibEntry == NULL )
         return;
 

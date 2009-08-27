@@ -52,7 +52,8 @@ bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName )
                 continue;
 
             SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) SchItem;
-            Entry = FindLibPart( DrawLibItem->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+            Entry = ( EDA_LibComponentStruct* ) FindLibPart( DrawLibItem->m_ChipName );
+
             if( Entry )    // if NULL : component not found
                 ListEntry.push_back( Entry );
         }

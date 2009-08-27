@@ -28,14 +28,16 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
     if( (g_CurrentViewLibraryName != wxEmptyString)
         && (g_CurrentViewComponentName != wxEmptyString) )
     {
-        RootLibEntry = FindLibPart( g_CurrentViewComponentName.GetData(),
-                                    g_CurrentViewLibraryName.GetData(),
-                                    FIND_ROOT );
+        RootLibEntry =
+            ( EDA_LibComponentStruct* ) FindLibPart( g_CurrentViewComponentName,
+                                                     g_CurrentViewLibraryName );
+
         if( RootLibEntry && LookForConvertPart( RootLibEntry ) > 1 )
             asdeMorgan = TRUE;
-        CurrentLibEntry = FindLibPart( g_CurrentViewComponentName.GetData(),
-                                       g_CurrentViewLibraryName.GetData(),
-                                       FIND_ALIAS );
+        CurrentLibEntry =
+            ( EDA_LibComponentStruct* ) FindLibPart( g_CurrentViewComponentName,
+                                                     g_CurrentViewLibraryName,
+                                                     ALIAS );
     }
 
     if( m_HToolBar  == NULL )

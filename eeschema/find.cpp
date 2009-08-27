@@ -624,51 +624,54 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
 }
 
 
-/*************************************************************/
-void WinEDA_FindFrame::LocatePartInLibs( wxCommandEvent& event )
-/*************************************************************/
-
-/* Search for a given component.
- * The serach is made in loaded libraries,
- * and if not found in all libraries found in lib paths.
+/*
+ * Search for a given component.
+ *
+ * The search is made in loaded libraries, and if not found in all libraries
+ * found in lib paths.
  */
+void WinEDA_FindFrame::LocatePartInLibs( wxCommandEvent& event )
 {
-    wxString                Text, FindList;
-    EDA_LibComponentStruct* LibEntry;
-    bool FoundInLib = FALSE;     // True si reference trouvee ailleurs qu'en cache
+    wxArrayString nameList;
+    wxString      Text, FindList;
+    bool          FoundInLib = false;
 
     Text = m_NewTextCtrl->GetValue();
     if( Text.IsEmpty() )
     {
-        Close(); return;
+        Close();
+        return;
     }
+
     s_OldStringFound = Text;
 
-     if( NumOfLibraries() == 0 )
+    if( NumOfLibraries() == 0 )
     {
         DisplayError( this, _( "No libraries are loaded" ) );
-        Close(); return;
+        Close();
+        return;
     }
 
-
     int nbitemsFound = 0;
+
     for( LibraryStruct* Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext )
     {
-        LibEntry = (EDA_LibComponentStruct*) PQFirst( &Lib->m_Entries, FALSE );
-        while( LibEntry )
+        Lib->SearchEntryNames( nameList, Text );
+
+        if( nameList.IsEmpty() )
+            continue;
+
+        nbitemsFound += nameList.GetCount();
+
+        if( !Lib->m_IsLibCache )
+            FoundInLib = true;
+
+        for( size_t i = 0; i < nameList.GetCount(); i++ )
         {
-            if( WildCompareString( Text, LibEntry->m_Name.m_Text, FALSE ) )
-            {
-                nbitemsFound++;
-                if( !Lib->m_IsLibCache )
-                    FoundInLib = TRUE;
-                if( !FindList.IsEmpty() )
-                    FindList += wxT( "\n" );
-                FindList << _( "Found " )
-                + LibEntry->m_Name.m_Text
-                + _( " in lib " ) + Lib->m_Name;
-            }
-            LibEntry = (EDA_LibComponentStruct*) PQNext( Lib->m_Entries, LibEntry, NULL );
+            if( !FindList.IsEmpty() )
+                FindList += wxT( "\n" );
+            FindList << _( "Found " ) + nameList[i] + _( " in library " )
+                + Lib->m_Name;
         }
     }
 
@@ -690,7 +693,9 @@ void WinEDA_FindFrame::LocatePartInLibs( wxCommandEvent& event )
         }
     }
     else
+    {
         DisplayInfoMessage( this, FindList );
+    }
 
     Close();
 }

@@ -130,7 +130,8 @@ static SCH_COMPONENT* FindNextComponentAndCreatPinList(
         // removed because with multiple instances of one schematic
         // (several sheets pointing to 1 screen), this will be erroneously be toggled.
 
-        Entry = FindLibPart( Component->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+        Entry = ( EDA_LibComponentStruct* ) FindLibPart( Component->m_ChipName );
+
         if( Entry  == NULL )
             continue;
 
@@ -549,9 +550,10 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
                 break;
 
             /* Get the Component FootprintFilter and put the component in CmpList if filter is not void */
-            EDA_LibComponentStruct* Entry;
-            if( ( Entry = FindLibPart( Component->m_ChipName.GetData(), wxEmptyString,
-                                       FIND_ROOT ) ) != NULL )
+            EDA_LibComponentStruct* Entry =
+                ( EDA_LibComponentStruct* ) FindLibPart( Component->m_ChipName );
+
+            if( Entry != NULL )
             {
                 if( Entry->m_FootprintList.GetCount() != 0 )   /* Put in list */
                 {
@@ -630,7 +632,7 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
         for( int ii = 0; ii < CmpListCount; ii++ )
         {
             Component = CmpList[ii].m_RootCmp;
-            Entry     = FindLibPart( Component->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+            Entry     = ( EDA_LibComponentStruct* ) FindLibPart( Component->m_ChipName );
 
             //Line.Printf(_("%s"), CmpList[ii].m_Ref);
             //Line.Replace( wxT( " " ), wxT( "_" ) );

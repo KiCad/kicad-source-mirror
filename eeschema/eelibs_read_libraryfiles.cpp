@@ -17,14 +17,6 @@
 
 #include "dialog_load_error.h"
 
-/* Local Functions */
-static void InsertAlias( PriorQue** PQ, EDA_LibComponentStruct* LibEntry,
-                         int* NumOfParts );
-
-
-// If this code was written in C++ then this would not be needed.
-static wxString currentLibraryName;
-
 
 /****************************************************************************/
 
@@ -39,40 +31,24 @@ LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
                                 const wxString&   FullLibName,
                                 const wxString&   LibName )
 {
-    int            NumOfParts;
-    FILE*          f;
     LibraryStruct* NewLib;
-    PriorQue*      Entries;
     wxFileName     fn;
+    wxString       errMsg;
 
     if( ( NewLib = FindLibrary( LibName ) ) != NULL )
     {
         if( NewLib->m_FullFileName == FullLibName )
             return NewLib;
-        FreeCmpLibrary( frame, LibName );
+
+        delete NewLib;
     }
-
-    NewLib = NULL;
-
-    f = wxFopen( FullLibName, wxT( "rt" ) );
-    if( f == NULL )
-    {
-        wxString msg;
-        msg.Printf( _( "Library <%s> not found" ), FullLibName.GetData() );
-        DisplayError( frame, msg );
-        return NULL;
-    }
-
-    currentLibraryName = FullLibName;
 
     NewLib = new LibraryStruct( LIBRARY_TYPE_EESCHEMA, LibName, FullLibName );
 
-    Entries = LoadLibraryAux( frame, NewLib, f, &NumOfParts );
-    if( Entries != NULL )
-    {
-        NewLib->m_Entries    = Entries;
-        NewLib->m_NumOfParts = NumOfParts;
+    wxBusyCursor ShowWait;
 
+    if( NewLib->Load( errMsg ) )
+    {
         if( g_LibraryList == NULL )
             g_LibraryList = NewLib;
         else
@@ -90,9 +66,15 @@ LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
     }
     else
     {
+        wxString msg;
+        msg.Printf( _( "Error <%s> occurred attempting to load component \
+library <%s>" ),
+                    ( const wxChar* ) errMsg,
+                    ( const wxChar* ) FullLibName );
+        DisplayError( frame, msg );
         SAFE_DELETE( NewLib );
     }
-    fclose( f );
+
     return NewLib;
 }
 
@@ -276,84 +258,6 @@ int LibraryEntryCompare( EDA_LibComponentStruct* LE1,
 }
 
 
-/**************************************************/
-/* Routine to load a library from given open file */
-/**************************************************/
-PriorQue* LoadLibraryAux( WinEDA_DrawFrame* frame, LibraryStruct* Library,
-                          FILE* libfile, int* NumOfParts )
-{
-    int                     LineNum = 0;
-    char                    Line[1024];
-    PriorQue*               PQ = NULL;
-    EDA_LibComponentStruct* LibEntry;
-    wxString                msg;
-
-    wxBusyCursor            ShowWait; // Display a Busy Cursor..
-
-    *NumOfParts = 0;
-
-    if( GetLine( libfile, Line, &LineNum, sizeof(Line) ) == NULL )
-    {
-        msg.Printf( _( "File <%s> is empty!" ),
-                    (const wxChar*) Library->m_Name );
-        DisplayError( frame, msg );
-        return NULL;
-    }
-
-    if( strnicmp( Line, LIBFILE_IDENT, 10 ) != 0 )
-    {
-        msg.Printf( _( "File <%s> is NOT an EESCHEMA library!" ),
-                    (const wxChar*) Library->m_Name );
-        DisplayError( frame, msg );
-        return NULL;
-    }
-
-    if( Library )
-        Library->m_Header = CONV_FROM_UTF8( Line );
-
-    PQInit( &PQ );
-    PQCompFunc( (PQCompFuncType) LibraryEntryCompare );
-
-    while( GetLine( libfile, Line, &LineNum, sizeof(Line) ) )
-    {
-        if( strnicmp( Line, "$HEADER", 7 ) == 0 )
-        {
-            if( Library && !Library->ReadHeader( libfile, &LineNum ) )
-            {
-                msg.Printf( _( "Library <%s> header read error" ),
-                            (const wxChar*) Library->m_Name );
-                DisplayError( frame, msg, 30 );
-            }
-            continue;
-        }
-
-        if( strnicmp( Line, "DEF", 3 ) == 0 )
-        {
-            /* Read one DEF/ENDDEF part entry from library: */
-            LibEntry = new EDA_LibComponentStruct( NULL );
-
-            if( LibEntry->Load( libfile, Line, &LineNum, msg ) )
-            {
-                /* If we are here, this part is O.k. - put it in: */
-                ++*NumOfParts;
-                PQInsert( &PQ, LibEntry );
-                InsertAlias( &PQ, LibEntry, NumOfParts );
-            }
-            else
-            {
-                wxLogWarning( _( "Library <%s> component load error %s." ),
-                              (const wxChar*) Library->m_Name,
-                              (const wxChar*) msg );
-                msg.Clear();
-                delete LibEntry;
-            }
-        }
-    }
-
-    return PQ;
-}
-
-
 /*****************************************************************************
 * Routine to find the library given its name.                            *
 *****************************************************************************/
@@ -363,7 +267,7 @@ LibraryStruct* FindLibrary( const wxString& Name )
 
     while( Lib )
     {
-        if( Lib->m_Name == Name )
+        if( *Lib == Name )
             return Lib;
         Lib = Lib->m_Pnext;
     }
@@ -387,27 +291,6 @@ int NumOfLibraries()
 }
 
 
-/********************************************************************/
-/* create in library (in list PQ) aliases of the "root" component LibEntry*/
-/********************************************************************/
-static void InsertAlias( PriorQue** PQ, EDA_LibComponentStruct* LibEntry,
-                         int* NumOfParts )
-{
-    EDA_LibCmpAliasStruct* AliasEntry;
-    unsigned ii;
-
-    for( ii = 0; ii < LibEntry->m_AliasList.GetCount(); ii++ )
-    {
-        AliasEntry =
-            new EDA_LibCmpAliasStruct( LibEntry->m_AliasList[ii],
-                                      LibEntry->m_Name.m_Text.GetData() );
-
-        ++*NumOfParts;
-        PQInsert( PQ, AliasEntry );
-    }
-}
-
-
 /*******************************************************/
 /* Routines de lecture des Documentation de composants */
 /*******************************************************/
@@ -418,7 +301,7 @@ int LoadDocLib( WinEDA_DrawFrame* frame, const wxString& FullDocLibName,
 {
     int      LineNum = 0;
     char     Line[1024], * Name, * Text;
-    EDA_LibComponentStruct* Entry;
+    LibCmpEntry* Entry;
     FILE*    f;
     wxString msg;
 
@@ -455,7 +338,8 @@ int LoadDocLib( WinEDA_DrawFrame* frame, const wxString& FullDocLibName,
         Name = strtok( Line + 5, "\n\r" );
         wxString cmpname;
         cmpname = CONV_FROM_UTF8( Name );
-        Entry   = FindLibPart( cmpname.GetData(), Libname, FIND_ALIAS );
+        Entry   = FindLibPart( cmpname, Libname, ALIAS );
+
         while( GetLine( f, Line, &LineNum, sizeof(Line) ) )
         {
             if( strncmp( Line, "$ENDCMP", 7 ) == 0 )

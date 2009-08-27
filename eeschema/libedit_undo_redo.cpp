@@ -23,7 +23,10 @@ void WinEDA_LibeditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
     EDA_LibComponentStruct* CopyItem;
     PICKED_ITEMS_LIST* lastcmd;
 
-    CopyItem = CopyLibEntryStruct( this, (EDA_LibComponentStruct*) ItemToCopy );
+    CopyItem = CopyLibEntryStruct( (EDA_LibComponentStruct*) ItemToCopy );
+
+    if( CopyItem == NULL )
+        return;
 
     lastcmd = new PICKED_ITEMS_LIST();
     ITEM_PICKER wrapper(CopyItem, UR_LIBEDIT);

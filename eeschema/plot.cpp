@@ -57,7 +57,7 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
     wxPoint    pos;
     bool       draw_bgfill = false;
 
-    Entry = FindLibPart( DrawLibItem->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+    Entry = ( EDA_LibComponentStruct* ) FindLibPart( DrawLibItem->m_ChipName );
     if( Entry == NULL )
         return;;
     memcpy( TransMat, DrawLibItem->m_Transform, sizeof(TransMat) );

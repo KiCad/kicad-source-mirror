@@ -37,10 +37,10 @@ extern int ExportPartId;
 /*************************************************/
 void WinEDA_LibeditFrame::OnImportPart( wxCommandEvent& event )
 {
-    wxFileName              fn;
-    LibraryStruct*          LibTmp;
-    EDA_LibComponentStruct* LibEntry;
-    int err = 1;
+    wxFileName     fn;
+    LibraryStruct* LibTmp;
+    LibCmpEntry*   LibEntry;
+    bool           entryLoaded;
 
     LibItemToRepeat = NULL;
 
@@ -58,14 +58,13 @@ void WinEDA_LibeditFrame::OnImportPart( wxCommandEvent& event )
 
     if( g_LibraryList )
     {
-        LibEntry = (EDA_LibComponentStruct*) PQFirst( &g_LibraryList->m_Entries,
-                                                      false );
+        LibEntry = g_LibraryList->GetFirstEntry();
 
         if( LibEntry )
-            err = LoadOneLibraryPartAux( LibEntry, g_LibraryList, 1 );
+            entryLoaded = LoadOneLibraryPartAux( LibEntry, g_LibraryList );
         FreeCmpLibrary( this, g_LibraryList->m_Name );
 
-        if( err == 0 )
+        if( entryLoaded )
         {
             fn = dlg.GetPath();
             m_LastLibImportPath = fn.GetPath();
@@ -75,7 +74,7 @@ void WinEDA_LibeditFrame::OnImportPart( wxCommandEvent& event )
             DrawPanel->Refresh();
         }
         else
-            DisplayError( this, _( "File is empty" ), 30 );
+            DisplayError( this, _( "File is empty" ) );
     }
 
     g_LibraryList = LibTmp;

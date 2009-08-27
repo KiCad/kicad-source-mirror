@@ -36,19 +36,15 @@ bool BuildAliasData( LibraryStruct* Lib, EDA_LibComponentStruct* component )
     LibCmpEntry*  CmpEntry;
     unsigned      ii;
 
-    if( component == NULL )
-        return FALSE;
-    if( Lib == NULL )
-        return FALSE;
-    if( component->m_AliasList.GetCount() == 0 )
-        return FALSE;
+    if( component == NULL || Lib == NULL
+        || component->m_AliasList.GetCount() == 0 )
+        return false;
 
     List = component->m_AliasList;
     component->m_AliasList.Clear();
     for( ii = 0; ii < List.GetCount(); ii++ )
     {
-        CmpEntry = (LibCmpEntry*) FindLibPart( List[ii].GetData(),
-                                               Lib->m_Name, FIND_ALIAS );
+        CmpEntry = FindLibPart( List[ii], Lib->m_Name, ALIAS );
         if( CmpEntry && CmpEntry->Type != ALIAS )
         {
             DisplayError( NULL,

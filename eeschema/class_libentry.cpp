@@ -168,9 +168,26 @@ LibCmpEntry::LibCmpEntry( LibrEntryType CmpType, const wxChar* CmpName ) :
 }
 
 
-/******************************/
 LibCmpEntry::~LibCmpEntry()
 {
+}
+
+
+bool LibCmpEntry::operator==( const wxChar* name ) const
+{
+    return m_Name.m_Text.CmpNoCase( name ) == 0;
+}
+
+
+bool operator<( LibCmpEntry& item1, LibCmpEntry& item2 )
+{
+    return item1.m_Name.m_Text.CmpNoCase( item2.m_Name.m_Text ) == -1;
+}
+
+
+int LibraryEntryCompare( LibCmpEntry* LE1, LibCmpEntry* LE2 )
+{
+    return LE1->m_Name.m_Text.CmpNoCase( LE2->m_Name.m_Text );
 }
 
 

@@ -72,10 +72,10 @@ void ReAnnotatePowerSymbolsOnly( void )
         {
             if( DrawList->Type() != TYPE_SCH_COMPONENT )
                 continue;
-            SCH_COMPONENT*          DrawLibItem =
-                (SCH_COMPONENT*) DrawList;
-            EDA_LibComponentStruct* Entry = FindLibPart(
-                DrawLibItem->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+            SCH_COMPONENT*          DrawLibItem = (SCH_COMPONENT*) DrawList;
+            EDA_LibComponentStruct* Entry =
+                ( EDA_LibComponentStruct* )FindLibPart( DrawLibItem->m_ChipName );
+
             if( (Entry == NULL) || (Entry->m_Options != ENTRY_POWER) )
                 continue;
 
@@ -354,9 +354,7 @@ int AddComponentsInSheetToList(  std::vector <OBJ_CMP_TO_LIST>& aComponentsList,
         if( DrawList->Type() == TYPE_SCH_COMPONENT )
         {
             DrawLibItem = (SCH_COMPONENT*) DrawList;
-            Entry = FindLibPart( DrawLibItem->m_ChipName.GetData(),
-                                 wxEmptyString,
-                                 FIND_ROOT );
+            Entry = ( EDA_LibComponentStruct* )FindLibPart( DrawLibItem->m_ChipName );
             if( Entry == NULL )
                 continue;
 

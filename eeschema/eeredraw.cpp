@@ -259,8 +259,8 @@ void DrawStructsInGhost( WinEDA_DrawPanel * aPanel, wxDC * aDC, SCH_ITEM * aItem
         EDA_LibComponentStruct* LibEntry;
         SCH_COMPONENT*          Struct;
         Struct   = (SCH_COMPONENT*) aItem;
-        LibEntry = FindLibPart( Struct->m_ChipName.GetData(), wxEmptyString,
-                                FIND_ROOT );
+        LibEntry = ( EDA_LibComponentStruct* ) FindLibPart( Struct->m_ChipName );
+
         if( LibEntry == NULL )
             break;
         DrawingLibInGhost( aPanel, aDC, LibEntry, Struct, Struct->m_Pos.x + aOffset.x,

@@ -273,8 +273,9 @@ int WinEDA_ViewlibFrame::BestZoom()
     wxSize size, itemsize;
     EDA_LibComponentStruct* CurrentLibEntry = NULL;
 
-    CurrentLibEntry = FindLibPart( g_CurrentViewComponentName.GetData(),
-                                   g_CurrentViewLibraryName.GetData(), FIND_ROOT );
+    CurrentLibEntry =
+        ( EDA_LibComponentStruct* ) FindLibPart( g_CurrentViewComponentName,
+                                                 g_CurrentViewLibraryName );
 
     if( CurrentLibEntry == NULL )
     {
@@ -314,7 +315,7 @@ void WinEDA_ViewlibFrame::ReCreateListLib()
         return;
 
     m_LibList->Clear();
-    
+
     wxArrayString libNamesList;
     for( LibraryStruct* Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext )
     {
@@ -323,13 +324,13 @@ void WinEDA_ViewlibFrame::ReCreateListLib()
         else
             libNamesList.Add( Lib->m_Name );
     }
-    
+
     libNamesList.Sort();
-    
+
     // Add lib cache
     if ( libcache )
         libNamesList.Add( libcache->m_Name );
-    
+
     m_LibList->Append(libNamesList);
 
     // Search for a previous selection:
@@ -358,29 +359,22 @@ void WinEDA_ViewlibFrame::ReCreateListLib()
 }
 
 
-/***********************************************/
 void WinEDA_ViewlibFrame::ReCreateListCmp()
-/***********************************************/
 {
     if( m_CmpList == NULL )
         return;
 
-    int ii;
-    EDA_LibComponentStruct* LibEntry = NULL;
-    LibraryStruct*          Library  = FindLibrary( g_CurrentViewLibraryName.GetData() );
+    LibraryStruct* Library  = FindLibrary( g_CurrentViewLibraryName.GetData() );
+    wxArrayString  nameList;
 
     m_CmpList->Clear();
-    ii = 0;
     g_CurrentViewComponentName.Empty();
-    g_ViewConvert = 1;                      /* Select normal/"de morgan" shape */
-    g_ViewUnit    = 1;                      /* Selec unit to display for multiple parts per package */
+    g_ViewConvert = 1;               /* Select normal/"de morgan" shape */
+    g_ViewUnit    = 1;               /* Select unit to display for multiple
+                                      * parts per package */
     if( Library )
-        LibEntry = (EDA_LibComponentStruct*) PQFirst( &Library->m_Entries, FALSE );
-    while( LibEntry )
-    {
-        m_CmpList->Append( LibEntry->m_Name.m_Text );
-        LibEntry = (EDA_LibComponentStruct*) PQNext( Library->m_Entries, LibEntry, NULL );
-    }
+        Library->GetEntryNames( nameList );
+    m_CmpList->Append( nameList );
 }
 
 

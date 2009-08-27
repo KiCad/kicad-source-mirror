@@ -472,7 +472,8 @@ static void ListeObjetConnection( DrawSheetPath*                sheetlist,
         case TYPE_SCH_COMPONENT:
             DrawLibItem = (SCH_COMPONENT*) DrawList;
 
-            Entry = FindLibPart( DrawLibItem->m_ChipName, wxEmptyString, FIND_ROOT );
+            Entry = ( EDA_LibComponentStruct* )FindLibPart(
+                DrawLibItem->m_ChipName );
 
             if( Entry == NULL )
                 break;

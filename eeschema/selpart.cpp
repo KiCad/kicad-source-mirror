@@ -72,16 +72,14 @@ LibraryStruct* SelectLibraryFromList( WinEDA_DrawFrame* frame )
 }
 
 
-/******************************************************************************************/
 int DisplayComponentsNamesInLib( WinEDA_DrawFrame* frame,
-                                 LibraryStruct* Library, wxString& Buffer, wxString& OldName )
-/******************************************************************************************/
+                                 LibraryStruct* Library,
+                                 wxString& Buffer, wxString& OldName )
 {
-    int                     ii;
-    wxString                msg;
-    EDA_LibComponentStruct* LibEntry;
-    WinEDAListBox*          ListBox;
-    const wxChar**          ListNames;
+    size_t         i;
+    wxString       msg;
+    wxArrayString  nameList;
+    const wxChar** ListNames;
 
     if( Library == NULL )
         Library = SelectLibraryFromList( frame );
@@ -89,44 +87,32 @@ int DisplayComponentsNamesInLib( WinEDA_DrawFrame* frame,
     if( Library == NULL )
         return 0;
 
-    PQCompFunc( (PQCompFuncType) LibraryEntryCompare );
-    LibEntry = (EDA_LibComponentStruct*) PQFirst( &Library->m_Entries, FALSE );
+    Library->GetEntryNames( nameList );
 
-    ii = 0;
-    while( LibEntry )
-    {
-        ii++;
-        LibEntry = (EDA_LibComponentStruct*) PQNext( Library->m_Entries, LibEntry, NULL );
-    }
+    ListNames = (const wxChar**) MyZMalloc( ( nameList.GetCount() + 1 ) *
+                                            sizeof( wxChar* ) );
 
-    ListNames = (const wxChar**) MyZMalloc( (ii + 1) * sizeof(wxChar*) );
+    msg.Printf( _( "Select 1 of %d components from library <%s>" ),
+                nameList.GetCount(), (const wxChar*) Library->m_Name );
 
-    msg.Printf( _( "Select component (%d items)" ), ii );
+    for( i = 0; i < nameList.GetCount(); i++ )
+        ListNames[i] = (const wxChar*) nameList[i];
 
-    ii = 0;
-    LibEntry = (EDA_LibComponentStruct*) PQFirst( &Library->m_Entries, FALSE );
-    while( LibEntry )
-    {
-        ListNames[ii++] = LibEntry->m_Name.m_Text.GetData();
-        LibEntry = (EDA_LibComponentStruct*) PQNext( Library->m_Entries, LibEntry, NULL );
-    }
+    WinEDAListBox dlg( frame, msg, ListNames, OldName, DisplayCmpDoc,
+                       wxColour( 255, 255, 255 ) );
 
-//	Qsort(ListNames,StrNumICmp);
+    dlg.MoveMouseToOrigin();
 
-    ListBox = new WinEDAListBox( frame, msg,
-                                ListNames, OldName, DisplayCmpDoc,
-                                wxColour( 255, 255, 255 ) ); // Component background listbox color
+    int rsp = dlg.ShowModal();
 
-    ListBox->MoveMouseToOrigin();
-
-    ii = ListBox->ShowModal(); ListBox->Destroy();
-    if( ii >= 0 )
-        Buffer = ListNames[ii];
+    if( rsp >= 0 )
+        Buffer = ListNames[rsp];
 
     free( ListNames );
 
-    if( ii < 0 )
+    if( rsp < 0 )
         return 0;
+
     return 1;
 }
 

@@ -57,8 +57,10 @@ void WinEDA_ViewlibFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_LIBVIEW_VIEWDOC:
-        LibEntry = FindLibPart( g_CurrentViewComponentName.GetData(),
-                                g_CurrentViewLibraryName.GetData(), FIND_ALIAS );
+        LibEntry =
+            ( EDA_LibComponentStruct* ) FindLibPart( g_CurrentViewComponentName,
+                                                     g_CurrentViewLibraryName,
+                                                     ALIAS );
         if( LibEntry && ( !LibEntry->m_DocFile.IsEmpty() ) )
             GetAssociatedDocument( this, LibEntry->m_DocFile,
                             & wxGetApp().GetLibraryPathList());
@@ -182,10 +184,9 @@ void WinEDA_ViewlibFrame::SelectAndViewLibraryPart( int option )
         return;
     }
 
-    EDA_LibComponentStruct* LibEntry = FindLibPart(
-        g_CurrentViewComponentName.GetData(),
-        g_CurrentViewLibraryName,
-        FIND_ALIAS );
+    LibCmpEntry* LibEntry = FindLibPart( g_CurrentViewComponentName,
+                                         g_CurrentViewLibraryName,
+                                         ALIAS );
 
     if( LibEntry == NULL )
         return;
@@ -203,10 +204,10 @@ void WinEDA_ViewlibFrame::SelectAndViewLibraryPart( int option )
 /*************************************************/
 void WinEDA_ViewlibFrame::ViewOneLibraryContent( LibraryStruct* Lib, int Flag )
 {
-    int        NumOfParts = 0;
-    EDA_LibComponentStruct* LibEntry, * PreviousLibEntry;
-    wxString   CmpName;
-    wxClientDC dc( DrawPanel );
+    int          NumOfParts = 0;
+    LibCmpEntry* LibEntry;
+    wxString     CmpName;
+    wxClientDC   dc( DrawPanel );
 
 
     DrawPanel->PrepareGraphicContext( &dc );
@@ -223,9 +224,6 @@ void WinEDA_ViewlibFrame::ViewOneLibraryContent( LibraryStruct* Lib, int Flag )
     if( Lib == NULL )
         return;
 
-    PQCompFunc( (PQCompFuncType) LibraryEntryCompare );
-    LibEntry = (EDA_LibComponentStruct*) PQFirst( &Lib->m_Entries, FALSE );
-
     if( Flag == NEW_PART )
     {
         DisplayComponentsNamesInLib( this,
@@ -236,54 +234,24 @@ void WinEDA_ViewlibFrame::ViewOneLibraryContent( LibraryStruct* Lib, int Flag )
 
     if( Flag == NEXT_PART )
     {
-        LibEntry = (EDA_LibComponentStruct*) PQFirst( &Lib->m_Entries, FALSE );
-        while( LibEntry )
-        {
-            if( LibEntry->m_Name.m_Text == g_CurrentViewComponentName )
-            {
-                LibEntry = (EDA_LibComponentStruct*)
-                           PQNext( Lib->m_Entries, LibEntry, NULL );
-                break;
-            }
-            LibEntry = (EDA_LibComponentStruct*)
-                       PQNext( Lib->m_Entries, LibEntry, NULL );
-        }
+        LibEntry = Lib->GetNextEntry( g_CurrentViewComponentName );
 
-        if( LibEntry == NULL )
-            LibEntry = (EDA_LibComponentStruct*) PQFirst( &Lib->m_Entries,
-                                                          FALSE );
         if( LibEntry )
             CmpName = LibEntry->m_Name.m_Text;
     }
 
     if( Flag == PREVIOUS_PART )
     {
-        PreviousLibEntry = NULL;
-        LibEntry = (EDA_LibComponentStruct*) PQFirst( &Lib->m_Entries, FALSE );
-        while( LibEntry )
-        {
-            if( LibEntry->m_Name.m_Text == g_CurrentViewComponentName )
-            {
-                if( PreviousLibEntry )
-                    break;
+        LibEntry = Lib->GetPreviousEntry( g_CurrentViewComponentName );
 
-                /* else : pointage sur 1er element :
-                 *  balayage de la liste et Previous pointera dernier element */
-            }
-
-            PreviousLibEntry = LibEntry;
-            LibEntry = (EDA_LibComponentStruct*)
-                       PQNext( Lib->m_Entries, LibEntry, NULL );
-        }
-
-        if( PreviousLibEntry )
-            CmpName = PreviousLibEntry->m_Name.m_Text;
+        if( LibEntry )
+            CmpName = LibEntry->m_Name.m_Text;
     }
 
     g_ViewUnit    = 1;
     g_ViewConvert = 1;
 
-    LibEntry = FindLibPart( CmpName.GetData(), Lib->m_Name, FIND_ALIAS );
+    LibEntry = Lib->FindEntry( CmpName );
     g_CurrentViewComponentName = CmpName;
     DisplayLibInfos();
     Zoom_Automatique( FALSE );
@@ -312,8 +280,10 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     ActiveScreen = GetScreen();
 
-    LibEntry = FindLibPart( g_CurrentViewComponentName.GetData(),
-                            g_CurrentViewLibraryName, FIND_ALIAS );
+    LibEntry =
+        ( EDA_LibComponentStruct* ) FindLibPart( g_CurrentViewComponentName,
+                                                 g_CurrentViewLibraryName,
+                                                 ALIAS );
     ViewCmpEntry = (LibCmpEntry*) LibEntry;
 
     /* Forcage de la reinit de la brosse et plume courante */
@@ -335,9 +305,10 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
                 ( (EDA_LibCmpAliasStruct*) LibEntry )->m_RootName.GetData();
             Msg.Printf( _( "Current Part: <%s> (is Alias of <%s>)" ),
                         CmpName, RootName );
-            LibEntry = FindLibPart( RootName,
-                                    g_CurrentViewLibraryName,
-                                    FIND_ROOT );
+            LibEntry =
+                ( EDA_LibComponentStruct* ) FindLibPart( RootName,
+                                                         g_CurrentViewLibraryName,
+                                                         ROOT );
 
             if( LibEntry == NULL )
             {

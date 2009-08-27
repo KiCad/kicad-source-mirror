@@ -50,7 +50,8 @@ class Plotter;
 enum id_librarytype {
     LIBRARY_TYPE_EESCHEMA,
     LIBRARY_TYPE_PCBNEW,
-    LIBRARY_TYPE_DOC
+    LIBRARY_TYPE_DOC,
+    LIBRARY_TYPE_SYMBOL
 };
 
 enum id_drawframe {

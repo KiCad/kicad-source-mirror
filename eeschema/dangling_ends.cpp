@@ -388,7 +388,7 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
             #undef STRUCT
             #define STRUCT ( (SCH_COMPONENT*) DrawItem )
             EDA_LibComponentStruct* Entry;
-            Entry = FindLibPart( STRUCT->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+            Entry = ( EDA_LibComponentStruct* ) FindLibPart( STRUCT->m_ChipName );
             if( Entry == NULL )
                 break;
 

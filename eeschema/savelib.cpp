@@ -28,11 +28,10 @@
  * A better way to duplicate a DrawLibItem is to have a virtual GenCopy() in
  * LibEDA_BaseStruct class (ToDo).
  */
-LibEDA_BaseStruct* CopyDrawEntryStruct( wxWindow*          frame,
-                                        LibEDA_BaseStruct* DrawItem )
+LibEDA_BaseStruct* CopyDrawEntryStruct( LibEDA_BaseStruct* DrawItem )
 {
-    LibEDA_BaseStruct* NewDrawItem = NULL;
     wxString           msg;
+    LibEDA_BaseStruct* NewDrawItem = NULL;
 
     switch( DrawItem->Type() )
     {
@@ -67,7 +66,7 @@ LibEDA_BaseStruct* CopyDrawEntryStruct( wxWindow*          frame,
     default:
         msg.Printf( wxT( "CopyDrawLibEntryStruct: unknown Draw Type %d" ),
                     DrawItem->Type() );
-        DisplayError( frame, msg );
+        wxLogError( msg );
         break;
     }
 
@@ -81,9 +80,9 @@ LibEDA_BaseStruct* CopyDrawEntryStruct( wxWindow*          frame,
  *  Parametres de sortie: pointeur sur la structure creee
  *  Do not copy new items ( i.e. with m_Flag  & IS_NEW)
  */
-EDA_LibComponentStruct* CopyLibEntryStruct( wxWindow* frame,
-                                            EDA_LibComponentStruct* OldEntry )
+EDA_LibComponentStruct* CopyLibEntryStruct( EDA_LibComponentStruct* OldEntry )
 {
+    wxString                msg;
     EDA_LibComponentStruct* NewStruct;
     LibEDA_BaseStruct*      NewDrawings, * OldDrawings;
     LibEDA_BaseStruct*      LastItem;
@@ -91,7 +90,9 @@ EDA_LibComponentStruct* CopyLibEntryStruct( wxWindow* frame,
 
     if( OldEntry->Type != ROOT )
     {
-        DisplayError( frame, wxT( "CopyLibEntryStruct(): Type != ROOT" ) );
+        msg.Printf( wxT( "Component <%s> must be root type to make copy." ),
+                    (const wxChar*) OldEntry->m_Name.m_Text );
+        wxLogError( msg );
         return NULL;
     }
 
@@ -126,10 +127,10 @@ EDA_LibComponentStruct* CopyLibEntryStruct( wxWindow* frame,
     for( OldDrawings = OldEntry->m_Drawings; OldDrawings != NULL;
          OldDrawings = OldDrawings->Next() )
     {
-        if( ( OldDrawings->m_Flags & IS_NEW) != 0 )
+        if( ( OldDrawings->m_Flags & IS_NEW ) != 0 )
             continue;
 
-        NewDrawings = CopyDrawEntryStruct( frame, OldDrawings );
+        NewDrawings = CopyDrawEntryStruct( OldDrawings );
         if( NewDrawings )
         {
             if( LastItem == NULL )
@@ -140,11 +141,15 @@ EDA_LibComponentStruct* CopyLibEntryStruct( wxWindow* frame,
             LastItem = NewDrawings;
             NewDrawings->SetNext( NULL );
         }
-        else	// Should nevers occurs, just in case...
+        else	// Should never occur, just in case...
         {       // CopyDrawEntryStruct() was not able to duplicate the type
                 // of OldDrawings
                 // occurs when an unexpected type is encountered
-            DisplayError( frame, wxT( "CopyLibEntryStruct(): error: aborted" ) );
+            msg.Printf( wxT( "Error attempting to copy draw item <%s> from \
+component <%s>." ),
+                        (const wxChar*) OldDrawings->GetClass(),
+                        (const wxChar*) OldEntry->m_Name.m_Text );
+            wxLogError( msg );
             break;
         }
     }

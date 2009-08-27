@@ -171,7 +171,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
 
     else if( newname.CmpNoCase( m_Cmp->m_ChipName ) )
     {
-        if( FindLibPart( newname.GetData(), wxEmptyString, FIND_ALIAS ) == NULL )
+        if( FindLibPart( newname, wxEmptyString, ALIAS ) == NULL )
         {
             wxString message;
             message.Printf( _( "Component [%s] not found!" ), newname.GetData() );
@@ -263,8 +263,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
         ++i;
     }
 
-    EDA_LibComponentStruct* entry = FindLibPart(
-        m_Cmp->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+    EDA_LibComponentStruct* entry =
+        ( EDA_LibComponentStruct* ) FindLibPart( m_Cmp->m_ChipName );
 
     if( entry &&  entry->m_Options == ENTRY_POWER )
         m_FieldsBuf[VALUE].m_Text = m_Cmp->m_ChipName;
@@ -411,7 +411,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
 {
     m_Cmp = aComponent;
 
-    m_LibEntry = FindLibPart( m_Cmp->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+    m_LibEntry = ( EDA_LibComponentStruct* ) FindLibPart( m_Cmp->m_ChipName );
 
 #if 0 && defined(DEBUG)
     for( int i = 0;  i<aComponent->GetFieldCount();  ++i )
@@ -705,7 +705,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     if( m_Cmp == NULL )
         return;
 
-    entry = FindLibPart( m_Cmp->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+    entry = ( EDA_LibComponentStruct* ) FindLibPart( m_Cmp->m_ChipName );
 
     if( entry == NULL )
         return;

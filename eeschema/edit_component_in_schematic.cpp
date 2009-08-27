@@ -68,7 +68,8 @@ void WinEDA_SchematicFrame::StartMoveCmpField( SCH_CMP_FIELD* aField, wxDC* DC )
     m_Multiflag = 0;
     if( aField->m_FieldId == REFERENCE )
     {
-        Entry = FindLibPart( comp->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+        Entry = ( EDA_LibComponentStruct* ) FindLibPart( comp->m_ChipName );
+
         if( Entry  != NULL )
         {
             if( Entry->m_UnitCount > 1 )
@@ -103,7 +104,8 @@ void WinEDA_SchematicFrame::EditCmpFieldText( SCH_CMP_FIELD* Field, wxDC* DC )
     fieldNdx = Field->m_FieldId;
     if( fieldNdx == VALUE )
     {
-        Entry = FindLibPart( Cmp->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+        Entry = ( EDA_LibComponentStruct* ) FindLibPart( Cmp->m_ChipName );
+
         if( Entry && (Entry->m_Options == ENTRY_POWER) )
         {
             DisplayInfoMessage( this,
@@ -117,7 +119,8 @@ void WinEDA_SchematicFrame::EditCmpFieldText( SCH_CMP_FIELD* Field, wxDC* DC )
     flag = 0;
     if( fieldNdx == REFERENCE )
     {
-        Entry = FindLibPart( Cmp->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+        Entry = ( EDA_LibComponentStruct* ) FindLibPart( Cmp->m_ChipName );
+
         if( Entry != NULL )
         {
             if( Entry->m_UnitCount > 1 )
@@ -259,8 +262,8 @@ void WinEDA_SchematicFrame::RotateCmpField( SCH_CMP_FIELD* Field, wxDC* DC )
     flag = 0;
     if( fieldNdx == REFERENCE )
     {
-        Entry = FindLibPart( ( (SCH_COMPONENT*) Field->GetParent() )->m_ChipName.GetData(),
-                            wxEmptyString, FIND_ROOT );
+        Entry = ( EDA_LibComponentStruct* ) FindLibPart( ( (SCH_COMPONENT*) Field->GetParent() )->m_ChipName );
+
         if( Entry != NULL )
         {
             if( Entry->m_UnitCount > 1 )
@@ -296,7 +299,8 @@ void WinEDA_SchematicFrame::EditComponentReference( SCH_COMPONENT* Cmp, wxDC* DC
     if( Cmp == NULL )
         return;
 
-    Entry = FindLibPart( Cmp->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+    Entry = ( EDA_LibComponentStruct* ) FindLibPart( Cmp->m_ChipName );
+
     if( Entry == NULL )
         return;
 
@@ -335,7 +339,8 @@ void WinEDA_SchematicFrame::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
     if( Cmp == NULL )
         return;
 
-    Entry = FindLibPart( Cmp->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+    Entry = ( EDA_LibComponentStruct* ) FindLibPart( Cmp->m_ChipName );
+
     if( Entry == NULL )
         return;
 
@@ -373,7 +378,8 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC
     if( Cmp == NULL )
         return;
 
-    Entry = FindLibPart( Cmp->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+    Entry = ( EDA_LibComponentStruct* ) FindLibPart( Cmp->m_ChipName );
+
     if( Entry == NULL )
         return;
 

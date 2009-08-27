@@ -251,7 +251,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 
     EDA_LibComponentStruct* LibEntry;
 
-    LibEntry = FindLibPart( Component->m_ChipName.GetData(), wxEmptyString, FIND_ROOT );
+    LibEntry = ( EDA_LibComponentStruct* ) FindLibPart( Component->m_ChipName );
 
     if( !Component->m_Flags )
     {
@@ -323,7 +323,8 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_CMP, _( "Delete Component" ), delete_xpm );
     }
 
-    LibEntry = FindLibPart( Component->m_ChipName.GetData(), wxEmptyString, FIND_ALIAS );
+    LibEntry = ( EDA_LibComponentStruct* ) FindLibPart( Component->m_ChipName,
+                                                        wxEmptyString, ALIAS );
     if( LibEntry &&  !LibEntry->m_DocFile.IsEmpty() )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DISPLAYDOC_CMP, _( "Doc" ), datasheet_xpm );
 }
