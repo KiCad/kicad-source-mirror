@@ -186,6 +186,16 @@ library <%s>." ),
     }
 
     CurrentLibEntry = CopyLibEntryStruct( (EDA_LibComponentStruct*) LibEntry );
+
+    if( CurrentLibEntry == NULL )
+    {
+        msg.Printf( _( "Could not create copy of part <%s> in library <%s>." ),
+                    (const wxChar*) LibEntry->m_Name.m_Text,
+                    (const wxChar*) Library->m_Name );
+        DisplayError( this, msg );
+        return false;
+    }
+
     CurrentUnit    = 1;
     CurrentConvert = 1;
     DisplayLibInfos();

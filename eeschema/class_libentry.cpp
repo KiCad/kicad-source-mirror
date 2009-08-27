@@ -517,6 +517,10 @@ bool EDA_LibComponentStruct::LoadDrawEntries( FILE* f, char* line,
             newEntry = ( LibEDA_BaseStruct* ) new LibDrawPolyline(this);
             break;
 
+        case 'B':    /* Bezier Curves */
+            newEntry = ( LibEDA_BaseStruct* ) new LibDrawBezier(this);
+            break;
+
         default:
             errorMsg.Printf( _( "undefined DRAW command %c" ), line[0] );
             m_Drawings = headEntry;

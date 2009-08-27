@@ -124,7 +124,18 @@ LibCmpEntry* LibraryStruct::FindEntry( const wxChar* name, LibrEntryType type )
     if( entry != NULL && entry->Type != ROOT && type == ROOT )
     {
         EDA_LibCmpAliasStruct* alias = ( EDA_LibCmpAliasStruct* ) entry;
-        entry = FindEntry( alias->m_RootName );
+
+        PQCompFunc( (PQCompFuncType) LibraryEntryCompare );
+        entry = (LibCmpEntry*) PQFirst( &m_Entries, false );
+
+        while( entry )
+        {
+            if( entry->m_Name.m_Text.CmpNoCase( name ) == 0
+                && entry->Type == ROOT )
+                break;
+
+            entry = (LibCmpEntry*) PQNext( m_Entries, entry, NULL );
+        }
     }
 
     return entry;
