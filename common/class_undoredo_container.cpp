@@ -36,6 +36,7 @@ ITEM_PICKER::ITEM_PICKER( EDA_BaseStruct* aItem, UndoRedoOpType aUndoRedoStatus 
     m_UndoRedoStatus = aUndoRedoStatus;
     m_PickedItem     = aItem;
     m_PickedItemType = TYPE_NOT_INIT;
+    m_PickerFlags = 0;
     m_Link = NULL;
 }
 
@@ -216,6 +217,18 @@ UndoRedoOpType PICKED_ITEMS_LIST::GetPickedItemStatus( unsigned int aIdx )
         return UR_UNSPECIFIED;
 }
 
+/** function GetPickerFlags
+ * return the value of the picker flag
+  * @param aIdx = index of the picker in the picked list
+ * @return the value stored in the picker, if the picker exists, or 0 if does not exist
+ */
+int PICKED_ITEMS_LIST::GetPickerFlags( unsigned aIdx )
+{
+    if( aIdx < m_ItemsList.size() )
+        return m_ItemsList[aIdx].m_PickerFlags;
+    else
+        return 0;
+}
 
 /** function SetPickedItem
  * @param aItem = a pointer to the item to pick
@@ -284,6 +297,22 @@ bool PICKED_ITEMS_LIST::SetPickedItemStatus( UndoRedoOpType aStatus, unsigned aI
     if( aIdx < m_ItemsList.size() )
     {
         m_ItemsList[aIdx].m_UndoRedoStatus = aStatus;
+        return true;
+    }
+    else
+        return false;
+}
+/** function SetPickerFlags
+ * Set the flags of the picker (usually to the picked item m_Flags value)
+ * @param aFlags = the value to save in picker
+ * @param aIdx = index of the picker in the picked list
+ * @return true if the picker exists, or false if does not exist
+ */
+bool PICKED_ITEMS_LIST::SetPickerFlags( int aFlags, unsigned aIdx )
+{
+    if( aIdx < m_ItemsList.size() )
+    {
+        m_ItemsList[aIdx].m_PickerFlags = aFlags;
         return true;
     }
     else

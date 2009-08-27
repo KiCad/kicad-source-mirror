@@ -241,7 +241,6 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
 
         case BLOCK_DRAG: /* Drag */
             BreakSegmentOnJunction( (SCH_SCREEN*) GetScreen() );
-
         case BLOCK_MOVE:    /* Move */
         case BLOCK_COPY:    /* Copy */
             PickItemsInBlock( GetScreen()->m_BlockLocate, GetScreen() );
@@ -584,8 +583,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
 {
     SCH_ITEM*           Struct;
     EDA_DrawLineStruct* SegmStruct;
-    int ox, oy, fx, fy;
-
+ 
     PICKED_ITEMS_LIST*  pickedlist = &screen->m_BlockLocate.m_ItemsSelection;
 
     if( pickedlist->GetCount() == 0 )
@@ -609,23 +607,13 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
     {
         for( unsigned ii = 0; ii < pickedlist->GetCount(); ii++ )
         {
-            Struct = (SCH_ITEM*)(SCH_ITEM*) pickedlist->GetPickedItem( ii );
+            Struct = (SCH_ITEM*) pickedlist->GetPickedItem( ii );
             Struct->m_Flags = SELECTED;
         }
     }
 
     if( screen->m_BlockLocate.m_Command != BLOCK_DRAG )
         return;
-
-    ox = screen->m_BlockLocate.GetX();
-    oy = screen->m_BlockLocate.GetY();
-    fx = screen->m_BlockLocate.GetRight();
-    fy = screen->m_BlockLocate.GetBottom();
-
-    if( fx < ox )
-        EXCHG( fx, ox );
-    if( fy < oy )
-        EXCHG( fy, oy );
 
 
     /* Suppression du deplacement des extremites de segments hors cadre
@@ -636,13 +624,15 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
         if( Struct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
         {
             SegmStruct = (EDA_DrawLineStruct*) Struct;
-            if( (SegmStruct->m_Start.x < ox) || (SegmStruct->m_Start.x > fx)
-               || (SegmStruct->m_Start.y < oy) || (SegmStruct->m_Start.y > fy) )
+            if( ! screen->m_BlockLocate.Inside(SegmStruct->m_Start) )
                 SegmStruct->m_Flags |= STARTPOINT;
 
-            if( (SegmStruct->m_End.x < ox) || (SegmStruct->m_End.x > fx)
-               || (SegmStruct->m_End.y < oy) || (SegmStruct->m_End.y > fy) )
+            if( ! screen->m_BlockLocate.Inside(SegmStruct->m_End) )
                 SegmStruct->m_Flags |= ENDPOINT;
+
+            // Save m_Flags for Undo/redo drag operations:
+            pickedlist->SetPickerFlags(SegmStruct->m_Flags, ii);
+            
         }
     }
 
@@ -660,7 +650,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
             DrawItem = GetNextPinPosition( (SCH_COMPONENT*) Struct, pos );
             while( DrawItem )
             {
-                if( (pos.x < ox) || (pos.x > fx) || (pos.y < oy) || (pos.y > fy) )
+                if( ! screen->m_BlockLocate.Inside(pos) )
                 {
                     // This pin is outside area,
                     // but because it it the pin of a selected component
@@ -724,6 +714,9 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
 
             if( STRUCT->m_End == position )
                 STRUCT->m_Flags &= ~ENDPOINT;
+
+            // Save m_Flags for Undo/redo drag operations:
+            pickedlist->SetPickerFlags(STRUCT->m_Flags, ii);
             break;
 
         default:
@@ -768,12 +761,16 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
             {
                 Struct->m_Flags  = SELECTED | ENDPOINT | STARTPOINT;
                 Struct->m_Flags &= ~STARTPOINT;
+                // Save m_Flags for Undo/redo drag operations:
+                picker.m_PickerFlags= Struct->m_Flags;
                 pickedlist->PushItem( picker );
             }
             else if( STRUCT->m_End == position )
             {
                 Struct->m_Flags  = SELECTED | ENDPOINT | STARTPOINT;
                 Struct->m_Flags &= ~ENDPOINT;
+                // Save m_Flags for Undo/redo drag operations:
+                picker.m_PickerFlags= Struct->m_Flags;
                 pickedlist->PushItem( picker );
             }
             break;

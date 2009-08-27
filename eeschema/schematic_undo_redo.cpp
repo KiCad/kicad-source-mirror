@@ -223,7 +223,10 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM*      aItem,
 
     ITEM_PICKER        itemWrapper( aItem, aCommandType );
     if( aItem )
+    {
         itemWrapper.m_PickedItemType = aItem->Type();
+        itemWrapper.m_PickerFlags = aItem->m_Flags;
+    }
 
     switch( aCommandType )
     {
@@ -368,7 +371,9 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bo
             break;
 
         case UR_MOVED:
+            item->m_Flags = aList->GetPickerFlags(ii);
             item->Move( aRedoCommand ? aList->m_TransformPoint : - aList->m_TransformPoint );
+            item->m_Flags = 0;
             break;
 
         case UR_MIRRORED_Y:

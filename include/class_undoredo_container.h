@@ -75,6 +75,7 @@ public:
                                          */
     KICAD_T         m_PickedItemType;   /* type of schematic or board item that is concerned
                                          */
+    int             m_PickerFlags;      /* a copy of m_Flags member. usefull in mode/drag undo/redo commands */
     EDA_BaseStruct* m_Link;             /* Pointer on an other item. Used in undo redo command
                                          * used when a duplicate exists i.e. when an item is modified,
                                          * and the copy of initial item exists (the duplicate)
@@ -174,6 +175,13 @@ public:
      */
     UndoRedoOpType  GetPickedItemStatus( unsigned int aIdx );
 
+    /** function GetPickerFlags
+     * return the value of the picker flag
+      * @param aIdx = index of the picker in the picked list
+     * @return the value stored in the picker, if the picker exists, or 0 if does not exist
+     */
+    int            GetPickerFlags( unsigned aIdx );
+
     /** function SetPickedItem
      * @param aItem = a pointer to the item to pick
      * @param aIdx = index of the picker in the picked list
@@ -198,12 +206,20 @@ public:
     bool            SetPickedItemLink( EDA_BaseStruct* aLink, unsigned aIdx );
 
     /** function SetPickedItemStatus
-     * Set the the type of undo/redo operation for a given picked item
+     * Set the type of undo/redo operation for a given picked item
      * @param aStatus = the type of undo/redo operation associated to the picked item
      * @param aIdx = index of the picker in the picked list
      * @return true if the picker exists, or false if does not exist
      */
     bool            SetPickedItemStatus( UndoRedoOpType aStatus, unsigned aIdx );
+
+    /** function SetPickerFlags
+     * Set the flags of the picker (usually to the picked item m_Flags value)
+     * @param aFlags = the value to save in picker
+     * @param aIdx = index of the picker in the picked list
+     * @return true if the picker exists, or false if does not exist
+     */
+    bool            SetPickerFlags( int aFlags, unsigned aIdx );
 
     /** function RemovePicker
      * remove one entry (one picker) from the list of picked items
