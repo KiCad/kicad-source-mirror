@@ -27,7 +27,7 @@ void PS_Plotter::set_viewport( wxPoint offset,
 }
 
 /*************************************************************************************/
-void PS_Plotter::set_default_line_width( int width ) 
+void PS_Plotter::set_default_line_width( int width )
 /*************************************************************************************/
 
 /* Set the default line width (in 1/1000 inch) for the current plotting
@@ -38,7 +38,7 @@ void PS_Plotter::set_default_line_width( int width )
 }
 
 /***************************************/
-void PS_Plotter::set_current_line_width( int width ) 
+void PS_Plotter::set_current_line_width( int width )
 /***************************************/
 
 /* Set the Current line width (in 1/1000 inch) for the next plot
@@ -53,7 +53,7 @@ void PS_Plotter::set_current_line_width( int width )
         pen_width = default_pen_width;
 
     if( pen_width != current_pen_width )
-        fprintf( output_file, "%g setlinewidth\n", 
+        fprintf( output_file, "%g setlinewidth\n",
 		user_to_device_size(pen_width));
 
     current_pen_width = pen_width;
@@ -93,23 +93,28 @@ void PS_Plotter::set_color( int color )
         				(double) ColorRefs[color].m_Blue / 255 );
     	}
     }
-    else /* B/W Mode - Use BLACK for all items */
+    else
+    /* B/W Mode - Use BLACK or WHITE for all items
+     * note the 2 colors are used in B&W mode, mainly by Pcbnew to draw holes in white on pads in black
+     */
     {
-    	/* Why invert in this mode. Does anyway WHITE! */
+    	int bwcolor = WHITE;
+        if( color != WHITE )
+           bwcolor = BLACK;
     	if (negative_mode)
     		fprintf( output_file, "%.3g %.3g %.3g setrgbcolor\n",
-    				(double) 1.0-ColorRefs[BLACK].m_Red / 255,
-    				(double) 1.0-ColorRefs[BLACK].m_Green / 255,
-    				(double) 1.0-ColorRefs[BLACK].m_Blue / 255 );
+    				(double) 1.0-ColorRefs[bwcolor].m_Red / 255,
+    				(double) 1.0-ColorRefs[bwcolor].m_Green / 255,
+    				(double) 1.0-ColorRefs[bwcolor].m_Blue / 255 );
     	else
        		fprintf( output_file, "%.3g %.3g %.3g setrgbcolor\n",
-        				(double) ColorRefs[BLACK].m_Red / 255,
-        				(double) ColorRefs[BLACK].m_Green / 255,
-        				(double) ColorRefs[BLACK].m_Blue / 255 );
+        				(double) ColorRefs[bwcolor].m_Red / 255,
+        				(double) ColorRefs[bwcolor].m_Green / 255,
+        				(double) ColorRefs[bwcolor].m_Blue / 255 );
     }
 }
 
-void PS_Plotter::set_dash( bool dashed ) 
+void PS_Plotter::set_dash( bool dashed )
 {
     wxASSERT(output_file);
     if (dashed)
@@ -147,7 +152,7 @@ void PS_Plotter::circle( wxPoint pos, int diametre, FILL_T fill, int width )
 
 
 /**************************************************************************************/
-void PS_Plotter::arc( wxPoint centre, int StAngle, int EndAngle, int rayon, 
+void PS_Plotter::arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
 	FILL_T fill, int width )
 /**************************************************************************************/
 
@@ -312,7 +317,7 @@ void PS_Plotter::start_plot( FILE *fout)
     // box need to be "rounded down", but the coordinates of its
     // upper right corner need to be "rounded up" instead.
     fprintf( output_file, "%%%%BoundingBox: 0 0 %d %d\n",
-        (int) ceil( paper_size.y * CONV_SCALE), 
+        (int) ceil( paper_size.y * CONV_SCALE),
 	(int) ceil( paper_size.x * CONV_SCALE));
 
     // Specify the size of the sheet and the name associated with that size.
@@ -363,12 +368,12 @@ void PS_Plotter::start_plot( FILE *fout)
     fprintf( output_file, "%d 0 translate 90 rotate\n", paper_size.y);
 
     // Apply the scale adjustments
-    if (plot_scale_adjX != 1.0 || plot_scale_adjY != 1.0) 
+    if (plot_scale_adjX != 1.0 || plot_scale_adjY != 1.0)
 	fprintf( output_file, "%g %g scale\n",
 	    plot_scale_adjX, plot_scale_adjY);
 
     // Set default line width ( g_Plot_DefaultPenWidth is in user units )
-    fprintf( output_file, "%g setlinewidth\n", 
+    fprintf( output_file, "%g setlinewidth\n",
 	    user_to_device_size(default_pen_width) );
 }
 
@@ -383,7 +388,7 @@ void PS_Plotter::end_plot()
 }
 
 /***********************************************************************************/
-void PS_Plotter::flash_pad_oval( wxPoint pos, wxSize size, int orient, 
+void PS_Plotter::flash_pad_oval( wxPoint pos, wxSize size, int orient,
 	GRTraceMode modetrace )
 /************************************************************************************/
 
@@ -421,7 +426,7 @@ void PS_Plotter::flash_pad_oval( wxPoint pos, wxSize size, int orient,
 }
 
 /*******************************************************************************/
-void PS_Plotter::flash_pad_circle(wxPoint pos, int diametre, 
+void PS_Plotter::flash_pad_circle(wxPoint pos, int diametre,
 	    GRTraceMode modetrace)
 /*******************************************************************************/
 /* Trace 1 pastille RONDE (via,pad rond) en position pos_X,Y
@@ -539,7 +544,7 @@ void PS_Plotter::flash_pad_trapez( wxPoint centre, wxSize size, wxSize delta,
     ddx = delta.x / 2;
     ddy = delta.y / 2;
 
-    int coord[10] = { 
+    int coord[10] = {
 	-dx - ddy, +dy + ddx,
 	-dx + ddy, -dy - ddx,
 	+dx - ddy, -dy + ddx,

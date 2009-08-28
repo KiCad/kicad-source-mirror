@@ -7,11 +7,11 @@
 
 
 /* Shared Config keys for plot and print */
-#define OPTKEY_PLOT_LINEWIDTH_VALUE    wxT( "PlotLineWidth" )
-#define OPTKEY_LAYERBASE               wxT( "PlotLayer_%d" )
-#define OPTKEY_PRINT_X_FINESCALE_ADJ   wxT( "PrintXFineScaleAdj" )
-#define OPTKEY_PRINT_Y_FINESCALE_ADJ   wxT( "PrintYFineScaleAdj" )
-#define OPTKEY_PRINT_SCALE             wxT( "PrintScale" )
+#define OPTKEY_PLOT_LINEWIDTH_VALUE  wxT( "PlotLineWidth" )
+#define OPTKEY_LAYERBASE             wxT( "PlotLayer_%d" )
+#define OPTKEY_PRINT_X_FINESCALE_ADJ wxT( "PrintXFineScaleAdj" )
+#define OPTKEY_PRINT_Y_FINESCALE_ADJ wxT( "PrintYFineScaleAdj" )
+#define OPTKEY_PRINT_SCALE           wxT( "PrintScale" )
 
 /* Constantes de conversion d'unites */
 /* coeff de conversion dim en 0.1 mil -> dim en unite PS: (unite PS = pouce) */
@@ -20,42 +20,47 @@
 #define SCALE_HPGL 0.102041
 
 /* Plot Options : */
-struct PCB_Plot_Options {
-    bool Exclude_Edges_Pcb;
-    int PlotLine_Width;
-    bool Plot_Frame_Ref;       // True to plot/print frame references
-    bool DrawViaOnMaskLayer;   // True if vias are drawn on Mask layer (ie protected by mask)
+class PCB_Plot_Options
+{
+public:
+    bool        Exclude_Edges_Pcb;
+    int         PlotLine_Width;
+    bool        Plot_Frame_Ref;     // True to plot/print frame references
+    bool        DrawViaOnMaskLayer; // True if vias are drawn on Mask layer (ie protected by mask)
     GRTraceMode Trace_Mode;
-    bool Plot_Set_MIROIR;
-    int HPGL_Pen_Num;                                                                  
-    int HPGL_Pen_Speed;
-    int HPGL_Pen_Diam;
-    int HPGL_Pen_Recouvrement;
-    int PlotPSColorOpt;        // True for color Postscript output
-    bool Plot_PS_Negative;     // True to create a  negative board ps plot
+    bool        Plot_Set_MIROIR;
+    int         HPGL_Pen_Num;
+    int         HPGL_Pen_Speed;
+    int         HPGL_Pen_Diam;
+    int         HPGL_Pen_Recouvrement;
+    int         PlotPSColorOpt;     // True for color Postscript output
+    bool        Plot_PS_Negative;   // True to create a  negative board ps plot
 
     /* Autorisation de trace des divers items en serigraphie */
-    bool Sel_Texte_Reference;
-    bool Sel_Texte_Valeur;
-    bool Sel_Texte_Divers;
-    bool Sel_Texte_Invisible;
-    bool PlotPadsOnSilkLayer;
-    bool Plot_Pads_All_Layers;   /* Plot pads meme n'appartenant pas a la
-                                        couche ( utile pour serigraphie) */
+    bool        Sel_Texte_Reference;
+    bool        Sel_Texte_Valeur;
+    bool        Sel_Texte_Divers;
+    bool        Sel_Texte_Invisible;
+    bool        PlotPadsOnSilkLayer;
+    bool        Plot_Pads_All_Layers; /* Plot pads meme n'appartenant pas a la
+                                  *      couche ( utile pour serigraphie) */
 
     /* id for plot format (see enum PlotFormat in plot_common.h) */
     int PlotFormat;
     int PlotOrient;
     int PlotScaleOpt;
     enum DrillShapeOptT {
-	NO_DRILL_SHAPE = 0,
-	SMALL_DRILL_SHAPE = 1,
-	FULL_DRILL_SHAPE = 2
+        NO_DRILL_SHAPE    = 0,
+        SMALL_DRILL_SHAPE = 1,
+        FULL_DRILL_SHAPE  = 2
     };
     DrillShapeOptT DrillShapeOpt;
-    double Scale;
-    double ScaleAdjX;
-    double ScaleAdjY;
+    double         Scale;
+    double         ScaleAdjX;
+    double         ScaleAdjY;
+
+public:
+    PCB_Plot_Options();
 };
 
 extern PCB_Plot_Options g_pcb_plot_options;
@@ -65,29 +70,29 @@ extern PCB_Plot_Options g_pcb_plot_options;
 /*************************************/
 
 /* PLOT_RTN.CC */
-void    PlotTextePcb(Plotter *plotter, TEXTE_PCB* pt_texte, int masque_layer,
-	GRTraceMode trace_mode);
+void PlotTextePcb( Plotter* plotter, TEXTE_PCB* pt_texte, int masque_layer,
+                   GRTraceMode trace_mode );
 
 /* Trace 1 Texte type PCB , c.a.d autre que les textes sur modules,
-  * prepare les parametres de trace de texte */
+ * prepare les parametres de trace de texte */
 
-void    PlotDrawSegment(Plotter *plotter, DRAWSEGMENT* PtSegm, int masque_layer,
-	GRTraceMode trace_mode);
+void PlotDrawSegment( Plotter* plotter, DRAWSEGMENT* PtSegm, int masque_layer,
+                      GRTraceMode trace_mode );
 
-void    PlotCotation(Plotter *plotter, COTATION* Cotation, int masque_layer ,
-	GRTraceMode trace_mode);
+void PlotCotation( Plotter* plotter, COTATION* Cotation, int masque_layer,
+                   GRTraceMode trace_mode );
 
-void    PlotMirePcb(Plotter *plotter, MIREPCB* PtMire, int masque_layer ,
-	GRTraceMode trace_mode);
+void PlotMirePcb( Plotter* plotter, MIREPCB* PtMire, int masque_layer,
+                  GRTraceMode trace_mode );
 
-void    Plot_1_EdgeModule(Plotter *plotter, EDGE_MODULE* PtEdge ,
-	GRTraceMode trace_mode);
+void Plot_1_EdgeModule( Plotter* plotter, EDGE_MODULE* PtEdge,
+                        GRTraceMode trace_mode );
 
-void    PlotFilledAreas(Plotter *plotter, ZONE_CONTAINER* aZone, 
-	GRTraceMode trace_mode);
+void PlotFilledAreas( Plotter* plotter, ZONE_CONTAINER* aZone,
+                      GRTraceMode trace_mode );
 
 /* PLOTGERB.CPP */
-void    SelectD_CODE_For_LineDraw(Plotter *plotter, int aSize );
+void SelectD_CODE_For_LineDraw( Plotter* plotter, int aSize );
 
 
 #endif  /* #define PCBPLOT_H */

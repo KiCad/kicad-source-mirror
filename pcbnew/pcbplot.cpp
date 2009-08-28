@@ -29,6 +29,19 @@
 #define MIN_SCALE 0.01
 #define MAX_SCALE 100.0
 
+// PCB_Plot_Options constructor: set the default values for plot options:
+PCB_Plot_Options::PCB_Plot_Options()
+{
+    Sel_Texte_Reference = true;
+    Sel_Texte_Valeur    = true;
+    Sel_Texte_Divers    = true;
+    DrillShapeOpt = PCB_Plot_Options::SMALL_DRILL_SHAPE;
+    Trace_Mode    = FILLED;
+    Scale = 1.0;
+    ScaleAdjX = 1.0;
+    ScaleAdjY = 1.0;
+    PlotScaleOpt = 1;
+}
 
 static long s_SelectedLayers = CUIVRE_LAYER | CMP_LAYER |
                                SILKSCREEN_LAYER_CMP | SILKSCREEN_LAYER_CU;
