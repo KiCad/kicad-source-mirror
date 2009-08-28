@@ -60,6 +60,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_MOVE_ITEM_REQUEST:
     case ID_POPUP_SCH_MOVE_CMP_REQUEST:
     case ID_POPUP_SCH_DRAG_CMP_REQUEST:
+    case ID_POPUP_SCH_DRAG_WIRE_REQUEST:
     case ID_POPUP_SCH_EDIT_CMP:
     case ID_POPUP_SCH_MIROR_X_CMP:
     case ID_POPUP_SCH_MIROR_Y_CMP:
@@ -421,9 +422,10 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_MOVE_ITEM_REQUEST:
         DrawPanel->MouseToCursorSchema();
-        if( id == ID_POPUP_SCH_DRAG_CMP_REQUEST )
+        if( (id == ID_POPUP_SCH_DRAG_CMP_REQUEST ) ||
+            (id == ID_POPUP_SCH_DRAG_WIRE_REQUEST ) )
         {
-            // The easiest way to handle a drag component is simulate a
+            // The easiest way to handle a drag component is to simulate a
             // block drag command
             if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
             {
@@ -437,7 +439,34 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
             Process_Move_Item( (SCH_ITEM*) screen->GetCurItem(), &dc );
         break;
 
-    case ID_POPUP_SCH_EDIT_CMP:
+    case ID_POPUP_SCH_DRAG_WIRE_REQUEST:
+        DrawPanel->MouseToCursorSchema();
+        // The easiest way to handle a drag component is to simulate a
+        // block drag command
+        if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
+        {
+            if( !HandleBlockBegin( &dc, BLOCK_DRAG,
+                                   screen->m_Curseur ) )
+                break;
+            // Ensure the block selection contains the segment, or one end of the segment
+            // the initial rect is only one point (w = h = 0)
+            // The rect must contains one or 2 ends.
+            // If only one end is selected, this is a drag Node
+            // if no ends selected, we adjust the rect area to contain the whole segment
+            // This works fine only for H and V segments and only if they do not cross a component
+            // TODO: a better way to drag only wires
+            EDA_DrawLineStruct* segm = (EDA_DrawLineStruct*)screen->GetCurItem();
+            if( !screen->m_BlockLocate.Inside(segm->m_Start) &&
+                !screen->m_BlockLocate.Inside(segm->m_End) )
+            {
+                screen->m_BlockLocate.SetOrigin(segm->m_Start);
+                screen->m_BlockLocate.SetEnd(segm->m_End);
+            }
+            HandleBlockEnd( &dc );
+        }
+        break;
+
+   case ID_POPUP_SCH_EDIT_CMP:
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)

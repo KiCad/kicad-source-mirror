@@ -583,7 +583,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
 {
     SCH_ITEM*           Struct;
     EDA_DrawLineStruct* SegmStruct;
- 
+
     PICKED_ITEMS_LIST*  pickedlist = &screen->m_BlockLocate.m_ItemsSelection;
 
     if( pickedlist->GetCount() == 0 )
@@ -632,7 +632,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
 
             // Save m_Flags for Undo/redo drag operations:
             pickedlist->SetPickerFlags(SegmStruct->m_Flags, ii);
-            
+
         }
     }
 

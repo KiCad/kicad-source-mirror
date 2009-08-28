@@ -588,12 +588,12 @@ static void AbortCreateNewLine( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     if( Screen->GetCurItem() )  /* trace en cours */
     {
-        Panel->ManageCurseur( Panel, DC, FALSE );
         Panel->ManageCurseur = NULL;
         Panel->ForceCloseManageCurseur = NULL;
         EraseStruct( (SCH_ITEM*) Screen->GetCurItem(), (SCH_SCREEN*) Screen );
         Screen->SetCurItem( NULL );
         RestoreOldWires( Screen );
+        Panel->Refresh();
     }
     else
         g_ItemToRepeat = NULL;  // Fin de commande generale

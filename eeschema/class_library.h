@@ -87,7 +87,7 @@ public:
      *       should give better search capability.
      *
      * @param names - String array to place entry names into.
-     * @parem nameSearch - Name wild card search criteria.
+     * @param nameSearch - Name wild card search criteria.
      * @param keySearch - Key word search criteria.
      * @param sort - Sort names if true.
      */

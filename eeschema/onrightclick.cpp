@@ -484,13 +484,14 @@ void AddMenusForWire( wxMenu* PopMenu, EDA_DrawLineStruct* Wire,
     wxPoint pos    = frame->GetScreen()->m_Curseur;
 
     if( is_new )
+    {
         ADD_MENUITEM( PopMenu, ID_POPUP_END_LINE, _( "Wire End" ), apply_xpm );
-
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Wire" ), delete_xpm );
-
-    if( is_new )
         return;
+    }
 
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DRAG_WIRE_REQUEST, _( "Drag Wire" ), move_track_xpm );
+    PopMenu->AppendSeparator();
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Wire" ), delete_xpm );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_NODE, _( "Delete Node" ), delete_node_xpm );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_CONNECTION, _(
                       "Delete Connection" ), delete_connection_xpm );
@@ -523,13 +524,15 @@ void AddMenusForBus( wxMenu* PopMenu, EDA_DrawLineStruct* Bus,
     wxPoint pos    = frame->GetScreen()->m_Curseur;
 
     if( is_new )
+    {
         ADD_MENUITEM( PopMenu, ID_POPUP_END_LINE, _( "Bus End" ), apply_xpm );
+        return;
+    }
 
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE,
                   _( "Delete Bus" ), delete_bus_xpm );
 
-    if( !is_new )
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE,
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE,
                       _( "Break Bus" ), break_bus_xpm );
 
     PopMenu->AppendSeparator();
