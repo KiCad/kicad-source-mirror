@@ -13,6 +13,7 @@ set(COMMON_SRCS
     bezier_curves.cpp
     block_commande.cpp
     class_marker_base.cpp
+	class_plotter.cpp
     class_undoredo_container.cpp
     common.cpp
     common_plot_functions.cpp

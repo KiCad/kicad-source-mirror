@@ -12,7 +12,7 @@
 #include "kicad_string.h"
 
 /*************************************************************************************/
-void PS_Plotter::set_viewport( wxPoint offset,
+void PS_PLOTTER::set_viewport( wxPoint offset,
 	double aScale, int orient )
 /*************************************************************************************/
 
@@ -27,7 +27,7 @@ void PS_Plotter::set_viewport( wxPoint offset,
 }
 
 /*************************************************************************************/
-void PS_Plotter::set_default_line_width( int width )
+void PS_PLOTTER::set_default_line_width( int width )
 /*************************************************************************************/
 
 /* Set the default line width (in 1/1000 inch) for the current plotting
@@ -38,7 +38,7 @@ void PS_Plotter::set_default_line_width( int width )
 }
 
 /***************************************/
-void PS_Plotter::set_current_line_width( int width )
+void PS_PLOTTER::set_current_line_width( int width )
 /***************************************/
 
 /* Set the Current line width (in 1/1000 inch) for the next plot
@@ -61,7 +61,7 @@ void PS_Plotter::set_current_line_width( int width )
 
 
 /******************************/
-void PS_Plotter::set_color( int color )
+void PS_PLOTTER::set_color( int color )
 /******************************/
 
 /* Print the postscript set color command:
@@ -114,7 +114,7 @@ void PS_Plotter::set_color( int color )
     }
 }
 
-void PS_Plotter::set_dash( bool dashed )
+void PS_PLOTTER::set_dash( bool dashed )
 {
     wxASSERT(output_file);
     if (dashed)
@@ -124,7 +124,7 @@ void PS_Plotter::set_dash( bool dashed )
 }
 
 /***************************************************************/
-void PS_Plotter::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
+void PS_PLOTTER::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
 /***************************************************************/
 {
     user_to_device_coordinates( p1 );
@@ -136,7 +136,7 @@ void PS_Plotter::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
 }
 
 /******************************************************/
-void PS_Plotter::circle( wxPoint pos, int diametre, FILL_T fill, int width )
+void PS_PLOTTER::circle( wxPoint pos, int diametre, FILL_T fill, int width )
 /******************************************************/
 {
     wxASSERT(output_file);
@@ -152,7 +152,7 @@ void PS_Plotter::circle( wxPoint pos, int diametre, FILL_T fill, int width )
 
 
 /**************************************************************************************/
-void PS_Plotter::arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
+void PS_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
 	FILL_T fill, int width )
 /**************************************************************************************/
 
@@ -181,7 +181,7 @@ void PS_Plotter::arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
 
 
 /*****************************************************************/
-void PS_Plotter::poly( int nb_segm, int* coord, FILL_T fill, int width )
+void PS_PLOTTER::poly( int nb_segm, int* coord, FILL_T fill, int width )
 /*****************************************************************/
 
 /* Draw a polygon ( a filled polygon if fill == 1 ) in POSTSCRIPT format
@@ -218,7 +218,7 @@ void PS_Plotter::poly( int nb_segm, int* coord, FILL_T fill, int width )
 
 
 /*************************************/
-void PS_Plotter::pen_to( wxPoint pos, char plume )
+void PS_PLOTTER::pen_to( wxPoint pos, char plume )
 /*************************************/
 
 /* Routine to draw to a new position
@@ -247,7 +247,7 @@ void PS_Plotter::pen_to( wxPoint pos, char plume )
 
 
 /***********************************************************/
-void PS_Plotter::start_plot( FILE *fout)
+void PS_PLOTTER::start_plot( FILE *fout)
 /***********************************************************/
 
 /* The code within this function (and the CloseFilePS function)
@@ -378,7 +378,7 @@ void PS_Plotter::start_plot( FILE *fout)
 }
 
 /******************************************/
-void PS_Plotter::end_plot()
+void PS_PLOTTER::end_plot()
 /******************************************/
 {
     wxASSERT(output_file);
@@ -388,7 +388,7 @@ void PS_Plotter::end_plot()
 }
 
 /***********************************************************************************/
-void PS_Plotter::flash_pad_oval( wxPoint pos, wxSize size, int orient,
+void PS_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
 	GRTraceMode modetrace )
 /************************************************************************************/
 
@@ -426,7 +426,7 @@ void PS_Plotter::flash_pad_oval( wxPoint pos, wxSize size, int orient,
 }
 
 /*******************************************************************************/
-void PS_Plotter::flash_pad_circle(wxPoint pos, int diametre,
+void PS_PLOTTER::flash_pad_circle(wxPoint pos, int diametre,
 	    GRTraceMode modetrace)
 /*******************************************************************************/
 /* Trace 1 pastille RONDE (via,pad rond) en position pos_X,Y
@@ -447,7 +447,7 @@ void PS_Plotter::flash_pad_circle(wxPoint pos, int diametre,
 }
 
 /**************************************************************************/
-void PS_Plotter::flash_pad_rect(wxPoint pos, wxSize size,
+void PS_PLOTTER::flash_pad_rect(wxPoint pos, wxSize size,
 	    int orient, GRTraceMode trace_mode)
 /**************************************************************************/
 /*
@@ -488,7 +488,7 @@ void PS_Plotter::flash_pad_rect(wxPoint pos, wxSize size,
 }
 
 /*******************************************************************/
-void PS_Plotter::flash_pad_trapez( wxPoint centre, wxSize size, wxSize delta,
+void PS_PLOTTER::flash_pad_trapez( wxPoint centre, wxSize size, wxSize delta,
 	int orient, GRTraceMode modetrace )
 /*******************************************************************/
 /*

@@ -714,7 +714,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
 * If TextInside then the text is been put inside (moving from x1, y1 in		 *
 * the opposite direction to x2,y2), otherwise all is drawn outside.		 *
 *****************************************************************************/
-void LibDrawPin::PlotPinTexts( Plotter *plotter,
+void LibDrawPin::PlotPinTexts( PLOTTER *plotter,
 			       wxPoint& pin_pos,
                                int      orient,
                                int      TextInside,

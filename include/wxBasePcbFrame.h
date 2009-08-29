@@ -53,11 +53,11 @@ public:
     bool m_DisplayPadFill;          // How show pads
     bool m_DisplayPadNum;           // show pads numbers
 
-    int  m_DisplayModEdge;          // How show module drawings
-    int  m_DisplayModText;          // How show module texts
+    int m_DisplayModEdge;           // How show module drawings
+    int m_DisplayModText;           // How show module texts
     bool m_DisplayPcbTrackFill;     /* FALSE : tracks are show in sketch mode, TRUE = filled */
     int m_UserGridUnits;
-    wxRealPoint m_UserGridSize;
+    wxRealPoint             m_UserGridSize;
 
     WinEDA3D_DrawFrame*     m_Draw3DFrame;
     WinEDA_ModuleEditFrame* m_ModuleEditFrame;
@@ -90,25 +90,26 @@ public:
 
 
     // General
-    virtual void OnCloseWindow( wxCloseEvent& Event ) = 0;
+    virtual void             OnCloseWindow( wxCloseEvent& Event ) = 0;
+
     virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) { }
-    virtual void ReCreateHToolbar() = 0;
-    virtual void ReCreateVToolbar() = 0;
-    virtual void OnLeftClick( wxDC* DC, const wxPoint& MousePos )  = 0;
-    virtual void OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) = 0;
-    virtual bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
-    virtual void ReCreateMenuBar();
-    virtual void SetToolID( int id, int new_cursor_id,
-                            const wxString& title );
-    virtual void UpdateStatusBar();
+    virtual void             ReCreateHToolbar() = 0;
+    virtual void             ReCreateVToolbar() = 0;
+    virtual void             OnLeftClick( wxDC* DC, const wxPoint& MousePos )  = 0;
+    virtual void             OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) = 0;
+    virtual bool             OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
+    virtual void             ReCreateMenuBar();
+    virtual void             SetToolID( int id, int new_cursor_id,
+                                        const wxString& title );
+    virtual void             UpdateStatusBar();
 
     PCB_SCREEN* GetScreen() const { return (PCB_SCREEN*) WinEDA_DrawFrame::GetBaseScreen(); }
 
-    BASE_SCREEN* GetBaseScreen() const;
+    BASE_SCREEN*             GetBaseScreen() const;
 
-    int          BestZoom();
+    int                      BestZoom();
 
-    virtual void Show3D_Frame( wxCommandEvent& event );
+    virtual void             Show3D_Frame( wxCommandEvent& event );
 
 public:
 
@@ -199,7 +200,9 @@ public:
                                             MODULE* module,
                                             int     angle,
                                             bool    incremental );
-    void                     Place_Module( MODULE* module, wxDC* DC, bool aDoNotRecreateRatsnest = false );
+    void                     Place_Module( MODULE* module,
+                                           wxDC*   DC,
+                                           bool    aDoNotRecreateRatsnest = false );
 
     // module texts
     void                     RotateTextModule( TEXTE_MODULE* Text, wxDC* DC );
@@ -223,6 +226,7 @@ public:
 
 
     // loading footprints
+
     /** function Get_Librairie_Module
      *
      *  Read active libraries or one library to find and load a given module
@@ -233,9 +237,9 @@ public:
      *  @return a MODULE * pointer to the new module, or NULL
      *
      */
-    MODULE*                  Get_Librairie_Module( const wxString& aLibraryFullFilename,
-                                                   const wxString& aModuleName,
-                                                   bool            aDisplayMessageError );
+    MODULE*      Get_Librairie_Module( const wxString& aLibraryFullFilename,
+                                       const wxString& aModuleName,
+                                       bool            aDisplayMessageError );
 
     /** Function Select_1_Module_From_List
      *  Display a list of modules found in active libraries or a given library
@@ -246,57 +250,68 @@ public:
      *
      *  @return wxEmptyString if abort or fails, or the selected module name if Ok
      */
-    wxString                 Select_1_Module_From_List(
+    wxString     Select_1_Module_From_List(
         WinEDA_DrawFrame* active_window, const wxString& aLibraryFullFilename,
         const wxString& aMask, const wxString& aKeyWord );
 
-    MODULE*                  Load_Module_From_Library( const wxString& library, wxDC* DC );
+    MODULE*      Load_Module_From_Library( const wxString& library, wxDC* DC );
 
     //  ratsnest functions
-    void                     Compile_Ratsnest( wxDC* DC, bool affiche );    /* Recalcul complet du chevelu */
-    int                      Test_1_Net_Ratsnest( wxDC* DC, int net_code );
-    void                     build_ratsnest_module( wxDC* DC, MODULE* Module );
-    void                     trace_ratsnest_module( wxDC* DC );
-    void                     Build_Board_Ratsnest( wxDC* DC );
-    void                     DrawGeneralRatsnest( wxDC* DC, int net_code = 0 );
-    void                     trace_ratsnest_pad( wxDC* DC );
-    void                     build_ratsnest_pad( BOARD_ITEM* ref,
-                                                 const wxPoint&  refpos,
-                                                 bool            init );
+    void         Compile_Ratsnest( wxDC* DC, bool affiche );                /* Recalcul complet du chevelu */
+    int          Test_1_Net_Ratsnest( wxDC* DC, int net_code );
+    void         build_ratsnest_module( wxDC* DC, MODULE* Module );
+    void         trace_ratsnest_module( wxDC* DC );
+    void         Build_Board_Ratsnest( wxDC* DC );
+    void         DrawGeneralRatsnest( wxDC* DC, int net_code = 0 );
+    void         trace_ratsnest_pad( wxDC* DC );
+    void         build_ratsnest_pad( BOARD_ITEM*    ref,
+                                     const wxPoint& refpos,
+                                     bool           init );
 
-    void                     Tst_Ratsnest( wxDC* DC, int ref_netcode );
-    void                     test_connexions( wxDC* DC );
-    void                     test_1_net_connexion( wxDC* DC, int net_code );
-    void                     RecalculateAllTracksNetcode( );
+    void         Tst_Ratsnest( wxDC* DC, int ref_netcode );
+    void         test_connexions( wxDC* DC );
+    void         test_1_net_connexion( wxDC* DC, int net_code );
+    void         RecalculateAllTracksNetcode();
 
-    // Plotting
-    void                     ToPlotter( wxCommandEvent& event );
-    void                     Genere_GERBER( const wxString& FullFileName, int Layer,
-                                            bool PlotOriginIsAuxAxis,
-					    GRTraceMode trace_mode );
-    void                     Genere_HPGL( const wxString& FullFileName, int Layer,
-	    GRTraceMode trace_mode);
-    void                     Genere_PS( const wxString& FullFileName, int Layer,
-	    bool useA4, GRTraceMode trace_mode );
-    void                     Genere_DXF( const wxString& FullFileName, int Layer,
-	    GRTraceMode trace_mode);
-    void		     Plot_Layer(Plotter *plotter, int Layer, GRTraceMode trace_mode );
-    void                     Plot_Standard_Layer( Plotter *plotter, int masque_layer,
-                                            int garde, bool trace_via,
-					    GRTraceMode trace_mode );
-    void                     Plot_Serigraphie( Plotter *plotter, int masque_layer,
-	    GRTraceMode trace_mode);
-    void PlotDrillMark(Plotter *plotter, GRTraceMode trace_mode );
+    /* Plotting functions:
+     */
+    void         ToPlotter( wxCommandEvent& event );
+    void         Genere_GERBER( const wxString& FullFileName, int Layer,
+                                bool PlotOriginIsAuxAxis, GRTraceMode trace_mode );
+    void         Genere_HPGL( const wxString& FullFileName, int Layer, GRTraceMode trace_mode );
+    void         Genere_PS( const wxString& FullFileName,
+                            int             Layer,
+                            bool            useA4,
+                            GRTraceMode     trace_mode );
+    void         Genere_DXF( const wxString& FullFileName, int Layer, GRTraceMode trace_mode );
+    void         Plot_Layer( PLOTTER* plotter, int Layer, GRTraceMode trace_mode );
+    void         Plot_Standard_Layer( PLOTTER* plotter, int masque_layer,
+                                      int garde, bool trace_via,
+                                      GRTraceMode trace_mode );
+    void         Plot_Serigraphie( PLOTTER* plotter, int masque_layer, GRTraceMode trace_mode );
 
-   /** Function SaveCopyInUndoList (virtual pure)
+    /** function PlotDrillMark
+     * Draw a drill mark for pads and vias.
+     * Must be called after all drawings, because it
+     * redraw the drill mark on a pad or via, as a negative (i.e. white) shape in FILLED plot mode
+     * @param aPlotter = the PLOTTER
+     * @param aTraceMode = the mode of plot (FILLED, SKETCH)
+     * @param aSmallDrillShape = true to plot a smalle drill shape, false to plot the actual drill shape
+     */
+    void         PlotDrillMark( PLOTTER* aPlotter, GRTraceMode aTraceMode, bool aSmallDrillShape );
+
+    /* Functions relative to Undo/redo commands:
+     */
+
+    /** Function SaveCopyInUndoList (virtual pure)
      * Creates a new entry in undo list of commands.
      * add a picker to handle aItemToCopy
      * @param aItemToCopy = the board item modified by the command to undo
      * @param aTypeCommand = command type (see enum UndoRedoOpType)
      * @param aTransformPoint = the reference point of the transformation, for commands like move
      */
-    virtual void        SaveCopyInUndoList( BOARD_ITEM* aItemToCopy, UndoRedoOpType aTypeCommand,
-                        const wxPoint& aTransformPoint = wxPoint(0,0) ) = 0;
+    virtual void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy, UndoRedoOpType aTypeCommand,
+                                    const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) = 0;
 
     /** Function SaveCopyInUndoList (virtual pure, overloaded).
      * Creates a new entry in undo list of commands.
@@ -305,23 +320,23 @@ public:
      * @param aTypeCommand = command type (see enum UndoRedoOpType)
      * @param aTransformPoint = the reference point of the transformation, for commands like move
      */
-    virtual void        SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList, UndoRedoOpType aTypeCommand,
-                        const wxPoint& aTransformPoint = wxPoint(0,0) ) = 0;
+    virtual void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList, UndoRedoOpType aTypeCommand,
+                                    const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) = 0;
 
 
     // layerhandling:
     // (See pcbnew/sel_layer.cpp for description of why null_layer parameter is provided)
-    int                      SelectLayer( int default_layer, int min_layer, int max_layer,
-                                          bool null_layer = false );
-    void                     SelectLayerPair();
-    virtual void             SwitchLayer( wxDC* DC, int layer );
+    int          SelectLayer( int default_layer, int min_layer, int max_layer,
+                              bool null_layer = false );
+    void         SelectLayerPair();
+    virtual void SwitchLayer( wxDC* DC, int layer );
 
     // divers
-    void                     AddHistory( int value, KICAD_T type );    // Add value in data list history
-    void                     InstallGridFrame( const wxPoint& pos );
+    void         AddHistory( int value, KICAD_T type );                // Add value in data list history
+    void         InstallGridFrame( const wxPoint& pos );
 
-    virtual void             LoadSettings();
-    virtual void             SaveSettings();
+    virtual void LoadSettings();
+    virtual void SaveSettings();
 
     DECLARE_EVENT_TABLE()
 };

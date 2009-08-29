@@ -58,7 +58,7 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
     }
 
     SetLocaleTo_C_standard();
-    Plotter* plotter = new Gerber_Plotter();
+    PLOTTER* plotter = new GERBER_PLOTTER();
     /* No mirror and scaling for gerbers! */
     plotter->set_viewport( offset, scale, 0 );
     plotter->set_default_line_width( g_pcb_plot_options.PlotLine_Width );

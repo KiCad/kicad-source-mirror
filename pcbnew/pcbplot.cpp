@@ -577,7 +577,6 @@ void WinEDA_PlotFrame::SetCommands( wxCommandEvent& event )
         break;
 
     case PLOT_FORMAT_GERBER:
-        m_Drill_Shape_Opt->SetSelection( 0 );
         m_Drill_Shape_Opt->Enable( false );
         m_PlotModeOpt->SetSelection( 1 );
         m_PlotModeOpt->Enable( false );
@@ -600,7 +599,6 @@ void WinEDA_PlotFrame::SetCommands( wxCommandEvent& event )
 
     case PLOT_FORMAT_HPGL:
         m_PlotMirorOpt->Enable( true );
-        m_Drill_Shape_Opt->SetSelection( 0 );
         m_Drill_Shape_Opt->Enable( false );
         m_PlotModeOpt->Enable( true );
         m_Choice_Plot_Offset->Enable( false );
@@ -620,8 +618,7 @@ void WinEDA_PlotFrame::SetCommands( wxCommandEvent& event )
 
     case PLOT_FORMAT_DXF:
         m_PlotMirorOpt->Enable( false );
-	m_PlotMirorOpt->SetValue( false );
-        m_Drill_Shape_Opt->SetSelection( 0 );
+        m_PlotMirorOpt->SetValue( false );
         m_Drill_Shape_Opt->Enable( false );
         m_PlotModeOpt->Enable( true );
         m_Choice_Plot_Offset->Enable( false );

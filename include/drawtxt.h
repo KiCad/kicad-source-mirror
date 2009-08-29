@@ -10,7 +10,7 @@
 #include "base_struct.h"
 
 class WinEDA_DrawPanel;
-class Plotter;
+class PLOTTER;
 
 /** Function  Clamp_Text_PenSize
  *As a rule, pen width should not be >1/4em, otherwise the character
@@ -74,7 +74,7 @@ void DrawGraphicText( WinEDA_DrawPanel * aPanel,
                       bool aItalic,
                       bool aBold,
                       void (*aCallback)( int x0, int y0, int xf, int yf ) = NULL,
-                      Plotter * plotter = NULL );
+                      PLOTTER * plotter = NULL );
 
 
 #endif /* __INCLUDE__DRAWTXT_H__ */

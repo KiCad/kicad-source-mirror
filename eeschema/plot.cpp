@@ -16,17 +16,17 @@
 #include "protos.h"
 
 /* Local Variables : */
-static void Plot_Hierarchical_PIN_Sheet( Plotter*                       plotter,
+static void Plot_Hierarchical_PIN_Sheet( PLOTTER*                       plotter,
                                          Hierarchical_PIN_Sheet_Struct* Struct );
-static void PlotTextField( Plotter* plotter, SCH_COMPONENT* DrawLibItem,
+static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
                            int FieldNumber, int IsMulti, int DrawMode );
-static void PlotPinSymbol( Plotter* plotter, const wxPoint& pos,
+static void PlotPinSymbol( PLOTTER* plotter, const wxPoint& pos,
                            int len, int orient, int Shape );
 
 /***/
 
 /**********************************************************/
-static void PlotNoConnectStruct( Plotter* plotter, DrawNoConnectStruct* Struct )
+static void PlotNoConnectStruct( PLOTTER* plotter, DrawNoConnectStruct* Struct )
 /**********************************************************/
 
 /* Routine de dessin des symboles de "No Connexion" ..
@@ -46,7 +46,7 @@ static void PlotNoConnectStruct( Plotter* plotter, DrawNoConnectStruct* Struct )
 
 
 /*************************************************/
-static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
+static void PlotLibPart( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem )
 /*************************************************/
 /* Polt a component */
 {
@@ -252,7 +252,7 @@ static void PlotLibPart( Plotter* plotter, SCH_COMPONENT* DrawLibItem )
 
 
 /*************************************************************/
-static void PlotTextField( Plotter* plotter, SCH_COMPONENT* DrawLibItem,
+static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
                            int FieldNumber, int IsMulti, int DrawMode )
 /**************************************************************/
 
@@ -398,7 +398,7 @@ static void PlotTextField( Plotter* plotter, SCH_COMPONENT* DrawLibItem,
 
 
 /**************************************************************************/
-static void PlotPinSymbol( Plotter* plotter, const wxPoint& pos,
+static void PlotPinSymbol( PLOTTER* plotter, const wxPoint& pos,
                            int len, int orient, int Shape )
 /**************************************************************************/
 
@@ -503,7 +503,7 @@ static void PlotPinSymbol( Plotter* plotter, const wxPoint& pos,
 
 
 /********************************************************************/
-static void PlotTextStruct( Plotter* plotter, SCH_TEXT* aSchText )
+static void PlotTextStruct( PLOTTER* plotter, SCH_TEXT* aSchText )
 /********************************************************************/
 
 /*
@@ -574,7 +574,7 @@ static void PlotTextStruct( Plotter* plotter, SCH_TEXT* aSchText )
 
 
 /*****************************************************************************************/
-static void Plot_Hierarchical_PIN_Sheet( Plotter*                       plotter,
+static void Plot_Hierarchical_PIN_Sheet( PLOTTER*                       plotter,
                                          Hierarchical_PIN_Sheet_Struct* aHierarchical_PIN )
 /****************************************************************************************/
 
@@ -619,7 +619,7 @@ static void Plot_Hierarchical_PIN_Sheet( Plotter*                       plotter,
 
 
 /*************************************************/
-static void PlotSheetStruct( Plotter* plotter, DrawSheetStruct* Struct )
+static void PlotSheetStruct( PLOTTER* plotter, DrawSheetStruct* Struct )
 /*************************************************/
 /* Routine de dessin du bloc type hierarchie */
 {
@@ -688,7 +688,7 @@ static void PlotSheetStruct( Plotter* plotter, DrawSheetStruct* Struct )
 
 
 /********************************************************/
-void PlotDrawlist( Plotter* plotter, SCH_ITEM* aDrawlist )
+void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* aDrawlist )
 /*********************************************************/
 {
     while( aDrawlist )  /* Plot each item in draw list */

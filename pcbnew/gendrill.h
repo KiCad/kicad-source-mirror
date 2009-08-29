@@ -85,7 +85,7 @@ void    GenDrillMapFile( BOARD* aPcb,
                          bool aUnit_Drill_is_Inch,
                          int format, const wxPoint& auxoffset );
 
-void    Gen_Drill_PcbMap( BOARD* aPcb, Plotter* plotter,
+void    Gen_Drill_PcbMap( BOARD* aPcb, PLOTTER* plotter,
                           std::vector<HOLE_INFO>& aHoleListBuffer,
                           std::vector<DRILL_TOOL>& aToolListBuffer);
 
@@ -95,8 +95,8 @@ void    Gen_Drill_PcbMap( BOARD* aPcb, Plotter* plotter,
  */
 void GenDrillReportFile( FILE* aFile, BOARD * aPcb, const wxString& aBoardFilename,
                          bool aUnit_Drill_is_Inch,
-						std::vector<HOLE_INFO> & aHoleListBuffer, 
-						std::vector<DRILL_TOOL>& aToolListBuffer 
+						std::vector<HOLE_INFO> & aHoleListBuffer,
+						std::vector<DRILL_TOOL>& aToolListBuffer
 						);
 
 #endif  //	#ifndef GENDRILL_H

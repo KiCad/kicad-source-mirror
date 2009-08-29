@@ -98,7 +98,7 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
         offset.y = 0;
     }
 
-    PS_Plotter* plotter = new PS_Plotter();
+    PS_PLOTTER* plotter = new PS_PLOTTER();
     plotter->set_paper_size( SheetPS );
     plotter->set_scale_adjust( g_pcb_plot_options.ScaleAdjX,
                                g_pcb_plot_options.ScaleAdjY );

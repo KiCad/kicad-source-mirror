@@ -16,13 +16,13 @@
 
 
 /* Fonctions locales */
-static void Plot_Edges_Modules( Plotter* plotter, BOARD* pcb, int masque_layer,
+static void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int masque_layer,
                                 GRTraceMode trace_mode );
-static void PlotTextModule( Plotter* plotter, TEXTE_MODULE* pt_texte,
+static void PlotTextModule( PLOTTER* plotter, TEXTE_MODULE* pt_texte,
                             GRTraceMode trace_mode );
 
 /**********************************************************/
-void WinEDA_BasePcbFrame::Plot_Serigraphie( Plotter* plotter,
+void WinEDA_BasePcbFrame::Plot_Serigraphie( PLOTTER* plotter,
                                             int masque_layer, GRTraceMode trace_mode )
 /***********************************************************/
 
@@ -234,7 +234,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( Plotter* plotter,
 
 
 /********************************************************************/
-static void PlotTextModule( Plotter* plotter, TEXTE_MODULE* pt_texte,
+static void PlotTextModule( PLOTTER* plotter, TEXTE_MODULE* pt_texte,
                             GRTraceMode trace_mode )
 /********************************************************************/
 {
@@ -264,7 +264,7 @@ static void PlotTextModule( Plotter* plotter, TEXTE_MODULE* pt_texte,
 
 
 /*******************************************************************************/
-void PlotCotation( Plotter* plotter, COTATION* Cotation, int masque_layer,
+void PlotCotation( PLOTTER* plotter, COTATION* Cotation, int masque_layer,
                    GRTraceMode trace_mode )
 /*******************************************************************************/
 {
@@ -313,7 +313,7 @@ void PlotCotation( Plotter* plotter, COTATION* Cotation, int masque_layer,
 
 
 /*****************************************************************/
-void PlotMirePcb( Plotter* plotter, MIREPCB* Mire, int masque_layer,
+void PlotMirePcb( PLOTTER* plotter, MIREPCB* Mire, int masque_layer,
                   GRTraceMode trace_mode )
 /*****************************************************************/
 {
@@ -359,7 +359,7 @@ void PlotMirePcb( Plotter* plotter, MIREPCB* Mire, int masque_layer,
 
 
 /**********************************************************************/
-void Plot_Edges_Modules( Plotter* plotter, BOARD* pcb, int masque_layer,
+void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int masque_layer,
                          GRTraceMode trace_mode )
 /**********************************************************************/
 /* Trace les contours des modules */
@@ -383,7 +383,7 @@ void Plot_Edges_Modules( Plotter* plotter, BOARD* pcb, int masque_layer,
 
 
 /**************************************************************/
-void Plot_1_EdgeModule( Plotter* plotter, EDGE_MODULE* PtEdge,
+void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge,
                         GRTraceMode trace_mode )
 /**************************************************************/
 /* Trace les contours des modules */
@@ -462,7 +462,7 @@ void Plot_1_EdgeModule( Plotter* plotter, EDGE_MODULE* PtEdge,
 
 
 /****************************************************************************/
-void PlotTextePcb( Plotter* plotter, TEXTE_PCB* pt_texte, int masque_layer,
+void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int masque_layer,
                    GRTraceMode trace_mode )
 /****************************************************************************/
 /* Trace 1 Texte type PCB , c.a.d autre que les textes sur modules */
@@ -477,8 +477,8 @@ void PlotTextePcb( Plotter* plotter, TEXTE_PCB* pt_texte, int masque_layer,
         return;
 
     /* calcul des parametres du texte :*/
-    size      = pt_texte->m_Size;
-    pos       = pt_texte->m_Pos;
+    size = pt_texte->m_Size;
+    pos  = pt_texte->m_Pos;
     orient    = pt_texte->m_Orient;
     thickness = (trace_mode==FILAIRE) ? -1 : pt_texte->m_Width;
 
@@ -516,7 +516,7 @@ void PlotTextePcb( Plotter* plotter, TEXTE_PCB* pt_texte, int masque_layer,
 
 
 /*********************************************************/
-void PlotFilledAreas( Plotter* plotter, ZONE_CONTAINER* aZone,
+void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone,
                       GRTraceMode trace_mode )
 /*********************************************************/
 
@@ -598,7 +598,7 @@ void PlotFilledAreas( Plotter* plotter, ZONE_CONTAINER* aZone,
 
 
 /******************************************************************************/
-void PlotDrawSegment( Plotter* plotter, DRAWSEGMENT* pt_segm, int masque_layer,
+void PlotDrawSegment( PLOTTER* plotter, DRAWSEGMENT* pt_segm, int masque_layer,
                       GRTraceMode trace_mode )
 /******************************************************************************/
 
@@ -649,7 +649,7 @@ void PlotDrawSegment( Plotter* plotter, DRAWSEGMENT* pt_segm, int masque_layer,
 
 
 /*********************************************************************/
-void WinEDA_BasePcbFrame::Plot_Layer( Plotter* plotter, int Layer,
+void WinEDA_BasePcbFrame::Plot_Layer( PLOTTER* plotter, int Layer,
                                       GRTraceMode trace_mode )
 /*********************************************************************/
 {
@@ -679,6 +679,17 @@ void WinEDA_BasePcbFrame::Plot_Layer( Plotter* plotter, int Layer,
     case LAYER_N_15:
     case LAST_COPPER_LAYER:
         Plot_Standard_Layer( plotter, layer_mask, 0, true, trace_mode );
+
+        // Adding drill marks, if required and if the plotter is able to plot them:
+        if( g_pcb_plot_options.DrillShapeOpt != PCB_Plot_Options::NO_DRILL_SHAPE )
+        {
+            if( plotter->GetPlotterType() == PLOT_FORMAT_POST )
+                PlotDrillMark(
+                    plotter,
+                    trace_mode,
+                    g_pcb_plot_options.DrillShapeOpt ==
+                    PCB_Plot_Options::SMALL_DRILL_SHAPE );
+        }
         break;
 
     case SOLDERMASK_N_CU:
@@ -697,13 +708,11 @@ void WinEDA_BasePcbFrame::Plot_Layer( Plotter* plotter, int Layer,
         Plot_Serigraphie( plotter, layer_mask, trace_mode );
         break;
     }
-
-    PlotDrillMark( plotter, trace_mode );
 }
 
 
 /*********************************************************************/
-void WinEDA_BasePcbFrame::Plot_Standard_Layer( Plotter*    plotter,
+void WinEDA_BasePcbFrame::Plot_Standard_Layer( PLOTTER*    plotter,
                                                int         masque_layer,
                                                int         garde,
                                                bool        trace_via,
@@ -888,14 +897,16 @@ void WinEDA_BasePcbFrame::Plot_Standard_Layer( Plotter*    plotter,
 }
 
 
-/***********************************************************************************/
-void WinEDA_BasePcbFrame::PlotDrillMark( Plotter* plotter, GRTraceMode trace_mode )
-/***********************************************************************************/
-
-/* Draw a drill mark for pads and vias.
+/** function PlotDrillMark
+ * Draw a drill mark for pads and vias.
  * Must be called after all drawings, because it
- * redraw the drill mark on a pad or via, as a negative (i.e. white) shape
+ * redraw the drill mark on a pad or via, as a negative (i.e. white) shape in FILLED plot mode
+ * @param aPlotter = the PLOTTER
+ * @param aTraceMode = the mode of plot (FILLED, SKETCH)
+ * @param aSmallDrillShape = true to plot a smalle drill shape, false to plot the actual drill shape
  */
+void WinEDA_BasePcbFrame::PlotDrillMark( PLOTTER* aPlotter, GRTraceMode aTraceMode,
+                                         bool aSmallDrillShape )
 {
     const int SMALL_DRILL = 150;
     wxPoint   pos;
@@ -904,12 +915,9 @@ void WinEDA_BasePcbFrame::PlotDrillMark( Plotter* plotter, GRTraceMode trace_mod
     D_PAD*    PtPad;
     TRACK*    pts;
 
-    if( g_pcb_plot_options.DrillShapeOpt == PCB_Plot_Options::NO_DRILL_SHAPE )
-        return;
-
-    if( trace_mode == FILLED )
+    if( aTraceMode == FILLED )
     {
-        plotter->set_color( WHITE );
+        aPlotter->set_color( WHITE );
     }
 
     for( pts = m_Pcb->m_Track; pts != NULL; pts = pts->Next() )
@@ -922,7 +930,7 @@ void WinEDA_BasePcbFrame::PlotDrillMark( Plotter* plotter, GRTraceMode trace_mod
         else
             diam.x = diam.y = pts->GetDrillValue();
 
-        plotter->flash_pad_circle( pos, diam.x, trace_mode );
+        aPlotter->flash_pad_circle( pos, diam.x, aTraceMode );
     }
 
     for( Module = m_Pcb->m_Modules;
@@ -941,19 +949,18 @@ void WinEDA_BasePcbFrame::PlotDrillMark( Plotter* plotter, GRTraceMode trace_mod
             if( PtPad->m_DrillShape == PAD_OVAL )
             {
                 diam = PtPad->m_Drill;
-                plotter->flash_pad_oval( pos, diam, PtPad->m_Orient, trace_mode );
+                aPlotter->flash_pad_oval( pos, diam, PtPad->m_Orient, aTraceMode );
             }
             else
             {
-                diam.x = (g_pcb_plot_options.DrillShapeOpt == PCB_Plot_Options::SMALL_DRILL_SHAPE)
-                         ? SMALL_DRILL : PtPad->m_Drill.x;
-                plotter->flash_pad_circle( pos, diam.x, trace_mode );
+                diam.x = aSmallDrillShape ? SMALL_DRILL : PtPad->m_Drill.x;
+                aPlotter->flash_pad_circle( pos, diam.x, aTraceMode );
             }
         }
     }
 
-    if( trace_mode == FILLED )
+    if( aTraceMode == FILLED )
     {
-        plotter->set_color( BLACK );
+        aPlotter->set_color( BLACK );
     }
 }

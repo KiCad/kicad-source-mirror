@@ -419,7 +419,7 @@ void WinEDA_PlotPSFrame::PlotOneSheetPS( const wxString& FileName,
     msg.Printf( _( "Plot: %s\n" ), FileName.GetData() );
     m_MsgBox->AppendText( msg );
 
-    PS_Plotter *plotter = new PS_Plotter();
+    PS_PLOTTER *plotter = new PS_PLOTTER();
     plotter->set_paper_size(sheet);
     plotter->set_viewport( plot_offset, scale, 0);
     plotter->set_default_line_width( g_DrawDefaultLineThickness );

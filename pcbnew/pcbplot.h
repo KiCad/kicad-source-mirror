@@ -70,29 +70,29 @@ extern PCB_Plot_Options g_pcb_plot_options;
 /*************************************/
 
 /* PLOT_RTN.CC */
-void PlotTextePcb( Plotter* plotter, TEXTE_PCB* pt_texte, int masque_layer,
+void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int masque_layer,
                    GRTraceMode trace_mode );
 
 /* Trace 1 Texte type PCB , c.a.d autre que les textes sur modules,
  * prepare les parametres de trace de texte */
 
-void PlotDrawSegment( Plotter* plotter, DRAWSEGMENT* PtSegm, int masque_layer,
+void PlotDrawSegment( PLOTTER* plotter, DRAWSEGMENT* PtSegm, int masque_layer,
                       GRTraceMode trace_mode );
 
-void PlotCotation( Plotter* plotter, COTATION* Cotation, int masque_layer,
+void PlotCotation( PLOTTER* plotter, COTATION* Cotation, int masque_layer,
                    GRTraceMode trace_mode );
 
-void PlotMirePcb( Plotter* plotter, MIREPCB* PtMire, int masque_layer,
+void PlotMirePcb( PLOTTER* plotter, MIREPCB* PtMire, int masque_layer,
                   GRTraceMode trace_mode );
 
-void Plot_1_EdgeModule( Plotter* plotter, EDGE_MODULE* PtEdge,
+void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge,
                         GRTraceMode trace_mode );
 
-void PlotFilledAreas( Plotter* plotter, ZONE_CONTAINER* aZone,
+void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone,
                       GRTraceMode trace_mode );
 
 /* PLOTGERB.CPP */
-void SelectD_CODE_For_LineDraw( Plotter* plotter, int aSize );
+void SelectD_CODE_For_LineDraw( PLOTTER* plotter, int aSize );
 
 
 #endif  /* #define PCBPLOT_H */

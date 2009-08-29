@@ -172,7 +172,7 @@ static void DrawGraphicTextPline(
     int point_count,
     wxPoint* coord,
     void (* aCallback)(int x0, int y0, int xf, int yf ),
-    Plotter *plotter )
+    PLOTTER *plotter )
 {
     if( plotter )
     {
@@ -242,7 +242,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
                      bool aItalic,
                      bool aBold,
 		     void (* aCallback)( int x0, int y0, int xf, int yf ),
-                     Plotter *plotter )
+                     PLOTTER *plotter )
 /****************************************************************************************************/
 {
     int     AsciiCode;
@@ -520,7 +520,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
  *  @param aBold = true to use a bold font Useful only with default width value (aWidth = 0)
  */
 /******************************************************************************************/
-void Plotter::text( const wxPoint&              aPos,
+void PLOTTER::text( const wxPoint&              aPos,
                       enum EDA_Colors             aColor,
                       const wxString&             aText,
                       int                         aOrient,

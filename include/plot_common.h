@@ -9,7 +9,6 @@
 #define __INCLUDE__PLOT_COMMON_H__ 1
 
 #include <vector>
-using namespace std;
 #include "drawtxt.h"
 
 /**
@@ -25,24 +24,14 @@ enum PlotFormat {
 
 const int PLOT_MIROIR = 1;
 
-class Plotter
+class PLOTTER
 {
 public:
-    Plotter()
-    {
-        plot_scale = 1;
-        default_pen_width = 0;
-        current_pen_width = -1;     /* To-be-set marker */
-        pen_state = 'Z';            /* End-of-path idle */
-        plot_orient_options = 0;    /* Mirror flag */
-        output_file   = 0;
-        color_mode    = false;      /* Start as a BW plot */
-        negative_mode = false;
-        sheet = NULL;
-    }
+    PlotFormat m_PlotType;          // type of plot
+public:
+    PLOTTER( PlotFormat aPlotType );
 
-
-    virtual ~Plotter()
+    virtual ~PLOTTER()
     {
         /* Emergency cleanup */
         if( output_file )
@@ -51,6 +40,12 @@ public:
         }
     }
 
+
+    /** function GetPlotterType()
+     * @return the format of the plot file
+     */
+    PlotFormat GetPlotterType()
+    { return m_PlotType; }
 
     virtual void start_plot( FILE* fout ) = 0;
     virtual void end_plot() = 0;
@@ -198,9 +193,13 @@ protected:
     wxSize        paper_size;
 };
 
-class HPGL_Plotter : public Plotter
+class HPGL_PLOTTER : public PLOTTER
 {
 public:
+    HPGL_PLOTTER() : PLOTTER(PLOT_FORMAT_HPGL)
+    {
+    }
+
     virtual void start_plot( FILE* fout );
     virtual void end_plot();
 
@@ -270,15 +269,14 @@ protected:
     double pen_overlap;
 };
 
-class PS_Plotter : public Plotter
+class PS_PLOTTER : public PLOTTER
 {
 public:
-    PS_Plotter()
+    PS_PLOTTER() : PLOTTER(PLOT_FORMAT_POST)
     {
         plot_scale_adjX = 1;
         plot_scale_adjY = 1;
     }
-
 
     virtual void start_plot( FILE* fout );
     virtual void end_plot();
@@ -318,7 +316,7 @@ protected:
 /* Class to handle a D_CODE when plotting a board : */
 #define FIRST_DCODE_VALUE 10    // D_CODE < 10 is a command, D_CODE >= 10 is a tool
 
-struct Aperture
+struct APERTURE
 {
     enum Aperture_Type {
         Circle   = 1,
@@ -335,10 +333,10 @@ struct Aperture
      *  tool change? */
 };
 
-class Gerber_Plotter : public Plotter
+class GERBER_PLOTTER : public PLOTTER
 {
 public:
-    Gerber_Plotter()
+    GERBER_PLOTTER() : PLOTTER(PLOT_FORMAT_GERBER)
     {
         work_file  = 0;
         final_file = 0;
@@ -346,45 +344,50 @@ public:
     }
 
 
-    virtual void               start_plot( FILE* fout );
-    virtual void               end_plot();
-    virtual void               set_current_line_width( int width );
-    virtual void               set_default_line_width( int width );
+    virtual void                    start_plot( FILE* fout );
+    virtual void                    end_plot();
+    virtual void                    set_current_line_width( int width );
+    virtual void                    set_default_line_width( int width );
 
 /* RS274X has no dashing, nor colours */
     virtual void set_dash( bool dashed ) {};
     virtual void set_color( int color ) {};
-    virtual void               set_viewport( wxPoint offset,
-                                             double scale, int orient );
-    virtual void               rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
-    virtual void               circle( wxPoint pos, int diametre, FILL_T fill, int width = -1 );
-    virtual void               poly( int nb_segm, int* coord, FILL_T fill, int width = -1 );
-    virtual void               pen_to( wxPoint pos, char plume );
-    virtual void               flash_pad_circle( wxPoint pos, int diametre,
-                                                 GRTraceMode trace_mode );
-    virtual void               flash_pad_oval( wxPoint pos, wxSize size, int orient,
-                                               GRTraceMode trace_mode );
-    virtual void               flash_pad_rect( wxPoint pos, wxSize size,
-                                               int orient, GRTraceMode trace_mode );
-    virtual void               flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
-                                                 int orient, GRTraceMode trace_mode );
+    virtual void                    set_viewport( wxPoint offset,
+                                                  double scale, int orient );
+    virtual void                    rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
+    virtual void                    circle( wxPoint pos, int diametre, FILL_T fill, int width = -1 );
+    virtual void                    poly( int nb_segm, int* coord, FILL_T fill, int width = -1 );
+    virtual void                    pen_to( wxPoint pos, char plume );
+    virtual void                    flash_pad_circle( wxPoint pos, int diametre,
+                                                      GRTraceMode trace_mode );
+    virtual void                    flash_pad_oval( wxPoint pos, wxSize size, int orient,
+                                                    GRTraceMode trace_mode );
+    virtual void                    flash_pad_rect( wxPoint pos, wxSize size,
+                                                    int orient, GRTraceMode trace_mode );
+    virtual void                    flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
+                                                      int orient, GRTraceMode trace_mode );
 
 protected:
-    void                       select_aperture( const wxSize& size, Aperture::Aperture_Type type );
+    void                            select_aperture( const wxSize&           size,
+                                                     APERTURE::Aperture_Type type );
 
-    vector<Aperture>::iterator get_aperture( const wxSize&           size,
-                                             Aperture::Aperture_Type type );
+    std::vector<APERTURE>::iterator get_aperture( const wxSize&           size,
+                                                  APERTURE::Aperture_Type type );
 
-    FILE*                      work_file, * final_file;
-    void                       write_aperture_list();
+    FILE* work_file, * final_file;
+    void                            write_aperture_list();
 
-    vector<Aperture>           apertures;
-    vector<Aperture>::iterator current_aperture;
+    std::vector<APERTURE>           apertures;
+    std::vector<APERTURE>::iterator current_aperture;
 };
 
-class DXF_Plotter : public Plotter
+class DXF_PLOTTER : public PLOTTER
 {
 public:
+    DXF_PLOTTER() : PLOTTER(PLOT_FORMAT_DXF)
+    {
+    }
+
     virtual void start_plot( FILE* fout );
     virtual void end_plot();
 
@@ -394,10 +397,10 @@ public:
         /* Handy override */
         current_pen_width = 0;
     };
-    virtual void set_default_line_width( int width ) 
+    virtual void set_default_line_width( int width )
     {
-	/* DXF lines are infinitesimal */
-	default_pen_width = 0;
+        /* DXF lines are infinitesimal */
+        default_pen_width = 0;
     };
     virtual void set_dash( bool dashed );
 
@@ -423,7 +426,7 @@ public:
                                    int orient, GRTraceMode trace_mode );
 
 protected:
-    int          current_color;
+    int current_color;
 };
 
 #endif  /* __INCLUDE__PLOT_COMMON_H__ */

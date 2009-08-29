@@ -278,7 +278,7 @@ void ReAnnotatePowerSymbolsOnly();
 /************/
 /* PLOT.CPP */
 /************/
-void PlotDrawlist( Plotter* plotter, SCH_ITEM* drawlist );
+void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* drawlist );
 
 /***************/
 /* DELSHEET.CPP */

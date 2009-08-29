@@ -12,7 +12,7 @@
 #include "kicad_string.h"
 
 /***********************************************************************************/
-void DXF_Plotter::set_viewport( wxPoint offset,
+void DXF_PLOTTER::set_viewport( wxPoint offset,
                                 double aScale, int orient )
 /***********************************************************************************/
 
@@ -30,7 +30,7 @@ void DXF_Plotter::set_viewport( wxPoint offset,
 
 
 /*****************************************************************/
-void DXF_Plotter::start_plot( FILE* fout )
+void DXF_PLOTTER::start_plot( FILE* fout )
 /*****************************************************************/
 {
     wxASSERT( !output_file );
@@ -54,7 +54,7 @@ void DXF_Plotter::start_plot( FILE* fout )
 
 
 /**********************************/
-void DXF_Plotter::end_plot()
+void DXF_PLOTTER::end_plot()
 /**********************************/
 {
     wxASSERT( output_file );
@@ -66,7 +66,7 @@ void DXF_Plotter::end_plot()
 
 
 /******************************/
-void DXF_Plotter::set_color( int color )
+void DXF_PLOTTER::set_color( int color )
 /******************************/
 
 /*
@@ -84,7 +84,7 @@ void DXF_Plotter::set_color( int color )
 
 
 /************************************************************/
-void DXF_Plotter::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
+void DXF_PLOTTER::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
 /************************************************************/
 {
     wxASSERT( output_file );
@@ -97,7 +97,7 @@ void DXF_Plotter::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
 
 
 /************************************************************/
-void DXF_Plotter::circle( wxPoint centre, int diameter, FILL_T fill, int width )
+void DXF_PLOTTER::circle( wxPoint centre, int diameter, FILL_T fill, int width )
 /************************************************************/
 {
     wxASSERT( output_file );
@@ -114,7 +114,7 @@ void DXF_Plotter::circle( wxPoint centre, int diameter, FILL_T fill, int width )
 
 
 /*****************************************************/
-void DXF_Plotter::poly( int nb, int* coord, FILL_T fill, int width )
+void DXF_PLOTTER::poly( int nb, int* coord, FILL_T fill, int width )
 /*****************************************************/
 
 /* Trace un polygone (ferme si rempli) en format DXF
@@ -143,7 +143,7 @@ void DXF_Plotter::poly( int nb, int* coord, FILL_T fill, int width )
 
 
 /**********************************************/
-void DXF_Plotter::pen_to( wxPoint pos, char plume )
+void DXF_PLOTTER::pen_to( wxPoint pos, char plume )
 /**********************************************/
 
 /*
@@ -172,14 +172,14 @@ void DXF_Plotter::pen_to( wxPoint pos, char plume )
 }
 
 
-void DXF_Plotter::set_dash( bool dashed )
+void DXF_PLOTTER::set_dash( bool dashed )
 {
     /* NOP for now */
     wxASSERT( output_file );
 }
 
 
-void DXF_Plotter::thick_segment( wxPoint start, wxPoint end, int width,
+void DXF_PLOTTER::thick_segment( wxPoint start, wxPoint end, int width,
                                  GRTraceMode tracemode )
 
 /** Function Plot a filled segment (track)
@@ -202,7 +202,7 @@ void DXF_Plotter::thick_segment( wxPoint start, wxPoint end, int width,
 
 
 /********************************************************************/
-void DXF_Plotter::arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
+void DXF_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
                        FILL_T fill, int width )
 /********************************************************************/
 
@@ -230,7 +230,7 @@ void DXF_Plotter::arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
 
 
 /***********************************************************************************/
-void DXF_Plotter::flash_pad_oval( wxPoint pos, wxSize size, int orient,
+void DXF_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
                                   GRTraceMode trace_mode )
 /************************************************************************************/
 /* Trace 1 pastille PAD_OVAL en position pos_X,Y , de dim size.x, size.y */
@@ -250,7 +250,7 @@ void DXF_Plotter::flash_pad_oval( wxPoint pos, wxSize size, int orient,
 
 
 /*******************************************************************************/
-void DXF_Plotter::flash_pad_circle( wxPoint pos, int diametre,
+void DXF_PLOTTER::flash_pad_circle( wxPoint pos, int diametre,
                                     GRTraceMode trace_mode )
 /*******************************************************************************/
 /* Trace 1 pastille RONDE (via,pad rond) en position pos */
@@ -261,7 +261,7 @@ void DXF_Plotter::flash_pad_circle( wxPoint pos, int diametre,
 
 
 /**************************************************************************/
-void DXF_Plotter::flash_pad_rect( wxPoint pos, wxSize padsize,
+void DXF_PLOTTER::flash_pad_rect( wxPoint pos, wxSize padsize,
                                   int orient, GRTraceMode trace_mode )
 /**************************************************************************/
 
@@ -325,7 +325,7 @@ void DXF_Plotter::flash_pad_rect( wxPoint pos, wxSize padsize,
 
 
 /*******************************************************************/
-void DXF_Plotter::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
+void DXF_PLOTTER::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
                                     int orient, GRTraceMode trace_mode )
 /*******************************************************************/
 

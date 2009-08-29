@@ -370,7 +370,7 @@ void WinEDA_PlotDXFFrame::PlotOneSheetDXF( const wxString& FileName,
     msg.Printf( _( "Plot: %s\n" ), FileName.GetData() );
     m_MsgBox->AppendText( msg );
 
-    DXF_Plotter *plotter = new DXF_Plotter();
+    DXF_PLOTTER *plotter = new DXF_PLOTTER();
     plotter->set_paper_size(sheet);
     plotter->set_viewport( plot_offset, scale, 0);
     plotter->set_color_mode(PlotDXFColorOpt);

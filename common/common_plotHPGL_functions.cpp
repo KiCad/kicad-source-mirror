@@ -15,8 +15,7 @@
 const double SCALE_HPGL = 0.102041;
 
 /***********************************************************************************/
-void HPGL_Plotter::set_viewport( wxPoint offset,
-	    double aScale, int orient )
+void HPGL_PLOTTER::set_viewport( wxPoint offset, double aScale, int orient )
 /***********************************************************************************/
 
 /* Set the plot offset for the current plotting
@@ -31,7 +30,7 @@ void HPGL_Plotter::set_viewport( wxPoint offset,
 }
 
 /*****************************************************************/
-void HPGL_Plotter::start_plot( FILE *fout )
+void HPGL_PLOTTER::start_plot( FILE *fout )
 /*****************************************************************/
 {
     wxASSERT(!output_file);
@@ -40,7 +39,7 @@ void HPGL_Plotter::start_plot( FILE *fout )
 }
 
 /**********************************/
-void HPGL_Plotter::end_plot()
+void HPGL_PLOTTER::end_plot()
 /**********************************/
 {
     wxASSERT(output_file);
@@ -50,7 +49,7 @@ void HPGL_Plotter::end_plot()
 }
 
 /************************************************************/
-void HPGL_Plotter::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
+void HPGL_PLOTTER::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
 /************************************************************/
 {
     wxASSERT(output_file);
@@ -61,7 +60,7 @@ void HPGL_Plotter::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
 }
 
 /************************************************************/
-void HPGL_Plotter::circle( wxPoint centre, int diameter, FILL_T fill, int width )
+void HPGL_PLOTTER::circle( wxPoint centre, int diameter, FILL_T fill, int width )
 /************************************************************/
 {
     wxASSERT(output_file);
@@ -71,12 +70,12 @@ void HPGL_Plotter::circle( wxPoint centre, int diameter, FILL_T fill, int width 
     {
 	move_to(centre);
 	fprintf( output_file, "CI %g;\n", rayon);
-	pen_finish(); 
+	pen_finish();
     }
 }
 
 /*****************************************************/
-void HPGL_Plotter::poly( int nb, int* coord, FILL_T fill, int width )
+void HPGL_PLOTTER::poly( int nb, int* coord, FILL_T fill, int width )
 /*****************************************************/
 
 /* Trace un polygone (ferme si rempli) en format HPGL
@@ -104,7 +103,7 @@ void HPGL_Plotter::poly( int nb, int* coord, FILL_T fill, int width )
 }
 
 /***************************/
-void HPGL_Plotter::pen_control( int plume )
+void HPGL_PLOTTER::pen_control( int plume )
 /***************************/
 
 /* leve (plume = 'U') ou baisse (plume = 'D') la plume
@@ -120,7 +119,7 @@ void HPGL_Plotter::pen_control( int plume )
 	}
 	break;
     case 'D':
-        if( pen_state != 'D' ) 
+        if( pen_state != 'D' )
 	{
             fputs( "PD;", output_file );
 	    pen_state = 'D';
@@ -136,7 +135,7 @@ void HPGL_Plotter::pen_control( int plume )
 }
 
 /**********************************************/
-void HPGL_Plotter::pen_to( wxPoint pos, char plume )
+void HPGL_PLOTTER::pen_to( wxPoint pos, char plume )
 /**********************************************/
 
 /*
@@ -156,11 +155,11 @@ void HPGL_Plotter::pen_to( wxPoint pos, char plume )
     user_to_device_coordinates( pos );
 
     if (pen_lastpos != pos)
-	fprintf( output_file, "PA %d,%d;\n", pos.x, pos.y ); 
+	fprintf( output_file, "PA %d,%d;\n", pos.x, pos.y );
     pen_lastpos = pos;
 }
 
-void HPGL_Plotter::set_dash( bool dashed ) 
+void HPGL_PLOTTER::set_dash( bool dashed )
 {
     wxASSERT(output_file);
     if (dashed)
@@ -169,7 +168,7 @@ void HPGL_Plotter::set_dash( bool dashed )
 	fputs("LI;\n", stderr);
 }
 
-void HPGL_Plotter::thick_segment( wxPoint start, wxPoint end, int width,
+void HPGL_PLOTTER::thick_segment( wxPoint start, wxPoint end, int width,
 	GRTraceMode tracemode)
 /** Function Plot a filled segment (track)
  * @param start = starting point
@@ -192,7 +191,7 @@ void HPGL_Plotter::thick_segment( wxPoint start, wxPoint end, int width,
 }
 
 /********************************************************************/
-void HPGL_Plotter::arc( wxPoint centre, int StAngle, int EndAngle, int rayon, 
+void HPGL_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
        FILL_T fill, int width )
 /********************************************************************/
 
@@ -213,7 +212,7 @@ void HPGL_Plotter::arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
     if( rayon <= 0 )
         return;
 
-    cpos = centre; 
+    cpos = centre;
     user_to_device_coordinates( cpos );
 
     if( plot_orient_options == PLOT_MIROIR )
@@ -226,13 +225,13 @@ void HPGL_Plotter::arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
     user_to_device_coordinates( cmap );
 
     fprintf( output_file, "PU;PA %d,%d;PD;AA %d,%d, ", cmap.x, cmap.y, cpos.x, cpos.y );
-    fprintf( output_file, "%f", angle ); 
+    fprintf( output_file, "%f", angle );
     fprintf( output_file, ";PU;\n" );
     pen_finish();
 }
 
 /***********************************************************************************/
-void HPGL_Plotter::flash_pad_oval( wxPoint pos, wxSize size, int orient, 
+void HPGL_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
 	GRTraceMode trace_mode )
 /************************************************************************************/
 /* Trace 1 pastille PAD_OVAL en position pos_X,Y , de dim size.x, size.y */
@@ -268,7 +267,7 @@ void HPGL_Plotter::flash_pad_oval( wxPoint pos, wxSize size, int orient,
 }
 
 /*******************************************************************************/
-void HPGL_Plotter::flash_pad_circle(wxPoint pos, int diametre, 
+void HPGL_PLOTTER::flash_pad_circle(wxPoint pos, int diametre,
 	    GRTraceMode trace_mode)
 /*******************************************************************************/
 /* Trace 1 pastille RONDE (via,pad rond) en position pos */
@@ -311,7 +310,7 @@ void HPGL_Plotter::flash_pad_circle(wxPoint pos, int diametre,
 }
 
 /**************************************************************************/
-void HPGL_Plotter::flash_pad_rect(wxPoint pos, wxSize padsize,
+void HPGL_PLOTTER::flash_pad_rect(wxPoint pos, wxSize padsize,
 	    int orient, GRTraceMode trace_mode)
 /**************************************************************************/
 /*
@@ -412,7 +411,7 @@ void HPGL_Plotter::flash_pad_rect(wxPoint pos, wxSize padsize,
 }
 
 /*******************************************************************/
-void HPGL_Plotter::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
+void HPGL_PLOTTER::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
 	int orient, GRTraceMode trace_mode )
 /*******************************************************************/
 /*

@@ -89,7 +89,7 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
         offset.y = 0;
     }
 
-    HPGL_Plotter* plotter = new HPGL_Plotter();
+    HPGL_PLOTTER* plotter = new HPGL_PLOTTER();
     plotter->set_paper_size( currentsheet );
     plotter->set_viewport( offset, scale,
                            g_pcb_plot_options.PlotOrient );

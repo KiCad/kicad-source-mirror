@@ -300,7 +300,7 @@ public:
                                wxPoint& pin_pos, int orient,
                                int TextInside, bool DrawPinNum,
                                bool DrawPinName, int Color, int DrawMode );
-    void         PlotPinTexts( Plotter *plotter,
+    void         PlotPinTexts( PLOTTER *plotter,
 			       wxPoint& pin_pos,
                                int      orient,
                                int      TextInside,

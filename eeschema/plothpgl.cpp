@@ -592,7 +592,7 @@ void WinEDA_PlotHPGLFrame::Plot_1_Page_HPGL( const wxString& FileName,
     msg.Printf( _( "Plot: %s\n" ), FileName.GetData() );
     m_MsgBox->AppendText( msg );
 
-    HPGL_Plotter *plotter = new HPGL_Plotter();
+    HPGL_PLOTTER *plotter = new HPGL_PLOTTER();
     plotter->set_paper_size(sheet);
     plotter->set_viewport( offset, plot_scale, 0);
     plotter->set_default_line_width( g_DrawDefaultLineThickness );

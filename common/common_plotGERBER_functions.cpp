@@ -14,7 +14,7 @@
 
 
 /***************************************************************************/
-void Gerber_Plotter::set_viewport( wxPoint offset,
+void GERBER_PLOTTER::set_viewport( wxPoint offset,
                                    double aScale, int orient )
 /***************************************************************************/
 
@@ -36,7 +36,7 @@ void Gerber_Plotter::set_viewport( wxPoint offset,
 
 
 /******************************************************************/
-void Gerber_Plotter::start_plot( FILE* aFile )
+void GERBER_PLOTTER::start_plot( FILE* aFile )
 /*****************************************************************/
 
 /** Function start_plot
@@ -70,7 +70,7 @@ void Gerber_Plotter::start_plot( FILE* aFile )
 
 
 /******************************************************************/
-void Gerber_Plotter::end_plot()
+void GERBER_PLOTTER::end_plot()
 /*****************************************************************/
 {
     char     line[1024];
@@ -102,7 +102,7 @@ void Gerber_Plotter::end_plot()
 
 
 /*************************************************************************************/
-void Gerber_Plotter::set_default_line_width( int width )
+void GERBER_PLOTTER::set_default_line_width( int width )
 /*************************************************************************************/
 
 /* Set the default line width (in 1/1000 inch) for the current plotting
@@ -114,7 +114,7 @@ void Gerber_Plotter::set_default_line_width( int width )
 
 
 /***************************************/
-void Gerber_Plotter::set_current_line_width( int width )
+void GERBER_PLOTTER::set_current_line_width( int width )
 /***************************************/
 
 /* Set the Current line width (in 1/1000 inch) for the next plot
@@ -127,20 +127,20 @@ void Gerber_Plotter::set_current_line_width( int width )
     else
         pen_width = default_pen_width;
 
-    select_aperture( wxSize( pen_width, pen_width ), Aperture::Plotting );
+    select_aperture( wxSize( pen_width, pen_width ), APERTURE::Plotting );
     current_pen_width = pen_width;
 }
 
 
 /******************************************************/
-vector<Aperture>::iterator Gerber_Plotter::get_aperture( const wxSize&           size,
-                                                         Aperture::Aperture_Type type )
+std::vector<APERTURE>::iterator GERBER_PLOTTER::get_aperture( const wxSize&           size,
+                                                         APERTURE::Aperture_Type type )
 /******************************************************/
 {
     int last_D_code = 9;
 
     // Search an existing aperture
-    vector<Aperture>::iterator tool = apertures.begin();
+    std::vector<APERTURE>::iterator tool = apertures.begin();
     while( tool != apertures.end() )
     {
         last_D_code = tool->D_code;
@@ -151,7 +151,7 @@ vector<Aperture>::iterator Gerber_Plotter::get_aperture( const wxSize&          
     }
 
     // Allocate a new aperture
-    Aperture new_tool;
+    APERTURE new_tool;
     new_tool.size   = size;
     new_tool.type   = type;
     new_tool.D_code = last_D_code + 1;
@@ -161,7 +161,7 @@ vector<Aperture>::iterator Gerber_Plotter::get_aperture( const wxSize&          
 
 
 /******************************************************/
-void Gerber_Plotter::select_aperture( const wxSize& size, Aperture::Aperture_Type type )
+void GERBER_PLOTTER::select_aperture( const wxSize& size, APERTURE::Aperture_Type type )
 /******************************************************/
 {
     wxASSERT( output_file );
@@ -177,7 +177,7 @@ void Gerber_Plotter::select_aperture( const wxSize& size, Aperture::Aperture_Typ
 
 
 /******************************************************/
-void Gerber_Plotter::write_aperture_list()
+void GERBER_PLOTTER::write_aperture_list()
 /******************************************************/
 
 /* Genere la liste courante des D_CODES
@@ -189,7 +189,7 @@ void Gerber_Plotter::write_aperture_list()
     char cbuf[1024];
 
     /* Init : */
-    for( vector<Aperture>::iterator tool = apertures.begin();
+    for( std::vector<APERTURE>::iterator tool = apertures.begin();
          tool != apertures.end(); tool++ )
     {
         const float fscale = 0.0001f * plot_scale; // For 3.4 format
@@ -199,20 +199,20 @@ void Gerber_Plotter::write_aperture_list()
 
         switch( tool->type )
         {
-        case Aperture::Circle:
+        case APERTURE::Circle:
             sprintf( text, "C,%f*%%\n", tool->size.x * fscale );
             break;
 
-        case Aperture::Rect:
+        case APERTURE::Rect:
             sprintf( text, "R,%fX%f*%%\n", tool->size.x * fscale,
                      tool->size.y * fscale );
             break;
 
-        case Aperture::Plotting:
+        case APERTURE::Plotting:
             sprintf( text, "C,%f*%%\n", tool->size.x * fscale );
             break;
 
-        case Aperture::Oval:
+        case APERTURE::Oval:
             sprintf( text, "O,%fX%f*%%\n", tool->size.x * fscale,
                      tool->size.y * fscale );
             break;
@@ -224,7 +224,7 @@ void Gerber_Plotter::write_aperture_list()
 
 
 /**********************************************/
-void Gerber_Plotter::pen_to( wxPoint aPos, char plume )
+void GERBER_PLOTTER::pen_to( wxPoint aPos, char plume )
 {
     wxASSERT( output_file );
     user_to_device_coordinates( aPos );
@@ -247,7 +247,7 @@ void Gerber_Plotter::pen_to( wxPoint aPos, char plume )
 
 
 /**************************************************************************/
-void Gerber_Plotter::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
+void GERBER_PLOTTER::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
 /**************************************************************************/
 {
     wxASSERT( output_file );
@@ -264,7 +264,7 @@ void Gerber_Plotter::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
 
 
 /*************************************************************************************/
-void Gerber_Plotter::circle( wxPoint aCentre, int aDiameter, FILL_T fill, int aWidth )
+void GERBER_PLOTTER::circle( wxPoint aCentre, int aDiameter, FILL_T fill, int aWidth )
 /*************************************************************************************/
 
 /** Function circle
@@ -296,7 +296,7 @@ void Gerber_Plotter::circle( wxPoint aCentre, int aDiameter, FILL_T fill, int aW
 
 
 /***************************************************************/
-void Gerber_Plotter::poly( int aCornersCount, int* aCoord, FILL_T aFill, int aWidth )
+void GERBER_PLOTTER::poly( int aCornersCount, int* aCoord, FILL_T aFill, int aWidth )
 /***************************************************************/
 
 /** Function PlotFilledPolygon_GERBER
@@ -338,7 +338,7 @@ void Gerber_Plotter::poly( int aCornersCount, int* aCoord, FILL_T aFill, int aWi
 /* Function flash_pad_circle
  * Plot a circular pad or via at the user position pos
  */
-void Gerber_Plotter::flash_pad_circle( wxPoint pos, int diametre,
+void GERBER_PLOTTER::flash_pad_circle( wxPoint pos, int diametre,
                                        GRTraceMode trace_mode )
 {
     wxASSERT( output_file );
@@ -354,14 +354,14 @@ void Gerber_Plotter::flash_pad_circle( wxPoint pos, int diametre,
 
     case FILLED:
         user_to_device_coordinates( pos );
-        select_aperture( size, Aperture::Circle );
+        select_aperture( size, APERTURE::Circle );
         fprintf( output_file, "X%5.5dY%5.5dD03*\n", pos.x, pos.y );
         break;
     }
 }
 
 
-void Gerber_Plotter::flash_pad_oval( wxPoint pos, wxSize size, int orient,
+void GERBER_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
                                      GRTraceMode trace_mode )
 
 /* Trace 1 pastille PAD_OVAL en position pos_X,Y:
@@ -381,7 +381,7 @@ void Gerber_Plotter::flash_pad_oval( wxPoint pos, wxSize size, int orient,
         if( orient == 900 || orient == 2700 ) /* orient tournee de 90 deg */
             EXCHG( size.x, size.y );
         user_to_device_coordinates( pos );
-        select_aperture( size, Aperture::Oval );
+        select_aperture( size, APERTURE::Oval );
         fprintf( output_file, "X%5.5dY%5.5dD03*\n", pos.x, pos.y );
     }
     else /* Forme tracee comme un segment */
@@ -414,7 +414,7 @@ void Gerber_Plotter::flash_pad_oval( wxPoint pos, wxSize size, int orient,
 }
 
 
-void Gerber_Plotter::flash_pad_rect( wxPoint pos, wxSize size,
+void GERBER_PLOTTER::flash_pad_rect( wxPoint pos, wxSize size,
                                      int orient, GRTraceMode trace_mode )
 
 /* Plot 1 rectangular pad
@@ -449,7 +449,7 @@ void Gerber_Plotter::flash_pad_rect( wxPoint pos, wxSize size,
 
         case FILLED:
             user_to_device_coordinates( pos );
-            select_aperture( size, Aperture::Rect );
+            select_aperture( size, APERTURE::Rect );
             fprintf( output_file, "X%5.5dY%5.5dD03*\n", pos.x, pos.y );
             break;
         }
@@ -463,7 +463,7 @@ void Gerber_Plotter::flash_pad_rect( wxPoint pos, wxSize size,
 }
 
 
-void Gerber_Plotter::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
+void GERBER_PLOTTER::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
                                        int orient, GRTraceMode trace_mode )
 
 /* Trace 1 pad trapezoidal donne par :
