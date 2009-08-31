@@ -547,7 +547,12 @@ void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone,
 
     imax--;
 
-    // Plot all filled areas
+    /* Plot all filled areas: filled areas have a filled area and a thick outline
+     * we must plot the filled area itself ( as a filled polygon OR a set of segments )
+     * and plot the thick outline itself
+     *
+     * in non filled mode the outline is plotted, but not the filling items
+     */
     int corners_count = 0;
     for( unsigned ic = 0, ii = 0; ic < imax; ic++ )
     {
@@ -566,11 +571,23 @@ void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone,
                 corners_count++;
             }
 
-            // Plot the current filled area outline
+            // Plot the current filled area and its outline
             if( trace_mode == FILLED )
             {
-                if( aZone->m_FillMode == 0 ) // We are using solid polygons (if != 0: using segments in m_Zone)
+                // Plot the current filled area polygon
+                if( aZone->m_FillMode == 0 ) // We are using solid polygons (if != 0: using segments )
                     plotter->poly( corners_count, CornersBuffer, FILLED_SHAPE );
+                else // We are using areas filled by segments: plot hem )
+                {
+                    for( unsigned iseg = 0; iseg < aZone->m_FillSegmList.size(); iseg++ )
+                    {
+                        wxPoint start = aZone->m_FillSegmList[iseg].m_Start;
+                        wxPoint end = aZone->m_FillSegmList[iseg].m_End ;
+                        plotter->thick_segment(start, end, aZone->m_ZoneMinThickness, trace_mode );
+                    }
+                }
+
+                // Plot the current filled area outline
                 if( aZone->m_ZoneMinThickness > 0 )
                     plotter->poly( corners_count, CornersBuffer, NO_FILL,
                                    aZone->m_ZoneMinThickness );
