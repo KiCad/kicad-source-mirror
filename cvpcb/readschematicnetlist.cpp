@@ -235,7 +235,11 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
         /* debut reference trouv‚ */
         for( ; ; i++ )
         {
+#if defined(KICAD_GOST)
+            if( Line[i] == ' ' )
+#else
             if( Line[i] <= ' ' )
+#endif
                 break;
             component_reference.Append( Line[i] );
         }
@@ -248,7 +252,11 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
 
         for( ; ; i++ )
         {
+#if defined(KICAD_GOST)
+            if( Line[i] == ' ' )
+#else
             if( Line[i] <= ' ' )
+#endif
                 break;
             component_value.Append( Line[i] );
         }

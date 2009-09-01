@@ -951,7 +951,11 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     }
     for( ii = 0; ii < (int) strlen( Name1 ); ii++ )
     {
-        if( Name1[ii] <= ' ' )
+#if defined(KICAD_GOST)
+            if( Name1[ii] == ' ' )
+#else
+            if( Name1[ii] <= ' ' )
+#endif
             Name1[ii] = '~';
     }
 
@@ -959,7 +963,11 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     {
         strncpy( Name2, CONV_TO_UTF8( m_ChipName ), sizeof( Name2 ) );
         for( ii = 0; ii < (int) strlen( Name2 ); ii++ )
+#if defined(KICAD_GOST)
+            if( Name2[ii] == ' ' )
+#else
             if( Name2[ii] <= ' ' )
+#endif
                 Name2[ii] = '~';
     }
     else
