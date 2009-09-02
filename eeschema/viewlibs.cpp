@@ -17,18 +17,12 @@
 
 #include "id.h"
 
-#define NEXT_PART     1
-#define NEW_PART      0
+#define NEXT_PART      1
+#define NEW_PART       0
 #define PREVIOUS_PART -1
 
 
-/* Routines locales */
-
-/* Variables locales */
-
-/*************************************************************************/
 void WinEDA_ViewlibFrame::Process_Special_Functions( wxCommandEvent& event )
-/*************************************************************************/
 {
     wxString msg;
     EDA_LibComponentStruct* LibEntry;
@@ -63,7 +57,7 @@ void WinEDA_ViewlibFrame::Process_Special_Functions( wxCommandEvent& event )
                                                      ALIAS );
         if( LibEntry && ( !LibEntry->m_DocFile.IsEmpty() ) )
             GetAssociatedDocument( this, LibEntry->m_DocFile,
-                            & wxGetApp().GetLibraryPathList());
+                                   &wxGetApp().GetLibraryPathList() );
         break;
 
     case ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT:
@@ -96,26 +90,20 @@ void WinEDA_ViewlibFrame::Process_Special_Functions( wxCommandEvent& event )
 }
 
 
-/*************************************************************************/
 void WinEDA_ViewlibFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
-/*************************************************************************/
 {
 }
 
 
-/********************************************************************************/
 bool WinEDA_ViewlibFrame::OnRightClick( const wxPoint& MousePos,
                                         wxMenu*        PopMenu )
-/********************************************************************************/
 {
     return true;
 }
 
 
-/**********************************************/
-void WinEDA_ViewlibFrame::DisplayLibInfos()
-/**********************************************/
 /* Affiche en Ligne d'info la librairie en cours de visualisation */
+void WinEDA_ViewlibFrame::DisplayLibInfos()
 {
     wxString       msg;
     LibraryStruct* Lib;
@@ -136,7 +124,7 @@ void WinEDA_ViewlibFrame::DisplayLibInfos()
 
 
 /*****************************************/
-/* Routine to Select Current library	  */
+/* Routine to Select Current library      */
 /*****************************************/
 void WinEDA_ViewlibFrame::SelectCurrentLibrary()
 {
@@ -162,10 +150,10 @@ void WinEDA_ViewlibFrame::SelectCurrentLibrary()
 }
 
 
-/**************************************************************/
+/*
+ * Routine to select and view library Part (NEW, NEXT or PREVIOUS)
+ */
 void WinEDA_ViewlibFrame::SelectAndViewLibraryPart( int option )
-/**************************************************************/
-/* Routine to select and view library Part  (NEW, NEXT or PREVIOUS) */
 {
     LibraryStruct* Lib;
 
@@ -209,15 +197,14 @@ void WinEDA_ViewlibFrame::ViewOneLibraryContent( LibraryStruct* Lib, int Flag )
     wxString     CmpName;
     wxClientDC   dc( DrawPanel );
 
-
     DrawPanel->PrepareGraphicContext( &dc );
 
     if( Lib )
-        NumOfParts = Lib->m_NumOfParts;
+        NumOfParts = Lib->GetCount();
 
     if( NumOfParts == 0 )
     {
-        DisplayError( this, wxT( "No Library or Library is empty!" ) );
+        DisplayError( this, wxT( "No library or library is empty!" ) );
         return;
     }
 
@@ -226,9 +213,7 @@ void WinEDA_ViewlibFrame::ViewOneLibraryContent( LibraryStruct* Lib, int Flag )
 
     if( Flag == NEW_PART )
     {
-        DisplayComponentsNamesInLib( this,
-                                     Lib,
-                                     CmpName,
+        DisplayComponentsNamesInLib( this, Lib, CmpName,
                                      g_CurrentViewComponentName );
     }
 
@@ -269,7 +254,7 @@ void WinEDA_ViewlibFrame::ViewOneLibraryContent( LibraryStruct* Lib, int Flag )
 
 /*****************************************************************************/
 /* Routine d'affichage du composant selectionne                              */
-/*	Si Le composant est un alias, le composant ROOT est recherche et affiche */
+/*  Si Le composant est un alias, le composant ROOT est recherche et affiche */
 /*****************************************************************************/
 void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {

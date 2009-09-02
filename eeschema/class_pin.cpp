@@ -73,7 +73,8 @@ bool LibDrawPin::HitTest( const wxPoint& aRefPos )
  * @param aThreshold = max distance to a segment
  * @param aTransMat = the transform matrix
  */
-bool LibDrawPin::HitTest( wxPoint aRefPos, int aThreshold, const int aTransMat[2][2] )
+bool LibDrawPin::HitTest( wxPoint aRefPos, int aThreshold,
+                          const int aTransMat[2][2] )
 {
     wxPoint pinPos = TransformCoordinate( aTransMat, m_Pos );
     wxPoint pinEnd = TransformCoordinate( aTransMat, ReturnPinEndPoint() );
@@ -286,7 +287,6 @@ int LibDrawPin::GetPenSize( )
 }
 
 
-/**********************************************************************************************/
 void LibDrawPin::Draw( WinEDA_DrawPanel* aPanel,
                        wxDC*             aDC,
                        const wxPoint&    aOffset,
@@ -294,10 +294,9 @@ void LibDrawPin::Draw( WinEDA_DrawPanel* aPanel,
                        int               aDrawMode,
                        void*             aData,
                        const int         aTransformMatrix[2][2] )
-/**********************************************************************************************/
 {
-    // Invisibles pins are only drawn on request.
-    // But in libedit they are drawn in g_InvisibleItemColor because we must see them
+    // Invisible pins are only drawn on request.  In libedit they are drawn
+    // in g_InvisibleItemColor because we must see them.
     WinEDA_SchematicFrame* frame =
         (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
 
@@ -312,7 +311,7 @@ void LibDrawPin::Draw( WinEDA_DrawPanel* aPanel,
     EDA_LibComponentStruct* Entry = ( (DrawPinPrms*) aData )->m_Entry;
     bool    DrawPinText = ( (DrawPinPrms*) aData )->m_DrawPinText;
 
-    /* Calculate Pin orient takin in account the component orientation */
+    /* Calculate pin orient taking in account the component orientation. */
     int     orient = ReturnPinDrawOrient( aTransformMatrix );
 
     /* Calculate the pin position */
@@ -500,7 +499,7 @@ void LibDrawPin::DrawPinSymbol( WinEDA_DrawPanel* aPanel,
 *  If PinText == NULL nothing is printed. If PinNum = 0 no number is printed.
 *  Current Zoom factor is taken into account.
 *  If TextInside then the text is been put inside,otherwise all is drawn outside.
-*  Pin Name:	substring beteween '~' is negated
+*  Pin Name:    substring beteween '~' is negated
 *****************************************************************************/
 void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
                                wxDC*             DC,
@@ -592,7 +591,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
             {
                 DrawGraphicText( panel, DC,
                                  wxPoint( (x1 + pin_pos.x) / 2,
-                                         y1 - TXTMARGE ), NumColor,
+                                          y1 - TXTMARGE ), NumColor,
                                  StringPinNum,
                                  TEXT_ORIENT_HORIZ, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
@@ -655,8 +654,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
             if( DrawPinName )
             {
                 x = (x1 + pin_pos.x) / 2;
-                DrawGraphicText( panel, DC, wxPoint( x,
-                                                     y1 - TXTMARGE ),
+                DrawGraphicText( panel, DC, wxPoint( x, y1 - TXTMARGE ),
                                  NameColor, m_PinName,
                                  TEXT_ORIENT_HORIZ, PinNameSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
@@ -666,8 +664,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
             if( DrawPinNum )
             {
                 x = (x1 + pin_pos.x) / 2;
-                DrawGraphicText( panel, DC, wxPoint( x,
-                                                     y1 + TXTMARGE ),
+                DrawGraphicText( panel, DC, wxPoint( x, y1 + TXTMARGE ),
                                  NumColor, StringPinNum,
                                  TEXT_ORIENT_HORIZ, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
@@ -680,8 +677,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
             if( DrawPinName )
             {
                 y = (y1 + pin_pos.y) / 2;
-                DrawGraphicText( panel, DC, wxPoint( x1 - TXTMARGE,
-                                                     y ),
+                DrawGraphicText( panel, DC, wxPoint( x1 - TXTMARGE, y ),
                                  NameColor, m_PinName,
                                  TEXT_ORIENT_VERT, PinNameSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
@@ -692,8 +688,7 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
             if( DrawPinNum )
             {
                 DrawGraphicText( panel, DC,
-                                 wxPoint( x1 + TXTMARGE,
-                                          (y1 + pin_pos.y) / 2 ),
+                                 wxPoint( x1 + TXTMARGE, (y1 + pin_pos.y) / 2 ),
                                  NumColor, StringPinNum,
                                  TEXT_ORIENT_VERT, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
@@ -706,16 +701,16 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
 
 
 /*****************************************************************************
-* Plot pin number and pin text info, given the pin line coordinates.	  *
+* Plot pin number and pin text info, given the pin line coordinates.      *
 * Same as DrawPinTexts((), but output is the plotter
-* The line must be vertical or horizontal.						  *
-* If PinNext == NULL nothing is printed.									*
-* Current Zoom factor is taken into account.					 *
-* If TextInside then the text is been put inside (moving from x1, y1 in		 *
-* the opposite direction to x2,y2), otherwise all is drawn outside.		 *
+* The line must be vertical or horizontal.                        *
+* If PinNext == NULL nothing is printed.                                    *
+* Current Zoom factor is taken into account.                     *
+* If TextInside then the text is been put inside (moving from x1, y1 in      *
+* the opposite direction to x2,y2), otherwise all is drawn outside.      *
 *****************************************************************************/
 void LibDrawPin::PlotPinTexts( PLOTTER *plotter,
-			       wxPoint& pin_pos,
+                               wxPoint& pin_pos,
                                int      orient,
                                int      TextInside,
                                bool     DrawPinNum,
@@ -764,32 +759,33 @@ void LibDrawPin::PlotPinTexts( PLOTTER *plotter,
                 {
                     x = x1 + TextInside;
                     plotter->text( wxPoint( x, y1 ), NameColor,
-                                     m_PinName,
-                                     TEXT_ORIENT_HORIZ,
-                                     PinNameSize,
-                                     GR_TEXT_HJUSTIFY_LEFT,
-                                     GR_TEXT_VJUSTIFY_CENTER,
-                                     aWidth, false, false );
+                                   m_PinName,
+                                   TEXT_ORIENT_HORIZ,
+                                   PinNameSize,
+                                   GR_TEXT_HJUSTIFY_LEFT,
+                                   GR_TEXT_VJUSTIFY_CENTER,
+                                   aWidth, false, false );
                 }
                 else    // orient == PIN_LEFT
                 {
                     x = x1 - TextInside;
                     if( DrawPinName )
                         plotter->text( wxPoint( x, y1 ),
-                                         NameColor, m_PinName, TEXT_ORIENT_HORIZ,
-                                         PinNameSize,
-                                         GR_TEXT_HJUSTIFY_RIGHT,
-                                         GR_TEXT_VJUSTIFY_CENTER,
-                                         aWidth, false, false );
+                                       NameColor, m_PinName, TEXT_ORIENT_HORIZ,
+                                       PinNameSize,
+                                       GR_TEXT_HJUSTIFY_RIGHT,
+                                       GR_TEXT_VJUSTIFY_CENTER,
+                                       aWidth, false, false );
                 }
                 if( DrawPinNum )
                 {
-                    plotter->text( wxPoint( (x1 + pin_pos.x) / 2, y1 - TXTMARGE ),
-                                     NumColor, StringPinNum,
-                                     TEXT_ORIENT_HORIZ, PinNumSize,
-                                     GR_TEXT_HJUSTIFY_CENTER,
-                                     GR_TEXT_VJUSTIFY_BOTTOM,
-                                     aWidth, false, false );
+                    plotter->text( wxPoint( (x1 + pin_pos.x) / 2,
+                                            y1 - TXTMARGE ),
+                                   NumColor, StringPinNum,
+                                   TEXT_ORIENT_HORIZ, PinNumSize,
+                                   GR_TEXT_HJUSTIFY_CENTER,
+                                   GR_TEXT_VJUSTIFY_BOTTOM,
+                                   aWidth, false, false );
                 }
             }
         }
@@ -801,20 +797,20 @@ void LibDrawPin::PlotPinTexts( PLOTTER *plotter,
 
                 if( DrawPinName )
                     plotter->text( wxPoint( x1, y ), NameColor,
-                                     m_PinName,
-                                     TEXT_ORIENT_VERT, PinNameSize,
-                                     GR_TEXT_HJUSTIFY_RIGHT,
-                                     GR_TEXT_VJUSTIFY_CENTER,
-                                     aWidth, false, false );
+                                   m_PinName,
+                                   TEXT_ORIENT_VERT, PinNameSize,
+                                   GR_TEXT_HJUSTIFY_RIGHT,
+                                   GR_TEXT_VJUSTIFY_CENTER,
+                                   aWidth, false, false );
                 if( DrawPinNum )
                 {
                     plotter->text( wxPoint( x1 - TXTMARGE,
-                                              (y1 + pin_pos.y) / 2 ),
-                                     NumColor, StringPinNum,
-                                     TEXT_ORIENT_VERT, PinNumSize,
-                                     GR_TEXT_HJUSTIFY_CENTER,
-                                     GR_TEXT_VJUSTIFY_BOTTOM,
-                                     aWidth, false, false );
+                                            (y1 + pin_pos.y) / 2 ),
+                                   NumColor, StringPinNum,
+                                   TEXT_ORIENT_VERT, PinNumSize,
+                                   GR_TEXT_HJUSTIFY_CENTER,
+                                   GR_TEXT_VJUSTIFY_BOTTOM,
+                                   aWidth, false, false );
                 }
             }
             else        /* PIN_UP */
@@ -823,20 +819,20 @@ void LibDrawPin::PlotPinTexts( PLOTTER *plotter,
 
                 if( DrawPinName )
                     plotter->text( wxPoint( x1, y ), NameColor,
-                                     m_PinName,
-                                     TEXT_ORIENT_VERT, PinNameSize,
-                                     GR_TEXT_HJUSTIFY_LEFT,
-                                     GR_TEXT_VJUSTIFY_CENTER,
-                                     aWidth, false, false );
+                                   m_PinName,
+                                   TEXT_ORIENT_VERT, PinNameSize,
+                                   GR_TEXT_HJUSTIFY_LEFT,
+                                   GR_TEXT_VJUSTIFY_CENTER,
+                                   aWidth, false, false );
                 if( DrawPinNum )
                 {
                     plotter->text( wxPoint( x1 - TXTMARGE,
-                                              (y1 + pin_pos.y) / 2 ),
-                                     NumColor, StringPinNum,
-                                     TEXT_ORIENT_VERT, PinNumSize,
-                                     GR_TEXT_HJUSTIFY_CENTER,
-                                     GR_TEXT_VJUSTIFY_BOTTOM,
-                                     aWidth, false, false );
+                                            (y1 + pin_pos.y) / 2 ),
+                                   NumColor, StringPinNum,
+                                   TEXT_ORIENT_VERT, PinNumSize,
+                                   GR_TEXT_HJUSTIFY_CENTER,
+                                   GR_TEXT_VJUSTIFY_BOTTOM,
+                                   aWidth, false, false );
                 }
             }
         }
@@ -850,21 +846,21 @@ void LibDrawPin::PlotPinTexts( PLOTTER *plotter,
             {
                 x = (x1 + pin_pos.x) / 2;
                 plotter->text( wxPoint( x, y1 - TXTMARGE ),
-                                 NameColor, m_PinName,
-                                 TEXT_ORIENT_HORIZ, PinNameSize,
-                                 GR_TEXT_HJUSTIFY_CENTER,
-                                 GR_TEXT_VJUSTIFY_BOTTOM,
-                                 aWidth, false, false );
+                               NameColor, m_PinName,
+                               TEXT_ORIENT_HORIZ, PinNameSize,
+                               GR_TEXT_HJUSTIFY_CENTER,
+                               GR_TEXT_VJUSTIFY_BOTTOM,
+                               aWidth, false, false );
             }
             if( DrawPinNum )
             {
                 x = (x1 + pin_pos.x) / 2;
                 plotter->text( wxPoint( x, y1 + TXTMARGE ),
-                                 NumColor, StringPinNum,
-                                 TEXT_ORIENT_HORIZ, PinNumSize,
-                                 GR_TEXT_HJUSTIFY_CENTER,
-                                 GR_TEXT_VJUSTIFY_TOP,
-                                 aWidth, false, false );
+                               NumColor, StringPinNum,
+                               TEXT_ORIENT_HORIZ, PinNumSize,
+                               GR_TEXT_HJUSTIFY_CENTER,
+                               GR_TEXT_VJUSTIFY_TOP,
+                               aWidth, false, false );
             }
         }
         else     /* Its a vertical line. */
@@ -873,21 +869,21 @@ void LibDrawPin::PlotPinTexts( PLOTTER *plotter,
             {
                 y = (y1 + pin_pos.y) / 2;
                 plotter->text( wxPoint( x1 - TXTMARGE, y ),
-                                 NameColor, m_PinName,
-                                 TEXT_ORIENT_VERT, PinNameSize,
-                                 GR_TEXT_HJUSTIFY_CENTER,
-                                 GR_TEXT_VJUSTIFY_BOTTOM,
-                                 aWidth, false, false );
+                               NameColor, m_PinName,
+                               TEXT_ORIENT_VERT, PinNameSize,
+                               GR_TEXT_HJUSTIFY_CENTER,
+                               GR_TEXT_VJUSTIFY_BOTTOM,
+                               aWidth, false, false );
             }
 
             if( DrawPinNum )
             {
                 plotter->text( wxPoint( x1 + TXTMARGE, (y1 + pin_pos.y) / 2 ),
-                                 NumColor, StringPinNum,
-                                 TEXT_ORIENT_VERT, PinNumSize,
-                                 GR_TEXT_HJUSTIFY_CENTER,
-                                 GR_TEXT_VJUSTIFY_TOP,
-                                 aWidth, false, false );
+                               NumColor, StringPinNum,
+                               TEXT_ORIENT_VERT, PinNumSize,
+                               GR_TEXT_HJUSTIFY_CENTER,
+                               GR_TEXT_VJUSTIFY_TOP,
+                               aWidth, false, false );
             }
         }
     }
@@ -1018,7 +1014,7 @@ void LibDrawPin::SetPinNumFromString( wxString& buffer )
 
 
 /*************************************/
-LibDrawPin* LibDrawPin::GenCopy()
+LibEDA_BaseStruct* LibDrawPin::DoGenCopy()
 /*************************************/
 {
     LibDrawPin* newpin = new LibDrawPin( GetParent() );
@@ -1043,7 +1039,7 @@ LibDrawPin* LibDrawPin::GenCopy()
 
     newpin->m_PinName = m_PinName;
 
-    return newpin;
+    return (LibEDA_BaseStruct*) newpin;
 }
 
 

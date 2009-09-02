@@ -168,7 +168,7 @@ bool LibDrawText::HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[
 }
 
 
-LibDrawText* LibDrawText::GenCopy()
+LibEDA_BaseStruct* LibDrawText::DoGenCopy()
 {
     LibDrawText* newitem = new LibDrawText(NULL);
 
@@ -185,7 +185,7 @@ LibDrawText* LibDrawText::GenCopy()
     newitem->m_Bold      = m_Bold;
     newitem->m_HJustify  = m_HJustify;
     newitem->m_VJustify  = m_VJustify;
-    return newitem;
+    return (LibEDA_BaseStruct*) newitem;
 }
 
 
@@ -247,4 +247,3 @@ void LibDrawText::DisplayInfo( WinEDA_DrawFrame* frame )
 
     frame->MsgPanel->Affiche_1_Parametre( 20, _( "Line width" ), msg, BLUE );
 }
-

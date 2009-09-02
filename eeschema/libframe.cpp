@@ -1,5 +1,5 @@
 /****************************/
-/*	EESchema - libframe.cpp	*/
+/*  EESchema - libframe.cpp */
 /****************************/
 
 /* Gestion de la frame d'edition des composants en librairie
@@ -200,7 +200,7 @@ void WinEDA_LibeditFrame::OnCloseWindow( wxCloseEvent& Event )
 
     for( Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext )
     {
-        if( Lib->m_Modified )
+        if( Lib->IsModified() )
         {
             wxString msg;
             msg.Printf( _( "Library \"%s\" was modified!\nDiscard changes?" ),
@@ -352,7 +352,7 @@ int WinEDA_LibeditFrame::BestZoom()
     }
 
     size    = DrawPanel->GetClientSize();
-    size -= wxSize(100,100);   // reserve 100 mils margin
+    size -= wxSize( 100, 100 );   // reserve 100 mils margin
     ii = abs( dx / size.x );
     jj = abs( dy / size.y );
 
@@ -659,7 +659,8 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_LIBEDIT_DELETE_ITEM_BUTT:
         if( CurrentLibEntry == NULL )
         {
-            wxBell(); break;
+            wxBell();
+            break;
         }
         SetToolID( id, wxCURSOR_BULLSEYE, _( "Delete item" ) );
         break;

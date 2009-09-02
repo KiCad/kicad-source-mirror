@@ -1,5 +1,5 @@
 /****************************************************************/
-/*	Headers fo library definition and lib component definitions */
+/*  Headers for library definition and lib component definitions */
 /****************************************************************/
 
 /* Definitions of graphic items used to create shapes in component libraries.
@@ -92,7 +92,7 @@ public:
 };
 
 /****************************************************************************/
-/* Classes for handle the body items of a compoment: pins add graphic items */
+/* Classes for handle the body items of a component: pins add graphic items */
 /****************************************************************************/
 
 
@@ -103,7 +103,7 @@ public:
 class LibEDA_BaseStruct : public EDA_BaseStruct
 {
 public:
-    int    m_Unit;       /* Unit identification (for multi part per parkage)
+    int    m_Unit;       /* Unit identification (for multi part per package)
                           * 0 if the item is common to all units */
     int    m_Convert;    /* Shape identification (for parts which have a convert
                           * shape) 0 if the item is common to all shapes */
@@ -130,12 +130,12 @@ public:
      * @param aColor = -1 to use the normal body item color, or use this color
      *                 if >= 0
      * @param aDrawMode = GR_OR, GR_XOR, ...
-     * @param aData = value or pointer used to pass others parametres,
+     * @param aData = value or pointer used to pass others parameters,
      *                depending on body items. used for some items to force
      *                to force no fill mode ( has meaning only for items what
      *                can be filled ). used in printing or moving objects mode
-     *                or to pass refernce to the lib component for pins
-     * @param aTransformMatrix = Transform Matrix (rotaion, mirror ..)
+     *                or to pass reference to the lib component for pins
+     * @param aTransformMatrix = Transform Matrix (rotation, mirror ..)
      */
     virtual void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC,
                        const wxPoint &aOffset, int aColor, int aDrawMode,
@@ -172,13 +172,15 @@ public:
         return false;   // derived classes should override this function
     }
 
-    /** Function HitTest (overlayed)
+    /** Function HitTest (overlaid)
      * @return true if the point aPosRef is near this object
      * @param aPosRef = a wxPoint to test
-     * @param aThreshold = max distance to this object (usually the half thickness of a line)
+     * @param aThreshold = max distance to this object (usually the half
+     *                     thickness of a line)
      * @param aTransMat = the transform matrix
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] ) = 0;
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold,
+                          const int aTransMat[2][2] ) = 0;
 
    /** Function GetBoundingBox
      * @return the boundary box for this, in library coordinates
@@ -189,6 +191,19 @@ public:
     }
 
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+
+    /**
+     * Make a copy of this draw item.
+     *
+     * Classes derived from LibEDA_BaseStruct must implement DoGenCopy().
+     * This is just a placeholder for the derived class.
+     *
+     * @return Copy of this draw item.
+     */
+    LibEDA_BaseStruct* GenCopy() { return DoGenCopy(); }
+
+protected:
+    virtual LibEDA_BaseStruct* DoGenCopy() = 0;
 };
 
 
@@ -198,22 +213,25 @@ public:
 class LibDrawPin : public LibEDA_BaseStruct
 {
 public:
-    int      m_PinLen;      /* Pin lenght */
+    int      m_PinLen;      /* Pin length */
     int      m_Orient;      /* Pin orientation (Up, Down, Left, Right) */
     int      m_PinShape;    /* Bitwise ORed: Pin shape (see enum DrawPinShape) */
     int      m_PinType;     /* Electrical pin properties */
     int      m_Attributs;   /* bit 0 != 0: pin invisible */
-    long     m_PinNum;      /* Pin number: 4 Ascii code like "12" or "anod"
+    long     m_PinNum;      /* Pin number: 4 ASCII code like "12" or "anod"
                              * or "G6" "12" is stored as "12\0\0" ans does not
                              * depend on endian type*/
     wxString m_PinName;
     int      m_PinNumSize;
     int      m_PinNameSize; /* Pin num and Pin name sizes */
 
-	// (Currently Unused) Pin num and Pin name text opt: italic/normal/bold, 0 = default:
-    char m_PinNumShapeOpt, m_PinNameShapeOpt;
-	// (Currently Unused) Pin num and Pin name text opt position, 0 = default:
-    char m_PinNumPositionOpt, m_PinNamePositionOpt;
+    /* (Currently Unused) Pin num and Pin name text options: italic/normal
+     * /bold, 0 = default */
+    char m_PinNumShapeOpt;
+    char m_PinNameShapeOpt;
+    // (Currently Unused) Pin num and Pin name text opt position, 0 = default:
+    char m_PinNumPositionOpt;
+    char m_PinNamePositionOpt;
 
     wxPoint  m_Pos;         /* Position or centre (Arc and Circle) or start
                              * point (segments) */
@@ -254,32 +272,35 @@ public:
     /** Function HitTest
      * @return true if the point aPosRef is near this object
      * @param aPosRef = a wxPoint to test
-     * @param aThreshold = max distance to this object (usually the half thickness of a line)
+     * @param aThreshold = max distance to this object (usually the half
+     *                     thickness of a line)
      * @param aTransMat = the transform matrix
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold,
+                          const int aTransMat[2][2] );
 
-    LibDrawPin*  GenCopy();
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
     virtual EDA_Rect GetBoundingBox();
-    wxPoint      ReturnPinEndPoint();
+    wxPoint ReturnPinEndPoint();
 
     int ReturnPinDrawOrient( const int TransMat[2][2] );
 
     /** Function ReturnPinStringNum
      * fill a buffer with pin num as a wxString
-     *  Pin num is coded as a long or 4 ascii chars
+     *  Pin num is coded as a long or 4 ASCII chars
      *  Used to print/draw the pin num
-     * @param aStringBuffer = the wxString to store the pin num as an unicode string
+     * @param aStringBuffer = the wxString to store the pin num as an unicode
+     *                         string
      */
     void         ReturnPinStringNum( wxString& aStringBuffer ) const;
 
     /** Function ReturnPinStringNum (static function)
      * Pin num is coded as a long or 4 ascii chars
      * @param aPinNum = a long containing a pin num
-     * @return aStringBuffer = the wxString to store the pin num as an unicode string
+     * @return aStringBuffer = the wxString to store the pin num as an
+     *                         unicode string
      */
-    static wxString         ReturnPinStringNum( long aPinNum );
+    static wxString ReturnPinStringNum( long aPinNum );
 
     void         SetPinNumFromString( wxString& buffer );
 
@@ -301,12 +322,15 @@ public:
                                int TextInside, bool DrawPinNum,
                                bool DrawPinName, int Color, int DrawMode );
     void         PlotPinTexts( PLOTTER *plotter,
-			       wxPoint& pin_pos,
+                               wxPoint& pin_pos,
                                int      orient,
                                int      TextInside,
                                bool     DrawPinNum,
                                bool     DrawPinNameint,
                                int      aWidth);
+
+protected:
+    virtual LibEDA_BaseStruct* DoGenCopy();
 };
 
 
@@ -355,12 +379,12 @@ public:
      /** Function HitTest
      * @return true if the point aPosRef is near this object
      * @param aPosRef = a wxPoint to test
-     * @param aThreshold = max distance to this object (usually the half thickness of a line)
+     * @param aThreshold = max distance to this object (usually the half
+     *                     thickness of a line)
      * @param aTransMat = the transform matrix
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
-
-    LibDrawArc*  GenCopy();
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold,
+                          const int aTransMat[2][2] );
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
                int aColor, int aDrawMode, void* aData,
@@ -373,6 +397,8 @@ public:
      */
     virtual int GetPenSize( );
 
+protected:
+    virtual LibEDA_BaseStruct* DoGenCopy();
 };
 
 
@@ -417,12 +443,12 @@ public:
      /** Function HitTest
      * @return true if the point aPosRef is near this object
      * @param aPosRef = a wxPoint to test
-     * @param aThreshold = max distance to this object (usually the half thickness of a line)
+     * @param aThreshold = max distance to this object (usually the half
+     *                     thickness of a line)
      * @param aTransMat = the transform matrix
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
-
-    LibDrawCircle* GenCopy();
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold,
+                          const int aTransMat[2][2] );
 
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
@@ -435,6 +461,9 @@ public:
 
     virtual EDA_Rect GetBoundingBox();
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+
+protected:
+    virtual LibEDA_BaseStruct* DoGenCopy();
 };
 
 
@@ -479,7 +508,8 @@ public:
      * @param aThreshold = max distance to a segment
      * @param aTransMat = the transform matrix
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold,
+                          const int aTransMat[2][2] );
 
     /**
      * Function HitTest (overlayed)
@@ -493,8 +523,6 @@ public:
         return TextHitTest( refArea );
     }
 
-    LibDrawText* GenCopy();
-
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
@@ -505,6 +533,9 @@ public:
                const int aTransformMatrix[2][2] );
 
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+
+protected:
+    virtual LibEDA_BaseStruct* DoGenCopy();
 };
 
 
@@ -548,12 +579,12 @@ public:
     /** Function HitTest
      * @return true if the point aPosRef is near this object
      * @param aPosRef = a wxPoint to test
-     * @param aThreshold = max distance to this object (usually the half thickness of a line)
+     * @param aThreshold = max distance to this object (usually the half
+     *                     thickness of a line)
      * @param aTransMat = the transform matrix
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
-
-    LibDrawSquare* GenCopy();
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold,
+                          const int aTransMat[2][2] );
 
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
@@ -566,6 +597,9 @@ public:
 
     virtual EDA_Rect GetBoundingBox();
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+
+protected:
+    virtual LibEDA_BaseStruct* DoGenCopy();
 };
 
 /**********************************/
@@ -609,12 +643,12 @@ public:
     /** Function HitTest
      * @return true if the point aPosRef is near this object
      * @param aPosRef = a wxPoint to test
-     * @param aThreshold = max distance to this object (usually the half thickness of a line)
+     * @param aThreshold = max distance to this object (usually the half
+     *                     thickness of a line)
      * @param aTransMat = the transform matrix
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
-
-    LibDrawSegment* GenCopy();
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold,
+                          const int aTransMat[2][2] );
 
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
@@ -626,6 +660,9 @@ public:
                const int aTransformMatrix[2][2] );
 
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+
+protected:
+    virtual LibEDA_BaseStruct* DoGenCopy();
 };
 
 
@@ -658,8 +695,7 @@ public:
     virtual bool Save( FILE* aFile ) const;
     virtual bool Load( char* line, wxString& errorMsg );
 
-    LibDrawPolyline* GenCopy();
-    void             AddPoint( const wxPoint& point );
+    void AddPoint( const wxPoint& point );
 
     /** Function GetCornerCount
      * @return the number of corners
@@ -680,7 +716,8 @@ public:
      * @param aThreshold = max distance to a segment
      * @param aTransMat = the transform matrix
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold,
+                          const int aTransMat[2][2] );
 
     /** Function GetBoundingBox
      * @return the boundary box for this, in library coordinates
@@ -697,6 +734,9 @@ public:
                const int aTransformMatrix[2][2] );
 
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+
+protected:
+    virtual LibEDA_BaseStruct* DoGenCopy();
 };
 
 /**********************************************************/
@@ -729,7 +769,6 @@ public:
     virtual bool Save( FILE* aFile ) const;
     virtual bool Load( char* line, wxString& errorMsg );
 
-    LibDrawBezier* GenCopy();
     void             AddPoint( const wxPoint& point );
 
     /** Function GetCornerCount
@@ -751,7 +790,8 @@ public:
      * @param aThreshold = max distance to a segment
      * @param aTransMat = the transform matrix
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold,
+                          const int aTransMat[2][2] );
 
     /** Function GetBoundingBox
      * @return the boundary box for this, in library coordinates
@@ -764,10 +804,13 @@ public:
     virtual int GetPenSize( );
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
-              int aColor, int aDrawMode, void* aData,
-              const int aTransformMatrix[2][2] );
+               int aColor, int aDrawMode, void* aData,
+               const int aTransformMatrix[2][2] );
 
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+
+protected:
+    virtual LibEDA_BaseStruct* DoGenCopy();
 };
 
 #endif  //  CLASSES_BODY_ITEMS_H

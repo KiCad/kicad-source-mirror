@@ -77,12 +77,21 @@ wxString DataBaseGetName( WinEDA_DrawFrame* frame, wxString& Keys,
 
 void DisplayCmpDoc( wxString& Name )
 {
-    LibCmpEntry* CmpEntry;
+    LibCmpEntry* CmpEntry = NULL;
+    LibraryStruct* Lib = g_LibraryList;
 
-    CmpEntry = FindLibPart( Name, wxEmptyString, ALIAS );
+    while( Lib != NULL && CmpEntry == NULL )
+    {
+        CmpEntry = Lib->FindEntry( Name );
+        Lib = Lib->m_Pnext;
+    }
 
     if( CmpEntry == NULL )
         return;
+
+    wxLogDebug( wxT( "Selected component <%s>, m_Doc: <%s>, m_KeyWord: <%s>." ),
+                (const wxChar*) Name, (const wxChar*) CmpEntry->m_Doc,
+                (const wxChar*) CmpEntry->m_KeyWord );
 
     Name  = wxT( "Description: " ) + CmpEntry->m_Doc;
     Name += wxT( "\nKey Words: " ) + CmpEntry->m_KeyWord;

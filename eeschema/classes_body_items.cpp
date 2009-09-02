@@ -218,7 +218,7 @@ bool LibDrawArc::HitTest( wxPoint aRefPoint, int aThreshold, const int aTransMat
 }
 
 
-LibDrawArc* LibDrawArc::GenCopy()
+LibEDA_BaseStruct* LibDrawArc::DoGenCopy()
 {
     LibDrawArc* newitem = new LibDrawArc( GetParent() );
 
@@ -233,7 +233,7 @@ LibDrawArc* LibDrawArc::GenCopy()
     newitem->m_Convert = m_Convert;
     newitem->m_Flags   = m_Flags;
     newitem->m_Fill    = m_Fill;
-    return newitem;
+    return (LibEDA_BaseStruct*) newitem;
 }
 
 
@@ -477,7 +477,7 @@ bool LibDrawCircle::HitTest( wxPoint aPosRef, int aThreshold, const int aTransMa
 }
 
 
-LibDrawCircle* LibDrawCircle::GenCopy()
+LibEDA_BaseStruct* LibDrawCircle::DoGenCopy()
 {
     LibDrawCircle* newitem = new LibDrawCircle( GetParent() );
 
@@ -488,7 +488,7 @@ LibDrawCircle* LibDrawCircle::GenCopy()
     newitem->m_Convert = m_Convert;
     newitem->m_Flags   = m_Flags;
     newitem->m_Fill    = m_Fill;
-    return newitem;
+    return (LibEDA_BaseStruct*) newitem;
 }
 
 
@@ -619,7 +619,7 @@ bool LibDrawSquare::Load( char* line, wxString& errorMsg )
 }
 
 
-LibDrawSquare* LibDrawSquare::GenCopy()
+LibEDA_BaseStruct* LibDrawSquare::DoGenCopy()
 {
     LibDrawSquare* newitem = new LibDrawSquare( GetParent() );
 
@@ -630,7 +630,7 @@ LibDrawSquare* LibDrawSquare::GenCopy()
     newitem->m_Convert = m_Convert;
     newitem->m_Flags   = m_Flags;
     newitem->m_Fill    = m_Fill;
-    return newitem;
+    return (LibEDA_BaseStruct*) newitem;
 }
 
 
@@ -788,7 +788,7 @@ bool LibDrawSegment::Load( char* line, wxString& errorMsg )
 }
 
 
-LibDrawSegment* LibDrawSegment::GenCopy()
+LibEDA_BaseStruct* LibDrawSegment::DoGenCopy()
 {
     LibDrawSegment* newitem = new LibDrawSegment( GetParent() );
 
@@ -798,7 +798,7 @@ LibDrawSegment* LibDrawSegment::GenCopy()
     newitem->m_Unit    = m_Unit;
     newitem->m_Convert = m_Convert;
     newitem->m_Flags   = m_Flags;
-    return newitem;
+    return (LibEDA_BaseStruct*) newitem;
 }
 
 
@@ -976,7 +976,7 @@ bool LibDrawPolyline::Load( char* line, wxString& errorMsg )
 }
 
 
-LibDrawPolyline* LibDrawPolyline::GenCopy()
+LibEDA_BaseStruct* LibDrawPolyline::DoGenCopy()
 {
     LibDrawPolyline* newitem = new LibDrawPolyline( GetParent() );
 
@@ -986,7 +986,7 @@ LibDrawPolyline* LibDrawPolyline::GenCopy()
     newitem->m_Convert = m_Convert;
     newitem->m_Flags   = m_Flags;
     newitem->m_Fill    = m_Fill;
-    return newitem;
+    return (LibEDA_BaseStruct*) newitem;
 }
 
 
@@ -1238,7 +1238,7 @@ bool LibDrawBezier::Load( char* line, wxString& errorMsg )
 }
 
 
-LibDrawBezier* LibDrawBezier::GenCopy()
+LibEDA_BaseStruct* LibDrawBezier::DoGenCopy()
 {
     LibDrawBezier* newitem = new LibDrawBezier(GetParent());
 
@@ -1248,7 +1248,7 @@ LibDrawBezier* LibDrawBezier::GenCopy()
     newitem->m_Convert = m_Convert;
     newitem->m_Flags   = m_Flags;
     newitem->m_Fill    = m_Fill;
-    return newitem;
+    return (LibEDA_BaseStruct*) newitem;
 }
 
 /** Function GetPenSize

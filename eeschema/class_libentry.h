@@ -16,13 +16,15 @@
 /* Types for components in libraries
  * components can be a true component or an alias of a true component.
  */
-enum LibrEntryType {
+enum LibrEntryType
+{
     ROOT,       /* This is a true component standard EDA_LibComponentStruct */
     ALIAS       /* This is an alias of a true component */
 };
 
 /* values for member .m_Options */
-enum  LibrEntryOptions {
+enum  LibrEntryOptions
+{
     ENTRY_NORMAL,   // Libentry is a standard component (real or alias)
     ENTRY_POWER     // Libentry is a power symbol
 };
@@ -31,7 +33,7 @@ enum  LibrEntryOptions {
 /**
  * Base class to describe library components and aliases.
  *
- * This class is not to be  used directly.
+ * This class is not to be used directly.
  */
 class LibCmpEntry : public EDA_BaseStruct
 {
@@ -76,9 +78,10 @@ public:
 
 typedef boost::ptr_vector< LibCmpEntry > LIB_ENTRY_LIST;
 
-extern bool operator<( LibCmpEntry& item1, LibCmpEntry& item2 );
+extern bool operator<( const LibCmpEntry& item1, const LibCmpEntry& item2 );
 
-extern int LibraryEntryCompare( LibCmpEntry* LE1, LibCmpEntry* LE2 );
+extern int LibraryEntryCompare( const LibCmpEntry* LE1,
+                                const LibCmpEntry* LE2 );
 
 
 /**
@@ -173,7 +176,7 @@ public:
  *
  * @todo Alias objects should really be defined as children of a component
  *       object not as children of a library object.  This would greatly
- *       simply searching for components in libraries.
+ *       simplify searching for components in libraries.
  */
 class EDA_LibCmpAliasStruct : public LibCmpEntry
 {

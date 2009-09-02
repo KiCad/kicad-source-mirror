@@ -101,7 +101,6 @@ set(EESCHEMA_SRCS
     plothpgl.cpp
     plotps.cpp
     plotdxf.cpp
-    priorque.cpp
     read_from_file_schematic_items_descriptions.cpp
     savelib.cpp
     save_schemas.cpp

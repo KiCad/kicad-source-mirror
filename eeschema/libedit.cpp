@@ -1,5 +1,5 @@
 /****************************/
-/*	EESchema - libedit.cpp	*/
+/*  EESchema - libedit.cpp  */
 /****************************/
 
 /* Routines de maintenanace des librairies:
@@ -86,7 +86,7 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPart()
 
     if( g_ScreenLib->IsModify() )
     {
-        if( !IsOK( this, _( "Current Part not saved.\nContinue?" ) ) )
+        if( !IsOK( this, _( "Current part not saved.\nContinue?" ) ) )
             return FALSE;
     }
 
@@ -115,7 +115,8 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPart()
 
     if( LibEntry == NULL )
     {
-        msg = _( "Component \"" ); msg << CmpName << _( "\" not found." );
+        msg = _( "Component \"" );
+        msg << CmpName << _( "\" not found." );
         DisplayError( this, msg );
         return FALSE;
     }
@@ -144,7 +145,7 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPartAux( LibCmpEntry*   LibEntry,
 {
     wxString msg, cmpName, rootName;
 
-    if( (LibEntry == NULL) || (Library == NULL) )
+    if( ( LibEntry == NULL ) || ( Library == NULL ) )
         return false;
 
     if( LibEntry->m_Name.m_Text.IsEmpty() )
@@ -263,33 +264,33 @@ void WinEDA_LibeditFrame::SaveActiveLibrary()
 
     if( CurrentLib == NULL )
     {
-        DisplayError( this, wxT( "No Library specified" ) );
+        DisplayError( this, wxT( "No library specified" ) );
         return;
     }
 
     fn = wxFileName( CurrentLib->m_FullFileName );
 
-    msg = _( "Modify Library File \"" ) + fn.GetFullPath() + _( "\"?" );
+    msg = _( "Modify library file \"" ) + fn.GetFullPath() + _( "\"?" );
 
     if( !IsOK( this, msg ) )
         return;
 
-    bool success = CurrentLib->SaveLibrary( fn.GetFullPath() );
+    bool success = CurrentLib->Save( fn.GetFullPath() );
 
     MsgPanel->EraseMsgBox();
 
     if( !success )
     {
-        msg = _( "Error while saving Library File \"" ) + fn.GetFullPath() +
+        msg = _( "Error while saving library file \"" ) + fn.GetFullPath() +
               _( "\"." );
         Affiche_1_Parametre( this, 1, wxT( " *** ERROR : **" ), msg, BLUE );
         DisplayError( this, msg );
     }
     else
     {
-        msg = _( "Library File \"" ) + fn.GetFullName() + wxT( "\" Ok" );
+        msg = _( "Library file \"" ) + fn.GetFullName() + wxT( "\" Ok" );
         fn.SetExt( DOC_EXT );
-        wxString msg1 = _( "Document File \"" ) + fn.GetFullPath() +
+        wxString msg1 = _( "Document file \"" ) + fn.GetFullPath() +
                         wxT( "\" Ok" );
         Affiche_1_Parametre( this, 1, msg, msg1, BLUE );
     }
@@ -476,7 +477,7 @@ void WinEDA_LibeditFrame::SaveOnePartInMemory()
 
     if( CurrentLib == NULL )
     {
-        DisplayError( this, _( "No Library specified." ) );
+        DisplayError( this, _( "No library specified." ) );
         return;
     }
 

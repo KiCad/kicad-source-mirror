@@ -2,9 +2,6 @@
 /* EESchema - selpart.cpp */
 /**************************/
 
-/* Routine de selection d'un composant en librairie
- */
-
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
@@ -16,32 +13,24 @@
 #include "protos.h"
 
 
-/* Routines locales */
-
-/* Variables locales */
-
-
-/***************************************************************/
 LibraryStruct* SelectLibraryFromList( WinEDA_DrawFrame* frame )
-/***************************************************************/
 {
-    int             ii, NumOfLibs = NumOfLibraries();
-    LibraryStruct*  Lib = NULL;
     static wxString OldLibName;
-    wxString        LibName;
+    wxString        LibName, msg;
+    int             count = NumOfLibraries();
+    LibraryStruct*  Lib = NULL;
 
-    if( NumOfLibs == 0 )
+    if( count == 0 )
     {
         DisplayError( frame, _( "No libraries are loaded" ) );
         return NULL;
     }
 
-    WinEDAListBox ListBox( frame, _( "Select Lib" ),
-                          NULL, OldLibName, NULL,
-                          wxColour( 255, 255, 255 ) );  // Library browser background color
+    msg.Printf( _( " Select 1 of %d libraries." ), count );
 
     wxArrayString  libNamesList;
     LibraryStruct* libcache = NULL;
+
     for( LibraryStruct* Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext )
     {
         if( Lib->m_IsLibCache )
@@ -56,17 +45,20 @@ LibraryStruct* SelectLibraryFromList( WinEDA_DrawFrame* frame )
     if( libcache )
         libNamesList.Add( libcache->m_Name );
 
-    ListBox.InsertItems( libNamesList );
+    wxSingleChoiceDialog dlg( frame, msg, _( "Select Library" ), libNamesList );
 
+    int index = libNamesList.Index( OldLibName );
 
-    ListBox.MoveMouseToOrigin();
+    if( index != wxNOT_FOUND )
+        dlg.SetSelection( index );
 
-    ii = ListBox.ShowModal();
+    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetStringSelection().IsEmpty() )
+        return NULL;
 
-    if( ii >= 0 )    /* Recherche de la librairie */
-    {
-        Lib = FindLibrary( libNamesList[ii] );
-    }
+    Lib = FindLibrary( dlg.GetStringSelection() );
+
+    if( Lib != NULL )
+        OldLibName = dlg.GetStringSelection();
 
     return Lib;
 }
@@ -77,7 +69,6 @@ int DisplayComponentsNamesInLib( WinEDA_DrawFrame* frame,
                                  wxString& Buffer, wxString& OldName )
 {
     size_t         i;
-    wxString       msg;
     wxArrayString  nameList;
     const wxChar** ListNames;
 
@@ -92,14 +83,11 @@ int DisplayComponentsNamesInLib( WinEDA_DrawFrame* frame,
     ListNames = (const wxChar**) MyZMalloc( ( nameList.GetCount() + 1 ) *
                                             sizeof( wxChar* ) );
 
-    msg.Printf( _( "Select 1 of %d components from library <%s>" ),
-                nameList.GetCount(), (const wxChar*) Library->m_Name );
-
     for( i = 0; i < nameList.GetCount(); i++ )
         ListNames[i] = (const wxChar*) nameList[i];
 
-    WinEDAListBox dlg( frame, msg, ListNames, OldName, DisplayCmpDoc,
-                       wxColour( 255, 255, 255 ) );
+    WinEDAListBox dlg( frame, _( "Select Component" ), ListNames, OldName,
+                       DisplayCmpDoc, wxColour( 255, 255, 255 ) );
 
     dlg.MoveMouseToOrigin();
 
@@ -117,10 +105,8 @@ int DisplayComponentsNamesInLib( WinEDA_DrawFrame* frame,
 }
 
 
-/************************************************************/
-int GetNameOfPartToLoad( WinEDA_DrawFrame* frame,
-                         LibraryStruct* Library, wxString& BufName )
-/************************************************************/
+int GetNameOfPartToLoad( WinEDA_DrawFrame* frame, LibraryStruct* Library,
+                         wxString& BufName )
 {
     int             ii;
     static wxString OldCmpName;

@@ -347,13 +347,13 @@ bool LibDrawField::HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat
 }
 
 // Creation et Duplication d'un field
-LibDrawField* LibDrawField::GenCopy()
+LibEDA_BaseStruct* LibDrawField::DoGenCopy()
 {
     LibDrawField* newfield = new LibDrawField( m_FieldId );
 
     Copy( newfield );
 
-    return newfield;
+    return (LibEDA_BaseStruct*) newfield;
 }
 
 

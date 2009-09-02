@@ -1,5 +1,5 @@
 /****************************/
-/*	EESchema - eesavlib.cpp	*/
+/*  EESchema - eesavlib.cpp */
 /****************************/
 
 /* Functions to save schematic libraries and library components (::Save()
@@ -17,61 +17,6 @@
 #include "general.h"
 
 #include "protos.h"
-
-
-/** Function CopyDrawEntryStruct
- * Duplicate a DrawLibItem
- * the new item is only created, it is not put in the current component linked
- *  list
- * @param DrawEntry = DrawLibItem * item to duplicate
- * @return a pointer to the new item
- * A better way to duplicate a DrawLibItem is to have a virtual GenCopy() in
- * LibEDA_BaseStruct class (ToDo).
- */
-LibEDA_BaseStruct* CopyDrawEntryStruct( LibEDA_BaseStruct* DrawItem )
-{
-    wxString           msg;
-    LibEDA_BaseStruct* NewDrawItem = NULL;
-
-    switch( DrawItem->Type() )
-    {
-    case COMPONENT_ARC_DRAW_TYPE:
-        NewDrawItem = ( (LibDrawArc*) DrawItem )->GenCopy();
-        break;
-
-    case COMPONENT_CIRCLE_DRAW_TYPE:
-        NewDrawItem = ( (LibDrawCircle*) DrawItem )->GenCopy();
-        break;
-
-    case COMPONENT_RECT_DRAW_TYPE:
-        NewDrawItem = ( (LibDrawSquare*) DrawItem )->GenCopy();
-        break;
-
-    case COMPONENT_PIN_DRAW_TYPE:
-        NewDrawItem = ( (LibDrawPin*) DrawItem )->GenCopy();
-        break;
-
-    case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
-        NewDrawItem = ( (LibDrawText*) DrawItem )->GenCopy();
-        break;
-
-    case COMPONENT_POLYLINE_DRAW_TYPE:
-        NewDrawItem = ( (LibDrawPolyline*) DrawItem )->GenCopy();
-        break;
-
-    case COMPONENT_BEZIER_DRAW_TYPE:
-        NewDrawItem = ( (LibDrawBezier*) DrawItem )->GenCopy();
-        break;
-
-    default:
-        msg.Printf( wxT( "CopyDrawLibEntryStruct: unknown Draw Type %d" ),
-                    DrawItem->Type() );
-        wxLogError( msg );
-        break;
-    }
-
-    return NewDrawItem;
-}
 
 
 /*
@@ -118,7 +63,7 @@ EDA_LibComponentStruct* CopyLibEntryStruct( EDA_LibComponentStruct* OldEntry )
     for( OldField = OldEntry->m_Fields; OldField != NULL;
          OldField = OldField->Next() )
     {
-        NewField = OldField->GenCopy();
+        NewField = (LibDrawField*) OldField->GenCopy();
         NewStruct->m_Fields.PushBack( NewField );
     }
 
@@ -130,7 +75,8 @@ EDA_LibComponentStruct* CopyLibEntryStruct( EDA_LibComponentStruct* OldEntry )
         if( ( OldDrawings->m_Flags & IS_NEW ) != 0 )
             continue;
 
-        NewDrawings = CopyDrawEntryStruct( OldDrawings );
+        NewDrawings = OldDrawings->GenCopy();
+
         if( NewDrawings )
         {
             if( LastItem == NULL )
@@ -141,7 +87,7 @@ EDA_LibComponentStruct* CopyLibEntryStruct( EDA_LibComponentStruct* OldEntry )
             LastItem = NewDrawings;
             NewDrawings->SetNext( NULL );
         }
-        else	// Should never occur, just in case...
+        else    // Should never occur, just in case...
         {       // CopyDrawEntryStruct() was not able to duplicate the type
                 // of OldDrawings
                 // occurs when an unexpected type is encountered

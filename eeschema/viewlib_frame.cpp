@@ -111,7 +111,8 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*      father,
         m_LibList =
             new wxListBox( m_LibListWindow, ID_LIBVIEW_LIB_LIST,
                            wxPoint( 0, 0 ),
-                           m_LibListWindow->GetClientSize() - wxSize(EXTRA_BORDER_SIZE*2,0),
+                           m_LibListWindow->GetClientSize() -
+                           wxSize( EXTRA_BORDER_SIZE * 2, 0 ),
                            0, NULL, wxLB_HSCROLL );
     }
     else
@@ -135,7 +136,8 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*      father,
     m_CmpListWindow->SetExtraBorderSize( EXTRA_BORDER_SIZE );
     m_CmpList = new wxListBox( m_CmpListWindow, ID_LIBVIEW_CMP_LIST,
                                wxPoint( 0, 0 ),
-                               m_CmpListWindow->GetClientSize() - wxSize(EXTRA_BORDER_SIZE*2,0),
+                               m_CmpListWindow->GetClientSize() -
+                               wxSize( EXTRA_BORDER_SIZE * 2, 0 ),
                                0, NULL, wxLB_HSCROLL );
 
     if( m_LibList )
@@ -231,7 +233,8 @@ void WinEDA_ViewlibFrame::OnSize( wxSizeEvent& SizeEv )
     if( m_VToolBar )
     {
         Vtoolbar_size = m_VToolBar->GetSize();
-        m_VToolBar->SetSize( clientsize.x - maintoolbar_size.y, 0, -1, clientsize.y );
+        m_VToolBar->SetSize( clientsize.x - maintoolbar_size.y, 0, -1,
+                             clientsize.y );
     }
 
     if( MsgPanel )
@@ -242,7 +245,8 @@ void WinEDA_ViewlibFrame::OnSize( wxSizeEvent& SizeEv )
     if( DrawPanel )
     {
         DrawPanel->SetSize( m_LibListSize.x + m_CmpListSize.x, 0,
-                            clientsize.x - Vtoolbar_size.x - m_LibListSize.x - m_CmpListSize.x,
+                            clientsize.x - Vtoolbar_size.x -
+                            m_LibListSize.x - m_CmpListSize.x,
                             clientsize.y );
     }
 
@@ -250,7 +254,8 @@ void WinEDA_ViewlibFrame::OnSize( wxSizeEvent& SizeEv )
     {
         m_LibListSize.y = clientsize.y - 2;
         m_LibListWindow->SetSize( m_LibListSize );
-        m_LibList->SetSize( m_LibListWindow->GetClientSize()  - wxSize(EXTRA_BORDER_SIZE*2,0) );
+        m_LibList->SetSize( m_LibListWindow->GetClientSize() -
+                            wxSize( EXTRA_BORDER_SIZE * 2, 0 ) );
     }
 
     if( m_CmpList && m_CmpListWindow )
@@ -258,7 +263,8 @@ void WinEDA_ViewlibFrame::OnSize( wxSizeEvent& SizeEv )
         m_CmpListSize.y = clientsize.y - 2;
         m_CmpListWindow->SetSize( m_CmpListSize );
         m_CmpListWindow->SetPosition( wxPoint( m_LibListSize.x, 0 ) );
-        m_CmpList->SetSize( m_CmpListWindow->GetClientSize() - wxSize(EXTRA_BORDER_SIZE*2,0) );
+        m_CmpList->SetSize( m_CmpListWindow->GetClientSize() -
+                            wxSize( EXTRA_BORDER_SIZE * 2, 0 ) );
     }
 
     SizeEv.Skip();
@@ -285,7 +291,8 @@ int WinEDA_ViewlibFrame::BestZoom()
         return bestzoom;
     }
 
-    EDA_Rect BoundaryBox = CurrentLibEntry->GetBoundaryBox( g_ViewUnit, g_ViewConvert );
+    EDA_Rect BoundaryBox = CurrentLibEntry->GetBoundaryBox( g_ViewUnit,
+                                                            g_ViewConvert );
     itemsize = BoundaryBox.GetSize();
 
     size     = DrawPanel->GetClientSize();
@@ -331,12 +338,12 @@ void WinEDA_ViewlibFrame::ReCreateListLib()
     if ( libcache )
         libNamesList.Add( libcache->m_Name );
 
-    m_LibList->Append(libNamesList);
+    m_LibList->Append( libNamesList );
 
     // Search for a previous selection:
     for ( unsigned ii = 0; ii < m_LibList->GetCount(); ii++ )
     {
-        if( g_CurrentViewLibraryName.Cmp( m_LibList->GetString(ii) ) == 0 )
+        if( g_CurrentViewLibraryName.Cmp( m_LibList->GetString( ii ) ) == 0 )
         {
             m_LibList->SetSelection( ii, TRUE );
             found = TRUE;
@@ -344,7 +351,8 @@ void WinEDA_ViewlibFrame::ReCreateListLib()
         }
     }
 
-    /* If not found, clear current library selection because it can be deleted after a config change
+    /* If not found, clear current library selection because it can be
+     * deleted after a config change.
      */
     if( !found )
     {
@@ -364,7 +372,7 @@ void WinEDA_ViewlibFrame::ReCreateListCmp()
     if( m_CmpList == NULL )
         return;
 
-    LibraryStruct* Library  = FindLibrary( g_CurrentViewLibraryName.GetData() );
+    LibraryStruct* Library  = FindLibrary( g_CurrentViewLibraryName );
     wxArrayString  nameList;
 
     m_CmpList->Clear();
@@ -378,9 +386,7 @@ void WinEDA_ViewlibFrame::ReCreateListCmp()
 }
 
 
-/********************************************************************/
 void WinEDA_ViewlibFrame::ClickOnLibList( wxCommandEvent& event )
-/********************************************************************/
 {
     int ii = m_LibList->GetSelection();
 
@@ -398,9 +404,7 @@ void WinEDA_ViewlibFrame::ClickOnLibList( wxCommandEvent& event )
 }
 
 
-/****************************************************************/
 void WinEDA_ViewlibFrame::ClickOnCmpList( wxCommandEvent& event )
-/****************************************************************/
 {
     int ii = m_CmpList->GetSelection();
 
@@ -418,12 +422,11 @@ void WinEDA_ViewlibFrame::ClickOnCmpList( wxCommandEvent& event )
 }
 
 
-/****************************************************************************/
-void WinEDA_ViewlibFrame::ExportToSchematicLibraryPart( wxCommandEvent& event )
-/****************************************************************************/
 
-/* Export the current component to schematic and close the library browser
+/*
+ * Export the current component to schematic and close the library browser
  */
+void WinEDA_ViewlibFrame::ExportToSchematicLibraryPart( wxCommandEvent& event )
 {
     int ii = m_CmpList->GetSelection();
 

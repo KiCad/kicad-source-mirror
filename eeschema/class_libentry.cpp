@@ -179,13 +179,13 @@ bool LibCmpEntry::operator==( const wxChar* name ) const
 }
 
 
-bool operator<( LibCmpEntry& item1, LibCmpEntry& item2 )
+bool operator<( const LibCmpEntry& item1, const LibCmpEntry& item2 )
 {
-    return item1.m_Name.m_Text.CmpNoCase( item2.m_Name.m_Text ) == -1;
+    return item1.m_Name.m_Text.CmpNoCase( item2.m_Name.m_Text ) < 0;
 }
 
 
-int LibraryEntryCompare( LibCmpEntry* LE1, LibCmpEntry* LE2 )
+int LibraryEntryCompare( const LibCmpEntry* LE1, const LibCmpEntry* LE2 )
 {
     return LE1->m_Name.m_Text.CmpNoCase( LE2->m_Name.m_Text );
 }

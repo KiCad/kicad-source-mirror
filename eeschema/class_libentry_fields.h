@@ -58,8 +58,6 @@ public:
     virtual bool Save( FILE* aFile ) const;
     virtual bool Load( char* line, wxString& errorMsg );
 
-    LibDrawField* GenCopy();
-
     /** Function Copy
      * copy parameters of this to Target. Pointers are not copied
      * @param aTarget = the LibDrawField to set with "this" values
@@ -104,6 +102,9 @@ public:
         m_VJustify = field.m_VJustify;
         m_Parent = field.m_Parent;
     }
+
+protected:
+    virtual LibEDA_BaseStruct* DoGenCopy();
 };
 
 #endif  //  CLASS_LIBENTRY_FIELDS_H

@@ -91,9 +91,6 @@ wxPoint        TransformCoordinate( const int      aTransformMatrix[2][2],
                                     const wxPoint& aPosition );
 
 LibraryStruct* FindLibrary( const wxString& Name );
-int            LoadDocLib( WinEDA_DrawFrame* frame,
-                           const wxString&   FullDocLibName,
-                           const wxString&   Libname );
 LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
                                 const wxString&   FullLibName,
                                 const wxString&   LibName );
@@ -235,18 +232,6 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose );
 /**************/
 /* SAVELIB.CPP */
 /**************/
-
-LibEDA_BaseStruct* CopyDrawEntryStruct( LibEDA_BaseStruct* DrawItem );
-
-/* Routine de Duplication d'une structure DrawLibItem d'une partlib
- *    Parametres d'entree:
- *        DrawEntry = pointeur sur la structure a dupliquer
- *    La structure nouvelle est creee, mais n'est pas inseree dans le
- *    chainage
- *    Retourne:
- *        Pointeur sur la structure creee (ou NULL si impossible)
- */
-
 
 EDA_LibComponentStruct* CopyLibEntryStruct( EDA_LibComponentStruct* OldEntry );
 

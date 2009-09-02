@@ -1,7 +1,7 @@
 /*************************************************/
 /* Functions to Load  from file and save to file */
 /* the graphic shapes  used to draw a component  */
-/* When using the import/export symbol options	 */
+/* When using the import/export symbol options   */
 /* files are the *.sym files                     */
 /*************************************************/
 
@@ -109,7 +109,7 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
         return;
     }
 
-    if( Lib->m_NumOfParts > 1 )
+    if( Lib->GetCount() > 1 )
         DisplayError( this, _( "Warning: more than 1 part in Symbol File" ) );
 
     Component = (EDA_LibComponentStruct*) Lib->GetFirstEntry();
@@ -240,10 +240,10 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
         for( ; DrawEntry != NULL; DrawEntry = DrawEntry->Next() )
         {
             /* Elimination des elements non relatifs a l'unite */
-            if( Unit && DrawEntry->m_Unit && (DrawEntry->m_Unit != Unit) )
+            if( Unit && DrawEntry->m_Unit && ( DrawEntry->m_Unit != Unit ) )
                 continue;
             if( convert && DrawEntry->m_Convert
-               && (DrawEntry->m_Convert != convert) )
+               && ( DrawEntry->m_Convert != convert ) )
                 continue;
 
             DrawEntry->Save( ExportFile );
@@ -401,10 +401,10 @@ static bool CompareSymbols( LibEDA_BaseStruct* DEntryRef,
 
 /***************************************************************************/
 /* Routine de placement du point d'ancrage ( reference des coordonnes pour */
-/* le trace) du composant courant											  */
-/*	Toutes les coord apparaissant dans les structures sont modifiees		  */
-/*	pour repositionner le point repere par le curseur souris au point	  */
-/*	d'ancrage ( coord 0,0 ).                                               */
+/* le trace) du composant courant                                             */
+/*  Toutes les coord apparaissant dans les structures sont modifiees          */
+/*  pour repositionner le point repere par le curseur souris au point     */
+/*  d'ancrage ( coord 0,0 ).                                               */
 /***************************************************************************/
 void WinEDA_LibeditFrame::PlaceAncre()
 {

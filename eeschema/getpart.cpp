@@ -1,5 +1,5 @@
 /*************************************************/
-/*	Module to handle Get & Place Library Part	 */
+/*  Module to handle Get & Place Library Part    */
 /*************************************************/
 
 #include "fctsys.h"
@@ -24,9 +24,7 @@ static int     OldTransMat[2][2];
 static wxPoint OldPos;
 
 
-/*******************************************************/
 wxString SelectFromLibBrowser( WinEDA_DrawFrame* parent )
-/*******************************************************/
 {
     wxString               name;
     WinEDA_ViewlibFrame*   Viewer;
@@ -56,17 +54,16 @@ wxString SelectFromLibBrowser( WinEDA_DrawFrame* parent )
 }
 
 
-/**************************************************************************/
+
+/*
+ * load from a library and place a component
+ *  if libname != "", search in lib "libname"
+ *  else search in all loaded libs
+ */
 SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
                                                       const wxString& libname,
                                                       wxArrayString&  HistoryList,
                                                       bool            UseLibBrowser )
-/**************************************************************************/
-
-/* load from a library and place a component
- *  if libname != "", search in lib "libname"
- *  else search in all loaded libs
- */
 {
     int                     ii, CmpCount = 0;
     EDA_LibComponentStruct* Entry     = NULL;
@@ -85,7 +82,7 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
         {
             if( Library->GetName().CmpNoCase( libname ) == 0 )
             {
-                CmpCount = Library->m_NumOfParts;
+                CmpCount = Library->GetCount();
                 break;
             }
             Library = Library->m_Pnext;
@@ -96,7 +93,7 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
         LibraryStruct* lib = g_LibraryList;
         while( lib )
         {
-            CmpCount += lib->m_NumOfParts;
+            CmpCount += lib->GetCount();
             lib = lib->m_Pnext;
         }
     }
@@ -204,13 +201,15 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
     Component->SetRef( GetSheet(), msg );
 
     /* Init champ Reference */
-    Component->GetField( REFERENCE )->m_Pos = Entry->m_Prefix.m_Pos + Component->m_Pos;
+    Component->GetField( REFERENCE )->m_Pos =
+        Entry->m_Prefix.m_Pos + Component->m_Pos;
     Component->GetField( REFERENCE )->ImportValues( Entry->m_Prefix );
     Component->m_PrefixString = Entry->m_Prefix.m_Text;
 
     /* Init des autres champs si predefinis dans la librairie */
     LibDrawField* EntryField;
-    for( EntryField = Entry->m_Fields; EntryField != NULL; EntryField = EntryField->Next() )
+    for( EntryField = Entry->m_Fields; EntryField != NULL;
+         EntryField = EntryField->Next() )
     {
         if( EntryField->m_Text.IsEmpty() && EntryField->m_Name.IsEmpty() )
             continue;
@@ -224,7 +223,8 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
             while( ii >= Component->GetFieldCount() )
             {
                 int field_id = Component->GetFieldCount();
-                SCH_CMP_FIELD field( wxPoint( 0, 0 ), field_id, Component, ReturnDefaultFieldName( ii ) );
+                SCH_CMP_FIELD field( wxPoint( 0, 0 ), field_id, Component,
+                                     ReturnDefaultFieldName( ii ) );
                 Component->AddField( field );
             }
         }
@@ -271,14 +271,12 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 }
 
 
-/**************************************************************************/
-void WinEDA_SchematicFrame::CmpRotationMiroir(
-    SCH_COMPONENT* DrawComponent, wxDC* DC, int type_rotate )
-/**************************************************************************/
-
-/* Routine permettant les rotations et les miroirs d'un composant
+/*
+ * Routine permettant les rotations et les miroirs d'un composant
  *  Si DC = NULL : pas de redessin
  */
+void WinEDA_SchematicFrame::CmpRotationMiroir( SCH_COMPONENT* DrawComponent,
+                                               wxDC* DC, int type_rotate )
 {
     if( DrawComponent == NULL )
         return;
@@ -288,7 +286,7 @@ void WinEDA_SchematicFrame::CmpRotationMiroir(
     {
         DrawPanel->CursorOff( DC );
         if( DrawComponent->m_Flags )
-            DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint(0,0) );
+            DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint( 0, 0 ) );
         else
         {
             DrawPanel->PostDirtyRect( DrawComponent->GetBoundingBox() );
@@ -303,8 +301,7 @@ void WinEDA_SchematicFrame::CmpRotationMiroir(
         if( DrawComponent->m_Flags )
             DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint(0,0) );
         else
-            DrawComponent->Draw( DrawPanel, DC, wxPoint( 0,
-                                                         0 ),
+            DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ),
                                  GR_DEFAULT_DRAWMODE );
         DrawPanel->CursorOn( DC );
     }
@@ -314,12 +311,10 @@ void WinEDA_SchematicFrame::CmpRotationMiroir(
 }
 
 
-/************************************************************/
-static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
-/************************************************************/
-
-/* Routine de sortie de la fonction de placement de composant
+/*
+ * Routine de sortie de la fonction de placement de composant
  */
+static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
     SCH_SCREEN*    screen = (SCH_SCREEN*) Panel->GetScreen();
 
@@ -339,18 +334,17 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
     }
 
     Panel->Refresh( TRUE );
-
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
     screen->SetCurItem( NULL );
 }
 
 
-/************************************************************************/
+/*
+ * Selection de l'unite dans les boitiers a multiples Parts
+ */
 void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
                                          int unit, wxDC* DC )
-/************************************************************************/
-/* Selection de l'unite dans les boitiers a multiples Parts */
 {
     int m_UnitCount;
     EDA_LibComponentStruct* LibEntry;
@@ -377,7 +371,7 @@ void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
 
     /* Efface le trace precedent */
     if( DrawComponent->m_Flags )
-        DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint(0,0) );
+        DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint( 0, 0 ) );
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
 
@@ -387,19 +381,18 @@ void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
 
     /* Redessine le composant dans la nouvelle position */
     if( DrawComponent->m_Flags )
-        DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint(0,0) );
+        DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint( 0, 0 ) );
     else
-        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ),
+                             GR_DEFAULT_DRAWMODE );
 
     TestDanglingEnds( GetScreen()->EEDrawList, DC );
     GetScreen()->SetModify();
 }
 
 
-/************************************************************************/
 void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
                                          wxDC*          DC )
-/************************************************************************/
 {
     int ii;
     EDA_LibComponentStruct* LibEntry;
@@ -414,12 +407,13 @@ void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
 
     if( ( ii = LookForConvertPart( LibEntry ) ) < 2 )
     {
-        DisplayError( this, wxT( "No Convert found" ), 10 ); return;
+        DisplayError( this, wxT( "No convert found" ) );
+        return;
     }
 
     /* Efface le trace precedent */
     if( DrawComponent->m_Flags )
-        DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint(0,0) );
+        DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint( 0, 0 ) );
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
 
@@ -429,26 +423,25 @@ void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
 
     /* Redessine le composant dans la nouvelle position */
     if( DrawComponent->m_Flags & IS_MOVED )
-        DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint(0,0) );
+        DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint( 0, 0 ) );
     else
-        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ),
+                             GR_DEFAULT_DRAWMODE );
 
     TestDanglingEnds( GetScreen()->EEDrawList, DC );
     GetScreen()->SetModify();
 }
 
 
-/**********************************************************/
-int LookForConvertPart( EDA_LibComponentStruct* LibEntry )
-/**********************************************************/
-
-/* Retourne la plus grande valeur trouvee dans la liste des elements
+/*
+ * Retourne la plus grande valeur trouvee dans la liste des elements
  *  "drawings" du composant LibEntry, pour le membre .Convert
  *  Si il n'y a pas de representation type "convert", la valeur
  *  retournee est 0 ou 1
  *  Si il y a une representation type "convert",
  *  la valeur retournee est > 1 (typiquement 2)
  */
+int LookForConvertPart( EDA_LibComponentStruct* LibEntry )
 {
     int ii;
     LibEDA_BaseStruct* DrawLibEntry;
@@ -466,10 +459,8 @@ int LookForConvertPart( EDA_LibComponentStruct* LibEntry )
 }
 
 
-/***********************************************************************************/
 void WinEDA_SchematicFrame::StartMovePart( SCH_COMPONENT* Component,
                                            wxDC*          DC )
-/***********************************************************************************/
 {
     if( Component == NULL )
         return;

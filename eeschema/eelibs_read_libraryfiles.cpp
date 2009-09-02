@@ -18,15 +18,15 @@
 #include "dialog_load_error.h"
 
 
-/****************************************************************************/
-
-/** Function LoadLibraryName
+/**
+ * Function LoadLibraryName
+ *
  * Routine to load the given library name. FullLibName should hold full path
  * of file name to open, while LibName should hold only its name.
  * If library already exists, it is NOT reloaded.
+ *
  * @return : new lib or NULL
  */
-/****************************************************************************/
 LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
                                 const wxString&   FullLibName,
                                 const wxString&   LibName )
@@ -60,9 +60,7 @@ LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
             tmplib->m_Pnext = NewLib;
         }
 
-        fn = FullLibName;
-        fn.SetExt( DOC_EXT );
-        LoadDocLib( frame, fn.GetFullPath(), NewLib->m_Name );
+        NewLib->LoadDocs( errMsg );
     }
     else
     {
@@ -79,7 +77,9 @@ library <%s>" ),
 }
 
 
-/** Function LoadLibraries
+/**
+ * Function LoadLibraries
+ *
  * Clear all already loaded libraries and load all librairies
  * given in frame->m_ComponentLibFiles
  */
@@ -200,12 +200,11 @@ void LoadLibraries( WinEDA_SchematicFrame* frame )
 }
 
 
-/**************************************************************/
-
-/** Function FreeCmpLibrary
+/**
+ * Function FreeCmpLibrary
+ *
  * Routine to remove and free a library from the current loaded libraries.
  */
-/**************************************************************/
 void FreeCmpLibrary( wxWindow* frame, const wxString& LibName )
 {
     int            NumOfLibs = NumOfLibraries();
@@ -247,7 +246,9 @@ void FreeCmpLibrary( wxWindow* frame, const wxString& LibName )
 }
 
 
-/** Function LibraryEntryCompare
+/**
+ * Function LibraryEntryCompare
+ *
  * Routine to compare two EDA_LibComponentStruct for the PriorQue module.
  * Comparison (insensitive  case) is based on Part name.
  */
@@ -259,8 +260,8 @@ int LibraryEntryCompare( EDA_LibComponentStruct* LE1,
 
 
 /*****************************************************************************
-* Routine to find the library given its name.                            *
-*****************************************************************************/
+ * Routine to find the library given its name.
+ *****************************************************************************/
 LibraryStruct* FindLibrary( const wxString& Name )
 {
     LibraryStruct* Lib = g_LibraryList;
@@ -277,8 +278,8 @@ LibraryStruct* FindLibrary( const wxString& Name )
 
 
 /*****************************************************************************
-* Routine to find the number of libraries currently loaded.              *
-*****************************************************************************/
+ * Routine to find the number of libraries currently loaded.
+ *****************************************************************************/
 int NumOfLibraries()
 {
     int            ii;
@@ -288,84 +289,4 @@ int NumOfLibraries()
         ii++;
 
     return ii;
-}
-
-
-/*******************************************************/
-/* Routines de lecture des Documentation de composants */
-/*******************************************************/
-
-/* Routine to load a library from given open file.*/
-int LoadDocLib( WinEDA_DrawFrame* frame, const wxString& FullDocLibName,
-                const wxString& Libname )
-{
-    int      LineNum = 0;
-    char     Line[1024], * Name, * Text;
-    LibCmpEntry* Entry;
-    FILE*    f;
-    wxString msg;
-
-    f = wxFopen( FullDocLibName, wxT( "rt" ) );
-    if( f == NULL )
-        return 0;
-
-    if( GetLine( f, Line, &LineNum, sizeof(Line) ) == NULL )
-    {
-        /* pas de lignes utiles */
-        fclose( f );
-        return 0;
-    }
-
-    if( strnicmp( Line, DOCFILE_IDENT, 10 ) != 0 )
-    {
-        DisplayError( frame, wxT( "File is NOT EESCHEMA doclib!" ) );
-        fclose( f );
-        return 0;
-    }
-
-    while( GetLine( f, Line, &LineNum, sizeof(Line) ) )
-    {
-        if( strncmp( Line, "$CMP", 4 ) != 0 )
-        {
-            msg.Printf( wxT( "$CMP command expected in line %d, aborted." ),
-                        LineNum );
-            DisplayError( frame, msg );
-            fclose( f );
-            return 0;
-        }
-
-        /* Read one $CMP/$ENDCMP part entry from library: */
-        Name = strtok( Line + 5, "\n\r" );
-        wxString cmpname;
-        cmpname = CONV_FROM_UTF8( Name );
-        Entry   = FindLibPart( cmpname, Libname, ALIAS );
-
-        while( GetLine( f, Line, &LineNum, sizeof(Line) ) )
-        {
-            if( strncmp( Line, "$ENDCMP", 7 ) == 0 )
-                break;
-            Text = strtok( Line + 2, "\n\r" );
-
-            switch( Line[0] )
-            {
-            case 'D':
-                if( Entry )
-                    Entry->m_Doc = CONV_FROM_UTF8( Text );
-                break;
-
-            case 'K':
-                if( Entry )
-                    Entry->m_KeyWord = CONV_FROM_UTF8( Text );
-                break;
-
-            case 'F':
-                if( Entry )
-                    Entry->m_DocFile = CONV_FROM_UTF8( Text );
-                break;
-            }
-        }
-    }
-
-    fclose( f );
-    return 1;
 }

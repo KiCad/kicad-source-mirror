@@ -1,11 +1,10 @@
 /*****************************************************************/
-/*	Headers for library definition and lib component definitions */
+/*  Headers for library definition and lib component definitions */
 /*****************************************************************/
 
 #ifndef LIBCMP_H
 #define LIBCMP_H
 
-#include "priorque.h"
 
 #define LIB_VERSION_MAJOR 2
 #define LIB_VERSION_MINOR 3
@@ -14,7 +13,7 @@
 #define DOC_EXT           wxT( "dcm" )                     /* Ext. of documentation files */
 
 
-//Offsets used in editing library component, for handle aliad dats
+//Offsets used in editing library component, for handle alias data
 #define ALIAS_NAME         0
 #define ALIAS_DOC          1
 #define ALIAS_KEYWORD      2

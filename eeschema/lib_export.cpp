@@ -127,7 +127,7 @@ void WinEDA_LibeditFrame::OnExportPart( wxCommandEvent& event )
     /* Sauvegarde du composant: */
     CurrentLib = NewLib;
     SaveOnePartInMemory();
-    bool success = NewLib->SaveLibrary( fn.GetFullPath() );
+    bool success = NewLib->Save( fn.GetFullPath() );
 
     if( success )
     {

@@ -9,9 +9,12 @@
 #include "class_libentry.h"
 
 
-/******************************/
-/* Class to handle a library */
-/******************************/
+/**
+ * Component library object.
+ *
+ * Component libraries are used to load, save, search, and otherwise manipulate
+ * component library files.
+ */
 
 class LibraryStruct
 {
@@ -20,10 +23,7 @@ public:
     wxString       m_Name;          /* Library file name (without path). */
     wxString       m_FullFileName;  /* Full File Name (with path) of library. */
     wxString       m_Header;        /* first line of loaded library. */
-    int            m_NumOfParts;    /* Number of parts this library has. */
     LibraryStruct* m_Pnext;         /* Point on next lib in chain. */
-    int            m_Modified;      /* flag indicateur d'edition */
-    int            m_Size;          // Size in bytes (for statistics)
     unsigned long  m_TimeStamp;     // Signature temporelle
     int            m_Flags;         // variable used in some functions
     bool           m_IsLibCache;    /* False for the "standard" libraries,
@@ -46,14 +46,26 @@ public:
      *
      * @return bool - true if success writing else false.
      */
-    bool SaveLibrary( const wxString& aFullFileName );
-    bool ReadHeader( FILE* file, int* LineNum );
+    bool Save( const wxString& aFullFileName );
 
+    /**
+     * Load library from file.
+     *
+     * @param errMsg - Error message if load fails.
+     *
+     * @return bool - True if load was successful otherwise false.
+     */
     bool Load( wxString& errMsg );
-    void InsertAliases( PriorQue** PQ, EDA_LibComponentStruct* component );
+
+    bool LoadDocs( wxString& errMsg );
 
 private:
-    bool WriteHeader( FILE* file );
+    bool SaveHeader( FILE* file );
+
+    bool LoadHeader( FILE* file, int* LineNum );
+    void LoadAliases( EDA_LibComponentStruct* component );
+
+    void RemoveEntry( const wxString& name );
 
 public:
     LibraryStruct( const wxChar* fileName = NULL );
@@ -65,7 +77,22 @@ public:
      */
     bool IsEmpty()
     {
-        return m_Entries == NULL;
+        return m_Entries.empty();
+    }
+
+    /**
+     * Get the number of entries in the library.
+     *
+     * @return The number of component and alias entries.
+     */
+    int GetCount()
+    {
+        return m_Entries.size();
+    }
+
+    bool IsModified()
+    {
+        return m_IsModified;
     }
 
     /**
@@ -73,8 +100,10 @@ public:
      *
      * @param names - String array to place entry names into.
      * @param sort - Sort names if true.
+     * @param makeUpperCase - Force entry names to upper case.
      */
-    void GetEntryNames( wxArrayString& names, bool sort = true );
+    void GetEntryNames( wxArrayString& names, bool sort = true,
+                        bool makeUpperCase = true );
 
     /**
      * Load string array with entry names matching name and/or key word.
@@ -150,7 +179,7 @@ public:
      */
     LibCmpEntry* GetFirstEntry()
     {
-        return (LibCmpEntry*) PQFirst( &m_Entries, false );
+        return &m_Entries.front();
     }
 
     /**
@@ -180,21 +209,17 @@ public:
      */
     LibCmpEntry* GetPreviousEntry( const wxChar* name );
 
-    bool Save( const wxString& saveAsFile );
-
     wxString GetName();
 
 protected:
     wxFileName     m_fileName;      /* Library file name. */
     wxDateTime     m_DateTime;      /* Library save time and date. */
     wxString       m_Version;       /* Library save version. */
-    PriorQue*      m_Entries;       /* Parts themselves are saved here. */
+    LIB_ENTRY_LIST m_Entries;       /* Parts themselves are saved here. */
+    bool           m_IsModified;    /* Library modification status. */
 
     friend class EDA_LibComponentStruct;
 };
-
-
-extern void FreeLibraryEntry( LibCmpEntry* Entry );
 
 
 /**
