@@ -184,7 +184,8 @@ void PS_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
 void PS_PLOTTER::poly( int nb_segm, int* coord, FILL_T fill, int width )
 /*****************************************************************/
 
-/* Draw a polygon ( a filled polygon if fill == 1 ) in POSTSCRIPT format
+/** Function poly
+ * @brief Draw a polygon ( a filled polygon if fill == 1 ) in POSTSCRIPT format
  * @param nb_segm = corner count
  * @param coord = corner list (a corner uses 2 int = X coordinate followed by Y  coordinate
  * @param fill :if true : filled polygon
@@ -212,7 +213,7 @@ void PS_PLOTTER::poly( int nb_segm, int* coord, FILL_T fill, int width )
         fprintf( output_file, "%d %d lineto\n", pos.x, pos.y );
     }
 
-    // Fermeture du polygone
+    // Close path
     fprintf(output_file, "poly%d\n", fill);
 }
 
@@ -558,5 +559,7 @@ void PS_PLOTTER::flash_pad_trapez( wxPoint centre, wxSize size, wxSize delta,
         coord[ii*2] += centre.x;
         coord[ii*2+1] += centre.y;
     }
+    coord[8] = coord[0];
+    coord[9] = coord[1];
     poly(5, coord, modetrace==FILLED?FILLED_SHAPE:NO_FILL);
 }
