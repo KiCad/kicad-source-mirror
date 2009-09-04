@@ -1,11 +1,102 @@
-How to build kicad on Debian
-============================
-First Written: 10-Mar-2009
+Compiling KiCad on Debian & Ubuntu
+==================================
+
+First written: 10-Mar-2009
+
+Updated: 31-Aug-2009
+
 Lasted edited by: Jerry Jacobs <jerkejacobs@gmail.com>
 
 
-For debian squeeze (testing)
-----------------------------
+Ubuntu (8.04)
+-----------
+Original from:
+http://basicubuntu.blogspot.com/2009/02/installing-kicad-on-ubuntu.html
+
+Required software and dependencies
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+We need to install the following packages: debhelper, dpatch, libx11-dev,
+libglu1-mesa-dev, libgl1-mesa-dev, mesa-common-dev, libwxbase2.8-dev,
+libwxgtk2.8-dev, libboost-dev, subversion, cmake (>= 2.6.0).
+
+---------------------------------------
+sudo apt-get install debhelper dpatch libx11-dev libglu1-mesa-dev
+libgl1-mesa-dev mesa-common-dev libwxbase2.8-dev libwxgtk2.8-dev
+libboost-dev fakeroot subversion libboost-serialization-dev
+---------------------------------------
+
+And finally, we need cmake, but we need atleast version 2.6, the one
+from the repository is not the updated one (atleast for ubuntu 8.04).
+You can download version 2.6 from newer ubuntu releases.
+Just search for cmake on http://packages.ubuntu.com then get a newer
+cmake .deb file and install the downloaded package on the console
+with:
+
+---------------------------------------
+sudo dpkg -i <packagename.deb>
+---------------------------------------
+
+But if what the repository gives you is atleast version 2.6, then
+simply
+
+---------------------------------------
+sudo apt-get install cmake
+---------------------------------------
+
+Get KiCad Sourcecode
+~~~~~~~~~~~~~~~~~~~~
+We will be getting the source codes through subversion. Create a directory
+where you'll be downloading the source codes, and go to that
+directory. type the following:
+
+---------------------------------------
+svn checkout https://kicad.svn.sourceforge.net/svnroot/kicad/trunk/kicad kicad
+svn checkout https://kicad.svn.sourceforge.net/svnroot/kicad/trunk/kicad-doc kicad-doc
+svn checkout https://kicad.svn.sourceforge.net/svnroot/kicad/trunk/kicad-library kicad-library
+---------------------------------------
+
+Also we need the following to get the debian specific stuff
+
+---------------------------------------
+svn checkout http://svn.flexserv.de/kicad/trunk/debian
+---------------------------------------
+
+Compiling
+~~~~~~~~~
+To compile simply do the following on your terminal (make sure you're still in
+the same directory where you did the svn)
+
+---------------------------------------
+fakeroot debian/rules binary
+---------------------------------------
+hopefully, there will be no errors.
+You'll find the compiled version of KiCad in the following directory:
+
+---------------------------------------
+debian/kicad/usr/bin/
+---------------------------------------
+to complete things up, you'll need to copy the following folders
+
+---------------------------------------
+debian/kicad-common/usr/share/kicad/library
+debian/kicad-common/usr/share/kicad/modules
+debian/kicad-common/usr/share/kicad/template
+---------------------------------------
+in here
+
+---------------------------------------
+debian/kicad/usr/share
+---------------------------------------
+again, to run KiCad go to
+
+---------------------------------------
+cd debian/kicad/usr/bin/
+---------------------------------------
+and double click KiCad
+
+
+Debian squeeze (testing)
+------------------------
 
 Special Note
 ~~~~~~~~~~~~
@@ -28,24 +119,25 @@ The following packages will also be installed then
 - wxwidgets development dependencies
 - opengl3 (glut) development dependencies
 
-
-Get KiCad Sourcecode
+Get KiCad sourcecode
 ~~~~~~~~~~~~~~~~~~~~
 Checkout sourcecode using subversion or download latest release.
 
-*Subversion*
-'svn checkout https://kicad.svn.sourceforge.net/svnroot/kicad/trunk/kicad kicad'
+.*Subversion*
+---------------------------------------
+svn checkout https://kicad.svn.sourceforge.net/svnroot/kicad/trunk/kicad kicad
+---------------------------------------
 
-*Release*
-download http://iut-tice.ujf-grenoble.fr/cao/kicad-sources-yyyy-mm-dd.tgz'
-'tar -xvf kicad-sources-yyyy-mm-dd.tgz'
-
+.*Release*
+---------------------------------------
+wget http://iut-tice.ujf-grenoble.fr/cao/kicad-sources-2009-02-16.tar.gz
+tar -xvf kicad-sources-2009-02-16.tar.gz
+---------------------------------------
 
 Compiling
 ~~~~~~~~~
 Run 'cmake .' in the root of the source directory then build the
 binaries with 'make'.
-
 
 Installing
 ~~~~~~~~~~

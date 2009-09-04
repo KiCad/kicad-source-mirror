@@ -1,0 +1,56 @@
+#!/bin/sh
+# RSS Feed Display Script by Hellf[i]re v0.1
+#
+# This script is designed for most any RSS Feed. As some feeds may
+# not be
+# completely compliant, it may need a bit of tweaking
+#
+# This script depends on curl.
+# Gentoo: emerge -av net-misc/curl
+# Debian: apt-get install curl
+# Homepage: http://curl.haxx.se/
+#
+# Usage:
+# .conkyrc: ${execi [time] /path/to/script/conky-rss.sh}
+#
+# Usage Example
+# ${execi 300 /home/youruser/scripts/conky-rss.sh}
+
+#RSS Setup
+URI=http://sourceforge.net/export/rss2_keepsake.php?group_id=145591 #URI of RSS Feed
+FEEDFILE="/tmp/kicad-svn-`date +%y%m%d-%H%M%S`.rss"
+URLFILE="/tmp/kicad-svn-`date +%y%m%d-%H%M%S`.url"
+LINES=4 #Number of headlines
+
+# Get feed and 
+EXEC="/usr/bin/curl -s" #Path to curl
+`$EXEC $URI &> $FEEDFILE`
+
+
+# Get and filter and print content
+cat $FEEDFILE | grep title |\
+sed -e 's/[ \t]*//' |\
+sed -e 's/^<title><\!\[CDATA\[//' |\
+sed -e 's/\]\]><\/title>//' |\
+sed -e 's/ to the Kicad EDA SVN repository//' |\
+head -n $(($LINES + 1)) |\
+tail -n $(($LINES))
+
+echo ""
+
+# Get latest commit url
+cat $FEEDFILE | grep link |\
+sed -e '2 s/<link>//' |\
+sed -e '/<link>/d' |\
+sed -e 's/[ \t]*//' |\
+sed -e 's/<\/link>//' \
+&> $URLFILE
+
+# Get commit message
+URL=`cat $URLFILE`
+curl -s $URL | grep vc_log |\
+sed -e 's/<td><pre class=\"vc_log\">//' |\
+sed -e 's/<\/pre><\/td>//'
+
+rm $URLFILE
+rm $FEEDFILE
