@@ -1118,8 +1118,11 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
         if( aPad->m_PadShape == PAD_RECT )
         {
             wxSize size = aPad->m_Size;
-            if( (pad_angle == 0) || (pad_angle == 900) || (pad_angle == 1800)
-               || (pad_angle == 2700) )
+	    // The trivial case is if both rects are rotated by multiple of 90°
+            if( ((aRefPad->m_Orient == 0) || (aRefPad->m_Orient == 900) || (aRefPad->m_Orient == 1800)
+               || (aRefPad->m_Orient == 2700)) && 
+                ((aPad->m_Orient == 0) || (aPad->m_Orient == 900) || (aPad->m_Orient == 1800)
+               || (aPad->m_Orient == 2700)) )
             {
                 if( (pad_angle == 900) || (pad_angle == 2700) )
                 {
