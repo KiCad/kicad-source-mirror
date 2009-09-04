@@ -42,7 +42,8 @@ bool LibDrawText::Save( FILE* ExportFile ) const
     fprintf( ExportFile, "T %d %d %d %d %d %d %d %s ", m_Orient,
             m_Pos.x, m_Pos.y, m_Size.x, m_Attributs, m_Unit, m_Convert,
             CONV_TO_UTF8( text ) );
-    fprintf( ExportFile, " %s %d", m_Italic ? "Italic" : "Normal", (m_Bold>0) ? 1 : 0 );
+    fprintf( ExportFile, " %s %d", m_Italic ? "Italic" : "Normal",
+             ( m_Bold>0 ) ? 1 : 0 );
 
     char hjustify = 'C';
     if( m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
@@ -76,7 +77,8 @@ bool LibDrawText::Load( char* line, wxString& errorMsg )
 
     cnt = sscanf( &line[2], "%d %d %d %d %d %d %d %s %s %d %c %c",
                   &m_Orient, &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Attributs,
-                  &m_Unit, &m_Convert, buf, tmp, &thickness, &hjustify, &vjustify );
+                  &m_Unit, &m_Convert, buf, tmp, &thickness, &hjustify,
+                  &vjustify );
 
     if( cnt < 8 )
     {
@@ -149,7 +151,8 @@ bool LibDrawText::HitTest( const wxPoint& refPos )
  * @param aThreshold = unused here (TextHitTest calculates its threshold )
  * @param aTransMat = the transform matrix
  */
-bool LibDrawText::HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] )
+bool LibDrawText::HitTest( wxPoint aPosRef, int aThreshold,
+                           const int aTransMat[2][2] )
 {
     wxPoint physicalpos = TransformCoordinate( aTransMat, m_Pos );
     wxPoint tmp = m_Pos;
@@ -228,6 +231,8 @@ void LibDrawText::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     /* The text orientation may need to be flipped if the
      *  transformation matrix causes xy axes to be flipped. */
     int t1 = ( aTransformMatrix[0][0] != 0 ) ^ ( m_Orient != 0 );
+
+    GRSetDrawMode( aDC, aDrawMode );
 
     DrawGraphicText( aPanel, aDC, pos1, (EDA_Colors) color, m_Text,
                      t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,

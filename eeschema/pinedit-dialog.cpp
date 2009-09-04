@@ -20,24 +20,29 @@
 ////@begin XPM images
 ////@end XPM images
 
-/*****************************************************************************************/
-void InstallPineditFrame(WinEDA_LibeditFrame * parent, wxDC * DC, const wxPoint & pos)
-/*****************************************************************************************/
+void InstallPineditFrame( WinEDA_LibeditFrame* parent, wxDC* DC,
+                          const wxPoint & pos )
 {
-wxPoint MousePos = parent->GetScreen()->m_Curseur;
-int accept = TRUE;
-    if ( (CurrentDrawItem == NULL) || (CurrentDrawItem->Type() == COMPONENT_PIN_DRAW_TYPE) )
+    wxPoint MousePos = parent->GetScreen()->m_Curseur;
+    int accept = TRUE;
+
+    if ( ( CurrentDrawItem == NULL )
+         || ( CurrentDrawItem->Type() == COMPONENT_PIN_DRAW_TYPE ) )
     {
         LibDrawPin * Pin = (LibDrawPin *) CurrentDrawItem;
-        WinEDA_PinPropertiesFrame * frame = new WinEDA_PinPropertiesFrame(parent);
-        accept = frame->ShowModal(); frame->Destroy();
-        if ( !accept && Pin && ( Pin->m_Flags & IS_NEW ) )	// Abord create new pin
+        WinEDA_PinPropertiesFrame dlg( parent );
+        accept = dlg.ShowModal();
+
+        if ( !accept && Pin && ( Pin->m_Flags & IS_NEW ) )
         {
-            if ( parent->DrawPanel->ForceCloseManageCurseur && DC)
-                parent->DrawPanel->ForceCloseManageCurseur(parent->DrawPanel, DC);
+            if ( parent->DrawPanel->ForceCloseManageCurseur && DC )
+                parent->DrawPanel->ForceCloseManageCurseur( parent->DrawPanel,
+                                                            DC );
         }
     }
-    else DisplayError(parent, wxT("Error: Not a Pin!") );
+    else
+        DisplayError( parent, wxT( "Error: Not a Pin!" ) );
+
     parent->GetScreen()->m_Curseur = MousePos;
     parent->DrawPanel->MouseToCursorSchema();
 }

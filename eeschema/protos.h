@@ -57,23 +57,6 @@ void                    DrawingLibInGhost( WinEDA_DrawPanel*       panel,
                                            int                     Color,
                                            bool                    DrawPinText );
 
-void DrawLibEntry( WinEDA_DrawPanel*       panel,
-                   wxDC*                   DC,
-                   EDA_LibComponentStruct* LibEntry,
-                   const wxPoint&          aOffset,
-                   int                     Multi,
-                   int                     convert,
-                   int                     DrawMode,
-                   int                     Color = -1 );
-
-void DrawLibraryDrawStruct( WinEDA_DrawPanel*       aPanel,
-                            wxDC*                   aDC,
-                            EDA_LibComponentStruct* aLibEntry,
-                            wxPoint                 aPosition,
-                            LibEDA_BaseStruct*      aDrawItem,
-                            int                     aDrawMode,
-                            int                     aColor = -1 );
-
 bool MapAngles( int*      Angle1,
                 int*      Angle2,
                 const int TransMat[2][2] );
@@ -282,21 +265,6 @@ bool ClearProjectDrawList( SCH_SCREEN* FirstWindow, bool confirm_deletion );
 bool LocateAndDeleteItem( WinEDA_SchematicFrame* frame, wxDC* DC );
 void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Window );
 void DeleteAllMarkers( int type );
-
-/* Effacement des marqueurs du type "type" */
-
-void DeleteOneLibraryDrawStruct( WinEDA_DrawPanel* panel,
-                                 wxDC* DC, EDA_LibComponentStruct* LibEntry,
-                                 LibEDA_BaseStruct* DrawItem, int Affiche );
-
-/* Routine d'effacement d'un "LibraryDrawStruct"
- *   (d'un element de dessin d'un composant )
- *    Parametres d'entree
- *       Pointeur sur le composant comportant la structure
- *            (Si NULL la structure a effacer est supposee non rattachee
- *           a un composant)
- *       Pointeur sur la structure a effacer
- *       Affiche (si != 0 Efface le graphique correspondant de l'ecran) */
 
 
 /**************/

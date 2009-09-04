@@ -6,14 +6,13 @@
 #include "common.h"
 #include "kicad_string.h"
 #include "confirm.h"
+#include "class_drawpanel.h"
+#include "gr_basic.h"
 
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
 #include "protos.h"
-
-#include <wx/tokenzr.h>
-#include <wx/txtstrm.h>
 
 
 int SortItemsFct(const void* ref, const void* item)
@@ -256,6 +255,136 @@ EDA_LibComponentStruct::~EDA_LibComponentStruct()
         NextDrawItem = DrawItem->Next();
         SAFE_DELETE( DrawItem );
         DrawItem = NextDrawItem;
+    }
+}
+
+
+void EDA_LibComponentStruct::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
+                                   const wxPoint& offset, int multi,
+                                   int convert, int drawMode, int color,
+                                   const int transformMatrix[2][2],
+                                   bool showPinText, bool drawFields,
+                                   bool onlySelected )
+{
+    wxString           fieldText;
+    LibDrawField*      Field;
+    LibEDA_BaseStruct* drawItem;
+    BASE_SCREEN*       screen = panel->GetScreen();
+
+    GRSetDrawMode( dc, drawMode );
+
+    for( drawItem = m_Drawings; drawItem != NULL; drawItem = drawItem->Next() )
+    {
+        if( onlySelected && drawItem->m_Selected == 0 )
+            continue;
+
+        // Do not draw an item while moving (the cursor handler does that)
+        if( drawItem->m_Flags & IS_MOVED )
+            continue;
+
+        /* Do not draw items not attached to the current part */
+        if( multi && drawItem->m_Unit && ( drawItem->m_Unit != multi ) )
+            continue;
+
+        if( convert && drawItem->m_Convert && ( drawItem->m_Convert != convert ) )
+            continue;
+
+
+        if( drawItem->Type() == COMPONENT_PIN_DRAW_TYPE )
+        {
+            drawItem->Draw( panel, dc, offset, color, drawMode, &showPinText,
+                            transformMatrix );
+        }
+        else
+        {
+            bool force_nofill =
+                ( screen->m_IsPrinting
+                  && drawItem->m_Fill == FILLED_WITH_BG_BODYCOLOR
+                  && GetGRForceBlackPenState() );
+
+            drawItem->Draw( panel, dc, offset, color, drawMode,
+                            (void*) force_nofill, transformMatrix );
+        }
+    }
+
+    if( drawFields )
+    {
+        /* The reference designator field is a special case for naming
+         * convention.
+         *
+         * FIXME: This should be handled by the LibDrawField class.
+         */
+        if( m_UnitCount > 1 )
+        {
+#if defined(KICAD_GOST)
+            fieldText.Printf( wxT( "%s?.%c" ), (const wxChar*) m_Prefix.m_Text,
+                              multi + '1' - 1 );
+#else
+            fieldText.Printf( wxT( "%s?%c" ), (const wxChar*) m_Prefix.m_Text,
+                              multi + 'A' - 1 );
+#endif
+        }
+        else
+        {
+            fieldText = m_Prefix.m_Text + wxT( "?" );
+        }
+
+        m_Prefix.Draw( panel, dc, offset, color, drawMode, &fieldText,
+                       transformMatrix );
+        m_Name.Draw( panel, dc, offset, color, drawMode, NULL, transformMatrix );
+
+        for( Field = m_Fields; Field != NULL; Field = Field->Next() )
+        {
+            Field->Draw( panel, dc, offset, color, drawMode, NULL,
+                         transformMatrix );
+        }
+    }
+
+    int len = panel->GetScreen()->Unscale( 3 );
+    GRLine( &panel->m_ClipBox, dc, offset.x, offset.y - len, offset.x,
+            offset.y + len, 0, color );
+    GRLine( &panel->m_ClipBox, dc, offset.x - len, offset.y, offset.x + len,
+            offset.y, 0, color );
+
+    /* Enable this to draw the bounding box around the component to validate
+     * the bounding box calculations. */
+#if 0
+    EDA_Rect bBox = LibEntry->GetBoundaryBox( Multi, convert );
+    GRRect( &panel->m_ClipBox, dc, bBox.GetOrigin().x, bBox.GetOrigin().y,
+            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+#endif
+}
+
+
+void EDA_LibComponentStruct::RemoveDrawItem( LibEDA_BaseStruct* item,
+                                             WinEDA_DrawPanel* panel,
+                                             wxDC* dc )
+{
+    wxASSERT( item != NULL );
+
+    LibEDA_BaseStruct* prevItem = m_Drawings;
+
+    if( dc != NULL )
+        item->Draw( panel, dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
+                        DefaultTransformMatrix );
+
+    if( m_Drawings == item )
+    {
+        m_Drawings = item->Next();
+        SAFE_DELETE( item );
+        return;
+    }
+
+    while( prevItem )
+    {
+        if( prevItem->Next() == item )
+        {
+            prevItem->SetNext( item->Next() );
+            SAFE_DELETE( item );
+            break;
+        }
+
+        prevItem = prevItem->Next();
     }
 }
 

@@ -173,7 +173,9 @@ extern SCH_SCREEN*      g_ScreenLib;
 
 /* Gestion des librairies schematiques */
 extern wxString       g_NetCmpExtBuffer;
-extern wxString       g_SymbolExtBuffer;
+
+extern const wxString SymbolFileExtension;
+extern const wxString SymbolFileWildcard;
 
 extern const wxString CompLibFileExtension;
 extern const wxString CompLibFileWildcard;

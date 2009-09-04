@@ -165,6 +165,40 @@ public:
      * @param aFields - a std::vector <LibDrawField> to import.
      */
     void SetFields( const std::vector <LibDrawField> aFields );
+
+    /**
+     * Draw component.
+     *
+     * @param panel - Window to draw on.
+     * @param dc - Device context to draw on.
+     * @param offset - Position to component.
+     * @param multi - Component unit if multiple parts per component.
+     * @param convert - Component conversion (DeMorgan) if available.
+     * @param drawMode - Device context drawing mode, see wxDC.
+     * @param color - Color to draw component.
+     * @param transformMatrix - Cooridinate adjustment settings.
+     * @param showPinText - Show pin text if true.
+     * @param drawFields - Draw field text if true otherwise just draw
+     *                     body items.
+     * @param onlySelected - Draws only the body items that are selected.
+     *                       Used for block move redraws.
+     */
+    void Draw( WinEDA_DrawPanel* panel, wxDC* dc, const wxPoint& offset,
+               int multi, int convert, int drawMode, int color = -1,
+               const int transformMatrix[2][2] = DefaultTransformMatrix,
+               bool showPinText = true, bool drawFields = true,
+               bool onlySelected = false );
+
+    /**
+     * Remove draw item from list.
+     *
+     * @param item - Draw item to remove from list.
+     * @param panel - Panel to remove part from.
+     * @param dc - Device context to remove part from.
+     */
+    void RemoveDrawItem( LibEDA_BaseStruct* item,
+                         WinEDA_DrawPanel* panel = NULL,
+                         wxDC* dc = NULL );
 };
 
 

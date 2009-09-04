@@ -8,7 +8,6 @@
 /* fichier symbedit.cpp */
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "appl_wxstruct.h"
 #include "common.h"
 #include "class_drawpanel.h"
@@ -22,11 +21,8 @@
 #include "protos.h"
 
 
-/* Routines locales */
 static bool CompareSymbols( LibEDA_BaseStruct* DEntryRef,
                             LibEDA_BaseStruct* DEntryCompare );
-
-/* Variables locales */
 
 
 /*
@@ -40,10 +36,9 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
 {
     EDA_LibComponentStruct* Component;
     LibEDA_BaseStruct*      DrawEntry;
-    wxString       FullFileName, mask;
-    FILE*          ImportFile;
-    wxString       msg, err;
-    LibraryStruct* Lib;
+    FILE*                   ImportFile;
+    wxString                msg, err;
+    LibraryStruct*          Lib;
 
     /* Exit if no library entry is selected or a command is in progress. */
     if( CurrentLibEntry == NULL
@@ -52,36 +47,29 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
 
     DrawPanel->m_IgnoreMouseEvents = TRUE;
 
-    mask = wxT( "*" ) + g_SymbolExtBuffer;
-    wxString default_lib_path = wxGetApp().ReturnLastVisitedLibraryPath();
+    wxString default_path = wxGetApp().ReturnLastVisitedLibraryPath();
 
-    FullFileName = EDA_FileSelector( _( "Import symbol drawings:" ),
-                                     default_lib_path,      /* Chemin par defaut */
-                                     wxEmptyString,         /* nom fichier par defaut */
-                                     g_SymbolExtBuffer,     /* extension par defaut */
-                                     mask,                  /* Masque d'affichage */
-                                     this,
-                                     0,
-                                     TRUE
-                                     );
+    wxFileDialog dlg( this, _( "Import Symbol Drawings" ), default_path,
+                      wxEmptyString, SymbolFileWildcard,
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
 
     GetScreen()->m_Curseur = wxPoint( 0, 0 );
     DrawPanel->MouseToCursorSchema();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
 
-    if( FullFileName.IsEmpty() )
-        return;
-
-    wxFileName fn = FullFileName;
+    wxFileName fn = dlg.GetPath();
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 
     /* Load data */
-    ImportFile = wxFopen( FullFileName, wxT( "rt" ) );
+    ImportFile = wxFopen( fn.GetFullPath(), wxT( "rt" ) );
 
     if( ImportFile == NULL )
     {
         msg.Printf( _( "Failed to open Symbol File <%s>" ),
-                    (const wxChar*) FullFileName );
+                    (const wxChar*) fn.GetFullPath() );
         DisplayError( this, msg );
         return;
     }
@@ -164,43 +152,43 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
  */
 void WinEDA_LibeditFrame::SaveOneSymbol()
 {
-    EDA_LibComponentStruct* LibEntry = CurrentLibEntry;
-    int Unit = CurrentUnit, convert = CurrentConvert;
-    LibEDA_BaseStruct*      DrawEntry;
-    wxString FullFileName, mask;
-    wxString msg;
-    FILE*    ExportFile;
+    LibEDA_BaseStruct* DrawEntry;
+    wxString           msg;
+    FILE*              ExportFile;
 
-    if( LibEntry->m_Drawings == NULL )
+    if( CurrentLibEntry->m_Drawings == NULL )
         return;
 
     /* Creation du fichier symbole */
-    wxString default_lib_path = wxGetApp().ReturnLastVisitedLibraryPath();
-    mask = wxT( "*" ) + g_SymbolExtBuffer;
-    FullFileName = EDA_FileSelector( _( "Export symbol drawings:" ),
-                                     default_lib_path,      /* Chemin par defaut */
-                                     wxEmptyString,         /* nom fichier par defaut */
-                                     g_SymbolExtBuffer,     /* extension par defaut */
-                                     mask,                  /* Masque d'affichage */
-                                     this,
-                                     wxFD_SAVE,
-                                     TRUE
-                                     );
-    if( FullFileName.IsEmpty() )
+    wxString default_path = wxGetApp().ReturnLastVisitedLibraryPath();
+
+    wxFileDialog dlg( this, _( "Export Symbol Drawings" ), default_path,
+                      CurrentLibEntry->m_Name.m_Text, SymbolFileWildcard,
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxFileName fn = FullFileName;
+    wxFileName fn = dlg.GetPath();
+
+    /* The GTK file chooser doesn't return the file extension added to
+     * file name so add it here. */
+    if( fn.GetExt().IsEmpty() )
+        fn.SetExt( SymbolFileExtension );
+
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 
-    ExportFile = wxFopen( FullFileName, wxT( "wt" ) );
+    ExportFile = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
+
     if( ExportFile == NULL )
     {
-        msg.Printf( _( "Unable to create <%s>" ), FullFileName.GetData() );
+        msg.Printf( _( "Unable to create <%s>" ),
+                    (const wxChar*) fn.GetFullPath() );
         DisplayError( this, msg );
         return;
     }
 
-    msg.Printf( _( "Save Symbol in [%s]" ), FullFileName.GetData() );
+    msg.Printf( _( "Save Symbol in [%s]" ), (const wxChar*) fn.GetPath() );
     Affiche_Message( msg );
 
     /* Creation de l'entete de la librairie */
@@ -211,39 +199,40 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
 
     /* Creation du commentaire donnant le nom du composant */
     fprintf( ExportFile, "# SYMBOL %s\n#\n",
-             (const char*) LibEntry->m_Name.m_Text.GetData() );
+             CONV_TO_UTF8( CurrentLibEntry->m_Name.m_Text ) );
 
     /* Generation des lignes utiles */
     fprintf( ExportFile, "DEF %s",
-             (const char*) LibEntry->m_Name.m_Text.GetData() );
-    if( !LibEntry->m_Prefix.m_Text.IsEmpty() )
+             CONV_TO_UTF8( CurrentLibEntry->m_Name.m_Text ) );
+    if( !CurrentLibEntry->m_Prefix.m_Text.IsEmpty() )
         fprintf( ExportFile, " %s",
-                 (const char*) LibEntry->m_Prefix.m_Text.GetData() );
+                 CONV_TO_UTF8( CurrentLibEntry->m_Prefix.m_Text ) );
     else
         fprintf( ExportFile, " ~" );
 
     fprintf( ExportFile, " %d %d %c %c %d %d %c\n",
              0, /* unused */
-             LibEntry->m_TextInside,
-             LibEntry->m_DrawPinNum ? 'Y' : 'N',
-             LibEntry->m_DrawPinName ? 'Y' : 'N',
+             CurrentLibEntry->m_TextInside,
+             CurrentLibEntry->m_DrawPinNum ? 'Y' : 'N',
+             CurrentLibEntry->m_DrawPinName ? 'Y' : 'N',
              1, 0 /* unused */, 'N' );
 
     /* Position / orientation / visibilite des champs */
-    LibEntry->m_Prefix.Save( ExportFile );
-    LibEntry->m_Name.Save( ExportFile );
+    CurrentLibEntry->m_Prefix.Save( ExportFile );
+    CurrentLibEntry->m_Name.Save( ExportFile );
+    DrawEntry = CurrentLibEntry->m_Drawings;
 
-    DrawEntry = LibEntry->m_Drawings;
     if( DrawEntry )
     {
         fprintf( ExportFile, "DRAW\n" );
         for( ; DrawEntry != NULL; DrawEntry = DrawEntry->Next() )
         {
             /* Elimination des elements non relatifs a l'unite */
-            if( Unit && DrawEntry->m_Unit && ( DrawEntry->m_Unit != Unit ) )
+            if( CurrentUnit && DrawEntry->m_Unit
+                && ( DrawEntry->m_Unit != CurrentUnit ) )
                 continue;
-            if( convert && DrawEntry->m_Convert
-               && ( DrawEntry->m_Convert != convert ) )
+            if( CurrentConvert && DrawEntry->m_Convert
+               && ( DrawEntry->m_Convert != CurrentConvert ) )
                 continue;
 
             DrawEntry->Save( ExportFile );
@@ -251,6 +240,7 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
 
         fprintf( ExportFile, "ENDDRAW\n" );
     }
+
     fprintf( ExportFile, "ENDDEF\n" );
     fclose( ExportFile );
 }
@@ -281,7 +271,7 @@ void SuppressDuplicateDrawItem( EDA_LibComponentStruct* LibEntry )
         {
             if( CompareSymbols( DEntryRef, DEntryCompare ) == TRUE )
             {
-                DeleteOneLibraryDrawStruct( NULL, DC, LibEntry, DEntryRef, 1 );
+                LibEntry->RemoveDrawItem( DEntryRef, NULL, DC );
                 deleted = TRUE;
                 break;
             }
@@ -474,7 +464,7 @@ void WinEDA_LibeditFrame::PlaceAncre()
             break;
 
         default:
-            ;
+            break;
         }
         DrawEntry = DrawEntry->Next();
     }

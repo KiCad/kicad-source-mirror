@@ -1,5 +1,5 @@
 /*****************************************/
-/*	EESchema - libedit_onleftclick.cpp	*/
+/*  EESchema - libedit_onleftclick.cpp  */
 /*****************************************/
 
 /* Library editor commands created by a mouse left button simple or double click
@@ -15,15 +15,12 @@
 #include "libcmp.h"
 #include "general.h"
 
-#include "bitmaps.h"
 #include "protos.h"
 
 #include "id.h"
 
 
-/************************************************************************/
 void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
-/************************************************************************/
 {
     LibEDA_BaseStruct* DrawEntry = CurrentDrawItem;
 
@@ -54,23 +51,27 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         }
         else
         {
-			DrawEntry = LocatePin( GetScreen()->m_MousePosition, CurrentLibEntry,
+            DrawEntry = LocatePin( GetScreen()->m_MousePosition, CurrentLibEntry,
                                    CurrentUnit, CurrentConvert );
             if( DrawEntry == NULL )
             {
-				DrawEntry = LocateDrawItem( (SCH_SCREEN*)GetScreen(), GetScreen()->m_MousePosition,
+                DrawEntry = LocateDrawItem( (SCH_SCREEN*)GetScreen(),
+                                            GetScreen()->m_MousePosition,
                                             CurrentLibEntry, CurrentUnit,
-                                            CurrentConvert, LOCATE_ALL_DRAW_ITEM );
+                                            CurrentConvert,
+                                            LOCATE_ALL_DRAW_ITEM );
             }
 
             if( DrawEntry == NULL )
-				DrawEntry = LocatePin( GetScreen()->m_Curseur, CurrentLibEntry,
+                DrawEntry = LocatePin( GetScreen()->m_Curseur, CurrentLibEntry,
                                        CurrentUnit, CurrentConvert );
             if( DrawEntry == NULL )
             {
-				DrawEntry = LocateDrawItem( (SCH_SCREEN*)GetScreen(), GetScreen()->m_Curseur,
+                DrawEntry = LocateDrawItem( (SCH_SCREEN*)GetScreen(),
+                                            GetScreen()->m_Curseur,
                                             CurrentLibEntry, CurrentUnit,
-                                            CurrentConvert, LOCATE_ALL_DRAW_ITEM );
+                                            CurrentConvert,
+                                            LOCATE_ALL_DRAW_ITEM );
             }
 
             if( DrawEntry )
@@ -80,7 +81,7 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             {
                 EraseMsgBox();
                 AfficheDoc( this, CurrentLibEntry->m_Doc.GetData(),
-                           CurrentLibEntry->m_KeyWord.GetData() );
+                            CurrentLibEntry->m_KeyWord.GetData() );
             }
         }
     }
@@ -126,39 +127,41 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         case ID_LIBEDIT_DELETE_ITEM_BUTT:
-			DrawEntry = LocatePin( GetScreen()->m_MousePosition, CurrentLibEntry,
+            DrawEntry = LocatePin( GetScreen()->m_MousePosition, CurrentLibEntry,
                                    CurrentUnit, CurrentConvert );
             if( DrawEntry == NULL )
             {
-				DrawEntry = LocateDrawItem( (SCH_SCREEN*)GetScreen(),
-											 GetScreen()->m_MousePosition,
+                DrawEntry = LocateDrawItem( (SCH_SCREEN*)GetScreen(),
+                                            GetScreen()->m_MousePosition,
                                             CurrentLibEntry, CurrentUnit,
-                                            CurrentConvert, LOCATE_ALL_DRAW_ITEM );
+                                            CurrentConvert,
+                                            LOCATE_ALL_DRAW_ITEM );
             }
 
             if( DrawEntry == NULL )
-				DrawEntry = LocatePin( GetScreen()->m_Curseur, CurrentLibEntry,
+                DrawEntry = LocatePin( GetScreen()->m_Curseur, CurrentLibEntry,
                                        CurrentUnit, CurrentConvert );
             if( DrawEntry == NULL )
             {
-				DrawEntry = LocateDrawItem( (SCH_SCREEN*)GetScreen(),
-											 GetScreen()->m_Curseur,
+                DrawEntry = LocateDrawItem( (SCH_SCREEN*)GetScreen(),
+                                            GetScreen()->m_Curseur,
                                             CurrentLibEntry, CurrentUnit,
-                                            CurrentConvert, LOCATE_ALL_DRAW_ITEM );
+                                            CurrentConvert,
+                                            LOCATE_ALL_DRAW_ITEM );
             }
             if( DrawEntry == NULL )
             {
                 AfficheDoc( this, CurrentLibEntry->m_Doc.GetData(),
-                           CurrentLibEntry->m_KeyWord.GetData() );
+                            CurrentLibEntry->m_KeyWord.GetData() );
                 break;
             }
             SaveCopyInUndoList( CurrentLibEntry );
             if( DrawEntry->Type() == COMPONENT_PIN_DRAW_TYPE )
                 DeletePin( DC, CurrentLibEntry, (LibDrawPin*) DrawEntry );
             else
-                DeleteOneLibraryDrawStruct( DrawPanel, DC, CurrentLibEntry, DrawEntry, TRUE );
+                CurrentLibEntry->RemoveDrawItem( DrawEntry, DrawPanel, DC );
             DrawEntry = NULL;
-			GetScreen()->SetModify();
+            GetScreen()->SetModify();
             break;
 
         case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
@@ -169,7 +172,8 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
 
         default:
-            DisplayError( this, wxT( "WinEDA_LibeditFrame::OnLeftClick error" ) );
+            DisplayError( this,
+                          wxT( "WinEDA_LibeditFrame::OnLeftClick error" ) );
             SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
             break;
         }
@@ -177,14 +181,12 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 }
 
 
-/*************************************************************************/
-void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
-/*************************************************************************/
-
-/* Called on a double click:
+/*
+ * Called on a double click:
  *  If an editable item  (field, pin, graphic):
  *      Call the suitable dialog editor.
  */
+void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 {
     wxPoint            pos = GetPosition();
     LibEDA_BaseStruct* DrawEntry = CurrentDrawItem;
@@ -192,46 +194,38 @@ void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
     if( CurrentLibEntry == NULL )
         return;
 
-    if( (DrawEntry == NULL) || (DrawEntry->m_Flags == 0) )
+    if( ( DrawEntry == NULL ) || ( DrawEntry->m_Flags == 0 ) )
     {   // We can locate an item
-		DrawEntry = LocatePin( GetScreen()->m_MousePosition, CurrentLibEntry,
+        DrawEntry = LocatePin( GetScreen()->m_MousePosition, CurrentLibEntry,
                                CurrentUnit, CurrentConvert );
         if( DrawEntry == NULL )
-			DrawEntry = LocatePin( GetScreen()->m_Curseur, CurrentLibEntry,
+            DrawEntry = LocatePin( GetScreen()->m_Curseur, CurrentLibEntry,
                                    CurrentUnit, CurrentConvert );
         if( DrawEntry == NULL )
         {
-			DrawEntry = CurrentDrawItem = LocateDrawItem( (SCH_SCREEN*) GetScreen(),
-														 GetScreen()->m_MousePosition,
-                                                         CurrentLibEntry, CurrentUnit,
-                                                         CurrentConvert,
-                                                         LOCATE_ALL_DRAW_ITEM );
+            DrawEntry = CurrentDrawItem =
+                LocateDrawItem( (SCH_SCREEN*) GetScreen(),
+                                GetScreen()->m_MousePosition,
+                                CurrentLibEntry, CurrentUnit,
+                                CurrentConvert, LOCATE_ALL_DRAW_ITEM );
         }
         if( DrawEntry == NULL )
         {
-			DrawEntry = CurrentDrawItem = LocateDrawItem( (SCH_SCREEN*) GetScreen(),
-														 GetScreen()->m_Curseur,
-                                                         CurrentLibEntry, CurrentUnit,
-                                                         CurrentConvert,
-                                                         LOCATE_ALL_DRAW_ITEM );
+            DrawEntry = CurrentDrawItem =
+                LocateDrawItem( (SCH_SCREEN*) GetScreen(),
+                                GetScreen()->m_Curseur,
+                                CurrentLibEntry, CurrentUnit,
+                                CurrentConvert, LOCATE_ALL_DRAW_ITEM );
         }
         if( DrawEntry == NULL )
         {
-            DrawEntry = CurrentDrawItem = (LibEDA_BaseStruct*)
-                                          LocateField( CurrentLibEntry );
+            DrawEntry = CurrentDrawItem =
+                (LibEDA_BaseStruct*) LocateField( CurrentLibEntry );
         }
         if( DrawEntry == NULL )
         {
             InstallLibeditFrame( );
         }
-    }
-
-    // Si Commande en cours: affichage commande d'annulation
-    if( m_ID_current_state )
-    {
-    }
-    else
-    {
     }
 
     if( DrawEntry )
@@ -246,7 +240,7 @@ void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
     switch( DrawEntry->Type() )
     {
     case  COMPONENT_PIN_DRAW_TYPE:
-        if( DrawEntry->m_Flags == 0 )       // Item localis� et non en edition: placement commande move
+        if( DrawEntry->m_Flags == 0 )
         {
             InstallPineditFrame( this, DC, pos );
         }
@@ -290,9 +284,9 @@ void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
     default:
         wxString msg;
-        msg.Printf(
-            wxT( "WinEDA_LibeditFrame::OnLeftDClick Error: unknown StructType %d" ),
-            DrawEntry->Type() );
+        msg.Printf( wxT( "WinEDA_LibeditFrame::OnLeftDClick Error: unknown \
+StructType %d" ),
+                    DrawEntry->Type() );
         DisplayError( this, msg );
         break;
     }

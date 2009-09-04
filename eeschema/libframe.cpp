@@ -118,7 +118,7 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
     // Give an icon
     SetIcon( wxIcon( libedit_xpm ) );
     SetBaseScreen( g_ScreenLib );
-    GetScreen()->m_Center = true;       // set to true to have the coordinates origine -0,0) centered on screen
+    GetScreen()->m_Center = true;
     LoadSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     if( DrawPanel )
@@ -181,9 +181,7 @@ void WinEDA_LibeditFrame::SaveSettings()
 }
 
 
-/***********************************************************/
 void WinEDA_LibeditFrame::OnCloseWindow( wxCloseEvent& Event )
-/***********************************************************/
 {
     LibraryStruct* Lib;
 
@@ -218,13 +216,14 @@ void WinEDA_LibeditFrame::OnCloseWindow( wxCloseEvent& Event )
 }
 
 
-/******************************************/
-void WinEDA_LibeditFrame::SetToolbars()
-/******************************************/
-
-/* Enable or disable tools of the differents toolbars,
- *  according to the current conditions or options
+/*
+ * Enable or disable tools of the differents toolbars, according to the
+ * current conditions or options.
+ *
+ * FIXME: Get rid of this function and use WX_UPDATE_UI to handle enabling of
+ *        menu and toolbar items.
  */
+void WinEDA_LibeditFrame::SetToolbars()
 {
     if( m_HToolBar == NULL )
         return;
@@ -282,7 +281,8 @@ void WinEDA_LibeditFrame::SetToolbars()
             else
                 m_HToolBar->EnableTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, false );
 
-            m_HToolBar->ToggleTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, g_EditPinByPinIsOn );
+            m_HToolBar->ToggleTool( ID_LIBEDIT_EDIT_PIN_BY_PIN,
+                                    g_EditPinByPinIsOn );
 
             m_HToolBar->EnableTool( ID_DE_MORGAN_CONVERT_BUTT, g_AsDeMorgan );
             m_HToolBar->EnableTool( ID_DE_MORGAN_NORMAL_BUTT, g_AsDeMorgan );
@@ -290,7 +290,8 @@ void WinEDA_LibeditFrame::SetToolbars()
             bool enable_dtool = false;
             if( !CurrentAliasName.IsEmpty() )
             {
-                int AliasLocation = LocateAlias( CurrentLibEntry->m_AliasList, CurrentAliasName );
+                int AliasLocation = LocateAlias( CurrentLibEntry->m_AliasList,
+                                                 CurrentAliasName );
                 if( AliasLocation >= 0 )
                     if( !CurrentLibEntry->m_AliasList[AliasLocation +
                                                       ALIAS_DOC_FILENAME].IsEmpty() )
@@ -307,8 +308,10 @@ void WinEDA_LibeditFrame::SetToolbars()
 
             if( GetScreen() )
             {
-                m_HToolBar->EnableTool( ID_LIBEDIT_UNDO, GetScreen()->GetUndoCommandCount() );
-                m_HToolBar->EnableTool( ID_LIBEDIT_REDO, GetScreen()->GetRedoCommandCount() );
+                m_HToolBar->EnableTool( ID_LIBEDIT_UNDO,
+                                        GetScreen()->GetUndoCommandCount() );
+                m_HToolBar->EnableTool( ID_LIBEDIT_REDO,
+                                        GetScreen()->GetRedoCommandCount() );
             }
         }
 
@@ -330,9 +333,7 @@ void WinEDA_LibeditFrame::SetToolbars()
 }
 
 
-/**************************************/
 int WinEDA_LibeditFrame::BestZoom()
-/**************************************/
 {
     int      dx, dy, ii, jj;
     int      bestzoom;
@@ -341,7 +342,8 @@ int WinEDA_LibeditFrame::BestZoom()
 
     if( CurrentLibEntry )
     {
-        BoundaryBox = CurrentLibEntry->GetBoundaryBox( CurrentUnit, CurrentConvert );
+        BoundaryBox = CurrentLibEntry->GetBoundaryBox( CurrentUnit,
+                                                       CurrentConvert );
         dx = BoundaryBox.GetWidth();
         dy = BoundaryBox.GetHeight();
     }
@@ -383,9 +385,7 @@ void WinEDA_LibeditFrame::OnUpdateNotEditingPart( wxUpdateUIEvent& event )
 }
 
 
-/*************************************************************************/
 void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
-/*************************************************************************/
 {
     int        id = event.GetId();
     wxPoint    pos;
@@ -514,15 +514,18 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
             wxString docfilename;
             if( !CurrentAliasName.IsEmpty() )
             {
-                int AliasLocation = LocateAlias( CurrentLibEntry->m_AliasList, CurrentAliasName );
+                int AliasLocation = LocateAlias( CurrentLibEntry->m_AliasList,
+                                                 CurrentAliasName );
                 if( AliasLocation >= 0 )
-                    docfilename = CurrentLibEntry->m_AliasList[AliasLocation + ALIAS_DOC_FILENAME];
+                    docfilename =
+                        CurrentLibEntry->m_AliasList[AliasLocation + ALIAS_DOC_FILENAME];
             }
             else
                 docfilename = CurrentLibEntry->m_DocFile;
 
             if( !docfilename.IsEmpty() )
-                GetAssociatedDocument( this, docfilename, & wxGetApp().GetLibraryPathList() );
+                GetAssociatedDocument( this, docfilename,
+                                       &wxGetApp().GetLibraryPathList() );
         }
         break;
 
@@ -667,7 +670,6 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
 
 
     case ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT:
-
         // Delete the last created segment, while creating a polyline draw item
         if( CurrentDrawItem == NULL )
             break;
@@ -690,7 +692,8 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
             if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
                 DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
             else
-                DeleteOneLibraryDrawStruct( DrawPanel, &dc, CurrentLibEntry, CurrentDrawItem, true );
+                CurrentLibEntry->RemoveDrawItem( CurrentDrawItem, DrawPanel,
+                                                 &dc );
         }
 
         CurrentDrawItem = NULL;
@@ -798,7 +801,8 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this, wxT( "WinEDA_LibeditFrame::Process_Special_Functions error" ) );
+        DisplayError( this,
+                      wxT( "WinEDA_LibeditFrame::Process_Special_Functions error" ) );
         break;
     }
 

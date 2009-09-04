@@ -18,19 +18,19 @@
 
 static int fill_tab[3] = { 'N', 'F', 'f' };
 
-//#define DRAW_ARC_WITH_ANGLE		// Used to draw arcs
+//#define DRAW_ARC_WITH_ANGLE       // Used to draw arcs
 
 
 /* Base class (abstract) for components bodies items */
-LibEDA_BaseStruct::LibEDA_BaseStruct( KICAD_T struct_type, EDA_LibComponentStruct* aParent ) :
+LibEDA_BaseStruct::LibEDA_BaseStruct( KICAD_T struct_type,
+                                      EDA_LibComponentStruct* aParent ) :
     EDA_BaseStruct( struct_type )
 {
-    m_Unit    = 0;   /* Unit identification (for multi part per package)
+    m_Unit     = 0;  /* Unit identification (for multi part per package)
                       *  0 if the item is common to all units */
-    m_Convert = 0;   /* Shape identification (for parts which have a convert
+    m_Convert  = 0;  /* Shape identification (for parts which have a convert
                       * shape) 0 if the item is common to all shapes */
-    m_Fill    = NO_FILL;
-
+    m_Fill     = NO_FILL;
     m_Parent   = aParent;
     m_typeName = _( "Undefined" );
 }
@@ -183,10 +183,12 @@ bool LibDrawArc::HitTest( const wxPoint& aRefPoint )
 /** Function HitTest
  * @return true if the point aPosRef is near this object
  * @param aRefPoint = a wxPoint to test
- * @param aThreshold = max distance to this object (usually the half thickness of a line)
+ * @param aThreshold = max distance to this object (usually the half thickness
+ *                     of a line)
  * @param aTransMat = the transform matrix
  */
-bool LibDrawArc::HitTest( wxPoint aRefPoint, int aThreshold, const int aTransMat[2][2] )
+bool LibDrawArc::HitTest( wxPoint aRefPoint, int aThreshold,
+                          const int aTransMat[2][2] )
 {
     // TODO: use aTransMat to calculmates parameters
     wxPoint relpos = aRefPoint;
@@ -200,10 +202,12 @@ bool LibDrawArc::HitTest( wxPoint aRefPoint, int aThreshold, const int aTransMat
     if( abs( dist - m_Rayon ) > aThreshold )
         return false;
 
-    // We are on the circle, ensure we are only on the arc, i.e. between m_ArcStart and m_ArcEnd
+    // We are on the circle, ensure we are only on the arc, i.e. between
+    //  m_ArcStart and m_ArcEnd
     int astart = t1;    // arc starting point ( in 0.1 degree)
     int aend   = t2;    // arc ending point ( in 0.1 degree)
-    int atest  = wxRound( atan2( (double) relpos.y, (double) relpos.x ) * 1800.0 / M_PI );
+    int atest  = wxRound( atan2( (double) relpos.y,
+                                 (double) relpos.x ) * 1800.0 / M_PI );
     NORMALIZE_ANGLE_180( atest );
     NORMALIZE_ANGLE_180( astart );
     NORMALIZE_ANGLE_180( aend );
@@ -226,13 +230,14 @@ LibEDA_BaseStruct* LibDrawArc::DoGenCopy()
     newitem->m_ArcStart = m_ArcStart;
     newitem->m_ArcEnd   = m_ArcEnd;
     newitem->m_Rayon    = m_Rayon;
-    newitem->t1 = t1;
-    newitem->t2 = t2;
-    newitem->m_Width   = m_Width;
-    newitem->m_Unit    = m_Unit;
-    newitem->m_Convert = m_Convert;
-    newitem->m_Flags   = m_Flags;
-    newitem->m_Fill    = m_Fill;
+    newitem->t1         = t1;
+    newitem->t2         = t2;
+    newitem->m_Width    = m_Width;
+    newitem->m_Unit     = m_Unit;
+    newitem->m_Convert  = m_Convert;
+    newitem->m_Flags    = m_Flags;
+    newitem->m_Fill     = m_Fill;
+
     return (LibEDA_BaseStruct*) newitem;
 }
 
@@ -240,10 +245,9 @@ LibEDA_BaseStruct* LibDrawArc::DoGenCopy()
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LibDrawArc::GetPenSize( )
+int LibDrawArc::GetPenSize()
 {
-    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
-    return pensize;
+    return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
 
@@ -254,11 +258,11 @@ void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 {
     wxPoint pos1, pos2, posc;
 
-    int     color     = ReturnLayerColor( LAYER_DEVICE );
+    int     color = ReturnLayerColor( LAYER_DEVICE );
 
     if( aColor < 0 )       // Used normal color or selected color
     {
-        if( (m_Selected & IS_SELECTED) )
+        if( ( m_Selected & IS_SELECTED ) )
             color = g_ItemSelectetColor;
     }
     else
@@ -284,8 +288,8 @@ void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRFilledArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
-                    m_Rayon, GetPenSize( ), color,
-                    ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                     m_Rayon, GetPenSize( ), color,
+                     ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE && !aData )
         GRFilledArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
                      m_Rayon, color, color );
@@ -295,12 +299,10 @@ void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
         GRArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
                m_Rayon, GetPenSize( ), color );
-
 #else
 
         GRArc1( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
                 posc.x, posc.y, GetPenSize( ), color );
-
 #endif
     }
 
@@ -325,9 +327,8 @@ EDA_Rect LibDrawArc::GetBoundingBox()
     if( ( normStart == nullPoint ) || ( normEnd == nullPoint )
        || ( m_Rayon == 0 ) )
     {
-        wxLogDebug( wxT(
-                        "Invalid arc drawing definition, center(%d, %d) \
-start(%d, %d), end(%d, %d), radius %d"                                                                            ),
+        wxLogDebug( wxT("Invalid arc drawing definition, center(%d, %d) \
+start(%d, %d), end(%d, %d), radius %d" ),
                     m_Pos.x, m_Pos.y, m_ArcStart.x, m_ArcStart.y, m_ArcEnd.x,
                     m_ArcEnd.y, m_Rayon );
         return rect;
@@ -469,7 +470,8 @@ bool LibDrawCircle::HitTest( wxPoint aPosRef, int aThreshold, const int aTransMa
     wxPoint relpos = aPosRef - TransformCoordinate( aTransMat, m_Pos );
 
     int     dist =
-        wxRound( sqrt( ( (double) relpos.x * relpos.x ) + ( (double) relpos.y * relpos.y ) ) );
+        wxRound( sqrt( ( (double) relpos.x * relpos.x ) +
+                       ( (double) relpos.y * relpos.y ) ) );
 
     if( abs( dist - m_Rayon ) <= aThreshold )
         return true;
@@ -488,6 +490,7 @@ LibEDA_BaseStruct* LibDrawCircle::DoGenCopy()
     newitem->m_Convert = m_Convert;
     newitem->m_Flags   = m_Flags;
     newitem->m_Fill    = m_Fill;
+
     return (LibEDA_BaseStruct*) newitem;
 }
 
@@ -495,10 +498,9 @@ LibEDA_BaseStruct* LibDrawCircle::DoGenCopy()
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LibDrawCircle::GetPenSize( )
+int LibDrawCircle::GetPenSize()
 {
-    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
-    return pensize;
+    return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
 
@@ -508,7 +510,7 @@ void LibDrawCircle::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 {
     wxPoint pos1;
 
-    int     color     = ReturnLayerColor( LAYER_DEVICE );
+    int     color = ReturnLayerColor( LAYER_DEVICE );
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -527,8 +529,8 @@ void LibDrawCircle::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
-                       m_Rayon, GetPenSize( ), color,
-                       ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                        m_Rayon, GetPenSize( ), color,
+                        ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE )
         GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
                         m_Rayon, 0, color, color );
@@ -630,6 +632,7 @@ LibEDA_BaseStruct* LibDrawSquare::DoGenCopy()
     newitem->m_Convert = m_Convert;
     newitem->m_Flags   = m_Flags;
     newitem->m_Fill    = m_Fill;
+
     return (LibEDA_BaseStruct*) newitem;
 }
 
@@ -637,10 +640,9 @@ LibEDA_BaseStruct* LibDrawSquare::DoGenCopy()
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LibDrawSquare::GetPenSize( )
+int LibDrawSquare::GetPenSize()
 {
-    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
-    return pensize;
+    return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
 void LibDrawSquare::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
@@ -649,7 +651,7 @@ void LibDrawSquare::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 {
     wxPoint pos1, pos2;
 
-    int     color     = ReturnLayerColor( LAYER_DEVICE );
+    int     color = ReturnLayerColor( LAYER_DEVICE );
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -666,10 +668,12 @@ void LibDrawSquare::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     if( aColor >= 0 )
         fill = NO_FILL;
 
+    GRSetDrawMode( aDC, aDrawMode );
+
     if( fill == FILLED_WITH_BG_BODYCOLOR && !aData )
         GRFilledRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-                     GetPenSize( ), color,
-                     ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                      GetPenSize( ), color,
+                      ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( m_Fill == FILLED_SHAPE  && !aData )
         GRFilledRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
                       GetPenSize( ), color, color );
@@ -724,10 +728,12 @@ bool LibDrawSquare::HitTest( const wxPoint& aRefPoint )
 /** Function HitTest
  * @return true if the point aPosRef is near this object
  * @param aRefPoint = a wxPoint to test
- * @param aThreshold = max distance to this object (usually the half thickness of a line)
+ * @param aThreshold = max distance to this object (usually the half thickness
+ *                     of a line)
  * @param aTransMat = the transform matrix
  */
-bool LibDrawSquare::HitTest( wxPoint aRefPoint, int aThreshold, const int aTransMat[2][2] )
+bool LibDrawSquare::HitTest( wxPoint aRefPoint, int aThreshold,
+                             const int aTransMat[2][2] )
 {
     wxPoint actualStart = TransformCoordinate( aTransMat, m_Pos );
     wxPoint actualEnd   = TransformCoordinate( aTransMat, m_End );
@@ -798,6 +804,7 @@ LibEDA_BaseStruct* LibDrawSegment::DoGenCopy()
     newitem->m_Unit    = m_Unit;
     newitem->m_Convert = m_Convert;
     newitem->m_Flags   = m_Flags;
+
     return (LibEDA_BaseStruct*) newitem;
 }
 
@@ -805,10 +812,9 @@ LibEDA_BaseStruct* LibDrawSegment::DoGenCopy()
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LibDrawSegment::GetPenSize( )
+int LibDrawSegment::GetPenSize()
 {
-    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
-    return pensize;
+    return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
 void LibDrawSegment::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
@@ -817,7 +823,7 @@ void LibDrawSegment::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 {
     wxPoint pos1, pos2;
 
-    int     color     = ReturnLayerColor( LAYER_DEVICE );
+    int     color = ReturnLayerColor( LAYER_DEVICE );
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -829,6 +835,8 @@ void LibDrawSegment::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     pos1 = TransformCoordinate( aTransformMatrix, m_Pos ) + aOffset;
     pos2 = TransformCoordinate( aTransformMatrix, m_End ) + aOffset;
+
+    GRSetDrawMode( aDC, aDrawMode );
 
     GRLine( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
             GetPenSize( ), color );
@@ -875,10 +883,12 @@ bool LibDrawSegment::HitTest( const wxPoint& aPosRef )
 /** Function HitTest
  * @return true if the point aPosRef is near this object
  * @param aPosRef = a wxPoint to test
- * @param aThreshold = max distance to this object (usually the half thickness of a line)
+ * @param aThreshold = max distance to this object (usually the half
+ *                     thickness of a line)
  * @param aTransMat = the transform matrix
  */
-bool LibDrawSegment::HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] )
+bool LibDrawSegment::HitTest( wxPoint aPosRef, int aThreshold,
+                              const int aTransMat[2][2] )
 {
     wxPoint start = TransformCoordinate( aTransMat, m_Pos );
     wxPoint end   = TransformCoordinate( aTransMat, m_End );
@@ -981,11 +991,12 @@ LibEDA_BaseStruct* LibDrawPolyline::DoGenCopy()
     LibDrawPolyline* newitem = new LibDrawPolyline( GetParent() );
 
     newitem->m_PolyPoints = m_PolyPoints;   // Vector copy
-    newitem->m_Width   = m_Width;
-    newitem->m_Unit    = m_Unit;
-    newitem->m_Convert = m_Convert;
-    newitem->m_Flags   = m_Flags;
-    newitem->m_Fill    = m_Fill;
+    newitem->m_Width      = m_Width;
+    newitem->m_Unit       = m_Unit;
+    newitem->m_Convert    = m_Convert;
+    newitem->m_Flags      = m_Flags;
+    newitem->m_Fill       = m_Fill;
+
     return (LibEDA_BaseStruct*) newitem;
 }
 
@@ -999,10 +1010,9 @@ void LibDrawPolyline::AddPoint( const wxPoint& point )
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LibDrawPolyline::GetPenSize( )
+int LibDrawPolyline::GetPenSize()
 {
-    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
-    return pensize;
+    return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
 void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
@@ -1010,8 +1020,7 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                             void* aData, const int aTransformMatrix[2][2] )
 {
     wxPoint         pos1;
-
-    int             color     = ReturnLayerColor( LAYER_DEVICE );
+    int             color = ReturnLayerColor( LAYER_DEVICE );
 
     // Buffer used to store current corners coordinates for drawings
     static wxPoint* Buf_Poly_Drawings = NULL;
@@ -1050,10 +1059,12 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     if( aColor >= 0 )
         fill = NO_FILL;
 
+    GRSetDrawMode( aDC, aDrawMode );
+
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
-               Buf_Poly_Drawings, 1, GetPenSize( ), color,
-               ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                Buf_Poly_Drawings, 1, GetPenSize( ), color,
+                ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE  )
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
                 Buf_Poly_Drawings, 1, GetPenSize( ), color, color );
@@ -1169,7 +1180,8 @@ bool LibDrawBezier::Save( FILE* ExportFile ) const
 
     for( unsigned i = 0; i < GetCornerCount(); i++ )
     {
-        fprintf( ExportFile, "  %d %d", m_BezierPoints[i].x, m_BezierPoints[i].y );
+        fprintf( ExportFile, "  %d %d", m_BezierPoints[i].x,
+                 m_BezierPoints[i].y );
     }
 
     fprintf( ExportFile, " %c\n", fill_tab[m_Fill] );
@@ -1185,17 +1197,18 @@ bool LibDrawBezier::Load( char* line, wxString& errorMsg )
     wxPoint pt;
 
     i = sscanf( &line[2], "%d %d %d %d", &ccount, &m_Unit, &m_Convert,
-			   &m_Width );
+               &m_Width );
 
     if( i !=4 )
     {
-        errorMsg.Printf( _( "Bezier only had %d parameters of the required 4" ), i );
+        errorMsg.Printf( _( "Bezier only had %d parameters of the required 4" ),
+                         i );
         return false;
     }
     if( ccount <= 0 )
     {
         errorMsg.Printf( _( "Bezier count parameter %d is invalid" ),
-						ccount );
+                         ccount );
         return false;
     }
 
@@ -1210,15 +1223,13 @@ bool LibDrawBezier::Load( char* line, wxString& errorMsg )
         p = strtok( NULL, " \t\n" );
         if( sscanf( p, "%d", &pt.x ) != 1 )
         {
-            errorMsg.Printf( _( "Bezier point %d X position not defined" ),
-							i );
+            errorMsg.Printf( _( "Bezier point %d X position not defined" ), i );
             return false;
         }
         p = strtok( NULL, " \t\n" );
         if( sscanf( p, "%d", &pt.y ) != 1 )
         {
-            errorMsg.Printf( _( "Bezier point %d Y position not defined" ),
-							i );
+            errorMsg.Printf( _( "Bezier point %d Y position not defined" ), i );
             return false;
         }
         m_BezierPoints.push_back( pt );
@@ -1254,29 +1265,30 @@ LibEDA_BaseStruct* LibDrawBezier::DoGenCopy()
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LibDrawBezier::GetPenSize( )
+int LibDrawBezier::GetPenSize()
 {
-    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
-    return pensize;
+    return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
 void LibDrawBezier::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-						   const wxPoint& aOffset, int aColor, int aDrawMode,
-						   void* aData, const int aTransformMatrix[2][2] )
+                           const wxPoint& aOffset, int aColor, int aDrawMode,
+                           void* aData, const int aTransformMatrix[2][2] )
 {
-    wxPoint         pos1;
-	std::vector<wxPoint> PolyPointsTraslated;
+    wxPoint              pos1;
+    std::vector<wxPoint> PolyPointsTraslated;
 
-    int             color     = ReturnLayerColor( LAYER_DEVICE );
+    int                  color = ReturnLayerColor( LAYER_DEVICE );
 
-    m_PolyPoints = Bezier2Poly( m_BezierPoints[0] ,
-                           m_BezierPoints[1] ,
-                           m_BezierPoints[2] ,
-                           m_BezierPoints[3]);
+    m_PolyPoints = Bezier2Poly( m_BezierPoints[0],
+                                m_BezierPoints[1],
+                                m_BezierPoints[2],
+                                m_BezierPoints[3] );
 
-	PolyPointsTraslated.clear();
-	for( unsigned int i = 0; i < m_PolyPoints.size() ; i++)
-		PolyPointsTraslated.push_back( TransformCoordinate( aTransformMatrix, m_PolyPoints[i] ) + aOffset);
+    PolyPointsTraslated.clear();
+
+    for( unsigned int i = 0; i < m_PolyPoints.size() ; i++ )
+        PolyPointsTraslated.push_back(
+            TransformCoordinate( aTransformMatrix, m_PolyPoints[i] ) + aOffset );
 
     if( aColor < 0 )                // Used normal color or selected color
     {
@@ -1290,16 +1302,18 @@ void LibDrawBezier::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     if( aColor >= 0 )
         fill = NO_FILL;
 
+    GRSetDrawMode( aDC, aDrawMode );
+
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
-                &PolyPointsTraslated[0], 1, GetPenSize( ), color,
+                &PolyPointsTraslated[0], 1, GetPenSize(), color,
                 ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE  )
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
-                &PolyPointsTraslated[0], 1, GetPenSize( ), color, color );
+                &PolyPointsTraslated[0], 1, GetPenSize(), color, color );
     else
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
-                &PolyPointsTraslated[0], 0, GetPenSize( ), color, color );
+                &PolyPointsTraslated[0], 0, GetPenSize(), color, color );
 
 }
 
@@ -1326,7 +1340,7 @@ bool LibDrawBezier::HitTest( const wxPoint& aRefPos )
  * @param aTransMat = the transform matrix
  */
 bool LibDrawBezier::HitTest( wxPoint aPosRef, int aThreshold,
-							  const int aTransMat[2][2] )
+                             const int aTransMat[2][2] )
 {
     wxPoint ref, start, end;
 
@@ -1334,6 +1348,7 @@ bool LibDrawBezier::HitTest( wxPoint aPosRef, int aThreshold,
     {
         start = TransformCoordinate( aTransMat, m_PolyPoints[ii - 1] );
         end   = TransformCoordinate( aTransMat, m_PolyPoints[ii] );
+
         if ( TestSegmentHit( aPosRef, start, end, aThreshold ) )
             return true;
     }
@@ -1349,8 +1364,10 @@ EDA_Rect LibDrawBezier::GetBoundingBox()
 {
     EDA_Rect rect;
     int      xmin, xmax, ymin, ymax;
-	if(!GetCornerCount())
-		return rect;
+
+    if( !GetCornerCount() )
+        return rect;
+
     xmin = xmax = m_PolyPoints[0].x;
     ymin = ymax = m_PolyPoints[0].y;
 
@@ -1378,12 +1395,12 @@ void LibDrawBezier::DisplayInfo( WinEDA_DrawFrame* frame )
     LibEDA_BaseStruct::DisplayInfo( frame );
 
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
-								EESCHEMA_INTERNAL_UNIT, true );
+                                 EESCHEMA_INTERNAL_UNIT, true );
 
     frame->MsgPanel->Affiche_1_Parametre( 20, _( "Line width" ), msg, BLUE );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
-			   bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
+                bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
     frame->MsgPanel->Affiche_1_Parametre( 40, _( "Bounding box" ), msg, BROWN );
 }

@@ -234,10 +234,9 @@ parameter <%c> is not valid" ),
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LibDrawField::GetPenSize( )
+int LibDrawField::GetPenSize()
 {
-    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
-    return pensize;
+    return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
 
@@ -249,20 +248,24 @@ void LibDrawField::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                          const wxPoint& aOffset, int aColor, int aDrawMode,
                          void* aData, const int aTransformMatrix[2][2] )
 {
-    wxPoint text_pos;
+    wxPoint  text_pos;
+    int      color;
+    int      linewidth = GetPenSize();
 
-    int     color     = aColor;
-    int     linewidth = GetPenSize( );
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
-
-    if( aColor < 0 )               // Used normal color or selected color
+    if( ( m_Attributs & TEXT_NO_VISIBLE ) && ( aColor < 0 ) )
     {
-        if( (m_Selected & IS_SELECTED) )
-            color = g_ItemSelectetColor;
+        color = g_InvisibleItemColor;
+    }
+    else if( ( m_Selected & IS_SELECTED ) && ( aColor < 0 ) )
+    {
+        color = g_ItemSelectetColor;
     }
     else
+    {
         color = aColor;
+    }
 
     if( color < 0 )
     {
@@ -281,13 +284,14 @@ void LibDrawField::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
             break;
         }
     }
-    text_pos = TransformCoordinate( aTransformMatrix, m_Pos ) + aOffset;
 
-    wxString* text = aData ? (wxString*) aData : &m_Text;
+    text_pos = TransformCoordinate( aTransformMatrix, m_Pos ) + aOffset;
+    wxString* text = aData ? (wxString*)aData : &m_Text;
     GRSetDrawMode( aDC, aDrawMode );
-    DrawGraphicText( aPanel, aDC, text_pos, (EDA_Colors) color, text->GetData(),
+    DrawGraphicText( aPanel, aDC, text_pos, (EDA_Colors) color, *text,
                      m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-                     m_Size, m_HJustify, m_VJustify, linewidth, m_Italic, m_Bold );
+                     m_Size, m_HJustify, m_VJustify, linewidth, m_Italic,
+                     m_Bold );
 }
 
 

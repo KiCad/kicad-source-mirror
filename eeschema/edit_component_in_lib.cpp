@@ -1,5 +1,5 @@
 /**************************************************************/
-/*	librairy editor: edition of component general properties  */
+/*  librairy editor: edition of component general properties  */
 /**************************************************************/
 
 #include "fctsys.h"
@@ -434,8 +434,8 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::ChangeNbUnitsPerPackage( int MaxUnit )
                         return FALSE;
                     }
                 }
-                DeleteOneLibraryDrawStruct( m_Parent->DrawPanel, NULL, CurrentLibEntry,
-                                            DrawItem, 0 );
+
+                CurrentLibEntry->RemoveDrawItem( DrawItem );
             }
         }
 
@@ -529,12 +529,9 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
                         return FALSE;
                     }
                 }
+
                 m_Parent->GetScreen()->SetModify();
-                DeleteOneLibraryDrawStruct( m_Parent->DrawPanel,
-                                            NULL,
-                                            CurrentLibEntry,
-                                            DrawItem,
-                                            0 );
+                CurrentLibEntry->RemoveDrawItem( DrawItem );
             }
         }
     }

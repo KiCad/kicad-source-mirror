@@ -1,7 +1,7 @@
 /*********************************************************************/
-/*			EESchema - symbdraw.cpp									 */
+/*          EESchema - symbdraw.cpp                                  */
 /* Create, move .. graphic shapes used to build and draw a component */
-/* (lines, arcs ..													 */
+/* (lines, arcs ..                                                   */
 /*********************************************************************/
 
 #include "fctsys.h"
@@ -60,12 +60,8 @@ void WinEDA_bodygraphics_PropertiesFrame::bodygraphics_PropertiesAccept( wxComma
 
         m_Parent->DrawPanel->PrepareGraphicContext( &dc );
 
-        DrawLibraryDrawStruct( m_Parent->DrawPanel,
-                               &dc,
-                               CurrentLibEntry,
-                               wxPoint( 0, 0 ),
-                               CurrentDrawItem,
-                               g_XorMode );
+        CurrentDrawItem->Draw( m_Parent->DrawPanel, &dc, wxPoint( 0, 0 ), -1,
+                               g_XorMode, NULL, DefaultTransformMatrix );
 
         if( g_FlDrawSpecificUnit )
             CurrentDrawItem->m_Unit = CurrentUnit;
@@ -113,12 +109,8 @@ void WinEDA_bodygraphics_PropertiesFrame::bodygraphics_PropertiesAccept( wxComma
 
         m_Parent->GetScreen()->SetModify();
 
-        DrawLibraryDrawStruct( m_Parent->DrawPanel,
-                               &dc,
-                               CurrentLibEntry,
-                               wxPoint( 0, 0 ),
-                               CurrentDrawItem,
-                               g_XorMode );
+        CurrentDrawItem->Draw( m_Parent->DrawPanel, &dc, wxPoint( 0, 0 ),
+                               -1, g_XorMode, NULL, DefaultTransformMatrix );
     }
 
     Close();
@@ -164,8 +156,11 @@ static void AbortSymbolTraceOn( WinEDA_DrawPanel* Panel, wxDC* DC )
             Panel->m_Parent->RedrawActiveWindow( DC, TRUE );
         }
         else
-            DrawLibraryDrawStruct( Panel, DC, CurrentLibEntry, wxPoint( 0, 0 ),
-                                   CurrentDrawItem, g_XorMode );
+        {
+            CurrentDrawItem->Draw( Panel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
+                                   NULL, DefaultTransformMatrix );
+        }
+
         SAFE_DELETE( CurrentDrawItem );
     }
     else
@@ -175,9 +170,9 @@ static void AbortSymbolTraceOn( WinEDA_DrawPanel* Panel, wxDC* DC )
         Panel->GetScreen()->m_Curseur = StartCursor;
         RedrawWhileMovingCursor( Panel, DC, TRUE );
         Panel->GetScreen()->m_Curseur = curpos;
-        DrawLibraryDrawStruct( Panel, DC, CurrentLibEntry, wxPoint( 0, 0 ),
-                               CurrentDrawItem, GR_DEFAULT_DRAWMODE );
-
+        CurrentDrawItem->Draw( Panel, DC, wxPoint( 0, 0 ), -1,
+                               GR_DEFAULT_DRAWMODE, NULL,
+                               DefaultTransformMatrix );
         CurrentDrawItem->m_Flags = 0;
     }
 }
@@ -311,9 +306,8 @@ LibEDA_BaseStruct* WinEDA_LibeditFrame::CreateGraphicItem( EDA_LibComponentStruc
         else
         {
             StartMoveDrawSymbol( DC );
-            DrawLibraryDrawStruct( DrawPanel, DC, CurrentLibEntry,
-                                   wxPoint( 0, 0 ),
-                                   Text, g_XorMode );
+            Text->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
+                        DefaultTransformMatrix );
         }
     }
     break;
@@ -400,15 +394,15 @@ static void RedrawWhileMovingCursor( WinEDA_DrawPanel* panel,
     /* Erase shape in the old positon*/
     if( erase )
     {
-        pos = ItemPreviousPos - StartCursor,
-        DrawLibraryDrawStruct( panel, DC, CurrentLibEntry, pos,
-                               CurrentDrawItem, g_XorMode );
+        pos = ItemPreviousPos - StartCursor;
+        CurrentDrawItem->Draw( panel, DC, pos, -1, g_XorMode, NULL,
+                               DefaultTransformMatrix );
     }
 
     /* Redraw moved shape */
-    pos = Screen->m_Curseur - StartCursor,
-    DrawLibraryDrawStruct( panel, DC, CurrentLibEntry, pos,
-                           CurrentDrawItem, g_XorMode );
+    pos = Screen->m_Curseur - StartCursor;
+    CurrentDrawItem->Draw( panel, DC, pos, -1, g_XorMode, NULL,
+                           DefaultTransformMatrix );
     ItemPreviousPos = Screen->m_Curseur;
 }
 
@@ -514,7 +508,7 @@ void WinEDA_LibeditFrame::StartMoveDrawSymbol( wxDC* DC )
 
 /****************************************************************/
 /* Routine de Gestion des evenements souris lors de la creation */
-/* d'un nouvel element type LibraryDrawStruct					*/
+/* d'un nouvel element type LibraryDrawStruct                   */
 /****************************************************************/
 static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
@@ -543,8 +537,8 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
         }
         else
         {
-            DrawLibraryDrawStruct( panel, DC, CurrentLibEntry, wxPoint( 0, 0 ),
-                                   CurrentDrawItem, DrawMode );
+            CurrentDrawItem->Draw( panel, DC, wxPoint( 0, 0 ), -1, DrawMode,
+                                   NULL, DefaultTransformMatrix );
             if( CurrentDrawItem->Type() == COMPONENT_ARC_DRAW_TYPE )
             {
                 int Color = ReturnLayerColor( LAYER_DEVICE );
@@ -621,8 +615,8 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     }
     else
     {
-        DrawLibraryDrawStruct( panel, DC, CurrentLibEntry, wxPoint( 0, 0 ),
-                               CurrentDrawItem, DrawMode );
+        CurrentDrawItem->Draw( panel, DC, wxPoint( 0, 0 ), -1, DrawMode,
+                               NULL, DefaultTransformMatrix );
         if( CurrentDrawItem->Type() == COMPONENT_ARC_DRAW_TYPE )
         {
             int Color = ReturnLayerColor( LAYER_DEVICE );
@@ -719,8 +713,8 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
         MoveLibDrawItemAt( CurrentDrawItem, pos );
     }
 
-    DrawLibEntry( DrawPanel, DC, CurrentLibEntry, wxPoint( 0, 0 ), CurrentUnit,
-                  CurrentConvert, GR_DEFAULT_DRAWMODE );
+    CurrentLibEntry->Draw( DrawPanel, DC, wxPoint( 0, 0 ), CurrentUnit,
+                           CurrentConvert, GR_DEFAULT_DRAWMODE );
 
     CurrentDrawItem->m_Flags = 0;
     CurrentDrawItem = NULL;
@@ -824,15 +818,14 @@ void WinEDA_LibeditFrame::DeleteDrawPoly( wxDC* DC )
 /* Used for deleting last entered segment while creating a Polyline
  */
 {
-    if( CurrentDrawItem == NULL )
-        return;
-    if( CurrentDrawItem->Type() != COMPONENT_POLYLINE_DRAW_TYPE )
+    if( CurrentDrawItem == NULL
+        || CurrentDrawItem->Type() != COMPONENT_POLYLINE_DRAW_TYPE )
         return;
 
     LibDrawPolyline* Poly = (LibDrawPolyline*) CurrentDrawItem;
 
-    DrawLibraryDrawStruct( DrawPanel, DC, CurrentLibEntry, wxPoint( 0, 0 ),
-                           CurrentDrawItem, g_XorMode );
+    CurrentDrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
+                           NULL, DefaultTransformMatrix );
 
     while( Poly->GetCornerCount() > 2 )     // First segment is kept, only its end point is changed
     {
@@ -847,6 +840,6 @@ void WinEDA_LibeditFrame::DeleteDrawPoly( wxDC* DC )
         }
     }
 
-    DrawLibraryDrawStruct( DrawPanel, DC, CurrentLibEntry, wxPoint( 0, 0 ),
-                           CurrentDrawItem, g_XorMode );
+    CurrentDrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
+                           NULL, DefaultTransformMatrix );
 }

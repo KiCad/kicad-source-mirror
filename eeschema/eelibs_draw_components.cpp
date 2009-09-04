@@ -6,11 +6,9 @@
 #include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
-#include "drawtxt.h"
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-#include "trigo.h"
 #include "protos.h"
 
 //#define DRAW_ARC_WITH_ANGLE       // Used to select function to draw arcs
@@ -39,117 +37,6 @@ wxPoint TransformCoordinate( const int      aTransformMatrix[2][2],
         ( aTransformMatrix[1][1] * aPosition.y );
 
     return new_pos;
-}
-
-
-/**************************************************************/
-/* Routine de dessin d'un composant d'une librairie
- *  LibEntry = pointeur sur la description en librairie
- *  posX, posY = position du composant
- *  DrawMode = GrOR ..
- *  Color = 0 : dessin en vraies couleurs, sinon couleur = Color
- *
- *  Une croix symbolise le point d'accrochage (ref position) du composant
- *
- *  Le composant est toujours trace avec orientation 0
- */
-/*************************************************************/
-void DrawLibEntry( WinEDA_DrawPanel* panel, wxDC* DC,
-                   EDA_LibComponentStruct* LibEntry,
-                   const wxPoint& aOffset,
-                   int Multi, int convert,
-                   int DrawMode, int Color )
-{
-    int           color;
-    wxString      Prefix;
-    LibDrawField* Field;
-    wxPoint       text_pos;
-
-
-    DrawLibPartAux( panel, DC, NULL, LibEntry, aOffset,
-                    DefaultTransformMatrix, Multi,
-                    convert, DrawMode, Color );
-
-    /* Trace des 2 champs ref et value (Attention aux coord: la matrice
-     *  de transformation change de signe les coord Y */
-
-    GRSetDrawMode( DC, DrawMode );
-
-    if( LibEntry->m_Prefix.m_Attributs & TEXT_NO_VISIBLE )
-    {
-        if( Color >= 0 )
-            color = Color;
-        else
-            color = g_InvisibleItemColor;
-    }
-    else
-        color = Color;
-
-    if( LibEntry->m_UnitCount > 1 )
-#if defined(KICAD_GOST)
-
-        Prefix.Printf( wxT( "%s?.%c" ),
-                       LibEntry->m_Prefix.m_Text.GetData(), Multi + '1' - 1 );
-#else
-
-        Prefix.Printf( wxT( "%s?%c" ),
-                       LibEntry->m_Prefix.m_Text.GetData(), Multi + 'A' - 1 );
-#endif
-    else
-        Prefix = LibEntry->m_Prefix.m_Text + wxT( "?" );
-
-    if( (LibEntry->m_Prefix.m_Flags & IS_MOVED) == 0 )
-        LibEntry->m_Prefix.Draw( panel, DC, aOffset, color, DrawMode,
-                                 &Prefix, DefaultTransformMatrix );
-
-    if( LibEntry->m_Name.m_Attributs & TEXT_NO_VISIBLE )
-    {
-        if( Color >= 0 )
-            color = Color;
-        else
-            color = g_InvisibleItemColor;
-    }
-    else
-        color = Color;
-
-    if( (LibEntry->m_Name.m_Flags & IS_MOVED) == 0 )
-        LibEntry->m_Name.Draw( panel, DC, aOffset, color, DrawMode,  NULL,
-                               DefaultTransformMatrix );
-
-    for( Field = LibEntry->m_Fields; Field != NULL; Field = Field->Next() )
-    {
-        if( Field->m_Text.IsEmpty() )
-            return;
-        if( (Field->m_Flags & IS_MOVED) != 0 )
-            continue;
-        if( Field->m_Attributs & TEXT_NO_VISIBLE )
-        {
-            if( Color >= 0 )
-                color = Color;
-            else
-                color = g_InvisibleItemColor;
-        }
-        else
-            color = Color;
-        Field->Draw( panel, DC, aOffset, color, DrawMode, NULL,
-                     DefaultTransformMatrix );
-    }
-
-    // Trace de l'ancre
-    int len = panel->GetScreen()->Unscale( 3 );
-    GRLine( &panel->m_ClipBox, DC, aOffset.x, aOffset.y - len, aOffset.x,
-            aOffset.y + len, 0, color );
-    GRLine( &panel->m_ClipBox, DC, aOffset.x - len, aOffset.y, aOffset.x + len,
-            aOffset.y, 0, color );
-
-    /* Enable this to draw the bounding box around the component to validate
-     * the bounding box calculations. */
-#if 0
-    EDA_Rect bBox = LibEntry->GetBoundaryBox( Multi, convert );
-    GRRect( &panel->m_ClipBox, DC, bBox.GetOrigin().x, bBox.GetOrigin().y,
-            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
-#endif
-
 }
 
 
@@ -281,54 +168,4 @@ void DrawingLibInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
     DrawLibPartAux( panel, DC, DrawLibItem, LibEntry, wxPoint( PartX, PartY ),
                     DrawLibItem->m_Transform, multi, convert, DrawMode, Color,
                     DrawPinText );
-}
-
-
-/************************************************************/
-/* Routine to draw One LibraryDrawStruct at given position, */
-/* matrice de transformation  1 0 0 -1 (normale)            */
-/* DrawMode  = GrXOR, GrOR ..                               */
-/************************************************************/
-/* Utilise en LibEdit et Lib Browse */
-void DrawLibraryDrawStruct( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                            EDA_LibComponentStruct* aLibEntry,
-                            wxPoint aPosition, LibEDA_BaseStruct* aDrawItem,
-                            int aDrawMode, int aColor )
-{
-    int  TransMat[2][2];
-    bool no_fill;
-    BASE_SCREEN* screen = aPanel->GetScreen();
-
-    GRSetDrawMode( aDC, aDrawMode );
-
-    TransMat[0][0] = 1;
-    TransMat[0][1] = TransMat[1][0] = 0;
-    TransMat[1][1] = -1;
-
-    no_fill = false;
-
-    switch( aDrawItem->Type() )
-    {
-    case COMPONENT_PIN_DRAW_TYPE:     /* Trace des Pins */
-    {
-        DrawPinPrms prms( aLibEntry, true );
-        aDrawItem->Draw( aPanel, aDC, aPosition, aColor, aDrawMode, &prms,
-                         TransMat );
-    }
-    break;
-
-    case COMPONENT_ARC_DRAW_TYPE:
-    case COMPONENT_CIRCLE_DRAW_TYPE:
-    case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
-    case COMPONENT_RECT_DRAW_TYPE:
-    case COMPONENT_POLYLINE_DRAW_TYPE:
-    default:
-        if( screen->m_IsPrinting
-            && aDrawItem->m_Fill == FILLED_WITH_BG_BODYCOLOR
-            && GetGRForceBlackPenState() )
-            no_fill = true;
-        aDrawItem->Draw( aPanel, aDC, aPosition, aColor, aDrawMode,
-                         (void*) no_fill, TransMat );
-        break;
-    }
 }

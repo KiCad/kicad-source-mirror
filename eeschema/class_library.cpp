@@ -189,8 +189,8 @@ void LibraryStruct::RemoveEntry( LibCmpEntry* entry )
         /* Remove alias name from the root component alias list */
         if( Root == NULL )
         {
-            wxLogWarning( wxT( "No root component found for alias <%s> in " \
-                               "library <%s>." ),
+            wxLogWarning( wxT( "No root component found for alias <%s> in \
+library <%s>." ),
                           ( const wxChar* ) entry->m_Name.m_Text,
                           ( const wxChar* ) m_Name );
         }

@@ -64,54 +64,8 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
                      int Multi, int convert, int DrawMode,
                      int Color, bool DrawPinText )
 {
-    wxPoint            pos1, pos2;
-    bool               force_nofill;
-    LibEDA_BaseStruct* DEntry;
-    BASE_SCREEN*       screen = panel->GetScreen();
-
-    if( Entry->m_Drawings == NULL )
-        return;
-    GRSetDrawMode( DC, DrawMode );
-
-    for( DEntry = Entry->m_Drawings; DEntry != NULL; DEntry = DEntry->Next() )
-    {
-        /* Do not draw items not attached to the current part */
-        if( Multi && DEntry->m_Unit && (DEntry->m_Unit != Multi) )
-            continue;
-
-        if( convert && DEntry->m_Convert && (DEntry->m_Convert != convert) )
-            continue;
-
-        // Do not draw an item while moving (the cursor handler does that)
-        if( DEntry->m_Flags & IS_MOVED )
-            continue;
-
-        force_nofill = false;
-
-        switch( DEntry->Type() )
-        {
-        case COMPONENT_PIN_DRAW_TYPE:
-        {
-            DrawPinPrms prms( Entry, DrawPinText );
-            DEntry->Draw( panel, DC, Pos, Color, DrawMode, &prms, TransMat );
-        }
-        break;
-
-        case COMPONENT_ARC_DRAW_TYPE:
-        case COMPONENT_CIRCLE_DRAW_TYPE:
-        case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
-        case COMPONENT_RECT_DRAW_TYPE:
-        case COMPONENT_POLYLINE_DRAW_TYPE:
-        default:
-            if( screen->m_IsPrinting
-                && DEntry->m_Fill == FILLED_WITH_BG_BODYCOLOR
-                && GetGRForceBlackPenState() )
-                force_nofill = true;
-            DEntry->Draw( panel, DC, Pos, Color, DrawMode, (void*) force_nofill,
-                          TransMat );
-            break;
-        }
-    }
+    Entry->Draw( panel, DC, Pos, Multi, convert, DrawMode, Color, TransMat,
+                 DrawPinText, false );
 
     if( g_DebugLevel > 4 ) /* Draw the component boundary box */
     {

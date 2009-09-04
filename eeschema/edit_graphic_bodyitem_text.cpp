@@ -1,10 +1,10 @@
-	/**********************************************/
-	/* EESchema - symbtext.cpp for Library Editor */
-	/**********************************************/
+    /**********************************************/
+    /* EESchema - symbtext.cpp for Library Editor */
+    /**********************************************/
 
 /* Menu et routines de creation, modification, suppression de textes
-	du type symbole
-	(textes autres que Fields)
+    du type symbole
+    (textes autres que Fields)
 */
 
 #include "fctsys.h"
@@ -24,25 +24,25 @@
 class Dialog_BodyGraphicText_Properties : public Dialog_BodyGraphicText_Properties_base
 {
 private:
-	WinEDA_LibeditFrame * m_Parent;
-	LibDrawText * m_GraphicText;
+    WinEDA_LibeditFrame * m_Parent;
+    LibDrawText * m_GraphicText;
 
 public:
-	Dialog_BodyGraphicText_Properties( WinEDA_LibeditFrame* aParent, LibDrawText * aGraphicText);
-	~Dialog_BodyGraphicText_Properties() {};
+    Dialog_BodyGraphicText_Properties( WinEDA_LibeditFrame* aParent, LibDrawText * aGraphicText);
+    ~Dialog_BodyGraphicText_Properties() {};
 
 private:
-	void InitDialog( );
-	void OnOkClick( wxCommandEvent& event );
-	void OnCancelClick( wxCommandEvent& event );
+    void InitDialog( );
+    void OnOkClick( wxCommandEvent& event );
+    void OnCancelClick( wxCommandEvent& event );
 };
 
 
 Dialog_BodyGraphicText_Properties::Dialog_BodyGraphicText_Properties(  WinEDA_LibeditFrame* aParent, LibDrawText * aGraphicText) :
-	Dialog_BodyGraphicText_Properties_base(aParent)
+    Dialog_BodyGraphicText_Properties_base(aParent)
 {
-	m_Parent = aParent;
-	m_GraphicText = aGraphicText;
+    m_Parent = aParent;
+    m_GraphicText = aGraphicText;
     InitDialog( );
 }
 
@@ -51,26 +51,32 @@ Dialog_BodyGraphicText_Properties::Dialog_BodyGraphicText_Properties(  WinEDA_Li
 void Dialog_BodyGraphicText_Properties::InitDialog(  )
 /*****************************************************/
 {
-wxString msg;
+    wxString msg;
 
-	SetFocus();
+    SetFocus();
 
-	if ( m_GraphicText )
-	{
-		msg = ReturnStringFromValue(g_UnitMetric, m_GraphicText->m_Size.x, m_Parent->m_InternalUnits);
-		m_TextSize->SetValue(msg);
-		m_TextValue->SetValue(m_GraphicText->m_Text);
-		if ( m_GraphicText->m_Unit == 0 ) m_CommonUnit->SetValue(TRUE);
-		if ( m_GraphicText->m_Convert == 0 ) m_CommonConvert->SetValue(TRUE);
-		if ( m_GraphicText->m_Orient == TEXT_ORIENT_VERT ) m_Orient->SetValue(TRUE);
-		int shape = 0;
-		if ( m_GraphicText->m_Italic)
-			shape = 1;
-		if ( m_GraphicText->m_Bold)
-			shape |= 2;
+    if ( m_GraphicText )
+    {
+        msg = ReturnStringFromValue(g_UnitMetric, m_GraphicText->m_Size.x,
+                                    m_Parent->m_InternalUnits);
+        m_TextSize->SetValue( msg );
+        m_TextValue->SetValue( m_GraphicText->m_Text );
 
-		m_TextShapeOpt->SetSelection(shape);
-        
+        if ( m_GraphicText->m_Unit == 0 )
+            m_CommonUnit->SetValue( TRUE );
+        if ( m_GraphicText->m_Convert == 0 )
+            m_CommonConvert->SetValue( TRUE );
+        if ( m_GraphicText->m_Orient == TEXT_ORIENT_VERT )
+            m_Orient->SetValue( TRUE );
+
+        int shape = 0;
+        if ( m_GraphicText->m_Italic )
+            shape = 1;
+        if ( m_GraphicText->m_Bold )
+            shape |= 2;
+
+        m_TextShapeOpt->SetSelection( shape );
+
         switch ( m_GraphicText->m_HJustify )
         {
             case GR_TEXT_HJUSTIFY_LEFT:
@@ -89,31 +95,36 @@ wxString msg;
 
         switch ( m_GraphicText->m_VJustify )
         {
-            case GR_TEXT_VJUSTIFY_BOTTOM:
-                m_TextVJustificationOpt->SetSelection(0);
-                break;
+        case GR_TEXT_VJUSTIFY_BOTTOM:
+            m_TextVJustificationOpt->SetSelection(0);
+            break;
 
-            case GR_TEXT_VJUSTIFY_CENTER:
-                m_TextVJustificationOpt->SetSelection(1);
-                break;
+        case GR_TEXT_VJUSTIFY_CENTER:
+            m_TextVJustificationOpt->SetSelection(1);
+            break;
 
-            case GR_TEXT_VJUSTIFY_TOP:
-                m_TextVJustificationOpt->SetSelection(2);
-                break;
-
+        case GR_TEXT_VJUSTIFY_TOP:
+            m_TextVJustificationOpt->SetSelection(2);
+            break;
         }
-	}
-	else
-	{
-		msg = ReturnStringFromValue(g_UnitMetric, g_LastTextSize, m_Parent->m_InternalUnits);
-		m_TextSize->SetValue(msg);
-		if ( ! g_FlDrawSpecificUnit ) m_CommonUnit->SetValue(TRUE);
-		if ( ! g_FlDrawSpecificConvert ) m_CommonConvert->SetValue(TRUE);
-		if ( g_LastTextOrient == TEXT_ORIENT_VERT ) m_Orient->SetValue(TRUE);
-	}
+    }
+    else
+    {
+        msg = ReturnStringFromValue( g_UnitMetric, g_LastTextSize,
+                                     m_Parent->m_InternalUnits );
+        m_TextSize->SetValue( msg );
 
-	msg = m_TextSizeText->GetLabel() + ReturnUnitSymbol();
-	m_TextSizeText->SetLabel(msg);
+        if ( ! g_FlDrawSpecificUnit )
+            m_CommonUnit->SetValue( TRUE );
+        if ( ! g_FlDrawSpecificConvert )
+            m_CommonConvert->SetValue( TRUE );
+        if ( g_LastTextOrient == TEXT_ORIENT_VERT )
+            m_Orient->SetValue( TRUE );
+    }
+
+    msg = m_TextSizeText->GetLabel() + ReturnUnitSymbol();
+    m_TextSizeText->SetLabel( msg );
+
     if (GetSizer())
     {
         GetSizer()->SetSizeHints(this);
@@ -135,71 +146,79 @@ void Dialog_BodyGraphicText_Properties::OnOkClick( wxCommandEvent& event )
 {
 wxString Line;
 
-	Line = m_TextValue->GetValue();
-	g_LastTextOrient = m_Orient->GetValue() ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
-	wxString msg = m_TextSize->GetValue();
-	g_LastTextSize = ReturnValueFromString(g_UnitMetric, msg, m_Parent->m_InternalUnits);
-	g_FlDrawSpecificConvert = m_CommonConvert->GetValue() ? FALSE : TRUE;
-	g_FlDrawSpecificUnit = m_CommonUnit->GetValue() ? FALSE : TRUE;
+    Line = m_TextValue->GetValue();
+    g_LastTextOrient = m_Orient->GetValue() ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
+    wxString msg = m_TextSize->GetValue();
+    g_LastTextSize = ReturnValueFromString(g_UnitMetric, msg,
+                                           m_Parent->m_InternalUnits);
+    g_FlDrawSpecificConvert = m_CommonConvert->GetValue() ? FALSE : TRUE;
+    g_FlDrawSpecificUnit = m_CommonUnit->GetValue() ? FALSE : TRUE;
 
-	if ( m_GraphicText )
-	{
-		if ( ! Line.IsEmpty() ) m_GraphicText->m_Text = Line;
-		else m_GraphicText->m_Text = wxT("[null]");
-		m_GraphicText->m_Size.x = m_GraphicText->m_Size.y = g_LastTextSize;
-		m_GraphicText->m_Orient = g_LastTextOrient;
-		if( g_FlDrawSpecificUnit ) m_GraphicText->m_Unit = CurrentUnit;
-		else m_GraphicText->m_Unit = 0;
-		if( g_FlDrawSpecificConvert ) m_GraphicText->m_Convert = CurrentConvert;
-		else m_GraphicText->m_Convert = 0;
+    if ( m_GraphicText )
+    {
+        if ( ! Line.IsEmpty() )
+            m_GraphicText->m_Text = Line;
+        else
+            m_GraphicText->m_Text = wxT("[null]");
 
-		if ( (m_TextShapeOpt->GetSelection() & 1 ) != 0 )
-			m_GraphicText->m_Italic = true;
-		else
-			m_GraphicText->m_Italic = false;
+        m_GraphicText->m_Size.x = m_GraphicText->m_Size.y = g_LastTextSize;
+        m_GraphicText->m_Orient = g_LastTextOrient;
 
-		if ( (m_TextShapeOpt->GetSelection() & 2 ) != 0 )
-			m_GraphicText->m_Bold = true;
-		else
-			m_GraphicText->m_Bold = false;
+        if( g_FlDrawSpecificUnit )
+            m_GraphicText->m_Unit = CurrentUnit;
+        else
+            m_GraphicText->m_Unit = 0;
+
+        if( g_FlDrawSpecificConvert )
+            m_GraphicText->m_Convert = CurrentConvert;
+        else
+            m_GraphicText->m_Convert = 0;
+
+        if ( (m_TextShapeOpt->GetSelection() & 1 ) != 0 )
+            m_GraphicText->m_Italic = true;
+        else
+            m_GraphicText->m_Italic = false;
+
+        if ( (m_TextShapeOpt->GetSelection() & 2 ) != 0 )
+            m_GraphicText->m_Bold = true;
+        else
+            m_GraphicText->m_Bold = false;
 
         switch ( m_TextHJustificationOpt->GetSelection() )
         {
-            case 0:
-                m_GraphicText->m_HJustify = GR_TEXT_HJUSTIFY_LEFT;
-                break;
+        case 0:
+            m_GraphicText->m_HJustify = GR_TEXT_HJUSTIFY_LEFT;
+            break;
 
-            case 1:
-                m_GraphicText->m_HJustify = GR_TEXT_HJUSTIFY_CENTER;
-                break;
+        case 1:
+            m_GraphicText->m_HJustify = GR_TEXT_HJUSTIFY_CENTER;
+            break;
 
-            case 2:
-                m_GraphicText->m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
-                break;
-
+        case 2:
+            m_GraphicText->m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
+            break;
         }
 
-        switch ( m_TextVJustificationOpt->GetSelection()  )
+        switch ( m_TextVJustificationOpt->GetSelection() )
         {
-            case 0:
-                m_GraphicText->m_VJustify = GR_TEXT_VJUSTIFY_BOTTOM;
-                break;
+        case 0:
+            m_GraphicText->m_VJustify = GR_TEXT_VJUSTIFY_BOTTOM;
+            break;
 
-            case 1:
-                m_GraphicText->m_VJustify = GR_TEXT_VJUSTIFY_CENTER;
-                break;
+        case 1:
+            m_GraphicText->m_VJustify = GR_TEXT_VJUSTIFY_CENTER;
+            break;
 
-            case 2:
-                m_GraphicText->m_VJustify = GR_TEXT_VJUSTIFY_TOP;
-                break;
-
+        case 2:
+            m_GraphicText->m_VJustify = GR_TEXT_VJUSTIFY_TOP;
+            break;
         }
-	}
-	Close();
+    }
+    Close();
 
-	if ( CurrentDrawItem )
-		CurrentDrawItem->DisplayInfo( m_Parent );
-	Close();
+    if ( CurrentDrawItem )
+        CurrentDrawItem->DisplayInfo( m_Parent );
+    Close();
 }
 
 
@@ -212,26 +231,28 @@ void WinEDA_LibeditFrame::EditSymbolText(wxDC * DC, LibEDA_BaseStruct * DrawItem
          || ( DrawItem->Type() != COMPONENT_GRAPHIC_TEXT_DRAW_TYPE ) )
         return;
 
-	/* Effacement ancien texte */
-	if( DC)
-		DrawLibraryDrawStruct(DrawPanel, DC, CurrentLibEntry, wxPoint(0, 0),
-                              DrawItem, DrawMode);
+    /* Effacement ancien texte */
+    if( DC)
+        DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, DrawMode, NULL,
+                        DefaultTransformMatrix );
 
 
-	Dialog_BodyGraphicText_Properties * frame =
-			new Dialog_BodyGraphicText_Properties(this,  (LibDrawText *) DrawItem);
-	frame->ShowModal(); frame->Destroy();
+    Dialog_BodyGraphicText_Properties * frame =
+            new Dialog_BodyGraphicText_Properties( this,
+                                                   (LibDrawText *) DrawItem );
+    frame->ShowModal();
+    frame->Destroy();
+    GetScreen()->SetModify();
 
-	GetScreen()->SetModify();
+    /* Affichage nouveau texte */
+    if( DC )
+    {
+        if ( ( DrawItem->m_Flags & IS_MOVED ) == 0 )
+            DrawMode = GR_DEFAULT_DRAWMODE;
 
-	/* Affichage nouveau texte */
-	if( DC )
-	{
-		if ( (DrawItem->m_Flags & IS_MOVED) == 0 )
-			DrawMode = GR_DEFAULT_DRAWMODE;
-		DrawLibraryDrawStruct(DrawPanel, DC, CurrentLibEntry, wxPoint(0, 0),
-				DrawItem, DrawMode);
-	}
+        DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, DrawMode, NULL,
+                        DefaultTransformMatrix );
+    }
 }
 
 
@@ -239,31 +260,32 @@ void WinEDA_LibeditFrame::EditSymbolText(wxDC * DC, LibEDA_BaseStruct * DrawItem
 void WinEDA_LibeditFrame::RotateSymbolText(wxDC * DC)
 /****************************************************/
 /*
-	90 deg Graphic text Rotation .
+    90 deg Graphic text Rotation .
 */
 {
-LibDrawText * DrawItem = (LibDrawText *) CurrentDrawItem;
+    LibDrawText * DrawItem = (LibDrawText *) CurrentDrawItem;
 
-	if(DrawItem == NULL) return;
+    if( DrawItem == NULL )
+        return;
 
-	/* Erase drawing (can be within a move command) */
-	if ( DrawPanel->ManageCurseur == NULL)
-		DrawLibraryDrawStruct(DrawPanel, DC, CurrentLibEntry, wxPoint(0, 0),
-				DrawItem, g_XorMode);
-	else DrawPanel->ManageCurseur(DrawPanel, DC, FALSE);
+    /* Erase drawing (can be within a move command) */
+    if ( DrawPanel->ManageCurseur == NULL)
+        DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
+                        DefaultTransformMatrix );
+    else
+        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
-	if( DrawItem->m_Orient == TEXT_ORIENT_HORIZ)
-			DrawItem->m_Orient = TEXT_ORIENT_VERT;
-	else DrawItem->m_Orient = TEXT_ORIENT_HORIZ;
+    if( DrawItem->m_Orient == TEXT_ORIENT_HORIZ )
+        DrawItem->m_Orient = TEXT_ORIENT_VERT;
+    else
+        DrawItem->m_Orient = TEXT_ORIENT_HORIZ;
 
-	GetScreen()->SetModify();
+    GetScreen()->SetModify();
 
-	/* Redraw item with new orient */
-	if ( DrawPanel->ManageCurseur == NULL)
-		DrawLibraryDrawStruct(DrawPanel, DC, CurrentLibEntry, wxPoint(0, 0),
-				DrawItem, GR_DEFAULT_DRAWMODE);
-	else DrawPanel->ManageCurseur(DrawPanel, DC, FALSE);
-
+    /* Redraw item with new orient */
+    if ( DrawPanel->ManageCurseur == NULL )
+        DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE,
+                        NULL, DefaultTransformMatrix );
+    else
+        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 }
-
-

@@ -77,19 +77,6 @@ enum  DrawPinOrient {
     PIN_DOWN  = 'D',
 };
 
-// Struct to pass parameters for drawing pins, in function Draw
-class DrawPinPrms
-{
-public:
-    EDA_LibComponentStruct* m_Entry;    // Pointer to the component in lib
-    bool m_DrawPinText;                 // Are pin texts drawn ?
-
-    DrawPinPrms( EDA_LibComponentStruct* entry, bool drawpintext = true )
-    {
-        m_Entry = entry;
-        m_DrawPinText = drawpintext;
-    }
-};
 
 /****************************************************************************/
 /* Classes for handle the body items of a component: pins add graphic items */
@@ -103,11 +90,11 @@ public:
 class LibEDA_BaseStruct : public EDA_BaseStruct
 {
 public:
-    int    m_Unit;       /* Unit identification (for multi part per package)
+    int      m_Unit;     /* Unit identification (for multi part per package)
                           * 0 if the item is common to all units */
-    int    m_Convert;    /* Shape identification (for parts which have a convert
+    int      m_Convert;  /* Shape identification (for parts which have a convert
                           * shape) 0 if the item is common to all shapes */
-    FILL_T m_Fill;       /* NO_FILL, FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR.
+    FILL_T   m_Fill;     /* NO_FILL, FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR.
                           * has meaning only for some items */
     wxString m_typeName; /* Name of object displayed in the message panel. */
 
@@ -227,11 +214,11 @@ public:
 
     /* (Currently Unused) Pin num and Pin name text options: italic/normal
      * /bold, 0 = default */
-    char m_PinNumShapeOpt;
-    char m_PinNameShapeOpt;
+    char     m_PinNumShapeOpt;
+    char     m_PinNameShapeOpt;
     // (Currently Unused) Pin num and Pin name text opt position, 0 = default:
-    char m_PinNumPositionOpt;
-    char m_PinNamePositionOpt;
+    char     m_PinNumPositionOpt;
+    char     m_PinNamePositionOpt;
 
     wxPoint  m_Pos;         /* Position or centre (Arc and Circle) or start
                              * point (segments) */

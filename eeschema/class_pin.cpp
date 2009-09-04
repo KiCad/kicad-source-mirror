@@ -38,7 +38,7 @@ LibDrawPin::LibDrawPin(EDA_LibComponentStruct * aParent) :
     m_PinShape    = NONE;               /* Bit a bit: Pin shape (voir enum prec) */
     m_PinType     = PIN_UNSPECIFIED;    /* electrical type of pin */
     m_Attributs   = 0;                  /* bit 0 != 0: pin invisible */
-    m_PinNum      = 0;                  /*pin number ( i.e. 4 codes Ascii ) */
+    m_PinNum      = 0;                  /*pin number ( i.e. 4 codes ASCII ) */
     m_PinNumSize  = 50;
     m_PinNameSize = 50;                 /* Default size for pin name and num */
     m_Width    = 0;
@@ -236,7 +236,7 @@ bool LibDrawPin::Load( char* line, wxString& errorMsg )
         return false;
     }
 
-    if( i == 12 )       /* Special Symbole defined */
+    if( i == 12 )       /* Special Symbol defined */
     {
         for( j = strlen( pinAttrs ); j > 0; )
         {
@@ -280,10 +280,9 @@ bool LibDrawPin::Load( char* line, wxString& errorMsg )
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LibDrawPin::GetPenSize( )
+int LibDrawPin::GetPenSize()
 {
-    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
-    return pensize;
+    return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
 
@@ -308,11 +307,14 @@ void LibDrawPin::Draw( WinEDA_DrawPanel* aPanel,
             return;
     }
 
-    EDA_LibComponentStruct* Entry = ( (DrawPinPrms*) aData )->m_Entry;
-    bool    DrawPinText = ( (DrawPinPrms*) aData )->m_DrawPinText;
+    EDA_LibComponentStruct* Entry = GetParent();
+    bool DrawPinText = true;
+
+    if( ( aData != NULL ) && ( (bool*) aData == false ) )
+        DrawPinText = false;
 
     /* Calculate pin orient taking in account the component orientation. */
-    int     orient = ReturnPinDrawOrient( aTransformMatrix );
+    int orient = ReturnPinDrawOrient( aTransformMatrix );
 
     /* Calculate the pin position */
     wxPoint pos1 = TransformCoordinate( aTransformMatrix, m_Pos ) + aOffset;
@@ -322,8 +324,7 @@ void LibDrawPin::Draw( WinEDA_DrawPanel* aPanel,
 
     if( DrawPinText )
     {
-        DrawPinTexts( aPanel, aDC, pos1, orient,
-                      Entry->m_TextInside,
+        DrawPinTexts( aPanel, aDC, pos1, orient, Entry->m_TextInside,
                       Entry->m_DrawPinNum, Entry->m_DrawPinName,
                       aColor, aDrawMode );
     }
@@ -943,7 +944,7 @@ int LibDrawPin::ReturnPinDrawOrient( const int TransMat[2][2] )
         end.x = 1; break;
     }
 
-    end    = TransformCoordinate( TransMat, end );    // = pos of end point, accordint to the component orientation
+    end    = TransformCoordinate( TransMat, end );    // = pos of end point, according to the component orientation
     orient = PIN_UP;
     if( end.x == 0 )
     {
@@ -1044,7 +1045,7 @@ LibEDA_BaseStruct* LibDrawPin::DoGenCopy()
 
 
 /** Function LibDrawPin::DisplayInfo
- * Displays info (pin num and name, otientation ...
+ * Displays info (pin num and name, orientation ...
  * on the Info window
  */
 void LibDrawPin::DisplayInfo( WinEDA_DrawFrame* frame )

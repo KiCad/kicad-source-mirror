@@ -70,10 +70,11 @@ DrawSheetStruct* g_RootSheet = NULL;
 SCH_SCREEN*      g_ScreenLib = NULL;
 
 wxString   g_NetCmpExtBuffer( wxT( "cmp" ) );
-wxString   g_SymbolExtBuffer( wxT( "sym" ) );
 
+const wxString SymbolFileExtension( wxT( "sym" ) );
 const wxString CompLibFileExtension( wxT( "lib" ) );
 
+const wxString SymbolFileWildcard( wxT( "Kicad drawing symbol file (*.sym)|*.sym" ) );
 const wxString CompLibFileWildcard( wxT( "Kicad component library file (*.lib)|*.lib" ) );
 
 wxString   g_SimulatorCommandLine;  // ligne de commande pour l'appel au simulateur (gnucap, spice..)

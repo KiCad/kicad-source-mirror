@@ -237,8 +237,8 @@ void WinEDA_LibeditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     DrawPanel->DrawBackGround( DC );
 
     if( CurrentLibEntry )
-        DrawLibEntry( DrawPanel, DC, CurrentLibEntry, wxPoint( 0, 0 ),
-                      CurrentUnit, CurrentConvert, GR_DEFAULT_DRAWMODE );
+        CurrentLibEntry->Draw( DrawPanel, DC, wxPoint( 0, 0 ), CurrentUnit,
+                               CurrentConvert, GR_DEFAULT_DRAWMODE );
 
     DrawPanel->CursorOn( DC ); // redraw cursor
 
