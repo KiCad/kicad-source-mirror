@@ -1054,6 +1054,15 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
 }
 
 
+// Rotate a vector by an angle
+wxPoint rotate(wxPoint p, int angle){
+    wxPoint n;
+    float theta = M_PI * angle/1800;
+    n.x = float(p.x) * cos(theta) - float(p.y) * sin(theta);
+    n.y = p.x * sin(theta) + p.y * cos(theta);
+    return n;
+}
+
 /**************************************************************************************/
 bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_min )
 /***************************************************************************************/
@@ -1075,8 +1084,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
 
     bool diag = true;
 
-    /* tst rapide: si les cercles exinscrits sont distants de dist_min au moins,
-     *  il n'y a pas de risque: */
+    /* Quick test: Clearance is OK if the bounding circles are further away than dist_min.*/
     if( (dist - aRefPad->m_Rayon - aPad->m_Rayon) >= dist_min )
         goto exit;
 
@@ -1143,8 +1151,55 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
             }
             else        // Any other orient
             {
-                /* TODO : any orient ... */
+                /* Use TestForIntersectionOfStraightLineSegments() for all 4 edges (segments).*/
+                
+                /* Test if one center point is contained in the other and thus the pads overlap. 
+                 * This case is not covered by the following check if one pad is
+                 * completely contained in the other (because edges don't intersect)!
+                 */
+                if ( ( (dist < aPad->m_Size.x) && (dist < aPad->m_Size.y) )||
+                    ( (dist < aRefPad->m_Size.x) && (dist < aRefPad->m_Size.y) )){
+                    diag = false;
+                }
+
+                // Vectors from center to corner
+                wxPoint aPad_c2c = wxPoint(aPad->m_Size.x/2, aPad->m_Size.y/2);
+                wxPoint aRefPad_c2c = wxPoint(aRefPad->m_Size.x/2, aRefPad->m_Size.y/2);
+
+                for (int i=0; i<4; i++){ // for all edges in aPad
+                    wxPoint p11 = aPad->ReturnShapePos() + rotate(aPad_c2c, aPad->m_Orient);
+                    // flip the center-to-corner vector
+                    if (i%2 == 0){ 
+                        aPad_c2c.x = -aPad_c2c.x;
+                    }else{
+                        aPad_c2c.y = -aPad_c2c.y;
+                    }
+                    wxPoint p12 = aPad->ReturnShapePos() + rotate(aPad_c2c, aPad->m_Orient);
+                    
+                    for (int j=0; j<4; j++){// for all edges in aRefPad
+                        wxPoint p21 = aRefPad->ReturnShapePos() + rotate(aRefPad_c2c, aRefPad->m_Orient);
+                        // flip the center-to-corner vector
+                        if (j%2 == 0){
+                            aRefPad_c2c.x = -aRefPad_c2c.x;
+                        }else{
+                            aRefPad_c2c.y = -aRefPad_c2c.y;
+                        }
+                        wxPoint p22 = aRefPad->ReturnShapePos() + rotate(aRefPad_c2c, aRefPad->m_Orient);
+                        
+                        int x,y;
+                        double d;
+                        int intersect = TestForIntersectionOfStraightLineSegments( p11.x, p11.y, p12.x, p12.y,
+                                                                        p21.x, p21.y, p22.x, p22.y,
+                                                                        &x, &y, &d);
+                                                                        ;
+                        if (intersect || (d< dist_min)){
+                            diag=false;
+                        }
+                    }
+                }
             }
+        }else{
+            // TODO: Pad -> other shape!
         }
         break;
 
