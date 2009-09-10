@@ -28,12 +28,17 @@ class DIALOG_DESIGN_RULES : public DIALOG_DESIGN_RULES_BASE
 
 private:
 
-    static const wxString wildCard;
+    static const wxString wildCard;     ///< the name of a ficticious netclass which includes all NETs
 
     WinEDA_PcbFrame*        m_Parent;
     BOARD*                  m_Pcb;
 
-    std::vector<wxString>   m_NetClasses;
+    /**
+     * A two column table which gets filled once and never loses any elements, so it is
+     * basically constant, except that the NETCUP::clazz member can change for any
+     * given row a NET is moved in and out of a class.  clazz reflects the respective
+     * NET's current net class.
+     */
     NETCUPS                 m_AllNets;
 
 private:
