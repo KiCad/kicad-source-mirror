@@ -84,6 +84,9 @@ void DIALOG_DESIGN_RULES::Init()
 
     // copy all NETs into m_AllNets by adding them as NETCUPs.
 
+    // @todo go fix m_Pcb->SynchronizeNetsAndNetClasses() so that the netcode==0 is not present in the BOARD::m_NetClasses
+
+
     NETCLASS*   netclass;
 
     NETCLASSES& netclasses = m_Pcb->m_NetClasses;
@@ -116,7 +119,7 @@ static bool sortByClassThenName( NETCUP* a, NETCUP* b )
     if( a->clazz < b->clazz )
         return true;
 
-    if( a->net < a->net )
+    if( a->net < b->net )
         return true;
 
     return false;
@@ -179,16 +182,14 @@ void DIALOG_DESIGN_RULES::setRowItem( wxListCtrl* aListCtrl, int aRow, NETCUP* a
  */
 void DIALOG_DESIGN_RULES::FillListBoxWithNetNames( wxListCtrl* aListCtrl, const wxString& aNetClass )
 {
-    aListCtrl->ClearAll();
-
-#if 0   // out of time for troubleshooting this now.
+    aListCtrl->DeleteAllItems();
 
     PNETCUPS    ptrList;
 
     // get a subset of m_AllNets in pointer form, sorted as desired.
     makePointers( &ptrList, aNetClass );
 
-#if defined(DEBUG)
+#if 0 && defined(DEBUG)
     int r = 0;
     for( PNETCUPS::iterator i = ptrList.begin();  i!=ptrList.end();  ++i, ++r )
     {
@@ -206,9 +207,6 @@ void DIALOG_DESIGN_RULES::FillListBoxWithNetNames( wxListCtrl* aListCtrl, const 
     }
 
     aListCtrl->Show();
-
-#endif
-
 }
 
 
@@ -469,42 +467,42 @@ void DIALOG_DESIGN_RULES::OnRightCBSelection( wxCommandEvent& event )
 }
 
 
-/* Called on clicking the "<<<" or Copy Right to Left button:
- * Selected items are moved from the right list to the left list
- */
+void DIALOG_DESIGN_RULES::moveSelectedItems( wxListCtrl* src, const wxString& newClassName )
+{
+    wxListItem  item;
+    wxString    netName;
+
+    for( int row = 0;  row < src->GetItemCount();  ++row )
+    {
+        if( !src->GetItemState( row, wxLIST_STATE_SELECTED ) )
+            continue;
+
+        item.SetColumn( 0 );
+        item.SetId( row );
+
+        src->GetItem( item );
+        netName = item.GetText();
+
+        setNetClass( netName, newClassName == wildCard ? NETCLASS::Default : newClassName );
+    }
+}
+
 
 void DIALOG_DESIGN_RULES::OnRightToLeftCopyButton( wxCommandEvent& event )
 {
-    wxString oldClassName = m_leftClassChoice->GetStringSelection();
-    wxString newClassName = m_rightClassChoice->GetStringSelection();
+    wxString newClassName = m_leftClassChoice->GetStringSelection();
 
-    wxASSERT( oldClassName != wxEmptyString );
-    wxASSERT( newClassName != wxEmptyString );
-
-    for( int row = 0;  row < m_rightListCtrl->GetItemCount();  ++row )
-    {
-        if( !m_rightListCtrl->GetItemState( row, wxLIST_STATE_SELECTED ) )
-            continue;
-
-/*
-        @todo: get the netName, call setNetClass()
-        wxString netName = m_rightListCtrl->OnGetItemText( row, 0 );
-
-        setNetClass( netName, newClassName == wildCard ? NETCLASS::Default : newClassName );
-*/
-    }
+    moveSelectedItems( m_rightListCtrl, newClassName );
 
     FillListBoxWithNetNames( m_leftListCtrl, m_leftClassChoice->GetStringSelection() );
     FillListBoxWithNetNames( m_rightListCtrl, m_rightClassChoice->GetStringSelection() );
 }
 
-
-/* Called on clicking the ">>>" or Copy Left to Right button:
- * Selected items are moved from the left list to the right list
- */
 void DIALOG_DESIGN_RULES::OnLeftToRightCopyButton( wxCommandEvent& event )
 {
-    // @todo factor code from above, or combine the two functions.
+    wxString newClassName = m_rightClassChoice->GetStringSelection();
+
+    moveSelectedItems( m_leftListCtrl, newClassName );
 
     FillListBoxWithNetNames( m_leftListCtrl, m_leftClassChoice->GetStringSelection() );
     FillListBoxWithNetNames( m_rightListCtrl, m_rightClassChoice->GetStringSelection() );

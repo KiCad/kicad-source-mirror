@@ -7,12 +7,11 @@ email address.
 2009-Sep-10 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++pcbnew
-    More NETCLASS work, started on the UI also.  Almost done.  Put NETCLASS support
+    Finished initial NETCLASS work, along with UI.  Put NETCLASS support
     into DRC.  Fixed DRC dialog so progress during DRC is sensible and visible.
     The specctra_export probably still needs a little work regarding VIAs.
-    Don't install this version of PCBNEW if you need stability.  You can compile
-    and look but I would not install it quite yet.  I compiled wxformbuilder
-    from source, so you may need to upgrade to load my *.fbp files.
+    I compiled wxformbuilder from source, so you may need to upgrade to
+    load my *.fbp files.
 
     Jean-Pierre @   todo:    pcbnew/zones_test_and_combine_areas.cpp needs to
                              use NETCLASS and not g_DesignSettings.m_TrackClearance

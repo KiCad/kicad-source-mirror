@@ -94,7 +94,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_leftClassChoice->SetSelection( 0 );
 	leftNetSelectBoxSizer->Add( m_leftClassChoice, 0, wxALL|wxEXPAND, 5 );
 	
-	m_leftListCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
+	m_leftListCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_VRULES );
 	m_leftListCtrl->SetMinSize( wxSize( 220,-1 ) );
 	
 	leftNetSelectBoxSizer->Add( m_leftListCtrl, 1, wxALL|wxEXPAND, 5 );
@@ -131,14 +131,14 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_rightClassChoice->SetSelection( 0 );
 	rghtNetSelectBoxSizer->Add( m_rightClassChoice, 0, wxALL|wxEXPAND, 5 );
 	
-	m_rightListCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
+	m_rightListCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_VRULES );
 	m_rightListCtrl->SetMinSize( wxSize( 220,-1 ) );
 	
 	rghtNetSelectBoxSizer->Add( m_rightListCtrl, 1, wxALL|wxEXPAND, 5 );
 	
-	sbSizer4->Add( rghtNetSelectBoxSizer, 1, wxALL|wxEXPAND, 5 );
+	sbSizer4->Add( rghtNetSelectBoxSizer, 0, wxALL|wxEXPAND, 5 );
 	
-	bMainSizer->Add( sbSizer4, 1, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( sbSizer4, 2, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer2;
 	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Messages:") ), wxHORIZONTAL );
