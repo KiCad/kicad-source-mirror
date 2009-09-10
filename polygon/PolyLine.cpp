@@ -538,13 +538,16 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
       Within the algorithm all input data is multiplied with DGRID, and the result
       is rounded to an integer.
    */
-    double DGRID = 1.0;     // round coordinate X or Y value in calculations to this (initial value = 1000.0 in kbool example)
-                            // Note: in kicad, coordinates are already integer so DGRID can be set to 1
+    double DGRID = 10.0;     // round coordinate X or Y value in calculations to this (initial value = 1000.0 in kbool example)
+                            // Note: in kicad, coordinates are already integer so DGRID could be set to 1
+                            // we choose a DGRID = 10 to have a MARGE = 1.0
 
-    double MARGE = 0.001;     // snap with in this range points to lines in the intersection routines
-                            // should always be > DGRID  a  MARGE >= 10*DGRID is ok
-                            // this is also used to remove small segments and to decide when
-                            // two segments are in line. ( initial value = 0.001 )
+    double MARGE = 1.0;             // snap with in this range points to lines in the intersection routines
+                                    // should always be > 1/DGRID  a  MARGE >= 10/DGRID is ok
+                                    // this is also used to remove small segments and to decide when
+                                    // two segments are in line. ( initial value = 0.001 )
+                                    // For kicad we choose MARGE = 1, with DGRID = 10
+
     double CORRECTIONFACTOR = 0.0;      // correct the polygons by this number: used in BOOL_CORRECTION operation
                                         // this operation shrinks a polygon if CORRECTIONFACTOR < 0
                                         // or stretch it if CORRECTIONFACTOR > 0

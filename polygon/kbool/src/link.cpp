@@ -5,7 +5,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: link.cpp,v 1.3 2008/06/04 21:23:22 titato Exp $
+    RCS-ID: $Id: link.cpp,v 1.4 2009/09/07 19:23:28 titato Exp $
 */
 
 #include "kbool/booleng.h"
@@ -19,12 +19,12 @@
 #include "kbool/graph.h"
 #include "kbool/graphlst.h"
 
-int linkXYsorter( KBoolLink *, KBoolLink * );
+int linkXYsorter( kbLink *, kbLink * );
 
 //
 // Default constructor
 //
-KBoolLink::KBoolLink( Bool_Engine* GC )
+kbLink::kbLink( Bool_Engine* GC )
 {
     _GC = GC;
     Reset();
@@ -34,7 +34,7 @@ KBoolLink::KBoolLink( Bool_Engine* GC )
 //
 // This constructor makes this link a valid part of a graph
 //
-KBoolLink::KBoolLink( int graphnr, Node *begin, Node *end, Bool_Engine* GC )
+kbLink::kbLink( int graphnr, kbNode *begin, kbNode *end, Bool_Engine* GC )
 {
     _GC = GC;
     Reset();
@@ -50,7 +50,7 @@ KBoolLink::KBoolLink( int graphnr, Node *begin, Node *end, Bool_Engine* GC )
 //
 // This constructor makes this link a valid part of a graph
 //
-KBoolLink::KBoolLink( Node *begin, Node *end, Bool_Engine* GC )
+kbLink::kbLink( kbNode *begin, kbNode *end, Bool_Engine* GC )
 {
     _GC = GC;
     Reset();
@@ -67,7 +67,7 @@ KBoolLink::KBoolLink( Node *begin, Node *end, Bool_Engine* GC )
 //
 // Destructor
 //
-KBoolLink::~KBoolLink()
+kbLink::~kbLink()
 {
     UnLink();
 }
@@ -75,13 +75,13 @@ KBoolLink::~KBoolLink()
 //
 // Checks whether the current algorithm has been on this link
 //
-bool KBoolLink::BeenHere()
+bool kbLink::BeenHere()
 {
     if ( m_bin ) return true;
     return false;
 }
 
-void KBoolLink::TakeOverOperationFlags( KBoolLink* link )
+void kbLink::TakeOverOperationFlags( kbLink* link )
 {
     m_merge_L = link->m_merge_L;
     m_a_substract_b_L = link->m_a_substract_b_L;
@@ -98,7 +98,7 @@ void KBoolLink::TakeOverOperationFlags( KBoolLink* link )
 //
 // Returns the next link from the argument
 //
-KBoolLink* KBoolLink::Forth( Node *node )
+kbLink* kbLink::Forth( kbNode *node )
 {
     assert( node == m_beginnode || node == m_endnode );
     return node->GetOtherLink( this );
@@ -107,7 +107,7 @@ KBoolLink* KBoolLink::Forth( Node *node )
 //
 // Returns the Beginnode
 //
-Node *KBoolLink::GetBeginNode()
+kbNode *kbLink::GetBeginNode()
 {
     return m_beginnode;
 }
@@ -115,17 +115,17 @@ Node *KBoolLink::GetBeginNode()
 //
 // Returns the endnode
 //
-Node* KBoolLink::GetEndNode()
+kbNode* kbLink::GetEndNode()
 {
     return m_endnode;
 }
 
-Node* KBoolLink::GetLowNode()
+kbNode* kbLink::GetLowNode()
 {
     return ( ( m_beginnode->GetY() < m_endnode->GetY() ) ? m_beginnode : m_endnode );
 }
 
-Node* KBoolLink::GetHighNode()
+kbNode* kbLink::GetHighNode()
 {
     return ( ( m_beginnode->GetY() > m_endnode->GetY() ) ? m_beginnode : m_endnode );
 }
@@ -133,61 +133,61 @@ Node* KBoolLink::GetHighNode()
 //
 // Returns the graphnumber
 //
-int KBoolLink::GetGraphNum()
+int kbLink::GetGraphNum()
 {
     return m_graphnum;
 }
 
-bool KBoolLink::GetInc()
+bool kbLink::GetInc()
 {
     return m_Inc;
 //   if (Inc) return true;
 // return false;
 }
 
-void KBoolLink::SetInc( bool inc )
+void kbLink::SetInc( bool inc )
 {
     m_Inc = inc;
 //   Inc=0;
 //   if (inc) Inc=1;
 }
 
-bool KBoolLink::GetLeftA()
+bool kbLink::GetLeftA()
 {
     return m_LeftA;
 }
 
-void KBoolLink::SetLeftA( bool la )
+void kbLink::SetLeftA( bool la )
 {
     m_LeftA = la;
 }
 
-bool KBoolLink::GetLeftB()
+bool kbLink::GetLeftB()
 {
     return m_LeftB;
 }
 
-void KBoolLink::SetLeftB( bool lb )
+void kbLink::SetLeftB( bool lb )
 {
     m_LeftB = lb;
 }
 
-bool KBoolLink::GetRightA()
+bool kbLink::GetRightA()
 {
     return m_RightA;
 }
 
-void KBoolLink::SetRightA( bool ra )
+void kbLink::SetRightA( bool ra )
 {
     m_RightA = ra;
 }
 
-bool KBoolLink::GetRightB()
+bool kbLink::GetRightB()
 {
     return m_RightB;
 }
 
-void KBoolLink::SetRightB( bool rb )
+void kbLink::SetRightB( bool rb )
 {
     m_RightB = rb;
 }
@@ -196,7 +196,7 @@ void KBoolLink::SetRightB( bool rb )
 // This function is very popular by GP-faults
 // It returns the node different from a
 //
-Node* KBoolLink::GetOther( const Node *const a )
+kbNode* kbLink::GetOther( const kbNode *const a )
 {
     return ( ( a != m_beginnode ) ? m_beginnode : m_endnode );
 }
@@ -205,7 +205,7 @@ Node* KBoolLink::GetOther( const Node *const a )
 //
 // Is this marked for given operation
 //
-bool KBoolLink::IsMarked( BOOL_OP operation )
+bool kbLink::IsMarked( BOOL_OP operation )
 {
     switch ( operation )
     {
@@ -218,7 +218,7 @@ bool KBoolLink::IsMarked( BOOL_OP operation )
     }
 }
 
-bool KBoolLink::IsMarkedLeft( BOOL_OP operation )
+bool kbLink::IsMarkedLeft( BOOL_OP operation )
 {
     switch ( operation )
     {
@@ -231,7 +231,7 @@ bool KBoolLink::IsMarkedLeft( BOOL_OP operation )
     }
 }
 
-bool KBoolLink::IsMarkedRight( BOOL_OP operation )
+bool kbLink::IsMarkedRight( BOOL_OP operation )
 {
     switch ( operation )
     {
@@ -247,7 +247,7 @@ bool KBoolLink::IsMarkedRight( BOOL_OP operation )
 //
 // Is this a hole for given operation
 // beginnode must be to the left
-bool KBoolLink::IsHole( BOOL_OP operation )
+bool kbLink::IsHole( BOOL_OP operation )
 {
 
     bool topsideA, topsideB;
@@ -271,13 +271,13 @@ bool KBoolLink::IsHole( BOOL_OP operation )
 //
 // Is this a part of a hole
 //
-bool KBoolLink::GetHole()
+bool kbLink::GetHole()
 {
     return ( m_hole );
 }
 
 
-void KBoolLink::SetHole( bool h )
+void kbLink::SetHole( bool h )
 {
     m_hole = h;
 }
@@ -286,7 +286,7 @@ void KBoolLink::SetHole( bool h )
 //
 // Is this not marked at all
 //
-bool KBoolLink::IsUnused()
+bool kbLink::IsUnused()
 {
     return
         !( m_merge_L || m_merge_R ||
@@ -297,13 +297,13 @@ bool KBoolLink::IsUnused()
 }
 
 
-bool KBoolLink::IsZero( B_INT marge )
+bool kbLink::IsZero( B_INT marge )
 {
     return ( m_beginnode->Equal( m_endnode, marge ) ) ;
 }
 
 
-bool KBoolLink::ShorterThan( B_INT marge )
+bool kbLink::ShorterThan( B_INT marge )
 {
     return ( m_beginnode->ShorterThan( m_endnode, marge ) ) ;
 }
@@ -312,7 +312,7 @@ bool KBoolLink::ShorterThan( B_INT marge )
 //
 // Mark this link
 //
-void KBoolLink::Mark()
+void kbLink::Mark()
 {
     m_mark = true;
 }
@@ -328,7 +328,7 @@ void KBoolLink::Mark()
 // The references to this link in the node will also be deleted
 // After doing that, link link can be deleted or be recycled.
 //
-void KBoolLink::MergeNodes( Node *const begin_or_end_node )
+void kbLink::MergeNodes( kbNode *const begin_or_end_node )
 {
 // assert(beginnode && endnode);
 // assert ((begin_or_end_node == beginnode)||(begin_or_end_node == endnode));
@@ -350,15 +350,15 @@ void KBoolLink::MergeNodes( Node *const begin_or_end_node )
 // Here Left and Right is defined as being left or right from
 // the this link towards the center (common) node
 //
-LinkStatus KBoolLink::OutProduct( KBoolLink* const two, double accur )
+LinkStatus kbLink::OutProduct( kbLink* const two, double accur )
 {
-    Node * center;
+    kbNode * center;
     double distance;
     if ( two->GetBeginNode()->Equal( two->GetEndNode(), 1 ) )
         assert( !two );
     if ( GetBeginNode()->Equal( GetEndNode(), 1 ) )
         assert( !this );
-    KBoolLine* temp_line = new KBoolLine( this, _GC );
+    kbLine* temp_line = new kbLine( this, _GC );
 
     //the this link should connect to the other two link at at least one node
     if ( m_endnode == two->m_endnode || m_endnode == two->m_beginnode )
@@ -405,7 +405,7 @@ LinkStatus KBoolLink::OutProduct( KBoolLink* const two, double accur )
 // the second link
 // Result = IS_ON | IS_LEFT | IS_RIGHT
 //
-LinkStatus KBoolLink::PointOnCorner( KBoolLink* const two, KBoolLink* const third )
+LinkStatus kbLink::PointOnCorner( kbLink* const two, kbLink* const third )
 {
     LinkStatus
     TwoToOne,  // Position of two to this line
@@ -413,7 +413,7 @@ LinkStatus KBoolLink::PointOnCorner( KBoolLink* const two, KBoolLink* const thir
     ThirdToTwo,  // Position of third to two
     Result;
 
-//m  Node* center;
+//m  kbNode* center;
 
 //the this link should connect to the other two link at at least one node
 //m  if (endnode==two->endnode || endnode==two->beginnode)
@@ -462,7 +462,7 @@ LinkStatus KBoolLink::PointOnCorner( KBoolLink* const two, KBoolLink* const thir
 //
 // Remove the reference from this link to a_node
 //
-void KBoolLink::Remove( Node *a_node )
+void kbLink::Remove( kbNode *a_node )
 {
     ( m_beginnode == a_node ) ? m_beginnode = NULL : m_endnode = NULL;
 }
@@ -471,7 +471,7 @@ void KBoolLink::Remove( Node *a_node )
 //
 // Replace oldnode by newnode and correct the references
 //
-void KBoolLink::Replace( Node *oldnode, Node *newnode )
+void kbLink::Replace( kbNode *oldnode, kbNode *newnode )
 {
     if ( m_beginnode == oldnode )
     {
@@ -491,7 +491,7 @@ void KBoolLink::Replace( Node *oldnode, Node *newnode )
 //
 // Reset all values
 //
-void KBoolLink::Reset()
+void kbLink::Reset()
 {
     m_beginnode = 0;
     m_endnode = 0;
@@ -502,7 +502,7 @@ void KBoolLink::Reset()
 //
 // Reset all flags
 //
-void KBoolLink::Reset_flags()
+void kbLink::Reset_flags()
 {
     m_bin = false;    // Marker for walking over the graph
     m_hole  = false;   // Is this a part of hole ?
@@ -525,7 +525,7 @@ void KBoolLink::Reset_flags()
 //
 // Refill this link by the arguments
 //
-void KBoolLink::Reset( Node *begin, Node *end, int graphnr )
+void kbLink::Reset( kbNode *begin, kbNode *end, int graphnr )
 {
     // Remove all the previous references
     UnLink();
@@ -540,29 +540,29 @@ void KBoolLink::Reset( Node *begin, Node *end, int graphnr )
 }
 
 
-void KBoolLink::Set( Node *begin, Node *end )
+void kbLink::Set( kbNode *begin, kbNode *end )
 {
     m_beginnode = begin;
     m_endnode = end;
 }
 
-void KBoolLink::SetBeenHere()
+void kbLink::SetBeenHere()
 {
     m_bin = true;
 }
 
-void KBoolLink::SetNotBeenHere()
+void kbLink::SetNotBeenHere()
 {
     m_bin = false;
 }
 
-void KBoolLink::SetBeginNode( Node* new_node )
+void kbLink::SetBeginNode( kbNode* new_node )
 {
     m_beginnode = new_node;
 }
 
 
-void KBoolLink::SetEndNode( Node* new_node )
+void kbLink::SetEndNode( kbNode* new_node )
 {
     m_endnode = new_node;
 }
@@ -571,12 +571,12 @@ void KBoolLink::SetEndNode( Node* new_node )
 //
 // Sets the graphnumber to argument num
 //
-void KBoolLink::SetGraphNum( int num )
+void kbLink::SetGraphNum( int num )
 {
     m_graphnum = num;
 }
 
-GroupType KBoolLink::Group()
+GroupType kbLink::Group()
 {
     return m_group;
 }
@@ -585,7 +585,7 @@ GroupType KBoolLink::Group()
 //
 // Reset the groupflag to argument groep
 //
-void KBoolLink::SetGroup( GroupType groep )
+void kbLink::SetGroup( GroupType groep )
 {
     m_group = groep;
 }
@@ -594,7 +594,7 @@ void KBoolLink::SetGroup( GroupType groep )
 //
 // Remove all references to this link and from this link
 //
-void KBoolLink::UnLink()
+void kbLink::UnLink()
 {
     if ( m_beginnode )
     {
@@ -611,13 +611,13 @@ void KBoolLink::UnLink()
 }
 
 
-void KBoolLink::UnMark()
+void kbLink::UnMark()
 {
     m_mark = false;
     m_bin = false;
 }
 
-void KBoolLink::SetMark( bool value )
+void kbLink::SetMark( bool value )
 {
     m_mark = value;
 }
@@ -625,16 +625,16 @@ void KBoolLink::SetMark( bool value )
 //
 // general purpose mark checker
 //
-bool KBoolLink::IsMarked() { return m_mark; }
+bool kbLink::IsMarked() { return m_mark; }
 
-void  KBoolLink::SetTopHole( bool value ) { m_hole_top = value; }
+void  kbLink::SetTopHole( bool value ) { m_hole_top = value; }
 
-bool KBoolLink::IsTopHole() { return m_hole_top; }
+bool kbLink::IsTopHole() { return m_hole_top; }
 
 //
 // Calculates the merge/substact/exor/intersect flags
 //
-void KBoolLink::SetLineTypes()
+void kbLink::SetLineTypes()
 {
     m_merge_R     =
         m_a_substract_b_R =
@@ -681,12 +681,12 @@ void KBoolLink::SetLineTypes()
 
 
 //put in direction with a_node as beginnode
-void  KBoolLink::Redirect( Node* a_node )
+void  kbLink::Redirect( kbNode* a_node )
 {
     if ( a_node != m_beginnode )
     {
         // swap the begin- and endnode of the current link
-        Node * dummy = m_beginnode;
+        kbNode * dummy = m_beginnode;
         m_beginnode = m_endnode;
         m_endnode = dummy;
 

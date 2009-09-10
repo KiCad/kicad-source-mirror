@@ -1,11 +1,11 @@
 /*! \file src/booleng.cpp
     \author Klaas Holwerda
-
+ 
     Copyright: 2001-2004 (C) Klaas Holwerda
-
-    Licence: see kboollicense.txt
-
-    RCS-ID: $Id: booleng.cpp,v 1.3 2008/06/04 21:23:22 titato Exp $
+ 
+    Licence: see kboollicense.txt 
+ 
+    RCS-ID: $Id: booleng.cpp,v 1.5 2009/09/07 19:23:28 titato Exp $
 */
 
 #include "kbool/booleng.h"
@@ -38,19 +38,10 @@ B_INT babs( B_INT a )
 //----------------- Bool_Engine_Error -------------------------------/
 //-------------------------------------------------------------------/
 
-Bool_Engine_Error::Bool_Engine_Error( const char* message, const char* header, int degree, int fatal )
+Bool_Engine_Error::Bool_Engine_Error( string message, string header, int degree, int fatal )
 {
-    _message = new char[LINELENGTH];
-    _header  = new char[LINELENGTH];
-    if ( message )
-        strcpy( _message, message );
-    else
-        strcpy( _message, "non specified" );
-
-    if ( header )
-        strcpy( _header, header );
-    else
-        strcpy( _header, "non specified" );
+    _message = message;
+    _header = header;
 
     _degree = degree;
     _fatal = fatal;
@@ -59,17 +50,8 @@ Bool_Engine_Error::Bool_Engine_Error( const char* message, const char* header, i
 
 Bool_Engine_Error::Bool_Engine_Error( const Bool_Engine_Error& a )
 {
-    _message = new char[LINELENGTH];
-    _header  = new char[LINELENGTH];
-    if ( a._message )
-        strcpy( _message, a._message );
-    else
-        strcpy( _message, "non specified" );
-
-    if ( a._header )
-        strcpy( _header, a._header );
-    else
-        strcpy( _header, "non specified" );
+    _message = a._message;
+    _header = a._header;
 
     _degree = a._degree;
     _fatal = a._fatal;
@@ -78,18 +60,16 @@ Bool_Engine_Error::Bool_Engine_Error( const Bool_Engine_Error& a )
 
 Bool_Engine_Error::~Bool_Engine_Error()
 {
-    strcpy( _message, "" );
-    strcpy( _header, "" );
-    delete _message;
-    delete _header;
+    _message = "";
+    _header = "";
 }
 
-char* Bool_Engine_Error::GetErrorMessage()
+string Bool_Engine_Error::GetErrorMessage()
 {
     return _message;
 }
 
-char* Bool_Engine_Error::GetHeaderMessage()
+string Bool_Engine_Error::GetHeaderMessage()
 {
     return _header;
 }
@@ -110,13 +90,13 @@ int Bool_Engine_Error::GetFatal()
 
 Bool_Engine::Bool_Engine()
 {
-    _linkiter = new TDLI<KBoolLink>();
+    _linkiter = new TDLI<kbLink>();
     m_intersectionruns = 1;
 
     m_orientationEntryMode = false;
     m_doLinkHoles = true;
 
-    m_graphlist = new GraphList( this );
+    m_graphlist = new kbGraphList( this );
     m_ACCUR = 1e-4;
     m_WINDINGRULE = true;
     m_GraphToAdd = NULL;
@@ -173,19 +153,19 @@ void Bool_Engine::SetLog( bool OnOff )
     }
 }
 
-void Bool_Engine::SetState( const char* process )
+void Bool_Engine::SetState( string process )
 {
     Write_Log( process );
 }
 
-void Bool_Engine::error( const char *text, const char *title )
+void Bool_Engine::error( string text, string title )
 {
     Write_Log( "FATAL ERROR: ", title );
     Write_Log( "FATAL ERROR: ", text );
     throw Bool_Engine_Error( " Fatal Error", "Fatal Error", 9, 1 );
 };
 
-void Bool_Engine::info( const char *text, const char *title )
+void Bool_Engine::info( string text, string title )
 {
     Write_Log( "FATAL ERROR: ", title );
     Write_Log( "FATAL ERROR: ", text );
@@ -331,7 +311,7 @@ bool Bool_Engine::Do_Operation( BOOL_OP operation )
 {
 
 #if KBOOL_DEBUG
-    GraphList * saveme = new GraphList( m_graphlist );
+    kbGraphList * saveme = new kbGraphList( m_graphlist );
 #endif
 
     try
@@ -366,7 +346,7 @@ bool Bool_Engine::Do_Operation( BOOL_OP operation )
 
 #if KBOOL_DEBUG
         delete m_graphlist;
-        m_graphlist = new GraphList( saveme );
+        m_graphlist = new kbGraphList( saveme );
         m_graphlist->WriteGraphsKEY( this );
 #endif
 
@@ -384,7 +364,7 @@ bool Bool_Engine::Do_Operation( BOOL_OP operation )
 
 #if KBOOL_DEBUG
         delete m_graphlist;
-        m_graphlist = new GraphList( saveme );
+        m_graphlist = new kbGraphList( saveme );
         m_graphlist->WriteGraphsKEY( this );
 #endif
 
@@ -414,7 +394,7 @@ bool Bool_Engine::StartPolygonAdd( GroupType A_or_B )
     if ( m_GraphToAdd != NULL )
         return false;
 
-    Graph *myGraph = new Graph( this );
+    kbGraph *myGraph = new kbGraph( this );
     m_graphlist->insbegin( myGraph );
     m_GraphToAdd = myGraph;
     m_groupType = A_or_B;
@@ -437,7 +417,7 @@ bool Bool_Engine::AddPoint( double x, double y )
 
     B_INT rintx = ( ( B_INT ) ( x * m_DGRID ) ) * m_GRID;
     B_INT rinty = ( ( B_INT ) ( y * m_DGRID ) ) * m_GRID;
-    Node *myNode = new Node( rintx, rinty, this );
+    kbNode *myNode = new kbNode( rintx, rinty, this );
 
     // adding first point to graph
     if ( m_firstNodeToAdd == NULL )
@@ -451,8 +431,8 @@ bool Bool_Engine::AddPoint( double x, double y )
         }
 #endif
 
-        m_firstNodeToAdd = ( Node * ) myNode;
-        m_lastNodeToAdd  = ( Node * ) myNode;
+        m_firstNodeToAdd = ( kbNode * ) myNode;
+        m_lastNodeToAdd  = ( kbNode * ) myNode;
     }
     else
     {
@@ -466,7 +446,7 @@ bool Bool_Engine::AddPoint( double x, double y )
 #endif
 
         m_GraphToAdd->AddLink( m_lastNodeToAdd, myNode );
-        m_lastNodeToAdd = ( Node * ) myNode;
+        m_lastNodeToAdd = ( kbNode * ) myNode;
     }
 
     return true;
@@ -489,7 +469,7 @@ bool Bool_Engine::StartPolygonGet()
 {
     if ( !m_graphlist->empty() )
     {
-        m_getGraph = ( Graph* ) m_graphlist->headitem();
+        m_getGraph = ( kbGraph* ) m_graphlist->headitem();
         m_getLink  = m_getGraph->GetFirstLink();
         m_getNode  = m_getLink->GetBeginNode();
         m_numPtsInPolygon = m_getGraph->GetNumberOfLinks();
@@ -571,34 +551,34 @@ kbEdgeType Bool_Engine::GetPolygonPointEdgeType()
 }
 
 
-void Bool_Engine::Write_Log( const char *msg1 )
+void Bool_Engine::Write_Log( string msg1 )
 {
     if ( m_logfile == NULL )
         return;
 
-    fprintf( m_logfile, "%s \n", msg1 );
+    fprintf( m_logfile, "%s \n", msg1.c_str() );
 }
 
-void Bool_Engine::Write_Log( const char *msg1, const char*msg2 )
+void Bool_Engine::Write_Log( string msg1, string msg2 )
 {
     if ( m_logfile == NULL )
         return;
 
-    fprintf( m_logfile, "%s %s\n", msg1, msg2 );
+    fprintf( m_logfile, "%s %s\n", msg1.c_str(), msg2.c_str() );
 }
 
-void Bool_Engine::Write_Log( const char *fmt, double dval )
+void Bool_Engine::Write_Log( string fmt, double dval )
 {
     if ( m_logfile == NULL )
         return;
 
-    fprintf( m_logfile, fmt, dval );
+    fprintf( m_logfile, fmt.c_str(), dval );
 }
 
-void Bool_Engine::Write_Log( const char *fmt, B_INT bval )
+void Bool_Engine::Write_Log( string fmt, B_INT bval )
 {
     if ( m_logfile == NULL )
         return;
 
-    fprintf( m_logfile, fmt, bval );
+    fprintf( m_logfile, fmt.c_str(), bval );
 }

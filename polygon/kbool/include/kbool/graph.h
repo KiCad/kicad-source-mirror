@@ -5,10 +5,10 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: graph.h,v 1.3 2008/06/04 21:23:21 titato Exp $
+    RCS-ID: $Id: graph.h,v 1.4 2009/09/07 19:23:28 titato Exp $
 */
 
-/* @@(#) $Source: /cvsroot/wxart2d/wxArt2D/thirdparty/kbool/include/kbool/graph.h,v $ $Revision: 1.3 $ $Date: 2008/06/04 21:23:21 $ */
+/* @@(#) $Source: /cvsroot/wxart2d/wxArt2D/thirdparty/kbool/include/kbool/graph.h,v $ $Revision: 1.4 $ $Date: 2009/09/07 19:23:28 $ */
 
 /*
 Program GRAPH.H
@@ -25,23 +25,23 @@ Last Update 03-04-1996
 #include "kbool/line.h"
 #include "kbool/scanbeam.h"
 
-class Node;
+class kbNode;
 
-class GraphList;
+class kbGraphList;
 
 //! one graph containing links that cab be connected.
-class A2DKBOOLDLLEXP Graph
+class A2DKBOOLDLLEXP kbGraph
 {
 protected:
     Bool_Engine* _GC;
 public:
 
-    Graph( Bool_Engine* GC );
-    Graph( KBoolLink*, Bool_Engine* GC );
+    kbGraph( Bool_Engine* GC );
+    kbGraph( kbLink*, Bool_Engine* GC );
 
-    Graph( Graph* other );
+    kbGraph( kbGraph* other );
 
-    ~Graph();
+    ~kbGraph();
 
     bool   GetBin()        { return _bin; };
     void   SetBin( bool b )      { _bin = b; };
@@ -51,10 +51,10 @@ public:
     void    Rotate( bool plus90 );
 
     //! adds a link to the linklist
-    void   AddLink( Node *begin, Node *end );
+    void   AddLink( kbNode *begin, kbNode *end );
 
     //! adds a link to the linklist
-    void   AddLink( KBoolLink *a_link );
+    void   AddLink( kbLink *a_link );
 
     bool   AreZeroLines( B_INT Marge );
 
@@ -79,42 +79,42 @@ public:
     // Remove unused links
     void   ReverseAllLinks();
 
-    //! Simplify the graph
+    //! Simplify the kbGraph
     bool   Simplify( B_INT Marge );
 
 
     //! Takes over all links of the argument
     bool    Smoothen( B_INT Marge );
 
-    void   TakeOver( Graph* );
+    void   TakeOver( kbGraph* );
 
     //! function for maximum performance
 
-    //! Get the First link from the graph
-    KBoolLink* GetFirstLink();
-    Node*   GetTopNode();
+    //! Get the First link from the kbGraph
+    kbLink* GetFirstLink();
+    kbNode*   GetTopNode();
     void   SetBeenHere( bool );
     void    Reset_flags();
 
-    //! Set the group of a graph
+    //! Set the group of a kbGraph
     void   SetGroup( GroupType );
 
-    //! Set the number of the graph
+    //! Set the number of the kbGraph
     void   SetNumber( int );
     void    Reset_Mark_and_Bin();
     bool     GetBeenHere();
     int   GetGraphNum();
     int   GetNumberOfLinks();
 
-    void        Boolean( BOOL_OP operation, GraphList* Result );
-    void        Correction( GraphList* Result, double factor );
-    void        MakeRing( GraphList* Result, double factor );
-    void        CreateRing( GraphList *ring, double factor );
-    void        CreateRing_fast( GraphList *ring, double factor );
-    void        CreateArc( Node* center, KBoolLine* incoming, Node* end, double radius, double aber );
-    void        CreateArc( Node* center, Node* begin, Node* end, double radius, bool clock, double aber );
+    void        Boolean( BOOL_OP operation, kbGraphList* Result );
+    void        Correction( kbGraphList* Result, double factor );
+    void        MakeRing( kbGraphList* Result, double factor );
+    void        CreateRing( kbGraphList *ring, double factor );
+    void        CreateRing_fast( kbGraphList *ring, double factor );
+    void        CreateArc( kbNode* center, kbLine* incoming, kbNode* end, double radius, double aber );
+    void        CreateArc( kbNode* center, kbNode* begin, kbNode* end, double radius, bool clock, double aber );
     void        MakeOneDirection();
-    void        Make_Rounded_Shape( KBoolLink* a_link, double factor );
+    void        Make_Rounded_Shape( kbLink* a_link, double factor );
     bool      MakeClockWise();
     bool      writegraph( bool linked );
     bool      writeintersections();
@@ -137,7 +137,7 @@ protected:
     void  Extract_Simples( BOOL_OP operation, bool detecthole, bool& foundholes );
 
     //! split graph into small graph, using the numbers in links.
-    void  Split( GraphList* partlist );
+    void  Split( kbGraphList* partlist );
 
     //! Collect a graph by starting at argument link
     /*
@@ -150,16 +150,16 @@ protected:
        \param graphnumber number to be given to links in the extracted graph piece
        \param foundholes when holes are found this flag is set true.
     */
-    void  CollectGraph( Node *current_node, BOOL_OP operation, bool detecthole, int graphnumber, bool& foundholes );
+    void  CollectGraph( kbNode *current_node, BOOL_OP operation, bool detecthole, int graphnumber, bool& foundholes );
 
-    void  CollectGraphLast( Node *current_node, BOOL_OP operation, bool detecthole, int graphnumber, bool& foundholes );
+    void  CollectGraphLast( kbNode *current_node, BOOL_OP operation, bool detecthole, int graphnumber, bool& foundholes );
 
     //! find a link not bin in the top left corner ( links should be sorted already )
     /*!
        Last found position is used to find it quickly.
        Used in ExtractSimples()
     */
-    Node* GetMostTopLeft( TDLI<KBoolLink>* _LI );
+    kbNode* GetMostTopLeft( TDLI<kbLink>* _LI );
 
     //! calculates crossing for all links in a graph, and add those as part of the graph.
     /*

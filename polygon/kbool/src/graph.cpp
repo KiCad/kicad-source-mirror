@@ -1,12 +1,12 @@
 /*! \file src/graph.cpp
     \brief Used to Intercect and other process functions
-    \author Klaas Holwerda
-
+    \author Klaas Holwerda 
+ 
     Copyright: 2001-2004 (C) Klaas Holwerda
-
-    Licence: see kboollicense.txt
-
-    RCS-ID: $Id: graph.cpp,v 1.3 2008/06/04 21:23:22 titato Exp $
+ 
+    Licence: see kboollicense.txt 
+ 
+    RCS-ID: $Id: graph.cpp,v 1.4 2009/09/07 19:23:28 titato Exp $
 */
 
 // Grpah is the structure used to store polygons
@@ -17,15 +17,15 @@
 #include "kbool/node.h"
 
 // Prototype of function
-int linkXYsorter( KBoolLink *, KBoolLink * );
-int linkYXsorter( KBoolLink *, KBoolLink * );
-int linkLsorter( KBoolLink *, KBoolLink * );
-int linkYXtopsorter( KBoolLink *a, KBoolLink *b );
-int linkGraphNumsorter( KBoolLink *_l1, KBoolLink* _l2 );
+int linkXYsorter( kbLink *, kbLink * );
+int linkYXsorter( kbLink *, kbLink * );
+int linkLsorter( kbLink *, kbLink * );
+int linkYXtopsorter( kbLink *a, kbLink *b );
+int linkGraphNumsorter( kbLink *_l1, kbLink* _l2 );
 
 // constructor, initialize with one link
-// usage: Graph *a_graph = new Graph(a_link);
-Graph::Graph( KBoolLink *a_link, Bool_Engine* GC )
+// usage: kbGraph *a_graph = new kbGraph(a_link);
+kbGraph::kbGraph( kbLink *a_link, Bool_Engine* GC )
 {
     _GC = GC;
     _linklist = new DL_List<void*>();
@@ -37,26 +37,26 @@ Graph::Graph( KBoolLink *a_link, Bool_Engine* GC )
 
 
 // constructor, initialize graph with no contents
-// usage: Graph *a_graph = new Graph();
-Graph::Graph( Bool_Engine* GC )
+// usage: kbGraph *a_graph = new kbGraph();
+kbGraph::kbGraph( Bool_Engine* GC )
 {
     _GC = GC;
     _linklist = new DL_List<void*>();
     _bin = false;
 }
 
-Graph::Graph( Graph* other )
+kbGraph::kbGraph( kbGraph* other )
 {
     _GC = other->_GC;
     _linklist = new DL_List<void*>();
     _bin = false;
 
     int _nr_of_points = other->_linklist->count();
-    KBoolLink* _current = other->GetFirstLink();
+    kbLink* _current = other->GetFirstLink();
 
-    Node* _last = _current->GetBeginNode();
-    Node* node = new Node( _current->GetBeginNode()->GetX(), _current->GetBeginNode()->GetY(), _GC );
-    Node* nodefirst = node;
+    kbNode* _last = _current->GetBeginNode();
+    kbNode* node = new kbNode( _current->GetBeginNode()->GetX(), _current->GetBeginNode()->GetY(), _GC );
+    kbNode* nodefirst = node;
     for ( int i = 0; i < _nr_of_points; i++ )
     {
         // get the other node on the link
@@ -64,19 +64,19 @@ Graph::Graph( Graph* other )
         // get the other link on the _last node
         _current = _current->Forth( _last );
 
-        Node* node2 = new Node( _current->GetBeginNode()->GetX(), _current->GetBeginNode()->GetY(), _GC );
-        _linklist->insend( new KBoolLink( node,  node2, _GC ) );
+        kbNode* node2 = new kbNode( _current->GetBeginNode()->GetX(), _current->GetBeginNode()->GetY(), _GC );
+        _linklist->insend( new kbLink( node,  node2, _GC ) );
         node = node2;
     }
-    _linklist->insend( new KBoolLink( node,  nodefirst, _GC ) );
+    _linklist->insend( new kbLink( node,  nodefirst, _GC ) );
 }
 
 // destructor
 // deletes all object of the linklist
-Graph::~Graph()
+kbGraph::~kbGraph()
 {
     {
-        TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+        TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
 
         //first empty the graph
         _LI.delete_all();
@@ -85,13 +85,13 @@ Graph::~Graph()
     delete _linklist;
 }
 
-KBoolLink* Graph::GetFirstLink()
+kbLink* kbGraph::GetFirstLink()
 {
-    return ( KBoolLink* ) _linklist->headitem();
+    return ( kbLink* ) _linklist->headitem();
 };
 
 
-void Graph::Prepare( int intersectionruns )
+void kbGraph::Prepare( int intersectionruns )
 {
     _GC->SetState( "Intersection" );
 
@@ -107,8 +107,8 @@ void Graph::Prepare( int intersectionruns )
 // Round(_GC->Get_Grid());
 
     {
-        TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
-        _LI.foreach_mf( &KBoolLink::UnMark );// Reset Bin and Mark flag
+        TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
+        _LI.foreach_mf( &kbLink::UnMark );// Reset Bin and Mark flag
     }
     _GC->SetState( "Set group A/B Flags" );
 
@@ -127,7 +127,7 @@ void Graph::Prepare( int intersectionruns )
     _GC->SetState( "Remove doubles" );
     // Remove the marked links
     {
-        TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+        TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
         _LI.tohead();
         while( !_LI.hitroot() )
         {
@@ -152,9 +152,9 @@ void Graph::Prepare( int intersectionruns )
 
 // x and y of the point will be rounded to the nearest
 // xnew=N*grid and ynew=N*grid
-void Graph::RoundInt( B_INT grid )
+void kbGraph::RoundInt( B_INT grid )
 {
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     _LI.tohead();
     while ( !_LI.hitroot() )
     {
@@ -165,16 +165,16 @@ void Graph::RoundInt( B_INT grid )
 }
 
 // rotate graph minus 90 degrees or plus 90 degrees
-void Graph::Rotate( bool plus90 )
+void kbGraph::Rotate( bool plus90 )
 {
     B_INT swap;
-    Node* last = NULL;
+    kbNode* last = NULL;
 
     B_INT neg = -1;
     if ( plus90 )
         neg = 1;
 
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     _LI.mergesort( linkXYsorter );
 
     _LI.tohead();
@@ -191,11 +191,11 @@ void Graph::Rotate( bool plus90 )
     }
 }
 
-bool Graph::RemoveNullLinks()
+bool kbGraph::RemoveNullLinks()
 {
     bool graph_is_modified = false;
 
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     _LI.tohead();
     while ( !_LI.hitroot() )
     {
@@ -214,7 +214,7 @@ bool Graph::RemoveNullLinks()
 
 // Add a link to the graph connection with
 // other links is through the link his nodes
-void Graph::AddLink( KBoolLink *a_link )
+void kbGraph::AddLink( kbLink *a_link )
 {
     assert( a_link );
 
@@ -224,20 +224,20 @@ void Graph::AddLink( KBoolLink *a_link )
 
 // Add a link to the graph, by giving it two nodes
 // the link is then made and added to the graph
-void Graph::AddLink( Node *begin, Node *end )
+void kbGraph::AddLink( kbNode *begin, kbNode *end )
 {
     assert( begin && end );
     assert( begin != end );
-    AddLink( new KBoolLink( 0, begin, end, _GC ) );
+    AddLink( new kbLink( 0, begin, end, _GC ) );
 }
 
 
 // Checks if there is a zeroline in the graph
-bool Graph::AreZeroLines( B_INT Marge )
+bool kbGraph::AreZeroLines( B_INT Marge )
 {
     bool Found_it = false;
 
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     _LI.tohead();
     while ( !_LI.hitroot() )
     {
@@ -253,9 +253,9 @@ bool Graph::AreZeroLines( B_INT Marge )
 
 
 // Delete links that do not fit the condition for given operation
-void Graph::DeleteNonCond( BOOL_OP operation )
+void kbGraph::DeleteNonCond( BOOL_OP operation )
 {
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     _LI.tohead();
     while( !_LI.hitroot() )
     {
@@ -269,9 +269,9 @@ void Graph::DeleteNonCond( BOOL_OP operation )
     }
 }
 
-void Graph::HandleNonCond( BOOL_OP operation )
+void kbGraph::HandleNonCond( BOOL_OP operation )
 {
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     _LI.tohead();
     while( !_LI.hitroot() )
     {
@@ -289,11 +289,11 @@ void Graph::HandleNonCond( BOOL_OP operation )
 // input : a marge, standard on _GC->Get_Marge()
 // return: true if lines in the graph are deleted
 //       : false if no lines in the graph are deleted
-bool Graph::DeleteZeroLines( B_INT Marge )
+bool kbGraph::DeleteZeroLines( B_INT Marge )
 {
     // Is the graph modified ?
     bool Is_Modified = false;
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
 
     int Processed = _LI.count();
 
@@ -333,14 +333,14 @@ bool Graph::DeleteZeroLines( B_INT Marge )
 // for instance a top link of a hole that is horizontal, always
 // is IN above the link and OUT underneath the link.
 // this for a non hole the opposite
-void Graph::CollectGraph( Node *current_node, BOOL_OP operation, bool detecthole, int graphnumber, bool& foundholes )
+void kbGraph::CollectGraph( kbNode *current_node, BOOL_OP operation, bool detecthole, int graphnumber, bool& foundholes )
 {
-    KBoolLink * currentlink;
-    KBoolLink *nextlink;
-    Node *next_node;
-    Node *MyFirst;
-    Node *Unlinked;
-    KBoolLink *MyFirstlink;
+    kbLink * currentlink;
+    kbLink *nextlink;
+    kbNode *next_node;
+    kbNode *MyFirst;
+    kbNode *Unlinked;
+    kbLink *MyFirstlink;
 
     bool Hole;
     LinkStatus whatside;
@@ -435,7 +435,7 @@ void Graph::CollectGraph( Node *current_node, BOOL_OP operation, bool detecthole
 
             if ( current_node->GetNumberOfLinks() > 2 )
             {  // replace endnode of currentlink and beginnode of nextlink with new node
-                Unlinked = new Node( current_node, _GC );
+                Unlinked = new kbNode( current_node, _GC );
                 currentlink->Replace( current_node, Unlinked );
                 nextlink->Replace( current_node, Unlinked );
             }
@@ -449,7 +449,7 @@ void Graph::CollectGraph( Node *current_node, BOOL_OP operation, bool detecthole
             //close the found graph properly
             if ( current_node->GetNumberOfLinks() > 2 )
             {  // replace endnode of currentlink and beginnode of nextlink with new node
-                Unlinked = new Node( current_node, _GC );
+                Unlinked = new kbNode( current_node, _GC );
                 currentlink->Replace( current_node, Unlinked );
                 MyFirstlink->Replace( current_node, Unlinked );
             }
@@ -465,14 +465,14 @@ void Graph::CollectGraph( Node *current_node, BOOL_OP operation, bool detecthole
     }
 }
 
-void Graph::CollectGraphLast( Node *current_node, BOOL_OP operation, bool detecthole, int graphnumber, bool& foundholes )
+void kbGraph::CollectGraphLast( kbNode *current_node, BOOL_OP operation, bool detecthole, int graphnumber, bool& foundholes )
 {
-    KBoolLink * currentlink;
-    KBoolLink *nextlink;
-    Node *next_node;
-    Node *MyFirst;
-    Node *Unlinked;
-    KBoolLink *MyFirstlink;
+    kbLink * currentlink;
+    kbLink *nextlink;
+    kbNode *next_node;
+    kbNode *MyFirst;
+    kbNode *Unlinked;
+    kbLink *MyFirstlink;
 
     bool Hole;
     LinkStatus whatside;
@@ -609,7 +609,7 @@ void Graph::CollectGraphLast( Node *current_node, BOOL_OP operation, bool detect
 
             if ( current_node->GetNumberOfLinks() > 2 )
             {  // replace endnode of currentlink and beginnode of nextlink with new node
-                Unlinked = new Node( current_node, _GC );
+                Unlinked = new kbNode( current_node, _GC );
                 currentlink->Replace( current_node, Unlinked );
                 nextlink->Replace( current_node, Unlinked );
             }
@@ -621,7 +621,7 @@ void Graph::CollectGraphLast( Node *current_node, BOOL_OP operation, bool detect
             //close the found graph properly
             if ( current_node->GetNumberOfLinks() > 2 )
             {  // replace endnode of currentlink and beginnode of nextlink with new node
-                Unlinked = new Node( current_node, _GC );
+                Unlinked = new kbNode( current_node, _GC );
                 currentlink->Replace( current_node, Unlinked );
                 MyFirstlink->Replace( current_node, Unlinked );
             }
@@ -641,11 +641,11 @@ void Graph::CollectGraphLast( Node *current_node, BOOL_OP operation, bool detect
 
 // Extract bi-directional graphs from this graph
 // Mark the graphs also as being a hole or not.
-void Graph::Extract_Simples( BOOL_OP operation, bool detecthole, bool& foundholes )
+void kbGraph::Extract_Simples( BOOL_OP operation, bool detecthole, bool& foundholes )
 {
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     if ( _LI.empty() ) return;
-    Node *begin;
+    kbNode *begin;
     int graphnumber = 1;
 
     _LI.mergesort( linkYXtopsorter );
@@ -674,12 +674,12 @@ void Graph::Extract_Simples( BOOL_OP operation, bool detecthole, bool& foundhole
     }
 }
 
-void Graph::Split( GraphList* partlist )
+void kbGraph::Split( kbGraphList* partlist )
 {
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     if ( _LI.empty() ) return;
 
-    Graph *part = NULL;
+    kbGraph *part = NULL;
     int graphnumber = 0;
 
     //sort the graph on graphnumber
@@ -691,10 +691,10 @@ void Graph::Split( GraphList* partlist )
         if ( _LI.item()->GetGraphNum() > 0 && graphnumber != _LI.item()->GetGraphNum() )
         {
             graphnumber = _LI.item()->GetGraphNum();
-            part = new Graph( _GC );
+            part = new kbGraph( _GC );
             partlist->insend( part );
         }
-        KBoolLink* tmp = _LI.item();
+        kbLink* tmp = _LI.item();
         if ( _LI.item()->GetGraphNum() > 0 )
         {
             part->AddLink( tmp );
@@ -707,23 +707,23 @@ void Graph::Split( GraphList* partlist )
     }
 }
 
-bool Graph::GetBeenHere()
+bool kbGraph::GetBeenHere()
 {
     return _bin;
 }
 
 // return total number of links in this graph
-int Graph::GetNumberOfLinks()
+int kbGraph::GetNumberOfLinks()
 {
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     return _LI.count();
 }
 
 //for all operations set the operation flags for the links
 //based on the Group_Left_Right values
-void Graph::Set_Operation_Flags()
+void kbGraph::Set_Operation_Flags()
 {
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     _LI.tohead();
     while( !_LI.hitroot() )
     {
@@ -733,9 +733,9 @@ void Graph::Set_Operation_Flags()
 }
 
 //  Remove unused (those not used for any operation) links
-void Graph::Remove_IN_Links()
+void kbGraph::Remove_IN_Links()
 {
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     _LI.tohead();
     for ( int t = _LI.count() ; t > 0; t-- )
     {
@@ -750,17 +750,17 @@ void Graph::Remove_IN_Links()
     }
 }
 
-void Graph::ResetBinMark()
+void kbGraph::ResetBinMark()
 {
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     if ( _LI.empty() ) return;
-    _LI.foreach_mf( &KBoolLink::UnMark );//reset bin and mark flag of each link
+    _LI.foreach_mf( &kbLink::UnMark );//reset bin and mark flag of each link
 }
 
-void Graph::ReverseAllLinks()
+void kbGraph::ReverseAllLinks()
 {
-    Node * dummy;
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    kbNode * dummy;
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     _LI.tohead();
     while ( !_LI.hitroot() )
     {
@@ -772,29 +772,29 @@ void Graph::ReverseAllLinks()
     }
 }
 
-void Graph::SetBeenHere( bool value )
+void kbGraph::SetBeenHere( bool value )
 {
     _bin = value;
 }
 
 // ReSet the flags  of the links
-void Graph::Reset_flags()
+void kbGraph::Reset_flags()
 {
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
-    _LI.foreach_mf( &KBoolLink::Reset_flags );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
+    _LI.foreach_mf( &kbLink::Reset_flags );
 }
 
 // ReSet the bin and mark flag of the links
-void Graph::Reset_Mark_and_Bin()
+void kbGraph::Reset_Mark_and_Bin()
 {
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
-    _LI.foreach_mf( &KBoolLink::UnMark );//reset bin and mark flag of each link
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
+    _LI.foreach_mf( &kbLink::UnMark );//reset bin and mark flag of each link
 }
 
 // Set the group of the links to the same as newgroup
-void Graph::SetGroup( GroupType newgroup )
+void kbGraph::SetGroup( GroupType newgroup )
 {
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     _LI.tohead();
     while ( !_LI.hitroot() )
     {
@@ -805,9 +805,9 @@ void Graph::SetGroup( GroupType newgroup )
 
 
 // Set the number of the links to the same as newnr
-void Graph::SetNumber( const int newnr )
+void kbGraph::SetNumber( const int newnr )
 {
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     _LI.tohead();
     while ( !_LI.hitroot() )
     {
@@ -827,13 +827,13 @@ void Graph::SetNumber( const int newnr )
 // input : a marge
 // return: true if graph is modified
 //   : false if graph is NOT simplified
-bool Graph::Simplify( B_INT Marge )
+bool kbGraph::Simplify( B_INT Marge )
 {
     bool graph_is_modified = false;
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     int Processed = _LI.count();
 
-    _LI.foreach_mf( &KBoolLink::UnMark );//reset bin and mark flag of each link
+    _LI.foreach_mf( &kbLink::UnMark );//reset bin and mark flag of each link
 
     _LI.tohead();
     GroupType mygroup = _LI.item()->Group();
@@ -873,8 +873,8 @@ bool Graph::Simplify( B_INT Marge )
         {
             // Line is not marked, not zero, so maybe it can be simplified
             bool virtual_link_is_modified;
-            Node *new_begin, *new_end, *a_node;
-            KBoolLink *a_link;
+            kbNode *new_begin, *new_end, *a_node;
+            kbLink *a_link;
 
             _LI.item()->Mark();
             new_begin = _LI.item()->GetBeginNode();
@@ -922,7 +922,7 @@ bool Graph::Simplify( B_INT Marge )
                 if ( _LI.hitroot() )
                     _LI.tohead();
 
-                KBoolLink *newlink = new KBoolLink( number, new_begin, new_end, _GC );
+                kbLink *newlink = new kbLink( number, new_begin, new_end, _GC );
                 newlink->SetGroup( mygroup );
 
                 _LI.insend( newlink );
@@ -1001,19 +1001,19 @@ bool Graph::Simplify( B_INT Marge )
 //   -1  L1 > L2
 //
 */
-bool Graph::Smoothen( B_INT Marge )
+bool kbGraph::Smoothen( B_INT Marge )
 {
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     if ( _LI.count() <= 3 ) // Don't modify it
         return false;
 
-    Node *Z, *A, *B, *C, *cross_node = new Node( _GC );
-    KBoolLink *prevlink, *nextlink, *thislink;
-    KBoolLine prevline( _GC ),  nextline( _GC ),  thisline( _GC );
-    KBoolLine prevhelp( _GC ),  nexthelp( _GC );
+    kbNode *Z, *A, *B, *C, *cross_node = new kbNode( _GC );
+    kbLink *prevlink, *nextlink, *thislink;
+    kbLine prevline( _GC ),  nextline( _GC ),  thisline( _GC );
+    kbLine prevhelp( _GC ),  nexthelp( _GC );
 
-    KBoolLink  LZB( new Node( _GC ), new Node( _GC ), _GC ),
-    LAC( new Node( _GC ), new Node( _GC ), _GC );
+    kbLink  LZB( new kbNode( _GC ), new kbNode( _GC ), _GC ),
+    LAC( new kbNode( _GC ), new kbNode( _GC ), _GC );
 
     double distance = 0;
     double prevdist, nextdist;
@@ -1258,19 +1258,19 @@ bool Graph::Smoothen( B_INT Marge )
 
 
 // Give the graphnumber of the first link in the graphlist
-int Graph::GetGraphNum()
+int kbGraph::GetGraphNum()
 {
-    return ( ( KBoolLink* )_linklist->headitem() )->GetGraphNum();
+    return ( ( kbLink* )_linklist->headitem() )->GetGraphNum();
 }
 
 
 // get the node with the highest Y value
-Node* Graph::GetTopNode()
+kbNode* kbGraph::GetTopNode()
 {
     B_INT max_Y = MAXB_INT;
-    Node* result;
+    kbNode* result;
 
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
 
     _LI.tohead();
     while ( !_LI.hitroot() )
@@ -1287,13 +1287,13 @@ Node* Graph::GetTopNode()
 // THE GRAPH MUST be SORTED before using this function
 // mergesort(linkYXtopsorter);
 // Get the mostleft top node from the graph  for which the link flag is not set yet
-Node* Graph::GetMostTopLeft( TDLI<KBoolLink>* _LI )
+kbNode* kbGraph::GetMostTopLeft( TDLI<kbLink>* _LI )
 {
     while ( !_LI->hitroot() )
     {
         if ( !_LI->item()->BeenHere() )
         {
-            KBoolLink * a = _LI->item();
+            kbLink * a = _LI->item();
             //find the top node of this link (sorted on top allready)
             if ( a->GetBeginNode()->GetY() > a->GetEndNode()->GetY() )
                 return( a->GetBeginNode() );
@@ -1309,14 +1309,14 @@ Node* Graph::GetMostTopLeft( TDLI<KBoolLink>* _LI )
 
 // Take the linkslist over from a other graph
 // The linklist of the other graph will be empty afterwards
-void Graph::TakeOver( Graph *other )
+void kbGraph::TakeOver( kbGraph *other )
 {
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     _LI.takeover( other->_linklist );
 }
 
 // calculate crossing with scanbeams
-bool Graph::CalculateCrossings( B_INT Marge )
+bool kbGraph::CalculateCrossings( B_INT Marge )
 {
     // POINT <==> POINT
     _GC->SetState( "Node to Node" );
@@ -1330,14 +1330,14 @@ bool Graph::CalculateCrossings( B_INT Marge )
         return found;
 
     // POINT <==> LINK
-    _GC->SetState( "Node to KBoolLink 0" );
+    _GC->SetState( "Node to kbLink 0" );
 
     found = ScanGraph2( NODELINK, dummy ) != 0 || found;
 
     _GC->SetState( "Rotate -90" );
     Rotate( false );
 
-    _GC->SetState( "Node to KBoolLink -90" );
+    _GC->SetState( "Node to kbLink -90" );
     found = ScanGraph2( NODELINK, dummy ) != 0 || found;
 
     _GC->SetState( "Rotate +90" );
@@ -1351,7 +1351,7 @@ bool Graph::CalculateCrossings( B_INT Marge )
     /*
        if (!checksort())
        { {
-        TDLI<KBoolLink> _LI=TDLI<KBoolLink>(_linklist);
+        TDLI<kbLink> _LI=TDLI<kbLink>(_linklist);
       _LI.mergesort(linkXYsorter);
          }
        writeintersections();
@@ -1360,7 +1360,7 @@ bool Graph::CalculateCrossings( B_INT Marge )
     */
 
 // Rotate(false);
-// _GC->SetState("KBoolLink to KBoolLink -90");
+// _GC->SetState("kbLink to kbLink -90");
 //   ScanGraph2(LINKLINK);
 // Rotate(true);
 
@@ -1376,25 +1376,25 @@ bool Graph::CalculateCrossings( B_INT Marge )
 }
 
 // neem de nodes die binnen de margeafstand bij elkaar liggen samen RICHARD
-int Graph::Merge_NodeToNode( B_INT Marge )
+int kbGraph::Merge_NodeToNode( B_INT Marge )
 {
     //aantal punten dat verplaatst is
     int merges = 0;
     {
-        TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+        TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
 
         //unmark all links; markflag wordt gebruikt om aan te geven
         //of een link (eigenlijk beginnode ervan) al verwerkt is
-        _LI.foreach_mf( &KBoolLink::UnMark );
+        _LI.foreach_mf( &kbLink::UnMark );
 
         //sort links on x value of beginnode
         _LI.mergesort( linkXYsorter );
 
         //extra iterator voor doorlopen links in graph
         {
-            TDLI<KBoolLink>  links = TDLI<KBoolLink>( _linklist );
+            TDLI<kbLink>  links = TDLI<kbLink>( _linklist );
 
-            Node *nodeOne, *nodeTwo;
+            kbNode *nodeOne, *nodeTwo;
             //verwerk alle links (alle (begin)nodes)
             for( _LI.tohead(); !_LI.hitroot(); _LI++ )
             {
@@ -1449,9 +1449,9 @@ int Graph::Merge_NodeToNode( B_INT Marge )
 }
 
 
-int Graph::ScanGraph2( SCANTYPE scantype, bool& holes )
+int kbGraph::ScanGraph2( SCANTYPE scantype, bool& holes )
 {
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     int found = 0;
 
     //sort links on x and y value of beginnode
@@ -1460,11 +1460,11 @@ int Graph::ScanGraph2( SCANTYPE scantype, bool& holes )
     writegraph( false );
 
     //bin flag is used in scanbeam so reset
-    _LI.foreach_mf( &KBoolLink::SetNotBeenHere );
+    _LI.foreach_mf( &kbLink::SetNotBeenHere );
 
     ScanBeam* scanbeam = new ScanBeam( _GC );
-    Node*  _low;
-    Node*  _high;
+    kbNode*  _low;
+    kbNode*  _high;
 
     _LI.tohead();
     while ( !_LI.attail() )
@@ -1497,9 +1497,9 @@ int Graph::ScanGraph2( SCANTYPE scantype, bool& holes )
 
 
 /*
-
+ 
 //       scanbeam->writebeam();
-
+ 
       if (j%100 ==0)
       {
         long x;
@@ -1511,33 +1511,33 @@ int Graph::ScanGraph2( SCANTYPE scantype, bool& holes )
    _GC->SetState(buf);
        scanbeam->writebeam();
       }
-
-
-
+ 
+ 
+ 
          writegraph(false);
             if (!checksort())
             {
                double x=_lowlink->GetBeginNode()->GetX();
                checksort();
             }
-
-
-
+ 
+ 
+ 
          _LI++;
       }
    }
-
+ 
  delete scanbeam;
  return 0;
 }
-
-
+ 
+ 
          if (!checksort())
          {
             x=_lowlink->GetBeginNode()->GetX();
             checksort();
          }
-
+ 
          if (x >= -112200)
          {
 //          writegraph(true);
@@ -1549,7 +1549,7 @@ int Graph::ScanGraph2( SCANTYPE scantype, bool& holes )
 //=============================== Global Functions =============================
 
 // Sorts the links on the X values
-int linkXYsorter( KBoolLink *a, KBoolLink* b )
+int linkXYsorter( kbLink *a, kbLink* b )
 {
     if ( a->GetBeginNode()->GetX() < b->GetBeginNode()->GetX() )
         return( 1 );
@@ -1565,7 +1565,7 @@ int linkXYsorter( KBoolLink *a, KBoolLink* b )
 }
 
 // Sorts the links on the Y value of the beginnode
-int linkYXsorter( KBoolLink *a, KBoolLink* b )
+int linkYXsorter( kbLink *a, kbLink* b )
 {
     if ( a->GetBeginNode()->GetY() > b->GetBeginNode()->GetY() )
         return( 1 );
@@ -1580,7 +1580,7 @@ int linkYXsorter( KBoolLink *a, KBoolLink* b )
 
 
 // The sort function for sorting graph from shortest to longest (_l1 < _l2)
-int linkLsorter( KBoolLink *_l1, KBoolLink* _l2 )
+int linkLsorter( kbLink *_l1, kbLink* _l2 )
 {
     B_INT dx1, dx2, dy1, dy2;
     dx1 = ( _l1->GetEndNode()->GetX() - _l1->GetBeginNode()->GetX() );
@@ -1604,7 +1604,7 @@ int linkLsorter( KBoolLink *_l1, KBoolLink* _l2 )
 // The sort function for the links in a graph (a.topnode < b.topnode)
 // if the two links lay with the top nodes on eachother the most left will be selected
 
-int linkYXtopsorter( KBoolLink *a, KBoolLink *b )
+int linkYXtopsorter( kbLink *a, kbLink *b )
 {
 
     if ( bmax( a->GetBeginNode()->GetY(), a->GetEndNode()->GetY() ) < bmax( b->GetBeginNode()->GetY(), b->GetEndNode()->GetY() ) )
@@ -1624,7 +1624,7 @@ int linkYXtopsorter( KBoolLink *a, KBoolLink *b )
 }
 
 // The sort function for sorting graph from shortest to longest (_l1 < _l2)
-int linkGraphNumsorter( KBoolLink *_l1, KBoolLink* _l2 )
+int linkGraphNumsorter( kbLink *_l1, kbLink* _l2 )
 {
     if ( _l1->GetGraphNum() > _l2->GetGraphNum() )
         return( -1 );
@@ -1634,7 +1634,7 @@ int linkGraphNumsorter( KBoolLink *_l1, KBoolLink* _l2 )
 }
 
 // Perform an operation on the graph
-void Graph::Boolean( BOOL_OP operation, GraphList* Result )
+void kbGraph::Boolean( BOOL_OP operation, kbGraphList* Result )
 {
     _GC->SetState( "Performing Operation" );
 
@@ -1682,7 +1682,10 @@ void Graph::Boolean( BOOL_OP operation, GraphList* Result )
         //The scanlines can not cope with this, so merge them, and later extract one more time.
         Merge_NodeToNode( 0 );
 
+#if KBOOL_LOG == 1
+        _GC->SetLog( true ); 
         _GC->Write_Log( "LINKHOLES\n" );
+#endif
         writegraph( false );
 
         //link the holes into the non holes if there are any.
@@ -1711,7 +1714,7 @@ void Graph::Boolean( BOOL_OP operation, GraphList* Result )
 }
 
 // Perform an correction on the graph
-void Graph::Correction( GraphList* Result, double factor )
+void kbGraph::Correction( kbGraphList* Result, double factor )
 {
     // At this moment we have one graph
     // step one, split it up in single graphs, and mark the holes
@@ -1724,16 +1727,16 @@ void Graph::Correction( GraphList* Result, double factor )
         if ( GetNumberOfLinks() < 3 )
             return;
 
-    Graph* original = new Graph( _GC );
+    kbGraph* original = new kbGraph( _GC );
 
     {
         if ( _linklist->empty() ) return;
 
-        KBoolLink* _current = GetFirstLink();
-        Node *_first = new Node( _current->GetBeginNode(), _GC );
-        Node *_last  = _current->GetBeginNode();
-        Node *_begin = _first;
-        Node *_end   = _first;
+        kbLink* _current = GetFirstLink();
+        kbNode *_first = new kbNode( _current->GetBeginNode(), _GC );
+        kbNode *_last  = _current->GetBeginNode();
+        kbNode *_begin = _first;
+        kbNode *_end   = _first;
 
         int _nr_of_points = GetNumberOfLinks();
         for ( int i = 1; i < _nr_of_points; i++ )
@@ -1741,7 +1744,7 @@ void Graph::Correction( GraphList* Result, double factor )
             // get the other node on the link
             _last = _current->GetOther( _last );
             // make a node from this point
-            _end = new Node( _last, _GC );
+            _end = new kbNode( _last, _GC );
 
             // make a link between begin and end
             original->AddLink( _begin, _end );
@@ -1775,8 +1778,8 @@ void Graph::Correction( GraphList* Result, double factor )
     _GC->SetState( "Create rings" );
     //first create a ring around all simple graphs
     {
-        TDLI<Graph> IResult = TDLI<Graph>( Result );
-        GraphList *_ring = new GraphList( _GC );
+        TDLI<kbGraph> IResult = TDLI<kbGraph>( Result );
+        kbGraphList *_ring = new kbGraphList( _GC );
         {
             //put into one graphlist
             IResult.tohead();
@@ -1796,8 +1799,8 @@ void Graph::Correction( GraphList* Result, double factor )
                 while ( !_ring->empty() )
                 {
                     //add to end
-                    ( ( Graph* )_ring->headitem() )->MakeClockWise();
-                    IResult.insend( ( Graph* )_ring->headitem() );
+                    ( ( kbGraph* )_ring->headitem() )->MakeClockWise();
+                    IResult.insend( ( kbGraph* )_ring->headitem() );
                     _ring->removehead();
                 }
             }
@@ -1826,7 +1829,7 @@ void Graph::Correction( GraphList* Result, double factor )
         Prepare( 1 );
         Boolean( BOOL_OR, Result );
 
-        TDLI<Graph> IResult = TDLI<Graph>( Result );
+        TDLI<kbGraph> IResult = TDLI<kbGraph>( Result );
         //IResult contains all rings
         //prepare the graphs for extracting the links of a certain operation
         //set original graphlist to groupA and ring to groupB
@@ -1887,7 +1890,7 @@ void Graph::Correction( GraphList* Result, double factor )
 }
 
 // Perform an operation on the graph
-void Graph::MakeRing( GraphList* Result, double factor )
+void kbGraph::MakeRing( kbGraphList* Result, double factor )
 {
 
     bool rule = _GC->GetWindingRule();
@@ -1917,8 +1920,8 @@ void Graph::MakeRing( GraphList* Result, double factor )
     _GC->SetState( "Create rings" );
 
     //first create a ring around all simple graphs
-    TDLI<Graph> IResult = TDLI<Graph>( Result );
-    GraphList *_ring = new GraphList( _GC );
+    TDLI<kbGraph> IResult = TDLI<kbGraph>( Result );
+    kbGraphList *_ring = new kbGraphList( _GC );
     {
         IResult.tohead();
         int i;
@@ -1936,8 +1939,8 @@ void Graph::MakeRing( GraphList* Result, double factor )
             while ( !_ring->empty() )
             {
                 //add to end
-                ( ( Graph* )_ring->headitem() )->MakeClockWise();
-                IResult.insend( ( Graph* )_ring->headitem() );
+                ( ( kbGraph* )_ring->headitem() )->MakeClockWise();
+                IResult.insend( ( kbGraph* )_ring->headitem() );
                 _ring->removehead();
             }
         }
@@ -1947,13 +1950,13 @@ void Graph::MakeRing( GraphList* Result, double factor )
 }
 
 //create a ring shapes on every edge of the graph
-void Graph::CreateRing( GraphList *ring, double factor )
+void kbGraph::CreateRing( kbGraphList *ring, double factor )
 {
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     _LI.tohead();
     while( !_LI.hitroot() )
     {
-        Graph * shape = new Graph( _GC );
+        kbGraph * shape = new kbGraph( _GC );
         //generate shape around link
         shape->Make_Rounded_Shape( _LI.item(), factor );
         ring->insbegin( shape );
@@ -1962,20 +1965,20 @@ void Graph::CreateRing( GraphList *ring, double factor )
 }
 
 //create a ring shapes on every edge of the graph
-void Graph::CreateRing_fast( GraphList *ring, double factor )
+void kbGraph::CreateRing_fast( kbGraphList *ring, double factor )
 {
-    Node * begin;
-    KBoolLink* currentlink;
-    KBoolLine  currentline( _GC );
+    kbNode * begin;
+    kbLink* currentlink;
+    kbLine  currentline( _GC );
 
-    KBoolLine  firstline( _GC );
+    kbLine  firstline( _GC );
 
-    KBoolLink* nextlink;
-    KBoolLine nextline( _GC );
+    kbLink* nextlink;
+    kbLine nextline( _GC );
 
     {
-        TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
-        _LI.foreach_mf( &KBoolLink::UnMark );//reset bin and mark flag of each link
+        TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
+        _LI.foreach_mf( &kbLink::UnMark );//reset bin and mark flag of each link
         _LI.mergesort( linkYXsorter );
         _LI.tohead();
 
@@ -1998,11 +2001,11 @@ void Graph::CreateRing_fast( GraphList *ring, double factor )
 
     while ( nextlink )
     {
-        Graph * shape = new Graph( _GC );
+        kbGraph * shape = new kbGraph( _GC );
         {
 
-            Node* _last_ins_left  = 0;
-            Node* _last_ins_right = 0;
+            kbNode* _last_ins_left  = 0;
+            kbNode* _last_ins_right = 0;
 
             currentline.Create_Begin_Shape( &nextline, &_last_ins_left, &_last_ins_right, factor, shape );
 
@@ -2037,11 +2040,11 @@ void Graph::CreateRing_fast( GraphList *ring, double factor )
         //if the shape is very small first merge it with the previous shape
         if ( !ring->empty() && shape->Small( ( B_INT ) fabs( factor * 3 ) ) )
         {
-            TDLI<Graph> Iring = TDLI<Graph>( ring );
+            TDLI<kbGraph> Iring = TDLI<kbGraph>( ring );
 
             Iring.totail();
 
-            GraphList *_twoshapes = new GraphList( _GC );
+            kbGraphList *_twoshapes = new kbGraphList( _GC );
             _twoshapes->insbegin( shape );
             _twoshapes->insbegin( Iring.item() );
             Iring.remove();
@@ -2064,15 +2067,15 @@ void Graph::CreateRing_fast( GraphList *ring, double factor )
 //end point of arc
 //radius of arc
 //aberation for generating the segments
-void Graph::CreateArc( Node* center, Node* begin, Node* end, double radius, bool clock, double aber )
+void kbGraph::CreateArc( kbNode* center, kbNode* begin, kbNode* end, double radius, bool clock, double aber )
 {
     double phi, dphi, dx, dy;
     int Segments;
     int i;
     double ang1, ang2, phit;
 
-    Node* _last_ins;
-    Node* _current;
+    kbNode* _last_ins;
+    kbNode* _current;
 
     _last_ins = begin;
 
@@ -2122,7 +2125,7 @@ void Graph::CreateArc( Node* center, Node* begin, Node* end, double radius, bool
         dy = ( double ) _last_ins->GetY() - center->GetY();
         phi = atan2( dy, dx );
 
-        _current = new Node( ( B_INT ) ( center->GetX() + radius * cos( phi - dphi ) ),
+        _current = new kbNode( ( B_INT ) ( center->GetX() + radius * cos( phi - dphi ) ),
                              ( B_INT ) ( center->GetY() + radius * sin( phi - dphi ) ), _GC );
         AddLink( _last_ins, _current );
 
@@ -2133,7 +2136,7 @@ void Graph::CreateArc( Node* center, Node* begin, Node* end, double radius, bool
     AddLink( _last_ins, end );
 }
 
-void Graph::CreateArc( Node* center, KBoolLine* incoming, Node* end, double radius, double aber )
+void kbGraph::CreateArc( kbNode* center, kbLine* incoming, kbNode* end, double radius, double aber )
 {
     double distance = 0;
     if ( incoming->PointOnLine( center, distance, _GC->GetAccur() ) == RIGHT_SIDE )
@@ -2142,13 +2145,13 @@ void Graph::CreateArc( Node* center, KBoolLine* incoming, Node* end, double radi
         CreateArc( center, incoming->GetEndNode(), end, radius, false, aber );
 }
 
-void Graph::MakeOneDirection()
+void kbGraph::MakeOneDirection()
 {
     int _nr_of_points = _linklist->count();
-    KBoolLink* _current = ( KBoolLink* )_linklist->headitem();
+    kbLink* _current = ( kbLink* )_linklist->headitem();
 
-    Node* _last = _current->GetBeginNode();
-    Node* dummy;
+    kbNode* _last = _current->GetBeginNode();
+    kbNode* dummy;
 
     for ( int i = 0; i < _nr_of_points; i++ )
     {
@@ -2167,12 +2170,12 @@ void Graph::MakeOneDirection()
     }
 }
 
-bool Graph::Small( B_INT howsmall )
+bool kbGraph::Small( B_INT howsmall )
 {
 
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     _LI.tohead();
-    Node* bg = _LI.item()->GetBeginNode();
+    kbNode* bg = _LI.item()->GetBeginNode();
     B_INT xmin = bg->GetX();
     B_INT xmax = bg->GetX();
     B_INT ymin = bg->GetY();
@@ -2201,24 +2204,24 @@ bool Graph::Small( B_INT howsmall )
 
 //create a circle at end and begin point
 // and block in between
-void Graph::Make_Rounded_Shape( KBoolLink* a_link, double factor )
+void kbGraph::Make_Rounded_Shape( kbLink* a_link, double factor )
 {
     double phi, dphi, dx, dy;
     int Segments = 6;
     int i;
 
 
-    KBoolLine theline( a_link, _GC );
+    kbLine theline( a_link, _GC );
     theline.CalculateLineParameters();
 
-    Node* _current;
-    Node *_first = new Node( a_link->GetBeginNode(), _GC );
-    Node *_last_ins = _first;
+    kbNode* _current;
+    kbNode *_first = new kbNode( a_link->GetBeginNode(), _GC );
+    kbNode *_last_ins = _first;
 
     theline.Virtual_Point( _first, factor );
 
     // make a node from this point
-    _current = new Node( a_link->GetEndNode(), _GC );
+    _current = new kbNode( a_link->GetEndNode(), _GC );
     theline.Virtual_Point( _current, factor );
 
     // make a link between the current and the previous and add this to graph
@@ -2234,7 +2237,7 @@ void Graph::Make_Rounded_Shape( KBoolLink* a_link, double factor )
         dy = ( double ) _last_ins->GetY() - a_link->GetEndNode()->GetY();
         phi = atan2( dy, dx );
 
-        _current = new Node( ( B_INT ) ( a_link->GetEndNode()->GetX() + factor * cos( phi - dphi ) ),
+        _current = new kbNode( ( B_INT ) ( a_link->GetEndNode()->GetX() + factor * cos( phi - dphi ) ),
                              ( B_INT ) ( a_link->GetEndNode()->GetY() + factor * sin( phi - dphi ) ), _GC );
 
         AddLink( _last_ins, _current );
@@ -2243,13 +2246,13 @@ void Graph::Make_Rounded_Shape( KBoolLink* a_link, double factor )
     }
 
     // make a node from the endnode of link
-    _current = new Node( a_link->GetEndNode(), _GC );
+    _current = new kbNode( a_link->GetEndNode(), _GC );
     theline.Virtual_Point( _current, -factor );
     AddLink( _last_ins, _current );
     _last_ins = _current;
 
     // make a node from this beginnode of link
-    _current = new Node( a_link->GetBeginNode(), _GC );
+    _current = new kbNode( a_link->GetBeginNode(), _GC );
     theline.Virtual_Point( _current, -factor );
     AddLink( _last_ins, _current );
     _last_ins = _current;
@@ -2260,7 +2263,7 @@ void Graph::Make_Rounded_Shape( KBoolLink* a_link, double factor )
         dy = ( double ) _last_ins->GetY() - a_link->GetBeginNode()->GetY();
         phi = atan2( dy, dx );
 
-        _current = new Node( ( B_INT )( a_link->GetBeginNode()->GetX() + factor * cos( phi - dphi ) ),
+        _current = new kbNode( ( B_INT )( a_link->GetBeginNode()->GetX() + factor * cos( phi - dphi ) ),
                              ( B_INT )( a_link->GetBeginNode()->GetY() + factor * sin( phi - dphi ) ), _GC );
 
         AddLink( _last_ins, _current );
@@ -2274,18 +2277,18 @@ void Graph::Make_Rounded_Shape( KBoolLink* a_link, double factor )
 
 //make the graph clockwise orientation,
 //return if the graph needed redirection
-bool Graph::MakeClockWise()
+bool kbGraph::MakeClockWise()
 {
     if ( _GC->GetOrientationEntryMode() )
         return false;
 
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     if ( _LI.empty() ) return false;
 
-    KBoolLink *currentlink;
-    Node *begin;
+    kbLink *currentlink;
+    kbNode *begin;
 
-    _LI.foreach_mf( &KBoolLink::UnMark );//reset bin and mark flag of each link
+    _LI.foreach_mf( &kbLink::UnMark );//reset bin and mark flag of each link
     _LI.mergesort( linkYXtopsorter );
     _LI.tohead();
 
@@ -2324,7 +2327,7 @@ bool Graph::MakeClockWise()
     return false;
 }
 
-bool Graph::writegraph( bool linked )
+bool kbGraph::writegraph( bool linked )
 {
 #if KBOOL_DEBUG == 1
 
@@ -2335,7 +2338,7 @@ bool Graph::writegraph( bool linked )
 
     fprintf( file, "# graph\n" );
 
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     if ( _LI.empty() )
     {
         return true;
@@ -2344,13 +2347,13 @@ bool Graph::writegraph( bool linked )
     _LI.tohead();
     while( !_LI.hitroot() )
     {
-        KBoolLink * curl = _LI.item();
+        kbLink * curl = _LI.item();
 
         fprintf( file, " linkbegin %I64d %I64d \n", curl->GetBeginNode()->GetX() , curl->GetBeginNode()->GetY() );
 
         if ( linked )
         {
-            TDLI<KBoolLink> Inode( curl->GetBeginNode()->GetLinklist() );
+            TDLI<kbLink> Inode( curl->GetBeginNode()->GetLinklist() );
             Inode.tohead();
             while( !Inode.hitroot() )
             {
@@ -2367,7 +2370,7 @@ bool Graph::writegraph( bool linked )
 
         if ( linked )
         {
-            TDLI<KBoolLink> Inode( curl->GetEndNode()->GetLinklist() );
+            TDLI<kbLink> Inode( curl->GetEndNode()->GetLinklist() );
             Inode.tohead();
             while( !Inode.hitroot() )
             {
@@ -2407,7 +2410,7 @@ bool Graph::writegraph( bool linked )
     return true;
 }
 
-bool Graph::writeintersections()
+bool kbGraph::writeintersections()
 {
 
 #if KBOOL_DEBUG == 1
@@ -2419,7 +2422,7 @@ bool Graph::writeintersections()
 
     fprintf( file, "# graph\n" );
 
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     if ( _LI.empty() )
     {
         return true;
@@ -2428,8 +2431,8 @@ bool Graph::writeintersections()
     _LI.tohead();
     while( !_LI.hitroot() )
     {
-        KBoolLink * curl = _LI.item();
-        TDLI<KBoolLink> Inode( curl->GetBeginNode()->GetLinklist() );
+        kbLink * curl = _LI.item();
+        TDLI<kbLink> Inode( curl->GetBeginNode()->GetLinklist() );
         Inode.tohead();
         if ( Inode.count() > 2 )
         {
@@ -2443,21 +2446,21 @@ bool Graph::writeintersections()
     return true;
 }
 
-bool Graph::checksort()
+bool kbGraph::checksort()
 {
     // if empty then just insert
     if ( _linklist->empty() )
         return true;
 
-    TDLI<KBoolLink> _LI = TDLI<KBoolLink>( _linklist );
+    TDLI<kbLink> _LI = TDLI<kbLink>( _linklist );
     // put new item left of the one that is bigger
     _LI.tohead();
-    KBoolLink* prev = _LI.item();
-    KBoolLink* cur = _LI.item();
+    kbLink* prev = _LI.item();
+    kbLink* cur = _LI.item();
     _LI++;
     while( !_LI.hitroot() )
     {
-        KBoolLink * aap = _LI.item();
+        kbLink * aap = _LI.item();
         if ( linkXYsorter( prev, _LI.item() ) == -1 )
         {
             cur = aap;
@@ -2471,7 +2474,7 @@ bool Graph::checksort()
 }
 
 
-void Graph::WriteKEY( Bool_Engine* GC, FILE* file )
+void kbGraph::WriteKEY( Bool_Engine* GC, FILE* file )
 {
     double scale = 1.0 / GC->GetGrid() / GC->GetGrid();
 
@@ -2497,7 +2500,7 @@ void Graph::WriteKEY( Bool_Engine* GC, FILE* file )
                  ");
     }
 
-    TDLI<KBoolLink> _LI=TDLI<KBoolLink>(_linklist);
+    TDLI<kbLink> _LI=TDLI<kbLink>(_linklist);
     if (_LI.empty())
     {
         if ( ownfile )
@@ -2514,7 +2517,7 @@ void Graph::WriteKEY( Bool_Engine* GC, FILE* file )
 
 
     _LI.tohead();
-    KBoolLink* curl = _LI.item();
+    kbLink* curl = _LI.item();
 
     if ( _LI.item()->Group() == GROUP_A )
         fprintf(file,"BOUNDARY; LAYER 0;  DATATYPE 0;\n");
@@ -2530,7 +2533,7 @@ void Graph::WriteKEY( Bool_Engine* GC, FILE* file )
 
     while(!_LI.hitroot())
     {
-        KBoolLink* curl = _LI.item();
+        kbLink* curl = _LI.item();
 
         fprintf(file,"X % f;\t", curl->GetBeginNode()->GetX()*scale);
         fprintf(file,"Y % f; \n", curl->GetBeginNode()->GetY()*scale);
@@ -2553,9 +2556,9 @@ void Graph::WriteKEY( Bool_Engine* GC, FILE* file )
 }
 
 
-void Graph::WriteGraphKEY(Bool_Engine* GC)
+void kbGraph::WriteGraphKEY(Bool_Engine* GC)
 {
-#if KBOOL_DEBUG == 1
+#if KBOOL_DEBUG
     double scale = 1.0/GC->GetGrid()/GC->GetGrid();
 
     FILE* file = fopen("keygraphfile.key", "w");
@@ -2576,7 +2579,7 @@ void Graph::WriteGraphKEY(Bool_Engine* GC)
             ");
 
 
-    TDLI<KBoolLink> _LI=TDLI<KBoolLink>(_linklist);
+    TDLI<kbLink> _LI=TDLI<kbLink>(_linklist);
     if (_LI.empty())
     {
         fprintf(file,"\
@@ -2588,7 +2591,7 @@ void Graph::WriteGraphKEY(Bool_Engine* GC)
     }
 
     _LI.tohead();
-    KBoolLink* curl;
+    kbLink* curl;
 
     int _nr_of_points = _linklist->count();
     for (int i = 0; i < _nr_of_points; i++)

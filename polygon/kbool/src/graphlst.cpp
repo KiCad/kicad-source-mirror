@@ -17,37 +17,37 @@
 //this here is to initialize the static iterator of graphlist
 //with NOLIST constructor
 
-int  graphsorterX( Graph *, Graph * );
-int  graphsorterY( Graph *, Graph * );
+int  graphsorterX( kbGraph *, kbGraph * );
+int  graphsorterY( kbGraph *, kbGraph * );
 
-GraphList::GraphList( Bool_Engine* GC )
+kbGraphList::kbGraphList( Bool_Engine* GC )
 {
     _GC = GC;
 }
 
-GraphList::GraphList( GraphList* other )
+kbGraphList::kbGraphList( kbGraphList* other )
 {
     _GC = other->_GC;
 
-    TDLI<Graph> _LI = TDLI<Graph>( other );
+    TDLI<kbGraph> _LI = TDLI<kbGraph>( other );
     _LI.tohead();
     while ( !_LI.hitroot() )
     {
-        insend( new Graph( _LI.item() ) );
+        insend( new kbGraph( _LI.item() ) );
         _LI++;
     }
 }
 
-GraphList::~GraphList()
+kbGraphList::~kbGraphList()
 {
-    TDLI<Graph> _LI = TDLI<Graph>( this );
+    TDLI<kbGraph> _LI = TDLI<kbGraph>( this );
     //first empty the graph
     _LI.delete_all();
 }
 
 //prepare the graphlist for the boolean operations
 //group all graphs into ONE graph
-void GraphList::Prepare( Graph* total )
+void kbGraphList::Prepare( kbGraph* total )
 {
     if ( empty() )
         return;
@@ -60,7 +60,7 @@ void GraphList::Prepare( Graph* total )
 
     if ( ! _GC->GetOrientationEntryMode() )
     {
-        TDLI<Graph> _LI = TDLI<Graph>( this );
+        TDLI<kbGraph> _LI = TDLI<kbGraph>( this );
         _LI.tohead();
         while ( !_LI.hitroot() )
         {
@@ -78,9 +78,9 @@ void GraphList::Prepare( Graph* total )
 // the function will make from all the graphs in the graphlist one graph,
 // simply by throwing all the links in one graph, the graphnumbers will
 // not be changed
-void GraphList::MakeOneGraph( Graph* total )
+void kbGraphList::MakeOneGraph( kbGraph* total )
 {
-    TDLI<Graph> _LI = TDLI<Graph>( this );
+    TDLI<kbGraph> _LI = TDLI<kbGraph>( this );
     _LI.tohead();
     while( !_LI.hitroot() )
     {
@@ -93,11 +93,11 @@ void GraphList::MakeOneGraph( Graph* total )
 //
 // Renumber all the graphs
 //
-void GraphList::Renumber()
+void kbGraphList::Renumber()
 {
     if ( _GC->GetOrientationEntryMode() )
     {
-        TDLI<Graph> _LI = TDLI<Graph>( this );
+        TDLI<kbGraph> _LI = TDLI<kbGraph>( this );
         _LI.tohead();
         while ( !_LI.hitroot() )
         {
@@ -111,7 +111,7 @@ void GraphList::Renumber()
     else
     {
         unsigned int Number = 1;
-        TDLI<Graph> _LI = TDLI<Graph>( this );
+        TDLI<kbGraph> _LI = TDLI<kbGraph>( this );
         _LI.tohead();
         while ( !_LI.hitroot() )
         {
@@ -123,10 +123,10 @@ void GraphList::Renumber()
 
 
 // Simplify the graphs
-void GraphList::Simplify( double marge )
+void kbGraphList::Simplify( double marge )
 {
-    TDLI<Graph> _LI = TDLI<Graph>( this );
-    _LI.foreach_mf( &Graph::Reset_Mark_and_Bin );
+    TDLI<kbGraph> _LI = TDLI<kbGraph>( this );
+    _LI.foreach_mf( &kbGraph::Reset_Mark_and_Bin );
 
     _LI.tohead();
     while ( !_LI.hitroot() )
@@ -146,10 +146,10 @@ void GraphList::Simplify( double marge )
 }
 
 // Smoothen the graphs
-void GraphList::Smoothen( double marge )
+void kbGraphList::Smoothen( double marge )
 {
-    TDLI<Graph> _LI = TDLI<Graph>( this );
-    _LI.foreach_mf( &Graph::Reset_Mark_and_Bin );
+    TDLI<kbGraph> _LI = TDLI<kbGraph>( this );
+    _LI.foreach_mf( &kbGraph::Reset_Mark_and_Bin );
 
     _LI.tohead();
     while ( !_LI.hitroot() )
@@ -170,10 +170,10 @@ void GraphList::Smoothen( double marge )
 
 
 // Turn off all markers in all the graphs
-void GraphList::UnMarkAll()
+void kbGraphList::UnMarkAll()
 {
-    TDLI<Graph> _LI = TDLI<Graph>( this );
-    _LI.foreach_mf( &Graph::Reset_Mark_and_Bin );
+    TDLI<kbGraph> _LI = TDLI<kbGraph>( this );
+    _LI.foreach_mf( &kbGraph::Reset_Mark_and_Bin );
 }
 
 //==============================================================================
@@ -182,9 +182,9 @@ void GraphList::UnMarkAll()
 //
 //==============================================================================
 
-void GraphList::Correction()
+void kbGraphList::Correction()
 {
-    TDLI<Graph> _LI = TDLI<Graph>( this );
+    TDLI<kbGraph> _LI = TDLI<kbGraph>( this );
     int todo = _LI.count();
 
     if ( _GC->GetInternalCorrectionFactor() ) //not zero
@@ -193,7 +193,7 @@ void GraphList::Correction()
         for( int i = 0; i < todo ; i++ )
         {
             //the input graph will be empty in the end
-            GraphList *_correct = new GraphList( _GC );
+            kbGraphList *_correct = new kbGraphList( _GC );
             {
                 _LI.item()->MakeClockWise();
                 _LI.item()->Correction( _correct, _GC->GetInternalCorrectionFactor() );
@@ -205,7 +205,7 @@ void GraphList::Correction()
                 while ( !_correct->empty() )
                 {
                     //add to end
-                    _LI.insend( ( Graph* )_correct->headitem() );
+                    _LI.insend( ( kbGraph* )_correct->headitem() );
                     _correct->removehead();
                 }
             }
@@ -214,16 +214,16 @@ void GraphList::Correction()
     }
 }
 
-void GraphList::MakeRings()
+void kbGraphList::MakeRings()
 {
-    TDLI<Graph> _LI = TDLI<Graph>( this );
+    TDLI<kbGraph> _LI = TDLI<kbGraph>( this );
     int todo = _LI.count();
 
     _LI.tohead();
     for( int i = 0; i < todo ; i++ )
     {
         //the input graph will be empty in the end
-        GraphList *_ring = new GraphList( _GC );
+        kbGraphList *_ring = new kbGraphList( _GC );
         {
             _LI.item()->MakeClockWise();
             _LI.item()->MakeRing( _ring, _GC->GetInternalCorrectionFactor() );
@@ -235,8 +235,8 @@ void GraphList::MakeRings()
             while ( !_ring->empty() )
             {
                 //add to end
-                ( ( Graph* )_ring->headitem() )->MakeClockWise();
-                _LI.insend( ( Graph* )_ring->headitem() );
+                ( ( kbGraph* )_ring->headitem() )->MakeClockWise();
+                _LI.insend( ( kbGraph* )_ring->headitem() );
                 _ring->removehead();
             }
         }
@@ -246,13 +246,13 @@ void GraphList::MakeRings()
 }
 
 //merge the graphs in the list and return the merged result
-void GraphList::Merge()
+void kbGraphList::Merge()
 {
     if ( count() <= 1 )
         return;
 
     {
-        TDLI<Graph> _LI = TDLI<Graph>( this );
+        TDLI<kbGraph> _LI = TDLI<kbGraph>( this );
         _LI.tohead();
         while ( !_LI.hitroot() )
         {
@@ -261,7 +261,7 @@ void GraphList::Merge()
         }
     }
 
-    Graph* _tomerge = new Graph( _GC );
+    kbGraph* _tomerge = new kbGraph( _GC );
 
     Renumber();
 
@@ -279,14 +279,14 @@ void GraphList::Merge()
 #define SAVEME 1
 
 //perform boolean operation on the graphs in the list
-void GraphList::Boolean( BOOL_OP operation, int intersectionRunsMax )
+void kbGraphList::Boolean( BOOL_OP operation, int intersectionRunsMax )
 {
     _GC->SetState( "Performing Boolean Operation" );
 
     if ( count() == 0 )
         return;
 
-    Graph* _prepared = new Graph( _GC );
+    kbGraph* _prepared = new kbGraph( _GC );
 
     if ( empty() )
         return;
@@ -345,9 +345,9 @@ void GraphList::Boolean( BOOL_OP operation, int intersectionRunsMax )
 }
 
 
-void GraphList::WriteGraphs()
+void kbGraphList::WriteGraphs()
 {
-    TDLI<Graph> _LI = TDLI<Graph>( this );
+    TDLI<kbGraph> _LI = TDLI<kbGraph>( this );
     _LI.tohead();
     while( !_LI.hitroot() )
     {
@@ -356,7 +356,7 @@ void GraphList::WriteGraphs()
     }
 }
 
-void GraphList::WriteGraphsKEY( Bool_Engine* GC )
+void kbGraphList::WriteGraphsKEY( Bool_Engine* GC )
 {
     FILE * file = fopen( "graphkeyfile.key", "w" );
 
@@ -375,7 +375,7 @@ void GraphList::WriteGraphsKEY( Bool_Engine* GC )
              STRNAME top; \
              ");
 
-    TDLI<Graph> _LI=TDLI<Graph>(this);
+    TDLI<kbGraph> _LI=TDLI<kbGraph>(this);
     _LI.tohead();
     while(!_LI.hitroot())
     {

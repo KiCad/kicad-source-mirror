@@ -1,11 +1,11 @@
 /*! \file kbool/include/kbool/_lnk_itr.h
-    \author Probably Klaas Holwerda
+    \author Klaas Holwerda
  
-    Copyright: 2001-2004 (C) Probably Klaas Holwerda
+    Copyright: 2001-2004 (C) Klaas Holwerda
  
-    Licence: wxWidgets Licence
+    Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: _lnk_itr.h,v 1.2 2006/12/15 21:00:05 titato Exp $
+    RCS-ID: $Id: _lnk_itr.h,v 1.3 2009/02/06 21:33:03 titato Exp $
 */
 
 //! author="Klaas Holwerda"

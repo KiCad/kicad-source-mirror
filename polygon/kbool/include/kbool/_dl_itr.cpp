@@ -1,12 +1,12 @@
 /*! \file kbool/_dl_itr.cpp
     \brief Double Linked list with Iterators on list
     \author Probably Klaas Holwerda
-
+ 
     Copyright: 2001-2004 (C) Probably Klaas Holwerda
-
-    Licence: wxWidgets Licence
-
-    RCS-ID: $Id: _dl_itr.cpp,v 1.3 2006/12/13 21:43:33 titato Exp $
+ 
+    Licence: see kboollicense.txt 
+ 
+    RCS-ID: $Id: _dl_itr.cpp,v 1.5 2009/04/23 19:35:24 titato Exp $
 */
 
 #ifdef __UNIX__
@@ -116,20 +116,20 @@ Error("remove_all",ITER_GT_O);
 \param error code to generate a message for
 */
 template <class Dtype>
-void DL_List<Dtype>::Error( const char* function, Lerror a_error )
+void DL_List<Dtype>::Error( string function, Lerror a_error )
 {
-    char buf[100];
-    strcpy( buf, "DL_List<Dtype>::" );
-    strcat( buf, function );
+    string buf;
+    buf += "DL_List<Dtype>::";
+    buf += function;
     switch ( a_error )
     {
-        case NO_MES:             strcat( buf, "" ); break;
-        case EMPTY:              strcat( buf, "list is empty" ); break;
-        case ITER_GT_0:          strcat( buf, "more then zero iter" ); break;
-        case NO_LIST:            strcat( buf, "no list attached" ); break;
-        case SAME_LIST:          strcat( buf, "same list not allowed" ); break;
-        case AC_ITER_LIST_OTHER: strcat( buf, "iter not allowed on other list" ); break;
-        default:       strcat( buf, "unhandled error" ); break;
+        case NO_MES:             buf += ""; break;
+        case EMPTY:              buf += "list is empty"; break;
+        case ITER_GT_0:          buf += "more then zero iter"; break;
+        case NO_LIST:            buf += "no list attached"; break;
+        case SAME_LIST:          buf += "same list not allowed"; break;
+        case AC_ITER_LIST_OTHER: buf += "iter not allowed on other list"; break;
+        default:       buf += "unhandled error"; break;
     }
 
     throw Bool_Engine_Error( buf, "list error", 0, 1 );
@@ -143,9 +143,9 @@ class | Dtype | item object in list
    too see if list is empty
 \code
 DL_List<int> _intlist; #create a list of integers
-
+ 
           if (_intlist.Empty())
-
+ 
                   cout << "empty";
 \endcode
 */
@@ -163,9 +163,9 @@ bool DL_List<Dtype>::empty()
    too see if list contains only one object
 \code
 DL_List <int> _intlist; #create a list of integers
-
+ 
           if (_intlist.count() == 1)
-
+ 
                   cout << "one object in list";
 \endcode
 */
@@ -181,11 +181,11 @@ int DL_List<Dtype>::count()
 \note
  The objects itself are not deleted, only removed from the list.
  The user is responsible for memory management.
-
+ 
 \note
    The iterator level must be zero to be able to use this function,
    else an error will be generated
-
+ 
 \note
    Use this function if an iterator is not needed to do more complex things.
    This will save time, since the iterator does not have to be created.
@@ -194,13 +194,13 @@ int DL_List<Dtype>::count()
 \code
    DL_List<int> _intlist; #create a list of integers
    int a=123;
-
+ 
    int b=345;
-
+ 
    _intlist.insbegin(a);
-
+ 
    _intlist.insbegin(b);
-
+ 
    _intlist.remove_all();
 \endcode
 */
@@ -233,28 +233,28 @@ remove the object at the begin of the list (head).
 \note
  The object itself is not deleted, only removed from the list.
  The user is responsible for memory management.
-
+ 
 \note
  The iterator level must be zero to be able to use this function, else an error will be generated
-
+ 
 \note
  The list must contain objects, else an error will be generated.
-
+ 
 \note
 Use this function if an iterator is not needed to do more complex things. This will save time, since the iterator does not
 have to be created.
-
+ 
 \par Example:
     too insert integer a at begin of list and remove it directly.
 \code
 DL_List<int> _intlist; #create a list of integers
-
+ 
          int a=123;
-
+ 
          _intlist.insbegin(a)
-
+ 
          _intlist.removehead();
-
+ 
 \endcode
 */
 template <class Dtype>
@@ -277,7 +277,7 @@ void DL_List<Dtype>::removehead()
 
 /*!
 remove the object at the begin of the list (head).
-
+ 
 \note
    - The object itself is not deleted, only removed from the list.
      The user is responsible for memory management.
@@ -286,18 +286,18 @@ remove the object at the begin of the list (head).
    - The list must contain objects, else an error will be generated.
    - Use this function if an iterator is not needed to do more complex things.
      This will save time, since the iterator does not have to be created.
-
+ 
 \par Example:
     too insert integer a at end of list and remove it directly.
 \code
 DL_List<int> _intlist; #create a list of integers
-
+ 
          int a=123;
-
+ 
          _intlist.insend(a)
-
+ 
          _intlist.removetail();
-
+ 
 \endcode
 */
 template <class Dtype>
@@ -322,7 +322,7 @@ insert the object given at the end of the list, after tail
 \note
 The iterator level must be zero to be able to use this function,
 else an error will be generated
-
+ 
 \note
 Use this function if an iterator is not needed to do more complex things.
 This will save time, since the iterator does not have to be created.
@@ -330,9 +330,9 @@ This will save time, since the iterator does not have to be created.
 too insert integer a at end of list
 \code
    DL_List<int> _intlist; #create a list of integers
-
+ 
          int a=123;
-
+ 
          _intlist.insend(a)
 \endcode
 \param newitem an object for which the template list was generated
@@ -360,18 +360,18 @@ insert the object given at the begin of the list, before head
 \note
 The iterator level must be zero to be able to use this function,
 else an error will be generated
-
+ 
 \note
 Use this function if an iterator is not needed to do more complex things.
 This will save time, since the iterator does not have to be created.
-
+ 
 \par Example:
 too insert integer a at begin of list
 \code
    DL_List<int> _intlist; #create a list of integers
-
+ 
          int a=123;
-
+ 
          _intlist.insbegin(a)
 \endcode
 \param newitem an object for which the template list was generated
@@ -401,15 +401,15 @@ get head item
    which is at head of list|
 \code
     DL_List<int> _intlist; #create a list of integers
-
+ 
           int a=123;
-
+ 
           int b=345;
-
+ 
           int c;
-
+ 
           _intlist.insbegin(a)
-
+ 
           _intlist.insbegin(b)
           c=_intlist.headitem()
 \endcode
@@ -428,15 +428,15 @@ get tail item
    is at the tail of list
 \code
     DL_List<int> _intlist; #create a list of integers
-
+ 
           int a=123;
-
+ 
           int b=345;
-
+ 
           int c;
           _intlist.insbegin(a)
           _intlist.insbegin(b)
-
+ 
           c=_intlist.headitem()
 \endcode
 */
@@ -449,7 +449,7 @@ Dtype DL_List<Dtype>::tailitem()
 /*!
 * \note
   The iterator level must be zero to be able to use this function, else an error will be generated
-
+ 
 * \note  The list may not be the same list as this list
 * \param otherlist the list to take the items from
 */
@@ -497,23 +497,23 @@ void DL_List<Dtype>::takeover( DL_List<Dtype>* otherlist )
    to insert integer a and b into list and remove_all directly using an iterator
 \code
      DL_List<int>* a_list = new DL_List<int>(); // declaration and allocation
-
+ 
      int a=123;
-
+ 
      int b=345;
-
+ 
      {
-
+ 
              DL_Iter<int>*  a_listiter=new DL_Iter<int>(a_list);
-
+ 
              a_listiter->insbegin(a)
-
+ 
              a_listiter->insbegin(b)
-
+ 
              a_listiter->remove_all()
-
+ 
      } //to destruct the iterator before the list is deleted
-
+ 
      delete a_list; #delete it (must have no iterators attached to it)
 \endcode
 */
@@ -532,28 +532,28 @@ void DL_List<Dtype>::takeover( DL_List<Dtype>* otherlist )
  \param a_error:  error code to generate a message for
 */
 template <class Dtype>
-void DL_Iter<Dtype>::Error( const char* function, Lerror a_error )
+void DL_Iter<Dtype>::Error( string function, Lerror a_error )
 {
-    char buf[100];
-    strcpy( buf, "DL_Iter<Dtype>::" );
-    strcat( buf, function );
+	string buf;
+    buf = "DL_Iter<Dtype>::";
+    buf += function;
     switch ( a_error )
     {
-        case NO_MES:             strcat( buf, "" ); break;
-        case NO_LIST:            strcat( buf, "no list attached" ); break;
-        case NO_LIST_OTHER:      strcat( buf, "no list on other iter" ); break;
-        case AC_ITER_LIST_OTHER: strcat( buf, "iter not allowed on other list" ); break;
-        case SAME_LIST:          strcat( buf, "same list not allowed" ); break;
-        case NOT_SAME_LIST:      strcat( buf, "must be same list" ); break;
-        case ITER_GT_1:          strcat( buf, "more then one iter" ); break;
-        case ITER_HITROOT:          strcat( buf, "iter at root" ); break;
-        case NO_ITEM:            strcat( buf, "no item at current" ); break;
-        case NO_NEXT:            strcat( buf, "no next after current" ); break;
-        case NO_PREV:            strcat( buf, "no prev before current" ); break;
-        case EMPTY:              strcat( buf, "list is empty" ); break;
-        case NOT_ALLOW:          strcat( buf, "not allowed" ); break;
-        case ITER_NEG:           strcat( buf, "to much iters deleted" ); break;
-        default:       strcat( buf, "unhandled error" ); break;
+        case NO_MES:             buf += ""; break;
+        case NO_LIST:            buf += "no list attached"; break;
+        case NO_LIST_OTHER:      buf += "no list on other iter"; break;
+        case AC_ITER_LIST_OTHER: buf += "iter not allowed on other list"; break;
+        case SAME_LIST:          buf += "same list not allowed"; break;
+        case NOT_SAME_LIST:      buf += "must be same list"; break;
+        case ITER_GT_1:          buf += "more then one iter"; break;
+        case ITER_HITROOT:       buf += "iter at root"; break;
+        case NO_ITEM:            buf += "no item at current"; break;
+        case NO_NEXT:            buf += "no next after current"; break;
+        case NO_PREV:            buf += "no prev before current"; break;
+        case EMPTY:              buf += "list is empty"; break;
+        case NOT_ALLOW:          buf += "not allowed"; break;
+        case ITER_NEG:           buf += "to much iters deleted"; break;
+        default:       buf += "unhandled error"; break;
     }
     throw Bool_Engine_Error( buf, "list error", 0, 1 );
 }
@@ -585,11 +585,11 @@ tcarg: class | Dtype | list item object
    How to construct a list of type integer and a second iterator for it:|
 \code
  DL_List<int>* IntegerList;
-
+ 
   IntegerList = new DL_List<int>();
-
+ 
  DL_Iter<int>*  a_listiter=new DL_Iter<int>(IntegerList);
-
+ 
  DL_Iter<int>*  a_secondlistiter=new DL_Iter<int>(a_listiter);
 \endcode
 \param otheriter other iterator on same list
@@ -610,21 +610,21 @@ Later on when a list is constructed,the iterator can be attached to it.
 This way an iterator to a specific list can be made static to a class, and can be used
 for several lists at the same time. \n
 tcarg: class | Dtype | list item object
-
+ 
 \par Example
    How to construct an iterator, without having a list first.
    This constructs an iterator for a list of the given type, but the list thus not yet exist.
 \code
    DL_Iter<int>*  a_iter=new DL_Iter<int>();
-
+ 
    DL_List<int>* IntegerList;
-
+ 
    IntegerList = new DL_List<int>();
-
+ 
    a_iter.Attach(IntegerList);
-
+ 
    a_iter.insend(123);
-
+ 
    a_iter.Detach();
 \endcode
 */
@@ -655,15 +655,15 @@ static to a class, and can be used for several lists at the same time.\n
    How to construct an iterator, without having a list first, and attach an iterator later:|
 \code
 DL_Iter<int>*  a_iter=new DL_Iter<int>();
-
+ 
 DL_List<int>* IntegerList;
-
+ 
 IntegerList = new DL_List<int>();
-
+ 
 a_iter.Attach(IntegerList);
-
+ 
 a_iter.insend(123);
-
+ 
 a_iter.Detach();
 \endcode
 \param newlist the list to attached the iterator to
@@ -687,15 +687,15 @@ and can be used for several lists at the same time. \n
 How to construct an iterator, without having a list first, and attach an iterator later:
 \code
 DL_Iter<int>*  a_iter=new DL_Iter<int>();
-
+ 
 DL_List<int>* IntegerList;
-
+ 
 IntegerList = new DL_List<int>();
-
+ 
 a_iter.Attach(IntegerList);
-
+ 
 a_iter.insend(123);
-
+ 
 a_iter.Detach();
 \endcode
 \param newlist: the list to attached the iterator to
@@ -755,22 +755,22 @@ to move all objects in a list to the list of the iterator.
 \note
  The iterator level must be one to be able to use this function,
  else an error will be generated
-
+ 
 \note
  The list may not be the same list as the iterator list
 \par Example
  to take over all items in _intlist|
 \code
 DL_List<int> _intlist; #create a list of integers
-
+ 
 DL_List<int> _intlist2; #create a list of integers
-
+ 
 int a=123;
-
+ 
 DL_Iter<int>*  a_listiter2=new DL_Iter<int>(&_intlist2);
-
+ 
 _intlist->insend(a) // insert at end
-
+ 
 a_listiter2->takeover(_intlist)
 \endcode
 \param otherlist  the list to take the items from
@@ -808,28 +808,28 @@ void DL_Iter<Dtype>::takeover( DL_List<Dtype>* otherlist )
 to move all objects in a list (using iterator of that list) to the list of the iterator.
 \note
    The iterator level for both iterators must be one to be able to use this function,
-
+ 
 \note
    else an error will be generated
-
+ 
 \note
    The list may not be the same list as the iterator list
-
+ 
 \par Example
    to take over all items in a_listiter1 it's list|
 \code
 DL_List<int> _intlist; #create a list of integers
-
+ 
 DL_List<int> _intlist2; #create a list of integers
-
+ 
 int a=123;
-
+ 
 DL_Iter<int>*  a_listiter1=new DL_Iter<int>(&_intlist);
-
+ 
 DL_Iter<int>*  a_listiter2=new DL_Iter<int>(&_intlist2);
-
+ 
 a_listiter1->insend(a) // insert at end
-
+ 
 a_listiter2->takeover(a_listiter1)
 \\!to move all objects in a list (using iterator of that list) to the list of the iterator
 \endcode
@@ -872,27 +872,27 @@ to move maxcount objects in a list (using iterator of that list)
 to the list of the iterator.
 \note The iterator level for both iterators must be one to be able to use this function,
     else an error will be generated
-
+ 
 \note The list may not be the same list as the iterator list
-
+ 
 \note If less then maxcount objects are available in the source iterator,
     all of them are taken and no error will accur
-
+ 
 \par Example
  to take over 1 item from a_listiter1 it's list
 \code
 DL_List<int> _intlist; #create a list of integers
-
+ 
 DL_List<int> _intlist2; #create a list of integers
-
+ 
 int a=123;
-
+ 
 DL_Iter<int>*  a_listiter1=new DL_Iter<int>(&_intlist);
-
+ 
 DL_Iter<int>*  a_listiter2=new DL_Iter<int>(&_intlist2);
-
+ 
 a_listiter1->insend(a) // insert at end
-
+ 
 a_listiter2->takeover(a_listiter1,1);
 //! to move maxcount objects in a list (using iterator of that list) to the list of the iterator
 \endcode
@@ -987,13 +987,13 @@ put the iterator root object before the current iterator position in the list.
 The current object will become the new head of the list.
 \note The iterator level must be one to be able to use this function,
 else an error will be generated
-
+ 
 \par Example
  move the root object to make the new head the old tail object|
 \code
 DL_List <int> _intlist; #create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(1234);
 a_listiter->insend(2345);
 a_listiter->insend(3456);
@@ -1036,7 +1036,7 @@ The current object will become the new tail of the list.
 \code
 DL_List <int> _intlist; #create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(1234);
 a_listiter->insend(2345);
 a_listiter->insend(3456);
@@ -1076,7 +1076,7 @@ is list empty (contains items or not)?
 \code
 DL_List<int> _intlist; #create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 if (a_listiter->Empty())
    cout << "empty"
 \endcode
@@ -1100,7 +1100,7 @@ the end can be tested with this function.
 \code
 DL_List <int> _intlist; #create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->tohead();
 //traverse forwards
 while ( ! a_listiter->hitroot())
@@ -1108,7 +1108,7 @@ while ( ! a_listiter->hitroot())
  cout << "The item =" << a_listiter->item();
  a_listiter++; //goto next object
 }
-
+ 
 a_listiter->totail();
 //traverse backwards
 while ( ! a_listiter->hitroot())
@@ -1135,7 +1135,7 @@ is the iterator at the head of the list.
 \code
 DL_List <int> _intlist; #create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->tohead();
 if (a_listiter->athead())
       cout << "at the head The item =" << a_listiter->item();
@@ -1159,7 +1159,7 @@ is the iterator at the tail of the list.
 \code
 DL_List <int> _intlist; #create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->totail();
 if (a_listiter->attail())
       cout << "at the tail The item =" << a_listiter->item();
@@ -1183,7 +1183,7 @@ does the iterator/list contain the given object
 DL_List <int> _intlist; #create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
 a_listiter->insend(1234);
-
+ 
 if (a_listiter->has(1234))
    cout << "yes it does";
 \endcode
@@ -1233,7 +1233,7 @@ go to first item,  if list is empty goto hite
 \code
 DL_List <int> _intlist; #create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(1234);
 a_listiter->tohead();
 \endcode
@@ -1254,7 +1254,7 @@ go to last item,  if list is empty goto hite
 \code
 DL_List <int> _intlist; #create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(1234);
 a_listiter->totail();
 \endcode
@@ -1275,7 +1275,7 @@ set the iterator position to the root (empty dummy) object in the list.
 \code
 DL_List <int> _intlist; #create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(1234);
 a_listiter->toroot();
 while (a_listiter->iterate())
@@ -1298,7 +1298,7 @@ how to iterate backwards
 \code
 DL_List <int> _intlist; //create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(1234);
 a_listiter->tohead();
 while (!a_listiter->hitroot())
@@ -1324,7 +1324,7 @@ how to iterate backwards
 \code
 DL_List <int> _intlist; //create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(1234);
 a_listiter->tohead();
 while (!a_listiter->hitroot())
@@ -1351,7 +1351,7 @@ how to iterate backwards
 \code
 DL_List <int> _intlist; //create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(1234);
 a_listiter->totail();
 while (!a_listiter->hitroot())
@@ -1378,7 +1378,7 @@ how to iterate backwards
 \code
 DL_List <int> _intlist; //create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(1234);
 a_listiter->totail();
 while (!a_listiter->hitroot())
@@ -1454,11 +1454,11 @@ put the iterator at the position of the given object in the list.
 \code
 DL_List <int> _intlist; #create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(1234);
 a_listiter->insend(2345);
 a_listiter->insend(3456);
-
+ 
 a_listiter->toitem(2345); template <class Dtype>
 \endcode
 */
@@ -1488,7 +1488,7 @@ put the iterator at the same position as the given iterator in the list.
 DL_List <int> _intlist; #create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
 DL_Iter<int>*  a_listiter2=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(1234);
 a_listiter->insend(2345);
 a_listiter->insend(3456);
@@ -1535,27 +1535,27 @@ bool DL_Iter<Dtype>::tonode( DL_Node<Dtype> *othernode )
 /*!
 advance the iterator one position in the next direction in the list.
 \return  returns true if not at the end/root of the list else false.
-
+ 
 \note  This function combines iteration and testing for the end of
 the list in one.
-
+ 
 \note  Therefore we do not have to advance the iterator ourselves.
-
+ 
 \note
 The iterator is first put to the next object, before testing for the end of the list. |
 This is why we need to start at the root element in general usage.
-
+ 
 \par Example
    iterate through all the items in a list
 \code
 DL_List <int> _intlist; #create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(1234);
 a_listiter->insend(2345);
 a_listiter->insend(3456);
 a_listiter->tobegin(2345);
-
+ 
 while (a_listiter->iterate())
 { cout << a_listiter->item(); }
 \endcode
@@ -1583,7 +1583,7 @@ since there is no item there.
 \code
 DL_List <int> _intlist; //create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(1234);
 a_listiter->tohead();
 int theitem=a_listiter->item();
@@ -1634,11 +1634,11 @@ cycle the list twice
 \code
 DL_List <int> _intlist; #create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(1234);
 a_listiter->insend(2345);
 a_listiter->tohead();
-
+ 
 int count=2*a_listiter->count();
 while (count)
 {
@@ -1681,11 +1681,11 @@ cycle the list twice
 \code
 DL_List <int> _intlist; #create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(1234);
 a_listiter->insend(2345);
 a_listiter->totail();
-
+ 
 int count=2*a_listiter->count();
 while (count)
 {
@@ -1723,23 +1723,23 @@ void DL_Iter<Dtype>::remove_all()
 /*!
 remove object at current iterator position from the list.
 \note  The object itself is not deleted, only removed from the list. The user is responsible for memory management.
-
+ 
 \note  The iterator level must be one to be able to use this function, else an error will be generated
-
+ 
 \note  The list must contain an object at the current iterator position, else an error will be generated.
 \par Example:
    to insert integer a at begin of list and remove it directly
 \code
 DL_List<int> _intlist; #create a list of integers
-
+ 
 int a=123;
-
+ 
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insbegin(a);
-
+ 
 a_listiter->tohead();
-
+ 
 a_listiter->remove();
 \endcode
 */
@@ -1767,21 +1767,21 @@ void DL_Iter<Dtype>::remove()
 /*!
 remove the object at the begin of the list using an iterator
 \note  The object itself is not deleted, only removed from the list. The user is responsible for memory management.
-
+ 
 \note  The iterator level must be one to be able to use this function, else an error will be generated
-
+ 
 \note  The list must contain objects, else an error will be generated.
-
+ 
 \note  Use this function if an iterator is needed to do more complex things. Else use the list member functions directly.
 \par Example:
    to insert integer a at begin of list and remove it directly|
 \code
 DL_List<int> _intlist; #create a list of integers
-
+ 
 int a=123;
-
+ 
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insbegin(a);
 a_listiter->removehead();
 \endcode
@@ -1808,21 +1808,21 @@ void DL_Iter<Dtype>::removehead()
 /*!
 //remove the object at the end of the list using an iterator
 \note  The object itself is not deleted, only removed from the list. The user is responsible for memory management.
-
+ 
 \note  The iterator level must be one to be able to use this function, else an error will be generated
-
+ 
 \note  The list must contain objects, else an error will be generated.
-
+ 
 \note  Use this function if an iterator is needed to do more complex things. Else use the list member functions directly.
 \par Example:
    to insert integer a at end of list and remove it directly
 \code
 DL_List<int> _intlist; #create a list of integers
-
+ 
 int a=123;
-
+ 
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(a);
 a_listiter->removetail();
 \endcode
@@ -1848,19 +1848,19 @@ void DL_Iter<Dtype>::removetail()
 
 /*!
 insert the object given at the end of the list
-
+ 
 \note  The iterator level must be one to be able to use this function, else an error will be generated
-
+ 
 \note  Use this function if an iterator is needed to do more complex things. Else use the list member functions directly.
 \par Example:
    to insert integer a at end of list|
 \code
 DL_List<int> _intlist; #create a list of integers
-
+ 
 int a=123;
-
+ 
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(a);
 \endcode
 */
@@ -1882,18 +1882,18 @@ DL_Node<Dtype>* DL_Iter<Dtype>::insend( Dtype newitem )
 /*!
 insert the object given at the begin of the list
 \note  The iterator level must be one to be able to use this function, else an error will be generated
-
+ 
 \note  Use this function if an iterator is needed to do more complex things. Else use the list member functions directly.
-
+ 
 \par Example:
  to insert integer a at begin of list|
 \code
 DL_List<int> _intlist; #create a list of integers
-
+ 
 int a=123;
-
+ 
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insbegin(a);
 \endcode
 \param newitem an object for which the template list/iterator was generated
@@ -1919,9 +1919,9 @@ DL_Node<Dtype>* DL_Iter<Dtype>::insbegin( Dtype newitem )
    to insert integer before the iterator position in the list|
 \code
 DL_List<int> _intlist; #create a list of integers
-
+ 
 int a=123;
-
+ 
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
 a_listiter->totail();
 a_listiter->insbefore(a);   // insert before tail
@@ -1954,9 +1954,9 @@ insert the object given after the current position of the iterator in list
 \par Example:  to insert integer after the iterator position in the list|
 \code
 DL_List<int> _intlist; #create a list of integers
-
+ 
 int a=123;
-
+ 
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
 a_listiter->tohead();
 a_listiter->insafter(a);   // insert after head
@@ -1986,30 +1986,30 @@ DL_Node<Dtype>* DL_Iter<Dtype>::insafter( Dtype newitem )
 sort all items in the list according to the compare function.
 when items need to be swapped to reach the right order the swap function will be called also.
 \note  There are no restrictions on the internal decision in the compare function when to return -1,0,1.
-
+ 
 \note  The swap function can be used to change items when they are swapped.
        fcmp (function, fcmp)
 \verbatim
-
+ 
           Declaration: int (*fcmp) (Dtype,Dtype)
-
+ 
           compare function pointer, the function takes two objects in the list. It must return -1, 0, 1, to sort the list in upgoing
           order the function should return:
-
+ 
                -1 is returned if the first object is bigger then the second.
                0 is returned if the objects are equal.
                1 is returned if the first object is smaller then the second.
-
+ 
           To sort the list in downgoing order:
-
+ 
                1 is returned if the first object is bigger then the second.
                0 is returned if the objects are equal.
                -1 is returned if the first object is smaller then the second.
-
+ 
           fswap (function, fswap)
-
+ 
           Declaration: void (*fswap) (Dtype,Dtype)
-
+ 
           swap function pointer, the function takes two objects in the list. It will be called when the objects are swapped to
           reach the right order. If it is NULL, it will not be called.
 \endverbatim
@@ -2022,10 +2022,10 @@ int numbersorter(int a,int b)
       if(a == b) return(0);
       return(-1);
 }
-
+ 
 DL_List <int> _intlist; #create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(2345);
 a_listiter->insend(3456);
 a_listiter->insend(1234);
@@ -2110,34 +2110,34 @@ int DL_Iter<Dtype>::cocktailsort( int ( *fcmp ) ( Dtype, Dtype ), bool ( *fswap 
 
 /*!
    sort all items in the list according to the compare function.
-
+ 
 \note
    There are no restrictions on the internal decision in the compare function when to return -1,0,1.
-
+ 
 \note
    For the mergesort function the objects will be swapped when the return value is -1.
-
+ 
 \note
 \verbatim
-
+ 
       fcmp (function, fcmp)
-
+ 
          Declaration: int (*fcmp) (Dtype,Dtype)
-
+ 
           compare function pointer, the function takes two objects in the list. It must return -1, 0, 1, to sort the list in upgoing
           order the function should return:
-
+ 
                -1 is returned if the first object is bigger then the second.
                0 is returned if the objects are equal.
                1 is returned if the first object is smaller then the second.
-
+ 
           To sort the list in downgoing order:
-
+ 
                1 is returned if the first object is bigger then the second.
                0 is returned if the objects are equal.
                -1 is returned if the first object is smaller then the second.
 \endverbatim
-
+ 
 !tcarg: class | Dtype | list item object
 \par example
    sort the list in upgoing order using mergesort and the function numbersorter|
@@ -2149,10 +2149,10 @@ int numbersorter(int a,int b)
       if(a == b) return(0);
       return(-1);
 }
-
+ 
 DL_List <int> _intlist; #create a list of integers
 DL_Iter<int>*  a_listiter=new DL_Iter<int>(&_intlist);
-
+ 
 a_listiter->insend(2345);
 a_listiter->insend(3456);
 a_listiter->insend(1234);

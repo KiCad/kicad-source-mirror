@@ -1,11 +1,11 @@
 /*! \file include/booleng.h
     \author Klaas Holwerda
-
+ 
     Copyright: 2001-2004 (C) Klaas Holwerda
-
-    Licence: see kboollicense.txt
-
-    RCS-ID: $Id: booleng.h,v 1.4 2008/09/05 19:01:14 titato Exp $
+ 
+    Licence: see kboollicense.txt 
+ 
+    RCS-ID: $Id: booleng.h,v 1.6 2009/09/07 19:23:28 titato Exp $
 */
 
 #ifndef BOOLENG_H
@@ -19,9 +19,13 @@
 #include <limits.h>
 #include <assert.h>
 #include <math.h>
+#include <string>
+
+using namespace std;
 
 
 #if 0       // Kicad does not use kbool in dll version
+
 #if defined(__WXMSW__)
     /*
        __declspec works in BC++ 5 and later, Watcom C++ 11.0 and later as well
@@ -58,6 +62,7 @@
 #    define WXEXPORT __declspec(dllexport)
 #    define WXIMPORT __declspec(dllimport)
 #endif
+
 #endif      // if 0 for kicad
 
 /* for other platforms/compilers we don't anything */
@@ -80,13 +85,13 @@
 #define A2DKBOOLDLLEXP_CTORFN
 #endif
 
-#define KBOOL_VERSION "1.9"
+#define KBOOL_VERSION "2.0"
 
 #define KBOOL_DEBUG 0
 #define KBOOL_LOG 0
 #define KBOOL_INT64 1
 
-class KBoolLink;
+class kbLink;
 
 #define LINELENGTH 200
 
@@ -163,17 +168,17 @@ B_INT bmax( B_INT value1, B_INT value2 );
 class A2DKBOOLDLLEXP Bool_Engine_Error
 {
 public:
-    Bool_Engine_Error( const char* message, const char* header = 0, int degree = 9, int fatal = 0 );
+    Bool_Engine_Error( string message, string header = 0, int degree = 9, int fatal = 0 );
     Bool_Engine_Error( const Bool_Engine_Error& a );
     ~Bool_Engine_Error();
-    char* GetErrorMessage();
-    char* GetHeaderMessage();
+    string GetErrorMessage();
+    string GetHeaderMessage();
     int GetErrorDegree();
     int GetFatal();
 
 protected:
-    char* _message;
-    char* _header;
+    string _message;
+    string _header;
     int  _degree;
     int  _fatal;
 };
@@ -207,10 +212,10 @@ enum BOOL_OP
     BOOL_MAKERING /*!< create a ring on all polygons */
 };
 
-class GraphList;
-class Graph;
-class KBoolLink;
-class Node;
+class kbGraphList;
+class kbGraph;
+class kbLink;
+class kbNode;
 template<class Type> class TDLI;
 
 //! boolean engine to perform operation on two sets of polygons.
@@ -220,7 +225,7 @@ template<class Type> class TDLI;
  The boolean operation ( BOOL_OR, BOOL_AND, BOOL_EXOR, BOOL_A_SUB_B, BOOL_B_SUB_A )
  are based on the two sets of polygons in group A and B.
  The other operation on group A only.
-
+ 
     At the end of the operation the resulting polygons can be extracted.
 */
 class A2DKBOOLDLLEXP Bool_Engine
@@ -234,16 +239,16 @@ public:
     //! destructor
     virtual ~Bool_Engine();
 
-    const char* GetVersion() { return KBOOL_VERSION; }
+    string GetVersion() { return KBOOL_VERSION; }
 
     //! reports progress of algorithm.
-    virtual void SetState( const char* = 0 );
+    virtual void SetState( string );
 
     //! called at an internal error.
-    virtual void error( const char *text, const char *title );
+    virtual void error( string text, string title );
 
     //! called at an internal generated possible error.
-    virtual void info( const char *text, const char *title );
+    virtual void info( string text, string title );
 
     bool Do_Operation( BOOL_OP operation );
 
@@ -252,7 +257,7 @@ public:
     /*
           The algorithm takes into account gaps and inaccuracies caused by rounding to integer coordinates
           in the original data.
-          Imagine two rectangles one with a side ( 0,0 ) ( 2.0, 17.0 )
+          Imagine two rectangles one with a side ( 0,0 ) ( 2.0, 17.0 ) 
           and the other has a side ( 0,0 ) ( 1.0, 8.5 )
           If for some reason those coordinates where round to ( 0,0 ) ( 2, 17 ) ( 0,0 ) ( 1, 9 ),
           there will be clearly a gap or overlap that was not intended.
@@ -275,8 +280,8 @@ public:
     Grid makes sure that the integer data used within the algorithm has room for extra intersections
     smaller than the smallest number within the input data.
     The input data scaled up with DGrid is related to the accuracy the user has in his input data.
-         Another scaling with Grid is applied on top of it to create space in the integer number for
-    even smaller numbers.
+         Another scaling with Grid is applied on top of it to create space in the integer number for 
+    even smaller numbers. 
     */
     void SetGrid( B_INT grid );
 
@@ -294,7 +299,7 @@ public:
        doubles, part of the integers used in vertexes within the boolean algorithm.
        And therefore DGRID bigger than 1 is not usefull, you would only loose accuracy.
        Within the algorithm all input data is multiplied with DGRID, and the result
-       is rounded to an integer.
+       is rounded to an integer. 
     */
     void SetDGrid( double dgrid );
 
@@ -405,7 +410,7 @@ public:
 
     //! if set true holes are linked into outer contours by double overlapping segments.
     /*!
-        This mode is needed when the software using the boolean algorithm does
+        This mode is needed when the software using the boolean algorithm does 
         not understand hole polygons. In that case a contour and its holes form one
         polygon. In cases where software understands the concept of holes, contours
         are clockwise oriented, while holes are anticlockwise oriented.
@@ -422,13 +427,13 @@ public:
     void SetLog( bool OnOff );
 
     //! used to write to log file
-    void Write_Log( const char * );
+    void Write_Log( string);
     //! used to write to log file
-    void Write_Log( const char *, const char * );
+    void Write_Log( string, string );
     //! used to write to log file
-    void Write_Log( const char *, double );
+    void Write_Log( string, double );
     //! used to write to log file
-    void Write_Log( const char *, B_INT );
+    void Write_Log( string, B_INT );
 
     FILE* GetLogFile() { return m_logfile; }
 
@@ -445,11 +450,11 @@ public:
        if (booleng->StartPolygonAdd(GROUP_A))
        {
         booleng->AddPoint(100,100);
-        booleng->AddPoint(-100,100);
-        booleng->AddPoint(-100,-100);
-        booleng->AddPoint(100,-100);
+        booleng->AddPoint(-100,100); 
+        booleng->AddPoint(-100,-100); 
+        booleng->AddPoint(100,-100); 
        }
-       booleng->EndPolygonAdd();
+       booleng->EndPolygonAdd(); 
 
        \param A_or_B defines if the new polygon will be of group A or B
 
@@ -457,7 +462,7 @@ public:
        to another polygon added.
        So the contour polygon ClockWise, then add counterclockwise polygons for holes, and visa versa.
        BUT only if m_orientationEntryMode is set true, else all polygons are redirected, and become
-       individual areas without holes.
+       individual areas without holes. 
        Holes in such a case must be linked into the contour using two extra segments.
     */
     bool StartPolygonAdd( GroupType A_or_B );
@@ -492,8 +497,8 @@ public:
     //! see StartPolygonGet
     /*!
        This iterates through the first graph in the graphlist.
-       Setting the current Node properly by following the links in the graph
-       through its nodes.
+       Setting the current kbNode properly by following the links in the graph
+       through its nodes. 
     */
     bool PolygonHasMorePoints();
 
@@ -526,7 +531,7 @@ private:
     bool m_doLog;
 
     //! contains polygons in graph form
-    GraphList* m_graphlist;
+    kbGraphList* m_graphlist;
 
     double m_MARGE;
     B_INT  m_GRID;
@@ -544,21 +549,21 @@ private:
     bool m_doLinkHoles;
 
     //! used in the StartPolygonAdd, AddPt, EndPolygonAdd sequence
-    Graph*    m_GraphToAdd;
+    kbGraph*    m_GraphToAdd;
     //! used in the StartPolygonAdd, AddPt, EndPolygonAdd sequence
-    Node*     m_lastNodeToAdd;
+    kbNode*     m_lastNodeToAdd;
     //! used in the StartPolygonAdd, AddPt, EndPolygonAdd sequence
-    Node*     m_firstNodeToAdd;
+    kbNode*     m_firstNodeToAdd;
 
     //! the current group type ( group A or B )
     GroupType m_groupType;
 
     //! used in extracting the points from the resultant polygons
-    Graph* m_getGraph;
+    kbGraph* m_getGraph;
     //! used in extracting the points from the resultant polygons
-    KBoolLink* m_getLink;
+    kbLink* m_getLink;
     //! used in extracting the points from the resultant polygons
-    Node* m_getNode;
+    kbNode* m_getNode;
     //! used in extracting the points from the resultant polygons
     double m_PolygonXPoint;
     //! used in extracting the points from the resultant polygons
@@ -572,8 +577,8 @@ private:
 
 public:
 
-    //! use in Node to iterate links.
-    TDLI<KBoolLink>*  _linkiter;
+    //! use in kbNode to iterate links.
+    TDLI<kbLink>*  _linkiter;
 
     //! how many time run intersections fase.
     unsigned int m_intersectionruns;

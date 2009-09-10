@@ -5,7 +5,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: scanbeam.cpp,v 1.3 2008/06/04 21:23:22 titato Exp $
+    RCS-ID: $Id: scanbeam.cpp,v 1.4 2009/09/07 19:23:28 titato Exp $
 */
 
 // class scanbeam
@@ -22,12 +22,12 @@
 //this here is to initialize the static iterator of scanbeam
 //with NOLIST constructor
 
-int recordsorter( Record* , Record* );
+int recordsorter( kbRecord* , kbRecord* );
 
-int recordsorter_ysp_angle( Record* , Record* );
-int recordsorter_ysp_angle_back( Record* rec1, Record* rec2 );
+int recordsorter_ysp_angle( kbRecord* , kbRecord* );
+int recordsorter_ysp_angle_back( kbRecord* rec1, kbRecord* rec2 );
 
-ScanBeam::ScanBeam( Bool_Engine* GC ): DL_List<Record*>()
+ScanBeam::ScanBeam( Bool_Engine* GC ): DL_List<kbRecord*>()
 {
     _GC = GC;
     _type = NORMAL;
@@ -43,7 +43,7 @@ ScanBeam::~ScanBeam()
     //DeleteRecordPool();
 }
 
-void ScanBeam::SetType( Node* low, Node* high )
+void ScanBeam::SetType( kbNode* low, kbNode* high )
 {
     if ( low->GetX() < high->GetX() )
         _type = NORMAL;
@@ -54,12 +54,12 @@ void ScanBeam::SetType( Node* low, Node* high )
 /*
 //catch node to link crossings
 // must be sorted on ysp
-int ScanBeam::FindCloseLinksAndCross(TDLI<KBoolLink>* _I,Node* _lowf)
+int ScanBeam::FindCloseLinksAndCross(TDLI<kbLink>* _I,kbNode* _lowf)
 {
  int merges = 0;
- Record* record;
+ kbRecord* record;
  
-   TDLI<Record> _BBI=TDLI<Record>(this);
+   TDLI<kbRecord> _BBI=TDLI<kbRecord>(this);
  
  if (_BI.count() > 1)
  {
@@ -131,16 +131,16 @@ int ScanBeam::FindCloseLinksAndCross(TDLI<KBoolLink>* _I,Node* _lowf)
 */
 
 /*
-bool  ScanBeam::Update(TDLI<KBoolLink>* _I,Node* _lowf)
+bool  ScanBeam::Update(TDLI<kbLink>* _I,kbNode* _lowf)
 {
  bool found=false;
- KBoolLink* link;
+ kbLink* link;
  
  _BI.tohead();
  while (!_BI.hitroot())
  {
  
-  Record* record=_BI.item();
+  kbRecord* record=_BI.item();
   record->Calc_Ysp(_type,_low);
   _BI++;
  }
@@ -150,7 +150,7 @@ bool  ScanBeam::Update(TDLI<KBoolLink>* _I,Node* _lowf)
    _BI.tohead();
    while (!_BI.hitroot())
    {
-      Record* record=_BI.item();
+      kbRecord* record=_BI.item();
       //records containing links towards the new low node
       //are links to be marked for removal
  
@@ -166,7 +166,7 @@ bool  ScanBeam::Update(TDLI<KBoolLink>* _I,Node* _lowf)
          _BI--;
          if (!_BI.hitroot() && (_BI.count() > 1))
          {
-            Record* prev=_BI.item();
+            kbRecord* prev=_BI.item();
             _BI++;
             if (!_BI.hitroot())
             {
@@ -195,7 +195,7 @@ bool  ScanBeam::Update(TDLI<KBoolLink>* _I,Node* _lowf)
  //so for following beams it will not be checked again
  while ( bool(link=_lowf->GetBinHighest(false)) )
  {
-      Record* record=new Record(link);
+      kbRecord* record=new kbRecord(link);
       // yp_new will always be the y of low node since all new links are
       // from this node
       record->SetYsp(_lowf->GetY());
@@ -222,7 +222,7 @@ bool  ScanBeam::Update(TDLI<KBoolLink>* _I,Node* _lowf)
          _BI--;_BI--; //just before the new record inserted
          if (!_BI.hitroot())
          {
-            Record* prev=_BI.item();
+            kbRecord* prev=_BI.item();
             _BI++; //goto the new record inserted
             if (!_BI.item()->Equal(prev)) // records NOT parallel
             {
@@ -238,11 +238,11 @@ bool  ScanBeam::Update(TDLI<KBoolLink>* _I,Node* _lowf)
          else
            _BI++;
  
-         Record* prev=_BI.item(); //the new record
+         kbRecord* prev=_BI.item(); //the new record
          _BI++;
          if (!_BI.hitroot() && !_BI.item()->Equal(prev)) // records NOT parallel
          {
-          Record* cur=_BI.item();
+          kbRecord* cur=_BI.item();
             if (cur->GetLine()->Intersect(prev->GetLine(),MARGE))
             {
                //this  may modify the links already part of the record
@@ -264,13 +264,13 @@ bool  ScanBeam::Update(TDLI<KBoolLink>* _I,Node* _lowf)
 }
 */
 
-bool ScanBeam::FindNew( SCANTYPE scantype, TDLI<KBoolLink>* _I, bool& holes )
+bool ScanBeam::FindNew( SCANTYPE scantype, TDLI<kbLink>* _I, bool& holes )
 {
     bool foundnew = false;
 
     _low = _I->item()->GetBeginNode();
 
-    KBoolLink* link;
+    kbLink* link;
 
     //if (!checksort())
     // SortTheBeam();
@@ -291,7 +291,7 @@ bool ScanBeam::FindNew( SCANTYPE scantype, TDLI<KBoolLink>* _I, bool& holes )
                 {
                     //all vertical links in flatbeam are ignored
                     //normal link in beam
-                    Record * record = new Record( link, _GC );
+                    kbRecord * record = new kbRecord( link, _GC );
                     // yp_new will always be the y of low node since all new links are
                     // from this node
                     record->SetYsp( _low->GetY() );
@@ -309,7 +309,7 @@ bool ScanBeam::FindNew( SCANTYPE scantype, TDLI<KBoolLink>* _I, bool& holes )
                 case LINKLINK:
                     //is the new record a flat link
                 {
-                    KBoolLine flatline = KBoolLine( link, _GC );
+                    kbLine flatline = kbLine( link, _GC );
                     foundnew = Process_LinkToLink_Flat( &flatline ) || foundnew;
                     //flatlinks are not part of the beams, still they are used to find new beams
                     //they can be processed now if the beginnode does not change, since this is used to
@@ -327,7 +327,7 @@ bool ScanBeam::FindNew( SCANTYPE scantype, TDLI<KBoolLink>* _I, bool& holes )
         else
         {
             //normal link in beam
-            Record* record = new Record( link, _GC );
+            kbRecord* record = new kbRecord( link, _GC );
             // yp_new will always be the y of low node since all new links are
             // from this node
             record->SetYsp( _low->GetY() );
@@ -361,7 +361,7 @@ bool ScanBeam::FindNew( SCANTYPE scantype, TDLI<KBoolLink>* _I, bool& holes )
                     //now we can set the a/b group flags based on the above link
                     _BI--;
                     _BI--;
-                    Record* above = 0;
+                    kbRecord* above = 0;
                     if ( !_BI.hitroot() )
                         above = _BI.item();
                     _BI++;
@@ -396,11 +396,11 @@ bool ScanBeam::FindNew( SCANTYPE scantype, TDLI<KBoolLink>* _I, bool& holes )
     return foundnew;
 }
 
-bool ScanBeam::RemoveOld( SCANTYPE scantype, TDLI<KBoolLink>* _I, bool& holes )
+bool ScanBeam::RemoveOld( SCANTYPE scantype, TDLI<kbLink>* _I, bool& holes )
 {
     bool found = false;
     bool foundnew = false;
-    DL_Iter<Record*>  _BBI = DL_Iter<Record*>();
+    DL_Iter<kbRecord*>  _BBI = DL_Iter<kbRecord*>();
     bool attached = false;
 
     _low = _I->item()->GetBeginNode();
@@ -416,10 +416,14 @@ bool ScanBeam::RemoveOld( SCANTYPE scantype, TDLI<KBoolLink>* _I, bool& holes )
                 {
                     if ( scantype == LINKHOLES )
                     {
+                        // Tophole links can be linked at the begin or end point, depending on
+                        // which is higher in Y.
+                        // A link pointing to the low node, and which is a tophole link,
+                        // and which was not linked in sofar should be linked now.
                         _BI.tohead();
                         while ( !_BI.hitroot() )
                         {
-                            Record * record = _BI.item();
+                            kbRecord * record = _BI.item();
                             //records containing links towards the new low node
                             //are links to be removed
                             if ( ( record->GetLink()->GetEndNode() == _low ) ||
@@ -435,36 +439,16 @@ bool ScanBeam::RemoveOld( SCANTYPE scantype, TDLI<KBoolLink>* _I, bool& holes )
                     _BI.tohead();
                     while ( !_BI.hitroot() )
                     {
-                        Record * record = _BI.item();
+                        kbRecord * record = _BI.item();
                         //records containing links towards the new low node
                         //are links to be removed
                         if ( ( record->GetLink()->GetEndNode() == _low ) ||
                                 ( record->GetLink()->GetBeginNode() == _low )
                            )
                         {
-                            if ( attached )   //there is a bug
-                            {
-                                _BBI.Detach();
-                                if ( !checksort() )
-                                    SortTheBeam( true );
-                                _BI.tohead();
-                                attached = false;
-
-                            }
                             delete _BI.item();
                             _BI.remove();
                             found = true;
-                        }
-                        else if ( found ) //only once in here
-                        {
-                            attached = true;
-                            found = false;
-                            _BBI.Attach( this );
-                            _BBI.toiter( &_BI ); //this is the position new records will be inserted
-
-                            //recalculate ysp for the new scanline
-                            record->Calc_Ysp( _low );
-                            _BI++;
                         }
                         else
                         {
@@ -474,21 +458,35 @@ bool ScanBeam::RemoveOld( SCANTYPE scantype, TDLI<KBoolLink>* _I, bool& holes )
                         }
                     }
 
-                    if ( attached )
+                    // all records are renewed in Ysp.
+                    // found links to remove, we search the new insert position for new links.
+                    if ( found )
                     {
-                        _BI.toiter( &_BBI );
-                        _BBI.Detach();
+                        _BI.tohead();
+                        while ( !_BI.hitroot() )
+                        {
+                            kbRecord * record = _BI.item();
+                            if (  record->Ysp() < _low->GetY() )
+                            {
+                                break;
+                            }
+                            _BI++;
+                        }
                     }
-
                 }
                 else
                 {
+                    // nothing is removed from the beam, still we moved forward with the scanline
+                    // at the new _low, so we need to recalculate the intersections of the links 
+                    // with the new scanline.
+                    // Also the the insert position for new links is determined, being the first
+                    // link below _low.
                     _BBI.Attach( this );
                     _BBI.toroot();
                     _BI.tohead();
                     while ( !_BI.hitroot() )
                     {
-                        Record * record = _BI.item();
+                        kbRecord * record = _BI.item();
 
                         record->Calc_Ysp( _low );
                         if ( !found && ( record->Ysp() < _low->GetY() ) )
@@ -502,7 +500,7 @@ bool ScanBeam::RemoveOld( SCANTYPE scantype, TDLI<KBoolLink>* _I, bool& holes )
                     _BBI.Detach();
                 }
             }
-            else
+            else // _type == NORMAL
             {  //because the previous beam was flat the links to remove are
                 //below the last insert position
                 if ( _low->GetBinHighest( true ) ) //is there something to remove
@@ -513,7 +511,7 @@ bool ScanBeam::RemoveOld( SCANTYPE scantype, TDLI<KBoolLink>* _I, bool& holes )
                         _BI.tohead();
                         while ( !_BI.hitroot() )
                         {
-                            Record * record = _BI.item();
+                            kbRecord * record = _BI.item();
                             //records containing links towards the new low node
                             //are links to be removed
                             if ( ( record->GetLink()->GetEndNode() == _low ) ||
@@ -531,14 +529,10 @@ bool ScanBeam::RemoveOld( SCANTYPE scantype, TDLI<KBoolLink>* _I, bool& holes )
                     //if there was no record before the last deleted record this means
                     //we where at the beginning of the beam, so at root
 
-                    //_BI << (lastinserted+1);
-                    //_BI--;
-                    //if (_BI.hitroot())  //only possible when at the begin of the beam
-
                     _BI.tohead();
                     while ( !_BI.hitroot() )
                     {
-                        Record * record = _BI.item();
+                        kbRecord * record = _BI.item();
                         //records containing links towards the new low node
                         //are links to be removed
                         if ( ( record->GetLink()->GetEndNode() == _low ) ||
@@ -566,13 +560,10 @@ bool ScanBeam::RemoveOld( SCANTYPE scantype, TDLI<KBoolLink>* _I, bool& holes )
                     //if there was no record before the last deleted record this means
                     //we where at the beginning of the beam, so at root
 
-                    //_BI << (lastinserted+ 1);
-                    //_BI--;
-                    //if (_BI.hitroot())  //only possible when at the begin of the beam
                     _BI.tohead();
                     while ( !_BI.hitroot() )
                     {
-                        Record * record = _BI.item();
+                        kbRecord * record = _BI.item();
                         if ( record->Ysp() < _low->GetY() )
                             break;
                         _BI++;
@@ -601,14 +592,14 @@ bool ScanBeam::RemoveOld( SCANTYPE scantype, TDLI<KBoolLink>* _I, bool& holes )
                 _BI.tohead();
                 while ( !_BI.hitroot() )
                 {
-                    Record * record = _BI.item();
+                    kbRecord * record = _BI.item();
                     //records containing links towards the new low node
                     //are links to be removed
                     if ( ( record->GetLink()->GetEndNode() == _low ) ||
                             ( record->GetLink()->GetBeginNode() == _low )
                        )
                     {
-                        KBoolLine * line = record->GetLine();
+                        kbLine * line = record->GetLine();
                         if ( scantype == NODELINK )
                             foundnew = Process_PointToLink_Crossings() != 0 || foundnew;
                         line->ProcessCrossings( _I );
@@ -629,7 +620,7 @@ bool ScanBeam::RemoveOld( SCANTYPE scantype, TDLI<KBoolLink>* _I, bool& holes )
                 _BI.tohead();
                 while ( !_BI.hitroot() )
                 {
-                    Record * record = _BI.item();
+                    kbRecord * record = _BI.item();
                     //because the beam is sorted on ysp, stop when
                     //the right insertion point for new links has been found
                     if ( ( record->Ysp() < _low->GetY() ) )
@@ -647,11 +638,11 @@ bool ScanBeam::RemoveOld( SCANTYPE scantype, TDLI<KBoolLink>* _I, bool& holes )
     return foundnew;
 }
 /*
-bool ScanBeam::RemoveOld(SCANTYPE scantype,TDLI<KBoolLink>* _I, bool& holes )
+bool ScanBeam::RemoveOld(SCANTYPE scantype,TDLI<kbLink>* _I, bool& holes )
 {
  bool found = false;
  bool foundnew = false;
-   DL_Iter<Record*>  _BBI=DL_Iter<Record*>();
+   DL_Iter<kbRecord*>  _BBI=DL_Iter<kbRecord*>();
  bool attached=false;
  
    _low = _I->item()->GetBeginNode();
@@ -663,7 +654,7 @@ bool ScanBeam::RemoveOld(SCANTYPE scantype,TDLI<KBoolLink>* _I, bool& holes )
       case LINKHOLES:
       if (_type==NORMAL )
       {
-         KBoolLink* link = _low->GetBinHighest(true);
+         kbLink* link = _low->GetBinHighest(true);
          if ( link ) //is there something to remove
          {
             link->SetRecordNode( NULL );
@@ -673,7 +664,7 @@ bool ScanBeam::RemoveOld(SCANTYPE scantype,TDLI<KBoolLink>* _I, bool& holes )
                _BI.tohead();
                while (!_BI.hitroot())
                {
-                  Record* record = _BI.item();
+                  kbRecord* record = _BI.item();
                   //records containing links towards the new low node
                   //are links to be removed
                   if ((record->GetLink()->GetEndNode() == _low) ||
@@ -689,7 +680,7 @@ bool ScanBeam::RemoveOld(SCANTYPE scantype,TDLI<KBoolLink>* _I, bool& holes )
             _BI.tohead();
             while (!_BI.hitroot())
             {
-               Record* record=_BI.item();
+               kbRecord* record=_BI.item();
                //records containing links towards the new low node
                //are links to be removed
                if ((record->GetLink()->GetEndNode() == _low) ||
@@ -721,7 +712,7 @@ bool ScanBeam::RemoveOld(SCANTYPE scantype,TDLI<KBoolLink>* _I, bool& holes )
             _BI.tohead();
             while (!_BI.hitroot())
             {
-                  Record* record=_BI.item();
+                  kbRecord* record=_BI.item();
                   record->Calc_Ysp(_low);
                   _BI++;
             }
@@ -730,7 +721,7 @@ bool ScanBeam::RemoveOld(SCANTYPE scantype,TDLI<KBoolLink>* _I, bool& holes )
       else
       {  //because the previous beam was flat the links to remove are
          //below the last insert position
-         KBoolLink* link;
+         kbLink* link;
          link = _low->GetBinHighest(true);
          if( link  )//is there something to remove
          {
@@ -740,7 +731,7 @@ bool ScanBeam::RemoveOld(SCANTYPE scantype,TDLI<KBoolLink>* _I, bool& holes )
             _BI.tohead();
             while (!_BI.hitroot())
             {
-               Record* record = _BI.item();
+               kbRecord* record = _BI.item();
                if (record->GetLink() == link) 
                   linkf = true;
                _BI++;
@@ -755,7 +746,7 @@ bool ScanBeam::RemoveOld(SCANTYPE scantype,TDLI<KBoolLink>* _I, bool& holes )
                _BI.tohead();
                while (!_BI.hitroot())
                {
-                  Record* record=_BI.item();
+                  kbRecord* record=_BI.item();
                   //records containing links towards the new low node
                   //are links to be removed
                   if ((record->GetLink()->GetEndNode() == _low) ||
@@ -786,7 +777,7 @@ bool ScanBeam::RemoveOld(SCANTYPE scantype,TDLI<KBoolLink>* _I, bool& holes )
             _BI.tohead();
             while (!_BI.hitroot())
             {
-               Record* record=_BI.item();
+               kbRecord* record=_BI.item();
                //records containing links towards the new low node
                //are links to be removed
                if ((record->GetLink()->GetEndNode() == _low) ||
@@ -835,7 +826,7 @@ bool ScanBeam::RemoveOld(SCANTYPE scantype,TDLI<KBoolLink>* _I, bool& holes )
                _BI.tohead();
             while (!_BI.hitroot())
             {
-                  Record* record=_BI.item();
+                  kbRecord* record=_BI.item();
                   if (record->Ysp() < _low->GetY())
                      break;
                   _BI++;
@@ -865,14 +856,14 @@ bool ScanBeam::RemoveOld(SCANTYPE scantype,TDLI<KBoolLink>* _I, bool& holes )
             _BI.tohead();
             while (!_BI.hitroot())
             {
-               Record* record=_BI.item();
+               kbRecord* record=_BI.item();
                //records containing links towards the new low node
                //are links to be removed
                if ((record->GetLink()->GetEndNode() == _low) ||
                    (record->GetLink()->GetBeginNode() == _low)
                   )
                {
-                  KBoolLine* line=record->GetLine();
+                  kbLine* line=record->GetLine();
                   if (scantype==NODELINK)
                    foundnew = Process_PointToLink_Crossings() !=0 || foundnew;
                   line->ProcessCrossings(_I);
@@ -893,7 +884,7 @@ bool ScanBeam::RemoveOld(SCANTYPE scantype,TDLI<KBoolLink>* _I, bool& holes )
             _BI.tohead();
             while (!_BI.hitroot())
             {
-                  Record* record=_BI.item();
+                  kbRecord* record=_BI.item();
                   //because the beam is sorted on ysp, stop when
                   //the right insertion point for new links has been found
                   if ((record->Ysp() < _low->GetY()))
@@ -925,8 +916,8 @@ void ScanBeam::Calc_Ysp()
     _BI.tohead();
     while ( !_BI.hitroot() )
     {
-        Record * record = _BI.item();
-//  KBoolLink* link=_BI.item()->GetLink();
+        kbRecord * record = _BI.item();
+//  kbLink* link=_BI.item()->GetLink();
         record->Calc_Ysp( _low );
         _BI++;
     }
@@ -940,7 +931,7 @@ void ScanBeam::Generate_INOUT( int graphnumber )
     DIRECTION first_dir = GO_LEFT;
     int diepte          = 0;
 
-    DL_Iter<Record*> _BBI = DL_Iter<Record*>();
+    DL_Iter<kbRecord*> _BBI = DL_Iter<kbRecord*>();
     _BBI.Attach( this );
     for( _BBI.tohead(); !_BBI.hitroot(); _BBI++ )
     {
@@ -999,14 +990,14 @@ void ScanBeam::Generate_INOUT( int graphnumber )
 //     in a later beam will be higher than the current, if so we will wait
 //     till that node comes around otherwise we will link this node to the
 //     closest link (prev in beam)
-bool ScanBeam::ProcessHoles( bool atinsert, TDLI<KBoolLink>* _LI )
+bool ScanBeam::ProcessHoles( bool atinsert, TDLI<kbLink>* _LI )
 {
     // The scanbeam must already be sorted at this moment
-    Node * topnode;
+    kbNode * topnode;
     bool foundholes = false;
 
-    Record* record = _BI.item();
-    KBoolLink* link = record->GetLink();
+    kbRecord* record = _BI.item();
+    kbLink* link = record->GetLink();
 
     if ( !record->GetLine()->CrossListEmpty() )
     {
@@ -1018,14 +1009,14 @@ bool ScanBeam::ProcessHoles( bool atinsert, TDLI<KBoolLink>* _LI )
         // make new nodes and links and set them, re-use the old link, so the links
         // that still stand in the linecrosslist will not be lost.
         // There is a hole that must be linked to this link !
-        TDLI<Node> I( record->GetLine()->GetCrossList() );
+        TDLI<kbNode> I( record->GetLine()->GetCrossList() );
         I.tohead();
         while( !I.hitroot() )
         {
             topnode = I.item();
             I.remove();
 
-            KBoolLine line( _GC );
+            kbLine line( _GC );
             line.Set( link );
 
             B_INT Y = line.Calculate_Y( topnode->GetX() );
@@ -1053,16 +1044,16 @@ bool ScanBeam::ProcessHoles( bool atinsert, TDLI<KBoolLink>* _LI )
             // all holes are oriented left around
 
 
-            Node * leftnode; //left node of clossest link
+            kbNode * leftnode; //left node of clossest link
             ( link->GetBeginNode()->GetX() < link->GetEndNode()->GetX() ) ?
             leftnode = link->GetBeginNode() :
                        leftnode = link->GetEndNode();
 
-            Node *node_A = new Node( topnode->GetX(), Y, _GC );
-            KBoolLink *link_A = new KBoolLink( 0, leftnode, node_A, _GC );
-            KBoolLink *link_B = new KBoolLink( 0, node_A, topnode, _GC );
-            KBoolLink *link_BB = new KBoolLink( 0, topnode, node_A, _GC );
-            KBoolLink *link_D = _BI.item()->GetLink();
+            kbNode *node_A = new kbNode( topnode->GetX(), Y, _GC );
+            kbLink *link_A = new kbLink( 0, leftnode, node_A, _GC );
+            kbLink *link_B = new kbLink( 0, node_A, topnode, _GC );
+            kbLink *link_BB = new kbLink( 0, topnode, node_A, _GC );
+            kbLink *link_D = _BI.item()->GetLink();
             link_D->Replace( leftnode, node_A );
             _LI->insbegin( link_A );
             _LI->insbegin( link_B );
@@ -1137,7 +1128,7 @@ bool ScanBeam::ProcessHoles( bool atinsert, TDLI<KBoolLink>* _LI )
 }
 
 //sort the records on Ysp if eqaul, sort on tangent at ysp
-int recordsorter_ysp_angle( Record* rec1, Record* rec2 )
+int recordsorter_ysp_angle( kbRecord* rec1, kbRecord* rec2 )
 {
     if ( rec1->Ysp() > rec2->Ysp() )
         return( 1 );
@@ -1163,7 +1154,7 @@ int recordsorter_ysp_angle( Record* rec1, Record* rec2 )
 }
 
 //sort the records on Ysp if eqaul, sort on tangent at ysp
-int recordsorter_ysp_angle_back( Record* rec1, Record* rec2 )
+int recordsorter_ysp_angle_back( kbRecord* rec1, kbRecord* rec2 )
 {
     if ( rec1->Ysp() > rec2->Ysp() )
         return( 1 );
@@ -1189,7 +1180,7 @@ int recordsorter_ysp_angle_back( Record* rec1, Record* rec2 )
 }
 
 // swap functie for cocktailsort ==> each swap means an intersection of links
-bool swap_crossing_normal( Record *a, Record *b )
+bool swap_crossing_normal( kbRecord *a, kbRecord *b )
 {
     if ( !a->Equal( b ) ) // records NOT parallel
     {
@@ -1210,11 +1201,11 @@ int ScanBeam::Process_LinkToLink_Crossings()
 int ScanBeam::Process_PointToLink_Crossings()
 {
     int merges = 0;
-    Record* record;
+    kbRecord* record;
 
     if ( _BI.count() > 1 )
     {
-        DL_Iter<Record*> IL = DL_Iter<Record*>( this );
+        DL_Iter<kbRecord*> IL = DL_Iter<kbRecord*>( this );
         IL.toiter( &_BI );
 
         //from IL search back for close links
@@ -1263,11 +1254,11 @@ int ScanBeam::Process_PointToLink_Crossings()
     return merges;
 }
 
-int ScanBeam::Process_LinkToLink_Flat( KBoolLine* flatline )
+int ScanBeam::Process_LinkToLink_Flat( kbLine* flatline )
 {
     int crossfound = 0;
-    Record* record;
-    DL_Iter<Record*> _BBI = DL_Iter<Record*>();
+    kbRecord* record;
+    DL_Iter<kbRecord*> _BBI = DL_Iter<kbRecord*>();
     _BBI.Attach( this );
     _BBI.toiter( &_BI );
 
@@ -1292,7 +1283,7 @@ int ScanBeam::Process_LinkToLink_Flat( KBoolLine* flatline )
                 ( record->GetLink()->GetBeginNode() != flatline->GetLink()->GetLowNode() )
             )
             {
-                Node * newnode = new Node( _low->GetX(), _BI.item()->Ysp(), _GC );
+                kbNode * newnode = new kbNode( _low->GetX(), _BI.item()->Ysp(), _GC );
                 flatline->AddCrossing( newnode );
                 record->GetLine()->AddCrossing( newnode );
                 crossfound++;
@@ -1313,11 +1304,11 @@ bool ScanBeam::checksort()
 
     // put new item left of the one that is bigger
     _BI.tohead();
-    Record* prev = _BI.item();
+    kbRecord* prev = _BI.item();
     _BI++;
     while( !_BI.hitroot() )
     {
-        Record * curr = _BI.item();
+        kbRecord * curr = _BI.item();
         if ( recordsorter_ysp_angle( prev, curr ) == -1 )
         {
             recordsorter_ysp_angle( prev, curr );
@@ -1347,17 +1338,17 @@ bool ScanBeam::writebeam()
         return true;
     }
 
-    DL_Iter<Record*> _BI( this );
+    DL_Iter<kbRecord*> _BI( this );
 
     // put new item left of the one that is bigger
     _BI.tohead();
     while( !_BI.hitroot() )
     {
-        Record * cur = _BI.item();
+        kbRecord * cur = _BI.item();
 
         fprintf( file, " ysp %I64d \n", cur->Ysp() );
 
-        KBoolLink* curl = cur->GetLink();
+        kbLink* curl = cur->GetLink();
 
         fprintf( file, "             linkbegin %I64d %I64d \n", curl->GetBeginNode()->GetX(), curl->GetBeginNode()->GetY() );
         fprintf( file, "             linkend %I64d %I64d \n", curl->GetEndNode()->GetX(), curl->GetEndNode()->GetY() );

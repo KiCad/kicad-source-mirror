@@ -1,11 +1,11 @@
 /*! \file kbool/include/kbool/_dl_itr.h
-    \author Probably Klaas Holwerda
-
-    Copyright: 2001-2004 (C) Probably Klaas Holwerda
-
-    Licence: wxWidgets Licence
-
-    RCS-ID: $Id: _dl_itr.h,v 1.3 2008/06/04 21:23:21 titato Exp $
+    \author Klaas Holwerda 
+ 
+    Copyright: 2001-2004 (C) Klaas Holwerda
+ 
+    Licence: see kboollicense.txt 
+ 
+    RCS-ID: $Id: _dl_itr.h,v 1.5 2009/04/23 19:35:24 titato Exp $
 */
 
 //! author="Klaas Holwerda"
@@ -22,7 +22,9 @@
 
 #include "kbool/booleng.h"
 #include <stdlib.h>
+#include <string>
 
+using namespace std;
 
 #ifndef _STATUS_ENUM
 #define _STATUS_ENUM
@@ -103,7 +105,7 @@ public:
     ~DL_List();
 
     //!Report off List Errors
-    void Error( const char* function, Lerror a_error );
+	void Error( string function, Lerror a_error );
 
     //!Number of items in the list
     int  count();
@@ -168,7 +170,7 @@ public:
     ~DL_Iter();
 
     //!Report off Iterator Errors
-    void    Error( const char* function, Lerror a_error );
+    void    Error( string function, Lerror a_error );
 
     //!This attaches an iterator to a list of a given type.
     void    Attach( DL_List<Dtype>* newlist );

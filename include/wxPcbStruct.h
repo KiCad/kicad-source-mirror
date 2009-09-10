@@ -63,7 +63,6 @@ private:
 
     DRC*             m_drc;         ///< the DRC controller, see drc.cpp
 
-
     // we'll use lower case function names for private member functions.
     void createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu );
     void createPopUpMenuForFootprints( MODULE* aModule, wxMenu* aPopMenu );
@@ -262,6 +261,12 @@ public:
      * @param aQuery = true to prompt user for confirmation, false to initialize silently
      */
     bool                     Clear_Pcb( bool aQuery );
+    
+    // Drc control
+    /* function GetDrcController
+     * @return the DRC controller
+     */
+    DRC* GetDrcController() {return m_drc;}         ///< return the DRC controller, see drc.cpp
 
     /**
      * Function RecreateBOMFileFromBoard
@@ -426,8 +431,8 @@ public:
      * @param aDC = the current device context (can be NULL)
      * @param aNewTrack = the new created track (a pointer to a segment of the track list)
      * @param aNewTrackSegmentsCount = number of segments in this new track
- * @param aItemsListPicker = the list picker to use for an undo command (can be NULL)
- */
+     * @param aItemsListPicker = the list picker to use for an undo command (can be NULL)
+     */
     int             EraseRedundantTrack( wxDC* aDC, TRACK* aNewTrack, int aNewTrackSegmentsCount,
                                         PICKED_ITEMS_LIST*  aItemsListPicker );
 

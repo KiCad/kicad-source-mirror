@@ -6,7 +6,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: line.h,v 1.3 2008/06/04 21:23:21 titato Exp $
+    RCS-ID: $Id: line.h,v 1.4 2009/09/07 19:23:28 titato Exp $
 */
 
 #ifndef LINE_H
@@ -20,72 +20,72 @@ class A2DKBOOLDLLEXP Bool_Engine;
 // Status of a point to a line
 enum PointStatus {LEFT_SIDE, RIGHT_SIDE, ON_AREA, IN_AREA};
 
-class A2DKBOOLDLLEXP Graph;
+class A2DKBOOLDLLEXP kbGraph;
 
-class A2DKBOOLDLLEXP KBoolLine
+class A2DKBOOLDLLEXP kbLine
 {
 protected:
     Bool_Engine* m_GC;
 public:
 
     // constructors and destructor
-    KBoolLine( Bool_Engine* GC );
-    KBoolLine( KBoolLink*, Bool_Engine* GC );
-    ~KBoolLine();
+    kbLine( Bool_Engine* GC );
+    kbLine( kbLink*, Bool_Engine* GC );
+    ~kbLine();
 
-    void   Set( KBoolLink * );
-    KBoolLink*  GetLink();
+    void   Set( kbLink * );
+    kbLink*  GetLink();
 
     //! Get the beginnode from a line
-    Node*  GetBeginNode();
+    kbNode*  GetBeginNode();
 
     //! Get the endnode from a line
-    Node*  GetEndNode();
+    kbNode*  GetEndNode();
 
     //! Check if two lines intersects
-    int     CheckIntersect( KBoolLine*, double Marge );
+    int     CheckIntersect( kbLine*, double Marge );
 
     //! Intersects two lines
-    int     Intersect( KBoolLine*, double Marge );
-    int               Intersect_simple( KBoolLine * lijn );
-    bool       Intersect2( Node* crossing, KBoolLine * lijn );
+    int     Intersect( kbLine*, double Marge );
+    int               Intersect_simple( kbLine * lijn );
+    bool       Intersect2( kbNode* crossing, kbLine * lijn );
 
     //!For an infinite line
-    PointStatus   PointOnLine( Node* a_node, double& Distance, double Marge );
+    PointStatus   PointOnLine( kbNode* a_node, double& Distance, double Marge );
 
     //!For a non-infinite line
-    PointStatus   PointInLine( Node* a_node, double& Distance, double Marge );
+    PointStatus   PointInLine( kbNode* a_node, double& Distance, double Marge );
 
     //! Caclulate Y if X is known
     B_INT     Calculate_Y( B_INT X );
     B_INT           Calculate_Y_from_X( B_INT X );
-    void              Virtual_Point( LPoint *a_point, double distance );
+    void              Virtual_Point( kbLPoint *a_point, double distance );
 
     //! assignment operator
-    KBoolLine&    operator=( const KBoolLine& );
+    kbLine&    operator=( const kbLine& );
 
-    Node*     OffsetContour( KBoolLine* const nextline, Node* last_ins, double factor, Graph *shape );
-    Node*     OffsetContour_rounded( KBoolLine* const nextline, Node* _last_ins, double factor, Graph *shape );
-    bool        OkeForContour( KBoolLine* const nextline, double factor, Node* LastLeft, Node* LastRight, LinkStatus& _outproduct );
-    bool       Create_Ring_Shape( KBoolLine* nextline, Node** _last_ins_left, Node** _last_ins_right, double factor, Graph *shape );
-    void      Create_Begin_Shape( KBoolLine* nextline, Node** _last_ins_left, Node** _last_ins_right, double factor, Graph *shape );
-    void      Create_End_Shape( KBoolLine* nextline, Node* _last_ins_left, Node* _last_ins_right, double factor, Graph *shape );
+    kbNode*     OffsetContour( kbLine* const nextline, kbNode* last_ins, double factor, kbGraph *shape );
+    kbNode*     OffsetContour_rounded( kbLine* const nextline, kbNode* _last_ins, double factor, kbGraph *shape );
+    bool        OkeForContour( kbLine* const nextline, double factor, kbNode* LastLeft, kbNode* LastRight, LinkStatus& _outproduct );
+    bool       Create_Ring_Shape( kbLine* nextline, kbNode** _last_ins_left, kbNode** _last_ins_right, double factor, kbGraph *shape );
+    void      Create_Begin_Shape( kbLine* nextline, kbNode** _last_ins_left, kbNode** _last_ins_right, double factor, kbGraph *shape );
+    void      Create_End_Shape( kbLine* nextline, kbNode* _last_ins_left, kbNode* _last_ins_right, double factor, kbGraph *shape );
 
     //! Calculate the parameters if nessecary
     void  CalculateLineParameters();
 
     //! Adds a crossing between the intersecting lines
-    void  AddLineCrossing( B_INT , B_INT , KBoolLine * );
+    void  AddLineCrossing( B_INT , B_INT , kbLine * );
 
-    void  AddCrossing( Node *a_node );
-    Node* AddCrossing( B_INT X, B_INT Y );
-    bool  ProcessCrossings( TDLI<KBoolLink>* _LI );
+    void  AddCrossing( kbNode *a_node );
+    kbNode* AddCrossing( B_INT X, B_INT Y );
+    bool  ProcessCrossings( TDLI<kbLink>* _LI );
 
 // Linecrosslist
     void SortLineCrossings();
     bool CrossListEmpty();
     DL_List<void*>*  GetCrossList();
-//  bool HasInCrossList(Node*);
+//  bool HasInCrossList(kbNode*);
 
 private:
 
@@ -94,10 +94,10 @@ private:
     //! Function needed for Intersect
     int   ActionOnTable2( PointStatus, PointStatus );
 
-    double   m_AA;
+    double  m_AA;
     double  m_BB;
     double  m_CC;
-    KBoolLink* m_link;
+    kbLink* m_link;
     bool  m_valid_parameters;
 
     //! List with crossings through this link

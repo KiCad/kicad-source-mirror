@@ -4,6 +4,14 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-sept-10 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++pcbnew
+    Work on undo/redo in pcbnew finished.
+    Used kbool V2.0. This version solves some problems in zones calculationsb but not all.
+    The Kbool author, Klaas Holveda, is still working on these problems
+    Thanks to Klaas
+
 2009-aug-23 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++pcbnew

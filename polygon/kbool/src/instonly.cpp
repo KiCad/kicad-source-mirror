@@ -3,9 +3,9 @@
  
     Copyright: 2001-2004 (C) Probably Klaas Holwerda
  
-    Licence: wxWidgets Licence
+    Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: instonly.cpp,v 1.2 2006/11/05 14:59:31 titato Exp $
+    RCS-ID: $Id: instonly.cpp,v 1.3 2009/02/06 21:33:03 titato Exp $
 */
 
 #ifdef __GNUG__

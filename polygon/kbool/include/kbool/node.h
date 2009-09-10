@@ -6,7 +6,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: node.h,v 1.3 2008/06/04 21:23:22 titato Exp $
+    RCS-ID: $Id: node.h,v 1.4 2009/09/07 19:23:28 titato Exp $
 */
 
 #ifndef NODE_H
@@ -22,7 +22,7 @@
 
 enum NodePosition { N_LEFT, N_ON, N_RIGHT};
 
-class A2DKBOOLDLLEXP Node : public LPoint
+class A2DKBOOLDLLEXP kbNode : public kbLPoint
 {
 protected:
     Bool_Engine* _GC;
@@ -31,52 +31,52 @@ public:
     friend class Debug_driver;
 
     // constructors and destructors
-    Node( Bool_Engine* GC );
+    kbNode( Bool_Engine* GC );
 
-    Node( const B_INT, const B_INT, Bool_Engine* GC );
+    kbNode( const B_INT, const B_INT, Bool_Engine* GC );
 
-    Node( LPoint* const a_point, Bool_Engine* GC );
-    Node( Node * const, Bool_Engine* GC );
-    Node& operator=( const Node &other_node );
-    ~Node();
+    kbNode( kbLPoint* const a_point, Bool_Engine* GC );
+    kbNode( kbNode * const, Bool_Engine* GC );
+    kbNode& operator=( const kbNode &other_node );
+    ~kbNode();
 
     //public member functions
-    void AddLink( KBoolLink* );
+    void AddLink( kbLink* );
     DL_List<void*>* GetLinklist();
 
     //! check two link for its operation flags to be the same when coming from the prev link.
-    bool SameSides( KBoolLink* const prev , KBoolLink* const link, BOOL_OP operation );
+    bool SameSides( kbLink* const prev , kbLink* const link, BOOL_OP operation );
 
     //! get the link most right or left to the current link, but with the specific operation
     /*! flags the same on the sides of the new link.
     */
-    KBoolLink*  GetMost( KBoolLink* const prev , LinkStatus whatside, BOOL_OP operation );
+    kbLink*  GetMost( kbLink* const prev , LinkStatus whatside, BOOL_OP operation );
 
     //! get link that is leading to a hole ( hole segment or linking segment )
-    KBoolLink* GetMostHole( KBoolLink* const prev , LinkStatus whatside, BOOL_OP operation );
+    kbLink* GetMostHole( kbLink* const prev , LinkStatus whatside, BOOL_OP operation );
 
     //! get link that is not vertical.
-    KBoolLink*  GetNotFlat();
+    kbLink*  GetNotFlat();
 
     //! get a link to a hole or from a hole.
-    KBoolLink* GetHoleLink( KBoolLink* const prev, bool checkbin, BOOL_OP operation );
+    kbLink* GetHoleLink( kbLink* const prev, bool checkbin, BOOL_OP operation );
 
-    int Merge( Node* );
-    void RemoveLink( KBoolLink* );
-    bool Simplify( Node* First, Node* Second, B_INT Marge );
+    int Merge( kbNode* );
+    void RemoveLink( kbLink* );
+    bool Simplify( kbNode* First, kbNode* Second, B_INT Marge );
 
     //  memberfunctions for maximum performance
     void        RoundInt( B_INT grid );
-    KBoolLink* GetIncomingLink();
+    kbLink* GetIncomingLink();
 
     int    GetNumberOfLinks();
-    KBoolLink* GetNextLink();
-    KBoolLink* GetOtherLink( KBoolLink* );
-    KBoolLink* GetOutgoingLink();
-    KBoolLink* GetPrevLink();
+    kbLink* GetNextLink();
+    kbLink* GetOtherLink( kbLink* );
+    kbLink* GetOutgoingLink();
+    kbLink* GetPrevLink();
 
-    KBoolLink* Follow( KBoolLink* const prev );
-    KBoolLink* GetBinHighest( bool binset );
+    kbLink* Follow( kbLink* const prev );
+    kbLink* GetBinHighest( bool binset );
 
 protected:
     DL_List<void*>*  _linklist;

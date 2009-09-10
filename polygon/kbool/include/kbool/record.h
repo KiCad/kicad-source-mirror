@@ -5,13 +5,13 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: record.h,v 1.3 2008/06/04 21:23:22 titato Exp $
+    RCS-ID: $Id: record.h,v 1.4 2009/09/07 19:23:28 titato Exp $
 */
 
 #ifndef RECORD_H
 #define RECORD_H
 
-class Node;
+class kbNode;
 #include "kbool/booleng.h"
 
 #include "kbool/link.h"
@@ -24,30 +24,30 @@ enum DIRECTION  {GO_LEFT, GO_RIGHT};
 //extern void DeleteRecordPool();
 class A2DKBOOLDLLEXP Bool_Engine;
 
-class A2DKBOOLDLLEXP Record
+class A2DKBOOLDLLEXP kbRecord
 {
 protected:
     Bool_Engine* _GC;
 public:
 //     void deletepool();
 
-    Record( KBoolLink* link, Bool_Engine* GC );
+    kbRecord( kbLink* link, Bool_Engine* GC );
 
-    ~Record();
+    ~kbRecord();
 
 //     void* operator new(size_t size);
 
 //     void operator delete(void* recordptr);
 
-    void SetNewLink( KBoolLink* link );
+    void SetNewLink( kbLink* link );
 
     void Set_Flags();
 
-    void Calc_Ysp( Node* low );
+    void Calc_Ysp( kbNode* low );
 
-    KBoolLink* GetLink();
+    kbLink* GetLink();
 
-    KBoolLine* GetLine();
+    kbLine* GetLine();
 
     B_INT Ysp();
 
@@ -55,12 +55,12 @@ public:
 
     DIRECTION Direction();
 
-    bool Calc_Left_Right( Record* record_above_me );
+    bool Calc_Left_Right( kbRecord* record_above_me );
 
-    bool Equal( Record* );
+    bool Equal( kbRecord* );
 
 private:
-    KBoolLine   _line;
+    kbLine   _line;
 
     B_INT   _ysp;
 

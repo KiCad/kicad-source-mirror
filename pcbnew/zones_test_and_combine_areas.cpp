@@ -952,7 +952,7 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                             }
                             int bstyle = Area_To_Test->m_Poly->GetSideStyle( ic2 );
                             int x, y;
-                            int d = ::GetClearanceBetweenSegments(
+                            int d = GetClearanceBetweenSegments(
                                 bx1, by1, bx2, by2, bstyle,
                                 0,
                                 ax1, ay1, ax2,
@@ -1081,7 +1081,7 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
                 }
                 int bstyle = Area_To_Test->m_Poly->GetSideStyle( ic2 );
                 int x, y;
-                int d = ::GetClearanceBetweenSegments( bx1, by1, bx2, by2, bstyle,
+                int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2, bstyle,
                                                        0,
                                                        ax1, ay1, ax2, ay2, astyle,
                                                        0,

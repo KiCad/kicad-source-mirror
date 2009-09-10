@@ -21,35 +21,35 @@ Last Update 12-12-1995
 
 #include "kbool/booleng.h"
 
-class A2DKBOOLDLLEXP LPoint
+class A2DKBOOLDLLEXP kbLPoint
 {
 public:
-    LPoint();
-    LPoint( B_INT const , B_INT const );
-    LPoint( LPoint* const );
+    kbLPoint();
+    kbLPoint( B_INT const , B_INT const );
+    kbLPoint( kbLPoint* const );
 
     void  Set( const B_INT, const B_INT );
-    void  Set( const LPoint & );
+    void  Set( const kbLPoint & );
 
-    LPoint  GetPoint();
+    kbLPoint  GetPoint();
     B_INT  GetX();
     B_INT  GetY();
     void   SetX( B_INT );
     void  SetY( B_INT );
-    bool  Equal( const LPoint a_point, B_INT Marge );
+    bool  Equal( const kbLPoint a_point, B_INT Marge );
     bool  Equal( const B_INT, const B_INT , B_INT Marge );
-    bool  ShorterThan( const LPoint a_point, B_INT marge );
+    bool  ShorterThan( const kbLPoint a_point, B_INT marge );
     bool  ShorterThan( const B_INT X, const B_INT Y, B_INT );
 
-    LPoint &operator=( const LPoint & );
-    LPoint &operator+( const LPoint & );
-    LPoint &operator-( const LPoint & );
+    kbLPoint &operator=( const kbLPoint & );
+    kbLPoint &operator+( const kbLPoint & );
+    kbLPoint &operator-( const kbLPoint & );
 
-    LPoint &operator*( int );
-    LPoint &operator/( int );
+    kbLPoint &operator*( int );
+    kbLPoint &operator/( int );
 
-    int  operator==( const LPoint & ) const;
-    int  operator!=( const LPoint & ) const;
+    int  operator==( const kbLPoint & ) const;
+    int  operator!=( const kbLPoint & ) const;
 
 protected:
     B_INT _x;

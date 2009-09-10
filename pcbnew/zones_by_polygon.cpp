@@ -500,7 +500,7 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
         {
             int diag;
             // Init zone params to reasonnable values
-            zone->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
+            zone->SetLayer( GetScreen()->m_Active_Layer );
 
             // Prompt user for parameters:
             DrawPanel->m_IgnoreMouseEvents = TRUE;
@@ -518,6 +518,7 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
                 wxGetApp().m_EDA_Config->Read( ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
                     &g_Zone_Default_Setting.m_ThermalReliefCopperBridgeValue );
 
+                g_Zone_Default_Setting.m_CurrentZone_Layer = zone->GetLayer();
                 dialog_copper_zone* frame = new dialog_copper_zone( this, &g_Zone_Default_Setting  );
                 diag = frame->ShowModal();
                 frame->Destroy();
@@ -534,7 +535,7 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
                 return 0;
 
             // Switch active layer to the selectec zonz layer
-            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = g_Zone_Default_Setting.m_CurrentZone_Layer;
+            GetScreen()->m_Active_Layer = g_Zone_Default_Setting.m_CurrentZone_Layer;
         }
         else  // Start a new contour: init zone params (net and layer) from an existing zone (add cutout or similar zone)
         {

@@ -16,13 +16,6 @@ set(PCBNEW_SRCS
     board.cpp
     board_undo_redo.cpp
     build_BOM_from_board.cpp
-#    class_board_item.cpp
-#    class_drawsegment.cpp
-#    class_edge_mod.cpp
-#    class_equipot.cpp
-#    class_module.cpp
-#    class_text_mod.cpp
-#    class_track.cpp
     clean.cpp
 #   cleaningoptions_dialog.cpp
     connect.cpp
@@ -30,6 +23,7 @@ set(PCBNEW_SRCS
 #   copy_track.cpp <-- not used
     cotation.cpp
     cross-probing.cpp
+    debug_kbool_key_file_fct.cpp
     deltrack.cpp
     dialog_copper_zones.cpp
     dialog_copper_zones_base.cpp
@@ -140,7 +134,6 @@ set(PCBNEW_SRCS
     tool_modedit.cpp
     tool_onrightclick.cpp
     tool_pcb.cpp
-#    tracemod.cpp
     tracepcb.cpp
     track.cpp
     tr_modif.cpp

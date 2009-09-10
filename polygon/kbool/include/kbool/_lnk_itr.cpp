@@ -3,9 +3,9 @@
  
     Copyright: 2001-2004 (C) Probably Klaas Holwerda
  
-    Licence: wxWidgets Licence
+    Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: _lnk_itr.cpp,v 1.3 2006/12/13 21:43:33 titato Exp $
+    RCS-ID: $Id: _lnk_itr.cpp,v 1.4 2009/02/06 21:33:03 titato Exp $
 */
 
 #ifdef __UNIX__

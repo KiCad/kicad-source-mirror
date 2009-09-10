@@ -5,7 +5,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: record.cpp,v 1.3 2008/06/04 21:23:22 titato Exp $
+    RCS-ID: $Id: record.cpp,v 1.4 2009/09/07 19:23:28 titato Exp $
 */
 
 #include "kbool/booleng.h"
@@ -28,11 +28,11 @@
 //   }
 //}
 
-Record::~Record()
+kbRecord::~kbRecord()
 {}
 
 
-//void* Record::operator new(size_t size)
+//void* kbRecord::operator new(size_t size)
 //{
 //
 //   if (r_index!=-1)
@@ -43,7 +43,7 @@ Record::~Record()
 //   return malloc(size);
 //}
 
-//void Record::operator delete(void* recordptr)
+//void kbRecord::operator delete(void* recordptr)
 //{
 //
 //   if (r_index < 28)
@@ -55,7 +55,7 @@ Record::~Record()
 // free (recordptr);
 //}
 
-//void Record::deletepool()
+//void kbRecord::deletepool()
 //{
 //
 //   while (r_index!=-1)
@@ -64,7 +64,7 @@ Record::~Record()
 //   }
 //}
 
-Record::Record( KBoolLink* link, Bool_Engine* GC )
+kbRecord::kbRecord( kbLink* link, Bool_Engine* GC )
         : _line( GC )
 {
     _GC = GC;
@@ -77,14 +77,14 @@ Record::Record( KBoolLink* link, Bool_Engine* GC )
 
 
 //when the dimensions of a link for a record changes, its line parameters need to be recalculated
-void Record::SetNewLink( KBoolLink* link )
+void kbRecord::SetNewLink( kbLink* link )
 {
     _line.Set( link );
     _line.CalculateLineParameters();
 }
 
 //for beams calculate the ysp on the low scanline
-void Record::Calc_Ysp( Node* low )
+void kbRecord::Calc_Ysp( kbNode* low )
 {
     if ( ( LNK->GetEndNode() == low ) || ( LNK->GetBeginNode() == low ) )
     {
@@ -103,7 +103,7 @@ void Record::Calc_Ysp( Node* low )
 }
 
 //to set the _dir for new links in the beam
-void Record::Set_Flags()
+void kbRecord::Set_Flags()
 {
     if ( LNK->GetEndNode()->GetX() == LNK->GetBeginNode()->GetX() ) //flatlink ?
     {  //only happens in flat beams
@@ -121,27 +121,27 @@ void Record::Set_Flags()
     }
 }
 
-KBoolLink* Record::GetLink()
+kbLink* kbRecord::GetLink()
 {
     return LNK;
 }
 
-B_INT Record::Ysp()
+B_INT kbRecord::Ysp()
 {
     return _ysp;
 }
 
-void Record::SetYsp( B_INT ysp )
+void kbRecord::SetYsp( B_INT ysp )
 {
     _ysp = ysp;
 }
 
-DIRECTION Record::Direction()
+DIRECTION kbRecord::Direction()
 {
     return DIRECTION( _dir );
 }
 
-bool Record::Calc_Left_Right( Record* record_above_me )
+bool kbRecord::Calc_Left_Right( kbRecord* record_above_me )
 {
     bool par = false;
 
@@ -337,14 +337,14 @@ bool Record::Calc_Left_Right( Record* record_above_me )
     return par;
 }
 
-bool Record::Equal( Record *a )
+bool kbRecord::Equal( kbRecord *a )
 {
     return( ( bool )( ( LNK->GetOther( a->LNK->GetBeginNode() ) == a->LNK->GetEndNode() )  &&
                       ( LNK->GetOther( a->LNK->GetEndNode() )   == a->LNK->GetBeginNode() )  ) );
 }
 
 
-KBoolLine* Record::GetLine()
+kbLine* kbRecord::GetLine()
 {
     return & _line;
 }

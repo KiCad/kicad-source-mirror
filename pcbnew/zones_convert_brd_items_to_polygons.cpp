@@ -25,19 +25,38 @@
 #include "fctsys.h"
 #include "common.h"
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "trigo.h"
 
 #include "zones.h"
 
 #include "PolyLine.h"
+// Kbool 1.9 and before had sometimes problemes when calculating thermal shapes as polygons (this is the best solution)
+// So as a workaround we can use stubs (small tracks segments) to create thermal shape
+// Define USE_STUBS_FOR_THERMAL to work on this workaround
+// Currently under development: DO NOT USE
+//  because the code is not finished, and pcbnew does not work properly when used
+// Kbool 2.0 has solved some problems, but not all
+//#define USE_STUBS_FOR_THERMAL
 
-using namespace std;
+// Used to create data files to debug Kbool
+#include "debug_kbool_key_file_fct.h"
+
+// Also we can create test files for Kbool bebug purposes
+// when CREATE_KBOOL_KEY_FILES is defined
+// See debug_kbool_key_file_fct.h
 
 
 extern void Test_For_Copper_Island_And_Remove( BOARD* aPcb, ZONE_CONTAINER* aZone_container );
 
 
 // Local Functions:
+#ifdef USE_STUBS_FOR_THERMAL
+#warning USE_STUBS_FOR_THERMAL defined for test version: do not use for working pcbnew version
+void        CreateStubsForThermalShapes(BOARD* aPcb, ZONE_CONTAINER* aZone_container,
+                                        int aThermalGap,
+                                        int aCopperThickness, int aMinThicknessValue);
+#endif
 void        AddTrackWithClearancePolygon( Bool_Engine* aBooleng,
                                           TRACK& aTrack, int aClearanceValue );
 void        AddPadWithClearancePolygon( Bool_Engine* aBooleng, D_PAD& aPad, int aClearanceValue );
@@ -202,15 +221,20 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 continue;
             }
 
+            int gap = clearance;
+#ifdef USE_STUBS_FOR_THERMAL
+            gap = MAX( clearance, m_ThermalReliefGapValue );
+#else
             if( (m_PadOption == PAD_NOT_IN_ZONE)
                || (GetNet() == 0) || pad->m_PadShape == PAD_TRAPEZOID )
-            // PAD_TRAPEZOID shapes are *never* in zones becuase they are used in microwave apps
-            // and the shae *must not* be changed by thermal pads or others
+            // PAD_TRAPEZOID shapes are not in zones because they are used in microwave apps
+            // and i think it is good shapes are not changed by thermal pads or others
+#endif
             {
                 item_boundingbox = pad->GetBoundingBox();
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
                 {
-                    AddPadWithClearancePolygon( booleng, *pad, clearance );
+                    AddPadWithClearancePolygon( booleng, *pad, gap );
                     have_poly_to_substract = true;
                 }
             }
@@ -297,6 +321,18 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     }
     delete booleng;
 
+#ifdef USE_STUBS_FOR_THERMAL
+    // remove thermal gaps if required:
+    if( m_PadOption != THERMAL_PAD || aPcb->m_Modules == NULL )
+    {
+        Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
+        return;
+    }
+
+    CreateStubsForThermalShapes(aPcb, this, m_ThermalReliefGapValue,
+                                        m_ThermalReliefCopperBridgeValue, m_ZoneMinThickness);
+    Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
+#else
 // Remove insulated islands:
     if( GetNet() > 0 )
         Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
@@ -313,6 +349,12 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         booleng = new Bool_Engine();
         ArmBoolEng( booleng, true );
         have_poly_to_substract = false;
+
+#ifdef CREATE_KBOOL_KEY_FILES
+    CreateKeyFile();
+    OpenEntity("Layer");
+    CopyPolygonsFromFilledPolysListToKeyFile(this, 0);
+#endif
 
         for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
         {
@@ -335,6 +377,9 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 }
             }
         }
+#ifdef CREATE_KBOOL_KEY_FILES
+    CloseEntity();
+#endif
 
         if( have_poly_to_substract )
         {
@@ -353,6 +398,9 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         // Remove insulated islands:
         if( GetNet() > 0 )
             Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
+#ifdef CREATE_KBOOL_KEY_FILES
+    CloseKeyFile();
+#endif
     }
 
 // Now we remove all unused thermal stubs.
@@ -402,7 +450,11 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             {
                 dx     = (int) ( dx * s_Correction );
                 dy     = dx;
+#ifdef CREATE_KBOOL_KEY_FILES
+                fAngle = 0;
+#else
                 fAngle = 450;
+#endif
             }
 
             // compute north, south, west and east points for zone connection.
@@ -500,7 +552,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
     delete booleng;
 
-#endif
+#endif  // REMOVE_UNUSED_THERMAL_STUBS
+#endif  // USE_STUBS_FOR_THERMAL
 }
 
 
@@ -671,6 +724,96 @@ void AddPadWithClearancePolygon( Bool_Engine* aBooleng,
 }
 
 
+/** function CreateStubsForThermalShapes()
+ * Only for testing the thermal shapes by stubs purposes
+ * Do not use for working pcbnew versions
+*/
+void        CreateStubsForThermalShapes(BOARD* aPcb, ZONE_CONTAINER* aZone_container,
+                                        int aThermalGap,
+                                        int aCopperThickness, int aMinThicknessValue)
+{
+    EDA_Rect zone_boundingbox = aZone_container->GetBoundingBox();
+
+    for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
+    {
+        for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
+        {
+            // check
+            if( !pad->IsOnLayer( aZone_container->GetLayer() ) )
+                continue;
+            if( pad->GetNet() != aZone_container->GetNet() )
+                continue;
+
+            EDA_Rect item_boundingbox = pad->GetBoundingBox();
+            item_boundingbox.Inflate( aThermalGap, aThermalGap );
+            if( !( item_boundingbox.Intersects( zone_boundingbox ) ) )
+                continue;
+
+            // test point
+            int dx = ( pad->m_Size.x / 2 ) + aThermalGap;
+            int dy = ( pad->m_Size.y / 2 ) + aThermalGap;
+
+            // This is CIRCLE pad tweak (for circle pads the thermal stubs are at 45 deg)
+            int fAngle = pad->m_Orient;
+            if( pad->m_PadShape == PAD_CIRCLE )
+            {
+                dx     = (int) ( dx * s_Correction );
+                dy     = dx;
+                fAngle = 450;
+            }
+
+            // compute north, south, west and east points for zone connection.
+            // Add a small value to ensure point is inside (or outside) zone, not on an edge
+            wxPoint ptTest[4];
+            ptTest[0] = wxPoint( 0, 3 + dy + aMinThicknessValue / 2 );
+            ptTest[1] = wxPoint( 0, -(3 + dy + aMinThicknessValue / 2) );
+            ptTest[2] = wxPoint( 3 + dx + aMinThicknessValue / 2, 0 );
+            ptTest[3] = wxPoint( -(3 + dx + aMinThicknessValue / 2), 0 );
+
+
+            // Test all sides
+            for( int i = 0; i<4; i++ )
+            {
+                // rotate point
+                RotatePoint( &ptTest[i], fAngle );
+
+                // translate point
+                ptTest[i] += pad->ReturnShapePos();
+                bool inside = aZone_container->HitTestFilledArea( ptTest[i] );
+
+                if( inside )
+                {
+
+                    TRACK*track = new TRACK(aPcb);
+                    track->m_Start = pad->ReturnShapePos();
+                    track->m_End = ptTest[i];
+                    track->SetNet(aZone_container->GetNet());
+                    track->SetLayer(aZone_container->GetLayer() );
+                    track->m_Width = aCopperThickness;
+                    track->m_TimeStamp = aZone_container->m_TimeStamp;
+                    track->SetState( BEGIN_ONPAD, ON );
+                    track->start = pad;
+
+                    // add stub
+                    WinEDA_PcbFrame* pcbFrame = (WinEDA_PcbFrame*) aPcb->m_PcbFrame;
+                    if( pcbFrame->GetDrcController()->Drc( track, aPcb->m_Track ) == BAD_DRC )
+                        delete track;
+                    else
+                    {
+                        // If this approach is developped, one must change the way the stubs are handles in pcbnew
+                        // because insert these stubs as tracks does not work with undo/redo functions
+                        // because these stubs must be deleted when refilling zones outside undo/redo calls
+                        // This code is only for trial only, not for working pcbnew versions.
+                        TRACK* insertBeforeMe = track->GetBestInsertPoint( aPcb );
+                            aPcb->m_Track.Insert( track, insertBeforeMe );
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 /** function AddThermalReliefPadPolygon
  * Add holes around a pad to create a thermal relief
  * copper thickness is min (dx/2, aCopperWitdh) or min (dy/2, aCopperWitdh)
@@ -773,7 +916,9 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         corner.x = copper_thickness.x / 2;
         int y = outer_radius - (aThermalGap / 4);
         corner.y = (int) sqrt( ( ( (double) y * y ) - (double) corner.x * corner.x ) );
+#ifndef CREATE_KBOOL_KEY_FILES
         corners_buffer.push_back( corner );
+#endif
 
         // calculate the starting point of the outter arc
         corner.x = copper_thickness.x / 2;
@@ -804,26 +949,45 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         // Now, add the 4 holes ( each is the pattern, rotated by 0, 90, 180 and 270  deg
         // WARNING: problems with kbool if angle = 0 (in fact when angle < 200):
         // bad filled polygon on some cases, when pads are on a same vertical line
-        // this seems a bug in kbool polygon (exists in 1.9 kbool version)
+        // this seems a bug in kbool polygon (exists in 2.0 kbool version)
         // angle = 450 (45.0 degrees orientation) seems work fine.
         // angle = 0 with thermal shapes without angle < 90 deg has problems in rare circumstances
         // Note: with the 2 step build ( thermal shapes added after areas are built), 0 seems work
+#ifdef CREATE_KBOOL_KEY_FILES
+        angle = 0;
+#else
         angle = 450;
+#endif
         int angle_pad = aPad.m_Orient;              // Pad orientation
         for( unsigned ihole = 0; ihole < 4; ihole++ )
         {
             if( aBooleng->StartPolygonAdd( GROUP_B ) )
             {
+#ifdef CREATE_KBOOL_KEY_FILES
+                StartPolygon(corners_buffer.size() +1, 1);
+#endif
                 for( unsigned ii = 0; ii < corners_buffer.size(); ii++ )
                 {
                     corner = corners_buffer[ii];
                     RotatePoint( &corner, angle + angle_pad );      // Rotate by segment angle and pad orientation
                     corner += PadShapePos;
                     aBooleng->AddPoint( corner.x, corner.y );
+#ifdef CREATE_KBOOL_KEY_FILES
+                    AddPointXY(corner.x, corner.y);
+#endif
                 }
+#ifdef CREATE_KBOOL_KEY_FILES
+                // Close polygon
+                corner = corners_buffer[0];
+                RotatePoint( &corner, angle + angle_pad );      // Rotate by segment angle and pad orientation
+                corner += PadShapePos;
+                AddPointXY( corner.x, corner.y );
+#endif
 
                 aBooleng->EndPolygonAdd();
-
+#ifdef CREATE_KBOOL_KEY_FILES
+                EndElement();
+#endif
                 angle += 900;   // Note: angle in in 0.1 deg.
             }
         }

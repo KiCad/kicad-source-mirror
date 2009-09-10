@@ -1077,8 +1077,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
     shape_pos = aRefPad->ReturnShapePos();
 
     // rel_pos is pad position relative to the aRefPad position
-    rel_pos.x -= shape_pos.x;
-    rel_pos.y -= shape_pos.y;
+    rel_pos -= shape_pos;
 
     dist = (int) hypot( rel_pos.x, rel_pos.y );
 
@@ -1101,8 +1100,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
     if( swap_pads )
     {
         EXCHG( aRefPad, aPad );
-        rel_pos.x = -rel_pos.x;
-        rel_pos.y = -rel_pos.y;
+        rel_pos = -rel_pos;
     }
 
     switch( aRefPad->m_PadShape )
@@ -1128,7 +1126,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
             wxSize size = aPad->m_Size;
 	    // The trivial case is if both rects are rotated by multiple of 90°
             if( ((aRefPad->m_Orient == 0) || (aRefPad->m_Orient == 900) || (aRefPad->m_Orient == 1800)
-               || (aRefPad->m_Orient == 2700)) && 
+               || (aRefPad->m_Orient == 2700)) &&
                 ((aPad->m_Orient == 0) || (aPad->m_Orient == 900) || (aPad->m_Orient == 1800)
                || (aPad->m_Orient == 2700)) )
             {
@@ -1230,7 +1228,6 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_mi
 
         m_finx = -sx;
         m_finy = -sy;                             // end of segment coordinate
-
         diag = checkClearanceSegmToPad( aPad, segm_width / 2, dist_min );
         break;
     }

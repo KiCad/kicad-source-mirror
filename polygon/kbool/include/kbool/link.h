@@ -6,7 +6,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: link.h,v 1.3 2008/06/04 21:23:22 titato Exp $
+    RCS-ID: $Id: link.h,v 1.4 2009/09/07 19:23:28 titato Exp $
 */
 
 #ifndef LINK_H
@@ -17,53 +17,53 @@
 
 enum LinkStatus {IS_LEFT, IS_ON, IS_RIGHT};
 
-class LPoint;
-class Node;
-class Record;
+class kbLPoint;
+class kbNode;
+class kbRecord;
 
 //!   segment within a graph
 /*
-   A Graph contains a list of KBoolLink, the KBoolLink or connected by Node's. 
-   Several KBoolLink can be connected to one Node. 
-   A KBoolLink has a direction defined by its begin and end node.
-   Node do have a list of connected KBoolLink's.
+   A Graph contains a list of kbLink, the kbLink or connected by Node's. 
+   Several kbLink can be connected to one Node. 
+   A kbLink has a direction defined by its begin and end node.
+   Node do have a list of connected kbLink's.
    So one can walk trough a graph in two ways:
-   1- via its KBoolLink list 
-   2- via the node connected to the KBoolLink's 
+   1- via its kbLink list 
+   2- via the node connected to the kbLink's 
 */
-class A2DKBOOLDLLEXP KBoolLink
+class A2DKBOOLDLLEXP kbLink
 {
 protected:
     Bool_Engine* _GC;
 public:
 
     //! contructors
-    KBoolLink( Bool_Engine* GC );
+    kbLink( Bool_Engine* GC );
 
     //! contructors
-    KBoolLink( int graphnr, Node* begin, Node* end, Bool_Engine* GC );
+    kbLink( int graphnr, kbNode* begin, kbNode* end, Bool_Engine* GC );
 
     //! contructors
-    KBoolLink( Node *begin, Node *end, Bool_Engine* GC );
+    kbLink( kbNode *begin, kbNode *end, Bool_Engine* GC );
 
     //! destructors
-    ~KBoolLink();
+    ~kbLink();
 
 
     //! Merges the other node with argument
-    void MergeNodes( Node* const );
+    void MergeNodes( kbNode* const );
 
     //! outproduct of two links
-    LinkStatus OutProduct( KBoolLink* const two, double accur );
+    LinkStatus OutProduct( kbLink* const two, double accur );
 
     //! link three compared to this and two
-    LinkStatus PointOnCorner( KBoolLink* const, KBoolLink* const );
+    LinkStatus PointOnCorner( kbLink* const, kbLink* const );
 
     //! Removes argument from the link
-    void Remove( Node* );
+    void Remove( kbNode* );
 
     //! replaces olddone in the link by newnode
-    void Replace( Node* oldnode, Node* newnode );
+    void Replace( kbNode* oldnode, kbNode* newnode );
 
     //!top hole marking
     void SetTopHole( bool value );
@@ -97,15 +97,15 @@ public:
     void UnLink();
 
     //! functions for maximum performance
-    Node* GetBeginNode();
+    kbNode* GetBeginNode();
 
     //! Datamember access functions
-    Node* GetEndNode();
-    Node* GetLowNode();
-    Node* GetHighNode();
+    kbNode* GetEndNode();
+    kbNode* GetLowNode();
+    kbNode* GetHighNode();
 
     //! Returns a next link beginning with argument
-    KBoolLink* Forth( Node* );
+    kbLink* Forth( kbNode* );
 
     int GetGraphNum();
     bool GetInc();
@@ -113,10 +113,10 @@ public:
     bool GetLeftB();
     bool GetRightA();
     bool GetRightB();
-    void GetLRO( LPoint*, int&, int&, double );
+    void GetLRO( kbLPoint*, int&, int&, double );
 
     //! Return a node not equal to arg.
-    Node* GetOther( const Node* const );
+    kbNode* GetOther( const kbNode* const );
     //! Is this link unused ?
     bool IsUnused();
 
@@ -143,10 +143,10 @@ public:
     bool ShorterThan( B_INT marge );
 
     //! Resets the link
-    void Reset( Node* begin, Node* end, int graphnr = 0 );
-    void Set( Node* begin, Node* end );
-    void SetBeginNode( Node* );
-    void SetEndNode( Node* );
+    void Reset( kbNode* begin, kbNode* end, int graphnr = 0 );
+    void Set( kbNode* begin, kbNode* end );
+    void SetBeginNode( kbNode* );
+    void SetEndNode( kbNode* );
     void SetGraphNum( int );
     void SetInc( bool );
     void SetLeftA( bool );
@@ -162,18 +162,18 @@ public:
     void Reset_flags();
 
     //!put in this direction
-    void Redirect( Node* a_node );
+    void Redirect( kbNode* a_node );
 
-    void TakeOverOperationFlags( KBoolLink* link );
+    void TakeOverOperationFlags( kbLink* link );
 
-    void SetRecordNode( DL_Node<Record*>* recordNode ) { m_record = recordNode; }
+    void SetRecordNode( DL_Node<kbRecord*>* recordNode ) { m_record = recordNode; }
 
-    DL_Node<Record*>* GetRecordNode() { return m_record; }
+    DL_Node<kbRecord*>* GetRecordNode() { return m_record; }
 
 protected:
 
     //! The mainitems of a link
-    Node  *m_beginnode, *m_endnode;
+    kbNode  *m_beginnode, *m_endnode;
     //! Marker for walking over the graph
 bool m_bin     : 1;
     //! Is this a part of hole ?
@@ -223,7 +223,7 @@ GroupType m_group : 1;
     //! belongs to this polygon part in the graph.
     int m_graphnum;
 
-    DL_Node<Record*>* m_record;
+    DL_Node<kbRecord*>* m_record;
 };
 
 #endif

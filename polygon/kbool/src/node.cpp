@@ -6,7 +6,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: node.cpp,v 1.3 2008/06/04 21:23:22 titato Exp $
+    RCS-ID: $Id: node.cpp,v 1.4 2009/09/07 19:23:28 titato Exp $
 */
 
 #include "kbool/node.h"
@@ -16,31 +16,31 @@
 
 //this here is to initialize the static iterator of node
 //with NOLIST constructor
-//TDLI<KBoolLink>  Node::_linkiter=TDLI<KBoolLink>(_GC);
+//TDLI<kbLink>  kbNode::_linkiter=TDLI<kbLink>(_GC);
 
-Node::Node( Bool_Engine* GC ) : LPoint( 0, 0 )
+kbNode::kbNode( Bool_Engine* GC ) : kbLPoint( 0, 0 )
 {
     _GC = GC;
     _linklist = new DL_List<void*>();
 }
 
 
-Node::Node( B_INT const X, B_INT const Y, Bool_Engine* GC ) : LPoint( X, Y )
+kbNode::kbNode( B_INT const X, B_INT const Y, Bool_Engine* GC ) : kbLPoint( X, Y )
 {
     _GC = GC;
     _linklist = new DL_List<void*>();
 }
 
 
-Node::Node( LPoint* const a_point, Bool_Engine* GC ) : LPoint( a_point )
+kbNode::kbNode( kbLPoint* const a_point, Bool_Engine* GC ) : kbLPoint( a_point )
 {
     _GC = GC;
     _linklist = new DL_List<void*>();
 }
 
 
-//Node::Node(Node * const other) : LPoint(other)
-Node::Node( Node * const other, Bool_Engine* GC )
+//kbNode::kbNode(kbNode * const other) : kbLPoint(other)
+kbNode::kbNode( kbNode * const other, Bool_Engine* GC )
 {
     _GC = GC;
     _x = other->_x;
@@ -48,7 +48,7 @@ Node::Node( Node * const other, Bool_Engine* GC )
     _linklist = new DL_List<void*>();
 }
 
-Node& Node::operator=( const Node &other_node )
+kbNode& kbNode::operator=( const kbNode &other_node )
 {
     _x = other_node._x;
     _y = other_node._y;
@@ -59,64 +59,64 @@ Node& Node::operator=( const Node &other_node )
 
 // x and y of the point will be rounded to the nearest
 // xnew=N*grid and ynew=N*grid
-void Node::RoundInt( B_INT grid )
+void kbNode::RoundInt( B_INT grid )
 {
     _x = ( B_INT ) floor( ( _x + grid * 0.5 ) / grid ) * grid;
     _y = ( B_INT ) floor( ( _y + grid * 0.5 ) / grid ) * grid;
 }
 
-Node::~Node()
+kbNode::~kbNode()
 {
     delete _linklist;
 }
 
-DL_List<void*>* Node::GetLinklist()
+DL_List<void*>* kbNode::GetLinklist()
 {
     return _linklist;
 }
 
-void Node::AddLink( KBoolLink *a_link )
+void kbNode::AddLink( kbLink *a_link )
 {
 // assert(a_link);
     _linklist->insbegin( a_link );
 }
 
-KBoolLink* Node::GetIncomingLink()
+kbLink* kbNode::GetIncomingLink()
 {
-    if ( ( ( KBoolLink* )_linklist->headitem() )->GetEndNode() == this )
-        return ( KBoolLink* )_linklist->headitem();
+    if ( ( ( kbLink* )_linklist->headitem() )->GetEndNode() == this )
+        return ( kbLink* )_linklist->headitem();
     else
-        return ( KBoolLink* )_linklist->tailitem();
+        return ( kbLink* )_linklist->tailitem();
 }
 
-KBoolLink* Node::GetOutgoingLink()
+kbLink* kbNode::GetOutgoingLink()
 {
-    if ( ( ( KBoolLink* )_linklist->headitem() )->GetBeginNode() == this )
-        return ( KBoolLink* )_linklist->headitem();
+    if ( ( ( kbLink* )_linklist->headitem() )->GetBeginNode() == this )
+        return ( kbLink* )_linklist->headitem();
     else
-        return ( KBoolLink* )_linklist->tailitem();
+        return ( kbLink* )_linklist->tailitem();
 }
 
 //
 // Returns the number of connected links
 //
-int Node::GetNumberOfLinks()
+int kbNode::GetNumberOfLinks()
 {
     return _linklist->count();
 }
 
-KBoolLink* Node::GetOtherLink( KBoolLink* prev )
+kbLink* kbNode::GetOtherLink( kbLink* prev )
 {
-    if ( prev == ( KBoolLink* )_linklist->headitem() )
-        return ( KBoolLink* )_linklist->tailitem();
-    if ( prev == ( KBoolLink* )_linklist->tailitem() )
-        return ( KBoolLink* )_linklist->headitem();
+    if ( prev == ( kbLink* )_linklist->headitem() )
+        return ( kbLink* )_linklist->tailitem();
+    if ( prev == ( kbLink* )_linklist->tailitem() )
+        return ( kbLink* )_linklist->headitem();
 
     return NULL;
 }
 
 
-int Node::Merge( Node *other )
+int kbNode::Merge( kbNode *other )
 {
     if ( this == other ) //they are already merged dummy
         return 0;
@@ -127,8 +127,8 @@ int Node::Merge( Node *other )
     // otherwise there can't be a takeover, because for takeover there can't
     // be an iterator on other->_linklist;
     {
-        TDLI<KBoolLink> Iother( other->_linklist );
-        KBoolLink* temp;
+        TDLI<kbLink> Iother( other->_linklist );
+        kbLink* temp;
 
         Counter = Iother.count();
 
@@ -153,7 +153,7 @@ int Node::Merge( Node *other )
 }
 
 
-void Node::RemoveLink( KBoolLink *a_link )
+void kbNode::RemoveLink( kbLink *a_link )
 {
 // assert(a_link);
     _GC->_linkiter->Attach( _linklist );
@@ -172,7 +172,7 @@ void Node::RemoveLink( KBoolLink *a_link )
 // output: -
 // return: true if points can be simplified
 //     false if points can't be simplified
-bool Node::Simplify( Node *First, Node *Second, B_INT Marge )
+bool kbNode::Simplify( kbNode *First, kbNode *Second, B_INT Marge )
 {
     double distance = 0;
 
@@ -189,9 +189,9 @@ bool Node::Simplify( Node *First, Node *Second, B_INT Marge )
     // Used tmp_link.set here, because the link may not be linked in the graph,
     // because the point of the graphs are used, after use of the line we have
     //to set the link to zero so the nodes will not be destructed by exit of the function
-    KBoolLink tmp_link( _GC );
+    kbLink tmp_link( _GC );
     tmp_link.Set( First, Second );
-    KBoolLine tmp_line( _GC );
+    kbLine tmp_line( _GC );
     tmp_line.Set( &tmp_link );
 
     // If third point is on the same line which is made from the first
@@ -215,7 +215,7 @@ bool Node::Simplify( Node *First, Node *Second, B_INT Marge )
 }
 
 
-KBoolLink* Node::GetNextLink()
+kbLink* kbNode::GetNextLink()
 {
     int Aantal = _linklist->count();
 
@@ -225,7 +225,7 @@ KBoolLink* Node::GetNextLink()
     if ( Aantal == 1 )
         return NULL;
     int Marked_Counter = 0;
-    KBoolLink *the_link = NULL;
+    kbLink *the_link = NULL;
 
     // count the marked links
     _GC->_linkiter->Attach( _linklist );
@@ -255,7 +255,7 @@ KBoolLink* Node::GetNextLink()
 }
 
 
-KBoolLink* Node::GetPrevLink()
+kbLink* kbNode::GetPrevLink()
 {
     int Aantal;
     if ( !_linklist )
@@ -270,7 +270,7 @@ KBoolLink* Node::GetPrevLink()
         return NULL;
 
     int Marked_Counter = 0;
-    KBoolLink *the_link = NULL;
+    kbLink *the_link = NULL;
 
     _GC->_linkiter->Attach( _linklist );
     // count the marked links
@@ -299,7 +299,7 @@ KBoolLink* Node::GetPrevLink()
     }
 }
 
-bool Node::SameSides( KBoolLink* const prev , KBoolLink* const link, BOOL_OP operation )
+bool kbNode::SameSides( kbLink* const prev , kbLink* const link, BOOL_OP operation )
 {
     bool directedLeft;
     bool directedRight;
@@ -331,16 +331,16 @@ bool Node::SameSides( KBoolLink* const prev , KBoolLink* const link, BOOL_OP ope
 //  on the node get the link
 //  is the most right or left one
 //  This function is used to collect the simple graphs from a graph
-KBoolLink* Node::GetMost( KBoolLink* const prev , LinkStatus whatside, BOOL_OP operation )
+kbLink* kbNode::GetMost( kbLink* const prev , LinkStatus whatside, BOOL_OP operation )
 {
-    KBoolLink * reserve = 0;
-    KBoolLink *Result = NULL, *link;
-    Node* prevbegin = prev->GetOther( this );
+    kbLink * reserve = 0;
+    kbLink *Result = NULL, *link;
+    kbNode* prevbegin = prev->GetOther( this );
 
     if ( _linklist->count() == 2 ) // only two links to this node take the one != prev
     {
-        if ( ( link = ( KBoolLink* )_linklist->headitem() ) == prev )      //this is NOT the one to go on
-            link = ( KBoolLink* )_linklist->tailitem();
+        if ( ( link = ( kbLink* )_linklist->headitem() ) == prev )      //this is NOT the one to go on
+            link = ( kbLink* )_linklist->tailitem();
         if ( !link->BeenHere() && SameSides( prev, link, operation ) )
             //we are back where we started (bin is true) return Null
             return link;
@@ -349,7 +349,7 @@ KBoolLink* Node::GetMost( KBoolLink* const prev , LinkStatus whatside, BOOL_OP o
 
     _GC->_linkiter->Attach( _linklist );
     _GC->_linkiter->tohead();
-    //more then 2 links to the Node
+    //more then 2 links to the kbNode
     while( !_GC->_linkiter->hitroot() )
     {
         link = _GC->_linkiter->item();
@@ -387,16 +387,16 @@ KBoolLink* Node::GetMost( KBoolLink* const prev , LinkStatus whatside, BOOL_OP o
 //  on the node get the link
 //  is the most right or left one
 //  This function is used to collect the simple graphs from a graph
-KBoolLink* Node::GetMostHole( KBoolLink* const prev, LinkStatus whatside, BOOL_OP operation )
+kbLink* kbNode::GetMostHole( kbLink* const prev, LinkStatus whatside, BOOL_OP operation )
 {
-    KBoolLink * reserve = 0;
-    KBoolLink *Result = NULL, *link;
-    Node* prevbegin = prev->GetOther( this );
+    kbLink * reserve = 0;
+    kbLink *Result = NULL, *link;
+    kbNode* prevbegin = prev->GetOther( this );
 
     if ( _linklist->count() == 2 ) // only two links to this node take the one != prev
     {
-        if ( ( link = ( KBoolLink* )_linklist->headitem() ) == prev )      //this is NOT the one to go on
-            link = ( KBoolLink* )_linklist->tailitem();
+        if ( ( link = ( kbLink* )_linklist->headitem() ) == prev )      //this is NOT the one to go on
+            link = ( kbLink* )_linklist->tailitem();
         if ( link->GetHole() && !link->GetHoleLink() && !link->BeenHere() && SameSides( prev, link, operation ) )
             //we are back where we started (bin is true) return Null
             return link;
@@ -405,7 +405,7 @@ KBoolLink* Node::GetMostHole( KBoolLink* const prev, LinkStatus whatside, BOOL_O
 
     _GC->_linkiter->Attach( _linklist );
     _GC->_linkiter->tohead();
-    //more then 2 links to the Node
+    //more then 2 links to the kbNode
     while( !_GC->_linkiter->hitroot() )
     {
         link = _GC->_linkiter->item();
@@ -443,9 +443,9 @@ KBoolLink* Node::GetMostHole( KBoolLink* const prev, LinkStatus whatside, BOOL_O
 }
 
 // this function gets the highest not flat link
-KBoolLink* Node::GetHoleLink( KBoolLink* const prev, bool checkbin, BOOL_OP operation )
+kbLink* kbNode::GetHoleLink( kbLink* const prev, bool checkbin, BOOL_OP operation )
 {
-    KBoolLink * Result = NULL, *link;
+    kbLink * Result = NULL, *link;
 
     _GC->_linkiter->Attach( _linklist );
 
@@ -467,9 +467,9 @@ KBoolLink* Node::GetHoleLink( KBoolLink* const prev, bool checkbin, BOOL_OP oper
 }
 
 // this function gets the highest not flat link
-KBoolLink* Node::GetNotFlat()
+kbLink* kbNode::GetNotFlat()
 {
-    KBoolLink * Result = NULL, *link;
+    kbLink * Result = NULL, *link;
 
     _GC->_linkiter->Attach( _linklist );
 
@@ -519,9 +519,9 @@ KBoolLink* Node::GetNotFlat()
 
 //  on the node get the link that is not BIN
 //  and that has the same graphnumber and is in same direction
-KBoolLink *Node::Follow( KBoolLink* const prev )
+kbLink *kbNode::Follow( kbLink* const prev )
 {
-    KBoolLink * temp;
+    kbLink * temp;
     _GC->_linkiter->Attach( _linklist );
 
     _GC->_linkiter->tohead();
@@ -555,9 +555,9 @@ KBoolLink *Node::Follow( KBoolLink* const prev )
 // this function gets the highest (other node) link ascending from the node
 // that has the bin flag set as the argument binset
 // if no such link exists return 0
-KBoolLink* Node::GetBinHighest( bool binset )
+kbLink* kbNode::GetBinHighest( bool binset )
 {
-    KBoolLink * Result = NULL, *link;
+    kbLink * Result = NULL, *link;
     _GC->_linkiter->Attach( _linklist );
 
     double tangold = 0.0;

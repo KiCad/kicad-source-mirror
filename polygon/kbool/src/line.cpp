@@ -6,7 +6,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: line.cpp,v 1.3 2008/06/04 21:23:22 titato Exp $
+    RCS-ID: $Id: line.cpp,v 1.4 2009/09/07 19:23:28 titato Exp $
 */
 
 // Standard include files
@@ -25,7 +25,7 @@
 //
 // The default constructor
 //
-KBoolLine::KBoolLine( Bool_Engine* GC )
+kbLine::kbLine( Bool_Engine* GC )
 {
     m_GC = GC;
     m_AA = 0.0;
@@ -36,7 +36,7 @@ KBoolLine::KBoolLine( Bool_Engine* GC )
     m_valid_parameters = false;
 }
 
-KBoolLine::~KBoolLine()
+kbLine::~kbLine()
 {
     if ( linecrosslist )
         delete linecrosslist;
@@ -45,7 +45,7 @@ KBoolLine::~KBoolLine()
 //
 // constructor with a link
 //
-KBoolLine::KBoolLine( KBoolLink *a_link, Bool_Engine* GC )
+kbLine::kbLine( kbLink *a_link, Bool_Engine* GC )
 {
     m_GC = GC;
     // a_link must exist
@@ -80,7 +80,7 @@ KBoolLine::KBoolLine( KBoolLink *a_link, Bool_Engine* GC )
 //     4: beginnode and endnode are crosspoints, no further investigation
 //         5: beginnode is a crosspoint, need further investigation
 //         6: endnode is a crosspoint, need further investigation
-int KBoolLine::ActionOnTable1( PointStatus Result_beginnode, PointStatus Result_endnode )
+int kbLine::ActionOnTable1( PointStatus Result_beginnode, PointStatus Result_endnode )
 {
     // Action 1.5 beginnode and endnode are crosspoints, no further investigation needed
     if (
@@ -196,7 +196,7 @@ int KBoolLine::ActionOnTable1( PointStatus Result_beginnode, PointStatus Result_
 //         2: endnode is a crosspoint
 //         3: beginnode is a crosspoint
 //         4: beginnode and endnode are crosspoints
-int KBoolLine::ActionOnTable2( PointStatus Result_beginnode, PointStatus Result_endnode )
+int kbLine::ActionOnTable2( PointStatus Result_beginnode, PointStatus Result_endnode )
 {
     // Action 2.5, beginnode and eindpoint are crosspoints
     if (
@@ -290,7 +290,7 @@ int KBoolLine::ActionOnTable2( PointStatus Result_beginnode, PointStatus Result_
 // the crossing will be put in the link, because the line will be destructed
 // after use of the variable
 //
-void KBoolLine::AddLineCrossing( B_INT X, B_INT Y, KBoolLine *other_line )
+void kbLine::AddLineCrossing( B_INT X, B_INT Y, kbLine *other_line )
 {
     // the other line must exist
     assert( other_line );
@@ -301,7 +301,7 @@ void KBoolLine::AddLineCrossing( B_INT X, B_INT Y, KBoolLine *other_line )
 
 // Calculate the Y when the X is given
 //
-B_INT KBoolLine::Calculate_Y( B_INT X )
+B_INT kbLine::Calculate_Y( B_INT X )
 {
     // link must exist to get info about the nodes
     assert( m_link );
@@ -314,7 +314,7 @@ B_INT KBoolLine::Calculate_Y( B_INT X )
         return m_link->GetBeginNode()->GetY();
 }
 
-B_INT KBoolLine::Calculate_Y_from_X( B_INT X )
+B_INT kbLine::Calculate_Y_from_X( B_INT X )
 {
     // link must exist to get info about the nodes
     assert( m_link );
@@ -327,7 +327,7 @@ B_INT KBoolLine::Calculate_Y_from_X( B_INT X )
         return m_link->GetBeginNode()->GetY();
 }
 
-void KBoolLine::Virtual_Point( LPoint *a_point, double distance )
+void kbLine::Virtual_Point( kbLPoint *a_point, double distance )
 {
     // link must exist to get info about the nodes
     assert( m_link );
@@ -345,7 +345,7 @@ void KBoolLine::Virtual_Point( LPoint *a_point, double distance )
 //
 // Calculate the lineparameters for the line if nessecary
 //
-void KBoolLine::CalculateLineParameters()
+void kbLine::CalculateLineParameters()
 {
     // linkmust exist to get beginnode AND endnode
     assert( m_link );
@@ -353,7 +353,7 @@ void KBoolLine::CalculateLineParameters()
     // if not valid_parameters calculate the parameters
     if ( !m_valid_parameters )
     {
-        Node * bp, *ep;
+        kbNode * bp, *ep;
         double length;
 
         // get the begin and endnode via the link
@@ -390,7 +390,7 @@ void KBoolLine::CalculateLineParameters()
 // return true : lines are crossing
 //    false: lines are not crossing
 //
-int KBoolLine::CheckIntersect ( KBoolLine * lijn, double Marge )
+int kbLine::CheckIntersect ( kbLine * lijn, double Marge )
 {
     double distance = 0;
     // link must exist
@@ -405,7 +405,7 @@ int KBoolLine::CheckIntersect ( KBoolLine * lijn, double Marge )
         assert( !m_link );
 
     int Take_Action1, Take_Action2, Total_Result;
-    Node *bp, *ep;
+    kbNode *bp, *ep;
     PointStatus Result_beginnode, Result_endnode;
 
     bp = lijn->m_link->GetBeginNode();
@@ -440,9 +440,9 @@ int KBoolLine::CheckIntersect ( KBoolLine * lijn, double Marge )
 
 //
 // Get the beginnode from the line
-// usage: Node *anode = a_line.GetBeginNode()
+// usage: kbNode *anode = a_line.GetBeginNode()
 //
-Node *KBoolLine::GetBeginNode()
+kbNode *kbLine::GetBeginNode()
 {
     // link must exist
     assert( m_link );
@@ -452,9 +452,9 @@ Node *KBoolLine::GetBeginNode()
 
 //
 // Get the endnode from the line
-// usage: Node *anode = a_line.GetEndNode()
+// usage: kbNode *anode = a_line.GetEndNode()
 //
-Node *KBoolLine::GetEndNode()
+kbNode *kbLine::GetEndNode()
 {
     // link must exist
     assert( m_link );
@@ -468,7 +468,7 @@ Node *KBoolLine::GetEndNode()
 // return 0: If there are no crossings
 //    1: If there is one crossing
 //    2: If there are two crossings
-int KBoolLine::Intersect( KBoolLine * lijn, double Marge )
+int kbLine::Intersect( kbLine * lijn, double Marge )
 {
     double distance = 0;
     // lijn must exist
@@ -480,7 +480,7 @@ int KBoolLine::Intersect( KBoolLine * lijn, double Marge )
     if ( m_link->GetBeginNode() == m_link->GetEndNode() )
         assert( !m_link );
 
-    Node *bp, *ep;
+    kbNode *bp, *ep;
     PointStatus Result_beginnode, Result_endnode;
     int Take_Action1, Take_Action2, Number_of_Crossings = 0;
 
@@ -558,7 +558,7 @@ case 1: case 5: case 6:
 
 
 // Intersects two lines there must be a crossing
-int KBoolLine::Intersect_simple( KBoolLine * lijn )
+int kbLine::Intersect_simple( kbLine * lijn )
 {
     // lijn must exist
     assert( lijn );
@@ -577,7 +577,7 @@ int KBoolLine::Intersect_simple( KBoolLine * lijn )
 }
 
 // Intersects two lines there must be a crossing
-bool KBoolLine::Intersect2( Node* crossing, KBoolLine * lijn )
+bool kbLine::Intersect2( kbNode* crossing, kbLine * lijn )
 {
     // lijn must exist
     assert( lijn );
@@ -606,7 +606,7 @@ bool KBoolLine::Intersect2( Node* crossing, KBoolLine * lijn )
 //         ON_AREA, when point lies on the infinite line within a range
 //     IN_AREA, when point lies in the area of the linesegment
 //     the returnvalues are declared in (LINE.H)
-PointStatus KBoolLine::PointInLine( Node *a_node, double& Distance, double Marge )
+PointStatus kbLine::PointInLine( kbNode *a_node, double& Distance, double Marge )
 {
     Distance = 0;
 
@@ -616,7 +616,7 @@ PointStatus KBoolLine::PointInLine( Node *a_node, double& Distance, double Marge
     assert( m_link );
 
     // get the nodes form the line via the link
-    Node *bp, *ep;
+    kbNode *bp, *ep;
     bp = m_link->GetBeginNode();
     ep = m_link->GetEndNode();
 
@@ -662,7 +662,7 @@ PointStatus KBoolLine::PointInLine( Node *a_node, double& Distance, double Marge
 //         ON_AREA, when point lies on the infinite line within a range
 //         RIGHT_SIDE, when point lies on the right side of the line
 //     LEFT_SIDE , RIGHT_SIDE , ON_AREA
-PointStatus KBoolLine::PointOnLine( Node *a_node, double& Distance, double Marge )
+PointStatus kbLine::PointOnLine( kbNode *a_node, double& Distance, double Marge )
 {
     Distance = 0;
 
@@ -672,7 +672,7 @@ PointStatus KBoolLine::PointOnLine( Node *a_node, double& Distance, double Marge
     assert( m_link );
 
     // get the nodes from the line via the link
-    Node *bp, *ep;
+    kbNode *bp, *ep;
     bp = m_link->GetBeginNode();
     ep = m_link->GetEndNode();
 
@@ -705,7 +705,7 @@ PointStatus KBoolLine::PointOnLine( Node *a_node, double& Distance, double Marge
 // Sets lines parameters
 // usage: a_line.Set(a_pointer_to_a_link);
 //
-void KBoolLine::Set( KBoolLink *a_link )
+void kbLine::Set( kbLink *a_link )
 {
     // points must exist
     assert( a_link );
@@ -719,7 +719,7 @@ void KBoolLine::Set( KBoolLink *a_link )
     m_valid_parameters = false;
 }
 
-KBoolLink* KBoolLine::GetLink()
+kbLink* kbLine::GetLink()
 {
     return m_link;
 }
@@ -727,7 +727,7 @@ KBoolLink* KBoolLine::GetLink()
 // makes a line same as these
 // usage : line1 = line2;
 //
-KBoolLine& KBoolLine::operator=( const KBoolLine& a_line )
+kbLine& kbLine::operator=( const kbLine& a_line )
 {
     m_AA = a_line.m_AA;
     m_BB = a_line.m_BB;
@@ -738,37 +738,37 @@ KBoolLine& KBoolLine::operator=( const KBoolLine& a_line )
     return *this;
 }
 
-Node* KBoolLine::OffsetContour( KBoolLine* const nextline, Node* _last_ins, double factor, Graph *shape )
+kbNode* kbLine::OffsetContour( kbLine* const nextline, kbNode* _last_ins, double factor, kbGraph *shape )
 {
-    KBoolLink * offs_currentlink;
-    KBoolLine  offs_currentline( m_GC );
-    KBoolLink* offs_nextlink;
-    KBoolLine  offs_nextline( m_GC );
-    Node* offs_end;
+    kbLink * offs_currentlink;
+    kbLine  offs_currentline( m_GC );
+    kbLink* offs_nextlink;
+    kbLine  offs_nextline( m_GC );
+    kbNode* offs_end;
 
-    Node* offs_bgn_next;
-    Node* offs_end_next;
+    kbNode* offs_bgn_next;
+    kbNode* offs_end_next;
 
     // make a node from this point
-    offs_end = new Node( GetEndNode(), m_GC );
+    offs_end = new kbNode( GetEndNode(), m_GC );
     Virtual_Point( offs_end, factor );
-    offs_currentlink = new KBoolLink( 0, _last_ins, offs_end, m_GC );
+    offs_currentlink = new kbLink( 0, _last_ins, offs_end, m_GC );
     offs_currentline.Set( offs_currentlink );
 
-    offs_bgn_next = new Node( nextline->m_link->GetBeginNode(), m_GC );
+    offs_bgn_next = new kbNode( nextline->m_link->GetBeginNode(), m_GC );
     nextline->Virtual_Point( offs_bgn_next, factor );
 
-    offs_end_next = new Node( nextline->m_link->GetEndNode(), m_GC );
+    offs_end_next = new kbNode( nextline->m_link->GetEndNode(), m_GC );
     nextline->Virtual_Point( offs_end_next, factor );
 
-    offs_nextlink = new KBoolLink( 0, offs_bgn_next, offs_end_next, m_GC );
+    offs_nextlink = new kbLink( 0, offs_bgn_next, offs_end_next, m_GC );
     offs_nextline.Set( offs_nextlink );
 
     offs_currentline.CalculateLineParameters();
     offs_nextline.CalculateLineParameters();
     offs_currentline.Intersect2( offs_end, &offs_nextline );
 
-    // make a link between the current and the previous and add this to graph
+    // make a link between the current and the previous and add this to kbGraph
     shape->AddLink( offs_currentlink );
 
     delete offs_nextlink;
@@ -777,35 +777,35 @@ Node* KBoolLine::OffsetContour( KBoolLine* const nextline, Node* _last_ins, doub
 }
 
 
-Node* KBoolLine::OffsetContour_rounded( KBoolLine* const nextline, Node* _last_ins, double factor, Graph *shape )
+kbNode* kbLine::OffsetContour_rounded( kbLine* const nextline, kbNode* _last_ins, double factor, kbGraph *shape )
 {
-    KBoolLink * offs_currentlink;
-    KBoolLine  offs_currentline( m_GC );
-    KBoolLink* offs_nextlink;
-    KBoolLine  offs_nextline( m_GC );
-    Node* offs_end;
-    Node* medial_axes_point = new Node( m_GC );
-    Node* bu_last_ins = new Node( _last_ins, m_GC );
+    kbLink * offs_currentlink;
+    kbLine  offs_currentline( m_GC );
+    kbLink* offs_nextlink;
+    kbLine  offs_nextline( m_GC );
+    kbNode* offs_end;
+    kbNode* medial_axes_point = new kbNode( m_GC );
+    kbNode* bu_last_ins = new kbNode( _last_ins, m_GC );
 
-    Node* offs_bgn_next;
-    Node* offs_end_next;
+    kbNode* offs_bgn_next;
+    kbNode* offs_end_next;
 
     // make a node from this point
-    offs_end = new Node( GetEndNode(), m_GC );
+    offs_end = new kbNode( GetEndNode(), m_GC );
 
     *_last_ins = *GetBeginNode();
     Virtual_Point( _last_ins, factor );
     Virtual_Point( offs_end, factor );
-    offs_currentlink = new KBoolLink( 0, _last_ins, offs_end, m_GC );
+    offs_currentlink = new kbLink( 0, _last_ins, offs_end, m_GC );
     offs_currentline.Set( offs_currentlink );
 
-    offs_bgn_next = new Node( nextline->m_link->GetBeginNode(), m_GC );
+    offs_bgn_next = new kbNode( nextline->m_link->GetBeginNode(), m_GC );
     nextline->Virtual_Point( offs_bgn_next, factor );
 
-    offs_end_next = new Node( nextline->m_link->GetEndNode(), m_GC );
+    offs_end_next = new kbNode( nextline->m_link->GetEndNode(), m_GC );
     nextline->Virtual_Point( offs_end_next, factor );
 
-    offs_nextlink = new KBoolLink( 0, offs_bgn_next, offs_end_next, m_GC );
+    offs_nextlink = new kbLink( 0, offs_bgn_next, offs_end_next, m_GC );
     offs_nextline.Set( offs_nextlink );
 
     offs_currentline.CalculateLineParameters();
@@ -821,7 +821,7 @@ Node* KBoolLine::OffsetContour_rounded( KBoolLine* const nextline, Node* _last_i
         *offs_end = *medial_axes_point;
         delete medial_axes_point;
         delete bu_last_ins;
-        // make a link between the current and the previous and add this to graph
+        // make a link between the current and the previous and add this to kbGraph
         delete offs_nextlink;
         shape->AddLink( offs_currentlink );
         return( offs_end );
@@ -831,7 +831,7 @@ Node* KBoolLine::OffsetContour_rounded( KBoolLine* const nextline, Node* _last_i
         *_last_ins = *bu_last_ins;
         delete medial_axes_point;
         delete bu_last_ins;
-        Node* endarc = new Node( offs_bgn_next, m_GC );
+        kbNode* endarc = new kbNode( offs_bgn_next, m_GC );
         shape->AddLink( offs_currentlink );
         delete offs_nextlink;
         shape->CreateArc( GetEndNode(), &offs_currentline, endarc, fabs( factor ), m_GC->GetInternalCorrectionAber() );
@@ -840,7 +840,7 @@ Node* KBoolLine::OffsetContour_rounded( KBoolLine* const nextline, Node* _last_i
 }
 
 
-bool KBoolLine::OkeForContour( KBoolLine* const nextline, double factor, Node* LastLeft, Node* LastRight, LinkStatus& _outproduct )
+bool kbLine::OkeForContour( kbLine* const nextline, double factor, kbNode* LastLeft, kbNode* LastRight, LinkStatus& _outproduct )
 {
     assert( m_link );
     assert( m_valid_parameters );
@@ -852,7 +852,7 @@ bool KBoolLine::OkeForContour( KBoolLine* const nextline, double factor, Node* L
 // PointStatus status=ON_AREA;
     double distance = 0;
 
-    Node offs_end_next( nextline->m_link->GetEndNode(), m_GC );
+    kbNode offs_end_next( nextline->m_link->GetEndNode(), m_GC );
 
     _outproduct = m_link->OutProduct( nextline->m_link, m_GC->GetAccur() );
 
@@ -899,9 +899,9 @@ bool KBoolLine::OkeForContour( KBoolLine* const nextline, double factor, Node* L
 }
 
 
-bool KBoolLine::Create_Ring_Shape( KBoolLine* nextline, Node** _last_ins_left, Node** _last_ins_right, double factor, Graph *shape )
+bool kbLine::Create_Ring_Shape( kbLine* nextline, kbNode** _last_ins_left, kbNode** _last_ins_right, double factor, kbGraph *shape )
 {
-    Node * _current;
+    kbNode * _current;
     LinkStatus _outproduct = IS_ON;
 
     if ( OkeForContour( nextline, factor, *_last_ins_left, *_last_ins_right, _outproduct ) )
@@ -926,14 +926,14 @@ bool KBoolLine::Create_Ring_Shape( KBoolLine* nextline, Node** _last_ins_left, N
             case IS_ON  :
             {
                 // make a node from this point
-                _current = new Node( m_link->GetEndNode(), m_GC );
+                _current = new kbNode( m_link->GetEndNode(), m_GC );
                 Virtual_Point( _current, factor );
 
-                // make a link between the current and the previous and add this to graph
+                // make a link between the current and the previous and add this to kbGraph
                 shape->AddLink( *_last_ins_left, _current );
                 *_last_ins_left = _current;
 
-                _current = new Node( m_link->GetEndNode(), m_GC );
+                _current = new kbNode( m_link->GetEndNode(), m_GC );
                 Virtual_Point( _current, -factor );
 
                 shape->AddLink( *_last_ins_right, _current );
@@ -965,14 +965,14 @@ bool KBoolLine::Create_Ring_Shape( KBoolLine* nextline, Node** _last_ins_left, N
        case IS_ON  :
        {
         // make a node from this point
-        _current = new Node(m_link->GetEndNode());
+        _current = new kbNode(m_link->GetEndNode());
         Virtual_Point(_current,factor);
      
-        // make a link between the current and the previous and add this to graph
+        // make a link between the current and the previous and add this to kbGraph
         Ishape->AddLink(*_last_ins_left, _current);
         *_last_ins_left=_current;
      
-        _current = new Node(m_link->GetEndNode());
+        _current = new kbNode(m_link->GetEndNode());
         Virtual_Point(_current,-factor);
      
         Ishape->AddLink(*_last_ins_right, _current);
@@ -987,7 +987,7 @@ bool KBoolLine::Create_Ring_Shape( KBoolLine* nextline, Node** _last_ins_left, N
 }
 
 
-void KBoolLine::Create_Begin_Shape( KBoolLine* nextline, Node** _last_ins_left, Node** _last_ins_right, double factor, Graph *shape )
+void kbLine::Create_Begin_Shape( kbLine* nextline, kbNode** _last_ins_left, kbNode** _last_ins_right, double factor, kbGraph *shape )
 {
     factor = fabs( factor );
     LinkStatus _outproduct;
@@ -997,11 +997,11 @@ void KBoolLine::Create_Begin_Shape( KBoolLine* nextline, Node** _last_ins_left, 
     {
         case IS_RIGHT :
         {
-            *_last_ins_left = new Node( m_link->GetEndNode(), m_GC );
+            *_last_ins_left = new kbNode( m_link->GetEndNode(), m_GC );
 
             Virtual_Point( *_last_ins_left, factor );
 
-            *_last_ins_right = new Node( nextline->m_link->GetBeginNode(), m_GC );
+            *_last_ins_right = new kbNode( nextline->m_link->GetBeginNode(), m_GC );
             nextline->Virtual_Point( *_last_ins_right, -factor );
 
             shape->AddLink( *_last_ins_left, *_last_ins_right );
@@ -1011,10 +1011,10 @@ void KBoolLine::Create_Begin_Shape( KBoolLine* nextline, Node** _last_ins_left, 
         break;
         case IS_LEFT :
         {
-            *_last_ins_left = new Node( nextline->m_link->GetBeginNode(), m_GC );
+            *_last_ins_left = new kbNode( nextline->m_link->GetBeginNode(), m_GC );
             nextline->Virtual_Point( *_last_ins_left, factor );
 
-            *_last_ins_right = new Node( m_link->GetEndNode(), m_GC );
+            *_last_ins_right = new kbNode( m_link->GetEndNode(), m_GC );
             Virtual_Point( *_last_ins_right, -factor );
 
             shape->AddLink( *_last_ins_left, *_last_ins_right );
@@ -1025,10 +1025,10 @@ void KBoolLine::Create_Begin_Shape( KBoolLine* nextline, Node** _last_ins_left, 
         // Line 2 lies on this line
         case IS_ON  :
         {
-            *_last_ins_left = new Node( nextline->m_link->GetBeginNode(), m_GC );
+            *_last_ins_left = new kbNode( nextline->m_link->GetBeginNode(), m_GC );
             Virtual_Point( *_last_ins_left, factor );
 
-            *_last_ins_right = new Node( nextline->m_link->GetBeginNode(), m_GC );
+            *_last_ins_right = new kbNode( nextline->m_link->GetBeginNode(), m_GC );
             Virtual_Point( *_last_ins_right, -factor );
 
             shape->AddLink( *_last_ins_left, *_last_ins_right );
@@ -1038,9 +1038,9 @@ void KBoolLine::Create_Begin_Shape( KBoolLine* nextline, Node** _last_ins_left, 
 
 }
 
-void KBoolLine::Create_End_Shape( KBoolLine* nextline, Node* _last_ins_left, Node* _last_ins_right, double factor, Graph *shape )
+void kbLine::Create_End_Shape( kbLine* nextline, kbNode* _last_ins_left, kbNode* _last_ins_right, double factor, kbGraph *shape )
 {
-    Node * _current;
+    kbNode * _current;
     factor = fabs( factor );
     LinkStatus _outproduct;
     _outproduct = m_link->OutProduct( nextline->m_link, m_GC->GetAccur() );
@@ -1049,7 +1049,7 @@ void KBoolLine::Create_End_Shape( KBoolLine* nextline, Node* _last_ins_left, Nod
     {
         case IS_RIGHT :
         {
-            _current = new Node( m_link->GetEndNode(), m_GC );
+            _current = new kbNode( m_link->GetEndNode(), m_GC );
             Virtual_Point( _current, -factor );
             shape->AddLink( _last_ins_right, _current );
             _last_ins_right = _current;
@@ -1060,7 +1060,7 @@ void KBoolLine::Create_End_Shape( KBoolLine* nextline, Node* _last_ins_left, Nod
         break;
         case IS_LEFT :
         {
-            _current = new Node( m_link->GetEndNode(), m_GC );
+            _current = new kbNode( m_link->GetEndNode(), m_GC );
             Virtual_Point( _current, factor );
             shape->AddLink( _last_ins_left, _current );
             _last_ins_left = _current;
@@ -1072,12 +1072,12 @@ void KBoolLine::Create_End_Shape( KBoolLine* nextline, Node* _last_ins_left, Nod
         // Line 2 lies on this line
         case IS_ON  :
         {
-            _current = new Node( m_link->GetEndNode(), m_GC );
+            _current = new kbNode( m_link->GetEndNode(), m_GC );
             Virtual_Point( _current, factor );
             shape->AddLink( _last_ins_left, _current );
             _last_ins_left = _current;
 
-            _current = new Node( m_link->GetEndNode(), m_GC );
+            _current = new kbNode( m_link->GetEndNode(), m_GC );
             Virtual_Point( _current, -factor );
             shape->AddLink( _last_ins_right, _current );
             _last_ins_right = _current;
@@ -1090,11 +1090,11 @@ void KBoolLine::Create_End_Shape( KBoolLine* nextline, Node* _last_ins_left, Nod
 }
 
 //
-// Generate from the found crossings a part of the graph
+// Generate from the found crossings a part of the kbGraph
 //
-bool KBoolLine::ProcessCrossings( TDLI<KBoolLink>* _LI )
+bool kbLine::ProcessCrossings( TDLI<kbLink>* _LI )
 {
-    Node * last; KBoolLink *dummy;
+    kbNode * last; kbLink *dummy;
 // assert (beginnode && endnode);
 
     if ( !linecrosslist ) return false;
@@ -1106,11 +1106,11 @@ bool KBoolLine::ProcessCrossings( TDLI<KBoolLink>* _LI )
     // Make new links :
     while ( !linecrosslist->empty() )
     {
-        dummy = new KBoolLink( m_link->GetGraphNum(), ( Node* ) linecrosslist->tailitem(), last, m_GC );
+        dummy = new kbLink( m_link->GetGraphNum(), ( kbNode* ) linecrosslist->tailitem(), last, m_GC );
         dummy->SetBeenHere();
         dummy->SetGroup( m_link->Group() );
         _LI->insbegin( dummy );
-        last = ( Node* )linecrosslist->tailitem();
+        last = ( kbNode* )linecrosslist->tailitem();
         linecrosslist->removetail();
     }
     // Recycle this link :
@@ -1123,7 +1123,7 @@ bool KBoolLine::ProcessCrossings( TDLI<KBoolLink>* _LI )
 
 /*
 // Sorts the links on the X values
-int NodeXYsorter(Node* a, Node* b)
+int NodeXYsorter(kbNode* a, kbNode* b)
 {
  if ( a->GetX() < b->GetX())
   return(1);
@@ -1147,11 +1147,11 @@ int NodeXYsorter(Node* a, Node* b)
 // The mostleft link most become the new link for the beam record
 // therefore the mostleft new/old link is returned to become the beam record link
 // also the part returned needs to have the bin flag set to the original value it had in the beam
-KBoolLink* KBoolLine::ProcessCrossingsSmart(TDLI<KBoolLink>* _LI)
+kbLink* kbLine::ProcessCrossingsSmart(TDLI<kbLink>* _LI)
 {
-   Node *lastinserted;
-   KBoolLink *new_link;
-   KBoolLink *returnlink;
+   kbNode *lastinserted;
+   kbLink *new_link;
+   kbLink *returnlink;
  assert (beginnode && endnode);
  if (!linecrosslist) return this;
  
@@ -1168,7 +1168,7 @@ KBoolLink* KBoolLine::ProcessCrossingsSmart(TDLI<KBoolLink>* _LI)
       //re_use this link
       endnode->RemoveLink(this);
       linecrosslist->insend(endnode); //the last link to create is towards this node
-      endnode=(Node*) linecrosslist->headitem();
+      endnode=(kbNode*) linecrosslist->headitem();
       endnode->AddLink(this);
       inbeam=NodeXYsorter(_LI->item()->beginnode,beginnode);
       switch (inbeam)
@@ -1188,7 +1188,7 @@ KBoolLink* KBoolLine::ProcessCrossingsSmart(TDLI<KBoolLink>* _LI)
       // Make new links starting at endnode
       while (!linecrosslist->empty())
       {
-         new_link=new KBoolLink(graphnum,lastinserted,(Node*) linecrosslist->headitem());
+         new_link=new kbLink(graphnum,lastinserted,(kbNode*) linecrosslist->headitem());
  
          new_link->group=group;
          int inbeam=NodeXYsorter(_LI->item()->beginnode,lastinserted);
@@ -1198,8 +1198,8 @@ KBoolLink* KBoolLine::ProcessCrossingsSmart(TDLI<KBoolLink>* _LI)
                {
                  double x,y,xl,yl;
                  char buf[80];
-                 x=((Node*)(linecrosslist->headitem()))->GetX();
-                 y=((Node*)(linecrosslist->headitem()))->GetY();
+                 x=((kbNode*)(linecrosslist->headitem()))->GetX();
+                 y=((kbNode*)(linecrosslist->headitem()))->GetY();
        xl=_LI->item()->beginnode->GetX();
                  yl=_LI->item()->beginnode->GetY();
                  sprintf(buf," x=%f , y=%f inserted before %f,%f",x,y,xl,yl);
@@ -1238,7 +1238,7 @@ KBoolLink* KBoolLine::ProcessCrossingsSmart(TDLI<KBoolLink>* _LI)
             _LI->insbefore_unsave(new_link);
             if (insert==0 && _LI->item()->beginnode!=new_link->beginnode)
              //the begin nodes are equal but not the same merge them into one node
-            {  Node* todelete=_LI->item()->beginnode;
+            {  kbNode* todelete=_LI->item()->beginnode;
      new_link->beginnode->Merge(todelete);
      delete todelete;
             }
@@ -1247,7 +1247,7 @@ KBoolLink* KBoolLine::ProcessCrossingsSmart(TDLI<KBoolLink>* _LI)
             (*_LI) << (i+1);
          }
  
-         lastinserted=(Node*)linecrosslist->headitem();
+         lastinserted=(kbNode*)linecrosslist->headitem();
          linecrosslist->removehead();
       }
    }
@@ -1256,7 +1256,7 @@ KBoolLink* KBoolLine::ProcessCrossingsSmart(TDLI<KBoolLink>* _LI)
       //re_use this link
       endnode->RemoveLink(this);
       linecrosslist->insend(endnode); //the last link to create is towards this node
-      endnode=(Node*) linecrosslist->headitem();
+      endnode=(kbNode*) linecrosslist->headitem();
       endnode->AddLink(this);
       inbeam=NodeXYsorter(_LI->item()->beginnode,endnode);
       switch (inbeam)
@@ -1277,10 +1277,10 @@ KBoolLink* KBoolLine::ProcessCrossingsSmart(TDLI<KBoolLink>* _LI)
       // Make new links starting at endnode
       while (!linecrosslist->empty())
       {
-         new_link=new KBoolLink(graphnum,lastinserted,(Node*) linecrosslist->headitem());
+         new_link=new kbLink(graphnum,lastinserted,(kbNode*) linecrosslist->headitem());
          new_link->group=group;
  
-         inbeam=NodeXYsorter(_LI->item()->beginnode,(Node*) linecrosslist->headitem());
+         inbeam=NodeXYsorter(_LI->item()->beginnode,(kbNode*) linecrosslist->headitem());
          switch (inbeam)
          {
            case -1:
@@ -1335,7 +1335,7 @@ KBoolLink* KBoolLine::ProcessCrossingsSmart(TDLI<KBoolLink>* _LI)
             _LI->insbefore_unsave(new_link);
             if (insert==0 && _LI->item()->beginnode!=new_link->beginnode)
              //the begin nodes are equal but not the same merge them into one node
-            {  Node* todelete=_LI->item()->beginnode;
+            {  kbNode* todelete=_LI->item()->beginnode;
      new_link->beginnode->Merge(todelete);
      delete todelete;
             }
@@ -1343,7 +1343,7 @@ KBoolLink* KBoolLine::ProcessCrossingsSmart(TDLI<KBoolLink>* _LI)
             (*_LI) << (i+1);
          }
  
-         lastinserted=(Node*)linecrosslist->headitem();
+         lastinserted=(kbNode*)linecrosslist->headitem();
          linecrosslist->removehead();
       }
    }
@@ -1354,7 +1354,7 @@ KBoolLink* KBoolLine::ProcessCrossingsSmart(TDLI<KBoolLink>* _LI)
 }
 */
 
-static int NODE_X_ASCENDING_L ( Node* a, Node* b )
+static int NODE_X_ASCENDING_L ( kbNode* a, kbNode* b )
 {
     if( b->GetX() > a->GetX() ) return( 1 );
     else
@@ -1363,7 +1363,7 @@ static int NODE_X_ASCENDING_L ( Node* a, Node* b )
     return( -1 );
 }
 
-static int NODE_X_DESCENDING_L( Node* a, Node* b )
+static int NODE_X_DESCENDING_L( kbNode* a, kbNode* b )
 {
     if( a->GetX() > b->GetX() ) return( 1 );
     else
@@ -1372,7 +1372,7 @@ static int NODE_X_DESCENDING_L( Node* a, Node* b )
     return( -1 );
 }
 
-static int NODE_Y_ASCENDING_L ( Node* a, Node* b )
+static int NODE_Y_ASCENDING_L ( kbNode* a, kbNode* b )
 {
     if( b->GetY() > a->GetY() ) return( 1 );
     else
@@ -1380,7 +1380,7 @@ static int NODE_Y_ASCENDING_L ( Node* a, Node* b )
     return( -1 );
 }
 
-static int NODE_Y_DESCENDING_L( Node* a, Node* b )
+static int NODE_Y_DESCENDING_L( kbNode* a, kbNode* b )
 {
     if( a->GetY() > b->GetY() ) return( 1 );
     else
@@ -1393,9 +1393,9 @@ static int NODE_Y_DESCENDING_L( Node* a, Node* b )
 // This function finds out which sortfunction to use with sorting
 // the crossings.
 //
-void KBoolLine::SortLineCrossings()
+void kbLine::SortLineCrossings()
 {
-    TDLI<Node> I( linecrosslist );
+    TDLI<kbNode> I( linecrosslist );
 
     B_INT dx, dy;
     dx = babs( m_link->GetEndNode()->GetX() - m_link->GetBeginNode()->GetX() );
@@ -1419,7 +1419,7 @@ void KBoolLine::SortLineCrossings()
 //
 // Adds a cross Node to this. a_node may not be deleted before processing the crossings
 //
-void KBoolLine::AddCrossing( Node *a_node )
+void kbLine::AddCrossing( kbNode *a_node )
 {
     if ( a_node == m_link->GetBeginNode() || a_node == m_link->GetEndNode() ) return;
 
@@ -1431,7 +1431,7 @@ void KBoolLine::AddCrossing( Node *a_node )
     }
     else
     {
-        TDLI<Node> I( linecrosslist );
+        TDLI<kbNode> I( linecrosslist );
         if ( !I.has( a_node ) )
             I.insend( a_node );
     }
@@ -1440,21 +1440,21 @@ void KBoolLine::AddCrossing( Node *a_node )
 //
 // see above
 //
-Node* KBoolLine::AddCrossing( B_INT X, B_INT Y )
+kbNode* kbLine::AddCrossing( B_INT X, B_INT Y )
 {
-    Node * result = new Node( X, Y, m_GC );
+    kbNode * result = new kbNode( X, Y, m_GC );
     AddCrossing( result );
     return result;
 }
 
-DL_List<void*>* KBoolLine::GetCrossList()
+DL_List<void*>* kbLine::GetCrossList()
 {
     if ( linecrosslist )
         return linecrosslist;
     return NULL;
 }
 
-bool KBoolLine::CrossListEmpty()
+bool kbLine::CrossListEmpty()
 {
     if ( linecrosslist )
         return linecrosslist->empty();
@@ -1462,11 +1462,11 @@ bool KBoolLine::CrossListEmpty()
 }
 
 /*
-bool KBoolLine::HasInCrossList(Node *n)
+bool kbLine::HasInCrossList(kbNode *n)
 {
  if(linecrosslist!=NULL)
  {
-  TDLI<Node> I(linecrosslist);
+  TDLI<kbNode> I(linecrosslist);
   return I.has(n);
  }
  return false;

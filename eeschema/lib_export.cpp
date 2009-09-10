@@ -40,7 +40,7 @@ void WinEDA_LibeditFrame::OnImportPart( wxCommandEvent& event )
     wxFileName     fn;
     LibraryStruct* LibTmp;
     LibCmpEntry*   LibEntry;
-    bool           entryLoaded;
+    bool           entryLoaded = false;
 
     LibItemToRepeat = NULL;
 

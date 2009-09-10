@@ -28,21 +28,21 @@ Last Update 11-03-1996
 class Debug_driver;
 
 
-class A2DKBOOLDLLEXP GraphList: public DL_List<void*>
+class A2DKBOOLDLLEXP kbGraphList: public DL_List<void*>
 {
 protected:
     Bool_Engine* _GC;
 public:
 
-    GraphList( Bool_Engine* GC );
+    kbGraphList( Bool_Engine* GC );
 
-    GraphList( GraphList* other );
+    kbGraphList( kbGraphList* other );
 
-    ~GraphList();
+    ~kbGraphList();
 
-    void    MakeOneGraph( Graph *total );
+    void    MakeOneGraph( kbGraph *total );
 
-    void    Prepare( Graph *total );
+    void    Prepare( kbGraph *total );
     void     MakeRings();
     void     Correction();
 

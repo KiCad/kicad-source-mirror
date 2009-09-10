@@ -185,7 +185,7 @@ int MarkItemsInBloc( EDA_LibComponentStruct* LibComponent,
         case COMPONENT_FIELD_DRAW_TYPE:
             break;
 
-        defualt:
+        default:
             break;
         }
     }
