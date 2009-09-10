@@ -208,7 +208,7 @@ public:
         return m_NetClassName;
     }
 
-
+#if 0
     /**
      * Function GetTrackWidth
      * returns the width of tracks used to route this net.
@@ -221,10 +221,10 @@ public:
 
 
     /**
-     * Function GetTrackMinWidth
+     * Function GetTrackWidth
      * returns the Minimum value for tracks thickness (used in DRC)
      */
-    int GetTrackMinWidth()
+    int GetTrackWidth()
     {
         wxASSERT( m_NetClass );
         return m_NetClass->GetTrackMinWidth();
@@ -273,7 +273,7 @@ public:
         wxASSERT( m_NetClass );
         return m_NetClass->GetClearance();
     }
-
+#endif
 
     /* Reading and writing data on files */
     int  ReadDescr( FILE* File, int* LineNum );

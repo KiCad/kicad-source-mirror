@@ -178,15 +178,15 @@ bool Read_Config( const wxString& projectFileName )
     /* User library path takes precedent over default library search paths. */
     wxGetApp().InsertLibraryPath( g_UserLibDirBuffer, 1 );
 
-    /* Some parameters must be reinitialize after loading a new board or config: */
+    // Some parameters must be reinitialized after loading a new board or config
     g_DesignSettings.m_TrackWidthHistory[0] = g_DesignSettings.m_CurrentTrackWidth;
-    g_DesignSettings.m_TrackClearenceHistory[0] = g_DesignSettings.m_TrackClearence;
+    g_DesignSettings.m_TrackClearanceHistory[0] = g_DesignSettings.m_TrackClearance;
     g_DesignSettings.m_ViaSizeHistory[0]    = g_DesignSettings.m_CurrentViaSize;
 
     for( ii = 1; ii < HISTORY_NUMBER; ii++ )
     {
         g_DesignSettings.m_TrackWidthHistory[ii] = 0;
-        g_DesignSettings.m_TrackClearenceHistory[ii] = 0;
+        g_DesignSettings.m_TrackClearanceHistory[ii] = 0;
         g_DesignSettings.m_ViaSizeHistory[ii]    = 0;
     }
 

@@ -99,7 +99,7 @@ public:
 
     NETCLASSES                 m_NetClasses;                ///< List of current netclasses. There is always the default netclass
 
-    ZONE_CONTAINER*             m_CurrentZoneContour;       // zone contour currently in progress
+    ZONE_CONTAINER*            m_CurrentZoneContour;        // zone contour currently in progress
 
     BOARD( EDA_BaseStruct* aParent, WinEDA_BasePcbFrame* frame );
     ~BOARD();
@@ -347,6 +347,7 @@ public:
      * @return none
      */
     void            SynchronizeNetsAndNetClasses();
+
 
     /**
      * Function Save

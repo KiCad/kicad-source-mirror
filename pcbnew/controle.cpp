@@ -596,9 +596,7 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
             // "as is", and let ShowNewTrackWhenMovingCursor figure out what to do.
             if( !Drc_On || !g_CurrentTrackSegment
                 || g_CurrentTrackSegment != this->GetCurItem()
-                || !LocateIntrusion( m_Pcb->m_Track,
-                                     g_CurrentTrackSegment->GetNet(),
-                                     g_CurrentTrackSegment->m_Width ) )
+                || !LocateIntrusion( m_Pcb->m_Track, g_CurrentTrackSegment ))
             {
                 GetScreen()->m_Curseur = on_grid;
             }

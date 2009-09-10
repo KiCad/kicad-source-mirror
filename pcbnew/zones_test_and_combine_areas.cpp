@@ -952,16 +952,19 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                             }
                             int bstyle = Area_To_Test->m_Poly->GetSideStyle( ic2 );
                             int x, y;
+
                             int d = GetClearanceBetweenSegments(
                                 bx1, by1, bx2, by2, bstyle,
                                 0,
                                 ax1, ay1, ax2,
                                 ay2, astyle,
                                 0,
-                                g_DesignSettings.
-                                m_TrackClearence,
+
+                                // @todo: decide what to use here.
+                                g_DesignSettings.m_TrackClearance,
                                 &x, &y );
-                            if( d < g_DesignSettings.m_TrackClearence )
+
+                            if( d < g_DesignSettings.m_TrackClearance )
                             {
                                 // COPPERAREA_COPPERAREA error : intersect or too close
                                 if( aCreate_Markers )

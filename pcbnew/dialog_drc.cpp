@@ -87,7 +87,7 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
         reportName = m_RptFilenameCtrl->GetValue();
     }
 
-    g_DesignSettings.m_TrackClearence =
+    g_DesignSettings.m_TrackClearance =
         ReturnValueFromTextCtrl( *m_SetClearance, m_Parent->m_InternalUnits );
     g_DesignSettings.m_TrackMinWidth =
         ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl, m_Parent->m_InternalUnits );
@@ -101,15 +101,14 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
                           true,         // DRC test for zones enabled
                           reportName, m_CreateRptCtrl->IsChecked() );
 
-
     DelDRCMarkers();
 
     wxBeginBusyCursor();
 
     // run all the tests, with no UI at this time.
     m_Messages->Clear();
-    wxSafeYield();      // Allows time slice to refresh the m_Messages window
-    m_tester->m_pcb->m_Status_Pcb = 0;                // Force full connectivity and ratsnest recalculations
+    wxSafeYield();                          // Allows time slice to refresh the m_Messages window
+    m_tester->m_pcb->m_Status_Pcb = 0;      // Force full connectivity and ratsnest recalculations
     m_tester->RunTests(m_Messages);
 
 #if wxCHECK_VERSION( 2, 8, 0 )
@@ -127,7 +126,7 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
         fclose( fp );
 
         wxString        msg;
-        msg.Printf( _( "Report file \"%s\" created" ), reportName.GetData() );
+        msg.Printf( _( "Report file \"%s\" created" ), GetChars( reportName ) );
 
         wxString        caption( _( "Disk File Report Completed" ) );
         wxMessageDialog popupWindow( this, msg, caption );
@@ -173,7 +172,7 @@ void DIALOG_DRC_CONTROL::OnListUnconnectedClick( wxCommandEvent& event )
         reportName = m_RptFilenameCtrl->GetValue();
     }
 
-    g_DesignSettings.m_TrackClearence =
+    g_DesignSettings.m_TrackClearance =
         ReturnValueFromTextCtrl( *m_SetClearance, m_Parent->m_InternalUnits );
     g_DesignSettings.m_TrackMinWidth =
         ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl, m_Parent->m_InternalUnits );
@@ -208,7 +207,7 @@ void DIALOG_DRC_CONTROL::OnListUnconnectedClick( wxCommandEvent& event )
         fclose( fp );
 
         wxString        msg;
-        msg.Printf( _( "Report file \"%s\" created" ), reportName.GetData() );
+        msg.Printf( _( "Report file \"%s\" created" ), GetChars( reportName ) );
         wxString        caption( _( "Disk File Report Completed" ) );
         wxMessageDialog popupWindow( this, msg, caption );
         popupWindow.ShowModal();

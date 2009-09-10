@@ -3924,6 +3924,15 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
 
         nets.clear();
     }
+
+
+    /**
+     * Function exportNETCLASS
+     * exports \a aNetClass to the DSN file.
+     */
+    void exportNETCLASS( NETCLASS* aNetClass );
+
+
     //-----</FromBOARD>------------------------------------------------------
 
     //-----<FromSESSION>-----------------------------------------------------

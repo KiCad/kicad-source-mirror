@@ -267,15 +267,20 @@ public:
 
     /**
      * Function GetClearance
-     * returns the clearance in 1/10000 inches to aItem from this BOARD_CONNECTED_ITEM.
+     * returns the clearance in 1/10000 inches.  If \a aItem is not NULL then the
+     * returned clearance is the greater of this object's NETCLASS clearance and
+     * aItem's NETCLASS clearance.  If \a aItem is NULL, then this objects clearance
+     * is returned.
+     * @param aItem is another BOARD_CONNECTED_ITEM or NULL
+     * @return int - the clearance in 1/10000 inches.
      */
-     virtual int GetClearance( BOARD_CONNECTED_ITEM* aItem ) const;
+    virtual int GetClearance( BOARD_CONNECTED_ITEM* aItem = NULL ) const;
 
      /**
       * Function GetNetClass
       * returns the NETCLASS for this item.
       */
-     virtual NETCLASS* GetNetClass() const;
+     NETCLASS* GetNetClass() const;
 };
 
 

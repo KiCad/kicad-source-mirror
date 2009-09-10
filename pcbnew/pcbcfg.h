@@ -126,7 +126,7 @@ static PARAM_CFG_INT ShowNetNamesModeCfg
 static PARAM_CFG_INT TrackClearenceCfg
 (
     wxT( "Isol" ),                                  /* Keyword */
-    &g_DesignSettings.m_TrackClearence,             /* Parameter address */
+    &g_DesignSettings.m_TrackClearance,             /* Parameter address */
     120,                                            /* Default value */
     0, 0xFFFF                                       /* Min and max values*/
 );

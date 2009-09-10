@@ -28,7 +28,8 @@ public:
     MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
            const wxString& aText, const wxPoint& aPos,
            const wxString& bText, const wxPoint& bPos );
-     /**
+
+    /**
      * Constructor
      * @param aErrorCode The categorizing identifier for an error
      * @param aMarkerPos The position of the MARKER_PCB on the BOARD
@@ -37,7 +38,6 @@ public:
      */
     MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
            const wxString& aText, const wxPoint& aPos );
-
 
     ~MARKER_PCB();
 

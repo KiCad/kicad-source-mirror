@@ -11,7 +11,6 @@ class Pcb3D_GLCanvas;
 class D_PAD : public BOARD_CONNECTED_ITEM
 {
 private:
-    int      m_NetCode;         // Net number for fast comparisons
     wxString m_Netname;         // Full net name like /mysheet/mysubsheet/vout used by eeschema
     wxString m_ShortNetname;    // short net name, like vout from /mysheet/mysubsheet/vout
 

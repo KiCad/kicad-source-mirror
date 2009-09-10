@@ -99,9 +99,9 @@ void WinEDA_PcbFrame::GlobalRoute( wxDC* DC )
     fprintf( outfile, " %d", g_GridRoutingSize / PSCALE );
 
     fprintf( outfile, " %d %d %d", /* isolation Pad, track, via */
-             g_DesignSettings.m_TrackClearence / PSCALE,
-             g_DesignSettings.m_TrackClearence / PSCALE,
-             g_DesignSettings.m_TrackClearence / PSCALE );
+             g_DesignSettings.m_TrackClearance / PSCALE,
+             g_DesignSettings.m_TrackClearance / PSCALE,
+             g_DesignSettings.m_TrackClearance / PSCALE );
 
 
     fprintf( outfile, " 0" );                                                       /* via type */

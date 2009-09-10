@@ -18,17 +18,19 @@
 #include "dialog_design_rules.h"
 #include "wx/generic/gridctrl.h"
 
-// Fields Positions on layer grid
-#define LAYERS_GRID_ROUTABLE_POSITION 0
-#define LAYERS_GRID_STATUS_POSITION   1
-#define LAYERS_GRID_NAME_POSITION     2
 
-// Fields Positions on rules grid
-#define RULE_GRID_TRACKSIZE_POSITION    0
-#define RULE_GRID_VIASIZE_POSITION      1
-#define RULE_GRID_CLEARANCE_POSITION    2
-#define RULE_GRID_MINTRACKSIZE_POSITION 3
-#define RULE_GRID_MINVIASIZE_POSITION   4
+// Field Positions on rules grid
+enum {
+    GRID_CLEARANCE,
+    GRID_TRACKSIZE,
+    GRID_VIASIZE,
+    GRID_VIADRILL,
+    GRID_uVIASIZE,
+    GRID_uVIADRILL,
+};
+
+const wxString DIALOG_DESIGN_RULES::wildCard = _("* (Any)");
+
 
 /***********************************************************************************/
 DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( WinEDA_PcbFrame* parent ) :
@@ -36,6 +38,29 @@ DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( WinEDA_PcbFrame* parent ) :
 /***********************************************************************************/
 {
     m_Parent = parent;
+
+    wxListItem  column0;
+    wxListItem  column1;
+
+    column0.Clear();
+    column1.Clear();
+
+    column0.SetImage( -1 );
+    column1.SetImage( -1 );
+
+    column0.SetText( _( "Net" ) );
+    column1.SetText( _( "Class" ) );
+
+    m_leftListCtrl->InsertColumn( 0, column0 );
+    m_leftListCtrl->InsertColumn( 1, column1 );
+    m_leftListCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
+    m_leftListCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
+
+    m_rightListCtrl->InsertColumn( 0, column0 );
+    m_rightListCtrl->InsertColumn( 1, column1 );
+    m_rightListCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
+    m_rightListCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
+
 
     Init();
     SetAutoLayout( true );
@@ -52,105 +77,137 @@ void DIALOG_DESIGN_RULES::Init()
     SetReturnCode( 0 );
 
     // Initialize the layers grid:
-    m_ActivesLayersCount = g_DesignSettings.m_CopperLayerCount;
     m_Pcb = m_Parent->GetBoard();
-
-    m_LayersCountSelection->SetSelection( m_ActivesLayersCount / 2 );
-
-    // Initialize the Routable column
-    SetRoutableLayerStatus();
-
-    // Initialize the Status column (layers attribute)
-    LAYER_T typelist[4] = { LT_SIGNAL, LT_POWER, LT_MIXED, LT_JUMPER };
-    for( int ii = 0; ii < 4; ii++ )
-    {
-        m_LayersType[ii]     = typelist[ii];
-        m_LayersTypeName[ii] = CONV_FROM_UTF8( LAYER::ShowType( typelist[ii] ) );
-    }
-
-    for( int ii = 0; ii <  m_gridLayersProperties->GetNumberRows(); ii++ )
-    {
-        m_gridLayersProperties->SetCellEditor( ii, LAYERS_GRID_STATUS_POSITION,
-                                              new wxGridCellChoiceEditor( WXSIZEOF(
-                                                                              m_LayersTypeName ),
-                                                                          m_LayersTypeName ) );
-        int select = LT_SIGNAL;
-        for( int jj = 0; jj < 4; jj++ )
-        {
-            int layer = LAYER_CMP_N - ii;
-            if( m_Pcb->GetLayerType( layer ) == m_LayersType[jj] )
-            {
-                select = m_LayersType[jj];
-                break;
-            }
-        }
-
-        m_gridLayersProperties->SetCellValue( ii, LAYERS_GRID_STATUS_POSITION,
-                                              m_LayersTypeName[select] );
-        m_gridLayersProperties->SetCellOverflow( ii, LAYERS_GRID_STATUS_POSITION, false );
-    }
-
-    // Initialize the Name column
-    for( int ii = 0; ii <  m_gridLayersProperties->GetNumberRows(); ii++ )
-    {
-        wxString layer_name = m_Pcb->GetLayerName( LAYER_CMP_N - ii );
-        m_gridLayersProperties->SetCellValue( ii, LAYERS_GRID_NAME_POSITION, layer_name );
-    }
 
     // Initialize the Rules List
     InitRulesList();
 
-    /* Initialize the list of nets buffers
-     *  (note the netcode 0 is not a real net, so it is not loaded)
-     */
-    for( unsigned ii = 1; ; ii++ )
+    // copy all NETs into m_AllNets by adding them as NETCUPs.
+
+    NETCLASS*   netclass;
+
+    NETCLASSES& netclasses = m_Pcb->m_NetClasses;
+
+    netclass = netclasses.GetDefault();
+
+    for( NETCLASS::const_iterator name = netclass->begin();  name != netclass->end();  ++name )
     {
-        NETINFO_ITEM* net = m_Pcb->FindNet( ii );
-        if( net == NULL )
-            break;
-        m_StockNets.push_back( net );
+        m_AllNets.push_back( NETCUP( *name, netclass->GetName() ) );
+    }
 
-        // search the index in rules list for this net
-        int rules_idx = 0;
-        for( int jj = 0; jj < m_gridNetClassesProperties->GetNumberRows(); jj++ )
+    for( NETCLASSES::const_iterator nc = netclasses.begin();  nc != netclasses.end();  ++nc )
+    {
+        netclass = nc->second;
+
+        for( NETCLASS::const_iterator name = netclass->begin();  name != netclass->end();  ++name )
         {
-            if( m_gridNetClassesProperties->GetRowLabelValue( jj ).CmpNoCase( net->GetClassName() )
-                == 0 )
-            {
-                rules_idx = jj;
-                break;
-            }
+            m_AllNets.push_back( NETCUP( *name, netclass->GetName() ) );
         }
-
-        m_NetsLinkToClasses.push_back( rules_idx ); // All nets are set to default net class
     }
 
     InitializeRulesSelectionBoxes();
 }
 
-
-/** Function FillListBoxWithNetsNames
- * populates the aListBox with net names members of the aNetclassIndex net class
- * the "Client Data pointer" is used to store the index of nets in ne nets lists
- */
-void DIALOG_DESIGN_RULES::FillListBoxWithNetsNames( wxListBox* aListBox, int aNetclassIndex )
+// Sort comparison function
+static bool sortByClassThenName( NETCUP* a, NETCUP* b )
 {
-    aListBox->Clear();
-    unsigned idx = 0;
-    for( unsigned ii = 0; ii < m_StockNets.size(); ii++ )
-    {
-        if( aNetclassIndex == m_NetsLinkToClasses[ii] )
-        {
-            aListBox->Append( m_StockNets[ii]->GetNetname() );
+    // return a < b
 
-            // Store the index of this net
-            // This is a trick to get an unsigned integer index from a pointer value.
-            // Some compilers cannot accept to convert an unsigned to a pointer  without complains
-            char * ptr = (char*)0 + ii;
-            aListBox->SetClientData( idx, ptr );
-            idx++;
+    if( a->clazz < b->clazz )
+        return true;
+
+    if( a->net < a->net )
+        return true;
+
+    return false;
+}
+
+void DIALOG_DESIGN_RULES::makePointers( PNETCUPS* aList, const wxString& aNetClassName )
+{
+    aList->clear();
+
+    if( wildCard == aNetClassName )
+    {
+        for( NETCUPS::iterator n = m_AllNets.begin();  n != m_AllNets.end();  ++n )
+        {
+            aList->push_back( &*n );
         }
+
+        sort( aList->begin(), aList->end(), sortByClassThenName );
+
+        // could use a different sort order for wildCard case.
     }
+    else
+    {
+        for( NETCUPS::iterator n = m_AllNets.begin();  n != m_AllNets.end();  ++n )
+        {
+            if( n->clazz == aNetClassName )
+                aList->push_back( &*n );
+        }
+
+        sort( aList->begin(), aList->end(), sortByClassThenName );
+    }
+}
+
+
+void DIALOG_DESIGN_RULES::setRowItem( wxListCtrl* aListCtrl, int aRow, NETCUP* aNetAndClass )
+{
+    wxASSERT( aRow >= 0 );
+
+    // insert blanks if aRow is larger than existing count
+    while( aRow >= aListCtrl->GetItemCount() )
+    {
+        long ndx = aListCtrl->InsertItem( aListCtrl->GetItemCount(), wxEmptyString );
+
+        wxASSERT( ndx >= 0 );
+
+        aListCtrl->SetItem( ndx, 1, wxEmptyString );
+    }
+
+    aListCtrl->SetItem( aRow, 0, aNetAndClass->net   );
+    aListCtrl->SetItem( aRow, 1, aNetAndClass->clazz );
+
+    // recompute the column widths here, after setting texts
+    aListCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
+    aListCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
+}
+
+
+/**
+ * Function FillListBoxWithNetNames
+ * populates aListCtrl with net names members of the aNetclassIndex net class
+ * the "Client Data pointer" is used to store the index of nets in the net lists
+ */
+void DIALOG_DESIGN_RULES::FillListBoxWithNetNames( wxListCtrl* aListCtrl, const wxString& aNetClass )
+{
+    aListCtrl->ClearAll();
+
+#if 1
+    PNETCUPS    ptrList;
+
+    makePointers( &ptrList, aNetClass );
+
+#if defined(DEBUG)
+    int r = 0;
+    for( PNETCUPS::iterator i = ptrList.begin();  i!=ptrList.end();  ++i, ++r )
+    {
+        printf("[%d]: %s  %s\n", r, CONV_TO_UTF8( (*i)->net ), CONV_TO_UTF8( (*i)->clazz ) );
+    }
+#endif
+
+    // to speed up inserting we hide the control temporarily
+    aListCtrl->Hide();
+
+    int row = 0;
+    for( PNETCUPS::iterator i = ptrList.begin();  i!=ptrList.end();  ++i, ++row )
+    {
+        setRowItem( aListCtrl, row, *i );
+    }
+
+    aListCtrl->Show();
+
+#endif
+
 }
 
 
@@ -158,91 +215,91 @@ void DIALOG_DESIGN_RULES::FillListBoxWithNetsNames( wxListBox* aListBox, int aNe
  */
 void DIALOG_DESIGN_RULES::InitializeRulesSelectionBoxes()
 {
-    m_CBoxRightSelection->Clear();
-    m_CBoxLeftSelection->Clear();
-    for( int ii = 0; ii < m_gridNetClassesProperties->GetNumberRows(); ii++ )
+    m_rightClassChoice->Clear();
+    m_leftClassChoice->Clear();
+
+    m_rightClassChoice->Append( wildCard );
+    m_leftClassChoice->Append( wildCard );
+
+    for( int ii = 0; ii < m_grid->GetNumberRows(); ii++ )
     {
-        m_CBoxRightSelection->Append( m_gridNetClassesProperties->GetRowLabelValue( ii ) );
-        m_CBoxLeftSelection->Append( m_gridNetClassesProperties->GetRowLabelValue( ii ) );
+        m_rightClassChoice->Append( m_grid->GetRowLabelValue( ii ) );
+        m_leftClassChoice->Append( m_grid->GetRowLabelValue( ii ) );
     }
 
-    m_CBoxRightSelection->Select( 0 );
-    m_CBoxLeftSelection->Select( 0 );
+    m_rightClassChoice->Select( 0 );
+    m_leftClassChoice->Select( 0 );
+
     m_buttonRightToLeft->Enable( false );
     m_buttonLeftToRight->Enable( false );;
-    FillListBoxWithNetsNames( m_listBoxLeftNetSelect, m_CBoxLeftSelection->GetCurrentSelection() );
-    FillListBoxWithNetsNames( m_listBoxRightNetSelect, m_CBoxRightSelection->GetCurrentSelection() );
-}
 
-
-/* Initialize the Routable column, and the R/W property of some cells
- */
-void DIALOG_DESIGN_RULES::SetRoutableLayerStatus()
-{
-    m_gridLayersProperties->SetColFormatBool( LAYERS_GRID_ROUTABLE_POSITION );
-    for( int ii = 0; ii <  m_gridLayersProperties->GetNumberRows(); ii++ )
-    {
-        int      layer = LAYER_CMP_N - ii;
-        wxString value = layer < (m_ActivesLayersCount - 1) ? wxT( "1" ) : wxT( "0" );
-        if( m_ActivesLayersCount > 1 && layer == LAYER_CMP_N )
-            value = wxT( "1" );
-        if(  layer == COPPER_LAYER_N )
-            value = wxT( "1" );
-        m_gridLayersProperties->SetCellValue( ii, LAYERS_GRID_ROUTABLE_POSITION, value );
-        m_gridLayersProperties->SetReadOnly( ii, LAYERS_GRID_ROUTABLE_POSITION );
-
-        // Set to Read Only cell for non existing copper layers:
-        m_gridLayersProperties->SetReadOnly( ii, LAYERS_GRID_STATUS_POSITION, value != wxT( "1" ) );
-        m_gridLayersProperties->SetReadOnly( ii, LAYERS_GRID_NAME_POSITION, value != wxT( "1" ) );
-    }
+    FillListBoxWithNetNames( m_leftListCtrl, m_leftClassChoice->GetStringSelection() );
+    FillListBoxWithNetNames( m_rightListCtrl, m_rightClassChoice->GetStringSelection() );
 }
 
 
 /* Initialize the rules list from board
  */
+
+static void class2gridRow( wxGrid* grid, int row, NETCLASS* nc, int units )
+{
+    wxString msg;
+
+    // label is netclass name
+    grid->SetRowLabelValue( row, nc->GetName() );
+
+    msg = ReturnStringFromValue( g_UnitMetric, nc->GetClearance(), units );
+    grid->SetCellValue( row, GRID_CLEARANCE, msg );
+
+    msg = ReturnStringFromValue( g_UnitMetric, nc->GetTrackWidth(), units );
+    grid->SetCellValue( row, GRID_TRACKSIZE, msg );
+
+    msg = ReturnStringFromValue( g_UnitMetric, nc->GetViaDiameter(), units );
+    grid->SetCellValue( row, GRID_VIASIZE, msg );
+
+    msg = ReturnStringFromValue( g_UnitMetric, nc->GetViaDrill(), units );
+    grid->SetCellValue( row, GRID_VIADRILL, msg );
+
+    msg = ReturnStringFromValue( g_UnitMetric, nc->GetuViaDiameter(), units );
+    grid->SetCellValue( row, GRID_uVIASIZE, msg );
+
+    msg = ReturnStringFromValue( g_UnitMetric, nc->GetuViaDrill(), units );
+    grid->SetCellValue( row, GRID_uVIADRILL, msg );
+}
+
 void DIALOG_DESIGN_RULES::InitRulesList()
 {
     NETCLASSES& netclasses = m_Pcb->m_NetClasses;
 
-    int ii = 0;
-    for( NETCLASSES::iterator i=netclasses.begin();  i!=netclasses.end();  ++i, ++ii )
+    // the +1 is for the Default NETCLASS.
+    if( netclasses.GetCount()+1 > (unsigned) m_grid->GetNumberRows() )
+    {
+        m_grid->AppendRows( netclasses.GetCount()+1 - m_grid->GetNumberRows() );
+    }
+
+    class2gridRow( m_grid, 0, netclasses.GetDefault(), m_Parent->m_InternalUnits );
+
+    int row = 1;
+    for( NETCLASSES::iterator i=netclasses.begin();  i!=netclasses.end();  ++i, ++row )
     {
         NETCLASS* netclass = i->second;
 
-        // Creates one entry if needed
-        if( ii >= m_gridNetClassesProperties->GetNumberRows() )
-            m_gridNetClassesProperties->AppendRows();
-
-        // Init name
-        m_gridNetClassesProperties->SetRowLabelValue( ii, netclass->GetName() );
-
-        // Init data
-        wxString msg;
-        msg = ReturnStringFromValue( g_UnitMetric,
-                                     netclass->GetTrackWidth(),
-                                     m_Parent->m_InternalUnits, false );
-        m_gridNetClassesProperties->SetCellValue( ii, RULE_GRID_TRACKSIZE_POSITION, msg );
-
-        msg = ReturnStringFromValue( g_UnitMetric,
-                                     netclass->GetViaSize(),
-                                     m_Parent->m_InternalUnits, false );
-        m_gridNetClassesProperties->SetCellValue( ii, RULE_GRID_VIASIZE_POSITION, msg );
-
-        msg = ReturnStringFromValue( g_UnitMetric,
-                                     netclass->GetClearance(),
-                                     m_Parent->m_InternalUnits, false );
-        m_gridNetClassesProperties->SetCellValue( ii, RULE_GRID_CLEARANCE_POSITION, msg );
-
-        msg = ReturnStringFromValue( g_UnitMetric,
-                                     netclass->GetTrackMinWidth(),
-                                     m_Parent->m_InternalUnits, false );
-        m_gridNetClassesProperties->SetCellValue( ii, RULE_GRID_MINTRACKSIZE_POSITION, msg );
-
-        msg = ReturnStringFromValue( g_UnitMetric,
-                                     netclass->GetViaMinSize(),
-                                     m_Parent->m_InternalUnits, false );
-        m_gridNetClassesProperties->SetCellValue( ii, RULE_GRID_MINVIASIZE_POSITION, msg );
+        class2gridRow( m_grid, row, netclass, m_Parent->m_InternalUnits );
     }
+}
+
+
+static void gridRow2class( wxGrid* grid, int row, NETCLASS* nc, int units )
+{
+#define MYCELL(col)   \
+    ReturnValueFromString( g_UnitMetric, grid->GetCellValue( row, col ), units )
+
+    nc->SetClearance(    MYCELL( GRID_CLEARANCE ) );
+    nc->SetTrackWidth(   MYCELL( GRID_TRACKSIZE ) );
+    nc->SetViaDiameter(  MYCELL( GRID_VIASIZE ) );
+    nc->SetViaDrill(     MYCELL( GRID_VIADRILL ) );
+    nc->SetuViaDiameter( MYCELL( GRID_uVIASIZE ) );
+    nc->SetuViaDrill(    MYCELL( GRID_uVIADRILL ) );
 }
 
 
@@ -254,50 +311,30 @@ void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
 
     netclasses.Clear();
 
-    for( int ii = 0; ii < m_gridNetClassesProperties->GetNumberRows(); ii++ )
+    // gridRow2class( wxGrid* grid, int row, NETCLASS* nc, int units )
+
+    gridRow2class( m_grid, 0, netclasses.GetDefault(), m_Parent->m_InternalUnits );
+
+    for( int row = 1; row < m_grid->GetNumberRows();  ++row )
     {
-        NETCLASS netclass( m_Pcb, m_gridNetClassesProperties->GetRowLabelValue( ii ) );
+        NETCLASS* nc = new NETCLASS( m_Pcb, m_grid->GetRowLabelValue( row ) );
 
-        // Init data
-        netclass.SetTrackWidth(
-            ReturnValueFromString( g_UnitMetric,
-                                   m_gridNetClassesProperties->GetCellValue( ii,
-                                                                             RULE_GRID_TRACKSIZE_POSITION ),
-                                   m_Parent->m_InternalUnits ));
-
-        netclass.SetViaSize(
-            ReturnValueFromString( g_UnitMetric,
-                                   m_gridNetClassesProperties->GetCellValue( ii,
-                                                                             RULE_GRID_VIASIZE_POSITION ),
-                                   m_Parent->m_InternalUnits ));
-
-        netclass.SetClearance(
-            ReturnValueFromString( g_UnitMetric,
-                                   m_gridNetClassesProperties->GetCellValue( ii,
-                                                                             RULE_GRID_CLEARANCE_POSITION ),
-                                   m_Parent->m_InternalUnits ));
-
-        netclass.SetTrackMinWidth(
-            ReturnValueFromString( g_UnitMetric,
-                                   m_gridNetClassesProperties->GetCellValue( ii,
-                                                                             RULE_GRID_MINTRACKSIZE_POSITION ),
-                                   m_Parent->m_InternalUnits ));
-
-        netclass.SetViaMinSize(
-            ReturnValueFromString( g_UnitMetric,
-                                   m_gridNetClassesProperties->GetCellValue( ii,
-                                                                             RULE_GRID_MINVIASIZE_POSITION ),
-                                   m_Parent->m_InternalUnits ));
-
-        // Copy the list of nets associated to this netclass:
-        for( unsigned idx = 0; idx < m_StockNets.size(); idx++ )
+        if( !m_Pcb->m_NetClasses.Add( nc ) )
         {
-            if( m_NetsLinkToClasses[idx] == ii )
-                netclass.Add( m_StockNets[idx]->GetNetname() );
+            // @todo: put up an error message here.
+
+            delete nc;
+            continue;
         }
 
-        // this calls copy constructor, so all data must be in 'netclass' before Add()ing.
-        m_Pcb->m_NetClasses.Add( netclass );
+        gridRow2class( m_grid, row, nc, m_Parent->m_InternalUnits );
+    }
+
+    for( NETCUPS::const_iterator netcup = m_AllNets.begin();  netcup != m_AllNets.end();  ++netcup )
+    {
+        NETCLASS* nc = netclasses.Find( netcup->clazz );
+        wxASSERT( nc );
+        nc->Add( netcup->net );
     }
 
     m_Pcb->SynchronizeNetsAndNetClasses();
@@ -322,49 +359,9 @@ void DIALOG_DESIGN_RULES::OnOkButtonClick( wxCommandEvent& event )
         return;
     }
 
-    g_DesignSettings.m_CopperLayerCount = m_ActivesLayersCount;
-
-    // Initialize the new layer name
-    for( int ii = 0; ii <  m_gridLayersProperties->GetNumberRows(); ii++ )
-    {
-        wxString layer_name = m_gridLayersProperties->GetCellValue( ii, LAYERS_GRID_NAME_POSITION );
-        if( layer_name != m_Pcb->GetLayerName( LAYER_CMP_N - ii ) )
-        {
-            m_Pcb->SetLayerName( LAYER_CMP_N - ii, layer_name );
-        }
-    }
-
-    // Initialize the layer type
-    for( int ii = 0; ii <  m_gridLayersProperties->GetNumberRows(); ii++ )
-    {
-        wxString txt   = m_gridLayersProperties->GetCellValue( ii, LAYERS_GRID_STATUS_POSITION );
-        int      layer = LAYER_CMP_N - ii;
-        for( int jj = 0; jj < 3; jj++ )
-        {
-            if( m_LayersTypeName[jj] == txt )
-            {
-                m_Pcb->SetLayerType( layer, m_LayersType[jj] );
-                break;
-            }
-        }
-    }
-
     CopyRulesListToBoard();
 
     EndModal( wxID_OK );
-}
-
-
-/**************************************************************************/
-void DIALOG_DESIGN_RULES::OnLayerCountClick( wxCommandEvent& event )
-/**************************************************************************/
-{
-    m_ActivesLayersCount = m_LayersCountSelection->GetSelection() * 2;
-    if( m_ActivesLayersCount <= 0 )
-        m_ActivesLayersCount = 1;
-
-    // Reinit the routable layers status
-    SetRoutableLayerStatus();
 }
 
 
@@ -381,10 +378,10 @@ void DIALOG_DESIGN_RULES::OnAddNetclassClick( wxCommandEvent& event )
         return;
 
     // The name must dot exists:
-    for( int ii = 0; ii < m_gridNetClassesProperties->GetNumberRows(); ii++ )
+    for( int ii = 0; ii < m_grid->GetNumberRows(); ii++ )
     {
         wxString value;
-        value = m_gridNetClassesProperties->GetRowLabelValue( ii );
+        value = m_grid->GetRowLabelValue( ii );
         if( class_name.CmpNoCase( value ) == 0 )       // Already exists!
         {
             DisplayError( this, _( "This NetClass is already existing, cannot add it; Aborted" ) );
@@ -392,18 +389,18 @@ void DIALOG_DESIGN_RULES::OnAddNetclassClick( wxCommandEvent& event )
         }
     }
 
-    m_gridNetClassesProperties->AppendRows();
-    m_gridNetClassesProperties->SetRowLabelValue(
-        m_gridNetClassesProperties->GetNumberRows() - 1,
+    m_grid->AppendRows();
+    m_grid->SetRowLabelValue(
+        m_grid->GetNumberRows() - 1,
         class_name );
 
     // Copy values of the previous class:
-    int irow = m_gridNetClassesProperties->GetNumberRows() - 1;
-    for( int icol = 0; icol < m_gridNetClassesProperties->GetNumberCols(); icol++ )
+    int irow = m_grid->GetNumberRows() - 1;
+    for( int icol = 0; icol < m_grid->GetNumberCols(); icol++ )
     {
         wxString value;
-        value = m_gridNetClassesProperties->GetCellValue( irow - 1, icol );
-        m_gridNetClassesProperties->SetCellValue( irow, icol, value );
+        value = m_grid->GetCellValue( irow - 1, icol );
+        m_grid->SetCellValue( irow, icol, value );
     }
 
     InitializeRulesSelectionBoxes();
@@ -414,19 +411,18 @@ void DIALOG_DESIGN_RULES::OnAddNetclassClick( wxCommandEvent& event )
 void DIALOG_DESIGN_RULES::OnRemoveNetclassClick( wxCommandEvent& event )
 /**************************************************************************/
 {
-    wxArrayInt select = m_gridNetClassesProperties->GetSelectedRows();
+    wxArrayInt select = m_grid->GetSelectedRows();
 
     for( int ii = select.GetCount() - 1; ii >= 0; ii-- )
     {
         if( select[ii] != 0 )   // Do not remove the default class
         {
-            m_gridNetClassesProperties->DeleteRows( select[ii] );
+            wxString classname = m_grid->GetRowLabelValue( ii );
 
-            // reset the net class to default for nets member of the removed net class
-            for( unsigned jj = 0; jj< m_NetsLinkToClasses.size(); jj++ )
-                if( m_NetsLinkToClasses[jj] == ii )
-                    m_NetsLinkToClasses[jj] = 0;    // Reset to default net class
+            m_grid->DeleteRows( select[ii] );
 
+            // reset the net class to default for members of the removed class
+            swapNetClass( classname, NETCLASS::Default );
         }
     }
 
@@ -439,8 +435,8 @@ void DIALOG_DESIGN_RULES::OnRemoveNetclassClick( wxCommandEvent& event )
  */
 void DIALOG_DESIGN_RULES::OnLeftCBSelection( wxCommandEvent& event )
 {
-    FillListBoxWithNetsNames( m_listBoxLeftNetSelect, m_CBoxLeftSelection->GetCurrentSelection() );
-    if( m_CBoxLeftSelection->GetCurrentSelection() ==  m_CBoxRightSelection->GetCurrentSelection() )
+    FillListBoxWithNetNames( m_leftListCtrl, m_leftClassChoice->GetStringSelection() );
+    if( m_leftClassChoice->GetStringSelection() ==  m_rightClassChoice->GetStringSelection() )
     {
         m_buttonRightToLeft->Enable( false );
         m_buttonLeftToRight->Enable( false );
@@ -458,8 +454,8 @@ void DIALOG_DESIGN_RULES::OnLeftCBSelection( wxCommandEvent& event )
  */
 void DIALOG_DESIGN_RULES::OnRightCBSelection( wxCommandEvent& event )
 {
-    FillListBoxWithNetsNames( m_listBoxRightNetSelect, m_CBoxRightSelection->GetCurrentSelection() );
-    if( m_CBoxLeftSelection->GetCurrentSelection() ==  m_CBoxRightSelection->GetCurrentSelection() )
+    FillListBoxWithNetNames( m_rightListCtrl, m_rightClassChoice->GetStringSelection() );
+    if( m_leftClassChoice->GetStringSelection() ==  m_rightClassChoice->GetStringSelection() )
     {
         m_buttonRightToLeft->Enable( false );
         m_buttonLeftToRight->Enable( false );;
@@ -478,24 +474,27 @@ void DIALOG_DESIGN_RULES::OnRightCBSelection( wxCommandEvent& event )
 
 void DIALOG_DESIGN_RULES::OnRightToLeftCopyButton( wxCommandEvent& event )
 {
-    int idx_class = m_CBoxLeftSelection->GetCurrentSelection();
+    wxString oldClassName = m_leftClassChoice->GetStringSelection();
+    wxString newClassName = m_rightClassChoice->GetStringSelection();
 
-    if( idx_class == wxNOT_FOUND )
-        return;
-    for( unsigned ii = 0; ii < m_listBoxRightNetSelect->GetCount(); ii++ )
+    wxASSERT( oldClassName != wxEmptyString );
+    wxASSERT( newClassName != wxEmptyString );
+
+    for( int row = 0;  row < m_rightListCtrl->GetItemCount();  ++row )
     {
-        if( !m_listBoxRightNetSelect->IsSelected( ii ) )
+        if( !m_rightListCtrl->GetItemState( row, wxLIST_STATE_SELECTED ) )
             continue;
 
-        // This is a trick to get an unsigned integer index from a pointer value.
-        // Some compilers cannot accept to convert a pointer to an unsigned without complains
-        char * ptr = (char*) m_listBoxRightNetSelect->GetClientData( ii );
-        unsigned idx = ptr - (char*)0;
-        m_NetsLinkToClasses[idx] = idx_class;
+/*
+        @todo: get the netName, call setNetClass()
+        wxString netName = m_rightListCtrl->OnGetItemText( row, 0 );
+
+        setNetClass( netName, newClassName == wildCard ? NETCLASS::Default : newClassName );
+*/
     }
 
-    FillListBoxWithNetsNames( m_listBoxLeftNetSelect, m_CBoxLeftSelection->GetCurrentSelection() );
-    FillListBoxWithNetsNames( m_listBoxRightNetSelect, m_CBoxRightSelection->GetCurrentSelection() );
+    FillListBoxWithNetNames( m_leftListCtrl, m_leftClassChoice->GetStringSelection() );
+    FillListBoxWithNetNames( m_rightListCtrl, m_rightClassChoice->GetStringSelection() );
 }
 
 
@@ -504,24 +503,10 @@ void DIALOG_DESIGN_RULES::OnRightToLeftCopyButton( wxCommandEvent& event )
  */
 void DIALOG_DESIGN_RULES::OnLeftToRightCopyButton( wxCommandEvent& event )
 {
-    int idx_class = m_CBoxRightSelection->GetCurrentSelection();
+    // @todo factor code from above, or combine the two functions.
 
-    if( idx_class == wxNOT_FOUND )
-        return;
-    for( unsigned ii = 0; ii < m_listBoxLeftNetSelect->GetCount(); ii++ )
-    {
-        if( !m_listBoxLeftNetSelect->IsSelected( ii ) )
-            continue;
-
-        // This is a trick to get an unsigned integer index from a pointer value.
-        // Some compilers cannot accept to convert a pointer to an unsigned without complains
-        char * ptr = (char*) m_listBoxLeftNetSelect->GetClientData( ii );
-        unsigned idx = ptr - (char*)0 ;
-        m_NetsLinkToClasses[idx] = idx_class;
-    }
-
-    FillListBoxWithNetsNames( m_listBoxLeftNetSelect, m_CBoxLeftSelection->GetCurrentSelection() );
-    FillListBoxWithNetsNames( m_listBoxRightNetSelect, m_CBoxRightSelection->GetCurrentSelection() );
+    FillListBoxWithNetNames( m_leftListCtrl, m_leftClassChoice->GetStringSelection() );
+    FillListBoxWithNetNames( m_rightListCtrl, m_rightClassChoice->GetStringSelection() );
 }
 
 
@@ -530,8 +515,8 @@ void DIALOG_DESIGN_RULES::OnLeftToRightCopyButton( wxCommandEvent& event )
  */
 void DIALOG_DESIGN_RULES::OnLeftSelectAllButton( wxCommandEvent& event )
 {
-    for( unsigned ii = 0; ii < m_listBoxLeftNetSelect->GetCount(); ii++ )
-        m_listBoxLeftNetSelect->SetSelection( ii );
+    for( int ii = 0; ii < m_leftListCtrl->GetItemCount(); ii++ )
+        m_leftListCtrl->SetItemState( ii, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
 }
 
 
@@ -540,8 +525,21 @@ void DIALOG_DESIGN_RULES::OnLeftSelectAllButton( wxCommandEvent& event )
  */
 void DIALOG_DESIGN_RULES::OnRightSelectAllButton( wxCommandEvent& event )
 {
-    for( unsigned ii = 0; ii < m_listBoxRightNetSelect->GetCount(); ii++ )
-        m_listBoxRightNetSelect->SetSelection( ii );
+    for( int ii = 0; ii < m_rightListCtrl->GetItemCount(); ii++ )
+        m_rightListCtrl->SetItemState( ii, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+}
+
+
+void DIALOG_DESIGN_RULES::setNetClass( const wxString& aNetName, const wxString& aClassName )
+{
+    for( NETCUPS::iterator i = m_AllNets.begin();  i != m_AllNets.end();  ++i )
+    {
+        if( i->net == aNetName )
+        {
+            i->clazz = aClassName;
+            break;
+        }
+    }
 }
 
 
@@ -552,63 +550,32 @@ void DIALOG_DESIGN_RULES::OnRightSelectAllButton( wxCommandEvent& event )
  */
 bool DIALOG_DESIGN_RULES::TestDataValidity()
 {
-    bool success = true;
-    m_MessagesList->SetPage(wxEmptyString); // Clear message list
+    bool result = true;
 
-    //  Test duplicate layers names
-    for( int ii = 0; ii < m_gridLayersProperties->GetNumberRows() - 1; ii++ )
+    m_MessagesList->SetPage(wxEmptyString);     // Clear message list
+
+    wxString    msg;
+
+    for( int row = 0; row < m_grid->GetNumberRows(); row++ )
     {
-        wxString value = m_gridLayersProperties->GetCellValue( ii, LAYERS_GRID_NAME_POSITION );
-        for( int jj = ii+1; jj < m_gridLayersProperties->GetNumberRows(); jj++ )
+        int viadia = ReturnValueFromString( g_UnitMetric,
+                                       m_grid->GetCellValue(
+                                           row, GRID_VIASIZE ),
+                                       m_Parent->m_InternalUnits );
+
+        int viadrill = ReturnValueFromString( g_UnitMetric,
+                                          m_grid->GetCellValue(
+                                          row, GRID_VIADRILL ),
+                                          m_Parent->m_InternalUnits );
+        if( viadrill && viadrill >= viadia )
         {
-            wxString othervalue = m_gridLayersProperties->GetCellValue( ii,
-                                                                        LAYERS_GRID_NAME_POSITION );
-            othervalue = m_gridLayersProperties->GetCellValue( jj, LAYERS_GRID_NAME_POSITION );
-            if( value.CmpNoCase( othervalue ) == 0 )   // Already exists!
-            {
-                wxString text;
-                text.Printf( _(
-                                "<small>This layer name <b>%s</b> is already existing<br>" ),
-                            value.GetData() );
-                m_MessagesList->AppendToPage( text );
-                success = false;
-            }
+            result = false;
+            msg.Printf( _( "%s: <b>Via Drill</b> &ge; <b>Via Dia</b><br>" ),
+                GetChars( m_grid->GetRowLabelValue(row)) );
+
+            m_MessagesList->AppendToPage( msg );
         }
     }
 
-    int value;
-    int minvalue;
-
-    for( int ii = 0; ii < m_gridNetClassesProperties->GetNumberRows(); ii++ )
-    {
-        value = ReturnValueFromString( g_UnitMetric,
-                                       m_gridNetClassesProperties->GetCellValue(
-                                           ii, RULE_GRID_TRACKSIZE_POSITION ),
-                                       m_Parent->m_InternalUnits );
-        minvalue = ReturnValueFromString( g_UnitMetric,
-                                          m_gridNetClassesProperties->GetCellValue( ii,
-                                                                                    RULE_GRID_MINTRACKSIZE_POSITION ),
-                                          m_Parent->m_InternalUnits );
-        if( value < minvalue )
-        {
-            success = false;
-            m_MessagesList->AppendToPage( _( "The <b>track</b> minimum size is bigger than the size<br>" ) );
-        }
-
-        value = ReturnValueFromString( g_UnitMetric,
-                                       m_gridNetClassesProperties->GetCellValue(
-                                           ii, RULE_GRID_VIASIZE_POSITION ),
-                                       m_Parent->m_InternalUnits );
-        minvalue = ReturnValueFromString( g_UnitMetric,
-                                          m_gridNetClassesProperties->GetCellValue( ii,
-                                                                                    RULE_GRID_MINVIASIZE_POSITION ),
-                                          m_Parent->m_InternalUnits );
-        if( value < minvalue )
-        {
-            success = false;
-            m_MessagesList->AppendToPage( _( "The <b>via</b> minimum size is bigger than the size<br>" ) );
-        }
-    }
-
-    return success;
+    return result;
 }

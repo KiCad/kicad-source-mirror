@@ -285,7 +285,8 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( FILE* File, int* LineNum )
 int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
 /*************************************************************/
 {
-    char Line[1024], * data;
+    char    Line[1024];
+    char*   data;
 
     while(  GetLine( File, Line, LineNum ) != NULL )
     {
@@ -294,6 +295,17 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
 
         if( stricmp( Line, "$EndSETUP" ) == 0 )
         {
+            // Until such time as the *.brd file does not have the global parameters:
+            // "TrackWidth", "TrackMinWidth", "ViaSize", "ViaDrill", "ViaMinSize", and "TrackClearence",
+            // put those same global values into the default NETCLASS until later board load
+            // code should override them.  *.brd files which have been saved with knowledge of
+            // NETCLASSes will override these defaults, old boards will not.
+            // @todo: I expect that at some point we can remove said global
+            // parameters from the *.brd file since the ones in the default
+            // netclass serve the same purpose.  If needed at all, the global defaults should go into
+            // a preferences file instead so they are there to start new board projects.
+            GetBoard()->m_NetClasses.GetDefault()->SetParams();
+
             return 0;
         }
 
@@ -358,7 +370,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
 
         if( stricmp( Line, "TrackClearence" ) == 0 )
         {
-            g_DesignSettings.m_TrackClearence = atoi( data );
+            g_DesignSettings.m_TrackClearance = atoi( data );
             continue;
         }
 
@@ -367,12 +379,13 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             g_DesignSettings.m_TrackMinWidth = atoi( data );
             continue;
         }
+
         if( stricmp( Line, "TrackClearenceHistory" ) == 0 )
-                {
-                    int tmp = atoi( data );
-                    AddHistory( tmp, TYPE_CLEARANCE );
-                    continue;
-                }
+        {
+            int tmp = atoi( data );
+            AddHistory( tmp, TYPE_CLEARANCE );
+            continue;
+        }
 
         if( stricmp( Line, "ZoneClearence" ) == 0 )
         {
@@ -385,7 +398,6 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             g_GridRoutingSize = atoi( data );
             continue;
         }
-
 
         if( stricmp( Line, "DrawSegmWidth" ) == 0 )
         {
@@ -548,13 +560,13 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
     }
 
 
-    fprintf( aFile, "TrackClearence %d\n", g_DesignSettings.m_TrackClearence );
+    fprintf( aFile, "TrackClearence %d\n", g_DesignSettings.m_TrackClearance );
     for( int ii = 0; ii < HISTORY_NUMBER; ii++ )
         {
-            if( g_DesignSettings.m_TrackClearenceHistory[ii] == 0 )
+            if( g_DesignSettings.m_TrackClearanceHistory[ii] == 0 )
                 break;
             fprintf( aFile, "TrackClearenceHistory %d\n",
-                     g_DesignSettings.m_TrackClearenceHistory[ii] );
+                     g_DesignSettings.m_TrackClearanceHistory[ii] );
         }
     fprintf( aFile, "ZoneClearence %d\n", g_Zone_Default_Setting.m_ZoneClearance );
     fprintf( aFile, "TrackMinWidth %d\n" , g_DesignSettings.m_TrackMinWidth );
@@ -796,67 +808,15 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
     board->m_Status_Pcb = 0;
     board->m_NetClasses.Clear();
 
+    // Put a dollar sign in front, and test for a specific length of characters
+    // The -1 is to omit the trailing \0 which is included in sizeof() on a string.
+#define TESTLINE(x) (strncmp(Line, "$" x, sizeof("$" x)-1) == 0)
+
     while( GetLine( File, Line, &LineNum ) != NULL )
     {
-        if( strnicmp( Line, "$EndPCB", 6 ) == 0 )
-            break;
+        // put the more frequent ones at the top
 
-        if( strnicmp( Line, "$GENERAL", 8 ) == 0 )
-        {
-            ReadGeneralDescrPcb( File, &LineNum );
-            continue;
-        }
-
-        if( strnicmp( Line, "$SHEETDESCR", 11 ) == 0 )
-        {
-            ReadSheetDescr( GetScreen(), File, &LineNum );
-            continue;
-        }
-
-        if( strnicmp( Line, "$SETUP", 6 ) == 0 )
-        {
-            if( !Append )
-            {
-                ReadSetup( File, &LineNum );
-            }
-            else
-            {
-                while( GetLine( File, Line, &LineNum ) != NULL )
-                    if( strnicmp( Line, "$EndSETUP", 6 ) == 0 )
-                        break;
-            }
-            continue;
-        }
-
-        if( strnicmp( Line, "$EQUIPOT", 7 ) == 0 )
-        {
-            NETINFO_ITEM* net = new NETINFO_ITEM( board );
-            board->m_NetInfo->AppendNet( net );
-            net->ReadDescr( File, &LineNum );
-            continue;
-        }
-
-        if( strnicmp( Line, "$NETCLASS", 8 ) == 0 )
-        {
-            NETCLASS netclass( board, wxEmptyString );
-
-            netclass.ReadDescr( File, &LineNum );
-
-            board->m_NetClasses.Add( netclass );
-            continue;
-        }
-
-        if( strnicmp( Line, "$CZONE_OUTLINE", 7 ) == 0 )
-        {
-            ZONE_CONTAINER * zone_descr = new ZONE_CONTAINER(board);
-            zone_descr->ReadDescr( File, &LineNum );
-            if ( zone_descr->GetNumCorners( ) > 2 )     // should always occur
-                board->Add(zone_descr);
-            else delete zone_descr;
-            continue;
-        }
-
-        if( strnicmp( Line, "$MODULE", 7 ) == 0 )
+        if( TESTLINE( "MODULE" ) )
         {
             MODULE* Module = new MODULE( board );
 
@@ -868,15 +828,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
             continue;
         }
 
-        if( strnicmp( Line, "$TEXTPCB", 8 ) == 0 )
-        {
-            TEXTE_PCB* pcbtxt = new TEXTE_PCB( board );
-            board->Add( pcbtxt, ADD_APPEND );
-            pcbtxt->ReadTextePcbDescr( File, &LineNum );
-            continue;
-        }
-
-        if( strnicmp( Line, "$DRAWSEGMENT", 10 ) == 0 )
+        if( TESTLINE( "DRAWSEGMENT" ) )
         {
             DRAWSEGMENT* DrawSegm = new DRAWSEGMENT( board );
             board->Add( DrawSegm, ADD_APPEND );
@@ -884,23 +836,23 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
             continue;
         }
 
-        if( strnicmp( Line, "$COTATION", 9 ) == 0 )
+        if( TESTLINE( "EQUIPOT" ) )
         {
-            COTATION* Cotation = new COTATION( board );
-            board->Add( Cotation, ADD_APPEND );
-            Cotation->ReadCotationDescr( File, &LineNum );
+            NETINFO_ITEM* net = new NETINFO_ITEM( board );
+            board->m_NetInfo->AppendNet( net );
+            net->ReadDescr( File, &LineNum );
             continue;
         }
 
-        if( strnicmp( Line, "$MIREPCB", 8 ) == 0 )
+        if( TESTLINE( "TEXTPCB" ) )
         {
-            MIREPCB* Mire = new MIREPCB( board );
-            board->Add( Mire, ADD_APPEND );
-            Mire->ReadMirePcbDescr( File, &LineNum );
+            TEXTE_PCB* pcbtxt = new TEXTE_PCB( board );
+            board->Add( pcbtxt, ADD_APPEND );
+            pcbtxt->ReadTextePcbDescr( File, &LineNum );
             continue;
         }
 
-        if( strnicmp( Line, "$TRACK", 6 ) == 0 )
+        if( TESTLINE( "TRACK" ) )
         {
 #ifdef PCBNEW
             TRACK* insertBeforeMe = Append ? NULL : board->m_Track.GetFirst();
@@ -910,7 +862,54 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
             continue;
         }
 
-        if( strnicmp( Line, "$ZONE", 5 ) == 0 )
+        if( TESTLINE( BRD_NETCLASS ) )
+        {
+            // create an empty NETCLASS without a name.
+            NETCLASS* netclass = new NETCLASS( board, wxEmptyString );
+
+            // fill it from the *.brd file, and establish its name.
+            netclass->ReadDescr( File, &LineNum );
+
+            if( !board->m_NetClasses.Add( netclass ) )
+            {
+                // Must have been a name conflict, this is a bad board file.
+                // User may have done a hand edit to the file.
+                // Delete netclass if board could not take ownership of it.
+                delete netclass;
+
+                // @todo: throw an exception here, this is a bad board file.
+            }
+
+            continue;
+        }
+
+        if( TESTLINE( "CZONE_OUTLINE" ) )
+        {
+            ZONE_CONTAINER * zone_descr = new ZONE_CONTAINER(board);
+            zone_descr->ReadDescr( File, &LineNum );
+            if ( zone_descr->GetNumCorners( ) > 2 )     // should always occur
+                board->Add(zone_descr);
+            else delete zone_descr;
+            continue;
+        }
+
+        if( TESTLINE( "COTATION" ) )
+        {
+            COTATION* Cotation = new COTATION( board );
+            board->Add( Cotation, ADD_APPEND );
+            Cotation->ReadCotationDescr( File, &LineNum );
+            continue;
+        }
+
+        if( TESTLINE( "MIREPCB" ) )
+        {
+            MIREPCB* Mire = new MIREPCB( board );
+            board->Add( Mire, ADD_APPEND );
+            Mire->ReadMirePcbDescr( File, &LineNum );
+            continue;
+        }
+
+        if( TESTLINE( "ZONE" ) )
         {
 #ifdef PCBNEW
             SEGZONE* insertBeforeMe = Append ? NULL : board->m_Zone.GetFirst();
@@ -920,6 +919,36 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 #endif
             continue;
         }
+
+        if( TESTLINE( "GENERAL" ) )
+        {
+            ReadGeneralDescrPcb( File, &LineNum );
+            continue;
+        }
+
+        if( TESTLINE( "SHEETDESCR" ) )
+        {
+            ReadSheetDescr( GetScreen(), File, &LineNum );
+            continue;
+        }
+
+        if( TESTLINE( "SETUP" ) )
+        {
+            if( !Append )
+            {
+                ReadSetup( File, &LineNum );
+            }
+            else
+            {
+                while( GetLine( File, Line, &LineNum ) != NULL )
+                    if( TESTLINE( "EndSETUP" ) )
+                        break;
+            }
+            continue;
+        }
+
+        if( TESTLINE( "EndPCB" ) )
+            break;
     }
 
     SetLocaleTo_Default( );      // revert to the current  locale

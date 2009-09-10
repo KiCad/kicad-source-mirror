@@ -70,7 +70,7 @@ void DIALOG_TRACKS_OPTIONS::SetDisplayValue()
                           g_DesignSettings.m_ViaDrillCustomValue,
                           Internal_Unit );
     PutValueInLocalUnits( *m_OptTrackWidth, g_DesignSettings.m_CurrentTrackWidth, Internal_Unit );
-    PutValueInLocalUnits( *m_OptTrackClearance, g_DesignSettings.m_TrackClearence, Internal_Unit );
+    PutValueInLocalUnits( *m_OptTrackClearance, g_DesignSettings.m_TrackClearance, Internal_Unit );
     PutValueInLocalUnits( *m_OptMaskMargin, g_DesignSettings.m_MaskMargin, Internal_Unit );
     if( g_DesignSettings.m_CurrentViaType != VIA_THROUGH )
         m_OptViaType->SetSelection( 1 );
@@ -109,7 +109,7 @@ void DIALOG_TRACKS_OPTIONS::OnButtonOkClick( wxCommandEvent& event )
 
     g_DesignSettings.m_CurrentTrackWidth =
         ReturnValueFromTextCtrl( *m_OptTrackWidth, m_Parent->m_InternalUnits );
-    g_DesignSettings.m_TrackClearence =
+    g_DesignSettings.m_TrackClearance =
         ReturnValueFromTextCtrl( *m_OptTrackClearance, m_Parent->m_InternalUnits );
 
     g_DesignSettings.m_MaskMargin =
@@ -119,7 +119,7 @@ void DIALOG_TRACKS_OPTIONS::OnButtonOkClick( wxCommandEvent& event )
 
     m_Parent->AddHistory( g_DesignSettings.m_CurrentViaSize, TYPE_VIA );
     m_Parent->AddHistory( g_DesignSettings.m_CurrentTrackWidth, TYPE_TRACK );
-    m_Parent->AddHistory( g_DesignSettings.m_TrackClearence, TYPE_CLEARANCE );
+    m_Parent->AddHistory( g_DesignSettings.m_TrackClearance, TYPE_CLEARANCE );
     EndModal( 1 );
 }
 
@@ -169,12 +169,12 @@ void WinEDA_BasePcbFrame::AddHistory( int value, KICAD_T type )
                        g_DesignSettings.m_TrackWidthHistory[ii + 1] );
             }
         }
-
         break;
+
     case TYPE_CLEARANCE:
             for( ii = 0; ii < HISTORY_NUMBER; ii++ )
             {
-                if( g_DesignSettings.m_TrackClearenceHistory[ii] == value )
+                if( g_DesignSettings.m_TrackClearanceHistory[ii] == value )
                 {
                     addhistory = FALSE;
                     break;
@@ -186,27 +186,27 @@ void WinEDA_BasePcbFrame::AddHistory( int value, KICAD_T type )
 
             for( ii = HISTORY_NUMBER - 1;   ii > 0;  ii-- )
             {
-                g_DesignSettings.m_TrackClearenceHistory[ii] =
-                    g_DesignSettings.m_TrackClearenceHistory[ii - 1];
+                g_DesignSettings.m_TrackClearanceHistory[ii] =
+                    g_DesignSettings.m_TrackClearanceHistory[ii - 1];
             }
 
-            g_DesignSettings.m_TrackClearenceHistory[0] = value;
+            g_DesignSettings.m_TrackClearanceHistory[0] = value;
 
             // Reclassement par valeur croissante
             for( ii = 0; ii < HISTORY_NUMBER - 1; ii++ )
             {
-                if( g_DesignSettings.m_TrackClearenceHistory[ii + 1] == 0 )
+                if( g_DesignSettings.m_TrackClearanceHistory[ii + 1] == 0 )
                     break;                                                          // Fin de liste
 
-                if( g_DesignSettings.m_TrackClearenceHistory[ii] >
-                    g_DesignSettings.m_TrackClearenceHistory[ii + 1]  )
+                if( g_DesignSettings.m_TrackClearanceHistory[ii] >
+                    g_DesignSettings.m_TrackClearanceHistory[ii + 1]  )
                 {
-                    EXCHG( g_DesignSettings.m_TrackClearenceHistory[ii],
-                           g_DesignSettings.m_TrackClearenceHistory[ii + 1] );
+                    EXCHG( g_DesignSettings.m_TrackClearanceHistory[ii],
+                           g_DesignSettings.m_TrackClearanceHistory[ii + 1] );
                 }
             }
-
             break;
+
     case TYPE_VIA:
         for( ii = 0; ii < HISTORY_NUMBER; ii++ )
         {

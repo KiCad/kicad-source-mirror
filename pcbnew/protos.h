@@ -248,7 +248,7 @@ MODULE* Load_Module_From_Library( WinEDA_DrawFrame* frame, wxDC* DC );
 /* EDITRACK.C : */
 /****************/
 
-TRACK*  LocateIntrusion( TRACK* start, int net, int width );
+TRACK*  LocateIntrusion( TRACK* listStart, TRACK* aTrack );
 
 void    ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel,
                                       wxDC* DC, bool erase );

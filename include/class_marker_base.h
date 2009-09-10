@@ -135,7 +135,8 @@ public:
                   const wxString& aText, const wxPoint& aPos );
 
 
-    /** Function SetAuxiliaryData
+    /**
+     * Function SetAuxiliaryData
      * initialize data for the second (auxiliary) item
      * @param aAuxiliaryText = the second text (main text) concerning the second schematic or board item
      * @param aAuxiliaryPos = position the second item
@@ -145,6 +146,10 @@ public:
         m_drc.SetAuxiliaryData( aAuxiliaryText, aAuxiliaryPos );
     }
 
+    void SetShowNoCoordinate()
+    {
+        m_drc.SetShowNoCoordinate();
+    }
 
     /**
      * Function GetReporter

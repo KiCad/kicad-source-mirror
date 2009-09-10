@@ -25,6 +25,9 @@
 #ifndef _CLASS_DRC_ITEM_H
 #define _CLASS_DRC_ITEM_H
 
+#include "macros.h"
+
+
 /**
  * Class DRC_ITEM
  * is a holder for a DRC (in Pcbnew) or ERC (in Eeschema) error item.
@@ -46,7 +49,7 @@ protected:
     wxPoint  m_MainPosition;                    ///< the location of the first (or main ) BOARD_ITEM or SCH_ITEM. This is also the position of the marker
     wxPoint  m_AuxiliaryPosition;               ///< the location of the second BOARD_ITEM or SCH_ITEM
     bool     m_hasSecondItem;                   ///< true when 2 items create a DRC/ERC error, false if only one item
-
+    bool     m_noCoordinate;
 
 public:
 
@@ -54,8 +57,8 @@ public:
     {
         m_ErrorCode     = 0;
         m_hasSecondItem = false;
+        m_noCoordinate = false;
     }
-
 
     DRC_ITEM( int aErrorCode,
               const wxString& aMainText, const wxString& bAuxiliaryText,
@@ -65,7 +68,6 @@ public:
                  aMainText, bAuxiliaryText,
                  aMainPos, bAuxiliaryPos );
     }
-
 
     DRC_ITEM( int aErrorCode,
               const wxString& aText, const wxPoint& aPos )
@@ -124,10 +126,13 @@ public:
 
     bool HasSecondItem() const { return m_hasSecondItem; }
 
+    void SetShowNoCoordinate() { m_noCoordinate = true; }
+
     /** acces to A and B texts
      */
     wxString GetMainText() const { return m_MainText; }
     wxString GetAuxiliaryText() const { return m_AuxiliaryText; }
+
 
     /**
      * Function ShowHtml
@@ -139,22 +144,30 @@ public:
     {
         wxString ret;
 
-        if( m_hasSecondItem )
+        if( m_noCoordinate )
+        {
+            // omit the coordinate, a NETCLASS has no location
+            ret.Printf( _( "ErrType(%d): <b>%s</b><ul><li> %s </li></ul>" ),
+                       m_ErrorCode,
+                       GetChars( GetErrorText() ),
+                       GetChars( m_MainText ) );
+        }
+        else if( m_hasSecondItem )
         {
             // an html fragment for the entire message in the listbox.  feel free
             // to add color if you want:
             ret.Printf( _( "ErrType(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>" ),
                        m_ErrorCode,
-                       GetErrorText().GetData(),
-                       ShowCoord( m_MainPosition ).GetData(), m_MainText.GetData(),
-                       ShowCoord( m_AuxiliaryPosition ).GetData(), m_AuxiliaryText.GetData() );
+                       GetChars( GetErrorText() ),
+                       GetChars( ShowCoord( m_MainPosition )), GetChars( m_MainText ),
+                       GetChars( ShowCoord( m_AuxiliaryPosition )), GetChars( m_AuxiliaryText ) );
         }
         else
         {
             ret.Printf( _( "ErrType(%d): <b>%s</b><ul><li> %s: %s </li></ul>" ),
                        m_ErrorCode,
-                       GetErrorText().GetData(),
-                       ShowCoord( m_MainPosition ).GetData(), m_MainText.GetData() );
+                       GetChars( GetErrorText() ),
+                       GetChars( ShowCoord( m_MainPosition ) ), GetChars( m_MainText ) );
         }
 
         return ret;

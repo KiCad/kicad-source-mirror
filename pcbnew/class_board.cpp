@@ -31,12 +31,17 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
     m_CurrentZoneContour = NULL;                // This ZONE_CONTAINER handle the zone contour cuurently in progress
     m_NetInfo = new NETINFO_LIST( this );       // handle nets info list (name, design constraints ..
 
-
     for( int layer = 0; layer<NB_COPPER_LAYERS;  ++layer )
     {
         m_Layer[layer].m_Name = ReturnPcbLayerName( layer, true );
         m_Layer[layer].m_Type = LT_SIGNAL;
     }
+
+    // Initial parameters for the default NETCLASS come from the global preferences
+    // within g_DesignSettings via the NETCLASS() constructor.
+    // Should user eventually load a board from a disk file, then these defaults
+    // will get overwritten during load.
+    m_NetClasses.GetDefault()->SetDescription( _("This is the default net class.") );
 }
 
 
@@ -829,16 +834,16 @@ NETINFO_ITEM* BOARD::FindNet( int anetcode ) const
     // the first valid netcode is 1 and the last is m_NetInfo->GetCount()-1.
     // zero is reserved for "no connection" and is not used.
     // NULL is returned for non valid netcodes
-    NETINFO_ITEM* item = m_NetInfo->GetNetItem( anetcode );
+    NETINFO_ITEM* net = m_NetInfo->GetNetItem( anetcode );
 
 #if defined(DEBUG)
-    if ( item )     // item can be NULL if anetcode is not valid
+    if( net )     // item can be NULL if anetcode is not valid
     {
-        wxASSERT( anetcode == item->GetNet() );
+        wxASSERT( anetcode == net->GetNet() );
     }
 #endif
 
-    return item;
+    return net;
 }
 
 

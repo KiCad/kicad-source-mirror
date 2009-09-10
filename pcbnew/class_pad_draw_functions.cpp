@@ -207,6 +207,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 
     SetAlpha(&color, 170);
 
+    int padClearance = GetClearance();
+
     switch( GetShape() )
     {
     case PAD_CIRCLE:
@@ -221,7 +223,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
                       DC,
                       xc,
                       yc,
-                      dx + g_DesignSettings.m_TrackClearence,
+                      dx + padClearance,
                       0,
                       color );
         }
@@ -259,7 +261,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         /* Trace de la marge d'isolement */
         if( DisplayIsol )
         {
-            rotdx = rotdx + g_DesignSettings.m_TrackClearence + g_DesignSettings.m_TrackClearence;
+            rotdx = rotdx + 2 * padClearance;
 
             GRCSegm( &panel->m_ClipBox, DC, ux0 + delta_cx, uy0 + delta_cy,
                      ux0 - delta_cx, uy0 - delta_cy,
@@ -297,8 +299,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 
         if( DisplayIsol )
         {
-            dx += g_DesignSettings.m_TrackClearence;
-            dy += g_DesignSettings.m_TrackClearence;
+            dx += padClearance;
+            dy += padClearance;
 
             coord[0].x = -dx - ddy;
             coord[0].y = dy + ddx;
@@ -481,7 +483,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 
     if( screen->Scale( tsize ) >= CHAR_SIZE_MIN )   // Not drawable in size too small.
     {
-    	 if( !(!IsOnLayer( screen->m_Active_Layer )&& DisplayOpt.ContrastModeDisplay)){
+         if( !(!IsOnLayer( screen->m_Active_Layer )&& DisplayOpt.ContrastModeDisplay)){
 
         tpos    = tpos0;
         if ( display_padnum )
@@ -492,7 +494,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         DrawGraphicText( panel, DC, tpos,
                          WHITE, m_ShortNetname, t_angle, wxSize( tsize, tsize ),
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7,
-			  false, false );
-    	 }
+              false, false );
+         }
     }
 }

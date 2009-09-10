@@ -49,6 +49,17 @@
 using namespace DSN;
 
 
+// Add .1 mil to the requested clearances as a safety margin.
+// There has been disagreement about interpretation of clearance in the past
+// between Kicad and Freerouter, so keep this safetyMargin until the
+// disagreement is resolved and stable.  Freerouter seems to be moving
+// (protected) traces upon loading the DSN file, and even though it seems to sometimes
+// add its own 0.1 to the clearances, I believe this is happening after
+// the load process (and moving traces) so I am of the opinion this is
+// still needed.
+static const double  safetyMargin = 0.1;
+
+
 // see wxPcbStruct.h
 void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
 {
@@ -93,6 +104,7 @@ void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
 
     try
     {
+        GetBoard()->SynchronizeNetsAndNetClasses();
         db.FromBOARD( GetBoard() );
         db.ExportPCB(  fullFileName, true );
 
@@ -258,7 +270,6 @@ static PATH* makePath( const POINT& aStart, const POINT& aEnd, const std::string
 /**
  * Struct wxString_less_than
  * is used by std:set<> and std::map<> instantiations which use wxString as their key.
- */
 struct wxString_less_than
 {
     // a "less than" test on two wxStrings
@@ -267,6 +278,7 @@ struct wxString_less_than
         return s1.Cmp( s2 ) < 0;  // case specific wxString compare
     }
 };
+ */
 
 
 /**
@@ -454,7 +466,8 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
 
 /// data type used to ensure unique-ness of pin names, holding (wxString and int)
-typedef std::map<wxString, int, wxString_less_than> PINMAP;
+//typedef std::map<wxString, int, wxString_less_than> PINMAP;
+typedef std::map<wxString, int> PINMAP;
 
 
 IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
@@ -952,27 +965,16 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
     //-----<rules>--------------------------------------------------------
     {
-        // put out these rules, the user can then edit them with a text editor
         char    rule[80];
 
-        int     curTrackWidth = aBoard->m_BoardSettings->m_CurrentTrackWidth;
-        int     curTrackClear = aBoard->m_BoardSettings->m_TrackClearence;
+        int     defaultTrackWidth = aBoard->m_NetClasses.GetDefault()->GetTrackWidth();
+        int     defaultClearance  = aBoard->m_NetClasses.GetDefault()->GetClearance();
 
-        // Add .1 mil to the requested clearances as a safety margin.
-        // There has been disagreement about interpretation of clearance in the past
-        // between Kicad and Freerouter, so keep this safetyMargin until the
-        // disagreement is resolved and stable.  Freerouter seems to be moving
-        // (protected) traces upon loading the DSN file, and even though it seems to sometimes
-        // add its own 0.1 to the clearances, I believe this is happening after
-        // the load process (and moving traces) so I am of the opinion this is
-        // still needed.
-        const double  safetyMargin = 0.1;
-
-        double  clearance = scale(curTrackClear);
+        double  clearance = scale( defaultClearance );
 
         STRINGS& rules = pcb->structure->rules->rules;
 
-        sprintf( rule, "(width %.6g)", scale( curTrackWidth ) );
+        sprintf( rule, "(width %.6g)", scale( defaultTrackWidth ) );
         rules.push_back( rule );
 
         sprintf( rule, "(clearance %.6g)", clearance+safetyMargin );
@@ -1017,7 +1019,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         // Pad to pad spacing on a single SMT part can be closer than our
         // clearance, we don't want freerouter complaining about that, so
         // output a significantly smaller pad to pad clearance to freerouter.
-        clearance = scale(curTrackClear)/4;
+        clearance = scale( defaultClearance )/4;
 
         sprintf( rule, "(clearance %.6g (type smd_smd))", clearance );
         rules.push_back( rule );
@@ -1401,45 +1403,57 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
     }
 
 
-    //-----<output a default class with all nets and the via and track size>--
+    //-----<output NETCLASSs>----------------------------------------------------
+    NETCLASSES& nclasses = aBoard->m_NetClasses;
+
+    exportNETCLASS( nclasses.GetDefault() );
+
+    for( NETCLASSES::iterator nc = nclasses.begin();  nc != nclasses.end();  ++nc )
     {
-        char        text[80];
-        STRINGSET   netIds;       // sort the net names in here
+        NETCLASS*   netclass = nc->second;
+        exportNETCLASS( netclass );
+    }
+}
 
-        CLASS*  clazz = new CLASS( pcb->network );
-        pcb->network->classes.push_back( clazz );
 
-        // freerouter creates a class named 'default' anyway, and if we
-        // try and use that, we end up with two 'default' via rules so use
-        // something else as the name of our default class.   Someday we may support
-        // additional classes.  Until then the user can text edit the exported
-        // DSN file and use this class as a template, copying it and giving the
-        // copy a different class_id and splitting out some of the nets.
+void SPECCTRA_DB::exportNETCLASS( NETCLASS* aNetClass )
+{
+    char        text[80];
+
+    CLASS*  clazz = new CLASS( pcb->network );
+    pcb->network->classes.push_back( clazz );
+
+    // freerouter creates a class named 'default' anyway, and if we
+    // try and use that, we end up with two 'default' via rules so use
+    // something else as the name of our default class.
+    clazz->class_id = CONV_TO_UTF8( aNetClass->GetName() );
+
+    for( NETCLASS::iterator net = aNetClass->begin();  net != aNetClass->end();  ++net )
+        clazz->net_ids.push_back( CONV_TO_UTF8( *net ) );
+
+    clazz->rules = new RULE( clazz, T_rule );
+
+    // output the track width.
+    int     trackWidth = aNetClass->GetTrackWidth();
+    sprintf( text, "(width %.6g)", scale( trackWidth ) );
+    clazz->rules->rules.push_back( text );
+
+    // output the clearance.
+    int clearance = aNetClass->GetClearance();
+    sprintf( text, "(clearance %.6g)", scale( clearance ) + safetyMargin );
+    clazz->rules->rules.push_back( text );
+
+    if( aNetClass->GetName() == NETCLASS::Default )
+    {
         clazz->class_id = "kicad_default";
 
-        // Insert all the net_ids into the set.  They are unique, but even if
-        // they were not the duplicated name is not our error, but the BOARD's.
-        // A duplicate would be removed here.
-        NETS& nets = pcb->network->nets;
-        for( NETS::iterator i=nets.begin();  i!=nets.end();  ++i )
-            netIds.insert( i->net_id );
-
-        // netIds is now sorted, put them into clazz->net_ids
-        for( STRINGSET::iterator i=netIds.begin();  i!=netIds.end();  ++i )
-            clazz->net_ids.push_back( *i );
-
-        // output the via and track dimensions, the whole reason for this scope.
-        int     curTrackWidth = aBoard->m_BoardSettings->m_CurrentTrackWidth;
-
-        clazz->rules = new RULE( clazz, T_rule );
-
-        sprintf( text, "(width %.6g)", scale( curTrackWidth ) );
-        clazz->rules->rules.push_back( text );
-
         int         viaNdx = pcb->library->via_start_index;
-
         sprintf( text, "(use_via %s)", pcb->library->padstacks[viaNdx].padstack_id.c_str() );
         clazz->circuit.push_back( text );
+    }
+    else
+    {
+        // @todo
     }
 }
 

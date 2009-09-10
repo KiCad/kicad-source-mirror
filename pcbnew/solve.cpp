@@ -195,8 +195,8 @@ static long newmask[8] = { /* patterns to mask out in neighbor cells */
 
 /* Macro d'affichage de l'activite du routeur; */
 #define AFFICHE_ACTIVITE_ROUTE \
-				msg.Printf( wxT("Activity: Open %d   Closed %d   Moved %d"), OpenNodes, ClosNodes, MoveNodes); \
-				pcbframe->Affiche_Message(msg);
+                msg.Printf( wxT("Activity: Open %d   Closed %d   Moved %d"), OpenNodes, ClosNodes, MoveNodes); \
+                pcbframe->Affiche_Message(msg);
 
 /********************************************************/
 int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
@@ -355,8 +355,8 @@ static int Autoroute_One_Track( WinEDA_PcbFrame* pcbframe, wxDC* DC,
 
     result = NOSUCCESS;
 
-    marge     = g_DesignSettings.m_TrackClearence + (g_DesignSettings.m_CurrentTrackWidth / 2);
-    via_marge = g_DesignSettings.m_TrackClearence + (g_DesignSettings.m_CurrentViaSize / 2);
+    marge     = g_DesignSettings.m_TrackClearance + (g_DesignSettings.m_CurrentTrackWidth / 2);
+    via_marge = g_DesignSettings.m_TrackClearance + (g_DesignSettings.m_CurrentViaSize / 2);
 
     /* clear direction flags */
     i = Nrows * Ncols * sizeof(char);
@@ -538,15 +538,15 @@ static int Autoroute_One_Track( WinEDA_PcbFrame* pcbframe, wxDC* DC,
             result = STOP_FROM_ESC; break;
         }
 
-		/* report every COUNT new nodes or so */
+        /* report every COUNT new nodes or so */
         #define COUNT 20000
-		if( (OpenNodes-lastopen > COUNT) || (ClosNodes-lastclos > COUNT) || (MoveNodes - lastmove > COUNT))
-		{
-			lastopen = OpenNodes;
+        if( (OpenNodes-lastopen > COUNT) || (ClosNodes-lastclos > COUNT) || (MoveNodes - lastmove > COUNT))
+        {
+            lastopen = OpenNodes;
             lastclos = ClosNodes;
-			lastmove = MoveNodes;
-			AFFICHE_ACTIVITE_ROUTE;
-		}
+            lastmove = MoveNodes;
+            AFFICHE_ACTIVITE_ROUTE;
+        }
 
         _self = 0;
         if( curcell & HOLE )
@@ -700,7 +700,7 @@ end_of_route:
     Place_1_Pad_Board(
         pcbframe->GetBoard(), pt_cur_ch->m_PadEnd, ~CURRENT_PAD, marge, WRITE_AND_CELL );
 
-	AFFICHE_ACTIVITE_ROUTE;
+    AFFICHE_ACTIVITE_ROUTE;
 
     return result;
 }
@@ -1048,8 +1048,8 @@ static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
     int marge, via_marge;
     WinEDA_DrawPanel* panel = pcbframe->DrawPanel;
 
-    marge     = g_DesignSettings.m_TrackClearence + (g_DesignSettings.m_CurrentTrackWidth / 2);
-    via_marge = g_DesignSettings.m_TrackClearence + (g_DesignSettings.m_CurrentViaSize / 2);
+    marge     = g_DesignSettings.m_TrackClearance + (g_DesignSettings.m_CurrentTrackWidth / 2);
+    via_marge = g_DesignSettings.m_TrackClearance + (g_DesignSettings.m_CurrentViaSize / 2);
 
     /* tst point d'arrivee : doit etre sur pad start */
 

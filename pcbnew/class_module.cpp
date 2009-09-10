@@ -782,7 +782,7 @@ EDA_Rect MODULE::GetBoundingBox()
 
     // Add the Clearence shape size: (shape around the pads when the clearence is shown
     // Not optimized, but the draw cost is small (perhaps smaller than optimization)
-    area.Inflate(g_DesignSettings.m_TrackClearence, g_DesignSettings.m_TrackClearence);
+    area.Inflate(g_DesignSettings.m_TrackClearance, g_DesignSettings.m_TrackClearance);
 
     return area;
 }

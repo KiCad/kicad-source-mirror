@@ -178,12 +178,19 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
  *      si FORCE_PADS : tous les pads seront places meme ceux de meme net_code
  */
 {
-    int             ux0 = 0, uy0 = 0, ux1, uy1, dx, dy;
-    int             marge, via_marge;
-    int             masque_layer;
+    int         ux0 = 0, uy0 = 0, ux1, uy1, dx, dy;
+    int         marge, via_marge;
+    int         masque_layer;
 
-    marge     = g_DesignSettings.m_TrackClearence + (g_DesignSettings.m_CurrentTrackWidth / 2);
-    via_marge = g_DesignSettings.m_TrackClearence + (g_DesignSettings.m_CurrentViaSize / 2);
+    // use the default NETCLASS?
+    NETCLASS*   nc = aPcb->m_NetClasses.GetDefault();
+
+    int         trackWidth = nc->GetTrackWidth();
+    int         clearance  = nc->GetClearance();
+    int         viaSize    = nc->GetViaDiameter();
+
+    marge     = clearance + (trackWidth / 2);
+    via_marge = clearance + (viaSize / 2);
 
     /////////////////////////////////////
     // Placement des PADS sur le board //
@@ -275,14 +282,14 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
             break;
 
         case TYPE_TEXTE:
-	    {
+        {
             TEXTE_PCB*      PtText;
             PtText = (TEXTE_PCB*) item;
 
             if( PtText->GetLength() == 0 )
                 break;
 
-	    EDA_Rect textbox = PtText->GetTextBox(-1);
+        EDA_Rect textbox = PtText->GetTextBox(-1);
             ux0 = textbox.GetX(); uy0 = textbox.GetY();
             dx = textbox.GetWidth();
             dy = textbox.GetHeight();
@@ -307,7 +314,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
                                   ux1 + via_marge, uy1 + via_marge,
                                   (int) (PtText->m_Orient),
                                   masque_layer, VIA_IMPOSSIBLE, WRITE_OR_CELL );
-	    }
+        }
             break;
 
         default:

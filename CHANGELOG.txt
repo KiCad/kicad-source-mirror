@@ -4,6 +4,20 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-Sep-10 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew
+    More NETCLASS work, started on the UI also.  Almost done.  Put NETCLASS support
+    into DRC.  Fixed DRC dialog so progress during DRC is sensible and visible.
+    The specctra_export probably still needs a little work regarding VIAs.
+    Don't install this version of PCBNEW if you need stability.  You can compile
+    and look but I would not install it quite yet.  I compiled wxformbuilder
+    from source, so you may need to upgrade to load my *.fbp files.
+
+    Jean-Pierre @   todo:    pcbnew/zones_test_and_combine_areas.cpp needs to
+                             use NETCLASS and not g_DesignSettings.m_TrackClearance
+
+
 2009-sept-10 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++pcbnew
@@ -11,6 +25,7 @@ email address.
     Switch to kbool V2.0. This version solves some problems in zones calculations but not all.
     The Kbool's author, Klaas Holveda, is still working on these problems
     Thanks to Klaas
+
 
 2009-aug-23 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================

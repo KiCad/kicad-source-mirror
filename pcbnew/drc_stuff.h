@@ -64,6 +64,12 @@
 #define DRCE_TOO_SMALL_TRACK_WIDTH          27  ///< Too small track width
 #define DRCE_TOO_SMALL_VIA                  28  ///< Too small via size
 #define DRCE_TOO_SMALL_MICROVIA             29  ///< Too small micro via size
+#define DRCE_NETCLASS_TRACKWIDTH            30  ///< netclass has TrackWidth < g_DesignSettings.m_TrackMinWidth
+#define DRCE_NETCLASS_CLEARANCE             31  ///< netclass has Clearance < g_DesignSettings.m_TrackClearance
+#define DRCE_NETCLASS_VIASIZE               32  ///< netclass has ViaSize < g_DesignSettings.m_ViasMinSize
+#define DRCE_NETCLASS_VIADRILLSIZE          33  ///< netclass has ViaDrillSize < g_DesignSettings.m_ViaDrill
+#define DRCE_NETCLASS_uVIASIZE              34
+#define DRCE_NETCLASS_uVIADRILLSIZE         35
 
 
 class WinEDA_DrawPanel;
@@ -144,7 +150,7 @@ private:
 
     // int              m_errorCount;
 
-    MARKER_PCB*           m_currentMarker;
+    MARKER_PCB*       m_currentMarker;
 
     bool              m_aboartDRC;
     bool              m_drcInProgress;
@@ -211,7 +217,26 @@ private:
      */
     MARKER_PCB* fillMarker( const ZONE_CONTAINER * aArea, const wxPoint & aPos, int aErrorCode, MARKER_PCB* fillMe );
 
+    /**
+     * Function fillMarker
+     * fills a MARKER which will report on a generic problem with the board which is
+     * not geographically locatable.
+     */
+    MARKER_PCB* fillMarker( int aErrorCode, const wxString& aMessage, MARKER_PCB* fillMe );
+
     //-----<categorical group tests>-----------------------------------------
+
+    /**
+     * Function testNetClasses
+     * goes through each NETCLASS and verifies that its clearance, via size,
+     * track width, and track clearance are larger than those in g_DesignSettings.
+     * This is necessary because the actual DRC checks are run against the NETCLASS
+     * limits, so in order enforce global limits, we first check the NETCLASSes against
+     * the global limits.
+     * @return bool - true if succes, else false but only after
+     *  reporting _all_ NETCLASS violations.
+     */
+    bool    testNetClasses();
 
     void    testTracks();
 
@@ -224,6 +249,8 @@ private:
 
     //-----<single "item" tests>-----------------------------------------
 
+    bool    doNetClass( NETCLASS* aNetClass, wxString& msg );
+
     /**
      * Function doPadToPadsDrc
      * tests the clearance between aRefPad and other pads.
@@ -231,10 +258,10 @@ private:
      * @param aRefPad The pad to test
      * @param aStart The start of the pad list to test against
      * @param aEnd Marks the end of the list and is not included
-     * @param max_size The size of the biggest pad (used to stop the test when the X distance is > max_size)
+     * @param x_limit is used to stop the test (when the any pad's X coord exceeds this)
      */
     bool    doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart,
-                            LISTE_PAD* aEnd, int max_size );
+                            LISTE_PAD* aEnd, int x_limit );
 
     /**
      * Function DoTrackDrc
@@ -267,7 +294,7 @@ private:
      * @param aPad Another pad to check against
      * @return bool - true if clearance between aRefPad and pad is >= dist_min, else false
      */
-    bool        checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, const int dist_min );
+    bool        checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad );
 
 
     /**
@@ -358,7 +385,6 @@ public:
         return doTrackDrc( aRefSeg, aList ) ? OK_DRC : BAD_DRC;
     }
 
-
     /**
      * Function ShowDialog
      * opens a dialog and prompts the user, then if a test run button is
@@ -366,7 +392,6 @@ public:
      * created if it is not already in existence.
      */
     void    ShowDialog();
-
 
     /**
      * Function DestroyDialog
@@ -396,7 +421,6 @@ public:
         m_doCreateRptFile = aSaveReport;
     }
 
-
     /**
      * Function RunTests
      * will actually run all the tests specified with a previous call to
@@ -404,7 +428,6 @@ public:
      * @param aMessages = a wxTextControl where to display some activity messages. Can be NULL
      */
     void    RunTests(wxTextCtrl * aMessages = NULL);
-
 
     /**
      * Function ListUnconnectedPad

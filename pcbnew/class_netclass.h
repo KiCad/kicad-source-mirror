@@ -49,20 +49,38 @@ protected:
 
     STRINGSET   m_Members;              ///< names of NET members of this class
 
-    /// The units on these parameters is 1/10000 of an inch.
+    /// The units on these parameters is 1/10000 of an inch, see #define PCB_INTERNAL_UNIT
 
-    int         m_TrackWidth;           ///< value for tracks thickness used to route this net
-    int         m_TrackMinWidth;        ///< minimum value for tracks thickness (used in DRC)
-    int         m_ViaSize;              ///< default via size used to route this net
-    int         m_ViaDrillSize;         ///< default via drill size used to create vias in this net
-    int         m_ViaMinSize;           ///< minimum size for vias (used in DRC)
     int         m_Clearance;            ///< clearance when routing
+
+    int         m_TrackWidth;           ///< track width used to route NETs in this NETCLASS
+    int         m_ViaDia;               ///< via diameter
+    int         m_ViaDrill;             ///< via drill hole diameter
+
+    int         m_uViaDia;              ///< microvia diameter
+    int         m_uViaDrill;            ///< microvia drill hole diameter
 
 public:
 
     static const wxString Default;      ///< the name of the default NETCLASS
 
-    NETCLASS( BOARD* aParent, const wxString& aName );
+    /**
+     * Name of identifier within BOARD file.
+     * 08-Sept-2009: changed the name from "NETCLASS" to this so we can
+     * toss any previous NETCLASSes in migratory BOARD files which will not have
+     * the proper parameters in the default netclass (from g_DesignSettings) in them.
+     * Spare the user from having to enter those defaults manually.
+     */
+#define BRD_NETCLASS  "NCLASS"
+
+    /**
+     * Constructor
+     * stuffs a NETCLASS instance with aParent, aName, and optionally the initialParameters
+     * @param initialParameters is a NETCLASS to copy parameters from, or if
+     *  NULL tells me to copy from g_DesignSettings.
+     */
+    NETCLASS( BOARD* aParent, const wxString& aName, const NETCLASS* initialParameters = NULL );
+
     ~NETCLASS();
 
     wxString GetClass() const
@@ -134,24 +152,33 @@ public:
     const wxString& GetDescription() const  { return m_Description; }
     void    SetDescription( const wxString& aDesc ) { m_Description = aDesc; }
 
-    int     GetTrackWidth() const           { return m_TrackWidth; }
-    void    SetTrackWidth( int aWidth )     { m_TrackWidth = aWidth; }
-
-    int     GetTrackMinWidth() const        { return m_TrackMinWidth; }
-    void    SetTrackMinWidth( int aWidth )  { m_TrackMinWidth = aWidth; }
-
-    int     GetViaSize() const              { return m_ViaSize; }
-    void    SetViaSize( int aSize )         { m_ViaSize = aSize; }
-
-    int     GetViaDrillSize() const         { return m_ViaDrillSize; }
-    void    SetViaDrillSize( int aSize )    { m_ViaDrillSize = aSize; }
-
-    int     GetViaMinSize() const           { return m_ViaMinSize; }
-    void    SetViaMinSize( int aSize )      { m_ViaMinSize = aSize; }
-
     int     GetClearance() const            { return m_Clearance; }
     void    SetClearance( int aClearance )  { m_Clearance = aClearance; }
 
+    int     GetTrackWidth() const           { return m_TrackWidth; }
+    void    SetTrackWidth( int aWidth )     { m_TrackWidth = aWidth; }
+
+    int     GetViaDiameter() const          { return m_ViaDia; }
+    void    SetViaDiameter( int aDia )      { m_ViaDia = aDia; }
+
+    int     GetViaDrill() const             { return m_ViaDrill; }
+    void    SetViaDrill( int aSize )        { m_ViaDrill = aSize; }
+
+    int     GetuViaDiameter() const         { return m_uViaDia; }
+    void    SetuViaDiameter( int aSize )    { m_uViaDia = aSize; }
+
+    int     GetuViaDrill() const            { return m_uViaDrill; }
+    void    SetuViaDrill( int aSize )       { m_uViaDrill = aSize; }
+
+
+    /**
+     * Function SetParams
+     * will set all the parameters by copying them from \a defaults.
+     * Parameters are the values like m_ViaSize, etc, but do not include m_Description.
+     * @param defaults is another NETCLASS to copy from.  If NULL, then copy
+     *  from global preferences instead.
+     */
+    void    SetParams( const NETCLASS* defaults = NULL );
 
     /**
      * Function Save
@@ -236,14 +263,14 @@ public:
         return (NETCLASS*) &m_Default;
     }
 
-
     /**
      * Function Add
+     * takes ownership of \a aNetclass and puts it into this NETCLASSES container.
      * @param aNetclass is netclass to add
-     * @return true if Ok, false if cannot be added (mainly because a
-     *  netclass with the same name exists)
+     * @return true if the name within aNetclass is unique and it could be inserted OK,
+     *  else false because the name was not unique and caller still owns aNetclass.
      */
-    bool Add( const NETCLASS& aNetclass );
+    bool Add( NETCLASS* aNetclass );
 
     /**
      * Function Remove

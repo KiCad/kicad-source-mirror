@@ -543,8 +543,11 @@ void WinEDA_PcbFrame::GenModuleOnBoard( MODULE* Module )
     TraceFilledRectangle( GetBoard(), ox, oy, fx, fy, masque_layer,
                           CELL_is_MODULE, WRITE_OR_CELL );
 
+    int trackWidth = GetBoard()->m_NetClasses.GetDefault()->GetTrackWidth();
+    int clearance  = GetBoard()->m_NetClasses.GetDefault()->GetClearance();
+
     /* Trace des pads et leur surface de securite */
-    marge = g_DesignSettings.m_TrackClearence + g_DesignSettings.m_CurrentTrackWidth;
+    marge = trackWidth + clearance;
 
     for( Pad = Module->m_Pads; Pad != NULL; Pad = Pad->Next() )
     {

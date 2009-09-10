@@ -475,9 +475,9 @@ void WinEDA_PcbFrame::SetToolbars()
                                             _( "Normal Contrast Mode Display" ) :
                                             _( "High Contrast Mode Display" ) );
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
-        		g_ModuleTextNOVColor & ITEM_NOT_SHOW );
+                g_ModuleTextNOVColor & ITEM_NOT_SHOW );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
-            		   g_ModuleTextNOVColor & (ITEM_NOT_SHOW) ?
+                       g_ModuleTextNOVColor & (ITEM_NOT_SHOW) ?
                                                    _( "Show Invisible Text" ) :
                                                    _( "Hide Invisible Text" ) );
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1, m_AuxVToolBar ? true : false );
@@ -521,36 +521,36 @@ void WinEDA_PcbFrame::SetToolbars()
         }
 
         if( m_SelClrWidthBox && m_SelClrWidthBox_Changed )
-                {
-                    m_SelClrWidthBox_Changed = FALSE;
-                    m_SelClrWidthBox->Clear();
-                    wxString format = _( "Clearance" );
+        {
+            m_SelClrWidthBox_Changed = FALSE;
+            m_SelClrWidthBox->Clear();
+            wxString format = _( "Clearance" );
 
-                    if( g_UnitMetric == INCHES )
-                        format += wxT( " %.1f" );
-                    else
-                        format += wxT( " %.3f" );
+            if( g_UnitMetric == INCHES )
+                format += wxT( " %.1f" );
+            else
+                format += wxT( " %.3f" );
 
-                    for( ii = 0; ii < HISTORY_NUMBER; ii++ )
-                    {
-                        if( g_DesignSettings.m_TrackClearenceHistory[ii] == 0 )
-                            break; // Fin de liste
-                        double value = To_User_Unit( g_UnitMetric,
-                                                     g_DesignSettings.m_TrackClearenceHistory[ii],
-                                                     PCB_INTERNAL_UNIT );
+            for( ii = 0; ii < HISTORY_NUMBER; ii++ )
+            {
+                if( g_DesignSettings.m_TrackClearanceHistory[ii] == 0 )
+                    break; // Fin de liste
+                double value = To_User_Unit( g_UnitMetric,
+                                             g_DesignSettings.m_TrackClearanceHistory[ii],
+                                             PCB_INTERNAL_UNIT );
 
-                        if( g_UnitMetric == INCHES )
-                            msg.Printf( format.GetData(), value * 1000 );
-                        else
-                            msg.Printf( format.GetData(), value );
+                if( g_UnitMetric == INCHES )
+                    msg.Printf( format.GetData(), value * 1000 );
+                else
+                    msg.Printf( format.GetData(), value );
 
-                        m_SelClrWidthBox->Append( msg );
+                m_SelClrWidthBox->Append( msg );
 
-                        if( g_DesignSettings.m_TrackClearenceHistory[ii] ==
-                            g_DesignSettings.m_TrackClearence )
-                        	m_SelClrWidthBox->SetSelection( ii );
-                    }
-                }
+                if( g_DesignSettings.m_TrackClearanceHistory[ii] ==
+                    g_DesignSettings.m_TrackClearance )
+                    m_SelClrWidthBox->SetSelection( ii );
+            }
+        }
 
         if( m_SelViaSizeBox && m_SelViaSizeBox_Changed )
         {

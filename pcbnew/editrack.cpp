@@ -549,15 +549,17 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
 }
 
 
-TRACK* LocateIntrusion( TRACK* start, int net, int width )
+TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack )
 {
+    int     net   = aTrack->GetNet();
+    int     width = aTrack->m_Width;
     int     layer = ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer;
 
     wxPoint ref = ActiveScreen->RefPos( true );
 
     TRACK*  found = NULL;
 
-    for( TRACK* track = start;  track;  track = track->Next() )
+    for( TRACK* track = listStart;  track;  track = track->Next() )
     {
         if( track->Type() == TYPE_TRACK )    // skip vias
         {
@@ -571,7 +573,7 @@ TRACK* LocateIntrusion( TRACK* start, int net, int width )
                 continue;
 
             /* TRACK::HitTest */
-            int     dist = width / 2 + track->m_Width / 2 + g_DesignSettings.m_TrackClearence;
+            int     dist = (width + track->m_Width) / 2 + aTrack->GetClearance( track );
 
             wxPoint pos = ref - track->m_Start;
             wxPoint vec = track->m_End - track->m_Start;
@@ -619,7 +621,7 @@ static void PushTrack( WinEDA_DrawPanel* panel )
     int     dist;
     double  f;
 
-    other = LocateIntrusion( pcb->m_Track, track->GetNet(), track->m_Width );
+    other = LocateIntrusion( pcb->m_Track, track );
 
     /* are we currently pointing into a conflicting trace ? */
     if( !other )
@@ -637,8 +639,7 @@ static void PushTrack( WinEDA_DrawPanel* panel )
     if( !det )
         return;
 
-    dist = (track->m_Width + 1) / 2 + (other->m_Width + 1) / 2 +
-           g_DesignSettings.m_TrackClearence + 2;
+    dist = (track->m_Width + 1) / 2 + (other->m_Width + 1) / 2 + track->GetClearance( other ) + 2;
 
     /*
      * DRC wants >, so +1.
@@ -683,6 +684,8 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
     DisplayOpt.DisplayPcbTrackFill = true;
     int         showTrackClearanceMode = DisplayOpt.ShowTrackClearanceMode;
 
+    NETCLASS* netclass = g_FirstTrackSegment->GetNetClass();
+
     if( showTrackClearanceMode != DO_NOT_SHOW_CLEARANCE )
         DisplayOpt.ShowTrackClearanceMode = SHOW_CLEARANCE_ALWAYS;
 
@@ -690,13 +693,16 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
     if( erase )
     {
         Trace_Une_Piste( panel, DC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
+
         ( (WinEDA_BasePcbFrame*)(panel->m_Parent) )->trace_ratsnest_pad( DC );
+
         if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )  // Show the via area
         {
             int color = g_DesignSettings.m_LayerColor[g_CurrentTrackSegment->GetLayer()];
+
             GRCircle( &panel->m_ClipBox, DC, g_CurrentTrackSegment->m_End.x,
                       g_CurrentTrackSegment->m_End.y,
-                      (g_DesignSettings.m_CurrentViaSize / 2) + g_DesignSettings.m_TrackClearence,
+                      (netclass->GetViaDiameter() / 2) + netclass->GetClearance(),
                       color );
         }
     }
@@ -708,7 +714,7 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
     /* dessin de la nouvelle piste : mise a jour du point d'arrivee */
     g_CurrentTrackSegment->SetLayer( screen->m_Active_Layer );
     if( !g_DesignSettings.m_UseConnectedTrackWidth )
-        g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
+        g_CurrentTrackSegment->m_Width = netclass->GetTrackWidth();
 
     if( g_TwoSegmentTrackBuild )
     {
@@ -716,8 +722,9 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
         if( previous_track  &&  previous_track->Type()==TYPE_TRACK )
         {
             previous_track->SetLayer( screen->m_Active_Layer );
+
             if( !g_DesignSettings.m_UseConnectedTrackWidth )
-                previous_track->m_Width = g_DesignSettings.m_CurrentTrackWidth;
+                previous_track->m_Width = netclass->GetTrackWidth();
         }
     }
 
@@ -751,12 +758,14 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
 
     D( g_CurrentTrackList.VerifyListIntegrity(); );
     Trace_Une_Piste( panel, DC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
+
     if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )  // Show the via area
     {
         int color = g_DesignSettings.m_LayerColor[g_CurrentTrackSegment->GetLayer()];
+
         GRCircle( &panel->m_ClipBox, DC, g_CurrentTrackSegment->m_End.x,
                   g_CurrentTrackSegment->m_End.y,
-                  (g_DesignSettings.m_CurrentViaSize / 2) + g_DesignSettings.m_TrackClearence,
+                  (netclass->GetViaDiameter() / 2) + netclass->GetClearance(),
                   color );
     }
 

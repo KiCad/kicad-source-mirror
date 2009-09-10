@@ -257,7 +257,7 @@ EDA_Rect TRACK::GetBoundingBox()
     if( ShowClearance( this ) )
     {
         // + 1 is for the clearance line itself.
-        radius += g_DesignSettings.m_TrackClearence + 1;
+        radius += GetClearance() + 1;
     }
 
     ymax += radius;
@@ -664,7 +664,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     {
         GRCSegm( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
                  m_End.x, m_End.y,
-                 m_Width + (g_DesignSettings.m_TrackClearence * 2), color );
+                 m_Width + (GetClearance() * 2), color );
     }
 
     /* Display the short netname for tracks, not for zone segments.
@@ -712,14 +712,14 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
             angle = 900;                    // angle is in 0.1 degree
         if( panel->GetScreen()->Scale( tsize ) >= 6 )
         {
-        	if( !(!IsOnLayer( curr_layer )&& DisplayOpt.ContrastModeDisplay)){
+            if( !(!IsOnLayer( curr_layer )&& DisplayOpt.ContrastModeDisplay)){
 
             tsize = (tsize * 8) / 10;           // small reduction to give a better look
             DrawGraphicText( panel, DC, tpos,
                              WHITE, net->GetShortNetname(), angle, wxSize( tsize, tsize ),
                              GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7,
-			      false, false );
-        	}
+                  false, false );
+            }
         }
     }
 }
@@ -794,7 +794,7 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
 
     if( DisplayOpt.ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS )
         GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
-                  rayon + g_DesignSettings.m_TrackClearence, color );
+                  rayon + GetClearance(), color );
 
     // for Micro Vias, draw a partial cross :
     // X on component layer, or + on copper layer
@@ -871,7 +871,7 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
             DrawGraphicText( panel, DC, m_Start,
                              WHITE, net->GetShortNetname(), 0, wxSize( tsize, tsize ),
                              GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7,
-			      false, false);
+                  false, false);
         }
     }
 }

@@ -206,7 +206,7 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     for( ii = 0; ii < HISTORY_NUMBER; ii++ )
     {
         m_TrackWidthHistory[ii] = 0;    // Last HISTORY_NUMBER used track widths
-        m_TrackClearenceHistory[ii] = 0;
+        m_TrackClearanceHistory[ii] = 0;
         m_ViaSizeHistory[ii]    = 0;    // Last HISTORY_NUMBER used via sizes
     }
 
@@ -214,7 +214,7 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     m_EdgeSegmentWidth = 100;                       // current graphic line width (EDGE layer only)
     m_PcbTextWidth     = 100;                       // current Pcb (not module) Text width
     m_PcbTextSize      = wxSize( 500, 500 );        // current Pcb (not module) Text size
-    m_TrackClearence   = 100;                       // track to track and track to pads clearance
+    m_TrackClearance   = 100;                       // track to track and track to pads clearance
     m_TrackMinWidth    = 80;                        // track min value for width ((min copper size value
     m_ViasMinSize      = 350;                       // vias (not micro vias) min diameter
     m_MicroViasMinSize = 200;                       // micro vias (not vias) min diameter

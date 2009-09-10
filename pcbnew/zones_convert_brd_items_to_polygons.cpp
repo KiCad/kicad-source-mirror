@@ -186,7 +186,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     CopyPolygonsFromFilledPolysListToBoolengine( booleng, GROUP_A );
 
     // Calculates the clearance value that meet DRC requirements
-    int clearance = max( m_ZoneClearance, g_DesignSettings.m_TrackClearence );
+    int clearance = max( m_ZoneClearance, g_DesignSettings.m_TrackClearance );
     clearance += m_ZoneMinThickness / 2;
 
 
@@ -260,7 +260,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     }
 
     // Draw graphic items (copper texts) and board edges
-    // zone clearance is used here regardless of the g_DesignSettings.m_TrackClearence value
+    // zone clearance is used here regardless of the g_DesignSettings.m_TrackClearance value
     for( BOARD_ITEM* item = aPcb->m_Drawings;  item;  item = item->Next() )
     {
         if( item->GetLayer() != GetLayer() && item->GetLayer() != EDGE_N )
@@ -288,7 +288,6 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 break;
 
             default:
-
                 AddRoundedEndsSegmentPolygon( booleng,
                                              ( (DRAWSEGMENT*) item )->m_Start,
                                              ( (DRAWSEGMENT*) item )->m_End,
@@ -297,7 +296,6 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 have_poly_to_substract = true;
                 break;
             }
-
             break;
 
         case TYPE_TEXTE:

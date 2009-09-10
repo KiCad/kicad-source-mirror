@@ -1007,8 +1007,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_AUX_TOOLBAR_PCB_CLR_WIDTH:
     {
         int ii = m_SelClrWidthBox->GetChoice();
-        g_DesignSettings.m_TrackClearence =
-            g_DesignSettings.m_TrackClearenceHistory[ii];
+        g_DesignSettings.m_TrackClearance =
+            g_DesignSettings.m_TrackClearanceHistory[ii];
         DisplayTrackSettings();
         m_SelTrackWidthBox_Changed = false;
         m_SelClrWidthBox_Changed   = false;

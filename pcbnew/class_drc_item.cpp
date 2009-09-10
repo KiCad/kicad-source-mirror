@@ -84,6 +84,19 @@ wxString DRC_ITEM::GetErrorText() const
     case DRCE_TOO_SMALL_MICROVIA:
         return wxString( _("Too small micro via size"));
 
+    // use &lt; since this is text ultimately embedded in HTML
+    case DRCE_NETCLASS_TRACKWIDTH:
+        return wxString( _("NetClass Track Width &lt; global limit"));
+    case DRCE_NETCLASS_CLEARANCE:
+        return wxString( _("NetClass Clearance &lt; global limit"));
+    case DRCE_NETCLASS_VIASIZE:
+        return wxString( _("NetClass Via Dia &lt; global limit"));
+    case DRCE_NETCLASS_VIADRILLSIZE:
+        return wxString( _("NetClass Via Drill &lt; global limit"));
+    case DRCE_NETCLASS_uVIASIZE:
+        return wxString( _("NetClass uVia Dia &lt; global limit"));
+    case DRCE_NETCLASS_uVIADRILLSIZE:
+        return wxString( _("NetClass uVia Drill &lt; global limit"));
 
     default:
         return wxString( wxT("PROGRAM BUG, PLEASE LEAVE THE ROOM.") );

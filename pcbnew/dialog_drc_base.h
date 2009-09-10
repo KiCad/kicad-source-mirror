@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  9 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -71,18 +71,18 @@ class DIALOG_DRC_CONTROL_BASE : public wxDialog
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnReportCheckBoxClicked( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnButtonBrowseRptFileClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnStartdrcClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnListUnconnectedClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnDeleteAllClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnDeleteOneClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnLeftDClickClearance( wxMouseEvent& event ){ event.Skip(); }
-		virtual void OnRightUpClearance( wxMouseEvent& event ){ event.Skip(); }
-		virtual void OnLeftDClickUnconnected( wxMouseEvent& event ){ event.Skip(); }
-		virtual void OnRightUpUnconnected( wxMouseEvent& event ){ event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnReportCheckBoxClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonBrowseRptFileClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnStartdrcClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnListUnconnectedClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeleteAllClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeleteOneClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnLeftDClickClearance( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnRightUpClearance( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnLeftDClickUnconnected( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnRightUpUnconnected( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
@@ -94,7 +94,8 @@ class DIALOG_DRC_CONTROL_BASE : public wxDialog
 		wxTextCtrl* m_RptFilenameCtrl;
 		DRCLISTBOX* m_ClearanceListBox;
 		DRCLISTBOX* m_UnconnectedListBox;
-		DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("DRC Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 683,508 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("DRC Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,508 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_DRC_CONTROL_BASE();
 	
 };

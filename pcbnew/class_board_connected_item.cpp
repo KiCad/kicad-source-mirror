@@ -72,22 +72,29 @@ void BOARD_CONNECTED_ITEM::SetZoneSubNet( int aSubNetCode )
 
 int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 {
-    NETCLASS*   hisclass = aItem->GetNetClass();
     NETCLASS*   myclass  = GetNetClass();
 
-    wxASSERT( hisclass );
     wxASSERT( myclass );
 
     if( myclass )
     {
-        if( hisclass )
-            return MAX( hisclass->GetClearance(), myclass->GetClearance() );
-        else
-            return myclass->GetClearance();
-    }
-    else if( hisclass )
-    {
-        return hisclass->GetClearance();
+        // @todo : after GetNetClass() is reliably not returning NULL, remove the
+        // tests for if( myclass ) and if( hisclass )
+
+        if( aItem )
+        {
+            NETCLASS*   hisclass = aItem->GetNetClass();
+            wxASSERT( hisclass );
+
+            if( hisclass )
+            {
+                int hisClearance = hisclass->GetClearance();
+                int myClearance  = myclass->GetClearance();
+                return max( hisClearance, myClearance );
+            }
+        }
+
+        return myclass->GetClearance();
     }
 
     return 0;
