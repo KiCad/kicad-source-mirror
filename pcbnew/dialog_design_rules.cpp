@@ -175,16 +175,17 @@ void DIALOG_DESIGN_RULES::setRowItem( wxListCtrl* aListCtrl, int aRow, NETCUP* a
 
 /**
  * Function FillListBoxWithNetNames
- * populates aListCtrl with net names members of the aNetclassIndex net class
- * the "Client Data pointer" is used to store the index of nets in the net lists
+ * populates aListCtrl with net names and class names from m_AllNets in a two column display.
  */
 void DIALOG_DESIGN_RULES::FillListBoxWithNetNames( wxListCtrl* aListCtrl, const wxString& aNetClass )
 {
     aListCtrl->ClearAll();
 
-#if 1
+#if 0   // out of time for troubleshooting this now.
+
     PNETCUPS    ptrList;
 
+    // get a subset of m_AllNets in pointer form, sorted as desired.
     makePointers( &ptrList, aNetClass );
 
 #if defined(DEBUG)
