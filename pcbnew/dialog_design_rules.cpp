@@ -1,8 +1,32 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        dialog_design_rules.cpp
-// Author:      jean-pierre Charras
 /////////////////////////////////////////////////////////////////////////////
+
+/*
+ * This program source code file is part of KICAD, a free EDA CAD application.
+ *
+ * Copyright (C) 2004-2009 Jean-Pierre Charras, jean-pierre.charras@inpg.fr
+ * Copyright (C) 2009 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2009 Kicad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 
 /* functions relatives to the design rules editor
  */
@@ -210,7 +234,7 @@ void DIALOG_DESIGN_RULES::FillListBoxWithNetNames( wxListCtrl* aListCtrl, const 
 }
 
 
-/* Initialize the combno boxes by the list of existing net classes
+/* Initialize the combo boxes by the list of existing net classes
  */
 void DIALOG_DESIGN_RULES::InitializeRulesSelectionBoxes()
 {
@@ -471,6 +495,7 @@ void DIALOG_DESIGN_RULES::moveSelectedItems( wxListCtrl* src, const wxString& ne
 {
     wxListItem  item;
     wxString    netName;
+    item.m_mask |= wxLIST_MASK_TEXT ;      // Validate the member m_text of the wxListItem item
 
     for( int row = 0;  row < src->GetItemCount();  ++row )
     {
