@@ -572,7 +572,7 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     case COMPONENT_CIRCLE_DRAW_TYPE:
         dx = ( (LibDrawCircle*) CurrentDrawItem )->m_Pos.x - curr_pos.x;
         dy = ( (LibDrawCircle*) CurrentDrawItem )->m_Pos.y - curr_pos.y;
-        ( (LibDrawCircle*) CurrentDrawItem )->m_Rayon =
+        ( (LibDrawCircle*) CurrentDrawItem )->m_Radius =
             (int) sqrt( ( (double) dx * dx ) + ( (double) dy * dy ) );
         ( (LibDrawCircle*) CurrentDrawItem )->m_Fill = FlSymbol_Fill;
         break;
@@ -741,13 +741,16 @@ static void ComputeArc( LibDrawArc* DrawItem, wxPoint ArcCentre )
     int cX, cY;     /* Coord centre de l'arc */
     int angle;
 
-    cX = ArcCentre.x; cY = ArcCentre.y;
+    cX = ArcCentre.x;
+    cY = ArcCentre.y;
 
     cY = -cY;   /* Attention a l'orientation de l'axe Y */
 
     /* calcul de cX et cY pour que l'arc passe par ArcStartX,Y et ArcEndX,Y */
-    dx    = ArcEndX - ArcStartX; dy = ArcEndY - ArcStartY;
-    cX   -= ArcStartX; cY -= ArcStartY;
+    dx    = ArcEndX - ArcStartX;
+    dy    = ArcEndY - ArcStartY;
+    cX   -= ArcStartX;
+    cY   -= ArcStartY;
     angle = (int) ( atan2( (double) dy, (double) dx ) * 1800 / M_PI );
     RotatePoint( &dx, &dy, angle );     /* Le segment dx, dy est horizontal */
                                         /* -> dx = longueur, dy = 0 */
@@ -755,59 +758,61 @@ static void ComputeArc( LibDrawArc* DrawItem, wxPoint ArcCentre )
     cX = dx / 2;                        /* cX, cY est sur la mediane du segment 0,0 a dx,0 */
 
     RotatePoint( &cX, &cY, -angle );
-    cX += ArcStartX; cY += ArcStartY;
-
-    DrawItem->m_Pos.x = cX; DrawItem->m_Pos.y = cY;
+    cX += ArcStartX;
+    cY += ArcStartY;
+    DrawItem->m_Pos.x = cX;
+    DrawItem->m_Pos.y = cY;
 
     dx = ArcStartX - DrawItem->m_Pos.x;
     dy = ArcStartY - DrawItem->m_Pos.y;
 
-    DrawItem->m_Rayon = (int) sqrt( ( (double) dx * dx ) + ( (double) dy * dy ) );
+    DrawItem->m_Radius = (int) sqrt( ( (double) dx * dx ) +
+                                     ( (double) dy * dy ) );
 
-    DrawItem->t1 = (int) ( atan2( (double) dy, (double) dx ) * 1800 / M_PI );
+    DrawItem->m_t1 = (int) ( atan2( (double) dy, (double) dx ) * 1800 / M_PI );
 
     dx = ArcEndX - DrawItem->m_Pos.x;
     dy = ArcEndY - DrawItem->m_Pos.y;
 
-    DrawItem->t2 = (int) ( atan2( (double) dy, (double) dx ) * 1800 / M_PI );
+    DrawItem->m_t2 = (int) ( atan2( (double) dy, (double) dx ) * 1800 / M_PI );
 
     DrawItem->m_ArcStart.x = ArcStartX;
     DrawItem->m_ArcStart.y = ArcStartY;
     DrawItem->m_ArcEnd.x   = ArcEndX;
     DrawItem->m_ArcEnd.y   = ArcEndY;
 
-    NORMALIZE_ANGLE( DrawItem->t1 );
-    NORMALIZE_ANGLE( DrawItem->t2 );  // angles = 0 .. 3600
+    NORMALIZE_ANGLE( DrawItem->m_t1 );
+    NORMALIZE_ANGLE( DrawItem->m_t2 );  // angles = 0 .. 3600
 
     // limitation val abs a < 1800 (1/2 cercle) pour eviter Pbs d'affichage en miroir
     // car en trace on suppose que l'arc fait moins de 180 deg pour trouver
     // son orientation apres rot, miroir...
-    if( (DrawItem->t2 - DrawItem->t1) > 1800 )
-        DrawItem->t2 -= 3600;
-    else if( (DrawItem->t2 - DrawItem->t1) <= -1800 )
-        DrawItem->t2 += 3600;
+    if( (DrawItem->m_t2 - DrawItem->m_t1) > 1800 )
+        DrawItem->m_t2 -= 3600;
+    else if( (DrawItem->m_t2 - DrawItem->m_t1) <= -1800 )
+        DrawItem->m_t2 += 3600;
 
     wxString msg;
-    angle = DrawItem->t2 - DrawItem->t1;
+    angle = DrawItem->m_t2 - DrawItem->m_t1;
     msg.Printf( _( "Arc %.1f deg" ), (float) angle / 10 );
     WinEDA_SchematicFrame* frame =
         (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
     frame->m_LibeditFrame->PrintMsg( msg );
 
-    while( (DrawItem->t2 - DrawItem->t1) >= 1800 )
+    while( (DrawItem->m_t2 - DrawItem->m_t1) >= 1800 )
     {
-        DrawItem->t2--;
-        DrawItem->t1++;
+        DrawItem->m_t2--;
+        DrawItem->m_t1++;
     }
 
-    while( (DrawItem->t1 - DrawItem->t2) >= 1800 )
+    while( (DrawItem->m_t1 - DrawItem->m_t2) >= 1800 )
     {
-        DrawItem->t2++;
-        DrawItem->t1--;
+        DrawItem->m_t2++;
+        DrawItem->m_t1--;
     }
 
-    NORMALIZE_ANGLE( DrawItem->t1 );
-    NORMALIZE_ANGLE( DrawItem->t2 );
+    NORMALIZE_ANGLE( DrawItem->m_t1 );
+    NORMALIZE_ANGLE( DrawItem->m_t2 );
 }
 
 

@@ -79,9 +79,10 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
             else
             {
-                EraseMsgBox();
-                AfficheDoc( this, CurrentLibEntry->m_Doc.GetData(),
-                            CurrentLibEntry->m_KeyWord.GetData() );
+                if( CurrentAliasName.IsEmpty() )
+                    DisplayCmpDoc( CurrentAliasName );
+                else
+                    DisplayCmpDoc( CurrentLibEntry->GetName() );
             }
         }
     }
@@ -151,8 +152,10 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             }
             if( DrawEntry == NULL )
             {
-                AfficheDoc( this, CurrentLibEntry->m_Doc.GetData(),
-                            CurrentLibEntry->m_KeyWord.GetData() );
+                if( CurrentAliasName.IsEmpty() )
+                    DisplayCmpDoc( CurrentLibEntry->GetName() );
+                else
+                    DisplayCmpDoc( CurrentAliasName );
                 break;
             }
             SaveCopyInUndoList( CurrentLibEntry );
@@ -224,7 +227,7 @@ void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         }
         if( DrawEntry == NULL )
         {
-            InstallLibeditFrame( );
+            EditComponentProperties();
         }
     }
 

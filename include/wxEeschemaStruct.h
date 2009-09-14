@@ -474,9 +474,24 @@ public:
     void               Process_Special_Functions( wxCommandEvent& event );
     void               OnImportPart( wxCommandEvent& event );
     void               OnExportPart( wxCommandEvent& event );
+    void               OnSelectAlias( wxCommandEvent& event );
+    void               OnSelectPart( wxCommandEvent& event );
+    void               OnEditComponentProperties( wxCommandEvent& event );
+
     void               OnUpdateEditingPart( wxUpdateUIEvent& event );
     void               OnUpdateNotEditingPart( wxUpdateUIEvent& event );
+    void               OnUpdateUndo( wxUpdateUIEvent& event );
+    void               OnUpdateRedo( wxUpdateUIEvent& event );
+    void               OnUpdateSaveCurrentLib( wxUpdateUIEvent& event );
+    void               OnUpdateViewDoc( wxUpdateUIEvent& event );
+    void               OnUpdatePinByPin( wxUpdateUIEvent& event );
+    void               OnUpdatePartNumber( wxUpdateUIEvent& event );
+    void               OnUpdateDeMorganNormal( wxUpdateUIEvent& event );
+    void               OnUpdateDeMorganConvert( wxUpdateUIEvent& event );
+    void               OnUpdateSelectAlias( wxUpdateUIEvent& event );
 
+    void               UpdateAliasSelectList();
+    void               UpdatePartSelectList();
     void               DisplayLibInfos();
     void               RedrawActiveWindow( wxDC* DC, bool EraseBg );
     void               OnCloseWindow( wxCloseEvent& Event );
@@ -485,7 +500,6 @@ public:
     void               OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     bool               OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
     int                BestZoom();  // Retourne le meilleur zoom
-    void               SetToolbars();
     void               OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
 
     SCH_SCREEN*        GetScreen() { return (SCH_SCREEN*) GetBaseScreen(); }
@@ -506,13 +520,13 @@ private:
     void               SaveOnePartInMemory();
     void               SelectActiveLibrary();
     bool               LoadOneLibraryPart();
-    void               SaveActiveLibrary();
+    void               SaveActiveLibrary( wxCommandEvent& event );
 
     bool               LoadOneLibraryPartAux( LibCmpEntry*   LibEntry,
                                               LibraryStruct* Library );
 
     void               DisplayCmpDoc( const wxString& Name );
-    void               InstallLibeditFrame();
+    void               EditComponentProperties();
 
     // General editing
 public:
@@ -537,13 +551,15 @@ private:
     void               PlaceAncre();
 
     // Edition des graphismes:
-    LibEDA_BaseStruct* CreateGraphicItem( EDA_LibComponentStruct * LibEntry, wxDC* DC );
+    LibEDA_BaseStruct* CreateGraphicItem( EDA_LibComponentStruct* LibEntry,
+                                          wxDC* DC );
     void               GraphicItemBeginDraw( wxDC* DC );
     void               StartMoveDrawSymbol( wxDC* DC );
     void               EndDrawGraphicItem( wxDC* DC );
     void               LoadOneSymbol();
     void               SaveOneSymbol();
-    void               EditGraphicSymbol( wxDC* DC, LibEDA_BaseStruct* DrawItem );
+    void               EditGraphicSymbol( wxDC* DC,
+                                          LibEDA_BaseStruct* DrawItem );
     void               EditSymbolText( wxDC* DC, LibEDA_BaseStruct* DrawItem );
     void               RotateSymbolText( wxDC* DC );
     void               DeleteDrawPoly( wxDC* DC );

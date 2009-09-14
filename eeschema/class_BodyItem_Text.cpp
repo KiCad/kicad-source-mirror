@@ -39,11 +39,13 @@ bool LibDrawText::Save( FILE* ExportFile ) const
     // changed to '~'
     text.Replace( wxT( " " ), wxT( "~" ) );
 
-    fprintf( ExportFile, "T %d %d %d %d %d %d %d %s ", m_Orient,
-            m_Pos.x, m_Pos.y, m_Size.x, m_Attributs, m_Unit, m_Convert,
-            CONV_TO_UTF8( text ) );
-    fprintf( ExportFile, " %s %d", m_Italic ? "Italic" : "Normal",
-             ( m_Bold>0 ) ? 1 : 0 );
+    if( fprintf( ExportFile, "T %d %d %d %d %d %d %d %s ", m_Orient,
+                 m_Pos.x, m_Pos.y, m_Size.x, m_Attributs, m_Unit, m_Convert,
+                 CONV_TO_UTF8( text ) ) < 0 )
+        return false;
+    if( fprintf( ExportFile, " %s %d", m_Italic ? "Italic" : "Normal",
+                 ( m_Bold > 0 ) ? 1 : 0 ) < 0 )
+        return false;
 
     char hjustify = 'C';
     if( m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
@@ -57,9 +59,8 @@ bool LibDrawText::Save( FILE* ExportFile ) const
     else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
         vjustify = 'T';
 
-    fprintf( ExportFile, " %c %c", hjustify, vjustify );
-
-    fprintf( ExportFile, "\n" );
+    if( fprintf( ExportFile, " %c %c\n", hjustify, vjustify ) < 0 )
+        return false;
 
     return true;
 }
@@ -189,6 +190,33 @@ LibEDA_BaseStruct* LibDrawText::DoGenCopy()
     newitem->m_HJustify  = m_HJustify;
     newitem->m_VJustify  = m_VJustify;
     return (LibEDA_BaseStruct*) newitem;
+}
+
+
+bool LibDrawText::DoCompare( const LibEDA_BaseStruct& other ) const
+{
+    wxASSERT( other.Type() == COMPONENT_GRAPHIC_TEXT_DRAW_TYPE );
+
+    const LibDrawText* tmp = ( LibDrawText* ) &other;
+
+    return ( ( m_Pos == tmp->m_Pos ) && ( m_Size == tmp->m_Size )
+             && ( m_Text == tmp->m_Text ) );
+}
+
+
+void LibDrawText::DoOffset( const wxPoint& offset )
+{
+    m_Pos += offset;
+}
+
+
+bool LibDrawText::DoTestInside( EDA_Rect& rect )
+{
+    /*
+     * FIXME: This should calculate the text size and justification and
+     *        use rectangle instect.
+     */
+    return rect.Inside( m_Pos.x, -m_Pos.y );
 }
 
 

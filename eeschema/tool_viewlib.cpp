@@ -17,34 +17,18 @@
 
 #include "id.h"
 
-/****************************************************/
+
 void WinEDA_ViewlibFrame::ReCreateHToolbar()
-/****************************************************/
 {
     int  ii;
-    EDA_LibComponentStruct* RootLibEntry = NULL, * CurrentLibEntry = NULL;
-    bool asdeMorgan = FALSE, state;
-
-    if( (g_CurrentViewLibraryName != wxEmptyString)
-        && (g_CurrentViewComponentName != wxEmptyString) )
-    {
-        RootLibEntry =
-            ( EDA_LibComponentStruct* ) FindLibPart( g_CurrentViewComponentName,
-                                                     g_CurrentViewLibraryName );
-
-        if( RootLibEntry && LookForConvertPart( RootLibEntry ) > 1 )
-            asdeMorgan = TRUE;
-        CurrentLibEntry =
-            ( EDA_LibComponentStruct* ) FindLibPart( g_CurrentViewComponentName,
-                                                     g_CurrentViewLibraryName,
-                                                     ALIAS );
-    }
+    LibraryStruct* lib;
+    EDA_LibComponentStruct* component = NULL;
+    LibCmpEntry* entry = NULL;
+    bool asdeMorgan = false;
 
     if( m_HToolBar  == NULL )
     {
-        m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN,
-                                         this,
-                                         ID_H_TOOLBAR,
+        m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR,
                                          TRUE );
         SetToolBar( m_HToolBar );
 
@@ -116,9 +100,25 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
                                  _( "Insert component in schematic" ) );
         }
 
-        // after adding the buttons to the toolbar, must call Realize() to reflect
-        // the changes
+        // after adding the buttons to the toolbar, must call Realize() to
+        // reflect the changes
         m_HToolBar->Realize();
+    }
+
+    if( (g_CurrentViewLibraryName != wxEmptyString)
+        && (g_CurrentViewComponentName != wxEmptyString) )
+    {
+        lib = FindLibrary( g_CurrentViewLibraryName );
+
+        if( lib != NULL )
+        {
+            component = lib->FindComponent( g_CurrentViewComponentName );
+
+            if( component && component->HasConversion() )
+                asdeMorgan = true;
+
+            entry = lib->FindEntry( g_CurrentViewComponentName );
+        }
     }
 
     // Must be AFTER Realize():
@@ -130,8 +130,8 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
     m_HToolBar->EnableTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, asdeMorgan );
 
     int jj = 1;
-    if( RootLibEntry )
-        jj = MAX( RootLibEntry->m_UnitCount, 1 );
+    if( component )
+        jj = MAX( component->m_UnitCount, 1 );
     SelpartBox->Clear();
     for( ii = 0; ii < jj; ii++ )
     {
@@ -141,20 +141,13 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
     }
 
     SelpartBox->SetSelection( 0 );
-    state = FALSE;
-    if( CurrentLibEntry && jj > 1 )
-        state = TRUE;
-    SelpartBox->Enable( state );
+    SelpartBox->Enable( component && component->HasConversion() );
 
-    state = FALSE;
-    if( CurrentLibEntry && (CurrentLibEntry->m_DocFile != wxEmptyString) )
-        state = TRUE;
-    m_HToolBar->EnableTool( ID_LIBVIEW_VIEWDOC, state );
+    m_HToolBar->EnableTool( ID_LIBVIEW_VIEWDOC,
+                            entry && ( entry->m_DocFile != wxEmptyString ) );
 }
 
 
-/****************************************************/
 void WinEDA_ViewlibFrame::ReCreateVToolbar()
-/****************************************************/
 {
 }

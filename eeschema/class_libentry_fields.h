@@ -105,6 +105,9 @@ public:
 
 protected:
     virtual LibEDA_BaseStruct* DoGenCopy();
+    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;
+    virtual void DoOffset( const wxPoint& offset );
+    virtual bool DoTestInside( EDA_Rect& rect );
 };
 
 #endif  //  CLASS_LIBENTRY_FIELDS_H

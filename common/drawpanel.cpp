@@ -1377,3 +1377,15 @@ void WinEDA_DrawPanel::OnPan( wxCommandEvent& event )
     Scroll( x, y );
     MouseToCursorSchema();
 }
+
+
+void WinEDA_DrawPanel::UnManageCursor( void )
+{
+    wxClientDC dc( this );
+
+    if( ManageCurseur && ForceCloseManageCurseur )
+    {
+        ForceCloseManageCurseur( this, &dc );
+        m_AutoPAN_Request = false;
+    }
+}

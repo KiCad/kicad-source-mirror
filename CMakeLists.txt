@@ -107,7 +107,7 @@ check_find_package_result(OPENGL_FOUND "OpenGL")
 ######################
 # Find Boost library #
 ######################
-find_package(Boost QUIET)
+find_package(Boost 1.36 QUIET)
 check_find_package_result(Boost_FOUND "Boost")
 
 ##########################

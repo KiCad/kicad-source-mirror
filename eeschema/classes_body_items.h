@@ -154,7 +154,7 @@ public:
      * @param refPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    virtual bool    HitTest( const wxPoint& refPos )
+    virtual bool HitTest( const wxPoint& refPos )
     {
         return false;   // derived classes should override this function
     }
@@ -189,8 +189,49 @@ public:
      */
     LibEDA_BaseStruct* GenCopy() { return DoGenCopy(); }
 
+    /**
+     * Test LibEDA_BaseStruct objects for equivalence.
+     *
+     * @param tst - Object to test against.
+     *
+     * @return bool - True if object is identical to this object.
+     */
+    bool operator==( const LibEDA_BaseStruct& other ) const;
+    bool operator==( const LibEDA_BaseStruct* other ) const
+    {
+        return *this == *other;
+    }
+
+    /**
+     * Set drawing object offset from the current position.
+     *
+     * @param offset - Cooridinates to offset position.
+     */
+    void SetOffset( const wxPoint offset ) { DoOffset( offset ); }
+
+    /**
+     * Test if any part of the draw object is inside rectangle bounds.
+     *
+     * This is used for block selection.  The real work is done by the
+     * DoTestInside method for each derived object type.
+     *
+     * @param rect - Rectangle to check against.
+     *
+     * @return bool - True if object is inside rectangle.
+     */
+    bool Inside( EDA_Rect& rect ) { return DoTestInside( rect ); }
+
 protected:
     virtual LibEDA_BaseStruct* DoGenCopy() = 0;
+
+    /**
+     * Provide the draw object specific comparison.
+     *
+     * This is called by the == operator.
+     */
+    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const = 0;
+    virtual void DoOffset( const wxPoint& offset ) = 0;
+    virtual bool DoTestInside( EDA_Rect& rect ) = 0;
 };
 
 
@@ -318,6 +359,9 @@ public:
 
 protected:
     virtual LibEDA_BaseStruct* DoGenCopy();
+    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;
+    virtual void DoOffset( const wxPoint& offset );
+    virtual bool DoTestInside( EDA_Rect& rect );
 };
 
 
@@ -328,8 +372,9 @@ protected:
 class LibDrawArc : public LibEDA_BaseStruct
 {
 public:
-    int     m_Rayon;
-    int     t1, t2;     /* position des 2 extremites de l'arc en 0.1 degres */
+    int     m_Radius;
+    int     m_t1;
+    int     m_t2;       /* position des 2 extremites de l'arc en 0.1 degres */
     wxPoint m_ArcStart;
     wxPoint m_ArcEnd;   /* position des 2 extremites de l'arc en coord reelles*/
     wxPoint m_Pos;      /* Position or centre (Arc and Circle) or start point
@@ -386,6 +431,9 @@ public:
 
 protected:
     virtual LibEDA_BaseStruct* DoGenCopy();
+    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;
+    virtual void DoOffset( const wxPoint& offset );
+    virtual bool DoTestInside( EDA_Rect& rect );
 };
 
 
@@ -395,7 +443,7 @@ protected:
 class LibDrawCircle : public LibEDA_BaseStruct
 {
 public:
-    int     m_Rayon;
+    int     m_Radius;
     wxPoint m_Pos;    /* Position or centre (Arc and Circle) or start
                        * point (segments) */
     int     m_Width;  /* Line width */
@@ -451,6 +499,9 @@ public:
 
 protected:
     virtual LibEDA_BaseStruct* DoGenCopy();
+    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;
+    virtual void DoOffset( const wxPoint& offset );
+    virtual bool DoTestInside( EDA_Rect& rect );
 };
 
 
@@ -523,6 +574,9 @@ public:
 
 protected:
     virtual LibEDA_BaseStruct* DoGenCopy();
+    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;
+    virtual void DoOffset( const wxPoint& offset );
+    virtual bool DoTestInside( EDA_Rect& rect );
 };
 
 
@@ -587,6 +641,9 @@ public:
 
 protected:
     virtual LibEDA_BaseStruct* DoGenCopy();
+    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;
+    virtual void DoOffset( const wxPoint& offset );
+    virtual bool DoTestInside( EDA_Rect& rect );
 };
 
 /**********************************/
@@ -650,6 +707,9 @@ public:
 
 protected:
     virtual LibEDA_BaseStruct* DoGenCopy();
+    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;
+    virtual void DoOffset( const wxPoint& offset );
+    virtual bool DoTestInside( EDA_Rect& rect );
 };
 
 
@@ -724,6 +784,9 @@ public:
 
 protected:
     virtual LibEDA_BaseStruct* DoGenCopy();
+    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;
+    virtual void DoOffset( const wxPoint& offset );
+    virtual bool DoTestInside( EDA_Rect& rect );
 };
 
 /**********************************************************/
@@ -798,6 +861,9 @@ public:
 
 protected:
     virtual LibEDA_BaseStruct* DoGenCopy();
+    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;
+    virtual void DoOffset( const wxPoint& offset );
+    virtual bool DoTestInside( EDA_Rect& rect );
 };
 
 #endif  //  CLASSES_BODY_ITEMS_H

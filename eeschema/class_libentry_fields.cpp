@@ -52,6 +52,7 @@ LibDrawField::LibDrawField( int idfield ) :
     m_Size.x = m_Size.y = DEFAULT_SIZE_TEXT;
 }
 
+
 LibDrawField::~LibDrawField()
 {
 }
@@ -74,13 +75,14 @@ bool LibDrawField::Save( FILE* ExportFile ) const
         vjustify = 'T';
     if( text.IsEmpty() )
         text = wxT( "~" );
-    fprintf( ExportFile, "F%d \"%s\" %d %d %d %c %c %c %c%c%c",
-             m_FieldId, CONV_TO_UTF8( text ), m_Pos.x, m_Pos.y, m_Size.x,
-             m_Orient == 0 ? 'H' : 'V',
-             (m_Attributs & TEXT_NO_VISIBLE ) ? 'I' : 'V',
-             hjustify, vjustify,
-             m_Italic ? 'I' : 'N',
-             m_Bold ? 'B' : 'N' );
+    if( fprintf( ExportFile, "F%d \"%s\" %d %d %d %c %c %c %c%c%c",
+                 m_FieldId, CONV_TO_UTF8( text ), m_Pos.x, m_Pos.y, m_Size.x,
+                 m_Orient == 0 ? 'H' : 'V',
+                 (m_Attributs & TEXT_NO_VISIBLE ) ? 'I' : 'V',
+                 hjustify, vjustify,
+                 m_Italic ? 'I' : 'N',
+                 m_Bold ? 'B' : 'N' ) < 0 )
+        return false;
 
     /* Save field name, if necessary
      * Field name is saved only if it is not the default name.
@@ -88,10 +90,13 @@ bool LibDrawField::Save( FILE* ExportFile ) const
      * a country to an other
      */
     if( m_FieldId >= FIELD1 && !m_Name.IsEmpty()
-        && m_Name != ReturnDefaultFieldName( m_FieldId ))
-        fprintf( ExportFile, " \"%s\"", CONV_TO_UTF8( m_Name ) );
+        && m_Name != ReturnDefaultFieldName( m_FieldId )
+        && fprintf( ExportFile, " \"%s\"", CONV_TO_UTF8( m_Name ) ) < 0 )
+        return false;
 
-    fprintf( ExportFile, "\n" );
+    if( fprintf( ExportFile, "\n" ) < 0 )
+        return false;
+
     return true;
 }
 
@@ -312,10 +317,12 @@ bool LibDrawField::HitTest( const wxPoint& refPos )
  * @param aThreshold =  unused here (TextHitTest calculates its threshold )
  * @param aTransMat = the transform matrix
  */
-bool LibDrawField::HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] )
+bool LibDrawField::HitTest( wxPoint aPosRef, int aThreshold,
+                            const int aTransMat[2][2] )
 {
     int extraCharCount = 0;
-    // Reference designator text has one or 2 additional character (displays U? or U?A)
+    // Reference designator text has one or 2 additional character (displays
+    // U? or U?A)
     if( m_FieldId == REFERENCE )
     {
         extraCharCount++;
@@ -379,6 +386,33 @@ void LibDrawField::Copy( LibDrawField* Target ) const
     Target->m_VJustify  = m_VJustify;
     Target->m_Italic    = m_Italic;
     Target->m_Bold      = m_Bold;
+}
+
+
+bool LibDrawField::DoCompare( const LibEDA_BaseStruct& other ) const
+{
+    wxASSERT( other.Type() == COMPONENT_FIELD_DRAW_TYPE );
+
+    const LibDrawField* tmp = ( LibDrawField* ) &other;
+
+    return ( ( m_FieldId == tmp->m_FieldId ) && ( m_Text == tmp->m_Text )
+             && ( m_Pos == tmp->m_Pos ) && ( m_Size == tmp->m_Size ) );
+}
+
+
+void LibDrawField::DoOffset( const wxPoint& offset )
+{
+    m_Pos += offset;
+}
+
+
+bool LibDrawField::DoTestInside( EDA_Rect& rect )
+{
+    /*
+     * FIXME: This fails to take into acount the size and/or orientation of
+     *        the text.
+     */
+    return rect.Inside( m_Pos.x, -m_Pos.y );
 }
 
 

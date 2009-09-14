@@ -277,13 +277,21 @@ int WinEDA_ViewlibFrame::BestZoom()
 {
     int    bestzoom, ii, jj;
     wxSize size, itemsize;
-    EDA_LibComponentStruct* CurrentLibEntry = NULL;
+    EDA_LibComponentStruct* component;
+    LibraryStruct* lib;
 
-    CurrentLibEntry =
-        ( EDA_LibComponentStruct* ) FindLibPart( g_CurrentViewComponentName,
-                                                 g_CurrentViewLibraryName );
+    GetScreen()->m_Curseur.x = 0;
+    GetScreen()->m_Curseur.y = 0;
+    bestzoom = 16;
 
-    if( CurrentLibEntry == NULL )
+    lib = FindLibrary( g_CurrentViewLibraryName );
+
+    if( lib == NULL )
+        return bestzoom;
+
+    component = lib->FindComponent( g_CurrentViewComponentName );
+
+    if( component == NULL )
     {
         bestzoom = 16;
         GetScreen()->m_Curseur.x = 0;
@@ -291,14 +299,13 @@ int WinEDA_ViewlibFrame::BestZoom()
         return bestzoom;
     }
 
-    EDA_Rect BoundaryBox = CurrentLibEntry->GetBoundaryBox( g_ViewUnit,
-                                                            g_ViewConvert );
+    EDA_Rect BoundaryBox = component->GetBoundaryBox( g_ViewUnit,
+                                                      g_ViewConvert );
     itemsize = BoundaryBox.GetSize();
-
     size     = DrawPanel->GetClientSize();
-    size    -= wxSize( 100, 100 ); // reserve a 100 mils margin
-    ii       = itemsize.x / size.x;
-    jj       = itemsize.y / size.y;
+    size    -= wxSize( 25, 25 ); // reserve a 25 mils margin.
+    ii       = wxRound( double( itemsize.x ) / double( size.x ) );
+    jj       = wxRound( double( itemsize.y ) / double( size.y ) );
     bestzoom = MAX( ii, jj ) + 1;
 
     GetScreen()->m_Curseur = BoundaryBox.Centre();

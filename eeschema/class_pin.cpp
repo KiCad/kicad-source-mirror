@@ -33,14 +33,14 @@ const wxChar* MsgPinElectricType[] =
 LibDrawPin::LibDrawPin(EDA_LibComponentStruct * aParent) :
     LibEDA_BaseStruct( COMPONENT_PIN_DRAW_TYPE, aParent )
 {
-    m_PinLen      = 300;                /* default Pin len */
-    m_Orient      = PIN_RIGHT;          /* Pin oprient: Up, Down, Left, Right */
-    m_PinShape    = NONE;               /* Bit a bit: Pin shape (voir enum prec) */
-    m_PinType     = PIN_UNSPECIFIED;    /* electrical type of pin */
-    m_Attributs   = 0;                  /* bit 0 != 0: pin invisible */
-    m_PinNum      = 0;                  /*pin number ( i.e. 4 codes ASCII ) */
+    m_PinLen      = 300;              /* default Pin len */
+    m_Orient      = PIN_RIGHT;        /* Pin oprient: Up, Down, Left, Right */
+    m_PinShape    = NONE;             /* Bit a bit: Pin shape (voir enum prec) */
+    m_PinType     = PIN_UNSPECIFIED;  /* electrical type of pin */
+    m_Attributs   = 0;                /* bit 0 != 0: pin invisible */
+    m_PinNum      = 0;                /* pin number ( i.e. 4 codes ASCII ) */
     m_PinNumSize  = 50;
-    m_PinNameSize = 50;                 /* Default size for pin name and num */
+    m_PinNameSize = 50;               /* Default size for pin name and num */
     m_Width    = 0;
     m_typeName = _( "Pin" );
     m_PinNumShapeOpt     = 0;
@@ -137,29 +137,46 @@ bool LibDrawPin::Save( FILE* ExportFile ) const
         StringPinNum = wxT( "~" );
 
     if( !m_PinName.IsEmpty() )
-        fprintf( ExportFile, "X %s", CONV_TO_UTF8( m_PinName ) );
+    {
+        if( fprintf( ExportFile, "X %s", CONV_TO_UTF8( m_PinName ) ) < 0 )
+            return false;
+    }
     else
-        fprintf( ExportFile, "X ~" );
+    {
+        if( fprintf( ExportFile, "X ~" ) < 0 )
+            return false;
+    }
 
-    fprintf( ExportFile, " %s %d %d %d %c %d %d %d %d %c",
-             CONV_TO_UTF8( StringPinNum ), m_Pos.x, m_Pos.y,
-             (int) m_PinLen, (int) m_Orient, m_PinNumSize, m_PinNameSize,
-             m_Unit, m_Convert, Etype );
+    if( fprintf( ExportFile, " %s %d %d %d %c %d %d %d %d %c",
+                 CONV_TO_UTF8( StringPinNum ), m_Pos.x, m_Pos.y,
+                 (int) m_PinLen, (int) m_Orient, m_PinNumSize, m_PinNameSize,
+                 m_Unit, m_Convert, Etype ) < 0 )
+        return false;
 
-    if( (m_PinShape) || (m_Attributs & PINNOTDRAW) )
-        fprintf( ExportFile, " " );
-    if( m_Attributs & PINNOTDRAW )
-        fprintf( ExportFile, "N" );
-    if( m_PinShape & INVERT )
-        fprintf( ExportFile, "I" );
-    if( m_PinShape & CLOCK )
-        fprintf( ExportFile, "C" );
-    if( m_PinShape & LOWLEVEL_IN )
-        fprintf( ExportFile, "L" );
-    if( m_PinShape & LOWLEVEL_OUT )
-        fprintf( ExportFile, "V" );
+    if( ( m_PinShape ) || ( m_Attributs & PINNOTDRAW ) )
+    {
+        if( fprintf( ExportFile, " " ) < 0 )
+            return false;
+    }
+    if( m_Attributs & PINNOTDRAW
+        && fprintf( ExportFile, "N" ) < 0 )
+        return false;
+    if( m_PinShape & INVERT
+        && fprintf( ExportFile, "I" ) < 0 )
+        return false;
+    if( m_PinShape & CLOCK
+        && fprintf( ExportFile, "C" ) < 0 )
+        return false;
+    if( m_PinShape & LOWLEVEL_IN
+        && fprintf( ExportFile, "L" ) < 0 )
+        return false;
+    if( m_PinShape & LOWLEVEL_OUT
+        && fprintf( ExportFile, "V" ) < 0 )
+        return false;
 
-    fprintf( ExportFile, "\n" );
+    if( fprintf( ExportFile, "\n" ) < 0 )
+        return false;
+
     return true;
 }
 
@@ -1037,10 +1054,33 @@ LibEDA_BaseStruct* LibDrawPin::DoGenCopy()
     newpin->m_Convert            = m_Convert;
     newpin->m_Flags              = m_Flags;
     newpin->m_Width              = m_Width;
-
-    newpin->m_PinName = m_PinName;
+    newpin->m_PinName            = m_PinName;
 
     return (LibEDA_BaseStruct*) newpin;
+}
+
+
+bool LibDrawPin::DoCompare( const LibEDA_BaseStruct& other ) const
+{
+    wxASSERT( other.Type() == COMPONENT_PIN_DRAW_TYPE );
+
+    const LibDrawPin* tmp = ( LibDrawPin* ) &other;
+
+    return ( m_Pos == tmp->m_Pos );
+}
+
+
+void LibDrawPin::DoOffset( const wxPoint& offset )
+{
+    m_Pos += offset;
+}
+
+
+bool LibDrawPin::DoTestInside( EDA_Rect& rect )
+{
+    wxPoint end = ReturnPinEndPoint();
+
+    return rect.Inside( m_Pos.x, -m_Pos.y ) || rect.Inside( end.x, -end.y );
 }
 
 

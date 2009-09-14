@@ -13,14 +13,6 @@
 #define DOC_EXT           wxT( "dcm" )                     /* Ext. of documentation files */
 
 
-//Offsets used in editing library component, for handle alias data
-#define ALIAS_NAME         0
-#define ALIAS_DOC          1
-#define ALIAS_KEYWORD      2
-#define ALIAS_DOC_FILENAME 3
-#define ALIAS_NEXT         4
-
-
 enum LocateDrawStructType {
     LOCATE_COMPONENT_ARC_DRAW_TYPE = 1,
     LOCATE_COMPONENT_CIRCLE_DRAW_TYPE   = 2,

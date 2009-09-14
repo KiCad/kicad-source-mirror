@@ -459,8 +459,6 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
 
     bool ItemInEdit = GetScreen()->GetCurItem()
                       && GetScreen()->GetCurItem()->m_Flags;
-    bool RefreshToolBar = FALSE;        /* Refresh tool bar when the undo/redo
-                                         * tool state is modified. */
 
     if( hotkey == 0 )
         return;
@@ -578,7 +576,4 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
         }
         break;
     }
-
-    if( RefreshToolBar )
-        SetToolbars();
 }

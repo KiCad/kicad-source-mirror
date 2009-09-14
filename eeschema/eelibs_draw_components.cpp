@@ -73,7 +73,10 @@ LibCmpEntry* FindLibPart( const wxChar* Name, const wxString& LibName,
         if( Lib == NULL )
             break;
 
-        Entry = Lib->FindEntry( Name, type );
+        if( type == ROOT )
+            Entry = (LibCmpEntry*) Lib->FindComponent( Name );
+        else
+            Entry = Lib->FindEntry( Name );
 
         if( Entry != NULL )
         {

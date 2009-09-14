@@ -217,16 +217,14 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
     /* A new name could be entered in VALUE field.
      *  Must not be an existing alias name in alias list box */
     wxString* newvalue = &m_FieldsBuf[VALUE].m_Text;
-    for( unsigned ii = 0; ii < m_LibEntry->m_AliasList.GetCount(); ii += ALIAS_NEXT  )
+    for( size_t i = 0; i < m_LibEntry->m_AliasList.GetCount(); i++ )
     {
-        wxString* libname = &(m_LibEntry->m_AliasList[ii + ALIAS_NAME]);
-        if( newvalue->CmpNoCase( *libname ) == 0 )
+        if( newvalue->CmpNoCase( m_LibEntry->m_AliasList[i] ) == 0 )
         {
             wxString msg;
-            msg.Printf(
-                _(
-                    "A new name is entered for this component\nAn alias %s already exists!\nCannot update this component" ),
-                newvalue->GetData() );
+            msg.Printf( _( "A new name is entered for this component\nAn \
+alias %s already exists!\nCannot update this component" ),
+                        newvalue->GetData() );
             DisplayError( this, msg );
             return;
         }
@@ -236,7 +234,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
     m_Parent->SaveCopyInUndoList( m_LibEntry, IS_CHANGED );
 
     // delete any fields with no name
-    for( unsigned i = FIELD1;  i<m_FieldsBuf.size(); )
+    for( unsigned i = FIELD1; i < m_FieldsBuf.size(); )
     {
         if( m_FieldsBuf[i].m_Name.IsEmpty() )
         {

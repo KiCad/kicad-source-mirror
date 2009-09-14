@@ -36,7 +36,7 @@ EDA_LibComponentStruct* CopyLibEntryStruct( EDA_LibComponentStruct* OldEntry )
     if( OldEntry->Type != ROOT )
     {
         msg.Printf( wxT( "Component <%s> must be root type to make copy." ),
-                    (const wxChar*) OldEntry->m_Name.m_Text );
+                    (const wxChar*) OldEntry->GetName() );
         wxLogError( msg );
         return NULL;
     }
@@ -94,7 +94,7 @@ EDA_LibComponentStruct* CopyLibEntryStruct( EDA_LibComponentStruct* OldEntry )
             msg.Printf( wxT( "Error attempting to copy draw item <%s> from \
 component <%s>." ),
                         (const wxChar*) OldDrawings->GetClass(),
-                        (const wxChar*) OldEntry->m_Name.m_Text );
+                        (const wxChar*) OldEntry->GetName() );
             wxLogError( msg );
             break;
         }

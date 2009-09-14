@@ -19,7 +19,7 @@
 #include "protos.h"
 
 DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( WinEDA_LibeditFrame* aParent):
-    DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE(aParent) 
+    DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE(aParent)
 {
 	m_Parent = aParent;
 	m_RecreateToolbar = false;
@@ -44,27 +44,26 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::Init( )
 {
     SetFocus();
     m_AliasLocation = -1;
+
     if( CurrentLibEntry == NULL )
     {
-        SetTitle( _( "Lib Component Properties" ) );
+        SetTitle( _( "Library Component Properties" ) );
         return;
     }
 
     wxString title = _( "Properties for " );
+
     if( !CurrentAliasName.IsEmpty() )
     {
-        m_AliasLocation = LocateAlias( CurrentLibEntry->m_AliasList, CurrentAliasName );
-        title += CurrentAliasName +
-                  _( "(alias of " ) +
-                  wxString( CurrentLibEntry->m_Name.m_Text )
-                  + wxT( ")" );
+        title += CurrentAliasName + _( " (alias of " ) +
+            wxString( CurrentLibEntry->m_Name.m_Text )+ wxT( ")" );
     }
     else
     {
         title += CurrentLibEntry->m_Name.m_Text;
         CurrentAliasName.Empty();
     }
-    
+
     SetTitle( title );
 
     InitPanelDoc();
@@ -76,34 +75,33 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::Init( )
     /* Place list of alias names in listbox */
     if( CurrentLibEntry )
     {
-        for( unsigned ii = 0; ii < CurrentLibEntry->m_AliasList.GetCount(); ii += ALIAS_NEXT )
-            m_PartAliasList->Append( CurrentLibEntry->m_AliasList[ii + ALIAS_NAME] );
+        m_PartAliasList->Append( CurrentLibEntry->m_AliasList );
     }
 
-    if( (CurrentLibEntry == NULL) || (CurrentLibEntry->m_AliasList.GetCount() == 0) )
+    if( ( CurrentLibEntry == NULL )
+        || ( CurrentLibEntry->m_AliasList.GetCount() == 0 ) )
     {
         m_ButtonDeleteAllAlias->Enable( false );
         m_ButtonDeleteOneAlias->Enable( false );
     }
-    
+
     /* Read the Footprint Filter list */
     if( CurrentLibEntry )
     {
-        for( unsigned ii = 0; ii < CurrentLibEntry->m_FootprintList.GetCount(); ii++ )
-            m_FootprintFilterListBox->Append( CurrentLibEntry->m_FootprintList[ii] );
+        m_FootprintFilterListBox->Append( CurrentLibEntry->m_FootprintList );
     }
 
-    if( (CurrentLibEntry == NULL) || (CurrentLibEntry->m_FootprintList.GetCount() == 0) )
+    if( ( CurrentLibEntry == NULL )
+        || ( CurrentLibEntry->m_FootprintList.GetCount() == 0 ) )
     {
         m_ButtonDeleteAllFootprintFilter->Enable( false );
         m_ButtonDeleteOneFootprintFilter->Enable( false );
     }
-
 }
 
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnCancelClick( wxCommandEvent& event )
 {
-	EndModal(0);
+	EndModal( wxID_CANCEL );
 }
 

@@ -30,70 +30,59 @@ extern int CurrentUnit;
 #include "dialog_edit_component_in_lib.h"
 
 
-/*****************************************************************/
-void WinEDA_LibeditFrame::InstallLibeditFrame( void )
-/*****************************************************************/
+void WinEDA_LibeditFrame::OnEditComponentProperties( wxCommandEvent& event )
 {
-    DIALOG_EDIT_COMPONENT_IN_LIBRARY* frame =
-        new DIALOG_EDIT_COMPONENT_IN_LIBRARY( this );
+    EditComponentProperties();
+}
 
-    int IsModified = frame->ShowModal(); frame->Destroy();
 
-    if( IsModified )
-        Refresh();
+void WinEDA_LibeditFrame::EditComponentProperties()
+{
+    wxASSERT( CurrentLibEntry != NULL && CurrentLib != NULL );
+
+    DIALOG_EDIT_COMPONENT_IN_LIBRARY dlg( this );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    UpdateAliasSelectList();
+    UpdatePartSelectList();
+    DisplayLibInfos();
+    GetScreen()->SetModify();
+    SaveCopyInUndoList( CurrentLibEntry );
 }
 
 
 
-/*****************************************************/
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitPanelDoc()
-/*****************************************************/
-
-/* create the panel for component doc editing
- */
 {
-    wxString msg_text;
+    LibCmpEntry* entry;
 
-    if( m_AliasLocation >= 0 )
-        msg_text = CurrentLibEntry->m_AliasList[m_AliasLocation + ALIAS_DOC];
+    if( CurrentLibEntry == NULL )
+        return;
+
+    if( CurrentAliasName.IsEmpty() )
+    {
+        entry = CurrentLibEntry;
+    }
     else
     {
-        if( CurrentLibEntry )
-            msg_text = CurrentLibEntry->m_Doc;
-    }
-    m_Doc->SetValue( msg_text );
+        entry = ( LibCmpEntry* ) CurrentLib->FindAlias( CurrentAliasName );
 
-    msg_text.Empty();
-    if( m_AliasLocation >= 0 )
-        msg_text = CurrentLibEntry->m_AliasList[m_AliasLocation + ALIAS_KEYWORD];
-    else
-    {
-        if( CurrentLibEntry )
-            msg_text = CurrentLibEntry->m_KeyWord;
+        if( entry == NULL )
+            return;
     }
-    m_Keywords->SetValue( msg_text );
 
-    msg_text.Empty();
-    if( m_AliasLocation >= 0 )
-        msg_text = CurrentLibEntry->m_AliasList[m_AliasLocation + ALIAS_DOC_FILENAME];
-    else
-    {
-        if( CurrentLibEntry )
-            msg_text = CurrentLibEntry->m_DocFile;
-    }
-    m_Docfile->SetValue( msg_text );
-
-    if( m_AliasLocation < 0 )
-        m_ButtonCopyDoc->Enable( FALSE );
+    m_Doc->SetValue( entry->m_Doc );
+    m_Keywords->SetValue( entry->m_KeyWord );
+    m_Docfile->SetValue( entry->m_DocFile );
 }
 
 
-/*****************************************************/
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitBasicPanel()
-/*****************************************************/
-
-/* create the basic panel for component properties editing
+/*
+ * create the basic panel for component properties editing
  */
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitBasicPanel()
 {
     if( g_AsDeMorgan )
         m_AsConvertButt->SetValue( TRUE );
@@ -135,101 +124,96 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitBasicPanel()
         number = 40;
     m_SetSkew->SetValue( number );
 
-    if( CurrentLibEntry )
-    {
-        if( CurrentLibEntry->m_Options == ENTRY_POWER )
-            m_OptionPower->SetValue( TRUE );
-    }
+    if( CurrentLibEntry && CurrentLibEntry->m_Options == ENTRY_POWER )
+        m_OptionPower->SetValue( TRUE );
 
-    if( CurrentLibEntry )
-    {
-        if( CurrentLibEntry->m_UnitSelectionLocked )
-            m_OptionPartsLocked->SetValue( TRUE );
-    }
+    if( CurrentLibEntry && CurrentLibEntry->m_UnitSelectionLocked )
+        m_OptionPartsLocked->SetValue( TRUE );
 }
 
 
-/**************************************************************************/
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
-/**************************************************************************/
-
-/* Updaye the current component parameters
- */
 {
-    int ii, jj;
-
-    if( CurrentLibEntry == NULL )
-    {
-        Close(); return;
-    }
-
-    m_Parent->GetScreen()->SetModify();
-    m_Parent->SaveCopyInUndoList( CurrentLibEntry );
 
     /* Update the doc, keyword and doc filename strings */
-    if( m_AliasLocation < 0 )
+    size_t i;
+    int index;
+    LibCmpEntry* entry;
+
+    if( CurrentAliasName.IsEmpty() )
     {
-        CurrentLibEntry->m_Doc     = m_Doc->GetValue();
-        CurrentLibEntry->m_KeyWord = m_Keywords->GetValue();
-        CurrentLibEntry->m_DocFile = m_Docfile->GetValue();
+        entry = CurrentLibEntry;
     }
     else
     {
-        CurrentLibEntry->m_AliasList[m_AliasLocation + ALIAS_DOC]     = m_Doc->GetValue();
-        CurrentLibEntry->m_AliasList[m_AliasLocation + ALIAS_KEYWORD] = m_Keywords->GetValue();
-        CurrentLibEntry->m_AliasList[m_AliasLocation + ALIAS_DOC_FILENAME] = m_Docfile->GetValue();
+        entry = CurrentLib->FindEntry( CurrentAliasName );
     }
 
-    /* Update the alias list */
-    /* 1 - Add names: test for a not existing name in old alias list: */
-    jj = m_PartAliasList->GetCount();
-    for( ii = 0; ii < jj; ii++ )
+    if( entry == NULL )
     {
-        if( LocateAlias( CurrentLibEntry->m_AliasList, m_PartAliasList->GetString( ii ) ) < 0 )
-        {
-            // new alias must be created
-            CurrentLibEntry->m_AliasList.Add( m_PartAliasList->GetString( ii ) );
-            CurrentLibEntry->m_AliasList.Add( wxEmptyString );      // Add a void doc string
-            CurrentLibEntry->m_AliasList.Add( wxEmptyString );      // Add a void keyword list string
-            CurrentLibEntry->m_AliasList.Add( wxEmptyString );      // Add a void doc filename string
-        }
+        wxString msg;
+        msg.Printf( _( "Alias <%s> not found for component <%s> in library <%s>." ),
+                    (const wxChar*) CurrentAliasName,
+                    (const wxChar*) CurrentLibEntry->GetName(),
+                    (const wxChar*) CurrentLib->m_Name );
+        wxMessageBox( msg, _( "Component Library Error" ),
+                      wxID_OK | wxICON_ERROR, this );
+    }
+    else
+    {
+        entry->m_Doc = m_Doc->GetValue();
+        entry->m_KeyWord = m_Keywords->GetValue();
+        entry->m_DocFile = m_Docfile->GetValue();
     }
 
-    /* 2 - Remove delete names: test for an non existing name in new alias list: */
-    int kk, kkmax = CurrentLibEntry->m_AliasList.GetCount();
-    for( kk = 0; kk < kkmax; )
+    if( m_PartAliasList->GetStrings() != CurrentLibEntry->m_AliasList )
     {
-        jj = m_PartAliasList->GetCount();
-        wxString aliasname = CurrentLibEntry->m_AliasList[kk];
-        for( ii = 0; ii < jj; ii++ )
+        EDA_LibCmpAliasStruct* alias;
+        wxArrayString aliases = m_PartAliasList->GetStrings();
+
+        /* Add names not existing in the old alias list. */
+        for( i = 0; i < aliases.GetCount(); i++ )
         {
-            if( aliasname.CmpNoCase( m_PartAliasList->GetString( ii ).GetData() ) == 0 )
+            index = CurrentLibEntry->m_AliasList.Index( aliases[ i ], false );
+
+            if( index != wxNOT_FOUND )
+                continue;
+
+            alias = new EDA_LibCmpAliasStruct( aliases[ i ],
+                                               CurrentLibEntry->GetName() );
+            if( !CurrentLib->AddAlias( alias ) )
             {
-                kk += ALIAS_NEXT; // Alias exist in new list. keep it and test next old name
-                break;
+                delete alias;
+                alias = NULL;
             }
         }
 
-        if( ii == jj ) // Alias not found in new list, remove it (4 strings in kk position)
+        /* Remove names and library alias entries not in the new alias list. */
+        for( i = 0; CurrentLibEntry->m_AliasList.GetCount(); i++ )
         {
-            for( ii = 0; ii < ALIAS_NEXT; ii++ )
-                CurrentLibEntry->m_AliasList.RemoveAt( kk );
+            index = aliases.Index( CurrentLibEntry->m_AliasList[ i ], false );
 
-            kkmax = CurrentLibEntry->m_AliasList.GetCount();
+            if( index == wxNOT_FOUND )
+                continue;
+
+            LibCmpEntry* alias =
+                CurrentLib->FindAlias( CurrentLibEntry->m_AliasList[ i ] );
+            if( alias != NULL )
+                CurrentLib->RemoveEntry( alias );
         }
+
+        CurrentLibEntry->m_AliasList = aliases;
     }
 
-    ii = m_SelNumberOfUnits->GetValue();
-    if( ChangeNbUnitsPerPackage( ii ) )
-        m_RecreateToolbar = TRUE;
+    index = m_SelNumberOfUnits->GetValue();
+    ChangeNbUnitsPerPackage( index );
 
     if( m_AsConvertButt->GetValue() )
     {
         if( !g_AsDeMorgan )
         {
             g_AsDeMorgan = 1;
-            if( SetUnsetConvert() )
-                m_RecreateToolbar = TRUE;
+            SetUnsetConvert();
         }
     }
     else
@@ -237,8 +221,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
         if( g_AsDeMorgan )
         {
             g_AsDeMorgan = 0;
-            if( SetUnsetConvert() )
-                m_RecreateToolbar = TRUE;
+            SetUnsetConvert();
         }
     }
 
@@ -261,18 +244,11 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
     if( CurrentLibEntry->m_UnitCount <= 1 )
         CurrentLibEntry->m_UnitSelectionLocked = FALSE;
 
-    if( m_RecreateToolbar )
-        m_Parent->ReCreateHToolbar();
-
-    m_Parent->DisplayLibInfos();
-
     /* Update the footprint filter list */
     CurrentLibEntry->m_FootprintList.Clear();
-    jj = m_FootprintFilterListBox->GetCount();
-    for( ii = 0; ii < jj; ii++ )
-        CurrentLibEntry->m_FootprintList.Add( m_FootprintFilterListBox->GetString( ii ) );
+    CurrentLibEntry->m_FootprintList = m_FootprintFilterListBox->GetStrings();
 
-    EndModal( 1 );
+    EndModal( wxID_OK );
 }
 
 
@@ -280,9 +256,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::CopyDocToAlias( wxCommandEvent& WXUNUSED (event) )
 /******************************************************************************/
 {
-    if( CurrentLibEntry == NULL )
-        return;
-    if( CurrentAliasName.IsEmpty() )
+    if( CurrentLibEntry == NULL || CurrentAliasName.IsEmpty() )
         return;
 
     m_Doc->SetValue( CurrentLibEntry->m_Doc );
@@ -296,16 +270,23 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllAliasOfPart(
     wxCommandEvent& WXUNUSED (event) )
 /**********************************************************/
 {
-    CurrentAliasName.Empty();
-    if( CurrentLibEntry )
+    if( m_PartAliasList->FindString( CurrentAliasName ) != wxNOT_FOUND )
     {
-        if( IsOK( this, _( "Ok to Delete Alias LIST" ) ) )
-        {
-            m_PartAliasList->Clear();
-            m_RecreateToolbar = TRUE;
-            m_ButtonDeleteAllAlias->Enable( FALSE );
-            m_ButtonDeleteOneAlias->Enable( FALSE );
-        }
+        wxString msg;
+        msg.Printf( _( "Alias <%s> cannot be removed while it is being \
+edited!" ),
+                    (const wxChar*) CurrentAliasName );
+        DisplayError( this, msg );
+        return;
+    }
+
+    CurrentAliasName.Empty();
+
+    if( IsOK( this, _( "Remove all aliases from list?" ) ) )
+    {
+        m_PartAliasList->Clear();
+        m_ButtonDeleteAllAlias->Enable( FALSE );
+        m_ButtonDeleteOneAlias->Enable( FALSE );
     }
 }
 
@@ -330,56 +311,49 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& WXUNUSED 
     Line.Replace( wxT( " " ), wxT( "_" ) );
     aliasname = Line;
 
-    if( CurrentLibEntry->m_Name.m_Text.CmpNoCase( Line ) == 0 )
+    if( m_PartAliasList->FindString( aliasname ) != wxNOT_FOUND
+        || CurrentLib->FindEntry( aliasname ) != NULL )
     {
-        DisplayError( this, _( "This is the Root Part" ), 10 ); return;
-    }
-
-    /* test for an existing name: */
-    int ii, jj = m_PartAliasList->GetCount();
-    for( ii = 0; ii < jj; ii++ )
-    {
-        if( aliasname.CmpNoCase( m_PartAliasList->GetString( ii ) ) == 0 )
-        {
-            DisplayError( this, _( "Already in use" ), 10 );
-            return;
-        }
+        wxString msg;
+        msg.Printf( _( "Alias or component name <%s> already exists in \
+library <%s>." ),
+                    (const wxChar*) aliasname,
+                    (const wxChar*) CurrentLib->m_Name );
+        DisplayError( this,  msg );
+        return;
     }
 
     m_PartAliasList->Append( aliasname );
     if( CurrentAliasName.IsEmpty() )
         m_ButtonDeleteAllAlias->Enable( TRUE );
     m_ButtonDeleteOneAlias->Enable( TRUE );
-
-    m_RecreateToolbar = TRUE;
 }
 
 
-/********************************************************/
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAliasOfPart(
     wxCommandEvent& WXUNUSED (event) )
-/********************************************************/
 {
     wxString aliasname = m_PartAliasList->GetStringSelection();
 
     if( aliasname.IsEmpty() )
         return;
-    if( aliasname == CurrentAliasName )
+    if( aliasname.CmpNoCase( CurrentAliasName ) == 0 )
     {
-        wxString msg = CurrentAliasName + _( " is Current Selected Alias!" );
+        wxString msg;
+        msg.Printf( _( "Alias <%s> cannot be removed while it is being \
+edited!" ),
+                    (const wxChar*) aliasname );
         DisplayError( this, msg );
         return;
     }
 
-    int ii = m_PartAliasList->GetSelection();
-    m_PartAliasList->Delete( ii );
+    m_PartAliasList->Delete( m_PartAliasList->GetSelection() );
 
-    if( !CurrentLibEntry || (CurrentLibEntry->m_AliasList.GetCount() == 0) )
+    if( m_PartAliasList->IsEmpty() )
     {
         m_ButtonDeleteAllAlias->Enable( FALSE );
         m_ButtonDeleteOneAlias->Enable( FALSE );
     }
-    m_RecreateToolbar = TRUE;
 }
 
 
@@ -602,20 +576,23 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& WXUNU
     if( CurrentLibEntry == NULL )
         return;
 
-    if( Get_Message( _( "New FootprintFilter:" ), _( "Footprint Filter" ), Line, this ) != 0 )
+    if( Get_Message( _( "Add Footprint Filter" ), _( "Footprint Filter" ),
+                     Line, this ) != 0 )
         return;
 
     Line.Replace( wxT( " " ), wxT( "_" ) );
 
     /* test for an existing name: */
-    int ii, jj = m_FootprintFilterListBox->GetCount();
-    for( ii = 0; ii < jj; ii++ )
+    int index = m_FootprintFilterListBox->FindString( Line );
+
+    if( index != wxNOT_FOUND )
     {
-        if( Line.CmpNoCase( m_FootprintFilterListBox->GetString( ii ) ) == 0 )
-        {
-            DisplayError( this, _( "Already in use" ), 10 );
-            return;
-        }
+        wxString msg;
+
+        msg.Printf( _( "Foot print filter <%s> is already defined." ),
+                    (const wxChar*) Line );
+        DisplayError( this, msg );
+        return;
     }
 
     m_FootprintFilterListBox->Append( Line );

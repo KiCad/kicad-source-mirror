@@ -56,6 +56,8 @@ public:
     }
 
 
+    const wxString& GetName() { return m_Name.m_Text; }
+
     /**
      * Write the entry document information to a FILE in "*.dcm" format.
      *
@@ -127,7 +129,7 @@ public:
 
     EDA_Rect GetBoundaryBox( int Unit, int Convert );
 
-    void     SortDrawItems();
+    void SortDrawItems();
 
     bool SaveDateAndTime( FILE* ExportFile );
     bool LoadDateAndTime( char* Line );
@@ -199,6 +201,40 @@ public:
     void RemoveDrawItem( LibEDA_BaseStruct* item,
                          WinEDA_DrawPanel* panel = NULL,
                          wxDC* dc = NULL );
+
+    /**
+     * Move the component offset.
+     *
+     * @param offset - Offset displacement.
+     */
+    void SetOffset( const wxPoint& offset );
+
+    /**
+     * Remove duplicate draw items from list.
+     */
+    void RemoveDuplicateDrawItems();
+
+    /**
+     * Test if component has more than one body conversion type (DeMorgan).
+     *
+     * @return bool - True if component has more than one conversion.
+     */
+    bool HasConversion() const;
+
+    /**
+     * Test if alias name is in component alias list.
+     *
+     * Alias name comparisons are case insensitive.
+     *
+     * @param name - Name of alias.
+     *
+     * @return bool - True if alias name in alias list.
+     */
+    bool HasAlias( const wxChar* name )
+    {
+        wxASSERT( name != NULL );
+        return m_AliasList.Index( name ) != wxNOT_FOUND;
+    }
 };
 
 

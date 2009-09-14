@@ -77,7 +77,6 @@ set(EESCHEMA_SRCS
     getpart.cpp
     hierarch.cpp
     hotkeys.cpp
-    libalias.cpp
     libarch.cpp
     libedit.cpp
     libedit_onleftclick.cpp

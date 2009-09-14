@@ -70,6 +70,15 @@ void LibEDA_BaseStruct::DisplayInfo( WinEDA_DrawFrame* frame )
 }
 
 
+bool LibEDA_BaseStruct::operator==( const LibEDA_BaseStruct& other ) const
+{
+    return ( ( Type() == other.Type() )
+             && ( m_Unit == other.m_Unit )
+             && ( m_Convert == other.m_Convert )
+             && DoCompare( other ) );
+}
+
+
 /**********************/
 /** class LibDrawArc **/
 /**********************/
@@ -77,8 +86,9 @@ void LibEDA_BaseStruct::DisplayInfo( WinEDA_DrawFrame* frame )
 LibDrawArc::LibDrawArc( EDA_LibComponentStruct* aParent ) :
     LibEDA_BaseStruct( COMPONENT_ARC_DRAW_TYPE, aParent )
 {
-    m_Rayon = 0;
-    t1 = t2 = 0;
+    m_Radius   = 0;
+    m_t1       = 0;
+    m_t2       = 0;
     m_Width    = 0;
     m_Fill     = NO_FILL;
     m_typeName = _( "Arc" );
@@ -92,20 +102,21 @@ LibDrawArc::LibDrawArc( EDA_LibComponentStruct* aParent ) :
  */
 bool LibDrawArc::Save( FILE* ExportFile ) const
 {
-    int x1 = t1;
+    int x1 = m_t1;
 
     if( x1 > 1800 )
         x1 -= 3600;
 
-    int x2 = t2;
+    int x2 = m_t2;
 
     if( x2 > 1800 )
         x2 -= 3600;
 
-    fprintf( ExportFile, "A %d %d %d %d %d %d %d %d %c %d %d %d %d\n",
-             m_Pos.x, m_Pos.y, m_Rayon, x1, x2, m_Unit, m_Convert, m_Width,
-             fill_tab[m_Fill], m_ArcStart.x, m_ArcStart.y, m_ArcEnd.x,
-             m_ArcEnd.y );
+    if( fprintf( ExportFile, "A %d %d %d %d %d %d %d %d %c %d %d %d %d\n",
+                 m_Pos.x, m_Pos.y, m_Radius, x1, x2, m_Unit, m_Convert, m_Width,
+                 fill_tab[m_Fill], m_ArcStart.x, m_ArcStart.y, m_ArcEnd.x,
+                 m_ArcEnd.y ) < 0 )
+        return false;
 
     return true;
 }
@@ -117,8 +128,8 @@ bool LibDrawArc::Load( char* line, wxString& errorMsg )
     char tmp[256];
 
     cnt = sscanf( &line[2], "%d %d %d %d %d %d %d %d %s %d %d %d %d",
-                  &m_Pos.x, &m_Pos.y, &m_Rayon, &t1, &t2, &m_Unit, &m_Convert,
-                  &m_Width, tmp, &startx, &starty, &endx, &endy );
+                  &m_Pos.x, &m_Pos.y, &m_Radius, &m_t1, &m_t2, &m_Unit,
+                  &m_Convert, &m_Width, tmp, &startx, &starty, &endx, &endy );
     if( cnt < 8 )
     {
         errorMsg.Printf( _( "arc only had %d parameters of the required 8" ),
@@ -131,8 +142,8 @@ bool LibDrawArc::Load( char* line, wxString& errorMsg )
     if( tmp[0] == 'f' )
         m_Fill = FILLED_WITH_BG_BODYCOLOR;
 
-    NORMALIZE_ANGLE( t1 );
-    NORMALIZE_ANGLE( t2 );
+    NORMALIZE_ANGLE( m_t1 );
+    NORMALIZE_ANGLE( m_t2 );
 
     // Actual Coordinates of arc ends are read from file
     if( cnt >= 13 )
@@ -146,14 +157,14 @@ bool LibDrawArc::Load( char* line, wxString& errorMsg )
     {
         // Actual Coordinates of arc ends are not read from file
         // (old library), calculate them
-        m_ArcStart.x = m_Rayon;
+        m_ArcStart.x = m_Radius;
         m_ArcStart.y = 0;
-        m_ArcEnd.x   = m_Rayon;
+        m_ArcEnd.x   = m_Radius;
         m_ArcEnd.y   = 0;
-        RotatePoint( &m_ArcStart.x, &m_ArcStart.y, -t1 );
+        RotatePoint( &m_ArcStart.x, &m_ArcStart.y, -m_t1 );
         m_ArcStart.x += m_Pos.x;
         m_ArcStart.y += m_Pos.y;
-        RotatePoint( &m_ArcEnd.x, &m_ArcEnd.y, -t2 );
+        RotatePoint( &m_ArcEnd.x, &m_ArcEnd.y, -m_t2 );
         m_ArcEnd.x += m_Pos.x;
         m_ArcEnd.y += m_Pos.y;
     }
@@ -199,13 +210,13 @@ bool LibDrawArc::HitTest( wxPoint aRefPoint, int aThreshold,
     int dist = wxRound( sqrt( ( (double) relpos.x * (double) relpos.x ) +
                               ( (double) relpos.y * (double) relpos.y ) ) );
 
-    if( abs( dist - m_Rayon ) > aThreshold )
+    if( abs( dist - m_Radius ) > aThreshold )
         return false;
 
     // We are on the circle, ensure we are only on the arc, i.e. between
     //  m_ArcStart and m_ArcEnd
-    int astart = t1;    // arc starting point ( in 0.1 degree)
-    int aend   = t2;    // arc ending point ( in 0.1 degree)
+    int astart = m_t1;    // arc starting point ( in 0.1 degree)
+    int aend   = m_t2;    // arc ending point ( in 0.1 degree)
     int atest  = wxRound( atan2( (double) relpos.y,
                                  (double) relpos.x ) * 1800.0 / M_PI );
     NORMALIZE_ANGLE_180( atest );
@@ -226,12 +237,12 @@ LibEDA_BaseStruct* LibDrawArc::DoGenCopy()
 {
     LibDrawArc* newitem = new LibDrawArc( GetParent() );
 
-    newitem->m_Pos = m_Pos;
+    newitem->m_Pos      = m_Pos;
     newitem->m_ArcStart = m_ArcStart;
     newitem->m_ArcEnd   = m_ArcEnd;
-    newitem->m_Rayon    = m_Rayon;
-    newitem->t1         = t1;
-    newitem->t2         = t2;
+    newitem->m_Radius   = m_Radius;
+    newitem->m_t1       = m_t1;
+    newitem->m_t2       = m_t2;
     newitem->m_Width    = m_Width;
     newitem->m_Unit     = m_Unit;
     newitem->m_Convert  = m_Convert;
@@ -239,6 +250,32 @@ LibEDA_BaseStruct* LibDrawArc::DoGenCopy()
     newitem->m_Fill     = m_Fill;
 
     return (LibEDA_BaseStruct*) newitem;
+}
+
+
+bool LibDrawArc::DoCompare( const LibEDA_BaseStruct& other ) const
+{
+    wxASSERT( other.Type() == COMPONENT_ARC_DRAW_TYPE );
+
+    const LibDrawArc* tmp = ( LibDrawArc* ) &other;
+
+    return ( ( m_Pos == tmp->m_Pos ) && ( m_t1 == tmp->m_t1 )
+             && ( m_t2 == tmp->m_t2 ) );
+}
+
+
+void LibDrawArc::DoOffset( const wxPoint& offset )
+{
+    m_Pos += offset;
+    m_ArcStart += offset;
+    m_ArcEnd += offset;
+}
+
+
+bool LibDrawArc::DoTestInside( EDA_Rect& rect )
+{
+    return rect.Inside( m_ArcStart.x, -m_ArcStart.y )
+        || rect.Inside( m_ArcEnd.x, -m_ArcEnd.y );
 }
 
 
@@ -271,8 +308,8 @@ void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     pos1 = TransformCoordinate( aTransformMatrix, m_ArcEnd ) + aOffset;
     pos2 = TransformCoordinate( aTransformMatrix, m_ArcStart ) + aOffset;
     posc = TransformCoordinate( aTransformMatrix, m_Pos ) + aOffset;
-    int  pt1  = t1;
-    int  pt2  = t2;
+    int  pt1  = m_t1;
+    int  pt2  = m_t2;
     bool swap = MapAngles( &pt1, &pt2, aTransformMatrix );
     if( swap )
     {
@@ -288,17 +325,17 @@ void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRFilledArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
-                     m_Rayon, GetPenSize( ), color,
+                     m_Radius, GetPenSize( ), color,
                      ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE && !aData )
         GRFilledArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
-                     m_Rayon, color, color );
+                     m_Radius, color, color );
     else
     {
 #ifdef DRAW_ARC_WITH_ANGLE
 
         GRArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
-               m_Rayon, GetPenSize( ), color );
+               m_Radius, GetPenSize( ), color );
 #else
 
         GRArc1( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
@@ -325,20 +362,20 @@ EDA_Rect LibDrawArc::GetBoundingBox()
     wxPoint  normEnd   = m_ArcEnd - m_Pos;
 
     if( ( normStart == nullPoint ) || ( normEnd == nullPoint )
-       || ( m_Rayon == 0 ) )
+       || ( m_Radius == 0 ) )
     {
         wxLogDebug( wxT("Invalid arc drawing definition, center(%d, %d) \
 start(%d, %d), end(%d, %d), radius %d" ),
                     m_Pos.x, m_Pos.y, m_ArcStart.x, m_ArcStart.y, m_ArcEnd.x,
-                    m_ArcEnd.y, m_Rayon );
+                    m_ArcEnd.y, m_Radius );
         return rect;
     }
 
     endPos     = TransformCoordinate( DefaultTransformMatrix, m_ArcEnd );
     startPos   = TransformCoordinate( DefaultTransformMatrix, m_ArcStart );
     centerPos  = TransformCoordinate( DefaultTransformMatrix, m_Pos );
-    angleStart = t1;
-    angleEnd   = t2;
+    angleStart = m_t1;
+    angleEnd   = m_t2;
 
     if( MapAngles( &angleStart, &angleEnd, DefaultTransformMatrix ) )
     {
@@ -354,20 +391,20 @@ start(%d, %d), end(%d, %d), radius %d" ),
 
     /* Zero degrees is a special case. */
     if( angleStart == 0 )
-        maxX = centerPos.x + m_Rayon;
+        maxX = centerPos.x + m_Radius;
 
     /* Arc end angle wrapped passed 360. */
     if( angleStart > angleEnd )
         angleEnd += 3600;
 
     if( angleStart <= 900 && angleEnd >= 900 )          /* 90 deg */
-        maxY = centerPos.y + m_Rayon;
+        maxY = centerPos.y + m_Radius;
     if( angleStart <= 1800 && angleEnd >= 1800 )        /* 180 deg */
-        minX = centerPos.x - m_Rayon;
+        minX = centerPos.x - m_Radius;
     if( angleStart <= 2700 && angleEnd >= 2700 )        /* 270 deg */
-        minY = centerPos.y - m_Rayon;
+        minY = centerPos.y - m_Radius;
     if( angleStart <= 3600 && angleEnd >= 3600 )        /* 0 deg   */
-        maxX = centerPos.x + m_Rayon;
+        maxX = centerPos.x + m_Radius;
 
     rect.SetOrigin( minX, minY );
     rect.SetEnd( maxX, maxY );
@@ -403,7 +440,7 @@ void LibDrawArc::DisplayInfo( WinEDA_DrawFrame* frame )
 LibDrawCircle::LibDrawCircle( EDA_LibComponentStruct* aParent ) :
     LibEDA_BaseStruct( COMPONENT_CIRCLE_DRAW_TYPE, aParent )
 {
-    m_Rayon    = 0;
+    m_Radius   = 0;
     m_Fill     = NO_FILL;
     m_typeName = _( "Circle" );
 }
@@ -411,8 +448,9 @@ LibDrawCircle::LibDrawCircle( EDA_LibComponentStruct* aParent ) :
 
 bool LibDrawCircle::Save( FILE* ExportFile ) const
 {
-    fprintf( ExportFile, "C %d %d %d %d %d %d %c\n", m_Pos.x, m_Pos.y,
-             m_Rayon, m_Unit, m_Convert, m_Width, fill_tab[m_Fill] );
+    if( fprintf( ExportFile, "C %d %d %d %d %d %d %c\n", m_Pos.x, m_Pos.y,
+                 m_Radius, m_Unit, m_Convert, m_Width, fill_tab[m_Fill] ) < 0 )
+        return false;
 
     return true;
 }
@@ -423,7 +461,7 @@ bool LibDrawCircle::Load( char* line, wxString& errorMsg )
     char tmp[256];
 
     int  cnt = sscanf( &line[2], "%d %d %d %d %d %d %s", &m_Pos.x, &m_Pos.y,
-                       &m_Rayon, &m_Unit, &m_Convert, &m_Width, tmp );
+                       &m_Radius, &m_Unit, &m_Convert, &m_Width, tmp );
 
     if( cnt < 6 )
     {
@@ -462,10 +500,12 @@ bool LibDrawCircle::HitTest( const wxPoint& aPosRef )
 /** Function HitTest
  * @return true if the point aPosRef is near this object
  * @param aPosRef = a wxPoint to test
- * @param aThreshold = max distance to this object (usually the half thickness of a line)
+ * @param aThreshold = max distance to this object (usually the half
+ *                     thickness of a line)
  * @param aTransMat = the transform matrix
  */
-bool LibDrawCircle::HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] )
+bool LibDrawCircle::HitTest( wxPoint aPosRef, int aThreshold,
+                             const int aTransMat[2][2] )
 {
     wxPoint relpos = aPosRef - TransformCoordinate( aTransMat, m_Pos );
 
@@ -473,7 +513,7 @@ bool LibDrawCircle::HitTest( wxPoint aPosRef, int aThreshold, const int aTransMa
         wxRound( sqrt( ( (double) relpos.x * relpos.x ) +
                        ( (double) relpos.y * relpos.y ) ) );
 
-    if( abs( dist - m_Rayon ) <= aThreshold )
+    if( abs( dist - m_Radius ) <= aThreshold )
         return true;
     return false;
 }
@@ -484,7 +524,7 @@ LibEDA_BaseStruct* LibDrawCircle::DoGenCopy()
     LibDrawCircle* newitem = new LibDrawCircle( GetParent() );
 
     newitem->m_Pos     = m_Pos;
-    newitem->m_Rayon   = m_Rayon;
+    newitem->m_Radius  = m_Radius;
     newitem->m_Width   = m_Width;
     newitem->m_Unit    = m_Unit;
     newitem->m_Convert = m_Convert;
@@ -492,6 +532,32 @@ LibEDA_BaseStruct* LibDrawCircle::DoGenCopy()
     newitem->m_Fill    = m_Fill;
 
     return (LibEDA_BaseStruct*) newitem;
+}
+
+
+bool LibDrawCircle::DoCompare( const LibEDA_BaseStruct& other ) const
+{
+    wxASSERT( other.Type() == COMPONENT_CIRCLE_DRAW_TYPE );
+
+    const LibDrawCircle* tmp = ( LibDrawCircle* ) &other;
+
+    return ( ( m_Pos == tmp->m_Pos ) && ( m_Radius == tmp->m_Radius ) );
+}
+
+
+void LibDrawCircle::DoOffset( const wxPoint& offset )
+{
+    m_Pos += offset;
+}
+
+
+bool LibDrawCircle::DoTestInside( EDA_Rect& rect )
+{
+    /*
+     * FIXME: This fails to take into acount the radius around the center
+     *        point.
+     */
+    return rect.Inside( m_Pos.x, -m_Pos.y );
 }
 
 
@@ -529,14 +595,14 @@ void LibDrawCircle::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
-                        m_Rayon, GetPenSize( ), color,
+                        m_Radius, GetPenSize( ), color,
                         ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE )
         GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
-                        m_Rayon, 0, color, color );
+                        m_Radius, 0, color, color );
     else
         GRCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
-                  m_Rayon, GetPenSize( ), color );
+                  m_Radius, GetPenSize( ), color );
 }
 
 
@@ -544,8 +610,8 @@ EDA_Rect LibDrawCircle::GetBoundingBox()
 {
     EDA_Rect rect;
 
-    rect.SetOrigin( m_Pos.x - m_Rayon, ( m_Pos.y - m_Rayon ) * -1 );
-    rect.SetEnd( m_Pos.x + m_Rayon, ( m_Pos.y + m_Rayon ) * -1 );
+    rect.SetOrigin( m_Pos.x - m_Radius, ( m_Pos.y - m_Radius ) * -1 );
+    rect.SetEnd( m_Pos.x + m_Radius, ( m_Pos.y + m_Radius ) * -1 );
     rect.Inflate( m_Width / 2, m_Width / 2 );
 
     return rect;
@@ -564,7 +630,7 @@ void LibDrawCircle::DisplayInfo( WinEDA_DrawFrame* frame )
 
     frame->MsgPanel->Affiche_1_Parametre( 20, _( "Line width" ), msg, BLUE );
 
-    msg = ReturnStringFromValue( g_UnitMetric, m_Rayon,
+    msg = ReturnStringFromValue( g_UnitMetric, m_Radius,
                                  EESCHEMA_INTERNAL_UNIT, true );
     frame->MsgPanel->Affiche_1_Parametre( 40, _( "Radius" ), msg, RED );
 
@@ -590,8 +656,10 @@ LibDrawSquare::LibDrawSquare( EDA_LibComponentStruct* aParent ) :
 
 bool LibDrawSquare::Save( FILE* ExportFile ) const
 {
-    fprintf( ExportFile, "S %d %d %d %d %d %d %d %c\n", m_Pos.x, m_Pos.y,
-             m_End.x, m_End.y, m_Unit, m_Convert, m_Width, fill_tab[m_Fill] );
+    if( fprintf( ExportFile, "S %d %d %d %d %d %d %d %c\n", m_Pos.x, m_Pos.y,
+                 m_End.x, m_End.y, m_Unit, m_Convert, m_Width,
+                 fill_tab[m_Fill] ) < 0 )
+        return false;
 
     return true;
 }
@@ -634,6 +702,29 @@ LibEDA_BaseStruct* LibDrawSquare::DoGenCopy()
     newitem->m_Fill    = m_Fill;
 
     return (LibEDA_BaseStruct*) newitem;
+}
+
+
+bool LibDrawSquare::DoCompare( const LibEDA_BaseStruct& other ) const
+{
+    wxASSERT( other.Type() == COMPONENT_RECT_DRAW_TYPE );
+
+    const LibDrawSquare* tmp = ( LibDrawSquare* ) &other;
+
+    return ( ( m_Pos == tmp->m_Pos ) && ( m_End == tmp->m_End ) );
+}
+
+
+void LibDrawSquare::DoOffset( const wxPoint& offset )
+{
+    m_Pos += offset;
+    m_End += offset;
+}
+
+
+bool LibDrawSquare::DoTestInside( EDA_Rect& rect )
+{
+    return rect.Inside( m_Pos.x, -m_Pos.y ) || rect.Inside( m_End.x, -m_End.y );
 }
 
 
@@ -782,7 +873,8 @@ LibDrawSegment::LibDrawSegment( EDA_LibComponentStruct* aParent ) :
 
 bool LibDrawSegment::Save( FILE* ExportFile ) const
 {
-    fprintf( ExportFile, "L %d %d %d", m_Unit, m_Convert, m_Width );
+    if( fprintf( ExportFile, "L %d %d %d", m_Unit, m_Convert, m_Width ) )
+        return false;
 
     return true;
 }
@@ -806,6 +898,29 @@ LibEDA_BaseStruct* LibDrawSegment::DoGenCopy()
     newitem->m_Flags   = m_Flags;
 
     return (LibEDA_BaseStruct*) newitem;
+}
+
+
+bool LibDrawSegment::DoCompare( const LibEDA_BaseStruct& other ) const
+{
+    wxASSERT( other.Type() == COMPONENT_LINE_DRAW_TYPE );
+
+    const LibDrawSegment* tmp = ( LibDrawSegment* ) &other;
+
+    return ( ( m_Pos == tmp->m_Pos ) && ( m_End == tmp->m_End ) );
+}
+
+
+void LibDrawSegment::DoOffset( const wxPoint& offset )
+{
+    m_Pos += offset;
+    m_End += offset;
+}
+
+
+bool LibDrawSegment::DoTestInside( EDA_Rect& rect )
+{
+    return rect.Inside( m_Pos.x, -m_Pos.y ) || rect.Inside( m_End.x, -m_End.y );
 }
 
 
@@ -913,14 +1028,19 @@ bool LibDrawPolyline::Save( FILE* ExportFile ) const
 {
     int ccount = GetCornerCount();
 
-    fprintf( ExportFile, "P %d %d %d %d", ccount, m_Unit, m_Convert, m_Width );
+    if( fprintf( ExportFile, "P %d %d %d %d",
+                 ccount, m_Unit, m_Convert, m_Width ) < 0 )
+        return false;
 
     for( unsigned i = 0; i < GetCornerCount(); i++ )
     {
-        fprintf( ExportFile, "  %d %d", m_PolyPoints[i].x, m_PolyPoints[i].y );
+        if( fprintf( ExportFile, "  %d %d",
+                     m_PolyPoints[i].x, m_PolyPoints[i].y ) < 0 )
+            return false;
     }
 
-    fprintf( ExportFile, " %c\n", fill_tab[m_Fill] );
+    if( fprintf( ExportFile, " %c\n", fill_tab[m_Fill] ) < 0 )
+        return false;
 
     return true;
 }
@@ -998,6 +1118,43 @@ LibEDA_BaseStruct* LibDrawPolyline::DoGenCopy()
     newitem->m_Fill       = m_Fill;
 
     return (LibEDA_BaseStruct*) newitem;
+}
+
+
+bool LibDrawPolyline::DoCompare( const LibEDA_BaseStruct& other ) const
+{
+    wxASSERT( other.Type() == COMPONENT_POLYLINE_DRAW_TYPE );
+
+    const LibDrawPolyline* tmp = ( LibDrawPolyline* ) &other;
+
+    if( m_PolyPoints.size() != tmp->m_PolyPoints.size() )
+        return false;
+
+    for( size_t i = 0; i < m_PolyPoints.size(); i++ )
+    {
+        if( m_PolyPoints[i] != tmp->m_PolyPoints[i] )
+            return false;
+    }
+    return true;
+}
+
+
+void LibDrawPolyline::DoOffset( const wxPoint& offset )
+{
+    for( size_t i = 0; i < m_PolyPoints.size(); i++ )
+        m_PolyPoints[i] += offset;
+}
+
+
+bool LibDrawPolyline::DoTestInside( EDA_Rect& rect )
+{
+    for( size_t i = 0; i < m_PolyPoints.size(); i++ )
+    {
+        if( rect.Inside( m_PolyPoints[i].x, -m_PolyPoints[i].y ) )
+            return true;
+    }
+
+    return false;
 }
 
 
@@ -1176,15 +1333,19 @@ bool LibDrawBezier::Save( FILE* ExportFile ) const
 {
     int ccount = GetCornerCount();
 
-    fprintf( ExportFile, "B %d %d %d %d", ccount, m_Unit, m_Convert, m_Width );
+    if( fprintf( ExportFile, "B %d %d %d %d",
+                 ccount, m_Unit, m_Convert, m_Width ) < 0 )
+        return false;
 
     for( unsigned i = 0; i < GetCornerCount(); i++ )
     {
-        fprintf( ExportFile, "  %d %d", m_BezierPoints[i].x,
-                 m_BezierPoints[i].y );
+        if( fprintf( ExportFile, "  %d %d", m_BezierPoints[i].x,
+                     m_BezierPoints[i].y ) < 0 )
+            return false;
     }
 
-    fprintf( ExportFile, " %c\n", fill_tab[m_Fill] );
+    if( fprintf( ExportFile, " %c\n", fill_tab[m_Fill] ) < 0 )
+        return false;
 
     return true;
 }
@@ -1261,6 +1422,50 @@ LibEDA_BaseStruct* LibDrawBezier::DoGenCopy()
     newitem->m_Fill    = m_Fill;
     return (LibEDA_BaseStruct*) newitem;
 }
+
+
+bool LibDrawBezier::DoCompare( const LibEDA_BaseStruct& other ) const
+{
+    wxASSERT( other.Type() == COMPONENT_BEZIER_DRAW_TYPE );
+
+    const LibDrawBezier* tmp = ( LibDrawBezier* ) &other;
+
+    if( m_BezierPoints.size() != tmp->m_BezierPoints.size() )
+        return false;
+
+    for( size_t i = 0; i < m_BezierPoints.size(); i++ )
+    {
+        if( m_BezierPoints[i] != tmp->m_BezierPoints[i] )
+            return false;
+    }
+
+    return true;
+}
+
+
+void LibDrawBezier::DoOffset( const wxPoint& offset )
+{
+    size_t i;
+
+    for( i = 0; i < m_BezierPoints.size(); i++ )
+        m_BezierPoints[i] += offset;
+
+    for( i = 0; i < m_PolyPoints.size(); i++ )
+        m_PolyPoints[i] += offset;
+}
+
+
+bool LibDrawBezier::DoTestInside( EDA_Rect& rect )
+{
+    for( size_t i = 0; i < m_PolyPoints.size(); i++ )
+    {
+        if( rect.Inside( m_PolyPoints[i].x, -m_PolyPoints[i].y ) )
+            return true;
+    }
+
+    return false;
+}
+
 
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item

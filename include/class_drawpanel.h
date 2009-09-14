@@ -149,6 +149,14 @@ public:
     void         CursorOff( wxDC* DC );                         // remove the grid cursor from the display
     void         CursorOn( wxDC* DC );                          // display the grid cursor
 
+    /**
+     * Release managed cursor.
+     *
+     * Check to see if the cursor is being managed for block or editing
+     * commands and release it.
+     */
+    void         UnManageCursor( void );
+
     DECLARE_EVENT_TABLE()
 };
 

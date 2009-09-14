@@ -223,15 +223,6 @@ EDA_LibComponentStruct* CopyLibEntryStruct( EDA_LibComponentStruct* OldEntry );
  *      Parametres de sortie: pointeur sur la structure creee */
 
 
-/***************/
-/* SYMBEDIT.CPP */
-/***************/
-void SuppressDuplicateDrawItem( EDA_LibComponentStruct* LibEntry );
-
-/* Routine de suppression des elements de trace dupliques, situation
- *  frequente lorsque l'on charge des symboles predessines plusieurs fois
- *  pour definir un composant */
-
 /**************/
 /* NETLIST.CPP */
 /**************/
@@ -364,18 +355,6 @@ void BreakSegment(SCH_SCREEN * aScreen, wxPoint aBreakpoint );
 /**************/
 
 void SetaParent( EDA_BaseStruct* Struct, BASE_SCREEN* Screen );
-
-/***************/
-/* LIBALIAS.CPP */
-/***************/
-
-bool BuildAliasData( LibraryStruct* Lib, EDA_LibComponentStruct* component );
-
-/* Create the alias data for the lib component to edit */
-int  LocateAlias( const wxArrayString& AliasData, const wxString& Name );
-
-/* Return an index in alias data list ( -1 if not found ) */
-
 
 /***************/
 /* OPTIONS.CPP */

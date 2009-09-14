@@ -68,7 +68,7 @@ void LibraryStruct::GetEntryNames( wxArrayString& names, bool sort,
         if( makeUpperCase )
             names.Add( entry.m_Name.m_Text.MakeUpper() );
         else
-            names.Add( entry.m_Name.m_Text );
+            names.Add( entry.GetName() );
     }
 
     if( sort )
@@ -84,11 +84,11 @@ void LibraryStruct::SearchEntryNames( wxArrayString& names,
     BOOST_FOREACH( LibCmpEntry& entry, m_Entries )
     {
         if( !keySearch.IsEmpty() && KeyWordOk( keySearch, entry.m_KeyWord ) )
-            names.Add( entry.m_Name.m_Text );
+            names.Add( entry.GetName() );
         if( !nameSearch.IsEmpty() && WildCompareString( nameSearch,
-                                                        entry.m_Name.m_Text,
+                                                        entry.GetName(),
                                                         false ) )
-            names.Add( entry.m_Name.m_Text );
+            names.Add( entry.GetName() );
     }
 
     if( sort )
@@ -100,7 +100,7 @@ LibCmpEntry* LibraryStruct::FindEntry( const wxChar* name )
 {
     BOOST_FOREACH( LibCmpEntry& entry, m_Entries )
     {
-        if( entry.m_Name.m_Text.CmpNoCase( name ) == 0 )
+        if( entry.GetName().CmpNoCase( name ) == 0 )
             return &entry;
     }
 
@@ -110,19 +110,56 @@ LibCmpEntry* LibraryStruct::FindEntry( const wxChar* name )
 
 LibCmpEntry* LibraryStruct::FindEntry( const wxChar* name, LibrEntryType type )
 {
-    LibCmpEntry* entry = FindEntry( name );
-
-    if( entry && entry->Type != ROOT && type == ROOT )
+    BOOST_FOREACH( LibCmpEntry& entry, m_Entries )
     {
-        EDA_LibCmpAliasStruct* alias = ( EDA_LibCmpAliasStruct* ) entry;
-
-        entry = FindEntry( alias->m_RootName );
-
-        if( entry && entry->Type != ROOT )
-            return NULL;
+        if( entry.GetName().CmpNoCase( name ) == 0 && entry.Type == type )
+            return &entry;
     }
 
-    return entry;
+    return NULL;
+}
+
+
+EDA_LibComponentStruct* LibraryStruct::FindComponent( const wxChar* name,
+                                                      bool searchAliases )
+{
+    if( !searchAliases )
+        return (EDA_LibComponentStruct*) FindEntry( name, ROOT );
+
+    EDA_LibComponentStruct* component = NULL;
+    LibCmpEntry* entry = FindEntry( name );
+
+    if( entry != NULL && entry->Type == ALIAS )
+    {
+        EDA_LibCmpAliasStruct* alias = (EDA_LibCmpAliasStruct*) entry;
+        component = (EDA_LibComponentStruct*) FindEntry( alias->m_RootName,
+                                                         ROOT );
+    }
+    else
+    {
+        component = (EDA_LibComponentStruct*) entry;
+    }
+
+    return component;
+}
+
+
+bool LibraryStruct::AddAlias( EDA_LibCmpAliasStruct* alias )
+{
+    wxASSERT( alias != NULL );
+
+    if( FindEntry( alias->GetName() ) != NULL )
+    {
+        wxString msg;
+
+        msg.Printf( _( "Cannot add duplicate alias <%s> to library <%s>." ),
+                    (const wxChar*) alias->GetName(), (const wxChar*) m_Name );
+        return false;
+    }
+
+    m_Entries.push_back( (LibCmpEntry*) alias );
+    m_IsModified = true;
+    return true;
 }
 
 
@@ -130,25 +167,32 @@ EDA_LibComponentStruct* LibraryStruct::AddComponent( EDA_LibComponentStruct* cmp
 {
     wxASSERT( cmp != NULL );
 
-    EDA_LibCmpAliasStruct*  Alias;
     EDA_LibComponentStruct* newCmp = CopyLibEntryStruct( cmp );
 
     if( newCmp == NULL )
         return NULL;
 
-    newCmp->m_AliasList.Clear();
     m_Entries.push_back( (LibCmpEntry*) newCmp );
     m_IsModified = true;
 
-    for( unsigned ii = 0; ii < cmp->m_AliasList.GetCount(); ii += ALIAS_NEXT )
+    for( size_t i = 0; i < newCmp->m_AliasList.GetCount(); i++ )
     {
-        wxString aliasname = cmp->m_AliasList[ii + ALIAS_NAME];
-        newCmp->m_AliasList.Add( aliasname );
-        Alias = new EDA_LibCmpAliasStruct( aliasname, newCmp->m_Name.m_Text );
-        Alias->m_Doc     = cmp->m_AliasList[ii + ALIAS_DOC];
-        Alias->m_KeyWord = cmp->m_AliasList[ii + ALIAS_KEYWORD];
-        Alias->m_DocFile = cmp->m_AliasList[ii + ALIAS_DOC_FILENAME];
-        m_Entries.push_back( (LibCmpEntry *) Alias );
+        EDA_LibCmpAliasStruct* alias = FindAlias( newCmp->m_AliasList[ i ] );
+
+        if( alias == NULL )
+        {
+            alias = new EDA_LibCmpAliasStruct( newCmp->m_AliasList[ i ],
+                                               newCmp->GetName() );
+            m_Entries.push_back( alias );
+        }
+        else if( alias->m_RootName != newCmp->GetName() )
+        {
+            wxLogError( _( "Conflict in library <%s>: alias <%s> already has \
+root name <%s> and will not be assigned to root name <%s>." ),
+                        (const wxChar*) m_Name,
+                        (const wxChar*) alias->m_RootName,
+                        (const wxChar*) newCmp->GetName() );
+        }
     }
 
     m_Entries.sort();
@@ -163,7 +207,7 @@ void LibraryStruct::RemoveEntry( const wxString& name )
 
     for( i = m_Entries.begin(); i < m_Entries.end(); i++ )
     {
-        if( i->m_Name.m_Text.CmpNoCase( name ) == 0 )
+        if( i->GetName().CmpNoCase( name ) == 0 )
         {
             m_Entries.erase( i );
             return;
@@ -184,31 +228,31 @@ void LibraryStruct::RemoveEntry( LibCmpEntry* entry )
     if( entry->Type == ALIAS )
     {
         Alias = (EDA_LibCmpAliasStruct*) entry;
-        Root = ( EDA_LibComponentStruct* ) FindEntry( Alias->m_RootName, ROOT );
+        Root = FindComponent( Alias->m_RootName );
 
         /* Remove alias name from the root component alias list */
         if( Root == NULL )
         {
             wxLogWarning( wxT( "No root component found for alias <%s> in \
 library <%s>." ),
-                          ( const wxChar* ) entry->m_Name.m_Text,
+                          ( const wxChar* ) entry->GetName(),
                           ( const wxChar* ) m_Name );
         }
         else
         {
-            int index = Root->m_AliasList.Index( entry->m_Name.m_Text, false );
+            int index = Root->m_AliasList.Index( entry->GetName(), false );
 
             if( index == wxNOT_FOUND )
                 wxLogWarning( wxT( "Alias <%s> not found in component <%s> \
 alias list in library <%s>" ),
-                              ( const wxChar* ) entry->m_Name.m_Text,
-                              ( const wxChar* ) Root->m_Name.m_Text,
+                              ( const wxChar* ) entry->GetName(),
+                              ( const wxChar* ) Root->GetName(),
                               ( const wxChar* ) m_Name );
             else
                 Root->m_AliasList.RemoveAt( index );
         }
 
-        RemoveEntry( Alias->m_Name.m_Text );
+        RemoveEntry( Alias->GetName() );
 
         return;
     }
@@ -218,7 +262,7 @@ alias list in library <%s>" ),
     /* Entry is a component with no aliases so removal is simple. */
     if( Root->m_AliasList.GetCount() == 0 )
     {
-        RemoveEntry( Root->m_Name.m_Text );
+        RemoveEntry( Root->GetName() );
         return;
     }
 
@@ -227,14 +271,14 @@ alias list in library <%s>" ),
 
     /* The root component is not really deleted, it is renamed with the first
      * alias name. */
-    Alias = (EDA_LibCmpAliasStruct*) FindEntry( AliasName, ALIAS );
+    Alias = FindAlias( AliasName );
 
-    if( Alias == NULL || Alias->Type == ROOT )
+    if( Alias == NULL )
     {
         wxLogWarning( wxT( "Alias <%s> for component <%s> not found in \
 library <%s>" ),
                       ( const wxChar* ) AliasName,
-                      ( const wxChar* ) Root->m_Name.m_Text,
+                      ( const wxChar* ) Root->GetName(),
                       ( const wxChar* ) m_Name );
         return;
     }
@@ -254,24 +298,90 @@ library <%s>" ),
     /* Change the "RootName" for all other aliases */
     for( size_t ii = 0; ii < Root->m_AliasList.GetCount(); ii++ )
     {
-        Alias = (EDA_LibCmpAliasStruct*) FindEntry( Root->m_AliasList[ii],
-                                                    ALIAS );
+        Alias = FindAlias( Root->m_AliasList[ii] );
 
         /* Should not occur if library was saved by the library editor.
          * However, it is possible if the library was edited by hand or
          * some other program or a there is a bug in the library editor. */
-        if( Alias == NULL ||  Alias->Type != ALIAS )
+        if( Alias == NULL )
         {
             wxLogWarning( wxT( "Alias <%s> for component <%s> not found in \
 library <%s>." ),
                           ( const wxChar* ) AliasName,
-                          ( const wxChar* ) Root->m_Name.m_Text,
+                          ( const wxChar* ) Root->GetName(),
                           ( const wxChar* ) m_Name );
             continue;
         }
 
-        Alias->m_RootName = Root->m_Name.m_Text;
+        Alias->m_RootName = Root->GetName();
     }
+}
+
+
+EDA_LibComponentStruct* LibraryStruct::ReplaceComponent(
+    EDA_LibComponentStruct* oldComponent,
+    EDA_LibComponentStruct* newComponent )
+{
+    wxASSERT( oldComponent != NULL && newComponent != NULL
+              && oldComponent->GetName().CmpNoCase( newComponent->GetName() )== 0 );
+
+    size_t i;
+    int index;
+    EDA_LibCmpAliasStruct* alias;
+
+    if( oldComponent->m_AliasList != newComponent->m_AliasList )
+    {
+        /* Remove extra aliases. */
+        for( i = 0; i < oldComponent->m_AliasList.GetCount(); i++ )
+        {
+             index =
+                newComponent->m_AliasList.Index( oldComponent->m_AliasList[ i ] );
+
+            if( index != wxNOT_FOUND )
+                continue;
+
+            wxLogDebug( wxT( "Removing extra alias <%s> from component <%s> \
+in library <%s>." ),
+                        (const wxChar*) oldComponent->m_AliasList[ i ],
+                        (const wxChar*) oldComponent->GetName(),
+                        (const wxChar*) m_Name );
+
+            RemoveEntry( oldComponent->m_AliasList[ i ] );
+        }
+
+        /* Add new aliases. */
+        for( i = 0; i < newComponent->m_AliasList.GetCount(); i++ )
+        {
+             index =
+                oldComponent->m_AliasList.Index( newComponent->m_AliasList[ i ] );
+
+            if( index != wxNOT_FOUND
+                || FindEntry( newComponent->m_AliasList[ i ] ) != NULL )
+                continue;
+
+            wxLogDebug( wxT( "Adding extra alias <%s> from component <%s> \
+in library <%s>." ),
+                        (const wxChar*) newComponent->m_AliasList[ i ],
+                        (const wxChar*) newComponent->GetName(),
+                        (const wxChar*) m_Name );
+
+            alias = new EDA_LibCmpAliasStruct( newComponent->m_AliasList[ i ],
+                                               newComponent->GetName() );
+            m_Entries.push_back( alias );
+        }
+    }
+
+    RemoveEntry( oldComponent->GetName() );
+
+    EDA_LibComponentStruct* newCmp = CopyLibEntryStruct( newComponent );
+
+    if( newCmp == NULL )
+        return NULL;
+
+    m_Entries.push_back( (LibCmpEntry*) newCmp );
+    m_Entries.sort();
+    m_IsModified = true;
+    return newCmp;
 }
 
 
@@ -282,7 +392,7 @@ LibCmpEntry* LibraryStruct::GetNextEntry( const wxChar* name )
 
     for( i = 0; i < m_Entries.size(); i++ )
     {
-        if( m_Entries[i].m_Name.m_Text.CmpNoCase( name ) == 0 )
+        if( m_Entries[i].GetName().CmpNoCase( name ) == 0 )
         {
             if( i < m_Entries.size() - 1 )
             {
@@ -306,7 +416,7 @@ LibCmpEntry* LibraryStruct::GetPreviousEntry( const wxChar* name )
 
     for( i = 0; i < m_Entries.size(); i++ )
     {
-        if( m_Entries[i].m_Name.m_Text.CmpNoCase( name ) == 0 && entry )
+        if( m_Entries[i].GetName().CmpNoCase( name ) == 0 && entry )
             break;
 
         entry = &m_Entries[i];
@@ -407,7 +517,7 @@ void LibraryStruct::LoadAliases( EDA_LibComponentStruct* component )
     {
         AliasEntry =
             new EDA_LibCmpAliasStruct( component->m_AliasList[ii],
-                                       component->m_Name.m_Text );
+                                       component->GetName() );
         m_Entries.push_back( AliasEntry );
     }
 }
@@ -484,7 +594,7 @@ document file." ),
 
         wxString cmpname = CONV_FROM_UTF8( Name );
 
-        Entry = FindEntry( cmpname, ALIAS );
+        Entry = FindEntry( cmpname );
 
         while( GetLine( f, Line, &LineNum, sizeof(Line) ) )
         {

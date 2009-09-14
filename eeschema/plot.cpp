@@ -83,20 +83,17 @@ static void PlotLibPart( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem )
         case COMPONENT_ARC_DRAW_TYPE:
         {
             LibDrawArc* Arc = (LibDrawArc*) DEntry;
-            t1  = Arc->t1; t2 = Arc->t2;
+            t1  = Arc->m_t1;
+            t2 = Arc->m_t2;
             pos = TransformCoordinate( TransMat, Arc->m_Pos ) + DrawLibItem->m_Pos;
             MapAngles( &t1, &t2, TransMat );
             if( draw_bgfill && Arc->m_Fill == FILLED_WITH_BG_BODYCOLOR )
             {
                 plotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-                plotter->arc( pos, -t2, -t1, Arc->m_Rayon, FILLED_SHAPE, 0 );
+                plotter->arc( pos, -t2, -t1, Arc->m_Radius, FILLED_SHAPE, 0 );
             }
             plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-            plotter->arc( pos,
-                          -t2,
-                          -t1,
-                          Arc->m_Rayon,
-                          Arc->m_Fill,
+            plotter->arc( pos, -t2, -t1, Arc->m_Radius, Arc->m_Fill,
                           thickness );
         }
         break;
@@ -108,11 +105,11 @@ static void PlotLibPart( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem )
             if( draw_bgfill && Circle->m_Fill == FILLED_WITH_BG_BODYCOLOR )
             {
                 plotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-                plotter->circle( pos, Circle->m_Rayon * 2, FILLED_SHAPE, 0 );
+                plotter->circle( pos, Circle->m_Radius * 2, FILLED_SHAPE, 0 );
             }
             plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
             plotter->circle( pos,
-                             Circle->m_Rayon * 2,
+                             Circle->m_Radius * 2,
                              Circle->m_Fill,
                              thickness );
         }

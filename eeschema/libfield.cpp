@@ -193,18 +193,32 @@ void WinEDA_LibeditFrame::EditField( wxDC* DC, LibDrawField* Field )
      */
     if( Field->m_FieldId == VALUE )
     {
-        /* test for an existing name in alias list: */
-        for( unsigned ii = 0; ii < CurrentLibEntry->m_AliasList.GetCount();
-             ii += ALIAS_NEXT )
-        {
-            wxString aliasname = CurrentLibEntry->m_AliasList[ii + ALIAS_NAME];
+        wxString msg;
 
-            if( Text.CmpNoCase( aliasname ) == 0 )
-            {
-                DisplayError( this, _( "This name is an existing alias of \
-the component\nAborting" ) );
-                return;
-            }
+        /* Test for an existing name in the current components alias list. */
+        if( CurrentLibEntry->m_AliasList.Index( Text, false ) != wxNOT_FOUND )
+        {
+            msg.Printf( _( "The field name <%s> is an existing alias of the \
+component <%s>.\nPlease choose another name that does not conflict with any \
+names in the alias list." ),
+                        (const wxChar*) Text,
+                        (const wxChar*) CurrentLibEntry->GetName() );
+            DisplayError( this, msg );
+            return;
+        }
+
+        /* Test for an existing entry in the library to prevent duplicate
+         * entry names.
+         */
+        if( CurrentLib && CurrentLib->FindEntry( Text ) != NULL )
+        {
+            msg.Printf( _( "The field name <%s> conflicts with an existing \
+entry in the component library <%s>.\nPlease choose another name that does \
+not conflict with any library entries." ),
+                        (const wxChar*) Text,
+                        (const wxChar*) CurrentLib->m_Name );
+            DisplayError( this, msg );
+            return;
         }
     }
 
@@ -233,9 +247,7 @@ the component\nAborting" ) );
                  DefaultTransformMatrix );
 
     GetScreen()->SetModify();
-
-    if( Field->m_FieldId == VALUE )
-        ReCreateHToolbar();
+    UpdateAliasSelectList();
 }
 
 

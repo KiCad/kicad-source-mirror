@@ -397,7 +397,6 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixe
     }
 
     UpdateStatusBar();    /* Affichage des coord curseur */
-    SetToolbars();
 }
 
 

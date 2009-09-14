@@ -172,9 +172,7 @@ void WinEDA_ViewlibFrame::SelectAndViewLibraryPart( int option )
         return;
     }
 
-    LibCmpEntry* LibEntry = FindLibPart( g_CurrentViewComponentName,
-                                         g_CurrentViewLibraryName,
-                                         ALIAS );
+    LibCmpEntry* LibEntry = Lib->FindEntry( g_CurrentViewComponentName );
 
     if( LibEntry == NULL )
         return;
@@ -258,18 +256,23 @@ void WinEDA_ViewlibFrame::ViewOneLibraryContent( LibraryStruct* Lib, int Flag )
 /*****************************************************************************/
 void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
-    EDA_LibComponentStruct* LibEntry     = NULL;
-    LibCmpEntry*            ViewCmpEntry = NULL;
-    const wxChar*           RootName, * CmpName;
-    wxString Msg;
+    EDA_LibComponentStruct* component;
+    LibCmpEntry*            entry;
+    LibraryStruct*          lib;
+    wxString                msg;
+    wxString                tmp;
 
     ActiveScreen = GetScreen();
 
-    LibEntry =
-        ( EDA_LibComponentStruct* ) FindLibPart( g_CurrentViewComponentName,
-                                                 g_CurrentViewLibraryName,
-                                                 ALIAS );
-    ViewCmpEntry = (LibCmpEntry*) LibEntry;
+    lib = FindLibrary( g_CurrentViewLibraryName );
+
+    if( lib == NULL )
+        return;
+
+    entry = lib->FindEntry( g_CurrentViewComponentName );
+
+    if( entry == NULL )
+        return;
 
     /* Forcage de la reinit de la brosse et plume courante */
     GRResetPenAndBrush( DC );
@@ -281,51 +284,52 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     DrawPanel->DrawBackGround( DC );
 
-    if( LibEntry )
+    if( entry->Type != ROOT )
     {
-        CmpName = LibEntry->m_Name.m_Text.GetData();
-        if( LibEntry->Type != ROOT )
-        {
-            RootName =
-                ( (EDA_LibCmpAliasStruct*) LibEntry )->m_RootName.GetData();
-            Msg.Printf( _( "Current Part: <%s> (is Alias of <%s>)" ),
-                        CmpName, RootName );
-            LibEntry =
-                ( EDA_LibComponentStruct* ) FindLibPart( RootName,
-                                                         g_CurrentViewLibraryName,
-                                                         ROOT );
+        EDA_LibCmpAliasStruct* alias = (EDA_LibCmpAliasStruct*) entry;
 
-            if( LibEntry == NULL )
-            {
-                Msg.Printf( _( "Error: Root Part <%s> not found" ), RootName );
-                DisplayError( this, Msg );
-            }
-            else
-            {
-                /* Affichage du composant ROOT, avec nom de l'alias */
-                wxString RealName;
-                RealName = LibEntry->m_Name.m_Text;
-                LibEntry->m_Name.m_Text = CmpName;
-                if( g_ViewUnit < 1 )
-                    g_ViewUnit = 1;
-                if( g_ViewConvert < 1 )
-                    g_ViewConvert = 1;
-                LibEntry->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_ViewUnit,
-                                g_ViewConvert, GR_DEFAULT_DRAWMODE );
-                LibEntry->m_Name.m_Text = RealName;
-            }
-        }
-        else
+        component = lib->FindComponent( alias->m_RootName );
+
+        if( component == NULL )
         {
-            Msg.Printf( _( "Current Part: <%s>" ),
-                        ViewCmpEntry->m_Name.m_Text.GetData() );
-            LibEntry->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_ViewUnit,
-                            g_ViewConvert, GR_DEFAULT_DRAWMODE );
+            msg.Printf( _( "Root component <%s> for alias <%s> not found in \
+library." ),
+                        (const wxChar*) alias->m_RootName,
+                        (const wxChar*) entry->GetName(),
+                        (const wxChar*) lib->m_Name );
+            DisplayError( this, msg );
+            return;
         }
-        AfficheDoc( this, ViewCmpEntry->m_Doc, ViewCmpEntry->m_KeyWord );
+
+        msg.Printf( _( "Current Part: <%s> (is Alias of <%s>)" ),
+                    (const wxChar*) entry->GetName(),
+                    (const wxChar*) alias->m_RootName );
+
+        /* Temporarily change the name field text to reflect the alias name. */
+        tmp = component->GetName();
+        component->m_Name.m_Text = alias->GetName();
+        if( g_ViewUnit < 1 )
+            g_ViewUnit = 1;
+        if( g_ViewConvert < 1 )
+            g_ViewConvert = 1;
+        component->m_Name.m_Text = tmp;
+    }
+    else
+    {
+        component = (EDA_LibComponentStruct*) entry;
+        msg.Printf( _( "Current Part: <%s>" ),
+                    (const wxChar*) component->GetName() );
     }
 
-    SetStatusText( Msg, 0 );
+    component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_ViewUnit,
+                     g_ViewConvert, GR_DEFAULT_DRAWMODE );
+
+    if( !tmp.IsEmpty() )
+        component->m_Name.m_Text = tmp;
+
+    AfficheDoc( this, entry->m_Doc, entry->m_KeyWord );
+
+    SetStatusText( msg, 0 );
 
     DrawPanel->Trace_Curseur( DC );
 }

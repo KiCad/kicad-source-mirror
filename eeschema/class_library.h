@@ -137,17 +137,58 @@ public:
     /**
      * Find entry by name and type.
      *
-     * If the search type is an alias, the return entry can be either an
-     * alias or a component object.  If the search type is a component
-     * (root) type, the object returned will be a component.  This was
-     * done to emulate the old search pattern.
-     *
      * @param name - Name of entry, case insensitive.
      * @param type - Type of entry, root or alias.
      *
      * @return Pointer to entry if found.  NULL if not found.
      */
     LibCmpEntry* FindEntry( const wxChar* name, LibrEntryType type );
+
+    /**
+     * Find component by name.
+     *
+     * This is a helper for FindEntry so casting a LibCmpEntry pointer to
+     * a EDA_LibComponentStruct pointer is not required.
+     *
+     * @param name - Name of component, case insensitive.
+     * @param searchAliases - Searches for component by alias name as well as
+     *                        component name if true.
+     *
+     * @return Pointer to component if found.  NULL if not found.
+     */
+    EDA_LibComponentStruct* FindComponent( const wxChar* name,
+                                           bool searchAliases = true );
+
+    /**
+     * Find alias by name.
+     *
+     * This is a helper for FindEntry so casting a LibCmpEntry pointer to
+     * a EDA_LibCmpAliasStruct pointer is not required.
+     *
+     * @param name - Name of alias, case insensitive.
+     *
+     * @return Pointer to alias if found.  NULL if not found.
+     */
+    EDA_LibCmpAliasStruct* FindAlias( const wxChar* name )
+    {
+        return (EDA_LibCmpAliasStruct*) FindEntry( name, ALIAS );
+    }
+
+    /**
+     * Add a new alias entry to the library.
+     *
+     * First check if a component or alias with the same name already exists
+     * in the library and add alias if no conflict occurs.  Once the alias
+     * is added to the library it is owned by the library.  Deleting the
+     * alias pointer will render the library unstable.  Use RemoveEntry to
+     * remove the alias from the library.
+     *
+     * @param alias - Alias to add to library.
+     *
+     * @return bool - True if alias added to library.  False if conflict
+     *                exists.
+     */
+    bool AddAlias( EDA_LibCmpAliasStruct* alias );
 
     /**
      * Add component entry to library.
@@ -171,6 +212,16 @@ public:
      * @param entry - Entry to remove from library.
      */
     void RemoveEntry( LibCmpEntry* entry );
+
+    /**
+     * Replace an existing component entry in the library.
+     *
+     * @param oldComponent - The component to replace.
+     * @param newComponent - The new component.
+     */
+    EDA_LibComponentStruct* ReplaceComponent(
+        EDA_LibComponentStruct* oldComponent,
+        EDA_LibComponentStruct* newComponent );
 
     /**
      * Return the first entry in the library.

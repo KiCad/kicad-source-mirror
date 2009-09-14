@@ -67,9 +67,6 @@ void WinEDA_LibeditFrame::GetComponentFromRedoList(wxCommandEvent& event)
         CurrentLibEntry->SetNext( NULL );
     CurrentDrawItem = NULL;
     GetScreen()->SetModify();
-    ReCreateHToolbar();
-    SetToolbars();
-
     DrawPanel->Refresh();
 }
 
@@ -101,8 +98,5 @@ void WinEDA_LibeditFrame::GetComponentFromUndoList(wxCommandEvent& event)
         CurrentLibEntry->SetNext( NULL );
     CurrentDrawItem = NULL;
     GetScreen()->SetModify();
-    ReCreateHToolbar();
-    SetToolbars();
-
     DrawPanel->Refresh();
 }

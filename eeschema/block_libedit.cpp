@@ -93,100 +93,10 @@ int MarkItemsInBloc( EDA_LibComponentStruct* LibComponent,
                 continue;
         }
 
-        switch( item->Type() )
+        if( item->Inside( Rect ) )
         {
-        case COMPONENT_ARC_DRAW_TYPE:
-        {
-            pos = ( (LibDrawArc*) item )->m_ArcStart; pos.y = -pos.y;
-            if( Rect.Inside( pos ) )
-            {
-                item->m_Selected = IS_SELECTED;
-                ItemsCount++;
-            }
-            pos = ( (LibDrawArc*) item )->m_ArcEnd; pos.y = -pos.y;
-            if( Rect.Inside( pos ) )
-            {
-                item->m_Selected = IS_SELECTED;
-                ItemsCount++;
-            }
-            break;
-        }
-
-        case COMPONENT_CIRCLE_DRAW_TYPE:
-            pos = ( (LibDrawCircle*) item )->m_Pos; pos.y = -pos.y;
-            if( Rect.Inside( pos ) )
-            {
-                item->m_Selected = IS_SELECTED;
-                ItemsCount++;
-            }
-            break;
-
-        case COMPONENT_RECT_DRAW_TYPE:
-            pos = ( (LibDrawSquare*) item )->m_Pos; pos.y = -pos.y;
-            if( Rect.Inside( pos ) )
-            {
-                item->m_Selected = IS_SELECTED;
-                ItemsCount++;
-            }
-            pos = ( (LibDrawSquare*) item )->m_End; pos.y = -pos.y;
-            if( Rect.Inside( pos ) )
-            {
-                item->m_Selected = IS_SELECTED;
-                ItemsCount++;
-            }
-            break;
-
-        case COMPONENT_POLYLINE_DRAW_TYPE:
-        {
-            int  ii, imax = ( (LibDrawPolyline*) item )->GetCornerCount();
-            for( ii = 0; ii < imax; ii ++ )
-            {
-                pos = ( (LibDrawPolyline*) item )->m_PolyPoints[ii];
-                NEGATE( pos.y );
-                if( Rect.Inside( pos ) )
-                {
-                    item->m_Selected = IS_SELECTED;
-                    ItemsCount++;
-                    break;
-                }
-            }
-        }
-            break;
-
-        case COMPONENT_LINE_DRAW_TYPE:
-            break;
-
-        case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
-            pos = ( (LibDrawText*) item )->m_Pos; pos.y = -pos.y;
-            if( Rect.Inside( pos ) )
-            {
-                item->m_Selected = IS_SELECTED;
-                ItemsCount++;
-            }
-            break;
-
-        case COMPONENT_PIN_DRAW_TYPE:
-                #undef STRUCT
-                #define STRUCT ( (LibDrawPin*) item )
-            pos = STRUCT->m_Pos; pos.y = -pos.y;
-            if( Rect.Inside( pos ) )
-            {
-                item->m_Selected = IS_SELECTED;
-                ItemsCount++;
-            }
-            pos = STRUCT->ReturnPinEndPoint(); pos.y = -pos.y;
-            if( Rect.Inside( pos ) )
-            {
-                item->m_Selected = IS_SELECTED;
-                ItemsCount++;
-            }
-            break;
-
-        case COMPONENT_FIELD_DRAW_TYPE:
-            break;
-
-        default:
-            break;
+            item->m_Selected = IS_SELECTED;
+            ItemsCount++;
         }
     }
 
@@ -513,54 +423,12 @@ void MoveMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
         return;
 
     NEGATE( offset.y );  // Y axis for lib items is Down to Up: reverse y offset value
-    item = LibEntry->m_Drawings;
-    for( ; item != NULL; item = item->Next() )
+    for( item = LibEntry->m_Drawings; item != NULL; item = item->Next() )
     {
         if( item->m_Selected == 0 )
             continue;
 
-        switch( item->Type() )
-        {
-        case COMPONENT_PIN_DRAW_TYPE:
-            ( (LibDrawPin*) item )->m_Pos += offset;
-            break;
-
-        case COMPONENT_ARC_DRAW_TYPE:
-        {
-            ( (LibDrawArc*) item )->m_Pos      += offset;
-            ( (LibDrawArc*) item )->m_ArcStart += offset;
-            ( (LibDrawArc*) item )->m_ArcEnd   += offset;
-            break;
-        }
-
-        case COMPONENT_CIRCLE_DRAW_TYPE:
-            ( (LibDrawCircle*) item )->m_Pos += offset;
-            break;
-
-        case COMPONENT_RECT_DRAW_TYPE:
-            ( (LibDrawSquare*) item )->m_Pos += offset;
-            ( (LibDrawSquare*) item )->m_End += offset;
-            break;
-
-        case COMPONENT_POLYLINE_DRAW_TYPE:
-        {
-            unsigned ii, imax = ( (LibDrawPolyline*) item )->GetCornerCount();
-            for( ii = 0; ii < imax; ii ++ )
-                ( (LibDrawPolyline*) item )->m_PolyPoints[ii] += offset;
-        }
-            break;
-
-        case COMPONENT_LINE_DRAW_TYPE:
-            break;
-
-        case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
-            ( (LibDrawText*) item )->m_Pos += offset;
-            break;
-
-        default:
-            break;
-        }
-
+        item->SetOffset( offset );
         item->m_Flags = item->m_Selected = 0;
     }
 }

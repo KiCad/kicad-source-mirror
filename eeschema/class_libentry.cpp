@@ -228,15 +228,15 @@ EDA_LibCmpAliasStruct::~EDA_LibCmpAliasStruct()
 EDA_LibComponentStruct:: EDA_LibComponentStruct( const wxChar* CmpName ) :
     LibCmpEntry( ROOT, CmpName )
 {
-    m_Drawings   = NULL;
-    m_LastDate   = 0;
-    m_UnitCount  = 1;
-    m_TextInside = 40;
-    m_Options    = ENTRY_NORMAL;
+    m_Drawings            = NULL;
+    m_LastDate            = 0;
+    m_UnitCount           = 1;
+    m_TextInside          = 40;
+    m_Options             = ENTRY_NORMAL;
     m_UnitSelectionLocked = FALSE;
-    m_DrawPinNum = 1;
-    m_DrawPinName = 1;
-    m_Prefix.m_FieldId = REFERENCE;
+    m_DrawPinNum          = 1;
+    m_DrawPinName         = 1;
+    m_Prefix.m_FieldId    = REFERENCE;
     m_Prefix.SetParent( this );
 }
 
@@ -366,7 +366,7 @@ void EDA_LibComponentStruct::RemoveDrawItem( LibEDA_BaseStruct* item,
 
     if( dc != NULL )
         item->Draw( panel, dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
-                        DefaultTransformMatrix );
+                    DefaultTransformMatrix );
 
     if( m_Drawings == item )
     {
@@ -404,59 +404,86 @@ bool EDA_LibComponentStruct::Save( FILE* aFile )
         return false;
 
     /* First line: it s a comment (component name for readers) */
-    fprintf( aFile, "#\n# %s\n#\n", CONV_TO_UTF8( m_Name.m_Text ) );
+    if( fprintf( aFile, "#\n# %s\n#\n", CONV_TO_UTF8( m_Name.m_Text ) ) < 0 )
+        return false;
 
     /* Save data */
-    fprintf( aFile, "DEF" );
+    if( fprintf( aFile, "DEF" ) < 0 )
+        return false;
+
     if( (m_Name.m_Attributs & TEXT_NO_VISIBLE) == 0 )
-        fprintf( aFile, " %s", CONV_TO_UTF8( m_Name.m_Text ) );
+    {
+        if( fprintf( aFile, " %s", CONV_TO_UTF8( m_Name.m_Text ) ) < 0 )
+            return false;
+    }
     else
-        fprintf( aFile, " ~%s", CONV_TO_UTF8( m_Name.m_Text ) );
+    {
+        if( fprintf( aFile, " ~%s", CONV_TO_UTF8( m_Name.m_Text ) ) < 0 )
+            return false;
+    }
 
     if( !m_Prefix.m_Text.IsEmpty() )
-        fprintf( aFile, " %s", CONV_TO_UTF8( m_Prefix.m_Text ) );
+    {
+        if( fprintf( aFile, " %s", CONV_TO_UTF8( m_Prefix.m_Text ) ) < 0 )
+            return false;
+    }
     else
-        fprintf( aFile, " ~" );
-    fprintf( aFile, " %d %d %c %c %d %c %c\n",
-             0, m_TextInside,
-             m_DrawPinNum ? 'Y' : 'N',
-             m_DrawPinName ? 'Y' : 'N',
-             m_UnitCount, m_UnitSelectionLocked ? 'L' : 'F',
-             m_Options == ENTRY_POWER ? 'P' : 'N' );
+    {
+        if( fprintf( aFile, " ~" ) < 0 )
+            return false;
+    }
 
-    SaveDateAndTime( aFile );
+    if( fprintf( aFile, " %d %d %c %c %d %c %c\n",
+                 0, m_TextInside,
+                 m_DrawPinNum ? 'Y' : 'N',
+                 m_DrawPinName ? 'Y' : 'N',
+                 m_UnitCount, m_UnitSelectionLocked ? 'L' : 'F',
+                 m_Options == ENTRY_POWER ? 'P' : 'N' ) < 0 )
+        return false;
 
-    /* Save fields */
-    m_Prefix.Save( aFile );
-    m_Name.Save( aFile );
+    if( !SaveDateAndTime( aFile ) || !m_Prefix.Save( aFile )
+        || !m_Name.Save( aFile ) )
+        return false;
 
     for( Field = m_Fields; Field != NULL; Field = Field->Next() )
     {
         if( Field->m_Text.IsEmpty() && Field->m_Name.IsEmpty() )
             continue;
-        Field->Save( aFile );
+        if( !Field->Save( aFile ) )
+            return false;
     }
 
     /* Save the alias list: a line starting by "ALIAS" */
     if( m_AliasList.GetCount() != 0 )
     {
-        fprintf( aFile, "ALIAS" );
-        unsigned ii;
-        for( ii = 0; ii < m_AliasList.GetCount(); ii++ )
-            fprintf( aFile, " %s", CONV_TO_UTF8( m_AliasList[ii] ) );
+        if( fprintf( aFile, "ALIAS" ) < 0 )
+            return false;
 
-        fprintf( aFile, "\n" );
+        for( size_t ii = 0; ii < m_AliasList.GetCount(); ii++ )
+        {
+            if( fprintf( aFile, " %s", CONV_TO_UTF8( m_AliasList[ii] ) ) < 0 )
+                return false;
+        }
+
+        if( fprintf( aFile, "\n" ) < 0 )
+            return false;
     }
 
     /* Write the footprint filter list */
     if( m_FootprintList.GetCount() != 0 )
     {
-        fprintf( aFile, "$FPLIST\n" );
-        unsigned ii;
-        for( ii = 0; ii < m_FootprintList.GetCount(); ii++ )
-            fprintf( aFile, " %s\n", CONV_TO_UTF8( m_FootprintList[ii] ) );
+        if( fprintf( aFile, "$FPLIST\n" ) < 0 )
+            return false;
 
-        fprintf( aFile, "$ENDFPLIST\n" );
+        for( size_t ii = 0; ii < m_FootprintList.GetCount(); ii++ )
+        {
+            if( fprintf( aFile, " %s\n",
+                         CONV_TO_UTF8( m_FootprintList[ii] ) ) < 0 )
+                return false;
+        }
+
+        if( fprintf( aFile, "$ENDFPLIST\n" ) < 0 )
+            return false;
     }
 
     /* Save graphics items (including pins) */
@@ -466,17 +493,23 @@ bool EDA_LibComponentStruct::Save( FILE* aFile )
          *  when a file editing "by hand" is made */
         SortDrawItems();
 
-        fprintf( aFile, "DRAW\n" );
+        if( fprintf( aFile, "DRAW\n" ) < 0 )
+            return false;
+
         DrawEntry = m_Drawings;
         while( DrawEntry )
         {
-            DrawEntry->Save( aFile );
+            if( !DrawEntry->Save( aFile ) )
+                return false;
             DrawEntry = DrawEntry->Next();
         }
-        fprintf( aFile, "ENDDRAW\n" );
+
+        if( fprintf( aFile, "ENDDRAW\n" ) < 0 )
+            return false;
     }
 
-    fprintf( aFile, "ENDDEF\n" );
+    if( fprintf( aFile, "ENDDEF\n" ) < 0 )
+        return false;
 
     return true;
 }
@@ -890,14 +923,14 @@ bool EDA_LibComponentStruct::SaveDateAndTime( FILE* file )
         return true;
 
     sec  = m_LastDate & 63;
-    min  = (m_LastDate >> 6) & 63;
-    hour = (m_LastDate >> 12) & 31;
-    day  = (m_LastDate >> 17) & 31;
-    mon  = (m_LastDate >> 22) & 15;
-    year = (m_LastDate >> 26) + 1990;
+    min  = ( m_LastDate >> 6 ) & 63;
+    hour = ( m_LastDate >> 12 ) & 31;
+    day  = ( m_LastDate >> 17 ) & 31;
+    mon  = ( m_LastDate >> 22 ) & 15;
+    year = ( m_LastDate >> 26 ) + 1990;
 
     if ( fprintf( file, "Ti %d/%d/%d %d:%d:%d\n",
-                  year, mon, day, hour, min, sec ) == EOF )
+                  year, mon, day, hour, min, sec ) < 0 )
         return false;
 
     return true;
@@ -927,6 +960,81 @@ bool EDA_LibComponentStruct::LoadDateAndTime( char* Line )
 }
 
 
+void EDA_LibComponentStruct::SetOffset( const wxPoint& offset )
+{
+    LibEDA_BaseStruct* DrawEntry;
+
+    m_Name.SetOffset( offset );
+    m_Prefix.SetOffset( offset );
+
+    for( LibDrawField* field = m_Fields; field != NULL; field = field->Next() )
+    {
+        field->SetOffset( offset );
+    }
+
+    DrawEntry = m_Drawings;
+
+    while( DrawEntry )
+    {
+        DrawEntry->SetOffset( offset );
+        DrawEntry = DrawEntry->Next();
+    }
+}
+
+
+void EDA_LibComponentStruct::RemoveDuplicateDrawItems()
+{
+    LibEDA_BaseStruct* DEntryRef;
+    LibEDA_BaseStruct* DEntryCompare;
+    bool  deleted;
+
+    DEntryRef = m_Drawings;
+
+    while( DEntryRef )
+    {
+        if( DEntryRef->Next() == NULL )
+            return;
+        DEntryCompare = DEntryRef->Next();
+
+        if( DEntryCompare == NULL )
+            return;
+
+        deleted = false;
+
+        while( DEntryCompare )
+        {
+            if( DEntryRef == DEntryCompare )
+            {
+                RemoveDrawItem( DEntryRef, NULL, NULL );
+                deleted = true;
+                break;
+            }
+
+            DEntryCompare = DEntryCompare->Next();
+        }
+
+        if( !deleted )
+            DEntryRef = DEntryRef->Next();
+        else
+            DEntryRef = m_Drawings;
+    }
+}
+
+
+bool EDA_LibComponentStruct::HasConversion() const
+{
+    LibEDA_BaseStruct* entry;
+
+    for( entry = m_Drawings; entry != NULL; entry = entry->Next() )
+    {
+        if( entry->m_Convert > 1 )
+            return true;
+    }
+
+    return false;
+}
+
+
 /**
  * Function SaveDoc
  * writes the doc info out to a FILE in "*.dcm" format.
@@ -941,17 +1049,23 @@ bool LibCmpEntry::SaveDoc( FILE* aFile )
         return true;
 
     /* Generation des lignes utiles */
-    fprintf( aFile, "#\n$CMP %s\n", CONV_TO_UTF8( m_Name.m_Text ) );
+    if( fprintf( aFile, "#\n$CMP %s\n", CONV_TO_UTF8( m_Name.m_Text ) ) < 0 )
+        return false;
 
-    if( ! m_Doc.IsEmpty() )
-        fprintf( aFile, "D %s\n", CONV_TO_UTF8( m_Doc ) );
+    if( ! m_Doc.IsEmpty()
+        && fprintf( aFile, "D %s\n", CONV_TO_UTF8( m_Doc ) ) < 0 )
+        return false;
 
-    if( ! m_KeyWord.IsEmpty() )
-        fprintf( aFile, "K %s\n", CONV_TO_UTF8( m_KeyWord ) );
+    if( ! m_KeyWord.IsEmpty()
+        && fprintf( aFile, "K %s\n", CONV_TO_UTF8( m_KeyWord ) ) < 0 )
+        return false;
 
-    if( ! m_DocFile.IsEmpty() )
-        fprintf( aFile, "F %s\n", CONV_TO_UTF8( m_DocFile ) );
+    if( ! m_DocFile.IsEmpty()
+        && fprintf( aFile, "F %s\n", CONV_TO_UTF8( m_DocFile ) ) < 0 )
+        return false;
 
-    fprintf( aFile, "$ENDCMP\n" );
+    if( fprintf( aFile, "$ENDCMP\n" ) < 0 )
+        return false;
+
     return true;
 }
