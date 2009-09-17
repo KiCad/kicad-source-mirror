@@ -5,7 +5,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: scanbeam.cpp,v 1.4 2009/09/07 19:23:28 titato Exp $
+    RCS-ID: $Id: scanbeam.cpp,v 1.7 2009/09/14 16:50:12 titato Exp $
 */
 
 // class scanbeam
@@ -401,7 +401,6 @@ bool ScanBeam::RemoveOld( SCANTYPE scantype, TDLI<kbLink>* _I, bool& holes )
     bool found = false;
     bool foundnew = false;
     DL_Iter<kbRecord*>  _BBI = DL_Iter<kbRecord*>();
-    bool attached = false;
 
     _low = _I->item()->GetBeginNode();
 
@@ -971,7 +970,7 @@ void ScanBeam::Generate_INOUT( int graphnumber )
 //
 // this function will search the closest link to a hole
 // step one, search for a link that is marked (this is a hole)
-// step two, this is tricky, the closest link is the previous link in
+// step two, the closest link is the previous link in
 //     the beam, but only in the beam that contains the highest node
 //     from the marked link.
 //     why ? : if the marked link has for the begin and end node different
@@ -998,6 +997,70 @@ bool ScanBeam::ProcessHoles( bool atinsert, TDLI<kbLink>* _LI )
 
     kbRecord* record = _BI.item();
     kbLink* link = record->GetLink();
+    kbNode* _low = _LI->item()->GetBeginNode();
+
+    if( _GC->GetAllowNonTopHoleLinking() )
+    {
+        _BI++;
+        if ( !_BI.hitroot() && _BI.item()->GetLink()->IsTopHole() )
+        {      
+
+            kbLink* linkToThis = _BI.item()->GetLink();
+            //calculate linkToThis its Y at X of topnode.
+            kbLine line( _GC );
+            line.Set( linkToThis );
+            B_INT Y;
+            kbNode * leftnode; //left node of clossest link
+            //link right now
+            if ( linkToThis->GetEndNode()->GetX() == _low->GetX() )
+                Y = linkToThis->GetEndNode()->GetY();
+            else if ( linkToThis->GetBeginNode()->GetX() == _low->GetX() )
+                Y = linkToThis->GetBeginNode()->GetY();
+            else
+                Y =  line.Calculate_Y( _low->GetX() );
+
+            if ( linkToThis->GetBeginNode()->GetX() < linkToThis->GetEndNode()->GetX() ) 
+                leftnode = linkToThis->GetBeginNode();
+            else
+                leftnode = linkToThis->GetEndNode();
+            kbNode *topnode = new kbNode( _low->GetX(), Y, _GC );
+            kbLink *link_A = new kbLink( 0, topnode, leftnode, _GC );
+            // the orginal linkToThis
+            linkToThis->Replace( leftnode, topnode );
+            _LI->insbegin( link_A );
+            //reset mark to flag that this hole has been processed
+            linkToThis->SetTopHole( false );
+
+            kbLink *link_B = new kbLink( 0, _low, topnode, _GC );
+            kbLink *link_BB = new kbLink( 0, topnode, _low, _GC );       
+            _LI->insbegin( link_B );
+            _LI->insbegin( link_BB );
+            //mark those two segments as hole linking segments
+            link_B->SetHoleLink( true );
+            link_BB->SetHoleLink( true );
+
+            //is where we come from/link to a hole
+            bool closest_is_hole = linkToThis->GetHole();
+
+            // if the polygon linked to, is a hole, this hole here
+            // just gets bigger, so we take over the links its hole marking.
+            link_A->SetHole( closest_is_hole );
+            link_B->SetHole( closest_is_hole );
+            link_BB->SetHole( closest_is_hole );
+
+            // we have only one operation at the time, taking
+            // over the operation flags is enough, since the linking segments will
+            // be part of that output for any operation done.
+            link_A->TakeOverOperationFlags( linkToThis );
+            link_B->TakeOverOperationFlags( linkToThis );
+            link_BB->TakeOverOperationFlags( linkToThis );
+
+            foundholes = true;
+
+            SortTheBeam( atinsert );
+        }
+        _BI--;
+    }
 
     if ( !record->GetLine()->CrossListEmpty() )
     {
@@ -1009,6 +1072,9 @@ bool ScanBeam::ProcessHoles( bool atinsert, TDLI<kbLink>* _LI )
         // make new nodes and links and set them, re-use the old link, so the links
         // that still stand in the linecrosslist will not be lost.
         // There is a hole that must be linked to this link !
+
+        kbLink* linkToThis = link;
+
         TDLI<kbNode> I( record->GetLine()->GetCrossList() );
         I.tohead();
         while( !I.hitroot() )
@@ -1016,11 +1082,43 @@ bool ScanBeam::ProcessHoles( bool atinsert, TDLI<kbLink>* _LI )
             topnode = I.item();
             I.remove();
 
+            //calculate linkToThis its Y at X of topnode.
             kbLine line( _GC );
-            line.Set( link );
+            line.Set( linkToThis );
 
-            B_INT Y = line.Calculate_Y( topnode->GetX() );
+            kbNode * leftnode; //left node of clossest link
+            B_INT Y;
+            //check if flatlink ( i think is always linkBB from a topnode at same X coordinate.
+            //but lets accept all flatlinks 
+            if ( linkToThis->GetEndNode()->GetX() == linkToThis->GetBeginNode()->GetX() )
+            {
+                //we take the lowest of the flatlink nodes, which is right for
+                // a second hole at same X
+                if ( linkToThis->GetEndNode()->GetY() >= linkToThis->GetBeginNode()->GetY() )
+                {
+                    Y = linkToThis->GetBeginNode()->GetY(); 
+                    leftnode = linkToThis->GetBeginNode();
+                }
+                else
+                {
+                    Y = linkToThis->GetEndNode()->GetY();
+                    leftnode = linkToThis->GetEndNode();
+                }
+            }
+            else
+            {   
+                if ( linkToThis->GetEndNode()->GetX() == topnode->GetX() )
+                    Y = linkToThis->GetEndNode()->GetY();
+                else if ( linkToThis->GetBeginNode()->GetX() == topnode->GetX() )
+                    Y = linkToThis->GetBeginNode()->GetY();
+                else
+                    Y =  line.Calculate_Y( topnode->GetX() );
 
+                if ( linkToThis->GetBeginNode()->GetX() < linkToThis->GetEndNode()->GetX() ) 
+                    leftnode = linkToThis->GetBeginNode();
+                else
+                    leftnode = linkToThis->GetEndNode();
+            }
             // Now we'll create new nodes and new links to make the link between
             // the graphs.
 
@@ -1031,30 +1129,25 @@ bool ScanBeam::ProcessHoles( bool atinsert, TDLI<kbLink>* _LI )
             //because they are left around but the link is always on the
             //bottom of the hole
 
-            //    linkA                      linkD
+            //    linkA                      linkToThis
             //   o-------->--------NodeA------->------------o
-            //         |  |
-            //         |  |
-            //      linkB  v  ^ linkBB
-            //         |  |
-            //         |  |
-            //   outgoing*       |  |          incoming*
+            //  leftnode          |  |
+            //                    |  |
+            //             linkB  v  ^ linkBB
+            //                    |  |
+            //                    |  |
+            //   outgoing*        |  |          incoming*
             //   o------<---------topnode--------<----------o
             //
             // all holes are oriented left around
 
 
-            kbNode * leftnode; //left node of clossest link
-            ( link->GetBeginNode()->GetX() < link->GetEndNode()->GetX() ) ?
-            leftnode = link->GetBeginNode() :
-                       leftnode = link->GetEndNode();
-
             kbNode *node_A = new kbNode( topnode->GetX(), Y, _GC );
             kbLink *link_A = new kbLink( 0, leftnode, node_A, _GC );
             kbLink *link_B = new kbLink( 0, node_A, topnode, _GC );
             kbLink *link_BB = new kbLink( 0, topnode, node_A, _GC );
-            kbLink *link_D = _BI.item()->GetLink();
-            link_D->Replace( leftnode, node_A );
+            // the orginal linkToThis
+            linkToThis->Replace( leftnode, node_A );
             _LI->insbegin( link_A );
             _LI->insbegin( link_B );
             _LI->insbegin( link_BB );
@@ -1064,7 +1157,7 @@ bool ScanBeam::ProcessHoles( bool atinsert, TDLI<kbLink>* _LI )
             link_BB->SetHoleLink( true );
 
             //is where we come from/link to a hole
-            bool closest_is_hole = link->GetHole();
+            bool closest_is_hole = linkToThis->GetHole();
 
             // if the polygon linked to, is a hole, this hole here
             // just gets bigger, so we take over the links its hole marking.
@@ -1075,9 +1168,19 @@ bool ScanBeam::ProcessHoles( bool atinsert, TDLI<kbLink>* _LI )
             // we have only one operation at the time, taking
             // over the operation flags is enough, since the linking segments will
             // be part of that output for any operation done.
-            link_A->TakeOverOperationFlags( link );
-            link_B->TakeOverOperationFlags( link );
-            link_BB->TakeOverOperationFlags( link );
+            link_A->TakeOverOperationFlags( linkToThis );
+            link_B->TakeOverOperationFlags( linkToThis );
+            link_BB->TakeOverOperationFlags( linkToThis );
+
+            // check next top node is at same X
+            if ( !I.hitroot() )
+            {
+                kbNode *newtopnode = I.item();
+                if ( topnode->GetX() == newtopnode->GetX() )
+                    linkToThis = link_BB;
+                else
+                    linkToThis = link;
+            }
         }
     }
 

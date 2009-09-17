@@ -197,9 +197,9 @@ void BOARD::SynchronizeNetsAndNetClasses()
         {
             const wxString&  netname = *member;
 
-            // @todo: although this overall function seems to be adequately fast, if you
-            // wanted to make an improvement it would be in FindNet( wxString ) which I
-            // think is a sequential search.
+            // although this overall function seems to be adequately fast,
+            // FindNet( wxString ) uses now a fast binary search and is fast
+            // event for large net lists
             NETINFO_ITEM* net = FindNet( netname );
 
             if( net && net->GetClassName() == NETCLASS::Default )

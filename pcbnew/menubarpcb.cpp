@@ -185,6 +185,11 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( preference_xpm );
     configmenu->Append( item );
 
+    item = new wxMenuItem( configmenu, ID_PCB_COPPER_LAYERS_SETUP, _( "Copper &Layers" ),
+                           _( "Select copper layers count and layers names" ) );
+    item->SetBitmap( copper_layers_setup_xpm );
+    configmenu->Append( item );
+
     item = new wxMenuItem( configmenu, ID_PCB_DISPLAY_OPTIONS_SETUP, _( "&Display" ),
                            _( "Select how items (pads, tracks texts ... ) are displayed" ) );
     item->SetBitmap( display_options_xpm );

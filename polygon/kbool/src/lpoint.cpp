@@ -6,7 +6,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: lpoint.cpp,v 1.3 2008/06/04 21:23:22 titato Exp $
+    RCS-ID: $Id: lpoint.cpp,v 1.4 2009/09/10 17:04:09 titato Exp $
 */
 
 #include "kbool/lpoint.h"

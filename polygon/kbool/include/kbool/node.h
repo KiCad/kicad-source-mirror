@@ -6,7 +6,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: node.h,v 1.4 2009/09/07 19:23:28 titato Exp $
+    RCS-ID: $Id: node.h,v 1.7 2009/09/14 16:50:12 titato Exp $
 */
 
 #ifndef NODE_H
@@ -53,13 +53,15 @@ public:
     kbLink*  GetMost( kbLink* const prev , LinkStatus whatside, BOOL_OP operation );
 
     //! get link that is leading to a hole ( hole segment or linking segment )
-    kbLink* GetMostHole( kbLink* const prev , LinkStatus whatside, BOOL_OP operation );
+    kbLink* GetMostHole( kbLink* const prev , LinkStatus whatside, BOOL_OP operation,
+                         bool searchholelink = true );
 
     //! get link that is not vertical.
     kbLink*  GetNotFlat();
 
     //! get a link to a hole or from a hole.
-    kbLink* GetHoleLink( kbLink* const prev, bool checkbin, BOOL_OP operation );
+    kbLink* GetHoleLink( kbLink* const prev, LinkStatus whatside, 
+                         bool checkbin, BOOL_OP operation );
 
     int Merge( kbNode* );
     void RemoveLink( kbLink* );

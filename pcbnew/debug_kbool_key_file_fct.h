@@ -11,6 +11,9 @@
 
 #ifdef CREATE_KBOOL_KEY_FILES
 
+// Allows or not) 0 degree orientation thermal shapes, for kbool tests
+//#define CREATE_KBOOL_KEY_FILES_WITH_0_DEG
+
 #define KEYFILE_FILENAME "dbgfile.key"
 
 /** function CreateKeyFile

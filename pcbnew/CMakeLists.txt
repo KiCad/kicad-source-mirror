@@ -25,6 +25,8 @@ set(PCBNEW_SRCS
     cross-probing.cpp
     debug_kbool_key_file_fct.cpp
     deltrack.cpp
+    dialog_copper_layers_setup_base.cpp
+    dialog_copper_layers_setup.cpp
     dialog_copper_zones.cpp
     dialog_copper_zones_base.cpp
     dialog_design_rules.cpp

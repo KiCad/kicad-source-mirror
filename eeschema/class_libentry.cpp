@@ -340,11 +340,14 @@ void EDA_LibComponentStruct::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
         }
     }
 
+    /* Enable this to draw the anchor of the component. */
+#if 0
     int len = panel->GetScreen()->Unscale( 3 );
     GRLine( &panel->m_ClipBox, dc, offset.x, offset.y - len, offset.x,
             offset.y + len, 0, color );
     GRLine( &panel->m_ClipBox, dc, offset.x - len, offset.y, offset.x + len,
             offset.y, 0, color );
+#endif
 
     /* Enable this to draw the bounding box around the component to validate
      * the bounding box calculations. */

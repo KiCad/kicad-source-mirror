@@ -5,10 +5,10 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: graph.h,v 1.4 2009/09/07 19:23:28 titato Exp $
+    RCS-ID: $Id: graph.h,v 1.5 2009/09/10 17:04:09 titato Exp $
 */
 
-/* @@(#) $Source: /cvsroot/wxart2d/wxArt2D/thirdparty/kbool/include/kbool/graph.h,v $ $Revision: 1.4 $ $Date: 2009/09/07 19:23:28 $ */
+/* @@(#) $Source: /cvsroot/wxart2d/wxArt2D/thirdparty/kbool/include/kbool/graph.h,v $ $Revision: 1.5 $ $Date: 2009/09/10 17:04:09 $ */
 
 /*
 Program GRAPH.H

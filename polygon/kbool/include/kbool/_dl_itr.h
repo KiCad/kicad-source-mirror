@@ -5,7 +5,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: _dl_itr.h,v 1.5 2009/04/23 19:35:24 titato Exp $
+    RCS-ID: $Id: _dl_itr.h,v 1.6 2009/09/10 17:04:09 titato Exp $
 */
 
 //! author="Klaas Holwerda"

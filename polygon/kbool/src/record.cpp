@@ -5,7 +5,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: record.cpp,v 1.4 2009/09/07 19:23:28 titato Exp $
+    RCS-ID: $Id: record.cpp,v 1.5 2009/09/10 17:04:09 titato Exp $
 */
 
 #include "kbool/booleng.h"

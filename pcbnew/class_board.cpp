@@ -827,7 +827,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
  * Function FindNet
  * searches for a net with the given netcode.
  * @param anetcode The netcode to search for.
- * @return EQUIPOT* - the net or NULL if not found.
+ * @return NETINFO_ITEM* - the net or NULL if not found.
  */
 NETINFO_ITEM* BOARD::FindNet( int anetcode ) const
 {
@@ -851,21 +851,66 @@ NETINFO_ITEM* BOARD::FindNet( int anetcode ) const
  * Function FindNet overlayed
  * searches for a net with the given name.
  * @param aNetname A Netname to search for.
- * @return EQUIPOT* - the net or NULL if not found.
+ * @return NETINFO_ITEM* - the net or NULL if not found.
  */
 NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
 {
     // the first valid netcode is 1.
     // zero is reserved for "no connection" and is not used.
-    if( !aNetname.IsEmpty() )
+    if( aNetname.IsEmpty() )
+        return NULL;
+
+    int ncount = m_NetInfo->GetCount();
+    // Search for a netname = aNetname
+#if 0
+    // Use a sequencial search: easy to understand, but slow
+    printf("\nsearch %s, nets %d\n", CONV_TO_UTF8(aNetname),  ncount);
+
+    for( int ii = 1; ii < ncount;  ii++ )
     {
-        for( unsigned ii = 1;  ii <  m_NetInfo->GetCount();  ii++ )
+        NETINFO_ITEM* item = m_NetInfo->GetNetItem( ii );
+        if( item && item->GetNetname() == aNetname )
         {
-            NETINFO_ITEM* item = m_NetInfo->GetNetItem( ii );
-            if( item && item->GetNetname() == aNetname )
-                return item;
+            printf("   found\n");
+            return item;
         }
     }
+#else
+    // Use a fast binary search,
+    // this is possible because Nets are alphabetically ordered in list
+    // see NETINFO_LIST::BuildListOfNets() and NETINFO_LIST::Build_Pads_Full_List()
+    int imax = ncount-1;
+    int index = imax;
+    while( ncount > 0 )
+    {
+        int ii       = ncount;
+        ncount >>= 1;
+
+        if( (ii & 1) && ( ii > 1 ) )
+            ncount++;
+
+        NETINFO_ITEM* item = m_NetInfo->GetNetItem( index );
+        if( item == NULL )
+            return NULL;
+        int icmp = item->GetNetname().Cmp(aNetname);
+
+        if (icmp == 0 ) // found !
+        {
+            printf("   found\n");
+            return item;
+        }
+        if( icmp < 0 ) // must search after item
+        {
+            index += ncount;
+             continue;
+        }
+        if( icmp > 0 ) // must search before item
+        {
+           index -= ncount;
+            continue;
+         }
+    }
+#endif
     return NULL;
 }
 

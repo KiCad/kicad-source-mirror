@@ -5,7 +5,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: booleng.h,v 1.6 2009/09/07 19:23:28 titato Exp $
+    RCS-ID: $Id: booleng.h,v 1.9 2009/09/14 18:18:03 titato Exp $
 */
 
 #ifndef BOOLENG_H
@@ -85,7 +85,7 @@ using namespace std;
 #define A2DKBOOLDLLEXP_CTORFN
 #endif
 
-#define KBOOL_VERSION "2.0"
+#define KBOOL_VERSION "2.1"
 
 #define KBOOL_DEBUG 0
 #define KBOOL_LOG 0
@@ -360,6 +360,13 @@ public:
     //! see SetWindingRule
     bool GetWindingRule();
 
+    //! when set not only the top vertex of a hole is linked to the other holes and contours,
+    //! but also vertex  other vertexes close to a hole can be used.
+    void SetAllowNonTopHoleLinking( bool allow ) { m_allowNonTopHoleLinking = allow; }
+
+    //! see SetWindingRule
+    bool GetAllowNonTopHoleLinking() { return m_allowNonTopHoleLinking; }
+
     //! the smallest accuracy used within the algorithm for comparing two real numbers.
     double GetAccur();
 
@@ -547,6 +554,7 @@ private:
     bool m_orientationEntryMode;
 
     bool m_doLinkHoles;
+    bool m_allowNonTopHoleLinking;
 
     //! used in the StartPolygonAdd, AddPt, EndPolygonAdd sequence
     kbGraph*    m_GraphToAdd;

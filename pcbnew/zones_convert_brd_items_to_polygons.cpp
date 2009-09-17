@@ -35,8 +35,9 @@
 // So as a workaround we can use stubs (small tracks segments) to create thermal shape
 // Define USE_STUBS_FOR_THERMAL to work on this workaround
 // Currently under development: DO NOT USE
-//  because the code is not finished, and pcbnew does not work properly when used
+//  because the code is not really tested, pcbnew can do not work properly when used
 // Kbool 2.0 has solved some problems, but not all
+// Kbool 2.1 has solved some others problems, but not all
 //#define USE_STUBS_FOR_THERMAL
 
 // Used to create data files to debug Kbool
@@ -49,10 +50,13 @@
 
 extern void Test_For_Copper_Island_And_Remove( BOARD* aPcb, ZONE_CONTAINER* aZone_container );
 
+#ifdef CREATE_KBOOL_KEY_FILES
+bool        s_GenDataForKbool = false;
+#endif
 
 // Local Functions:
 #ifdef USE_STUBS_FOR_THERMAL
-#warning USE_STUBS_FOR_THERMAL defined for test version: do not use for working pcbnew version
+#warning USE_STUBS_FOR_THERMAL is defined: for test version only do not use for working pcbnew version
 void        CreateStubsForThermalShapes(BOARD* aPcb, ZONE_CONTAINER* aZone_container,
                                         int aThermalGap,
                                         int aCopperThickness, int aMinThicknessValue);
@@ -67,6 +71,10 @@ void        AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
 void        AddRoundedEndsSegmentPolygon( Bool_Engine* aBooleng,
                                           wxPoint aStart, wxPoint aEnd,
                                           int aWidth );
+void        AddSquareEndsSegmentPolygon( Bool_Engine* aBooleng,
+                                   wxPoint aStart, wxPoint aEnd,
+                                   int aWidth );
+
 void        AddTextBoxWithClearancePolygon( Bool_Engine* aBooleng,
                                             TEXTE_PCB* aText, int aClearanceValue );
 
@@ -327,9 +335,18 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         return;
     }
 
+#ifdef CREATE_KBOOL_KEY_FILES
+    CreateKeyFile();
+    OpenEntity("Layer");
+    CopyPolygonsFromFilledPolysListToKeyFile(this, 0);
+#endif
     CreateStubsForThermalShapes(aPcb, this, m_ThermalReliefGapValue,
                                         m_ThermalReliefCopperBridgeValue, m_ZoneMinThickness);
     Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
+#ifdef CREATE_KBOOL_KEY_FILES
+    CloseEntity();
+    CloseKeyFile();
+#endif
 #else
 // Remove insulated islands:
     if( GetNet() > 0 )
@@ -448,7 +465,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             {
                 dx     = (int) ( dx * s_Correction );
                 dy     = dx;
-#ifdef CREATE_KBOOL_KEY_FILES
+#ifdef CREATE_KBOOL_KEY_FILES_WITH_0_DEG
                 fAngle = 0;
 #else
                 fAngle = 450;
@@ -731,7 +748,18 @@ void        CreateStubsForThermalShapes(BOARD* aPcb, ZONE_CONTAINER* aZone_conta
                                         int aCopperThickness, int aMinThicknessValue)
 {
     EDA_Rect zone_boundingbox = aZone_container->GetBoundingBox();
+    bool have_poly_to_add = false;
+    Bool_Engine * booleng = new Bool_Engine();
+    ArmBoolEng( booleng, true );
 
+    TRACK dummy_track(aPcb);
+
+    if( aCopperThickness <= aMinThicknessValue )
+        return;
+
+#ifdef CREATE_KBOOL_KEY_FILES
+    s_GenDataForKbool = true;
+#endif
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
         for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
@@ -782,33 +810,44 @@ void        CreateStubsForThermalShapes(BOARD* aPcb, ZONE_CONTAINER* aZone_conta
                 if( inside )
                 {
 
-                    TRACK*track = new TRACK(aPcb);
-                    track->m_Start = pad->ReturnShapePos();
-                    track->m_End = ptTest[i];
-                    track->SetNet(aZone_container->GetNet());
-                    track->SetLayer(aZone_container->GetLayer() );
-                    track->m_Width = aCopperThickness;
-                    track->m_TimeStamp = aZone_container->m_TimeStamp;
-                    track->SetState( BEGIN_ONPAD, ON );
-                    track->start = pad;
+                    dummy_track.m_Start = pad->ReturnShapePos();
+                    dummy_track.m_End = ptTest[i];
+                    dummy_track.SetNet(aZone_container->GetNet());
+                    dummy_track.SetLayer(aZone_container->GetLayer() );
+                    dummy_track.m_Width = aCopperThickness;
+                    dummy_track.SetState( BEGIN_ONPAD, ON );
+                    dummy_track.start = pad;
 
                     // add stub
                     WinEDA_PcbFrame* pcbFrame = (WinEDA_PcbFrame*) aPcb->m_PcbFrame;
-                    if( pcbFrame->GetDrcController()->Drc( track, aPcb->m_Track ) == BAD_DRC )
-                        delete track;
-                    else
+                    if( pcbFrame->GetDrcController()->Drc( &dummy_track, aPcb->m_Track ) == OK_DRC )
                     {
-                        // If this approach is developped, one must change the way the stubs are handles in pcbnew
-                        // because insert these stubs as tracks does not work with undo/redo functions
-                        // because these stubs must be deleted when refilling zones outside undo/redo calls
-                        // This code is only for trial only, not for working pcbnew versions.
-                        TRACK* insertBeforeMe = track->GetBestInsertPoint( aPcb );
-                            aPcb->m_Track.Insert( track, insertBeforeMe );
+                        have_poly_to_add = true;
+                        // because stubs outlines are drawn with a pen size = aMinThicknessValue,
+                        // the width of the stub is aCopperThickness - aMinThicknessValue
+                        int thickness = dummy_track.m_Width - aMinThicknessValue;
+                        AddRoundedEndsSegmentPolygon( booleng, dummy_track.m_Start, dummy_track.m_End, thickness );
                     }
                 }
             }
         }
     }
+#ifdef CREATE_KBOOL_KEY_FILES
+    s_GenDataForKbool = false;
+#endif
+    if( have_poly_to_add )
+    {
+        /* Add the main corrected polygon (i.e. the filled area using only one outline)
+         * in GroupA in Bool_Engine
+         */
+        aZone_container->CopyPolygonsFromFilledPolysListToBoolengine( booleng, GROUP_A );
+        /* remove thermal areas (non copper areas) */
+        booleng->Do_Operation( BOOL_OR );
+        /* put these areas in m_FilledPolysList */
+        aZone_container->m_FilledPolysList.clear();
+        aZone_container->CopyPolygonsFromBoolengineToFilledPolysList( booleng );
+    }
+    delete booleng;
 }
 
 
@@ -914,7 +953,7 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         corner.x = copper_thickness.x / 2;
         int y = outer_radius - (aThermalGap / 4);
         corner.y = (int) sqrt( ( ( (double) y * y ) - (double) corner.x * corner.x ) );
-#ifndef CREATE_KBOOL_KEY_FILES
+#ifndef CREATE_KBOOL_KEY_FILES_WITH_0_DEG
         corners_buffer.push_back( corner );
 #endif
 
@@ -951,7 +990,7 @@ void    AddThermalReliefPadPolygon( Bool_Engine* aBooleng,
         // angle = 450 (45.0 degrees orientation) seems work fine.
         // angle = 0 with thermal shapes without angle < 90 deg has problems in rare circumstances
         // Note: with the 2 step build ( thermal shapes added after areas are built), 0 seems work
-#ifdef CREATE_KBOOL_KEY_FILES
+#ifdef CREATE_KBOOL_KEY_FILES_WITH_0_DEG
         angle = 0;
 #else
         angle = 450;
@@ -1299,16 +1338,31 @@ void AddRoundedEndsSegmentPolygon( Bool_Engine* aBooleng,
 
     int delta = 3600 / s_CircleToSegmentsCount; // rot angle in 0.1 degree
 
+    
+#ifdef CREATE_KBOOL_KEY_FILES
+    if( s_GenDataForKbool )
+        StartPolygon(s_CircleToSegmentsCount+4, 1);
+#endif
+
+    
     // Compute the outlines of the segment, and creates a polygon
     corner = wxPoint( 0, rayon );
     RotatePoint( &corner, -delta_angle );
     corner += startp;
     aBooleng->AddPoint( corner.x, corner.y );
+#ifdef CREATE_KBOOL_KEY_FILES
+    if( s_GenDataForKbool )
+        AddPointXY(corner.x, corner.y);
+#endif
 
     corner = wxPoint( seg_len, rayon );
     RotatePoint( &corner, -delta_angle );
     corner += startp;
     aBooleng->AddPoint( corner.x, corner.y );
+#ifdef CREATE_KBOOL_KEY_FILES
+    if( s_GenDataForKbool )
+        AddPointXY(corner.x, corner.y);
+#endif
 
     // add right rounded end:
     for( int ii = delta; ii < 1800; ii += delta )
@@ -1319,17 +1373,29 @@ void AddRoundedEndsSegmentPolygon( Bool_Engine* aBooleng,
         RotatePoint( &corner, -delta_angle );
         corner += startp;
         aBooleng->AddPoint( corner.x, corner.y );
+#ifdef CREATE_KBOOL_KEY_FILES
+    if( s_GenDataForKbool )
+        AddPointXY(corner.x, corner.y);
+#endif
     }
 
     corner = wxPoint( seg_len, -rayon );
     RotatePoint( &corner, -delta_angle );
     corner += startp;
     aBooleng->AddPoint( corner.x, corner.y );
+#ifdef CREATE_KBOOL_KEY_FILES
+    if( s_GenDataForKbool )
+        AddPointXY(corner.x, corner.y);
+#endif
 
     corner = wxPoint( 0, -rayon );
     RotatePoint( &corner, -delta_angle );
     corner += startp;
     aBooleng->AddPoint( corner.x, corner.y );
+#ifdef CREATE_KBOOL_KEY_FILES
+    if( s_GenDataForKbool )
+        AddPointXY(corner.x, corner.y);
+#endif
 
     // add left rounded end:
     for( int ii = delta; ii < 1800; ii += delta )
@@ -1339,9 +1405,122 @@ void AddRoundedEndsSegmentPolygon( Bool_Engine* aBooleng,
         RotatePoint( &corner, -delta_angle );
         corner += startp;
         aBooleng->AddPoint( corner.x, corner.y );
+#ifdef CREATE_KBOOL_KEY_FILES
+    if( s_GenDataForKbool )
+        AddPointXY(corner.x, corner.y);
+#endif
     }
 
     aBooleng->EndPolygonAdd();
+#ifdef CREATE_KBOOL_KEY_FILES
+    if( s_GenDataForKbool )
+        EndElement();
+#endif
+}
+
+/** Function AddSquareEndsSegmentPolygon
+ * Add a polygon cutout for a segment (with square ends) in a zone area
+ */
+void AddSquareEndsSegmentPolygon( Bool_Engine* aBooleng,
+                                   wxPoint aStart, wxPoint aEnd,
+                                   int aWidth )
+{
+    int     rayon  = aWidth / 2;
+    wxPoint endp   = aEnd - aStart; // end point coordinate for the same segment starting at (0,0)
+    wxPoint startp = aStart;
+    wxPoint corner;
+    int     seg_len;
+
+    // normalize the position in order to have endp.x >= 0;
+    if( endp.x < 0 )
+    {
+        endp   = aStart - aEnd;
+        startp = aEnd;
+    }
+    int delta_angle = ArcTangente( endp.y, endp.x );    // delta_angle is in 0.1 degrees
+    seg_len = (int) sqrt( ( (double) endp.y * endp.y ) + ( (double) endp.x * endp.x ) );
+
+    if( !aBooleng->StartPolygonAdd( GROUP_B ) )
+        return;                                 // error!
+
+    int delta = 900; // rot angle in 0.1 degree
+
+#ifdef CREATE_KBOOL_KEY_FILES
+    if( s_GenDataForKbool )
+        StartPolygon(5, 1);
+#endif
+
+    // Compute the outlines of the segment, and creates a polygon
+    corner = wxPoint( 0, rayon );
+    RotatePoint( &corner, -delta_angle );
+    corner += startp;
+    aBooleng->AddPoint( corner.x, corner.y );
+#ifdef CREATE_KBOOL_KEY_FILES
+    if( s_GenDataForKbool )
+        AddPointXY(corner.x, corner.y);
+#endif
+
+    corner = wxPoint( seg_len, rayon );
+    RotatePoint( &corner, -delta_angle );
+    corner += startp;
+    aBooleng->AddPoint( corner.x, corner.y );
+#ifdef CREATE_KBOOL_KEY_FILES
+    if( s_GenDataForKbool )
+        AddPointXY(corner.x, corner.y);
+#endif
+
+    // add right rounded end:
+    for( int ii = delta; ii < 1800; ii += delta )
+    {
+        corner = wxPoint( 0, rayon );
+        RotatePoint( &corner, ii );
+        corner.x += seg_len;
+        RotatePoint( &corner, -delta_angle );
+        corner += startp;
+        aBooleng->AddPoint( corner.x, corner.y );
+#ifdef CREATE_KBOOL_KEY_FILES
+    if( s_GenDataForKbool )
+        AddPointXY(corner.x, corner.y);
+#endif
+    }
+
+    corner = wxPoint( seg_len, -rayon );
+    RotatePoint( &corner, -delta_angle );
+    corner += startp;
+    aBooleng->AddPoint( corner.x, corner.y );
+#ifdef CREATE_KBOOL_KEY_FILES
+    if( s_GenDataForKbool )
+        AddPointXY(corner.x, corner.y);
+#endif
+
+    corner = wxPoint( 0, -rayon );
+    RotatePoint( &corner, -delta_angle );
+    corner += startp;
+    aBooleng->AddPoint( corner.x, corner.y );
+#ifdef CREATE_KBOOL_KEY_FILES
+    if( s_GenDataForKbool )
+        AddPointXY(corner.x, corner.y);
+#endif
+
+    // add left rounded end:
+    for( int ii = delta; ii < 1800; ii += delta )
+    {
+        corner = wxPoint( 0, -rayon );
+        RotatePoint( &corner, ii );
+        RotatePoint( &corner, -delta_angle );
+        corner += startp;
+        aBooleng->AddPoint( corner.x, corner.y );
+#ifdef CREATE_KBOOL_KEY_FILES
+    if( s_GenDataForKbool )
+        AddPointXY(corner.x, corner.y);
+#endif
+    }
+
+    aBooleng->EndPolygonAdd();
+#ifdef CREATE_KBOOL_KEY_FILES
+    if( s_GenDataForKbool )
+        EndElement();
+#endif
 }
 
 
@@ -1487,6 +1666,7 @@ int ZONE_CONTAINER::CopyPolygonsFromBoolengineToFilledPolysList( Bool_Engine* aB
             corner.end_contour = false;
 
             // Flag this corner if starting a hole connection segment:
+            // This is used by draw functions to draw only useful segments (and not extra segments)
             corner.utility = (aBoolengine->GetPolygonPointEdgeType() == KB_FALSE_EDGE) ? 1 : 0;
             m_FilledPolysList.push_back( corner );
             count++;

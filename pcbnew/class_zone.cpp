@@ -1142,7 +1142,8 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
     m_PadOption = src->m_PadOption;
     m_ThermalReliefGapValue   = src->m_ThermalReliefGapValue;
     m_ThermalReliefCopperBridgeValue   = src->m_ThermalReliefCopperBridgeValue;
-    m_Poly->SetHatch( src->m_Poly->GetHatchStyle() );
+    m_Poly->m_HatchStyle = src->m_Poly->GetHatchStyle();
+    m_Poly->m_HatchLines = src->m_Poly->m_HatchLines;   // Copy vector <CSegment>
     m_FilledPolysList.clear();
     m_FilledPolysList = src->m_FilledPolysList;
     m_FillSegmList.clear();

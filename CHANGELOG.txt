@@ -4,6 +4,25 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-sept-17 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++pcbnew
+    Speed up ZONE_CONTAINER::Copy method
+    Speed up NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) by using afast binary search
+    Switch to kbool V2.1. This version solves others problems in zones calculations.
+    Adding an other way to generate thermal shape; DO NOT USE: this is for kbool tests only
+    (I am thinking some bugs are remaining, so i am always working on kbool tests.
+    Klaas Olwerda is supporting me)
+
+
+2009-sept-14 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++pcbnew
+    moved copper layers properties (layers couns anf layers names) from Design rules
+    to a specific dialog.
+    This must be seen as a TEMPORARY work, until a volunteer creates a better dialog box,
+    because there is currently no other way to change copper layers names.
+
 2009-Sep-10 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++pcbnew
@@ -22,7 +41,7 @@ email address.
 ++pcbnew
     Work on undo/redo in pcbnew finished.
     Switch to kbool V2.0. This version solves some problems in zones calculations but not all.
-    The Kbool's author, Klaas Holveda, is still working on these problems
+    The Kbool's author, Klaas Holweda, is still working on these problems
     Thanks to Klaas
 
 

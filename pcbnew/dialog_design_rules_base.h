@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  9 2009)
+// C++ code generated with wxFormBuilder (version Apr 16 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -59,23 +59,23 @@ class DIALOG_DESIGN_RULES_BASE : public wxDialog
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnNetClassesGridLeftClick( wxGridEvent& event ) { event.Skip(); }
-		virtual void OnNetClassesGridRightClick( wxGridEvent& event ) { event.Skip(); }
-		virtual void OnAddNetclassClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRemoveNetclassClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnLeftCBSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRightToLeftCopyButton( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnLeftToRightCopyButton( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnLeftSelectAllButton( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRightSelectAllButton( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRightCBSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOkButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnNetClassesGridLeftClick( wxGridEvent& event ){ event.Skip(); }
+		virtual void OnNetClassesGridRightClick( wxGridEvent& event ){ event.Skip(); }
+		virtual void OnAddNetclassClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnRemoveNetclassClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnMoveUpSelectedNetClass( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnLeftCBSelection( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnRightToLeftCopyButton( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnLeftToRightCopyButton( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnLeftSelectAllButton( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnRightSelectAllButton( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnRightCBSelection( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnCancelButtonClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnOkButtonClick( wxCommandEvent& event ){ event.Skip(); }
 		
 	
 	public:
-		
-		DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Design Rules Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 750,520 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Design Rules Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 750,692 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_DESIGN_RULES_BASE();
 	
 };

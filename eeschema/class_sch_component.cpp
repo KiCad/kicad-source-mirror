@@ -67,7 +67,10 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
     Entry->Draw( panel, DC, Pos, Multi, convert, DrawMode, Color, TransMat,
                  DrawPinText, false );
 
-    if( g_DebugLevel > 4 ) /* Draw the component boundary box */
+    /* Enable this to draw the bounding box around the component to validate
+     * the bounding box calculations. */
+#if 0
+    /* Draw the component boundary box */
     {
         EDA_Rect BoundaryBox;
         if( Component )
@@ -92,6 +95,7 @@ void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
         y2 = BoundaryBox.GetBottom();
         GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
     }
+#endif
 }
 
 

@@ -5,7 +5,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: booleng.cpp,v 1.5 2009/09/07 19:23:28 titato Exp $
+    RCS-ID: $Id: booleng.cpp,v 1.7 2009/09/14 16:50:12 titato Exp $
 */
 
 #include "kbool/booleng.h"
@@ -95,6 +95,7 @@ Bool_Engine::Bool_Engine()
 
     m_orientationEntryMode = false;
     m_doLinkHoles = true;
+    m_allowNonTopHoleLinking = true;
 
     m_graphlist = new kbGraphList( this );
     m_ACCUR = 1e-4;

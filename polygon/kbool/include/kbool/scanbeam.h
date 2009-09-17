@@ -5,7 +5,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: scanbeam.h,v 1.5 2009/09/07 19:23:28 titato Exp $
+    RCS-ID: $Id: scanbeam.h,v 1.6 2009/09/10 17:04:09 titato Exp $
 */
 
 #ifndef SCANBEAM_H

@@ -309,7 +309,7 @@ void WinEDA_LibeditFrame::UpdatePartSelectList()
         return;
 
 
-    if( !m_SelpartBox->IsEmpty() )
+    if( m_SelpartBox->GetCount() != 0 )
         m_SelpartBox->Clear();
 
     if( CurrentLibEntry == NULL || CurrentLibEntry->m_UnitCount <= 1 )

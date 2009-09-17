@@ -181,13 +181,13 @@ void WinEDA_PcbFrame::PrepareLayerIndicator()
 void WinEDA_PcbFrame::ReCreateHToolbar()
 /******************************************/
 
-/* Create the main horizontal toolbar for the board editor */
+/* Creates or updates the main horizontal toolbar for the board editor
+*/
 {
     wxString msg;
 
     if( m_HToolBar != NULL )
     {
-        D(printf("ReCreateHToolbar\n");)
         SetToolbars();
         return;
     }

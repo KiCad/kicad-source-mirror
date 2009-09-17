@@ -290,6 +290,9 @@ static void class2gridRow( wxGrid* grid, int row, NETCLASS* nc, int units )
     grid->SetCellValue( row, GRID_uVIADRILL, msg );
 }
 
+/** Function InitRulesList()
+ * Fill the grid showing current rules with values
+ */
 void DIALOG_DESIGN_RULES::InitRulesList()
 {
     NETCLASSES& netclasses = m_Pcb->m_NetClasses;
@@ -300,8 +303,10 @@ void DIALOG_DESIGN_RULES::InitRulesList()
         m_grid->AppendRows( netclasses.GetCount()+1 - m_grid->GetNumberRows() );
     }
 
+    // enter the Default NETCLASS.
     class2gridRow( m_grid, 0, netclasses.GetDefault(), m_Parent->m_InternalUnits );
 
+    // enter others netclasses
     int row = 1;
     for( NETCLASSES::iterator i=netclasses.begin();  i!=netclasses.end();  ++i, ++row )
     {
@@ -326,7 +331,7 @@ static void gridRow2class( wxGrid* grid, int row, NETCLASS* nc, int units )
 }
 
 
-/* Copy the rules list to board
+/* Copy the rules list from grid to board
  */
 void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
 {
@@ -450,6 +455,44 @@ void DIALOG_DESIGN_RULES::OnRemoveNetclassClick( wxCommandEvent& event )
     }
 
     InitializeRulesSelectionBoxes();
+}
+
+/*
+ * Called on "Move Up" button click
+ * the selected(s) rules are moved up
+ * The default netclass is always the first rule
+ */
+void DIALOG_DESIGN_RULES::OnMoveUpSelectedNetClass( wxCommandEvent& event )
+{
+    // Cannot move up rules if we have 1 or 2 rules only
+    if( m_grid->GetNumberRows() < 3 )
+        return;
+    wxArrayInt select = m_grid->GetSelectedRows();
+
+    bool reinit = false;
+    for( unsigned irow = 0; irow < select.GetCount(); irow++ )
+    {
+        int ii = select[irow];
+        if( ii < 2 )   // The default netclass *must* be the first netclass
+            continue;           // so we cannot move up line 0 and 1
+        // Swap the rule and the previous rule
+        wxString curr_value, previous_value;
+        for( int icol = 0; icol < m_grid->GetNumberCols(); icol++ )
+        {
+            reinit = true;
+            curr_value = m_grid->GetCellValue( ii, icol );
+            previous_value = m_grid->GetCellValue( ii-1, icol );
+            m_grid->SetCellValue( ii, icol, previous_value );
+            m_grid->SetCellValue( ii-1, icol, curr_value );
+        }
+        curr_value = m_grid->GetRowLabelValue( ii );
+        previous_value = m_grid->GetRowLabelValue( ii-1 );
+        m_grid->SetRowLabelValue(ii, previous_value );
+        m_grid->SetRowLabelValue(ii-1, curr_value );
+    }
+    
+    if( reinit )
+        InitializeRulesSelectionBoxes();
 }
 
 

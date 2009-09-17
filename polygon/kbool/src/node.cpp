@@ -6,7 +6,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: node.cpp,v 1.4 2009/09/07 19:23:28 titato Exp $
+    RCS-ID: $Id: node.cpp,v 1.7 2009/09/14 16:50:12 titato Exp $
 */
 
 #include "kbool/node.h"
@@ -387,7 +387,7 @@ kbLink* kbNode::GetMost( kbLink* const prev , LinkStatus whatside, BOOL_OP opera
 //  on the node get the link
 //  is the most right or left one
 //  This function is used to collect the simple graphs from a graph
-kbLink* kbNode::GetMostHole( kbLink* const prev, LinkStatus whatside, BOOL_OP operation )
+kbLink* kbNode::GetMostHole( kbLink* const prev, LinkStatus whatside, BOOL_OP operation, bool searchholelink )
 {
     kbLink * reserve = 0;
     kbLink *Result = NULL, *link;
@@ -397,7 +397,11 @@ kbLink* kbNode::GetMostHole( kbLink* const prev, LinkStatus whatside, BOOL_OP op
     {
         if ( ( link = ( kbLink* )_linklist->headitem() ) == prev )      //this is NOT the one to go on
             link = ( kbLink* )_linklist->tailitem();
-        if ( link->GetHole() && !link->GetHoleLink() && !link->BeenHere() && SameSides( prev, link, operation ) )
+        if ( 
+             !link->BeenHere() &&
+             link->GetHole() && 
+             ( searchholelink && link->GetHoleLink() || !link->GetHoleLink() ) && 
+             SameSides( prev, link, operation ) )
             //we are back where we started (bin is true) return Null
             return link;
         return( 0 );
@@ -409,9 +413,10 @@ kbLink* kbNode::GetMostHole( kbLink* const prev, LinkStatus whatside, BOOL_OP op
     while( !_GC->_linkiter->hitroot() )
     {
         link = _GC->_linkiter->item();
-        if ( !link->BeenHere() &&
-                link->GetHole() &&
-                !link->GetHoleLink() &&
+        if ( 
+               !link->BeenHere() &&
+               link->GetHole() && 
+               ( searchholelink && link->GetHoleLink() || !link->GetHoleLink() ) && 
                 SameSides( prev, link, operation ) &&
                 link != prev   //should be set to bin already
            )
@@ -443,7 +448,7 @@ kbLink* kbNode::GetMostHole( kbLink* const prev, LinkStatus whatside, BOOL_OP op
 }
 
 // this function gets the highest not flat link
-kbLink* kbNode::GetHoleLink( kbLink* const prev, bool checkbin, BOOL_OP operation )
+kbLink* kbNode::GetHoleLink( kbLink* const prev, LinkStatus whatside, bool checkbin, BOOL_OP operation )
 {
     kbLink * Result = NULL, *link;
 
@@ -457,8 +462,14 @@ kbLink* kbNode::GetHoleLink( kbLink* const prev, bool checkbin, BOOL_OP operatio
                 SameSides( prev, link, operation )
            )
         {
-            Result = link;
-            break;
+            if ( !Result )
+                Result = link; //first one found sofar
+            else
+            {
+                if ( prev->PointOnCorner( Result, link ) == whatside )
+                    //more to the whatside than take this one
+                    Result = link;
+            }
         }
     }
 

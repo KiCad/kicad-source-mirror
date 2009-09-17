@@ -18,6 +18,7 @@
 #include "id.h"
 #include "hotkeys.h"
 #include "protos.h"
+#include "dialog_copper_layers_setup.h"
 
 /* Routines Locales */
 
@@ -46,6 +47,13 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
     {
     case ID_COLORS_SETUP:
         DisplayColorSetupFrame( this, pos );
+        break;
+
+    case ID_PCB_COPPER_LAYERS_SETUP:
+    {
+        DIALOG_COPPER_LAYERS_SETUP dialog( this );
+        dialog.ShowModal();
+    }
         break;
 
     case ID_CONFIG_REQ:             // Creation de la fenetre de configuration

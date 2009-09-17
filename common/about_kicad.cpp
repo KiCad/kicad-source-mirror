@@ -72,9 +72,9 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
 
 	/* Show Unicode or Ansi version */
 #if wxUSE_UNICODE
-		<< ( wxT( " Unicode\n" ) );
+		<< ( wxT( " Unicode " ) );
 #		else
-		<< ( wxT( " Ansi\n" ) );
+		<< ( wxT( " Ansi " ) );
 #endif
 
 
@@ -107,7 +107,7 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
 
 #endif
 
-	/* Websites */
+    /* Websites */
 	description << wxT( "\n\nKiCad on the web\n\n" );
 	description << wxT( "http://iut-tice.ujf-grenoble.fr/kicad \n" );
 	description << wxT( "http://kicad.sourceforge.net \n" );

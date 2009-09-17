@@ -6,7 +6,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: graph.cpp,v 1.4 2009/09/07 19:23:28 titato Exp $
+    RCS-ID: $Id: graph.cpp,v 1.7 2009/09/14 16:50:12 titato Exp $
 */
 
 // Grpah is the structure used to store polygons
@@ -536,14 +536,14 @@ void kbGraph::CollectGraphLast( kbNode *current_node, BOOL_OP operation, bool de
         {
             if ( currentlink->GetHoleLink() )
             {
-                //in case we entered the hole via the hole link just now, we followe the hole.
+                //in case we entered the hole via the hole link just now, we follow the hole.
                 //This is taking as many holes as possible ( most right around)
-                nextlink = next_node->GetMostHole( currentlink, IS_RIGHT , operation );
+                nextlink = next_node->GetMostHole( currentlink, IS_RIGHT , operation, false );
                 if ( !nextlink ) // hole done?
                     //if we did get to this hole via a holelink?, then we might now be on the return link.
                     //BTW it is also possible that holes are already found via a non linked hole path,
                     //in that case, we did go to the HoleLink here, and directly return on the other holelink.
-                    nextlink = next_node->GetHoleLink( currentlink, true, operation );
+                    nextlink = next_node->GetHoleLink( currentlink, IS_RIGHT, true, operation );
                 if ( !nextlink )
                 {
                     //we did get to this hole via a holelink and we are on the returning holelink.
@@ -554,9 +554,9 @@ void kbGraph::CollectGraphLast( kbNode *current_node, BOOL_OP operation, bool de
             }
             else
             {
-                nextlink = next_node->GetHoleLink( currentlink, true, operation ); // other linked holes first
+                nextlink = next_node->GetMostHole( currentlink, IS_RIGHT, operation ); // other holes first
                 if ( !nextlink )
-                    nextlink = next_node->GetMostHole( currentlink, IS_RIGHT, operation ); // other holes first
+                    nextlink = next_node->GetHoleLink( currentlink,  IS_RIGHT, true, operation ); // other linked holes first
                 if ( !nextlink )
                 {
                     //We are leaving the hole.
@@ -568,9 +568,11 @@ void kbGraph::CollectGraphLast( kbNode *current_node, BOOL_OP operation, bool de
         }
         else
         {
+            //nextlink = next_node->GetMost( currentlink, IS_RIGHT, operation );
+            //if ( !nextlink )
 
             //a hole link is preferred above a normal link. If not no holes would be linked in anyway.
-            nextlink = next_node->GetHoleLink( currentlink, true, operation );
+            nextlink = next_node->GetHoleLink( currentlink, IS_RIGHT, true, operation );
             if ( !nextlink )
                 //also if we can get to a hole directly within a contour, that is better (get as much as possible)
                 nextlink = next_node->GetMostHole( currentlink, IS_RIGHT, operation );
@@ -1683,7 +1685,7 @@ void kbGraph::Boolean( BOOL_OP operation, kbGraphList* Result )
         Merge_NodeToNode( 0 );
 
 #if KBOOL_LOG == 1
-        _GC->SetLog( true ); 
+        //_GC->SetLog( true ); 
         _GC->Write_Log( "LINKHOLES\n" );
 #endif
         writegraph( false );
@@ -1698,7 +1700,7 @@ void kbGraph::Boolean( BOOL_OP operation, kbGraphList* Result )
         {
             //to delete extra points
             //those extra points are caused by link holes
-            //and are eqaul
+            //and are eqaul ( the smallest number in integer is 1 )
             DeleteZeroLines( 1 );
 
             _GC->SetState( "extract simples last" );
@@ -2559,6 +2561,7 @@ void kbGraph::WriteKEY( Bool_Engine* GC, FILE* file )
 void kbGraph::WriteGraphKEY(Bool_Engine* GC)
 {
 #if KBOOL_DEBUG
+
     double scale = 1.0/GC->GetGrid()/GC->GetGrid();
 
     FILE* file = fopen("keygraphfile.key", "w");

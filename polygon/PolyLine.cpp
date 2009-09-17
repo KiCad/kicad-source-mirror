@@ -538,15 +538,17 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
       Within the algorithm all input data is multiplied with DGRID, and the result
       is rounded to an integer.
    */
-    double DGRID = 10.0;     // round coordinate X or Y value in calculations to this (initial value = 1000.0 in kbool example)
+    double DGRID = 1.0;     // round coordinate X or Y value in calculations to this (initial value = 1000.0 in kbool example)
+                            // kbool uses DGRID to convert float user units to integer
+                            // kbool unit = (int)(user unit * DGRID)
                             // Note: in kicad, coordinates are already integer so DGRID could be set to 1
-                            // we choose a DGRID = 10 to have a MARGE = 1.0
+                            // we choose DGRID = 1.0
 
-    double MARGE = 1.0;             // snap with in this range points to lines in the intersection routines
-                                    // should always be > 1/DGRID  a  MARGE >= 10/DGRID is ok
+    double MARGE = 10.0;            // snap with in this range points to lines in the intersection routines
+                                    // should always be >= 1/DGRID  a  MARGE >= 10/DGRID is ok
                                     // this is also used to remove small segments and to decide when
                                     // two segments are in line. ( initial value = 0.001 )
-                                    // For kicad we choose MARGE = 1, with DGRID = 10
+                                    // For kicad we choose MARGE = 10, with DGRID = 1.0
 
     double CORRECTIONFACTOR = 0.0;      // correct the polygons by this number: used in BOOL_CORRECTION operation
                                         // this operation shrinks a polygon if CORRECTIONFACTOR < 0
@@ -578,6 +580,10 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
 
     if( aConvertHoles )
     {
+#if 1   // Can be set to 1 for kbool version >= 2.1, must be set to 0 for previous versions 
+        // SetAllowNonTopHoleLinking() exists only in kbool >= 2.1
+        aBooleng->SetAllowNonTopHoleLinking( false );    // Default = true, but i have problems (filling errors) when true
+#endif
         aBooleng->SetLinkHoles( true );                 // holes will be connected by double overlapping segments
         aBooleng->SetOrientationEntryMode( false );     // all polygons are contours, not holes
     }

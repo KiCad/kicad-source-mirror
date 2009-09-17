@@ -6,7 +6,7 @@
  
     Licence: see kboollicense.txt 
  
-    RCS-ID: $Id: line.cpp,v 1.4 2009/09/07 19:23:28 titato Exp $
+    RCS-ID: $Id: line.cpp,v 1.6 2009/09/13 18:34:06 titato Exp $
 */
 
 // Standard include files
@@ -308,7 +308,11 @@ B_INT kbLine::Calculate_Y( B_INT X )
 
     CalculateLineParameters();
     if ( m_AA != 0 )
+    {
+         //vertical line is undefined
+        assert( m_BB );
         return ( B_INT )( -( m_AA * X + m_CC ) / m_BB );
+    }
     else
         // horizontal line
         return m_link->GetBeginNode()->GetY();
