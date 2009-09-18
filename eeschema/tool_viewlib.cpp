@@ -3,27 +3,23 @@
 /****************************************************************/
 
 #include "fctsys.h"
-
 #include "common.h"
+#include "bitmaps.h"
+#include "id.h"
+
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-
-#include "wx/spinctrl.h"
-
 #include "protos.h"
-
-#include "bitmaps.h"
-
-#include "id.h"
+#include "class_library.h"
 
 
 void WinEDA_ViewlibFrame::ReCreateHToolbar()
 {
     int  ii;
-    LibraryStruct* lib;
-    EDA_LibComponentStruct* component = NULL;
-    LibCmpEntry* entry = NULL;
+    CMP_LIBRARY* lib;
+    LIB_COMPONENT* component = NULL;
+    CMP_LIB_ENTRY* entry = NULL;
     bool asdeMorgan = false;
 
     if( m_HToolBar  == NULL )
@@ -108,7 +104,7 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
     if( (g_CurrentViewLibraryName != wxEmptyString)
         && (g_CurrentViewComponentName != wxEmptyString) )
     {
-        lib = FindLibrary( g_CurrentViewLibraryName );
+        lib = CMP_LIBRARY::FindLibrary( g_CurrentViewLibraryName );
 
         if( lib != NULL )
         {

@@ -28,9 +28,9 @@ static void WriteGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
 static void AddPinToComponentPinList( SCH_COMPONENT* Component,
                                       DrawSheetPath* sheet,
                                       LibDrawPin*    PinEntry );
-static void FindAllsInstancesOfComponent( SCH_COMPONENT*          Component,
-                                          EDA_LibComponentStruct* Entry,
-                                          DrawSheetPath*          Sheet_in );
+static void FindAllsInstancesOfComponent( SCH_COMPONENT* Component,
+                                          LIB_COMPONENT* Entry,
+                                          DrawSheetPath* Sheet_in );
 static bool SortPinsByNum( NETLIST_OBJECT* Pin1, NETLIST_OBJECT* Pin2 );
 static void EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList );
 
@@ -108,9 +108,9 @@ static SCH_COMPONENT* FindNextComponentAndCreatPinList(
  *  Must be deallocated by the user
  */
 {
-    SCH_COMPONENT*          Component = NULL;
-    EDA_LibComponentStruct* Entry;
-    LibEDA_BaseStruct*      DEntry;
+    SCH_COMPONENT*     Component = NULL;
+    LIB_COMPONENT*     Entry;
+    LibEDA_BaseStruct* DEntry;
 
     s_SortedComponentPinList.clear();
     for( ; DrawList != NULL; DrawList = DrawList->Next() )
@@ -130,7 +130,7 @@ static SCH_COMPONENT* FindNextComponentAndCreatPinList(
         // removed because with multiple instances of one schematic
         // (several sheets pointing to 1 screen), this will be erroneously be toggled.
 
-        Entry = ( EDA_LibComponentStruct* ) FindLibPart( Component->m_ChipName );
+        Entry = CMP_LIBRARY::FindLibraryComponent( Component->m_ChipName );
 
         if( Entry  == NULL )
             continue;
@@ -550,8 +550,8 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
                 break;
 
             /* Get the Component FootprintFilter and put the component in CmpList if filter is not void */
-            EDA_LibComponentStruct* Entry =
-                ( EDA_LibComponentStruct* ) FindLibPart( Component->m_ChipName );
+            LIB_COMPONENT* Entry =
+                CMP_LIBRARY::FindLibraryComponent( Component->m_ChipName );
 
             if( Entry != NULL )
             {
@@ -628,11 +628,11 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
     if( with_pcbnew && CmpList )
     {
         fprintf( f, "{ Allowed footprints by component:\n" );
-        EDA_LibComponentStruct* Entry;
+        LIB_COMPONENT* Entry;
         for( int ii = 0; ii < CmpListCount; ii++ )
         {
             Component = CmpList[ii].m_RootCmp;
-            Entry     = ( EDA_LibComponentStruct* ) FindLibPart( Component->m_ChipName );
+            Entry = CMP_LIBRARY::FindLibraryComponent( Component->m_ChipName );
 
             //Line.Printf(_("%s"), CmpList[ii].m_Ref);
             //Line.Replace( wxT( " " ), wxT( "_" ) );
@@ -754,9 +754,9 @@ static void EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
 
 
 /**********************************************************************************/
-static void FindAllsInstancesOfComponent( SCH_COMPONENT*          Component_in,
-                                          EDA_LibComponentStruct* Entry,
-                                          DrawSheetPath*          Sheet_in )
+static void FindAllsInstancesOfComponent( SCH_COMPONENT* Component_in,
+                                          LIB_COMPONENT* Entry,
+                                          DrawSheetPath* Sheet_in )
 /**********************************************************************************/
 
 /**

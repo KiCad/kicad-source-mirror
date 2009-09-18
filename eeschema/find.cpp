@@ -8,27 +8,27 @@
  *  in current sheet or whole the project
  */
 #include "fctsys.h"
-
-//#include "gr_basic.h"
 #include "appl_wxstruct.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
+
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
 #include "class_marker_sch.h"
+#include "protos.h"
+
+#include <boost/foreach.hpp>
+
 
 /* Variables Locales */
 static int      s_ItemsCount, s_MarkerCount;
 static wxString s_OldStringFound;
 
 #include "dialog_find.cpp"
-
-
-#include "protos.h"
 
 
 /**************************************************************/
@@ -645,25 +645,25 @@ void WinEDA_FindFrame::LocatePartInLibs( wxCommandEvent& event )
 
     s_OldStringFound = Text;
 
-    if( NumOfLibraries() == 0 )
+    if( CMP_LIBRARY::GetLibraryCount() == 0 )
     {
-        DisplayError( this, _( "No libraries are loaded" ) );
+        DisplayError( this, _( "No component libraries are loaded." ) );
         Close();
         return;
     }
 
     int nbitemsFound = 0;
 
-    for( LibraryStruct* Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext )
+    BOOST_FOREACH( CMP_LIBRARY& lib, CMP_LIBRARY::GetLibraryList() )
     {
-        Lib->SearchEntryNames( nameList, Text );
+        lib.SearchEntryNames( nameList, Text );
 
         if( nameList.IsEmpty() )
             continue;
 
         nbitemsFound += nameList.GetCount();
 
-        if( !Lib->m_IsLibCache )
+        if( !lib.IsCache() )
             FoundInLib = true;
 
         for( size_t i = 0; i < nameList.GetCount(); i++ )
@@ -671,7 +671,7 @@ void WinEDA_FindFrame::LocatePartInLibs( wxCommandEvent& event )
             if( !FindList.IsEmpty() )
                 FindList += wxT( "\n" );
             FindList << _( "Found " ) + nameList[i] + _( " in library " )
-                + Lib->m_Name;
+                + lib.GetName();
         }
     }
 

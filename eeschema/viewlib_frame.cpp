@@ -5,13 +5,15 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
+#include "id.h"
 #include "class_drawpanel.h"
+#include "bitmaps.h"
+
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-#include "bitmaps.h"
 #include "protos.h"
-#include "id.h"
+
 
 /*****************************/
 /* class WinEDA_ViewlibFrame */
@@ -60,9 +62,9 @@ static wxAcceleratorEntry accels[] =
 #define EXTRA_BORDER_SIZE 2
 
 
-WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*      father,
-                                          LibraryStruct* Library,
-                                          wxSemaphore*   semaphore ) :
+WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
+                                          CMP_LIBRARY* Library,
+                                          wxSemaphore* semaphore ) :
     WinEDA_DrawFrame( father, VIEWER_FRAME, _( "Library browser" ),
                       wxDefaultPosition, wxDefaultSize )
 {
@@ -117,7 +119,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*      father,
     }
     else
     {
-        g_CurrentViewLibraryName = Library->m_Name;
+        g_CurrentViewLibraryName = Library->GetName();
         m_LibListSize.x = 0;
     }
 
@@ -277,14 +279,14 @@ int WinEDA_ViewlibFrame::BestZoom()
 {
     int    bestzoom, ii, jj;
     wxSize size, itemsize;
-    EDA_LibComponentStruct* component;
-    LibraryStruct* lib;
+    LIB_COMPONENT* component;
+    CMP_LIBRARY* lib;
 
     GetScreen()->m_Curseur.x = 0;
     GetScreen()->m_Curseur.y = 0;
     bestzoom = 16;
 
-    lib = FindLibrary( g_CurrentViewLibraryName );
+    lib = CMP_LIBRARY::FindLibrary( g_CurrentViewLibraryName );
 
     if( lib == NULL )
         return bestzoom;
@@ -314,37 +316,22 @@ int WinEDA_ViewlibFrame::BestZoom()
 }
 
 
-/******************************************/
-void WinEDA_ViewlibFrame::ReCreateListLib()
-/******************************************/
-/** Function ReCreateListLib
+/**
+ * Function ReCreateListLib
+ *
  * Creates or recreates the list of current loaded libraries.
  * This list is sorted, with the library cache always at end of the list
-*/
+ */
+void WinEDA_ViewlibFrame::ReCreateListLib()
 {
-    LibraryStruct * libcache = NULL;
-    bool           found = FALSE;
+    wxArrayString  libNamesList;
+    bool           found = false;
 
     if( m_LibList == NULL )
         return;
 
     m_LibList->Clear();
-
-    wxArrayString libNamesList;
-    for( LibraryStruct* Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext )
-    {
-        if ( Lib->m_IsLibCache )
-            libcache = Lib;
-        else
-            libNamesList.Add( Lib->m_Name );
-    }
-
-    libNamesList.Sort();
-
-    // Add lib cache
-    if ( libcache )
-        libNamesList.Add( libcache->m_Name );
-
+    libNamesList = CMP_LIBRARY::GetLibraryNames();
     m_LibList->Append( libNamesList );
 
     // Search for a previous selection:
@@ -379,7 +366,7 @@ void WinEDA_ViewlibFrame::ReCreateListCmp()
     if( m_CmpList == NULL )
         return;
 
-    LibraryStruct* Library  = FindLibrary( g_CurrentViewLibraryName );
+    CMP_LIBRARY* Library = CMP_LIBRARY::FindLibrary( g_CurrentViewLibraryName );
     wxArrayString  nameList;
 
     m_CmpList->Clear();

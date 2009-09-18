@@ -56,7 +56,7 @@ void WinEDA_LibeditFrame::EditComponentProperties()
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitPanelDoc()
 {
-    LibCmpEntry* entry;
+    CMP_LIB_ENTRY* entry;
 
     if( CurrentLibEntry == NULL )
         return;
@@ -67,7 +67,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitPanelDoc()
     }
     else
     {
-        entry = ( LibCmpEntry* ) CurrentLib->FindAlias( CurrentAliasName );
+        entry = ( CMP_LIB_ENTRY* ) CurrentLib->FindAlias( CurrentAliasName );
 
         if( entry == NULL )
             return;
@@ -138,7 +138,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
     /* Update the doc, keyword and doc filename strings */
     size_t i;
     int index;
-    LibCmpEntry* entry;
+    CMP_LIB_ENTRY* entry;
 
     if( CurrentAliasName.IsEmpty() )
     {
@@ -155,7 +155,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
         msg.Printf( _( "Alias <%s> not found for component <%s> in library <%s>." ),
                     (const wxChar*) CurrentAliasName,
                     (const wxChar*) CurrentLibEntry->GetName(),
-                    (const wxChar*) CurrentLib->m_Name );
+                    (const wxChar*) CurrentLib->GetName() );
         wxMessageBox( msg, _( "Component Library Error" ),
                       wxID_OK | wxICON_ERROR, this );
     }
@@ -168,7 +168,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
 
     if( m_PartAliasList->GetStrings() != CurrentLibEntry->m_AliasList )
     {
-        EDA_LibCmpAliasStruct* alias;
+        LIB_ALIAS* alias;
         wxArrayString aliases = m_PartAliasList->GetStrings();
 
         /* Add names not existing in the old alias list. */
@@ -179,8 +179,8 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
             if( index != wxNOT_FOUND )
                 continue;
 
-            alias = new EDA_LibCmpAliasStruct( aliases[ i ],
-                                               CurrentLibEntry->GetName() );
+            alias = new LIB_ALIAS( aliases[ i ], CurrentLibEntry );
+
             if( !CurrentLib->AddAlias( alias ) )
             {
                 delete alias;
@@ -196,7 +196,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
             if( index == wxNOT_FOUND )
                 continue;
 
-            LibCmpEntry* alias =
+            CMP_LIB_ENTRY* alias =
                 CurrentLib->FindAlias( CurrentLibEntry->m_AliasList[ i ] );
             if( alias != NULL )
                 CurrentLib->RemoveEntry( alias );
@@ -318,7 +318,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& WXUNUSED 
         msg.Printf( _( "Alias or component name <%s> already exists in \
 library <%s>." ),
                     (const wxChar*) aliasname,
-                    (const wxChar*) CurrentLib->m_Name );
+                    (const wxChar*) CurrentLib->GetName() );
         DisplayError( this,  msg );
         return;
     }

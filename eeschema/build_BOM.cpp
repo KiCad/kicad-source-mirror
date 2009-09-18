@@ -576,12 +576,12 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 /* Print the B.O.M sorted by reference
  */
 {
-    int                     Multi, Unit;
-    EDA_BaseStruct*         DrawList;
-    SCH_COMPONENT*          DrawLibItem;
-    EDA_LibComponentStruct* Entry;
-    char                    CmpName[80];
-    wxString                msg;
+    int             Multi, Unit;
+    EDA_BaseStruct* DrawList;
+    SCH_COMPONENT*  DrawLibItem;
+    LIB_COMPONENT*  Entry;
+    char            CmpName[80];
+    wxString        msg;
 
     if( CompactForm )
     {
@@ -649,7 +649,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 
         Multi = 0;
         Unit  = ' ';
-        Entry = ( EDA_LibComponentStruct* ) FindLibPart( DrawLibItem->m_ChipName );
+        Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
         if( Entry )
             Multi = Entry->m_UnitCount;
 
@@ -714,17 +714,16 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 int DIALOG_BUILD_BOM::PrintComponentsListByVal(
     FILE*                          f,
     std::vector <OBJ_CMP_TO_LIST>& aList,
-    bool
-                                   aIncludeSubComponents )
+    bool                           aIncludeSubComponents )
 /**********************************************************************************************/
 {
-    int                     Multi;
-    wxChar                  Unit;
-    EDA_BaseStruct*         DrawList;
-    SCH_COMPONENT*          DrawLibItem;
-    EDA_LibComponentStruct* Entry;
-    char                    CmpName[80];
-    wxString                msg;
+    int             Multi;
+    wxChar          Unit;
+    EDA_BaseStruct* DrawList;
+    SCH_COMPONENT*  DrawLibItem;
+    LIB_COMPONENT*  Entry;
+    char            CmpName[80];
+    wxString        msg;
 
     msg = _( "\n#Cmp ( order = Value )" );
 
@@ -749,7 +748,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal(
 
         Multi = 0;
         Unit  = ' ';
-        Entry = ( EDA_LibComponentStruct* ) FindLibPart( DrawLibItem->m_ChipName );
+        Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
         if( Entry )
             Multi = Entry->m_UnitCount;
 

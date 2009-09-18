@@ -649,10 +649,10 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         if( screen->GetCurItem() == NULL )
             break;
         {
-            LibCmpEntry* LibEntry;
-            LibEntry = FindLibPart(
-                ( (SCH_COMPONENT*) screen->GetCurItem() )->m_ChipName,
-                wxEmptyString, ALIAS );
+            CMP_LIB_ENTRY* LibEntry;
+            LibEntry = CMP_LIBRARY::FindLibraryEntry(
+                ( (SCH_COMPONENT*) screen->GetCurItem() )->m_ChipName );
+
             if( LibEntry && LibEntry->m_DocFile != wxEmptyString )
             {
                 GetAssociatedDocument( this, LibEntry->m_DocFile ,

@@ -94,8 +94,6 @@ typedef enum {
 
 
 /* variables generales */
-extern LibraryStruct* g_LibraryList;    // All part libs are saved here.
-
 extern int            g_OptNetListUseNames; /* TRUE pour utiliser les noms de net plutot que
                                              * les numeros (netlist PSPICE seulement) */
 extern SCH_ITEM*      g_ItemToRepeat; /* pointeur sur la derniere structure

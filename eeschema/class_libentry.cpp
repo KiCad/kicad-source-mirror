@@ -145,53 +145,63 @@ int SortItemsFct(const void* ref, const void* item)
 
 
 /*********************/
-/* class LibCmpEntry */
+/* class CMP_LIB_ENTRY */
 /*********************/
 
 /* Basic class for library component description
  *  Not directly used
  *  Used to create the 2 derived classes :
- *      - EDA_LibCmpAliasStruct
- *      - EDA_LibComponentStruct
+ *      - LIB_ALIAS
+ *      - LIB_COMPONENT
  */
 
 /********************************************************************/
-LibCmpEntry::LibCmpEntry( LibrEntryType CmpType, const wxChar* CmpName ) :
+CMP_LIB_ENTRY::CMP_LIB_ENTRY( LibrEntryType type, const wxString& name,
+                              CMP_LIBRARY* lib ) :
     EDA_BaseStruct( LIBCOMPONENT_STRUCT_TYPE )
 {
-    Type = CmpType;
+    Type = type;
     m_Name.m_FieldId = VALUE;
     m_Name.SetParent( this );
-    if( CmpName )
-        m_Name.m_Text = CmpName;
+    m_Name.m_Text = name;
+    m_lib = lib;
 }
 
 
-LibCmpEntry::~LibCmpEntry()
+CMP_LIB_ENTRY::~CMP_LIB_ENTRY()
 {
 }
 
 
-bool LibCmpEntry::operator==( const wxChar* name ) const
+wxString CMP_LIB_ENTRY::GetLibraryName()
+{
+    if( m_lib != NULL )
+        return m_lib->GetName();
+
+    return wxEmptyString;
+}
+
+
+bool CMP_LIB_ENTRY::operator==( const wxChar* name ) const
 {
     return m_Name.m_Text.CmpNoCase( name ) == 0;
 }
 
 
-bool operator<( const LibCmpEntry& item1, const LibCmpEntry& item2 )
+bool operator<( const CMP_LIB_ENTRY& item1, const CMP_LIB_ENTRY& item2 )
 {
     return item1.m_Name.m_Text.CmpNoCase( item2.m_Name.m_Text ) < 0;
 }
 
 
-int LibraryEntryCompare( const LibCmpEntry* LE1, const LibCmpEntry* LE2 )
+int LibraryEntryCompare( const CMP_LIB_ENTRY* LE1, const CMP_LIB_ENTRY* LE2 )
 {
     return LE1->m_Name.m_Text.CmpNoCase( LE2->m_Name.m_Text );
 }
 
 
 /*******************************/
-/* class EDA_LibCmpAliasStruct */
+/* class LIB_ALIAS */
 /*******************************/
 
 /* Class to define an alias of a component
@@ -203,30 +213,37 @@ int LibraryEntryCompare( const LibCmpEntry* LE1, const LibCmpEntry* LE2 )
  *  (like 74LS00, 74HC00 ... and many op amps )
  */
 
-EDA_LibCmpAliasStruct::EDA_LibCmpAliasStruct( const wxChar* CmpName,
-                                              const wxChar* CmpRootName ) :
-    LibCmpEntry( ALIAS, CmpName )
+LIB_ALIAS::LIB_ALIAS( const wxString& name, LIB_COMPONENT* root,
+                      CMP_LIBRARY* lib ) :
+    CMP_LIB_ENTRY( ALIAS, name, lib )
 {
-    if( CmpRootName == NULL )
-        m_RootName.Empty();
-    else
-        m_RootName = CmpRootName;
+    wxASSERT( root != NULL && root->Type == ROOT );
+
+    m_root = root;
 }
 
 
-EDA_LibCmpAliasStruct::~EDA_LibCmpAliasStruct()
+LIB_ALIAS::~LIB_ALIAS()
 {
+}
+
+
+void LIB_ALIAS::SetComponent( LIB_COMPONENT* root )
+{
+    wxASSERT( root != NULL && root->Type == ROOT );
+
+    m_root =  root;
 }
 
 
 /********************************/
-/* class EDA_LibComponentStruct */
+/* class LIB_COMPONENT */
 /********************************/
 
 /* This is a standard component  (in library)
  */
-EDA_LibComponentStruct:: EDA_LibComponentStruct( const wxChar* CmpName ) :
-    LibCmpEntry( ROOT, CmpName )
+LIB_COMPONENT::LIB_COMPONENT( const wxString& name, CMP_LIBRARY* lib ) :
+    CMP_LIB_ENTRY( ROOT, name, lib )
 {
     m_Drawings            = NULL;
     m_LastDate            = 0;
@@ -241,7 +258,7 @@ EDA_LibComponentStruct:: EDA_LibComponentStruct( const wxChar* CmpName ) :
 }
 
 
-EDA_LibComponentStruct::~EDA_LibComponentStruct()
+LIB_COMPONENT::~LIB_COMPONENT()
 {
     LibEDA_BaseStruct* DrawItem;
     LibEDA_BaseStruct* NextDrawItem;
@@ -259,12 +276,12 @@ EDA_LibComponentStruct::~EDA_LibComponentStruct()
 }
 
 
-void EDA_LibComponentStruct::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
-                                   const wxPoint& offset, int multi,
-                                   int convert, int drawMode, int color,
-                                   const int transformMatrix[2][2],
-                                   bool showPinText, bool drawFields,
-                                   bool onlySelected )
+void LIB_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
+                          const wxPoint& offset, int multi,
+                          int convert, int drawMode, int color,
+                          const int transformMatrix[2][2],
+                          bool showPinText, bool drawFields,
+                          bool onlySelected )
 {
     wxString           fieldText;
     LibDrawField*      Field;
@@ -359,9 +376,9 @@ void EDA_LibComponentStruct::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
 }
 
 
-void EDA_LibComponentStruct::RemoveDrawItem( LibEDA_BaseStruct* item,
-                                             WinEDA_DrawPanel* panel,
-                                             wxDC* dc )
+void LIB_COMPONENT::RemoveDrawItem( LibEDA_BaseStruct* item,
+                                    WinEDA_DrawPanel* panel,
+                                    wxDC* dc )
 {
     wxASSERT( item != NULL );
 
@@ -398,7 +415,7 @@ void EDA_LibComponentStruct::RemoveDrawItem( LibEDA_BaseStruct* item,
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
-bool EDA_LibComponentStruct::Save( FILE* aFile )
+bool LIB_COMPONENT::Save( FILE* aFile )
 {
     LibEDA_BaseStruct* DrawEntry;
     LibDrawField*      Field;
@@ -517,8 +534,8 @@ bool EDA_LibComponentStruct::Save( FILE* aFile )
     return true;
 }
 
-bool EDA_LibComponentStruct::Load( FILE* file, char* line, int* lineNum,
-                                   wxString& errorMsg )
+bool LIB_COMPONENT::Load( FILE* file, char* line, int* lineNum,
+                          wxString& errorMsg )
 {
     int      unused;
     char*    p;
@@ -636,8 +653,8 @@ bool EDA_LibComponentStruct::Load( FILE* file, char* line, int* lineNum,
 }
 
 
-bool EDA_LibComponentStruct::LoadDrawEntries( FILE* f, char* line,
-                                              int* lineNum, wxString& errorMsg )
+bool LIB_COMPONENT::LoadDrawEntries( FILE* f, char* line,
+                                     int* lineNum, wxString& errorMsg )
 {
     LibEDA_BaseStruct* newEntry = NULL;
     LibEDA_BaseStruct* headEntry = NULL;
@@ -729,7 +746,7 @@ to flush to end of drawing section." );
 }
 
 
-bool EDA_LibComponentStruct::LoadAliases( char* line, wxString& errorMsg )
+bool LIB_COMPONENT::LoadAliases( char* line, wxString& errorMsg )
 {
     char* text = strtok( line, " \t\r\n" );
 
@@ -743,7 +760,7 @@ bool EDA_LibComponentStruct::LoadAliases( char* line, wxString& errorMsg )
 }
 
 
-bool EDA_LibComponentStruct::LoadField( char* line, wxString& errorMsg )
+bool LIB_COMPONENT::LoadField( char* line, wxString& errorMsg )
 {
     LibDrawField* field = new LibDrawField( this );
 
@@ -772,8 +789,8 @@ bool EDA_LibComponentStruct::LoadField( char* line, wxString& errorMsg )
 }
 
 
-bool EDA_LibComponentStruct::LoadFootprints( FILE* file, char* line,
-                                             int* lineNum, wxString& errorMsg )
+bool LIB_COMPONENT::LoadFootprints( FILE* file, char* line,
+                                    int* lineNum, wxString& errorMsg )
 {
     while( true )
     {
@@ -799,7 +816,7 @@ bool EDA_LibComponentStruct::LoadFootprints( FILE* file, char* line,
  *  items remplis en premier, pins en dernier
  *  En cas de superposition d'items, c'est plus lisible
  */
-void EDA_LibComponentStruct::SortDrawItems()
+void LIB_COMPONENT::SortDrawItems()
 {
     LibEDA_BaseStruct** Bufentry, ** BufentryBase, * Entry = m_Drawings;
     int ii, nbitems;
@@ -842,7 +859,7 @@ void EDA_LibComponentStruct::SortDrawItems()
  *  if Convert == 0 Convert is non used
  **/
 /**********************************************************************/
-EDA_Rect EDA_LibComponentStruct::GetBoundaryBox( int Unit, int Convert )
+EDA_Rect LIB_COMPONENT::GetBoundaryBox( int Unit, int Convert )
 {
     LibEDA_BaseStruct* DrawEntry;
     EDA_Rect           bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
@@ -869,7 +886,7 @@ EDA_Rect EDA_LibComponentStruct::GetBoundaryBox( int Unit, int Convert )
  * initialize fields from a vector of fields
  * @param aFields a std::vector <LibDrawField> to import.
  */
-void EDA_LibComponentStruct::SetFields( const std::vector <LibDrawField> aFields )
+void LIB_COMPONENT::SetFields( const std::vector <LibDrawField> aFields )
 {
     // Init basic fields (Value = name in lib, and reference):
     aFields[VALUE].Copy( &m_Name );
@@ -918,7 +935,7 @@ void EDA_LibComponentStruct::SetFields( const std::vector <LibDrawField> aFields
  * lit date et time de modif composant sous le format:
  *  "Ti yy/mm/jj hh:mm:ss"
  */
-bool EDA_LibComponentStruct::SaveDateAndTime( FILE* file )
+bool LIB_COMPONENT::SaveDateAndTime( FILE* file )
 {
     int year, mon, day, hour, min, sec;
 
@@ -942,7 +959,7 @@ bool EDA_LibComponentStruct::SaveDateAndTime( FILE* file )
 /* lit date et time de modif composant sous le format:
  *  "Ti yy/mm/jj hh:mm:ss"
  */
-bool EDA_LibComponentStruct::LoadDateAndTime( char* Line )
+bool LIB_COMPONENT::LoadDateAndTime( char* Line )
 {
     int   year, mon, day, hour, min, sec;
     char* text;
@@ -963,7 +980,7 @@ bool EDA_LibComponentStruct::LoadDateAndTime( char* Line )
 }
 
 
-void EDA_LibComponentStruct::SetOffset( const wxPoint& offset )
+void LIB_COMPONENT::SetOffset( const wxPoint& offset )
 {
     LibEDA_BaseStruct* DrawEntry;
 
@@ -985,7 +1002,7 @@ void EDA_LibComponentStruct::SetOffset( const wxPoint& offset )
 }
 
 
-void EDA_LibComponentStruct::RemoveDuplicateDrawItems()
+void LIB_COMPONENT::RemoveDuplicateDrawItems()
 {
     LibEDA_BaseStruct* DEntryRef;
     LibEDA_BaseStruct* DEntryCompare;
@@ -1024,7 +1041,7 @@ void EDA_LibComponentStruct::RemoveDuplicateDrawItems()
 }
 
 
-bool EDA_LibComponentStruct::HasConversion() const
+bool LIB_COMPONENT::HasConversion() const
 {
     LibEDA_BaseStruct* entry;
 
@@ -1046,7 +1063,7 @@ bool EDA_LibComponentStruct::HasConversion() const
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
-bool LibCmpEntry::SaveDoc( FILE* aFile )
+bool CMP_LIB_ENTRY::SaveDoc( FILE* aFile )
 {
     if( m_Doc.IsEmpty() && m_KeyWord.IsEmpty() && m_DocFile.IsEmpty() )
         return true;

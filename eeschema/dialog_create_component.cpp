@@ -101,7 +101,7 @@ bool WinEDA_CreateCmpDialog::Create( WinEDA_DrawFrame* parent, wxWindowID id, co
 
 
 /**********************************************************************************/
-void WinEDA_CreateCmpDialog::SetComponentData( EDA_LibComponentStruct & component )
+void WinEDA_CreateCmpDialog::SetComponentData( LIB_COMPONENT & component )
 /**********************************************************************************/
 {
     g_AsDeMorgan = m_AsConvert->GetValue();

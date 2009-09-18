@@ -22,7 +22,7 @@
 
 
 
-LibDrawText::LibDrawText(EDA_LibComponentStruct * aParent) :
+LibDrawText::LibDrawText(LIB_COMPONENT * aParent) :
     LibEDA_BaseStruct( COMPONENT_GRAPHIC_TEXT_DRAW_TYPE, aParent ),
     EDA_TextStruct()
 {

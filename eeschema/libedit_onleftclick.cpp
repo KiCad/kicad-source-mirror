@@ -78,12 +78,7 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 DrawEntry->DisplayInfo( this );
 
             else
-            {
-                if( CurrentAliasName.IsEmpty() )
-                    DisplayCmpDoc( CurrentAliasName );
-                else
-                    DisplayCmpDoc( CurrentLibEntry->GetName() );
-            }
+                DisplayCmpDoc();
         }
     }
 
@@ -151,13 +146,7 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                                             LOCATE_ALL_DRAW_ITEM );
             }
             if( DrawEntry == NULL )
-            {
-                if( CurrentAliasName.IsEmpty() )
-                    DisplayCmpDoc( CurrentLibEntry->GetName() );
-                else
-                    DisplayCmpDoc( CurrentAliasName );
-                break;
-            }
+                DisplayCmpDoc();
             SaveCopyInUndoList( CurrentLibEntry );
             if( DrawEntry->Type() == COMPONENT_PIN_DRAW_TYPE )
                 DeletePin( DC, CurrentLibEntry, (LibDrawPin*) DrawEntry );

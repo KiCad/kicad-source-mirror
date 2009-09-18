@@ -501,9 +501,9 @@ void WinEDA_PinPropertiesFrame::SetPinNum( const wxString& newnum, int newsize )
 
 
 /*************************************************/
-void WinEDA_LibeditFrame::DeletePin( wxDC*                   DC,
-                                     EDA_LibComponentStruct* LibEntry,
-                                     LibDrawPin*             Pin )
+void WinEDA_LibeditFrame::DeletePin( wxDC*          DC,
+                                     LIB_COMPONENT* LibEntry,
+                                     LibDrawPin*    Pin )
 /*************************************************/
 
 /* Routine d'effacement de la pin pointee par la souris
@@ -956,7 +956,7 @@ int sort_by_pin_number( const void* ref, const void* tst )
 
 
 /***************************************************************/
-bool WinEDA_LibeditFrame::TestPins( EDA_LibComponentStruct* LibEntry )
+bool WinEDA_LibeditFrame::TestPins( LIB_COMPONENT* LibEntry )
 /***************************************************************/
 
 // Test des pins ( duplicates...)

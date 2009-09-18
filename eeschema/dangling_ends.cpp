@@ -387,8 +387,8 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
         {
             #undef STRUCT
             #define STRUCT ( (SCH_COMPONENT*) DrawItem )
-            EDA_LibComponentStruct* Entry;
-            Entry = ( EDA_LibComponentStruct* ) FindLibPart( STRUCT->m_ChipName );
+            LIB_COMPONENT* Entry;
+            Entry = CMP_LIBRARY::FindLibraryComponent( STRUCT->m_ChipName );
             if( Entry == NULL )
                 break;
 

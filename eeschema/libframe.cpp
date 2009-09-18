@@ -17,6 +17,9 @@
 #include "bitmaps.h"
 #include "protos.h"
 #include "id.h"
+#include "class_library.h"
+
+#include <boost/foreach.hpp>
 
 
 /* Library editor wxConfig entry names. */
@@ -147,6 +150,7 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
     ReCreateHToolbar();
     ReCreateVToolbar();
     DisplayLibInfos();
+    DisplayCmpDoc();
     UpdateAliasSelectList();
     UpdatePartSelectList();
     BestZoom();
@@ -204,8 +208,6 @@ void WinEDA_LibeditFrame::SaveSettings()
 
 void WinEDA_LibeditFrame::OnCloseWindow( wxCloseEvent& Event )
 {
-    LibraryStruct* Lib;
-
     if( GetScreen()->IsModify() )
     {
         if( !IsOK( this, _( "Component was modified!\nDiscard changes?" ) ) )
@@ -217,13 +219,13 @@ void WinEDA_LibeditFrame::OnCloseWindow( wxCloseEvent& Event )
             GetScreen()->ClrModify();
     }
 
-    for( Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext )
+    BOOST_FOREACH( const CMP_LIBRARY& lib, CMP_LIBRARY::GetLibraryList() )
     {
-        if( Lib->IsModified() )
+        if( lib.IsModified() )
         {
             wxString msg;
             msg.Printf( _( "Library \"%s\" was modified!\nDiscard changes?" ),
-                        Lib->m_Name.GetData() );
+                        (const wxChar*) lib.GetName() );
             if( !IsOK( this, msg ) )
             {
                 Event.Veto();
@@ -358,7 +360,8 @@ void WinEDA_LibeditFrame::OnUpdateRedo( wxUpdateUIEvent& event )
 
 void WinEDA_LibeditFrame::OnUpdateSaveCurrentLib( wxUpdateUIEvent& event )
 {
-    event.Enable( CurrentLib != NULL );
+    event.Enable( CurrentLib != NULL
+                  && ( CurrentLib->IsModified() || GetScreen()->IsModify() ) );
 }
 
 
@@ -370,7 +373,7 @@ void WinEDA_LibeditFrame::OnUpdateViewDoc( wxUpdateUIEvent& event )
     {
         if( !CurrentAliasName.IsEmpty() )
         {
-            LibCmpEntry* entry = CurrentLib->FindEntry( CurrentAliasName );
+            CMP_LIB_ENTRY* entry = CurrentLib->FindEntry( CurrentAliasName );
 
             if( entry != NULL )
                 enable = !entry->m_DocFile.IsEmpty();
@@ -452,11 +455,9 @@ void WinEDA_LibeditFrame::OnSelectAlias( wxCommandEvent& event )
     if( m_SelAliasBox->GetStringSelection().CmpNoCase(CurrentLibEntry->GetName() ) == 0 )
         CurrentAliasName.Empty();
     else
-    {
         CurrentAliasName = m_SelAliasBox->GetStringSelection();
-        DisplayCmpDoc( CurrentAliasName );
-    }
 
+    DisplayCmpDoc();
     DrawPanel->Refresh();
 }
 
@@ -464,11 +465,14 @@ void WinEDA_LibeditFrame::OnSelectAlias( wxCommandEvent& event )
 void WinEDA_LibeditFrame::OnSelectPart( wxCommandEvent& event )
 {
     int i = event.GetSelection();
-    if( i < 0 )
+
+    if( ( i == wxNOT_FOUND ) || ( ( i + 1 ) == CurrentUnit ) )
         return;
+
     LibItemToRepeat = NULL;
     CurrentUnit = i + 1;
     DrawPanel->Refresh();
+    DisplayCmpDoc();
 }
 
 
@@ -585,7 +589,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
             wxString docfilename;
             if( !CurrentAliasName.IsEmpty() )
             {
-                LibCmpEntry* entry = CurrentLib->FindEntry( CurrentAliasName );
+                CMP_LIB_ENTRY* entry = CurrentLib->FindEntry( CurrentAliasName );
                 if( entry != NULL )
                     docfilename = entry->m_DocFile;
             }

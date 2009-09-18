@@ -8,12 +8,16 @@
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
+
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
 #include "macros.h"
-
 #include "protos.h"
+#include "class_library.h"
+
+#include <boost/foreach.hpp>
+
 
 /* Fonctions Locales */
 static void SaveLayers( FILE* f );
@@ -119,11 +123,12 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
 
     wxString datetime = DateAndTime(  );
     bool first = true;
-    for( LibraryStruct* Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext )
+
+    BOOST_FOREACH( const CMP_LIBRARY& lib, CMP_LIBRARY::GetLibraryList() )
     {
         if( ! first )
             Name += wxT( "," );
-        Name += Lib->m_Name;
+        Name += lib.GetName();
         first = false;
     }
 

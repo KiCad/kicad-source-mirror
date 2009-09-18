@@ -855,7 +855,7 @@ static LibEDA_BaseStruct* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
  * @return a pointer to the pin
  */
 {
-    EDA_LibComponentStruct* Entry;
+    LIB_COMPONENT* Entry;
     static LibEDA_BaseStruct* NextItem;
     static int Multi, convert, TransMat[2][2];
     LibEDA_BaseStruct* DEntry;
@@ -866,8 +866,7 @@ static LibEDA_BaseStruct* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
     if( aDrawLibItem )
     {
         NextItem = NULL;
-        Entry =
-            ( EDA_LibComponentStruct* )FindLibPart( aDrawLibItem->m_ChipName );
+        Entry = CMP_LIBRARY::FindLibraryComponent( aDrawLibItem->m_ChipName );
 
         if( Entry == NULL )
             return NULL;

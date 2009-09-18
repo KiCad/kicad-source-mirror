@@ -30,7 +30,7 @@ const wxChar* MsgPinElectricType[] =
     wxT( "?????" )
 };
 
-LibDrawPin::LibDrawPin(EDA_LibComponentStruct * aParent) :
+LibDrawPin::LibDrawPin(LIB_COMPONENT * aParent) :
     LibEDA_BaseStruct( COMPONENT_PIN_DRAW_TYPE, aParent )
 {
     m_PinLen      = 300;              /* default Pin len */
@@ -324,7 +324,7 @@ void LibDrawPin::Draw( WinEDA_DrawPanel* aPanel,
             return;
     }
 
-    EDA_LibComponentStruct* Entry = GetParent();
+    LIB_COMPONENT* Entry = GetParent();
     bool DrawPinText = true;
 
     if( ( aData != NULL ) && ( (bool*) aData == false ) )

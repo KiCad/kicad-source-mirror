@@ -13,14 +13,12 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
+#include "id.h"
 
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-
 #include "protos.h"
-
-#include "id.h"
 
 #include <wx/filename.h>
 
@@ -37,10 +35,10 @@ extern int ExportPartId;
 /*************************************************/
 void WinEDA_LibeditFrame::OnImportPart( wxCommandEvent& event )
 {
+    wxString       errMsg;
     wxFileName     fn;
-    LibraryStruct* LibTmp;
-    LibCmpEntry*   LibEntry;
-    bool           entryLoaded = false;
+    CMP_LIBRARY*   LibTmp;
+    CMP_LIB_ENTRY* LibEntry;
 
     LibItemToRepeat = NULL;
 
@@ -51,33 +49,35 @@ void WinEDA_LibeditFrame::OnImportPart( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    LibTmp = g_LibraryList;
-    g_LibraryList = NULL;
+    fn = dlg.GetPath();
 
-    LoadLibraryName( this, dlg.GetPath(), wxT( "$tmplib$" ) );
+    LibTmp = CMP_LIBRARY::LoadLibrary( fn, errMsg );
 
-    if( g_LibraryList )
+    if( LibTmp == NULL )
+        return;
+
+    LibEntry = LibTmp->GetFirstEntry();
+
+    if( LibEntry == NULL )
     {
-        LibEntry = g_LibraryList->GetFirstEntry();
+        wxString msg;
 
-        if( LibEntry )
-            entryLoaded = LoadOneLibraryPartAux( LibEntry, g_LibraryList );
-        FreeCmpLibrary( this, g_LibraryList->m_Name );
-
-        if( entryLoaded )
-        {
-            fn = dlg.GetPath();
-            m_LastLibImportPath = fn.GetPath();
-            ReCreateHToolbar();
-            DisplayLibInfos();
-            GetScreen()->ClearUndoRedoList();
-            DrawPanel->Refresh();
-        }
-        else
-            DisplayError( this, _( "File is empty" ) );
+        msg.Printf( _( "Component library file <%s> is empty." ),
+                    (const wxChar*) fn.GetFullPath() );
+        DisplayError( this,  msg );
+        return;
     }
 
-    g_LibraryList = LibTmp;
+    if( LoadOneLibraryPartAux( LibEntry, LibTmp ) )
+    {
+        fn = dlg.GetPath();
+        m_LastLibImportPath = fn.GetPath();
+        DisplayLibInfos();
+        GetScreen()->ClearUndoRedoList();
+        DrawPanel->Refresh();
+    }
+
+    delete LibTmp;
 }
 
 
@@ -90,18 +90,18 @@ void WinEDA_LibeditFrame::OnImportPart( wxCommandEvent& event )
  */
 void WinEDA_LibeditFrame::OnExportPart( wxCommandEvent& event )
 {
-    wxFileName     fn;
-    wxString       Name, mask, title;
-    LibraryStruct* NewLib, * LibTmp, * CurLibTmp;
-    bool createLib = ( event.GetId() == ExportPartId ) ? false : true;
+    wxFileName   fn;
+    wxString     msg, title;
+    CMP_LIBRARY* CurLibTmp;
+    bool         createLib = ( event.GetId() != ExportPartId ) ? false : true;
 
     if( CurrentLibEntry == NULL )
     {
-        DisplayError( this, _( "No Part to Save" ), 10 );
+        DisplayError( this, _( "There is no component selected to save." ) );
         return;
     }
 
-    fn = CurrentLibEntry->m_Name.m_Text.Lower();
+    fn = CurrentLibEntry->GetName().Lower();
     fn.SetExt( CompLibFileExtension );
 
     title = createLib ? _( "New Library" ) : _( "Export Component" );
@@ -114,38 +114,26 @@ void WinEDA_LibeditFrame::OnExportPart( wxCommandEvent& event )
 
     fn = dlg.GetPath();
 
-    /* Creation d'une librairie standard pour sauvegarde */
-
-    LibTmp    = g_LibraryList;
     CurLibTmp = CurrentLib;
 
-    NewLib = new LibraryStruct( LIBRARY_TYPE_EESCHEMA, wxT( "$libTmp$" ),
-                                fn.GetFullName() );
+    CurrentLib = new CMP_LIBRARY( LIBRARY_TYPE_EESCHEMA, fn );
 
-    g_LibraryList = NewLib;
-
-    /* Sauvegarde du composant: */
-    CurrentLib = NewLib;
     SaveOnePartInMemory();
-    bool success = NewLib->Save( fn.GetFullPath() );
+
+    bool success = CurrentLib->Save( fn.GetFullPath() );
 
     if( success )
-    {
         m_LastLibExportPath = fn.GetPath();
-    }
 
-    /* Suppression de la librarie temporaire */
-    FreeCmpLibrary( this, NewLib->m_Name );
-    g_LibraryList = LibTmp;
-    CurrentLib    = CurLibTmp;
+    delete CurrentLib;
+    CurrentLib = CurLibTmp;
 
-    wxString msg;
     if( createLib && success )
     {
         msg = fn.GetFullPath() + _( " - OK" );
-        DisplayInfoMessage( this,
-                            _( "Note: this new library will be available only \
-if it is loaded by eeschema.\nModify eeschema config if you want use it." ) );
+        DisplayInfoMessage( this, _( "This library will not be available \
+until it is loaded by EESchema.\nModify the EESchema library configuration \
+if you want to include it as part of this project." ) );
     }
     else
         msg = _( "Error creating " ) + fn.GetFullName();

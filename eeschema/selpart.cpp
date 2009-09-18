@@ -13,37 +13,23 @@
 #include "protos.h"
 
 
-LibraryStruct* SelectLibraryFromList( WinEDA_DrawFrame* frame )
+CMP_LIBRARY* SelectLibraryFromList( WinEDA_DrawFrame* frame )
 {
     static wxString OldLibName;
-    wxString        LibName, msg;
-    int             count = NumOfLibraries();
-    LibraryStruct*  Lib = NULL;
+    wxString        msg;
+    wxArrayString   libNamesList;
+    int             count = CMP_LIBRARY::GetLibraryCount();
+    CMP_LIBRARY*    Lib = NULL;
 
     if( count == 0 )
     {
-        DisplayError( frame, _( "No libraries are loaded" ) );
+        DisplayError( frame, _( "No component libraries are loaded." ) );
         return NULL;
     }
 
+    libNamesList = CMP_LIBRARY::GetLibraryNames();
+
     msg.Printf( _( " Select 1 of %d libraries." ), count );
-
-    wxArrayString  libNamesList;
-    LibraryStruct* libcache = NULL;
-
-    for( LibraryStruct* Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext )
-    {
-        if( Lib->m_IsLibCache )
-            libcache = Lib;
-        else
-            libNamesList.Add( Lib->m_Name );
-    }
-
-    libNamesList.Sort();
-
-    // Add lib cache
-    if( libcache )
-        libNamesList.Add( libcache->m_Name );
 
     wxSingleChoiceDialog dlg( frame, msg, _( "Select Library" ), libNamesList );
 
@@ -55,7 +41,7 @@ LibraryStruct* SelectLibraryFromList( WinEDA_DrawFrame* frame )
     if( dlg.ShowModal() == wxID_CANCEL || dlg.GetStringSelection().IsEmpty() )
         return NULL;
 
-    Lib = FindLibrary( dlg.GetStringSelection() );
+    Lib = CMP_LIBRARY::FindLibrary( dlg.GetStringSelection() );
 
     if( Lib != NULL )
         OldLibName = dlg.GetStringSelection();
@@ -65,7 +51,7 @@ LibraryStruct* SelectLibraryFromList( WinEDA_DrawFrame* frame )
 
 
 int DisplayComponentsNamesInLib( WinEDA_DrawFrame* frame,
-                                 LibraryStruct* Library,
+                                 CMP_LIBRARY* Library,
                                  wxString& Buffer, wxString& OldName )
 {
     size_t         i;
@@ -105,7 +91,7 @@ int DisplayComponentsNamesInLib( WinEDA_DrawFrame* frame,
 }
 
 
-int GetNameOfPartToLoad( WinEDA_DrawFrame* frame, LibraryStruct* Library,
+int GetNameOfPartToLoad( WinEDA_DrawFrame* frame, CMP_LIBRARY* Library,
                          wxString& BufName )
 {
     int             ii;

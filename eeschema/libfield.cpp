@@ -216,7 +216,7 @@ names in the alias list." ),
 entry in the component library <%s>.\nPlease choose another name that does \
 not conflict with any library entries." ),
                         (const wxChar*) Text,
-                        (const wxChar*) CurrentLib->m_Name );
+                        (const wxChar*) CurrentLib->GetName() );
             DisplayError( this, msg );
             return;
         }
@@ -294,7 +294,7 @@ void WinEDA_LibeditFrame::RotateField( wxDC* DC, LibDrawField* Field )
  * return:
  *   pointer on the field (or NULL )
  */
-LibDrawField* WinEDA_LibeditFrame::LocateField( EDA_LibComponentStruct* LibEntry )
+LibDrawField* WinEDA_LibeditFrame::LocateField( LIB_COMPONENT* LibEntry )
 {
     wxPoint refpos = GetScreen()->m_Curseur;
     /* Test reference */

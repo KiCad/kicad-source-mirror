@@ -94,7 +94,7 @@ public:
     {
         return m_CmpName->GetValue();
     }
-    void SetComponentData( EDA_LibComponentStruct & component );
+    void SetComponentData( LIB_COMPONENT & component );
 ////@begin WinEDA_CreateCmpDialog event handler declarations
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK

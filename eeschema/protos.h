@@ -2,11 +2,11 @@
 /* prototypage des fonctions de EESchema */
 /*****************************************/
 
-LibEDA_BaseStruct* LocatePin( const wxPoint&          RefPos,
-                              EDA_LibComponentStruct* Entry,
-                              int                     Unit,
-                              int                     Convert,
-                              SCH_COMPONENT*          DrawItem = NULL );
+LibEDA_BaseStruct* LocatePin( const wxPoint& RefPos,
+                              LIB_COMPONENT* Entry,
+                              int            Unit,
+                              int            Convert,
+                              SCH_COMPONENT* DrawItem = NULL );
 
 /* Routine de localisation d'une PIN de la PartLib pointee par Entry */
 
@@ -40,22 +40,16 @@ void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
 /******************************/
 /* EELIBS_DRAW_COMPONENTS.CPP */
 /******************************/
-int                     NumOfLibraries();
-
-LibCmpEntry* FindLibPart( const wxChar*   Name,
-                          const wxString& LibName = wxEmptyString,
-                          LibrEntryType   Alias = ROOT );
-
-void                    DrawingLibInGhost( WinEDA_DrawPanel*       panel,
-                                           wxDC*                   DC,
-                                           EDA_LibComponentStruct* LibEntry,
-                                           SCH_COMPONENT*          DrawLibItem,
-                                           int                     PartX,
-                                           int                     PartY,
-                                           int                     Multi,
-                                           int                     convert,
-                                           int                     Color,
-                                           bool                    DrawPinText );
+void DrawingLibInGhost( WinEDA_DrawPanel* panel,
+                        wxDC*             DC,
+                        LIB_COMPONENT*    LibEntry,
+                        SCH_COMPONENT*    DrawLibItem,
+                        int               PartX,
+                        int               PartY,
+                        int               Multi,
+                        int               convert,
+                        int               Color,
+                        bool              DrawPinText );
 
 bool MapAngles( int*      Angle1,
                 int*      Angle2,
@@ -72,14 +66,6 @@ bool MapAngles( int*      Angle1,
  */
 wxPoint        TransformCoordinate( const int      aTransformMatrix[2][2],
                                     const wxPoint& aPosition );
-
-LibraryStruct* FindLibrary( const wxString& Name );
-LibraryStruct* LoadLibraryName( WinEDA_DrawFrame* frame,
-                                const wxString&   FullLibName,
-                                const wxString&   LibName );
-void           LoadLibraries( WinEDA_SchematicFrame* frame );
-void           FreeCmpLibrary( wxWindow*       frame,
-                               const wxString& LibName );
 
 void           SnapLibItemPoint( int            OrigX,
                                  int            OrigY,
@@ -153,12 +139,12 @@ SCH_ITEM*          PickStruct( const wxPoint& refpos,
                                int            SearchMask );
 
 
-LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN*             Screen,
-                                   const wxPoint&          refpoint,
-                                   EDA_LibComponentStruct* LibEntry,
-                                   int                     Unit,
-                                   int                     Convert,
-                                   int                     masque );
+LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN*    Screen,
+                                   const wxPoint& refpoint,
+                                   LIB_COMPONENT* LibEntry,
+                                   int            Unit,
+                                   int            Convert,
+                                   int            masque );
 
 Hierarchical_PIN_Sheet_Struct* LocateSheetLabel( DrawSheetStruct* Sheet,
                                                  const wxPoint&   pos );
@@ -216,7 +202,7 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose );
 /* SAVELIB.CPP */
 /**************/
 
-EDA_LibComponentStruct* CopyLibEntryStruct( EDA_LibComponentStruct* OldEntry );
+LIB_COMPONENT* CopyLibEntryStruct( LIB_COMPONENT* OldEntry );
 
 /* Routine de copie d'une partlib
  *      Parametres d'entree: pointeur sur la structure de depart
@@ -262,7 +248,7 @@ void DeleteAllMarkers( int type );
 /* GETPART.CPP */
 /**************/
 
-int LookForConvertPart( EDA_LibComponentStruct* LibEntry );
+int LookForConvertPart( LIB_COMPONENT* LibEntry );
 
 /* Retourne la plus grande valeur trouvee dans la liste des elements
  *    "drawings" du composant LibEntry, pour le membre .Convert
@@ -295,7 +281,7 @@ void InstallPineditFrame( WinEDA_LibeditFrame* parent,
  *       0 si commande annulee
  */
 int            DisplayComponentsNamesInLib( WinEDA_DrawFrame* frame,
-                                            LibraryStruct*    Library,
+                                            CMP_LIBRARY*      Library,
                                             wxString&         Buffer,
                                             wxString&         OldName );
 
@@ -305,7 +291,7 @@ int            DisplayComponentsNamesInLib( WinEDA_DrawFrame* frame,
  * a library
  * This list is sorted, with the library cache always at end of the list
  */
-LibraryStruct* SelectLibraryFromList( WinEDA_DrawFrame* frame );
+CMP_LIBRARY* SelectLibraryFromList( WinEDA_DrawFrame* frame );
 
 /**
  * Function GetNameOfPartToLoad
@@ -319,7 +305,7 @@ LibraryStruct* SelectLibraryFromList( WinEDA_DrawFrame* frame );
  *   BufName
  */
 int            GetNameOfPartToLoad( WinEDA_DrawFrame* frame,
-                                    LibraryStruct*    Lib,
+                                    CMP_LIBRARY*      Lib,
                                     wxString&         BufName );
 
 /**************/

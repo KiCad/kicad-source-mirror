@@ -1,5 +1,5 @@
 /****************************/
-/*	EESCHEMA - files-io.cpp	*/
+/*  EESCHEMA - files-io.cpp */
 /****************************/
 
 #include "fctsys.h"
@@ -45,19 +45,18 @@ void WinEDA_SchematicFrame::Save_File( wxCommandEvent& event )
 }
 
 
-/************************************************************************************/
+/*
+ *  Load an entire project
+ *
+ *  Schematic root file and its subhierarchies, the configuration and the libs
+ *  which are not already loaded)
+ */
 int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
                                              bool IsNew )
-/************************************************************************************/
 {
-    /*
-     *  Load an entire project
-     * ( schematic root file and its subhierarchies, the configuration and the libs
-     *  which are not already loaded)
-     */
     SCH_SCREEN*    screen;
     wxString       FullFileName, msg;
-    bool           LibCacheExist = FALSE;
+    bool           LibCacheExist = false;
 
     EDA_ScreenList ScreenList;
 
@@ -133,13 +132,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
     LoadProjectFile( wxEmptyString, FALSE );
 
     // Delete old caches.
-    LibraryStruct* nextlib, * lib = g_LibraryList;
-    for( ; lib != NULL; lib = nextlib )
-    {
-        nextlib = lib->m_Pnext;
-        if( lib->m_IsLibCache )
-            FreeCmpLibrary( this, lib->m_Name );
-    }
+    CMP_LIBRARY::RemoveCacheLibrary();
 
     if( IsNew )
     {
@@ -164,29 +157,44 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
         fn.SetExt( wxT( "cache.lib" ) );
         use_oldcachename = true;
     }
+
     if( fn.FileExists() )
     {
+        wxString errMsg;
+
         wxLogDebug( wxT( "Load schematic cache library file <%s>" ),
                     fn.GetFullPath().c_str() );
         msg = wxT( "Load " ) + fn.GetFullPath();
-        LibraryStruct* LibCache = LoadLibraryName( this, fn.GetFullPath(),
-                                                   fn.GetName() );
+
+        CMP_LIBRARY* LibCache = CMP_LIBRARY::LoadLibrary( fn, errMsg );
+
         if( LibCache )
         {
-            LibCache->m_IsLibCache = TRUE;
+            LibCache->SetCache();
             msg += wxT( " OK" );
             if ( use_oldcachename )     // set the new name
             {
                 fn.SetName(cachename);
                 fn.SetExt( CompLibFileExtension );
-                LibCache->m_Name = fn.GetName();
-                LibCache->m_FullFileName = fn.GetFullPath();
+                LibCache->SetFileName( fn );
             }
+
+            LibCacheExist = true;
+            CMP_LIBRARY::GetLibraryList().push_back( LibCache );
         }
         else
+        {
+            wxString prompt;
+
+            prompt.Printf( _( "Component library <%s> failed to load.\n\n\
+Error: %s" ),
+                           ( const wxChar* ) fn.GetFullPath(),
+                           ( const wxChar* ) errMsg );
+            DisplayError( this, prompt );
             msg += wxT( " ->Error" );
+        }
+
         PrintMsg( msg );
-        LibCacheExist = TRUE;
     }
 
     if( !wxFileExists( g_RootSheet->m_AssociatedScreen->m_FileName )
@@ -194,7 +202,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
     {
         Zoom_Automatique( FALSE );
         msg.Printf( _( "File <%s> not found." ),
-            g_RootSheet->m_AssociatedScreen->m_FileName.GetData() );
+                    g_RootSheet->m_AssociatedScreen->m_FileName.GetData() );
         DisplayInfoMessage( this, msg, 0 );
         return -1;
     }

@@ -18,18 +18,18 @@
 
 static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
                                      bool erase );
-static int  MarkItemsInBloc( EDA_LibComponentStruct* LibComponent,
-                             EDA_Rect&               Rect );
+static int  MarkItemsInBloc( LIB_COMPONENT* LibComponent,
+                             EDA_Rect&      Rect );
 
-static void ClearMarkItems( EDA_LibComponentStruct* LibComponent );
-static void CopyMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset );
-static void MoveMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset );
-static void MirrorMarkedItems( EDA_LibComponentStruct* LibEntry,
+static void ClearMarkItems( LIB_COMPONENT* LibComponent );
+static void CopyMarkedItems( LIB_COMPONENT* LibEntry, wxPoint offset );
+static void MoveMarkedItems( LIB_COMPONENT* LibEntry, wxPoint offset );
+static void MirrorMarkedItems( LIB_COMPONENT* LibEntry,
                                wxPoint offset );
-static void DeleteMarkedItems( EDA_LibComponentStruct* LibEntry );
+static void DeleteMarkedItems( LIB_COMPONENT* LibEntry );
 
 
-void ClearMarkItems( EDA_LibComponentStruct* LibComponent )
+void ClearMarkItems( LIB_COMPONENT* LibComponent )
 {
     LibEDA_BaseStruct* item;
 
@@ -55,8 +55,8 @@ void ClearMarkItems( EDA_LibComponentStruct* LibComponent )
  *       only the pins specific to current part and current convert are marked
  *     - all specific to current convert pins are marked;
  */
-int MarkItemsInBloc( EDA_LibComponentStruct* LibComponent,
-                     EDA_Rect&               Rect )
+int MarkItemsInBloc( LIB_COMPONENT* LibComponent,
+                     EDA_Rect&      Rect )
 {
     LibEDA_BaseStruct* item;
     int                ItemsCount = 0;
@@ -389,7 +389,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
 /*
  * Copy marked items, at new position = old position + offset
  */
-void CopyMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
+void CopyMarkedItems( LIB_COMPONENT* LibEntry, wxPoint offset )
 {
     LibEDA_BaseStruct* item;
 
@@ -415,7 +415,7 @@ void CopyMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
 /*
  * Move marked items, at new position = old position + offset
  */
-void MoveMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
+void MoveMarkedItems( LIB_COMPONENT* LibEntry, wxPoint offset )
 {
     LibEDA_BaseStruct* item;
 
@@ -437,7 +437,7 @@ void MoveMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
 /*
  * Delete marked items
  */
-void DeleteMarkedItems( EDA_LibComponentStruct* LibEntry )
+void DeleteMarkedItems( LIB_COMPONENT* LibEntry )
 {
     LibEDA_BaseStruct* item, * next_item;
 
@@ -458,7 +458,7 @@ void DeleteMarkedItems( EDA_LibComponentStruct* LibEntry )
 /*
  * Mirror marked items, refer to a Vertical axis at position offset
  */
-void MirrorMarkedItems( EDA_LibComponentStruct* LibEntry, wxPoint offset )
+void MirrorMarkedItems( LIB_COMPONENT* LibEntry, wxPoint offset )
 {
 #define SETMIRROR( z ) (z) -= offset.x; (z) = -(z); (z) += offset.x;
     LibEDA_BaseStruct* item;

@@ -23,7 +23,7 @@ static int fill_tab[3] = { 'N', 'F', 'f' };
 
 /* Base class (abstract) for components bodies items */
 LibEDA_BaseStruct::LibEDA_BaseStruct( KICAD_T struct_type,
-                                      EDA_LibComponentStruct* aParent ) :
+                                      LIB_COMPONENT* aParent ) :
     EDA_BaseStruct( struct_type )
 {
     m_Unit     = 0;  /* Unit identification (for multi part per package)
@@ -83,7 +83,7 @@ bool LibEDA_BaseStruct::operator==( const LibEDA_BaseStruct& other ) const
 /** class LibDrawArc **/
 /**********************/
 
-LibDrawArc::LibDrawArc( EDA_LibComponentStruct* aParent ) :
+LibDrawArc::LibDrawArc( LIB_COMPONENT* aParent ) :
     LibEDA_BaseStruct( COMPONENT_ARC_DRAW_TYPE, aParent )
 {
     m_Radius   = 0;
@@ -437,7 +437,7 @@ void LibDrawArc::DisplayInfo( WinEDA_DrawFrame* frame )
 /** class LibDrawCircle **/
 /*************************/
 
-LibDrawCircle::LibDrawCircle( EDA_LibComponentStruct* aParent ) :
+LibDrawCircle::LibDrawCircle( LIB_COMPONENT* aParent ) :
     LibEDA_BaseStruct( COMPONENT_CIRCLE_DRAW_TYPE, aParent )
 {
     m_Radius   = 0;
@@ -645,7 +645,7 @@ void LibDrawCircle::DisplayInfo( WinEDA_DrawFrame* frame )
 /** class LibDrawSquare **/
 /*************************/
 
-LibDrawSquare::LibDrawSquare( EDA_LibComponentStruct* aParent ) :
+LibDrawSquare::LibDrawSquare( LIB_COMPONENT* aParent ) :
     LibEDA_BaseStruct( COMPONENT_RECT_DRAW_TYPE, aParent )
 {
     m_Width    = 0;
@@ -863,7 +863,7 @@ bool LibDrawSquare::HitTest( wxPoint aRefPoint, int aThreshold,
 /**************************/
 /** class LibDrawSegment **/
 /**************************/
-LibDrawSegment::LibDrawSegment( EDA_LibComponentStruct* aParent ) :
+LibDrawSegment::LibDrawSegment( LIB_COMPONENT* aParent ) :
     LibEDA_BaseStruct( COMPONENT_LINE_DRAW_TYPE, aParent )
 {
     m_Width    = 0;
@@ -1015,7 +1015,7 @@ bool LibDrawSegment::HitTest( wxPoint aPosRef, int aThreshold,
 /***************************/
 /** class LibDrawPolyline **/
 /***************************/
-LibDrawPolyline::LibDrawPolyline( EDA_LibComponentStruct* aParent ) :
+LibDrawPolyline::LibDrawPolyline( LIB_COMPONENT* aParent ) :
     LibEDA_BaseStruct( COMPONENT_POLYLINE_DRAW_TYPE, aParent )
 {
     m_Fill     = NO_FILL;
@@ -1320,7 +1320,7 @@ void LibDrawPolyline::DisplayInfo( WinEDA_DrawFrame* frame )
 /***************************/
 /** class LibDrawBezier **/
 /***************************/
-LibDrawBezier::LibDrawBezier( EDA_LibComponentStruct* aParent ) :
+LibDrawBezier::LibDrawBezier( LIB_COMPONENT* aParent ) :
     LibEDA_BaseStruct( COMPONENT_BEZIER_DRAW_TYPE, aParent )
 {
     m_Fill     = NO_FILL;

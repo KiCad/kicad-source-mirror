@@ -405,7 +405,7 @@ bool SCH_CMP_FIELD::Save( FILE* aFile ) const
 void SCH_CMP_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 {
     int fieldNdx;
-    EDA_LibComponentStruct* Entry;
+    LIB_COMPONENT* Entry;
 
     frame->DrawPanel->ManageCurseur = NULL;
     frame->DrawPanel->ForceCloseManageCurseur = NULL;
@@ -424,7 +424,7 @@ void SCH_CMP_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
     m_AddExtraText = 0;
     if( fieldNdx == REFERENCE )
     {
-        Entry = ( EDA_LibComponentStruct* ) FindLibPart( component->m_ChipName );
+        Entry = CMP_LIBRARY::FindLibraryComponent( component->m_ChipName );
         if( Entry != NULL )
         {
             if( Entry->m_UnitCount > 1 )

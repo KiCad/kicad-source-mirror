@@ -38,7 +38,7 @@
  *
  *  others = free fields
  */
-LibDrawField::LibDrawField(EDA_LibComponentStruct * aParent, int idfield ) :
+LibDrawField::LibDrawField(LIB_COMPONENT * aParent, int idfield ) :
     LibEDA_BaseStruct( COMPONENT_FIELD_DRAW_TYPE, aParent )
 {
     m_FieldId = idfield;
@@ -327,7 +327,7 @@ bool LibDrawField::HitTest( wxPoint aPosRef, int aThreshold,
     {
         extraCharCount++;
         m_Text.Append('?');
-        EDA_LibComponentStruct* parent = (EDA_LibComponentStruct*)m_Parent;
+        LIB_COMPONENT* parent = (LIB_COMPONENT*)m_Parent;
         if ( parent && ( parent->m_UnitCount > 1 ) )
         {
             m_Text.Append('A');

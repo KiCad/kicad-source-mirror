@@ -9,13 +9,13 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "eda_doc.h"
+#include "id.h"
 
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 
-#include "id.h"
 
 #define NEXT_PART      1
 #define NEW_PART       0
@@ -25,7 +25,7 @@
 void WinEDA_ViewlibFrame::Process_Special_Functions( wxCommandEvent& event )
 {
     wxString msg;
-    EDA_LibComponentStruct* LibEntry;
+    CMP_LIB_ENTRY* LibEntry;
     int     ii, id = event.GetId();
     wxPoint pos;
 
@@ -51,10 +51,9 @@ void WinEDA_ViewlibFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_LIBVIEW_VIEWDOC:
-        LibEntry =
-            ( EDA_LibComponentStruct* ) FindLibPart( g_CurrentViewComponentName,
-                                                     g_CurrentViewLibraryName,
-                                                     ALIAS );
+        LibEntry = CMP_LIBRARY::FindLibraryEntry( g_CurrentViewComponentName,
+                                                  g_CurrentViewLibraryName );
+
         if( LibEntry && ( !LibEntry->m_DocFile.IsEmpty() ) )
             GetAssociatedDocument( this, LibEntry->m_DocFile,
                                    &wxGetApp().GetLibraryPathList() );
@@ -105,16 +104,16 @@ bool WinEDA_ViewlibFrame::OnRightClick( const wxPoint& MousePos,
 /* Affiche en Ligne d'info la librairie en cours de visualisation */
 void WinEDA_ViewlibFrame::DisplayLibInfos()
 {
-    wxString       msg;
-    LibraryStruct* Lib;
+    wxString     msg;
+    CMP_LIBRARY* Lib;
 
-    Lib = FindLibrary( g_CurrentViewLibraryName );
+    Lib = CMP_LIBRARY::FindLibrary( g_CurrentViewLibraryName );
     msg = _( "Library browser" );
 
     msg << wxT( " [" );
 
     if( Lib )
-        msg <<  Lib->m_FullFileName;
+        msg <<  Lib->GetFullFileName();
     else
         msg += _( "none selected" );
 
@@ -128,13 +127,13 @@ void WinEDA_ViewlibFrame::DisplayLibInfos()
 /*****************************************/
 void WinEDA_ViewlibFrame::SelectCurrentLibrary()
 {
-    LibraryStruct* Lib;
+    CMP_LIBRARY* Lib;
 
     Lib = SelectLibraryFromList( this );
     if( Lib )
     {
         g_CurrentViewComponentName.Empty();
-        g_CurrentViewLibraryName = Lib->m_Name;
+        g_CurrentViewLibraryName = Lib->GetName();
         DisplayLibInfos();
         if( m_LibList )
         {
@@ -155,14 +154,14 @@ void WinEDA_ViewlibFrame::SelectCurrentLibrary()
  */
 void WinEDA_ViewlibFrame::SelectAndViewLibraryPart( int option )
 {
-    LibraryStruct* Lib;
+    CMP_LIBRARY* Lib;
 
     if( g_CurrentViewLibraryName.IsEmpty() )
         SelectCurrentLibrary();
     if( g_CurrentViewLibraryName.IsEmpty() )
         return;
 
-    Lib = FindLibrary( g_CurrentViewLibraryName );
+    Lib = CMP_LIBRARY::FindLibrary( g_CurrentViewLibraryName );
     if( Lib == NULL )
         return;
 
@@ -172,7 +171,7 @@ void WinEDA_ViewlibFrame::SelectAndViewLibraryPart( int option )
         return;
     }
 
-    LibCmpEntry* LibEntry = Lib->FindEntry( g_CurrentViewComponentName );
+    CMP_LIB_ENTRY* LibEntry = Lib->FindEntry( g_CurrentViewComponentName );
 
     if( LibEntry == NULL )
         return;
@@ -188,12 +187,12 @@ void WinEDA_ViewlibFrame::SelectAndViewLibraryPart( int option )
 /*************************************************/
 /* Routine to view one selected library content. */
 /*************************************************/
-void WinEDA_ViewlibFrame::ViewOneLibraryContent( LibraryStruct* Lib, int Flag )
+void WinEDA_ViewlibFrame::ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag )
 {
-    int          NumOfParts = 0;
-    LibCmpEntry* LibEntry;
-    wxString     CmpName;
-    wxClientDC   dc( DrawPanel );
+    int            NumOfParts = 0;
+    CMP_LIB_ENTRY* LibEntry;
+    wxString       CmpName;
+    wxClientDC     dc( DrawPanel );
 
     DrawPanel->PrepareGraphicContext( &dc );
 
@@ -256,15 +255,15 @@ void WinEDA_ViewlibFrame::ViewOneLibraryContent( LibraryStruct* Lib, int Flag )
 /*****************************************************************************/
 void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
-    EDA_LibComponentStruct* component;
-    LibCmpEntry*            entry;
-    LibraryStruct*          lib;
-    wxString                msg;
-    wxString                tmp;
+    LIB_COMPONENT* component;
+    CMP_LIB_ENTRY* entry;
+    CMP_LIBRARY*   lib;
+    wxString       msg;
+    wxString       tmp;
 
     ActiveScreen = GetScreen();
 
-    lib = FindLibrary( g_CurrentViewLibraryName );
+    lib = CMP_LIBRARY::FindLibrary( g_CurrentViewLibraryName );
 
     if( lib == NULL )
         return;
@@ -286,24 +285,12 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     if( entry->Type != ROOT )
     {
-        EDA_LibCmpAliasStruct* alias = (EDA_LibCmpAliasStruct*) entry;
+        LIB_ALIAS* alias = (LIB_ALIAS*) entry;
+        component = alias->GetComponent();
 
-        component = lib->FindComponent( alias->m_RootName );
+        wxASSERT( component != NULL && component->Type == ROOT );
 
-        if( component == NULL )
-        {
-            msg.Printf( _( "Root component <%s> for alias <%s> not found in \
-library." ),
-                        (const wxChar*) alias->m_RootName,
-                        (const wxChar*) entry->GetName(),
-                        (const wxChar*) lib->m_Name );
-            DisplayError( this, msg );
-            return;
-        }
-
-        msg.Printf( _( "Current Part: <%s> (is Alias of <%s>)" ),
-                    (const wxChar*) entry->GetName(),
-                    (const wxChar*) alias->m_RootName );
+        msg = alias->GetName();
 
         /* Temporarily change the name field text to reflect the alias name. */
         tmp = component->GetName();
@@ -316,9 +303,8 @@ library." ),
     }
     else
     {
-        component = (EDA_LibComponentStruct*) entry;
-        msg.Printf( _( "Current Part: <%s>" ),
-                    (const wxChar*) component->GetName() );
+        component = (LIB_COMPONENT*) entry;
+        msg = _( "None" );
     }
 
     component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_ViewUnit,
@@ -327,9 +313,11 @@ library." ),
     if( !tmp.IsEmpty() )
         component->m_Name.m_Text = tmp;
 
-    AfficheDoc( this, entry->m_Doc, entry->m_KeyWord );
-
-    SetStatusText( msg, 0 );
+    MsgPanel->EraseMsgBox();
+    MsgPanel->AppendMessage( _( "Part" ), component->GetName(), BLUE, 6 );
+    MsgPanel->AppendMessage( _( "Alias" ), msg, RED, 6 );
+    MsgPanel->AppendMessage( _( "Description" ), entry->m_Doc, CYAN, 6 );
+    MsgPanel->AppendMessage( _( "Key words" ), entry->m_KeyWord, DARKDARKGRAY );
 
     DrawPanel->Trace_Curseur( DC );
 }

@@ -289,9 +289,6 @@ void        Affiche_1_Parametre( WinEDA_DrawFrame* frame,
                                  const wxString&   texte_L,
                                  int               color );
 
-void        AfficheDoc( WinEDA_DrawFrame* frame, const wxString& Doc,
-                        const wxString& KeyW );
-
 /* Routine d'affichage de la documentation associee a un composant */
 
 int         GetTimeStamp();

@@ -233,9 +233,6 @@ bool WinEDA_SchematicFrame::LoadProjectFile( const wxString& CfgFileName,
     wxFileName              fn;
     bool                    IsRead = TRUE;
     wxArrayString           liblist_tmp = m_ComponentLibFiles;
-    WinEDA_SchematicFrame*  frame;
-
-    frame = (WinEDA_SchematicFrame*)wxGetApp().GetTopWindow();
 
     if( CfgFileName.IsEmpty() )
         fn = g_RootSheet->m_AssociatedScreen->m_FileName;
@@ -265,12 +262,8 @@ bool WinEDA_SchematicFrame::LoadProjectFile( const wxString& CfgFileName,
     if( m_ComponentLibFiles.GetCount() == 0 )
         m_ComponentLibFiles.Add( wxT( "power" ) );
 
-    if( frame )
-    {
-        frame->SetDrawBgColor( g_DrawBgColor );
-    }
-
-    LoadLibraries( frame );
+    SetDrawBgColor( g_DrawBgColor );
+    LoadLibraries();
 
     return IsRead;
 }

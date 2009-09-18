@@ -10,11 +10,12 @@
 #include "libcmp.h"
 #include "general.h"
 #include "protos.h"
+#include "class_library.h"
+
+#include <boost/foreach.hpp>
+
 
 //#define DRAW_ARC_WITH_ANGLE       // Used to select function to draw arcs
-
-
-/* Local functions */
 
 
 /***************************************************************************/
@@ -37,57 +38,6 @@ wxPoint TransformCoordinate( const int      aTransformMatrix[2][2],
         ( aTransformMatrix[1][1] * aPosition.y );
 
     return new_pos;
-}
-
-
-/*****************************************************************************/
-/*
- *  Routine to find a part in one of the libraries given its name.
- *  Name = Name of part.
- *  LibName = Name of Lib; if "": seach in all libs
- *  Alias = Flag: si flag != 0, retourne un pointeur sur une part ou un alias
- *                si flag = 0, retourne un pointeur sur une part meme si le nom
- *                correspond a un alias
- *  Alias = FIND_ROOT, ou Alias = FIND_ALIAS
- */
-/*****************************************************************************/
-LibCmpEntry* FindLibPart( const wxChar* Name, const wxString& LibName,
-                          LibrEntryType type )
-{
-    LibCmpEntry*   Entry = NULL;
-    LibraryStruct* Lib = g_LibraryList;
-
-    FindLibName.Empty();
-
-    while( Lib )
-    {
-        if( !LibName.IsEmpty() )
-        {
-            if( Lib->m_Name != LibName )
-            {
-                Lib = Lib->m_Pnext;
-                continue;
-            }
-        }
-
-        if( Lib == NULL )
-            break;
-
-        if( type == ROOT )
-            Entry = (LibCmpEntry*) Lib->FindComponent( Name );
-        else
-            Entry = Lib->FindEntry( Name );
-
-        if( Entry != NULL )
-        {
-            FindLibName = Lib->m_Name;
-            break;
-        }
-
-        Lib = Lib->m_Pnext;
-    }
-
-    return Entry;
 }
 
 
@@ -162,9 +112,9 @@ bool MapAngles( int* Angle1, int* Angle2, const int TransMat[2][2] )
 * This routine is applied by the PlaceLibItem routine above.                 *
 *****************************************************************************/
 void DrawingLibInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
-                        EDA_LibComponentStruct* LibEntry,
-                        SCH_COMPONENT* DrawLibItem, int PartX, int PartY,
-                        int multi, int convert, int Color, bool DrawPinText )
+                        LIB_COMPONENT* LibEntry, SCH_COMPONENT* DrawLibItem,
+                        int PartX, int PartY, int multi, int convert,
+                        int Color, bool DrawPinText )
 {
     int DrawMode = g_XorMode;
 

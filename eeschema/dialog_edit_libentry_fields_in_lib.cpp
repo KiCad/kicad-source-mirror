@@ -28,15 +28,15 @@ class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB : public DIALOG_EDIT_LIBENTRY_FIELDS_IN
 {
 private:
     WinEDA_LibeditFrame*    m_Parent;
-    EDA_LibComponentStruct* m_LibEntry;
+    LIB_COMPONENT* m_LibEntry;
     bool m_skipCopyFromPanel;
 
     /// a copy of the edited component's LibDrawFields
     std::vector <LibDrawField> m_FieldsBuf;
 
 public:
-    DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB( WinEDA_LibeditFrame*    aParent,
-                                        EDA_LibComponentStruct* aLibEntry );
+    DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB( WinEDA_LibeditFrame* aParent,
+                                        LIB_COMPONENT* aLibEntry );
     ~DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB();
 
 private:
@@ -121,8 +121,8 @@ void WinEDA_LibeditFrame::InstallFieldsEditorDialog( void )
 
 /***********************************************************************/
 DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB(
-    WinEDA_LibeditFrame*    aParent,
-    EDA_LibComponentStruct* aLibEntry ) :
+    WinEDA_LibeditFrame* aParent,
+    LIB_COMPONENT*       aLibEntry ) :
     DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE( aParent )
 /***********************************************************************/
 {

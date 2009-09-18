@@ -15,8 +15,9 @@
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-
 #include "protos.h"
+
+#include <boost/foreach.hpp>
 
 
 /*
@@ -34,7 +35,6 @@
 wxString DataBaseGetName( WinEDA_DrawFrame* frame, wxString& Keys,
                           wxString& BufName )
 {
-    LibraryStruct* Lib;
     wxArrayString  nameList;
     wxString       msg;
 
@@ -42,9 +42,9 @@ wxString DataBaseGetName( WinEDA_DrawFrame* frame, wxString& Keys,
     Keys.MakeUpper();
 
     /* Examen de la liste des librairies pour comptage */
-    for( Lib = g_LibraryList; Lib != NULL; Lib = Lib->m_Pnext )
+    BOOST_FOREACH( CMP_LIBRARY& lib, CMP_LIBRARY::GetLibraryList() )
     {
-        Lib->SearchEntryNames( nameList, BufName, Keys );
+        lib.SearchEntryNames( nameList, BufName, Keys );
     }
 
     if( nameList.IsEmpty() )
@@ -77,14 +77,9 @@ wxString DataBaseGetName( WinEDA_DrawFrame* frame, wxString& Keys,
 
 void DisplayCmpDoc( wxString& Name )
 {
-    LibCmpEntry* CmpEntry = NULL;
-    LibraryStruct* Lib = g_LibraryList;
+    CMP_LIB_ENTRY* CmpEntry = NULL;
 
-    while( Lib != NULL && CmpEntry == NULL )
-    {
-        CmpEntry = Lib->FindEntry( Name );
-        Lib = Lib->m_Pnext;
-    }
+    CmpEntry = CMP_LIBRARY::FindLibraryEntry( Name );
 
     if( CmpEntry == NULL )
         return;

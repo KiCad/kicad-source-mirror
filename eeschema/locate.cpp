@@ -612,12 +612,12 @@ static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
 
 
 /*********************************************************************************/
-LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN*             Screen,
-                                   const wxPoint&          aRefPoint,
-                                   EDA_LibComponentStruct* LibEntry,
-                                   int                     Unit,
-                                   int                     Convert,
-                                   int                     masque )
+LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN*    Screen,
+                                   const wxPoint& aRefPoint,
+                                   LIB_COMPONENT* LibEntry,
+                                   int            Unit,
+                                   int            Convert,
+                                   int            masque )
 /*********************************************************************************/
 
 /* Locates a body item( not pins )
@@ -718,11 +718,11 @@ LibDrawPin* LocatePinByNumber( const wxString& ePin_Number,
  */
 {
     LibEDA_BaseStruct* DrawItem;
-    EDA_LibComponentStruct* Entry;
+    LIB_COMPONENT* Entry;
     LibDrawPin* Pin;
     int Unit, Convert;
 
-    Entry = ( EDA_LibComponentStruct* )FindLibPart( eComponent->m_ChipName );
+    Entry = CMP_LIBRARY::FindLibraryComponent( eComponent->m_ChipName );
 
     if( Entry == NULL )
         return NULL;
@@ -760,8 +760,7 @@ LibDrawPin* LocatePinByNumber( const wxString& ePin_Number,
 
 
 /*******************************************************************/
-LibEDA_BaseStruct* LocatePin( const wxPoint& RefPos,
-                              EDA_LibComponentStruct* Entry,
+LibEDA_BaseStruct* LocatePin( const wxPoint& RefPos, LIB_COMPONENT* Entry,
                               int Unit, int convert, SCH_COMPONENT* DrawLibItem )
 /*******************************************************************/
 
@@ -850,7 +849,7 @@ LibDrawPin* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos,
 /**************************************************************************/
 {
     SCH_ITEM* DrawStruct;
-    EDA_LibComponentStruct* Entry;
+    LIB_COMPONENT* Entry;
     SCH_COMPONENT* LibItem = NULL;
     LibDrawPin* Pin = NULL;
 
@@ -859,7 +858,7 @@ LibDrawPin* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos,
         if( DrawStruct->Type() != TYPE_SCH_COMPONENT )
             continue;
         LibItem = (SCH_COMPONENT*) DrawStruct;
-        Entry   = ( EDA_LibComponentStruct* ) FindLibPart( LibItem->m_ChipName );
+        Entry   = CMP_LIBRARY::FindLibraryComponent( LibItem->m_ChipName );
 
         if( Entry == NULL )
             continue;

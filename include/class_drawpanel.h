@@ -155,7 +155,8 @@ public:
      * Check to see if the cursor is being managed for block or editing
      * commands and release it.
      */
-    void         UnManageCursor( void );
+    void         UnManageCursor( int id = -1, int cursor = -1,
+                                 const wxString& title = wxEmptyString );
 
     DECLARE_EVENT_TABLE()
 };

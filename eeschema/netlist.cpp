@@ -353,7 +353,7 @@ static void ListeObjetConnection( DrawSheetPath*                sheetlist,
     SCH_ITEM*                      DrawList;
     NETLIST_OBJECT*                new_item;
     SCH_COMPONENT*                 DrawLibItem;
-    EDA_LibComponentStruct*        Entry;
+    LIB_COMPONENT*                 Entry;
     LibEDA_BaseStruct*             DEntry;
     Hierarchical_PIN_Sheet_Struct* SheetLabel;
     DrawSheetPath                  list;
@@ -472,8 +472,8 @@ static void ListeObjetConnection( DrawSheetPath*                sheetlist,
         case TYPE_SCH_COMPONENT:
             DrawLibItem = (SCH_COMPONENT*) DrawList;
 
-            Entry = ( EDA_LibComponentStruct* )FindLibPart(
-                DrawLibItem->m_ChipName );
+            Entry =
+                CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
 
             if( Entry == NULL )
                 break;

@@ -50,14 +50,14 @@ static void PlotLibPart( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem )
 /*************************************************/
 /* Polt a component */
 {
-    int        ii, t1, t2, * Poly, orient;
-    EDA_LibComponentStruct* Entry;
-    int        TransMat[2][2], Multi, convert;
-    EDA_Colors CharColor = UNSPECIFIED_COLOR;
-    wxPoint    pos;
-    bool       draw_bgfill = false;
+    int            ii, t1, t2, * Poly, orient;
+    LIB_COMPONENT* Entry;
+    int            TransMat[2][2], Multi, convert;
+    EDA_Colors     CharColor = UNSPECIFIED_COLOR;
+    wxPoint        pos;
+    bool           draw_bgfill = false;
 
-    Entry = ( EDA_LibComponentStruct* ) FindLibPart( DrawLibItem->m_ChipName );
+    Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
     if( Entry == NULL )
         return;;
     memcpy( TransMat, DrawLibItem->m_Transform, sizeof(TransMat) );

@@ -19,11 +19,11 @@ void WinEDA_LibeditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
                                               int             unused_flag )
 /*************************************************************************/
 {
-    EDA_BaseStruct*         item;
-    EDA_LibComponentStruct* CopyItem;
+    EDA_BaseStruct*    item;
+    LIB_COMPONENT*     CopyItem;
     PICKED_ITEMS_LIST* lastcmd;
 
-    CopyItem = CopyLibEntryStruct( (EDA_LibComponentStruct*) ItemToCopy );
+    CopyItem = CopyLibEntryStruct( (LIB_COMPONENT*) ItemToCopy );
 
     if( CopyItem == NULL )
         return;
@@ -62,7 +62,7 @@ void WinEDA_LibeditFrame::GetComponentFromRedoList(wxCommandEvent& event)
     lastcmd = GetScreen()->PopCommandFromRedoList( );
 
     wrapper = lastcmd->PopItem();
-    CurrentLibEntry = (EDA_LibComponentStruct*) wrapper.m_PickedItem;
+    CurrentLibEntry = (LIB_COMPONENT*) wrapper.m_PickedItem;
     if( CurrentLibEntry )
         CurrentLibEntry->SetNext( NULL );
     CurrentDrawItem = NULL;
@@ -92,7 +92,7 @@ void WinEDA_LibeditFrame::GetComponentFromUndoList(wxCommandEvent& event)
     lastcmd = GetScreen()->PopCommandFromUndoList( );
 
     wrapper = lastcmd->PopItem();
-    CurrentLibEntry = (EDA_LibComponentStruct*) wrapper.m_PickedItem;
+    CurrentLibEntry = (LIB_COMPONENT*) wrapper.m_PickedItem;
 
     if( CurrentLibEntry )
         CurrentLibEntry->SetNext( NULL );

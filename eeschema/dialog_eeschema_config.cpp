@@ -161,7 +161,7 @@ void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
             m_Parent->m_ComponentLibFiles.Add(m_ListLibr->GetString(ii) );
 
         // take new list in account
-        LoadLibraries( m_Parent );
+        m_Parent->LoadLibraries();
         if( m_Parent->m_ViewlibFrame )
             m_Parent->m_ViewlibFrame->ReCreateListLib();
     }

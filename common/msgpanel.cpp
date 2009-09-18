@@ -61,6 +61,20 @@ int WinEDA_MsgPanel::GetRequiredHeight()
 }
 
 
+wxSize WinEDA_MsgPanel::computeTextSize( const wxString& text )
+{
+    // Get size of the wxSYS_DEFAULT_GUI_FONT
+    wxSize      textSizeInPixels;
+
+    wxScreenDC dc;
+
+    dc.SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
+    dc.GetTextExtent( text, &textSizeInPixels.x, &textSizeInPixels.y );
+
+    return textSizeInPixels;
+}
+
+
 /*************************************************/
 void WinEDA_MsgPanel::OnPaint( wxPaintEvent& event )
 /*************************************************/
@@ -80,6 +94,36 @@ void WinEDA_MsgPanel::OnPaint( wxPaintEvent& event )
     event.Skip();
 }
 
+void WinEDA_MsgPanel::AppendMessage( const wxString& textUpper,
+                                     const wxString& textLower,
+                                     int color, int pad )
+{
+    wxString    text;
+    wxSize      drawSize = GetClientSize();
+
+    text = ( textUpper.Len() > textLower.Len() ) ? textUpper : textLower;
+    text.Append( ' ', pad );
+
+    MsgItem item;
+
+    /* Don't put the first message a window client position 0.  Offset by
+     * one 'W' character width. */
+    if( m_last_x == 0 )
+        m_last_x = m_fontSize.x;
+
+    item.m_X = m_last_x;
+
+    item.m_UpperY = ( drawSize.y / 2 ) - m_fontSize.y;
+    item.m_LowerY = drawSize.y - m_fontSize.y;
+
+    item.m_UpperText = textUpper;
+    item.m_LowerText = textLower;
+    item.m_Color = color;
+    m_Items.push_back( item );
+    m_last_x += computeTextSize( text ).x;
+
+    Refresh();
+}
 
 /*****************************************************************************/
 void WinEDA_MsgPanel::Affiche_1_Parametre( int pos_X, const wxString& texte_H,

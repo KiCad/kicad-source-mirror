@@ -17,7 +17,7 @@
 
 
 /* Local variables */
-static EDA_LibComponentStruct* DummyCmp;
+static LIB_COMPONENT* DummyCmp;
 
 /* Descr component <DUMMY> used when a component is not found in library,
  *  to draw a dummy shape
@@ -33,7 +33,7 @@ static EDA_LibComponentStruct* DummyCmp;
  */
 void CreateDummyCmp()
 {
-    DummyCmp = new EDA_LibComponentStruct( NULL );
+    DummyCmp = new LIB_COMPONENT( wxEmptyString );
 
     LibDrawSquare* Square = new LibDrawSquare(DummyCmp);
 
@@ -58,8 +58,7 @@ void CreateDummyCmp()
 *****************************************************************************/
 /* DrawMode  = GrXOR, GrOR ..*/
 void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
-                     SCH_COMPONENT* Component,
-                     EDA_LibComponentStruct* Entry,
+                     SCH_COMPONENT* Component, LIB_COMPONENT* Entry,
                      const wxPoint& Pos, const int TransMat[2][2],
                      int Multi, int convert, int DrawMode,
                      int Color, bool DrawPinText )
@@ -165,11 +164,11 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aTemplate ) :
 void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                           const wxPoint& offset, int DrawMode, int Color )
 {
-    EDA_LibComponentStruct* Entry;
+    LIB_COMPONENT* Entry;
     int  ii;
     bool dummy = FALSE;
 
-    Entry = ( EDA_LibComponentStruct* ) FindLibPart( m_ChipName );
+    Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
 
     if( Entry == NULL )
     {
@@ -477,8 +476,7 @@ void SCH_COMPONENT::AddField( const SCH_CMP_FIELD& aField )
 
 EDA_Rect SCH_COMPONENT::GetBoundaryBox() const
 {
-    EDA_LibComponentStruct* Entry =
-        ( EDA_LibComponentStruct* ) FindLibPart( m_ChipName );
+    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
     EDA_Rect BoundaryBox;
     int      x0, xm, y0, ym;
 
@@ -587,13 +585,13 @@ void SCH_COMPONENT::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
  */
 void SCH_COMPONENT::ClearAnnotation( DrawSheetPath* aSheet )
 {
-    wxString                defRef    = m_PrefixString;
-    bool                    KeepMulti = false;
-    EDA_LibComponentStruct* Entry;
-    wxString                separators( wxT( " " ) );
-    wxArrayString           reference_fields;
+    wxString       defRef    = m_PrefixString;
+    bool           KeepMulti = false;
+    LIB_COMPONENT* Entry;
+    wxString       separators( wxT( " " ) );
+    wxArrayString  reference_fields;
 
-    Entry = ( EDA_LibComponentStruct* ) FindLibPart( m_ChipName );
+    Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
 
     if( Entry && Entry->m_UnitSelectionLocked )
         KeepMulti = true;
@@ -1025,8 +1023,7 @@ EDA_Rect SCH_COMPONENT::GetBoundingBox()
 
 void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
 {
-    EDA_LibComponentStruct* Entry =
-        ( EDA_LibComponentStruct* ) FindLibPart( m_ChipName );
+    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
 
     wxString msg;
 
@@ -1045,7 +1042,8 @@ void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
 
     Affiche_1_Parametre( frame, 28, _( "RefLib" ), m_ChipName.GetData(), BROWN );
 
-    msg = FindLibName;
+    msg = Entry->GetLibraryName();
+
     Affiche_1_Parametre( frame, 40, _( "Lib" ), msg, DARKRED );
 
     if( Entry )

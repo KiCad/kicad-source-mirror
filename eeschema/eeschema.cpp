@@ -21,8 +21,6 @@
 
 // Global variables
 
-LibraryStruct* g_LibraryList;    // All part libs are saved here.
-
 int       g_OptNetListUseNames; /* TRUE pour utiliser les noms de net plutot que
                                  * les numeros (netlist PSPICE seulement) */
 SCH_ITEM* g_ItemToRepeat; /* pointeur sur la derniere structure
@@ -103,8 +101,8 @@ int g_InvisibleItemColor = DARKGRAY;
 LibEDA_BaseStruct* LibItemToRepeat = NULL; /* pointer on a graphic item than
                                             * can be duplicated by the Ins key
                                             * (usually the last created item */
-LibraryStruct* CurrentLib = NULL;          /* Current opened library */
-EDA_LibComponentStruct* CurrentLibEntry = NULL;     /* Current component */
+CMP_LIBRARY* CurrentLib = NULL;          /* Current opened library */
+LIB_COMPONENT* CurrentLibEntry = NULL;     /* Current component */
 LibEDA_BaseStruct* CurrentDrawItem = NULL;     /* current edited item */
 
 // Current selected alias (for components which have aliases)
@@ -114,9 +112,6 @@ wxString CurrentAliasName;
 bool g_AsDeMorgan;
 int CurrentUnit = 1;
 int CurrentConvert = 1;
-
-/* Library (name) containing the last component find by FindLibPart() */
-wxString FindLibName;
 
 int DefaultTransformMatrix[2][2] = { { 1, 0 }, { 0, -1 } };
 

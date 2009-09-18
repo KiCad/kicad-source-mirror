@@ -256,14 +256,15 @@ void DrawStructsInGhost( WinEDA_DrawPanel * aPanel, wxDC * aDC, SCH_ITEM * aItem
 
     case TYPE_SCH_COMPONENT:
     {
-        EDA_LibComponentStruct* LibEntry;
-        SCH_COMPONENT*          Struct;
+        LIB_COMPONENT* LibEntry;
+        SCH_COMPONENT* Struct;
         Struct   = (SCH_COMPONENT*) aItem;
-        LibEntry = ( EDA_LibComponentStruct* ) FindLibPart( Struct->m_ChipName );
+        LibEntry = CMP_LIBRARY::FindLibraryComponent( Struct->m_ChipName );
 
         if( LibEntry == NULL )
             break;
-        DrawingLibInGhost( aPanel, aDC, LibEntry, Struct, Struct->m_Pos.x + aOffset.x,
+        DrawingLibInGhost( aPanel, aDC, LibEntry, Struct,
+                           Struct->m_Pos.x + aOffset.x,
                            Struct->m_Pos.y + aOffset.y, Struct->m_Multi,
                            Struct->m_Convert, g_GhostColor, FALSE );
         break;

@@ -72,9 +72,9 @@ void ReAnnotatePowerSymbolsOnly( void )
         {
             if( DrawList->Type() != TYPE_SCH_COMPONENT )
                 continue;
-            SCH_COMPONENT*          DrawLibItem = (SCH_COMPONENT*) DrawList;
-            EDA_LibComponentStruct* Entry =
-                ( EDA_LibComponentStruct* )FindLibPart( DrawLibItem->m_ChipName );
+            SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) DrawList;
+            LIB_COMPONENT* Entry =
+                CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
 
             if( (Entry == NULL) || (Entry->m_Options != ENTRY_POWER) )
                 continue;
@@ -344,17 +344,18 @@ int AddComponentsInSheetToList(  std::vector <OBJ_CMP_TO_LIST>& aComponentsList,
  * @param the DrawSheetPath sheet to analyse
  */
 {
-    int                     NbrCmp   = 0;
-    EDA_BaseStruct*         DrawList = aSheet->LastDrawList();
-    SCH_COMPONENT*          DrawLibItem;
-    EDA_LibComponentStruct* Entry;
+    int             NbrCmp   = 0;
+    EDA_BaseStruct* DrawList = aSheet->LastDrawList();
+    SCH_COMPONENT*  DrawLibItem;
+    LIB_COMPONENT*  Entry;
 
     for( ; DrawList != NULL;   DrawList = DrawList->Next() )
     {
         if( DrawList->Type() == TYPE_SCH_COMPONENT )
         {
             DrawLibItem = (SCH_COMPONENT*) DrawList;
-            Entry = ( EDA_LibComponentStruct* )FindLibPart( DrawLibItem->m_ChipName );
+            Entry =
+                CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
             if( Entry == NULL )
                 continue;
 

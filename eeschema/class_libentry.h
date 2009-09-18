@@ -13,12 +13,15 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 
+class CMP_LIBRARY;
+
+
 /* Types for components in libraries
  * components can be a true component or an alias of a true component.
  */
 enum LibrEntryType
 {
-    ROOT,       /* This is a true component standard EDA_LibComponentStruct */
+    ROOT,       /* This is a true component standard LIB_COMPONENT */
     ALIAS       /* This is an alias of a true component */
 };
 
@@ -35,7 +38,7 @@ enum  LibrEntryOptions
  *
  * This class is not to be used directly.
  */
-class LibCmpEntry : public EDA_BaseStruct
+class CMP_LIB_ENTRY : public EDA_BaseStruct
 {
 public:
     LibrEntryType    Type;      /* Type = ROOT;
@@ -48,13 +51,16 @@ public:
     LibrEntryOptions m_Options; // special features (i.e. Entry is a POWER)
 
 public:
-    LibCmpEntry( LibrEntryType CmpType, const wxChar* CmpName );
-    virtual ~LibCmpEntry();
+    CMP_LIB_ENTRY( LibrEntryType CmpType, const wxString& name,
+                   CMP_LIBRARY* lib = NULL );
+    virtual ~CMP_LIB_ENTRY();
+
     virtual wxString GetClass() const
     {
-        return wxT( "LibCmpEntry" );
+        return wxT( "CMP_LIB_ENTRY" );
     }
 
+    wxString GetLibraryName();
 
     const wxString& GetName() { return m_Name.m_Text; }
 
@@ -75,15 +81,18 @@ public:
     {
         return !( *this == name );
     }
+
+protected:
+    CMP_LIBRARY* m_lib;
 };
 
 
-typedef boost::ptr_vector< LibCmpEntry > LIB_ENTRY_LIST;
+typedef boost::ptr_vector< CMP_LIB_ENTRY > LIB_ENTRY_LIST;
 
-extern bool operator<( const LibCmpEntry& item1, const LibCmpEntry& item2 );
+extern bool operator<( const CMP_LIB_ENTRY& item1, const CMP_LIB_ENTRY& item2 );
 
-extern int LibraryEntryCompare( const LibCmpEntry* LE1,
-                                const LibCmpEntry* LE2 );
+extern int LibraryEntryCompare( const CMP_LIB_ENTRY* LE1,
+                                const CMP_LIB_ENTRY* LE2 );
 
 
 /**
@@ -93,7 +102,7 @@ extern int LibraryEntryCompare( const LibCmpEntry* LE1,
  * library file (.lib).  Library components are different from schematic
  * components.
  */
-class EDA_LibComponentStruct : public LibCmpEntry
+class LIB_COMPONENT : public CMP_LIB_ENTRY
 {
 public:
     LibDrawField       m_Prefix;         /* Prefix ( U, IC ... ) = REFERENCE */
@@ -120,12 +129,12 @@ public:
 public:
     virtual wxString GetClass() const
     {
-        return wxT( "EDA_LibComponentStruct" );
+        return wxT( "LIB_COMPONENT" );
     }
 
 
-    EDA_LibComponentStruct( const wxChar* CmpName );
-    ~EDA_LibComponentStruct();
+    LIB_COMPONENT( const wxString& name, CMP_LIBRARY* lib = NULL );
+    ~LIB_COMPONENT();
 
     EDA_Rect GetBoundaryBox( int Unit, int Convert );
 
@@ -248,19 +257,33 @@ public:
  *       object not as children of a library object.  This would greatly
  *       simplify searching for components in libraries.
  */
-class EDA_LibCmpAliasStruct : public LibCmpEntry
+class LIB_ALIAS : public CMP_LIB_ENTRY
 {
-public:
-    wxString m_RootName;        /* Root component Part name */
+protected:
+    LIB_COMPONENT* m_root;    /* Root component of the alias. */
 
 public:
-    EDA_LibCmpAliasStruct( const wxChar* CmpName, const wxChar* CmpRootName );
-    ~EDA_LibCmpAliasStruct();
+    LIB_ALIAS( const wxString& name, LIB_COMPONENT* root,
+                           CMP_LIBRARY* lib = NULL );
+    ~LIB_ALIAS();
 
     virtual wxString GetClass() const
     {
-        return wxT( "EDA_LibCmpAliasStruct" );
+        return wxT( "LIB_ALIAS" );
     }
+
+    /**
+     * Get the alias root component.
+     */
+    LIB_COMPONENT* GetComponent( void ) const
+    {
+        return m_root;
+    }
+
+    /**
+     * Set the alias root component.
+     */
+    void SetComponent( LIB_COMPONENT* component );
 };
 
 

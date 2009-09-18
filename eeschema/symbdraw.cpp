@@ -179,8 +179,8 @@ static void AbortSymbolTraceOn( WinEDA_DrawPanel* Panel, wxDC* DC )
 
 
 /*******************************************************************************************/
-LibEDA_BaseStruct* WinEDA_LibeditFrame::CreateGraphicItem( EDA_LibComponentStruct* LibEntry,
-                                                           wxDC*                   DC )
+LibEDA_BaseStruct* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry,
+                                                           wxDC*          DC )
 /*******************************************************************************************/
 
 /* Routine de creation d'un nouvel element type LibraryDrawStruct

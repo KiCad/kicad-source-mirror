@@ -18,9 +18,9 @@ class DRAWSEGMENT;
 class DrawPickedStruct;
 class SCH_ITEM;
 class DrawNoConnectStruct;
-class LibraryStruct;
-class EDA_LibComponentStruct;
-class LibCmpEntry;
+class CMP_LIBRARY;
+class LIB_COMPONENT;
+class CMP_LIB_ENTRY;
 class LibEDA_BaseStruct;
 class EDA_BaseStruct;
 class DrawBusEntryStruct;
@@ -448,6 +448,11 @@ public:
      */
     int CheckAnnotate( wxArrayString * aMessageList, bool aOneSheetOnly );
 
+    /**
+     * Load component libraries defined in project file.
+     */
+    void LoadLibraries( void );
+
 
     DECLARE_EVENT_TABLE()
 };
@@ -522,10 +527,10 @@ private:
     bool               LoadOneLibraryPart();
     void               SaveActiveLibrary( wxCommandEvent& event );
 
-    bool               LoadOneLibraryPartAux( LibCmpEntry*   LibEntry,
-                                              LibraryStruct* Library );
+    bool               LoadOneLibraryPartAux( CMP_LIB_ENTRY* LibEntry,
+                                              CMP_LIBRARY* Library );
 
-    void               DisplayCmpDoc( const wxString& Name );
+    void               DisplayCmpDoc();
     void               EditComponentProperties();
 
     // General editing
@@ -539,20 +544,19 @@ private:
 
     // Edition des Pins:
     void               CreatePin( wxDC* DC );
-    void               DeletePin( wxDC*                   DC,
-                                  EDA_LibComponentStruct* LibEntry,
-                                  LibDrawPin*             Pin );
+    void               DeletePin( wxDC*          DC,
+                                  LIB_COMPONENT* LibEntry,
+                                  LibDrawPin*    Pin );
     void               StartMovePin( wxDC* DC );
 
     // Test des pins ( duplicates...)
-    bool               TestPins( EDA_LibComponentStruct* LibEntry );
+    bool               TestPins( LIB_COMPONENT* LibEntry );
 
     // Edition de l'ancre
     void               PlaceAncre();
 
     // Edition des graphismes:
-    LibEDA_BaseStruct* CreateGraphicItem( EDA_LibComponentStruct* LibEntry,
-                                          wxDC* DC );
+    LibEDA_BaseStruct* CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC );
     void               GraphicItemBeginDraw( wxDC* DC );
     void               StartMoveDrawSymbol( wxDC* DC );
     void               EndDrawGraphicItem( wxDC* DC );
@@ -563,7 +567,7 @@ private:
     void               EditSymbolText( wxDC* DC, LibEDA_BaseStruct* DrawItem );
     void               RotateSymbolText( wxDC* DC );
     void               DeleteDrawPoly( wxDC* DC );
-    LibDrawField*      LocateField( EDA_LibComponentStruct* LibEntry );
+    LibDrawField*      LocateField( LIB_COMPONENT* LibEntry );
     LibEDA_BaseStruct* LocateItemUsingCursor();
     void               RotateField( wxDC* DC, LibDrawField* Field );
     void               PlaceField( wxDC* DC, LibDrawField* Field );
@@ -592,9 +596,6 @@ protected:
 };
 
 
-/************************************************************************************************/
-/************************************************************************************************/
-class LibraryStruct;
 class WinEDA_ViewlibFrame : public WinEDA_DrawFrame
 {
 private:
@@ -615,9 +616,9 @@ private:
     wxString     m_ConfigPath;          // subpath for configuartion
 
 public:
-    WinEDA_ViewlibFrame( wxWindow*      father,
-                         LibraryStruct* Library = NULL,
-                         wxSemaphore*   semaphore = NULL );
+    WinEDA_ViewlibFrame( wxWindow*    father,
+                         CMP_LIBRARY* Library = NULL,
+                         wxSemaphore* semaphore = NULL );
 
     ~WinEDA_ViewlibFrame();
 
@@ -647,7 +648,7 @@ private:
     void SelectCurrentLibrary();
     void SelectAndViewLibraryPart( int option );
     void ExportToSchematicLibraryPart( wxCommandEvent& event );
-    void ViewOneLibraryContent( LibraryStruct* Lib, int Flag );
+    void ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag );
     bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
 
     DECLARE_EVENT_TABLE()

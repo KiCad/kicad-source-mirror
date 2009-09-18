@@ -14,8 +14,7 @@
 
 
 extern void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
-                            SCH_COMPONENT* Component,
-                            EDA_LibComponentStruct* Entry,
+                            SCH_COMPONENT* Component, LIB_COMPONENT* Entry,
                             const wxPoint& Pos, const int TransMat[2][2],
                             int Multi, int convert, int DrawMode,
                             int Color = -1, bool DrawPinText = TRUE );

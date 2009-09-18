@@ -43,11 +43,11 @@ enum  TypeNetForm {
 class OBJ_CMP_TO_LIST
 {
 public:
-    SCH_COMPONENT*          m_RootCmp;                  // the component in schematic
-    EDA_LibComponentStruct* m_Entry;                    // the source component in library
-    int m_Unit;                                         /* Selected part (For multi parts per package) depending on sheet path */
-    DrawSheetPath           m_SheetPath;                /* the sheet path for this component */
-    unsigned long           m_TimeStamp;                /* unique identification number depending on sheet path */
+    SCH_COMPONENT* m_RootCmp;                  // the component in schematic
+    LIB_COMPONENT* m_Entry;                    // the source component in library
+    int            m_Unit;                     /* Selected part (For multi parts per package) depending on sheet path */
+    DrawSheetPath  m_SheetPath;                /* the sheet path for this component */
+    unsigned long  m_TimeStamp;                /* unique identification number depending on sheet path */
     bool      m_IsNew;                                  /* true for not yet annotated components */
     wxString* m_Value;                                  /* Component value (same for all instances) */
     char      m_Reference[32];                          /* Component reference prefix, without number (for IC1, this is IC) ) */

@@ -362,6 +362,10 @@ protected:
      */
     static wxSize computeFontSize();
 
+    /**
+     * Calculate the width and height of a text string using the system UI font.
+     */
+    wxSize computeTextSize( const wxString& text );
 
 public:
     WinEDA_DrawFrame* m_Parent;
@@ -386,6 +390,21 @@ public:
     void Affiche_1_Parametre( int pos_X, const wxString& texte_H,
                               const wxString& texte_L, int color );
 
+    /**
+     * Append a message to the message panel.
+     *
+     * This method automatically adjusts for the width of the text string.
+     * Making consectutive calls to AppendMessage will append each message
+     * to the right of the last message.  This message is not compatible
+     * with Affiche_1_Parametre.
+     *
+     * @param textUpper - The message upper text.
+     * @param textLower - The message lower text.
+     * @param color - A color ID from the Kicad color list (see colors.h).
+     * @param pad - Number of spaces to pad between messages (default = 4).
+     */
+    void AppendMessage( const wxString& textUpper, const wxString& textLower,
+                        int color, int pad = 4 );
 
     DECLARE_EVENT_TABLE()
 };

@@ -15,18 +15,18 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEM
     friend void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
                           SCH_COMPONENT* aComponent );
 
-    WinEDA_SchematicFrame*  m_Parent;
-    SCH_COMPONENT*          m_Cmp;
-    EDA_LibComponentStruct* m_LibEntry;
-    bool                    m_skipCopyFromPanel;
+    WinEDA_SchematicFrame* m_Parent;
+    SCH_COMPONENT*         m_Cmp;
+    LIB_COMPONENT*         m_LibEntry;
+    bool                   m_skipCopyFromPanel;
 
-    static int              s_SelectedRow;
+    static int             s_SelectedRow;
 
     /// The size of the dialog window last time it was displayed;
-    static wxSize           s_LastSize;
+    static wxSize          s_LastSize;
 
     /// a copy of the edited component's SCH_CMP_FIELDs
-    SCH_CMP_FIELDS          m_FieldsBuf;
+    SCH_CMP_FIELDS         m_FieldsBuf;
 
     void setSelectedFieldNdx( int aFieldNdx );
 

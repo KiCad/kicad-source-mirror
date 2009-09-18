@@ -8,11 +8,15 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+
 #include "get_component_dialog.h"
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
 #include "protos.h"
+#include "class_library.h"
+
+#include <boost/foreach.hpp>
 
 
 /* Routines Locales */
@@ -65,36 +69,28 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
                                                       wxArrayString&  HistoryList,
                                                       bool            UseLibBrowser )
 {
-    int                     ii, CmpCount = 0;
-    EDA_LibComponentStruct* Entry     = NULL;
-    SCH_COMPONENT*          Component = NULL;
-    LibraryStruct*          Library   = NULL;
-    wxString                Name, keys, msg;
-    bool                    AllowWildSeach = TRUE;
+    int            ii, CmpCount = 0;
+    LIB_COMPONENT* Entry     = NULL;
+    SCH_COMPONENT* Component = NULL;
+    CMP_LIBRARY*   Library   = NULL;
+    wxString       Name, keys, msg;
+    bool           AllowWildSeach = TRUE;
 
     g_ItemToRepeat = NULL;
     DrawPanel->m_IgnoreMouseEvents = TRUE;
 
     if( !libname.IsEmpty() )
     {
-        Library = g_LibraryList;
-        while( Library )
-        {
-            if( Library->GetName().CmpNoCase( libname ) == 0 )
-            {
-                CmpCount = Library->GetCount();
-                break;
-            }
-            Library = Library->m_Pnext;
-        }
+        Library = CMP_LIBRARY::FindLibrary( libname );
+
+        if( Library != NULL )
+            CmpCount = Library->GetCount();
     }
     else
     {
-        LibraryStruct* lib = g_LibraryList;
-        while( lib )
+        BOOST_FOREACH( CMP_LIBRARY& lib, CMP_LIBRARY::GetLibraryList() )
         {
-            CmpCount += lib->GetCount();
-            lib = lib->m_Pnext;
+            CmpCount += lib.GetCount();
         }
     }
 
@@ -145,7 +141,7 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
         }
     }
 
-    Entry = ( EDA_LibComponentStruct* ) FindLibPart( Name, libname );
+    Entry = CMP_LIBRARY::FindLibraryComponent( Name, libname );
 
     if( (Entry == NULL) && AllowWildSeach ) /* Attemp to search with wildcard */
     {
@@ -155,7 +151,7 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
         Name = DataBaseGetName( this, keys, Name );
 
         if( !Name.IsEmpty() )
-            Entry = ( EDA_LibComponentStruct* ) FindLibPart( Name, libname );
+            Entry = CMP_LIBRARY::FindLibraryComponent( Name, libname );
 
         if( Entry == NULL )
         {
@@ -347,12 +343,12 @@ void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
                                          int unit, wxDC* DC )
 {
     int m_UnitCount;
-    EDA_LibComponentStruct* LibEntry;
+    LIB_COMPONENT* LibEntry;
 
     if( DrawComponent == NULL )
         return;
 
-    LibEntry = ( EDA_LibComponentStruct* ) FindLibPart( DrawComponent->m_ChipName );
+    LibEntry = CMP_LIBRARY::FindLibraryComponent( DrawComponent->m_ChipName );
 
     if( LibEntry == NULL )
         return;
@@ -395,12 +391,12 @@ void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
                                          wxDC*          DC )
 {
     int ii;
-    EDA_LibComponentStruct* LibEntry;
+    LIB_COMPONENT* LibEntry;
 
     if( DrawComponent == NULL )
         return;
 
-    LibEntry = ( EDA_LibComponentStruct* ) FindLibPart( DrawComponent->m_ChipName );
+    LibEntry = CMP_LIBRARY::FindLibraryComponent( DrawComponent->m_ChipName );
 
     if( LibEntry == NULL )
         return;
@@ -441,7 +437,7 @@ void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
  *  Si il y a une representation type "convert",
  *  la valeur retournee est > 1 (typiquement 2)
  */
-int LookForConvertPart( EDA_LibComponentStruct* LibEntry )
+int LookForConvertPart( LIB_COMPONENT* LibEntry )
 {
     int ii;
     LibEDA_BaseStruct* DrawLibEntry;

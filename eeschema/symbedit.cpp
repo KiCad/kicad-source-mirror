@@ -30,11 +30,11 @@
  */
 void WinEDA_LibeditFrame::LoadOneSymbol( void )
 {
-    EDA_LibComponentStruct* Component;
-    LibEDA_BaseStruct*      DrawEntry;
-    FILE*                   ImportFile;
-    wxString                msg, err;
-    LibraryStruct*          Lib;
+    LIB_COMPONENT*     Component;
+    LibEDA_BaseStruct* DrawEntry;
+    FILE*              ImportFile;
+    wxString           msg, err;
+    CMP_LIBRARY*       Lib;
 
     /* Exit if no library entry is selected or a command is in progress. */
     if( CurrentLibEntry == NULL
@@ -70,8 +70,7 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
         return;
     }
 
-    Lib = new LibraryStruct( LIBRARY_TYPE_SYMBOL, fn.GetName(),
-                             fn.GetFullPath() );
+    Lib = new CMP_LIBRARY( LIBRARY_TYPE_SYMBOL, fn );
 
     if( !Lib->Load( err ) )
     {
@@ -96,7 +95,7 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
     if( Lib->GetCount() > 1 )
         DisplayError( this, _( "Warning: more than 1 part in Symbol File" ) );
 
-    Component = (EDA_LibComponentStruct*) Lib->GetFirstEntry();
+    Component = (LIB_COMPONENT*) Lib->GetFirstEntry();
     DrawEntry = Component->m_Drawings;
 
     while( DrawEntry )

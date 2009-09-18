@@ -25,13 +25,13 @@
  *  Parametres de sortie: pointeur sur la structure creee
  *  Do not copy new items ( i.e. with m_Flag  & IS_NEW)
  */
-EDA_LibComponentStruct* CopyLibEntryStruct( EDA_LibComponentStruct* OldEntry )
+LIB_COMPONENT* CopyLibEntryStruct( LIB_COMPONENT* OldEntry )
 {
-    wxString                msg;
-    EDA_LibComponentStruct* NewStruct;
-    LibEDA_BaseStruct*      NewDrawings, * OldDrawings;
-    LibEDA_BaseStruct*      LastItem;
-    LibDrawField*           OldField, * NewField;
+    wxString           msg;
+    LIB_COMPONENT*     NewStruct;
+    LibEDA_BaseStruct* NewDrawings, * OldDrawings;
+    LibEDA_BaseStruct* LastItem;
+    LibDrawField*      OldField, * NewField;
 
     if( OldEntry->Type != ROOT )
     {
@@ -41,7 +41,7 @@ EDA_LibComponentStruct* CopyLibEntryStruct( EDA_LibComponentStruct* OldEntry )
         return NULL;
     }
 
-    NewStruct = new EDA_LibComponentStruct( NULL );
+    NewStruct = new LIB_COMPONENT( wxEmptyString );
 
     OldEntry->m_Prefix.Copy( &NewStruct->m_Prefix );
     OldEntry->m_Name.Copy( &NewStruct->m_Name );

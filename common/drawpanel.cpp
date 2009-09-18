@@ -1379,7 +1379,8 @@ void WinEDA_DrawPanel::OnPan( wxCommandEvent& event )
 }
 
 
-void WinEDA_DrawPanel::UnManageCursor( void )
+void WinEDA_DrawPanel::UnManageCursor( int id, int cursor,
+                                       const wxString& title )
 {
     wxClientDC dc( this );
 
@@ -1387,5 +1388,12 @@ void WinEDA_DrawPanel::UnManageCursor( void )
     {
         ForceCloseManageCurseur( this, &dc );
         m_AutoPAN_Request = false;
+
+        if( id != -1 && cursor != -1 )
+        {
+            wxASSERT( cursor > wxCURSOR_NONE && cursor < wxCURSOR_MAX );
+
+            m_Parent->SetToolID( id, cursor, title );
+        }
     }
 }

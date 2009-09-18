@@ -690,28 +690,6 @@ void Affiche_1_Parametre( WinEDA_DrawFrame* frame, int pos_X,
 }
 
 
-/*
- *  Routine d'affichage de la documentation associee a un composant
- */
-/****************************************************************************/
-void AfficheDoc( WinEDA_DrawFrame* frame, const wxString& Doc,
-                 const wxString& KeyW )
-/****************************************************************************/
-{
-    wxString Line1( wxT( "Doc:  " ) ), Line2( wxT( "KeyW: " ) );
-
-    int      color = BLUE;
-
-    if( frame && frame->MsgPanel )
-    {
-        frame->MsgPanel->EraseMsgBox();
-        Line1 += Doc;
-        Line2 += KeyW;
-        frame->MsgPanel->Affiche_1_Parametre( 10, Line1, Line2, color );
-    }
-}
-
-
 /***********************/
 int GetTimeStamp()
 /***********************/
