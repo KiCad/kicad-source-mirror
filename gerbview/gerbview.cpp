@@ -74,6 +74,10 @@ bool WinEDA_App::OnInit()
     frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() );
     frame->SetBoard( new BOARD( NULL, frame ) );
 
+    // Initialize some display options
+    DisplayOpt.DisplayPadIsol = false;      // Pad clearance has no meaning here
+    DisplayOpt.ShowTrackClearanceMode = 0;  // tracks and vias clearance has no meaning here
+
     SetTopWindow( frame );              // Set GerbView mainframe on top
     frame->Show( TRUE );                // Show GerbView mainframe
     frame->Zoom_Automatique( TRUE );    // Zoomfit drawing in frame

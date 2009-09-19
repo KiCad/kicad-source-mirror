@@ -481,7 +481,9 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
         }
 
         if( n_vertices != ivtx )
+        {
             wxASSERT( 0 );
+        }
 
         //  close list added to the bool engine
         booleng->EndPolygonAdd();
@@ -580,7 +582,7 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
 
     if( aConvertHoles )
     {
-#if 1   // Can be set to 1 for kbool version >= 2.1, must be set to 0 for previous versions 
+#if 1   // Can be set to 1 for kbool version >= 2.1, must be set to 0 for previous versions
         // SetAllowNonTopHoleLinking() exists only in kbool >= 2.1
         aBooleng->SetAllowNonTopHoleLinking( false );    // Default = true, but i have problems (filling errors) when true
 #endif
@@ -795,7 +797,9 @@ void CPolyLine::AppendCorner( int x, int y, int style, bool bDraw )
 void CPolyLine::Close( int style, bool bDraw )
 {
     if( GetClosed() )
+    {
         wxASSERT( 0 );
+    }
     Undraw();
     side_style[corner.size() - 1] = style;
     corner[corner.size() - 1].end_contour = TRUE;
@@ -1349,7 +1353,9 @@ void CPolyLine::Hatch()
 bool CPolyLine::TestPointInside( int px, int py )
 {
     if( !GetClosed() )
+    {
         wxASSERT( 0 );
+    }
 
     // define line passing through (x,y), with slope = 2/3;
     // get intersection points
@@ -1426,7 +1432,9 @@ bool CPolyLine::TestPointInsideContour( int icont, int px, int py )
     if( icont >= GetNumContours() )
         return FALSE;
     if( !GetClosed() )
+    {
         wxASSERT( 0 );
+    }
 
 // define line passing through (x,y), with slope = 2/3;
 // get intersection points

@@ -74,8 +74,8 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 {
     NETCLASS*   myclass  = GetNetClass();
 
-    wxASSERT( myclass );
-
+    // DO NOT use wxASSERT, because GetClearance is called inside an OnPaint event
+    // and a call to wxASSERT can crash the application.
     if( myclass )
     {
         // @todo : after GetNetClass() is reliably not returning NULL, remove the
@@ -84,18 +84,20 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
         if( aItem )
         {
             NETCLASS*   hisclass = aItem->GetNetClass();
-            wxASSERT( hisclass );
-
             if( hisclass )
             {
                 int hisClearance = hisclass->GetClearance();
                 int myClearance  = myclass->GetClearance();
                 return max( hisClearance, myClearance );
             }
+            else
+                wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetClearance(): NULL hisclass") );
         }
 
         return myclass->GetClearance();
     }
+    else
+        wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetClearance(): NULL netclass") );
 
     return 0;
 }
@@ -105,20 +107,24 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
 {
     // It is important that this be implemented without any sequential searching.
     // Simple array lookups should be fine, performance-wise.
-
     BOARD*  board = GetBoard();
-    wxASSERT( board );
+    // DO NOT use wxASSERT, because GetNetClass is called inside an OnPaint event
+    // and a call to wxASSERT can crash the application.
     if( board )
     {
         NETINFO_ITEM* net = board->FindNet( GetNet() );
-        wxASSERT( net );
         if( net )
         {
             NETCLASS* netclass = net->GetNetClass();
-            wxASSERT( netclass );
+            if( netclass == NULL )
+                wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetNetClass(): NULL netclass") );
             return netclass;
         }
+        else
+            wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetNetClass(): NULL net") );
     }
+    else
+        wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetNetClass(): NULL board, type %d"), Type() );
 
     return NULL;
 }

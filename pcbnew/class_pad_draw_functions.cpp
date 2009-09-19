@@ -38,9 +38,6 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     if( m_Flags & DO_NOT_DRAW )
         return;
 
-    wxASSERT( panel );
-
-
     WinEDA_BasePcbFrame* frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
     PCB_SCREEN*          screen = frame->GetScreen();
     if( frame->m_DisplayPadFill == FILLED )
@@ -205,9 +202,14 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     if( ( m_Masque_Layer & ALL_CU_LAYERS ) == 0 )
         DisplayIsol = FALSE;
 
-    SetAlpha(&color, 170);
+    SetAlpha( &color, 170 );
 
-    int padClearance = GetClearance();
+    /* Get the pad clearance. This has a meaning only for Pcbnew.
+     *  for Cvpcb (and Gerbview) GetClearance() creates debug errors because there is no
+     *  net classes so a call to GetClearance() is made only when needed
+     *  (never needed in Cvpcb nor in Gerbview)
+     */
+    int padClearance =  DisplayIsol ? GetClearance() : 0;
 
     switch( GetShape() )
     {
@@ -423,7 +425,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     wxPoint tpos  = tpos0;
     wxSize  AreaSize;                           // size of text area, normalized to AreaSize.y < AreaSize.x
     int     shortname_len = m_ShortNetname.Len();
-    if( ! display_netname )
+    if( !display_netname )
         shortname_len = 0;
     if( GetShape() == PAD_CIRCLE )
         angle = 0;
@@ -455,7 +457,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     #define MIN_CHAR_COUNT 3
     wxString buffer;
 
-    int tsize;
+    int      tsize;
     if( display_padnum )
     {
         ReturnStringPadName( buffer );
@@ -464,13 +466,15 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 
         tsize = min( AreaSize.y, AreaSize.x / numpad_len );
         #define CHAR_SIZE_MIN 5
-        if( screen->Scale( tsize ) >= CHAR_SIZE_MIN )   // Not drawable when size too small.
+        if( screen->Scale( tsize ) >= CHAR_SIZE_MIN )       // Not drawable when size too small.
         {
-            tsize = (int) (tsize * 0.8);                // reserve room for marges and segments thickness
+            tsize = (int) ( tsize * 0.8 );                  // reserve room for marges and segments thickness
 
             DrawGraphicText( panel, DC, tpos,
-                             WHITE, buffer, t_angle, wxSize( tsize, tsize ),
-                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false, false );
+                             WHITE, buffer, t_angle, wxSize( tsize,
+                                                             tsize ),
+                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false,
+                             false, false );
         }
     }
 
@@ -483,18 +487,18 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 
     if( screen->Scale( tsize ) >= CHAR_SIZE_MIN )   // Not drawable in size too small.
     {
-         if( !(!IsOnLayer( screen->m_Active_Layer )&& DisplayOpt.ContrastModeDisplay)){
+        if( !(!IsOnLayer( screen->m_Active_Layer )&& DisplayOpt.ContrastModeDisplay) )
+        {
+            tpos = tpos0;
+            if( display_padnum )
+                tpos.y += AreaSize.y / 2;
+            RotatePoint( &tpos, wxPoint( ux0, uy0 ), angle );
 
-        tpos    = tpos0;
-        if ( display_padnum )
-            tpos.y += AreaSize.y / 2;
-        RotatePoint( &tpos, wxPoint( ux0, uy0 ), angle );
-
-        tsize = (int) (tsize * 0.8);         // reserve room for marges and segments thickness
-        DrawGraphicText( panel, DC, tpos,
-                         WHITE, m_ShortNetname, t_angle, wxSize( tsize, tsize ),
-                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7,
-              false, false );
-         }
+            tsize = (int) ( tsize * 0.8 );   // reserve room for marges and segments thickness
+            DrawGraphicText( panel, DC, tpos,
+                             WHITE, m_ShortNetname, t_angle, wxSize( tsize, tsize ),
+                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7,
+                             false, false );
+        }
     }
 }

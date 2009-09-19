@@ -119,7 +119,6 @@ found in the default search paths." ),
             if( stricmp( Name, CONV_TO_UTF8( CmpName ) ) == 0 )  /* composant localise */
             {
                 Module = new MODULE( GetBoard() );
-
                 // Switch the locale to standard C (needed to print floating point numbers like 1.3)
                 SetLocaleTo_C_standard();
                 Module->ReadDescr( file, &LineNum );

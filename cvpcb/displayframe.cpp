@@ -62,6 +62,12 @@ WinEDA_DisplayFrame::WinEDA_DisplayFrame( WinEDA_CvpcbFrame* father,
     SetBaseScreen( new PCB_SCREEN() );
 
     LoadSettings();
+
+    // Initialize some display options
+    DisplayOpt.DisplayPadIsol = false;      // Pad clearance has no meaning here
+    DisplayOpt.ShowTrackClearanceMode = 0;  // tracks and vias clearance has no meaning here
+
+
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     ReCreateHToolbar();
     ReCreateVToolbar();
