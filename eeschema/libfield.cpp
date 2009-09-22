@@ -11,18 +11,12 @@
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-
 #include "protos.h"
+#include "libeditfrm.h"
 
 
 /* Routines locales */
 static void ShowMoveField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
-
-/*
- * if the field is the reference, return reference like schematic,
- * i.e U -> U? or U?A or the field text for others
- */
-static wxString ReturnFieldFullText( LibDrawField* aField );
 
 
 /* Variables locales */
@@ -55,7 +49,7 @@ void WinEDA_LibeditFrame::StartMoveField( wxDC* DC, LibDrawField* field )
 {
     wxPoint startPos;
 
-    if( ( CurrentLibEntry == NULL ) || ( field == NULL ) )
+    if( ( m_currentComponent == NULL ) || ( field == NULL ) )
         return;
 
     CurrentDrawItem  = field;
@@ -77,37 +71,6 @@ void WinEDA_LibeditFrame::StartMoveField( wxDC* DC, LibDrawField* field )
 }
 
 
-/*
- * If the field is the reference, return reference like schematic,
- * i.e U -> U? or U?A or the field text for others
- *
- * @fixme This should be handled by the field object.
- */
-static wxString ReturnFieldFullText( LibDrawField* aField )
-{
-    if( aField->m_FieldId != REFERENCE )
-        return aField->m_Text;
-
-    wxString text = aField->m_Text;
-
-    if( CurrentLibEntry->m_UnitCount > 1 )
-    {
-#if defined(KICAD_GOST)
-        text.Printf( wxT( "%s?.%c" ),
-                     aField->m_Text.GetData(), CurrentUnit + '1' - 1 );
-#else
-
-        text.Printf( wxT( "%s?%c" ),
-                     aField->m_Text.GetData(), CurrentUnit + 'A' - 1 );
-#endif
-    }
-    else
-        text << wxT( "?" );
-
-    return text;
-}
-
-
 /*****************************************************************/
 /* Routine d'affichage du texte 'Field' en cours de deplacement. */
 /*  Routine normalement attachee au curseur                     */
@@ -116,10 +79,10 @@ static void ShowMoveField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
     LibDrawField* Field = (LibDrawField*) CurrentDrawItem;
 
-    if( ( CurrentLibEntry == NULL ) || ( Field == NULL ) )
+    if( Field == NULL )
         return;
 
-    wxString text = ReturnFieldFullText( Field );
+    wxString text = Field->GetFullText();
 
     if( erase )
         Field->Draw( panel, DC, wxPoint( 0, 0 ), -1, g_XorMode, &text,
@@ -144,7 +107,7 @@ void WinEDA_LibeditFrame::PlaceField( wxDC* DC, LibDrawField* Field )
     Field->m_Pos.y = -GetScreen()->m_Curseur.y;
     DrawPanel->CursorOff( DC );
 
-    wxString fieldText = ReturnFieldFullText( Field );
+    wxString fieldText = Field->GetFullText();
 
     Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE,
                  &fieldText, DefaultTransformMatrix );
@@ -196,13 +159,13 @@ void WinEDA_LibeditFrame::EditField( wxDC* DC, LibDrawField* Field )
         wxString msg;
 
         /* Test for an existing name in the current components alias list. */
-        if( CurrentLibEntry->m_AliasList.Index( Text, false ) != wxNOT_FOUND )
+        if( Field->GetParent()->m_AliasList.Index( Text, false ) != wxNOT_FOUND )
         {
             msg.Printf( _( "The field name <%s> is an existing alias of the \
 component <%s>.\nPlease choose another name that does not conflict with any \
 names in the alias list." ),
                         (const wxChar*) Text,
-                        (const wxChar*) CurrentLibEntry->GetName() );
+                        (const wxChar*) Field->GetParent()->GetName() );
             DisplayError( this, msg );
             return;
         }
@@ -222,14 +185,14 @@ not conflict with any library entries." ),
         }
     }
 
-    wxString fieldText = ReturnFieldFullText( Field );
+    wxString fieldText = Field->GetFullText();
 
     Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode, &fieldText,
                  DefaultTransformMatrix );
 
     if( !Text.IsEmpty() )
     {
-        SaveCopyInUndoList( CurrentLibEntry );
+        SaveCopyInUndoList( Field->GetParent() );
         Field->m_Text = Text;
     }
     else
@@ -237,7 +200,7 @@ not conflict with any library entries." ),
         DisplayError( this, _( "No new text: no change" ) );
     }
 
-    fieldText = ReturnFieldFullText( Field );
+    fieldText = Field->GetFullText();
     int drawMode = g_XorMode;
 
     if( Field->m_Flags == 0 )
@@ -266,7 +229,7 @@ void WinEDA_LibeditFrame::RotateField( wxDC* DC, LibDrawField* Field )
     DrawPanel->CursorOff( DC );
     GRSetDrawMode( DC, g_XorMode );
 
-    wxString fieldText = ReturnFieldFullText( Field );
+    wxString fieldText = Field->GetFullText();
 
     Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode, &fieldText,
                  DefaultTransformMatrix );
@@ -324,33 +287,33 @@ LibEDA_BaseStruct* WinEDA_LibeditFrame::LocateItemUsingCursor()
 {
     LibEDA_BaseStruct* DrawEntry = CurrentDrawItem;
 
-    if( CurrentLibEntry == NULL )
+    if( m_currentComponent == NULL )
         return NULL;
 
     if( ( DrawEntry == NULL ) || ( DrawEntry->m_Flags == 0 ) )
     {
-        DrawEntry = LocatePin( GetScreen()->m_Curseur, CurrentLibEntry,
+        DrawEntry = LocatePin( GetScreen()->m_Curseur, m_currentComponent,
                                CurrentUnit, CurrentConvert );
         if( DrawEntry == NULL )
         {
             DrawEntry = CurrentDrawItem =
                 LocateDrawItem( (SCH_SCREEN*) GetScreen(),
                                 GetScreen()->m_MousePosition,
-                                CurrentLibEntry, CurrentUnit,
+                                m_currentComponent, CurrentUnit,
                                 CurrentConvert, LOCATE_ALL_DRAW_ITEM );
         }
         if( DrawEntry == NULL )
         {
             DrawEntry = CurrentDrawItem =
                 LocateDrawItem( (SCH_SCREEN*) GetScreen(),
-                                GetScreen()->m_Curseur, CurrentLibEntry,
+                                GetScreen()->m_Curseur, m_currentComponent,
                                 CurrentUnit, CurrentConvert,
                                 LOCATE_ALL_DRAW_ITEM );
         }
         if( DrawEntry == NULL )
         {
             DrawEntry = CurrentDrawItem =
-                (LibEDA_BaseStruct*) LocateField( CurrentLibEntry );
+                (LibEDA_BaseStruct*) LocateField( m_currentComponent );
         }
     }
 

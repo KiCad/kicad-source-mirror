@@ -3,7 +3,6 @@
 /******************************************************/
 
 #include "fctsys.h"
-#include "id.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
@@ -12,6 +11,8 @@
 #include "gerbview.h"
 #include "pcbplot.h"
 #include "protos.h"
+
+
 
 /************************************************************************/
 void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )

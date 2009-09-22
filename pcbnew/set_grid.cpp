@@ -15,7 +15,7 @@
 #include "protos.h"
 #include <wx/spinctrl.h>
 
-#include "id.h"
+#include "pcbnew_id.h"
 
 #include "set_grid.h"
 

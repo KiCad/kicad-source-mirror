@@ -11,6 +11,7 @@
 #include "common.h"
 #include "gestfich.h"
 #include "appl_wxstruct.h"
+#include "bitmaps.h"
 
 #include "kicad.h"
 
@@ -19,10 +20,6 @@
 #include "wx/treectrl.h"
 #include "wx/regex.h"
 #include "wx/dir.h"
-
-#include "bitmaps.h"
-
-#include "id.h"
 
 
 /********************************************/

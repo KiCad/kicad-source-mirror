@@ -11,7 +11,7 @@
 
 #include "eda_dde.h"
 
-#include "id.h"
+#include "eeschema_id.h"
 
 #include "protos.h"
 

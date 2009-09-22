@@ -13,7 +13,6 @@
 #include "confirm.h"
 #include "gestfich.h"
 #include "prjconfig.h"
-#include "id.h"
 #include "kicad.h"
 
 static const wxString GeneralGroupName( wxT( "/general" ) );

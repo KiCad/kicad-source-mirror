@@ -5,7 +5,7 @@
 
 #include "fctsys.h"
 #include "common.h"
-#include "id.h"
+#include "eeschema_id.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 

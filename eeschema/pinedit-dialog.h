@@ -14,9 +14,9 @@
 #ifndef _PINEDIT_DIALOG_H_
 #define _PINEDIT_DIALOG_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "pinedit-dialog.h"
-#endif
+/* #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA) */
+/* #pragma interface "pinedit-dialog.h" */
+/* #endif */
 
 /*!
  * Includes
@@ -29,8 +29,8 @@
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-#include "id.h"
-
+#include "eeschema_id.h"
+#include "libeditfrm.h"
 #include "protos.h"
 
 ////@begin includes

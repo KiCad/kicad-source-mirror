@@ -5,7 +5,7 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
-#include "id.h"
+#include "eeschema_id.h"
 #include "class_drawpanel.h"
 #include "bitmaps.h"
 
@@ -13,6 +13,7 @@
 #include "libcmp.h"
 #include "general.h"
 #include "protos.h"
+#include "libviewfrm.h"
 
 
 /*****************************/
@@ -30,8 +31,9 @@ BEGIN_EVENT_TABLE( WinEDA_ViewlibFrame, WinEDA_DrawFrame )
 
 
     /* Toolbar events */
-    EVT_TOOL_RANGE( ID_LIBVIEW_START_H_TOOL, ID_LIBVIEW_END_H_TOOL,
+    EVT_TOOL_RANGE( ID_LIBVIEW_NEXT, ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT,
                     WinEDA_ViewlibFrame::Process_Special_Functions )
+
     EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_ViewlibFrame::OnZoom )
     EVT_TOOL( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC,
               WinEDA_ViewlibFrame::ExportToSchematicLibraryPart )

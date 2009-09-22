@@ -14,7 +14,7 @@
 #include "general.h"
 #include "bitmaps.h"
 #include "protos.h"
-#include "id.h"
+#include "eeschema_id.h"
 #include "hotkeys.h"
 
 

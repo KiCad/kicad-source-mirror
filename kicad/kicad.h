@@ -15,6 +15,7 @@
 #include <wx/dragimag.h>
 #include <wx/filename.h>
 
+#include "id.h"
 #include "wxstruct.h"
 #include "appl_wxstruct.h"
 
@@ -23,6 +24,44 @@ class WinEDA_CommandFrame;
 class WinEDA_TreePrj;
 class WinEDA_PrjFrame;
 
+
+/**
+ * Command IDs for Kicad.
+ *
+ * Please add IDs that are unique to Kica  here and not in the global id.h
+ * file.  This will prevent the entire project from being rebuilt when adding
+ * new commands to Kicad.
+ */
+
+enum id_kicad_frm
+{
+    ID_LEFT_FRAME = ID_END_LIST,
+    ID_BOTTOM_FRAME,
+    ID_PROJECT_TREE,
+    ID_PROJECT_TXTEDIT,
+    ID_PROJECT_TREE_REFRESH,
+    ID_PROJECT_RUNPY,
+    ID_PROJECT_NEWFILE,
+    ID_PROJECT_NEWPY,
+    ID_PROJECT_NEWTXT,
+    ID_PROJECT_NEWDIR,
+    ID_PROJECT_DELETE,
+    ID_PROJECT_RENAME,
+    ID_PROJECT_OPEN_FILE_WITH_TEXT_EDITOR,
+
+    ID_MAIN_COMMAND,
+    ID_TO_EDITOR,
+    ID_TO_EESCHEMA,
+    ID_TO_GERBVIEW,
+    ID_RUN_PYTHON,
+    ID_BROWSE_AN_SELECT_FILE,
+    ID_SELECT_PREFERED_EDITOR,
+    ID_SELECT_PREFERED_PDF_BROWSER_NAME,
+    ID_SELECT_PREFERED_PDF_BROWSER,
+    ID_SELECT_DEFAULT_PDF_BROWSER,
+    ID_SAVE_AND_ZIP_FILES,
+    ID_READ_ZIP_ARCHIVE,
+};
 
 
 /*******************************************/
@@ -140,19 +179,23 @@ enum TreeFileType {
 /**************************************************************/
 
 /** class WinEDA_CommandFrame
- * This is the window handling the main tools to launch eeschema, cvpcb, pcbnew and gerbview
+ * This is the window handling the main tools to launch eeschema, cvpcb,
+ * pcbnew and gerbview
  */
 class WinEDA_CommandFrame : public wxSashLayoutWindow
 {
 public:
-    WinEDA_CommandFrame( wxWindow* parent, int id, wxPoint pos, wxSize size, long style );
+    WinEDA_CommandFrame( wxWindow* parent, int id, wxPoint pos, wxSize size,
+                         long style );
     ~WinEDA_CommandFrame()
     { }
 
     /** Function AddFastLaunch
       * add a Bitmap Button (fast launch button) to the window
      */
-public: void AddFastLaunch( wxBitmapButton * button );
+public:
+    void AddFastLaunch( wxBitmapButton * button );
+
 private:
 
     /** Function CreateCommandToolbar
@@ -187,7 +230,8 @@ private:
 
 public:
 
-    TreePrjItemData( TreeFileType type, const wxString& data, wxTreeCtrl* parent );
+    TreePrjItemData( TreeFileType type, const wxString& data,
+                     wxTreeCtrl* parent );
     TreePrjItemData() : m_Parent( NULL ) { }
 
     TreePrjItemData( const TreePrjItemData& src ) :
@@ -235,7 +279,8 @@ public:
 
 #ifdef KICAD_PYTHON
     boost::python::object   GetFileNamePy() const;
-    bool                    RenamePy( const boost::python::str& newname, bool check = true );
+    bool                    RenamePy( const boost::python::str& newname,
+                                      bool check = true );
 
     boost::python::object   GetDirPy() const;
 
@@ -261,10 +306,11 @@ private:
     wxCursor m_Default;
 
 protected:
-    wxMenu*             GetContextMenu( int type );
-    void                NewFile( TreeFileType type );
-    void                NewFile( const wxString& name, TreeFileType type, wxTreeItemId& root );
-    TreePrjItemData*    GetSelectedData();
+    wxMenu*           GetContextMenu( int type );
+    void              NewFile( TreeFileType type );
+    void              NewFile( const wxString& name, TreeFileType type,
+                               wxTreeItemId& root );
+    TreePrjItemData*  GetSelectedData();
 
 public:
     WinEDA_MainFrame* m_Parent;
@@ -273,8 +319,8 @@ public:
     wxTreeItemId      m_root;
 
 public:
-    static wxString                 GetFileExt( TreeFileType type );
-    static wxString                 GetFileWildcard( TreeFileType type );
+    static wxString   GetFileExt( TreeFileType type );
+    static wxString   GetFileWildcard( TreeFileType type );
 
     WinEDA_PrjFrame( WinEDA_MainFrame* parent,
                      const wxPoint& pos, const wxSize& size );
@@ -330,7 +376,8 @@ public:
 
     boost::python::object   GetTreeCtrl();
     TreePrjItemData*        GetItemData( const boost::python::object& item );
-    void                    AddFilePy( const boost::python::str& name, boost::python::object& root );
+    void                    AddFilePy( const boost::python::str& name,
+                                       boost::python::object& root );
     void                    NewFilePy( const boost::python::str& name,
                                        TreeFileType              type,
                                        boost::python::object&    root );

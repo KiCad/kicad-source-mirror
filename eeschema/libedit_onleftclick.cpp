@@ -10,28 +10,27 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "eeschema_id.h"
 
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-
 #include "protos.h"
-
-#include "id.h"
+#include "libeditfrm.h"
 
 
 void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 {
     LibEDA_BaseStruct* DrawEntry = CurrentDrawItem;
 
-    if( CurrentLibEntry == NULL )   // No component loaded !
+    if( m_currentComponent == NULL )   // No component loaded !
         return;
 
     if( m_ID_current_state == 0 )
     {
         if( DrawEntry && DrawEntry->m_Flags )
         {
-            SaveCopyInUndoList( CurrentLibEntry );
+            SaveCopyInUndoList( m_currentComponent );
 
             switch( DrawEntry->Type() )
             {
@@ -51,25 +50,27 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         }
         else
         {
-            DrawEntry = LocatePin( GetScreen()->m_MousePosition, CurrentLibEntry,
-                                   CurrentUnit, CurrentConvert );
+            DrawEntry = LocatePin( GetScreen()->m_MousePosition,
+                                   m_currentComponent, CurrentUnit,
+                                   CurrentConvert );
             if( DrawEntry == NULL )
             {
                 DrawEntry = LocateDrawItem( (SCH_SCREEN*)GetScreen(),
                                             GetScreen()->m_MousePosition,
-                                            CurrentLibEntry, CurrentUnit,
+                                            m_currentComponent, CurrentUnit,
                                             CurrentConvert,
                                             LOCATE_ALL_DRAW_ITEM );
             }
 
             if( DrawEntry == NULL )
-                DrawEntry = LocatePin( GetScreen()->m_Curseur, CurrentLibEntry,
-                                       CurrentUnit, CurrentConvert );
+                DrawEntry = LocatePin( GetScreen()->m_Curseur,
+                                       m_currentComponent, CurrentUnit,
+                                       CurrentConvert );
             if( DrawEntry == NULL )
             {
                 DrawEntry = LocateDrawItem( (SCH_SCREEN*)GetScreen(),
                                             GetScreen()->m_Curseur,
-                                            CurrentLibEntry, CurrentUnit,
+                                            m_currentComponent, CurrentUnit,
                                             CurrentConvert,
                                             LOCATE_ALL_DRAW_ITEM );
             }
@@ -96,7 +97,7 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             }
             else
             {
-                SaveCopyInUndoList( CurrentLibEntry );
+                SaveCopyInUndoList( m_currentComponent );
                 PlacePin( DC );
             }
             break;
@@ -108,7 +109,7 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         case ID_LIBEDIT_BODY_TEXT_BUTT:
             if( CurrentDrawItem == NULL || CurrentDrawItem->m_Flags == 0 )
             {
-                CurrentDrawItem = CreateGraphicItem( CurrentLibEntry, DC );
+                CurrentDrawItem = CreateGraphicItem( m_currentComponent, DC );
             }
             else if( CurrentDrawItem )
             {
@@ -116,48 +117,50 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                     GraphicItemBeginDraw( DC );
                 else
                 {
-                    SaveCopyInUndoList( CurrentLibEntry );
+                    SaveCopyInUndoList( m_currentComponent );
                     EndDrawGraphicItem( DC );
                 }
             }
             break;
 
         case ID_LIBEDIT_DELETE_ITEM_BUTT:
-            DrawEntry = LocatePin( GetScreen()->m_MousePosition, CurrentLibEntry,
-                                   CurrentUnit, CurrentConvert );
+            DrawEntry = LocatePin( GetScreen()->m_MousePosition,
+                                   m_currentComponent, CurrentUnit,
+                                   CurrentConvert );
             if( DrawEntry == NULL )
             {
                 DrawEntry = LocateDrawItem( (SCH_SCREEN*)GetScreen(),
                                             GetScreen()->m_MousePosition,
-                                            CurrentLibEntry, CurrentUnit,
+                                            m_currentComponent, CurrentUnit,
                                             CurrentConvert,
                                             LOCATE_ALL_DRAW_ITEM );
             }
 
             if( DrawEntry == NULL )
-                DrawEntry = LocatePin( GetScreen()->m_Curseur, CurrentLibEntry,
-                                       CurrentUnit, CurrentConvert );
+                DrawEntry = LocatePin( GetScreen()->m_Curseur,
+                                       m_currentComponent, CurrentUnit,
+                                       CurrentConvert );
             if( DrawEntry == NULL )
             {
                 DrawEntry = LocateDrawItem( (SCH_SCREEN*)GetScreen(),
                                             GetScreen()->m_Curseur,
-                                            CurrentLibEntry, CurrentUnit,
+                                            m_currentComponent, CurrentUnit,
                                             CurrentConvert,
                                             LOCATE_ALL_DRAW_ITEM );
             }
             if( DrawEntry == NULL )
                 DisplayCmpDoc();
-            SaveCopyInUndoList( CurrentLibEntry );
+            SaveCopyInUndoList( m_currentComponent );
             if( DrawEntry->Type() == COMPONENT_PIN_DRAW_TYPE )
-                DeletePin( DC, CurrentLibEntry, (LibDrawPin*) DrawEntry );
+                DeletePin( DC, m_currentComponent, (LibDrawPin*) DrawEntry );
             else
-                CurrentLibEntry->RemoveDrawItem( DrawEntry, DrawPanel, DC );
+                m_currentComponent->RemoveDrawItem( DrawEntry, DrawPanel, DC );
             DrawEntry = NULL;
             GetScreen()->SetModify();
             break;
 
         case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
-            SaveCopyInUndoList( CurrentLibEntry );
+            SaveCopyInUndoList( m_currentComponent );
             PlaceAncre();
             SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
             break;
@@ -183,22 +186,22 @@ void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
     wxPoint            pos = GetPosition();
     LibEDA_BaseStruct* DrawEntry = CurrentDrawItem;
 
-    if( CurrentLibEntry == NULL )
+    if( m_currentComponent == NULL )
         return;
 
     if( ( DrawEntry == NULL ) || ( DrawEntry->m_Flags == 0 ) )
     {   // We can locate an item
-        DrawEntry = LocatePin( GetScreen()->m_MousePosition, CurrentLibEntry,
+        DrawEntry = LocatePin( GetScreen()->m_MousePosition, m_currentComponent,
                                CurrentUnit, CurrentConvert );
         if( DrawEntry == NULL )
-            DrawEntry = LocatePin( GetScreen()->m_Curseur, CurrentLibEntry,
+            DrawEntry = LocatePin( GetScreen()->m_Curseur, m_currentComponent,
                                    CurrentUnit, CurrentConvert );
         if( DrawEntry == NULL )
         {
             DrawEntry = CurrentDrawItem =
                 LocateDrawItem( (SCH_SCREEN*) GetScreen(),
                                 GetScreen()->m_MousePosition,
-                                CurrentLibEntry, CurrentUnit,
+                                m_currentComponent, CurrentUnit,
                                 CurrentConvert, LOCATE_ALL_DRAW_ITEM );
         }
         if( DrawEntry == NULL )
@@ -206,13 +209,13 @@ void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             DrawEntry = CurrentDrawItem =
                 LocateDrawItem( (SCH_SCREEN*) GetScreen(),
                                 GetScreen()->m_Curseur,
-                                CurrentLibEntry, CurrentUnit,
+                                m_currentComponent, CurrentUnit,
                                 CurrentConvert, LOCATE_ALL_DRAW_ITEM );
         }
         if( DrawEntry == NULL )
         {
             DrawEntry = CurrentDrawItem =
-                (LibEDA_BaseStruct*) LocateField( CurrentLibEntry );
+                (LibEDA_BaseStruct*) LocateField( m_currentComponent );
         }
         if( DrawEntry == NULL )
         {

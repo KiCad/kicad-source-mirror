@@ -15,7 +15,7 @@
 #include "libcmp.h"
 #include "general.h"
 
-#include "id.h"
+#include "eeschema_id.h"
 
 #include "protos.h"
 

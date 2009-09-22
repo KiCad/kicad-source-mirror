@@ -9,11 +9,14 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "drawtxt.h"
+#include "plot_common.h"
+
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-#include "plot_common.h"
 #include "protos.h"
+#include "libeditfrm.h"
+
 
 const wxChar* MsgPinElectricType[] =
 {

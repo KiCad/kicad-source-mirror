@@ -15,7 +15,7 @@
 #include "pcbplot.h"
 #include "pcbcfg.h"
 #include "worksheet.h"
-#include "id.h"
+#include "pcbnew_id.h"
 #include "hotkeys.h"
 #include "protos.h"
 #include "dialog_copper_layers_setup.h"

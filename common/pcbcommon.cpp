@@ -81,6 +81,8 @@ const wxString ModuleFileExtension( wxT( "mod" ) );
 const wxString ModuleFileWildcard(
     _( "Kicad footprint library files (*.mod)|*.mod" )
 );
+const wxString PcbFileWildcard(
+    _( "Printed circuit board files (*.brd)|*.brd" ) );
 
 int g_CurrentVersionPCB = 1;
 

@@ -8,7 +8,7 @@
 #include "confirm.h"
 #include "eda_doc.h"
 #include "gestfich.h"
-#include "id.h"
+#include "pcbnew_id.h"
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
@@ -201,7 +201,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
                 toggle = 1;
             break;
 
-        case ID_LINE_COMMENT_BUTT:
+        case ID_PCB_ADD_LINE_BUTT:
         case ID_PCB_ARC_BUTT:
         case ID_PCB_CIRCLE_BUTT:
             if( DrawStruct == NULL )
@@ -344,13 +344,13 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         SetToolID( id, wxCURSOR_PENCIL, _( "Adjust Zero" ) );
         break;
 
-    case ID_LINE_COMMENT_BUTT:
+    case ID_PCB_ADD_LINE_BUTT:
     case ID_PCB_ARC_BUTT:
     case ID_PCB_CIRCLE_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add Graphic" ) );
         break;
 
-    case ID_TEXT_COMMENT_BUTT:
+    case ID_PCB_ADD_TEXT_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add Text" ) );
         break;
 
@@ -383,7 +383,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
         break;
 
-    case ID_POPUP_END_LINE:
+    case ID_POPUP_PCB_END_LINE:
         DrawPanel->MouseToCursorSchema();
 
         //	EndSegment(&dc);

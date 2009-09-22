@@ -15,7 +15,7 @@
 #include "wxPcbStruct.h"
 #include "autorout.h"
 #include "cell.h"
-#include "id.h"
+#include "pcbnew_id.h"
 #include "protos.h"
 
 

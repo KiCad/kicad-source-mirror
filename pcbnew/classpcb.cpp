@@ -9,7 +9,7 @@
 #include "pcbnew.h"
 
 #include "trigo.h"
-#include "id.h"
+#include "pcbnew_id.h"
 
 
 /* Default pcbnew zoom values.

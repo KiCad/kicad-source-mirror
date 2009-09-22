@@ -8,7 +8,6 @@
 #include "confirm.h"
 #include "eda_doc.h"
 #include "gestfich.h"
-#include "id.h"
 #include "param_config.h"
 #include "bitmaps.h"
 

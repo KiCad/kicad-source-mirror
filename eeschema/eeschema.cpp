@@ -102,7 +102,6 @@ LibEDA_BaseStruct* LibItemToRepeat = NULL; /* pointer on a graphic item than
                                             * can be duplicated by the Ins key
                                             * (usually the last created item */
 CMP_LIBRARY* CurrentLib = NULL;          /* Current opened library */
-LIB_COMPONENT* CurrentLibEntry = NULL;     /* Current component */
 LibEDA_BaseStruct* CurrentDrawItem = NULL;     /* current edited item */
 
 // Current selected alias (for components which have aliases)

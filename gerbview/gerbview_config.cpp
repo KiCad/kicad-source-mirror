@@ -13,8 +13,8 @@
 #include "pcbcommon.h"
 #include "gerbview.h"
 #include "pcbplot.h"
-#include "id.h"
 #include "hotkeys.h"
+
 #include "gerbview_config.h"
 #include "protos.h"
 

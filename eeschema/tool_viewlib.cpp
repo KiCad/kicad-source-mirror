@@ -5,13 +5,14 @@
 #include "fctsys.h"
 #include "common.h"
 #include "bitmaps.h"
-#include "id.h"
+#include "eeschema_id.h"
 
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
+#include "libviewfrm.h"
 
 
 void WinEDA_ViewlibFrame::ReCreateHToolbar()

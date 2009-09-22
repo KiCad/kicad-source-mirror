@@ -10,7 +10,6 @@
 #include "pcbplot.h"
 #include "protos.h"
 #include "bitmaps.h"
-#include "id.h"
 #include "hotkeys.h"
 
 /***********************************************/
@@ -30,11 +29,11 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
     menuBar = new wxMenuBar();
 
     wxMenu* filesMenu = new wxMenu;
-    filesMenu->Append( ID_MENU_LOAD_FILE, _( "Clear and Load Gerber File" ),
+    filesMenu->Append( ID_LOAD_FILE, _( "Clear and Load Gerber File" ),
                        _( "Clear all layers and Load new Gerber file" ),
                        FALSE );
 
-    filesMenu->Append( ID_MENU_APPEND_FILE, _( "Load Gerber File" ),
+    filesMenu->Append( ID_APPEND_FILE, _( "Load Gerber File" ),
                        _( "Load new Gerber file on currrent layer" ),
                        FALSE );
 
@@ -50,7 +49,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
                        _( "Load excellon drill file" ), FALSE );
 #endif
 
-    filesMenu->Append( ID_MENU_NEW_BOARD, _( "&New" ),
+    filesMenu->Append( ID_NEW_BOARD, _( "&New" ),
                        _( "Clear all layers" ), FALSE );
 
     filesMenu->AppendSeparator();
@@ -59,10 +58,10 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
 
 #if 0
     filesMenu->AppendSeparator();
-    filesMenu->Append( ID_MENU_SAVE_BOARD, _( "&Save Layers" ),
+    filesMenu->Append( ID_SAVE_BOARD, _( "&Save Layers" ),
                        _( "Save current layers (GERBER format)" ), FALSE );
 
-    filesMenu->Append( ID_MENU_SAVE_BOARD_AS, _( "Save Layers As..." ),
+    filesMenu->Append( ID_SAVE_BOARD_AS, _( "Save Layers As..." ),
                        _( "Save current layers as.." ), FALSE );
 #endif
 
@@ -308,7 +307,7 @@ create or update the right vertical toolbar
                          _( "Add layer alignment target" ) );
 
     m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_TEXT_COMMENT_BUTT, wxEmptyString,
+    m_VToolBar->AddTool( ID_PCB_ADD_TEXT_BUTT, wxEmptyString,
                          wxBitmap( tool_text_xpm ),
                          _( "Add Text" ) );
 

@@ -5,7 +5,6 @@
 #include "fctsys.h"
 #include "common.h"
 #include "class_drawpanel.h"
-#include "id.h"
 #include "confirm.h"
 
 #include "gerbview.h"

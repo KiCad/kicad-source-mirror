@@ -6,7 +6,7 @@
 #include "gr_basic.h"
 #include "common.h"
 #include "trigo.h"
-#include "id.h"             // ID_TRACK_BUTT
+#include "pcbnew_id.h"             // ID_TRACK_BUTT
 #include "class_drawpanel.h"
 #include "drawtxt.h"
 

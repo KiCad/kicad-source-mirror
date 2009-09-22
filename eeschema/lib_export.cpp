@@ -13,12 +13,13 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
-#include "id.h"
+#include "eeschema_id.h"
 
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
 #include "protos.h"
+#include "libeditfrm.h"
 
 #include <wx/filename.h>
 
@@ -95,13 +96,13 @@ void WinEDA_LibeditFrame::OnExportPart( wxCommandEvent& event )
     CMP_LIBRARY* CurLibTmp;
     bool         createLib = ( event.GetId() != ExportPartId ) ? false : true;
 
-    if( CurrentLibEntry == NULL )
+    if( m_currentComponent == NULL )
     {
         DisplayError( this, _( "There is no component selected to save." ) );
         return;
     }
 
-    fn = CurrentLibEntry->GetName().Lower();
+    fn = m_currentComponent->GetName().Lower();
     fn.SetExt( CompLibFileExtension );
 
     title = createLib ? _( "New Library" ) : _( "Export Component" );
@@ -132,7 +133,7 @@ void WinEDA_LibeditFrame::OnExportPart( wxCommandEvent& event )
     {
         msg = fn.GetFullPath() + _( " - OK" );
         DisplayInfoMessage( this, _( "This library will not be available \
-until it is loaded by EESchema.\nModify the EESchema library configuration \
+until it is loaded by EESchema.\n\nModify the EESchema library configuration \
 if you want to include it as part of this project." ) );
     }
     else

@@ -10,16 +10,11 @@
 
 #include "fctsys.h"
 #include "common.h"
-#include "id.h"
 #include "class_drawpanel.h"
 
 #include "pcbnew.h"
 #include "gerbview.h"
 #include "protos.h"
-
-/* Routines Locales : */
-
-/* Variables Locales */
 
 
 /**********************************************************************/

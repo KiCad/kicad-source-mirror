@@ -11,7 +11,7 @@
 #include "wxPcbStruct.h"
 #include "protos.h"
 
-#include "id.h"
+#include "pcbnew_id.h"
 #include "collectors.h"
 
 #include "bitmaps.h"

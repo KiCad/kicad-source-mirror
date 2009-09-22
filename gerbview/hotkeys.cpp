@@ -4,10 +4,9 @@
 
 #include "fctsys.h"
 #include "common.h"
-#include "gerbview.h"
-#include "id.h"
 #include "hotkeys.h"
 
+#include "gerbview.h"
 #include "protos.h"
 
 /* How to add a new hotkey:

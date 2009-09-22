@@ -15,7 +15,7 @@
 #include "pcbplot.h"
 #include "autorout.h"
 
-#include "id.h"
+#include "pcbnew_id.h"
 
 #include "protos.h"
 

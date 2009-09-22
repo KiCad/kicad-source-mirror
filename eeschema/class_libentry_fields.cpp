@@ -416,6 +416,37 @@ bool LibDrawField::DoTestInside( EDA_Rect& rect )
 }
 
 
+/*
+ * If the field is the reference, return reference like schematic,
+ * i.e U -> U? or U?A or the field text for others
+ *
+ * @fixme This should be handled by the field object.
+ */
+wxString LibDrawField::GetFullText( void )
+{
+    if( m_FieldId != REFERENCE )
+        return m_Text;
+
+    wxString text = m_Text;
+
+    if( GetParent()->m_UnitCount > 1 )
+    {
+#if defined(KICAD_GOST)
+        text.Printf( wxT( "%s?.%c" ),
+                     m_Text.GetData(), CurrentUnit + '1' - 1 );
+#else
+
+        text.Printf( wxT( "%s?%c" ),
+                     m_Text.GetData(), CurrentUnit + 'A' - 1 );
+#endif
+    }
+    else
+        text << wxT( "?" );
+
+    return text;
+}
+
+
 /**
  * Function ReturnDefaultFieldName
  * Return the default field name from its index (REFERENCE, VALUE ..)

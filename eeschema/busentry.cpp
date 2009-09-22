@@ -6,7 +6,7 @@
 #include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
-#include "id.h"
+#include "eeschema_id.h"
 #include "confirm.h"
 
 #include "program.h"

@@ -8,7 +8,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "fctsys.h"
-#include <wx/tokenzr.h>
 #include "appl_wxstruct.h"
 #include "common.h"
 #include "confirm.h"
@@ -17,11 +16,11 @@
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-
 #include "protos.h"
 #include "netlist.h"
+#include "libviewfrm.h"
 
-#include "id.h"
+#include <wx/tokenzr.h>
 
 #include "dialog_eeschema_config_fbp.h"
 

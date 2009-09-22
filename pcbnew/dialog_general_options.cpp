@@ -13,7 +13,7 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 
-#include "id.h"
+#include "pcbnew_id.h"
 
 #include "dialog_general_options_BoardEditor_base.h"
 #include "dialog_general_options.h"

@@ -9,7 +9,7 @@
 
 #include "pcbnew.h"
 #include "trigo.h"
-#include "id.h"             // ID_TRACK_BUTT
+#include "pcbnew_id.h"             // ID_TRACK_BUTT
 
 
 /*******************************/

@@ -4,7 +4,6 @@
 
 #include "fctsys.h"
 #include "common.h"
-#include "id.h"
 
 #include "gerbview.h"
 #include "pcbplot.h"

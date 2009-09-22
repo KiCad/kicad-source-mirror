@@ -21,7 +21,6 @@
 #include "wx/dataobj.h"
 #include "wx/clipbrd.h"
 
-#include "id.h"
 #include "gestfich.h"
 
 #include "3d_viewer.h"
@@ -29,23 +28,6 @@
 
 /* Tool and button Bitmaps */
 #include "bitmaps.h"
-
-enum onrclick_id {
-    ID_POPUP_3D_VIEW_START = 2000,
-    ID_POPUP_ZOOMIN,
-    ID_POPUP_ZOOMOUT,
-    ID_POPUP_VIEW_XPOS,
-    ID_POPUP_VIEW_XNEG,
-    ID_POPUP_VIEW_YPOS,
-    ID_POPUP_VIEW_YNEG,
-    ID_POPUP_VIEW_ZPOS,
-    ID_POPUP_VIEW_ZNEG,
-    ID_POPUP_MOVE3D_LEFT,
-    ID_POPUP_MOVE3D_RIGHT,
-    ID_POPUP_MOVE3D_UP,
-    ID_POPUP_MOVE3D_DOWN,
-    ID_POPUP_3D_VIEW_END
-};
 
 
 /*

@@ -2,7 +2,7 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
-#include "id.h"
+#include "eeschema_id.h"
 #include "class_drawpanel.h"
 #include "program.h"
 #include "libcmp.h"

@@ -18,7 +18,6 @@
 #endif
 
 #include "bitmaps.h"
-#include "id.h"
 
 #include "3d_viewer.h"
 #include "trackball.h"

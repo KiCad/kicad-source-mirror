@@ -103,6 +103,8 @@ public:
         m_Parent = field.m_Parent;
     }
 
+    wxString GetFullText( void );
+
 protected:
     virtual LibEDA_BaseStruct* DoGenCopy();
     virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;

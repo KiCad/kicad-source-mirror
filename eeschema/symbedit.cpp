@@ -19,6 +19,7 @@
 #include "libcmp.h"
 #include "general.h"
 #include "protos.h"
+#include "libeditfrm.h"
 
 
 /*
@@ -37,7 +38,7 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
     CMP_LIBRARY*       Lib;
 
     /* Exit if no library entry is selected or a command is in progress. */
-    if( CurrentLibEntry == NULL
+    if( m_currentComponent == NULL
        || ( CurrentDrawItem && CurrentDrawItem->m_Flags ) )
         return;
 
@@ -109,8 +110,8 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
 
         if( DrawEntry->Next() == NULL ) /* Fin de liste trouvee */
         {
-            DrawEntry->SetNext( CurrentLibEntry->m_Drawings );
-            CurrentLibEntry->m_Drawings = Component->m_Drawings;
+            DrawEntry->SetNext( m_currentComponent->m_Drawings );
+            m_currentComponent->m_Drawings = Component->m_Drawings;
             Component->m_Drawings = NULL;
             break;
         }
@@ -119,10 +120,10 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
     }
 
     // Remove duplicated drawings:
-    CurrentLibEntry->RemoveDuplicateDrawItems();
+    m_currentComponent->RemoveDuplicateDrawItems();
 
     // Clear flags
-    DrawEntry = CurrentLibEntry->m_Drawings;
+    DrawEntry = m_currentComponent->m_Drawings;
     while( DrawEntry )
     {
         DrawEntry->m_Flags    = 0;
@@ -151,14 +152,14 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
     wxString           msg;
     FILE*              ExportFile;
 
-    if( CurrentLibEntry->m_Drawings == NULL )
+    if( m_currentComponent->m_Drawings == NULL )
         return;
 
     /* Creation du fichier symbole */
     wxString default_path = wxGetApp().ReturnLastVisitedLibraryPath();
 
     wxFileDialog dlg( this, _( "Export Symbol Drawings" ), default_path,
-                      CurrentLibEntry->m_Name.m_Text, SymbolFileWildcard,
+                      m_currentComponent->m_Name.m_Text, SymbolFileWildcard,
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -194,28 +195,28 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
 
     /* Creation du commentaire donnant le nom du composant */
     fprintf( ExportFile, "# SYMBOL %s\n#\n",
-             CONV_TO_UTF8( CurrentLibEntry->m_Name.m_Text ) );
+             CONV_TO_UTF8( m_currentComponent->m_Name.m_Text ) );
 
     /* Generation des lignes utiles */
     fprintf( ExportFile, "DEF %s",
-             CONV_TO_UTF8( CurrentLibEntry->m_Name.m_Text ) );
-    if( !CurrentLibEntry->m_Prefix.m_Text.IsEmpty() )
+             CONV_TO_UTF8( m_currentComponent->m_Name.m_Text ) );
+    if( !m_currentComponent->m_Prefix.m_Text.IsEmpty() )
         fprintf( ExportFile, " %s",
-                 CONV_TO_UTF8( CurrentLibEntry->m_Prefix.m_Text ) );
+                 CONV_TO_UTF8( m_currentComponent->m_Prefix.m_Text ) );
     else
         fprintf( ExportFile, " ~" );
 
     fprintf( ExportFile, " %d %d %c %c %d %d %c\n",
              0, /* unused */
-             CurrentLibEntry->m_TextInside,
-             CurrentLibEntry->m_DrawPinNum ? 'Y' : 'N',
-             CurrentLibEntry->m_DrawPinName ? 'Y' : 'N',
+             m_currentComponent->m_TextInside,
+             m_currentComponent->m_DrawPinNum ? 'Y' : 'N',
+             m_currentComponent->m_DrawPinName ? 'Y' : 'N',
              1, 0 /* unused */, 'N' );
 
     /* Position / orientation / visibilite des champs */
-    CurrentLibEntry->m_Prefix.Save( ExportFile );
-    CurrentLibEntry->m_Name.Save( ExportFile );
-    DrawEntry = CurrentLibEntry->m_Drawings;
+    m_currentComponent->m_Prefix.Save( ExportFile );
+    m_currentComponent->m_Name.Save( ExportFile );
+    DrawEntry = m_currentComponent->m_Drawings;
 
     if( DrawEntry )
     {
@@ -250,14 +251,14 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
 /***************************************************************************/
 void WinEDA_LibeditFrame::PlaceAncre()
 {
-    if( CurrentLibEntry == NULL )
+    if( m_currentComponent == NULL )
         return;
 
     wxPoint offset( -GetScreen()->m_Curseur.x, GetScreen()->m_Curseur.y );
 
     GetScreen()->SetModify();
 
-    CurrentLibEntry->SetOffset( offset );
+    m_currentComponent->SetOffset( offset );
 
     /* Redraw the symbol */
     GetScreen()->m_Curseur.x = GetScreen()->m_Curseur.y = 0;

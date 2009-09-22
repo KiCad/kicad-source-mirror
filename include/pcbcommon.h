@@ -31,6 +31,7 @@ extern wxString NetCmpExtBuffer;
 extern const wxString ModuleFileExtension;
 
 extern const wxString ModuleFileWildcard;
+extern const wxString PcbFileWildcard;
 
 extern wxString g_ViaType_Name[4];
 

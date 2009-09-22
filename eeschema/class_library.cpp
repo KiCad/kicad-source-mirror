@@ -514,8 +514,8 @@ information." );
         {
             wxLogWarning( _( "The component library <%s> header version \
 number is invalid.\n\nIn future versions of EESchema this library may not \
-load correctly.\nTo resolve this problem open the library in the library \
-editor and save it.\nIf this library is the project cache library, save \
+load correctly.  To resolve this problem open the library in the library \
+editor and save it.  If this library is the project cache library, save \
 the current schematic." ),
                           (const wxChar*) GetName() );
         }
@@ -636,7 +636,7 @@ bool CMP_LIBRARY::LoadDocs( wxString& errMsg )
 
     if( f == NULL )
     {
-        errMsg.Printf( _( "Could not open component document libray file\n<%s>." ),
+        errMsg.Printf( _( "Could not open component document libray file <%s>." ),
                        (const wxChar*) fn.GetFullPath() );
         return false;
     }

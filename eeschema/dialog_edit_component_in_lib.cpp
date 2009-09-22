@@ -5,7 +5,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "fctsys.h"
-#include "appl_wxstruct.h"
 #include "common.h"
 #include "confirm.h"
 #include "gestfich.h"
@@ -13,10 +12,11 @@
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
+#include "protos.h"
+#include "libeditfrm.h"
 
 #include "dialog_edit_component_in_lib.h"
 
-#include "protos.h"
 
 DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( WinEDA_LibeditFrame* aParent):
     DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE(aParent)
@@ -45,7 +45,9 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::Init( )
     SetFocus();
     m_AliasLocation = -1;
 
-    if( CurrentLibEntry == NULL )
+    LIB_COMPONENT* component = m_Parent->GetCurrentComponent();
+
+    if( component == NULL )
     {
         SetTitle( _( "Library Component Properties" ) );
         return;
@@ -56,16 +58,15 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::Init( )
     if( !CurrentAliasName.IsEmpty() )
     {
         title += CurrentAliasName + _( " (alias of " ) +
-            wxString( CurrentLibEntry->m_Name.m_Text )+ wxT( ")" );
+            component->GetName() + wxT( ")" );
     }
     else
     {
-        title += CurrentLibEntry->m_Name.m_Text;
+        title += component->GetName();
         CurrentAliasName.Empty();
     }
 
     SetTitle( title );
-
     InitPanelDoc();
     InitBasicPanel();
 
@@ -73,26 +74,18 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::Init( )
         m_ButtonDeleteAllAlias->Enable( false );
 
     /* Place list of alias names in listbox */
-    if( CurrentLibEntry )
-    {
-        m_PartAliasList->Append( CurrentLibEntry->m_AliasList );
-    }
+    m_PartAliasList->Append( component->m_AliasList );
 
-    if( ( CurrentLibEntry == NULL )
-        || ( CurrentLibEntry->m_AliasList.GetCount() == 0 ) )
+    if( component->m_AliasList.GetCount() == 0 )
     {
         m_ButtonDeleteAllAlias->Enable( false );
         m_ButtonDeleteOneAlias->Enable( false );
     }
 
     /* Read the Footprint Filter list */
-    if( CurrentLibEntry )
-    {
-        m_FootprintFilterListBox->Append( CurrentLibEntry->m_FootprintList );
-    }
+    m_FootprintFilterListBox->Append( component->m_FootprintList );
 
-    if( ( CurrentLibEntry == NULL )
-        || ( CurrentLibEntry->m_FootprintList.GetCount() == 0 ) )
+    if( component->m_FootprintList.GetCount() == 0 )
     {
         m_ButtonDeleteAllFootprintFilter->Enable( false );
         m_ButtonDeleteOneFootprintFilter->Enable( false );

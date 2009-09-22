@@ -15,7 +15,7 @@
 #include "pcbnew.h"
 #include "bitmaps.h"
 #include "protos.h"
-#include "id.h"
+#include "pcbnew_id.h"
 
 #include "collectors.h"
 #include "class_drawpanel.h"

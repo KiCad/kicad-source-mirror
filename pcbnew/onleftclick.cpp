@@ -11,7 +11,7 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 
-#include "id.h"
+#include "pcbnew_id.h"
 
 
 
@@ -167,7 +167,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     case ID_PCB_CIRCLE_BUTT:
     case ID_PCB_ARC_BUTT:
-    case ID_LINE_COMMENT_BUTT:
+    case ID_PCB_ADD_LINE_BUTT:
     {
         int shape = S_SEGMENT;
         if( m_ID_current_state == ID_PCB_CIRCLE_BUTT )
@@ -244,7 +244,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             DisplayError( this, wxT( "Edit: zone internal error" ) );
         break;
 
-    case ID_TEXT_COMMENT_BUTT:
+    case ID_PCB_ADD_TEXT_BUTT:
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
             SetCurItem( Create_Texte_Pcb( DC ) );
@@ -436,7 +436,7 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         }
         break;
 
-    case ID_LINE_COMMENT_BUTT:
+    case ID_PCB_ADD_LINE_BUTT:
     case ID_PCB_ARC_BUTT:
     case ID_PCB_CIRCLE_BUTT:
         if( DrawStruct == NULL )

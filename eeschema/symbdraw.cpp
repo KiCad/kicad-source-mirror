@@ -10,12 +10,14 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "eeschema_id.h"
+
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
 #include "trigo.h"
 #include "protos.h"
-#include "id.h"
+#include "libeditfrm.h"
 
 /* Routines locales */
 static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
@@ -55,7 +57,7 @@ void WinEDA_bodygraphics_PropertiesFrame::bodygraphics_PropertiesAccept( wxComma
     if( CurrentDrawItem )
     {
         if( !(CurrentDrawItem->m_Flags & IS_NEW) )  // if IS_NEW, copy for undo is done before place
-            m_Parent->SaveCopyInUndoList( CurrentLibEntry );
+            m_Parent->SaveCopyInUndoList( CurrentDrawItem->GetParent() );
         wxClientDC dc( m_Parent->DrawPanel );
 
         m_Parent->DrawPanel->PrepareGraphicContext( &dc );
@@ -105,7 +107,8 @@ void WinEDA_bodygraphics_PropertiesFrame::bodygraphics_PropertiesAccept( wxComma
                 break;
             }
         }
-        CurrentLibEntry->SortDrawItems();
+
+        CurrentDrawItem->GetParent()->SortDrawItems();
 
         m_Parent->GetScreen()->SetModify();
 
@@ -641,10 +644,10 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
  *  courant, si elle existe et redessine toujours celle ci
  *  Parametres: (tous globaux)
  *      CurrentDrawItem
- *      CurrentLibEntry
+ *      m_currentComponent
  */
 {
-    if( CurrentLibEntry == NULL )
+    if( m_currentComponent == NULL )
         return;
     if( CurrentDrawItem == NULL )
         return;
@@ -666,9 +669,9 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
 
     if( CurrentDrawItem->m_Flags & IS_NEW )
     {
-        SaveCopyInUndoList( CurrentLibEntry );
-        CurrentDrawItem->SetNext( CurrentLibEntry->m_Drawings );
-        CurrentLibEntry->m_Drawings = CurrentDrawItem;
+        SaveCopyInUndoList( m_currentComponent );
+        CurrentDrawItem->SetNext( m_currentComponent->m_Drawings );
+        m_currentComponent->m_Drawings = CurrentDrawItem;
 
         switch( CurrentDrawItem->Type() )
         {
@@ -697,7 +700,7 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
             ;
         }
 
-        CurrentLibEntry->SortDrawItems();
+        m_currentComponent->SortDrawItems();
     }
 
     if( m_ID_current_state )
@@ -713,8 +716,8 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
         MoveLibDrawItemAt( CurrentDrawItem, pos );
     }
 
-    CurrentLibEntry->Draw( DrawPanel, DC, wxPoint( 0, 0 ), CurrentUnit,
-                           CurrentConvert, GR_DEFAULT_DRAWMODE );
+    m_currentComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), CurrentUnit,
+                              CurrentConvert, GR_DEFAULT_DRAWMODE );
 
     CurrentDrawItem->m_Flags = 0;
     CurrentDrawItem = NULL;

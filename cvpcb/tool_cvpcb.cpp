@@ -5,7 +5,6 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
-#include "id.h"
 #include "trigo.h"
 
 #include "bitmaps.h"

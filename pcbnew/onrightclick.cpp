@@ -13,7 +13,7 @@
 #include "wxPcbStruct.h"
 
 //#include "autorout.h"
-#include "id.h"
+#include "pcbnew_id.h"
 #include "hotkeys.h"
 #include "collectors.h"
 
@@ -303,8 +303,8 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
     case ID_PCB_CIRCLE_BUTT:
     case ID_PCB_ARC_BUTT:
-    case ID_TEXT_COMMENT_BUTT:
-    case ID_LINE_COMMENT_BUTT:
+    case ID_PCB_ADD_TEXT_BUTT:
+    case ID_PCB_ADD_LINE_BUTT:
     case ID_PCB_COTATION_BUTT:
         ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_SELECT_NO_CU_LAYER,
                       _( "Select Working Layer" ), select_w_layer_xpm );

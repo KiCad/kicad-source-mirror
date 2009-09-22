@@ -12,7 +12,7 @@
 #include "general.h"
 
 #include "protos.h"
-#include "id.h"
+#include "eeschema_id.h"
 
 
 /****************************************************************/

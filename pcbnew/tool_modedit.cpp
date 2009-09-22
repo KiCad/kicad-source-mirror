@@ -12,7 +12,7 @@
 
 #include "bitmaps.h"
 
-#include "id.h"
+#include "pcbnew_id.h"
 
 #include "hotkeys.h"
 
@@ -37,7 +37,7 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar()
     SetToolBar( m_HToolBar );
 
     // Set up toolbar
-    m_HToolBar->AddTool( ID_LIBEDIT_SELECT_CURRENT_LIB, wxEmptyString,
+    m_HToolBar->AddTool( ID_MODEDIT_SELECT_CURRENT_LIB, wxEmptyString,
                          wxBitmap( open_library_xpm ),
                          _( "Select working library" ) );
 
@@ -51,7 +51,7 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar()
                          _( "Create new library and save current module" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_LIBEDIT_DELETE_PART, wxEmptyString,
+    m_HToolBar->AddTool( ID_MODEDIT_DELETE_PART, wxEmptyString,
                          wxBitmap( delete_xpm ),
                          _( "Delete part in current library" ) );
 
@@ -159,7 +159,7 @@ void WinEDA_ModuleEditFrame::ReCreateVToolbar()
                          _( "Add Pads" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_LINE_COMMENT_BUTT, wxEmptyString,
+    m_VToolBar->AddTool( ID_PCB_ADD_LINE_BUTT, wxEmptyString,
                          wxBitmap( add_polygon_xpm ),
                          _( "Add graphic line or polygon" ), wxITEM_CHECK );
 
@@ -171,7 +171,7 @@ void WinEDA_ModuleEditFrame::ReCreateVToolbar()
                          wxBitmap( add_arc_xpm ),
                          _( "Add graphic arc" ), wxITEM_CHECK );
 
-    m_VToolBar->AddTool( ID_TEXT_COMMENT_BUTT, wxEmptyString,
+    m_VToolBar->AddTool( ID_PCB_ADD_TEXT_BUTT, wxEmptyString,
                          wxBitmap( add_text_xpm ),
                          _( "Add Text" ), wxITEM_CHECK );
 

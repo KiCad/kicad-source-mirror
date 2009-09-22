@@ -23,7 +23,7 @@
 #include "cvpcb.h"
 #endif
 
-#include "id.h"
+#include "pcbnew_id.h"
 
 
 /* Format des structures de sauvegarde type ASCII :

@@ -14,7 +14,7 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 
-#include "id.h"
+#include "pcbnew_id.h"
 #include "dialog_copper_layers_setup.h"
 #include "wx/generic/gridctrl.h"
 

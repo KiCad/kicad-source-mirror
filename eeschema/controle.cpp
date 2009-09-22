@@ -7,12 +7,14 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "eda_dde.h"
-#include "id.h"
+#include "eeschema_id.h"
 
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
 #include "protos.h"
+#include "libeditfrm.h"
+#include "libviewfrm.h"
 
 #include "class_marker_sch.h"
 

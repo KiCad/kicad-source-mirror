@@ -17,7 +17,7 @@
 #include "general.h"
 #include "bitmaps.h"
 #include "protos.h"
-#include "id.h"
+#include "eeschema_id.h"
 #include "netlist.h"
 
 #include "annotate_dialog.h"
@@ -26,6 +26,8 @@
 #include "dialog_find.h"
 #include "netlist_control.h"
 #include "dialog_erc.h"
+#include "libeditfrm.h"
+#include "libviewfrm.h"
 
 
 /*******************************/
@@ -92,6 +94,8 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
     EVT_TOOL( ID_GET_TOOLS, WinEDA_SchematicFrame::OnCreateBillOfMaterials )
     EVT_TOOL( ID_FIND_ITEMS, WinEDA_SchematicFrame::OnFindItems )
     EVT_TOOL( ID_BACKANNO_ITEMS, WinEDA_SchematicFrame::OnLoadStuffFile )
+    EVT_TOOL( ID_COMPONENT_BUTT,
+              WinEDA_SchematicFrame::Process_Special_Functions )
 
     EVT_MENU( ID_GENERAL_HELP, WinEDA_DrawFrame::GetKicadHelp )
     EVT_MENU( ID_KICAD_ABOUT, WinEDA_DrawFrame::GetKicadAbout )

@@ -8,7 +8,7 @@
 #include "common.h"
 #include "pcbnew.h"
 
-#include "id.h"
+#include "pcbnew_id.h"
 #include "collectors.h"
 
 #include "bitmaps.h"

@@ -12,7 +12,6 @@
 #include "kicad.h"
 #include "macros.h"
 #include "bitmaps.h"        // Common bitmaps
-#include "id.h"
 
 
 /*****************************************************************************/

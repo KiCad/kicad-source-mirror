@@ -9,9 +9,8 @@
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-//#include "id.h"
-
 #include "protos.h"
+#include "libeditfrm.h"
 
 
 /*************************************************************************/
@@ -55,16 +54,16 @@ void WinEDA_LibeditFrame::GetComponentFromRedoList(wxCommandEvent& event)
         return;
 
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-    ITEM_PICKER wrapper(CurrentLibEntry, UR_LIBEDIT);
+    ITEM_PICKER wrapper(m_currentComponent, UR_LIBEDIT);
     lastcmd->PushItem(wrapper);
     GetScreen()->PushCommandToUndoList( lastcmd );
 
     lastcmd = GetScreen()->PopCommandFromRedoList( );
 
     wrapper = lastcmd->PopItem();
-    CurrentLibEntry = (LIB_COMPONENT*) wrapper.m_PickedItem;
-    if( CurrentLibEntry )
-        CurrentLibEntry->SetNext( NULL );
+    m_currentComponent = (LIB_COMPONENT*) wrapper.m_PickedItem;
+    if( m_currentComponent )
+        m_currentComponent->SetNext( NULL );
     CurrentDrawItem = NULL;
     GetScreen()->SetModify();
     DrawPanel->Refresh();
@@ -85,17 +84,17 @@ void WinEDA_LibeditFrame::GetComponentFromUndoList(wxCommandEvent& event)
         return;
 
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-    ITEM_PICKER wrapper(CurrentLibEntry, UR_LIBEDIT);
+    ITEM_PICKER wrapper(m_currentComponent, UR_LIBEDIT);
     lastcmd->PushItem(wrapper);
     GetScreen()->PushCommandToRedoList( lastcmd );
 
     lastcmd = GetScreen()->PopCommandFromUndoList( );
 
     wrapper = lastcmd->PopItem();
-    CurrentLibEntry = (LIB_COMPONENT*) wrapper.m_PickedItem;
+    m_currentComponent = (LIB_COMPONENT*) wrapper.m_PickedItem;
 
-    if( CurrentLibEntry )
-        CurrentLibEntry->SetNext( NULL );
+    if( m_currentComponent )
+        m_currentComponent->SetNext( NULL );
     CurrentDrawItem = NULL;
     GetScreen()->SetModify();
     DrawPanel->Refresh();

@@ -18,7 +18,6 @@
 #include "bitmaps.h"
 #include "confirm.h"
 #include "gestfich.h"
-#include "id.h"
 
 #include "kicad.h"
 #include "prjconfig.h"

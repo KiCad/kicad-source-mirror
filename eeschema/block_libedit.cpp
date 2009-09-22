@@ -14,6 +14,7 @@
 #include "libcmp.h"
 #include "general.h"
 #include "protos.h"
+#include "libeditfrm.h"
 
 
 static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
@@ -183,7 +184,7 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
     case BLOCK_DRAG:        /* Drag */
     case BLOCK_MOVE:        /* Move */
     case BLOCK_COPY:        /* Copy */
-        ItemsCount = MarkItemsInBloc( CurrentLibEntry,
+        ItemsCount = MarkItemsInBloc( m_currentComponent,
                                       GetScreen()->m_BlockLocate );
         if( ItemsCount )
         {
@@ -206,11 +207,11 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
         break;
 
     case BLOCK_DELETE:     /* Delete */
-        ItemsCount = MarkItemsInBloc( CurrentLibEntry,
+        ItemsCount = MarkItemsInBloc( m_currentComponent,
                                       GetScreen()->m_BlockLocate );
         if( ItemsCount )
-            SaveCopyInUndoList( CurrentLibEntry );
-        DeleteMarkedItems( CurrentLibEntry );
+            SaveCopyInUndoList( m_currentComponent );
+        DeleteMarkedItems( m_currentComponent );
         break;
 
     case BLOCK_SAVE:     /* Save */
@@ -222,11 +223,11 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
 
 
     case BLOCK_MIRROR_Y:
-        ItemsCount = MarkItemsInBloc( CurrentLibEntry,
+        ItemsCount = MarkItemsInBloc( m_currentComponent,
                                       GetScreen()->m_BlockLocate );
         if( ItemsCount )
-            SaveCopyInUndoList( CurrentLibEntry );
-        MirrorMarkedItems( CurrentLibEntry,
+            SaveCopyInUndoList( m_currentComponent );
+        MirrorMarkedItems( m_currentComponent,
                            GetScreen()->m_BlockLocate.Centre() );
         break;
 
@@ -245,7 +246,7 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
     {
         if( GetScreen()->m_BlockLocate.m_Command  != BLOCK_SELECT_ITEMS_ONLY )
         {
-            ClearMarkItems( CurrentLibEntry );
+            ClearMarkItems( m_currentComponent );
         }
         GetScreen()->m_BlockLocate.m_Flags   = 0;
         GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
@@ -291,16 +292,16 @@ void WinEDA_LibeditFrame::HandleBlockPlace( wxDC* DC )
     case BLOCK_MOVE:                /* Move */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         GetScreen()->m_BlockLocate.ClearItemsList();
-        SaveCopyInUndoList( CurrentLibEntry );
-        MoveMarkedItems( CurrentLibEntry,
+        SaveCopyInUndoList( m_currentComponent );
+        MoveMarkedItems( m_currentComponent,
                          GetScreen()->m_BlockLocate.m_MoveVector );
         DrawPanel->Refresh( TRUE );
         break;
 
     case BLOCK_COPY:     /* Copy */
         GetScreen()->m_BlockLocate.ClearItemsList();
-        SaveCopyInUndoList( CurrentLibEntry );
-        CopyMarkedItems( CurrentLibEntry,
+        SaveCopyInUndoList( m_currentComponent );
+        CopyMarkedItems( m_currentComponent,
                          GetScreen()->m_BlockLocate.m_MoveVector );
         break;
 
@@ -309,8 +310,8 @@ void WinEDA_LibeditFrame::HandleBlockPlace( wxDC* DC )
         break;
 
     case BLOCK_MIRROR_Y:      /* Invert by popup menu, from block move */
-        SaveCopyInUndoList( CurrentLibEntry );
-        MirrorMarkedItems( CurrentLibEntry,
+        SaveCopyInUndoList( m_currentComponent );
+        MirrorMarkedItems( m_currentComponent,
                            GetScreen()->m_BlockLocate.Centre() );
         break;
 
@@ -342,8 +343,7 @@ void WinEDA_LibeditFrame::HandleBlockPlace( wxDC* DC )
  * Retrace le contour du block de recherche de structures
  *  L'ensemble du block suit le curseur
  */
-static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
-                                     bool erase )
+void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
     BLOCK_SELECTOR* PtBlock;
     BASE_SCREEN* screen = panel->GetScreen();
@@ -351,19 +351,22 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
 
     PtBlock = &screen->m_BlockLocate;
 
-    /* Effacement ancien cadre */
+    WinEDA_LibeditFrame* parent = ( WinEDA_LibeditFrame* ) panel->GetParent();
+    wxASSERT( parent != NULL );
+
+    LIB_COMPONENT* component = parent->GetCurrentComponent();
+
+    if( component == NULL )
+        return;
+
     if( erase )
     {
         PtBlock->Draw( panel, DC, PtBlock->m_MoveVector, g_XorMode,
                        PtBlock->m_Color );
 
-        if( CurrentLibEntry )
-        {
-            CurrentLibEntry->Draw( panel, DC, PtBlock->m_MoveVector,
-                                   CurrentUnit, CurrentConvert, g_XorMode,
-                                   -1, DefaultTransformMatrix, true, false,
-                                   true );
-        }
+        component->Draw( panel, DC, PtBlock->m_MoveVector, CurrentUnit,
+                         CurrentConvert, g_XorMode, -1, DefaultTransformMatrix,
+                         true, false, true );
     }
 
     /* Redessin nouvel affichage */
@@ -376,13 +379,9 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
     PtBlock->Draw( panel, DC, PtBlock->m_MoveVector, g_XorMode,
                    PtBlock->m_Color );
 
-    if( CurrentLibEntry )
-    {
-        CurrentLibEntry->Draw( panel, DC, PtBlock->m_MoveVector,
-                               CurrentUnit, CurrentConvert, g_XorMode,
-                               -1, DefaultTransformMatrix, true, false,
-                               true );
-    }
+    component->Draw( panel, DC, PtBlock->m_MoveVector, CurrentUnit,
+                     CurrentConvert, g_XorMode, -1, DefaultTransformMatrix,
+                     true, false, true );
 }
 
 

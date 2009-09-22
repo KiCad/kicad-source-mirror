@@ -10,7 +10,7 @@
 
 #include "bitmaps.h"
 #include "protos.h"
-#include "id.h"
+#include "pcbnew_id.h"
 
 
 

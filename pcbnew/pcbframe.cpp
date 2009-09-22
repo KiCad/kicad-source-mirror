@@ -12,7 +12,7 @@
 #include "collectors.h"
 #include "bitmaps.h"
 #include "protos.h"
-#include "id.h"
+#include "pcbnew_id.h"
 #include "drc_stuff.h"
 #include "3d_viewer.h"
 #include "kbool/include/kbool/booleng.h"
@@ -52,11 +52,11 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
 // Menu Files:
     EVT_MENU( ID_MAIN_MENUBAR, WinEDA_PcbFrame::Process_Special_Functions )
 
-    EVT_MENU( ID_MENU_LOAD_FILE, WinEDA_PcbFrame::Files_io )
-    EVT_MENU( ID_MENU_NEW_BOARD, WinEDA_PcbFrame::Files_io )
-    EVT_MENU( ID_MENU_SAVE_BOARD, WinEDA_PcbFrame::Files_io )
-    EVT_MENU( ID_MENU_APPEND_FILE, WinEDA_PcbFrame::Files_io )
-    EVT_MENU( ID_MENU_SAVE_BOARD_AS, WinEDA_PcbFrame::Files_io )
+    EVT_MENU( ID_LOAD_FILE, WinEDA_PcbFrame::Files_io )
+    EVT_MENU( ID_NEW_BOARD, WinEDA_PcbFrame::Files_io )
+    EVT_MENU( ID_SAVE_BOARD, WinEDA_PcbFrame::Files_io )
+    EVT_MENU( ID_APPEND_FILE, WinEDA_PcbFrame::Files_io )
+    EVT_MENU( ID_SAVE_BOARD_AS, WinEDA_PcbFrame::Files_io )
     EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, WinEDA_PcbFrame::OnFileHistory )
 
     EVT_MENU( ID_GEN_PLOT, WinEDA_PcbFrame::ToPlotter )
@@ -168,8 +168,8 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_TOOL( ID_PCB_MIRE_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_PCB_ARC_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_PCB_CIRCLE_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
-    EVT_TOOL( ID_TEXT_COMMENT_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
-    EVT_TOOL( ID_LINE_COMMENT_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_TOOL( ID_PCB_ADD_TEXT_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_TOOL( ID_PCB_ADD_LINE_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_PCB_COTATION_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_PCB_DELETE_ITEM_BUTT,
               WinEDA_PcbFrame::Process_Special_Functions )
@@ -184,8 +184,8 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_TOOL_RCLICKED( ID_TRACK_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
     EVT_TOOL_RCLICKED( ID_PCB_CIRCLE_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
     EVT_TOOL_RCLICKED( ID_PCB_ARC_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
-    EVT_TOOL_RCLICKED( ID_TEXT_COMMENT_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
-    EVT_TOOL_RCLICKED( ID_LINE_COMMENT_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
+    EVT_TOOL_RCLICKED( ID_PCB_ADD_TEXT_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
+    EVT_TOOL_RCLICKED( ID_PCB_ADD_LINE_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
     EVT_TOOL_RCLICKED( ID_PCB_COTATION_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
 
     EVT_MENU_RANGE( ID_POPUP_PCB_AUTOPLACE_START_RANGE,
@@ -199,7 +199,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
                     WinEDA_PcbFrame::Process_Special_Functions )
 
-EVT_MENU_RANGE( ID_POPUP_VIA_EDIT_START_RANGE, ID_POPUP_VIA_EDIT_END_RANGE,
+    EVT_MENU_RANGE( ID_POPUP_VIA_EDIT_START_RANGE, ID_POPUP_VIA_EDIT_END_RANGE,
                     WinEDA_PcbFrame::Via_Edit_Control )
 
 // PopUp Menus pour Zooms traites dans drawpanel.cpp

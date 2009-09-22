@@ -2,17 +2,18 @@
 /*	library editor: edition of fields of lib entries (components in libraries) */
 /*******************************************************************************/
 
-#include "fctsys.h"
-
 #include <algorithm>
 
+#include "fctsys.h"
 #include "common.h"
 #include "confirm.h"
+#include "class_drawpanel.h"
+
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-
 #include "protos.h"
+#include "libeditfrm.h"
 
 #include "dialog_edit_libentry_fields_in_lib_base.h"
 
@@ -97,25 +98,25 @@ private:
     void reinitializeFieldsIdAndDefaultNames();
 };
 
-/*****************************************************************/
-void WinEDA_LibeditFrame::InstallFieldsEditorDialog( void )
-/*****************************************************************/
+
+void WinEDA_LibeditFrame::InstallFieldsEditorDialog( wxCommandEvent& event )
 {
-    if( CurrentLibEntry == NULL )
+    if( m_currentComponent == NULL )
         return;
 
-    DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB* frame =
-        new DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB( this, CurrentLibEntry );
+    DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
 
-    int abort = frame->ShowModal(); frame->Destroy();
+    DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB dlg( this, m_currentComponent );
 
-    if( ! abort )
-    {
-        ReCreateHToolbar();
-        Refresh();
-    }
+    int abort = dlg.ShowModal();
 
+    if( abort )
+        return;
+
+    UpdateAliasSelectList();
+    UpdatePartSelectList();
     DisplayLibInfos();
+    Refresh();
 }
 
 

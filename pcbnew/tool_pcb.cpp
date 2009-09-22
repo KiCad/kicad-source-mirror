@@ -10,7 +10,7 @@
 
 #include "bitmaps.h"
 
-#include "id.h"
+#include "pcbnew_id.h"
 
 #ifdef __UNIX__
 #define LISTBOX_WIDTH 140
@@ -443,7 +443,7 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
                          _( "Add zones" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_LINE_COMMENT_BUTT, wxEmptyString,
+    m_VToolBar->AddTool( ID_PCB_ADD_LINE_BUTT, wxEmptyString,
                          wxBitmap( add_dashed_line_xpm ),
                          _( "Add graphic line or polygon" ), wxITEM_CHECK );
 
@@ -455,7 +455,7 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
                          wxBitmap( add_arc_xpm ),
                          _( "Add graphic arc" ), wxITEM_CHECK );
 
-    m_VToolBar->AddTool( ID_TEXT_COMMENT_BUTT, wxEmptyString,
+    m_VToolBar->AddTool( ID_PCB_ADD_TEXT_BUTT, wxEmptyString,
                          wxBitmap( add_text_xpm ),
                          _( "Add text" ), wxITEM_CHECK );
 

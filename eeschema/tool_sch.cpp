@@ -14,7 +14,7 @@
 #include "hotkeys.h"
 
 #include "bitmaps.h"
-#include "id.h"
+#include "eeschema_id.h"
 
 
 /**************************************************************/

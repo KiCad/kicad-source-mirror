@@ -14,6 +14,7 @@
 #include "confirm.h"
 #include "gestfich.h"
 #include "appl_wxstruct.h"
+#include "bitmaps.h"
 
 #include "kicad.h"
 
@@ -23,9 +24,6 @@
 #include "wx/regex.h"
 #include "wx/dir.h"
 
-#include "bitmaps.h"
-
-#include "id.h"
 
 // Comment this if you do no want to load subdirs files in the tree project
 // UnComment this to load subdirs files in the tree project

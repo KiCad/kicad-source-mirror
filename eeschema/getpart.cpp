@@ -15,6 +15,7 @@
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
+#include "libviewfrm.h"
 
 #include <boost/foreach.hpp>
 

@@ -11,7 +11,6 @@
 #include "gerbview.h"
 #include "pcbplot.h"
 #include "protos.h"
-#include "id.h"
 
 
 /* Routines locales */
@@ -50,7 +49,6 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_MENU_LOAD_FILE:
     case ID_LOAD_FILE:
         if( Clear_Pcb( TRUE ) )
         {
@@ -72,12 +70,10 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
         }
         break;
 
-    case ID_MENU_APPEND_FILE:
     case ID_APPEND_FILE:
         LoadOneGerberFile( wxEmptyString, &dc, 0 );
         break;
 
-    case ID_MENU_NEW_BOARD:
     case ID_NEW_BOARD:
         Clear_Pcb( TRUE );
         Zoom_Automatique( FALSE );
@@ -93,11 +89,10 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
         break;
 
     case ID_SAVE_BOARD:
-    case ID_MENU_SAVE_BOARD:
         SaveGerberFile( GetScreen()->m_FileName, &dc );
         break;
 
-    case ID_MENU_SAVE_BOARD_AS:
+    case ID_SAVE_BOARD_AS:
         SaveGerberFile( wxEmptyString, &dc );
         break;
 

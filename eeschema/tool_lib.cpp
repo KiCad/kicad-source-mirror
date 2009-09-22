@@ -3,14 +3,16 @@
 /********************************************/
 
 #include "fctsys.h"
-
 #include "common.h"
+#include "hotkeys.h"
+#include "bitmaps.h"
+#include "eeschema_id.h"
+
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-
 #include "protos.h"
-#include "hotkeys.h"
+#include "libeditfrm.h"
 
 #ifdef __UNIX__
 #define LISTBOX_WIDTH 140
@@ -18,9 +20,6 @@
 #define LISTBOX_WIDTH 120
 #endif
 
-#include "bitmaps.h"
-
-#include "id.h"
 
 extern int ExportPartId;
 extern int ImportPartId;
@@ -42,7 +41,7 @@ void WinEDA_LibeditFrame::ReCreateVToolbar()
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_LIBEDIT_PIN_BUTT, wxEmptyString,
                          wxBitmap( pin_xpm ),
-                         _( "Add Pins" ), wxITEM_CHECK  );
+                         _( "Add pin" ), wxITEM_CHECK  );
 
     m_VToolBar->AddTool( ID_LIBEDIT_BODY_TEXT_BUTT, wxEmptyString,
                          wxBitmap( add_text_xpm ),

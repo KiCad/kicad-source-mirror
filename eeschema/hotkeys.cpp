@@ -3,17 +3,15 @@
 /***************/
 
 #include "fctsys.h"
-
 #include "common.h"
+#include "eeschema_id.h"
+#include "hotkeys.h"
+
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
-
-#include "id.h"
-
-#include "hotkeys.h"
-
 #include "protos.h"
+#include "libeditfrm.h"
 
 /* How to add a new hotkey:
  * add a new id in the enum hotkey_id_commnand like MY_NEW_ID_FUNCTION (see

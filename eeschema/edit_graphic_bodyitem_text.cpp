@@ -15,10 +15,10 @@
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
+#include "protos.h"
+#include "libeditfrm.h"
 
 #include "dialog_bodygraphictext_properties_base.h"
-
-#include "protos.h"
 
 
 class Dialog_BodyGraphicText_Properties : public Dialog_BodyGraphicText_Properties_base

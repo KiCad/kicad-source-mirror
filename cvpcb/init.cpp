@@ -8,7 +8,6 @@
 #include "confirm.h"
 #include "gr_basic.h"
 #include "gestfich.h"
-#include "id.h"
 #include "appl_wxstruct.h"
 
 #include "cvpcb.h"

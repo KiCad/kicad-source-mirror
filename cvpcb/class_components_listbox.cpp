@@ -5,7 +5,6 @@
 #include "fctsys.h"
 #include "wxstruct.h"
 #include "common.h"
-#include "id.h"
 
 #include "cvpcb.h"
 #include "protos.h"
@@ -33,8 +32,8 @@ COMPONENTS_LISTBOX::~COMPONENTS_LISTBOX()
  */
 
 BEGIN_EVENT_TABLE( COMPONENTS_LISTBOX, ITEMS_LISTBOX_BASE )
-EVT_SIZE( ITEMS_LISTBOX_BASE::OnSize )
-EVT_CHAR( COMPONENTS_LISTBOX::OnChar )
+    EVT_SIZE( ITEMS_LISTBOX_BASE::OnSize )
+    EVT_CHAR( COMPONENTS_LISTBOX::OnChar )
 END_EVENT_TABLE()
 
 

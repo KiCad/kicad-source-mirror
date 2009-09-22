@@ -8,7 +8,6 @@
 #include "common.h"
 #include "confirm.h"
 #include "gestfich.h"
-#include "id.h"
 
 #include "cvpcb.h"
 #include "zones.h"

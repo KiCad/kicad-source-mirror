@@ -15,7 +15,7 @@
 #include "wxPcbStruct.h"
 #include "bitmaps.h"
 #include "protos.h"
-#include "id.h"
+#include "pcbnew_id.h"
 
 #include "3d_viewer.h"
 
@@ -37,11 +37,11 @@ BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, WinEDA_BasePcbFrame )
 
     EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_ModuleEditFrame::OnZoom )
 
-    EVT_TOOL( ID_LIBEDIT_SELECT_CURRENT_LIB,
+    EVT_TOOL( ID_MODEDIT_SELECT_CURRENT_LIB,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_SAVE_LIBMODULE,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_LIBEDIT_DELETE_PART,
+    EVT_TOOL( ID_MODEDIT_DELETE_PART,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_NEW_MODULE,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
@@ -84,9 +84,9 @@ BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, WinEDA_BasePcbFrame )
               WinEDA_ModuleEditFrame::Process_Special_Functions )
     EVT_TOOL( ID_PCB_CIRCLE_BUTT,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_TEXT_COMMENT_BUTT,
+    EVT_TOOL( ID_PCB_ADD_TEXT_BUTT,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_LINE_COMMENT_BUTT,
+    EVT_TOOL( ID_PCB_ADD_LINE_BUTT,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_DELETE_ITEM_BUTT,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
@@ -102,9 +102,9 @@ BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, WinEDA_BasePcbFrame )
                        WinEDA_ModuleEditFrame::ToolOnRightClick )
     EVT_TOOL_RCLICKED( ID_PCB_ARC_BUTT,
                        WinEDA_ModuleEditFrame::ToolOnRightClick )
-    EVT_TOOL_RCLICKED( ID_TEXT_COMMENT_BUTT,
+    EVT_TOOL_RCLICKED( ID_PCB_ADD_TEXT_BUTT,
                        WinEDA_ModuleEditFrame::ToolOnRightClick )
-    EVT_TOOL_RCLICKED( ID_LINE_COMMENT_BUTT,
+    EVT_TOOL_RCLICKED( ID_PCB_ADD_LINE_BUTT,
                        WinEDA_ModuleEditFrame::ToolOnRightClick )
     EVT_TOOL_RCLICKED( ID_PCB_COTATION_BUTT,
                        WinEDA_ModuleEditFrame::ToolOnRightClick )
@@ -250,7 +250,7 @@ void WinEDA_ModuleEditFrame::SetToolbars()
         islib = false;
 
     m_HToolBar->EnableTool( ID_MODEDIT_SAVE_LIBMODULE, islib );
-    m_HToolBar->EnableTool( ID_LIBEDIT_DELETE_PART, islib );
+    m_HToolBar->EnableTool( ID_MODEDIT_DELETE_PART, islib );
 
     if( GetBoard()->m_Modules == NULL )
         active = false;
@@ -310,10 +310,10 @@ void WinEDA_ModuleEditFrame::SetToolbars()
     if( m_VToolBar )
     {
         m_VToolBar->EnableTool( ID_MODEDIT_ADD_PAD, active );
-        m_VToolBar->EnableTool( ID_LINE_COMMENT_BUTT, active );
+        m_VToolBar->EnableTool( ID_PCB_ADD_LINE_BUTT, active );
         m_VToolBar->EnableTool( ID_PCB_CIRCLE_BUTT, active );
         m_VToolBar->EnableTool( ID_PCB_ARC_BUTT, active );
-        m_VToolBar->EnableTool( ID_TEXT_COMMENT_BUTT, active );
+        m_VToolBar->EnableTool( ID_PCB_ADD_TEXT_BUTT, active );
         m_VToolBar->EnableTool( ID_MODEDIT_PLACE_ANCHOR, active );
         m_VToolBar->EnableTool( ID_PCB_DELETE_ITEM_BUTT, active );
     }

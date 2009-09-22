@@ -13,7 +13,7 @@
 #include "trigo.h"
 
 #include "drag.h"
-#include "id.h"
+#include "pcbnew_id.h"
 
 #include "protos.h"
 

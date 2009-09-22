@@ -17,7 +17,7 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "eda_dde.h"
-#include "id.h"
+#include "pcbnew_id.h"
 #include "collectors.h"
 #include "protos.h"
 

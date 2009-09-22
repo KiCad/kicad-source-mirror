@@ -9,7 +9,7 @@
 #include "bitmaps.h"
 #include "protos.h"
 #include "hotkeys.h"
-#include "id.h"
+#include "pcbnew_id.h"
 
 /***********************************************/
 void WinEDA_PcbFrame::ReCreateMenuBar()
@@ -30,19 +30,19 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     wxMenu* filesMenu = new wxMenu;
 
     // New board
-    item = new wxMenuItem( filesMenu, ID_MENU_NEW_BOARD, _( "&New Board" ),
+    item = new wxMenuItem( filesMenu, ID_NEW_BOARD, _( "&New Board" ),
                            _( "Clear old board and initialize a new one" ) );
     item->SetBitmap( new_xpm );
     filesMenu->Append( item );
 
     // Load board
-    item = new wxMenuItem( filesMenu, ID_MENU_LOAD_FILE, _( "&Load Board" ),
+    item = new wxMenuItem( filesMenu, ID_LOAD_FILE, _( "&Load Board" ),
                            _( "Delete old board and load new board" ) );
     item->SetBitmap( open_xpm );
     filesMenu->Append( item );
 
     // Append board
-    item = new wxMenuItem( filesMenu, ID_MENU_APPEND_FILE, _( "Append Board" ),
+    item = new wxMenuItem( filesMenu, ID_APPEND_FILE, _( "Append Board" ),
                            _( "Add board to old board" ) );
     item->SetBitmap( import_xpm );
     filesMenu->Append( item );
@@ -61,12 +61,12 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 
     // Add save menu
     filesMenu->AppendSeparator();
-    item = new wxMenuItem( filesMenu, ID_MENU_SAVE_BOARD,
+    item = new wxMenuItem( filesMenu, ID_SAVE_BOARD,
                            _( "&Save Board\tCtrl-S" ), _( "Save current board" ) );
     item->SetBitmap( save_xpm );
     filesMenu->Append( item );
 
-    item = new wxMenuItem( filesMenu, ID_MENU_SAVE_BOARD_AS,
+    item = new wxMenuItem( filesMenu, ID_SAVE_BOARD_AS,
                            _( "Save Board as..." ),
                            _( "Save current board as.." ) );
     item->SetBitmap( save_as_xpm );

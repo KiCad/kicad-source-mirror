@@ -9,7 +9,7 @@
 #include "gestfich.h"
 #include "appl_wxstruct.h"
 #include "bitmaps.h"
-#include "id.h"
+#include "pcbnew_id.h"
 #include "trigo.h"
 
 #include "3d_viewer.h"
@@ -199,11 +199,11 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         Close( true );
         break;
 
-    case ID_LIBEDIT_SELECT_CURRENT_LIB:
+    case ID_MODEDIT_SELECT_CURRENT_LIB:
         Select_Active_Library();
         break;
 
-    case ID_LIBEDIT_DELETE_PART:
+    case ID_MODEDIT_DELETE_PART:
     {
         wxFileName fn = wxFileName( wxEmptyString, m_CurrentLib,
                                     ModuleFileExtension );
@@ -418,10 +418,10 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
-    case ID_LINE_COMMENT_BUTT:
+    case ID_PCB_ADD_LINE_BUTT:
     case ID_PCB_ARC_BUTT:
     case ID_PCB_CIRCLE_BUTT:
-    case ID_TEXT_COMMENT_BUTT:
+    case ID_PCB_ADD_TEXT_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add Drawing" ) );
         break;
 

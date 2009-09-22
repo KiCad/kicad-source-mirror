@@ -9,12 +9,13 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "eda_doc.h"
-#include "id.h"
 
 #include "program.h"
 #include "libcmp.h"
 #include "general.h"
 #include "protos.h"
+#include "libviewfrm.h"
+#include "eeschema_id.h"
 
 
 #define NEXT_PART      1

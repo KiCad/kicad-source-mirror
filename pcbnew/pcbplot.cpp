@@ -12,7 +12,7 @@
 #include "wxPcbStruct.h"
 #include "pcbplot.h"
 #include "worksheet.h"
-#include "id.h"
+#include "pcbnew_id.h"
 #include "protos.h"
 
 #define PLOT_DEFAULT_MARGE 300      // mils

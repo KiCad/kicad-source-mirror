@@ -20,6 +20,15 @@
         LIB_VERSION( LIB_VERSION_MAJOR, LIB_VERSION_MINOR)  \
     )
 
+/*
+ * Library versions 2.3 and lower use the old separate library (.lib) and
+ * document (.dcm) files.  Component libraries after 2.3 merged the library
+ * and document files into a single library file.  This macro checks if the
+ * library version supports the old format
+ */
+#define USE_OLD_DOC_FILE_FORMAT( major, minor )                 \
+    ( LIB_VERSION( major, minor ) < LIB_VERSION( 2, 3 )
+
 /* Must be the first line of component library document (.dcm) files. */
 #define DOCFILE_IDENT     "EESchema-DOCLIB  Version 2.0"
 
@@ -48,7 +57,6 @@ extern LibEDA_BaseStruct* LibItemToRepeat; /* pointer on a graphic item than
                                             * can be duplicated by the Ins key
                                             * (usually the last created item */
 extern CMP_LIBRARY*       CurrentLib;      /* Current opened library */
-extern LIB_COMPONENT*     CurrentLibEntry; /* Current component */
 extern LibEDA_BaseStruct* CurrentDrawItem; /* current edited item */
 
 extern wxString CurrentAliasName;

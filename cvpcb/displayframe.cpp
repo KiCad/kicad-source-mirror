@@ -6,7 +6,6 @@
 #include "appl_wxstruct.h"
 #include "common.h"
 #include "class_drawpanel.h"
-#include "id.h"
 #include "confirm.h"
 #include "macros.h"
 

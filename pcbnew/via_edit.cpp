@@ -8,7 +8,7 @@
 #include "confirm.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "id.h"
+#include "pcbnew_id.h"
 
 
 /**********************************************************************************/

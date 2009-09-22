@@ -12,7 +12,7 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "zones.h"
-#include "id.h"
+#include "pcbnew_id.h"
 #include "protos.h"
 #include "zones_functions_for_undo_redo.h"
 

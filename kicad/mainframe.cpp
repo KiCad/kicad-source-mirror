@@ -16,7 +16,6 @@
 #include "confirm.h"
 #include "gestfich.h"
 #include "bitmaps.h"
-#include "id.h"
 
 #include "kicad.h"
 
@@ -81,7 +80,7 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
     m_BottomWin->SetSashVisible( wxSASH_LEFT, TRUE );
     m_BottomWin->SetExtraBorderSize( 2 );
 
-    m_DialogWin = new wxTextCtrl( m_BottomWin, ID_MAIN_DIALOG, wxEmptyString,
+    m_DialogWin = new wxTextCtrl( m_BottomWin, wxID_ANY, wxEmptyString,
                                   wxDefaultPosition, wxDefaultSize,
                                   wxTE_MULTILINE | wxNO_BORDER | wxTE_READONLY );
 

@@ -14,7 +14,7 @@
 
 #include "bitmaps.h"
 #include "protos.h"
-#include "id.h"
+#include "pcbnew_id.h"
 
 /*************************************************************************/
 void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
@@ -79,7 +79,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     case ID_PCB_CIRCLE_BUTT:
     case ID_PCB_ARC_BUTT:
-    case ID_LINE_COMMENT_BUTT:
+    case ID_PCB_ADD_LINE_BUTT:
         if( !DrawStruct || DrawStruct->m_Flags == 0 )
         {
             int shape = S_SEGMENT;
@@ -145,7 +145,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     }
     break;
 
-    case ID_TEXT_COMMENT_BUTT:
+    case ID_PCB_ADD_TEXT_BUTT:
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
         CreateTextModule( GetBoard()->m_Modules, DC );
         break;
@@ -353,7 +353,7 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
     PopMenu->AppendSeparator();
 
     if( append_set_width
-       || ( m_ID_current_state && ( (m_ID_current_state == ID_LINE_COMMENT_BUTT)
+       || ( m_ID_current_state && ( (m_ID_current_state == ID_PCB_ADD_LINE_BUTT)
                                    || (m_ID_current_state == ID_PCB_CIRCLE_BUTT)
                                    || (m_ID_current_state == ID_PCB_ARC_BUTT) ) ) )
     {
@@ -425,7 +425,7 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
         break;      // end case 0
 
-    case ID_LINE_COMMENT_BUTT:
+    case ID_PCB_ADD_LINE_BUTT:
     {
         if( DrawStruct && (DrawStruct->m_Flags & IS_NEW) )
         {

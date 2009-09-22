@@ -16,7 +16,6 @@
 #include "pcbplot.h"
 #include "bitmaps.h"
 #include "protos.h"
-#include "id.h"
 
 
 /****************************************/
@@ -38,12 +37,12 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
     EVT_TOOL( ID_SAVE_BOARD, WinEDA_GerberFrame::Files_io )
 
 // Menu Files:
-    EVT_MENU( ID_MENU_LOAD_FILE, WinEDA_GerberFrame::Files_io )
-    EVT_MENU( ID_MENU_APPEND_FILE, WinEDA_GerberFrame::Files_io )
+    EVT_MENU( ID_LOAD_FILE, WinEDA_GerberFrame::Files_io )
+    EVT_MENU( ID_APPEND_FILE, WinEDA_GerberFrame::Files_io )
     EVT_MENU( ID_MENU_INC_LAYER_AND_APPEND_FILE, WinEDA_GerberFrame::Files_io )
-    EVT_MENU( ID_MENU_NEW_BOARD, WinEDA_GerberFrame::Files_io )
-    EVT_MENU( ID_MENU_SAVE_BOARD, WinEDA_GerberFrame::Files_io )
-    EVT_MENU( ID_MENU_SAVE_BOARD_AS, WinEDA_GerberFrame::Files_io )
+    EVT_MENU( ID_NEW_BOARD, WinEDA_GerberFrame::Files_io )
+    EVT_MENU( ID_SAVE_BOARD, WinEDA_GerberFrame::Files_io )
+    EVT_MENU( ID_SAVE_BOARD_AS, WinEDA_GerberFrame::Files_io )
     EVT_MENU( ID_GEN_PLOT, WinEDA_GerberFrame::ToPlotter )
     EVT_MENU( ID_GERBVIEW_EXPORT_TO_PCBNEW,
               WinEDA_GerberFrame::ExportDataInPcbnewFormat )

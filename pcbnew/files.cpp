@@ -11,7 +11,7 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "protos.h"
-#include "id.h"
+#include "pcbnew_id.h"
 
 
 void WinEDA_PcbFrame::OnFileHistory( wxCommandEvent& event )
@@ -60,7 +60,6 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_MENU_LOAD_FILE:
     case ID_LOAD_FILE:
         LoadOnePcbFile( wxEmptyString, false );
         ReCreateAuxiliaryToolbar();
@@ -102,26 +101,24 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
         break;
     }
 
-    case ID_MENU_APPEND_FILE:
     case ID_APPEND_FILE:
         LoadOnePcbFile( wxEmptyString, TRUE );
         break;
 
-    case ID_MENU_NEW_BOARD:
     case ID_NEW_BOARD:
         Clear_Pcb( TRUE );
         GetScreen()->m_FileName.Printf( wxT( "%s%cnoname%s" ),
-                                       wxGetCwd().GetData(), DIR_SEP, PcbExtBuffer.GetData() );
+                                        wxGetCwd().GetData(), DIR_SEP,
+                                        PcbExtBuffer.GetData() );
         SetTitle( GetScreen()->m_FileName );
         ReCreateLayerBox( NULL );
         break;
 
     case ID_SAVE_BOARD:
-    case ID_MENU_SAVE_BOARD:
         SavePcbFile( GetScreen()->m_FileName );
         break;
 
-    case ID_MENU_SAVE_BOARD_AS:
+    case ID_SAVE_BOARD_AS:
         SavePcbFile( wxEmptyString );
         break;
 
@@ -131,27 +128,24 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
 }
 
 
-/*******************************************************************************/
-int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
-/*******************************************************************************/
-
 /**
  *  Read a board file
  *  @param FullFileName = file name. If empty, a file name will be asked
  *  @return 0 if fails or abort, 1 if OK
  */
+bool WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
 {
     int      ii;
     FILE*    source;
     wxString msg;
-    char cbuf[1024];
+    char     cbuf[1024];
 
     ActiveScreen = GetScreen();
 
-    if( GetScreen()->IsModify() &&  !Append )
+    if( GetScreen()->IsModify() && !Append )
     {
         if( !IsOK( this, _( "Board Modified: Continue ?" ) ) )
-            return 0;
+            return false;
     }
 
     m_SelTrackWidthBox_Changed = TRUE;
@@ -169,20 +163,16 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
 
     if( FullFileName == wxEmptyString )
     {
-        msg = wxT( "*" ) + PcbExtBuffer;
-        fileName =
-            EDA_FileSelector( _( "Open Board File:" ),
-                              wxEmptyString,            /* Chemin par defaut */
-                              GetScreen()->m_FileName,  /* nom fichier par defaut */
-                              PcbExtBuffer,             /* extension par defaut */
-                              msg,                      /* Masque d'affichage */
-                              this,
-                              wxFD_OPEN,
-                              FALSE
-            );
+        wxFileName fn = GetScreen()->m_FileName;
 
-        if( fileName == wxEmptyString )
-            return FALSE;
+        wxFileDialog dlg( this, _( "Open Board File" ), wxEmptyString,
+                          fn.GetFullName(), PcbFileWildcard,
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return false;
+
+        fileName = dlg.GetPath();
     }
     else
         fileName = FullFileName;
@@ -198,9 +188,10 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
     source = wxFopen( GetScreen()->m_FileName, wxT( "rt" ) );
     if( source == NULL )
     {
-        msg.Printf( _( "File <%s> not found" ), GetScreen()->m_FileName.GetData() );
+        msg.Printf( _( "File <%s> not found" ),
+                    GetScreen()->m_FileName.GetData() );
         DisplayError( this, msg );
-        return 0;
+        return false;
     }
 
 
@@ -210,18 +201,21 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
     {
         fclose( source );
         DisplayError( this, wxT( "Unknown file type" ) );
-        return 0;
+        return false;
     }
 
     int ver;
     sscanf(cbuf, "PCBNEW-BOARD Version %d date", &ver );
     if ( ver > g_CurrentVersionPCB )
     {
-        DisplayInfoMessage( this, _( "This file was created by a more recent version of PCBnew and may not load correctly. Please consider updating!"));
+        DisplayInfoMessage( this, _( "This file was created by a more recent \
+version of PCBnew and may not load correctly. Please consider updating!"));
     }
     else if ( ver < g_CurrentVersionPCB )
     {
-        DisplayInfoMessage( this, _( "This file was created by an older version of PCBnew. It will be stored in the new file format when you save this file again."));
+        DisplayInfoMessage( this, _( "This file was created by an older \
+version of PCBnew. It will be stored in the new file format when you save \
+this file again."));
     }
 
     // Reload the corresponding configuration file:
@@ -289,7 +283,7 @@ int WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
     GetBoard()->Show( 0, std::cout );
 #endif
 
-    return 1;
+    return true;
 }
 
 
@@ -348,13 +342,13 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
             msg = _( "Warning: unable to create backup file " ) +
                 backupFileName.GetFullPath();
             DisplayError( this, msg, 15 );
-            saveok = FALSE;
+            saveok = false;
         }
     }
     else
     {
         backupFileName.Clear();
-        saveok   = FALSE;
+        saveok = false;
     }
 
     /* Create the file */
@@ -364,7 +358,7 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
     {
         msg = _( "Unable to create " ) + pcbFileName.GetFullPath();
         DisplayError( this, msg );
-        saveok = FALSE;
+        saveok = false;
     }
 
     if( dest )
@@ -395,5 +389,5 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
     g_SaveTime = time( NULL );    /* Reset timer for the automatic saving */
 
     GetScreen()->ClrModify();
-    return TRUE;
+    return true;
 }

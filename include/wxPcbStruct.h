@@ -249,7 +249,7 @@ public:
 
     void             OnFileHistory( wxCommandEvent& event );
     void             Files_io( wxCommandEvent& event );
-    int              LoadOnePcbFile( const wxString& FileName, bool Append );
+    bool             LoadOnePcbFile( const wxString& FileName, bool Append );
     int              ReadPcbFile( FILE* File, bool Append );
     bool             SavePcbFile( const wxString& FileName );
     int              SavePcbFormatAscii( FILE* File );
@@ -261,7 +261,7 @@ public:
      * @param aQuery = true to prompt user for confirmation, false to initialize silently
      */
     bool                     Clear_Pcb( bool aQuery );
-    
+
     // Drc control
     /* function GetDrcController
      * @return the DRC controller

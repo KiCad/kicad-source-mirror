@@ -14,12 +14,10 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 
-#include "gerbview.h"
 #include "pcbplot.h"
-
-#include "id.h"
-
+#include "gerbview.h"
 #include "protos.h"
+
 #include <wx/spinctrl.h>
 
 

@@ -8,7 +8,7 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 
-#include "id.h"
+#include "pcbnew_id.h"
 
 
 /*****************************************************************/
@@ -33,9 +33,9 @@ void WinEDA_PcbFrame::ToolOnRightClick( wxCommandEvent& event )
 
     case ID_PCB_CIRCLE_BUTT:
     case ID_PCB_ARC_BUTT:
-    case ID_LINE_COMMENT_BUTT:
+    case ID_PCB_ADD_LINE_BUTT:
     case ID_PCB_COTATION_BUTT:
-    case ID_TEXT_COMMENT_BUTT:
+    case ID_PCB_ADD_TEXT_BUTT:
         InstallPcbOptionsFrame( pos, NULL, ID_PCB_DRAWINGS_WIDTHS_SETUP );
         break;
 
@@ -64,9 +64,9 @@ void WinEDA_ModuleEditFrame::ToolOnRightClick( wxCommandEvent& event )
 
     case ID_PCB_CIRCLE_BUTT:
     case ID_PCB_ARC_BUTT:
-    case ID_LINE_COMMENT_BUTT:
+    case ID_PCB_ADD_LINE_BUTT:
     case ID_PCB_COTATION_BUTT:
-    case ID_TEXT_COMMENT_BUTT:
+    case ID_PCB_ADD_TEXT_BUTT:
         InstallOptionsFrame( pos );
         break;
 

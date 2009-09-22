@@ -4,10 +4,7 @@
 
 #include "fctsys.h"
 #include "macros.h"
-
 #include "bitmaps.h"
-
-#include "id.h"
 
 #include "3d_viewer.h"
 

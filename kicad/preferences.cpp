@@ -12,7 +12,6 @@
 #include "confirm.h"
 #include "gestfich.h"
 #include "bitmaps.h"
-#include "id.h"
 
 #include "kicad.h"
 

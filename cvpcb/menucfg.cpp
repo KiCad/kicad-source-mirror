@@ -13,8 +13,6 @@
 
 #include "bitmaps.h"
 
-#include "id.h"
-
 
 /*******************************************/
 void WinEDA_CvpcbFrame::ReCreateMenuBar()

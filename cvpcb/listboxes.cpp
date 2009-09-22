@@ -5,7 +5,6 @@
 #include "fctsys.h"
 #include "wxstruct.h"
 #include "common.h"
-#include "id.h"
 
 #include "cvpcb.h"
 #include "protos.h"
