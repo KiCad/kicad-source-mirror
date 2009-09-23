@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-18 20:34+0100\n"
-"PO-Revision-Date: 2009-09-18 20:38+0100\n"
+"POT-Creation-Date: 2009-09-21 19:56+0100\n"
+"PO-Revision-Date: 2009-09-21 19:59+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -4820,7 +4820,7 @@ msgstr "Cette NetClass existe déjà, et ne peut être ajoutée; Abandon"
 #: pcbnew/dialog_design_rules.cpp:640
 #, c-format
 msgid "%s: <b>Via Drill</b> &ge; <b>Via Dia</b><br>"
-msgstr ""
+msgstr "%s: <b>Perçage Via</b> &ge; <b>Diam Via</b><br>"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:35
 msgid "Exclude Edges_Pcb Layer"
@@ -5835,31 +5835,28 @@ msgid "Default"
 msgstr "Défaut"
 
 #: pcbnew/dialog_design_rules_base.cpp:59
-#, fuzzy
 msgid "Net Class parameters"
-msgstr "Classes d'Equipots."
+msgstr "Paramètres de NeClass"
 
 #: pcbnew/dialog_design_rules_base.cpp:68
 msgid "Add another Net Class"
-msgstr ""
+msgstr "Ajouter une autre NetClass"
 
 #: pcbnew/dialog_design_rules_base.cpp:73
-#, fuzzy
 msgid "Remove the currently select Net Class"
-msgstr "Le texte (ou la valeur) du champ actuellement sélectionné"
+msgstr "Supprimer la NetClass actuellement sélectionnée"
 
 #: pcbnew/dialog_design_rules_base.cpp:77
 msgid "Move Up"
 msgstr "Vers le haut ^"
 
 #: pcbnew/dialog_design_rules_base.cpp:78
-#, fuzzy
 msgid "Move the currently selected Net Class up one row"
-msgstr "Déplacer le champ optionnel sélectionné de une position vers le haut"
+msgstr "Déplacer la NetClassl sélectionné de une ligne vers le haut"
 
 #: pcbnew/dialog_design_rules_base.cpp:87
 msgid "Membership:"
-msgstr ""
+msgstr "Membres:"
 
 #: pcbnew/dialog_design_rules_base.cpp:107
 msgid "<<<"
@@ -5999,9 +5996,8 @@ msgid "Export current drawing"
 msgstr "Exporter le dessin en cours"
 
 #: eeschema/tool_lib.cpp:104
-#, fuzzy
 msgid "Save current library to disk"
-msgstr "Sauver le C.I. actuel"
+msgstr "Sauver la librairie courante sur disque"
 
 #: eeschema/tool_lib.cpp:112
 msgid "Delete component in current library"
@@ -6016,9 +6012,8 @@ msgid "Select component to edit"
 msgstr "Sélectionner le composant à éditer"
 
 #: eeschema/tool_lib.cpp:125
-#, fuzzy
 msgid "Update current component in current library"
-msgstr "Supprimer composant en librairie de travail"
+msgstr "Mettre à jour le composant courant en librairie de travail"
 
 #: eeschema/tool_lib.cpp:128
 msgid "Import component"
@@ -6029,9 +6024,8 @@ msgid "Export component"
 msgstr "Exporter composant"
 
 #: eeschema/tool_lib.cpp:135
-#, fuzzy
 msgid "Save current component to new library"
-msgstr "Sauver le composant courant en librairie courante (en mémoire)"
+msgstr "Sauver le composant courant dans une nouvelle librairie"
 
 #: eeschema/tool_lib.cpp:138
 msgid "Undo last command"
@@ -6528,9 +6522,8 @@ msgid "none selected"
 msgstr "Pas de sélection"
 
 #: eeschema/viewlibs.cpp:317
-#, fuzzy
 msgid "Part"
-msgstr "Composant %c"
+msgstr "Part"
 
 #: eeschema/viewlibs.cpp:318
 msgid "Alias"
@@ -6557,9 +6550,9 @@ msgid "Background Color:"
 msgstr "Couleur du Fond:"
 
 #: eeschema/edit_component_in_lib.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "Alias <%s> not found for component <%s> in library <%s>."
-msgstr "Element <%s> non trouvé en librairie <%s>."
+msgstr "Alias <%s> non trouvé pour le component <%s> en librairie <%s>."
 
 #: eeschema/edit_component_in_lib.cpp:159
 msgid "Component Library Error"
@@ -6569,11 +6562,11 @@ msgstr "Erreur en Librairie de Composanr"
 #: eeschema/edit_component_in_lib.cpp:343
 #, c-format
 msgid "Alias <%s> cannot be removed while it is being edited!"
-msgstr ""
+msgstr "L'alias <%s> ne peut être supprimé tant qu'il est en cours d'édition!"
 
 #: eeschema/edit_component_in_lib.cpp:285
 msgid "Remove all aliases from list?"
-msgstr ""
+msgstr "Supprimer tous les alias de la liste?"
 
 #: eeschema/edit_component_in_lib.cpp:308
 msgid "New alias:"
@@ -6584,9 +6577,9 @@ msgid "Component Alias"
 msgstr "Alias de Composant"
 
 #: eeschema/edit_component_in_lib.cpp:318
-#, fuzzy, c-format
+#, c-format
 msgid "Alias or component name <%s> already exists in library <%s>."
-msgstr "Composant %s sauvé en librairie %s"
+msgstr "Alias ou nom de composant <%s> déjà existant en librairie <%s>."
 
 #: eeschema/edit_component_in_lib.cpp:396
 msgid "Delete units"
@@ -6955,9 +6948,9 @@ msgid "Please select a component library."
 msgstr "SVP sélectionner une librairie de composants."
 
 #: eeschema/libedit.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Component library <%s> is empty."
-msgstr "Fichier document de composants <%s> vide"
+msgstr "Fichier librairie de composants <%s> vide"
 
 #: eeschema/libedit.cpp:391
 #, fuzzy
@@ -8297,11 +8290,6 @@ msgstr ""
 msgid "User defined search path"
 msgstr "Chemin de recherche défini par l'utilisateur"
 
-#: eeschema/class_libentry.cpp:552
-#, c-format
-msgid "DEF command expected in line %d, aborted."
-msgstr ""
-
 #: eeschema/class_libentry.cpp:574
 #, c-format
 msgid "Wrong DEF format in line %d, skipped."
@@ -8309,16 +8297,6 @@ msgstr ""
 
 #: eeschema/class_libentry.cpp:667
 msgid "file ended prematurely loading component draw element"
-msgstr ""
-
-#: eeschema/class_libentry.cpp:707
-#, c-format
-msgid "undefined DRAW command %c"
-msgstr ""
-
-#: eeschema/class_libentry.cpp:714
-#, c-format
-msgid "error <%s> in DRAW command %c"
 msgstr ""
 
 #: eeschema/class_libentry.cpp:723
@@ -8639,9 +8617,9 @@ msgid "Import Component"
 msgstr "Importer Composant"
 
 #: eeschema/lib_export.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Component library file <%s> is empty."
-msgstr "Fichier document de composants <%s> vide"
+msgstr "Le fichier de composants <%s> est vide."
 
 #: eeschema/lib_export.cpp:100
 msgid "There is no component selected to save."
@@ -9031,9 +9009,9 @@ msgid "Component library <%s> has duplicate entry name <%s>.  This may cause som
 msgstr ""
 
 #: eeschema/class_library.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot add duplicate alias <%s> to library <%s>."
-msgstr "Ne peut créer une copie de l'élément <%s> en librairie <%s>."
+msgstr "Ne peut ajouter un double de l'alias <%s> en librairie <%s>."
 
 #: eeschema/class_library.cpp:223
 #, c-format
@@ -9041,14 +9019,12 @@ msgid "Conflict in library <%s>: alias <%s> already has root name <%s> and will 
 msgstr ""
 
 #: eeschema/class_library.cpp:453
-#, fuzzy
 msgid "The component library file name is not set."
-msgstr "Nom du fichier librairie  non sélectionné"
+msgstr "Le nom du fichier librairie  est non sélectionné."
 
 #: eeschema/class_library.cpp:461
-#, fuzzy
 msgid "The file could not be opened."
-msgstr "Fichier d'aide %s non trouvé."
+msgstr "Le fichier n'a pas pu être ouvert."
 
 #: eeschema/class_library.cpp:467
 msgid "The file is empty!"
@@ -9077,9 +9053,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/class_library.cpp:539
-#, fuzzy
 msgid "An error occured attempting to read the header."
-msgstr "L'erreur <%s> s'est produite lors du chargement de la librairie de composants <%s>"
+msgstr "Une 'erreur s'est produite lors de la lecture de l'entête."
 
 #: eeschema/class_library.cpp:569
 #, c-format
@@ -9969,7 +9944,7 @@ msgstr "Ne peut ouvrir le fichier librairie de modules PCB <%s>."
 msgid "<%s> is not a valid Kicad PCB foot print library."
 msgstr "<%s> in'est pas un fichier de module PCB  Kicad valide."
 
-#: cvpcb/loadcmp.cpp:137
+#: cvpcb/loadcmp.cpp:136
 #, c-format
 msgid "Module %s not found"
 msgstr "Module %s non trouvé"
@@ -10052,24 +10027,24 @@ msgstr "Cvpcb est en cours d'exécution. Continuer ?"
 msgid " [no file]"
 msgstr " [pas de fichier]"
 
-#: cvpcb/displayframe.cpp:124
+#: cvpcb/displayframe.cpp:130
 msgid "Display Options"
 msgstr "Options d'Affichage"
 
-#: cvpcb/displayframe.cpp:130
+#: cvpcb/displayframe.cpp:136
 msgid "zoom + (F1)"
 msgstr "zoom + (F1)"
 
-#: cvpcb/displayframe.cpp:134
+#: cvpcb/displayframe.cpp:140
 msgid "zoom - (F2)"
 msgstr "zoom - (F2)"
 
-#: cvpcb/displayframe.cpp:138
+#: cvpcb/displayframe.cpp:144
 msgid "redraw (F3)"
 msgstr "Redessin (F3)"
 
-#: cvpcb/displayframe.cpp:142
-#: cvpcb/displayframe.cpp:147
+#: cvpcb/displayframe.cpp:148
+#: cvpcb/displayframe.cpp:153
 msgid "1:1 zoom"
 msgstr "1:1 zoom"
 
@@ -11814,9 +11789,8 @@ msgid "Module properties"
 msgstr "Propriétés du Module"
 
 #: pcbnew/dialog_copper_layers_setup_base.h:55
-#, fuzzy
 msgid "Copper layers setup"
-msgstr "Couches Cuivre"
+msgstr "Réglage des Couches Cuivre"
 
 #: eeschema/dialog_cmp_graphic_properties.h:43
 msgid "Graphic shape properties"

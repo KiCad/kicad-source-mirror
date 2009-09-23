@@ -705,7 +705,7 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
 MODULE* WinEDA_BasePcbFrame::Create_1_Module( wxDC* DC, const wxString& module_name )
 /************************************************************************************/
 
-/* Create a new module or footprint : A new module is tartted with 2 texts :
+/* Create a new module or footprint : A new module contains 2 texts :
  *          First = REFERENCE
  *          Second = VALUE: "VAL**"
  *  the new module is added on begining of the linked list of modules

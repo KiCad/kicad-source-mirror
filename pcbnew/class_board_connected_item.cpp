@@ -91,13 +91,21 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
                 return max( hisClearance, myClearance );
             }
             else
+            {
+#ifdef __WXDEBUG__
                 wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetClearance(): NULL hisclass") );
+#endif
+            }
         }
 
         return myclass->GetClearance();
     }
     else
+    {
+#ifdef __WXDEBUG__
         wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetClearance(): NULL netclass") );
+#endif
+    }
 
     return 0;
 }
@@ -116,15 +124,25 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
         if( net )
         {
             NETCLASS* netclass = net->GetNetClass();
+#ifdef __WXDEBUG__
             if( netclass == NULL )
                 wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetNetClass(): NULL netclass") );
+#endif
             return netclass;
         }
         else
+        {
+#ifdef __WXDEBUG__
             wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetNetClass(): NULL net") );
+#endif
+        }
     }
     else
+    {
+#ifdef __WXDEBUG__
         wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetNetClass(): NULL board, type %d"), Type() );
+#endif
+    }
 
     return NULL;
 }

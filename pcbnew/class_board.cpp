@@ -30,8 +30,9 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
 
     m_CurrentZoneContour = NULL;                // This ZONE_CONTAINER handle the zone contour cuurently in progress
     m_NetInfo = new NETINFO_LIST( this );       // handle nets info list (name, design constraints ..
+    m_NetInfo->BuildListOfNets();               // prepare pads and nets lists containers.
 
-    for( int layer = 0; layer<NB_COPPER_LAYERS;  ++layer )
+    for( int layer = 0; layer < NB_COPPER_LAYERS;  ++layer )
     {
         m_Layer[layer].m_Name = ReturnPcbLayerName( layer, true );
         m_Layer[layer].m_Type = LT_SIGNAL;

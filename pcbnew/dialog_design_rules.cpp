@@ -93,6 +93,30 @@ DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( WinEDA_PcbFrame* parent ) :
 }
 
 
+/* Display on m_MessagesList the current global settings:
+ * minimal values for tracks, vias, clearance ...
+ */
+void DIALOG_DESIGN_RULES::PrintCurrentSettings( )
+{
+    wxString msg, value;
+    int internal_units = m_Parent->m_InternalUnits;
+
+    m_MessagesList->AppendToPage(_("<b>Current general setting:</b><br>") );
+
+    // Display min values:
+    value = ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_TrackMinWidth, internal_units, true );
+    msg.Printf(_("Minimum value for tracks width: <b>%s</b><br>\n"), value.GetData() );
+    m_MessagesList->AppendToPage(msg);
+    value = ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_ViasMinSize, internal_units, true );
+    msg.Printf(_("Minimum value for vias diameter: <b>%s</b><br>\n"), value.GetData() );
+    m_MessagesList->AppendToPage(msg);
+    value = ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_MicroViasMinSize, internal_units, true );
+    msg.Printf(_("Minimum value for microvias diameter: <b>%s</b><br>\n"), value.GetData() );
+    m_MessagesList->AppendToPage(msg);
+    
+}
+
+
 /********************************************************************/
 void DIALOG_DESIGN_RULES::Init()
 /********************************************************************/
@@ -117,11 +141,13 @@ void DIALOG_DESIGN_RULES::Init()
 
     netclass = netclasses.GetDefault();
 
+    // Initialize list of nets for Default Net Class
     for( NETCLASS::const_iterator name = netclass->begin();  name != netclass->end();  ++name )
     {
         m_AllNets.push_back( NETCUP( *name, netclass->GetName() ) );
     }
 
+    // Initialize list of nets for others (custom) Net Classes
     for( NETCLASSES::const_iterator nc = netclasses.begin();  nc != netclasses.end();  ++nc )
     {
         netclass = nc->second;
@@ -133,6 +159,8 @@ void DIALOG_DESIGN_RULES::Init()
     }
 
     InitializeRulesSelectionBoxes();
+    
+    PrintCurrentSettings( );
 }
 
 // Sort comparison function

@@ -19,21 +19,23 @@
 D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, TYPE_PAD )
 {
     m_NumPadName   = 0;
-    m_Masque_Layer = CUIVRE_LAYER;
-    m_DrillShape   = PAD_CIRCLE;        // Drill shape = circle
 
-    m_Size.x = m_Size.y = 500;
+    m_Size.x = m_Size.y = 500;          // give it a reasonnable size
+    m_Orient   = 0;                     // Pad rotation in 1/10 degrees
 
     if( m_Parent && (m_Parent->Type()  == TYPE_MODULE) )
     {
         m_Pos = ( (MODULE*) m_Parent )->GetPosition();
     }
 
-    m_PadShape = PAD_CIRCLE;            // forme CERCLE, PAD_RECT PAD_OVAL PAD_TRAPEZOID ou libre
-    m_Attribut = PAD_STANDARD;          // NORMAL, PAD_SMD, PAD_CONN, Bit 7 = STACK
-    m_Orient   = 0;                     // en 1/10 degres
+    m_PadShape = PAD_CIRCLE;            // Shape: PAD_CIRCLE, PAD_RECT PAD_OVAL PAD_TRAPEZOID
+    m_Attribut = PAD_STANDARD;          // Type: NORMAL, PAD_SMD, PAD_CONN
+    m_DrillShape   = PAD_CIRCLE;        // Drill shape = circle
+    // these layers are ok for a standard pad:
+    m_Masque_Layer = ALL_CU_LAYERS | SILKSCREEN_LAYER_CMP |\
+                SOLDERMASK_LAYER_CU | SOLDERMASK_LAYER_CMP;
 
-    SetSubRatsnest( 0 );
+    SetSubRatsnest( 0 );                // used in ratsnest calculations
     ComputeRayon();
 }
 

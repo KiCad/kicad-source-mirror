@@ -549,7 +549,7 @@ bool LIB_COMPONENT::Load( FILE* file, char* line, int* lineNum,
 
     if( strcmp( p, "DEF" ) != 0 )
     {
-        errorMsg.Printf( _( "DEF command expected in line %d, aborted." ),
+        errorMsg.Printf( wxT( "DEF command expected in line %d, aborted." ),
                          *lineNum );
         return false;
     }
@@ -704,14 +704,14 @@ bool LIB_COMPONENT::LoadDrawEntries( FILE* f, char* line,
             break;
 
         default:
-            errorMsg.Printf( _( "undefined DRAW command %c" ), line[0] );
+            errorMsg.Printf( wxT( "undefined DRAW command %c" ), line[0] );
             m_Drawings = headEntry;
             return false;
         }
 
         if( !newEntry->Load( line, errorMsg ) )
         {
-            errorMsg.Printf( _( "error <%s> in DRAW command %c" ),
+            errorMsg.Printf( wxT( "error <%s> in DRAW command %c" ),
                              ( const wxChar* ) errorMsg, line[0] );
             SAFE_DELETE( newEntry );
 

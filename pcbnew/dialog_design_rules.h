@@ -65,6 +65,7 @@ private:
     void CopyRulesListToBoard();
     void SetRoutableLayerStatus();
     void FillListBoxWithNetNames( wxListCtrl* aListCtrl, const wxString& aNetClass );
+    void PrintCurrentSettings( );
 
     /**
      * Function swapNetClass

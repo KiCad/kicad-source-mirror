@@ -223,6 +223,10 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         MODULE* module = Create_1_Module( NULL, wxEmptyString );
         if( module )        // i.e. if create module command not aborted
         {
+            // Initialize data relative to nets and netclasses (for a new module
+            // the defaults are used)
+            // This is mandatory to handle and draw pads
+            GetBoard()->m_NetInfo->BuildListOfNets();
             redraw = true;
             module->SetPosition( wxPoint( 0, 0 ) );
             if( GetBoard()->m_Modules )
