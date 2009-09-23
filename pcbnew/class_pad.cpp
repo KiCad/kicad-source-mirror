@@ -31,9 +31,7 @@ D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, TYPE_PAD )
     m_PadShape = PAD_CIRCLE;            // Shape: PAD_CIRCLE, PAD_RECT PAD_OVAL PAD_TRAPEZOID
     m_Attribut = PAD_STANDARD;          // Type: NORMAL, PAD_SMD, PAD_CONN
     m_DrillShape   = PAD_CIRCLE;        // Drill shape = circle
-    // these layers are ok for a standard pad:
-    m_Masque_Layer = ALL_CU_LAYERS | SILKSCREEN_LAYER_CMP |\
-                SOLDERMASK_LAYER_CU | SOLDERMASK_LAYER_CMP;
+    m_Masque_Layer = PAD_STANDARD_DEFAULT_LAYERS;   // set layers mask to default for a standard pad
 
     SetSubRatsnest( 0 );                // used in ratsnest calculations
     ComputeRayon();

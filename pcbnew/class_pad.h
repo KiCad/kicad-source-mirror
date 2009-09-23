@@ -6,6 +6,21 @@ class Pcb3D_GLCanvas;
 
 #include "pad_shapes.h"
 
+/* Default layers used for pads, accordint to the pad type.
+ * this is default values only, they can be changed for a given pad
+ */
+// PAD_STANDARD:
+#define PAD_STANDARD_DEFAULT_LAYERS ALL_CU_LAYERS | SILKSCREEN_LAYER_CMP | SOLDERMASK_LAYER_CU | SOLDERMASK_LAYER_CMP
+
+// PAD_CONN:
+#define PAD_CONN_DEFAULT_LAYERS CMP_LAYER | SOLDERPASTE_LAYER_CMP | SOLDERMASK_LAYER_CMP
+
+// PAD_SMD:
+#define PAD_SMD_DEFAULT_LAYERS CMP_LAYER | SOLDERMASK_LAYER_CMP
+
+//PAD_HOLE_NOT_PLATED:
+#define PAD_HOLE_NOT_PLATED_DEFAULT_LAYERS CUIVRE_LAYER | SILKSCREEN_LAYER_CMP | SOLDERMASK_LAYER_CU | SOLDERMASK_LAYER_CMP
+
 
 /* Definition type Structure d'un pad */
 class D_PAD : public BOARD_CONNECTED_ITEM
