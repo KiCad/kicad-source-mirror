@@ -5,12 +5,12 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
-#include "program.h"
-#include "libcmp.h"
-#include "general.h"
 
+#include "program.h"
+#include "general.h"
 #include "netlist.h" /* Definitions generales liees au calcul de netliste */
 #include "protos.h"
+#include "class_library.h"
 
 
 enum End_Type {
@@ -392,7 +392,7 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
             if( Entry == NULL )
                 break;
 
-            LibEDA_BaseStruct* DrawLibItem = Entry->m_Drawings;
+            LIB_DRAW_ITEM* DrawLibItem = Entry->m_Drawings;
             for( ; DrawLibItem != NULL; DrawLibItem = DrawLibItem->Next() )
             {
                 if( DrawLibItem->Type() != COMPONENT_PIN_DRAW_TYPE )

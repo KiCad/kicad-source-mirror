@@ -1,12 +1,43 @@
-/***********************************/
-/*	Headers for library definition */
-/***********************************/
+/*********************************************/
+/*	Headers for component library definition */
+/*********************************************/
 
 #ifndef CLASS_LIBRARY_H
 #define CLASS_LIBRARY_H
 
 
 #include "class_libentry.h"
+
+/*
+ * Component Library version and file header  macros.
+ */
+#define LIB_VERSION_MAJOR 2
+#define LIB_VERSION_MINOR 3
+
+/* Must be the first line of component library (.lib) files. */
+#define LIBFILE_IDENT     "EESchema-LIBRARY Version"
+
+#define LIB_VERSION( major, minor ) ( major * 100 + minor )
+
+#define IS_LIB_CURRENT_VERSION( major, minor )              \
+    (                                                       \
+        LIB_VERSION( major1, minor1 ) ==                    \
+        LIB_VERSION( LIB_VERSION_MAJOR, LIB_VERSION_MINOR)  \
+    )
+
+/*
+ * Library versions 2.3 and lower use the old separate library (.lib) and
+ * document (.dcm) files.  Component libraries after 2.3 merged the library
+ * and document files into a single library file.  This macro checks if the
+ * library version supports the old format
+ */
+#define USE_OLD_DOC_FILE_FORMAT( major, minor )                 \
+    ( LIB_VERSION( major, minor ) <= LIB_VERSION( 2, 3 ) )
+
+/* Must be the first line of component library document (.dcm) files. */
+#define DOCFILE_IDENT     "EESchema-DOCLIB  Version 2.0"
+
+#define DOC_EXT           wxT( "dcm" )
 
 
 /* Helpers for creating a list of component libraries. */
@@ -43,17 +74,35 @@ public:
     /**
      * Save library to file.
      *
-     * Two files are created.  The component objects are save as component
-     * library (*.lib) files.  The alias objects are save as document
-     * definition (*.dcm) files.  If the component library already exists,
-     * it is backup up in file *.bak.  If the document definition file
-     * already exists, it is backed up in file *.bck.
+     * Prior to component library version 3.0, two files were created.  The
+     * component objects are wer as component library (*.lib) files.  The
+     * library entry ojbect document strings were save in library document
+     * definition (*.dcm) files.  After version component library version 3.0,
+     * the document string information is saved as part of the library file.
+     * Saving separate document is maintained for backwards compatability.
+     * Please note that this behavior may change in the future.  If the
+     * component library already exists, it is backup up in file *.bak.
+     *
+     * @param aFullFileName - The library filename with path.
+     * @param oldDocFormat - Save the document information in a separate
+     *                       file if true.  The default is to save as the
+     *                       current library file format.
+     *
+     * @return bool - true if success writing else false.
+     */
+    bool Save( const wxString& aFullFileName, bool oldDocFormat = false );
+
+    /**
+     * Save library document information to file.
+     *
+     * If the document definition file* already exists, it is backed up in
+     * file *.bck.
      *
      * @param aFullFileName - The library filename with path.
      *
      * @return bool - true if success writing else false.
      */
-    bool Save( const wxString& aFullFileName );
+    bool SaveDocFile( const wxString& FullFileName );
 
     /**
      * Load library from file.

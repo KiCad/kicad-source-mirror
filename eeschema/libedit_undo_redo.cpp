@@ -7,10 +7,10 @@
 
 #include "common.h"
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditfrm.h"
+#include "class_libentry.h"
 
 
 /*************************************************************************/
@@ -22,7 +22,7 @@ void WinEDA_LibeditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
     LIB_COMPONENT*     CopyItem;
     PICKED_ITEMS_LIST* lastcmd;
 
-    CopyItem = CopyLibEntryStruct( (LIB_COMPONENT*) ItemToCopy );
+    CopyItem = new LIB_COMPONENT( *( (LIB_COMPONENT*) ItemToCopy ) );
 
     if( CopyItem == NULL )
         return;
@@ -54,17 +54,17 @@ void WinEDA_LibeditFrame::GetComponentFromRedoList(wxCommandEvent& event)
         return;
 
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-    ITEM_PICKER wrapper(m_currentComponent, UR_LIBEDIT);
+    ITEM_PICKER wrapper(m_component, UR_LIBEDIT);
     lastcmd->PushItem(wrapper);
     GetScreen()->PushCommandToUndoList( lastcmd );
 
     lastcmd = GetScreen()->PopCommandFromRedoList( );
 
     wrapper = lastcmd->PopItem();
-    m_currentComponent = (LIB_COMPONENT*) wrapper.m_PickedItem;
-    if( m_currentComponent )
-        m_currentComponent->SetNext( NULL );
-    CurrentDrawItem = NULL;
+    m_component = (LIB_COMPONENT*) wrapper.m_PickedItem;
+    if( m_component )
+        m_component->SetNext( NULL );
+    m_drawItem = NULL;
     GetScreen()->SetModify();
     DrawPanel->Refresh();
 }
@@ -84,18 +84,18 @@ void WinEDA_LibeditFrame::GetComponentFromUndoList(wxCommandEvent& event)
         return;
 
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-    ITEM_PICKER wrapper(m_currentComponent, UR_LIBEDIT);
+    ITEM_PICKER wrapper(m_component, UR_LIBEDIT);
     lastcmd->PushItem(wrapper);
     GetScreen()->PushCommandToRedoList( lastcmd );
 
     lastcmd = GetScreen()->PopCommandFromUndoList( );
 
     wrapper = lastcmd->PopItem();
-    m_currentComponent = (LIB_COMPONENT*) wrapper.m_PickedItem;
+    m_component = (LIB_COMPONENT*) wrapper.m_PickedItem;
 
-    if( m_currentComponent )
-        m_currentComponent->SetNext( NULL );
-    CurrentDrawItem = NULL;
+    if( m_component )
+        m_component->SetNext( NULL );
+    m_drawItem = NULL;
     GetScreen()->SetModify();
     DrawPanel->Refresh();
 }

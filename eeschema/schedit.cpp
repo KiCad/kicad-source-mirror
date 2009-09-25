@@ -9,15 +9,13 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "eda_doc.h"
+
 #include "class_marker_sch.h"
-
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
-
 #include "eeschema_id.h"
-
 #include "protos.h"
+#include "class_library.h"
 
 
 /*****************************************************************************

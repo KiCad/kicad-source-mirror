@@ -7,6 +7,11 @@
 #ifndef CLASSES_BODY_ITEMS_H
 #define CLASSES_BODY_ITEMS_H
 
+
+class LIB_COMPONENT;
+class PLOTTER;
+
+
 #define TARGET_PIN_DIAM     12  /* Circle diameter drawn at the active end of
                                  * pins */
 
@@ -83,11 +88,11 @@ enum  DrawPinOrient {
 /****************************************************************************/
 
 
-/* class LibEDA_BaseStruct : Basic class for items used in a library component
+/* class LIB_DRAW_ITEM : Basic class for items used in a library component
  *  (graphic shapes, texts, fields, pins)
  */
 
-class LibEDA_BaseStruct : public EDA_BaseStruct
+class LIB_DRAW_ITEM : public EDA_BaseStruct
 {
 public:
     int      m_Unit;     /* Unit identification (for multi part per package)
@@ -99,14 +104,15 @@ public:
     wxString m_typeName; /* Name of object displayed in the message panel. */
 
 public:
-    LibEDA_BaseStruct* Next()
+    LIB_DRAW_ITEM* Next()
     {
-        return (LibEDA_BaseStruct*) Pnext;
+        return (LIB_DRAW_ITEM*) Pnext;
     }
 
 
-    LibEDA_BaseStruct( KICAD_T struct_type, LIB_COMPONENT * aParent );
-    virtual ~LibEDA_BaseStruct() { }
+    LIB_DRAW_ITEM( KICAD_T struct_type, LIB_COMPONENT * aParent );
+    LIB_DRAW_ITEM( const LIB_DRAW_ITEM& item );
+    virtual ~LIB_DRAW_ITEM() { }
 
     /** Function Draw (virtual pure)
      * Draw A body item
@@ -182,22 +188,22 @@ public:
     /**
      * Make a copy of this draw item.
      *
-     * Classes derived from LibEDA_BaseStruct must implement DoGenCopy().
+     * Classes derived from LIB_DRAW_ITEM must implement DoGenCopy().
      * This is just a placeholder for the derived class.
      *
      * @return Copy of this draw item.
      */
-    LibEDA_BaseStruct* GenCopy() { return DoGenCopy(); }
+    LIB_DRAW_ITEM* GenCopy() { return DoGenCopy(); }
 
     /**
-     * Test LibEDA_BaseStruct objects for equivalence.
+     * Test LIB_DRAW_ITEM objects for equivalence.
      *
      * @param tst - Object to test against.
      *
      * @return bool - True if object is identical to this object.
      */
-    bool operator==( const LibEDA_BaseStruct& other ) const;
-    bool operator==( const LibEDA_BaseStruct* other ) const
+    bool operator==( const LIB_DRAW_ITEM& other ) const;
+    bool operator==( const LIB_DRAW_ITEM* other ) const
     {
         return *this == *other;
     }
@@ -207,7 +213,7 @@ public:
      *
      * @param offset - Cooridinates to offset position.
      */
-    void SetOffset( const wxPoint offset ) { DoOffset( offset ); }
+    void SetOffset( const wxPoint& offset ) { DoOffset( offset ); }
 
     /**
      * Test if any part of the draw object is inside rectangle bounds.
@@ -221,24 +227,40 @@ public:
      */
     bool Inside( EDA_Rect& rect ) { return DoTestInside( rect ); }
 
+    /**
+     * Move a draw object to a new position.
+     *
+     * The real work is done by the DoMove method for each derived object type.
+     *
+     * @param newPosition - Position to move draw item to.
+     */
+    void Move( const wxPoint& newPosition ) { DoMove( newPosition ); }
+
+    /**
+     * Return the current draw object start position.
+     */
+    wxPoint GetPosition( void ) { return DoGetPosition(); }
+
 protected:
-    virtual LibEDA_BaseStruct* DoGenCopy() = 0;
+    virtual LIB_DRAW_ITEM* DoGenCopy() = 0;
 
     /**
      * Provide the draw object specific comparison.
      *
      * This is called by the == operator.
      */
-    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const = 0;
+    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const = 0;
     virtual void DoOffset( const wxPoint& offset ) = 0;
     virtual bool DoTestInside( EDA_Rect& rect ) = 0;
+    virtual void DoMove( const wxPoint& newPosition ) = 0;
+    virtual wxPoint DoGetPosition( void ) = 0;
 };
 
 
 /********/
 /* Pins */
 /********/
-class LibDrawPin : public LibEDA_BaseStruct
+class LibDrawPin : public LIB_DRAW_ITEM
 {
 public:
     int      m_PinLen;      /* Pin length */
@@ -267,6 +289,7 @@ public:
 
 public:
     LibDrawPin(LIB_COMPONENT * aParent);
+    LibDrawPin( const LibDrawPin& pin );
     ~LibDrawPin() { }
 
     LibDrawPin* Next() const { return (LibDrawPin*) Pnext; }
@@ -358,10 +381,12 @@ public:
                                int      aWidth);
 
 protected:
-    virtual LibEDA_BaseStruct* DoGenCopy();
-    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;
+    virtual LIB_DRAW_ITEM* DoGenCopy();
+    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
+    virtual void DoMove( const wxPoint& newPosition );
+    virtual wxPoint DoGetPosition( void ) { return m_Pos; }
 };
 
 
@@ -369,7 +394,7 @@ protected:
 /* Graphic Body Item: Arc */
 /**************************/
 
-class LibDrawArc : public LibEDA_BaseStruct
+class LibDrawArc : public LIB_DRAW_ITEM
 {
 public:
     int     m_Radius;
@@ -383,6 +408,7 @@ public:
 
 public:
     LibDrawArc(LIB_COMPONENT * aParent);
+    LibDrawArc( const LibDrawArc& arc );
     ~LibDrawArc() { }
     virtual wxString GetClass() const
     {
@@ -430,17 +456,19 @@ public:
     virtual int GetPenSize( );
 
 protected:
-    virtual LibEDA_BaseStruct* DoGenCopy();
-    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;
+    virtual LIB_DRAW_ITEM* DoGenCopy();
+    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
+    virtual void DoMove( const wxPoint& newPosition );
+    virtual wxPoint DoGetPosition( void ) { return m_Pos; }
 };
 
 
 /*****************************/
 /* Graphic Body Item: Circle */
 /*****************************/
-class LibDrawCircle : public LibEDA_BaseStruct
+class LibDrawCircle : public LIB_DRAW_ITEM
 {
 public:
     int     m_Radius;
@@ -450,6 +478,7 @@ public:
 
 public:
     LibDrawCircle(LIB_COMPONENT * aParent);
+    LibDrawCircle( const LibDrawCircle& circle );
     ~LibDrawCircle() { }
     virtual wxString GetClass() const
     {
@@ -498,10 +527,12 @@ public:
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
 
 protected:
-    virtual LibEDA_BaseStruct* DoGenCopy();
-    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;
+    virtual LIB_DRAW_ITEM* DoGenCopy();
+    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
+    virtual void DoMove( const wxPoint& newPosition );
+    virtual wxPoint DoGetPosition( void ) { return m_Pos; }
 };
 
 
@@ -511,10 +542,11 @@ protected:
 /* Fields like Ref , value... are not Text,  */
 /* they are a separate class                 */
 /*********************************************/
-class LibDrawText : public LibEDA_BaseStruct, public EDA_TextStruct
+class LibDrawText : public LIB_DRAW_ITEM, public EDA_TextStruct
 {
 public:
     LibDrawText(LIB_COMPONENT * aParent);
+    LibDrawText( const LibDrawText& text );
     ~LibDrawText() { }
     virtual wxString GetClass() const
     {
@@ -573,17 +605,19 @@ public:
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
 
 protected:
-    virtual LibEDA_BaseStruct* DoGenCopy();
-    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;
+    virtual LIB_DRAW_ITEM* DoGenCopy();
+    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
+    virtual void DoMove( const wxPoint& newPosition );
+    virtual wxPoint DoGetPosition( void ) { return m_Pos; }
 };
 
 
 /********************************/
 /* Graphic Body Item: Rectangle */
 /********************************/
-class LibDrawSquare  : public LibEDA_BaseStruct
+class LibDrawSquare  : public LIB_DRAW_ITEM
 {
 public:
     wxPoint m_End;     /* Rectangle end point. */
@@ -592,6 +626,7 @@ public:
 
 public:
     LibDrawSquare(LIB_COMPONENT * aParent);
+    LibDrawSquare( const LibDrawSquare& rect );
     ~LibDrawSquare() { }
     virtual wxString GetClass() const
     {
@@ -640,16 +675,18 @@ public:
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
 
 protected:
-    virtual LibEDA_BaseStruct* DoGenCopy();
-    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;
+    virtual LIB_DRAW_ITEM* DoGenCopy();
+    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
+    virtual void DoMove( const wxPoint& newPosition );
+    virtual wxPoint DoGetPosition( void ) { return m_Pos; }
 };
 
 /**********************************/
 /* Graphic Body Item: single line */
 /**********************************/
-class LibDrawSegment  : public LibEDA_BaseStruct
+class LibDrawSegment  : public LIB_DRAW_ITEM
 {
 public:
     wxPoint m_End;
@@ -659,6 +696,7 @@ public:
 
 public:
     LibDrawSegment(LIB_COMPONENT * aParent);
+    LibDrawSegment( const LibDrawSegment& segment );
     ~LibDrawSegment() { }
     virtual wxString GetClass() const
     {
@@ -706,17 +744,19 @@ public:
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
 
 protected:
-    virtual LibEDA_BaseStruct* DoGenCopy();
-    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;
+    virtual LIB_DRAW_ITEM* DoGenCopy();
+    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
+    virtual void DoMove( const wxPoint& newPosition );
+    virtual wxPoint DoGetPosition( void ) { return m_Pos; }
 };
 
 
 /**********************************************************/
 /* Graphic Body Item: Polygon and polyline (set of lines) */
 /**********************************************************/
-class LibDrawPolyline : public LibEDA_BaseStruct
+class LibDrawPolyline : public LIB_DRAW_ITEM
 {
 public:
     int m_Width;                            /* Line width */
@@ -724,6 +764,7 @@ public:
 
 public:
     LibDrawPolyline(LIB_COMPONENT * aParent);
+    LibDrawPolyline( const LibDrawPolyline& polyline );
     ~LibDrawPolyline() { }
 
     virtual wxString GetClass() const
@@ -783,16 +824,18 @@ public:
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
 
 protected:
-    virtual LibEDA_BaseStruct* DoGenCopy();
-    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;
+    virtual LIB_DRAW_ITEM* DoGenCopy();
+    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
+    virtual void DoMove( const wxPoint& newPosition );
+    virtual wxPoint DoGetPosition( void ) { return m_PolyPoints[0]; }
 };
 
 /**********************************************************/
 /* Graphic Body Item: Bezier Curve (set of lines) */
 /**********************************************************/
-class LibDrawBezier : public LibEDA_BaseStruct
+class LibDrawBezier : public LIB_DRAW_ITEM
 {
 public:
     int m_Width;                            /* Line width */
@@ -800,7 +843,8 @@ public:
     std::vector<wxPoint> m_PolyPoints;      // list of points (>= 2)
 
 public:
-    LibDrawBezier(LIB_COMPONENT * aParent);
+    LibDrawBezier( LIB_COMPONENT * aParent );
+    LibDrawBezier( const LibDrawBezier& bezier );
     ~LibDrawBezier() { }
 
     virtual wxString GetClass() const
@@ -860,10 +904,12 @@ public:
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
 
 protected:
-    virtual LibEDA_BaseStruct* DoGenCopy();
-    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;
+    virtual LIB_DRAW_ITEM* DoGenCopy();
+    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
+    virtual void DoMove( const wxPoint& newPosition );
+    virtual wxPoint DoGetPosition( void ) { return m_PolyPoints[0]; }
 };
 
 #endif  //  CLASSES_BODY_ITEMS_H

@@ -10,15 +10,16 @@
 #include "gr_basic.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
+#include "class_library.h"
+#include "class_libentry.h"
 
 
 int SortItemsFct(const void* ref, const void* item)
 {
-#define Ref    ( *(LibEDA_BaseStruct**) (ref) )
-#define Item   ( *(LibEDA_BaseStruct**) (item) )
+#define Ref    ( *(LIB_DRAW_ITEM**) (ref) )
+#define Item   ( *(LIB_DRAW_ITEM**) (item) )
 #define BEFORE -1
 #define AFTER  1
 
@@ -168,6 +169,20 @@ CMP_LIB_ENTRY::CMP_LIB_ENTRY( LibrEntryType type, const wxString& name,
 }
 
 
+CMP_LIB_ENTRY::CMP_LIB_ENTRY( const CMP_LIB_ENTRY& entry, CMP_LIBRARY* lib ) :
+    EDA_BaseStruct( entry )
+{
+    Type = entry.Type;
+    m_Name = entry.m_Name;
+    m_Doc = entry.m_Doc;
+    m_KeyWord = entry.m_KeyWord;
+    m_DocFile = entry.m_DocFile;
+    m_Options = entry.m_Options;
+    m_lib = lib;
+    m_Name.SetParent( this );
+}
+
+
 CMP_LIB_ENTRY::~CMP_LIB_ENTRY()
 {
 }
@@ -178,7 +193,43 @@ wxString CMP_LIB_ENTRY::GetLibraryName()
     if( m_lib != NULL )
         return m_lib->GetName();
 
-    return wxEmptyString;
+    return wxString( _( "none" ) );
+}
+
+
+/**
+ * Function SaveDoc
+ * writes the doc info out to a FILE in "*.dcm" format.
+ * Only non empty fields are written.
+ * If all fields are empty, does not write anything
+ * @param aFile The FILE to write to.
+ * @return bool - true if success writing else false.
+ */
+bool CMP_LIB_ENTRY::SaveDoc( FILE* aFile )
+{
+    if( m_Doc.IsEmpty() && m_KeyWord.IsEmpty() && m_DocFile.IsEmpty() )
+        return true;
+
+    /* Generation des lignes utiles */
+    if( fprintf( aFile, "#\n$CMP %s\n", CONV_TO_UTF8( m_Name.m_Text ) ) < 0 )
+        return false;
+
+    if( ! m_Doc.IsEmpty()
+        && fprintf( aFile, "D %s\n", CONV_TO_UTF8( m_Doc ) ) < 0 )
+        return false;
+
+    if( ! m_KeyWord.IsEmpty()
+        && fprintf( aFile, "K %s\n", CONV_TO_UTF8( m_KeyWord ) ) < 0 )
+        return false;
+
+    if( ! m_DocFile.IsEmpty()
+        && fprintf( aFile, "F %s\n", CONV_TO_UTF8( m_DocFile ) ) < 0 )
+        return false;
+
+    if( fprintf( aFile, "$ENDCMP\n" ) < 0 )
+        return false;
+
+    return true;
 }
 
 
@@ -223,6 +274,13 @@ LIB_ALIAS::LIB_ALIAS( const wxString& name, LIB_COMPONENT* root,
 }
 
 
+LIB_ALIAS::LIB_ALIAS( const LIB_ALIAS& alias, CMP_LIBRARY* lib ) :
+    CMP_LIB_ENTRY( alias )
+{
+    m_root = alias.m_root;
+}
+
+
 LIB_ALIAS::~LIB_ALIAS()
 {
 }
@@ -258,10 +316,61 @@ LIB_COMPONENT::LIB_COMPONENT( const wxString& name, CMP_LIBRARY* lib ) :
 }
 
 
+LIB_COMPONENT::LIB_COMPONENT( const LIB_COMPONENT& component,
+                              CMP_LIBRARY* lib ) :
+    CMP_LIB_ENTRY( component, lib )
+{
+    LIB_DRAW_ITEM* oldItem;
+    LIB_DRAW_ITEM* newItem;
+    LIB_DRAW_ITEM* lastItem = NULL;
+    LibDrawField*  oldField;
+    LibDrawField*  newField;
+
+
+    m_Prefix              = component.m_Prefix;
+    m_AliasList           = component.m_AliasList;
+    m_FootprintList       = component.m_FootprintList;
+    m_UnitCount           = component.m_UnitCount;
+    m_UnitSelectionLocked = component.m_UnitSelectionLocked;
+    m_TextInside          = component.m_TextInside;
+    m_DrawPinNum          = component.m_DrawPinNum;
+    m_DrawPinName         = component.m_DrawPinName;
+    m_LastDate            = component.m_LastDate;
+
+    m_Prefix.SetParent( this );
+
+    for( oldItem = component.m_Drawings; oldItem != NULL;
+         oldItem = oldItem->Next() )
+    {
+        if( ( oldItem->m_Flags & IS_NEW ) != 0 )
+            continue;
+
+        newItem = oldItem->GenCopy();
+
+        if( lastItem == NULL )
+            m_Drawings = newItem;
+        else
+            lastItem->SetNext( newItem );
+
+        newItem->SetParent( this );
+        lastItem = newItem;
+        newItem->SetNext( NULL );
+    }
+
+    for( oldField = component.m_Fields; oldField != NULL;
+         oldField = oldField->Next() )
+    {
+        newField = (LibDrawField*) oldField->GenCopy();
+        newField->SetParent( this );
+        m_Fields.PushBack( newField );
+    }
+}
+
+
 LIB_COMPONENT::~LIB_COMPONENT()
 {
-    LibEDA_BaseStruct* DrawItem;
-    LibEDA_BaseStruct* NextDrawItem;
+    LIB_DRAW_ITEM* DrawItem;
+    LIB_DRAW_ITEM* NextDrawItem;
 
     /* suppression des elements dependants */
     DrawItem = m_Drawings;
@@ -283,10 +392,10 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
                           bool showPinText, bool drawFields,
                           bool onlySelected )
 {
-    wxString           fieldText;
-    LibDrawField*      Field;
-    LibEDA_BaseStruct* drawItem;
-    BASE_SCREEN*       screen = panel->GetScreen();
+    wxString       fieldText;
+    LibDrawField*  Field;
+    LIB_DRAW_ITEM* drawItem;
+    BASE_SCREEN*   screen = panel->GetScreen();
 
     GRSetDrawMode( dc, drawMode );
 
@@ -303,7 +412,8 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
         if( multi && drawItem->m_Unit && ( drawItem->m_Unit != multi ) )
             continue;
 
-        if( convert && drawItem->m_Convert && ( drawItem->m_Convert != convert ) )
+        if( convert && drawItem->m_Convert
+            && ( drawItem->m_Convert != convert ) )
             continue;
 
 
@@ -346,12 +456,19 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
             fieldText = m_Prefix.m_Text + wxT( "?" );
         }
 
-        m_Prefix.Draw( panel, dc, offset, color, drawMode, &fieldText,
-                       transformMatrix );
-        m_Name.Draw( panel, dc, offset, color, drawMode, NULL, transformMatrix );
+        if( !( onlySelected && m_Prefix.m_Selected == 0 ) )
+            m_Prefix.Draw( panel, dc, offset, color, drawMode, &fieldText,
+                           transformMatrix );
+
+        if( !( onlySelected && m_Name.m_Selected == 0 ) )
+            m_Name.Draw( panel, dc, offset, color, drawMode, NULL,
+                         transformMatrix );
 
         for( Field = m_Fields; Field != NULL; Field = Field->Next() )
         {
+            if( onlySelected && drawItem->m_Selected == 0 )
+                continue;
+
             Field->Draw( panel, dc, offset, color, drawMode, NULL,
                          transformMatrix );
         }
@@ -376,13 +493,13 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
 }
 
 
-void LIB_COMPONENT::RemoveDrawItem( LibEDA_BaseStruct* item,
+void LIB_COMPONENT::RemoveDrawItem( LIB_DRAW_ITEM* item,
                                     WinEDA_DrawPanel* panel,
                                     wxDC* dc )
 {
     wxASSERT( item != NULL );
 
-    LibEDA_BaseStruct* prevItem = m_Drawings;
+    LIB_DRAW_ITEM* prevItem = m_Drawings;
 
     if( dc != NULL )
         item->Draw( panel, dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
@@ -417,11 +534,11 @@ void LIB_COMPONENT::RemoveDrawItem( LibEDA_BaseStruct* item,
  */
 bool LIB_COMPONENT::Save( FILE* aFile )
 {
-    LibEDA_BaseStruct* DrawEntry;
+    LIB_DRAW_ITEM* DrawEntry;
     LibDrawField*      Field;
 
-    if( Type != ROOT )  // should not happen, but just in case
-        return false;
+    /* Sort just in clase sorting was not done properly. */
+    SortDrawItems();
 
     /* First line: it s a comment (component name for readers) */
     if( fprintf( aFile, "#\n# %s\n#\n", CONV_TO_UTF8( m_Name.m_Text ) ) < 0 )
@@ -656,9 +773,9 @@ bool LIB_COMPONENT::Load( FILE* file, char* line, int* lineNum,
 bool LIB_COMPONENT::LoadDrawEntries( FILE* f, char* line,
                                      int* lineNum, wxString& errorMsg )
 {
-    LibEDA_BaseStruct* newEntry = NULL;
-    LibEDA_BaseStruct* headEntry = NULL;
-    LibEDA_BaseStruct* tailEntry = NULL;
+    LIB_DRAW_ITEM* newEntry = NULL;
+    LIB_DRAW_ITEM* headEntry = NULL;
+    LIB_DRAW_ITEM* tailEntry = NULL;
 
     while( true )
     {
@@ -676,31 +793,31 @@ bool LIB_COMPONENT::LoadDrawEntries( FILE* f, char* line,
         switch( line[0] )
         {
         case 'A':    /* Arc */
-            newEntry = ( LibEDA_BaseStruct* ) new LibDrawArc(this);
+            newEntry = ( LIB_DRAW_ITEM* ) new LibDrawArc(this);
             break;
 
         case 'C':    /* Circle */
-            newEntry = ( LibEDA_BaseStruct* ) new LibDrawCircle(this);
+            newEntry = ( LIB_DRAW_ITEM* ) new LibDrawCircle(this);
             break;
 
         case 'T':    /* Text */
-            newEntry = ( LibEDA_BaseStruct* ) new LibDrawText(this);
+            newEntry = ( LIB_DRAW_ITEM* ) new LibDrawText(this);
             break;
 
         case 'S':    /* Square */
-            newEntry = ( LibEDA_BaseStruct* ) new LibDrawSquare(this);
+            newEntry = ( LIB_DRAW_ITEM* ) new LibDrawSquare(this);
             break;
 
         case 'X':    /* Pin Description */
-            newEntry = ( LibEDA_BaseStruct* ) new LibDrawPin(this);
+            newEntry = ( LIB_DRAW_ITEM* ) new LibDrawPin(this);
             break;
 
         case 'P':    /* Polyline */
-            newEntry = ( LibEDA_BaseStruct* ) new LibDrawPolyline(this);
+            newEntry = ( LIB_DRAW_ITEM* ) new LibDrawPolyline(this);
             break;
 
         case 'B':    /* Bezier Curves */
-            newEntry = ( LibEDA_BaseStruct* ) new LibDrawBezier(this);
+            newEntry = ( LIB_DRAW_ITEM* ) new LibDrawBezier(this);
             break;
 
         default:
@@ -818,7 +935,7 @@ bool LIB_COMPONENT::LoadFootprints( FILE* file, char* line,
  */
 void LIB_COMPONENT::SortDrawItems()
 {
-    LibEDA_BaseStruct** Bufentry, ** BufentryBase, * Entry = m_Drawings;
+    LIB_DRAW_ITEM** Bufentry, ** BufentryBase, * Entry = m_Drawings;
     int ii, nbitems;
 
     if( Entry == NULL )
@@ -828,15 +945,15 @@ void LIB_COMPONENT::SortDrawItems()
         nbitems++;
 
     BufentryBase =
-        (LibEDA_BaseStruct**) MyZMalloc( (nbitems + 1) *
-                                         sizeof(LibEDA_BaseStruct*) );
+        (LIB_DRAW_ITEM**) MyZMalloc( (nbitems + 1) *
+                                         sizeof(LIB_DRAW_ITEM*) );
 
     /* memorisation du chainage : */
     for( Entry = m_Drawings, ii = 0; Entry != NULL; Entry = Entry->Next() )
         BufentryBase[ii++] = Entry;
 
     /* Tri du chainage */
-    qsort( BufentryBase, nbitems, sizeof(LibEDA_BaseStruct*), SortItemsFct );
+    qsort( BufentryBase, nbitems, sizeof(LIB_DRAW_ITEM*), SortItemsFct );
 
     /* Mise a jour du chainage. Remarque:
      *  le dernier element de BufEntryBase (BufEntryBase[nbitems]) est NULL*/
@@ -861,7 +978,7 @@ void LIB_COMPONENT::SortDrawItems()
 /**********************************************************************/
 EDA_Rect LIB_COMPONENT::GetBoundaryBox( int Unit, int Convert )
 {
-    LibEDA_BaseStruct* DrawEntry;
+    LIB_DRAW_ITEM* DrawEntry;
     EDA_Rect           bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
 
     for( DrawEntry = m_Drawings; DrawEntry != NULL;
@@ -982,7 +1099,7 @@ bool LIB_COMPONENT::LoadDateAndTime( char* Line )
 
 void LIB_COMPONENT::SetOffset( const wxPoint& offset )
 {
-    LibEDA_BaseStruct* DrawEntry;
+    LIB_DRAW_ITEM* DrawEntry;
 
     m_Name.SetOffset( offset );
     m_Prefix.SetOffset( offset );
@@ -1004,8 +1121,8 @@ void LIB_COMPONENT::SetOffset( const wxPoint& offset )
 
 void LIB_COMPONENT::RemoveDuplicateDrawItems()
 {
-    LibEDA_BaseStruct* DEntryRef;
-    LibEDA_BaseStruct* DEntryCompare;
+    LIB_DRAW_ITEM* DEntryRef;
+    LIB_DRAW_ITEM* DEntryCompare;
     bool  deleted;
 
     DEntryRef = m_Drawings;
@@ -1043,7 +1160,7 @@ void LIB_COMPONENT::RemoveDuplicateDrawItems()
 
 bool LIB_COMPONENT::HasConversion() const
 {
-    LibEDA_BaseStruct* entry;
+    LIB_DRAW_ITEM* entry;
 
     for( entry = m_Drawings; entry != NULL; entry = entry->Next() )
     {
@@ -1055,37 +1172,149 @@ bool LIB_COMPONENT::HasConversion() const
 }
 
 
-/**
- * Function SaveDoc
- * writes the doc info out to a FILE in "*.dcm" format.
- * Only non empty fields are written.
- * If all fields are empty, does not write anything
- * @param aFile The FILE to write to.
- * @return bool - true if success writing else false.
- */
-bool CMP_LIB_ENTRY::SaveDoc( FILE* aFile )
+int LIB_COMPONENT::SelectItems( EDA_Rect& rect, int unit, int convert,
+                                bool editPinByPin )
 {
-    if( m_Doc.IsEmpty() && m_KeyWord.IsEmpty() && m_DocFile.IsEmpty() )
-        return true;
+    LIB_DRAW_ITEM* item;
+    int            ItemsCount = 0;
 
-    /* Generation des lignes utiles */
-    if( fprintf( aFile, "#\n$CMP %s\n", CONV_TO_UTF8( m_Name.m_Text ) ) < 0 )
-        return false;
+    for( item = m_Drawings; item != NULL; item = item->Next() )
+    {
+        item->m_Selected = 0;
 
-    if( ! m_Doc.IsEmpty()
-        && fprintf( aFile, "D %s\n", CONV_TO_UTF8( m_Doc ) ) < 0 )
-        return false;
+        if( ( item->m_Unit && item->m_Unit != unit )
+            || ( item->m_Convert && item->m_Convert != convert ) )
+        {
+            if( item->Type() != COMPONENT_PIN_DRAW_TYPE )
+                continue;
 
-    if( ! m_KeyWord.IsEmpty()
-        && fprintf( aFile, "K %s\n", CONV_TO_UTF8( m_KeyWord ) ) < 0 )
-        return false;
+             // Specific rules for pins.
+            if( editPinByPin || m_UnitSelectionLocked
+                || ( item->m_Convert && item->m_Convert != convert ) )
+                continue;
+        }
 
-    if( ! m_DocFile.IsEmpty()
-        && fprintf( aFile, "F %s\n", CONV_TO_UTF8( m_DocFile ) ) < 0 )
-        return false;
+        if( item->Inside( rect ) )
+        {
+            item->m_Selected = IS_SELECTED;
+            ItemsCount++;
+        }
+    }
 
-    if( fprintf( aFile, "$ENDCMP\n" ) < 0 )
-        return false;
+    if( m_Name.Inside( rect ) )
+    {
+        m_Name.m_Selected = IS_SELECTED;
+        ItemsCount++;
+    }
 
-    return true;
+    if( m_Prefix.Inside( rect ) )
+    {
+        m_Prefix.m_Selected = IS_SELECTED;
+        ItemsCount++;
+    }
+
+    for( LibDrawField* field = m_Fields.GetFirst(); field != NULL;
+         field = field->Next() )
+    {
+        if( field->Inside( rect ) )
+        {
+            field->m_Selected = IS_SELECTED;
+            ItemsCount++;
+        }
+    }
+
+    return ItemsCount;
+}
+
+
+void LIB_COMPONENT::MoveSelectedItems( const wxPoint& offset )
+{
+    LIB_DRAW_ITEM* item;
+    LibDrawField*  field;
+
+    for( item = m_Drawings; item != NULL; item = item->Next() )
+    {
+        if( item->m_Selected == 0 )
+            continue;
+
+        item->SetOffset( offset );
+        item->m_Flags = item->m_Selected = 0;
+    }
+
+    if( m_Name.m_Selected )
+    {
+        m_Name.SetOffset( offset );
+        m_Name.m_Flags = m_Name.m_Selected = 0;
+    }
+
+    if( m_Prefix.m_Selected )
+    {
+        m_Prefix.SetOffset( offset );
+        m_Prefix.m_Flags = m_Prefix.m_Selected = 0;
+    }
+
+    for( field = m_Fields.GetFirst(); field != NULL; field = field->Next() )
+    {
+        if( field->m_Selected )
+        {
+            field->SetOffset( offset );
+            field->m_Flags = field->m_Selected = 0;
+        }
+    }
+
+    SortDrawItems();
+}
+
+
+void LIB_COMPONENT::ClearSelectedItems( void )
+{
+    LIB_DRAW_ITEM* item;
+    LibDrawField* field;
+
+    for( item = m_Drawings; item != NULL; item = item->Next() )
+        item->m_Flags = item->m_Selected = 0;
+
+    m_Name.m_Flags = m_Name.m_Selected = 0;
+    m_Prefix.m_Flags = m_Prefix.m_Selected = 0;
+
+    for( field = m_Fields.GetFirst(); field != NULL; field = field->Next() )
+        field->m_Flags = field->m_Selected = 0;
+}
+
+
+void LIB_COMPONENT::DeleteSelectedItems( void )
+{
+    LIB_DRAW_ITEM* item;
+    LIB_DRAW_ITEM* nextItem;
+
+    for( item = m_Drawings; item != NULL; item = nextItem )
+    {
+        nextItem = item->Next();
+
+        if( item->m_Selected == 0 )
+            continue;
+
+        RemoveDrawItem( item );
+    }
+}
+
+
+void LIB_COMPONENT::CopySelectedItems( const wxPoint& offset )
+{
+    LIB_DRAW_ITEM* item;
+
+    for( item = m_Drawings; item != NULL; item = item->Next() )
+    {
+        if( item->m_Selected == 0 )
+            continue;
+
+        item->m_Selected = 0;
+        LIB_DRAW_ITEM* newItem = item->GenCopy();
+        newItem->m_Selected = IS_SELECTED;
+        newItem->SetNext( m_Drawings );
+        m_Drawings = newItem;
+    }
+
+    MoveSelectedItems( offset );
+    SortDrawItems();
 }

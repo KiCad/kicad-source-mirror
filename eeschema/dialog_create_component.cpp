@@ -16,12 +16,12 @@
 #endif
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "confirm.h"
+
 #include "program.h"
-#include "libcmp.h"
-#include "general.h"
+#include "class_libentry.h"
+#include "libeditfrm.h"
 
 ////@begin includes
 ////@end includes
@@ -104,7 +104,9 @@ bool WinEDA_CreateCmpDialog::Create( WinEDA_DrawFrame* parent, wxWindowID id, co
 void WinEDA_CreateCmpDialog::SetComponentData( LIB_COMPONENT & component )
 /**********************************************************************************/
 {
-    g_AsDeMorgan = m_AsConvert->GetValue();
+    WinEDA_LibeditFrame* parent = (WinEDA_LibeditFrame*) GetParent();
+
+    parent->SetShowDeMorgan( m_AsConvert->GetValue() );
     component.m_UnitCount = m_PartsCount->GetSelection() + 1;
     component.m_Prefix.m_Text = m_Reference->GetValue();
 	if ( m_PinNameInside->GetValue() == FALSE)

@@ -101,7 +101,6 @@ set(EESCHEMA_SRCS
     plotps.cpp
     plotdxf.cpp
     read_from_file_schematic_items_descriptions.cpp
-    savelib.cpp
     save_schemas.cpp
     schedit.cpp
     schematic_undo_redo.cpp

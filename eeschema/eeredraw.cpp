@@ -10,9 +10,10 @@
 #include "appl_wxstruct.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
+#include "class_library.h"
+
 
 static EDA_BaseStruct* HighLightStruct = NULL;
 

@@ -8,9 +8,7 @@
 
 #include "common.h"
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
-
 #include "protos.h"
 
 /* used to calculate the pen size from default value

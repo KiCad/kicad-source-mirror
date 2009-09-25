@@ -8,16 +8,15 @@
 #include "eeschema_id.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "bitmaps.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "class_marker_sch.h"
-
 #include "protos.h"
 #include "hotkeys.h"
+#include "class_library.h"
 
-#include "bitmaps.h"
 
 /* functions to add commands and submenus depending on the item */
 static void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame );

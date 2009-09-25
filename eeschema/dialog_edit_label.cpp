@@ -13,7 +13,6 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "dialog_edit_label.h"
 

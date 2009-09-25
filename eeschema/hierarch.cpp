@@ -7,16 +7,13 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "bitmaps.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 
 #include "wx/imaglist.h"
 #include "wx/treectrl.h"
-
-
-#include "bitmaps.h"
 
 
 static bool UpdateScreenFromSheet( WinEDA_SchematicFrame* frame );

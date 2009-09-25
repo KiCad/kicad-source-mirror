@@ -12,7 +12,6 @@
 #include "gestfich.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "eeconfig.h"

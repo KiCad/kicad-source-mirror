@@ -11,9 +11,10 @@
 #include "trigo.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
+#include "class_library.h"
+
 
 /* Local Variables : */
 static void Plot_Hierarchical_PIN_Sheet( PLOTTER*                       plotter,
@@ -64,7 +65,7 @@ static void PlotLibPart( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem )
     Multi   = DrawLibItem->m_Multi;
     convert = DrawLibItem->m_Convert;
 
-    for( LibEDA_BaseStruct* DEntry = Entry->m_Drawings;
+    for( LIB_DRAW_ITEM* DEntry = Entry->m_Drawings;
         DEntry != NULL; DEntry = DEntry->Next() )
     {
         /* Elimination des elements non relatifs a l'unite */

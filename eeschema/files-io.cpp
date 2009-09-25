@@ -7,12 +7,12 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
-#include "program.h"
-#include "libcmp.h"
-#include "general.h"
 
+#include "program.h"
+#include "general.h"
 #include "protos.h"
 #include "eeschema_id.h"
+#include "class_library.h"
 
 
 /****************************************************************/

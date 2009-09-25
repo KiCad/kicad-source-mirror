@@ -10,10 +10,10 @@
 #include "class_drawpanel.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditfrm.h"
+#include "class_library.h"
 
 #include "dialog_edit_libentry_fields_in_lib_base.h"
 
@@ -101,12 +101,12 @@ private:
 
 void WinEDA_LibeditFrame::InstallFieldsEditorDialog( wxCommandEvent& event )
 {
-    if( m_currentComponent == NULL )
+    if( m_component == NULL )
         return;
 
     DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
 
-    DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB dlg( this, m_currentComponent );
+    DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB dlg( this, m_component );
 
     int abort = dlg.ShowModal();
 

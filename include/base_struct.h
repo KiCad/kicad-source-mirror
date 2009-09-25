@@ -277,6 +277,7 @@ public:
 
     EDA_BaseStruct( EDA_BaseStruct* parent, KICAD_T idType );
     EDA_BaseStruct( KICAD_T idType );
+    EDA_BaseStruct( const EDA_BaseStruct& base );
     virtual ~EDA_BaseStruct() { };
 
     /**

@@ -158,7 +158,7 @@ extern HPGL_Pen_Descr_Struct g_HPGL_Pen_Descr;
 
 /* First and main (root) screen */
 extern DrawSheetStruct* g_RootSheet;
-extern SCH_SCREEN*      g_ScreenLib;
+
 
 /*************************************/
 /* Gestion de recherche des elements */

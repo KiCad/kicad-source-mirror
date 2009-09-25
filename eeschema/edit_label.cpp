@@ -12,11 +12,10 @@
 #include "confirm.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
-#include "dialog_edit_label.h"
-
 #include "protos.h"
+
+#include "dialog_edit_label.h"
 
 /* Fonctions locales */
 static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );

@@ -14,10 +14,10 @@
 #include "hotkeys.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditfrm.h"
+#include "class_libentry.h"
 
 
 /* functions to add commands and submenus depending on the item */
@@ -29,10 +29,10 @@ static void AddMenusForPin( wxMenu* PopMenu, LibDrawPin* Pin,
 bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
                                         wxMenu*        PopMenu )
 {
-    LibEDA_BaseStruct* DrawEntry = LocateItemUsingCursor();
+    LIB_DRAW_ITEM* DrawEntry = LocateItemUsingCursor();
     bool BlockActive = (GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE);
 
-    if( m_currentComponent == NULL )
+    if( m_component == NULL )
         return true;
 
     //  If Command in progresss: put the menu "cancel" and "end tool"
@@ -68,7 +68,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
     else
         return true;
 
-    CurrentDrawItem = DrawEntry;
+    m_drawItem = DrawEntry;
     wxString msg;
 
     switch( DrawEntry->Type() )
@@ -211,7 +211,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
 StructType %d" ),
             DrawEntry->Type() );
         DisplayError( this, msg );
-        CurrentDrawItem = NULL;
+        m_drawItem = NULL;
         break;
     }
 

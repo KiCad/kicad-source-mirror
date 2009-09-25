@@ -53,6 +53,8 @@ public:
 public:
     CMP_LIB_ENTRY( LibrEntryType CmpType, const wxString& name,
                    CMP_LIBRARY* lib = NULL );
+    CMP_LIB_ENTRY( const CMP_LIB_ENTRY& entry, CMP_LIBRARY* lib = NULL );
+
     virtual ~CMP_LIB_ENTRY();
 
     virtual wxString GetClass() const
@@ -123,7 +125,7 @@ public:
     bool               m_DrawPinNum;
     bool               m_DrawPinName;
     DLIST<LibDrawField> m_Fields;         /* Auxiliary Field list (id >= 2 ) */
-    LibEDA_BaseStruct* m_Drawings;        /* How to draw this part */
+    LIB_DRAW_ITEM    * m_Drawings;        /* How to draw this part */
     long               m_LastDate;        // Last change Date
 
 public:
@@ -134,6 +136,8 @@ public:
 
 
     LIB_COMPONENT( const wxString& name, CMP_LIBRARY* lib = NULL );
+    LIB_COMPONENT( const LIB_COMPONENT& component, CMP_LIBRARY* lib = NULL );
+
     ~LIB_COMPONENT();
 
     EDA_Rect GetBoundaryBox( int Unit, int Convert );
@@ -207,7 +211,7 @@ public:
      * @param panel - Panel to remove part from.
      * @param dc - Device context to remove part from.
      */
-    void RemoveDrawItem( LibEDA_BaseStruct* item,
+    void RemoveDrawItem( LIB_DRAW_ITEM* item,
                          WinEDA_DrawPanel* panel = NULL,
                          wxDC* dc = NULL );
 
@@ -244,6 +248,52 @@ public:
         wxASSERT( name != NULL );
         return m_AliasList.Index( name ) != wxNOT_FOUND;
     }
+
+    /**
+     * Checks all draw objects of component to see if they are with block.
+     *
+     * Use this method to mark draw objects as selected during block
+     * functions.
+     *
+     * @param rect - The bounding rectangle to test in draw items are inside.
+     * @param unit - The current unit number to test against.
+     * @param convert - Are the draw items being selected a conversion.
+     * @param editPinByPin - Used to ignore pin selections when in edit pin
+     *                       by pin mode is enabled.
+     *
+     * @return int - The number of draw object found inside the block select
+     *               rectangle.
+     */
+    int SelectItems( EDA_Rect& rect, int unit, int convert,
+                     bool editPinByPin );
+
+    /**
+     * Clears all the draw items marked by a block select.
+     */
+    void ClearSelectedItems( void );
+
+    /**
+     * Deletes the select draw items marked by a block select.
+     *
+     * The name and reference field will not be deleted.  They are the
+     * minimum drawing items required for any component.  Thier properties
+     * can be changed but the cannot be removed.
+     */
+    void DeleteSelectedItems( void );
+
+    /**
+     * Move the selected draw items marked by a block select.
+     */
+    void MoveSelectedItems( const wxPoint& offset );
+
+    /**
+     * Make a copy of the selected draw items marked by a block select.
+     *
+     * Fields are not copied.  Only component body items are copied.
+     * Copying fields would result in duplicate fields which does not
+     * make sense in this context.
+     */
+    void CopySelectedItems( const wxPoint& offset );
 };
 
 
@@ -264,7 +314,8 @@ protected:
 
 public:
     LIB_ALIAS( const wxString& name, LIB_COMPONENT* root,
-                           CMP_LIBRARY* lib = NULL );
+               CMP_LIBRARY* lib = NULL );
+    LIB_ALIAS( const LIB_ALIAS& alias, CMP_LIBRARY* lib = NULL );
     ~LIB_ALIAS();
 
     virtual wxString GetClass() const

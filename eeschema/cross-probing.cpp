@@ -5,15 +5,13 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
-#include "program.h"
-#include "libcmp.h"
-#include "general.h"
-
 #include "eda_dde.h"
 
+#include "program.h"
+#include "general.h"
 #include "eeschema_id.h"
-
 #include "protos.h"
+#include "classes_body_items.h"
 
 
 /***************************************************************/

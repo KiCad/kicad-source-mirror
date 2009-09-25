@@ -12,31 +12,36 @@
 #include "block_commande.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "class_marker_sch.h"
+#include "class_library.h"
 #include "protos.h"
 
 
 /* Variables Locales */
 
 // Imported functions:
-void               MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector );
-void               MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& Center );
-void               DeleteItemsInList( WinEDA_DrawPanel*  panel, PICKED_ITEMS_LIST& aItemsList );
-void               DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector  );
+void               MoveItemsInList( PICKED_ITEMS_LIST& aItemsList,
+                                    const wxPoint      aMoveVector );
+void               MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList,
+                                      wxPoint&           Center );
+void               DeleteItemsInList( WinEDA_DrawPanel*  panel,
+                                      PICKED_ITEMS_LIST& aItemsList );
+void               DuplicateItemsInList( SCH_SCREEN*        screen,
+                                         PICKED_ITEMS_LIST& aItemsList,
+                                         const wxPoint      aMoveVector  );
 
 /* Fonctions exportees */
 
 /* Fonctions Locales */
-static void               CollectStructsToDrag( SCH_SCREEN* screen );
-static void               AddPickedItem( SCH_SCREEN* screen, wxPoint aPosition );
-static LibEDA_BaseStruct* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
-                                              wxPoint&       aPosition );
-static void               DrawMovingBlockOutlines( WinEDA_DrawPanel* panel,
-                                                   wxDC*             DC,
-                                                   bool              erase );
-static void               SaveStructListForPaste( PICKED_ITEMS_LIST& aItemsList );
+static void           CollectStructsToDrag( SCH_SCREEN* screen );
+static void           AddPickedItem( SCH_SCREEN* screen, wxPoint aPosition );
+static LIB_DRAW_ITEM* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
+                                          wxPoint&       aPosition );
+static void           DrawMovingBlockOutlines( WinEDA_DrawPanel* panel,
+                                               wxDC*             DC,
+                                               bool              erase );
+static void           SaveStructListForPaste( PICKED_ITEMS_LIST& aItemsList );
 
 
 /*************************************************************************/
@@ -645,7 +650,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
         if( Struct->Type() == TYPE_SCH_COMPONENT )
         {
             // Add all pins of the selected component to list
-            LibEDA_BaseStruct* DrawItem;
+            LIB_DRAW_ITEM* DrawItem;
             wxPoint            pos;
             DrawItem = GetNextPinPosition( (SCH_COMPONENT*) Struct, pos );
             while( DrawItem )
@@ -840,8 +845,8 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
 
 
 /*********************************************************************************/
-static LibEDA_BaseStruct* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
-                                              wxPoint&       aPosition )
+static LIB_DRAW_ITEM* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
+                                          wxPoint&       aPosition )
 /*********************************************************************************/
 
 /** GetNextPinPosition()
@@ -856,9 +861,9 @@ static LibEDA_BaseStruct* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
  */
 {
     LIB_COMPONENT* Entry;
-    static LibEDA_BaseStruct* NextItem;
+    static LIB_DRAW_ITEM* NextItem;
     static int Multi, convert, TransMat[2][2];
-    LibEDA_BaseStruct* DEntry;
+    LIB_DRAW_ITEM* DEntry;
     int orient;
     LibDrawPin* Pin;
     static wxPoint CmpPosition;

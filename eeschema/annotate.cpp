@@ -10,8 +10,9 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "wxstruct.h"
+
 #include "program.h"
-#include "libcmp.h"
+#include "class_library.h"
 #include "protos.h"
 #include "netlist.h"
 

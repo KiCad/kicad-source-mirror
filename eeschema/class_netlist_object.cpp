@@ -6,7 +6,6 @@
 #include "fctsys.h"
 #include "common.h"
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 
 #include "class_netlist_object.h"

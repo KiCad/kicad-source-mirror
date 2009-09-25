@@ -5,16 +5,19 @@
 #include "fctsys.h"
 #include "common.h"
 #include "program.h"
-#include "libcmp.h"
-#include "general.h"
 #include "trigo.h"
 #include "macros.h"
-#include "class_marker_sch.h"
 
+#include "libcmp.h"
+#include "general.h"
+#include "class_marker_sch.h"
 #include "protos.h"
+#include "class_library.h"
+
 
 /* Routines Locales */
-static bool DrawStructInBox(int x1, int y1, int x2, int y2, SCH_ITEM *DrawStruct);
+static bool DrawStructInBox( int x1, int y1, int x2, int y2,
+                             SCH_ITEM *DrawStruct );
 static SCH_ITEM* LastSnappedStruct = NULL;
 static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
                           int StartX2, int StartY2, int EndX2, int EndY2 );
@@ -612,12 +615,12 @@ static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
 
 
 /*********************************************************************************/
-LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN*    Screen,
-                                   const wxPoint& aRefPoint,
-                                   LIB_COMPONENT* LibEntry,
-                                   int            Unit,
-                                   int            Convert,
-                                   int            masque )
+LIB_DRAW_ITEM* LocateDrawItem( SCH_SCREEN*    Screen,
+                               const wxPoint& aRefPoint,
+                               LIB_COMPONENT* LibEntry,
+                               int            Unit,
+                               int            Convert,
+                               int            masque )
 /*********************************************************************************/
 
 /* Locates a body item( not pins )
@@ -626,7 +629,7 @@ LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN*    Screen,
  *  remember the Y axis is from bottom to top in library entries for graphic items.
  */
 {
-    LibEDA_BaseStruct* DrawItem;
+    LIB_DRAW_ITEM* DrawItem;
 
     if( LibEntry == NULL )
         return NULL;
@@ -717,7 +720,7 @@ LibDrawPin* LocatePinByNumber( const wxString& ePin_Number,
  * @return a pointer on the pin, or NULL if not found
  */
 {
-    LibEDA_BaseStruct* DrawItem;
+    LIB_DRAW_ITEM* DrawItem;
     LIB_COMPONENT* Entry;
     LibDrawPin* Pin;
     int Unit, Convert;
@@ -760,8 +763,8 @@ LibDrawPin* LocatePinByNumber( const wxString& ePin_Number,
 
 
 /*******************************************************************/
-LibEDA_BaseStruct* LocatePin( const wxPoint& RefPos, LIB_COMPONENT* Entry,
-                              int Unit, int convert, SCH_COMPONENT* DrawLibItem )
+LIB_DRAW_ITEM* LocatePin( const wxPoint& RefPos, LIB_COMPONENT* Entry,
+                          int Unit, int convert, SCH_COMPONENT* DrawLibItem )
 /*******************************************************************/
 
 /* Routine de localisation d'une PIN de la PartLib pointee par Entry
@@ -779,7 +782,7 @@ LibEDA_BaseStruct* LocatePin( const wxPoint& RefPos, LIB_COMPONENT* Entry,
         return NULL;
     }
 
-    LibEDA_BaseStruct* DrawItem = Entry->m_Drawings;
+    LIB_DRAW_ITEM* DrawItem = Entry->m_Drawings;
     for( ; DrawItem != NULL; DrawItem = DrawItem->Next() )
     {
         if( DrawItem->Type() == COMPONENT_PIN_DRAW_TYPE ) /* Pin Trouvee */

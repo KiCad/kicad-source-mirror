@@ -7,12 +7,12 @@
 #include "common.h"
 #include "trigo.h"
 #include "confirm.h"
-#include "program.h"
-#include "libcmp.h"
-#include "general.h"
-#include "netlist.h"
 #include "macros.h"
+
+#include "program.h"
+#include "general.h"
 #include "protos.h"
+#include "netlist.h"
 
 
 /* Routines locales */

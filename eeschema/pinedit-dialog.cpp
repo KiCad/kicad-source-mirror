@@ -26,10 +26,10 @@ void InstallPineditFrame( WinEDA_LibeditFrame* parent, wxDC* DC,
     wxPoint MousePos = parent->GetScreen()->m_Curseur;
     int accept = TRUE;
 
-    if ( ( CurrentDrawItem == NULL )
-         || ( CurrentDrawItem->Type() == COMPONENT_PIN_DRAW_TYPE ) )
+    if ( ( parent->GetDrawItem() == NULL )
+         || ( parent->GetDrawItem()->Type() == COMPONENT_PIN_DRAW_TYPE ) )
     {
-        LibDrawPin * Pin = (LibDrawPin *) CurrentDrawItem;
+        LibDrawPin * Pin = (LibDrawPin *) parent->GetDrawItem();
         WinEDA_PinPropertiesFrame dlg( parent );
         accept = dlg.ShowModal();
 
@@ -81,7 +81,7 @@ WinEDA_PinPropertiesFrame::WinEDA_PinPropertiesFrame( )
 
 WinEDA_PinPropertiesFrame::WinEDA_PinPropertiesFrame( WinEDA_LibeditFrame* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style )
 {
-LibDrawPin * CurrentPin = (LibDrawPin *) CurrentDrawItem;
+    LibDrawPin * CurrentPin = (LibDrawPin *) parent->GetDrawItem();
 
     m_Parent = parent;
     if ( CurrentPin )
@@ -326,7 +326,7 @@ void WinEDA_PinPropertiesFrame::SetValuesInDialog(void)
 /*******************************************************/
 {
     wxString number;
-    LibDrawPin * CurrentPin = (LibDrawPin *) CurrentDrawItem;
+    LibDrawPin * CurrentPin = (LibDrawPin *) m_Parent->GetDrawItem();
     wxString msg;
     int tmp, ii;
 

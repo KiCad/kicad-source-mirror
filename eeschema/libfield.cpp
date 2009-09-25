@@ -9,10 +9,11 @@
 #include "confirm.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
+#include "libcmp.h"
 #include "protos.h"
 #include "libeditfrm.h"
+#include "class_library.h"
 
 
 /* Routines locales */
@@ -20,7 +21,7 @@ static void ShowMoveField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
 
 /* Variables locales */
-extern int     CurrentUnit;
+extern int     m_unit;
 static wxPoint StartCursor, LastTextPosition;
 
 
@@ -28,7 +29,15 @@ static void ExitMoveField( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    if( CurrentDrawItem == NULL )
+
+    WinEDA_LibeditFrame* parent = ( WinEDA_LibeditFrame* ) Panel->GetParent();
+
+    if( parent == NULL )
+        return;
+
+    LIB_DRAW_ITEM* item = parent->GetDrawItem();
+
+    if( item == NULL )
         return;
 
     wxPoint curpos = Panel->GetScreen()->m_Curseur;
@@ -36,9 +45,8 @@ static void ExitMoveField( WinEDA_DrawPanel* Panel, wxDC* DC )
     Panel->GetScreen()->m_Curseur = StartCursor;
     ShowMoveField( Panel, DC, TRUE );
     Panel->GetScreen()->m_Curseur = curpos;
-    CurrentDrawItem->m_Flags = 0;
-
-    CurrentDrawItem = NULL;
+    item->m_Flags = 0;
+    parent->SetDrawItem( NULL );
 }
 
 
@@ -49,12 +57,12 @@ void WinEDA_LibeditFrame::StartMoveField( wxDC* DC, LibDrawField* field )
 {
     wxPoint startPos;
 
-    if( ( m_currentComponent == NULL ) || ( field == NULL ) )
+    if( ( m_component == NULL ) || ( field == NULL ) )
         return;
 
-    CurrentDrawItem  = field;
+    m_drawItem  = field;
     LastTextPosition = field->m_Pos;
-    CurrentDrawItem->m_Flags |= IS_MOVED;
+    m_drawItem->m_Flags |= IS_MOVED;
 
     startPos.x = LastTextPosition.x;
     startPos.y = -LastTextPosition.y;
@@ -77,12 +85,17 @@ void WinEDA_LibeditFrame::StartMoveField( wxDC* DC, LibDrawField* field )
 /*****************************************************************/
 static void ShowMoveField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
-    LibDrawField* Field = (LibDrawField*) CurrentDrawItem;
+    WinEDA_LibeditFrame* parent = (WinEDA_LibeditFrame*) panel->GetParent();
+
+    if( parent == NULL )
+        return;
+
+    LibDrawField* Field = (LibDrawField*) parent->GetDrawItem();
 
     if( Field == NULL )
         return;
 
-    wxString text = Field->GetFullText();
+    wxString text = Field->GetFullText( parent->GetUnit() );
 
     if( erase )
         Field->Draw( panel, DC, wxPoint( 0, 0 ), -1, g_XorMode, &text,
@@ -107,7 +120,7 @@ void WinEDA_LibeditFrame::PlaceField( wxDC* DC, LibDrawField* Field )
     Field->m_Pos.y = -GetScreen()->m_Curseur.y;
     DrawPanel->CursorOff( DC );
 
-    wxString fieldText = Field->GetFullText();
+    wxString fieldText = Field->GetFullText( m_unit );
 
     Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE,
                  &fieldText, DefaultTransformMatrix );
@@ -116,7 +129,7 @@ void WinEDA_LibeditFrame::PlaceField( wxDC* DC, LibDrawField* Field )
     GetScreen()->SetModify();
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
-    CurrentDrawItem = NULL;
+    m_drawItem = NULL;
 }
 
 
@@ -148,13 +161,12 @@ void WinEDA_LibeditFrame::EditField( wxDC* DC, LibDrawField* Field )
     Get_Message( title, _( "Edit field" ), Text, this );
     Text.Replace( wxT( " " ), wxT( "_" ) );
 
-    /* If the value is changed, this is equivalent to create a new component
-     * from the old one.
-     * So we must check for an existing alias of this "new" component
-     * and change the value only if there is no existing alias with the same
-     * name for this component
+    /* If the value field is changed, this is equivalent to creating a new
+     * component from the old one.  Check for an existing library entry of
+     * this "new" component and change the value only if there is no existing
+     * entry with the same name.
      */
-    if( Field->m_FieldId == VALUE )
+    if( Field->m_FieldId == VALUE && Text != Field->m_Text )
     {
         wxString msg;
 
@@ -173,19 +185,19 @@ names in the alias list." ),
         /* Test for an existing entry in the library to prevent duplicate
          * entry names.
          */
-        if( CurrentLib && CurrentLib->FindEntry( Text ) != NULL )
+        if( m_library && m_library->FindEntry( Text ) != NULL )
         {
             msg.Printf( _( "The field name <%s> conflicts with an existing \
 entry in the component library <%s>.\nPlease choose another name that does \
 not conflict with any library entries." ),
                         (const wxChar*) Text,
-                        (const wxChar*) CurrentLib->GetName() );
+                        (const wxChar*) m_library->GetName() );
             DisplayError( this, msg );
             return;
         }
     }
 
-    wxString fieldText = Field->GetFullText();
+    wxString fieldText = Field->GetFullText( m_unit );
 
     Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode, &fieldText,
                  DefaultTransformMatrix );
@@ -200,7 +212,7 @@ not conflict with any library entries." ),
         DisplayError( this, _( "No new text: no change" ) );
     }
 
-    fieldText = Field->GetFullText();
+    fieldText = Field->GetFullText( m_unit );
     int drawMode = g_XorMode;
 
     if( Field->m_Flags == 0 )
@@ -229,7 +241,7 @@ void WinEDA_LibeditFrame::RotateField( wxDC* DC, LibDrawField* Field )
     DrawPanel->CursorOff( DC );
     GRSetDrawMode( DC, g_XorMode );
 
-    wxString fieldText = Field->GetFullText();
+    wxString fieldText = Field->GetFullText( m_unit );
 
     Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode, &fieldText,
                  DefaultTransformMatrix );
@@ -283,37 +295,35 @@ LibDrawField* WinEDA_LibeditFrame::LocateField( LIB_COMPONENT* LibEntry )
 }
 
 
-LibEDA_BaseStruct* WinEDA_LibeditFrame::LocateItemUsingCursor()
+LIB_DRAW_ITEM* WinEDA_LibeditFrame::LocateItemUsingCursor()
 {
-    LibEDA_BaseStruct* DrawEntry = CurrentDrawItem;
+    LIB_DRAW_ITEM* DrawEntry = m_drawItem;
 
-    if( m_currentComponent == NULL )
+    if( m_component == NULL )
         return NULL;
 
     if( ( DrawEntry == NULL ) || ( DrawEntry->m_Flags == 0 ) )
     {
-        DrawEntry = LocatePin( GetScreen()->m_Curseur, m_currentComponent,
-                               CurrentUnit, CurrentConvert );
+        DrawEntry = LocatePin( GetScreen()->m_Curseur, m_component,
+                               m_unit, m_convert );
         if( DrawEntry == NULL )
         {
-            DrawEntry = CurrentDrawItem =
+            DrawEntry = m_drawItem =
                 LocateDrawItem( (SCH_SCREEN*) GetScreen(),
-                                GetScreen()->m_MousePosition,
-                                m_currentComponent, CurrentUnit,
-                                CurrentConvert, LOCATE_ALL_DRAW_ITEM );
+                                GetScreen()->m_MousePosition, m_component,
+                                m_unit, m_convert, LOCATE_ALL_DRAW_ITEM );
         }
         if( DrawEntry == NULL )
         {
-            DrawEntry = CurrentDrawItem =
+            DrawEntry = m_drawItem =
                 LocateDrawItem( (SCH_SCREEN*) GetScreen(),
-                                GetScreen()->m_Curseur, m_currentComponent,
-                                CurrentUnit, CurrentConvert,
-                                LOCATE_ALL_DRAW_ITEM );
+                                GetScreen()->m_Curseur, m_component,
+                                m_unit, m_convert, LOCATE_ALL_DRAW_ITEM );
         }
         if( DrawEntry == NULL )
         {
-            DrawEntry = CurrentDrawItem =
-                (LibEDA_BaseStruct*) LocateField( m_currentComponent );
+            DrawEntry = m_drawItem =
+                (LIB_DRAW_ITEM*) LocateField( m_component );
         }
     }
 

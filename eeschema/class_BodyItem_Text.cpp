@@ -15,7 +15,7 @@
 #include "trigo.h"
 
 #include "program.h"
-#include "libcmp.h"
+#include "classes_body_items.h"
 #include "general.h"
 #include "protos.h"
 
@@ -23,7 +23,7 @@
 
 
 LibDrawText::LibDrawText(LIB_COMPONENT * aParent) :
-    LibEDA_BaseStruct( COMPONENT_GRAPHIC_TEXT_DRAW_TYPE, aParent ),
+    LIB_DRAW_ITEM( COMPONENT_GRAPHIC_TEXT_DRAW_TYPE, aParent ),
     EDA_TextStruct()
 {
     m_Size     = wxSize( 50, 50 );
@@ -172,7 +172,7 @@ bool LibDrawText::HitTest( wxPoint aPosRef, int aThreshold,
 }
 
 
-LibEDA_BaseStruct* LibDrawText::DoGenCopy()
+LIB_DRAW_ITEM* LibDrawText::DoGenCopy()
 {
     LibDrawText* newitem = new LibDrawText(NULL);
 
@@ -189,11 +189,11 @@ LibEDA_BaseStruct* LibDrawText::DoGenCopy()
     newitem->m_Bold      = m_Bold;
     newitem->m_HJustify  = m_HJustify;
     newitem->m_VJustify  = m_VJustify;
-    return (LibEDA_BaseStruct*) newitem;
+    return (LIB_DRAW_ITEM*) newitem;
 }
 
 
-bool LibDrawText::DoCompare( const LibEDA_BaseStruct& other ) const
+bool LibDrawText::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_GRAPHIC_TEXT_DRAW_TYPE );
 
@@ -217,6 +217,12 @@ bool LibDrawText::DoTestInside( EDA_Rect& rect )
      *        use rectangle instect.
      */
     return rect.Inside( m_Pos.x, -m_Pos.y );
+}
+
+
+void LibDrawText::DoMove( const wxPoint& newPosition )
+{
+    m_Pos = newPosition;
 }
 
 
@@ -273,7 +279,7 @@ void LibDrawText::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
 
-    LibEDA_BaseStruct::DisplayInfo( frame );
+    LIB_DRAW_ITEM::DisplayInfo( frame );
 
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );

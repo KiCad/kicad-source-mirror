@@ -16,10 +16,10 @@
 #include "gestfich.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditfrm.h"
+#include "class_library.h"
 
 
 /*
@@ -31,15 +31,14 @@
  */
 void WinEDA_LibeditFrame::LoadOneSymbol( void )
 {
-    LIB_COMPONENT*     Component;
-    LibEDA_BaseStruct* DrawEntry;
-    FILE*              ImportFile;
-    wxString           msg, err;
-    CMP_LIBRARY*       Lib;
+    LIB_COMPONENT* Component;
+    LIB_DRAW_ITEM* DrawEntry;
+    FILE*          ImportFile;
+    wxString       msg, err;
+    CMP_LIBRARY*   Lib;
 
     /* Exit if no library entry is selected or a command is in progress. */
-    if( m_currentComponent == NULL
-       || ( CurrentDrawItem && CurrentDrawItem->m_Flags ) )
+    if( m_component == NULL || ( m_drawItem && m_drawItem->m_Flags ) )
         return;
 
     DrawPanel->m_IgnoreMouseEvents = TRUE;
@@ -102,16 +101,16 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
     while( DrawEntry )
     {
         if( DrawEntry->m_Unit )
-            DrawEntry->m_Unit = CurrentUnit;
+            DrawEntry->m_Unit = m_unit;
         if( DrawEntry->m_Convert )
-            DrawEntry->m_Convert = CurrentConvert;
+            DrawEntry->m_Convert = m_convert;
         DrawEntry->m_Flags    = IS_NEW;
         DrawEntry->m_Selected = IS_SELECTED;
 
         if( DrawEntry->Next() == NULL ) /* Fin de liste trouvee */
         {
-            DrawEntry->SetNext( m_currentComponent->m_Drawings );
-            m_currentComponent->m_Drawings = Component->m_Drawings;
+            DrawEntry->SetNext( m_component->m_Drawings );
+            m_component->m_Drawings = Component->m_Drawings;
             Component->m_Drawings = NULL;
             break;
         }
@@ -120,10 +119,10 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
     }
 
     // Remove duplicated drawings:
-    m_currentComponent->RemoveDuplicateDrawItems();
+    m_component->RemoveDuplicateDrawItems();
 
     // Clear flags
-    DrawEntry = m_currentComponent->m_Drawings;
+    DrawEntry = m_component->m_Drawings;
     while( DrawEntry )
     {
         DrawEntry->m_Flags    = 0;
@@ -148,18 +147,18 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
  */
 void WinEDA_LibeditFrame::SaveOneSymbol()
 {
-    LibEDA_BaseStruct* DrawEntry;
-    wxString           msg;
-    FILE*              ExportFile;
+    LIB_DRAW_ITEM* DrawEntry;
+    wxString       msg;
+    FILE*          ExportFile;
 
-    if( m_currentComponent->m_Drawings == NULL )
+    if( m_component->m_Drawings == NULL )
         return;
 
     /* Creation du fichier symbole */
     wxString default_path = wxGetApp().ReturnLastVisitedLibraryPath();
 
     wxFileDialog dlg( this, _( "Export Symbol Drawings" ), default_path,
-                      m_currentComponent->m_Name.m_Text, SymbolFileWildcard,
+                      m_component->m_Name.m_Text, SymbolFileWildcard,
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -195,28 +194,28 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
 
     /* Creation du commentaire donnant le nom du composant */
     fprintf( ExportFile, "# SYMBOL %s\n#\n",
-             CONV_TO_UTF8( m_currentComponent->m_Name.m_Text ) );
+             CONV_TO_UTF8( m_component->m_Name.m_Text ) );
 
     /* Generation des lignes utiles */
     fprintf( ExportFile, "DEF %s",
-             CONV_TO_UTF8( m_currentComponent->m_Name.m_Text ) );
-    if( !m_currentComponent->m_Prefix.m_Text.IsEmpty() )
+             CONV_TO_UTF8( m_component->m_Name.m_Text ) );
+    if( !m_component->m_Prefix.m_Text.IsEmpty() )
         fprintf( ExportFile, " %s",
-                 CONV_TO_UTF8( m_currentComponent->m_Prefix.m_Text ) );
+                 CONV_TO_UTF8( m_component->m_Prefix.m_Text ) );
     else
         fprintf( ExportFile, " ~" );
 
     fprintf( ExportFile, " %d %d %c %c %d %d %c\n",
              0, /* unused */
-             m_currentComponent->m_TextInside,
-             m_currentComponent->m_DrawPinNum ? 'Y' : 'N',
-             m_currentComponent->m_DrawPinName ? 'Y' : 'N',
+             m_component->m_TextInside,
+             m_component->m_DrawPinNum ? 'Y' : 'N',
+             m_component->m_DrawPinName ? 'Y' : 'N',
              1, 0 /* unused */, 'N' );
 
     /* Position / orientation / visibilite des champs */
-    m_currentComponent->m_Prefix.Save( ExportFile );
-    m_currentComponent->m_Name.Save( ExportFile );
-    DrawEntry = m_currentComponent->m_Drawings;
+    m_component->m_Prefix.Save( ExportFile );
+    m_component->m_Name.Save( ExportFile );
+    DrawEntry = m_component->m_Drawings;
 
     if( DrawEntry )
     {
@@ -224,11 +223,11 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
         for( ; DrawEntry != NULL; DrawEntry = DrawEntry->Next() )
         {
             /* Elimination des elements non relatifs a l'unite */
-            if( CurrentUnit && DrawEntry->m_Unit
-                && ( DrawEntry->m_Unit != CurrentUnit ) )
+            if( m_unit && DrawEntry->m_Unit
+                && ( DrawEntry->m_Unit != m_unit ) )
                 continue;
-            if( CurrentConvert && DrawEntry->m_Convert
-               && ( DrawEntry->m_Convert != CurrentConvert ) )
+            if( m_convert && DrawEntry->m_Convert
+               && ( DrawEntry->m_Convert != m_convert ) )
                 continue;
 
             DrawEntry->Save( ExportFile );
@@ -244,21 +243,21 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
 
 /***************************************************************************/
 /* Routine de placement du point d'ancrage ( reference des coordonnes pour */
-/* le trace) du composant courant                                             */
-/*  Toutes les coord apparaissant dans les structures sont modifiees          */
-/*  pour repositionner le point repere par le curseur souris au point     */
+/* le trace) du composant courant                                          */
+/*  Toutes les coord apparaissant dans les structures sont modifiees       */
+/*  pour repositionner le point repere par le curseur souris au point      */
 /*  d'ancrage ( coord 0,0 ).                                               */
 /***************************************************************************/
 void WinEDA_LibeditFrame::PlaceAncre()
 {
-    if( m_currentComponent == NULL )
+    if( m_component == NULL )
         return;
 
     wxPoint offset( -GetScreen()->m_Curseur.x, GetScreen()->m_Curseur.y );
 
     GetScreen()->SetModify();
 
-    m_currentComponent->SetOffset( offset );
+    m_component->SetOffset( offset );
 
     /* Redraw the symbol */
     GetScreen()->m_Curseur.x = GetScreen()->m_Curseur.y = 0;

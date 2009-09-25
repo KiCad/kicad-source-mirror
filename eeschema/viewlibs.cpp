@@ -11,11 +11,11 @@
 #include "eda_doc.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "libviewfrm.h"
 #include "eeschema_id.h"
+#include "class_library.h"
 
 
 #define NEXT_PART      1
@@ -28,10 +28,6 @@ void WinEDA_ViewlibFrame::Process_Special_Functions( wxCommandEvent& event )
     wxString msg;
     CMP_LIB_ENTRY* LibEntry;
     int     ii, id = event.GetId();
-    wxPoint pos;
-
-    wxGetMousePosition( &pos.x, &pos.y );
-    pos.y += 20;
 
     switch( id )
     {

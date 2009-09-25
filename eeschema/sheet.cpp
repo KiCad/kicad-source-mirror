@@ -18,6 +18,7 @@
 
 ////@begin includes
 ////@end includes
+
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
@@ -26,10 +27,9 @@
 #include "gestfich.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
-
 #include "protos.h"
+
 
 /* Routines Locales */
 static void ExitSheet( WinEDA_DrawPanel* Panel, wxDC* DC );

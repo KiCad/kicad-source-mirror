@@ -13,10 +13,10 @@
 #include "class_drawpanel.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditfrm.h"
+#include "class_libentry.h"
 
 #include "dialog_bodygraphictext_properties_base.h"
 
@@ -144,7 +144,7 @@ void Dialog_BodyGraphicText_Properties::OnOkClick( wxCommandEvent& event )
 /* Met a jour les differents parametres pour le composant en cours d'edition
 */
 {
-wxString Line;
+    wxString Line;
 
     Line = m_TextValue->GetValue();
     g_LastTextOrient = m_Orient->GetValue() ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
@@ -165,12 +165,12 @@ wxString Line;
         m_GraphicText->m_Orient = g_LastTextOrient;
 
         if( g_FlDrawSpecificUnit )
-            m_GraphicText->m_Unit = CurrentUnit;
+            m_GraphicText->m_Unit = m_Parent->GetUnit();
         else
             m_GraphicText->m_Unit = 0;
 
         if( g_FlDrawSpecificConvert )
-            m_GraphicText->m_Convert = CurrentConvert;
+            m_GraphicText->m_Convert = m_Parent->GetConvert();
         else
             m_GraphicText->m_Convert = 0;
 
@@ -216,14 +216,14 @@ wxString Line;
     }
     Close();
 
-    if ( CurrentDrawItem )
-        CurrentDrawItem->DisplayInfo( m_Parent );
+    if ( m_Parent->GetDrawItem() )
+        m_Parent->GetDrawItem()->DisplayInfo( m_Parent );
     Close();
 }
 
 
 
-void WinEDA_LibeditFrame::EditSymbolText(wxDC * DC, LibEDA_BaseStruct * DrawItem)
+void WinEDA_LibeditFrame::EditSymbolText(wxDC* DC, LIB_DRAW_ITEM* DrawItem)
 {
     int DrawMode = g_XorMode;
 
@@ -263,7 +263,7 @@ void WinEDA_LibeditFrame::RotateSymbolText(wxDC * DC)
     90 deg Graphic text Rotation .
 */
 {
-    LibDrawText * DrawItem = (LibDrawText *) CurrentDrawItem;
+    LibDrawText * DrawItem = (LibDrawText *) m_drawItem;
 
     if( DrawItem == NULL )
         return;

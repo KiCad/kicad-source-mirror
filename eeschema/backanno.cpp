@@ -9,9 +9,9 @@
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
-#include "libcmp.h"
-#include "general.h"
 #include "appl_wxstruct.h"
+
+#include "general.h"
 
 /* Variables Locales */
 

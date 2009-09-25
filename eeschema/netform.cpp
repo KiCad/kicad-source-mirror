@@ -8,13 +8,14 @@
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
-#include "program.h"
-#include "libcmp.h"
-#include "general.h"
-#include "netlist.h"
 #include "appl_wxstruct.h"
 
+#include "program.h"
+#include "general.h"
+#include "netlist.h"
 #include "protos.h"
+#include "class_library.h"
+
 
 /* Routines locales */
 static void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& FullFileName );
@@ -108,9 +109,9 @@ static SCH_COMPONENT* FindNextComponentAndCreatPinList(
  *  Must be deallocated by the user
  */
 {
-    SCH_COMPONENT*     Component = NULL;
-    LIB_COMPONENT*     Entry;
-    LibEDA_BaseStruct* DEntry;
+    SCH_COMPONENT* Component = NULL;
+    LIB_COMPONENT* Entry;
+    LIB_DRAW_ITEM* DEntry;
 
     s_SortedComponentPinList.clear();
     for( ; DrawList != NULL; DrawList = DrawList->Next() )
@@ -767,7 +768,7 @@ static void FindAllsInstancesOfComponent( SCH_COMPONENT* Component_in,
 {
     EDA_BaseStruct* SchItem;
     SCH_COMPONENT* Component2;
-    LibEDA_BaseStruct* DEntry;
+    LIB_DRAW_ITEM* DEntry;
     DrawSheetPath* sheet;
     wxString str, Reference = Component_in->GetRef( Sheet_in );
 

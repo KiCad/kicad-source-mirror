@@ -9,9 +9,9 @@
 #include "confirm.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
+#include "class_library.h"
 
 #include "dialog_edit_component_in_schematic.h"
 

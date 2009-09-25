@@ -16,10 +16,10 @@
 #include "eeschema_id.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditfrm.h"
+#include "class_library.h"
 
 #include <wx/filename.h>
 
@@ -41,7 +41,7 @@ void WinEDA_LibeditFrame::OnImportPart( wxCommandEvent& event )
     CMP_LIBRARY*   LibTmp;
     CMP_LIB_ENTRY* LibEntry;
 
-    LibItemToRepeat = NULL;
+    m_lastDrawItem = NULL;
 
     wxFileDialog dlg( this, _( "Import Component" ), m_LastLibImportPath,
                       wxEmptyString, CompLibFileWildcard,
@@ -96,13 +96,13 @@ void WinEDA_LibeditFrame::OnExportPart( wxCommandEvent& event )
     CMP_LIBRARY* CurLibTmp;
     bool         createLib = ( event.GetId() != ExportPartId ) ? false : true;
 
-    if( m_currentComponent == NULL )
+    if( m_component == NULL )
     {
         DisplayError( this, _( "There is no component selected to save." ) );
         return;
     }
 
-    fn = m_currentComponent->GetName().Lower();
+    fn = m_component->GetName().Lower();
     fn.SetExt( CompLibFileExtension );
 
     title = createLib ? _( "New Library" ) : _( "Export Component" );
@@ -115,19 +115,19 @@ void WinEDA_LibeditFrame::OnExportPart( wxCommandEvent& event )
 
     fn = dlg.GetPath();
 
-    CurLibTmp = CurrentLib;
+    CurLibTmp = m_library;
 
-    CurrentLib = new CMP_LIBRARY( LIBRARY_TYPE_EESCHEMA, fn );
+    m_library = new CMP_LIBRARY( LIBRARY_TYPE_EESCHEMA, fn );
 
     SaveOnePartInMemory();
 
-    bool success = CurrentLib->Save( fn.GetFullPath() );
+    bool success = m_library->Save( fn.GetFullPath() );
 
     if( success )
         m_LastLibExportPath = fn.GetPath();
 
-    delete CurrentLib;
-    CurrentLib = CurLibTmp;
+    delete m_library;
+    m_library = CurLibTmp;
 
     if( createLib && success )
     {

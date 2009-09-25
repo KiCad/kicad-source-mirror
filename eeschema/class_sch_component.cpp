@@ -6,12 +6,12 @@
 #include "class_drawpanel.h"
 #include "gr_basic.h"
 #include "common.h"
+
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "macros.h"
-
 #include "protos.h"
+#include "class_library.h"
 
 #include <wx/tokenzr.h>
 

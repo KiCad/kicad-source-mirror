@@ -10,10 +10,10 @@
 #include "gestfich.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditfrm.h"
+#include "class_libentry.h"
 
 #include "dialog_edit_component_in_lib.h"
 
@@ -45,7 +45,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::Init( )
     SetFocus();
     m_AliasLocation = -1;
 
-    LIB_COMPONENT* component = m_Parent->GetCurrentComponent();
+    LIB_COMPONENT* component = m_Parent->GetComponent();
 
     if( component == NULL )
     {
@@ -55,22 +55,22 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::Init( )
 
     wxString title = _( "Properties for " );
 
-    if( !CurrentAliasName.IsEmpty() )
+    if( !m_Parent->GetAliasName().IsEmpty() )
     {
-        title += CurrentAliasName + _( " (alias of " ) +
+        title += m_Parent->GetAliasName() + _( " (alias of " ) +
             component->GetName() + wxT( ")" );
     }
     else
     {
         title += component->GetName();
-        CurrentAliasName.Empty();
+        m_Parent->GetAliasName().Empty();
     }
 
     SetTitle( title );
     InitPanelDoc();
     InitBasicPanel();
 
-    if( !CurrentAliasName.IsEmpty() )
+    if( !m_Parent->GetAliasName().IsEmpty() )
         m_ButtonDeleteAllAlias->Enable( false );
 
     /* Place list of alias names in listbox */

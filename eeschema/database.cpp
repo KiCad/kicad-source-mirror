@@ -13,9 +13,9 @@
 #include "kicad_string.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
+#include "class_library.h"
 
 #include <boost/foreach.hpp>
 

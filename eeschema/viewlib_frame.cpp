@@ -10,10 +10,10 @@
 #include "bitmaps.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "libviewfrm.h"
+#include "class_library.h"
 
 
 /*****************************/
@@ -135,7 +135,6 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
                                               wxT( "CmpWindow" ) );
     m_CmpListWindow->SetOrientation( wxLAYOUT_VERTICAL );
 
-//    m_CmpListWindow->SetAlignment( wxLAYOUT_LEFT );
     m_CmpListWindow->SetSashVisible( wxSASH_RIGHT, TRUE );
     m_CmpListWindow->SetExtraBorderSize( EXTRA_BORDER_SIZE );
     m_CmpList = new wxListBox( m_CmpListWindow, ID_LIBVIEW_CMP_LIST,
@@ -154,13 +153,8 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
 }
 
 
-/*******************************************/
 WinEDA_ViewlibFrame::~WinEDA_ViewlibFrame()
-/*******************************************/
 {
-    delete GetScreen();
-    SetBaseScreen( 0 );
-
     WinEDA_SchematicFrame* frame =
         (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
     frame->m_ViewlibFrame = NULL;

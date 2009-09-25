@@ -20,11 +20,11 @@
 #include "gr_basic.h"
 #include "common.h"
 #include "confirm.h"
-#include "program.h"
-#include "libcmp.h"
-#include "general.h"
 #include "worksheet.h"
 #include "plot_common.h"
+
+#include "program.h"
+#include "general.h"
 #include "protos.h"
 
 enum PageFormatReq {

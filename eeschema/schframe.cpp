@@ -11,11 +11,10 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "gestfich.h"
+#include "bitmaps.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
-#include "bitmaps.h"
 #include "protos.h"
 #include "eeschema_id.h"
 #include "netlist.h"
@@ -286,10 +285,10 @@ void WinEDA_SchematicFrame::CreateScreens()
     m_CurrentSheet->Clear();
     m_CurrentSheet->Push( g_RootSheet );
 
-    if( g_ScreenLib == NULL )
-        g_ScreenLib = new SCH_SCREEN();
-    g_ScreenLib->SetZoom( 4 * g_ScreenLib->m_ZoomScalar );
-    g_ScreenLib->m_UndoRedoCountMax = 10;
+    if( GetBaseScreen() == NULL )
+        SetBaseScreen( new SCH_SCREEN() );
+    GetBaseScreen()->SetZoom( 4 * GetBaseScreen()->m_ZoomScalar );
+    GetBaseScreen()->m_UndoRedoCountMax = 10;
 }
 
 
@@ -648,7 +647,7 @@ void WinEDA_SchematicFrame::OnOpenLibraryEditor( wxCommandEvent& event )
                                                   wxT( "Library Editor" ),
                                                   wxPoint( -1, -1 ),
                                                   wxSize( 600, 400 ) );
-        ActiveScreen = g_ScreenLib;
+        ActiveScreen = GetBaseScreen();
         m_LibeditFrame->AdjustScrollBars();
     }
 }

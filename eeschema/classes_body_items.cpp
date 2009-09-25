@@ -11,9 +11,9 @@
 #include "bezier_curves.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
+#include "classes_body_items.h"
 
 
 static int fill_tab[3] = { 'N', 'F', 'f' };
@@ -22,8 +22,7 @@ static int fill_tab[3] = { 'N', 'F', 'f' };
 
 
 /* Base class (abstract) for components bodies items */
-LibEDA_BaseStruct::LibEDA_BaseStruct( KICAD_T struct_type,
-                                      LIB_COMPONENT* aParent ) :
+LIB_DRAW_ITEM::LIB_DRAW_ITEM( KICAD_T struct_type, LIB_COMPONENT* aParent ) :
     EDA_BaseStruct( struct_type )
 {
     m_Unit     = 0;  /* Unit identification (for multi part per package)
@@ -31,8 +30,19 @@ LibEDA_BaseStruct::LibEDA_BaseStruct( KICAD_T struct_type,
     m_Convert  = 0;  /* Shape identification (for parts which have a convert
                       * shape) 0 if the item is common to all shapes */
     m_Fill     = NO_FILL;
-    m_Parent   = aParent;
+    m_Parent   = (EDA_BaseStruct*) aParent;
     m_typeName = _( "Undefined" );
+}
+
+
+LIB_DRAW_ITEM::LIB_DRAW_ITEM( const LIB_DRAW_ITEM& item ) :
+    EDA_BaseStruct( item )
+{
+    m_Unit = item.m_Unit;
+    m_Convert = item.m_Convert;
+    m_Fill = item.m_Fill;
+    m_Parent = item.m_Parent;
+    m_typeName = item.m_typeName;
 }
 
 
@@ -43,7 +53,7 @@ LibEDA_BaseStruct::LibEDA_BaseStruct( KICAD_T struct_type,
  * all library items.  Call the base class from the derived class or the
  * common information will not be updated in the message panel.
  */
-void LibEDA_BaseStruct::DisplayInfo( WinEDA_DrawFrame* frame )
+void LIB_DRAW_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
 
@@ -70,7 +80,7 @@ void LibEDA_BaseStruct::DisplayInfo( WinEDA_DrawFrame* frame )
 }
 
 
-bool LibEDA_BaseStruct::operator==( const LibEDA_BaseStruct& other ) const
+bool LIB_DRAW_ITEM::operator==( const LIB_DRAW_ITEM& other ) const
 {
     return ( ( Type() == other.Type() )
              && ( m_Unit == other.m_Unit )
@@ -84,7 +94,7 @@ bool LibEDA_BaseStruct::operator==( const LibEDA_BaseStruct& other ) const
 /**********************/
 
 LibDrawArc::LibDrawArc( LIB_COMPONENT* aParent ) :
-    LibEDA_BaseStruct( COMPONENT_ARC_DRAW_TYPE, aParent )
+    LIB_DRAW_ITEM( COMPONENT_ARC_DRAW_TYPE, aParent )
 {
     m_Radius   = 0;
     m_t1       = 0;
@@ -92,6 +102,19 @@ LibDrawArc::LibDrawArc( LIB_COMPONENT* aParent ) :
     m_Width    = 0;
     m_Fill     = NO_FILL;
     m_typeName = _( "Arc" );
+}
+
+
+LibDrawArc::LibDrawArc( const LibDrawArc& arc ) : LIB_DRAW_ITEM( arc )
+{
+    m_Radius   = arc.m_Radius;
+    m_t1       = arc.m_t1;
+    m_t2       = arc.m_t2;
+    m_Width    = arc.m_Width;
+    m_Fill     = arc.m_Fill;
+    m_Pos      = arc.m_Pos;
+    m_ArcStart = arc.m_ArcStart;
+    m_ArcEnd   = arc.m_ArcEnd;
 }
 
 
@@ -233,7 +256,7 @@ bool LibDrawArc::HitTest( wxPoint aRefPoint, int aThreshold,
 }
 
 
-LibEDA_BaseStruct* LibDrawArc::DoGenCopy()
+LIB_DRAW_ITEM* LibDrawArc::DoGenCopy()
 {
     LibDrawArc* newitem = new LibDrawArc( GetParent() );
 
@@ -249,11 +272,11 @@ LibEDA_BaseStruct* LibDrawArc::DoGenCopy()
     newitem->m_Flags    = m_Flags;
     newitem->m_Fill     = m_Fill;
 
-    return (LibEDA_BaseStruct*) newitem;
+    return (LIB_DRAW_ITEM*) newitem;
 }
 
 
-bool LibDrawArc::DoCompare( const LibEDA_BaseStruct& other ) const
+bool LibDrawArc::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_ARC_DRAW_TYPE );
 
@@ -276,6 +299,15 @@ bool LibDrawArc::DoTestInside( EDA_Rect& rect )
 {
     return rect.Inside( m_ArcStart.x, -m_ArcStart.y )
         || rect.Inside( m_ArcEnd.x, -m_ArcEnd.y );
+}
+
+
+void LibDrawArc::DoMove( const wxPoint& newPosition )
+{
+    wxPoint offset = newPosition - m_Pos;
+    m_Pos = newPosition;
+    m_ArcStart += offset;
+    m_ArcEnd   += offset;
 }
 
 
@@ -419,7 +451,7 @@ void LibDrawArc::DisplayInfo( WinEDA_DrawFrame* frame )
     wxString msg;
     EDA_Rect bBox = GetBoundingBox();
 
-    LibEDA_BaseStruct::DisplayInfo( frame );
+    LIB_DRAW_ITEM::DisplayInfo( frame );
 
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
@@ -438,11 +470,20 @@ void LibDrawArc::DisplayInfo( WinEDA_DrawFrame* frame )
 /*************************/
 
 LibDrawCircle::LibDrawCircle( LIB_COMPONENT* aParent ) :
-    LibEDA_BaseStruct( COMPONENT_CIRCLE_DRAW_TYPE, aParent )
+    LIB_DRAW_ITEM( COMPONENT_CIRCLE_DRAW_TYPE, aParent )
 {
     m_Radius   = 0;
     m_Fill     = NO_FILL;
     m_typeName = _( "Circle" );
+}
+
+
+LibDrawCircle::LibDrawCircle( const LibDrawCircle& circle ) :
+    LIB_DRAW_ITEM( circle )
+{
+    m_Pos    = circle.m_Pos;
+    m_Radius = circle.m_Radius;
+    m_Fill   = circle.m_Fill;
 }
 
 
@@ -519,7 +560,7 @@ bool LibDrawCircle::HitTest( wxPoint aPosRef, int aThreshold,
 }
 
 
-LibEDA_BaseStruct* LibDrawCircle::DoGenCopy()
+LIB_DRAW_ITEM* LibDrawCircle::DoGenCopy()
 {
     LibDrawCircle* newitem = new LibDrawCircle( GetParent() );
 
@@ -531,11 +572,11 @@ LibEDA_BaseStruct* LibDrawCircle::DoGenCopy()
     newitem->m_Flags   = m_Flags;
     newitem->m_Fill    = m_Fill;
 
-    return (LibEDA_BaseStruct*) newitem;
+    return (LIB_DRAW_ITEM*) newitem;
 }
 
 
-bool LibDrawCircle::DoCompare( const LibEDA_BaseStruct& other ) const
+bool LibDrawCircle::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_CIRCLE_DRAW_TYPE );
 
@@ -558,6 +599,12 @@ bool LibDrawCircle::DoTestInside( EDA_Rect& rect )
      *        point.
      */
     return rect.Inside( m_Pos.x, -m_Pos.y );
+}
+
+
+void LibDrawCircle::DoMove( const wxPoint& newPosition )
+{
+    m_Pos = newPosition;
 }
 
 
@@ -623,7 +670,7 @@ void LibDrawCircle::DisplayInfo( WinEDA_DrawFrame* frame )
     wxString msg;
     EDA_Rect bBox = GetBoundingBox();
 
-    LibEDA_BaseStruct::DisplayInfo( frame );
+    LIB_DRAW_ITEM::DisplayInfo( frame );
 
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
@@ -646,11 +693,21 @@ void LibDrawCircle::DisplayInfo( WinEDA_DrawFrame* frame )
 /*************************/
 
 LibDrawSquare::LibDrawSquare( LIB_COMPONENT* aParent ) :
-    LibEDA_BaseStruct( COMPONENT_RECT_DRAW_TYPE, aParent )
+    LIB_DRAW_ITEM( COMPONENT_RECT_DRAW_TYPE, aParent )
 {
     m_Width    = 0;
     m_Fill     = NO_FILL;
     m_typeName = _( "Rectangle" );
+}
+
+
+LibDrawSquare::LibDrawSquare( const LibDrawSquare& rect ) :
+    LIB_DRAW_ITEM( rect )
+{
+    m_Pos   = rect.m_Pos;
+    m_End   = rect.m_End;
+    m_Width = rect.m_Width;
+    m_Fill  = rect.m_Fill;
 }
 
 
@@ -689,7 +746,7 @@ bool LibDrawSquare::Load( char* line, wxString& errorMsg )
 }
 
 
-LibEDA_BaseStruct* LibDrawSquare::DoGenCopy()
+LIB_DRAW_ITEM* LibDrawSquare::DoGenCopy()
 {
     LibDrawSquare* newitem = new LibDrawSquare( GetParent() );
 
@@ -701,11 +758,11 @@ LibEDA_BaseStruct* LibDrawSquare::DoGenCopy()
     newitem->m_Flags   = m_Flags;
     newitem->m_Fill    = m_Fill;
 
-    return (LibEDA_BaseStruct*) newitem;
+    return (LIB_DRAW_ITEM*) newitem;
 }
 
 
-bool LibDrawSquare::DoCompare( const LibEDA_BaseStruct& other ) const
+bool LibDrawSquare::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_RECT_DRAW_TYPE );
 
@@ -725,6 +782,14 @@ void LibDrawSquare::DoOffset( const wxPoint& offset )
 bool LibDrawSquare::DoTestInside( EDA_Rect& rect )
 {
     return rect.Inside( m_Pos.x, -m_Pos.y ) || rect.Inside( m_End.x, -m_End.y );
+}
+
+
+void LibDrawSquare::DoMove( const wxPoint& newPosition )
+{
+    wxPoint size = m_End - m_Pos;
+    m_Pos = newPosition;
+    m_End = newPosition + size;
 }
 
 
@@ -778,7 +843,7 @@ void LibDrawSquare::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
 
-    LibEDA_BaseStruct::DisplayInfo( frame );
+    LIB_DRAW_ITEM::DisplayInfo( frame );
 
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
@@ -864,10 +929,19 @@ bool LibDrawSquare::HitTest( wxPoint aRefPoint, int aThreshold,
 /** class LibDrawSegment **/
 /**************************/
 LibDrawSegment::LibDrawSegment( LIB_COMPONENT* aParent ) :
-    LibEDA_BaseStruct( COMPONENT_LINE_DRAW_TYPE, aParent )
+    LIB_DRAW_ITEM( COMPONENT_LINE_DRAW_TYPE, aParent )
 {
     m_Width    = 0;
     m_typeName = _( "Segment" );
+}
+
+
+LibDrawSegment::LibDrawSegment( const LibDrawSegment& segment ) :
+    LIB_DRAW_ITEM( segment )
+{
+    m_Pos   = segment.m_Pos;
+    m_End   = segment.m_End;
+    m_Width = segment.m_Width;
 }
 
 
@@ -886,7 +960,7 @@ bool LibDrawSegment::Load( char* line, wxString& errorMsg )
 }
 
 
-LibEDA_BaseStruct* LibDrawSegment::DoGenCopy()
+LIB_DRAW_ITEM* LibDrawSegment::DoGenCopy()
 {
     LibDrawSegment* newitem = new LibDrawSegment( GetParent() );
 
@@ -897,11 +971,11 @@ LibEDA_BaseStruct* LibDrawSegment::DoGenCopy()
     newitem->m_Convert = m_Convert;
     newitem->m_Flags   = m_Flags;
 
-    return (LibEDA_BaseStruct*) newitem;
+    return (LIB_DRAW_ITEM*) newitem;
 }
 
 
-bool LibDrawSegment::DoCompare( const LibEDA_BaseStruct& other ) const
+bool LibDrawSegment::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_LINE_DRAW_TYPE );
 
@@ -921,6 +995,14 @@ void LibDrawSegment::DoOffset( const wxPoint& offset )
 bool LibDrawSegment::DoTestInside( EDA_Rect& rect )
 {
     return rect.Inside( m_Pos.x, -m_Pos.y ) || rect.Inside( m_End.x, -m_End.y );
+}
+
+
+void LibDrawSegment::DoMove( const wxPoint& newPosition )
+{
+    wxPoint offset = newPosition - m_Pos;
+    m_Pos += offset;
+    m_End += offset;
 }
 
 
@@ -963,7 +1045,7 @@ void LibDrawSegment::DisplayInfo( WinEDA_DrawFrame* frame )
     wxString msg;
     EDA_Rect bBox = GetBoundingBox();
 
-    LibEDA_BaseStruct::DisplayInfo( frame );
+    LIB_DRAW_ITEM::DisplayInfo( frame );
 
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
@@ -1016,11 +1098,20 @@ bool LibDrawSegment::HitTest( wxPoint aPosRef, int aThreshold,
 /** class LibDrawPolyline **/
 /***************************/
 LibDrawPolyline::LibDrawPolyline( LIB_COMPONENT* aParent ) :
-    LibEDA_BaseStruct( COMPONENT_POLYLINE_DRAW_TYPE, aParent )
+    LIB_DRAW_ITEM( COMPONENT_POLYLINE_DRAW_TYPE, aParent )
 {
     m_Fill     = NO_FILL;
     m_Width    = 0;
     m_typeName = _( "PolyLine" );
+}
+
+
+LibDrawPolyline::LibDrawPolyline( const LibDrawPolyline& polyline ) :
+    LIB_DRAW_ITEM( polyline )
+{
+    m_PolyPoints = polyline.m_PolyPoints;   // Vector copy
+    m_Width      = polyline.m_Width;
+    m_Fill       = polyline.m_Fill;
 }
 
 
@@ -1106,7 +1197,7 @@ bool LibDrawPolyline::Load( char* line, wxString& errorMsg )
 }
 
 
-LibEDA_BaseStruct* LibDrawPolyline::DoGenCopy()
+LIB_DRAW_ITEM* LibDrawPolyline::DoGenCopy()
 {
     LibDrawPolyline* newitem = new LibDrawPolyline( GetParent() );
 
@@ -1117,11 +1208,11 @@ LibEDA_BaseStruct* LibDrawPolyline::DoGenCopy()
     newitem->m_Flags      = m_Flags;
     newitem->m_Fill       = m_Fill;
 
-    return (LibEDA_BaseStruct*) newitem;
+    return (LIB_DRAW_ITEM*) newitem;
 }
 
 
-bool LibDrawPolyline::DoCompare( const LibEDA_BaseStruct& other ) const
+bool LibDrawPolyline::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_POLYLINE_DRAW_TYPE );
 
@@ -1155,6 +1246,12 @@ bool LibDrawPolyline::DoTestInside( EDA_Rect& rect )
     }
 
     return false;
+}
+
+
+void LibDrawPolyline::DoMove( const wxPoint& newPosition )
+{
+    DoOffset( newPosition - m_PolyPoints[0] );
 }
 
 
@@ -1304,7 +1401,7 @@ void LibDrawPolyline::DisplayInfo( WinEDA_DrawFrame* frame )
     wxString msg;
     EDA_Rect bBox = GetBoundingBox();
 
-    LibEDA_BaseStruct::DisplayInfo( frame );
+    LIB_DRAW_ITEM::DisplayInfo( frame );
 
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
@@ -1321,11 +1418,21 @@ void LibDrawPolyline::DisplayInfo( WinEDA_DrawFrame* frame )
 /** class LibDrawBezier **/
 /***************************/
 LibDrawBezier::LibDrawBezier( LIB_COMPONENT* aParent ) :
-    LibEDA_BaseStruct( COMPONENT_BEZIER_DRAW_TYPE, aParent )
+    LIB_DRAW_ITEM( COMPONENT_BEZIER_DRAW_TYPE, aParent )
 {
     m_Fill     = NO_FILL;
     m_Width    = 0;
     m_typeName = _( "Bezier" );
+}
+
+
+LibDrawBezier::LibDrawBezier( const LibDrawBezier& bezier ) :
+    LIB_DRAW_ITEM( bezier )
+{
+    m_PolyPoints   = bezier.m_PolyPoints;
+    m_BezierPoints = bezier.m_BezierPoints;   // Vector copy
+    m_Width        = bezier.m_Width;
+    m_Fill         = bezier.m_Fill;
 }
 
 
@@ -1410,7 +1517,7 @@ bool LibDrawBezier::Load( char* line, wxString& errorMsg )
 }
 
 
-LibEDA_BaseStruct* LibDrawBezier::DoGenCopy()
+LIB_DRAW_ITEM* LibDrawBezier::DoGenCopy()
 {
     LibDrawBezier* newitem = new LibDrawBezier(GetParent());
 
@@ -1420,11 +1527,11 @@ LibEDA_BaseStruct* LibDrawBezier::DoGenCopy()
     newitem->m_Convert = m_Convert;
     newitem->m_Flags   = m_Flags;
     newitem->m_Fill    = m_Fill;
-    return (LibEDA_BaseStruct*) newitem;
+    return (LIB_DRAW_ITEM*) newitem;
 }
 
 
-bool LibDrawBezier::DoCompare( const LibEDA_BaseStruct& other ) const
+bool LibDrawBezier::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_BEZIER_DRAW_TYPE );
 
@@ -1464,6 +1571,12 @@ bool LibDrawBezier::DoTestInside( EDA_Rect& rect )
     }
 
     return false;
+}
+
+
+void LibDrawBezier::DoMove( const wxPoint& newPosition )
+{
+    DoOffset( newPosition - m_PolyPoints[0] );
 }
 
 
@@ -1597,7 +1710,7 @@ void LibDrawBezier::DisplayInfo( WinEDA_DrawFrame* frame )
     wxString msg;
     EDA_Rect bBox = GetBoundingBox();
 
-    LibEDA_BaseStruct::DisplayInfo( frame );
+    LIB_DRAW_ITEM::DisplayInfo( frame );
 
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );

@@ -6,14 +6,12 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "bitmaps.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "hotkeys.h"
-
-#include "bitmaps.h"
 #include "eeschema_id.h"
 
 

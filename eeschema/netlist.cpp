@@ -4,14 +4,15 @@
 
 #include "fctsys.h"
 #include "common.h"
-#include "program.h"
-#include "libcmp.h"
-#include "general.h"
 
+#include "program.h"
+#include "general.h"
 #include "netlist.h" /* Definitions generales liees au calcul de netliste */
 #include "protos.h"
+#include "class_library.h"
 
 #include "algorithm"
+
 
 // Buffer to build the list of items used in netlist and erc calculations
 NETLIST_OBJECT_LIST g_NetObjectslist;
@@ -354,7 +355,7 @@ static void ListeObjetConnection( DrawSheetPath*                sheetlist,
     NETLIST_OBJECT*                new_item;
     SCH_COMPONENT*                 DrawLibItem;
     LIB_COMPONENT*                 Entry;
-    LibEDA_BaseStruct*             DEntry;
+    LIB_DRAW_ITEM*                 DEntry;
     Hierarchical_PIN_Sheet_Struct* SheetLabel;
     DrawSheetPath                  list;
 

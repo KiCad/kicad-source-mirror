@@ -5,6 +5,10 @@
 #ifndef _NETLIST_H_
 #define _NETLIST_H_
 
+
+#include "class_libentry.h"
+
+
 #define NETLIST_HEAD_STRING "EESchema Netlist Version 1.1"
 
 #define ISBUS 1

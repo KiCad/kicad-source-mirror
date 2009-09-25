@@ -5,11 +5,12 @@
 #include "fctsys.h"
 #include "confirm.h"
 #include "kicad_string.h"
+
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "class_marker_sch.h"
+
 
 /* in read_from_file_schematic_items_description.cpp */
 SCH_ITEM* ReadTextDescr( FILE* aFile, wxString& aMsgDiag, char* aLine,

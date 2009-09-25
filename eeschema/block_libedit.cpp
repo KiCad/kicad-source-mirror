@@ -11,98 +11,15 @@
 #include "block_commande.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
+#include "class_library.h"
 #include "protos.h"
 #include "libeditfrm.h"
 
 
 static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
                                      bool erase );
-static int  MarkItemsInBloc( LIB_COMPONENT* LibComponent,
-                             EDA_Rect&      Rect );
-
-static void ClearMarkItems( LIB_COMPONENT* LibComponent );
-static void CopyMarkedItems( LIB_COMPONENT* LibEntry, wxPoint offset );
-static void MoveMarkedItems( LIB_COMPONENT* LibEntry, wxPoint offset );
-static void MirrorMarkedItems( LIB_COMPONENT* LibEntry,
-                               wxPoint offset );
-static void DeleteMarkedItems( LIB_COMPONENT* LibEntry );
-
-
-void ClearMarkItems( LIB_COMPONENT* LibComponent )
-{
-    LibEDA_BaseStruct* item;
-
-    if( LibComponent == NULL )
-        return;
-
-    item = LibComponent->m_Drawings;
-    for( ; item != NULL; item = item->Next() )
-        item->m_Flags = item->m_Selected = 0;
-}
-
-
-/*
- * Mark items inside rect.
- * Items are inside rect when an end point is inside rect
- *
- * Rules for convert drawings and other parts ( for multi part per package):
- *  - Commons are always marked
- *  - Specific graphic shapes must agree with the current displayed part and
- *    convert
- *  - Because most of pins are specific to current part and current convert:
- *     - if g_EditPinByPinIsOn == TRUE, or flag .m_UnitSelectionLocked == TRUE,
- *       only the pins specific to current part and current convert are marked
- *     - all specific to current convert pins are marked;
- */
-int MarkItemsInBloc( LIB_COMPONENT* LibComponent,
-                     EDA_Rect&      Rect )
-{
-    LibEDA_BaseStruct* item;
-    int                ItemsCount = 0;
-    wxPoint            pos;
-    bool               ItemIsInOtherPart;
-    bool               ItemIsInOtherConvert;
-
-    if( LibComponent == NULL )
-        return 0;
-
-    item = LibComponent->m_Drawings;
-    for( ; item != NULL; item = item->Next() )
-    {
-        item->m_Selected = 0;
-
-        // Do not consider other units or other convert items:
-        ItemIsInOtherPart = ItemIsInOtherConvert = FALSE;
-        if( item->m_Unit && (item->m_Unit != CurrentUnit) )
-            ItemIsInOtherPart = TRUE;
-        if( item->m_Convert && (item->m_Convert != CurrentConvert) )
-            ItemIsInOtherConvert = TRUE;
-        if( ItemIsInOtherPart || ItemIsInOtherConvert )
-        {
-            if( item->Type() == COMPONENT_PIN_DRAW_TYPE )
-            { // Specific rules for pins:
-                if( g_EditPinByPinIsOn )
-                    continue;
-                if( LibComponent->m_UnitSelectionLocked )
-                    continue;
-                if( ItemIsInOtherConvert )
-                    continue;
-            }
-            else
-                continue;
-        }
-
-        if( item->Inside( Rect ) )
-        {
-            item->m_Selected = IS_SELECTED;
-            ItemsCount++;
-        }
-    }
-
-    return ItemsCount;
-}
+static void MirrorMarkedItems( LIB_COMPONENT* LibEntry, wxPoint offset );
 
 
 /*
@@ -158,7 +75,7 @@ int WinEDA_LibeditFrame::ReturnBlockCommand( int key )
  */
 int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
 {
-    int ItemsCount = 0;
+    int ItemCount = 0;
     int MustDoPlace = 0;
 
     if( GetScreen()->m_BlockLocate.GetCount() )
@@ -184,9 +101,10 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
     case BLOCK_DRAG:        /* Drag */
     case BLOCK_MOVE:        /* Move */
     case BLOCK_COPY:        /* Copy */
-        ItemsCount = MarkItemsInBloc( m_currentComponent,
-                                      GetScreen()->m_BlockLocate );
-        if( ItemsCount )
+        ItemCount = m_component->SelectItems( GetScreen()->m_BlockLocate,
+                                              m_unit, m_convert,
+                                              g_EditPinByPinIsOn );
+        if( ItemCount )
         {
             MustDoPlace = 1;
             if( DrawPanel->ManageCurseur != NULL )
@@ -207,11 +125,12 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
         break;
 
     case BLOCK_DELETE:     /* Delete */
-        ItemsCount = MarkItemsInBloc( m_currentComponent,
-                                      GetScreen()->m_BlockLocate );
-        if( ItemsCount )
-            SaveCopyInUndoList( m_currentComponent );
-        DeleteMarkedItems( m_currentComponent );
+        ItemCount = m_component->SelectItems( GetScreen()->m_BlockLocate,
+                                              m_unit, m_convert,
+                                              g_EditPinByPinIsOn );
+        if( ItemCount )
+            SaveCopyInUndoList( m_component );
+        m_component->DeleteSelectedItems();
         break;
 
     case BLOCK_SAVE:     /* Save */
@@ -223,12 +142,12 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
 
 
     case BLOCK_MIRROR_Y:
-        ItemsCount = MarkItemsInBloc( m_currentComponent,
-                                      GetScreen()->m_BlockLocate );
-        if( ItemsCount )
-            SaveCopyInUndoList( m_currentComponent );
-        MirrorMarkedItems( m_currentComponent,
-                           GetScreen()->m_BlockLocate.Centre() );
+        ItemCount = m_component->SelectItems( GetScreen()->m_BlockLocate,
+                                              m_unit, m_convert,
+                                              g_EditPinByPinIsOn );
+        if( ItemCount )
+            SaveCopyInUndoList( m_component );
+        MirrorMarkedItems( m_component, GetScreen()->m_BlockLocate.Centre() );
         break;
 
     case BLOCK_ZOOM:     /* Window Zoom */
@@ -245,9 +164,8 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
     if( MustDoPlace <= 0 )
     {
         if( GetScreen()->m_BlockLocate.m_Command  != BLOCK_SELECT_ITEMS_ONLY )
-        {
-            ClearMarkItems( m_currentComponent );
-        }
+            m_component->ClearSelectedItems();
+
         GetScreen()->m_BlockLocate.m_Flags   = 0;
         GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
         GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
@@ -273,6 +191,7 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
 void WinEDA_LibeditFrame::HandleBlockPlace( wxDC* DC )
 {
     bool err = FALSE;
+    wxPoint offset;
 
     if( DrawPanel->ManageCurseur == NULL )
     {
@@ -292,17 +211,19 @@ void WinEDA_LibeditFrame::HandleBlockPlace( wxDC* DC )
     case BLOCK_MOVE:                /* Move */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         GetScreen()->m_BlockLocate.ClearItemsList();
-        SaveCopyInUndoList( m_currentComponent );
-        MoveMarkedItems( m_currentComponent,
-                         GetScreen()->m_BlockLocate.m_MoveVector );
+        SaveCopyInUndoList( m_component );
+        offset = GetScreen()->m_BlockLocate.m_MoveVector;
+        offset.y *= -1;
+        m_component->MoveSelectedItems( offset );
         DrawPanel->Refresh( TRUE );
         break;
 
     case BLOCK_COPY:     /* Copy */
         GetScreen()->m_BlockLocate.ClearItemsList();
-        SaveCopyInUndoList( m_currentComponent );
-        CopyMarkedItems( m_currentComponent,
-                         GetScreen()->m_BlockLocate.m_MoveVector );
+        SaveCopyInUndoList( m_component );
+        offset = GetScreen()->m_BlockLocate.m_MoveVector;
+        offset.y *= -1;
+        m_component->CopySelectedItems( offset );
         break;
 
     case BLOCK_PASTE:     /* Paste (recopie du dernier bloc sauve */
@@ -310,9 +231,8 @@ void WinEDA_LibeditFrame::HandleBlockPlace( wxDC* DC )
         break;
 
     case BLOCK_MIRROR_Y:      /* Invert by popup menu, from block move */
-        SaveCopyInUndoList( m_currentComponent );
-        MirrorMarkedItems( m_currentComponent,
-                           GetScreen()->m_BlockLocate.Centre() );
+        SaveCopyInUndoList( m_component );
+        MirrorMarkedItems( m_component, GetScreen()->m_BlockLocate.Centre() );
         break;
 
     case BLOCK_ZOOM:        // Handled by HandleBlockEnd
@@ -348,25 +268,27 @@ void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     BLOCK_SELECTOR* PtBlock;
     BASE_SCREEN* screen = panel->GetScreen();
     wxPoint move_offset;
-
     PtBlock = &screen->m_BlockLocate;
 
     WinEDA_LibeditFrame* parent = ( WinEDA_LibeditFrame* ) panel->GetParent();
     wxASSERT( parent != NULL );
 
-    LIB_COMPONENT* component = parent->GetCurrentComponent();
+    LIB_COMPONENT* component = parent->GetComponent();
 
     if( component == NULL )
         return;
+
+    int unit = parent->GetUnit();
+    int convert = parent->GetConvert();
 
     if( erase )
     {
         PtBlock->Draw( panel, DC, PtBlock->m_MoveVector, g_XorMode,
                        PtBlock->m_Color );
 
-        component->Draw( panel, DC, PtBlock->m_MoveVector, CurrentUnit,
-                         CurrentConvert, g_XorMode, -1, DefaultTransformMatrix,
-                         true, false, true );
+        component->Draw( panel, DC, PtBlock->m_MoveVector, unit, convert,
+                         g_XorMode, -1, DefaultTransformMatrix,
+                         true, true, true );
     }
 
     /* Redessin nouvel affichage */
@@ -379,78 +301,9 @@ void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     PtBlock->Draw( panel, DC, PtBlock->m_MoveVector, g_XorMode,
                    PtBlock->m_Color );
 
-    component->Draw( panel, DC, PtBlock->m_MoveVector, CurrentUnit,
-                     CurrentConvert, g_XorMode, -1, DefaultTransformMatrix,
-                     true, false, true );
-}
-
-
-/*
- * Copy marked items, at new position = old position + offset
- */
-void CopyMarkedItems( LIB_COMPONENT* LibEntry, wxPoint offset )
-{
-    LibEDA_BaseStruct* item;
-
-    if( LibEntry == NULL )
-        return;
-
-    item = LibEntry->m_Drawings;
-    for( ; item != NULL; item = item->Next() )
-    {
-        if( item->m_Selected == 0 )
-            continue;
-        item->m_Selected = 0;
-        LibEDA_BaseStruct* newitem = item->GenCopy();
-        newitem->m_Selected = IS_SELECTED;
-        newitem->SetNext( LibEntry->m_Drawings );
-        LibEntry->m_Drawings = newitem;
-    }
-
-    MoveMarkedItems( LibEntry, offset );
-}
-
-
-/*
- * Move marked items, at new position = old position + offset
- */
-void MoveMarkedItems( LIB_COMPONENT* LibEntry, wxPoint offset )
-{
-    LibEDA_BaseStruct* item;
-
-    if( LibEntry == NULL )
-        return;
-
-    NEGATE( offset.y );  // Y axis for lib items is Down to Up: reverse y offset value
-    for( item = LibEntry->m_Drawings; item != NULL; item = item->Next() )
-    {
-        if( item->m_Selected == 0 )
-            continue;
-
-        item->SetOffset( offset );
-        item->m_Flags = item->m_Selected = 0;
-    }
-}
-
-
-/*
- * Delete marked items
- */
-void DeleteMarkedItems( LIB_COMPONENT* LibEntry )
-{
-    LibEDA_BaseStruct* item, * next_item;
-
-    if( LibEntry == NULL )
-        return;
-
-    item = LibEntry->m_Drawings;
-    for( ; item != NULL; item = next_item )
-    {
-        next_item = item->Next();
-        if( item->m_Selected == 0 )
-            continue;
-        LibEntry->RemoveDrawItem( item );
-    }
+    component->Draw( panel, DC, PtBlock->m_MoveVector, unit, convert,
+                     g_XorMode, -1, DefaultTransformMatrix,
+                     true, true, true );
 }
 
 
@@ -460,7 +313,7 @@ void DeleteMarkedItems( LIB_COMPONENT* LibEntry )
 void MirrorMarkedItems( LIB_COMPONENT* LibEntry, wxPoint offset )
 {
 #define SETMIRROR( z ) (z) -= offset.x; (z) = -(z); (z) += offset.x;
-    LibEDA_BaseStruct* item;
+    LIB_DRAW_ITEM* item;
 
     if( LibEntry == NULL )
         return;

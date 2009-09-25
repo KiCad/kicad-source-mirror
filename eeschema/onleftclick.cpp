@@ -9,11 +9,10 @@
 #include "confirm.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "class_marker_sch.h"
-
 #include "protos.h"
+
 
 static wxArrayString s_CmpNameList;
 static wxArrayString s_PowerNameList;

@@ -8,11 +8,10 @@
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
+#include "macros.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
-#include "macros.h"
 #include "protos.h"
 #include "class_library.h"
 

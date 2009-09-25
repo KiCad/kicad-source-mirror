@@ -8,18 +8,17 @@
 #include "kicad_string.h"
 #include "gestfich.h"
 #include "appl_wxstruct.h"
+#include "bitmaps.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "netlist.h"
-#include "bitmaps.h"
 #include "class_marker_sch.h"
-
-#include "dialog_erc.h"
+#include "protos.h"
 #include "erc.h"
 
-#include "protos.h"
+#include "dialog_erc.h"
+
 
 /* ERC tests :
  *  1 - conflicts between connected pins ( example: 2 connected outputs )

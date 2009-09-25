@@ -8,18 +8,20 @@
 #include "appl_wxstruct.h"
 #include "common.h"
 #include "class_drawpanel.h"
+
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "class_marker_sch.h"
-
 #include "protos.h"
 
+
 /* Exported Functions */
-void               MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector );
-void               MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint );
-void               DeleteItemsInList( WinEDA_DrawPanel*  panel, PICKED_ITEMS_LIST& aItemsList );
-void               DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector  );
+void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector );
+void MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint );
+void DeleteItemsInList( WinEDA_DrawPanel* panel,
+                        PICKED_ITEMS_LIST& aItemsList );
+void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
+                           const wxPoint aMoveVector  );
 
 
 /*****************************************************************************

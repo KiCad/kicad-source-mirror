@@ -14,15 +14,14 @@
 #include "kicad_string.h"
 #include "gestfich.h"
 #include "appl_wxstruct.h"
+
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
+#include "class_library.h"
 #include "netlist.h"
+#include "protos.h"
 
 #include "dialog_build_BOM.h"
-
-
-#include "protos.h"
 
 
 /* object used in build BOM to handle the list of labels in schematic

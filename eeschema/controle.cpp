@@ -10,13 +10,13 @@
 #include "eeschema_id.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditfrm.h"
 #include "libviewfrm.h"
-
+#include "classes_body_items.h"
 #include "class_marker_sch.h"
+
 
 /**************************************************************************************/
 SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool IncludePin )

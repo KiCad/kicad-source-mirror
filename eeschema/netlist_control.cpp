@@ -17,12 +17,13 @@
 #include "common.h"
 #include "confirm.h"
 #include "gestfich.h"
+
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "netlist.h"
 #include "protos.h"
 #include "netlist_control.h"
+
 
 // ID for configuration:
 #define CUSTOM_NETLIST_TITLE   wxT( "CustomNetlistTitle" )

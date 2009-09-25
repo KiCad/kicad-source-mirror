@@ -9,13 +9,11 @@
 #include "gestfich.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditfrm.h"
+#include "class_library.h"
 
-
-extern int CurrentUnit;
 
 /* Dialog box to edit a libentry (a component in library) properties */
 
@@ -38,7 +36,7 @@ void WinEDA_LibeditFrame::OnEditComponentProperties( wxCommandEvent& event )
 
 void WinEDA_LibeditFrame::EditComponentProperties()
 {
-    wxASSERT( m_currentComponent != NULL && CurrentLib != NULL );
+    wxASSERT( m_component != NULL && m_library != NULL );
 
     DIALOG_EDIT_COMPONENT_IN_LIBRARY dlg( this );
 
@@ -50,7 +48,7 @@ void WinEDA_LibeditFrame::EditComponentProperties()
     DisplayLibInfos();
     DisplayCmpDoc();
     GetScreen()->SetModify();
-    SaveCopyInUndoList( m_currentComponent );
+    SaveCopyInUndoList( m_component );
 }
 
 
@@ -58,18 +56,20 @@ void WinEDA_LibeditFrame::EditComponentProperties()
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitPanelDoc()
 {
     CMP_LIB_ENTRY* entry;
-    LIB_COMPONENT* component = m_Parent->GetCurrentComponent();
+    LIB_COMPONENT* component = m_Parent->GetComponent();
+    CMP_LIBRARY* library = m_Parent->GetLibrary();
 
     if( component == NULL )
         return;
 
-    if( CurrentAliasName.IsEmpty() )
+    if( m_Parent->GetAliasName().IsEmpty() )
     {
         entry = component;
     }
     else
     {
-        entry = ( CMP_LIB_ENTRY* ) CurrentLib->FindAlias( CurrentAliasName );
+        entry =
+            ( CMP_LIB_ENTRY* ) library->FindAlias( m_Parent->GetAliasName() );
 
         if( entry == NULL )
             return;
@@ -86,9 +86,9 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitPanelDoc()
  */
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitBasicPanel()
 {
-    LIB_COMPONENT* component = m_Parent->GetCurrentComponent();
+    LIB_COMPONENT* component = m_Parent->GetComponent();
 
-    if( g_AsDeMorgan )
+    if( m_Parent->GetShowDeMorgan() )
         m_AsConvertButt->SetValue( true );
 
     /* Default values for a new component. */
@@ -121,15 +121,16 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
     size_t i;
     int index;
     CMP_LIB_ENTRY* entry;
-    LIB_COMPONENT* component = m_Parent->GetCurrentComponent();
+    LIB_COMPONENT* component = m_Parent->GetComponent();
+    CMP_LIBRARY* library = m_Parent->GetLibrary();
 
-    if( CurrentAliasName.IsEmpty() )
+    if( m_Parent->GetAliasName().IsEmpty() )
     {
         entry = (CMP_LIB_ENTRY*) component;
     }
     else
     {
-        entry = CurrentLib->FindEntry( CurrentAliasName );
+        entry = library->FindEntry( m_Parent->GetAliasName() );
     }
 
     if( entry == NULL )
@@ -137,9 +138,9 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
         wxString msg;
         msg.Printf( _( "Alias <%s> not found for component <%s> in library \
 <%s>." ),
-                    (const wxChar*) CurrentAliasName,
+                    (const wxChar*) m_Parent->GetAliasName(),
                     (const wxChar*) component->GetName(),
-                    (const wxChar*) CurrentLib->GetName() );
+                    (const wxChar*) library->GetName() );
         wxMessageBox( msg, _( "Component Library Error" ),
                       wxID_OK | wxICON_ERROR, this );
     }
@@ -165,7 +166,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
 
             alias = new LIB_ALIAS( aliases[ i ], component );
 
-            if( !CurrentLib->AddAlias( alias ) )
+            if( !library->AddAlias( alias ) )
             {
                 delete alias;
                 alias = NULL;
@@ -181,9 +182,9 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
                 continue;
 
             CMP_LIB_ENTRY* alias =
-                CurrentLib->FindAlias( component->m_AliasList[ i ] );
+                library->FindAlias( component->m_AliasList[ i ] );
             if( alias != NULL )
-                CurrentLib->RemoveEntry( alias );
+                library->RemoveEntry( alias );
         }
 
         component->m_AliasList = aliases;
@@ -194,17 +195,17 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
 
     if( m_AsConvertButt->GetValue() )
     {
-        if( !g_AsDeMorgan )
+        if( !m_Parent->GetShowDeMorgan() )
         {
-            g_AsDeMorgan = 1;
+            m_Parent->SetShowDeMorgan( true );
             SetUnsetConvert();
         }
     }
     else
     {
-        if( g_AsDeMorgan )
+        if( m_Parent->GetShowDeMorgan() )
         {
-            g_AsDeMorgan = 0;
+            m_Parent->SetShowDeMorgan( false );
             SetUnsetConvert();
         }
     }
@@ -240,9 +241,9 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::CopyDocToAlias( wxCommandEvent& WXUNUSED (event) )
 /******************************************************************************/
 {
-    LIB_COMPONENT* component = m_Parent->GetCurrentComponent();
+    LIB_COMPONENT* component = m_Parent->GetComponent();
 
-    if( component == NULL || CurrentAliasName.IsEmpty() )
+    if( component == NULL || m_Parent->GetAliasName().IsEmpty() )
         return;
 
     m_Doc->SetValue( component->m_Doc );
@@ -256,17 +257,18 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllAliasOfPart(
     wxCommandEvent& WXUNUSED (event) )
 /**********************************************************/
 {
-    if( m_PartAliasList->FindString( CurrentAliasName ) != wxNOT_FOUND )
+    if( m_PartAliasList->FindString( m_Parent->GetAliasName() )
+        != wxNOT_FOUND )
     {
         wxString msg;
         msg.Printf( _( "Alias <%s> cannot be removed while it is being \
 edited!" ),
-                    (const wxChar*) CurrentAliasName );
+                    (const wxChar*) m_Parent->GetAliasName() );
         DisplayError( this, msg );
         return;
     }
 
-    CurrentAliasName.Empty();
+    m_Parent->GetAliasName().Empty();
 
     if( IsOK( this, _( "Remove all aliases from list?" ) ) )
     {
@@ -287,31 +289,33 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& WXUNUSED 
 {
     wxString Line;
     wxString aliasname;
-    LIB_COMPONENT* component = m_Parent->GetCurrentComponent();
+    LIB_COMPONENT* component = m_Parent->GetComponent();
+    CMP_LIBRARY* library = m_Parent->GetLibrary();
 
     if( component == NULL )
         return;
 
-    if( Get_Message( _( "New alias:" ), _( "Component Alias" ), Line, this ) != 0 )
+    if( Get_Message( _( "New alias:" ),
+                     _( "Component Alias" ), Line, this ) != 0 )
         return;
 
     Line.Replace( wxT( " " ), wxT( "_" ) );
     aliasname = Line;
 
     if( m_PartAliasList->FindString( aliasname ) != wxNOT_FOUND
-        || CurrentLib->FindEntry( aliasname ) != NULL )
+        || library->FindEntry( aliasname ) != NULL )
     {
         wxString msg;
         msg.Printf( _( "Alias or component name <%s> already exists in \
 library <%s>." ),
                     (const wxChar*) aliasname,
-                    (const wxChar*) CurrentLib->GetName() );
+                    (const wxChar*) library->GetName() );
         DisplayError( this,  msg );
         return;
     }
 
     m_PartAliasList->Append( aliasname );
-    if( CurrentAliasName.IsEmpty() )
+    if( m_Parent->GetAliasName().IsEmpty() )
         m_ButtonDeleteAllAlias->Enable( TRUE );
     m_ButtonDeleteOneAlias->Enable( TRUE );
 }
@@ -324,7 +328,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAliasOfPart(
 
     if( aliasname.IsEmpty() )
         return;
-    if( aliasname.CmpNoCase( CurrentAliasName ) == 0 )
+    if( aliasname.CmpNoCase( m_Parent->GetAliasName() ) == 0 )
     {
         wxString msg;
         msg.Printf( _( "Alias <%s> cannot be removed while it is being \
@@ -353,8 +357,8 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::ChangeNbUnitsPerPackage( int MaxUnit )
  */
 {
     int OldNumUnits, ii, FlagDel = -1;
-    LibEDA_BaseStruct* DrawItem, * NextDrawItem;
-    LIB_COMPONENT* component = m_Parent->GetCurrentComponent();
+    LIB_DRAW_ITEM* DrawItem, * NextDrawItem;
+    LIB_COMPONENT* component = m_Parent->GetComponent();
 
     if( component == NULL )
         return FALSE;
@@ -384,8 +388,8 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::ChangeNbUnitsPerPackage( int MaxUnit )
                     if( IsOK( this, _( "Delete units" ) ) )
                     {
                         /* Si part selectee n'existe plus: selection 1ere unit */
-                        if( CurrentUnit > MaxUnit )
-                            CurrentUnit = 1;
+                        if( m_Parent->GetUnit() > MaxUnit )
+                            m_Parent->SetUnit( 1 );
                         FlagDel = 1;
                     }
                     else
@@ -435,10 +439,10 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
  */
 {
     int FlagDel = 0;
-    LibEDA_BaseStruct* DrawItem = NULL, * NextDrawItem;
-    LIB_COMPONENT* component = m_Parent->GetCurrentComponent();
+    LIB_DRAW_ITEM* DrawItem = NULL, * NextDrawItem;
+    LIB_COMPONENT* component = m_Parent->GetComponent();
 
-    if( g_AsDeMorgan )  /* Representation convertie a creer */
+    if( m_Parent->GetShowDeMorgan() )  /* Representation convertie a creer */
     {
         /* Traitement des elements a ajouter ( pins seulement ) */
         if( component )
@@ -459,7 +463,8 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
                         if( IsOK( this, _( "Part as \"De Morgan\" anymore" ) ) )
                             return TRUE;
 
-                        g_AsDeMorgan = 0; return FALSE;
+                        m_Parent->SetShowDeMorgan( false );
+                        return FALSE;
                     }
                 }
                 NextDrawItem = DrawItem->GenCopy();
@@ -483,12 +488,12 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
                 {
                     if( IsOK( this, _( "Delete Convert items" ) ) )
                     {
-                        CurrentConvert = 1;
+                        m_Parent->SetConvert( 1 );
                         FlagDel = 1;
                     }
                     else
                     {
-                        g_AsDeMorgan = 1;
+                        m_Parent->SetShowDeMorgan( true );
                         return FALSE;
                     }
                 }
@@ -561,7 +566,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& WXUNU
  */
 {
     wxString Line;
-    LIB_COMPONENT* component = m_Parent->GetCurrentComponent();
+    LIB_COMPONENT* component = m_Parent->GetComponent();
 
     if( component == NULL )
         return;
@@ -596,7 +601,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteOneFootprintFilter(
     wxCommandEvent& WXUNUSED (event) )
 /********************************************************/
 {
-    LIB_COMPONENT* component = m_Parent->GetCurrentComponent();
+    LIB_COMPONENT* component = m_Parent->GetComponent();
     int ii = m_FootprintFilterListBox->GetSelection();
 
     m_FootprintFilterListBox->Delete( ii );

@@ -16,13 +16,12 @@
 #include "base_struct.h"
 #include "gr_basic.h"
 #include "drawtxt.h"
-
-#include "program.h"
-#include "libcmp.h"
-#include "general.h"
 #include "macros.h"
 
+#include "program.h"
+#include "general.h"
 #include "protos.h"
+#include "class_library.h"
 
 
 SCH_CMP_FIELD::SCH_CMP_FIELD( const wxPoint& aPos, int aFieldId,

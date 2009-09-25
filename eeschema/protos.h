@@ -2,11 +2,30 @@
 /* prototypage des fonctions de EESchema */
 /*****************************************/
 
-LibEDA_BaseStruct* LocatePin( const wxPoint& RefPos,
-                              LIB_COMPONENT* Entry,
-                              int            Unit,
-                              int            Convert,
-                              SCH_COMPONENT* DrawItem = NULL );
+#ifndef __PROTOS_H__
+#define __PROTOS_H__
+
+
+class EDA_BaseStruct;
+class WinEDA_DrawPanel;
+class WinEDA_SchematicFrame;
+class LIB_COMPONENT;
+class LIB_DRAW_ITEM;
+class SCH_COMPONENT;
+class BASE_SCREEN;
+class SCH_SCREEN;
+class SCH_ITEM;
+class Hierarchical_PIN_Sheet_Struct;
+class PLOTTER;
+class DrawSheetStruct;
+class LibDrawPin;
+
+
+LIB_DRAW_ITEM* LocatePin( const wxPoint& RefPos,
+                          LIB_COMPONENT* Entry,
+                          int            Unit,
+                          int            Convert,
+                          SCH_COMPONENT* DrawItem = NULL );
 
 /* Routine de localisation d'une PIN de la PartLib pointee par Entry */
 
@@ -139,12 +158,12 @@ SCH_ITEM*          PickStruct( const wxPoint& refpos,
                                int            SearchMask );
 
 
-LibEDA_BaseStruct* LocateDrawItem( SCH_SCREEN*    Screen,
-                                   const wxPoint& refpoint,
-                                   LIB_COMPONENT* LibEntry,
-                                   int            Unit,
-                                   int            Convert,
-                                   int            masque );
+LIB_DRAW_ITEM* LocateDrawItem( SCH_SCREEN*    Screen,
+                               const wxPoint& refpoint,
+                               LIB_COMPONENT* LibEntry,
+                               int            Unit,
+                               int            Convert,
+                               int            masque );
 
 Hierarchical_PIN_Sheet_Struct* LocateSheetLabel( DrawSheetStruct* Sheet,
                                                  const wxPoint&   pos );
@@ -196,17 +215,6 @@ int  CountCmpNumber();
 /* EECONFIG.CPP */
 /***************/
 bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose );
-
-
-/**************/
-/* SAVELIB.CPP */
-/**************/
-
-LIB_COMPONENT* CopyLibEntryStruct( LIB_COMPONENT* OldEntry );
-
-/* Routine de copie d'une partlib
- *      Parametres d'entree: pointeur sur la structure de depart
- *      Parametres de sortie: pointeur sur la structure creee */
 
 
 /**************/
@@ -352,3 +360,5 @@ void DisplayOptionFrame( WinEDA_SchematicFrame* parent,
 /* CONTROLE.CPP */
 /****************/
 void RemoteCommand( const char* cmdline );
+
+#endif  /* __PROTOS_H__ */

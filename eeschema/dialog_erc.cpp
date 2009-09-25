@@ -8,16 +8,14 @@
 // Licence:     GPL
 /////////////////////////////////////////////////////////////////////////////
 #include "fctsys.h"
-
 #include "common.h"
 #include "class_drawpanel.h"
+#include "bitmaps.h"
+
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "netlist.h"
-#include "bitmaps.h"
 #include "class_marker_sch.h"
-
 #include "protos.h"
 
 #include "dialog_erc.h"

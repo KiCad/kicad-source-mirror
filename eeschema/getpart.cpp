@@ -9,13 +9,13 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 
-#include "get_component_dialog.h"
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
 #include "libviewfrm.h"
+
+#include "get_component_dialog.h"
 
 #include <boost/foreach.hpp>
 
@@ -441,7 +441,7 @@ void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
 int LookForConvertPart( LIB_COMPONENT* LibEntry )
 {
     int ii;
-    LibEDA_BaseStruct* DrawLibEntry;
+    LIB_DRAW_ITEM* DrawLibEntry;
 
     DrawLibEntry = LibEntry->m_Drawings;
     ii = 0;

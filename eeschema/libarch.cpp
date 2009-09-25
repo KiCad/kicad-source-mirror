@@ -7,10 +7,10 @@
 #include "confirm.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "netlist.h"
 #include "protos.h"
+#include "class_library.h"
 
 
 /*

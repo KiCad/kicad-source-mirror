@@ -8,10 +8,11 @@
 #include "hotkeys.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditfrm.h"
+#include "class_libentry.h"
+
 
 /* How to add a new hotkey:
  * add a new id in the enum hotkey_id_commnand like MY_NEW_ID_FUNCTION (see
@@ -463,7 +464,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
 
     wxPoint            MousePos = GetScreen()->m_MousePosition;
 
-    LibEDA_BaseStruct* DrawEntry = LocateItemUsingCursor();
+    LIB_DRAW_ITEM* DrawEntry = LocateItemUsingCursor();
 
     // Remap the control key Ctrl A (0x01) to GR_KB_CTRL + 'A' (easier to
     // handle...)
@@ -533,10 +534,10 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_REPEAT_LAST:
-        if( LibItemToRepeat && (LibItemToRepeat->m_Flags == 0)
-           && (LibItemToRepeat->Type() == COMPONENT_PIN_DRAW_TYPE) )
+        if( m_lastDrawItem && (m_lastDrawItem->m_Flags == 0)
+           && (m_lastDrawItem->Type() == COMPONENT_PIN_DRAW_TYPE) )
         {
-            RepeatPinItem( DC, (LibDrawPin*) LibItemToRepeat );
+            RepeatPinItem( DC, (LibDrawPin*) m_lastDrawItem );
         }
         else
             wxBell();
@@ -544,18 +545,18 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_EDIT_PIN:
         if( DrawEntry )
-            CurrentDrawItem = DrawEntry;
-        if( CurrentDrawItem )
+            m_drawItem = DrawEntry;
+        if( m_drawItem )
         {
-            if( CurrentDrawItem->Type() == COMPONENT_PIN_DRAW_TYPE )
+            if( m_drawItem->Type() == COMPONENT_PIN_DRAW_TYPE )
                 InstallPineditFrame( this, DC, MousePos );
         }
         break;
 
     case HK_DELETE_PIN:
         if( DrawEntry )
-            CurrentDrawItem = DrawEntry;
-        if( CurrentDrawItem )
+            m_drawItem = DrawEntry;
+        if( m_drawItem )
         {
             wxCommandEvent evt;
             evt.SetId( ID_POPUP_LIBEDIT_DELETE_ITEM );
@@ -565,8 +566,8 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_MOVE_PIN:
         if( DrawEntry )
-            CurrentDrawItem = DrawEntry;
-        if( CurrentDrawItem )
+            m_drawItem = DrawEntry;
+        if( m_drawItem )
         {
             wxCommandEvent evt;
             evt.SetId( ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST );

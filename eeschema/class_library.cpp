@@ -11,7 +11,6 @@
 #include "eda_doc.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
@@ -197,7 +196,7 @@ LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* cmp )
 {
     wxASSERT( cmp != NULL );
 
-    LIB_COMPONENT* newCmp = CopyLibEntryStruct( cmp );
+    LIB_COMPONENT* newCmp = new LIB_COMPONENT( *cmp, this );
 
     if( newCmp == NULL )
         return NULL;
@@ -387,7 +386,7 @@ in library <%s>." ),
 
     RemoveEntry( oldComponent->GetName() );
 
-    LIB_COMPONENT* newCmp = CopyLibEntryStruct( newComponent );
+    LIB_COMPONENT* newCmp = new LIB_COMPONENT( *newComponent, this );
 
     if( newCmp == NULL )
         return NULL;
@@ -706,13 +705,12 @@ document file." ),
 }
 
 
-bool CMP_LIBRARY::Save( const wxString& FullFileName )
+bool CMP_LIBRARY::Save( const wxString& FullFileName, bool oldDocFormat )
 {
-    FILE* libfile, *docfile;
+    FILE* libfile;
     wxString msg;
     wxFileName libFileName = FullFileName;
     wxFileName backupFileName = FullFileName;
-    wxFileName docFileName = FullFileName;
 
     /* the old .lib file is renamed .bak */
     if( libFileName.FileExists() )
@@ -723,24 +721,8 @@ bool CMP_LIBRARY::Save( const wxString& FullFileName )
         if( !wxRenameFile( libFileName.GetFullPath(),
                            backupFileName.GetFullPath() ) )
         {
-            msg = wxT( "Failed to rename old lib file " ) +
-                backupFileName.GetFullPath();
-            DisplayError( NULL, msg );
-        }
-    }
-
-    docFileName.SetExt( DOC_EXT );
-    /* L'ancien fichier doc lib est renomme en .bck */
-    if( wxFileExists( docFileName.GetFullPath() ) )
-    {
-        backupFileName = docFileName;
-        backupFileName.SetExt( wxT( "bck" ) );
-        wxRemoveFile( backupFileName.GetFullPath() );
-
-        if( !wxRenameFile( docFileName.GetFullPath(),
-                           backupFileName.GetFullPath() ) )
-        {
-            msg = wxT( "Failed to save old doc lib file " ) +
+            libFileName.MakeAbsolute();
+            msg = wxT( "Failed to rename old component library file " ) +
                 backupFileName.GetFullPath();
             DisplayError( NULL, msg );
         }
@@ -750,31 +732,22 @@ bool CMP_LIBRARY::Save( const wxString& FullFileName )
 
     if( libfile == NULL )
     {
+        libFileName.MakeAbsolute();
         msg = wxT( "Failed to create component library file " ) +
             libFileName.GetFullPath();
         DisplayError( NULL, msg );
         return false;
     }
 
-    docfile = wxFopen( docFileName.GetFullPath(), wxT( "wt" ) );
-
-    if( docfile == NULL )
-    {
-        msg = wxT( "Failed to create component document library file " ) +
-            docFileName.GetFullPath();
-        DisplayError( NULL, msg );
-    }
-
     m_IsModified = false;
 
     /* Creation de l'entete de la librairie */
     m_TimeStamp = GetTimeStamp();
-    SaveHeader( libfile );
-
-    /* Sauvegarde des composant: */
-    char Line[256];
-    fprintf( docfile, "%s  Date: %s\n", DOCFILE_IDENT,
-             DateAndTime( Line ) );
+    if( !SaveHeader( libfile ) )
+    {
+        fclose( libfile );
+        return false;
+    }
 
     bool success = true;
 
@@ -783,21 +756,80 @@ bool CMP_LIBRARY::Save( const wxString& FullFileName )
         if ( entry.Type == ROOT )
         {
             LIB_COMPONENT* component = ( LIB_COMPONENT* ) &entry;
-            if ( ! component->Save( libfile ) )
-                success = false;
-        }
-        if ( docfile )
-        {
-            if ( ! entry.SaveDoc( docfile ) )
+            if ( !component->Save( libfile ) )
                 success = false;
         }
     }
 
-    fprintf( libfile, "#\n#End Library\n" );
-    if ( docfile )
-        fprintf( docfile, "#\n#End Doc Library\n" );
+    if( fprintf( libfile, "#\n#End Library\n" ) < 0 )
+        success = false;
+
     fclose( libfile );
+
+    if( USE_OLD_DOC_FILE_FORMAT( m_verMajor, m_verMinor ) && oldDocFormat )
+        success = SaveDocFile( FullFileName );
+
+    return success;
+}
+
+
+bool CMP_LIBRARY::SaveDocFile( const wxString& FullFileName )
+{
+    FILE* docfile;
+    wxString msg;
+    wxFileName backupFileName = FullFileName;
+    wxFileName docFileName = FullFileName;
+
+    docFileName.SetExt( DOC_EXT );
+
+    /* Save current doc file as .bck */
+    if( docFileName.FileExists() )
+    {
+        backupFileName = docFileName;
+        backupFileName.SetExt( wxT( "bck" ) );
+        wxRemoveFile( backupFileName.GetFullPath() );
+
+        if( !wxRenameFile( docFileName.GetFullPath(),
+                           backupFileName.GetFullPath() ) )
+        {
+            msg = wxT( "Failed to save old library document file " ) +
+                backupFileName.GetFullPath();
+            DisplayError( NULL, msg );
+        }
+    }
+
+    docfile = wxFopen( docFileName.GetFullPath(), wxT( "wt" ) );
+
+    if( docfile == NULL )
+    {
+        docFileName.MakeAbsolute();
+        msg = wxT( "Failed to create component document library file " ) +
+            docFileName.GetFullPath();
+        DisplayError( NULL, msg );
+        return false;
+    }
+
+    char Line[256];
+    if( fprintf( docfile, "%s  Date: %s\n", DOCFILE_IDENT,
+                 DateAndTime( Line ) ) < 0 )
+    {
+        fclose( docfile );
+        return false;
+    }
+
+    bool success = true;
+
+    BOOST_FOREACH( CMP_LIB_ENTRY& entry, m_Entries )
+    {
+        if ( !entry.SaveDoc( docfile ) )
+            success = false;
+    }
+
+    if ( fprintf( docfile, "#\n#End Doc Library\n" ) < 0 )
+        success = false;
+
     fclose( docfile );
+
     return success;
 }
 
@@ -805,7 +837,7 @@ bool CMP_LIBRARY::Save( const wxString& FullFileName )
 bool CMP_LIBRARY::SaveHeader( FILE* file )
 {
     char BufLine[1024];
-    bool succes = false;
+    bool succes = true;
 
     DateAndTime( BufLine );
     if( fprintf( file, "%s %d.%d  Date: %s\n", LIBFILE_IDENT,
@@ -844,7 +876,8 @@ CMP_LIBRARY* CMP_LIBRARY::LoadLibrary( const wxFileName& fileName,
         return NULL;
     }
 
-    lib->LoadDocs( errMsg );
+    if( USE_OLD_DOC_FILE_FORMAT( lib->m_verMajor, lib->m_verMinor ) )
+        lib->LoadDocs( errMsg );
 
     return lib;
 }

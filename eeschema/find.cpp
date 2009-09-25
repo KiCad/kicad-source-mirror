@@ -16,10 +16,10 @@
 #include "gestfich.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "class_marker_sch.h"
 #include "protos.h"
+#include "class_library.h"
 
 #include <boost/foreach.hpp>
 

@@ -10,10 +10,9 @@
 #include "kicad_string.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
-
 #include "protos.h"
+#include "class_libentry.h"
 
 #include <wx/tokenzr.h>
 #include <wx/stream.h>
@@ -39,17 +38,33 @@
  *  others = free fields
  */
 LibDrawField::LibDrawField(LIB_COMPONENT * aParent, int idfield ) :
-    LibEDA_BaseStruct( COMPONENT_FIELD_DRAW_TYPE, aParent )
+    LIB_DRAW_ITEM( COMPONENT_FIELD_DRAW_TYPE, aParent )
 {
     m_FieldId = idfield;
     m_Size.x = m_Size.y = DEFAULT_SIZE_TEXT;
 }
 
 LibDrawField::LibDrawField( int idfield ) :
-    LibEDA_BaseStruct( COMPONENT_FIELD_DRAW_TYPE, NULL )
+    LIB_DRAW_ITEM( COMPONENT_FIELD_DRAW_TYPE, NULL )
 {
     m_FieldId = idfield;
     m_Size.x = m_Size.y = DEFAULT_SIZE_TEXT;
+}
+
+LibDrawField::LibDrawField( const LibDrawField& field ) :
+    LIB_DRAW_ITEM( field )
+{
+    m_Pos       = field.m_Pos;
+    m_Size      = field.m_Size;
+    m_Width     = field.m_Width;
+    m_Orient    = field.m_Orient;
+    m_Attributs = field.m_Attributs;
+    m_Text      = field.m_Text;
+    m_Name      = field.m_Name;
+    m_HJustify  = field.m_HJustify;
+    m_VJustify  = field.m_VJustify;
+    m_Italic    = field.m_Italic;
+    m_Bold      = field.m_Bold;
 }
 
 
@@ -358,13 +373,13 @@ bool LibDrawField::HitTest( wxPoint aPosRef, int aThreshold,
 }
 
 // Creation et Duplication d'un field
-LibEDA_BaseStruct* LibDrawField::DoGenCopy()
+LIB_DRAW_ITEM* LibDrawField::DoGenCopy()
 {
     LibDrawField* newfield = new LibDrawField( m_FieldId );
 
     Copy( newfield );
 
-    return (LibEDA_BaseStruct*) newfield;
+    return (LIB_DRAW_ITEM*) newfield;
 }
 
 
@@ -389,7 +404,7 @@ void LibDrawField::Copy( LibDrawField* Target ) const
 }
 
 
-bool LibDrawField::DoCompare( const LibEDA_BaseStruct& other ) const
+bool LibDrawField::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_FIELD_DRAW_TYPE );
 
@@ -416,13 +431,19 @@ bool LibDrawField::DoTestInside( EDA_Rect& rect )
 }
 
 
+void LibDrawField::DoMove( const wxPoint& newPosition )
+{
+    m_Pos = newPosition;
+}
+
+
 /*
  * If the field is the reference, return reference like schematic,
  * i.e U -> U? or U?A or the field text for others
  *
  * @fixme This should be handled by the field object.
  */
-wxString LibDrawField::GetFullText( void )
+wxString LibDrawField::GetFullText( int unit )
 {
     if( m_FieldId != REFERENCE )
         return m_Text;
@@ -433,11 +454,11 @@ wxString LibDrawField::GetFullText( void )
     {
 #if defined(KICAD_GOST)
         text.Printf( wxT( "%s?.%c" ),
-                     m_Text.GetData(), CurrentUnit + '1' - 1 );
+                     m_Text.GetData(), unit + '1' - 1 );
 #else
 
         text.Printf( wxT( "%s?%c" ),
-                     m_Text.GetData(), CurrentUnit + 'A' - 1 );
+                     m_Text.GetData(), unit + 'A' - 1 );
 #endif
     }
     else

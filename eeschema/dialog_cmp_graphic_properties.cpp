@@ -51,7 +51,7 @@ WinEDA_bodygraphics_PropertiesFrame::WinEDA_bodygraphics_PropertiesFrame( )
 
 WinEDA_bodygraphics_PropertiesFrame::WinEDA_bodygraphics_PropertiesFrame( WinEDA_LibeditFrame* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style )
 {
-LibEDA_BaseStruct * CurrentItem = CurrentDrawItem;
+    LIB_DRAW_ITEM * CurrentItem = parent->GetDrawItem();
 
 	m_Parent = parent;
     Create(parent, id, caption, pos, size, style);

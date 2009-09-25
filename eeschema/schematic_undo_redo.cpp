@@ -7,7 +7,6 @@
 #include "class_drawpanel.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "class_marker_sch.h"
@@ -436,7 +435,7 @@ void WinEDA_SchematicFrame::GetSchematicFromUndoList(wxCommandEvent& event)
     List->ReversePickersListOrder();
     GetScreen()->PushCommandToRedoList( List );
 
-    CurrentDrawItem = NULL;
+//    m_drawItem = NULL;
     GetScreen()->SetModify();
     SetSheetNumberAndCount();
     ReCreateHToolbar();
@@ -471,7 +470,7 @@ void WinEDA_SchematicFrame::GetSchematicFromRedoList(wxCommandEvent& event)
     List->ReversePickersListOrder();
     GetScreen()->PushCommandToUndoList( List );
 
-    CurrentDrawItem = NULL;
+//    m_drawItem = NULL;
     GetScreen()->SetModify();
     SetSheetNumberAndCount();
     ReCreateHToolbar();

@@ -9,10 +9,10 @@
 #include "fctsys.h"
 #include "common.h"
 #include "appl_wxstruct.h"
-#include "program.h"
-#include "libcmp.h"
-#include "general.h"
 #include "bitmaps.h"
+
+#include "program.h"
+#include "general.h"
 #include "protos.h"
 #include "eeschema_id.h"
 #include "hotkeys.h"

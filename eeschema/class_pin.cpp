@@ -12,10 +12,10 @@
 #include "plot_common.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditfrm.h"
+#include "class_libentry.h"
 
 
 const wxChar* MsgPinElectricType[] =
@@ -34,7 +34,7 @@ const wxChar* MsgPinElectricType[] =
 };
 
 LibDrawPin::LibDrawPin(LIB_COMPONENT * aParent) :
-    LibEDA_BaseStruct( COMPONENT_PIN_DRAW_TYPE, aParent )
+    LIB_DRAW_ITEM( COMPONENT_PIN_DRAW_TYPE, aParent )
 {
     m_PinLen      = 300;              /* default Pin len */
     m_Orient      = PIN_RIGHT;        /* Pin oprient: Up, Down, Left, Right */
@@ -50,6 +50,26 @@ LibDrawPin::LibDrawPin(LIB_COMPONENT * aParent) :
     m_PinNameShapeOpt    = 0;
     m_PinNumPositionOpt  = 0;
     m_PinNamePositionOpt = 0;
+}
+
+
+LibDrawPin::LibDrawPin( const LibDrawPin& pin ) : LIB_DRAW_ITEM( pin )
+{
+    m_Pos                = pin.m_Pos;
+    m_PinLen             = pin.m_PinLen;
+    m_Orient             = pin.m_Orient;
+    m_PinShape           = pin.m_PinShape;
+    m_PinType            = pin.m_PinType;
+    m_Attributs          = pin.m_Attributs;
+    m_PinNum             = pin.m_PinNum;
+    m_PinNumSize         = pin.m_PinNumSize;
+    m_PinNameSize        = pin.m_PinNameSize;
+    m_PinNumShapeOpt     = pin.m_PinNumShapeOpt;
+    m_PinNameShapeOpt    = pin.m_PinNameShapeOpt;
+    m_PinNumPositionOpt  = pin.m_PinNumPositionOpt;
+    m_PinNamePositionOpt = pin.m_PinNamePositionOpt;
+    m_Width              = pin.m_Width;
+    m_PinName            = pin.m_PinName;
 }
 
 
@@ -1035,7 +1055,7 @@ void LibDrawPin::SetPinNumFromString( wxString& buffer )
 
 
 /*************************************/
-LibEDA_BaseStruct* LibDrawPin::DoGenCopy()
+LIB_DRAW_ITEM* LibDrawPin::DoGenCopy()
 /*************************************/
 {
     LibDrawPin* newpin = new LibDrawPin( GetParent() );
@@ -1059,11 +1079,11 @@ LibEDA_BaseStruct* LibDrawPin::DoGenCopy()
     newpin->m_Width              = m_Width;
     newpin->m_PinName            = m_PinName;
 
-    return (LibEDA_BaseStruct*) newpin;
+    return (LIB_DRAW_ITEM*) newpin;
 }
 
 
-bool LibDrawPin::DoCompare( const LibEDA_BaseStruct& other ) const
+bool LibDrawPin::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_PIN_DRAW_TYPE );
 
@@ -1087,6 +1107,12 @@ bool LibDrawPin::DoTestInside( EDA_Rect& rect )
 }
 
 
+void LibDrawPin::DoMove( const wxPoint& newPosition )
+{
+    m_Pos = newPosition;
+}
+
+
 /** Function LibDrawPin::DisplayInfo
  * Displays info (pin num and name, orientation ...
  * on the Info window
@@ -1096,7 +1122,7 @@ void LibDrawPin::DisplayInfo( WinEDA_DrawFrame* frame )
     wxString Text;
     int      ii;
 
-    LibEDA_BaseStruct::DisplayInfo( frame );
+    LIB_DRAW_ITEM::DisplayInfo( frame );
 
     /* Affichage du nom */
     frame->MsgPanel->Affiche_1_Parametre( 30, _( "PinName" ), m_PinName,

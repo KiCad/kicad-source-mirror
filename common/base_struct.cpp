@@ -41,6 +41,18 @@ EDA_BaseStruct::EDA_BaseStruct( KICAD_T idType )
 }
 
 
+EDA_BaseStruct::EDA_BaseStruct( const EDA_BaseStruct& base )
+{
+    m_StructType = base.m_StructType;
+    m_Parent     = base.m_Parent;
+    m_Son        = base.m_Son;
+    m_Flags      = base.m_Flags;
+    m_TimeStamp  = base.m_TimeStamp;
+    m_Status     = base.m_Status;
+    m_Selected   = base.m_Selected;
+}
+
+
 /********************************************/
 void EDA_BaseStruct::InitVars()
 /********************************************/

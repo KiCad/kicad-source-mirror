@@ -6,6 +6,9 @@
 #define CLASS_LIBENTRY_FIELDS_H
 
 
+#include "classes_body_items.h"
+
+
 /* Fields , same as component fields.
  * can be defined in libraries (mandatory for ref and value, ca be useful for
  * footprints)
@@ -15,7 +18,7 @@
  * default value in schematic
  */
 
-class LibDrawField : public LibEDA_BaseStruct,
+class LibDrawField : public LIB_DRAW_ITEM,
     public EDA_TextStruct
 {
 public:
@@ -36,6 +39,7 @@ public:
 
     LibDrawField( int idfield = 2 );
     LibDrawField( LIB_COMPONENT * aParent, int idfield = 2 );
+    LibDrawField( const LibDrawField& field );
     ~LibDrawField();
     virtual wxString GetClass() const
     {
@@ -103,13 +107,26 @@ public:
         m_Parent = field.m_Parent;
     }
 
-    wxString GetFullText( void );
+    /**
+     * Return the text of a field.
+     *
+     * If the field is the reference field, the unit number is used to
+     * create a pseudo reference text.  If the base reference field is U,
+     * the string U?A will be returned for unit = 1.
+     *
+     * @param unit - The package unit number.  Only effects reference field.
+     *
+     * @return wxString - Field text.
+     */
+    wxString GetFullText( int unit = 1 );
 
 protected:
-    virtual LibEDA_BaseStruct* DoGenCopy();
-    virtual bool DoCompare( const LibEDA_BaseStruct& other ) const;
+    virtual LIB_DRAW_ITEM* DoGenCopy();
+    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
+    virtual void DoMove( const wxPoint& newPosition );
+    virtual wxPoint DoGetPosition( void ) { return m_Pos; }
 };
 
 #endif  //  CLASS_LIBENTRY_FIELDS_H

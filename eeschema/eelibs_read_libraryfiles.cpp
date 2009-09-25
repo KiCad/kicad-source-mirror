@@ -7,8 +7,8 @@
 #include "appl_wxstruct.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
+#include "class_library.h"
 
 #include "dialog_load_error.h"
 

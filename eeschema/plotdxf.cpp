@@ -19,13 +19,14 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
-#include "confirm.h"
-#include "program.h"
-#include "libcmp.h"
-#include "general.h"
-#include "worksheet.h"
 #include "plot_common.h"
+#include "confirm.h"
+#include "worksheet.h"
+
+#include "program.h"
+#include "general.h"
 #include "protos.h"
+
 
 /* Variables locales : */
 static bool  Plot_Sheet_Ref = TRUE;

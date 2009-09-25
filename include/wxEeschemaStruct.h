@@ -21,7 +21,7 @@ class DrawNoConnectStruct;
 class CMP_LIBRARY;
 class LIB_COMPONENT;
 class CMP_LIB_ENTRY;
-class LibEDA_BaseStruct;
+class LIB_DRAW_ITEM;
 class EDA_BaseStruct;
 class DrawBusEntryStruct;
 class SCH_GLOBALLABEL;

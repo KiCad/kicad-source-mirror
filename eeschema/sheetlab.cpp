@@ -9,18 +9,17 @@
 #include "confirm.h"
 
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "protos.h"
 
 
 /* Routines Locales */
-static void     ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC );
-static void     Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC );
+static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
 /* Variables locales */
 static int CurrentTypeLabel = NET_INPUT;
-static wxSize   NetSheetTextSize( DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT );
+static wxSize NetSheetTextSize( DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT );
 
 /****************************************/
 /* class WinEDA_PinSheetPropertiesFrame */

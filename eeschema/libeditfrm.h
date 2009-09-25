@@ -12,6 +12,7 @@ class SCH_SCREEN;
 class CMP_LIBRARY;
 class LIB_COMPONENT;
 class LIB_ALIAS;
+class LIB_DRAW_ITEM;
 
 /**
  * The component library editor main window.
@@ -39,6 +40,10 @@ public:
     void               CreateNewLibraryPart( wxCommandEvent& event );
     void               OnEditComponentProperties( wxCommandEvent& event );
     void               InstallFieldsEditorDialog(  wxCommandEvent& event );
+    void               LoadOneLibraryPart( wxCommandEvent& event );
+    void               OnViewEntryDoc( wxCommandEvent& event );
+    void               OnCheckComponent( wxCommandEvent& event );
+    void               OnSelectBodyStyle( wxCommandEvent& event );
 
     void               OnUpdateEditingPart( wxUpdateUIEvent& event );
     void               OnUpdateNotEditingPart( wxUpdateUIEvent& event );
@@ -74,17 +79,51 @@ public:
     void               LoadSettings();
     void               SaveSettings();
 
-    LIB_COMPONENT*     GetCurrentComponent( void )
+    LIB_COMPONENT*     GetComponent( void ) { return m_component; }
+
+    CMP_LIBRARY*       GetLibrary( void ) { return m_library; }
+
+    wxString&          GetAliasName( void ) { return m_aliasName; }
+
+    int                GetUnit( void ) { return m_unit; }
+
+    void               SetUnit( int unit )
     {
-        return m_currentComponent;
+        wxASSERT( unit >= 1 );
+        m_unit = unit;
     }
+
+    int                GetConvert( void ) { return m_convert; }
+
+    void               SetConvert( int convert )
+    {
+        wxASSERT( convert >= 1 );
+        m_convert = convert;
+    }
+
+    LIB_DRAW_ITEM*     GetLastDrawItem( void ) { return m_lastDrawItem; }
+
+    void               SetLastDrawItem( LIB_DRAW_ITEM* drawItem )
+    {
+        m_lastDrawItem = drawItem;
+    }
+
+    LIB_DRAW_ITEM*     GetDrawItem( void ) { return m_drawItem; }
+
+    void               SetDrawItem( LIB_DRAW_ITEM* drawItem )
+    {
+        m_drawItem = drawItem;
+    }
+
+    bool               GetShowDeMorgan( void ) { return m_showDeMorgan; }
+
+    void               SetShowDeMorgan( bool show ) { m_showDeMorgan = show; }
 
 private:
 
     // General:
     void               SaveOnePartInMemory();
     void               SelectActiveLibrary();
-    bool               LoadOneLibraryPart();
     void               SaveActiveLibrary( wxCommandEvent& event );
 
     bool               LoadOneLibraryPartAux( CMP_LIB_ENTRY* LibEntry,
@@ -109,26 +148,23 @@ private:
                                   LibDrawPin*    Pin );
     void               StartMovePin( wxDC* DC );
 
-    // Test des pins ( duplicates...)
-    bool               TestPins( LIB_COMPONENT* LibEntry );
-
     // Edition de l'ancre
     void               PlaceAncre();
 
     // Edition des graphismes:
-    LibEDA_BaseStruct* CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC );
+    LIB_DRAW_ITEM*     CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC );
     void               GraphicItemBeginDraw( wxDC* DC );
     void               StartMoveDrawSymbol( wxDC* DC );
     void               EndDrawGraphicItem( wxDC* DC );
     void               LoadOneSymbol();
     void               SaveOneSymbol();
     void               EditGraphicSymbol( wxDC* DC,
-                                          LibEDA_BaseStruct* DrawItem );
-    void               EditSymbolText( wxDC* DC, LibEDA_BaseStruct* DrawItem );
+                                          LIB_DRAW_ITEM* DrawItem );
+    void               EditSymbolText( wxDC* DC, LIB_DRAW_ITEM* DrawItem );
     void               RotateSymbolText( wxDC* DC );
     void               DeleteDrawPoly( wxDC* DC );
     LibDrawField*      LocateField( LIB_COMPONENT* LibEntry );
-    LibEDA_BaseStruct* LocateItemUsingCursor();
+    LIB_DRAW_ITEM*     LocateItemUsingCursor();
     void               RotateField( wxDC* DC, LibDrawField* Field );
     void               PlaceField( wxDC* DC, LibDrawField* Field );
     void               EditField( wxDC* DC, LibDrawField* Field );
@@ -152,7 +188,15 @@ protected:
     wxString m_LastLibImportPath;
     wxString m_LastLibExportPath;
 
-    static LIB_COMPONENT* m_currentComponent;
+    static LIB_COMPONENT* m_component;
+    static CMP_LIBRARY*   m_library;
+    static LIB_DRAW_ITEM* m_lastDrawItem;
+    static LIB_DRAW_ITEM* m_drawItem;
+    static wxString       m_aliasName;
+    static int            m_unit;
+    static int            m_convert;
+    static bool           m_showDeMorgan;
+    static wxSize         m_clientSize;
 
     DECLARE_EVENT_TABLE()
 };
