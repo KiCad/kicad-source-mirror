@@ -798,16 +798,16 @@ void LibDrawPin::PlotPinTexts( PLOTTER *plotter,
                                        GR_TEXT_VJUSTIFY_CENTER,
                                        aWidth, false, false );
                 }
-                if( DrawPinNum )
-                {
-                    plotter->text( wxPoint( (x1 + pin_pos.x) / 2,
-                                            y1 - TXTMARGE ),
-                                   NumColor, StringPinNum,
-                                   TEXT_ORIENT_HORIZ, PinNumSize,
-                                   GR_TEXT_HJUSTIFY_CENTER,
-                                   GR_TEXT_VJUSTIFY_BOTTOM,
-                                   aWidth, false, false );
-                }
+            }
+            if( DrawPinNum )
+            {
+                plotter->text( wxPoint( (x1 + pin_pos.x) / 2,
+                                        y1 - TXTMARGE ),
+                               NumColor, StringPinNum,
+                               TEXT_ORIENT_HORIZ, PinNumSize,
+                               GR_TEXT_HJUSTIFY_CENTER,
+                               GR_TEXT_VJUSTIFY_BOTTOM,
+                               aWidth, false, false );
             }
         }
         else         /* Its a vertical line. */
