@@ -66,7 +66,7 @@ void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
     }
 
     parent->DrawPanel->MouseToCursorSchema();
-    parent->DrawPanel->m_IgnoreMouseEvents = FALSE;
+    parent->DrawPanel->m_IgnoreMouseEvents = false;
 }
 
 
@@ -522,8 +522,12 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
 
     fieldValueTextCtrl->SetValue( field.m_Text );
 
+    // For power symbols, the value is NOR editable, because value and pin name must be same
+    // and can be edited only in library editor
     if( fieldNdx == VALUE && m_LibEntry && m_LibEntry->m_Options == ENTRY_POWER )
-        fieldValueTextCtrl->Enable( FALSE );
+        fieldValueTextCtrl->Enable( false );
+    else
+        fieldValueTextCtrl->Enable( true );
 
     textSizeTextCtrl->SetValue(
         WinEDA_GraphicTextCtrl::FormatSize( EESCHEMA_INTERNAL_UNIT, g_UnitMetric, field.m_Size.x ) );

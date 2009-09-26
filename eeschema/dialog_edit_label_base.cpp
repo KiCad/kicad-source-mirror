@@ -23,13 +23,13 @@ DialogLabelEditor_Base::DialogLabelEditor_Base( wxWindow* parent, wxWindowID id,
 	m_TextLabelSingleline = new wxTextCtrl( this, wxID_VALUE, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	m_TextLabelSingleline->SetToolTip( _("Enter the text to be used within the schematic") );
 	
-	bMainSizer->Add( m_TextLabelSingleline, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bMainSizer->Add( m_TextLabelSingleline, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_textCtrlMultiline = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_PROCESS_ENTER );
 	m_textCtrlMultiline->SetToolTip( _("Enter the text to be used within the schematic") );
 	m_textCtrlMultiline->SetMinSize( wxSize( -1,60 ) );
 	
-	bMainSizer->Add( m_textCtrlMultiline, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bMainSizer->Add( m_textCtrlMultiline, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* m_OptionsSizer;
 	m_OptionsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -73,7 +73,7 @@ DialogLabelEditor_Base::DialogLabelEditor_Base( wxWindow* parent, wxWindowID id,
 	
 	m_OptionsSizer->Add( bSizer4, 1, 0, 5 );
 	
-	bMainSizer->Add( m_OptionsSizer, 1, wxEXPAND, 5 );
+	bMainSizer->Add( m_OptionsSizer, 0, wxEXPAND, 5 );
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();

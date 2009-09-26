@@ -46,11 +46,13 @@ DialogLabelEditor::DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT* C
 void DialogLabelEditor::init()
 {
     wxString msg;
+    bool multine = false;
     
     if( m_CurrentText->m_MultilineAllowed )
     {
         m_TextLabel = m_textCtrlMultiline;
         m_TextLabelSingleline->Show(false);
+        multine = true;
     }
     else
     {
@@ -90,8 +92,33 @@ void DialogLabelEditor::init()
         textWidth.Append( 'M', MINTEXTWIDTH );
         EnsureTextCtrlWidth( m_TextLabel, &textWidth );
     }
-    else
+    else if ( ! multine )
         EnsureTextCtrlWidth( m_TextLabel );
+    else
+    {
+        // calculate the lenght of the biggest line
+        // we cannot use the lenght of the entire text that has no meaning
+        int max_len = 0;
+        int curr_len = 0;
+        int imax = m_CurrentText->m_Text.Len();
+        for( int count = 0; count < imax; count++ )
+        {
+            if( m_CurrentText->m_Text[count] == '\n' ||
+                 m_CurrentText->m_Text[count] == '\r' ) // new line
+                {
+                    curr_len = 0;
+                }
+            else
+            {
+                curr_len++;
+                if ( max_len < curr_len )
+                    max_len = curr_len;
+            }
+        }
+        wxString textWidth;
+        textWidth.Append( 'M', max_len );
+        EnsureTextCtrlWidth( m_TextLabel, &textWidth );
+    }
 
     // Set validators
     m_TextOrient->SetSelection( m_CurrentText->GetSchematicTextOrientation() );
