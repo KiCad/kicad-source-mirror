@@ -281,6 +281,11 @@ public:
       * returns the NETCLASS for this item.
       */
      NETCLASS* GetNetClass() const;
+
+    /** function GetNetClassName
+     * @return the Net Class name of this item
+     */
+    wxString GetNetClassName( ) const;
 };
 
 

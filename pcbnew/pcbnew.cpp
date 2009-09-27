@@ -54,8 +54,6 @@ wxSize ModuleTextSize;       /* Default footprint texts size */
 wxPoint g_Offset_Module;     /* Offset de trace du modul en depl */
 wxString g_Current_PadName;  // Last used pad name (pad num)
 
-PCB_SCREEN* ScreenModule  = NULL;
-
 // Wildcard for footprint libraries filesnames
 const wxString g_FootprintLibFileWildcard( wxT( "Kicad footprint library file (*.mod)|*.mod" ) );
 

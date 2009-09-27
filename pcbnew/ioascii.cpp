@@ -380,13 +380,6 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             continue;
         }
 
-        if( stricmp( Line, "TrackClearenceHistory" ) == 0 )
-        {
-            int tmp = atoi( data );
-            AddHistory( tmp, TYPE_CLEARANCE );
-            continue;
-        }
-
         if( stricmp( Line, "ZoneClearence" ) == 0 )
         {
             g_Zone_Default_Setting.m_ZoneClearance = atoi( data );
@@ -561,13 +554,6 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
 
 
     fprintf( aFile, "TrackClearence %d\n", g_DesignSettings.m_TrackClearance );
-    for( int ii = 0; ii < HISTORY_NUMBER; ii++ )
-        {
-            if( g_DesignSettings.m_TrackClearanceHistory[ii] == 0 )
-                break;
-            fprintf( aFile, "TrackClearenceHistory %d\n",
-                     g_DesignSettings.m_TrackClearanceHistory[ii] );
-        }
     fprintf( aFile, "ZoneClearence %d\n", g_Zone_Default_Setting.m_ZoneClearance );
     fprintf( aFile, "TrackMinWidth %d\n" , g_DesignSettings.m_TrackMinWidth );
 
@@ -959,6 +945,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 
     board->SynchronizeNetsAndNetClasses( );
     board->m_Status_Pcb = 0;
+    SetToolbars();
     return 1;
 }
 

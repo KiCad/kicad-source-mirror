@@ -1007,6 +1007,14 @@ void TRACK::DisplayInfo( WinEDA_DrawFrame* frame )
     }
     else
         Affiche_1_Parametre( frame, text_pos, _( "Width" ), msg, DARKCYAN );
+    
+    NETCLASS* netclass = GetNetClass();
+    if( netclass )
+    {
+        msg = netclass->GetName();
+        text_pos += 10;
+        Affiche_1_Parametre( frame, text_pos, _( "Net Class" ), msg, DARKCYAN );
+    }
 }
 
 

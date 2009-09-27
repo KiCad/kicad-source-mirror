@@ -74,17 +74,17 @@ private:
     MARKERS m_markers;                                      ///< MARKER_PCBs for clearance problems, owned by pointer
 
     typedef std::vector<ZONE_CONTAINER*> ZONE_CONTAINERS;   // @todo: switch to boost::ptr_vector, and change ~BOARD()
-    ZONE_CONTAINERS            m_ZoneDescriptorList;        ///< edge zone descriptors, owned by pointer
+    ZONE_CONTAINERS          m_ZoneDescriptorList;          ///< edge zone descriptors, owned by pointer
 
-    LAYER                      m_Layer[NB_COPPER_LAYERS];
+    LAYER                    m_Layer[NB_COPPER_LAYERS];
 
 public:
-    WinEDA_BasePcbFrame*       m_PcbFrame;                  // Window de visualisation
-    EDA_Rect                   m_BoundaryBox;               // Board size and position
-    int                        m_Status_Pcb;                // Flags used in ratsnet calculation and update
-    EDA_BoardDesignSettings*   m_BoardSettings;             // Link to current design settings
-    int                        m_NbNodes;                   // Active pads (pads attached to a net ) count
-    int                        m_NbNoconnect;               // Active ratsnet count (rastnests not alraedy connected by tracks)
+    WinEDA_BasePcbFrame*     m_PcbFrame;                    // Window de visualisation
+    EDA_Rect                 m_BoundaryBox;                 // Board size and position
+    int m_Status_Pcb;                                       // Flags used in ratsnet calculation and update
+    EDA_BoardDesignSettings* m_BoardSettings;               // Link to current design settings
+    int m_NbNodes;                                          // Active pads (pads attached to a net ) count
+    int m_NbNoconnect;                                      // Active ratsnet count (rastnests not alraedy connected by tracks)
 
     DLIST<BOARD_ITEM>          m_Drawings;                  // linked list of lines & texts
     DLIST<MODULE>              m_Modules;                   // linked list of MODULEs
@@ -97,9 +97,12 @@ public:
     std::vector<RATSNEST_ITEM> m_LocalRatsnest;             /* Rastnest list relative to a given footprint
                                                              *  (used while moving a footprint) */
 
-    NETCLASSES                 m_NetClasses;                ///< List of current netclasses. There is always the default netclass
+    NETCLASSES m_NetClasses;                                ///< List of current netclasses. There is always the default netclass
+    wxString   m_CurrentNetClassName;                       /* Current net class name used to display netclass info.
+                                                             *  this is also the last used netclass after starting a track
+                                                             */
 
-    ZONE_CONTAINER*            m_CurrentZoneContour;        // zone contour currently in progress
+    ZONE_CONTAINER* m_CurrentZoneContour;                   // zone contour currently in progress
 
     BOARD( EDA_BaseStruct* aParent, WinEDA_BasePcbFrame* frame );
     ~BOARD();
@@ -259,6 +262,7 @@ public:
         return m_NetInfo->GetPadsCount();
     }
 
+
     // Calcul du rectangle d'encadrement:
     bool          ComputeBoundaryBox();
 
@@ -346,7 +350,7 @@ public:
      * @param none
      * @return none
      */
-    void            SynchronizeNetsAndNetClasses();
+    void          SynchronizeNetsAndNetClasses();
 
 
     /**
@@ -486,7 +490,7 @@ public:
      * @return pointer to the new area
      */
     ZONE_CONTAINER* AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode,
-                int aLayer, wxPoint aStartPointPosition, int aHatch );
+                             int aLayer, wxPoint aStartPointPosition, int aHatch );
 
     /**
      * Function InsertArea
@@ -534,11 +538,11 @@ public:
      *	 1 if intersecting sides
      * Also sets areas->utility1 flags if areas are modified
      */
-    int             ClipAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
-                                     ZONE_CONTAINER* aCurrArea,
-                                     bool            bMessageBoxArc,
-                                     bool            bMessageBoxInt,
-                                     bool            bRetainArcs = TRUE );
+    int             ClipAreaPolygon( PICKED_ITEMS_LIST* aNewZonesList,
+                                     ZONE_CONTAINER*    aCurrArea,
+                                     bool               bMessageBoxArc,
+                                     bool               bMessageBoxInt,
+                                     bool               bRetainArcs = TRUE );
 
     /**
      * Process an area that has been modified, by clipping its polygon against
@@ -553,10 +557,10 @@ public:
      *  0 if no intersecting sides
      *  1 if intersecting sides, polygon clipped
      */
-    int  AreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
-                              ZONE_CONTAINER* modified_area,
-                              bool            bMessageBoxArc,
-                              bool            bMessageBoxInt );
+    int AreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
+                             ZONE_CONTAINER*    modified_area,
+                             bool               bMessageBoxArc,
+                             bool               bMessageBoxInt );
 
     /**
      * Function CombineAllAreasInNet
@@ -569,7 +573,10 @@ public:
      * Sets utility flag = 1 for any areas modified
      * If an area has self-intersecting arcs, doesn't try to combine it
      */
-    int  CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode, bool bMessageBox, bool bUseUtility );
+    int CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList,
+                              int                aNetCode,
+                              bool               bMessageBox,
+                              bool               bUseUtility );
 
     /** Function RemoveArea
      * remove copper area from net, and put it in a deleted list (if exists)
@@ -611,7 +618,9 @@ public:
      *         1 if intersection
      *         2 if arcs intersect
      */
-    int  CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_combine );
+    int  CombineAreas( PICKED_ITEMS_LIST* aDeletedList,
+                       ZONE_CONTAINER*    area_ref,
+                       ZONE_CONTAINER*    area_to_combine );
 
     /**
      * Function Test_Drc_Areas_Outlines_To_Areas_Outlines

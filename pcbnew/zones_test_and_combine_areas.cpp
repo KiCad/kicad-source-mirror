@@ -797,12 +797,15 @@ int BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_r
 #endif
 
     // add holes
+    bool show_error = true;
     while( booleng->StartPolygonGet() )
     {
-        if( booleng->GetPolygonPointEdgeType() != KB_INSIDE_EDGE )
+        if( booleng->GetPolygonPointEdgeType() != KB_INSIDE_EDGE ) // we expect all vertex are holes inside the main outline
         {
-            DisplayError( NULL,
+            if( show_error )    // show this error only once, if happens
+                DisplayError( NULL,
                          wxT( "BOARD::CombineAreas() error: unexpected outside contour descriptor" ) );
+            show_error = false;
             continue;
         }
         while( booleng->PolygonHasMorePoints() )

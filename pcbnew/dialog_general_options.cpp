@@ -224,7 +224,6 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         if( id == ID_TB_OPTIONS_SELECT_UNIT_INCH )
             g_UnitMetric = INCHES;
         m_SelTrackWidthBox_Changed = TRUE;
-        m_SelClrWidthBox_Changed = TRUE;
         UpdateStatusBar();    /* Reaffichage des coord curseur */
         ReCreateAuxiliaryToolbar();
         DisplayUnitsMsg();

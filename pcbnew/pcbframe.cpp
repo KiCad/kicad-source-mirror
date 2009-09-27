@@ -145,8 +145,6 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
                          WinEDA_PcbFrame::Process_Special_Functions )
     EVT_KICAD_CHOICEBOX( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
                          WinEDA_PcbFrame::Process_Special_Functions )
-    EVT_KICAD_CHOICEBOX( ID_AUX_TOOLBAR_PCB_CLR_WIDTH,
-                         WinEDA_PcbFrame::Process_Special_Functions )
     EVT_KICAD_CHOICEBOX( ID_AUX_TOOLBAR_PCB_VIA_SIZE,
                          WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_TOOLBARH_PCB_AUTOPLACE, WinEDA_PcbFrame::AutoPlace )
@@ -224,11 +222,9 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     m_Draw_Sheet_Ref           = TRUE;  // TRUE pour avoir le cartouche dessine
     m_Draw_Auxiliary_Axis      = TRUE;
     m_SelTrackWidthBox         = NULL;
-    m_SelClrWidthBox = NULL;
     m_SelViaSizeBox            = NULL;
     m_SelLayerBox              = NULL;
     m_SelTrackWidthBox_Changed = FALSE;
-    m_SelClrWidthBox_Changed = FALSE;
     m_SelViaSizeBox_Changed    = FALSE;
 
     SetBoard( new BOARD( NULL, this ) );
@@ -287,13 +283,7 @@ WinEDA_PcbFrame::~WinEDA_PcbFrame()
 {
     extern PARAM_CFG_BASE* ParamCfgList[];
     wxGetApp().SaveCurrentSetupValues( ParamCfgList );
-
-    SetBaseScreen( ScreenPcb );
-
     delete m_drc;
-
-    if( GetBoard() != g_ModuleEditor_Pcb )
-        delete GetBoard();
 }
 
 
@@ -301,20 +291,11 @@ WinEDA_PcbFrame::~WinEDA_PcbFrame()
 void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
 /********************************************************/
 {
-    PCB_SCREEN* screen;
     wxConfig *  config = wxGetApp().m_EDA_Config;
 
     DrawPanel->m_AbortRequest = TRUE;
 
-    screen = ScreenPcb;
-    while( screen )
-    {
-        if( screen->IsModify() )
-            break;
-        screen = screen->Next();
-    }
-
-    if( screen )
+    if( ScreenPcb->IsModify() )
     {
         unsigned        ii;
         wxMessageDialog dialog( this, _( "Board modified, Save before exit ?" ),
@@ -340,15 +321,6 @@ void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
         }
     }
 
-    while( screen ) // Remove modify flag, to avoi others messages
-    {
-        screen->ClrModify();
-        screen = screen->Next();
-    }
-
-    /* Reselection de l'ecran de base,
-     *  pour les evenements de refresh generes par wxWindows */
-    SetBaseScreen( ActiveScreen = ScreenPcb );
 
     SaveSettings();
     if( config )
@@ -360,267 +332,13 @@ void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
         config->Write( PCB_MAGNETIC_TRACKS_OPT, (long) g_MagneticTrackOption );
         config->Write( SHOW_MICROWAVE_TOOLS, (long) m_AuxVToolBar ? 1 : 0 );
     }
+
+    // do not show the window because ScreenPcb will be deleted and we do not want any paint event
+    Show(false);
+    ActiveScreen = ScreenPcb;
     Destroy();
 }
 
-
-/***************************************/
-void WinEDA_PcbFrame::SetToolbars()
-/***************************************/
-
-/*
- *  Active ou desactive les tools des toolbars, en fonction des commandes
- *  en cours
- */
-{
-    size_t i;
-    int ii, jj;
-    bool state;
-
-    if( m_ID_current_state == ID_TRACK_BUTT )
-    {
-        if( Drc_On )
-            DrawPanel->SetCursor( wxCursor( wxCURSOR_PENCIL ) );
-        else
-            DrawPanel->SetCursor( wxCursor( wxCURSOR_QUESTION_ARROW ) );
-    }
-
-
-    if( m_HToolBar == NULL )
-        return;
-
-    m_HToolBar->EnableTool( ID_SAVE_BOARD, GetScreen()->IsModify() );
-
-    state = GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE;
-    m_HToolBar->EnableTool( wxID_CUT, state );
-    m_HToolBar->EnableTool( wxID_COPY, state );
-
-    m_HToolBar->EnableTool( wxID_PASTE, FALSE );
-
-    state = GetScreen()->GetUndoCommandCount() > 0;
-    m_HToolBar->EnableTool( ID_UNDO_BUTT, state );
-
-    state = GetScreen()->GetRedoCommandCount() > 0;
-    m_HToolBar->EnableTool( ID_REDO_BUTT, state );
-
-    if( m_OptionsToolBar )
-    {
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_DRC_OFF,
-                                      !Drc_On );
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_DRC_OFF,
-                                            Drc_On ?
-                                            _( "DRC Off (Disable !!!), Currently: DRC is active" ) :
-                                            _( "DRC On (Currently: DRC is inactive !!!)" ) );
-
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_MM,
-                                      g_UnitMetric == MILLIMETRE ? TRUE : FALSE );
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                                      g_UnitMetric == INCHES ? TRUE : FALSE );
-
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_POLAR_COORD,
-                                      DisplayOpt.DisplayPolarCood );
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLAR_COORD,
-                                            DisplayOpt.DisplayPolarCood ?
-                                            _( "Polar Coords not show" ) :
-                                            _( "Display Polar Coords" ) );
-
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID,
-                                      m_Draw_Grid );
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_GRID,
-                                            m_Draw_Grid ? _( "Grid not show" ) : _( "Show Grid" ) );
-
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR,
-                                      m_CursorShape );
-
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_RATSNEST,
-                                      g_Show_Ratsnest );
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_RATSNEST,
-                                            g_Show_Ratsnest ?
-                                            _( "Hide General ratsnest" ) :
-                                            _( "Show General ratsnest" ) );
-
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
-                                      g_Show_Module_Ratsnest );
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
-                                            g_Show_Module_Ratsnest ?
-                                            _( "Hide Module ratsnest" ) :
-                                            _( "Show Module ratsnest" ) );
-
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_AUTO_DEL_TRACK,
-                                      g_AutoDeleteOldTrack );
-
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_AUTO_DEL_TRACK,
-                                            g_AutoDeleteOldTrack ?
-                                            _( "Disable Auto Delete old Track" ) :
-                                            _( "Enable Auto Delete old Track" ) );
-
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-                                      !m_DisplayPadFill );
-
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-                                            m_DisplayPadFill ?
-                                            _( "Show Pads Sketch mode" ) :
-                                            _( "Show pads filled mode" ) );
-
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
-                                      !m_DisplayPcbTrackFill );
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
-                                            m_DisplayPcbTrackFill ?
-                                            _( "Show Tracks Sketch mode" ) :
-                                            _( "Show Tracks filled mode" ) );
-
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
-                                      DisplayOpt.ContrastModeDisplay );
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
-                                            DisplayOpt.ContrastModeDisplay ?
-                                            _( "Normal Contrast Mode Display" ) :
-                                            _( "High Contrast Mode Display" ) );
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
-                g_ModuleTextNOVColor & ITEM_NOT_SHOW );
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
-                       g_ModuleTextNOVColor & (ITEM_NOT_SHOW) ?
-                                                   _( "Show Invisible Text" ) :
-                                                   _( "Hide Invisible Text" ) );
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1, m_AuxVToolBar ? true : false );
-    }
-
-    if( m_AuxiliaryToolBar )
-    {
-        wxString msg;
-        m_AuxiliaryToolBar->ToggleTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
-                                        g_DesignSettings.m_UseConnectedTrackWidth );
-        if( m_SelTrackWidthBox && m_SelTrackWidthBox_Changed )
-        {
-            m_SelTrackWidthBox_Changed = FALSE;
-            m_SelTrackWidthBox->Clear();
-            wxString format = _( "Track" );
-
-            if( g_UnitMetric == INCHES )
-                format += wxT( " %.1f" );
-            else
-                format += wxT( " %.3f" );
-
-            for( ii = 0; ii < HISTORY_NUMBER; ii++ )
-            {
-                if( g_DesignSettings.m_TrackWidthHistory[ii] == 0 )
-                    break; // Fin de liste
-                double value = To_User_Unit( g_UnitMetric,
-                                             g_DesignSettings.m_TrackWidthHistory[ii],
-                                             PCB_INTERNAL_UNIT );
-
-                if( g_UnitMetric == INCHES )
-                    msg.Printf( format.GetData(), value * 1000 );
-                else
-                    msg.Printf( format.GetData(), value );
-
-                m_SelTrackWidthBox->Append( msg );
-
-                if( g_DesignSettings.m_TrackWidthHistory[ii] ==
-                    g_DesignSettings.m_CurrentTrackWidth )
-                    m_SelTrackWidthBox->SetSelection( ii );
-            }
-        }
-
-        if( m_SelClrWidthBox && m_SelClrWidthBox_Changed )
-        {
-            m_SelClrWidthBox_Changed = FALSE;
-            m_SelClrWidthBox->Clear();
-            wxString format = _( "Clearance" );
-
-            if( g_UnitMetric == INCHES )
-                format += wxT( " %.1f" );
-            else
-                format += wxT( " %.3f" );
-
-            for( ii = 0; ii < HISTORY_NUMBER; ii++ )
-            {
-                if( g_DesignSettings.m_TrackClearanceHistory[ii] == 0 )
-                    break; // Fin de liste
-                double value = To_User_Unit( g_UnitMetric,
-                                             g_DesignSettings.m_TrackClearanceHistory[ii],
-                                             PCB_INTERNAL_UNIT );
-
-                if( g_UnitMetric == INCHES )
-                    msg.Printf( format.GetData(), value * 1000 );
-                else
-                    msg.Printf( format.GetData(), value );
-
-                m_SelClrWidthBox->Append( msg );
-
-                if( g_DesignSettings.m_TrackClearanceHistory[ii] ==
-                    g_DesignSettings.m_TrackClearance )
-                    m_SelClrWidthBox->SetSelection( ii );
-            }
-        }
-
-        if( m_SelViaSizeBox && m_SelViaSizeBox_Changed )
-        {
-            m_SelViaSizeBox_Changed = FALSE;
-            m_SelViaSizeBox->Clear();
-            wxString format = _( "Via" );
-
-            if( g_UnitMetric == INCHES )
-                format += wxT( " %.1f" );
-            else
-                format += wxT( " %.3f" );
-
-            for( ii = 0; ii < HISTORY_NUMBER; ii++ )
-            {
-                if( g_DesignSettings.m_ViaSizeHistory[ii] == 0 )
-                    break; // Fin de liste
-
-                double value = To_User_Unit( g_UnitMetric,
-                                             g_DesignSettings.m_ViaSizeHistory[ii],
-                                             PCB_INTERNAL_UNIT );
-
-                if( g_UnitMetric == INCHES )
-                    msg.Printf( format.GetData(), value * 1000 );
-                else
-                    msg.Printf( format.GetData(), value );
-
-                m_SelViaSizeBox->Append( msg );
-                if( g_DesignSettings.m_ViaSizeHistory[ii] == g_DesignSettings.m_CurrentViaSize )
-                    m_SelViaSizeBox->SetSelection( ii );
-            }
-        }
-
-        if( m_SelZoomBox )
-        {
-            bool not_found = true;
-            for( jj = 0; jj < (int)GetScreen()->m_ZoomList.GetCount(); jj++ )
-            {
-                if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[jj] )
-                {
-                    m_SelZoomBox->SetSelection( jj + 1 );
-                    not_found = false;
-                    break;
-                }
-            }
-            if ( not_found )
-                m_SelZoomBox->SetSelection( -1 );
-        }
-
-        if( m_SelGridBox && GetScreen() )
-        {
-            int kk = m_SelGridBox->GetChoice();
-
-            for( i = 0; i < GetScreen()->m_GridList.GetCount(); i++ )
-            {
-                if( GetScreen()->GetGrid() == GetScreen()->m_GridList[i].m_Size )
-                {
-                    if( kk != ( int ) i )
-                        m_SelGridBox->SetSelection( ( int ) i );
-                    kk = ( int ) i;
-                    break;
-                }
-            }
-        }
-    }
-
-    UpdateToolbarLayerInfo();
-    PrepareLayerIndicator();
-    DisplayUnitsMsg();
-}
 
 /**
  * Display 3D frame of current printed circuit board.

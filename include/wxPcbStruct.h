@@ -53,12 +53,12 @@ class WinEDA_PcbFrame: public WinEDA_BasePcbFrame
 public:
     WinEDAChoiceBox* m_SelLayerBox;
     WinEDAChoiceBox* m_SelTrackWidthBox;
-    WinEDAChoiceBox* m_SelClrWidthBox;
+    wxTextCtrl* m_ClearanceBox;
+    wxTextCtrl* m_NetClassSelectedBox;
     WinEDAChoiceBox* m_SelViaSizeBox;
 
 private:
     bool             m_SelTrackWidthBox_Changed;
-    bool             m_SelClrWidthBox_Changed;
     bool             m_SelViaSizeBox_Changed;
 
     DRC*             m_drc;         ///< the DRC controller, see drc.cpp
@@ -112,6 +112,7 @@ public:
      */
     void             ShowDesignRulesEditor( wxCommandEvent& event );
 
+    /* toolbars update UI functions: */
     /**
      * Function UpdateToolbarLayerInfo
      * updates the currently selected layer in the layer listbox and
@@ -120,6 +121,22 @@ public:
     void             UpdateToolbarLayerInfo();
 
     void             PrepareLayerIndicator();
+
+    /**
+     * Function AuxiliaryToolBar_Update_UI
+     * update the displayed values on auxiliary horizontal toolbar
+     * (track width, via sizes, clearance ...
+     */
+    void AuxiliaryToolBar_Update_UI( );
+
+    /**
+     * Function AuxiliaryToolBar_DesignRules_Update_UI
+     * update the displayed values: track width, via sizes, clearance
+     * used when a ne netclass is selected
+     */
+    void AuxiliaryToolBar_DesignRules_Update_UI( );
+
+    /* mouse functions events: */
     void             OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void             OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
 

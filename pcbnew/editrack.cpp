@@ -140,8 +140,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
         else    // no starting point, but a filled zone area can exist. This is also a good starting point.
         {
             ZONE_CONTAINER* zone = GetBoard()->HitTestForAnyFilledArea( pos,
-                                                                        GetScreen()->
-                                                                        m_Active_Layer );
+                                                                        GetScreen()->m_Active_Layer );
             if( zone )
                 g_HightLigth_NetCode = zone->GetNet();
         }
@@ -154,7 +153,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
 
         Hight_Light( DC );
 
-        g_CurrentTrackSegment->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
+        g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
         g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
 
         if( g_DesignSettings.m_UseConnectedTrackWidth )
@@ -169,6 +168,10 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
         g_CurrentTrackSegment->m_Start = pos;
         g_CurrentTrackSegment->m_End   = pos;
         g_CurrentTrackSegment->SetNet( g_HightLigth_NetCode );
+
+        // Display info about track Net class:
+        GetBoard()->m_CurrentNetClassName = g_CurrentTrackSegment->GetNetClassName();
+        AuxiliaryToolBar_DesignRules_Update_UI();
 
         if( pt_pad )
         {

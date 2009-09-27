@@ -558,12 +558,14 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
                                                   wxSize( LISTBOX_WIDTH + 20, -1 ) );
         m_AuxiliaryToolBar->AddControl( m_SelTrackWidthBox );
         m_SelTrackWidthBox_Changed = TRUE;
-        m_SelClrWidthBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
-                                                          ID_AUX_TOOLBAR_PCB_CLR_WIDTH,
+        m_ClearanceBox = new wxTextCtrl( m_AuxiliaryToolBar,
+                                                          -1,
+                                                          wxEmptyString,
                                                           wxPoint( -1, -1 ),
-                                                          wxSize( LISTBOX_WIDTH + 20, -1 ) );
-		m_AuxiliaryToolBar->AddControl( m_SelClrWidthBox );
-		m_SelClrWidthBox_Changed = TRUE;
+                                                          wxSize( LISTBOX_WIDTH + 20, -1 ),
+                                                          wxTE_READONLY );
+		m_AuxiliaryToolBar->AddControl( m_ClearanceBox );
+        m_ClearanceBox->SetToolTip(_("Current NetClass clearance value") );
 
         m_AuxiliaryToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
                                      wxEmptyString,
@@ -575,12 +577,20 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
         m_SelViaSizeBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
                                                ID_AUX_TOOLBAR_PCB_VIA_SIZE,
                                                wxPoint( -1, -1 ),
-                                               wxSize( LISTBOX_WIDTH + 10, -1 ) );
+                                               wxSize( LISTBOX_WIDTH, -1 ) );
         m_AuxiliaryToolBar->AddControl( m_SelViaSizeBox );
 
-        m_AuxiliaryToolBar->AddSeparator();
+        m_NetClassSelectedBox = new wxTextCtrl( m_AuxiliaryToolBar,
+                                                          -1,
+                                                          wxEmptyString,
+                                                          wxPoint( -1, -1 ),
+                                                          wxSize( LISTBOX_WIDTH, -1 ),
+                                                          wxTE_READONLY );
+		m_AuxiliaryToolBar->AddControl( m_NetClassSelectedBox );
+        m_NetClassSelectedBox->SetToolTip(_("Name of the current NetClass") );
 
         // Boite de selection du pas de grille
+        m_AuxiliaryToolBar->AddSeparator();
         m_SelGridBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
                                             ID_ON_GRID_SELECT,
                                             wxPoint( -1, -1 ),
@@ -642,7 +652,6 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
 
     m_SelViaSizeBox_Changed    = TRUE;
     m_SelTrackWidthBox_Changed = TRUE;
-    m_SelClrWidthBox_Changed = TRUE;
 
     ReCreateLayerBox( NULL );
 

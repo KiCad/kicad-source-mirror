@@ -20,9 +20,9 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 /* Constructor */
 BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
     BOARD_ITEM( (BOARD_ITEM*)parent, TYPE_PCB ),
-    m_NetClasses(this)
+    m_NetClasses( this )
 {
-    m_PcbFrame = frame;
+    m_PcbFrame      = frame;
     m_Status_Pcb    = 0;                        // Mot d'etat: Bit 1 = Chevelu calcule
     m_BoardSettings = &g_DesignSettings;
     m_NbNodes     = 0;                          // nombre de pads connectes
@@ -42,7 +42,8 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
     // within g_DesignSettings via the NETCLASS() constructor.
     // Should user eventually load a board from a disk file, then these defaults
     // will get overwritten during load.
-    m_NetClasses.GetDefault()->SetDescription( _("This is the default net class.") );
+    m_NetClasses.GetDefault()->SetDescription( _( "This is the default net class." ) );
+    m_CurrentNetClassName = m_NetClasses.GetDefault()->GetName( );
 }
 
 
@@ -239,6 +240,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         else
             m_Modules.PushFront( (MODULE*) aBoardItem );
         aBoardItem->SetParent( this );
+
         // Because the list of pads has changed, reset the status
         // This indicate the list of pad and nets must be recalculated before use
         m_Status_Pcb = 0;
@@ -263,9 +265,9 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         msg.Printf(
             wxT( "BOARD::Add() needs work: BOARD_ITEM type (%d) not handled" ),
             aBoardItem->Type() );
-        wxFAIL_MSG(msg );
+        wxFAIL_MSG( msg );
     }
-        break;
+    break;
     }
 }
 
@@ -414,7 +416,7 @@ bool BOARD::ComputeBoundaryBox()
 
         if( ptr->m_Shape == S_CIRCLE )
         {
-            cx = ptr->m_Start.x; cy = ptr->m_Start.y;
+            cx       = ptr->m_Start.x; cy = ptr->m_Start.y;
             rayon    = (int) hypot( (double) ( ptr->m_End.x - cx ), (double) ( ptr->m_End.y - cy ) );
             rayon   += d;
             xmin     = MIN( xmin, cx - rayon );
@@ -425,8 +427,8 @@ bool BOARD::ComputeBoundaryBox()
         }
         else
         {
-            cx = MIN( ptr->m_Start.x, ptr->m_End.x );
-            cy = MIN( ptr->m_Start.y, ptr->m_End.y );
+            cx       = MIN( ptr->m_Start.x, ptr->m_End.x );
+            cy       = MIN( ptr->m_Start.y, ptr->m_End.y );
             xmin     = MIN( xmin, cx - d );
             ymin     = MIN( ymin, cy - d );
             cx       = MAX( ptr->m_Start.x, ptr->m_End.x );
@@ -463,9 +465,9 @@ bool BOARD::ComputeBoundaryBox()
     /* Analyse track and zones */
     for( TRACK* track = m_Track;  track;  track = track->Next() )
     {
-        d = (track->m_Width / 2) + 1;
-        cx = MIN( track->m_Start.x, track->m_End.x );
-        cy = MIN( track->m_Start.y, track->m_End.y );
+        d        = (track->m_Width / 2) + 1;
+        cx       = MIN( track->m_Start.x, track->m_End.x );
+        cy       = MIN( track->m_Start.y, track->m_End.y );
         xmin     = MIN( xmin, cx - d );
         ymin     = MIN( ymin, cy - d );
         cx       = MAX( track->m_Start.x, track->m_End.x );
@@ -477,9 +479,9 @@ bool BOARD::ComputeBoundaryBox()
 
     for( TRACK* track = m_Zone;  track;  track = track->Next() )
     {
-        d = (track->m_Width / 2) + 1;
-        cx = MIN( track->m_Start.x, track->m_End.x );
-        cy = MIN( track->m_Start.y, track->m_End.y );
+        d        = (track->m_Width / 2) + 1;
+        cx       = MIN( track->m_Start.x, track->m_End.x );
+        cy       = MIN( track->m_Start.y, track->m_End.y );
         xmin     = MIN( xmin, cx - d );
         ymin     = MIN( ymin, cy - d );
         cx       = MAX( track->m_Start.x, track->m_End.x );
@@ -840,7 +842,10 @@ NETINFO_ITEM* BOARD::FindNet( int anetcode ) const
 #if defined(DEBUG)
     if( net )     // item can be NULL if anetcode is not valid
     {
-        wxASSERT( anetcode == net->GetNet() );
+        if( anetcode != net->GetNet() )
+        {
+           printf("FindNet() anetcode %d != GetNet() %d\n", anetcode, net->GetNet());
+        }
     }
 #endif
 
@@ -862,29 +867,30 @@ NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
         return NULL;
 
     int ncount = m_NetInfo->GetCount();
+
     // Search for a netname = aNetname
 #if 0
-    // Use a sequencial search: easy to understand, but slow
-    printf("\nsearch %s, nets %d\n", CONV_TO_UTF8(aNetname),  ncount);
 
+    // Use a sequencial search: easy to understand, but slow
     for( int ii = 1; ii < ncount;  ii++ )
     {
         NETINFO_ITEM* item = m_NetInfo->GetNetItem( ii );
         if( item && item->GetNetname() == aNetname )
         {
-            printf("   found\n");
             return item;
         }
     }
+
 #else
+
     // Use a fast binary search,
     // this is possible because Nets are alphabetically ordered in list
     // see NETINFO_LIST::BuildListOfNets() and NETINFO_LIST::Build_Pads_Full_List()
-    int imax = ncount-1;
+    int imax  = ncount - 1;
     int index = imax;
     while( ncount > 0 )
     {
-        int ii       = ncount;
+        int ii = ncount;
         ncount >>= 1;
 
         if( (ii & 1) && ( ii > 1 ) )
@@ -893,24 +899,28 @@ NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
         NETINFO_ITEM* item = m_NetInfo->GetNetItem( index );
         if( item == NULL )
             return NULL;
-        int icmp = item->GetNetname().Cmp(aNetname);
+        int           icmp = item->GetNetname().Cmp( aNetname );
 
-        if (icmp == 0 ) // found !
+        if( icmp == 0 ) // found !
         {
-            printf("   found\n");
             return item;
         }
         if( icmp < 0 ) // must search after item
         {
             index += ncount;
-             continue;
+            if( index > imax )
+                index = imax;
+            continue;
         }
         if( icmp > 0 ) // must search before item
         {
-           index -= ncount;
+            index -= ncount;
+            if( index < 1 )
+                index = 1;
             continue;
-         }
+        }
     }
+
 #endif
     return NULL;
 }

@@ -102,8 +102,6 @@ extern int         g_MagneticTrackOption;
 extern bool        g_HightLigt_Status;
 extern int         g_HightLigth_NetCode;
 
-extern PCB_SCREEN* ScreenModule;        /* Ecran de l'editeur de modules */
-
 extern wxPoint     g_Offset_Module;     /* Offset de trace du modul en depl */
 
 extern wxString    g_Current_PadName;   // Last used pad name (pad num)

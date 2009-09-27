@@ -75,9 +75,6 @@ enum KICAD_T {
     COMPONENT_FIELD_DRAW_TYPE,
     COMPONENT_BEZIER_DRAW_TYPE,
 
-    // Special id used to store clearance values (this is not a good idea: TODO: change it)
-    TYPE_CLEARANCE,
-
     // End value
     MAX_STRUCT_TYPE_ID
 };

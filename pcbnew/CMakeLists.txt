@@ -136,6 +136,7 @@ set(PCBNEW_SRCS
     tool_modedit.cpp
     tool_onrightclick.cpp
     tool_pcb.cpp
+    toolbars_update_user_interface.cpp
     tracepcb.cpp
     track.cpp
     tr_modif.cpp

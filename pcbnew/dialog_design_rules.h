@@ -42,11 +42,8 @@ private:
     NETCUPS                 m_AllNets;
 
 private:
-//    void OnLayerCountClick( wxCommandEvent& event );
-//    void OnLayerGridLeftClick( wxGridEvent& event ){ event.Skip(); }
-//    void OnLayerGridRighttClick( wxGridEvent& event ){ event.Skip(); }
-    void OnNetClassesGridLeftClick( wxGridEvent& event ){ event.Skip(); }
-    void OnNetClassesGridRightClick( wxGridEvent& event ){ event.Skip(); }
+    void OnNetClassesNameLeftClick( wxGridEvent& event ){ event.Skip(); }
+    void OnNetClassesNameRightClick( wxGridEvent& event ){ event.Skip(); }
     void OnCancelButtonClick( wxCommandEvent& event );
     void OnOkButtonClick( wxCommandEvent& event );
     void OnAddNetclassClick( wxCommandEvent& event );

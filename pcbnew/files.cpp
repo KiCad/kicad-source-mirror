@@ -102,11 +102,11 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
     }
 
     case ID_APPEND_FILE:
-        LoadOnePcbFile( wxEmptyString, TRUE );
+        LoadOnePcbFile( wxEmptyString, true );
         break;
 
     case ID_NEW_BOARD:
-        Clear_Pcb( TRUE );
+        Clear_Pcb( true );
         GetScreen()->m_FileName.Printf( wxT( "%s%cnoname%s" ),
                                         wxGetCwd().GetData(), DIR_SEP,
                                         PcbExtBuffer.GetData() );
@@ -148,9 +148,8 @@ bool WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append 
             return false;
     }
 
-    m_SelTrackWidthBox_Changed = TRUE;
-    m_SelClrWidthBox_Changed = TRUE;
-    m_SelViaSizeBox_Changed    = TRUE;
+    m_SelTrackWidthBox_Changed = true;
+    m_SelViaSizeBox_Changed    = true;
 
     if( Append )
     {
@@ -300,7 +299,7 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
     wxString    lowerTxt;
     wxString    msg;
 
-    bool        saveok = TRUE;
+    bool        saveok = true;
     FILE*       dest;
 
     if( FileName == wxEmptyString )

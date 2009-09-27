@@ -50,7 +50,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case wxID_CUT:
     case wxID_COPY:
     case ID_AUX_TOOLBAR_PCB_TRACK_WIDTH:
-    case ID_AUX_TOOLBAR_PCB_CLR_WIDTH:
     case ID_AUX_TOOLBAR_PCB_VIA_SIZE:
     case ID_ON_GRID_SELECT:
     case ID_ON_ZOOM_SELECT:
@@ -999,19 +998,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             g_DesignSettings.m_TrackWidthHistory[ii];
         DisplayTrackSettings();
         m_SelTrackWidthBox_Changed = false;
-        m_SelViaSizeBox_Changed    = false;
-        g_DesignSettings.m_UseConnectedTrackWidth = false;
-    }
-    break;
-
-    case ID_AUX_TOOLBAR_PCB_CLR_WIDTH:
-    {
-        int ii = m_SelClrWidthBox->GetChoice();
-        g_DesignSettings.m_TrackClearance =
-            g_DesignSettings.m_TrackClearanceHistory[ii];
-        DisplayTrackSettings();
-        m_SelTrackWidthBox_Changed = false;
-        m_SelClrWidthBox_Changed   = false;
         m_SelViaSizeBox_Changed    = false;
         g_DesignSettings.m_UseConnectedTrackWidth = false;
     }

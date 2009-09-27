@@ -156,7 +156,6 @@ public:
     int    m_PcbTextWidth;                          // current Pcb (not module) Text width
     wxSize m_PcbTextSize;                           // current Pcb (not module) Text size
     int    m_TrackClearance;                        // track to track and track to pads clearance
-    int    m_TrackClearanceHistory[HISTORY_NUMBER]; // Last HISTORY_NUMBER used track widths
     int    m_TrackMinWidth;                         // track min value for width ((min copper size value
     int    m_ViasMinSize;                           // vias (not micro vias) min diameter
     int    m_MicroViasMinSize;                      // micro vias (not vias) min diameter

@@ -59,7 +59,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_grid->SetToolTip( _("Net Class parameters") );
 	m_grid->SetMinSize( wxSize( -1,150 ) );
 	
-	sbSizer1->Add( m_grid, 1, wxALL|wxEXPAND, 5 );
+	sbSizer1->Add( m_grid, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* buttonBoxSizer;
 	buttonBoxSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -67,21 +67,21 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_addButton = new wxButton( this, wxID_ADD_NETCLASS, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_addButton->SetToolTip( _("Add another Net Class") );
 	
-	buttonBoxSizer->Add( m_addButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	buttonBoxSizer->Add( m_addButton, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_removeButton = new wxButton( this, wxID_REMOVE_NETCLASS, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_removeButton->SetToolTip( _("Remove the currently select Net Class") );
 	
-	buttonBoxSizer->Add( m_removeButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	buttonBoxSizer->Add( m_removeButton, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_moveUpButton = new wxButton( this, wxID_ANY, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_moveUpButton->SetToolTip( _("Move the currently selected Net Class up one row") );
 	
-	buttonBoxSizer->Add( m_moveUpButton, 0, wxALL, 5 );
+	buttonBoxSizer->Add( m_moveUpButton, 0, wxRIGHT|wxLEFT, 5 );
 	
 	sbSizer1->Add( buttonBoxSizer, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	bMainSizer->Add( sbSizer1, 1, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( sbSizer1, 1, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbSizer4;
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Membership:") ), wxHORIZONTAL );
@@ -92,12 +92,12 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	wxArrayString m_leftClassChoiceChoices;
 	m_leftClassChoice = new wxChoice( this, ID_LEFT_CHOICE_CLICK, wxDefaultPosition, wxDefaultSize, m_leftClassChoiceChoices, 0 );
 	m_leftClassChoice->SetSelection( 0 );
-	leftNetSelectBoxSizer->Add( m_leftClassChoice, 0, wxALL|wxEXPAND, 5 );
+	leftNetSelectBoxSizer->Add( m_leftClassChoice, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	m_leftListCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_VRULES );
-	m_leftListCtrl->SetMinSize( wxSize( 220,-1 ) );
+	m_leftListCtrl->SetMinSize( wxSize( 220,300 ) );
 	
-	leftNetSelectBoxSizer->Add( m_leftListCtrl, 1, wxALL|wxEXPAND, 5 );
+	leftNetSelectBoxSizer->Add( m_leftListCtrl, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	sbSizer4->Add( leftNetSelectBoxSizer, 1, wxALL|wxEXPAND, 5 );
 	
@@ -129,12 +129,12 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	wxArrayString m_rightClassChoiceChoices;
 	m_rightClassChoice = new wxChoice( this, ID_RIGHT_CHOICE_CLICK, wxDefaultPosition, wxDefaultSize, m_rightClassChoiceChoices, 0 );
 	m_rightClassChoice->SetSelection( 0 );
-	rghtNetSelectBoxSizer->Add( m_rightClassChoice, 0, wxALL|wxEXPAND, 5 );
+	rghtNetSelectBoxSizer->Add( m_rightClassChoice, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	m_rightListCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_VRULES );
 	m_rightListCtrl->SetMinSize( wxSize( 220,-1 ) );
 	
-	rghtNetSelectBoxSizer->Add( m_rightListCtrl, 1, wxALL|wxEXPAND, 5 );
+	rghtNetSelectBoxSizer->Add( m_rightListCtrl, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	sbSizer4->Add( rghtNetSelectBoxSizer, 0, wxALL|wxEXPAND, 5 );
 	
@@ -144,9 +144,9 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Messages:") ), wxHORIZONTAL );
 	
 	m_MessagesList = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO|wxSUNKEN_BORDER );
-	m_MessagesList->SetMinSize( wxSize( -1,100 ) );
+	m_MessagesList->SetMinSize( wxSize( -1,90 ) );
 	
-	sbSizer2->Add( m_MessagesList, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	sbSizer2->Add( m_MessagesList, 1, wxEXPAND, 5 );
 	
 	bMainSizer->Add( sbSizer2, 0, wxALL|wxEXPAND, 5 );
 	
@@ -162,8 +162,8 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	this->Layout();
 	
 	// Connect Events
-	m_grid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_DESIGN_RULES_BASE::OnNetClassesGridLeftClick ), NULL, this );
-	m_grid->Connect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( DIALOG_DESIGN_RULES_BASE::OnNetClassesGridRightClick ), NULL, this );
+	m_grid->Connect( wxEVT_GRID_LABEL_LEFT_CLICK, wxGridEventHandler( DIALOG_DESIGN_RULES_BASE::OnNetClassesNameLeftClick ), NULL, this );
+	m_grid->Connect( wxEVT_GRID_LABEL_RIGHT_CLICK, wxGridEventHandler( DIALOG_DESIGN_RULES_BASE::OnNetClassesNameRightClick ), NULL, this );
 	m_addButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnAddNetclassClick ), NULL, this );
 	m_removeButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnRemoveNetclassClick ), NULL, this );
 	m_moveUpButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnMoveUpSelectedNetClass ), NULL, this );
@@ -180,8 +180,8 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 DIALOG_DESIGN_RULES_BASE::~DIALOG_DESIGN_RULES_BASE()
 {
 	// Disconnect Events
-	m_grid->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_DESIGN_RULES_BASE::OnNetClassesGridLeftClick ), NULL, this );
-	m_grid->Disconnect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( DIALOG_DESIGN_RULES_BASE::OnNetClassesGridRightClick ), NULL, this );
+	m_grid->Disconnect( wxEVT_GRID_LABEL_LEFT_CLICK, wxGridEventHandler( DIALOG_DESIGN_RULES_BASE::OnNetClassesNameLeftClick ), NULL, this );
+	m_grid->Disconnect( wxEVT_GRID_LABEL_RIGHT_CLICK, wxGridEventHandler( DIALOG_DESIGN_RULES_BASE::OnNetClassesNameRightClick ), NULL, this );
 	m_addButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnAddNetclassClick ), NULL, this );
 	m_removeButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnRemoveNetclassClick ), NULL, this );
 	m_moveUpButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnMoveUpSelectedNetClass ), NULL, this );

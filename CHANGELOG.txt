@@ -4,6 +4,45 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-sept-27 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++pcbnew
+    * make pcbnew compatible with last changes
+        (Delete base screen in WinEDA_DrawFrame destructor to prevent potential memory leak.)
+    * Starting complementary work on Net Classes (moving target)
+
+2009-sept-25 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+Component library editor improvements and minor bug fixes.
+* Component library objects renamed for improved readability.
+* Fields now move when selected in library editor.
+* Add copy constructor to all library draw and library component objects.
+* Added copy constructor to EDA_BaseStruct.
+* Delete base screen in WinEDA_DrawFrame destructor to prevent potential memory leak.
+* Fixed memory access bug when replacing and adding a component to library.
+* Moved library component block manipulation code into component object.
+* Removed all of the global variables used by the library editor main window object.
+* The usual code cleaning and refactoring.
+
+2009-sept-22:
+Command ID refactoring and other minor improvements.
+* Split out application specific command IDs to prevent unnecessary rebuilding.
+* Eliminate duplicate menu and tool bar command IDs.
+* Split component library editor and viewer definitions to separate header files.
+* More component library and document file merge code.
+* A bunch of minor string readability and consistency fixes.
+
+2009-sept-18:
+Component library object and other minor improvements.
+* Create static component library methods to manage library list.
+* Rename component library, component, and alias objects to more readable name.
+* Use pointer to component instead of root name to prevent redundant library searches.
+* Add append message helper to message panel that calculates string length.
+* Initial ground work for merging library and library document files.
+* Improved component library file load error checking.
+* Minor component library editor improvements.
+
+
 2009-sept-17 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++pcbnew

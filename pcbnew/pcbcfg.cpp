@@ -188,13 +188,11 @@ bool Read_Config( const wxString& projectFileName )
 
     // Some parameters must be reinitialized after loading a new board or config
     g_DesignSettings.m_TrackWidthHistory[0] = g_DesignSettings.m_CurrentTrackWidth;
-    g_DesignSettings.m_TrackClearanceHistory[0] = g_DesignSettings.m_TrackClearance;
     g_DesignSettings.m_ViaSizeHistory[0]    = g_DesignSettings.m_CurrentViaSize;
 
     for( ii = 1; ii < HISTORY_NUMBER; ii++ )
     {
         g_DesignSettings.m_TrackWidthHistory[ii] = 0;
-        g_DesignSettings.m_TrackClearanceHistory[ii] = 0;
         g_DesignSettings.m_ViaSizeHistory[ii]    = 0;
     }
 

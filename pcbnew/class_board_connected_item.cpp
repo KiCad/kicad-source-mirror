@@ -146,3 +146,22 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
 
     return NULL;
 }
+
+/** function GetNetClassName
+ * @return the Net Class name of this item
+ */
+wxString BOARD_CONNECTED_ITEM::GetNetClassName( ) const
+{
+    wxString name;
+    NETCLASS*   myclass  = GetNetClass();
+
+    if( myclass )
+        name = myclass->GetName();
+    else
+    {
+        BOARD*  board = GetBoard();
+        name = board->m_NetClasses.GetDefault()->GetName();
+    }
+
+    return name;
+}
