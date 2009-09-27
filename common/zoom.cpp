@@ -152,7 +152,12 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
         break;
 
     case ID_ZOOM_PAGE:
-        Zoom_Automatique( false );
+        // With Zoom_Automatique(), the "Zoom Auto" button (and hotkey)
+        // does nothing if the view is already at the correct
+        // zoom level, but needs to be shifted (centered).
+        //Zoom_Automatique( false );
+        GetBaseScreen()->SetZoom( BestZoom() );
+        Recadre_Trace( false );
         break;
 
     case ID_POPUP_ZOOM_SELECT:

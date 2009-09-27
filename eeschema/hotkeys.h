@@ -14,6 +14,7 @@ enum hotkey_id_commnand {
     HK_ZOOM_OUT,
     HK_ZOOM_REDRAW,
     HK_ZOOM_CENTER,
+    HK_ZOOM_AUTO,
     HK_NEXT_SEARCH,
     HK_DELETE,
     HK_REPEAT_LAST,
@@ -41,5 +42,7 @@ extern struct Ki_HotkeyInfoSectionDescriptor s_Eeschema_Hokeys_Descr[];
 extern struct Ki_HotkeyInfoSectionDescriptor s_Schematic_Hokeys_Descr[];
 // List of hotkey descriptors for the lib editor only
 extern struct Ki_HotkeyInfoSectionDescriptor s_Libedit_Hokeys_Descr[];
+// List of hotkey descriptors for the lib browser only
+extern struct Ki_HotkeyInfoSectionDescriptor s_Viewlib_Hokeys_Descr[];
 
 #endif		// KOTKEYS_H

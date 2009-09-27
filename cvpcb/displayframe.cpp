@@ -132,24 +132,24 @@ void WinEDA_DisplayFrame::ReCreateHToolbar()
 
     m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,
                          wxBitmap( zoom_in_xpm ),
-                         _( "zoom + (F1)" ) );
+                         _( "Zoom in (F1)" ) );
 
     m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
                          wxBitmap( zoom_out_xpm ),
-                         _( "zoom - (F2)" ) );
+                         _( "Zoom out (F2)" ) );
 
     m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                          wxBitmap( zoom_redraw_xpm ),
-                         _( "redraw (F3)" ) );
+                         _( "Redraw view (F3)" ) );
 
     m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                          wxBitmap( zoom_auto_xpm ),
-                         _( "1:1 zoom" ) );
+                         _( "Zoom auto (Home)" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_CVPCB_SHOW3D_FRAME, wxEmptyString,
                          wxBitmap( show_3d_xpm ),
-                         _( "1:1 zoom" ) );
+                         _( "3D Display" ) );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
@@ -231,6 +231,13 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     case WXK_F4:
         cmd.SetId( ID_POPUP_ZOOM_CENTER );
+        GetEventHandler()->ProcessEvent( cmd );
+        flagcurseur = 2;
+        curpos = GetScreen()->m_Curseur;
+        break;
+
+    case WXK_HOME:
+        cmd.SetId( ID_ZOOM_PAGE );
         GetEventHandler()->ProcessEvent( cmd );
         flagcurseur = 2;
         curpos = GetScreen()->m_Curseur;

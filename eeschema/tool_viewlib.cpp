@@ -10,13 +10,14 @@
 #include "program.h"
 #include "general.h"
 #include "protos.h"
+#include "hotkeys.h"
 #include "class_library.h"
 #include "libviewfrm.h"
 
 
 void WinEDA_ViewlibFrame::ReCreateHToolbar()
 {
-    int  ii;
+    int  ii; wxString msg;
     CMP_LIBRARY* lib;
     LIB_COMPONENT* component = NULL;
     CMP_LIB_ENTRY* entry = NULL;
@@ -47,21 +48,21 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
                              _( "Display next part" ) );
 
         m_HToolBar->AddSeparator();
+        msg = AddHotkeyName( _( "Zoom in" ), s_Viewlib_Hokeys_Descr, HK_ZOOM_IN );
         m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,
-                             wxBitmap( zoom_in_xpm ),
-                             _( "Zoom in" ) );
+                             wxBitmap( zoom_in_xpm ), msg );
 
+        msg = AddHotkeyName( _( "Zoom out" ), s_Viewlib_Hokeys_Descr, HK_ZOOM_OUT );
         m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
-                             wxBitmap( zoom_out_xpm ),
-                             _( "Zoom out" ) );
+                             wxBitmap( zoom_out_xpm ), msg );
 
+        msg = AddHotkeyName( _( "Redraw view" ), s_Viewlib_Hokeys_Descr, HK_ZOOM_REDRAW );
         m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
-                             wxBitmap( zoom_redraw_xpm ),
-                             _( "Redraw view" ) );
+                             wxBitmap( zoom_redraw_xpm ), msg );
 
+        msg = AddHotkeyName( _( "Zoom auto" ), s_Viewlib_Hokeys_Descr, HK_ZOOM_AUTO );
         m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
-                             wxBitmap( zoom_auto_xpm ),
-                             _( "Best zoom" ) );
+                             wxBitmap( zoom_auto_xpm ), msg );
 
         m_HToolBar->AddSeparator();
         m_HToolBar->AddTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, wxEmptyString,

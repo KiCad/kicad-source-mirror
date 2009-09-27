@@ -16,6 +16,7 @@ enum hotkey_id_commnand {
     HK_ZOOM_OUT,
     HK_ZOOM_REDRAW,
     HK_ZOOM_CENTER,
+    HK_ZOOM_AUTO,
     HK_SWITCH_LAYER_TO_NEXT,
     HK_SWITCH_LAYER_TO_PREVIOUS
 };

@@ -77,6 +77,7 @@ static struct hotkey_name_descr s_Hotkey_Name_List[] =
     { wxT( "Backspace" ), WXK_BACK         },
     { wxT( "Insert" ),    WXK_INSERT       },
 
+    { wxT( "Home" ),      WXK_HOME         },
     { wxT( "End" ),       WXK_END          },
     { wxT( "Page Up" ),   WXK_PAGEUP       },
     { wxT( "Page Down" ), WXK_PAGEDOWN     },

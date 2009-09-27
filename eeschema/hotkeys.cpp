@@ -48,6 +48,8 @@
 /* Hotkey list: */
 
 // Common commands
+static Ki_HotkeyInfo HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO,
+                                   WXK_HOME );
 static Ki_HotkeyInfo HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER,
                                    WXK_F4 );
 static Ki_HotkeyInfo HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW,
@@ -107,7 +109,7 @@ Ki_HotkeyInfo* s_Common_Hotkey_List[] =
 {
     &HkHelp,
     &HkZoomIn,         &HkZoomOut,          &HkZoomRedraw,
-    &HkZoomCenter,
+    &HkZoomCenter,     &HkZoomAuto,
     &HkResetLocalCoord,
     &HkUndo,           &HkRedo,
     NULL
@@ -161,6 +163,14 @@ struct Ki_HotkeyInfoSectionDescriptor s_Libedit_Hokeys_Descr[] =
 {
     { &g_CommonSectionTag,  s_Common_Hotkey_List,  NULL },
     { &g_LibEditSectionTag, s_LibEdit_Hotkey_List, NULL },
+    { NULL, NULL, NULL }
+};
+
+// list of sections and corresponding hotkey list for the component browser
+// (used to list current hotkeys)
+struct Ki_HotkeyInfoSectionDescriptor s_Viewlib_Hokeys_Descr[] =
+{
+    { &g_CommonSectionTag,  s_Common_Hotkey_List,  NULL },
     { NULL, NULL, NULL }
 };
 
@@ -233,6 +243,11 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_ZOOM_CENTER:
         cmd.SetId( ID_POPUP_ZOOM_CENTER );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_ZOOM_AUTO:
+        cmd.SetId( ID_ZOOM_PAGE );
         GetEventHandler()->ProcessEvent( cmd );
         break;
 
@@ -514,6 +529,11 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_ZOOM_CENTER:
         cmd.SetId( ID_POPUP_ZOOM_CENTER );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_ZOOM_AUTO:
+        cmd.SetId( ID_ZOOM_PAGE );
         GetEventHandler()->ProcessEvent( cmd );
         break;
 

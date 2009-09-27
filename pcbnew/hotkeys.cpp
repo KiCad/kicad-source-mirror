@@ -83,6 +83,7 @@ static Ki_HotkeyInfo HkDelete(wxT("Delete Track or Footprint"), HK_DELETE,
 		WXK_DELETE);
 static Ki_HotkeyInfo HkResetLocalCoord(wxT("Reset local coord."),
 		HK_RESET_LOCAL_COORD, ' ');
+static Ki_HotkeyInfo HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
 static Ki_HotkeyInfo HkZoomCenter(wxT("Zoom Center"), HK_ZOOM_CENTER, WXK_F4);
 static Ki_HotkeyInfo HkZoomRedraw(wxT("Zoom Redraw"), HK_ZOOM_REDRAW, WXK_F3);
 static Ki_HotkeyInfo HkZoomOut(wxT("Zoom Out"), HK_ZOOM_OUT, WXK_F2);
@@ -99,8 +100,8 @@ static Ki_HotkeyInfo HkToggle(wxT("Toggle Present Command"), HK_TOGGLE, 'E');
 // List of common hotkey descriptors
 Ki_HotkeyInfo
 		* s_Common_Hotkey_List[] = { &HkHelp, &HkZoomIn, &HkZoomOut,
-				&HkZoomRedraw, &HkZoomCenter, &HkSwitchUnits,
-				&HkResetLocalCoord, NULL };
+				&HkZoomRedraw, &HkZoomCenter, &HkZoomAuto,
+				&HkSwitchUnits, &HkResetLocalCoord, NULL };
 
 // List of hotkey descriptors for pcbnew
 Ki_HotkeyInfo* s_board_edit_Hotkey_List[] = { &HkTrackDisplayMode, &HkDelete,
@@ -277,6 +278,11 @@ void WinEDA_PcbFrame::OnHotKey(wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct)
 		break;
 	case HK_TOGGLE:
 		cmd.SetId(ID_TOGGLE_PRESENT_COMMAND);
+		GetEventHandler()->ProcessEvent(cmd);
+		break;
+
+	case HK_ZOOM_AUTO:
+		cmd.SetId(ID_ZOOM_PAGE);
 		GetEventHandler()->ProcessEvent(cmd);
 		break;
 
@@ -592,6 +598,11 @@ void WinEDA_ModuleEditFrame::OnHotKey(wxDC* DC, int hotkey,
 
 	case HK_ZOOM_CENTER:
 		cmd.SetId(ID_POPUP_ZOOM_CENTER);
+		GetEventHandler()->ProcessEvent(cmd);
+		break;
+
+	case HK_ZOOM_AUTO:
+		cmd.SetId(ID_ZOOM_PAGE);
 		GetEventHandler()->ProcessEvent(cmd);
 		break;
 	}

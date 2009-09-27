@@ -169,8 +169,9 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
     m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                          wxBitmap( zoom_redraw_xpm ), msg );
 
+    msg = AddHotkeyName( _( "Zoom auto" ), s_Libedit_Hokeys_Descr, HK_ZOOM_AUTO );
     m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
-                         wxBitmap( zoom_auto_xpm ), _( "Zoom page" ) );
+                         wxBitmap( zoom_auto_xpm ), msg );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_DE_MORGAN_NORMAL_BUTT, wxEmptyString,

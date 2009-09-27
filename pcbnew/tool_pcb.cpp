@@ -255,9 +255,10 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
     m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                          wxBitmap( zoom_redraw_xpm ), msg );
 
+    msg = AddHotkeyName( _( "Zoom auto" ), s_Board_Editor_Hokeys_Descr,
+                         HK_ZOOM_AUTO );
     m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
-                         wxBitmap( zoom_auto_xpm ),
-                         _( "Zoom auto" ) );
+                         wxBitmap( zoom_auto_xpm ), msg );
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Find components and texts" ),

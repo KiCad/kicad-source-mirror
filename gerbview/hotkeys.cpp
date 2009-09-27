@@ -30,6 +30,7 @@
 /* local variables */
 /* Hotkey list: */
 static Ki_HotkeyInfo    HkResetLocalCoord( wxT( "Reset local coord." ), HK_RESET_LOCAL_COORD, ' ' );
+static Ki_HotkeyInfo    HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
 static Ki_HotkeyInfo    HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
 static Ki_HotkeyInfo    HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
 static Ki_HotkeyInfo    HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
@@ -51,7 +52,7 @@ static Ki_HotkeyInfo    HkSwitch2PreviousCopperLayer( wxT(
 Ki_HotkeyInfo* s_Gerbview_Hotkey_List[] = {
     &HkHelp,
     &HkZoomIn,                     &HkZoomOut,         &HkZoomRedraw, &HkZoomCenter,
-    &HkSwitchUnits,                &HkResetLocalCoord,
+    &HkZoomAuto,  &HkSwitchUnits,  &HkResetLocalCoord,
     &HkTrackDisplayMode,
     &HkSwitch2NextCopperLayer,
     &HkSwitch2PreviousCopperLayer,
@@ -120,6 +121,11 @@ void WinEDA_GerberFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_ZOOM_CENTER:
         cmd.SetId( ID_POPUP_ZOOM_CENTER );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_ZOOM_AUTO:
+        cmd.SetId( ID_ZOOM_PAGE );
         GetEventHandler()->ProcessEvent( cmd );
         break;
 

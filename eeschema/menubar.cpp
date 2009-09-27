@@ -170,8 +170,10 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     item->SetBitmap( zoom_out_xpm );
     viewMenu->Append( item );
 
-    item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, _( "Zoom auto" ),
-                           _( "Zoom auto" ), wxITEM_NORMAL );
+    msg = AddHotkeyName( _( "Zoom auto" ), s_Schematic_Hokeys_Descr,
+                         HK_ZOOM_AUTO );
+    item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, msg, _( "Zoom auto" ),
+                           wxITEM_NORMAL );
     item->SetBitmap( zoom_auto_xpm );
     viewMenu->Append( item );
 

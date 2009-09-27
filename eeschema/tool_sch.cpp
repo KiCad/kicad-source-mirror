@@ -96,8 +96,9 @@ void WinEDA_SchematicFrame::ReCreateHToolbar()
     m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, wxBitmap( zoom_redraw_xpm ),
                          msg );
 
+    msg = AddHotkeyName( _( "Zoom auto" ), s_Schematic_Hokeys_Descr, HK_ZOOM_AUTO );
     m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, wxBitmap( zoom_auto_xpm ),
-                         _( "Zoom auto" ) );
+                         msg );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, wxBitmap( find_xpm ),
