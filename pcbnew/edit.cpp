@@ -55,6 +55,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_ON_ZOOM_SELECT:
     case ID_PCB_USER_GRID_SETUP:
     case ID_TOOLBARH_PCB_SELECT_LAYER:
+    case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
     case ID_POPUP_PCB_ROTATE_TEXTEPCB:
     case ID_POPUP_PCB_EDIT_TEXTEPCB:
     case ID_POPUP_PCB_EDIT_MIRE:

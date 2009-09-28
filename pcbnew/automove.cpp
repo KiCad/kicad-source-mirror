@@ -57,6 +57,10 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
 
     switch( id )   // Arret eventuel de la commande de déplacement en cours
     {
+    case ID_TOOLBARH_PCB_AUTOPLACE:
+    case ID_TOOLBARH_PCB_AUTOROUTE:
+        break;
+
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
         if( DrawPanel->ManageCurseur
             && DrawPanel->ForceCloseManageCurseur )
@@ -71,9 +75,7 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
         {
             DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
         }
-        m_ID_current_state = 0;
-        DisplayToolMsg( wxEmptyString );
-        DrawPanel->SetCursor( wxCursor( wxCURSOR_ARROW ) );
+        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         break;
     }
 
