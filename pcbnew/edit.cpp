@@ -995,8 +995,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_AUX_TOOLBAR_PCB_TRACK_WIDTH:
     {
         int ii = m_SelTrackWidthBox->GetChoice();
-        g_DesignSettings.m_CurrentTrackWidth =
-            g_DesignSettings.m_TrackWidthHistory[ii];
+        g_DesignSettings.m_CurrentTrackWidth = GetBoard()->m_TrackWidthHistory[ii];
         DisplayTrackSettings();
         m_SelTrackWidthBox_Changed = false;
         m_SelViaSizeBox_Changed    = false;
@@ -1016,8 +1015,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         g_DesignSettings.m_UseConnectedTrackWidth = false;
         {
             int ii = id - ID_POPUP_PCB_SELECT_WIDTH1;
-            g_DesignSettings.m_CurrentTrackWidth =
-                g_DesignSettings.m_TrackWidthHistory[ii];
+            g_DesignSettings.m_CurrentTrackWidth = GetBoard()->m_TrackWidthHistory[ii];
             DisplayTrackSettings();
         }
         break;
@@ -1035,8 +1033,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_AUX_TOOLBAR_PCB_VIA_SIZE:
     {
         int ii = m_SelViaSizeBox->GetChoice();
-        g_DesignSettings.m_CurrentViaSize =
-            g_DesignSettings.m_ViaSizeHistory[ii];
+        g_DesignSettings.m_CurrentViaSize = GetBoard()->m_ViaSizeHistory[ii];
         DisplayTrackSettings();
         m_SelTrackWidthBox_Changed = false;
         m_SelViaSizeBox_Changed    = false;

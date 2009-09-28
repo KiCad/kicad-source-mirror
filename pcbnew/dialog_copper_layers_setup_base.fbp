@@ -32,7 +32,7 @@
             <property name="minimum_size">-1,-1</property>
             <property name="name">DIALOG_COPPER_LAYERS_SETUP_BASE</property>
             <property name="pos"></property>
-            <property name="size">558,479</property>
+            <property name="size">558,598</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass"></property>
             <property name="title">Copper layers setup</property>
@@ -254,7 +254,7 @@
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND</property>
-                    <property name="proportion">1</property>
+                    <property name="proportion">0</property>
                     <object class="wxStaticBoxSizer" expanded="1">
                         <property name="id">wxID_ANY</property>
                         <property name="label">Messages:</property>
@@ -265,8 +265,8 @@
                         <event name="OnUpdateUI"></event>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
-                            <property name="proportion">1</property>
+                            <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
+                            <property name="proportion">0</property>
                             <object class="wxHtmlWindow" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
@@ -276,7 +276,7 @@
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
                                 <property name="maximum_size"></property>
-                                <property name="minimum_size"></property>
+                                <property name="minimum_size">-1,150</property>
                                 <property name="name">m_MessagesList</property>
                                 <property name="permission">protected</property>
                                 <property name="pos"></property>

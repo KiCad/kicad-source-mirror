@@ -43,7 +43,7 @@ void WinEDA_PcbFrame::Via_Edit_Control( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_VIASIZE8:      // selec the new current value for via size (via diameter)
         DrawPanel->MouseToCursorSchema();
         ii = event.GetId() - ID_POPUP_PCB_SELECT_VIASIZE1;
-        g_DesignSettings.m_CurrentViaSize = g_DesignSettings.m_ViaSizeHistory[ii];
+        g_DesignSettings.m_CurrentViaSize = GetBoard()->m_ViaSizeHistory[ii];
         DisplayTrackSettings();
         break;
 

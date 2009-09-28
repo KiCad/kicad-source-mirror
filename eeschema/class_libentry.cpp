@@ -688,7 +688,7 @@ bool LIB_COMPONENT::Load( FILE* file, char* line, int* lineNum,
         || ( p = strtok( NULL, " \t\n" ) ) == NULL       /* m_UnitCount: */
         || sscanf( p, "%d", &m_UnitCount ) != 1 )
     {
-        errorMsg.Printf( _( "Wrong DEF format in line %d, skipped." ),
+        errorMsg.Printf( wxT( "Wrong DEF format in line %d, skipped." ),
                          *lineNum );
         while( GetLine( file, line, lineNum, 1024 ) )
         {

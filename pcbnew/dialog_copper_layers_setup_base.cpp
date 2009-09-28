@@ -80,9 +80,11 @@ DIALOG_COPPER_LAYERS_SETUP_BASE::DIALOG_COPPER_LAYERS_SETUP_BASE( wxWindow* pare
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Messages:") ), wxVERTICAL );
 	
 	m_MessagesList = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
-	sbSizer1->Add( m_MessagesList, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_MessagesList->SetMinSize( wxSize( -1,150 ) );
 	
-	bMainSizer->Add( sbSizer1, 1, wxEXPAND, 5 );
+	sbSizer1->Add( m_MessagesList, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	
+	bMainSizer->Add( sbSizer1, 0, wxEXPAND, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );

@@ -135,7 +135,6 @@ class RATSNEST_ITEM;
 #include "class_board.h"
 
 // Class for handle current printed board design settings
-#define HISTORY_NUMBER 8
 class EDA_BoardDesignSettings
 {
 public:
@@ -146,11 +145,9 @@ public:
     int    m_CurrentViaSize;                        // Current via size
     int    m_CurrentMicroViaSize;                   // Current micro via size
     bool   m_MicroViasAllowed;                      // true to allow micro vias
-    int    m_ViaSizeHistory[HISTORY_NUMBER];        // Last HISTORY_NUMBER used via sizes
     int    m_CurrentViaType;                        // via type (VIA_BLIND_BURIED, VIA_TROUGHT VIA_MICROVIA)
     int    m_CurrentTrackWidth;                     // current track width
     bool   m_UseConnectedTrackWidth;                // if true, when creating a new track starting on an existing track, use this track width
-    int    m_TrackWidthHistory[HISTORY_NUMBER];     // Last HISTORY_NUMBER used track widths
     int    m_DrawSegmentWidth;                      // current graphic line width (not EDGE layer)
     int    m_EdgeSegmentWidth;                      // current graphic line width (EDGE layer only)
     int    m_PcbTextWidth;                          // current Pcb (not module) Text width

@@ -5,7 +5,6 @@
 #ifndef CLASS_BOARD_H
 #define CLASS_BOARD_H
 
-
 #include "dlist.h"
 #include "class_netinfo.h"
 
@@ -65,13 +64,14 @@ struct LAYER
  * Class BOARD
  * holds information pertinent to a PCBNEW printed circuit board.
  */
+#define HISTORY_MAX_COUNT 8
 class BOARD : public BOARD_ITEM
 {
     friend class WinEDA_PcbFrame;
 
 private:
     typedef std::vector<MARKER_PCB*> MARKERS;               // @todo: switch to boost:ptr_vector, and change ~BOARD()
-    MARKERS m_markers;                                      ///< MARKER_PCBs for clearance problems, owned by pointer
+    MARKERS                  m_markers;                     ///< MARKER_PCBs for clearance problems, owned by pointer
 
     typedef std::vector<ZONE_CONTAINER*> ZONE_CONTAINERS;   // @todo: switch to boost::ptr_vector, and change ~BOARD()
     ZONE_CONTAINERS          m_ZoneDescriptorList;          ///< edge zone descriptors, owned by pointer
@@ -103,7 +103,11 @@ public:
                                                              */
 
     ZONE_CONTAINER* m_CurrentZoneContour;                   // zone contour currently in progress
+    std::vector <int>    m_ViaSizeHistory;                       // Last used via sizes (max count = HISTORY_MAX_COUNT)
+    std::vector <int>    m_TrackWidthHistory;                    // Last used track widths (max count = HISTORY_MAX_COUNT)
 
+    /**********************************/
+public:
     BOARD( EDA_BaseStruct* aParent, WinEDA_BasePcbFrame* frame );
     ~BOARD();
 

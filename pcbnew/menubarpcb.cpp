@@ -185,11 +185,6 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( preference_xpm );
     configmenu->Append( item );
 
-    item = new wxMenuItem( configmenu, ID_PCB_COPPER_LAYERS_SETUP, _( "Copper &Layers" ),
-                           _( "Select copper layers count and layers names" ) );
-    item->SetBitmap( copper_layers_setup_xpm );
-    configmenu->Append( item );
-
     item = new wxMenuItem( configmenu, ID_PCB_DISPLAY_OPTIONS_SETUP, _( "&Display" ),
                            _( "Select how items (pads, tracks texts ... ) are displayed" ) );
     item->SetBitmap( display_options_xpm );
@@ -211,11 +206,16 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     configmenu->AppendSeparator();
     AddHotkeyConfigMenu( configmenu );
 
-    // Add acces to the Design Rules Dialog:
+    // Add access to the Design Rules Dialog:
     wxMenu* designRulesMenu = new wxMenu;
     item = new wxMenuItem( designRulesMenu, ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG,
                            _( "Design Rules" ), _( "Open the design rules dialog editor" ) );
     item->SetBitmap( hammer_xpm );
+    designRulesMenu->Append( item );
+
+    item = new wxMenuItem( designRulesMenu, ID_PCB_COPPER_LAYERS_SETUP, _( "Copper &Layers" ),
+                           _( "Select copper layers count and layers names" ) );
+    item->SetBitmap( copper_layers_setup_xpm );
     designRulesMenu->Append( item );
 
     /////////////////////////////

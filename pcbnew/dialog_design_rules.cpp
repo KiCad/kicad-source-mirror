@@ -365,20 +365,25 @@ void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
 {
     NETCLASSES& netclasses = m_Pcb->m_NetClasses;
 
+    // Remove all netclasses from board. We'll copy new list after
     netclasses.Clear();
 
-    // gridRow2class( wxGrid* grid, int row, NETCLASS* nc, int units )
-
+    // Copy the default NetClass:
     gridRow2class( m_grid, 0, netclasses.GetDefault(), m_Parent->m_InternalUnits );
 
+    // Copy other NetClasses :
     for( int row = 1; row < m_grid->GetNumberRows();  ++row )
     {
         NETCLASS* nc = new NETCLASS( m_Pcb, m_grid->GetRowLabelValue( row ) );
 
         if( !m_Pcb->m_NetClasses.Add( nc ) )
         {
-            // @todo: put up an error message here.
-
+            // this netclass cannot be added because an other netclass with the same name exists
+            // Should not occur because OnAddNetclassClick() tests for existing NetClass names
+            wxString msg;
+            msg.Printf( wxT("CopyRulesListToBoard(): The NetClass \"%s\" already exists. Skip"),
+                m_grid->GetRowLabelValue( row ).GetData() );
+            wxMessageBox( msg );
             delete nc;
             continue;
         }
@@ -386,7 +391,8 @@ void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
         gridRow2class( m_grid, row, nc, m_Parent->m_InternalUnits );
     }
 
-    for( NETCUPS::const_iterator netcup = m_AllNets.begin();  netcup != m_AllNets.end();  ++netcup )
+    // Now read all nets and push them in the corresponding netclass net buffer
+    for( NETCUPS::const_iterator netcup = m_AllNets.begin(); netcup != m_AllNets.end(); ++netcup )
     {
         NETCLASS* nc = netclasses.Find( netcup->clazz );
         wxASSERT( nc );
@@ -471,11 +477,12 @@ void DIALOG_DESIGN_RULES::OnRemoveNetclassClick( wxCommandEvent& event )
 
     for( int ii = select.GetCount() - 1; ii >= 0; ii-- )
     {
-        if( select[ii] != 0 )   // Do not remove the default class
+        int grid_row = select[ii];
+        if(  grid_row != 0 )   // Do not remove the default class
         {
-            wxString classname = m_grid->GetRowLabelValue( ii );
+            wxString classname = m_grid->GetRowLabelValue( grid_row );
 
-            m_grid->DeleteRows( select[ii] );
+            m_grid->DeleteRows( grid_row );
 
             // reset the net class to default for members of the removed class
             swapNetClass( classname, NETCLASS::Default );
@@ -653,19 +660,65 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
 
     for( int row = 0; row < m_grid->GetNumberRows(); row++ )
     {
+        int tracksize = ReturnValueFromString( g_UnitMetric,
+                                       m_grid->GetCellValue( row, GRID_TRACKSIZE ),
+                                       m_Parent->m_InternalUnits );
+        if( tracksize < g_DesignSettings.m_TrackMinWidth )
+        {
+            result = false;
+            msg.Printf( _( "%s: <b>Track Size</b> &lt; <b>Min Track Size</b><br>" ),
+                GetChars( m_grid->GetRowLabelValue(row)) );
+
+            m_MessagesList->AppendToPage( msg );
+        }
+        
+        // Test vias
         int viadia = ReturnValueFromString( g_UnitMetric,
-                                       m_grid->GetCellValue(
-                                           row, GRID_VIASIZE ),
+                                       m_grid->GetCellValue( row, GRID_VIASIZE ),
                                        m_Parent->m_InternalUnits );
 
+        if( viadia < g_DesignSettings.m_ViasMinSize )
+        {
+            result = false;
+            msg.Printf( _( "%s: <b>Via Diameter</b> &lt; <b>Minimun Via Diameter</b><br>" ),
+                GetChars( m_grid->GetRowLabelValue(row)) );
+
+            m_MessagesList->AppendToPage( msg );
+        }
+
         int viadrill = ReturnValueFromString( g_UnitMetric,
-                                          m_grid->GetCellValue(
-                                          row, GRID_VIADRILL ),
+                                          m_grid->GetCellValue( row, GRID_VIADRILL ),
                                           m_Parent->m_InternalUnits );
         if( viadrill && viadrill >= viadia )
         {
             result = false;
             msg.Printf( _( "%s: <b>Via Drill</b> &ge; <b>Via Dia</b><br>" ),
+                GetChars( m_grid->GetRowLabelValue(row)) );
+
+            m_MessagesList->AppendToPage( msg );
+        }
+
+        // Test Micro vias
+        int muviadia = ReturnValueFromString( g_UnitMetric,
+                                       m_grid->GetCellValue( row, GRID_uVIASIZE ),
+                                       m_Parent->m_InternalUnits );
+
+        if( muviadia < g_DesignSettings.m_MicroViasMinSize )
+        {
+            result = false;
+            msg.Printf( _( "%s: <b>MicroVia Diameter</b> &lt; <b>Minimun MicroVia Diameter</b><br>" ),
+                GetChars( m_grid->GetRowLabelValue(row)) );
+
+            m_MessagesList->AppendToPage( msg );
+        }
+
+        int muviadrill = ReturnValueFromString( g_UnitMetric,
+                                          m_grid->GetCellValue( row, GRID_uVIADRILL ),
+                                          m_Parent->m_InternalUnits );
+        if( muviadrill && muviadrill >= muviadia )
+        {
+            result = false;
+            msg.Printf( _( "%s: <b>MicroVia Drill</b> &ge; <b>MicroVia Dia</b><br>" ),
                 GetChars( m_grid->GetRowLabelValue(row)) );
 
             m_MessagesList->AppendToPage( msg );

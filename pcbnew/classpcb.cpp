@@ -202,13 +202,6 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     m_MicroViaDrill = 50;                           // micro via drill (for the entire board)
     m_CurrentMicroViaSize = 150;                    // Current micro via size
     m_MicroViasAllowed    = false;                  // true to allow micro vias
-
-    for( ii = 0; ii < HISTORY_NUMBER; ii++ )
-    {
-        m_TrackWidthHistory[ii] = 0;    // Last HISTORY_NUMBER used track widths
-        m_ViaSizeHistory[ii]    = 0;    // Last HISTORY_NUMBER used via sizes
-    }
-
     m_DrawSegmentWidth = 100;                       // current graphic line width (not EDGE layer)
     m_EdgeSegmentWidth = 100;                       // current graphic line width (EDGE layer only)
     m_PcbTextWidth     = 100;                       // current Pcb (not module) Text width

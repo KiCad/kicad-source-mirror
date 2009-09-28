@@ -78,16 +78,13 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI( )
         m_SelTrackWidthBox_Changed = false;
         m_SelTrackWidthBox->Clear();
 
-        for( int ii = 0; ii < HISTORY_NUMBER; ii++ )
+        for( unsigned ii = 0; ii < GetBoard()->m_TrackWidthHistory.size(); ii++ )
         {
-            if( g_DesignSettings.m_TrackWidthHistory[ii] == 0 )
-                break; // Fin de liste
-            msg = _( "Track" ) + ReturnStringValue(g_DesignSettings.m_TrackWidthHistory[ii]);
+            msg = _( "Track" ) + ReturnStringValue(GetBoard()->m_TrackWidthHistory[ii]);
 
             m_SelTrackWidthBox->Append( msg );
 
-            if( g_DesignSettings.m_TrackWidthHistory[ii] ==
-                g_DesignSettings.m_CurrentTrackWidth )
+            if( GetBoard()->m_TrackWidthHistory[ii] == g_DesignSettings.m_CurrentTrackWidth )
                 m_SelTrackWidthBox->SetSelection( ii );
         }
     }
@@ -99,15 +96,12 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI( )
         m_SelViaSizeBox_Changed = false;
         m_SelViaSizeBox->Clear();
 
-        for( int ii = 0; ii < HISTORY_NUMBER; ii++ )
+        for( unsigned ii = 0; ii < GetBoard()->m_ViaSizeHistory.size(); ii++ )
         {
-            if( g_DesignSettings.m_ViaSizeHistory[ii] == 0 )
-                break; // Fin de liste
-
-            msg = _( "Via" ) + ReturnStringValue(g_DesignSettings.m_ViaSizeHistory[ii]);
+            msg = _( "Via" ) + ReturnStringValue(GetBoard()->m_ViaSizeHistory[ii]);
 
             m_SelViaSizeBox->Append( msg );
-            if( g_DesignSettings.m_ViaSizeHistory[ii] == g_DesignSettings.m_CurrentViaSize )
+            if( GetBoard()->m_ViaSizeHistory[ii] == g_DesignSettings.m_CurrentViaSize )
                 m_SelViaSizeBox->SetSelection( ii );
         }
     }
@@ -115,7 +109,7 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI( )
     if( m_SelZoomBox )
     {
         bool not_found = true;
-        for( int jj = 0; jj < (int)GetScreen()->m_ZoomList.GetCount(); jj++ )
+        for( unsigned jj = 0; jj < GetScreen()->m_ZoomList.GetCount(); jj++ )
         {
             if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[jj] )
             {

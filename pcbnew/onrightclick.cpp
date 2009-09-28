@@ -22,7 +22,7 @@
 
 /* Bitmaps */
 #include "bitmaps.h"
-static wxMenu* Append_Track_Width_List();
+static wxMenu* Append_Track_Width_List( BOARD * aBoard );
 
 
 /******************************************************************************/
@@ -291,7 +291,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         break;
 
     case ID_TRACK_BUTT:
-        ADD_MENUITEM_WITH_SUBMENU( aPopMenu, Append_Track_Width_List(),
+        ADD_MENUITEM_WITH_SUBMENU( aPopMenu, Append_Track_Width_List( GetBoard() ),
                                    ID_POPUP_PCB_SELECT_WIDTH,
                                    _( "Select Track Width" ), width_track_xpm );
         ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_SELECT_CU_LAYER,
@@ -364,7 +364,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         }
 
         if( locate_track )
-            ADD_MENUITEM_WITH_SUBMENU( aPopMenu, Append_Track_Width_List(),
+            ADD_MENUITEM_WITH_SUBMENU( aPopMenu, Append_Track_Width_List( GetBoard() ),
                                        ID_POPUP_PCB_SELECT_WIDTH, _( "Select Track Width" ),
                                        width_track_xpm );
         ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_SELECT_LAYER,
@@ -826,18 +826,15 @@ void WinEDA_PcbFrame::createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aP
 }
 
 
-/********************************************/
-static wxMenu* Append_Track_Width_List()
-/********************************************/
+/*******************************************************/
+static wxMenu* Append_Track_Width_List( BOARD * aBoard )
+/*******************************************************/
 
 /* create a wxMenu * which shows the last used track widths and via diameters
  *  @return a pointeur to the menu
  */
 {
-    #define TRACK_HISTORY_NUMBER_MAX 6
-    #define VIA_HISTORY_NUMBER_MAX   4
-    int      ii;
-    wxString msg;
+   wxString msg;
     wxMenu*  trackwidth_menu;
     double   value;
 
@@ -855,12 +852,10 @@ static wxMenu* Append_Track_Width_List()
     if( g_DesignSettings.m_UseConnectedTrackWidth )
         trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, TRUE );
 
-    for( ii = 0; (ii < HISTORY_NUMBER) && (ii < TRACK_HISTORY_NUMBER_MAX); ii++ )
+    for( unsigned ii = 0; ii < aBoard->m_TrackWidthHistory.size(); ii++ )
     {
-        if( g_DesignSettings.m_TrackWidthHistory[ii] == 0 )
-            break;
         value = To_User_Unit( g_UnitMetric,
-                              g_DesignSettings.m_TrackWidthHistory[ii],
+                              aBoard->m_TrackWidthHistory[ii],
                               PCB_INTERNAL_UNIT );
         if( g_UnitMetric == INCHES )  // Affichage en mils
             msg.Printf( _( "Track %.1f" ), value * 1000 );
@@ -869,25 +864,23 @@ static wxMenu* Append_Track_Width_List()
 
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_WIDTH1 + ii, msg, wxEmptyString, TRUE );
 
-        if( (g_DesignSettings.m_TrackWidthHistory[ii] == g_DesignSettings.m_CurrentTrackWidth)
+        if( (aBoard->m_TrackWidthHistory[ii] == g_DesignSettings.m_CurrentTrackWidth)
            && !g_DesignSettings.m_UseConnectedTrackWidth )
             trackwidth_menu->Check( ID_POPUP_PCB_SELECT_WIDTH1 + ii, TRUE );
     }
 
     trackwidth_menu->AppendSeparator();
-    for( ii = 0; (ii < HISTORY_NUMBER) && (ii < VIA_HISTORY_NUMBER_MAX); ii++ )
+    for( unsigned ii = 0; ii < aBoard->m_ViaSizeHistory.size(); ii++ )
     {
-        if( g_DesignSettings.m_ViaSizeHistory[ii] == 0 )
-            break;
-        value = To_User_Unit( g_UnitMetric,
-                              g_DesignSettings.m_ViaSizeHistory[ii],
+       value = To_User_Unit( g_UnitMetric,
+                              aBoard->m_ViaSizeHistory[ii],
                               PCB_INTERNAL_UNIT );
         if( g_UnitMetric == INCHES )
             msg.Printf( _( "Via %.1f" ), value * 1000 );
         else
             msg.Printf( _( "Via %.3f" ), value );
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, msg, wxEmptyString, TRUE );
-        if( g_DesignSettings.m_ViaSizeHistory[ii] == g_DesignSettings.m_CurrentViaSize )
+        if( aBoard->m_ViaSizeHistory[ii] == g_DesignSettings.m_CurrentViaSize )
             trackwidth_menu->Check( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, TRUE );
     }
 

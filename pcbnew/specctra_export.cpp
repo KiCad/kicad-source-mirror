@@ -1236,7 +1236,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         // Next we add the via's which may be used.
 
         int defaultViaSize = aBoard->m_BoardSettings->m_CurrentViaSize;
-
+// TODO: output vias sizes in NetClasses
         /* I need at least one via for the (class...) scope below
         if( defaultViaSize )
         */
@@ -1251,11 +1251,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             pcb->library->SetViaStartIndex( pcb->library->padstacks.size()-1 );
         }
 
-        for( int i=0;  i<HISTORY_NUMBER;  ++i )
+        for( unsigned i=0; i < aBoard->m_ViaSizeHistory.size(); ++i )
         {
-            int viaSize = aBoard->m_BoardSettings->m_ViaSizeHistory[i];
-            if( !viaSize )
-                break;
+            int viaSize = aBoard->m_ViaSizeHistory[i];
 
             if( viaSize == defaultViaSize )
                 continue;

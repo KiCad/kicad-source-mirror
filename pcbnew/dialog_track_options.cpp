@@ -13,7 +13,7 @@
 #include "wxPcbStruct.h"
 
 #include "dialog_track_options.h"
-
+#include <algorithm>
 
 /**
  *  DIALOG_TRACKS_OPTIONS, derived from DIALOG_TRACKS_OPTIONS_BASE
@@ -21,8 +21,8 @@
  *  automatically created by wxFormBuilder
  */
 
-DIALOG_TRACKS_OPTIONS::DIALOG_TRACKS_OPTIONS( WinEDA_PcbFrame* parent )
-    : DIALOG_TRACKS_OPTIONS_BASE(parent)
+DIALOG_TRACKS_OPTIONS::DIALOG_TRACKS_OPTIONS( WinEDA_PcbFrame* parent ) :
+    DIALOG_TRACKS_OPTIONS_BASE( parent )
 {
     m_Parent = parent;
 }
@@ -82,7 +82,6 @@ void DIALOG_TRACKS_OPTIONS::SetDisplayValue()
     m_MicroViaDrillCtrl->Enable( g_DesignSettings.m_MicroViasAllowed );
 
     m_AllowMicroViaCtrl->SetValue( g_DesignSettings.m_MicroViasAllowed );
-
 }
 
 
@@ -129,84 +128,32 @@ void WinEDA_BasePcbFrame::AddHistory( int value, KICAD_T type )
 
 // Mise a jour des listes des dernieres epaisseurs de via et track utilis√©es
 {
-    bool addhistory = TRUE;
-    int  ii;
+    std::vector <int> * vlist = NULL;
 
     switch( type )
     {
     case TYPE_TRACK:
-        for( ii = 0; ii < HISTORY_NUMBER; ii++ )
-        {
-            if( g_DesignSettings.m_TrackWidthHistory[ii] == value )
-            {
-                addhistory = FALSE;
-                break;
-            }
-        }
-
-        if( !addhistory )
-            break;
-
-        for( ii = HISTORY_NUMBER - 1;   ii > 0;  ii-- )
-        {
-            g_DesignSettings.m_TrackWidthHistory[ii] =
-                g_DesignSettings.m_TrackWidthHistory[ii - 1];
-        }
-
-        g_DesignSettings.m_TrackWidthHistory[0] = value;
-
-        // Reclassement par valeur croissante
-        for( ii = 0; ii < HISTORY_NUMBER - 1; ii++ )
-        {
-            if( g_DesignSettings.m_TrackWidthHistory[ii + 1] == 0 )
-                break;                                                          // Fin de liste
-
-            if( g_DesignSettings.m_TrackWidthHistory[ii] >
-                g_DesignSettings.m_TrackWidthHistory[ii + 1]  )
-            {
-                EXCHG( g_DesignSettings.m_TrackWidthHistory[ii],
-                       g_DesignSettings.m_TrackWidthHistory[ii + 1] );
-            }
-        }
+        vlist = &GetBoard()->m_TrackWidthHistory;
         break;
 
     case TYPE_VIA:
-        for( ii = 0; ii < HISTORY_NUMBER; ii++ )
-        {
-            if( g_DesignSettings.m_ViaSizeHistory[ii] == value )
-            {
-                addhistory = FALSE;
-                break;
-            }
-        }
-
-        if( !addhistory )
-            break;
-
-        for( ii = HISTORY_NUMBER - 1;  ii > 0;  ii-- )
-        {
-            g_DesignSettings.m_ViaSizeHistory[ii] = g_DesignSettings.m_ViaSizeHistory[ii - 1];
-        }
-
-        g_DesignSettings.m_ViaSizeHistory[0] = value;
-
-        // Reclassement par valeur croissante
-        for( ii = 0;  ii < HISTORY_NUMBER - 1;  ii++ )
-        {
-            if( g_DesignSettings.m_ViaSizeHistory[ii + 1] == 0 )
-                break;                                                      // Fin de liste
-
-            if( g_DesignSettings.m_ViaSizeHistory[ii] > g_DesignSettings.m_ViaSizeHistory[ii + 1]  )
-            {
-                EXCHG( g_DesignSettings.m_ViaSizeHistory[ii],
-                       g_DesignSettings.m_ViaSizeHistory[ii + 1] );
-            }
-        }
-
+        vlist = &GetBoard()->m_ViaSizeHistory;
         break;
 
     default:
-        break;
+        return;
+    }
+
+    // values are sorted by increasing value in list, so we can use binary_search()
+    // (see C++ Standard Template Library ª C++ Algorithms ª binary_search)
+    if( binary_search( vlist->begin(), vlist->end(), value ) == false )
+    {      // value not already existing
+        vlist->push_back( value );
+        if( vlist->size() >= HISTORY_MAX_COUNT )
+            vlist->erase( vlist->begin() );
+
+        // Sort new list by by increasing value
+        sort( vlist->begin(), vlist->end() );
     }
 }
 

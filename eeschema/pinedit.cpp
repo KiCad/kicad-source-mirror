@@ -1025,7 +1025,7 @@ with pin %s at location (%d, %d)" ),
         if( m_showDeMorgan )
         {
             if( curr_pin->m_Convert )
-                msg += _( "  of converion" );
+                msg += _( "  of converted" );
             else
                 msg += _( "  of normal" );
         }

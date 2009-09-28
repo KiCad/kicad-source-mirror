@@ -186,16 +186,6 @@ bool Read_Config( const wxString& projectFileName )
     /* User library path takes precedent over default library search paths. */
     wxGetApp().InsertLibraryPath( g_UserLibDirBuffer, 1 );
 
-    // Some parameters must be reinitialized after loading a new board or config
-    g_DesignSettings.m_TrackWidthHistory[0] = g_DesignSettings.m_CurrentTrackWidth;
-    g_DesignSettings.m_ViaSizeHistory[0]    = g_DesignSettings.m_CurrentViaSize;
-
-    for( ii = 1; ii < HISTORY_NUMBER; ii++ )
-    {
-        g_DesignSettings.m_TrackWidthHistory[ii] = 0;
-        g_DesignSettings.m_ViaSizeHistory[ii]    = 0;
-    }
-
     /* Reset the ITEM_NOT_SHOW flag when loading a new config
     *  Because it could creates SERIOUS mistakes for the user,
      * if some items are not visible after loading a board...

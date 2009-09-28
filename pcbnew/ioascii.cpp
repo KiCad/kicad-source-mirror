@@ -521,7 +521,6 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
 /******************************************************************************/
 {
     char text[1024];
-    int  ii;
 
     fprintf( aFile, "$SETUP\n" );
     sprintf( text, "InternalUnit %f INCH\n", 1.0 / PCB_INTERNAL_UNIT );
@@ -544,13 +543,8 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
     }
 
     fprintf( aFile, "TrackWidth %d\n", g_DesignSettings.m_CurrentTrackWidth );
-    for( int ii = 0; ii < HISTORY_NUMBER; ii++ )
-    {
-        if( g_DesignSettings.m_TrackWidthHistory[ii] == 0 )
-            break;
-        fprintf( aFile, "TrackWidthHistory %d\n",
-                 g_DesignSettings.m_TrackWidthHistory[ii] );
-    }
+    for( unsigned ii = 0; ii < aBoard->m_TrackWidthHistory.size(); ii++ )
+       fprintf( aFile, "TrackWidthHistory %d\n", aBoard->m_TrackWidthHistory[ii] );
 
 
     fprintf( aFile, "TrackClearence %d\n", g_DesignSettings.m_TrackClearance );
@@ -564,12 +558,8 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
     fprintf( aFile, "ViaAltDrill %d\n", g_DesignSettings.m_ViaDrillCustomValue );
     fprintf( aFile, "ViaMinSize %d\n", g_DesignSettings.m_ViasMinSize );
 
-    for( ii = 0; ii < HISTORY_NUMBER; ii++ )
-    {
-        if( g_DesignSettings.m_ViaSizeHistory[ii] == 0 )
-            break;
-        fprintf( aFile, "ViaSizeHistory %d\n", g_DesignSettings.m_ViaSizeHistory[ii] );
-    }
+    for( unsigned ii = 0; ii < aBoard->m_ViaSizeHistory.size(); ii++ )
+       fprintf( aFile, "ViaSizeHistory %d\n", aBoard->m_ViaSizeHistory[ii] );
 
     fprintf( aFile, "MicroViaSize %d\n", g_DesignSettings.m_CurrentMicroViaSize);
     fprintf( aFile, "MicroViaDrill %d\n", g_DesignSettings.m_MicroViaDrill);

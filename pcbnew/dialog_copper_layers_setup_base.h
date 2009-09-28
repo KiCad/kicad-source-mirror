@@ -52,7 +52,7 @@ class DIALOG_COPPER_LAYERS_SETUP_BASE : public wxDialog
 		
 	
 	public:
-		DIALOG_COPPER_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Copper layers setup"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 558,479 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_COPPER_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Copper layers setup"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 558,598 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_COPPER_LAYERS_SETUP_BASE();
 	
 };

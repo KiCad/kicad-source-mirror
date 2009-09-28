@@ -7,6 +7,7 @@
 
 #include "dialog_design_rules_base.h"
 
+// helper struct to handle a net and its netclass in dialog design rule editor
 struct NETCUP
 {
     NETCUP( const wxString& aNet, const wxString& aClass )
