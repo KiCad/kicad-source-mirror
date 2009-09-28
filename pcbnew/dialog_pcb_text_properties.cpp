@@ -73,7 +73,7 @@ void WinEDA_PcbFrame::InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB, wxDC* DC )
 WinEDA_TextPCBPropertiesFrame::WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* parent,
                                                               TEXTE_PCB* TextPCB,
                                                               wxDC* DC ) :
-    wxDialog( parent, -1, _( "TextPCB properties" ), wxDefaultPosition,
+    wxDialog( parent, -1, _( "PCB Text properties" ), wxDefaultPosition,
               wxSize( 390, 340 ) )
 {
     wxButton* Button;

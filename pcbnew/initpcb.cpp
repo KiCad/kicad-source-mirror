@@ -152,7 +152,7 @@ bool WinEDA_PcbFrame::Clear_Pcb( bool aQuery )
             || GetBoard()->m_Track || GetBoard()->m_Zone )
         {
             if( !IsOK( this,
-                _( "Current Board will be lost and this operation and cannot be undone. Continue ?" ) ) )
+                _( "Current Board will be lost and this operation cannot be undone. Continue ?" ) ) )
                 return FALSE;
         }
     }
@@ -198,7 +198,7 @@ bool WinEDA_ModuleEditFrame::Clear_Pcb( bool aQuery )
         if( GetBoard()->m_Modules )
         {
             if( !IsOK( this,
-                _( "Current Footprint will be lost and this operation and cannot be undone. Continue ?" ) ) )
+                _( "Current Footprint will be lost and this operation cannot be undone. Continue ?" ) ) )
                 return FALSE;
         }
     }

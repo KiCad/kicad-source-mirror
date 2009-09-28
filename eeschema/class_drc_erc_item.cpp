@@ -44,9 +44,9 @@ wxString DRC_ITEM::GetErrorText() const
     case ERCE_PIN_NOT_DRIVEN:
         return wxString( _("Pin connected to some others pins but no pin to drive it") );
     case ERCE_PIN_TO_PIN_WARNING:
-        return wxString( _("Confict problem between pins. Severity: warning") );
+        return wxString( _("Conflict problem between pins. Severity: warning") );
     case ERCE_PIN_TO_PIN_ERROR:
-        return wxString( _("Confict problem between pins. Severity: error") );
+        return wxString( _("Conflict problem between pins. Severity: error") );
     case ERCE_HIERACHICAL_LABEL:
         return wxString( _("Mismatch between hierarchical labels and pins sheets"));
     case ERCE_NOCONNECT_CONNECTED:

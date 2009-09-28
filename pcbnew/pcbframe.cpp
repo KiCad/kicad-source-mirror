@@ -194,6 +194,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
                     WinEDA_PcbFrame::Process_Special_Functions )
 
     // popup menus
+    EVT_MENU( ID_POPUP_PCB_DELETE_TRACKSEG, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
                     WinEDA_PcbFrame::Process_Special_Functions )
 

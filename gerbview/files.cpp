@@ -140,7 +140,7 @@ WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
 		filetypes += _("Top solder resist (*.GTS)|*.GTS;*.gts|");
 		filetypes += _("Bottom overlay (*.GBO)|*.GBO;*.gbo|");
 		filetypes += _("Top overlay (*.GTO)|*.GTO;*.gto|");
-		filetypes += _("Bottom paste (*.GBP)|*.GBP;*.gto|");
+		filetypes += _("Bottom paste (*.GBP)|*.GBP;*.gbp|");
 		filetypes += _("Top paste (*.GTP)|*.GTP;*.gtp|");
 		filetypes += _("Keep-out layer (*.GKO)|*.GKO;*.gko|");
 		filetypes += _("Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|");

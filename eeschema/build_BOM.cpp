@@ -48,7 +48,7 @@ public:
 
 // Filename extension for BOM list
 static const wxString BomFileExtension( wxT( "lst" ) );
-static const wxString BomFileWildcard( wxT( "Bill of Materials file (*.lst)|*.lst" ) );
+#define BomFileWildcard _( "Bill of Materials file (*.lst)|*.lst" )
 
 
 /* Local functions */

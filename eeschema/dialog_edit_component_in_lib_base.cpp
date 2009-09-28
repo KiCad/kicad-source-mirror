@@ -93,7 +93,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	
 	m_OptionPartsLocked = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Parts are locked"), wxDefaultPosition, wxDefaultSize, 0 );
 	
-	m_OptionPartsLocked->SetToolTip( _("Check this option if Eeschema cannot change parts selections inside a given package\nThis happens when parts are differents in this package.") );
+	m_OptionPartsLocked->SetToolTip( _("Check this option if Eeschema cannot change parts selections inside a given package\nThis happens when parts are different in this package.") );
 	
 	bSizerBasicPanel->Add( m_OptionPartsLocked, 0, wxALL, 5 );
 	

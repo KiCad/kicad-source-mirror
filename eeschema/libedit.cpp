@@ -438,7 +438,7 @@ void WinEDA_LibeditFrame::DeleteOnePart( wxCommandEvent& event )
      */
 
     if( GetScreen()->IsModify()
-        && !IsOK( this, _( "The component being deleted has been modified.  \
+        && !IsOK( this, _( "The component being deleted has been modified. \
 All changes will be lost. Discard changes?" ) ) )
         return;
 

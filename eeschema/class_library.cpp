@@ -21,7 +21,7 @@
 
 
 static const wxChar* duplicate_name_msg = _( "Component library <%s> has \
-duplicate entry name <%s>.  This may cause some expected behavior when \
+duplicate entry name <%s>.  This may cause some unexpected behavior when \
 loading components into a schematic." );
 
 
