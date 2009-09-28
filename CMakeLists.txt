@@ -107,11 +107,8 @@ check_find_package_result(OPENGL_FOUND "OpenGL")
 ######################
 # Find Boost library #
 ######################
-# kicad now includes needed boost files.
-# the two next lines can be uncommented to use the native boost lib.
-# but this is not a good idea
-#find_package(Boost 1.36 QUIET)
-#check_find_package_result(Boost_FOUND "Boost")
+find_package(Boost 1.36 QUIET)
+check_find_package_result(Boost_FOUND "Boost")
 
 ##########################
 # Find wxWidgets library #
