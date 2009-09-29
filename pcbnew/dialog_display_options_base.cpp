@@ -87,6 +87,10 @@ DialogDisplayOptions_base::DialogDisplayOptions_base( wxWindow* parent, wxWindow
 	m_OptDisplayPads->SetSelection( 1 );
 	bRModuleSizer->Add( m_OptDisplayPads, 0, wxALL|wxEXPAND, 5 );
 	
+	m_OptDisplayVias = new wxRadioBox( this, ID_VIAS_SHAPES, _("Via Shapes:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayPadsNChoices, m_OptDisplayPadsChoices, 1, wxRA_SPECIFY_COLS );
+	m_OptDisplayVias->SetSelection( 1 );
+	bRModuleSizer->Add( m_OptDisplayVias, 0, wxALL|wxEXPAND, 5 );
+	
 	m_OptDisplayPadClearence = new wxCheckBox( this, wxID_ANY, _("Show pad clearance"), wxDefaultPosition, wxDefaultSize, 0 );
 	
 	bRModuleSizer->Add( m_OptDisplayPadClearence, 0, wxALL, 5 );

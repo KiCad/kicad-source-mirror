@@ -71,6 +71,18 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         DrawPanel->Refresh( TRUE );
         break;
 
+    case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
+        if( m_OptionsToolBar->GetToolState( id ) )
+        {
+            DisplayOpt.DisplayViaFill = m_DisplayViaFill = false;
+        }
+        else
+        {
+            DisplayOpt.DisplayViaFill = m_DisplayViaFill = true;
+        }
+        DrawPanel->Refresh( TRUE );
+        break;
+
     case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
         if( m_OptionsToolBar->GetToolState( id ) )
         {
@@ -249,6 +261,7 @@ private:
     WinEDA_BasePcbFrame* m_Parent;
     wxRadioBox*          m_OptDisplayLines;
     wxRadioBox*          m_OptDisplayFlashes;
+    wxRadioBox*          m_OptDisplayVias;		//@@@@TODO: Does it belong here?
     wxRadioBox*          m_OptDisplayPolygons;
     wxCheckBox*          m_OptDisplayDCodes;
     wxRadioBox*          m_OptDisplayDrawings;
@@ -314,6 +327,16 @@ WinEDA_LookFrame::WinEDA_LookFrame( WinEDA_BasePcbFrame* parent,
         m_OptDisplayFlashes->SetSelection( 1 );
     LeftBoxSizer->Add( m_OptDisplayFlashes, 0, wxGROW | wxALL, 5 );
 
+
+    m_OptDisplayVias = new wxRadioBox( this, -1, _( "Spots:" ),
+                                       wxDefaultPosition, wxDefaultSize,
+                                       2, list_opt2, 1 );
+    if( DisplayOpt.DisplayViaFill )
+        m_OptDisplayVias->SetSelection( 1 );
+    LeftBoxSizer->Add( m_OptDisplayVias, 0, wxGROW | wxALL, 5 );
+
+
+
     // Show Option Draw polygons
     m_OptDisplayPolygons = new wxRadioBox( this, -1, _( "Polygons:" ),
                                            wxDefaultPosition, wxDefaultSize,
@@ -364,6 +387,12 @@ void WinEDA_LookFrame::OnOkClick( wxCommandEvent& event )
     else
         DisplayOpt.DisplayPadFill = false;
 
+    if( m_OptDisplayVias->GetSelection() == 1 )
+        DisplayOpt.DisplayViaFill = true;
+    else
+        DisplayOpt.DisplayViaFill = false;
+
+
     if( m_OptDisplayPolygons->GetSelection() == 0 )
         g_DisplayPolygonsModeSketch = 1;
     else
@@ -374,6 +403,7 @@ void WinEDA_LookFrame::OnOkClick( wxCommandEvent& event )
     DisplayOpt.DisplayDrawItems = m_OptDisplayDrawings->GetSelection();
 
     m_Parent->m_DisplayPadFill = DisplayOpt.DisplayPadFill;
+    m_Parent->m_DisplayViaFill = DisplayOpt.DisplayViaFill;
     m_Parent->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
 
     m_Parent->GetScreen()->SetRefreshReq();

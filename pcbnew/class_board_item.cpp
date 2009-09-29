@@ -284,7 +284,7 @@ const char** BOARD_ITEM::MenuIcon() const
         break;
 
     case TYPE_VIA:
-        xpm = pad_sketch_xpm;
+        xpm = via_sketch_xpm;
         break;
 
     case TYPE_MARKER_PCB:

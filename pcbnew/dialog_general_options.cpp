@@ -270,6 +270,18 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         DrawPanel->Refresh( );
         break;
 
+    case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
+        if( m_OptionsToolBar->GetToolState( id ) )
+        {
+            m_DisplayViaFill = DisplayOpt.DisplayViaFill = false;
+        }
+        else
+        {
+            m_DisplayViaFill = DisplayOpt.DisplayViaFill = true;
+        }
+        DrawPanel->Refresh( );
+        break;
+
     case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill =
                                     !m_OptionsToolBar->GetToolState( id );

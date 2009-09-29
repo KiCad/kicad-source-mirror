@@ -61,6 +61,14 @@ static PARAM_CFG_INT PadFillCfg
     TRUE                    /* Valeur par defaut */
 );
 
+static PARAM_CFG_INT ViaFillCfg
+(
+    INSETUP,
+    wxT("ViaFill"),             /* identification */
+    (int*)&DisplayOpt.DisplayViaFill, /* Adresse du parametre */
+    TRUE                    /* Valeur par defaut */
+);
+
 static PARAM_CFG_BOOL PadShowNumCfg // Affiche DCodes
 (
     INSETUP,
@@ -391,6 +399,7 @@ PARAM_CFG_BASE * ParamCfgList[] =
     & GerberScaleCfg,
     & SegmFillCfg,
     & PadFillCfg,
+    & ViaFillCfg,  //TODO: Will adding this line break tha pcbnew file compatibility?
     & PadShowNumCfg,
     & ColorLayer0Cfg,
     & ColorLayer1Cfg,

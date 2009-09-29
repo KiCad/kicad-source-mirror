@@ -733,6 +733,12 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
     int rayon;
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
+    int fillvia = 0;
+    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) panel->m_Parent;
+    PCB_SCREEN* screen = frame->GetScreen();
+    if( frame->m_DisplayViaFill == FILLED )
+        fillvia = 1;
+
     GRSetDrawMode( DC, draw_mode );
 
     color = g_DesignSettings.m_ViaColor[m_Shape];
@@ -770,7 +776,10 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
         return;
     }
 
-    GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon, color );
+    if( fillvia )
+        GRFilledCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon, 0, color, color );
+    else
+        GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon, color );
 
     int drill_rayon = GetDrillValue() / 2;
     int inner_rayon = rayon - panel->GetScreen()->Unscale( 2 );
@@ -786,8 +795,35 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
         {
             if( drill_rayon < inner_rayon )                             // We can show the via hole
             {
-                GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
-                          drill_rayon, color );
+                if( fillvia )
+                {
+                    bool blackpenstate = false;
+                    if( screen->m_IsPrinting )
+                    {
+                        blackpenstate = GetGRForceBlackPenState();
+                        GRForceBlackPen( false );
+                        color = g_DrawBgColor;
+                    }
+                    else
+                        color = BLACK; // or DARKGRAY;
+
+                    if( draw_mode != GR_XOR )
+                        GRSetDrawMode( DC, GR_COPY );
+                    else
+                        GRSetDrawMode( DC, GR_XOR );
+
+                    if( screen->Scale( drill_rayon ) > 1 ) /* draw hole if its size is enought */
+                        GRFilledCircle( &panel->m_ClipBox, DC, m_Start.x,
+                                        m_Start.y, drill_rayon, 0, color, color );
+
+                    if( screen->m_IsPrinting )
+                        GRForceBlackPen( blackpenstate );
+                }
+                else
+                {
+                    GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
+                              drill_rayon, color );
+                }
             }
         }
     }

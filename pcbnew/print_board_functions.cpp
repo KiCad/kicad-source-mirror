@@ -35,10 +35,18 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMa
 
     save_opt = DisplayOpt;
     if( aPrintMaskLayer & ALL_CU_LAYERS )
+    {
         DisplayOpt.DisplayPadFill = true;
+        DisplayOpt.DisplayViaFill = true;
+    }
     else
+    {
         DisplayOpt.DisplayPadFill = false;
+        DisplayOpt.DisplayViaFill = false;
+    }
+
     frame->m_DisplayPadFill      = DisplayOpt.DisplayPadFill;
+    frame->m_DisplayViaFill      = DisplayOpt.DisplayViaFill;
     frame->m_DisplayPadNum       = DisplayOpt.DisplayPadNum = false;
     DisplayOpt.DisplayPadNoConn  = false;
     DisplayOpt.DisplayPadIsol    = false;
@@ -154,6 +162,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMa
     DisplayOpt = save_opt;
     frame->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
     frame->m_DisplayPadFill = DisplayOpt.DisplayPadFill;
+    frame->m_DisplayViaFill = DisplayOpt.DisplayViaFill;
     frame->m_DisplayPadNum  = DisplayOpt.DisplayPadNum;
 }
 

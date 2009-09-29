@@ -238,6 +238,7 @@ class DISPLAY_OPTIONS
 {
 public:
     bool DisplayPadFill;
+    bool DisplayViaFill;
     bool DisplayPadNum;
     bool DisplayPadNoConn;
     bool DisplayPadIsol;

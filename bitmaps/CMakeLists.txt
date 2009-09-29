@@ -363,6 +363,7 @@ set(BITMAP_SRCS
     unzip.xpm
     Update_Module_Board.xpm
     up.xpm
+    Via_Sketch.xpm
     viewlibs_icon.xpm
     Web_support.xpm
     Width_Net.xpm

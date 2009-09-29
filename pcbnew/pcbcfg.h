@@ -218,6 +218,14 @@ static PARAM_CFG_BOOL PadFillCfg
     TRUE                            /* Default value */
 );
 
+static PARAM_CFG_BOOL ViaFillCfg
+(
+    INSETUP,
+    wxT( "ViaFill" ),               /* Keyword */
+    &DisplayOpt.DisplayViaFill,     /* Parameter address */
+    TRUE                            /* Default value */
+);
+
 static PARAM_CFG_BOOL PadAfficheGardeCfg
 (
     INSETUP,
@@ -812,6 +820,7 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &SegmFillCfg,
     &TrackDisplayClearanceCfg,
     &PadFillCfg,
+    &ViaFillCfg,  //TODO: Will adding this line break tha pcbnew file compatibility?
     &PadAfficheGardeCfg,
     &PadShowNumCfg,
     &AfficheContourModuleCfg,

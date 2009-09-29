@@ -195,13 +195,13 @@ void WinEDA_PcbFrame::SetToolbars()
                                       DisplayOpt.DisplayPolarCood );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLAR_COORD,
                                             DisplayOpt.DisplayPolarCood ?
-                                            _( "Polar Coords not show" ) :
-                                            _( "Display Polar Coords" ) );
+                                            _( "Polar coords not show" ) :
+                                            _( "Display polar coords" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID,
                                       m_Draw_Grid );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_GRID,
-                                            m_Draw_Grid ? _( "Grid not show" ) : _( "Show Grid" ) );
+                                            m_Draw_Grid ? _( "Grid not show" ) : _( "Show grid" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR,
                                       m_CursorShape );
@@ -210,51 +210,60 @@ void WinEDA_PcbFrame::SetToolbars()
                                       g_Show_Ratsnest );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_RATSNEST,
                                             g_Show_Ratsnest ?
-                                            _( "Hide General ratsnest" ) :
-                                            _( "Show General ratsnest" ) );
+                                            _( "Hide general ratsnest" ) :
+                                            _( "Show general ratsnest" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
                                       g_Show_Module_Ratsnest );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
                                             g_Show_Module_Ratsnest ?
-                                            _( "Hide Module ratsnest" ) :
-                                            _( "Show Module ratsnest" ) );
+                                            _( "Hide module ratsnest" ) :
+                                            _( "Show module ratsnest" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_AUTO_DEL_TRACK,
                                       g_AutoDeleteOldTrack );
 
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_AUTO_DEL_TRACK,
                                             g_AutoDeleteOldTrack ?
-                                            _( "Disable Auto Delete old Track" ) :
-                                            _( "Enable Auto Delete old Track" ) );
+                                            _( "Disable auto delete old track" ) :
+                                            _( "Enable auto delete old track" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
                                       !m_DisplayPadFill );
 
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
                                             m_DisplayPadFill ?
-                                            _( "Show Pads Sketch mode" ) :
+                                            _( "Show pads sketch mode" ) :
                                             _( "Show pads filled mode" ) );
+
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
+                                      !m_DisplayViaFill );
+
+        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
+                                            m_DisplayViaFill ?
+                                            _( "Show vias sketch mode" ) :
+                                            _( "Show vias filled mode" ) );
+
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
                                       !m_DisplayPcbTrackFill );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
                                             m_DisplayPcbTrackFill ?
-                                            _( "Show Tracks Sketch mode" ) :
-                                            _( "Show Tracks filled mode" ) );
+                                            _( "Show tracks sketch mode" ) :
+                                            _( "Show tracks filled mode" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
                                       DisplayOpt.ContrastModeDisplay );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
                                             DisplayOpt.ContrastModeDisplay ?
-                                            _( "Normal Contrast Mode Display" ) :
-                                            _( "High Contrast Mode Display" ) );
+                                            _( "Normal contrast mode display" ) :
+                                            _( "High contrast mode display" ) );
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
                 g_ModuleTextNOVColor & ITEM_NOT_SHOW );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
                        g_ModuleTextNOVColor & (ITEM_NOT_SHOW) ?
-                                                   _( "Show Invisible Text" ) :
-                                                   _( "Hide Invisible Text" ) );
+                                                   _( "Show invisible text" ) :
+                                                   _( "Hide invisible text" ) );
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1, m_AuxVToolBar ? true : false );
     }
 

@@ -234,6 +234,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
 
     m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
     m_DisplayPadFill = DisplayOpt.DisplayPadFill;
+    m_DisplayViaFill = DisplayOpt.DisplayViaFill;
     m_DisplayPadNum  = DisplayOpt.DisplayPadNum;
 
     m_DisplayModEdge = DisplayOpt.DisplayModEdge;
@@ -369,3 +370,4 @@ void WinEDA_PcbFrame::ShowDesignRulesEditor( wxCommandEvent& event )
         GetScreen()->SetModify();
     }
 }
+

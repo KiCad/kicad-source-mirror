@@ -24,6 +24,7 @@ void Print_PcbItems(BOARD * Pcb, wxDC *DC, int drawmode, int printmasklayer)
 
     save_opt = DisplayOpt;
     DisplayOpt.DisplayPadFill = FILLED;
+    DisplayOpt.DisplayViaFill = FILLED;
     DisplayOpt.DisplayPadNum = 0;
     DisplayOpt.DisplayPadNoConn = 0;
     DisplayOpt.DisplayPadIsol = 0;

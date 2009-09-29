@@ -62,6 +62,11 @@ wxClientDC dc(DrawPanel);
 			DrawPanel->ReDraw(&dc, TRUE);
 			break;
 
+		case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
+			m_DisplayViaFill = ! m_OptionsToolBar->GetToolState(id);
+			DrawPanel->ReDraw(&dc, TRUE);
+			break;
+
 		case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:
 			m_DisplayModText =
 				m_OptionsToolBar->GetToolState(id) ? SKETCH : FILLED;

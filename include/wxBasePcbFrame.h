@@ -51,6 +51,7 @@ class WinEDA_BasePcbFrame : public WinEDA_DrawFrame
 public:
 
     bool m_DisplayPadFill;          // How show pads
+    bool m_DisplayViaFill;          // How show vias
     bool m_DisplayPadNum;           // show pads numbers
 
     int m_DisplayModEdge;           // How show module drawings

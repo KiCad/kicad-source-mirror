@@ -83,6 +83,11 @@ void Dialog_Display_Options::init()
     else
         m_OptDisplayPads->SetSelection(0);
 
+    if ( DisplayOpt.DisplayViaFill )
+        m_OptDisplayVias->SetSelection(1);
+    else
+        m_OptDisplayVias->SetSelection(0);
+
     m_Show_Page_Limits->SetSelection( g_ShowPageLimits ? 0 : 1);
 
     m_OptDisplayViaHole->SetSelection( DisplayOpt.m_DisplayViaMode );
@@ -149,7 +154,13 @@ void Dialog_Display_Options::OnOkClick(wxCommandEvent& event)
     else
         DisplayOpt.DisplayPadFill = false;
 
+    if (m_OptDisplayVias->GetSelection() == 1 )
+        DisplayOpt.DisplayViaFill = true;
+    else
+        DisplayOpt.DisplayViaFill = false;
+
     m_Parent->m_DisplayPadFill = DisplayOpt.DisplayPadFill;
+    m_Parent->m_DisplayViaFill = DisplayOpt.DisplayViaFill;
 
     DisplayOpt.DisplayPadIsol = m_OptDisplayPadClearence->GetValue();
 

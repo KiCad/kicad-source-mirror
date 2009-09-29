@@ -96,6 +96,7 @@ bool WinEDA_FootprintDisplayOptionsFrame::Create( wxWindow* parent, wxWindowID i
     m_TextDisplayOption = NULL;
     ColumnBoxSizer = NULL;
     m_IsShowPadFill = NULL;
+    m_IsShowViaFill = NULL;
     m_IsShowPadNum = NULL;
     m_CancelButton = NULL;
 ////@end WinEDA_FootprintDisplayOptionsFrame member initialisation
@@ -154,6 +155,10 @@ void WinEDA_FootprintDisplayOptionsFrame::CreateControls()
     m_IsShowPadFill->SetValue(false);
     ColumnBoxSizer->Add(m_IsShowPadFill, 1, wxGROW|wxALL, 5);
 
+    m_IsShowViaFill = new wxCheckBox( itemDialog1, VIAFILL_OPT, _("Fill &via"), wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
+    m_IsShowViaFill->SetValue(false);
+    ColumnBoxSizer->Add(m_IsShowViaFill, 1, wxGROW|wxALL, 5);
+
     m_IsShowPadNum = new wxCheckBox( itemDialog1, PADNUM_OPT, _("Show pad &number"), wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
     m_IsShowPadNum->SetValue(false);
     if (WinEDA_FootprintDisplayOptionsFrame::ShowToolTips())
@@ -181,6 +186,7 @@ void WinEDA_FootprintDisplayOptionsFrame::CreateControls()
     m_EdgesDisplayOption->SetValidator( wxGenericValidator(& DisplayOpt.DisplayModEdge) );
     m_TextDisplayOption->SetValidator( wxGenericValidator(& DisplayOpt.DisplayModText) );
     m_IsShowPadFill->SetValidator( wxGenericValidator( & DisplayOpt.DisplayPadFill) );
+    m_IsShowViaFill->SetValidator( wxGenericValidator( & DisplayOpt.DisplayViaFill) );
     m_IsShowPadNum->SetValidator( wxGenericValidator(& DisplayOpt.DisplayPadNum) );
 ////@end WinEDA_FootprintDisplayOptionsFrame content construction
 
@@ -234,6 +240,7 @@ void WinEDA_FootprintDisplayOptionsFrame::UpdateObjectSettings(void)
 	m_Parent->m_DisplayModText = m_TextDisplayOption->GetSelection();
     m_Parent->m_DisplayPadNum = m_IsShowPadNum->GetValue();
 	m_Parent->m_DisplayPadFill = m_IsShowPadFill->GetValue();
+    m_Parent->m_DisplayViaFill = m_IsShowViaFill->GetValue();
 	m_Parent->DrawPanel->Refresh();
 ////@end WinEDA_FootprintDisplayOptionsFrame update settings
 }

@@ -367,6 +367,10 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
                                wxBitmap( pad_sketch_xpm ),
                                _( "Show Pads Sketch" ), wxITEM_CHECK );
 
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_VIAS_SKETCH, wxEmptyString,
+                               wxBitmap( via_sketch_xpm ),
+                               _( "Show Vias Sketch" ), wxITEM_CHECK );
+
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH, wxEmptyString,
                                wxBitmap( showtrack_xpm ),
                                _( "Show Tracks Sketch" ), wxITEM_CHECK );

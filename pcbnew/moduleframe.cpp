@@ -347,6 +347,13 @@ void WinEDA_ModuleEditFrame::SetToolbars()
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR,
                                       m_CursorShape );
 
+
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
+                                      !m_DisplayViaFill );
+        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
+                                            m_DisplayViaFill ?
+                                            _( "Show Vias Sketch mode" ) :
+                                            _( "Show vias filled mode" ) );
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
                                       !m_DisplayPadFill );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_PADS_SKETCH,

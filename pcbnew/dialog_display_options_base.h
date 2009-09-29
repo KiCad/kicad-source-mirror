@@ -40,6 +40,7 @@ class DialogDisplayOptions_base : public wxDialog
 			ID_EDGES_MODULES,
 			ID_TEXT_MODULES,
 			ID_PADS_SHAPES,
+			ID_VIAS_SHAPES
 		};
 		
 		wxRadioBox* m_OptDisplayTracks;
@@ -49,6 +50,7 @@ class DialogDisplayOptions_base : public wxDialog
 		wxRadioBox* m_OptDisplayModEdges;
 		wxRadioBox* m_OptDisplayModTexts;
 		wxRadioBox* m_OptDisplayPads;
+		wxRadioBox* m_OptDisplayVias;
 		wxCheckBox* m_OptDisplayPadClearence;
 		wxCheckBox* m_OptDisplayPadNumber;
 		wxCheckBox* m_OptDisplayPadNoConn;

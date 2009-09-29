@@ -26,6 +26,7 @@ static const wxString UserGridSizeXEntry( wxT( "PcbUserGrid_X" ) );
 static const wxString UserGridSizeYEntry( wxT( "PcbUserGrid_Y" ) );
 static const wxString UserGridUnitsEntry( wxT( "PcbUserGrid_Unit" ) );
 static const wxString DisplayPadFillEntry( wxT( "DiPadFi" ) );
+static const wxString DisplayViaFillEntry( wxT( "DiViaFi" ) );
 static const wxString DisplayPadNumberEntry( wxT( "DiPadNu" ) );
 static const wxString DisplayModuleEdgeEntry( wxT( "DiModEd" ) );
 static const wxString DisplayModuleTextEntry( wxT( "DiModTx" ) );
@@ -58,6 +59,7 @@ WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow*       father,
     m_Pcb                 = NULL;
 
     m_DisplayPadFill      = true;   // How to draw pads
+    m_DisplayViaFill      = true;   // How to draw vias
     m_DisplayPadNum       = true;   // show pads number
 
     m_DisplayModEdge      = FILLED; // How to show module drawings
@@ -383,6 +385,7 @@ void WinEDA_BasePcbFrame::LoadSettings()
     cfg->Read( m_FrameName + UserGridUnitsEntry, &m_UserGridUnits,
                ( long )INCHES );
     cfg->Read( m_FrameName + DisplayPadFillEntry, &m_DisplayPadFill, true );
+    cfg->Read( m_FrameName + DisplayViaFillEntry, &m_DisplayViaFill, true );  //TODO: Will adding this line break tha pcbnew file compatibility?
     cfg->Read( m_FrameName + DisplayPadNumberEntry, &m_DisplayPadNum, true );
     cfg->Read( m_FrameName + DisplayModuleEdgeEntry, &m_DisplayModEdge,
                ( long )FILLED );
@@ -412,6 +415,7 @@ void WinEDA_BasePcbFrame::SaveSettings()
     cfg->Write( m_FrameName + UserGridSizeYEntry, m_UserGridSize.y );
     cfg->Write( m_FrameName + UserGridUnitsEntry, ( long )m_UserGridUnits );
     cfg->Write( m_FrameName + DisplayPadFillEntry, m_DisplayPadFill );
+    cfg->Write( m_FrameName + DisplayViaFillEntry, m_DisplayViaFill );  //TODO: Will adding this line break tha pcbnew file compatibility?
     cfg->Write( m_FrameName + DisplayPadNumberEntry, m_DisplayPadNum );
     cfg->Write( m_FrameName + DisplayModuleEdgeEntry, ( long )m_DisplayModEdge );
     cfg->Write( m_FrameName + DisplayModuleTextEntry, ( long )m_DisplayModText );

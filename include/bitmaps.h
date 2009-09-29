@@ -359,6 +359,7 @@ extern const char* unlocked_xpm[];
 extern const char* unzip_xpm[];
 extern const char* update_module_board_xpm[];
 extern const char* up_xpm[];
+extern const char* via_sketch_xpm[];
 extern const char* viewlibs_icon_xpm[];
 extern const char* warning_xpm[];
 extern const char* web_support_xpm[];

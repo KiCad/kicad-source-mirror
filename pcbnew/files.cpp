@@ -230,6 +230,7 @@ this file again."));
         m_DisplayModText = DisplayOpt.DisplayModText;
         m_DisplayModEdge = DisplayOpt.DisplayModEdge;
         m_DisplayPadFill = DisplayOpt.DisplayPadFill;
+        m_DisplayViaFill = DisplayOpt.DisplayViaFill;
 
         ReadPcbFile( source, false );
     }
