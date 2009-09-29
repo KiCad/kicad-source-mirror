@@ -8,7 +8,6 @@
 #include "trigo.h"
 #include "macros.h"
 
-#include "libcmp.h"
 #include "general.h"
 #include "class_marker_sch.h"
 #include "protos.h"
@@ -25,13 +24,14 @@ static bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
                         SCH_ITEM* DrawList, double aScaleFactor );
 
 
-/*********************************************************************/
-SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
-/*********************************************************************/
-
-/* Search the smaller (considering its area) component under the mouse cursor or the pcb cursor
- *  If more than 1 component is found, a pointer to the smaller component is returned
+/**
+ * Search the smaller (considering its area) component under the mouse
+ * cursor or the pcb cursor
+ *
+ * If more than 1 component is found, a pointer to the smaller component is
+ * returned
  */
+SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
 {
     SCH_COMPONENT* component = NULL, * lastcomponent = NULL;
     SCH_ITEM*      DrawList;
@@ -111,7 +111,8 @@ SCH_ITEM* PickStruct( const wxPoint& refpos, BASE_SCREEN* screen, int SearchMask
         return NULL;
 
     if( ( Snapped = SnapPoint2( refpos, SearchMask,
-                               screen->EEDrawList, screen->GetScalingFactor() ) ) != FALSE )
+                                screen->EEDrawList,
+                                screen->GetScalingFactor() ) ) != FALSE )
     {
         return LastSnappedStruct;
     }
@@ -162,12 +163,12 @@ int PickItemsInBlock( BLOCK_SELECTOR& aBlock, BASE_SCREEN* aScreen )
 
 
 /*****************************************************************************
-* Routine to search all objects for the closest point to a given point, in	 *
-* drawing space, and snap it to that points if closer than SnapDistance.	 *
-* Note we use L1 norm as distance measure, as it is the fastest.			 *
+* Routine to search all objects for the closest point to a given point, in   *
+* drawing space, and snap it to that points if closer than SnapDistance.     *
+* Note we use L1 norm as distance measure, as it is the fastest.             *
 * This routine updates LastSnappedStruct to the last object used in to snap  *
-* a point. This variable is global to this module only (see above).			 *
-* The routine returns TRUE if point was snapped.							 *
+* a point. This variable is global to this module only (see above).          *
+* The routine returns TRUE if point was snapped.                             *
 *****************************************************************************/
 bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
                  SCH_ITEM* DrawList, double aScaleFactor )
@@ -371,9 +372,9 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
 
 
 /*****************************************************************************
-* Routine to test if an object has non empty intersection with the box		 *
+* Routine to test if an object has non empty intersection with the box       *
 * defined by x1/y1 and x2/y2 (x1 < x2, y1 < y2), and return TRUE if so. This *
-* routine is used to pick all points in a given box.						 *
+* routine is used to pick all points in a given box.                         *
 *****************************************************************************/
 bool DrawStructInBox( int x1, int y1, int x2, int y2, SCH_ITEM* DrawStruct )
 {
@@ -613,114 +614,15 @@ static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
 }
 
 
-
-/*********************************************************************************/
-LIB_DRAW_ITEM* LocateDrawItem( SCH_SCREEN*    Screen,
-                               const wxPoint& aRefPoint,
-                               LIB_COMPONENT* LibEntry,
-                               int            Unit,
-                               int            Convert,
-                               int            masque )
-/*********************************************************************************/
-
-/* Locates a body item( not pins )
- *  Unit = part number (if Unit = 0, all parts are considered)
- *  Convert = convert value for shape (si Convert = 0, all shapes are considered)
- *  remember the Y axis is from bottom to top in library entries for graphic items.
- */
-{
-    LIB_DRAW_ITEM* DrawItem;
-
-    if( LibEntry == NULL )
-        return NULL;
-
-    if( LibEntry->Type != ROOT )
-    {
-        wxMessageBox( wxT( "Error in LocateDrawItem: Entry is ALIAS" ) );
-        return NULL;
-    }
-
-    DrawItem = LibEntry->m_Drawings;
-
-    for( ; DrawItem != NULL; DrawItem = DrawItem->Next() )
-    {
-        if( Unit && DrawItem->m_Unit && (Unit != DrawItem->m_Unit) )
-            continue;
-        if( Convert && DrawItem->m_Convert && (Convert != DrawItem->m_Convert) )
-            continue;
-
-        switch( DrawItem->Type() )
-        {
-        case COMPONENT_ARC_DRAW_TYPE:
-            if( (masque & LOCATE_COMPONENT_ARC_DRAW_TYPE) == 0 )
-                break;
-            if( DrawItem->HitTest( aRefPoint ) )
-                return DrawItem;
-        break;
-
-        case COMPONENT_CIRCLE_DRAW_TYPE:
-            if( (masque & LOCATE_COMPONENT_CIRCLE_DRAW_TYPE) == 0 )
-                break;
-            if( DrawItem->HitTest( aRefPoint ) )
-                return DrawItem;
-        break;
-
-        case COMPONENT_RECT_DRAW_TYPE:  // Locate a rect if the mouse cursor is on a side of this rectangle
-            if( (masque & LOCATE_COMPONENT_RECT_DRAW_TYPE) == 0 )
-                break;
-             if( DrawItem->HitTest( aRefPoint ) )
-                return DrawItem;
-         break;
-
-        case COMPONENT_POLYLINE_DRAW_TYPE:
-            if( (masque & LOCATE_COMPONENT_POLYLINE_DRAW_TYPE) == 0 )
-                break;
-            if( DrawItem->HitTest( aRefPoint ) )
-                return DrawItem;
-        break;
-
-        case COMPONENT_BEZIER_DRAW_TYPE:
-            if( (masque & LOCATE_COMPONENT_POLYLINE_DRAW_TYPE) == 0 )
-                break;
-            if( DrawItem->HitTest( aRefPoint ) )
-                return DrawItem;
-        break;
-
-        case COMPONENT_LINE_DRAW_TYPE:
-            if( (masque & LOCATE_COMPONENT_LINE_DRAW_TYPE) == 0 )
-                break;
-            if( DrawItem->HitTest( aRefPoint ) )
-                return DrawItem;
-        break;
-
-        case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
-            if( (masque & LOCATE_COMPONENT_GRAPHIC_TEXT_DRAW_TYPE) == 0 )
-                break;
-            if( DrawItem->HitTest( aRefPoint ) )
-                return DrawItem;
-        break;
-
-        default:
-            ;
-        }
-    }
-
-    return NULL;
-}
-
-
-/*******************************************************************/
-LibDrawPin* LocatePinByNumber( const wxString& ePin_Number,
-                               SCH_COMPONENT*  eComponent )
-/*******************************************************************/
-
-/** Find a PIN in a component
+/**
+ * Find a PIN in a component
  * @param pin_number = pin number (string)
  * @param pin_number = pin number (string)
  * @return a pointer on the pin, or NULL if not found
  */
+LibDrawPin* LocatePinByNumber( const wxString& ePin_Number,
+                               SCH_COMPONENT*  eComponent )
 {
-    LIB_DRAW_ITEM* DrawItem;
     LIB_COMPONENT* Entry;
     LibDrawPin* Pin;
     int Unit, Convert;
@@ -730,103 +632,42 @@ LibDrawPin* LocatePinByNumber( const wxString& ePin_Number,
     if( Entry == NULL )
         return NULL;
 
-    if( Entry->Type != ROOT )
-    {
-        wxMessageBox( wxT( "LocatePinByNumber() error: Entry is ALIAS" ) );
-        return NULL;
-    }
+    wxASSERT( Entry->Type == ROOT );
 
     Unit    = eComponent->m_Multi;
     Convert = eComponent->m_Convert;
 
-    DrawItem = Entry->m_Drawings;
-    for( ; DrawItem != NULL; DrawItem = DrawItem->Next() )
+    for( Pin = Entry->GetNextPin(); Pin != NULL;
+         Pin = Entry->GetNextPin( Pin ) )
     {
-        if( DrawItem->Type() == COMPONENT_PIN_DRAW_TYPE ) /* Pin Trouvee */
-        {
-            Pin = (LibDrawPin*) DrawItem;
+        wxASSERT( Pin->Type() != COMPONENT_PIN_DRAW_TYPE );
 
-            if( Unit && DrawItem->m_Unit && (DrawItem->m_Unit != Unit) )
-                continue;
+        if( Unit && Pin->m_Unit && ( Pin->m_Unit != Unit ) )
+            continue;
 
-            if( Convert && DrawItem->m_Convert && (DrawItem->m_Convert != Convert) )
-                continue;
-            wxString pNumber;
-            Pin->ReturnPinStringNum( pNumber );
-            if( ePin_Number == pNumber )
-                return Pin;
-        }
+        if( Convert && Pin->m_Convert && ( Pin->m_Convert != Convert ) )
+            continue;
+
+        wxString pNumber;
+        Pin->ReturnPinStringNum( pNumber );
+
+        if( ePin_Number == pNumber )
+            return Pin;
     }
 
     return NULL;
 }
 
 
-/*******************************************************************/
-LIB_DRAW_ITEM* LocatePin( const wxPoint& RefPos, LIB_COMPONENT* Entry,
-                          int Unit, int convert, SCH_COMPONENT* DrawLibItem )
-/*******************************************************************/
-
-/* Routine de localisation d'une PIN de la PartLib pointee par Entry
- *  retourne un pointeur sur la pin, ou NULL si pas trouve
- *  Si Unit = 0, le numero d'unite n'est pas teste
- *  Si convert = 0, le numero convert n'est pas teste
- */
-{
-    if( Entry == NULL )
-        return NULL;
-
-    if( Entry->Type != ROOT )
-    {
-        wxMessageBox( wxT( "LocatePin() error: Entry is ALIAS" ) );
-        return NULL;
-    }
-
-    LIB_DRAW_ITEM* DrawItem = Entry->m_Drawings;
-    for( ; DrawItem != NULL; DrawItem = DrawItem->Next() )
-    {
-        if( DrawItem->Type() == COMPONENT_PIN_DRAW_TYPE ) /* Pin Trouvee */
-        {
-            LibDrawPin* Pin = (LibDrawPin*) DrawItem;
-
-            if( Unit && DrawItem->m_Unit && (DrawItem->m_Unit != Unit) )
-                continue;
-
-            if( convert && DrawItem->m_Convert && (DrawItem->m_Convert != convert) )
-                continue;
-
-            if( DrawLibItem == NULL )
-            {
-                if ( Pin->HitTest( RefPos ) )
-                    return DrawItem;
-            }
-
-            else
-            {
-                int mindist = Pin->m_Width ? Pin->m_Width / 2 : g_DrawDefaultLineThickness / 2;
-
-                // Have a minimal tolerance for hit test
-                if( mindist < 3 )
-                    mindist = 3;        // = 3 mils
-                if ( Pin->HitTest( RefPos - DrawLibItem->m_Pos, mindist, DrawLibItem->m_Transform ) )
-                    return DrawItem;
-            }
-        }
-    }
-
-    return NULL;
-}
-
-
-/***********************************************************************************/
-Hierarchical_PIN_Sheet_Struct* LocateSheetLabel( DrawSheetStruct* Sheet, const wxPoint& pos )
-/***********************************************************************************/
+Hierarchical_PIN_Sheet_Struct* LocateSheetLabel( DrawSheetStruct* Sheet,
+                                                 const wxPoint& pos )
 {
     int size, dy, minx, maxx;
     Hierarchical_PIN_Sheet_Struct* SheetLabel;
 
     SheetLabel = Sheet->m_Label;
-    while( (SheetLabel) && (SheetLabel->Type()==DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE) )
+    while( SheetLabel
+           && SheetLabel->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
     {
         size = ( SheetLabel->GetLength() + 1 ) * SheetLabel->m_Size.x;
         if( SheetLabel->m_Edge )
@@ -846,17 +687,16 @@ Hierarchical_PIN_Sheet_Struct* LocateSheetLabel( DrawSheetStruct* Sheet, const w
 }
 
 
-/**************************************************************************/
 LibDrawPin* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos,
                           SCH_COMPONENT** libpart )
-/**************************************************************************/
 {
     SCH_ITEM* DrawStruct;
     LIB_COMPONENT* Entry;
     SCH_COMPONENT* LibItem = NULL;
     LibDrawPin* Pin = NULL;
 
-    for( DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
+    for( DrawStruct = DrawList; DrawStruct != NULL;
+         DrawStruct = DrawStruct->Next() )
     {
         if( DrawStruct->Type() != TYPE_SCH_COMPONENT )
             continue;
@@ -865,8 +705,10 @@ LibDrawPin* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos,
 
         if( Entry == NULL )
             continue;
-        Pin = (LibDrawPin*) LocatePin( RefPos, Entry, LibItem->m_Multi,
-                                       LibItem->m_Convert, LibItem );
+        Pin = (LibDrawPin*) Entry->LocateDrawItem( LibItem->m_Multi,
+                                                   LibItem->m_Convert,
+                                                   COMPONENT_PIN_DRAW_TYPE,
+                                                   RefPos );
         if( Pin )
             break;
     }
@@ -877,20 +719,20 @@ LibDrawPin* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos,
 }
 
 
-/***************************************************************/
 Hierarchical_PIN_Sheet_Struct* LocateAnyPinSheet( const wxPoint& RefPos,
                                                   SCH_ITEM*      DrawList )
-/***************************************************************/
 {
     SCH_ITEM* DrawStruct;
     Hierarchical_PIN_Sheet_Struct* PinSheet = NULL;
 
-    for( DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
+    for( DrawStruct = DrawList; DrawStruct != NULL;
+         DrawStruct = DrawStruct->Next() )
     {
         if( DrawStruct->Type() != DRAW_SHEET_STRUCT_TYPE )
             continue;
+
         PinSheet = LocateSheetLabel( (DrawSheetStruct*) DrawStruct,
-                                    RefPos );
+                                     RefPos );
         if( PinSheet )
             break;
     }

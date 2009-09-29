@@ -13,7 +13,6 @@
 
 #include "program.h"
 #include "general.h"
-#include "libcmp.h"
 #include "protos.h"
 
 /* Constructor and destructor for SCH_ITEM */

@@ -110,10 +110,7 @@ public:
 
     LIB_DRAW_ITEM*     GetDrawItem( void ) { return m_drawItem; }
 
-    void               SetDrawItem( LIB_DRAW_ITEM* drawItem )
-    {
-        m_drawItem = drawItem;
-    }
+    void               SetDrawItem( LIB_DRAW_ITEM* drawItem );
 
     bool               GetShowDeMorgan( void ) { return m_showDeMorgan; }
 
@@ -163,7 +160,6 @@ private:
     void               EditSymbolText( wxDC* DC, LIB_DRAW_ITEM* DrawItem );
     void               RotateSymbolText( wxDC* DC );
     void               DeleteDrawPoly( wxDC* DC );
-    LibDrawField*      LocateField( LIB_COMPONENT* LibEntry );
     LIB_DRAW_ITEM*     LocateItemUsingCursor();
     void               RotateField( wxDC* DC, LibDrawField* Field );
     void               PlaceField( wxDC* DC, LibDrawField* Field );

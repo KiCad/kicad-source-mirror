@@ -215,9 +215,8 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
 }
 
 
-/*************************************************************************************/
-void WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
-/*************************************************************************************/
+void WinEDA_SchematicFrame::GeneralControle( wxDC* DC,
+                                             wxPoint MousePositionInPixels )
 {
     wxRealPoint delta;
     SCH_SCREEN* screen = GetScreen();
@@ -309,11 +308,10 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPi
 }
 
 
-/*************************************************************************************/
-void WinEDA_LibeditFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
-/*************************************************************************************/
+void WinEDA_LibeditFrame::GeneralControle( wxDC* DC,
+                                           wxPoint MousePositionInPixels )
 {
-    wxRealPoint      delta;
+    wxRealPoint delta;
     SCH_SCREEN* screen = GetScreen();
     wxPoint     curpos, oldpos;
     int         hotkey = 0;
@@ -402,11 +400,10 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixe
 }
 
 
-/*****************************************************************************/
 void WinEDA_ViewlibFrame::GeneralControle( wxDC*   DC,
                                            wxPoint MousePositionInPixels )
 {
-    wxRealPoint      delta;
+    wxRealPoint delta;
     SCH_SCREEN* screen = GetScreen();
     wxPoint     curpos, oldpos;
     int         hotkey = 0;

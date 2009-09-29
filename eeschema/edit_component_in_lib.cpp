@@ -377,7 +377,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::ChangeNbUnitsPerPackage( int MaxUnit )
     /* Traitement des unites enlevees ou rajoutees */
     if( OldNumUnits > component->m_UnitCount )
     {
-        DrawItem = component->m_Drawings;
+        DrawItem = component->GetNextDrawItem();
         for( ; DrawItem != NULL; DrawItem = NextDrawItem )
         {
             NextDrawItem = DrawItem->Next();
@@ -410,7 +410,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::ChangeNbUnitsPerPackage( int MaxUnit )
 
     if( OldNumUnits < component->m_UnitCount )
     {
-        DrawItem = component->m_Drawings;
+        DrawItem = component->GetNextDrawItem();
         for( ; DrawItem != NULL; DrawItem = DrawItem->Next() )
         {
             /* Duplication des items pour autres elements */
@@ -419,13 +419,13 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::ChangeNbUnitsPerPackage( int MaxUnit )
                 for( ii = OldNumUnits + 1; ii <= MaxUnit; ii++ )
                 {
                     NextDrawItem = DrawItem->GenCopy();
-                    NextDrawItem->SetNext( component->m_Drawings );
-                    component->m_Drawings = NextDrawItem;
                     NextDrawItem->m_Unit = ii;
+                    component->AddDrawItem( NextDrawItem );
                 }
             }
         }
     }
+
     return TRUE;
 }
 
@@ -446,7 +446,8 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
     {
         /* Traitement des elements a ajouter ( pins seulement ) */
         if( component )
-            DrawItem = component->m_Drawings;
+            DrawItem = component->GetNextDrawItem();
+
         for( ; DrawItem != NULL; DrawItem = DrawItem->Next() )
         {
             /* Duplication des items pour autres elements */
@@ -456,7 +457,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
             {
                 if( FlagDel == 0 )
                 {
-                    if( IsOK( this, _( "Create pins for Convert items" ) ) )
+                    if( IsOK( this, _( "Create pins for convert items." ) ) )
                         FlagDel = 1;
                     else
                     {
@@ -467,10 +468,10 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
                         return FALSE;
                     }
                 }
+
                 NextDrawItem = DrawItem->GenCopy();
-                NextDrawItem->SetNext( component->m_Drawings );
-                component->m_Drawings = NextDrawItem;
-                NextDrawItem->m_Convert     = 2;
+                NextDrawItem->m_Convert = 2;
+                component->AddDrawItem( NextDrawItem );
             }
         }
     }
@@ -478,7 +479,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
     {
         /* Traitement des elements � supprimer */
         if( component )
-            DrawItem = component->m_Drawings;
+            DrawItem = component->GetNextDrawItem();
         for( ; DrawItem != NULL; DrawItem = NextDrawItem )
         {
             NextDrawItem = DrawItem->Next();

@@ -18,12 +18,14 @@
 
 
 /* Routines locales */
-static void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& FullFileName );
+static void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
+                                   const wxString& FullFileName );
 static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f,
                                 bool with_pcbnew );
 static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f );
 static void WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
-static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_netnames );
+static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
+                                bool use_netnames );
 
 static void WriteGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
 static void AddPinToComponentPinList( SCH_COMPONENT* Component,
@@ -97,21 +99,19 @@ void WriteNetList( WinEDA_SchematicFrame* frame, const wxString& FileNameNL,
 }
 
 
-/****************************************************************************/
-static SCH_COMPONENT* FindNextComponentAndCreatPinList(
-    EDA_BaseStruct* DrawList, DrawSheetPath* sheet )
-/****************************************************************************/
-
-/*	Find a "suitable" component from the DrawList
+/*  Find a "suitable" component from the DrawList
  *  build its pin list s_SortedComponentPinList.
  *  The list is sorted by pin num
- *  A suitable component is a "new" real component (power symbols are not considered)
+ *  A suitable component is a "new" real component (power symbols are not
+ *  considered)
  *  Must be deallocated by the user
  */
+static SCH_COMPONENT* FindNextComponentAndCreatPinList( EDA_BaseStruct* DrawList,
+                                                        DrawSheetPath* sheet )
 {
     SCH_COMPONENT* Component = NULL;
     LIB_COMPONENT* Entry;
-    LIB_DRAW_ITEM* DEntry;
+    LibDrawPin* Pin;
 
     s_SortedComponentPinList.clear();
     for( ; DrawList != NULL; DrawList = DrawList->Next() )
@@ -129,14 +129,16 @@ static SCH_COMPONENT* FindNextComponentAndCreatPinList(
         //if( Component->m_FlagControlMulti == 1 )
         //    continue;                                      /* yes */
         // removed because with multiple instances of one schematic
-        // (several sheets pointing to 1 screen), this will be erroneously be toggled.
+        // (several sheets pointing to 1 screen), this will be erroneously be
+        // toggled.
 
         Entry = CMP_LIBRARY::FindLibraryComponent( Component->m_ChipName );
 
         if( Entry  == NULL )
             continue;
 
-        if( Entry->m_UnitCount > 1 )    // Multi parts per package: test if already visited:
+        // Multi parts per package: test if already visited:
+        if( Entry->m_UnitCount > 1 )
         {
             bool found = false;
             for( unsigned jj = 0; jj < s_ReferencesAlreadyFound.GetCount(); jj++ )
@@ -156,29 +158,29 @@ static SCH_COMPONENT* FindNextComponentAndCreatPinList(
             }
         }
 
-        DEntry = Entry->m_Drawings;
         if( Entry->m_UnitCount <= 1 )   // One part per package
         {
-            for( ; DEntry != NULL; DEntry = DEntry->Next() )
+            for( Pin = Entry->GetNextPin(); Pin != NULL;
+                 Pin = Entry->GetNextPin( Pin ) )
             {
-                if( DEntry->Type() != COMPONENT_PIN_DRAW_TYPE )
+                wxASSERT( Pin->Type() == COMPONENT_PIN_DRAW_TYPE );
+
+                if( Pin->m_Unit
+                    && ( Pin->m_Unit != Component->GetUnitSelection( sheet ) ) )
                     continue;
-                if( DEntry->m_Unit
-                   && ( DEntry->m_Unit != Component->GetUnitSelection( sheet ) ) )
+                if( Pin->m_Convert
+                    && ( Pin->m_Convert != Component->m_Convert ) )
                     continue;
-                if( DEntry->m_Convert
-                   && (DEntry->m_Convert != Component->m_Convert) )
-                    continue;
-                {
-                    AddPinToComponentPinList( Component, sheet, (LibDrawPin*) DEntry );
-                }
+
+                AddPinToComponentPinList( Component, sheet, Pin );
             }
         }
         else  // Multiple parts per package: Collect all parts ans pins for this reference
             FindAllsInstancesOfComponent( Component, Entry, sheet );
 
         /* Sort Pins in s_SortedComponentPinList by pin number */
-        sort( s_SortedComponentPinList.begin(), s_SortedComponentPinList.end(),SortPinsByNum );
+        sort( s_SortedComponentPinList.begin(),
+              s_SortedComponentPinList.end(), SortPinsByNum );
 
         /* Remove duplicate Pins in s_SortedComponentPinList */
         EraseDuplicatePins( s_SortedComponentPinList );
@@ -373,7 +375,7 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
 /* Routine de generation du fichier netliste ( Format PSPICE )
  *  si use_netnames = TRUE
  *      les nodes sont identifies par le netname
- *  sinon	les nodes sont identifies par le netnumber
+ *  sinon   les nodes sont identifies par le netnumber
  *
  *  tous les textes graphiques commen�ant par [.-+]pspice ou  [.-+]gnucap
  *  sont consideres comme des commandes a placer dans la netliste
@@ -754,29 +756,30 @@ static void EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
 }
 
 
-/**********************************************************************************/
+/**
+ * Used for multiple parts per package components.
+ *
+ * Search all instances of Component_in,
+ * Calls AddPinToComponentPinList() to and pins founds to the current
+ * component pin list
+ */
 static void FindAllsInstancesOfComponent( SCH_COMPONENT* Component_in,
                                           LIB_COMPONENT* Entry,
                                           DrawSheetPath* Sheet_in )
-/**********************************************************************************/
-
-/**
- *  Used for multiple parts per package components
- * Search all instances of Component_in,
- * Calls AddPinToComponentPinList() to and pins founds to the current component pin list
- */
 {
     EDA_BaseStruct* SchItem;
     SCH_COMPONENT* Component2;
-    LIB_DRAW_ITEM* DEntry;
+    LibDrawPin* pin;
     DrawSheetPath* sheet;
     wxString str, Reference = Component_in->GetRef( Sheet_in );
 
     EDA_SheetList SheetList;
 
-    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
+    for( sheet = SheetList.GetFirst(); sheet != NULL;
+         sheet = SheetList.GetNext() )
     {
-        for( SchItem = sheet->LastDrawList(); SchItem; SchItem = SchItem->Next() )
+        for( SchItem = sheet->LastDrawList(); SchItem;
+             SchItem = SchItem->Next() )
         {
             if( SchItem->Type() != TYPE_SCH_COMPONENT )
                 continue;
@@ -787,41 +790,40 @@ static void FindAllsInstancesOfComponent( SCH_COMPONENT* Component_in,
             if( str.CmpNoCase( Reference ) != 0 )
                 continue;
 
-            if( Entry && Entry->m_Drawings != NULL )
+            if( Entry == NULL )
+                continue;
+
+            for( pin = Entry->GetNextPin(); pin != NULL;
+                 pin = Entry->GetNextPin( pin ) )
             {
-                DEntry = Entry->m_Drawings;
-                for( ; DEntry != NULL; DEntry = DEntry->Next() )
-                {
-                    if( DEntry->Type() != COMPONENT_PIN_DRAW_TYPE )
-                        continue;
-                    if( DEntry->m_Unit
-                       && ( DEntry->m_Unit != Component2->GetUnitSelection( sheet ) ) )
-                        continue;
-                    if( DEntry->m_Convert
-                       && (DEntry->m_Convert != Component2->m_Convert) )
+                wxASSERT( pin->Type() != COMPONENT_PIN_DRAW_TYPE );
+
+                if( pin->m_Unit
+                    && ( pin->m_Unit != Component2->GetUnitSelection( sheet ) ) )
+                    continue;
+
+                if( pin->m_Convert
+                    && ( pin->m_Convert != Component2->m_Convert ) )
                         continue;
 
-                    // A suitable pin in found: add it to the current list
-                    AddPinToComponentPinList( Component2, sheet, (LibDrawPin*) DEntry );
-                }
+                // A suitable pin in found: add it to the current list
+                AddPinToComponentPinList( Component2, sheet, pin );
             }
         }
     }
 }
 
 
-/**************************************************************************/
-static bool SortPinsByNum( NETLIST_OBJECT* Pin1, NETLIST_OBJECT* Pin2 )
-/**************************************************************************/
-
-/* Routine de comparaison pour le tri des pins par numero croissant
+/*
+ Routine de comparaison pour le tri des pins par numero croissant
  *  du tableau des pins s_SortedComponentPinList par qsort()
  */
+static bool SortPinsByNum( NETLIST_OBJECT* Pin1, NETLIST_OBJECT* Pin2 )
 {
     int Num1, Num2;
     char Line[5];
 
-    Num1    = Pin1->m_PinNum;
+    Num1 = Pin1->m_PinNum;
     Num2 = Pin2->m_PinNum;
     Line[4] = 0;
     memcpy( Line, &Num1, 4 ); Num1 = atoi( Line );
@@ -1055,7 +1057,7 @@ static void WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
                                   + NetcodeName;
 
                     //NetcodeName << wxT("_") <<
-                    //		g_NetObjectslist[jj].m_SheetList.PathHumanReadable();
+                    //      g_NetObjectslist[jj].m_SheetList.PathHumanReadable();
                 }
             }
             else  // this net has no name: create a default name $<net number>
@@ -1113,7 +1115,7 @@ static void WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
         aObjectsList[ii]->m_Flag = 1;
 
         // Recherche des pins redondantes et mise a 1 de m_Flag,
-        //	pour ne pas generer plusieurs fois la connexion
+        //  pour ne pas generer plusieurs fois la connexion
         for( jj = ii + 1; jj < aObjectsList.size(); jj++ )
         {
             if( aObjectsList[jj]->GetNet() != NetCode )

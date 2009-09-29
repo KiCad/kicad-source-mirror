@@ -27,7 +27,6 @@
 
 #include "common.h"
 #include "program.h"
-#include "libcmp.h"
 #include "general.h"
 #include "eeschema_id.h"
 #include "libeditfrm.h"
@@ -133,8 +132,8 @@ public:
 	void NewSizePin(int newsize);
 	void SetPinShape( int newshape);
 	void SetPinType(int newtype);
-	void SetPinOrient(int neworient);
-	void SetAttributsPin(bool draw, bool unit, bool convert);
+	void SetPinOrientation(int neworient);
+	void SetPinAttributes(bool draw, bool unit, bool convert);
 
 ////@begin WinEDA_PinPropertiesFrame member variables
     wxTextCtrl* m_PinNameCtrl;

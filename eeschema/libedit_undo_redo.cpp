@@ -31,9 +31,9 @@ void WinEDA_LibeditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
     ITEM_PICKER wrapper(CopyItem, UR_LIBEDIT);
     lastcmd->PushItem(wrapper);
     GetScreen()->PushCommandToUndoList( lastcmd );
-    /* Clear current flags (which can be temporary set by a current edit command) */
-    for( item = CopyItem->m_Drawings; item != NULL; item = item->Next() )
-        item->m_Flags = 0;
+    /* Clear current flags (which can be temporary set by a current edit
+     * command) */
+    CopyItem->ClearStatus();
 
     /* Clear redo list, because after new save there is no redo to do */
     GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );

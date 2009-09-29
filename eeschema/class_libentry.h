@@ -205,6 +205,13 @@ public:
                bool onlySelected = false );
 
     /**
+     * Add a new draw item to the draw object list.
+     *
+     * @param item - New draw object to add to component.
+     */
+    void AddDrawItem( LIB_DRAW_ITEM* item );
+
+    /**
      * Remove draw item from list.
      *
      * @param item - Draw item to remove from list.
@@ -214,6 +221,23 @@ public:
     void RemoveDrawItem( LIB_DRAW_ITEM* item,
                          WinEDA_DrawPanel* panel = NULL,
                          wxDC* dc = NULL );
+
+    /**
+     * Return the next draw object pointer.
+     *
+     * @param item - Pointer to the current draw item.  Setting item NULL
+     *               with return the first item of type in the list.
+     *
+     */
+
+    LIB_DRAW_ITEM* GetNextDrawItem( LIB_DRAW_ITEM* item = NULL,
+                                    KICAD_T type = TYPE_NOT_INIT );
+
+    LibDrawPin* GetNextPin( LibDrawPin* item = NULL )
+    {
+        return (LibDrawPin*) GetNextDrawItem( (LIB_DRAW_ITEM*) item,
+                                              COMPONENT_PIN_DRAW_TYPE );
+    }
 
     /**
      * Move the component offset.
@@ -248,6 +272,11 @@ public:
         wxASSERT( name != NULL );
         return m_AliasList.Index( name ) != wxNOT_FOUND;
     }
+
+    /**
+     * Clears the status flag all draw objects in this component.
+     */
+    void ClearStatus( void );
 
     /**
      * Checks all draw objects of component to see if they are with block.
@@ -294,6 +323,27 @@ public:
      * make sense in this context.
      */
     void CopySelectedItems( const wxPoint& offset );
+
+    /**
+     * Horizontally (X axis) mirror selected draw items about a point.
+     *
+     * @param center - Center point to mirror around.
+     */
+    void MirrorSelectedItemsH( const wxPoint& center );
+
+    /**
+     * Locate a draw object.
+     *
+     * @param unit - Unit number of draw item.
+     * @param convert - Body style of draw item.
+     * @param type - Draw object type, set to 0 to search for any type.
+     * @param pt - Coordinate for hit testing.
+     *
+     * @return LIB_DRAW_ITEM - Pointer the the draw object if found.
+     *                         Otherwise NULL.
+     */
+    LIB_DRAW_ITEM* LocateDrawItem( int unit, int convert, KICAD_T type,
+                                   const wxPoint& pt );
 };
 
 

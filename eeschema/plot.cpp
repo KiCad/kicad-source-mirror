@@ -65,7 +65,7 @@ static void PlotLibPart( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem )
     Multi   = DrawLibItem->m_Multi;
     convert = DrawLibItem->m_Convert;
 
-    for( LIB_DRAW_ITEM* DEntry = Entry->m_Drawings;
+    for( LIB_DRAW_ITEM* DEntry = Entry->GetNextDrawItem();
         DEntry != NULL; DEntry = DEntry->Next() )
     {
         /* Elimination des elements non relatifs a l'unite */

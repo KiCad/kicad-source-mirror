@@ -10,7 +10,6 @@
 
 #include "program.h"
 #include "general.h"
-#include "libcmp.h"
 #include "protos.h"
 #include "libeditfrm.h"
 #include "class_library.h"
@@ -263,38 +262,6 @@ void WinEDA_LibeditFrame::RotateField( wxDC* DC, LibDrawField* Field )
 }
 
 
-/*
- * Locate the component fiels (ref, name or auxiliary fields) under the
- * mouse cursor
- * return:
- *   pointer on the field (or NULL )
- */
-LibDrawField* WinEDA_LibeditFrame::LocateField( LIB_COMPONENT* LibEntry )
-{
-    wxPoint refpos = GetScreen()->m_Curseur;
-    /* Test reference */
-    if( LibEntry->m_Name.HitTest( refpos ) )
-        return &LibEntry->m_Name;
-
-    /* Test Prefix */
-    if( LibEntry->m_Prefix.HitTest( refpos ) )
-        return &LibEntry->m_Prefix;
-
-    /* Test others fields */
-    for( LibDrawField* field = LibEntry->m_Fields; field != NULL;
-         field = field->Next() )
-    {
-        if( field->m_Text.IsEmpty() )
-            continue;
-
-        if( field->HitTest( refpos ) )
-            return field;
-    }
-
-    return NULL;
-}
-
-
 LIB_DRAW_ITEM* WinEDA_LibeditFrame::LocateItemUsingCursor()
 {
     LIB_DRAW_ITEM* DrawEntry = m_drawItem;
@@ -304,26 +271,15 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::LocateItemUsingCursor()
 
     if( ( DrawEntry == NULL ) || ( DrawEntry->m_Flags == 0 ) )
     {
-        DrawEntry = LocatePin( GetScreen()->m_Curseur, m_component,
-                               m_unit, m_convert );
+        DrawEntry = m_drawItem =
+            m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
+                                         GetScreen()->m_MousePosition );
+
         if( DrawEntry == NULL )
         {
             DrawEntry = m_drawItem =
-                LocateDrawItem( (SCH_SCREEN*) GetScreen(),
-                                GetScreen()->m_MousePosition, m_component,
-                                m_unit, m_convert, LOCATE_ALL_DRAW_ITEM );
-        }
-        if( DrawEntry == NULL )
-        {
-            DrawEntry = m_drawItem =
-                LocateDrawItem( (SCH_SCREEN*) GetScreen(),
-                                GetScreen()->m_Curseur, m_component,
-                                m_unit, m_convert, LOCATE_ALL_DRAW_ITEM );
-        }
-        if( DrawEntry == NULL )
-        {
-            DrawEntry = m_drawItem =
-                (LIB_DRAW_ITEM*) LocateField( m_component );
+                m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
+                                             GetScreen()->m_Curseur );
         }
     }
 

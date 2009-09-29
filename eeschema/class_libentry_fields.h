@@ -75,6 +75,13 @@ public:
                const int aTransformMatrix[2][2] );
 
     /**
+     * Return the bounding rectangle of the field text.
+     *
+     * @return EDA_Rect - Bounding rectangle.
+     */
+    virtual EDA_Rect GetBoundingBox() { return GetTextBox(); }
+
+    /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
      * @param refPos A wxPoint to test, in Field coordinate system
@@ -82,13 +89,16 @@ public:
      */
     bool HitTest( const wxPoint& refPos );
 
-     /** Function HitTest
+     /**
+      * Function HitTest
      * @return true if the point aPosRef is near this object
      * @param aPosRef = a wxPoint to test
-     * @param aThreshold = max distance to this object (usually the half thickness of a line)
+     * @param aThreshold = max distance to this object (usually the half
+     *                     thickness of a line)
      * @param aTransMat = the transform matrix
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold,
+                          const int aTransMat[2][2] );
 
     void operator=( const LibDrawField& field )
     {
@@ -127,6 +137,7 @@ protected:
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) { return m_Pos; }
+    virtual void DoMirrorHorizontal( const wxPoint& center );
 };
 
 #endif  //  CLASS_LIBENTRY_FIELDS_H

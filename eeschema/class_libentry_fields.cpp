@@ -437,6 +437,14 @@ void LibDrawField::DoMove( const wxPoint& newPosition )
 }
 
 
+void LibDrawField::DoMirrorHorizontal( const wxPoint& center )
+{
+    m_Pos.x -= center.x;
+    m_Pos.x *= -1;
+    m_Pos.x += center.x;
+}
+
+
 /*
  * If the field is the reference, return reference like schematic,
  * i.e U -> U? or U?A or the field text for others

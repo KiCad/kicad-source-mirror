@@ -96,9 +96,9 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
         DisplayError( this, _( "Warning: more than 1 part in Symbol File" ) );
 
     Component = (LIB_COMPONENT*) Lib->GetFirstEntry();
-    DrawEntry = Component->m_Drawings;
+    DrawEntry = Component->GetNextDrawItem();
 
-    while( DrawEntry )
+    while( DrawEntry != NULL )
     {
         if( DrawEntry->m_Unit )
             DrawEntry->m_Unit = m_unit;
@@ -107,14 +107,9 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
         DrawEntry->m_Flags    = IS_NEW;
         DrawEntry->m_Selected = IS_SELECTED;
 
-        if( DrawEntry->Next() == NULL ) /* Fin de liste trouvee */
-        {
-            DrawEntry->SetNext( m_component->m_Drawings );
-            m_component->m_Drawings = Component->m_Drawings;
-            Component->m_Drawings = NULL;
-            break;
-        }
-
+        LIB_DRAW_ITEM* newItem = DrawEntry->GenCopy();
+        newItem->SetParent( m_component );
+        m_component->AddDrawItem( newItem );
         DrawEntry = DrawEntry->Next();
     }
 
@@ -122,13 +117,7 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
     m_component->RemoveDuplicateDrawItems();
 
     // Clear flags
-    DrawEntry = m_component->m_Drawings;
-    while( DrawEntry )
-    {
-        DrawEntry->m_Flags    = 0;
-        DrawEntry->m_Selected = 0;
-        DrawEntry = DrawEntry->Next();
-    }
+    m_component->ClearSelectedItems();
 
     GetScreen()->SetModify();
     DrawPanel->Refresh();
@@ -151,7 +140,7 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
     wxString       msg;
     FILE*          ExportFile;
 
-    if( m_component->m_Drawings == NULL )
+    if( m_component->GetNextDrawItem() == NULL )
         return;
 
     /* Creation du fichier symbole */
@@ -215,11 +204,12 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
     /* Position / orientation / visibilite des champs */
     m_component->m_Prefix.Save( ExportFile );
     m_component->m_Name.Save( ExportFile );
-    DrawEntry = m_component->m_Drawings;
+    DrawEntry = m_component->GetNextDrawItem();
 
     if( DrawEntry )
     {
         fprintf( ExportFile, "DRAW\n" );
+
         for( ; DrawEntry != NULL; DrawEntry = DrawEntry->Next() )
         {
             /* Elimination des elements non relatifs a l'unite */

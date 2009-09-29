@@ -680,7 +680,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
         convertCheckBox->SetValue( true );
     }
 
-    if( m_LibEntry == NULL || LookForConvertPart( m_LibEntry ) <= 1 )
+    if( m_LibEntry == NULL || !m_LibEntry->HasConversion() )
     {
         convertCheckBox->Enable( false );
     }

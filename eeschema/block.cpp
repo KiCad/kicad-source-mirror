@@ -861,51 +861,47 @@ static LIB_DRAW_ITEM* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
  */
 {
     LIB_COMPONENT* Entry;
-    static LIB_DRAW_ITEM* NextItem;
+    static LibDrawPin* NextPin;
     static int Multi, convert, TransMat[2][2];
-    LIB_DRAW_ITEM* DEntry;
     int orient;
     LibDrawPin* Pin;
     static wxPoint CmpPosition;
 
     if( aDrawLibItem )
     {
-        NextItem = NULL;
+        NextPin = NULL;
         Entry = CMP_LIBRARY::FindLibraryComponent( aDrawLibItem->m_ChipName );
 
         if( Entry == NULL )
             return NULL;
 
-        DEntry      = Entry->m_Drawings;
+        Pin         = Entry->GetNextPin();
         Multi       = aDrawLibItem->m_Multi;
         convert     = aDrawLibItem->m_Convert;
         CmpPosition = aDrawLibItem->m_Pos;
         memcpy( TransMat, aDrawLibItem->m_Transform, sizeof(TransMat) );
     }
     else
-        DEntry = NextItem;
+        Pin = NextPin;
 
-    for( ; DEntry != NULL; DEntry = DEntry->Next() )
+    for( ; Pin != NULL; NextPin = Entry->GetNextPin( Pin ) )
     {
-        /* Elimination des elements non relatifs a l'unite */
-        if( Multi && DEntry->m_Unit && (DEntry->m_Unit != Multi) )
-            continue;
-        if( convert && DEntry->m_Convert && (DEntry->m_Convert != convert) )
-            continue;
-        if( DEntry->Type() != COMPONENT_PIN_DRAW_TYPE )
-            continue;
+        wxASSERT( Pin->Type() == COMPONENT_PIN_DRAW_TYPE );
 
-        Pin = (LibDrawPin*) DEntry;
+        /* Elimination des elements non relatifs a l'unite */
+        if( Multi && Pin->m_Unit && ( Pin->m_Unit != Multi ) )
+            continue;
+        if( convert && Pin->m_Convert && ( Pin->m_Convert != convert ) )
+            continue;
 
         /* Calcul de l'orientation reelle de la Pin */
         orient = Pin->ReturnPinDrawOrient( TransMat );
 
         /* Calcul de la position du point de reference */
         aPosition = TransformCoordinate( TransMat, Pin->m_Pos ) + CmpPosition;
-        NextItem  = DEntry->Next();
-        return DEntry;
+        return Pin;
     }
 
-    NextItem = NULL;
+    NextPin = NULL;
     return NULL;
 }

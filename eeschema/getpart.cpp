@@ -402,7 +402,7 @@ void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
     if( LibEntry == NULL )
         return;
 
-    if( ( ii = LookForConvertPart( LibEntry ) ) < 2 )
+    if( !LibEntry->HasConversion() )
     {
         DisplayError( this, wxT( "No convert found" ) );
         return;
@@ -427,32 +427,6 @@ void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
 
     TestDanglingEnds( GetScreen()->EEDrawList, DC );
     GetScreen()->SetModify();
-}
-
-
-/*
- * Retourne la plus grande valeur trouvee dans la liste des elements
- *  "drawings" du composant LibEntry, pour le membre .Convert
- *  Si il n'y a pas de representation type "convert", la valeur
- *  retournee est 0 ou 1
- *  Si il y a une representation type "convert",
- *  la valeur retournee est > 1 (typiquement 2)
- */
-int LookForConvertPart( LIB_COMPONENT* LibEntry )
-{
-    int ii;
-    LIB_DRAW_ITEM* DrawLibEntry;
-
-    DrawLibEntry = LibEntry->m_Drawings;
-    ii = 0;
-    while( DrawLibEntry )
-    {
-        if( ii < DrawLibEntry->m_Convert )
-            ii = DrawLibEntry->m_Convert;
-        DrawLibEntry = DrawLibEntry->Next();
-    }
-
-    return ii;
 }
 
 

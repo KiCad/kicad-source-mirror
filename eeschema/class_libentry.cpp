@@ -326,7 +326,6 @@ LIB_COMPONENT::LIB_COMPONENT( const LIB_COMPONENT& component,
     LibDrawField*  oldField;
     LibDrawField*  newField;
 
-
     m_Prefix              = component.m_Prefix;
     m_AliasList           = component.m_AliasList;
     m_FootprintList       = component.m_FootprintList;
@@ -336,6 +335,7 @@ LIB_COMPONENT::LIB_COMPONENT( const LIB_COMPONENT& component,
     m_DrawPinNum          = component.m_DrawPinNum;
     m_DrawPinName         = component.m_DrawPinName;
     m_LastDate            = component.m_LastDate;
+    m_Drawings            = NULL;
 
     m_Prefix.SetParent( this );
 
@@ -505,24 +505,83 @@ void LIB_COMPONENT::RemoveDrawItem( LIB_DRAW_ITEM* item,
         item->Draw( panel, dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
                     DefaultTransformMatrix );
 
-    if( m_Drawings == item )
+    if( item->Type() != COMPONENT_FIELD_DRAW_TYPE )
     {
-        m_Drawings = item->Next();
-        SAFE_DELETE( item );
+        if( m_Drawings == item )
+        {
+            m_Drawings = item->Next();
+            SAFE_DELETE( item );
+            return;
+        }
+
+        while( prevItem )
+        {
+            if( prevItem->Next() == item )
+            {
+                prevItem->SetNext( item->Next() );
+                SAFE_DELETE( item );
+                break;
+            }
+
+            prevItem = prevItem->Next();
+        }
+    }
+    else
+    {
+        LibDrawField* field;
+
+        for( field = m_Fields; field != NULL; field = field->Next() )
+        {
+            if( field == item )
+            {
+                m_Fields.Remove( field );
+                delete field;
+                break;
+            }
+        }
+    }
+}
+
+
+void LIB_COMPONENT::AddDrawItem( LIB_DRAW_ITEM* item )
+{
+    wxASSERT( item != NULL );
+
+    if( m_Drawings == NULL )
+    {
+        m_Drawings = item;
+        item->SetNext( NULL );
         return;
     }
 
-    while( prevItem )
-    {
-        if( prevItem->Next() == item )
-        {
-            prevItem->SetNext( item->Next() );
-            SAFE_DELETE( item );
-            break;
-        }
+    LIB_DRAW_ITEM* i = m_Drawings;
 
-        prevItem = prevItem->Next();
+    while(  i->Next() != NULL )
+        i = i->Next();
+
+    i->SetNext( item );
+    item->SetNext( NULL );
+    SortDrawItems();
+}
+
+
+LIB_DRAW_ITEM* LIB_COMPONENT::GetNextDrawItem( LIB_DRAW_ITEM* item,
+                                               KICAD_T type )
+{
+    if( type == TYPE_NOT_INIT )
+        return ( item == NULL ) ? m_Drawings : item->Next();
+
+    LIB_DRAW_ITEM* i = ( item == NULL ) ? m_Drawings : item->Next();
+
+    while( i != NULL )
+    {
+        if( i->Type() == type )
+            return i;
+
+        i = i->Next();
     }
+
+    return i;
 }
 
 
@@ -535,7 +594,7 @@ void LIB_COMPONENT::RemoveDrawItem( LIB_DRAW_ITEM* item,
 bool LIB_COMPONENT::Save( FILE* aFile )
 {
     LIB_DRAW_ITEM* DrawEntry;
-    LibDrawField*      Field;
+    LibDrawField*  Field;
 
     /* Sort just in clase sorting was not done properly. */
     SortDrawItems();
@@ -940,7 +999,7 @@ void LIB_COMPONENT::SortDrawItems()
 
     if( Entry == NULL )
         return; /* Pas d'alias pour ce composant */
-    /* calcul du nombre d'items */
+
     for( nbitems = 0; Entry != NULL; Entry = Entry->Next() )
         nbitems++;
 
@@ -978,22 +1037,24 @@ void LIB_COMPONENT::SortDrawItems()
 /**********************************************************************/
 EDA_Rect LIB_COMPONENT::GetBoundaryBox( int Unit, int Convert )
 {
-    LIB_DRAW_ITEM* DrawEntry;
-    EDA_Rect           bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
+    LIB_DRAW_ITEM* item;
+    EDA_Rect       bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
 
-    for( DrawEntry = m_Drawings; DrawEntry != NULL;
-         DrawEntry = DrawEntry->Next() )
+    for( item = m_Drawings; item != NULL; item = item->Next() )
     {
-        if( DrawEntry->m_Unit > 0 )  // The item is non common to units
-            if( ( m_UnitCount > 1 ) && ( Unit > 0 )
-                && ( Unit != DrawEntry->m_Unit ) )
-                continue;
-        if( DrawEntry->m_Convert > 0 )  // The item is not common to all convert
-            if( ( Convert > 0 ) && ( Convert != DrawEntry->m_Convert ) )
-                continue;
+        if( ( item->m_Unit > 0 )
+            && ( ( m_UnitCount > 1 ) && ( Unit > 0 )
+                 && ( Unit != item->m_Unit ) ) )
+            continue;
+        if( item->m_Convert > 0
+            && ( ( Convert > 0 ) && ( Convert != item->m_Convert ) ) )
+            continue;
 
-        bBox.Merge( DrawEntry->GetBoundingBox() );
+        bBox.Merge( item->GetBoundingBox() );
     }
+
+    bBox.Merge( m_Name.GetBoundingBox() );
+    bBox.Merge( m_Prefix.GetBoundingBox() );
 
     return bBox;
 }
@@ -1172,6 +1233,22 @@ bool LIB_COMPONENT::HasConversion() const
 }
 
 
+void LIB_COMPONENT::ClearStatus( void )
+{
+    LIB_DRAW_ITEM* item;
+    LibDrawField* field;
+
+    for( item = m_Drawings; item != NULL; item = item->Next() )
+        item->m_Flags = 0;
+
+    m_Name.m_Flags = 0;
+    m_Prefix.m_Flags = 0;
+
+    for( field = m_Fields.GetFirst(); field != NULL; field = field->Next() )
+        field->m_Flags = 0;
+}
+
+
 int LIB_COMPONENT::SelectItems( EDA_Rect& rect, int unit, int convert,
                                 bool editPinByPin )
 {
@@ -1317,4 +1394,78 @@ void LIB_COMPONENT::CopySelectedItems( const wxPoint& offset )
 
     MoveSelectedItems( offset );
     SortDrawItems();
+}
+
+void LIB_COMPONENT::MirrorSelectedItemsH( const wxPoint& center )
+{
+    LIB_DRAW_ITEM* item;
+    LibDrawField*  field;
+
+    for( item = m_Drawings; item != NULL; item = item->Next() )
+    {
+        if( item->m_Selected == 0 )
+            continue;
+
+        item->SetOffset( center );
+        item->m_Flags = item->m_Selected = 0;
+    }
+
+    if( m_Name.m_Selected )
+    {
+        m_Name.SetOffset( center );
+        m_Name.m_Flags = m_Name.m_Selected = 0;
+    }
+
+    if( m_Prefix.m_Selected )
+    {
+        m_Prefix.SetOffset( center );
+        m_Prefix.m_Flags = m_Prefix.m_Selected = 0;
+    }
+
+    for( field = m_Fields.GetFirst(); field != NULL; field = field->Next() )
+    {
+        if( field->m_Selected )
+        {
+            field->SetOffset( center );
+            field->m_Flags = field->m_Selected = 0;
+        }
+    }
+
+    SortDrawItems();
+}
+
+
+LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int unit, int convert,
+                                              KICAD_T type, const wxPoint& pt )
+{
+    LIB_DRAW_ITEM* item;
+    LibDrawField*  field;
+
+    for( item = m_Drawings; item != NULL; item = item->Next() )
+    {
+        if( ( unit && item->m_Unit && ( unit != item->m_Unit) )
+            || ( convert && item->m_Convert && ( convert != item->m_Convert ) )
+            || ( ( item->Type() != type ) && ( type != TYPE_NOT_INIT ) ) )
+            continue;
+
+        if( item->HitTest( pt ) )
+            return item;
+    }
+
+    if( type == COMPONENT_FIELD_DRAW_TYPE || type == TYPE_NOT_INIT )
+    {
+        if( m_Name.HitTest( pt ) )
+            return &m_Name;
+        if( m_Prefix.HitTest( pt ) )
+            return &m_Prefix;
+
+        for( field = m_Fields.GetFirst(); field != NULL; field = field->Next() )
+        {
+            if( field->HitTest( pt ) )
+                return field;
+        }
+    }
+
+
+    return NULL;
 }

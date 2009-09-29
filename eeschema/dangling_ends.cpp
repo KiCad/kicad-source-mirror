@@ -392,20 +392,17 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
             if( Entry == NULL )
                 break;
 
-            LIB_DRAW_ITEM* DrawLibItem = Entry->m_Drawings;
-            for( ; DrawLibItem != NULL; DrawLibItem = DrawLibItem->Next() )
+            for( LibDrawPin* Pin = Entry->GetNextPin(); Pin != NULL;
+                 Pin = Entry->GetNextPin( Pin ) )
             {
-                if( DrawLibItem->Type() != COMPONENT_PIN_DRAW_TYPE )
+                wxASSERT( Pin->Type() == COMPONENT_PIN_DRAW_TYPE );
+
+                if( Pin->m_Unit && STRUCT->m_Multi
+                   && ( STRUCT->m_Multi != Pin->m_Unit ) )
                     continue;
 
-                LibDrawPin* Pin = (LibDrawPin*) DrawLibItem;
-
-                if( Pin->m_Unit && DrawLibItem->m_Unit
-                   && (DrawLibItem->m_Unit != Pin->m_Unit) )
-                    continue;
-
-                if( Pin->m_Convert && DrawLibItem->m_Convert
-                   && (DrawLibItem->m_Convert != Pin->m_Convert) )
+                if( Pin->m_Convert && STRUCT->m_Convert
+                    && ( STRUCT->m_Convert != Pin->m_Convert ) )
                     continue;
 
                 item = new DanglingEndHandle( PIN_END );

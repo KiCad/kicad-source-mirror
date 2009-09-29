@@ -45,8 +45,8 @@ void CreateDummyCmp()
     Text->m_Size.x = Text->m_Size.y = 150;
     Text->m_Text   = wxT( "??" );
 
-    DummyCmp->m_Drawings = Square;
-    Square->SetNext( Text );
+    DummyCmp->AddDrawItem( Square );
+    DummyCmp->AddDrawItem( Text );
 }
 
 

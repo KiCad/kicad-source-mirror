@@ -471,15 +471,12 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
 
     cmd.SetEventObject( this );
 
+    wxPoint MousePos = GetScreen()->m_MousePosition;
     bool ItemInEdit = GetScreen()->GetCurItem()
                       && GetScreen()->GetCurItem()->m_Flags;
 
     if( hotkey == 0 )
         return;
-
-    wxPoint            MousePos = GetScreen()->m_MousePosition;
-
-    LIB_DRAW_ITEM* DrawEntry = LocateItemUsingCursor();
 
     // Remap the control key Ctrl A (0x01) to GR_KB_CTRL + 'A' (easier to
     // handle...)
@@ -564,18 +561,16 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_EDIT_PIN:
-        if( DrawEntry )
-            m_drawItem = DrawEntry;
-        if( m_drawItem )
-        {
-            if( m_drawItem->Type() == COMPONENT_PIN_DRAW_TYPE )
-                InstallPineditFrame( this, DC, MousePos );
-        }
+        m_drawItem = LocateItemUsingCursor();
+
+        if( m_drawItem && m_drawItem->Type() == COMPONENT_PIN_DRAW_TYPE )
+            InstallPineditFrame( this, DC, MousePos );
+
         break;
 
     case HK_DELETE_PIN:
-        if( DrawEntry )
-            m_drawItem = DrawEntry;
+        m_drawItem = LocateItemUsingCursor();
+
         if( m_drawItem )
         {
             wxCommandEvent evt;
@@ -585,8 +580,8 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_MOVE_PIN:
-        if( DrawEntry )
-            m_drawItem = DrawEntry;
+        m_drawItem = LocateItemUsingCursor();
+
         if( m_drawItem )
         {
             wxCommandEvent evt;

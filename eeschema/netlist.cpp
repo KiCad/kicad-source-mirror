@@ -355,7 +355,7 @@ static void ListeObjetConnection( DrawSheetPath*                sheetlist,
     NETLIST_OBJECT*                new_item;
     SCH_COMPONENT*                 DrawLibItem;
     LIB_COMPONENT*                 Entry;
-    LIB_DRAW_ITEM*                 DEntry;
+    LibDrawPin*                    pin;
     Hierarchical_PIN_Sheet_Struct* SheetLabel;
     DrawSheetPath                  list;
 
@@ -479,43 +479,38 @@ static void ListeObjetConnection( DrawSheetPath*                sheetlist,
             if( Entry == NULL )
                 break;
 
-            if( Entry->m_Drawings == NULL )
-                break;
-
-            DEntry = Entry->m_Drawings;
-
-            for( ;  DEntry;   DEntry = DEntry->Next() )
+            for( pin = Entry->GetNextPin(); pin != NULL;
+                 pin = Entry->GetNextPin( pin ) )
             {
-                LibDrawPin* Pin = (LibDrawPin*) DEntry;
-                if( DEntry->Type() != COMPONENT_PIN_DRAW_TYPE )
+                wxASSERT( pin->Type() == COMPONENT_PIN_DRAW_TYPE );
+
+                if( pin->m_Unit
+                    && ( pin->m_Unit != DrawLibItem->GetUnitSelection( sheetlist ) ) )
                     continue;
 
-                if( DEntry->m_Unit && ( DEntry->m_Unit != DrawLibItem->GetUnitSelection( sheetlist ) ) )
-                    continue;
-
-                if( DEntry->m_Convert
-                   && (DEntry->m_Convert != DrawLibItem->m_Convert) )
+                if( pin->m_Convert
+                    && ( pin->m_Convert != DrawLibItem->m_Convert ) )
                     continue;
 
                 wxPoint pos2 =
                     TransformCoordinate( DrawLibItem->m_Transform,
-                                         Pin->m_Pos ) + DrawLibItem->m_Pos;
+                                         pin->m_Pos ) + DrawLibItem->m_Pos;
 
                 new_item = new NETLIST_OBJECT();
                 new_item->m_SheetListInclude = *sheetlist;
-                new_item->m_Comp = DEntry;
+                new_item->m_Comp = pin;
                 new_item->m_SheetList = *sheetlist;
                 new_item->m_Type = NET_PIN;
                 new_item->m_Link = DrawLibItem;
-                new_item->m_ElectricalType = Pin->m_PinType;
-                new_item->m_PinNum = Pin->m_PinNum;
-                new_item->m_Label  = &Pin->m_PinName;
+                new_item->m_ElectricalType = pin->m_PinType;
+                new_item->m_PinNum = pin->m_PinNum;
+                new_item->m_Label  = &pin->m_PinName;
                 new_item->m_Start  = new_item->m_End = pos2;
 
                 aNetItemBuffer.push_back( new_item );
 
-                if( ( (int) Pin->m_PinType == (int) PIN_POWER_IN )
-                   && ( Pin->m_Attributs & PINNOTDRAW ) )
+                if( ( (int) pin->m_PinType == (int) PIN_POWER_IN )
+                   && ( pin->m_Attributs & PINNOTDRAW ) )
                 {
                     /* Il y a un PIN_LABEL Associe */
                     new_item = new NETLIST_OBJECT();
@@ -523,7 +518,7 @@ static void ListeObjetConnection( DrawSheetPath*                sheetlist,
                     new_item->m_Comp = NULL;
                     new_item->m_SheetList = *sheetlist;
                     new_item->m_Type  = NET_PINLABEL;
-                    new_item->m_Label = &Pin->m_PinName;
+                    new_item->m_Label = &pin->m_PinName;
                     new_item->m_Start = pos2;
                     new_item->m_End   = new_item->m_Start;
 
@@ -545,8 +540,7 @@ static void ListeObjetConnection( DrawSheetPath*                sheetlist,
             list = *sheetlist;
             list.Push( STRUCT );
             SheetLabel = STRUCT->m_Label;
-            for( ; SheetLabel != NULL;
-                SheetLabel = SheetLabel->Next() )
+            for( ; SheetLabel != NULL; SheetLabel = SheetLabel->Next() )
             {
                 ii = IsBusLabel( SheetLabel->m_Text );
                 new_item = new NETLIST_OBJECT();
@@ -573,7 +567,7 @@ static void ListeObjetConnection( DrawSheetPath*                sheetlist,
         {
             wxString msg;
             msg.Printf( wxT( "Netlist: unexpected struct type %d" ),
-                       DrawList->Type() );
+                        DrawList->Type() );
             wxMessageBox( msg );
             break;
         }

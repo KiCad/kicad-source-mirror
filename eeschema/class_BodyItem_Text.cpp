@@ -226,6 +226,14 @@ void LibDrawText::DoMove( const wxPoint& newPosition )
 }
 
 
+void LibDrawText::DoMirrorHorizontal( const wxPoint& center )
+{
+    m_Pos.x -= center.x;
+    m_Pos.x *= -1;
+    m_Pos.x += center.x;
+}
+
+
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */

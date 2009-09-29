@@ -1113,6 +1113,19 @@ void LibDrawPin::DoMove( const wxPoint& newPosition )
 }
 
 
+void LibDrawPin::DoMirrorHorizontal( const wxPoint& center )
+{
+    m_Pos.x -= center.x;
+    m_Pos.x *= -1;
+    m_Pos.x += center.x;
+
+    if( m_Orient == PIN_RIGHT )
+        m_Orient = PIN_LEFT;
+    else if( m_Orient == PIN_LEFT )
+        m_Orient = PIN_RIGHT;
+}
+
+
 /** Function LibDrawPin::DisplayInfo
  * Displays info (pin num and name, orientation ...
  * on the Info window

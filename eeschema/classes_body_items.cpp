@@ -311,6 +311,21 @@ void LibDrawArc::DoMove( const wxPoint& newPosition )
 }
 
 
+void LibDrawArc::DoMirrorHorizontal( const wxPoint& center )
+{
+    m_Pos.x -= center.x;
+    m_Pos.x *= -1;
+    m_Pos.x += center.x;
+    m_ArcStart.x -= center.x;
+    m_ArcStart.x *= -1;
+    m_ArcStart.x += center.x;
+    m_ArcEnd.x -= center.x;
+    m_ArcEnd.x *= -1;
+    m_ArcEnd.x += center.x;
+    EXCHG( m_ArcStart, m_ArcEnd );
+}
+
+
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
@@ -608,6 +623,14 @@ void LibDrawCircle::DoMove( const wxPoint& newPosition )
 }
 
 
+void LibDrawCircle::DoMirrorHorizontal( const wxPoint& center )
+{
+    m_Pos.x -= center.x;
+    m_Pos.x *= -1;
+    m_Pos.x += center.x;
+}
+
+
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
@@ -790,6 +813,17 @@ void LibDrawSquare::DoMove( const wxPoint& newPosition )
     wxPoint size = m_End - m_Pos;
     m_Pos = newPosition;
     m_End = newPosition + size;
+}
+
+
+void LibDrawSquare::DoMirrorHorizontal( const wxPoint& center )
+{
+    m_Pos.x -= center.x;
+    m_Pos.x *= -1;
+    m_Pos.x += center.x;
+    m_End.x -= center.x;
+    m_End.x *= -1;
+    m_End.x += center.x;
 }
 
 
@@ -1003,6 +1037,17 @@ void LibDrawSegment::DoMove( const wxPoint& newPosition )
     wxPoint offset = newPosition - m_Pos;
     m_Pos += offset;
     m_End += offset;
+}
+
+
+void LibDrawSegment::DoMirrorHorizontal( const wxPoint& center )
+{
+    m_Pos.x -= center.x;
+    m_Pos.x *= -1;
+    m_Pos.x += center.x;
+    m_End.x -= center.x;
+    m_End.x *= -1;
+    m_End.x += center.x;
 }
 
 
@@ -1252,6 +1297,19 @@ bool LibDrawPolyline::DoTestInside( EDA_Rect& rect )
 void LibDrawPolyline::DoMove( const wxPoint& newPosition )
 {
     DoOffset( newPosition - m_PolyPoints[0] );
+}
+
+
+void LibDrawPolyline::DoMirrorHorizontal( const wxPoint& center )
+{
+    size_t i, imax = m_PolyPoints.size();
+
+    for( i = 0; i < imax; i++ )
+    {
+        m_PolyPoints[i].x -= center.x;
+        m_PolyPoints[i].x *= -1;
+        m_PolyPoints[i].x += center.x;
+    }
 }
 
 
@@ -1577,6 +1635,27 @@ bool LibDrawBezier::DoTestInside( EDA_Rect& rect )
 void LibDrawBezier::DoMove( const wxPoint& newPosition )
 {
     DoOffset( newPosition - m_PolyPoints[0] );
+}
+
+
+void LibDrawBezier::DoMirrorHorizontal( const wxPoint& center )
+{
+    size_t i, imax = m_PolyPoints.size();
+
+    for( i = 0; i < imax; i++ )
+    {
+        m_PolyPoints[i].x -= center.x;
+        m_PolyPoints[i].x *= -1;
+        m_PolyPoints[i].x += center.x;
+    }
+
+    imax = m_BezierPoints.size();
+    for( i = 0; i < imax; i++ )
+    {
+        m_BezierPoints[i].x -= center.x;
+        m_BezierPoints[i].x *= -1;
+        m_BezierPoints[i].x += center.x;
+    }
 }
 
 

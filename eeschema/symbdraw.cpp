@@ -140,13 +140,12 @@ void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
 }
 
 
-/****************************************************************/
 static void AbortSymbolTraceOn( WinEDA_DrawPanel* Panel, wxDC* DC )
-/****************************************************************/
 {
     LIB_DRAW_ITEM* item;
+    WinEDA_LibeditFrame* parent = ( WinEDA_LibeditFrame* ) Panel->GetParent();
 
-    item = ( ( WinEDA_LibeditFrame* ) Panel->GetParent() )->GetDrawItem();
+    item = parent->GetDrawItem();
 
     if( item == NULL )
         return;
@@ -164,6 +163,7 @@ static void AbortSymbolTraceOn( WinEDA_DrawPanel* Panel, wxDC* DC )
                         DefaultTransformMatrix );
 
         SAFE_DELETE( item );
+        parent->SetDrawItem( NULL );
     }
     else
     {
@@ -297,12 +297,10 @@ error" ) );
 }
 
 
-/********************************************************/
-void WinEDA_LibeditFrame::GraphicItemBeginDraw( wxDC* DC )
-/********************************************************/
-
-/* Routine de creation d'un nouvel element type LibraryDrawStruct
+/*
+ * Routine de creation d'un nouvel element type LibraryDrawStruct
  */
+void WinEDA_LibeditFrame::GraphicItemBeginDraw( wxDC* DC )
 {
     if( m_drawItem == NULL )
         return;
@@ -520,16 +518,14 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 }
 
 
-/******************************************************/
-void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
-/******************************************************/
-
-/* Place la structure courante en liste des structures du composant
- *  courant, si elle existe et redessine toujours celle ci
+/*
+ * Place la structure courante en liste des structures du composant
+ * courant, si elle existe et redessine toujours celle ci
  *  Parametres: (tous globaux)
  *      m_drawItem
  *      m_component
  */
+void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
 {
     if( m_component == NULL || m_drawItem == NULL )
         return;
@@ -538,11 +534,12 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
     {
         if( StateDrawArc == 1 ) /* Trace d'arc en cours: doit etre termine */
         {
-            DisplayError( this, wxT( "Arc in progress.." ), 10 ); return;
+            DisplayError( this, wxT( "Arc in progress.." ) );
+            return;
         }
         else
         {
-            if( (m_drawItem->m_Flags & IS_MOVED) == 0 )
+            if( ( m_drawItem->m_Flags & IS_MOVED ) == 0 )
                 SymbolDisplayDraw( DrawPanel, DC, FALSE );
         }
     }
@@ -552,8 +549,7 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
     if( m_drawItem->m_Flags & IS_NEW )
     {
         SaveCopyInUndoList( m_component );
-        m_drawItem->SetNext( m_component->m_Drawings );
-        m_component->m_Drawings = m_drawItem;
+        m_component->AddDrawItem( m_drawItem );
 
         switch( m_drawItem->Type() )
         {
@@ -581,8 +577,6 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
         default:
             ;
         }
-
-        m_component->SortDrawItems();
     }
 
     if( m_ID_current_state )
@@ -590,7 +584,7 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
     else
         SetCursor( wxCURSOR_ARROW );
 
-    if( (m_drawItem->m_Flags & IS_MOVED) )
+    if( m_drawItem->m_Flags & IS_MOVED )
     {
         wxPoint pos;
         pos.x = GetScreen()->m_Curseur.x + InitPosition.x - StartCursor.x,
@@ -702,12 +696,10 @@ static void ComputeArc( LibDrawArc* DrawItem, wxPoint ArcCentre )
 }
 
 
-/***************************************************/
-void WinEDA_LibeditFrame::DeleteDrawPoly( wxDC* DC )
-/**************************************************/
-
-/* Used for deleting last entered segment while creating a Polyline
+/*
+ * Used for deleting last entered segment while creating a Polyline
  */
+void WinEDA_LibeditFrame::DeleteDrawPoly( wxDC* DC )
 {
     if( m_drawItem == NULL
         || m_drawItem->Type() != COMPONENT_POLYLINE_DRAW_TYPE )
@@ -718,7 +710,8 @@ void WinEDA_LibeditFrame::DeleteDrawPoly( wxDC* DC )
     m_drawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
                       DefaultTransformMatrix );
 
-    while( Poly->GetCornerCount() > 2 )     // First segment is kept, only its end point is changed
+    // First segment is kept, only its end point is changed
+    while( Poly->GetCornerCount() > 2 )
     {
         Poly->m_PolyPoints.pop_back();
         unsigned idx   = Poly->GetCornerCount() - 1;

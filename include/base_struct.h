@@ -255,7 +255,7 @@ protected:
 
 
 public:
-    int m_Flags;            // flags for editing and other misc. uses
+    int             m_Flags;            // flags for editing and other uses.
 
     unsigned long   m_TimeStamp;        // Time stamp used for logical links
     int             m_Selected;         /* Used by block commands, and selective editing */

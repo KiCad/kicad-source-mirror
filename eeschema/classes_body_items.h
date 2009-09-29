@@ -114,7 +114,9 @@ public:
     LIB_DRAW_ITEM( const LIB_DRAW_ITEM& item );
     virtual ~LIB_DRAW_ITEM() { }
 
-    /** Function Draw (virtual pure)
+    /**
+     * Function Draw (virtual pure)
+     *
      * Draw A body item
      * @param aPanel = DrawPanel to use (can be null) mainly used for clipping
      *                 purposes
@@ -241,6 +243,16 @@ public:
      */
     wxPoint GetPosition( void ) { return DoGetPosition(); }
 
+    /**
+     * Mirror the draw object along the horizontal (X) axis about a point.
+     *
+     * @param center - Point to mirror around.
+     */
+    void MirrorHorizontal( const wxPoint& center )
+    {
+        DoMirrorHorizontal( center );
+    }
+
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy() = 0;
 
@@ -254,6 +266,7 @@ protected:
     virtual bool DoTestInside( EDA_Rect& rect ) = 0;
     virtual void DoMove( const wxPoint& newPosition ) = 0;
     virtual wxPoint DoGetPosition( void ) = 0;
+    virtual void DoMirrorHorizontal( const wxPoint& center ) = 0;
 };
 
 
@@ -387,6 +400,7 @@ protected:
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) { return m_Pos; }
+    virtual void DoMirrorHorizontal( const wxPoint& center );
 };
 
 
@@ -462,6 +476,7 @@ protected:
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) { return m_Pos; }
+    virtual void DoMirrorHorizontal( const wxPoint& center );
 };
 
 
@@ -533,6 +548,7 @@ protected:
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) { return m_Pos; }
+    virtual void DoMirrorHorizontal( const wxPoint& center );
 };
 
 
@@ -611,6 +627,7 @@ protected:
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) { return m_Pos; }
+    virtual void DoMirrorHorizontal( const wxPoint& center );
 };
 
 
@@ -681,6 +698,7 @@ protected:
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) { return m_Pos; }
+    virtual void DoMirrorHorizontal( const wxPoint& center );
 };
 
 /**********************************/
@@ -750,6 +768,7 @@ protected:
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) { return m_Pos; }
+    virtual void DoMirrorHorizontal( const wxPoint& center );
 };
 
 
@@ -830,6 +849,7 @@ protected:
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) { return m_PolyPoints[0]; }
+    virtual void DoMirrorHorizontal( const wxPoint& center );
 };
 
 /**********************************************************/
@@ -910,6 +930,7 @@ protected:
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) { return m_PolyPoints[0]; }
+    virtual void DoMirrorHorizontal( const wxPoint& center );
 };
 
 #endif  //  CLASSES_BODY_ITEMS_H

@@ -21,14 +21,6 @@ class DrawSheetStruct;
 class LibDrawPin;
 
 
-LIB_DRAW_ITEM* LocatePin( const wxPoint& RefPos,
-                          LIB_COMPONENT* Entry,
-                          int            Unit,
-                          int            Convert,
-                          SCH_COMPONENT* DrawItem = NULL );
-
-/* Routine de localisation d'une PIN de la PartLib pointee par Entry */
-
 wxString ReturnDefaultFieldName( int aFieldNdx );
 
 
@@ -158,13 +150,6 @@ SCH_ITEM*          PickStruct( const wxPoint& refpos,
                                int            SearchMask );
 
 
-LIB_DRAW_ITEM* LocateDrawItem( SCH_SCREEN*    Screen,
-                               const wxPoint& refpoint,
-                               LIB_COMPONENT* LibEntry,
-                               int            Unit,
-                               int            Convert,
-                               int            masque );
-
 Hierarchical_PIN_Sheet_Struct* LocateSheetLabel( DrawSheetStruct* Sheet,
                                                  const wxPoint&   pos );
 LibDrawPin*                    LocateAnyPin( SCH_ITEM*       DrawList,
@@ -250,20 +235,6 @@ bool ClearProjectDrawList( SCH_SCREEN* FirstWindow, bool confirm_deletion );
 bool LocateAndDeleteItem( WinEDA_SchematicFrame* frame, wxDC* DC );
 void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Window );
 void DeleteAllMarkers( int type );
-
-
-/**************/
-/* GETPART.CPP */
-/**************/
-
-int LookForConvertPart( LIB_COMPONENT* LibEntry );
-
-/* Retourne la plus grande valeur trouvee dans la liste des elements
- *    "drawings" du composant LibEntry, pour le membre .Convert
- *    Si il n'y a pas de representation type "convert", la valeur
- *    retournee est 0 ou 1
- *    Si il y a une representation type "convert",
- *    la valeur retournee est > 1 (typiquement 2) */
 
 
 /**************/

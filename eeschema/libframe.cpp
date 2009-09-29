@@ -203,6 +203,12 @@ void WinEDA_LibeditFrame::LoadSettings()
 }
 
 
+void WinEDA_LibeditFrame::SetDrawItem( LIB_DRAW_ITEM* drawItem )
+{
+    m_drawItem = drawItem;
+}
+
+
 /**
  * Save library editor frame specific configuration settings.
  *

@@ -179,7 +179,7 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPartAux( CMP_LIB_ENTRY* LibEntry,
 
     m_showDeMorgan = false;
 
-    if( LookForConvertPart( m_component ) > 1 )
+    if( m_component->HasConversion() )
         m_showDeMorgan = true;
 
     GetBaseScreen()->ClrModify();
@@ -265,7 +265,7 @@ void WinEDA_LibeditFrame::SaveActiveLibrary( wxCommandEvent& event )
     if( !IsOK( this, msg ) )
         return;
 
-    bool success = m_library->Save( fn.GetFullPath() );
+    bool success = m_library->Save( fn.GetFullPath(), true );
 
     MsgPanel->EraseMsgBox();
 
