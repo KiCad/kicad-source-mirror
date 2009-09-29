@@ -101,19 +101,21 @@ void DIALOG_DESIGN_RULES::PrintCurrentSettings( )
     wxString msg, value;
     int internal_units = m_Parent->m_InternalUnits;
 
-    m_MessagesList->AppendToPage(_("<b>Current general setting:</b><br>") );
+    m_MessagesList->AppendToPage(_("<b>Current general settings:</b><br>") );
 
     // Display min values:
     value = ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_TrackMinWidth, internal_units, true );
-    msg.Printf(_("Minimum value for tracks width: <b>%s</b><br>\n"), value.GetData() );
+    msg.Printf(_("Minimum value for tracks width: <b>%s</b><br>\n"), GetChars( value ) );
     m_MessagesList->AppendToPage(msg);
+
     value = ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_ViasMinSize, internal_units, true );
-    msg.Printf(_("Minimum value for vias diameter: <b>%s</b><br>\n"), value.GetData() );
+    msg.Printf(_("Minimum value for vias diameter: <b>%s</b><br>\n"), GetChars( value ) );
     m_MessagesList->AppendToPage(msg);
+
     value = ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_MicroViasMinSize, internal_units, true );
-    msg.Printf(_("Minimum value for microvias diameter: <b>%s</b><br>\n"), value.GetData() );
+    msg.Printf(_("Minimum value for microvias diameter: <b>%s</b><br>\n"), GetChars( value ) );
     m_MessagesList->AppendToPage(msg);
-    
+
 }
 
 
@@ -159,7 +161,7 @@ void DIALOG_DESIGN_RULES::Init()
     }
 
     InitializeRulesSelectionBoxes();
-    
+
     PrintCurrentSettings( );
 }
 
@@ -382,7 +384,7 @@ void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
             // Should not occur because OnAddNetclassClick() tests for existing NetClass names
             wxString msg;
             msg.Printf( wxT("CopyRulesListToBoard(): The NetClass \"%s\" already exists. Skip"),
-                m_grid->GetRowLabelValue( row ).GetData() );
+                GetChars( m_grid->GetRowLabelValue( row ) ) );
             wxMessageBox( msg );
             delete nc;
             continue;
@@ -525,7 +527,7 @@ void DIALOG_DESIGN_RULES::OnMoveUpSelectedNetClass( wxCommandEvent& event )
         m_grid->SetRowLabelValue(ii, previous_value );
         m_grid->SetRowLabelValue(ii-1, curr_value );
     }
-    
+
     if( reinit )
         InitializeRulesSelectionBoxes();
 }
@@ -671,7 +673,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
 
             m_MessagesList->AppendToPage( msg );
         }
-        
+
         // Test vias
         int viadia = ReturnValueFromString( g_UnitMetric,
                                        m_grid->GetCellValue( row, GRID_VIASIZE ),
