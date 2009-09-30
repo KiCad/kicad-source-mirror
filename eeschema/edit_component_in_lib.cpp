@@ -174,7 +174,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
         }
 
         /* Remove names and library alias entries not in the new alias list. */
-        for( i = 0; component->m_AliasList.GetCount(); i++ )
+        for( i = 0; i < component->m_AliasList.GetCount(); i++ )
         {
             index = aliases.Index( component->m_AliasList[ i ], false );
 
