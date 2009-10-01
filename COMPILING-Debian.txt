@@ -3,13 +3,119 @@ Compiling KiCad on Debian & Ubuntu
 
 First written: 10-Mar-2009
 
-Updated: 31-Aug-2009
+Updated: 01-Oct-2009
 
 Lasted edited by: Jerry Jacobs <jerkejacobs@gmail.com>
 
 
-Ubuntu (8.04)
+Ubuntu 9.04
 -----------
+Special thanks to David J S Briscoe <david@djsbriscoe.vispa.com>
+
+The first thing I did was follow this page up to the running kicad section
+
+http://basicubuntu.blogspot.com/2009/02/installing-kicad-on-ubuntu.html
+
+This resulted in the error message detailed in this post
+
+http://tech.groups.yahoo.com/group/kicad-devel/message/3180
+
+SNIPPET
+
+The build fails with the following message
+
+----------------------------------------------------------:
+
+david@ubuntu:~/Desktop/KICAD_SVN$ fakeroot debian/rules binary
+test -d debian/patched || install -d debian/patched
+dpatch apply-all
+dpatch cat-all >>patch-stampT
+mv -f patch-stampT patch-stamp
+mkdir -p /home/david/Desktop/KICAD_SVN/build/kicad
+mkdir -p /home/david/Desktop/KICAD_SVN/build/bitmaps
+cd /home/david/Desktop/KICAD_SVN/build/kicad && cmake -DKICAD_MINIZIP=0 \
+
+-DKICAD_DEMOS=/home/david/Desktop/KICAD_SVN/debian/kicad-common/usr/share/doc/ki\
+cad/demos ../../kicad \
+-DXPM_CPP_PATH=/home/david/Desktop/KICAD_SVN/build/bitmaps
+-- The C compiler identification is GNU
+-- The CXX compiler identification is GNU
+-- Check for working C compiler: /usr/bin/gcc
+-- Check for working C compiler: /usr/bin/gcc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Looking for XOpenDisplay in /usr/lib/libX11.so;/usr/lib/libXext.so
+-- Looking for XOpenDisplay in /usr/lib/libX11.so;/usr/lib/libXext.so - found
+-- Looking for gethostbyname
+-- Looking for gethostbyname - found
+-- Looking for connect
+-- Looking for connect - found
+-- Looking for remove
+-- Looking for remove - found
+-- Looking for shmat
+-- Looking for shmat - found
+-- Looking for IceConnectionNumber in ICE
+-- Looking for IceConnectionNumber in ICE - found
+-- Found X11: /usr/lib/libX11.so
+-- Check for installed OpenGL -- found
+-- Check for installed Boost -- not found
+CMake Error at CMakeModules/CheckFindPackageResult.cmake:6 (message):
+Boost was not found - it is required to build Kicad
+Call Stack (most recent call first):
+CMakeLists.txt:111 (check_find_package_result)
+
+
+-- Configuring incomplete, errors occurred!
+make: *** [configure-stamp] Error 1
+david@ubuntu:~/Desktop/KICAD_SVN$
+
+-----------------------------------------------------------------:
+
+
+SNIPPET
+
+The next step was to remove any libboost 1.34 libraries using the apt-get
+remove command (can't remember the exact commands I used) as the Ubuntu 9.04
+(Jaunty) repositories only had the 1.34 version available.
+
+After this I installed the boost 1.37 libraries
+using this command
+
+---------------------------------------
+sudo apt-get install libboost1.37-dev
+---------------------------------------
+
+This pulled down all the required files and dependencies (as far as I
+know-how do I check this?)
+
+I then entered the following command
+
+---------------------------------------
+fakeroot debian/rules binary
+---------------------------------------
+
+and everything was built properly (I saw a few warnings flash past-will
+these be logged anywhere?)
+
+I was left with a bunch of debian packaged files. I installed the main one,
+the common one and an English language documentation one (I can supply more
+details if needed later as I am not using Ubuntu at the moment).
+
+The first link above describes moving the libraries and other files into the
+same place as the compiled executables. I didn't do this, so I have a
+duplicate installation.
+The above method needs some fine tuning and improvements. If you can let me
+know of a tidier way of compiling Kicad please let me know.
+Maybe there is a way of automating things with scripts, my Linux knowledge
+doesn't go that far, yet.
+
+
+Ubuntu (8.04)
+-------------
 Original from:
 http://basicubuntu.blogspot.com/2009/02/installing-kicad-on-ubuntu.html
 
