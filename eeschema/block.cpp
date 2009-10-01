@@ -860,7 +860,7 @@ static LIB_DRAW_ITEM* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
  * @return a pointer to the pin
  */
 {
-    LIB_COMPONENT* Entry;
+    static LIB_COMPONENT* Entry;
     static LibDrawPin* NextPin;
     static int Multi, convert, TransMat[2][2];
     int orient;
@@ -888,16 +888,16 @@ static LIB_DRAW_ITEM* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
     {
         wxASSERT( Pin->Type() == COMPONENT_PIN_DRAW_TYPE );
 
-        /* Elimination des elements non relatifs a l'unite */
+        /* Skip items not used for this part */
         if( Multi && Pin->m_Unit && ( Pin->m_Unit != Multi ) )
             continue;
         if( convert && Pin->m_Convert && ( Pin->m_Convert != convert ) )
             continue;
 
-        /* Calcul de l'orientation reelle de la Pin */
+        /* Calculate the pin orient (according to the component orientation) */
         orient = Pin->ReturnPinDrawOrient( TransMat );
 
-        /* Calcul de la position du point de reference */
+        /* Calculate the pin position (according to the component orientation) */
         aPosition = TransformCoordinate( TransMat, Pin->m_Pos ) + CmpPosition;
         return Pin;
     }
