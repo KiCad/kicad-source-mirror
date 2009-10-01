@@ -58,8 +58,7 @@ public:
     WinEDAChoiceBox* m_SelViaSizeBox;
 
 private:
-    bool             m_SelTrackWidthBox_Changed;
-    bool             m_SelViaSizeBox_Changed;
+    bool             m_TrackAndViasSizesList_Changed;
 
     DRC*             m_drc;         ///< the DRC controller, see drc.cpp
 

@@ -18,7 +18,6 @@ void WinEDA_LibeditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
                                               int             unused_flag )
 /*************************************************************************/
 {
-    EDA_BaseStruct*    item;
     LIB_COMPONENT*     CopyItem;
     PICKED_ITEMS_LIST* lastcmd;
 

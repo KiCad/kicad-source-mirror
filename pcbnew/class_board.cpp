@@ -43,7 +43,9 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
     // Should user eventually load a board from a disk file, then these defaults
     // will get overwritten during load.
     m_NetClasses.GetDefault()->SetDescription( _( "This is the default net class." ) );
-    m_CurrentNetClassName = m_NetClasses.GetDefault()->GetName( );
+    m_ViaSizeSelector = 0;
+    m_TrackWidthSelector = 0;
+    SetCurrentNetClass(m_NetClasses.GetDefault()->GetName( ));      // Initialize default values
 }
 
 
@@ -74,6 +76,31 @@ BOARD::~BOARD()
     delete m_NetInfo;
 }
 
+/**
+ * Function SetCurrentNetClass
+ * Must be called after a netclass selection (or after a netclass parameter change
+ * Initialise vias and tracks values displayed in comb boxs of the auxiliary toolbar
+ * and some others parametres (netclass name ....)
+ */
+ void BOARD::SetCurrentNetClass( const wxString & aNetClassName)
+{
+    NETCLASS * netClass = m_NetClasses.Find(aNetClassName);
+
+    // if not found (should not happen) use the default
+    if ( netClass == NULL )
+        netClass = m_NetClasses.GetDefault();
+
+    m_CurrentNetClassName = netClass->GetName();
+
+    // Initialize others values:
+    if( m_ViaSizeHistory.size() == 0 )
+        m_ViaSizeHistory.push_back(0);
+    if( m_TrackWidthHistory.size() == 0 )
+        m_TrackWidthHistory.push_back(0);
+
+    m_ViaSizeHistory[0] = netClass->GetViaDiameter();
+    m_TrackWidthHistory[0] = netClass->GetTrackWidth();
+}
 
 wxString BOARD::GetLayerName( int aLayerIndex ) const
 {

@@ -93,7 +93,7 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
     int ii;
 
     DisplayOpt.DisplayPolarCood =
-        (m_PolarDisplay->GetSelection() == 0) ? FALSE : TRUE;
+        (m_PolarDisplay->GetSelection() == 0) ? FALSE : true;
     ii = g_UnitMetric;
     g_UnitMetric = (m_UnitsSelection->GetSelection() == 0)  ? 0 : 1;
     if( ii != g_UnitMetric )
@@ -113,7 +113,7 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
     {
         g_Show_Ratsnest = m_ShowGlobalRatsnest->GetValue();
         m_Parent->Ratsnest_On_Off( m_DC );
-        m_Parent->RedrawActiveWindow( m_DC, TRUE);
+        m_Parent->RedrawActiveWindow( m_DC, true);
     }
     g_Show_Module_Ratsnest = m_ShowModuleRatsnest->GetValue();
     g_AutoDeleteOldTrack   = m_TrackAutodel->GetValue();
@@ -195,7 +195,7 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
     switch( id )
     {
     case ID_TB_OPTIONS_DRC_OFF:
-        Drc_On = m_OptionsToolBar->GetToolState( id ) ? FALSE : TRUE;
+        Drc_On = m_OptionsToolBar->GetToolState( id ) ? FALSE : true;
         break;
 
     case ID_TB_OPTIONS_SHOW_GRID:
@@ -209,7 +209,7 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         wxClientDC dc( DrawPanel );
         DrawPanel->PrepareGraphicContext( &dc );
         Ratsnest_On_Off( &dc );
-        RedrawActiveWindow( &dc, TRUE);
+        RedrawActiveWindow( &dc, true);
         }
         break;
 
@@ -223,7 +223,7 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
     case ID_TB_OPTIONS_SELECT_UNIT_INCH:
         if( id == ID_TB_OPTIONS_SELECT_UNIT_INCH )
             g_UnitMetric = INCHES;
-        m_SelTrackWidthBox_Changed = TRUE;
+        m_TrackAndViasSizesList_Changed = true;
         UpdateStatusBar();    /* Reaffichage des coord curseur */
         ReCreateAuxiliaryToolbar();
         DisplayUnitsMsg();

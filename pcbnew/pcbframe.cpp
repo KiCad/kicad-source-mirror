@@ -220,13 +220,12 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     wxConfig* config           = wxGetApp().m_EDA_Config;
 
     m_FrameName                = wxT( "PcbFrame" );
-    m_Draw_Sheet_Ref           = TRUE;  // TRUE pour avoir le cartouche dessine
-    m_Draw_Auxiliary_Axis      = TRUE;
+    m_Draw_Sheet_Ref           = true;  // true pour avoir le cartouche dessine
+    m_Draw_Auxiliary_Axis      = true;
     m_SelTrackWidthBox         = NULL;
     m_SelViaSizeBox            = NULL;
     m_SelLayerBox              = NULL;
-    m_SelTrackWidthBox_Changed = FALSE;
-    m_SelViaSizeBox_Changed    = FALSE;
+    m_TrackAndViasSizesList_Changed = false;
 
     SetBoard( new BOARD( NULL, this ) );
 
@@ -260,7 +259,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     GetScreen()->SetGrid( GridSize );
 
     if( DrawPanel )
-        DrawPanel->m_Block_Enable = TRUE;
+        DrawPanel->m_Block_Enable = true;
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateAuxiliaryToolbar();
@@ -295,7 +294,7 @@ void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
 {
     wxConfig *  config = wxGetApp().m_EDA_Config;
 
-    DrawPanel->m_AbortRequest = TRUE;
+    DrawPanel->m_AbortRequest = true;
 
     if( ScreenPcb->IsModify() )
     {
@@ -354,7 +353,7 @@ void WinEDA_PcbFrame::Show3D_Frame( wxCommandEvent& event )
     }
 
     m_Draw3DFrame = new WinEDA3D_DrawFrame( this, _( "3D Viewer" ) );
-    m_Draw3DFrame->Show( TRUE );
+    m_Draw3DFrame->Show( true );
 }
 
 /**

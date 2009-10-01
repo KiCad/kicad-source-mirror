@@ -44,7 +44,7 @@ static void Exit_Editrack( WinEDA_DrawPanel* Panel, wxDC* DC )
     if( track && ( track->Type()==TYPE_VIA || track->Type()==TYPE_TRACK ) )
     {
         /* Erase the current drawing */
-        ShowNewTrackWhenMovingCursor( Panel, DC, FALSE );
+        ShowNewTrackWhenMovingCursor( Panel, DC, false );
         if( g_HightLigt_Status )
             frame->Hight_Light( DC );
 
@@ -147,7 +147,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
 
         D( g_CurrentTrackList.VerifyListIntegrity(); );
 
-        build_ratsnest_pad( LockPoint, wxPoint( 0, 0 ), TRUE );
+        build_ratsnest_pad( LockPoint, wxPoint( 0, 0 ), true );
 
         D( g_CurrentTrackList.VerifyListIntegrity(); );
 
@@ -170,7 +170,8 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
         g_CurrentTrackSegment->SetNet( g_HightLigth_NetCode );
 
         // Display info about track Net class:
-        GetBoard()->m_CurrentNetClassName = g_CurrentTrackSegment->GetNetClassName();
+        GetBoard()->SetCurrentNetClass( g_CurrentTrackSegment->GetNetClassName() );
+        m_TrackAndViasSizesList_Changed = true;
         AuxiliaryToolBar_DesignRules_Update_UI();
 
         if( pt_pad )
@@ -198,7 +199,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
 
         g_CurrentTrackSegment->DisplayInfo( this );
         SetCurItem( g_CurrentTrackSegment );
-        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+        DrawPanel->ManageCurseur( DrawPanel, DC, false );
 
         if( Drc_On )
         {
@@ -227,20 +228,20 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
         /* Current track is Ok: current segment is kept, and a new one is created
          * unless the current segment is null, or 2 last are null if a 2 segments track build
          */
-        bool CanCreateNewSegment = TRUE;
+        bool CanCreateNewSegment = true;
         if( !g_TwoSegmentTrackBuild && g_CurrentTrackSegment->IsNull() )
-            CanCreateNewSegment = FALSE;
+            CanCreateNewSegment = false;
 
         if( g_TwoSegmentTrackBuild && g_CurrentTrackSegment->IsNull()
            && g_CurrentTrackSegment->Back() && g_CurrentTrackSegment->Back()->IsNull() )
-            CanCreateNewSegment = FALSE;
+            CanCreateNewSegment = false;
 
         if( CanCreateNewSegment )
         {
             /* Erase old track on screen */
             D( g_CurrentTrackList.VerifyListIntegrity(); );
 
-            ShowNewTrackWhenMovingCursor( DrawPanel, DC, FALSE );
+            ShowNewTrackWhenMovingCursor( DrawPanel, DC, false );
 
             D( g_CurrentTrackList.VerifyListIntegrity(); );
 
@@ -279,7 +280,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
             D( g_CurrentTrackList.VerifyListIntegrity(); );
 
             /* Show the new position */
-            ShowNewTrackWhenMovingCursor( DrawPanel, DC, FALSE );
+            ShowNewTrackWhenMovingCursor( DrawPanel, DC, false );
         }
         g_CurrentTrackSegment->DisplayInfo( this );
     }
@@ -446,8 +447,8 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
     if( Begin_Route( aTrack, DC ) == NULL )
         return;
 
-    ShowNewTrackWhenMovingCursor( DrawPanel, DC, TRUE );    /* mise a jour trace reel */
-    ShowNewTrackWhenMovingCursor( DrawPanel, DC, FALSE );   /* efface trace piste*/
+    ShowNewTrackWhenMovingCursor( DrawPanel, DC, true );    /* mise a jour trace reel */
+    ShowNewTrackWhenMovingCursor( DrawPanel, DC, false );   /* efface trace piste*/
     trace_ratsnest_pad( DC );                               /* efface trace chevelu*/
 
     /* cleanup
@@ -776,7 +777,7 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
     DisplayOpt.DisplayPcbTrackFill    = Track_fill_copy;
 
     ( (WinEDA_BasePcbFrame*)(panel->m_Parent) )->
-    build_ratsnest_pad( NULL, g_CurrentTrackSegment->m_End, FALSE );
+    build_ratsnest_pad( NULL, g_CurrentTrackSegment->m_End, false );
 
     ( (WinEDA_BasePcbFrame*)(panel->m_Parent) )->trace_ratsnest_pad( DC );
 }

@@ -111,8 +111,7 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
 
     SetLocaleTo_Default( );    // revert to the current locale
 
-    m_SelTrackWidthBox_Changed = TRUE;
-    m_SelViaSizeBox_Changed    = TRUE;
+    m_TrackAndViasSizesList_Changed = true;
 
     GetScreen()->SetModify();
     GetBoard()->m_Status_Pcb = 0;
@@ -128,7 +127,7 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
 
     Affiche_Message( wxString( _("Session file imported and merged OK.")) );
 
-    DrawPanel->Refresh( TRUE );
+    DrawPanel->Refresh( true );
 }
 
 

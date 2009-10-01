@@ -997,8 +997,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         int ii = m_SelTrackWidthBox->GetChoice();
         g_DesignSettings.m_CurrentTrackWidth = GetBoard()->m_TrackWidthHistory[ii];
         DisplayTrackSettings();
-        m_SelTrackWidthBox_Changed = false;
-        m_SelViaSizeBox_Changed    = false;
+        m_TrackAndViasSizesList_Changed = false;
         g_DesignSettings.m_UseConnectedTrackWidth = false;
     }
     break;
@@ -1035,8 +1034,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         int ii = m_SelViaSizeBox->GetChoice();
         g_DesignSettings.m_CurrentViaSize = GetBoard()->m_ViaSizeHistory[ii];
         DisplayTrackSettings();
-        m_SelTrackWidthBox_Changed = false;
-        m_SelViaSizeBox_Changed    = false;
+        m_TrackAndViasSizesList_Changed = false;
     }
     break;
 

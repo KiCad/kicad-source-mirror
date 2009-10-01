@@ -62,48 +62,47 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_DesignRules_Update_UI( )
 
 }
 
-
 /**
  * Function AuxiliaryToolBar_Update_UI
  * update the displayed values on auxiliary horizontal toolbar
  * (track width, via sizes, clearance ...
+ * Display format for track and via lists
+ *    first item = current selected class value
+ *    next items (if any) = ordered list of sizes (extra sizes).
+ *    So the current selected class value can be same as an other extra value
  */
 void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI( )
 {
     wxString msg;
     m_AuxiliaryToolBar->ToggleTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
                                     g_DesignSettings.m_UseConnectedTrackWidth );
-    if( m_SelTrackWidthBox && m_SelTrackWidthBox_Changed )
-    {
-        m_SelTrackWidthBox_Changed = false;
-        m_SelTrackWidthBox->Clear();
-
-        for( unsigned ii = 0; ii < GetBoard()->m_TrackWidthHistory.size(); ii++ )
-        {
-            msg = _( "Track" ) + ReturnStringValue(GetBoard()->m_TrackWidthHistory[ii]);
-
-            m_SelTrackWidthBox->Append( msg );
-
-            if( GetBoard()->m_TrackWidthHistory[ii] == g_DesignSettings.m_CurrentTrackWidth )
-                m_SelTrackWidthBox->SetSelection( ii );
-        }
-    }
 
     AuxiliaryToolBar_DesignRules_Update_UI( );
 
-    if( m_SelViaSizeBox && m_SelViaSizeBox_Changed )
+    if( m_SelTrackWidthBox && m_TrackAndViasSizesList_Changed )
     {
-        m_SelViaSizeBox_Changed = false;
-        m_SelViaSizeBox->Clear();
+        m_SelTrackWidthBox->Clear();
+        for( unsigned ii = 0; ii < GetBoard()->m_TrackWidthHistory.size(); ii++ )
+        {
+            msg = _( "Track" ) + ReturnStringValue(GetBoard()->m_TrackWidthHistory[ii]);
+            m_SelTrackWidthBox->Append( msg );
+        }
+        if( GetBoard()->m_TrackWidthSelector >= (int)GetBoard()->m_TrackWidthHistory.size() )
+            GetBoard()->m_TrackWidthSelector = 0;
+        m_SelTrackWidthBox->SetSelection( GetBoard()->m_TrackWidthSelector );
+    }
 
+    if( m_SelViaSizeBox && m_TrackAndViasSizesList_Changed )
+    {
+        m_SelViaSizeBox->Clear();
         for( unsigned ii = 0; ii < GetBoard()->m_ViaSizeHistory.size(); ii++ )
         {
             msg = _( "Via" ) + ReturnStringValue(GetBoard()->m_ViaSizeHistory[ii]);
-
             m_SelViaSizeBox->Append( msg );
-            if( GetBoard()->m_ViaSizeHistory[ii] == g_DesignSettings.m_CurrentViaSize )
-                m_SelViaSizeBox->SetSelection( ii );
         }
+        if( GetBoard()->m_ViaSizeSelector >= (int)GetBoard()->m_ViaSizeHistory.size() )
+            GetBoard()->m_ViaSizeSelector = 0;
+        m_SelViaSizeBox->SetSelection( GetBoard()->m_ViaSizeSelector );
     }
 
     if( m_SelZoomBox )
@@ -122,7 +121,7 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI( )
             m_SelZoomBox->SetSelection( -1 );
     }
 
-    if( m_SelGridBox && GetScreen() )
+    if( m_SelGridBox )
     {
         int kk = m_SelGridBox->GetChoice();
 
@@ -137,6 +136,8 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI( )
             }
         }
     }
+
+    m_TrackAndViasSizesList_Changed = false;
 }
 
 

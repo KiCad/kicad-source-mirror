@@ -26,17 +26,17 @@
 
 #include "eda_dde.h"
 
-bool Drc_On = TRUE;
-bool g_AutoDeleteOldTrack = TRUE;
+bool Drc_On = true;
+bool g_AutoDeleteOldTrack = true;
 bool g_No_Via_Route;
 bool g_Drag_Pistes_On;
 bool g_Show_Ratsnest;
 bool g_Show_Module_Ratsnest;
-bool g_Show_Pads_Module_in_Move = TRUE;
-bool g_Raccord_45_Auto = TRUE;
+bool g_Show_Pads_Module_in_Move = true;
+bool g_Raccord_45_Auto = true;
 bool Track_45_Only;
 bool Segments_45_Only;
-bool g_TwoSegmentTrackBuild = TRUE;
+bool g_TwoSegmentTrackBuild = true;
 bool g_HightLigt_Status;
 extern PARAM_CFG_BASE* ParamCfgList[];
 
@@ -116,16 +116,16 @@ Changing extension to .brd." ),
     ActiveScreen = ScreenPcb;
 
     SetTopWindow( frame );
-    frame->Show( TRUE );
+    frame->Show( true );
 
     if( CreateServer( frame, KICAD_PCB_PORT_SERVICE_NUMBER ) )
     {
         SetupServerFunction( RemoteCommand );
     }
 
-    frame->Zoom_Automatique( TRUE );
-
     Read_Config( fn.GetFullPath() );
+
+    frame->Zoom_Automatique( true );
 
     /* Load file specified in the command line. */
     if( fn.IsOk() )
@@ -135,5 +135,5 @@ Changing extension to .brd." ),
         frame->ReCreateLayerBox( NULL );
     }
 
-    return TRUE;
+    return true;
 }

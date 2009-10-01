@@ -75,25 +75,25 @@ void WinEDA_PcbFrame::PrepareLayerIndicator()
     if( previous_active_layer_color != active_layer_color )
     {
         previous_active_layer_color = active_layer_color;
-        change = TRUE;
+        change = true;
     }
     Route_Layer_TOP_color = g_DesignSettings.m_LayerColor[((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP];
     if( previous_Route_Layer_TOP_color != Route_Layer_TOP_color )
     {
         previous_Route_Layer_TOP_color = Route_Layer_TOP_color;
-        change = TRUE;
+        change = true;
     }
     Route_Layer_BOTTOM_color = g_DesignSettings.m_LayerColor[((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM];
     if( previous_Route_Layer_BOTTOM_color != Route_Layer_BOTTOM_color )
     {
         previous_Route_Layer_BOTTOM_color = Route_Layer_BOTTOM_color;
-        change = TRUE;
+        change = true;
     }
     via_color = g_DesignSettings.m_ViaColor[g_DesignSettings.m_CurrentViaType ];
     if( previous_via_color != via_color )
     {
         previous_via_color = via_color;
-        change = TRUE;
+        change = true;
     }
 
     if( !change && (LayerPairBitmap != NULL) )
@@ -193,7 +193,7 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
     }
 
 
-    m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
+    m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
     m_HToolBar->SetRows( 1 );
 
     SetToolBar( m_HToolBar );
@@ -422,7 +422,7 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
     // Set up toolbar
     m_VToolBar->AddTool( ID_NO_SELECT_BUTT, wxEmptyString,
                          wxBitmap( cursor_xpm ), wxEmptyString, wxITEM_CHECK );
-    m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, TRUE );
+    m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, true );
     m_VToolBar->AddSeparator();
 
     m_VToolBar->AddTool( ID_PCB_HIGHLIGHT_BUTT, wxEmptyString,
@@ -553,7 +553,7 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
     if( m_AuxiliaryToolBar == NULL )
     {
         m_AuxiliaryToolBar = new WinEDA_Toolbar( TOOLBAR_AUX, this,
-                                                 ID_AUX_TOOLBAR, TRUE );
+                                                 ID_AUX_TOOLBAR, true );
 
         // Set up toolbar
         m_AuxiliaryToolBar->AddSeparator();
@@ -562,7 +562,7 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
                                                   wxPoint( -1, -1 ),
                                                   wxSize( LISTBOX_WIDTH + 20, -1 ) );
         m_AuxiliaryToolBar->AddControl( m_SelTrackWidthBox );
-        m_SelTrackWidthBox_Changed = TRUE;
+        m_TrackAndViasSizesList_Changed = true;
         m_ClearanceBox = new wxTextCtrl( m_AuxiliaryToolBar,
                                                           -1,
                                                           wxEmptyString,
@@ -655,9 +655,7 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
         m_SelGridBox->Append( msg );
     }
 
-    m_SelViaSizeBox_Changed    = TRUE;
-    m_SelTrackWidthBox_Changed = TRUE;
-
+    m_TrackAndViasSizesList_Changed    = true;
     ReCreateLayerBox( NULL );
 
     SetToolbars();

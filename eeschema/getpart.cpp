@@ -390,7 +390,6 @@ void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
 void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
                                          wxDC*          DC )
 {
-    int ii;
     LIB_COMPONENT* LibEntry;
 
     if( DrawComponent == NULL )
@@ -414,7 +413,13 @@ void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
 
     DrawComponent->m_Convert++;
-    if( DrawComponent->m_Convert > ii )
+    // ensure m_Convert = 0, 1 or 2
+    // 0 and 1 = shape 1 = not converted
+    // 2 = shape 2 = first converted shape
+    // > 2 is not used but could be used for more shapes
+    // like multiple shapes for a programmable component
+    // When m_Convert = val max, return to the first shape
+    if( DrawComponent->m_Convert > 2 )
         DrawComponent->m_Convert = 1;
 
     /* Redessine le composant dans la nouvelle position */

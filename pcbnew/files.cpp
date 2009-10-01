@@ -148,8 +148,7 @@ bool WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append 
             return false;
     }
 
-    m_SelTrackWidthBox_Changed = true;
-    m_SelViaSizeBox_Changed    = true;
+    m_TrackAndViasSizesList_Changed = true;
 
     if( Append )
     {
