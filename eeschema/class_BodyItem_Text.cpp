@@ -20,8 +20,6 @@
 #include "protos.h"
 
 
-
-
 LibDrawText::LibDrawText(LIB_COMPONENT * aParent) :
     LIB_DRAW_ITEM( COMPONENT_GRAPHIC_TEXT_DRAW_TYPE, aParent ),
     EDA_TextStruct()
@@ -176,7 +174,7 @@ LIB_DRAW_ITEM* LibDrawText::DoGenCopy()
 {
     LibDrawText* newitem = new LibDrawText(NULL);
 
-    newitem->m_Pos = m_Pos;
+    newitem->m_Pos       = m_Pos;
     newitem->m_Orient    = m_Orient;
     newitem->m_Size      = m_Size;
     newitem->m_Attributs = m_Attributs;
@@ -193,14 +191,30 @@ LIB_DRAW_ITEM* LibDrawText::DoGenCopy()
 }
 
 
-bool LibDrawText::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LibDrawText::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_GRAPHIC_TEXT_DRAW_TYPE );
 
     const LibDrawText* tmp = ( LibDrawText* ) &other;
 
-    return ( ( m_Pos == tmp->m_Pos ) && ( m_Size == tmp->m_Size )
-             && ( m_Text == tmp->m_Text ) );
+    int result = m_Text.CmpNoCase( tmp->m_Text );
+
+    if( result != 0 )
+        return result;
+
+    if( m_Pos.x != tmp->m_Pos.x )
+        return m_Pos.x - tmp->m_Pos.x;
+
+    if( m_Pos.y != tmp->m_Pos.y )
+        return m_Pos.y - tmp->m_Pos.y;
+
+    if( m_Size.x != tmp->m_Size.x )
+        return m_Size.x - tmp->m_Size.x;
+
+    if( m_Size.y != tmp->m_Size.y )
+        return m_Size.y - tmp->m_Size.y;
+
+    return 0;
 }
 
 
@@ -259,7 +273,8 @@ void LibDrawText::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 {
     wxPoint pos1, pos2;
 
-    int     color     = ReturnLayerColor( LAYER_DEVICE );
+    int     color = ReturnLayerColor( LAYER_DEVICE );
+
     if( aColor < 0 )       // Used normal color or selected color
     {
         if( ( m_Selected & IS_SELECTED ) )
@@ -270,16 +285,18 @@ void LibDrawText::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     pos1 = TransformCoordinate( aTransformMatrix, m_Pos ) + aOffset;
 
-    /* The text orientation may need to be flipped if the
-     *  transformation matrix causes xy axes to be flipped. */
-    int t1 = ( aTransformMatrix[0][0] != 0 ) ^ ( m_Orient != 0 );
-
     GRSetDrawMode( aDC, aDrawMode );
 
     DrawGraphicText( aPanel, aDC, pos1, (EDA_Colors) color, m_Text,
-                     t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
-                     m_Size, m_HJustify, m_VJustify,
+                     m_Orient, m_Size, m_HJustify, m_VJustify,
                      GetPenSize( ), m_Italic, m_Bold );
+
+#if 0
+    EDA_Rect bBox = GetBoundingBox();
+    bBox.Inflate( 1, 1 );
+    GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
+            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+#endif
 }
 
 
@@ -293,4 +310,23 @@ void LibDrawText::DisplayInfo( WinEDA_DrawFrame* frame )
                                  EESCHEMA_INTERNAL_UNIT, true );
 
     frame->MsgPanel->Affiche_1_Parametre( 20, _( "Line width" ), msg, BLUE );
+}
+
+
+EDA_Rect LibDrawText::GetBoundingBox()
+{
+    EDA_Rect rect = GetTextBox();
+    rect.m_Pos.y *= -1;
+    rect.m_Pos.y -= rect.GetHeight();
+
+    wxPoint orig = rect.GetOrigin();
+    wxPoint end = rect.GetEnd();
+    wxPoint center = rect.Centre();
+
+    RotatePoint( &orig, center, m_Orient );
+    RotatePoint( &end, center, m_Orient );
+    rect.SetOrigin( orig );
+    rect.SetEnd( end );
+
+    return rect;
 }

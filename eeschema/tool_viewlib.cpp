@@ -102,27 +102,27 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
         m_HToolBar->Realize();
     }
 
-    if( (g_CurrentViewLibraryName != wxEmptyString)
-        && (g_CurrentViewComponentName != wxEmptyString) )
+    if( (m_libraryName != wxEmptyString)
+        && (m_entryName != wxEmptyString) )
     {
-        lib = CMP_LIBRARY::FindLibrary( g_CurrentViewLibraryName );
+        lib = CMP_LIBRARY::FindLibrary( m_libraryName );
 
         if( lib != NULL )
         {
-            component = lib->FindComponent( g_CurrentViewComponentName );
+            component = lib->FindComponent( m_entryName );
 
             if( component && component->HasConversion() )
                 asdeMorgan = true;
 
-            entry = lib->FindEntry( g_CurrentViewComponentName );
+            entry = lib->FindEntry( m_entryName );
         }
     }
 
     // Must be AFTER Realize():
     m_HToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT,
-                            (g_ViewConvert <= 1) ? TRUE : FALSE );
+                            (m_convert <= 1) ? TRUE : FALSE );
     m_HToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT,
-                            (g_ViewConvert >= 2) ? TRUE : FALSE );
+                            (m_convert >= 2) ? TRUE : FALSE );
     m_HToolBar->EnableTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, asdeMorgan );
     m_HToolBar->EnableTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, asdeMorgan );
 
@@ -137,7 +137,7 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
         SelpartBox->Append( msg );
     }
 
-    SelpartBox->SetSelection( 0 );
+    SelpartBox->SetSelection( m_unit - 1 );
     SelpartBox->Enable( component && component->HasConversion() );
 
     m_HToolBar->EnableTool( ID_LIBVIEW_VIEWDOC,

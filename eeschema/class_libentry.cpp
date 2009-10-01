@@ -486,7 +486,7 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
     /* Enable this to draw the bounding box around the component to validate
      * the bounding box calculations. */
 #if 0
-    EDA_Rect bBox = LibEntry->GetBoundaryBox( Multi, convert );
+    EDA_Rect bBox = GetBoundaryBox( multi, convert );
     GRRect( &panel->m_ClipBox, dc, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif

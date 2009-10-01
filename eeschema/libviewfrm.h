@@ -58,12 +58,21 @@ public:
     void LoadSettings();
     void SaveSettings();
 
+    wxString& GetEntryName( void ) const { return m_entryName; }
+
 private:
     void SelectCurrentLibrary();
     void SelectAndViewLibraryPart( int option );
     void ExportToSchematicLibraryPart( wxCommandEvent& event );
     void ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag );
     bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+
+protected:
+    static wxString m_libraryName;
+    static wxString m_entryName;
+    static int      m_unit;
+    static int      m_convert;
+    static wxSize   m_clientSize;
 
     DECLARE_EVENT_TABLE()
 };

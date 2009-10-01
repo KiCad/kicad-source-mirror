@@ -31,7 +31,6 @@ static wxPoint OldPos;
 
 wxString SelectFromLibBrowser( WinEDA_DrawFrame* parent )
 {
-    wxString               name;
     WinEDA_ViewlibFrame*   Viewer;
     wxSemaphore            semaphore( 0, 1 );
     WinEDA_SchematicFrame* frame;
@@ -39,23 +38,23 @@ wxString SelectFromLibBrowser( WinEDA_DrawFrame* parent )
     frame = (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
 
     Viewer = frame->m_ViewlibFrame;
-    /* Close the current Lib browser, if open, and open a new one, in "modal" mode */
+    /* Close the current Lib browser, if open, and open a new one, in
+     * "modal" mode */
     if( Viewer )
         Viewer->Destroy();
 
-    Viewer = frame->m_ViewlibFrame =
-                 new WinEDA_ViewlibFrame( frame, NULL, &semaphore );
+    Viewer = frame->m_ViewlibFrame = new WinEDA_ViewlibFrame( frame, NULL,
+                                                              &semaphore );
     Viewer->AdjustScrollBars();
 
     // Show the library viewer frame until it is closed
-    while( semaphore.TryWait() == wxSEMA_BUSY )    // Wait for viewer closing event
+    while( semaphore.TryWait() == wxSEMA_BUSY ) // Wait for viewer closing event
     {
         wxYield();
         wxMilliSleep( 50 );
     }
 
-    name = g_CurrentViewComponentName;
-    return name;
+    return Viewer->GetEntryName();
 }
 
 

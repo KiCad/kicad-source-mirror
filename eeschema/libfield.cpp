@@ -248,7 +248,7 @@ void WinEDA_LibeditFrame::RotateField( wxDC* DC, LibDrawField* Field )
     if( Field->m_Orient )
         Field->m_Orient = 0;
     else
-        Field->m_Orient = 1;
+        Field->m_Orient = 900;
 
     int drawMode = g_XorMode;
 
@@ -264,24 +264,20 @@ void WinEDA_LibeditFrame::RotateField( wxDC* DC, LibDrawField* Field )
 
 LIB_DRAW_ITEM* WinEDA_LibeditFrame::LocateItemUsingCursor()
 {
-    LIB_DRAW_ITEM* DrawEntry = m_drawItem;
-
     if( m_component == NULL )
         return NULL;
 
-    if( ( DrawEntry == NULL ) || ( DrawEntry->m_Flags == 0 ) )
+    if( ( m_drawItem == NULL ) || ( m_drawItem->m_Flags == 0 ) )
     {
-        DrawEntry = m_drawItem =
-            m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
-                                         GetScreen()->m_MousePosition );
+        m_drawItem = m_component->LocateDrawItem( m_unit, m_convert,
+                                                  TYPE_NOT_INIT,
+                                                  GetScreen()->m_MousePosition );
 
-        if( DrawEntry == NULL )
-        {
-            DrawEntry = m_drawItem =
-                m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
-                                             GetScreen()->m_Curseur );
-        }
+        if( m_drawItem == NULL )
+            m_drawItem = m_component->LocateDrawItem( m_unit, m_convert,
+                                                      TYPE_NOT_INIT,
+                                                      GetScreen()->m_Curseur );
     }
 
-    return DrawEntry;
+    return m_drawItem;
 }

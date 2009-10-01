@@ -85,7 +85,28 @@ bool LIB_DRAW_ITEM::operator==( const LIB_DRAW_ITEM& other ) const
     return ( ( Type() == other.Type() )
              && ( m_Unit == other.m_Unit )
              && ( m_Convert == other.m_Convert )
-             && DoCompare( other ) );
+             && DoCompare( other ) == 0 );
+}
+
+
+bool LIB_DRAW_ITEM::operator<( const LIB_DRAW_ITEM& other ) const
+{
+    int result = Type() - other.Type();
+
+    if( result < 0 )
+        return true;
+
+    result = m_Unit - other.m_Unit;
+
+    if( result < 0 )
+        return true;
+
+    result = m_Convert - other.m_Convert;
+
+    if( result < 0 )
+        return true;
+
+    return DoCompare( other ) < 0;
 }
 
 
@@ -276,14 +297,25 @@ LIB_DRAW_ITEM* LibDrawArc::DoGenCopy()
 }
 
 
-bool LibDrawArc::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LibDrawArc::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_ARC_DRAW_TYPE );
 
     const LibDrawArc* tmp = ( LibDrawArc* ) &other;
 
-    return ( ( m_Pos == tmp->m_Pos ) && ( m_t1 == tmp->m_t1 )
-             && ( m_t2 == tmp->m_t2 ) );
+    if( m_Pos.x != tmp->m_Pos.x )
+        return m_Pos.x - tmp->m_Pos.x;
+
+    if( m_Pos.y != tmp->m_Pos.y )
+        return m_Pos.y - tmp->m_Pos.y;
+
+    if( m_t1 != tmp->m_t1 )
+        return m_t1 - tmp->m_t1;
+
+    if( m_t2 != tmp->m_t2 )
+        return m_t2 - tmp->m_t2;
+
+    return 0;
 }
 
 
@@ -591,13 +623,22 @@ LIB_DRAW_ITEM* LibDrawCircle::DoGenCopy()
 }
 
 
-bool LibDrawCircle::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LibDrawCircle::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_CIRCLE_DRAW_TYPE );
 
     const LibDrawCircle* tmp = ( LibDrawCircle* ) &other;
 
-    return ( ( m_Pos == tmp->m_Pos ) && ( m_Radius == tmp->m_Radius ) );
+    if( m_Pos.x != tmp->m_Pos.x )
+        return m_Pos.x - tmp->m_Pos.x;
+
+    if( m_Pos.y != tmp->m_Pos.y )
+        return m_Pos.y - tmp->m_Pos.y;
+
+    if( m_Radius != tmp->m_Radius )
+        return m_Radius - tmp->m_Radius;
+
+    return 0;
 }
 
 
@@ -673,6 +714,14 @@ void LibDrawCircle::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     else
         GRCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
                   m_Radius, GetPenSize( ), color );
+
+    /* Set to one (1) to draw bounding box around circle to validate bounding
+     * box calculation. */
+#if 0
+    EDA_Rect bBox = GetBoundingBox();
+    GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
+            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+#endif
 }
 
 
@@ -785,13 +834,25 @@ LIB_DRAW_ITEM* LibDrawSquare::DoGenCopy()
 }
 
 
-bool LibDrawSquare::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LibDrawSquare::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_RECT_DRAW_TYPE );
 
     const LibDrawSquare* tmp = ( LibDrawSquare* ) &other;
 
-    return ( ( m_Pos == tmp->m_Pos ) && ( m_End == tmp->m_End ) );
+    if( m_Pos.x != tmp->m_Pos.x )
+        return m_Pos.x - tmp->m_Pos.x;
+
+    if( m_Pos.y != tmp->m_Pos.y )
+        return m_Pos.y - tmp->m_Pos.y;
+
+    if( m_End.x != tmp->m_End.x )
+        return m_End.x - tmp->m_End.x;
+
+    if( m_End.y != tmp->m_End.y )
+        return m_End.y - tmp->m_End.y;
+
+    return 0;
 }
 
 
@@ -870,6 +931,15 @@ void LibDrawSquare::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     else
         GRRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
                 GetPenSize( ), color );
+
+    /* Set to one (1) to draw bounding box around rectangle to validate
+     * bounding box calculation. */
+#if 0
+    EDA_Rect bBox = GetBoundingBox();
+    bBox.Inflate( m_Width + 1, m_Width + 1 );
+    GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
+            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+#endif
 }
 
 
@@ -1009,13 +1079,25 @@ LIB_DRAW_ITEM* LibDrawSegment::DoGenCopy()
 }
 
 
-bool LibDrawSegment::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LibDrawSegment::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_LINE_DRAW_TYPE );
 
     const LibDrawSegment* tmp = ( LibDrawSegment* ) &other;
 
-    return ( ( m_Pos == tmp->m_Pos ) && ( m_End == tmp->m_End ) );
+    if( m_Pos.x != tmp->m_Pos.x )
+        return m_Pos.x - tmp->m_Pos.x;
+
+    if( m_Pos.y != tmp->m_Pos.y )
+        return m_Pos.y - tmp->m_Pos.y;
+
+    if( m_End.x != tmp->m_End.x )
+        return m_End.x - tmp->m_End.x;
+
+    if( m_End.y != tmp->m_End.y )
+        return m_End.y - tmp->m_End.y;
+
+    return 0;
 }
 
 
@@ -1082,6 +1164,15 @@ void LibDrawSegment::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     GRLine( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
             GetPenSize( ), color );
+
+    /* Set to one (1) to draw bounding box around line segment to validate
+     * bounding box calculation. */
+#if 0
+    EDA_Rect bBox = GetBoundingBox();
+    bBox.Inflate( m_Width + 2, m_Width + 2 );
+    GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
+            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+#endif
 }
 
 
@@ -1257,21 +1348,24 @@ LIB_DRAW_ITEM* LibDrawPolyline::DoGenCopy()
 }
 
 
-bool LibDrawPolyline::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LibDrawPolyline::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_POLYLINE_DRAW_TYPE );
 
     const LibDrawPolyline* tmp = ( LibDrawPolyline* ) &other;
 
     if( m_PolyPoints.size() != tmp->m_PolyPoints.size() )
-        return false;
+        return m_PolyPoints.size() - tmp->m_PolyPoints.size();
 
     for( size_t i = 0; i < m_PolyPoints.size(); i++ )
     {
-        if( m_PolyPoints[i] != tmp->m_PolyPoints[i] )
-            return false;
+        if( m_PolyPoints[i].x != tmp->m_PolyPoints[i].x )
+            return m_PolyPoints[i].x - tmp->m_PolyPoints[i].x;
+        if( m_PolyPoints[i].y != tmp->m_PolyPoints[i].y )
+            return m_PolyPoints[i].y - tmp->m_PolyPoints[i].y;
     }
-    return true;
+
+    return 0;
 }
 
 
@@ -1383,6 +1477,15 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     else
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
                 Buf_Poly_Drawings, 0, GetPenSize( ), color, color );
+
+    /* Set to one (1) to draw bounding box around polyline to validate
+     * bounding box calculation. */
+#if 0
+    EDA_Rect bBox = GetBoundingBox();
+    bBox.Inflate( m_Width + 1, m_Width + 1 );
+    GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
+            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+#endif
 }
 
 
@@ -1589,22 +1692,24 @@ LIB_DRAW_ITEM* LibDrawBezier::DoGenCopy()
 }
 
 
-bool LibDrawBezier::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LibDrawBezier::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_BEZIER_DRAW_TYPE );
 
     const LibDrawBezier* tmp = ( LibDrawBezier* ) &other;
 
     if( m_BezierPoints.size() != tmp->m_BezierPoints.size() )
-        return false;
+        return m_BezierPoints.size() - tmp->m_BezierPoints.size();
 
     for( size_t i = 0; i < m_BezierPoints.size(); i++ )
     {
-        if( m_BezierPoints[i] != tmp->m_BezierPoints[i] )
-            return false;
+        if( m_BezierPoints[i].x != tmp->m_BezierPoints[i].x )
+            return m_BezierPoints[i].x - tmp->m_BezierPoints[i].x;
+        if( m_BezierPoints[i].y != tmp->m_BezierPoints[i].y )
+            return m_BezierPoints[i].y - tmp->m_BezierPoints[i].y;
     }
 
-    return true;
+    return 0;
 }
 
 
@@ -1712,6 +1817,14 @@ void LibDrawBezier::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
                 &PolyPointsTraslated[0], 0, GetPenSize(), color, color );
 
+    /* Set to one (1) to draw bounding box around bezier curve to validate
+     * bounding box calculation. */
+#if 0
+    EDA_Rect bBox = GetBoundingBox();
+    bBox.Inflate( m_Width + 1, m_Width + 1 );
+    GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
+            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+#endif
 }
 
 

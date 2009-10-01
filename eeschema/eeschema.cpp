@@ -44,12 +44,6 @@ bool      g_HVLines = true;   // Bool: force H or V directions (Wires, Bus ..)
 
 struct EESchemaVariables g_EESchemaVar;
 
-/* Variables globales pour Libview */
-wxString  g_CurrentViewLibraryName;   /* nom de la librairie en cours d'examen */
-wxString  g_CurrentViewComponentName; /* nom du le composant en cours d'examen */
-int       g_ViewConvert;              /* Vue normal / convert */
-int       g_ViewUnit;                 /* part a afficher (A, B ..) */
-
 /* Variables globales pour Schematic Edit */
 int       g_DefaultTextLabelSize = DEFAULT_SIZE_TEXT;
 

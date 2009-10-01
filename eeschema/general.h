@@ -125,11 +125,6 @@ struct EESchemaVariables
 
 extern struct EESchemaVariables g_EESchemaVar;
 
-/* Variables globales pour Libview */
-extern wxString g_CurrentViewLibraryName;           /* nom de la librairie en cours d'examen */
-extern wxString g_CurrentViewComponentName;         /* nom du le composant en cours d'examen */
-extern int      g_ViewConvert;                      /* Vue normal / convert */
-extern int      g_ViewUnit;                         /* part a afficher (A, B ..) */
 
 /* Variables globales pour Schematic Edit */
 extern int      g_DefaultTextLabelSize;

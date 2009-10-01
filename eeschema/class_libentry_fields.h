@@ -79,7 +79,7 @@ public:
      *
      * @return EDA_Rect - Bounding rectangle.
      */
-    virtual EDA_Rect GetBoundingBox() { return GetTextBox(); }
+    virtual EDA_Rect GetBoundingBox();
 
     /**
      * Function HitTest
@@ -132,7 +132,7 @@ public:
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
-    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const;
+    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );

@@ -368,6 +368,15 @@ void LibDrawPin::Draw( WinEDA_DrawPanel* aPanel,
                       Entry->m_DrawPinNum, Entry->m_DrawPinName,
                       aColor, aDrawMode );
     }
+
+    /* Set to one (1) to draw bounding box around pin to validate bounding
+     * box calculation. */
+#if 0
+    EDA_Rect bBox = GetBoundingBox();
+    bBox.Inflate( 5, 5 );
+    GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
+            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+#endif
 }
 
 
@@ -1083,13 +1092,27 @@ LIB_DRAW_ITEM* LibDrawPin::DoGenCopy()
 }
 
 
-bool LibDrawPin::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LibDrawPin::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_PIN_DRAW_TYPE );
 
     const LibDrawPin* tmp = ( LibDrawPin* ) &other;
 
-    return ( m_Pos == tmp->m_Pos );
+    if( m_PinNum != tmp->m_PinNum )
+        return m_PinNum - tmp->m_PinNum;
+
+    int result = m_PinName.CmpNoCase( tmp->m_PinName );
+
+    if( result != 0 )
+        return result;
+
+    if( m_Pos.x != tmp->m_Pos.x )
+        return m_Pos.x - tmp->m_Pos.x;
+
+    if( m_Pos.y != tmp->m_Pos.y )
+        return m_Pos.y - tmp->m_Pos.y;
+
+    return 0;
 }
 
 

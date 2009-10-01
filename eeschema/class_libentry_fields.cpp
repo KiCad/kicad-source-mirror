@@ -8,6 +8,8 @@
 #include "base_struct.h"
 #include "drawtxt.h"
 #include "kicad_string.h"
+#include "class_drawpanel.h"
+#include "trigo.h"
 
 #include "program.h"
 #include "general.h"
@@ -309,9 +311,20 @@ void LibDrawField::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     wxString* text = aData ? (wxString*)aData : &m_Text;
     GRSetDrawMode( aDC, aDrawMode );
     DrawGraphicText( aPanel, aDC, text_pos, (EDA_Colors) color, *text,
-                     m_Orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-                     m_Size, m_HJustify, m_VJustify, linewidth, m_Italic,
-                     m_Bold );
+                     m_Orient, m_Size, m_HJustify, m_VJustify, linewidth,
+                     m_Italic, m_Bold );
+
+    /* Set to one (1) to draw bounding box around field text to validate
+     * bounding box calculation. */
+#if 0
+    wxString tmp = m_Text;
+    m_Text = *text;
+    EDA_Rect bBox = GetBoundingBox();
+    m_Text = tmp;
+    bBox.Inflate( 1, 1 );
+    GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
+            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+#endif
 }
 
 
@@ -404,14 +417,33 @@ void LibDrawField::Copy( LibDrawField* Target ) const
 }
 
 
-bool LibDrawField::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LibDrawField::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_FIELD_DRAW_TYPE );
 
     const LibDrawField* tmp = ( LibDrawField* ) &other;
 
-    return ( ( m_FieldId == tmp->m_FieldId ) && ( m_Text == tmp->m_Text )
-             && ( m_Pos == tmp->m_Pos ) && ( m_Size == tmp->m_Size ) );
+    if( m_FieldId == tmp->m_FieldId )
+        return m_FieldId - tmp->m_FieldId;
+
+    int result = m_Text.CmpNoCase( tmp->m_Text );
+
+    if( result != 0 )
+        return result;
+
+    if( m_Pos.x != tmp->m_Pos.x )
+        return m_Pos.x - tmp->m_Pos.x;
+
+    if( m_Pos.y != tmp->m_Pos.y )
+        return m_Pos.y - tmp->m_Pos.y;
+
+    if( m_Size.x != tmp->m_Size.x )
+        return m_Size.x - tmp->m_Size.x;
+
+    if( m_Size.y != tmp->m_Size.y )
+        return m_Size.y - tmp->m_Size.y;
+
+    return 0;
 }
 
 
@@ -473,6 +505,25 @@ wxString LibDrawField::GetFullText( int unit )
         text << wxT( "?" );
 
     return text;
+}
+
+
+EDA_Rect LibDrawField::GetBoundingBox()
+{
+    EDA_Rect rect = GetTextBox();
+    rect.m_Pos.y *= -1;
+    rect.m_Pos.y -= rect.GetHeight();
+
+    wxPoint orig = rect.GetOrigin();
+    wxPoint end = rect.GetEnd();
+    wxPoint center = rect.Centre();
+
+    RotatePoint( &orig, center, m_Orient );
+    RotatePoint( &end, center, m_Orient );
+    rect.SetOrigin( orig );
+    rect.SetEnd( end );
+
+    return rect;
 }
 
 

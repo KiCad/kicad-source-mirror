@@ -75,6 +75,9 @@ int DisplayComponentsNamesInLib( WinEDA_DrawFrame* frame,
     WinEDAListBox dlg( frame, _( "Select Component" ), ListNames, OldName,
                        DisplayCmpDoc, wxColour( 255, 255, 255 ) );
 
+    if( !OldName.IsEmpty() )
+        dlg.m_List->SetStringSelection( OldName );
+
     dlg.MoveMouseToOrigin();
 
     int rsp = dlg.ShowModal();

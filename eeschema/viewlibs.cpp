@@ -48,8 +48,8 @@ void WinEDA_ViewlibFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_LIBVIEW_VIEWDOC:
-        LibEntry = CMP_LIBRARY::FindLibraryEntry( g_CurrentViewComponentName,
-                                                  g_CurrentViewLibraryName );
+        LibEntry = CMP_LIBRARY::FindLibraryEntry( m_entryName,
+                                                  m_libraryName );
 
         if( LibEntry && ( !LibEntry->m_DocFile.IsEmpty() ) )
             GetAssociatedDocument( this, LibEntry->m_DocFile,
@@ -59,14 +59,14 @@ void WinEDA_ViewlibFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT:
         m_HToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, TRUE );
         m_HToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, FALSE );
-        g_ViewConvert = 1;
+        m_convert = 1;
         DrawPanel->Refresh();
         break;
 
     case ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT:
         m_HToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, FALSE );
         m_HToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, TRUE );
-        g_ViewConvert = 2;
+        m_convert = 2;
         DrawPanel->Refresh();
         break;
 
@@ -74,7 +74,7 @@ void WinEDA_ViewlibFrame::Process_Special_Functions( wxCommandEvent& event )
         ii = SelpartBox->GetChoice();
         if( ii < 0 )
             return;
-        g_ViewUnit = ii + 1;
+        m_unit = ii + 1;
         DrawPanel->Refresh();
         break;
 
@@ -104,15 +104,15 @@ void WinEDA_ViewlibFrame::DisplayLibInfos()
     wxString     msg;
     CMP_LIBRARY* Lib;
 
-    Lib = CMP_LIBRARY::FindLibrary( g_CurrentViewLibraryName );
-    msg = _( "Library browser" );
+    Lib = CMP_LIBRARY::FindLibrary( m_libraryName );
+    msg = _( "Library Browser" );
 
     msg << wxT( " [" );
 
     if( Lib )
         msg <<  Lib->GetFullFileName();
     else
-        msg += _( "none selected" );
+        msg += _( "no library selected" );
 
     msg << wxT( "]" );
     SetTitle( msg );
@@ -129,8 +129,8 @@ void WinEDA_ViewlibFrame::SelectCurrentLibrary()
     Lib = SelectLibraryFromList( this );
     if( Lib )
     {
-        g_CurrentViewComponentName.Empty();
-        g_CurrentViewLibraryName = Lib->GetName();
+        m_entryName.Empty();
+        m_libraryName = Lib->GetName();
         DisplayLibInfos();
         if( m_LibList )
         {
@@ -138,7 +138,7 @@ void WinEDA_ViewlibFrame::SelectCurrentLibrary()
             DrawPanel->Refresh();
             DisplayLibInfos();
             ReCreateHToolbar();
-            int id = m_LibList->FindString( g_CurrentViewLibraryName.GetData() );
+            int id = m_LibList->FindString( m_libraryName.GetData() );
             if( id >= 0 )
                 m_LibList->SetSelection( id );
         }
@@ -153,22 +153,22 @@ void WinEDA_ViewlibFrame::SelectAndViewLibraryPart( int option )
 {
     CMP_LIBRARY* Lib;
 
-    if( g_CurrentViewLibraryName.IsEmpty() )
+    if( m_libraryName.IsEmpty() )
         SelectCurrentLibrary();
-    if( g_CurrentViewLibraryName.IsEmpty() )
+    if( m_libraryName.IsEmpty() )
         return;
 
-    Lib = CMP_LIBRARY::FindLibrary( g_CurrentViewLibraryName );
+    Lib = CMP_LIBRARY::FindLibrary( m_libraryName );
     if( Lib == NULL )
         return;
 
-    if( ( g_CurrentViewComponentName.IsEmpty() ) || ( option == NEW_PART ) )
+    if( ( m_entryName.IsEmpty() ) || ( option == NEW_PART ) )
     {
         ViewOneLibraryContent( Lib, NEW_PART );
         return;
     }
 
-    CMP_LIB_ENTRY* LibEntry = Lib->FindEntry( g_CurrentViewComponentName );
+    CMP_LIB_ENTRY* LibEntry = Lib->FindEntry( m_entryName );
 
     if( LibEntry == NULL )
         return;
@@ -208,12 +208,12 @@ void WinEDA_ViewlibFrame::ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag )
     if( Flag == NEW_PART )
     {
         DisplayComponentsNamesInLib( this, Lib, CmpName,
-                                     g_CurrentViewComponentName );
+                                     m_entryName );
     }
 
     if( Flag == NEXT_PART )
     {
-        LibEntry = Lib->GetNextEntry( g_CurrentViewComponentName );
+        LibEntry = Lib->GetNextEntry( m_entryName );
 
         if( LibEntry )
             CmpName = LibEntry->m_Name.m_Text;
@@ -221,24 +221,24 @@ void WinEDA_ViewlibFrame::ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag )
 
     if( Flag == PREVIOUS_PART )
     {
-        LibEntry = Lib->GetPreviousEntry( g_CurrentViewComponentName );
+        LibEntry = Lib->GetPreviousEntry( m_entryName );
 
         if( LibEntry )
             CmpName = LibEntry->m_Name.m_Text;
     }
 
-    g_ViewUnit    = 1;
-    g_ViewConvert = 1;
+    m_unit    = 1;
+    m_convert = 1;
 
     LibEntry = Lib->FindEntry( CmpName );
-    g_CurrentViewComponentName = CmpName;
+    m_entryName = CmpName;
     DisplayLibInfos();
-    Zoom_Automatique( FALSE );
-    RedrawActiveWindow( &dc, TRUE );
+    Zoom_Automatique( false );
+    RedrawActiveWindow( &dc, true );
 
     if( m_CmpList )
     {
-        int id = m_CmpList->FindString( g_CurrentViewComponentName.GetData() );
+        int id = m_CmpList->FindString( m_entryName.GetData() );
         if( id >= 0 )
             m_CmpList->SetSelection( id );
     }
@@ -260,12 +260,12 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     ActiveScreen = GetScreen();
 
-    lib = CMP_LIBRARY::FindLibrary( g_CurrentViewLibraryName );
+    lib = CMP_LIBRARY::FindLibrary( m_libraryName );
 
     if( lib == NULL )
         return;
 
-    entry = lib->FindEntry( g_CurrentViewComponentName );
+    entry = lib->FindEntry( m_entryName );
 
     if( entry == NULL )
         return;
@@ -292,10 +292,10 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         /* Temporarily change the name field text to reflect the alias name. */
         tmp = component->GetName();
         component->m_Name.m_Text = alias->GetName();
-        if( g_ViewUnit < 1 )
-            g_ViewUnit = 1;
-        if( g_ViewConvert < 1 )
-            g_ViewConvert = 1;
+        if( m_unit < 1 )
+            m_unit = 1;
+        if( m_convert < 1 )
+            m_convert = 1;
         component->m_Name.m_Text = tmp;
     }
     else
@@ -304,8 +304,8 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         msg = _( "None" );
     }
 
-    component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_ViewUnit,
-                     g_ViewConvert, GR_DEFAULT_DRAWMODE );
+    component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), m_unit, m_convert,
+                     GR_DEFAULT_DRAWMODE );
 
     if( !tmp.IsEmpty() )
         component->m_Name.m_Text = tmp;

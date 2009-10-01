@@ -10,6 +10,7 @@
 
 class LIB_COMPONENT;
 class PLOTTER;
+class LIB_DRAW_ITEM;
 
 
 #define TARGET_PIN_DIAM     12  /* Circle diameter drawn at the active end of
@@ -36,7 +37,8 @@ class PLOTTER;
  * Enum ElectricPinType
  * is the set of schematic pin types, used in ERC tests.
  */
-enum ElectricPinType {
+enum ElectricPinType
+{
     PIN_INPUT,
     PIN_OUTPUT,
     PIN_BIDI,
@@ -62,10 +64,11 @@ extern const wxChar* MsgPinElectricType[];
  * Enum DrawPinShape
  * is the set of shapes allowed for pins.
  */
-enum  DrawPinShape {
-    NONE   = 0,
-    INVERT = 1,
-    CLOCK  = 2,
+enum DrawPinShape
+{
+    NONE         = 0,
+    INVERT       = 1,
+    CLOCK        = 2,
     LOWLEVEL_IN  = 4,
     LOWLEVEL_OUT = 8
 };
@@ -75,10 +78,11 @@ enum  DrawPinShape {
  * Enum DrawPinOrient
  * is the set of orientations allowed for pins.
  */
-enum  DrawPinOrient {
+enum  DrawPinOrient
+{
     PIN_RIGHT = 'R',
     PIN_LEFT  = 'L',
-    PIN_UP = 'U',
+    PIN_UP    = 'U',
     PIN_DOWN  = 'D',
 };
 
@@ -200,7 +204,7 @@ public:
     /**
      * Test LIB_DRAW_ITEM objects for equivalence.
      *
-     * @param tst - Object to test against.
+     * @param other - Object to test against.
      *
      * @return bool - True if object is identical to this object.
      */
@@ -209,6 +213,15 @@ public:
     {
         return *this == *other;
     }
+
+    /**
+     * Test if another draw item is less than this draw object.
+     *
+     * @param other - Draw item to compare against.
+     *
+     * @return bool - True if object is less than this object.
+     */
+    bool operator<( const LIB_DRAW_ITEM& other) const;
 
     /**
      * Set drawing object offset from the current position.
@@ -261,13 +274,19 @@ protected:
      *
      * This is called by the == operator.
      */
-    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const = 0;
+    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const = 0;
     virtual void DoOffset( const wxPoint& offset ) = 0;
     virtual bool DoTestInside( EDA_Rect& rect ) = 0;
     virtual void DoMove( const wxPoint& newPosition ) = 0;
     virtual wxPoint DoGetPosition( void ) = 0;
     virtual void DoMirrorHorizontal( const wxPoint& center ) = 0;
 };
+
+
+/**
+ * Helper for defining a list of library draw object pointers.
+ */
+typedef boost::ptr_vector< LIB_DRAW_ITEM > LIB_DRAW_ITEM_LIST;
 
 
 /********/
@@ -395,7 +414,7 @@ public:
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
-    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const;
+    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
@@ -471,7 +490,7 @@ public:
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
-    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const;
+    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
@@ -543,7 +562,7 @@ public:
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
-    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const;
+    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
@@ -586,7 +605,7 @@ public:
      * @param refPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    virtual bool    HitTest( const wxPoint& refPos );
+    virtual bool HitTest( const wxPoint& refPos );
 
      /** Function HitTest
      * @return true if the point aPosRef is near a segment
@@ -604,7 +623,7 @@ public:
      * @param refArea : the given EDA_Rect
      * @return bool - true if a hit, else false
      */
-    virtual bool    HitTest( EDA_Rect& refArea )
+    virtual bool HitTest( EDA_Rect& refArea )
     {
         return TextHitTest( refArea );
     }
@@ -620,9 +639,11 @@ public:
 
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
 
+    virtual EDA_Rect GetBoundingBox();
+
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
-    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const;
+    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
@@ -693,7 +714,7 @@ public:
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
-    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const;
+    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
@@ -763,7 +784,7 @@ public:
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
-    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const;
+    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
@@ -844,7 +865,7 @@ public:
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
-    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const;
+    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
@@ -925,7 +946,7 @@ public:
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
-    virtual bool DoCompare( const LIB_DRAW_ITEM& other ) const;
+    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
