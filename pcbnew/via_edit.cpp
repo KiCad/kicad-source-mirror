@@ -19,7 +19,6 @@ void WinEDA_PcbFrame::Via_Edit_Control( wxCommandEvent& event )
   * Execute edit commands relative to vias
  */
 {
-    int    ii;
     TRACK* via_struct;
     SEGVIA* via = (SEGVIA*) GetCurItem();
     wxClientDC  dc( DrawPanel );
@@ -33,20 +32,6 @@ void WinEDA_PcbFrame::Via_Edit_Control( wxCommandEvent& event )
 
     switch( event.GetId() )
     {
-    case ID_POPUP_PCB_SELECT_VIASIZE1:
-    case ID_POPUP_PCB_SELECT_VIASIZE2:
-    case ID_POPUP_PCB_SELECT_VIASIZE3:
-    case ID_POPUP_PCB_SELECT_VIASIZE4:
-    case ID_POPUP_PCB_SELECT_VIASIZE5:
-    case ID_POPUP_PCB_SELECT_VIASIZE6:
-    case ID_POPUP_PCB_SELECT_VIASIZE7:
-    case ID_POPUP_PCB_SELECT_VIASIZE8:      // selec the new current value for via size (via diameter)
-        DrawPanel->MouseToCursorSchema();
-        ii = event.GetId() - ID_POPUP_PCB_SELECT_VIASIZE1;
-        g_DesignSettings.m_CurrentViaSize = GetBoard()->m_ViaSizeHistory[ii];
-        DisplayTrackSettings();
-        break;
-
     case ID_POPUP_PCB_VIA_HOLE_ENTER_VALUE:     // Enter a new alternate value for drill via
         InstallPcbOptionsFrame( wxDefaultPosition, &dc, ID_PCB_TRACK_SIZE_SETUP );
         DrawPanel->MouseToCursorSchema();
@@ -124,7 +109,7 @@ void WinEDA_PcbFrame::Via_Edit_Control( wxCommandEvent& event )
         break;
 
     default:
-        wxMessageBox( wxT( "WinEDA_PcbFrame::Via_Edition() error: unknown command" ) );
+        wxMessageBox( wxT( "WinEDA_PcbFrame::Via_Edit_Control() error: unknown command" ) );
         break;
     }
 

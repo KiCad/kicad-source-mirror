@@ -79,6 +79,7 @@ set(PCBNEW_SRCS
     edit_pcb_text.cpp
     edit_track_width.cpp
     edtxtmod.cpp
+    event_handlers_tracks_vias_sizes.cpp
     export_gencad.cpp
     files.cpp
     find.cpp

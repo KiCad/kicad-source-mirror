@@ -207,7 +207,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
         case TYPE_TRACK:
         case TYPE_VIA:
-            locate_track = TRUE;
+            locate_track = true;
             createPopupMenuForTracks( (TRACK*) item, aPopMenu );
             break;
 
@@ -545,13 +545,13 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
 
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
                                ID_POPUP_PCB_SETFLAGS_TRACK_MNU, _( "Set Flags" ), flag_xpm );
-    track_mnu->Append( ID_POPUP_PCB_LOCK_ON_TRACKSEG, _( "Locked: Yes" ), wxEmptyString, TRUE );
-    track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_TRACKSEG, _( "Locked: No" ), wxEmptyString, TRUE );
+    track_mnu->Append( ID_POPUP_PCB_LOCK_ON_TRACKSEG, _( "Locked: Yes" ), wxEmptyString, true );
+    track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_TRACKSEG, _( "Locked: No" ), wxEmptyString, true );
 
     if( Track->GetState( SEGM_FIXE ) )
-        track_mnu->Check( ID_POPUP_PCB_LOCK_ON_TRACKSEG, TRUE );
+        track_mnu->Check( ID_POPUP_PCB_LOCK_ON_TRACKSEG, true );
     else
-        track_mnu->Check( ID_POPUP_PCB_LOCK_OFF_TRACKSEG, TRUE );
+        track_mnu->Check( ID_POPUP_PCB_LOCK_OFF_TRACKSEG, true );
 
     if( !flags )
     {
@@ -830,8 +830,9 @@ void WinEDA_PcbFrame::createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aP
 static wxMenu* Append_Track_Width_List( BOARD * aBoard )
 /*******************************************************/
 
-/* create a wxMenu * which shows the last used track widths and via diameters
- *  @return a pointeur to the menu
+/** function Append_Track_Width_List
+ * creates a wxMenu * which shows the last used track widths and via diameters
+ * @return a pointeur to the menu
  */
 {
    wxString msg;
@@ -847,10 +848,16 @@ static wxMenu* Append_Track_Width_List( BOARD * aBoard )
                              _( "Auto Width" ),
                              _(
                                  "Use the track width when starting on a track, otherwise the current track width" ),
-                             TRUE );
+                             true );
 
     if( g_DesignSettings.m_UseConnectedTrackWidth )
-        trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, TRUE );
+        trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, true );
+
+    if( aBoard->m_ViaSizeSelector != 0 || aBoard->m_TrackWidthSelector != 0 )
+        trackwidth_menu->Append( ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES,
+                             _( "Use Netclass Values" ),
+                             _( "Use track and via sizes from their Netclass values" ),
+                             true );
 
     for( unsigned ii = 0; ii < aBoard->m_TrackWidthHistory.size(); ii++ )
     {
@@ -862,11 +869,18 @@ static wxMenu* Append_Track_Width_List( BOARD * aBoard )
         else
             msg.Printf( _( "Track %.3f" ), value );
 
-        trackwidth_menu->Append( ID_POPUP_PCB_SELECT_WIDTH1 + ii, msg, wxEmptyString, TRUE );
+        if ( ii == 0 )
+            msg << _(" (Use NetClass)" );
 
-        if( (aBoard->m_TrackWidthHistory[ii] == g_DesignSettings.m_CurrentTrackWidth)
-           && !g_DesignSettings.m_UseConnectedTrackWidth )
-            trackwidth_menu->Check( ID_POPUP_PCB_SELECT_WIDTH1 + ii, TRUE );
+        trackwidth_menu->Append( ID_POPUP_PCB_SELECT_WIDTH1 + ii, msg, wxEmptyString, true );
+
+    }
+    if( g_DesignSettings.m_UseConnectedTrackWidth )
+        trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, true );
+    else
+    {
+        if( aBoard->m_TrackWidthSelector < (int)aBoard->m_TrackWidthHistory.size() )
+            trackwidth_menu->Check( ID_POPUP_PCB_SELECT_WIDTH1 + aBoard->m_TrackWidthSelector, true );
     }
 
     trackwidth_menu->AppendSeparator();
@@ -879,10 +893,12 @@ static wxMenu* Append_Track_Width_List( BOARD * aBoard )
             msg.Printf( _( "Via %.1f" ), value * 1000 );
         else
             msg.Printf( _( "Via %.3f" ), value );
-        trackwidth_menu->Append( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, msg, wxEmptyString, TRUE );
-        if( aBoard->m_ViaSizeHistory[ii] == g_DesignSettings.m_CurrentViaSize )
-            trackwidth_menu->Check( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, TRUE );
+        if ( ii == 0 )
+            msg << _(" (Use NetClass)" );
+        trackwidth_menu->Append( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, msg, wxEmptyString, true );
     }
+    if( aBoard->m_ViaSizeSelector < (int)aBoard->m_ViaSizeHistory.size() )
+        trackwidth_menu->Check( ID_POPUP_PCB_SELECT_VIASIZE1 + aBoard->m_ViaSizeSelector, true );
 
     return trackwidth_menu;
 }

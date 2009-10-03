@@ -92,9 +92,6 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
     BOARD_ITEM* LockPoint;
     wxPoint     pos = GetScreen()->m_Curseur;
 
-    static int  InitialTrackWidthValue;     /* first track segment width.
-                                             * used when we are in the auto tack width mode */
-
     DrawPanel->ManageCurseur = ShowNewTrackWhenMovingCursor;
     DrawPanel->ForceCloseManageCurseur = Exit_Editrack;
 
@@ -109,8 +106,6 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
 
         if( g_HightLigt_Status )
             Hight_Light( DC );
-
-        InitialTrackWidthValue = -1;        // Set to "no value"
 
         g_CurrentTrackList.PushBack( new TRACK( GetBoard() ) );
         g_CurrentTrackSegment->m_Flags = IS_NEW;
@@ -153,26 +148,22 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
 
         Hight_Light( DC );
 
+        // Display info about track Net class, and init track and vias sizes:
+        g_CurrentTrackSegment->SetNet( g_HightLigth_NetCode );
+        GetBoard()->SetCurrentNetClass( g_CurrentTrackSegment->GetNetClassName() );
+        m_TrackAndViasSizesList_Changed = true;
+        AuxiliaryToolBar_Update_UI();
+
         g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
         g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
 
         if( g_DesignSettings.m_UseConnectedTrackWidth )
         {
             if( TrackOnStartPoint && TrackOnStartPoint->Type() == TYPE_TRACK )
-            {
-                InitialTrackWidthValue = TrackOnStartPoint->m_Width;
-                g_CurrentTrackSegment->m_Width = InitialTrackWidthValue;
-            }
+                g_CurrentTrackSegment->m_Width = TrackOnStartPoint->m_Width;
         }
-
         g_CurrentTrackSegment->m_Start = pos;
         g_CurrentTrackSegment->m_End   = pos;
-        g_CurrentTrackSegment->SetNet( g_HightLigth_NetCode );
-
-        // Display info about track Net class:
-        GetBoard()->SetCurrentNetClass( g_CurrentTrackSegment->GetNetClassName() );
-        m_TrackAndViasSizesList_Changed = true;
-        AuxiliaryToolBar_DesignRules_Update_UI();
 
         if( pt_pad )
         {
@@ -271,17 +262,16 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
             newTrack->m_Start = newTrack->m_End;
 
             newTrack->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
-
             if( !g_DesignSettings.m_UseConnectedTrackWidth )
             {
                 newTrack->m_Width = g_DesignSettings.m_CurrentTrackWidth;
             }
 
-            D( g_CurrentTrackList.VerifyListIntegrity(); );
+             D( g_CurrentTrackList.VerifyListIntegrity(); );
 
             /* Show the new position */
             ShowNewTrackWhenMovingCursor( DrawPanel, DC, false );
-        }
+         }
         g_CurrentTrackSegment->DisplayInfo( this );
     }
 
@@ -674,10 +664,7 @@ static void PushTrack( WinEDA_DrawPanel* panel )
 void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 /****************************************************************************/
 
-/* redessin du contour de la piste  lors des deplacements de la souris
- *  Cette routine est utilisee comme .ManageCurseur()
- *  si ShowIsolDuringCreateTrack_Item.State == RUN la marge d'isolation
- *  est aussi affichee
+/* Redraw the current track beiing created when the mouse cursor is moved
  */
 {
     D( g_CurrentTrackList.VerifyListIntegrity(); );
@@ -693,7 +680,7 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
     if( showTrackClearanceMode != DO_NOT_SHOW_CLEARANCE )
         DisplayOpt.ShowTrackClearanceMode = SHOW_CLEARANCE_ALWAYS;
 
-    /* efface ancienne position si elle a ete deja dessinee */
+    /* Erase old track */
     if( erase )
     {
         Trace_Une_Piste( panel, DC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
@@ -715,10 +702,9 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
     if( g_CurrentTrackList.GetCount() == 0 )
         return;
 
-    /* dessin de la nouvelle piste : mise a jour du point d'arrivee */
+    // Set track parameters, that can be modified while creating the track
     g_CurrentTrackSegment->SetLayer( screen->m_Active_Layer );
-    if( !g_DesignSettings.m_UseConnectedTrackWidth )
-        g_CurrentTrackSegment->m_Width = netclass->GetTrackWidth();
+    g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
 
     if( g_TwoSegmentTrackBuild )
     {
@@ -728,7 +714,7 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
             previous_track->SetLayer( screen->m_Active_Layer );
 
             if( !g_DesignSettings.m_UseConnectedTrackWidth )
-                previous_track->m_Width = netclass->GetTrackWidth();
+                previous_track->m_Width = g_DesignSettings.m_CurrentTrackWidth;
         }
     }
 
@@ -760,6 +746,7 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
         g_CurrentTrackSegment->m_End = screen->m_Curseur;
     }
 
+    /* Redraw the new track */
     D( g_CurrentTrackList.VerifyListIntegrity(); );
     Trace_Une_Piste( panel, DC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
 

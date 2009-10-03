@@ -114,8 +114,6 @@ void DIALOG_TRACKS_OPTIONS::OnButtonOkClick( wxCommandEvent& event )
     g_DesignSettings.m_MaskMargin =
         ReturnValueFromTextCtrl( *m_OptMaskMargin, m_Parent->m_InternalUnits );
 
-    m_Parent->DisplayTrackSettings();
-
     m_Parent->AddHistory( g_DesignSettings.m_CurrentViaSize, TYPE_VIA );
     m_Parent->AddHistory( g_DesignSettings.m_CurrentTrackWidth, TYPE_TRACK );
     EndModal( 1 );

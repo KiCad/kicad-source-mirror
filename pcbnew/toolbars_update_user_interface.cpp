@@ -74,8 +74,6 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_DesignRules_Update_UI( )
 void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI( )
 {
     wxString msg;
-    m_AuxiliaryToolBar->ToggleTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
-                                    g_DesignSettings.m_UseConnectedTrackWidth );
 
     AuxiliaryToolBar_DesignRules_Update_UI( );
 
@@ -85,12 +83,14 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI( )
         for( unsigned ii = 0; ii < GetBoard()->m_TrackWidthHistory.size(); ii++ )
         {
             msg = _( "Track" ) + ReturnStringValue(GetBoard()->m_TrackWidthHistory[ii]);
+            if (ii == 0 )
+                msg << _(" *");
             m_SelTrackWidthBox->Append( msg );
         }
-        if( GetBoard()->m_TrackWidthSelector >= (int)GetBoard()->m_TrackWidthHistory.size() )
-            GetBoard()->m_TrackWidthSelector = 0;
-        m_SelTrackWidthBox->SetSelection( GetBoard()->m_TrackWidthSelector );
     }
+    if( GetBoard()->m_TrackWidthSelector >= GetBoard()->m_TrackWidthHistory.size() )
+        GetBoard()->m_TrackWidthSelector = 0;
+    m_SelTrackWidthBox->SetSelection( GetBoard()->m_TrackWidthSelector );
 
     if( m_SelViaSizeBox && m_TrackAndViasSizesList_Changed )
     {
@@ -98,12 +98,14 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI( )
         for( unsigned ii = 0; ii < GetBoard()->m_ViaSizeHistory.size(); ii++ )
         {
             msg = _( "Via" ) + ReturnStringValue(GetBoard()->m_ViaSizeHistory[ii]);
+            if (ii == 0 )
+                msg << _(" *");
             m_SelViaSizeBox->Append( msg );
         }
-        if( GetBoard()->m_ViaSizeSelector >= (int)GetBoard()->m_ViaSizeHistory.size() )
-            GetBoard()->m_ViaSizeSelector = 0;
-        m_SelViaSizeBox->SetSelection( GetBoard()->m_ViaSizeSelector );
     }
+    if( GetBoard()->m_ViaSizeSelector >= GetBoard()->m_ViaSizeHistory.size() )
+        GetBoard()->m_ViaSizeSelector = 0;
+    m_SelViaSizeBox->SetSelection( GetBoard()->m_ViaSizeSelector );
 
     if( m_SelZoomBox )
     {

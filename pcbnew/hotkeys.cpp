@@ -95,7 +95,6 @@ static Ki_HotkeyInfo HkTrackDisplayMode(wxT("Track Display Mode"),
 		HK_SWITCH_TRACK_DISPLAY_MODE, 'K');
 static Ki_HotkeyInfo HkAddModule(wxT("Add Module"), HK_ADD_MODULE, 'O');
 static Ki_HotkeyInfo HkAddTrack(wxT("Add Track or Via"), HK_ADD_TRACK, 'J');
-static Ki_HotkeyInfo HkToggle(wxT("Toggle Present Command"), HK_TOGGLE, 'E');
 
 // List of common hotkey descriptors
 Ki_HotkeyInfo
@@ -112,7 +111,7 @@ Ki_HotkeyInfo* s_board_edit_Hotkey_List[] = { &HkTrackDisplayMode, &HkDelete,
 		&HkSwitch2InnerLayer2, &HkSwitch2InnerLayer3, &HkSwitch2InnerLayer4,
 		&HkSwitch2InnerLayer5, &HkSwitch2InnerLayer6, &HkSwitch2ComponentLayer,
 		&HkSwitch2NextCopperLayer, &HkSwitch2PreviousCopperLayer, &HkAddModule,
-		&HkAddTrack, &HkToggle, NULL };
+		&HkAddTrack, NULL };
 
 // List of hotkey descriptors for the module editor
 Ki_HotkeyInfo* s_module_edit_Hotkey_List[] = { NULL };
@@ -274,10 +273,6 @@ void WinEDA_PcbFrame::OnHotKey(wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct)
 		break;
 	case HK_ADD_TRACK:
 		cmd.SetId(ID_TRACK_BUTT);
-		GetEventHandler()->ProcessEvent(cmd);
-		break;
-	case HK_TOGGLE:
-		cmd.SetId(ID_TOGGLE_PRESENT_COMMAND);
 		GetEventHandler()->ProcessEvent(cmd);
 		break;
 

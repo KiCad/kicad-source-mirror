@@ -36,8 +36,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     wxClientDC  dc( DrawPanel );
     BOARD_ITEM* DrawStruct = GetCurItem();
 
-    int         toggle = 0;
-
     DrawPanel->CursorOff( &dc );
     DrawPanel->PrepareGraphicContext( &dc );
 
@@ -49,8 +47,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     {
     case wxID_CUT:
     case wxID_COPY:
-    case ID_AUX_TOOLBAR_PCB_TRACK_WIDTH:
-    case ID_AUX_TOOLBAR_PCB_VIA_SIZE:
     case ID_ON_GRID_SELECT:
     case ID_ON_ZOOM_SELECT:
     case ID_PCB_USER_GRID_SETUP:
@@ -93,17 +89,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_CU_LAYER:
     case ID_POPUP_PCB_SELECT_LAYER_PAIR:
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
-    case ID_POPUP_PCB_SELECT_WIDTH:
-    case ID_POPUP_PCB_SELECT_AUTO_WIDTH:
-    case ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH:
-    case ID_POPUP_PCB_SELECT_WIDTH1:
-    case ID_POPUP_PCB_SELECT_WIDTH2:
-    case ID_POPUP_PCB_SELECT_WIDTH3:
-    case ID_POPUP_PCB_SELECT_WIDTH4:
-    case ID_POPUP_PCB_SELECT_WIDTH5:
-    case ID_POPUP_PCB_SELECT_WIDTH6:
-    case ID_POPUP_PCB_SELECT_WIDTH7:
-    case ID_POPUP_PCB_SELECT_WIDTH8:
     case ID_POPUP_PCB_MOVE_TRACK_NODE:
     case ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE:
     case ID_POPUP_PCB_DRAG_TRACK_SEGMENT:
@@ -149,9 +134,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             SetCursor( DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor );
         break;
 
-    case ID_TOGGLE_PRESENT_COMMAND:
-        break;
-
     default:        // Finish (abort ) the command
         if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
             DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
@@ -172,77 +154,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_EXIT:
         Close( true );
-        break;
-
-    case ID_TOGGLE_PRESENT_COMMAND:
-        switch( m_ID_current_state )
-        {
-        case 0:
-            toggle = 1;
-            break;
-
-        case ID_TRACK_BUTT:
-            if( DrawStruct && (DrawStruct->m_Flags & IS_NEW) )
-            {
-                End_Route( (TRACK*) DrawStruct, &dc );
-                DrawPanel->m_AutoPAN_Request = false;
-            }
-            else
-                toggle = 1;
-            break;
-
-        case ID_PCB_ZONES_BUTT:
-            if( End_Zone( &dc ) )
-            {
-                DrawPanel->m_AutoPAN_Request = false;
-                SetCurItem( NULL );
-            }
-            else
-                toggle = 1;
-            break;
-
-        case ID_PCB_ADD_LINE_BUTT:
-        case ID_PCB_ARC_BUTT:
-        case ID_PCB_CIRCLE_BUTT:
-            if( DrawStruct == NULL )
-            {
-            }
-            else if( DrawStruct->Type() != TYPE_DRAWSEGMENT )
-            {
-                DisplayError( this, wxT( "DrawStruct Type error" ) );
-                DrawPanel->m_AutoPAN_Request = false;
-            }
-            else if( (DrawStruct->m_Flags & IS_NEW) )
-            {
-                End_Edge( (DRAWSEGMENT*) DrawStruct, &dc );
-                DrawPanel->m_AutoPAN_Request = false;
-                SetCurItem( NULL );
-            }
-            else
-                toggle = 1;
-            break;
-
-        default:
-
-            toggle = 1;
-            break;
-        }
-
-        if( toggle )
-        {
-            int swap = m_ID_last_state;
-            m_ID_last_state = m_ID_current_state;
-            SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
-            m_ID_current_state = swap;
-        }
-
-
-        //SetCursor( DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor );
-
-        event.SetId( m_ID_current_state );
-        Process_Special_Functions( event );
-
-
         break;
 
     case ID_OPEN_MODULE_EDITOR:
@@ -321,7 +232,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_TRACK_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add Tracks" ) );
-        DisplayTrackSettings();
         if( (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
         {
             Compile_Ratsnest( &dc, true );
@@ -989,54 +899,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
-    case ID_POPUP_PCB_SELECT_WIDTH:
-        break;
-
-    case ID_AUX_TOOLBAR_PCB_TRACK_WIDTH:
-    {
-        int ii = m_SelTrackWidthBox->GetChoice();
-        g_DesignSettings.m_CurrentTrackWidth = GetBoard()->m_TrackWidthHistory[ii];
-        DisplayTrackSettings();
-        m_TrackAndViasSizesList_Changed = false;
-        g_DesignSettings.m_UseConnectedTrackWidth = false;
-    }
-    break;
-
-    case ID_POPUP_PCB_SELECT_WIDTH1:
-    case ID_POPUP_PCB_SELECT_WIDTH2:
-    case ID_POPUP_PCB_SELECT_WIDTH3:
-    case ID_POPUP_PCB_SELECT_WIDTH4:
-    case ID_POPUP_PCB_SELECT_WIDTH5:
-    case ID_POPUP_PCB_SELECT_WIDTH6:
-    case ID_POPUP_PCB_SELECT_WIDTH7:
-    case ID_POPUP_PCB_SELECT_WIDTH8:
-        DrawPanel->MouseToCursorSchema();
-        g_DesignSettings.m_UseConnectedTrackWidth = false;
-        {
-            int ii = id - ID_POPUP_PCB_SELECT_WIDTH1;
-            g_DesignSettings.m_CurrentTrackWidth = GetBoard()->m_TrackWidthHistory[ii];
-            DisplayTrackSettings();
-        }
-        break;
-
-    case ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH:
-        g_DesignSettings.m_UseConnectedTrackWidth =
-            not g_DesignSettings.m_UseConnectedTrackWidth;
-        break;
-
-    case ID_POPUP_PCB_SELECT_AUTO_WIDTH:
-        DrawPanel->MouseToCursorSchema();
-        g_DesignSettings.m_UseConnectedTrackWidth = true;
-        break;
-
-    case ID_AUX_TOOLBAR_PCB_VIA_SIZE:
-    {
-        int ii = m_SelViaSizeBox->GetChoice();
-        g_DesignSettings.m_CurrentViaSize = GetBoard()->m_ViaSizeHistory[ii];
-        DisplayTrackSettings();
-        m_TrackAndViasSizesList_Changed = false;
-    }
-    break;
 
     case ID_POPUP_PCB_MOVE_TRACK_SEGMENT:
         DrawPanel->MouseToCursorSchema();

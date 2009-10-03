@@ -51,11 +51,11 @@ class GENERAL_COLLECTORS_GUIDE;
 class WinEDA_PcbFrame: public WinEDA_BasePcbFrame
 {
 public:
-    WinEDAChoiceBox* m_SelLayerBox;
-    WinEDAChoiceBox* m_SelTrackWidthBox;
-    wxTextCtrl* m_ClearanceBox;
-    wxTextCtrl* m_NetClassSelectedBox;
-    WinEDAChoiceBox* m_SelViaSizeBox;
+    WinEDAChoiceBox* m_SelLayerBox;         // a combo box to display and select active layer
+    WinEDAChoiceBox* m_SelTrackWidthBox;    // a combo box to display and select current track width
+    WinEDAChoiceBox* m_SelViaSizeBox;       // a combo box to display and select current via diameter
+    wxTextCtrl* m_ClearanceBox;             // a text ctrl to display the current tracks and vias clearance
+    wxTextCtrl* m_NetClassSelectedBox;      // a text ctrl to display the current NetClass
 
 private:
     bool             m_TrackAndViasSizesList_Changed;
@@ -90,6 +90,7 @@ public:
 
     void             OnCloseWindow( wxCloseEvent& Event );
     void             Process_Special_Functions( wxCommandEvent& event );
+    void             Tracks_and_Vias_Size_Event( wxCommandEvent& event );
 
     void             ProcessMuWaveFunctions( wxCommandEvent& event );
     void             MuWaveCommand( wxDC* DC, const wxPoint& MousePos );
@@ -388,7 +389,6 @@ public:
 
     // Track and via edition:
     void             Via_Edit_Control( wxCommandEvent& event );
-    void             DisplayTrackSettings();
 
     /**
      * Function Other_Layer_Route

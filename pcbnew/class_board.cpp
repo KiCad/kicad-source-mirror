@@ -81,10 +81,13 @@ BOARD::~BOARD()
  * Must be called after a netclass selection (or after a netclass parameter change
  * Initialise vias and tracks values displayed in comb boxs of the auxiliary toolbar
  * and some others parametres (netclass name ....)
+ * @param aNetClassName = the new netclass name
+ * @return true if lists of tracks and vias sizes are modified
  */
- void BOARD::SetCurrentNetClass( const wxString & aNetClassName)
+ bool BOARD::SetCurrentNetClass( const wxString & aNetClassName)
 {
     NETCLASS * netClass = m_NetClasses.Find(aNetClassName);
+    bool lists_sizes_modified = false;
 
     // if not found (should not happen) use the default
     if ( netClass == NULL )
@@ -94,12 +97,34 @@ BOARD::~BOARD()
 
     // Initialize others values:
     if( m_ViaSizeHistory.size() == 0 )
+    {
+        lists_sizes_modified = true;
         m_ViaSizeHistory.push_back(0);
+    }
     if( m_TrackWidthHistory.size() == 0 )
+    {
+        lists_sizes_modified = true;
         m_TrackWidthHistory.push_back(0);
+    }
 
+    if( m_ViaSizeHistory[0] != netClass->GetViaDiameter() )
+        lists_sizes_modified = true;
     m_ViaSizeHistory[0] = netClass->GetViaDiameter();
+
+    if( m_TrackWidthHistory[0] != netClass->GetTrackWidth() )
+        lists_sizes_modified = true;
     m_TrackWidthHistory[0] = netClass->GetTrackWidth();
+
+    if( m_ViaSizeSelector >= m_ViaSizeHistory.size() )
+        m_ViaSizeSelector = m_ViaSizeHistory.size();
+    if( m_TrackWidthSelector >= m_TrackWidthHistory.size() )
+        m_TrackWidthSelector = m_TrackWidthHistory.size();
+
+    //Initialize track and via current size:
+    g_DesignSettings.m_CurrentViaSize = m_ViaSizeHistory[m_ViaSizeSelector];
+    g_DesignSettings.m_CurrentTrackWidth = m_TrackWidthHistory[m_TrackWidthSelector];
+
+    return lists_sizes_modified;
 }
 
 wxString BOARD::GetLayerName( int aLayerIndex ) const

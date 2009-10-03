@@ -98,21 +98,21 @@ public:
                                                              *  (used while moving a footprint) */
 
     ZONE_CONTAINER* m_CurrentZoneContour;                   // zone contour currently in progress
- 
+
     NETCLASSES m_NetClasses;                                ///< List of current netclasses. There is always the default netclass
     wxString   m_CurrentNetClassName;                       /* Current net class name used to display netclass info.
                                                              *  this is also the last used netclass after starting a track
                                                              */
 
-    
+
     // handling of vias and tracks size:
     // the first value is always the value of the current NetClass
     // The others values are extra values
     std::vector <int>    m_ViaSizeHistory;          // Last used via sizes (max count = HISTORY_MAX_COUNT)
     std::vector <int>    m_TrackWidthHistory;       // Last used track widths (max count = HISTORY_MAX_COUNT)
-    int m_ViaSizeSelector;                          // index for m_ViaSizeHistory to select the value
+    unsigned m_ViaSizeSelector;                     // index for m_ViaSizeHistory to select the value
                                                     // O is the selection of the default value Netclass
-    int m_TrackWidthSelector;                       // index for m_TrackWidthHistory to select the value
+    unsigned m_TrackWidthSelector;                  // index for m_TrackWidthHistory to select the value
 
     /**********************************/
 public:
@@ -369,8 +369,10 @@ public:
      * Must be called after a netclass selection (or after a netclass parameter change
      * Initialise vias and tracks values displayed in comb boxs of the auxiliary toolbar
      * and some others parametres (netclass name ....)
+     * @param aNetClassName = the new netclass name
+     * @return true if lists of tracks and vias sizes are modified
      */
-     void SetCurrentNetClass( const wxString & aNetClassName);
+    bool SetCurrentNetClass( const wxString & aNetClassName);
 
     /**
      * Function Save

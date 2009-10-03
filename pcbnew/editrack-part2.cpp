@@ -14,29 +14,6 @@
 #include "protos.h"
 
 
-/* Routines Locales */
-
-/* variables locales */
-
-/***********************************************/
-void WinEDA_PcbFrame::DisplayTrackSettings()
-/***********************************************/
-
-/* Display the current track width and via diameter
- */
-{
-    wxString msg;
-    wxString buftrc, bufvia;
-
-    valeur_param( g_DesignSettings.m_CurrentTrackWidth, buftrc );
-    valeur_param( g_DesignSettings.m_CurrentViaSize, bufvia );
-    msg.Printf( _( "Track Width: %s   Vias Size : %s" ),
-               buftrc.GetData(), bufvia.GetData() );
-    Affiche_Message( msg );
-    m_TrackAndViasSizesList_Changed = TRUE;
-}
-
-
 /***********************************************/
 void WinEDA_PcbFrame::Ratsnest_On_Off( wxDC* DC )
 /***********************************************/
