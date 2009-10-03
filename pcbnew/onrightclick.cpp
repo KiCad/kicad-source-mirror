@@ -853,7 +853,9 @@ static wxMenu* Append_Track_Width_List( BOARD * aBoard )
     if( g_DesignSettings.m_UseConnectedTrackWidth )
         trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, true );
 
-    if( aBoard->m_ViaSizeSelector != 0 || aBoard->m_TrackWidthSelector != 0 )
+    if( aBoard->m_ViaSizeSelector != 0 ||
+        aBoard->m_TrackWidthSelector != 0 ||
+        g_DesignSettings.m_UseConnectedTrackWidth )
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES,
                              _( "Use Netclass Values" ),
                              _( "Use track and via sizes from their Netclass values" ),
@@ -870,7 +872,7 @@ static wxMenu* Append_Track_Width_List( BOARD * aBoard )
             msg.Printf( _( "Track %.3f" ), value );
 
         if ( ii == 0 )
-            msg << _(" (Use NetClass)" );
+            msg << _(" (from NetClass)" );
 
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_WIDTH1 + ii, msg, wxEmptyString, true );
 
@@ -894,7 +896,7 @@ static wxMenu* Append_Track_Width_List( BOARD * aBoard )
         else
             msg.Printf( _( "Via %.3f" ), value );
         if ( ii == 0 )
-            msg << _(" (Use NetClass)" );
+            msg << _(" (from NetClass)" );
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, msg, wxEmptyString, true );
     }
     if( aBoard->m_ViaSizeSelector < (int)aBoard->m_ViaSizeHistory.size() )

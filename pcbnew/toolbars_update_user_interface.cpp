@@ -1,9 +1,10 @@
 /****************************************************************
-toolbars_update_user_interface.cpp
+*   toolbars_update_user_interface.cpp
 ****************************************************************/
+
 /*
-function to update toolbars UI after changing parameters
-*/
+ *  function to update toolbars UI after changing parameters
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -19,11 +20,12 @@ function to update toolbars UI after changing parameters
 /* helper to convert an integer value to a string, using mils or mm
  * according to g_UnitMetric value
  */
-static wxString ReturnStringValue(int aValue)
+static wxString ReturnStringValue( int aValue )
 {
-    wxString text;
-    const wxChar * format;
-    double value = To_User_Unit( g_UnitMetric, aValue, PCB_INTERNAL_UNIT );
+    wxString      text;
+    const wxChar* format;
+    double        value = To_User_Unit( g_UnitMetric, aValue, PCB_INTERNAL_UNIT );
+
     if( g_UnitMetric == INCHES )
     {
         format = wxT( " %.1f" );
@@ -33,21 +35,23 @@ static wxString ReturnStringValue(int aValue)
         format = wxT( " %.3f" );
     text.Printf( format, value );
     if( g_UnitMetric == INCHES )
-        text += _(" mils");
+        text += _( " mils" );
     else
-        text += _(" mm");
+        text += _( " mm" );
     return text;
 }
+
 
 /**
  * Function AuxiliaryToolBar_DesignRules_Update_UI
  * update the displayed values: track widths, via sizes, clearance, Netclass name
  * used when a netclass is selected
  */
-void WinEDA_PcbFrame::AuxiliaryToolBar_DesignRules_Update_UI( )
+void WinEDA_PcbFrame::AuxiliaryToolBar_DesignRules_Update_UI()
 {
     wxString nclname = GetBoard()->m_CurrentNetClassName;
-    wxString msg = _("NetClass: ") + nclname;
+    wxString msg     = _( "NetClass: " ) + nclname;
+
     m_NetClassSelectedBox->Clear();
     m_NetClassSelectedBox->AppendText( msg );
 
@@ -55,12 +59,12 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_DesignRules_Update_UI( )
 
     if( m_ClearanceBox )
     {
-        wxString msg = _( "Clearance" ) + ReturnStringValue(netclass->GetClearance());
+        wxString msg = _( "Clearance" ) + ReturnStringValue( netclass->GetClearance() );
         m_ClearanceBox->Clear();
         m_ClearanceBox->AppendText( msg );
     }
-
 }
+
 
 /**
  * Function AuxiliaryToolBar_Update_UI
@@ -71,20 +75,23 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_DesignRules_Update_UI( )
  *    next items (if any) = ordered list of sizes (extra sizes).
  *    So the current selected class value can be same as an other extra value
  */
-void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI( )
+void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI()
 {
     wxString msg;
 
-    AuxiliaryToolBar_DesignRules_Update_UI( );
+    AuxiliaryToolBar_DesignRules_Update_UI();
+
+    m_AuxiliaryToolBar->ToggleTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
+                                    g_DesignSettings.m_UseConnectedTrackWidth );
 
     if( m_SelTrackWidthBox && m_TrackAndViasSizesList_Changed )
     {
         m_SelTrackWidthBox->Clear();
         for( unsigned ii = 0; ii < GetBoard()->m_TrackWidthHistory.size(); ii++ )
         {
-            msg = _( "Track" ) + ReturnStringValue(GetBoard()->m_TrackWidthHistory[ii]);
-            if (ii == 0 )
-                msg << _(" *");
+            msg = _( "Track" ) + ReturnStringValue( GetBoard()->m_TrackWidthHistory[ii] );
+            if( ii == 0 )
+                msg << _( " *" );
             m_SelTrackWidthBox->Append( msg );
         }
     }
@@ -97,9 +104,9 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI( )
         m_SelViaSizeBox->Clear();
         for( unsigned ii = 0; ii < GetBoard()->m_ViaSizeHistory.size(); ii++ )
         {
-            msg = _( "Via" ) + ReturnStringValue(GetBoard()->m_ViaSizeHistory[ii]);
-            if (ii == 0 )
-                msg << _(" *");
+            msg = _( "Via" ) + ReturnStringValue( GetBoard()->m_ViaSizeHistory[ii] );
+            if( ii == 0 )
+                msg << _( " *" );
             m_SelViaSizeBox->Append( msg );
         }
     }
@@ -119,7 +126,8 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI( )
                 break;
             }
         }
-        if ( not_found )
+
+        if( not_found )
             m_SelZoomBox->SetSelection( -1 );
     }
 
@@ -185,9 +193,11 @@ void WinEDA_PcbFrame::SetToolbars()
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_DRC_OFF,
                                       !Drc_On );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_DRC_OFF,
-                                            Drc_On ?
-                                            _( "DRC Off (Disable !!!), Currently: DRC is active" ) :
-                                            _( "DRC On (Currently: DRC is inactive !!!)" ) );
+                                           Drc_On ?
+                                           _(
+                                               "DRC Off (Disable !!!), Currently: DRC is active" )
+                                           :
+                                           _( "DRC On (Currently: DRC is inactive !!!)" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_MM,
                                       g_UnitMetric == MILLIMETRE ? TRUE : false );
@@ -197,14 +207,14 @@ void WinEDA_PcbFrame::SetToolbars()
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_POLAR_COORD,
                                       DisplayOpt.DisplayPolarCood );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLAR_COORD,
-                                            DisplayOpt.DisplayPolarCood ?
-                                            _( "Polar coords not show" ) :
-                                            _( "Display polar coords" ) );
+                                           DisplayOpt.DisplayPolarCood ?
+                                           _( "Polar coords not show" ) :
+                                           _( "Display polar coords" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID,
                                       m_Draw_Grid );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_GRID,
-                                            m_Draw_Grid ? _( "Grid not show" ) : _( "Show grid" ) );
+                                           m_Draw_Grid ? _( "Grid not show" ) : _( "Show grid" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR,
                                       m_CursorShape );
@@ -212,66 +222,67 @@ void WinEDA_PcbFrame::SetToolbars()
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_RATSNEST,
                                       g_Show_Ratsnest );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_RATSNEST,
-                                            g_Show_Ratsnest ?
-                                            _( "Hide general ratsnest" ) :
-                                            _( "Show general ratsnest" ) );
+                                           g_Show_Ratsnest ?
+                                           _( "Hide general ratsnest" ) :
+                                           _( "Show general ratsnest" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
                                       g_Show_Module_Ratsnest );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
-                                            g_Show_Module_Ratsnest ?
-                                            _( "Hide module ratsnest" ) :
-                                            _( "Show module ratsnest" ) );
+                                           g_Show_Module_Ratsnest ?
+                                           _( "Hide module ratsnest" ) :
+                                           _( "Show module ratsnest" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_AUTO_DEL_TRACK,
                                       g_AutoDeleteOldTrack );
 
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_AUTO_DEL_TRACK,
-                                            g_AutoDeleteOldTrack ?
-                                            _( "Disable auto delete old track" ) :
-                                            _( "Enable auto delete old track" ) );
+                                           g_AutoDeleteOldTrack ?
+                                           _( "Disable auto delete old track" ) :
+                                           _( "Enable auto delete old track" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
                                       !m_DisplayPadFill );
 
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-                                            m_DisplayPadFill ?
-                                            _( "Show pads sketch mode" ) :
-                                            _( "Show pads filled mode" ) );
+                                           m_DisplayPadFill ?
+                                           _( "Show pads sketch mode" ) :
+                                           _( "Show pads filled mode" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
                                       !m_DisplayViaFill );
 
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
-                                            m_DisplayViaFill ?
-                                            _( "Show vias sketch mode" ) :
-                                            _( "Show vias filled mode" ) );
+                                           m_DisplayViaFill ?
+                                           _( "Show vias sketch mode" ) :
+                                           _( "Show vias filled mode" ) );
 
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
                                       !m_DisplayPcbTrackFill );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
-                                            m_DisplayPcbTrackFill ?
-                                            _( "Show tracks sketch mode" ) :
-                                            _( "Show tracks filled mode" ) );
+                                           m_DisplayPcbTrackFill ?
+                                           _( "Show tracks sketch mode" ) :
+                                           _( "Show tracks filled mode" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
                                       DisplayOpt.ContrastModeDisplay );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
-                                            DisplayOpt.ContrastModeDisplay ?
-                                            _( "Normal contrast mode display" ) :
-                                            _( "High contrast mode display" ) );
+                                           DisplayOpt.ContrastModeDisplay ?
+                                           _( "Normal contrast mode display" ) :
+                                           _( "High contrast mode display" ) );
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
-                g_ModuleTextNOVColor & ITEM_NOT_SHOW );
+                                      g_ModuleTextNOVColor & ITEM_NOT_SHOW );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
-                       g_ModuleTextNOVColor & (ITEM_NOT_SHOW) ?
-                                                   _( "Show invisible text" ) :
-                                                   _( "Hide invisible text" ) );
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1, m_AuxVToolBar ? true : false );
+                                           g_ModuleTextNOVColor & (ITEM_NOT_SHOW) ?
+                                           _( "Show invisible text" ) :
+                                           _( "Hide invisible text" ) );
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
+                                      m_AuxVToolBar ? true : false );
     }
 
     if( m_AuxiliaryToolBar )
-        AuxiliaryToolBar_Update_UI( );
+        AuxiliaryToolBar_Update_UI();
 
     UpdateToolbarLayerInfo();
     PrepareLayerIndicator();

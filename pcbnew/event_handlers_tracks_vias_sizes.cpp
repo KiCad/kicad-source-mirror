@@ -39,6 +39,7 @@ void WinEDA_PcbFrame::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES:
+        g_DesignSettings.m_UseConnectedTrackWidth = false;
         GetBoard()->m_TrackWidthSelector = 0;
         g_DesignSettings.m_CurrentTrackWidth = GetBoard()->m_TrackWidthHistory[0];
         GetBoard()->m_ViaSizeSelector = 0;

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-02 18:07+0100\n"
-"PO-Revision-Date: 2009-10-02 18:08+0100\n"
+"POT-Creation-Date: 2009-10-03 20:27+0100\n"
+"PO-Revision-Date: 2009-10-03 20:28+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -758,32 +758,21 @@ msgstr "Création de stub (arc) de longueur spécifiée (pour applications micro
 msgid "Create a polynomial shape for microwave applications"
 msgstr "Création de formes polynomiales (pour applications micro-ondes)"
 
-#: pcbnew/tool_pcb.cpp:581
+#: pcbnew/tool_pcb.cpp:585
 msgid "Current NetClass clearance value"
 msgstr "Valeur isolation NetClass courante"
 
-#: pcbnew/tool_pcb.cpp:590
+#: pcbnew/tool_pcb.cpp:595
 msgid "Name of the current NetClass"
 msgstr "Nom de la NetClass courante"
 
-#: pcbnew/tool_pcb.cpp:598
-msgid "Strategy selection for tracks widths and vias diameters:\n"
-msgstr ""
-
-#: pcbnew/tool_pcb.cpp:599
-msgid "Normal: use NetClass values\n"
-msgstr ""
-
-#: pcbnew/tool_pcb.cpp:600
-#, fuzzy
-msgid "Auto: when starting a track on an existing track use its width.O therwise, use NetClass value\n"
+#: pcbnew/tool_pcb.cpp:601
+msgid ""
+"Auto track width: when starting on an existing track use its width\n"
+"otherwise, use current width setting"
 msgstr ""
 "Largeur de piste automatique: si on démarre sur une piste existante, utiliser sa largeur\n"
 " sinon utiliser la largeur  courante"
-
-#: pcbnew/tool_pcb.cpp:601
-msgid "Manual: use selected values"
-msgstr ""
 
 #: pcbnew/tool_pcb.cpp:618
 msgid "Auto"
@@ -1522,19 +1511,19 @@ msgstr "Forme X"
 msgid "Target Shape:"
 msgstr "Forme Mire:"
 
-#: pcbnew/pcbframe.cpp:302
+#: pcbnew/pcbframe.cpp:306
 msgid "Board modified, Save before exit ?"
 msgstr "Circuit Imprimé modifié,  Sauver avant de quitter ?"
 
-#: pcbnew/pcbframe.cpp:303
+#: pcbnew/pcbframe.cpp:307
 msgid "Confirmation"
 msgstr "Confirmation"
 
-#: pcbnew/pcbframe.cpp:351
+#: pcbnew/pcbframe.cpp:355
 msgid "3D Frame already opened"
 msgstr "Fenêtre 3D déjà ouverte"
 
-#: pcbnew/pcbframe.cpp:355
+#: pcbnew/pcbframe.cpp:359
 msgid "3D Viewer"
 msgstr "Visu 3D"
 
@@ -1660,7 +1649,7 @@ msgstr " Effacement global sur couche cuivre non autorisé"
 msgid "Delete Layer "
 msgstr "Effacer Couche"
 
-#: pcbnew/via_edit.cpp:64
+#: pcbnew/via_edit.cpp:49
 msgid "Incorrect value for Via drill. No via drill change"
 msgstr "Valeur incorrecte pour perçage. Pas de changement pour la via"
 
@@ -2345,34 +2334,47 @@ msgstr "Effacer Marqueur"
 msgid "Marker Error Info"
 msgstr "Info de Marqueurd'Erreur"
 
-#: pcbnew/onrightclick.cpp:844
+#: pcbnew/onrightclick.cpp:845
 msgid "New Width/Size"
 msgstr "Nouvelle Largeur/Taille"
 
-#: pcbnew/onrightclick.cpp:847
+#: pcbnew/onrightclick.cpp:848
 msgid "Auto Width"
 msgstr "Epaisseur Automatique"
 
-#: pcbnew/onrightclick.cpp:849
+#: pcbnew/onrightclick.cpp:850
 msgid "Use the track width when starting on a track, otherwise the current track width"
 msgstr "Si on démarre sur une piste existante, utiliser sa largeur,  sinon utiliser la largeur  courante"
 
-#: pcbnew/onrightclick.cpp:861
+#: pcbnew/onrightclick.cpp:858
+msgid "Use Netclass Values"
+msgstr "Utiliser les Valeurs des NetClass"
+
+#: pcbnew/onrightclick.cpp:859
+msgid "Use track and via sizes from their Netclass values"
+msgstr ""
+
+#: pcbnew/onrightclick.cpp:868
 #, c-format
 msgid "Track %.1f"
 msgstr "Piste %.1f"
 
-#: pcbnew/onrightclick.cpp:863
+#: pcbnew/onrightclick.cpp:870
 #, c-format
 msgid "Track %.3f"
 msgstr "Piste %.3f"
 
-#: pcbnew/onrightclick.cpp:879
+#: pcbnew/onrightclick.cpp:873
+#: pcbnew/onrightclick.cpp:897
+msgid " (from NetClass)"
+msgstr " (de NetClass)"
+
+#: pcbnew/onrightclick.cpp:893
 #, c-format
 msgid "Via %.1f"
 msgstr "Via %.1f"
 
-#: pcbnew/onrightclick.cpp:881
+#: pcbnew/onrightclick.cpp:895
 #, c-format
 msgid "Via %.3f"
 msgstr "Via %.3f"
@@ -2587,12 +2589,12 @@ msgstr "Epaisseur Contour"
 msgid "Incorrect number, no change"
 msgstr "Nombre incorrect, pas de changement"
 
-#: pcbnew/hotkeys.cpp:484
+#: pcbnew/hotkeys.cpp:479
 #, c-format
 msgid "Footprint %s found, but locked"
 msgstr "Module %s trouvé, mais verrouillé"
 
-#: pcbnew/hotkeys.cpp:651
+#: pcbnew/hotkeys.cpp:646
 msgid "Delete module?"
 msgstr "Effacer Module?"
 
@@ -3499,27 +3501,27 @@ msgstr "Autoplace modules: Pas de contours sur pcb. Impossible de placer les mod
 msgid "This is the default net class."
 msgstr "Ceci est la Netclass par défaut"
 
-#: pcbnew/class_board.cpp:575
+#: pcbnew/class_board.cpp:600
 msgid "Vias"
 msgstr "Vias"
 
-#: pcbnew/class_board.cpp:578
+#: pcbnew/class_board.cpp:603
 msgid "Nodes"
 msgstr "Nodes"
 
-#: pcbnew/class_board.cpp:581
+#: pcbnew/class_board.cpp:606
 msgid "Nets"
 msgstr "Nets"
 
-#: pcbnew/class_board.cpp:589
+#: pcbnew/class_board.cpp:614
 msgid "Links"
 msgstr "Liens"
 
-#: pcbnew/class_board.cpp:592
+#: pcbnew/class_board.cpp:617
 msgid "Connect"
 msgstr "Connect"
 
-#: pcbnew/class_board.cpp:595
+#: pcbnew/class_board.cpp:620
 msgid "NoConn"
 msgstr "Non Conn"
 
@@ -4588,43 +4590,43 @@ msgstr "Visible"
 msgid "Invisible"
 msgstr "Invisible"
 
-#: pcbnew/edit.cpp:323
+#: pcbnew/edit.cpp:234
 msgid "Add Tracks"
 msgstr "Addition de Pistes"
 
-#: pcbnew/edit.cpp:332
+#: pcbnew/edit.cpp:242
 msgid "Add Zones"
 msgstr "Addition de Zones"
 
-#: pcbnew/edit.cpp:334
+#: pcbnew/edit.cpp:244
 msgid "Warning: Display Zone is OFF!!!"
 msgstr "Attention: Affichage zones désactivé !!!"
 
-#: pcbnew/edit.cpp:340
+#: pcbnew/edit.cpp:250
 msgid "Add Layer Alignment Target"
 msgstr "Ajouter Mire de superposition"
 
-#: pcbnew/edit.cpp:344
+#: pcbnew/edit.cpp:254
 msgid "Adjust Zero"
 msgstr "Ajuster Zéro"
 
-#: pcbnew/edit.cpp:350
+#: pcbnew/edit.cpp:260
 msgid "Add Graphic"
 msgstr "Addition éléments graphiques"
 
-#: pcbnew/edit.cpp:358
+#: pcbnew/edit.cpp:268
 msgid "Add Modules"
 msgstr "Addition de Modules"
 
-#: pcbnew/edit.cpp:362
+#: pcbnew/edit.cpp:272
 msgid "Add Dimension"
 msgstr "Ajout de cotes"
 
-#: pcbnew/edit.cpp:370
+#: pcbnew/edit.cpp:280
 msgid "Net Highlight"
 msgstr "Surbrillance des équipotentielles"
 
-#: pcbnew/edit.cpp:374
+#: pcbnew/edit.cpp:284
 msgid "Local Ratsnest"
 msgstr "Montrer le chevelu général"
 
@@ -5129,79 +5131,84 @@ msgstr " mm"
 msgid "NetClass: "
 msgstr "NetClass: "
 
-#: pcbnew/toolbars_update_user_interface.cpp:187
+#: pcbnew/toolbars_update_user_interface.cpp:87
+#: pcbnew/toolbars_update_user_interface.cpp:102
+msgid " *"
+msgstr " *"
+
+#: pcbnew/toolbars_update_user_interface.cpp:189
 msgid "DRC Off (Disable !!!), Currently: DRC is active"
 msgstr "DRC off (désactivée !!!), actuellement DRC active"
 
-#: pcbnew/toolbars_update_user_interface.cpp:188
+#: pcbnew/toolbars_update_user_interface.cpp:190
 msgid "DRC On (Currently: DRC is inactive !!!)"
 msgstr "DRC On (Actuellement, DRC désactivée !!!)"
 
-#: pcbnew/toolbars_update_user_interface.cpp:199
+#: pcbnew/toolbars_update_user_interface.cpp:201
 msgid "Polar coords not show"
 msgstr "Coord Polaires non affichées"
 
-#: pcbnew/toolbars_update_user_interface.cpp:200
+#: pcbnew/toolbars_update_user_interface.cpp:202
 msgid "Display polar coords"
 msgstr "Affichage coord Polaires"
 
-#: pcbnew/toolbars_update_user_interface.cpp:205
+#: pcbnew/toolbars_update_user_interface.cpp:207
 msgid "Show grid"
 msgstr "Afficher grille"
 
-#: pcbnew/toolbars_update_user_interface.cpp:214
+#: pcbnew/toolbars_update_user_interface.cpp:216
 msgid "Hide general ratsnest"
 msgstr "Ne pas afficher le chevelu général"
 
-#: pcbnew/toolbars_update_user_interface.cpp:215
+#: pcbnew/toolbars_update_user_interface.cpp:217
 msgid "Show general ratsnest"
 msgstr "Afficher le chevelu général"
 
-#: pcbnew/toolbars_update_user_interface.cpp:221
+#: pcbnew/toolbars_update_user_interface.cpp:223
 msgid "Hide module ratsnest"
 msgstr "Ne pas montrer le chevelu du module"
 
-#: pcbnew/toolbars_update_user_interface.cpp:222
+#: pcbnew/toolbars_update_user_interface.cpp:224
 msgid "Show module ratsnest"
 msgstr "Montrer le chevelu du module"
 
-#: pcbnew/toolbars_update_user_interface.cpp:229
+#: pcbnew/toolbars_update_user_interface.cpp:231
 msgid "Disable auto delete old track"
 msgstr "Ne pas Autoriser l'effacement automatique des pistes"
 
-#: pcbnew/toolbars_update_user_interface.cpp:230
+#: pcbnew/toolbars_update_user_interface.cpp:232
 msgid "Enable auto delete old track"
 msgstr "Autoriser l'effacement automatique des pistes"
 
-#: pcbnew/toolbars_update_user_interface.cpp:237
+#: pcbnew/toolbars_update_user_interface.cpp:239
 msgid "Show pads sketch mode"
 msgstr "Afficher pastilles en mode contour"
 
-#: pcbnew/toolbars_update_user_interface.cpp:245
+#: pcbnew/toolbars_update_user_interface.cpp:247
 msgid "Show vias sketch mode"
 msgstr "Afficher vias en mode contour"
 
-#: pcbnew/toolbars_update_user_interface.cpp:253
+#: pcbnew/toolbars_update_user_interface.cpp:255
 msgid "Show tracks sketch mode"
 msgstr "Afficher pistes en mode contour"
 
-#: pcbnew/toolbars_update_user_interface.cpp:254
+#: pcbnew/toolbars_update_user_interface.cpp:256
 msgid "Show tracks filled mode"
 msgstr "Afficher pistes en mode plein"
 
-#: pcbnew/toolbars_update_user_interface.cpp:260
+#: pcbnew/toolbars_update_user_interface.cpp:262
 msgid "Normal contrast mode display"
 msgstr "Mode d'affichage contraste normal"
 
-#: pcbnew/toolbars_update_user_interface.cpp:261
+#: pcbnew/toolbars_update_user_interface.cpp:263
 msgid "High contrast mode display"
 msgstr "Mode d'affichage haut contraste"
 
-#: pcbnew/toolbars_update_user_interface.cpp:266
+#: pcbnew/toolbars_update_user_interface.cpp:268
 msgid "Show invisible text"
 msgstr "Montrer textes invisibles"
 
-#: pcbnew/toolbars_update_user_interface.cpp:267
+#: pcbnew/toolbars_update_user_interface.cpp:269
 msgid "Hide invisible text"
 msgstr "Cacher textes invisibles"
 
@@ -5439,12 +5446,7 @@ msgstr "X Pos"
 msgid "Y pos"
 msgstr "Y pos"
 
-#: pcbnew/editrack-part2.cpp:33
-#, c-format
-msgid "Track Width: %s   Vias Size : %s"
-msgstr "Larg. piste: %s  Diam Vias : %s"
-
-#: pcbnew/editrack-part2.cpp:132
+#: pcbnew/editrack-part2.cpp:109
 msgid "Drc error, cancelled"
 msgstr "Erreur DRC, annulation"
 
@@ -6043,34 +6045,42 @@ msgid "Show page limits"
 msgstr " Afficher limites de page"
 
 #: eeschema/plotdxf.cpp:155
+#: eeschema/plotps.cpp:174
 msgid "Plot Options:"
 msgstr "Options de Tracé:"
 
 #: eeschema/plotdxf.cpp:160
+#: eeschema/plotps.cpp:179
 msgid "B/W"
 msgstr "N/B"
 
 #: eeschema/plotdxf.cpp:162
+#: eeschema/plotps.cpp:181
 msgid "Plot Color:"
 msgstr "Tracé et Couleurs:"
 
 #: eeschema/plotdxf.cpp:166
+#: eeschema/plotps.cpp:185
 msgid "Print Sheet Ref"
 msgstr "Imprimer cartouche"
 
 #: eeschema/plotdxf.cpp:175
+#: eeschema/plotps.cpp:194
 msgid "&Plot Page"
 msgstr "&Tracer Page"
 
 #: eeschema/plotdxf.cpp:179
+#: eeschema/plotps.cpp:198
 msgid "Plot A&LL"
 msgstr "&Tout Tracer"
 
 #: eeschema/plotdxf.cpp:185
+#: eeschema/plotps.cpp:207
 msgid "Messages :"
 msgstr "Messages :"
 
 #: eeschema/plotdxf.cpp:371
+#: eeschema/plotps.cpp:419
 #, c-format
 msgid "Plot: %s\n"
 msgstr "Trace: %s\n"
@@ -6670,7 +6680,6 @@ msgid "Add NoConnect Flag"
 msgstr "Ajoutde symboles de non connexion"
 
 #: eeschema/schedit.cpp:195
-#: eeschema/hotkeys.cpp:324
 msgid "Add Wire"
 msgstr "Ajouter Fils"
 
@@ -6715,7 +6724,6 @@ msgid "Import PinSheet"
 msgstr "Importer Connecteur de hiérarchie"
 
 #: eeschema/schedit.cpp:247
-#: eeschema/hotkeys.cpp:299
 msgid "Add Component"
 msgstr "Ajout Composant"
 
@@ -6839,6 +6847,8 @@ msgid ""
 "The field name <%s> is an existing alias of the component <%s>.\n"
 "Please choose another name that does not conflict with any names in the alias list."
 msgstr ""
+"Le nom de champ <%s> est un alias existant du composant%s>.\n"
+"SVP  choisir un autre nom qui n'est pas déjà existant dans la liste des alias."
 
 #: eeschema/libfield.cpp:189
 #, c-format
@@ -6894,7 +6904,7 @@ msgstr "Position occupée par une autre pin. Continuer ?"
 #: eeschema/pinedit.cpp:599
 #, c-format
 msgid "Initial pin position (%d, %d)"
-msgstr ""
+msgstr "Position initiane de la pin (%d, %d)"
 
 #: eeschema/pinedit.cpp:969
 #, c-format
@@ -7348,27 +7358,22 @@ msgid "Library Browser"
 msgstr "Visualisateur de Librairies"
 
 #: eeschema/viewlibs.cpp:115
-#: eeschema/libedit.cpp:35
 msgid "no library selected"
 msgstr "Pas de librairie sélectionnée"
 
 #: eeschema/viewlibs.cpp:314
-#: eeschema/libedit.cpp:306
 msgid "Part"
 msgstr "Part"
 
 #: eeschema/viewlibs.cpp:315
-#: eeschema/libedit.cpp:318
 msgid "Alias"
 msgstr "Alias"
 
 #: eeschema/viewlibs.cpp:316
-#: eeschema/libedit.cpp:344
 msgid "Description"
 msgstr "Description"
 
 #: eeschema/viewlibs.cpp:317
-#: eeschema/libedit.cpp:351
 msgid "Key words"
 msgstr "Mots clé"
 
@@ -7394,7 +7399,6 @@ msgid "File <%s> not found."
 msgstr "Fichier <%s> non trouvé"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:26
-#: eeschema/libedit.cpp:323
 msgid "Unit"
 msgstr "Unité"
 
@@ -7499,7 +7503,6 @@ msgid "The name of the symbol in the library from which this component came"
 msgstr "Le nom du symbole dans la librairie d'où vient le composant."
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:73
-#: eeschema/libedit.cpp:326
 msgid "Convert"
 msgstr "Convert"
 
@@ -10698,9 +10701,8 @@ msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
 msgstr ""
 
 #: gerbview/files.cpp:143
-#, fuzzy
 msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
-msgstr "Couche cuivre"
+msgstr "Bottom paste (*.GBP)|*.GBP;*.gbp|"
 
 #: gerbview/files.cpp:144
 msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
@@ -12186,6 +12188,8 @@ msgstr "DCodes id."
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "Track Width: %s   Vias Size : %s"
+#~ msgstr "Larg. piste: %s  Diam Vias : %s"
 #~ msgid "none selected"
 #~ msgstr "Pas de sélection"
 #~ msgid "TextPCB properties"
