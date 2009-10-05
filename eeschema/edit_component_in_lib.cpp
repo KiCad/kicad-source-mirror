@@ -107,7 +107,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitBasicPanel()
     m_ShowPinNumButt->SetValue( component->m_DrawPinNum );
     m_ShowPinNameButt->SetValue( component->m_DrawPinName );
     m_PinsNameInsideButt->SetValue( component->m_TextInside != 0 );
-    m_SelNumberOfUnits->SetValue( component->m_UnitCount );
+    m_SelNumberOfUnits->SetValue( component->GetPartCount() );
     m_SetSkew->SetValue( component->m_TextInside );
     m_OptionPower->SetValue( component->m_Options == ENTRY_POWER );
     m_OptionPartsLocked->SetValue( component->m_UnitSelectionLocked );
@@ -226,7 +226,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
     /* Set the option "Units locked".
      *  Obviously, cannot be TRUE if there is only one part */
     component->m_UnitSelectionLocked = m_OptionPartsLocked->GetValue();
-    if( component->m_UnitCount <= 1 )
+    if( component->GetPartCount() <= 1 )
         component->m_UnitSelectionLocked = FALSE;
 
     /* Update the footprint filter list */
@@ -348,163 +348,57 @@ edited!" ),
 }
 
 
-/********************************************************************/
-bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::ChangeNbUnitsPerPackage( int MaxUnit )
-/********************************************************************/
-
-/* Routine de modification du nombre d'unites par package pour le
- *  composant courant;
+/*
+ * Change the number of parts per package.
  */
+bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::ChangeNbUnitsPerPackage( int MaxUnit )
 {
-    int OldNumUnits, ii, FlagDel = -1;
-    LIB_DRAW_ITEM* DrawItem, * NextDrawItem;
     LIB_COMPONENT* component = m_Parent->GetComponent();
 
-    if( component == NULL )
-        return FALSE;
+    if( component == NULL || component->GetPartCount() == MaxUnit
+        || MaxUnit < 1 )
+        return false;
 
-    /* Si pas de changement: termine */
-    if( component->m_UnitCount == MaxUnit )
-        return FALSE;
+    if( MaxUnit < component->GetPartCount()
+        && !IsOK( this, _( "Delete extra parts from component?" ) ) )
+        return false;
 
-    OldNumUnits = component->m_UnitCount;
-    if( OldNumUnits < 1 )
-        OldNumUnits = 1;
-
-    component->m_UnitCount = MaxUnit;
-
-
-    /* Traitement des unites enlevees ou rajoutees */
-    if( OldNumUnits > component->m_UnitCount )
-    {
-        DrawItem = component->GetNextDrawItem();
-        for( ; DrawItem != NULL; DrawItem = NextDrawItem )
-        {
-            NextDrawItem = DrawItem->Next();
-            if( DrawItem->m_Unit > MaxUnit )  /* Item a effacer */
-            {
-                if( FlagDel < 0 )
-                {
-                    if( IsOK( this, _( "Delete units" ) ) )
-                    {
-                        /* Si part selectee n'existe plus: selection 1ere unit */
-                        if( m_Parent->GetUnit() > MaxUnit )
-                            m_Parent->SetUnit( 1 );
-                        FlagDel = 1;
-                    }
-                    else
-                    {
-                        FlagDel = 0;
-                        MaxUnit = OldNumUnits;
-                        component->m_UnitCount = MaxUnit;
-                        return FALSE;
-                    }
-                }
-
-                component->RemoveDrawItem( DrawItem );
-            }
-        }
-
-        return TRUE;
-    }
-
-    if( OldNumUnits < component->m_UnitCount )
-    {
-        DrawItem = component->GetNextDrawItem();
-        for( ; DrawItem != NULL; DrawItem = DrawItem->Next() )
-        {
-            /* Duplication des items pour autres elements */
-            if( DrawItem->m_Unit == 1 )
-            {
-                for( ii = OldNumUnits + 1; ii <= MaxUnit; ii++ )
-                {
-                    NextDrawItem = DrawItem->GenCopy();
-                    NextDrawItem->m_Unit = ii;
-                    component->AddDrawItem( NextDrawItem );
-                }
-            }
-        }
-    }
-
-    return TRUE;
+    component->SetPartCount( MaxUnit );
+    return true;
 }
 
 
-/*****************************************************/
-bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
-/*****************************************************/
-
-/* cr�e ou efface (selon option AsConvert) les �l�ments
- *  de la repr�sentation convertie d'un composant
+/*
+ * Set or clear the component alternate body style ( DeMorgan ).
  */
+bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
 {
-    int FlagDel = 0;
-    LIB_DRAW_ITEM* DrawItem = NULL, * NextDrawItem;
     LIB_COMPONENT* component = m_Parent->GetComponent();
 
-    if( m_Parent->GetShowDeMorgan() )  /* Representation convertie a creer */
+    if( component == NULL
+        || ( m_Parent->GetShowDeMorgan() == component->HasConversion() ) )
+        return false;
+
+    if( m_Parent->GetShowDeMorgan()
+        && !IsOK( this, _( "Add new pins for alternate body style \
+( DeMorgan ) to component?" ) ) )
     {
-        /* Traitement des elements a ajouter ( pins seulement ) */
-        if( component )
-            DrawItem = component->GetNextDrawItem();
-
-        for( ; DrawItem != NULL; DrawItem = DrawItem->Next() )
-        {
-            /* Duplication des items pour autres elements */
-            if( DrawItem->Type() != COMPONENT_PIN_DRAW_TYPE )
-                continue;
-            if( DrawItem->m_Convert == 1 )
-            {
-                if( FlagDel == 0 )
-                {
-                    if( IsOK( this, _( "Create pins for convert items." ) ) )
-                        FlagDel = 1;
-                    else
-                    {
-                        if( IsOK( this, _( "Part as \"De Morgan\" anymore" ) ) )
-                            return TRUE;
-
-                        m_Parent->SetShowDeMorgan( false );
-                        return FALSE;
-                    }
-                }
-
-                NextDrawItem = DrawItem->GenCopy();
-                NextDrawItem->m_Convert = 2;
-                component->AddDrawItem( NextDrawItem );
-            }
-        }
+        m_Parent->SetShowDeMorgan( false );
+        return false;
     }
-    else               /* Representation convertie a supprimer */
+
+    if( !m_Parent->GetShowDeMorgan()
+        && !IsOK( this, _( "Delete alternate body style (DeMorgan) draw \
+items from component?" ) ) )
     {
-        /* Traitement des elements � supprimer */
-        if( component )
-            DrawItem = component->GetNextDrawItem();
-        for( ; DrawItem != NULL; DrawItem = NextDrawItem )
-        {
-            NextDrawItem = DrawItem->Next();
-            if( DrawItem->m_Convert > 1 )  /* Item a effacer */
-            {
-                if( FlagDel == 0 )
-                {
-                    if( IsOK( this, _( "Delete Convert items" ) ) )
-                    {
-                        m_Parent->SetConvert( 1 );
-                        FlagDel = 1;
-                    }
-                    else
-                    {
-                        m_Parent->SetShowDeMorgan( true );
-                        return FALSE;
-                    }
-                }
-
-                m_Parent->GetScreen()->SetModify();
-                component->RemoveDrawItem( DrawItem );
-            }
-        }
+        m_Parent->SetShowDeMorgan( true );
+        return false;
     }
-    return TRUE;
+
+    component->SetConversion( m_Parent->GetShowDeMorgan() );
+    m_Parent->GetScreen()->SetModify();
+
+    return true;
 }
 
 

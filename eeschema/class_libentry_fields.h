@@ -132,12 +132,28 @@ public:
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
+
+    /**
+     * Provide the field draw object specific comparison.
+     *
+     * The sort order for field is as follows:
+     *
+     *      - Field ID, REFERENCE, VALUE, etc.
+     *      - Field string, case insensitive compare.
+     *      - Field horizontal (X) position.
+     *      - Field vertical (Y) position.
+     *      - Field width.
+     *      - Field height.
+     */
     virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
+
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& center );
+    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                         const int transform[2][2] );
 };
 
 #endif  //  CLASS_LIBENTRY_FIELDS_H

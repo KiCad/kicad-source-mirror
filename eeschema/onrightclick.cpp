@@ -332,10 +332,10 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
         ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_CONVERT_CMP,
                       _( "Convert" ), component_select_alternate_shape_xpm );
 
-    if( libComponent && ( libComponent->m_UnitCount >= 2 ) )
+    if( libComponent && ( libComponent->GetPartCount() >= 2 ) )
     {
         wxMenu* sel_unit_menu = new wxMenu; int ii;
-        for( ii = 0; ii < libComponent->m_UnitCount; ii++ )
+        for( ii = 0; ii < libComponent->GetPartCount(); ii++ )
         {
             wxString num_unit;
             num_unit.Printf( _( "Unit %d %c" ), ii + 1,

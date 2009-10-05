@@ -138,7 +138,7 @@ static SCH_COMPONENT* FindNextComponentAndCreatPinList( EDA_BaseStruct* DrawList
             continue;
 
         // Multi parts per package: test if already visited:
-        if( Entry->m_UnitCount > 1 )
+        if( Entry->GetPartCount() > 1 )
         {
             bool found = false;
             for( unsigned jj = 0; jj < s_ReferencesAlreadyFound.GetCount(); jj++ )
@@ -158,7 +158,7 @@ static SCH_COMPONENT* FindNextComponentAndCreatPinList( EDA_BaseStruct* DrawList
             }
         }
 
-        if( Entry->m_UnitCount <= 1 )   // One part per package
+        if( Entry->GetPartCount() <= 1 )   // One part per package
         {
             for( Pin = Entry->GetNextPin(); Pin != NULL;
                  Pin = Entry->GetNextPin( Pin ) )

@@ -111,7 +111,7 @@ void WinEDA_bodygraphics_PropertiesFrame::bodygraphics_PropertiesAccept( wxComma
             break;
         }
 
-        item->GetParent()->SortDrawItems();
+        item->GetParent()->GetDrawItemList().sort();
 
         m_Parent->GetScreen()->SetModify();
 

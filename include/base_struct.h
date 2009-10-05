@@ -63,7 +63,14 @@ enum KICAD_T {
     SCREEN_STRUCT_TYPE,
     BLOCK_LOCATE_STRUCT_TYPE,
 
-    // Draw Items in library component
+    /*
+     * Draw items in library component.
+     *
+     * The order of these items effects the sort order for items inside the
+     * "DRAW/ENDDRAW" section of the component definition in a library file.
+     * If you add a new draw item, type, please make sure you add it so the
+     * sort order is logical.
+     */
     LIBCOMPONENT_STRUCT_TYPE,
     COMPONENT_ARC_DRAW_TYPE,
     COMPONENT_CIRCLE_DRAW_TYPE,
@@ -71,9 +78,14 @@ enum KICAD_T {
     COMPONENT_RECT_DRAW_TYPE,
     COMPONENT_POLYLINE_DRAW_TYPE,
     COMPONENT_LINE_DRAW_TYPE,
-    COMPONENT_PIN_DRAW_TYPE,
-    COMPONENT_FIELD_DRAW_TYPE,
     COMPONENT_BEZIER_DRAW_TYPE,
+    COMPONENT_PIN_DRAW_TYPE,
+
+    /*
+     * Fields are not saved inside the "DRAW/ENDDRAW".  Add new draw item
+     * types before this line.
+     */
+    COMPONENT_FIELD_DRAW_TYPE,
 
     // End value
     MAX_STRUCT_TYPE_ID

@@ -6,6 +6,7 @@
 #include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
+#include "plot_common.h"
 #include "drawtxt.h"
 #include "trigo.h"
 #include "bezier_curves.h"
@@ -91,22 +92,22 @@ bool LIB_DRAW_ITEM::operator==( const LIB_DRAW_ITEM& other ) const
 
 bool LIB_DRAW_ITEM::operator<( const LIB_DRAW_ITEM& other ) const
 {
-    int result = Type() - other.Type();
+    int result = m_Convert - other.m_Convert;
 
-    if( result < 0 )
-        return true;
+    if( result != 0 )
+        return result < 0;
 
     result = m_Unit - other.m_Unit;
 
-    if( result < 0 )
-        return true;
+    if( result != 0 )
+        return result < 0;
 
-    result = m_Convert - other.m_Convert;
+    result = Type() - other.Type();
 
-    if( result < 0 )
-        return true;
+    if( result != 0 )
+        return result < 0;
 
-    return DoCompare( other ) < 0;
+    return ( DoCompare( other ) < 0 );
 }
 
 
@@ -355,6 +356,28 @@ void LibDrawArc::DoMirrorHorizontal( const wxPoint& center )
     m_ArcEnd.x *= -1;
     m_ArcEnd.x += center.x;
     EXCHG( m_ArcStart, m_ArcEnd );
+}
+
+
+void LibDrawArc::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                         const int transform[2][2] )
+{
+    wxASSERT( plotter != NULL );
+
+    int t1 = m_t1;
+    int t2 = m_t2;
+    wxPoint pos = TransformCoordinate( transform, m_Pos ) + offset;
+
+    MapAngles( &t1, &t2, transform );
+
+    if( fill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
+    {
+        plotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        plotter->arc( pos, -t2, -t1, m_Radius, FILLED_SHAPE, 0 );
+    }
+
+    plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
+    plotter->arc( pos, -t2, -t1, m_Radius, m_Fill, GetPenSize() );
 }
 
 
@@ -672,6 +695,22 @@ void LibDrawCircle::DoMirrorHorizontal( const wxPoint& center )
 }
 
 
+void LibDrawCircle::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                            const int transform[2][2] )
+{
+    wxPoint pos = TransformCoordinate( transform, m_Pos ) + offset;
+
+    if( fill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
+    {
+        plotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        plotter->circle( pos, m_Radius * 2, FILLED_SHAPE, 0 );
+    }
+
+    plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
+    plotter->circle( pos, m_Radius * 2, m_Fill, GetPenSize() );
+}
+
+
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
@@ -885,6 +924,25 @@ void LibDrawSquare::DoMirrorHorizontal( const wxPoint& center )
     m_End.x -= center.x;
     m_End.x *= -1;
     m_End.x += center.x;
+}
+
+
+void LibDrawSquare::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                            const int transform[2][2] )
+{
+    wxASSERT( plotter != NULL );
+
+    wxPoint pos = TransformCoordinate( transform, m_Pos ) + offset;
+    wxPoint end = TransformCoordinate( transform, m_End ) + offset;
+
+    if( fill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
+    {
+        plotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        plotter->rect( pos, end, FILLED_WITH_BG_BODYCOLOR, 0 );
+    }
+
+    plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
+    plotter->rect( pos, end, m_Fill, GetPenSize() );
 }
 
 
@@ -1130,6 +1188,23 @@ void LibDrawSegment::DoMirrorHorizontal( const wxPoint& center )
     m_End.x -= center.x;
     m_End.x *= -1;
     m_End.x += center.x;
+}
+
+
+void LibDrawSegment::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                             const int transform[2][2] )
+{
+    wxASSERT( plotter != NULL );
+
+    int points[4];
+    wxPoint pos = TransformCoordinate( transform, m_Pos ) + offset;
+    wxPoint end = TransformCoordinate( transform, m_End ) + offset;
+    points[0] = pos.x;
+    points[1] = pos.y;
+    points[2] = end.x;
+    points[3] = end.y;
+    plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
+    plotter->poly( 2, points, m_Fill, GetPenSize() );
 }
 
 
@@ -1404,6 +1479,35 @@ void LibDrawPolyline::DoMirrorHorizontal( const wxPoint& center )
         m_PolyPoints[i].x *= -1;
         m_PolyPoints[i].x += center.x;
     }
+}
+
+
+void LibDrawPolyline::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                              const int transform[2][2] )
+{
+    wxASSERT( plotter != NULL );
+
+    size_t i;
+
+    int* Poly = (int*) MyMalloc( sizeof(int) * 2 * GetCornerCount() );
+
+    for( i = 0; i < m_PolyPoints.size(); i++ )
+    {
+        wxPoint pos = m_PolyPoints[i];
+        pos = TransformCoordinate( transform, pos ) + offset;
+        Poly[i * 2]     = pos.x;
+        Poly[i * 2 + 1] = pos.y;
+    }
+
+    if( fill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
+    {
+        plotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        plotter->poly( i, Poly, FILLED_WITH_BG_BODYCOLOR, 0 );
+    }
+
+    plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
+    plotter->poly( i, Poly, m_Fill, GetPenSize() );
+    MyFree( Poly );
 }
 
 
@@ -1761,6 +1865,35 @@ void LibDrawBezier::DoMirrorHorizontal( const wxPoint& center )
         m_BezierPoints[i].x *= -1;
         m_BezierPoints[i].x += center.x;
     }
+}
+
+
+void LibDrawBezier::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                            const int transform[2][2] )
+{
+    wxASSERT( plotter != NULL );
+
+    size_t i;
+
+    int* Poly = (int*) MyMalloc( sizeof(int) * 2 * GetCornerCount() );
+
+    for( i = 0; i < m_PolyPoints.size(); i++ )
+    {
+        wxPoint pos = m_PolyPoints[i];
+        pos = TransformCoordinate( transform, pos ) + offset;
+        Poly[i * 2]     = pos.x;
+        Poly[i * 2 + 1] = pos.y;
+    }
+
+    if( fill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
+    {
+        plotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        plotter->poly( i, Poly, FILLED_WITH_BG_BODYCOLOR, 0 );
+    }
+
+    plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
+    plotter->poly( i, Poly, m_Fill, GetPenSize() );
+    MyFree( Poly );
 }
 
 

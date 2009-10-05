@@ -426,7 +426,7 @@ void SCH_CMP_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
         Entry = CMP_LIBRARY::FindLibraryComponent( component->m_ChipName );
         if( Entry != NULL )
         {
-            if( Entry->m_UnitCount > 1 )
+            if( Entry->GetPartCount() > 1 )
                 m_AddExtraText = 1;
         }
     }

@@ -650,7 +650,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
         Unit  = ' ';
         Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
         if( Entry )
-            Multi = Entry->m_UnitCount;
+            Multi = Entry->GetPartCount();
 
         if( ( Multi > 1 ) && aIncludeSubComponents )
 #if defined (KICAD_GOST)
@@ -749,7 +749,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal(
         Unit  = ' ';
         Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
         if( Entry )
-            Multi = Entry->m_UnitCount;
+            Multi = Entry->GetPartCount();
 
         if( ( Multi > 1 ) && aIncludeSubComponents )
         {

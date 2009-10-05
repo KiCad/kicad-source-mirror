@@ -191,7 +191,7 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     if( ( ( field->m_Attributs & TEXT_NO_VISIBLE ) == 0 )
         && !( field->m_Flags & IS_MOVED ) )
     {
-        if( Entry->m_UnitCount > 1 )
+        if( Entry->GetPartCount() > 1 )
         {
             field->m_AddExtraText = true;
             field->Draw( panel, DC, offset, DrawMode );

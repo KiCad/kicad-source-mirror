@@ -18,6 +18,10 @@
 #include "class_libentry.h"
 
 
+extern void PlotPinSymbol( PLOTTER* plotter, const wxPoint& pos,
+                           int len, int orient, int Shape );
+
+
 const wxChar* MsgPinElectricType[] =
 {
     wxT( "input" ),
@@ -1146,6 +1150,24 @@ void LibDrawPin::DoMirrorHorizontal( const wxPoint& center )
         m_Orient = PIN_LEFT;
     else if( m_Orient == PIN_LEFT )
         m_Orient = PIN_RIGHT;
+}
+
+
+void LibDrawPin::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                         const int transform[2][2] )
+{
+    if( m_Attributs & PINNOTDRAW )
+        return;
+
+    int orient = ReturnPinDrawOrient( transform );
+
+    wxPoint pos = TransformCoordinate( transform, m_Pos ) + offset;
+
+    plotter->set_current_line_width( GetPenSize() );
+    PlotPinSymbol( plotter, pos, m_PinLen, orient, m_PinShape );
+    PlotPinTexts( plotter, pos, orient, GetParent()->m_TextInside,
+                  GetParent()->m_DrawPinNum, GetParent()->m_DrawPinName,
+                  GetPenSize() );
 }
 
 

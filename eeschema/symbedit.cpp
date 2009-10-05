@@ -21,6 +21,8 @@
 #include "libeditfrm.h"
 #include "class_library.h"
 
+#include <boost/foreach.hpp>
+
 
 /*
  * Read a component shape file (a symbol file *.sym )and add data (graphic
@@ -32,7 +34,6 @@
 void WinEDA_LibeditFrame::LoadOneSymbol( void )
 {
     LIB_COMPONENT* Component;
-    LIB_DRAW_ITEM* DrawEntry;
     FILE*          ImportFile;
     wxString       msg, err;
     CMP_LIBRARY*   Lib;
@@ -93,24 +94,23 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
     }
 
     if( Lib->GetCount() > 1 )
-        DisplayError( this, _( "Warning: more than 1 part in Symbol File" ) );
+        DisplayError( this, _( "Warning: more than 1 part in symbol file." ) );
 
     Component = (LIB_COMPONENT*) Lib->GetFirstEntry();
-    DrawEntry = Component->GetNextDrawItem();
+    LIB_DRAW_ITEM_LIST& drawList = Component->GetDrawItemList();
 
-    while( DrawEntry != NULL )
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawList )
     {
-        if( DrawEntry->m_Unit )
-            DrawEntry->m_Unit = m_unit;
-        if( DrawEntry->m_Convert )
-            DrawEntry->m_Convert = m_convert;
-        DrawEntry->m_Flags    = IS_NEW;
-        DrawEntry->m_Selected = IS_SELECTED;
+        if( item.m_Unit )
+            item.m_Unit = m_unit;
+        if( item.m_Convert )
+            item.m_Convert = m_convert;
+        item.m_Flags    = IS_NEW;
+        item.m_Selected = IS_SELECTED;
 
-        LIB_DRAW_ITEM* newItem = DrawEntry->GenCopy();
+        LIB_DRAW_ITEM* newItem = item.GenCopy();
         newItem->SetParent( m_component );
         m_component->AddDrawItem( newItem );
-        DrawEntry = DrawEntry->Next();
     }
 
     // Remove duplicated drawings:
@@ -136,11 +136,10 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
  */
 void WinEDA_LibeditFrame::SaveOneSymbol()
 {
-    LIB_DRAW_ITEM* DrawEntry;
-    wxString       msg;
-    FILE*          ExportFile;
+    wxString msg;
+    FILE*    ExportFile;
 
-    if( m_component->GetNextDrawItem() == NULL )
+    if( m_component->GetDrawItemList().empty() )
         return;
 
     /* Creation du fichier symbole */
@@ -204,28 +203,23 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
     /* Position / orientation / visibilite des champs */
     m_component->m_Prefix.Save( ExportFile );
     m_component->m_Name.Save( ExportFile );
-    DrawEntry = m_component->GetNextDrawItem();
 
-    if( DrawEntry )
+    LIB_DRAW_ITEM_LIST& drawList = m_component->GetDrawItemList();
+
+    fprintf( ExportFile, "DRAW\n" );
+
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawList )
     {
-        fprintf( ExportFile, "DRAW\n" );
+        /* Elimination des elements non relatifs a l'unite */
+        if( m_unit && item.m_Unit && ( item.m_Unit != m_unit ) )
+            continue;
+        if( m_convert && item.m_Convert && ( item.m_Convert != m_convert ) )
+            continue;
 
-        for( ; DrawEntry != NULL; DrawEntry = DrawEntry->Next() )
-        {
-            /* Elimination des elements non relatifs a l'unite */
-            if( m_unit && DrawEntry->m_Unit
-                && ( DrawEntry->m_Unit != m_unit ) )
-                continue;
-            if( m_convert && DrawEntry->m_Convert
-               && ( DrawEntry->m_Convert != m_convert ) )
-                continue;
-
-            DrawEntry->Save( ExportFile );
-        }
-
-        fprintf( ExportFile, "ENDDRAW\n" );
+        item.Save( ExportFile );
     }
 
+    fprintf( ExportFile, "ENDDRAW\n" );
     fprintf( ExportFile, "ENDDEF\n" );
     fclose( ExportFile );
 }

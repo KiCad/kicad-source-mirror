@@ -11,6 +11,7 @@
 #include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
+#include "plot_common.h"
 #include "drawtxt.h"
 #include "trigo.h"
 
@@ -245,6 +246,23 @@ void LibDrawText::DoMirrorHorizontal( const wxPoint& center )
     m_Pos.x -= center.x;
     m_Pos.x *= -1;
     m_Pos.x += center.x;
+}
+
+
+void LibDrawText::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                          const int transform[2][2] )
+{
+    wxASSERT( plotter != NULL );
+
+    /* The text orientation may need to be flipped if the
+     * transformation matrix causes xy axes to be flipped. */
+    int t1  = ( transform[0][0] != 0 ) ^ ( m_Orient != 0 );
+    wxPoint pos = TransformCoordinate( transform, m_Pos ) + offset;
+
+    plotter->text( pos, UNSPECIFIED_COLOR, m_Text,
+                   t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
+                   m_Size, GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                   GetPenSize(), m_Italic, m_Bold );
 }
 
 

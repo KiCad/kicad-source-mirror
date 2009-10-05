@@ -71,7 +71,7 @@ void WinEDA_SchematicFrame::StartMoveCmpField( SCH_CMP_FIELD* aField, wxDC* DC )
 
         if( Entry  != NULL )
         {
-            if( Entry->m_UnitCount > 1 )
+            if( Entry->GetPartCount() > 1 )
                 m_Multiflag = 1;
         }
     }
@@ -122,7 +122,7 @@ void WinEDA_SchematicFrame::EditCmpFieldText( SCH_CMP_FIELD* Field, wxDC* DC )
 
         if( Entry != NULL )
         {
-            if( Entry->m_UnitCount > 1 )
+            if( Entry->GetPartCount() > 1 )
                 flag = 1;
         }
     }
@@ -266,7 +266,7 @@ void WinEDA_SchematicFrame::RotateCmpField( SCH_CMP_FIELD* Field, wxDC* DC )
 
         if( Entry != NULL )
         {
-            if( Entry->m_UnitCount > 1 )
+            if( Entry->GetPartCount() > 1 )
                 flag = 1;
         }
     }
@@ -304,7 +304,7 @@ void WinEDA_SchematicFrame::EditComponentReference( SCH_COMPONENT* Cmp, wxDC* DC
     if( Entry == NULL )
         return;
 
-    if( Entry->m_UnitCount > 1 )
+    if( Entry->GetPartCount() > 1 )
         flag = 1;
 
     wxString ref = Cmp->GetRef(GetSheet());

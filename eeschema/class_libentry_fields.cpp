@@ -9,6 +9,7 @@
 #include "drawtxt.h"
 #include "kicad_string.h"
 #include "class_drawpanel.h"
+#include "plot_common.h"
 #include "trigo.h"
 
 #include "program.h"
@@ -356,7 +357,7 @@ bool LibDrawField::HitTest( wxPoint aPosRef, int aThreshold,
         extraCharCount++;
         m_Text.Append('?');
         LIB_COMPONENT* parent = (LIB_COMPONENT*)m_Parent;
-        if ( parent && ( parent->m_UnitCount > 1 ) )
+        if ( parent && ( parent->GetPartCount() > 1 ) )
         {
             m_Text.Append('A');
             extraCharCount++;
@@ -477,6 +478,12 @@ void LibDrawField::DoMirrorHorizontal( const wxPoint& center )
 }
 
 
+void LibDrawField::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                           const int transform[2][2] )
+{
+}
+
+
 /*
  * If the field is the reference, return reference like schematic,
  * i.e U -> U? or U?A or the field text for others
@@ -490,7 +497,7 @@ wxString LibDrawField::GetFullText( int unit )
 
     wxString text = m_Text;
 
-    if( GetParent()->m_UnitCount > 1 )
+    if( GetParent()->GetPartCount() > 1 )
     {
 #if defined(KICAD_GOST)
         text.Printf( wxT( "%s?.%c" ),

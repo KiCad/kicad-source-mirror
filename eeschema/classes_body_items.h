@@ -266,13 +266,30 @@ public:
         DoMirrorHorizontal( center );
     }
 
+    /**
+     * Plot the draw item using the plot object.
+     *
+     * @param plotter - The plot object to plot to.
+     */
+    void Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+               const int transform[2][2] )
+    {
+        DoPlot( plotter, offset, fill, transform );
+    }
+
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy() = 0;
 
     /**
      * Provide the draw object specific comparison.
      *
-     * This is called by the == operator.
+     * This is called by the == and < operators.
+     *
+     * The sort order is as follows:
+     *      - Component alternate part (DeMorgan) number.
+     *      - Component part number.
+     *      - KICAD_T enum value.
+     *      - Result of derived classes comparison.
      */
     virtual int DoCompare( const LIB_DRAW_ITEM& other ) const = 0;
     virtual void DoOffset( const wxPoint& offset ) = 0;
@@ -280,6 +297,8 @@ protected:
     virtual void DoMove( const wxPoint& newPosition ) = 0;
     virtual wxPoint DoGetPosition( void ) = 0;
     virtual void DoMirrorHorizontal( const wxPoint& center ) = 0;
+    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                         const int transform[2][2] ) = 0;
 };
 
 
@@ -396,30 +415,43 @@ public:
                int aColor, int aDrawMode, void* aData,
                const int aTransformMatrix[2][2] );
 
-    void         DrawPinSymbol( WinEDA_DrawPanel* panel, wxDC* DC,
-                                const wxPoint& pin_pos, int orient,
-                                int DrawMode, int Color = -1 );
+    void DrawPinSymbol( WinEDA_DrawPanel* panel, wxDC* DC,
+                        const wxPoint& pin_pos, int orient,
+                        int DrawMode, int Color = -1 );
 
-    void         DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
-                               wxPoint& pin_pos, int orient,
-                               int TextInside, bool DrawPinNum,
-                               bool DrawPinName, int Color, int DrawMode );
-    void         PlotPinTexts( PLOTTER *plotter,
-                               wxPoint& pin_pos,
-                               int      orient,
-                               int      TextInside,
-                               bool     DrawPinNum,
-                               bool     DrawPinNameint,
-                               int      aWidth);
+    void DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
+                       wxPoint& pin_pos, int orient,
+                       int TextInside, bool DrawPinNum,
+                       bool DrawPinName, int Color, int DrawMode );
+
+    void PlotPinTexts( PLOTTER *plotter,
+                       wxPoint& pin_pos,
+                       int      orient,
+                       int      TextInside,
+                       bool     DrawPinNum,
+                       bool     DrawPinNameint,
+                       int      aWidth );
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
+
+    /**
+     * Provide the pin draw object specific comparison.
+     *
+     * The sort order is as follows:
+     *      - Pin number.
+     *      - Pin name, case insensitive compare.
+     *      - Pin horizontal (X) position.
+     *      - Pin vertical (Y) position.
+     */
     virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& center );
+    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                         const int transform[2][2] );
 };
 
 
@@ -490,12 +522,24 @@ public:
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
+
+    /**
+     * Provide the arc draw object specific comparison.
+     *
+     * The sort order is as follows:
+     *      - Arc horizontal (X) position.
+     *      - Arc vertical (Y) position.
+     *      - Arc start angle.
+     *      - Arc end angle.
+     */
     virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& center );
+    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                         const int transform[2][2] );
 };
 
 
@@ -562,12 +606,24 @@ public:
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
+
+    /**
+     * Provide the circle draw object specific comparison.
+     *
+     * The sort order is as follows:
+     *      - Circle horizontal (X) position.
+     *      - Circle vertical (Y) position.
+     *      - Circle radius.
+     */
     virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
+
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& center );
+    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                         const int transform[2][2] );
 };
 
 
@@ -643,12 +699,26 @@ public:
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
+
+    /**
+     * Provide the text draw object specific comparison.
+     *
+     * The sort order is as follows:
+     *      - Text string, case insensitive compare.
+     *      - Text horizontal (X) position.
+     *      - Text vertical (Y) position.
+     *      - Text width.
+     *      - Text height.
+     */
     virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
+
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& center );
+    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                         const int transform[2][2] );
 };
 
 
@@ -714,12 +784,25 @@ public:
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
+
+    /**
+     * Provide the rectangle draw object specific comparison.
+     *
+     * The sort order is as follows:
+     *      - Rectangle horizontal (X) start position.
+     *      - Rectangle vertical (Y) start position.
+     *      - Rectangle horizontal (X) end position.
+     *      - Rectangle vertical (Y) end position.
+     */
     virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
+
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& center );
+    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                         const int transform[2][2] );
 };
 
 /**********************************/
@@ -784,12 +867,25 @@ public:
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
+
+    /**
+     * Provide the line segment draw object specific comparison.
+     *
+     * The sort order is as follows:
+     *      - Line segment horizontal (X) start position.
+     *      - Line segment vertical (Y) start position.
+     *      - Line segment horizontal (X) end position.
+     *      - Line segment vertical (Y) end position.
+     */
     virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
+
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& center );
+    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                         const int transform[2][2] );
 };
 
 
@@ -865,12 +961,23 @@ public:
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
+
+    /**
+     * Provide the ployline segment draw object specific comparison.
+     *
+     * The sort order for each polyline segment point is as follows:
+     *      - Line segment point horizontal (X) position.
+     *      - Line segment point vertical (Y) position.
+     */
     virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
+
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) { return m_PolyPoints[0]; }
     virtual void DoMirrorHorizontal( const wxPoint& center );
+    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                         const int transform[2][2] );
 };
 
 /**********************************************************/
@@ -904,7 +1011,7 @@ public:
     virtual bool Save( FILE* aFile ) const;
     virtual bool Load( char* line, wxString& errorMsg );
 
-    void             AddPoint( const wxPoint& point );
+    void         AddPoint( const wxPoint& point );
 
     /** Function GetCornerCount
      * @return the number of corners
@@ -946,12 +1053,23 @@ public:
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
+
+    /**
+     * Provide the bezier curve draw object specific comparison.
+     *
+     * The sort order for each bezier curve segment point is as follows:
+     *      - Bezier point horizontal (X) point position.
+     *      - Bezier point vertical (Y) point position.
+     */
     virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
+
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_Rect& rect );
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) { return m_PolyPoints[0]; }
     virtual void DoMirrorHorizontal( const wxPoint& center );
+    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                         const int transform[2][2] );
 };
 
 #endif  //  CLASSES_BODY_ITEMS_H

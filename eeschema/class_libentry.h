@@ -53,7 +53,7 @@ public:
 public:
     CMP_LIB_ENTRY( LibrEntryType CmpType, const wxString& name,
                    CMP_LIBRARY* lib = NULL );
-    CMP_LIB_ENTRY( const CMP_LIB_ENTRY& entry, CMP_LIBRARY* lib = NULL );
+    CMP_LIB_ENTRY( CMP_LIB_ENTRY& entry, CMP_LIBRARY* lib = NULL );
 
     virtual ~CMP_LIB_ENTRY();
 
@@ -112,7 +112,6 @@ public:
     wxArrayString      m_FootprintList;  /* list of suitable footprint names
                                           * for the component (wildcard names
                                           * accepted) */
-    int                m_UnitCount;      /* Units (or sections) per package */
     bool               m_UnitSelectionLocked;  /* True if units are different
                                                 * and their selection is
                                                 * locked (i.e. if part A cannot
@@ -125,8 +124,11 @@ public:
     bool               m_DrawPinNum;
     bool               m_DrawPinName;
     DLIST<LibDrawField> m_Fields;         /* Auxiliary Field list (id >= 2 ) */
-    LIB_DRAW_ITEM    * m_Drawings;        /* How to draw this part */
     long               m_LastDate;        // Last change Date
+
+protected:
+    int                m_UnitCount;      /* Units (or sections) per package */
+    LIB_DRAW_ITEM_LIST m_Drawings;       /* How to draw this part */
 
 public:
     virtual wxString GetClass() const
@@ -136,13 +138,11 @@ public:
 
 
     LIB_COMPONENT( const wxString& name, CMP_LIBRARY* lib = NULL );
-    LIB_COMPONENT( const LIB_COMPONENT& component, CMP_LIBRARY* lib = NULL );
+    LIB_COMPONENT( LIB_COMPONENT& component, CMP_LIBRARY* lib = NULL );
 
     ~LIB_COMPONENT();
 
     EDA_Rect GetBoundaryBox( int Unit, int Convert );
-
-    void SortDrawItems();
 
     bool SaveDateAndTime( FILE* ExportFile );
     bool LoadDateAndTime( char* Line );
@@ -203,6 +203,17 @@ public:
                const int transformMatrix[2][2] = DefaultTransformMatrix,
                bool showPinText = true, bool drawFields = true,
                bool onlySelected = false );
+
+    /**
+     * Plot component to plotter.
+     *
+     * @param plotter - Plotter object to plot to.
+     * @param unit - Component part to plot.
+     * @param convert - Component alternate body style to plot.
+     * @param transform - Component plot transform matrix.
+     */
+    void Plot( PLOTTER* plotter, int unit, int convert, const wxPoint& offset,
+               const int transform[2][2] );
 
     /**
      * Add a new draw item to the draw object list.
@@ -344,6 +355,40 @@ public:
      */
     LIB_DRAW_ITEM* LocateDrawItem( int unit, int convert, KICAD_T type,
                                    const wxPoint& pt );
+
+    /**
+     * Return a reference to the draw item list.
+     *
+     * @return LIB_DRAW_ITEM_LIST& - Reference to the draw item object list.
+     */
+    LIB_DRAW_ITEM_LIST& GetDrawItemList( void ) { return m_Drawings; }
+
+    /**
+     * Set the part per package count.
+     *
+     * If the count is greater than the current count, then the all of the
+     * current draw items are duplicated for each additional part.  If the
+     * count is less than the current count, all draw objects for parts
+     * greater that count are removed from the component.
+     *
+     * @param count - Number of parts per package.
+     */
+    void SetPartCount( int count );
+
+    int GetPartCount( void ) { return m_UnitCount; }
+
+    /**
+     * Set or clear the alternate body style (DeMorgan) for the component.
+     *
+     * If the component already has an alternate body style set and a
+     * asConvert if false, all of the existing draw items for the alternate
+     * body style are remove.  If the alternate body style is not set and
+     * asConvert is true, than the base draw items are duplicated and
+     * added to the component.
+     *
+     * @param asConvert - Set or clear the component alternate body style.
+     */
+    void SetConversion( bool asConvert );
 };
 
 
@@ -365,7 +410,7 @@ protected:
 public:
     LIB_ALIAS( const wxString& name, LIB_COMPONENT* root,
                CMP_LIBRARY* lib = NULL );
-    LIB_ALIAS( const LIB_ALIAS& alias, CMP_LIBRARY* lib = NULL );
+    LIB_ALIAS( LIB_ALIAS& alias, CMP_LIBRARY* lib = NULL );
     ~LIB_ALIAS();
 
     virtual wxString GetClass() const

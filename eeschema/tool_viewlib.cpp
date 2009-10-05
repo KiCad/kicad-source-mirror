@@ -128,7 +128,7 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
 
     int jj = 1;
     if( component )
-        jj = MAX( component->m_UnitCount, 1 );
+        jj = MAX( component->GetPartCount(), 1 );
     SelpartBox->Clear();
     for( ii = 0; ii < jj; ii++ )
     {

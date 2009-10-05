@@ -21,8 +21,6 @@ static void Plot_Hierarchical_PIN_Sheet( PLOTTER*                       plotter,
                                          Hierarchical_PIN_Sheet_Struct* Struct );
 static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
                            int FieldNumber, int IsMulti, int DrawMode );
-static void PlotPinSymbol( PLOTTER* plotter, const wxPoint& pos,
-                           int len, int orient, int Shape );
 
 /***/
 
@@ -51,200 +49,22 @@ static void PlotLibPart( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem )
 /*************************************************/
 /* Polt a component */
 {
-    int            ii, t1, t2, * Poly, orient;
     LIB_COMPONENT* Entry;
-    int            TransMat[2][2], Multi, convert;
-    EDA_Colors     CharColor = UNSPECIFIED_COLOR;
-    wxPoint        pos;
-    bool           draw_bgfill = false;
+    int            TransMat[2][2];
 
     Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
+
     if( Entry == NULL )
         return;;
+
     memcpy( TransMat, DrawLibItem->m_Transform, sizeof(TransMat) );
-    Multi   = DrawLibItem->m_Multi;
-    convert = DrawLibItem->m_Convert;
 
-    for( LIB_DRAW_ITEM* DEntry = Entry->GetNextDrawItem();
-        DEntry != NULL; DEntry = DEntry->Next() )
+    Entry->Plot( plotter, DrawLibItem->m_Multi, DrawLibItem->m_Convert,
+                 DrawLibItem->m_Pos, TransMat );
+
+    for( int i = 0; i < NUMBER_OF_FIELDS; i++ )
     {
-        /* Elimination des elements non relatifs a l'unite */
-        if( Multi && DEntry->m_Unit && (DEntry->m_Unit != Multi) )
-            continue;
-        if( convert && DEntry->m_Convert && (DEntry->m_Convert != convert) )
-            continue;
-
-        int thickness = DEntry->GetPenSize();
-
-        plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-        draw_bgfill = plotter->get_color_mode();
-
-        switch( DEntry->Type() )
-        {
-        case COMPONENT_ARC_DRAW_TYPE:
-        {
-            LibDrawArc* Arc = (LibDrawArc*) DEntry;
-            t1  = Arc->m_t1;
-            t2 = Arc->m_t2;
-            pos = TransformCoordinate( TransMat, Arc->m_Pos ) + DrawLibItem->m_Pos;
-            MapAngles( &t1, &t2, TransMat );
-            if( draw_bgfill && Arc->m_Fill == FILLED_WITH_BG_BODYCOLOR )
-            {
-                plotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-                plotter->arc( pos, -t2, -t1, Arc->m_Radius, FILLED_SHAPE, 0 );
-            }
-            plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-            plotter->arc( pos, -t2, -t1, Arc->m_Radius, Arc->m_Fill,
-                          thickness );
-        }
-        break;
-
-        case COMPONENT_CIRCLE_DRAW_TYPE:
-        {
-            LibDrawCircle* Circle = (LibDrawCircle*) DEntry;
-            pos = TransformCoordinate( TransMat, Circle->m_Pos ) + DrawLibItem->m_Pos;
-            if( draw_bgfill && Circle->m_Fill == FILLED_WITH_BG_BODYCOLOR )
-            {
-                plotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-                plotter->circle( pos, Circle->m_Radius * 2, FILLED_SHAPE, 0 );
-            }
-            plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-            plotter->circle( pos,
-                             Circle->m_Radius * 2,
-                             Circle->m_Fill,
-                             thickness );
-        }
-        break;
-
-        case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
-        {
-            LibDrawText* Text = (LibDrawText*) DEntry;
-
-            /* The text orientation may need to be flipped if the
-             * transformation matrix causes xy axes to be flipped. */
-            t1  = (TransMat[0][0] != 0) ^ (Text->m_Orient != 0);
-            pos = TransformCoordinate( TransMat, Text->m_Pos ) + DrawLibItem->m_Pos;
-            plotter->text( pos, CharColor,
-                           Text->m_Text,
-                           t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
-                           Text->m_Size,
-                           GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                           thickness, Text->m_Italic, Text->m_Bold );
-        }
-        break;
-
-        case COMPONENT_RECT_DRAW_TYPE:
-        {
-            LibDrawSquare* Square = (LibDrawSquare*) DEntry;
-            pos = TransformCoordinate( TransMat, Square->m_Pos ) + DrawLibItem->m_Pos;
-            wxPoint        end =
-                TransformCoordinate( TransMat, Square->m_End ) + DrawLibItem->m_Pos;
-
-            if( draw_bgfill && Square->m_Fill == FILLED_WITH_BG_BODYCOLOR )
-            {
-                plotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-                plotter->rect( pos, end, FILLED_WITH_BG_BODYCOLOR, 0 );
-            }
-            plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-            plotter->rect( pos, end, Square->m_Fill, thickness );
-        }
-        break;
-
-        case COMPONENT_PIN_DRAW_TYPE:     /* Trace des Pins */
-        {
-            LibDrawPin* Pin = (LibDrawPin*) DEntry;
-            if( Pin->m_Attributs & PINNOTDRAW )
-                break;
-
-            /* Calcul de l'orientation reelle de la Pin */
-            orient = Pin->ReturnPinDrawOrient( TransMat );
-            /* compute Pin Pos */
-            pos = TransformCoordinate( TransMat, Pin->m_Pos ) + DrawLibItem->m_Pos;
-
-            /* Dessin de la pin et du symbole special associe */
-            thickness = Pin->GetPenSize();
-            plotter->set_current_line_width( thickness );
-            PlotPinSymbol( plotter, pos, Pin->m_PinLen, orient, Pin->m_PinShape );
-            Pin->PlotPinTexts( plotter, pos, orient,
-                               Entry->m_TextInside,
-                               Entry->m_DrawPinNum, Entry->m_DrawPinName,
-                               thickness );
-        }
-        break;
-
-        case COMPONENT_POLYLINE_DRAW_TYPE:
-        {
-            LibDrawPolyline* polyline = (LibDrawPolyline*) DEntry;
-            Poly = (int*) MyMalloc( sizeof(int) * 2 * polyline->GetCornerCount() );
-            for( ii = 0; ii < (int) polyline->GetCornerCount(); ii++ )
-            {
-                pos = polyline->m_PolyPoints[ii];
-                pos = TransformCoordinate( TransMat, pos ) + DrawLibItem->m_Pos;
-                Poly[ii * 2]     = pos.x;
-                Poly[ii * 2 + 1] = pos.y;
-            }
-
-            if( draw_bgfill && polyline->m_Fill == FILLED_WITH_BG_BODYCOLOR )
-            {
-                plotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-                plotter->poly( ii, Poly, FILLED_WITH_BG_BODYCOLOR, 0 );
-            }
-            plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-            plotter->poly( ii, Poly, polyline->m_Fill, thickness );
-            MyFree( Poly );
-        }
-        break;
-
-        case COMPONENT_BEZIER_DRAW_TYPE:
-        {
-            LibDrawBezier* polyline = (LibDrawBezier*) DEntry;
-            Poly = (int*) MyMalloc( sizeof(int) * 2 * polyline->GetCornerCount() );
-            for( ii = 0; ii < (int) polyline->GetCornerCount(); ii++ )
-            {
-                pos = polyline->m_PolyPoints[ii];
-                pos = TransformCoordinate( TransMat, pos ) + DrawLibItem->m_Pos;
-                Poly[ii * 2]     = pos.x;
-                Poly[ii * 2 + 1] = pos.y;
-            }
-
-            if( draw_bgfill && polyline->m_Fill == FILLED_WITH_BG_BODYCOLOR )
-            {
-                plotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-                plotter->poly( ii, Poly, FILLED_WITH_BG_BODYCOLOR, 0 );
-            }
-            plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-            plotter->poly( ii, Poly, polyline->m_Fill, thickness );
-            MyFree( Poly );
-        }
-
-        default:
-            D( printf( "Drawing Type=%d\n", DEntry->Type() ) );
-        }
-
-        /* Fin Switch */
-    }
-
-    /* Fin Boucle de dessin */
-
-    /* Trace des champs, avec placement et orientation selon orient. du
-     * composant
-     * Si la reference commence par # elle n'est pas tracee
-     */
-
-    if( (Entry->m_Prefix.m_Attributs & TEXT_NO_VISIBLE) == 0 )
-    {
-        if( Entry->m_UnitCount > 1 )
-            PlotTextField( plotter, DrawLibItem, REFERENCE, 1, 0 );
-        else
-            PlotTextField( plotter, DrawLibItem, REFERENCE, 0, 0 );
-    }
-
-    if( (Entry->m_Name.m_Attributs & TEXT_NO_VISIBLE) == 0 )
-        PlotTextField( plotter, DrawLibItem, VALUE, 0, 0 );
-
-    for( ii = 2; ii < NUMBER_OF_FIELDS; ii++ )
-    {
-        PlotTextField( plotter, DrawLibItem, ii, 0, 0 );
+        PlotTextField( plotter, DrawLibItem, i, 0, 0 );
     }
 }
 
@@ -396,8 +216,8 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
 
 
 /**************************************************************************/
-static void PlotPinSymbol( PLOTTER* plotter, const wxPoint& pos,
-                           int len, int orient, int Shape )
+void PlotPinSymbol( PLOTTER* plotter, const wxPoint& pos,
+                    int len, int orient, int Shape )
 /**************************************************************************/
 
 /* Trace la pin du symbole en cours de trace

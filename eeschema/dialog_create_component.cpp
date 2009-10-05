@@ -107,7 +107,7 @@ void WinEDA_CreateCmpDialog::SetComponentData( LIB_COMPONENT & component )
     WinEDA_LibeditFrame* parent = (WinEDA_LibeditFrame*) GetParent();
 
     parent->SetShowDeMorgan( m_AsConvert->GetValue() );
-    component.m_UnitCount = m_PartsCount->GetSelection() + 1;
+    component.SetPartCount( m_PartsCount->GetSelection() + 1 );
     component.m_Prefix.m_Text = m_Reference->GetValue();
 	if ( m_PinNameInside->GetValue() == FALSE)
 		component.m_TextInside = 0;
@@ -122,7 +122,7 @@ void WinEDA_CreateCmpDialog::SetComponentData( LIB_COMPONENT & component )
 	/* Set the option "Units locked".
 	Obviously, cannot be TRUE if there is only one part */
 	component.m_UnitSelectionLocked = m_PartsAreLocked->GetValue();
-	if ( component.m_UnitCount <= 1 )
+	if ( component.GetPartCount() <= 1 )
 		component.m_UnitSelectionLocked = FALSE;
 }
 

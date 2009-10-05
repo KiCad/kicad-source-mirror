@@ -625,7 +625,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     int choiceCount = unitChoice->GetCount();
 
     // Remove non existing choices (choiceCount must be <= number for parts)
-    int unitcount = m_LibEntry ? m_LibEntry->m_UnitCount : 1;
+    int unitcount = m_LibEntry ? m_LibEntry->GetPartCount() : 1;
 
     if( unitcount < 1 )
         unitcount = 1;

@@ -348,13 +348,13 @@ void WinEDA_LibeditFrame::UpdatePartSelectList()
     if( m_SelpartBox->GetCount() != 0 )
         m_SelpartBox->Clear();
 
-    if( m_component == NULL || m_component->m_UnitCount <= 1 )
+    if( m_component == NULL || m_component->GetPartCount() <= 1 )
     {
         m_SelpartBox->Append( wxEmptyString );
     }
     else
     {
-        for( int i = 0; i < m_component->m_UnitCount; i++ )
+        for( int i = 0; i < m_component->GetPartCount(); i++ )
         {
             wxString msg;
             msg.Printf( _( "Part %c" ), 'A' + i );
@@ -425,7 +425,7 @@ void WinEDA_LibeditFrame::OnUpdateViewDoc( wxUpdateUIEvent& event )
 void WinEDA_LibeditFrame::OnUpdatePinByPin( wxUpdateUIEvent& event )
 {
     event.Enable( ( m_component != NULL )
-                  && ( ( m_component->m_UnitCount > 1 ) || m_showDeMorgan ) );
+                  && ( ( m_component->GetPartCount() > 1 ) || m_showDeMorgan ) );
 
     if( m_HToolBar )
         m_HToolBar->ToggleTool( event.GetId(), g_EditPinByPinIsOn );
@@ -441,7 +441,7 @@ void WinEDA_LibeditFrame::OnUpdatePartNumber( wxUpdateUIEvent& event )
      * so use the pointer to alias combobox to directly enable or disable.
      */
     m_SelpartBox->Enable( m_component != NULL
-                          && m_component->m_UnitCount > 1 );
+                          && m_component->GetPartCount() > 1 );
 }
 
 

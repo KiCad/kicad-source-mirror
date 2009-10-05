@@ -353,7 +353,7 @@ void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
     if( LibEntry == NULL )
         return;
 
-    m_UnitCount = LibEntry->m_UnitCount;
+    m_UnitCount = LibEntry->GetPartCount();
 
     if( m_UnitCount <= 1 )
         return;

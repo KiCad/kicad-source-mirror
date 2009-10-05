@@ -505,7 +505,7 @@ static void ComputeReferenceNumber( std::vector <OBJ_CMP_TO_LIST>& aComponentsLi
         }
 
         /* Annotation of one part per package components (trivial case)*/
-        if( aComponentsList[ii].m_Entry->m_UnitCount <= 1 )
+        if( aComponentsList[ii].m_Entry->GetPartCount() <= 1 )
         {
             if( aComponentsList[ii].m_IsNew )
             {
@@ -520,7 +520,7 @@ static void ComputeReferenceNumber( std::vector <OBJ_CMP_TO_LIST>& aComponentsLi
 
         /* Annotation of multi-part components ( n parts per package )
          * (complex case) */
-        NumberOfUnits = aComponentsList[ii].m_Entry->m_UnitCount;
+        NumberOfUnits = aComponentsList[ii].m_Entry->GetPartCount();
 
         if( aComponentsList[ii].m_IsNew )
         {
@@ -709,7 +709,7 @@ int WinEDA_SchematicFrame::CheckAnnotate( wxArrayString* aMessageList, bool aOne
         }
 
         // Annotate error
-        if( MAX( ComponentsList[ii].m_Entry->m_UnitCount, 1 ) < ComponentsList[ii].m_Unit  )
+        if( MAX( ComponentsList[ii].m_Entry->GetPartCount(), 1 ) < ComponentsList[ii].m_Unit  )
         {
             if( ComponentsList[ii].m_NumRef >= 0 )
                 Buff << ComponentsList[ii].m_NumRef;
@@ -721,7 +721,7 @@ int WinEDA_SchematicFrame::CheckAnnotate( wxArrayString* aMessageList, bool aOne
                        Buff.GetData() );
 
             Buff.Printf( _( " unit %d and no more than %d parts" ),
-                         ComponentsList[ii].m_Unit, ComponentsList[ii].m_Entry->m_UnitCount );
+                         ComponentsList[ii].m_Unit, ComponentsList[ii].m_Entry->GetPartCount() );
             msg << Buff;
             if( aMessageList )
             {
@@ -777,7 +777,7 @@ int WinEDA_SchematicFrame::CheckAnnotate( wxArrayString* aMessageList, bool aOne
 
         /* Test error if units are different but number of parts per package
          * too hight (ex U3 ( 1 part) and we find U3B this is an error) */
-        if( ComponentsList[ii].m_Entry->m_UnitCount != ComponentsList[ii + 1].m_Entry->m_UnitCount )
+        if( ComponentsList[ii].m_Entry->GetPartCount() != ComponentsList[ii + 1].m_Entry->GetPartCount() )
         {
             if( ComponentsList[ii].m_NumRef >= 0 )
                 Buff << ComponentsList[ii].m_NumRef;

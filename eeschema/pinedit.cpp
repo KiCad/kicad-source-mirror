@@ -783,7 +783,7 @@ static void CreateImagePins( LibDrawPin* Pin, int unit, int convert,
         Pin->GetParent()->AddDrawItem( NewPin );
     }
 
-    for( ii = 1; ii <= Pin->GetParent()->m_UnitCount; ii++ )
+    for( ii = 1; ii <= Pin->GetParent()->GetPartCount(); ii++ )
     {
         if( ii == unit || Pin->m_Unit == 0 )
             continue;                       /* Pin commune a toutes les unites */
@@ -974,7 +974,7 @@ with pin %s at location (%d, %d)" ),
                     (const wxChar*) Pin->m_PinName,
                     Pin->m_Pos.x, -Pin->m_Pos.y );
 
-        if( m_component->m_UnitCount > 1 )
+        if( m_component->GetPartCount() > 1 )
         {
             aux_msg.Printf( _( " in part %c" ), 'A' + curr_pin->m_Unit );
             msg += aux_msg;
