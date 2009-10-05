@@ -44,19 +44,19 @@ static void ReadDocLib( const wxString& ModLibName, FOOTPRINT_LIST& list );
 bool LoadFootprintFiles( const wxArrayString& libNames,
                          FOOTPRINT_LIST& list )
 {
-	FILE*       file;   /* pour lecture librairie */
-	char        buffer[1024];
-	wxFileName  filename;
-	int         end;
-	FOOTPRINT*  ItemLib;
-	unsigned    i;
-	wxString    tmp, msg;
+    FILE*       file;   /* pour lecture librairie */
+    char        buffer[1024];
+    wxFileName  filename;
+    int         end;
+    FOOTPRINT*  ItemLib;
+    unsigned    i;
+    wxString    tmp, msg;
 
-	/* Check if footprint list is not empty */
-	if( !list.empty() )
-		list.clear();
+    /* Check if footprint list is not empty */
+    if( !list.empty() )
+        list.clear();
 
-	/* Check if there are footprint libraries in project file */
+    /* Check if there are footprint libraries in project file */
     if( libNames.GetCount() == 0 )
     {
         wxMessageBox( _( "No PCB foot print libraries are listed in the current project file." ),
@@ -90,7 +90,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
         }
 
         /* Check if library type is valid */
-        fgets( buffer, 32, file );
+        (void) fgets( buffer, 32, file );
         if( strncmp( buffer, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
         {
             s_files_invalid << tmp << _(" (Not a Kicad file)") << wxT("\n");
@@ -132,8 +132,8 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
         ReadDocLib( tmp, list );
     }
 
-	/* Display if there are mdc files not found */
-	if( !s_files_not_found.IsEmpty() || !s_files_invalid.IsEmpty() )
+    /* Display if there are mdc files not found */
+    if( !s_files_not_found.IsEmpty() || !s_files_invalid.IsEmpty() )
     {
         DIALOG_LOAD_ERROR dialog(NULL);
         if( !s_files_not_found.IsEmpty() )
@@ -154,9 +154,9 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
         dialog.ShowModal();
     }
 
-	list.sort();
+    list.sort();
 
-	return true;
+    return true;
 }
 
 
@@ -169,77 +169,77 @@ static void
 ReadDocLib( const wxString& ModLibName,
             FOOTPRINT_LIST& list )
 {
-	FOOTPRINT* NewMod;
-	char       Line[1024];
-	wxString   ModuleName;
-	FILE*      mdc_file;
-	wxFileName mdc_filename = ModLibName;
+    FOOTPRINT* NewMod;
+    char       Line[1024];
+    wxString   ModuleName;
+    FILE*      mdc_file;
+    wxFileName mdc_filename = ModLibName;
 
-	/* Set mdc filename extension */
-	mdc_filename.SetExt( wxT( "mdc" ) );
+    /* Set mdc filename extension */
+    mdc_filename.SetExt( wxT( "mdc" ) );
 
-	/* Check if mdc file exists and can be opened */
-	if( ( mdc_file = wxFopen( mdc_filename.GetFullPath(), wxT( "rt" ) ) ) == NULL )
-	{
-		s_files_not_found += mdc_filename.GetFullPath() + wxT("\n");
-		return;
-	}
+    /* Check if mdc file exists and can be opened */
+    if( ( mdc_file = wxFopen( mdc_filename.GetFullPath(), wxT( "rt" ) ) ) == NULL )
+    {
+        s_files_not_found += mdc_filename.GetFullPath() + wxT("\n");
+        return;
+    }
 
-	/* Check if mdc file is valid */
-	GetLine( mdc_file, Line, NULL, sizeof(Line) - 1 );
-	if( strnicmp( Line, ENTETE_LIBDOC, L_ENTETE_LIB ) != 0 )
-	{
-		s_files_invalid += mdc_filename.GetFullPath() + wxT("\n");
-		return;
-	}
+    /* Check if mdc file is valid */
+    GetLine( mdc_file, Line, NULL, sizeof(Line) - 1 );
+    if( strnicmp( Line, ENTETE_LIBDOC, L_ENTETE_LIB ) != 0 )
+    {
+        s_files_invalid += mdc_filename.GetFullPath() + wxT("\n");
+        return;
+    }
 
-	/* Read the mdc file */
-	while( GetLine( mdc_file, Line, NULL, sizeof(Line) - 1 ) )
-	{
-		NewMod = NULL;
-		if( Line[0] != '$' )
-			continue;
-		if( Line[1] == 'E' )
-			break;
-		if( Line[1] == 'M' )    /* 1 module description */
-		{
-			/* Parse file line by line */
-			while( GetLine( mdc_file, Line, NULL, sizeof(Line) - 1 ) )
-			{
-				/* $EndMODULE */
-				if( Line[0] == '$' )
-					break;
+    /* Read the mdc file */
+    while( GetLine( mdc_file, Line, NULL, sizeof(Line) - 1 ) )
+    {
+        NewMod = NULL;
+        if( Line[0] != '$' )
+            continue;
+        if( Line[1] == 'E' )
+            break;
+        if( Line[1] == 'M' )    /* 1 module description */
+        {
+            /* Parse file line by line */
+            while( GetLine( mdc_file, Line, NULL, sizeof(Line) - 1 ) )
+            {
+                /* $EndMODULE */
+                if( Line[0] == '$' )
+                    break;
 
-				switch( Line[0] )
-				{
-					/* LibName */
-					case 'L':       /* LibName */
-						ModuleName = CONV_FROM_UTF8( StrPurge( Line + 3 ) );
-						BOOST_FOREACH( FOOTPRINT& footprint, list )
-						{
-							if( ModuleName == footprint.m_Module )
-							{
-								NewMod = &footprint;
-								break;
-							}
-						}
-					break;
+                switch( Line[0] )
+                {
+                    /* LibName */
+                    case 'L':       /* LibName */
+                        ModuleName = CONV_FROM_UTF8( StrPurge( Line + 3 ) );
+                        BOOST_FOREACH( FOOTPRINT& footprint, list )
+                        {
+                            if( ModuleName == footprint.m_Module )
+                            {
+                                NewMod = &footprint;
+                                break;
+                            }
+                        }
+                    break;
 
-					/* KeyWords */
-					case 'K':
-						if( NewMod && (!NewMod->m_KeyWord) )
-						NewMod->m_KeyWord = CONV_FROM_UTF8( StrPurge( Line + 3 ) );
-					break;
+                    /* KeyWords */
+                    case 'K':
+                        if( NewMod && (!NewMod->m_KeyWord) )
+                        NewMod->m_KeyWord = CONV_FROM_UTF8( StrPurge( Line + 3 ) );
+                    break;
 
-					/* Doc */
-					case 'C':
-						if( NewMod && ( !NewMod->m_Doc ) )
-						NewMod->m_Doc = CONV_FROM_UTF8( StrPurge( Line + 3 ) );
-					break;
-				}
-			}
-		} /* Parsed one module documentation */
-	} /* Parsed complete library documentation */
+                    /* Doc */
+                    case 'C':
+                        if( NewMod && ( !NewMod->m_Doc ) )
+                        NewMod->m_Doc = CONV_FROM_UTF8( StrPurge( Line + 3 ) );
+                    break;
+                }
+            }
+        } /* Parsed one module documentation */
+    } /* Parsed complete library documentation */
 
-	fclose( mdc_file );
+    fclose( mdc_file );
 }

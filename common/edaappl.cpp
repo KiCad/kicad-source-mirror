@@ -417,7 +417,7 @@ bool WinEDA_App::SetBinDir()
 
         if( ( ftmp = fopen( TMP_FILE, "rt" ) ) != NULL )
         {
-            fgets( Line, 1000, ftmp );
+            (void) fgets( Line, 1000, ftmp );
             fclose( ftmp );
             remove( TMP_FILE );
         }

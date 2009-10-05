@@ -192,7 +192,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
         return 1;
     }
 
-    fgets( Line, sizeof(Line), FichCmp );
+    (void) fgets( Line, sizeof(Line), FichCmp );
     fprintf( NewFile, "Cmp-Mod V01 Genere par PcbNew le %s\n",
             DateAndTime( Line ) );
 
@@ -601,7 +601,7 @@ void WinEDA_PcbFrame::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
         return;
     }
 
-    fgets( Line, sizeof(Line), FichCmp );
+    (void) fgets( Line, sizeof(Line), FichCmp );
     fprintf( FichCmp, "Cmp-Mod V01 Genere par PcbNew le %s\n",
             DateAndTime( Line ) );
 

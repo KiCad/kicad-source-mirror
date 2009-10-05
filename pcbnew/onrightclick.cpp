@@ -881,7 +881,7 @@ static wxMenu* Append_Track_Width_List( BOARD * aBoard )
         trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, true );
     else
     {
-        if( aBoard->m_TrackWidthSelector < (int)aBoard->m_TrackWidthHistory.size() )
+        if( aBoard->m_TrackWidthSelector < aBoard->m_TrackWidthHistory.size() )
             trackwidth_menu->Check( ID_POPUP_PCB_SELECT_WIDTH1 + aBoard->m_TrackWidthSelector, true );
     }
 
@@ -899,7 +899,7 @@ static wxMenu* Append_Track_Width_List( BOARD * aBoard )
             msg << _(" (from NetClass)" );
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, msg, wxEmptyString, true );
     }
-    if( aBoard->m_ViaSizeSelector < (int)aBoard->m_ViaSizeHistory.size() )
+    if( aBoard->m_ViaSizeSelector < aBoard->m_ViaSizeHistory.size() )
         trackwidth_menu->Check( ID_POPUP_PCB_SELECT_VIASIZE1 + aBoard->m_ViaSizeSelector, true );
 
     return trackwidth_menu;

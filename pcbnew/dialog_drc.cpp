@@ -523,14 +523,14 @@ void DIALOG_DRC_CONTROL::writeReport( FILE* fp )
     fprintf( fp, "\n** Found %d DRC errors **\n", count );
 
     for( int i = 0;  i<count;  ++i )
-        fprintf( fp, m_ClearanceListBox->GetItem( i )->ShowReport().mb_str() );
+        fprintf( fp, "%s", CONV_TO_UTF8( m_ClearanceListBox->GetItem( i )->ShowReport()) );
 
     count = m_UnconnectedListBox->GetItemCount();
 
     fprintf( fp, "\n** Found %d unconnected pads **\n", count );
 
     for( int i = 0;  i<count;  ++i )
-        fprintf( fp, m_UnconnectedListBox->GetItem( i )->ShowReport().mb_str() );
+        fprintf( fp, "%s", CONV_TO_UTF8( m_UnconnectedListBox->GetItem( i )->ShowReport() ) );
 
     fprintf( fp, "\n** End of Report **\n" );
 }

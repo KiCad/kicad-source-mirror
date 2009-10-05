@@ -524,7 +524,7 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
 
     fprintf( aFile, "$SETUP\n" );
     sprintf( text, "InternalUnit %f INCH\n", 1.0 / PCB_INTERNAL_UNIT );
-    fprintf( aFile, text );
+    fprintf( aFile, "%s", text );
 
     fprintf( aFile, "ZoneGridSize %d\n", g_GridRoutingSize );
 

@@ -658,7 +658,7 @@ void EDGE_MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
 
     default:
         s.Printf( wxT( "Error: Shape nr %d not implemented!\n" ), m_Shape );
-        printf( CONV_TO_UTF8( s ) );
+        D(printf( "%s", CONV_TO_UTF8( s ) );)
         break;
     }
 }

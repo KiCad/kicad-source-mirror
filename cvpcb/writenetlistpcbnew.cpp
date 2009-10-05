@@ -93,7 +93,7 @@ int GenNetlistPcbnew( FILE* file, COMPONENT_LIST& list, bool isEESchemaNetlist,
         fprintf( file, " ( %s ", CONV_TO_UTF8( component.m_TimeStamp ) );
 
         if( !component.m_Module.IsEmpty() )
-            fprintf( file, CONV_TO_UTF8( component.m_Module ) );
+            fprintf( file, "%s", CONV_TO_UTF8( component.m_Module ) );
 
         else
             fprintf( file, "$noname$" );

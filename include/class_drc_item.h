@@ -188,16 +188,16 @@ public:
         {
             ret.Printf( wxT( "ErrType(%d): %s\n    %s: %s\n    %s: %s\n" ),
                        m_ErrorCode,
-                       GetErrorText().GetData(),
-                       ShowCoord( m_MainPosition ).GetData(), m_MainText.GetData(),
-                       ShowCoord( m_AuxiliaryPosition ).GetData(), m_AuxiliaryText.GetData() );
+                       GetChars( GetErrorText() ),
+                       GetChars( ShowCoord( m_MainPosition ) ), GetChars( m_MainText ),
+                       GetChars( ShowCoord( m_AuxiliaryPosition ) ), GetChars( m_AuxiliaryText ) );
         }
         else
         {
             ret.Printf( wxT( "ErrType(%d): %s\n    %s: %s\n" ),
                        m_ErrorCode,
-                       GetErrorText().GetData(),
-                       ShowCoord( m_MainPosition ).GetData(), m_MainText.GetData() );
+                       GetChars( GetErrorText() ),
+                       GetChars( ShowCoord( m_MainPosition ) ), GetChars( m_MainText ) );
         }
 
         return ret;

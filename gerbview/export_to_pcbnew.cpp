@@ -94,7 +94,7 @@ static int WriteSetup( FILE* File, BOARD* Pcb )
 
     fprintf( File, "$SETUP\n" );
     sprintf( text, "InternalUnit %f INCH\n", 1.0 / PCB_INTERNAL_UNIT );
-    fprintf( File, text );
+    fprintf( File, "%s", text );
 
     Pcb->m_BoardSettings->m_CopperLayerCount = g_DesignSettings.m_CopperLayerCount;
     fprintf( File, "Layers %d\n", g_DesignSettings.m_CopperLayerCount );

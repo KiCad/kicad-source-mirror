@@ -412,12 +412,12 @@ int WinEDA_BasicFrame::WriteHotkeyConfigFile( const wxString&                   
     wxString keyname, infokey;
 
     msg = wxT( "$hotkey list\n" );
-    fprintf( cfgfile, CONV_TO_UTF8( msg ) );
+    fprintf( cfgfile, "%s", CONV_TO_UTF8( msg ) );
 
     /* print the allowed keys, for info
      */
     msg = wxT( "# " ); msg += _( "Allowed keys:\n" );
-    fprintf( cfgfile, CONV_TO_UTF8( msg ) );
+    fprintf( cfgfile, "%s", CONV_TO_UTF8( msg ) );
     msg.Empty();
     for( int ii = 0; ; ii++ )
     {
@@ -431,7 +431,7 @@ int WinEDA_BasicFrame::WriteHotkeyConfigFile( const wxString&                   
         if( msg.Len() > 60 )
         {
             msg += wxT( "\n" );
-            fprintf( cfgfile, CONV_TO_UTF8( msg ) );
+            fprintf( cfgfile, "%s", CONV_TO_UTF8( msg ) );
             msg.Empty();
         }
     }
@@ -440,7 +440,7 @@ int WinEDA_BasicFrame::WriteHotkeyConfigFile( const wxString&                   
     if( !msg.IsEmpty() )
         msg += wxT( "\n" );
     msg += wxT( "#\n#\n" );
-    fprintf( cfgfile, CONV_TO_UTF8( msg ) );
+    fprintf( cfgfile, "%s", CONV_TO_UTF8( msg ) );
 
     /* Print the current hotkey list */
     Ki_HotkeyInfo** List;
@@ -449,12 +449,10 @@ int WinEDA_BasicFrame::WriteHotkeyConfigFile( const wxString&                   
         if( DescList->m_Comment )
         {
             fprintf( cfgfile, "# " );
-            fprintf( cfgfile, DescList->m_Comment );
-            fprintf( cfgfile, "\n" );
+            fprintf( cfgfile, "%s\n", DescList->m_Comment );
         }
         msg = *DescList->m_SectionTag;
-        fprintf( cfgfile, CONV_TO_UTF8( msg ) );
-        fprintf( cfgfile, "\n" );
+        fprintf( cfgfile, "%s\n", CONV_TO_UTF8( msg ) );
         List = DescList->m_HK_InfoList;
         for( ; *List != NULL; List++ )
         {
@@ -465,12 +463,12 @@ int WinEDA_BasicFrame::WriteHotkeyConfigFile( const wxString&                   
             infokey = hk_decr->m_InfoMsg;
             AddDelimiterString( infokey );
             msg += keyname + wxT( ":    " ) + infokey + wxT( "\n" );
-            fprintf( cfgfile, CONV_TO_UTF8( msg ) );
+            fprintf( cfgfile, "%s", CONV_TO_UTF8( msg ) );
         }
     }
 
     msg = wxT( "$Endlist\n" );
-    fprintf( cfgfile, CONV_TO_UTF8( msg ) );
+    fprintf( cfgfile, "%s\n", CONV_TO_UTF8( msg ) );
     fclose( cfgfile );
     return 1;
 }

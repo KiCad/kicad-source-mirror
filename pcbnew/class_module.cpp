@@ -365,19 +365,19 @@ int MODULE::Write_3D_Descr( FILE* File ) const
                 t3D->m_MatScale.x,
                 t3D->m_MatScale.y,
                 t3D->m_MatScale.z );
-            fprintf( File, to_point( buf ) );
+            fprintf( File, "%s", to_point( buf ) );
 
             sprintf( buf, "Of %lf %lf %lf\n",
                 t3D->m_MatPosition.x,
                 t3D->m_MatPosition.y,
                 t3D->m_MatPosition.z );
-            fprintf( File, to_point( buf ) );
+            fprintf( File, "%s", to_point( buf ) );
 
             sprintf( buf, "Ro %lf %lf %lf\n",
                 t3D->m_MatRotation.x,
                 t3D->m_MatRotation.y,
                 t3D->m_MatRotation.z );
-            fprintf( File, to_point( buf ) );
+            fprintf( File, "%s", to_point( buf ) );
 
             fprintf( File, "$EndSHAPE3D\n" );
         }
