@@ -253,7 +253,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
         for( ; ; i++ )
         {
 #if defined(KICAD_GOST)
-            if( (Line[i] == ' ')  || (Line[i] == '\n') )
+            if( (Line[i] == ' ') || (Line[i] == '\n') || (Line[i] == '\r') )
 #else
             if( Line[i] <= ' ' )
 #endif
