@@ -24,6 +24,7 @@ void WinEDA_SchematicFrame::LoadLibraries( void )
     wxFileName     fn;
     wxString       msg, tmp, errMsg;
     wxString       libraries_not_found;
+    wxArrayString  sortOrder;
 
     CMP_LIBRARY_LIST::iterator i = CMP_LIBRARY::GetLibraryList().begin();
 
@@ -73,6 +74,7 @@ void WinEDA_SchematicFrame::LoadLibraries( void )
         if( CMP_LIBRARY::AddLibrary( fn, errMsg ) )
         {
             msg += _( " loaded" );
+            sortOrder.Add( fn.GetName() );
         }
         else
         {
@@ -100,14 +102,19 @@ Error: %s" ),
     }
 
     /* Put the libraries in the correct order. */
-    CMP_LIBRARY::SetSortOrder( m_ComponentLibFiles );
+    CMP_LIBRARY::SetSortOrder( sortOrder );
     CMP_LIBRARY::GetLibraryList().sort();
 
 #ifdef __WXDEBUG__
+    wxLogDebug( wxT( "Requested component library sort order." ) );
+
+    for( size_t i = 0; i < sortOrder.GetCount(); i++ )
+        wxLogDebug( wxT( "    " ) + sortOrder[i] );
+
     wxLogDebug( wxT( "Component library sort order:" ) );
 
     for ( i = CMP_LIBRARY::GetLibraryList().begin();
           i < CMP_LIBRARY::GetLibraryList().end(); i++ )
-        wxLogDebug( wxT( "  " ) + i->GetName() );
+        wxLogDebug( wxT( "    " ) + i->GetName() );
 #endif
 }
