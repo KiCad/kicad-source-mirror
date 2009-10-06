@@ -1,4 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
+
 // Name:        dialog_track_options.h
 // Author:      jean-pierre Charras
 // Created:     17 feb 2009
@@ -17,18 +18,23 @@
  */
 class DIALOG_TRACKS_OPTIONS : public DIALOG_TRACKS_OPTIONS_BASE
 {
-public:
-    WinEDA_PcbFrame* m_Parent;
+private:
+    WinEDA_PcbFrame*  m_Parent;
+    std::vector <int> m_ViasDiameterList;
+    std::vector <int> m_TracksWidthList;
 
 public:
     DIALOG_TRACKS_OPTIONS( WinEDA_PcbFrame* parent );
     ~DIALOG_TRACKS_OPTIONS() {};
 private:
-    void SetDisplayValue();
-    virtual void OnInitDialog( wxInitDialogEvent& event );
-    virtual void OnCheckboxAllowsMicroviaClick( wxCommandEvent& event );
+    void         MyInit();
+    void         InitDimensionsLists();
     virtual void OnButtonOkClick( wxCommandEvent& event );
     virtual void OnButtonCancelClick( wxCommandEvent& event );
+    virtual void OnButtonAddViaSizeClick( wxCommandEvent& event );
+    virtual void OnButtonDeleteViaSizeClick( wxCommandEvent& event );
+    virtual void OnButtonAddTrackSizeClick( wxCommandEvent& event );
+    virtual void OnButtonDeleteTrackSizeClick( wxCommandEvent& event );
 };
 
 #endif    // _DIALOG_TRACK_OPTIONS_H_

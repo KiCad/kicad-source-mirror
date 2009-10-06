@@ -115,7 +115,12 @@ static void RestoreOldWires( SCH_SCREEN* screen )
 void WinEDA_SchematicFrame::BeginSegment( wxDC* DC, int type )
 /*************************************************************/
 
-/* Create a new segment ( WIRE, BUS ).
+/* Creates a new segment ( WIRE, BUS ),
+ * or terminates the current segment
+ * If the end of the current segment is on an other segment, place a junction if needed
+ * and terminates the command
+ * If the end of the current segment is on a pin, terminates the command
+ * In others cases starts a new segment
  */
 {
     EDA_DrawLineStruct* oldsegment, * newsegment, * nextsegment;
@@ -177,7 +182,7 @@ void WinEDA_SchematicFrame::BeginSegment( wxDC* DC, int type )
         DrawPanel->ForceCloseManageCurseur = AbortCreateNewLine;
         g_ItemToRepeat = NULL;
     }
-    else    /* Trace en cours: Placement d'un point supplementaire */
+    else    /* A segment is in progress: terminates the current segment and add a new segment */
     {
         nextsegment = oldsegment->Next();
         if( !g_HVLines )
@@ -194,8 +199,9 @@ void WinEDA_SchematicFrame::BeginSegment( wxDC* DC, int type )
 
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
-        /* Creation du segment suivant ou fin de trac� si point sur pin, jonction ...*/
-        if( IsTerminalPoint( (SCH_SCREEN*)GetScreen(), cursorpos, oldsegment->GetLayer() ) )
+        /* Creates the new segment, or terminates the command
+         * if the end point is on a pin, jonction or an other wire or bus */
+        if( IsTerminalPoint( GetScreen(), cursorpos, oldsegment->GetLayer() ) )
         {
             EndSegment( DC ); return;
         }
@@ -777,15 +783,15 @@ void IncrementLabelMember( wxString& name )
 static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
 /***************************************************************************/
 
-/* Returne TRUE si pos est un point possible pour terminer automatiquement un
- *  segment, c'est a dire pour
- *  - type WIRE, si il y a
- *      - une jonction
- *      - ou une pin
- *      - ou une extr�mit� unique de fil
+/* Return TRUE if pos can be a terminal point for a wire or a bus
+ * i.e. :
+ *  for a WIRE, if at pos is found:
+ *      - a junction
+ *      - or a pin
+ *      - or an other wire
  *
- *  - type BUS, si il y a
- *      - ou une extr�mit� unique de BUS
+ *  - for a BUS, if at pos is found:
+ *      - a BUS
  */
 {
     EDA_BaseStruct*         item;

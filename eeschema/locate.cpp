@@ -686,13 +686,45 @@ Hierarchical_PIN_Sheet_Struct* LocateSheetLabel( DrawSheetStruct* Sheet,
     return NULL;
 }
 
+/* helper function used to locate graphics items in a lib component (in library space)
+ * to a given location given in schematic space
+ * in schematic space, a component is an image of the lib component, rotated and mirorred
+ * by its mirror/rotation matrix
+ * this function calculates the invert matrix of the mirror/rotation matrix
+ * it is used to calculate the position in in library space from
+ * the position in schematic space of a test point, corresponding to a given component 
+ */
+bool InvertMatrix(int aSource[2][2], int aDest[2][2] )
+{
+    /* for a source matrix (a,b, c,d) a, if the first line, and cd the second line
+    * the invert matrix is 1/det * comatrix
+    * det = ad-bc
+    * comatrix = (d,-b, -c,a)
+    * a = aSource[0][0]
+    * b = aSource[0][1]
+    * c = aSource[1][0]
+    * d = aSource[1][1]
+    * in eeschema, values are 1, 0 or -1 only and we can use integers only
+    */
+    bool success = true;
+    int det = aSource[0][0]*aSource[1][1] - aSource[0][1]*aSource[1][0];
+    wxASSERT(det);
+    if( det == 0 )  // Should not occur with eeschema matrix transform
+        det = 1;
+    aDest[0][0] = aSource[1][1]/det;
+    aDest[0][1] = -aSource[0][1]/det;
+    aDest[1][0] = -aSource[1][0]/det;
+    aDest[1][1] = aSource[0][0]/det;
+
+    return success;
+}
 
 LibDrawPin* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos,
                           SCH_COMPONENT** libpart )
 {
     SCH_ITEM* DrawStruct;
     LIB_COMPONENT* Entry;
-    SCH_COMPONENT* LibItem = NULL;
+    SCH_COMPONENT* schItem = NULL;
     LibDrawPin* Pin = NULL;
 
     for( DrawStruct = DrawList; DrawStruct != NULL;
@@ -700,21 +732,36 @@ LibDrawPin* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos,
     {
         if( DrawStruct->Type() != TYPE_SCH_COMPONENT )
             continue;
-        LibItem = (SCH_COMPONENT*) DrawStruct;
-        Entry   = CMP_LIBRARY::FindLibraryComponent( LibItem->m_ChipName );
+        schItem = (SCH_COMPONENT*) DrawStruct;
+        Entry   = CMP_LIBRARY::FindLibraryComponent( schItem->m_ChipName );
 
         if( Entry == NULL )
             continue;
-        Pin = (LibDrawPin*) Entry->LocateDrawItem( LibItem->m_Multi,
-                                                   LibItem->m_Convert,
+        /* we use LocateDrawItem to locate pîns. but this function suppose a component 
+         * at 0,0 location, in normal orientation/mirror
+         * So we must calculate the ref position in component space
+         */
+        // Calculate the position relative to the component (in library space the component is at location 0,0)
+        wxPoint libPos = RefPos - schItem->m_Pos;
+        // Calculate the equivalent position of the test point for a normal orient component
+        int itransMat[2][2];
+        InvertMatrix(schItem->m_Transform, itransMat );
+        libPos = TransformCoordinate(itransMat, libPos);
+        // LocateDrawItem uses DefaultTransformMatrix as matrix orientation of the component
+        // so we must recalculate libPos for this orientation before calling LocateDrawItem
+        InvertMatrix(DefaultTransformMatrix, itransMat );
+        libPos = TransformCoordinate(itransMat, libPos);
+        wxPoint schPos = TransformCoordinate(schItem->m_Transform, libPos);
+        Pin = (LibDrawPin*) Entry->LocateDrawItem( schItem->m_Multi,
+                                                   schItem->m_Convert,
                                                    COMPONENT_PIN_DRAW_TYPE,
-                                                   RefPos );
+                                                   libPos );
         if( Pin )
             break;
     }
 
     if( libpart )
-        *libpart = LibItem;
+        *libpart = schItem;
     return Pin;
 }
 

@@ -79,7 +79,7 @@ BOARD::~BOARD()
 /**
  * Function SetCurrentNetClass
  * Must be called after a netclass selection (or after a netclass parameter change
- * Initialise vias and tracks values displayed in comb boxs of the auxiliary toolbar
+ * Initialise vias and tracks values displayed in combo boxs of the auxiliary toolbar
  * and some others parametres (netclass name ....)
  * @param aNetClassName = the new netclass name
  * @return true if lists of tracks and vias sizes are modified
@@ -96,33 +96,33 @@ BOARD::~BOARD()
     m_CurrentNetClassName = netClass->GetName();
 
     // Initialize others values:
-    if( m_ViaSizeHistory.size() == 0 )
+    if( m_ViaSizeList.size() == 0 )
     {
         lists_sizes_modified = true;
-        m_ViaSizeHistory.push_back(0);
+        m_ViaSizeList.push_back(0);
     }
-    if( m_TrackWidthHistory.size() == 0 )
+    if( m_TrackWidthList.size() == 0 )
     {
         lists_sizes_modified = true;
-        m_TrackWidthHistory.push_back(0);
+        m_TrackWidthList.push_back(0);
     }
 
-    if( m_ViaSizeHistory[0] != netClass->GetViaDiameter() )
+    if( m_ViaSizeList[0] != netClass->GetViaDiameter() )
         lists_sizes_modified = true;
-    m_ViaSizeHistory[0] = netClass->GetViaDiameter();
+    m_ViaSizeList[0] = netClass->GetViaDiameter();
 
-    if( m_TrackWidthHistory[0] != netClass->GetTrackWidth() )
+    if( m_TrackWidthList[0] != netClass->GetTrackWidth() )
         lists_sizes_modified = true;
-    m_TrackWidthHistory[0] = netClass->GetTrackWidth();
+    m_TrackWidthList[0] = netClass->GetTrackWidth();
 
-    if( m_ViaSizeSelector >= m_ViaSizeHistory.size() )
-        m_ViaSizeSelector = m_ViaSizeHistory.size();
-    if( m_TrackWidthSelector >= m_TrackWidthHistory.size() )
-        m_TrackWidthSelector = m_TrackWidthHistory.size();
+    if( m_ViaSizeSelector >= m_ViaSizeList.size() )
+        m_ViaSizeSelector = m_ViaSizeList.size();
+    if( m_TrackWidthSelector >= m_TrackWidthList.size() )
+        m_TrackWidthSelector = m_TrackWidthList.size();
 
     //Initialize track and via current size:
-    g_DesignSettings.m_CurrentViaSize = m_ViaSizeHistory[m_ViaSizeSelector];
-    g_DesignSettings.m_CurrentTrackWidth = m_TrackWidthHistory[m_TrackWidthSelector];
+    g_DesignSettings.m_CurrentViaSize = m_ViaSizeList[m_ViaSizeSelector];
+    g_DesignSettings.m_CurrentTrackWidth = m_TrackWidthList[m_TrackWidthSelector];
 
     return lists_sizes_modified;
 }

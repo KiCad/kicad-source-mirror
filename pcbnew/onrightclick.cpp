@@ -861,10 +861,10 @@ static wxMenu* Append_Track_Width_List( BOARD * aBoard )
                              _( "Use track and via sizes from their Netclass values" ),
                              true );
 
-    for( unsigned ii = 0; ii < aBoard->m_TrackWidthHistory.size(); ii++ )
+    for( unsigned ii = 0; ii < aBoard->m_TrackWidthList.size(); ii++ )
     {
         value = To_User_Unit( g_UnitMetric,
-                              aBoard->m_TrackWidthHistory[ii],
+                              aBoard->m_TrackWidthList[ii],
                               PCB_INTERNAL_UNIT );
         if( g_UnitMetric == INCHES )  // Affichage en mils
             msg.Printf( _( "Track %.1f" ), value * 1000 );
@@ -881,15 +881,15 @@ static wxMenu* Append_Track_Width_List( BOARD * aBoard )
         trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, true );
     else
     {
-        if( aBoard->m_TrackWidthSelector < aBoard->m_TrackWidthHistory.size() )
+        if( aBoard->m_TrackWidthSelector < aBoard->m_TrackWidthList.size() )
             trackwidth_menu->Check( ID_POPUP_PCB_SELECT_WIDTH1 + aBoard->m_TrackWidthSelector, true );
     }
 
     trackwidth_menu->AppendSeparator();
-    for( unsigned ii = 0; ii < aBoard->m_ViaSizeHistory.size(); ii++ )
+    for( unsigned ii = 0; ii < aBoard->m_ViaSizeList.size(); ii++ )
     {
        value = To_User_Unit( g_UnitMetric,
-                              aBoard->m_ViaSizeHistory[ii],
+                              aBoard->m_ViaSizeList[ii],
                               PCB_INTERNAL_UNIT );
         if( g_UnitMetric == INCHES )
             msg.Printf( _( "Via %.1f" ), value * 1000 );
@@ -899,7 +899,7 @@ static wxMenu* Append_Track_Width_List( BOARD * aBoard )
             msg << _(" (from NetClass)" );
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, msg, wxEmptyString, true );
     }
-    if( aBoard->m_ViaSizeSelector < aBoard->m_ViaSizeHistory.size() )
+    if( aBoard->m_ViaSizeSelector < aBoard->m_ViaSizeList.size() )
         trackwidth_menu->Check( ID_POPUP_PCB_SELECT_VIASIZE1 + aBoard->m_ViaSizeSelector, true );
 
     return trackwidth_menu;

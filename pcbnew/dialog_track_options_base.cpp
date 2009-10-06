@@ -10,10 +10,12 @@
 ///////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE( DIALOG_TRACKS_OPTIONS_BASE, wxDialog )
-	EVT_INIT_DIALOG( DIALOG_TRACKS_OPTIONS_BASE::_wxFB_OnInitDialog )
-	EVT_CHECKBOX( wxID_ANY, DIALOG_TRACKS_OPTIONS_BASE::_wxFB_OnCheckboxAllowsMicroviaClick )
-	EVT_BUTTON( wxID_OK, DIALOG_TRACKS_OPTIONS_BASE::_wxFB_OnButtonOkClick )
+	EVT_BUTTON( wxID_ADD_VIA_SIZE, DIALOG_TRACKS_OPTIONS_BASE::_wxFB_OnButtonAddViaSizeClick )
+	EVT_BUTTON( wxID_DELETED_WIA_SIEZ, DIALOG_TRACKS_OPTIONS_BASE::_wxFB_OnButtonDeleteViaSizeClick )
+	EVT_BUTTON( wxID_ADD_TRACK_WIDTH, DIALOG_TRACKS_OPTIONS_BASE::_wxFB_OnButtonAddTrackSizeClick )
+	EVT_BUTTON( wxID_DELETED_TRACK_WIDTH, DIALOG_TRACKS_OPTIONS_BASE::_wxFB_OnButtonDeleteTrackSizeClick )
 	EVT_BUTTON( wxID_CANCEL, DIALOG_TRACKS_OPTIONS_BASE::_wxFB_OnButtonCancelClick )
+	EVT_BUTTON( wxID_OK, DIALOG_TRACKS_OPTIONS_BASE::_wxFB_OnButtonOkClick )
 END_EVENT_TABLE()
 
 DIALOG_TRACKS_OPTIONS_BASE::DIALOG_TRACKS_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -21,19 +23,32 @@ DIALOG_TRACKS_OPTIONS_BASE::DIALOG_TRACKS_OPTIONS_BASE( wxWindow* parent, wxWind
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
 	wxBoxSizer* bMainSizer;
-	bMainSizer = new wxBoxSizer( wxHORIZONTAL );
+	bMainSizer = new wxBoxSizer( wxVERTICAL );
+	
+	wxBoxSizer* bMainUpperSizer;
+	bMainUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxStaticBoxSizer* sbLeftSizer;
 	sbLeftSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Vias:") ), wxVERTICAL );
 	
-	m_ViaSizeTitle = new wxStaticText( this, wxID_ANY, _("Via size"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ViaSizeTitle->Wrap( -1 );
-	sbLeftSizer->Add( m_ViaSizeTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	wxStaticBoxSizer* sViaSizeBox;
+	sViaSizeBox = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Vias Custom Sizes List:") ), wxHORIZONTAL );
 	
-	m_OptViaSize = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptViaSize->SetToolTip( _("Enter the current via diameter.") );
+	m_ViaSizeListCtrl = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
+	sViaSizeBox->Add( m_ViaSizeListCtrl, 1, wxALL|wxEXPAND, 5 );
 	
-	sbLeftSizer->Add( m_OptViaSize, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	wxBoxSizer* bSizeViasListButtons;
+	bSizeViasListButtons = new wxBoxSizer( wxVERTICAL );
+	
+	m_buttonAddViasSize = new wxButton( this, wxID_ADD_VIA_SIZE, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizeViasListButtons->Add( m_buttonAddViasSize, 1, wxALL, 5 );
+	
+	m_button4 = new wxButton( this, wxID_DELETED_WIA_SIEZ, _("Delete"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizeViasListButtons->Add( m_button4, 1, wxALL, 5 );
+	
+	sViaSizeBox->Add( bSizeViasListButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	
+	sbLeftSizer->Add( sViaSizeBox, 1, wxEXPAND, 5 );
 	
 	m_ViaDefaultDrillValueTitle = new wxStaticText( this, wxID_ANY, _("Default Via Drill"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaDefaultDrillValueTitle->Wrap( -1 );
@@ -53,69 +68,58 @@ DIALOG_TRACKS_OPTIONS_BASE::DIALOG_TRACKS_OPTIONS_BASE( wxWindow* parent, wxWind
 	
 	sbLeftSizer->Add( m_OptCustomViaDrill, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
+	bMainUpperSizer->Add( sbLeftSizer, 1, wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* sbMiddleLeftSizer;
+	sbMiddleLeftSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Vias Options:") ), wxVERTICAL );
+	
 	wxString m_OptViaTypeChoices[] = { _("Through Via"), _("Blind or Buried Via") };
 	int m_OptViaTypeNChoices = sizeof( m_OptViaTypeChoices ) / sizeof( wxString );
 	m_OptViaType = new wxRadioBox( this, wxID_ANY, _("Default Via Type"), wxDefaultPosition, wxDefaultSize, m_OptViaTypeNChoices, m_OptViaTypeChoices, 1, wxRA_SPECIFY_COLS );
 	m_OptViaType->SetSelection( 0 );
 	m_OptViaType->SetToolTip( _("Select the current via type.\nTrough via is the usual selection") );
 	
-	sbLeftSizer->Add( m_OptViaType, 0, wxALL, 5 );
-	
-	bMainSizer->Add( sbLeftSizer, 1, wxEXPAND, 5 );
-	
-	wxStaticBoxSizer* sbMiddleLeftSizer;
-	sbMiddleLeftSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Micro Vias:") ), wxVERTICAL );
-	
-	m_MicroViaSizeTitle = new wxStaticText( this, wxID_ANY, _("Micro Via Size"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_MicroViaSizeTitle->Wrap( -1 );
-	sbMiddleLeftSizer->Add( m_MicroViaSizeTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_MicroViaSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	sbMiddleLeftSizer->Add( m_MicroViaSizeCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-	
-	m_MicroViaDrillTitle = new wxStaticText( this, wxID_ANY, _("Micro Via Drill"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_MicroViaDrillTitle->Wrap( -1 );
-	sbMiddleLeftSizer->Add( m_MicroViaDrillTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_MicroViaDrillCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	sbMiddleLeftSizer->Add( m_MicroViaDrillCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	sbMiddleLeftSizer->Add( m_OptViaType, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	sbMiddleLeftSizer->Add( 10, 10, 0, 0, 5 );
 	
-	m_AllowMicroViaCtrl = new wxCheckBox( this, wxID_ANY, _("Allows Micro Vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	
-	m_AllowMicroViaCtrl->SetToolTip( _("Allows use of micro vias\nThey are very small vias only from an external copper layer to its near neightbour\n") );
+	wxString m_AllowMicroViaCtrlChoices[] = { _("Do Not Allow Micro Vias"), _("Allow Micro Vias") };
+	int m_AllowMicroViaCtrlNChoices = sizeof( m_AllowMicroViaCtrlChoices ) / sizeof( wxString );
+	m_AllowMicroViaCtrl = new wxRadioBox( this, wxID_ALLOW_MICROVIA, _("Micro Vias:"), wxDefaultPosition, wxDefaultSize, m_AllowMicroViaCtrlNChoices, m_AllowMicroViaCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_AllowMicroViaCtrl->SetSelection( 0 );
+	m_AllowMicroViaCtrl->SetToolTip( _("Allows or do not allow use of micro vias\nThey are very small vias only from an external copper layer to its near neightbour") );
 	
 	sbMiddleLeftSizer->Add( m_AllowMicroViaCtrl, 0, wxALL, 5 );
 	
-	bMainSizer->Add( sbMiddleLeftSizer, 1, wxEXPAND, 5 );
+	bMainUpperSizer->Add( sbMiddleLeftSizer, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbMiddleRightSizer;
 	sbMiddleRightSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Dimensions:") ), wxVERTICAL );
 	
-	m_TrackWidthTitle = new wxStaticText( this, wxID_ANY, _("Track Width"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_TrackWidthTitle->Wrap( -1 );
-	sbMiddleRightSizer->Add( m_TrackWidthTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	wxStaticBoxSizer* sbTracksListSizer;
+	sbTracksListSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Tracks Custom Widths List:") ), wxHORIZONTAL );
 	
-	m_OptTrackWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptTrackWidth->SetToolTip( _("Enter the current track width") );
+	m_TrackWidthListCtrl = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
+	sbTracksListSizer->Add( m_TrackWidthListCtrl, 1, wxALL|wxEXPAND, 5 );
 	
-	sbMiddleRightSizer->Add( m_OptTrackWidth, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	wxBoxSizer* bSizerTacksButtSizer;
+	bSizerTacksButtSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_TrackClearanceTitle = new wxStaticText( this, wxID_ANY, _("Clearance"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_TrackClearanceTitle->Wrap( -1 );
-	sbMiddleRightSizer->Add( m_TrackClearanceTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_buttonAddTrackSize = new wxButton( this, wxID_ADD_TRACK_WIDTH, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerTacksButtSizer->Add( m_buttonAddTrackSize, 0, wxALL|wxEXPAND, 5 );
 	
-	m_OptTrackClearance = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptTrackClearance->SetToolTip( _("This is the clearance between tracks, vias and pads for DRC.") );
+	m_buttonDeleteTrackWidth = new wxButton( this, wxID_DELETED_TRACK_WIDTH, _("Delete"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerTacksButtSizer->Add( m_buttonDeleteTrackWidth, 0, wxALL|wxEXPAND, 5 );
 	
-	sbMiddleRightSizer->Add( m_OptTrackClearance, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	sbTracksListSizer->Add( bSizerTacksButtSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	
+	sbMiddleRightSizer->Add( sbTracksListSizer, 1, wxEXPAND, 5 );
 	
 	
 	sbMiddleRightSizer->Add( 10, 10, 0, 0, 5 );
 	
-	m_MaskClearanceTitle = new wxStaticText( this, wxID_ANY, _("Mask clearance"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MaskClearanceTitle = new wxStaticText( this, wxID_ANY, _("Pads Mask Clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MaskClearanceTitle->Wrap( -1 );
 	sbMiddleRightSizer->Add( m_MaskClearanceTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -124,23 +128,20 @@ DIALOG_TRACKS_OPTIONS_BASE::DIALOG_TRACKS_OPTIONS_BASE( wxWindow* parent, wxWind
 	
 	sbMiddleRightSizer->Add( m_OptMaskMargin, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	bMainSizer->Add( sbMiddleRightSizer, 1, wxEXPAND, 5 );
+	bMainUpperSizer->Add( sbMiddleRightSizer, 1, wxEXPAND, 5 );
 	
-	wxBoxSizer* bRightSizer;
-	bRightSizer = new wxBoxSizer( wxVERTICAL );
+	bMainSizer->Add( bMainUpperSizer, 1, wxEXPAND, 5 );
 	
-	m_buttonOK = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonOK->SetDefault(); 
-	bRightSizer->Add( m_buttonOK, 0, wxALL, 5 );
-	
-	m_buttonCANCEL = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizer->Add( m_buttonCANCEL, 0, wxALL, 5 );
-	
-	bMainSizer->Add( bRightSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_sdbButtonsSizer = new wxStdDialogButtonSizer();
+	m_sdbButtonsSizerOK = new wxButton( this, wxID_OK );
+	m_sdbButtonsSizer->AddButton( m_sdbButtonsSizerOK );
+	m_sdbButtonsSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbButtonsSizer->AddButton( m_sdbButtonsSizerCancel );
+	m_sdbButtonsSizer->Realize();
+	bMainSizer->Add( m_sdbButtonsSizer, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 }
 
 DIALOG_TRACKS_OPTIONS_BASE::~DIALOG_TRACKS_OPTIONS_BASE()

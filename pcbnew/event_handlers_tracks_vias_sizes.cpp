@@ -33,17 +33,17 @@ void WinEDA_PcbFrame::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     {
     case ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH:
         g_DesignSettings.m_UseConnectedTrackWidth = not g_DesignSettings.m_UseConnectedTrackWidth;
-        g_DesignSettings.m_CurrentTrackWidth = GetBoard()->m_TrackWidthHistory[m_SelTrackWidthBox->GetChoice()];
-        g_DesignSettings.m_CurrentViaSize = GetBoard()->m_ViaSizeHistory[m_SelViaSizeBox->GetChoice()];
+        g_DesignSettings.m_CurrentTrackWidth = GetBoard()->m_TrackWidthList[m_SelTrackWidthBox->GetChoice()];
+        g_DesignSettings.m_CurrentViaSize = GetBoard()->m_ViaSizeList[m_SelViaSizeBox->GetChoice()];
         AuxiliaryToolBar_Update_UI( );
         break;
 
     case ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES:
         g_DesignSettings.m_UseConnectedTrackWidth = false;
         GetBoard()->m_TrackWidthSelector = 0;
-        g_DesignSettings.m_CurrentTrackWidth = GetBoard()->m_TrackWidthHistory[0];
+        g_DesignSettings.m_CurrentTrackWidth = GetBoard()->m_TrackWidthList[0];
         GetBoard()->m_ViaSizeSelector = 0;
-        g_DesignSettings.m_CurrentViaSize = GetBoard()->m_ViaSizeHistory[0];
+        g_DesignSettings.m_CurrentViaSize = GetBoard()->m_ViaSizeList[0];
         AuxiliaryToolBar_Update_UI( );
         break;
 
@@ -65,7 +65,7 @@ void WinEDA_PcbFrame::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         g_DesignSettings.m_UseConnectedTrackWidth = false;
         ii = id - ID_POPUP_PCB_SELECT_WIDTH1;
         GetBoard()->m_TrackWidthSelector = ii;
-        g_DesignSettings.m_CurrentTrackWidth = GetBoard()->m_TrackWidthHistory[ii];
+        g_DesignSettings.m_CurrentTrackWidth = GetBoard()->m_TrackWidthList[ii];
         AuxiliaryToolBar_Update_UI( );
         break;
 
@@ -80,20 +80,20 @@ void WinEDA_PcbFrame::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         ii = id - ID_POPUP_PCB_SELECT_VIASIZE1;
         GetBoard()->m_ViaSizeSelector = ii;
-        g_DesignSettings.m_CurrentViaSize = GetBoard()->m_ViaSizeHistory[ii];
+        g_DesignSettings.m_CurrentViaSize = GetBoard()->m_ViaSizeList[ii];
         AuxiliaryToolBar_Update_UI( );
         break;
 
 
     case ID_AUX_TOOLBAR_PCB_TRACK_WIDTH:
         ii = m_SelTrackWidthBox->GetChoice();
-        g_DesignSettings.m_CurrentTrackWidth = GetBoard()->m_TrackWidthHistory[ii];
+        g_DesignSettings.m_CurrentTrackWidth = GetBoard()->m_TrackWidthList[ii];
         GetBoard()->m_TrackWidthSelector = ii;
         break;
 
     case ID_AUX_TOOLBAR_PCB_VIA_SIZE:
         ii = m_SelViaSizeBox->GetChoice();
-        g_DesignSettings.m_CurrentViaSize = GetBoard()->m_ViaSizeHistory[ii];
+        g_DesignSettings.m_CurrentViaSize = GetBoard()->m_ViaSizeList[ii];
         GetBoard()->m_ViaSizeSelector = ii;
         break;
 

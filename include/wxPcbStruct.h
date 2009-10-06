@@ -56,10 +56,10 @@ public:
     WinEDAChoiceBox* m_SelViaSizeBox;       // a combo box to display and select current via diameter
     wxTextCtrl* m_ClearanceBox;             // a text ctrl to display the current tracks and vias clearance
     wxTextCtrl* m_NetClassSelectedBox;      // a text ctrl to display the current NetClass
+    bool        m_TrackAndViasSizesList_Changed;
 
 private:
-    bool             m_TrackAndViasSizesList_Changed;
-
+ 
     DRC*             m_drc;         ///< the DRC controller, see drc.cpp
 
     // we'll use lower case function names for private member functions.

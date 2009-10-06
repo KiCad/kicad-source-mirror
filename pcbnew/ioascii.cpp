@@ -357,14 +357,13 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
         if( stricmp( Line, "TrackWidth" ) == 0 )
         {
             g_DesignSettings.m_CurrentTrackWidth = atoi( data );
-            AddHistory( g_DesignSettings.m_CurrentTrackWidth, TYPE_TRACK );
             continue;
         }
 
-        if( stricmp( Line, "TrackWidthHistory" ) == 0 )
+        if( stricmp( Line, "TrackWidthList" ) == 0 )
         {
             int tmp = atoi( data );
-            AddHistory( tmp, TYPE_TRACK );
+            GetBoard()->m_TrackWidthList.push_back( tmp );
             continue;
         }
 
@@ -407,7 +406,6 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
         if( stricmp( Line, "ViaSize" ) == 0 )
         {
             g_DesignSettings.m_CurrentViaSize = atoi( data );
-            AddHistory( g_DesignSettings.m_CurrentViaSize, TYPE_VIA );
             continue;
         }
 
@@ -429,10 +427,10 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             continue;
         }
 
-        if( stricmp( Line, "ViaSizeHistory" ) == 0 )
+        if( stricmp( Line, "ViaSizeList" ) == 0 )
         {
             int tmp = atoi( data );
-            AddHistory( tmp, TYPE_VIA );
+            GetBoard()->m_ViaSizeList.push_back( tmp );
             continue;
         }
 
@@ -508,7 +506,35 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             g_Pad_Master.m_Drill.y = g_Pad_Master.m_Drill.x;
             continue;
         }
+        if( stricmp( Line, "Pad2MaskClearance" ) == 0 )
+        {
+            g_DesignSettings.m_MaskMargin = atoi( data );
+            continue;
+        }
 #endif
+    }
+
+    /* Ensure tracks and vias sizes lists are ok:
+     * Sort lists by by increasing value and remove duplicates
+     * (the first value is not tested, because it is the netclass value
+    */
+    sort( GetBoard()->m_ViaSizeList.begin()+1, GetBoard()->m_ViaSizeList.end() );
+    sort( GetBoard()->m_TrackWidthList.begin()+1, GetBoard()->m_TrackWidthList.end() );
+    for( unsigned ii = 1; ii < GetBoard()->m_ViaSizeList.size()-1; ii++ )
+    {
+        if( GetBoard()->m_ViaSizeList[ii] == GetBoard()->m_ViaSizeList[ii+1] )
+        {
+            GetBoard()->m_ViaSizeList.erase(GetBoard()->m_ViaSizeList.begin()+ii);
+            ii--;
+        }
+    }
+    for( unsigned ii = 1; ii < GetBoard()->m_TrackWidthList.size()-1; ii++ )
+    {
+        if( GetBoard()->m_TrackWidthList[ii] == GetBoard()->m_TrackWidthList[ii+1] )
+        {
+            GetBoard()->m_TrackWidthList.erase(GetBoard()->m_TrackWidthList.begin()+ii);
+            ii--;
+        }
     }
 
     return 1;
@@ -543,8 +569,9 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
     }
 
     fprintf( aFile, "TrackWidth %d\n", g_DesignSettings.m_CurrentTrackWidth );
-    for( unsigned ii = 0; ii < aBoard->m_TrackWidthHistory.size(); ii++ )
-       fprintf( aFile, "TrackWidthHistory %d\n", aBoard->m_TrackWidthHistory[ii] );
+    // Save custom tracks width list (the first is not saved here: this is the netclass value
+    for( unsigned ii = 1; ii < aBoard->m_TrackWidthList.size(); ii++ )
+       fprintf( aFile, "TrackWidthList %d\n", aBoard->m_TrackWidthList[ii] );
 
 
     fprintf( aFile, "TrackClearence %d\n", g_DesignSettings.m_TrackClearance );
@@ -558,8 +585,9 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
     fprintf( aFile, "ViaAltDrill %d\n", g_DesignSettings.m_ViaDrillCustomValue );
     fprintf( aFile, "ViaMinSize %d\n", g_DesignSettings.m_ViasMinSize );
 
-    for( unsigned ii = 0; ii < aBoard->m_ViaSizeHistory.size(); ii++ )
-       fprintf( aFile, "ViaSizeHistory %d\n", aBoard->m_ViaSizeHistory[ii] );
+    // Save custom vias diameters list (the first is not saved here: this is the netclass value
+    for( unsigned ii = 1; ii < aBoard->m_ViaSizeList.size(); ii++ )
+       fprintf( aFile, "ViaSizeList %d\n", aBoard->m_ViaSizeList[ii] );
 
     fprintf( aFile, "MicroViaSize %d\n", g_DesignSettings.m_CurrentMicroViaSize);
     fprintf( aFile, "MicroViaDrill %d\n", g_DesignSettings.m_MicroViaDrill);
@@ -575,6 +603,7 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
     fprintf( aFile, "TextModWidth %d\n", ModuleTextWidth );
     fprintf( aFile, "PadSize %d %d\n", g_Pad_Master.m_Size.x, g_Pad_Master.m_Size.y );
     fprintf( aFile, "PadDrill %d\n", g_Pad_Master.m_Drill.x );
+    fprintf( aFile, "Pad2MaskClearance %d\n", g_DesignSettings.m_MaskMargin );
 
     fprintf( aFile, "AuxiliaryAxisOrg %d %d\n",
              aFrame->m_Auxiliary_Axis_Position.x, aFrame->m_Auxiliary_Axis_Position.y );
@@ -966,11 +995,15 @@ int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* aFile )
             DateAndTime( line ) );
     fprintf( aFile, "# Created by Pcbnew%s\n\n", CONV_TO_UTF8( GetBuildVersion() ) );
 
+    GetBoard()->SynchronizeNetsAndNetClasses();
+    // Select default Netclass. Useful to save default values in headers
+    GetBoard()->SetCurrentNetClass( GetBoard()->m_NetClasses.GetDefault()->GetName( ));
+    m_TrackAndViasSizesList_Changed = true;
+    AuxiliaryToolBar_Update_UI();
+
     WriteGeneralDescrPcb( aFile );
     WriteSheetDescr( GetScreen(), aFile );
     WriteSetup( aFile, this, GetBoard() );
-
-    GetBoard()->SynchronizeNetsAndNetClasses();
 
     rc = GetBoard()->Save( aFile );
 

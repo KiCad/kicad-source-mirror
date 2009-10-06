@@ -9,6 +9,7 @@
 
 #include "fctsys.h"
 #include "common.h"
+#include "confirm.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 
@@ -25,63 +26,173 @@ DIALOG_TRACKS_OPTIONS::DIALOG_TRACKS_OPTIONS( WinEDA_PcbFrame* parent ) :
     DIALOG_TRACKS_OPTIONS_BASE( parent )
 {
     m_Parent = parent;
+    MyInit();
+    GetSizer()->SetSizeHints( this );
 }
 
 
-void DIALOG_TRACKS_OPTIONS::OnInitDialog( wxInitDialogEvent& event )
+void DIALOG_TRACKS_OPTIONS::MyInit()
 {
     SetFocus();
 
-    // deselect the existing text, seems SetFocus() wants to emulate Microsoft, which is not desireable here.
-    m_OptViaSize->SetSelection( 0, 0 );
-
-    SetDisplayValue();
-
-    if( GetSizer() )
-    {
-        GetSizer()->SetSizeHints( this );
-    }
-
-    event.Skip();
-}
-
-
-/*************************************************/
-void DIALOG_TRACKS_OPTIONS::SetDisplayValue()
-/*************************************************/
-{
-    AddUnitSymbol( *m_ViaSizeTitle );
-    AddUnitSymbol( *m_MicroViaSizeTitle );
-    AddUnitSymbol( *m_ViaDefaultDrillValueTitle );
-    AddUnitSymbol( *m_MicroViaDrillTitle );
-    AddUnitSymbol( *m_ViaAltDrillValueTitle );
-    AddUnitSymbol( *m_TrackWidthTitle );
-    AddUnitSymbol( *m_TrackClearanceTitle );
     AddUnitSymbol( *m_MaskClearanceTitle );
 
     int Internal_Unit = m_Parent->m_InternalUnits;
-    PutValueInLocalUnits( *m_OptViaSize, g_DesignSettings.m_CurrentViaSize, Internal_Unit );
-    PutValueInLocalUnits( *m_MicroViaSizeCtrl,
-                          g_DesignSettings.m_CurrentMicroViaSize,
-                          Internal_Unit );
     PutValueInLocalUnits( *m_OptViaDrill, g_DesignSettings.m_ViaDrill, Internal_Unit );
-    PutValueInLocalUnits( *m_MicroViaDrillCtrl, g_DesignSettings.m_MicroViaDrill, Internal_Unit );
     PutValueInLocalUnits( *m_OptCustomViaDrill,
                           g_DesignSettings.m_ViaDrillCustomValue,
                           Internal_Unit );
-    PutValueInLocalUnits( *m_OptTrackWidth, g_DesignSettings.m_CurrentTrackWidth, Internal_Unit );
-    PutValueInLocalUnits( *m_OptTrackClearance, g_DesignSettings.m_TrackClearance, Internal_Unit );
     PutValueInLocalUnits( *m_OptMaskMargin, g_DesignSettings.m_MaskMargin, Internal_Unit );
     if( g_DesignSettings.m_CurrentViaType != VIA_THROUGH )
         m_OptViaType->SetSelection( 1 );
 
-    m_MicroViaSizeTitle->Enable( g_DesignSettings.m_MicroViasAllowed );
-    m_MicroViaSizeCtrl->Enable( g_DesignSettings.m_MicroViasAllowed );
+    m_AllowMicroViaCtrl->SetSelection( g_DesignSettings.m_MicroViasAllowed ? 1 : 0);
 
-    m_MicroViaDrillTitle->Enable( g_DesignSettings.m_MicroViasAllowed );
-    m_MicroViaDrillCtrl->Enable( g_DesignSettings.m_MicroViasAllowed );
+    // Vias and Tracks sizes values.
+    // note we display only extra values, never the current netclass value.
+    // (the first value in histories list)
+    m_TracksWidthList = m_Parent->GetBoard()->m_TrackWidthList;
+    m_TracksWidthList.erase( m_TracksWidthList.begin() );   // remove the netclass value
+    m_ViasDiameterList = m_Parent->GetBoard()->m_ViaSizeList;
+    m_ViasDiameterList.erase( m_ViasDiameterList.begin() ); // remove the netclass value
+    // Display values:
+    InitDimensionsLists();
+}
 
-    m_AllowMicroViaCtrl->SetValue( g_DesignSettings.m_MicroViasAllowed );
+
+/*******************************************************************/
+void DIALOG_TRACKS_OPTIONS::OnButtonDeleteViaSizeClick( wxCommandEvent& event )
+/*******************************************************************/
+{
+    int isel = m_ViaSizeListCtrl->GetSelection();
+
+    if( isel < 0 )
+        return;
+    m_ViasDiameterList.erase( m_ViasDiameterList.begin() + isel );
+    InitDimensionsLists();
+}
+
+
+/*******************************************************************/
+void DIALOG_TRACKS_OPTIONS::OnButtonAddViaSizeClick( wxCommandEvent& event )
+/*******************************************************************/
+{
+    wxString msg = wxGetTextFromUser( wxEmptyString,
+                                      _( "Enter new via diameter value:" ), wxEmptyString, this );
+
+    if( msg.IsEmpty() )
+        return;
+
+    bool error = false;
+    int  value = ReturnValueFromString( g_UnitMetric, msg, m_Parent->m_InternalUnits );
+
+    if( value <= 0 )
+        error = true;
+    if( value > 10000 )        //  a value > 1 inch is surely a stupid value
+        error = true;
+
+    if( error )
+    {
+        DisplayError( this, _( "Incorrect entered value. Aborted" ) );
+        return;
+    }
+
+    // values are sorted by increasing value in list, so we can use binary_search()
+    // (see C++ Standard Template Library ª C++ Algorithms ª binary_search)
+    if( binary_search( m_ViasDiameterList.begin(), m_ViasDiameterList.end(), value ) == false ) // value not already existing
+    {
+        if( m_ViasDiameterList.size() >= HISTORY_MAX_COUNT - 1 )
+        {
+            DisplayError( this, _( "Too many values in list (max count reached). Aborted" ) );
+            return;
+        }
+        m_ViasDiameterList.push_back( value );
+
+        // Sort new list by by increasing value
+        sort( m_ViasDiameterList.begin(), m_ViasDiameterList.end() );
+    }
+    InitDimensionsLists();
+}
+
+
+/*******************************************************************/
+void DIALOG_TRACKS_OPTIONS::OnButtonDeleteTrackSizeClick( wxCommandEvent& event )
+/*******************************************************************/
+{
+    int isel = m_TrackWidthListCtrl->GetSelection();
+
+    if( isel < 0 )
+        return;
+    m_TracksWidthList.erase( m_TracksWidthList.begin() + isel );
+    InitDimensionsLists();
+}
+
+
+/*******************************************************************/
+void DIALOG_TRACKS_OPTIONS::OnButtonAddTrackSizeClick( wxCommandEvent& event )
+/*******************************************************************/
+{
+    wxString msg = wxGetTextFromUser( wxEmptyString,
+                                      _( "Enter new track size value:" ), wxEmptyString, this );
+
+    if( msg.IsEmpty() )
+        return;
+
+    bool error = false;
+    int  value = ReturnValueFromString( g_UnitMetric, msg, m_Parent->m_InternalUnits );
+
+    if( value <= 0 )
+        error = true;
+    if( value > 10000 )        // a value > 1 inche is surely a stupid value
+        error = true;
+
+    if( error )
+    {
+        DisplayError( this, _( "Incorrect entered value. Aborted" ) );
+        return;
+    }
+
+    // values are sorted by increasing value in list, so we can use binary_search()
+    // (see C++ Standard Template Library ª C++ Algorithms ª binary_search)
+    if( binary_search( m_TracksWidthList.begin(), m_TracksWidthList.end(), value ) == false ) // value not already existing
+    {
+        if( m_TracksWidthList.size() >= HISTORY_MAX_COUNT - 1 )
+        {
+            DisplayError( this, _( "Too many values in list (max count reached). Aborted" ) );
+            return;
+        }
+        m_TracksWidthList.push_back( value );
+
+        // Sort new list by by increasing value
+        sort( m_TracksWidthList.begin(), m_TracksWidthList.end() );
+    }
+    InitDimensionsLists();
+}
+
+
+/***************************************************/
+void DIALOG_TRACKS_OPTIONS::InitDimensionsLists()
+/***************************************************/
+
+/* Populates the 2 lists of sizes (Tracks width list and Vias diameters list)
+ */
+{
+    wxString msg;
+    int      Internal_Unit = m_Parent->m_InternalUnits;
+
+    m_TrackWidthListCtrl->Clear();
+    for( unsigned ii = 0; ii < m_TracksWidthList.size(); ii++ )
+    {
+        msg = ReturnStringFromValue( g_UnitMetric, m_TracksWidthList[ii], Internal_Unit, true );
+        m_TrackWidthListCtrl->Append( msg );
+    }
+
+    m_ViaSizeListCtrl->Clear();
+    for( unsigned ii = 0; ii < m_ViasDiameterList.size(); ii++ )
+    {
+        msg = ReturnStringFromValue( g_UnitMetric, m_ViasDiameterList[ii], Internal_Unit, true );
+        m_ViaSizeListCtrl->Append( msg );
+    }
 }
 
 
@@ -93,66 +204,28 @@ void DIALOG_TRACKS_OPTIONS::OnButtonOkClick( wxCommandEvent& event )
     if( m_OptViaType->GetSelection() > 0 )
         g_DesignSettings.m_CurrentViaType = VIA_BLIND_BURIED;
 
-    g_DesignSettings.m_CurrentViaSize =
-        ReturnValueFromTextCtrl( *m_OptViaSize, m_Parent->m_InternalUnits );
-    g_DesignSettings.m_CurrentMicroViaSize =
-        ReturnValueFromTextCtrl( *m_MicroViaSizeCtrl, m_Parent->m_InternalUnits );
-
-    g_DesignSettings.m_MicroViaDrill =
-        ReturnValueFromTextCtrl( *m_MicroViaDrillCtrl, m_Parent->m_InternalUnits );
     g_DesignSettings.m_ViaDrill =
         ReturnValueFromTextCtrl( *m_OptViaDrill, m_Parent->m_InternalUnits );
     g_DesignSettings.m_ViaDrillCustomValue =
         ReturnValueFromTextCtrl( *m_OptCustomViaDrill, m_Parent->m_InternalUnits );
-    g_DesignSettings.m_MicroViasAllowed = m_AllowMicroViaCtrl->IsChecked();
-
-    g_DesignSettings.m_CurrentTrackWidth =
-        ReturnValueFromTextCtrl( *m_OptTrackWidth, m_Parent->m_InternalUnits );
-    g_DesignSettings.m_TrackClearance =
-        ReturnValueFromTextCtrl( *m_OptTrackClearance, m_Parent->m_InternalUnits );
+    g_DesignSettings.m_MicroViasAllowed = m_AllowMicroViaCtrl->GetSelection() == 1;
 
     g_DesignSettings.m_MaskMargin =
         ReturnValueFromTextCtrl( *m_OptMaskMargin, m_Parent->m_InternalUnits );
 
-    m_Parent->AddHistory( g_DesignSettings.m_CurrentViaSize, TYPE_VIA );
-    m_Parent->AddHistory( g_DesignSettings.m_CurrentTrackWidth, TYPE_TRACK );
+    // Reinitialize m_TrackWidthList and m_ViaSizeList
+    std::vector <int>* list = &m_Parent->GetBoard()->m_TrackWidthList;
+    list->erase( list->begin() + 1, list->end() );  // Remove old "custom" sizes
+    list->insert( list->end(), m_TracksWidthList.begin(), m_TracksWidthList.end() ); //Add new "custom" sizes
+
+    list = &m_Parent->GetBoard()->m_ViaSizeList;
+    list->erase( list->begin() + 1, list->end() );
+    list->insert( list->end(), m_ViasDiameterList.begin(), m_ViasDiameterList.end() );
+
     EndModal( 1 );
-}
 
-
-/*********************************************************************/
-void WinEDA_BasePcbFrame::AddHistory( int value, KICAD_T type )
-/**********************************************************************/
-
-// Mise a jour des listes des dernieres epaisseurs de via et track utilis√©es
-{
-    std::vector <int> * vlist = NULL;
-
-    switch( type )
-    {
-    case TYPE_TRACK:
-        vlist = &GetBoard()->m_TrackWidthHistory;
-        break;
-
-    case TYPE_VIA:
-        vlist = &GetBoard()->m_ViaSizeHistory;
-        break;
-
-    default:
-        return;
-    }
-
-    // values are sorted by increasing value in list, so we can use binary_search()
-    // (see C++ Standard Template Library ª C++ Algorithms ª binary_search)
-    if( binary_search( vlist->begin(), vlist->end(), value ) == false )
-    {      // value not already existing
-        vlist->push_back( value );
-        if( vlist->size() >= HISTORY_MAX_COUNT )
-            vlist->erase( vlist->begin() );
-
-        // Sort new list by by increasing value
-        sort( vlist->begin(), vlist->end() );
-    }
+    m_Parent->m_TrackAndViasSizesList_Changed = true;
+    m_Parent->AuxiliaryToolBar_Update_UI();
 }
 
 
@@ -165,17 +238,3 @@ void DIALOG_TRACKS_OPTIONS::OnButtonCancelClick( wxCommandEvent& event )
     EndModal( 0 );
 }
 
-
-/*!
- * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_CHECKBOX_ALLOWS_MICROVIA
- */
-
-void DIALOG_TRACKS_OPTIONS::OnCheckboxAllowsMicroviaClick( wxCommandEvent& event )
-{
-    bool state = m_AllowMicroViaCtrl->IsChecked();
-
-    m_MicroViaSizeTitle->Enable( state );
-    m_MicroViaSizeCtrl->Enable( state );
-    m_MicroViaDrillTitle->Enable( state );
-    m_MicroViaDrillCtrl->Enable( state );
-}

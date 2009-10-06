@@ -242,7 +242,6 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
 {
     wxString       fieldText;
     LibDrawField*  Field;
-    LIB_DRAW_ITEM* drawItem;
     BASE_SCREEN*   screen = panel->GetScreen();
 
     GRSetDrawMode( dc, drawMode );
@@ -313,7 +312,7 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
 
         for( Field = m_Fields; Field != NULL; Field = Field->Next() )
         {
-            if( onlySelected && drawItem->m_Selected == 0 )
+            if( onlySelected && Field->m_Selected == 0 )
                 continue;
 
             Field->Draw( panel, dc, offset, color, drawMode, NULL,

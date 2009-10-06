@@ -1251,9 +1251,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             pcb->library->SetViaStartIndex( pcb->library->padstacks.size()-1 );
         }
 
-        for( unsigned i=0; i < aBoard->m_ViaSizeHistory.size(); ++i )
+        for( unsigned i=0; i < aBoard->m_ViaSizeList.size(); ++i )
         {
-            int viaSize = aBoard->m_ViaSizeHistory[i];
+            int viaSize = aBoard->m_ViaSizeList[i];
 
             if( viaSize == defaultViaSize )
                 continue;

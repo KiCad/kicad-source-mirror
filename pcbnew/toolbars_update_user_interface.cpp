@@ -87,30 +87,30 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI()
     if( m_SelTrackWidthBox && m_TrackAndViasSizesList_Changed )
     {
         m_SelTrackWidthBox->Clear();
-        for( unsigned ii = 0; ii < GetBoard()->m_TrackWidthHistory.size(); ii++ )
+        for( unsigned ii = 0; ii < GetBoard()->m_TrackWidthList.size(); ii++ )
         {
-            msg = _( "Track" ) + ReturnStringValue( GetBoard()->m_TrackWidthHistory[ii] );
+            msg = _( "Track" ) + ReturnStringValue( GetBoard()->m_TrackWidthList[ii] );
             if( ii == 0 )
                 msg << _( " *" );
             m_SelTrackWidthBox->Append( msg );
         }
     }
-    if( GetBoard()->m_TrackWidthSelector >= GetBoard()->m_TrackWidthHistory.size() )
+    if( GetBoard()->m_TrackWidthSelector >= GetBoard()->m_TrackWidthList.size() )
         GetBoard()->m_TrackWidthSelector = 0;
     m_SelTrackWidthBox->SetSelection( GetBoard()->m_TrackWidthSelector );
 
     if( m_SelViaSizeBox && m_TrackAndViasSizesList_Changed )
     {
         m_SelViaSizeBox->Clear();
-        for( unsigned ii = 0; ii < GetBoard()->m_ViaSizeHistory.size(); ii++ )
+        for( unsigned ii = 0; ii < GetBoard()->m_ViaSizeList.size(); ii++ )
         {
-            msg = _( "Via" ) + ReturnStringValue( GetBoard()->m_ViaSizeHistory[ii] );
+            msg = _( "Via" ) + ReturnStringValue( GetBoard()->m_ViaSizeList[ii] );
             if( ii == 0 )
                 msg << _( " *" );
             m_SelViaSizeBox->Append( msg );
         }
     }
-    if( GetBoard()->m_ViaSizeSelector >= GetBoard()->m_ViaSizeHistory.size() )
+    if( GetBoard()->m_ViaSizeSelector >= GetBoard()->m_ViaSizeList.size() )
         GetBoard()->m_ViaSizeSelector = 0;
     m_SelViaSizeBox->SetSelection( GetBoard()->m_ViaSizeSelector );
 
