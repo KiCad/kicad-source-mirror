@@ -26,13 +26,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define wxID_ADD_NETCLASS 1000
-#define wxID_REMOVE_NETCLASS 1001
-#define ID_LEFT_CHOICE_CLICK 1002
-#define ID_LEFT_TO_RIGHT_COPY 1003
-#define ID_RIGHT_TO_LEFT_COPY 1004
-#define ID_RIGHT_CHOICE_CLICK 1005
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_DESIGN_RULES_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -41,6 +34,16 @@ class DIALOG_DESIGN_RULES_BASE : public wxDialog
 	private:
 	
 	protected:
+		enum
+		{
+			wxID_ADD_NETCLASS = 1000,
+			wxID_REMOVE_NETCLASS,
+			ID_LEFT_CHOICE_CLICK,
+			ID_LEFT_TO_RIGHT_COPY,
+			ID_RIGHT_TO_LEFT_COPY,
+			ID_RIGHT_CHOICE_CLICK,
+		};
+		
 		wxGrid* m_grid;
 		wxButton* m_addButton;
 		wxButton* m_removeButton;

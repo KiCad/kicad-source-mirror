@@ -53,6 +53,8 @@ private:
 
     void Init( );
 
+    void SetDrcParmeters( );
+
     /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_CHECKBOX
     void OnReportCheckBoxClicked( wxCommandEvent& event );
 

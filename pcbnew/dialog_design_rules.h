@@ -57,7 +57,7 @@ private:
     void OnLeftSelectAllButton( wxCommandEvent& event );
     void OnRightSelectAllButton( wxCommandEvent& event );
     bool TestDataValidity( );
-    void Init();
+    void InitDialogRules();
     void InitRulesList();
     void InitializeRulesSelectionBoxes();
     void CopyRulesListToBoard();

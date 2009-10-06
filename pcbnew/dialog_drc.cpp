@@ -65,6 +65,20 @@ void DIALOG_DRC_CONTROL::Init()
 //    m_SetClearance->SetSelection(0,0);
 }
 
+/* accept DRC parameters (min clearance value and min sizes
+*/
+void DIALOG_DRC_CONTROL::SetDrcParmeters( )
+{
+    g_DesignSettings.m_TrackClearance =
+        ReturnValueFromTextCtrl( *m_SetClearance, m_Parent->m_InternalUnits );
+    g_DesignSettings.m_TrackMinWidth =
+        ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl, m_Parent->m_InternalUnits );
+    g_DesignSettings.m_ViasMinSize =
+        ReturnValueFromTextCtrl( *m_SetViaMinSizeCtrl, m_Parent->m_InternalUnits );
+    g_DesignSettings.m_MicroViasMinSize =
+        ReturnValueFromTextCtrl( *m_SetMicroViakMinSizeCtrl, m_Parent->m_InternalUnits );
+}
+
 
 /*!
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_DRC_RUN
@@ -87,14 +101,7 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
         reportName = m_RptFilenameCtrl->GetValue();
     }
 
-    g_DesignSettings.m_TrackClearance =
-        ReturnValueFromTextCtrl( *m_SetClearance, m_Parent->m_InternalUnits );
-    g_DesignSettings.m_TrackMinWidth =
-        ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl, m_Parent->m_InternalUnits );
-    g_DesignSettings.m_ViasMinSize =
-        ReturnValueFromTextCtrl( *m_SetViaMinSizeCtrl, m_Parent->m_InternalUnits );
-    g_DesignSettings.m_MicroViasMinSize =
-        ReturnValueFromTextCtrl( *m_SetMicroViakMinSizeCtrl, m_Parent->m_InternalUnits );
+    SetDrcParmeters( );
 
     m_tester->SetSettings( true,        // Pad to pad DRC test enabled
                           true,         // unconnected pdas DRC test enabled
@@ -172,14 +179,7 @@ void DIALOG_DRC_CONTROL::OnListUnconnectedClick( wxCommandEvent& event )
         reportName = m_RptFilenameCtrl->GetValue();
     }
 
-    g_DesignSettings.m_TrackClearance =
-        ReturnValueFromTextCtrl( *m_SetClearance, m_Parent->m_InternalUnits );
-    g_DesignSettings.m_TrackMinWidth =
-        ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl, m_Parent->m_InternalUnits );
-    g_DesignSettings.m_ViasMinSize =
-        ReturnValueFromTextCtrl( *m_SetViaMinSizeCtrl, m_Parent->m_InternalUnits );
-    g_DesignSettings.m_MicroViasMinSize =
-        ReturnValueFromTextCtrl( *m_SetMicroViakMinSizeCtrl, m_Parent->m_InternalUnits );
+    SetDrcParmeters( );
 
     m_tester->SetSettings( true,        // Pad to pad DRC test enabled
                           true,         // unconnected pdas DRC test enabled
@@ -252,6 +252,7 @@ void DIALOG_DRC_CONTROL::OnButtonBrowseRptFileClick( wxCommandEvent& event )
 void DIALOG_DRC_CONTROL::OnOkClick( wxCommandEvent& event )
 {
     SetReturnCode( wxID_OK );
+    SetDrcParmeters( );
     m_tester->DestroyDialog( wxID_OK );
 }
 
@@ -283,8 +284,6 @@ void DIALOG_DRC_CONTROL::OnReportCheckBoxClicked( wxCommandEvent& event )
         m_RptFilenameCtrl->Enable( false );
         m_BrowseButton->Enable( false );
     }
-
-//    event.Skip();
 }
 
 

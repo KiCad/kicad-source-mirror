@@ -86,7 +86,7 @@ DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( WinEDA_PcbFrame* parent ) :
     m_rightListCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
 
 
-    Init();
+    InitDialogRules();
     SetAutoLayout( true );
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
@@ -105,23 +105,23 @@ void DIALOG_DESIGN_RULES::PrintCurrentSettings( )
 
     // Display min values:
     value = ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_TrackMinWidth, internal_units, true );
-    msg.Printf(_("Minimum value for tracks width: <b>%s</b><br>\n"), GetChars( value ) );
+    msg.Printf(_("Minimum value for tracks width: <b>%s</b><br>\n"), value.c_str( ) );
     m_MessagesList->AppendToPage(msg);
 
     value = ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_ViasMinSize, internal_units, true );
-    msg.Printf(_("Minimum value for vias diameter: <b>%s</b><br>\n"), GetChars( value ) );
+    msg.Printf(_("Minimum value for vias diameter: <b>%s</b><br>\n"), value.c_str( ) );
     m_MessagesList->AppendToPage(msg);
 
     value = ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_MicroViasMinSize, internal_units, true );
-    msg.Printf(_("Minimum value for microvias diameter: <b>%s</b><br>\n"), GetChars( value ) );
+    msg.Printf(_("Minimum value for microvias diameter: <b>%s</b><br>\n"), value.c_str( ) );
     m_MessagesList->AppendToPage(msg);
 
 }
 
 
-/********************************************************************/
-void DIALOG_DESIGN_RULES::Init()
-/********************************************************************/
+/**************************************/
+void DIALOG_DESIGN_RULES::InitDialogRules()
+/**************************************/
 {
     SetFocus();
     SetReturnCode( 0 );
@@ -409,7 +409,7 @@ void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
 void DIALOG_DESIGN_RULES::OnCancelButtonClick( wxCommandEvent& event )
 /*****************************************************************/
 {
-    EndModal( 0 );
+    EndModal( wxID_CANCEL );
 }
 
 

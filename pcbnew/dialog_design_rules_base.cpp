@@ -94,7 +94,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_leftClassChoice->SetSelection( 0 );
 	leftNetSelectBoxSizer->Add( m_leftClassChoice, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
-	m_leftListCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_VRULES );
+	m_leftListCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_VRULES|wxSUNKEN_BORDER );
 	m_leftListCtrl->SetMinSize( wxSize( 220,300 ) );
 	
 	leftNetSelectBoxSizer->Add( m_leftListCtrl, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -105,21 +105,16 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	bmiddleSizerNetSelect = new wxBoxSizer( wxVERTICAL );
 	
 	m_buttonRightToLeft = new wxButton( this, ID_LEFT_TO_RIGHT_COPY, _("<<<"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizerNetSelect->Add( m_buttonRightToLeft, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	bmiddleSizerNetSelect->Add( m_buttonRightToLeft, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_buttonLeftToRight = new wxButton( this, ID_RIGHT_TO_LEFT_COPY, _(">>>"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizerNetSelect->Add( m_buttonLeftToRight, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
-	
-	wxBoxSizer* bSizerButtonsSelecAll;
-	bSizerButtonsSelecAll = new wxBoxSizer( wxHORIZONTAL );
+	bmiddleSizerNetSelect->Add( m_buttonLeftToRight, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_buttonLeftSelAll = new wxButton( this, wxID_ANY, _("<< Select All"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtonsSelecAll->Add( m_buttonLeftSelAll, 0, wxALL, 5 );
+	bmiddleSizerNetSelect->Add( m_buttonLeftSelAll, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_buttonRightSelAll = new wxButton( this, wxID_ANY, _("Select All >>"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtonsSelecAll->Add( m_buttonRightSelAll, 0, wxALIGN_BOTTOM|wxALIGN_RIGHT|wxALL, 5 );
-	
-	bmiddleSizerNetSelect->Add( bSizerButtonsSelecAll, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+	bmiddleSizerNetSelect->Add( m_buttonRightSelAll, 0, wxALIGN_BOTTOM|wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	sbSizer4->Add( bmiddleSizerNetSelect, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -131,12 +126,12 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_rightClassChoice->SetSelection( 0 );
 	rghtNetSelectBoxSizer->Add( m_rightClassChoice, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
-	m_rightListCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_VRULES );
+	m_rightListCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_VRULES|wxSUNKEN_BORDER );
 	m_rightListCtrl->SetMinSize( wxSize( 220,-1 ) );
 	
 	rghtNetSelectBoxSizer->Add( m_rightListCtrl, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
-	sbSizer4->Add( rghtNetSelectBoxSizer, 0, wxALL|wxEXPAND, 5 );
+	sbSizer4->Add( rghtNetSelectBoxSizer, 1, wxALL|wxEXPAND, 5 );
 	
 	bMainSizer->Add( sbSizer4, 2, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
@@ -156,7 +151,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
-	bMainSizer->Add( m_sdbSizer1, 0, wxALIGN_RIGHT|wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( m_sdbSizer1, 0, wxALL|wxALIGN_RIGHT, 5 );
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
