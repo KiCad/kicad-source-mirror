@@ -1168,6 +1168,18 @@ void LIB_COMPONENT::MirrorSelectedItemsH( const wxPoint& center )
 }
 
 
+
+/**
+ * Locate a draw object.
+ *
+ * @param unit - Unit number of draw item.
+ * @param convert - Body style of draw item.
+ * @param type - Draw object type, set to 0 to search for any type.
+ * @param pt - Coordinate for hit testing.
+ *
+ * @return LIB_DRAW_ITEM - Pointer the the draw object if found.
+ *                         Otherwise NULL.
+ */
 LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int unit, int convert,
                                               KICAD_T type, const wxPoint& pt )
 {
@@ -1201,6 +1213,46 @@ LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int unit, int convert,
     return NULL;
 }
 
+/** Function HitTest (overlaid)
+ * @return true if the point aPosRef is near this object
+ * @param aPosRef = a wxPoint to test
+ * @param aThreshold = max distance to this object (usually the half
+ *                     thickness of a line)
+ * @param aTransMat = the transform matrix
+ *
+ * @return LIB_DRAW_ITEM - Pointer the the draw object if found.
+ *                         Otherwise NULL.
+ */
+LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int unit, int convert,
+                                              KICAD_T type, const wxPoint& pt, const int aTransMat[2][2] )
+{
+    /* we use LocateDrawItem( int unit, int convert, KICAD_T type, const wxPoint& pt )
+     * to search items.
+     * because this function uses DefaultTransformMatrix as orient/mirror matrix
+     * we temporary copy aTransMat in DefaultTransformMatrix
+    */
+    LIB_DRAW_ITEM * item;
+    int matrix[2][2];
+    for ( int ii =0; ii<2;ii++ )
+    {
+        for ( int jj =0; jj<2;jj++ )
+        {
+            matrix[ii][jj] = aTransMat[ii][jj];
+            EXCHG(matrix[ii][jj], DefaultTransformMatrix[ii][jj]);
+        }
+    }
+    item = LocateDrawItem( unit, convert, type, pt );
+    //Restore matrix
+    for ( int ii =0; ii<2;ii++ )
+    {
+        for ( int jj =0; jj<2;jj++ )
+        {
+            EXCHG(matrix[ii][jj], DefaultTransformMatrix[ii][jj]);
+        }
+    }
+    
+    return item;
+}
 
 void LIB_COMPONENT::SetPartCount( int count )
 {

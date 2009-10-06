@@ -357,6 +357,21 @@ public:
                                    const wxPoint& pt );
 
     /**
+     * Locate a draw object (overlaid)
+     *
+     * @param unit - Unit number of draw item.
+     * @param convert - Body style of draw item.
+     * @param type - Draw object type, set to 0 to search for any type.
+     * @param pt - Coordinate for hit testing.
+     * @param aTransMat = the transform matrix
+     *
+     * @return LIB_DRAW_ITEM - Pointer the the draw object if found.
+     *                         Otherwise NULL.
+     */
+    LIB_DRAW_ITEM* LocateDrawItem( int unit, int convert, KICAD_T type,
+                                   const wxPoint& pt, const int aTransMat[2][2] );
+
+    /**
      * Return a reference to the draw item list.
      *
      * @return LIB_DRAW_ITEM_LIST& - Reference to the draw item object list.
