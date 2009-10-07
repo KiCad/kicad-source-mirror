@@ -223,7 +223,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     wxConfig* config = wxGetApp().m_EDA_Config;
 
     m_FrameName = wxT( "PcbFrame" );
-    m_Draw_Sheet_Ref = true;            // true pour avoir le cartouche dessine
+    m_Draw_Sheet_Ref = true;            // true to display sheet references
     m_Draw_Auxiliary_Axis = true;
     m_SelTrackWidthBox    = NULL;
     m_SelViaSizeBox = NULL;
@@ -231,6 +231,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     m_TrackAndViasSizesList_Changed = false;
 
     SetBoard( new BOARD( NULL, this ) );
+    m_TrackAndViasSizesList_Changed = true;
 
     m_drc = new DRC( this );        // these 2 objects point to each other
 

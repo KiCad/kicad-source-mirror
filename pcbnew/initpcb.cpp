@@ -163,20 +163,23 @@ bool WinEDA_PcbFrame::Clear_Pcb( bool aQuery )
     // delete the old BOARD and create a new BOARD so that the default
     // layer names are put into the BOARD.
     SetBoard( new BOARD( NULL, this ) );
-
-    /* init pointeurs  et variables */
-    GetScreen()->m_FileName.Empty();
-
+    m_TrackAndViasSizesList_Changed = true;
     SetCurItem( NULL );
 
-    /* Init parametres de gestion */
+    /* clear filename, to avoid overwriting an old file */
+    GetScreen()->m_FileName.Empty();
+
+    /* Init new grid size */
     wxRealPoint gridsize = GetScreen()->GetGrid();
     GetScreen()->Init();
     GetScreen()->SetGrid( gridsize );
 
     g_HightLigt_Status = 0;
-    g_DesignSettings.m_CopperLayerCount = 2;		// Default copper layers count set to 2: double layer board
+    // Default copper layers count set to 2: double layer board
+    g_DesignSettings.m_CopperLayerCount = 2;
 
+    // Update display:
+    SetToolbars();
     Zoom_Automatique( true );
 
     return true;

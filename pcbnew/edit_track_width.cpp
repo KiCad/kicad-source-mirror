@@ -81,9 +81,10 @@ void WinEDA_PcbFrame::Edit_TrackSegm_Width( wxDC* DC, TRACK* aTrackItem )
         return;     // No change
 
     // The segment has changed: redraw it and save it in undo list
-    TRACK* oldsegm = (TRACK*) itemsListPicker.GetPickedItem( 0 );
     if( DC )
     {
+        TRACK* oldsegm = (TRACK*) itemsListPicker.GetPickedItemLink( 0 );
+        wxASSERT(oldsegm);
         DrawPanel->CursorOff( DC );                     // Erase cursor shape
         oldsegm->Draw( DrawPanel, DC, GR_XOR );         // Erase old track shape
         aTrackItem->Draw( DrawPanel, DC, GR_OR );       // Display new track shape

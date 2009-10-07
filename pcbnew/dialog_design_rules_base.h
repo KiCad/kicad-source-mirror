@@ -57,9 +57,9 @@ class DIALOG_DESIGN_RULES_BASE : public wxDialog
 		wxChoice* m_rightClassChoice;
 		wxListCtrl* m_rightListCtrl;
 		wxHtmlWindow* m_MessagesList;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
+		wxStdDialogButtonSizer* m_sdbButtonsSizer;
+		wxButton* m_sdbButtonsSizerOK;
+		wxButton* m_sdbButtonsSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnNetClassesNameLeftClick( wxGridEvent& event ){ event.Skip(); }

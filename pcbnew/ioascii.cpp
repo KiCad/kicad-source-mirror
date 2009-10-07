@@ -964,6 +964,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 
     board->SynchronizeNetsAndNetClasses( );
     board->m_Status_Pcb = 0;
+    m_TrackAndViasSizesList_Changed = true;
     SetToolbars();
     return 1;
 }
