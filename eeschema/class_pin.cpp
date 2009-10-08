@@ -37,7 +37,7 @@ const wxChar* MsgPinElectricType[] =
     wxT( "?????" )
 };
 
-LibDrawPin::LibDrawPin(LIB_COMPONENT * aParent) :
+LIB_PIN::LIB_PIN(LIB_COMPONENT * aParent) :
     LIB_DRAW_ITEM( COMPONENT_PIN_DRAW_TYPE, aParent )
 {
     m_PinLen      = 300;              /* default Pin len */
@@ -57,7 +57,7 @@ LibDrawPin::LibDrawPin(LIB_COMPONENT * aParent) :
 }
 
 
-LibDrawPin::LibDrawPin( const LibDrawPin& pin ) : LIB_DRAW_ITEM( pin )
+LIB_PIN::LIB_PIN( const LIB_PIN& pin ) : LIB_DRAW_ITEM( pin )
 {
     m_Pos                = pin.m_Pos;
     m_PinLen             = pin.m_PinLen;
@@ -83,7 +83,7 @@ LibDrawPin::LibDrawPin( const LibDrawPin& pin ) : LIB_DRAW_ITEM( pin )
  * @param aRefPos A wxPoint to test
  * @return bool - true if a hit, else false
  */
-bool LibDrawPin::HitTest( const wxPoint& aRefPos )
+bool LIB_PIN::HitTest( const wxPoint& aRefPos )
 {
     int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
 
@@ -100,8 +100,8 @@ bool LibDrawPin::HitTest( const wxPoint& aRefPos )
  * @param aThreshold = max distance to a segment
  * @param aTransMat = the transform matrix
  */
-bool LibDrawPin::HitTest( wxPoint aRefPos, int aThreshold,
-                          const int aTransMat[2][2] )
+bool LIB_PIN::HitTest( wxPoint aRefPos, int aThreshold,
+                       const int aTransMat[2][2] )
 {
     wxPoint pinPos = TransformCoordinate( aTransMat, m_Pos );
     wxPoint pinEnd = TransformCoordinate( aTransMat, ReturnPinEndPoint() );
@@ -110,7 +110,7 @@ bool LibDrawPin::HitTest( wxPoint aRefPos, int aThreshold,
 }
 
 
-bool LibDrawPin::Save( FILE* ExportFile ) const
+bool LIB_PIN::Save( FILE* ExportFile ) const
 {
     wxString StringPinNum;
     int      Etype;
@@ -208,7 +208,7 @@ bool LibDrawPin::Save( FILE* ExportFile ) const
 }
 
 
-bool LibDrawPin::Load( char* line, wxString& errorMsg )
+bool LIB_PIN::Load( char* line, wxString& errorMsg )
 {
     int  i, j;
     char pinAttrs[64];
@@ -324,19 +324,19 @@ bool LibDrawPin::Load( char* line, wxString& errorMsg )
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LibDrawPin::GetPenSize()
+int LIB_PIN::GetPenSize()
 {
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
 
-void LibDrawPin::Draw( WinEDA_DrawPanel* aPanel,
-                       wxDC*             aDC,
-                       const wxPoint&    aOffset,
-                       int               aColor,
-                       int               aDrawMode,
-                       void*             aData,
-                       const int         aTransformMatrix[2][2] )
+void LIB_PIN::Draw( WinEDA_DrawPanel* aPanel,
+                    wxDC*             aDC,
+                    const wxPoint&    aOffset,
+                    int               aColor,
+                    int               aDrawMode,
+                    void*             aData,
+                    const int         aTransformMatrix[2][2] )
 {
     // Invisible pins are only drawn on request.  In libedit they are drawn
     // in g_InvisibleItemColor because we must see them.
@@ -388,12 +388,12 @@ void LibDrawPin::Draw( WinEDA_DrawPanel* aPanel,
  * Draw the pin symbol (without texts)
  *  if Color != 0 draw with Color, else with the normal pin color
  */
-void LibDrawPin::DrawPinSymbol( WinEDA_DrawPanel* aPanel,
-                                wxDC*             aDC,
-                                const wxPoint&    aPinPos,
-                                int               aOrient,
-                                int               aDrawMode,
-                                int               aColor )
+void LIB_PIN::DrawPinSymbol( WinEDA_DrawPanel* aPanel,
+                             wxDC*             aDC,
+                             const wxPoint&    aPinPos,
+                             int               aOrient,
+                             int               aDrawMode,
+                             int               aColor )
 {
     int          MapX1, MapY1, x1, y1;
     int          color;
@@ -555,15 +555,15 @@ void LibDrawPin::DrawPinSymbol( WinEDA_DrawPanel* aPanel,
 *  If TextInside then the text is been put inside,otherwise all is drawn outside.
 *  Pin Name:    substring beteween '~' is negated
 *****************************************************************************/
-void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
-                               wxDC*             DC,
-                               wxPoint&          pin_pos,
-                               int               orient,
-                               int               TextInside,
-                               bool              DrawPinNum,
-                               bool              DrawPinName,
-                               int               Color,
-                               int               DrawMode )
+void LIB_PIN::DrawPinTexts( WinEDA_DrawPanel* panel,
+                            wxDC*             DC,
+                            wxPoint&          pin_pos,
+                            int               orient,
+                            int               TextInside,
+                            bool              DrawPinNum,
+                            bool              DrawPinName,
+                            int               Color,
+                            int               DrawMode )
 /* DrawMode = GR_OR, XOR ... */
 {
     int        x, y, x1, y1;
@@ -763,13 +763,13 @@ void LibDrawPin::DrawPinTexts( WinEDA_DrawPanel* panel,
 * If TextInside then the text is been put inside (moving from x1, y1 in      *
 * the opposite direction to x2,y2), otherwise all is drawn outside.      *
 *****************************************************************************/
-void LibDrawPin::PlotPinTexts( PLOTTER *plotter,
-                               wxPoint& pin_pos,
-                               int      orient,
-                               int      TextInside,
-                               bool     DrawPinNum,
-                               bool     DrawPinName,
-                               int      aWidth )
+void LIB_PIN::PlotPinTexts( PLOTTER *plotter,
+                            wxPoint& pin_pos,
+                            int      orient,
+                            int      TextInside,
+                            bool     DrawPinNum,
+                            bool     DrawPinName,
+                            int      aWidth )
 {
     int        x, y, x1, y1;
     wxString   StringPinNum;
@@ -945,7 +945,7 @@ void LibDrawPin::PlotPinTexts( PLOTTER *plotter,
 
 
 /******************************************/
-wxPoint LibDrawPin::ReturnPinEndPoint()
+wxPoint LIB_PIN::ReturnPinEndPoint()
 /******************************************/
 
 /* return the pin end position, for a component in normal orient
@@ -977,7 +977,7 @@ wxPoint LibDrawPin::ReturnPinEndPoint()
  *  according to its orientation and the matrix transform (rot, mirror) TransMat
  * @param  TransMat = transform matrix
  */
-int LibDrawPin::ReturnPinDrawOrient( const int TransMat[2][2] )
+int LIB_PIN::ReturnPinDrawOrient( const int TransMat[2][2] )
 {
     int     orient;
     wxPoint end;    // position of a end pin starting at 0,0 according to its orientation, lenght = 1
@@ -1021,7 +1021,7 @@ int LibDrawPin::ReturnPinDrawOrient( const int TransMat[2][2] )
  *  Used to print/draw the pin num
  * @param aStringBuffer = the wxString to store the pin num as an unicode string
  */
-void LibDrawPin::ReturnPinStringNum( wxString& aStringBuffer ) const
+void LIB_PIN::ReturnPinStringNum( wxString& aStringBuffer ) const
 {
     aStringBuffer = ReturnPinStringNum( m_PinNum );
 }
@@ -1031,7 +1031,7 @@ void LibDrawPin::ReturnPinStringNum( wxString& aStringBuffer ) const
  * @param aPinNum = a long containing a pin num
  * @return aStringBuffer = the wxString to store the pin num as an unicode string
  */
-wxString LibDrawPin::ReturnPinStringNum( long aPinNum )
+wxString LIB_PIN::ReturnPinStringNum( long aPinNum )
 {
     char ascii_buf[5];
 
@@ -1044,12 +1044,12 @@ wxString LibDrawPin::ReturnPinStringNum( long aPinNum )
 }
 
 
-/** Function LibDrawPin::SetPinNumFromString()
+/** Function LIB_PIN::SetPinNumFromString()
  * fill the buffer with pin num as a wxString
  *  Pin num is coded as a long
  *  Used to print/draw the pin num
  */
-void LibDrawPin::SetPinNumFromString( wxString& buffer )
+void LIB_PIN::SetPinNumFromString( wxString& buffer )
 {
     char     ascii_buf[4];
     unsigned ii, len = buffer.Len();
@@ -1068,10 +1068,10 @@ void LibDrawPin::SetPinNumFromString( wxString& buffer )
 
 
 /*************************************/
-LIB_DRAW_ITEM* LibDrawPin::DoGenCopy()
+LIB_DRAW_ITEM* LIB_PIN::DoGenCopy()
 /*************************************/
 {
-    LibDrawPin* newpin = new LibDrawPin( GetParent() );
+    LIB_PIN* newpin = new LIB_PIN( GetParent() );
 
     newpin->m_Pos                = m_Pos;
     newpin->m_PinLen             = m_PinLen;
@@ -1096,11 +1096,11 @@ LIB_DRAW_ITEM* LibDrawPin::DoGenCopy()
 }
 
 
-int LibDrawPin::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LIB_PIN::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_PIN_DRAW_TYPE );
 
-    const LibDrawPin* tmp = ( LibDrawPin* ) &other;
+    const LIB_PIN* tmp = ( LIB_PIN* ) &other;
 
     if( m_PinNum != tmp->m_PinNum )
         return m_PinNum - tmp->m_PinNum;
@@ -1120,13 +1120,13 @@ int LibDrawPin::DoCompare( const LIB_DRAW_ITEM& other ) const
 }
 
 
-void LibDrawPin::DoOffset( const wxPoint& offset )
+void LIB_PIN::DoOffset( const wxPoint& offset )
 {
     m_Pos += offset;
 }
 
 
-bool LibDrawPin::DoTestInside( EDA_Rect& rect )
+bool LIB_PIN::DoTestInside( EDA_Rect& rect )
 {
     wxPoint end = ReturnPinEndPoint();
 
@@ -1134,13 +1134,13 @@ bool LibDrawPin::DoTestInside( EDA_Rect& rect )
 }
 
 
-void LibDrawPin::DoMove( const wxPoint& newPosition )
+void LIB_PIN::DoMove( const wxPoint& newPosition )
 {
     m_Pos = newPosition;
 }
 
 
-void LibDrawPin::DoMirrorHorizontal( const wxPoint& center )
+void LIB_PIN::DoMirrorHorizontal( const wxPoint& center )
 {
     m_Pos.x -= center.x;
     m_Pos.x *= -1;
@@ -1153,8 +1153,8 @@ void LibDrawPin::DoMirrorHorizontal( const wxPoint& center )
 }
 
 
-void LibDrawPin::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                         const int transform[2][2] )
+void LIB_PIN::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                      const int transform[2][2] )
 {
     if( m_Attributs & PINNOTDRAW )
         return;
@@ -1171,48 +1171,42 @@ void LibDrawPin::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 }
 
 
-/** Function LibDrawPin::DisplayInfo
+/** Function LIB_PIN::DisplayInfo
  * Displays info (pin num and name, orientation ...
  * on the Info window
  */
-void LibDrawPin::DisplayInfo( WinEDA_DrawFrame* frame )
+void LIB_PIN::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString Text;
     int      ii;
 
     LIB_DRAW_ITEM::DisplayInfo( frame );
 
-    /* Affichage du nom */
-    frame->MsgPanel->Affiche_1_Parametre( 30, _( "PinName" ), m_PinName,
-                                          DARKCYAN );
+    frame->MsgPanel->AppendMessage( _( "Pin name" ), m_PinName, DARKCYAN );
 
-    /* Affichage du numero */
     if( m_PinNum == 0 )
         Text = wxT( "?" );
     else
         ReturnPinStringNum( Text );
 
-    frame->MsgPanel->Affiche_1_Parametre( 38, _( "PinNum" ), Text, DARKCYAN );
+    frame->MsgPanel->AppendMessage( _( "Pin number" ), Text, DARKCYAN );
 
-    /* Affichage du type */
     ii = m_PinType;
-    frame->MsgPanel->Affiche_1_Parametre( 44, _( "PinType" ),
-                                          MsgPinElectricType[ii], RED );
+    frame->MsgPanel->AppendMessage( _( "Pin type" ), MsgPinElectricType[ii],
+                                    RED );
 
-    /* Affichage de la visiblite */
     ii = m_Attributs;
     if( ii & 1 )
-        Text = _( "no" );
+        Text = _( "Not visible" );
     else
-        Text = _( "yes" );
-    frame->MsgPanel->Affiche_1_Parametre( 50, _( "Display" ), Text, DARKGREEN );
+        Text = _( "Visible" );
+    frame->MsgPanel->AppendMessage( _( "Display" ), Text, DARKGREEN );
 
     /* Display pin length */
     Text = ReturnStringFromValue( g_UnitMetric, m_PinLen,
                                   EESCHEMA_INTERNAL_UNIT, true );
-    frame->MsgPanel->Affiche_1_Parametre( 56, _( "Length" ), Text, MAGENTA );
+    frame->MsgPanel->AppendMessage( _( "Length" ), Text, MAGENTA );
 
-    /* Affichage de l'orientation */
     switch( m_Orient )
     {
     case PIN_UP:
@@ -1232,18 +1226,18 @@ void LibDrawPin::DisplayInfo( WinEDA_DrawFrame* frame )
         break;
 
     default:
-        Text = wxT( "??" );
+        Text = _( "Unknown" );
         break;
     }
 
-    frame->MsgPanel->Affiche_1_Parametre( 62, _( "Orient" ), Text, MAGENTA );
+    frame->MsgPanel->AppendMessage( _( "Oriention" ), Text, MAGENTA );
 }
 
 
-/** Function LibDrawPin::GetBoundingBox
+/** Function LIB_PIN::GetBoundingBox
  * @return the boundary box for this, in schematic coordinates
  */
-EDA_Rect LibDrawPin::GetBoundingBox()
+EDA_Rect LIB_PIN::GetBoundingBox()
 {
     wxPoint pt = m_Pos;
 

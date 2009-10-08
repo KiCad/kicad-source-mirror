@@ -203,7 +203,7 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
     Component->m_PrefixString = Entry->m_Prefix.m_Text;
 
     /* Init des autres champs si predefinis dans la librairie */
-    LibDrawField* EntryField;
+    LIB_FIELD* EntryField;
     for( EntryField = Entry->m_Fields; EntryField != NULL;
          EntryField = EntryField->Next() )
     {

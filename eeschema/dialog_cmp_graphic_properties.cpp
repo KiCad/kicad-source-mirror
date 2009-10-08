@@ -59,57 +59,62 @@ WinEDA_bodygraphics_PropertiesFrame::WinEDA_bodygraphics_PropertiesFrame( WinEDA
 	/* Set the dialog items: */
 	if ( CurrentItem )
 	{
-		if ( CurrentItem->m_Unit == 0 ) m_CommonUnit->SetValue(TRUE);
+		if ( CurrentItem->m_Unit == 0 )
+            m_CommonUnit->SetValue( TRUE );
 	}
-	else if ( ! g_FlDrawSpecificUnit ) m_CommonUnit->SetValue(TRUE);
+	else if ( ! g_FlDrawSpecificUnit )
+    {
+        m_CommonUnit->SetValue( TRUE );
+    }
+
 	if ( CurrentItem )
 	{
-		if ( CurrentItem->m_Convert == 0 ) m_CommonConvert->SetValue(TRUE);
+		if ( CurrentItem->m_Convert == 0 )
+            m_CommonConvert->SetValue( TRUE );
 	}
-	else if ( !g_FlDrawSpecificConvert ) m_CommonConvert->SetValue(TRUE);
+	else if ( !g_FlDrawSpecificConvert )
+    {
+        m_CommonConvert->SetValue( TRUE );
+    }
 
-bool show_fill_option = FALSE;
-int fill_option = 0;
+    bool show_fill_option = false;
+    int fill_option = 0;
+
 	if( CurrentItem )
-        switch(CurrentItem->Type())
+    {
+        fill_option = CurrentItem->m_Fill;
+
+        switch( CurrentItem->Type() )
  		{
         case COMPONENT_ARC_DRAW_TYPE:
-            show_fill_option = TRUE;
-            fill_option = ((LibDrawArc*)CurrentItem)->m_Fill;
-			m_GraphicShapeWidthCtrl->SetValue(((LibDrawArc*)CurrentItem)->m_Width);
-
-            break;
-
 		case COMPONENT_CIRCLE_DRAW_TYPE:
-            show_fill_option = TRUE;
-            fill_option = ((LibDrawCircle*)CurrentItem)->m_Fill;
-			m_GraphicShapeWidthCtrl->SetValue(((LibDrawCircle*)CurrentItem)->m_Width);
-            break;
-
 		case COMPONENT_RECT_DRAW_TYPE:
-            show_fill_option = TRUE;
-            fill_option = ((LibDrawSquare *)CurrentItem)->m_Fill;
-			m_GraphicShapeWidthCtrl->SetValue(((LibDrawSquare*)CurrentItem)->m_Width);
-            break;
+        case COMPONENT_POLYLINE_DRAW_TYPE:
+            show_fill_option = true;
 
-        case  COMPONENT_POLYLINE_DRAW_TYPE:
-            show_fill_option = TRUE;
-            fill_option = ((LibDrawPolyline*)CurrentItem)->m_Fill;
-			m_GraphicShapeWidthCtrl->SetValue(((LibDrawPolyline*)CurrentItem)->m_Width);
+        default:
             break;
-
-        default: break;
         }
 
-    if ( show_fill_option ) m_Filled->SetSelection(fill_option);
-    else m_Filled->Enable(false);
+        m_GraphicShapeWidthCtrl->SetValue( CurrentItem->GetWidth() );
+    }
+
+    if ( show_fill_option )
+        m_Filled->SetSelection( fill_option );
+    else
+        m_Filled->Enable( false );
 }
 
 /*!
  * WinEDA_bodygraphics_PropertiesFrame creator
  */
 
-bool WinEDA_bodygraphics_PropertiesFrame::Create( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style )
+bool WinEDA_bodygraphics_PropertiesFrame::Create( wxWindow*       parent,
+                                                  wxWindowID      id,
+                                                  const wxString& caption,
+                                                  const wxPoint&  pos,
+                                                  const wxSize&   size,
+                                                  long            style )
 {
 ////@begin WinEDA_bodygraphics_PropertiesFrame member initialisation
     m_CommonUnit = NULL;

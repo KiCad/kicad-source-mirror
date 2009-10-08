@@ -39,7 +39,7 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 break;
 
             case COMPONENT_FIELD_DRAW_TYPE:
-                PlaceField( DC, (LibDrawField*) DrawEntry );
+                PlaceField( DC, (LIB_FIELD*) DrawEntry );
                 DrawEntry = NULL;
                 break;
 
@@ -126,7 +126,7 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 DisplayCmpDoc();
             SaveCopyInUndoList( m_component );
             if( DrawEntry->Type() == COMPONENT_PIN_DRAW_TYPE )
-                DeletePin( DC, m_component, (LibDrawPin*) DrawEntry );
+                DeletePin( DC, m_component, (LIB_PIN*) DrawEntry );
             else
                 m_component->RemoveDrawItem( DrawEntry, DrawPanel, DC );
             DrawEntry = NULL;
@@ -229,7 +229,7 @@ void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
     case COMPONENT_FIELD_DRAW_TYPE:
         if( DrawEntry->m_Flags == 0 )
         {
-            EditField( DC, (LibDrawField*) DrawEntry );
+            EditField( DC, (LIB_FIELD*) DrawEntry );
         }
         break;
 

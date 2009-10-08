@@ -82,7 +82,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem(
     bool           DoCenterAndRedraw = FALSE;
     bool           NotFound = true;
     wxString       msg;
-    LibDrawPin*    pin;
+    LIB_PIN*       pin;
 
     EDA_SheetList  SheetList;
 

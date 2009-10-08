@@ -43,7 +43,6 @@ set(EESCHEMA_SRCS
     dialog_build_BOM.cpp
     dialog_build_BOM_base.cpp
 #   dialog_cmp_graphic_properties.cpp
-    dialog_create_component.cpp
     dialog_edit_component_in_lib.cpp
     dialog_edit_component_in_lib_base.cpp
     dialog_edit_component_in_schematic_fbp.cpp
@@ -57,6 +56,8 @@ set(EESCHEMA_SRCS
     dialog_erc.cpp
     dialog_erc_base.cpp
 #   dialog_find.cpp
+    dialog_lib_new_component.cpp
+    dialog_lib_new_component_base.cpp
     dialog_options.cpp
     dialog_print_using_printer_base.cpp
     dialog_print_using_printer.cpp

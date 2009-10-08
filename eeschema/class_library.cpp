@@ -18,6 +18,7 @@
 #include <boost/foreach.hpp>
 
 #include <wx/tokenzr.h>
+#include <wx/regex.h>
 
 
 static const wxChar* duplicate_name_msg = _( "Component library <%s> has \
@@ -121,6 +122,23 @@ void CMP_LIBRARY::SearchEntryNames( wxArrayString& names,
         if( !nameSearch.IsEmpty() && WildCompareString( nameSearch,
                                                         entry.GetName(),
                                                         false ) )
+            names.Add( entry.GetName() );
+    }
+
+    if( sort )
+        names.Sort();
+}
+
+
+void CMP_LIBRARY::SearchEntryNames( wxArrayString& names, const wxRegEx& re,
+                                    bool sort )
+{
+    if( !re.IsValid() )
+        return;
+
+    BOOST_FOREACH( CMP_LIB_ENTRY& entry, m_Entries )
+    {
+        if( re.Matches( entry.m_KeyWord ) )
             names.Add( entry.GetName() );
     }
 

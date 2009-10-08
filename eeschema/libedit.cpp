@@ -21,10 +21,10 @@
 #include "libeditfrm.h"
 #include "class_library.h"
 
-#include "dialog_create_component.h"
+#include "dialog_lib_new_component.h"
 
 
-/* Affiche dans la zone messages la librairie , et le composant edite */
+/* Update the main window title bar with the current library name. */
 void WinEDA_LibeditFrame::DisplayLibInfos()
 {
     wxString msg = _( "Component Library Editor: " );
@@ -490,9 +490,7 @@ All changes will be lost. Discard changes?" ) ) )
  */
 void WinEDA_LibeditFrame::CreateNewLibraryPart( wxCommandEvent& event )
 {
-    int            diag;
-    wxString       msg;
-    LIB_COMPONENT* NewStruct;
+    wxString name;
 
     if( m_component && GetScreen()->IsModify()
         && !IsOK( this, _( "All changes to the current component will be \
@@ -503,43 +501,43 @@ lost!\n\nClear the current component from the screen?" ) ) )
 
     m_drawItem = NULL;
 
-    WinEDA_CreateCmpDialog Dialogbox( this );
-    diag = Dialogbox.ShowModal();
-    if( diag != wxID_OK )
+    DIALOG_LIB_NEW_COMPONENT dlg( this );
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
-    msg = Dialogbox.ReturnCmpName();
-    if( msg.IsEmpty() )
+
+    if( dlg.GetName().IsEmpty() )
         return;
-    msg.MakeUpper();
-    msg.Replace( wxT( " " ), wxT( "_" ) );
+
+    name = dlg.GetName().MakeUpper();
+    name.Replace( wxT( " " ), wxT( "_" ) );
 
     /* Test: y a t-il un composant deja de ce nom */
-    if( m_library )
+    if( m_library && m_library->FindEntry( name ) )
     {
-        if( m_library->FindEntry( msg ) )
-        {
-            wxString msg;
-            msg.Printf( _( "Component \"%s\" already exists in \
-library \"%s\"." ),
-                        (const wxChar*) Dialogbox.ReturnCmpName(),
-                        (const wxChar*) m_library->GetName() );
-            DisplayError( this, msg );
-            return;
-        }
+        wxString msg;
+        msg.Printf( _( "Component \"%s\" already exists in library \"%s\"." ),
+                    (const wxChar*) name,
+                    (const wxChar*) m_library->GetName() );
+        DisplayError( this, msg );
+        return;
     }
 
-    NewStruct = new LIB_COMPONENT( msg );
-    Dialogbox.SetComponentData( *NewStruct );
-    if( NewStruct->m_Prefix.m_Text.IsEmpty() )
-        NewStruct->m_Prefix.m_Text = wxT( "U" );
-    NewStruct->m_Prefix.m_Text.MakeUpper();
+    LIB_COMPONENT* component = new LIB_COMPONENT( name );
+    component->m_Prefix.m_Text = dlg.GetReference();
+    component->SetPartCount( dlg.GetPartCount() );
+    component->SetConversion( dlg.GetAlternateBodyStyle() );
+    component->m_TextInside = dlg.GetPinTextPosition();
+    component->m_Options = ( dlg.GetPowerSymbol() ) ? ENTRY_POWER :
+        ENTRY_NORMAL;
+    component->m_DrawPinNum = dlg.GetShowPinNumber();
+    component->m_DrawPinName = dlg.GetShowPinName();
 
-    // Effacement ancien composant affich�
     if( m_component )
     {
         SAFE_DELETE( m_component );
     }
-    m_component = NewStruct;
+
+    m_component = component;
     m_unit = 1;
     m_convert  = 1;
     DisplayLibInfos();
@@ -549,6 +547,7 @@ library \"%s\"." ),
     g_EditPinByPinIsOn = false;
     m_lastDrawItem = NULL;
     GetScreen()->ClearUndoRedoList();
+    GetScreen()->SetModify();
     DrawPanel->Refresh();
 }
 

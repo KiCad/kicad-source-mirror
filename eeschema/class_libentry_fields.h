@@ -18,8 +18,7 @@
  * default value in schematic
  */
 
-class LibDrawField : public LIB_DRAW_ITEM,
-    public EDA_TextStruct
+class LIB_FIELD : public LIB_DRAW_ITEM, public EDA_TextStruct
 {
 public:
     int m_FieldId;     /*  0 = REFERENCE
@@ -33,17 +32,17 @@ public:
 
 public:
 
-    LibDrawField* Next() const { return (LibDrawField*) Pnext; }
-    LibDrawField* Back() const { return (LibDrawField*) Pback; }
+    LIB_FIELD* Next() const { return (LIB_FIELD*) Pnext; }
+    LIB_FIELD* Back() const { return (LIB_FIELD*) Pback; }
 
 
-    LibDrawField( int idfield = 2 );
-    LibDrawField( LIB_COMPONENT * aParent, int idfield = 2 );
-    LibDrawField( const LibDrawField& field );
-    ~LibDrawField();
+    LIB_FIELD( int idfield = 2 );
+    LIB_FIELD( LIB_COMPONENT * aParent, int idfield = 2 );
+    LIB_FIELD( const LIB_FIELD& field );
+    ~LIB_FIELD();
     virtual wxString GetClass() const
     {
-        return wxT( "LibDrawField" );
+        return wxT( "LIB_FIELD" );
     }
 
 
@@ -64,11 +63,11 @@ public:
 
     /** Function Copy
      * copy parameters of this to Target. Pointers are not copied
-     * @param aTarget = the LibDrawField to set with "this" values
+     * @param aTarget = the LIB_FIELD to set with "this" values
      */
-    void          Copy( LibDrawField* aTarget ) const;
+    void          Copy( LIB_FIELD* aTarget ) const;
 
-    void          SetFields( const std::vector <LibDrawField> aFields );
+    void          SetFields( const std::vector <LIB_FIELD> aFields );
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
                int aColor, int aDrawMode, void* aData,
@@ -100,7 +99,7 @@ public:
     virtual bool HitTest( wxPoint aPosRef, int aThreshold,
                           const int aTransMat[2][2] );
 
-    void operator=( const LibDrawField& field )
+    void operator=( const LIB_FIELD& field )
     {
         m_FieldId = field.m_FieldId;
         m_Text = field.m_Text;
@@ -154,6 +153,7 @@ protected:
     virtual void DoMirrorHorizontal( const wxPoint& center );
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] );
+    virtual int DoGetWidth( void ) { return m_Width; }
 };
 
 #endif  //  CLASS_LIBENTRY_FIELDS_H

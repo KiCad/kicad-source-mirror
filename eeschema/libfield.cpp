@@ -52,7 +52,7 @@ static void ExitMoveField( WinEDA_DrawPanel* Panel, wxDC* DC )
 /*
  * Initialise le deplacement d'un champ ( ref ou Name )
  */
-void WinEDA_LibeditFrame::StartMoveField( wxDC* DC, LibDrawField* field )
+void WinEDA_LibeditFrame::StartMoveField( wxDC* DC, LIB_FIELD* field )
 {
     wxPoint startPos;
 
@@ -89,7 +89,7 @@ static void ShowMoveField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     if( parent == NULL )
         return;
 
-    LibDrawField* Field = (LibDrawField*) parent->GetDrawItem();
+    LIB_FIELD* Field = (LIB_FIELD*) parent->GetDrawItem();
 
     if( Field == NULL )
         return;
@@ -109,7 +109,7 @@ static void ShowMoveField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 }
 
 
-void WinEDA_LibeditFrame::PlaceField( wxDC* DC, LibDrawField* Field )
+void WinEDA_LibeditFrame::PlaceField( wxDC* DC, LIB_FIELD* Field )
 {
     if( Field == NULL )
         return;
@@ -132,7 +132,7 @@ void WinEDA_LibeditFrame::PlaceField( wxDC* DC, LibDrawField* Field )
 }
 
 
-void WinEDA_LibeditFrame::EditField( wxDC* DC, LibDrawField* Field )
+void WinEDA_LibeditFrame::EditField( wxDC* DC, LIB_FIELD* Field )
 {
     wxString   Text;
     wxString   title;
@@ -230,7 +230,7 @@ not conflict with any library entries." ),
  * si un champ est en cours d'edition, modif de celui ci.
  * sinon Modif du champ pointe par la souris
  */
-void WinEDA_LibeditFrame::RotateField( wxDC* DC, LibDrawField* Field )
+void WinEDA_LibeditFrame::RotateField( wxDC* DC, LIB_FIELD* Field )
 {
 
     if( Field == NULL )

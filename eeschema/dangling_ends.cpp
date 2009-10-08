@@ -148,17 +148,19 @@ void WinEDA_SchematicFrame::TestDanglingEnds( SCH_ITEM* DrawList, wxDC* DC )
 }
 
 
-/************************************************************************************************/
-LibDrawPin* WinEDA_SchematicFrame::LocatePinEnd( SCH_ITEM* DrawList,  const wxPoint&  pos )
-/************************************************************************************************/
 
-/** Teste if point pos is on a pin end
- * @return un pointer on the pin or NULL
- * @param DrawList = list of SCH_ITEMs
+/**
+ * Test if point pos is on a pin end.
+ *
+ * @param DrawList = List of SCH_ITEMs to check.
+ *
+ * @return LIB_PIN - Pointer to the located pin or NULL if no pin was found.
  */
+LIB_PIN* WinEDA_SchematicFrame::LocatePinEnd( SCH_ITEM* DrawList,
+                                              const wxPoint&  pos )
 {
     SCH_COMPONENT* DrawLibItem;
-    LibDrawPin* Pin;
+    LIB_PIN* Pin;
     wxPoint pinpos;
 
     Pin = LocateAnyPin( DrawList, pos, &DrawLibItem );
@@ -275,13 +277,10 @@ void TestLabelForDangling( SCH_TEXT* label,
 }
 
 
-/****************************************************/
-wxPoint ReturnPinPhysicalPosition( LibDrawPin*             Pin,
-                                   SCH_COMPONENT* DrawLibItem )
-/****************************************************/
 
 /* Retourne la position physique de la pin, qui d�pend de l'orientation
  *  du composant */
+wxPoint ReturnPinPhysicalPosition( LIB_PIN* Pin, SCH_COMPONENT* DrawLibItem )
 {
     wxPoint PinPos = Pin->m_Pos;
 
@@ -289,7 +288,8 @@ wxPoint ReturnPinPhysicalPosition( LibDrawPin*             Pin,
         NEGATE( PinPos.y );
 
     else
-        PinPos = TransformCoordinate( DrawLibItem->m_Transform, Pin->m_Pos) + DrawLibItem->m_Pos;
+        PinPos = TransformCoordinate( DrawLibItem->m_Transform,
+                                      Pin->m_Pos ) + DrawLibItem->m_Pos;
 
     return PinPos;
 }
@@ -392,7 +392,7 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
             if( Entry == NULL )
                 break;
 
-            for( LibDrawPin* Pin = Entry->GetNextPin(); Pin != NULL;
+            for( LIB_PIN* Pin = Entry->GetNextPin(); Pin != NULL;
                  Pin = Entry->GetNextPin( Pin ) )
             {
                 wxASSERT( Pin->Type() == COMPONENT_PIN_DRAW_TYPE );

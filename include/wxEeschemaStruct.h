@@ -31,9 +31,8 @@ class DrawSheetStruct;
 class DrawSheetPath;
 class Hierarchical_PIN_Sheet_Struct;
 class SCH_COMPONENT;
-class LibDrawField;
 class SCH_CMP_FIELD;
-class LibDrawPin;
+class LIB_PIN;
 class DrawJunctionStruct;
 
 /* enum used in RotationMiroir() */
@@ -445,7 +444,7 @@ public:
 
     // Test des points de connexion en l'air (dangling ends)
     void           TestDanglingEnds( SCH_ITEM* DrawList, wxDC* DC );
-    LibDrawPin*    LocatePinEnd( SCH_ITEM* DrawList, const wxPoint& pos );
+    LIB_PIN*       LocatePinEnd( SCH_ITEM* DrawList, const wxPoint& pos );
 
     // ERC:
     /**

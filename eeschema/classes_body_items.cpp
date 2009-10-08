@@ -60,14 +60,14 @@ void LIB_DRAW_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
 
     frame->MsgPanel->EraseMsgBox();
 
-    frame->MsgPanel->Affiche_1_Parametre( 1, _( "Type" ), m_typeName, CYAN );
+    frame->MsgPanel->AppendMessage( _( "Type" ), m_typeName, CYAN );
 
     /* Affichage de l'appartenance */
     if( m_Unit == 0 )
         msg = _( "All" );
     else
         msg.Printf( wxT( "%d" ), m_Unit );
-    Affiche_1_Parametre( frame, 8, _( "Unit" ), msg, BROWN );
+    frame->MsgPanel->AppendMessage( _( "Unit" ), msg, BROWN );
 
     if( m_Convert == 0 )
         msg = _( "All" );
@@ -77,7 +77,7 @@ void LIB_DRAW_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
         msg = _( "yes" );
     else
         msg = wxT( "?" );
-    Affiche_1_Parametre( frame, 14, _( "Convert" ), msg, BROWN );
+    frame->MsgPanel->AppendMessage( _( "Convert" ), msg, BROWN );
 }
 
 
@@ -112,10 +112,10 @@ bool LIB_DRAW_ITEM::operator<( const LIB_DRAW_ITEM& other ) const
 
 
 /**********************/
-/** class LibDrawArc **/
+/** class LIB_ARC **/
 /**********************/
 
-LibDrawArc::LibDrawArc( LIB_COMPONENT* aParent ) :
+LIB_ARC::LIB_ARC( LIB_COMPONENT* aParent ) :
     LIB_DRAW_ITEM( COMPONENT_ARC_DRAW_TYPE, aParent )
 {
     m_Radius   = 0;
@@ -127,7 +127,7 @@ LibDrawArc::LibDrawArc( LIB_COMPONENT* aParent ) :
 }
 
 
-LibDrawArc::LibDrawArc( const LibDrawArc& arc ) : LIB_DRAW_ITEM( arc )
+LIB_ARC::LIB_ARC( const LIB_ARC& arc ) : LIB_DRAW_ITEM( arc )
 {
     m_Radius   = arc.m_Radius;
     m_t1       = arc.m_t1;
@@ -145,7 +145,7 @@ LibDrawArc::LibDrawArc( const LibDrawArc& arc ) : LIB_DRAW_ITEM( arc )
  *  A centre_posx centre_posy rayon start_angle end_angle unit convert
  *  fill('N', 'F' ou 'f') startx starty endx endy
  */
-bool LibDrawArc::Save( FILE* ExportFile ) const
+bool LIB_ARC::Save( FILE* ExportFile ) const
 {
     int x1 = m_t1;
 
@@ -167,7 +167,7 @@ bool LibDrawArc::Save( FILE* ExportFile ) const
 }
 
 
-bool LibDrawArc::Load( char* line, wxString& errorMsg )
+bool LIB_ARC::Load( char* line, wxString& errorMsg )
 {
     int  startx, starty, endx, endy, cnt;
     char tmp[256];
@@ -224,7 +224,7 @@ bool LibDrawArc::Load( char* line, wxString& errorMsg )
  * @param aRefPoint A wxPoint to test in eeschema space
  * @return bool - true if a hit, else false
  */
-bool LibDrawArc::HitTest( const wxPoint& aRefPoint )
+bool LIB_ARC::HitTest( const wxPoint& aRefPoint )
 {
     int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
 
@@ -243,8 +243,8 @@ bool LibDrawArc::HitTest( const wxPoint& aRefPoint )
  *                     of a line)
  * @param aTransMat = the transform matrix
  */
-bool LibDrawArc::HitTest( wxPoint aRefPoint, int aThreshold,
-                          const int aTransMat[2][2] )
+bool LIB_ARC::HitTest( wxPoint aRefPoint, int aThreshold,
+                       const int aTransMat[2][2] )
 {
     // TODO: use aTransMat to calculmates parameters
     wxPoint relpos = aRefPoint;
@@ -278,9 +278,9 @@ bool LibDrawArc::HitTest( wxPoint aRefPoint, int aThreshold,
 }
 
 
-LIB_DRAW_ITEM* LibDrawArc::DoGenCopy()
+LIB_DRAW_ITEM* LIB_ARC::DoGenCopy()
 {
-    LibDrawArc* newitem = new LibDrawArc( GetParent() );
+    LIB_ARC* newitem = new LIB_ARC( GetParent() );
 
     newitem->m_Pos      = m_Pos;
     newitem->m_ArcStart = m_ArcStart;
@@ -298,11 +298,11 @@ LIB_DRAW_ITEM* LibDrawArc::DoGenCopy()
 }
 
 
-int LibDrawArc::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LIB_ARC::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_ARC_DRAW_TYPE );
 
-    const LibDrawArc* tmp = ( LibDrawArc* ) &other;
+    const LIB_ARC* tmp = ( LIB_ARC* ) &other;
 
     if( m_Pos.x != tmp->m_Pos.x )
         return m_Pos.x - tmp->m_Pos.x;
@@ -320,7 +320,7 @@ int LibDrawArc::DoCompare( const LIB_DRAW_ITEM& other ) const
 }
 
 
-void LibDrawArc::DoOffset( const wxPoint& offset )
+void LIB_ARC::DoOffset( const wxPoint& offset )
 {
     m_Pos += offset;
     m_ArcStart += offset;
@@ -328,14 +328,14 @@ void LibDrawArc::DoOffset( const wxPoint& offset )
 }
 
 
-bool LibDrawArc::DoTestInside( EDA_Rect& rect )
+bool LIB_ARC::DoTestInside( EDA_Rect& rect )
 {
     return rect.Inside( m_ArcStart.x, -m_ArcStart.y )
         || rect.Inside( m_ArcEnd.x, -m_ArcEnd.y );
 }
 
 
-void LibDrawArc::DoMove( const wxPoint& newPosition )
+void LIB_ARC::DoMove( const wxPoint& newPosition )
 {
     wxPoint offset = newPosition - m_Pos;
     m_Pos = newPosition;
@@ -344,7 +344,7 @@ void LibDrawArc::DoMove( const wxPoint& newPosition )
 }
 
 
-void LibDrawArc::DoMirrorHorizontal( const wxPoint& center )
+void LIB_ARC::DoMirrorHorizontal( const wxPoint& center )
 {
     m_Pos.x -= center.x;
     m_Pos.x *= -1;
@@ -359,8 +359,8 @@ void LibDrawArc::DoMirrorHorizontal( const wxPoint& center )
 }
 
 
-void LibDrawArc::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                         const int transform[2][2] )
+void LIB_ARC::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                      const int transform[2][2] )
 {
     wxASSERT( plotter != NULL );
 
@@ -384,16 +384,15 @@ void LibDrawArc::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LibDrawArc::GetPenSize()
+int LIB_ARC::GetPenSize()
 {
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
 
-void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                       const wxPoint& aOffset, int aColor,
-                       int aDrawMode, void* aData,
-                       const int aTransformMatrix[2][2] )
+void LIB_ARC::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                    const wxPoint& aOffset, int aColor, int aDrawMode,
+                    void* aData, const int aTransformMatrix[2][2] )
 {
     wxPoint pos1, pos2, posc;
 
@@ -455,7 +454,7 @@ void LibDrawArc::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 }
 
 
-EDA_Rect LibDrawArc::GetBoundingBox()
+EDA_Rect LIB_ARC::GetBoundingBox()
 {
     int      minX, minY, maxX, maxY, angleStart, angleEnd;
     EDA_Rect rect;
@@ -516,7 +515,7 @@ start(%d, %d), end(%d, %d), radius %d" ),
 }
 
 
-void LibDrawArc::DisplayInfo( WinEDA_DrawFrame* frame )
+void LIB_ARC::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
     EDA_Rect bBox = GetBoundingBox();
@@ -526,20 +525,20 @@ void LibDrawArc::DisplayInfo( WinEDA_DrawFrame* frame )
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
 
-    frame->MsgPanel->Affiche_1_Parametre( 20, _( "Line width" ), msg, BLUE );
+    frame->MsgPanel->AppendMessage( _( "Line width" ), msg, BLUE );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
-    frame->MsgPanel->Affiche_1_Parametre( 40, _( "Bounding box" ), msg, BROWN );
+    frame->MsgPanel->AppendMessage( _( "Bounding box" ), msg, BROWN );
 }
 
 
 /*************************/
-/** class LibDrawCircle **/
+/** class LIB_CIRCLE **/
 /*************************/
 
-LibDrawCircle::LibDrawCircle( LIB_COMPONENT* aParent ) :
+LIB_CIRCLE::LIB_CIRCLE( LIB_COMPONENT* aParent ) :
     LIB_DRAW_ITEM( COMPONENT_CIRCLE_DRAW_TYPE, aParent )
 {
     m_Radius   = 0;
@@ -548,7 +547,7 @@ LibDrawCircle::LibDrawCircle( LIB_COMPONENT* aParent ) :
 }
 
 
-LibDrawCircle::LibDrawCircle( const LibDrawCircle& circle ) :
+LIB_CIRCLE::LIB_CIRCLE( const LIB_CIRCLE& circle ) :
     LIB_DRAW_ITEM( circle )
 {
     m_Pos    = circle.m_Pos;
@@ -557,7 +556,7 @@ LibDrawCircle::LibDrawCircle( const LibDrawCircle& circle ) :
 }
 
 
-bool LibDrawCircle::Save( FILE* ExportFile ) const
+bool LIB_CIRCLE::Save( FILE* ExportFile ) const
 {
     if( fprintf( ExportFile, "C %d %d %d %d %d %d %c\n", m_Pos.x, m_Pos.y,
                  m_Radius, m_Unit, m_Convert, m_Width, fill_tab[m_Fill] ) < 0 )
@@ -567,7 +566,7 @@ bool LibDrawCircle::Save( FILE* ExportFile ) const
 }
 
 
-bool LibDrawCircle::Load( char* line, wxString& errorMsg )
+bool LIB_CIRCLE::Load( char* line, wxString& errorMsg )
 {
     char tmp[256];
 
@@ -596,7 +595,7 @@ bool LibDrawCircle::Load( char* line, wxString& errorMsg )
  * @param aRefPos A wxPoint to test in eeschema space
  * @return bool - true if a hit, else false
  */
-bool LibDrawCircle::HitTest( const wxPoint& aPosRef )
+bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef )
 {
     int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
 
@@ -615,7 +614,7 @@ bool LibDrawCircle::HitTest( const wxPoint& aPosRef )
  *                     thickness of a line)
  * @param aTransMat = the transform matrix
  */
-bool LibDrawCircle::HitTest( wxPoint aPosRef, int aThreshold,
+bool LIB_CIRCLE::HitTest( wxPoint aPosRef, int aThreshold,
                              const int aTransMat[2][2] )
 {
     wxPoint relpos = aPosRef - TransformCoordinate( aTransMat, m_Pos );
@@ -630,9 +629,9 @@ bool LibDrawCircle::HitTest( wxPoint aPosRef, int aThreshold,
 }
 
 
-LIB_DRAW_ITEM* LibDrawCircle::DoGenCopy()
+LIB_DRAW_ITEM* LIB_CIRCLE::DoGenCopy()
 {
-    LibDrawCircle* newitem = new LibDrawCircle( GetParent() );
+    LIB_CIRCLE* newitem = new LIB_CIRCLE( GetParent() );
 
     newitem->m_Pos     = m_Pos;
     newitem->m_Radius  = m_Radius;
@@ -646,11 +645,11 @@ LIB_DRAW_ITEM* LibDrawCircle::DoGenCopy()
 }
 
 
-int LibDrawCircle::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LIB_CIRCLE::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_CIRCLE_DRAW_TYPE );
 
-    const LibDrawCircle* tmp = ( LibDrawCircle* ) &other;
+    const LIB_CIRCLE* tmp = ( LIB_CIRCLE* ) &other;
 
     if( m_Pos.x != tmp->m_Pos.x )
         return m_Pos.x - tmp->m_Pos.x;
@@ -665,13 +664,13 @@ int LibDrawCircle::DoCompare( const LIB_DRAW_ITEM& other ) const
 }
 
 
-void LibDrawCircle::DoOffset( const wxPoint& offset )
+void LIB_CIRCLE::DoOffset( const wxPoint& offset )
 {
     m_Pos += offset;
 }
 
 
-bool LibDrawCircle::DoTestInside( EDA_Rect& rect )
+bool LIB_CIRCLE::DoTestInside( EDA_Rect& rect )
 {
     /*
      * FIXME: This fails to take into acount the radius around the center
@@ -681,13 +680,13 @@ bool LibDrawCircle::DoTestInside( EDA_Rect& rect )
 }
 
 
-void LibDrawCircle::DoMove( const wxPoint& newPosition )
+void LIB_CIRCLE::DoMove( const wxPoint& newPosition )
 {
     m_Pos = newPosition;
 }
 
 
-void LibDrawCircle::DoMirrorHorizontal( const wxPoint& center )
+void LIB_CIRCLE::DoMirrorHorizontal( const wxPoint& center )
 {
     m_Pos.x -= center.x;
     m_Pos.x *= -1;
@@ -695,8 +694,8 @@ void LibDrawCircle::DoMirrorHorizontal( const wxPoint& center )
 }
 
 
-void LibDrawCircle::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                            const int transform[2][2] )
+void LIB_CIRCLE::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                         const int transform[2][2] )
 {
     wxPoint pos = TransformCoordinate( transform, m_Pos ) + offset;
 
@@ -714,15 +713,15 @@ void LibDrawCircle::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LibDrawCircle::GetPenSize()
+int LIB_CIRCLE::GetPenSize()
 {
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
 
-void LibDrawCircle::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                          const wxPoint& aOffset, int aColor, int aDrawMode,
-                          void* aData, const int aTransformMatrix[2][2] )
+void LIB_CIRCLE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                       const wxPoint& aOffset, int aColor, int aDrawMode,
+                       void* aData, const int aTransformMatrix[2][2] )
 {
     wxPoint pos1;
 
@@ -764,7 +763,7 @@ void LibDrawCircle::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 }
 
 
-EDA_Rect LibDrawCircle::GetBoundingBox()
+EDA_Rect LIB_CIRCLE::GetBoundingBox()
 {
     EDA_Rect rect;
 
@@ -776,7 +775,7 @@ EDA_Rect LibDrawCircle::GetBoundingBox()
 }
 
 
-void LibDrawCircle::DisplayInfo( WinEDA_DrawFrame* frame )
+void LIB_CIRCLE::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
     EDA_Rect bBox = GetBoundingBox();
@@ -786,24 +785,24 @@ void LibDrawCircle::DisplayInfo( WinEDA_DrawFrame* frame )
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
 
-    frame->MsgPanel->Affiche_1_Parametre( 20, _( "Line width" ), msg, BLUE );
+    frame->MsgPanel->AppendMessage( _( "Line width" ), msg, BLUE );
 
     msg = ReturnStringFromValue( g_UnitMetric, m_Radius,
                                  EESCHEMA_INTERNAL_UNIT, true );
-    frame->MsgPanel->Affiche_1_Parametre( 40, _( "Radius" ), msg, RED );
+    frame->MsgPanel->AppendMessage( _( "Radius" ), msg, RED );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
-    frame->MsgPanel->Affiche_1_Parametre( 60, _( "Bounding box" ), msg, BROWN );
+    frame->MsgPanel->AppendMessage( _( "Bounding box" ), msg, BROWN );
 }
 
 
 /*************************/
-/** class LibDrawSquare **/
+/** class LIB_RECTANGLE **/
 /*************************/
 
-LibDrawSquare::LibDrawSquare( LIB_COMPONENT* aParent ) :
+LIB_RECTANGLE::LIB_RECTANGLE( LIB_COMPONENT* aParent ) :
     LIB_DRAW_ITEM( COMPONENT_RECT_DRAW_TYPE, aParent )
 {
     m_Width    = 0;
@@ -812,7 +811,7 @@ LibDrawSquare::LibDrawSquare( LIB_COMPONENT* aParent ) :
 }
 
 
-LibDrawSquare::LibDrawSquare( const LibDrawSquare& rect ) :
+LIB_RECTANGLE::LIB_RECTANGLE( const LIB_RECTANGLE& rect ) :
     LIB_DRAW_ITEM( rect )
 {
     m_Pos   = rect.m_Pos;
@@ -822,7 +821,7 @@ LibDrawSquare::LibDrawSquare( const LibDrawSquare& rect ) :
 }
 
 
-bool LibDrawSquare::Save( FILE* ExportFile ) const
+bool LIB_RECTANGLE::Save( FILE* ExportFile ) const
 {
     if( fprintf( ExportFile, "S %d %d %d %d %d %d %d %c\n", m_Pos.x, m_Pos.y,
                  m_End.x, m_End.y, m_Unit, m_Convert, m_Width,
@@ -833,7 +832,7 @@ bool LibDrawSquare::Save( FILE* ExportFile ) const
 }
 
 
-bool LibDrawSquare::Load( char* line, wxString& errorMsg )
+bool LIB_RECTANGLE::Load( char* line, wxString& errorMsg )
 {
     int  cnt;
     char tmp[256];
@@ -857,9 +856,9 @@ bool LibDrawSquare::Load( char* line, wxString& errorMsg )
 }
 
 
-LIB_DRAW_ITEM* LibDrawSquare::DoGenCopy()
+LIB_DRAW_ITEM* LIB_RECTANGLE::DoGenCopy()
 {
-    LibDrawSquare* newitem = new LibDrawSquare( GetParent() );
+    LIB_RECTANGLE* newitem = new LIB_RECTANGLE( GetParent() );
 
     newitem->m_Pos     = m_Pos;
     newitem->m_End     = m_End;
@@ -873,11 +872,11 @@ LIB_DRAW_ITEM* LibDrawSquare::DoGenCopy()
 }
 
 
-int LibDrawSquare::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LIB_RECTANGLE::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_RECT_DRAW_TYPE );
 
-    const LibDrawSquare* tmp = ( LibDrawSquare* ) &other;
+    const LIB_RECTANGLE* tmp = ( LIB_RECTANGLE* ) &other;
 
     if( m_Pos.x != tmp->m_Pos.x )
         return m_Pos.x - tmp->m_Pos.x;
@@ -895,20 +894,20 @@ int LibDrawSquare::DoCompare( const LIB_DRAW_ITEM& other ) const
 }
 
 
-void LibDrawSquare::DoOffset( const wxPoint& offset )
+void LIB_RECTANGLE::DoOffset( const wxPoint& offset )
 {
     m_Pos += offset;
     m_End += offset;
 }
 
 
-bool LibDrawSquare::DoTestInside( EDA_Rect& rect )
+bool LIB_RECTANGLE::DoTestInside( EDA_Rect& rect )
 {
     return rect.Inside( m_Pos.x, -m_Pos.y ) || rect.Inside( m_End.x, -m_End.y );
 }
 
 
-void LibDrawSquare::DoMove( const wxPoint& newPosition )
+void LIB_RECTANGLE::DoMove( const wxPoint& newPosition )
 {
     wxPoint size = m_End - m_Pos;
     m_Pos = newPosition;
@@ -916,7 +915,7 @@ void LibDrawSquare::DoMove( const wxPoint& newPosition )
 }
 
 
-void LibDrawSquare::DoMirrorHorizontal( const wxPoint& center )
+void LIB_RECTANGLE::DoMirrorHorizontal( const wxPoint& center )
 {
     m_Pos.x -= center.x;
     m_Pos.x *= -1;
@@ -927,7 +926,7 @@ void LibDrawSquare::DoMirrorHorizontal( const wxPoint& center )
 }
 
 
-void LibDrawSquare::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+void LIB_RECTANGLE::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                             const int transform[2][2] )
 {
     wxASSERT( plotter != NULL );
@@ -949,12 +948,12 @@ void LibDrawSquare::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LibDrawSquare::GetPenSize()
+int LIB_RECTANGLE::GetPenSize()
 {
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
-void LibDrawSquare::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+void LIB_RECTANGLE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                           const wxPoint& aOffset, int aColor, int aDrawMode,
                           void* aData, const int aTransformMatrix[2][2] )
 {
@@ -1001,7 +1000,7 @@ void LibDrawSquare::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 }
 
 
-void LibDrawSquare::DisplayInfo( WinEDA_DrawFrame* frame )
+void LIB_RECTANGLE::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
 
@@ -1010,11 +1009,11 @@ void LibDrawSquare::DisplayInfo( WinEDA_DrawFrame* frame )
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
 
-    frame->MsgPanel->Affiche_1_Parametre( 20, _( "Line width" ), msg, BLUE );
+    frame->MsgPanel->AppendMessage( _( "Line width" ), msg, BLUE );
 }
 
 
-EDA_Rect LibDrawSquare::GetBoundingBox()
+EDA_Rect LIB_RECTANGLE::GetBoundingBox()
 {
     EDA_Rect rect;
 
@@ -1031,7 +1030,7 @@ EDA_Rect LibDrawSquare::GetBoundingBox()
  * @param aRefPoint A wxPoint to test in eeschema space
  * @return bool - true if a hit, else false
  */
-bool LibDrawSquare::HitTest( const wxPoint& aRefPoint )
+bool LIB_RECTANGLE::HitTest( const wxPoint& aRefPoint )
 {
     int mindist = (m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2) + 1;
 
@@ -1050,7 +1049,7 @@ bool LibDrawSquare::HitTest( const wxPoint& aRefPoint )
  *                     of a line)
  * @param aTransMat = the transform matrix
  */
-bool LibDrawSquare::HitTest( wxPoint aRefPoint, int aThreshold,
+bool LIB_RECTANGLE::HitTest( wxPoint aRefPoint, int aThreshold,
                              const int aTransMat[2][2] )
 {
     wxPoint actualStart = TransformCoordinate( aTransMat, m_Pos );
@@ -1088,9 +1087,9 @@ bool LibDrawSquare::HitTest( wxPoint aRefPoint, int aThreshold,
 
 
 /**************************/
-/** class LibDrawSegment **/
+/** class LIB_SEGMENT **/
 /**************************/
-LibDrawSegment::LibDrawSegment( LIB_COMPONENT* aParent ) :
+LIB_SEGMENT::LIB_SEGMENT( LIB_COMPONENT* aParent ) :
     LIB_DRAW_ITEM( COMPONENT_LINE_DRAW_TYPE, aParent )
 {
     m_Width    = 0;
@@ -1098,7 +1097,7 @@ LibDrawSegment::LibDrawSegment( LIB_COMPONENT* aParent ) :
 }
 
 
-LibDrawSegment::LibDrawSegment( const LibDrawSegment& segment ) :
+LIB_SEGMENT::LIB_SEGMENT( const LIB_SEGMENT& segment ) :
     LIB_DRAW_ITEM( segment )
 {
     m_Pos   = segment.m_Pos;
@@ -1107,7 +1106,7 @@ LibDrawSegment::LibDrawSegment( const LibDrawSegment& segment ) :
 }
 
 
-bool LibDrawSegment::Save( FILE* ExportFile ) const
+bool LIB_SEGMENT::Save( FILE* ExportFile ) const
 {
     if( fprintf( ExportFile, "L %d %d %d", m_Unit, m_Convert, m_Width ) )
         return false;
@@ -1116,15 +1115,15 @@ bool LibDrawSegment::Save( FILE* ExportFile ) const
 }
 
 
-bool LibDrawSegment::Load( char* line, wxString& errorMsg )
+bool LIB_SEGMENT::Load( char* line, wxString& errorMsg )
 {
     return true;
 }
 
 
-LIB_DRAW_ITEM* LibDrawSegment::DoGenCopy()
+LIB_DRAW_ITEM* LIB_SEGMENT::DoGenCopy()
 {
-    LibDrawSegment* newitem = new LibDrawSegment( GetParent() );
+    LIB_SEGMENT* newitem = new LIB_SEGMENT( GetParent() );
 
     newitem->m_Pos     = m_Pos;
     newitem->m_End     = m_End;
@@ -1137,11 +1136,11 @@ LIB_DRAW_ITEM* LibDrawSegment::DoGenCopy()
 }
 
 
-int LibDrawSegment::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LIB_SEGMENT::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_LINE_DRAW_TYPE );
 
-    const LibDrawSegment* tmp = ( LibDrawSegment* ) &other;
+    const LIB_SEGMENT* tmp = ( LIB_SEGMENT* ) &other;
 
     if( m_Pos.x != tmp->m_Pos.x )
         return m_Pos.x - tmp->m_Pos.x;
@@ -1159,20 +1158,20 @@ int LibDrawSegment::DoCompare( const LIB_DRAW_ITEM& other ) const
 }
 
 
-void LibDrawSegment::DoOffset( const wxPoint& offset )
+void LIB_SEGMENT::DoOffset( const wxPoint& offset )
 {
     m_Pos += offset;
     m_End += offset;
 }
 
 
-bool LibDrawSegment::DoTestInside( EDA_Rect& rect )
+bool LIB_SEGMENT::DoTestInside( EDA_Rect& rect )
 {
     return rect.Inside( m_Pos.x, -m_Pos.y ) || rect.Inside( m_End.x, -m_End.y );
 }
 
 
-void LibDrawSegment::DoMove( const wxPoint& newPosition )
+void LIB_SEGMENT::DoMove( const wxPoint& newPosition )
 {
     wxPoint offset = newPosition - m_Pos;
     m_Pos += offset;
@@ -1180,7 +1179,7 @@ void LibDrawSegment::DoMove( const wxPoint& newPosition )
 }
 
 
-void LibDrawSegment::DoMirrorHorizontal( const wxPoint& center )
+void LIB_SEGMENT::DoMirrorHorizontal( const wxPoint& center )
 {
     m_Pos.x -= center.x;
     m_Pos.x *= -1;
@@ -1191,8 +1190,8 @@ void LibDrawSegment::DoMirrorHorizontal( const wxPoint& center )
 }
 
 
-void LibDrawSegment::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                             const int transform[2][2] )
+void LIB_SEGMENT::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                          const int transform[2][2] )
 {
     wxASSERT( plotter != NULL );
 
@@ -1211,14 +1210,14 @@ void LibDrawSegment::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LibDrawSegment::GetPenSize()
+int LIB_SEGMENT::GetPenSize()
 {
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
-void LibDrawSegment::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                           const wxPoint& aOffset, int aColor, int aDrawMode,
-                           void* aData, const int aTransformMatrix[2][2] )
+void LIB_SEGMENT::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                        const wxPoint& aOffset, int aColor, int aDrawMode,
+                        void* aData, const int aTransformMatrix[2][2] )
 {
     wxPoint pos1, pos2;
 
@@ -1251,7 +1250,7 @@ void LibDrawSegment::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 }
 
 
-void LibDrawSegment::DisplayInfo( WinEDA_DrawFrame* frame )
+void LIB_SEGMENT::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
     EDA_Rect bBox = GetBoundingBox();
@@ -1261,12 +1260,12 @@ void LibDrawSegment::DisplayInfo( WinEDA_DrawFrame* frame )
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
 
-    frame->MsgPanel->Affiche_1_Parametre( 20, _( "Line width" ), msg, BLUE );
+    frame->MsgPanel->AppendMessage( _( "Line width" ), msg, BLUE );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
-    frame->MsgPanel->Affiche_1_Parametre( 60, _( "Bounding box" ), msg, BROWN );
+    frame->MsgPanel->AppendMessage( _( "Bounding box" ), msg, BROWN );
 }
 
 
@@ -1276,7 +1275,7 @@ void LibDrawSegment::DisplayInfo( WinEDA_DrawFrame* frame )
  * @param aRefPos A wxPoint to test
  * @return bool - true if a hit, else false
  */
-bool LibDrawSegment::HitTest( const wxPoint& aPosRef )
+bool LIB_SEGMENT::HitTest( const wxPoint& aPosRef )
 {
     int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
 
@@ -1295,8 +1294,8 @@ bool LibDrawSegment::HitTest( const wxPoint& aPosRef )
  *                     thickness of a line)
  * @param aTransMat = the transform matrix
  */
-bool LibDrawSegment::HitTest( wxPoint aPosRef, int aThreshold,
-                              const int aTransMat[2][2] )
+bool LIB_SEGMENT::HitTest( wxPoint aPosRef, int aThreshold,
+                           const int aTransMat[2][2] )
 {
     wxPoint start = TransformCoordinate( aTransMat, m_Pos );
     wxPoint end   = TransformCoordinate( aTransMat, m_End );
@@ -1306,9 +1305,9 @@ bool LibDrawSegment::HitTest( wxPoint aPosRef, int aThreshold,
 
 
 /***************************/
-/** class LibDrawPolyline **/
+/** class LIB_POLYLINE **/
 /***************************/
-LibDrawPolyline::LibDrawPolyline( LIB_COMPONENT* aParent ) :
+LIB_POLYLINE::LIB_POLYLINE( LIB_COMPONENT* aParent ) :
     LIB_DRAW_ITEM( COMPONENT_POLYLINE_DRAW_TYPE, aParent )
 {
     m_Fill     = NO_FILL;
@@ -1317,7 +1316,7 @@ LibDrawPolyline::LibDrawPolyline( LIB_COMPONENT* aParent ) :
 }
 
 
-LibDrawPolyline::LibDrawPolyline( const LibDrawPolyline& polyline ) :
+LIB_POLYLINE::LIB_POLYLINE( const LIB_POLYLINE& polyline ) :
     LIB_DRAW_ITEM( polyline )
 {
     m_PolyPoints = polyline.m_PolyPoints;   // Vector copy
@@ -1326,7 +1325,7 @@ LibDrawPolyline::LibDrawPolyline( const LibDrawPolyline& polyline ) :
 }
 
 
-bool LibDrawPolyline::Save( FILE* ExportFile ) const
+bool LIB_POLYLINE::Save( FILE* ExportFile ) const
 {
     int ccount = GetCornerCount();
 
@@ -1348,7 +1347,7 @@ bool LibDrawPolyline::Save( FILE* ExportFile ) const
 }
 
 
-bool LibDrawPolyline::Load( char* line, wxString& errorMsg )
+bool LIB_POLYLINE::Load( char* line, wxString& errorMsg )
 {
     char*   p;
     int     i, ccount = 0;
@@ -1408,9 +1407,9 @@ bool LibDrawPolyline::Load( char* line, wxString& errorMsg )
 }
 
 
-LIB_DRAW_ITEM* LibDrawPolyline::DoGenCopy()
+LIB_DRAW_ITEM* LIB_POLYLINE::DoGenCopy()
 {
-    LibDrawPolyline* newitem = new LibDrawPolyline( GetParent() );
+    LIB_POLYLINE* newitem = new LIB_POLYLINE( GetParent() );
 
     newitem->m_PolyPoints = m_PolyPoints;   // Vector copy
     newitem->m_Width      = m_Width;
@@ -1423,11 +1422,11 @@ LIB_DRAW_ITEM* LibDrawPolyline::DoGenCopy()
 }
 
 
-int LibDrawPolyline::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LIB_POLYLINE::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_POLYLINE_DRAW_TYPE );
 
-    const LibDrawPolyline* tmp = ( LibDrawPolyline* ) &other;
+    const LIB_POLYLINE* tmp = ( LIB_POLYLINE* ) &other;
 
     if( m_PolyPoints.size() != tmp->m_PolyPoints.size() )
         return m_PolyPoints.size() - tmp->m_PolyPoints.size();
@@ -1444,14 +1443,14 @@ int LibDrawPolyline::DoCompare( const LIB_DRAW_ITEM& other ) const
 }
 
 
-void LibDrawPolyline::DoOffset( const wxPoint& offset )
+void LIB_POLYLINE::DoOffset( const wxPoint& offset )
 {
     for( size_t i = 0; i < m_PolyPoints.size(); i++ )
         m_PolyPoints[i] += offset;
 }
 
 
-bool LibDrawPolyline::DoTestInside( EDA_Rect& rect )
+bool LIB_POLYLINE::DoTestInside( EDA_Rect& rect )
 {
     for( size_t i = 0; i < m_PolyPoints.size(); i++ )
     {
@@ -1463,13 +1462,13 @@ bool LibDrawPolyline::DoTestInside( EDA_Rect& rect )
 }
 
 
-void LibDrawPolyline::DoMove( const wxPoint& newPosition )
+void LIB_POLYLINE::DoMove( const wxPoint& newPosition )
 {
     DoOffset( newPosition - m_PolyPoints[0] );
 }
 
 
-void LibDrawPolyline::DoMirrorHorizontal( const wxPoint& center )
+void LIB_POLYLINE::DoMirrorHorizontal( const wxPoint& center )
 {
     size_t i, imax = m_PolyPoints.size();
 
@@ -1482,8 +1481,8 @@ void LibDrawPolyline::DoMirrorHorizontal( const wxPoint& center )
 }
 
 
-void LibDrawPolyline::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                              const int transform[2][2] )
+void LIB_POLYLINE::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                           const int transform[2][2] )
 {
     wxASSERT( plotter != NULL );
 
@@ -1511,7 +1510,7 @@ void LibDrawPolyline::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill
 }
 
 
-void LibDrawPolyline::AddPoint( const wxPoint& point )
+void LIB_POLYLINE::AddPoint( const wxPoint& point )
 {
     m_PolyPoints.push_back( point );
 }
@@ -1520,14 +1519,14 @@ void LibDrawPolyline::AddPoint( const wxPoint& point )
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LibDrawPolyline::GetPenSize()
+int LIB_POLYLINE::GetPenSize()
 {
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
-void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                            const wxPoint& aOffset, int aColor, int aDrawMode,
-                            void* aData, const int aTransformMatrix[2][2] )
+void LIB_POLYLINE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                         const wxPoint& aOffset, int aColor, int aDrawMode,
+                         void* aData, const int aTransformMatrix[2][2] )
 {
     wxPoint         pos1;
     int             color = ReturnLayerColor( LAYER_DEVICE );
@@ -1599,7 +1598,7 @@ void LibDrawPolyline::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  * @param aRefPos A wxPoint to test
  * @return bool - true if a hit, else false
  */
-bool LibDrawPolyline::HitTest( const wxPoint& aRefPos )
+bool LIB_POLYLINE::HitTest( const wxPoint& aRefPos )
 {
     int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
 
@@ -1616,7 +1615,7 @@ bool LibDrawPolyline::HitTest( const wxPoint& aRefPos )
  * @param aThreshold = max distance to a segment
  * @param aTransMat = the transform matrix
  */
-bool LibDrawPolyline::HitTest( wxPoint aPosRef, int aThreshold,
+bool LIB_POLYLINE::HitTest( wxPoint aPosRef, int aThreshold,
                                const int aTransMat[2][2] )
 {
     wxPoint ref, start, end;
@@ -1637,7 +1636,7 @@ bool LibDrawPolyline::HitTest( wxPoint aPosRef, int aThreshold,
 /** Function GetBoundingBox
  * @return the boundary box for this, in library coordinates
  */
-EDA_Rect LibDrawPolyline::GetBoundingBox()
+EDA_Rect LIB_POLYLINE::GetBoundingBox()
 {
     EDA_Rect rect;
     int      xmin, xmax, ymin, ymax;
@@ -1661,7 +1660,7 @@ EDA_Rect LibDrawPolyline::GetBoundingBox()
 }
 
 
-void LibDrawPolyline::DisplayInfo( WinEDA_DrawFrame* frame )
+void LIB_POLYLINE::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
     EDA_Rect bBox = GetBoundingBox();
@@ -1671,18 +1670,18 @@ void LibDrawPolyline::DisplayInfo( WinEDA_DrawFrame* frame )
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
 
-    frame->MsgPanel->Affiche_1_Parametre( 20, _( "Line width" ), msg, BLUE );
+    frame->MsgPanel->AppendMessage( _( "Line width" ), msg, BLUE );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
-    frame->MsgPanel->Affiche_1_Parametre( 40, _( "Bounding box" ), msg, BROWN );
+    frame->MsgPanel->AppendMessage( _( "Bounding box" ), msg, BROWN );
 }
 
 /***************************/
-/** class LibDrawBezier **/
+/** class LIB_BEZIER **/
 /***************************/
-LibDrawBezier::LibDrawBezier( LIB_COMPONENT* aParent ) :
+LIB_BEZIER::LIB_BEZIER( LIB_COMPONENT* aParent ) :
     LIB_DRAW_ITEM( COMPONENT_BEZIER_DRAW_TYPE, aParent )
 {
     m_Fill     = NO_FILL;
@@ -1691,8 +1690,7 @@ LibDrawBezier::LibDrawBezier( LIB_COMPONENT* aParent ) :
 }
 
 
-LibDrawBezier::LibDrawBezier( const LibDrawBezier& bezier ) :
-    LIB_DRAW_ITEM( bezier )
+LIB_BEZIER::LIB_BEZIER( const LIB_BEZIER& bezier ) : LIB_DRAW_ITEM( bezier )
 {
     m_PolyPoints   = bezier.m_PolyPoints;
     m_BezierPoints = bezier.m_BezierPoints;   // Vector copy
@@ -1701,7 +1699,7 @@ LibDrawBezier::LibDrawBezier( const LibDrawBezier& bezier ) :
 }
 
 
-bool LibDrawBezier::Save( FILE* ExportFile ) const
+bool LIB_BEZIER::Save( FILE* ExportFile ) const
 {
     int ccount = GetCornerCount();
 
@@ -1723,7 +1721,7 @@ bool LibDrawBezier::Save( FILE* ExportFile ) const
 }
 
 
-bool LibDrawBezier::Load( char* line, wxString& errorMsg )
+bool LIB_BEZIER::Load( char* line, wxString& errorMsg )
 {
     char*   p;
     int     i, ccount = 0;
@@ -1782,9 +1780,9 @@ bool LibDrawBezier::Load( char* line, wxString& errorMsg )
 }
 
 
-LIB_DRAW_ITEM* LibDrawBezier::DoGenCopy()
+LIB_DRAW_ITEM* LIB_BEZIER::DoGenCopy()
 {
-    LibDrawBezier* newitem = new LibDrawBezier(GetParent());
+    LIB_BEZIER* newitem = new LIB_BEZIER(GetParent());
 
     newitem->m_BezierPoints = m_BezierPoints;   // Vector copy
     newitem->m_Width   = m_Width;
@@ -1796,11 +1794,11 @@ LIB_DRAW_ITEM* LibDrawBezier::DoGenCopy()
 }
 
 
-int LibDrawBezier::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LIB_BEZIER::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_BEZIER_DRAW_TYPE );
 
-    const LibDrawBezier* tmp = ( LibDrawBezier* ) &other;
+    const LIB_BEZIER* tmp = ( LIB_BEZIER* ) &other;
 
     if( m_BezierPoints.size() != tmp->m_BezierPoints.size() )
         return m_BezierPoints.size() - tmp->m_BezierPoints.size();
@@ -1817,7 +1815,7 @@ int LibDrawBezier::DoCompare( const LIB_DRAW_ITEM& other ) const
 }
 
 
-void LibDrawBezier::DoOffset( const wxPoint& offset )
+void LIB_BEZIER::DoOffset( const wxPoint& offset )
 {
     size_t i;
 
@@ -1829,7 +1827,7 @@ void LibDrawBezier::DoOffset( const wxPoint& offset )
 }
 
 
-bool LibDrawBezier::DoTestInside( EDA_Rect& rect )
+bool LIB_BEZIER::DoTestInside( EDA_Rect& rect )
 {
     for( size_t i = 0; i < m_PolyPoints.size(); i++ )
     {
@@ -1841,13 +1839,13 @@ bool LibDrawBezier::DoTestInside( EDA_Rect& rect )
 }
 
 
-void LibDrawBezier::DoMove( const wxPoint& newPosition )
+void LIB_BEZIER::DoMove( const wxPoint& newPosition )
 {
     DoOffset( newPosition - m_PolyPoints[0] );
 }
 
 
-void LibDrawBezier::DoMirrorHorizontal( const wxPoint& center )
+void LIB_BEZIER::DoMirrorHorizontal( const wxPoint& center )
 {
     size_t i, imax = m_PolyPoints.size();
 
@@ -1868,8 +1866,8 @@ void LibDrawBezier::DoMirrorHorizontal( const wxPoint& center )
 }
 
 
-void LibDrawBezier::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                            const int transform[2][2] )
+void LIB_BEZIER::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                         const int transform[2][2] )
 {
     wxASSERT( plotter != NULL );
 
@@ -1900,14 +1898,14 @@ void LibDrawBezier::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LibDrawBezier::GetPenSize()
+int LIB_BEZIER::GetPenSize()
 {
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
-void LibDrawBezier::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                           const wxPoint& aOffset, int aColor, int aDrawMode,
-                           void* aData, const int aTransformMatrix[2][2] )
+void LIB_BEZIER::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                       const wxPoint& aOffset, int aColor, int aDrawMode,
+                       void* aData, const int aTransformMatrix[2][2] )
 {
     wxPoint              pos1;
     std::vector<wxPoint> PolyPointsTraslated;
@@ -1967,7 +1965,7 @@ void LibDrawBezier::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  * @param aRefPos A wxPoint to test
  * @return bool - true if a hit, else false
  */
-bool LibDrawBezier::HitTest( const wxPoint& aRefPos )
+bool LIB_BEZIER::HitTest( const wxPoint& aRefPos )
 {
     int mindist = m_Width ? m_Width /2 : g_DrawDefaultLineThickness / 2;
     // Have a minimal tolerance for hit test
@@ -1982,8 +1980,8 @@ bool LibDrawBezier::HitTest( const wxPoint& aRefPos )
  * @param aThreshold = max distance to a segment
  * @param aTransMat = the transform matrix
  */
-bool LibDrawBezier::HitTest( wxPoint aPosRef, int aThreshold,
-                             const int aTransMat[2][2] )
+bool LIB_BEZIER::HitTest( wxPoint aPosRef, int aThreshold,
+                          const int aTransMat[2][2] )
 {
     wxPoint ref, start, end;
 
@@ -2003,7 +2001,7 @@ bool LibDrawBezier::HitTest( wxPoint aPosRef, int aThreshold,
 /** Function GetBoundingBox
  * @return the boundary box for this, in library coordinates
  */
-EDA_Rect LibDrawBezier::GetBoundingBox()
+EDA_Rect LIB_BEZIER::GetBoundingBox()
 {
     EDA_Rect rect;
     int      xmin, xmax, ymin, ymax;
@@ -2030,7 +2028,7 @@ EDA_Rect LibDrawBezier::GetBoundingBox()
 }
 
 
-void LibDrawBezier::DisplayInfo( WinEDA_DrawFrame* frame )
+void LIB_BEZIER::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
     EDA_Rect bBox = GetBoundingBox();
@@ -2040,10 +2038,10 @@ void LibDrawBezier::DisplayInfo( WinEDA_DrawFrame* frame )
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
 
-    frame->MsgPanel->Affiche_1_Parametre( 20, _( "Line width" ), msg, BLUE );
+    frame->MsgPanel->AppendMessage( _( "Line width" ), msg, BLUE );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
-    frame->MsgPanel->Affiche_1_Parametre( 40, _( "Bounding box" ), msg, BROWN );
+    frame->MsgPanel->AppendMessage( _( "Bounding box" ), msg, BROWN );
 }

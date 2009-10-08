@@ -30,7 +30,7 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
 static void WriteGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
 static void AddPinToComponentPinList( SCH_COMPONENT* Component,
                                       DrawSheetPath* sheet,
-                                      LibDrawPin*    PinEntry );
+                                      LIB_PIN*       PinEntry );
 static void FindAllsInstancesOfComponent( SCH_COMPONENT* Component,
                                           LIB_COMPONENT* Entry,
                                           DrawSheetPath* Sheet_in );
@@ -111,7 +111,7 @@ static SCH_COMPONENT* FindNextComponentAndCreatPinList( EDA_BaseStruct* DrawList
 {
     SCH_COMPONENT* Component = NULL;
     LIB_COMPONENT* Entry;
-    LibDrawPin* Pin;
+    LIB_PIN* Pin;
 
     s_SortedComponentPinList.clear();
     for( ; DrawList != NULL; DrawList = DrawList->Next() )
@@ -672,7 +672,7 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
 
 /*************************************************************************************/
 static void AddPinToComponentPinList( SCH_COMPONENT* Component,
-                                      DrawSheetPath* sheetlist, LibDrawPin* Pin )
+                                      DrawSheetPath* sheetlist, LIB_PIN* Pin )
 /*************************************************************************************/
 
 /* Add a new pin description in the pin list s_SortedComponentPinList
@@ -769,7 +769,7 @@ static void FindAllsInstancesOfComponent( SCH_COMPONENT* Component_in,
 {
     EDA_BaseStruct* SchItem;
     SCH_COMPONENT* Component2;
-    LibDrawPin* pin;
+    LIB_PIN* pin;
     DrawSheetPath* sheet;
     wxString str, Reference = Component_in->GetRef( Sheet_in );
 

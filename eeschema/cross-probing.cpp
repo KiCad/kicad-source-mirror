@@ -98,8 +98,8 @@ void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct* objectToSync,
     if( objectToSync == NULL )
         return;
 
-    LibDrawPin* Pin = NULL;
-    char        Line[1024];
+    LIB_PIN* Pin = NULL;
+    char     Line[1024];
 
     /* Cross probing to pcbnew if a pin or a component is found */
     switch( objectToSync->Type() )
@@ -126,7 +126,7 @@ void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct* objectToSync,
         if( LibItem == NULL )
             break;
 
-        Pin = (LibDrawPin*) objectToSync;
+        Pin = (LIB_PIN*) objectToSync;
         if( Pin->m_PinNum )
         {
             wxString pinnum;

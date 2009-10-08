@@ -620,11 +620,11 @@ static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
  * @param pin_number = pin number (string)
  * @return a pointer on the pin, or NULL if not found
  */
-LibDrawPin* LocatePinByNumber( const wxString& ePin_Number,
-                               SCH_COMPONENT*  eComponent )
+LIB_PIN* LocatePinByNumber( const wxString& ePin_Number,
+                            SCH_COMPONENT*  eComponent )
 {
     LIB_COMPONENT* Entry;
-    LibDrawPin* Pin;
+    LIB_PIN* Pin;
     int Unit, Convert;
 
     Entry = CMP_LIBRARY::FindLibraryComponent( eComponent->m_ChipName );
@@ -687,13 +687,13 @@ Hierarchical_PIN_Sheet_Struct* LocateSheetLabel( DrawSheetStruct* Sheet,
 }
 
 
-LibDrawPin* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos,
-                          SCH_COMPONENT** libpart )
+LIB_PIN* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos,
+                       SCH_COMPONENT** libpart )
 {
     SCH_ITEM* DrawStruct;
     LIB_COMPONENT* Entry;
     SCH_COMPONENT* schItem = NULL;
-    LibDrawPin* Pin = NULL;
+    LIB_PIN* Pin = NULL;
 
     for( DrawStruct = DrawList; DrawStruct != NULL;
          DrawStruct = DrawStruct->Next() )
@@ -705,15 +705,16 @@ LibDrawPin* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos,
 
         if( Entry == NULL )
             continue;
-        /* we use LocateDrawItem to locate pîns. but this function suppose a component 
+        /* we use LocateDrawItem to locate pîns. but this function suppose a
+         * component.
          * at 0,0 location
          * So we must calculate the ref position relative to the component
-        */
+         */
         wxPoint libPos = RefPos - schItem->m_Pos;
-        Pin = (LibDrawPin*) Entry->LocateDrawItem( schItem->m_Multi,
-                                                   schItem->m_Convert,
-                                                   COMPONENT_PIN_DRAW_TYPE,
-                                                   libPos, schItem->m_Transform );
+        Pin = (LIB_PIN*) Entry->LocateDrawItem( schItem->m_Multi,
+                                                schItem->m_Convert,
+                                                COMPONENT_PIN_DRAW_TYPE,
+                                                libPos, schItem->m_Transform );
         if( Pin )
             break;
     }

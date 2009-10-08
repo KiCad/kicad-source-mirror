@@ -25,10 +25,11 @@ class Dialog_BodyGraphicText_Properties : public Dialog_BodyGraphicText_Properti
 {
 private:
     WinEDA_LibeditFrame * m_Parent;
-    LibDrawText * m_GraphicText;
+    LIB_TEXT* m_GraphicText;
 
 public:
-    Dialog_BodyGraphicText_Properties( WinEDA_LibeditFrame* aParent, LibDrawText * aGraphicText);
+    Dialog_BodyGraphicText_Properties( WinEDA_LibeditFrame* aParent,
+                                       LIB_TEXT* aGraphicText );
     ~Dialog_BodyGraphicText_Properties() {};
 
 private:
@@ -38,8 +39,9 @@ private:
 };
 
 
-Dialog_BodyGraphicText_Properties::Dialog_BodyGraphicText_Properties(  WinEDA_LibeditFrame* aParent, LibDrawText * aGraphicText) :
-    Dialog_BodyGraphicText_Properties_base(aParent)
+Dialog_BodyGraphicText_Properties::Dialog_BodyGraphicText_Properties(  WinEDA_LibeditFrame* aParent,
+                                                                       LIB_TEXT* aGraphicText ) :
+    Dialog_BodyGraphicText_Properties_base( aParent )
 {
     m_Parent = aParent;
     m_GraphicText = aGraphicText;
@@ -239,7 +241,7 @@ void WinEDA_LibeditFrame::EditSymbolText(wxDC* DC, LIB_DRAW_ITEM* DrawItem)
 
     Dialog_BodyGraphicText_Properties * frame =
             new Dialog_BodyGraphicText_Properties( this,
-                                                   (LibDrawText *) DrawItem );
+                                                   (LIB_TEXT*) DrawItem );
     frame->ShowModal();
     frame->Destroy();
     GetScreen()->SetModify();
@@ -263,7 +265,7 @@ void WinEDA_LibeditFrame::RotateSymbolText(wxDC * DC)
     90 deg Graphic text Rotation .
 */
 {
-    LibDrawText * DrawItem = (LibDrawText *) m_drawItem;
+    LIB_TEXT* DrawItem = (LIB_TEXT *) m_drawItem;
 
     if( DrawItem == NULL )
         return;

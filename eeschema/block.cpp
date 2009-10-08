@@ -861,10 +861,10 @@ static LIB_DRAW_ITEM* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
  */
 {
     static LIB_COMPONENT* Entry;
-    static LibDrawPin* NextPin;
+    static LIB_PIN* NextPin;
     static int Multi, convert, TransMat[2][2];
     int orient;
-    LibDrawPin* Pin;
+    LIB_PIN* Pin;
     static wxPoint CmpPosition;
 
     if( aDrawLibItem )

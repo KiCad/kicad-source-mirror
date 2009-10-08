@@ -198,7 +198,8 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
         DrawGraphicText( panel, DC, pos, color, fulltext,
                          orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
-                         m_Size, hjustify, vjustify, LineWidth, m_Italic, m_Bold, false );
+                         m_Size, hjustify, vjustify, LineWidth, m_Italic,
+                         m_Bold, false );
     }
 }
 
@@ -208,19 +209,19 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
  * copy parameters from a source.
  * Pointers and specific values (position, texts) are not copied
  * used to init a field from the model read from a lib entry
- * @param aSource = the LibDrawField to read
+ * @param aSource = the LIB_FIELD to read
  */
-void SCH_CMP_FIELD::ImportValues( const LibDrawField& aSource )
+void SCH_CMP_FIELD::ImportValues( const LIB_FIELD& aSource )
 {
-    m_Orient   = aSource.m_Orient;
-    m_Size     = aSource.m_Size;
-    m_HJustify = aSource.m_HJustify;
-    m_VJustify = aSource.m_VJustify;
-    m_Italic   = aSource.m_Italic;
-    m_Bold     = aSource.m_Bold;
-    m_Width    = aSource.m_Width;
+    m_Orient    = aSource.m_Orient;
+    m_Size      = aSource.m_Size;
+    m_HJustify  = aSource.m_HJustify;
+    m_VJustify  = aSource.m_VJustify;
+    m_Italic    = aSource.m_Italic;
+    m_Bold      = aSource.m_Bold;
+    m_Width     = aSource.m_Width;
     m_Attributs = aSource.m_Attributs;
-    m_Mirror   = aSource.m_Mirror;
+    m_Mirror    = aSource.m_Mirror;
 }
 
 /**

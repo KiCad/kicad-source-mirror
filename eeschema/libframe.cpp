@@ -739,7 +739,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         SaveCopyInUndoList( m_component );
         if( m_drawItem->Type() == COMPONENT_PIN_DRAW_TYPE )
         {
-            DeletePin( &dc, m_component, (LibDrawPin*) m_drawItem );
+            DeletePin( &dc, m_component, (LIB_PIN*) m_drawItem );
         }
         else
         {
@@ -761,7 +761,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         if( m_drawItem->Type() == COMPONENT_PIN_DRAW_TYPE )
             StartMovePin( &dc );
         else if( m_drawItem->Type() == COMPONENT_FIELD_DRAW_TYPE )
-            StartMoveField( &dc, (LibDrawField*) m_drawItem );
+            StartMoveField( &dc, (LIB_FIELD*) m_drawItem );
         else
             StartMoveDrawSymbol( &dc );
         break;
@@ -785,7 +785,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         if( m_drawItem->Type() == COMPONENT_FIELD_DRAW_TYPE )
         {
             SaveCopyInUndoList( m_component );
-            RotateField( &dc, (LibDrawField*) m_drawItem );
+            RotateField( &dc, (LIB_FIELD*) m_drawItem );
         }
         DrawPanel->CursorOn( &dc );
         break;
@@ -796,7 +796,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->CursorOff( &dc );
         if( m_drawItem->Type() == COMPONENT_FIELD_DRAW_TYPE )
         {
-            EditField( &dc, (LibDrawField*) m_drawItem );
+            EditField( &dc, (LIB_FIELD*) m_drawItem );
         }
         DrawPanel->MouseToCursorSchema();
         DrawPanel->CursorOn( &dc );
@@ -809,7 +809,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
            || (m_drawItem->Type() != COMPONENT_PIN_DRAW_TYPE) )
             break;
         SaveCopyInUndoList( m_component );
-        GlobalSetPins( &dc, (LibDrawPin*) m_drawItem, id );
+        GlobalSetPins( &dc, (LIB_PIN*) m_drawItem, id );
         DrawPanel->MouseToCursorSchema();
         break;
 

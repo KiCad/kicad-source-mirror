@@ -42,7 +42,7 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool Include
     SCH_ITEM*      DrawStruct;
     wxString       msg;
     wxPoint        mouse_position = GetScreen()->m_MousePosition;
-    LibDrawPin*    Pin     = NULL;
+    LIB_PIN*       Pin     = NULL;
     SCH_COMPONENT* LibItem = NULL;
 
     DrawStruct = SchematicGeneralLocateAndDisplay( mouse_position, IncludePin );
@@ -75,7 +75,7 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool Include
         break;
 
     case COMPONENT_PIN_DRAW_TYPE:
-        Pin = (LibDrawPin*) DrawStruct;
+        Pin = (LIB_PIN*) DrawStruct;
         break;
     }
 
@@ -120,7 +120,7 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
  */
 {
     SCH_ITEM*      DrawStruct;
-    LibDrawPin*    Pin;
+    LIB_PIN*       Pin;
     SCH_COMPONENT* LibItem;
     wxString       Text;
     wxString       msg;

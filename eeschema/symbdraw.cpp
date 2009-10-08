@@ -22,7 +22,7 @@
 
 /* Routines locales */
 static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
-static void ComputeArc( LibDrawArc* DrawItem, wxPoint ArcCentre );
+static void ComputeArc( LIB_ARC* DrawItem, wxPoint ArcCentre );
 static void RedrawWhileMovingCursor( WinEDA_DrawPanel* panel,
                                      wxDC*             DC,
                                      bool              erase );
@@ -83,27 +83,27 @@ void WinEDA_bodygraphics_PropertiesFrame::bodygraphics_PropertiesAccept( wxComma
         switch( item->Type() )
         {
         case COMPONENT_ARC_DRAW_TYPE:
-            ( (LibDrawArc*) item )->m_Fill  = FlSymbol_Fill;
-            ( (LibDrawArc*) item )->m_Width =
+            ( (LIB_ARC*) item )->m_Fill  = FlSymbol_Fill;
+            ( (LIB_ARC*) item )->m_Width =
                 m_GraphicShapeWidthCtrl->GetValue();
             break;
 
         case COMPONENT_CIRCLE_DRAW_TYPE:
-            ( (LibDrawCircle*) item )->m_Fill  = FlSymbol_Fill;
-            ( (LibDrawCircle*) item )->m_Width =
+            ( (LIB_CIRCLE*) item )->m_Fill  = FlSymbol_Fill;
+            ( (LIB_CIRCLE*) item )->m_Width =
                 m_GraphicShapeWidthCtrl->GetValue();
             break;
 
         case COMPONENT_RECT_DRAW_TYPE:
-            ( (LibDrawSquare*) item )->m_Fill  = FlSymbol_Fill;
-            ( (LibDrawSquare*) item )->m_Width =
+            ( (LIB_RECTANGLE*) item )->m_Fill  = FlSymbol_Fill;
+            ( (LIB_RECTANGLE*) item )->m_Width =
                 m_GraphicShapeWidthCtrl->GetValue();
             break;
 
         case COMPONENT_POLYLINE_DRAW_TYPE:
-            ( (LibDrawPolyline*) item )->m_Fill =
+            ( (LIB_POLYLINE*) item )->m_Fill =
                 FlSymbol_Fill;
-            ( (LibDrawPolyline*) item )->m_Width =
+            ( (LIB_POLYLINE*) item )->m_Width =
                 m_GraphicShapeWidthCtrl->GetValue();
             break;
 
@@ -188,7 +188,7 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry,
     {
     case ID_LIBEDIT_BODY_ARC_BUTT:
     {
-        LibDrawArc* Arc = new LibDrawArc( LibEntry );
+        LIB_ARC* Arc = new LIB_ARC( LibEntry );
 
         m_drawItem = Arc;
         ArcStartX    = ArcEndX = GetScreen()->m_Curseur.x;
@@ -201,7 +201,7 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry,
 
     case ID_LIBEDIT_BODY_CIRCLE_BUTT:
     {
-        LibDrawCircle* Circle = new LibDrawCircle( LibEntry );
+        LIB_CIRCLE* Circle = new LIB_CIRCLE( LibEntry );
 
         m_drawItem = Circle;
         Circle->m_Pos   = GetScreen()->m_Curseur;
@@ -213,7 +213,7 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry,
 
     case ID_LIBEDIT_BODY_RECT_BUTT:
     {
-        LibDrawSquare* Square = new LibDrawSquare( LibEntry );
+        LIB_RECTANGLE* Square = new LIB_RECTANGLE( LibEntry );
 
         m_drawItem = Square;
         Square->m_Pos   = GetScreen()->m_Curseur;
@@ -226,7 +226,7 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry,
 
     case ID_LIBEDIT_BODY_LINE_BUTT:
     {
-        LibDrawPolyline* polyline = new LibDrawPolyline( LibEntry );
+        LIB_POLYLINE* polyline = new LIB_POLYLINE( LibEntry );
         m_drawItem = polyline;
         wxPoint          point = GetScreen()->m_Curseur;
         NEGATE( point.y );
@@ -239,7 +239,7 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry,
 
     case COMPONENT_LINE_DRAW_TYPE:
     {
-        LibDrawSegment* Segment = new LibDrawSegment( LibEntry );
+        LIB_SEGMENT* Segment = new LIB_SEGMENT( LibEntry );
 
         m_drawItem = Segment;
         Segment->m_Pos  = GetScreen()->m_Curseur;
@@ -251,7 +251,7 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry,
 
     case ID_LIBEDIT_BODY_TEXT_BUTT:
     {
-        LibDrawText* Text = new LibDrawText( LibEntry );
+        LIB_TEXT* Text = new LIB_TEXT( LibEntry );
 
         m_drawItem = Text;
         Text->m_Size.x  = Text->m_Size.y = g_LastTextSize;
@@ -332,7 +332,7 @@ void WinEDA_LibeditFrame::GraphicItemBeginDraw( wxDC* DC )
     {
         wxPoint pos = GetScreen()->m_Curseur;
         NEGATE( pos.y );
-        ( (LibDrawPolyline*) m_drawItem )->AddPoint( pos );
+        ( (LIB_POLYLINE*) m_drawItem )->AddPoint( pos );
     }
     break;
 
@@ -432,12 +432,12 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
             {
                 int Color = ReturnLayerColor( LAYER_DEVICE );
                 GRDashedLine( &panel->m_ClipBox, DC, ArcStartX, -ArcStartY,
-                              ( (LibDrawArc*) item )->m_Pos.x,
-                              -( (LibDrawArc*) item )->m_Pos.y,
+                              ( (LIB_ARC*) item )->m_Pos.x,
+                              -( (LIB_ARC*) item )->m_Pos.y,
                               0, Color );
                 GRDashedLine( &panel->m_ClipBox, DC, ArcEndX, -ArcEndY,
-                              ( (LibDrawArc*) item )->m_Pos.x,
-                              -( (LibDrawArc*) item )->m_Pos.y,
+                              ( (LIB_ARC*) item )->m_Pos.x,
+                              -( (LIB_ARC*) item )->m_Pos.y,
                               0, Color );
             }
         }
@@ -454,34 +454,34 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
         if( StateDrawArc == 2 )
         {
-            ComputeArc( (LibDrawArc*) item, Screen->m_Curseur );
+            ComputeArc( (LIB_ARC*) item, Screen->m_Curseur );
         }
-        ( (LibDrawArc*) item )->m_Fill = FlSymbol_Fill;
+        ( (LIB_ARC*) item )->m_Fill = FlSymbol_Fill;
         break;
 
     case COMPONENT_CIRCLE_DRAW_TYPE:
-        dx = ( (LibDrawCircle*) item )->m_Pos.x - curr_pos.x;
-        dy = ( (LibDrawCircle*) item )->m_Pos.y - curr_pos.y;
-        ( (LibDrawCircle*) item )->m_Radius =
+        dx = ( (LIB_CIRCLE*) item )->m_Pos.x - curr_pos.x;
+        dy = ( (LIB_CIRCLE*) item )->m_Pos.y - curr_pos.y;
+        ( (LIB_CIRCLE*) item )->m_Radius =
             (int) sqrt( ( (double) dx * dx ) + ( (double) dy * dy ) );
-        ( (LibDrawCircle*) item )->m_Fill = FlSymbol_Fill;
+        ( (LIB_CIRCLE*) item )->m_Fill = FlSymbol_Fill;
         break;
 
     case COMPONENT_RECT_DRAW_TYPE:
-        ( (LibDrawSquare*) item )->m_End  = curr_pos;
-        ( (LibDrawSquare*) item )->m_Fill = FlSymbol_Fill;
+        ( (LIB_RECTANGLE*) item )->m_End  = curr_pos;
+        ( (LIB_RECTANGLE*) item )->m_Fill = FlSymbol_Fill;
         break;
 
     case COMPONENT_POLYLINE_DRAW_TYPE:
     {
-        unsigned idx = ( (LibDrawPolyline*) item )->GetCornerCount() - 1;
-        ( (LibDrawPolyline*) item )->m_PolyPoints[idx] = curr_pos;
-        ( (LibDrawPolyline*) item )->m_Fill = FlSymbol_Fill;
+        unsigned idx = ( (LIB_POLYLINE*) item )->GetCornerCount() - 1;
+        ( (LIB_POLYLINE*) item )->m_PolyPoints[idx] = curr_pos;
+        ( (LIB_POLYLINE*) item )->m_Fill = FlSymbol_Fill;
     }
     break;
 
     case COMPONENT_LINE_DRAW_TYPE:
-        ( (LibDrawSegment*) item )->m_End = curr_pos;
+        ( (LIB_SEGMENT*) item )->m_End = curr_pos;
         break;
 
     case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:      /* Traite par des routines specifiques */
@@ -506,12 +506,12 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
         {
             int Color = ReturnLayerColor( LAYER_DEVICE );
             GRDashedLine( &panel->m_ClipBox, DC, ArcStartX, -ArcStartY,
-                          ( (LibDrawArc*) item )->m_Pos.x,
-                          -( (LibDrawArc*) item )->m_Pos.y,
+                          ( (LIB_ARC*) item )->m_Pos.x,
+                          -( (LIB_ARC*) item )->m_Pos.y,
                           0, Color );
             GRDashedLine( &panel->m_ClipBox, DC, ArcEndX, -ArcEndY,
-                          ( (LibDrawArc*) item )->m_Pos.x,
-                          -( (LibDrawArc*) item )->m_Pos.y,
+                          ( (LIB_ARC*) item )->m_Pos.x,
+                          -( (LIB_ARC*) item )->m_Pos.y,
                           0, Color );
         }
     }
@@ -554,19 +554,19 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
         switch( m_drawItem->Type() )
         {
         case COMPONENT_ARC_DRAW_TYPE:
-            ( (LibDrawArc*) m_drawItem )->m_Fill = FlSymbol_Fill;
+            ( (LIB_ARC*) m_drawItem )->m_Fill = FlSymbol_Fill;
             break;
 
         case COMPONENT_CIRCLE_DRAW_TYPE:
-            ( (LibDrawCircle*) m_drawItem )->m_Fill = FlSymbol_Fill;
+            ( (LIB_CIRCLE*) m_drawItem )->m_Fill = FlSymbol_Fill;
             break;
 
         case COMPONENT_RECT_DRAW_TYPE:
-            ( (LibDrawSquare*) m_drawItem )->m_Fill = FlSymbol_Fill;
+            ( (LIB_RECTANGLE*) m_drawItem )->m_Fill = FlSymbol_Fill;
             break;
 
         case COMPONENT_POLYLINE_DRAW_TYPE:
-            ( (LibDrawPolyline*) m_drawItem )->m_Fill = FlSymbol_Fill;
+            ( (LIB_POLYLINE*) m_drawItem )->m_Fill = FlSymbol_Fill;
             break;
 
         case COMPONENT_PIN_DRAW_TYPE:
@@ -607,7 +607,7 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
 
 
 /***************************************************************/
-static void ComputeArc( LibDrawArc* DrawItem, wxPoint ArcCentre )
+static void ComputeArc( LIB_ARC* DrawItem, wxPoint ArcCentre )
 /***************************************************************/
 
 /* routine d'ajustage des parametres de l'arc en cours de trace
@@ -705,7 +705,7 @@ void WinEDA_LibeditFrame::DeleteDrawPoly( wxDC* DC )
         || m_drawItem->Type() != COMPONENT_POLYLINE_DRAW_TYPE )
         return;
 
-    LibDrawPolyline* Poly = (LibDrawPolyline*) m_drawItem;
+    LIB_POLYLINE* Poly = (LIB_POLYLINE*) m_drawItem;
 
     m_drawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
                       DefaultTransformMatrix );

@@ -15,6 +15,7 @@
 
 
 class SCH_COMPONENT;
+class LIB_FIELD;
 
 
 /**
@@ -23,7 +24,7 @@ class SCH_COMPONENT;
  * reference designator, footprint, and user definable name-value pairs of
  * arbitrary purpose.
  */
-class SCH_CMP_FIELD :  public SCH_ITEM, public EDA_TextStruct
+class SCH_CMP_FIELD : public SCH_ITEM, public EDA_TextStruct
 {
 public:
     int      m_FieldId;         // Field indicator type (REFERENCE, VALUE or other id)
@@ -53,9 +54,9 @@ public:
     /** Function ImportValues
      * copy parameters from a source.
      * Pointers and specific values (position) are not copied
-     * @param aSource = the LibDrawField to read
+     * @param aSource = the LIB_FIELD to read
      */
-    void     ImportValues( const LibDrawField& aSource );
+    void     ImportValues( const LIB_FIELD& aSource );
 
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item

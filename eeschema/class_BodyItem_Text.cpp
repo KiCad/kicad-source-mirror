@@ -3,7 +3,7 @@
 /***************************/
 
 /**
-* class LibDrawText : describes a graphic text used to draw component shapes
+* class LIB_TEXT : describes a graphic text used to draw component shapes
 * This is only a graphic item
 */
 
@@ -21,7 +21,7 @@
 #include "protos.h"
 
 
-LibDrawText::LibDrawText(LIB_COMPONENT * aParent) :
+LIB_TEXT::LIB_TEXT(LIB_COMPONENT * aParent) :
     LIB_DRAW_ITEM( COMPONENT_GRAPHIC_TEXT_DRAW_TYPE, aParent ),
     EDA_TextStruct()
 {
@@ -30,7 +30,7 @@ LibDrawText::LibDrawText(LIB_COMPONENT * aParent) :
 }
 
 
-bool LibDrawText::Save( FILE* ExportFile ) const
+bool LIB_TEXT::Save( FILE* ExportFile ) const
 {
     wxString text = m_Text;
 
@@ -65,7 +65,7 @@ bool LibDrawText::Save( FILE* ExportFile ) const
 }
 
 
-bool LibDrawText::Load( char* line, wxString& errorMsg )
+bool LIB_TEXT::Load( char* line, wxString& errorMsg )
 {
     int  cnt, thickness;
     char hjustify = 'C', vjustify = 'C';
@@ -139,7 +139,7 @@ bool LibDrawText::Load( char* line, wxString& errorMsg )
  * @param refPos A wxPoint to test
  * @return bool - true if a hit, else false
  */
-bool LibDrawText::HitTest( const wxPoint& refPos )
+bool LIB_TEXT::HitTest( const wxPoint& refPos )
 {
     return HitTest( refPos, 0, DefaultTransformMatrix );
 }
@@ -151,8 +151,8 @@ bool LibDrawText::HitTest( const wxPoint& refPos )
  * @param aThreshold = unused here (TextHitTest calculates its threshold )
  * @param aTransMat = the transform matrix
  */
-bool LibDrawText::HitTest( wxPoint aPosRef, int aThreshold,
-                           const int aTransMat[2][2] )
+bool LIB_TEXT::HitTest( wxPoint aPosRef, int aThreshold,
+                        const int aTransMat[2][2] )
 {
     wxPoint physicalpos = TransformCoordinate( aTransMat, m_Pos );
     wxPoint tmp = m_Pos;
@@ -171,9 +171,9 @@ bool LibDrawText::HitTest( wxPoint aPosRef, int aThreshold,
 }
 
 
-LIB_DRAW_ITEM* LibDrawText::DoGenCopy()
+LIB_DRAW_ITEM* LIB_TEXT::DoGenCopy()
 {
-    LibDrawText* newitem = new LibDrawText(NULL);
+    LIB_TEXT* newitem = new LIB_TEXT(NULL);
 
     newitem->m_Pos       = m_Pos;
     newitem->m_Orient    = m_Orient;
@@ -192,11 +192,11 @@ LIB_DRAW_ITEM* LibDrawText::DoGenCopy()
 }
 
 
-int LibDrawText::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LIB_TEXT::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_GRAPHIC_TEXT_DRAW_TYPE );
 
-    const LibDrawText* tmp = ( LibDrawText* ) &other;
+    const LIB_TEXT* tmp = ( LIB_TEXT* ) &other;
 
     int result = m_Text.CmpNoCase( tmp->m_Text );
 
@@ -219,13 +219,13 @@ int LibDrawText::DoCompare( const LIB_DRAW_ITEM& other ) const
 }
 
 
-void LibDrawText::DoOffset( const wxPoint& offset )
+void LIB_TEXT::DoOffset( const wxPoint& offset )
 {
     m_Pos += offset;
 }
 
 
-bool LibDrawText::DoTestInside( EDA_Rect& rect )
+bool LIB_TEXT::DoTestInside( EDA_Rect& rect )
 {
     /*
      * FIXME: This should calculate the text size and justification and
@@ -235,13 +235,13 @@ bool LibDrawText::DoTestInside( EDA_Rect& rect )
 }
 
 
-void LibDrawText::DoMove( const wxPoint& newPosition )
+void LIB_TEXT::DoMove( const wxPoint& newPosition )
 {
     m_Pos = newPosition;
 }
 
 
-void LibDrawText::DoMirrorHorizontal( const wxPoint& center )
+void LIB_TEXT::DoMirrorHorizontal( const wxPoint& center )
 {
     m_Pos.x -= center.x;
     m_Pos.x *= -1;
@@ -249,8 +249,8 @@ void LibDrawText::DoMirrorHorizontal( const wxPoint& center )
 }
 
 
-void LibDrawText::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                          const int transform[2][2] )
+void LIB_TEXT::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                       const int transform[2][2] )
 {
     wxASSERT( plotter != NULL );
 
@@ -269,7 +269,7 @@ void LibDrawText::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LibDrawText::GetPenSize( )
+int LIB_TEXT::GetPenSize( )
 {
     int     pensize = m_Width;
 
@@ -285,9 +285,9 @@ int LibDrawText::GetPenSize( )
     return pensize;
 }
 
-void LibDrawText::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                        const wxPoint& aOffset, int aColor, int aDrawMode,
-                        void* aData, const int aTransformMatrix[2][2] )
+void LIB_TEXT::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                     const wxPoint& aOffset, int aColor, int aDrawMode,
+                     void* aData, const int aTransformMatrix[2][2] )
 {
     wxPoint pos1, pos2;
 
@@ -318,7 +318,7 @@ void LibDrawText::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 }
 
 
-void LibDrawText::DisplayInfo( WinEDA_DrawFrame* frame )
+void LIB_TEXT::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
 
@@ -331,7 +331,7 @@ void LibDrawText::DisplayInfo( WinEDA_DrawFrame* frame )
 }
 
 
-EDA_Rect LibDrawText::GetBoundingBox()
+EDA_Rect LIB_TEXT::GetBoundingBox()
 {
     EDA_Rect rect = GetTextBox();
     rect.m_Pos.y *= -1;

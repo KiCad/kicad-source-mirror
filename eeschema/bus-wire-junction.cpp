@@ -794,9 +794,9 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
  *      - a BUS
  */
 {
-    EDA_BaseStruct*         item;
-    LibDrawPin*             pin;
-    SCH_COMPONENT* LibItem = NULL;
+    EDA_BaseStruct* item;
+    LIB_PIN*        pin;
+    SCH_COMPONENT*  LibItem = NULL;
     Hierarchical_PIN_Sheet_Struct*   pinsheet;
     wxPoint itempos;
 

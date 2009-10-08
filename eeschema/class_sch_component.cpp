@@ -35,12 +35,12 @@ void CreateDummyCmp()
 {
     DummyCmp = new LIB_COMPONENT( wxEmptyString );
 
-    LibDrawSquare* Square = new LibDrawSquare(DummyCmp);
+    LIB_RECTANGLE* Square = new LIB_RECTANGLE(DummyCmp);
 
     Square->m_Pos   = wxPoint( -200, 200 );
     Square->m_End   = wxPoint( 200, -200 );
 
-    LibDrawText* Text = new LibDrawText(DummyCmp);
+    LIB_TEXT* Text = new LIB_TEXT(DummyCmp);
 
     Text->m_Size.x = Text->m_Size.y = 150;
     Text->m_Text   = wxT( "??" );

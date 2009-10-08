@@ -34,7 +34,7 @@ int             CodeShape[NBSHAPES] =
 
 
 /* Routines locales */
-static void CreateImagePins( LibDrawPin* Pin, int unit, int convert,
+static void CreateImagePins( LIB_PIN* Pin, int unit, int convert,
                              bool asDeMorgan );
 static void AbortPinMove( WinEDA_DrawPanel* Panel, wxDC* DC );
 static void DrawMovePin( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
@@ -125,8 +125,8 @@ void WinEDA_PinPropertiesFrame::PinPropertiesAccept( wxCommandEvent& event )
  */
 void WinEDA_LibeditFrame::InitEditOnePin()
 {
-    LibDrawPin* Pin;
-    LibDrawPin* CurrentPin = (LibDrawPin*) m_drawItem;
+    LIB_PIN* Pin;
+    LIB_PIN* CurrentPin = (LIB_PIN*) m_drawItem;
 
     if( m_component == NULL || CurrentPin == NULL
         || m_drawItem->Type() != COMPONENT_PIN_DRAW_TYPE )
@@ -160,7 +160,7 @@ static void AbortPinMove( WinEDA_DrawPanel* Panel, wxDC* DC )
     if( parent == NULL )
         return;
 
-    LibDrawPin* CurrentPin = (LibDrawPin*) parent->GetDrawItem();
+    LIB_PIN* CurrentPin = (LIB_PIN*) parent->GetDrawItem();
 
     if( CurrentPin == NULL || CurrentPin->Type() != COMPONENT_PIN_DRAW_TYPE )
         return;
@@ -184,11 +184,11 @@ static void AbortPinMove( WinEDA_DrawPanel* Panel, wxDC* DC )
  */
 void WinEDA_LibeditFrame::PlacePin( wxDC* DC )
 {
-    LibDrawPin* Pin;
-    LibDrawPin* CurrentPin  = (LibDrawPin*) m_drawItem;
-    bool        ask_for_pin = true;
-    wxPoint     newpos;
-    bool        status;
+    LIB_PIN* Pin;
+    LIB_PIN* CurrentPin  = (LIB_PIN*) m_drawItem;
+    bool     ask_for_pin = true;
+    wxPoint  newpos;
+    bool     status;
 
     if( CurrentPin == NULL )
         return;
@@ -254,8 +254,8 @@ another pin. Continue?" ) );
 
 void WinEDA_PinPropertiesFrame::SetPinOrientation( int neworient )
 {
-    LibDrawPin* CurrentPin = (LibDrawPin*) m_Parent->GetDrawItem();
-    LibDrawPin* Pin, * RefPin = CurrentPin;
+    LIB_PIN* CurrentPin = (LIB_PIN*) m_Parent->GetDrawItem();
+    LIB_PIN* Pin, * RefPin = CurrentPin;
 
     if( CurrentPin == NULL || CurrentPin->GetParent() == NULL || RefPin == NULL )
         return;
@@ -285,9 +285,9 @@ void WinEDA_PinPropertiesFrame::SetPinOrientation( int neworient )
  */
 void WinEDA_LibeditFrame::StartMovePin( wxDC* DC )
 {
-    LibDrawPin* Pin;
-    LibDrawPin* CurrentPin = (LibDrawPin*) m_drawItem;
-    wxPoint     startPos;
+    LIB_PIN* Pin;
+    LIB_PIN* CurrentPin = (LIB_PIN*) m_drawItem;
+    wxPoint  startPos;
 
     /* Marquage des pins a traiter */
     Pin = m_component->GetNextPin();
@@ -330,7 +330,7 @@ static void DrawMovePin( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     if( parent == NULL )
         return;
 
-    LibDrawPin* CurrentPin = (LibDrawPin*) parent->GetDrawItem();
+    LIB_PIN* CurrentPin = (LIB_PIN*) parent->GetDrawItem();
 
     if( CurrentPin == NULL || CurrentPin->Type() != COMPONENT_PIN_DRAW_TYPE )
         return;
@@ -372,8 +372,8 @@ void WinEDA_PinPropertiesFrame::SetPinShape( int newshape )
   * des autres unites de la seule forme convert courante
  */
 {
-    LibDrawPin* Pin;
-    LibDrawPin* CurrentPin = (LibDrawPin*) m_Parent->GetDrawItem();
+    LIB_PIN* Pin;
+    LIB_PIN* CurrentPin = (LIB_PIN*) m_Parent->GetDrawItem();
 
     if( CurrentPin )
     {
@@ -401,8 +401,8 @@ void WinEDA_PinPropertiesFrame::SetPinType( int newtype )
   * des autres unites du boitier
  */
 {
-    LibDrawPin* Pin;
-    LibDrawPin* CurrentPin = (LibDrawPin*) m_Parent->GetDrawItem();
+    LIB_PIN* Pin;
+    LIB_PIN* CurrentPin = (LIB_PIN*) m_Parent->GetDrawItem();
 
     if( CurrentPin == NULL || CurrentPin->GetParent() == NULL )
         return;
@@ -429,9 +429,9 @@ void WinEDA_PinPropertiesFrame::SetPinName( const wxString& newname, int newsize
   * si newsize < 0 : pas de changement de taille
  */
 {
-    LibDrawPin* Pin;
-    LibDrawPin* CurrentPin = (LibDrawPin*) m_Parent->GetDrawItem();
-    wxString    buf;
+    LIB_PIN* Pin;
+    LIB_PIN* CurrentPin = (LIB_PIN*) m_Parent->GetDrawItem();
+    wxString buf;
 
     if( CurrentPin == NULL || CurrentPin->GetParent() == NULL )
         return;
@@ -470,9 +470,9 @@ void WinEDA_PinPropertiesFrame::SetPinNum( const wxString& newnum, int newsize )
   * Si newsize < 0 ) pase de changement de taille
  */
 {
-    LibDrawPin* Pin;
-    LibDrawPin* CurrentPin = (LibDrawPin*) m_Parent->GetDrawItem();
-    wxString    buf;
+    LIB_PIN* Pin;
+    LIB_PIN* CurrentPin = (LIB_PIN*) m_Parent->GetDrawItem();
+    wxString buf;
 
     buf = newnum;
     buf.Replace( wxT( " " ), wxT( "_" ) );
@@ -503,7 +503,7 @@ void WinEDA_PinPropertiesFrame::SetPinNum( const wxString& newnum, int newsize )
 /*************************************************/
 void WinEDA_LibeditFrame::DeletePin( wxDC*          DC,
                                      LIB_COMPONENT* LibEntry,
-                                     LibDrawPin*    Pin )
+                                     LIB_PIN*       Pin )
 /*************************************************/
 
 /* Routine d'effacement de la pin pointee par la souris
@@ -512,8 +512,8 @@ void WinEDA_LibeditFrame::DeletePin( wxDC*          DC,
   * Sinon seule la pin de l'unite en convert courante sera effacee
  */
 {
-    LibDrawPin* tmp;
-    wxPoint     PinPos;
+    LIB_PIN* tmp;
+    wxPoint  PinPos;
 
     if( LibEntry == NULL || Pin == NULL )
         return;
@@ -547,8 +547,8 @@ void WinEDA_LibeditFrame::DeletePin( wxDC*          DC,
  */
 void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
 {
-    LibDrawPin* CurrentPin;
-    bool        showPinText = true;
+    LIB_PIN* CurrentPin;
+    bool     showPinText = true;
 
     if( m_component == NULL )
         return;
@@ -556,7 +556,7 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
     /* Effacement des flags */
     m_component->ClearStatus();
 
-    CurrentPin = new LibDrawPin( m_component );
+    CurrentPin = new LIB_PIN( m_component );
 
     m_drawItem = CurrentPin;
 
@@ -626,9 +626,9 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
 void WinEDA_PinPropertiesFrame::SetPinAttributes( bool draw, bool unit,
                                                   bool convert )
 {
-    LibDrawPin* tmp;
-    LibDrawPin* Pin;
-    LibDrawPin* CurrentPin = (LibDrawPin*) m_Parent->GetDrawItem();
+    LIB_PIN* tmp;
+    LIB_PIN* Pin;
+    LIB_PIN* CurrentPin = (LIB_PIN*) m_Parent->GetDrawItem();
 
     if( CurrentPin == NULL )
         return;
@@ -729,7 +729,7 @@ void WinEDA_PinPropertiesFrame::NewSizePin( int newsize )
  *
  */
 {
-    LibDrawPin* RefPin, * Pin = (LibDrawPin*) m_Parent->GetDrawItem();
+    LIB_PIN* RefPin, * Pin = (LIB_PIN*) m_Parent->GetDrawItem();
 
     if( Pin == NULL || Pin->GetParent() == NULL )
         return;
@@ -758,12 +758,12 @@ void WinEDA_PinPropertiesFrame::NewSizePin( int newsize )
 }
 
 
-static void CreateImagePins( LibDrawPin* Pin, int unit, int convert,
+static void CreateImagePins( LIB_PIN* Pin, int unit, int convert,
                              bool asDeMorgan )
 {
-    int         ii;
-    LibDrawPin* NewPin;
-    bool        CreateConv = false;
+    int      ii;
+    LIB_PIN* NewPin;
+    bool     CreateConv = false;
 
 
     if( g_EditPinByPinIsOn )
@@ -775,7 +775,7 @@ static void CreateImagePins( LibDrawPin* Pin, int unit, int convert,
     /* Creation de la pin " convert " pour la part courante */
     if( CreateConv == true )
     {
-        NewPin = (LibDrawPin*) Pin->GenCopy();
+        NewPin = (LIB_PIN*) Pin->GenCopy();
         if( Pin->m_Convert > 1 )
             NewPin->m_Convert = 1;
         else
@@ -789,7 +789,7 @@ static void CreateImagePins( LibDrawPin* Pin, int unit, int convert,
             continue;                       /* Pin commune a toutes les unites */
 
         /* Creation pour la representation "normale" */
-        NewPin = (LibDrawPin*) Pin->GenCopy();
+        NewPin = (LIB_PIN*) Pin->GenCopy();
         if( convert != 0 )
             NewPin->m_Convert = 1;
         NewPin->m_Unit = ii;
@@ -799,7 +799,7 @@ static void CreateImagePins( LibDrawPin* Pin, int unit, int convert,
         if( CreateConv == false )
             continue;
 
-        NewPin = (LibDrawPin*)Pin->GenCopy();
+        NewPin = (LIB_PIN*)Pin->GenCopy();
         NewPin->m_Convert = 2;
         if( Pin->m_Unit != 0 )
             NewPin->m_Unit = ii;
@@ -808,21 +808,19 @@ static void CreateImagePins( LibDrawPin* Pin, int unit, int convert,
 }
 
 
-/*************************************************/
-void WinEDA_LibeditFrame::GlobalSetPins( wxDC* DC,
-                                         LibDrawPin* MasterPin, int id )
-/*************************************************/
-
 /*  Depending on "id":
-  * - Change pin text size (name or num) (range 10 .. 1000 mil)
-  * - Change pin lenght.
+ * - Change pin text size (name or num) (range 10 .. 1000 mil)
+ * - Change pin lenght.
  *
-  * If Pin is selected ( .m_flag == IS_SELECTED ) only the other selected pis are modified
+ * If Pin is selected ( .m_flag == IS_SELECTED ) only the other selected
+ * pins are modified
  */
+void WinEDA_LibeditFrame::GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id )
+
 {
-    LibDrawPin* Pin;
-    bool        selected = ( MasterPin->m_Selected & IS_SELECTED ) != 0;
-    bool        showPinText = true;
+    LIB_PIN* Pin;
+    bool     selected = ( MasterPin->m_Selected & IS_SELECTED ) != 0;
+    bool     showPinText = true;
 
     if( ( m_component == NULL ) || ( MasterPin == NULL ) )
         return;
@@ -866,19 +864,19 @@ void WinEDA_LibeditFrame::GlobalSetPins( wxDC* DC,
 
 
 /************************************************************************/
-void WinEDA_LibeditFrame::RepeatPinItem( wxDC* DC, LibDrawPin* SourcePin )
+void WinEDA_LibeditFrame::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
 /************************************************************************/
 /* Creation d'une nouvelle pin par copie de la pr�c�dente ( fct REPEAT) */
 {
-    LibDrawPin* Pin;
-    wxString    msg;
-    int         ox = 0, oy = 0;
+    LIB_PIN* Pin;
+    wxString msg;
+    int      ox = 0, oy = 0;
 
     if( m_component == NULL || SourcePin == NULL
         || SourcePin->Type() != COMPONENT_PIN_DRAW_TYPE )
         return;
 
-    Pin = (LibDrawPin*)SourcePin->GenCopy();
+    Pin = (LIB_PIN*)SourcePin->GenCopy();
     m_component->AddDrawItem( Pin );
 
     Pin->m_Flags = IS_NEW;
@@ -916,8 +914,8 @@ void WinEDA_LibeditFrame::RepeatPinItem( wxDC* DC, LibDrawPin* SourcePin )
 
 int sort_by_pin_number( const void* ref, const void* tst )
 {
-    const LibDrawPin* Ref = *(LibDrawPin**) ref;
-    const LibDrawPin* Tst = *(LibDrawPin**) tst;
+    const LIB_PIN* Ref = *(LIB_PIN**) ref;
+    const LIB_PIN* Tst = *(LIB_PIN**) tst;
 
     return Ref->m_PinNum - Tst->m_PinNum;
 }
@@ -925,10 +923,10 @@ int sort_by_pin_number( const void* ref, const void* tst )
 
 void WinEDA_LibeditFrame::OnCheckComponent( wxCommandEvent& event )
 {
-    int             nb_pins, ii, error;
-    LibDrawPin*     Pin;
-    LibDrawPin**    PinList;
-    wxString        msg;
+    int       nb_pins, ii, error;
+    LIB_PIN*  Pin;
+    LIB_PIN** PinList;
+    wxString  msg;
 
     if( m_component == NULL )
         return;
@@ -940,7 +938,7 @@ void WinEDA_LibeditFrame::OnCheckComponent( wxCommandEvent& event )
         nb_pins++;
     }
 
-    PinList = (LibDrawPin**) MyZMalloc( (nb_pins + 1) * sizeof(LibDrawPin*) );
+    PinList = (LIB_PIN**) MyZMalloc( (nb_pins + 1) * sizeof(LIB_PIN*) );
     Pin = m_component->GetNextPin();
     for( ii = 0; Pin != NULL; Pin = m_component->GetNextPin( Pin ) )
     {
@@ -949,14 +947,14 @@ void WinEDA_LibeditFrame::OnCheckComponent( wxCommandEvent& event )
     }
 
     // Classement des pins par numero de pin
-    qsort( PinList, nb_pins, sizeof(LibDrawPin*), sort_by_pin_number );
+    qsort( PinList, nb_pins, sizeof(LIB_PIN*), sort_by_pin_number );
 
     // Controle des duplicates:
     error = 0;
     for( ii = 1; ii < nb_pins; ii++ )
     {
-        wxString    aux_msg, StringPinNum;
-        LibDrawPin* curr_pin = PinList[ii];
+        wxString aux_msg, StringPinNum;
+        LIB_PIN* curr_pin = PinList[ii];
         Pin = PinList[ii - 1];
 
         if( Pin->m_PinNum != curr_pin->m_PinNum

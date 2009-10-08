@@ -22,7 +22,7 @@
 
 /* functions to add commands and submenus depending on the item */
 static void AddMenusForBlock( wxMenu* PopMenu, WinEDA_LibeditFrame* frame );
-static void AddMenusForPin( wxMenu* PopMenu, LibDrawPin* Pin,
+static void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin,
                             WinEDA_LibeditFrame* frame );
 
 
@@ -74,7 +74,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
     switch( DrawEntry->Type() )
     {
     case COMPONENT_PIN_DRAW_TYPE:
-        AddMenusForPin( PopMenu, (LibDrawPin*) DrawEntry, this );
+        AddMenusForPin( PopMenu, (LIB_PIN*) DrawEntry, this );
         break;
 
     case COMPONENT_ARC_DRAW_TYPE:
@@ -179,7 +179,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
         }
         else if( (DrawEntry->m_Flags & IS_NEW) )
         {
-            if( ( (LibDrawPolyline*) DrawEntry )->GetCornerCount() > 2 )
+            if( ( (LIB_POLYLINE*) DrawEntry )->GetCornerCount() > 2 )
             {
                 msg = AddHotkeyName( _( "Delete Segment " ),
                                      s_Libedit_Hokeys_Descr, HK_DELETE_PIN );
@@ -221,7 +221,7 @@ StructType %d" ),
 
 
 void AddMenusForPin( wxMenu*              PopMenu,
-                     LibDrawPin*          Pin,
+                     LIB_PIN*             Pin,
                      WinEDA_LibeditFrame* frame )
 {
     bool selected    = (Pin->m_Selected & IS_SELECTED) != 0;

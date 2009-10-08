@@ -554,7 +554,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
         if( m_lastDrawItem && (m_lastDrawItem->m_Flags == 0)
            && (m_lastDrawItem->Type() == COMPONENT_PIN_DRAW_TYPE) )
         {
-            RepeatPinItem( DC, (LibDrawPin*) m_lastDrawItem );
+            RepeatPinItem( DC, (LIB_PIN*) m_lastDrawItem );
         }
         else
             wxBell();

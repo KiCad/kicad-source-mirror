@@ -43,7 +43,7 @@ class CMP_LIB_ENTRY : public EDA_BaseStruct
 public:
     LibrEntryType    Type;      /* Type = ROOT;
                                  *      = ALIAS pour struct LibraryAliasType */
-    LibDrawField     m_Name;    // name (74LS00 ..) in lib ( = VALUE )
+    LIB_FIELD        m_Name;    // name (74LS00 ..) in lib ( = VALUE )
     wxString         m_Doc;     /* documentation for info */
     wxString         m_KeyWord; /* keyword list (used to select a group of
                                  * components by keyword) */
@@ -107,7 +107,7 @@ extern int LibraryEntryCompare( const CMP_LIB_ENTRY* LE1,
 class LIB_COMPONENT : public CMP_LIB_ENTRY
 {
 public:
-    LibDrawField       m_Prefix;         /* Prefix ( U, IC ... ) = REFERENCE */
+    LIB_FIELD          m_Prefix;         /* Prefix ( U, IC ... ) = REFERENCE */
     wxArrayString      m_AliasList;      /* ALIAS list for the component */
     wxArrayString      m_FootprintList;  /* list of suitable footprint names
                                           * for the component (wildcard names
@@ -123,8 +123,8 @@ public:
                                           * m_TextInside in mils */
     bool               m_DrawPinNum;
     bool               m_DrawPinName;
-    DLIST<LibDrawField> m_Fields;         /* Auxiliary Field list (id >= 2 ) */
-    long               m_LastDate;        // Last change Date
+    DLIST<LIB_FIELD>   m_Fields;         /* Auxiliary Field list (id >= 2 ) */
+    long               m_LastDate;       // Last change Date
 
 protected:
     int                m_UnitCount;      /* Units (or sections) per package */
@@ -177,9 +177,9 @@ public:
     /**
      * Initialize fields from a vector of fields.
      *
-     * @param aFields - a std::vector <LibDrawField> to import.
+     * @param aFields - a std::vector <LIB_FIELD> to import.
      */
-    void SetFields( const std::vector <LibDrawField> aFields );
+    void SetFields( const std::vector <LIB_FIELD> aFields );
 
     /**
      * Draw component.
@@ -244,10 +244,10 @@ public:
     LIB_DRAW_ITEM* GetNextDrawItem( LIB_DRAW_ITEM* item = NULL,
                                     KICAD_T type = TYPE_NOT_INIT );
 
-    LibDrawPin* GetNextPin( LibDrawPin* item = NULL )
+    LIB_PIN* GetNextPin( LIB_PIN* item = NULL )
     {
-        return (LibDrawPin*) GetNextDrawItem( (LIB_DRAW_ITEM*) item,
-                                              COMPONENT_PIN_DRAW_TYPE );
+        return (LIB_PIN*) GetNextDrawItem( (LIB_DRAW_ITEM*) item,
+                                           COMPONENT_PIN_DRAW_TYPE );
     }
 
     /**

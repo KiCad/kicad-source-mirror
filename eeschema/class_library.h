@@ -42,6 +42,8 @@
 
 /* Helpers for creating a list of component libraries. */
 class CMP_LIBRARY;
+class wxRegEx;
+
 
 typedef boost::ptr_vector< CMP_LIBRARY > CMP_LIBRARY_LIST;
 
@@ -176,9 +178,6 @@ public:
      * WildCompareString().  The names array will be populated with the
      * library entry names that meat the search criteria on exit.
      *
-     * @todo Convert the search functions to use regular expressions which
-     *       should give better search capability.
-     *
      * @param names - String array to place entry names into.
      * @param nameSearch - Name wild card search criteria.
      * @param keySearch - Key word search criteria.
@@ -187,6 +186,16 @@ public:
     void SearchEntryNames( wxArrayString& names,
                            const wxString& nameSearch = wxEmptyString,
                            const wxString& keySearch = wxEmptyString,
+                           bool sort = true );
+
+    /**
+     * Find components in library by key word regular expression search.
+     *
+     * @param names - String array to place found component names into.
+     * @param re - Regular expression used to seach component key words.
+     * @param sort - Sort component name list.
+     */
+    void SearchEntryNames( wxArrayString& names, const wxRegEx& re,
                            bool sort = true );
 
     /**

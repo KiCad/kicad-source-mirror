@@ -277,6 +277,14 @@ public:
         DoPlot( plotter, offset, fill, transform );
     }
 
+    /**
+     * Return the width of the draw item.
+     *
+     * @return int - Width of draw object.
+     */
+    int GetWidth( void ) { return DoGetWidth(); }
+
+
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy() = 0;
 
@@ -299,6 +307,7 @@ protected:
     virtual void DoMirrorHorizontal( const wxPoint& center ) = 0;
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] ) = 0;
+    virtual int DoGetWidth( void ) = 0;
 };
 
 
@@ -311,7 +320,7 @@ typedef boost::ptr_vector< LIB_DRAW_ITEM > LIB_DRAW_ITEM_LIST;
 /********/
 /* Pins */
 /********/
-class LibDrawPin : public LIB_DRAW_ITEM
+class LIB_PIN : public LIB_DRAW_ITEM
 {
 public:
     int      m_PinLen;      /* Pin length */
@@ -339,16 +348,16 @@ public:
     int      m_Width;       /* Line width */
 
 public:
-    LibDrawPin(LIB_COMPONENT * aParent);
-    LibDrawPin( const LibDrawPin& pin );
-    ~LibDrawPin() { }
+    LIB_PIN(LIB_COMPONENT * aParent);
+    LIB_PIN( const LIB_PIN& pin );
+    ~LIB_PIN() { }
 
-    LibDrawPin* Next() const { return (LibDrawPin*) Pnext; }
-    LibDrawPin* Back() const { return (LibDrawPin*) Pback; }
+    LIB_PIN* Next() const { return (LIB_PIN*) Pnext; }
+    LIB_PIN* Back() const { return (LIB_PIN*) Pback; }
 
     virtual wxString GetClass() const
     {
-        return wxT( "LibDrawPin" );
+        return wxT( "LIB_PIN" );
     }
 
 
@@ -452,6 +461,7 @@ protected:
     virtual void DoMirrorHorizontal( const wxPoint& center );
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] );
+    virtual int DoGetWidth( void ) { return m_Width; }
 };
 
 
@@ -459,7 +469,7 @@ protected:
 /* Graphic Body Item: Arc */
 /**************************/
 
-class LibDrawArc : public LIB_DRAW_ITEM
+class LIB_ARC : public LIB_DRAW_ITEM
 {
 public:
     int     m_Radius;
@@ -472,12 +482,12 @@ public:
     int     m_Width;    /* Line width */
 
 public:
-    LibDrawArc(LIB_COMPONENT * aParent);
-    LibDrawArc( const LibDrawArc& arc );
-    ~LibDrawArc() { }
+    LIB_ARC(LIB_COMPONENT * aParent);
+    LIB_ARC( const LIB_ARC& arc );
+    ~LIB_ARC() { }
     virtual wxString GetClass() const
     {
-        return wxT( "LibDrawArc" );
+        return wxT( "LIB_ARC" );
     }
 
 
@@ -540,13 +550,14 @@ protected:
     virtual void DoMirrorHorizontal( const wxPoint& center );
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] );
+    virtual int DoGetWidth( void ) { return m_Width; }
 };
 
 
 /*****************************/
 /* Graphic Body Item: Circle */
 /*****************************/
-class LibDrawCircle : public LIB_DRAW_ITEM
+class LIB_CIRCLE : public LIB_DRAW_ITEM
 {
 public:
     int     m_Radius;
@@ -555,12 +566,12 @@ public:
     int     m_Width;  /* Line width */
 
 public:
-    LibDrawCircle(LIB_COMPONENT * aParent);
-    LibDrawCircle( const LibDrawCircle& circle );
-    ~LibDrawCircle() { }
+    LIB_CIRCLE(LIB_COMPONENT * aParent);
+    LIB_CIRCLE( const LIB_CIRCLE& circle );
+    ~LIB_CIRCLE() { }
     virtual wxString GetClass() const
     {
-        return wxT( "LibDrawCircle" );
+        return wxT( "LIB_CIRCLE" );
     }
 
 
@@ -624,6 +635,7 @@ protected:
     virtual void DoMirrorHorizontal( const wxPoint& center );
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] );
+    virtual int DoGetWidth( void ) { return m_Width; }
 };
 
 
@@ -633,15 +645,15 @@ protected:
 /* Fields like Ref , value... are not Text,  */
 /* they are a separate class                 */
 /*********************************************/
-class LibDrawText : public LIB_DRAW_ITEM, public EDA_TextStruct
+class LIB_TEXT : public LIB_DRAW_ITEM, public EDA_TextStruct
 {
 public:
-    LibDrawText(LIB_COMPONENT * aParent);
-    LibDrawText( const LibDrawText& text );
-    ~LibDrawText() { }
+    LIB_TEXT(LIB_COMPONENT * aParent);
+    LIB_TEXT( const LIB_TEXT& text );
+    ~LIB_TEXT() { }
     virtual wxString GetClass() const
     {
-        return wxT( "LibDrawText" );
+        return wxT( "LIB_TEXT" );
     }
 
 
@@ -719,13 +731,14 @@ protected:
     virtual void DoMirrorHorizontal( const wxPoint& center );
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] );
+    virtual int DoGetWidth( void ) { return m_Width; }
 };
 
 
 /********************************/
 /* Graphic Body Item: Rectangle */
 /********************************/
-class LibDrawSquare  : public LIB_DRAW_ITEM
+class LIB_RECTANGLE  : public LIB_DRAW_ITEM
 {
 public:
     wxPoint m_End;     /* Rectangle end point. */
@@ -733,12 +746,12 @@ public:
     int     m_Width;   /* Line width */
 
 public:
-    LibDrawSquare(LIB_COMPONENT * aParent);
-    LibDrawSquare( const LibDrawSquare& rect );
-    ~LibDrawSquare() { }
+    LIB_RECTANGLE(LIB_COMPONENT * aParent);
+    LIB_RECTANGLE( const LIB_RECTANGLE& rect );
+    ~LIB_RECTANGLE() { }
     virtual wxString GetClass() const
     {
-        return wxT( "LibDrawSquare" );
+        return wxT( "LIB_RECTANGLE" );
     }
 
 
@@ -803,12 +816,13 @@ protected:
     virtual void DoMirrorHorizontal( const wxPoint& center );
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] );
+    virtual int DoGetWidth( void ) { return m_Width; }
 };
 
 /**********************************/
 /* Graphic Body Item: single line */
 /**********************************/
-class LibDrawSegment  : public LIB_DRAW_ITEM
+class LIB_SEGMENT  : public LIB_DRAW_ITEM
 {
 public:
     wxPoint m_End;
@@ -817,12 +831,12 @@ public:
     int     m_Width;    /* Line width */
 
 public:
-    LibDrawSegment(LIB_COMPONENT * aParent);
-    LibDrawSegment( const LibDrawSegment& segment );
-    ~LibDrawSegment() { }
+    LIB_SEGMENT(LIB_COMPONENT * aParent);
+    LIB_SEGMENT( const LIB_SEGMENT& segment );
+    ~LIB_SEGMENT() { }
     virtual wxString GetClass() const
     {
-        return wxT( "LibDrawSegment" );
+        return wxT( "LIB_SEGMENT" );
     }
 
 
@@ -886,26 +900,27 @@ protected:
     virtual void DoMirrorHorizontal( const wxPoint& center );
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] );
+    virtual int DoGetWidth( void ) { return m_Width; }
 };
 
 
 /**********************************************************/
 /* Graphic Body Item: Polygon and polyline (set of lines) */
 /**********************************************************/
-class LibDrawPolyline : public LIB_DRAW_ITEM
+class LIB_POLYLINE : public LIB_DRAW_ITEM
 {
 public:
     int m_Width;                            /* Line width */
     std::vector<wxPoint> m_PolyPoints;      // list of points (>= 2)
 
 public:
-    LibDrawPolyline(LIB_COMPONENT * aParent);
-    LibDrawPolyline( const LibDrawPolyline& polyline );
-    ~LibDrawPolyline() { }
+    LIB_POLYLINE(LIB_COMPONENT * aParent);
+    LIB_POLYLINE( const LIB_POLYLINE& polyline );
+    ~LIB_POLYLINE() { }
 
     virtual wxString GetClass() const
     {
-        return wxT( "LibDrawPolyline" );
+        return wxT( "LIB_POLYLINE" );
     }
 
 
@@ -978,12 +993,13 @@ protected:
     virtual void DoMirrorHorizontal( const wxPoint& center );
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] );
+    virtual int DoGetWidth( void ) { return m_Width; }
 };
 
 /**********************************************************/
 /* Graphic Body Item: Bezier Curve (set of lines) */
 /**********************************************************/
-class LibDrawBezier : public LIB_DRAW_ITEM
+class LIB_BEZIER : public LIB_DRAW_ITEM
 {
 public:
     int m_Width;                            /* Line width */
@@ -991,13 +1007,13 @@ public:
     std::vector<wxPoint> m_PolyPoints;      // list of points (>= 2)
 
 public:
-    LibDrawBezier( LIB_COMPONENT * aParent );
-    LibDrawBezier( const LibDrawBezier& bezier );
-    ~LibDrawBezier() { }
+    LIB_BEZIER( LIB_COMPONENT * aParent );
+    LIB_BEZIER( const LIB_BEZIER& bezier );
+    ~LIB_BEZIER() { }
 
     virtual wxString GetClass() const
     {
-        return wxT( "LibDrawBezier" );
+        return wxT( "LIB_BEZIER" );
     }
 
 
@@ -1070,6 +1086,7 @@ protected:
     virtual void DoMirrorHorizontal( const wxPoint& center );
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] );
+    virtual int DoGetWidth( void ) { return m_Width; }
 };
 
 #endif  //  CLASSES_BODY_ITEMS_H

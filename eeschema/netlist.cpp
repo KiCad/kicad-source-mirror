@@ -355,7 +355,7 @@ static void ListeObjetConnection( DrawSheetPath*                sheetlist,
     NETLIST_OBJECT*                new_item;
     SCH_COMPONENT*                 DrawLibItem;
     LIB_COMPONENT*                 Entry;
-    LibDrawPin*                    pin;
+    LIB_PIN*                       pin;
     Hierarchical_PIN_Sheet_Struct* SheetLabel;
     DrawSheetPath                  list;
 

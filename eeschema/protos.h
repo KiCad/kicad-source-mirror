@@ -18,7 +18,7 @@ class SCH_ITEM;
 class Hierarchical_PIN_Sheet_Struct;
 class PLOTTER;
 class DrawSheetStruct;
-class LibDrawPin;
+class LIB_PIN;
 
 
 wxString ReturnDefaultFieldName( int aFieldNdx );
@@ -101,15 +101,15 @@ void      DeleteStruct( WinEDA_DrawPanel* panel,
 /*************/
 /* LOCATE.CPP */
 /*************/
-LibDrawPin*        LocatePinByNumber( const wxString& ePin_Number,
-                                      SCH_COMPONENT*  eComponent );
+LIB_PIN*        LocatePinByNumber( const wxString& ePin_Number,
+                                   SCH_COMPONENT*  eComponent );
 
-SCH_COMPONENT*     LocateSmallestComponent( SCH_SCREEN* Screen );
+SCH_COMPONENT*  LocateSmallestComponent( SCH_SCREEN* Screen );
 
 /* Recherche du plus petit (en surface) composant pointe par la souris */
 
-int                PickItemsInBlock( BLOCK_SELECTOR& aBlock,
-                                     BASE_SCREEN*    screen );
+int             PickItemsInBlock( BLOCK_SELECTOR& aBlock,
+                                  BASE_SCREEN*    screen );
 
 /* function PickStruct:
  *   Search at location pos
@@ -152,7 +152,7 @@ SCH_ITEM*          PickStruct( const wxPoint& refpos,
 
 Hierarchical_PIN_Sheet_Struct* LocateSheetLabel( DrawSheetStruct* Sheet,
                                                  const wxPoint&   pos );
-LibDrawPin*                    LocateAnyPin( SCH_ITEM*       DrawList,
+LIB_PIN*                       LocateAnyPin( SCH_ITEM*       DrawList,
                                              const wxPoint&  RefPos,
                                              SCH_COMPONENT** libpart = NULL );
 

@@ -40,22 +40,21 @@
  *
  *  others = free fields
  */
-LibDrawField::LibDrawField(LIB_COMPONENT * aParent, int idfield ) :
+LIB_FIELD::LIB_FIELD(LIB_COMPONENT * aParent, int idfield ) :
     LIB_DRAW_ITEM( COMPONENT_FIELD_DRAW_TYPE, aParent )
 {
     m_FieldId = idfield;
     m_Size.x = m_Size.y = DEFAULT_SIZE_TEXT;
 }
 
-LibDrawField::LibDrawField( int idfield ) :
+LIB_FIELD::LIB_FIELD( int idfield ) :
     LIB_DRAW_ITEM( COMPONENT_FIELD_DRAW_TYPE, NULL )
 {
     m_FieldId = idfield;
     m_Size.x = m_Size.y = DEFAULT_SIZE_TEXT;
 }
 
-LibDrawField::LibDrawField( const LibDrawField& field ) :
-    LIB_DRAW_ITEM( field )
+LIB_FIELD::LIB_FIELD( const LIB_FIELD& field ) : LIB_DRAW_ITEM( field )
 {
     m_Pos       = field.m_Pos;
     m_Size      = field.m_Size;
@@ -71,12 +70,12 @@ LibDrawField::LibDrawField( const LibDrawField& field ) :
 }
 
 
-LibDrawField::~LibDrawField()
+LIB_FIELD::~LIB_FIELD()
 {
 }
 
 
-bool LibDrawField::Save( FILE* ExportFile ) const
+bool LIB_FIELD::Save( FILE* ExportFile ) const
 {
     int      hjustify, vjustify;
     wxString text = m_Text;
@@ -119,7 +118,7 @@ bool LibDrawField::Save( FILE* ExportFile ) const
 }
 
 
-bool LibDrawField::Load( char* line, wxString& errorMsg )
+bool LIB_FIELD::Load( char* line, wxString& errorMsg )
 {
     int   cnt;
     char  textOrient;
@@ -257,7 +256,7 @@ parameter <%c> is not valid" ),
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LibDrawField::GetPenSize()
+int LIB_FIELD::GetPenSize()
 {
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
@@ -267,9 +266,9 @@ int LibDrawField::GetPenSize()
  * if aData not NULL, aData must point a wxString which is used instead of
  * the m_Text
  */
-void LibDrawField::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                         const wxPoint& aOffset, int aColor, int aDrawMode,
-                         void* aData, const int aTransformMatrix[2][2] )
+void LIB_FIELD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                      const wxPoint& aOffset, int aColor, int aDrawMode,
+                      void* aData, const int aTransformMatrix[2][2] )
 {
     wxPoint  text_pos;
     int      color;
@@ -335,7 +334,7 @@ void LibDrawField::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  * @param refPos A wxPoint to test, in Field coordinate system
  * @return bool - true if a hit, else false
  */
-bool LibDrawField::HitTest( const wxPoint& refPos )
+bool LIB_FIELD::HitTest( const wxPoint& refPos )
 {
     return HitTest( refPos, 0, DefaultTransformMatrix );
 }
@@ -346,8 +345,8 @@ bool LibDrawField::HitTest( const wxPoint& refPos )
  * @param aThreshold =  unused here (TextHitTest calculates its threshold )
  * @param aTransMat = the transform matrix
  */
-bool LibDrawField::HitTest( wxPoint aPosRef, int aThreshold,
-                            const int aTransMat[2][2] )
+bool LIB_FIELD::HitTest( wxPoint aPosRef, int aThreshold,
+                         const int aTransMat[2][2] )
 {
     int extraCharCount = 0;
     // Reference designator text has one or 2 additional character (displays
@@ -387,9 +386,9 @@ bool LibDrawField::HitTest( wxPoint aPosRef, int aThreshold,
 }
 
 // Creation et Duplication d'un field
-LIB_DRAW_ITEM* LibDrawField::DoGenCopy()
+LIB_DRAW_ITEM* LIB_FIELD::DoGenCopy()
 {
-    LibDrawField* newfield = new LibDrawField( m_FieldId );
+    LIB_FIELD* newfield = new LIB_FIELD( m_FieldId );
 
     Copy( newfield );
 
@@ -399,9 +398,9 @@ LIB_DRAW_ITEM* LibDrawField::DoGenCopy()
 
 /** Function Copy
  * copy parameters of this to Target. Pointers are not copied
- * @param Target = the LibDrawField to set with "this" values
+ * @param Target = the LIB_FIELD to set with "this" values
  */
-void LibDrawField::Copy( LibDrawField* Target ) const
+void LIB_FIELD::Copy( LIB_FIELD* Target ) const
 {
     Target->SetParent( m_Parent );
     Target->m_Pos       = m_Pos;
@@ -418,11 +417,11 @@ void LibDrawField::Copy( LibDrawField* Target ) const
 }
 
 
-int LibDrawField::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LIB_FIELD::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
     wxASSERT( other.Type() == COMPONENT_FIELD_DRAW_TYPE );
 
-    const LibDrawField* tmp = ( LibDrawField* ) &other;
+    const LIB_FIELD* tmp = ( LIB_FIELD* ) &other;
 
     if( m_FieldId == tmp->m_FieldId )
         return m_FieldId - tmp->m_FieldId;
@@ -448,13 +447,13 @@ int LibDrawField::DoCompare( const LIB_DRAW_ITEM& other ) const
 }
 
 
-void LibDrawField::DoOffset( const wxPoint& offset )
+void LIB_FIELD::DoOffset( const wxPoint& offset )
 {
     m_Pos += offset;
 }
 
 
-bool LibDrawField::DoTestInside( EDA_Rect& rect )
+bool LIB_FIELD::DoTestInside( EDA_Rect& rect )
 {
     /*
      * FIXME: This fails to take into acount the size and/or orientation of
@@ -464,13 +463,13 @@ bool LibDrawField::DoTestInside( EDA_Rect& rect )
 }
 
 
-void LibDrawField::DoMove( const wxPoint& newPosition )
+void LIB_FIELD::DoMove( const wxPoint& newPosition )
 {
     m_Pos = newPosition;
 }
 
 
-void LibDrawField::DoMirrorHorizontal( const wxPoint& center )
+void LIB_FIELD::DoMirrorHorizontal( const wxPoint& center )
 {
     m_Pos.x -= center.x;
     m_Pos.x *= -1;
@@ -478,8 +477,8 @@ void LibDrawField::DoMirrorHorizontal( const wxPoint& center )
 }
 
 
-void LibDrawField::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                           const int transform[2][2] )
+void LIB_FIELD::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                        const int transform[2][2] )
 {
 }
 
@@ -490,7 +489,7 @@ void LibDrawField::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
  *
  * @fixme This should be handled by the field object.
  */
-wxString LibDrawField::GetFullText( int unit )
+wxString LIB_FIELD::GetFullText( int unit )
 {
     if( m_FieldId != REFERENCE )
         return m_Text;
@@ -515,7 +514,7 @@ wxString LibDrawField::GetFullText( int unit )
 }
 
 
-EDA_Rect LibDrawField::GetBoundingBox()
+EDA_Rect LIB_FIELD::GetBoundingBox()
 {
     EDA_Rect rect = GetTextBox();
     rect.m_Pos.y *= -1;

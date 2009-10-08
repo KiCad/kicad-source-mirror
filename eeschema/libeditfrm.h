@@ -142,7 +142,7 @@ private:
     void               CreatePin( wxDC* DC );
     void               DeletePin( wxDC*          DC,
                                   LIB_COMPONENT* LibEntry,
-                                  LibDrawPin*    Pin );
+                                  LIB_PIN*       Pin );
     void               StartMovePin( wxDC* DC );
 
     // Edition de l'ancre
@@ -161,10 +161,10 @@ private:
     void               RotateSymbolText( wxDC* DC );
     void               DeleteDrawPoly( wxDC* DC );
     LIB_DRAW_ITEM*     LocateItemUsingCursor();
-    void               RotateField( wxDC* DC, LibDrawField* Field );
-    void               PlaceField( wxDC* DC, LibDrawField* Field );
-    void               EditField( wxDC* DC, LibDrawField* Field );
-    void               StartMoveField( wxDC* DC, LibDrawField* field );
+    void               RotateField( wxDC* DC, LIB_FIELD* Field );
+    void               PlaceField( wxDC* DC, LIB_FIELD* Field );
+    void               EditField( wxDC* DC, LIB_FIELD* Field );
+    void               StartMoveField( wxDC* DC, LIB_FIELD* field );
 
 public:
     /* Block commands: */
@@ -174,10 +174,10 @@ public:
 
     void               PlacePin( wxDC* DC );
     void               InitEditOnePin();
-    void               GlobalSetPins( wxDC* DC, LibDrawPin* MasterPin, int id );
+    void               GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id );
 
     // Repetition automatique de placement de pins
-    void               RepeatPinItem( wxDC* DC, LibDrawPin* Pin );
+    void               RepeatPinItem( wxDC* DC, LIB_PIN* Pin );
 
 protected:
     wxString m_ConfigPath;

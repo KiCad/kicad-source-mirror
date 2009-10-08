@@ -193,8 +193,8 @@ LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& component, CMP_LIBRARY* lib ) :
     CMP_LIB_ENTRY( component, lib )
 {
     LIB_DRAW_ITEM* newItem;
-    LibDrawField*  oldField;
-    LibDrawField*  newField;
+    LIB_FIELD*     oldField;
+    LIB_FIELD*     newField;
 
     m_Prefix              = component.m_Prefix;
     m_AliasList           = component.m_AliasList;
@@ -221,7 +221,7 @@ LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& component, CMP_LIBRARY* lib ) :
     for( oldField = component.m_Fields; oldField != NULL;
          oldField = oldField->Next() )
     {
-        newField = (LibDrawField*) oldField->GenCopy();
+        newField = (LIB_FIELD*) oldField->GenCopy();
         newField->SetParent( this );
         m_Fields.PushBack( newField );
     }
@@ -240,8 +240,6 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
                           bool showPinText, bool drawFields,
                           bool onlySelected )
 {
-    wxString       fieldText;
-    LibDrawField*  Field;
     BASE_SCREEN*   screen = panel->GetScreen();
 
     GRSetDrawMode( dc, drawMode );
@@ -282,25 +280,13 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
 
     if( drawFields )
     {
-        /* The reference designator field is a special case for naming
+        LIB_FIELD* Field;
+
+        /*
+         * The reference designator field is a special case for naming
          * convention.
-         *
-         * FIXME: This should be handled by the LibDrawField class.
          */
-        if( m_UnitCount > 1 )
-        {
-#if defined(KICAD_GOST)
-            fieldText.Printf( wxT( "%s?.%c" ), (const wxChar*) m_Prefix.m_Text,
-                              multi + '1' - 1 );
-#else
-            fieldText.Printf( wxT( "%s?%c" ), (const wxChar*) m_Prefix.m_Text,
-                              multi + 'A' - 1 );
-#endif
-        }
-        else
-        {
-            fieldText = m_Prefix.m_Text + wxT( "?" );
-        }
+        wxString      fieldText = m_Prefix.GetFullText( multi );
 
         if( !( onlySelected && m_Prefix.m_Selected == 0 ) )
             m_Prefix.Draw( panel, dc, offset, color, drawMode, &fieldText,
@@ -384,7 +370,7 @@ void LIB_COMPONENT::RemoveDrawItem( LIB_DRAW_ITEM* item,
     }
     else
     {
-        LibDrawField* field;
+        LIB_FIELD* field;
 
         for( field = m_Fields; field != NULL; field = field->Next() )
         {
@@ -438,7 +424,7 @@ LIB_DRAW_ITEM* LIB_COMPONENT::GetNextDrawItem( LIB_DRAW_ITEM* item,
  */
 bool LIB_COMPONENT::Save( FILE* aFile )
 {
-    LibDrawField*  Field;
+    LIB_FIELD*  Field;
 
     /* First line: it s a comment (component name for readers) */
     if( fprintf( aFile, "#\n# %s\n#\n", CONV_TO_UTF8( m_Name.m_Text ) ) < 0 )
@@ -689,31 +675,31 @@ bool LIB_COMPONENT::LoadDrawEntries( FILE* f, char* line,
         switch( line[0] )
         {
         case 'A':    /* Arc */
-            newEntry = ( LIB_DRAW_ITEM* ) new LibDrawArc(this);
+            newEntry = ( LIB_DRAW_ITEM* ) new LIB_ARC(this);
             break;
 
         case 'C':    /* Circle */
-            newEntry = ( LIB_DRAW_ITEM* ) new LibDrawCircle(this);
+            newEntry = ( LIB_DRAW_ITEM* ) new LIB_CIRCLE(this);
             break;
 
         case 'T':    /* Text */
-            newEntry = ( LIB_DRAW_ITEM* ) new LibDrawText(this);
+            newEntry = ( LIB_DRAW_ITEM* ) new LIB_TEXT(this);
             break;
 
         case 'S':    /* Square */
-            newEntry = ( LIB_DRAW_ITEM* ) new LibDrawSquare(this);
+            newEntry = ( LIB_DRAW_ITEM* ) new LIB_RECTANGLE(this);
             break;
 
         case 'X':    /* Pin Description */
-            newEntry = ( LIB_DRAW_ITEM* ) new LibDrawPin(this);
+            newEntry = ( LIB_DRAW_ITEM* ) new LIB_PIN(this);
             break;
 
         case 'P':    /* Polyline */
-            newEntry = ( LIB_DRAW_ITEM* ) new LibDrawPolyline(this);
+            newEntry = ( LIB_DRAW_ITEM* ) new LIB_POLYLINE(this);
             break;
 
         case 'B':    /* Bezier Curves */
-            newEntry = ( LIB_DRAW_ITEM* ) new LibDrawBezier(this);
+            newEntry = ( LIB_DRAW_ITEM* ) new LIB_BEZIER(this);
             break;
 
         default:
@@ -766,7 +752,7 @@ bool LIB_COMPONENT::LoadAliases( char* line, wxString& errorMsg )
 
 bool LIB_COMPONENT::LoadField( char* line, wxString& errorMsg )
 {
-    LibDrawField* field = new LibDrawField( this );
+    LIB_FIELD* field = new LIB_FIELD( this );
 
     if ( !field->Load( line, errorMsg ) )
     {
@@ -846,9 +832,9 @@ EDA_Rect LIB_COMPONENT::GetBoundaryBox( int Unit, int Convert )
 
 /** Function SetFields
  * initialize fields from a vector of fields
- * @param aFields a std::vector <LibDrawField> to import.
+ * @param aFields a std::vector <LIB_FIELD> to import.
  */
-void LIB_COMPONENT::SetFields( const std::vector <LibDrawField> aFields )
+void LIB_COMPONENT::SetFields( const std::vector <LIB_FIELD> aFields )
 {
     // Init basic fields (Value = name in lib, and reference):
     aFields[VALUE].Copy( &m_Name );
@@ -867,7 +853,7 @@ void LIB_COMPONENT::SetFields( const std::vector <LibDrawField> aFields )
             create = TRUE;
         if( create )
         {
-            LibDrawField*Field = new LibDrawField( this, ii );
+            LIB_FIELD*Field = new LIB_FIELD( this, ii );
             aFields[ii].Copy( Field );
             m_Fields.PushBack( Field );
         }
@@ -879,7 +865,7 @@ void LIB_COMPONENT::SetFields( const std::vector <LibDrawField> aFields )
      * text is like a void text and for non editable names, remove the name
      * (set to the default name)
      */
-    for( LibDrawField* Field = m_Fields; Field; Field = Field->Next() )
+    for( LIB_FIELD* Field = m_Fields; Field; Field = Field->Next() )
     {
         Field->SetParent( this );
         if( Field->m_FieldId >= FIELD1 )
@@ -947,7 +933,7 @@ void LIB_COMPONENT::SetOffset( const wxPoint& offset )
     m_Name.SetOffset( offset );
     m_Prefix.SetOffset( offset );
 
-    for( LibDrawField* field = m_Fields; field != NULL; field = field->Next() )
+    for( LIB_FIELD* field = m_Fields; field != NULL; field = field->Next() )
     {
         field->SetOffset( offset );
     }
@@ -979,7 +965,7 @@ bool LIB_COMPONENT::HasConversion() const
 
 void LIB_COMPONENT::ClearStatus( void )
 {
-    LibDrawField* field;
+    LIB_FIELD* field;
 
     BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
         item.m_Flags = 0;
@@ -1032,7 +1018,7 @@ int LIB_COMPONENT::SelectItems( EDA_Rect& rect, int unit, int convert,
         ItemsCount++;
     }
 
-    for( LibDrawField* field = m_Fields.GetFirst(); field != NULL;
+    for( LIB_FIELD* field = m_Fields.GetFirst(); field != NULL;
          field = field->Next() )
     {
         if( field->Inside( rect ) )
@@ -1048,7 +1034,7 @@ int LIB_COMPONENT::SelectItems( EDA_Rect& rect, int unit, int convert,
 
 void LIB_COMPONENT::MoveSelectedItems( const wxPoint& offset )
 {
-    LibDrawField*  field;
+    LIB_FIELD*  field;
 
     BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
     {
@@ -1086,7 +1072,7 @@ void LIB_COMPONENT::MoveSelectedItems( const wxPoint& offset )
 
 void LIB_COMPONENT::ClearSelectedItems( void )
 {
-    LibDrawField* field;
+    LIB_FIELD* field;
 
     BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
         item.m_Flags = item.m_Selected = 0;
@@ -1132,7 +1118,7 @@ void LIB_COMPONENT::CopySelectedItems( const wxPoint& offset )
 
 void LIB_COMPONENT::MirrorSelectedItemsH( const wxPoint& center )
 {
-    LibDrawField*  field;
+    LIB_FIELD*  field;
 
     BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
     {
@@ -1183,7 +1169,7 @@ void LIB_COMPONENT::MirrorSelectedItemsH( const wxPoint& center )
 LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int unit, int convert,
                                               KICAD_T type, const wxPoint& pt )
 {
-    LibDrawField*  field;
+    LIB_FIELD*  field;
 
     BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
     {

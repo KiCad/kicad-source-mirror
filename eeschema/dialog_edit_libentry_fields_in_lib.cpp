@@ -32,8 +32,8 @@ private:
     LIB_COMPONENT* m_LibEntry;
     bool m_skipCopyFromPanel;
 
-    /// a copy of the edited component's LibDrawFields
-    std::vector <LibDrawField> m_FieldsBuf;
+    /// a copy of the edited component's LIB_FIELDs
+    std::vector <LIB_FIELD> m_FieldsBuf;
 
 public:
     DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB( WinEDA_LibeditFrame* aParent,
@@ -79,7 +79,7 @@ private:
      *   bad data into a field, and this value can be used to deny a row change.
      */
     bool copyPanelToSelectedField();
-    void setRowItem( int aFieldNdx, const LibDrawField& aField );
+    void setRowItem( int aFieldNdx, const LIB_FIELD& aField );
 
     /** Function updateDisplay
      * update the listbox showing fields, according to the fields texts
@@ -283,7 +283,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::addFieldButtonHandler( wxCommandEvent& 
 
     unsigned     fieldNdx = m_FieldsBuf.size();
 
-    LibDrawField blank( fieldNdx );
+    LIB_FIELD blank( fieldNdx );
 
     m_FieldsBuf.push_back( blank );
     m_FieldsBuf[fieldNdx].m_Name = ReturnDefaultFieldName(fieldNdx);
@@ -362,7 +362,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB:: moveUpButtonHandler( wxCommandEvent& e
 
     // swap the fieldNdx field with the one before it, in both the vector
     // and in the fieldListCtrl
-    LibDrawField tmp = m_FieldsBuf[fieldNdx - 1];
+    LIB_FIELD tmp = m_FieldsBuf[fieldNdx - 1];
 
     m_FieldsBuf[fieldNdx - 1] = m_FieldsBuf[fieldNdx];
     setRowItem( fieldNdx - 1, m_FieldsBuf[fieldNdx] );
@@ -407,7 +407,7 @@ int DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::getSelectedFieldNdx()
 }
 
 
-static bool SortFieldsById(const LibDrawField& item1, const LibDrawField& item2)
+static bool SortFieldsById(const LIB_FIELD& item1, const LIB_FIELD& item2)
 {
     return item1.m_FieldId < item2.m_FieldId;
 }
@@ -423,11 +423,11 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers( void )
     m_FieldsBuf.push_back( m_LibEntry->m_Name );
 
     // Creates a working copy of fields
-    for( LibDrawField* field = m_LibEntry->m_Fields; field != NULL; field = field->Next() )
+    for( LIB_FIELD* field = m_LibEntry->m_Fields; field != NULL; field = field->Next() )
         m_FieldsBuf.push_back( *field );
 
     // Display 12 fields (or more), and add missing fields
-    LibDrawField blank( 2 );
+    LIB_FIELD blank( 2 );
     unsigned fcount = m_FieldsBuf.size();
     for( unsigned ii = 2; ii < NUMBER_OF_FIELDS; ii++ )
     {
@@ -470,7 +470,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers( void )
 
 
 /***********************************************************************************************/
-void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::setRowItem( int aFieldNdx, const LibDrawField& aField )
+void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::setRowItem( int aFieldNdx, const LIB_FIELD& aField )
 /***********************************************************************************************/
 {
     wxASSERT( aFieldNdx >= 0 );
@@ -503,7 +503,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
     if( fieldNdx >= m_FieldsBuf.size() )    // traps the -1 case too
         return;
 
-    LibDrawField& field = m_FieldsBuf[fieldNdx];
+    LIB_FIELD& field = m_FieldsBuf[fieldNdx];
 
     showCheckBox->SetValue( !(field.m_Attributs & TEXT_NO_VISIBLE) );
 
@@ -584,7 +584,7 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
     if( fieldNdx >= m_FieldsBuf.size() )        // traps the -1 case too
         return true;
 
-    LibDrawField& field = m_FieldsBuf[fieldNdx];
+    LIB_FIELD& field = m_FieldsBuf[fieldNdx];
 
     if( showCheckBox->GetValue() )
         field.m_Attributs &= ~TEXT_NO_VISIBLE;
