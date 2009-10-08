@@ -233,11 +233,13 @@ public:
                          WinEDA_DrawPanel* panel = NULL,
                          wxDC* dc = NULL );
 
-    /**
+    /** GetNextDrawItem()
      * Return the next draw object pointer.
      *
      * @param item - Pointer to the current draw item.  Setting item NULL
      *               with return the first item of type in the list.
+     * @param type - type of searched item (filter).
+     *               if TYPE_NOT_INIT search for all items types
      *
      */
 

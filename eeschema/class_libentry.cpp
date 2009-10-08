@@ -397,19 +397,34 @@ void LIB_COMPONENT::AddDrawItem( LIB_DRAW_ITEM* item )
 LIB_DRAW_ITEM* LIB_COMPONENT::GetNextDrawItem( LIB_DRAW_ITEM* item,
                                                KICAD_T type )
 {
+    /* Return the next draw object pointer.
+     * If item is NULL return the first item of type in the list.
+     */
     if( m_Drawings.empty() )
         return NULL;
 
-    if( item == NULL && type == TYPE_NOT_INIT )
+    if( item == NULL && type == TYPE_NOT_INIT )    // type is unspecified
         return &m_Drawings[0];
 
-    for( size_t i = 0; i < m_Drawings.size() - 1; i++ )
+    // Search for last item
+    size_t idx = 0;
+    if( item )
     {
-        if( item != &m_Drawings[i] )
-            continue;
+        for( ; idx < m_Drawings.size(); idx++ )
+        {
+            if( item == &m_Drawings[idx] )
+            {
+                idx++;   // Prepare the next item search
+                break;
+            }
+        }
+    }
 
-        if( type == TYPE_NOT_INIT || m_Drawings[ i + 1 ].Type() == type )
-            return &m_Drawings[ i + 1 ];
+    // Search the next item
+    for( ; idx < m_Drawings.size(); idx++ )
+    {
+        if( type == TYPE_NOT_INIT || m_Drawings[ idx ].Type() == type )
+            return &m_Drawings[ idx ];
     }
 
     return NULL;
@@ -1236,7 +1251,7 @@ LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int unit, int convert,
             EXCHG(matrix[ii][jj], DefaultTransformMatrix[ii][jj]);
         }
     }
-    
+
     return item;
 }
 

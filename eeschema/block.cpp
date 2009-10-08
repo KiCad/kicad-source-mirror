@@ -36,8 +36,9 @@ void               DuplicateItemsInList( SCH_SCREEN*        screen,
 /* Fonctions Locales */
 static void           CollectStructsToDrag( SCH_SCREEN* screen );
 static void           AddPickedItem( SCH_SCREEN* screen, wxPoint aPosition );
-static LIB_DRAW_ITEM* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
-                                          wxPoint&       aPosition );
+static LIB_PIN*       GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
+                                          wxPoint&       aPosition,
+                                          bool aSearchFirst );
 static void           DrawMovingBlockOutlines( WinEDA_DrawPanel* panel,
                                                wxDC*             DC,
                                                bool              erase );
@@ -650,10 +651,10 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
         if( Struct->Type() == TYPE_SCH_COMPONENT )
         {
             // Add all pins of the selected component to list
-            LIB_DRAW_ITEM* DrawItem;
+            LIB_PIN* pin;
             wxPoint            pos;
-            DrawItem = GetNextPinPosition( (SCH_COMPONENT*) Struct, pos );
-            while( DrawItem )
+            pin = GetNextPinPosition( (SCH_COMPONENT*) Struct, pos, true );
+            while( pin )
             {
                 if( ! screen->m_BlockLocate.Inside(pos) )
                 {
@@ -663,7 +664,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
                     AddPickedItem( screen, pos );
                 }
 
-                DrawItem = GetNextPinPosition( NULL, pos );
+                pin = GetNextPinPosition( (SCH_COMPONENT*) Struct, pos, false );
             }
         }
 
@@ -845,31 +846,26 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
 
 
 /*********************************************************************************/
-static LIB_DRAW_ITEM* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
-                                          wxPoint&       aPosition )
+static LIB_PIN* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
+                                          wxPoint&       aPosition,
+                                          bool aSearchFirst)
 /*********************************************************************************/
 
 /** GetNextPinPosition()
  * calculate position of the "next" pin of the aDrawLibItem component
- * if aDrawLibItem is non null : search for the first pin
- * if aDrawLibItem == NULL, search the next pin
- * returns its position
- * @param aDrawLibItem = component test. search for the first pin
- *      if NULL, serach for the next pin for each call
+ * @param aDrawLibItem = component to test.
  * @param aPosition = the calculated pin position, according to the component orientation and position
+ * @param aSearchFirst = if true, search for the first pin
  * @return a pointer to the pin
  */
 {
     static LIB_COMPONENT* Entry;
-    static LIB_PIN* NextPin;
     static int Multi, convert, TransMat[2][2];
-    int orient;
-    LIB_PIN* Pin;
     static wxPoint CmpPosition;
+    static LIB_PIN* Pin;
 
-    if( aDrawLibItem )
+    if( aSearchFirst )
     {
-        NextPin = NULL;
         Entry = CMP_LIBRARY::FindLibraryComponent( aDrawLibItem->m_ChipName );
 
         if( Entry == NULL )
@@ -882,9 +878,9 @@ static LIB_DRAW_ITEM* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
         memcpy( TransMat, aDrawLibItem->m_Transform, sizeof(TransMat) );
     }
     else
-        Pin = NextPin;
+        Pin = Entry->GetNextPin( Pin );
 
-    for( ; Pin != NULL; NextPin = Entry->GetNextPin( Pin ) )
+    for( ; Pin != NULL; Pin = Entry->GetNextPin( Pin ) )
     {
         wxASSERT( Pin->Type() == COMPONENT_PIN_DRAW_TYPE );
 
@@ -894,14 +890,9 @@ static LIB_DRAW_ITEM* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
         if( convert && Pin->m_Convert && ( Pin->m_Convert != convert ) )
             continue;
 
-        /* Calculate the pin orient (according to the component orientation) */
-        orient = Pin->ReturnPinDrawOrient( TransMat );
-
         /* Calculate the pin position (according to the component orientation) */
         aPosition = TransformCoordinate( TransMat, Pin->m_Pos ) + CmpPosition;
         return Pin;
     }
-
-    NextPin = NULL;
     return NULL;
 }
