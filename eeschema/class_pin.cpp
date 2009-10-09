@@ -1230,7 +1230,7 @@ void LIB_PIN::DisplayInfo( WinEDA_DrawFrame* frame )
         break;
     }
 
-    frame->MsgPanel->AppendMessage( _( "Oriention" ), Text, MAGENTA );
+    frame->MsgPanel->AppendMessage( _( "Orientation" ), Text, MAGENTA );
 }
 
 

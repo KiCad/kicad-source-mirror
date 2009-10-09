@@ -84,10 +84,11 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool Include
         /* Force display pin infos (the previous display could be a component info) */
         Pin->DisplayInfo( this );
         if( LibItem )
-            Affiche_1_Parametre( this, 1,
-                                 LibItem->GetRef( GetSheet() ),
+        {
+            MsgPanel->AppendMessage( LibItem->GetRef( GetSheet() ),
                                  LibItem->GetField( VALUE )->m_Text,
-                                 CYAN );
+                                 DARKCYAN );
+        }
 
         // Cross probing:2 - pin found, and send a locate pin command to pcbnew (hightlight net)
         SendMessageToPCBNEW( Pin, LibItem );
@@ -153,10 +154,11 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
         {
             Pin->DisplayInfo( this );
             if( LibItem )
-                Affiche_1_Parametre( this, 1,
-                                     LibItem->GetRef( GetSheet() ),
-                                     LibItem->GetField( VALUE )->m_Text,
-                                     CYAN );
+            {
+            MsgPanel->AppendMessage( LibItem->GetRef( GetSheet() ),
+                                 LibItem->GetField( VALUE )->m_Text,
+                                 DARKCYAN );
+            }
         }
         else
             MsgPanel->EraseMsgBox();
@@ -179,10 +181,11 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
     {
         Pin->DisplayInfo( this );
         if( LibItem )
-            Affiche_1_Parametre( this, 1,
-                                 LibItem->GetRef( GetSheet() ),
+        {
+            MsgPanel->AppendMessage( LibItem->GetRef( GetSheet() ),
                                  LibItem->GetField( VALUE )->m_Text,
-                                 CYAN );
+                                 DARKCYAN );
+        }
         if( IncludePin )
             return LibItem;
     }
