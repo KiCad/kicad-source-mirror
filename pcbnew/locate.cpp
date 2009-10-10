@@ -506,7 +506,7 @@ TRACK* Locate_Pistes( TRACK* start_adresse, const wxPoint& ref_pos, int MasqueLa
             continue;
         }
 
-        if( g_DesignSettings.m_LayerColor[layer] & ITEM_NOT_SHOW )
+        if( g_DesignSettings.IsLayerVisible( layer ) == false )
             continue;
 
         if( track->Type() == TYPE_VIA ) /* VIA rencontree */

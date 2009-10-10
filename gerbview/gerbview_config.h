@@ -338,7 +338,8 @@ static PARAM_CFG_SETCOLOR ColorpcbGrilleCfg
 (
     INSETUP,
     wxT("CoPcbGr"),             /* identification */
-    &g_DesignSettings.m_PcbGridColor, /* Adresse du parametre */
+//@@IMB: Wrong object    &g_DesignSettings.m_PcbGridColor, /* Adresse du parametre */
+    &g_GridColor,       //@@IMB: This is the real variable.
     DARKGRAY                /* Valeur par defaut */
 );
 

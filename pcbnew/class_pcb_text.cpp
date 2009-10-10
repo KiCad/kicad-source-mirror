@@ -196,10 +196,10 @@ void TEXTE_PCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
  * and the actual size is very important, especially for copper texts
  */
 {
-    int color = g_DesignSettings.m_LayerColor[m_Layer];
-
-    if( color & ITEM_NOT_SHOW )
+    if( g_DesignSettings.IsLayerVisible( m_Layer ) == false )
         return;
+
+    int color = g_DesignSettings.m_LayerColor[m_Layer];
 
     GRTraceMode fillmode = FILLED;
     if ( DisplayOpt.DisplayDrawItems == SKETCH)
@@ -210,7 +210,8 @@ void TEXTE_PCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         offset,
         (EDA_Colors) color,
         DrawMode, fillmode,
-        (g_AnchorColor & ITEM_NOT_SHOW) ? UNSPECIFIED_COLOR : (EDA_Colors) g_AnchorColor );
+        g_DesignSettings.IsElementVisible( ANCHOR_VISIBLE ) ?
+            (EDA_Colors) g_AnchorColor : UNSPECIFIED_COLOR );
 }
 
 

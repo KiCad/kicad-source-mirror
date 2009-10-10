@@ -78,9 +78,10 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
     }
     else
     {
-        color = g_DesignSettings.m_LayerColor[track->GetLayer()];
-        if( color & ITEM_NOT_SHOW )
+        if( g_DesignSettings.IsLayerVisible( track->GetLayer() ) == false )
             return;
+
+        color = g_DesignSettings.m_LayerColor[track->GetLayer()];
 
         if( draw_mode & GR_SURBRILL )
         {

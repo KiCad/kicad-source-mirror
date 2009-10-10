@@ -11,7 +11,7 @@
 #define MASKCOLOR           31           ///< mask for color index into ColorRefs[]
 
 /// bit indicateur d'affichage (vu / non vu) des items : (defini dans les valeurs des couleurs
-#define ITEM_NOT_SHOW       (1<<18)         // 0x40000
+//IMB: Not used anymore     #define ITEM_NOT_SHOW       (1<<18)         // 0x40000
 
 /// Definition du bit de surbrillance
 #define HIGHT_LIGHT_FLAG    (1<<19)         // 0x80000

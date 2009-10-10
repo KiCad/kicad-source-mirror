@@ -210,32 +210,47 @@ void WinEDA_SetColorsFrame::CreateControls()
             RowBoxSizer->Add(BUTT_SIZE_X, BUTT_SIZE_Y, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxBOTTOM, 5);
         }
 
+        //---------------------------------------------------------------
         // Note: When setting texts, we must call wxGetTranslation( ) for all statically created texts
         // if we want them translated
-        if( laytool_list[lyr]->m_LayerNumber >= 0 )
+        switch( laytool_list[lyr]->m_Type )
         {
-            if( laytool_list[lyr]->m_Title == wxT( "*" ) )
-                msg = wxGetTranslation( g_ViaType_Name[laytool_list[lyr]->m_LayerNumber]);
-            else
+            case type_layer:
                 msg = m_Parent->GetBoard()->GetLayerName( laytool_list[lyr]->m_LayerNumber );
-        }
-        else
-            msg = wxGetTranslation( laytool_list[lyr]->m_Title );
+                break;
 
+            case type_via:
+                msg = wxGetTranslation( g_ViaType_Name[laytool_list[lyr]->m_LayerNumber] );
+                break;
+
+            default:
+                msg = wxGetTranslation( laytool_list[lyr]->m_Title );
+                break;
+        }
+
+        //---------------------------------------------------------------
         CheckBox = new wxCheckBox( this, ID_COLOR_CHECKBOX_ONOFF, msg,
                                    wxDefaultPosition, wxDefaultSize, wxCHK_2STATE );
 
         laytool_list[lyr]->m_CheckBox = CheckBox;
 
-        if( laytool_list[lyr]->m_NoDisplayIsColor )
+        //---------------------------------------------------------------
+
+        switch( laytool_list[lyr]->m_Type )
         {
-            if( *laytool_list[lyr]->m_Color & ITEM_NOT_SHOW )
-                CheckBox->SetValue( FALSE );
-            else
-                CheckBox->SetValue( TRUE );
+            case type_layer:
+                CheckBox->SetValue( g_DesignSettings.IsLayerVisible( laytool_list[lyr]->m_LayerNumber ));
+                break;
+
+            case type_via:
+            case type_element:
+                CheckBox->SetValue( g_DesignSettings.IsElementVisible( laytool_list[lyr]->m_LayerNumber ));
+                break;
+
+            case type_visual:
+                CheckBox->SetValue( *laytool_list[lyr]->m_NoDisplay );
+                break;
         }
-        else if( laytool_list[lyr]->m_NoDisplay )
-            CheckBox->SetValue( *laytool_list[lyr]->m_NoDisplay );
 
         RowBoxSizer->Add(CheckBox, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5);
 
@@ -457,25 +472,30 @@ void WinEDA_SetColorsFrame::UpdateLayerSettings()
 {
     for( int lyr = 0; lyr < NB_BUTT; lyr++ )
     {
-        if( laytool_list[lyr]->m_NoDisplayIsColor )
+        if( laytool_list[lyr]->m_Color )
+            *laytool_list[lyr]->m_Color = CurrentColor[lyr];
+        switch( laytool_list[lyr]->m_Type )
         {
-            if( laytool_list[lyr]->m_CheckBox->GetValue() )
-                *laytool_list[lyr]->m_Color = CurrentColor[lyr] & ~ITEM_NOT_SHOW;
-            else
-                *laytool_list[lyr]->m_Color = CurrentColor[lyr] | ITEM_NOT_SHOW;
-        }
-        else
-        {
-            if( laytool_list[lyr]->m_Color )
-                *laytool_list[lyr]->m_Color = CurrentColor[lyr];
+            case type_layer:
+                g_DesignSettings.SetLayerVisibility( laytool_list[lyr]->m_LayerNumber,
+                    laytool_list[lyr]->m_CheckBox->GetValue() );
+                break;
 
-            *laytool_list[lyr]->m_NoDisplay = laytool_list[lyr]->m_CheckBox->GetValue();
+            case type_via:
+            case type_element:
+                g_DesignSettings.SetElementVisibility( laytool_list[lyr]->m_LayerNumber,
+                    laytool_list[lyr]->m_CheckBox->GetValue() );
+                break;
+
+            case type_visual:
+                *laytool_list[lyr]->m_NoDisplay = laytool_list[lyr]->m_CheckBox->GetValue();
+                break;
         }
     }
+
     // Additional command required for updating visibility of grid.
     m_Parent->m_Draw_Grid = s_showGrid;
 }
-
 
 /**********************************************************************/
 void WinEDA_SetColorsFrame::ResetDisplayLayersCu( wxCommandEvent& event )
@@ -487,11 +507,6 @@ void WinEDA_SetColorsFrame::ResetDisplayLayersCu( wxCommandEvent& event )
 
     for( int lyr = 0; lyr < 16; lyr++ )
     {
-//      if( laytool_list[lyr]->m_CheckBox )
-//          laytool_list[lyr]->m_CheckBox->SetValue( NewState );
-
-        // (As checkboxes are actually provided for *all* of these layers,
-        // the following (simpler) command can be used instead.)
         laytool_list[lyr]->m_CheckBox->SetValue( NewState );
     }
 }

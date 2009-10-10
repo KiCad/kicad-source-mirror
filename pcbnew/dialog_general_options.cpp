@@ -294,10 +294,8 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         DrawPanel->Refresh( );
         break;
     case ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE:
-            if(!m_OptionsToolBar->GetToolState( id ))
-            	g_ModuleTextNOVColor &= (~ITEM_NOT_SHOW);
-            else
-            	g_ModuleTextNOVColor |= ( ITEM_NOT_SHOW);
+            g_DesignSettings.SetElementVisibility( MODULE_TEXT_NOV_VISIBLE,
+                                m_OptionsToolBar->GetToolState( id ));
             DrawPanel->Refresh( );
             break;
 

@@ -271,12 +271,14 @@ void WinEDA_PcbFrame::SetToolbars()
                                            DisplayOpt.ContrastModeDisplay ?
                                            _( "Normal contrast mode display" ) :
                                            _( "High contrast mode display" ) );
+
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
-                                      g_ModuleTextNOVColor & ITEM_NOT_SHOW );
+                            g_DesignSettings.IsElementVisible( MODULE_TEXT_NOV_VISIBLE ) );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
-                                           g_ModuleTextNOVColor & (ITEM_NOT_SHOW) ?
-                                           _( "Show invisible text" ) :
-                                           _( "Hide invisible text" ) );
+                            g_DesignSettings.IsElementVisible( MODULE_TEXT_NOV_VISIBLE ) ?
+                                           _( "Hide invisible text" ) :
+                                           _( "Show invisible text" ) );
+
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
                                       m_AuxVToolBar ? true : false );
     }

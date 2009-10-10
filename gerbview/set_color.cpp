@@ -213,10 +213,10 @@ void WinEDA_SetColorsFrame::CreateControls()
 
         if( laytool_list[lyr]->m_NoDisplayIsColor )
         {
-            if( *laytool_list[lyr]->m_Color & ITEM_NOT_SHOW )
-                CheckBox->SetValue( FALSE );
-            else
+            if( g_DesignSettings.IsLayerVisible( lyr ))
                 CheckBox->SetValue( TRUE );
+            else
+                CheckBox->SetValue( FALSE );
         }
         else
             CheckBox->SetValue( *laytool_list[lyr]->m_NoDisplay );
@@ -427,25 +427,24 @@ void WinEDA_SetColorsFrame::SetColor(wxCommandEvent& event)
 void WinEDA_SetColorsFrame::UpdateLayerSettings()
 /******************************************************************/
 {
-    for( int lyr = 0; lyr < NB_BUTT; lyr++ )
+    for( int lyr = 0; lyr < NB_BUTT - 2; lyr++ )
     {
-        if( laytool_list[lyr]->m_NoDisplayIsColor )
-        {
-            if( laytool_list[lyr]->m_CheckBox->GetValue() )
-                *laytool_list[lyr]->m_Color = CurrentColor[lyr] & ~ITEM_NOT_SHOW;
-            else
-                *laytool_list[lyr]->m_Color = CurrentColor[lyr] | ITEM_NOT_SHOW;
-        }
-        else
-        {
-            // (As a bitmap button and a checkbox have been provided for *every*
-            // layer, it is not necessary to check whether each of those items
-            // actually has been provided for each of those layers.)
-            *laytool_list[lyr]->m_Color = CurrentColor[lyr];
-            *laytool_list[lyr]->m_NoDisplay = laytool_list[lyr]->m_CheckBox->GetValue();
-        }
+        g_DesignSettings.SetLayerVisibility( lyr, laytool_list[lyr]->m_CheckBox->GetValue() );
+        *laytool_list[lyr]->m_Color = CurrentColor[lyr];
     }
-   // Additional command required for updating visibility of grid.
+
+    // (As a bitmap button and a checkbox have been provided for *every*
+    // layer, it is not necessary to check whether each of those items
+    // actually has been provided for each of those layers.)
+
+
+    g_GridColor                 = CurrentColor[32];
+    s_showGrid                  = laytool_list[32]->m_CheckBox->GetValue();
+
+    g_DCodesColor               = CurrentColor[33];
+    DisplayOpt.DisplayPadNum    = laytool_list[33]->m_CheckBox->GetValue();
+    
+    // Additional command required for updating visibility of grid.
     m_Parent->m_Draw_Grid = s_showGrid;
 }
 

@@ -134,6 +134,23 @@ class RATSNEST_ITEM;
 /* Class to handle a board */
 #include "class_board.h"
 
+enum ELEMENTS_NUMBERS
+{
+    VIAS_VISIBLE                = 0,
+    VIA_NOT_DEFINED_VISIBLE     =  VIAS_VISIBLE,
+    VIA_MICROVIA_VISIBLE,
+    VIA_BLIND_BURIED_VISIBLE,
+    VIA_THROUGH_VISIBLE,
+    MODULE_TEXT_CMP_VISIBLE,
+    MODULE_TEXT_CU_VISIBLE,
+    MODULE_TEXT_NOV_VISIBLE,
+    ANCHOR_VISIBLE,
+    PAD_CU_VISIBLE,
+    PAD_CMP_VISIBLE
+};
+    
+    
+    
 // Class for handle current printed board design settings
 class EDA_BoardDesignSettings
 {
@@ -160,21 +177,28 @@ public:
     int    m_LayerThickness;                        // Layer Thickness for 3D viewer
 
     // Color options for screen display of the Printed Board:
-    int    m_PcbGridColor;                      // Grid color
+//@@IMB: Not used    int    m_PcbGridColor;                          // Grid color
 
-    int    m_LayerColor[32];                    // Layer colors (tracks and graphic items)
+	int    m_EnabledLayers;                         // IMB: Paving the road
+	int    m_VisibleLayers;                         // IMB: Bit-mask for layer visibility
+	int    m_VisibleElements;                       // IMB: Bit-mask for elements visibility
 
-    int    m_ViaColor[4];                       // Via color (depending on is type)
-    int    m_ModuleTextCMPColor;                // Text module color for modules on the COMPONENT layer
-    int    m_ModuleTextCUColor;                 // Text module color for modules on the COPPER layer
-    int    m_ModuleTextNOVColor;                // Text module color for "invisible" texts (must be BLACK if really not displayed)
-    int    m_AnchorColor;                       // Anchor color for modules and texts
+    int    m_LayerColor[32];                        // Layer colors (tracks and graphic items)
 
-    int    m_PadCUColor;                        // Pad color for the COPPER side of the pad
-    int    m_PadCMPColor;                       // Pad color for the COMPONENT side of the pad
+    int    m_ViaColor[4];                           // Via color (depending on is type)
+
+//@@IMB: Not used    int    m_ModuleTextCMPColor;                // Text module color for modules on the COMPONENT layer
+//@@IMB: Not used    int    m_ModuleTextCUColor;                 // Text module color for modules on the COPPER layer
+//@@IMB: Not used    int    m_ModuleTextNOVColor;                // Text module color for "invisible" texts (must be BLACK if really not displayed)
+//@@IMB: Not used    int    m_AnchorColor;                       // Anchor color for modules and texts
+
+//@@IMB: Not used    int    m_PadCUColor;                        // Pad color for the COPPER side of the pad
+//@@IMB: Not used    int    m_PadCMPColor;                       // Pad color for the COMPONENT side of the pad
+
     // Pad color for the pads of both sides is m_PadCUColor OR m_PadCMPColor (in terms of colors)
 
-    int    m_RatsnestColor;                     // Ratsnest color
+    int    m_RatsnestColor;                         // Ratsnest color
+
 
 public:
     EDA_BoardDesignSettings();
@@ -185,6 +209,36 @@ public:
      * @return int - the visible layers in bit-mapped form.
      */
     int GetVisibleLayers() const;
+
+    void SetVisibleLayers( int Mask );
+    
+    /**
+     * Function IsLayerVisible
+     * @param LayerNumber The number of the layer to be tested.
+     * @return bool - true if the layer is visible.
+     */
+    inline bool IsLayerVisible( int LayerNumber ) const
+    {
+        if( LayerNumber < 0 || LayerNumber >= 32 ) //@@IMB: Altough Pcbnew uses only 29, Gerbview uses all 32 layers
+            return false;
+        return (bool)( m_VisibleLayers & 1 << LayerNumber );
+    }
+
+    void SetLayerVisibility( int LayerNumber, bool State );
+
+    /**
+     * Function IsElementVisible
+     * @param ElementNumber The number of the element to be tested.
+     * @return bool - true if the elememt is visible.
+     */
+    inline bool IsElementVisible( int ElementNumber ) const
+    {
+        if( ElementNumber < 0 || ElementNumber > PAD_CMP_VISIBLE )
+            return false;
+        return (bool)( m_VisibleElements & 1 << ElementNumber );
+    }
+
+    void SetElementVisibility( int ElementNumber, bool State );
 };
 
 

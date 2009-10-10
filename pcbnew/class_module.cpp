@@ -67,7 +67,7 @@ void MODULE::DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset
 
     GRSetDrawMode( DC, draw_mode );
 
-    if( (g_AnchorColor & ITEM_NOT_SHOW) == 0 )
+    if( g_DesignSettings.IsElementVisible( ANCHOR_VISIBLE ))
     {
         GRLine( &panel->m_ClipBox, DC,
             m_Pos.x - offset.x - anchor_size, m_Pos.y - offset.y,

@@ -420,7 +420,7 @@ static bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
             if( doCheckNet && currTrack && currTrack->GetNet() != track->GetNet() )
                 continue;
 
-            if( g_DesignSettings.m_LayerColor[track->GetLayer()] & ITEM_NOT_SHOW )
+            if( g_DesignSettings.IsLayerVisible( track->GetLayer() ) == false )
                 continue;
 
             // omit the layer check if moving a via

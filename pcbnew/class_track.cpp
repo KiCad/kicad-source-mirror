@@ -579,7 +579,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     {
         color = g_DesignSettings.m_LayerColor[m_Layer];
 
-        if( ( color & (ITEM_NOT_SHOW | HIGHT_LIGHT_FLAG) ) == ITEM_NOT_SHOW )
+        if( g_DesignSettings.IsLayerVisible( m_Layer ) == false && ( color & HIGHT_LIGHT_FLAG ) != HIGHT_LIGHT_FLAG )
             return;
 
         if( DisplayOpt.ContrastModeDisplay )
@@ -743,7 +743,7 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
 
     color = g_DesignSettings.m_ViaColor[m_Shape];
 
-    if( ( color & (ITEM_NOT_SHOW | HIGHT_LIGHT_FLAG) ) == ITEM_NOT_SHOW )
+    if( g_DesignSettings.IsElementVisible( VIAS_VISIBLE + m_Shape ) == false && ( color & HIGHT_LIGHT_FLAG ) != HIGHT_LIGHT_FLAG )
         return;
 
     if( DisplayOpt.ContrastModeDisplay )

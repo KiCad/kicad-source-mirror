@@ -114,9 +114,10 @@ void MIREPCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     ox = m_Pos.x + offset.x;
     oy = m_Pos.y + offset.y;
 
-    gcolor = g_DesignSettings.m_LayerColor[m_Layer];
-    if( (gcolor & ITEM_NOT_SHOW) != 0 )
+    if( g_DesignSettings.IsLayerVisible( m_Layer ) == false )
         return;
+
+    gcolor = g_DesignSettings.m_LayerColor[m_Layer];
 
     GRSetDrawMode( DC, mode_color );
     typeaff = DisplayOpt.DisplayDrawItems;

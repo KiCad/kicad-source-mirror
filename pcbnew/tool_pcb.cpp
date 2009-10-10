@@ -388,7 +388,7 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
                                _( "Show Invisible Text" ),
                                wxITEM_CHECK );
     m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
-           		g_ModuleTextNOVColor & ITEM_NOT_SHOW );
+                g_DesignSettings.IsElementVisible( MODULE_TEXT_NOV_VISIBLE ));
 
 
 #ifdef MUWAVE_ENBL

@@ -85,112 +85,112 @@ static ColorButton Layer_1_Butt=
 {
     _("Layer 1"),       // Title
     ADR(0),             // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_2_Butt=
 {
     _("Layer 2"),       // Title
     ADR(1),             // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_3_Butt=
 {
     _("Layer 3"),       // Title
     ADR(2),             // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_4_Butt=
 {
     _("Layer 4"),       // Title
     ADR(3),             // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_5_Butt=
 {
     _("Layer 5"),       // Title
     ADR(4),             // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_6_Butt=
 {
     _("Layer 6"),       // Title
     ADR(5),             // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_7_Butt=
 {
     _("Layer 7"),       // Title
     ADR(6),             // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_8_Butt=
 {
     _("Layer 8"),       // Title
     ADR(7),             // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_9_Butt=
 {
     _("Layer 9"),       // Title
     ADR(8),             // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_10_Butt=
 {
     _("Layer 10"),      // Title
     ADR(9),             // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_11_Butt=
 {
     _("Layer 11"),      // Title
     ADR(10),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_12_Butt=
 {
     _("Layer 12"),      // Title
     ADR(11),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_13_Butt=
 {
     _("Layer 13"),      // Title
     ADR(12),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_14_Butt=
 {
     _("Layer 14"),      // Title
     ADR(13),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_15_Butt=
 {
     _("Layer 15"),      // Title
     ADR(14),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_16_Butt=
 {
     _("Layer 16"),      // Title
     ADR(15),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 
@@ -204,112 +204,112 @@ static ColorButton Layer_17_Butt=
 {
     _("Layer 17"),      // Title
     ADR(16),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_18_Butt=
 {
     _("Layer 18"),      // Title
     ADR(17),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_19_Butt=
 {
     _("Layer 19"),      // Title
     ADR(18),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_20_Butt=
 {
     _("Layer 20"),      // Title
     ADR(19),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_21_Butt=
 {
     _("Layer 21"),      // Title
     ADR(20),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_22_Butt=
 {
     _("Layer 22"),      // Title
     ADR(21),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_23_Butt=
 {
     _("Layer 23"),      // Title
     ADR(22),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_24_Butt=
 {
     _("Layer 24"),      // Title
     ADR(23),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_25_Butt=
 {
     _("Layer 25"),      // Title
     ADR(24),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_26_Butt=
 {
     _("Layer 26"),      // Title
     ADR(25),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_27_Butt=
 {
     _("Layer 27"),      // Title
     ADR(26),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_28_Butt=
 {
     _("Layer 28"),      // Title
     ADR(27),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_29_Butt=
 {
     _("Layer 29"),      // Title
     ADR(28),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_30_Butt=
 {
     _("Layer 30"),      // Title
     ADR(29),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_31_Butt=
 {
     _("Layer 31"),      // Title
     ADR(30),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 static ColorButton Layer_32_Butt=
 {
     _("Layer 32"),      // Title
     ADR(31),            // Address of optional parameter
-    TRUE                // Toggle ITEM_NOT_SHOW bit of the color variable
+    TRUE                // Toggle ITEM*NOT*SHOW bit of the color variable
 };
 
 

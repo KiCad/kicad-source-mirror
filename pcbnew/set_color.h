@@ -53,12 +53,22 @@ const int BUTT_SIZE_Y = 20;
 /**********************************/
 /* Liste des menus de Menu_Layers */
 /**********************************/
+
+enum button_types
+{
+    type_layer,
+    type_via,
+    type_element,
+    type_visual
+};
+    
+
 struct ColorButton
 {
+    int            m_Type;              ///
     const wxString m_Title;
     int            m_LayerNumber;
     int*           m_Color;             ///< pointer to color variable to manipulate
-    bool           m_NoDisplayIsColor;  ///< TRUE if bit ITEM_NOT_SHOW of the color variable should be manipulated
     bool*          m_NoDisplay;         ///< pointer to the on/off display control variable, if it is not the color variable
 
     int             m_Id;
@@ -82,130 +92,130 @@ static ButtonIndex Msg_Layers_Cu =
 
 static ColorButton Layer_1_Butt =
 {
+    type_layer,                  // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     COPPER_LAYER_N,             // Layer
-    ADR( COPPER_LAYER_N ),      // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( COPPER_LAYER_N )       // Address of optional parameter
 };
 
 static ColorButton Layer_2_Butt =
 {
+    type_layer,                  // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     1,                          // Layer
-    ADR( 1 ),                   // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( 1 )                    // Address of optional parameter
 };
 
 static ColorButton Layer_3_Butt =
 {
+    type_layer,                  // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     2,                          // Layer
-    ADR( 2 ),                   // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( 2 )                    // Address of optional parameter
 };
 
 static ColorButton Layer_4_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     3,                          // Layer
-    ADR( 3 ),                   // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( 3 )                    // Address of optional parameter
 };
 
 static ColorButton Layer_5_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     4,                          // Layer
-    ADR( 4 ),                   // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( 4 )                    // Address of optional parameter
 };
 
 static ColorButton Layer_6_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     5,                          // Layer
-    ADR( 5 ),                   // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( 5 )                    // Address of optional parameter
 };
 
 static ColorButton Layer_7_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     6,                          // Layer
-    ADR( 6 ),                   // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( 6 )                    // Address of optional parameter
 };
 
 static ColorButton Layer_8_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     7,                          // Layer
-    ADR( 7 ),                   // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( 7 )                    // Address of optional parameter
 };
 
 static ColorButton Layer_9_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     8,                          // Layer
-    ADR( 8 ),                   // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( 8 )                    // Address of optional parameter
 };
 
 static ColorButton Layer_10_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     9,                          // Layer
-    ADR( 9 ),                   // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( 9 )                    // Address of optional parameter
 };
 
 static ColorButton Layer_11_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     10,                         // Layer
-    ADR( 10 ),                  // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( 10 )                   // Address of optional parameter
 };
 
 static ColorButton Layer_12_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     11,                         // Layer
-    ADR( 11 ),                  // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( 11 )                   // Address of optional parameter
 };
 
 static ColorButton Layer_13_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     12,                         // Layer
-    ADR( 12 ),                  // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( 12 )                   // Address of optional parameter
 };
 
 static ColorButton Layer_14_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     13,                         // Layer
-    ADR( 13 ),                  // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( 13 )                   // Address of optional parameter
 };
 
 static ColorButton Layer_15_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     14,                         // Layer
-    ADR( 14 ),                  // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( 14 )                   // Address of optional parameter
 };
 
 static ColorButton Layer_16_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     CMP_N,                      // Layer
-    ADR( CMP_N ),               // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( CMP_N )                // Address of optional parameter
 };
 
 
@@ -217,106 +227,106 @@ static ButtonIndex Msg_Layers_Tech =
 
 static ColorButton Layer_17_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     ADHESIVE_N_CU,              // Layer
-    ADR( ADHESIVE_N_CU ),       // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( ADHESIVE_N_CU )        // Address of optional parameter
 };
 
 static ColorButton Layer_18_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     ADHESIVE_N_CMP,             // Layer
-    ADR( ADHESIVE_N_CMP ),      // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( ADHESIVE_N_CMP )       // Address of optional parameter
 };
 
 static ColorButton Layer_19_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     SOLDERPASTE_N_CU,           // Layer
-    ADR( SOLDERPASTE_N_CU ),    // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( SOLDERPASTE_N_CU )     // Address of optional parameter
 };
 
 static ColorButton Layer_20_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     SOLDERPASTE_N_CMP,          // Layer
     ADR( SOLDERPASTE_N_CMP ),   // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
 };
 
 static ColorButton Layer_21_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     SILKSCREEN_N_CU,            // Layer
-    ADR( SILKSCREEN_N_CU ),     // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( SILKSCREEN_N_CU )      // Address of optional parameter
 };
 
 static ColorButton Layer_22_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     SILKSCREEN_N_CMP,           // Layer
-    ADR( SILKSCREEN_N_CMP ),    // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( SILKSCREEN_N_CMP )     // Address of optional parameter
 };
 
 static ColorButton Layer_23_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     SOLDERMASK_N_CU,            // Layer
-    ADR( SOLDERMASK_N_CU ),     // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( SOLDERMASK_N_CU )      // Address of optional parameter
 };
 
 static ColorButton Layer_24_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     SOLDERMASK_N_CMP,           // Layer
-    ADR( SOLDERMASK_N_CMP ),    // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( SOLDERMASK_N_CMP )     // Address of optional parameter
 };
 
 static ColorButton Layer_25_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     DRAW_N,                     // Layer
-    ADR( DRAW_N ),              // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( DRAW_N )               // Address of optional parameter
 };
 
 static ColorButton Layer_26_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     COMMENT_N,                  // Layer
-    ADR( COMMENT_N ),           // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( COMMENT_N )            // Address of optional parameter
 };
 
 static ColorButton Layer_27_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     ECO1_N,                     // Layer
-    ADR( ECO1_N ),              // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( ECO1_N )               // Address of optional parameter
 };
 
 static ColorButton Layer_28_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     ECO2_N,                     // Layer
-    ADR( ECO2_N ),              // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( ECO2_N )               // Address of optional parameter
 };
 
 static ColorButton Layer_29_Butt =
 {
+    type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
     EDGE_N,                     // Layer
-    ADR( EDGE_N ),              // Address of optional parameter
-    TRUE                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ADR( EDGE_N )               // Address of optional parameter
 };
 
 
@@ -328,118 +338,118 @@ static ButtonIndex Msg_Others_Items =
 
 static ColorButton VIA_THROUGH_Butt =
 {
-    wxT( "*" ),
+    type_via,                                   // Toggle ITEM_NOT_SHOW bit of the color variable
+    wxEmptyString,
     VIA_THROUGH,                                // Layer
-    &g_DesignSettings.m_ViaColor[VIA_THROUGH],  // Address of optional parameter
-    TRUE                                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    &g_DesignSettings.m_ViaColor[VIA_THROUGH]   // Address of optional parameter
 };
 
 static ColorButton VIA_BLIND_BURIED_Butt =
 {
-    wxT( "*" ),
+    type_via,                                          // Toggle ITEM_NOT_SHOW bit of the color variable
+    wxEmptyString,
     VIA_BLIND_BURIED,                                  // Layer
-    &g_DesignSettings.m_ViaColor[VIA_BLIND_BURIED],    // Address of optional parameter
-    TRUE                                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    &g_DesignSettings.m_ViaColor[VIA_BLIND_BURIED]     // Address of optional parameter
 };
 
 static ColorButton MICRO_VIA_Butt =
 {
-    wxT( "*" ),
+    type_via,                                     // Toggle ITEM_NOT_SHOW bit of the color variable
+    wxEmptyString,
     VIA_MICROVIA,                                 // Layer
-    &g_DesignSettings.m_ViaColor[VIA_MICROVIA],   // Address of optional parameter
-    TRUE                                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    &g_DesignSettings.m_ViaColor[VIA_MICROVIA]    // Address of optional parameter
 };
 
 static ColorButton Ratsnest_Butt =
 {
+    type_visual,
     _( "Ratsnest" ),                            // Title
     -1,
     &g_DesignSettings.m_RatsnestColor,          // Address of optional parameter
-    FALSE,
     &g_Show_Ratsnest                            // Address of boolean display control parameter to toggle
 };
 
 static ColorButton Pad_Cu_Butt =
 {
+    type_element,                               // Toggle ITEM_NOT_SHOW bit of the color variable
     _( "Pad Cu" ),                              // Title
-    -1,
-    &g_PadCUColor,                              // Address of optional parameter
-    TRUE                                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    PAD_CU_VISIBLE,
+    &g_PadCUColor                               // Address of optional parameter
 };
 
 static ColorButton Pad_Cmp_Butt =
 {
+    type_element,                               // Toggle ITEM_NOT_SHOW bit of the color variable
     _( "Pad Cmp" ),                             // Title
-    -1,
-    &g_PadCMPColor,                             // Address of optional parameter
-    TRUE                                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    PAD_CMP_VISIBLE,
+    &g_PadCMPColor                              // Address of optional parameter
 };
 
 static ColorButton Text_Mod_Cu_Butt =
 {
+    type_element,                               // Toggle ITEM_NOT_SHOW bit of the color variable
     _( "Text Module Cu" ),                      // Title
-    -1,
-    &g_ModuleTextCUColor,                       // Address of optional parameter
-    TRUE                                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    MODULE_TEXT_CU_VISIBLE,
+    &g_ModuleTextCUColor                        // Address of optional parameter
 };
 
 static ColorButton Text_Mod_Cmp_Butt =
 {
+    type_element,                               // Toggle ITEM_NOT_SHOW bit of the color variable
     _( "Text Module Cmp" ),                     // Title
-    -1,
-    &g_ModuleTextCMPColor,                      // Address of optional parameter
-    TRUE                                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    MODULE_TEXT_CMP_VISIBLE,
+    &g_ModuleTextCMPColor                       // Address of optional parameter
 };
 
 static ColorButton Text_Mod_NoVisible_Butt =
 {
+    type_element,                               // Toggle ITEM_NOT_SHOW bit of the color variable
     _( "Text Module invisible" ),               // Title
-    -1,
-    &g_ModuleTextNOVColor,                      // Address of optional parameter
-    TRUE                                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    MODULE_TEXT_NOV_VISIBLE,
+    &g_ModuleTextNOVColor                       // Address of optional parameter
 };
 
 static ColorButton Anchors_Butt =
 {
+    type_element,                               // Toggle ITEM_NOT_SHOW bit of the color variable
     _( "Anchors" ),                             // Title
-    -1,
-    &g_AnchorColor,                             // Address of optional parameter
-    TRUE                                        // Toggle ITEM_NOT_SHOW bit of the color variable
+    ANCHOR_VISIBLE,
+    &g_AnchorColor                              // Address of optional parameter
 };
 
 static ColorButton Grid_Butt =
 {
+    type_visual,
     _( "Grid" ),                                // Title
     -1,
     &g_GridColor,                               // Address of optional parameter
-    FALSE,
     &s_showGrid                                 // Address of boolean display control parameter to toggle
 };
 
 static ColorButton Show_Pads_Noconnect_Butt =
 {
+    type_visual,
     _( "Show Noconnect" ),                      // Title
     -1,
     NULL,                                       // Address of optional parameter
-    FALSE,
     &DisplayOpt.DisplayPadNoConn                // Address of boolean display control parameter to toggle
 };
 
 static ColorButton Show_Modules_Cmp_Butt =
 {
+    type_visual,
     _( "Show Modules Cmp" ),                    // Title
     -1,
     NULL,                                       // Address of optional parameter
-    FALSE,
     &DisplayOpt.Show_Modules_Cmp                // Address of boolean display control parameter to toggle
 };
 
 static ColorButton Show_Modules_Cu_Butt =
 {
+    type_visual,
     _( "Show Modules Cu" ),                     // Title
     -1,
     NULL,                                       // Address of optional parameter
-    FALSE,
     &DisplayOpt.Show_Modules_Cu                 // Address of boolean display control parameter to toggle
 };
 

@@ -381,7 +381,7 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const
     GRSetDrawMode( DC, draw_mode );
 
     /* trace du centre du texte */
-    if( (g_AnchorColor & ITEM_NOT_SHOW) == 0 )
+    if( g_DesignSettings.IsElementVisible( ANCHOR_VISIBLE ))
     {
         int anchor_size = screen->Unscale( 2 );
         GRLine( &panel->m_ClipBox, DC,
@@ -392,22 +392,30 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const
                 pos.x, pos.y + anchor_size, 0, g_AnchorColor );
     }
 
+    //@@@@IMB: BIG BIG BUG Here???? May Module be NULL?
     color = g_DesignSettings.m_LayerColor[Module->GetLayer()];
 
+
+    //@@IMB: Why the next ifs are testing for Module?
     if( Module && Module->GetLayer() == COPPER_LAYER_N )
+    {
+        if( g_DesignSettings.IsElementVisible( MODULE_TEXT_CU_VISIBLE ) == false )
+            return;
         color = g_ModuleTextCUColor;
-
+    }
     else if( Module && Module->GetLayer() == CMP_N )
+    {
+        if( g_DesignSettings.IsElementVisible( MODULE_TEXT_CMP_VISIBLE ) == false )
+            return;
         color = g_ModuleTextCMPColor;
-
-    if( (color & ITEM_NOT_SHOW) != 0 )
-        return;
+    }
 
     if( m_NoShow )
+        {
+        if( g_DesignSettings.IsElementVisible( MODULE_TEXT_NOV_VISIBLE ) == false )
+            return;
         color = g_ModuleTextNOVColor;
-
-    if( (color & ITEM_NOT_SHOW) != 0 )
-        return;
+        }
 
     /* If the text is mirrored : negate size.x (mirror / Y axis) */
     if( m_Mirror )

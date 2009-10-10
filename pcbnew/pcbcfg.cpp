@@ -186,25 +186,29 @@ bool Read_Config( const wxString& projectFileName )
     /* User library path takes precedent over default library search paths. */
     wxGetApp().InsertLibraryPath( g_UserLibDirBuffer, 1 );
 
-    /* Reset the ITEM_NOT_SHOW flag when loading a new config
-    *  Because it could creates SERIOUS mistakes for the user,
+    /* Reset the ITEM*NOT*SHOW flag when loading a new config
+     *  Because it could creates SERIOUS mistakes for the user,
      * if some items are not visible after loading a board...
-    */
+     */
     for( ii = 0; ii < LAYER_COUNT; ii++ )
-        g_DesignSettings.m_LayerColor[ii] &= ~ ITEM_NOT_SHOW;
+        g_DesignSettings.SetLayerVisibility( ii, true );
+
     DisplayOpt.Show_Modules_Cmp = true;
     DisplayOpt.Show_Modules_Cu = true;
-    g_ModuleTextNOVColor &= ~ ITEM_NOT_SHOW;
-    g_ModuleTextCMPColor &= ~ ITEM_NOT_SHOW;
-    g_ModuleTextCUColor &= ~ ITEM_NOT_SHOW;
-    g_PadCMPColor &= ~ ITEM_NOT_SHOW;
-    g_PadCUColor &= ~ ITEM_NOT_SHOW;
-    g_DesignSettings.m_ViaColor[VIA_THROUGH] &= ~ ITEM_NOT_SHOW;
-    g_DesignSettings.m_ViaColor[VIA_BLIND_BURIED] &= ~ ITEM_NOT_SHOW;
-    g_DesignSettings.m_ViaColor[VIA_MICROVIA] &= ~ ITEM_NOT_SHOW;
+
     // These parameters could be left in their previous state, or resetted
     // Comment or uncomment to keep or reset this option after loading a board
-    g_AnchorColor &= ~ ITEM_NOT_SHOW;
+
+    g_DesignSettings.SetElementVisibility( MODULE_TEXT_NOV_VISIBLE, true );
+    g_DesignSettings.SetElementVisibility( MODULE_TEXT_CMP_VISIBLE, true );
+    g_DesignSettings.SetElementVisibility( MODULE_TEXT_CU_VISIBLE, true );
+    g_DesignSettings.SetElementVisibility( PAD_CMP_VISIBLE, true );
+    g_DesignSettings.SetElementVisibility( PAD_CU_VISIBLE, true );
+    g_DesignSettings.SetElementVisibility( VIA_THROUGH_VISIBLE, true );
+    g_DesignSettings.SetElementVisibility( VIA_BLIND_BURIED_VISIBLE, true );
+    g_DesignSettings.SetElementVisibility( VIA_MICROVIA_VISIBLE, true );
+    g_DesignSettings.SetElementVisibility( ANCHOR_VISIBLE, true );
+
     DisplayOpt.DisplayPadNoConn = true;
     return TRUE;
 }

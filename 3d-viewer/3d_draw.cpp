@@ -316,12 +316,14 @@ void Pcb3D_GLCanvas::Draw3D_Track( TRACK* track )
 {
     double zpos;
     int    layer = track->GetLayer();
-    int    color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
     double ox, oy, fx, fy;
     double w;
 
-    if( color & ITEM_NOT_SHOW )
+    if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
         return;
+
+    int    color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
+
     if( layer == LAST_COPPER_LAYER )
         layer = g_Parm_3D_Visu.m_Layers - 1;
     zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
@@ -363,11 +365,17 @@ void Pcb3D_GLCanvas::Draw3D_Via( SEGVIA* via )
     {
         zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
         if( layer < g_Parm_3D_Visu.m_Layers - 1 )
+        {
+            if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
+                continue;
             color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
+        }
         else
+        {
+            if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( CMP_N ) == false )
+                continue;
             color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[CMP_N];
-        if( color & ITEM_NOT_SHOW )
-            continue;
+        }
 
         SetGLColor( color );
 
@@ -394,13 +402,15 @@ void Pcb3D_GLCanvas::Draw3D_Via( SEGVIA* via )
 void Pcb3D_GLCanvas::Draw3D_DrawSegment( DRAWSEGMENT* segment )
 /*************************************************************/
 {
-    int    layer;
     double x, y, xf, yf;
     double zpos, w;
-    int    color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[segment->GetLayer()];
 
-    if( color & ITEM_NOT_SHOW )
+    int    layer = segment->GetLayer();
+    
+    if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
         return;
+
+    int    color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
 
     SetGLColor( color );
     w  = segment->m_Width * g_Parm_3D_Visu.m_BoardScale;
@@ -409,7 +419,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawSegment( DRAWSEGMENT* segment )
     xf = segment->m_End.x * g_Parm_3D_Visu.m_BoardScale;
     yf = segment->m_End.y * g_Parm_3D_Visu.m_BoardScale;
 
-    if( segment->GetLayer() == EDGE_N )
+    if( layer == EDGE_N )
     {
         for( layer = 0; layer < g_Parm_3D_Visu.m_Layers; layer++ )
         {
@@ -434,7 +444,6 @@ void Pcb3D_GLCanvas::Draw3D_DrawSegment( DRAWSEGMENT* segment )
     }
     else
     {
-        layer = segment->GetLayer();
         glNormal3f( 0.0, 0.0, Get3DLayerSide( layer ) );
         zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
         if( Get3DLayerEnable( layer ) )
@@ -623,10 +632,12 @@ void EDGE_MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
     wxString s;
     int      dx, dy;
     double   scale, x, y, fx, fy, w, zpos;
+
+    if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( m_Layer ) == false )
+        return;
+
     int      color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[m_Layer];
 
-    if( color & ITEM_NOT_SHOW )
-        return;
 
     SetGLColor( color );
     glNormal3f( 0.0, 0.0, (m_Layer == COPPER_LAYER_N) ? -1.0 : 1.0 );
@@ -737,7 +748,7 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
             if( (layer > FIRST_COPPER_LAYER) && (layer < LAST_COPPER_LAYER) && !Both )
                 continue;
             color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
-            if( color & ITEM_NOT_SHOW )
+            if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
                 continue;
 
             SetGLColor( color );
@@ -787,7 +798,7 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
                     continue;
                 color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
                 glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0 );
-                if( color & ITEM_NOT_SHOW )
+                if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
                     continue;
 
                 SetGLColor( color );
@@ -862,7 +873,7 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
                 continue;
             color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
             glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0 );
-            if( color & ITEM_NOT_SHOW )
+            if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
                 continue;
 
             SetGLColor( color );

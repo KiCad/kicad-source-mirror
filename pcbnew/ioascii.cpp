@@ -189,6 +189,42 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( FILE* File, int* LineNum )
         if( strnicmp( data, "$EndGENERAL", 10 ) == 0 )
             break;
 
+        if( stricmp( data, "EnabledLayers" ) == 0 )
+        {
+            int EnabledLayers = 0;
+            data = strtok( NULL, " =\n\r" );
+            sscanf( data, "%X", &EnabledLayers );
+
+            // Setup layer visibility
+            GetBoard()->m_BoardSettings->m_EnabledLayers    = EnabledLayers;
+
+            continue;
+        }
+
+        if( stricmp( data, "VisibleLayers" ) == 0 )
+        {
+            int VisibleLayers = 0;
+            data = strtok( NULL, " =\n\r" );
+            sscanf( data, "%X", &VisibleLayers );
+
+            // Setup layer visibility
+            GetBoard()->m_BoardSettings->m_VisibleLayers    = VisibleLayers;
+
+            continue;
+        }
+
+        if( stricmp( data, "VisibleElements" ) == 0 )
+        {
+            int VisibleElements = 0;
+            data = strtok( NULL, " =\n\r" );
+            sscanf( data, "%X", &VisibleElements );
+
+            // Setup elements visibility
+            GetBoard()->m_BoardSettings->m_VisibleElements    = VisibleElements;
+
+            continue;
+        }
+
         if( strncmp( data, "Ly", 2 ) == 0 )    // Old format for Layer count
         {
             int Masque_Layer = 1, ii;
@@ -629,6 +665,9 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
 
     // Write old format for Layer count (for compatibility with old versions of pcbnew
     fprintf( File, "Ly %8X\n", g_TabAllCopperLayerMask[NbLayers - 1] | ALL_NO_CU_LAYERS ); // For compatibility with old version of pcbnew
+    fprintf( File, "EnabledLayers %08X\n", GetBoard()->m_BoardSettings->m_EnabledLayers );
+    fprintf( File, "VisibleLayers %08X\n", GetBoard()->m_BoardSettings->m_VisibleLayers );
+    fprintf( File, "VisibleElements %08X\n", GetBoard()->m_BoardSettings->m_VisibleElements );
     fprintf( File, "Links %d\n", GetBoard()->GetRatsnestsCount() );
     fprintf( File, "NoConn %d\n", GetBoard()->m_NbNoconnect );
 

@@ -102,9 +102,10 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     if( m_Parent && (m_Parent->Type() == TYPE_MODULE) )
         Module = (MODULE*) m_Parent;
 
-    color = g_DesignSettings.m_LayerColor[m_Layer];
-    if( (color & ITEM_NOT_SHOW) != 0 )
+    if( g_DesignSettings.IsLayerVisible( m_Layer ) == false )
         return;
+
+    color = g_DesignSettings.m_LayerColor[m_Layer];
 
     frame = (WinEDA_BasePcbFrame*) panel->m_Parent;
 

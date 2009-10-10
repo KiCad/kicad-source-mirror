@@ -290,9 +290,9 @@ GENERAL_COLLECTORS_GUIDE WinEDA_BasePcbFrame::GetCollectorsGuide()
                                     ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
 
     // account for the globals
-    guide.SetIgnoreMTextsMarkedNoShow( g_ModuleTextNOVColor & ITEM_NOT_SHOW );
-    guide.SetIgnoreMTextsOnCopper( g_ModuleTextCUColor & ITEM_NOT_SHOW );
-    guide.SetIgnoreMTextsOnCmp( g_ModuleTextCMPColor & ITEM_NOT_SHOW );
+    guide.SetIgnoreMTextsMarkedNoShow( ! g_DesignSettings.IsElementVisible( MODULE_TEXT_NOV_VISIBLE ));
+    guide.SetIgnoreMTextsOnCopper( ! g_DesignSettings.IsElementVisible( MODULE_TEXT_CU_VISIBLE ));
+    guide.SetIgnoreMTextsOnCmp( ! g_DesignSettings.IsElementVisible( MODULE_TEXT_CMP_VISIBLE ));
     guide.SetIgnoreModulesOnCu( !DisplayOpt.Show_Modules_Cu );
     guide.SetIgnoreModulesOnCmp( !DisplayOpt.Show_Modules_Cmp );
 

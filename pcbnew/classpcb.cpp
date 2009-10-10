@@ -137,32 +137,32 @@ bool PCB_SCREEN::IsMicroViaAcceptable( void )
 
 DISPLAY_OPTIONS::DISPLAY_OPTIONS()
 {
-    DisplayPadFill   = FILLED;
-    DisplayViaFill   = FILLED;
-    DisplayPadNum    = true;
-    DisplayPadNoConn = true;
-    DisplayPadIsol   = true;
+    DisplayPadFill          = FILLED;
+    DisplayViaFill          = FILLED;
+    DisplayPadNum           = true;
+    DisplayPadNoConn        = true;
+    DisplayPadIsol          = true;
 
-    DisplayModEdge = true;
-    DisplayModText = true;
-    DisplayPcbTrackFill    = true; /* false = sketch , true = filled */
-    ShowTrackClearanceMode = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
-    m_DisplayViaMode = VIA_HOLE_NOT_SHOW;
+    DisplayModEdge          = true;
+    DisplayModText          = true;
+    DisplayPcbTrackFill     = true;  /* false = sketch , true = filled */
+    ShowTrackClearanceMode  = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
+    m_DisplayViaMode        = VIA_HOLE_NOT_SHOW;
 
-    DisplayPolarCood    = false; /* false = display absolute coordinates,
-                                  * true = display polar cordinates */
-    DisplayZonesMode    = 0;    /* 0 = Show filled areas outlines in zones,
-                                 * 1 = do not show filled areas outlines
-                                 * 2 = show outlines of filled areas */
-    DisplayNetNamesMode = 3;   /* 0 do not show netnames,
-                                * 1 show netnames on pads
-                                * 2 show netnames on tracks
-                                * 3 show netnames on tracks and pads */
-    Show_Modules_Cmp    = true;
-    Show_Modules_Cu     = true;
+    DisplayPolarCood        = false; /* false = display absolute coordinates,
+                                      * true = display polar cordinates */
+    DisplayZonesMode        = 0;     /* 0 = Show filled areas outlines in zones,
+                                      * 1 = do not show filled areas outlines
+                                      * 2 = show outlines of filled areas */
+    DisplayNetNamesMode     = 3;     /* 0 do not show netnames,
+                                      * 1 show netnames on pads
+                                      * 2 show netnames on tracks
+                                      * 3 show netnames on tracks and pads */
+    Show_Modules_Cmp        = true;
+    Show_Modules_Cu         = true;
 
-    DisplayDrawItems    = true;
-    ContrastModeDisplay = false;
+    DisplayDrawItems        = true;
+    ContrastModeDisplay     = false;
 }
 
 
@@ -213,23 +213,30 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     m_MicroViasMinSize = 200;                       // micro vias (not vias) min diameter
     m_MaskMargin = 150;                             // Solder mask margin
     /* Color options for screen display of the Printed Board: */
-    m_PcbGridColor = DARKGRAY;                      // Grid color
+
+
+//@@IMB: Not used    m_PcbGridColor = DARKGRAY;                      // Grid color
+
+    m_EnabledLayers     = 0x1fffffff;               // IMB: All layers enabled at first. TODO: Use a macro for the initial value.
+    m_VisibleLayers     = 0xffffffff;               // IMB: All layers visible at first. TODO: Use a macro for the initial value.
+    m_VisibleElements   = 0x00000fff;               // IMB: All elements visible at first. TODO: Use a macro for the initial value.
 
     for( ii = 0; ii < 32; ii++ )
         m_LayerColor[ii] = default_layer_color[ii];
 
     // Layer colors (tracks and graphic items)
-    m_ViaColor[VIA_NOT_DEFINED]  = DARKGRAY;
-    m_ViaColor[VIA_MICROVIA]     = CYAN;
-    m_ViaColor[VIA_BLIND_BURIED] = BROWN;
-    m_ViaColor[VIA_THROUGH] = WHITE;
+    m_ViaColor[VIA_NOT_DEFINED]     = DARKGRAY;
+    m_ViaColor[VIA_MICROVIA]        = CYAN;
+    m_ViaColor[VIA_BLIND_BURIED]    = BROWN;
+    m_ViaColor[VIA_THROUGH]         = WHITE;
 
-    m_ModuleTextCMPColor = LIGHTGRAY;       // Text module color for modules on the COMPONENT layer
-    m_ModuleTextCUColor  = MAGENTA;         // Text module color for modules on the COPPER layer
-    m_ModuleTextNOVColor = DARKGRAY;        // Text module color for "invisible" texts (must be BLACK if really not displayed)
-    m_AnchorColor   = BLUE;                 // Anchor color for modules and texts
-    m_PadCUColor    = GREEN;                // Pad color for the COMPONENT side of the pad
-    m_PadCMPColor   = RED;                  // Pad color for the COPPER side of the pad
+//@@IMB: Not used    m_ModuleTextCMPColor = LIGHTGRAY;       // Text module color for modules on the COMPONENT layer
+//@@IMB: Not used    m_ModuleTextCUColor  = MAGENTA;         // Text module color for modules on the COPPER layer
+//@@IMB: Not used    m_ModuleTextNOVColor = DARKGRAY;        // Text module color for "invisible" texts (must be BLACK if really not displayed)
+//@@IMB: Not used    m_AnchorColor   = BLUE;                 // Anchor color for modules and texts
+//@@IMB: Not used    m_PadCUColor    = GREEN;                // Pad color for the COMPONENT side of the pad
+//@@IMB: Not used    m_PadCMPColor   = RED;                  // Pad color for the COPPER side of the pad
+
     m_RatsnestColor = WHITE;                // Ratsnest color
 }
 
@@ -237,13 +244,48 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
 // see pcbstruct.h
 int EDA_BoardDesignSettings::GetVisibleLayers() const
 {
-    int layerMask = 0;
+    return m_VisibleLayers;
+}
 
-    for( int i = 0, mask = 1;  i< 32;   ++i, mask <<= 1 )
-    {
-        if( !( m_LayerColor[i] & ITEM_NOT_SHOW ) )
-            layerMask |= mask;
-    }
+void EDA_BoardDesignSettings::SetVisibleLayers( int Mask )
+{
+    m_VisibleLayers = Mask & 0x1fffffff;
+}
 
-    return layerMask;
+/* //@@IMB: Made inline
+bool EDA_BoardDesignSettings::IsLayerVisible( int LayerNumber ) const
+{
+    if( LayerNumber < 0 || LayerNumber >= 32 ) //@@IMB: Altough Pcbnew uses only 29, Gerbview uses all 32 layers
+        return false;
+    return (bool)( m_VisibleLayers & 1 << LayerNumber );
+}
+*/
+
+void EDA_BoardDesignSettings::SetLayerVisibility( int LayerNumber, bool State )
+{
+    if( LayerNumber < 0 || LayerNumber >= 32 ) //@@IMB: Altough Pcbnew uses only 29, Gerbview uses all 32 layers
+        return;
+    if( State )
+        m_VisibleLayers |= 1 << LayerNumber;
+    else
+        m_VisibleLayers &= ~( 1 << LayerNumber );
+}
+
+/* //@@IMB: Made inline
+bool EDA_BoardDesignSettings::IsElementVisible( int ElementNumber ) const
+{
+    if( ElementNumber < 0 || ElementNumber > PAD_CMP_VISIBLE )
+        return false;
+    return (bool)( m_VisibleElements & 1 << ElementNumber );
+}
+*/
+
+void EDA_BoardDesignSettings::SetElementVisibility( int ElementNumber, bool State )
+{
+    if( ElementNumber < 0 || ElementNumber > PAD_CMP_VISIBLE )
+        return;
+    if( State )
+        m_VisibleElements |= 1 << ElementNumber;
+    else
+        m_VisibleElements &= ~( 1 << ElementNumber );
 }
