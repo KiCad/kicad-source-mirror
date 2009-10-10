@@ -73,7 +73,8 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
 
     l1 = Route_Layer_TOP; l2 = Route_Layer_BOTTOM;
 
-    pt_track = Marque_Une_Piste( this, DC, pt_segm, &nb_segm, GR_XOR );
+    pt_track = Marque_Une_Piste( GetBoard(), pt_segm, &nb_segm, NULL, true );
+    Trace_Une_Piste( DrawPanel, DC, pt_track, nb_segm, GR_XOR );
 
     /* effacement du flag BUSY et sauvegarde en membre .param de la couche
      *  initiale */

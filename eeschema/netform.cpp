@@ -796,7 +796,7 @@ static void FindAllsInstancesOfComponent( SCH_COMPONENT* Component_in,
             for( pin = Entry->GetNextPin(); pin != NULL;
                  pin = Entry->GetNextPin( pin ) )
             {
-                wxASSERT( pin->Type() != COMPONENT_PIN_DRAW_TYPE );
+                wxASSERT( pin->Type() == COMPONENT_PIN_DRAW_TYPE );
 
                 if( pin->m_Unit
                     && ( pin->m_Unit != Component2->GetUnitSelection( sheet ) ) )

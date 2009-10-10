@@ -5,6 +5,7 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
+#include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
 
@@ -31,13 +32,12 @@
 void WinEDA_LibeditFrame::OnEditComponentProperties( wxCommandEvent& event )
 {
     EditComponentProperties();
+    DrawPanel->Refresh();
 }
 
 
 void WinEDA_LibeditFrame::EditComponentProperties()
 {
-    wxASSERT( m_component != NULL && m_library != NULL );
-
     DIALOG_EDIT_COMPONENT_IN_LIBRARY dlg( this );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -120,15 +120,21 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
     /* Update the doc, keyword and doc filename strings */
     size_t i;
     int index;
-    CMP_LIB_ENTRY* entry;
+    CMP_LIB_ENTRY* entry = NULL;
     LIB_COMPONENT* component = m_Parent->GetComponent();
+    if( component == NULL )
+    {
+        EndModal( wxID_CANCEL );
+        return;
+    }
+
     CMP_LIBRARY* library = m_Parent->GetLibrary();
 
     if( m_Parent->GetAliasName().IsEmpty() )
     {
         entry = (CMP_LIB_ENTRY*) component;
     }
-    else
+    else if ( library )
     {
         entry = library->FindEntry( m_Parent->GetAliasName() );
     }
@@ -213,21 +219,26 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
     component->m_DrawPinNum  = m_ShowPinNumButt->GetValue() ? 1 : 0;
     component->m_DrawPinName = m_ShowPinNameButt->GetValue() ? 1 : 0;
 
-    if( m_PinsNameInsideButt->GetValue() == FALSE )
-        component->m_TextInside = 0;
+    if( m_PinsNameInsideButt->GetValue() == false )
+        component->m_TextInside = 0;        // pin text outside the body (name is on the pin)
     else
+    {
         component->m_TextInside = m_SetSkew->GetValue();
+        // Ensure component->m_TextInside != 0, because the meaning is "text outside".
+        if( component->m_TextInside == 0 )
+            component->m_TextInside = 20;       // give a reasonnable value
+    }
 
-    if( m_OptionPower->GetValue() == TRUE )
+    if( m_OptionPower->GetValue() == true )
         component->m_Options = ENTRY_POWER;
     else
         component->m_Options = ENTRY_NORMAL;
 
     /* Set the option "Units locked".
-     *  Obviously, cannot be TRUE if there is only one part */
+     *  Obviously, cannot be true if there is only one part */
     component->m_UnitSelectionLocked = m_OptionPartsLocked->GetValue();
     if( component->GetPartCount() <= 1 )
-        component->m_UnitSelectionLocked = FALSE;
+        component->m_UnitSelectionLocked = false;
 
     /* Update the footprint filter list */
     component->m_FootprintList.Clear();
@@ -273,8 +284,8 @@ edited!" ),
     if( IsOK( this, _( "Remove all aliases from list?" ) ) )
     {
         m_PartAliasList->Clear();
-        m_ButtonDeleteAllAlias->Enable( FALSE );
-        m_ButtonDeleteOneAlias->Enable( FALSE );
+        m_ButtonDeleteAllAlias->Enable( false );
+        m_ButtonDeleteOneAlias->Enable( false );
     }
 }
 
@@ -316,8 +327,8 @@ library <%s>." ),
 
     m_PartAliasList->Append( aliasname );
     if( m_Parent->GetAliasName().IsEmpty() )
-        m_ButtonDeleteAllAlias->Enable( TRUE );
-    m_ButtonDeleteOneAlias->Enable( TRUE );
+        m_ButtonDeleteAllAlias->Enable( true );
+    m_ButtonDeleteOneAlias->Enable( true );
 }
 
 
@@ -342,8 +353,8 @@ edited!" ),
 
     if( m_PartAliasList->IsEmpty() )
     {
-        m_ButtonDeleteAllAlias->Enable( FALSE );
-        m_ButtonDeleteOneAlias->Enable( FALSE );
+        m_ButtonDeleteAllAlias->Enable( false );
+        m_ButtonDeleteOneAlias->Enable( false );
     }
 }
 
@@ -379,20 +390,20 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
         || ( m_Parent->GetShowDeMorgan() == component->HasConversion() ) )
         return false;
 
-    if( m_Parent->GetShowDeMorgan()
-        && !IsOK( this, _( "Add new pins for alternate body style \
-( DeMorgan ) to component?" ) ) )
+    if( m_Parent->GetShowDeMorgan() )
     {
-        m_Parent->SetShowDeMorgan( false );
+       if( !IsOK( this, _( "Add new pins for alternate body style \
+( DeMorgan ) to component?" ) ) )
         return false;
     }
 
-    if( !m_Parent->GetShowDeMorgan()
-        && !IsOK( this, _( "Delete alternate body style (DeMorgan) draw \
-items from component?" ) ) )
+    else if(  component->HasConversion() )
     {
-        m_Parent->SetShowDeMorgan( true );
-        return false;
+        if( !IsOK( this, _( "Delete alternate body style (DeMorgan) draw items from component?" ) ) )
+        {
+            m_Parent->SetShowDeMorgan( true );
+            return false;
+        }
     }
 
     component->SetConversion( m_Parent->GetShowDeMorgan() );
@@ -419,7 +430,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::BrowseAndSelectDocFile( wxCommandEvent& e
                                      mask,          /* Masque d'affichage */
                                      this,
                                      wxFD_OPEN,
-                                     TRUE
+                                     true
                                      );
     if( FullFileName.IsEmpty() )
         return;
@@ -446,8 +457,8 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllFootprintFilter(
     if( IsOK( this, _( "Ok to Delete FootprintFilter LIST" ) ) )
     {
         m_FootprintFilterListBox->Clear();
-        m_ButtonDeleteAllFootprintFilter->Enable( FALSE );
-        m_ButtonDeleteOneFootprintFilter->Enable( FALSE );
+        m_ButtonDeleteAllFootprintFilter->Enable( false );
+        m_ButtonDeleteOneFootprintFilter->Enable( false );
     }
 }
 
@@ -486,8 +497,8 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& WXUNU
     }
 
     m_FootprintFilterListBox->Append( Line );
-    m_ButtonDeleteAllFootprintFilter->Enable( TRUE );
-    m_ButtonDeleteOneFootprintFilter->Enable( TRUE );
+    m_ButtonDeleteAllFootprintFilter->Enable( true );
+    m_ButtonDeleteOneFootprintFilter->Enable( true );
 }
 
 
@@ -503,7 +514,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteOneFootprintFilter(
 
     if( !component || (m_FootprintFilterListBox->GetCount() == 0) )
     {
-        m_ButtonDeleteAllFootprintFilter->Enable( FALSE );
-        m_ButtonDeleteOneFootprintFilter->Enable( FALSE );
+        m_ButtonDeleteAllFootprintFilter->Enable( false );
+        m_ButtonDeleteOneFootprintFilter->Enable( false );
     }
 }

@@ -59,7 +59,7 @@ public:
     bool        m_TrackAndViasSizesList_Changed;
 
 private:
- 
+
     DRC*             m_drc;         ///< the DRC controller, see drc.cpp
 
     // we'll use lower case function names for private member functions.
@@ -457,9 +457,10 @@ public:
      *  Basic routine used by other routines when editing tracks or vias
      * @param aTrackItem = the track segment or via to modify
      * @param aItemsListPicker = the list picker to use for an undo command (can be NULL)
+     * @param aUseNetclassValue = true to use NetClass value, false to use g_DesignSettings value
      * @return  true if done, false if no not change (because DRC error)
      */
-    bool             SetTrackSegmentWidth( TRACK* aTrackItem, PICKED_ITEMS_LIST* aItemsListPicker );
+    bool             SetTrackSegmentWidth( TRACK* aTrackItem, PICKED_ITEMS_LIST* aItemsListPicker, bool aUseNetclassValue );
 
 
     // zone handling

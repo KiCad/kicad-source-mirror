@@ -506,7 +506,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         track_mnu = new wxMenu;
         ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
                                    ID_POPUP_PCB_EDIT_TRACK_MNU, _(
-                                       "Change Width" ), width_track_xpm );
+                                       "Change Tracks and Vias Sizes" ), width_track_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACKSEG,
                       Track->Type()==TYPE_VIA ? _( "Change Via Size" ) : _(
                           "Change Segment Width" ), width_segment_xpm );
@@ -514,13 +514,13 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACK,
                       _( "Change Track Width" ), width_track_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_NET,
-                      _( "Change Net" ), width_net_xpm );
+                      _( "Set Net to NetClass values" ), width_net_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE,
-                      _( "Change ALL Tracks and Vias" ), width_track_via_xpm );
+                      _( "Set ALL Tracks and Vias to NetClass Values" ), width_track_via_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_ALL_VIAS_SIZE,
-                      _( "Change ALL Vias (No Track)" ), width_vias_xpm );
+                      _( "Set ALL Vias (No Track)to NetClass Values" ), width_vias_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_ALL_TRACK_SIZE,
-                      _( "Change ALL Tracks (No Via)" ), width_track_xpm );
+                      _( "Set ALL Tracks (No Via)to NetClass Values" ), width_track_xpm );
     }
 
     // Delete control:

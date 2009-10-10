@@ -101,7 +101,8 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
     case BLOCK_DRAG:        /* Drag */
     case BLOCK_MOVE:        /* Move */
     case BLOCK_COPY:        /* Copy */
-        ItemCount = m_component->SelectItems( GetScreen()->m_BlockLocate,
+        if ( m_component )
+            ItemCount = m_component->SelectItems( GetScreen()->m_BlockLocate,
                                               m_unit, m_convert,
                                               g_EditPinByPinIsOn );
         if( ItemCount )
@@ -125,12 +126,14 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
         break;
 
     case BLOCK_DELETE:     /* Delete */
-        ItemCount = m_component->SelectItems( GetScreen()->m_BlockLocate,
+        if ( m_component )
+            ItemCount = m_component->SelectItems( GetScreen()->m_BlockLocate,
                                               m_unit, m_convert,
                                               g_EditPinByPinIsOn );
         if( ItemCount )
             SaveCopyInUndoList( m_component );
-        m_component->DeleteSelectedItems();
+        if ( m_component )
+            m_component->DeleteSelectedItems();
         break;
 
     case BLOCK_SAVE:     /* Save */
@@ -142,14 +145,16 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
 
 
     case BLOCK_MIRROR_Y:
-        ItemCount = m_component->SelectItems( GetScreen()->m_BlockLocate,
+        if ( m_component )
+            ItemCount = m_component->SelectItems( GetScreen()->m_BlockLocate,
                                               m_unit, m_convert,
                                               g_EditPinByPinIsOn );
         if( ItemCount )
             SaveCopyInUndoList( m_component );
         pt = GetScreen()->m_BlockLocate.Centre();
         pt.y *= -1;
-        m_component->MirrorSelectedItemsH( pt );
+        if ( m_component )
+            m_component->MirrorSelectedItemsH( pt );
         break;
 
     case BLOCK_ZOOM:     /* Window Zoom */
@@ -166,7 +171,8 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
     if( MustDoPlace <= 0 )
     {
         if( GetScreen()->m_BlockLocate.m_Command  != BLOCK_SELECT_ITEMS_ONLY )
-            m_component->ClearSelectedItems();
+            if ( m_component )
+                m_component->ClearSelectedItems();
 
         GetScreen()->m_BlockLocate.m_Flags   = 0;
         GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
@@ -213,19 +219,23 @@ void WinEDA_LibeditFrame::HandleBlockPlace( wxDC* DC )
     case BLOCK_MOVE:                /* Move */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         GetScreen()->m_BlockLocate.ClearItemsList();
-        SaveCopyInUndoList( m_component );
+        if ( m_component )
+            SaveCopyInUndoList( m_component );
         pt = GetScreen()->m_BlockLocate.m_MoveVector;
         pt.y *= -1;
-        m_component->MoveSelectedItems( pt );
+        if ( m_component )
+            m_component->MoveSelectedItems( pt );
         DrawPanel->Refresh( TRUE );
         break;
 
     case BLOCK_COPY:     /* Copy */
         GetScreen()->m_BlockLocate.ClearItemsList();
-        SaveCopyInUndoList( m_component );
+        if ( m_component )
+            SaveCopyInUndoList( m_component );
         pt = GetScreen()->m_BlockLocate.m_MoveVector;
         pt.y *= -1;
-        m_component->CopySelectedItems( pt );
+        if ( m_component )
+            m_component->CopySelectedItems( pt );
         break;
 
     case BLOCK_PASTE:     /* Paste (recopie du dernier bloc sauve */
@@ -233,10 +243,12 @@ void WinEDA_LibeditFrame::HandleBlockPlace( wxDC* DC )
         break;
 
     case BLOCK_MIRROR_Y:      /* Invert by popup menu, from block move */
-        SaveCopyInUndoList( m_component );
+        if ( m_component )
+            SaveCopyInUndoList( m_component );
         pt = GetScreen()->m_BlockLocate.Centre();
         pt.y *= -1;
-        m_component->MirrorSelectedItemsH( pt );
+        if ( m_component )
+            m_component->MirrorSelectedItemsH( pt );
         break;
 
     case BLOCK_ZOOM:        // Handled by HandleBlockEnd

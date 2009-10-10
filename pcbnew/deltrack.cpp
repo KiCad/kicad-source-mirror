@@ -192,7 +192,7 @@ void WinEDA_PcbFrame::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
     if( pt_segm == NULL )
         return;
 
-    TRACK*  trackList = Marque_Une_Piste( this, DC, pt_segm, &segments_to_delete_count, 0 );
+    TRACK*  trackList = Marque_Une_Piste( GetBoard(), pt_segm, &segments_to_delete_count, NULL, true );
     if( segments_to_delete_count == 0 )
         return;
 

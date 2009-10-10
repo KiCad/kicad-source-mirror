@@ -73,7 +73,7 @@ DIALOG_TRACKS_OPTIONS_BASE::DIALOG_TRACKS_OPTIONS_BASE( wxWindow* parent, wxWind
 	wxStaticBoxSizer* sbMiddleLeftSizer;
 	sbMiddleLeftSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Vias Options:") ), wxVERTICAL );
 	
-	wxString m_OptViaTypeChoices[] = { _("Through Via"), _("Blind or Buried Via") };
+	wxString m_OptViaTypeChoices[] = { _("Through via"), _("Blind or buried via") };
 	int m_OptViaTypeNChoices = sizeof( m_OptViaTypeChoices ) / sizeof( wxString );
 	m_OptViaType = new wxRadioBox( this, wxID_ANY, _("Default Via Type"), wxDefaultPosition, wxDefaultSize, m_OptViaTypeNChoices, m_OptViaTypeChoices, 1, wxRA_SPECIFY_COLS );
 	m_OptViaType->SetSelection( 0 );
@@ -84,7 +84,7 @@ DIALOG_TRACKS_OPTIONS_BASE::DIALOG_TRACKS_OPTIONS_BASE( wxWindow* parent, wxWind
 	
 	sbMiddleLeftSizer->Add( 10, 10, 0, 0, 5 );
 	
-	wxString m_AllowMicroViaCtrlChoices[] = { _("Do Not Allow Micro Vias"), _("Allow Micro Vias") };
+	wxString m_AllowMicroViaCtrlChoices[] = { _("Do not allow micro vias"), _("Allow micro vias") };
 	int m_AllowMicroViaCtrlNChoices = sizeof( m_AllowMicroViaCtrlChoices ) / sizeof( wxString );
 	m_AllowMicroViaCtrl = new wxRadioBox( this, wxID_ALLOW_MICROVIA, _("Micro Vias:"), wxDefaultPosition, wxDefaultSize, m_AllowMicroViaCtrlNChoices, m_AllowMicroViaCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_AllowMicroViaCtrl->SetSelection( 0 );

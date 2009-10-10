@@ -49,7 +49,7 @@ int WinEDA_PcbFrame::EraseRedundantTrack( wxDC* aDC, TRACK* aNewTrack, int aNewT
     if( aNewTrack->Type() == TYPE_VIA && (aNewTrackSegmentsCount > 1 ) )
         aNewTrack = aNewTrack->Next();
 
-    aNewTrack = Marque_Une_Piste( this, aDC, aNewTrack, &aNewTrackSegmentsCount, 0 );
+    aNewTrack = Marque_Une_Piste( GetBoard(), aNewTrack, &aNewTrackSegmentsCount, NULL, true );
     wxASSERT( aNewTrack );
 
 #if 0 && defined(DEBUG)
@@ -204,7 +204,7 @@ int WinEDA_PcbFrame::EraseRedundantTrack( wxDC* aDC, TRACK* aNewTrack, int aNewT
         nbconnect--;
         pt_del->SetState( CHAIN, OFF );
 
-        pt_del = Marque_Une_Piste( this, aDC, pt_del, &nb_segm, 0 );
+        pt_del = Marque_Une_Piste( GetBoard(), pt_del, &nb_segm, NULL, true );
 
         /* Test si La piste marquee est redondante, c'est a dire si l'un des
          * segments marques est connecte au point de depart de la piste nouvelle

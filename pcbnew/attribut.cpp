@@ -46,7 +46,8 @@ void WinEDA_PcbFrame::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
         return;
 
     DrawPanel->CursorOff( DC );   // Erase cursor shape
-    Track = Marque_Une_Piste( this, DC, track, &nb_segm, GR_OR | GR_SURBRILL );
+    Track = Marque_Une_Piste( GetBoard(), track, &nb_segm, NULL, true );
+    Trace_Une_Piste( DrawPanel, DC, Track, nb_segm, GR_OR | GR_SURBRILL );
 
     for( ; (Track != NULL) && (nb_segm > 0); nb_segm-- )
     {

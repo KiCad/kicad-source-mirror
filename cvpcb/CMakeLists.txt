@@ -19,6 +19,7 @@ set(CVPCB_SRCS
     dialog_cvpcb_config_fbp.cpp
     dialog_display_options.cpp
     displayframe.cpp
+    dummy_functions.cpp
     genequiv.cpp
     init.cpp
     listboxes.cpp

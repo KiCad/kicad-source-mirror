@@ -113,6 +113,7 @@ library \"%s\"." ),
     GetScreen()->ClearUndoRedoList();
     Zoom_Automatique( false );
     DrawPanel->Refresh();
+    SetShowDeMorgan(m_component->HasConversion() );
 }
 
 
@@ -506,7 +507,10 @@ lost!\n\nClear the current component from the screen?" ) ) )
         return;
 
     if( dlg.GetName().IsEmpty() )
+    {
+        wxMessageBox(_("This new component has no name and cannot be created. Aborted"));
         return;
+    }
 
     name = dlg.GetName().MakeUpper();
     name.Replace( wxT( " " ), wxT( "_" ) );
@@ -525,12 +529,25 @@ lost!\n\nClear the current component from the screen?" ) ) )
     LIB_COMPONENT* component = new LIB_COMPONENT( name );
     component->m_Prefix.m_Text = dlg.GetReference();
     component->SetPartCount( dlg.GetPartCount() );
+    // Initialize component->m_TextInside member:
+    // if 0, pin text is outside the body (on the pin)
+    // if > 0, pin text is inside the body
     component->SetConversion( dlg.GetAlternateBodyStyle() );
-    component->m_TextInside = dlg.GetPinTextPosition();
-    component->m_Options = ( dlg.GetPowerSymbol() ) ? ENTRY_POWER :
-        ENTRY_NORMAL;
+    SetShowDeMorgan( dlg.GetAlternateBodyStyle() );
+    if( dlg.GetPinNameInside( ) )
+    {
+        component->m_TextInside = dlg.GetPinTextPosition();
+        if( component->m_TextInside == 0 )
+            component->m_TextInside = 1;
+    }
+    else
+        component->m_TextInside = 0;
+    component->m_Options = ( dlg.GetPowerSymbol() ) ? ENTRY_POWER : ENTRY_NORMAL;
     component->m_DrawPinNum = dlg.GetShowPinNumber();
     component->m_DrawPinName = dlg.GetShowPinName();
+    component->m_UnitSelectionLocked = dlg.GetLockItems();
+    if( dlg.GetPartCount() < 2 )
+        component->m_UnitSelectionLocked = false;
 
     if( m_component )
     {

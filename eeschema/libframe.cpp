@@ -154,6 +154,7 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
     m_Draw_Axis = true;             // true pour avoir les axes dessines
     m_Draw_Grid = true;             // true pour avoir la axes dessinee
     m_ConfigPath = wxT( "LibraryEditor" );
+    SetShowDeMorgan( false );
 
     // Give an icon
     SetIcon( wxIcon( libedit_xpm ) );
@@ -440,8 +441,7 @@ void WinEDA_LibeditFrame::OnUpdatePartNumber( wxUpdateUIEvent& event )
     /* Using the typical event.Enable() call doesn't seem to work with wxGTK
      * so use the pointer to alias combobox to directly enable or disable.
      */
-    m_SelpartBox->Enable( m_component != NULL
-                          && m_component->GetPartCount() > 1 );
+    m_SelpartBox->Enable( m_component && m_component->GetPartCount() > 1 );
 }
 
 
@@ -450,8 +450,8 @@ void WinEDA_LibeditFrame::OnUpdateDeMorganNormal( wxUpdateUIEvent& event )
     if( m_HToolBar == NULL )
         return;
 
-    event.Enable( m_component != NULL
-                  && m_component->HasConversion() );
+    event.Enable( GetShowDeMorgan() ||
+                  (m_component && m_component->HasConversion()) );
     m_HToolBar->ToggleTool( event.GetId(), m_convert <= 1 );
 }
 
@@ -461,8 +461,8 @@ void WinEDA_LibeditFrame::OnUpdateDeMorganConvert( wxUpdateUIEvent& event )
     if( m_HToolBar == NULL )
         return;
 
-    event.Enable( m_component != NULL
-                  && m_component->HasConversion() );
+    event.Enable( GetShowDeMorgan() ||
+                  (m_component && m_component->HasConversion()) );
     m_HToolBar->ToggleTool( event.GetId(), m_convert > 1 );
 }
 

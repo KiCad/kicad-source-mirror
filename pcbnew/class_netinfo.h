@@ -208,7 +208,7 @@ public:
         return m_NetClassName;
     }
 
-#if 0
+#if 1
     /**
      * Function GetTrackWidth
      * returns the width of tracks used to route this net.
@@ -220,16 +220,18 @@ public:
     }
 
 
+#if 0
     /**
-     * Function GetTrackWidth
+     * Function GetTrackMinWidth
      * returns the Minimum value for tracks thickness (used in DRC)
      */
-    int GetTrackWidth()
+    int GetTrackMinWidth()
     {
-        wxASSERT( m_NetClass );
-        return m_NetClass->GetTrackMinWidth();
+//        wxASSERT( m_NetClass );
+//        return m_NetClass->GetTrackMinWidth();
+        return g_DesignSettings.m_TrackMinWidth;
     }
-
+#endif
 
     /**
      * Function GetViaSize
@@ -238,7 +240,17 @@ public:
     int GetViaSize()
     {
         wxASSERT( m_NetClass );
-        return m_NetClass->GetViaSize();
+        return m_NetClass->GetViaDiameter();
+    }
+
+    /**
+     * Function GetMicroViaSize
+     * returns the size of vias used to route this net
+     */
+    int GetMicroViaSize()
+    {
+        wxASSERT( m_NetClass );
+        return m_NetClass->GetuViaDiameter();
     }
 
 
@@ -249,10 +261,22 @@ public:
     int GetViaDrillSize()
     {
         wxASSERT( m_NetClass );
-        return m_NetClass->GetViaDrillSize();
+        return m_NetClass->GetViaDrill();
+    }
+
+    /**
+     * Function GetViaDrillSize
+     * returns the size of via drills used to route this net
+     */
+    int GetMicroViaDrillSize()
+    {
+        wxASSERT( m_NetClass );
+        return m_NetClass->GetuViaDrill();
     }
 
 
+
+#if 0
     /**
      * Function GetViaMinSize
      * returns the Minimum value for via sizes (used in DRC)
@@ -262,7 +286,7 @@ public:
         wxASSERT( m_NetClass );
         return m_NetClass->GetViaMinSize();
     }
-
+#endif
 
     /**
      * Function GetClearance

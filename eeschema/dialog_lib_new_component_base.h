@@ -67,6 +67,8 @@ class DIALOG_LIB_NEW_COMPONENT_BASE : public wxDialog
 		
 		wxCheckBox* m_checkShowPinName;
 		
+		wxCheckBox* m_checkShowPinNameInside;
+		
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

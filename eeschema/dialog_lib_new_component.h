@@ -62,6 +62,12 @@ public:
         m_checkShowPinName->SetValue( show );
     }
     bool GetShowPinName( void ) { return m_checkShowPinName->GetValue(); }
+
+    void SetPinNameInside( bool show )
+    {
+        m_checkShowPinNameInside->SetValue( show );
+    }
+    bool GetPinNameInside( void ) { return m_checkShowPinNameInside->GetValue(); }
 };
 
 #endif // __dialog_lib_new_component__

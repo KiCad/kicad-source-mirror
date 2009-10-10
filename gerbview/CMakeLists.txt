@@ -12,6 +12,7 @@ set(GERBVIEW_SRCS
     controle.cpp
     dcode.cpp
     deltrack.cpp
+    dummy_functions.cpp
     edit.cpp
     export_to_pcbnew.cpp
     files.cpp

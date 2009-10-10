@@ -262,17 +262,24 @@ void    Calcule_Coord_Extremite_45( int ox, int oy, int* fx, int* fy );
 /*****************/
 /* TRACK.CPP : */
 /*****************/
-TRACK*  Marque_Une_Piste( WinEDA_BasePcbFrame* frame, wxDC* DC,
-                          TRACK* pt_segm, int* nb_segm, int flagcolor );
-
-/* Routine de Marquage de 1 piste, a partir du segment pointe par pt_segm.
-  * le segment pointe est marque puis les segments adjacents
-  * jusqu'a un pad ou un point de jonction de plus de 2 segments
-  * le marquage est la mise a 1 du bit BUSY du parametre .status
-  * Les segments sont ensuite reclasses pour etre contigus en memoire
-  * Retourne:
-  *     adresse du 1er segment de la chaine creee
-  *     nombre de segments */
+/**
+ * Function Marque_Une_Piste
+ * marks a chain of track segments, connected to aTrackList.
+ * Each segment is marked by setting the BUSY bit into m_Flags.  Electrical continuity
+ * is detected by walking each segment, and finally the segments are rearranged
+ * into a contiguous chain within the given list.
+ * @param aPcb = the board to analyse
+ * @param aStartSegm The first interesting segment within a list of track segment of aPcb
+ * @param aSegmCount = a pointer to an integer where to return the number of interesting segments
+ * @param aTrackLen = a pointer to an integer where to return the lenght of the track
+ * @param aReorder =
+ *  true for reorder the interesting segments (useful for track edition/deletion)
+ *   in this case the flag BUSY is set (the user is responsible of flag clearing)
+ *  false for no reorder : useful when we want just calculate the track lenght
+ *  in this case, flags are reset
+ * @return TRACK* the first in the chain of interesting segments.
+ */
+TRACK*  Marque_Une_Piste( BOARD * aPcb, TRACK* aStartSegm, int* aSegmCount, int * aTrackLen, bool aReorder );
 
 int     ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
                          TRACK** StartTrack, TRACK** EndTrack );

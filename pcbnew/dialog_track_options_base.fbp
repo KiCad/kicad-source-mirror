@@ -509,7 +509,7 @@
                                     <property name="proportion">0</property>
                                     <object class="wxRadioBox" expanded="1">
                                         <property name="bg"></property>
-                                        <property name="choices">&quot;Through Via&quot; &quot;Blind or Buried Via&quot;</property>
+                                        <property name="choices">&quot;Through via&quot; &quot;Blind or buried via&quot;</property>
                                         <property name="context_help"></property>
                                         <property name="enabled">1</property>
                                         <property name="fg"></property>
@@ -573,7 +573,7 @@
                                     <property name="proportion">0</property>
                                     <object class="wxRadioBox" expanded="1">
                                         <property name="bg"></property>
-                                        <property name="choices">&quot;Do Not Allow Micro Vias&quot; &quot;Allow Micro Vias&quot;</property>
+                                        <property name="choices">&quot;Do not allow micro vias&quot; &quot;Allow micro vias&quot;</property>
                                         <property name="context_help"></property>
                                         <property name="enabled">1</property>
                                         <property name="fg"></property>

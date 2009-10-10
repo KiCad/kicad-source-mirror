@@ -599,8 +599,8 @@ bool LIB_COMPONENT::Load( FILE* file, char* line, int* lineNum,
         return false;
     }
 
-    m_DrawPinNum  = (drawnum == 'N') ? FALSE : TRUE;
-    m_DrawPinName = (drawname == 'N') ? FALSE : TRUE;
+    m_DrawPinNum  = (drawnum == 'N') ? FALSE : true;
+    m_DrawPinName = (drawname == 'N') ? FALSE : true;
 
     /* Copy part name and prefix. */
     strupper( name );
@@ -622,7 +622,7 @@ bool LIB_COMPONENT::Load( FILE* file, char* line, int* lineNum,
 
     // Copy optional infos
     if( ( p = strtok( NULL, " \t\n" ) ) != NULL && *p == 'L' )
-        m_UnitSelectionLocked = TRUE;
+        m_UnitSelectionLocked = true;
     if( ( p = strtok( NULL, " \t\n" ) ) != NULL  && *p == 'P' )
         m_Options = ENTRY_POWER;
 
@@ -862,10 +862,10 @@ void LIB_COMPONENT::SetFields( const std::vector <LIB_FIELD> aFields )
     {
         bool create = FALSE;
         if( !aFields[ii].m_Text.IsEmpty() )
-            create = TRUE;
+            create = true;
         if( !aFields[ii].m_Name.IsEmpty()
             && ( aFields[ii].m_Name != ReturnDefaultFieldName( ii ) ) )
-            create = TRUE;
+            create = true;
         if( create )
         {
             LIB_FIELD*Field = new LIB_FIELD( this, ii );
@@ -1302,7 +1302,7 @@ void LIB_COMPONENT::SetConversion( bool asConvert )
 {
     if( asConvert == HasConversion() )
         return;
-
+    // Duplicate items to create the converted shape
     if( asConvert )
     {
 
@@ -1321,6 +1321,7 @@ void LIB_COMPONENT::SetConversion( bool asConvert )
     }
     else
     {
+        // Delete converted shape items becuase the converted shape does not exist
         LIB_DRAW_ITEM_LIST::iterator i = m_Drawings.begin();
 
         while( i != m_Drawings.end() )

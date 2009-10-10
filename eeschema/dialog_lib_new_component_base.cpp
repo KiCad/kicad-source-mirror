@@ -80,7 +80,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	bSizer4->Add( 0, 0, 1, wxEXPAND, 3 );
 	
-	m_spinPartCount = new wxSpinCtrl( this, wxID_ANY, wxT("1"), wxDefaultPosition, wxSize( 100,-1 ), wxSP_ARROW_KEYS, 1, 40, 0 );
+	m_spinPartCount = new wxSpinCtrl( this, wxID_ANY, wxT("1"), wxDefaultPosition, wxSize( 100,-1 ), wxSP_ARROW_KEYS, 1, 26, 0 );
 	bSizer4->Add( m_spinPartCount, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	
@@ -118,7 +118,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	bSizer9->Add( 12, 0, 0, wxEXPAND, 3 );
 	
-	m_checkLockItems = new wxCheckBox( this, wxID_ANY, _("Prevent drawing items from being &moved"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkLockItems = new wxCheckBox( this, wxID_ANY, _("Parts in package locked (cannot be swapped)"), wxDefaultPosition, wxDefaultSize, 0 );
 	
 	bSizer9->Add( m_checkLockItems, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
@@ -146,7 +146,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	bSizer6->Add( 0, 0, 1, wxEXPAND, 3 );
 	
-	m_spinPinTextPosition = new wxSpinCtrl( this, wxID_ANY, wxT("40"), wxDefaultPosition, wxSize( 100,-1 ), wxSP_ARROW_KEYS, 0, 10000, 40 );
+	m_spinPinTextPosition = new wxSpinCtrl( this, wxID_ANY, wxT("40"), wxDefaultPosition, wxSize( 100,-1 ), wxSP_ARROW_KEYS, 1, 100, 40 );
 	bSizer6->Add( m_spinPinTextPosition, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_staticText5 = new wxStaticText( this, wxID_ANY, _("mils"), wxDefaultPosition, wxSize( 30,-1 ), 0 );
@@ -180,6 +180,19 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	bSizer12->Add( m_checkShowPinName, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	bSizer5->Add( bSizer12, 0, wxALL|wxEXPAND, 0 );
+	
+	wxBoxSizer* bSizer121;
+	bSizer121 = new wxBoxSizer( wxHORIZONTAL );
+	
+	
+	bSizer121->Add( 12, 0, 0, wxEXPAND, 3 );
+	
+	m_checkShowPinNameInside = new wxCheckBox( this, wxID_ANY, _("Pin name &inside"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkShowPinNameInside->SetValue(true);
+	
+	bSizer121->Add( m_checkShowPinNameInside, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	
+	bSizer5->Add( bSizer121, 1, wxEXPAND, 5 );
 	
 	
 	bSizer5->Add( 0, 5, 0, wxALL|wxEXPAND, 10 );

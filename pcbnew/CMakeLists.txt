@@ -97,6 +97,7 @@ set(PCBNEW_SRCS
     librairi.cpp
     loadcmp.cpp
     locate.cpp
+    magnetic_tracks_functions.cpp
     menubarmodedit.cpp
     menubarpcb.cpp
     mirepcb.cpp
