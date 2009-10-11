@@ -904,13 +904,13 @@ void ZONE_CONTAINER::DisplayInfo( WinEDA_DrawFrame* frame )
 /************************************************************/
 {
     wxString msg;
-    int      text_pos;
 
     BOARD*   board = (BOARD*) m_Parent;
+    WinEDA_MsgPanel *msgpanel = frame->MsgPanel;
 
     wxASSERT( board );
 
-    frame->MsgPanel->EraseMsgBox();
+    msgpanel->EraseMsgBox();
 
     msg = _( "Zone Outline" );
 
@@ -918,10 +918,7 @@ void ZONE_CONTAINER::DisplayInfo( WinEDA_DrawFrame* frame )
     if( ncont )
         msg << wxT( " " ) << _( "(Cutout)" );
 
-    text_pos = 1;
-    Affiche_1_Parametre( frame, text_pos, _( "Type" ), msg, DARKCYAN );
-
-    text_pos += 15;
+    msgpanel->AppendMessage( _( "Type" ), msg, DARKCYAN );
 
     if( IsOnCopperLayer() )
     {
@@ -941,41 +938,35 @@ void ZONE_CONTAINER::DisplayInfo( WinEDA_DrawFrame* frame )
             msg << wxT( " <" ) << _( "Not Found" ) << wxT( ">" );
         }
 
-        Affiche_1_Parametre( frame, text_pos, _( "NetName" ), msg, RED );
+        msgpanel->AppendMessage( _( "NetName" ), msg, RED );
     }
     else
-        Affiche_1_Parametre( frame, text_pos, _( "Non Copper Zone" ), wxEmptyString, RED );
+        msgpanel->AppendMessage( _( "Non Copper Zone" ), wxEmptyString, RED );
 
     /* Display net code : (usefull in test or debug) */
-    text_pos += 18;
     msg.Printf( wxT( "%d" ), GetNet() );
-    Affiche_1_Parametre( frame, text_pos, _( "NetCode" ), msg, RED );
+    msgpanel->AppendMessage( _( "NetCode" ), msg, RED );
 
-    text_pos += 6;
     msg = board->GetLayerName( m_Layer );
-    Affiche_1_Parametre( frame, text_pos, _( "Layer" ), msg, BROWN );
+    msgpanel->AppendMessage( _( "Layer" ), msg, BROWN );
 
-    text_pos += 8;
     msg.Printf( wxT( "%d" ), m_Poly->corner.size() );
-    Affiche_1_Parametre( frame, text_pos, _( "Corners" ), msg, BLUE );
+    msgpanel->AppendMessage( _( "Corners" ), msg, BLUE );
 
-    text_pos += 6;
     if( m_FillMode )
         msg.Printf( _( "Segments" ), m_FillMode );
     else
         msg = _( "Polygons" );
-    Affiche_1_Parametre( frame, text_pos, _( "Fill mode" ), msg, BROWN );
+    msgpanel->AppendMessage( _( "Fill mode" ), msg, BROWN );
 
     // Useful for statistics :
-    text_pos += 9;
     msg.Printf( wxT( "%d" ), m_Poly->m_HatchLines.size() );
-    Affiche_1_Parametre( frame, text_pos, _( "Hatch lines" ), msg, BLUE );
+    msgpanel->AppendMessage( _( "Hatch lines" ), msg, BLUE );
 
     if( m_FilledPolysList.size() )
     {
-        text_pos += 9;
         msg.Printf( wxT( "%d" ), m_FilledPolysList.size() );
-        Affiche_1_Parametre( frame, text_pos, _( "Corners in DrawList" ), msg, BLUE );
+        msgpanel->AppendMessage( _( "Corners in DrawList" ), msg, BLUE );
     }
 }
 

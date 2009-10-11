@@ -122,6 +122,9 @@ void WinEDA_MsgPanel::AppendMessage( const wxString& textUpper,
     m_Items.push_back( item );
     m_last_x += computeTextSize( text ).x;
 
+    // Add an extra space between texts for a better look:
+    m_last_x += m_fontSize.x;
+
     Refresh();
 }
 

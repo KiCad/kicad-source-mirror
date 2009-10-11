@@ -797,21 +797,19 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     int      nbpad;
     char     bufcar[512], Line[512];
-    int      pos;
     bool     flag = FALSE;
     wxString msg;
     BOARD*   board = (BOARD*) m_Parent;
+    WinEDA_MsgPanel *msgpanel = frame->MsgPanel;
 
-    frame->MsgPanel->EraseMsgBox();    /* Effacement de la zone message */
+    msgpanel->EraseMsgBox();
     if( frame->m_Ident != PCB_FRAME )
         flag = TRUE;
-    pos = 1;
-    Affiche_1_Parametre( frame, pos, m_Reference->m_Text, m_Value->m_Text,
+
+    msgpanel->AppendMessage( m_Reference->m_Text, m_Value->m_Text,
                          DARKCYAN );
 
-    /* Affiche signature temporelle ou date de modif (en edition de modules) */
-    pos += 6;
-    if( flag ) // Affichage date de modification (utile en Module Editor)
+    if( flag ) // Display last date the component was edited( useful in Module Editor)
     {
         time_t edit_time = m_LastEdit_Time;
         strcpy( Line, ctime( &edit_time ) );
@@ -821,20 +819,16 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
         strtok( NULL, " \n\r" );
         strcat( bufcar, strtok( NULL, " \n\r" ) );
         msg = CONV_FROM_UTF8( bufcar );
-        Affiche_1_Parametre( frame, pos, _( "Last Change" ), msg, BROWN );
-        pos += 4;
+        msgpanel->AppendMessage( _( "Last Change" ), msg, BROWN );
     }
-    else
+    else    // displa time stamp in schematic
     {
         msg.Printf( wxT( "%8.8lX" ), m_TimeStamp );
-        Affiche_1_Parametre( frame, pos, _( "Netlist path" ), m_Path, BROWN );
+        msgpanel->AppendMessage( _( "Netlist path" ), m_Path, BROWN );
     }
 
-    pos += 12;
-    Affiche_1_Parametre( frame, pos, _( "Layer" ),
-                         board->GetLayerName( m_Layer ), RED );
+    msgpanel->AppendMessage( _( "Layer" ), board->GetLayerName( m_Layer ), RED );
 
-    pos += 6;
     EDA_BaseStruct* PtStruct = m_Pads;
     nbpad = 0;
     while( PtStruct )
@@ -844,34 +838,29 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
     }
 
     msg.Printf( wxT( "%d" ), nbpad );
-    Affiche_1_Parametre( frame, pos, _( "Pads" ), msg, BLUE );
+    msgpanel->AppendMessage( _( "Pads" ), msg, BLUE );
 
-    pos += 4;
     msg  = wxT( ".." );
     if( IsLocked() )
         msg[0] = 'L';
     if( m_ModuleStatus & MODULE_is_PLACED )
         msg[1] = 'P';
-    Affiche_1_Parametre( frame, pos, _( "Stat" ), msg, MAGENTA );
+    msgpanel->AppendMessage( _( "Stat" ), msg, MAGENTA );
 
-    pos += 4;
     msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
-    Affiche_1_Parametre( frame, pos, _( "Orient" ), msg, BROWN );
+    msgpanel->AppendMessage( _( "Orient" ), msg, BROWN );
 
-    pos += 5;
-    Affiche_1_Parametre( frame, pos, _( "Module" ), m_LibRef, BLUE );
+    msgpanel->AppendMessage( _( "Module" ), m_LibRef, BLUE );
 
-    pos += 9;
     if(  m_3D_Drawings != NULL )
         msg = m_3D_Drawings->m_Shape3DName;
     else
         msg = _("No 3D shape");
-    Affiche_1_Parametre( frame, pos, _( "3D-Shape" ), msg, RED );
+    msgpanel->AppendMessage( _( "3D-Shape" ), msg, RED );
 
-    pos += 14;
     wxString doc     = _( "Doc:  " ) + m_Doc;
     wxString keyword = _( "KeyW: " ) + m_KeyWord;
-    Affiche_1_Parametre( frame, pos, doc, keyword, BLACK );
+    msgpanel->AppendMessage( doc, keyword, BLACK );
 }
 
 

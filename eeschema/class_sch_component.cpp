@@ -1026,31 +1026,28 @@ void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
     LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
 
     wxString msg;
+    WinEDA_MsgPanel *msgpanel = frame->MsgPanel;
 
-    frame->MsgPanel->EraseMsgBox();
+    msgpanel->EraseMsgBox();
 
-    Affiche_1_Parametre( frame, 1, _( "Ref" ),
-                         GetRef(((WinEDA_SchematicFrame*)frame)->GetSheet()),
-                         DARKCYAN );
+    msg = GetRef(((WinEDA_SchematicFrame*)frame)->GetSheet());
+    msgpanel->AppendMessage( _( "Ref" ), msg, DARKCYAN );
 
     if( Entry && Entry->m_Options == ENTRY_POWER )
         msg = _( "Pwr Symb" );
     else
         msg = _( "Val" );
 
-    Affiche_1_Parametre( frame, 10, msg, GetField( VALUE )->m_Text, DARKCYAN );
+    msgpanel->AppendMessage( msg, GetField( VALUE )->m_Text, DARKCYAN );
 
-    Affiche_1_Parametre( frame, 28, _( "RefLib" ), m_ChipName.GetData(), BROWN );
+    msgpanel->AppendMessage( _( "RefLib" ), m_ChipName.GetData(), BROWN );
 
     msg = Entry->GetLibraryName();
 
-    Affiche_1_Parametre( frame, 40, _( "Lib" ), msg, DARKRED );
+    msgpanel->AppendMessage(  _( "Lib" ), msg, DARKRED );
 
     if( Entry )
-    {
-        Affiche_1_Parametre( frame, 52, Entry->m_Doc, Entry->m_KeyWord,
-                             DARKCYAN );
-    }
+        msgpanel->AppendMessage( Entry->m_Doc, Entry->m_KeyWord, DARKCYAN );
 }
 
 /** virtual function Mirror_Y
