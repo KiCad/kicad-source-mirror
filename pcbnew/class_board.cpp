@@ -572,19 +572,13 @@ bool BOARD::ComputeBoundaryBox()
 // virtual, see pcbstruct.h
 void BOARD::DisplayInfo( WinEDA_DrawFrame* frame )
 {
-/* Affiche l'etat du PCB : nb de pads, nets , connexions.. */
-#define POS_AFF_NBPADS      1
-#define POS_AFF_NBVIAS      8
-#define POS_AFF_NBNODES     16
-#define POS_AFF_NBNETS      24
-#define POS_AFF_NBLINKS     32
-#define POS_AFF_NBCONNECT   40
-#define POS_AFF_NBNOCONNECT 48
+    /* Display board statistics: pads, nets, connections.. count
+    */
 
     wxString txt;
 
-    frame->MsgPanel->EraseMsgBox();
-
+    WinEDA_MsgPanel *msgpanel = frame->MsgPanel;
+    msgpanel->EraseMsgBox();
 
     int viasCount = 0;
     for( BOARD_ITEM* item = m_Track;  item;  item = item->Next() )
@@ -594,16 +588,16 @@ void BOARD::DisplayInfo( WinEDA_DrawFrame* frame )
     }
 
     txt.Printf( wxT( "%d" ), GetPadsCount() );
-    Affiche_1_Parametre( frame, POS_AFF_NBPADS, _( "Pads" ), txt, DARKGREEN );
+    msgpanel->AppendMessage( _( "Pads" ), txt, DARKGREEN );
 
     txt.Printf( wxT( "%d" ), viasCount );
-    Affiche_1_Parametre( frame, POS_AFF_NBVIAS, _( "Vias" ), txt, DARKGREEN );
+    msgpanel->AppendMessage( _( "Vias" ), txt, DARKGREEN );
 
     txt.Printf( wxT( "%d" ), GetNodesCount() );
-    Affiche_1_Parametre( frame, POS_AFF_NBNODES, _( "Nodes" ), txt, DARKCYAN );
+    msgpanel->AppendMessage( _( "Nodes" ), txt, DARKCYAN );
 
     txt.Printf( wxT( "%d" ), m_NetInfo->GetCount() );
-    Affiche_1_Parametre( frame, POS_AFF_NBNETS, _( "Nets" ), txt, RED );
+    msgpanel->AppendMessage( _( "Nets" ), txt, RED );
 
     /* These parameters are known only if the full ratsnest is available,
      *  so, display them only if this is the case
@@ -611,13 +605,13 @@ void BOARD::DisplayInfo( WinEDA_DrawFrame* frame )
     if( (m_Status_Pcb & NET_CODES_OK) )
     {
         txt.Printf( wxT( "%d" ), GetRatsnestsCount() );
-        Affiche_1_Parametre( frame, POS_AFF_NBLINKS, _( "Links" ), txt, DARKGREEN );
+        msgpanel->AppendMessage( _( "Links" ), txt, DARKGREEN );
 
         txt.Printf( wxT( "%d" ), GetRatsnestsCount() - GetNoconnectCount() );
-        Affiche_1_Parametre( frame, POS_AFF_NBCONNECT, _( "Connect" ), txt, DARKGREEN );
+        msgpanel->AppendMessage( _( "Connect" ), txt, DARKGREEN );
 
         txt.Printf( wxT( "%d" ), GetNoconnectCount() );
-        Affiche_1_Parametre( frame, POS_AFF_NBNOCONNECT, _( "NoConn" ), txt, BLUE );
+        msgpanel->AppendMessage( _( "NoConn" ), txt, BLUE );
     }
 }
 

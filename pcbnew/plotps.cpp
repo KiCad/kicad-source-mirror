@@ -42,7 +42,7 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
     }
 
     SetLocaleTo_C_standard();
-    Affiche_1_Parametre( this, 0, _( "File" ), FullFileName, CYAN );
+    MsgPanel->AppendMessage( _( "File" ), FullFileName, CYAN );
 
     if( g_pcb_plot_options.PlotScaleOpt != 1 )
         Center = TRUE; // Echelle != 1 donc trace centree du PCB

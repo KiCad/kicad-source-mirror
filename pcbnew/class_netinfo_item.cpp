@@ -137,12 +137,13 @@ void NETINFO_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
     D_PAD*          pad;
     double          lengthnet = 0;
 
-    frame->MsgPanel->EraseMsgBox();
+    WinEDA_MsgPanel *msgpanel = frame->MsgPanel;
+    msgpanel->EraseMsgBox();
 
-    Affiche_1_Parametre( frame, 1, _( "Net Name" ), GetNetname(), RED );
+    msgpanel->AppendMessage( _( "Net Name" ), GetNetname(), RED );
 
     txt.Printf( wxT( "%d" ), GetNet() );
-    Affiche_1_Parametre( frame, 30, _( "Net Code" ), txt, RED );
+    msgpanel->AppendMessage( _( "Net Code" ), txt, RED );
 
     count  = 0;
     module = ( (WinEDA_BasePcbFrame*) frame )->GetBoard()->m_Modules;
@@ -156,7 +157,7 @@ void NETINFO_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
     }
 
     txt.Printf( wxT( "%d" ), count );
-    Affiche_1_Parametre( frame, 40, _( "Pads" ), txt, DARKGREEN );
+    msgpanel->AppendMessage( _( "Pads" ), txt, DARKGREEN );
 
     count  = 0;
     Struct = ( (WinEDA_BasePcbFrame*) frame )->GetBoard()->m_Track;
@@ -171,10 +172,10 @@ void NETINFO_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
     }
 
     txt.Printf( wxT( "%d" ), count );
-    Affiche_1_Parametre( frame, 50, _( "Vias" ), txt, BLUE );
+    msgpanel->AppendMessage( _( "Vias" ), txt, BLUE );
 
     valeur_param( (int) lengthnet, txt );
-    Affiche_1_Parametre( frame, 60, _( "Net Length" ), txt, RED );
+    msgpanel->AppendMessage( _( "Net Length" ), txt, RED );
 }
 
 

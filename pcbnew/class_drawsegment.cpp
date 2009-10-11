@@ -362,33 +362,34 @@ void DRAWSEGMENT::DisplayInfo( WinEDA_DrawFrame* frame )
     BOARD*   board = (BOARD*) m_Parent;
     wxASSERT( board );
 
-    frame->MsgPanel->EraseMsgBox();
+    WinEDA_MsgPanel *msgpanel = frame->MsgPanel;
+    msgpanel->EraseMsgBox();
 
     itype = m_Type & 0x0F;
 
     msg = wxT( "DRAWING" );
 
-    Affiche_1_Parametre( frame, 1, _( "Type" ), msg, DARKCYAN );
+    msgpanel->AppendMessage( _( "Type" ), msg, DARKCYAN );
 
     wxString    shape = _( "Shape" );
 
     switch( m_Shape ) {
         case S_CIRCLE:
-            Affiche_1_Parametre( frame, 10, shape, _( "Circle" ), RED );
+            msgpanel->AppendMessage( shape, _( "Circle" ), RED );
             break;
 
         case S_ARC:
-            Affiche_1_Parametre( frame, 10, shape, _( "Arc" ), RED );
+            msgpanel->AppendMessage( shape, _( "Arc" ), RED );
 
-            msg.Printf( wxT( "%d.%d" ), m_Angle/10, m_Angle % 10 );
-            Affiche_1_Parametre( frame, 18, _("Angle"), msg, RED );
+            msg.Printf( wxT( "%1." ), (float)m_Angle/10 );
+            msgpanel->AppendMessage( _("Angle"), msg, RED );
             break;
         case S_CURVE:
-            Affiche_1_Parametre( frame, 10, shape, _( "Curve" ), RED );
+            msgpanel->AppendMessage( shape, _( "Curve" ), RED );
             break;
 
         default:
-            Affiche_1_Parametre( frame, 10, shape, _( "Segment" ), RED );
+            msgpanel->AppendMessage( shape, _( "Segment" ), RED );
     }
     wxString start;
     start << GetStart();
@@ -396,14 +397,13 @@ void DRAWSEGMENT::DisplayInfo( WinEDA_DrawFrame* frame )
     wxString end;
     end << GetEnd();
 
-    Affiche_1_Parametre( frame, 22, start, end, BLACK );
+    msgpanel->AppendMessage( start, end, DARKGREEN );
 
-    Affiche_1_Parametre( frame, 36, _( "Layer" ),
-                         board->GetLayerName( m_Layer ), BROWN );
+    msgpanel->AppendMessage( _( "Layer" ),
+                         board->GetLayerName( m_Layer ), DARKBROWN );
 
     valeur_param( (unsigned) m_Width, msg );
-
-    Affiche_1_Parametre( frame, 50, _( "Width" ), msg, DARKCYAN );
+    msgpanel->AppendMessage( _( "Width" ), msg, DARKCYAN );
 }
 
 

@@ -221,7 +221,7 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 // see class_edge_mod.h
 void EDGE_MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
 {
-    wxString bufcar;
+    wxString msg;
 
     MODULE* module = (MODULE*) m_Parent;
     if( !module )
@@ -231,22 +231,23 @@ void EDGE_MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
     if( !board )
         return;
 
-    frame->MsgPanel->EraseMsgBox();
+    WinEDA_MsgPanel *msgpanel = frame->MsgPanel;
+    msgpanel->EraseMsgBox();
 
-    Affiche_1_Parametre( frame, 1, _( "Seg" ), wxEmptyString, DARKCYAN );
+    msgpanel->AppendMessage( _( "Graphic Item" ), wxEmptyString, DARKCYAN );
 
-    Affiche_1_Parametre( frame, 5, _( "Module" ), module->m_Reference->m_Text, DARKCYAN );
-    Affiche_1_Parametre( frame, 14, _( "Value" ), module->m_Value->m_Text, BLUE );
-    bufcar.Printf( wxT( "%8.8lX" ), module->m_TimeStamp );
+    msgpanel->AppendMessage( _( "Module" ), module->m_Reference->m_Text, DARKCYAN );
+    msgpanel->AppendMessage( _( "Value" ), module->m_Value->m_Text, BLUE );
 
-    Affiche_1_Parametre( frame, 24, _( "TimeStamp" ), bufcar, BROWN );
+    msg.Printf( wxT( "%8.8lX" ), module->m_TimeStamp );
+    msgpanel->AppendMessage( _( "TimeStamp" ), msg, BROWN );
 
-    Affiche_1_Parametre( frame, 34, _( "Mod Layer" ), board->GetLayerName( module->GetLayer() ), RED );
+    msgpanel->AppendMessage( _( "Mod Layer" ), board->GetLayerName( module->GetLayer() ), RED );
 
-    Affiche_1_Parametre( frame, 44, _( "Seg Layer" ), board->GetLayerName( module->GetLayer() ), RED );
+    msgpanel->AppendMessage( _( "Seg Layer" ), board->GetLayerName( GetLayer() ), RED );
 
-    valeur_param( m_Width, bufcar );
-    Affiche_1_Parametre( frame, 54, _( "Width" ), bufcar, BLUE );
+    valeur_param( m_Width, msg );
+    msgpanel->AppendMessage( _( "Width" ), msg, BLUE );
 }
 
 

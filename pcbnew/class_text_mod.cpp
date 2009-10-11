@@ -467,25 +467,25 @@ void TEXTE_MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
         _( "Ref." ), _( "Value" ), _( "Text" )
     };
 
-    frame->MsgPanel->EraseMsgBox();
+    WinEDA_MsgPanel *msgpanel = frame->MsgPanel;
+    msgpanel->EraseMsgBox();
 
     Line = module->m_Reference->m_Text;
-    Affiche_1_Parametre( frame, 1, _( "Module" ), Line, DARKCYAN );
+    msgpanel->AppendMessage( _( "Module" ), Line, DARKCYAN );
 
     Line = m_Text;
-    Affiche_1_Parametre( frame, 10, _( "Text" ), Line, BROWN );
+    msgpanel->AppendMessage( _( "Text" ), Line, BROWN );
 
     ii = m_Type;
     if( ii > 2 )
         ii = 2;
-
-    Affiche_1_Parametre( frame, 20, _( "Type" ), text_type_msg[ii], DARKGREEN );
+    msgpanel->AppendMessage( _( "Type" ), text_type_msg[ii], DARKGREEN );
 
     if( m_NoShow )
         msg = _( "No" );
     else
         msg = _( "Yes" );
-    Affiche_1_Parametre( frame, 25, _( "Display" ), msg, DARKGREEN );
+    msgpanel->AppendMessage( _( "Display" ), msg, DARKGREEN );
 
     // Display text layer (use layer name if possible)
     BOARD* board = NULL;
@@ -494,25 +494,24 @@ void TEXTE_MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
         msg = board->GetLayerName( m_Layer );
     else
         msg.Printf( wxT( "%d" ), m_Layer );
-    Affiche_1_Parametre( frame, 31, _( "Layer" ), msg, DARKGREEN );
+    msgpanel->AppendMessage( _( "Layer" ), msg, DARKGREEN );
 
     msg = _( " No" );
     if( m_Mirror )
         msg = _( " Yes" );
-
-    Affiche_1_Parametre( frame, 37, _( "Mirror" ), msg, DARKGREEN );
+    msgpanel->AppendMessage( _( "Mirror" ), msg, DARKGREEN );
 
     msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
-    Affiche_1_Parametre( frame, 43, _( "Orient" ), msg, DARKGREEN );
+    msgpanel->AppendMessage( _( "Orient" ), msg, DARKGREEN );
 
     valeur_param( m_Width, msg );
-    Affiche_1_Parametre( frame, 51, _( "Width" ), msg, DARKGREEN );
+    msgpanel->AppendMessage( _( "Width" ), msg, DARKGREEN );
 
     valeur_param( m_Size.x, msg );
-    Affiche_1_Parametre( frame, 60, _( "H Size" ), msg, RED );
+    msgpanel->AppendMessage( _( "H Size" ), msg, RED );
 
     valeur_param( m_Size.y, msg );
-    Affiche_1_Parametre( frame, 69, _( "V Size" ), msg, RED );
+    msgpanel->AppendMessage( _( "V Size" ), msg, RED );
 }
 
 

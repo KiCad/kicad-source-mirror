@@ -274,7 +274,7 @@ void WinEDA_LibeditFrame::SaveActiveLibrary( wxCommandEvent& event )
     {
         msg = _( "Error while saving library file \"" ) + fn.GetFullPath() +
               _( "\"." );
-        MsgPanel->Affiche_1_Parametre( 1, wxT( "*** ERROR: ***" ), msg, RED );
+        MsgPanel->AppendMessage( wxT( "*** ERROR: ***" ), msg, RED );
         DisplayError( this, msg );
     }
     else
@@ -283,7 +283,7 @@ void WinEDA_LibeditFrame::SaveActiveLibrary( wxCommandEvent& event )
         fn.SetExt( DOC_EXT );
         wxString msg1 = _( "Document file \"" ) + fn.GetFullPath() +
                         wxT( "\" Ok" );
-        MsgPanel->Affiche_1_Parametre( 1, msg, msg1, BLUE );
+        MsgPanel->AppendMessage( msg, msg1, BLUE );
     }
 }
 
