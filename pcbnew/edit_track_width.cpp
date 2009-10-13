@@ -178,7 +178,7 @@ void WinEDA_PcbFrame::Edit_Net_Width( wxDC* DC, int aNetcode )
     wxString      netClassName = netClass->GetName();
     msg.Printf( _(
                    "Set tracks and vias sizes to the Netclass \"%s\"default value (entire NET \"%s\") ?" ),
-               netClassName.c_str(), netName.c_str() );
+               GetChars( netClassName ), GetChars( netName ) );
     if( !IsOK( this, msg ) )
         return;
 

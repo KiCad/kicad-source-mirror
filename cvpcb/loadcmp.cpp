@@ -49,7 +49,7 @@ MODULE* WinEDA_DisplayFrame::Get_Module( const wxString& CmpName )
         {
             msg.Printf( _( "PCB foot print library file <%s> could not be \
 found in the default search paths." ),
-                        fn.GetFullName().c_str() );
+                        GetChars( fn.GetFullName() ) );
             wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR, this );
             continue;
         }
@@ -59,7 +59,7 @@ found in the default search paths." ),
         if( file == NULL )
         {
             msg.Printf( _( "Could not open PCB foot print library file <%s>." ),
-                        tmp.c_str() );
+                        GetChars( tmp ) );
             wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR, this );
             continue;
         }
@@ -72,7 +72,7 @@ found in the default search paths." ),
         if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
         {
             msg.Printf( _( "<%s> is not a valid Kicad PCB foot print library." ),
-                        tmp.c_str() );
+                        GetChars( tmp ) );
             wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR, this );
             fclose( file );
             return NULL;

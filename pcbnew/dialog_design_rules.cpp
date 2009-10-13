@@ -105,15 +105,15 @@ void DIALOG_DESIGN_RULES::PrintCurrentSettings( )
 
     // Display min values:
     value = ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_TrackMinWidth, internal_units, true );
-    msg.Printf(_("Minimum value for tracks width: <b>%s</b><br>\n"), value.c_str( ) );
+    msg.Printf(_("Minimum value for tracks width: <b>%s</b><br>\n"), GetChars( value ) );
     m_MessagesList->AppendToPage(msg);
 
     value = ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_ViasMinSize, internal_units, true );
-    msg.Printf(_("Minimum value for vias diameter: <b>%s</b><br>\n"), value.c_str( ) );
+    msg.Printf(_("Minimum value for vias diameter: <b>%s</b><br>\n"), GetChars( value ) );
     m_MessagesList->AppendToPage(msg);
 
     value = ReturnStringFromValue( g_UnitMetric, g_DesignSettings.m_MicroViasMinSize, internal_units, true );
-    msg.Printf(_("Minimum value for microvias diameter: <b>%s</b><br>\n"), value.c_str( ) );
+    msg.Printf(_("Minimum value for microvias diameter: <b>%s</b><br>\n"), GetChars( value ) );
     m_MessagesList->AppendToPage(msg);
 
 }

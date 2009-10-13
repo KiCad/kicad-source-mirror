@@ -163,7 +163,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
         wxString errMsg;
 
         wxLogDebug( wxT( "Load schematic cache library file <%s>" ),
-                    fn.GetFullPath().c_str() );
+                    GetChars( fn.GetFullPath() ) );
         msg = wxT( "Load " ) + fn.GetFullPath();
 
         CMP_LIBRARY* LibCache = CMP_LIBRARY::LoadLibrary( fn, errMsg );

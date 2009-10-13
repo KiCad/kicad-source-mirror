@@ -89,7 +89,7 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
         if( !wxFileExists( dlg.GetPath() ) )
         {
             wxString msg;
-            msg.Printf( _( "File %s not found" ), dlg.GetPath().c_str() );
+            msg.Printf( _( "File %s not found" ), GetChars( dlg.GetPath() ) );
             DisplayError( this, msg );
             break;
         }

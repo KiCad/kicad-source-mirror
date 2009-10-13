@@ -190,7 +190,7 @@ bool    GetAssociatedDocument( wxFrame* aFrame,
     if( !success )
     {
         msg.Printf( _( "Unknown MIME type for doc file <%s>" ),
-            fullfilename.GetData() );
+            GetChars( fullfilename ) );
         DisplayError( aFrame, msg );
     }
 

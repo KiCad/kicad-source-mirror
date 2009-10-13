@@ -47,7 +47,7 @@ void DIALOG_LOAD_ERROR::ListSet(const wxString &list)
 void DIALOG_LOAD_ERROR::MessageSet(const wxString &message)
 {
 	wxString message_value;
-    message_value.Printf(wxT("<b>%s</b><br>"), message.GetData() );
+    message_value.Printf(wxT("<b>%s</b><br>"), GetChars( message ) );
     m_htmlWindow->AppendToPage( message_value );
 }
 

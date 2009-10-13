@@ -77,7 +77,7 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
     if( file == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File <%s> not found" ), dlg.GetPath().GetData() );
+        msg.Printf( _( "File <%s> not found" ), GetChars( dlg.GetPath() ) );
         DisplayError( this, msg );
         return NULL;
     }
@@ -187,7 +187,7 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
     /* Generation du fichier Empreinte */
     if( ( file = wxFopen( fn.GetFullPath(), wxT( "wt" ) ) ) == NULL )
     {
-        msg.Printf( _( "Unable to create <%s>" ), fn.GetFullPath().c_str() );
+        msg.Printf( _( "Unable to create <%s>" ), GetChars( fn.GetFullPath() ) );
         DisplayError( this, msg );
         return;
     }
@@ -207,7 +207,7 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
 
     fputs( "$EndLIBRARY\n", file );
     fclose( file );
-    msg.Printf( _( "Module exported in file <%s>" ), fn.GetFullPath().c_str() );
+    msg.Printf( _( "Module exported in file <%s>" ), GetChars( fn.GetFullPath() ) );
     DisplayInfoMessage( this, msg );
 }
 
@@ -231,7 +231,7 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const
 
     /* Confirmation */
     msg.Printf( _( "Ok to delete module %s in library %s" ),
-               CmpName.GetData(), aLibname.GetData() );
+               GetChars( CmpName ), GetChars( aLibname ) );
     if( !IsOK( this, msg ) )
         return;
 
@@ -281,7 +281,7 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const
     if( NoFound )
     {
         fclose( lib_module );
-        msg.Printf( _( "Module [%s] not found" ), CmpName.GetData() );
+        msg.Printf( _( "Module [%s] not found" ), GetChars( CmpName ) );
         DisplayError( this, msg );
         return;
     }
@@ -379,8 +379,8 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const
         return;
     }
 
-    msg.Printf( _( "Component %s deleted in library %s" ), CmpName.GetData(),
-                oldFileName.GetFullPath().c_str() );
+    msg.Printf( _( "Component %s deleted in library %s" ), GetChars( CmpName ),
+                GetChars( oldFileName.GetFullPath() ) );
     Affiche_Message( msg );
 
     CreateDocLibrary( oldFileName.GetFullPath() );
@@ -430,7 +430,7 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
     if( !NewModulesOnly && file_exists )
     {
         wxString msg;
-        msg.Printf( _( "File %s exists, OK to replace ?" ), fileName.c_str() );
+        msg.Printf( _( "File %s exists, OK to replace ?" ), GetChars( fileName ) );
         if( !IsOK( this, msg ) )
             return;
     }
@@ -509,7 +509,7 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
 
     if( !wxFileExists( aLibName ) )
     {
-        msg.Printf( _( "Library %s not found" ), aLibName.GetData() );
+        msg.Printf( _( "Library %s not found" ), GetChars( aLibName ) );
         DisplayError( this, msg );
         return 0;
     }
@@ -530,7 +530,7 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
 
     if( ( lib_module = wxFopen( aLibName, wxT( "rt" ) ) ) == NULL )
     {
-        msg.Printf( _( "Unable to open %s" ), aLibName.GetData() );
+        msg.Printf( _( "Unable to open %s" ), GetChars( aLibName ) );
         DisplayError( this, msg );
         return 0;
     }
@@ -540,7 +540,7 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
     if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
     {
         fclose( lib_module );
-        msg.Printf( _( "File %s is not a eeschema library" ), aLibName.GetData() );
+        msg.Printf( _( "File %s is not a eeschema library" ), GetChars( aLibName ) );
         DisplayError( this, msg );
         return 0;
     }

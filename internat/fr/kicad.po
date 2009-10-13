@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-10 15:08+0100\n"
-"PO-Revision-Date: 2009-10-10 15:10+0100\n"
+"POT-Creation-Date: 2009-10-11 20:11+0100\n"
+"PO-Revision-Date: 2009-10-11 20:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -216,15 +216,15 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: pcbnew/class_marker_pcb.cpp:67
+#: pcbnew/class_marker_pcb.cpp:65
 msgid "Type"
 msgstr "Type"
 
-#: pcbnew/class_marker_pcb.cpp:67
+#: pcbnew/class_marker_pcb.cpp:65
 msgid "Marker"
 msgstr "Marqueur"
 
-#: pcbnew/class_marker_pcb.cpp:71
+#: pcbnew/class_marker_pcb.cpp:69
 msgid "ErrType"
 msgstr "Type Err"
 
@@ -233,7 +233,7 @@ msgid "Unable to create file "
 msgstr "Impossible de créer le fichier "
 
 #: pcbnew/plotdxf.cpp:33
-#: pcbnew/plotgerb.cpp:68
+#: pcbnew/plotgerb.cpp:67
 msgid "File"
 msgstr "Fichier"
 
@@ -385,7 +385,7 @@ msgstr "Créer Gap MicroOnde "
 msgid "Gap (inch):"
 msgstr "Gap (inch):"
 
-#: pcbnew/plotgerb.cpp:55
+#: pcbnew/plotgerb.cpp:54
 msgid "unable to create file "
 msgstr "Impossible de créer  fichier "
 
@@ -1666,41 +1666,41 @@ msgstr "Ecriture fichier CI: "
 msgid "Failed to create "
 msgstr "Impossible de créer  fichier "
 
-#: pcbnew/class_pcb_text.cpp:237
+#: pcbnew/class_pcb_text.cpp:238
 msgid "COTATION"
 msgstr "COTATION"
 
-#: pcbnew/class_pcb_text.cpp:239
+#: pcbnew/class_pcb_text.cpp:240
 msgid "PCB Text"
 msgstr "Texte PCB"
 
-#: pcbnew/class_pcb_text.cpp:241
+#: pcbnew/class_pcb_text.cpp:242
 #: pcbnew/class_text_mod.cpp:497
 msgid "Layer"
 msgstr "Couche"
 
-#: pcbnew/class_pcb_text.cpp:247
+#: pcbnew/class_pcb_text.cpp:246
 #: pcbnew/class_text_mod.cpp:485
 msgid "No"
 msgstr "Non"
 
-#: pcbnew/class_pcb_text.cpp:249
+#: pcbnew/class_pcb_text.cpp:248
 #: pcbnew/class_text_mod.cpp:487
 msgid "Yes"
 msgstr "Oui"
 
-#: pcbnew/class_pcb_text.cpp:252
-#: pcbnew/class_text_mod.cpp:506
+#: pcbnew/class_pcb_text.cpp:251
+#: pcbnew/class_text_mod.cpp:505
 msgid "Orient"
 msgstr "Orient"
 
-#: pcbnew/class_pcb_text.cpp:258
-#: pcbnew/class_text_mod.cpp:512
+#: pcbnew/class_pcb_text.cpp:257
+#: pcbnew/class_text_mod.cpp:511
 msgid "H Size"
 msgstr "Taille H"
 
-#: pcbnew/class_pcb_text.cpp:261
-#: pcbnew/class_text_mod.cpp:515
+#: pcbnew/class_pcb_text.cpp:260
+#: pcbnew/class_text_mod.cpp:514
 msgid "V Size"
 msgstr "Taille V"
 
@@ -1841,11 +1841,11 @@ msgid "Value"
 msgstr "Valeur"
 
 #: pcbnew/class_text_mod.cpp:467
-#: pcbnew/class_text_mod.cpp:476
+#: pcbnew/class_text_mod.cpp:477
 msgid "Text"
 msgstr "Texte"
 
-#: pcbnew/class_text_mod.cpp:473
+#: pcbnew/class_text_mod.cpp:474
 msgid "Module"
 msgstr "Module"
 
@@ -2069,19 +2069,19 @@ msgstr "Le circuit actuel sera perdu et cette opération ne pourra pas être ann
 msgid "Current Footprint will be lost and this operation cannot be undone. Continue ?"
 msgstr "Le module actuel sera perdu et cette opération ne pourra pas être annulée. Continuer ?"
 
-#: pcbnew/class_edge_mod.cpp:236
-msgid "Seg"
-msgstr "Seg"
+#: pcbnew/class_edge_mod.cpp:237
+msgid "Graphic Item"
+msgstr "Element Graphique"
 
-#: pcbnew/class_edge_mod.cpp:242
+#: pcbnew/class_edge_mod.cpp:243
 msgid "TimeStamp"
 msgstr "TimeStamp"
 
-#: pcbnew/class_edge_mod.cpp:244
+#: pcbnew/class_edge_mod.cpp:245
 msgid "Mod Layer"
 msgstr "Couche Mod."
 
-#: pcbnew/class_edge_mod.cpp:246
+#: pcbnew/class_edge_mod.cpp:247
 msgid "Seg Layer"
 msgstr "Couche Seg."
 
@@ -2253,11 +2253,11 @@ msgstr "Valeur entrée incorrecte. Annulation"
 #: pcbnew/dialog_track_options.cpp:106
 #: pcbnew/dialog_track_options.cpp:161
 msgid "Too many values in list (max count reached). Aborted"
-msgstr ""
+msgstr "trop de valeurs en liste (compte maxi. atteint). Abandon"
 
 #: pcbnew/dialog_track_options.cpp:136
 msgid "Enter new track size value:"
-msgstr ""
+msgstr "Entrer la nouvelle valeur le la largeur de piste:"
 
 #: pcbnew/dialog_track_options_base.cpp:32
 msgid "Vias:"
@@ -2967,27 +2967,27 @@ msgstr "Autoplace modules: Pas de contours sur pcb. Impossible de placer les mod
 msgid "This is the default net class."
 msgstr "Ceci est la Netclass par défaut"
 
-#: pcbnew/class_board.cpp:600
+#: pcbnew/class_board.cpp:594
 msgid "Vias"
 msgstr "Vias"
 
-#: pcbnew/class_board.cpp:603
+#: pcbnew/class_board.cpp:597
 msgid "Nodes"
 msgstr "Nodes"
 
-#: pcbnew/class_board.cpp:606
+#: pcbnew/class_board.cpp:600
 msgid "Nets"
 msgstr "Nets"
 
-#: pcbnew/class_board.cpp:614
+#: pcbnew/class_board.cpp:608
 msgid "Links"
 msgstr "Liens"
 
-#: pcbnew/class_board.cpp:617
+#: pcbnew/class_board.cpp:611
 msgid "Connect"
 msgstr "Connect"
 
-#: pcbnew/class_board.cpp:620
+#: pcbnew/class_board.cpp:614
 msgid "NoConn"
 msgstr "Non Conn"
 
@@ -3130,44 +3130,44 @@ msgstr "Contour de Zone"
 msgid "(Cutout)"
 msgstr "(Cutout)"
 
-#: pcbnew/class_zone.cpp:941
+#: pcbnew/class_zone.cpp:938
 #: pcbnew/class_board_item.cpp:163
 msgid "Not Found"
 msgstr " Non Trouvé"
 
-#: pcbnew/class_zone.cpp:944
+#: pcbnew/class_zone.cpp:941
 msgid "NetName"
 msgstr "NetName"
 
-#: pcbnew/class_zone.cpp:947
+#: pcbnew/class_zone.cpp:944
 msgid "Non Copper Zone"
 msgstr "Zone non Cuivre"
 
-#: pcbnew/class_zone.cpp:952
+#: pcbnew/class_zone.cpp:948
 msgid "NetCode"
 msgstr "NetCode"
 
-#: pcbnew/class_zone.cpp:960
+#: pcbnew/class_zone.cpp:954
 msgid "Corners"
 msgstr "Sommets"
 
-#: pcbnew/class_zone.cpp:964
+#: pcbnew/class_zone.cpp:957
 msgid "Segments"
 msgstr "Segments"
 
-#: pcbnew/class_zone.cpp:966
+#: pcbnew/class_zone.cpp:959
 msgid "Polygons"
 msgstr "Polygones"
 
-#: pcbnew/class_zone.cpp:967
+#: pcbnew/class_zone.cpp:960
 msgid "Fill mode"
 msgstr "Mode de remplissage"
 
-#: pcbnew/class_zone.cpp:972
+#: pcbnew/class_zone.cpp:964
 msgid "Hatch lines"
 msgstr "Lignes de Hachure"
 
-#: pcbnew/class_zone.cpp:978
+#: pcbnew/class_zone.cpp:969
 msgid "Corners in DrawList"
 msgstr "Sommets en Liste de dessin"
 
@@ -4000,19 +4000,19 @@ msgstr "Sauver Fichier Projet"
 msgid "Error: Unexpected end of file !"
 msgstr "Erreur: Fin de fichier inattendue !"
 
-#: pcbnew/class_drawsegment.cpp:373
+#: pcbnew/class_drawsegment.cpp:374
 msgid "Shape"
 msgstr "Forme"
 
-#: pcbnew/class_drawsegment.cpp:384
+#: pcbnew/class_drawsegment.cpp:385
 msgid "Angle"
 msgstr "Angle"
 
-#: pcbnew/class_drawsegment.cpp:387
+#: pcbnew/class_drawsegment.cpp:388
 msgid "Curve"
 msgstr "Courbe"
 
-#: pcbnew/class_drawsegment.cpp:391
+#: pcbnew/class_drawsegment.cpp:392
 msgid "Segment"
 msgstr "Segment"
 
@@ -4656,15 +4656,15 @@ msgstr ""
 msgid "NETCLASS: '%s' has uVia Drill:%s which is less than global:%s"
 msgstr ""
 
-#: pcbnew/class_netinfo_item.cpp:142
+#: pcbnew/class_netinfo_item.cpp:143
 msgid "Net Name"
 msgstr "Nom Equipot"
 
-#: pcbnew/class_netinfo_item.cpp:145
+#: pcbnew/class_netinfo_item.cpp:146
 msgid "Net Code"
 msgstr "Net Code"
 
-#: pcbnew/class_netinfo_item.cpp:177
+#: pcbnew/class_netinfo_item.cpp:178
 msgid "Net Length"
 msgstr "Long. Net"
 
@@ -5366,7 +5366,7 @@ msgid "Diam"
 msgstr "Diam"
 
 #: pcbnew/class_track.cpp:993
-#: pcbnew/class_pad.cpp:577
+#: pcbnew/class_pad.cpp:566
 msgid "Drill"
 msgstr "Perçage"
 
@@ -5394,23 +5394,23 @@ msgstr "Long. Piste"
 msgid "Unknown Pad shape"
 msgstr "Forme Pad inconnue"
 
-#: pcbnew/class_pad.cpp:466
+#: pcbnew/class_pad.cpp:465
 msgid "RefP"
 msgstr "RefP"
 
-#: pcbnew/class_pad.cpp:469
+#: pcbnew/class_pad.cpp:467
 msgid "Net"
 msgstr "Net"
 
-#: pcbnew/class_pad.cpp:585
+#: pcbnew/class_pad.cpp:574
 msgid "Drill X / Y"
 msgstr "Perçage X/Y"
 
-#: pcbnew/class_pad.cpp:600
+#: pcbnew/class_pad.cpp:587
 msgid "X Pos"
 msgstr "X Pos"
 
-#: pcbnew/class_pad.cpp:604
+#: pcbnew/class_pad.cpp:590
 msgid "Y pos"
 msgstr "Y pos"
 
@@ -6074,27 +6074,27 @@ msgstr "Designation"
 msgid "Supplier and ref"
 msgstr "Fournisseur et ref"
 
-#: pcbnew/class_module.cpp:824
+#: pcbnew/class_module.cpp:822
 msgid "Last Change"
 msgstr "Last Change"
 
-#: pcbnew/class_module.cpp:830
+#: pcbnew/class_module.cpp:827
 msgid "Netlist path"
 msgstr "Chemin Netliste "
 
-#: pcbnew/class_module.cpp:868
+#: pcbnew/class_module.cpp:858
 msgid "No 3D shape"
 msgstr "Pas de forme 3D"
 
-#: pcbnew/class_module.cpp:869
+#: pcbnew/class_module.cpp:859
 msgid "3D-Shape"
 msgstr "Forme 3D"
 
-#: pcbnew/class_module.cpp:872
+#: pcbnew/class_module.cpp:861
 msgid "Doc:  "
 msgstr "Doc: "
 
-#: pcbnew/class_module.cpp:873
+#: pcbnew/class_module.cpp:862
 msgid "KeyW: "
 msgstr "KeyW: "
 
@@ -7092,89 +7092,89 @@ msgstr ""
 msgid "Component or alias name \"%s\" not found in library \"%s\"."
 msgstr "Composant ou alias \"%s\" non trouvé en librairie \"%s\"."
 
-#: eeschema/libedit.cpp:170
+#: eeschema/libedit.cpp:171
 #, c-format
 msgid "Could not create copy of part <%s> in library <%s>."
 msgstr "Ne peut créer une copie de l'élément <%s> en librairie <%s>."
 
-#: eeschema/libedit.cpp:251
+#: eeschema/libedit.cpp:252
 msgid "Include last component changes?"
 msgstr "Inclure les dernières modifications du composant"
 
-#: eeschema/libedit.cpp:263
+#: eeschema/libedit.cpp:264
 msgid "Modify library file \""
 msgstr "Modifier le fichier Librairie \""
 
-#: eeschema/libedit.cpp:263
+#: eeschema/libedit.cpp:264
 msgid "\"?"
 msgstr "\"?"
 
-#: eeschema/libedit.cpp:274
+#: eeschema/libedit.cpp:275
 msgid "Error while saving library file \""
 msgstr "Erreur en sauvant le fichier librairie \""
 
-#: eeschema/libedit.cpp:275
+#: eeschema/libedit.cpp:276
 msgid "\"."
 msgstr "\"."
 
-#: eeschema/libedit.cpp:281
+#: eeschema/libedit.cpp:282
 msgid "Library file \""
 msgstr "Fichier librairie \""
 
-#: eeschema/libedit.cpp:283
+#: eeschema/libedit.cpp:284
 msgid "Document file \""
 msgstr "Fichier de doc \""
 
-#: eeschema/libedit.cpp:306
+#: eeschema/libedit.cpp:307
 msgid "Part"
 msgstr "Part"
 
-#: eeschema/libedit.cpp:318
+#: eeschema/libedit.cpp:319
 msgid "Alias"
 msgstr "Alias"
 
-#: eeschema/libedit.cpp:323
+#: eeschema/libedit.cpp:324
 msgid "Unit"
 msgstr "Unité"
 
-#: eeschema/libedit.cpp:326
+#: eeschema/libedit.cpp:327
 msgid "Convert"
 msgstr "Convert"
 
-#: eeschema/libedit.cpp:330
+#: eeschema/libedit.cpp:331
 msgid "Body"
 msgstr "Body"
 
-#: eeschema/libedit.cpp:333
+#: eeschema/libedit.cpp:334
 msgid "Power Symbol"
 msgstr "Symbole d'Alimentation"
 
-#: eeschema/libedit.cpp:335
+#: eeschema/libedit.cpp:336
 msgid "Component"
 msgstr "Composant"
 
-#: eeschema/libedit.cpp:344
+#: eeschema/libedit.cpp:345
 msgid "Description"
 msgstr "Description"
 
-#: eeschema/libedit.cpp:351
+#: eeschema/libedit.cpp:352
 msgid "Key words"
 msgstr "Mots clé"
 
-#: eeschema/libedit.cpp:385
+#: eeschema/libedit.cpp:386
 msgid "Please select a component library."
 msgstr "SVP sélectionner une librairie de composants."
 
-#: eeschema/libedit.cpp:394
+#: eeschema/libedit.cpp:395
 #, c-format
 msgid "Component library <%s> is empty."
 msgstr "Fichier librairie de composants <%s> vide"
 
-#: eeschema/libedit.cpp:396
+#: eeschema/libedit.cpp:397
 msgid "Delete Entry Error"
 msgstr "Erreur en suppression d'élément"
 
-#: eeschema/libedit.cpp:401
+#: eeschema/libedit.cpp:402
 #, c-format
 msgid ""
 "Select 1 of %d components to delete\n"
@@ -7183,50 +7183,54 @@ msgstr ""
 "Selection 1 de %d composants a supprimer\n"
 "de la librairie <%s>."
 
-#: eeschema/libedit.cpp:405
+#: eeschema/libedit.cpp:406
 msgid "Delete Component"
 msgstr "Suppression Composant"
 
-#: eeschema/libedit.cpp:414
+#: eeschema/libedit.cpp:415
 #, c-format
 msgid "Entry <%s> not found in library <%s>."
 msgstr "Element <%s> non trouvé en librairie <%s>."
 
-#: eeschema/libedit.cpp:421
+#: eeschema/libedit.cpp:422
 #, c-format
 msgid "Delete component \"%s\" from library \"%s\"?"
 msgstr "Supprimer composant \"%s\" de la librairie  \"%s\"?"
 
-#: eeschema/libedit.cpp:441
+#: eeschema/libedit.cpp:442
 msgid "The component being deleted has been modified. All changes will be lost. Discard changes?"
 msgstr ""
 
-#: eeschema/libedit.cpp:496
+#: eeschema/libedit.cpp:497
 msgid ""
 "All changes to the current component will be lost!\n"
 "\n"
 "Clear the current component from the screen?"
 msgstr ""
 
-#: eeschema/libedit.cpp:518
+#: eeschema/libedit.cpp:511
+msgid "This new component has no name and cannot be created. Aborted"
+msgstr ""
+
+#: eeschema/libedit.cpp:522
 #, c-format
 msgid "Component \"%s\" already exists in library \"%s\"."
 msgstr "Composant \"%s\" déjà  existant en librairie \"%s\"."
 
-#: eeschema/libedit.cpp:570
+#: eeschema/libedit.cpp:587
 msgid "No component to save."
 msgstr "Pas de composant à sauver."
 
-#: eeschema/libedit.cpp:579
+#: eeschema/libedit.cpp:596
 msgid "No library specified."
 msgstr "Pas de librairie spécifiée."
 
-#: eeschema/libedit.cpp:589
+#: eeschema/libedit.cpp:606
 #, c-format
 msgid "Component \"%s\" exists. Change it?"
 msgstr "Le composant \" %s\" existe, Le changer ?"
 
-#: eeschema/libedit.cpp:607
+#: eeschema/libedit.cpp:624
 #, c-format
 msgid "Component %s saved in library %s"
 msgstr "Composant %s sauvé en librairie %s"
@@ -7399,7 +7403,7 @@ msgstr "Navigateur"
 msgid "Root"
 msgstr "Racine"
 
-#: eeschema/libframe.cpp:236
+#: eeschema/libframe.cpp:237
 msgid ""
 "Component was modified!\n"
 "Discard changes?"
@@ -7407,7 +7411,7 @@ msgstr ""
 "Le composant a été modifié\n"
 "Perdre les  changements"
 
-#: eeschema/libframe.cpp:250
+#: eeschema/libframe.cpp:251
 #, c-format
 msgid ""
 "Library \"%s\" was modified!\n"
@@ -7416,7 +7420,7 @@ msgstr ""
 "Librairie \"%s\"  modifiée!\n"
 "Perdre les changements ?"
 
-#: eeschema/libframe.cpp:360
+#: eeschema/libframe.cpp:361
 #, c-format
 msgid "Part %c"
 msgstr "Composant %c"
@@ -8265,8 +8269,8 @@ msgid "Create component as power &symbol"
 msgstr "Créer composant comme &symbole d'alimentation"
 
 #: eeschema/dialog_lib_new_component_base.cpp:121
-msgid "Parts in package cannot be swapped"
-msgstr "Les parts du boitier ne peuvent pas être interchangées"
+msgid "Parts in package locked (cannot be swapped)"
+msgstr "Les parts du boitier sont verroulliées (ne peuvent pas être interchangées)"
 
 #: eeschema/dialog_lib_new_component_base.cpp:130
 msgid "Global Pin Settings"
@@ -8287,6 +8291,10 @@ msgstr "Afficher le &numéro de pin"
 #: eeschema/dialog_lib_new_component_base.cpp:177
 msgid "Show pin name te&xt"
 msgstr "Afficher le N&om de Pin"
+
+#: eeschema/dialog_lib_new_component_base.cpp:190
+msgid "Pin name &inside"
+msgstr "Nom de pin à l'&intérieur"
 
 #: eeschema/eeconfig.cpp:281
 msgid "Save Project Settings"
@@ -8318,7 +8326,7 @@ msgstr "Cette feuille utilise des données partagées dans une hiérarchie compl
 msgid "Do we convert it in a simple hierarchical sheet (otherwise delete current sheet data)"
 msgstr "Doit on la convertir en une feuille de hiérarchie simple (autrement supprimer les données courantes)"
 
-#: eeschema/class_drawsheet.cpp:703
+#: eeschema/class_drawsheet.cpp:704
 msgid "FileName"
 msgstr "Nom Fichier"
 
@@ -8819,7 +8827,7 @@ msgstr "Propriétés du label"
 msgid "Text Properties"
 msgstr "Propriétés du Texte"
 
-#: eeschema/class_sch_component.cpp:1032
+#: eeschema/class_sch_component.cpp:1034
 msgid "Ref"
 msgstr "Ref"
 
@@ -9230,99 +9238,74 @@ msgstr "Copie dans Presse papier"
 
 #: eeschema/class_libentry_fields.cpp:134
 msgid "invalid field number defined"
-msgstr ""
-
-#: eeschema/class_libentry_fields.cpp:173
-#, c-format
-msgid "field %d does not have the correct number of parameters"
-msgstr ""
-
-#: eeschema/class_libentry_fields.cpp:188
-#, c-format
-msgid "field %d text orientation parameter <%c> is not valid"
-msgstr "champ %d  parametre d'orientation de texte<%c> non valide"
-
-#: eeschema/class_libentry_fields.cpp:200
-#, c-format
-msgid "field %d text visible parameter <%c> is not valid"
-msgstr "champ %d  parametre de visibilité de texte<%c> non valide"
-
-#: eeschema/class_libentry_fields.cpp:219
-#, c-format
-msgid "field %d text horizontal justification parameter <%c> is not valid"
-msgstr ""
-
-#: eeschema/class_libentry_fields.cpp:233
-#, c-format
-msgid "field %d text vertical justification parameter <%c> is not valid"
-msgstr ""
+msgstr "numéro de champ défini invalide"
 
 #: eeschema/class_libentry_fields.cpp:552
 msgid "Datasheet"
 msgstr "Documentation"
 
-#: eeschema/edit_component_in_lib.cpp:139
+#: eeschema/edit_component_in_lib.cpp:145
 #, c-format
 msgid "Alias <%s> not found for component <%s> in library <%s>."
 msgstr "Alias <%s> non trouvé pour le component <%s> en librairie <%s>."
 
-#: eeschema/edit_component_in_lib.cpp:144
+#: eeschema/edit_component_in_lib.cpp:150
 msgid "Component Library Error"
 msgstr "Erreur en Librairie de Composanr"
 
-#: eeschema/edit_component_in_lib.cpp:264
-#: eeschema/edit_component_in_lib.cpp:334
+#: eeschema/edit_component_in_lib.cpp:275
+#: eeschema/edit_component_in_lib.cpp:345
 #, c-format
 msgid "Alias <%s> cannot be removed while it is being edited!"
 msgstr "L'alias <%s> ne peut être supprimé tant qu'il est en cours d'édition!"
 
-#: eeschema/edit_component_in_lib.cpp:273
+#: eeschema/edit_component_in_lib.cpp:284
 msgid "Remove all aliases from list?"
 msgstr "Supprimer tous les alias de la liste?"
 
-#: eeschema/edit_component_in_lib.cpp:298
+#: eeschema/edit_component_in_lib.cpp:309
 msgid "New alias:"
 msgstr "Noveau alias"
 
-#: eeschema/edit_component_in_lib.cpp:299
+#: eeschema/edit_component_in_lib.cpp:310
 msgid "Component Alias"
 msgstr "Alias de Composant"
 
-#: eeschema/edit_component_in_lib.cpp:309
+#: eeschema/edit_component_in_lib.cpp:320
 #, c-format
 msgid "Alias or component name <%s> already exists in library <%s>."
 msgstr "Alias ou nom de composant <%s> déjà existant en librairie <%s>."
 
-#: eeschema/edit_component_in_lib.cpp:363
+#: eeschema/edit_component_in_lib.cpp:374
 msgid "Delete extra parts from component?"
 msgstr "Supprimer les parts supplémentaires du composant?"
 
-#: eeschema/edit_component_in_lib.cpp:383
+#: eeschema/edit_component_in_lib.cpp:395
 msgid "Add new pins for alternate body style ( DeMorgan ) to component?"
 msgstr ""
 
-#: eeschema/edit_component_in_lib.cpp:391
+#: eeschema/edit_component_in_lib.cpp:402
 msgid "Delete alternate body style (DeMorgan) draw items from component?"
 msgstr ""
 
-#: eeschema/edit_component_in_lib.cpp:415
+#: eeschema/edit_component_in_lib.cpp:426
 msgid "Doc Files"
 msgstr "Fichiers de Doc"
 
-#: eeschema/edit_component_in_lib.cpp:446
+#: eeschema/edit_component_in_lib.cpp:457
 msgid "Ok to Delete FootprintFilter LIST"
 msgstr "Ok pour effacer la LISTE des filtres de modules"
 
-#: eeschema/edit_component_in_lib.cpp:469
+#: eeschema/edit_component_in_lib.cpp:480
 msgid "Add Footprint Filter"
 msgstr "Ajouter Filtre Modules"
 
-#: eeschema/edit_component_in_lib.cpp:469
-#: eeschema/dialog_edit_component_in_lib_base.cpp:211
+#: eeschema/edit_component_in_lib.cpp:480
+#: eeschema/dialog_edit_component_in_lib_base.cpp:214
 msgid "Footprint Filter"
 msgstr "Filtrage Modules"
 
-#: eeschema/edit_component_in_lib.cpp:482
+#: eeschema/edit_component_in_lib.cpp:493
 #, c-format
 msgid "Foot print filter <%s> is already defined."
 msgstr ""
@@ -9528,17 +9511,17 @@ msgid "Show Pin Number"
 msgstr "Montrer Numéro de Pin"
 
 #: eeschema/dialog_create_component.cpp:241
-#: eeschema/dialog_edit_component_in_lib_base.cpp:39
+#: eeschema/dialog_edit_component_in_lib_base.cpp:40
 msgid "Show Pin Name"
 msgstr "Montre Nom de Pin"
 
 #: eeschema/dialog_create_component.cpp:245
-#: eeschema/dialog_edit_component_in_lib_base.cpp:45
+#: eeschema/dialog_edit_component_in_lib_base.cpp:47
 msgid "Pin Name Inside"
 msgstr "Nom de pin à l'intérieur"
 
 #: eeschema/dialog_create_component.cpp:249
-#: eeschema/dialog_edit_component_in_lib_base.cpp:74
+#: eeschema/dialog_edit_component_in_lib_base.cpp:77
 msgid "Skew:"
 msgstr "Décalage:"
 
@@ -9560,25 +9543,25 @@ msgstr ""
 msgid "Show Pin Num"
 msgstr "Montre Numéro de Pin"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:35
+#: eeschema/dialog_edit_component_in_lib_base.cpp:36
 msgid "Show or hide pin numbers"
 msgstr "Affichage ou non des numéroes de pins"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:41
+#: eeschema/dialog_edit_component_in_lib_base.cpp:43
 msgid "Show or hide pin names"
 msgstr "Affichage ou non des noms des pins"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:47
+#: eeschema/dialog_edit_component_in_lib_base.cpp:50
 msgid ""
 "Check this option to have pin names inside the body and pin number outside.\n"
 "If not checked pins names and pins numbers are outside."
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:62
+#: eeschema/dialog_edit_component_in_lib_base.cpp:65
 msgid "Number of Units:"
 msgstr "Nombre de Parts:"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:90
+#: eeschema/dialog_edit_component_in_lib_base.cpp:93
 msgid ""
 "Check this option for power symbols.\n"
 "Power symbols have specific properties"
@@ -9586,42 +9569,42 @@ msgstr ""
 "Activer cete option pour les symboles d'alimentation.\n"
 "Les symboles d'alimentation ont des propriétés spécifiques"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:96
+#: eeschema/dialog_edit_component_in_lib_base.cpp:99
 msgid ""
 "Check this option if Eeschema cannot change parts selections inside a given package\n"
 "This happens when parts are different in this package."
 msgstr ""
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:108
+#: eeschema/dialog_edit_component_in_lib_base.cpp:111
 msgid "Description:"
 msgstr "Description:"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:115
+#: eeschema/dialog_edit_component_in_lib_base.cpp:118
 msgid "Keywords:"
 msgstr "Mots Clés:"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:122
+#: eeschema/dialog_edit_component_in_lib_base.cpp:125
 msgid "DocFileName:"
 msgstr "Fichier de Doc:"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:132
+#: eeschema/dialog_edit_component_in_lib_base.cpp:135
 msgid "Copy Doc"
 msgstr "Copie Doc"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:135
+#: eeschema/dialog_edit_component_in_lib_base.cpp:138
 msgid "Browse DocFiles"
 msgstr "Examen Fichiers de Doc"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:151
+#: eeschema/dialog_edit_component_in_lib_base.cpp:154
 msgid "Alias List:"
 msgstr "Liste des Alias:"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:169
-#: eeschema/dialog_edit_component_in_lib_base.cpp:203
+#: eeschema/dialog_edit_component_in_lib_base.cpp:172
+#: eeschema/dialog_edit_component_in_lib_base.cpp:206
 msgid "Delete All"
 msgstr "Tout Supprimer"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:185
+#: eeschema/dialog_edit_component_in_lib_base.cpp:188
 msgid "Footprints"
 msgstr "Modules"
 
@@ -12300,6 +12283,14 @@ msgstr "DCodes id."
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "field %d does not have the correct number of parameters"
+#~ msgstr "le champ %d n'a pas le nombre correct de parametres"
+#~ msgid "field %d text orientation parameter <%c> is not valid"
+#~ msgstr "champ %d  parametre d'orientation de texte<%c> non valide"
+#~ msgid "field %d text visible parameter <%c> is not valid"
+#~ msgstr "champ %d  parametre de visibilité de texte<%c> non valide"
+#~ msgid "Seg"
+#~ msgstr "Seg"
 #~ msgid "Change track width (entire NET) ?"
 #~ msgstr "Change largeur piste ( NET complet) ?"
 #~ msgid "Edit All Via Sizes"

@@ -442,7 +442,7 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile,
     }
 
     wxString msg;
-    msg.Printf( _( "Command <%s> could not found" ), ExecFile.c_str() );
+    msg.Printf( _( "Command <%s> could not found" ), GetChars( ExecFile ) );
     DisplayError( frame, msg, 20 );
     return -1;
 }

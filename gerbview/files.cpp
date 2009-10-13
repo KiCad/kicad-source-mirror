@@ -201,7 +201,7 @@ static void LoadDCodeFile( WinEDA_GerberFrame* frame, const wxString& FullFileNa
     if( !fn.IsOk() )
     {
         wildcard.Printf( _( "Gerber DCODE files (%s)|*.%s" ),
-                         g_PenFilenameExt.c_str(), g_PenFilenameExt.c_str());
+                         GetChars( g_PenFilenameExt ), GetChars( g_PenFilenameExt ));
         wildcard += AllFilesWildcard;
         fn = frame->GetScreen()->m_FileName;
         fn.SetExt( g_PenFilenameExt );
@@ -236,7 +236,7 @@ bool WinEDA_GerberFrame::SaveGerberFile( const wxString& FullFileName, wxDC* DC 
         fn = GetScreen()->m_FileName;
 
         wildcard.Printf( _( "Gerber DCODE files (%s)|*.%s" ),
-                         g_PenFilenameExt.c_str(), g_PenFilenameExt.c_str());
+                         GetChars( g_PenFilenameExt ), GetChars( g_PenFilenameExt ));
 
         wxFileDialog dlg( this, _( "Save Gerber File" ), fn.GetPath(),
                           fn.GetFullName(), wildcard,

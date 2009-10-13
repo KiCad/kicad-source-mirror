@@ -209,12 +209,12 @@ void WinEDA_MsgPanel::showItem( wxDC& dc, const MsgItem& aItem )
 
     if( !aItem.m_UpperText.IsEmpty() )
     {
-        dc.DrawText( aItem.m_UpperText.GetData(), aItem.m_X, aItem.m_UpperY );
+        dc.DrawText( aItem.m_UpperText, aItem.m_X, aItem.m_UpperY );
     }
 
     if( !aItem.m_LowerText.IsEmpty() )
     {
-        dc.DrawText( aItem.m_LowerText.GetData(), aItem.m_X, aItem.m_LowerY );
+        dc.DrawText( aItem.m_LowerText, aItem.m_X, aItem.m_LowerY );
     }
 }
 

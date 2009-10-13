@@ -278,8 +278,6 @@ void WinEDA_MainFrame::OnRunEeschema( wxCommandEvent& event )
 {
     wxFileName fn( m_ProjectFileName );
     fn.SetExt( SchematicFileExtension );
-    wxLogDebug( wxT( "Loading EESchema with file <%s>." ),
-                fn.GetFullPath().c_str() );
     ExecuteFile( this, EESCHEMA_EXE, QuoteFullPath( fn ) );
 }
 

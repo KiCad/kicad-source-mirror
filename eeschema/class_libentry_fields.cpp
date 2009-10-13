@@ -170,7 +170,7 @@ bool LIB_FIELD::Load( char* line, wxString& errorMsg )
 
     if( cnt < 5 )
     {
-        errorMsg.Printf( _( "field %d does not have the correct number of \
+        errorMsg.Printf( wxT( "field %d does not have the correct number of \
 parameters" ),
                          m_FieldId );
         return false;
@@ -185,7 +185,7 @@ parameters" ),
         m_Orient = TEXT_ORIENT_VERT;
     else
     {
-        errorMsg.Printf( _( "field %d text orientation parameter <%c> is \
+        errorMsg.Printf( wxT( "field %d text orientation parameter <%c> is \
 not valid" ),
                          textOrient );
         return false;
@@ -197,7 +197,7 @@ not valid" ),
         m_Attributs |= TEXT_NO_VISIBLE;
     else
     {
-        errorMsg.Printf( _( "field %d text visible parameter <%c> is not \
+        errorMsg.Printf( wxT( "field %d text visible parameter <%c> is not \
 valid" ),
                          textVisible );
         return false;
@@ -216,7 +216,7 @@ valid" ),
             m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
         else
         {
-            errorMsg.Printf( _( "field %d text horizontal justification \
+            errorMsg.Printf( wxT( "field %d text horizontal justification \
 parameter <%c> is not valid" ),
                              textHJustify );
             return false;
@@ -230,7 +230,7 @@ parameter <%c> is not valid" ),
             m_VJustify = GR_TEXT_VJUSTIFY_TOP;
         else
         {
-            errorMsg.Printf( _( "field %d text vertical justification \
+            errorMsg.Printf( wxT( "field %d text vertical justification \
 parameter <%c> is not valid" ),
                              textVJustify[0] );
             return false;

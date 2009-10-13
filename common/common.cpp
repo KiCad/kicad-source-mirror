@@ -469,7 +469,7 @@ wxString GenDate()
     time( &buftime );
     Date = gmtime( &buftime );
     string_date.Printf( wxT( "%d %s %d" ), Date->tm_mday,
-                        mois[Date->tm_mon].GetData(),
+                        GetChars( mois[Date->tm_mon] ),
                         Date->tm_year + 1900 );
     return string_date;
 }

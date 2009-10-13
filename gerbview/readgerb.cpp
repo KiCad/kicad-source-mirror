@@ -272,7 +272,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
             fn = GERBER_FullFileName;
             fn.SetExt( g_PenFilenameExt );
             wildcard.Printf( _( "Gerber DCODE files (%s)|*.%s" ),
-                             g_PenFilenameExt.c_str(), g_PenFilenameExt.c_str());
+                             GetChars( g_PenFilenameExt ), GetChars( g_PenFilenameExt ));
             wildcard += AllFilesWildcard;
 
             wxFileDialog dlg( this, _( "Load GERBER DCODE File" ),

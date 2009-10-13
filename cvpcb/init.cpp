@@ -49,8 +49,8 @@ void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
     Component->m_Module = package;
 
     Line.Printf( CMP_FORMAT, NumCmp + 1,
-                 Component->m_Reference.GetData(), Component->m_Value.GetData(),
-                 Component->m_Module.GetData() );
+                 GetChars( Component->m_Reference ), GetChars( Component->m_Value ),
+                 GetChars( Component->m_Module ) );
     m_modified = true;
 
     if( isUndefined )
@@ -84,7 +84,7 @@ bool WinEDA_CvpcbFrame::ReadNetList()
     if( error_level < 0 )
     {
         msg.Printf( _( "File <%s> does not appear to be a valid Kicad net list file." ),
-                    m_NetlistFileName.GetFullPath().c_str() );
+                    GetChars( m_NetlistFileName.GetFullPath() ) );
         ::wxMessageBox( msg, _( "File Error" ), wxOK | wxICON_ERROR, this );
         return false;
     }
@@ -105,9 +105,9 @@ bool WinEDA_CvpcbFrame::ReadNetList()
     BOOST_FOREACH( COMPONENT& component, m_components )
     {
         msg.Printf( CMP_FORMAT, m_ListCmp->GetCount() + 1,
-                    component.m_Reference.GetData(),
-                    component.m_Value.GetData(),
-                    component.m_Module.GetData() );
+                    GetChars( component.m_Reference ),
+                    GetChars( component.m_Value ),
+                    GetChars( component.m_Module ) );
         m_ListCmp->AppendLine( msg );
         if( component.m_Module.IsEmpty() )
             m_undefinedComponentCnt += 1;

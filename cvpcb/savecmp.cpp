@@ -85,7 +85,7 @@ bool LoadComponentFile( const wxString& fileName, COMPONENT_LIST& list )
     if( source == NULL )
     {
         msg.Printf( _( "Cannot open component library <%s>." ),
-                    fn.GetFullPath().c_str() );
+                    GetChars( fn.GetFullPath() ) );
         wxMessageBox( msg, titleComponentLibErr, wxOK | wxICON_ERROR );
         return false;
     }
@@ -94,7 +94,7 @@ bool LoadComponentFile( const wxString& fileName, COMPONENT_LIST& list )
     if( fgets( Line, 79, source ) == 0 )
     {
         msg.Printf( _( " <%s> does not appear to be a valid Kicad component library." ),
-                    fn.GetFullPath().c_str() );
+                    GetChars( fn.GetFullPath() ) );
         wxMessageBox( msg, titleComponentLibErr, wxOK | wxICON_ERROR );
         fclose( source );
         return false;

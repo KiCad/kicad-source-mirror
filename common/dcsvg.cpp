@@ -907,7 +907,7 @@ void wxSVGFileDC::DoDrawBitmap( const class wxBitmap& bmp,
     int      h = myBitmap.GetHeight();
     sTmp.Printf( wxT( " <image x=\"%d\" y=\"%d\" width=\"%dpx\" height=\"%dpx\" " ), x, y, w, h );
     s = s + sTmp;
-    sTmp.Printf( wxT( " xlink:href=\"%s\"> \n" ), sPNG.c_str() );
+    sTmp.Printf( wxT( " xlink:href=\"%s\"> \n" ), GetChars( sPNG ) );
     s = s + sTmp + wxT( "<title>Image from wxSVG</title>  </image>" ) + newline;
 
     if( m_OK && bPNG_OK )

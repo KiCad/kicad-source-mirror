@@ -171,7 +171,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
     {
         if( ShowError )
         {
-            msg.Printf( _( "file %s not found" ), fn.GetFullPath().c_str() );
+            msg.Printf( _( "file %s not found" ), GetChars( fn.GetFullPath() ) );
             m_WinMessages->AppendText( msg );
         }
         return 1;
@@ -186,7 +186,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
         if( ShowError )
         {
             msg.Printf( _( "Unable to create file %s" ),
-                       tmpFileName.GetFullPath().c_str() );
+                       GetChars( tmpFileName.GetFullPath() ) );
             m_WinMessages->AppendText( msg );
         }
         return 1;

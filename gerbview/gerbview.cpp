@@ -104,9 +104,6 @@ bool WinEDA_App::OnInit()
             fn = wxFileName( argv[i] );
             fn.SetExt( g_PhotoFilenameExt );
 
-            wxLogDebug( wxT( "Opening file <%s> in GerbView." ),
-                        fn.GetFullPath().c_str() );
-
             if( fn.FileExists() )
             {
                 ( (PCB_SCREEN*) frame->GetScreen() )->m_Active_Layer = i - 1;

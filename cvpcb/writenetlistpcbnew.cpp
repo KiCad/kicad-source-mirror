@@ -54,15 +54,11 @@ static void RemoveDuplicatePins( COMPONENT& component )
         if( !same_pin_net( pin1, pin2 ) )
         {
             msg.Printf( _( "Component %s %s pin %s : Different Nets" ),
-                        component.m_Reference.GetData(),
-                        component.m_Value.GetData(),
+                        GetChars( component.m_Reference ),
+                        GetChars( component.m_Value ),
                         pin1->m_Number.GetData() );
             DisplayError( NULL, msg, 60 );
         }
-
-        wxLogDebug( wxT( "Removing duplicate pin %s from component %s: %s" ),
-                    pin1->m_Number.c_str(), component.m_Reference.c_str(),
-                    component.m_Value.c_str() );
         pin1 = pin2;
         i = component.m_Pins.erase( i );
         delete pin2;

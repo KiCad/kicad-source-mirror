@@ -176,7 +176,7 @@ void WinEDAListBox::ClickOnList( wxCommandEvent& event )
         m_WinMsg->Clear();
         text = m_List->GetStringSelection();
         m_MoveFct( text );
-        m_WinMsg->WriteText( text.GetData() );
+        m_WinMsg->WriteText( text );
     }
 }
 

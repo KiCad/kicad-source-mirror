@@ -92,18 +92,16 @@ void WinEDA_CvpcbFrame::AssocieModule( wxCommandEvent& event )
         {
             msg.Printf( _( "Footprint alias library file <%s> could not be \
 found in the default search paths." ),
-                        fn.GetFullName().c_str() );
+                        GetChars( fn.GetFullName() ) );
             wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
             continue;
         }
-
-        wxLogDebug( wxT( "Opening footprint alias file: %s." ), tmp.c_str() );
 
         file = wxFopen( tmp, wxT( "rt" ) );
 
         if( file == NULL )
         {
-            msg.Printf( _( "Error opening alias library <%s>." ), tmp.c_str() );
+            msg.Printf( _( "Error opening alias library <%s>." ), GetChars( tmp ) );
             wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
             continue;
         }
@@ -128,8 +126,6 @@ found in the default search paths." ),
             alias = new FOOTPRINT_ALIAS();
             alias->m_Name = value;
             alias->m_FootprintName = footprint;
-            wxLogDebug( wxT( "Adding alias %s for footprint %s" ),
-                        value.c_str(), footprint.c_str() );
             aliases.push_back( alias );
             text++;
         }
@@ -168,8 +164,8 @@ found in the default search paths." ),
             {
                 msg.Printf( _( "Component %s: footprint %s not found in \
 any of the project footprint libraries." ),
-                            component.m_Reference.c_str(),
-                            alias.m_FootprintName.c_str() );
+                            GetChars( component.m_Reference ),
+                            GetChars( alias.m_FootprintName ) );
                 wxMessageBox( msg, _( "CVPcb Error" ), wxOK | wxICON_ERROR,
                               this );
             }
