@@ -3,10 +3,6 @@
  * @file basicframe.cpp
  */
 
-#ifdef __GNUG__
-#	pragma implementation
-#endif
-
 #include <wx/aboutdlg.h>
 #include <wx/fontdlg.h>
 
@@ -21,6 +17,7 @@
 #include "confirm.h"
 #include "eda_doc.h"
 #include "wxstruct.h"
+#include "macros.h"
 
 
 /*

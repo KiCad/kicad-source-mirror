@@ -29,6 +29,7 @@
 #include "dcsvg.h"
 
 #include "wx/image.h"
+#include "macros.h"
 
 #define wxSVG_DEBUG FALSE
 

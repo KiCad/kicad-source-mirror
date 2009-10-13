@@ -1,4 +1,6 @@
+#include "fctsys.h"
 #include "dialog_load_error.h"
+#include "macros.h"
 
 DIALOG_LOAD_ERROR::DIALOG_LOAD_ERROR( wxWindow* parent )
 :
