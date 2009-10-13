@@ -62,15 +62,6 @@ int NETINFO_ITEM:: ReadDescr( FILE* File, int* LineNum )
             m_Netname = CONV_FROM_UTF8( Ltmp );
             continue;
         }
-
-        /*
-        if( strncmp( Line, "NetClass", 8 ) == 0 )
-        {
-            ReadDelimitedText( Ltmp, Line + 8, sizeof(Ltmp) );
-            m_NetClassName = CONV_FROM_UTF8( Ltmp );
-            continue;
-        }
-        */
     }
 
     return 1;

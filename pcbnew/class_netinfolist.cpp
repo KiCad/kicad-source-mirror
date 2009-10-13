@@ -139,6 +139,16 @@ void NETINFO_LIST::BuildListOfNets()
     m_Parent->m_Status_Pcb |= NET_CODES_OK;
 
     m_Parent->SetAreasNetCodesFromNetNames();
+
+// For test and debug purposes only
+#if 0
+    for( unsigned icnt = 0; icnt < GetCount(); icnt++)
+    {
+        wxLogWarning(wxT("icnt %d, netcode %d, netname <%s>\n"),
+            icnt, m_NetBuffer[icnt]->GetNet(),
+             GetChars( m_NetBuffer[icnt]->GetNetname() ) );
+    }
+#endif
 }
 
 

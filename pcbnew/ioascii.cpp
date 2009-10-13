@@ -997,13 +997,15 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 
     SetLocaleTo_Default( );      // revert to the current  locale
 
-    Affiche_Message( wxEmptyString );
-
-    BestZoom();
+    GetBoard()->m_Status_Pcb = 0;
+    // Build the net info list
+    GetBoard()->m_NetInfo->BuildListOfNets();
 
     board->SynchronizeNetsAndNetClasses( );
-    board->m_Status_Pcb = 0;
+
     m_TrackAndViasSizesList_Changed = true;
+    Affiche_Message( wxEmptyString );
+    BestZoom();
     SetToolbars();
     return 1;
 }
@@ -1036,7 +1038,8 @@ int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* aFile )
     fprintf( aFile, "# Created by Pcbnew%s\n\n", CONV_TO_UTF8( GetBuildVersion() ) );
 
     GetBoard()->SynchronizeNetsAndNetClasses();
-    // Select default Netclass. Useful to save default values in headers
+    // Select default Netclass before writing file.
+    // Useful to save default values in headers
     GetBoard()->SetCurrentNetClass( GetBoard()->m_NetClasses.GetDefault()->GetName( ));
     m_TrackAndViasSizesList_Changed = true;
     AuxiliaryToolBar_Update_UI();

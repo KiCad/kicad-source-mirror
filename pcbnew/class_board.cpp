@@ -890,7 +890,8 @@ NETINFO_ITEM* BOARD::FindNet( int anetcode ) const
     {
         if( anetcode != net->GetNet() )
         {
-           printf("FindNet() anetcode %d != GetNet() %d\n", anetcode, net->GetNet());
+           printf("FindNet() anetcode %d != GetNet() %d (net: %s)\n",
+                anetcode, net->GetNet(), CONV_TO_UTF8(net->GetNetname()));
         }
     }
 #endif
