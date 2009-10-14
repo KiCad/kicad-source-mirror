@@ -133,18 +133,8 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI()
 
     if( m_SelGridBox )
     {
-        int kk = m_SelGridBox->GetChoice();
-
-        for( int ii = 0; ii < (int) GetScreen()->m_GridList.GetCount(); ii++ )
-        {
-            if( GetScreen()->GetGrid() == GetScreen()->m_GridList[ii].m_Size )
-            {
-                if( kk != ii )
-                    m_SelGridBox->SetSelection( ii );
-                kk = ii;
-                break;
-            }
-        }
+        m_SelGridBox->SetSelection( ID_POPUP_GRID_LEVEL_1000 +
+                                    m_LastGridSizeId );
     }
 
     m_TrackAndViasSizesList_Changed = false;

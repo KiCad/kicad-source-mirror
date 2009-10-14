@@ -301,7 +301,7 @@ bool EDA_Printout::OnPrintPage( int page )
     wxString msg;
 
     msg.Printf( _( "Print page %d" ), page );
-    m_Parent->Affiche_Message( msg );
+    m_Parent->AppendMsgPanel( msg, wxEmptyString, CYAN );
 
     WinEDA_SchematicFrame* schframe     = (WinEDA_SchematicFrame*) m_Parent;
     SCH_SCREEN*            screen       = schframe->GetScreen();

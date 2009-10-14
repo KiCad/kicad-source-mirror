@@ -58,16 +58,15 @@ void LIB_DRAW_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
 
-    frame->MsgPanel->EraseMsgBox();
-
-    frame->MsgPanel->AppendMessage( _( "Type" ), m_typeName, CYAN );
+    frame->ClearMsgPanel();
+    frame->AppendMsgPanel( _( "Type" ), m_typeName, CYAN );
 
     /* Affichage de l'appartenance */
     if( m_Unit == 0 )
         msg = _( "All" );
     else
         msg.Printf( wxT( "%d" ), m_Unit );
-    frame->MsgPanel->AppendMessage( _( "Unit" ), msg, BROWN );
+    frame->AppendMsgPanel( _( "Unit" ), msg, BROWN );
 
     if( m_Convert == 0 )
         msg = _( "All" );
@@ -77,7 +76,7 @@ void LIB_DRAW_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
         msg = _( "yes" );
     else
         msg = wxT( "?" );
-    frame->MsgPanel->AppendMessage( _( "Convert" ), msg, BROWN );
+    frame->AppendMsgPanel( _( "Convert" ), msg, BROWN );
 }
 
 
@@ -525,12 +524,12 @@ void LIB_ARC::DisplayInfo( WinEDA_DrawFrame* frame )
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
 
-    frame->MsgPanel->AppendMessage( _( "Line width" ), msg, BLUE );
+    frame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
-    frame->MsgPanel->AppendMessage( _( "Bounding box" ), msg, BROWN );
+    frame->AppendMsgPanel( _( "Bounding box" ), msg, BROWN );
 }
 
 
@@ -785,16 +784,16 @@ void LIB_CIRCLE::DisplayInfo( WinEDA_DrawFrame* frame )
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
 
-    frame->MsgPanel->AppendMessage( _( "Line width" ), msg, BLUE );
+    frame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
 
     msg = ReturnStringFromValue( g_UnitMetric, m_Radius,
                                  EESCHEMA_INTERNAL_UNIT, true );
-    frame->MsgPanel->AppendMessage( _( "Radius" ), msg, RED );
+    frame->AppendMsgPanel( _( "Radius" ), msg, RED );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
-    frame->MsgPanel->AppendMessage( _( "Bounding box" ), msg, BROWN );
+    frame->AppendMsgPanel( _( "Bounding box" ), msg, BROWN );
 }
 
 
@@ -1009,7 +1008,7 @@ void LIB_RECTANGLE::DisplayInfo( WinEDA_DrawFrame* frame )
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
 
-    frame->MsgPanel->AppendMessage( _( "Line width" ), msg, BLUE );
+    frame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
 }
 
 
@@ -1260,12 +1259,12 @@ void LIB_SEGMENT::DisplayInfo( WinEDA_DrawFrame* frame )
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
 
-    frame->MsgPanel->AppendMessage( _( "Line width" ), msg, BLUE );
+    frame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
-    frame->MsgPanel->AppendMessage( _( "Bounding box" ), msg, BROWN );
+    frame->AppendMsgPanel( _( "Bounding box" ), msg, BROWN );
 }
 
 
@@ -1670,12 +1669,12 @@ void LIB_POLYLINE::DisplayInfo( WinEDA_DrawFrame* frame )
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
 
-    frame->MsgPanel->AppendMessage( _( "Line width" ), msg, BLUE );
+    frame->AppendMsgPanel(_( "Line width" ), msg, BLUE );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
-    frame->MsgPanel->AppendMessage( _( "Bounding box" ), msg, BROWN );
+    frame->AppendMsgPanel( _( "Bounding box" ), msg, BROWN );
 }
 
 /***************************/
@@ -2038,10 +2037,10 @@ void LIB_BEZIER::DisplayInfo( WinEDA_DrawFrame* frame )
     msg = ReturnStringFromValue( g_UnitMetric, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
 
-    frame->MsgPanel->AppendMessage( _( "Line width" ), msg, BLUE );
+    frame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
-    frame->MsgPanel->AppendMessage( _( "Bounding box" ), msg, BROWN );
+    frame->AppendMsgPanel( _( "Bounding box" ), msg, BROWN );
 }

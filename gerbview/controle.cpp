@@ -58,7 +58,7 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     curpos = DrawPanel->CursorRealPosition( Mouse );
     oldpos = GetScreen()->m_Curseur;
 
-    delta = GetScreen()->GetGrid();
+    delta = GetScreen()->GetGridSize();
     GetScreen()->Scale( delta );
 
     if( delta.x == 0 )

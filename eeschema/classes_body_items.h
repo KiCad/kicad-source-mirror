@@ -11,6 +11,7 @@
 class LIB_COMPONENT;
 class PLOTTER;
 class LIB_DRAW_ITEM;
+class LIB_PIN;
 
 
 #define TARGET_PIN_DIAM     12  /* Circle diameter drawn at the active end of
@@ -85,6 +86,23 @@ enum  DrawPinOrient
     PIN_UP    = 'U',
     PIN_DOWN  = 'D',
 };
+
+
+/**
+ * Helper for defining a list of library draw object pointers.  The Boost
+ * pointer containers are responsible for deleting object pointers placed
+ * in them.  If you access a object pointer from the list, do not delete
+ * it directly.
+ */
+typedef boost::ptr_vector< LIB_DRAW_ITEM > LIB_DRAW_ITEM_LIST;
+
+
+/**
+ * Helper for defining a list of pin object pointers.  The list does not
+ * use a Boost pointer class so the ojbect pointers do not accidently get
+ * deleted when the container is deleted.
+ */
+typedef std::vector< LIB_PIN* > LIB_PIN_LIST;
 
 
 /****************************************************************************/
@@ -309,12 +327,6 @@ protected:
                          const int transform[2][2] ) = 0;
     virtual int DoGetWidth( void ) = 0;
 };
-
-
-/**
- * Helper for defining a list of library draw object pointers.
- */
-typedef boost::ptr_vector< LIB_DRAW_ITEM > LIB_DRAW_ITEM_LIST;
 
 
 /********/

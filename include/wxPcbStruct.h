@@ -58,6 +58,8 @@ public:
     wxTextCtrl* m_NetClassSelectedBox;      // a text ctrl to display the current NetClass
     bool        m_TrackAndViasSizesList_Changed;
 
+    bool        m_show_microwave_tools;
+
 private:
 
     DRC*             m_drc;         ///< the DRC controller, see drc.cpp
@@ -670,6 +672,28 @@ public:
     void         Begin_Self( wxDC* DC );
     MODULE*      Genere_Self( wxDC* DC );
 
+    /**
+     * Load applications settings specific to the PCBNew.
+     *
+     * This overrides the base class WinEDA_BasePcbFrame::LoadSettings() to
+     * handle settings specific common to the PCB layout application.  It
+     * calls down to the base class to load settings common to all PCB type
+     * drawing frames.  Please put your application settings for PCBNew here
+     * to avoid having application settings loaded all over the place.
+     */
+    virtual void LoadSettings();
+
+    /**
+     * Save applications settings common to PCB draw frame objects.
+     *
+     * This overrides the base class WinEDA_BasePcbFrame::SaveSettings() to
+     * save settings specific to the PCB layout application main window.  It
+     * calls down to the base class to save settings common to all PCB type
+     * drawing frames.  Please put your application settings for PCBNew here
+     * to avoid having application settings saved all over the place.
+     */
+    virtual void SaveSettings();
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -712,7 +736,6 @@ public:
     void         OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
     void         Show3D_Frame( wxCommandEvent& event );
     void         GeneralControle( wxDC* DC, wxPoint Mouse );
-    virtual void OnSelectGrid( wxCommandEvent& event );
     void         LoadModuleFromBoard( wxCommandEvent& event );
 
     // BOARD handling

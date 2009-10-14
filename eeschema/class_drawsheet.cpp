@@ -698,10 +698,9 @@ bool DrawSheetStruct::ChangeFileName( WinEDA_SchematicFrame* aFrame,
 /***********************************************************/
 void DrawSheetStruct::DisplayInfo( WinEDA_DrawFrame* frame )
 {
-    WinEDA_MsgPanel *msgpanel = frame->MsgPanel;
-    msgpanel->EraseMsgBox();
-    msgpanel->AppendMessage( _( "Name" ), m_SheetName, CYAN );
-    msgpanel->AppendMessage( _( "FileName" ), m_FileName, BROWN );
+    frame->ClearMsgPanel();
+    frame->AppendMsgPanel( _( "Sheet name" ), m_SheetName, CYAN );
+    frame->AppendMsgPanel( _( "File name" ), m_FileName, BROWN );
 }
 
 

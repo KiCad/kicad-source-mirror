@@ -261,7 +261,7 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     curpos = DrawPanel->CursorRealPosition( Mouse );
     oldpos = GetScreen()->m_Curseur;
 
-    delta = GetScreen()->GetGrid();
+    delta = GetScreen()->GetGridSize();
     GetScreen()->Scale( delta );
 
     if( delta.x <= 0 )
@@ -326,10 +326,10 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
         PutOnGrid( &on_grid );
         wxSize grid;
-        grid.x = (int) GetScreen()->GetGrid().x;
-        grid.y = (int) GetScreen()->GetGrid().y;
+        grid.x = (int) GetScreen()->GetGridSize().x;
+        grid.y = (int) GetScreen()->GetGridSize().y;
         if( Magnetize(m_Pcb, (WinEDA_PcbFrame *) this, m_ID_current_state,
-                        grid, on_grid, &curpos) )
+                      grid, on_grid, &curpos) )
         {
             GetScreen()->m_Curseur = curpos;
         }

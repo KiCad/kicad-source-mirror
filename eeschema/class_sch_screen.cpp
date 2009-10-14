@@ -53,6 +53,7 @@ static int SchematicZoomList[] =
 
 #define SCHEMATIC_ZOOM_LIST_CNT  ( sizeof( SchematicZoomList ) / \
                                    sizeof( int ) )
+#define MM_TO_SCH_UNITS 1000.0 / 25.4000508001016
 
 
 /* Default grid sizes for the schematic editor. */
@@ -62,7 +63,19 @@ static GRID_TYPE SchematicGridList[] = {
     { ID_POPUP_GRID_LEVEL_10, wxRealPoint( 10, 10 ) },
     { ID_POPUP_GRID_LEVEL_5, wxRealPoint( 5, 5 ) },
     { ID_POPUP_GRID_LEVEL_2, wxRealPoint( 2, 2 ) },
-    { ID_POPUP_GRID_LEVEL_1, wxRealPoint( 1, 1 ) }
+    { ID_POPUP_GRID_LEVEL_1, wxRealPoint( 1, 1 ) },
+
+    // predefined grid list in mm
+    { ID_POPUP_GRID_LEVEL_2_5MM, wxRealPoint( MM_TO_SCH_UNITS * 2.5,
+                                              MM_TO_SCH_UNITS * 2.5 ) },
+    { ID_POPUP_GRID_LEVEL_1MM, wxRealPoint( MM_TO_SCH_UNITS,
+                                            MM_TO_SCH_UNITS ) },
+    { ID_POPUP_GRID_LEVEL_0_5MM, wxRealPoint( MM_TO_SCH_UNITS * 0.5,
+                                              MM_TO_SCH_UNITS * 0.5 ) },
+    { ID_POPUP_GRID_LEVEL_0_25MM, wxRealPoint( MM_TO_SCH_UNITS * 0.25,
+                                               MM_TO_SCH_UNITS * 0.25 ) },
+    { ID_POPUP_GRID_LEVEL_0_1MM, wxRealPoint( MM_TO_SCH_UNITS * 0.1,
+                                              MM_TO_SCH_UNITS * 0.1 ) }
 };
 
 #define SCHEMATIC_GRID_LIST_CNT ( sizeof( SchematicGridList ) / \

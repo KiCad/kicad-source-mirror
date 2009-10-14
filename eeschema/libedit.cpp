@@ -268,13 +268,13 @@ void WinEDA_LibeditFrame::SaveActiveLibrary( wxCommandEvent& event )
 
     bool success = m_library->Save( fn.GetFullPath(), true );
 
-    MsgPanel->EraseMsgBox();
+    ClearMsgPanel();
 
     if( !success )
     {
         msg = _( "Error while saving library file \"" ) + fn.GetFullPath() +
               _( "\"." );
-        MsgPanel->AppendMessage( wxT( "*** ERROR: ***" ), msg, RED );
+        AppendMsgPanel( _( "*** ERROR: ***" ), msg, RED );
         DisplayError( this, msg );
     }
     else
@@ -283,7 +283,7 @@ void WinEDA_LibeditFrame::SaveActiveLibrary( wxCommandEvent& event )
         fn.SetExt( DOC_EXT );
         wxString msg1 = _( "Document file \"" ) + fn.GetFullPath() +
                         wxT( "\" Ok" );
-        MsgPanel->AppendMessage( msg, msg1, BLUE );
+        AppendMsgPanel( msg, msg1, BLUE );
     }
 }
 
@@ -297,14 +297,14 @@ void WinEDA_LibeditFrame::DisplayCmpDoc()
     wxString msg;
     LIB_ALIAS* alias = NULL;
 
-    MsgPanel->EraseMsgBox();
+    ClearMsgPanel();
 
     if( m_library == NULL || m_component == NULL )
         return;
 
     msg = m_component->GetName();
 
-    MsgPanel->AppendMessage( _( "Part" ), msg, BLUE, 8 );
+    AppendMsgPanel( _( "Part" ), msg, BLUE, 8 );
 
     if( m_aliasName.IsEmpty() )
     {
@@ -316,40 +316,40 @@ void WinEDA_LibeditFrame::DisplayCmpDoc()
         alias = m_library->FindAlias( m_aliasName );
     }
 
-    MsgPanel->AppendMessage( _( "Alias" ), msg, RED, 8 );
+    AppendMsgPanel( _( "Alias" ), msg, RED, 8 );
 
     static wxChar UnitLetter[] = wxT( "?ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
     msg = UnitLetter[m_unit];
 
-    MsgPanel->AppendMessage( _( "Unit" ), msg, BROWN, 8 );
+    AppendMsgPanel( _( "Unit" ), msg, BROWN, 8 );
 
     if( m_convert > 1 )
         msg = _( "Convert" );
     else
         msg = _( "Normal" );
 
-    MsgPanel->AppendMessage( _( "Body" ), msg, GREEN, 8 );
+    AppendMsgPanel( _( "Body" ), msg, GREEN, 8 );
 
     if( m_component->m_Options == ENTRY_POWER )
         msg = _( "Power Symbol" );
     else
         msg = _( "Component" );
 
-    MsgPanel->AppendMessage( _( "Type" ), msg, MAGENTA, 8 );
+    AppendMsgPanel( _( "Type" ), msg, MAGENTA, 8 );
 
     if( alias != NULL )
         msg = alias->m_Doc;
     else
         msg = m_component->m_Doc;
 
-    MsgPanel->AppendMessage( _( "Description" ), msg, CYAN, 8 );
+    AppendMsgPanel( _( "Description" ), msg, CYAN, 8 );
 
     if( alias != NULL )
         msg = alias->m_KeyWord;
     else
         msg = m_component->m_KeyWord;
 
-    MsgPanel->AppendMessage( _( "Key words" ), msg, DARKDARKGRAY );
+    AppendMsgPanel( _( "Key words" ), msg, DARKDARKGRAY );
 }
 
 

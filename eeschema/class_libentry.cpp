@@ -431,6 +431,20 @@ LIB_DRAW_ITEM* LIB_COMPONENT::GetNextDrawItem( LIB_DRAW_ITEM* item,
 }
 
 
+void LIB_COMPONENT::GetPins( LIB_PIN_LIST& pins, int unit, int convert )
+{
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
+    {
+        if( item.Type() != COMPONENT_PIN_DRAW_TYPE ||
+            ( unit && item.m_Unit != unit ) ||
+            ( convert && item.m_Convert != convert ) )
+            continue;
+
+        pins.push_back( (LIB_PIN*) &item );
+    }
+}
+
+
 /**
  * Function Save
  * writes the data structures for this object out to a FILE in "*.brd" format.

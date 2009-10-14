@@ -1025,29 +1025,30 @@ void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
 
+    if( Entry == NULL )
+        return;
+
     wxString msg;
-    WinEDA_MsgPanel *msgpanel = frame->MsgPanel;
 
-    msgpanel->EraseMsgBox();
+    frame->ClearMsgPanel();
 
-    msg = GetRef(((WinEDA_SchematicFrame*)frame)->GetSheet());
-    msgpanel->AppendMessage( _( "Ref" ), msg, DARKCYAN );
+    frame->AppendMsgPanel( _( "Reference" ),
+                           GetRef(((WinEDA_SchematicFrame*)frame)->GetSheet()),
+                           DARKCYAN );
 
-    if( Entry && Entry->m_Options == ENTRY_POWER )
-        msg = _( "Pwr Symb" );
+    if( Entry->m_Options == ENTRY_POWER )
+        msg = _( "Power symbol" );
     else
-        msg = _( "Val" );
+        msg = _( "Name" );
 
-    msgpanel->AppendMessage( msg, GetField( VALUE )->m_Text, DARKCYAN );
-
-    msgpanel->AppendMessage( _( "RefLib" ), m_ChipName.GetData(), BROWN );
+    frame->AppendMsgPanel( msg, GetField( VALUE )->m_Text, DARKCYAN );
+    frame->AppendMsgPanel( _( "Component" ), m_ChipName, BROWN );
 
     msg = Entry->GetLibraryName();
 
-    msgpanel->AppendMessage(  _( "Lib" ), msg, DARKRED );
-
-    if( Entry )
-        msgpanel->AppendMessage( Entry->m_Doc, Entry->m_KeyWord, DARKCYAN );
+    frame->AppendMsgPanel( _( "Library" ), msg, DARKRED );
+    frame->AppendMsgPanel( _( "Description" ), Entry->m_Doc, DARKCYAN );
+    frame->AppendMsgPanel( _( "Key words" ), Entry->m_KeyWord, DARKCYAN );
 }
 
 /** virtual function Mirror_Y

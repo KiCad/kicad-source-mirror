@@ -482,7 +482,7 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    m_Parent->MsgPanel->EraseMsgBox();
+    m_Parent->ClearMsgPanel();
 
     ReAnnotatePowerSymbolsOnly();
     if( m_Parent->CheckAnnotate( NULL, 0 ) )

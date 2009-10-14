@@ -92,7 +92,7 @@ WinEDA_SetOptionsFrame::WinEDA_SetOptionsFrame( WinEDA_SchematicFrame* parent,
     /* Init options */
     if( screen )
     {
-        switch( (int)screen->GetGrid().x )
+        switch( (int)screen->GetGridSize().x )
         {
         case 50:
             m_SelGridSize->SetSelection( 0 );

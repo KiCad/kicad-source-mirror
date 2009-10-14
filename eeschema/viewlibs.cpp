@@ -310,11 +310,11 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( !tmp.IsEmpty() )
         component->m_Name.m_Text = tmp;
 
-    MsgPanel->EraseMsgBox();
-    MsgPanel->AppendMessage( _( "Part" ), component->GetName(), BLUE, 6 );
-    MsgPanel->AppendMessage( _( "Alias" ), msg, RED, 6 );
-    MsgPanel->AppendMessage( _( "Description" ), entry->m_Doc, CYAN, 6 );
-    MsgPanel->AppendMessage( _( "Key words" ), entry->m_KeyWord, DARKDARKGRAY );
+    ClearMsgPanel();
+    AppendMsgPanel( _( "Part" ), component->GetName(), BLUE, 6 );
+    AppendMsgPanel( _( "Alias" ), msg, RED, 6 );
+    AppendMsgPanel( _( "Description" ), entry->m_Doc, CYAN, 6 );
+    AppendMsgPanel( _( "Key words" ), entry->m_KeyWord, DARKDARKGRAY );
 
     DrawPanel->Trace_Curseur( DC );
 }

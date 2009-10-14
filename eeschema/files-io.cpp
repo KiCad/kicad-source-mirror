@@ -99,7 +99,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
     GetScreen()->m_FileName = FullFileName;
     g_RootSheet->SetFileName( FullFileName );
     Affiche_Message( wxEmptyString );
-    MsgPanel->EraseMsgBox();
+    ClearMsgPanel();
 
     memset( &g_EESchemaVar, 0, sizeof(g_EESchemaVar) );
 
@@ -111,6 +111,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
     {
         screen->m_CurrentSheetDesc = &g_Sheet_A4;
         screen->SetZoom( 32 );
+        screen->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
         screen->m_Title = wxT( "noname.sch" );
         GetScreen()->m_FileName = screen->m_Title;
         screen->m_Company.Empty();
@@ -213,6 +214,7 @@ Error: %s" ),
 
     /* Reaffichage ecran de base (ROOT) si necessaire */
     ActiveScreen = GetScreen();
+    ActiveScreen->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
     Zoom_Automatique( FALSE );
     SetSheetNumberAndCount();
     DrawPanel->Refresh( true );

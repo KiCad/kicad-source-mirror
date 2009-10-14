@@ -162,6 +162,8 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
     GetScreen()->m_Center = true;
     LoadSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
+
     if( DrawPanel )
         DrawPanel->m_Block_Enable = true;
     ReCreateHToolbar();

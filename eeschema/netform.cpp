@@ -160,17 +160,16 @@ static SCH_COMPONENT* FindNextComponentAndCreatPinList( EDA_BaseStruct* DrawList
 
         if( Entry->GetPartCount() <= 1 )   // One part per package
         {
-            for( Pin = Entry->GetNextPin(); Pin != NULL;
-                 Pin = Entry->GetNextPin( Pin ) )
-            {
-                wxASSERT( Pin->Type() == COMPONENT_PIN_DRAW_TYPE );
+            LIB_PIN_LIST pins;
 
-                if( Pin->m_Unit
-                    && ( Pin->m_Unit != Component->GetUnitSelection( sheet ) ) )
-                    continue;
-                if( Pin->m_Convert
-                    && ( Pin->m_Convert != Component->m_Convert ) )
-                    continue;
+            Entry->GetPins( pins, Component->GetUnitSelection( sheet ),
+                            Component->m_Convert );
+
+            for( size_t i = 0; i < pins.size(); i++ )
+            {
+                Pin = pins[i];
+
+                wxASSERT( Pin->Type() == COMPONENT_PIN_DRAW_TYPE );
 
                 AddPinToComponentPinList( Component, sheet, Pin );
             }

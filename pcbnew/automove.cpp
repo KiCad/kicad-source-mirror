@@ -203,7 +203,7 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( wxDC* DC, bool PlaceModulesHorsPcb )
     MODULE*  Module;
     wxPoint  start, current;
     int      Ymax_size, Xsize_allowed;
-    int      pas_grille = (int)GetScreen()->GetGrid().x;
+    int      pas_grille = (int)GetScreen()->GetGridSize().x;
     bool     EdgeExists;
     float    surface;
 

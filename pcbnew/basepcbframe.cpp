@@ -70,7 +70,6 @@ WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow*       father,
 
     m_UserGridSize        = wxRealPoint( 100.0, 100.0 );
     m_UserGridUnits       = INCHES;
-
     m_Collector           = new GENERAL_COLLECTOR();
 }
 

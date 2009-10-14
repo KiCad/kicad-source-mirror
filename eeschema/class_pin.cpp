@@ -1182,17 +1182,17 @@ void LIB_PIN::DisplayInfo( WinEDA_DrawFrame* frame )
 
     LIB_DRAW_ITEM::DisplayInfo( frame );
 
-    frame->MsgPanel->AppendMessage( _( "Pin name" ), m_PinName, DARKCYAN );
+    frame->AppendMsgPanel( _( "Pin name" ), m_PinName, DARKCYAN );
 
     if( m_PinNum == 0 )
         Text = wxT( "?" );
     else
         ReturnPinStringNum( Text );
 
-    frame->MsgPanel->AppendMessage( _( "Pin number" ), Text, DARKCYAN );
+    frame->AppendMsgPanel( _( "Pin number" ), Text, DARKCYAN );
 
     ii = m_PinType;
-    frame->MsgPanel->AppendMessage( _( "Pin type" ), MsgPinElectricType[ii],
+    frame->AppendMsgPanel( _( "Pin type" ), MsgPinElectricType[ii],
                                     RED );
 
     ii = m_Attributs;
@@ -1200,12 +1200,12 @@ void LIB_PIN::DisplayInfo( WinEDA_DrawFrame* frame )
         Text = _( "Not visible" );
     else
         Text = _( "Visible" );
-    frame->MsgPanel->AppendMessage( _( "Display" ), Text, DARKGREEN );
+    frame->AppendMsgPanel( _( "Display" ), Text, DARKGREEN );
 
     /* Display pin length */
     Text = ReturnStringFromValue( g_UnitMetric, m_PinLen,
                                   EESCHEMA_INTERNAL_UNIT, true );
-    frame->MsgPanel->AppendMessage( _( "Length" ), Text, MAGENTA );
+    frame->AppendMsgPanel( _( "Length" ), Text, MAGENTA );
 
     switch( m_Orient )
     {
@@ -1230,7 +1230,7 @@ void LIB_PIN::DisplayInfo( WinEDA_DrawFrame* frame )
         break;
     }
 
-    frame->MsgPanel->AppendMessage( _( "Orientation" ), Text, MAGENTA );
+    frame->AppendMsgPanel( _( "Orientation" ), Text, MAGENTA );
 }
 
 

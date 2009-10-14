@@ -102,6 +102,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
     GetScreen()->m_Center = true;       // set to true to have the coordinates origine -0,0) centered on screen
     LoadSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
     ReCreateHToolbar();
     ReCreateVToolbar();

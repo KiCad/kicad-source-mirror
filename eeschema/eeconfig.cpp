@@ -263,6 +263,7 @@ bool WinEDA_SchematicFrame::LoadProjectFile( const wxString& CfgFileName,
 
     SetDrawBgColor( g_DrawBgColor );
     LoadLibraries();
+    GetBaseScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
     return IsRead;
 }

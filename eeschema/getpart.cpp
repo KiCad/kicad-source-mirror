@@ -235,7 +235,7 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
 
     DrawStructsInGhost( DrawPanel, DC, Component, wxPoint(0,0) );
 
-    MsgPanel->EraseMsgBox();
+    ClearMsgPanel();
     Component->DisplayInfo( this );
 
     return Component;

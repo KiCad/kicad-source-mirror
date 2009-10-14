@@ -117,7 +117,7 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC 
     lay_tmp_TOP    = Route_Layer_TOP;
     OldPasRoute    = g_GridRoutingSize;
 
-    g_GridRoutingSize = (int)GetScreen()->GetGrid().x;
+    g_GridRoutingSize = (int)GetScreen()->GetGridSize().x;
 
     // Ensure g_GridRoutingSize has a reasonnable value:
     if( g_GridRoutingSize < 10 )

@@ -295,11 +295,13 @@ void WinEDA_SchematicFrame::OnSelectOptionToolbar( wxCommandEvent& event )
     case ID_TB_OPTIONS_SELECT_UNIT_MM:
         g_UnitMetric = MILLIMETRE;
         UpdateStatusBar();        /* Reaffichage des coord curseur */
+        DrawPanel->Refresh();
         break;
 
     case ID_TB_OPTIONS_SELECT_UNIT_INCH:
         g_UnitMetric = INCHES;
         UpdateStatusBar();        /* Reaffichage des coord curseur */
+        DrawPanel->Refresh();
         break;
 
     case ID_TB_OPTIONS_SELECT_CURSOR:

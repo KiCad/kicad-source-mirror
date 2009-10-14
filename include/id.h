@@ -174,11 +174,16 @@ enum main_id
     ID_POPUP_GRID_LEVEL_5,
     ID_POPUP_GRID_LEVEL_2,
     ID_POPUP_GRID_LEVEL_1,       // id for last predefined grid in inches ( 0.0001 inch)
+    ID_POPUP_GRID_LEVEL_5MM,
+    ID_POPUP_GRID_LEVEL_2_5MM,
     ID_POPUP_GRID_LEVEL_1MM,     // id for first predefined grid in mm (1mm)
     ID_POPUP_GRID_LEVEL_0_5MM,
     ID_POPUP_GRID_LEVEL_0_25MM,
     ID_POPUP_GRID_LEVEL_0_2MM,
     ID_POPUP_GRID_LEVEL_0_1MM,
+    ID_POPUP_GRID_LEVEL_0_0_5MM,
+    ID_POPUP_GRID_LEVEL_0_0_25MM,
+    ID_POPUP_GRID_LEVEL_0_0_1MM,
     ID_POPUP_GRID_USER,
 
     ID_SHEET_SET,

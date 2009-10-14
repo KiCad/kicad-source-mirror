@@ -264,7 +264,7 @@ void WinEDA_SchematicFrame::InstallPreviousSheet()
         return;
 
     g_ItemToRepeat = NULL;
-    MsgPanel->EraseMsgBox();
+    ClearMsgPanel();
 
     //make a copy for testing purposes.
     DrawSheetPath listtemp = *m_CurrentSheet;
@@ -296,7 +296,7 @@ void WinEDA_SchematicFrame::InstallNextScreen( DrawSheetStruct* Sheet )
     }
     m_CurrentSheet->Push( Sheet );
     g_ItemToRepeat = NULL;
-    MsgPanel->EraseMsgBox();
+    ClearMsgPanel();
     UpdateScreenFromSheet( this );
 }
 
@@ -321,7 +321,7 @@ static bool UpdateScreenFromSheet( WinEDA_SchematicFrame* frame )
 
     // Reinit des parametres d'affichage du nouvel ecran
     // assumes m_CurrentSheet has already been updated.
-    frame->MsgPanel->EraseMsgBox();
+    frame->ClearMsgPanel();
     frame->DrawPanel->SetScrollbars( NewScreen->m_ZoomScalar,
                                      NewScreen->m_ZoomScalar,
                                      NewScreen->m_ScrollbarNumber.x,

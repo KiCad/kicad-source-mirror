@@ -28,32 +28,37 @@ static const int PcbZoomList[] =
 };
 
 #define PCB_ZOOM_LIST_CNT ( sizeof( PcbZoomList ) / sizeof( int ) )
+#define MM_TO_PCB_UNITS 10000.0 / 25.4000508001016
 
 
 /* Default grid sizes for PCB editor screens. */
-#define MM_TO_PCB_UNITS 10000.0 / 25.4
 static GRID_TYPE PcbGridList[] =
 {
     // predefined grid list in 0.0001 inches
-    { ID_POPUP_GRID_LEVEL_1000,   wxRealPoint( 1000,                   1000 )                      },
-    { ID_POPUP_GRID_LEVEL_500,    wxRealPoint( 500,                    500 )                       },
-    { ID_POPUP_GRID_LEVEL_250,    wxRealPoint( 250,                    250 )                       },
-    { ID_POPUP_GRID_LEVEL_200,    wxRealPoint( 200,                    200 )                       },
-    { ID_POPUP_GRID_LEVEL_100,    wxRealPoint( 100,                    100 )                       },
-    { ID_POPUP_GRID_LEVEL_50,     wxRealPoint( 50,                     50 )                        },
-    { ID_POPUP_GRID_LEVEL_25,     wxRealPoint( 25,                     25 )                        },
-    { ID_POPUP_GRID_LEVEL_20,     wxRealPoint( 20,                     20 )                        },
-    { ID_POPUP_GRID_LEVEL_10,     wxRealPoint( 10,                     10 )                        },
-    { ID_POPUP_GRID_LEVEL_5,      wxRealPoint( 5,                      5 )                         },
-    { ID_POPUP_GRID_LEVEL_2,      wxRealPoint( 2,                      2 )                         },
-    { ID_POPUP_GRID_LEVEL_1,      wxRealPoint( 1,                      1 )                         },
+    { ID_POPUP_GRID_LEVEL_1000,     wxRealPoint( 1000,                    1000 )                      },
+    { ID_POPUP_GRID_LEVEL_500,      wxRealPoint( 500,                     500 )                       },
+    { ID_POPUP_GRID_LEVEL_250,      wxRealPoint( 250,                     250 )                       },
+    { ID_POPUP_GRID_LEVEL_200,      wxRealPoint( 200,                     200 )                       },
+    { ID_POPUP_GRID_LEVEL_100,      wxRealPoint( 100,                     100 )                       },
+    { ID_POPUP_GRID_LEVEL_50,       wxRealPoint( 50,                      50 )                        },
+    { ID_POPUP_GRID_LEVEL_25,       wxRealPoint( 25,                      25 )                        },
+    { ID_POPUP_GRID_LEVEL_20,       wxRealPoint( 20,                      20 )                        },
+    { ID_POPUP_GRID_LEVEL_10,       wxRealPoint( 10,                      10 )                        },
+    { ID_POPUP_GRID_LEVEL_5,        wxRealPoint( 5,                       5 )                         },
+    { ID_POPUP_GRID_LEVEL_2,        wxRealPoint( 2,                       2 )                         },
+    { ID_POPUP_GRID_LEVEL_1,        wxRealPoint( 1,                       1 )                         },
 
     // predefined grid list in mm
-    { ID_POPUP_GRID_LEVEL_1MM,    wxRealPoint( MM_TO_PCB_UNITS,        MM_TO_PCB_UNITS )           },
-    { ID_POPUP_GRID_LEVEL_0_5MM,  wxRealPoint( MM_TO_PCB_UNITS * 0.5,  MM_TO_PCB_UNITS * 0.5 )     },
-    { ID_POPUP_GRID_LEVEL_0_25MM, wxRealPoint( MM_TO_PCB_UNITS * 0.25, MM_TO_PCB_UNITS * 0.25 )    },
-    { ID_POPUP_GRID_LEVEL_0_2MM,  wxRealPoint( MM_TO_PCB_UNITS * 0.2,  MM_TO_PCB_UNITS * 0.2 )     },
-    { ID_POPUP_GRID_LEVEL_0_1MM,  wxRealPoint( MM_TO_PCB_UNITS * 0.1,  MM_TO_PCB_UNITS * 0.1 )     }
+    { ID_POPUP_GRID_LEVEL_5MM,      wxRealPoint( MM_TO_PCB_UNITS * 5.0,   MM_TO_PCB_UNITS * 5.0 )     },
+    { ID_POPUP_GRID_LEVEL_2_5MM,    wxRealPoint( MM_TO_PCB_UNITS * 2.5,   MM_TO_PCB_UNITS * 2.5 )     },
+    { ID_POPUP_GRID_LEVEL_1MM,      wxRealPoint( MM_TO_PCB_UNITS,         MM_TO_PCB_UNITS )           },
+    { ID_POPUP_GRID_LEVEL_0_5MM,    wxRealPoint( MM_TO_PCB_UNITS * 0.5,   MM_TO_PCB_UNITS * 0.5 )     },
+    { ID_POPUP_GRID_LEVEL_0_25MM,   wxRealPoint( MM_TO_PCB_UNITS * 0.25,  MM_TO_PCB_UNITS * 0.25 )    },
+    { ID_POPUP_GRID_LEVEL_0_2MM,    wxRealPoint( MM_TO_PCB_UNITS * 0.2,   MM_TO_PCB_UNITS * 0.2 )     },
+    { ID_POPUP_GRID_LEVEL_0_1MM,    wxRealPoint( MM_TO_PCB_UNITS * 0.1,   MM_TO_PCB_UNITS * 0.1 )     },
+    { ID_POPUP_GRID_LEVEL_0_0_5MM,  wxRealPoint( MM_TO_PCB_UNITS * 0.05,  MM_TO_PCB_UNITS * 0.05 )     },
+    { ID_POPUP_GRID_LEVEL_0_0_25MM, wxRealPoint( MM_TO_PCB_UNITS * 0.025, MM_TO_PCB_UNITS * 0.025 )     },
+    { ID_POPUP_GRID_LEVEL_0_0_1MM,  wxRealPoint( MM_TO_PCB_UNITS * 0.01,  MM_TO_PCB_UNITS * 0.01 )     }
 };
 
 #define PCB_GRID_LIST_CNT ( sizeof( PcbGridList ) / sizeof( GRID_TYPE ) )

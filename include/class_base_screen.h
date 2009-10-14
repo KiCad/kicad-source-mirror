@@ -25,6 +25,22 @@ class GRID_TYPE
 public:
     int         m_Id;
     wxRealPoint m_Size;
+
+    GRID_TYPE& operator=( const GRID_TYPE& item )
+    {
+        if( this != &item )
+        {
+            m_Id = item.m_Id;
+            m_Size = item.m_Size;
+        }
+
+        return *this;
+    }
+
+    const bool operator==( const GRID_TYPE& item ) const
+    {
+        return ( m_Size == item.m_Size && m_Id == item.m_Id );
+    }
 };
 
 
@@ -57,7 +73,7 @@ public:
                                 * navigation dans la hierarchie */
     bool    m_Center;          /* fix the coordinate (0,0) position on
                                 * screen : if TRUE (0,0) in centered on screen
-                                *  TRUE: when coordiantaes can be < 0 and
+                                *  TRUE: when coordinates can be < 0 and
                                 * > 0   all but schematic
                                 *  FALSE: when coordinates can be only >= 0
                                 * Schematic */
@@ -94,11 +110,11 @@ private:
     char            m_FlagModified;         // indique modif du PCB,utilise pour eviter une sortie sans sauvegarde
     char            m_FlagSave;             // indique sauvegarde auto faite
     EDA_BaseStruct* m_CurrentItem;          ///< Currently selected object
+    GRID_TYPE       m_Grid;                 ///< Current grid selection.
 
     /* Valeurs du pas de grille et du zoom */
 public:
-    wxRealPoint m_Grid;                 /* Current grid. */
-    GridArray   m_GridList;
+    GridArray       m_GridList;
     bool        m_UserGridIsON;
 
     wxArrayInt  m_ZoomList;         /* Array of standard zoom coefficients. */
@@ -137,7 +153,7 @@ public:
 
     /** function ClearUndoORRedoList (virtual).
      * this function must remove the aItemCount old commands from aList
-     * and delete commmands, pickers and picked items if needed
+     * and delete commands, pickers and picked items if needed
      * Because picked items must be deleted only if they are not in use, this is a virtual pure
      * function that must be created for SCH_SCREEN and PCB_SCREEN
      * @param aList = the UNDO_REDO_CONTAINER of commands
@@ -257,9 +273,30 @@ public:
     bool        SetLastZoom();          /* ajuste le coeff de zoom au max */
 
     //----<grid stuff>----------------------------------------------------------
-    wxRealPoint GetGrid();                      /* retourne la grille */
+
+    /**
+     * Return the command ID of the currently selected grid.
+     *
+     * @return int - Currently selected grid command ID.
+     */
+    int         GetGridId();
+
+    /**
+     * Return the grid size of the currently selected grid.
+     *
+     * @return wxRealPoint - The currently selected grid size.
+     */
+    wxRealPoint GetGridSize();
+
+    /**
+     * Return the grid object of the currently selected grid.
+     *
+     * @return GRID_TYPE - The currently selected grid.
+     */
+    GRID_TYPE   GetGrid();
+
     void        SetGrid( const wxRealPoint& size );
-    void        SetGrid( int );
+    void        SetGrid( int id );
     void        SetGridList( GridArray& sizelist );
     void        AddGrid( const GRID_TYPE& grid );
     void        AddGrid( const wxRealPoint& size, int id );
@@ -268,11 +305,13 @@ public:
 
     /**
      * Function RefPos
-     * returns the reference position, coming from either the mouse position or the
-     * the cursor position.
+     * Return the reference position, coming from either the mouse position
+     * or the cursor position.
+     *
      * @param useMouse If true, return mouse position, else cursor's.
+     *
      * @return wxPoint - The reference point, either the mouse position or
-     *   the cursor position.
+     *                   the cursor position.
      */
     wxPoint RefPos( bool useMouse )
     {

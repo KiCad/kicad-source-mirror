@@ -24,6 +24,7 @@
 /* Configuration entry names. */
 static const wxString CursorShapeEntry( wxT( "CuShape" ) );
 static const wxString ShowGridEntry( wxT( "ShGrid" ) );
+static const wxString LastGridSizeId( wxT( "_LastGridSize" ) );
 
 
 BEGIN_EVENT_TABLE( WinEDA_DrawFrame, WinEDA_BasicFrame )
@@ -32,6 +33,8 @@ BEGIN_EVENT_TABLE( WinEDA_DrawFrame, WinEDA_BasicFrame )
     EVT_ACTIVATE( WinEDA_DrawFrame::OnActivate )
     EVT_MENU_RANGE( ID_POPUP_ZOOM_START_RANGE, ID_POPUP_ZOOM_END_RANGE,
                     WinEDA_DrawFrame::OnZoom )
+    EVT_MENU_RANGE( ID_POPUP_GRID_LEVEL_1000, ID_POPUP_GRID_USER,
+                    WinEDA_DrawFrame::OnSelectGrid )
 END_EVENT_TABLE()
 
 
@@ -67,6 +70,7 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     m_Draw_Auxiliary_Axis = FALSE;  // TRUE pour avoir les axes auxiliares dessines
     m_UnitType            = INTERNAL_UNIT_TYPE;    // Internal unit = inch
     m_CursorShape         = 0;
+    m_LastGridSizeId      = 0;
 
     // Internal units per inch: = 1000 for schema, = 10000 for PCB
     m_InternalUnits       = EESCHEMA_INTERNAL_UNIT;
@@ -191,23 +195,65 @@ void WinEDA_DrawFrame::ToolOnRightClick( wxCommandEvent& event )
 }
 
 
-/********************************************************/
-void WinEDA_DrawFrame::OnSelectGrid( wxCommandEvent& event )
-/********************************************************/
 // Virtual function
+void WinEDA_DrawFrame::OnSelectGrid( wxCommandEvent& event )
 {
-    if( m_SelGridBox == NULL )
-        return;                        // Should not occurs
+    int* clientData;
+    int  id = ID_POPUP_GRID_LEVEL_100;
+
+    if( event.GetEventType() == wxEVT_COMMAND_COMBOBOX_SELECTED )
+    {
+        if( m_SelGridBox == NULL )
+            return;
+
+        /*
+         * Don't use wxCommandEvent::GetClientData() here.  It always
+         * returns NULL in GTK.  This solution is not as elegant but
+         * it works.
+         */
+        int index = m_SelGridBox->GetSelection();
+        wxASSERT( index != wxNOT_FOUND );
+        clientData = (int*) m_SelGridBox->GetClientData( index );
+
+        if( clientData != NULL )
+            id = *clientData;
+    }
+    else
+    {
+        id = event.GetId();
+
+        /* Update the grid select combobox if the grid size was changed
+         * by menu event.
+         */
+        if( m_SelGridBox != NULL )
+        {
+            for( size_t i = 0; i < m_SelGridBox->GetCount(); i++ )
+            {
+                clientData = (int*) m_SelGridBox->GetClientData( i );
+
+                if( clientData && id == *clientData )
+                {
+                    m_SelGridBox->SetSelection( i );
+                    break;
+                }
+            }
+        }
+    }
 
     BASE_SCREEN* screen = GetBaseScreen();
 
-    screen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
-    wxRealPoint current_grid = screen->GetGrid();
-    screen->SetGrid( event.GetSelection() + ID_POPUP_GRID_LEVEL_1000 );
-    wxRealPoint selected_grid = screen->GetGrid();
+    if( screen->GetGridId() == id )
+        return;
 
-    if( selected_grid != current_grid )
-        Recadre_Trace( FALSE );
+    /*
+     * This allows for saving non-sequential command ID offsets used that
+     * may be used in the grid size combobox.  Do not use the selection
+     * index returned by GetSelection().
+     */
+    m_LastGridSizeId = id - ID_POPUP_GRID_LEVEL_1000;
+    screen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
+    screen->SetGrid( event.GetId() );
+    Refresh();
 }
 
 
@@ -652,30 +698,43 @@ void WinEDA_DrawFrame::SetLanguage( wxCommandEvent& event )
     }
 }
 
-/* used in UpdateStatusBar() when coordinates are in mm
- * try to approximate a coordinate (in 0.001 mm) to an easy to read number
+/**
+ * Round to the nearest precision.
+ *
+ * Try to approximate a coordinate using a given precision to prevent
+ * rounding errors when converting from inches to mm.
+ *
  * ie round the unit value to 0 if unit is 1 or 2, or 8 or 9
  */
-double Round_To_0(double x)
+double RoundTo0( double x, double precision )
 {
-    long long ix = wxRound(x * 1000); // ix is in 0.001 mm
-    if ( x < 0 ) NEGATE(ix);
+    assert( precision != 0 );
 
-    int remainder = ix%10;  // remainder is in 0.001 mm
+    long long ix = wxRound( x * precision );
+    if ( x < 0.0 )
+        NEGATE( ix );
+
+    int remainder = ix % 10;   // remainder is in precision mm
+
     if ( remainder <= 2 )
-        ix -= remainder;    // truncate to the near number
+        ix -= remainder;       // truncate to the near number
     else if (remainder >= 8 )
-        ix += 10 - remainder;   // round to near number
+        ix += 10 - remainder;  // round to near number
 
-    if ( x < 0 ) NEGATE(ix);
-    return (double)ix/1000.0;
+    if ( x < 0 )
+        NEGATE( ix );
+
+    return (double) ix / precision;
 }
 
-/** Function UpdateStatusBar()
+/**
+ * Function UpdateStatusBar()
  * Displays in the bottom of the main window a stust:
  *  - Absolute Cursor coordinates
- *  - Relative Cursor coordinates (relative to the last coordinate stored when actiavte the space bar)
- * ( in this status is also displayed the zoom level, but this is not made by this function)
+ *  - Relative Cursor coordinates (relative to the last coordinate stored
+ *     when actiavte the space bar)
+ * ( in this status is also displayed the zoom level, but this is not made
+ *   by this function )
  */
 void WinEDA_DrawFrame::UpdateStatusBar()
 {
@@ -690,21 +749,31 @@ void WinEDA_DrawFrame::UpdateStatusBar()
     if ( (screen->GetZoom() % screen->m_ZoomScalar) == 0 )
         Line.Printf( wxT( "Z %d" ), screen->GetZoom() / screen->m_ZoomScalar );
     else
-        Line.Printf( wxT( "Z %.1f" ), (float)screen->GetZoom() / screen->m_ZoomScalar );
+        Line.Printf( wxT( "Z %.1f" ),
+                     (float)screen->GetZoom() / screen->m_ZoomScalar );
     SetStatusText( Line, 1 );
 
     /* Display absolute coordinates:  */
-    double dXpos = To_User_Unit( g_UnitMetric, screen->m_Curseur.x, m_InternalUnits );
-    double dYpos = To_User_Unit( g_UnitMetric, screen->m_Curseur.y, m_InternalUnits );
-    /* When using mm the conversion from 1/10000 inch to mm can give some non easy to read numbers,
-     * like 1.999 or 2.001 that be better if displayed 2.000, so small diffs are filtered here.
+    double dXpos = To_User_Unit( g_UnitMetric, screen->m_Curseur.x,
+                                 m_InternalUnits );
+    double dYpos = To_User_Unit( g_UnitMetric, screen->m_Curseur.y,
+                                 m_InternalUnits );
+    /*
+     * Converting from inches to mm can give some coordinates due to
+     * float point precision rounding errors, like 1.999 or 2.001 so
+     * round to the nearest drawing precision required by the application.
     */
     if ( g_UnitMetric )
     {
-        dXpos = Round_To_0(dXpos);
-        dYpos = Round_To_0(dYpos);
+        dXpos = RoundTo0( dXpos, (double)( m_InternalUnits / 10 ) );
+        dYpos = RoundTo0( dYpos, (double)( m_InternalUnits / 10 ) );
     }
-    Line.Printf( g_UnitMetric ? wxT( "X %.3f  Y %.3f" ) : wxT( "X %.4f  Y %.4f" ), dXpos, dYpos );
+    if( m_InternalUnits == EESCHEMA_INTERNAL_UNIT )
+        Line.Printf( g_UnitMetric ? wxT( "X %.2f  Y %.2f" ) :
+                     wxT( "X %.3f  Y %.3f" ), dXpos, dYpos );
+    else
+        Line.Printf( g_UnitMetric ? wxT( "X %.3f  Y %.3f" ) :
+                     wxT( "X %.4f  Y %.4f" ), dXpos, dYpos );
     SetStatusText( Line, 2 );
 
     /* Display relative coordinates:  */
@@ -714,10 +783,15 @@ void WinEDA_DrawFrame::UpdateStatusBar()
     dYpos = To_User_Unit( g_UnitMetric, dy, m_InternalUnits );
     if ( g_UnitMetric )
     {
-        dXpos = Round_To_0(dXpos);
-        dYpos = Round_To_0(dYpos);
+        dXpos = RoundTo0( dXpos, (double)( m_InternalUnits / 10 ) );
+        dYpos = RoundTo0( dYpos, (double)( m_InternalUnits / 10 ) );
     }
-    Line.Printf( g_UnitMetric ? wxT( "x %.3f  y %.3f" ) : wxT( "x %.4f  y %.4f" ), dXpos, dYpos );
+    if( m_InternalUnits == EESCHEMA_INTERNAL_UNIT )
+        Line.Printf( g_UnitMetric ? wxT( "X %.2f  Y %.2f" ) :
+                     wxT( "X %.3f  Y %.3f" ), dXpos, dYpos );
+    else
+        Line.Printf( g_UnitMetric ? wxT( "x %.3f  y %.3f" ) :
+                     wxT( "x %.4f  y %.4f" ), dXpos, dYpos );
 
     SetStatusText( Line, 3 );
 }
@@ -737,6 +811,7 @@ void WinEDA_DrawFrame::LoadSettings()
     WinEDA_BasicFrame::LoadSettings();
     cfg->Read( m_FrameName + CursorShapeEntry, &m_CursorShape, ( long )0 );
     cfg->Read( m_FrameName + ShowGridEntry, &m_Draw_Grid, true );
+    cfg->Read( m_FrameName + LastGridSizeId, &m_LastGridSizeId, 0L );
 }
 
 
@@ -755,4 +830,25 @@ void WinEDA_DrawFrame::SaveSettings()
     WinEDA_BasicFrame::SaveSettings();
     cfg->Write( m_FrameName + CursorShapeEntry, m_CursorShape );
     cfg->Write( m_FrameName + ShowGridEntry, m_Draw_Grid );
+    cfg->Write( m_FrameName + LastGridSizeId, ( long ) m_LastGridSizeId );
+}
+
+
+void WinEDA_DrawFrame::AppendMsgPanel( const wxString& textUpper,
+                                       const wxString& textLower,
+                                       int color, int pad )
+{
+    if( MsgPanel == NULL )
+        return;
+
+    MsgPanel->AppendMessage( textUpper, textLower, color, pad );
+}
+
+
+void WinEDA_DrawFrame::ClearMsgPanel( void )
+{
+    if( MsgPanel == NULL )
+        return;
+
+    MsgPanel->EraseMsgBox();
 }

@@ -59,7 +59,7 @@ static const char s_BitmapLayerIcon[16][16] = {
 void WinEDA_PcbFrame::PrepareLayerIndicator()
 /************************************************************/
 
-/* Draw the icon for the "Select layet pair" bitmap tool
+/* Draw the icon for the "Select layer pair" bitmap tool
  */
 {
     int        ii, jj;
@@ -99,7 +99,7 @@ void WinEDA_PcbFrame::PrepareLayerIndicator()
     if( !change && (LayerPairBitmap != NULL) )
         return;
 
-    /* Creat the bitmap too and its Memory DC, if not already made */
+    /* Create the bitmap too and its Memory DC, if not already made */
     if( LayerPairBitmap == NULL )
     {
         LayerPairBitmap = new wxBitmap( 16, 16 );
@@ -276,7 +276,7 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
     m_HToolBar->AddSeparator();
 
     ReCreateLayerBox( m_HToolBar );
-    PrepareLayerIndicator();    // Initialise the bitmap with current active layer colors for the next tool
+    PrepareLayerIndicator();    // Initialize the bitmap with current active layer colors for the next tool
     m_HToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, wxEmptyString,
                          *LayerPairBitmap, SEL_LAYER_HELP );
 
@@ -495,7 +495,7 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
 void WinEDA_PcbFrame::ReCreateAuxVToolbar()
 /*********************************************/
 
-/* Create the auxiliary vertical right toolbar, showing tools fo microwave applications
+/* Create the auxiliary vertical right toolbar, showing tools for microwave applications
  */
 {
     if( m_AuxVToolBar )
@@ -566,6 +566,7 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
                                                   wxPoint( -1, -1 ),
                                                   wxSize( LISTBOX_WIDTH + 10, -1 ) );
         m_AuxiliaryToolBar->AddControl( m_SelTrackWidthBox );
+        m_AuxiliaryToolBar->AddSeparator();
 
         // Creates box to display and choose vias diameters:
         m_SelViaSizeBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
@@ -573,32 +574,33 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
                                                wxPoint( -1, -1 ),
                                                wxSize( LISTBOX_WIDTH + 10, -1 ) );
         m_AuxiliaryToolBar->AddControl( m_SelViaSizeBox );
+        m_AuxiliaryToolBar->AddSeparator();
 
         // Creates box to display tracks and vias clearance:
-        m_ClearanceBox = new wxTextCtrl( m_AuxiliaryToolBar,
-                                                          -1,
-                                                          wxEmptyString,
-                                                          wxPoint( -1, -1 ),
-                                                          wxSize( LISTBOX_WIDTH + 20, -1 ),
-                                                          wxTE_READONLY );
-		m_AuxiliaryToolBar->AddControl( m_ClearanceBox );
+        m_ClearanceBox = new wxTextCtrl( m_AuxiliaryToolBar, -1,
+                                         wxEmptyString, wxPoint( -1, -1 ),
+                                         wxSize( LISTBOX_WIDTH + 20, -1 ),
+                                         wxTE_READONLY );
         m_ClearanceBox->SetToolTip(_("Current NetClass clearance value") );
+		m_AuxiliaryToolBar->AddControl( m_ClearanceBox );
+        m_AuxiliaryToolBar->AddSeparator();
 
         // Creates box to display the current NetClass:
-        m_NetClassSelectedBox = new wxTextCtrl( m_AuxiliaryToolBar,
-                                                          -1,
-                                                          wxEmptyString,
-                                                          wxPoint( -1, -1 ),
-                                                          wxSize( LISTBOX_WIDTH, -1 ),
-                                                          wxTE_READONLY );
-		m_AuxiliaryToolBar->AddControl( m_NetClassSelectedBox );
+        m_NetClassSelectedBox = new wxTextCtrl( m_AuxiliaryToolBar, -1,
+                                                wxEmptyString, wxPoint( -1, -1 ),
+                                                wxSize( LISTBOX_WIDTH, -1 ),
+                                                wxTE_READONLY );
         m_NetClassSelectedBox->SetToolTip(_("Name of the current NetClass") );
+		m_AuxiliaryToolBar->AddControl( m_NetClassSelectedBox );
+        m_AuxiliaryToolBar->AddSeparator();
 
-        // Creates box to display and choose strategy to handle tracks an vias sizes:
+        // Creates box to display and choose strategy to handle tracks an
+        // vias sizes:
         m_AuxiliaryToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
                                      wxEmptyString,
                                      wxBitmap( auto_track_width_xpm ),
-                                     _( "Auto track width: when starting on an existing track use its width\notherwise, use current width setting" ),
+                                     _( "Auto track width: when starting on \
+an existing track use its width\notherwise, use current width setting" ),
                                      wxITEM_CHECK );
 
         // Add the box to display and select the current grid size:
@@ -625,7 +627,9 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
             else
             {
                 wxString value;
-                value.Printf(wxT("%.1f"),(float)GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar );
+                value.Printf( wxT( "%.1f" ),
+                              (float)GetScreen()->m_ZoomList[i] /
+                              GetScreen()->m_ZoomScalar );
                 msg += value;
             }
             m_SelZoomBox->Append( msg );
@@ -648,7 +652,8 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
     for( i = 0; i < GetScreen()->m_GridList.GetCount(); i++ )
     {
         GRID_TYPE grid = GetScreen()->m_GridList[i];
-        double value = To_User_Unit( g_UnitMetric, grid.m_Size.x, m_InternalUnits );
+        double value = To_User_Unit( g_UnitMetric, grid.m_Size.x,
+                                     m_InternalUnits );
         if( grid.m_Id != ID_POPUP_GRID_USER )
         {
             if( g_UnitMetric == INCHES )
@@ -659,7 +664,11 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
         else
             msg = _( "User Grid" );
 
-        m_SelGridBox->Append( msg );
+        m_SelGridBox->Append( msg, (void*) &GetScreen()->m_GridList[i].m_Id );
+
+        if( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId ==
+            GetScreen()->m_GridList[i].m_Id )
+            m_SelGridBox->SetSelection( i );
     }
 
     m_TrackAndViasSizesList_Changed    = true;

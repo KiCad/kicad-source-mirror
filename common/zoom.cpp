@@ -47,7 +47,7 @@ void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
 * @param coord = coordinate to adjust
 */
 {
-    wxRealPoint grid_size = GetBaseScreen()->GetGrid();
+    wxRealPoint grid_size = GetBaseScreen()->GetGridSize();
 
     if( !GetBaseScreen()->m_UserGridIsON )
     {
@@ -183,11 +183,6 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
     UpdateStatusBar();
 }
 
-void WinEDA_DrawPanel::OnPopupGridSelect( wxCommandEvent& event )
-{
-    GetScreen()->SetGrid( event.GetId() );
-    Refresh();
-}
 
 /*************************************************************/
 void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
@@ -200,7 +195,7 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
     size_t      i;
     int         maxZoomIds;
     int         zoom;
-    wxRealPoint      grid;
+    wxRealPoint grid;
     wxString    msg;
     GRID_TYPE   tmp;
     wxMenu*     gridMenu;
@@ -228,10 +223,12 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
     /* Populate zoom submenu. */
     for( i = 0; i < (size_t) maxZoomIds; i++ )
     {
-        if ( (GetScreen()->m_ZoomList[i] % GetScreen()->m_ZoomScalar) == 0 )
-            msg.Printf( wxT( "%u" ), GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar);
+        if ( ( GetScreen()->m_ZoomList[i] % GetScreen()->m_ZoomScalar ) == 0 )
+            msg.Printf( wxT( "%u" ),
+                        GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar );
         else
-            msg.Printf(wxT("%.1f"),(float)GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar );
+            msg.Printf( wxT( "%.1f" ),
+                        (float) GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar );
 
         zoom_choice->Append( ID_POPUP_ZOOM_LEVEL_START + i, _( "Zoom: " ) + msg,
                              wxEmptyString, wxITEM_CHECK );
@@ -247,7 +244,7 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
                                    ID_POPUP_GRID_SELECT, _( "Grid Select" ),
                                    grid_select_xpm );
 
-        grid = GetScreen()->GetGrid();
+        grid = GetScreen()->GetGridSize();
 
         for( i = 0; i < GetScreen()->m_GridList.GetCount(); i++ )
         {

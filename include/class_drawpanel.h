@@ -96,7 +96,6 @@ public:
 
     void         AddMenuZoom( wxMenu* MasterMenu );
     bool         OnRightClick( wxMouseEvent& event );
-    void         OnPopupGridSelect( wxCommandEvent& event );
     void         Process_Special_Functions( wxCommandEvent& event );
 
     /** Function CursorRealPosition

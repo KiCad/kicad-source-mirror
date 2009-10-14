@@ -310,24 +310,29 @@ public:
      * add a picker to handle aItemToCopy
      * @param aItemToCopy = the board item modified by the command to undo
      * @param aTypeCommand = command type (see enum UndoRedoOpType)
-     * @param aTransformPoint = the reference point of the transformation, for commands like move
+     * @param aTransformPoint = the reference point of the transformation, for
+     *                          commands like move
      */
-    virtual void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy, UndoRedoOpType aTypeCommand,
-                                    const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) = 0;
+    virtual void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy,
+                                     UndoRedoOpType aTypeCommand,
+                                     const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) = 0;
 
     /** Function SaveCopyInUndoList (virtual pure, overloaded).
      * Creates a new entry in undo list of commands.
      * add a list of pickers to handle a list of items
      * @param aItemsList = the list of items modified by the command to undo
      * @param aTypeCommand = command type (see enum UndoRedoOpType)
-     * @param aTransformPoint = the reference point of the transformation, for commands like move
+     * @param aTransformPoint = the reference point of the transformation,
+     *                          for commands like move
      */
-    virtual void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList, UndoRedoOpType aTypeCommand,
-                                    const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) = 0;
+    virtual void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
+                                     UndoRedoOpType aTypeCommand,
+                                     const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) = 0;
 
 
     // layerhandling:
-    // (See pcbnew/sel_layer.cpp for description of why null_layer parameter is provided)
+    // (See pcbnew/sel_layer.cpp for description of why null_layer parameter
+    // is provided)
     int          SelectLayer( int default_layer, int min_layer, int max_layer,
                               bool null_layer = false );
     void         SelectLayerPair();
@@ -336,7 +341,28 @@ public:
     // divers
     void         InstallGridFrame( const wxPoint& pos );
 
+    /**
+     * Load applications settings common to PCB draw frame objects.
+     *
+     * This overrides the base class WinEDA_DrawFrame::LoadSettings() to
+     * handle settings common to the PCB layout application and footprint
+     * editor main windows.  It calls down to the base class to load
+     * settings common to all drawing frames.  Please put your application
+     * settings common to all pcb drawing frames here to avoid having
+     * application settings loaded all over the place.
+     */
     virtual void LoadSettings();
+
+    /**
+     * Save applications settings common to PCB draw frame objects.
+     *
+     * This overrides the base class WinEDA_DrawFrame::SaveSettings() to
+     * save settings common to the PCB layout application and footprint
+     * editor main windows.  It calls down to the base class to save
+     * settings common to all drawing frames.  Please put your application
+     * settings common to all pcb drawing frames here to avoid having
+     * application settings saved all over the place.
+     */
     virtual void SaveSettings();
 
     DECLARE_EVENT_TABLE()

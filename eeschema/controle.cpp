@@ -48,7 +48,8 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool Include
     DrawStruct = SchematicGeneralLocateAndDisplay( mouse_position, IncludePin );
     if( !DrawStruct && ( mouse_position != GetScreen()->m_Curseur) )
     {
-        DrawStruct = SchematicGeneralLocateAndDisplay( GetScreen()->m_Curseur, IncludePin );
+        DrawStruct = SchematicGeneralLocateAndDisplay( GetScreen()->m_Curseur,
+                                                       IncludePin );
     }
     if( !DrawStruct )
         return NULL;
@@ -63,7 +64,8 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool Include
         break;
 
     case TYPE_SCH_COMPONENT:
-        Pin = LocateAnyPin( GetScreen()->EEDrawList, GetScreen()->m_Curseur, &LibItem );
+        Pin = LocateAnyPin( GetScreen()->EEDrawList, GetScreen()->m_Curseur,
+                            &LibItem );
         if( Pin )
             break; // Priority is probing a pin first
         LibItem = (SCH_COMPONENT*) DrawStruct;
@@ -71,7 +73,8 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool Include
         break;
 
     default:
-        Pin = LocateAnyPin( GetScreen()->EEDrawList, GetScreen()->m_Curseur, &LibItem );
+        Pin = LocateAnyPin( GetScreen()->EEDrawList, GetScreen()->m_Curseur,
+                            &LibItem );
         break;
 
     case COMPONENT_PIN_DRAW_TYPE:
@@ -81,16 +84,15 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool Include
 
     if( Pin )
     {
-        /* Force display pin infos (the previous display could be a component info) */
+        /* Force display pin information (the previous display could be a
+         * component info) */
         Pin->DisplayInfo( this );
         if( LibItem )
-        {
-            MsgPanel->AppendMessage( LibItem->GetRef( GetSheet() ),
-                                 LibItem->GetField( VALUE )->m_Text,
-                                 DARKCYAN );
-        }
+            AppendMsgPanel( LibItem->GetRef( GetSheet() ),
+                            LibItem->GetField( VALUE )->m_Text, DARKCYAN );
 
-        // Cross probing:2 - pin found, and send a locate pin command to pcbnew (hightlight net)
+        // Cross probing:2 - pin found, and send a locate pin command to
+        // pcbnew (hightlight net)
         SendMessageToPCBNEW( Pin, LibItem );
     }
     return DrawStruct;
@@ -98,7 +100,7 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool Include
 
 
 /********************************************************************************************/
-SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoint& refpoint,
+SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay( const wxPoint& refpoint,
                                                                     bool           IncludePin )
 /********************************************************************************************/
 
@@ -129,20 +131,20 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), MARKERITEM );
     if( DrawStruct )
     {
-        MsgPanel->EraseMsgBox();
+        ClearMsgPanel();
         return DrawStruct;
     }
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), NOCONNECTITEM );
     if( DrawStruct )
     {
-        MsgPanel->EraseMsgBox();
+        ClearMsgPanel();
         return DrawStruct;
     }
 
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), JUNCTIONITEM );
     if( DrawStruct )
     {
-        MsgPanel->EraseMsgBox();
+        ClearMsgPanel();
         return DrawStruct;
     }
 
@@ -154,14 +156,11 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
         {
             Pin->DisplayInfo( this );
             if( LibItem )
-            {
-            MsgPanel->AppendMessage( LibItem->GetRef( GetSheet() ),
-                                 LibItem->GetField( VALUE )->m_Text,
-                                 DARKCYAN );
-            }
+                AppendMsgPanel( LibItem->GetRef( GetSheet() ),
+                                LibItem->GetField( VALUE )->m_Text, DARKCYAN );
         }
         else
-            MsgPanel->EraseMsgBox();
+            ClearMsgPanel();
         return DrawStruct;
     }
 
@@ -176,16 +175,14 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
     }
 
     /* search for a pin */
-    Pin = LocateAnyPin( (SCH_ITEM*) m_CurrentSheet->LastDrawList(), refpoint, &LibItem );
+    Pin = LocateAnyPin( (SCH_ITEM*) m_CurrentSheet->LastDrawList(), refpoint,
+                        &LibItem );
     if( Pin )
     {
         Pin->DisplayInfo( this );
         if( LibItem )
-        {
-            MsgPanel->AppendMessage( LibItem->GetRef( GetSheet() ),
-                                 LibItem->GetField( VALUE )->m_Text,
-                                 DARKCYAN );
-        }
+            AppendMsgPanel( LibItem->GetRef( GetSheet() ),
+                            LibItem->GetField( VALUE )->m_Text, DARKCYAN );
         if( IncludePin )
             return LibItem;
     }
@@ -213,7 +210,7 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( const wxPoin
         return DrawStruct;
     }
 
-    MsgPanel->EraseMsgBox();
+    ClearMsgPanel();
     return NULL;
 }
 
@@ -231,7 +228,7 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC* DC,
     curpos = screen->m_MousePosition;
     oldpos = screen->m_Curseur;
 
-    delta = screen->GetGrid();
+    delta = screen->GetGridSize();
     screen->Scale( delta );
 
     if( delta.x <= 0 )
@@ -324,7 +321,7 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC* DC,
     curpos = screen->m_MousePosition;
     oldpos = screen->m_Curseur;
 
-    delta = screen->GetGrid();
+    delta = screen->GetGridSize();
     screen->Scale( delta );
 
     if( delta.x <= 0 )
@@ -416,7 +413,7 @@ void WinEDA_ViewlibFrame::GeneralControle( wxDC*   DC,
     curpos = screen->m_MousePosition;
     oldpos = screen->m_Curseur;
 
-    delta = screen->GetGrid();
+    delta = screen->GetGridSize();
     screen->Scale( delta );
 
     if( delta.x <= 0 )

@@ -147,6 +147,7 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
 
     LoadSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+    ActiveScreen->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
@@ -299,9 +300,9 @@ int WinEDA_GerberFrame::BestZoom()
     GetBoard()->ComputeBoundaryBox();
     size = DrawPanel->GetClientSize();
     x = ( (double) GetBoard()->m_BoundaryBox.GetWidth() +
-          GetScreen()->GetGrid().x ) / (double) size.x;
+          GetScreen()->GetGridSize().x ) / (double) size.x;
     y = ( (double) GetBoard()->m_BoundaryBox.GetHeight() +
-          GetScreen()->GetGrid().y ) / (double) size.y;
+          GetScreen()->GetGridSize().y ) / (double) size.y;
     GetScreen()->m_Curseur = GetBoard()->m_BoundaryBox.Centre();
 
     return wxRound( MAX( x, y ) * (double)GetScreen()->m_ZoomScalar );

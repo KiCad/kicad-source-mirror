@@ -172,6 +172,9 @@ public:
                                              */
     wxPoint      m_Auxiliary_Axis_Position; /* position of the auxiliary axis */
 
+protected:
+    int          m_LastGridSizeId;
+
 private:
     BASE_SCREEN* m_CurrentScreen;           ///< current used SCREEN
 
@@ -215,6 +218,16 @@ public:
     virtual void     SetToolID( int id, int new_cursor_id,
                                 const wxString& title );
 
+    /**
+     * Command event handler for selecting grid sizes.
+     *
+     * All commands that set the grid size should eventually end up here.
+     * This is where the application setting is saved.  If you override
+     * this method, make sure you call down to the base class.
+     *
+     * @param event - Command event passed by selecting grid size from the
+     *                grid size combobox on the toolbar.
+     */
     virtual void     OnSelectGrid( wxCommandEvent& event );
     virtual void     OnSelectZoom( wxCommandEvent& event );
 
@@ -296,6 +309,26 @@ public:
 
     virtual void     LoadSettings();
     virtual void     SaveSettings();
+
+    /**
+     * Append a message to the message panel.
+     *
+     * This helper method checks to make sure the message panel exists in
+     * the frame and appends a message to it using the message panel
+     * AppendMessage() method.
+     *
+     * @param textUpper - The message upper text.
+     * @param textLower - The message lower text.
+     * @param color - A color ID from the Kicad color list (see colors.h).
+     * @param pad - Number of spaces to pad between messages (default = 4).
+     */
+    void AppendMsgPanel( const wxString& textUpper, const wxString& textLower,
+                         int color, int pad = 6 );
+
+    /**
+     * Clear all messages from the message panel.
+     */
+    void ClearMsgPanel( void );
 
     DECLARE_EVENT_TABLE();
 };
@@ -404,7 +437,7 @@ public:
      * @param pad - Number of spaces to pad between messages (default = 4).
      */
     void AppendMessage( const wxString& textUpper, const wxString& textLower,
-                        int color, int pad = 4 );
+                        int color, int pad = 6 );
 
     DECLARE_EVENT_TABLE()
 };

@@ -38,9 +38,6 @@ BEGIN_EVENT_TABLE( WinEDA_DrawPanel, wxScrolledWindow )
     EVT_ERASE_BACKGROUND( WinEDA_DrawPanel::OnEraseBackground )
     EVT_SCROLLWIN( WinEDA_DrawPanel::OnScroll )
     EVT_ACTIVATE( WinEDA_DrawPanel::OnActivate )
-
-    EVT_MENU_RANGE( ID_POPUP_GRID_LEVEL_1000, ID_POPUP_GRID_USER,
-                    WinEDA_DrawPanel::OnPopupGridSelect )
     EVT_MENU_RANGE( ID_PAN_UP, ID_PAN_RIGHT, WinEDA_DrawPanel::OnPan )
 END_EVENT_TABLE()
 
@@ -186,7 +183,7 @@ void WinEDA_DrawPanel::SetZoom( int zoom )
 wxRealPoint WinEDA_DrawPanel::GetGrid()
 /************************************/
 {
-    return GetScreen()->GetGrid();
+    return GetScreen()->GetGridSize();
 }
 
 
@@ -763,7 +760,7 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
      */
     drawgrid = m_Parent->m_Draw_Grid;
 
-    screen_grid_size = screen->GetGrid();
+    screen_grid_size = screen->GetGridSize();
 
     wxRealPoint  dgrid = screen_grid_size;
     screen->Scale( dgrid );     // dgrid = grid size in pixels
@@ -797,7 +794,7 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     screen->Unscale( size );
 
 #ifdef WX_ZOOM
-    screen_grid_size = screen->GetGrid();
+    screen_grid_size = screen->GetGridSize();
 
     if( DC->LogicalToDeviceXRel( (int) screen_grid_size.x ) < 5
         || DC->LogicalToDeviceYRel( (int) screen_grid_size.y ) < 5 )

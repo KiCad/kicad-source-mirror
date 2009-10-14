@@ -34,7 +34,8 @@ BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_BaseStruct( aType )
     m_NumberOfScreen   = 1;  /* Hierarchy: Root: ScreenNumber = 1 */
     m_ZoomScalar       = 10;
     m_Zoom             = 32 * m_ZoomScalar;
-    m_Grid             = wxRealPoint( 50, 50 );   /* Default grid size */
+    m_Grid.m_Size      = wxRealPoint( 50, 50 );   /* Default grid size */
+    m_Grid.m_Id        = ID_POPUP_GRID_LEVEL_50;
     m_UserGridIsON     = FALSE;
     m_Center           = true;
     m_CurrentSheetDesc = &g_Sheet_A4;
@@ -357,25 +358,26 @@ void BASE_SCREEN::SetGrid( const wxRealPoint& size )
 
     size_t i;
 
-    wxRealPoint nearest_grid = m_GridList[0].m_Size;
+    GRID_TYPE nearest_grid = m_GridList[0];
+
     for( i = 0; i < m_GridList.GetCount(); i++ )
     {
         if( m_GridList[i].m_Size == size )
         {
-            m_Grid = m_GridList[i].m_Size;
+            m_Grid = m_GridList[i];
             return;
         }
 
         // keep trace of the nearest grill size, if the exact size is not found
         if ( size.x < m_GridList[i].m_Size.x )
-            nearest_grid = m_GridList[i].m_Size;
+            nearest_grid = m_GridList[i];
     }
 
     m_Grid = nearest_grid;
 
     wxLogWarning( wxT( "Grid size( %f, %f ) not in grid list, falling back " ) \
                   wxT( "to grid size( %f, %f )." ),
-                  size.x, size.y, m_Grid.x, m_Grid.y );
+                  size.x, size.y, m_Grid.m_Size.x, m_Grid.m_Size.y );
 }
 
 /* Set grid size from command ID. */
@@ -389,15 +391,16 @@ void BASE_SCREEN::SetGrid( int id  )
     {
         if( m_GridList[i].m_Id == id )
         {
-            m_Grid = m_GridList[i].m_Size;
+            m_Grid = m_GridList[i];
             return;
         }
     }
 
-    m_Grid = m_GridList[0].m_Size;
+    m_Grid = m_GridList[0];
 
     wxLogWarning( wxT( "Grid ID %d not in grid list, falling back to " ) \
-                  wxT( "grid size( %g, %g )." ), id, m_Grid.x, m_Grid.y );
+                  wxT( "grid size( %g, %g )." ), id, m_Grid.m_Size.x,
+                  m_Grid.m_Size.y );
 }
 
 void BASE_SCREEN::AddGrid( const GRID_TYPE& grid )
@@ -406,8 +409,8 @@ void BASE_SCREEN::AddGrid( const GRID_TYPE& grid )
 
     for( i = 0; i < m_GridList.GetCount(); i++ )
     {
-        if( m_GridList[i].m_Size == grid.m_Size &&
-               grid.m_Id != ID_POPUP_GRID_USER)
+        if( m_GridList[i].m_Size == grid.m_Size
+            && grid.m_Id != ID_POPUP_GRID_USER )
         {
             wxLogDebug( wxT( "Discarding duplicate grid size( %g, %g )." ),
                         grid.m_Size.x, grid.m_Size.y );
@@ -446,13 +449,13 @@ void BASE_SCREEN::AddGrid( const wxRealPoint& size, int units, int id )
 
     if( units == MILLIMETRE )
     {
-        x = size.x / 25.4;
-        y = size.y / 25.4;
+        x = size.x / 25.4000508001016;
+        y = size.y / 25.4000508001016;
     }
     else if( units == CENTIMETRE )
     {
-        x = size.x / 2.54;
-        y = size.y / 2.54;
+        x = size.x / 2.54000508001016;
+        y = size.y / 2.54000508001016;
     }
     else
     {
@@ -468,11 +471,22 @@ void BASE_SCREEN::AddGrid( const wxRealPoint& size, int units, int id )
     AddGrid( new_grid );
 }
 
-/*********************************/
-wxRealPoint BASE_SCREEN::GetGrid()
-/*********************************/
+
+GRID_TYPE BASE_SCREEN::GetGrid()
 {
     return m_Grid;
+}
+
+
+wxRealPoint BASE_SCREEN::GetGridSize()
+{
+    return m_Grid.m_Size;
+}
+
+
+int BASE_SCREEN::GetGridId()
+{
+    return m_Grid.m_Id;
 }
 
 

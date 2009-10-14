@@ -19,8 +19,6 @@
 
 #include "3d_viewer.h"
 
-// Keys used in read/write config
-#define MODEDIT_CURR_GRID wxT( "ModEditCurrGrid" )
 
 // local variables:
 static PCB_SCREEN* s_screenModule = NULL;   // the PCB_SCREEN used by the footprint editor
@@ -36,8 +34,8 @@ EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START,
 EVT_CLOSE( WinEDA_ModuleEditFrame::OnCloseWindow )
 EVT_SIZE( WinEDA_ModuleEditFrame::OnSize )
 
-EVT_KICAD_CHOICEBOX( ID_ON_ZOOM_SELECT, WinEDA_PcbFrame::OnSelectZoom )
-EVT_KICAD_CHOICEBOX( ID_ON_GRID_SELECT, WinEDA_PcbFrame::OnSelectGrid )
+EVT_KICAD_CHOICEBOX( ID_ON_ZOOM_SELECT, WinEDA_ModuleEditFrame::OnSelectZoom )
+EVT_KICAD_CHOICEBOX( ID_ON_GRID_SELECT, WinEDA_ModuleEditFrame::OnSelectGrid )
 
 EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_ModuleEditFrame::OnZoom )
 
@@ -156,8 +154,6 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
     WinEDA_BasePcbFrame( father, MODULE_EDITOR_FRAME,
                          wxEmptyString, pos, size, style )
 {
-    wxConfig* config = wxGetApp().m_EDA_Config;
-
     m_FrameName = wxT( "ModEditFrame" );
     m_Draw_Sheet_Ref = false;   // true to show the frame references
     m_Draw_Axis = true;         // true to show X and Y axis on screen
@@ -181,6 +177,7 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
     LoadSettings();
 
     GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnits, ID_POPUP_GRID_USER );
+    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     ReCreateMenuBar();
@@ -188,13 +185,6 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
     ReCreateAuxiliaryToolbar();
     ReCreateVToolbar();
     ReCreateOptToolbar();
-
-    if( config )
-    {
-        long gridselection = 1;
-        config->Read( MODEDIT_CURR_GRID, &gridselection );
-        GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + gridselection  );
-    }
 
     if( DrawPanel )
         DrawPanel->m_Block_Enable = TRUE;
@@ -222,8 +212,6 @@ WinEDA_ModuleEditFrame::~WinEDA_ModuleEditFrame()
 void WinEDA_ModuleEditFrame::OnCloseWindow( wxCloseEvent& Event )
 /**************************************************************/
 {
-    wxConfig* config = wxGetApp().m_EDA_Config;
-
     if( GetScreen()->IsModify() )
     {
         if( !IsOK( this, _( "Module Editor: Module modified! Continue?" ) ) )
@@ -233,19 +221,12 @@ void WinEDA_ModuleEditFrame::OnCloseWindow( wxCloseEvent& Event )
     }
 
     SaveSettings();
-    if( config )
-    {
-        config->Write( MODEDIT_CURR_GRID, m_SelGridBox->GetSelection() );
-    }
     Destroy();
 }
 
 
-/*********************************************/
 void WinEDA_ModuleEditFrame::SetToolbars()
-/*********************************************/
 {
-    size_t           i;
     bool             active, islib = TRUE;
     WinEDA_PcbFrame* frame = (WinEDA_PcbFrame*) wxGetApp().GetTopWindow();
 
@@ -382,19 +363,10 @@ void WinEDA_ModuleEditFrame::SetToolbars()
                 m_SelZoomBox->SetSelection( -1 );
         }
 
-        if( m_SelGridBox && GetScreen() )
+        if( m_SelGridBox )
         {
-            int kk = m_SelGridBox->GetChoice();
-            for( i = 0; i < GetScreen()->m_GridList.GetCount(); i++ )
-            {
-                if( ( GetScreen()->GetGrid() == GetScreen()->m_GridList[i].m_Size ) )
-                {
-                    if( kk != (int) i )
-                        m_SelGridBox->SetSelection( (int) i );
-                    kk = (int) i;
-                    break;
-                }
-            }
+            m_SelGridBox->SetSelection( ID_POPUP_GRID_LEVEL_1000 +
+                                        m_LastGridSizeId );
         }
     }
 
@@ -441,7 +413,7 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     curpos = DrawPanel->CursorRealPosition( Mouse );
     oldpos = GetScreen()->m_Curseur;
 
-    delta = GetScreen()->GetGrid();
+    delta = GetScreen()->GetGridSize();
     GetScreen()->Scale( delta );
 
     if( delta.x == 0 )
@@ -513,27 +485,4 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     SetToolbars();
     UpdateStatusBar();    /* Affichage des coord curseur */
-}
-
-
-/*****************************************************************/
-void WinEDA_ModuleEditFrame::OnSelectGrid( wxCommandEvent& event )
-/******************************************************************/
-
-// Virtual function
-{
-    if( m_SelGridBox == NULL )
-        return;                        // Should not occurs
-
-    GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnits, ID_POPUP_GRID_USER );
-
-    WinEDA_DrawFrame::OnSelectGrid( event );
-
-    // If the user grid is the current selection , ensure grid size value = new user grid value
-    int ii = m_SelGridBox->GetSelection();
-    if( ii == (int) ( m_SelGridBox->GetCount() - 1 ) )
-    {
-        GetScreen()->SetGrid( ID_POPUP_GRID_USER );
-        DrawPanel->Refresh();
-    }
 }

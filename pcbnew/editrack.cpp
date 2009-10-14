@@ -310,9 +310,9 @@ bool WinEDA_PcbFrame::Add_45_degrees_Segment( wxDC* DC )
         return false;
     }
 
-    pas_45 = (int) GetScreen()->GetGrid().x / 2;
+    pas_45 = (int) GetScreen()->GetGridSize().x / 2;
     if( pas_45 < curTrack->m_Width )
-        pas_45 = (int) GetScreen()->GetGrid().x;
+        pas_45 = (int) GetScreen()->GetGridSize().x;
 
     while( pas_45 < curTrack->m_Width )
         pas_45 *= 2;

@@ -233,11 +233,13 @@ void WinEDA_ModuleEditFrame::ReCreateOptToolbar()
                                wxBitmap( via_sketch_xpm ),
                                _( "Show Vias Sketch" ) );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, wxEmptyString,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
+                               wxEmptyString,
                                wxBitmap( text_sketch_xpm ),
                                _( "Show Texts Sketch" ) );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, wxEmptyString,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
+                               wxEmptyString,
                                wxBitmap( show_mod_edge_xpm ),
                                _( "Show Edges Sketch" ) );
 
@@ -280,12 +282,14 @@ void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
         for( int i = 0; i < (int)GetScreen()->m_ZoomList.GetCount(); i++ )
         {
             msg = _( "Zoom " );
-            if ( (GetScreen()->m_ZoomList[i] % GetScreen()->m_ZoomScalar) == 0 )
+            if ( GetScreen()->m_ZoomList[i] % GetScreen()->m_ZoomScalar == 0 )
                 msg << GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar;
             else
             {
                 wxString value;
-                value.Printf(wxT("%.1f"),(float)GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar );
+                value.Printf( wxT( "%.1f" ),
+                              (float)GetScreen()->m_ZoomList[i] /
+                              GetScreen()->m_ZoomScalar );
                 msg += value;
             }
             m_SelZoomBox->Append( msg );
@@ -293,8 +297,8 @@ void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
 
         m_AuxiliaryToolBar->AddControl( m_SelZoomBox );
 
-        // after adding the buttons to the toolbar, must call Realize() to reflect
-        // the changes
+        // after adding the buttons to the toolbar, must call Realize() to
+        // reflect the changes
         m_AuxiliaryToolBar->Realize();
     }
 
@@ -317,7 +321,11 @@ void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
             msg = _( "User Grid" );
         }
 
-        m_SelGridBox->Append( msg );
+        m_SelGridBox->Append( msg, (void*) &GetScreen()->m_GridList[i].m_Id );
+
+        if( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId ==
+            GetScreen()->m_GridList[i].m_Id )
+            m_SelGridBox->SetSelection( i );
     }
 
     SetToolbars();

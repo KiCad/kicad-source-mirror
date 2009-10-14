@@ -241,16 +241,45 @@ public:
      * @param type - type of searched item (filter).
      *               if TYPE_NOT_INIT search for all items types
      *
+     * @return - Pointer to the next drawing object in the list if found,
+     *           otherwise NULL.
      */
 
     LIB_DRAW_ITEM* GetNextDrawItem( LIB_DRAW_ITEM* item = NULL,
                                     KICAD_T type = TYPE_NOT_INIT );
 
+    /**
+     * Return the next pin object from the draw list.
+     *
+     * This is just a pin object specific version of GetNextDrawItem().
+     *
+     * @param item - Pointer to the previous pin item, or NULL to get the
+     *               first pin in the draw object list.
+     *
+     * @return - Pointer to the next pin object in the list if found,
+     *           otherwise NULL.
+     */
     LIB_PIN* GetNextPin( LIB_PIN* item = NULL )
     {
         return (LIB_PIN*) GetNextDrawItem( (LIB_DRAW_ITEM*) item,
                                            COMPONENT_PIN_DRAW_TYPE );
     }
+
+
+    /**
+     * Return a list of pin object pointers from the draw item list.
+     *
+     * Note pin objects are owned by the draw list of the component.
+     * Deleting any of the objects will leave list in a unstable state
+     * and will likely segfault when the list is destroyed.
+     *
+     * @param list - Pin list to place pin object pointers into.
+     * @param unit - Unit number of pin to add to list.  Set to 0 to
+     *               get pins from any component part.
+     * @param convert - Convert number of pin to add to list.  Set to 0 to
+     *                  get pins from any convert of component.
+     */
+    void GetPins( LIB_PIN_LIST& pins, int unit = 0, int convert = 0 );
 
     /**
      * Move the component offset.
