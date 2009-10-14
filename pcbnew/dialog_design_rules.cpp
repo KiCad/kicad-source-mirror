@@ -484,8 +484,8 @@ void DIALOG_DESIGN_RULES::OnRemoveNetclassClick( wxCommandEvent& event )
     // Sort selection by decreasing index order:
     select.Sort(sort_int);
     bool reinit = false;
-    // rows labels seem have problems when deleting rows: they are not deleted properly.
-    // Workaround: store them, delete rows and reinit row labels (wxWidgets <= 2.9 )
+    // rows labels are not removed when deleting rows: they are not deleted.
+    // So we must store them, remove correponding labels and reinit them
     wxArrayString labels;
     for( int ii = 0; ii < m_grid->GetNumberRows(); ii++ )
         labels.Add(m_grid->GetRowLabelValue(ii));
@@ -498,7 +498,7 @@ void DIALOG_DESIGN_RULES::OnRemoveNetclassClick( wxCommandEvent& event )
         {
             wxString classname = m_grid->GetRowLabelValue( grid_row );
             m_grid->DeleteRows( grid_row );
-            labels.RemoveAt(grid_row);
+            labels.RemoveAt(grid_row);  // Remove corresponding row label
             reinit = true;
 
             // reset the net class to default for members of the removed class
@@ -509,7 +509,7 @@ void DIALOG_DESIGN_RULES::OnRemoveNetclassClick( wxCommandEvent& event )
     }
     if( reinit )
     {
-        // Workaround: reinit labels (wxWidgets <= 2.9 )
+        // Reinit labels :
         for( unsigned ii = 1; ii < labels.GetCount(); ii++ )
              m_grid->SetRowLabelValue(ii, labels[ii]);
 
