@@ -190,6 +190,9 @@ static void Show_MoveNode( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     }
 
     DisplayOpt.DisplayPcbTrackFill = track_fill_copy;
+    // Display track length
+    WinEDA_BasePcbFrame* frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
+    Track->DisplayInfo( frame );
 }
 
 
@@ -439,6 +442,9 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( WinEDA_DrawPanel* panel,
         tSegmentToStart->Draw( panel, DC, draw_mode );
     if( tSegmentToEnd )
         tSegmentToEnd->Draw( panel, DC, draw_mode );
+    // Display track length
+    WinEDA_BasePcbFrame* frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
+    Track->DisplayInfo( frame );
 }
 
 

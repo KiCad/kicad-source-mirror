@@ -84,8 +84,8 @@ void DialogEditModuleText::Init( )
     {
         wxString format = m_ModuleInfoText->GetLabel();
         msg.Printf( format,
-            m_Module->m_Reference->m_Text.GetData(),
-            m_Module->m_Value->m_Text.GetData(),
+            GetChars( m_Module->m_Reference->m_Text ),
+            GetChars( m_Module->m_Value->m_Text ),
             (float) m_Module->m_Orient / 10 );
     }
 

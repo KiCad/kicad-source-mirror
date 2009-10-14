@@ -57,9 +57,9 @@ void RemoteCommand(  const char* cmdline )
         module = frame->GetBoard()->FindModuleByReference( modName );
 
         if( module )
-            msg.Printf( _( "%s found" ), modName.GetData() );
+            msg.Printf( _( "%s found" ), GetChars( modName ) );
         else
-            msg.Printf( _( "%s not found" ), modName.GetData() );
+            msg.Printf( _( "%s not found" ), GetChars( modName ) );
 
         frame->Affiche_Message( msg );
         if( module )
@@ -103,17 +103,17 @@ void RemoteCommand(  const char* cmdline )
         }
 
         if( module == NULL )
-            msg.Printf( _( "%s not found" ), modName.GetData() );
+            msg.Printf( _( "%s not found" ), GetChars( modName ) );
         else if( pad == NULL )
         {
             msg.Printf( _( "%s pin %s not found" ),
-                        modName.GetData(), pinName.GetData() );
+                        GetChars( modName ), GetChars( pinName ) );
             frame->SetCurItem( module );
         }
         else
         {
             msg.Printf( _( "%s pin %s found" ),
-                        modName.GetData(), pinName.GetData() );
+                        GetChars( modName ), GetChars( pinName ) );
             frame->SetCurItem( pad );
         }
 

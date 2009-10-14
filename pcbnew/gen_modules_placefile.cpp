@@ -448,7 +448,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
         }
 
         fprintf( rptfile, "$EndMODULE  %s\n\n",
-                (const char*) Module->m_Reference->m_Text.GetData() );
+                CONV_TO_UTF8(Module->m_Reference->m_Text ) );
     }
 
     /* Write board Edges */

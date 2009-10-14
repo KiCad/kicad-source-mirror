@@ -143,7 +143,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( PLOTTER* plotter,
 
             errMsg.Printf(
                 _( "Your BOARD has a bad layer number of %u for module\n %s's \"reference\" text." ),
-                textLayer, Module->GetReference().GetData() );
+                textLayer, GetChars( Module->GetReference() ) );
             DisplayError( this, errMsg );
             return;
         }
@@ -163,7 +163,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( PLOTTER* plotter,
 
             errMsg.Printf(
                 _( "Your BOARD has a bad layer number of %u for module\n %s's \"value\" text." ),
-                textLayer, Module->GetReference().GetData() );
+                textLayer, GetChars( Module->GetReference() ) );
             DisplayError( this, errMsg );
             return;
         }
@@ -201,7 +201,8 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( PLOTTER* plotter,
                 errMsg.Printf(
                     _(
                         "Your BOARD has a bad layer number of %u for module\n %s's \"module text\" text of %s." ),
-                    textLayer, Module->GetReference().GetData(), pt_texte->m_Text.GetData() );
+                    textLayer, GetChars( Module->GetReference() ),
+                    GetChars( pt_texte->m_Text ) );
                 DisplayError( this, errMsg );
                 return;
             }
@@ -477,8 +478,8 @@ void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int masque_layer,
         return;
 
     /* calcul des parametres du texte :*/
-    size = pt_texte->m_Size;
-    pos  = pt_texte->m_Pos;
+    size      = pt_texte->m_Size;
+    pos       = pt_texte->m_Pos;
     orient    = pt_texte->m_Orient;
     thickness = (trace_mode==FILAIRE) ? -1 : pt_texte->m_Width;
 
@@ -575,15 +576,15 @@ void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone,
             if( trace_mode == FILLED )
             {
                 // Plot the current filled area polygon
-                if( aZone->m_FillMode == 0 ) // We are using solid polygons (if != 0: using segments )
+                if( aZone->m_FillMode == 0 )    // We are using solid polygons (if != 0: using segments )
                     plotter->poly( corners_count, CornersBuffer, FILLED_SHAPE );
-                else // We are using areas filled by segments: plot hem )
+                else                            // We are using areas filled by segments: plot hem )
                 {
                     for( unsigned iseg = 0; iseg < aZone->m_FillSegmList.size(); iseg++ )
                     {
                         wxPoint start = aZone->m_FillSegmList[iseg].m_Start;
-                        wxPoint end = aZone->m_FillSegmList[iseg].m_End ;
-                        plotter->thick_segment(start, end, aZone->m_ZoneMinThickness, trace_mode );
+                        wxPoint end   = aZone->m_FillSegmList[iseg].m_End;
+                        plotter->thick_segment( start, end, aZone->m_ZoneMinThickness, trace_mode );
                     }
                 }
 

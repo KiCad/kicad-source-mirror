@@ -126,7 +126,6 @@ set(PCBNEW_SRCS
     plot_rtn.cpp
     queue.cpp
     ratsnest.cpp
-    router.cpp
     set_color.cpp
     set_grid.cpp
     solve.cpp

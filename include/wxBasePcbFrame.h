@@ -150,8 +150,9 @@ public:
      * of "selecting" an item more formal, and to indivisibly tie the operation
      * of selecting an item to displaying it using BOARD_ITEM::Display_Infos().
      * @param aItem The BOARD_ITEM to make the selected item or NULL if none.
+     * @param aDisplayInfo = true to display item info, false if not (default = true)
      */
-    void                     SetCurItem( BOARD_ITEM* aItem );
+    void                     SetCurItem( BOARD_ITEM* aItem, bool aDisplayInfo = true );
     BOARD_ITEM*              GetCurItem();
 
     /**

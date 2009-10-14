@@ -205,7 +205,7 @@ bool DIALOG_COPPER_LAYERS_SETUP::TestDataValidity()
                 wxString text;
                 text.Printf( _(
                                 "<small>This layer name <b>%s</b> is already existing<br>" ),
-                            value.GetData() );
+                            GetChars( value ) );
                 m_MessagesList->AppendToPage( text );
                 success = false;
             }

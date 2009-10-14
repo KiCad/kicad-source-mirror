@@ -153,7 +153,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             if( m_HTOOL_current_state == ID_TOOLBARH_PCB_AUTOROUTE )
             {
                 if( !flags )
-                    aPopMenu->Append( ID_POPUP_PCB_AUTOROUTE_MODULE, _( "Autoroute" ) );
+                    aPopMenu->Append( ID_POPUP_PCB_AUTOROUTE_MODULE, _( "Autoroute Module" ) );
             }
             break;
 
@@ -345,21 +345,13 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         if( m_HTOOL_current_state == ID_TOOLBARH_PCB_AUTOROUTE )
         {
             wxMenu* commands = new wxMenu;
-            aPopMenu->Append( ID_POPUP_PCB_AUTOROUTE_COMMANDS, _( "Global Autoroute" ), commands );
+            aPopMenu->Append( ID_POPUP_PCB_AUTOROUTE_COMMANDS, _( "Autoroute" ), commands );
             ADD_MENUITEM( commands, ID_POPUP_PCB_SELECT_LAYER_PAIR,
                           _( "Select Layer Pair" ), select_layer_pair_xpm );
             commands->AppendSeparator();
             commands->Append( ID_POPUP_PCB_AUTOROUTE_ALL_MODULES, _( "Autoroute All Modules" ) );
             commands->AppendSeparator();
             commands->Append( ID_POPUP_PCB_AUTOROUTE_RESET_UNROUTED, _( "Reset Unrouted" ) );
-            if( GetBoard()->m_Modules )
-            {
-                commands->AppendSeparator();
-                commands->Append( ID_POPUP_PCB_AUTOROUTE_GET_AUTOROUTER,
-                                 _( "Global AutoRouter" ) );
-                commands->Append( ID_POPUP_PCB_AUTOROUTE_GET_AUTOROUTER_DATA,
-                                 _( "Read Global AutoRouter Data" ) );
-            }
             aPopMenu->AppendSeparator();
         }
 

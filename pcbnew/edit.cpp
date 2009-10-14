@@ -598,7 +598,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_MOVE_MODULE_REQUEST:
 
-        // If the current Item is a pad, text module ...: Get the parent
+        // If the current Item is a pad, text module ...: Get its parent
         if( GetCurItem()->Type() != TYPE_MODULE )
             SetCurItem( GetCurItem()->GetParent() );
         if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
@@ -622,7 +622,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_DELETE_MODULE:
         DrawPanel->MouseToCursorSchema();
 
-        // If the current Item is a pad, text module ...: Get the parent
+        // If the current Item is a pad, text module ...: Get its parent
         if( GetCurItem()->Type() != TYPE_MODULE )
             SetCurItem( GetCurItem()->GetParent() );
 
@@ -637,7 +637,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE:
         DrawPanel->MouseToCursorSchema();
 
-        // If the current Item is a pad, text module ...: Get the parent
+        // If the current Item is a pad, text module ...: Get its parent
         if( GetCurItem()->Type() != TYPE_MODULE )
             SetCurItem( GetCurItem()->GetParent() );
 
@@ -652,7 +652,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE:
         DrawPanel->MouseToCursorSchema();
 
-        // If the current Item is a pad, text module ...: Get the parent
+        // If the current Item is a pad, text module ...: Get its parent
         if( GetCurItem()->Type() != TYPE_MODULE )
             SetCurItem( GetCurItem()->GetParent() );
 
@@ -666,7 +666,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_CHANGE_SIDE_MODULE:
         DrawPanel->MouseToCursorSchema();
 
-        // If the current Item is a pad, text module ...: Get the parent
+        // If the current Item is a pad, text module ...: Get its parent
         if( GetCurItem()->Type() != TYPE_MODULE )
             SetCurItem( GetCurItem()->GetParent() );
         if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
@@ -680,7 +680,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_EDIT_MODULE:
 
-        // If the current Item is a pad, text module ...: Get the parent
+        // If the current Item is a pad, text module ...: Get its parent
         if( GetCurItem()->Type() != TYPE_MODULE )
             SetCurItem( GetCurItem()->GetParent() );
         if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
@@ -939,14 +939,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MENU_PCB_SWAP_LAYERS:
         Swap_Layers( event );
-        break;
-
-    case ID_POPUP_PCB_AUTOROUTE_GET_AUTOROUTER:
-        GlobalRoute( &dc );
-        break;
-
-    case ID_POPUP_PCB_AUTOROUTE_GET_AUTOROUTER_DATA:
-        ReadAutoroutedTracks( &dc );
         break;
 
     case ID_PCB_USER_GRID_SETUP:

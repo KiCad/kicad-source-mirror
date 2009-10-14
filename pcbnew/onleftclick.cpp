@@ -215,8 +215,10 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         else if( DrawStruct && (DrawStruct->m_Flags & IS_NEW) )
         {
             TRACK* track = Begin_Route( (TRACK*) DrawStruct, DC );
-            if( track )  // c'est a dire si OK
-                SetCurItem( DrawStruct = track );
+            // SetCurItem() must not write to the msg panel
+            // because a track info is displayed while moving the mouse cursor
+            if( track )  // A new segment was created
+                SetCurItem( DrawStruct = track, false );
             DrawPanel->m_AutoPAN_Request = true;
         }
         break;

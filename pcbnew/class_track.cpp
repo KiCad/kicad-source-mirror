@@ -133,7 +133,7 @@ int TRACK::GetDrillValue() const
 double TRACK::GetLength()
 {
     wxPoint delta = m_End - m_Start;
-    return sqrt( (double)delta.x*delta.x + (double)delta.y*delta.y );
+    return sqrt( ((double)delta.x*delta.x) + ((double)delta.y*delta.y ) );
 }
 
 /***********************/
@@ -905,6 +905,31 @@ void TRACK::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
     BOARD*   board = ( (WinEDA_BasePcbFrame*) frame )->GetBoard();
+    
+    // Display basic infos
+    DisplayInfoBase( frame ); 
+
+    // Display full track length (in pcbnew)
+    if( frame->m_Ident == PCB_FRAME )
+    {
+        int   trackLen = 0;
+        Marque_Une_Piste( board, this, NULL, &trackLen, false );
+        valeur_param( trackLen, msg );
+        frame->MsgPanel->AppendMessage( _( "Track Len" ), msg, DARKCYAN );
+    }
+}
+
+/*
+ * Function DisplayInfoBase
+ * has knowledge about the frame and how and where to put status information
+ * about this object into the frame's message panel.
+ * Display info about the track segment only, and does not calculate the full track length
+ * @param frame A WinEDA_DrawFrame in which to print status information.
+ */
+void TRACK::DisplayInfoBase( WinEDA_DrawFrame* frame )
+{
+    wxString msg;
+    BOARD*   board = ( (WinEDA_BasePcbFrame*) frame )->GetBoard();
 
     frame->MsgPanel->EraseMsgBox();
 
@@ -1017,15 +1042,6 @@ void TRACK::DisplayInfo( WinEDA_DrawFrame* frame )
     {
         valeur_param( wxRound( GetLength() ), msg );
         frame->MsgPanel->AppendMessage( _( "Seg Len" ), msg, DARKCYAN );
-    }
-
-    // Display full track length (in pcbnew)
-    if( frame->m_Ident == PCB_FRAME )
-    {
-        int   trackLen;
-        Marque_Une_Piste( board, this, NULL, &trackLen, false );
-        valeur_param( trackLen, msg );
-        frame->MsgPanel->AppendMessage( _( "Track Len" ), msg, DARKCYAN );
     }
 }
 

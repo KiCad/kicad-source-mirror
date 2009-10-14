@@ -108,8 +108,8 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
     case ID_NEW_BOARD:
         Clear_Pcb( true );
         GetScreen()->m_FileName.Printf( wxT( "%s%cnoname%s" ),
-                                        wxGetCwd().GetData(), DIR_SEP,
-                                        PcbExtBuffer.GetData() );
+                                        GetChars( wxGetCwd() ), DIR_SEP,
+                                        GetChars( PcbExtBuffer ) );
         SetTitle( GetScreen()->m_FileName );
         ReCreateLayerBox( NULL );
         break;
@@ -187,7 +187,7 @@ bool WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append 
     if( source == NULL )
     {
         msg.Printf( _( "File <%s> not found" ),
-                    GetScreen()->m_FileName.GetData() );
+                    GetChars( GetScreen()->m_FileName ) );
         DisplayError( this, msg );
         return false;
     }

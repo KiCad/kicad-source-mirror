@@ -296,14 +296,14 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
         check_module_value = true;
         value = m_CurrentModule->m_Value->m_Text;
         msg.Printf( _( "Change modules <%s> -> <%s> (val = %s)?" ),
-                   m_CurrentModule->m_LibRef.GetData(),
-                   newmodulename.GetData(),
-                   m_CurrentModule->m_Value->m_Text.GetData() );
+                   GetChars( m_CurrentModule->m_LibRef ),
+                   GetChars( newmodulename ),
+                   GetChars( m_CurrentModule->m_Value->m_Text ) );
     }
     else
     {
         msg.Printf( _( "Change modules <%s> -> <%s> ?" ),
-                   lib_reference.GetData(), newmodulename.GetData() );
+                   GetChars( lib_reference ), GetChars( newmodulename ) );
     }
 
     if( !IsOK( this, msg ) )
@@ -327,7 +327,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
             if( value.CmpNoCase( Module->m_Value->m_Text ) != 0 )
                 continue;
         }
-        if( Change_1_Module( Module, newmodulename.GetData(), &pickList, ShowErr ) )
+        if( Change_1_Module( Module, newmodulename, &pickList, ShowErr ) )
             change = true;
         else if( ShowErr )
             ShowErr--;
@@ -376,7 +376,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
     for( ; Module && ( Module->Type() == TYPE_MODULE ); Module = PtBack )
     {
         PtBack = Module->Back();
-        if( Change_1_Module( Module, Module->m_LibRef.GetData(), &pickList, ShowErr ) )
+        if( Change_1_Module( Module, Module->m_LibRef, &pickList, ShowErr ) )
             change = true;
         else if( ShowErr )
             ShowErr--;
@@ -424,7 +424,7 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*         Module,
 
     /* Chargement du module */
     Line.Printf( _( "Change module %s (%s)  " ),
-                Module->m_Reference->m_Text.GetData(), oldnamecmp.GetData() );
+                GetChars( Module->m_Reference->m_Text ), GetChars( oldnamecmp ) );
     m_WinMessages->AppendText( Line );
 
     namecmp.Trim( true );

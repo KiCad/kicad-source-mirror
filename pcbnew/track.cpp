@@ -53,6 +53,9 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
     if( aSegmCount )
         *aSegmCount = 0;
 
+    if( aTrackLen )
+        *aTrackLen = 0;
+
     if( aStartSegm == NULL )
         return NULL;
 
@@ -259,7 +262,6 @@ static void Marque_Chaine_segments( BOARD* aPcb, wxPoint aRef_pos, int aLayerMas
     /* Set the BUSY flag of all connected segments, first search starting at aRef_pos
      *  Search ends when:
      *     - a pad is found (end of a track)
-     *     - a segment found is flagged "EDIT"
      *     - a segment end has more than one other segment end connected
      *     - and obviously when no connected item found
      *  Vias are a special case, because we must see others segment connected on others layers
@@ -284,9 +286,6 @@ static void Marque_Chaine_segments( BOARD* aPcb, wxPoint aRef_pos, int aLayerMas
         pt_via = Fast_Locate_Via( aPcb->m_Track, NULL, aRef_pos, aLayerMask );
         if( pt_via )
         {
-            if( pt_via->GetState( EDIT ) )
-                return;
-
             aLayerMask = pt_via->ReturnMaskLayer();
 
             aList->push_back( pt_via );
@@ -302,9 +301,6 @@ static void Marque_Chaine_segments( BOARD* aPcb, wxPoint aRef_pos, int aLayerMas
         while( ( pt_segm = Fast_Locate_Piste( pt_segm, NULL,
                                               aRef_pos, aLayerMask ) ) != NULL )
         {
-            if( pt_segm->GetState( EDIT ) ) // End of track
-                return;
-
             if( pt_segm->GetState( BUSY ) ) // already found and selected: skip it
             {
                 pt_segm = pt_segm->Next();

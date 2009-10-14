@@ -27,8 +27,8 @@ static void Exit_Move_Pad( WinEDA_DrawPanel* Panel, wxDC* DC )
 /************************************************************/
 
 /* Routine de sortie du menu EDIT PADS.
-  * Sortie simple si pad de pad en mouvement
-  * Remise en etat des conditions initiales avant move si move en cours
+ * Sortie simple si pad de pad en mouvement
+ * Remise en etat des conditions initiales avant move si move en cours
  */
 {
     D_PAD* pad = s_CurrentSelectedPad;
@@ -59,7 +59,7 @@ static void Exit_Move_Pad( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     EraseDragListe();
     s_CurrentSelectedPad = NULL;
-    g_Drag_Pistes_On = FALSE;
+    g_Drag_Pistes_On     = FALSE;
 }
 
 
@@ -123,7 +123,7 @@ void WinEDA_BasePcbFrame::Export_Pad_Settings( D_PAD* pt_pad )
     g_Pad_Master.m_Masque_Layer = pt_pad->m_Masque_Layer;
     g_Pad_Master.m_Orient = pt_pad->m_Orient -
                             ( (MODULE*) pt_pad->GetParent() )->m_Orient;
-    g_Pad_Master.m_Size      = pt_pad->m_Size;
+    g_Pad_Master.m_Size = pt_pad->m_Size;
     g_Pad_Master.m_DeltaSize = pt_pad->m_DeltaSize;
     pt_pad->ComputeRayon();
 
@@ -138,9 +138,9 @@ void WinEDA_BasePcbFrame::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 /***********************************************************************/
 
 /* Met a jour les nouvelles valeurs de dimensions du pad pointe par pt_pad
-  * - Source : valeurs choisies des caracteristiques generales
-  * - les dimensions sont modifiees
-  * - la position et les noms ne sont pas touches
+ * - Source : valeurs choisies des caracteristiques generales
+ * - les dimensions sont modifiees
+ * - la position et les noms ne sont pas touches
  */
 {
     if( aDraw )
@@ -152,10 +152,10 @@ void WinEDA_BasePcbFrame::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 
     aPad->m_PadShape     = g_Pad_Master.m_PadShape;
     aPad->m_Masque_Layer = g_Pad_Master.m_Masque_Layer;
-    aPad->m_Attribut = g_Pad_Master.m_Attribut;
-    aPad->m_Orient   = g_Pad_Master.m_Orient +
-                         ( (MODULE*) aPad->GetParent() )->m_Orient;
-    aPad->m_Size       = g_Pad_Master.m_Size;
+    aPad->m_Attribut     = g_Pad_Master.m_Attribut;
+    aPad->m_Orient = g_Pad_Master.m_Orient +
+                     ( (MODULE*) aPad->GetParent() )->m_Orient;
+    aPad->m_Size = g_Pad_Master.m_Size;
     aPad->m_DeltaSize  = wxSize( 0, 0 );
     aPad->m_Offset     = g_Pad_Master.m_Offset;
     aPad->m_Drill      = g_Pad_Master.m_Drill;
@@ -208,7 +208,7 @@ void WinEDA_BasePcbFrame::AddPad( MODULE* Module, bool draw )
 
     /* Mise a jour des caract de la pastille : */
     Import_Pad_Settings( Pad, false );
-    Pad->SetNetname(wxEmptyString);
+    Pad->SetNetname( wxEmptyString );
 
     Pad->m_Pos = GetScreen()->m_Curseur;
 
@@ -222,8 +222,8 @@ void WinEDA_BasePcbFrame::AddPad( MODULE* Module, bool draw )
 
     /* Increment automatique de la reference courante Current_PadName */
     long num = 0; int ponder = 1;
-    while( g_Current_PadName.Len() && g_Current_PadName.Last() >= '0' &&
-           g_Current_PadName.Last() <= '9' )
+    while( g_Current_PadName.Len() && g_Current_PadName.Last() >= '0'
+           && g_Current_PadName.Last() <= '9' )
     {
         num += (g_Current_PadName.Last() - '0') * ponder;
         g_Current_PadName.RemoveLast();
@@ -237,7 +237,7 @@ void WinEDA_BasePcbFrame::AddPad( MODULE* Module, bool draw )
     /* Redessin du module */
     Module->Set_Rectangle_Encadrement();
     Pad->DisplayInfo( this );
-    if ( draw )
+    if( draw )
         DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
 }
 
@@ -257,7 +257,8 @@ void WinEDA_BasePcbFrame::DeletePad( D_PAD* Pad )
     Module->m_LastEdit_Time = time( NULL );
 
     line.Printf( _( "Delete Pad (module %s %s) " ),
-        Module->m_Reference->m_Text.GetData(), Module->m_Value->m_Text.GetData() );
+                GetChars( Module->m_Reference->m_Text ),
+                GetChars( Module->m_Value->m_Text ) );
     if( !IsOK( this, line ) )
         return;
 
@@ -309,48 +310,49 @@ void WinEDA_BasePcbFrame::PlacePad( D_PAD* Pad, wxDC* DC )
 /*********************************************************/
 /* Routine to Place a moved pad */
 {
-    int        dX, dY;
-    TRACK*     Track;
-    MODULE*    Module;
+    int     dX, dY;
+    TRACK*  Track;
+    MODULE* Module;
 
     if( Pad == NULL )
         return;
 
     Module = (MODULE*) Pad->GetParent();
 
-    ITEM_PICKER picker(NULL, UR_CHANGED);
+    ITEM_PICKER       picker( NULL, UR_CHANGED );
     PICKED_ITEMS_LIST pickList;
 
     /* Save  dragged track segments in undo list */
     for( DRAG_SEGM* pt_drag = g_DragSegmentList; pt_drag; pt_drag = pt_drag->Pnext )
     {
         Track = pt_drag->m_Segm;
+
         // Set the old state
         wxPoint t_start = Track->m_Start;
-        wxPoint t_end = Track->m_End;
+        wxPoint t_end   = Track->m_End;
         if( pt_drag->m_Pad_Start )
             Track->m_Start = Pad_OldPos;
         if( pt_drag->m_Pad_End )
             Track->m_End = Pad_OldPos;
 
         picker.m_PickedItem = Track;
-        pickList.PushItem(picker);
+        pickList.PushItem( picker );
     }
 
     /* Save old module and old items values */
     wxPoint pad_curr_position = Pad->m_Pos;
 
     Pad->m_Pos = Pad_OldPos;
-    if ( g_DragSegmentList == NULL )
+    if( g_DragSegmentList == NULL )
         SaveCopyInUndoList( Module, UR_CHANGED );
     else
     {
         picker.m_PickedItem = Module;
-        pickList.PushItem(picker);
+        pickList.PushItem( picker );
     }
 
 
-    if ( g_DragSegmentList )
+    if( g_DragSegmentList )
         SaveCopyInUndoList( pickList, UR_CHANGED );
 
     /* Placement du pad */
@@ -359,9 +361,10 @@ void WinEDA_BasePcbFrame::PlacePad( D_PAD* Pad, wxDC* DC )
     Pad->Draw( DrawPanel, DC, GR_XOR );
 
     /* Redraw dragged track segments */
-     for( DRAG_SEGM* pt_drag = g_DragSegmentList; pt_drag; pt_drag = pt_drag->Pnext )
+    for( DRAG_SEGM* pt_drag = g_DragSegmentList; pt_drag; pt_drag = pt_drag->Pnext )
     {
         Track = pt_drag->m_Segm;
+
         // Set the new state
         if( pt_drag->m_Pad_Start )
             Track->m_Start = Pad->m_Pos;
@@ -369,7 +372,7 @@ void WinEDA_BasePcbFrame::PlacePad( D_PAD* Pad, wxDC* DC )
             Track->m_End = Pad->m_Pos;
 
         Track->SetState( EDIT, OFF );
-        if ( DC )
+        if( DC )
             Track->Draw( DrawPanel, DC, GR_OR );
     }
 
@@ -383,7 +386,7 @@ void WinEDA_BasePcbFrame::PlacePad( D_PAD* Pad, wxDC* DC )
 
     Pad->m_Flags = 0;
 
-    if ( DC )
+    if( DC )
         Pad->Draw( DrawPanel, DC, GR_OR );
 
     Module->Set_Rectangle_Encadrement();
@@ -404,7 +407,7 @@ void WinEDA_BasePcbFrame::RotatePad( D_PAD* Pad, wxDC* DC )
 /**********************************************************/
 
 /* Tourne de 90 degres le pad selectionne :
-  * c.a.d intervertit dim X et Y et offsets
+ * c.a.d intervertit dim X et Y et offsets
  */
 {
     MODULE* Module;
@@ -417,7 +420,7 @@ void WinEDA_BasePcbFrame::RotatePad( D_PAD* Pad, wxDC* DC )
 
     GetScreen()->SetModify();
 
-    if ( DC )
+    if( DC )
         Module->Draw( DrawPanel, DC, GR_XOR );
 
     EXCHG( Pad->m_Size.x, Pad->m_Size.y );
@@ -427,11 +430,11 @@ void WinEDA_BasePcbFrame::RotatePad( D_PAD* Pad, wxDC* DC )
 
     EXCHG( Pad->m_DeltaSize.x, Pad->m_DeltaSize.y );
     Pad->m_DeltaSize.x = -Pad->m_DeltaSize.x; /* ceci est la variation
-                                                * de la dim Y sur l'axe X */
+                                               * de la dim Y sur l'axe X */
 
     Module->Set_Rectangle_Encadrement();
 
     Pad->DisplayInfo( this );
-    if ( DC )
+    if( DC )
         Module->Draw( DrawPanel, DC, GR_OR );
 }

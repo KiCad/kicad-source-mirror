@@ -464,7 +464,8 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
 
                 pad->ReturnStringPadName( padname );
                 msg.Printf( wxT( "NODE %s %.4s" ),
-                           module->m_Reference->m_Text.GetData(), padname.GetData() );
+                           GetChars( module->m_Reference->m_Text ),
+                            GetChars( padname ) );
 
                 fputs( CONV_TO_UTF8( msg ), file );
                 fputs( "\n", file );

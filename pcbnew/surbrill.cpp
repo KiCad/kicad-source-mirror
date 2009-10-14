@@ -45,7 +45,7 @@ void WinEDA_PcbFrame::ListNetsAndSelect( wxCommandEvent& event )
             continue;
 
         Line.Printf( wxT( "net_code = %3.3d  [%.16s] " ), net->GetNet(),
-                    net->GetNetname().GetData() );
+                    GetChars( net->GetNetname() ) );
         List.Append( Line );
     }
 

@@ -245,14 +245,15 @@ void WinEDA_BasePcbFrame::ProcessItemSelection( wxCommandEvent& event )
 
 
 /*****************************************************************/
-void WinEDA_BasePcbFrame::SetCurItem( BOARD_ITEM* aItem )
+void WinEDA_BasePcbFrame::SetCurItem( BOARD_ITEM* aItem, bool aDisplayInfo )
 /*****************************************************************/
 {
     GetScreen()->SetCurItem( aItem );
 
     if( aItem )
     {
-        aItem->DisplayInfo( this );
+        if( aDisplayInfo )
+            aItem->DisplayInfo( this );
 
 #if 0 && defined(DEBUG)
     aItem->Show( 0, std::cout );

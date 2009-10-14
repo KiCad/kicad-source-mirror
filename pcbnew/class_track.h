@@ -201,10 +201,19 @@ public:
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
      * Is virtual from EDA_BaseStruct.
+     * Display info about the track segment and the full track length
      * @param frame A WinEDA_DrawFrame in which to print status information.
      */
     void            DisplayInfo( WinEDA_DrawFrame* frame );
 
+    /**
+     * Function DisplayInfoBase
+     * has knowledge about the frame and how and where to put status information
+     * about this object into the frame's message panel.
+     * Display info about the track segment only, and does not calculate the full track length
+     * @param frame A WinEDA_DrawFrame in which to print status information.
+     */
+    void            DisplayInfoBase( WinEDA_DrawFrame* frame );
 
     /**
      * Function ShowWidth

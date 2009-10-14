@@ -55,7 +55,7 @@ static void Exit_Editrack( WinEDA_DrawPanel* Panel, wxDC* DC )
         frame->MsgPanel->EraseMsgBox();
 
         // Undo pending changes (mainly a lock point cretion) and clear the undo picker list:
-        frame->PutDataInPreviousState(&s_ItemsListPicker, false, false);
+        frame->PutDataInPreviousState( &s_ItemsListPicker, false, false );
         s_ItemsListPicker.ClearListAndDeleteItems();
 
         // Delete current (new) track
@@ -135,7 +135,8 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
         else    // no starting point, but a filled zone area can exist. This is also a good starting point.
         {
             ZONE_CONTAINER* zone = GetBoard()->HitTestForAnyFilledArea( pos,
-                                                                        GetScreen()->m_Active_Layer );
+                                                                        GetScreen()->
+                                                                        m_Active_Layer );
             if( zone )
                 g_HightLigth_NetCode = zone->GetNet();
         }
@@ -188,8 +189,8 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
 
         D( g_CurrentTrackList.VerifyListIntegrity(); );
 
-        g_CurrentTrackSegment->DisplayInfo( this );
-        SetCurItem( g_CurrentTrackSegment );
+        g_CurrentTrackSegment->DisplayInfoBase( this );
+        SetCurItem( g_CurrentTrackSegment, false );
         DrawPanel->ManageCurseur( DrawPanel, DC, false );
 
         if( Drc_On )
@@ -267,15 +268,14 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
                 newTrack->m_Width = g_DesignSettings.m_CurrentTrackWidth;
             }
 
-             D( g_CurrentTrackList.VerifyListIntegrity(); );
+            D( g_CurrentTrackList.VerifyListIntegrity(); );
 
             /* Show the new position */
             ShowNewTrackWhenMovingCursor( DrawPanel, DC, false );
-         }
-        g_CurrentTrackSegment->DisplayInfo( this );
+        }
     }
 
-    SetCurItem( g_CurrentTrackSegment );
+    SetCurItem( g_CurrentTrackSegment, false );
     return g_CurrentTrackSegment;
 }
 
@@ -476,7 +476,7 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
             LockPoint = CreateLockPoint( g_CurrentTrackSegment->m_End,
                                          adr_buf,
                                          g_CurrentTrackSegment,
-                                        &s_ItemsListPicker);
+                                         &s_ItemsListPicker );
         }
     }
 
@@ -514,9 +514,9 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
         // erase the old track, if exists
         if( g_AutoDeleteOldTrack )
         {
-            EraseRedundantTrack( DC, firstTrack, newCount, & s_ItemsListPicker );
+            EraseRedundantTrack( DC, firstTrack, newCount, &s_ItemsListPicker );
         }
-        SaveCopyInUndoList(s_ItemsListPicker, UR_UNSPECIFIED);
+        SaveCopyInUndoList( s_ItemsListPicker, UR_UNSPECIFIED );
         s_ItemsListPicker.ClearItemsList(); // s_ItemsListPicker is no more owner of picked items
 
         /* compute the new rastnest : */
@@ -669,11 +669,12 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
 {
     D( g_CurrentTrackList.VerifyListIntegrity(); );
 
-    PCB_SCREEN* screen = (PCB_SCREEN*) panel->GetScreen();
+    PCB_SCREEN*          screen = (PCB_SCREEN*) panel->GetScreen();
+    WinEDA_BasePcbFrame* frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
 
-    bool        Track_fill_copy = DisplayOpt.DisplayPcbTrackFill;
+    bool      Track_fill_copy = DisplayOpt.DisplayPcbTrackFill;
     DisplayOpt.DisplayPcbTrackFill = true;
-    int         showTrackClearanceMode = DisplayOpt.ShowTrackClearanceMode;
+    int       showTrackClearanceMode = DisplayOpt.ShowTrackClearanceMode;
 
     NETCLASS* netclass = g_FirstTrackSegment->GetNetClass();
 
@@ -685,7 +686,7 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
     {
         Trace_Une_Piste( panel, DC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
 
-        ( (WinEDA_BasePcbFrame*)(panel->m_Parent) )->trace_ratsnest_pad( DC );
+        frame->trace_ratsnest_pad( DC );
 
         if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )  // Show the via area
         {
@@ -760,13 +761,35 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
                   color );
     }
 
+    /* Display info about currrent segment and the full new track:
+     *  Choose the interesting segment: because we are using a 2 segments step,
+     *  the last segment can be null, and the previous segment can be the interesting segment.
+     */
+    TRACK* isegm = g_CurrentTrackSegment;
+    if( isegm->GetLength() == 0 && g_CurrentTrackSegment->Back() )
+        isegm = g_CurrentTrackSegment->Back();
+
+    // display interesting segment info only:
+    isegm->DisplayInfoBase( frame );
+
+    // Add current track length
+    int      trackLen = 0;
+    wxString msg;
+    for( TRACK* track = g_FirstTrackSegment; track; track = track->Next() )
+        trackLen += track->GetLength();
+
+    valeur_param( trackLen, msg );
+    frame->MsgPanel->AppendMessage( _( "Track Len" ), msg, DARKCYAN );
+
+    // Add current segments count (number of segments in this new track):
+    msg.Printf( wxT( "%d" ), g_CurrentTrackList.GetCount() );
+    frame->MsgPanel->AppendMessage( _( "Segs Count" ), msg, DARKCYAN );
+
     DisplayOpt.ShowTrackClearanceMode = showTrackClearanceMode;
     DisplayOpt.DisplayPcbTrackFill    = Track_fill_copy;
 
-    ( (WinEDA_BasePcbFrame*)(panel->m_Parent) )->
-    build_ratsnest_pad( NULL, g_CurrentTrackSegment->m_End, false );
-
-    ( (WinEDA_BasePcbFrame*)(panel->m_Parent) )->trace_ratsnest_pad( DC );
+    frame->build_ratsnest_pad( NULL, g_CurrentTrackSegment->m_End, false );
+    frame->trace_ratsnest_pad( DC );
 }
 
 

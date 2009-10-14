@@ -119,9 +119,9 @@ void DIALOG_DESIGN_RULES::PrintCurrentSettings( )
 }
 
 
-/**************************************/
+/******************************************/
 void DIALOG_DESIGN_RULES::InitDialogRules()
-/**************************************/
+/******************************************/
 {
     SetFocus();
     SetReturnCode( 0 );
@@ -470,28 +470,51 @@ void DIALOG_DESIGN_RULES::OnAddNetclassClick( wxCommandEvent& event )
     InitializeRulesSelectionBoxes();
 }
 
-
+// Sort function for wxArrayInt. Itelms (ints) are sorted by decreasing value
+// used in DIALOG_DESIGN_RULES::OnRemoveNetclassClick
+int sort_int(int *first, int *second)
+{
+    return * second - *first;
+}
 /**************************************************************************/
 void DIALOG_DESIGN_RULES::OnRemoveNetclassClick( wxCommandEvent& event )
 /**************************************************************************/
 {
     wxArrayInt select = m_grid->GetSelectedRows();
-
-    for( int ii = select.GetCount() - 1; ii >= 0; ii-- )
+    // Sort selection by decreasing index order:
+    select.Sort(sort_int);
+    bool reinit = false;
+    // rows labels seem have problems when deleting rows: they are not deleted properly.
+    // Workaround: store them, delete rows and reinit row labels (wxWidgets <= 2.9 )
+    wxArrayString labels;
+    for( int ii = 0; ii < m_grid->GetNumberRows(); ii++ )
+        labels.Add(m_grid->GetRowLabelValue(ii));
+    // Delete rows from last to first (this is the order wxArrayInt select after sorting) )
+    // This order is Ok when removing rows
+    for( unsigned ii = 0; ii < select.GetCount(); ii++ )
     {
         int grid_row = select[ii];
         if(  grid_row != 0 )   // Do not remove the default class
         {
             wxString classname = m_grid->GetRowLabelValue( grid_row );
-
             m_grid->DeleteRows( grid_row );
+            labels.RemoveAt(grid_row);
+            reinit = true;
 
             // reset the net class to default for members of the removed class
             swapNetClass( classname, NETCLASS::Default );
         }
+        else
+            wxMessageBox(_("The defaut Netclass cannot be removed") );
     }
+    if( reinit )
+    {
+        // Workaround: reinit labels (wxWidgets <= 2.9 )
+        for( unsigned ii = 1; ii < labels.GetCount(); ii++ )
+             m_grid->SetRowLabelValue(ii, labels[ii]);
 
-    InitializeRulesSelectionBoxes();
+        InitializeRulesSelectionBoxes();
+    }
 }
 
 /*

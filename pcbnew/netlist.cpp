@@ -114,7 +114,7 @@ bool OpenNetlistFile( const wxString& aFullFileName )
     if( source == 0 )
     {
         wxString msg;
-        msg.Printf( _( "Netlist file %s not found" ), aFullFileName.GetData() );
+        msg.Printf( _( "Netlist file %s not found" ), GetChars( aFullFileName ) );
         DisplayError( NULL, msg );
         return FALSE;
     }
@@ -181,7 +181,7 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
     State = 0; LineNum = 0; Comment = 0;
     s_NbNewModules = 0;
 
-    wxBusyCursor        dummy; // Shows an hourglass while calculating
+    wxBusyCursor dummy;        // Shows an hourglass while calculating
 
     /* First, read the netlist: Build the list of footprints to load (new footprints)
      */
@@ -486,8 +486,9 @@ MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
                         msg.Printf(
                             _(
                                 "Component \"%s\": Mismatch! module is [%s] and netlist said [%s]\n" ),
-                            TextCmpName.GetData(), Module->m_LibRef.GetData(),
-                            NameLibCmp.GetData() );
+                            GetChars( TextCmpName ),
+                            GetChars( Module->m_LibRef ),
+                            GetChars( NameLibCmp ) );
 
                         if( aMessageWindow )
                             aMessageWindow->AppendText( msg );
@@ -520,7 +521,7 @@ MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
             if( aMessageWindow )
             {
                 wxString msg;
-                msg.Printf( _( "Component [%s] not found" ), TextCmpName.GetData() );
+                msg.Printf( _( "Component [%s] not found" ), GetChars( TextCmpName ) );
                 aMessageWindow->AppendText( msg + wxT( "\n" ) );
             }
         }
@@ -586,7 +587,8 @@ int SetPadNetName( wxWindow* frame, char* Text, MODULE* Module, wxTextCtrl* aMes
         {
             wxString pin_name = CONV_FROM_UTF8( TextPinName );
             Msg.Printf( _( "Module [%s]: Pad [%s] not found" ),
-                       Module->m_Reference->m_Text.GetData(), pin_name.GetData() );
+                       GetChars( Module->m_Reference->m_Text ),
+                       GetChars( pin_name ) );
             aMessageWindow->AppendText( Msg + wxT( "\n" ) );
         }
     }
@@ -658,7 +660,7 @@ void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       aFrame,
  */
 #define MAX_LEN_TXT 32
 {
-    int ii;
+    int               ii;
     MODULE*           Module, * pt_aux;
     int               NbModulesNetListe, nberr = 0;
     WinEDA_TextFrame* List;
@@ -870,7 +872,7 @@ int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
     {
         wxString msg;
         msg.Printf( _( "File <%s> not found, use Netlist for lib module selection" ),
-                   CmpFullFileName.GetData() );
+                   GetChars( CmpFullFileName ) );
         DisplayError( NULL, msg, 20 );
         return 0;
     }
@@ -1001,7 +1003,8 @@ void LoadListeModules( WinEDA_PcbFrame* aPcbFrame )
             {
                 wxString msg;
                 msg.Printf( _( "Component [%s]: footprint <%s> not found" ),
-                           cmp->m_CmpName.GetData(), cmp->m_LibName.GetData() );
+                           GetChars( cmp->m_CmpName ),
+                           GetChars( cmp->m_LibName ) );
                 DisplayError( NULL, msg );
                 continue;
             }
