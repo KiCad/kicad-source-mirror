@@ -4,6 +4,19 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-oct-14 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+Fix save last grid size and other minor updates.
+* Create single event handler for grid size events.
+* Fix all frame windows to use new grid size event handler.
+* Use offset relative to ID instead of ComboBox index to save last grid size.
+* Move last grid size load/save setting into WinEDA_DrawFrame.
+* Add equality and assignment operators the GRID_TYPE.
+* Add current grid helper methods to BASE_SCREEN.
+* Add GetPins helper to LIB_COMPONENT to replace GetNextPin where applicable.
+* Add AppendMsgPanel helper to WinEDA_DrawFrame.
+* Improve rounding for display of coordinates when millimeter units are selected.
+
 2009-oct-01 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
 * Component library viewer restores state between uses.

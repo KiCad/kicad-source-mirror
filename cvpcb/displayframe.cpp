@@ -61,6 +61,10 @@ WinEDA_DisplayFrame::WinEDA_DisplayFrame( WinEDA_CvpcbFrame* father,
     SetBaseScreen( new PCB_SCREEN() );
 
     LoadSettings();
+    // Initilialize grid id to a default value if not found in config or bad:
+    if( (m_LastGridSizeId <= 0) ||
+        (m_LastGridSizeId < (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
+        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_500 - ID_POPUP_GRID_LEVEL_1000;
 
     // Initialize some display options
     DisplayOpt.DisplayPadIsol = false;      // Pad clearance has no meaning here

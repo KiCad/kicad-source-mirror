@@ -121,15 +121,6 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
     Ki_PageDescr*  PlotSheet;
 
     wxString datetime = DateAndTime(  );
-    bool first = true;
-
-    BOOST_FOREACH( const CMP_LIBRARY& lib, CMP_LIBRARY::GetLibraryList() )
-    {
-        if( ! first )
-            Name += wxT( "," );
-        Name += lib.GetName();
-        first = false;
-    }
 
     // Creates header
     if( fprintf( aFile, "%s %s %d", EESCHEMA_FILE_STAMP,
@@ -139,8 +130,12 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
     if( fprintf( aFile, "  date %s\n", CONV_TO_UTF8(datetime) ) == EOF )
         return FALSE;
 
-    if( fprintf( aFile, "LIBS:%s\n", CONV_TO_UTF8( Name ) ) == EOF )
-        return FALSE;
+    BOOST_FOREACH( const CMP_LIBRARY& lib, CMP_LIBRARY::GetLibraryList() )
+    {
+        Name = lib.GetName();
+        if( fprintf( aFile, "LIBS:%s\n", CONV_TO_UTF8( Name ) ) == EOF )
+            return FALSE;
+    }
 
     SaveLayers( aFile );
 

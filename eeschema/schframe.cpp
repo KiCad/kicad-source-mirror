@@ -172,6 +172,11 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow*       father,
 
     /* Get config */
     LoadSettings();
+    
+    // Initilialize grid id to a default value if not found in config or bad:
+    if( (m_LastGridSizeId <= 0) ||
+        (m_LastGridSizeId < (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
+        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 

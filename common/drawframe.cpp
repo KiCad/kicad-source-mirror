@@ -252,7 +252,7 @@ void WinEDA_DrawFrame::OnSelectGrid( wxCommandEvent& event )
      */
     m_LastGridSizeId = id - ID_POPUP_GRID_LEVEL_1000;
     screen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
-    screen->SetGrid( event.GetId() );
+    screen->SetGrid( id );
     Refresh();
 }
 
