@@ -17,7 +17,7 @@ Dialogs:
     "default buttons", ESC key termination.
     
     Use wxWidgets "sizers" in all dialogs, no matter how simple they are: 
-    http://www.lpthe.jussieu.fr/~zeitlin/wxWindows/docs/wxwin_sizeroverview.html
+    http://zetcode.com/tutorials/wxwidgetstutorial/layoutmanagement
     and keep dialogs resizeable.
     
     Configure the sizers so that as the dialog window is expanded, the most
