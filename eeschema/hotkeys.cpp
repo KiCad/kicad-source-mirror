@@ -76,6 +76,8 @@ static Ki_HotkeyInfo HkOrientNormalComponent( wxT( "Orient Normal Component" ),
                                               HK_ORIENT_NORMAL_COMPONENT, 'N' );
 static Ki_HotkeyInfo HkRotateComponent( wxT( "Rotate Component" ),
                                         HK_ROTATE_COMPONENT, 'R' );
+static Ki_HotkeyInfo HkEditComponent( wxT( "Edit Component" ),
+                                           HK_EDIT_COMPONENT, 'E' );
 static Ki_HotkeyInfo HkEditComponentValue( wxT( "Edit Component Value" ),
                                            HK_EDIT_COMPONENT_VALUE, 'V' );
 static Ki_HotkeyInfo HkEditComponentFootprint( wxT( "Edit Component Footprint" ),
@@ -123,7 +125,7 @@ Ki_HotkeyInfo* s_Schematic_Hotkey_List[] =
     &HkMoveComponent,        &HkDragComponent,          &HkAddComponent,
     &HkRotateComponent,      &HkMirrorXComponent,       &HkMirrorYComponent,
     &HkOrientNormalComponent,
-    &HkEditComponentValue,&HkEditComponentFootprint,
+    &HkEditComponent,&HkEditComponentValue,&HkEditComponentFootprint,
     &HkBeginWire,
     NULL
 };
@@ -418,15 +420,82 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_MOVE_COMPONENT:         // Start move Component
         if( ItemInEdit )
             break;
-        if( DrawStruct == NULL )
-            DrawStruct = LocateSmallestComponent( GetScreen() );
-        if( DrawStruct && (DrawStruct->m_Flags ==0) )
-        {
-            GetScreen()->SetCurItem( (SCH_ITEM*) DrawStruct );
-            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED,
-                                  HK_Descr->m_IdMenuEvent );
 
-            wxPostEvent( this, event );
+        if( DrawStruct == NULL )
+        {
+            DrawStruct = PickStruct( GetScreen()->m_Curseur,
+                                     GetScreen(), LIBITEM | TEXTITEM |
+                                     LABELITEM );
+            if( DrawStruct == NULL )
+                break;
+            if( DrawStruct->Type() == TYPE_SCH_COMPONENT )
+                DrawStruct = LocateSmallestComponent( GetScreen() );
+            if( DrawStruct == NULL )
+                break;
+        }
+
+
+        switch( DrawStruct->Type() )
+        {
+        case TYPE_SCH_COMPONENT:
+            if( DrawStruct && (DrawStruct->m_Flags ==0) )
+            {
+                GetScreen()->SetCurItem( (SCH_ITEM*) DrawStruct );
+                wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED,
+                                  HK_Descr->m_IdMenuEvent );
+                wxPostEvent( this, event );
+            }
+            break;
+
+        case TYPE_SCH_TEXT:
+        case TYPE_SCH_LABEL:
+        case TYPE_SCH_GLOBALLABEL:
+        case TYPE_SCH_HIERLABEL:
+            if( DrawStruct->m_Flags == 0 )
+            {
+                SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, UR_CHANGED );
+                RefreshToolBar = TRUE;
+            }
+            StartMoveTexte( (SCH_TEXT*) DrawStruct, DC );
+            break;
+
+        default:
+            ;
+        }
+        break;
+
+    case HK_EDIT_COMPONENT:
+
+        if( ItemInEdit )
+            break;
+        if( DrawStruct == NULL )
+        {
+            DrawStruct = PickStruct( GetScreen()->m_Curseur,
+                                     GetScreen(), LIBITEM | TEXTITEM |
+                                     LABELITEM );
+            if( DrawStruct == NULL )
+                break;
+            if( DrawStruct->Type() == TYPE_SCH_COMPONENT )
+                DrawStruct = LocateSmallestComponent( GetScreen() );
+            if( DrawStruct == NULL )
+                break;
+        }
+
+        switch( DrawStruct->Type() )
+        {
+        case TYPE_SCH_COMPONENT:
+            InstallCmpeditFrame( this, MousePos,(SCH_COMPONENT*) DrawStruct );
+            break;
+
+        case TYPE_SCH_TEXT:
+        case TYPE_SCH_LABEL:
+        case TYPE_SCH_GLOBALLABEL:
+        case TYPE_SCH_HIERLABEL:
+            EditSchematicText( (SCH_TEXT*) DrawStruct, DC );
+            break;
+
+        default:
+            ;
         }
         break;
 
