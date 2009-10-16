@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-11 14:52+0100\n"
-"PO-Revision-Date: 2009-05-17 11:24+0100\n"
+"PO-Revision-Date: 2009-10-16 11:49+0100\n"
 "Last-Translator: Milan Horák <stranger@tiscali.cz>\n"
 "Language-Team: Čeština <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -237,7 +237,7 @@ msgstr "Čá&ra"
 #: /home/martin/kicad/cvpcb/dialog_display_options.cpp:135
 #: /home/martin/kicad/cvpcb/dialog_display_options.cpp:143
 msgid "&Filled"
-msgstr "&Vyplněno"
+msgstr "&Výplň"
 
 #: /home/martin/kicad/cvpcb/dialog_display_options.cpp:136
 #: /home/martin/kicad/cvpcb/dialog_display_options.cpp:144
@@ -258,7 +258,7 @@ msgstr "Vyplnit &plošku"
 
 #: /home/martin/kicad/cvpcb/dialog_display_options.cpp:156
 msgid "Show pad &number"
-msgstr "Zobrazit číslo plošky"
+msgstr "Ukázat číslo plošky"
 
 #: /home/martin/kicad/cvpcb/dialog_display_options.cpp:159
 msgid "Display pad number"
@@ -376,7 +376,7 @@ msgstr "<%s> není platnou knihovnou pouzder Kicad"
 
 #: /home/martin/kicad/cvpcb/listlib.cpp:127
 msgid "Unexpected end of file occurred while parsing PCB foot print library <%s>."
-msgstr "Obhevil se neočekávaný konec souboru při analýze knihovny pouzder PCB <%s>."
+msgstr "Objevil se neočekávaný konec souboru při analýze knihovny pouzder PCB <%s>."
 
 #: /home/martin/kicad/cvpcb/listlib.cpp:162
 msgid "Could not open PCB foot print library document file <%s>."
@@ -405,7 +405,7 @@ msgstr "U&končit"
 
 #: /home/martin/kicad/cvpcb/menucfg.cpp:51
 msgid "Quit Cvpcb"
-msgstr "Ukončit CVPCB"
+msgstr "Ukončit Cvpcb"
 
 #: /home/martin/kicad/cvpcb/menucfg.cpp:60
 msgid "&Configuration"
@@ -421,11 +421,11 @@ msgstr "Nechat otevřené při uložení"
 
 #: /home/martin/kicad/cvpcb/menucfg.cpp:69
 msgid "Prevent CVPcb from exiting after saving netlist file"
-msgstr "Zabránit CVPcb ukončení po uložení netlistu"
+msgstr "Zabránit Cvpcb ukončení po uložení netlistu"
 
 #: /home/martin/kicad/cvpcb/menucfg.cpp:75
 msgid "&Save Project File"
-msgstr "Uložit projekt:"
+msgstr "Uložit projekt"
 
 #: /home/martin/kicad/cvpcb/menucfg.cpp:76
 msgid "Save changes to the project file"
@@ -438,15 +438,15 @@ msgstr "&Obsah"
 
 #: /home/martin/kicad/cvpcb/menucfg.cpp:83
 msgid "Open the cvpcb manual"
-msgstr "Otevřít mauál CVPCB"
+msgstr "Otevřít manuál Cvpcb"
 
 #: /home/martin/kicad/cvpcb/menucfg.cpp:87
 msgid "&About cvpcb"
-msgstr "&O CVPCB"
+msgstr "&O Cvpcb"
 
 #: /home/martin/kicad/cvpcb/menucfg.cpp:88
 msgid "About cvpcb schematic to pcb converter"
-msgstr "O převodníku schématu na desku CVPCB"
+msgstr "O převodníku schématu na desku Cvpcb"
 
 #: /home/martin/kicad/cvpcb/menucfg.cpp:92
 #: /home/martin/kicad/kicad/buildmnu.cpp:237
@@ -477,7 +477,7 @@ msgstr "Neznámý formát souboru <%s>"
 
 #: /home/martin/kicad/cvpcb/readschematicnetlist.cpp:141
 msgid "Netlist Format: EESchema"
-msgstr "Formát netlistu: EESchema"
+msgstr "Formát netlistu: Eeschema"
 
 #: /home/martin/kicad/cvpcb/readschematicnetlist.cpp:202
 msgid "Netlist error: %s"
@@ -497,7 +497,7 @@ msgstr "Chyba při načítání knihovny"
 
 #: /home/martin/kicad/cvpcb/cvpcb.cpp:55
 msgid "Cvpcb is already running, Continue?"
-msgstr "CVPCB je již spuštěn. Pokračovat?"
+msgstr "Cvpcb je již spuštěn. Pokračovat?"
 
 #: /home/martin/kicad/cvpcb/cvpcb.cpp:98
 msgid " [no file]"
@@ -529,7 +529,7 @@ msgstr "Nelze vytvořit netlist"
 
 #: /home/martin/kicad/cvpcb/cfg.cpp:103
 msgid "Save Project File"
-msgstr "Uložit projekt:"
+msgstr "Uložit projekt"
 
 #: /home/martin/kicad/cvpcb/loadcmp.cpp:74
 msgid "<%s> is not a valid Kicad PCB foot print library."
@@ -647,7 +647,7 @@ msgstr "Změnit název souboru"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:98
 msgid "&Open\tCtrl+O"
-msgstr "Otevřít"
+msgstr "Otevřít\tCtrl+O"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:99
 msgid "Open an existing project"
@@ -655,7 +655,7 @@ msgstr "Načíst existující projekt"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:104
 msgid "&New\tCtrl+N"
-msgstr "&Nový"
+msgstr "&Nový\tCtrl+N"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:105
 #: /home/martin/kicad/kicad/buildmnu.cpp:261
@@ -664,7 +664,7 @@ msgstr "Vytvořit nový projekt"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:111
 msgid "&Save\tCtrl+S"
-msgstr "Uložit\tCtrl-S"
+msgstr "Uložit\tCtrl+S"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:112
 #: /home/martin/kicad/kicad/buildmnu.cpp:269
@@ -689,7 +689,7 @@ msgstr "Extrahovat projekt ze souboru zip"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:137
 msgid "Quit kicad"
-msgstr "Ukončit KICAD"
+msgstr "Ukončit Kicad"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:149
 msgid "Text E&ditor"
@@ -749,7 +749,7 @@ msgstr "Nastavení prohlížeče PDF"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:226
 msgid "Open the kicad manual"
-msgstr "Otevřít mauál KICADu"
+msgstr "Otevřít mauál Kicadu"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:231
 msgid "&About"
@@ -757,7 +757,7 @@ msgstr "O aplikaci"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:232
 msgid "About kicad project manager"
-msgstr "O projektovém manažeru KICAD"
+msgstr "O projektovém manažeru Kicad"
 
 #: /home/martin/kicad/kicad/buildmnu.cpp:238
 msgid "&Browse"
@@ -810,7 +810,7 @@ msgstr "Smazat soubor"
 
 #: /home/martin/kicad/kicad/treeprj_datas.cpp:393
 msgid "no kicad files found in this directory"
-msgstr "v tomto adresáři nejsou soubory KICADu"
+msgstr "v tomto adresáři nejsou soubory Kicadu"
 
 #: /home/martin/kicad/kicad/kicad.cpp:378
 msgid "noname"
@@ -894,15 +894,15 @@ msgstr "Načíst soubor  k úpravám"
 
 #: /home/martin/kicad/kicad/commandframe.cpp:55
 msgid "EESchema (Schematic editor)"
-msgstr "EESchema (editor schémat)"
+msgstr "Eeschema (editor schémat)"
 
 #: /home/martin/kicad/kicad/commandframe.cpp:59
 msgid "CVpcb (Components to modules)"
-msgstr "CVPCB (součástky -> moduly)"
+msgstr "Cvpcb (součástky -> moduly)"
 
 #: /home/martin/kicad/kicad/commandframe.cpp:63
 msgid "PCBnew (PCB editor)"
-msgstr "PCBNew (editor desek)"
+msgstr "Pcbnew (editor desek)"
 
 #: /home/martin/kicad/kicad/commandframe.cpp:67
 msgid "GerbView (Gerber viewer)"
@@ -946,9 +946,7 @@ msgstr "Načíst existující projekt"
 
 #: /home/martin/kicad/kicad/prjconfig.cpp:93
 msgid "Kicad project file <"
-msgstr ""
-"Projekt\n"
-"<"
+msgstr "Projekt <"
 
 #: /home/martin/kicad/kicad/prjconfig.cpp:107
 msgid "Working dir: "
@@ -1579,7 +1577,7 @@ msgstr "> je prázdný!"
 
 #: /home/martin/kicad/eeschema/eelibs_read_libraryfiles.cpp:327
 msgid "> is NOT EESCHEMA library!"
-msgstr "> NENÍ knihovna EESCHEMA"
+msgstr "> NENÍ knihovna Eeschema"
 
 #: /home/martin/kicad/eeschema/eelibs_read_libraryfiles.cpp:344
 msgid "Library <"
@@ -1720,15 +1718,15 @@ msgstr "Načítání "
 #: /home/martin/kicad/eeschema/load_one_schematic_file.cpp:82
 #: /home/martin/kicad/eeschema/load_one_schematic_file.cpp:114
 msgid " is NOT an EESchema file!"
-msgstr " NENÍ soubor schémat EESCHEMA"
+msgstr " NENÍ soubor schémat Eeschema"
 
 #: /home/martin/kicad/eeschema/load_one_schematic_file.cpp:93
 msgid " was created by a more recent version of EESchema and may not load correctly. Please consider updating!"
-msgstr " bylo vytvořeno v novější verzi EESSCHEMA a nemusí být správně načteno. Zvažte aktualizaci!"
+msgstr " bylo vytvořeno v novější verzi Eeschema a nemusí být správně načteno. Zvažte aktualizaci!"
 
 #: /home/martin/kicad/eeschema/load_one_schematic_file.cpp:103
 msgid " was created by an older version of EESchema. It will be stored in the new file format when you save this file again."
-msgstr " bylo vytvořeno ve starší verzi EESCHEMA. Pokud ho uložíte znovu, uloží se v novějším formátu."
+msgstr " bylo vytvořeno ve starší verzi Eeschema. Pokud ho uložíte znovu, uloží se v novějším formátu."
 
 #: /home/martin/kicad/eeschema/load_one_schematic_file.cpp:408
 msgid "Done Loading "
@@ -2260,7 +2258,7 @@ msgstr "Obsazeno jiným vývodem. Pokračovat?"
 
 #: /home/martin/kicad/eeschema/pinedit.cpp:995
 msgid "Duplicate Pin %4.4s (Pin %s loc %d, %d, and Pin %s loc %d, %d)"
-msgstr "Duplicitní vývod %4.4s (Pin %s poz. %d, %d, a Pin %s poz. %d, %d)"
+msgstr "Duplicitní vývod %4.4s (Pin %s pozice %d, %d, a Pin %s pozice %d, %d)"
 
 #: /home/martin/kicad/eeschema/pinedit.cpp:1002
 msgid "  Part %d"
@@ -2677,7 +2675,7 @@ msgstr "Seznam"
 
 #: /home/martin/kicad/eeschema/dialog_build_BOM_base.cpp:47
 msgid "Text for spreadsheet import"
-msgstr "Text pro import do spreadsheetu"
+msgstr "Text pro import do tabulkového kalkulátoru"
 
 #: /home/martin/kicad/eeschema/dialog_build_BOM_base.cpp:49
 msgid "Output format:"
@@ -2697,7 +2695,7 @@ msgstr ","
 
 #: /home/martin/kicad/eeschema/dialog_build_BOM_base.cpp:55
 msgid "Field separator for spreadsheet import:"
-msgstr "Oddělovač polí pro import do spreadsheetu"
+msgstr "Oddělovač polí pro import do tabulkového kalkulátoru"
 
 #: /home/martin/kicad/eeschema/dialog_build_BOM_base.cpp:62
 msgid "Launch list browser"
@@ -3098,8 +3096,8 @@ msgid ""
 "Note: this new library will be available only if it is loaded by eeschema.\n"
 "Modify eeschema config if you want use it."
 msgstr ""
-"Poznámka: tato nová knihovna bude dostupná pouze po načtení do EESCHEMA\n"
-"Změňte konfiguraci EESCHEMA, chcete-li ji použít"
+"Poznámka: tato nová knihovna bude dostupná pouze po načtení do Eeschema\n"
+"Změňte konfiguraci Eeschema, chcete-li ji použít"
 
 #: /home/martin/kicad/eeschema/lib_export.cpp:152
 msgid "Error creating "
@@ -3435,7 +3433,7 @@ msgstr "> %-28.28s %s        (List %.2s) pozice: %3.3f, %3.3f\n"
 
 #: /home/martin/kicad/eeschema/build_BOM.cpp:837
 msgid "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
-msgstr "> %-28.28s List výv. %-7.7s (List %.2s) pozice: %3.3f, %3.3f\n"
+msgstr "> %-28.28s List vývodů %-7.7s (List %.2s) pozice: %3.3f, %3.3f\n"
 
 #: /home/martin/kicad/eeschema/build_BOM.cpp:852
 msgid "#End labels\n"
@@ -3524,7 +3522,7 @@ msgstr "Kreslit Postscript"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:80
 msgid "Plot schematic sheet in PostScript format"
-msgstr "Kreslit list schématu ve formátu PostScript"
+msgstr "Kreslit list schématu ve formátu Postscript"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:84
 msgid "Plot HPGL"
@@ -3560,7 +3558,7 @@ msgstr "Kreslit list schématu ve formátu HPGL, PostScript nebo SVG"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:109
 msgid "Quit Eeschema"
-msgstr "Ukončit EESCHEMA"
+msgstr "Ukončit Eeschema"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:118
 msgid "&Undo\t"
@@ -3576,7 +3574,7 @@ msgstr "Z&novu\t"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:126
 msgid "Redo the last undo command"
-msgstr "Zopakovat poslední příkaz undo"
+msgstr "Zopakovat poslední příkaz Zpět"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:133
 msgid "Delete items"
@@ -3754,7 +3752,7 @@ msgstr "&Možnosti"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:297
 msgid "Eeschema general options and preferences"
-msgstr "Všeobecné možnosti a předvolby EESCHEMA"
+msgstr "Všeobecné možnosti a předvolby Eeschema"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:304
 msgid "&Save preferences"
@@ -3774,11 +3772,11 @@ msgstr "Načíst předvolby aplikace"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:320
 msgid "Open the eeschema manual"
-msgstr "Otevřít maunál EESCHEMA"
+msgstr "Otevřít manuál Eeschema"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:325
 msgid "About eeschema schematic designer"
-msgstr "O návrháři schémat EESCHEMA"
+msgstr "O návrháři schémat Eeschema"
 
 #: /home/martin/kicad/eeschema/menubar.cpp:331
 msgid "&Edit"
@@ -4055,7 +4053,7 @@ msgstr "Soubor dokumentace \""
 
 #: /home/martin/kicad/eeschema/libedit.cpp:343
 msgid "No Active Library"
-msgstr "Źádná knihovna není aktivní"
+msgstr "Žádná knihovna není aktivní"
 
 #: /home/martin/kicad/eeschema/libedit.cpp:362
 msgid "Select Component (%d items)"
@@ -4333,7 +4331,7 @@ msgstr "Velikost čísla vývodu -> ostatní"
 
 #: /home/martin/kicad/eeschema/libedit_onrightclick.cpp:236
 msgid "Zoom Block (drag middle mouse)"
-msgstr "Zvětšit blok (shift + prostřední tlačítko myši)"
+msgstr "Zvětšit blok (táhnout prostředním tlačítkem myši)"
 
 #: /home/martin/kicad/eeschema/libedit_onrightclick.cpp:244
 msgid "Select Items"
@@ -4349,7 +4347,7 @@ msgstr "Vybrat součástku (%d položek)"
 
 #: /home/martin/kicad/eeschema/eeschema.cpp:147
 msgid "Eeschema is already running, Continue?"
-msgstr "EESCHEMA je již spušteno, pokračovat?"
+msgstr "Eeschema je již spuštěno, pokračovat?"
 
 #: /home/martin/kicad/eeschema/tool_sch.cpp:39
 msgid "Open schematic project"
@@ -4389,11 +4387,11 @@ msgstr "Tisknout schéma"
 
 #: /home/martin/kicad/eeschema/tool_sch.cpp:83
 msgid "Run Cvpcb"
-msgstr "Spustit CVPCB"
+msgstr "Spustit Cvpcb"
 
 #: /home/martin/kicad/eeschema/tool_sch.cpp:86
 msgid "Run pcbnew"
-msgstr "Spustit PCBNEW"
+msgstr "Spustit Pcbnew"
 
 #: /home/martin/kicad/eeschema/tool_sch.cpp:110
 msgid "Netlist generation"
@@ -4469,7 +4467,7 @@ msgstr "Přidat čáru nebo mnohoúhelník"
 
 #: /home/martin/kicad/eeschema/tool_sch.cpp:247
 msgid "Display Grid OFF"
-msgstr "Zobrazení mřížky VYP"
+msgstr "Vypnout zobrazení mřížky"
 
 #: /home/martin/kicad/eeschema/tool_sch.cpp:251
 msgid "Units in inches"
@@ -5241,7 +5239,7 @@ msgstr "Soubory desek Kicad (*.brd)|*.brd"
 
 #: /home/martin/kicad/common/common.cpp:61
 msgid "Kicad schematic files (*.sch)|*.sch"
-msgstr "Soubry schémat Kicad (*.sch)|*.sch"
+msgstr "Soubory schémat Kicad (*.sch)|*.sch"
 
 #: /home/martin/kicad/common/common.cpp:62
 msgid "Kicad netlist files (*.net)|*.net"
@@ -5530,7 +5528,7 @@ msgstr "Zobrazit D-kódy"
 
 #: /home/martin/kicad/gerbview/gerbview.cpp:54
 msgid "GerbView is already running. Continue?"
-msgstr "GerbView je již spuštěn. Pokračovat?"
+msgstr "Gerbview je již spuštěn. Pokračovat?"
 
 #: /home/martin/kicad/gerbview/readgerb.cpp:146
 msgid "File "
@@ -5659,11 +5657,11 @@ msgstr "Vyčistit všechny vrstvy"
 
 #: /home/martin/kicad/gerbview/tool_gerber.cpp:57
 msgid "&Export to Pcbnew"
-msgstr "&Exportovat do PCBNEW"
+msgstr "&Exportovat do Pcbnew"
 
 #: /home/martin/kicad/gerbview/tool_gerber.cpp:58
 msgid "Export data in pcbnew format"
-msgstr "Exportovat data ve formátu PCBNEW"
+msgstr "Exportovat data ve formátu Pcbnew"
 
 #: /home/martin/kicad/gerbview/tool_gerber.cpp:62
 msgid "&Save Layers"
@@ -5695,7 +5693,7 @@ msgstr "Kreslení v různých formátech"
 
 #: /home/martin/kicad/gerbview/tool_gerber.cpp:76
 msgid "Quit Gerbview"
-msgstr "Ukončit GerbView"
+msgstr "Ukončit Gerbview"
 
 #: /home/martin/kicad/gerbview/tool_gerber.cpp:82
 msgid "&File Ext"
@@ -5747,15 +5745,15 @@ msgstr "Smazat aktuální vrstvu"
 
 #: /home/martin/kicad/gerbview/tool_gerber.cpp:128
 msgid "Open the gerbview manual"
-msgstr "Otevřít mauál GerbView"
+msgstr "Otevřít manuál Gerbview"
 
 #: /home/martin/kicad/gerbview/tool_gerber.cpp:129
 msgid "&About Gerbview"
-msgstr "O GerbView"
+msgstr "O Gerbview"
 
 #: /home/martin/kicad/gerbview/tool_gerber.cpp:130
 msgid "About gerbview gerber and drill viewer"
-msgstr "O prohlížeči formátu Gerber a vrtání GerbView"
+msgstr "O prohlížeči formátu Gerber a vrtání Gerbview"
 
 #: /home/martin/kicad/gerbview/tool_gerber.cpp:135
 msgid "&Miscellaneous"
@@ -5791,7 +5789,7 @@ msgstr "Najít D-kódy"
 
 #: /home/martin/kicad/gerbview/tool_gerber.cpp:257
 msgid "No tool"
-msgstr "Nástoj není k dispozici"
+msgstr "Nástroj není k dispozici"
 
 #: /home/martin/kicad/gerbview/tool_gerber.cpp:261
 msgid "Tool "
@@ -5811,7 +5809,7 @@ msgstr "Přidat lícovací značku"
 
 #: /home/martin/kicad/gerbview/tool_gerber.cpp:346
 msgid "Display Polar Coord ON"
-msgstr "Polární souřadnice ZAP"
+msgstr "Zapnout polární souřadnice"
 
 #: /home/martin/kicad/gerbview/tool_gerber.cpp:363
 msgid "Show Spots in Sketch Mode"
@@ -5831,15 +5829,15 @@ msgstr "Zobrazit číslo D-kódu"
 
 #: /home/martin/kicad/gerbview/gerbview_config.cpp:26
 msgid "GerbView project files (.cnf)|*.cnf"
-msgstr "Soubory projektu GerbView (.cnf)|*.cnf"
+msgstr "Soubory projektu Gerbview (.cnf)|*.cnf"
 
 #: /home/martin/kicad/gerbview/gerbview_config.cpp:141
 msgid "Save GerbView Project File"
-msgstr "Uložit soubor projektu GerbView"
+msgstr "Uložit soubor projektu Gerbview"
 
 #: /home/martin/kicad/gerbview/rs274x.cpp:303
 msgid "Command <%c%c> ignored by Gerbview"
-msgstr "Příkaz<%c%c> GerbView ignorován"
+msgstr "Příkaz<%c%c> Gerbview ignorován"
 
 #: /home/martin/kicad/gerbview/rs274x.cpp:340
 msgid "Too many include files!!"
@@ -5991,11 +5989,11 @@ msgstr "Soubor <%s> nenalezen"
 
 #: /home/martin/kicad/pcbnew/files.cpp:218
 msgid "This file was created by a more recent version of PCBnew and may not load correctly. Please consider updating!"
-msgstr "Tento soubor byl vytvořen novější verzí PCBNEW a nemusí být načten správně. Zvažte aktualizaci!"
+msgstr "Tento soubor byl vytvořen novější verzí Pcbnew a nemusí být načten správně. Zvažte aktualizaci!"
 
 #: /home/martin/kicad/pcbnew/files.cpp:222
 msgid "This file was created by an older version of PCBnew. It will be stored in the new file format when you save this file again."
-msgstr "Tento soubor byl vytvořen starší verzí PCBNEW. Bude uložen v novém formátu, pokud ho uložíte znovu."
+msgstr "Tento soubor byl vytvořen starší verzí Pcbnew. Bude uložen v novém formátu, pokud ho uložíte znovu."
 
 #: /home/martin/kicad/pcbnew/files.cpp:307
 msgid "Save Board File"
@@ -6914,7 +6912,7 @@ msgstr "Vytvoří zprávu jako prostý text"
 
 #: /home/martin/kicad/pcbnew/dialog_gendrill.cpp:222
 msgid "HPGL plotter Options:"
-msgstr "Možnosti HPGL plotru:"
+msgstr "Možnosti HPGL plotteru:"
 
 #: /home/martin/kicad/pcbnew/dialog_gendrill.cpp:226
 msgid "Speed (cm/s)"
@@ -6970,7 +6968,7 @@ msgstr "Vnořené via:"
 
 #: /home/martin/kicad/pcbnew/moduleframe.cpp:228
 msgid "Module Editor: Module modified! Continue?"
-msgstr "Editor modulů: modul změněn, pokračovatl?"
+msgstr "Editor modulů: modul změněn, pokračovat?"
 
 #: /home/martin/kicad/pcbnew/via_edit.cpp:54
 msgid "Incorrect value for Via drill. No via drill change"
@@ -7084,7 +7082,7 @@ msgstr "Spoje:"
 
 #: /home/martin/kicad/pcbnew/dialog_display_options_base.cpp:26
 msgid "Select how tracks are displayed"
-msgstr " Zvolit jak budou zobrazeny prvky"
+msgstr "Zvolit jak budou zobrazeny spoje"
 
 #: /home/martin/kicad/pcbnew/dialog_display_options_base.cpp:30
 #: /home/martin/kicad/pcbnew/dialog_display_options_base.cpp:38
@@ -7110,11 +7108,11 @@ msgid ""
 "If New track is selected,  track clearance area is shown only when creating the track."
 msgstr ""
 "Zobrazit (nezobrazovat) oblast izolační mezery mezi spoji.\n"
-"Je-li zvolen Nový spoj, zobrazí se oblast izolační mezery pouze při vyzváření spoje."
+"Je-li zvolen Nový spoj, zobrazí se oblast izolační mezery pouze při vytváření spoje."
 
 #: /home/martin/kicad/pcbnew/dialog_display_options_base.cpp:38
 msgid "Defined holes"
-msgstr "definované díry"
+msgstr "Definované díry"
 
 #: /home/martin/kicad/pcbnew/dialog_display_options_base.cpp:40
 msgid "Show Via Holes:"
@@ -7331,7 +7329,7 @@ msgstr "%s nelze otevřít"
 
 #: /home/martin/kicad/pcbnew/librairi.cpp:543
 msgid "File %s is not a eeschema library"
-msgstr "Soubor %s není knihovna EESCHEMA"
+msgstr "Soubor %s není knihovna Eeschema"
 
 #: /home/martin/kicad/pcbnew/librairi.cpp:572
 msgid ""
@@ -8079,7 +8077,7 @@ msgstr "Spustit FreeRouter pomocí Java Web Start"
 
 #: /home/martin/kicad/pcbnew/dialog_freeroute_exchange.cpp:185
 msgid "Use Java Web Start function to run FreeRouter via Internet (or your Browser if not found)"
-msgstr "Použít funkci Java Web Start ke spuštění FreeRouteru na internetu (nebo prohlížeč, není-li nalezen Jawa Web Start)"
+msgstr "Použít funkci Java Web Start ke spuštění FreeRouteru na internetu (nebo prohlížeč, není-li nalezen Java Web Start)"
 
 #: /home/martin/kicad/pcbnew/dialog_freeroute_exchange.cpp:188
 msgid "Back Import the Specctra Session (*.ses) File"
@@ -8440,7 +8438,7 @@ msgstr "Seznam nezapojených"
 
 #: /home/martin/kicad/pcbnew/dialog_drc.cpp:500
 msgid "List unconnected pads or tracks"
-msgstr "Sezam nezapojených plošek nebo spojů"
+msgstr "Seznam nezapojených plošek nebo spojů"
 
 #: /home/martin/kicad/pcbnew/dialog_drc.cpp:503
 msgid "Delete All Markers"
@@ -9070,7 +9068,7 @@ msgstr "Vyčistit starou desku a načíst starší verzi"
 
 #: /home/martin/kicad/pcbnew/menubarpcb.cpp:64
 msgid "&Save Board\tCtrl-S"
-msgstr "Uložit de&sku\tCtrl-S"
+msgstr "Uložit de&sku\tCtrl+S"
 
 #: /home/martin/kicad/pcbnew/menubarpcb.cpp:64
 msgid "Save current board"
@@ -9170,7 +9168,7 @@ msgstr "Archivovat nebo přidat pouzdra do knihovny"
 
 #: /home/martin/kicad/pcbnew/menubarpcb.cpp:162
 msgid "Quit PCBNEW"
-msgstr "Ukončit PCBNEW"
+msgstr "Ukončit Pcbnew"
 
 #: /home/martin/kicad/pcbnew/menubarpcb.cpp:173
 msgid "Setting libraries, directories and others..."
@@ -9190,7 +9188,7 @@ msgstr "Obecné"
 
 #: /home/martin/kicad/pcbnew/menubarpcb.cpp:183
 msgid "Select general options for PCBNEW"
-msgstr "Vybrat možnosti PCBNEW"
+msgstr "Vybrat možnosti Pcbnew"
 
 #: /home/martin/kicad/pcbnew/menubarpcb.cpp:187
 msgid "&Display"
@@ -9258,7 +9256,7 @@ msgstr "Vytvořit soubor součástek"
 
 #: /home/martin/kicad/pcbnew/menubarpcb.cpp:259
 msgid "Recreate .cmp file for CvPcb"
-msgstr "Znovu vytvořit soubor .cmp pro CVPCB"
+msgstr "Znovu vytvořit soubor .cmp pro Cvpcb"
 
 #: /home/martin/kicad/pcbnew/menubarpcb.cpp:264
 msgid "Create &BOM File"
@@ -9266,7 +9264,7 @@ msgstr "Vytvořit rozpis materiálu"
 
 #: /home/martin/kicad/pcbnew/menubarpcb.cpp:265
 msgid "Recreate .csv file for CvPcb"
-msgstr "Obnovit soubor .csv pro CvPcb"
+msgstr "Obnovit soubor .csv pro Cvpcb"
 
 #: /home/martin/kicad/pcbnew/menubarpcb.cpp:274
 msgid "Global &Deletions"
@@ -9302,15 +9300,15 @@ msgstr "Zaměnit spoje na vrstvách mědi nebo kresby na ostatních vrstvách"
 
 #: /home/martin/kicad/pcbnew/menubarpcb.cpp:302
 msgid "Open the PCBNEW manual"
-msgstr "Otevřít manuál PCBNEW"
+msgstr "Otevřít manuál Pcbnew"
 
 #: /home/martin/kicad/pcbnew/menubarpcb.cpp:306
 msgid "&About PCBNEW"
-msgstr "&O PCBNEW"
+msgstr "&O Pcbnew"
 
 #: /home/martin/kicad/pcbnew/menubarpcb.cpp:307
 msgid "About PCBNEW printed circuit board designer"
-msgstr "O návrháři desek PCBNEW"
+msgstr "O návrháři desek Pcbnew"
 
 #: /home/martin/kicad/pcbnew/menubarpcb.cpp:316
 msgid "3D Display"
@@ -9461,15 +9459,15 @@ msgstr "Velikost uživatelské mřížky"
 
 #: /home/martin/kicad/pcbnew/menubarmodedit.cpp:65
 msgid "Open the pcbnew manual"
-msgstr "Otevřít manuál PCBNEW"
+msgstr "Otevřít manuál Pcbnew"
 
 #: /home/martin/kicad/pcbnew/menubarmodedit.cpp:73
 msgid "&About pcbnew"
-msgstr "O PCBNEW"
+msgstr "O Pcbnew"
 
 #: /home/martin/kicad/pcbnew/menubarmodedit.cpp:74
 msgid "About pcbnew PCB designer"
-msgstr "O návrháři PCB PCBNEW"
+msgstr "O návrháři DPS Pcbnew"
 
 #: /home/martin/kicad/pcbnew/dialog_initpcb.cpp:103
 msgid "Items to delete"
@@ -9978,7 +9976,7 @@ msgstr "Vrstva náčrtku"
 
 #: /home/martin/kicad/pcbnew/pcbframe.cpp:303
 msgid "Board modified, Save before exit ?"
-msgstr "Deska změněna. Uložit?"
+msgstr "Deska změněna. Uložit před ukončením?"
 
 #: /home/martin/kicad/pcbnew/pcbframe.cpp:409
 msgid "DRC Off (Disable !!!), Currently: DRC is active"
@@ -10114,7 +10112,7 @@ msgstr "Uložit soubory součástek"
 
 #: /home/martin/kicad/pcbnew/pcbnew.cpp:113
 msgid "Pcbnew is already running, Continue?"
-msgstr "PCBNEW je již spuštěn. Pokračovat?"
+msgstr "Pcbnew je již spuštěn. Pokračovat?"
 
 #: /home/martin/kicad/pcbnew/gendrill.cpp:27
 msgid "Drill files (*.drl)|*.drl"
@@ -10460,7 +10458,7 @@ msgstr "horizontálně"
 
 #: /home/martin/kicad/pcbnew/dialog_edit_module_text_base.cpp:79
 msgid "vertical"
-msgstr "vertilkálně"
+msgstr "vertikálně"
 
 #: /home/martin/kicad/pcbnew/dialog_edit_module_text_base.cpp:85
 msgid "Visible"
@@ -10740,7 +10738,7 @@ msgstr "Nastavení stránky"
 
 #: /home/martin/kicad/eeschema/eelayer.h:35
 msgid "EESchema Colors"
-msgstr "Barvy EESCHEMA"
+msgstr "Barvy Eeschema"
 
 #: /home/martin/kicad/eeschema/eelayer.h:73
 msgid "Wire"
@@ -10848,7 +10846,7 @@ msgstr "Rozpiska materiálu"
 
 #: /home/martin/kicad/eeschema/dialog_erc.h:57
 msgid "EESchema Erc"
-msgstr "EESCHEMA ERC"
+msgstr "Eeschema ERC"
 
 #: /home/martin/kicad/eeschema/dialog_create_component.h:55
 msgid "Component Creation"
@@ -10860,7 +10858,7 @@ msgstr "Vlastnosti textu:"
 
 #: /home/martin/kicad/eeschema/plothpgl.h:55
 msgid "EESchema Plot HPGL"
-msgstr "EESCHEMA kreslit HPGL"
+msgstr "Eeschama kreslit HPGL"
 
 #: /home/martin/kicad/eeschema/dialog_edit_component_in_schematic_fbp.h:82
 msgid "Component Properties"
@@ -10868,7 +10866,7 @@ msgstr "Vlastnosti součástky"
 
 #: /home/martin/kicad/eeschema/annotate_dialog.h:52
 msgid "EESchema Annotation"
-msgstr "EESCHEMA očíslování"
+msgstr "Eeschema očíslování"
 
 #: /home/martin/kicad/eeschema/dialog_edit_libentry_fields_in_lib_base.h:74
 msgid "Fields Properties"
@@ -10876,11 +10874,11 @@ msgstr "Vlastnosti polí"
 
 #: /home/martin/kicad/eeschema/plotps.h:50
 msgid "EESchema Plot PS"
-msgstr "EESCHEMA kreslení PS"
+msgstr "Eeschema kreslení PS"
 
 #: /home/martin/kicad/eeschema/dialog_find.h:46
 msgid "EESchema Locate"
-msgstr "Najít EESCHEMA"
+msgstr "Najít Eeschema"
 
 #: /home/martin/kicad/gerbview/set_color.h:38
 msgid "GerbView Layer Colors:"
@@ -11044,7 +11042,7 @@ msgstr "Vlastnosti plošky"
 
 #: /home/martin/kicad/pcbnew/set_color.h:38
 msgid "Pcbnew Layer Colors:"
-msgstr "PCBNEW - barvy vrstev:"
+msgstr "Pcbnew - barvy vrstev:"
 
 #: /home/martin/kicad/pcbnew/set_color.h:81
 msgid "Copper Layers"
