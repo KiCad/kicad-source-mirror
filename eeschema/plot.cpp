@@ -85,9 +85,7 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
  */
 
 {
-    wxPoint        textpos;  /* Position des textes */
     SCH_CMP_FIELD* field = DrawLibItem->GetField( FieldNumber );
-    int            orient;
     EDA_Colors     color = UNSPECIFIED_COLOR;
 
     color = ReturnLayerColor( field->GetLayer() );
@@ -98,98 +96,37 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
     if( field->IsVoid() )
         return;
 
-    /* Calcul de la position des textes, selon orientation du composant */
-    orient = field->m_Orient;
-    GRTextHorizJustifyType hjustify = field->m_HJustify;
-    GRTextVertJustifyType  vjustify = field->m_VJustify;
-    textpos = field->m_Pos - DrawLibItem->m_Pos;    // textpos is the text position relative to the component anchor
-
-    textpos = TransformCoordinate( DrawLibItem->m_Transform, textpos ) + DrawLibItem->m_Pos;
-
-    /* Y a t-il rotation */
-    if( DrawLibItem->m_Transform[0][1] )
+    /* Calculate the text orientation, according to the component orientation/mirror */
+    int orient = field->m_Orient;
+    if( DrawLibItem->m_Transform[0][1] )  // Rotation du composant de 90deg
     {
         if( orient == TEXT_ORIENT_HORIZ )
             orient = TEXT_ORIENT_VERT;
         else
             orient = TEXT_ORIENT_HORIZ;
-        /* Y a t-il rotation, miroir (pour les justifications)*/
-        GRTextHorizJustifyType tmp = hjustify;
-        hjustify = (GRTextHorizJustifyType) vjustify;
-        vjustify = (GRTextVertJustifyType) tmp;
-
-        if( DrawLibItem->m_Transform[1][0] < 0 )
-            switch( vjustify )
-            {
-            case GR_TEXT_VJUSTIFY_BOTTOM:
-                vjustify = GR_TEXT_VJUSTIFY_TOP;
-                break;
-
-            case GR_TEXT_VJUSTIFY_TOP:
-                vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
-                break;
-
-            default:
-                break;
-            }
-
-        if( DrawLibItem->m_Transform[1][0] > 0 )
-            switch( hjustify )
-            {
-            case GR_TEXT_HJUSTIFY_LEFT:
-                hjustify = GR_TEXT_HJUSTIFY_RIGHT;
-                break;
-
-            case GR_TEXT_HJUSTIFY_RIGHT:
-                hjustify = GR_TEXT_HJUSTIFY_LEFT;
-                break;
-
-            default:
-                break;
-            }
-
     }
-    else
-    {
-        /* Texte horizontal: Y a t-il miroir (pour les justifications)*/
-        if( DrawLibItem->m_Transform[0][0] < 0 )
-            switch( hjustify )
-            {
-            case GR_TEXT_HJUSTIFY_LEFT:
-                hjustify = GR_TEXT_HJUSTIFY_RIGHT;
-                break;
 
-            case GR_TEXT_HJUSTIFY_RIGHT:
-                hjustify = GR_TEXT_HJUSTIFY_LEFT;
-                break;
-
-            default:
-                break;
-            }
-
-        if( DrawLibItem->m_Transform[1][1] > 0 )
-            switch( vjustify )
-            {
-            case GR_TEXT_VJUSTIFY_BOTTOM:
-                vjustify = GR_TEXT_VJUSTIFY_TOP;
-                break;
-
-            case GR_TEXT_VJUSTIFY_TOP:
-                vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
-                break;
-
-            default:
-                break;
-            }
-
-    }
+    /* Calculate the text justification, according to the component orientation/mirror
+     * this is a bit complicated due to cumulative calculations:
+     * - numerous cases (mirrored or not, rotation)
+     * - the DrawGraphicText function recalculate also H and H vustifications
+     *      according to the text orienation.
+     * - When a component is mirrored, the text is not mirrored and justifications
+     *      are complicated to calculate
+     * so the more easily way is to use no justifications ( Centered text )
+     * and use GetBoundaryBox to know the text coordinate considered as centered
+    */
+    EDA_Rect BoundaryBox = field->GetBoundaryBox();
+    GRTextHorizJustifyType hjustify = GR_TEXT_HJUSTIFY_CENTER;
+    GRTextVertJustifyType vjustify = GR_TEXT_VJUSTIFY_CENTER;
+    wxPoint textpos = BoundaryBox.Centre();
 
     int thickness = field->GetPenSize();
 
     if( !IsMulti || (FieldNumber != REFERENCE) )
     {
         plotter->text( textpos, color, field->m_Text,
-                       orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
+                       orient,
                        field->m_Size,
                        hjustify, vjustify,
                        thickness, field->m_Italic, field->m_Bold );
@@ -208,7 +145,7 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
 #endif
         Text.Append( unit_id );
         plotter->text( textpos, color, Text,
-                       orient ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ,
+                       orient,
                        field->m_Size, hjustify, vjustify,
                        thickness, field->m_Italic, field->m_Bold );
     }
