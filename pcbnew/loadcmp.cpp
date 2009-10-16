@@ -100,33 +100,45 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
     wxPoint              curspos = GetScreen()->m_Curseur;
     wxString             ModuleName, keys;
     static wxArrayString HistoryList;
+    static wxString      lastCommponentName;
     bool AllowWildSeach = TRUE;
 
     /* Ask for a component name or key words */
-    ModuleName = GetComponentName( this, HistoryList, _( "Place module" ), NULL );
-    ModuleName.MakeUpper();
+    WinEDA_SelectCmp dlg( this, GetComponentDialogPosition(), HistoryList,
+                          _( "Place Module" ), false );
+    dlg.SetComponentName( lastCommponentName );
+
+    if ( dlg.ShowModal() == wxID_CANCEL )
+        return NULL;
+
+    ModuleName = dlg.GetComponentName();
+
     if( ModuleName.IsEmpty() )  /* Cancel command */
     {
         DrawPanel->MouseToCursorSchema();
         return NULL;
     }
 
+    ModuleName.MakeUpper();
 
     if( ModuleName[0] == '=' )   // Selection by keywords
     {
         AllowWildSeach = FALSE;
         keys = ModuleName.AfterFirst( '=' );
-        ModuleName = Select_1_Module_From_List( this, library, wxEmptyString, keys );
+        ModuleName = Select_1_Module_From_List( this, library, wxEmptyString,
+                                                keys );
         if( ModuleName.IsEmpty() )  /* Cancel command */
         {
             DrawPanel->MouseToCursorSchema();
             return NULL;
         }
     }
-    else if( ( ModuleName.Contains( wxT( "?" ) ) ) || ( ModuleName.Contains( wxT( "*" ) ) ) ) // Selection wild card
+    else if( ( ModuleName.Contains( wxT( "?" ) ) )
+             || ( ModuleName.Contains( wxT( "*" ) ) ) ) // Selection wild card
     {
         AllowWildSeach = FALSE;
-        ModuleName = Select_1_Module_From_List( this, library, ModuleName, wxEmptyString );
+        ModuleName = Select_1_Module_From_List( this, library, ModuleName,
+                                                wxEmptyString );
         if( ModuleName.IsEmpty() )
         {
             DrawPanel->MouseToCursorSchema();
@@ -136,12 +148,13 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
 
     module = Get_Librairie_Module( library, ModuleName, FALSE );
 
-    if( (module == NULL) && AllowWildSeach )    /* Attemp to search with wildcard */
+    if( ( module == NULL ) && AllowWildSeach )    /* Sarch with wildcard */
     {
         AllowWildSeach = FALSE;
         wxString wildname = wxChar( '*' ) + ModuleName + wxChar( '*' );
         ModuleName = wildname;
-        ModuleName = Select_1_Module_From_List( this, library, ModuleName, wxEmptyString );
+        ModuleName = Select_1_Module_From_List( this, library, ModuleName,
+                                                wxEmptyString );
         if( ModuleName.IsEmpty() )
         {
             DrawPanel->MouseToCursorSchema();
@@ -156,6 +169,7 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
 
     if( module )
     {
+        lastCommponentName = ModuleName;
         AddHistoryComponentName( HistoryList, ModuleName );
 
         module->m_Flags     = IS_NEW;

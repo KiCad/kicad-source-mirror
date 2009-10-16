@@ -31,7 +31,7 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
     Ki_PageDescr* SheetPS;
     wxPoint       offset;
 
-    MsgPanel->EraseMsgBox();
+    ClearMsgPanel();
 
     FILE* output_file = wxFopen( FullFileName, wxT( "wt" ) );
     if( output_file == NULL )
@@ -42,7 +42,7 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
     }
 
     SetLocaleTo_C_standard();
-    MsgPanel->AppendMessage( _( "File" ), FullFileName, CYAN );
+    AppendMsgPanel( _( "File" ), FullFileName, CYAN );
 
     if( g_pcb_plot_options.PlotScaleOpt != 1 )
         Center = TRUE; // Echelle != 1 donc trace centree du PCB

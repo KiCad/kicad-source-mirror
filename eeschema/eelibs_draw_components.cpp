@@ -105,20 +105,3 @@ bool MapAngles( int* Angle1, int* Angle2, const int TransMat[2][2] )
 
     return swap;
 }
-
-
-/*****************************************************************************
-* Routine to display an outline version of given library entry.              *
-* This routine is applied by the PlaceLibItem routine above.                 *
-*****************************************************************************/
-void DrawingLibInGhost( WinEDA_DrawPanel* panel, wxDC* DC,
-                        LIB_COMPONENT* LibEntry, SCH_COMPONENT* DrawLibItem,
-                        int PartX, int PartY, int multi, int convert,
-                        int Color, bool DrawPinText )
-{
-    int DrawMode = g_XorMode;
-
-    DrawLibPartAux( panel, DC, DrawLibItem, LibEntry, wxPoint( PartX, PartY ),
-                    DrawLibItem->m_Transform, multi, convert, DrawMode, Color,
-                    DrawPinText );
-}

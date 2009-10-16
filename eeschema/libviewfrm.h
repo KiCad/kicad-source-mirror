@@ -50,6 +50,7 @@ public:
     int  BestZoom();    // Retourne le meilleur zoom
     void ClickOnLibList( wxCommandEvent& event );
     void ClickOnCmpList( wxCommandEvent& event );
+    void OnSetRelativeOffset( wxCommandEvent& event );
 
     SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) GetBaseScreen(); }
 
@@ -59,6 +60,9 @@ public:
     void SaveSettings();
 
     wxString& GetEntryName( void ) const { return m_entryName; }
+
+    int  GetUnit( void ) { return m_unit; }
+    int  GetConvert( void ) { return m_convert; }
 
 private:
     void SelectCurrentLibrary();

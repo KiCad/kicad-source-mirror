@@ -905,9 +905,9 @@ void TRACK::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
     BOARD*   board = ( (WinEDA_BasePcbFrame*) frame )->GetBoard();
-    
+
     // Display basic infos
-    DisplayInfoBase( frame ); 
+    DisplayInfoBase( frame );
 
     // Display full track length (in pcbnew)
     if( frame->m_Ident == PCB_FRAME )
@@ -915,7 +915,7 @@ void TRACK::DisplayInfo( WinEDA_DrawFrame* frame )
         int   trackLen = 0;
         Marque_Une_Piste( board, this, NULL, &trackLen, false );
         valeur_param( trackLen, msg );
-        frame->MsgPanel->AppendMessage( _( "Track Len" ), msg, DARKCYAN );
+        frame->AppendMsgPanel( _( "Track Length" ), msg, DARKCYAN );
     }
 }
 
@@ -931,7 +931,7 @@ void TRACK::DisplayInfoBase( WinEDA_DrawFrame* frame )
     wxString msg;
     BOARD*   board = ( (WinEDA_BasePcbFrame*) frame )->GetBoard();
 
-    frame->MsgPanel->EraseMsgBox();
+    frame->ClearMsgPanel();
 
     switch( Type() )
     {
@@ -950,7 +950,7 @@ void TRACK::DisplayInfoBase( WinEDA_DrawFrame* frame )
         msg = wxT( "????" ); break;
     }
 
-    frame->MsgPanel->AppendMessage( _( "Type" ), msg, DARKCYAN );
+    frame->AppendMsgPanel( _( "Type" ), msg, DARKCYAN );
 
     // Display Net Name (in pcbnew)
     if( frame->m_Ident == PCB_FRAME )
@@ -962,18 +962,18 @@ void TRACK::DisplayInfoBase( WinEDA_DrawFrame* frame )
         else
             msg = wxT( "<noname>" );
 
-        frame->MsgPanel->AppendMessage( _( "NetName" ), msg, RED );
+        frame->AppendMsgPanel( _( "NetName" ), msg, RED );
 
         /* Display net code : (usefull in test or debug) */
         msg.Printf( wxT( "%d .%d" ), GetNet(), GetSubNet() );
-        frame->MsgPanel->AppendMessage( _( "NetCode" ), msg, RED );
+        frame->AppendMsgPanel( _( "NetCode" ), msg, RED );
     }
 
 #if defined(DEBUG)
 
     /* Display the flags */
     msg.Printf( wxT( "0x%08X" ), m_Flags );
-    frame->MsgPanel->AppendMessage( _( "Flags" ), msg, BLUE );
+    frame->AppendMsgPanel( _( "Flags" ), msg, BLUE );
 
 #endif
 
@@ -985,7 +985,7 @@ void TRACK::DisplayInfoBase( WinEDA_DrawFrame* frame )
     if( GetState( SEGM_AR ) )
         msg[2] = 'A';
 
-    frame->MsgPanel->AppendMessage( _( "Stat" ), msg, MAGENTA );
+    frame->AppendMsgPanel( _( "Status" ), msg, MAGENTA );
 
     /* Display layer or layer pair) */
     if( Type() == TYPE_VIA )
@@ -1000,7 +1000,7 @@ void TRACK::DisplayInfoBase( WinEDA_DrawFrame* frame )
     else
         msg = board->GetLayerName( m_Layer );
 
-    frame->MsgPanel->AppendMessage( _( "Layer" ), msg, BROWN );
+    frame->AppendMsgPanel( _( "Layer" ), msg, BROWN );
 
     /* Display width */
     valeur_param( (unsigned) m_Width, msg );
@@ -1008,7 +1008,7 @@ void TRACK::DisplayInfoBase( WinEDA_DrawFrame* frame )
     if( Type() == TYPE_VIA )      // Display Diam and Drill values
     {
         // Display diameter value:
-        frame->MsgPanel->AppendMessage( _( "Diam" ), msg, DARKCYAN );
+        frame->AppendMsgPanel( _( "Diam" ), msg, DARKCYAN );
 
         // Display drill value
         int drill_value = GetDrillValue();
@@ -1023,25 +1023,25 @@ void TRACK::DisplayInfoBase( WinEDA_DrawFrame* frame )
         else
             title += _( "(Default)" );
 
-        frame->MsgPanel->AppendMessage( title, msg, RED );
+        frame->AppendMsgPanel( title, msg, RED );
     }
     else
     {
-        frame->MsgPanel->AppendMessage( _( "Width" ), msg, DARKCYAN );
+        frame->AppendMsgPanel( _( "Width" ), msg, DARKCYAN );
     }
 
     NETCLASS* netclass = GetNetClass();
     if( netclass )
     {
         msg = netclass->GetName();
-        frame->MsgPanel->AppendMessage( _( "Net Class" ), msg, DARKCYAN );
+        frame->AppendMsgPanel( _( "Net Class" ), msg, DARKCYAN );
     }
 
     // Display segment length
     if( Type() != TYPE_VIA )      // Display Diam and Drill values
     {
         valeur_param( wxRound( GetLength() ), msg );
-        frame->MsgPanel->AppendMessage( _( "Seg Len" ), msg, DARKCYAN );
+        frame->AppendMsgPanel( _( "Segment Length" ), msg, DARKCYAN );
     }
 }
 

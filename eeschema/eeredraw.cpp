@@ -1,6 +1,6 @@
 /*****************************************************************************
-*	Program to draw EE diagrams.											 *
-* This module redraw/draw all structs.										 *
+*   Program to draw EE diagrams.                                             *
+* This module redraw/draw all structs.                                       *
 *****************************************************************************/
 
 #include "fctsys.h"
@@ -123,8 +123,8 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref,
 
 
 /*****************************************************************************
-* Routine to redraw list of structs.										 *
-* If the list is of DrawPickStruct types then the picked item are drawn.	 *
+* Routine to redraw list of structs.                                         *
+* If the list is of DrawPickStruct types then the picked item are drawn.     *
 *****************************************************************************/
 void RedrawStructList( WinEDA_DrawPanel* panel, wxDC* DC,
                        SCH_ITEM* Structlist, int DrawMode, int Color )
@@ -144,7 +144,7 @@ void RedrawStructList( WinEDA_DrawPanel* panel, wxDC* DC,
 
 
 /*****************************************************************************
-* Routine to redraw list of structs.										 *
+* Routine to redraw list of structs.                                         *
 *****************************************************************************/
 void RedrawOneStruct( WinEDA_DrawPanel* panel, wxDC* DC,
                       SCH_ITEM* Struct, int DrawMode, int Color )
@@ -257,17 +257,12 @@ void DrawStructsInGhost( WinEDA_DrawPanel * aPanel, wxDC * aDC, SCH_ITEM * aItem
 
     case TYPE_SCH_COMPONENT:
     {
-        LIB_COMPONENT* LibEntry;
-        SCH_COMPONENT* Struct;
-        Struct   = (SCH_COMPONENT*) aItem;
-        LibEntry = CMP_LIBRARY::FindLibraryComponent( Struct->m_ChipName );
+        SCH_COMPONENT* Component = (SCH_COMPONENT*) aItem;
 
-        if( LibEntry == NULL )
+        if( Component == NULL )
             break;
-        DrawingLibInGhost( aPanel, aDC, LibEntry, Struct,
-                           Struct->m_Pos.x + aOffset.x,
-                           Struct->m_Pos.y + aOffset.y, Struct->m_Multi,
-                           Struct->m_Convert, g_GhostColor, FALSE );
+
+        Component->Draw( aPanel, aDC, aOffset, g_XorMode, g_GhostColor, false );
         break;
     }
 
@@ -288,4 +283,3 @@ void DrawStructsInGhost( WinEDA_DrawPanel * aPanel, wxDC * aDC, SCH_ITEM * aItem
         break;
     }
 }
-

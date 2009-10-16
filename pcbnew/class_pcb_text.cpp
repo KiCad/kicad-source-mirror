@@ -231,33 +231,32 @@ void TEXTE_PCB::DisplayInfo( WinEDA_DrawFrame* frame )
         board = (BOARD*) parent;
     wxASSERT( board );
 
-    WinEDA_MsgPanel *msgpanel = frame->MsgPanel;
-    msgpanel->EraseMsgBox();
+    frame->ClearMsgPanel();
 
     if( m_Parent && m_Parent->Type() == TYPE_COTATION )
-        msgpanel->AppendMessage( _( "COTATION" ), m_Text, DARKGREEN );
+        frame->AppendMsgPanel( _( "COTATION" ), m_Text, DARKGREEN );
     else
-        msgpanel->AppendMessage( _( "PCB Text" ), m_Text, DARKGREEN );
+        frame->AppendMsgPanel( _( "PCB Text" ), m_Text, DARKGREEN );
 
-    msgpanel->AppendMessage( _( "Layer" ),
+    frame->AppendMsgPanel( _( "Layer" ),
                          board->GetLayerName( m_Layer ), BLUE );
 
     if( !m_Mirror )
-        msgpanel->AppendMessage( _( "Mirror" ), _( "No" ), DARKGREEN );
+        frame->AppendMsgPanel( _( "Mirror" ), _( "No" ), DARKGREEN );
     else
-        msgpanel->AppendMessage( _( "Mirror" ), _( "Yes" ), DARKGREEN );
+        frame->AppendMsgPanel( _( "Mirror" ), _( "Yes" ), DARKGREEN );
 
     msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
-    msgpanel->AppendMessage( _( "Orient" ), msg, DARKGREEN );
+    frame->AppendMsgPanel( _( "Orient" ), msg, DARKGREEN );
 
     valeur_param( m_Width, msg );
-    msgpanel->AppendMessage( _( "Width" ), msg, MAGENTA );
+    frame->AppendMsgPanel( _( "Width" ), msg, MAGENTA );
 
     valeur_param( m_Size.x, msg );
-    msgpanel->AppendMessage( _( "H Size" ), msg, RED );
+    frame->AppendMsgPanel( _( "H Size" ), msg, RED );
 
     valeur_param( m_Size.y, msg );
-    msgpanel->AppendMessage( _( "V Size" ), msg, RED );
+    frame->AppendMsgPanel( _( "V Size" ), msg, RED );
 }
 
 /**

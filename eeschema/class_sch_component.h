@@ -13,13 +13,6 @@
 #include "class_sch_cmp_field.h"
 
 
-extern void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
-                            SCH_COMPONENT* Component, LIB_COMPONENT* Entry,
-                            const wxPoint& Pos, const int TransMat[2][2],
-                            int Multi, int convert, int DrawMode,
-                            int Color = -1, bool DrawPinText = TRUE );
-
-
 WX_DECLARE_OBJARRAY( DrawSheetPath, ArrayOfSheetLists );
 
 
@@ -114,9 +107,29 @@ private:
      */
     wxArrayString m_PathsAndReferences;
 
+    void Init( const wxPoint& pos = wxPoint( 0, 0 ) );
+
 public:
     SCH_COMPONENT( const wxPoint& pos = wxPoint( 0, 0 ),
                    SCH_ITEM* aParent = NULL );
+
+    /**
+     * Create schematic component from library component object.
+     *
+     * @param libComponent - Component library object to create schematic
+     *                       component from.
+     * @param sheet - Schemitic sheet the component is place into.
+     * @param unit - Part for components that have multiple parts per
+     *               package.
+     * @param convert - Use the alternate body style for the schematic
+     *                  component.
+     * @param pos - Position to place new component.
+     * @param setNewItemFlag - Set the component IS_NEW and IS_MOVED flags.
+     */
+    SCH_COMPONENT( LIB_COMPONENT& libComponent, DrawSheetPath* sheet,
+                   int unit = 0, int convert = 0,
+                   const wxPoint& pos = wxPoint( 0, 0 ),
+                   bool setNewItemFlag = false );
 
     /**
      * Copy Constructor
@@ -240,7 +253,17 @@ public:
                                   wxDC*             DC,
                                   const wxPoint&    offset,
                                   int               draw_mode,
-                                  int               Color = -1 );
+                                  int               Color = -1 )
+    {
+        Draw( panel, DC, offset, draw_mode, Color, true );
+    }
+
+    void                    Draw( WinEDA_DrawPanel* panel,
+                                  wxDC*             DC,
+                                  const wxPoint&    offset,
+                                  int               draw_mode,
+                                  int               Color,
+                                  bool              DrawPinText );
 
     void                    SwapData( SCH_COMPONENT* copyitem );
 

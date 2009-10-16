@@ -577,8 +577,7 @@ void BOARD::DisplayInfo( WinEDA_DrawFrame* frame )
 
     wxString txt;
 
-    WinEDA_MsgPanel *msgpanel = frame->MsgPanel;
-    msgpanel->EraseMsgBox();
+    frame->ClearMsgPanel();
 
     int viasCount = 0;
     for( BOARD_ITEM* item = m_Track;  item;  item = item->Next() )
@@ -588,16 +587,16 @@ void BOARD::DisplayInfo( WinEDA_DrawFrame* frame )
     }
 
     txt.Printf( wxT( "%d" ), GetPadsCount() );
-    msgpanel->AppendMessage( _( "Pads" ), txt, DARKGREEN );
+    frame->AppendMsgPanel( _( "Pads" ), txt, DARKGREEN );
 
     txt.Printf( wxT( "%d" ), viasCount );
-    msgpanel->AppendMessage( _( "Vias" ), txt, DARKGREEN );
+    frame->AppendMsgPanel( _( "Vias" ), txt, DARKGREEN );
 
     txt.Printf( wxT( "%d" ), GetNodesCount() );
-    msgpanel->AppendMessage( _( "Nodes" ), txt, DARKCYAN );
+    frame->AppendMsgPanel( _( "Nodes" ), txt, DARKCYAN );
 
     txt.Printf( wxT( "%d" ), m_NetInfo->GetCount() );
-    msgpanel->AppendMessage( _( "Nets" ), txt, RED );
+    frame->AppendMsgPanel( _( "Nets" ), txt, RED );
 
     /* These parameters are known only if the full ratsnest is available,
      *  so, display them only if this is the case
@@ -605,13 +604,13 @@ void BOARD::DisplayInfo( WinEDA_DrawFrame* frame )
     if( (m_Status_Pcb & NET_CODES_OK) )
     {
         txt.Printf( wxT( "%d" ), GetRatsnestsCount() );
-        msgpanel->AppendMessage( _( "Links" ), txt, DARKGREEN );
+        frame->AppendMsgPanel( _( "Links" ), txt, DARKGREEN );
 
         txt.Printf( wxT( "%d" ), GetRatsnestsCount() - GetNoconnectCount() );
-        msgpanel->AppendMessage( _( "Connect" ), txt, DARKGREEN );
+        frame->AppendMsgPanel( _( "Connect" ), txt, DARKGREEN );
 
         txt.Printf( wxT( "%d" ), GetNoconnectCount() );
-        msgpanel->AppendMessage( _( "NoConn" ), txt, BLUE );
+        frame->AppendMsgPanel( _( "NoConn" ), txt, BLUE );
     }
 }
 

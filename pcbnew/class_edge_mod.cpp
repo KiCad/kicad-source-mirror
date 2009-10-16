@@ -231,23 +231,22 @@ void EDGE_MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
     if( !board )
         return;
 
-    WinEDA_MsgPanel *msgpanel = frame->MsgPanel;
-    msgpanel->EraseMsgBox();
+    frame->ClearMsgPanel();
 
-    msgpanel->AppendMessage( _( "Graphic Item" ), wxEmptyString, DARKCYAN );
+    frame->AppendMsgPanel( _( "Graphic Item" ), wxEmptyString, DARKCYAN );
 
-    msgpanel->AppendMessage( _( "Module" ), module->m_Reference->m_Text, DARKCYAN );
-    msgpanel->AppendMessage( _( "Value" ), module->m_Value->m_Text, BLUE );
+    frame->AppendMsgPanel( _( "Module" ), module->m_Reference->m_Text, DARKCYAN );
+    frame->AppendMsgPanel( _( "Value" ), module->m_Value->m_Text, BLUE );
 
     msg.Printf( wxT( "%8.8lX" ), module->m_TimeStamp );
-    msgpanel->AppendMessage( _( "TimeStamp" ), msg, BROWN );
+    frame->AppendMsgPanel( _( "TimeStamp" ), msg, BROWN );
 
-    msgpanel->AppendMessage( _( "Mod Layer" ), board->GetLayerName( module->GetLayer() ), RED );
+    frame->AppendMsgPanel( _( "Mod Layer" ), board->GetLayerName( module->GetLayer() ), RED );
 
-    msgpanel->AppendMessage( _( "Seg Layer" ), board->GetLayerName( GetLayer() ), RED );
+    frame->AppendMsgPanel( _( "Seg Layer" ), board->GetLayerName( GetLayer() ), RED );
 
     valeur_param( m_Width, msg );
-    msgpanel->AppendMessage( _( "Width" ), msg, BLUE );
+    frame->AppendMsgPanel( _( "Width" ), msg, BLUE );
 }
 
 

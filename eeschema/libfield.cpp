@@ -175,8 +175,8 @@ void WinEDA_LibeditFrame::EditField( wxDC* DC, LIB_FIELD* Field )
             msg.Printf( _( "The field name <%s> is an existing alias of the \
 component <%s>.\nPlease choose another name that does not conflict with any \
 names in the alias list." ),
-                        (const wxChar*) Text,
-                        (const wxChar*) Field->GetParent()->GetName() );
+                        GetChars( Text ),
+                        GetChars( Field->GetParent()->GetName() ) );
             DisplayError( this, msg );
             return;
         }
@@ -189,8 +189,8 @@ names in the alias list." ),
             msg.Printf( _( "The field name <%s> conflicts with an existing \
 entry in the component library <%s>.\nPlease choose another name that does \
 not conflict with any library entries." ),
-                        (const wxChar*) Text,
-                        (const wxChar*) m_library->GetName() );
+                        GetChars( Text ),
+                        GetChars( m_library->GetName() ) );
             DisplayError( this, msg );
             return;
         }

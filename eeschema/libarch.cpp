@@ -53,7 +53,7 @@ bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName )
     if( !libCache->Save( ArchFullFileName ) )
     {
         msg.Printf( _( "An error occurrred attempting to save component \
-library <%s>." ), (const wxChar*) ArchFullFileName );
+library <%s>." ), GetChars( ArchFullFileName ) );
         DisplayError( frame, msg );
         return false;
     }

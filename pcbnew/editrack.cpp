@@ -779,11 +779,11 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
         trackLen += track->GetLength();
 
     valeur_param( trackLen, msg );
-    frame->MsgPanel->AppendMessage( _( "Track Len" ), msg, DARKCYAN );
+    frame->AppendMsgPanel( _( "Track Len" ), msg, DARKCYAN );
 
     // Add current segments count (number of segments in this new track):
     msg.Printf( wxT( "%d" ), g_CurrentTrackList.GetCount() );
-    frame->MsgPanel->AppendMessage( _( "Segs Count" ), msg, DARKCYAN );
+    frame->AppendMsgPanel( _( "Segs Count" ), msg, DARKCYAN );
 
     DisplayOpt.ShowTrackClearanceMode = showTrackClearanceMode;
     DisplayOpt.DisplayPcbTrackFill    = Track_fill_copy;

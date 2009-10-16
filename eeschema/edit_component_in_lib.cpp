@@ -144,9 +144,9 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
         wxString msg;
         msg.Printf( _( "Alias <%s> not found for component <%s> in library \
 <%s>." ),
-                    (const wxChar*) m_Parent->GetAliasName(),
-                    (const wxChar*) component->GetName(),
-                    (const wxChar*) library->GetName() );
+                    GetChars( m_Parent->GetAliasName() ),
+                    GetChars( component->GetName() ),
+                    GetChars( library->GetName() ) );
         wxMessageBox( msg, _( "Component Library Error" ),
                       wxID_OK | wxICON_ERROR, this );
     }
@@ -274,7 +274,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllAliasOfPart(
         wxString msg;
         msg.Printf( _( "Alias <%s> cannot be removed while it is being \
 edited!" ),
-                    (const wxChar*) m_Parent->GetAliasName() );
+                    GetChars( m_Parent->GetAliasName() ) );
         DisplayError( this, msg );
         return;
     }
@@ -319,8 +319,8 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& WXUNUSED 
         wxString msg;
         msg.Printf( _( "Alias or component name <%s> already exists in \
 library <%s>." ),
-                    (const wxChar*) aliasname,
-                    (const wxChar*) library->GetName() );
+                    GetChars( aliasname ),
+                    GetChars( library->GetName() ) );
         DisplayError( this,  msg );
         return;
     }
@@ -344,7 +344,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAliasOfPart(
         wxString msg;
         msg.Printf( _( "Alias <%s> cannot be removed while it is being \
 edited!" ),
-                    (const wxChar*) aliasname );
+                    GetChars( aliasname ) );
         DisplayError( this, msg );
         return;
     }
@@ -491,7 +491,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& WXUNU
         wxString msg;
 
         msg.Printf( _( "Foot print filter <%s> is already defined." ),
-                    (const wxChar*) Line );
+                    GetChars( Line ) );
         DisplayError( this, msg );
         return;
     }

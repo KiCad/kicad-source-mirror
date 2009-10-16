@@ -1,5 +1,5 @@
 /*********************************/
-/*	get_component_dialog.cpp	 */
+/*  get_component_dialog.cpp     */
 /*********************************/
 
 #include "fctsys.h"
@@ -7,6 +7,7 @@
 #include "common.h"
 #include "macros.h"
 #include "wxstruct.h"
+#include "get_component_dialog.h"
 
 
 /****************************************************************************/
@@ -15,46 +16,7 @@
 /****************************************************************************/
 
 static unsigned s_HistoryMaxCount = 8;  // Max number of items displayed in history list
-static wxString s_ItemName;
 
-
-enum selcmp_id {
-    ID_ACCEPT_NAME = 3900,
-    ID_ACCEPT_KEYWORD,
-    ID_ENTER_NAME,
-    ID_CANCEL,
-    ID_LIST_ALL,
-    ID_EXTRA_TOOL,
-    ID_SEL_BY_LISTBOX
-};
-
-/***************************************/
-class WinEDA_SelectCmp : public wxDialog
-/***************************************/
-{
-private:
-    WinEDA_DrawFrame* m_Parent;
-    bool m_AuxTool;
-    wxString*         m_Text;
-    wxTextCtrl*       m_TextCtrl;
-    wxListBox*        m_List;
-public:
-    bool m_GetExtraFunction;
-
-public:
-
-    // Constructor and destructor
-    WinEDA_SelectCmp( WinEDA_DrawFrame* parent, const wxPoint& framepos,
-                      wxArrayString& HistoryList, const wxString& Title,
-                      bool show_extra_tool );
-    ~WinEDA_SelectCmp() {};
-
-private:
-    void Accept( wxCommandEvent& event );
-    void GetExtraSelection( wxCommandEvent& event );
-
-    DECLARE_EVENT_TABLE()
-};
 
 BEGIN_EVENT_TABLE( WinEDA_SelectCmp, wxDialog )
     EVT_BUTTON( ID_ACCEPT_NAME, WinEDA_SelectCmp::Accept )
@@ -66,28 +28,22 @@ BEGIN_EVENT_TABLE( WinEDA_SelectCmp, wxDialog )
 END_EVENT_TABLE()
 
 
-/****************************************************************************/
+/*
+ * Dialog frame to choose a component or a footprint
+ *   This dialog shows an history of last selected items
+ */
 WinEDA_SelectCmp::WinEDA_SelectCmp( WinEDA_DrawFrame* parent,
                                     const wxPoint&    framepos,
                                     wxArrayString&    HistoryList,
                                     const wxString&   Title,
                                     bool              show_extra_tool ) :
     wxDialog( parent, -1, Title, framepos, wxDefaultSize, DIALOG_STYLE )
-/****************************************************************************/
-
-/* Dialog frame to choose a component or a footprint
- *   This dialog shows an history of last selected items
- */
 {
     wxButton*     Button;
     wxStaticText* Text;
 
-    m_Parent  = parent;
     m_AuxTool = show_extra_tool;
-    m_GetExtraFunction = FALSE;
-
-    s_ItemName.Empty();
-    m_Text = &s_ItemName;
+    m_GetExtraFunction = false;
 
     wxBoxSizer* MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( MainBoxSizer );
@@ -127,7 +83,7 @@ WinEDA_SelectCmp::WinEDA_SelectCmp( WinEDA_DrawFrame* parent,
                         wxGROW | wxLEFT | wxRIGHT | wxTOP | wxBOTTOM,
                         5 );
 
-    Button = new wxButton( this, ID_ACCEPT_KEYWORD, _( "Search KeyWord" ) );
+    Button = new wxButton( this, ID_ACCEPT_KEYWORD, _( "Search by Keyword" ) );
     RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
     Button = new wxButton( this, ID_CANCEL, _( "Cancel" ) );
@@ -139,7 +95,7 @@ WinEDA_SelectCmp::WinEDA_SelectCmp( WinEDA_DrawFrame* parent,
 #ifndef __WXMAC__
     if( m_AuxTool )     /* The selection can be done by an extra function */
     {
-        Button = new wxButton( this, ID_EXTRA_TOOL, _( "By Lib Browser" ) );
+        Button = new wxButton( this, ID_EXTRA_TOOL, _( "Select by Browser" ) );
         RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
     }
 #endif
@@ -149,98 +105,98 @@ WinEDA_SelectCmp::WinEDA_SelectCmp( WinEDA_DrawFrame* parent,
 }
 
 
-/*********************************************************/
 void WinEDA_SelectCmp::Accept( wxCommandEvent& event )
-/*********************************************************/
 {
+    int id = wxID_OK;
+
     switch( event.GetId() )
     {
     case ID_SEL_BY_LISTBOX:
-        *m_Text = m_List->GetStringSelection();
+        m_Text = m_List->GetStringSelection();
         break;
 
     case ID_ACCEPT_NAME:
-        *m_Text = m_TextCtrl->GetValue();
+        m_Text = m_TextCtrl->GetValue();
         break;
 
     case ID_ACCEPT_KEYWORD:
-        *m_Text = wxT( "= " ) + m_TextCtrl->GetValue();
+        m_Text = wxT( "= " ) + m_TextCtrl->GetValue();
         break;
 
     case ID_CANCEL:
-        *m_Text = wxEmptyString;
+        m_Text = wxEmptyString;
+        id = wxID_CANCEL;
         break;
 
     case ID_LIST_ALL:
-        *m_Text = wxT( "*" );
+        m_Text = wxT( "*" );
         break;
     }
 
-    m_Text->Trim( FALSE );      // Remove blanks at beginning
-    m_Text->Trim( TRUE );       // Remove blanks at end
-    Close( TRUE );
+    m_Text.Trim( false );      // Remove blanks at beginning
+    m_Text.Trim( true );       // Remove blanks at end
+
+    if( IsModal() )
+        EndModal( id );
+    else
+        Close( id );
 }
 
 
-/**************************************************************/
+/* Get the component name by the extra function */
 void WinEDA_SelectCmp::GetExtraSelection( wxCommandEvent& event )
-/**************************************************************/
-
-/* Get the component name by the extra function
- */
 {
-    m_GetExtraFunction = TRUE;
-    Close( TRUE );
+    m_GetExtraFunction = true;
+
+    if( IsModal() )
+        EndModal( wxID_OK );
+    else
+        Close( wxID_OK );
 }
 
 
-/******************************************************************************/
-wxString GetComponentName( WinEDA_DrawFrame* frame,
-                          wxArrayString& HistoryList, const wxString& Title,
-                          wxString (*AuxTool)( WinEDA_DrawFrame* parent ) )
-/*******************************************************************************/
-
-/* Dialog frame to choose a component name
- */
+wxString WinEDA_SelectCmp::GetComponentName( void )
 {
-    wxPoint framepos;
+    return m_Text;
+}
+
+
+void WinEDA_SelectCmp::SetComponentName( const wxString& name )
+{
+    if( m_TextCtrl )
+        m_TextCtrl->SetValue( name );
+}
+
+
+wxPoint GetComponentDialogPosition( void )
+{
+    wxPoint pos;
     int     x, y, w, h;
-    bool    GetExtraFunction;
 
-    framepos = wxGetMousePosition();
+    pos = wxGetMousePosition();
     wxClientDisplayRect( &x, &y, &w, &h );
-    framepos.x -= 100;
-    framepos.y -= 50;
-    if( framepos.x < x )
-        framepos.x = x;
-    if( framepos.y < y )
-        framepos.y = y;
-    if( framepos.x < x )
-        framepos.x = x;
+    pos.x -= 100;
+    pos.y -= 50;
+    if( pos.x < x )
+        pos.x = x;
+    if( pos.y < y )
+        pos.y = y;
+    if( pos.x < x )
+        pos.x = x;
     x += w - 350;
-    if( framepos.x > x )
-        framepos.x = x;
-    if( framepos.y < y )
-        framepos.y = y;
-    WinEDA_SelectCmp* selframe =
-        new WinEDA_SelectCmp( frame, framepos, HistoryList, Title,
-                              AuxTool ? TRUE : FALSE );
-    selframe->ShowModal();
-    GetExtraFunction = selframe->m_GetExtraFunction;
-    selframe->Destroy();
+    if( pos.x > x )
+        pos.x = x;
+    if( pos.y < y )
+        pos.y = y;
 
-    if( GetExtraFunction )
-        s_ItemName = AuxTool( frame );
-    return s_ItemName;
+    return pos;
 }
 
 
-/*******************************************************************************/
-void AddHistoryComponentName( wxArrayString& HistoryList, const wxString& Name )
-/*******************************************************************************/
-
-/* Add the string "Name" to the history list HistoryList
+/*
+ * Add the string "Name" to the history list HistoryList
  */
+void AddHistoryComponentName( wxArrayString& HistoryList, const wxString& Name )
 {
     int ii, c_max;
 

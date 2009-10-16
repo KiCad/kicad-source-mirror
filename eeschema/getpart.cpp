@@ -29,23 +29,20 @@ static int     OldTransMat[2][2];
 static wxPoint OldPos;
 
 
-wxString SelectFromLibBrowser( WinEDA_DrawFrame* parent )
+wxString WinEDA_SchematicFrame::SelectFromLibBrowser( void )
 {
-    WinEDA_ViewlibFrame*   Viewer;
-    wxSemaphore            semaphore( 0, 1 );
-    WinEDA_SchematicFrame* frame;
+    wxSemaphore semaphore( 0, 1 );
 
-    frame = (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
-
-    Viewer = frame->m_ViewlibFrame;
     /* Close the current Lib browser, if open, and open a new one, in
      * "modal" mode */
-    if( Viewer )
-        Viewer->Destroy();
+    if( m_ViewlibFrame )
+    {
+        m_ViewlibFrame->Destroy();
+        m_ViewlibFrame = NULL;
+    }
 
-    Viewer = frame->m_ViewlibFrame = new WinEDA_ViewlibFrame( frame, NULL,
-                                                              &semaphore );
-    Viewer->AdjustScrollBars();
+    m_ViewlibFrame = new WinEDA_ViewlibFrame( this, NULL, &semaphore );
+    m_ViewlibFrame->AdjustScrollBars();
 
     // Show the library viewer frame until it is closed
     while( semaphore.TryWait() == wxSEMA_BUSY ) // Wait for viewer closing event
@@ -54,7 +51,7 @@ wxString SelectFromLibBrowser( WinEDA_DrawFrame* parent )
         wxMilliSleep( 50 );
     }
 
-    return Viewer->GetEntryName();
+    return m_ViewlibFrame->GetEntryName();
 }
 
 
@@ -69,12 +66,15 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
                                                       wxArrayString&  HistoryList,
                                                       bool            UseLibBrowser )
 {
-    int            ii, CmpCount = 0;
-    LIB_COMPONENT* Entry     = NULL;
-    SCH_COMPONENT* Component = NULL;
-    CMP_LIBRARY*   Library   = NULL;
-    wxString       Name, keys, msg;
-    bool           AllowWildSeach = TRUE;
+    int             CmpCount  = 0;
+    int             unit      = 1;
+    int             convert   = 1;
+    LIB_COMPONENT*  Entry     = NULL;
+    SCH_COMPONENT*  Component = NULL;
+    CMP_LIBRARY*    Library   = NULL;
+    wxString        Name, keys, msg;
+    bool            AllowWildSeach = TRUE;
+    static wxString lastCommponentName;
 
     g_ItemToRepeat = NULL;
     DrawPanel->m_IgnoreMouseEvents = TRUE;
@@ -97,15 +97,32 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
     /* Ask for a component name or key words */
     msg.Printf( _( "component selection (%d items loaded):" ), CmpCount );
 
-    Name = GetComponentName( this, HistoryList, msg,
-                             UseLibBrowser ? SelectFromLibBrowser : NULL );
-    Name.MakeUpper();
+    WinEDA_SelectCmp dlg( this, GetComponentDialogPosition(), HistoryList,
+                          msg, UseLibBrowser );
+    dlg.SetComponentName( lastCommponentName );
+
+    if ( dlg.ShowModal() == wxID_CANCEL )
+        return NULL;
+
+    if( dlg.m_GetExtraFunction )
+    {
+        Name = SelectFromLibBrowser();
+        unit = m_ViewlibFrame->GetUnit();
+        convert = m_ViewlibFrame->GetConvert();
+    }
+    else
+    {
+        Name = dlg.GetComponentName();
+    }
+
     if( Name.IsEmpty() )
     {
         DrawPanel->m_IgnoreMouseEvents = FALSE;
         DrawPanel->MouseToCursorSchema();
-        return NULL;    /* annulation de commande */
+        return NULL;
     }
+
+    Name.MakeUpper();
 
     if( Name.GetChar( 0 ) == '=' )
     {
@@ -143,7 +160,7 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
 
     Entry = CMP_LIBRARY::FindLibraryComponent( Name, libname );
 
-    if( (Entry == NULL) && AllowWildSeach ) /* Attemp to search with wildcard */
+    if( ( Entry == NULL ) && AllowWildSeach ) /* Search with wildcard */
     {
         AllowWildSeach = FALSE;
         wxString wildname = wxChar( '*' ) + Name + wxChar( '*' );
@@ -161,81 +178,26 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
         }
     }
 
-
     DrawPanel->m_IgnoreMouseEvents = FALSE;
     DrawPanel->MouseToCursorSchema();
     if( Entry == NULL )
     {
         msg = _( "Failed to find part " ) + Name + _( " in library" );
-        DisplayError( this, msg, 10 );
+        DisplayError( this, msg );
         return NULL;
     }
 
+    lastCommponentName = Name;
     AddHistoryComponentName( HistoryList, Name );
 
     DrawPanel->ManageCurseur = ShowWhileMoving;
     DrawPanel->ForceCloseManageCurseur = ExitPlaceCmp;
 
-    Component = new SCH_COMPONENT( GetScreen()->m_Curseur );
-    Component->m_Multi     = 1; /* Selection de l'unite 1 dans le boitier */
-    Component->m_Convert   = 1;
-    Component->m_ChipName  = Name;
-    Component->m_TimeStamp = GetTimeStamp();
-    Component->m_Flags     = IS_NEW | IS_MOVED;
+    Component = new SCH_COMPONENT( *Entry, GetSheet(), unit, convert,
+                                   GetScreen()->m_Curseur, true );
 
-    /* Init champ Valeur */
-    Component->GetField( VALUE )->m_Pos = Entry->m_Name.m_Pos + Component->m_Pos;
-    Component->GetField( VALUE )->ImportValues( Entry->m_Name );
-    Component->GetField( VALUE )->m_Text = Component->m_ChipName;
+    DrawStructsInGhost( DrawPanel, DC, Component, wxPoint( 0, 0 ) );
 
-    msg = Entry->m_Prefix.m_Text;
-    if( msg.IsEmpty() )
-        msg = wxT( "U" );
-    msg += wxT( "?" );
-
-    // update the reference -- just the prefix for now.
-    Component->SetRef( GetSheet(), msg );
-
-    /* Init champ Reference */
-    Component->GetField( REFERENCE )->m_Pos =
-        Entry->m_Prefix.m_Pos + Component->m_Pos;
-    Component->GetField( REFERENCE )->ImportValues( Entry->m_Prefix );
-    Component->m_PrefixString = Entry->m_Prefix.m_Text;
-
-    /* Init des autres champs si predefinis dans la librairie */
-    LIB_FIELD* EntryField;
-    for( EntryField = Entry->m_Fields; EntryField != NULL;
-         EntryField = EntryField->Next() )
-    {
-        if( EntryField->m_Text.IsEmpty() && EntryField->m_Name.IsEmpty() )
-            continue;
-
-        ii = EntryField->m_FieldId;
-        if( ii < 2 )        // Reference or value, already done
-            continue;
-
-        if( ii >= Component->GetFieldCount() )
-        {   // This entry has more than the default count: add extra fields
-            while( ii >= Component->GetFieldCount() )
-            {
-                int field_id = Component->GetFieldCount();
-                SCH_CMP_FIELD field( wxPoint( 0, 0 ), field_id, Component,
-                                     ReturnDefaultFieldName( ii ) );
-                Component->AddField( field );
-            }
-        }
-
-        SCH_CMP_FIELD* curr_field = Component->GetField( ii );
-
-        curr_field->m_Pos = Component->m_Pos + EntryField->m_Pos;
-        curr_field->ImportValues( *EntryField );
-        curr_field->m_Text = EntryField->m_Text;
-        curr_field->m_Name = ( ii < FIELD1 ) ? ReturnDefaultFieldName( ii ) : EntryField->m_Name;
-    }
-
-    DrawStructsInGhost( DrawPanel, DC, Component, wxPoint(0,0) );
-
-    ClearMsgPanel();
     Component->DisplayInfo( this );
 
     return Component;

@@ -57,18 +57,17 @@ MARKER_PCB::~MARKER_PCB()
 
 void MARKER_PCB::DisplayInfo( WinEDA_DrawFrame* frame )
 {
-    WinEDA_MsgPanel *msgpanel = frame->MsgPanel;
-    msgpanel->EraseMsgBox();
+    frame->ClearMsgPanel();
 
     const DRC_ITEM& rpt = m_drc;
 
-    msgpanel->AppendMessage( _( "Type" ), _("Marker"), DARKCYAN );
+    frame->AppendMsgPanel( _( "Type" ), _("Marker"), DARKCYAN );
 
     wxString errorTxt;
 
     errorTxt << _("ErrType") << wxT("(") << rpt.GetErrorCode() << wxT(")-  ") << rpt.GetErrorText() << wxT(":");
 
-    msgpanel->AppendMessage( errorTxt, wxEmptyString, RED );
+    frame->AppendMsgPanel( errorTxt, wxEmptyString, RED );
 
     wxString txtA;
     txtA << DRC_ITEM::ShowCoord( rpt.GetPointA() ) << wxT(": ") << rpt.GetTextA();
@@ -77,7 +76,7 @@ void MARKER_PCB::DisplayInfo( WinEDA_DrawFrame* frame )
     if ( rpt.HasSecondItem() )
         txtB << DRC_ITEM::ShowCoord( rpt.GetPointB() ) << wxT(": ") << rpt.GetTextB();
 
-    msgpanel->AppendMessage( txtA, txtB, DARKBROWN );
+    frame->AppendMsgPanel( txtA, txtB, DARKBROWN );
 }
 
 /**

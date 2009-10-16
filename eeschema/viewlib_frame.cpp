@@ -39,7 +39,6 @@ BEGIN_EVENT_TABLE( WinEDA_ViewlibFrame, WinEDA_DrawFrame )
     EVT_SASH_DRAGGED( ID_LIBVIEW_LIBWINDOW, WinEDA_ViewlibFrame::OnSashDrag )
     EVT_SASH_DRAGGED( ID_LIBVIEW_CMPWINDOW, WinEDA_ViewlibFrame::OnSashDrag )
 
-
     /* Toolbar events */
     EVT_TOOL_RANGE( ID_LIBVIEW_NEXT, ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT,
                     WinEDA_ViewlibFrame::Process_Special_Functions )
@@ -53,6 +52,9 @@ BEGIN_EVENT_TABLE( WinEDA_ViewlibFrame, WinEDA_DrawFrame )
     /* listbox events */
     EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, WinEDA_ViewlibFrame::ClickOnLibList )
     EVT_LISTBOX( ID_LIBVIEW_CMP_LIST, WinEDA_ViewlibFrame::ClickOnCmpList )
+
+    EVT_MENU( ID_SET_RELATIVE_OFFSET,
+              WinEDA_ViewlibFrame::OnSetRelativeOffset )
 END_EVENT_TABLE()
 
 
@@ -67,7 +69,8 @@ static wxAcceleratorEntry accels[] =
     wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F2, ID_ZOOM_OUT ),
     wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F3, ID_ZOOM_REDRAW ),
     wxAcceleratorEntry( wxACCEL_NORMAL, WXK_F4, ID_POPUP_ZOOM_CENTER ),
-    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_HOME, ID_ZOOM_PAGE )
+    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_HOME, ID_ZOOM_PAGE ),
+    wxAcceleratorEntry( wxACCEL_NORMAL, WXK_SPACE, ID_SET_RELATIVE_OFFSET )
 };
 
 #define ACCEL_TABLE_CNT ( sizeof( accels ) / sizeof( wxAcceleratorEntry ) )
@@ -278,6 +281,13 @@ void WinEDA_ViewlibFrame::OnSize( wxSizeEvent& SizeEv )
 }
 
 
+void WinEDA_ViewlibFrame::OnSetRelativeOffset( wxCommandEvent& event )
+{
+    GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
+    UpdateStatusBar();
+}
+
+
 int WinEDA_ViewlibFrame::BestZoom()
 {
     int    bestzoom, ii, jj;
@@ -443,8 +453,8 @@ void WinEDA_ViewlibFrame::ClickOnCmpList( wxCommandEvent& event )
     {
         m_entryName = name;
         DisplayLibInfos();
-        m_unit    = 1;
-        m_convert = 1;
+        m_unit    = 0;
+        m_convert = 0;
         Zoom_Automatique( false );
         ReCreateHToolbar();
         DrawPanel->Refresh();

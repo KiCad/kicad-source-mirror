@@ -66,7 +66,7 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
     if( ImportFile == NULL )
     {
         msg.Printf( _( "Failed to open Symbol File <%s>" ),
-                    (const wxChar*) fn.GetFullPath() );
+                    GetChars( fn.GetFullPath() ) );
         DisplayError( this, msg );
         return;
     }
@@ -76,7 +76,7 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
     if( !Lib->Load( err ) )
     {
         msg.Printf( _( "Error <%s> occurred loading symbol library <%s>." ),
-                   (const wxChar*) err, (const wxChar*) fn.GetName() );
+                    GetChars( err ), GetChars( fn.GetName() ) );
         DisplayError( this, msg );
         fclose( ImportFile );
         delete Lib;
@@ -88,7 +88,7 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
     if( Lib->IsEmpty() )
     {
         msg.Printf( _( "No components found in symbol library <%s>." ),
-                   (const wxChar*) fn.GetName() );
+                    GetChars( fn.GetName() ) );
         delete Lib;
         return;
     }
@@ -166,12 +166,12 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
     if( ExportFile == NULL )
     {
         msg.Printf( _( "Unable to create <%s>" ),
-                    (const wxChar*) fn.GetFullPath() );
+                    GetChars( fn.GetFullPath() ) );
         DisplayError( this, msg );
         return;
     }
 
-    msg.Printf( _( "Save Symbol in [%s]" ), (const wxChar*) fn.GetPath() );
+    msg.Printf( _( "Save Symbol in [%s]" ), GetChars( fn.GetPath() ) );
     Affiche_Message( msg );
 
     /* Creation de l'entete de la librairie */

@@ -256,7 +256,7 @@ void WinEDA_LibeditFrame::OnCloseWindow( wxCloseEvent& Event )
         {
             wxString msg;
             msg.Printf( _( "Library \"%s\" was modified!\nDiscard changes?" ),
-                        (const wxChar*) lib.GetName() );
+                        GetChars( lib.GetName() ) );
             if( !IsOK( this, msg ) )
             {
                 Event.Veto();

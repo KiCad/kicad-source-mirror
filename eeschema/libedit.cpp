@@ -100,8 +100,8 @@ saved.\n\nDiscard current changes?" ) ) )
     {
         msg.Printf( _( "Component or alias name \"%s\" not found in \
 library \"%s\"." ),
-                    (const wxChar*) CmpName,
-                    (const wxChar*) m_library->GetName() );
+                    GetChars( CmpName ),
+                    GetChars( m_library->GetName() ) );
         DisplayError( this, msg );
         return;
     }
@@ -136,7 +136,7 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPartAux( CMP_LIB_ENTRY* LibEntry,
     if( LibEntry->GetName().IsEmpty() )
     {
         wxLogWarning( wxT( "Entry in library <%s> has empty name field." ),
-                      (const wxChar*) LibEntry );
+                      GetChars( Library->GetName() ) );
         return false;
     }
 
@@ -151,8 +151,8 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPartAux( CMP_LIB_ENTRY* LibEntry,
         wxASSERT( component != NULL && component->Type == ROOT );
 
         wxLogDebug( wxT( "\"<%s>\" is alias of \"<%s>\"" ),
-                    (const wxChar*) cmpName,
-                    (const wxChar*) component->GetName() );
+                    GetChars( cmpName ),
+                    GetChars( component->GetName() ) );
 
         m_aliasName = cmpName;
     }
@@ -169,8 +169,8 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPartAux( CMP_LIB_ENTRY* LibEntry,
     if( m_component == NULL )
     {
         msg.Printf( _( "Could not create copy of part <%s> in library <%s>." ),
-                    (const wxChar*) LibEntry->GetName(),
-                    (const wxChar*) Library->GetName() );
+                    GetChars( LibEntry->GetName() ),
+                    GetChars( Library->GetName() ) );
         DisplayError( this, msg );
         return false;
     }
@@ -393,7 +393,7 @@ void WinEDA_LibeditFrame::DeleteOnePart( wxCommandEvent& event )
     if( ListNames.IsEmpty() )
     {
         msg.Printf( _( "Component library <%s> is empty." ),
-                    ( const wxChar* ) m_library->GetName() );
+                    GetChars( m_library->GetName() ) );
         wxMessageBox( msg, _( "Delete Entry Error" ),
                       wxID_OK | wxICON_EXCLAMATION, this );
         return;
@@ -401,7 +401,7 @@ void WinEDA_LibeditFrame::DeleteOnePart( wxCommandEvent& event )
 
     msg.Printf( _( "Select 1 of %d components to delete\nfrom library <%s>." ),
                 ListNames.GetCount(),
-                ( const wxChar* ) m_library->GetName() );
+                GetChars( m_library->GetName() ) );
 
     wxSingleChoiceDialog dlg( this, msg, _( "Delete Component" ), ListNames );
 
@@ -413,15 +413,15 @@ void WinEDA_LibeditFrame::DeleteOnePart( wxCommandEvent& event )
     if( LibEntry == NULL )
     {
         msg.Printf( _( "Entry <%s> not found in library <%s>." ),
-                    ( const wxChar* ) dlg.GetStringSelection(),
-                    ( const wxChar* ) m_library->GetName() );
+                    GetChars( dlg.GetStringSelection() ),
+                    GetChars( m_library->GetName() ) );
         DisplayError( this, msg );
         return;
     }
 
     msg.Printf( _( "Delete component \"%s\" from library \"%s\"?" ),
-                (const wxChar*) LibEntry->GetName(),
-                (const wxChar*) m_library->GetName() );
+                GetChars( LibEntry->GetName() ),
+                GetChars( m_library->GetName() ) );
 
     if( !IsOK( this, msg ) )
         return;
@@ -520,8 +520,8 @@ lost!\n\nClear the current component from the screen?" ) ) )
     {
         wxString msg;
         msg.Printf( _( "Component \"%s\" already exists in library \"%s\"." ),
-                    (const wxChar*) name,
-                    (const wxChar*) m_library->GetName() );
+                    GetChars( name ),
+                    GetChars( m_library->GetName() ) );
         DisplayError( this, msg );
         return;
     }
@@ -604,7 +604,7 @@ void WinEDA_LibeditFrame::SaveOnePartInMemory()
     if( oldComponent != NULL )
     {
         msg.Printf( _( "Component \"%s\" exists. Change it?" ),
-                    (const wxChar*) oldComponent->GetName() );
+                    GetChars( oldComponent->GetName() ) );
         if( !IsOK( this, msg ) )
             return;
     }
@@ -622,7 +622,7 @@ void WinEDA_LibeditFrame::SaveOnePartInMemory()
         return;
 
     msg.Printf( _( "Component %s saved in library %s" ),
-                ( const wxChar* ) Component->GetName(),
-                ( const wxChar* ) m_library->GetName() );
+                GetChars( Component->GetName() ),
+                GetChars( m_library->GetName() ) );
     Affiche_Message( msg );
 }

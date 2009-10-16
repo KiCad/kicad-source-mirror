@@ -25,7 +25,7 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
     double        scale;
     wxPoint       offset;
 
-    MsgPanel->EraseMsgBox();
+    ClearMsgPanel();
 
     // Compute pen_dim (from g_HPGL_Pen_Diam in mils) in pcb units,
     // with plot scale (if Scale is 2, pen diametre is always g_HPGL_Pen_Diam
@@ -50,7 +50,7 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
     }
 
     SetLocaleTo_C_standard();
-    MsgPanel->AppendMessage( _( "File" ), FullFileName, CYAN );
+    AppendMsgPanel( _( "File" ), FullFileName, CYAN );
 
     if( g_pcb_plot_options.PlotScaleOpt != 1 )
         Center = TRUE; // Echelle != 1 donc trace centree du PCB

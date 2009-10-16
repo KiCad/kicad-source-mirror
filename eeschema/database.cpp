@@ -85,8 +85,8 @@ void DisplayCmpDoc( wxString& Name )
         return;
 
     wxLogDebug( wxT( "Selected component <%s>, m_Doc: <%s>, m_KeyWord: <%s>." ),
-                (const wxChar*) Name, (const wxChar*) CmpEntry->m_Doc,
-                (const wxChar*) CmpEntry->m_KeyWord );
+                GetChars( Name ), GetChars( CmpEntry->m_Doc ),
+                GetChars( CmpEntry->m_KeyWord ) );
 
     Name  = wxT( "Description: " ) + CmpEntry->m_Doc;
     Name += wxT( "\nKey Words: " ) + CmpEntry->m_KeyWord;

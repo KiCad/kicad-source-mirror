@@ -452,24 +452,23 @@ void D_PAD::DisplayInfo( WinEDA_DrawFrame* frame )
     { wxT( "norm" ), wxT( "smd " ), wxT( "conn" ), wxT( "????" ) };
 
 
-    WinEDA_MsgPanel *msgpanel = frame->MsgPanel;
-    msgpanel->EraseMsgBox();
+    frame->EraseMsgBox();
 
     /* Recherche du module correspondant */
     module = (MODULE*) m_Parent;
     if( module )
     {
         wxString msg = module->GetReference();
-        msgpanel->AppendMessage( _( "Module" ), msg, DARKCYAN );
+        frame->AppendMsgPanel( _( "Module" ), msg, DARKCYAN );
         ReturnStringPadName( Line );
-        msgpanel->AppendMessage( _( "RefP" ), Line, BROWN );
+        frame->AppendMsgPanel( _( "RefP" ), Line, BROWN );
     }
-    msgpanel->AppendMessage( _( "Net" ), m_Netname, DARKCYAN );
+    frame->AppendMsgPanel( _( "Net" ), m_Netname, DARKCYAN );
 
     /* For test and debug only: display m_physical_connexion and m_logical_connexion */
 #if 1   // Used only to debug connectivity calculations
     Line.Printf( wxT( "%d-%d-%d " ), GetSubRatsnest(), GetSubNet(), m_ZoneSubnet );
-    msgpanel->AppendMessage( wxT( "L-P-Z" ), Line, DARKGREEN );
+    frame->AppendMsgPanel( wxT( "L-P-Z" ), Line, DARKGREEN );
 #endif
 
     wxString LayerInfo;
@@ -546,24 +545,24 @@ void D_PAD::DisplayInfo( WinEDA_DrawFrame* frame )
             break;
         }
     }
-    msgpanel->AppendMessage( _( "Layer" ), LayerInfo, DARKGREEN );
+    frame->AppendMsgPanel( _( "Layer" ), LayerInfo, DARKGREEN );
 
     int attribut = m_Attribut & 15;
     if( attribut > 3 )
         attribut = 3;
-    msgpanel->AppendMessage( Msg_Pad_Shape[m_PadShape],
+    frame->AppendMsgPanel( Msg_Pad_Shape[m_PadShape],
         Msg_Pad_Attribut[attribut], DARKGREEN );
 
     valeur_param( m_Size.x, Line );
-    msgpanel->AppendMessage( _( "H Size" ), Line, RED );
+    frame->AppendMsgPanel( _( "H Size" ), Line, RED );
 
     valeur_param( m_Size.y, Line );
-    msgpanel->AppendMessage( _( "V Size" ), Line, RED );
+    frame->AppendMsgPanel( _( "V Size" ), Line, RED );
 
     valeur_param( (unsigned) m_Drill.x, Line );
     if( m_DrillShape == PAD_CIRCLE )
     {
-        msgpanel->AppendMessage( _( "Drill" ), Line, RED );
+        frame->AppendMsgPanel( _( "Drill" ), Line, RED );
     }
     else
     {
@@ -571,7 +570,7 @@ void D_PAD::DisplayInfo( WinEDA_DrawFrame* frame )
         wxString msg;
         valeur_param( (unsigned) m_Drill.y, msg );
         Line += wxT( " / " ) + msg;
-        msgpanel->AppendMessage( _( "Drill X / Y" ), Line, RED );
+        frame->AppendMsgPanel( _( "Drill X / Y" ), Line, RED );
     }
 
 
@@ -581,13 +580,13 @@ void D_PAD::DisplayInfo( WinEDA_DrawFrame* frame )
             (float) ( m_Orient - module_orient ) / 10, (float) module_orient / 10 );
     else
         Line.Printf( wxT( "%3.1f" ), (float) m_Orient / 10 );
-    msgpanel->AppendMessage( _( "Orient" ), Line, BLUE );
+    frame->AppendMsgPanel( _( "Orient" ), Line, BLUE );
 
     valeur_param( m_Pos.x, Line );
-    msgpanel->AppendMessage( _( "X Pos" ), Line, BLUE );
+    frame->AppendMsgPanel( _( "X Pos" ), Line, BLUE );
 
     valeur_param( m_Pos.y, Line );
-    msgpanel->AppendMessage( _( "Y pos" ), Line, BLUE );
+    frame->AppendMsgPanel( _( "Y pos" ), Line, BLUE );
 }
 
 

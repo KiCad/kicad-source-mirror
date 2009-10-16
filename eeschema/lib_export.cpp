@@ -64,7 +64,7 @@ void WinEDA_LibeditFrame::OnImportPart( wxCommandEvent& event )
         wxString msg;
 
         msg.Printf( _( "Component library file <%s> is empty." ),
-                    (const wxChar*) fn.GetFullPath() );
+                    GetChars( fn.GetFullPath() ) );
         DisplayError( this,  msg );
         return;
     }

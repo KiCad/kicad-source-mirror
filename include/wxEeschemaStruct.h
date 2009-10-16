@@ -319,6 +319,11 @@ private:
     DrawSheetStruct* CreateSheet( wxDC* DC );
     void             ReSizeSheet( DrawSheetStruct* Sheet, wxDC* DC );
 
+    /**
+     * Use the component viewer to select component to import into schematic.
+     */
+    wxString         SelectFromLibBrowser( void );
+
 public:
     bool             EditSheet( DrawSheetStruct* Sheet, wxDC* DC );
 

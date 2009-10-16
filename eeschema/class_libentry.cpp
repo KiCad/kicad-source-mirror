@@ -671,7 +671,7 @@ bool LIB_COMPONENT::Load( FILE* file, char* line, int* lineNum,
                 errorMsg.Printf( wxT( "error occurred at line %d " ), *lineNum );
             else
                 errorMsg.Printf( wxT( "error <%s> occurred at line %d " ),
-                                 ( const wxChar* ) Msg, *lineNum );
+                                 GetChars( Msg ), *lineNum );
             return false;
         }
     }
@@ -739,7 +739,7 @@ bool LIB_COMPONENT::LoadDrawEntries( FILE* f, char* line,
         if( !newEntry->Load( line, errorMsg ) )
         {
             errorMsg.Printf( wxT( "error <%s> in DRAW command %c" ),
-                             ( const wxChar* ) errorMsg, line[0] );
+                             GetChars( errorMsg ), line[0] );
             SAFE_DELETE( newEntry );
 
             /* Flush till end of draw section */

@@ -966,10 +966,10 @@ void WinEDA_LibeditFrame::OnCheckComponent( wxCommandEvent& event )
         curr_pin->ReturnPinStringNum( StringPinNum );
         msg.Printf( _( "Duplicate pin %s at location (%d, %d) conflicts \
 with pin %s at location (%d, %d)" ),
-                    (const wxChar*) StringPinNum,
-                    (const wxChar*) curr_pin->m_PinName,
+                    GetChars( StringPinNum ),
+                    GetChars( curr_pin->m_PinName ),
                     curr_pin->m_Pos.x, -curr_pin->m_Pos.y,
-                    (const wxChar*) Pin->m_PinName,
+                    GetChars( Pin->m_PinName ),
                     Pin->m_Pos.x, -Pin->m_Pos.y );
 
         if( m_component->GetPartCount() > 1 )

@@ -362,34 +362,33 @@ void DRAWSEGMENT::DisplayInfo( WinEDA_DrawFrame* frame )
     BOARD*   board = (BOARD*) m_Parent;
     wxASSERT( board );
 
-    WinEDA_MsgPanel *msgpanel = frame->MsgPanel;
-    msgpanel->EraseMsgBox();
+    frame->ClearMsgPanel();
 
     itype = m_Type & 0x0F;
 
     msg = wxT( "DRAWING" );
 
-    msgpanel->AppendMessage( _( "Type" ), msg, DARKCYAN );
+    frame->AppendMsgPanel( _( "Type" ), msg, DARKCYAN );
 
     wxString    shape = _( "Shape" );
 
     switch( m_Shape ) {
         case S_CIRCLE:
-            msgpanel->AppendMessage( shape, _( "Circle" ), RED );
+            frame->AppendMsgPanel( shape, _( "Circle" ), RED );
             break;
 
         case S_ARC:
-            msgpanel->AppendMessage( shape, _( "Arc" ), RED );
+            frame->AppendMsgPanel( shape, _( "Arc" ), RED );
 
             msg.Printf( wxT( "%1." ), (float)m_Angle/10 );
-            msgpanel->AppendMessage( _("Angle"), msg, RED );
+            frame->AppendMsgPanel( _("Angle"), msg, RED );
             break;
         case S_CURVE:
-            msgpanel->AppendMessage( shape, _( "Curve" ), RED );
+            frame->AppendMsgPanel( shape, _( "Curve" ), RED );
             break;
 
         default:
-            msgpanel->AppendMessage( shape, _( "Segment" ), RED );
+            frame->AppendMsgPanel( shape, _( "Segment" ), RED );
     }
     wxString start;
     start << GetStart();
@@ -397,13 +396,13 @@ void DRAWSEGMENT::DisplayInfo( WinEDA_DrawFrame* frame )
     wxString end;
     end << GetEnd();
 
-    msgpanel->AppendMessage( start, end, DARKGREEN );
+    frame->AppendMsgPanel( start, end, DARKGREEN );
 
-    msgpanel->AppendMessage( _( "Layer" ),
+    frame->AppendMsgPanel( _( "Layer" ),
                          board->GetLayerName( m_Layer ), DARKBROWN );
 
     valeur_param( (unsigned) m_Width, msg );
-    msgpanel->AppendMessage( _( "Width" ), msg, DARKCYAN );
+    frame->AppendMsgPanel( _( "Width" ), msg, DARKCYAN );
 }
 
 

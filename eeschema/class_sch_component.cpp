@@ -50,89 +50,78 @@ void CreateDummyCmp()
 }
 
 
-/*****************************************************************************
-* Routine to draw the given part at given position, transformed/mirror as
-* specified, and in the given drawing mode.
-* if Color < 0: Draw in normal color
-* else draw  in color = Color
-*****************************************************************************/
-/* DrawMode  = GrXOR, GrOR ..*/
-void DrawLibPartAux( WinEDA_DrawPanel* panel, wxDC* DC,
-                     SCH_COMPONENT* Component, LIB_COMPONENT* Entry,
-                     const wxPoint& Pos, const int TransMat[2][2],
-                     int Multi, int convert, int DrawMode,
-                     int Color, bool DrawPinText )
-{
-    Entry->Draw( panel, DC, Pos, Multi, convert, DrawMode, Color, TransMat,
-                 DrawPinText, false );
-
-    /* Enable this to draw the bounding box around the component to validate
-     * the bounding box calculations. */
-#if 0
-    /* Draw the component boundary box */
-    {
-        EDA_Rect BoundaryBox;
-        if( Component )
-            BoundaryBox = Component->GetBoundaryBox();
-        else
-            BoundaryBox = Entry->GetBoundaryBox( Multi, convert );
-        int x1 = BoundaryBox.GetX();
-        int y1 = BoundaryBox.GetY();
-        int x2 = BoundaryBox.GetRight();
-        int y2 = BoundaryBox.GetBottom();
-        GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
-        BoundaryBox = Component->GetField( REFERENCE )->GetBoundaryBox();
-        x1 = BoundaryBox.GetX();
-        y1 = BoundaryBox.GetY();
-        x2 = BoundaryBox.GetRight();
-        y2 = BoundaryBox.GetBottom();
-        GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
-        BoundaryBox = Component->GetField( VALUE )->GetBoundaryBox();
-        x1 = BoundaryBox.GetX();
-        y1 = BoundaryBox.GetY();
-        x2 = BoundaryBox.GetRight();
-        y2 = BoundaryBox.GetBottom();
-        GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
-    }
-#endif
-}
-
-
-
 /*******************************************************************/
 SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
     SCH_ITEM( aParent, TYPE_SCH_COMPONENT )
 {
-    m_Multi = 0;    /* In multi unit chip - which unit to draw. */
+    Init( aPos );
+}
 
-    m_Pos = aPos;
 
-    m_Convert = 0;  /* De Morgan Handling  */
+SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, DrawSheetPath* sheet,
+                              int unit, int convert, const wxPoint& pos,
+                              bool setNewItemFlag ) :
+    SCH_ITEM( NULL, TYPE_SCH_COMPONENT )
+{
+    Init( pos );
 
-    /* The rotation/mirror transformation matrix. pos normal */
-    m_Transform[0][0] = 1;
-    m_Transform[0][1] = 0;
-    m_Transform[1][0] = 0;
-    m_Transform[1][1] = -1;
+    m_Multi     = unit;
+    m_Convert   = convert;
+    m_ChipName  = libComponent.GetName();
+    m_TimeStamp = GetTimeStamp();
 
-    m_Fields.reserve( NUMBER_OF_FIELDS );
+    if( setNewItemFlag )
+        m_Flags = IS_NEW | IS_MOVED;
 
-    for( int i = 0; i < NUMBER_OF_FIELDS; ++i )
+    GetField( VALUE )->m_Pos = libComponent.m_Name.m_Pos + m_Pos;
+    GetField( VALUE )->ImportValues( libComponent.m_Name );
+    GetField( VALUE )->m_Text = m_ChipName;
+
+    wxString msg = libComponent.m_Prefix.m_Text;
+    if( msg.IsEmpty() )
+        msg = wxT( "U" );
+    msg += wxT( "?" );
+
+    // update the reference -- just the prefix for now.
+    SetRef( sheet, msg );
+
+    GetField( REFERENCE )->m_Pos = libComponent.m_Prefix.m_Pos + m_Pos;
+    GetField( REFERENCE )->ImportValues( libComponent.m_Prefix );
+    m_PrefixString = libComponent.m_Prefix.m_Text;
+
+    /* Init des autres champs si predefinis dans la librairie */
+    LIB_FIELD* EntryField;
+    int        ii;
+
+    for( EntryField = libComponent.m_Fields; EntryField != NULL;
+         EntryField = EntryField->Next() )
     {
-        SCH_CMP_FIELD field( aPos, i, this, ReturnDefaultFieldName( i ) );
+        if( EntryField->m_Text.IsEmpty() && EntryField->m_Name.IsEmpty() )
+            continue;
 
-        if( i==REFERENCE )
-            field.SetLayer( LAYER_REFERENCEPART );
-        else if( i==VALUE )
-            field.SetLayer( LAYER_VALUEPART );
+        ii = EntryField->m_FieldId;
+        if( ii < 2 )        // Reference or value, already done
+            continue;
 
-        // else keep LAYER_FIELDS from SCH_CMP_FIELD constructor
+        if( ii >= GetFieldCount() )
+        {   // This entry has more than the default count: add extra fields
+            while( ii >= GetFieldCount() )
+            {
+                int field_id = GetFieldCount();
+                SCH_CMP_FIELD field( wxPoint( 0, 0 ), field_id, this,
+                                     ReturnDefaultFieldName( ii ) );
+                AddField( field );
+            }
+        }
 
-        // SCH_CMP_FIELD's implicitly created copy constructor is called in here
-        AddField( field );
+        SCH_CMP_FIELD* curr_field = GetField( ii );
+
+        curr_field->m_Pos = m_Pos + EntryField->m_Pos;
+        curr_field->ImportValues( *EntryField );
+        curr_field->m_Text = EntryField->m_Text;
+        curr_field->m_Name =
+            ( ii < FIELD1 ) ? ReturnDefaultFieldName( ii ) : EntryField->m_Name;
     }
-
-    m_PrefixString = wxString( _( "U" ) );
 }
 
 
@@ -157,12 +146,46 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aTemplate ) :
 }
 
 
+void SCH_COMPONENT::Init( const wxPoint& pos )
+{
+    m_Pos = pos;
+    m_Multi = 0;    /* In multi unit chip - which unit to draw. */
+    m_Convert = 0;  /* De Morgan Handling  */
+
+    /* The rotation/mirror transformation matrix. pos normal */
+    m_Transform[0][0] = 1;
+    m_Transform[0][1] = 0;
+    m_Transform[1][0] = 0;
+    m_Transform[1][1] = -1;
+
+    m_Fields.reserve( NUMBER_OF_FIELDS );
+
+    for( int i = 0; i < NUMBER_OF_FIELDS; ++i )
+    {
+        SCH_CMP_FIELD field( pos, i, this, ReturnDefaultFieldName( i ) );
+
+        if( i==REFERENCE )
+            field.SetLayer( LAYER_REFERENCEPART );
+        else if( i==VALUE )
+            field.SetLayer( LAYER_VALUEPART );
+
+        // else keep LAYER_FIELDS from SCH_CMP_FIELD constructor
+
+        // SCH_CMP_FIELD's implicitly created copy constructor is called in here
+        AddField( field );
+    }
+
+    m_PrefixString = wxString( _( "U" ) );
+}
+
+
 /*****************************************************************************
 * Routine to draw the given part at given position, transformed/mirror as	 *
 * specified, and in the given drawing mode. Only this one is visible...		 *
 *****************************************************************************/
 void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                          const wxPoint& offset, int DrawMode, int Color )
+                          const wxPoint& offset, int DrawMode, int Color,
+                          bool DrawPinText )
 {
     LIB_COMPONENT* Entry;
     int  ii;
@@ -172,19 +195,16 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
     if( Entry == NULL )
     {
-        /* composant non trouve, on affiche un composant "dummy" */
+        /* Create a dummy component if the actual component can not be found. */
         dummy = TRUE;
         if( DummyCmp == NULL )
             CreateDummyCmp();
         Entry = DummyCmp;
     }
 
-    DrawLibPartAux( panel, DC, this, Entry, m_Pos + offset,  m_Transform,
-                    dummy ? 0 : m_Multi, dummy ? 0 : m_Convert, DrawMode );
-
-    /* Trace des champs, avec placement et orientation selon orient. du
-     *  composant
-     */
+    Entry->Draw( panel, DC, m_Pos + offset, dummy ? 0 : m_Multi,
+                 dummy ? 0 : m_Convert, DrawMode, Color, m_Transform,
+                 DrawPinText );
 
     SCH_CMP_FIELD* field = GetField( REFERENCE );
 
@@ -212,6 +232,32 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
         field->Draw( panel, DC, offset, DrawMode );
     }
+
+
+#if 0
+    /* Draw the component boundary box */
+    {
+        EDA_Rect BoundaryBox;
+        BoundaryBox = GetBoundaryBox();
+        int x1 = BoundaryBox.GetX();
+        int y1 = BoundaryBox.GetY();
+        int x2 = BoundaryBox.GetRight();
+        int y2 = BoundaryBox.GetBottom();
+        GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
+        BoundaryBox = GetField( REFERENCE )->GetBoundaryBox();
+        x1 = BoundaryBox.GetX();
+        y1 = BoundaryBox.GetY();
+        x2 = BoundaryBox.GetRight();
+        y2 = BoundaryBox.GetBottom();
+        GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
+        BoundaryBox = GetField( VALUE )->GetBoundaryBox();
+        x1 = BoundaryBox.GetX();
+        y1 = BoundaryBox.GetY();
+        x2 = BoundaryBox.GetRight();
+        y2 = BoundaryBox.GetBottom();
+        GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
+    }
+#endif
 }
 
 

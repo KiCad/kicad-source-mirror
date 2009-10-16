@@ -48,20 +48,6 @@ void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
                           SCH_COMPONENT* m_Cmp );
 
 
-/******************************/
-/* EELIBS_DRAW_COMPONENTS.CPP */
-/******************************/
-void DrawingLibInGhost( WinEDA_DrawPanel* panel,
-                        wxDC*             DC,
-                        LIB_COMPONENT*    LibEntry,
-                        SCH_COMPONENT*    DrawLibItem,
-                        int               PartX,
-                        int               PartY,
-                        int               Multi,
-                        int               convert,
-                        int               Color,
-                        bool              DrawPinText );
-
 bool MapAngles( int*      Angle1,
                 int*      Angle2,
                 const int TransMat[2][2] );

@@ -199,8 +199,8 @@ bool CMP_LIBRARY::AddAlias( LIB_ALIAS* alias )
         wxString msg;
 
         msg.Printf( _( "Cannot add duplicate alias <%s> to library <%s>." ),
-                    (const wxChar*) alias->GetName(),
-                    (const wxChar*) m_fileName.GetName() );
+                    GetChars( alias->GetName() ),
+                    GetChars( m_fileName.GetName() ) );
         return false;
     }
 
@@ -239,9 +239,9 @@ LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* cmp )
             {
                 wxLogError( _( "Conflict in library <%s>: alias <%s> already \
 has root name <%s> and will not be assigned to root name <%s>." ),
-                        (const wxChar*) m_fileName.GetName(),
-                        (const wxChar*) alias->GetComponent()->GetName(),
-                        (const wxChar*) newCmp->GetName() );
+                            GetChars( m_fileName.GetName() ),
+                            GetChars( alias->GetComponent()->GetName() ),
+                            GetChars( newCmp->GetName() ) );
             }
         }
     }
@@ -287,8 +287,8 @@ void CMP_LIBRARY::RemoveEntry( CMP_LIB_ENTRY* entry )
         {
             wxLogWarning( wxT( "No root component found for alias <%s> in \
 library <%s>." ),
-                          ( const wxChar* ) entry->GetName(),
-                          ( const wxChar* ) m_fileName.GetName() );
+                          GetChars( entry->GetName() ),
+                          GetChars( m_fileName.GetName() ) );
         }
         else
         {
@@ -297,9 +297,9 @@ library <%s>." ),
             if( index == wxNOT_FOUND )
                 wxLogWarning( wxT( "Alias <%s> not found in component <%s> \
 alias list in library <%s>" ),
-                              ( const wxChar* ) entry->GetName(),
-                              ( const wxChar* ) Root->GetName(),
-                              ( const wxChar* ) m_fileName.GetName() );
+                              GetChars( entry->GetName() ),
+                              GetChars( Root->GetName() ),
+                              GetChars( m_fileName.GetName() ) );
             else
                 Root->m_AliasList.RemoveAt( index );
         }
@@ -329,9 +329,9 @@ alias list in library <%s>" ),
     {
         wxLogWarning( wxT( "Alias <%s> for component <%s> not found in \
 library <%s>" ),
-                      ( const wxChar* ) AliasName,
-                      ( const wxChar* ) Root->GetName(),
-                      ( const wxChar* ) m_fileName.GetName() );
+                      GetChars( AliasName ),
+                      GetChars( Root->GetName() ),
+                      GetChars( m_fileName.GetName() ) );
         return;
     }
 
@@ -373,9 +373,9 @@ LIB_COMPONENT* CMP_LIBRARY::ReplaceComponent( LIB_COMPONENT* oldComponent,
 
             wxLogDebug( wxT( "Removing extra alias <%s> from component <%s> \
 in library <%s>." ),
-                        (const wxChar*) oldComponent->m_AliasList[ i ],
-                        (const wxChar*) oldComponent->GetName(),
-                        (const wxChar*) m_fileName.GetName() );
+                        GetChars( oldComponent->m_AliasList[ i ] ),
+                        GetChars( oldComponent->GetName() ),
+                        GetChars( m_fileName.GetName() ) );
 
             RemoveEntry( oldComponent->m_AliasList[ i ] );
         }
@@ -392,9 +392,9 @@ in library <%s>." ),
 
             wxLogDebug( wxT( "Adding extra alias <%s> from component <%s> \
 in library <%s>." ),
-                        (const wxChar*) newComponent->m_AliasList[ i ],
-                        (const wxChar*) newComponent->GetName(),
-                        (const wxChar*) m_fileName.GetName() );
+                        GetChars( newComponent->m_AliasList[ i ] ),
+                        GetChars( newComponent->GetName() ),
+                        GetChars( m_fileName.GetName() ) );
 
             alias = new LIB_ALIAS( newComponent->m_AliasList[ i ],
                                    newComponent );
@@ -534,7 +534,7 @@ number is invalid.\n\nIn future versions of EESchema this library may not \
 load correctly.  To resolve this problem open the library in the library \
 editor and save it.  If this library is the project cache library, save \
 the current schematic." ),
-                          (const wxChar*) GetName() );
+                          GetChars( GetName() ) );
         }
         else
         {
@@ -542,7 +542,7 @@ the current schematic." ),
             m_verMinor = (int) minor;
 
             wxLogDebug( wxT( "Component library <%s> is version %d.%d." ),
-                        (const wxChar*) GetName(), m_verMajor, m_verMinor );
+                        GetChars( GetName() ), m_verMajor, m_verMinor );
         }
     }
 
@@ -573,8 +573,8 @@ the current schematic." ),
                 if( FindEntry( LibEntry->GetName() ) != NULL )
                 {
                     wxLogWarning( duplicate_name_msg,
-                                  (const wxChar*) m_fileName.GetName(),
-                                  (const wxChar*) LibEntry->GetName() );
+                                  GetChars( m_fileName.GetName() ),
+                                  GetChars( LibEntry->GetName() ) );
                 }
 
                 /* If we are here, this part is O.k. - put it in: */
@@ -584,8 +584,8 @@ the current schematic." ),
             else
             {
                 wxLogWarning( _( "Library <%s> component load error %s." ),
-                              (const wxChar*) m_fileName.GetName(),
-                              (const wxChar*) msg );
+                              GetChars( m_fileName.GetName() ),
+                              GetChars( msg ) );
                 msg.Clear();
                 delete LibEntry;
             }
@@ -610,8 +610,8 @@ void CMP_LIBRARY::LoadAliases( LIB_COMPONENT* component )
         if( FindEntry( component->m_AliasList[ii] ) != NULL )
         {
             wxLogError( duplicate_name_msg,
-                        (const wxChar*) m_fileName.GetName(),
-                        (const wxChar*) component->m_AliasList[ii] );
+                        GetChars( m_fileName.GetName() ),
+                        GetChars( component->m_AliasList[ii] ) );
         }
 
         alias = new LIB_ALIAS( component->m_AliasList[ii], component, this );
@@ -654,14 +654,14 @@ bool CMP_LIBRARY::LoadDocs( wxString& errMsg )
     if( f == NULL )
     {
         errMsg.Printf( _( "Could not open component document libray file <%s>." ),
-                       (const wxChar*) fn.GetFullPath() );
+                       GetChars( fn.GetFullPath() ) );
         return false;
     }
 
     if( GetLine( f, Line, &LineNum, sizeof(Line) ) == NULL )
     {
         errMsg.Printf( _( "Component document libray file <%s> is empty." ),
-                       (const wxChar*) fn.GetFullPath() );
+                       GetChars( fn.GetFullPath() ) );
         fclose( f );
         return false;
     }
@@ -670,7 +670,7 @@ bool CMP_LIBRARY::LoadDocs( wxString& errMsg )
     {
         errMsg.Printf( _( "File <%s> is not a valid component library \
 document file." ),
-                       (const wxChar*) fn.GetFullPath() );
+                       GetChars( fn.GetFullPath() ) );
         fclose( f );
         return false;
     }

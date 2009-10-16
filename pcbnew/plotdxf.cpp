@@ -19,7 +19,7 @@ void WinEDA_BasePcbFrame::Genere_DXF( const wxString& FullFileName, int Layer,
 {
     Ki_PageDescr* currentsheet = GetScreen()->m_CurrentSheetDesc;
 
-    MsgPanel->EraseMsgBox();
+    ClearMsgPanel();
 
     FILE* output_file = wxFopen( FullFileName, wxT( "wt" ) );
     if( output_file == NULL )
@@ -30,7 +30,7 @@ void WinEDA_BasePcbFrame::Genere_DXF( const wxString& FullFileName, int Layer,
     }
 
     SetLocaleTo_C_standard();
-    MsgPanel->AppendMessage( _( "File" ), FullFileName, CYAN );
+    AppendMsgPanel( _( "File" ), FullFileName, CYAN );
 
     DXF_PLOTTER* plotter = new DXF_PLOTTER();
     plotter->set_paper_size( currentsheet );

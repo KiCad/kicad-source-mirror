@@ -906,11 +906,10 @@ void ZONE_CONTAINER::DisplayInfo( WinEDA_DrawFrame* frame )
     wxString msg;
 
     BOARD*   board = (BOARD*) m_Parent;
-    WinEDA_MsgPanel *msgpanel = frame->MsgPanel;
 
     wxASSERT( board );
 
-    msgpanel->EraseMsgBox();
+    frame->ClearMsgPanel();
 
     msg = _( "Zone Outline" );
 
@@ -918,7 +917,7 @@ void ZONE_CONTAINER::DisplayInfo( WinEDA_DrawFrame* frame )
     if( ncont )
         msg << wxT( " " ) << _( "(Cutout)" );
 
-    msgpanel->AppendMessage( _( "Type" ), msg, DARKCYAN );
+    frame->AppendMsgPanel( _( "Type" ), msg, DARKCYAN );
 
     if( IsOnCopperLayer() )
     {
@@ -938,35 +937,35 @@ void ZONE_CONTAINER::DisplayInfo( WinEDA_DrawFrame* frame )
             msg << wxT( " <" ) << _( "Not Found" ) << wxT( ">" );
         }
 
-        msgpanel->AppendMessage( _( "NetName" ), msg, RED );
+        frame->AppendMsgPanel( _( "NetName" ), msg, RED );
     }
     else
-        msgpanel->AppendMessage( _( "Non Copper Zone" ), wxEmptyString, RED );
+        frame->AppendMsgPanel( _( "Non Copper Zone" ), wxEmptyString, RED );
 
     /* Display net code : (usefull in test or debug) */
     msg.Printf( wxT( "%d" ), GetNet() );
-    msgpanel->AppendMessage( _( "NetCode" ), msg, RED );
+    frame->AppendMsgPanel( _( "NetCode" ), msg, RED );
 
     msg = board->GetLayerName( m_Layer );
-    msgpanel->AppendMessage( _( "Layer" ), msg, BROWN );
+    frame->AppendMsgPanel( _( "Layer" ), msg, BROWN );
 
     msg.Printf( wxT( "%d" ), m_Poly->corner.size() );
-    msgpanel->AppendMessage( _( "Corners" ), msg, BLUE );
+    frame->AppendMsgPanel( _( "Corners" ), msg, BLUE );
 
     if( m_FillMode )
         msg.Printf( _( "Segments" ), m_FillMode );
     else
         msg = _( "Polygons" );
-    msgpanel->AppendMessage( _( "Fill mode" ), msg, BROWN );
+    frame->AppendMsgPanel( _( "Fill mode" ), msg, BROWN );
 
     // Useful for statistics :
     msg.Printf( wxT( "%d" ), m_Poly->m_HatchLines.size() );
-    msgpanel->AppendMessage( _( "Hatch lines" ), msg, BLUE );
+    frame->AppendMsgPanel( _( "Hatch lines" ), msg, BLUE );
 
     if( m_FilledPolysList.size() )
     {
         msg.Printf( wxT( "%d" ), m_FilledPolysList.size() );
-        msgpanel->AppendMessage( _( "Corners in DrawList" ), msg, BLUE );
+        frame->AppendMsgPanel( _( "Corners in DrawList" ), msg, BLUE );
     }
 }
 

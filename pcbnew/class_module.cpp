@@ -800,14 +800,13 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
     bool     flag = FALSE;
     wxString msg;
     BOARD*   board = (BOARD*) m_Parent;
-    WinEDA_MsgPanel *msgpanel = frame->MsgPanel;
 
-    msgpanel->EraseMsgBox();
+    frame->EraseMsgBox();
     if( frame->m_Ident != PCB_FRAME )
         flag = TRUE;
 
-    msgpanel->AppendMessage( m_Reference->m_Text, m_Value->m_Text,
-                         DARKCYAN );
+    frame->AppendMsgPanel( m_Reference->m_Text, m_Value->m_Text,
+                           DARKCYAN );
 
     if( flag ) // Display last date the component was edited( useful in Module Editor)
     {
@@ -819,15 +818,15 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
         strtok( NULL, " \n\r" );
         strcat( bufcar, strtok( NULL, " \n\r" ) );
         msg = CONV_FROM_UTF8( bufcar );
-        msgpanel->AppendMessage( _( "Last Change" ), msg, BROWN );
+        frame->AppendMsgPanel( _( "Last Change" ), msg, BROWN );
     }
     else    // displa time stamp in schematic
     {
         msg.Printf( wxT( "%8.8lX" ), m_TimeStamp );
-        msgpanel->AppendMessage( _( "Netlist path" ), m_Path, BROWN );
+        frame->AppendMsgPanel( _( "Netlist path" ), m_Path, BROWN );
     }
 
-    msgpanel->AppendMessage( _( "Layer" ), board->GetLayerName( m_Layer ), RED );
+    frame->AppendMsgPanel( _( "Layer" ), board->GetLayerName( m_Layer ), RED );
 
     EDA_BaseStruct* PtStruct = m_Pads;
     nbpad = 0;
@@ -838,29 +837,29 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
     }
 
     msg.Printf( wxT( "%d" ), nbpad );
-    msgpanel->AppendMessage( _( "Pads" ), msg, BLUE );
+    frame->AppendMsgPanel( _( "Pads" ), msg, BLUE );
 
     msg  = wxT( ".." );
     if( IsLocked() )
         msg[0] = 'L';
     if( m_ModuleStatus & MODULE_is_PLACED )
         msg[1] = 'P';
-    msgpanel->AppendMessage( _( "Stat" ), msg, MAGENTA );
+    frame->AppendMsgPanel( _( "Stat" ), msg, MAGENTA );
 
     msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
-    msgpanel->AppendMessage( _( "Orient" ), msg, BROWN );
+    frame->AppendMsgPanel( _( "Orient" ), msg, BROWN );
 
-    msgpanel->AppendMessage( _( "Module" ), m_LibRef, BLUE );
+    frame->AppendMsgPanel( _( "Module" ), m_LibRef, BLUE );
 
     if(  m_3D_Drawings != NULL )
         msg = m_3D_Drawings->m_Shape3DName;
     else
         msg = _("No 3D shape");
-    msgpanel->AppendMessage( _( "3D-Shape" ), msg, RED );
+    frame->AppendMsgPanel( _( "3D-Shape" ), msg, RED );
 
     wxString doc     = _( "Doc:  " ) + m_Doc;
     wxString keyword = _( "KeyW: " ) + m_KeyWord;
-    msgpanel->AppendMessage( doc, keyword, BLACK );
+    frame->AppendMsgPanel( doc, keyword, BLACK );
 }
 
 

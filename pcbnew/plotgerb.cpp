@@ -35,7 +35,7 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
 {
     wxPoint offset;
 
-    MsgPanel->EraseMsgBox();
+    ClearMsgPanel();
 
     /* Calculate scaling from pcbnew units (in 0.1 mil or 0.0001 inch) to gerber units */
     double scale = g_pcb_plot_options.Scale;
@@ -64,7 +64,7 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
     plotter->set_creator( wxT( "PCBNEW-RS274X" ) );
     plotter->set_filename( FullFileName );
 
-    MsgPanel->AppendMessage( _( "File" ), FullFileName, CYAN );
+    AppendMsgPanel( _( "File" ), FullFileName, CYAN );
 
     plotter->start_plot( output_file );
 
