@@ -204,7 +204,7 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
     Entry->Draw( panel, DC, m_Pos + offset, dummy ? 0 : m_Multi,
                  dummy ? 0 : m_Convert, DrawMode, Color, m_Transform,
-                 DrawPinText );
+                 DrawPinText, false );
 
     SCH_CMP_FIELD* field = GetField( REFERENCE );
 

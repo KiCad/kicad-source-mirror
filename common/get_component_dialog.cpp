@@ -59,7 +59,7 @@ WinEDA_SelectCmp::WinEDA_SelectCmp( WinEDA_DrawFrame* parent,
     Text = new wxStaticText( this, -1, _( "Name:" ) );
     LeftBoxSizer->Add( Text, 0, wxALIGN_LEFT | wxLEFT | wxRIGHT | wxTOP, 5 );
 
-    m_TextCtrl = new wxTextCtrl( this, ID_ENTER_NAME, *m_Text );
+    m_TextCtrl = new wxTextCtrl( this, ID_ENTER_NAME, m_Text );
     m_TextCtrl->SetInsertionPoint( 1 );
     LeftBoxSizer->Add( m_TextCtrl,
                        0,
