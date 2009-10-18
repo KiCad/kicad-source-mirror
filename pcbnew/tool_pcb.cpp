@@ -582,7 +582,7 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
                                          wxSize( LISTBOX_WIDTH + 20, -1 ),
                                          wxTE_READONLY );
         m_ClearanceBox->SetToolTip(_("Current NetClass clearance value") );
-		m_AuxiliaryToolBar->AddControl( m_ClearanceBox );
+        m_AuxiliaryToolBar->AddControl( m_ClearanceBox );
         m_AuxiliaryToolBar->AddSeparator();
 
         // Creates box to display the current NetClass:
@@ -591,7 +591,7 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
                                                 wxSize( LISTBOX_WIDTH, -1 ),
                                                 wxTE_READONLY );
         m_NetClassSelectedBox->SetToolTip(_("Name of the current NetClass") );
-		m_AuxiliaryToolBar->AddControl( m_NetClassSelectedBox );
+        m_AuxiliaryToolBar->AddControl( m_NetClassSelectedBox );
         m_AuxiliaryToolBar->AddSeparator();
 
         // Creates box to display and choose strategy to handle tracks an
@@ -729,11 +729,12 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
         parent->AddControl( m_SelLayerBox );
     }
 
-
+/*
     int     layer_mask = g_TabAllCopperLayerMask[g_DesignSettings.m_CopperLayerCount - 1];
 
     layer_mask |= ALL_NO_CU_LAYERS;
-
+*/
+    int      layer_mask = g_DesignSettings.GetEnabledLayers();
     unsigned length  = 0;
 
     m_SelLayerBox->Clear();

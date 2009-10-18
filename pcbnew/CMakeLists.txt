@@ -25,8 +25,8 @@ set(PCBNEW_SRCS
     cross-probing.cpp
     debug_kbool_key_file_fct.cpp
     deltrack.cpp
-    dialog_copper_layers_setup_base.cpp
-    dialog_copper_layers_setup.cpp
+#    dialog_copper_layers_setup_base.cpp
+#    dialog_copper_layers_setup.cpp
     dialog_copper_zones.cpp
     dialog_copper_zones_base.cpp
     dialog_design_rules.cpp
@@ -50,6 +50,7 @@ set(PCBNEW_SRCS
     dialog_graphic_item_properties.cpp
     dialog_graphic_item_properties_base.cpp
 #   dialog_initpcb.cpp
+    dialog_layers_setup.cpp
     dialog_netlist.cpp
     dialog_netlist_fbp.cpp
     dialog_pcb_text_properties.cpp

@@ -385,4 +385,10 @@ void DisplayColorSetupFrame( WinEDA_PcbFrame* parent,
                              const wxPoint&    framepos );
 
 
+/***************************/
+/* DIALOG_LAYERS_SETUP.CPP */
+/***************************/
+
+void DisplayDialogLayerSetup( WinEDA_PcbFrame* parent );
+
 #endif  /* #define PROTO_H */

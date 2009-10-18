@@ -208,6 +208,55 @@ public:
     int      GetCopperLayerCount() const;
 
     /**
+     * Function GetEnabledLayers
+     * is a proxy function that calls the correspondent function in m_BoardSettings
+     * Returns a bit-mask of all the layers that are enabled
+     * @return int - the enabled layers in bit-mapped form.
+     */
+    int GetEnabledLayers() const;
+
+    /**
+     * Function GetVisibleLayers
+     * is a proxy function that calls the correspondent function in m_BoardSettings
+     * Returns a bit-mask of all the layers that are visible
+     * @return int - the visible layers in bit-mapped form.
+     */
+    int GetVisibleLayers() const;
+
+    /**
+     * Function SetEnabledLayers
+     * is a proxy function that calls the correspondent function in m_BoardSettings
+     * Changes the bit-mask of enabled layers
+     * @param aMask = The new bit-mask of enabled layers
+     */
+    void SetEnabledLayers( int aLayerMask );
+
+    /**
+     * Function SetVisibleLayers
+     * is a proxy function that calls the correspondent function in m_BoardSettings
+     * changes the bit-mask of visible layers
+     * @param aMask = The new bit-mask of visible layers
+     */
+    void SetVisibleLayers( int aLayerMask );
+
+    /**
+     * Function SetVisibleElements
+     * is a proxy function that calls the correspondent function in m_BoardSettings
+     * changes the bit-mask of visible element categories
+     * @param aMask = The new bit-mask of visible element categories
+     */
+    void SetVisibleElements( int aMask );
+
+    /**
+     * Function GetVisibleElements
+     * is a proxy function that calls the correspondent function in m_BoardSettings
+     * returns a bit-mask of all the element categories that are visible
+     * @return int - the visible element categories in bit-mapped form.
+     */
+    int  GetVisibleElements() const;
+
+
+    /**
      * Function GetLayerName
      * returns the name of the copper layer given by aLayerIndex.
      *
@@ -555,10 +604,10 @@ public:
      * @param bMessageBoxInt == true, shows message when clipping occurs.
      * @param  bMessageBoxArc == true, shows message when clipping can't be done due to arcs.
      * @param bRetainArcs = true to handle arcs (not really used in kicad)
-     * @return:
-     *	-1 if arcs intersect other sides, so polygon can't be clipped
-     *	 0 if no intersecting sides
-     *	 1 if intersecting sides
+     * @return :
+     *  -1 if arcs intersect other sides, so polygon can't be clipped
+     *   0 if no intersecting sides
+     *   1 if intersecting sides
      * Also sets areas->utility1 flags if areas are modified
      */
     int             ClipAreaPolygon( PICKED_ITEMS_LIST* aNewZonesList,

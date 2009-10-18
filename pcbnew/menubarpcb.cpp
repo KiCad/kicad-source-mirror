@@ -213,10 +213,18 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( hammer_xpm );
     designRulesMenu->Append( item );
 
+/*
     item = new wxMenuItem( designRulesMenu, ID_PCB_COPPER_LAYERS_SETUP, _( "Copper &Layers" ),
                            _( "Select copper layers count and layers names" ) );
     item->SetBitmap( copper_layers_setup_xpm );
     designRulesMenu->Append( item );
+*/
+
+    item = new wxMenuItem( configmenu, ID_PCB_LAYERS_SETUP, _( "&Layers Setup" ),
+                           _( "Enable and set properties of layers" ) );
+    item->SetBitmap( copper_layers_setup_xpm );
+    designRulesMenu->Append( item );
+
 
     /////////////////////////////
     // Ajustage de dimensions: //
@@ -274,10 +282,10 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     postprocess_menu->Append( item );
 
     item = new wxMenuItem( postprocess_menu, ID_PCB_GEN_BOM_FILE_FROM_BOARD,
-						   _( "Create &BOM File" ),
-						   _( "Recreate .csv file for CvPcb" ) );
-	item->SetBitmap( tools_xpm );
-	postprocess_menu->Append( item );
+                           _( "Create &BOM File" ),
+                           _( "Recreate .csv file for CvPcb" ) );
+    item->SetBitmap( tools_xpm );
+    postprocess_menu->Append( item );
 
     //////////////////////////
     // Menu d'outils divers //

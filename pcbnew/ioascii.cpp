@@ -1,7 +1,7 @@
 
 /********************************************************************/
 /* Routines de lecture et sauvegarde des structures en format ASCii */
-/*  Fichier common a PCBNEW et CVPCB								*/
+/*  Fichier common a PCBNEW et CVPCB                                */
 /********************************************************************/
 
 /* ioascii.cpp */
@@ -32,12 +32,12 @@
 
  $PAD
  Sh "name" forme dimv dimH dV dH orient  :forme generale dV, dH = delta dimensions
- Dr diam, dV dH					:drill : diametre offsets de percage
- At type S/N layers				: type standard,cms,conn,hole,meca.,
+ Dr diam, dV dH                 :drill : diametre offsets de percage
+ At type S/N layers             : type standard,cms,conn,hole,meca.,
                              Stack/Normal,
                              Hexadecimal 32 bits: occupation des couches
  Nm net_code netname
- Po posrefX posrefy :			position refX,Y (= position orient 0 / ancre)
+ Po posrefX posrefy :           position refX,Y (= position orient 0 / ancre)
  $EndPAD
 
 ****** Structure module ***********
@@ -51,12 +51,12 @@
                                      m_TimeCode a usage interne (groupements)
  Li <namelib>
 
- Cd <text>						Description du composant (Composant Doc)
- Kw <text>						Liste des mots cle
+ Cd <text>                      Description du composant (Composant Doc)
+ Kw <text>                      Liste des mots cle
 
- Sc schematimestamp						de reference schematique
+ Sc schematimestamp                     de reference schematique
 
- Op rot90 rot180					Options de placement auto (cout rot 90, 180 )
+ Op rot90 rot180                    Options de placement auto (cout rot 90, 180 )
                              rot90 est sur 2x4 bits:
                              lsb = cout rot 90, msb = cout rot -90;
 
@@ -70,9 +70,9 @@
                              edge: segment coord ox,oy a fx,fy, relatives
                              a l'ancre et orient 0
                              epaisseur w
- DC ox oy fx fy w				descr cercle (centre, 1 point, epaisseur)
+ DC ox oy fx fy w               descr cercle (centre, 1 point, epaisseur)
  $PAD
- $EndPAD							section pads s'il y en a
+ $EndPAD                            section pads s'il y en a
  $EndMODULE
 */
 
@@ -196,7 +196,7 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( FILE* File, int* LineNum )
             sscanf( data, "%X", &EnabledLayers );
 
             // Setup layer visibility
-            GetBoard()->m_BoardSettings->m_EnabledLayers    = EnabledLayers;
+            GetBoard()->SetEnabledLayers( EnabledLayers );
 
             continue;
         }
@@ -208,7 +208,7 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( FILE* File, int* LineNum )
             sscanf( data, "%X", &VisibleLayers );
 
             // Setup layer visibility
-            GetBoard()->m_BoardSettings->m_VisibleLayers    = VisibleLayers;
+            GetBoard()->SetVisibleLayers( VisibleLayers );
 
             continue;
         }
@@ -220,7 +220,7 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( FILE* File, int* LineNum )
             sscanf( data, "%X", &VisibleElements );
 
             // Setup elements visibility
-            GetBoard()->m_BoardSettings->m_VisibleElements    = VisibleElements;
+            GetBoard()->SetVisibleElements( VisibleElements );
 
             continue;
         }
@@ -665,9 +665,9 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
 
     // Write old format for Layer count (for compatibility with old versions of pcbnew
     fprintf( File, "Ly %8X\n", g_TabAllCopperLayerMask[NbLayers - 1] | ALL_NO_CU_LAYERS ); // For compatibility with old version of pcbnew
-    fprintf( File, "EnabledLayers %08X\n", GetBoard()->m_BoardSettings->m_EnabledLayers );
-    fprintf( File, "VisibleLayers %08X\n", GetBoard()->m_BoardSettings->m_VisibleLayers );
-    fprintf( File, "VisibleElements %08X\n", GetBoard()->m_BoardSettings->m_VisibleElements );
+    fprintf( File, "EnabledLayers %08X\n", GetBoard()->GetEnabledLayers() );
+    fprintf( File, "VisibleLayers %08X\n", GetBoard()->GetVisibleLayers() );
+    fprintf( File, "VisibleElements %08X\n", GetBoard()->GetVisibleElements() );
     fprintf( File, "Links %d\n", GetBoard()->GetRatsnestsCount() );
     fprintf( File, "NoConn %d\n", GetBoard()->m_NbNoconnect );
 

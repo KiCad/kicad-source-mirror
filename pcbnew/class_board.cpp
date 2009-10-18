@@ -129,9 +129,11 @@ BOARD::~BOARD()
 
 wxString BOARD::GetLayerName( int aLayerIndex ) const
 {
+    if( ! IsValidLayerIndex( aLayerIndex ))
+        return wxEmptyString;
+
     // copper layer names are stored in the BOARD.
-    if( (unsigned) aLayerIndex < (unsigned) GetCopperLayerCount()
-       || aLayerIndex == LAST_COPPER_LAYER )
+    if( IsValidCopperLayerIndex( aLayerIndex ) && m_BoardSettings->IsLayerEnabled( aLayerIndex ))
     {
         // default names were set in BOARD::BOARD() but they may be
         // over-ridden by BOARD::SetLayerName()
@@ -144,30 +146,30 @@ wxString BOARD::GetLayerName( int aLayerIndex ) const
 
 bool BOARD::SetLayerName( int aLayerIndex, const wxString& aLayerName )
 {
-    if( (unsigned) aLayerIndex < (unsigned) GetCopperLayerCount()
-       || aLayerIndex==LAST_COPPER_LAYER )
+    if( ! IsValidCopperLayerIndex( aLayerIndex ))
+        return false;
+
+    if( aLayerName == wxEmptyString  || aLayerName.Len() > 20 )
+        return false;
+
+    // no quote chars in the name allowed
+    if( aLayerName.Find( wxChar( '"' ) ) != wxNOT_FOUND )
+        return false;
+
+    wxString NameTemp = aLayerName;
+
+    // replace any spaces with underscores before we do any comparing
+    NameTemp.Replace( wxT( " " ), wxT( "_" ) );
+
+    if( m_BoardSettings->IsLayerEnabled( aLayerIndex ))
     {
-        if( aLayerName == wxEmptyString  || aLayerName.Len() > 20 )
-            return false;
-
-        // no quote chars in the name allowed
-        if( aLayerName.Find( wxChar( '"' ) ) != wxNOT_FOUND )
-            return false;
-
-        // ensure unique-ness of layer names
-        for( int layer = 0;  layer<GetCopperLayerCount() || layer==LAST_COPPER_LAYER;  )
+        for( int i = 0; i < NB_COPPER_LAYERS; i++ )
         {
-            if( layer!=aLayerIndex && aLayerName == m_Layer[layer].m_Name )
+            if( i != aLayerIndex && m_BoardSettings->IsLayerEnabled( i ) && NameTemp == m_Layer[i].m_Name )
                 return false;
-
-            if( ++layer == GetCopperLayerCount() )
-                layer = LAST_COPPER_LAYER;
         }
 
-        m_Layer[aLayerIndex].m_Name = aLayerName;
-
-        // replace any spaces with underscores
-        m_Layer[aLayerIndex].m_Name.Replace( wxT( " " ), wxT( "_" ) );
+        m_Layer[aLayerIndex].m_Name = NameTemp;
 
         return true;
     }
@@ -178,7 +180,12 @@ bool BOARD::SetLayerName( int aLayerIndex, const wxString& aLayerName )
 
 LAYER_T BOARD::GetLayerType( int aLayerIndex ) const
 {
-    if( (unsigned) aLayerIndex < (unsigned) GetCopperLayerCount() )
+    if( ! IsValidCopperLayerIndex( aLayerIndex ))
+        return LT_SIGNAL;
+
+    //@@IMB: The original test was broken due to the discontinuity
+    // in the layer sequence.
+    if( m_BoardSettings->IsLayerEnabled( aLayerIndex ))
         return m_Layer[aLayerIndex].m_Type;
     return LT_SIGNAL;
 }
@@ -186,7 +193,12 @@ LAYER_T BOARD::GetLayerType( int aLayerIndex ) const
 
 bool BOARD::SetLayerType( int aLayerIndex, LAYER_T aLayerType )
 {
-    if( (unsigned) aLayerIndex < (unsigned) GetCopperLayerCount() )
+    if( ! IsValidCopperLayerIndex( aLayerIndex ))
+        return false;
+
+    //@@IMB: The original test was broken due to the discontinuity
+    // in the layer sequence.
+    if( m_BoardSettings->IsLayerEnabled( aLayerIndex ))
     {
         m_Layer[aLayerIndex].m_Type = aLayerType;
         return true;
@@ -237,6 +249,36 @@ LAYER_T LAYER::ParseType( const char* aType )
 int BOARD::GetCopperLayerCount() const
 {
     return m_BoardSettings->m_CopperLayerCount;
+}
+
+int BOARD::GetEnabledLayers() const
+{
+    return m_BoardSettings->GetEnabledLayers();
+}
+
+int BOARD::GetVisibleLayers() const
+{
+    return m_BoardSettings->GetVisibleLayers();
+}
+
+void BOARD::SetEnabledLayers( int aLayerMask )
+{
+    m_BoardSettings->SetEnabledLayers( aLayerMask );
+}
+
+void BOARD::SetVisibleLayers( int aLayerMask )
+{
+    m_BoardSettings->SetVisibleLayers( aLayerMask );
+}
+
+void BOARD::SetVisibleElements( int aMask )
+{
+    m_BoardSettings->SetVisibleElements( aMask );
+}
+
+int  BOARD::GetVisibleElements() const
+{
+    return m_BoardSettings->GetVisibleElements();
 }
 
 

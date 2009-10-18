@@ -149,7 +149,38 @@ enum ELEMENTS_NUMBERS
     PAD_CMP_VISIBLE
 };
     
+/**
+ * Function IsValidLayerIndex
+ * tests whether a given integer is a valid layer index
+ * @param aLayerIndex = Layer index to test
+ * @return true if aLayerIndex is a valid layer index
+*/
+inline bool IsValidLayerIndex( int aLayerIndex )
+{
+    return aLayerIndex >= 0 && aLayerIndex < NB_LAYERS;
+}
+
+/**
+ * Function IsValidCopperLayerIndex
+ * tests whether an integer is a valid copper layer index
+ * @param aLayerIndex = Layer index to test
+ * @return true if aLayerIndex is a valid copper layer index
+*/
+inline bool IsValidCopperLayerIndex( int aLayerIndex )
+{
+    return aLayerIndex >= FIRST_COPPER_LAYER && aLayerIndex <= LAST_COPPER_LAYER;
+}
     
+/**
+ * Function IsValidNonCopperLayerIndex
+ * tests whether an integer is a valid non copper layer index
+ * @param aLayerIndex = Layer index to test
+ * @return true if aLayerIndex is a valid non copper layer index
+*/
+inline bool IsValidNonCopperLayerIndex( int aLayerIndex )
+{
+    return aLayerIndex >= FIRST_NO_COPPER_LAYER && aLayerIndex <= LAST_NO_COPPER_LAYER;
+}
     
 // Class for handle current printed board design settings
 class EDA_BoardDesignSettings
@@ -176,24 +207,16 @@ public:
     int    m_MaskMargin;                            // Solder mask margin
     int    m_LayerThickness;                        // Layer Thickness for 3D viewer
 
+protected:
+    int    m_EnabledLayers;                         // Bit-mask for layer enabling
+    int    m_VisibleLayers;                         // Bit-mask for layer visibility
+    int    m_VisibleElements;                       // Bit-mask for element category visibility
+
+public:
     // Color options for screen display of the Printed Board:
-//@@IMB: Not used    int    m_PcbGridColor;                          // Grid color
-
-	int    m_EnabledLayers;                         // IMB: Paving the road
-	int    m_VisibleLayers;                         // IMB: Bit-mask for layer visibility
-	int    m_VisibleElements;                       // IMB: Bit-mask for elements visibility
-
     int    m_LayerColor[32];                        // Layer colors (tracks and graphic items)
 
     int    m_ViaColor[4];                           // Via color (depending on is type)
-
-//@@IMB: Not used    int    m_ModuleTextCMPColor;                // Text module color for modules on the COMPONENT layer
-//@@IMB: Not used    int    m_ModuleTextCUColor;                 // Text module color for modules on the COPPER layer
-//@@IMB: Not used    int    m_ModuleTextNOVColor;                // Text module color for "invisible" texts (must be BLACK if really not displayed)
-//@@IMB: Not used    int    m_AnchorColor;                       // Anchor color for modules and texts
-
-//@@IMB: Not used    int    m_PadCUColor;                        // Pad color for the COPPER side of the pad
-//@@IMB: Not used    int    m_PadCMPColor;                       // Pad color for the COMPONENT side of the pad
 
     // Pad color for the pads of both sides is m_PadCUColor OR m_PadCMPColor (in terms of colors)
 
@@ -205,40 +228,134 @@ public:
 
     /**
      * Function GetVisibleLayers
-     * returns a bit-map of all the layers that are visible.
+     * returns a bit-mask of all the layers that are visible
      * @return int - the visible layers in bit-mapped form.
      */
     int GetVisibleLayers() const;
 
-    void SetVisibleLayers( int Mask );
+    /**
+     * Function SetVisibleLayers
+     * changes the bit-mask of visible layers
+     * @param aMask = The new bit-mask of visible layers
+     */
+    void SetVisibleLayers( int aMask );
     
     /**
      * Function IsLayerVisible
-     * @param LayerNumber The number of the layer to be tested.
+     * tests whether a given layer is visible
+     * @param aLayerIndex = The index of the layer to be tested
      * @return bool - true if the layer is visible.
      */
-    inline bool IsLayerVisible( int LayerNumber ) const
+    inline bool IsLayerVisible( int aLayerIndex ) const
     {
-        if( LayerNumber < 0 || LayerNumber >= 32 ) //@@IMB: Altough Pcbnew uses only 29, Gerbview uses all 32 layers
+        if( aLayerIndex < 0 || aLayerIndex >= 32 ) //@@IMB: Altough Pcbnew uses only 29, Gerbview uses all 32 layers
             return false;
-        return (bool)( m_VisibleLayers & 1 << LayerNumber );
+        // If a layer is disabled, it is automatically invisible
+        return (bool)( m_VisibleLayers & m_EnabledLayers & 1 << aLayerIndex );
     }
-
-    void SetLayerVisibility( int LayerNumber, bool State );
 
     /**
-     * Function IsElementVisible
-     * @param ElementNumber The number of the element to be tested.
-     * @return bool - true if the elememt is visible.
+     * Function SetLayerVisibility
+     * changes the visibility of a given layer
+     * @param aLayerIndex = The index of the layer to be changed
+     * @param aNewState = The new visibility state of the layer
      */
-    inline bool IsElementVisible( int ElementNumber ) const
+    void SetLayerVisibility( int aLayerIndex, bool aNewState );
+
+    /**
+     * Function GetVisibleElements
+     * returns a bit-mask of all the element categories that are visible
+     * @return int - the visible element categories in bit-mapped form.
+     */
+    inline int GetVisibleElements() const
     {
-        if( ElementNumber < 0 || ElementNumber > PAD_CMP_VISIBLE )
-            return false;
-        return (bool)( m_VisibleElements & 1 << ElementNumber );
+        return m_VisibleElements;
     }
 
-    void SetElementVisibility( int ElementNumber, bool State );
+    /**
+     * Function SetVisibleElements
+     * changes the bit-mask of visible element categories
+     * @param aMask = The new bit-mask of visible element categories
+     */
+    inline void SetVisibleElements( int aMask )
+    {
+        m_VisibleElements = aMask;
+    }
+    
+    /**
+     * Function IsElementVisible
+     * tests whether a given element category is visible
+     * @param aCategoryIndex = The index of the element category to be tested.
+     * @return bool - true if the element is visible.
+     */
+    inline bool IsElementVisible( int aCategoryIndex ) const
+    {
+        if( aCategoryIndex < 0 || aCategoryIndex > PAD_CMP_VISIBLE )
+            return false;
+        return (bool)( m_VisibleElements & 1 << aCategoryIndex );
+    }
+
+    /**
+     * Function SetElementVisibility
+     * changes the visibility of an element category
+     * @param aCategoryIndex = The index of the element category to be changed
+     * @param aNewState = The new visibility state of the element category
+     */
+    void SetElementVisibility( int aCategoryIndex, bool aNewState );
+
+    /**
+     * Function GetEnabledLayers
+     * returns a bit-mask of all the layers that are enabled
+     * @return int - the enabled layers in bit-mapped form.
+     */
+    inline int GetEnabledLayers() const
+    {
+        return m_EnabledLayers;
+    }
+
+    /**
+     * Function SetEnabledLayers
+     * changes the bit-mask of enabled layers
+     * @param aMask = The new bit-mask of enabled layers
+     */
+    void SetEnabledLayers( int aMask )
+    {
+        // TODO; ensure consistency with m_CopperLayerCount
+        m_EnabledLayers = aMask;
+        // A disabled layer cannot be visible
+        m_VisibleLayers &= aMask;
+    }
+
+    /**
+     * Function IsLayerEnabled
+     * tests whether a given layer is enabled
+     * @param aLayerIndex = The index of the layer to be tested
+     * @return bool - true if the layer is enabled
+     */
+    inline bool IsLayerEnabled( int aLayerIndex )
+    {
+        return (bool)( m_EnabledLayers & 1 << aLayerIndex );
+    }
+
+    /**
+     * Function GetCopperLayerCount
+     * @return int - the number of neabled copper layers
+     */
+    inline int GetCopperLayerCount() const
+    {
+        return m_CopperLayerCount;
+    }
+
+    /**
+     * Function SetCopperLayerCount
+     * do what its name says...
+     * @param aNewLayerCount = The new number of enabled copper layers
+     */
+    inline void SetCopperLayerCount( int aNewLayerCount )
+    {
+        // TODO; ensure consistency with the m_EnabledLayers member
+        m_CopperLayerCount = aNewLayerCount;
+    }
 };
 
 

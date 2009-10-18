@@ -84,7 +84,8 @@ EVT_MENU_RANGE( ID_CONFIG_AND_PREFERENCES_START,
 
 EVT_MENU( ID_COLORS_SETUP, WinEDA_PcbFrame::Process_Config )
 EVT_MENU( ID_OPTIONS_SETUP, WinEDA_PcbFrame::Process_Config )
-EVT_MENU( ID_PCB_COPPER_LAYERS_SETUP, WinEDA_PcbFrame::Process_Config )
+//EVT_MENU( ID_PCB_COPPER_LAYERS_SETUP, WinEDA_PcbFrame::Process_Config )
+EVT_MENU( ID_PCB_LAYERS_SETUP, WinEDA_PcbFrame::Process_Config )
 EVT_MENU( ID_PCB_TRACK_SIZE_SETUP, WinEDA_PcbFrame::Process_Config )
 EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, WinEDA_PcbFrame::Process_Config )
 EVT_MENU( ID_PCB_PAD_SETUP, WinEDA_PcbFrame::Process_Config )

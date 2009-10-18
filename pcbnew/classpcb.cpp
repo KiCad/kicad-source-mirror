@@ -1,6 +1,6 @@
 /**********************************************************************/
 /* fonctions membres des classes utilisees dans pcbnew (voir pcbstruct.h */
-/*	  sauf routines relatives aux pistes (voir class_track.cpp)		  */
+/*    sauf routines relatives aux pistes (voir class_track.cpp)       */
 /**********************************************************************/
 
 #include "fctsys.h"
@@ -198,31 +198,31 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
         LIGHTGRAY
     };
 
-    m_CopperLayerCount = 2;                         // Default design is a double sided board
-    m_ViaDrill = 250;                               // defualt via drill (for the entire board)
-    m_ViaDrillCustomValue = 250;                    // via drill for vias which must have a defined drill value
-    m_CurrentViaSize    = 450;                      // Current via size
-    m_CurrentViaType    = VIA_THROUGH;              // via type (VIA_BLIND_BURIED, VIA_THROUGH VIA_MICROVIA)
-    m_CurrentTrackWidth = 170;                      // current track width
+    m_CopperLayerCount      = 2;                    // Default design is a double sided board
+    m_ViaDrill              = 250;                  // defualt via drill (for the entire board)
+    m_ViaDrillCustomValue   = 250;                  // via drill for vias which must have a defined drill value
+    m_CurrentViaSize        = 450;                  // Current via size
+    m_CurrentViaType        = VIA_THROUGH;          // via type (VIA_BLIND_BURIED, VIA_THROUGH VIA_MICROVIA)
+    m_CurrentTrackWidth     = 170;                  // current track width
     m_UseConnectedTrackWidth = false;               // if true, when creating a new track starting on an existing track, use this track width
-    m_MicroViaDrill = 50;                           // micro via drill (for the entire board)
-    m_CurrentMicroViaSize = 150;                    // Current micro via size
-    m_MicroViasAllowed    = false;                  // true to allow micro vias
-    m_DrawSegmentWidth = 100;                       // current graphic line width (not EDGE layer)
-    m_EdgeSegmentWidth = 100;                       // current graphic line width (EDGE layer only)
-    m_PcbTextWidth     = 100;                       // current Pcb (not module) Text width
-    m_PcbTextSize      = wxSize( 500, 500 );        // current Pcb (not module) Text size
-    m_TrackClearance   = 100;                       // track to track and track to pads clearance
-    m_TrackMinWidth    = 80;                        // track min value for width ((min copper size value
-    m_ViasMinSize      = 350;                       // vias (not micro vias) min diameter
-    m_MicroViasMinSize = 200;                       // micro vias (not vias) min diameter
-    m_MaskMargin = 150;                             // Solder mask margin
+    m_MicroViaDrill         = 50;                   // micro via drill (for the entire board)
+    m_CurrentMicroViaSize   = 150;                  // Current micro via size
+    m_MicroViasAllowed      = false;                // true to allow micro vias
+    m_DrawSegmentWidth      = 100;                  // current graphic line width (not EDGE layer)
+    m_EdgeSegmentWidth      = 100;                  // current graphic line width (EDGE layer only)
+    m_PcbTextWidth          = 100;                  // current Pcb (not module) Text width
+    m_PcbTextSize           = wxSize( 500, 500 );   // current Pcb (not module) Text size
+    m_TrackClearance        = 100;                  // track to track and track to pads clearance
+    m_TrackMinWidth         = 80;                   // track min value for width ((min copper size value
+    m_ViasMinSize           = 350;                  // vias (not micro vias) min diameter
+    m_MicroViasMinSize      = 200;                  // micro vias (not vias) min diameter
+    m_MaskMargin            = 150;                  // Solder mask margin
     /* Color options for screen display of the Printed Board: */
 
 
 //@@IMB: Not used    m_PcbGridColor = DARKGRAY;                      // Grid color
 
-    m_EnabledLayers     = 0x1fffffff;               // IMB: All layers enabled at first. TODO: Use a macro for the initial value.
+    m_EnabledLayers     = ALL_LAYERS;               // All layers enabled at first.
     m_VisibleLayers     = 0xffffffff;               // IMB: All layers visible at first. TODO: Use a macro for the initial value.
     m_VisibleElements   = 0x00000fff;               // IMB: All elements visible at first. TODO: Use a macro for the initial value.
 
@@ -252,45 +252,28 @@ int EDA_BoardDesignSettings::GetVisibleLayers() const
     return m_VisibleLayers;
 }
 
-void EDA_BoardDesignSettings::SetVisibleLayers( int Mask )
+void EDA_BoardDesignSettings::SetVisibleLayers( int aMask )
 {
-    m_VisibleLayers = Mask & 0x1fffffff;
+    m_VisibleLayers = aMask & m_EnabledLayers & ALL_LAYERS;
 }
 
-/* //@@IMB: Made inline
-bool EDA_BoardDesignSettings::IsLayerVisible( int LayerNumber ) const
+void EDA_BoardDesignSettings::SetLayerVisibility( int aLayerIndex, bool aNewState )
 {
-    if( LayerNumber < 0 || LayerNumber >= 32 ) //@@IMB: Altough Pcbnew uses only 29, Gerbview uses all 32 layers
-        return false;
-    return (bool)( m_VisibleLayers & 1 << LayerNumber );
-}
-*/
-
-void EDA_BoardDesignSettings::SetLayerVisibility( int LayerNumber, bool State )
-{
-    if( LayerNumber < 0 || LayerNumber >= 32 ) //@@IMB: Altough Pcbnew uses only 29, Gerbview uses all 32 layers
+    // Altough Pcbnew uses only 29, Gerbview uses all 32 layers
+    if( aLayerIndex < 0 || aLayerIndex >= 32 )
         return;
-    if( State )
-        m_VisibleLayers |= 1 << LayerNumber;
+    if( aNewState && IsLayerEnabled( aLayerIndex ))
+        m_VisibleLayers |= 1 << aLayerIndex;
     else
-        m_VisibleLayers &= ~( 1 << LayerNumber );
+        m_VisibleLayers &= ~( 1 << aLayerIndex );
 }
 
-/* //@@IMB: Made inline
-bool EDA_BoardDesignSettings::IsElementVisible( int ElementNumber ) const
+void EDA_BoardDesignSettings::SetElementVisibility( int aElementCategory, bool aNewState )
 {
-    if( ElementNumber < 0 || ElementNumber > PAD_CMP_VISIBLE )
-        return false;
-    return (bool)( m_VisibleElements & 1 << ElementNumber );
-}
-*/
-
-void EDA_BoardDesignSettings::SetElementVisibility( int ElementNumber, bool State )
-{
-    if( ElementNumber < 0 || ElementNumber > PAD_CMP_VISIBLE )
+    if( aElementCategory < 0 || aElementCategory > PAD_CMP_VISIBLE )
         return;
-    if( State )
-        m_VisibleElements |= 1 << ElementNumber;
+    if( aNewState )
+        m_VisibleElements |= 1 << aElementCategory;
     else
-        m_VisibleElements &= ~( 1 << ElementNumber );
+        m_VisibleElements &= ~( 1 << aElementCategory );
 }

@@ -45,6 +45,7 @@ void Dialog_GeneralOptions::init()
     wxString timevalue;
     timevalue << g_TimeOut / 60;
     m_SaveTime->SetValue( timevalue );
+/*
     int layer_count[] = {1,2,4,6,8,10,12,14,16};
     m_LayerNumber->SetSelection(1);
     for ( unsigned ii = 0; ii < sizeof(layer_count); ii++ )
@@ -54,7 +55,7 @@ void Dialog_GeneralOptions::init()
         m_LayerNumber->SetSelection(ii);
         break;
     }
-
+*/
     m_MaxShowLinks->SetValue( g_MaxLinksShowed );
 
     m_DrcOn->SetValue( Drc_On );
@@ -103,10 +104,11 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
     g_TimeOut = 60 * m_SaveTime->GetValue();
 
     /* Mise a jour de la combobox d'affichage de la couche active */
+/*
     int layer_count[] = {1,2,4,6,8,10,12,14,16};
     g_DesignSettings.m_CopperLayerCount = layer_count[m_LayerNumber->GetSelection()];
     m_Parent->ReCreateLayerBox( NULL );
-
+*/
     g_MaxLinksShowed = m_MaxShowLinks->GetValue();
     Drc_On = m_DrcOn->GetValue();
     if( g_Show_Ratsnest != m_ShowGlobalRatsnest->GetValue() )
