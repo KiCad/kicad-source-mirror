@@ -121,7 +121,6 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
     {
     case DRAW_NOCONNECT_STRUCT_TYPE:
 
-//			if( !flags ) PopMenu->Append(ID_POPUP_SCH_MOVE_ITEM_REQUEST, "Move Noconnect");
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Noconn" ),
                       delete_xpm );
         break;
@@ -309,7 +308,8 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
                                _( "Orient Component" ), orient_xpm );
 
     wxMenu* editmenu = new wxMenu;
-    ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_CMP, _( "Edit" ),
+    msg = AddHotkeyName( _( "Edit" ), s_Schematic_Hokeys_Descr, HK_EDIT_COMPONENT );
+    ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_CMP, msg,
                   edit_component_xpm );
 
     if( libEntry && libEntry->m_Options != ENTRY_POWER )
@@ -373,10 +373,14 @@ void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
 /* Add menu commands for a Global Label
  */
     wxMenu* menu_change_type = new wxMenu;
+    wxString msg;
 
     if( !GLabel->m_Flags )
+    {
+        msg = AddHotkeyName( _( "Move Global Label" ), s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
-                      _( "Move Global Label" ), move_text_xpm );
+                      msg, move_text_xpm );
+    }
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT,
                   _( "Rotate Global Label" ), rotate_glabel_xpm );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT,
@@ -404,10 +408,14 @@ void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
 /* Add menu commands for a hierarchical Label
  */
     wxMenu* menu_change_type = new wxMenu;
+    wxString msg;
 
     if( !HLabel->m_Flags )
+    {
+        msg = AddHotkeyName( _( "Move Hierarchical Label" ), s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
-                      _( "Move Hierarchical Label" ), move_text_xpm );
+                      msg, move_text_xpm );
+    }
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT,
                   _( "Rotate Hierarchical Label" ), rotate_glabel_xpm );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT,
@@ -435,10 +443,14 @@ void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
 /* Add menu commands for a Label
  */
     wxMenu* menu_change_type = new wxMenu;
+    wxString msg;
 
     if( !Label->m_Flags )
+    {
+        msg = AddHotkeyName( _( "Move Label" ), s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
-                      _( "Move Label" ), move_text_xpm );
+                      msg, move_text_xpm );
+    }
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT,
                   _( "Rotate Label" ), rotate_pos_xpm );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT,

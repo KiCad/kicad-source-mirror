@@ -102,7 +102,11 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
     dlg.SetComponentName( lastCommponentName );
 
     if ( dlg.ShowModal() == wxID_CANCEL )
+    {
+        DrawPanel->m_IgnoreMouseEvents = FALSE;
+        DrawPanel->MouseToCursorSchema();
         return NULL;
+    }
 
     if( dlg.m_GetExtraFunction )
     {
