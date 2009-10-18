@@ -26,7 +26,7 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
     if( m_HToolBar  == NULL )
     {
         m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR,
-                                         TRUE );
+                                         true );
         SetToolBar( m_HToolBar );
 
         // Set up toolbar
@@ -86,7 +86,7 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
         m_HToolBar->AddTool( ID_LIBVIEW_VIEWDOC, wxEmptyString,
                              wxBitmap( datasheet_xpm ),
                              _( "View component documents" ) );
-        m_HToolBar->EnableTool( ID_LIBVIEW_VIEWDOC, FALSE );
+        m_HToolBar->EnableTool( ID_LIBVIEW_VIEWDOC, false );
 
         if( m_Semaphore )   // The lib browser is called from a "load component" command
         {
@@ -119,12 +119,23 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
     }
 
     // Must be AFTER Realize():
-    m_HToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT,
-                            (m_convert <= 1) ? TRUE : FALSE );
-    m_HToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT,
-                            (m_convert >= 2) ? TRUE : FALSE );
-    m_HToolBar->EnableTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, asdeMorgan );
-    m_HToolBar->EnableTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, asdeMorgan );
+    if( asdeMorgan )
+    {
+        m_HToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT,
+                                (m_convert <= 1) ? true : false );
+        m_HToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT,
+                                (m_convert >= 2) ? true : false );
+        m_HToolBar->EnableTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, true );
+        m_HToolBar->EnableTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, true );
+    }
+    else
+    {
+        m_HToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, true  );
+        m_HToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, false );
+        m_HToolBar->EnableTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, false );
+        m_HToolBar->EnableTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, false );
+    }
+
 
     int jj = 1;
     if( component )
@@ -137,7 +148,7 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
         SelpartBox->Append( msg );
     }
 
-    SelpartBox->SetSelection( m_unit - 1 );
+    SelpartBox->SetSelection( (m_unit > 0 ) ? m_unit - 1 : 0 );
     SelpartBox->Enable( component && component->HasConversion() );
 
     m_HToolBar->EnableTool( ID_LIBVIEW_VIEWDOC,

@@ -510,9 +510,9 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE,
                       _( "Set ALL Tracks and Vias to NetClass Values" ), width_track_via_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_ALL_VIAS_SIZE,
-                      _( "Set ALL Vias (No Track)to NetClass Values" ), width_vias_xpm );
+                      _( "Set ALL Vias (No Track) to NetClass Values" ), width_vias_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_ALL_TRACK_SIZE,
-                      _( "Set ALL Tracks (No Via)to NetClass Values" ), width_track_xpm );
+                      _( "Set ALL Tracks (No Via) to NetClass Values" ), width_track_xpm );
     }
 
     // Delete control:

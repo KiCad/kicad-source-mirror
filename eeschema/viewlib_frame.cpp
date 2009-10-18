@@ -458,8 +458,8 @@ void WinEDA_ViewlibFrame::ClickOnCmpList( wxCommandEvent& event )
     {
         m_entryName = name;
         DisplayLibInfos();
-        m_unit    = 0;
-        m_convert = 0;
+        m_unit    = 1;
+        m_convert = 1;
         Zoom_Automatique( false );
         ReCreateHToolbar();
         DrawPanel->Refresh();
