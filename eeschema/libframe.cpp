@@ -48,6 +48,8 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::m_lastDrawItem = NULL;
 LIB_DRAW_ITEM* WinEDA_LibeditFrame::m_drawItem = NULL;
 bool WinEDA_LibeditFrame::m_showDeMorgan = false;
 wxSize WinEDA_LibeditFrame::m_clientSize = wxSize( -1, -1 );
+int WinEDA_LibeditFrame::m_textSize = DEFAULT_SIZE_TEXT;
+int WinEDA_LibeditFrame::m_textOrientation = TEXT_ORIENT_HORIZ;
 
 
 /*****************************/
@@ -155,6 +157,8 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
     m_Draw_Grid = true;             // true pour avoir la axes dessinee
     m_ConfigPath = wxT( "LibraryEditor" );
     SetShowDeMorgan( false );
+    m_drawSpecificConvert = true;
+    m_drawSpecificUnit = false;
 
     // Give an icon
     SetIcon( wxIcon( libedit_xpm ) );

@@ -129,12 +129,6 @@ extern struct EESchemaVariables g_EESchemaVar;
 /* Variables globales pour Schematic Edit */
 extern int      g_DefaultTextLabelSize;
 
-/* Variables globales pour LibEdit */
-extern int      g_LastTextSize;
-extern int      g_LastTextOrient;
-
-extern bool     g_FlDrawSpecificUnit;
-extern bool     g_FlDrawSpecificConvert;
 
 /********************************************************/
 /* Description des structures des parametres principaux */

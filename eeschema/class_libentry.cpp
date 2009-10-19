@@ -1239,35 +1239,37 @@ LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int unit, int convert,
  *                         Otherwise NULL.
  */
 LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int unit, int convert,
-                                              KICAD_T type, const wxPoint& pt, const int aTransMat[2][2] )
+                                              KICAD_T type, const wxPoint& pt,
+                                              const int aTransMat[2][2] )
 {
-    /* we use LocateDrawItem( int unit, int convert, KICAD_T type, const wxPoint& pt )
-     * to search items.
+    /* we use LocateDrawItem( int unit, int convert, KICAD_T type, const
+     * wxPoint& pt ) to search items.
      * because this function uses DefaultTransformMatrix as orient/mirror matrix
      * we temporary copy aTransMat in DefaultTransformMatrix
-    */
+     */
     LIB_DRAW_ITEM * item;
     int matrix[2][2];
-    for ( int ii =0; ii<2;ii++ )
+    for ( int ii = 0; ii < 2; ii++ )
     {
-        for ( int jj =0; jj<2;jj++ )
+        for ( int jj = 0; jj < 2; jj++ )
         {
             matrix[ii][jj] = aTransMat[ii][jj];
-            EXCHG(matrix[ii][jj], DefaultTransformMatrix[ii][jj]);
+            EXCHG( matrix[ii][jj], DefaultTransformMatrix[ii][jj] );
         }
     }
     item = LocateDrawItem( unit, convert, type, pt );
     //Restore matrix
-    for ( int ii =0; ii<2;ii++ )
+    for ( int ii = 0; ii < 2; ii++ )
     {
-        for ( int jj =0; jj<2;jj++ )
+        for ( int jj = 0; jj < 2; jj++ )
         {
-            EXCHG(matrix[ii][jj], DefaultTransformMatrix[ii][jj]);
+            EXCHG( matrix[ii][jj], DefaultTransformMatrix[ii][jj] );
         }
     }
 
     return item;
 }
+
 
 void LIB_COMPONENT::SetPartCount( int count )
 {
@@ -1335,7 +1337,8 @@ void LIB_COMPONENT::SetConversion( bool asConvert )
     }
     else
     {
-        // Delete converted shape items becuase the converted shape does not exist
+        // Delete converted shape items becuase the converted shape does
+        // not exist
         LIB_DRAW_ITEM_LIST::iterator i = m_Drawings.begin();
 
         while( i != m_Drawings.end() )

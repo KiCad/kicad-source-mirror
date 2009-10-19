@@ -51,8 +51,8 @@ void WinEDA_bodygraphics_PropertiesFrame::bodygraphics_PropertiesAccept( wxComma
     if( item == NULL )
         return;
 
-    g_FlDrawSpecificConvert = m_CommonConvert->GetValue() ? FALSE : TRUE;
-    g_FlDrawSpecificUnit    = m_CommonUnit->GetValue() ? FALSE : TRUE;
+    m_Parent->m_drawSpecificConvert = m_CommonConvert->GetValue() ? false : true;
+    m_Parent->m_drawSpecificUnit    = m_CommonUnit->GetValue() ? false : true;
 
     if( m_Filled )
         FlSymbol_Fill = (FILL_T) m_Filled->GetSelection();
@@ -68,49 +68,20 @@ void WinEDA_bodygraphics_PropertiesFrame::bodygraphics_PropertiesAccept( wxComma
     item->Draw( m_Parent->DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode,
                 NULL, DefaultTransformMatrix );
 
-    if( g_FlDrawSpecificUnit )
+    if( m_Parent->m_drawSpecificUnit )
         item->m_Unit = m_Parent->GetUnit();
     else
         item->m_Unit = 0;
 
-    if( g_FlDrawSpecificConvert )
+    if( m_Parent->m_drawSpecificConvert )
         item->m_Convert = m_Parent->GetConvert();
     else
         item->m_Convert = 0;
 
-    if( m_Filled  )
+    if( m_Filled )
     {
-        switch( item->Type() )
-        {
-        case COMPONENT_ARC_DRAW_TYPE:
-            ( (LIB_ARC*) item )->m_Fill  = FlSymbol_Fill;
-            ( (LIB_ARC*) item )->m_Width =
-                m_GraphicShapeWidthCtrl->GetValue();
-            break;
-
-        case COMPONENT_CIRCLE_DRAW_TYPE:
-            ( (LIB_CIRCLE*) item )->m_Fill  = FlSymbol_Fill;
-            ( (LIB_CIRCLE*) item )->m_Width =
-                m_GraphicShapeWidthCtrl->GetValue();
-            break;
-
-        case COMPONENT_RECT_DRAW_TYPE:
-            ( (LIB_RECTANGLE*) item )->m_Fill  = FlSymbol_Fill;
-            ( (LIB_RECTANGLE*) item )->m_Width =
-                m_GraphicShapeWidthCtrl->GetValue();
-            break;
-
-        case COMPONENT_POLYLINE_DRAW_TYPE:
-            ( (LIB_POLYLINE*) item )->m_Fill =
-                FlSymbol_Fill;
-            ( (LIB_POLYLINE*) item )->m_Width =
-                m_GraphicShapeWidthCtrl->GetValue();
-            break;
-
-        default:
-            break;
-        }
-
+        item->m_Fill = FlSymbol_Fill;
+        item->SetWidth( m_GraphicShapeWidthCtrl->GetValue() );
         item->GetParent()->GetDrawItemList().sort();
 
         m_Parent->GetScreen()->SetModify();
@@ -254,8 +225,8 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry,
         LIB_TEXT* Text = new LIB_TEXT( LibEntry );
 
         m_drawItem = Text;
-        Text->m_Size.x  = Text->m_Size.y = g_LastTextSize;
-        Text->m_Orient  = g_LastTextOrient;
+        Text->m_Size.x  = Text->m_Size.y = m_textSize;
+        Text->m_Orient  = m_textOrientation;
         Text->m_Pos   = GetScreen()->m_Curseur;
         NEGATE( Text->m_Pos.y );
         EditSymbolText( NULL, Text );
@@ -284,9 +255,9 @@ error" ) );
     if( m_drawItem )
     {
         m_drawItem->m_Flags |= IS_NEW;
-        if( g_FlDrawSpecificUnit )
+        if( m_drawSpecificUnit )
             m_drawItem->m_Unit = m_unit;
-        if( g_FlDrawSpecificConvert )
+        if( m_drawSpecificConvert )
             m_drawItem->m_Convert = m_convert;
     }
 

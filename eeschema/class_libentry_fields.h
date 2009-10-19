@@ -154,6 +154,7 @@ protected:
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] );
     virtual int DoGetWidth( void ) { return m_Width; }
+    virtual void DoSetWidth( int width ) { m_Width = width; }
 };
 
 #endif  //  CLASS_LIBENTRY_FIELDS_H

@@ -301,7 +301,7 @@ public:
      * @return int - Width of draw object.
      */
     int GetWidth( void ) { return DoGetWidth(); }
-
+    void SetWidth( int width ) { DoSetWidth( width ); }
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy() = 0;
@@ -326,6 +326,7 @@ protected:
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] ) = 0;
     virtual int DoGetWidth( void ) = 0;
+    virtual void DoSetWidth( int width ) = 0;
 };
 
 
@@ -474,6 +475,7 @@ protected:
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] );
     virtual int DoGetWidth( void ) { return m_Width; }
+    virtual void DoSetWidth( int width ) { m_Width = width; }
 };
 
 
@@ -563,6 +565,7 @@ protected:
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] );
     virtual int DoGetWidth( void ) { return m_Width; }
+    virtual void DoSetWidth( int width ) { m_Width = width; }
 };
 
 
@@ -648,6 +651,7 @@ protected:
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] );
     virtual int DoGetWidth( void ) { return m_Width; }
+    virtual void DoSetWidth( int width ) { m_Width = width; }
 };
 
 
@@ -744,6 +748,7 @@ protected:
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] );
     virtual int DoGetWidth( void ) { return m_Width; }
+    virtual void DoSetWidth( int width ) { m_Width = width; }
 };
 
 
@@ -829,6 +834,7 @@ protected:
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] );
     virtual int DoGetWidth( void ) { return m_Width; }
+    virtual void DoSetWidth( int width ) { m_Width = width; }
 };
 
 /**********************************/
@@ -913,6 +919,7 @@ protected:
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] );
     virtual int DoGetWidth( void ) { return m_Width; }
+    virtual void DoSetWidth( int width ) { m_Width = width; }
 };
 
 
@@ -1006,6 +1013,7 @@ protected:
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] );
     virtual int DoGetWidth( void ) { return m_Width; }
+    virtual void DoSetWidth( int width ) { m_Width = width; }
 };
 
 /**********************************************************/
@@ -1099,6 +1107,7 @@ protected:
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const int transform[2][2] );
     virtual int DoGetWidth( void ) { return m_Width; }
+    virtual void DoSetWidth( int width ) { m_Width = width; }
 };
 
 #endif  //  CLASSES_BODY_ITEMS_H

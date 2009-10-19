@@ -13,6 +13,9 @@ class CMP_LIBRARY;
 class LIB_COMPONENT;
 class LIB_ALIAS;
 class LIB_DRAW_ITEM;
+class WinEDA_bodygraphics_PropertiesFrame;
+class Dialog_BodyGraphicText_Properties;
+
 
 /**
  * The component library editor main window.
@@ -187,20 +190,43 @@ protected:
     wxString              m_LastLibImportPath;
     wxString              m_LastLibExportPath;
 
-    static LIB_COMPONENT* m_component;          // The current edited component (NULL if no component)
-    static CMP_LIBRARY*   m_library;            // The current active libary (NULL if none)
+    /// Convert of the item currently being drawn.
+    bool                  m_drawSpecificConvert;
+    bool                  m_drawSpecificUnit;
+
+    // The current edited component (NULL if no component)
+    static LIB_COMPONENT* m_component;
+
+    // The current active libary (NULL if none)
+    static CMP_LIBRARY*   m_library;
     static LIB_DRAW_ITEM* m_lastDrawItem;
     static LIB_DRAW_ITEM* m_drawItem;
     static wxString       m_aliasName;
-    static int            m_unit;               // The unit number to edit and show
-    static int            m_convert;            // Show the normal shape ( m_convert <= 1 )
-                                                // or the converted shape ( m_convert > 1 )
-    static bool           m_showDeMorgan;       // true to force DeMorgan/normal tools selection enabled
-                                                // They are enabled when the loaded component has
-                                                // Graphic items for converted shape
-                                                // But under some circumstances (New component created)
-                                                // these tools must left enable
+
+    // The unit number to edit and show
+    static int            m_unit;
+
+    // Show the normal shape ( m_convert <= 1 ) or the converted shape
+    // ( m_convert > 1 )
+    static int            m_convert;
+
+    // true to force DeMorgan/normal tools selection enabled.
+    // They are enabled when the loaded component has
+    // Graphic items for converted shape
+    // But under some circumstances (New component created)
+    // these tools must left enable
+    static bool           m_showDeMorgan;
+
+    /// The current text size setting.
+    static int            m_textSize;
+
+    /// Current text orientation setting.
+    static int            m_textOrientation;
+
     static wxSize         m_clientSize;
+
+    friend class WinEDA_bodygraphics_PropertiesFrame;
+    friend class Dialog_BodyGraphicText_Properties;
 
     DECLARE_EVENT_TABLE()
 };

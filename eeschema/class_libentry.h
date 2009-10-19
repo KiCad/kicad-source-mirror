@@ -194,8 +194,9 @@ public:
      * @param transformMatrix - Cooridinate adjustment settings.
      * @param showPinText - Show pin text if true.
      * @param drawFields - Draw field text if true otherwise just draw
-     *        body items (useful to draw a body in schematic,
-     *        because fields of schematic components replace the lib component fields).
+     *                     body items (useful to draw a body in schematic,
+     *                     because fields of schematic components replace
+     *                     the lib component fields).
      * @param onlySelected - Draws only the body items that are selected.
      *                       Used for block move redraws.
      */
@@ -401,7 +402,8 @@ public:
      *                         Otherwise NULL.
      */
     LIB_DRAW_ITEM* LocateDrawItem( int unit, int convert, KICAD_T type,
-                                   const wxPoint& pt, const int aTransMat[2][2] );
+                                   const wxPoint& pt,
+                                   const int aTransMat[2][2] );
 
     /**
      * Return a reference to the draw item list.
@@ -444,10 +446,6 @@ public:
  *
  * Component aliases are not really components.  They are references
  * to an actual component object.
- *
- * @todo Alias objects should really be defined as children of a component
- *       object not as children of a library object.  This would greatly
- *       simplify searching for components in libraries.
  */
 class LIB_ALIAS : public CMP_LIB_ENTRY
 {

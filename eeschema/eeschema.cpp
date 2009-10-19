@@ -47,13 +47,6 @@ struct EESchemaVariables g_EESchemaVar;
 /* Variables globales pour Schematic Edit */
 int       g_DefaultTextLabelSize = DEFAULT_SIZE_TEXT;
 
-/* Variables globales pour LibEdit */
-int       g_LastTextSize = DEFAULT_SIZE_TEXT;
-int       g_LastTextOrient = TEXT_ORIENT_HORIZ;
-
-bool      g_FlDrawSpecificUnit = FALSE;
-bool      g_FlDrawSpecificConvert = TRUE;
-
 HPGL_Pen_Descr_Struct g_HPGL_Pen_Descr;
 
 //SCH_SCREEN * ScreenSch;

@@ -112,15 +112,15 @@ void Dialog_BodyGraphicText_Properties::InitDialog(  )
     }
     else
     {
-        msg = ReturnStringFromValue( g_UnitMetric, g_LastTextSize,
+        msg = ReturnStringFromValue( g_UnitMetric, m_Parent->m_textSize,
                                      m_Parent->m_InternalUnits );
         m_TextSize->SetValue( msg );
 
-        if ( ! g_FlDrawSpecificUnit )
+        if ( ! m_Parent->m_drawSpecificUnit )
             m_CommonUnit->SetValue( TRUE );
-        if ( ! g_FlDrawSpecificConvert )
+        if ( ! m_Parent->m_drawSpecificConvert )
             m_CommonConvert->SetValue( TRUE );
-        if ( g_LastTextOrient == TEXT_ORIENT_VERT )
+        if ( m_Parent->m_textOrientation == TEXT_ORIENT_VERT )
             m_Orient->SetValue( TRUE );
     }
 
@@ -149,12 +149,13 @@ void Dialog_BodyGraphicText_Properties::OnOkClick( wxCommandEvent& event )
     wxString Line;
 
     Line = m_TextValue->GetValue();
-    g_LastTextOrient = m_Orient->GetValue() ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
+    m_Parent->m_textOrientation =
+        m_Orient->GetValue() ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
     wxString msg = m_TextSize->GetValue();
-    g_LastTextSize = ReturnValueFromString(g_UnitMetric, msg,
-                                           m_Parent->m_InternalUnits);
-    g_FlDrawSpecificConvert = m_CommonConvert->GetValue() ? FALSE : TRUE;
-    g_FlDrawSpecificUnit = m_CommonUnit->GetValue() ? FALSE : TRUE;
+    m_Parent->m_textSize = ReturnValueFromString( g_UnitMetric, msg,
+                                                  m_Parent->m_InternalUnits );
+    m_Parent->m_drawSpecificConvert = m_CommonConvert->GetValue() ? false : true;
+    m_Parent->m_drawSpecificUnit = m_CommonUnit->GetValue() ? false : true;
 
     if ( m_GraphicText )
     {
@@ -163,15 +164,15 @@ void Dialog_BodyGraphicText_Properties::OnOkClick( wxCommandEvent& event )
         else
             m_GraphicText->m_Text = wxT("[null]");
 
-        m_GraphicText->m_Size.x = m_GraphicText->m_Size.y = g_LastTextSize;
-        m_GraphicText->m_Orient = g_LastTextOrient;
+        m_GraphicText->m_Size.x = m_GraphicText->m_Size.y = m_Parent->m_textSize;
+        m_GraphicText->m_Orient = m_Parent->m_textOrientation;
 
-        if( g_FlDrawSpecificUnit )
+        if( m_Parent->m_drawSpecificUnit )
             m_GraphicText->m_Unit = m_Parent->GetUnit();
         else
             m_GraphicText->m_Unit = 0;
 
-        if( g_FlDrawSpecificConvert )
+        if( m_Parent->m_drawSpecificConvert )
             m_GraphicText->m_Convert = m_Parent->GetConvert();
         else
             m_GraphicText->m_Convert = 0;

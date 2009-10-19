@@ -62,7 +62,7 @@ WinEDA_bodygraphics_PropertiesFrame::WinEDA_bodygraphics_PropertiesFrame( WinEDA
 		if ( CurrentItem->m_Unit == 0 )
             m_CommonUnit->SetValue( TRUE );
 	}
-	else if ( ! g_FlDrawSpecificUnit )
+	else if ( ! m_Parent->m_drawSpecificUnit )
     {
         m_CommonUnit->SetValue( TRUE );
     }
@@ -72,7 +72,7 @@ WinEDA_bodygraphics_PropertiesFrame::WinEDA_bodygraphics_PropertiesFrame( WinEDA
 		if ( CurrentItem->m_Convert == 0 )
             m_CommonConvert->SetValue( TRUE );
 	}
-	else if ( !g_FlDrawSpecificConvert )
+	else if ( !m_Parent->m_drawSpecificConvert )
     {
         m_CommonConvert->SetValue( TRUE );
     }
