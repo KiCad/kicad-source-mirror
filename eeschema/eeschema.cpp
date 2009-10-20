@@ -68,10 +68,6 @@ LayerStruct g_LayerDescr;            /* couleurs des couches  */
 bool g_EditPinByPinIsOn = false;   /* true to do not synchronize pins edition
                                              *  when they are at the same location */
 
-int  g_LibSymbolDefaultLineWidth = 0; /* default line width  (in EESCHEMA units)
-                                                    *  used when creating a new graphic item in libedit.
-                                                    *  0 = use default line thicknes
-                                                    */
 int  g_DrawDefaultLineThickness = 6; /* Default line (in EESCHEMA units) thickness
                                                    *  used to draw/plot items having a default thickness line value (i.e. = 0 ).
                                                    *  0 = single pixel line width

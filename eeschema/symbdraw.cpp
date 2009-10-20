@@ -18,6 +18,7 @@
 #include "protos.h"
 #include "libeditfrm.h"
 #include "class_libentry.h"
+#include "dialog_lib_edit_draw_item.h"
 
 
 /* Routines locales */
@@ -30,71 +31,6 @@ static void RedrawWhileMovingCursor( WinEDA_DrawPanel* panel,
 /* Variables locales */
 static int     StateDrawArc, ArcStartX, ArcStartY, ArcEndX, ArcEndY;
 static wxPoint InitPosition, StartCursor, ItemPreviousPos;
-static FILL_T  FlSymbol_Fill = NO_FILL;
-
-
-/************************************/
-/* class WinEDA_PartPropertiesFrame */
-/************************************/
-#include "dialog_cmp_graphic_properties.cpp"
-
-
-/************************************************************/
-void WinEDA_bodygraphics_PropertiesFrame::bodygraphics_PropertiesAccept( wxCommandEvent& event )
-/************************************************************/
-
-/* Update the current draw item
- */
-{
-    LIB_DRAW_ITEM* item = m_Parent->GetDrawItem();
-
-    if( item == NULL )
-        return;
-
-    m_Parent->m_drawSpecificConvert = m_CommonConvert->GetValue() ? false : true;
-    m_Parent->m_drawSpecificUnit    = m_CommonUnit->GetValue() ? false : true;
-
-    if( m_Filled )
-        FlSymbol_Fill = (FILL_T) m_Filled->GetSelection();
-
-    g_LibSymbolDefaultLineWidth = m_GraphicShapeWidthCtrl->GetValue();
-
-    if( !(item->m_Flags & IS_NEW) )  // if IS_NEW, copy for undo is done before place
-        m_Parent->SaveCopyInUndoList( item->GetParent() );
-    wxClientDC dc( m_Parent->DrawPanel );
-
-    m_Parent->DrawPanel->PrepareGraphicContext( &dc );
-
-    item->Draw( m_Parent->DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode,
-                NULL, DefaultTransformMatrix );
-
-    if( m_Parent->m_drawSpecificUnit )
-        item->m_Unit = m_Parent->GetUnit();
-    else
-        item->m_Unit = 0;
-
-    if( m_Parent->m_drawSpecificConvert )
-        item->m_Convert = m_Parent->GetConvert();
-    else
-        item->m_Convert = 0;
-
-    if( m_Filled )
-    {
-        item->m_Fill = FlSymbol_Fill;
-        item->SetWidth( m_GraphicShapeWidthCtrl->GetValue() );
-        item->GetParent()->GetDrawItemList().sort();
-
-        m_Parent->GetScreen()->SetModify();
-
-        item->Draw( m_Parent->DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode,
-                    NULL, DefaultTransformMatrix );
-    }
-
-    Close();
-
-    item->DisplayInfo( m_Parent );
-    m_Parent->DrawPanel->Refresh();
-}
 
 
 /*
@@ -105,9 +41,69 @@ void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
     if( DrawItem == NULL )
         return;
 
-    WinEDA_bodygraphics_PropertiesFrame dlg( this );
+    LIB_COMPONENT* component = DrawItem->GetParent();
 
-    dlg.ShowModal();
+    DIALOG_LIB_EDIT_DRAW_ITEM dlg( this, DrawItem->m_typeName );
+
+    dlg.SetWidthUnits( ReturnUnitSymbol( g_UnitMetric ) );
+
+    wxString val = ReturnStringFromValue( g_UnitMetric, m_drawLineWidth,
+                                          m_InternalUnits );
+    dlg.SetWidth( val );
+    dlg.SetApplyToAllUnits( !m_drawSpecificUnit );
+    dlg.EnableApplyToAllUnits( component && component->GetPartCount() > 1 );
+    dlg.SetApplyToAllConversions( !m_drawSpecificConvert );
+    dlg.EnableApplyToAllConversions( component && component->HasConversion() );
+    dlg.SetFillStyle( m_drawFillStyle );
+    dlg.EnableFillStyle( DrawItem->IsFillable() );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    val = dlg.GetWidth();
+    m_drawLineWidth       = ReturnValueFromString( g_UnitMetric, val,
+                                                   m_InternalUnits );
+    m_drawSpecificConvert = !dlg.GetApplyToAllConversions();
+    m_drawSpecificUnit    = !dlg.GetApplyToAllUnits();
+
+    if( DrawItem->IsFillable() )
+        m_drawFillStyle = (FILL_T) dlg.GetFillStyle();
+
+    // Save copy for undo is done before place.
+    if( !( DrawItem->m_Flags & IS_NEW ) )
+        SaveCopyInUndoList( DrawItem->GetParent() );
+
+    wxClientDC dc( DrawPanel );
+
+    DrawPanel->PrepareGraphicContext( &dc );
+
+    DrawItem->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode,
+                    NULL, DefaultTransformMatrix );
+
+    if( m_drawSpecificUnit )
+        DrawItem->m_Unit = GetUnit();
+    else
+        DrawItem->m_Unit = 0;
+
+    if( m_drawSpecificConvert )
+        DrawItem->m_Convert = GetConvert();
+    else
+        DrawItem->m_Convert = 0;
+
+    if( DrawItem->IsFillable() )
+        DrawItem->m_Fill = m_drawFillStyle;
+
+    DrawItem->SetWidth( m_drawLineWidth );
+
+    if( component )
+        component->GetDrawItemList().sort();
+    GetScreen()->SetModify();
+
+    DrawItem->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode,
+                    NULL, DefaultTransformMatrix );
+
+    DrawItem->DisplayInfo( this );
+    DrawPanel->Refresh();
 }
 
 
@@ -165,8 +161,8 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry,
         ArcStartX    = ArcEndX = GetScreen()->m_Curseur.x;
         ArcStartY    = ArcEndY = -( GetScreen()->m_Curseur.y );
         StateDrawArc = 1;
-        Arc->m_Fill  = FlSymbol_Fill;
-        Arc->m_Width = g_LibSymbolDefaultLineWidth;
+        Arc->m_Fill  = m_drawFillStyle;
+        Arc->m_Width = m_drawLineWidth;
     }
     break;
 
@@ -177,8 +173,8 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry,
         m_drawItem = Circle;
         Circle->m_Pos   = GetScreen()->m_Curseur;
         NEGATE( Circle->m_Pos.y );
-        Circle->m_Fill  = FlSymbol_Fill;
-        Circle->m_Width = g_LibSymbolDefaultLineWidth;
+        Circle->m_Fill  = m_drawFillStyle;
+        Circle->m_Width = m_drawLineWidth;
     }
     break;
 
@@ -190,8 +186,8 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry,
         Square->m_Pos   = GetScreen()->m_Curseur;
         NEGATE( Square->m_Pos.y );
         Square->m_End   = Square->m_Pos;
-        Square->m_Fill  = FlSymbol_Fill;
-        Square->m_Width = g_LibSymbolDefaultLineWidth;
+        Square->m_Fill  = m_drawFillStyle;
+        Square->m_Width = m_drawLineWidth;
     }
     break;
 
@@ -203,8 +199,8 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry,
         NEGATE( point.y );
         polyline->AddPoint( point );    // Start point of the current segment
         polyline->AddPoint( point );    // End point of the current segment
-        polyline->m_Fill  = FlSymbol_Fill;
-        polyline->m_Width = g_LibSymbolDefaultLineWidth;
+        polyline->m_Fill  = m_drawFillStyle;
+        polyline->m_Width = m_drawLineWidth;
     }
     break;
 
@@ -216,7 +212,7 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry,
         Segment->m_Pos  = GetScreen()->m_Curseur;
         NEGATE( Segment->m_Pos.y );
         Segment->m_End   = Segment->m_Pos;
-        Segment->m_Width = g_LibSymbolDefaultLineWidth;
+        Segment->m_Width = m_drawLineWidth;
     }
     break;
 
@@ -371,17 +367,19 @@ void WinEDA_LibeditFrame::StartMoveDrawSymbol( wxDC* DC )
 /****************************************************************/
 static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
-    int          DrawMode = g_XorMode;
-    int          dx, dy;
-    BASE_SCREEN* Screen   = panel->GetScreen();
-    wxPoint      curr_pos = Screen->m_Curseur;
-
+    int            dx, dy;
+    int            DrawMode  = g_XorMode;
+    BASE_SCREEN*   Screen    = panel->GetScreen();
+    wxPoint        curr_pos  = Screen->m_Curseur;
+    FILL_T         fillStyle = NO_FILL;
     LIB_DRAW_ITEM* item;
 
     item = ( ( WinEDA_LibeditFrame* ) panel->GetParent() )->GetDrawItem();
 
     if( item == NULL )
         return;
+
+    fillStyle = ( ( WinEDA_LibeditFrame* ) panel->GetParent() )->GetFillStyle();
 
     NEGATE( curr_pos.y );
 
@@ -427,7 +425,7 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
         {
             ComputeArc( (LIB_ARC*) item, Screen->m_Curseur );
         }
-        ( (LIB_ARC*) item )->m_Fill = FlSymbol_Fill;
+        item ->m_Fill = fillStyle;
         break;
 
     case COMPONENT_CIRCLE_DRAW_TYPE:
@@ -435,19 +433,19 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
         dy = ( (LIB_CIRCLE*) item )->m_Pos.y - curr_pos.y;
         ( (LIB_CIRCLE*) item )->m_Radius =
             (int) sqrt( ( (double) dx * dx ) + ( (double) dy * dy ) );
-        ( (LIB_CIRCLE*) item )->m_Fill = FlSymbol_Fill;
+        item->m_Fill = fillStyle;
         break;
 
     case COMPONENT_RECT_DRAW_TYPE:
         ( (LIB_RECTANGLE*) item )->m_End  = curr_pos;
-        ( (LIB_RECTANGLE*) item )->m_Fill = FlSymbol_Fill;
+        item->m_Fill = fillStyle;
         break;
 
     case COMPONENT_POLYLINE_DRAW_TYPE:
     {
         unsigned idx = ( (LIB_POLYLINE*) item )->GetCornerCount() - 1;
         ( (LIB_POLYLINE*) item )->m_PolyPoints[idx] = curr_pos;
-        ( (LIB_POLYLINE*) item )->m_Fill = FlSymbol_Fill;
+        item->m_Fill = fillStyle;
     }
     break;
 
@@ -525,19 +523,19 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
         switch( m_drawItem->Type() )
         {
         case COMPONENT_ARC_DRAW_TYPE:
-            ( (LIB_ARC*) m_drawItem )->m_Fill = FlSymbol_Fill;
+            ( (LIB_ARC*) m_drawItem )->m_Fill = m_drawFillStyle;
             break;
 
         case COMPONENT_CIRCLE_DRAW_TYPE:
-            ( (LIB_CIRCLE*) m_drawItem )->m_Fill = FlSymbol_Fill;
+            ( (LIB_CIRCLE*) m_drawItem )->m_Fill = m_drawFillStyle;
             break;
 
         case COMPONENT_RECT_DRAW_TYPE:
-            ( (LIB_RECTANGLE*) m_drawItem )->m_Fill = FlSymbol_Fill;
+            ( (LIB_RECTANGLE*) m_drawItem )->m_Fill = m_drawFillStyle;
             break;
 
         case COMPONENT_POLYLINE_DRAW_TYPE:
-            ( (LIB_POLYLINE*) m_drawItem )->m_Fill = FlSymbol_Fill;
+            ( (LIB_POLYLINE*) m_drawItem )->m_Fill = m_drawFillStyle;
             break;
 
         case COMPONENT_PIN_DRAW_TYPE:

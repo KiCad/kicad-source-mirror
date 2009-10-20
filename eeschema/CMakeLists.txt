@@ -42,7 +42,6 @@ set(EESCHEMA_SRCS
     dialog_bodygraphictext_properties_base.cpp
     dialog_build_BOM.cpp
     dialog_build_BOM_base.cpp
-#   dialog_cmp_graphic_properties.cpp
     dialog_edit_component_in_lib.cpp
     dialog_edit_component_in_lib_base.cpp
     dialog_edit_component_in_schematic_fbp.cpp
@@ -56,6 +55,8 @@ set(EESCHEMA_SRCS
     dialog_erc.cpp
     dialog_erc_base.cpp
 #   dialog_find.cpp
+    dialog_lib_edit_draw_item.cpp
+    dialog_lib_edit_draw_item_base.cpp
     dialog_lib_new_component.cpp
     dialog_lib_new_component_base.cpp
     dialog_options.cpp

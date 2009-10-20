@@ -43,16 +43,16 @@
 LIB_FIELD::LIB_FIELD(LIB_COMPONENT * aParent, int idfield ) :
     LIB_DRAW_ITEM( COMPONENT_FIELD_DRAW_TYPE, aParent )
 {
-    m_FieldId = idfield;
-    m_Size.x = m_Size.y = DEFAULT_SIZE_TEXT;
+    Init( idfield );
 }
+
 
 LIB_FIELD::LIB_FIELD( int idfield ) :
     LIB_DRAW_ITEM( COMPONENT_FIELD_DRAW_TYPE, NULL )
 {
-    m_FieldId = idfield;
-    m_Size.x = m_Size.y = DEFAULT_SIZE_TEXT;
+    Init( idfield );
 }
+
 
 LIB_FIELD::LIB_FIELD( const LIB_FIELD& field ) : LIB_DRAW_ITEM( field )
 {
@@ -72,6 +72,14 @@ LIB_FIELD::LIB_FIELD( const LIB_FIELD& field ) : LIB_DRAW_ITEM( field )
 
 LIB_FIELD::~LIB_FIELD()
 {
+}
+
+
+void LIB_FIELD::Init( int id )
+{
+    m_FieldId = id;
+    m_Size.x = m_Size.y = DEFAULT_SIZE_TEXT;
+    m_typeName = _( "Field" );
 }
 
 

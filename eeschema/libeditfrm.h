@@ -108,7 +108,7 @@ public:
 
     LIB_DRAW_ITEM* GetLastDrawItem( void ) { return m_lastDrawItem; }
 
-    void               SetLastDrawItem( LIB_DRAW_ITEM* drawItem )
+    void           SetLastDrawItem( LIB_DRAW_ITEM* drawItem )
     {
         m_lastDrawItem = drawItem;
     }
@@ -116,11 +116,13 @@ public:
 
     LIB_DRAW_ITEM* GetDrawItem( void ) { return m_drawItem; }
 
-    void SetDrawItem( LIB_DRAW_ITEM* drawItem );
+    void           SetDrawItem( LIB_DRAW_ITEM* drawItem );
 
-    bool               GetShowDeMorgan( void ) { return m_showDeMorgan; }
+    bool           GetShowDeMorgan( void ) { return m_showDeMorgan; }
 
-    void               SetShowDeMorgan( bool show ) { m_showDeMorgan = show; }
+    void           SetShowDeMorgan( bool show ) { m_showDeMorgan = show; }
+
+    FILL_T         GetFillStyle( void ) { return m_drawFillStyle; }
 
 private:
 
@@ -190,14 +192,27 @@ protected:
     wxString              m_LastLibImportPath;
     wxString              m_LastLibExportPath;
 
-    /// Convert of the item currently being drawn.
+    /** Convert of the item currently being drawn. */
     bool                  m_drawSpecificConvert;
+
+    /**
+     * Specify which component parts the current draw item applies to.
+     *
+     * If true, the item being drawn or edited applies only to the selected
+     * part.  Otherwise it applies to all parts in the component.
+     */
     bool                  m_drawSpecificUnit;
 
-    // The current edited component (NULL if no component)
+    /** The current draw or edit graphic item fill style. */
+    static FILL_T         m_drawFillStyle;
+
+    /** Default line width for drawing or editing graphic items. */
+    static int            m_drawLineWidth;
+
+    /** The current component being edited.  NULL if no component is selected. */
     static LIB_COMPONENT* m_component;
 
-    // The current active libary (NULL if none)
+    /** The current active libary.   NULL if no library is active. */
     static CMP_LIBRARY*   m_library;
     static LIB_DRAW_ITEM* m_lastDrawItem;
     static LIB_DRAW_ITEM* m_drawItem;
@@ -225,7 +240,6 @@ protected:
 
     static wxSize         m_clientSize;
 
-    friend class WinEDA_bodygraphics_PropertiesFrame;
     friend class Dialog_BodyGraphicText_Properties;
 
     DECLARE_EVENT_TABLE()

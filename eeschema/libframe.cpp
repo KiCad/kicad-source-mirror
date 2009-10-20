@@ -50,6 +50,8 @@ bool WinEDA_LibeditFrame::m_showDeMorgan = false;
 wxSize WinEDA_LibeditFrame::m_clientSize = wxSize( -1, -1 );
 int WinEDA_LibeditFrame::m_textSize = DEFAULT_SIZE_TEXT;
 int WinEDA_LibeditFrame::m_textOrientation = TEXT_ORIENT_HORIZ;
+int WinEDA_LibeditFrame::m_drawLineWidth = 0;
+FILL_T WinEDA_LibeditFrame::m_drawFillStyle = NO_FILL;
 
 
 /*****************************/

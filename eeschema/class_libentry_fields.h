@@ -40,11 +40,16 @@ public:
     LIB_FIELD( LIB_COMPONENT * aParent, int idfield = 2 );
     LIB_FIELD( const LIB_FIELD& field );
     ~LIB_FIELD();
+
     virtual wxString GetClass() const
     {
         return wxT( "LIB_FIELD" );
     }
 
+    /**
+     * Object constructor initialization helper.
+     */
+    void Init( int idfield );
 
     /** Function GetPenSize virtual pure
      * @return the size of the "pen" that be used to draw or plot this item

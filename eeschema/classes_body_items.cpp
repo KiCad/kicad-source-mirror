@@ -26,13 +26,14 @@ static int fill_tab[3] = { 'N', 'F', 'f' };
 LIB_DRAW_ITEM::LIB_DRAW_ITEM( KICAD_T struct_type, LIB_COMPONENT* aParent ) :
     EDA_BaseStruct( struct_type )
 {
-    m_Unit     = 0;  /* Unit identification (for multi part per package)
-                      *  0 if the item is common to all units */
-    m_Convert  = 0;  /* Shape identification (for parts which have a convert
-                      * shape) 0 if the item is common to all shapes */
-    m_Fill     = NO_FILL;
-    m_Parent   = (EDA_BaseStruct*) aParent;
-    m_typeName = _( "Undefined" );
+    m_Unit       = 0;  /* Unit identification (for multi part per package)
+                        *  0 if the item is common to all units */
+    m_Convert    = 0;  /* Shape identification (for parts which have a convert
+                        * shape) 0 if the item is common to all shapes */
+    m_Fill       = NO_FILL;
+    m_Parent     = (EDA_BaseStruct*) aParent;
+    m_typeName   = _( "Undefined" );
+    m_isFillable = false;
 }
 
 
@@ -44,6 +45,7 @@ LIB_DRAW_ITEM::LIB_DRAW_ITEM( const LIB_DRAW_ITEM& item ) :
     m_Fill = item.m_Fill;
     m_Parent = item.m_Parent;
     m_typeName = item.m_typeName;
+    m_isFillable = item.m_isFillable;
 }
 
 
@@ -117,12 +119,13 @@ bool LIB_DRAW_ITEM::operator<( const LIB_DRAW_ITEM& other ) const
 LIB_ARC::LIB_ARC( LIB_COMPONENT* aParent ) :
     LIB_DRAW_ITEM( COMPONENT_ARC_DRAW_TYPE, aParent )
 {
-    m_Radius   = 0;
-    m_t1       = 0;
-    m_t2       = 0;
-    m_Width    = 0;
-    m_Fill     = NO_FILL;
-    m_typeName = _( "Arc" );
+    m_Radius     = 0;
+    m_t1         = 0;
+    m_t2         = 0;
+    m_Width      = 0;
+    m_Fill       = NO_FILL;
+    m_isFillable = true;
+    m_typeName   = _( "Arc" );
 }
 
 
@@ -540,9 +543,10 @@ void LIB_ARC::DisplayInfo( WinEDA_DrawFrame* frame )
 LIB_CIRCLE::LIB_CIRCLE( LIB_COMPONENT* aParent ) :
     LIB_DRAW_ITEM( COMPONENT_CIRCLE_DRAW_TYPE, aParent )
 {
-    m_Radius   = 0;
-    m_Fill     = NO_FILL;
-    m_typeName = _( "Circle" );
+    m_Radius     = 0;
+    m_Fill       = NO_FILL;
+    m_isFillable = true;
+    m_typeName   = _( "Circle" );
 }
 
 
@@ -804,9 +808,10 @@ void LIB_CIRCLE::DisplayInfo( WinEDA_DrawFrame* frame )
 LIB_RECTANGLE::LIB_RECTANGLE( LIB_COMPONENT* aParent ) :
     LIB_DRAW_ITEM( COMPONENT_RECT_DRAW_TYPE, aParent )
 {
-    m_Width    = 0;
-    m_Fill     = NO_FILL;
-    m_typeName = _( "Rectangle" );
+    m_Width      = 0;
+    m_Fill       = NO_FILL;
+    m_isFillable = true;
+    m_typeName   = _( "Rectangle" );
 }
 
 
@@ -1309,9 +1314,10 @@ bool LIB_SEGMENT::HitTest( wxPoint aPosRef, int aThreshold,
 LIB_POLYLINE::LIB_POLYLINE( LIB_COMPONENT* aParent ) :
     LIB_DRAW_ITEM( COMPONENT_POLYLINE_DRAW_TYPE, aParent )
 {
-    m_Fill     = NO_FILL;
-    m_Width    = 0;
-    m_typeName = _( "PolyLine" );
+    m_Fill       = NO_FILL;
+    m_Width      = 0;
+    m_isFillable = true;
+    m_typeName   = _( "PolyLine" );
 }
 
 
@@ -1683,9 +1689,10 @@ void LIB_POLYLINE::DisplayInfo( WinEDA_DrawFrame* frame )
 LIB_BEZIER::LIB_BEZIER( LIB_COMPONENT* aParent ) :
     LIB_DRAW_ITEM( COMPONENT_BEZIER_DRAW_TYPE, aParent )
 {
-    m_Fill     = NO_FILL;
-    m_Width    = 0;
-    m_typeName = _( "Bezier" );
+    m_Fill       = NO_FILL;
+    m_Width      = 0;
+    m_isFillable = true;
+    m_typeName   = _( "Bezier" );
 }
 
 

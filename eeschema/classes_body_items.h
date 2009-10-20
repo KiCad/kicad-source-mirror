@@ -303,6 +303,16 @@ public:
     int GetWidth( void ) { return DoGetWidth(); }
     void SetWidth( int width ) { DoSetWidth( width ); }
 
+    /**
+     * Check if draw object can be filled.
+     *
+     * The default setting is false.  If the derived object support filling,
+     * set the m_isFillable member to true.
+     *
+     * @return bool - True if draw object can be fill.  Default is false.
+     */
+    bool IsFillable( void ) { return m_isFillable; }
+
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy() = 0;
 
@@ -327,6 +337,9 @@ protected:
                          const int transform[2][2] ) = 0;
     virtual int DoGetWidth( void ) = 0;
     virtual void DoSetWidth( int width ) = 0;
+
+    /** Flag to indicate if draw item is fillable.  Default is false. */
+    bool m_isFillable;
 };
 
 
