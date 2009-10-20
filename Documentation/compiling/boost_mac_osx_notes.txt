@@ -1,0 +1,72 @@
+Mac OSX Boost check macro error
+===============================
+Credits by Nick
+http://stuffthingsandjunk.blogspot.com/2009/02/kicad-osx-nightlies-fixed.html
+
+
+The following files have to be patched to remove the check macro error on OSX
+build. This is also for Boost 1.40.0 !
+This patch is added on revision 2033 (kicad/include/boost directory!)
+So if upgrading to new version apply this if you get the same error.
+See below snippets of the two files that have to be edit.
+Just subsitude check with check_ in both files.
+
+boost/ptr_container/detail/static_move_ptr.hpp
+----------------------------------------------
+
+    % diff /temp/boost_1_37_0/boost/ptr_container/detail/static_move_ptr.hpp
+    /temp/kicad-sources/boost/ptr_container/detail/static_move_ptr.hpp
+
+
+    154c155
+    <     void check(const static_move_ptr& ptr)
+    ---
+    >     void check_(const static_move_ptr& ptr)
+
+
+boost/detail/is_incrementable.hpp
+---------------------------------
+
+    % diff /temp/boost_1_37_0/boost/detail/is_incrementable.hpp
+    /temp/kicad-sources/boost/detail/is_incrementable.hpp
+
+
+    68c68
+    <   char (& check(tag) )[2];
+    ---
+    >   char (& check_(tag) )[2];
+    71c71
+    <   char check(T const&);
+    ---
+    >   char check_(T const&);
+    81c81
+    <         , value = sizeof(is_incrementable_::check(BOOST_comma(++x,0))) == 1
+    ---
+    >         , value = sizeof(is_incrementable_::check_(BOOST_comma(++x,0))) ==
+    >         1
+    92c92
+    <         , value = sizeof(is_incrementable_::check(BOOST_comma(x++,0))) == 1
+    ---
+    >         , value = sizeof(is_incrementable_::check_(BOOST_comma(x++,0))) ==
+    >         1
+
+
+
+The error was
+-------------
+
+    In file included from
+/temp/kicad-sources/boost_1_38_0/boost/ptr_container/detail/reversible_ptr_container.hpp:22In
+file included from
+/temp/kicad-sources/boost_1_38_0/boost/ptr_container/detail/reversible_ptr_container.hpp:22,
+                     from
+/temp/kicad-sources/boost_1_38_0/boost/ptr_container/ptr_sequence_adapter.hpp:20,
+                     from
+/temp/kicad-sources/boost_1_38_0/boost/ptr_container/ptr_vector.hpp:20,
+                     from
+/temp/kicad-sources/kicad/include/board_item_struct.h:9,
+                     from /temp/kicad-sources/kicad/include/pcbstruct.h:10,
+                     from /temp/kicad-sources/kicad/3d-viewer/3d_viewer.h:29,
+                     from /temp/kicad-sources/kicad/3d-viewer/3d_aux.cpp:23:
+    /temp/kicad-sources/boost_1_38_0/boost/ptr_container/detail/static_move_ptr.hpp:154:50:
+error: macro "check" passed 2 arguments, but takes just 1
