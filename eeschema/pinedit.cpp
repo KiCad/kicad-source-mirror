@@ -10,6 +10,7 @@
 #include "class_libentry.h"
 
 #include "pinedit-dialog.h"
+#include "dialog_display_info_HTML_base.h"
 
 static int CodeOrient[4] =
 {
@@ -22,7 +23,7 @@ static int CodeOrient[4] =
 #define NBSHAPES 7
 static wxString shape_list[NBSHAPES] =
 {
-    _( "line" ),   _( "invert" ),    _( "clock" ), _( "clock inv" ),
+    _( "line" ),   _( "invert" ),    _( "clock" ),    _( "clock inv" ),
     _( "low in" ), _( "low clock" ), _( "low out" )
 };
 
@@ -43,15 +44,15 @@ static void DrawMovePin( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
 /* Variables locales */
 static wxPoint OldPos, PinPreviousPos;
-static int     LastPinType          = PIN_INPUT,
-               LastPinOrient        = PIN_RIGHT,
-               LastPinShape         = NONE,
-               LastPinSize          = 300,
-               LastPinNameSize      = 50,
-               LastPinNumSize       = 50,
+static int     LastPinType     = PIN_INPUT,
+               LastPinOrient   = PIN_RIGHT,
+               LastPinShape    = NONE,
+               LastPinSize     = 300,
+               LastPinNameSize = 50,
+               LastPinNumSize  = 50,
                LastPinCommonConvert = false,
                LastPinCommonUnit    = false,
-               LastPinNoDraw        = false;
+               LastPinNoDraw = false;
 
 
 #include "pinedit-dialog.cpp"
@@ -73,8 +74,8 @@ void WinEDA_PinPropertiesFrame::PinPropertiesAccept( wxCommandEvent& event )
     LastPinNoDraw = m_NoDraw->GetValue();
 
     msg = m_PinSizeCtrl->GetValue();
-    LastPinSize   = ReturnValueFromString( g_UnitMetric, msg,
-                                           m_Parent->m_InternalUnits );
+    LastPinSize = ReturnValueFromString( g_UnitMetric, msg,
+                                         m_Parent->m_InternalUnits );
 
     msg = m_PinNameSizeCtrl->GetValue();
     LastPinNameSize = ReturnValueFromString( g_UnitMetric, msg,
@@ -133,14 +134,14 @@ void WinEDA_LibeditFrame::InitEditOnePin()
         return;
 
     for( Pin = m_component->GetNextPin(); Pin != NULL;
-         Pin = m_component->GetNextPin( Pin ) )
+        Pin = m_component->GetNextPin( Pin ) )
     {
         if( Pin == CurrentPin )
             continue;
         if( ( Pin->m_Pos == CurrentPin->m_Pos )
-            && ( Pin->m_Orient == CurrentPin->m_Orient )
-            && ( !( CurrentPin->m_Flags & IS_NEW ) )
-            && ( g_EditPinByPinIsOn == false ) )
+           && ( Pin->m_Orient == CurrentPin->m_Orient )
+           && ( !( CurrentPin->m_Flags & IS_NEW ) )
+           && ( g_EditPinByPinIsOn == false ) )
             Pin->m_Flags |= IS_LINKED | IN_EDIT;
         else
             Pin->m_Flags = 0;
@@ -198,7 +199,7 @@ void WinEDA_LibeditFrame::PlacePin( wxDC* DC )
 
     // Tst for an other pin in same new position:
     for( Pin = m_component->GetNextPin(); Pin != NULL;
-         Pin = m_component->GetNextPin( Pin ) )
+        Pin = m_component->GetNextPin( Pin ) )
     {
         if( Pin == CurrentPin || newpos != Pin->m_Pos || Pin->m_Flags )
             continue;
@@ -206,7 +207,8 @@ void WinEDA_LibeditFrame::PlacePin( wxDC* DC )
         if( ask_for_pin && !g_EditPinByPinIsOn )
         {
             DrawPanel->m_IgnoreMouseEvents = true;
-            status = IsOK( this, _( "This position is already occupied by \
+            status =
+                IsOK( this, _( "This position is already occupied by \
 another pin. Continue?" ) );
             DrawPanel->MouseToCursorSchema();
             DrawPanel->m_IgnoreMouseEvents = false;
@@ -234,7 +236,7 @@ another pin. Continue?" ) );
 
     /* Put linked pins in new position, and clear flags */
     for( Pin = m_component->GetNextPin(); Pin != NULL;
-         Pin = m_component->GetNextPin( Pin ) )
+        Pin = m_component->GetNextPin( Pin ) )
     {
         if( Pin->m_Flags == 0 )
             continue;
@@ -297,8 +299,8 @@ void WinEDA_LibeditFrame::StartMovePin( wxDC* DC )
         if( Pin == CurrentPin )
             continue;
         if( ( Pin->m_Pos == CurrentPin->m_Pos )
-            && ( Pin->m_Orient == CurrentPin->m_Orient )
-            && ( g_EditPinByPinIsOn == false ) )
+           && ( Pin->m_Orient == CurrentPin->m_Orient )
+           && ( g_EditPinByPinIsOn == false ) )
             Pin->m_Flags |= IS_LINKED | IS_MOVED;
     }
 
@@ -368,8 +370,8 @@ void WinEDA_PinPropertiesFrame::SetPinShape( int newshape )
 /**********************************************************/
 
 /* Changement de la forme de la pin courante.
-  * Le changement est egalement fait sur les autres pins correspondantes
-  * des autres unites de la seule forme convert courante
+ * Le changement est egalement fait sur les autres pins correspondantes
+ * des autres unites de la seule forme convert courante
  */
 {
     LIB_PIN* Pin;
@@ -397,8 +399,8 @@ void WinEDA_PinPropertiesFrame::SetPinType( int newtype )
 /******************************************************/
 
 /* Changement du type electrique de la pin courante.
-  * Le changement est egalement fait sur les autres pins correspondantes
-  * des autres unites du boitier
+ * Le changement est egalement fait sur les autres pins correspondantes
+ * des autres unites du boitier
  */
 {
     LIB_PIN* Pin;
@@ -425,8 +427,8 @@ void WinEDA_PinPropertiesFrame::SetPinName( const wxString& newname, int newsize
 /********************************************************************************/
 
 /* Met a jour le nom et la taille de ce nom de la pin courante
-  * si newname == NULL, pas de changement de nom
-  * si newsize < 0 : pas de changement de taille
+ * si newname == NULL, pas de changement de nom
+ * si newsize < 0 : pas de changement de taille
  */
 {
     LIB_PIN* Pin;
@@ -464,10 +466,10 @@ void WinEDA_PinPropertiesFrame::SetPinNum( const wxString& newnum, int newsize )
 /******************************************************************************/
 
 /* Changement du numero de la pin courante.
-  * Le changement est egalement fait sur les autres pins correspondantes
-  * a la forme convertie
-  * Si newnum == NULL: pas de changement de numero
-  * Si newsize < 0 ) pase de changement de taille
+ * Le changement est egalement fait sur les autres pins correspondantes
+ * a la forme convertie
+ * Si newnum == NULL: pas de changement de numero
+ * Si newsize < 0 ) pase de changement de taille
  */
 {
     LIB_PIN* Pin;
@@ -491,7 +493,7 @@ void WinEDA_PinPropertiesFrame::SetPinNum( const wxString& newnum, int newsize )
     for( ; Pin != NULL; Pin = CurrentPin->GetParent()->GetNextPin( Pin ) )
     {
         if( ( Pin->m_Flags & IS_LINKED ) == 0
-            || Pin->m_Unit != CurrentPin->m_Unit )
+           || Pin->m_Unit != CurrentPin->m_Unit )
             continue;
         if( newsize >= 0 )
             Pin->m_PinNumSize = newsize;
@@ -507,9 +509,9 @@ void WinEDA_LibeditFrame::DeletePin( wxDC*          DC,
 /*************************************************/
 
 /* Routine d'effacement de la pin pointee par la souris
-  * Si g_EditPinByPinIsOn == false :
-  *     toutes les pins de meme coordonnee seront effacees.
-  * Sinon seule la pin de l'unite en convert courante sera effacee
+ * Si g_EditPinByPinIsOn == false :
+ *     toutes les pins de meme coordonnee seront effacees.
+ * Sinon seule la pin de l'unite en convert courante sera effacee
  */
 {
     LIB_PIN* tmp;
@@ -566,14 +568,14 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
     CurrentPin->m_Unit    = m_unit;
     CurrentPin->m_Convert = m_convert;
 
-    /* Marquage des pins a traiter */
+    /* Flag pins to consider */
     if( g_EditPinByPinIsOn == false )
         CurrentPin->m_Flags |= IS_LINKED;
 
-    CurrentPin->m_Pos.x       = GetScreen()->m_Curseur.x;
-    CurrentPin->m_Pos.y       = -GetScreen()->m_Curseur.y;
-    CurrentPin->m_PinLen      = LastPinSize;
-    CurrentPin->m_Orient      = LastPinOrient;
+    CurrentPin->m_Pos.x = GetScreen()->m_Curseur.x;
+    CurrentPin->m_Pos.y = -GetScreen()->m_Curseur.y;
+    CurrentPin->m_PinLen = LastPinSize;
+    CurrentPin->m_Orient = LastPinOrient;
     CurrentPin->m_PinType     = LastPinType;
     CurrentPin->m_PinShape    = LastPinShape;
     CurrentPin->m_PinNameSize = LastPinNameSize;
@@ -654,7 +656,7 @@ void WinEDA_PinPropertiesFrame::SetPinAttributes( bool draw, bool unit,
                 if( Pin->m_Flags == 0 || Pin == CurrentPin )
                     continue;
                 if( CurrentPin->m_Convert
-                    && ( CurrentPin->m_Convert != Pin->m_Convert ) )
+                   && ( CurrentPin->m_Convert != Pin->m_Convert ) )
                     continue;
                 if( CurrentPin->m_Pos != Pin->m_Pos )
                     continue;
@@ -724,8 +726,8 @@ void WinEDA_PinPropertiesFrame::NewSizePin( int newsize )
 /******************************************************/
 
 /* Fonction permettant la mise aux dimensions courantes:
-  * - longueur, dimension des textes
-  * de la pin courante
+ * - longueur, dimension des textes
+ * de la pin courante
  *
  */
 {
@@ -799,7 +801,7 @@ static void CreateImagePins( LIB_PIN* Pin, int unit, int convert,
         if( CreateConv == false )
             continue;
 
-        NewPin = (LIB_PIN*)Pin->GenCopy();
+        NewPin = (LIB_PIN*) Pin->GenCopy();
         NewPin->m_Convert = 2;
         if( Pin->m_Unit != 0 )
             NewPin->m_Unit = ii;
@@ -819,7 +821,7 @@ void WinEDA_LibeditFrame::GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id )
 
 {
     LIB_PIN* Pin;
-    bool     selected = ( MasterPin->m_Selected & IS_SELECTED ) != 0;
+    bool     selected    = ( MasterPin->m_Selected & IS_SELECTED ) != 0;
     bool     showPinText = true;
 
     if( ( m_component == NULL ) || ( MasterPin == NULL ) )
@@ -876,10 +878,10 @@ void WinEDA_LibeditFrame::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
         || SourcePin->Type() != COMPONENT_PIN_DRAW_TYPE )
         return;
 
-    Pin = (LIB_PIN*)SourcePin->GenCopy();
+    Pin = (LIB_PIN*) SourcePin->GenCopy();
     m_component->AddDrawItem( Pin );
 
-    Pin->m_Flags = IS_NEW;
+    Pin->m_Flags  = IS_NEW;
     Pin->m_Pos.x += g_RepeatStep.x;
     ox = Pin->m_Pos.x;
     Pin->m_Pos.y += -g_RepeatStep.y;
@@ -912,48 +914,63 @@ void WinEDA_LibeditFrame::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
 }
 
 
-int sort_by_pin_number( const void* ref, const void* tst )
+/* helper function to sort pins by pin num */
+bool sort_by_pin_number( const LIB_PIN* ref, const LIB_PIN* tst )
 {
-    const LIB_PIN* Ref = *(LIB_PIN**) ref;
-    const LIB_PIN* Tst = *(LIB_PIN**) tst;
+    int test = ref->m_PinNum - tst->m_PinNum;
 
-    return Ref->m_PinNum - Tst->m_PinNum;
+    if( test == 0 )
+    {
+        test = ref->m_Convert - tst->m_Convert;
+    }
+    if( test == 0 )
+    {
+        test = ref->m_Unit - tst->m_Unit;
+    }
+    return test < 0;
 }
 
 
+/* Test for duplicate pins:
+ */
 void WinEDA_LibeditFrame::OnCheckComponent( wxCommandEvent& event )
 {
-    int       nb_pins, ii, error;
-    LIB_PIN*  Pin;
-    LIB_PIN** PinList;
-    wxString  msg;
+    int      error;
+    LIB_PIN* Pin;
+    wxString msg;
 
     if( m_component == NULL )
         return;
 
-    // Construction de la liste des pins:
+    // Build the pin list:
+    std::vector <LIB_PIN* >PinList;
     Pin = m_component->GetNextPin();
-    for( nb_pins = 0; Pin != NULL; Pin = m_component->GetNextPin( Pin ) )
-    {
-        nb_pins++;
-    }
-
-    PinList = (LIB_PIN**) MyZMalloc( (nb_pins + 1) * sizeof(LIB_PIN*) );
-    Pin = m_component->GetNextPin();
-    for( ii = 0; Pin != NULL; Pin = m_component->GetNextPin( Pin ) )
+    for( ; Pin != NULL; Pin = m_component->GetNextPin( Pin ) )
     {
         if( Pin->Type() == COMPONENT_PIN_DRAW_TYPE )
-            PinList[ii++] = Pin;
+            PinList.push_back( Pin );
     }
 
-    // Classement des pins par numero de pin
-    qsort( PinList, nb_pins, sizeof(LIB_PIN*), sort_by_pin_number );
-
-    // Controle des duplicates:
-    error = 0;
-    for( ii = 1; ii < nb_pins; ii++ )
+    if( PinList.size() == 0 )
     {
-        wxString aux_msg, StringPinNum;
+        DisplayInfoMessage( this, _( "No pins!" ) );
+        return;
+    }
+
+    // Sort pins by pin num, so 2 duplicate pins
+    // (pins with the same number) will be consecutive in list
+    sort( PinList.begin(), PinList.end(), sort_by_pin_number );
+
+    // Test for duplicates:
+    error = 0;
+    DIALOG_DISPLAY_HTML_TEXT_BASE
+    error_display( this, wxID_ANY, _( "Marker Info" ),
+                  wxDefaultPosition, wxSize( 750, 600 ) );
+    for( unsigned ii = 1; ii < PinList.size(); ii++ )
+    {
+        wxString aux_msg;
+        wxString stringPinNum, stringCurrPinNum;
+
         LIB_PIN* curr_pin = PinList[ii];
         Pin = PinList[ii - 1];
 
@@ -963,14 +980,17 @@ void WinEDA_LibeditFrame::OnCheckComponent( wxCommandEvent& event )
             continue;
 
         error++;
-        curr_pin->ReturnPinStringNum( StringPinNum );
-        msg.Printf( _( "Duplicate pin %s at location (%d, %d) conflicts \
-with pin %s at location (%d, %d)" ),
-                    GetChars( StringPinNum ),
+        Pin->ReturnPinStringNum( stringPinNum );
+        curr_pin->ReturnPinStringNum( stringCurrPinNum );
+        msg.Printf( _(
+                        "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts \
+with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"                                                                                                      ),
+                    GetChars( stringCurrPinNum ),
                     GetChars( curr_pin->m_PinName ),
-                    curr_pin->m_Pos.x, -curr_pin->m_Pos.y,
+                    (float) curr_pin->m_Pos.x / 1000.0, (float) -curr_pin->m_Pos.y / 1000.0,
+                    GetChars( stringPinNum ),
                     GetChars( Pin->m_PinName ),
-                    Pin->m_Pos.x, -Pin->m_Pos.y );
+                    (float) Pin->m_Pos.x / 1000.0, (float) -Pin->m_Pos.y / 1000.0 );
 
         if( m_component->GetPartCount() > 1 )
         {
@@ -986,13 +1006,13 @@ with pin %s at location (%d, %d)" ),
                 msg += _( "  of normal" );
         }
 
-        msg += wxT( "." );
+        msg += wxT( ".<br>" );
 
-        DisplayError( this, msg );
+        error_display.m_htmlWindow->AppendToPage( msg );
     }
-
-    free( PinList );
 
     if( error == 0 )
         DisplayInfoMessage( this, _( "No duplicate pins were found." ) );
+    else
+        error_display.ShowModal();
 }
