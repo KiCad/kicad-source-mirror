@@ -151,7 +151,7 @@ public:
     deleter_const_reference get_deleter() const { return impl_.second(); }
 private:
     template<typename TT, typename DD>
-    void check(const static_move_ptr<TT, DD>& ptr)
+    void check_(const static_move_ptr<TT, DD>& ptr)
         {
             typedef move_ptrs::is_smart_ptr_convertible<TT, T> convertible;
             BOOST_STATIC_ASSERT(convertible::value);
