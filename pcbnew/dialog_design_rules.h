@@ -58,9 +58,11 @@ private:
     void OnRightSelectAllButton( wxCommandEvent& event );
     bool TestDataValidity( );
     void InitDialogRules();
+    void InitGlobalRules();
     void InitRulesList();
     void InitializeRulesSelectionBoxes();
     void CopyRulesListToBoard();
+    bool CopyGlobalRulesToBoard();
     void SetRoutableLayerStatus();
     void FillListBoxWithNetNames( wxListCtrl* aListCtrl, const wxString& aNetClass );
     void PrintCurrentSettings( );

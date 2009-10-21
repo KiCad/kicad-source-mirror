@@ -193,23 +193,35 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      */
     CopyPolygonsFromFilledPolysListToBoolengine( booleng, GROUP_A );
 
-    // Calculates the clearance value that meet DRC requirements
-    int clearance = max( m_ZoneClearance, g_DesignSettings.m_TrackClearance );
-    clearance += m_ZoneMinThickness / 2;
+    /* Calculates the clearance value that meet DRC requirements
+     * from m_ZoneClearance and clearance from the corresponding netclass
+     * We have a "local" clearance in zones because most of time
+     * clearance between a zone and others items is bigger than the netclass clearance
+     * this is more true for small clearance values
+     * Note also the "local" clearance is used for clearance between non copper items
+     *    or items like texts on copper layers
+     */
+    int zone_clearance = max( m_ZoneClearance, GetClearance() );
+    zone_clearance += m_ZoneMinThickness / 2;
 
 
     /* Add holes (i.e. tracks and pads areas as polygons outlines)
      * in GroupB in Bool_Engine
      */
-    /* items ouside the zone bounding box are skipped */
+    /* items ouside the zone bounding box are skipped
+     * the bounding box is the zone bounding box + the biigest clearance found in Netclass list
+    */
     EDA_Rect item_boundingbox;
     EDA_Rect zone_boundingbox = GetBoundingBox();
-    zone_boundingbox.Inflate( m_ZoneClearance, clearance );
+    int biggest_clearance = aPcb->GetBiggestClearanceValue();
+    biggest_clearance = MAX( biggest_clearance, zone_clearance );
+    zone_boundingbox.Inflate( biggest_clearance, biggest_clearance );
 
     /*
      * First : Add pads. Note: pads having the same net as zone are left in zone.
      * Thermal shapes will be created later if necessary
      */
+    int item_clearance;
     have_poly_to_substract = false;
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
@@ -220,18 +232,19 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
             if( pad->GetNet() != GetNet() )
             {
+                item_clearance = pad->GetClearance() + (m_ZoneMinThickness / 2);
                 item_boundingbox = pad->GetBoundingBox();
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
                 {
-                    AddPadWithClearancePolygon( booleng, *pad, clearance );
+                    AddPadWithClearancePolygon( booleng, *pad, MAX(zone_clearance,item_clearance) );
                     have_poly_to_substract = true;
                 }
                 continue;
             }
 
-            int gap = clearance;
+            int gap = zone_clearance;
 #ifdef USE_STUBS_FOR_THERMAL
-            gap = MAX( clearance, m_ThermalReliefGapValue );
+            gap = MAX( zone_clearance, m_ThermalReliefGapValue );
 #else
             if( (m_PadOption == PAD_NOT_IN_ZONE)
                || (GetNet() == 0) || pad->m_PadShape == PAD_TRAPEZOID )
@@ -259,10 +272,12 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             continue;
         if( track->GetNet() == GetNet()  && (GetNet() != 0) )
             continue;
+
+        item_clearance = track->GetClearance() + (m_ZoneMinThickness / 2);
         item_boundingbox = track->GetBoundingBox();
         if( item_boundingbox.Intersects( zone_boundingbox ) )
         {
-            AddTrackWithClearancePolygon( booleng, *track, clearance );
+            AddTrackWithClearancePolygon( booleng, *track, MAX(zone_clearance,item_clearance) );
             have_poly_to_substract = true;
         }
     }
@@ -1338,13 +1353,13 @@ void AddRoundedEndsSegmentPolygon( Bool_Engine* aBooleng,
 
     int delta = 3600 / s_CircleToSegmentsCount; // rot angle in 0.1 degree
 
-    
+
 #ifdef CREATE_KBOOL_KEY_FILES
     if( s_GenDataForKbool )
         StartPolygon(s_CircleToSegmentsCount+4, 1);
 #endif
 
-    
+
     // Compute the outlines of the segment, and creates a polygon
     corner = wxPoint( 0, rayon );
     RotatePoint( &corner, -delta_angle );

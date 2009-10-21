@@ -16,10 +16,15 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxStaticBoxSizer* sbSizer1;
-	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Net Classes:") ), wxVERTICAL );
+	m_DRnotebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_LEFT );
+	m_panelNetClassesEditor = new wxPanel( m_DRnotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
+	wxBoxSizer* bpanelNetClassesSizer;
+	bpanelNetClassesSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_grid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxSIMPLE_BORDER|wxVSCROLL );
+	wxStaticBoxSizer* sbSizer1;
+	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( m_panelNetClassesEditor, wxID_ANY, _("Net Classes:") ), wxVERTICAL );
+	
+	m_grid = new wxGrid( m_panelNetClassesEditor, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxSIMPLE_BORDER|wxVSCROLL );
 	
 	// Grid
 	m_grid->CreateGrid( 1, 6 );
@@ -64,56 +69,64 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* buttonBoxSizer;
 	buttonBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_addButton = new wxButton( this, wxID_ADD_NETCLASS, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_addButton = new wxButton( m_panelNetClassesEditor, wxID_ADD_NETCLASS, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_addButton->SetToolTip( _("Add another Net Class") );
 	
 	buttonBoxSizer->Add( m_addButton, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
 	
-	m_removeButton = new wxButton( this, wxID_REMOVE_NETCLASS, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_removeButton->SetToolTip( _("Remove the currently select Net Class") );
+	m_removeButton = new wxButton( m_panelNetClassesEditor, wxID_REMOVE_NETCLASS, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_removeButton->SetToolTip( _("Remove the currently select Net Class\nThe default Net Class cannot be removed") );
 	
 	buttonBoxSizer->Add( m_removeButton, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
 	
-	m_moveUpButton = new wxButton( this, wxID_ANY, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_moveUpButton = new wxButton( m_panelNetClassesEditor, wxID_ANY, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_moveUpButton->SetToolTip( _("Move the currently selected Net Class up one row") );
 	
 	buttonBoxSizer->Add( m_moveUpButton, 0, wxRIGHT|wxLEFT, 5 );
 	
 	sbSizer1->Add( buttonBoxSizer, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	bMainSizer->Add( sbSizer1, 1, wxEXPAND|wxALL, 5 );
+	bpanelNetClassesSizer->Add( sbSizer1, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	wxStaticBoxSizer* sbSizer4;
-	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Membership:") ), wxHORIZONTAL );
+	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( m_panelNetClassesEditor, wxID_ANY, _("Membership:") ), wxHORIZONTAL );
 	
 	wxBoxSizer* leftNetSelectBoxSizer;
 	leftNetSelectBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxArrayString m_leftClassChoiceChoices;
-	m_leftClassChoice = new wxChoice( this, ID_LEFT_CHOICE_CLICK, wxDefaultPosition, wxDefaultSize, m_leftClassChoiceChoices, 0 );
+	m_leftClassChoice = new wxChoice( m_panelNetClassesEditor, ID_LEFT_CHOICE_CLICK, wxDefaultPosition, wxDefaultSize, m_leftClassChoiceChoices, 0 );
 	m_leftClassChoice->SetSelection( 0 );
-	leftNetSelectBoxSizer->Add( m_leftClassChoice, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	leftNetSelectBoxSizer->Add( m_leftClassChoice, 0, wxEXPAND, 5 );
 	
-	m_leftListCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_VRULES|wxSUNKEN_BORDER );
+	m_leftListCtrl = new wxListCtrl( m_panelNetClassesEditor, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_VRULES|wxSUNKEN_BORDER );
 	m_leftListCtrl->SetMinSize( wxSize( 220,300 ) );
 	
-	leftNetSelectBoxSizer->Add( m_leftListCtrl, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	leftNetSelectBoxSizer->Add( m_leftListCtrl, 1, wxEXPAND|wxTOP, 5 );
 	
 	sbSizer4->Add( leftNetSelectBoxSizer, 1, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bmiddleSizerNetSelect;
 	bmiddleSizerNetSelect = new wxBoxSizer( wxVERTICAL );
 	
-	m_buttonRightToLeft = new wxButton( this, ID_LEFT_TO_RIGHT_COPY, _("<<<"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonRightToLeft = new wxButton( m_panelNetClassesEditor, ID_LEFT_TO_RIGHT_COPY, _("<<<"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonRightToLeft->SetToolTip( _("Move the selected nets in the right list to the left list") );
+	
 	bmiddleSizerNetSelect->Add( m_buttonRightToLeft, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_buttonLeftToRight = new wxButton( this, ID_RIGHT_TO_LEFT_COPY, _(">>>"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonLeftToRight = new wxButton( m_panelNetClassesEditor, ID_RIGHT_TO_LEFT_COPY, _(">>>"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonLeftToRight->SetToolTip( _("Move the selected nets in the left list to the right list") );
+	
 	bmiddleSizerNetSelect->Add( m_buttonLeftToRight, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_buttonLeftSelAll = new wxButton( this, wxID_ANY, _("<< Select All"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonLeftSelAll = new wxButton( m_panelNetClassesEditor, wxID_ANY, _("<< Select All"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonLeftSelAll->SetToolTip( _("Select all nets in the left list") );
+	
 	bmiddleSizerNetSelect->Add( m_buttonLeftSelAll, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_buttonRightSelAll = new wxButton( this, wxID_ANY, _("Select All >>"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonRightSelAll = new wxButton( m_panelNetClassesEditor, wxID_ANY, _("Select All >>"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonRightSelAll->SetToolTip( _("Select all nets in the right list") );
+	
 	bmiddleSizerNetSelect->Add( m_buttonRightSelAll, 0, wxALIGN_BOTTOM|wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	sbSizer4->Add( bmiddleSizerNetSelect, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -122,18 +135,133 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	rghtNetSelectBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxArrayString m_rightClassChoiceChoices;
-	m_rightClassChoice = new wxChoice( this, ID_RIGHT_CHOICE_CLICK, wxDefaultPosition, wxDefaultSize, m_rightClassChoiceChoices, 0 );
+	m_rightClassChoice = new wxChoice( m_panelNetClassesEditor, ID_RIGHT_CHOICE_CLICK, wxDefaultPosition, wxDefaultSize, m_rightClassChoiceChoices, 0 );
 	m_rightClassChoice->SetSelection( 0 );
-	rghtNetSelectBoxSizer->Add( m_rightClassChoice, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	rghtNetSelectBoxSizer->Add( m_rightClassChoice, 0, wxEXPAND, 5 );
 	
-	m_rightListCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_VRULES|wxSUNKEN_BORDER );
+	m_rightListCtrl = new wxListCtrl( m_panelNetClassesEditor, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_VRULES|wxSUNKEN_BORDER );
 	m_rightListCtrl->SetMinSize( wxSize( 220,-1 ) );
 	
-	rghtNetSelectBoxSizer->Add( m_rightListCtrl, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	rghtNetSelectBoxSizer->Add( m_rightListCtrl, 1, wxEXPAND|wxTOP, 5 );
 	
 	sbSizer4->Add( rghtNetSelectBoxSizer, 1, wxALL|wxEXPAND, 5 );
 	
-	bMainSizer->Add( sbSizer4, 2, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bpanelNetClassesSizer->Add( sbSizer4, 2, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_panelNetClassesEditor->SetSizer( bpanelNetClassesSizer );
+	m_panelNetClassesEditor->Layout();
+	bpanelNetClassesSizer->Fit( m_panelNetClassesEditor );
+	m_DRnotebook->AddPage( m_panelNetClassesEditor, _("Net Classes Editor"), true );
+	m_panelGolbalDesignRules = new wxPanel( m_DRnotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
+	wxBoxSizer* bpanelGlobRulesSizer;
+	bpanelGlobRulesSizer = new wxBoxSizer( wxVERTICAL );
+	
+	wxBoxSizer* bDesignRulesUpperSizer;
+	bDesignRulesUpperSizer = new wxBoxSizer( wxHORIZONTAL );
+	
+	wxStaticBoxSizer* sbViasOptionSizer;
+	sbViasOptionSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Vias Options:") ), wxVERTICAL );
+	
+	wxString m_OptViaTypeChoices[] = { _("Through via"), _("Blind or buried via") };
+	int m_OptViaTypeNChoices = sizeof( m_OptViaTypeChoices ) / sizeof( wxString );
+	m_OptViaType = new wxRadioBox( m_panelGolbalDesignRules, wxID_ANY, _("Default Via Type"), wxDefaultPosition, wxDefaultSize, m_OptViaTypeNChoices, m_OptViaTypeChoices, 1, wxRA_SPECIFY_COLS );
+	m_OptViaType->SetSelection( 0 );
+	m_OptViaType->SetToolTip( _("Select the current via type.\nTrough via is the usual selection") );
+	
+	sbViasOptionSizer->Add( m_OptViaType, 0, wxALL|wxEXPAND, 5 );
+	
+	wxFlexGridSizer* fgViasMinValuesSizer;
+	fgViasMinValuesSizer = new wxFlexGridSizer( 1, 2, 0, 0 );
+	fgViasMinValuesSizer->AddGrowableCol( 1 );
+	fgViasMinValuesSizer->SetFlexibleDirection( wxBOTH );
+	fgViasMinValuesSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_ViaMinTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Via Min Diameter"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ViaMinTitle->Wrap( -1 );
+	fgViasMinValuesSizer->Add( m_ViaMinTitle, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	
+	m_SetViasMinSizeCtrl = new wxTextCtrl( m_panelGolbalDesignRules, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgViasMinValuesSizer->Add( m_SetViasMinSizeCtrl, 0, wxEXPAND|wxALL, 5 );
+	
+	m_ViaMinDrillTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Via Min Drill"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ViaMinDrillTitle->Wrap( -1 );
+	fgViasMinValuesSizer->Add( m_ViaMinDrillTitle, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_RIGHT, 5 );
+	
+	m_SetViasMinDrillCtrl = new wxTextCtrl( m_panelGolbalDesignRules, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgViasMinValuesSizer->Add( m_SetViasMinDrillCtrl, 0, wxALL|wxEXPAND, 5 );
+	
+	sbViasOptionSizer->Add( fgViasMinValuesSizer, 0, wxEXPAND, 5 );
+	
+	bDesignRulesUpperSizer->Add( sbViasOptionSizer, 1, wxALIGN_CENTER_VERTICAL, 5 );
+	
+	wxStaticBoxSizer* sbuViasSizer;
+	sbuViasSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Micro Vias Options:") ), wxVERTICAL );
+	
+	wxString m_AllowMicroViaCtrlChoices[] = { _("Do not allow micro vias"), _("Allow micro vias") };
+	int m_AllowMicroViaCtrlNChoices = sizeof( m_AllowMicroViaCtrlChoices ) / sizeof( wxString );
+	m_AllowMicroViaCtrl = new wxRadioBox( m_panelGolbalDesignRules, wxID_ANY, _("Micro Vias:"), wxDefaultPosition, wxDefaultSize, m_AllowMicroViaCtrlNChoices, m_AllowMicroViaCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_AllowMicroViaCtrl->SetSelection( 0 );
+	m_AllowMicroViaCtrl->SetToolTip( _("Allows or do not allow use of micro vias\nThey are very small vias only from an external copper layer to its near neightbour") );
+	
+	sbuViasSizer->Add( m_AllowMicroViaCtrl, 0, wxALL|wxEXPAND, 5 );
+	
+	wxFlexGridSizer* fgMinMicroviasValuesSizer;
+	fgMinMicroviasValuesSizer = new wxFlexGridSizer( 1, 2, 0, 0 );
+	fgMinMicroviasValuesSizer->AddGrowableCol( 1 );
+	fgMinMicroviasValuesSizer->SetFlexibleDirection( wxBOTH );
+	fgMinMicroviasValuesSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_MicroViaMinSizeTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("MicroVia Min Diameter"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MicroViaMinSizeTitle->Wrap( -1 );
+	fgMinMicroviasValuesSizer->Add( m_MicroViaMinSizeTitle, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	
+	m_SetMicroViasMinSizeCtrl = new wxTextCtrl( m_panelGolbalDesignRules, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgMinMicroviasValuesSizer->Add( m_SetMicroViasMinSizeCtrl, 0, wxALL|wxEXPAND, 5 );
+	
+	m_MicroViaMinDrillTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("MicroVia Min Drill"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MicroViaMinDrillTitle->Wrap( -1 );
+	fgMinMicroviasValuesSizer->Add( m_MicroViaMinDrillTitle, 0, wxALIGN_RIGHT|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	
+	m_SetMicroViasMinDrillCtrl = new wxTextCtrl( m_panelGolbalDesignRules, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgMinMicroviasValuesSizer->Add( m_SetMicroViasMinDrillCtrl, 0, wxALL|wxEXPAND, 5 );
+	
+	sbuViasSizer->Add( fgMinMicroviasValuesSizer, 1, wxEXPAND, 5 );
+	
+	bDesignRulesUpperSizer->Add( sbuViasSizer, 1, wxALIGN_CENTER_VERTICAL, 5 );
+	
+	wxStaticBoxSizer* sbMinSizesSizer;
+	sbMinSizesSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Minimal Values Allowed:") ), wxVERTICAL );
+	
+	wxFlexGridSizer* fgMinValuesSizer;
+	fgMinValuesSizer = new wxFlexGridSizer( 1, 2, 0, 0 );
+	fgMinValuesSizer->AddGrowableCol( 1 );
+	fgMinValuesSizer->SetFlexibleDirection( wxBOTH );
+	fgMinValuesSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_TrackMinWidthTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Track Min Width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TrackMinWidthTitle->Wrap( -1 );
+	fgMinValuesSizer->Add( m_TrackMinWidthTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	
+	m_SetTrackMinWidthCtrl = new wxTextCtrl( m_panelGolbalDesignRules, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgMinValuesSizer->Add( m_SetTrackMinWidthCtrl, 0, wxALL, 5 );
+	
+	sbMinSizesSizer->Add( fgMinValuesSizer, 0, 0, 5 );
+	
+	bDesignRulesUpperSizer->Add( sbMinSizesSizer, 0, wxEXPAND, 5 );
+	
+	bpanelGlobRulesSizer->Add( bDesignRulesUpperSizer, 0, wxEXPAND, 5 );
+	
+	wxBoxSizer* bDesignRulesLowerSizer;
+	bDesignRulesLowerSizer = new wxBoxSizer( wxHORIZONTAL );
+	
+	bpanelGlobRulesSizer->Add( bDesignRulesLowerSizer, 1, wxEXPAND, 5 );
+	
+	m_panelGolbalDesignRules->SetSizer( bpanelGlobRulesSizer );
+	m_panelGolbalDesignRules->Layout();
+	bpanelGlobRulesSizer->Fit( m_panelGolbalDesignRules );
+	m_DRnotebook->AddPage( m_panelGolbalDesignRules, _("Global Design Rules"), false );
+	
+	bMainSizer->Add( m_DRnotebook, 1, wxEXPAND | wxALL, 5 );
 	
 	wxStaticBoxSizer* sbSizer2;
 	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Messages:") ), wxHORIZONTAL );

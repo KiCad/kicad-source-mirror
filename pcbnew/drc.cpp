@@ -62,8 +62,6 @@ void DRC::ShowDialog()
 
         // copy data retained in this DRC object into the m_ui DrcPanel:
 
-        PutValueInLocalUnits( *m_ui->m_SetClearance, g_DesignSettings.m_TrackClearance,
-                              m_mainWindow->m_InternalUnits );;
         PutValueInLocalUnits( *m_ui->m_SetTrackMinWidthCtrl, g_DesignSettings.m_TrackMinWidth,
                               m_mainWindow->m_InternalUnits );;
         PutValueInLocalUnits( *m_ui->m_SetViaMinSizeCtrl, g_DesignSettings.m_ViasMinSize,
@@ -320,7 +318,8 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
 
 #define FmtVal( x )   GetChars( ReturnStringFromValue( g_UnitMetric, x, PCB_INTERNAL_UNIT ) )
 
-    if( nc->GetClearance() < g.m_TrackClearance )
+#if 0   // set to 1 when (if...) EDA_BoardDesignSettings has a m_MinClearance value
+    if( nc->GetClearance() < g.m_MinClearance )
     {
         msg.Printf( _("NETCLASS: '%s' has Clearance:%s which is less than global:%s"),
             GetChars( nc->GetName() ),
@@ -333,6 +332,7 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
         m_currentMarker = 0;
         ret = false;
     }
+#endif
 
     if( nc->GetTrackWidth() < g.m_TrackMinWidth )
     {
@@ -362,12 +362,12 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
         ret = false;
     }
 
-    if( nc->GetViaDrill() < g.m_ViaDrill )
+    if( nc->GetViaDrill() < g.m_ViasMinDrill )
     {
         msg.Printf( _("NETCLASS: '%s' has Via Drill:%s which is less than global:%s"),
             GetChars( nc->GetName() ),
             FmtVal( nc->GetViaDrill() ),
-            FmtVal( g.m_ViaDrill )
+            FmtVal( g.m_ViasMinDrill )
             );
 
         m_currentMarker = fillMarker( DRCE_NETCLASS_VIADRILLSIZE, msg, m_currentMarker );
@@ -390,12 +390,12 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
         ret = false;
     }
 
-    if( nc->GetuViaDrill() < g.m_MicroViaDrill )
+    if( nc->GetuViaDrill() < g.m_MicroViasMinDrill )
     {
         msg.Printf( _("NETCLASS: '%s' has uVia Drill:%s which is less than global:%s"),
             GetChars( nc->GetName() ),
             FmtVal( nc->GetuViaDrill() ),
-            FmtVal( g.m_MicroViaDrill )
+            FmtVal( g.m_MicroViasMinDrill )
             );
 
         m_currentMarker = fillMarker( DRCE_NETCLASS_uVIADRILLSIZE, msg, m_currentMarker );

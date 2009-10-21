@@ -108,7 +108,7 @@ TRACK* TRACK::Copy() const
 
 /**
  * Function GetDrillValue
- * calculate the drill value for vias (m-Drill if > 0, or default drill value for the board
+ * calculate the drill value for vias (m_Drill if > 0, or default drill value for the Netclass
  * @return real drill_value
  */
 int TRACK::GetDrillValue() const
@@ -116,25 +116,18 @@ int TRACK::GetDrillValue() const
     if( Type() != TYPE_VIA )
         return 0;
 
-    if( m_Drill >= 0 )
+    if( m_Drill > 0 )      // Use the specific value.
         return m_Drill;
 
+    // Use the default value from the Netclass
+    NETCLASS* netclass = GetNetClass();
+
     if( m_Shape == VIA_MICROVIA )
-        return g_DesignSettings.m_MicroViaDrill;
+        return netclass->GetuViaDrill();
 
-    return g_DesignSettings.m_ViaDrill;
+    return netclass->GetViaDrill();
 }
 
-/**
- * Function GetLength
- * returns the position of this object.
- * @return the length of the track segment (0 for a via).
- */
-double TRACK::GetLength()
-{
-    wxPoint delta = m_End - m_Start;
-    return sqrt( ((double)delta.x*delta.x) + ((double)delta.y*delta.y ) );
-}
 
 /***********************/
 bool TRACK::IsNull()

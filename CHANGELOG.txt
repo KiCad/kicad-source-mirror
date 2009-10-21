@@ -4,6 +4,29 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-oct-20 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+Replace component library editor draw item dialog box.
+* Created new component library editor draw item dialog box with
+  wxFormBuilder.
+* Removed previous DialogBlocks version of the draw item dialog box.
+* Removed some additional global variables used in component library
+  editor.
+* Add IsFillable() method to draw item base object.
+
+wxWidgets 2.9 string fixes and other minor updates.
+* Replace all known instances of (const wxChar*) casts to GetChars() for
+  wxWidgets 2.9 compatibility.
+* Cleaned up get component dialog so last part gets saved on wild card
+  selections.
+* Remove redundant schematic component drawing code.
+* Added SCH_COMPONENT constructor to create new component from library
+  component object.
+* Add message panel helpers to WinEDA_DrawFrame and update old message
+  panel access code.
+* Using library viewer to add component to schematic now respects unit
+  and body style selection.
+
 2009-oct-14 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
 Fix save last grid size and other minor updates.

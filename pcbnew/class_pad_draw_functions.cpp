@@ -14,7 +14,8 @@
 
 
 /*******************************************************************************************/
-void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoint& offset )
+void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
+                    const wxPoint& offset )
 /*******************************************************************************************/
 
 /** Draw a pad:
@@ -34,6 +35,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     wxPoint coord[4];
     int     fillpad = 0;
     wxPoint shape_pos;
+    int     mask_margin = 0;    // margin (clearance) used for some non copper layers
 
     if( m_Flags & DO_NOT_DRAW )
         return;
@@ -56,6 +58,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 
     if( color == 0 ) /* Not on copper layer */
     {
+        // If the pad in on only one tech layer, use the layer color
+        // else use DARKGRAY
         switch( m_Masque_Layer & ~ALL_CU_LAYERS )
         {
         case ADHESIVE_LAYER_CU:
@@ -160,12 +164,26 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         }
     }
 
-    // if Contrast mode and a technical layer active, show pads on this layer
+    // if Contrast mode is ON and a technical layer active, show pads on this layer
     // so we can see pads on paste or solder layer
     if( DisplayOpt.ContrastModeDisplay && screen->m_Active_Layer > LAST_COPPER_LAYER )
     {
         if( IsOnLayer( screen->m_Active_Layer ) )
+        {
             color = g_DesignSettings.m_LayerColor[screen->m_Active_Layer];
+            // In hight contrast mode, and if the active layer is the mask layer
+            // shows the pad size with the mask clearance
+            switch( screen->m_Active_Layer )
+            {
+            case SOLDERMASK_N_CU:
+            case SOLDERMASK_N_CMP:
+                mask_margin = g_DesignSettings.m_MaskMargin;
+                break;
+
+            default:
+                break;
+            }
+        }
         else
             color = DARKDARKGRAY;
     }
@@ -191,8 +209,6 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     xc  = ux0;
     yc  = uy0;
 
-    /* le trace depend de la rotation de l'empreinte */
-
     dx = dx0 = m_Size.x >> 1;
     dy = dy0 = m_Size.y >> 1; /* demi dim  dx et dy */
 
@@ -209,15 +225,15 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
      *  net classes so a call to GetClearance() is made only when needed
      *  (never needed in Cvpcb nor in Gerbview)
      */
-    int padClearance =  DisplayIsol ? GetClearance() : 0;
+    int padClearance = DisplayIsol ? GetClearance() : 0;
 
     switch( GetShape() )
     {
     case PAD_CIRCLE:
         if( fillpad )
-            GRFilledCircle( &panel->m_ClipBox, DC, xc, yc, dx, 0, color, color );
+            GRFilledCircle( &panel->m_ClipBox, DC, xc, yc, dx + mask_margin, 0, color, color );
         else
-            GRCircle( &panel->m_ClipBox, DC, xc, yc, dx, 0, color );
+            GRCircle( &panel->m_ClipBox, DC, xc, yc, dx + mask_margin, 0, color );
 
         if( DisplayIsol )
         {
@@ -249,14 +265,16 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 
         if( fillpad )
         {
-            GRFillCSegm( &panel->m_ClipBox, DC, ux0 + delta_cx, uy0 + delta_cy,
-                         ux0 - delta_cx, uy0 - delta_cy,
+            GRFillCSegm( &panel->m_ClipBox, DC,
+                         ux0 + delta_cx + mask_margin, uy0 + delta_cy + mask_margin,
+                         ux0 - delta_cx - mask_margin, uy0 - delta_cy - mask_margin,
                          rotdx, color );
         }
         else
         {
-            GRCSegm( &panel->m_ClipBox, DC, ux0 + delta_cx, uy0 + delta_cy,
-                     ux0 - delta_cx, uy0 - delta_cy,
+            GRCSegm( &panel->m_ClipBox, DC,
+                     ux0 + delta_cx + mask_margin, uy0 + delta_cy + mask_margin,
+                     ux0 - delta_cx - mask_margin, uy0 - delta_cy - mask_margin,
                      rotdx, color );
         }
 
@@ -275,8 +293,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     case PAD_TRAPEZOID:
     {
         int ddx, ddy;
-        ddx = m_DeltaSize.x >> 1;
-        ddy = m_DeltaSize.y >> 1;      /* demi dim  dx et dy */
+        ddx = (m_DeltaSize.x >> 1) + mask_margin;
+        ddy = (m_DeltaSize.y >> 1) + mask_margin;      /* demi dim  dx et dy */
 
         coord[0].x = -dx - ddy;
         coord[0].y = +dy + ddx;
@@ -301,8 +319,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 
         if( DisplayIsol )
         {
-            dx += padClearance;
-            dy += padClearance;
+            dx += padClearance - mask_margin;
+            dy += padClearance - mask_margin;
 
             coord[0].x = -dx - ddy;
             coord[0].y = dy + ddx;

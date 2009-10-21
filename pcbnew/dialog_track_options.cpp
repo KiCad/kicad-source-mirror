@@ -38,15 +38,10 @@ void DIALOG_TRACKS_OPTIONS::MyInit()
     AddUnitSymbol( *m_MaskClearanceTitle );
 
     int Internal_Unit = m_Parent->m_InternalUnits;
-    PutValueInLocalUnits( *m_OptViaDrill, g_DesignSettings.m_ViaDrill, Internal_Unit );
     PutValueInLocalUnits( *m_OptCustomViaDrill,
                           g_DesignSettings.m_ViaDrillCustomValue,
                           Internal_Unit );
     PutValueInLocalUnits( *m_OptMaskMargin, g_DesignSettings.m_MaskMargin, Internal_Unit );
-    if( g_DesignSettings.m_CurrentViaType != VIA_THROUGH )
-        m_OptViaType->SetSelection( 1 );
-
-    m_AllowMicroViaCtrl->SetSelection( g_DesignSettings.m_MicroViasAllowed ? 1 : 0);
 
     // Vias and Tracks sizes values.
     // note we display only extra values, never the current netclass value.
@@ -200,15 +195,8 @@ void DIALOG_TRACKS_OPTIONS::InitDimensionsLists()
 void DIALOG_TRACKS_OPTIONS::OnButtonOkClick( wxCommandEvent& event )
 /*******************************************************************/
 {
-    g_DesignSettings.m_CurrentViaType = VIA_THROUGH;
-    if( m_OptViaType->GetSelection() > 0 )
-        g_DesignSettings.m_CurrentViaType = VIA_BLIND_BURIED;
-
-    g_DesignSettings.m_ViaDrill =
-        ReturnValueFromTextCtrl( *m_OptViaDrill, m_Parent->m_InternalUnits );
     g_DesignSettings.m_ViaDrillCustomValue =
         ReturnValueFromTextCtrl( *m_OptCustomViaDrill, m_Parent->m_InternalUnits );
-    g_DesignSettings.m_MicroViasAllowed = m_AllowMicroViaCtrl->GetSelection() == 1;
 
     g_DesignSettings.m_MaskMargin =
         ReturnValueFromTextCtrl( *m_OptMaskMargin, m_Parent->m_InternalUnits );

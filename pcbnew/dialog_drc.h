@@ -51,7 +51,7 @@ private:
      */
     void writeReport( FILE* fpOut );
 
-    void Init( );
+    void InitValues( );
 
     void SetDrcParmeters( );
 

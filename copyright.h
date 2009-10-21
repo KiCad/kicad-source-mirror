@@ -12,7 +12,7 @@ may choose to document this corresponding work in the CHANGELOG.txt file.
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2008 Jean-Pierre Charras, jean-pierre.charras@inpg.fr
+ * Copyright (C) 1992-2008 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 1992-2008 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or

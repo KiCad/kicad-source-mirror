@@ -22,7 +22,7 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, WinEDA_PcbFrame* parent ) 
     m_tester = aTester;
     m_Parent = parent;
 
-    Init();
+    InitValues();
     if( GetSizer() )
     {
         GetSizer()->SetSizeHints( this );
@@ -30,7 +30,7 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, WinEDA_PcbFrame* parent ) 
 }
 
 
-void DIALOG_DRC_CONTROL::Init()
+void DIALOG_DRC_CONTROL::InitValues()
 {
     // Connect events and objects
     m_ClearanceListBox->Connect( ID_CLEARANCE_LIST, wxEVT_LEFT_DCLICK,
@@ -46,10 +46,10 @@ void DIALOG_DRC_CONTROL::Init()
                                    wxMouseEventHandler(
                                        DIALOG_DRC_CONTROL::OnRightUpUnconnected ), NULL, this );
 
-    AddUnitSymbol( *m_ClearenceTitle );
     AddUnitSymbol( *m_TrackMinWidthTitle );
     AddUnitSymbol( *m_ViaMinTitle );
     AddUnitSymbol( *m_MicroViaMinTitle );
+    m_SetClearance->SetValue( _("Use netclasses values"));
 
     Layout();      // adding the units above expanded Clearance text, now resize.
 
@@ -69,8 +69,6 @@ void DIALOG_DRC_CONTROL::Init()
 */
 void DIALOG_DRC_CONTROL::SetDrcParmeters( )
 {
-    g_DesignSettings.m_TrackClearance =
-        ReturnValueFromTextCtrl( *m_SetClearance, m_Parent->m_InternalUnits );
     g_DesignSettings.m_TrackMinWidth =
         ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl, m_Parent->m_InternalUnits );
     g_DesignSettings.m_ViasMinSize =

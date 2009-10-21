@@ -111,6 +111,11 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 }
 
 
+/** return a pointer to the netclass of the zone
+ * if the net is not found (can happen when a netlist is reread,
+ * and the net name is not existant, return the default net class
+ * So should not return a null pointer
+ */
 NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
 {
     // It is important that this be implemented without any sequential searching.
@@ -118,33 +123,35 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
     BOARD*  board = GetBoard();
     // DO NOT use wxASSERT, because GetNetClass is called inside an OnPaint event
     // and a call to wxASSERT can crash the application.
-    if( board )
-    {
-        NETINFO_ITEM* net = board->FindNet( GetNet() );
-        if( net )
-        {
-            NETCLASS* netclass = net->GetNetClass();
-#ifdef __WXDEBUG__
-            if( netclass == NULL )
-                wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetNetClass(): NULL netclass") );
-#endif
-            return netclass;
-        }
-        else
-        {
-#ifdef __WXDEBUG__
-            wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetNetClass(): NULL net") );
-#endif
-        }
-    }
-    else
+    if( board == NULL )     // Should not occurs
     {
 #ifdef __WXDEBUG__
         wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetNetClass(): NULL board, type %d"), Type() );
 #endif
+        return NULL;
     }
 
-    return NULL;
+    NETCLASS* netclass = NULL;
+    NETINFO_ITEM* net = board->FindNet( GetNet() );
+    if( net )
+    {
+        netclass = net->GetNetClass();
+#ifdef __WXDEBUG__
+        if( netclass == NULL )
+            wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetNetClass(): NULL netclass") );
+#endif
+    }
+    else
+    {
+#ifdef __WXDEBUG__
+        wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetNetClass(): NULL net") );
+#endif
+    }
+
+    if( netclass )
+        return netclass;
+    else
+        return board->m_NetClasses.GetDefault();
 }
 
 /** function GetNetClassName

@@ -21,6 +21,14 @@
 #include <wx/statbox.h>
 #include <wx/choice.h>
 #include <wx/listctrl.h>
+#include <wx/panel.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/radiobox.h>
+#include <wx/stattext.h>
+#include <wx/textctrl.h>
+#include <wx/notebook.h>
 #include <wx/html/htmlwin.h>
 #include <wx/dialog.h>
 
@@ -44,6 +52,8 @@ class DIALOG_DESIGN_RULES_BASE : public wxDialog
 			ID_RIGHT_CHOICE_CLICK,
 		};
 		
+		wxNotebook* m_DRnotebook;
+		wxPanel* m_panelNetClassesEditor;
 		wxGrid* m_grid;
 		wxButton* m_addButton;
 		wxButton* m_removeButton;
@@ -56,6 +66,19 @@ class DIALOG_DESIGN_RULES_BASE : public wxDialog
 		wxButton* m_buttonRightSelAll;
 		wxChoice* m_rightClassChoice;
 		wxListCtrl* m_rightListCtrl;
+		wxPanel* m_panelGolbalDesignRules;
+		wxRadioBox* m_OptViaType;
+		wxStaticText* m_ViaMinTitle;
+		wxTextCtrl* m_SetViasMinSizeCtrl;
+		wxStaticText* m_ViaMinDrillTitle;
+		wxTextCtrl* m_SetViasMinDrillCtrl;
+		wxRadioBox* m_AllowMicroViaCtrl;
+		wxStaticText* m_MicroViaMinSizeTitle;
+		wxTextCtrl* m_SetMicroViasMinSizeCtrl;
+		wxStaticText* m_MicroViaMinDrillTitle;
+		wxTextCtrl* m_SetMicroViasMinDrillCtrl;
+		wxStaticText* m_TrackMinWidthTitle;
+		wxTextCtrl* m_SetTrackMinWidthCtrl;
 		wxHtmlWindow* m_MessagesList;
 		wxStdDialogButtonSizer* m_sdbButtonsSizer;
 		wxButton* m_sdbButtonsSizerOK;
@@ -78,7 +101,7 @@ class DIALOG_DESIGN_RULES_BASE : public wxDialog
 		
 	
 	public:
-		DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Design Rules Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 750,692 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Design Rules Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 792,692 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_DESIGN_RULES_BASE();
 	
 };

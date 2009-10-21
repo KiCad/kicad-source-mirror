@@ -123,7 +123,7 @@ Changing extension to .brd." ),
         SetupServerFunction( RemoteCommand );
     }
 
-    Read_Config( fn.GetFullPath() );
+    frame->Read_Config( fn.GetFullPath() );
 
     frame->Zoom_Automatique( true );
 

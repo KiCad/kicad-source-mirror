@@ -21,7 +21,6 @@
 #include <wx/statbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/radiobox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -48,7 +47,6 @@ class DIALOG_TRACKS_OPTIONS_BASE : public wxDialog
 		{
 			wxID_ADD_VIA_SIZE = 1000,
 			wxID_DELETED_WIA_SIEZ,
-			wxID_ALLOW_MICROVIA,
 			wxID_ADD_TRACK_WIDTH,
 			wxID_DELETED_TRACK_WIDTH,
 		};
@@ -56,13 +54,8 @@ class DIALOG_TRACKS_OPTIONS_BASE : public wxDialog
 		wxListBox* m_ViaSizeListCtrl;
 		wxButton* m_buttonAddViasSize;
 		wxButton* m_button4;
-		wxStaticText* m_ViaDefaultDrillValueTitle;
-		wxTextCtrl* m_OptViaDrill;
 		wxStaticText* m_ViaAltDrillValueTitle;
 		wxTextCtrl* m_OptCustomViaDrill;
-		wxRadioBox* m_OptViaType;
-		
-		wxRadioBox* m_AllowMicroViaCtrl;
 		wxListBox* m_TrackWidthListCtrl;
 		wxButton* m_buttonAddTrackSize;
 		wxButton* m_buttonDeleteTrackWidth;
@@ -83,7 +76,7 @@ class DIALOG_TRACKS_OPTIONS_BASE : public wxDialog
 		
 	
 	public:
-		DIALOG_TRACKS_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Tracks and Vias Sizes"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 627,351 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_TRACKS_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Tracks and Vias Sizes"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,351 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_TRACKS_OPTIONS_BASE();
 	
 };

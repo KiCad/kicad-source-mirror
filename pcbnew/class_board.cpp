@@ -127,6 +127,22 @@ BOARD::~BOARD()
     return lists_sizes_modified;
 }
 
+/** function GetBiggestClearanceValue
+ * @return the biggest clerance value found in NetClasses list
+ */
+int BOARD::GetBiggestClearanceValue()
+{
+    int clearance = m_NetClasses.GetDefault()->GetClearance();
+    //Read list of Net Classes
+    for( NETCLASSES::const_iterator nc = m_NetClasses.begin();  nc != m_NetClasses.end(); nc++ )
+    {
+        NETCLASS* netclass = nc->second;
+        clearance = MAX( clearance, netclass->GetClearance() );
+    }
+    return clearance;
+}
+
+
 wxString BOARD::GetLayerName( int aLayerIndex ) const
 {
     if( ! IsValidLayerIndex( aLayerIndex ))

@@ -324,6 +324,8 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
     char    Line[1024];
     char*   data;
 
+    NETCLASS * netclass_default = GetBoard()->m_NetClasses.GetDefault();
+
     while(  GetLine( File, Line, LineNum ) != NULL )
     {
         strtok( Line, " =\n\r" );
@@ -405,7 +407,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
 
         if( stricmp( Line, "TrackClearence" ) == 0 )
         {
-            g_DesignSettings.m_TrackClearance = atoi( data );
+            netclass_default->SetClearance( atoi( data ) );
             continue;
         }
 
@@ -418,12 +420,6 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
         if( stricmp( Line, "ZoneClearence" ) == 0 )
         {
             g_Zone_Default_Setting.m_ZoneClearance = atoi( data );
-            continue;
-        }
-
-        if( stricmp( Line, "ZoneGridSize" ) == 0 )
-        {
-            g_GridRoutingSize = atoi( data );
             continue;
         }
 
@@ -472,7 +468,8 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
 
         if( stricmp( Line, "ViaDrill" ) == 0 )
         {
-            g_DesignSettings.m_ViaDrill = atoi( data );
+            int diameter = atoi( data );
+            netclass_default->SetViaDrill( diameter );
             continue;
         }
 
@@ -482,9 +479,23 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             continue;
         }
 
+        if( stricmp( Line, "ViaMinDrill" ) == 0 )
+        {
+            g_DesignSettings.m_ViasMinDrill = atoi( data );
+            continue;
+        }
+
         if( stricmp( Line, "MicroViaDrill" ) == 0 )
         {
-            g_DesignSettings.m_MicroViaDrill = atoi( data );
+            int diameter = atoi( data );
+            netclass_default->SetuViaDrill( diameter );
+            continue;
+        }
+
+        if( stricmp( Line, "MicroViaMinDrill" ) == 0 )
+        {
+            int diameter = atoi( data );
+            g_DesignSettings.m_MicroViasMinDrill = diameter;
             continue;
         }
 
@@ -582,6 +593,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
 static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
 /******************************************************************************/
 {
+    NETCLASS * netclass_default = aFrame->GetBoard()->m_NetClasses.GetDefault();
     char text[1024];
 
     fprintf( aFile, "$SETUP\n" );
@@ -610,25 +622,27 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
        fprintf( aFile, "TrackWidthList %d\n", aBoard->m_TrackWidthList[ii] );
 
 
-    fprintf( aFile, "TrackClearence %d\n", g_DesignSettings.m_TrackClearance );
+    fprintf( aFile, "TrackClearence %d\n", netclass_default->GetClearance() );
     fprintf( aFile, "ZoneClearence %d\n", g_Zone_Default_Setting.m_ZoneClearance );
     fprintf( aFile, "TrackMinWidth %d\n" , g_DesignSettings.m_TrackMinWidth );
 
     fprintf( aFile, "DrawSegmWidth %d\n", g_DesignSettings.m_DrawSegmentWidth );
     fprintf( aFile, "EdgeSegmWidth %d\n", g_DesignSettings.m_EdgeSegmentWidth );
     fprintf( aFile, "ViaSize %d\n", g_DesignSettings.m_CurrentViaSize );
-    fprintf( aFile, "ViaDrill %d\n", g_DesignSettings.m_ViaDrill );
+    fprintf( aFile, "ViaDrill %d\n", netclass_default->GetViaDrill() );
     fprintf( aFile, "ViaAltDrill %d\n", g_DesignSettings.m_ViaDrillCustomValue );
     fprintf( aFile, "ViaMinSize %d\n", g_DesignSettings.m_ViasMinSize );
+    fprintf( aFile, "ViaMinDrill %d\n", g_DesignSettings.m_ViasMinDrill );
 
     // Save custom vias diameters list (the first is not saved here: this is the netclass value
     for( unsigned ii = 1; ii < aBoard->m_ViaSizeList.size(); ii++ )
        fprintf( aFile, "ViaSizeList %d\n", aBoard->m_ViaSizeList[ii] );
 
     fprintf( aFile, "MicroViaSize %d\n", g_DesignSettings.m_CurrentMicroViaSize);
-    fprintf( aFile, "MicroViaDrill %d\n", g_DesignSettings.m_MicroViaDrill);
+    fprintf( aFile, "MicroViaDrill %d\n", netclass_default->GetuViaDrill());
     fprintf( aFile, "MicroViasAllowed %d\n", g_DesignSettings.m_MicroViasAllowed);
     fprintf( aFile, "MicroViaMinSize %d\n" , g_DesignSettings.m_MicroViasMinSize );
+    fprintf( aFile, "MicroViaMinDrill %d\n", g_DesignSettings.m_MicroViasMinDrill );
 
     fprintf( aFile, "TextPcbWidth %d\n", g_DesignSettings.m_PcbTextWidth );
     fprintf( aFile, "TextPcbSize %d %d\n",

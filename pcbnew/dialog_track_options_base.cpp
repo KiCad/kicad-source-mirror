@@ -35,7 +35,7 @@ DIALOG_TRACKS_OPTIONS_BASE::DIALOG_TRACKS_OPTIONS_BASE( wxWindow* parent, wxWind
 	sViaSizeBox = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Vias Custom Sizes List:") ), wxHORIZONTAL );
 	
 	m_ViaSizeListCtrl = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	sViaSizeBox->Add( m_ViaSizeListCtrl, 1, wxALL|wxEXPAND, 5 );
+	sViaSizeBox->Add( m_ViaSizeListCtrl, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizeViasListButtons;
 	bSizeViasListButtons = new wxBoxSizer( wxVERTICAL );
@@ -50,15 +50,6 @@ DIALOG_TRACKS_OPTIONS_BASE::DIALOG_TRACKS_OPTIONS_BASE( wxWindow* parent, wxWind
 	
 	sbLeftSizer->Add( sViaSizeBox, 1, wxEXPAND, 5 );
 	
-	m_ViaDefaultDrillValueTitle = new wxStaticText( this, wxID_ANY, _("Default Via Drill"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ViaDefaultDrillValueTitle->Wrap( -1 );
-	sbLeftSizer->Add( m_ViaDefaultDrillValueTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_OptViaDrill = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptViaDrill->SetToolTip( _("Enter the default via drill diameter\nAll vias drills not set to a specific drill value will have this drill value.") );
-	
-	sbLeftSizer->Add( m_OptViaDrill, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-	
 	m_ViaAltDrillValueTitle = new wxStaticText( this, wxID_ANY, _("Specific Via Drill"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaAltDrillValueTitle->Wrap( -1 );
 	sbLeftSizer->Add( m_ViaAltDrillValueTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -70,30 +61,6 @@ DIALOG_TRACKS_OPTIONS_BASE::DIALOG_TRACKS_OPTIONS_BASE( wxWindow* parent, wxWind
 	
 	bMainUpperSizer->Add( sbLeftSizer, 1, wxEXPAND, 5 );
 	
-	wxStaticBoxSizer* sbMiddleLeftSizer;
-	sbMiddleLeftSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Vias Options:") ), wxVERTICAL );
-	
-	wxString m_OptViaTypeChoices[] = { _("Through via"), _("Blind or buried via") };
-	int m_OptViaTypeNChoices = sizeof( m_OptViaTypeChoices ) / sizeof( wxString );
-	m_OptViaType = new wxRadioBox( this, wxID_ANY, _("Default Via Type"), wxDefaultPosition, wxDefaultSize, m_OptViaTypeNChoices, m_OptViaTypeChoices, 1, wxRA_SPECIFY_COLS );
-	m_OptViaType->SetSelection( 0 );
-	m_OptViaType->SetToolTip( _("Select the current via type.\nTrough via is the usual selection") );
-	
-	sbMiddleLeftSizer->Add( m_OptViaType, 0, wxALL|wxEXPAND, 5 );
-	
-	
-	sbMiddleLeftSizer->Add( 10, 10, 0, 0, 5 );
-	
-	wxString m_AllowMicroViaCtrlChoices[] = { _("Do not allow micro vias"), _("Allow micro vias") };
-	int m_AllowMicroViaCtrlNChoices = sizeof( m_AllowMicroViaCtrlChoices ) / sizeof( wxString );
-	m_AllowMicroViaCtrl = new wxRadioBox( this, wxID_ALLOW_MICROVIA, _("Micro Vias:"), wxDefaultPosition, wxDefaultSize, m_AllowMicroViaCtrlNChoices, m_AllowMicroViaCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_AllowMicroViaCtrl->SetSelection( 0 );
-	m_AllowMicroViaCtrl->SetToolTip( _("Allows or do not allow use of micro vias\nThey are very small vias only from an external copper layer to its near neightbour") );
-	
-	sbMiddleLeftSizer->Add( m_AllowMicroViaCtrl, 0, wxALL, 5 );
-	
-	bMainUpperSizer->Add( sbMiddleLeftSizer, 0, wxEXPAND, 5 );
-	
 	wxStaticBoxSizer* sbMiddleRightSizer;
 	sbMiddleRightSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Dimensions:") ), wxVERTICAL );
 	
@@ -101,7 +68,7 @@ DIALOG_TRACKS_OPTIONS_BASE::DIALOG_TRACKS_OPTIONS_BASE( wxWindow* parent, wxWind
 	sbTracksListSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Tracks Custom Widths List:") ), wxHORIZONTAL );
 	
 	m_TrackWidthListCtrl = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	sbTracksListSizer->Add( m_TrackWidthListCtrl, 1, wxALL|wxEXPAND, 5 );
+	sbTracksListSizer->Add( m_TrackWidthListCtrl, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizerTacksButtSizer;
 	bSizerTacksButtSizer = new wxBoxSizer( wxVERTICAL );

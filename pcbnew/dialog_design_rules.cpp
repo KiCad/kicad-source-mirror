@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2004-2009 Jean-Pierre Charras, jean-pierre.charras@inpg.fr
+ * Copyright (C) 2004-2009 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
  * Copyright (C) 2009 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2009 Kicad Developers, see change_log.txt for contributors.
  *
@@ -62,6 +62,7 @@ DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( WinEDA_PcbFrame* parent ) :
 /***********************************************************************************/
 {
     m_Parent = parent;
+    SetAutoLayout( true );
 
     wxListItem  column0;
     wxListItem  column1;
@@ -87,7 +88,7 @@ DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( WinEDA_PcbFrame* parent ) :
 
 
     InitDialogRules();
-    SetAutoLayout( true );
+	Layout();
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
 }
@@ -161,11 +162,37 @@ void DIALOG_DESIGN_RULES::InitDialogRules()
     }
 
     InitializeRulesSelectionBoxes();
+    InitGlobalRules();
 
     PrintCurrentSettings( );
 }
 
-// Sort comparison function
+/*******************************************/
+void DIALOG_DESIGN_RULES::InitGlobalRules()
+/*******************************************/
+{
+    AddUnitSymbol( *m_ViaMinTitle );
+    AddUnitSymbol( *m_ViaMinDrillTitle );
+    AddUnitSymbol( *m_MicroViaMinSizeTitle );
+    AddUnitSymbol( *m_MicroViaMinDrillTitle );
+    AddUnitSymbol( *m_TrackMinWidthTitle );
+
+    int Internal_Unit = m_Parent->m_InternalUnits;
+    PutValueInLocalUnits( *m_SetViasMinSizeCtrl, g_DesignSettings.m_ViasMinSize, Internal_Unit );
+    PutValueInLocalUnits( *m_SetViasMinDrillCtrl, g_DesignSettings.m_ViasMinDrill, Internal_Unit );
+
+    if( g_DesignSettings.m_CurrentViaType != VIA_THROUGH )
+        m_OptViaType->SetSelection( 1 );
+
+    m_AllowMicroViaCtrl->SetSelection( g_DesignSettings.m_MicroViasAllowed ? 1 : 0);
+    PutValueInLocalUnits( *m_SetMicroViasMinSizeCtrl, g_DesignSettings.m_MicroViasMinSize, Internal_Unit );
+    PutValueInLocalUnits( *m_SetMicroViasMinDrillCtrl, g_DesignSettings.m_MicroViasMinDrill, Internal_Unit );
+
+    PutValueInLocalUnits( *m_SetTrackMinWidthCtrl, g_DesignSettings.m_TrackMinWidth, Internal_Unit );
+}
+
+
+// Sort comparison function (helper for makePointers() )
 static bool sortByClassThenName( NETCUP* a, NETCUP* b )
 {
     // return a < b
@@ -404,6 +431,35 @@ void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
     m_Pcb->SynchronizeNetsAndNetClasses();
 }
 
+/*************************************************/
+bool DIALOG_DESIGN_RULES::CopyGlobalRulesToBoard()
+/*************************************************/
+{
+    g_DesignSettings.m_CurrentViaType = VIA_THROUGH;
+    if( m_OptViaType->GetSelection() > 0 )
+        g_DesignSettings.m_CurrentViaType = VIA_BLIND_BURIED;
+
+    // Update vias minimum values for DRC
+    g_DesignSettings.m_ViasMinSize =
+        ReturnValueFromTextCtrl( *m_SetViasMinSizeCtrl, m_Parent->m_InternalUnits );
+    g_DesignSettings.m_ViasMinDrill =
+        ReturnValueFromTextCtrl( *m_SetViasMinDrillCtrl, m_Parent->m_InternalUnits );
+
+    g_DesignSettings.m_MicroViasAllowed = m_AllowMicroViaCtrl->GetSelection() == 1;
+
+    // Update microvias minimum values for DRC
+    g_DesignSettings.m_MicroViasMinSize =
+        ReturnValueFromTextCtrl( *m_SetMicroViasMinSizeCtrl, m_Parent->m_InternalUnits );
+    g_DesignSettings.m_MicroViasMinDrill =
+        ReturnValueFromTextCtrl( *m_SetMicroViasMinDrillCtrl, m_Parent->m_InternalUnits );
+
+    // Update tracks minimum values for DRC
+    g_DesignSettings.m_TrackMinWidth =
+        ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl, m_Parent->m_InternalUnits );
+
+    return true;
+}
+
 
 /*****************************************************************/
 void DIALOG_DESIGN_RULES::OnCancelButtonClick( wxCommandEvent& event )
@@ -424,8 +480,11 @@ void DIALOG_DESIGN_RULES::OnOkButtonClick( wxCommandEvent& event )
     }
 
     CopyRulesListToBoard();
+    CopyGlobalRulesToBoard();
 
     EndModal( wxID_OK );
+
+    m_Parent->AuxiliaryToolBar_Update_UI();
 }
 
 
@@ -458,19 +517,19 @@ void DIALOG_DESIGN_RULES::OnAddNetclassClick( wxCommandEvent& event )
         m_grid->GetNumberRows() - 1,
         class_name );
 
-    // Copy values of the previous class:
+    // Copy values of the default class:
     int irow = m_grid->GetNumberRows() - 1;
     for( int icol = 0; icol < m_grid->GetNumberCols(); icol++ )
     {
         wxString value;
-        value = m_grid->GetCellValue( irow - 1, icol );
+        value = m_grid->GetCellValue( 0, icol );
         m_grid->SetCellValue( irow, icol, value );
     }
 
     InitializeRulesSelectionBoxes();
 }
 
-// Sort function for wxArrayInt. Itelms (ints) are sorted by decreasing value
+// Sort function for wxArrayInt. Items (ints) are sorted by decreasing value
 // used in DIALOG_DESIGN_RULES::OnRemoveNetclassClick
 int sort_int(int *first, int *second)
 {
@@ -683,12 +742,17 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
 
     wxString    msg;
 
+    int minViaDrill = ReturnValueFromTextCtrl( *m_SetViasMinDrillCtrl, m_Parent->m_InternalUnits );
+    int minUViaDrill = ReturnValueFromTextCtrl( *m_SetMicroViasMinDrillCtrl, m_Parent->m_InternalUnits );
+    int minTrackWidth = ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl, m_Parent->m_InternalUnits );
+
+
     for( int row = 0; row < m_grid->GetNumberRows(); row++ )
     {
         int tracksize = ReturnValueFromString( g_UnitMetric,
                                        m_grid->GetCellValue( row, GRID_TRACKSIZE ),
                                        m_Parent->m_InternalUnits );
-        if( tracksize < g_DesignSettings.m_TrackMinWidth )
+        if( tracksize < minTrackWidth )
         {
             result = false;
             msg.Printf( _( "%s: <b>Track Size</b> &lt; <b>Min Track Size</b><br>" ),
@@ -714,10 +778,19 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
         int viadrill = ReturnValueFromString( g_UnitMetric,
                                           m_grid->GetCellValue( row, GRID_VIADRILL ),
                                           m_Parent->m_InternalUnits );
-        if( viadrill && viadrill >= viadia )
+        if( viadrill >= viadia )
         {
             result = false;
             msg.Printf( _( "%s: <b>Via Drill</b> &ge; <b>Via Dia</b><br>" ),
+                GetChars( m_grid->GetRowLabelValue(row)) );
+
+            m_MessagesList->AppendToPage( msg );
+        }
+
+        if( viadrill < minViaDrill )
+        {
+            result = false;
+            msg.Printf( _( "%s: <b>Via Drill</b> &lt; <b>Min Via Drill</b><br>" ),
                 GetChars( m_grid->GetRowLabelValue(row)) );
 
             m_MessagesList->AppendToPage( msg );
@@ -731,7 +804,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
         if( muviadia < g_DesignSettings.m_MicroViasMinSize )
         {
             result = false;
-            msg.Printf( _( "%s: <b>MicroVia Diameter</b> &lt; <b>Minimun MicroVia Diameter</b><br>" ),
+            msg.Printf( _( "%s: <b>MicroVia Diameter</b> &lt; <b>MicroVia Min Diameter</b><br>" ),
                 GetChars( m_grid->GetRowLabelValue(row)) );
 
             m_MessagesList->AppendToPage( msg );
@@ -740,10 +813,19 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
         int muviadrill = ReturnValueFromString( g_UnitMetric,
                                           m_grid->GetCellValue( row, GRID_uVIADRILL ),
                                           m_Parent->m_InternalUnits );
-        if( muviadrill && muviadrill >= muviadia )
+        if( muviadrill >= muviadia )
         {
             result = false;
             msg.Printf( _( "%s: <b>MicroVia Drill</b> &ge; <b>MicroVia Dia</b><br>" ),
+                GetChars( m_grid->GetRowLabelValue(row)) );
+
+            m_MessagesList->AppendToPage( msg );
+        }
+
+        if( muviadrill < minUViaDrill )
+        {
+            result = false;
+            msg.Printf( _( "%s: <b>MicroVia Drill</b> &ge; <b>MicroVia Min Drill</b><br>" ),
                 GetChars( m_grid->GetRowLabelValue(row)) );
 
             m_MessagesList->AppendToPage( msg );

@@ -619,7 +619,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
             fprintf( file, "VIA viapad%d %d %d ALL %d via%d\n",
                      track->m_Width,
                      mapXto( track->m_Start.x ), mapYto( track->m_Start.y ),
-                     g_DesignSettings.m_ViaDrill, vianum++ );
+                     track->GetDrillValue(), vianum++ );
         }
     }
 

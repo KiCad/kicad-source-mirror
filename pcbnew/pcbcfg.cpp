@@ -49,15 +49,6 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
         DisplayColorSetupFrame( this, pos );
         break;
 
-/*
-    case ID_PCB_COPPER_LAYERS_SETUP:
-    {
-        DIALOG_COPPER_LAYERS_SETUP dialog( this );
-        dialog.ShowModal();
-    }
-        break;
-*/
-
     case ID_PCB_LAYERS_SETUP:
         DisplayDialogLayerSetup( this );
         break;
@@ -163,17 +154,14 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose )
 }
 
 
-/**************************************************************************/
-bool Read_Config( const wxString& projectFileName )
-/*************************************************************************/
-
-/* lit la configuration, si elle n'a pas deja ete lue
- * 1 - lit <nom fichier brd>.pro
- * 2 - si non trouve lit <chemin de *.exe>/kicad.pro
- * 3 - si non trouve: init des variables aux valeurs par defaut
- *
- * Retourne TRUE si lu, FALSE si config non lue ou non modifiée
+/** Function Read_Config
+ * Read the project configuration file
+ * @param projectFileName = the config filename
+ *  if not found use kicad.pro
+ *  if not found : initialize default values
+ * @return true if the current config is modified, false if no change
  */
+bool WinEDA_PcbFrame::Read_Config( const wxString& projectFileName )
 {
     wxFileName fn = projectFileName;
     int      ii;
@@ -192,7 +180,7 @@ bool Read_Config( const wxString& projectFileName )
     /* User library path takes precedent over default library search paths. */
     wxGetApp().InsertLibraryPath( g_UserLibDirBuffer, 1 );
 
-    /* Reset the ITEM*NOT*SHOW flag when loading a new config
+    /* Reset the items visibility flag when loading a new config
      *  Because it could creates SERIOUS mistakes for the user,
      * if some items are not visible after loading a board...
      */
@@ -201,10 +189,6 @@ bool Read_Config( const wxString& projectFileName )
 
     DisplayOpt.Show_Modules_Cmp = true;
     DisplayOpt.Show_Modules_Cu = true;
-
-    // These parameters could be left in their previous state, or resetted
-    // Comment or uncomment to keep or reset this option after loading a board
-
     g_DesignSettings.SetElementVisibility( MODULE_TEXT_NOV_VISIBLE, true );
     g_DesignSettings.SetElementVisibility( MODULE_TEXT_CMP_VISIBLE, true );
     g_DesignSettings.SetElementVisibility( MODULE_TEXT_CU_VISIBLE, true );
@@ -213,6 +197,8 @@ bool Read_Config( const wxString& projectFileName )
     g_DesignSettings.SetElementVisibility( VIA_THROUGH_VISIBLE, true );
     g_DesignSettings.SetElementVisibility( VIA_BLIND_BURIED_VISIBLE, true );
     g_DesignSettings.SetElementVisibility( VIA_MICROVIA_VISIBLE, true );
+
+    // Items that can remain not visible: comment them if you want.
     g_DesignSettings.SetElementVisibility( ANCHOR_VISIBLE, true );
 
     DisplayOpt.DisplayPadNoConn = true;

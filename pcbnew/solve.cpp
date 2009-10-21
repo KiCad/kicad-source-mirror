@@ -31,6 +31,7 @@ static int      segm_oX, segm_oY;
 static int      segm_fX, segm_fY;   /* Origine et fin de la piste en cours de trace */
 static RATSNEST_ITEM* pt_cur_ch;
 static int      Ncurrent;           /* measures of progress */
+static int s_Clearance;             // Clerance value used in autorouter
 
 
 #define NOSUCCESS       0
@@ -219,6 +220,8 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
     DrawPanel->m_AbortRequest = FALSE;
     DrawPanel->m_AbortEnable  = TRUE;
 
+    s_Clearance = GetBoard()->m_NetClasses.GetDefault()->GetClearance();
+
     Ncurrent = 0;
     MsgPanel->EraseMsgBox();
     msg.Printf( wxT( "%d  " ), GetBoard()->m_NbNoconnect );
@@ -355,8 +358,8 @@ static int Autoroute_One_Track( WinEDA_PcbFrame* pcbframe, wxDC* DC,
 
     result = NOSUCCESS;
 
-    marge     = g_DesignSettings.m_TrackClearance + (g_DesignSettings.m_CurrentTrackWidth / 2);
-    via_marge = g_DesignSettings.m_TrackClearance + (g_DesignSettings.m_CurrentViaSize / 2);
+    marge     = s_Clearance + (g_DesignSettings.m_CurrentTrackWidth / 2);
+    via_marge = s_Clearance + (g_DesignSettings.m_CurrentViaSize / 2);
 
     /* clear direction flags */
     i = Nrows * Ncols * sizeof(char);
@@ -1048,8 +1051,8 @@ static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
     int marge, via_marge;
     WinEDA_DrawPanel* panel = pcbframe->DrawPanel;
 
-    marge     = g_DesignSettings.m_TrackClearance + (g_DesignSettings.m_CurrentTrackWidth / 2);
-    via_marge = g_DesignSettings.m_TrackClearance + (g_DesignSettings.m_CurrentViaSize / 2);
+    marge     = s_Clearance + (g_DesignSettings.m_CurrentTrackWidth / 2);
+    via_marge = s_Clearance + (g_DesignSettings.m_CurrentViaSize / 2);
 
     /* tst point d'arrivee : doit etre sur pad start */
 

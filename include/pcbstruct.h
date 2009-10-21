@@ -7,7 +7,7 @@
 
 #include "base_struct.h"
 #include "class_base_screen.h"
-#include "board_item_struct.h"
+#include "class_board_item.h"
 
 // Definitions relatives aux libariries
 #define ENTETE_LIBRAIRIE "PCBNEW-LibModule-V1"
@@ -148,7 +148,7 @@ enum ELEMENTS_NUMBERS
     PAD_CU_VISIBLE,
     PAD_CMP_VISIBLE
 };
-    
+
 /**
  * Function IsValidLayerIndex
  * tests whether a given integer is a valid layer index
@@ -170,7 +170,7 @@ inline bool IsValidCopperLayerIndex( int aLayerIndex )
 {
     return aLayerIndex >= FIRST_COPPER_LAYER && aLayerIndex <= LAST_COPPER_LAYER;
 }
-    
+
 /**
  * Function IsValidNonCopperLayerIndex
  * tests whether an integer is a valid non copper layer index
@@ -181,15 +181,13 @@ inline bool IsValidNonCopperLayerIndex( int aLayerIndex )
 {
     return aLayerIndex >= FIRST_NO_COPPER_LAYER && aLayerIndex <= LAST_NO_COPPER_LAYER;
 }
-    
+
 // Class for handle current printed board design settings
 class EDA_BoardDesignSettings
 {
 public:
     int    m_CopperLayerCount;                      // Number of copper layers for this design
-    int    m_ViaDrill;                              // via drill (for the entire board)
-    int    m_ViaDrillCustomValue;                   // via drill for vias which must have a defined drill value
-    int    m_MicroViaDrill;                         // micro via drill (for the entire board)
+    int    m_ViaDrillCustomValue;                   // via drill for vias that have a specific drill value
     int    m_CurrentViaSize;                        // Current via size
     int    m_CurrentMicroViaSize;                   // Current micro via size
     bool   m_MicroViasAllowed;                      // true to allow micro vias
@@ -200,10 +198,11 @@ public:
     int    m_EdgeSegmentWidth;                      // current graphic line width (EDGE layer only)
     int    m_PcbTextWidth;                          // current Pcb (not module) Text width
     wxSize m_PcbTextSize;                           // current Pcb (not module) Text size
-    int    m_TrackClearance;                        // track to track and track to pads clearance
     int    m_TrackMinWidth;                         // track min value for width ((min copper size value
     int    m_ViasMinSize;                           // vias (not micro vias) min diameter
+    int    m_ViasMinDrill;                          // vias (not micro vias) min drill diameter
     int    m_MicroViasMinSize;                      // micro vias (not vias) min diameter
+    int    m_MicroViasMinDrill;                     // micro vias (not vias) min drill diameter
     int    m_MaskMargin;                            // Solder mask margin
     int    m_LayerThickness;                        // Layer Thickness for 3D viewer
 
@@ -239,7 +238,7 @@ public:
      * @param aMask = The new bit-mask of visible layers
      */
     void SetVisibleLayers( int aMask );
-    
+
     /**
      * Function IsLayerVisible
      * tests whether a given layer is visible
@@ -281,7 +280,7 @@ public:
     {
         m_VisibleElements = aMask;
     }
-    
+
     /**
      * Function IsElementVisible
      * tests whether a given element category is visible

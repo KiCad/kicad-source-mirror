@@ -224,7 +224,8 @@ class NETCLASS;
 /**
  * Class BOARD_CONNECTED_ITEM
  * This is a base class derived from BOARD_ITEM for items that can be connected
- * mainly: tracks and pads
+ * and have a net, a netname, a clearance ...
+ * mainly: tracks, pads and zones
  * Handle connection info
  */
 class BOARD_CONNECTED_ITEM : public BOARD_ITEM
@@ -248,7 +249,7 @@ public:
      * @return int - the net code.
      */
     int GetNet() const;
-    void SetNet( int aNetCode );
+    virtual void SetNet( int aNetCode );
 
     /**
      * Function GetSubNet
@@ -289,6 +290,10 @@ public:
 };
 
 
+/*
+ * class BOARD_ITEM_LIST
+ * Handles a collection of BOARD_ITEM elements
+*/
 class BOARD_ITEM_LIST : public BOARD_ITEM
 {
     typedef boost::ptr_vector<BOARD_ITEM>   ITEM_ARRAY;

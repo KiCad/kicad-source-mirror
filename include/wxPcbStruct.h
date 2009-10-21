@@ -87,6 +87,15 @@ public:
     void             InstallConfigFrame( const wxPoint& pos );
     void             Process_Config( wxCommandEvent& event );
     void             Update_config( wxWindow* displayframe );
+    /** Function Read_Config
+     * Read the project configuration file
+     * @param projectFileName = the config filename
+     *  if not found use kicad.pro
+     *  if not found : initialize default values
+     * @return true if the current config is modified, false if no change
+     */
+    bool             Read_Config( const wxString& projectFileName );
+
     void             OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
     bool             OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct );
 

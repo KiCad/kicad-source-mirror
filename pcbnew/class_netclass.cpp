@@ -33,6 +33,10 @@
 
 // This will get mapped to "kicad_default" in the specctra_export.
 const wxString NETCLASS::Default = wxT("Default");
+// Initial values for netclass initialization
+int NETCLASS::DEFAULT_CLEARANCE = 100;                  // track to track and track to pads clearance
+int NETCLASS::DEFAULT_VIA_DRILL = 250;                  // default via drill
+int NETCLASS::DEFAULT_UVIA_DRILL = 50;                  // micro via drill
 
 
 NETCLASS::NETCLASS( BOARD* aParent, const wxString& aName, const NETCLASS* initialParameters ) :
@@ -60,12 +64,13 @@ void NETCLASS::SetParams( const NETCLASS* defaults )
     {
         const EDA_BoardDesignSettings& g = g_DesignSettings;
 
-        SetClearance(   g.m_TrackClearance );
         SetTrackWidth(  g.m_TrackMinWidth );
         SetViaDiameter( g.m_ViasMinSize );
-        SetViaDrill(    g.m_ViaDrill );
         SetuViaDiameter(g.m_MicroViasMinSize );
-        SetuViaDrill(   g.m_MicroViaDrill );
+        // Use default values for next parameters:
+        SetClearance( DEFAULT_CLEARANCE );
+        SetViaDrill( DEFAULT_VIA_DRILL );
+        SetuViaDrill( DEFAULT_UVIA_DRILL );
     }
 }
 

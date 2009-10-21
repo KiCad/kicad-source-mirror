@@ -207,7 +207,21 @@ public:
      */
     operator wxRect() const { return wxRect( m_Pos, m_Size ); }
 
+    /** Inflate
+     * Inflate this object: move each horizontal edge by dx and each vertical edge by dy
+     * toward rect outside
+     * if dx and/or dy is negative, move toward rect inside (deflate)
+     * Works for positive and negative rect size
+     */
     EDA_Rect&   Inflate( wxCoord dx, wxCoord dy );
+
+    /** Inflate
+     * Inflate this object: move each horizontal edge and each vertical edge by aDelta
+     * toward rect outside
+     * if aDelta is negative, move toward rect inside (deflate)
+     * Works for positive and negative rect size
+     */
+    EDA_Rect&   Inflate( int aDelta );
 
     /** Function Merge
      * Modify Position and Size of this in order to contain the given rect

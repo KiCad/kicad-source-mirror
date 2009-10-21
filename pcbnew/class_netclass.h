@@ -37,8 +37,15 @@
  * handles a collection of nets and the parameters used to route or
  * test these nets.
  */
+
 class NETCLASS
 {
+private:
+    // Default values used to init a NETCLASS
+    static int DEFAULT_CLEARANCE;
+    static int DEFAULT_VIA_DRILL;
+    static int DEFAULT_UVIA_DRILL;
+
 protected:
 
     BOARD*      m_Parent;
@@ -213,7 +220,7 @@ public:
 
 /**
  * Class NETCLASSES
- * is a containter for NETCLASS instances.  It owns all its NETCLASSes
+ * is a container for NETCLASS instances.  It owns all its NETCLASSes
  * (=> it will delete them at time of destruction).  This container will always have
  * a default NETCLASS with the name given by const NETCLASS::Default.
  */

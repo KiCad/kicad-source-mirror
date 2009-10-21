@@ -297,7 +297,7 @@ public:
     bool     SetLayerType( int aLayerIndex, LAYER_T aLayerType );
 
 
-    /* Routines de calcul des nombres de segments pistes et zones */
+    /* Functions to get some items count */
     int      GetNumSegmTrack();
     int      GetNumSegmZone();
     unsigned GetNoconnectCount();        // retourne le nombre de connexions manquantes
@@ -404,6 +404,7 @@ public:
      */
     int           ReturnSortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount );
 
+    /****** function relative to NetClasses: */
     /**
      * Function SynchronizeNetsAndNetClasses
      * copies NETCLASS info to each NET, based on NET membership in a NETCLASS.
@@ -425,6 +426,13 @@ public:
      */
     bool          SetCurrentNetClass( const wxString& aNetClassName );
 
+    /** function GetBiggestClearanceValue
+     * @return the biggest clerance value found in NetClasses list
+     */
+    int           GetBiggestClearanceValue();
+
+
+    /***************************************************************************/
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd" format.
@@ -714,6 +722,7 @@ public:
      * @param aNetcode = netcode to analyse. if -1, analyse all nets
      */
     void Test_Connections_To_Copper_Areas( int aNetcode = -1 );
+
 };
 
 #endif      // #ifndef CLASS_BOARD_H

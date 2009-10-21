@@ -147,7 +147,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMa
             continue;
         if( pt_piste->Type() == TYPE_VIA ) /* VIA rencontree */
         {
-            int rayon = g_DesignSettings.m_ViaDrill / 2;
+            int rayon = pt_piste->GetDrillValue() / 2;
             GRFilledCircle( &m_ClipBox, aDC, pt_piste->m_Start.x, pt_piste->m_Start.y,
                             rayon, 0, color, color );
         }

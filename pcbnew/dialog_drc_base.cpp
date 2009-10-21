@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  9 2009)
+// C++ code generated with wxFormBuilder (version Apr 16 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -32,17 +32,20 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	fgMinValuesSizer->SetFlexibleDirection( wxBOTH );
 	fgMinValuesSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_ClearenceTitle = new wxStaticText( this, wxID_ANY, _("Clearance"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ClearenceTitle->Wrap( -1 );
-	fgMinValuesSizer->Add( m_ClearenceTitle, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_RIGHT, 5 );
+	m_ClearanceTitle = new wxStaticText( this, wxID_ANY, _("Clearance"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ClearanceTitle->Wrap( -1 );
+	fgMinValuesSizer->Add( m_ClearanceTitle, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_RIGHT, 5 );
 	
 	m_SetClearance = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SetClearance->Enable( false );
 	m_SetClearance->SetToolTip( _("In the clearance units, enter the clearance distance") );
 	
 	fgMinValuesSizer->Add( m_SetClearance, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_ViaMinTitle = new wxStaticText( this, wxID_ANY, _("Via Min Size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaMinTitle->Wrap( -1 );
+	m_ViaMinTitle->Enable( false );
+	
 	fgMinValuesSizer->Add( m_ViaMinTitle, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_RIGHT, 5 );
 	
 	m_SetViaMinSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -50,12 +53,9 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	fgMinValuesSizer->Add( m_SetViaMinSizeCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_TrackMinWidthTitle
-	= new wxStaticText( this, wxID_ANY, _("Track Min Width"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_TrackMinWidthTitle
-	->Wrap( -1 );
-	fgMinValuesSizer->Add( m_TrackMinWidthTitle
-	, 0, wxALIGN_RIGHT|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	m_TrackMinWidthTitle = new wxStaticText( this, wxID_ANY, _("Track Min Width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TrackMinWidthTitle->Wrap( -1 );
+	fgMinValuesSizer->Add( m_TrackMinWidthTitle, 0, wxALIGN_RIGHT|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_SetTrackMinWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_SetTrackMinWidthCtrl->SetToolTip( _("In the clearance units, enter the clearance distance") );
@@ -77,6 +77,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	ReportFileSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Create Report File") ), wxHORIZONTAL );
 	
 	m_CreateRptCtrl = new wxCheckBox( this, ID_CHECKBOX_RPT_FILE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	
 	m_CreateRptCtrl->SetToolTip( _("Enable writing report to this file") );
 	
 	ReportFileSizer->Add( m_CreateRptCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
@@ -214,5 +215,4 @@ DIALOG_DRC_CONTROL_BASE::~DIALOG_DRC_CONTROL_BASE()
 	m_UnconnectedListBox->Disconnect( wxEVT_RIGHT_UP, wxMouseEventHandler( DIALOG_DRC_CONTROL_BASE::OnRightUpUnconnected ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnOkClick ), NULL, this );
-	
 }

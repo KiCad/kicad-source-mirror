@@ -50,7 +50,6 @@ void CreateSortedPadListByXCoord( BOARD* aBoard, std::vector<D_PAD*>* aVector );
 /**************/
 /* PCBCFG.CPP */
 /**************/
-bool    Read_Config( const wxString& project_name );
 bool    Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose );
 
 

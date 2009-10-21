@@ -33,7 +33,7 @@ public:
  * others polygons inside this main polygon are holes.
  */
 
-class ZONE_CONTAINER : public BOARD_ITEM
+class ZONE_CONTAINER : public BOARD_CONNECTED_ITEM
 {
 public:
     wxString              m_Netname;                        // Net Name
@@ -59,10 +59,6 @@ public:
                                                 *  ( m_FillMode == 1 )
                                                 *  in this case segments have m_ZoneMinThickness width
                                                 */
-
-private:
-    int m_NetCode;      // Net number for fast comparisons
-    int m_ZoneSubnet;   // variable used in rastnest computations:handle block number in zone connection calculations
 
 public:
     ZONE_CONTAINER( BOARD* parent );
@@ -154,21 +150,7 @@ public:
         return ( GetLayer() < FIRST_NO_COPPER_LAYER ) ? true : false;
     }
 
-
-    /**
-     * Function GetZoneSubNet
-     * @return int - the sub net code in zone connections.
-     */
-    int GetZoneSubNet() const { return m_ZoneSubnet; }
-    void SetZoneSubNet( int aSubNetCode ) { m_ZoneSubnet = aSubNetCode; }
-
-    int GetNet( void ) const
-    {
-        return m_NetCode;
-    }
-
-
-    void SetNet( int anet_code );
+    virtual void SetNet( int anet_code );
 
     /**
      * Function SetNetNameFromNetCode

@@ -527,6 +527,21 @@ bool EDA_Rect::Intersects( const EDA_Rect aRect ) const
 
 
 /**************************************************/
+EDA_Rect& EDA_Rect::Inflate( int aDelta )
+/**************************************************/
+
+/** Function Inflate
+ * Inflate "this": move each horizontal edgeand each vertical edge by aDelta
+ * toward rect outside
+ * if aDelta is negative, move toward rect inside (deflate)
+ * Works for positive and negative rect size
+ *
+ */
+{
+    Inflate( aDelta, aDelta );
+}
+
+/**************************************************/
 EDA_Rect& EDA_Rect::Inflate( wxCoord dx, wxCoord dy )
 /**************************************************/
 

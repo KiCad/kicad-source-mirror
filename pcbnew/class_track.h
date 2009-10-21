@@ -96,12 +96,6 @@ public:
         return m_Start;  // it had to be start or end.
     }
 
-    /**
-     * Function GetLength
-     * returns the position of this object.
-     * @return the length of the track segment (0 for a via).
-     */
-    double GetLength();
 
     EDA_Rect GetBoundingBox();
 

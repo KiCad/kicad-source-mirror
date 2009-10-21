@@ -846,6 +846,7 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
 {
     wxString str;
     long     nerrors = 0;
+    int zone2zoneClearance;
 
     // iterate through all areas
     for( int ia = 0; ia < GetAreaCount(); ia++ )
@@ -856,6 +857,7 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
 
         if( aArea_To_Examine && (aArea_To_Examine != Area_Ref) )
             continue;
+
         for( int ia2 = 0; ia2 < GetAreaCount(); ia2++ )
         {
             ZONE_CONTAINER* Area_To_Test = GetArea( ia2 );
@@ -870,6 +872,14 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
             // Test for same net
             if( Area_Ref->GetNet() == Area_To_Test->GetNet() && Area_Ref->GetNet() >= 0 )
                 continue;
+
+            /* Examine a candidate zone: compare Area_To_Test to Area_Ref
+            */
+
+            // Calculate the clearance used in zone to zone test:
+            zone2zoneClearance = Area_Ref->GetClearance(Area_To_Test);
+            zone2zoneClearance = MAX( zone2zoneClearance, Area_Ref->m_ZoneClearance );
+            zone2zoneClearance = MAX( zone2zoneClearance, Area_To_Test->m_ZoneClearance );
 
             // test for some corners of Area_Ref inside Area_To_Test
             for( int ic = 0; ic < Area_Ref->m_Poly->GetNumCorners(); ic++ )
@@ -962,12 +972,10 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                                 ax1, ay1, ax2,
                                 ay2, astyle,
                                 0,
-
-                                // @todo: decide what to use here.
-                                g_DesignSettings.m_TrackClearance,
+                                zone2zoneClearance,
                                 &x, &y );
 
-                            if( d < g_DesignSettings.m_TrackClearance )
+                            if( d < zone2zoneClearance )
                             {
                                 // COPPERAREA_COPPERAREA error : intersect or too close
                                 if( aCreate_Markers )

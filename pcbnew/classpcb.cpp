@@ -199,23 +199,22 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     };
 
     m_CopperLayerCount      = 2;                    // Default design is a double sided board
-    m_ViaDrill              = 250;                  // defualt via drill (for the entire board)
     m_ViaDrillCustomValue   = 250;                  // via drill for vias which must have a defined drill value
     m_CurrentViaSize        = 450;                  // Current via size
     m_CurrentViaType        = VIA_THROUGH;          // via type (VIA_BLIND_BURIED, VIA_THROUGH VIA_MICROVIA)
     m_CurrentTrackWidth     = 170;                  // current track width
     m_UseConnectedTrackWidth = false;               // if true, when creating a new track starting on an existing track, use this track width
-    m_MicroViaDrill         = 50;                   // micro via drill (for the entire board)
     m_CurrentMicroViaSize   = 150;                  // Current micro via size
     m_MicroViasAllowed      = false;                // true to allow micro vias
     m_DrawSegmentWidth      = 100;                  // current graphic line width (not EDGE layer)
     m_EdgeSegmentWidth      = 100;                  // current graphic line width (EDGE layer only)
     m_PcbTextWidth          = 100;                  // current Pcb (not module) Text width
     m_PcbTextSize           = wxSize( 500, 500 );   // current Pcb (not module) Text size
-    m_TrackClearance        = 100;                  // track to track and track to pads clearance
     m_TrackMinWidth         = 80;                   // track min value for width ((min copper size value
     m_ViasMinSize           = 350;                  // vias (not micro vias) min diameter
+    m_ViasMinDrill          = 200;                  // vias (not micro vias) min drill diameter
     m_MicroViasMinSize      = 200;                  // micro vias (not vias) min diameter
+    m_MicroViasMinDrill     = 80;                   // micro vias (not vias) min drill diameter
     m_MaskMargin            = 150;                  // Solder mask margin
     /* Color options for screen display of the Printed Board: */
 

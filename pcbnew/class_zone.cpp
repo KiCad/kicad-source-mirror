@@ -22,7 +22,7 @@
 /************************/
 
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
-    BOARD_ITEM( parent, TYPE_ZONE_CONTAINER )
+    BOARD_CONNECTED_ITEM( parent, TYPE_ZONE_CONTAINER )
 
 {
     m_NetCode = -1;                           // Net number for fast comparisons
@@ -40,6 +40,7 @@ ZONE_CONTAINER::~ZONE_CONTAINER()
     delete m_Poly;
     m_Poly = NULL;
 }
+
 
 
 /** virtual function GetPosition
@@ -71,21 +72,14 @@ void ZONE_CONTAINER::SetNet( int anet_code )
     if( anet_code < 0 )
         return;
 
-    if( m_Parent )
+    BOARD* board = GetBoard();
+    if( board )
     {
-        BOARD* board = (BOARD*) m_Parent;
         NETINFO_ITEM* net = board->FindNet( anet_code );
         if( net )
             m_Netname = net->GetNetname();
         else
             m_Netname.Empty();
-
-        // Set corresponding SEGZONE items if this zone uses fill areas by segments
-        for( SEGZONE* zseg = board->m_Zone;  zseg;   zseg = zseg->Next() )
-        {
-            if ( zseg->m_TimeStamp == m_TimeStamp )
-                zseg->SetNet(GetNet());
-        }
     }
     else
         m_Netname.Empty();

@@ -1113,10 +1113,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         std::string componentId;
 
         // find the highest numbered netCode within the board.
-        int highestNetCode = -1;
-//        for( EQUIPOT* equipot = aBoard->m_Equipots;  equipot;  equipot = equipot->Next() )
-//            highestNetCode = MAX( highestNetCode, equipot->GetNet() );
-        highestNetCode = aBoard->m_NetInfo->GetCount() - 1;
+        int highestNetCode = aBoard->m_NetInfo->GetCount() - 1;
         deleteNETs();
 
         // expand the net vector to highestNetCode+1, setting empty to NULL
@@ -1236,12 +1233,15 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         // Next we add the via's which may be used.
 
         int defaultViaSize = aBoard->m_BoardSettings->m_CurrentViaSize;
-// TODO: output vias sizes in NetClasses
+        int defaultViaDrill = aBoard->m_NetClasses.GetDefault()->GetViaDrill();
+/**
+ *@todo: *** output vias sizes and drill in NetClasses  ***
+*/
         /* I need at least one via for the (class...) scope below
         if( defaultViaSize )
         */
         {
-            PADSTACK*   padstack = makeVia( defaultViaSize, g_DesignSettings.m_ViaDrill,
+            PADSTACK*   padstack = makeVia( defaultViaSize, defaultViaDrill,
                                            0, aBoard->GetCopperLayerCount()-1 );
             pcb->library->AddPadstack( padstack );
 
@@ -1258,7 +1258,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             if( viaSize == defaultViaSize )
                 continue;
 
-            PADSTACK*   padstack = makeVia( viaSize, g_DesignSettings.m_ViaDrill,
+            PADSTACK*   padstack = makeVia( viaSize, defaultViaDrill,
                                            0, aBoard->GetCopperLayerCount()-1 );
             pcb->library->AddPadstack( padstack );
         }

@@ -64,21 +64,6 @@ static PARAM_CFG_INT ViaDiametreCfg
     0, 0xFFFF                                   /* Min and max values*/
 );
 
-static PARAM_CFG_INT ViaDrillCfg
-(
-    wxT( "ViaDril" ),                           /* Keyword */
-    &g_DesignSettings.m_ViaDrill,               /* Parameter address */
-    250,                                        /* Default value */
-    0, 0xFFFF                                   /* Min and max values*/
-);
-
-static PARAM_CFG_INT ViaAltDrillCfg
-(
-    wxT( "ViaAltD" ),                           /* Keyword */
-    &g_DesignSettings.m_ViaDrillCustomValue,    /* Parameter address */
-    250,                                        /* Default value */
-    0, 0xFFFF                                   /* Min and max values*/
-);
 static PARAM_CFG_INT LayerThicknessCfg
 (
     wxT( "LayerThickness" ),                           /* Keyword */
@@ -93,14 +78,6 @@ static PARAM_CFG_INT MicroViaDiametreCfg
     &g_DesignSettings.m_CurrentMicroViaSize,        /* Parameter address */
     200,                                            /* Default value */
     0, 1000                                         /* Min and max values*/
-);
-
-static PARAM_CFG_INT MicroViaDrillCfg
-(
-    wxT( "MViaDrl" ),                           /* Keyword */
-    &g_DesignSettings.m_MicroViaDrill,          /* Parameter address */
-    80,                                         /* Default value */
-    0, 800                                      /* Min and max values*/
 );
 
 static PARAM_CFG_INT ViaShowHoleCfg
@@ -123,30 +100,6 @@ static PARAM_CFG_INT ShowNetNamesModeCfg
     3                                           /* Min and max values*/
 );
 
-static PARAM_CFG_INT TrackClearenceCfg
-(
-    wxT( "Isol" ),                                  /* Keyword */
-    &g_DesignSettings.m_TrackClearance,             /* Parameter address */
-    120,                                            /* Default value */
-    0, 0xFFFF                                       /* Min and max values*/
-);
-
-static PARAM_CFG_INT LayerCountCfg                      // Mask Working Layers
-(
-    wxT( "Countlayer" ),                                /* Keyword */
-    &g_DesignSettings.m_CopperLayerCount,               /* Parameter address */
-    2,                                                  /* Default value */
-    1, NB_COPPER_LAYERS                                 /* Min and max values*/
-);
-
-static PARAM_CFG_INT TrackWidthCfg
-(
-    wxT( "Lpiste" ),                                /* Keyword */
-    &g_DesignSettings.m_CurrentTrackWidth,          /* Parameter address */
-    170,                                            /* Default value */
-    2, 0xFFFF                                       /* Min and max values*/
-);
-
 static PARAM_CFG_INT RouteLayTopCfg     // First current working layer
 (
     wxT( "RouteTo" ),                   /* Keyword */
@@ -161,14 +114,6 @@ static PARAM_CFG_INT RouteLayBotCfg     // second current working layer
     &Route_Layer_BOTTOM,                /* Parameter address */
     0,                                  /* Default value */
     0, 15                               /* Min and max values*/
-);
-
-static PARAM_CFG_INT TypeViaCfg
-(
-    wxT( "TypeVia" ),                               /* Keyword */
-    &g_DesignSettings.m_CurrentViaType,             /* Parameter address */
-    VIA_THROUGH,                                    /* Default value */
-    0, 3                                            /* Min and max values*/
 );
 
 static PARAM_CFG_BOOL Segm45Cfg     // Segm Pistes a 0, 45, 90 degres uniquement
@@ -801,26 +746,19 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &PadDimHCfg,
     &PadDimVCfg,
     &ViaDiametreCfg,
-    &ViaDrillCfg,
-    &ViaAltDrillCfg,
     &MicroViaDiametreCfg,
-    &MicroViaDrillCfg,
     &ViaShowHoleCfg,
     &ShowNetNamesModeCfg,
-    &TrackClearenceCfg,
     &LayerThicknessCfg,
-    &LayerCountCfg,
-    &TrackWidthCfg,
     &RouteLayTopCfg,
     &RouteLayBotCfg,
-    &TypeViaCfg,
     &Segm45Cfg,
     &Raccord45Cfg,
     &UnitCfg,
     &SegmFillCfg,
     &TrackDisplayClearanceCfg,
     &PadFillCfg,
-    &ViaFillCfg,  //TODO: Will adding this line break tha pcbnew file compatibility?
+    &ViaFillCfg,
     &PadAfficheGardeCfg,
     &PadShowNumCfg,
     &AfficheContourModuleCfg,

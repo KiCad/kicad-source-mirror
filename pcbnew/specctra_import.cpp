@@ -242,9 +242,9 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
 
             // drillMils is not in the session units, but actual mils so we don't use scale()
             drillDiam = (int) (drillMils * 10);
-
-            if( drillDiam == g_DesignSettings.m_ViaDrill )      // default
-                drillDiam = -1;         // import as default
+/** @todo: see if we use default netclass or specific value
+*/
+            drillDiam = -1;         // import as default: real drill is the netclass value
         }
     }
 
