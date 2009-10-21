@@ -63,6 +63,9 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, DrawSheetPath* sheet,
                               bool setNewItemFlag ) :
     SCH_ITEM( NULL, TYPE_SCH_COMPONENT )
 {
+    size_t         i;
+    LIB_FIELD_LIST libFields;
+
     Init( pos );
 
     m_Multi     = unit;
@@ -73,11 +76,38 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, DrawSheetPath* sheet,
     if( setNewItemFlag )
         m_Flags = IS_NEW | IS_MOVED;
 
-    GetField( VALUE )->m_Pos = libComponent.m_Name.m_Pos + m_Pos;
-    GetField( VALUE )->ImportValues( libComponent.m_Name );
-    GetField( VALUE )->m_Text = m_ChipName;
+    libComponent.GetFields( libFields );
 
-    wxString msg = libComponent.m_Prefix.m_Text;
+    for( i = 0; i < libFields.size(); i++ )
+    {
+        if( libFields[i].m_Text.IsEmpty() && libFields[i].m_Name.IsEmpty() )
+            continue;
+
+        /* Add extra fields if library component has more than the default
+         * number of fields.
+         */
+        if( (int) i >= GetFieldCount() )
+        {
+            while( (int) i >= GetFieldCount() )
+            {
+                SCH_CMP_FIELD field( wxPoint( 0, 0 ), GetFieldCount(), this,
+                                     ReturnDefaultFieldName( i ) );
+                AddField( field );
+            }
+        }
+
+        SCH_CMP_FIELD* schField = GetField( i );
+
+        schField->m_Pos = m_Pos + libFields[i].m_Pos;
+        schField->ImportValues( libFields[i] );
+        schField->m_Text = libFields[i].m_Text;
+        schField->m_Name = ( i < FIELD1 ) ? ReturnDefaultFieldName( i ) :
+            libFields[i].m_Name;
+    }
+
+
+    wxString msg = libComponent.GetReferenceField().m_Text;
+
     if( msg.IsEmpty() )
         msg = wxT( "U" );
     msg += wxT( "?" );
@@ -85,43 +115,10 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, DrawSheetPath* sheet,
     // update the reference -- just the prefix for now.
     SetRef( sheet, msg );
 
-    GetField( REFERENCE )->m_Pos = libComponent.m_Prefix.m_Pos + m_Pos;
-    GetField( REFERENCE )->ImportValues( libComponent.m_Prefix );
-    m_PrefixString = libComponent.m_Prefix.m_Text;
-
-    /* Init des autres champs si predefinis dans la librairie */
-    LIB_FIELD* EntryField;
-    int        ii;
-
-    for( EntryField = libComponent.m_Fields; EntryField != NULL;
-         EntryField = EntryField->Next() )
-    {
-        if( EntryField->m_Text.IsEmpty() && EntryField->m_Name.IsEmpty() )
-            continue;
-
-        ii = EntryField->m_FieldId;
-        if( ii < 2 )        // Reference or value, already done
-            continue;
-
-        if( ii >= GetFieldCount() )
-        {   // This entry has more than the default count: add extra fields
-            while( ii >= GetFieldCount() )
-            {
-                int field_id = GetFieldCount();
-                SCH_CMP_FIELD field( wxPoint( 0, 0 ), field_id, this,
-                                     ReturnDefaultFieldName( ii ) );
-                AddField( field );
-            }
-        }
-
-        SCH_CMP_FIELD* curr_field = GetField( ii );
-
-        curr_field->m_Pos = m_Pos + EntryField->m_Pos;
-        curr_field->ImportValues( *EntryField );
-        curr_field->m_Text = EntryField->m_Text;
-        curr_field->m_Name =
-            ( ii < FIELD1 ) ? ReturnDefaultFieldName( ii ) : EntryField->m_Name;
-    }
+    /* Use the schematic component name instead of the library value field
+     * name.
+     */
+    GetField( VALUE )->m_Text = m_ChipName;
 }
 
 

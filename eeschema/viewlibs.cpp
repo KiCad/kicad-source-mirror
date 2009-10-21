@@ -216,7 +216,7 @@ void WinEDA_ViewlibFrame::ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag )
         LibEntry = Lib->GetNextEntry( m_entryName );
 
         if( LibEntry )
-            CmpName = LibEntry->m_Name.m_Text;
+            CmpName = LibEntry->GetName();
     }
 
     if( Flag == PREVIOUS_PART )
@@ -224,7 +224,7 @@ void WinEDA_ViewlibFrame::ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag )
         LibEntry = Lib->GetPreviousEntry( m_entryName );
 
         if( LibEntry )
-            CmpName = LibEntry->m_Name.m_Text;
+            CmpName = LibEntry->GetName();
     }
 
     m_unit    = 1;
@@ -291,12 +291,12 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
         /* Temporarily change the name field text to reflect the alias name. */
         tmp = component->GetName();
-        component->m_Name.m_Text = alias->GetName();
+        component->SetName( alias->GetName() );
         if( m_unit < 1 )
             m_unit = 1;
         if( m_convert < 1 )
             m_convert = 1;
-        component->m_Name.m_Text = tmp;
+        component->SetName( tmp );
     }
     else
     {
@@ -308,7 +308,7 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
                      GR_DEFAULT_DRAWMODE );
 
     if( !tmp.IsEmpty() )
-        component->m_Name.m_Text = tmp;
+        component->SetName( tmp );
 
     ClearMsgPanel();
     AppendMsgPanel( _( "Part" ), component->GetName(), BLUE, 6 );

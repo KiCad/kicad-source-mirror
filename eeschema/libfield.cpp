@@ -160,6 +160,8 @@ void WinEDA_LibeditFrame::EditField( wxDC* DC, LIB_FIELD* Field )
     Get_Message( title, _( "Edit field" ), Text, this );
     Text.Replace( wxT( " " ), wxT( "_" ) );
 
+    wxString fieldText = Field->GetFullText( m_unit );
+
     /* If the value field is changed, this is equivalent to creating a new
      * component from the old one.  Check for an existing library entry of
      * this "new" component and change the value only if there is no existing
@@ -194,9 +196,9 @@ not conflict with any library entries." ),
             DisplayError( this, msg );
             return;
         }
-    }
 
-    wxString fieldText = Field->GetFullText( m_unit );
+        Field->GetParent()->SetName( Text );
+    }
 
     Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode, &fieldText,
                  DefaultTransformMatrix );

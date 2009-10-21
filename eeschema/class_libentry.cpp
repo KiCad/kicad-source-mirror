@@ -36,9 +36,7 @@ CMP_LIB_ENTRY::CMP_LIB_ENTRY( LibrEntryType type, const wxString& name,
     EDA_BaseStruct( LIBCOMPONENT_STRUCT_TYPE )
 {
     Type = type;
-    m_Name.m_FieldId = VALUE;
-    m_Name.SetParent( this );
-    m_Name.m_Text = name;
+    m_Name = name;
     m_lib = lib;
 }
 
@@ -53,7 +51,6 @@ CMP_LIB_ENTRY::CMP_LIB_ENTRY( CMP_LIB_ENTRY& entry, CMP_LIBRARY* lib ) :
     m_DocFile = entry.m_DocFile;
     m_Options = entry.m_Options;
     m_lib = lib;
-    m_Name.SetParent( this );
 }
 
 
@@ -85,7 +82,7 @@ bool CMP_LIB_ENTRY::SaveDoc( FILE* aFile )
         return true;
 
     /* Generation des lignes utiles */
-    if( fprintf( aFile, "#\n$CMP %s\n", CONV_TO_UTF8( m_Name.m_Text ) ) < 0 )
+    if( fprintf( aFile, "#\n$CMP %s\n", CONV_TO_UTF8( m_Name ) ) < 0 )
         return false;
 
     if( ! m_Doc.IsEmpty()
@@ -109,19 +106,19 @@ bool CMP_LIB_ENTRY::SaveDoc( FILE* aFile )
 
 bool CMP_LIB_ENTRY::operator==( const wxChar* name ) const
 {
-    return m_Name.m_Text.CmpNoCase( name ) == 0;
+    return m_Name.CmpNoCase( name ) == 0;
 }
 
 
 bool operator<( const CMP_LIB_ENTRY& item1, const CMP_LIB_ENTRY& item2 )
 {
-    return item1.m_Name.m_Text.CmpNoCase( item2.m_Name.m_Text ) < 0;
+    return item1.GetName().CmpNoCase( item2.GetName() ) < 0;
 }
 
 
 int LibraryEntryCompare( const CMP_LIB_ENTRY* LE1, const CMP_LIB_ENTRY* LE2 )
 {
-    return LE1->m_Name.m_Text.CmpNoCase( LE2->m_Name.m_Text );
+    return LE1->GetName().CmpNoCase( LE2->GetName() );
 }
 
 
@@ -184,8 +181,14 @@ LIB_COMPONENT::LIB_COMPONENT( const wxString& name, CMP_LIBRARY* lib ) :
     m_UnitSelectionLocked = FALSE;
     m_DrawPinNum          = 1;
     m_DrawPinName         = 1;
-    m_Prefix.m_FieldId    = REFERENCE;
-    m_Prefix.SetParent( this );
+
+    /* The minimum requirements for a component are a value and a reference
+     * designator field.
+     */
+    LIB_FIELD* value = new LIB_FIELD( this, VALUE );
+    value->m_Text = name;
+    m_Drawings.push_back( value );
+    m_Drawings.push_back( new LIB_FIELD( this, REFERENCE ) );
 }
 
 
@@ -193,10 +196,7 @@ LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& component, CMP_LIBRARY* lib ) :
     CMP_LIB_ENTRY( component, lib )
 {
     LIB_DRAW_ITEM* newItem;
-    LIB_FIELD*     oldField;
-    LIB_FIELD*     newField;
 
-    m_Prefix              = component.m_Prefix;
     m_AliasList           = component.m_AliasList;
     m_FootprintList       = component.m_FootprintList;
     m_UnitCount           = component.m_UnitCount;
@@ -206,8 +206,6 @@ LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& component, CMP_LIBRARY* lib ) :
     m_DrawPinName         = component.m_DrawPinName;
     m_LastDate            = component.m_LastDate;
 
-    m_Prefix.SetParent( this );
-
     BOOST_FOREACH( LIB_DRAW_ITEM& oldItem, component.GetDrawItemList() )
     {
         if( ( oldItem.m_Flags & IS_NEW ) != 0 )
@@ -216,14 +214,6 @@ LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& component, CMP_LIBRARY* lib ) :
         newItem = oldItem.GenCopy();
         newItem->SetParent( this );
         m_Drawings.push_back( newItem );
-    }
-
-    for( oldField = component.m_Fields; oldField != NULL;
-         oldField = oldField->Next() )
-    {
-        newField = (LIB_FIELD*) oldField->GenCopy();
-        newField->SetParent( this );
-        m_Fields.PushBack( newField );
     }
 }
 
@@ -260,50 +250,28 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
         if( convert && drawItem.m_Convert && ( drawItem.m_Convert != convert ) )
             continue;
 
+        if( !drawFields && drawItem.Type() == COMPONENT_FIELD_DRAW_TYPE )
+            continue;
 
         if( drawItem.Type() == COMPONENT_PIN_DRAW_TYPE )
         {
-            drawItem.Draw( panel, dc, offset, color, drawMode, &showPinText,
-                           transformMatrix );
+            drawItem.Draw( panel, dc, offset, color, drawMode,
+                           (void*) &showPinText, transformMatrix );
+        }
+        else if( drawItem.Type() == COMPONENT_FIELD_DRAW_TYPE )
+        {
+            drawItem.Draw( panel, dc, offset, color, drawMode,
+                           (void*) NULL, transformMatrix );
         }
         else
         {
-            bool force_nofill =
-                ( screen->m_IsPrinting
-                  && drawItem.m_Fill == FILLED_WITH_BG_BODYCOLOR
-                  && GetGRForceBlackPenState() );
-
+            bool forceNoFill = ( screen->m_IsPrinting
+                                 && drawItem.m_Fill == FILLED_WITH_BG_BODYCOLOR
+                                 && GetGRForceBlackPenState() );
             drawItem.Draw( panel, dc, offset, color, drawMode,
-                           (void*) force_nofill, transformMatrix );
+                           (void*) &forceNoFill, transformMatrix );
         }
-    }
 
-    if( drawFields )
-    {
-        LIB_FIELD* Field;
-
-        /*
-         * The reference designator field is a special case for naming
-         * convention.
-         */
-        wxString      fieldText = m_Prefix.GetFullText( multi );
-
-        if( !( onlySelected && m_Prefix.m_Selected == 0 ) )
-            m_Prefix.Draw( panel, dc, offset, color, drawMode, &fieldText,
-                           transformMatrix );
-
-        if( !( onlySelected && m_Name.m_Selected == 0 ) )
-            m_Name.Draw( panel, dc, offset, color, drawMode, NULL,
-                         transformMatrix );
-
-        for( Field = m_Fields; Field != NULL; Field = Field->Next() )
-        {
-            if( onlySelected && Field->m_Selected == 0 )
-                continue;
-
-            Field->Draw( panel, dc, offset, color, drawMode, NULL,
-                         transformMatrix );
-        }
     }
 
     /* Enable this to draw the anchor of the component. */
@@ -351,35 +319,36 @@ void LIB_COMPONENT::RemoveDrawItem( LIB_DRAW_ITEM* item,
 {
     wxASSERT( item != NULL );
 
+    /* Value and reference fields cannot be removed. */
+    if( item->Type() == COMPONENT_FIELD_DRAW_TYPE )
+    {
+        LIB_FIELD* field = (LIB_FIELD*)item;
+
+        if( field->m_FieldId == VALUE || field->m_FieldId == REFERENCE )
+        {
+            wxString fieldType = ( field->m_FieldId == VALUE ) ?
+                _( "value" ) : _( "reference" );
+
+            wxLogWarning( _( "An attempt was made to remove the %s field \
+from component %s in library %s." ),
+                          GetChars( fieldType ), GetChars( GetName() ),
+                          GetChars( GetLibraryName() ) );
+            return;
+        }
+    }
+
     LIB_DRAW_ITEM_LIST::iterator i;
 
     if( dc != NULL )
         item->Draw( panel, dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
                     DefaultTransformMatrix );
 
-    if( item->Type() != COMPONENT_FIELD_DRAW_TYPE )
+    for( i = m_Drawings.begin(); i < m_Drawings.end(); i++ )
     {
-        for( i = m_Drawings.begin(); i < m_Drawings.end(); i++ )
+        if( *i == item )
         {
-            if( *i == item )
-            {
-                m_Drawings.erase( i );
-                break;
-            }
-        }
-    }
-    else
-    {
-        LIB_FIELD* field;
-
-        for( field = m_Fields; field != NULL; field = field->Next() )
-        {
-            if( field == item )
-            {
-                m_Fields.Remove( field );
-                delete field;
-                break;
-            }
+            m_Drawings.erase( i );
+            break;
         }
     }
 }
@@ -445,38 +414,35 @@ void LIB_COMPONENT::GetPins( LIB_PIN_LIST& pins, int unit, int convert )
 }
 
 
-/**
- * Function Save
- * writes the data structures for this object out to a FILE in "*.brd" format.
- * @param aFile The FILE to write to.
- * @return bool - true if success writing else false.
- */
 bool LIB_COMPONENT::Save( FILE* aFile )
 {
-    LIB_FIELD*  Field;
+    size_t     i;
+    LIB_FIELD& value = GetValueField();
 
     /* First line: it s a comment (component name for readers) */
-    if( fprintf( aFile, "#\n# %s\n#\n", CONV_TO_UTF8( m_Name.m_Text ) ) < 0 )
+    if( fprintf( aFile, "#\n# %s\n#\n", CONV_TO_UTF8( value.m_Text ) ) < 0 )
         return false;
 
     /* Save data */
     if( fprintf( aFile, "DEF" ) < 0 )
         return false;
 
-    if( (m_Name.m_Attributs & TEXT_NO_VISIBLE) == 0 )
+    if( ( value.m_Attributs & TEXT_NO_VISIBLE ) == 0 )
     {
-        if( fprintf( aFile, " %s", CONV_TO_UTF8( m_Name.m_Text ) ) < 0 )
+        if( fprintf( aFile, " %s", CONV_TO_UTF8( value.m_Text ) ) < 0 )
             return false;
     }
     else
     {
-        if( fprintf( aFile, " ~%s", CONV_TO_UTF8( m_Name.m_Text ) ) < 0 )
+        if( fprintf( aFile, " ~%s", CONV_TO_UTF8( value.m_Text ) ) < 0 )
             return false;
     }
 
-    if( !m_Prefix.m_Text.IsEmpty() )
+    LIB_FIELD& reference = GetReferenceField();
+
+    if( !reference.m_Text.IsEmpty() )
     {
-        if( fprintf( aFile, " %s", CONV_TO_UTF8( m_Prefix.m_Text ) ) < 0 )
+        if( fprintf( aFile, " %s", CONV_TO_UTF8( reference.m_Text ) ) < 0 )
             return false;
     }
     else
@@ -493,15 +459,18 @@ bool LIB_COMPONENT::Save( FILE* aFile )
                  m_Options == ENTRY_POWER ? 'P' : 'N' ) < 0 )
         return false;
 
-    if( !SaveDateAndTime( aFile ) || !m_Prefix.Save( aFile )
-        || !m_Name.Save( aFile ) )
+    if( !SaveDateAndTime( aFile ) )
         return false;
 
-    for( Field = m_Fields; Field != NULL; Field = Field->Next() )
+    LIB_FIELD_LIST fields;
+    GetFields( fields );
+
+    for( i = 0; i < fields.size(); i++ )
     {
-        if( Field->m_Text.IsEmpty() && Field->m_Name.IsEmpty() )
+        if( fields[i].m_Text.IsEmpty() && fields[i].m_Name.IsEmpty() )
             continue;
-        if( !Field->Save( aFile ) )
+
+        if( !fields[i].Save( aFile ) )
             return false;
     }
 
@@ -511,9 +480,9 @@ bool LIB_COMPONENT::Save( FILE* aFile )
         if( fprintf( aFile, "ALIAS" ) < 0 )
             return false;
 
-        for( size_t ii = 0; ii < m_AliasList.GetCount(); ii++ )
+        for( i = 0; i < m_AliasList.GetCount(); i++ )
         {
-            if( fprintf( aFile, " %s", CONV_TO_UTF8( m_AliasList[ii] ) ) < 0 )
+            if( fprintf( aFile, " %s", CONV_TO_UTF8( m_AliasList[i] ) ) < 0 )
                 return false;
         }
 
@@ -527,10 +496,10 @@ bool LIB_COMPONENT::Save( FILE* aFile )
         if( fprintf( aFile, "$FPLIST\n" ) < 0 )
             return false;
 
-        for( size_t ii = 0; ii < m_FootprintList.GetCount(); ii++ )
+        for( i = 0; i < m_FootprintList.GetCount(); i++ )
         {
             if( fprintf( aFile, " %s\n",
-                         CONV_TO_UTF8( m_FootprintList[ii] ) ) < 0 )
+                         CONV_TO_UTF8( m_FootprintList[i] ) ) < 0 )
                 return false;
         }
 
@@ -550,6 +519,8 @@ bool LIB_COMPONENT::Save( FILE* aFile )
 
         BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
         {
+            if( item.Type() == COMPONENT_FIELD_DRAW_TYPE )
+                continue;
             if( !item.Save( aFile ) )
                 return false;
         }
@@ -617,22 +588,30 @@ bool LIB_COMPONENT::Load( FILE* file, char* line, int* lineNum,
     m_DrawPinName = (drawname == 'N') ? FALSE : true;
 
     /* Copy part name and prefix. */
+    LIB_FIELD& value = GetValueField();
+
     strupper( name );
     if( name[0] != '~' )
-        m_Name.m_Text = CONV_FROM_UTF8( name );
+    {
+        m_Name = value.m_Text = CONV_FROM_UTF8( name );
+    }
     else
     {
-        m_Name.m_Text = CONV_FROM_UTF8( &name[1] );
-        m_Name.m_Attributs |= TEXT_NO_VISIBLE;
+        m_Name = value.m_Text = CONV_FROM_UTF8( &name[1] );
+        value.m_Attributs |= TEXT_NO_VISIBLE;
     }
+
+    LIB_FIELD& reference = GetReferenceField();
 
     if( strcmp( prefix, "~" ) == 0 )
     {
-        m_Prefix.m_Text.Empty();
-        m_Prefix.m_Attributs |= TEXT_NO_VISIBLE;
+        reference.m_Text.Empty();
+        reference.m_Attributs |= TEXT_NO_VISIBLE;
     }
     else
-        m_Prefix.m_Text = CONV_FROM_UTF8( prefix );
+    {
+        reference.m_Text = CONV_FROM_UTF8( prefix );
+    }
 
     // Copy optional infos
     if( ( p = strtok( NULL, " \t\n" ) ) != NULL && *p == 'L' )
@@ -791,17 +770,18 @@ bool LIB_COMPONENT::LoadField( char* line, wxString& errorMsg )
 
     if( field->m_FieldId == REFERENCE )
     {
-        m_Prefix = *field;
+        GetReferenceField() = *field;
         SAFE_DELETE( field );
     }
     else if ( field->m_FieldId == VALUE )
     {
-        m_Name = *field;
+        GetValueField() = *field;
+        m_Name = field->m_Text;
         SAFE_DELETE( field );
     }
     else
     {
-        m_Fields.PushBack( field );
+        m_Drawings.push_back( field );
     }
 
     return true;
@@ -852,9 +832,6 @@ EDA_Rect LIB_COMPONENT::GetBoundaryBox( int Unit, int Convert )
         bBox.Merge( item.GetBoundingBox() );
     }
 
-    bBox.Merge( m_Name.GetBoundingBox() );
-    bBox.Merge( m_Prefix.GetBoundingBox() );
-
     return bBox;
 }
 
@@ -865,46 +842,77 @@ EDA_Rect LIB_COMPONENT::GetBoundaryBox( int Unit, int Convert )
  */
 void LIB_COMPONENT::SetFields( const std::vector <LIB_FIELD> aFields )
 {
-    // Init basic fields (Value = name in lib, and reference):
-    aFields[VALUE].Copy( &m_Name );
-    aFields[REFERENCE].Copy( &m_Prefix );
+    LIB_FIELD* field;
 
-    // Remove others fields:
-    m_Fields.DeleteAll();
-
-    for( unsigned ii = FOOTPRINT; ii < aFields.size(); ii++ )
+    for( size_t i = 0; i < aFields.size(); i++ )
     {
-        bool create = FALSE;
-        if( !aFields[ii].m_Text.IsEmpty() )
-            create = true;
-        if( !aFields[ii].m_Name.IsEmpty()
-            && ( aFields[ii].m_Name != ReturnDefaultFieldName( ii ) ) )
-            create = true;
-        if( create )
+        field = GetField( aFields[i].m_FieldId );
+
+        if( field )
         {
-            LIB_FIELD*Field = new LIB_FIELD( this, ii );
-            aFields[ii].Copy( Field );
-            m_Fields.PushBack( Field );
+            *field = aFields[i];
+
+            if( (int) i == VALUE )
+                m_Name = field->m_Text;
+
+            continue;
         }
+
+        /* If the field isn't set, don't add it to the component. */
+        if( aFields[i].m_Text.IsEmpty() )
+            continue;
+
+        field = new LIB_FIELD( aFields[i] );
+        m_Drawings.push_back( field );
     }
 
-    /* for a user field (FieldId >= FIELD1), if a field value is void,
-     * fill it with "~" because for a library component a void field is not
-     * a very good idea  (we do not see anything...) and in schematic this
-     * text is like a void text and for non editable names, remove the name
-     * (set to the default name)
-     */
-    for( LIB_FIELD* Field = m_Fields; Field; Field = Field->Next() )
+    m_Drawings.sort();
+}
+
+
+void LIB_COMPONENT::GetFields( LIB_FIELD_LIST& list )
+{
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
     {
-        Field->SetParent( this );
-        if( Field->m_FieldId >= FIELD1 )
-        {
-            if( Field->m_Text.IsEmpty() )
-                Field->m_Text = wxT( "~" );
-        }
-        else
-            Field->m_Name.Empty();
+        if( item.Type() != COMPONENT_FIELD_DRAW_TYPE )
+            continue;
+
+        LIB_FIELD* field = ( LIB_FIELD* ) &item;
+        list.push_back( *field );
     }
+}
+
+
+LIB_FIELD* LIB_COMPONENT::GetField( int id )
+{
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
+    {
+        if( item.Type() != COMPONENT_FIELD_DRAW_TYPE )
+            continue;
+
+        LIB_FIELD* field = ( LIB_FIELD* ) &item;
+
+        if( field->m_FieldId == id )
+            return field;
+    }
+
+    return NULL;
+}
+
+
+LIB_FIELD& LIB_COMPONENT::GetValueField( void )
+{
+    LIB_FIELD* field = GetField( VALUE );
+    wxASSERT( field != NULL );
+    return *field;
+}
+
+
+LIB_FIELD& LIB_COMPONENT::GetReferenceField( void )
+{
+    LIB_FIELD* field = GetField( REFERENCE );
+    wxASSERT( field != NULL );
+    return *field;
 }
 
 
@@ -959,14 +967,6 @@ bool LIB_COMPONENT::LoadDateAndTime( char* Line )
 
 void LIB_COMPONENT::SetOffset( const wxPoint& offset )
 {
-    m_Name.SetOffset( offset );
-    m_Prefix.SetOffset( offset );
-
-    for( LIB_FIELD* field = m_Fields; field != NULL; field = field->Next() )
-    {
-        field->SetOffset( offset );
-    }
-
     BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
     {
         item.SetOffset( offset );
@@ -994,23 +994,15 @@ bool LIB_COMPONENT::HasConversion() const
 
 void LIB_COMPONENT::ClearStatus( void )
 {
-    LIB_FIELD* field;
-
     BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
         item.m_Flags = 0;
-
-    m_Name.m_Flags = 0;
-    m_Prefix.m_Flags = 0;
-
-    for( field = m_Fields.GetFirst(); field != NULL; field = field->Next() )
-        field->m_Flags = 0;
 }
 
 
 int LIB_COMPONENT::SelectItems( EDA_Rect& rect, int unit, int convert,
                                 bool editPinByPin )
 {
-    int            ItemsCount = 0;
+    int ItemsCount = 0;
 
     BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
     {
@@ -1035,36 +1027,12 @@ int LIB_COMPONENT::SelectItems( EDA_Rect& rect, int unit, int convert,
         }
     }
 
-    if( m_Name.Inside( rect ) )
-    {
-        m_Name.m_Selected = IS_SELECTED;
-        ItemsCount++;
-    }
-
-    if( m_Prefix.Inside( rect ) )
-    {
-        m_Prefix.m_Selected = IS_SELECTED;
-        ItemsCount++;
-    }
-
-    for( LIB_FIELD* field = m_Fields.GetFirst(); field != NULL;
-         field = field->Next() )
-    {
-        if( field->Inside( rect ) )
-        {
-            field->m_Selected = IS_SELECTED;
-            ItemsCount++;
-        }
-    }
-
     return ItemsCount;
 }
 
 
 void LIB_COMPONENT::MoveSelectedItems( const wxPoint& offset )
 {
-    LIB_FIELD*  field;
-
     BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
     {
         if( item.m_Selected == 0 )
@@ -1074,43 +1042,14 @@ void LIB_COMPONENT::MoveSelectedItems( const wxPoint& offset )
         item.m_Flags = item.m_Selected = 0;
     }
 
-    if( m_Name.m_Selected )
-    {
-        m_Name.SetOffset( offset );
-        m_Name.m_Flags = m_Name.m_Selected = 0;
-    }
-
-    if( m_Prefix.m_Selected )
-    {
-        m_Prefix.SetOffset( offset );
-        m_Prefix.m_Flags = m_Prefix.m_Selected = 0;
-    }
-
-    for( field = m_Fields.GetFirst(); field != NULL; field = field->Next() )
-    {
-        if( field->m_Selected )
-        {
-            field->SetOffset( offset );
-            field->m_Flags = field->m_Selected = 0;
-        }
-    }
-
     m_Drawings.sort();
 }
 
 
 void LIB_COMPONENT::ClearSelectedItems( void )
 {
-    LIB_FIELD* field;
-
     BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
         item.m_Flags = item.m_Selected = 0;
-
-    m_Name.m_Flags = m_Name.m_Selected = 0;
-    m_Prefix.m_Flags = m_Prefix.m_Selected = 0;
-
-    for( field = m_Fields.GetFirst(); field != NULL; field = field->Next() )
-        field->m_Flags = field->m_Selected = 0;
 }
 
 
@@ -1147,8 +1086,6 @@ void LIB_COMPONENT::CopySelectedItems( const wxPoint& offset )
 
 void LIB_COMPONENT::MirrorSelectedItemsH( const wxPoint& center )
 {
-    LIB_FIELD*  field;
-
     BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
     {
         if( item.m_Selected == 0 )
@@ -1156,27 +1093,6 @@ void LIB_COMPONENT::MirrorSelectedItemsH( const wxPoint& center )
 
         item.SetOffset( center );
         item.m_Flags = item.m_Selected = 0;
-    }
-
-    if( m_Name.m_Selected )
-    {
-        m_Name.SetOffset( center );
-        m_Name.m_Flags = m_Name.m_Selected = 0;
-    }
-
-    if( m_Prefix.m_Selected )
-    {
-        m_Prefix.SetOffset( center );
-        m_Prefix.m_Flags = m_Prefix.m_Selected = 0;
-    }
-
-    for( field = m_Fields.GetFirst(); field != NULL; field = field->Next() )
-    {
-        if( field->m_Selected )
-        {
-            field->SetOffset( center );
-            field->m_Flags = field->m_Selected = 0;
-        }
     }
 
     m_Drawings.sort();
@@ -1198,8 +1114,6 @@ void LIB_COMPONENT::MirrorSelectedItemsH( const wxPoint& center )
 LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int unit, int convert,
                                               KICAD_T type, const wxPoint& pt )
 {
-    LIB_FIELD*  field;
-
     BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
     {
         if( ( unit && item.m_Unit && ( unit != item.m_Unit) )
@@ -1209,20 +1123,6 @@ LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int unit, int convert,
 
         if( item.HitTest( pt ) )
             return &item;
-    }
-
-    if( type == COMPONENT_FIELD_DRAW_TYPE || type == TYPE_NOT_INIT )
-    {
-        if( m_Name.HitTest( pt ) )
-            return &m_Name;
-        if( m_Prefix.HitTest( pt ) )
-            return &m_Prefix;
-
-        for( field = m_Fields.GetFirst(); field != NULL; field = field->Next() )
-        {
-            if( field->HitTest( pt ) )
-                return field;
-        }
     }
 
     return NULL;

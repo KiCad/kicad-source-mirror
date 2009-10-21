@@ -416,15 +416,16 @@ static bool SortFieldsById(const LIB_FIELD& item1, const LIB_FIELD& item2)
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers( void )
 /***********************************************************/
 {
+    LIB_FIELD_LIST fields;
+
+    m_LibEntry->GetFields( fields );
+
     // copy all the fields to a work area
     m_FieldsBuf.reserve(NUMBER_OF_FIELDS);
 
-    m_FieldsBuf.push_back( m_LibEntry->m_Prefix );
-    m_FieldsBuf.push_back( m_LibEntry->m_Name );
-
     // Creates a working copy of fields
-    for( LIB_FIELD* field = m_LibEntry->m_Fields; field != NULL; field = field->Next() )
-        m_FieldsBuf.push_back( *field );
+    for( size_t i = 0; i < fields.size(); i++ )
+        m_FieldsBuf.push_back( fields[i] );
 
     // Display 12 fields (or more), and add missing fields
     LIB_FIELD blank( 2 );

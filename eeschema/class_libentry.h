@@ -5,8 +5,6 @@
 #ifndef CLASS_LIBENTRY_H
 #define CLASS_LIBENTRY_H
 
-#include "dlist.h"
-
 #include "classes_body_items.h"
 #include "class_libentry_fields.h"
 
@@ -43,7 +41,6 @@ class CMP_LIB_ENTRY : public EDA_BaseStruct
 public:
     LibrEntryType    Type;      /* Type = ROOT;
                                  *      = ALIAS pour struct LibraryAliasType */
-    LIB_FIELD        m_Name;    // name (74LS00 ..) in lib ( = VALUE )
     wxString         m_Doc;     /* documentation for info */
     wxString         m_KeyWord; /* keyword list (used to select a group of
                                  * components by keyword) */
@@ -64,7 +61,9 @@ public:
 
     wxString GetLibraryName();
 
-    const wxString& GetName() { return m_Name.m_Text; }
+    virtual const wxString& GetName() const { return m_Name; }
+
+    virtual void SetName( const wxString& name ) { m_Name = name; }
 
     /**
      * Write the entry document information to a FILE in "*.dcm" format.
@@ -85,7 +84,10 @@ public:
     }
 
 protected:
-    CMP_LIBRARY* m_lib;
+    wxString         m_Name;
+
+    /** Library object that entry is attached to. */
+    CMP_LIBRARY*     m_lib;
 };
 
 
@@ -107,7 +109,6 @@ extern int LibraryEntryCompare( const CMP_LIB_ENTRY* LE1,
 class LIB_COMPONENT : public CMP_LIB_ENTRY
 {
 public:
-    LIB_FIELD          m_Prefix;         /* Prefix ( U, IC ... ) = REFERENCE */
     wxArrayString      m_AliasList;      /* ALIAS list for the component */
     wxArrayString      m_FootprintList;  /* list of suitable footprint names
                                           * for the component (wildcard names
@@ -123,7 +124,6 @@ public:
                                           * m_TextInside in mils */
     bool               m_DrawPinNum;
     bool               m_DrawPinName;
-    DLIST<LIB_FIELD>   m_Fields;         /* Auxiliary Field list (id >= 2 ) */
     long               m_LastDate;       // Last change Date
 
 protected:
@@ -136,6 +136,12 @@ public:
         return wxT( "LIB_COMPONENT" );
     }
 
+
+    virtual void SetName( const wxString& name )
+    {
+        CMP_LIB_ENTRY::SetName( name );
+        GetValueField().m_Text = name;
+    }
 
     LIB_COMPONENT( const wxString& name, CMP_LIBRARY* lib = NULL );
     LIB_COMPONENT( LIB_COMPONENT& component, CMP_LIBRARY* lib = NULL );
@@ -180,6 +186,29 @@ public:
      * @param aFields - a std::vector <LIB_FIELD> to import.
      */
     void SetFields( const std::vector <LIB_FIELD> aFields );
+
+    /**
+     * Return list of field references of component.
+     *
+     * @param list - List to add field references to.
+     */
+    void GetFields( LIB_FIELD_LIST& list );
+
+    /**
+     * Return pointer to the requested field.
+     *
+     * @param id - Id of field to return.
+     *
+     * @return LIB_FIELD* - Pointer to field if found.  NULL is returned if
+     *                      field not found.
+     */
+    LIB_FIELD* GetField( int id );
+
+    /** Return reference to the value field. */
+    LIB_FIELD& GetValueField( void );
+
+    /** Return reference to the reference designator field. */
+    LIB_FIELD& GetReferenceField( void );
 
     /**
      * Draw component.

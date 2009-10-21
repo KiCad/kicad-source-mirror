@@ -527,7 +527,7 @@ lost!\n\nClear the current component from the screen?" ) ) )
     }
 
     LIB_COMPONENT* component = new LIB_COMPONENT( name );
-    component->m_Prefix.m_Text = dlg.GetReference();
+    component->GetReferenceField().m_Text = dlg.GetReference();
     component->SetPartCount( dlg.GetPartCount() );
     // Initialize component->m_TextInside member:
     // if 0, pin text is outside the body (on the pin)

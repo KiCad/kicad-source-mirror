@@ -56,6 +56,7 @@ LIB_FIELD::LIB_FIELD( int idfield ) :
 
 LIB_FIELD::LIB_FIELD( const LIB_FIELD& field ) : LIB_DRAW_ITEM( field )
 {
+    m_FieldId   = field.m_FieldId;
     m_Pos       = field.m_Pos;
     m_Size      = field.m_Size;
     m_Width     = field.m_Width;
@@ -431,7 +432,7 @@ int LIB_FIELD::DoCompare( const LIB_DRAW_ITEM& other ) const
 
     const LIB_FIELD* tmp = ( LIB_FIELD* ) &other;
 
-    if( m_FieldId == tmp->m_FieldId )
+    if( m_FieldId != tmp->m_FieldId )
         return m_FieldId - tmp->m_FieldId;
 
     int result = m_Text.CmpNoCase( tmp->m_Text );

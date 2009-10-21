@@ -9,6 +9,12 @@
 #include "classes_body_items.h"
 
 
+class LIB_FIELD;
+
+
+typedef std::vector< LIB_FIELD > LIB_FIELD_LIST;
+
+
 /* Fields , same as component fields.
  * can be defined in libraries (mandatory for ref and value, ca be useful for
  * footprints)

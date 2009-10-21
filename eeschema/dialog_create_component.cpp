@@ -108,7 +108,7 @@ void WinEDA_CreateCmpDialog::SetComponentData( LIB_COMPONENT & component )
 
     parent->SetShowDeMorgan( m_AsConvert->GetValue() );
     component.SetPartCount( m_PartsCount->GetSelection() + 1 );
-    component.m_Prefix.m_Text = m_Reference->GetValue();
+    component.GetReference().m_Text = m_Reference->GetValue();
 	if ( m_PinNameInside->GetValue() == FALSE)
 		component.m_TextInside = 0;
 	else

@@ -101,6 +101,8 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
 
     BOOST_FOREACH( LIB_DRAW_ITEM& item, drawList )
     {
+        if( item.Type() == COMPONENT_FIELD_DRAW_TYPE )
+            continue;
         if( item.m_Unit )
             item.m_Unit = m_unit;
         if( item.m_Convert )
@@ -146,7 +148,7 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
     wxString default_path = wxGetApp().ReturnLastVisitedLibraryPath();
 
     wxFileDialog dlg( this, _( "Export Symbol Drawings" ), default_path,
-                      m_component->m_Name.m_Text, SymbolFileWildcard,
+                      m_component->GetName(), SymbolFileWildcard,
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -182,14 +184,14 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
 
     /* Creation du commentaire donnant le nom du composant */
     fprintf( ExportFile, "# SYMBOL %s\n#\n",
-             CONV_TO_UTF8( m_component->m_Name.m_Text ) );
+             CONV_TO_UTF8( m_component->GetName() ) );
 
     /* Generation des lignes utiles */
     fprintf( ExportFile, "DEF %s",
-             CONV_TO_UTF8( m_component->m_Name.m_Text ) );
-    if( !m_component->m_Prefix.m_Text.IsEmpty() )
+             CONV_TO_UTF8( m_component->GetName() ) );
+    if( !m_component->GetReferenceField().m_Text.IsEmpty() )
         fprintf( ExportFile, " %s",
-                 CONV_TO_UTF8( m_component->m_Prefix.m_Text ) );
+                 CONV_TO_UTF8( m_component->GetReferenceField().m_Text ) );
     else
         fprintf( ExportFile, " ~" );
 
@@ -201,8 +203,8 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
              1, 0 /* unused */, 'N' );
 
     /* Position / orientation / visibilite des champs */
-    m_component->m_Prefix.Save( ExportFile );
-    m_component->m_Name.Save( ExportFile );
+    m_component->GetReferenceField().Save( ExportFile );
+    m_component->GetValueField().Save( ExportFile );
 
     LIB_DRAW_ITEM_LIST& drawList = m_component->GetDrawItemList();
 
@@ -210,7 +212,9 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
 
     BOOST_FOREACH( LIB_DRAW_ITEM& item, drawList )
     {
-        /* Elimination des elements non relatifs a l'unite */
+        if( item.Type() == COMPONENT_FIELD_DRAW_TYPE )
+            continue;
+        /* Don't save unused parts or alternate body styles. */
         if( m_unit && item.m_Unit && ( item.m_Unit != m_unit ) )
             continue;
         if( m_convert && item.m_Convert && ( item.m_Convert != m_convert ) )

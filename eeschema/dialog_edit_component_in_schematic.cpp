@@ -720,11 +720,13 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, g_XorMode );
 
     /* Initialise fields values to default values found in library:  */
-    m_Cmp->GetField( REFERENCE )->m_Pos = entry->m_Prefix.m_Pos + m_Cmp->m_Pos;
-    m_Cmp->GetField( REFERENCE )->ImportValues( entry->m_Prefix );
+    LIB_FIELD& refField = entry->GetReferenceField();
+    m_Cmp->GetField( REFERENCE )->m_Pos = refField.m_Pos + m_Cmp->m_Pos;
+    m_Cmp->GetField( REFERENCE )->ImportValues( refField );
 
-    m_Cmp->GetField( VALUE )->m_Pos = entry->m_Name.m_Pos + m_Cmp->m_Pos;
-    m_Cmp->GetField( VALUE )->ImportValues( entry->m_Name );
+    LIB_FIELD& valField = entry->GetValueField();
+    m_Cmp->GetField( VALUE )->m_Pos = valField.m_Pos + m_Cmp->m_Pos;
+    m_Cmp->GetField( VALUE )->ImportValues( valField );
 
     m_Cmp->SetRotationMiroir( CMP_NORMAL );
 

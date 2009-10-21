@@ -29,7 +29,7 @@ loading components into a schematic." );
 static bool DuplicateEntryName( const CMP_LIB_ENTRY& item1,
                                 const CMP_LIB_ENTRY& item2 )
 {
-    return item1.m_Name.m_Text.CmpNoCase( item2.m_Name.m_Text ) == 0;
+    return item1.GetName().CmpNoCase( item2.GetName() ) == 0;
 }
 
 
@@ -100,9 +100,15 @@ void CMP_LIBRARY::GetEntryNames( wxArrayString& names, bool sort,
     BOOST_FOREACH( CMP_LIB_ENTRY& entry, m_Entries )
     {
         if( makeUpperCase )
-            names.Add( entry.m_Name.m_Text.MakeUpper() );
+        {
+            wxString tmp = entry.GetName();
+            tmp.MakeUpper();
+            names.Add( tmp );
+        }
         else
+        {
             names.Add( entry.GetName() );
+        }
     }
 
     if( sort )
@@ -346,7 +352,7 @@ library <%s>" ),
     RemoveEntry( AliasName );
 
     /* Change the root name. */
-    Root->m_Name.m_Text = AliasName;
+    Root->SetName( AliasName );
 }
 
 
