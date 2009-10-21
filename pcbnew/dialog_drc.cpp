@@ -49,7 +49,7 @@ void DIALOG_DRC_CONTROL::InitValues()
     AddUnitSymbol( *m_TrackMinWidthTitle );
     AddUnitSymbol( *m_ViaMinTitle );
     AddUnitSymbol( *m_MicroViaMinTitle );
-    m_SetClearance->SetValue( _("Use netclasses values"));
+    m_SetClearance->SetValue( _("Netclasses values"));
 
     Layout();      // adding the units above expanded Clearance text, now resize.
 

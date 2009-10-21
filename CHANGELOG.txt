@@ -4,6 +4,13 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-oct-21 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++pcbnew
+    * Work on Net Classes: tracks and vias sizes, vias drill
+    come from netclass netclasses values. Global values removed.
+    * Added for DRC drill vias and microvias min drill value
+
 2009-oct-20 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
 Replace component library editor draw item dialog box.

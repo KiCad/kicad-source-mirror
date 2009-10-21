@@ -38,14 +38,11 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	m_SetClearance = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_SetClearance->Enable( false );
-	m_SetClearance->SetToolTip( _("In the clearance units, enter the clearance distance") );
 	
 	fgMinValuesSizer->Add( m_SetClearance, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_ViaMinTitle = new wxStaticText( this, wxID_ANY, _("Via Min Size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaMinTitle->Wrap( -1 );
-	m_ViaMinTitle->Enable( false );
-	
 	fgMinValuesSizer->Add( m_ViaMinTitle, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_RIGHT, 5 );
 	
 	m_SetViaMinSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
