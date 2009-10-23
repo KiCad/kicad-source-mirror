@@ -12,6 +12,9 @@
 #define OPTKEY_PRINT_X_FINESCALE_ADJ wxT( "PrintXFineScaleAdj" )
 #define OPTKEY_PRINT_Y_FINESCALE_ADJ wxT( "PrintYFineScaleAdj" )
 #define OPTKEY_PRINT_SCALE           wxT( "PrintScale" )
+#define OPTKEY_PRINT_MODULE_SCALE    wxT( "PrintModuleScale" )
+#define OPTKEY_PRINT_PAGE_FRAME      wxT( "PrintPageFrame" )
+#define OPTKEY_PRINT_MONOCHROME_MODE      wxT( "PrintMonochrome" )
 
 /* Constantes de conversion d'unites */
 /* coeff de conversion dim en 0.1 mil -> dim en unite PS: (unite PS = pouce) */

@@ -229,10 +229,6 @@ void WinEDA_ModuleEditFrame::ReCreateOptToolbar()
                                wxBitmap( pad_sketch_xpm ),
                                _( "Show Pads Sketch" ) );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_VIAS_SKETCH, wxEmptyString,
-                               wxBitmap( via_sketch_xpm ),
-                               _( "Show Vias Sketch" ) );
-
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
                                wxEmptyString,
                                wxBitmap( text_sketch_xpm ),

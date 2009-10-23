@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-21 13:43+0100\n"
-"PO-Revision-Date: 2009-10-21 13:45+0100\n"
+"POT-Creation-Date: 2009-10-22 12:21+0100\n"
+"PO-Revision-Date: 2009-10-22 12:22+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,6 @@ msgstr ""
 "X-Poedit-SearchPath-7: share\n"
 
 #: pcbnew/pcbnew.cpp:80
-#, fuzzy
 msgid "Pcbnew is already running, Continue?"
 msgstr "Pcbnew est en cours d'exécution. Continuer ?"
 
@@ -480,7 +479,7 @@ msgstr "Fenêtre 3D déjà ouverte"
 msgid "3D Viewer"
 msgstr "Visu 3D"
 
-#: pcbnew/solve.cpp:240
+#: pcbnew/solve.cpp:243
 msgid "Abort routing?"
 msgstr "Arrêter le routage?"
 
@@ -1346,7 +1345,7 @@ msgstr "Afficher pastilles en contour"
 
 #: pcbnew/tool_pcb.cpp:372
 msgid "Show Vias Sketch"
-msgstr "Afficher Pastilles en Contour"
+msgstr "Afficher Vias en Contour"
 
 #: pcbnew/tool_pcb.cpp:376
 msgid "Show Tracks Sketch"
@@ -2273,34 +2272,34 @@ msgstr "Créer Fichier "
 msgid " error"
 msgstr " erreur"
 
-#: pcbnew/pcbcfg.cpp:88
+#: pcbnew/pcbcfg.cpp:79
 msgid "Read Project File"
 msgstr "Lire Fichier Projet"
 
-#: pcbnew/pcbcfg.cpp:98
+#: pcbnew/pcbcfg.cpp:89
 #, c-format
 msgid "File %s not found"
 msgstr "Fichier %s non trouvé"
 
-#: pcbnew/pcbcfg.cpp:233
+#: pcbnew/pcbcfg.cpp:219
 msgid "Save Project File"
 msgstr "Sauver Fichier Projet"
 
-#: pcbnew/dialog_track_options.cpp:77
+#: pcbnew/dialog_track_options.cpp:76
 msgid "Enter new via diameter value:"
 msgstr "Entrer une nouvelle valeur du diamètre de via"
 
-#: pcbnew/dialog_track_options.cpp:92
-#: pcbnew/dialog_track_options.cpp:147
+#: pcbnew/dialog_track_options.cpp:91
+#: pcbnew/dialog_track_options.cpp:146
 msgid "Incorrect entered value. Aborted"
 msgstr "Valeur entrée incorrecte. Annulation"
 
-#: pcbnew/dialog_track_options.cpp:102
-#: pcbnew/dialog_track_options.cpp:157
+#: pcbnew/dialog_track_options.cpp:101
+#: pcbnew/dialog_track_options.cpp:156
 msgid "Too many values in list (max count reached). Aborted"
 msgstr "trop de valeurs en liste (compte maxi. atteint). Abandon"
 
-#: pcbnew/dialog_track_options.cpp:132
+#: pcbnew/dialog_track_options.cpp:131
 msgid "Enter new track size value:"
 msgstr "Entrer la nouvelle valeur le la largeur de piste:"
 
@@ -2313,32 +2312,20 @@ msgid "Vias Custom Sizes List:"
 msgstr "Liste des Tailles de Vias Supplémentaires"
 
 #: pcbnew/dialog_track_options_base.cpp:43
-#: pcbnew/dialog_track_options_base.cpp:85
+#: pcbnew/dialog_track_options_base.cpp:76
 msgid "Add"
 msgstr "Ajouter"
 
 #: pcbnew/dialog_track_options_base.cpp:46
-#: pcbnew/dialog_track_options_base.cpp:88
+#: pcbnew/dialog_track_options_base.cpp:79
 msgid "Delete"
 msgstr "Supprimer"
 
 #: pcbnew/dialog_track_options_base.cpp:53
-msgid "Default Via Drill"
-msgstr "Perçage vias par défaut"
-
-#: pcbnew/dialog_track_options_base.cpp:58
-msgid ""
-"Enter the default via drill diameter\n"
-"All vias drills not set to a specific drill value will have this drill value."
-msgstr ""
-"Entrer le preçage des vias par défault\n"
-"Tous les perçages de vias non ajusté à une valeur spécifique auront cette valeur de perçage."
-
-#: pcbnew/dialog_track_options_base.cpp:62
 msgid "Specific Via Drill"
 msgstr "Perçage Spécifique"
 
-#: pcbnew/dialog_track_options_base.cpp:67
+#: pcbnew/dialog_track_options_base.cpp:58
 msgid ""
 "Use a specific drill value for all vias that must have a given drill value,\n"
 "and set the via hole to this specific drill value using the pop up menu."
@@ -2346,19 +2333,19 @@ msgstr ""
 "Utiliser une valeur de perçage spécifique pour toutes les vias qui doivent avoir un perçage donné,\n"
 "et mettre le trou de la via à cette valeur spécifique en utilisant le menu popup."
 
-#: pcbnew/dialog_track_options_base.cpp:74
+#: pcbnew/dialog_track_options_base.cpp:65
 msgid "Dimensions:"
 msgstr "Dimensions:"
 
-#: pcbnew/dialog_track_options_base.cpp:77
+#: pcbnew/dialog_track_options_base.cpp:68
 msgid "Tracks Custom Widths List:"
 msgstr "Liste des Largeurs de Pistes Supplémentaires"
 
-#: pcbnew/dialog_track_options_base.cpp:98
+#: pcbnew/dialog_track_options_base.cpp:89
 msgid "Pads Mask Clearance:"
 msgstr "Marge Masque des Pads"
 
-#: pcbnew/dialog_track_options_base.cpp:103
+#: pcbnew/dialog_track_options_base.cpp:94
 msgid "This is the clearance between pads and the mask"
 msgstr "Ceci est l'espace entre pads et le masque"
 
@@ -2418,39 +2405,44 @@ msgstr "Sauver Fichier PCB format GenCAD"
 msgid "Drill files (*.drl)|*.drl"
 msgstr "Fichiers de Perçage (*.drl)|*.drl"
 
-#: pcbnew/gendrill.cpp:318
+#: pcbnew/gendrill.cpp:93
+#: pcbnew/gendrill.cpp:95
+msgid "Use Netclasses values"
+msgstr "Utiliser les valeurs des Netclass"
+
+#: pcbnew/gendrill.cpp:310
 msgid "Save Drill File"
 msgstr "Sauver Fichier de Perçage"
 
-#: pcbnew/gendrill.cpp:403
+#: pcbnew/gendrill.cpp:396
 msgid "3:2"
 msgstr "3:2"
 
-#: pcbnew/gendrill.cpp:404
+#: pcbnew/gendrill.cpp:397
 msgid "3:3"
 msgstr "3:3"
 
-#: pcbnew/gendrill.cpp:755
+#: pcbnew/gendrill.cpp:750
 msgid "PostScript files (.ps)|*.ps"
 msgstr "Fichiers PostScript (.ps)|*.ps"
 
-#: pcbnew/gendrill.cpp:760
+#: pcbnew/gendrill.cpp:755
 msgid "Gerber files (.pho)|*.pho"
 msgstr "Fichiers Gerber (*.pho)|*.pho"
 
-#: pcbnew/gendrill.cpp:778
+#: pcbnew/gendrill.cpp:773
 msgid "Save Drill Plot File"
 msgstr "Sauver Plan de Perçage"
 
-#: pcbnew/gendrill.cpp:789
+#: pcbnew/gendrill.cpp:784
 msgid "Unable to create file"
 msgstr "Impossible de créer le fichier"
 
-#: pcbnew/gendrill.cpp:816
+#: pcbnew/gendrill.cpp:811
 msgid "Drill report files (.rpt)|*.rpt"
 msgstr "Fichiers rapport de perçage (.rpt)*.rpt"
 
-#: pcbnew/gendrill.cpp:822
+#: pcbnew/gendrill.cpp:817
 msgid "Save Drill Report File"
 msgstr "Sauver Fichier Rapport de Perçage"
 
@@ -2515,9 +2507,8 @@ msgid "Board contour"
 msgstr "Contour pcb"
 
 #: pcbnew/dialog_layers_setup.cpp:108
-#, fuzzy
 msgid "Auxiliary"
-msgstr "Axe Auxiliaire"
+msgstr "Auxiliaire"
 
 #: pcbnew/dialog_layers_setup.cpp:116
 msgid "All Layers On"
@@ -2547,22 +2538,26 @@ msgstr "4 couches, Composants sur le Dessus"
 msgid "Four Layers, Parts on Both Faces"
 msgstr "4 couches, Composants sur les 2 faces"
 
-#: pcbnew/dialog_drc.cpp:136
-#: pcbnew/dialog_drc.cpp:210
+#: pcbnew/dialog_drc.cpp:52
+msgid "Netclasses values"
+msgstr "Valeurs NetClass"
+
+#: pcbnew/dialog_drc.cpp:134
+#: pcbnew/dialog_drc.cpp:208
 #, c-format
 msgid "Report file \"%s\" created"
 msgstr "Fichier rapport \"%s\" créé"
 
-#: pcbnew/dialog_drc.cpp:138
-#: pcbnew/dialog_drc.cpp:211
+#: pcbnew/dialog_drc.cpp:136
+#: pcbnew/dialog_drc.cpp:209
 msgid "Disk File Report Completed"
 msgstr "Fichier rapport terminé"
 
-#: pcbnew/dialog_drc.cpp:231
+#: pcbnew/dialog_drc.cpp:229
 msgid "DRC report files (.rpt)|*.rpt"
 msgstr "Fichier rapport DRC  (.rpt)|*.rpt"
 
-#: pcbnew/dialog_drc.cpp:237
+#: pcbnew/dialog_drc.cpp:235
 msgid "Save DRC Report File"
 msgstr "Sauver Fichier Rapport DRC:"
 
@@ -2588,7 +2583,7 @@ msgstr "Afficher grille"
 
 #: pcbnew/moduleframe.cpp:340
 msgid "Show Vias Sketch mode"
-msgstr "Afficher pastilles en mode contour"
+msgstr "Afficher vias en mode contour"
 
 #: pcbnew/moduleframe.cpp:341
 msgid "Show vias filled mode"
@@ -3720,7 +3715,7 @@ msgstr ""
 "Ne peut être utilisé que pour imprimer la feuille courante"
 
 #: pcbnew/dialog_SVG_print_base.cpp:97
-#: pcbnew/dialog_drc_base.cpp:102
+#: pcbnew/dialog_drc_base.cpp:100
 msgid "Messages:"
 msgstr "Messages:"
 
@@ -3732,90 +3727,89 @@ msgstr "Options"
 msgid "Clearance"
 msgstr "Isolation"
 
-#: pcbnew/dialog_drc_base.cpp:40
-#: pcbnew/dialog_drc_base.cpp:49
-#: pcbnew/dialog_drc_base.cpp:61
-#: pcbnew/dialog_drc_base.cpp:70
-msgid "In the clearance units, enter the clearance distance"
-msgstr "Entrée l'isolation"
-
 #: pcbnew/dialog_drc_base.cpp:44
 msgid "Via Min Size"
 msgstr "Via Taille Min"
 
-#: pcbnew/dialog_drc_base.cpp:54
+#: pcbnew/dialog_drc_base.cpp:49
+#: pcbnew/dialog_drc_base.cpp:58
+#: pcbnew/dialog_drc_base.cpp:67
+msgid "In the clearance units, enter the clearance distance"
+msgstr "Entrée l'isolation"
+
+#: pcbnew/dialog_drc_base.cpp:53
 msgid "Track Min Width"
 msgstr "Epais.Mini Piste"
 
-#: pcbnew/dialog_drc_base.cpp:65
+#: pcbnew/dialog_drc_base.cpp:62
 msgid "MicroVia Min Size"
 msgstr "Diam. Mini MicroVia"
 
-#: pcbnew/dialog_drc_base.cpp:77
+#: pcbnew/dialog_drc_base.cpp:74
 msgid "Create Report File"
 msgstr "Créer fichier rapport "
 
-#: pcbnew/dialog_drc_base.cpp:80
+#: pcbnew/dialog_drc_base.cpp:78
 msgid "Enable writing report to this file"
 msgstr "Autoriser l'écriture du rapport dans ce fichier"
 
-#: pcbnew/dialog_drc_base.cpp:85
+#: pcbnew/dialog_drc_base.cpp:83
 msgid "Enter the report filename"
 msgstr "Entrer le nom du fichier rapport "
 
-#: pcbnew/dialog_drc_base.cpp:90
+#: pcbnew/dialog_drc_base.cpp:88
 msgid "..."
 msgstr "..."
 
-#: pcbnew/dialog_drc_base.cpp:116
+#: pcbnew/dialog_drc_base.cpp:114
 msgid "Start DRC"
 msgstr "Démarrer DRC"
 
-#: pcbnew/dialog_drc_base.cpp:118
+#: pcbnew/dialog_drc_base.cpp:116
 msgid "Start the Design Rule Checker"
 msgstr "Démarrer le Contrôle des Règles de Conception (DRC)"
 
-#: pcbnew/dialog_drc_base.cpp:122
+#: pcbnew/dialog_drc_base.cpp:120
 msgid "List Unconnected"
 msgstr "Liste Non Conn."
 
-#: pcbnew/dialog_drc_base.cpp:123
+#: pcbnew/dialog_drc_base.cpp:121
 msgid "List unconnected pads or tracks"
 msgstr "Lister pads ou pistes non connectées"
 
-#: pcbnew/dialog_drc_base.cpp:127
+#: pcbnew/dialog_drc_base.cpp:125
 msgid "Delete All Markers"
 msgstr "Effacer tous les Marqueurs"
 
-#: pcbnew/dialog_drc_base.cpp:128
+#: pcbnew/dialog_drc_base.cpp:126
 msgid "Delete every marker"
 msgstr "Effacer Chaque Marqueur"
 
-#: pcbnew/dialog_drc_base.cpp:132
+#: pcbnew/dialog_drc_base.cpp:130
 msgid "Delete Current Marker"
 msgstr "Effacer Marqueur Courant"
 
-#: pcbnew/dialog_drc_base.cpp:133
+#: pcbnew/dialog_drc_base.cpp:131
 msgid "Delete the marker selected in the listBox below"
 msgstr "Supprimer le marqueur sélectionné dans la liste ci dessous"
 
-#: pcbnew/dialog_drc_base.cpp:141
+#: pcbnew/dialog_drc_base.cpp:139
 msgid "Error Messages:"
 msgstr "Messages d'Erreur:"
 
-#: pcbnew/dialog_drc_base.cpp:151
+#: pcbnew/dialog_drc_base.cpp:149
 msgid "MARKERs, double click any to go there in PCB, right click for popup menu"
 msgstr "MARQUEURS, double clic pour aller sur le PCB, clic droit pour ouvrir menu"
 
-#: pcbnew/dialog_drc_base.cpp:159
+#: pcbnew/dialog_drc_base.cpp:157
 msgid "Problems / Markers"
 msgstr "Problèmes / Marqueurs"
 
-#: pcbnew/dialog_drc_base.cpp:165
+#: pcbnew/dialog_drc_base.cpp:163
 msgid "A list of unconnected pads, right click for popup menu"
 msgstr "Pour une liste de pads non connecté, clic droit pour ouvrir un menu"
 
-#: pcbnew/dialog_drc_base.cpp:172
+#: pcbnew/dialog_drc_base.cpp:170
 msgid "Unconnected"
 msgstr "Non connecté"
 
@@ -3904,31 +3898,31 @@ msgstr "Le fichier Session a une 'reference' à un composant non existant \"%s\"
 msgid "A wire_via references a missing padstack \"%s\""
 msgstr "Une piste ou via  a une référence vers un  pad \"%s\" manquant"
 
-#: pcbnew/class_module.cpp:821
+#: pcbnew/class_module.cpp:822
 msgid "Last Change"
 msgstr "Last Change"
 
-#: pcbnew/class_module.cpp:826
+#: pcbnew/class_module.cpp:827
 msgid "Netlist path"
 msgstr "Chemin Netliste "
 
-#: pcbnew/class_module.cpp:847
+#: pcbnew/class_module.cpp:848
 msgid "Stat"
 msgstr "Stat"
 
-#: pcbnew/class_module.cpp:857
+#: pcbnew/class_module.cpp:858
 msgid "No 3D shape"
 msgstr "Pas de forme 3D"
 
-#: pcbnew/class_module.cpp:858
+#: pcbnew/class_module.cpp:859
 msgid "3D-Shape"
 msgstr "Forme 3D"
 
-#: pcbnew/class_module.cpp:860
+#: pcbnew/class_module.cpp:861
 msgid "Doc:  "
 msgstr "Doc: "
 
-#: pcbnew/class_module.cpp:861
+#: pcbnew/class_module.cpp:862
 msgid "KeyW: "
 msgstr "KeyW: "
 
@@ -4254,39 +4248,39 @@ msgstr "Recalculer le chevelu complet ( utile après une édition manuelle de no
 msgid "Netlist File:"
 msgstr "Fichier Netliste:"
 
-#: pcbnew/drc.cpp:202
+#: pcbnew/drc.cpp:200
 msgid "Compile ratsnest...\n"
 msgstr "Calcul du chevelu...\n"
 
-#: pcbnew/drc.cpp:218
+#: pcbnew/drc.cpp:216
 msgid "Aborting\n"
 msgstr "Arrêt\n"
 
-#: pcbnew/drc.cpp:231
+#: pcbnew/drc.cpp:229
 msgid "Pad clearances...\n"
 msgstr "Isolations pads...\n"
 
-#: pcbnew/drc.cpp:241
+#: pcbnew/drc.cpp:239
 msgid "Track clearances...\n"
 msgstr "Isolations pistes...\n"
 
-#: pcbnew/drc.cpp:251
+#: pcbnew/drc.cpp:249
 msgid "Fill zones...\n"
 msgstr "Remplissage zones...\n"
 
-#: pcbnew/drc.cpp:259
+#: pcbnew/drc.cpp:257
 msgid "Test zones...\n"
 msgstr "Test zones...\n"
 
-#: pcbnew/drc.cpp:270
+#: pcbnew/drc.cpp:268
 msgid "Unconnected pads...\n"
 msgstr "Pads non connectés...\n"
 
-#: pcbnew/drc.cpp:284
+#: pcbnew/drc.cpp:282
 msgid "Finished"
 msgstr "Fini"
 
-#: pcbnew/drc.cpp:325
+#: pcbnew/drc.cpp:324
 #, c-format
 msgid "NETCLASS: '%s' has Clearance:%s which is less than global:%s"
 msgstr "NETCLASS: '%s' a une isolation:%s qui est moins que la valeur globale:%s"
@@ -5383,19 +5377,23 @@ msgstr ""
 msgid "Via Min Diameter"
 msgstr "Via Taille Min"
 
-#: pcbnew/dialog_design_rules_base.cpp:191
+#: pcbnew/dialog_design_rules_base.cpp:186
+msgid "Via Min Drill"
+msgstr "Via Perçage Min"
+
+#: pcbnew/dialog_design_rules_base.cpp:198
 msgid "Micro Vias Options:"
 msgstr "Options Micro Vias:"
 
-#: pcbnew/dialog_design_rules_base.cpp:193
+#: pcbnew/dialog_design_rules_base.cpp:200
 msgid "Do not allow micro vias"
 msgstr "Ne pas autoriser les micro vias"
 
-#: pcbnew/dialog_design_rules_base.cpp:193
+#: pcbnew/dialog_design_rules_base.cpp:200
 msgid "Allow micro vias"
 msgstr "Autoriser les micro vias"
 
-#: pcbnew/dialog_design_rules_base.cpp:197
+#: pcbnew/dialog_design_rules_base.cpp:204
 msgid ""
 "Allows or do not allow use of micro vias\n"
 "They are very small vias only from an external copper layer to its near neightbour"
@@ -5403,15 +5401,19 @@ msgstr ""
 "Autorise ou non l'utilisation de micro vias\n"
 "Ce sont de petites vias allant d'une couche externe à la plus proche couche interne uniquement"
 
-#: pcbnew/dialog_design_rules_base.cpp:207
+#: pcbnew/dialog_design_rules_base.cpp:214
 msgid "MicroVia Min Diameter"
 msgstr "Diam. Mini MicroVia"
 
-#: pcbnew/dialog_design_rules_base.cpp:219
+#: pcbnew/dialog_design_rules_base.cpp:221
+msgid "MicroVia Min Drill"
+msgstr "Micro Via Perçage Min"
+
+#: pcbnew/dialog_design_rules_base.cpp:233
 msgid "Minimal Values Allowed:"
 msgstr "Valeurs Minimales Autorisées:"
 
-#: pcbnew/dialog_design_rules_base.cpp:248
+#: pcbnew/dialog_design_rules_base.cpp:262
 msgid "Global Design Rules"
 msgstr "Règles Générales"
 
@@ -5420,7 +5422,7 @@ msgid "No Net"
 msgstr "No Net"
 
 #: pcbnew/dialog_copper_layers_setup.cpp:135
-#: pcbnew/dialog_design_rules.cpp:470
+#: pcbnew/dialog_design_rules.cpp:478
 msgid "Errors detected, Abort"
 msgstr "Erreurs detectées, Abandont"
 
@@ -5604,42 +5606,52 @@ msgstr "Valeur minimum pour le diamètre de via: <b>%s</b><br>\n"
 msgid "Minimum value for microvias diameter: <b>%s</b><br>\n"
 msgstr "Valeur minimum pour le diamètre de microvia: <b>%s</b><br>\n"
 
-#: pcbnew/dialog_design_rules.cpp:489
+#: pcbnew/dialog_design_rules.cpp:497
 msgid "New Net Class Name:"
 msgstr "Nouveau Nom de Classe d'Equipotentielle:"
 
-#: pcbnew/dialog_design_rules.cpp:502
+#: pcbnew/dialog_design_rules.cpp:510
 msgid "This NetClass is already existing, cannot add it; Aborted"
 msgstr "Cette NetClass existe déjà, et ne peut être ajoutée; Abandon"
 
-#: pcbnew/dialog_design_rules.cpp:559
+#: pcbnew/dialog_design_rules.cpp:567
 msgid "The defaut Netclass cannot be removed"
-msgstr ""
+msgstr "La Netclass Défault ne peut être supprimée"
 
-#: pcbnew/dialog_design_rules.cpp:745
+#: pcbnew/dialog_design_rules.cpp:758
 #, c-format
 msgid "%s: <b>Track Size</b> &lt; <b>Min Track Size</b><br>"
 msgstr "%s: <b>Largeur Piste</b> &ge; <b>Largeur Piste Minimum</b><br>"
 
-#: pcbnew/dialog_design_rules.cpp:759
+#: pcbnew/dialog_design_rules.cpp:772
 #, c-format
 msgid "%s: <b>Via Diameter</b> &lt; <b>Minimun Via Diameter</b><br>"
 msgstr "%s: <b>Diamètre Via</b> &ge; <b>Min. Diamètre Via</b><br>"
 
-#: pcbnew/dialog_design_rules.cpp:771
+#: pcbnew/dialog_design_rules.cpp:784
 #, c-format
 msgid "%s: <b>Via Drill</b> &ge; <b>Via Dia</b><br>"
 msgstr "%s: <b>Perçage Via</b> &ge; <b>Diam Via</b><br>"
 
-#: pcbnew/dialog_design_rules.cpp:785
+#: pcbnew/dialog_design_rules.cpp:793
 #, c-format
-msgid "%s: <b>MicroVia Diameter</b> &lt; <b>Minimun MicroVia Diameter</b><br>"
-msgstr "%s: <b>Diamètre  MicroVia</b> &ge; <b>Diamètre  MicroVia Minimum</b><br>"
+msgid "%s: <b>Via Drill</b> &lt; <b>Min Via Drill</b><br>"
+msgstr "%s: <b>Perçage Via</b> &lt; <b>Via Perçage Min</b><br>"
 
-#: pcbnew/dialog_design_rules.cpp:797
+#: pcbnew/dialog_design_rules.cpp:807
+#, c-format
+msgid "%s: <b>MicroVia Diameter</b> &lt; <b>MicroVia Min Diameter</b><br>"
+msgstr "%s: <b>Diamètre  MicroVia</b> &lt; <b>Diamètre  MicroVia Minimum</b><br>"
+
+#: pcbnew/dialog_design_rules.cpp:819
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &ge; <b>MicroVia Dia</b><br>"
 msgstr "%s: <b>Perçage MicroVia</b> &ge; <b>Diam MicroVia</b><br>"
+
+#: pcbnew/dialog_design_rules.cpp:828
+#, c-format
+msgid "%s: <b>MicroVia Drill</b> &lt; <b>MicroVia Min Drill</b><br>"
+msgstr "%s: <b>Perçage MicroVia</b> &lt; <b>MicroVia Perçage Min</b><br>"
 
 #: pcbnew/dialog_display_options_base.cpp:20
 msgid "Tracks and vias:"
@@ -6171,6 +6183,11 @@ msgstr "Contrôle la capture du curseur pcb quand le curseur souris passe sur un
 msgid "Remove the currently select Net Class"
 msgstr "Supprimer la NetClass actuellement sélectionnée"
 
+#: pcbnew/copies_de_sauvegarde/dialog_design_rules.cpp:734
+#, c-format
+msgid "%s: <b>MicroVia Diameter</b> &lt; <b>Minimun MicroVia Diameter</b><br>"
+msgstr "%s: <b>Diamètre  MicroVia</b> &ge; <b>Diamètre  MicroVia Minimum</b><br>"
+
 #: eeschema/libarch.cpp:55
 #, c-format
 msgid "An error occurrred attempting to save component library <%s>."
@@ -6283,175 +6300,53 @@ msgstr "Options d'affichage du Champ"
 msgid "Failed to open Stuff File <%s>"
 msgstr "Ne peut pas ouvrir fichier d'échange <%s>"
 
-#: eeschema/libedit.cpp:30
-msgid "Component Library Editor: "
-msgstr "Editeur de Composants"
+#: eeschema/libfield.cpp:160
+msgid "Edit field"
+msgstr "Editer Champ"
 
-#: eeschema/libedit.cpp:35
+#: eeschema/libfield.cpp:177
+#, c-format
+msgid ""
+"The field name <%s> is an existing alias of the component <%s>.\n"
+"Please choose another name that does not conflict with any names in the alias list."
+msgstr ""
+"Le nom de champ <%s> est un alias existant du composant%s>.\n"
+"SVP  choisir un autre nom qui n'est pas déjà existant dans la liste des alias."
+
+#: eeschema/libfield.cpp:191
+#, c-format
+msgid ""
+"The field name <%s> conflicts with an existing entry in the component library <%s>.\n"
+"Please choose another name that does not conflict with any library entries."
+msgstr ""
+
+#: eeschema/libfield.cpp:213
+msgid "No new text: no change"
+msgstr "Pas de nouveau texte: pas de changements"
+
+#: eeschema/viewlibs.cpp:108
+msgid "Library Browser"
+msgstr "Visualisateur de Librairies"
+
+#: eeschema/viewlibs.cpp:115
 msgid "no library selected"
 msgstr "Pas de librairie sélectionnée"
 
-#: eeschema/libedit.cpp:71
-msgid ""
-"Current part not saved.\n"
-"\n"
-"Discard current changes?"
-msgstr ""
-"Composant courant non sauvé.\n"
-"\n"
-"Perdre les changements en cours ?"
-
-#: eeschema/libedit.cpp:101
-#, c-format
-msgid "Component or alias name \"%s\" not found in library \"%s\"."
-msgstr "Composant ou alias \"%s\" non trouvé en librairie \"%s\"."
-
-#: eeschema/libedit.cpp:171
-#, c-format
-msgid "Could not create copy of part <%s> in library <%s>."
-msgstr "Ne peut créer une copie de l'élément <%s> en librairie <%s>."
-
-#: eeschema/libedit.cpp:252
-msgid "Include last component changes?"
-msgstr "Inclure les dernières modifications du composant"
-
-#: eeschema/libedit.cpp:264
-msgid "Modify library file \""
-msgstr "Modifier le fichier Librairie \""
-
-#: eeschema/libedit.cpp:264
-msgid "\"?"
-msgstr "\"?"
-
-#: eeschema/libedit.cpp:275
-msgid "Error while saving library file \""
-msgstr "Erreur en sauvant le fichier librairie \""
-
-#: eeschema/libedit.cpp:276
-msgid "\"."
-msgstr "\"."
-
-#: eeschema/libedit.cpp:277
-msgid "*** ERROR: ***"
-msgstr "***ERREUR:****"
-
-#: eeschema/libedit.cpp:282
-msgid "Library file \""
-msgstr "Fichier librairie \""
-
-#: eeschema/libedit.cpp:284
-msgid "Document file \""
-msgstr "Fichier de doc \""
-
-#: eeschema/libedit.cpp:307
+#: eeschema/viewlibs.cpp:314
 msgid "Part"
 msgstr "Part"
 
-#: eeschema/libedit.cpp:319
+#: eeschema/viewlibs.cpp:315
 msgid "Alias"
 msgstr "Alias"
 
-#: eeschema/libedit.cpp:324
-msgid "Unit"
-msgstr "Unité"
-
-#: eeschema/libedit.cpp:327
-msgid "Convert"
-msgstr "Convert"
-
-#: eeschema/libedit.cpp:331
-msgid "Body"
-msgstr "Body"
-
-#: eeschema/libedit.cpp:334
-msgid "Power Symbol"
-msgstr "Symbole d'Alimentation"
-
-#: eeschema/libedit.cpp:336
-msgid "Component"
-msgstr "Composant"
-
-#: eeschema/libedit.cpp:345
+#: eeschema/viewlibs.cpp:316
 msgid "Description"
 msgstr "Description"
 
-#: eeschema/libedit.cpp:352
+#: eeschema/viewlibs.cpp:317
 msgid "Key words"
 msgstr "Mots clé"
-
-#: eeschema/libedit.cpp:386
-msgid "Please select a component library."
-msgstr "SVP sélectionner une librairie de composants."
-
-#: eeschema/libedit.cpp:395
-#, c-format
-msgid "Component library <%s> is empty."
-msgstr "Fichier librairie de composants <%s> vide"
-
-#: eeschema/libedit.cpp:397
-msgid "Delete Entry Error"
-msgstr "Erreur en suppression d'élément"
-
-#: eeschema/libedit.cpp:402
-#, c-format
-msgid ""
-"Select 1 of %d components to delete\n"
-"from library <%s>."
-msgstr ""
-"Selection 1 de %d composants a supprimer\n"
-"de la librairie <%s>."
-
-#: eeschema/libedit.cpp:406
-msgid "Delete Component"
-msgstr "Suppression Composant"
-
-#: eeschema/libedit.cpp:415
-#, c-format
-msgid "Entry <%s> not found in library <%s>."
-msgstr "Element <%s> non trouvé en librairie <%s>."
-
-#: eeschema/libedit.cpp:422
-#, c-format
-msgid "Delete component \"%s\" from library \"%s\"?"
-msgstr "Supprimer composant \"%s\" de la librairie  \"%s\"?"
-
-#: eeschema/libedit.cpp:442
-msgid "The component being deleted has been modified. All changes will be lost. Discard changes?"
-msgstr ""
-
-#: eeschema/libedit.cpp:497
-msgid ""
-"All changes to the current component will be lost!\n"
-"\n"
-"Clear the current component from the screen?"
-msgstr ""
-
-#: eeschema/libedit.cpp:511
-msgid "This new component has no name and cannot be created. Aborted"
-msgstr "Ce noveau composant n'a pas de nom et ne peut être créé, Abandon"
-
-#: eeschema/libedit.cpp:522
-#, c-format
-msgid "Component \"%s\" already exists in library \"%s\"."
-msgstr "Composant \"%s\" déjà  existant en librairie \"%s\"."
-
-#: eeschema/libedit.cpp:587
-msgid "No component to save."
-msgstr "Pas de composant à sauver."
-
-#: eeschema/libedit.cpp:596
-msgid "No library specified."
-msgstr "Pas de librairie spécifiée."
-
-#: eeschema/libedit.cpp:606
-#, c-format
-msgid "Component \"%s\" exists. Change it?"
-msgstr "Le composant \" %s\" existe, Le changer ?"
-
-#: eeschema/libedit.cpp:624
-#, c-format
-msgid "Component %s saved in library %s"
-msgstr "Composant %s sauvé en librairie %s"
 
 #: eeschema/symbedit.cpp:49
 msgid "Import Symbol Drawings"
@@ -6476,38 +6371,14 @@ msgstr "Pas deomposant trouvé en librairie de symboles <%s>."
 msgid "Warning: more than 1 part in symbol file."
 msgstr "Attention: plus de 1élément dans le fichier symbole."
 
-#: eeschema/symbedit.cpp:148
+#: eeschema/symbedit.cpp:150
 msgid "Export Symbol Drawings"
 msgstr "Exporter Symbole de Dessin"
 
-#: eeschema/symbedit.cpp:174
+#: eeschema/symbedit.cpp:176
 #, c-format
 msgid "Save Symbol in [%s]"
 msgstr "Symbole sauvé en  [%s]"
-
-#: eeschema/libfield.cpp:160
-msgid "Edit field"
-msgstr "Editer Champ"
-
-#: eeschema/libfield.cpp:175
-#, c-format
-msgid ""
-"The field name <%s> is an existing alias of the component <%s>.\n"
-"Please choose another name that does not conflict with any names in the alias list."
-msgstr ""
-"Le nom de champ <%s> est un alias existant du composant%s>.\n"
-"SVP  choisir un autre nom qui n'est pas déjà existant dans la liste des alias."
-
-#: eeschema/libfield.cpp:189
-#, c-format
-msgid ""
-"The field name <%s> conflicts with an existing entry in the component library <%s>.\n"
-"Please choose another name that does not conflict with any library entries."
-msgstr ""
-
-#: eeschema/libfield.cpp:211
-msgid "No new text: no change"
-msgstr "Pas de nouveau texte: pas de changements"
 
 #: eeschema/hierarch.cpp:119
 msgid "Navigator"
@@ -7170,18 +7041,180 @@ msgstr "Couleur du Fond:"
 msgid "Eeschema is already running, Continue?"
 msgstr "Eeschema est en cours d'exécution. Continuer ?"
 
-#: eeschema/class_libentry_fields.cpp:82
-#: eeschema/class_libentry_fields.cpp:568
-msgid "Field"
-msgstr "Champ"
+#: eeschema/libedit.cpp:30
+msgid "Component Library Editor: "
+msgstr "Editeur de Composants"
 
-#: eeschema/class_libentry_fields.cpp:142
-msgid "invalid field number defined"
-msgstr "numéro de champ défini invalide"
+#: eeschema/libedit.cpp:71
+msgid ""
+"Current part not saved.\n"
+"\n"
+"Discard current changes?"
+msgstr ""
+"Composant courant non sauvé.\n"
+"\n"
+"Perdre les changements en cours ?"
 
-#: eeschema/class_libentry_fields.cpp:560
-msgid "Datasheet"
-msgstr "Documentation"
+#: eeschema/libedit.cpp:101
+#, c-format
+msgid "Component or alias name \"%s\" not found in library \"%s\"."
+msgstr "Composant ou alias \"%s\" non trouvé en librairie \"%s\"."
+
+#: eeschema/libedit.cpp:171
+#, c-format
+msgid "Could not create copy of part <%s> in library <%s>."
+msgstr "Ne peut créer une copie de l'élément <%s> en librairie <%s>."
+
+#: eeschema/libedit.cpp:252
+msgid "Include last component changes?"
+msgstr "Inclure les dernières modifications du composant"
+
+#: eeschema/libedit.cpp:264
+msgid "Modify library file \""
+msgstr "Modifier le fichier Librairie \""
+
+#: eeschema/libedit.cpp:264
+msgid "\"?"
+msgstr "\"?"
+
+#: eeschema/libedit.cpp:275
+msgid "Error while saving library file \""
+msgstr "Erreur en sauvant le fichier librairie \""
+
+#: eeschema/libedit.cpp:276
+msgid "\"."
+msgstr "\"."
+
+#: eeschema/libedit.cpp:277
+msgid "*** ERROR: ***"
+msgstr "***ERREUR:****"
+
+#: eeschema/libedit.cpp:282
+msgid "Library file \""
+msgstr "Fichier librairie \""
+
+#: eeschema/libedit.cpp:284
+msgid "Document file \""
+msgstr "Fichier de doc \""
+
+#: eeschema/libedit.cpp:324
+msgid "Unit"
+msgstr "Unité"
+
+#: eeschema/libedit.cpp:327
+msgid "Convert"
+msgstr "Convert"
+
+#: eeschema/libedit.cpp:331
+msgid "Body"
+msgstr "Body"
+
+#: eeschema/libedit.cpp:334
+msgid "Power Symbol"
+msgstr "Symbole d'Alimentation"
+
+#: eeschema/libedit.cpp:336
+msgid "Component"
+msgstr "Composant"
+
+#: eeschema/libedit.cpp:386
+msgid "Please select a component library."
+msgstr "SVP sélectionner une librairie de composants."
+
+#: eeschema/libedit.cpp:395
+#, c-format
+msgid "Component library <%s> is empty."
+msgstr "Fichier librairie de composants <%s> vide"
+
+#: eeschema/libedit.cpp:397
+msgid "Delete Entry Error"
+msgstr "Erreur en suppression d'élément"
+
+#: eeschema/libedit.cpp:402
+#, c-format
+msgid ""
+"Select 1 of %d components to delete\n"
+"from library <%s>."
+msgstr ""
+"Selection 1 de %d composants a supprimer\n"
+"de la librairie <%s>."
+
+#: eeschema/libedit.cpp:406
+msgid "Delete Component"
+msgstr "Suppression Composant"
+
+#: eeschema/libedit.cpp:415
+#, c-format
+msgid "Entry <%s> not found in library <%s>."
+msgstr "Element <%s> non trouvé en librairie <%s>."
+
+#: eeschema/libedit.cpp:422
+#, c-format
+msgid "Delete component \"%s\" from library \"%s\"?"
+msgstr "Supprimer composant \"%s\" de la librairie  \"%s\"?"
+
+#: eeschema/libedit.cpp:442
+msgid "The component being deleted has been modified. All changes will be lost. Discard changes?"
+msgstr ""
+
+#: eeschema/libedit.cpp:497
+msgid ""
+"All changes to the current component will be lost!\n"
+"\n"
+"Clear the current component from the screen?"
+msgstr ""
+
+#: eeschema/libedit.cpp:511
+msgid "This new component has no name and cannot be created. Aborted"
+msgstr "Ce noveau composant n'a pas de nom et ne peut être créé, Abandon"
+
+#: eeschema/libedit.cpp:522
+#, c-format
+msgid "Component \"%s\" already exists in library \"%s\"."
+msgstr "Composant \"%s\" déjà  existant en librairie \"%s\"."
+
+#: eeschema/libedit.cpp:587
+msgid "No component to save."
+msgstr "Pas de composant à sauver."
+
+#: eeschema/libedit.cpp:596
+msgid "No library specified."
+msgstr "Pas de librairie spécifiée."
+
+#: eeschema/libedit.cpp:606
+#, c-format
+msgid "Component \"%s\" exists. Change it?"
+msgstr "Le composant \" %s\" existe, Le changer ?"
+
+#: eeschema/libedit.cpp:624
+#, c-format
+msgid "Component %s saved in library %s"
+msgstr "Composant %s sauvé en librairie %s"
+
+#: eeschema/class_libentry.cpp:67
+msgid "none"
+msgstr "rien"
+
+#: eeschema/class_libentry.cpp:330
+msgid "value"
+msgstr "valeur"
+
+#: eeschema/class_libentry.cpp:330
+msgid "reference"
+msgstr "référence"
+
+#: eeschema/class_libentry.cpp:332
+#, fuzzy, c-format
+msgid "An attempt was made to remove the %s field from component %s in library %s."
+msgstr "Alias <%s> non trouvé pour le component <%s> en librairie <%s>."
+
+#: eeschema/class_libentry.cpp:674
+msgid "file ended prematurely loading component draw element"
+msgstr ""
+
+#: eeschema/class_libentry.cpp:729
+msgid "file ended prematurely while attempting to flush to end of drawing section."
+msgstr ""
 
 #: eeschema/files-io.cpp:71
 msgid "Clear Schematic Hierarchy (modified!)?"
@@ -7273,10 +7306,6 @@ msgstr "Exporter"
 #, c-format
 msgid "Arc %.1f deg"
 msgstr "Arc %.1f deg"
-
-#: eeschema/viewlibs.cpp:108
-msgid "Library Browser"
-msgstr "Visualisateur de Librairies"
 
 #: eeschema/getpart.cpp:98
 #, c-format
@@ -8474,6 +8503,10 @@ msgstr ""
 "\n"
 "#End List\n"
 
+#: eeschema/build_BOM.cpp:620
+msgid "Field"
+msgstr "Champ"
+
 #: eeschema/build_BOM.cpp:628
 msgid ""
 "\n"
@@ -8514,17 +8547,21 @@ msgstr "> %-28.28s PinSheet %-7.7s (Feuille %s) pos: %3.3f, %3.3f\n"
 msgid "#End labels\n"
 msgstr "#End labels\n"
 
-#: eeschema/class_libentry.cpp:70
-msgid "none"
-msgstr "rien"
+#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:160
+#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:165
+msgid "Pos "
+msgstr "Pos "
 
-#: eeschema/class_libentry.cpp:695
-msgid "file ended prematurely loading component draw element"
+#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:226
+#, c-format
+msgid ""
+"A new name is entered for this component\n"
+"An alias %s already exists!\n"
+"Cannot update this component"
 msgstr ""
-
-#: eeschema/class_libentry.cpp:750
-msgid "file ended prematurely while attempting to flush to end of drawing section."
-msgstr ""
+"Un noveau nom a été entré pour ce composant\n"
+"Un alias %s existe déjà!\n"
+"Ne peut mettre à jour ce composant"
 
 #: eeschema/edit_component_in_lib.cpp:145
 #, c-format
@@ -8589,7 +8626,7 @@ msgstr "Filtrage Modules"
 #: eeschema/edit_component_in_lib.cpp:493
 #, c-format
 msgid "Foot print filter <%s> is already defined."
-msgstr ""
+msgstr "Filtre de module <%s> déjà défini."
 
 #: eeschema/dialog_eeschema_config_fbp.cpp:20
 msgid "Component library files"
@@ -8859,77 +8896,6 @@ msgstr "Imprimer Page Courante"
 #: eeschema/dialog_SVG_print_base.cpp:56
 msgid "Print All"
 msgstr "Imprimer Tout"
-
-#: eeschema/class_library.cpp:24
-#, c-format
-msgid "Component library <%s> has duplicate entry name <%s>.  This may cause some unexpected behavior when loading components into a schematic."
-msgstr ""
-
-#: eeschema/class_library.cpp:201
-#, c-format
-msgid "Cannot add duplicate alias <%s> to library <%s>."
-msgstr "Ne peut ajouter un double de l'alias <%s> en librairie <%s>."
-
-#: eeschema/class_library.cpp:240
-#, c-format
-msgid "Conflict in library <%s>: alias <%s> already has root name <%s> and will not be assigned to root name <%s>."
-msgstr ""
-
-#: eeschema/class_library.cpp:470
-msgid "The component library file name is not set."
-msgstr "Le nom du fichier librairie  est non sélectionné."
-
-#: eeschema/class_library.cpp:478
-msgid "The file could not be opened."
-msgstr "Le fichier n'a pas pu être ouvert."
-
-#: eeschema/class_library.cpp:484
-msgid "The file is empty!"
-msgstr "Fichier vide!"
-
-#: eeschema/class_library.cpp:507
-msgid "The file is NOT an EESCHEMA library!"
-msgstr "Le fichier n'est PAS une librairie EESCHEMA !"
-
-#: eeschema/class_library.cpp:513
-msgid "The file header is missing version and time stamp information."
-msgstr ""
-
-#: eeschema/class_library.cpp:520
-msgid "The file header version information is invalid."
-msgstr ""
-
-#: eeschema/class_library.cpp:532
-#, c-format
-msgid ""
-"The component library <%s> header version number is invalid.\n"
-"\n"
-"In future versions of EESchema this library may not load correctly.  To resolve this problem open the library in the library editor and save it.  If this library is the project cache library, save the current schematic."
-msgstr ""
-
-#: eeschema/class_library.cpp:556
-msgid "An error occured attempting to read the header."
-msgstr "Une 'erreur s'est produite lors de la lecture de l'entête."
-
-#: eeschema/class_library.cpp:586
-#, c-format
-msgid "Library <%s> component load error %s."
-msgstr "Librairie <%s> erreur de chargement du composant %s."
-
-#: eeschema/class_library.cpp:656
-#, c-format
-msgid "Could not open component document libray file <%s>."
-msgstr "Ne peut ouvrir le fichier document du composant <%s>."
-
-#: eeschema/class_library.cpp:663
-#, c-format
-msgid "Component document libray file <%s> is empty."
-msgstr "Fichier document de composants <%s> vide"
-
-#: eeschema/class_library.cpp:671
-#, c-format
-msgid "File <%s> is not a valid component library document file."
-msgstr "<%s> n'est pas un fichier documentation de composant valide."
 
 #: eeschema/dialog_print_using_printer_base.cpp:52
 msgid "Current"
@@ -9336,9 +9302,76 @@ msgstr "Fichiers Schématiques"
 msgid "File write operation failed."
 msgstr "Erreur sur écriture sur fichier."
 
-#: eeschema/class_sch_component.cpp:1086
-msgid "Power symbol"
-msgstr "Symbole d'alimentation"
+#: eeschema/class_library.cpp:24
+#, c-format
+msgid "Component library <%s> has duplicate entry name <%s>.  This may cause some unexpected behavior when loading components into a schematic."
+msgstr ""
+
+#: eeschema/class_library.cpp:207
+#, c-format
+msgid "Cannot add duplicate alias <%s> to library <%s>."
+msgstr "Ne peut ajouter un double de l'alias <%s> en librairie <%s>."
+
+#: eeschema/class_library.cpp:246
+#, c-format
+msgid "Conflict in library <%s>: alias <%s> already has root name <%s> and will not be assigned to root name <%s>."
+msgstr ""
+
+#: eeschema/class_library.cpp:476
+msgid "The component library file name is not set."
+msgstr "Le nom du fichier librairie  est non sélectionné."
+
+#: eeschema/class_library.cpp:484
+msgid "The file could not be opened."
+msgstr "Le fichier n'a pas pu être ouvert."
+
+#: eeschema/class_library.cpp:490
+msgid "The file is empty!"
+msgstr "Fichier vide!"
+
+#: eeschema/class_library.cpp:513
+msgid "The file is NOT an EESCHEMA library!"
+msgstr "Le fichier n'est PAS une librairie EESCHEMA !"
+
+#: eeschema/class_library.cpp:519
+msgid "The file header is missing version and time stamp information."
+msgstr ""
+
+#: eeschema/class_library.cpp:526
+msgid "The file header version information is invalid."
+msgstr ""
+
+#: eeschema/class_library.cpp:538
+#, c-format
+msgid ""
+"The component library <%s> header version number is invalid.\n"
+"\n"
+"In future versions of EESchema this library may not load correctly.  To resolve this problem open the library in the library editor and save it.  If this library is the project cache library, save the current schematic."
+msgstr ""
+
+#: eeschema/class_library.cpp:562
+msgid "An error occured attempting to read the header."
+msgstr "Une 'erreur s'est produite lors de la lecture de l'entête."
+
+#: eeschema/class_library.cpp:592
+#, c-format
+msgid "Library <%s> component load error %s."
+msgstr "Librairie <%s> erreur de chargement du composant %s."
+
+#: eeschema/class_library.cpp:662
+#, c-format
+msgid "Could not open component document libray file <%s>."
+msgstr "Ne peut ouvrir le fichier document du composant <%s>."
+
+#: eeschema/class_library.cpp:669
+#, c-format
+msgid "Component document libray file <%s> is empty."
+msgstr "Fichier document de composants <%s> vide"
+
+#: eeschema/class_library.cpp:677
+#, c-format
+msgid "File <%s> is not a valid component library document file."
+msgstr "<%s> n'est pas un fichier documentation de composant valide."
 
 #: eeschema/class_drc_erc_item.cpp:39
 msgid "ERC err unspecified"
@@ -9372,145 +9405,23 @@ msgstr "Différence entre labels de hiérarchieet pins de hiérarchie"
 msgid "A no connect symbol is connected to more than 1 pin"
 msgstr "Un symbole de non connexion est connecté à plus de une pin"
 
-#: eeschema/dialog_create_component.cpp:172
-msgid "As Convert"
-msgstr "A une forme \"convertie\""
+#: eeschema/dialog_edit_component_in_schematic.cpp:170
+msgid "No Component Name!"
+msgstr "Pas de nom de composant!"
 
-#: eeschema/dialog_create_component.cpp:201
-msgid "&1"
-msgstr "&1"
-
-#: eeschema/dialog_create_component.cpp:202
-msgid "&2"
-msgstr "&2"
-
-#: eeschema/dialog_create_component.cpp:203
-msgid "&3"
-msgstr "&3"
-
-#: eeschema/dialog_create_component.cpp:204
-msgid "&4"
-msgstr "&4"
-
-#: eeschema/dialog_create_component.cpp:205
-msgid "&5"
-msgstr "&5"
-
-#: eeschema/dialog_create_component.cpp:206
-msgid "&6"
-msgstr "&6"
-
-#: eeschema/dialog_create_component.cpp:207
-msgid "&7"
-msgstr "&7"
-
-#: eeschema/dialog_create_component.cpp:208
-msgid "&8"
-msgstr "&8"
-
-#: eeschema/dialog_create_component.cpp:209
-msgid "&9"
-msgstr "&9"
-
-#: eeschema/dialog_create_component.cpp:210
-msgid "&10"
-msgstr "&10"
-
-#: eeschema/dialog_create_component.cpp:211
-msgid "&11"
-msgstr "&11"
-
-#: eeschema/dialog_create_component.cpp:212
-msgid "&12"
-msgstr "&12"
-
-#: eeschema/dialog_create_component.cpp:213
-msgid "&13"
-msgstr "&13"
-
-#: eeschema/dialog_create_component.cpp:214
-msgid "&14"
-msgstr "&14"
-
-#: eeschema/dialog_create_component.cpp:215
-msgid "&15"
-msgstr "&15"
-
-#: eeschema/dialog_create_component.cpp:216
-msgid "&16"
-msgstr "&16"
-
-#: eeschema/dialog_create_component.cpp:217
-msgid "&17"
-msgstr "&17"
-
-#: eeschema/dialog_create_component.cpp:218
-msgid "&18"
-msgstr "&18"
-
-#: eeschema/dialog_create_component.cpp:219
-msgid "&19"
-msgstr "&19"
-
-#: eeschema/dialog_create_component.cpp:220
-msgid "&20"
-msgstr "&20"
-
-#: eeschema/dialog_create_component.cpp:221
-msgid "&21"
-msgstr "&21"
-
-#: eeschema/dialog_create_component.cpp:222
-msgid "&22"
-msgstr "&22"
-
-#: eeschema/dialog_create_component.cpp:223
-msgid "&23"
-msgstr "&23"
-
-#: eeschema/dialog_create_component.cpp:224
-msgid "&24"
-msgstr "&24"
-
-#: eeschema/dialog_create_component.cpp:225
-msgid "&25"
-msgstr "&25"
-
-#: eeschema/dialog_create_component.cpp:226
-msgid "&26"
-msgstr "&26"
-
-#: eeschema/dialog_create_component.cpp:227
-msgid "Parts per component"
-msgstr "Parts par composant"
-
-#: eeschema/dialog_create_component.cpp:233
-msgid "Draw options"
-msgstr "Options de Tracé"
-
-#: eeschema/dialog_create_component.cpp:237
-msgid "Show Pin Number"
-msgstr "Montrer Numéro de Pin"
-
-#: eeschema/dialog_create_component.cpp:241
-msgid "Show Pin Name"
-msgstr "Montre Nom de Pin"
-
-#: eeschema/dialog_create_component.cpp:245
-msgid "Pin Name Inside"
-msgstr "Nom de pin à l'intérieur"
-
-#: eeschema/dialog_create_component.cpp:249
-msgid "Skew:"
-msgstr "Décalage:"
-
-#: eeschema/dialog_create_component.cpp:303
-msgid "You must provide a name for this component"
-msgstr "Vous devez fournir un nom pour ce composant"
+#: eeschema/dialog_edit_component_in_schematic.cpp:177
+#, c-format
+msgid "Component [%s] not found!"
+msgstr "Composant [%s] non trouvé!"
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:25
 msgid "General :"
 msgstr "Général :"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:27
+#: eeschema/dialog_create_component.cpp:172
+msgid "As Convert"
+msgstr "A une forme \"convertie\""
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:29
 msgid ""
@@ -9526,9 +9437,19 @@ msgstr "Montre Numéro de Pin"
 msgid "Show or hide pin numbers"
 msgstr "Affichage ou non des numéroes de pins"
 
+#: eeschema/dialog_edit_component_in_lib_base.cpp:40
+#: eeschema/dialog_create_component.cpp:241
+msgid "Show Pin Name"
+msgstr "Montre Nom de Pin"
+
 #: eeschema/dialog_edit_component_in_lib_base.cpp:43
 msgid "Show or hide pin names"
 msgstr "Affichage ou non des noms des pins"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:47
+#: eeschema/dialog_create_component.cpp:245
+msgid "Pin Name Inside"
+msgstr "Nom de pin à l'intérieur"
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:50
 msgid ""
@@ -9539,6 +9460,11 @@ msgstr ""
 #: eeschema/dialog_edit_component_in_lib_base.cpp:65
 msgid "Number of Units:"
 msgstr "Nombre de Parts:"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:77
+#: eeschema/dialog_create_component.cpp:249
+msgid "Skew:"
+msgstr "Décalage:"
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:93
 msgid ""
@@ -9665,6 +9591,14 @@ msgstr "Incrément Label:"
 msgid "Default Label Size"
 msgstr "Taille Label par défaut"
 
+#: eeschema/class_libentry_fields.cpp:143
+msgid "invalid field number defined"
+msgstr "numéro de champ défini invalide"
+
+#: eeschema/class_libentry_fields.cpp:561
+msgid "Datasheet"
+msgstr "Documentation"
+
 #: eeschema/edit_component_in_schematic.cpp:37
 msgid "No Field to move"
 msgstr "Pas de champ à déplacer"
@@ -9710,32 +9644,9 @@ msgstr "Module du Composant"
 msgid "text only had %d parameters of the required 8"
 msgstr "le texte a seulement %d paramètres sur les 8 requis"
 
-#: eeschema/dialog_edit_component_in_schematic.cpp:94
-#: eeschema/dialog_edit_component_in_schematic.cpp:99
-#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:160
-#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:165
-msgid "Pos "
-msgstr "Pos "
-
-#: eeschema/dialog_edit_component_in_schematic.cpp:170
-msgid "No Component Name!"
-msgstr "Pas de nom de composant!"
-
-#: eeschema/dialog_edit_component_in_schematic.cpp:177
-#, c-format
-msgid "Component [%s] not found!"
-msgstr "Composant [%s] non trouvé!"
-
-#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:226
-#, c-format
-msgid ""
-"A new name is entered for this component\n"
-"An alias %s already exists!\n"
-"Cannot update this component"
-msgstr ""
-"Un noveau nom a été entré pour ce composant\n"
-"Un alias %s existe déjà!\n"
-"Ne peut mettre à jour ce composant"
+#: eeschema/class_sch_component.cpp:1083
+msgid "Power symbol"
+msgstr "Symbole d'alimentation"
 
 #: eeschema/dialog_erc_base.cpp:38
 msgid "Erc File Report:"
@@ -9824,6 +9735,126 @@ msgstr " (alias de "
 #, c-format
 msgid "%8.8lX/"
 msgstr "%8.8lX/"
+
+#: eeschema/dialog_create_component.cpp:201
+msgid "&1"
+msgstr "&1"
+
+#: eeschema/dialog_create_component.cpp:202
+msgid "&2"
+msgstr "&2"
+
+#: eeschema/dialog_create_component.cpp:203
+msgid "&3"
+msgstr "&3"
+
+#: eeschema/dialog_create_component.cpp:204
+msgid "&4"
+msgstr "&4"
+
+#: eeschema/dialog_create_component.cpp:205
+msgid "&5"
+msgstr "&5"
+
+#: eeschema/dialog_create_component.cpp:206
+msgid "&6"
+msgstr "&6"
+
+#: eeschema/dialog_create_component.cpp:207
+msgid "&7"
+msgstr "&7"
+
+#: eeschema/dialog_create_component.cpp:208
+msgid "&8"
+msgstr "&8"
+
+#: eeschema/dialog_create_component.cpp:209
+msgid "&9"
+msgstr "&9"
+
+#: eeschema/dialog_create_component.cpp:210
+msgid "&10"
+msgstr "&10"
+
+#: eeschema/dialog_create_component.cpp:211
+msgid "&11"
+msgstr "&11"
+
+#: eeschema/dialog_create_component.cpp:212
+msgid "&12"
+msgstr "&12"
+
+#: eeschema/dialog_create_component.cpp:213
+msgid "&13"
+msgstr "&13"
+
+#: eeschema/dialog_create_component.cpp:214
+msgid "&14"
+msgstr "&14"
+
+#: eeschema/dialog_create_component.cpp:215
+msgid "&15"
+msgstr "&15"
+
+#: eeschema/dialog_create_component.cpp:216
+msgid "&16"
+msgstr "&16"
+
+#: eeschema/dialog_create_component.cpp:217
+msgid "&17"
+msgstr "&17"
+
+#: eeschema/dialog_create_component.cpp:218
+msgid "&18"
+msgstr "&18"
+
+#: eeschema/dialog_create_component.cpp:219
+msgid "&19"
+msgstr "&19"
+
+#: eeschema/dialog_create_component.cpp:220
+msgid "&20"
+msgstr "&20"
+
+#: eeschema/dialog_create_component.cpp:221
+msgid "&21"
+msgstr "&21"
+
+#: eeschema/dialog_create_component.cpp:222
+msgid "&22"
+msgstr "&22"
+
+#: eeschema/dialog_create_component.cpp:223
+msgid "&23"
+msgstr "&23"
+
+#: eeschema/dialog_create_component.cpp:224
+msgid "&24"
+msgstr "&24"
+
+#: eeschema/dialog_create_component.cpp:225
+msgid "&25"
+msgstr "&25"
+
+#: eeschema/dialog_create_component.cpp:226
+msgid "&26"
+msgstr "&26"
+
+#: eeschema/dialog_create_component.cpp:227
+msgid "Parts per component"
+msgstr "Parts par composant"
+
+#: eeschema/dialog_create_component.cpp:233
+msgid "Draw options"
+msgstr "Options de Tracé"
+
+#: eeschema/dialog_create_component.cpp:237
+msgid "Show Pin Number"
+msgstr "Montrer Numéro de Pin"
+
+#: eeschema/dialog_create_component.cpp:303
+msgid "You must provide a name for this component"
+msgstr "Vous devez fournir un nom pour ce composant"
 
 #: eeschema/dialog_lib_edit_draw_item_base.cpp:22
 msgid "General"
@@ -11939,7 +11970,7 @@ msgstr "Effacements Globaux"
 msgid "Footprints Orientation"
 msgstr "Orientation des Modules"
 
-#: pcbnew/dialog_track_options_base.h:81
+#: pcbnew/dialog_track_options_base.h:79
 msgid "Tracks and Vias Sizes"
 msgstr "Dims Pistes et Vias"
 
@@ -11951,7 +11982,7 @@ msgstr "Dialogue Netliste"
 msgid "Create SVG file"
 msgstr "Créer Fichier SVG"
 
-#: pcbnew/dialog_design_rules_base.h:100
+#: pcbnew/dialog_design_rules_base.h:104
 msgid "Design Rules Editor"
 msgstr "Editeur de Règles de Conception"
 
@@ -12031,7 +12062,7 @@ msgstr "Afficher Modules Cmp"
 msgid "Show Modules Cu"
 msgstr "Afficher Modules Cu"
 
-#: pcbnew/dialog_drc_base.h:98
+#: pcbnew/dialog_drc_base.h:96
 msgid "DRC Control"
 msgstr "Contrôle DRC"
 
@@ -12340,6 +12371,16 @@ msgstr "DCodes id."
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "Default Via Drill"
+#~ msgstr "Perçage vias par défaut"
+#~ msgid ""
+#~ "Enter the default via drill diameter\n"
+#~ "All vias drills not set to a specific drill value will have this drill "
+#~ "value."
+#~ msgstr ""
+#~ "Entrer le preçage des vias par défault\n"
+#~ "Tous les perçages de vias non ajusté à une valeur spécifique auront cette "
+#~ "valeur de perçage."
 #~ msgid "Copper &Layers"
 #~ msgstr "Couches &Cuivre."
 #~ msgid "Select copper layers count and layers names"
@@ -12412,8 +12453,6 @@ msgstr "Ajustage opt Page"
 #~ msgstr "Diamètre via"
 #~ msgid "Micro Via Size"
 #~ msgstr "Diamètre Micro Via"
-#~ msgid "Micro Via Drill"
-#~ msgstr "Perçage Micro Via"
 #~ msgid "Enter the current track width"
 #~ msgstr "Entrer la largeur de piste courante"
 #~ msgid "This is the clearance between tracks, vias and pads for DRC."

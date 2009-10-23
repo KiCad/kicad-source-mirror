@@ -60,6 +60,8 @@ set(PCBNEW_SRCS
     dialog_pad_properties_base.cpp
     dialog_pcbnew_config_libs_and_paths.cpp
     dialog_pcbnew_config_libs_and_paths_fbp.cpp
+    dialog_print_for_modedit.cpp
+    dialog_print_for_modedit_base.cpp
     dialog_print_using_printer.cpp
     dialog_orient_footprints.cpp
     dialog_track_options.cpp
@@ -95,6 +97,7 @@ set(PCBNEW_SRCS
     initpcb.cpp
     ioascii.cpp
     print_board_functions.cpp
+    printout_controler.cpp
     librairi.cpp
     loadcmp.cpp
     locate.cpp

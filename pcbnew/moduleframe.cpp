@@ -57,7 +57,7 @@ EVT_TOOL( ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
           WinEDA_ModuleEditFrame::Process_Special_Functions )
 EVT_TOOL( ID_MODEDIT_SHEET_SET,
           WinEDA_ModuleEditFrame::Process_Special_Functions )
-EVT_TOOL( ID_GEN_PRINT, WinEDA_DrawFrame::ToPrinter )
+EVT_TOOL( ID_GEN_PRINT, WinEDA_ModuleEditFrame::ToPrinter )
 EVT_TOOL( ID_MODEDIT_LOAD_MODULE,
           WinEDA_ModuleEditFrame::Process_Special_Functions )
 EVT_TOOL( ID_MODEDIT_CHECK,
@@ -333,14 +333,9 @@ void WinEDA_ModuleEditFrame::SetToolbars()
                                       m_CursorShape );
 
 
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
-                                      !m_DisplayViaFill );
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
-                                            m_DisplayViaFill ?
-                                            _( "Show Vias Sketch mode" ) :
-                                            _( "Show vias filled mode" ) );
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
                                       !m_DisplayPadFill );
+
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
                                            m_DisplayPadFill ?
                                            _( "Show Pads Sketch mode" ) :

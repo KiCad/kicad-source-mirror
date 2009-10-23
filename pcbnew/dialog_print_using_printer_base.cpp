@@ -135,8 +135,6 @@ DIALOG_PRINT_USING_PRINTER_base::DIALOG_PRINT_USING_PRINTER_base( wxWindow* pare
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PRINT_USING_PRINTER_base::OnCloseWindow ) );
-	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_PRINT_USING_PRINTER_base::OnInitDialog ) );
-	m_ScaleOption->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_base::SetScale ), NULL, this );
 	m_buttonOption->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_base::OnPrintSetup ), NULL, this );
 	m_buttonPreview->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_base::OnPrintPreview ), NULL, this );
 	m_buttonPrint->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_base::OnPrintButtonClick ), NULL, this );
@@ -147,8 +145,6 @@ DIALOG_PRINT_USING_PRINTER_base::~DIALOG_PRINT_USING_PRINTER_base()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PRINT_USING_PRINTER_base::OnCloseWindow ) );
-	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_PRINT_USING_PRINTER_base::OnInitDialog ) );
-	m_ScaleOption->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_base::SetScale ), NULL, this );
 	m_buttonOption->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_base::OnPrintSetup ), NULL, this );
 	m_buttonPreview->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_base::OnPrintPreview ), NULL, this );
 	m_buttonPrint->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_base::OnPrintButtonClick ), NULL, this );

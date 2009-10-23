@@ -37,12 +37,9 @@ set(GERBVIEW_SRCS
     trpiste.cpp )
 
 set(GERBVIEW_EXTRA_SRCS
-#    ../pcbnew/class_board_item.cpp
-#    ../pcbnew/class_drawsegment.cpp
-#    ../pcbnew/undelete.cpp
-
     ../share/setpage.cpp
     ../pcbnew/dialog_print_using_printer.cpp
+    ../pcbnew/printout_controler.cpp
 )
 
 if(WIN32)

@@ -747,6 +747,11 @@ public:
     void         GeneralControle( wxDC* DC, wxPoint Mouse );
     void         LoadModuleFromBoard( wxCommandEvent& event );
 
+    /** function ToPrinter
+     * Install the print dialog
+     */
+    void         ToPrinter( wxCommandEvent& event );
+
     // BOARD handling
     /** function Clear_Pcb()
      * delete all and reinitialize the current board

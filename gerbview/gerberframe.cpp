@@ -277,9 +277,6 @@ void WinEDA_GerberFrame::SetToolbars()
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
                                       !m_DisplayPadFill );
 
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
-                                      !m_DisplayViaFill );
-
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
                                       !m_DisplayPcbTrackFill );
 

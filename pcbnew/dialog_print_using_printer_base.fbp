@@ -11,7 +11,7 @@
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
         <property name="internationalize">1</property>
-        <property name="name">DialogSVGPrint_base</property>
+        <property name="name">DialogPrint_base</property>
         <property name="namespace"></property>
         <property name="path">.</property>
         <property name="precompiled_header"></property>
@@ -49,7 +49,7 @@
             <event name="OnHibernate"></event>
             <event name="OnIconize"></event>
             <event name="OnIdle"></event>
-            <event name="OnInitDialog">OnInitDialog</event>
+            <event name="OnInitDialog"></event>
             <event name="OnKeyDown"></event>
             <event name="OnKeyUp"></event>
             <event name="OnKillFocus"></event>
@@ -234,7 +234,7 @@
                                 <event name="OnMouseEvents"></event>
                                 <event name="OnMouseWheel"></event>
                                 <event name="OnPaint"></event>
-                                <event name="OnRadioBox">SetScale</event>
+                                <event name="OnRadioBox"></event>
                                 <event name="OnRightDClick"></event>
                                 <event name="OnRightDown"></event>
                                 <event name="OnRightUp"></event>

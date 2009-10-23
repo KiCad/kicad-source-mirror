@@ -362,10 +362,6 @@ create or update the left vertical toolbar (option toolbar
                                wxBitmap( pad_sketch_xpm ),
                                _( "Show Spots in Sketch Mode" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_VIAS_SKETCH, wxEmptyString,
-                               wxBitmap( via_sketch_xpm ),
-                               _( "Show Vias in Sketch Mode" ), wxITEM_CHECK );
-
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH, wxEmptyString,
                                wxBitmap( showtrack_xpm ),
                                _( "Show Lines in Sketch Mode" ), wxITEM_CHECK );

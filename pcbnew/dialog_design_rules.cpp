@@ -825,7 +825,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
         if( muviadrill < minUViaDrill )
         {
             result = false;
-            msg.Printf( _( "%s: <b>MicroVia Drill</b> &ge; <b>MicroVia Min Drill</b><br>" ),
+            msg.Printf( _( "%s: <b>MicroVia Drill</b> &lt; <b>MicroVia Min Drill</b><br>" ),
                 GetChars( m_grid->GetRowLabelValue(row)) );
 
             m_MessagesList->AppendToPage( msg );
