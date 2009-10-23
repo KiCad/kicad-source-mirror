@@ -123,7 +123,10 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                                                  GetScreen()->m_Curseur );
             }
             if( DrawEntry == NULL )
+            {
                 DisplayCmpDoc();
+                break;
+            }
             SaveCopyInUndoList( m_component );
             if( DrawEntry->Type() == COMPONENT_PIN_DRAW_TYPE )
                 DeletePin( DC, m_component, (LIB_PIN*) DrawEntry );

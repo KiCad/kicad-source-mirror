@@ -1247,7 +1247,7 @@ void LIB_SEGMENT::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
      * bounding box calculation. */
 #if 0
     EDA_Rect bBox = GetBoundingBox();
-    bBox.Inflate( m_Width + 2, m_Width + 2 );
+    bBox.Inflate( m_Width + 2 );
     GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif

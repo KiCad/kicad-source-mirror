@@ -206,20 +206,11 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnAddOrInsertLibClick( wxCommandEvent& event )
          * because it preserve use of default libraries paths, when the
          * path is a sub path of these default paths
          */
-        if( wxGetApp().GetLibraryPathList().Index( fn.GetPath() ) != wxNOT_FOUND )  // Ok, trivial case
-            libfilename = fn.GetName();
-        else    // not in the default, : see if this file is in a subpath:
-        {
-            libfilename = fn.GetPathWithSep() + fn.GetName();
-            for ( unsigned kk = 0; kk < wxGetApp().GetLibraryPathList().GetCount(); kk ++ )
-            {
-                if( fn.MakeRelativeTo(wxGetApp().GetLibraryPathList()[kk] ) )
-                {
-                    libfilename = fn.GetPathWithSep() + fn.GetName();
-                    break;
-                }
-            }
-        }
+        libfilename = wxGetApp().ReturnFilenameWithRelativePathInLibPath( fn.GetFullPath() );
+        // Remove extension:
+        fn = libfilename;
+        fn.SetExt(wxEmptyString);
+        libfilename = fn.GetFullPath();
 
         //Add or insert new library name, if not already in list
         if( m_ListLibr->FindString( libfilename, fn.IsCaseSensitive() ) == wxNOT_FOUND )

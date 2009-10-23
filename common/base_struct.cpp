@@ -539,6 +539,7 @@ EDA_Rect& EDA_Rect::Inflate( int aDelta )
  */
 {
     Inflate( aDelta, aDelta );
+    return *this;
 }
 
 /**************************************************/
