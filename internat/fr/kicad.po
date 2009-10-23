@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-22 12:21+0100\n"
-"PO-Revision-Date: 2009-10-22 12:22+0100\n"
+"POT-Creation-Date: 2009-10-23 11:01+0100\n"
+"PO-Revision-Date: 2009-10-23 11:02+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -2581,19 +2581,11 @@ msgstr "Grille non montrée"
 msgid "Show Grid"
 msgstr "Afficher grille"
 
-#: pcbnew/moduleframe.cpp:340
-msgid "Show Vias Sketch mode"
-msgstr "Afficher vias en mode contour"
-
 #: pcbnew/moduleframe.cpp:341
-msgid "Show vias filled mode"
-msgstr "Afficher pastilles en mode plein"
-
-#: pcbnew/moduleframe.cpp:346
 msgid "Show Pads Sketch mode"
 msgstr "Afficher pastilles en contour"
 
-#: pcbnew/moduleframe.cpp:347
+#: pcbnew/moduleframe.cpp:342
 msgid "Show pads filled mode"
 msgstr "Afficher pastilles en mode plein"
 
@@ -4156,7 +4148,7 @@ msgid "Preview"
 msgstr "Prévisualisation"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:125
-#: pcbnew/dialog_print_using_printer.cpp:465
+#: pcbnew/dialog_print_using_printer.cpp:442
 msgid "Print"
 msgstr "Imprimer"
 
@@ -4970,26 +4962,21 @@ msgstr ""
 "Chemins (chemins système et chemins utilisateurs) utilisés pour chercher et charger les fichiers libriries et documentation des composants.\n"
 "Triés par ordre de priorité décroissante."
 
-#: pcbnew/dialog_print_using_printer.cpp:129
+#: pcbnew/dialog_print_using_printer.cpp:90
 msgid "Error Init Printer info"
 msgstr "Erreur Init info imprimante"
 
-#: pcbnew/dialog_print_using_printer.cpp:374
+#: pcbnew/dialog_print_using_printer.cpp:372
 msgid "Printer Problem!"
 msgstr "Problème d'imprimante"
 
-#: pcbnew/dialog_print_using_printer.cpp:396
+#: pcbnew/dialog_print_using_printer.cpp:386
 msgid "Print Preview"
 msgstr "Prévisualisation"
 
-#: pcbnew/dialog_print_using_printer.cpp:476
+#: pcbnew/dialog_print_using_printer.cpp:453
 msgid "There was a problem printing"
 msgstr "Il y a un problème d'impression"
-
-#: pcbnew/dialog_print_using_printer.cpp:492
-#, c-format
-msgid "Print page %d"
-msgstr "Imprimer page %d"
 
 #: pcbnew/class_drawsegment.cpp:373
 msgid "Shape"
@@ -5667,8 +5654,6 @@ msgstr "Sélectionner comment les pistes sont affichées"
 
 #: pcbnew/dialog_display_options_base.cpp:30
 #: pcbnew/dialog_display_options_base.cpp:38
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:137
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:145
 msgid "Never"
 msgstr "Jamais"
 
@@ -5682,8 +5667,6 @@ msgstr "Nouvelle piste avec via"
 
 #: pcbnew/dialog_display_options_base.cpp:30
 #: pcbnew/dialog_display_options_base.cpp:38
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:137
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:145
 msgid "Always"
 msgstr "Toujours"
 
@@ -5863,6 +5846,19 @@ msgstr "Couche Mod."
 msgid "Seg Layer"
 msgstr "Couche Seg."
 
+#: pcbnew/dialog_print_for_modedit.cpp:242
+#, fuzzy
+msgid "Print Footprint"
+msgstr "Module"
+
+#: pcbnew/dialog_print_for_modedit_base.cpp:22
+msgid "Scale 8"
+msgstr "Echelle 8"
+
+#: pcbnew/dialog_print_for_modedit_base.cpp:22
+msgid "Scale 16"
+msgstr "Echelle 16"
+
 #: pcbnew/tool_modedit.cpp:42
 msgid "Select working library"
 msgstr "Sélection de la librairie de travail"
@@ -5919,20 +5915,20 @@ msgstr "Test module"
 msgid "Add Pads"
 msgstr "Addition de \"pins\""
 
-#: pcbnew/tool_modedit.cpp:239
+#: pcbnew/tool_modedit.cpp:235
 msgid "Show Texts Sketch"
 msgstr "Afficher textes en contour"
 
-#: pcbnew/tool_modedit.cpp:244
+#: pcbnew/tool_modedit.cpp:240
 msgid "Show Edges Sketch"
 msgstr "Afficher Modules en contour"
 
-#: pcbnew/tool_modedit.cpp:315
+#: pcbnew/tool_modedit.cpp:311
 #, c-format
 msgid "Grid %.1f"
 msgstr "Grille %.1f"
 
-#: pcbnew/tool_modedit.cpp:317
+#: pcbnew/tool_modedit.cpp:313
 #, c-format
 msgid "Grid %.3f"
 msgstr "Grille %.3f"
@@ -6005,6 +6001,10 @@ msgstr "Afficher pastilles en mode contour"
 #: pcbnew/toolbars_update_user_interface.cpp:247
 msgid "Show vias sketch mode"
 msgstr "Afficher vias en mode contour"
+
+#: pcbnew/toolbars_update_user_interface.cpp:248
+msgid "Show vias filled mode"
+msgstr "Afficher pastilles en mode plein"
 
 #: pcbnew/toolbars_update_user_interface.cpp:255
 msgid "Show tracks sketch mode"
@@ -7577,6 +7577,7 @@ msgid "Save Project Settings"
 msgstr "Sauver Optionsr Projet"
 
 #: eeschema/netlist.cpp:92
+#: eeschema/dialog_build_BOM_base.cpp:47
 msgid "List"
 msgstr "Liste"
 
@@ -7751,10 +7752,12 @@ msgid "Check if you want this field's text rotated 90 degrees"
 msgstr "Activer si vous voulez avoir le texte de ce champ tourné à 90°"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:136
+#: eeschema/dialog_edit_label_base.cpp:43
 msgid "Bold"
 msgstr "Gras"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:136
+#: eeschema/dialog_edit_label_base.cpp:43
 msgid "Bold Italic"
 msgstr "Gras Italique"
 
@@ -8647,6 +8650,11 @@ msgstr ""
 msgid "User defined search path"
 msgstr "Chemin de recherche défini par l'utilisateur"
 
+#: eeschema/dialog_print_using_printer.cpp:303
+#, c-format
+msgid "Print page %d"
+msgstr "Imprimer page %d"
+
 #: eeschema/lib_export.cpp:46
 msgid "Import Component"
 msgstr "Importer Composant"
@@ -8727,39 +8735,31 @@ msgid "Text Shape:"
 msgstr "Aspect Texte:"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:82
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:56
 msgid "Align left"
 msgstr "Alignement à gauche"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:82
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:88
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:56
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:69
 msgid "Align center"
 msgstr "Alignement au centre"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:82
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:56
 msgid "Align right"
 msgstr "Alignement à droite"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:84
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:58
 msgid "Horiz. Justify"
 msgstr "Justification Horiz."
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:88
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:69
 msgid "Align bottom"
 msgstr "Alignement en bas"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:88
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:69
 msgid "Align top"
 msgstr "Alignement au sommet"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:90
-#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:71
 msgid "Vert. Justify"
 msgstr "Vert. Justifié"
 
@@ -9419,7 +9419,6 @@ msgid "General :"
 msgstr "Général :"
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:27
-#: eeschema/dialog_create_component.cpp:172
 msgid "As Convert"
 msgstr "A une forme \"convertie\""
 
@@ -9438,7 +9437,6 @@ msgid "Show or hide pin numbers"
 msgstr "Affichage ou non des numéroes de pins"
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:40
-#: eeschema/dialog_create_component.cpp:241
 msgid "Show Pin Name"
 msgstr "Montre Nom de Pin"
 
@@ -9447,7 +9445,6 @@ msgid "Show or hide pin names"
 msgstr "Affichage ou non des noms des pins"
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:47
-#: eeschema/dialog_create_component.cpp:245
 msgid "Pin Name Inside"
 msgstr "Nom de pin à l'intérieur"
 
@@ -9462,7 +9459,6 @@ msgid "Number of Units:"
 msgstr "Nombre de Parts:"
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:77
-#: eeschema/dialog_create_component.cpp:249
 msgid "Skew:"
 msgstr "Décalage:"
 
@@ -9883,11 +9879,11 @@ msgstr "Pas de remplissage"
 
 #: eeschema/dialog_lib_edit_draw_item_base.cpp:96
 msgid "Fill &foreground"
-msgstr "Remplissage en &arriere plan"
+msgstr "Remplissage en &avant plan"
 
 #: eeschema/dialog_lib_edit_draw_item_base.cpp:99
 msgid "Fill &background"
-msgstr "Remplissage en a&vant plan"
+msgstr "Remplissage en a&rriere plan"
 
 #: eeschema/component_wizard/dialog_component_setup.cpp:137
 msgid "Quick KICAD Library Component Builder"
@@ -10261,7 +10257,6 @@ msgid "File <"
 msgstr "Fichier <"
 
 #: cvpcb/readschematicnetlist.cpp:114
-#: kicad/prjconfig.cpp:93
 msgid "> not found"
 msgstr ">  non trouvé"
 
@@ -11116,18 +11111,14 @@ msgid "Show Spots in Sketch Mode"
 msgstr "Afficher Flashs en Mode Contour"
 
 #: gerbview/tool_gerber.cpp:367
-msgid "Show Vias in Sketch Mode"
-msgstr "Afficher Vias en Mode Contour"
-
-#: gerbview/tool_gerber.cpp:371
 msgid "Show Lines in Sketch Mode"
 msgstr "Afficher Lignes en Mode Contour"
 
-#: gerbview/tool_gerber.cpp:375
+#: gerbview/tool_gerber.cpp:371
 msgid "Show Polygons in Sketch Mode"
 msgstr "Afficher Polygones en Mode Contour"
 
-#: gerbview/tool_gerber.cpp:379
+#: gerbview/tool_gerber.cpp:375
 msgid "Show dcode number"
 msgstr "Afficher le n° de DCode"
 
@@ -12371,6 +12362,10 @@ msgstr "DCodes id."
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "Show Vias Sketch mode"
+#~ msgstr "Afficher vias en mode contour"
+#~ msgid "Show Vias in Sketch Mode"
+#~ msgstr "Afficher Vias en Mode Contour"
 #~ msgid "Default Via Drill"
 #~ msgstr "Perçage vias par défaut"
 #~ msgid ""

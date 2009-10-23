@@ -256,7 +256,7 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
         if( drawItem.Type() == COMPONENT_PIN_DRAW_TYPE )
         {
             drawItem.Draw( panel, dc, offset, color, drawMode,
-                           (void*) &showPinText, transformMatrix );
+                           (void*) showPinText, transformMatrix );
         }
         else if( drawItem.Type() == COMPONENT_FIELD_DRAW_TYPE )
         {
@@ -269,7 +269,7 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
                                  && drawItem.m_Fill == FILLED_WITH_BG_BODYCOLOR
                                  && GetGRForceBlackPenState() );
             drawItem.Draw( panel, dc, offset, color, drawMode,
-                           (void*) &forceNoFill, transformMatrix );
+                           (void*) forceNoFill, transformMatrix );
         }
 
     }
