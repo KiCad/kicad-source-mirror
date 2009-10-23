@@ -445,6 +445,11 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::BrowseAndSelectDocFile( wxCommandEvent& e
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 
     filename = wxGetApp().ReturnFilenameWithRelativePathInLibPath(FullFileName);
+    // Filenames are always stored in unix like mode, ie separator "\" is stored as "/"
+    // to ensure files are identical under unices and windows
+#ifdef __WINDOWS__
+    filename.Replace(wxT("\\"), wxT("/") );
+#endif
     m_Docfile->SetValue( filename );
 }
 

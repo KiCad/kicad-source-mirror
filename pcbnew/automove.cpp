@@ -40,7 +40,7 @@ wxString ModulesMaskSelection = wxT( "*" );
 void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
 /******************************************************/
 
-/* Traite les selections d'outils et les commandes appelees du menu POPUP
+/* Called on events (popup menus) relative to automove and autoplace footprints
  */
 {
     int        id = event.GetId();
@@ -55,7 +55,7 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
 
     wxGetMousePosition( &pos.x, &pos.y );
 
-    switch( id )   // Arret eventuel de la commande de déplacement en cours
+    switch( id )
     {
     case ID_TOOLBARH_PCB_AUTOPLACE:
     case ID_TOOLBARH_PCB_AUTOROUTE:
@@ -69,7 +69,7 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
         }
         break;
 
-    default:        // Arret de la commande de déplacement en cours
+    default:   // Abort a current command (if any)
         if( DrawPanel->ManageCurseur
             && DrawPanel->ForceCloseManageCurseur )
         {
@@ -84,7 +84,7 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
         DrawGeneralRatsnest( &dc );
     GetBoard()->m_Status_Pcb |= DO_NOT_SHOW_GENERAL_RASTNEST;
 
-    switch( id )   // Traitement des commandes
+    switch( id )
     {
     case ID_TOOLBARH_PCB_AUTOPLACE:
         on_state = m_HToolBar->GetToolState( ID_TOOLBARH_PCB_AUTOPLACE );
@@ -142,11 +142,11 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_AUTOMOVE_ALL_MODULES:
-        AutoMoveModulesOnPcb( &dc, FALSE );
+        AutoMoveModulesOnPcb( FALSE );
         break;
 
     case ID_POPUP_PCB_AUTOMOVE_NEW_MODULES:
-        AutoMoveModulesOnPcb( &dc, TRUE );
+        AutoMoveModulesOnPcb( TRUE );
         break;
 
     case ID_POPUP_PCB_REORIENT_ALL_MODULES:
@@ -188,7 +188,7 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
 
 
 /*****************************************************************************/
-void WinEDA_PcbFrame::AutoMoveModulesOnPcb( wxDC* DC, bool PlaceModulesHorsPcb )
+void WinEDA_PcbFrame::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
 /*****************************************************************************/
 
 /* Routine de repartition des composants dans un rectangle de format 4 / 3,
@@ -259,7 +259,6 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( wxDC* DC, bool PlaceModulesHorsPcb )
 
     Xsize_allowed = (int) (sqrt( surface ) * 4.0 / 3.0);
 
-    /* Placement des modules */
     start     = current = GetScreen()->m_Curseur;
     Ymax_size = 0;
 
@@ -290,14 +289,13 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( wxDC* DC, bool PlaceModulesHorsPcb )
 
         PutOnGrid( &GetScreen()->m_Curseur );
 
-        Module->Draw( DrawPanel, DC, GR_XOR );
-        Place_Module( Module, DC );   /* positionne Module et recalcule cadre */
+        Place_Module( Module, NULL, true );
 
         current.x += Module->m_RealBoundaryBox.GetWidth() + pas_grille;
     }
 
     MyFree( BaseListeModules );
-    GetScreen()->SetRefreshReq();
+    DrawPanel->Refresh();
 }
 
 
