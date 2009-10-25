@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-23 11:01+0100\n"
-"PO-Revision-Date: 2009-10-23 11:02+0100\n"
+"POT-Creation-Date: 2009-10-25 16:44+0100\n"
+"PO-Revision-Date: 2009-10-25 16:44+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -221,7 +221,7 @@ msgid "Place Module"
 msgstr "Place Module"
 
 #: pcbnew/loadcmp.cpp:234
-#: pcbnew/loadcmp.cpp:386
+#: pcbnew/loadcmp.cpp:387
 #, c-format
 msgid "PCB footprint library file <%s> not found in search paths."
 msgstr "Librairie modules PCB %s non trouvée dans les chemins de recherche"
@@ -229,8 +229,8 @@ msgstr "Librairie modules PCB %s non trouvée dans les chemins de recherche"
 #: pcbnew/loadcmp.cpp:236
 #: pcbnew/loadcmp.cpp:248
 #: pcbnew/loadcmp.cpp:264
-#: pcbnew/loadcmp.cpp:388
-#: pcbnew/loadcmp.cpp:424
+#: pcbnew/loadcmp.cpp:389
+#: pcbnew/loadcmp.cpp:425
 msgid "Library Load Error"
 msgstr "Erreur en Chargement de librairie"
 
@@ -245,7 +245,7 @@ msgid "Scan Lib: %s"
 msgstr "Examen Lib: %s"
 
 #: pcbnew/loadcmp.cpp:262
-#: pcbnew/loadcmp.cpp:422
+#: pcbnew/loadcmp.cpp:423
 #, c-format
 msgid "<%s> is not a valid Kicad PCB footprint library file."
 msgstr "<%s> n'est pas un fichier librarire de modules Kicad PCB valide."
@@ -255,16 +255,16 @@ msgstr "<%s> n'est pas un fichier librarire de modules Kicad PCB valide."
 msgid "Module <%s> not found"
 msgstr "Module <%s> non trouvé"
 
-#: pcbnew/loadcmp.cpp:413
+#: pcbnew/loadcmp.cpp:414
 msgid "Library "
 msgstr "Librairie "
 
-#: pcbnew/loadcmp.cpp:413
+#: pcbnew/loadcmp.cpp:414
 msgid " loaded"
 msgstr " chargé"
 
-#: pcbnew/loadcmp.cpp:484
-#: pcbnew/loadcmp.cpp:636
+#: pcbnew/loadcmp.cpp:485
+#: pcbnew/loadcmp.cpp:637
 #, c-format
 msgid "Modules [%d items]"
 msgstr "Modules [%d éléments]"
@@ -2892,7 +2892,7 @@ msgstr "dimension"
 #: pcbnew/edit_track_width.cpp:180
 #, c-format
 msgid "Set tracks and vias sizes to the Netclass \"%s\"default value (entire NET \"%s\") ?"
-msgstr ""
+msgstr "Ajuster pistes et vias sizes à la valeur de la Netclass \"%s\" (tout le NET \"%s\") ?"
 
 #: pcbnew/edit_track_width.cpp:232
 msgid "Set All Tracks and Vias to Netclass value"
@@ -3504,7 +3504,7 @@ msgstr "&Options Couches"
 
 #: pcbnew/menubarpcb.cpp:224
 msgid "Enable and set properties of layers"
-msgstr ""
+msgstr "Activer les couches et ajuster leur propriétés"
 
 #: pcbnew/menubarpcb.cpp:235
 msgid "Tracks and Vias"
@@ -4876,19 +4876,19 @@ msgstr "De "
 msgid "Footprint library files:"
 msgstr "Fichiers Library Modules:"
 
-#: pcbnew/dialog_pcbnew_config_libs_and_paths.cpp:236
+#: pcbnew/dialog_pcbnew_config_libs_and_paths.cpp:227
 msgid "Library already in use"
 msgstr "Librairie déjà en usage"
 
-#: pcbnew/dialog_pcbnew_config_libs_and_paths.cpp:249
+#: pcbnew/dialog_pcbnew_config_libs_and_paths.cpp:240
 msgid "Default Path for Libraries"
 msgstr "Chemin par Défaut des Librairies"
 
-#: pcbnew/dialog_pcbnew_config_libs_and_paths.cpp:284
+#: pcbnew/dialog_pcbnew_config_libs_and_paths.cpp:275
 msgid "Path already in use"
 msgstr "Chemin déjà en usage"
 
-#: pcbnew/dialog_pcbnew_config_libs_and_paths.cpp:323
+#: pcbnew/dialog_pcbnew_config_libs_and_paths.cpp:314
 msgid "Footprint document file:"
 msgstr "Documentation des Modules:"
 
@@ -5409,7 +5409,7 @@ msgid "No Net"
 msgstr "No Net"
 
 #: pcbnew/dialog_copper_layers_setup.cpp:135
-#: pcbnew/dialog_design_rules.cpp:478
+#: pcbnew/dialog_design_rules.cpp:479
 msgid "Errors detected, Abort"
 msgstr "Erreurs detectées, Abandont"
 
@@ -5574,68 +5574,68 @@ msgstr "* (Tout)"
 msgid "Class"
 msgstr "Classe"
 
-#: pcbnew/dialog_design_rules.cpp:105
+#: pcbnew/dialog_design_rules.cpp:106
 msgid "<b>Current general settings:</b><br>"
 msgstr "<b>Reglages généraux courants:</b><br>"
 
-#: pcbnew/dialog_design_rules.cpp:109
+#: pcbnew/dialog_design_rules.cpp:110
 #, c-format
 msgid "Minimum value for tracks width: <b>%s</b><br>\n"
 msgstr "Valeur minimum pour la largeur de piste: <b>%s</b><br>\n"
 
-#: pcbnew/dialog_design_rules.cpp:113
+#: pcbnew/dialog_design_rules.cpp:114
 #, c-format
 msgid "Minimum value for vias diameter: <b>%s</b><br>\n"
 msgstr "Valeur minimum pour le diamètre de via: <b>%s</b><br>\n"
 
-#: pcbnew/dialog_design_rules.cpp:117
+#: pcbnew/dialog_design_rules.cpp:118
 #, c-format
 msgid "Minimum value for microvias diameter: <b>%s</b><br>\n"
 msgstr "Valeur minimum pour le diamètre de microvia: <b>%s</b><br>\n"
 
-#: pcbnew/dialog_design_rules.cpp:497
+#: pcbnew/dialog_design_rules.cpp:498
 msgid "New Net Class Name:"
 msgstr "Nouveau Nom de Classe d'Equipotentielle:"
 
-#: pcbnew/dialog_design_rules.cpp:510
+#: pcbnew/dialog_design_rules.cpp:511
 msgid "This NetClass is already existing, cannot add it; Aborted"
 msgstr "Cette NetClass existe déjà, et ne peut être ajoutée; Abandon"
 
-#: pcbnew/dialog_design_rules.cpp:567
+#: pcbnew/dialog_design_rules.cpp:568
 msgid "The defaut Netclass cannot be removed"
 msgstr "La Netclass Défault ne peut être supprimée"
 
-#: pcbnew/dialog_design_rules.cpp:758
+#: pcbnew/dialog_design_rules.cpp:759
 #, c-format
 msgid "%s: <b>Track Size</b> &lt; <b>Min Track Size</b><br>"
 msgstr "%s: <b>Largeur Piste</b> &ge; <b>Largeur Piste Minimum</b><br>"
 
-#: pcbnew/dialog_design_rules.cpp:772
+#: pcbnew/dialog_design_rules.cpp:773
 #, c-format
 msgid "%s: <b>Via Diameter</b> &lt; <b>Minimun Via Diameter</b><br>"
 msgstr "%s: <b>Diamètre Via</b> &ge; <b>Min. Diamètre Via</b><br>"
 
-#: pcbnew/dialog_design_rules.cpp:784
+#: pcbnew/dialog_design_rules.cpp:785
 #, c-format
 msgid "%s: <b>Via Drill</b> &ge; <b>Via Dia</b><br>"
 msgstr "%s: <b>Perçage Via</b> &ge; <b>Diam Via</b><br>"
 
-#: pcbnew/dialog_design_rules.cpp:793
+#: pcbnew/dialog_design_rules.cpp:794
 #, c-format
 msgid "%s: <b>Via Drill</b> &lt; <b>Min Via Drill</b><br>"
 msgstr "%s: <b>Perçage Via</b> &lt; <b>Via Perçage Min</b><br>"
 
-#: pcbnew/dialog_design_rules.cpp:807
+#: pcbnew/dialog_design_rules.cpp:808
 #, c-format
 msgid "%s: <b>MicroVia Diameter</b> &lt; <b>MicroVia Min Diameter</b><br>"
 msgstr "%s: <b>Diamètre  MicroVia</b> &lt; <b>Diamètre  MicroVia Minimum</b><br>"
 
-#: pcbnew/dialog_design_rules.cpp:819
+#: pcbnew/dialog_design_rules.cpp:820
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &ge; <b>MicroVia Dia</b><br>"
 msgstr "%s: <b>Perçage MicroVia</b> &ge; <b>Diam MicroVia</b><br>"
 
-#: pcbnew/dialog_design_rules.cpp:828
+#: pcbnew/dialog_design_rules.cpp:829
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &lt; <b>MicroVia Min Drill</b><br>"
 msgstr "%s: <b>Perçage MicroVia</b> &lt; <b>MicroVia Perçage Min</b><br>"
@@ -5847,9 +5847,8 @@ msgid "Seg Layer"
 msgstr "Couche Seg."
 
 #: pcbnew/dialog_print_for_modedit.cpp:242
-#, fuzzy
 msgid "Print Footprint"
-msgstr "Module"
+msgstr "Imprimer Module"
 
 #: pcbnew/dialog_print_for_modedit_base.cpp:22
 msgid "Scale 8"
@@ -6995,35 +6994,43 @@ msgstr "Position occupée par une autre pin. Continuer ?"
 msgid "Initial pin position (%d, %d)"
 msgstr "Position initiane de la pin (%d, %d)"
 
-#: eeschema/pinedit.cpp:956
+#: eeschema/pinedit.cpp:961
 msgid "No pins!"
 msgstr "Pas de Pins!"
 
-#: eeschema/pinedit.cpp:967
+#: eeschema/pinedit.cpp:971
 msgid "Marker Info"
 msgstr "Info Marqueur"
 
-#: eeschema/pinedit.cpp:986
+#: eeschema/pinedit.cpp:989
 #, c-format
 msgid "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr "<b>Pin dupliquée %s</b> \"%s\" en position <b>(%.3f, %.3f)</b> en conflit avec pin %s \"%s\" en position <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:997
+#: eeschema/pinedit.cpp:1000
+#: eeschema/pinedit.cpp:1038
 #, c-format
 msgid " in part %c"
 msgstr " en composant %c"
 
-#: eeschema/pinedit.cpp:1004
+#: eeschema/pinedit.cpp:1007
+#: eeschema/pinedit.cpp:1045
 msgid "  of converted"
 msgstr "  de converti"
 
-#: eeschema/pinedit.cpp:1006
+#: eeschema/pinedit.cpp:1009
+#: eeschema/pinedit.cpp:1047
 msgid "  of normal"
 msgstr "  de normal"
 
-#: eeschema/pinedit.cpp:1015
-msgid "No duplicate pins were found."
-msgstr "Pas de  pins doublées trouvéées"
+#: eeschema/pinedit.cpp:1030
+#, c-format
+msgid "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
+msgstr ""
+
+#: eeschema/pinedit.cpp:1055
+msgid "No off grid or duplicate pins were found."
+msgstr "Pas de  pins doublées ou hors grille trouvées"
 
 #: eeschema/eelayer.cpp:218
 msgid "White"
@@ -7155,7 +7162,7 @@ msgstr "Supprimer composant \"%s\" de la librairie  \"%s\"?"
 
 #: eeschema/libedit.cpp:442
 msgid "The component being deleted has been modified. All changes will be lost. Discard changes?"
-msgstr ""
+msgstr "Le composant à supprimer a été modifié. Tous les changements seront perdus. Ignorer les changements?"
 
 #: eeschema/libedit.cpp:497
 msgid ""
@@ -7204,9 +7211,9 @@ msgid "reference"
 msgstr "référence"
 
 #: eeschema/class_libentry.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid "An attempt was made to remove the %s field from component %s in library %s."
-msgstr "Alias <%s> non trouvé pour le component <%s> en librairie <%s>."
+msgstr "Une tentative a été faite pour supprimer le champ %s du composant %s en librairie %s."
 
 #: eeschema/class_libentry.cpp:674
 msgid "file ended prematurely loading component draw element"
@@ -7443,8 +7450,8 @@ msgid "Add and remove fields and edit field properties"
 msgstr "Ajouter, supprimer des champs et éditer leurs propriétés"
 
 #: eeschema/tool_lib.cpp:156
-msgid "Test for duplicate pins"
-msgstr "Test  pins doublées"
+msgid "Test for duplicate pins and off grid pins"
+msgstr "Test  pins doublées et hors grille"
 
 #: eeschema/tool_lib.cpp:179
 msgid "Show as \"De Morgan\" normal part"
@@ -8041,7 +8048,7 @@ msgstr "Créer composant comme &symbole d'alimentation"
 
 #: eeschema/dialog_lib_new_component_base.cpp:121
 msgid "Parts in package locked (cannot be swapped)"
-msgstr "Les parts du boitier sont verroulliées (ne peuvent pas être interchangées)"
+msgstr "Les parts du boitier sont verrouillées (ne peuvent pas être interchangées)"
 
 #: eeschema/dialog_lib_new_component_base.cpp:130
 msgid "Global Pin Settings"
@@ -8614,19 +8621,19 @@ msgstr ""
 msgid "Doc Files"
 msgstr "Fichiers de Doc"
 
-#: eeschema/edit_component_in_lib.cpp:457
+#: eeschema/edit_component_in_lib.cpp:462
 msgid "Ok to Delete FootprintFilter LIST"
 msgstr "Ok pour effacer la LISTE des filtres de modules"
 
-#: eeschema/edit_component_in_lib.cpp:480
+#: eeschema/edit_component_in_lib.cpp:485
 msgid "Add Footprint Filter"
 msgstr "Ajouter Filtre Modules"
 
-#: eeschema/edit_component_in_lib.cpp:480
+#: eeschema/edit_component_in_lib.cpp:485
 msgid "Footprint Filter"
 msgstr "Filtrage Modules"
 
-#: eeschema/edit_component_in_lib.cpp:493
+#: eeschema/edit_component_in_lib.cpp:498
 #, c-format
 msgid "Foot print filter <%s> is already defined."
 msgstr "Filtre de module <%s> déjà défini."
@@ -9862,12 +9869,11 @@ msgstr "&Epaisseur"
 
 #: eeschema/dialog_lib_edit_draw_item_base.cpp:56
 msgid "Apply changes to all &parts in component"
-msgstr ""
+msgstr "Apliquer les changements à toutes les &parts du composant"
 
 #: eeschema/dialog_lib_edit_draw_item_base.cpp:68
-#, fuzzy
 msgid "Apply changes to all body &styles (DeMorgan)"
-msgstr "Créer un composant avec une forme &alternative (DeMorgan)"
+msgstr "Appliquer les changements à toutes les parts et &représentation  (DeMorgan)"
 
 #: eeschema/dialog_lib_edit_draw_item_base.cpp:77
 msgid "Fill Style"

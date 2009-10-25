@@ -258,7 +258,7 @@ void DialogLayerSetup::SetLayerType( int Layer, LAYER_T Type )
 }
 
 //==============================================================================
-// The layer mask for non-copper layers is obtained from the new 
+// The layer mask for non-copper layers is obtained from the new
 // EDA_BoardDesignSettings::m*EnabledLayers, but for compatibility, the mask
 // for the copper-layers is obtained from g_DesignSettings::m_CopperLayerCount
 
@@ -445,7 +445,7 @@ DialogLayerSetup::DialogLayerSetup( WinEDA_PcbFrame* parent, const wxPoint& pos,
             // The copper layer names can be changed, we need a text control
 
             m_LayerNameTextCtrl[Layer] = new wxTextCtrl( m_LayerNamePanel[Layer], ID_LAYERNAMES + Layer, GetLayerName( Layer ), wxDefaultPosition, wxDefaultSize, 0 /*|wxNO_BORDER*/ );
-            m_LayerNameTextCtrl[Layer]->SetMaxLength( 20 ); 
+            m_LayerNameTextCtrl[Layer]->SetMaxLength( 20 );
 
 #if CONTROL_BACKGROUND_COLORED
             m_LayerNameTextCtrl[Layer]->SetBackgroundColour( GetRowColor( Layer ));
@@ -659,6 +659,8 @@ DialogLayerSetup::DialogLayerSetup( WinEDA_PcbFrame* parent, const wxPoint& pos,
         m_LayerEnabledCheckBox[i]->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DialogLayerSetup::OnLayerEnabledKillFocus ), NULL, this );
         m_LayerEnabledCheckBox[i]->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( DialogLayerSetup::OnLayerEnabledSetFocus ), NULL, this );
     }
+
+    Centre();
 }
 
 //==============================================================================
@@ -994,7 +996,7 @@ void DialogLayerSetup::OnOKClick( wxCommandEvent& event )
         if( m_LayersMask >> i & 0x00000001 )
             NumberOfCopperLayers++;
     }
-    
+
     m_Pcb->m_BoardSettings->m_CopperLayerCount = NumberOfCopperLayers;
 
     m_Pcb->SetEnabledLayers( m_LayersMask );

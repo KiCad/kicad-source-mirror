@@ -88,9 +88,9 @@ void WinEDA_CvpcbFrame::BuildCmpListBox()
 
     BOOST_FOREACH( COMPONENT & component, m_components ) {
         msg.Printf( CMP_FORMAT, m_ListCmp->GetCount() + 1,
-                   component.m_Reference.GetData(),
-                   component.m_Value.GetData(),
-                   component.m_Module.GetData() );
+                   GetChars(component.m_Reference),
+                   GetChars(component.m_Value),
+                   GetChars(component.m_Module) );
         m_ListCmp->m_ComponentList.Add( msg );
     }
 

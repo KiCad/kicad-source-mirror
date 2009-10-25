@@ -91,6 +91,7 @@ DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( WinEDA_PcbFrame* parent ) :
 	Layout();
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
+    Center();
 }
 
 

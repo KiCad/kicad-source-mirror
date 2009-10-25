@@ -266,16 +266,16 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         if( fillpad )
         {
             GRFillCSegm( &panel->m_ClipBox, DC,
-                         ux0 + delta_cx + mask_margin, uy0 + delta_cy + mask_margin,
-                         ux0 - delta_cx - mask_margin, uy0 - delta_cy - mask_margin,
-                         rotdx, color );
+                         ux0 + delta_cx, uy0 + delta_cy,
+                         ux0 - delta_cx, uy0 - delta_cy,
+                         rotdx + mask_margin, color );
         }
         else
         {
             GRCSegm( &panel->m_ClipBox, DC,
-                     ux0 + delta_cx + mask_margin, uy0 + delta_cy + mask_margin,
-                     ux0 - delta_cx - mask_margin, uy0 - delta_cy - mask_margin,
-                     rotdx, color );
+                     ux0 + delta_cx, uy0 + delta_cy,
+                     ux0 - delta_cx, uy0 - delta_cy,
+                     rotdx + mask_margin, color );
         }
 
         /* Trace de la marge d'isolement */
@@ -293,20 +293,20 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     case PAD_TRAPEZOID:
     {
         int ddx, ddy;
-        ddx = (m_DeltaSize.x >> 1) + mask_margin;
-        ddy = (m_DeltaSize.y >> 1) + mask_margin;      /* demi dim  dx et dy */
+        ddx = (m_DeltaSize.x >> 1);
+        ddy = (m_DeltaSize.y >> 1);      /* demi dim  dx et dy */
 
-        coord[0].x = -dx - ddy;
-        coord[0].y = +dy + ddx;
+        coord[0].x = -dx - ddy - mask_margin;
+        coord[0].y = +dy + ddx + mask_margin;
 
-        coord[1].x = -dx + ddy;
-        coord[1].y = -dy - ddx;
+        coord[1].x = -dx + ddy - mask_margin;
+        coord[1].y = -dy - ddx - mask_margin;
 
-        coord[2].x = +dx - ddy;
-        coord[2].y = -dy + ddx;
+        coord[2].x = +dx - ddy + mask_margin;
+        coord[2].y = -dy + ddx - mask_margin;
 
-        coord[3].x = +dx + ddy;
-        coord[3].y = +dy - ddx;
+        coord[3].x = +dx + ddy + mask_margin;
+        coord[3].y = +dy - ddx + mask_margin;
 
         for( ii = 0; ii < 4; ii++ )
         {

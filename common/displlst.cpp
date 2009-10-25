@@ -97,15 +97,25 @@ WinEDAListBox::WinEDAListBox( WinEDA_DrawFrame* parent, const wxString& title,
     {
         Centre();
     }
-    else    // Ensure the window dialog is on screen :
+    else    // Ensure the window dialog is inside the main window :
     {
-        wxPoint pos;
-        m_Parent->GetPosition( &pos.x, &pos.y );
-        if( pos.x < 0 )
-            pos.x = 0;
-        if( pos.y < 0 )
-            pos.y = 0;
-        pos.x += 20; pos.y += 30;
+        wxPoint pos = dialog_position;
+        wxPoint maxpos;
+        maxpos.x = parent->GetPosition().x + parent->GetSize().x;
+        maxpos.y = parent->GetPosition().y + parent->GetSize().y;
+        wxPoint endpoint;
+        endpoint.x = pos.x + GetSize().x;
+        endpoint.y = pos.y + GetSize().y;
+
+        if( endpoint.x > maxpos.x )
+            pos.x -= endpoint.x - maxpos.x;
+        if( endpoint.y > maxpos.y )
+            pos.y -= endpoint.y - maxpos.y;
+
+        if( pos.x < parent->GetPosition().x )
+            pos.x = parent->GetPosition().x;
+        if( pos.y < parent->GetPosition().y )
+            pos.y = parent->GetPosition().y;
         Move( pos );
     }
 }

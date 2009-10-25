@@ -23,7 +23,7 @@ static int CodeOrient[4] =
 #define NBSHAPES 7
 static wxString shape_list[NBSHAPES] =
 {
-    _( "line" ),   _( "invert" ),    _( "clock" ),    _( "clock inv" ),
+    _( "line" ),   _( "invert" ),    _( "clock" ), _( "clock inv" ),
     _( "low in" ), _( "low clock" ), _( "low out" )
 };
 
@@ -572,10 +572,10 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
     if( g_EditPinByPinIsOn == false )
         CurrentPin->m_Flags |= IS_LINKED;
 
-    CurrentPin->m_Pos.x = GetScreen()->m_Curseur.x;
-    CurrentPin->m_Pos.y = -GetScreen()->m_Curseur.y;
-    CurrentPin->m_PinLen = LastPinSize;
-    CurrentPin->m_Orient = LastPinOrient;
+    CurrentPin->m_Pos.x       = GetScreen()->m_Curseur.x;
+    CurrentPin->m_Pos.y       = -GetScreen()->m_Curseur.y;
+    CurrentPin->m_PinLen      = LastPinSize;
+    CurrentPin->m_Orient      = LastPinOrient;
     CurrentPin->m_PinType     = LastPinType;
     CurrentPin->m_PinShape    = LastPinShape;
     CurrentPin->m_PinNameSize = LastPinNameSize;
@@ -931,13 +931,18 @@ bool sort_by_pin_number( const LIB_PIN* ref, const LIB_PIN* tst )
 }
 
 
-/* Test for duplicate pins:
+/* Test for duplicate pins and off grid pins:
+ * Pins are considered off grid when they are not on the 25 mils grid
+ * A grid smaller than 25 mils must be used only to build graphic shapes.
  */
 void WinEDA_LibeditFrame::OnCheckComponent( wxCommandEvent& event )
 {
-    int      error;
+    #define MIN_GRID_SIZE 25
+    int      dup_error;
+    int      offgrid_error;
     LIB_PIN* Pin;
     wxString msg;
+    wxString aux_msg;
 
     if( m_component == NULL )
         return;
@@ -962,13 +967,11 @@ void WinEDA_LibeditFrame::OnCheckComponent( wxCommandEvent& event )
     sort( PinList.begin(), PinList.end(), sort_by_pin_number );
 
     // Test for duplicates:
-    error = 0;
-    DIALOG_DISPLAY_HTML_TEXT_BASE
-    error_display( this, wxID_ANY, _( "Marker Info" ),
-                  wxDefaultPosition, wxSize( 750, 600 ) );
+    dup_error = 0;
+    DIALOG_DISPLAY_HTML_TEXT_BASE error_display( this, wxID_ANY, _( "Marker Info" ),
+                                                wxDefaultPosition, wxSize( 750, 600 ) );
     for( unsigned ii = 1; ii < PinList.size(); ii++ )
     {
-        wxString aux_msg;
         wxString stringPinNum, stringCurrPinNum;
 
         LIB_PIN* curr_pin = PinList[ii];
@@ -979,7 +982,7 @@ void WinEDA_LibeditFrame::OnCheckComponent( wxCommandEvent& event )
             || Pin->m_Unit != curr_pin->m_Unit )
             continue;
 
-        error++;
+        dup_error++;
         Pin->ReturnPinStringNum( stringPinNum );
         curr_pin->ReturnPinStringNum( stringCurrPinNum );
         msg.Printf( _(
@@ -1007,12 +1010,50 @@ with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"                             
         }
 
         msg += wxT( ".<br>" );
-
         error_display.m_htmlWindow->AppendToPage( msg );
     }
 
-    if( error == 0 )
-        DisplayInfoMessage( this, _( "No duplicate pins were found." ) );
+    // Test for off grid pins:
+    offgrid_error = 0;
+    for( unsigned ii = 0; ii < PinList.size(); ii++ )
+    {
+        Pin = PinList[ii];
+
+        if( ( (Pin->m_Pos.x % MIN_GRID_SIZE) == 0 ) &&
+            ( (Pin->m_Pos.y % MIN_GRID_SIZE) == 0 ) )
+            continue;
+
+        // A pin is foun here off grid
+        offgrid_error++;
+        wxString stringPinNum;
+        Pin->ReturnPinStringNum( stringPinNum );
+        msg.Printf( _( "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>" ),
+                    GetChars( stringPinNum ),
+                    GetChars( Pin->m_PinName ),
+                    (float) Pin->m_Pos.x / 1000.0, (float) -Pin->m_Pos.y / 1000.0
+                    );
+
+        if( m_component->GetPartCount() > 1 )
+        {
+            aux_msg.Printf( _( " in part %c" ), 'A' + Pin->m_Unit );
+            msg += aux_msg;
+        }
+
+        if( m_showDeMorgan )
+        {
+            if( Pin->m_Convert )
+                msg += _( "  of converted" );
+            else
+                msg += _( "  of normal" );
+        }
+
+        msg += wxT( ".<br>" );
+        error_display.m_htmlWindow->AppendToPage( msg );
+    }
+
+    if( !dup_error && !offgrid_error )
+        DisplayInfoMessage( this, _( "No off grid or duplicate pins were found." ) );
+
     else
         error_display.ShowModal();
 }
