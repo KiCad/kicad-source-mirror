@@ -402,11 +402,23 @@ LIB_DRAW_ITEM* LIB_COMPONENT::GetNextDrawItem( LIB_DRAW_ITEM* item,
 
 void LIB_COMPONENT::GetPins( LIB_PIN_LIST& pins, int unit, int convert )
 {
+    /* Notes:
+     * when unit == 0: no unit filtering
+     * when convert == 0: no convert (shape selection) filtering
+     * when .m_Unit == 0, the body item is common to units
+     * when .m_Convert == 0, the body item is common to shape
+     */
     BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
     {
-        if( item.Type() != COMPONENT_PIN_DRAW_TYPE ||
-            ( unit && item.m_Unit != unit ) ||
-            ( convert && item.m_Convert != convert ) )
+        if( item.Type() != COMPONENT_PIN_DRAW_TYPE )    // we search pins only
+            continue;
+
+        // Unit filtering:
+        if( unit && item.m_Unit && ( item.m_Unit != unit ) )
+             continue;
+
+        // Shape filtering:
+        if( convert && item.m_Convert && ( item.m_Convert != convert ) )
             continue;
 
         pins.push_back( (LIB_PIN*) &item );
