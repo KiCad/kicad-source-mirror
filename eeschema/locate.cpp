@@ -615,16 +615,18 @@ static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
 
 
 /**
- * Find a PIN in a component
- * @param pin_number = pin number (string)
- * @param pin_number = pin number (string)
- * @return a pointer on the pin, or NULL if not found
+ * Find a PIN in a component by pin number.
+ *
+ * @param ePin_Number - pin number to locate.
+ * @param eComponent - schematic component object to search.
+ *
+ * @return a pointer to the located the pin, or NULL if not found
  */
 LIB_PIN* LocatePinByNumber( const wxString& ePin_Number,
                             SCH_COMPONENT*  eComponent )
 {
     LIB_COMPONENT* Entry;
-    LIB_PIN* Pin;
+    LIB_PIN_LIST pinList;
     int Unit, Convert;
 
     Entry = CMP_LIBRARY::FindLibraryComponent( eComponent->m_ChipName );
@@ -637,22 +639,17 @@ LIB_PIN* LocatePinByNumber( const wxString& ePin_Number,
     Unit    = eComponent->m_Multi;
     Convert = eComponent->m_Convert;
 
-    for( Pin = Entry->GetNextPin(); Pin != NULL;
-         Pin = Entry->GetNextPin( Pin ) )
+    Entry->GetPins( pinList, Unit, Convert );
+
+    for( size_t i = 0; i < pinList.size(); i++ )
     {
-        wxASSERT( Pin->Type() != COMPONENT_PIN_DRAW_TYPE );
-
-        if( Unit && Pin->m_Unit && ( Pin->m_Unit != Unit ) )
-            continue;
-
-        if( Convert && Pin->m_Convert && ( Pin->m_Convert != Convert ) )
-            continue;
+        wxASSERT( pinList[i]->Type() == COMPONENT_PIN_DRAW_TYPE );
 
         wxString pNumber;
-        Pin->ReturnPinStringNum( pNumber );
+        pinList[i]->ReturnPinStringNum( pNumber );
 
         if( ePin_Number == pNumber )
-            return Pin;
+            return pinList[i];
     }
 
     return NULL;
