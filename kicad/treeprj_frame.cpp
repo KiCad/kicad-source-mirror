@@ -15,6 +15,7 @@
 #include "gestfich.h"
 #include "appl_wxstruct.h"
 #include "bitmaps.h"
+#include "macros.h"
 
 #include "kicad.h"
 
@@ -156,14 +157,14 @@ WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent,
 
 
         // ID_PROJECT_NEWPY
-      #ifdef KICAD_PYTHON
+#ifdef KICAD_PYTHON
         item = new wxMenuItem( menu,
                                ID_PROJECT_NEWPY,
                                _( "New P&ython Script" ),
                                _( "Create a New Python Script" ) );
         item->SetBitmap( new_python_xpm );
         menu->Append( item );
-      #endif /* KICAD_PYTHON */
+#endif /* KICAD_PYTHON */
 
 
         // ID_PROJECT_NEWTXT
@@ -306,10 +307,13 @@ void WinEDA_PrjFrame::OnDragEnd( wxTreeEvent& event )
     wxTreeItemId     moved = m_TreeProject->GetSelection();
     TreePrjItemData* source_data = GetSelectedData();
     wxTreeItemId     dest = event.GetItem();
+
     if( !dest.IsOk() )
         return;                // Cancelled ...
+
     TreePrjItemData* destData =
         dynamic_cast<TreePrjItemData*>( m_TreeProject->GetItemData( dest ) );
+
     if( !destData )
         return;
 
@@ -325,6 +329,7 @@ void WinEDA_PrjFrame::OnDragEnd( wxTreeEvent& event )
         // Select the right destData:
         destData =
             dynamic_cast<TreePrjItemData*>( m_TreeProject->GetItemData( dest ) );
+
         if( !destData )
             return;
     }
@@ -588,19 +593,19 @@ void WinEDA_PrjFrame::NewFile( const wxString& name,
     {
         wxFile( name, wxFile::write );
 
-    #ifdef KICAD_PYTHON
+#ifdef KICAD_PYTHON
         PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::NewFile" ),
                                                 PyHandler::Convert( name ) );
-    #endif /* KICAD_PYTHON */
+#endif /* KICAD_PYTHON */
     }
     else
     {
         wxMkdir( name );
 
-    #ifdef KICAD_PYTHON
+#ifdef KICAD_PYTHON
         PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::NewDirectory" ),
                                                 PyHandler::Convert( name ) );
-    #endif /* KICAD_PYTHON */
+#endif /* KICAD_PYTHON */
     }
 
     AddFile( name, root );
@@ -737,6 +742,7 @@ bool WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
                 addFile = true;
                 if( i==0 )
                     isSchematic = true;
+                break;
             }
         }
 
@@ -762,7 +768,9 @@ bool WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
             }
 
             addFile = false;
-            for( int i = 0;  i<20;  ++i )
+
+            // check the first 100 lines for the "Sheet 1" string
+            for( int i = 0;  i<100;  ++i )
             {
                 if( !fgets( line, sizeof(line), fp ) )
                     break;
@@ -833,15 +841,15 @@ bool WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
         data->m_IsRootFile = false;
 
 
-    #ifdef KICAD_PYTHON
+#ifdef KICAD_PYTHON
     PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::TreeAddFile" ),
                                             PyHandler::Convert( name ) );
-    #endif /* KICAD_YTHON */
+#endif /* KICAD_YTHON */
 
 
     // When enabled This section adds dirs and files found in the subdirs
     // in this case AddFile is recursive.
-    #ifdef ADD_FILES_IN_SUBDIRS
+#ifdef ADD_FILES_IN_SUBDIRS
     if( TREE_DIRECTORY == type )
     {
         const wxString sep = wxFileName().GetPathSeparator();
@@ -859,7 +867,7 @@ bool WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
         /* Sort filenames by alphabetic order */
         m_TreeProject->SortChildren( cellule );
     }
-    #endif /* ADD_FILES_IN_SUBDIRS */
+#endif /* ADD_FILES_IN_SUBDIRS */
 
 
     return true;
@@ -932,6 +940,7 @@ void WinEDA_PrjFrame::ReCreateTreePrj()
             if( filename != fn.GetFullName() )
                 AddFile( dir.GetName() + wxFileName::GetPathSeparator() +
                          filename, m_root );
+
             cont = dir.GetNext( &filename );
         }
     }
@@ -1036,10 +1045,10 @@ void WinEDA_PrjFrame::OnTxtEdit( wxCommandEvent& event )
 
     if( !editorname.IsEmpty() )
     {
-      #ifdef KICAD_PYTHON
+  #ifdef KICAD_PYTHON
         PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::EditScript" ),
                                                 PyHandler::Convert( FullFileName ) );
-      #endif
+  #endif
 
         ExecuteFile( this, editorname, FullFileName );
     }
