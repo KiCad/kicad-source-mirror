@@ -190,8 +190,44 @@ void DIALOG_DESIGN_RULES::InitGlobalRules()
     PutValueInLocalUnits( *m_SetMicroViasMinDrillCtrl, g_DesignSettings.m_MicroViasMinDrill, Internal_Unit );
 
     PutValueInLocalUnits( *m_SetTrackMinWidthCtrl, g_DesignSettings.m_TrackMinWidth, Internal_Unit );
+
+    // Initialize Vias and Tracks sizes lists.
+    // note we display only extra values, never the current netclass value.
+    // (the first value in histories list)
+    m_TracksWidthList = m_Parent->GetBoard()->m_TrackWidthList;
+    m_TracksWidthList.erase( m_TracksWidthList.begin() );   // remove the netclass value
+    m_ViasDiameterList = m_Parent->GetBoard()->m_ViaSizeList;
+    m_ViasDiameterList.erase( m_ViasDiameterList.begin() ); // remove the netclass value
+    InitDimensionsLists();
+
 }
 
+/***************************************************/
+void DIALOG_DESIGN_RULES::InitDimensionsLists()
+/***************************************************/
+
+/* Populates the lists of sizes (Tracks width list and Vias diameters & drill list)
+ */
+{
+    wxString msg;
+    int      Internal_Unit = m_Parent->m_InternalUnits;
+
+    for( unsigned ii = 0; ii < m_TracksWidthList.size(); ii++ )
+    {
+        msg = ReturnStringFromValue( g_UnitMetric, m_TracksWidthList[ii], Internal_Unit, false );
+        m_gridTrackWidthList->SetCellValue( ii, 0, msg  );
+    }
+
+    for( unsigned ii = 0; ii < m_ViasDiameterList.size(); ii++ )
+    {
+        msg = ReturnStringFromValue( g_UnitMetric, m_ViasDiameterList[ii], Internal_Unit, false );
+        m_gridViaSizeList->SetCellValue( ii, 0, msg );
+    }
+
+    // recompute the column widths here, after setting texts
+    m_gridViaSizeList->SetColumnWidth( 0, wxLIST_AUTOSIZE );
+    m_gridTrackWidthList->SetColumnWidth( 0, wxLIST_AUTOSIZE );
+}
 
 // Sort comparison function (helper for makePointers() )
 static bool sortByClassThenName( NETCUP* a, NETCUP* b )
@@ -433,7 +469,7 @@ void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
 }
 
 /*************************************************/
-bool DIALOG_DESIGN_RULES::CopyGlobalRulesToBoard()
+void DIALOG_DESIGN_RULES::CopyGlobalRulesToBoard()
 /*************************************************/
 {
     g_DesignSettings.m_CurrentViaType = VIA_THROUGH;
@@ -457,8 +493,50 @@ bool DIALOG_DESIGN_RULES::CopyGlobalRulesToBoard()
     // Update tracks minimum values for DRC
     g_DesignSettings.m_TrackMinWidth =
         ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl, m_Parent->m_InternalUnits );
+}
 
-    return true;
+/*******************************************************************/
+void DIALOG_DESIGN_RULES::CopyDimensionsListsToBoard( )
+/*******************************************************************/
+{
+    wxString msg;
+
+    // Reinitialize m_TrackWidthList
+    m_TracksWidthList.clear();
+    for( int row = 0; row < m_gridTrackWidthList->GetNumberRows();  ++row )
+    {
+        msg = m_gridTrackWidthList->GetCellValue( row, 0 );
+        if( msg.IsEmpty() )
+            continue;
+        int  value = ReturnValueFromString( g_UnitMetric, msg, m_Parent->m_InternalUnits );
+        m_TracksWidthList.push_back( value);
+    }
+    // Sort new list by by increasing value
+    sort( m_TracksWidthList.begin(), m_TracksWidthList.end() );
+
+    // Reinitialize m_TrackWidthList
+    m_ViasDiameterList.clear();
+    for( int row = 0; row < m_gridViaSizeList->GetNumberRows();  ++row )
+    {
+        msg = m_gridViaSizeList->GetCellValue( row, 0 );
+        if( msg.IsEmpty() )
+            continue;
+        int  value = ReturnValueFromString( g_UnitMetric, msg, m_Parent->m_InternalUnits );
+        m_ViasDiameterList.push_back( value);
+    }
+    // Sort new list by by increasing value
+    sort( m_ViasDiameterList.begin(), m_ViasDiameterList.end() );
+
+    std::vector <int>* list = &m_Parent->GetBoard()->m_TrackWidthList;
+    list->erase( list->begin() + 1, list->end() );  // Remove old "custom" sizes
+    list->insert( list->end(), m_TracksWidthList.begin(), m_TracksWidthList.end() ); //Add new "custom" sizes
+
+    // Reinitialize m_ViaSizeList
+    list = &m_Parent->GetBoard()->m_ViaSizeList;
+    list->erase( list->begin() + 1, list->end() );
+    list->insert( list->end(), m_ViasDiameterList.begin(), m_ViasDiameterList.end() );
+
+    m_Parent->m_TrackAndViasSizesList_Changed = true;
 }
 
 
@@ -482,6 +560,7 @@ void DIALOG_DESIGN_RULES::OnOkButtonClick( wxCommandEvent& event )
 
     CopyRulesListToBoard();
     CopyGlobalRulesToBoard();
+    CopyDimensionsListsToBoard( );
 
     EndModal( wxID_OK );
 
@@ -743,7 +822,9 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
 
     wxString    msg;
 
+    int minViaDia = ReturnValueFromTextCtrl( *m_SetViasMinSizeCtrl, m_Parent->m_InternalUnits );
     int minViaDrill = ReturnValueFromTextCtrl( *m_SetViasMinDrillCtrl, m_Parent->m_InternalUnits );
+    int minUViaDia = ReturnValueFromTextCtrl( *m_SetMicroViasMinSizeCtrl, m_Parent->m_InternalUnits );
     int minUViaDrill = ReturnValueFromTextCtrl( *m_SetMicroViasMinDrillCtrl, m_Parent->m_InternalUnits );
     int minTrackWidth = ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl, m_Parent->m_InternalUnits );
 
@@ -767,7 +848,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
                                        m_grid->GetCellValue( row, GRID_VIASIZE ),
                                        m_Parent->m_InternalUnits );
 
-        if( viadia < g_DesignSettings.m_ViasMinSize )
+        if( viadia < minViaDia )
         {
             result = false;
             msg.Printf( _( "%s: <b>Via Diameter</b> &lt; <b>Minimun Via Diameter</b><br>" ),
@@ -802,7 +883,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
                                        m_grid->GetCellValue( row, GRID_uVIASIZE ),
                                        m_Parent->m_InternalUnits );
 
-        if( muviadia < g_DesignSettings.m_MicroViasMinSize )
+        if( muviadia < minUViaDia )
         {
             result = false;
             msg.Printf( _( "%s: <b>MicroVia Diameter</b> &lt; <b>MicroVia Min Diameter</b><br>" ),
@@ -828,6 +909,61 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
             result = false;
             msg.Printf( _( "%s: <b>MicroVia Drill</b> &lt; <b>MicroVia Min Drill</b><br>" ),
                 GetChars( m_grid->GetRowLabelValue(row)) );
+
+            m_MessagesList->AppendToPage( msg );
+        }
+    }
+
+    // Test list of values for specific vias and tracks
+    for( int row = 1; row < m_gridTrackWidthList->GetNumberRows();  ++row )
+    {
+        wxString tvalue = m_gridTrackWidthList->GetCellValue(row, 0);
+        if( tvalue.IsEmpty() )
+            continue;
+
+         int tracksize = ReturnValueFromString( g_UnitMetric,
+                                       tvalue,
+                                       m_Parent->m_InternalUnits );
+        if( tracksize < minTrackWidth )
+        {
+            result = false;
+            msg.Printf( _( "<b>Extra Track %d Size</b> %s &lt; <b>Min Track Size</b><br>" ),
+                row+1, GetChars( tvalue ) );
+
+            m_MessagesList->AppendToPage( msg );
+        }
+        if( tracksize > 10000 )
+        {
+            result = false;
+            msg.Printf( _( "<b>Extra Track %d Size</b> ¨%s &gt; <b>1 inch!</b><br>" ),
+                row+1, GetChars( tvalue ) );
+
+            m_MessagesList->AppendToPage( msg );
+        }
+    }
+
+    for( int row = 1; row < m_gridViaSizeList->GetNumberRows();  ++row )
+    {
+        wxString tvalue = m_gridViaSizeList->GetCellValue(row, 0);
+        if( tvalue.IsEmpty() )
+            continue;
+
+        int viadia = ReturnValueFromString( g_UnitMetric,
+                                       tvalue,
+                                       m_Parent->m_InternalUnits );
+        if( viadia < minViaDia )
+        {
+            result = false;
+            msg.Printf( _( "<b>Extra Via %d Size</b> %s &lt; <b>Min Via Size</b><br>" ),
+                row+1, GetChars( tvalue ) );
+
+            m_MessagesList->AppendToPage( msg );
+        }
+        if( viadia > 10000 )
+        {
+            result = false;
+            msg.Printf( _( "<b>Extra Via %d Size</b>%s &gt; <b>1 inch!</b><br>" ),
+                row+1, GetChars( tvalue ) );
 
             m_MessagesList->AppendToPage( msg );
         }

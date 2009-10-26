@@ -214,7 +214,7 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     m_ViasMinSize           = 350;                  // vias (not micro vias) min diameter
     m_ViasMinDrill          = 200;                  // vias (not micro vias) min drill diameter
     m_MicroViasMinSize      = 200;                  // micro vias (not vias) min diameter
-    m_MicroViasMinDrill     = 80;                   // micro vias (not vias) min drill diameter
+    m_MicroViasMinDrill     = 50;                   // micro vias (not vias) min drill diameter
     m_MaskMargin            = 150;                  // Solder mask margin
     /* Color options for screen display of the Printed Board: */
 

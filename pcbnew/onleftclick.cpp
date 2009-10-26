@@ -27,6 +27,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     if( (m_ID_current_state == 0) || ( DrawStruct && DrawStruct->m_Flags ) )
     {
         DrawPanel->m_AutoPAN_Request = false;
+
         if( DrawStruct && DrawStruct->m_Flags ) // "POPUP" in progress
         {
             DrawPanel->m_IgnoreMouseEvents = true;
@@ -110,6 +111,25 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             DrawStruct = PcbGeneralLocateAndDisplay();
             if( DrawStruct )
                 SendMessageToEESCHEMA( DrawStruct );
+        }
+    }
+
+    if( DrawStruct ) // display netclass info for zones, tracks and pads
+    {
+        switch( DrawStruct->Type() )
+        {
+        case TYPE_ZONE_CONTAINER:
+        case TYPE_TRACK:
+        case TYPE_VIA:
+        case TYPE_PAD:
+            GetBoard()->SetCurrentNetClass(
+                ((BOARD_CONNECTED_ITEM*)DrawStruct)->GetNetClassName() );
+            m_TrackAndViasSizesList_Changed = true;
+            AuxiliaryToolBar_Update_UI();
+            break;
+
+        default:
+           break;
         }
     }
 

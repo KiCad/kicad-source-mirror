@@ -280,7 +280,7 @@ void GERBER_PLOTTER::circle( wxPoint aCentre, int aDiameter, FILL_T fill, int aW
     double    radius = aDiameter / 2;
     const int delta  = 3600 / 32; /* increment (in 0.1 degrees) to draw circles */
 
-    start.x = aCentre.x + radius;
+    start.x = aCentre.x + wxRound( radius );
     start.y = aCentre.y;
     set_current_line_width( aWidth );
     move_to( start );

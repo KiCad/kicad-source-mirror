@@ -45,6 +45,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
                                           wxMenu*        PopMenu )
 {
 /*****************************************************************/
+
 /* Prepare le menu PullUp affich� par un click sur le bouton droit
  *  de la souris.
  *  Ce menu est ensuite compl�t� par la liste des commandes de ZOOM
@@ -171,7 +172,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
 
         // Many fields are inside a component. If this is the case, add the component menu
         SCH_COMPONENT* Component = LocateSmallestComponent(
-             (SCH_SCREEN*) GetScreen() );
+            (SCH_SCREEN*) GetScreen() );
         if( Component )
         {
             PopMenu->AppendSeparator();
@@ -221,7 +222,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         wxString msg;
         msg.Printf( wxT( "WinEDA_SchematicFrame::OnRightClick Error: unknown \
 DrawType %d" ),
-            DrawStruct->Type() );
+                   DrawStruct->Type() );
         DisplayError( this, msg );
         break;
     }
@@ -235,6 +236,7 @@ DrawType %d" ),
 void AddMenusForComponentField( wxMenu* PopMenu, SCH_CMP_FIELD* Field )
 {
 /*************************************************************************/
+
 /* Add menu commands for a component field (like value, reference)
  */
     if( !Field->m_Flags )
@@ -251,6 +253,7 @@ void AddMenusForComponentField( wxMenu* PopMenu, SCH_CMP_FIELD* Field )
 void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 {
 /**************************************************************************/
+
 /* Add menu commands for a component
  */
     if( Component->Type() != TYPE_SCH_COMPONENT )
@@ -370,9 +373,10 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
 {
 /*******************************************************************/
+
 /* Add menu commands for a Global Label
  */
-    wxMenu* menu_change_type = new wxMenu;
+    wxMenu*  menu_change_type = new wxMenu;
     wxString msg;
 
     if( !GLabel->m_Flags )
@@ -405,14 +409,17 @@ void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
 void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
 {
 /*******************************************************************/
+
 /* Add menu commands for a hierarchical Label
  */
-    wxMenu* menu_change_type = new wxMenu;
+    wxMenu*  menu_change_type = new wxMenu;
     wxString msg;
 
     if( !HLabel->m_Flags )
     {
-        msg = AddHotkeyName( _( "Move Hierarchical Label" ), s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT );
+        msg = AddHotkeyName( _(
+                                 "Move Hierarchical Label" ), s_Schematic_Hokeys_Descr,
+                             HK_MOVE_COMPONENT );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
                       msg, move_text_xpm );
     }
@@ -440,9 +447,10 @@ void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
 void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
 {
 /*****************************************************************/
+
 /* Add menu commands for a Label
  */
-    wxMenu* menu_change_type = new wxMenu;
+    wxMenu*  menu_change_type = new wxMenu;
     wxString msg;
 
     if( !Label->m_Flags )
@@ -475,6 +483,7 @@ void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
 void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
 {
 /*****************************************************************/
+
 /* Add menu commands for a Text (a comment)
  */
     wxMenu* menu_change_type = new wxMenu;
@@ -515,6 +524,7 @@ void AddMenusForJunction( wxMenu* PopMenu, DrawJunctionStruct* Junction,
                           WinEDA_SchematicFrame* frame )
 {
 /*****************************************************************/
+
 /* Add menu commands for a junction
  */
     bool is_new = (Junction->m_Flags & IS_NEW) ? TRUE : FALSE;
@@ -546,6 +556,7 @@ void AddMenusForWire( wxMenu* PopMenu, EDA_DrawLineStruct* Wire,
                       WinEDA_SchematicFrame* frame )
 {
 /*****************************************************************/
+
 /* Add menu commands for a wire
  */
     bool    is_new = (Wire->m_Flags & IS_NEW) ? TRUE : FALSE;
@@ -591,6 +602,7 @@ void AddMenusForBus( wxMenu* PopMenu, EDA_DrawLineStruct* Bus,
                      WinEDA_SchematicFrame* frame )
 {
 /*****************************************************************/
+
 /* Add menu commands for a Bus
  */
     bool    is_new = (Bus->m_Flags & IS_NEW) ? TRUE : FALSE;
@@ -626,6 +638,7 @@ void AddMenusForBus( wxMenu* PopMenu, EDA_DrawLineStruct* Bus,
 void AddMenusForHierchicalSheet( wxMenu* PopMenu, DrawSheetStruct* Sheet )
 {
 /************************************************************************/
+
 /* Add menu commands for a Sheet
  */
     if( !Sheet->m_Flags )
@@ -666,6 +679,7 @@ void AddMenusForPinSheet( wxMenu*                        PopMenu,
                           Hierarchical_PIN_Sheet_Struct* PinSheet )
 {
 /************************************************************************/
+
 /* Add menu commands for a Pin Sheet (or Sheet label)
  */
     if( !PinSheet->m_Flags )
@@ -685,6 +699,7 @@ void AddMenusForPinSheet( wxMenu*                        PopMenu,
 void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame )
 {
 /**********************************************************************/
+
 /* Add menu commands for block
  */
     ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,

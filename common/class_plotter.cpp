@@ -109,7 +109,7 @@ double PLOTTER::user_to_device_size( double size )
 void PLOTTER::center_square( const wxPoint& position, int diametre, FILL_T fill )
 /************************************************************************************/
 {
-    int rayon     = diametre / 2.8284;
+    int rayon     = wxRound( diametre / 2.8284 );
     int coord[10] =
     {
         position.x + rayon, position.y + rayon,

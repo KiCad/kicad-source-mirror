@@ -28,6 +28,7 @@
 #include <wx/radiobox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/statline.h>
 #include <wx/notebook.h>
 #include <wx/html/htmlwin.h>
 #include <wx/dialog.h>
@@ -79,6 +80,11 @@ class DIALOG_DESIGN_RULES_BASE : public wxDialog
 		wxTextCtrl* m_SetMicroViasMinDrillCtrl;
 		wxStaticText* m_TrackMinWidthTitle;
 		wxTextCtrl* m_SetTrackMinWidthCtrl;
+		wxStaticLine* m_staticline1;
+		wxStaticText* m_staticTextInfo;
+		wxStaticText* m_staticText7;
+		wxGrid* m_gridViaSizeList;
+		wxGrid* m_gridTrackWidthList;
 		wxHtmlWindow* m_MessagesList;
 		wxStdDialogButtonSizer* m_sdbButtonsSizer;
 		wxButton* m_sdbButtonsSizerOK;

@@ -399,14 +399,15 @@ LIB_DRAW_ITEM* LIB_COMPONENT::GetNextDrawItem( LIB_DRAW_ITEM* item,
     return NULL;
 }
 
-
+/*************************************************************************/
 void LIB_COMPONENT::GetPins( LIB_PIN_LIST& pins, int unit, int convert )
+/*************************************************************************/
 {
     /* Notes:
      * when unit == 0: no unit filtering
      * when convert == 0: no convert (shape selection) filtering
      * when .m_Unit == 0, the body item is common to units
-     * when .m_Convert == 0, the body item is common to shape
+     * when .m_Convert == 0, the body item is common to shapes
      */
     BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
     {

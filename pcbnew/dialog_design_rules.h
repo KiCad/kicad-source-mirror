@@ -42,6 +42,10 @@ private:
      */
     NETCUPS                 m_AllNets;
 
+    // List of values to "customize" some tracks and vias
+    std::vector <int> m_ViasDiameterList;
+    std::vector <int> m_TracksWidthList;
+
 private:
     void OnNetClassesNameLeftClick( wxGridEvent& event ){ event.Skip(); }
     void OnNetClassesNameRightClick( wxGridEvent& event ){ event.Skip(); }
@@ -60,9 +64,11 @@ private:
     void InitDialogRules();
     void InitGlobalRules();
     void InitRulesList();
+    void InitDimensionsLists();
     void InitializeRulesSelectionBoxes();
     void CopyRulesListToBoard();
-    bool CopyGlobalRulesToBoard();
+    void CopyGlobalRulesToBoard();
+    void CopyDimensionsListsToBoard( );
     void SetRoutableLayerStatus();
     void FillListBoxWithNetNames( wxListCtrl* aListCtrl, const wxString& aNetClass );
     void PrintCurrentSettings( );

@@ -251,7 +251,7 @@ void HPGL_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
     rayon   = size.x / 2;
     if( trace_mode == FILLED )
     {
-        flash_pad_rect( pos, wxSize( size.x, deltaxy+pen_diameter ),
+        flash_pad_rect( pos, wxSize( size.x, deltaxy + wxRound( pen_diameter ) ),
                                  orient, trace_mode );
         cx = 0; cy = deltaxy / 2;
         RotatePoint( &cx, &cy, orient );
@@ -262,7 +262,7 @@ void HPGL_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
     }
     else    /* Trace en mode SKETCH */
     {
-	sketch_oval(pos, size, orient, pen_diameter);
+	sketch_oval(pos, size, orient, wxRound( pen_diameter) );
     }
 }
 
@@ -277,11 +277,11 @@ void HPGL_PLOTTER::flash_pad_circle(wxPoint pos, int diametre,
 
     user_to_device_coordinates( pos );
 
-    delta = pen_diameter - pen_overlap;
+    delta = wxRound( pen_diameter - pen_overlap ) ;
     rayon = diametre / 2;
     if( trace_mode != FILAIRE )
     {
-        rayon = (diametre - pen_diameter ) / 2;
+        rayon = (diametre - wxRound( pen_diameter) ) / 2;
     }
 
     if( rayon < 0 )
@@ -437,7 +437,7 @@ void HPGL_PLOTTER::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
     wxPoint coord[4];       /* coord reelles des sommets du trapeze a tracer */
     int     moveX, moveY; /* variation de position plume selon axe X et Y , lors
 			   *  du remplissage du trapeze */
-    moveX = moveY = pen_diameter;
+    moveX = moveY = wxRound( pen_diameter );
 
     size.x  /= 2;  size.y /= 2;
     delta.x /= 2; delta.y /= 2;
@@ -471,7 +471,7 @@ void HPGL_PLOTTER::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
     {
 	int     jj;
 	/* Fill the shape */
-	moveX = moveY = pen_diameter - pen_overlap;
+	moveX = moveY = wxRound( pen_diameter - pen_overlap );
 	/* calcul de jj = hauteur du remplissage */
 	if( delta.y ) /* Trapeze horizontal */
 	{

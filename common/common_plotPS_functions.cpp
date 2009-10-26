@@ -168,7 +168,7 @@ void PS_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
 
     // Calcul des coord du point de depart :
     user_to_device_coordinates( centre );
-    rayon = user_to_device_size(rayon);
+    rayon = wxRound( user_to_device_size(rayon) );
     if( plot_orient_options == PLOT_MIROIR )
         fprintf( output_file, "%d %d %d %g %g arc%d\n", centre.x, centre.y,
             rayon, (double) -EndAngle / 10, (double) -StAngle / 10,

@@ -400,12 +400,17 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
 /******************************************************************************/
 
 /* Create command lines for a popup menu, for track editing
+ * also update Netclass selection
  */
 {
     wxPoint  cursorPosition = GetScreen()->m_Curseur;
     wxString msg;
-    int      flags = Track->m_Flags;
 
+    GetBoard()->SetCurrentNetClass( Track->GetNetClassName() );
+    m_TrackAndViasSizesList_Changed = true;
+    AuxiliaryToolBar_Update_UI();
+
+    int      flags = Track->m_Flags;
     if( flags == 0 )
     {
         if( Track->Type() == TYPE_VIA )
@@ -416,13 +421,15 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
             ADD_MENUITEM_WITH_SUBMENU( PopMenu, via_mnu,
                                        ID_POPUP_PCB_VIA_EDITING, _( "Edit Via Drill" ), edit_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_TO_DEFAULT,
-                          _( "Set Via Hole to Default" ), apply_xpm );
-            msg = _( "Set via hole to a specific value. This specific value is currently" );
+                          _( "Set Via Hole to Netclass Default" ), apply_xpm );
+
+            msg = _( "Set Via Hole to the Specific Value" );
             msg << wxT( " " ) << ReturnStringFromValue( g_UnitMetric,
                                                         g_DesignSettings.m_ViaDrillCustomValue,
                                                         m_InternalUnits );
             ADD_MENUITEM_WITH_HELP( via_mnu, ID_POPUP_PCB_VIA_HOLE_TO_VALUE,
-                                    _( "Set Via Hole to Specific Value" ), msg,
+                                    msg,
+                                    _("Set via hole to a specific value, rather than its default Netclass value."),
                                     options_new_pad_xpm );
             msg = _( "Set a specific via hole value. This value is currently" );
             msg << wxT( " " ) << ReturnStringFromValue( g_UnitMetric,
@@ -435,7 +442,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_EXPORT_TO_OTHERS,
                           _( "Export this Via Hole to Others id Vias" ), global_options_pad_xpm );
             ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_RESET_TO_DEFAULT,
-                          _( "Set ALL Via Holes to Default" ), apply_xpm );
+                          _( "Set All Via Holes to Netclass Default" ), apply_xpm );
             if( Track->IsDrillDefault() )   // Can't export the drill value, because this value is 0 (default)
             {
                 via_mnu->Enable( ID_POPUP_PCB_VIA_HOLE_EXPORT, FALSE );
@@ -499,12 +506,16 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
                                    ID_POPUP_PCB_EDIT_TRACK_MNU, _(
                                        "Change Tracks and Vias Sizes" ), width_track_xpm );
-        ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACKSEG,
-                      Track->Type()==TYPE_VIA ? _( "Change Via Size" ) : _(
-                          "Change Segment Width" ), width_segment_xpm );
-
-        ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACK,
+        if( Track->Type() == TYPE_VIA )
+        {
+            ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACKSEG,_( "Change Via Size" ), width_segment_xpm );
+        }
+        else
+        {
+            ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACKSEG, _( "Change Segment Width" ), width_segment_xpm );
+            ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACK,
                       _( "Change Track Width" ), width_track_xpm );
+        }
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_NET,
                       _( "Set Net to NetClass values" ), width_net_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE,
@@ -725,13 +736,19 @@ void WinEDA_PcbFrame::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* m
 /************************************************************************/
 void WinEDA_PcbFrame::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
 /************************************************************************/
-/* Create pop menu for pads */
+/* Create pop menu for pads
+ * also update Netclass selection
+ */
 {
     wxMenu* sub_menu_Pad;
     int     flags = Pad->m_Flags;
 
     if( flags )     // Currently in edit, no others commands possible
         return;
+
+    GetBoard()->SetCurrentNetClass( Pad->GetNetClassName() );
+    m_TrackAndViasSizesList_Changed = true;
+    AuxiliaryToolBar_Update_UI();
 
     wxString msg = Pad->MenuText( GetBoard() );
 

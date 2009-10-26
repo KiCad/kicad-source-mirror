@@ -251,10 +251,107 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	
 	bpanelGlobRulesSizer->Add( bDesignRulesUpperSizer, 0, wxEXPAND, 5 );
 	
+	m_staticline1 = new wxStaticLine( m_panelGolbalDesignRules, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bpanelGlobRulesSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	
+	m_staticTextInfo = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("List of specific vias diameters and specific tracks widths\nThese values can be used to replace default Netclasses values, on demand,\nfor some vias or track segments"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfo->Wrap( -1 );
+	bpanelGlobRulesSizer->Add( m_staticTextInfo, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
 	wxBoxSizer* bDesignRulesLowerSizer;
 	bDesignRulesLowerSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	bpanelGlobRulesSizer->Add( bDesignRulesLowerSizer, 1, wxEXPAND, 5 );
+	wxStaticBoxSizer* sViaSizeBox;
+	sViaSizeBox = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Vias Custom Sizes List:") ), wxVERTICAL );
+	
+	m_staticText7 = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("A 0 value or blank means default Netclass value"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText7->Wrap( -1 );
+	sViaSizeBox->Add( m_staticText7, 0, wxALL, 5 );
+	
+	m_gridViaSizeList = new wxGrid( m_panelGolbalDesignRules, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	// Grid
+	m_gridViaSizeList->CreateGrid( 7, 2 );
+	m_gridViaSizeList->EnableEditing( true );
+	m_gridViaSizeList->EnableGridLines( true );
+	m_gridViaSizeList->EnableDragGridSize( false );
+	m_gridViaSizeList->SetMargins( 0, 0 );
+	
+	// Columns
+	m_gridViaSizeList->EnableDragColMove( false );
+	m_gridViaSizeList->EnableDragColSize( true );
+	m_gridViaSizeList->SetColLabelSize( 30 );
+	m_gridViaSizeList->SetColLabelValue( 0, _("Diameter") );
+	m_gridViaSizeList->SetColLabelValue( 1, _("Drill") );
+	m_gridViaSizeList->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
+	
+	// Rows
+	m_gridViaSizeList->EnableDragRowSize( true );
+	m_gridViaSizeList->SetRowLabelSize( 80 );
+	m_gridViaSizeList->SetRowLabelValue( 0, _("Via 1") );
+	m_gridViaSizeList->SetRowLabelValue( 1, _("Via 2") );
+	m_gridViaSizeList->SetRowLabelValue( 2, _("Via 3") );
+	m_gridViaSizeList->SetRowLabelValue( 3, _("Via 4") );
+	m_gridViaSizeList->SetRowLabelValue( 4, _("Via 5") );
+	m_gridViaSizeList->SetRowLabelValue( 5, _("Via 6") );
+	m_gridViaSizeList->SetRowLabelValue( 6, _("Via 7") );
+	m_gridViaSizeList->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
+	
+	// Label Appearance
+	
+	// Cell Defaults
+	m_gridViaSizeList->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	sViaSizeBox->Add( m_gridViaSizeList, 0, wxALL, 5 );
+	
+	bDesignRulesLowerSizer->Add( sViaSizeBox, 0, wxALL, 5 );
+	
+	wxStaticBoxSizer* sbTracksListSizer;
+	sbTracksListSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Tracks Custom Widths List:") ), wxHORIZONTAL );
+	
+	m_gridTrackWidthList = new wxGrid( m_panelGolbalDesignRules, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	// Grid
+	m_gridTrackWidthList->CreateGrid( 7, 1 );
+	m_gridTrackWidthList->EnableEditing( true );
+	m_gridTrackWidthList->EnableGridLines( true );
+	m_gridTrackWidthList->EnableDragGridSize( false );
+	m_gridTrackWidthList->SetMargins( 0, 0 );
+	
+	// Columns
+	m_gridTrackWidthList->EnableDragColMove( false );
+	m_gridTrackWidthList->EnableDragColSize( true );
+	m_gridTrackWidthList->SetColLabelSize( 30 );
+	m_gridTrackWidthList->SetColLabelValue( 0, _("Width") );
+	m_gridTrackWidthList->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
+	
+	// Rows
+	m_gridTrackWidthList->SetRowSize( 0, 17 );
+	m_gridTrackWidthList->SetRowSize( 1, 17 );
+	m_gridTrackWidthList->SetRowSize( 2, 17 );
+	m_gridTrackWidthList->SetRowSize( 3, 17 );
+	m_gridTrackWidthList->SetRowSize( 4, 17 );
+	m_gridTrackWidthList->SetRowSize( 5, 17 );
+	m_gridTrackWidthList->SetRowSize( 6, 17 );
+	m_gridTrackWidthList->EnableDragRowSize( true );
+	m_gridTrackWidthList->SetRowLabelSize( 80 );
+	m_gridTrackWidthList->SetRowLabelValue( 0, _("Track 1") );
+	m_gridTrackWidthList->SetRowLabelValue( 1, _("Track 2") );
+	m_gridTrackWidthList->SetRowLabelValue( 2, _("Track 3") );
+	m_gridTrackWidthList->SetRowLabelValue( 3, _("Track 4") );
+	m_gridTrackWidthList->SetRowLabelValue( 4, _("Track 5") );
+	m_gridTrackWidthList->SetRowLabelValue( 5, _("Track 6") );
+	m_gridTrackWidthList->SetRowLabelValue( 6, _("Track 7") );
+	m_gridTrackWidthList->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
+	
+	// Label Appearance
+	
+	// Cell Defaults
+	m_gridTrackWidthList->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	sbTracksListSizer->Add( m_gridTrackWidthList, 0, wxALL, 5 );
+	
+	bDesignRulesLowerSizer->Add( sbTracksListSizer, 0, wxALL, 5 );
+	
+	bpanelGlobRulesSizer->Add( bDesignRulesLowerSizer, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_panelGolbalDesignRules->SetSizer( bpanelGlobRulesSizer );
 	m_panelGolbalDesignRules->Layout();
