@@ -407,6 +407,7 @@ bool WinEDA_App::SetBinDir()
     char     FileName[1024];
     wxString str_arg0;
     int      ii;
+    char*    res;
 
     FileName[0] = 0;
     str_arg0    = argv[0];
@@ -417,7 +418,7 @@ bool WinEDA_App::SetBinDir()
 
         if( ( ftmp = fopen( TMP_FILE, "rt" ) ) != NULL )
         {
-            (void) fgets( Line, 1000, ftmp );
+            res = fgets( Line, 1000, ftmp );
             fclose( ftmp );
             remove( TMP_FILE );
         }

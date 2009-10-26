@@ -157,6 +157,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
     FILE*      FichCmp, * NewFile;
     char       Line[1024];
     wxString   msg;
+    char*      result;                      // quiet compiler
 
     if( old_name == new_name )
         return 0;                           /* pas de changement de nom */
@@ -192,7 +193,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
         return 1;
     }
 
-    (void) fgets( Line, sizeof(Line), FichCmp );
+    result = fgets( Line, sizeof(Line), FichCmp );
     fprintf( NewFile, "Cmp-Mod V01 Genere par PcbNew le %s\n",
             DateAndTime( Line ) );
 
@@ -571,6 +572,7 @@ void WinEDA_PcbFrame::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
     MODULE*    Module = GetBoard()->m_Modules;
     wxString   msg;
     wxString   wildcard;
+    char*      result;              // quiet compiler
 
     if( Module == NULL )
     {
@@ -601,7 +603,7 @@ void WinEDA_PcbFrame::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
         return;
     }
 
-    (void) fgets( Line, sizeof(Line), FichCmp );
+    result = fgets( Line, sizeof(Line), FichCmp );
     fprintf( FichCmp, "Cmp-Mod V01 Genere par PcbNew le %s\n",
             DateAndTime( Line ) );
 

@@ -96,6 +96,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
     char*      ptchar;
     COMPONENT* Cmp;
     FILE*      source;
+    char*      result;
 
     m_modified = false;
     m_isEESchemaNetlist = false;
@@ -118,7 +119,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
     /* Read the file header (must be  "( { OrCAD PCB" or "({ OrCAD PCB" )
      * or "# EESchema Netliste"
      */
-    (void) fgets( Line, BUFFER_CHAR_SIZE, source );
+    result = fgets( Line, BUFFER_CHAR_SIZE, source );
     /* test for netlist type PCB2 */
     i = strnicmp( Line, "( {", 3 );
     if( i != 0 )

@@ -240,6 +240,7 @@ int main( int argc, char* argv[] )
     {
         int len;
         int dot_found = 0;
+        int ret;
 
         zipok = 1;
         strncpy( filename_try, argv[zipfilenamearg], MAXFILENAME );
@@ -270,7 +271,7 @@ int main( int argc, char* argv[] )
                         char answer[128];
                         printf( "The file %s exist. Overwrite ? [y]es, [n]o, [a]ppend : ",
                                 filename_try );
-                        (void) scanf( "%1s", answer );
+                        ret = scanf( "%1s", answer );
                         rep = answer[0];
                         if( (rep>='a') && (rep<='z') )
                             rep -= 0x20;

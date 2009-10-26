@@ -51,6 +51,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
     FOOTPRINT*  ItemLib;
     unsigned    i;
     wxString    tmp, msg;
+    char*       result;
 
     /* Check if footprint list is not empty */
     if( !list.empty() )
@@ -90,7 +91,7 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
         }
 
         /* Check if library type is valid */
-        (void) fgets( buffer, 32, file );
+        result = fgets( buffer, 32, file );
         if( strncmp( buffer, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
         {
             s_files_invalid << tmp << _(" (Not a Kicad file)") << wxT("\n");
