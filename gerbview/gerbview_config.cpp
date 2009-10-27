@@ -60,7 +60,8 @@ void WinEDA_GerberFrame::Process_Config( wxCommandEvent& event )
         Update_config();
         break;
 
-    case ID_PREFERENCES_CREATE_CONFIG_HOTKEYS:
+   /* Hotkey IDs */
+    case ID_PREFERENCES_HOTKEY_CREATE_CONFIG:
         FullFileName  = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
         FullFileName += HOTKEY_FILENAME;
         FullFileName +=  wxT(".");
@@ -68,11 +69,11 @@ void WinEDA_GerberFrame::Process_Config( wxCommandEvent& event )
         WriteHotkeyConfigFile( FullFileName, s_Gerbview_Hokeys_Descr, true );
         break;
 
-    case ID_PREFERENCES_READ_CONFIG_HOTKEYS:
+    case ID_PREFERENCES_HOTKEY_READ_CONFIG:
         Read_Hotkey_Config( this, true );
         break;
 
-    case ID_PREFERENCES_EDIT_CONFIG_HOTKEYS:
+    case ID_PREFERENCES_HOTKEY_EDIT_CONFIG:
     {
         FullFileName  = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
         FullFileName += HOTKEY_FILENAME;

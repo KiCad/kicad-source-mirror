@@ -4,9 +4,9 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = Kicad
+PROJECT_NAME           = KiCad PCB EDA Suite
 PROJECT_NUMBER         = 
-OUTPUT_DIRECTORY       = 
+OUTPUT_DIRECTORY       = Documentation/doxygen
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
 BRIEF_MEMBER_DESC      = YES

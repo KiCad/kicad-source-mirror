@@ -70,18 +70,20 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
     }
     break;
 
-    case ID_PREFERENCES_CREATE_CONFIG_HOTKEYS:
+
+    /* Hotkey IDs */
+    case ID_PREFERENCES_HOTKEY_CREATE_CONFIG:
         fn = wxFileName( ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice ),
                          HOTKEY_FILENAME,
                          DEFAULT_HOTKEY_FILENAME_EXT );
         WriteHotkeyConfigFile( fn.GetFullPath(), s_Eeschema_Hokeys_Descr, true );
         break;
 
-    case ID_PREFERENCES_READ_CONFIG_HOTKEYS:
+    case ID_PREFERENCES_HOTKEY_READ_CONFIG:
         Read_Hotkey_Config( this, true );
         break;
 
-    case ID_PREFERENCES_EDIT_CONFIG_HOTKEYS:
+    case ID_PREFERENCES_HOTKEY_EDIT_CONFIG:
     {
         fn = wxFileName( ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice ),
                          HOTKEY_FILENAME, DEFAULT_HOTKEY_FILENAME_EXT );

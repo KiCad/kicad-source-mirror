@@ -67,12 +67,12 @@ set(EESCHEMA_SRCS
     edit_component_in_lib.cpp
     edit_component_in_schematic.cpp
     edit_label.cpp
-    eeconfig.cpp
     eelayer.cpp
     eelibs_draw_components.cpp
     eelibs_read_libraryfiles.cpp
     eeredraw.cpp
     eeschema.cpp
+    eeschema_config.cpp
     erc.cpp
     files-io.cpp
     find.cpp

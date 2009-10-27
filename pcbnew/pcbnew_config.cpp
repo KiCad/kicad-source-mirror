@@ -94,7 +94,7 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
         Read_Config( dlg.GetPath() );
         break;
     }
-    case ID_PREFERENCES_CREATE_CONFIG_HOTKEYS:
+    case ID_PREFERENCES_HOTKEY_CREATE_CONFIG:
         fn.SetPath( ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice ) );
         fn.SetName( HOTKEY_FILENAME );
         fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
@@ -102,11 +102,11 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
                                true );
         break;
 
-    case ID_PREFERENCES_READ_CONFIG_HOTKEYS:
+    case ID_PREFERENCES_HOTKEY_READ_CONFIG:
         Read_Hotkey_Config( this, true );
         break;
 
-    case ID_PREFERENCES_EDIT_CONFIG_HOTKEYS:
+    case ID_PREFERENCES_HOTKEY_EDIT_CONFIG:
     {
         fn.SetPath( ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice ) );
         fn.SetName( HOTKEY_FILENAME );

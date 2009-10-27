@@ -160,7 +160,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     // Add exit menu
     filesMenu->AppendSeparator();
     item = new wxMenuItem( filesMenu, ID_EXIT, _( "E&xit" ),
-                           _( "Quit PCBNEW" ) );
+                           _( "Quit PCBnew" ) );
     item->SetBitmap( exit_xpm );
     filesMenu->Append( item );
 
@@ -181,7 +181,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     configmenu->Append( item );
 
     item = new wxMenuItem( configmenu, ID_OPTIONS_SETUP, _( "&General" ),
-                           _( "Select general options for PCBNEW" ) );
+                           _( "Select general options for PCBnew" ) );
     item->SetBitmap( preference_xpm );
     configmenu->Append( item );
 
@@ -191,6 +191,8 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     configmenu->Append( item );
 
     wxGetApp().AddMenuLanguageList( configmenu );
+
+    AddHotkeyConfigMenu( configmenu );
 
     configmenu->AppendSeparator();
     item = new wxMenuItem( configmenu, ID_CONFIG_SAVE, _( "&Save Preferences" ),
@@ -202,9 +204,6 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
                            _( "Read application preferences" ) );
     item->SetBitmap( read_setup_xpm );
     configmenu->Append( item );
-
-    configmenu->AppendSeparator();
-    AddHotkeyConfigMenu( configmenu );
 
     // Add access to the Design Rules Dialog:
     wxMenu* designRulesMenu = new wxMenu;
@@ -320,12 +319,12 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     ////////////////
     wxMenu* helpMenu = new wxMenu;
     item = new wxMenuItem( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
-                           _( "Open the PCBNEW manual" ) );
+                           _( "Open the PCBnew manual" ) );
     item->SetBitmap( help_xpm );
     helpMenu->Append( item );
 
-    item = new wxMenuItem( helpMenu, ID_KICAD_ABOUT, _( "&About PCBNEW" ),
-                           _( "About PCBNEW printed circuit board designer" ) );
+    item = new wxMenuItem( helpMenu, ID_KICAD_ABOUT, _( "&About PCBnew" ),
+                           _( "About PCBnew printed circuit board designer" ) );
     item->SetBitmap( info_xpm );
     helpMenu->Append( item );
 

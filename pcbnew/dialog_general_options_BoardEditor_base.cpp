@@ -66,7 +66,7 @@ DialogGeneralOptionsBoardEditor_base::DialogGeneralOptionsBoardEditor_base( wxWi
 
     bMiddleLeftSizer->Add( m_MaxShowLinks, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
-    m_staticTextautosave = new wxStaticText( this, wxID_ANY, _("Auto Save (minuts):"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_staticTextautosave = new wxStaticText( this, wxID_ANY, _("Auto Save (minutes):"), wxDefaultPosition, wxDefaultSize, 0 );
     m_staticTextautosave->Wrap( -1 );
     bMiddleLeftSizer->Add( m_staticTextautosave, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 

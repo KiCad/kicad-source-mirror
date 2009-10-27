@@ -119,9 +119,9 @@ set(PCBNEW_SRCS
     netlist.cpp
     onleftclick.cpp
     onrightclick.cpp
-    pcbcfg.cpp
     pcbframe.cpp
     pcbnew.cpp
+    pcbnew_config.cpp
     pcbplot.cpp
     plotgerb.cpp
     plothpgl.cpp

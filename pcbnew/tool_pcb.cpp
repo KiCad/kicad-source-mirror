@@ -426,12 +426,12 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
     m_VToolBar->AddSeparator();
 
     m_VToolBar->AddTool( ID_PCB_HIGHLIGHT_BUTT, wxEmptyString,
-                         wxBitmap( net_hightlight_xpm ), _( "Net highlight" ),
+                         wxBitmap( net_hightlight_xpm ), _( "Highlight net" ),
                          wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_PCB_SHOW_1_RATSNEST_BUTT, wxEmptyString,
                          wxBitmap( tool_ratsnet_xpm ),
-                         _( "Display local ratsnest (pad or module)" ),
+                         _( "Display local ratsnest" ),
                          wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();

@@ -629,60 +629,77 @@ wxString    ReturnHotkeyConfigFilePath( int choice )
 void AddHotkeyConfigMenu( wxMenu* menu )
 /***************************************/
 
-/** add hotkey config options to a menu
+/** add hotkey config options submenu to a menu
  * @param menu : initial menu
  */
 {
     wxMenuItem* item;
+    wxMenu* HotkeySubmenu = new wxMenu();
 
     if( menu == NULL )
         return;
 
-    item = new wxMenuItem( menu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
-                           _( "Show Current Hotkey List" ),
-                           _( "Show the current hotkey config" ) );
+    /* Show hotkey configuration */
+    item = new wxMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
+                           _( "Show" ),
+                           _( "Show the current hotkey configuration" ) );
     item->SetBitmap( info_xpm );
-    menu->Append( item );
+    HotkeySubmenu->Append( item );
 
-    item = new wxMenuItem( menu, ID_PREFERENCES_CREATE_CONFIG_HOTKEYS,
-                           _( "Create Hotkey config file" ),
-                           _( "Create or Recreate the hotkey config file from current hotkey list" )
+    /* (Re)create hotkey file */
+    item = new wxMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_CREATE_CONFIG,
+                           _( "(Re)create" ),
+                           _( "Create or recreate the hotkey configuration file from current hotkey list" )
                            );
     item->SetBitmap( save_setup_xpm );
-    menu->Append( item );
+    HotkeySubmenu->Append( item );
 
-    item = new wxMenuItem( menu, ID_PREFERENCES_READ_CONFIG_HOTKEYS,
-                           _( "Reread Hotkey config file" ),
-                           _( "Reread the hotkey config file" ) );
+    /* Reload hotkey file */
+    item = new wxMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_READ_CONFIG,
+                           _( "Reload" ),
+                           _( "Reload the hotkey configuration file" ) );
     item->SetBitmap( reload_xpm );
-    menu->Append( item );
-    item = new wxMenuItem( menu, ID_PREFERENCES_EDIT_CONFIG_HOTKEYS,
-                          _( "Edit Hotkey config file" ),
-                          _( "Run the text editor and edit the hotkey config file" ) );
-    item->SetBitmap( editor_xpm );
-    menu->Append( item );
+    HotkeySubmenu->Append( item );
 
-    wxMenu* submenu_hkcfg = new wxMenu();
-    item = new wxMenuItem( submenu_hkcfg, ID_PREFERENCES_HOTKEY_PATH_IS_HOME,
-                           _( "home directory" ),
+    /* Edit hotkey file */
+    item = new wxMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_EDIT_CONFIG,
+                          _( "Edit" ),
+                          _( "Edit the hotkey configuration file in a text editor" ) );
+    item->SetBitmap( editor_xpm );
+    HotkeySubmenu->Append( item );
+
+    /* Append HotkeySubmenu to menu */
+    menu->Append( ID_PREFERENCES_HOTKEY_SUBMENU,
+                  _("Hotkey"),
+                  HotkeySubmenu,
+                  _("Hotkey configuration and preferences"));
+
+    /* Hotkey path */
+    wxMenu* HotkeyLocationSubmenu = new wxMenu();
+
+    /* Home directory */
+    item = new wxMenuItem( HotkeyLocationSubmenu, ID_PREFERENCES_HOTKEY_PATH_IS_HOME,
+                           _( "Home directory" ),
                            _( "Use home directory to load or store Hotkey config files" ),
                            wxITEM_CHECK );
-    submenu_hkcfg->Append( item );
+    HotkeyLocationSubmenu->Append( item );
 
-    item = new wxMenuItem( submenu_hkcfg, ID_PREFERENCES_HOTKEY_PATH_IS_KICAD,
-                           _( "kicad/template directory" ),
+    /* KiCad template directory */ 
+    item = new wxMenuItem( HotkeyLocationSubmenu, ID_PREFERENCES_HOTKEY_PATH_IS_KICAD,
+                           _( "KiCad template directory" ),
                            _( "Use kicad/template directory to load or store Hotkey config files" ),
                            wxITEM_CHECK );
-    submenu_hkcfg->Append( item );
+    HotkeyLocationSubmenu->Append( item );
 
+    /* Append location submenu to HotkeySubmenu */
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU(
-        menu, submenu_hkcfg, -1,
-        _( "Hotkey config location" ),
-        _( "Select hotkey config file location (home directory or kicad tree)" ),
+        HotkeySubmenu, HotkeyLocationSubmenu, -1,
+        _( "Location" ),
+        _( "Select hotkey configuration file location" ),
         right_xpm );
-    submenu_hkcfg->Check( ID_PREFERENCES_HOTKEY_PATH_IS_HOME,
+    HotkeyLocationSubmenu->Check( ID_PREFERENCES_HOTKEY_PATH_IS_HOME,
                           g_ConfigFileLocationChoice == 0 );
-    submenu_hkcfg->Check( ID_PREFERENCES_HOTKEY_PATH_IS_KICAD,
+    HotkeyLocationSubmenu->Check( ID_PREFERENCES_HOTKEY_PATH_IS_KICAD,
                           g_ConfigFileLocationChoice == 1 );
 }
 

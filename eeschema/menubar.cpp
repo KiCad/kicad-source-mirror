@@ -288,7 +288,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     item->SetBitmap( add_text_xpm );
     placeMenu->Append( item );
 
-    // Menu Configuration:
+    /* Preferences Menu */
     wxMenu* configmenu = new wxMenu;
     item = new wxMenuItem( configmenu, ID_CONFIG_REQ, _( "&Library" ),
                            _( "Library preferences" ) );
@@ -308,6 +308,8 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     wxGetApp().AddMenuLanguageList( configmenu );
 
+    AddHotkeyConfigMenu( configmenu );
+
     configmenu->AppendSeparator();
     item = new wxMenuItem( configmenu, ID_CONFIG_SAVE, _( "&Save preferences" ),
                            _( "Save application preferences" ) );
@@ -319,10 +321,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     item->SetBitmap( read_setup_xpm );
     configmenu->Append( item );
 
-    configmenu->AppendSeparator();
-    AddHotkeyConfigMenu( configmenu );
-
-    // Menu Help:
+    /* Help Menu*/
     wxMenu* helpMenu = new wxMenu;
     item = new wxMenuItem( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
                            _( "Open the eeschema manual" ) );
