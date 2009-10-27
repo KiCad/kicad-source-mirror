@@ -488,7 +488,7 @@ void WinEDA_SchematicFrame::OnUpdateGrid( wxUpdateUIEvent& event )
 void WinEDA_SchematicFrame::OnAnnotate( wxCommandEvent& event )
 /**************************************************************/
 {
-    WinEDA_AnnotateFrame* dlg = new WinEDA_AnnotateFrame( this );
+    DIALOG_ANNOTATE* dlg = new DIALOG_ANNOTATE( this );
 
     dlg->ShowModal();
     dlg->Destroy();

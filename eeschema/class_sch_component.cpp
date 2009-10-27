@@ -408,6 +408,13 @@ void SCH_COMPONENT::SetRef( DrawSheetPath* sheet, const wxString& ref )
     }
 
     rf->m_Text = ref;  // for drawing.
+    
+    // Reinit the m_PrefixString member if needed
+    wxString prefix = ref;
+    while( prefix.Last() == '?' or isdigit(prefix.Last()) )
+        prefix.RemoveLast();
+    if( m_PrefixString != prefix )
+        m_PrefixString = prefix;
 }
 
 /** function SetTimeStamp

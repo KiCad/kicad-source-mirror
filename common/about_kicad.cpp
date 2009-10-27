@@ -8,7 +8,7 @@
 #include "appl_wxstruct.h"
 
 
-#define BUILD_VERSION "(20091024-unstable)"
+#define BUILD_VERSION "(20091027-unstable)"
 
 
 #ifdef HAVE_SVN_VERSION

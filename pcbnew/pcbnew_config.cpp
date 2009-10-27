@@ -13,7 +13,7 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "pcbplot.h"
-#include "pcbcfg.h"
+#include "pcbnew_config.h"
 #include "worksheet.h"
 #include "pcbnew_id.h"
 #include "hotkeys.h"

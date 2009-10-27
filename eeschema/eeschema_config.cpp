@@ -14,7 +14,7 @@
 #include "program.h"
 #include "general.h"
 #include "protos.h"
-#include "eeconfig.h"
+#include "eeschema_config.h"
 #include "worksheet.h"
 #include "hotkeys.h"
 

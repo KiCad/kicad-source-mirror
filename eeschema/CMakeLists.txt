@@ -38,7 +38,7 @@ set(EESCHEMA_SRCS
     database.cpp
     delete.cpp
     delsheet.cpp
-#   dialog_backanno.cpp
+    dialog_annotate_base.cpp
     dialog_bodygraphictext_properties_base.cpp
     dialog_build_BOM.cpp
     dialog_build_BOM_base.cpp
