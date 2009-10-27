@@ -110,9 +110,10 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, DrawSheetPath* sheet,
 
     if( msg.IsEmpty() )
         msg = wxT( "U" );
-    msg += wxT( "?" );
+    m_PrefixString = msg;
 
     // update the reference -- just the prefix for now.
+    msg += wxT( "?" );
     SetRef( sheet, msg );
 
     /* Use the schematic component name instead of the library value field

@@ -200,9 +200,11 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
     Component = new SCH_COMPONENT( *Entry, GetSheet(), unit, convert,
                                    GetScreen()->m_Curseur, true );
 
-    DrawStructsInGhost( DrawPanel, DC, Component, wxPoint( 0, 0 ) );
-
+    // Set the component value (that can differ from component name in lib, for aliases)
+    Component->GetField( VALUE )->m_Text = Name;
     Component->DisplayInfo( this );
+
+    DrawStructsInGhost( DrawPanel, DC, Component, wxPoint( 0, 0 ) );
 
     return Component;
 }

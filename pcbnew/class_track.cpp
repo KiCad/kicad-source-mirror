@@ -558,7 +558,8 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     {
         color = g_DesignSettings.m_LayerColor[m_Layer];
 
-        if( g_DesignSettings.IsLayerVisible( m_Layer ) == false && ( color & HIGHT_LIGHT_FLAG ) != HIGHT_LIGHT_FLAG )
+        if( g_DesignSettings.IsLayerVisible( m_Layer ) == false && ( color & HIGHT_LIGHT_FLAG ) !=
+            HIGHT_LIGHT_FLAG )
             return;
 
         if( DisplayOpt.ContrastModeDisplay )
@@ -708,13 +709,13 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoint& notUsed )
 /*******************************************************************************************/
 {
-    int                  color;
-    int                  rayon;
-    int                  curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    int color;
+    int rayon;
+    int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
-    int                  fillvia = 0;
-    WinEDA_BasePcbFrame* frame   = (WinEDA_BasePcbFrame*) panel->m_Parent;
-    PCB_SCREEN*          screen  = frame->GetScreen();
+    int fillvia = 0;
+    WinEDA_BasePcbFrame* frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
+    PCB_SCREEN*          screen = frame->GetScreen();
 
     if( frame->m_DisplayViaFill == FILLED )
         fillvia = 1;
@@ -723,7 +724,8 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
 
     color = g_DesignSettings.m_ViaColor[m_Shape];
 
-    if( g_DesignSettings.IsElementVisible( VIAS_VISIBLE + m_Shape ) == false && ( color & HIGHT_LIGHT_FLAG ) != HIGHT_LIGHT_FLAG )
+    if( g_DesignSettings.IsElementVisible( VIAS_VISIBLE + m_Shape ) == false
+        && ( color & HIGHT_LIGHT_FLAG ) != HIGHT_LIGHT_FLAG )
         return;
 
     if( DisplayOpt.ContrastModeDisplay )
@@ -750,22 +752,30 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
 
 
     rayon = m_Width >> 1;
-    if( panel->GetScreen()->Scale( rayon ) <= 4 )
+    // for small via size on screen (rayon < 4 pixels) draw a simplified shape
+    int radius_in_pixels = panel->GetScreen()->Scale( rayon );
+    bool fast_draw = false;
+
+    // Vias are drawn as a filled circle or a double circle. The hole will be drawn later
+    int drill_rayon = GetDrillValue() / 2;
+    int inner_rayon = rayon - panel->GetScreen()->Unscale( 2 );
+    if( radius_in_pixels < 3 )
     {
-        GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon, color );
-        return;
+        fast_draw = true;
+        fillvia = false;
     }
 
     if( fillvia )
         GRFilledCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon, 0, color, color );
+
     else
+    {
         GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon, color );
-
-    int drill_rayon = GetDrillValue() / 2;
-    int inner_rayon = rayon - panel->GetScreen()->Unscale( 2 );
-
-    GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
-              inner_rayon, color );
+        if ( fast_draw )
+            return;
+        GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
+                  inner_rayon, color );
+    }
 
     // Draw the via hole if the display option allows it
     if( DisplayOpt.m_DisplayViaMode != VIA_HOLE_NOT_SHOW )
@@ -773,37 +783,35 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
         if( (DisplayOpt.m_DisplayViaMode == ALL_VIA_HOLE_SHOW)          // Display all drill holes requested
            || ( (drill_rayon > 0 ) && !IsDrillDefault() ) )             // Or Display non default holes requested
         {
-            if( drill_rayon < inner_rayon )                             // We can show the via hole
+            if( fillvia )
             {
-                if( fillvia )
+                bool blackpenstate = false;
+                if( screen->m_IsPrinting )
                 {
-                    bool blackpenstate = false;
-                    if( screen->m_IsPrinting )
-                    {
-                        blackpenstate = GetGRForceBlackPenState();
-                        GRForceBlackPen( false );
-                        color = g_DrawBgColor;
-                    }
-                    else
-                        color = BLACK; // or DARKGRAY;
-
-                    if( draw_mode != GR_XOR )
-                        GRSetDrawMode( DC, GR_COPY );
-                    else
-                        GRSetDrawMode( DC, GR_XOR );
-
-                    if( screen->Scale( drill_rayon ) > 1 ) /* draw hole if its size is enought */
-                        GRFilledCircle( &panel->m_ClipBox, DC, m_Start.x,
-                                        m_Start.y, drill_rayon, 0, color, color );
-
-                    if( screen->m_IsPrinting )
-                        GRForceBlackPen( blackpenstate );
+                    blackpenstate = GetGRForceBlackPenState();
+                    GRForceBlackPen( false );
+                    color = g_DrawBgColor;
                 }
                 else
-                {
+                    color = BLACK;     // or DARKGRAY;
+
+                if( draw_mode != GR_XOR )
+                    GRSetDrawMode( DC, GR_COPY );
+                else
+                    GRSetDrawMode( DC, GR_XOR );
+
+                if( screen->Scale( drill_rayon ) > 1 )     /* draw hole if its size is enought */
+                    GRFilledCircle( &panel->m_ClipBox, DC, m_Start.x,
+                                    m_Start.y, drill_rayon, 0, color, color );
+
+                if( screen->m_IsPrinting )
+                    GRForceBlackPen( blackpenstate );
+            }
+            else
+            {
+                if( drill_rayon < inner_rayon )         // We can show the via hole
                     GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
                               drill_rayon, color );
-                }
             }
         }
     }
@@ -905,12 +913,13 @@ void TRACK::DisplayInfo( WinEDA_DrawFrame* frame )
     // Display full track length (in pcbnew)
     if( frame->m_Ident == PCB_FRAME )
     {
-        int   trackLen = 0;
+        int trackLen = 0;
         Marque_Une_Piste( board, this, NULL, &trackLen, false );
         valeur_param( trackLen, msg );
         frame->AppendMsgPanel( _( "Track Length" ), msg, DARKCYAN );
     }
 }
+
 
 /*
  * Function DisplayInfoBase

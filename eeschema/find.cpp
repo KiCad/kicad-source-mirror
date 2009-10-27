@@ -656,6 +656,7 @@ void WinEDA_FindFrame::LocatePartInLibs( wxCommandEvent& event )
 
     BOOST_FOREACH( CMP_LIBRARY& lib, CMP_LIBRARY::GetLibraryList() )
     {
+        nameList.Clear();
         lib.SearchEntryNames( nameList, Text );
 
         if( nameList.IsEmpty() )
