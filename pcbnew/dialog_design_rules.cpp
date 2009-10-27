@@ -88,7 +88,7 @@ DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( WinEDA_PcbFrame* parent ) :
 
 
     InitDialogRules();
-	Layout();
+    Layout();
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
     Center();
@@ -921,7 +921,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
         if( tvalue.IsEmpty() )
             continue;
 
-         int tracksize = ReturnValueFromString( g_UnitMetric,
+        int tracksize = ReturnValueFromString( g_UnitMetric,
                                        tvalue,
                                        m_Parent->m_InternalUnits );
         if( tracksize < minTrackWidth )
@@ -935,7 +935,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
         if( tracksize > 10000 )
         {
             result = false;
-            msg.Printf( _( "<b>Extra Track %d Size</b> ¨%s &gt; <b>1 inch!</b><br>" ),
+            msg.Printf( _( "<b>Extra Track %d Size</b> %s &gt; <b>1 inch!</b><br>" ),
                 row+1, GetChars( tvalue ) );
 
             m_MessagesList->AppendToPage( msg );
@@ -971,3 +971,4 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
 
     return result;
 }
+
