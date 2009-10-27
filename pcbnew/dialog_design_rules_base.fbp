@@ -32,7 +32,7 @@
             <property name="minimum_size">600,520</property>
             <property name="name">DIALOG_DESIGN_RULES_BASE</property>
             <property name="pos"></property>
-            <property name="size">792,692</property>
+            <property name="size">850,692</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass"></property>
             <property name="title">Design Rules Editor</property>
@@ -128,7 +128,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Net Classes Editor</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
@@ -969,7 +969,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Global Design Rules</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
@@ -1032,7 +1032,7 @@
                                                 <property name="proportion">1</property>
                                                 <object class="wxStaticBoxSizer" expanded="1">
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Vias Options:</property>
+                                                    <property name="label">Via Options:</property>
                                                     <property name="minimum_size"></property>
                                                     <property name="name">sbViasOptionSizer</property>
                                                     <property name="orient">wxVERTICAL</property>
@@ -1120,7 +1120,7 @@
                                                                     <property name="font"></property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
-                                                                    <property name="label">Via Min Diameter</property>
+                                                                    <property name="label">Min via diameter</property>
                                                                     <property name="maximum_size"></property>
                                                                     <property name="minimum_size"></property>
                                                                     <property name="name">m_ViaMinTitle</property>
@@ -1226,7 +1226,7 @@
                                                                     <property name="font"></property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
-                                                                    <property name="label">Via Min Drill</property>
+                                                                    <property name="label">Min via drill dia</property>
                                                                     <property name="maximum_size"></property>
                                                                     <property name="minimum_size"></property>
                                                                     <property name="name">m_ViaMinDrillTitle</property>
@@ -1330,7 +1330,7 @@
                                                 <property name="proportion">1</property>
                                                 <object class="wxStaticBoxSizer" expanded="1">
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Micro Vias Options:</property>
+                                                    <property name="label">Micro Via Options:</property>
                                                     <property name="minimum_size"></property>
                                                     <property name="name">sbuViasSizer</property>
                                                     <property name="orient">wxVERTICAL</property>
@@ -1418,7 +1418,7 @@
                                                                     <property name="font"></property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
-                                                                    <property name="label">MicroVia Min Diameter</property>
+                                                                    <property name="label">Min uvia diameter</property>
                                                                     <property name="maximum_size"></property>
                                                                     <property name="minimum_size"></property>
                                                                     <property name="name">m_MicroViaMinSizeTitle</property>
@@ -1470,7 +1470,7 @@
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength">0</property>
+                                                                    <property name="maxlength">6</property>
                                                                     <property name="minimum_size"></property>
                                                                     <property name="name">m_SetMicroViasMinSizeCtrl</property>
                                                                     <property name="permission">protected</property>
@@ -1524,7 +1524,7 @@
                                                                     <property name="font"></property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
-                                                                    <property name="label">MicroVia Min Drill</property>
+                                                                    <property name="label">Min uvia drill dia</property>
                                                                     <property name="maximum_size"></property>
                                                                     <property name="minimum_size"></property>
                                                                     <property name="name">m_MicroViaMinDrillTitle</property>
@@ -1576,7 +1576,7 @@
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength">0</property>
+                                                                    <property name="maxlength">6</property>
                                                                     <property name="minimum_size"></property>
                                                                     <property name="name">m_SetMicroViasMinDrillCtrl</property>
                                                                     <property name="permission">protected</property>
@@ -1625,10 +1625,10 @@
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND</property>
-                                                <property name="proportion">0</property>
+                                                <property name="proportion">1</property>
                                                 <object class="wxStaticBoxSizer" expanded="1">
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Minimal Values Allowed:</property>
+                                                    <property name="label">Minimum Allowed Values:</property>
                                                     <property name="minimum_size"></property>
                                                     <property name="name">sbMinSizesSizer</property>
                                                     <property name="orient">wxVERTICAL</property>
@@ -1662,7 +1662,7 @@
                                                                     <property name="font"></property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
-                                                                    <property name="label">Track Min Width</property>
+                                                                    <property name="label">Min track width</property>
                                                                     <property name="maximum_size"></property>
                                                                     <property name="minimum_size"></property>
                                                                     <property name="name">m_TrackMinWidthTitle</property>
@@ -1703,7 +1703,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxALL</property>
+                                                                <property name="flag">wxALL|wxEXPAND</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxTextCtrl" expanded="1">
                                                                     <property name="bg"></property>
@@ -1823,7 +1823,7 @@
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
                                             <property name="id">wxID_ANY</property>
-                                            <property name="label">List of specific vias diameters and specific tracks widths&#x0A;These values can be used to replace default Netclasses values, on demand,&#x0A;for some vias or track segments</property>
+                                            <property name="label">Specific via diameters and track widths, which &#x0A;can be used to replace default Netclass values &#x0A;on demand, for arbitrary via or track segments.</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_staticTextInfo</property>
@@ -1864,7 +1864,7 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL</property>
+                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxEXPAND</property>
                                         <property name="proportion">0</property>
                                         <object class="wxBoxSizer" expanded="1">
                                             <property name="minimum_size"></property>
@@ -1873,11 +1873,11 @@
                                             <property name="permission">none</property>
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
-                                                <property name="flag">wxALL</property>
-                                                <property name="proportion">0</property>
+                                                <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND</property>
+                                                <property name="proportion">1</property>
                                                 <object class="wxStaticBoxSizer" expanded="1">
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Vias Custom Sizes List:</property>
+                                                    <property name="label">Custom Via Sizes:</property>
                                                     <property name="minimum_size"></property>
                                                     <property name="name">sViaSizeBox</property>
                                                     <property name="orient">wxVERTICAL</property>
@@ -1895,7 +1895,7 @@
                                                             <property name="font"></property>
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
-                                                            <property name="label">A 0 value or blank means default Netclass value</property>
+                                                            <property name="label">A blank or 0 =&gt; default Netclass value</property>
                                                             <property name="maximum_size"></property>
                                                             <property name="minimum_size"></property>
                                                             <property name="name">m_staticText7</property>
@@ -2049,16 +2049,67 @@
                                             </object>
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
-                                                <property name="flag">wxALL</property>
-                                                <property name="proportion">0</property>
+                                                <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND</property>
+                                                <property name="proportion">1</property>
                                                 <object class="wxStaticBoxSizer" expanded="1">
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Tracks Custom Widths List:</property>
+                                                    <property name="label">Custom Track Widths:</property>
                                                     <property name="minimum_size"></property>
                                                     <property name="name">sbTracksListSizer</property>
-                                                    <property name="orient">wxHORIZONTAL</property>
+                                                    <property name="orient">wxVERTICAL</property>
                                                     <property name="permission">none</property>
                                                     <event name="OnUpdateUI"></event>
+                                                    <object class="sizeritem" expanded="1">
+                                                        <property name="border">5</property>
+                                                        <property name="flag">wxALL</property>
+                                                        <property name="proportion">0</property>
+                                                        <object class="wxStaticText" expanded="1">
+                                                            <property name="bg"></property>
+                                                            <property name="context_help"></property>
+                                                            <property name="enabled">1</property>
+                                                            <property name="fg"></property>
+                                                            <property name="font"></property>
+                                                            <property name="hidden">0</property>
+                                                            <property name="id">wxID_ANY</property>
+                                                            <property name="label"> </property>
+                                                            <property name="maximum_size"></property>
+                                                            <property name="minimum_size"></property>
+                                                            <property name="name">m_staticText8</property>
+                                                            <property name="permission">protected</property>
+                                                            <property name="pos"></property>
+                                                            <property name="size"></property>
+                                                            <property name="style"></property>
+                                                            <property name="subclass"></property>
+                                                            <property name="tooltip"></property>
+                                                            <property name="window_extra_style"></property>
+                                                            <property name="window_name"></property>
+                                                            <property name="window_style"></property>
+                                                            <property name="wrap">-1</property>
+                                                            <event name="OnChar"></event>
+                                                            <event name="OnEnterWindow"></event>
+                                                            <event name="OnEraseBackground"></event>
+                                                            <event name="OnKeyDown"></event>
+                                                            <event name="OnKeyUp"></event>
+                                                            <event name="OnKillFocus"></event>
+                                                            <event name="OnLeaveWindow"></event>
+                                                            <event name="OnLeftDClick"></event>
+                                                            <event name="OnLeftDown"></event>
+                                                            <event name="OnLeftUp"></event>
+                                                            <event name="OnMiddleDClick"></event>
+                                                            <event name="OnMiddleDown"></event>
+                                                            <event name="OnMiddleUp"></event>
+                                                            <event name="OnMotion"></event>
+                                                            <event name="OnMouseEvents"></event>
+                                                            <event name="OnMouseWheel"></event>
+                                                            <event name="OnPaint"></event>
+                                                            <event name="OnRightDClick"></event>
+                                                            <event name="OnRightDown"></event>
+                                                            <event name="OnRightUp"></event>
+                                                            <event name="OnSetFocus"></event>
+                                                            <event name="OnSize"></event>
+                                                            <event name="OnUpdateUI"></event>
+                                                        </object>
+                                                    </object>
                                                     <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
                                                         <property name="flag">wxALL</property>
@@ -2105,7 +2156,7 @@
                                                             <property name="row_label_size">80</property>
                                                             <property name="row_label_values">&quot;Track 1&quot; &quot;Track 2&quot; &quot;Track 3&quot; &quot;Track 4&quot; &quot;Track 5&quot; &quot;Track 6&quot; &quot;Track 7&quot;</property>
                                                             <property name="row_label_vert_alignment">wxALIGN_CENTRE</property>
-                                                            <property name="row_sizes">17,17,17,17,17,17,17</property>
+                                                            <property name="row_sizes"></property>
                                                             <property name="rows">7</property>
                                                             <property name="size"></property>
                                                             <property name="subclass"></property>
