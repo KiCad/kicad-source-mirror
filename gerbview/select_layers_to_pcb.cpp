@@ -7,6 +7,7 @@
 #include "fctsys.h"
 #include "common.h"
 #include "gerbview.h"
+#include "class_board_design_settings.h"
 
 #include "protos.h"
 
@@ -127,25 +128,26 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_GerberFrame* parent ) :
     // buttons should be some other size in that version.
 
     // Compute a reasonable number of copper layers
-    g_DesignSettings.m_CopperLayerCount = 0;
+    int pcb_layer_number = 0;
     for( ii = 0; ii < 32; ii++ )
     {
         if( g_GERBER_List[ii] != NULL )
-            g_DesignSettings.m_CopperLayerCount++;
+            pcb_layer_number++;
 
         // Specify the default value for each member of these arrays.
         ButtonTable[ii] = -1;
         LayerLookUpTable[ii] = LAYER_UNSELECTED;
     }
+    g_DesignSettings.SetCopperLayerCount(pcb_layer_number);
 
-    int pcb_layer_number = 0;
+    pcb_layer_number = 0;
     for( nb_items = 0, ii = 0; ii < 32; ii++ )
     {
         if( g_GERBER_List[ii] == NULL )
             continue;
 
-        if( (pcb_layer_number == g_DesignSettings.m_CopperLayerCount - 1)
-           && (g_DesignSettings.m_CopperLayerCount > 1) )
+        if( (pcb_layer_number == g_DesignSettings.GetCopperLayerCount() - 1)
+           && (g_DesignSettings.GetCopperLayerCount() > 1) )
             pcb_layer_number = CMP_N;
 
         ButtonTable[nb_items] = ii;
@@ -375,8 +377,8 @@ void WinEDA_SwapLayerFrame::OnSelectLayer( wxCommandEvent& event )
 
 /*********************************************************/
 void WinEDA_SwapLayerFrame::OnCancelClick( wxCommandEvent& event )
-{
 /*********************************************************/
+{
     EndModal( -1 );
 }
 
@@ -391,7 +393,7 @@ void WinEDA_SwapLayerFrame::OnOkClick( wxCommandEvent& event )
     /* Compute the number of copper layers
      * this is the max layer number + 1 (if some internal layers exist)
      */
-    g_DesignSettings.m_CopperLayerCount = 1;
+    int layers_count = 1;
     for( ii = 0; ii < 32; ii++ )
     {
         if( LayerLookUpTable[ii] == CMP_N )
@@ -400,15 +402,17 @@ void WinEDA_SwapLayerFrame::OnOkClick( wxCommandEvent& event )
         {
             if( LayerLookUpTable[ii] >= LAST_COPPER_LAYER )
                 continue; // not a copper layer
-            if( LayerLookUpTable[ii] >= g_DesignSettings.m_CopperLayerCount )
-                g_DesignSettings.m_CopperLayerCount++;
+            if( LayerLookUpTable[ii] >= layers_count )
+                layers_count++;
         }
     }
 
     if( AsCmpLayer )
-        g_DesignSettings.m_CopperLayerCount++;
-    if( g_DesignSettings.m_CopperLayerCount > NB_COPPER_LAYERS ) // should not occur.
-        g_DesignSettings.m_CopperLayerCount = NB_COPPER_LAYERS;
+        layers_count++;
+    if( layers_count > NB_COPPER_LAYERS ) // should not occur.
+        layers_count = NB_COPPER_LAYERS;
+
+    g_DesignSettings.SetCopperLayerCount( layers_count );
 
     EndModal( 1 );
 }

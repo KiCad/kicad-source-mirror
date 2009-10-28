@@ -11,6 +11,7 @@
 #include "dialog_drc.h"
 #include "common.h"
 #include "wxPcbStruct.h"
+#include "class_board_design_settings.h"
 
 /* class DIALOG_DRC_CONTROL: a dialog to set DRC parameters (clearance, min cooper size)
  * and run DRC tests

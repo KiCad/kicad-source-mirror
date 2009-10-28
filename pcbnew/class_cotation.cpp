@@ -8,6 +8,7 @@
 #include "pcbnew.h"
 #include "trigo.h"
 #include "wxstruct.h"
+#include "class_board_design_settings.h"
 #include "class_drawpanel.h"
 #include "kicad_string.h"
 #include "protos.h"

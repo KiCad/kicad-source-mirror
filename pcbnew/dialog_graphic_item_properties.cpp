@@ -17,6 +17,7 @@
 #include "class_drawpanel.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "class_board_design_settings.h"
 
 #include "dialog_graphic_item_properties_base.h"
 

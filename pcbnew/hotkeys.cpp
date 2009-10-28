@@ -9,6 +9,7 @@
 #include "pcbnew_id.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "class_board_design_settings.h"
 
 #include "hotkeys.h"
 #include "protos.h"
@@ -189,11 +190,11 @@ void WinEDA_PcbFrame::OnHotKey(wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct)
 		ll = GetScreen()->m_Active_Layer;
 		if ((ll <= COPPER_LAYER_N) || (ll > CMP_N))
 			break;
-		if (GetBoard()->m_BoardSettings->m_CopperLayerCount < 2) // Single layer
+		if (GetBoard()->m_BoardSettings->GetCopperLayerCount() < 2) // Single layer
 			ll = COPPER_LAYER_N;
 		else if (ll == CMP_N)
 			ll = MAX(COPPER_LAYER_N,
-					GetBoard()->m_BoardSettings->m_CopperLayerCount - 2);
+					GetBoard()->m_BoardSettings->GetCopperLayerCount() - 2);
 		else
 			ll--;
 		SwitchLayer(DC, ll);
@@ -203,9 +204,9 @@ void WinEDA_PcbFrame::OnHotKey(wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct)
 		ll = GetScreen()->m_Active_Layer;
 		if ((ll < COPPER_LAYER_N) || (ll >= CMP_N))
 			break;
-		if (GetBoard()->m_BoardSettings->m_CopperLayerCount < 2) // Single layer
+		if (GetBoard()->m_BoardSettings->GetCopperLayerCount() < 2) // Single layer
 			ll = COPPER_LAYER_N;
-		else if (ll >= GetBoard()->m_BoardSettings->m_CopperLayerCount - 2)
+		else if (ll >= GetBoard()->m_BoardSettings->GetCopperLayerCount() - 2)
 			ll = CMP_N;
 		else
 			ll++;

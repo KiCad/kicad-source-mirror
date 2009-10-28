@@ -12,6 +12,7 @@
 #include "autorout.h"
 #include "cell.h"
 #include "zones.h"
+#include "class_board_design_settings.h"
 
 #include "protos.h"
 
@@ -40,7 +41,7 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
     int      autoroute_net_code = -1;
     wxString msg;
 
-    if( g_DesignSettings.m_CopperLayerCount > 1 )
+    if( g_DesignSettings.GetCopperLayerCount() > 1 )
     {
         Route_Layer_TOP    = ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP;
         Route_Layer_BOTTOM = ((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM;

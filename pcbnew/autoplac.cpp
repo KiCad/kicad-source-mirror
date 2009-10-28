@@ -14,6 +14,7 @@
 #include "autorout.h"
 #include "zones.h"
 #include "cell.h"
+#include "class_board_design_settings.h"
 
 #include "protos.h"
 

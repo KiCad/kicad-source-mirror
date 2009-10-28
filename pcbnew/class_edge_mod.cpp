@@ -10,13 +10,9 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "kicad_string.h"
-#include "macros.h"
 
 #include "pcbnew.h"
-#include "autorout.h"
-#include "drag.h"
-
-#include "protos.h"
+#include "class_board_design_settings.h"
 
 #define MAX_WIDTH 10000     // Epaisseur (en 1/10000 ") max raisonnable des traits, textes...
 

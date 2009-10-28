@@ -33,8 +33,7 @@ set(GERBVIEW_SRCS
     select_layers_to_pcb.cpp
     set_color.cpp
     tool_gerber.cpp
-    tracepcb.cpp
-    trpiste.cpp )
+    tracepcb.cpp )
 
 set(GERBVIEW_EXTRA_SRCS
     ../share/setpage.cpp

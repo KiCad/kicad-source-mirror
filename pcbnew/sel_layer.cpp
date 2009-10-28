@@ -7,12 +7,9 @@
 #include "confirm.h"
 
 #include "pcbnew.h"
+#include "class_board_design_settings.h"
 #include "protos.h"
 
-
-/* Variables locales */
-
-/* Fonctions locales: */
 
 enum layer_sel_id {
     ID_LAYER_SELECT_TOP = 1800,
@@ -111,7 +108,7 @@ WinEDA_SelLayerFrame::WinEDA_SelLayerFrame( WinEDA_BasePcbFrame* parent,
 
     /* Build the layer list */
     LayerCount = 0;
-    int Masque_Layer = g_TabAllCopperLayerMask[g_DesignSettings.m_CopperLayerCount - 1];
+    int Masque_Layer = g_TabAllCopperLayerMask[g_DesignSettings.GetCopperLayerCount( ) - 1];
     Masque_Layer += ALL_NO_CU_LAYERS;
     for( ii = 0; ii < NB_LAYERS; ii++ )
     {
@@ -231,7 +228,7 @@ void WinEDA_BasePcbFrame::SelectLayerPair()
     // Check whether more than one copper layer has been enabled for the
     // current PCB file, as Layer Pairs can only meaningfully be defined
     // within PCB files which contain at least two copper layers.
-    if( GetBoard()->m_BoardSettings->m_CopperLayerCount < 2 )
+    if( GetBoard()->m_BoardSettings->GetCopperLayerCount( ) < 2 )
     {
         wxString InfoMsg;
         InfoMsg = _( "Less than two copper layers are being used." );
@@ -273,7 +270,7 @@ WinEDA_SelLayerPairFrame::WinEDA_SelLayerPairFrame( WinEDA_BasePcbFrame* parent 
 
     PCB_SCREEN* screen = (PCB_SCREEN*) m_Parent->GetScreen();
     /* Construction de la liste des couches autoris�s */
-    int         Masque_Layer = g_TabAllCopperLayerMask[g_DesignSettings.m_CopperLayerCount - 1];
+    int         Masque_Layer = g_TabAllCopperLayerMask[g_DesignSettings.GetCopperLayerCount( ) - 1];
     Masque_Layer += ALL_NO_CU_LAYERS;
     for( ii = 0, LayerCount = 0; ii < NB_COPPER_LAYERS; ii++ )
     {

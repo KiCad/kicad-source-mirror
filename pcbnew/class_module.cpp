@@ -14,6 +14,7 @@
 #include "pcbcommon.h"
 
 #include "pcbnew.h"
+#include "class_board_design_settings.h"
 
 #include "autorout.h"
 #include "drag.h"

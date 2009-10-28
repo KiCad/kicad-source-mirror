@@ -16,6 +16,7 @@
 #include "bitmaps.h"
 #include "protos.h"
 #include "pcbnew_id.h"
+#include "class_board_design_settings.h"
 
 #include "collectors.h"
 #include "class_drawpanel.h"
@@ -185,7 +186,7 @@ void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
         // If only one copper layer is enabled, the only such layer
         // that can be selected to is the "Copper" layer (so the
         // selection of any other copper layer is disregarded).
-        if( m_Pcb->m_BoardSettings->m_CopperLayerCount < 2 )
+        if( m_Pcb->m_BoardSettings->GetCopperLayerCount() < 2 )
         {
             if( layer != COPPER_LAYER_N )
             {
@@ -200,7 +201,7 @@ void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
         else
         {
             if( (layer != COPPER_LAYER_N) && (layer != LAYER_CMP_N)
-                && (layer >= m_Pcb->m_BoardSettings->m_CopperLayerCount - 1) )
+                && (layer >= m_Pcb->m_BoardSettings->GetCopperLayerCount() - 1) )
             {
                 return;
             }
@@ -212,7 +213,7 @@ void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
     // and a non-copper layer, or vice-versa?
     // ...
 
-    ((PCB_SCREEN*)GetScreen())->m_Active_Layer = layer;
+    GetScreen()->m_Active_Layer = layer;
 
     if( DisplayOpt.ContrastModeDisplay )
         GetScreen()->SetRefreshReq();

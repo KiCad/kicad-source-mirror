@@ -8,6 +8,7 @@
 #include "class_drawpanel.h"
 
 #include "pcbnew.h"
+#include "class_board_design_settings.h"
 #include "pcbplot.h"
 #include "protos.h"
 

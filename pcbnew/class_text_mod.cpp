@@ -12,10 +12,11 @@
 #include "drawtxt.h"
 #include "kicad_string.h"
 #include "pcbcommon.h"
+#include "class_board_design_settings.h"
 
-#include "autorout.h"
-#include "drag.h"
-#include "protos.h"
+//#include "autorout.h"
+//#include "drag.h"
+//#include "protos.h"
 
 
 /************************************************************************/

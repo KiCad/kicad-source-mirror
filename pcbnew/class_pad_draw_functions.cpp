@@ -11,6 +11,7 @@
 #include "drawtxt.h"
 
 #include "pcbnew.h"
+#include "class_board_design_settings.h"
 
 
 /*******************************************************************************************/

@@ -7,6 +7,7 @@
 
 #include "common.h"
 #include "pcbnew.h"
+#include "class_board_design_settings.h"
 
 #include "trigo.h"
 #include "pcbnew_id.h"
@@ -116,7 +117,7 @@ int PCB_SCREEN::GetInternalUnits( void )
  */
 bool PCB_SCREEN::IsMicroViaAcceptable( void )
 {
-    int copperlayercnt = g_DesignSettings.m_CopperLayerCount;
+    int copperlayercnt = g_DesignSettings.GetCopperLayerCount( );
 
     if( !g_DesignSettings.m_MicroViasAllowed )
         return false;   // Obvious..
@@ -124,7 +125,7 @@ bool PCB_SCREEN::IsMicroViaAcceptable( void )
         return false;   // Only on multilayer boards..
     if( ( m_Active_Layer == COPPER_LAYER_N )
        || ( m_Active_Layer == LAYER_CMP_N )
-       || ( m_Active_Layer == g_DesignSettings.m_CopperLayerCount - 2 )
+       || ( m_Active_Layer == g_DesignSettings.GetCopperLayerCount( ) - 2 )
        || ( m_Active_Layer == LAYER_N_2 ) )
         return true;
 
@@ -168,111 +169,4 @@ DISPLAY_OPTIONS::DISPLAY_OPTIONS()
 
     DisplayDrawItems        = true;
     ContrastModeDisplay     = false;
-}
-
-
-/*****************************************************/
-EDA_BoardDesignSettings::EDA_BoardDesignSettings()
-/*****************************************************/
-
-// Default values for designing boards
-{
-    int ii;
-
-    static const int default_layer_color[32] =
-    {
-        GREEN,     LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
-        LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
-        LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
-        LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, RED,
-        LIGHTGRAY, LIGHTGRAY,
-        LIGHTGRAY, LIGHTGRAY,
-        MAGENTA,   CYAN,
-        LIGHTGRAY, LIGHTGRAY,
-        LIGHTGRAY,
-        LIGHTGRAY,
-        LIGHTGRAY, LIGHTGRAY,
-        LIGHTGRAY,
-        LIGHTGRAY,
-        LIGHTGRAY,
-        LIGHTGRAY
-    };
-
-    m_CopperLayerCount      = 2;                    // Default design is a double sided board
-    m_ViaDrillCustomValue   = 250;                  // via drill for vias which must have a defined drill value
-    m_CurrentViaSize        = 450;                  // Current via size
-    m_CurrentViaType        = VIA_THROUGH;          // via type (VIA_BLIND_BURIED, VIA_THROUGH VIA_MICROVIA)
-    m_CurrentTrackWidth     = 170;                  // current track width
-    m_UseConnectedTrackWidth = false;               // if true, when creating a new track starting on an existing track, use this track width
-    m_CurrentMicroViaSize   = 150;                  // Current micro via size
-    m_MicroViasAllowed      = false;                // true to allow micro vias
-    m_DrawSegmentWidth      = 100;                  // current graphic line width (not EDGE layer)
-    m_EdgeSegmentWidth      = 100;                  // current graphic line width (EDGE layer only)
-    m_PcbTextWidth          = 100;                  // current Pcb (not module) Text width
-    m_PcbTextSize           = wxSize( 500, 500 );   // current Pcb (not module) Text size
-    m_TrackMinWidth         = 80;                   // track min value for width ((min copper size value
-    m_ViasMinSize           = 350;                  // vias (not micro vias) min diameter
-    m_ViasMinDrill          = 200;                  // vias (not micro vias) min drill diameter
-    m_MicroViasMinSize      = 200;                  // micro vias (not vias) min diameter
-    m_MicroViasMinDrill     = 50;                   // micro vias (not vias) min drill diameter
-    m_MaskMargin            = 150;                  // Solder mask margin
-    /* Color options for screen display of the Printed Board: */
-
-
-//@@IMB: Not used    m_PcbGridColor = DARKGRAY;                      // Grid color
-
-    m_EnabledLayers     = ALL_LAYERS;               // All layers enabled at first.
-    m_VisibleLayers     = 0xffffffff;               // IMB: All layers visible at first. TODO: Use a macro for the initial value.
-    m_VisibleElements   = 0x00000fff;               // IMB: All elements visible at first. TODO: Use a macro for the initial value.
-
-    for( ii = 0; ii < 32; ii++ )
-        m_LayerColor[ii] = default_layer_color[ii];
-
-    // Layer colors (tracks and graphic items)
-    m_ViaColor[VIA_NOT_DEFINED]     = DARKGRAY;
-    m_ViaColor[VIA_MICROVIA]        = CYAN;
-    m_ViaColor[VIA_BLIND_BURIED]    = BROWN;
-    m_ViaColor[VIA_THROUGH]         = WHITE;
-
-//@@IMB: Not used    m_ModuleTextCMPColor = LIGHTGRAY;       // Text module color for modules on the COMPONENT layer
-//@@IMB: Not used    m_ModuleTextCUColor  = MAGENTA;         // Text module color for modules on the COPPER layer
-//@@IMB: Not used    m_ModuleTextNOVColor = DARKGRAY;        // Text module color for "invisible" texts (must be BLACK if really not displayed)
-//@@IMB: Not used    m_AnchorColor   = BLUE;                 // Anchor color for modules and texts
-//@@IMB: Not used    m_PadCUColor    = GREEN;                // Pad color for the COMPONENT side of the pad
-//@@IMB: Not used    m_PadCMPColor   = RED;                  // Pad color for the COPPER side of the pad
-
-    m_RatsnestColor = WHITE;                // Ratsnest color
-}
-
-
-// see pcbstruct.h
-int EDA_BoardDesignSettings::GetVisibleLayers() const
-{
-    return m_VisibleLayers;
-}
-
-void EDA_BoardDesignSettings::SetVisibleLayers( int aMask )
-{
-    m_VisibleLayers = aMask & m_EnabledLayers & ALL_LAYERS;
-}
-
-void EDA_BoardDesignSettings::SetLayerVisibility( int aLayerIndex, bool aNewState )
-{
-    // Altough Pcbnew uses only 29, Gerbview uses all 32 layers
-    if( aLayerIndex < 0 || aLayerIndex >= 32 )
-        return;
-    if( aNewState && IsLayerEnabled( aLayerIndex ))
-        m_VisibleLayers |= 1 << aLayerIndex;
-    else
-        m_VisibleLayers &= ~( 1 << aLayerIndex );
-}
-
-void EDA_BoardDesignSettings::SetElementVisibility( int aElementCategory, bool aNewState )
-{
-    if( aElementCategory < 0 || aElementCategory > PAD_CMP_VISIBLE )
-        return;
-    if( aNewState )
-        m_VisibleElements |= 1 << aElementCategory;
-    else
-        m_VisibleElements &= ~( 1 << aElementCategory );
 }

@@ -10,6 +10,7 @@
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "class_board_design_settings.h"
 
 #include "protos.h"
 
@@ -204,10 +205,11 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
             if ( old_layer == COPPER_LAYER_N )
                 ((PCB_SCREEN*)GetScreen())->m_Active_Layer = LAYER_N_2;
             else if ( old_layer == LAYER_CMP_N )
-                ((PCB_SCREEN*)GetScreen())->m_Active_Layer = GetBoard()->m_BoardSettings->m_CopperLayerCount - 2;
+                ((PCB_SCREEN*)GetScreen())->m_Active_Layer =
+                    GetBoard()->m_BoardSettings->GetCopperLayerCount() - 2;
             else if ( old_layer == LAYER_N_2 )
                 ((PCB_SCREEN*)GetScreen())->m_Active_Layer = COPPER_LAYER_N;
-            else if ( old_layer == GetBoard()->m_BoardSettings->m_CopperLayerCount - 2 )
+            else if ( old_layer == GetBoard()->m_BoardSettings->GetCopperLayerCount() - 2 )
                 ((PCB_SCREEN*)GetScreen())->m_Active_Layer = LAYER_CMP_N;
             // else error
             via->SetLayerPair( old_layer, ((PCB_SCREEN*)GetScreen())->m_Active_Layer );

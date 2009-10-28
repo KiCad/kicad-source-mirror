@@ -18,6 +18,7 @@
 #include "pcbplot.h"
 #include "macros.h"
 #include "appl_wxstruct.h"
+#include "class_board_design_settings.h"
 
 #include "gendrill.h"
 
@@ -364,7 +365,7 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
             layer1++;
             layer2++;                      // use next layer pair
 
-            if( layer2 == g_DesignSettings.m_CopperLayerCount - 1 )
+            if( layer2 == g_DesignSettings.GetCopperLayerCount() - 1 )
                 layer2 = LAYER_CMP_N;      // the last layer is always the component layer
         }
 

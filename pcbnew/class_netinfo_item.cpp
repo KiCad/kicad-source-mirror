@@ -7,6 +7,7 @@
 #include "common.h"
 #include "kicad_string.h"
 #include "pcbnew.h"
+#include "class_board_design_settings.h"
 
 
 /*********************************************************/

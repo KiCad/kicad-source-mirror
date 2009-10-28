@@ -39,6 +39,7 @@
 #include "confirm.h"            // DisplayError()
 #include "gestfich.h"           // EDA_FileSelector()
 #include "autorout.h"           // NET_CODES_OK
+#include "class_board_design_settings.h"
 
 #include "trigo.h"              // RotatePoint()
 #include <set>                  // std::set

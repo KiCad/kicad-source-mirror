@@ -34,7 +34,7 @@
 #include "pcbcommon.h"
 #include "plot_common.h"
 #include "class_zone_setting.h"
-
+#include "class_board_design_settings.h"
 
 /* Look up Table for conversion one layer number -> one bit layer mask: */
 int g_TabOneLayerMask[LAYER_COUNT] = {

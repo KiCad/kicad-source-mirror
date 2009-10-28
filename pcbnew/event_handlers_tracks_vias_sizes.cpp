@@ -14,6 +14,7 @@
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "class_board_design_settings.h"
 
 /** Function Tracks_and_Vias_Size_Event
  * Event handler for tracks and vias size selection (and some options)

@@ -11,6 +11,7 @@
 #include "kicad_string.h"
 
 #include "pcbnew.h"
+#include "class_board_design_settings.h"
 
 #include "trigo.h"
 #include "protos.h"

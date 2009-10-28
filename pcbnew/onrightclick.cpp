@@ -11,17 +11,15 @@
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "class_board_design_settings.h"
 
-//#include "autorout.h"
 #include "pcbnew_id.h"
 #include "hotkeys.h"
 #include "collectors.h"
 
-//#include "protos.h"
-
-
 /* Bitmaps */
 #include "bitmaps.h"
+
 static wxMenu* Append_Track_Width_List( BOARD * aBoard );
 
 

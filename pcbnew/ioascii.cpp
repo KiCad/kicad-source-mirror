@@ -13,6 +13,7 @@
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "class_board_design_settings.h"
 
 #ifdef PCBNEW
 #include "autorout.h"
@@ -232,13 +233,14 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( FILE* File, int* LineNum )
             sscanf( data, "%X", &Masque_Layer );
 
             // Setup layer count
-            GetBoard()->m_BoardSettings->m_CopperLayerCount = 0;
+            int layer_count = 0;
             for( ii = 0; ii < NB_COPPER_LAYERS; ii++ )
             {
                 if( Masque_Layer & 1 )
-                    GetBoard()->m_BoardSettings->m_CopperLayerCount++;
+                    layer_count++;
                 Masque_Layer >>= 1;
             }
+            GetBoard()->m_BoardSettings->SetCopperLayerCount( layer_count );
 
             continue;
         }
@@ -363,7 +365,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
         {
             int tmp;
             sscanf( data, "%d", &tmp );
-            GetBoard()->m_BoardSettings->m_CopperLayerCount = tmp;
+            GetBoard()->m_BoardSettings->SetCopperLayerCount( tmp );
             continue;
         }
 
@@ -673,7 +675,7 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
     int             NbModules, NbDrawItem, NbLayers;
 
     /* Write copper layer count */
-    NbLayers = GetBoard()->m_BoardSettings->m_CopperLayerCount;
+    NbLayers = GetBoard()->m_BoardSettings->GetCopperLayerCount();
     fprintf( File, "$GENERAL\n" );
     fprintf( File, "LayerCount %d\n", NbLayers );
 

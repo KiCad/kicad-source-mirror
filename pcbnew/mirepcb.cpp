@@ -8,6 +8,7 @@
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "class_board_design_settings.h"
 
 #include "protos.h"
 
@@ -21,11 +22,6 @@ static int     MireDefaultSize = 5000;
 static MIREPCB s_TargetCopy( NULL );      /* Used to store "old" values of the current item
                                          *  parameters before edition (used in undo/redo or cancel operations)
                                          */
-
-enum id_mire_properties {
-    ID_SIZE_MIRE = 1900,   // (Not currently used anywhere else)
-    ID_LISTBOX_SHAPE_MIRE
-};
 
 /************************************/
 /* class WinEDA_MirePropertiesFrame */
@@ -116,7 +112,7 @@ WinEDA_MirePropertiesFrame::WinEDA_MirePropertiesFrame( WinEDA_PcbFrame* parent,
 
     // Shape
     wxString shape_list[2] = { _( "shape +" ), _( "shape X" ) };
-    m_MireShape = new wxRadioBox( this, ID_LISTBOX_SHAPE_MIRE,
+    m_MireShape = new wxRadioBox( this, wxID_ANY,
                                   _( "Target Shape:" ),
                                   wxDefaultPosition, wxSize( -1, -1 ),
                                   2, shape_list, 1 );

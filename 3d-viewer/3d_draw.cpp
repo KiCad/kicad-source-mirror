@@ -9,6 +9,7 @@
 #include "macros.h"
 #include "drawtxt.h"
 #include "confirm.h"
+#include "class_board_design_settings.h"
 
 #include "3d_viewer.h"
 #include "trackball.h"
@@ -113,7 +114,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     g_Parm_3D_Visu.m_BoardSize     = pcb->m_BoundaryBox.GetSize();
     g_Parm_3D_Visu.m_BoardPos   = pcb->m_BoundaryBox.Centre();
     g_Parm_3D_Visu.m_BoardPos.y = -g_Parm_3D_Visu.m_BoardPos.y;
-    g_Parm_3D_Visu.m_Layers     = pcb->m_BoardSettings->m_CopperLayerCount;
+    g_Parm_3D_Visu.m_Layers     = pcb->m_BoardSettings->GetCopperLayerCount();
 
     // Ensure the board has 2 sides for 3D views, because it is hard to find a *really* single side board in the true life...
     if ( g_Parm_3D_Visu.m_Layers < 2 )
@@ -406,7 +407,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawSegment( DRAWSEGMENT* segment )
     double zpos, w;
 
     int    layer = segment->GetLayer();
-    
+
     if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
         return;
 

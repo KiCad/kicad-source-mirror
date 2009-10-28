@@ -12,6 +12,7 @@
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "class_board_design_settings.h"
 #include "autorout.h"
 #include "zones.h"
 #include "protos.h"
@@ -418,7 +419,7 @@ static int Autoroute_One_Track( WinEDA_PcbFrame* pcbframe, wxDC* DC,
     /* Test du cas trivial: connection directe par superposition des pads */
     if( (row_source == row_target) && (col_source == col_target)
        && ( pad_masque_layer_e & pad_masque_layer_s &
-            g_TabAllCopperLayerMask[g_DesignSettings.m_CopperLayerCount - 1]) )
+            g_TabAllCopperLayerMask[g_DesignSettings.GetCopperLayerCount() - 1]) )
     {
         result = TRIVIAL_SUCCESS;
         goto end_of_route;

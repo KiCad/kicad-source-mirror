@@ -18,6 +18,7 @@ using namespace std;
 #include "pcbnew.h"
 #include "pcbplot.h"
 #include "macros.h"
+#include "class_board_design_settings.h"
 #include "gendrill.h"
 
 /**********************************************************************************/
@@ -394,7 +395,7 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb, const wxString& aBoardFilenam
         sprintf( line, "\ntotal holes count %d\n\n\n", TotalHoleCount );
         fputs( line, aFile );
 
-        if( g_DesignSettings.m_CopperLayerCount <= 2 )
+        if( g_DesignSettings.GetCopperLayerCount() <= 2 )
             break;
 
         if(  gen_through_holes )
@@ -404,7 +405,7 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb, const wxString& aBoardFilenam
             if( layer2 >= LAYER_CMP_N )                                 // no more layer pair to consider
                 break;
             layer1++; layer2++;                                         // use next layer pair
-            if( layer2 == g_DesignSettings.m_CopperLayerCount - 1 )     // The last layer is reached
+            if( layer2 == g_DesignSettings.GetCopperLayerCount() - 1 )     // The last layer is reached
                 layer2 = LAYER_CMP_N;                                   // the last layer is always the component layer
         }
         gen_through_holes = false;

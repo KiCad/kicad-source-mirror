@@ -16,6 +16,7 @@
 
 #include "gerbview.h"
 #include "pcbnew.h"
+#include "class_board_design_settings.h"
 
 #include "protos.h"
 
@@ -443,7 +444,7 @@ void WinEDA_SetColorsFrame::UpdateLayerSettings()
 
     g_DCodesColor               = CurrentColor[33];
     DisplayOpt.DisplayPadNum    = laytool_list[33]->m_CheckBox->GetValue();
-    
+
     // Additional command required for updating visibility of grid.
     m_Parent->m_Draw_Grid = s_showGrid;
 }

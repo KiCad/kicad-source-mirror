@@ -12,13 +12,13 @@
 #include "gestfich.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "class_board_design_settings.h"
 #include "pcbplot.h"
 #include "pcbnew_config.h"
 #include "worksheet.h"
 #include "pcbnew_id.h"
 #include "hotkeys.h"
 #include "protos.h"
-//#include "dialog_copper_layers_setup.h"
 
 /* Routines Locales */
 

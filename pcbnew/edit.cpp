@@ -12,6 +12,7 @@
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "class_board_design_settings.h"
 #include "autorout.h"
 #include "protos.h"
 
@@ -1105,7 +1106,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
         // If only one copper layer is enabled, the only such layer
         // that can be selected to is the "Copper" layer (so the
         // selection of any other copper layer is disregarded).
-        if( GetBoard()->m_BoardSettings->m_CopperLayerCount < 2 )
+        if( GetBoard()->m_BoardSettings->GetCopperLayerCount() < 2 )
         {
             if( layer != COPPER_LAYER_N )
             {
@@ -1124,7 +1125,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
         else
         {
             if( (layer != COPPER_LAYER_N) && (layer != LAYER_CMP_N)
-               && (layer >= GetBoard()->m_BoardSettings->m_CopperLayerCount - 1) )
+               && (layer >= GetBoard()->m_BoardSettings->GetCopperLayerCount() - 1) )
             {
                 // Uncomment following command (and line 17) to beep
                 // the speaker. (Doing that would provide feedback to

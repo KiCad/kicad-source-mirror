@@ -13,6 +13,7 @@
 #include "pcbnew.h"
 #include "pcbplot.h"
 #include "trigo.h"
+#include "class_board_design_settings.h"
 
 
 /* Fonctions locales */

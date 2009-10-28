@@ -11,6 +11,7 @@
 #include "drawtxt.h"
 
 #include "pcbnew.h"
+#include "class_board_design_settings.h"
 #include "protos.h"
 
 
@@ -862,15 +863,15 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
         ( (SEGVIA*) this )->ReturnLayerPair( &layer_top, &layer_bottom );
 
         /* lines for the top layer */
-        RotatePoint( &ax, &ay, layer_top * 3600 / g_DesignSettings.m_CopperLayerCount );
-        RotatePoint( &bx, &by, layer_top * 3600 / g_DesignSettings.m_CopperLayerCount );
+        RotatePoint( &ax, &ay, layer_top * 3600 / g_DesignSettings.GetCopperLayerCount( ) );
+        RotatePoint( &bx, &by, layer_top * 3600 / g_DesignSettings.GetCopperLayerCount( ) );
         GRLine( &panel->m_ClipBox, DC, m_Start.x - ax, m_Start.y - ay,
                 m_Start.x - bx, m_Start.y - by, 0, color );
 
         /* lines for the bottom layer */
         ax = 0; ay = rayon; bx = 0; by = drill_rayon;
-        RotatePoint( &ax, &ay, layer_bottom * 3600 / g_DesignSettings.m_CopperLayerCount );
-        RotatePoint( &bx, &by, layer_bottom * 3600 / g_DesignSettings.m_CopperLayerCount );
+        RotatePoint( &ax, &ay, layer_bottom * 3600 / g_DesignSettings.GetCopperLayerCount( ) );
+        RotatePoint( &bx, &by, layer_bottom * 3600 / g_DesignSettings.GetCopperLayerCount( ) );
         GRLine( &panel->m_ClipBox, DC, m_Start.x - ax, m_Start.y - ay,
                 m_Start.x - bx, m_Start.y - by, 0, color );
     }

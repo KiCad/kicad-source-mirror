@@ -10,6 +10,7 @@
 #include "confirm.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "class_board_design_settings.h"
 
 #include "pcbnew_id.h"
 
@@ -259,7 +260,7 @@ void DialogLayerSetup::SetLayerType( int Layer, LAYER_T Type )
 
 //==============================================================================
 // The layer mask for non-copper layers is obtained from the new
-// EDA_BoardDesignSettings::m*EnabledLayers, but for compatibility, the mask
+// EDA_BoardDesignSettings::m_EnabledLayers, but for compatibility, the mask
 // for the copper-layers is obtained from g_DesignSettings::m_CopperLayerCount
 
 // Hopefully in the future we may unify them, perhaps saving only the mask and
@@ -279,7 +280,7 @@ int DialogLayerSetup::GetLayersMask()
     else
         Aux /= 2;
 
-    return CopperMasks[Aux] | m_Pcb->GetEnabledLayers() & ALL_NO_CU_LAYERS;
+    return CopperMasks[Aux] | ( m_Pcb->GetEnabledLayers() & ALL_NO_CU_LAYERS );
 }
 
 //==============================================================================
@@ -997,7 +998,7 @@ void DialogLayerSetup::OnOKClick( wxCommandEvent& event )
             NumberOfCopperLayers++;
     }
 
-    m_Pcb->m_BoardSettings->m_CopperLayerCount = NumberOfCopperLayers;
+    m_Pcb->m_BoardSettings->SetCopperLayerCount( NumberOfCopperLayers );
 
     m_Pcb->SetEnabledLayers( m_LayersMask );
 

@@ -5,6 +5,7 @@
 #include "common.h"
 
 #include "pcbnew.h"
+#include "class_board_design_settings.h"
 
 
 /* This is an odd place for this, but cvpcb won't link if it is
@@ -264,7 +265,7 @@ LAYER_T LAYER::ParseType( const char* aType )
 
 int BOARD::GetCopperLayerCount() const
 {
-    return m_BoardSettings->m_CopperLayerCount;
+    return m_BoardSettings->GetCopperLayerCount();
 }
 
 int BOARD::GetEnabledLayers() const

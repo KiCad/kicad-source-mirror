@@ -37,6 +37,7 @@
 #include "autorout.h"
 #include "trigo.h"
 #include "gestfich.h"
+#include "class_board_design_settings.h"
 
 #include "protos.h"
 
@@ -771,7 +772,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             // test:
             if( layer1 == COPPER_LAYER_N && layer2 == LAYER_N_2 )
                 err = false;
-            if( layer1 == (g_DesignSettings.m_CopperLayerCount - 2 ) && layer2 == LAYER_CMP_N )
+            if( layer1 == (g_DesignSettings.GetCopperLayerCount() - 2 ) && layer2 == LAYER_CMP_N )
                 err = false;
             if( err )
             {

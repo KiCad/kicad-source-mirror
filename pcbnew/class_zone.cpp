@@ -13,6 +13,7 @@
 #include "PolyLine.h"
 #include "pcbnew.h"
 #include "zones.h"
+#include "class_board_design_settings.h"
 
 #include "protos.h"
 
