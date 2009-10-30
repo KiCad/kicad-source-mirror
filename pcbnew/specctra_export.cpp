@@ -1233,10 +1233,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         // must follow the initial padstack construction code.
         // Next we add the via's which may be used.
 
-        int defaultViaSize = aBoard->m_BoardSettings->m_CurrentViaSize;
+        int defaultViaSize = aBoard->m_NetClasses.GetDefault()->GetViaDiameter();
         int defaultViaDrill = aBoard->m_NetClasses.GetDefault()->GetViaDrill();
 /**
- *@todo: *** output vias sizes and drill in NetClasses  ***
+ *@todo: *** output vias sizes and drill in NetClasses and in stock ***
 */
         /* I need at least one via for the (class...) scope below
         if( defaultViaSize )
@@ -1252,14 +1252,15 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
             pcb->library->SetViaStartIndex( pcb->library->padstacks.size()-1 );
         }
 
-        for( unsigned i=0; i < aBoard->m_ViaSizeList.size(); ++i )
+        for( unsigned i=0; i < aBoard->m_ViasDimensionsList.size(); ++i )
         {
-            int viaSize = aBoard->m_ViaSizeList[i];
+            int viaSize = aBoard->m_ViasDimensionsList[i].m_Diameter;
+            int viaDrill = aBoard->m_ViasDimensionsList[i].m_Drill;
 
             if( viaSize == defaultViaSize )
                 continue;
 
-            PADSTACK*   padstack = makeVia( viaSize, defaultViaDrill,
+            PADSTACK*   padstack = makeVia( viaSize, viaDrill,
                                            0, aBoard->GetCopperLayerCount()-1 );
             pcb->library->AddPadstack( padstack );
         }

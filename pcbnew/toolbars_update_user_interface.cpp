@@ -103,15 +103,20 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI()
     if( m_SelViaSizeBox && m_TrackAndViasSizesList_Changed )
     {
         m_SelViaSizeBox->Clear();
-        for( unsigned ii = 0; ii < GetBoard()->m_ViaSizeList.size(); ii++ )
+        for( unsigned ii = 0; ii < GetBoard()->m_ViasDimensionsList.size(); ii++ )
         {
-            msg = _( "Via" ) + ReturnStringValue( GetBoard()->m_ViaSizeList[ii] );
+            msg = _( "Via" );
+            msg << ReturnStringValue( GetBoard()->m_ViasDimensionsList[ii].m_Diameter );
+
+            if( GetBoard()->m_ViasDimensionsList[ii].m_Drill )
+                msg  << wxT("/") << ReturnStringValue( GetBoard()->m_ViasDimensionsList[ii].m_Drill );
+
             if( ii == 0 )
                 msg << _( " *" );
             m_SelViaSizeBox->Append( msg );
         }
     }
-    if( GetBoard()->m_ViaSizeSelector >= GetBoard()->m_ViaSizeList.size() )
+    if( GetBoard()->m_ViaSizeSelector >= GetBoard()->m_ViasDimensionsList.size() )
         GetBoard()->m_ViaSizeSelector = 0;
     m_SelViaSizeBox->SetSelection( GetBoard()->m_ViaSizeSelector );
 

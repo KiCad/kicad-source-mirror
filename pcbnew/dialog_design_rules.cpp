@@ -197,8 +197,8 @@ void DIALOG_DESIGN_RULES::InitGlobalRules()
     // (the first value in histories list)
     m_TracksWidthList = m_Parent->GetBoard()->m_TrackWidthList;
     m_TracksWidthList.erase( m_TracksWidthList.begin() );   // remove the netclass value
-    m_ViasDiameterList = m_Parent->GetBoard()->m_ViaSizeList;
-    m_ViasDiameterList.erase( m_ViasDiameterList.begin() ); // remove the netclass value
+    m_ViasDimensionsList = m_Parent->GetBoard()->m_ViasDimensionsList;
+    m_ViasDimensionsList.erase( m_ViasDimensionsList.begin() ); // remove the netclass value
     InitDimensionsLists();
 
 }
@@ -219,10 +219,17 @@ void DIALOG_DESIGN_RULES::InitDimensionsLists()
         m_gridTrackWidthList->SetCellValue( ii, 0, msg  );
     }
 
-    for( unsigned ii = 0; ii < m_ViasDiameterList.size(); ii++ )
+    for( unsigned ii = 0; ii < m_ViasDimensionsList.size(); ii++ )
     {
-        msg = ReturnStringFromValue( g_UnitMetric, m_ViasDiameterList[ii], Internal_Unit, false );
+        msg = ReturnStringFromValue( g_UnitMetric, m_ViasDimensionsList[ii].m_Diameter,
+                                    Internal_Unit, false );
         m_gridViaSizeList->SetCellValue( ii, 0, msg );
+        if( m_ViasDimensionsList[ii].m_Drill > 0 )
+        {
+            msg = ReturnStringFromValue( g_UnitMetric, m_ViasDimensionsList[ii].m_Drill,
+                                        Internal_Unit, false );
+            m_gridViaSizeList->SetCellValue( ii, 1, msg );
+        }
     }
 
     // recompute the column widths here, after setting texts
@@ -516,26 +523,34 @@ void DIALOG_DESIGN_RULES::CopyDimensionsListsToBoard( )
     sort( m_TracksWidthList.begin(), m_TracksWidthList.end() );
 
     // Reinitialize m_TrackWidthList
-    m_ViasDiameterList.clear();
+    m_ViasDimensionsList.clear();
     for( int row = 0; row < m_gridViaSizeList->GetNumberRows();  ++row )
     {
         msg = m_gridViaSizeList->GetCellValue( row, 0 );
         if( msg.IsEmpty() )
             continue;
         int  value = ReturnValueFromString( g_UnitMetric, msg, m_Parent->m_InternalUnits );
-        m_ViasDiameterList.push_back( value);
+        VIA_DIMENSION via_dim;
+        via_dim.m_Diameter = value;
+        msg = m_gridViaSizeList->GetCellValue( row, 1 );
+        if( ! msg.IsEmpty() )
+        {
+            value = ReturnValueFromString( g_UnitMetric, msg, m_Parent->m_InternalUnits );
+            via_dim.m_Drill = value;
+        }
+        m_ViasDimensionsList.push_back( via_dim);
     }
     // Sort new list by by increasing value
-    sort( m_ViasDiameterList.begin(), m_ViasDiameterList.end() );
+    sort( m_ViasDimensionsList.begin(), m_ViasDimensionsList.end() );
 
-    std::vector <int>* list = &m_Parent->GetBoard()->m_TrackWidthList;
-    list->erase( list->begin() + 1, list->end() );  // Remove old "custom" sizes
-    list->insert( list->end(), m_TracksWidthList.begin(), m_TracksWidthList.end() ); //Add new "custom" sizes
+    std::vector <int>* tlist = &m_Parent->GetBoard()->m_TrackWidthList;
+    tlist->erase( tlist->begin() + 1, tlist->end() );  // Remove old "custom" sizes
+    tlist->insert( tlist->end(), m_TracksWidthList.begin(), m_TracksWidthList.end() ); //Add new "custom" sizes
 
     // Reinitialize m_ViaSizeList
-    list = &m_Parent->GetBoard()->m_ViaSizeList;
-    list->erase( list->begin() + 1, list->end() );
-    list->insert( list->end(), m_ViasDiameterList.begin(), m_ViasDiameterList.end() );
+    std::vector <VIA_DIMENSION>* vialist = &m_Parent->GetBoard()->m_ViasDimensionsList;
+    vialist->erase( vialist->begin() + 1, vialist->end() );
+    vialist->insert( vialist->end(), m_ViasDimensionsList.begin(), m_ViasDimensionsList.end() );
 
     m_Parent->m_TrackAndViasSizesList_Changed = true;
 }

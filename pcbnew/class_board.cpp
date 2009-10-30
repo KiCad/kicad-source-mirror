@@ -97,10 +97,11 @@ BOARD::~BOARD()
     m_CurrentNetClassName = netClass->GetName();
 
     // Initialize others values:
-    if( m_ViaSizeList.size() == 0 )
+    if( m_ViasDimensionsList.size() == 0 )
     {
+        VIA_DIMENSION viadim;
         lists_sizes_modified = true;
-        m_ViaSizeList.push_back(0);
+        m_ViasDimensionsList.push_back(viadim);
     }
     if( m_TrackWidthList.size() == 0 )
     {
@@ -108,22 +109,21 @@ BOARD::~BOARD()
         m_TrackWidthList.push_back(0);
     }
 
-    if( m_ViaSizeList[0] != netClass->GetViaDiameter() )
+    /* note the m_ViasDimensionsList[0] and m_TrackWidthList[0] values
+     * are always the Netclass values
+     */
+    if( m_ViasDimensionsList[0].m_Diameter != netClass->GetViaDiameter() )
         lists_sizes_modified = true;
-    m_ViaSizeList[0] = netClass->GetViaDiameter();
+    m_ViasDimensionsList[0].m_Diameter = netClass->GetViaDiameter();
 
     if( m_TrackWidthList[0] != netClass->GetTrackWidth() )
         lists_sizes_modified = true;
     m_TrackWidthList[0] = netClass->GetTrackWidth();
 
-    if( m_ViaSizeSelector >= m_ViaSizeList.size() )
-        m_ViaSizeSelector = m_ViaSizeList.size();
+    if( m_ViaSizeSelector >= m_ViasDimensionsList.size() )
+        m_ViaSizeSelector = m_ViasDimensionsList.size();
     if( m_TrackWidthSelector >= m_TrackWidthList.size() )
         m_TrackWidthSelector = m_TrackWidthList.size();
-
-    //Initialize track and via current size:
-    g_DesignSettings.m_CurrentViaSize = m_ViaSizeList[m_ViaSizeSelector];
-    g_DesignSettings.m_CurrentTrackWidth = m_TrackWidthList[m_TrackWidthSelector];
 
     return lists_sizes_modified;
 }
@@ -143,6 +143,25 @@ int BOARD::GetBiggestClearanceValue()
     return clearance;
 }
 
+/** function GetCurrentMicroViaSize
+ * @return the current micro via size,
+ * that is the current netclass value
+ */
+int BOARD::GetCurrentMicroViaSize()
+{
+    NETCLASS* netclass = m_NetClasses.Find( m_CurrentNetClassName );
+    return netclass->GetuViaDiameter();
+}
+
+/** function GetCurrentMicroViaDrill
+ * @return the current micro via drill,
+ * that is the current netclass value
+ */
+int BOARD::GetCurrentMicroViaDrill()
+{
+    NETCLASS* netclass = m_NetClasses.Find( m_CurrentNetClassName );
+    return netclass->GetuViaDrill();
+}
 
 wxString BOARD::GetLayerName( int aLayerIndex ) const
 {

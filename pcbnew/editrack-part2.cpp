@@ -183,7 +183,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     SEGVIA* via    = new SEGVIA( GetBoard() );
     via->m_Flags   = IS_NEW;
     via->m_Shape   = g_DesignSettings.m_CurrentViaType;
-    via->m_Width   = g_DesignSettings.m_CurrentViaSize;
+    via->m_Width   = GetBoard()->GetCurrentViaSize();
     via->SetNet( g_HightLigth_NetCode );
     via->m_Start   = via->m_End = g_CurrentTrackSegment->m_End;
     int old_layer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
@@ -199,6 +199,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     {
         case VIA_BLIND_BURIED:
             via->SetLayerPair( old_layer, ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
+            via->SetDrillValue( GetBoard()->GetCurrentViaDrill() );
             break;
 
         case VIA_MICROVIA:	// from external to the near neghbour inner layer
@@ -213,11 +214,15 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
                 ((PCB_SCREEN*)GetScreen())->m_Active_Layer = LAYER_CMP_N;
             // else error
             via->SetLayerPair( old_layer, ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
-            via->m_Width   = g_DesignSettings.m_CurrentMicroViaSize;
+            {
+                NETINFO_ITEM* net = GetBoard()->FindNet( via->GetNet() );
+                via->m_Width   = net->GetMicroViaSize();
+            }
             break;
 
         default:
             // Usual via is from copper to component; layer pair is 0 and 0x0F.
+            via->SetDrillValue( GetBoard()->GetCurrentViaDrill() );
             via->SetLayerPair( COPPER_LAYER_N, LAYER_CMP_N );
             break;
     }

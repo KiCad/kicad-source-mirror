@@ -14,9 +14,9 @@
 #include "pcbnew_id.h"
 
 #ifdef __UNIX__
-#define LISTBOX_WIDTH 140
+#define LISTBOX_WIDTH 150
 #else
-#define LISTBOX_WIDTH 120
+#define LISTBOX_WIDTH 130
 #endif
 
 #include  "wx/ownerdrw.h"
@@ -486,8 +486,6 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
                          wxITEM_CHECK );
 
     m_VToolBar->Realize();
-
-    D(printf("ReCreateVToolbar\n");)
     SetToolbars();
 }
 
@@ -565,7 +563,7 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
         m_SelTrackWidthBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
                                                   ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
                                                   wxPoint( -1, -1 ),
-                                                  wxSize( LISTBOX_WIDTH + 10, -1 ) );
+                                                  wxSize( LISTBOX_WIDTH, -1 ) );
         m_AuxiliaryToolBar->AddControl( m_SelTrackWidthBox );
         m_AuxiliaryToolBar->AddSeparator();
 
@@ -573,14 +571,14 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
         m_SelViaSizeBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
                                                ID_AUX_TOOLBAR_PCB_VIA_SIZE,
                                                wxPoint( -1, -1 ),
-                                               wxSize( LISTBOX_WIDTH + 10, -1 ) );
+                                               wxSize( (LISTBOX_WIDTH*12)/10, -1 ) );
         m_AuxiliaryToolBar->AddControl( m_SelViaSizeBox );
         m_AuxiliaryToolBar->AddSeparator();
 
         // Creates box to display tracks and vias clearance:
         m_ClearanceBox = new wxTextCtrl( m_AuxiliaryToolBar, -1,
                                          wxEmptyString, wxPoint( -1, -1 ),
-                                         wxSize( LISTBOX_WIDTH + 20, -1 ),
+                                         wxSize( LISTBOX_WIDTH + 10, -1 ),
                                          wxTE_READONLY );
         m_ClearanceBox->SetToolTip(_("Current NetClass clearance value") );
         m_AuxiliaryToolBar->AddControl( m_ClearanceBox );
@@ -723,7 +721,7 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
                                              // Maybe that string is too long?
                                              wxSize( 230, -1 )
 #else
-                                             wxSize( LISTBOX_WIDTH + 40, -1 )
+                                             wxSize( LISTBOX_WIDTH + 30, -1 )
 #endif
                                              );
 

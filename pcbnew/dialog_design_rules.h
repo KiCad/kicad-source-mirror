@@ -43,7 +43,7 @@ private:
     NETCUPS                 m_AllNets;
 
     // List of values to "customize" some tracks and vias
-    std::vector <int> m_ViasDiameterList;
+    std::vector <VIA_DIMENSION> m_ViasDimensionsList;
     std::vector <int> m_TracksWidthList;
 
 private:

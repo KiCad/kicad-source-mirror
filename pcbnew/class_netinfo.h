@@ -227,8 +227,6 @@ public:
      */
     int GetTrackMinWidth()
     {
-//        wxASSERT( m_NetClass );
-//        return m_NetClass->GetTrackMinWidth();
         return g_DesignSettings.m_TrackMinWidth;
     }
 #endif

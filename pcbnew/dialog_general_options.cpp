@@ -13,12 +13,9 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
+#include "dialog_general_options.h"
 
 #include "pcbnew_id.h"
-
-#include "dialog_general_options_BoardEditor_base.h"
-#include "dialog_general_options.h"
-#include "dialog_track_options.h"
 
 
 /***********************************************************************************/
@@ -105,11 +102,6 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
     g_TimeOut = 60 * m_SaveTime->GetValue();
 
     /* Mise a jour de la combobox d'affichage de la couche active */
-/*
-    int layer_count[] = {1,2,4,6,8,10,12,14,16};
-    g_DesignSettings.m_CopperLayerCount = layer_count[m_LayerNumber->GetSelection()];
-    m_Parent->ReCreateLayerBox( NULL );
-*/
     g_MaxLinksShowed = m_MaxShowLinks->GetValue();
     Drc_On = m_DrcOn->GetValue();
     if( g_Show_Ratsnest != m_ShowGlobalRatsnest->GetValue() )
@@ -141,35 +133,18 @@ void WinEDA_PcbFrame::InstallPcbOptionsFrame( const wxPoint& pos,
 {
     switch( id )
     {
-    case ID_PCB_TRACK_SIZE_SETUP:
-        {
-            DIALOG_TRACKS_OPTIONS* OptionsFrame =
-                new DIALOG_TRACKS_OPTIONS( this );
-
-            OptionsFrame->ShowModal();
-            OptionsFrame->Destroy();
-        }
-        break;
 
     case ID_PCB_DRAWINGS_WIDTHS_SETUP:
         {
-            WinEDA_GraphicItemsOptionsDialog* OptionsFrame =
-                new WinEDA_GraphicItemsOptionsDialog( this );
-
-            OptionsFrame->ShowModal();
-            OptionsFrame->Destroy();
+            WinEDA_GraphicItemsOptionsDialog dlg( this );
+            dlg.ShowModal();
         }
         break;
 
-    case ID_OPTIONS_SETUP:
-        {
-            Dialog_GeneralOptions* OptionsFrame =
-                new Dialog_GeneralOptions( this, DC );
-
-            OptionsFrame->ShowModal();
-            OptionsFrame->Destroy();
-        }
+    default:
+        wxMessageBox(wxT("InstallPcbOptionsFrame() id error"));
         break;
+
     }
 }
 
@@ -178,9 +153,8 @@ void WinEDA_PcbFrame::InstallPcbOptionsFrame( const wxPoint& pos,
 void WinEDA_ModuleEditFrame::InstallOptionsFrame( const wxPoint& pos )
 /*******************************************************************/
 {
-    WinEDA_GraphicItemsOptionsDialog OptionsFrame( this );
-
-    OptionsFrame.ShowModal();
+    WinEDA_GraphicItemsOptionsDialog dlg( this );
+    dlg.ShowModal();
 }
 
 

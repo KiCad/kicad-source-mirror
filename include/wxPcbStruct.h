@@ -420,8 +420,22 @@ public:
     void             Delete_Track( wxDC* DC, TRACK* Track );
     void             Delete_net( wxDC* DC, TRACK* Track );
     void             Remove_One_Track( wxDC* DC, TRACK* pt_segm );
-    bool             Resize_Pistes_Vias( wxDC* DC, bool Track, bool Via );
-    void             Edit_Net_Width( wxDC* DC, int Netcode );
+
+    /** function Reset_All_Tracks_And_Vias_To_Netclass_Values
+     * Reset all tracks width and/or vias diameters and drill
+     * to their default Netclass value
+     * @param aTrack : bool true to modify tracks
+     * @param aVia : bool true to modify vias
+     */
+    bool             Reset_All_Tracks_And_Vias_To_Netclass_Values( bool aTrack, bool aVia );
+
+    /** function Change_Net_Tracks_And_Vias_Sizes
+     * Reset all tracks width and vias diameters and drill
+     * to their default Netclass value ou current values
+     * @param aNetcode : the netcode of the net to edit
+     * @param aUseNetclassValue : bool. True to use netclass values, false to use current values
+     */
+    bool             Change_Net_Tracks_And_Vias_Sizes( int aNetcode, bool aUseNetclassValue );
 
     /** Function Edit_Track_Width
      * Modify a full track width (using DRC control).
@@ -433,7 +447,7 @@ public:
 
     /** Function Edit_TrackSegm_Width
      *  Modify one track segment width or one via diameter (using DRC control).
-     * @param  DC = the curred device context (can be NULL)
+     * @param  DC = the current device context (can be NULL)
      * @param aTrackItem = the track segment or via to modify
      */
     void             Edit_TrackSegm_Width( wxDC* DC, TRACK* segm );

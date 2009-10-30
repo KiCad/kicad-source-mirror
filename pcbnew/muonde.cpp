@@ -263,7 +263,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     }
 
     /* Generation du composant: calcul des elements de la self */
-    Mself.m_Width  = g_DesignSettings.m_CurrentTrackWidth;
+    Mself.m_Width  = GetBoard()->GetCurrentTrackWidth();
     Mself.m_Size.x = Mself.m_Size.y / 2;
 
     // Choix d'une Valeur de depart raisonnable pour le rayon des arcs de cercle
@@ -600,7 +600,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( const wxString& name, int pad_
 
         Module->m_Pads.PushFront( pad );
 
-        pad->m_Size.x       = pad->m_Size.y = g_DesignSettings.m_CurrentTrackWidth;
+        pad->m_Size.x       = pad->m_Size.y = GetBoard()->GetCurrentTrackWidth();
         pad->m_Pos          = Module->m_Pos;
         pad->m_PadShape     = PAD_RECT;
         pad->m_Attribut     = PAD_SMD;
@@ -663,7 +663,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
     bool     abort;
 
     /* Enter the size of the gap or stub*/
-    int gap_size = g_DesignSettings.m_CurrentTrackWidth;        // Valeur raisonnable
+    int gap_size = GetBoard()->GetCurrentTrackWidth();        // Valeur raisonnable
 
     switch( shape_type )
     {
@@ -1212,7 +1212,7 @@ void WinEDA_PcbFrame::Edit_Gap( wxDC* DC, MODULE* Module )
     }
 
     /* Mise a jour des tailles des pastilles formant le gap */
-    pad->m_Size.x = pad->m_Size.y = g_DesignSettings.m_CurrentTrackWidth;
+    pad->m_Size.x = pad->m_Size.y = GetBoard()->GetCurrentTrackWidth();
     pad->m_Pos0.y = 0;
     oX = pad->m_Pos0.x = -( (gap_size + pad->m_Size.x) / 2 );
     pad->m_Pos.x = pad->m_Pos0.x + Module->m_Pos.x;
@@ -1220,7 +1220,7 @@ void WinEDA_PcbFrame::Edit_Gap( wxDC* DC, MODULE* Module )
     RotatePoint( &(pad->m_Pos.x), &(pad->m_Pos.y),
                  Module->m_Pos.x, Module->m_Pos.y, Module->m_Orient );
 
-    next_pad->m_Size.x = next_pad->m_Size.y = g_DesignSettings.m_CurrentTrackWidth;
+    next_pad->m_Size.x = next_pad->m_Size.y = GetBoard()->GetCurrentTrackWidth();
     next_pad->m_Pos0.y = 0;
     next_pad->m_Pos0.x = oX + gap_size + next_pad->m_Size.x;
     next_pad->m_Pos.x  = next_pad->m_Pos0.x + Module->m_Pos.x;

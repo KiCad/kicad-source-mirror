@@ -7,6 +7,7 @@
 #include "confirm.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "dialog_design_rules.h"
 
 #include "pcbnew_id.h"
 
@@ -25,8 +26,11 @@ void WinEDA_PcbFrame::ToolOnRightClick( wxCommandEvent& event )
     switch( id )
     {
     case ID_TRACK_BUTT:
-        InstallPcbOptionsFrame( pos, NULL, ID_PCB_TRACK_SIZE_SETUP );
+    {
+        DIALOG_DESIGN_RULES dlg( this );
+        dlg.ShowModal();
         break;
+    }
 
     case ID_COMPONENT_BUTT:
         break;

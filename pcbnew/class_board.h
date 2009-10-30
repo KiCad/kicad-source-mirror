@@ -60,6 +60,33 @@ struct LAYER
 };
 
 
+/** a small helper class to handle a stock of specific vias diameter and drill pair
+ * in the BOARD class
+*/
+class VIA_DIMENSION
+{
+public:
+    int m_Diameter;     // <= 0 means use Netclass via diameter
+    int m_Drill;        // <= 0 means use Netclass via drill
+
+    VIA_DIMENSION()
+    {
+        m_Diameter = 0; m_Drill = 0;
+    }
+
+    bool operator == (const VIA_DIMENSION& other) const
+    {
+        return (m_Diameter == other.m_Diameter) &&
+                (m_Drill == other.m_Drill);
+    }
+    bool operator < (const VIA_DIMENSION& other) const
+    {
+        if (m_Diameter != other.m_Diameter)
+            return (m_Diameter < other.m_Diameter);
+        return m_Drill < other.m_Drill;
+    }
+};
+
 /**
  * Class BOARD
  * holds information pertinent to a PCBNEW printed circuit board.
@@ -108,7 +135,7 @@ public:
     // handling of vias and tracks size:
     // the first value is always the value of the current NetClass
     // The others values are extra values
-    std::vector <int> m_ViaSizeList;                // vias sizes list(max count = HISTORY_MAX_COUNT)
+    std::vector <VIA_DIMENSION> m_ViasDimensionsList;   // vias size and drill list(max count = HISTORY_MAX_COUNT)
                                                     // The first value is the current netclass via size
     std::vector <int> m_TrackWidthList;             // tracks widths (max count = HISTORY_MAX_COUNT)
                                                     // The first value is the current netclass track width
@@ -404,7 +431,9 @@ public:
      */
     int           ReturnSortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount );
 
-    /****** function relative to NetClasses: */
+    /**************************************/
+    /** function relative to NetClasses: **/
+    /**************************************/
     /**
      * Function SynchronizeNetsAndNetClasses
      * copies NETCLASS info to each NET, based on NET membership in a NETCLASS.
@@ -427,10 +456,52 @@ public:
     bool          SetCurrentNetClass( const wxString& aNetClassName );
 
     /** function GetBiggestClearanceValue
-     * @return the biggest clerance value found in NetClasses list
+     * @return the biggest clearance value found in NetClasses list
      */
     int           GetBiggestClearanceValue();
 
+    /** function GetCurrentTrackWidth
+     * @return the current track width, accordint to the selected options
+     * ( using the default netclass value or a preset value )
+     * the default netclass is always in m_TrackWidthList[0]
+     */
+    int           GetCurrentTrackWidth()
+    {
+        return m_TrackWidthList[m_TrackWidthSelector];
+    }
+
+    /** function GetCurrentViaSize
+     * @return the current via size, accordint to the selected options
+     * ( using the default netclass value or a preset value )
+     * the default netclass is always in m_TrackWidthList[0]
+     */
+    int           GetCurrentViaSize()
+    {
+        return m_ViasDimensionsList[m_ViaSizeSelector].m_Diameter;
+    }
+
+    /** function GetCurrentViaDrill
+     * @return the current via size, accordint to the selected options
+     * ( using the default netclass value or a preset value )
+     * the default netclass is always in m_TrackWidthList[0]
+     */
+    int           GetCurrentViaDrill()
+    {
+        return m_ViasDimensionsList[m_ViaSizeSelector].m_Drill > 0 ?
+                m_ViasDimensionsList[m_ViaSizeSelector].m_Drill : -1;
+    }
+
+    /** function GetCurrentMicroViaSize
+     * @return the current micro via size,
+     * that is the current netclass value
+     */
+    int           GetCurrentMicroViaSize();
+
+    /** function GetCurrentMicroViaDrill
+     * @return the current micro via drill,
+     * that is the current netclass value
+     */
+    int           GetCurrentMicroViaDrill();
 
     /***************************************************************************/
     /**

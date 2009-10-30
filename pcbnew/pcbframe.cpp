@@ -84,9 +84,8 @@ EVT_MENU_RANGE( ID_CONFIG_AND_PREFERENCES_START,
 
 EVT_MENU( ID_COLORS_SETUP, WinEDA_PcbFrame::Process_Config )
 EVT_MENU( ID_OPTIONS_SETUP, WinEDA_PcbFrame::Process_Config )
-//EVT_MENU( ID_PCB_COPPER_LAYERS_SETUP, WinEDA_PcbFrame::Process_Config )
 EVT_MENU( ID_PCB_LAYERS_SETUP, WinEDA_PcbFrame::Process_Config )
-EVT_MENU( ID_PCB_TRACK_SIZE_SETUP, WinEDA_PcbFrame::Process_Config )
+EVT_MENU( ID_PCB_MASK_CLEARANCE, WinEDA_PcbFrame::Process_Config )
 EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, WinEDA_PcbFrame::Process_Config )
 EVT_MENU( ID_PCB_PAD_SETUP, WinEDA_PcbFrame::Process_Config )
 EVT_MENU( ID_CONFIG_SAVE, WinEDA_PcbFrame::Process_Config )
@@ -200,9 +199,6 @@ EVT_MENU_RANGE( ID_POPUP_PCB_SELECT_WIDTH_START_RANGE, ID_POPUP_PCB_SELECT_WIDTH
 EVT_MENU( ID_POPUP_PCB_DELETE_TRACKSEG, WinEDA_PcbFrame::Process_Special_Functions )
 EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
                 WinEDA_PcbFrame::Process_Special_Functions )
-
-EVT_MENU_RANGE( ID_POPUP_VIA_EDIT_START_RANGE, ID_POPUP_VIA_EDIT_END_RANGE,
-                WinEDA_PcbFrame::Via_Edit_Control )
 
 // PopUp Menus pour Zooms traites dans drawpanel.cpp
 END_EVENT_TABLE()

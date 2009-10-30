@@ -157,7 +157,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
         AuxiliaryToolBar_Update_UI();
 
         g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
-        g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
+        g_CurrentTrackSegment->m_Width = GetBoard()->GetCurrentTrackWidth();
 
         if( g_DesignSettings.m_UseConnectedTrackWidth )
         {
@@ -266,7 +266,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
             newTrack->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
             if( !g_DesignSettings.m_UseConnectedTrackWidth )
             {
-                newTrack->m_Width = g_DesignSettings.m_CurrentTrackWidth;
+                newTrack->m_Width = GetBoard()->GetCurrentTrackWidth();
             }
 
             D( g_CurrentTrackList.VerifyListIntegrity(); );
@@ -706,7 +706,7 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
 
     // Set track parameters, that can be modified while creating the track
     g_CurrentTrackSegment->SetLayer( screen->m_Active_Layer );
-    g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
+    g_CurrentTrackSegment->m_Width = frame->GetBoard()->GetCurrentTrackWidth();
 
     if( g_TwoSegmentTrackBuild )
     {
@@ -716,7 +716,7 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
             previous_track->SetLayer( screen->m_Active_Layer );
 
             if( !g_DesignSettings.m_UseConnectedTrackWidth )
-                previous_track->m_Width = g_DesignSettings.m_CurrentTrackWidth;
+                previous_track->m_Width = frame->GetBoard()->GetCurrentTrackWidth();
         }
     }
 

@@ -41,12 +41,8 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     m_VisibleElements   = 0x00000fff;               // IMB: All elements visible at first. TODO: Use a macro for the initial value.
 
     SetCopperLayerCount( 2 );                    // Default design is a double sided board
-    m_ViaDrillCustomValue   = 250;                  // via drill for vias which must have a defined drill value
-    m_CurrentViaSize        = 450;                  // Current via size
     m_CurrentViaType        = VIA_THROUGH;          // via type (VIA_BLIND_BURIED, VIA_THROUGH VIA_MICROVIA)
-    m_CurrentTrackWidth     = 170;                  // current track width
     m_UseConnectedTrackWidth = false;               // if true, when creating a new track starting on an existing track, use this track width
-    m_CurrentMicroViaSize   = 150;                  // Current micro via size
     m_MicroViasAllowed      = false;                // true to allow micro vias
     m_DrawSegmentWidth      = 100;                  // current graphic line width (not EDGE layer)
     m_EdgeSegmentWidth      = 100;                  // current graphic line width (EDGE layer only)

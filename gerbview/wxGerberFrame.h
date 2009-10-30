@@ -70,7 +70,7 @@ public:
     void         Process_Settings( wxCommandEvent& event );
     void         Process_Config( wxCommandEvent& event );
     void         InstallConfigFrame( const wxPoint& pos );
-    void         InstallPcbOptionsFrame( const wxPoint& pos, int id );
+    void         InstallGerberOptionsFrame( const wxPoint& pos, int id );
     void         InstallPcbGlobalDeleteFrame( const wxPoint& pos );
 
     /* handlers for block commands */

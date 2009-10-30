@@ -359,8 +359,8 @@ static int Autoroute_One_Track( WinEDA_PcbFrame* pcbframe, wxDC* DC,
 
     result = NOSUCCESS;
 
-    marge     = s_Clearance + (g_DesignSettings.m_CurrentTrackWidth / 2);
-    via_marge = s_Clearance + (g_DesignSettings.m_CurrentViaSize / 2);
+    marge     = s_Clearance + (pcbframe->GetBoard()->GetCurrentTrackWidth() / 2);
+    via_marge = s_Clearance + (pcbframe->GetBoard()->GetCurrentViaSize() / 2);
 
     /* clear direction flags */
     i = Nrows * Ncols * sizeof(char);
@@ -956,7 +956,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
         g_CurrentTrackSegment->m_Start.y   =
             g_CurrentTrackSegment->m_End.y = pcb->m_BoundaryBox.m_Pos.y + (g_GridRoutingSize * col);
 
-        g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentViaSize;
+        g_CurrentTrackSegment->m_Width = pcb->GetCurrentViaSize();
         g_CurrentTrackSegment->m_Shape = g_DesignSettings.m_CurrentViaType;
 
         g_CurrentTrackSegment->SetNet( current_net_code );
@@ -1010,7 +1010,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
                 g_CurrentTrackSegment->m_Start = g_CurrentTrackSegment->Back()->m_End;
             }
         }
-        g_CurrentTrackSegment->m_Width = g_DesignSettings.m_CurrentTrackWidth;
+        g_CurrentTrackSegment->m_Width = pcb->GetCurrentTrackWidth();
 
         if( g_CurrentTrackSegment->m_Start != g_CurrentTrackSegment->m_End )
         {
@@ -1052,8 +1052,8 @@ static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
     int marge, via_marge;
     WinEDA_DrawPanel* panel = pcbframe->DrawPanel;
 
-    marge     = s_Clearance + (g_DesignSettings.m_CurrentTrackWidth / 2);
-    via_marge = s_Clearance + (g_DesignSettings.m_CurrentViaSize / 2);
+    marge     = s_Clearance + (pcbframe->GetBoard()->GetCurrentTrackWidth() / 2);
+    via_marge = s_Clearance + (pcbframe->GetBoard()->GetCurrentViaSize() / 2);
 
     /* tst point d'arrivee : doit etre sur pad start */
 

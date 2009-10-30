@@ -16,6 +16,8 @@
 #include "autorout.h"
 #include "protos.h"
 
+#include "dialog_global_edit_tracks_and_vias.h"
+
 // Uncomment following line to enable wxBell() command (which beeps speaker)
 // #include <wx/utils.h>
 
@@ -111,7 +113,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_FLIP_BLOCK:
     case ID_POPUP_ROTATE_BLOCK:
     case ID_POPUP_COPY_BLOCK:
-    case ID_POPUP_PCB_VIA_EDITING:
     case ID_POPUP_PCB_EDIT_DRAWING:
     case ID_POPUP_PCB_GETINFO_MARKER:
         break;
@@ -316,27 +317,17 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         GetScreen()->SetModify();
         break;
 
-    case ID_POPUP_PCB_EDIT_NET:
-        if( GetCurItem() == NULL )
-            break;
-        Edit_Net_Width( &dc, ( (TRACK*) GetCurItem() )->GetNet() );
-        DrawPanel->MouseToCursorSchema();
-        GetScreen()->SetModify();
-        break;
-
     case ID_POPUP_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE:
-    case ID_POPUP_PCB_EDIT_ALL_VIAS_SIZE:
-    case ID_POPUP_PCB_EDIT_ALL_TRACK_SIZE:
         if( GetCurItem() == NULL )
             break;
         {
-            bool resize_vias = true, resize_track = true;
-            if( id == ID_POPUP_PCB_EDIT_ALL_VIAS_SIZE )
-                resize_track = false;
-            if( id == ID_POPUP_PCB_EDIT_ALL_TRACK_SIZE )
-                resize_vias = false;
-            if( Resize_Pistes_Vias( &dc, resize_track, resize_vias ) )
-                GetScreen()->SetModify();
+        int type = GetCurItem()->Type();
+        if( type == TYPE_TRACK || type == TYPE_VIA )
+        {
+            BOARD_CONNECTED_ITEM*item = (BOARD_CONNECTED_ITEM*) GetCurItem();
+            DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS dlg( this, item->GetNet() );
+            dlg.ShowModal();
+        }
         }
         DrawPanel->MouseToCursorSchema();
         break;

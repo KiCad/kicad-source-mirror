@@ -20,7 +20,7 @@
 /* Bitmaps */
 #include "bitmaps.h"
 
-static wxMenu* Append_Track_Width_List( BOARD * aBoard );
+static wxMenu* Append_Track_Width_List( BOARD* aBoard );
 
 
 /******************************************************************************/
@@ -82,8 +82,6 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     wxPoint selectPos = m_Collector->GetRefPos();
 
     PutOnGrid( &selectPos );
-
-    // printf( "cursor=(%d, %d) select=(%d,%d)\n", cursorPos.x, cursorPos.y, selectPos.x, selectPos.y );
 
     /*  We can reselect another item only if there are no item being edited
      * because ALL moving functions use GetCurItem(), therefore GetCurItem()
@@ -269,7 +267,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                       msg, move_module_xpm );
     }
 
-    /* Traitement des fonctions specifiques */
+    /* Display context sensitive comands: */
     switch(  m_ID_current_state )
     {
     case ID_PCB_ZONES_BUTT:
@@ -289,7 +287,8 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         break;
 
     case ID_TRACK_BUTT:
-        ADD_MENUITEM_WITH_SUBMENU( aPopMenu, Append_Track_Width_List( GetBoard() ),
+        if ( ! locate_track )   // This menu is already added when a track is located
+            ADD_MENUITEM_WITH_SUBMENU( aPopMenu, Append_Track_Width_List( GetBoard() ),
                                    ID_POPUP_PCB_SELECT_WIDTH,
                                    _( "Select Track Width" ), width_track_xpm );
         ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_SELECT_CU_LAYER,
@@ -397,7 +396,7 @@ void WinEDA_PcbFrame::createPopUpBlockMenu( wxMenu* menu )
 void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
 /******************************************************************************/
 
-/* Create command lines for a popup menu, for track editing
+/* Create command lines for a popup menu, for track and via editing
  * also update Netclass selection
  */
 {
@@ -408,45 +407,12 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     m_TrackAndViasSizesList_Changed = true;
     AuxiliaryToolBar_Update_UI();
 
-    int      flags = Track->m_Flags;
+    int flags = Track->m_Flags;
     if( flags == 0 )
     {
         if( Track->Type() == TYPE_VIA )
         {
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_TRACK_NODE, _( "Drag Via" ), move_xpm );
-            wxMenu* via_mnu = new wxMenu();
-
-            ADD_MENUITEM_WITH_SUBMENU( PopMenu, via_mnu,
-                                       ID_POPUP_PCB_VIA_EDITING, _( "Edit Via Drill" ), edit_xpm );
-            ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_TO_DEFAULT,
-                          _( "Set Via Hole to Netclass Default" ), apply_xpm );
-
-            msg = _( "Set Via Hole to the Specific Value" );
-            msg << wxT( " " ) << ReturnStringFromValue( g_UnitMetric,
-                                                        g_DesignSettings.m_ViaDrillCustomValue,
-                                                        m_InternalUnits );
-            ADD_MENUITEM_WITH_HELP( via_mnu, ID_POPUP_PCB_VIA_HOLE_TO_VALUE,
-                                    msg,
-                                    _("Set via hole to a specific value, rather than its default Netclass value."),
-                                    options_new_pad_xpm );
-            msg = _( "Set a specific via hole value. This value is currently" );
-            msg << wxT( " " ) << ReturnStringFromValue( g_UnitMetric,
-                                                        g_DesignSettings.m_ViaDrillCustomValue,
-                                                        m_InternalUnits );
-            ADD_MENUITEM_WITH_HELP( via_mnu, ID_POPUP_PCB_VIA_HOLE_ENTER_VALUE,
-                                    _( "Change the Current Specific Drill Value" ), msg, edit_xpm );
-            ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_EXPORT, _(
-                              "Use this Via Hole as Specific Value" ), export_options_pad_xpm );
-            ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_EXPORT_TO_OTHERS,
-                          _( "Export this Via Hole to Others id Vias" ), global_options_pad_xpm );
-            ADD_MENUITEM( via_mnu, ID_POPUP_PCB_VIA_HOLE_RESET_TO_DEFAULT,
-                          _( "Set All Via Holes to Netclass Default" ), apply_xpm );
-            if( Track->IsDrillDefault() )   // Can't export the drill value, because this value is 0 (default)
-            {
-                via_mnu->Enable( ID_POPUP_PCB_VIA_HOLE_EXPORT, FALSE );
-            }
-            if( g_DesignSettings.m_ViaDrillCustomValue <= 0 )
-                via_mnu->Enable( ID_POPUP_PCB_VIA_HOLE_TO_VALUE, FALSE );
         }
         else
         {
@@ -461,10 +427,6 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
                               _( "Drag Segments, Keep Slope" ), drag_segment_withslope_xpm );
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DRAG_TRACK_SEGMENT,
                               _( "Drag Segment" ), drag_track_segment_xpm );
-#if 0
-                ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_TRACK_SEGMENT,
-                              _( "Move Segment" ), move_track_segment_xpm );
-#endif
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_BREAK_TRACK,
                               _( "Break Track" ), break_line_xpm );
             }
@@ -497,39 +459,36 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     }
 
     // track Width control :
-    wxMenu* track_mnu;
     if( !flags )    // track Width control :
     {
-        track_mnu = new wxMenu;
-        ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
-                                   ID_POPUP_PCB_EDIT_TRACK_MNU, _(
-                                       "Change Tracks and Vias Sizes" ), width_track_xpm );
         if( Track->Type() == TYPE_VIA )
         {
-            ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACKSEG,_( "Change Via Size" ), width_segment_xpm );
+            ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_TRACKSEG, _(
+                              "Change Via Size and Drill" ), width_segment_xpm );
         }
         else
         {
-            ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACKSEG, _( "Change Segment Width" ), width_segment_xpm );
-            ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_TRACK,
-                      _( "Change Track Width" ), width_track_xpm );
+            ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_TRACKSEG, _(
+                              "Change Segment Width" ), width_segment_xpm );
+            ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_TRACK,
+                          _( "Change Track Width" ), width_track_xpm );
         }
-        ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_NET,
-                      _( "Set Net to NetClass values" ), width_net_xpm );
-        ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE,
-                      _( "Set ALL Tracks and Vias to NetClass Values" ), width_track_via_xpm );
-        ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_ALL_VIAS_SIZE,
-                      _( "Set ALL Vias (No Track) to NetClass Values" ), width_vias_xpm );
-        ADD_MENUITEM( track_mnu, ID_POPUP_PCB_EDIT_ALL_TRACK_SIZE,
-                      _( "Set ALL Tracks (No Via) to NetClass Values" ), width_track_xpm );
+        ADD_MENUITEM_WITH_SUBMENU( PopMenu, Append_Track_Width_List( GetBoard() ),
+                                   ID_POPUP_PCB_SELECT_WIDTH,
+                                   _( "Select Track Width" ), width_track_xpm );
+        PopMenu->AppendSeparator();
+        ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE,
+                      _( "Global Tracks and Vias Edition" ), width_track_via_xpm );
+        PopMenu->AppendSeparator();
     }
 
     // Delete control:
-    track_mnu = new wxMenu;
+    wxMenu* track_mnu = new wxMenu;
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
                                ID_POPUP_PCB_DELETE_TRACK_MNU, _( "Delete" ), delete_xpm );
 
-    msg = AddHotkeyName( Track->Type()==TYPE_VIA ? _( "Delete Via" ) : _( "Delete Segment" ),
+    msg = AddHotkeyName( Track->Type()==TYPE_VIA ?
+                        _( "Delete Via" ) : _( "Delete Segment" ),
                          s_Board_Editor_Hokeys_Descr, HK_BACK_SPACE );
 
     ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACKSEG,
@@ -734,6 +693,7 @@ void WinEDA_PcbFrame::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* m
 /************************************************************************/
 void WinEDA_PcbFrame::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
 /************************************************************************/
+
 /* Create pop menu for pads
  * also update Netclass selection
  */
@@ -834,7 +794,7 @@ void WinEDA_PcbFrame::createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aP
 
 
 /*******************************************************/
-static wxMenu* Append_Track_Width_List( BOARD * aBoard )
+static wxMenu* Append_Track_Width_List( BOARD* aBoard )
 /*******************************************************/
 
 /** function Append_Track_Width_List
@@ -842,14 +802,11 @@ static wxMenu* Append_Track_Width_List( BOARD * aBoard )
  * @return a pointeur to the menu
  */
 {
-   wxString msg;
+    wxString msg;
     wxMenu*  trackwidth_menu;
-    double   value;
+    wxString value;
 
     trackwidth_menu = new wxMenu;
-
-    ADD_MENUITEM( trackwidth_menu, ID_PCB_TRACK_SIZE_SETUP,
-                  _( "New Width/Size" ), showtrack_xpm );
 
     trackwidth_menu->Append( ID_POPUP_PCB_SELECT_AUTO_WIDTH,
                              _( "Auto Width" ),
@@ -860,53 +817,53 @@ static wxMenu* Append_Track_Width_List( BOARD * aBoard )
     if( g_DesignSettings.m_UseConnectedTrackWidth )
         trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, true );
 
-    if( aBoard->m_ViaSizeSelector != 0 ||
-        aBoard->m_TrackWidthSelector != 0 ||
-        g_DesignSettings.m_UseConnectedTrackWidth )
+    if( aBoard->m_ViaSizeSelector != 0
+        || aBoard->m_TrackWidthSelector != 0
+        || g_DesignSettings.m_UseConnectedTrackWidth )
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES,
-                             _( "Use Netclass Values" ),
-                             _( "Use track and via sizes from their Netclass values" ),
-                             true );
+                                 _( "Use Netclass Values" ),
+                                 _( "Use track and via sizes from their Netclass values" ),
+                                 true );
 
     for( unsigned ii = 0; ii < aBoard->m_TrackWidthList.size(); ii++ )
     {
-        value = To_User_Unit( g_UnitMetric,
-                              aBoard->m_TrackWidthList[ii],
-                              PCB_INTERNAL_UNIT );
-        if( g_UnitMetric == INCHES )  // Affichage en mils
-            msg.Printf( _( "Track %.1f" ), value * 1000 );
-        else
-            msg.Printf( _( "Track %.3f" ), value );
-
-        if ( ii == 0 )
-            msg << _(" (from NetClass)" );
-
+        value = ReturnStringFromValue( g_UnitMetric, aBoard->m_TrackWidthList[ii],
+                                       PCB_INTERNAL_UNIT, true );
+        msg.Printf( _( "Track %s" ), GetChars( value ) );
+        if( ii == 0 )
+            msg << _( " (use NetClass)" );
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_WIDTH1 + ii, msg, wxEmptyString, true );
-
     }
+
     if( g_DesignSettings.m_UseConnectedTrackWidth )
         trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, true );
     else
     {
         if( aBoard->m_TrackWidthSelector < aBoard->m_TrackWidthList.size() )
-            trackwidth_menu->Check( ID_POPUP_PCB_SELECT_WIDTH1 + aBoard->m_TrackWidthSelector, true );
+            trackwidth_menu->Check( ID_POPUP_PCB_SELECT_WIDTH1 + aBoard->m_TrackWidthSelector,
+                                    true );
     }
 
     trackwidth_menu->AppendSeparator();
-    for( unsigned ii = 0; ii < aBoard->m_ViaSizeList.size(); ii++ )
+    for( unsigned ii = 0; ii < aBoard->m_ViasDimensionsList.size(); ii++ )
     {
-       value = To_User_Unit( g_UnitMetric,
-                              aBoard->m_ViaSizeList[ii],
-                              PCB_INTERNAL_UNIT );
-        if( g_UnitMetric == INCHES )
-            msg.Printf( _( "Via %.1f" ), value * 1000 );
+        value = ReturnStringFromValue( g_UnitMetric, aBoard->m_ViasDimensionsList[ii].m_Diameter,
+                                       PCB_INTERNAL_UNIT, true );
+        wxString drill = ReturnStringFromValue( g_UnitMetric,
+                                                aBoard->m_ViasDimensionsList[ii].m_Drill,
+                                                PCB_INTERNAL_UNIT,  true );
+        if( aBoard->m_ViasDimensionsList[ii].m_Drill <= 0 )
+            msg.Printf( _( "Via %s" ), GetChars( value ) );
         else
-            msg.Printf( _( "Via %.3f" ), value );
-        if ( ii == 0 )
-            msg << _(" (from NetClass)" );
+        {
+            msg.Printf( _( "Via %s; (drl %s)" ), GetChars( value ), GetChars( drill ) );
+        }
+        if( ii == 0 )
+            msg << _( " (use NetClass)" );
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, msg, wxEmptyString, true );
     }
-    if( aBoard->m_ViaSizeSelector < aBoard->m_ViaSizeList.size() )
+
+    if( aBoard->m_ViaSizeSelector < aBoard->m_ViasDimensionsList.size() )
         trackwidth_menu->Check( ID_POPUP_PCB_SELECT_VIASIZE1 + aBoard->m_ViaSizeSelector, true );
 
     return trackwidth_menu;

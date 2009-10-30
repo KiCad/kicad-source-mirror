@@ -20,13 +20,10 @@ set(PCBNEW_SRCS
 #   cleaningoptions_dialog.cpp
     connect.cpp
     controle.cpp
-#   copy_track.cpp <-- not used
     cotation.cpp
     cross-probing.cpp
     debug_kbool_key_file_fct.cpp
     deltrack.cpp
-#    dialog_copper_layers_setup_base.cpp
-#    dialog_copper_layers_setup.cpp
     dialog_copper_zones.cpp
     dialog_copper_zones_base.cpp
     dialog_design_rules.cpp
@@ -46,6 +43,8 @@ set(PCBNEW_SRCS
 #   dialog_gendrill.cpp
     dialog_general_options.cpp
     dialog_general_options_BoardEditor_base.cpp
+    dialog_global_edit_tracks_and_vias.cpp
+    dialog_global_edit_tracks_and_vias_base.cpp
 #   dialog_graphic_items_options.cpp
     dialog_graphic_item_properties.cpp
     dialog_graphic_item_properties_base.cpp
@@ -64,15 +63,14 @@ set(PCBNEW_SRCS
     dialog_print_for_modedit_base.cpp
     dialog_print_using_printer.cpp
     dialog_orient_footprints.cpp
-    dialog_track_options.cpp
-    dialog_track_options_base.cpp
+    dialog_mask_clearance.cpp
+    dialog_mask_clearance_base.cpp
     dialog_SVG_print.cpp
     dialog_SVG_print_base.cpp
     dist.cpp
     dragsegm.cpp
     drc.cpp
     dsn.cpp
-#   dupltrac.cpp <-- not used
     edgemod.cpp
     edit.cpp
     editedge.cpp
@@ -111,7 +109,6 @@ set(PCBNEW_SRCS
     modedit_undo_redo.cpp
     moduleframe.cpp
     modules.cpp
-#   move_copy_track.cpp <-- not used
     move-drag_pads.cpp
     move_or_drag_track.cpp
     muonde.cpp
@@ -146,7 +143,6 @@ set(PCBNEW_SRCS
     track.cpp
     tr_modif.cpp
     trpiste.cpp
-    via_edit.cpp
     work.cpp
     xchgmod.cpp
     zones_by_polygon.cpp

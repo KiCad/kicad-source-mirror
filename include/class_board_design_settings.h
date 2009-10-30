@@ -11,12 +11,8 @@ class EDA_BoardDesignSettings
 protected:
     int    m_CopperLayerCount;                      // Number of copper layers for this design
 public:
-    int    m_ViaDrillCustomValue;                   // via drill for vias that have a specific drill value
-    int    m_CurrentViaSize;                        // Current via size
-    int    m_CurrentMicroViaSize;                   // Current micro via size
     bool   m_MicroViasAllowed;                      // true to allow micro vias
     int    m_CurrentViaType;                        // via type (VIA_BLIND_BURIED, VIA_TROUGHT VIA_MICROVIA)
-    int    m_CurrentTrackWidth;                     // current track width
     bool   m_UseConnectedTrackWidth;                // if true, when creating a new track starting on an existing track, use this track width
     int    m_DrawSegmentWidth;                      // current graphic line width (not EDGE layer)
     int    m_EdgeSegmentWidth;                      // current graphic line width (EDGE layer only)

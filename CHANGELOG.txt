@@ -4,6 +4,22 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-oct-30 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++pcbnew
+    Rewrite the GUI relative to the tracks widths and vias diameters and drills selection
+    and edition, for compatibility with new netclass approach.
+    Now vias dimensions are defined by their diameter and drill values
+    (This is also a simpler an better way than the old one that considers
+    via diameters and drill values as independant parmeters)
+    When set a via to a "custom" value, the diameter and the drill values are set.
+    (of course one can use the drill defualt value of the netclass)
+    So the via hole edit options (in popup menu) does not exist no more.
+    The global tracks widths and vias diameters and drills changes are now
+    accessible by a specific dialog frame.
+
+
+
 
 2009-oct-27 UPDATE Jerry Jacobs <xor.gate.engineering@gmail.com>
 ================================================================================

@@ -167,7 +167,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     wxGetApp().m_fileHistory.AddFilesToMenu( filesMenu );
 
     ///////////////////////////////////
-    // Configuration et preferences: //
+    // Preferences an configuration //
     ///////////////////////////////////
     wxMenu* configmenu = new wxMenu;
     item = new wxMenuItem( configmenu, ID_CONFIG_REQ, _( "&Library" ),
@@ -205,19 +205,16 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( read_setup_xpm );
     configmenu->Append( item );
 
-    // Add access to the Design Rules Dialog:
+
+
+    ////////////////////////////////////////////////////////////
+    // Add access to the Design Rules Dialog and layers setup //
+    ////////////////////////////////////////////////////////////
     wxMenu* designRulesMenu = new wxMenu;
     item = new wxMenuItem( designRulesMenu, ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG,
                            _( "Design Rules" ), _( "Open the design rules dialog editor" ) );
     item->SetBitmap( hammer_xpm );
     designRulesMenu->Append( item );
-
-/*
-    item = new wxMenuItem( designRulesMenu, ID_PCB_COPPER_LAYERS_SETUP, _( "Copper &Layers" ),
-                           _( "Select copper layers count and layers names" ) );
-    item->SetBitmap( copper_layers_setup_xpm );
-    designRulesMenu->Append( item );
-*/
 
     item = new wxMenuItem( configmenu, ID_PCB_LAYERS_SETUP, _( "&Layers Setup" ),
                            _( "Enable and set properties of layers" ) );
@@ -225,15 +222,15 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     designRulesMenu->Append( item );
 
 
-    /////////////////////////////
-    // Ajustage de dimensions: //
-    /////////////////////////////
+    /////////////////////////////////////////////////////////
+    // dimensions of some items (excluding tracks and vias //
+    /////////////////////////////////////////////////////////
     wxMenu* sizes_menu = new wxMenu;
 
-    item = new wxMenuItem( sizes_menu, ID_PCB_TRACK_SIZE_SETUP,
-                           _( "Tracks and Vias" ),
-                           _( "Adjust size and width for tracks and vias" ) );
-    item->SetBitmap( showtrack_xpm );
+    item = new wxMenuItem( sizes_menu, ID_PCB_MASK_CLEARANCE,
+                           _( "Pads Mask Clearance" ),
+                           _( "Adjust the global clearance between pads and the solder resist mask" ) );
+    item->SetBitmap( pad_xpm );
     sizes_menu->Append( item );
 
     item = new wxMenuItem( sizes_menu, ID_PCB_USER_GRID_SETUP, _( "Grid" ),

@@ -394,9 +394,8 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             continue;
         }
 
-        if( stricmp( Line, "TrackWidth" ) == 0 )
+        if( stricmp( Line, "TrackWidth" ) == 0 )    // no more used
         {
-            g_DesignSettings.m_CurrentTrackWidth = atoi( data );
             continue;
         }
 
@@ -437,9 +436,8 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             continue;
         }
 
-        if( stricmp( Line, "ViaSize" ) == 0 )
+        if( stricmp( Line, "ViaSize" ) == 0 )    // no more used
         {
-            g_DesignSettings.m_CurrentViaSize = atoi( data );
             continue;
         }
 
@@ -449,9 +447,8 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             continue;
         }
 
-        if( stricmp( Line, "MicroViaSize" ) == 0 )
+        if( stricmp( Line, "MicroViaSize" ) == 0 )  // Not used
         {
-            g_DesignSettings.m_CurrentMicroViaSize = atoi( data );
             continue;
         }
 
@@ -464,7 +461,15 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
         if( stricmp( Line, "ViaSizeList" ) == 0 )
         {
             int tmp = atoi( data );
-            GetBoard()->m_ViaSizeList.push_back( tmp );
+            VIA_DIMENSION via_dim;
+            via_dim.m_Diameter = tmp;
+            data = strtok( NULL, " \n\r" );
+            if( data )
+            {
+                tmp = atoi( data );
+                via_dim.m_Drill = tmp > 0 ? tmp : 0;
+            }
+            GetBoard()->m_ViasDimensionsList.push_back( via_dim );
             continue;
         }
 
@@ -472,12 +477,6 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
         {
             int diameter = atoi( data );
             netclass_default->SetViaDrill( diameter );
-            continue;
-        }
-
-        if( stricmp( Line, "ViaAltDrill" ) == 0 )
-        {
-            g_DesignSettings.m_ViaDrillCustomValue = atoi( data );
             continue;
         }
 
@@ -567,13 +566,13 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
      * Sort lists by by increasing value and remove duplicates
      * (the first value is not tested, because it is the netclass value
     */
-    sort( GetBoard()->m_ViaSizeList.begin()+1, GetBoard()->m_ViaSizeList.end() );
+    sort( GetBoard()->m_ViasDimensionsList.begin()+1, GetBoard()->m_ViasDimensionsList.end() );
     sort( GetBoard()->m_TrackWidthList.begin()+1, GetBoard()->m_TrackWidthList.end() );
-    for( unsigned ii = 1; ii < GetBoard()->m_ViaSizeList.size()-1; ii++ )
+    for( unsigned ii = 1; ii < GetBoard()->m_ViasDimensionsList.size()-1; ii++ )
     {
-        if( GetBoard()->m_ViaSizeList[ii] == GetBoard()->m_ViaSizeList[ii+1] )
+        if( GetBoard()->m_ViasDimensionsList[ii] == GetBoard()->m_ViasDimensionsList[ii+1] )
         {
-            GetBoard()->m_ViaSizeList.erase(GetBoard()->m_ViaSizeList.begin()+ii);
+            GetBoard()->m_ViasDimensionsList.erase(GetBoard()->m_ViasDimensionsList.begin()+ii);
             ii--;
         }
     }
@@ -618,7 +617,8 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
         }
     }
 
-    fprintf( aFile, "TrackWidth %d\n", g_DesignSettings.m_CurrentTrackWidth );
+    // Save current default track width, for compatibility with older pcbnew version;
+    fprintf( aFile, "TrackWidth %d\n", aBoard->GetCurrentTrackWidth() );
     // Save custom tracks width list (the first is not saved here: this is the netclass value
     for( unsigned ii = 1; ii < aBoard->m_TrackWidthList.size(); ii++ )
        fprintf( aFile, "TrackWidthList %d\n", aBoard->m_TrackWidthList[ii] );
@@ -630,17 +630,20 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
 
     fprintf( aFile, "DrawSegmWidth %d\n", g_DesignSettings.m_DrawSegmentWidth );
     fprintf( aFile, "EdgeSegmWidth %d\n", g_DesignSettings.m_EdgeSegmentWidth );
-    fprintf( aFile, "ViaSize %d\n", g_DesignSettings.m_CurrentViaSize );
+    // Save current default via size, for compatibility with older pcbnew version;
+    fprintf( aFile, "ViaSize %d\n", netclass_default->GetViaDiameter() );
     fprintf( aFile, "ViaDrill %d\n", netclass_default->GetViaDrill() );
-    fprintf( aFile, "ViaAltDrill %d\n", g_DesignSettings.m_ViaDrillCustomValue );
     fprintf( aFile, "ViaMinSize %d\n", g_DesignSettings.m_ViasMinSize );
     fprintf( aFile, "ViaMinDrill %d\n", g_DesignSettings.m_ViasMinDrill );
 
     // Save custom vias diameters list (the first is not saved here: this is the netclass value
-    for( unsigned ii = 1; ii < aBoard->m_ViaSizeList.size(); ii++ )
-       fprintf( aFile, "ViaSizeList %d\n", aBoard->m_ViaSizeList[ii] );
+    for( unsigned ii = 1; ii < aBoard->m_ViasDimensionsList.size(); ii++ )
+       fprintf( aFile, "ViaSizeList %d %d\n",
+                    aBoard->m_ViasDimensionsList[ii].m_Diameter,
+                    aBoard->m_ViasDimensionsList[ii].m_Drill );
 
-    fprintf( aFile, "MicroViaSize %d\n", g_DesignSettings.m_CurrentMicroViaSize);
+    // for old versions compatibility:
+    fprintf( aFile, "MicroViaSize %d\n", netclass_default->GetuViaDiameter() );
     fprintf( aFile, "MicroViaDrill %d\n", netclass_default->GetuViaDrill());
     fprintf( aFile, "MicroViasAllowed %d\n", g_DesignSettings.m_MicroViasAllowed);
     fprintf( aFile, "MicroViaMinSize %d\n" , g_DesignSettings.m_MicroViasMinSize );

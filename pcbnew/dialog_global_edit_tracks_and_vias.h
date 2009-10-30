@@ -1,14 +1,3 @@
-Copyright template
-
-
-A copyright message which may be added to all source files
-at their top.  There is one line that represents the main copyright holder which
-is its original author.
-
-Workers who earn partial copyright holder status of a source module
-may choose to document this corresponding work in the CHANGELOG.txt file.
-
-
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
@@ -32,3 +21,30 @@ may choose to document this corresponding work in the CHANGELOG.txt file.
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#ifndef __dialog_global_edit_tracks_and_vias__
+#define __dialog_global_edit_tracks_and_vias__
+
+#include "dialog_global_edit_tracks_and_vias_base.h"
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS
+///////////////////////////////////////////////////////////////////////////////
+class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS :
+    public DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
+{
+private:
+    WinEDA_PcbFrame* m_Parent;
+    int m_Netcode;
+
+public:
+    DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( WinEDA_PcbFrame* aParent, int aNetcode );
+    ~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS() {};
+
+    // Virtual event handlers, overided here
+    void OnOkClick( wxCommandEvent& event );
+    void OnCancelClick( wxCommandEvent& event );
+    void MyInit();
+};
+
+#endif //__dialog_global_edit_tracks_and_vias__

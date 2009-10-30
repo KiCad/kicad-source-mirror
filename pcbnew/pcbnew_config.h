@@ -56,28 +56,12 @@ static PARAM_CFG_INT PadDimVCfg
 );
 
 
-static PARAM_CFG_INT ViaDiametreCfg
-(
-    wxT( "ViaDiam" ),                           /* Keyword */
-    &g_DesignSettings.m_CurrentViaSize,         /* Parameter address */
-    450,                                        /* Default value */
-    0, 0xFFFF                                   /* Min and max values*/
-);
-
 static PARAM_CFG_INT LayerThicknessCfg
 (
     wxT( "LayerThickness" ),                           /* Keyword */
     &g_DesignSettings.m_LayerThickness,    /* Parameter address */
     630,                                        /* Default value */
     0, 0xFFFF                                   /* Min and max values*/
-);
-
-static PARAM_CFG_INT MicroViaDiametreCfg
-(
-    wxT( "MViaDia" ),                               /* Keyword */
-    &g_DesignSettings.m_CurrentMicroViaSize,        /* Parameter address */
-    200,                                            /* Default value */
-    0, 1000                                         /* Min and max values*/
 );
 
 static PARAM_CFG_INT ViaShowHoleCfg
@@ -745,8 +729,6 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &PadDrillCfg,
     &PadDimHCfg,
     &PadDimVCfg,
-    &ViaDiametreCfg,
-    &MicroViaDiametreCfg,
     &ViaShowHoleCfg,
     &ShowNetNamesModeCfg,
     &LayerThicknessCfg,

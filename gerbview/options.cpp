@@ -413,7 +413,7 @@ void WinEDA_LookFrame::OnOkClick( wxCommandEvent& event )
 
 
 /***************************************************************************/
-void WinEDA_GerberFrame::InstallPcbOptionsFrame( const wxPoint& pos, int id )
+void WinEDA_GerberFrame::InstallGerberOptionsFrame( const wxPoint& pos, int id )
 /***************************************************************************/
 {
     switch( id )

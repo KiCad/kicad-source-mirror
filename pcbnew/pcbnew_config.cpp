@@ -20,9 +20,10 @@
 #include "hotkeys.h"
 #include "protos.h"
 
-/* Routines Locales */
+#include "dialog_mask_clearance.h"
+#include "dialog_general_options.h"
 
-/* Variables locales */
+
 
 #define HOTKEY_FILENAME wxT( "pcbnew" )
 
@@ -57,8 +58,20 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
         InstallConfigFrame( pos );
         break;
 
-    case ID_PCB_TRACK_SIZE_SETUP:
+    case ID_PCB_MASK_CLEARANCE:
+        {
+            DIALOG_PADS_MASK_CLEARANCE dlg( this );
+            dlg.ShowModal();
+        }
+        break;
+
     case ID_OPTIONS_SETUP:
+        {
+            Dialog_GeneralOptions dlg( this, &dc );
+            dlg.ShowModal();
+        }
+        break;
+
     case ID_PCB_DRAWINGS_WIDTHS_SETUP:
         InstallPcbOptionsFrame( pos, &dc, id );
         break;
