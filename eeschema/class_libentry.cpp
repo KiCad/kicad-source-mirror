@@ -81,7 +81,6 @@ bool CMP_LIB_ENTRY::SaveDoc( FILE* aFile )
     if( m_Doc.IsEmpty() && m_KeyWord.IsEmpty() && m_DocFile.IsEmpty() )
         return true;
 
-    /* Generation des lignes utiles */
     if( fprintf( aFile, "#\n$CMP %s\n", CONV_TO_UTF8( m_Name ) ) < 0 )
         return false;
 
@@ -424,6 +423,27 @@ void LIB_COMPONENT::GetPins( LIB_PIN_LIST& pins, int unit, int convert )
 
         pins.push_back( (LIB_PIN*) &item );
     }
+}
+
+
+LIB_PIN* LIB_COMPONENT::GetPin( const wxString& number, int unit, int convert )
+{
+    wxString     pNumber;
+    LIB_PIN_LIST pinList;
+
+    GetPins( pinList, unit, convert );
+
+    for( size_t i = 0; i < pinList.size(); i++ )
+    {
+        wxASSERT( pinList[i]->Type() == COMPONENT_PIN_DRAW_TYPE );
+
+        pinList[i]->ReturnPinStringNum( pNumber );
+
+        if( number == pNumber )
+            return pinList[i];
+    }
+
+    return NULL;
 }
 
 
@@ -930,7 +950,7 @@ LIB_FIELD& LIB_COMPONENT::GetReferenceField( void )
 
 
 /*
- * lit date et time de modif composant sous le format:
+ * Read date and time of component in the format:
  *  "Ti yy/mm/jj hh:mm:ss"
  */
 bool LIB_COMPONENT::SaveDateAndTime( FILE* file )
@@ -964,7 +984,7 @@ bool LIB_COMPONENT::LoadDateAndTime( char* Line )
 
     year = mon = day = hour = min = sec = 0;
     text = strtok( Line, " \r\t\n" );
-    text = strtok( NULL, " \r\t\n" );  // text pointe donnees utiles
+    text = strtok( NULL, " \r\t\n" );
 
     if (sscanf( Line, "%d/%d/%d %d:%d:%d",
                 &year, &mon, &day, &hour, &min, &sec ) != 6 )

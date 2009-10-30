@@ -114,7 +114,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem(
 
                     case 1:                 // find a pin
                         pos = pSch->m_Pos;  // temporary: will be changed if the pin is found
-                        pin = LocatePinByNumber( text_to_find, pSch );
+                        pin = pSch->GetPin( text_to_find );
                         if( pin == NULL )
                             break;
                         NotFound = FALSE;
@@ -167,10 +167,10 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem(
             &( GetScreen()->m_StartVisu.x ),
             &( GetScreen()->m_StartVisu.y ) );
 
-        // calcul des coord curseur avec origine = screen
+        // Calculating cursor position with original screen.
         curpos -= GetScreen()->m_StartVisu;
 
-        /* Il y a peut-etre necessite de recadrer le dessin: */
+        /* There may be need to reframe the drawing */
         #define MARGIN 30
         if( (curpos.x <= MARGIN) || (curpos.x >= DrawAreaSize.x - MARGIN)
            || (curpos.y <= MARGIN) || (curpos.y >= DrawAreaSize.y - MARGIN) )
@@ -342,7 +342,6 @@ SCH_ITEM* WinEDA_SchematicFrame::FindMarker( int SearchType )
         sheet->LastScreen()->m_Curseur = pos;
         curpos = DrawPanel->CursorScreenPosition();
 
-        // calcul des coord curseur avec origine = screen
         DrawPanel->GetViewStart( &m_CurrentSheet->LastScreen()->m_StartVisu.x,
                                  &m_CurrentSheet->LastScreen()->m_StartVisu.y );
         curpos.x -= m_CurrentSheet->LastScreen()->m_StartVisu.x;
@@ -511,7 +510,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
                 StartCount++;
                 if( s_ItemsCount >= StartCount )
                 {
-                    NotFound = TRUE;    /* Continue recherche de l'element suivant */
+                    NotFound = TRUE;    /* Continue search of the next element */
                 }
                 else
                 {
@@ -573,10 +572,9 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
             &( GetScreen()->m_StartVisu.x ),
             &( GetScreen()->m_StartVisu.y ) );
 
-        // calcul des coord curseur avec origine = screen
         curpos -= m_CurrentSheet->LastScreen()->m_StartVisu;
 
-        /* Il y a peut-etre necessite de recadrer le dessin: */
+        /* There may be need to reframe the drawing */
         #define MARGIN 30
         if( (curpos.x <= MARGIN) || (curpos.x >= DrawAreaSize.x - MARGIN)
            || (curpos.y <= MARGIN) || (curpos.y >= DrawAreaSize.y - MARGIN) )

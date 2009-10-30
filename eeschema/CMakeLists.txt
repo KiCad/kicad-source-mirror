@@ -57,6 +57,8 @@ set(EESCHEMA_SRCS
 #   dialog_find.cpp
     dialog_lib_edit_draw_item.cpp
     dialog_lib_edit_draw_item_base.cpp
+    dialog_lib_edit_pin.cpp
+    dialog_lib_edit_pin_base.cpp
     dialog_lib_new_component.cpp
     dialog_lib_new_component_base.cpp
     dialog_options.cpp
@@ -97,7 +99,6 @@ set(EESCHEMA_SRCS
     onrightclick.cpp
     operations_on_items_lists.cpp
     pinedit.cpp
-#   pinedit-dialog.cpp
     plot.cpp
     plothpgl.cpp
     plotps.cpp

@@ -73,10 +73,7 @@ int            g_DebugLevel;
 int            g_MouseOldButtons;
 int            g_KeyPressed;
 
-// Nom (full file name) du file Configuration par defaut (kicad.pro)
 wxString       g_Prj_Default_Config_FullFilename;
-
-// Nom du file Configuration local (<curr projet>.pro)
 wxString       g_Prj_Config_LocalFilename;
 
 // Handle the preferd editor for browsing report files:
@@ -256,6 +253,31 @@ wxString ReturnUnitSymbol( int Units )
     return label;
 }
 
+
+wxString GetUnitsLabel( int units )
+{
+    wxString label;
+
+    switch( units )
+    {
+    case INCHES:
+        label = _( "inches" );
+        break;
+
+    case MILLIMETRE:
+        label = _( "millimeters" );
+        break;
+
+    case CENTIMETRE:
+        label = _( "centimeters" );
+        break;
+    default:
+        label = _( "Unknown" );
+        break;
+    }
+
+    return label;
+}
 
 /*
  * Add string "  (mm):" or " ("):" to the static text Stext.
@@ -669,17 +691,6 @@ void WinEDA_TextFrame::OnClose( wxCloseEvent& event )
 }
 
 
-/**
- *  Routine d'affichage d'un parametre.
- *  pos_X = cadrage horizontal
- *      si pos_X < 0 : la position horizontale est la derniere
- *          valeur demandee >= 0
- *  texte_H = texte a afficher en ligne superieure.
- *      si "", par d'affichage sur cette ligne
- *  texte_L = texte a afficher en ligne inferieure.
- *      si "", par d'affichage sur cette ligne
- *  color = couleur d'affichage
- */
 /*****************************************************************************/
 void Affiche_1_Parametre( WinEDA_DrawFrame* frame, int pos_X,
                           const wxString& texte_H, const wxString& texte_L,
@@ -693,10 +704,6 @@ void Affiche_1_Parametre( WinEDA_DrawFrame* frame, int pos_X,
 /***********************/
 int GetTimeStamp()
 /***********************/
-
-/*
- *  Retourne une identification temporelle (Time stamp) differente a chaque appel
- */
 {
     static int OldTimeStamp, NewTimeStamp;
 
@@ -708,16 +715,12 @@ int GetTimeStamp()
 }
 
 
-/**
- *  TODO replace this obsolete funtion by ReturnStringFromValue
- * Retourne pour affichage la valeur d'un parametre, selon type d'unites choisies
- *  entree : valeur en mils , buffer de texte
- *  retourne en buffer : texte : valeur exprimee en pouces ou millimetres
- *                      suivie de " ou mm
+/* Returns to display the value of a parameter, by type of units selected
+ * Input: value in mils, buffer text
+ * Returns to buffer: text: value expressed in inches or millimeters
+ * Followed by " or mm
  */
-/*********************************************/
 const wxString& valeur_param( int valeur, wxString& buf_texte )
-/*********************************************/
 {
     if( g_UnitMetric )
     {

@@ -65,11 +65,9 @@ enum pseudokeys {
 #define TEXT_ORIENT_HORIZ  0
 #define TEXT_ORIENT_VERT   900
 
-/* Affichage ou Effacement d'Item */
-#define ON  1       /* Affichage  */
-#define OFF 0       /* Effacement */
+#define ON  1
+#define OFF 0
 
-/* unites d'affichage sur ecran et autres */
 #define INCHES     0
 #define MILLIMETRE 1
 #define CENTIMETRE 2
@@ -86,7 +84,7 @@ class LibNameList;
 
 
 /***********************************/
-/* Classe pour affichage de textes */
+/* Class to display text           */
 /***********************************/
 class WinEDA_TextFrame : public wxDialog
 {
@@ -169,9 +167,9 @@ extern const wxString PdfFileWildcard;
 extern const wxString AllFilesWildcard;
 
 
-// Nom (full file name) du file Configuration par defaut (kicad.pro)
+// Name of default configuration file. (kicad.pro)
 extern wxString g_Prj_Default_Config_FullFilename;
-// Nom du file Configuration local (<curr projet>.pro)
+// Name of local configuration file. (<curr projet>.pro)
 extern wxString g_Prj_Config_LocalFilename;
 
 extern int   g_UnitMetric;   // display units mm = 1, inches = 0, cm = 2
@@ -273,15 +271,15 @@ wxString    GetAboutBuildVersion(); /* Return custom build date for about dialog
 
 /**
  * function Affiche_1_Parametre
- *  Routine d'affichage d'un parametre.
- *  pos_X = cadrage horizontal
- *      si pos_X < 0 : la position horizontale est la derniere
- *          valeur demandee >= 0
- *  texte_H = texte a afficher en ligne superieure.
- *      si "", par d'affichage sur cette ligne
- *  texte_L = texte a afficher en ligne inferieure.
- *      si "", par d'affichage sur cette ligne
- *  color = couleur d'affichage
+ * Routine to display a parameter.
+ * = POS_X horizontal framing
+ * If POS_X <0: horizontal position is the last
+ * Required value> = 0
+ * Texte_H = text to be displayed in top line.
+ * If "by posting on this line
+ * Texte_L = text to be displayed in bottom line.
+ * If "by posting on this line
+ * Color = color display
  */
 void        Affiche_1_Parametre( WinEDA_DrawFrame* frame,
                                  int               pos_X,
@@ -289,25 +287,34 @@ void        Affiche_1_Parametre( WinEDA_DrawFrame* frame,
                                  const wxString&   texte_L,
                                  int               color );
 
-/* Routine d'affichage de la documentation associee a un composant */
-
 int         GetTimeStamp();
 
-/* Retoure une identification temporelle (Time stamp) differente a chaque appel */
 int         DisplayColorFrame( wxWindow* parent, int OldColor );
 int         GetCommandOptions( const int argc, const char** argv,
                                const char* stringtst, const char** optarg,
                                int* optind );
 
 
-/* Retourne pour affichage la valeur d'un parametre, selon type d'unites choisies
- *  entree : valeur en mils , buffer de texte
- *  retourne en buffer : texte : valeur exprimee en pouces ou millimetres
- *                      suivie de " ou mm
+/* Returns to display the value of a parameter, by type of units selected
+ * Input: value in mils, buffer text
+ * Returns to buffer: text: value expressed in inches or millimeters
+ * Followed by " or mm
  */
 const wxString& valeur_param( int valeur, wxString& buf_texte );
 
 wxString    ReturnUnitSymbol( int Units = g_UnitMetric );
+
+/**
+ * Get a human readable units string.
+ *
+ * The strings returned are full text name and not abbreviations or symbolic
+ * representations of units.  Set ReturnUnitSymbol() for that.
+ *
+ * @param units - The units text to return.
+ * @return The human readable units string.
+ */
+wxString    GetUnitsLabel( int units );
+
 int         ReturnValueFromString( int Units, const wxString& TextValue,
                                    int Internal_Unit );
 

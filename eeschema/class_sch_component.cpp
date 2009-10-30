@@ -178,8 +178,8 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
 
 
 /*****************************************************************************
-* Routine to draw the given part at given position, transformed/mirror as	 *
-* specified, and in the given drawing mode. Only this one is visible...		 *
+* Routine to draw the given part at given position, transformed/mirror as    *
+* specified, and in the given drawing mode. Only this one is visible...      *
 *****************************************************************************/
 void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                           const wxPoint& offset, int DrawMode, int Color,
@@ -261,7 +261,7 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
 /**
  * Function AddHierarchicalReference
- * adds a full hierachical reference (path + local reference)
+ * adds a full hierarchical reference (path + local reference)
  * @param aPath = hierarchical path (/<sheet timestamp>/component timestamp>
  * like /05678E50/A23EF560)
  * @param aRef = local reference like C45, R56
@@ -408,7 +408,7 @@ void SCH_COMPONENT::SetRef( DrawSheetPath* sheet, const wxString& ref )
     }
 
     rf->m_Text = ref;  // for drawing.
-    
+
     // Reinit the m_PrefixString member if needed
     wxString prefix = ref;
     while( prefix.Last() == '?' or isdigit(prefix.Last()) )
@@ -522,6 +522,19 @@ SCH_CMP_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
 void SCH_COMPONENT::AddField( const SCH_CMP_FIELD& aField )
 {
     m_Fields.push_back( aField );
+}
+
+
+LIB_PIN* SCH_COMPONENT::GetPin( const wxString& number )
+{
+    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
+
+    if( Entry == NULL )
+        return NULL;
+
+    wxASSERT( Entry->Type == ROOT );
+
+    return Entry->GetPin( number, m_Multi, m_Convert );
 }
 
 
@@ -663,7 +676,7 @@ void SCH_COMPONENT::ClearAnnotation( DrawSheetPath* aSheet )
             path = GetPath( aSheet );
         for( unsigned int ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
         {
-            // Break hierachical reference in path, ref and multi selection:
+            // Break hierarchical reference in path, ref and multi selection:
             reference_fields = wxStringTokenize( m_PathsAndReferences[ii],
                                                  separators );
             if( aSheet == NULL || reference_fields[0].Cmp( path ) == 0 )
@@ -882,9 +895,9 @@ int SCH_COMPONENT::GetRotationMiroir()
 
 
 /**
- * Renvoie la coordonn�e du point coord, en fonction de l'orientation
- *  du composant (rotation, miroir).
- *  Les coord sont toujours relatives a l'ancre (coord 0,0) du composant
+ * Returns the coordinated point, depending on the orientation of the
+ * component (rotation, mirror).
+ * The coordinates are always relative to the anchor position of the component.
  */
 wxPoint SCH_COMPONENT::GetScreenCoord( const wxPoint& coord )
 {
@@ -986,7 +999,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     if( fprintf( f, "L %s %s\n", Name2, Name1 ) == EOF )
         return false;
 
-    /* Generation de numero d'unit, convert et Time Stamp*/
+    /* Generate unit number, convert and time stamp*/
     if( fprintf( f, "U %d %d %8.8lX\n", m_Multi, m_Convert,
                  m_TimeStamp ) == EOF )
         return false;
@@ -998,7 +1011,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     /* If this is a complex hierarchy; save hierarchical references.
      * but for simple hierarchies it is not necessary.
      * the reference inf is already saved
-     * this is usefull for old eeschema version compatibility
+     * this is useful for old eeschema version compatibility
      */
     if( m_PathsAndReferences.GetCount() > 1 )
     {

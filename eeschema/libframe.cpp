@@ -109,7 +109,9 @@ BEGIN_EVENT_TABLE( WinEDA_LibeditFrame, WinEDA_DrawFrame )
                     WinEDA_LibeditFrame::Process_Special_Functions )
 
 /* Context menu events and commands. */
-    EVT_MENU_RANGE( ID_POPUP_LIBEDIT_PIN_EDIT,
+    EVT_MENU( ID_LIBEDIT_EDIT_PIN, WinEDA_LibeditFrame::OnEditPin )
+
+    EVT_MENU_RANGE( ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_ITEM,
                     ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT,
                     WinEDA_LibeditFrame::Process_Special_Functions )
 
@@ -155,8 +157,8 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
     WinEDA_DrawFrame( father, LIBEDITOR_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "LibeditFrame" );
-    m_Draw_Axis = true;             // true pour avoir les axes dessines
-    m_Draw_Grid = true;             // true pour avoir la axes dessinee
+    m_Draw_Axis = true;             // true to draw axis
+    m_Draw_Grid = true;             // true to draw grid
     m_ConfigPath = wxT( "LibraryEditor" );
     SetShowDeMorgan( false );
     m_drawSpecificConvert = true;
@@ -579,10 +581,10 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
     wxGetMousePosition( &pos.x, &pos.y );
     pos.y += 20;
 
-    switch( id )   // Arret de la commande de d�placement en cours
+    switch( id )   // Stop placement commands before handling new command.
     {
     case ID_POPUP_LIBEDIT_END_CREATE_ITEM:
-    case ID_POPUP_LIBEDIT_PIN_EDIT:
+    case ID_LIBEDIT_EDIT_PIN:
     case ID_POPUP_LIBEDIT_BODY_EDIT_ITEM:
     case ID_POPUP_LIBEDIT_FIELD_ROTATE_ITEM:
     case ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM:
@@ -626,10 +628,6 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         g_EditPinByPinIsOn = g_EditPinByPinIsOn ? false : true;
         break;
 
-    case ID_POPUP_LIBEDIT_PIN_EDIT:
-        InstallPineditFrame( this, &dc, pos );
-        break;
-
     case ID_LIBEDIT_PIN_BUTT:
         if( m_component )
         {
@@ -638,7 +636,9 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         else
         {
             SetToolID( id, wxCURSOR_ARROW, _( "Set pin options" ) );
-            InstallPineditFrame( this, &dc, pos );
+            wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+            cmd.SetId( ID_LIBEDIT_EDIT_PIN );
+            GetEventHandler()->ProcessEvent( cmd );
             SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         }
         break;

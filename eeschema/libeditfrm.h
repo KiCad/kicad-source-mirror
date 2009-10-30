@@ -47,6 +47,7 @@ public:
     void OnViewEntryDoc( wxCommandEvent& event );
     void OnCheckComponent( wxCommandEvent& event );
     void OnSelectBodyStyle( wxCommandEvent& event );
+    void OnEditPin( wxCommandEvent& event );
 
     void OnUpdateEditingPart( wxUpdateUIEvent& event );
     void OnUpdateNotEditingPart( wxUpdateUIEvent& event );
@@ -69,7 +70,7 @@ public:
     void ReCreateVToolbar();
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
-    int  BestZoom();                // Retourne le meilleur zoom
+    int  BestZoom();                // Returns the best zoom
     void OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
 
     SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) GetBaseScreen(); }
@@ -146,17 +147,17 @@ private:
     void           GetComponentFromUndoList( wxCommandEvent& event );
     void           GetComponentFromRedoList( wxCommandEvent& event );
 
-    // Edition des Pins:
+    // Editing pins
     void           CreatePin( wxDC* DC );
     void           DeletePin( wxDC*          DC,
                               LIB_COMPONENT* LibEntry,
                               LIB_PIN*       Pin );
     void           StartMovePin( wxDC* DC );
 
-    // Edition de l'ancre
+    // Editing anchor
     void           PlaceAncre();
 
-    // Edition des graphismes:
+    // Editing graphic items
     LIB_DRAW_ITEM* CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC );
     void           GraphicItemBeginDraw( wxDC* DC );
     void           StartMoveDrawSymbol( wxDC* DC );
@@ -181,10 +182,9 @@ public:
     int            HandleBlockEnd( wxDC* DC );
 
     void           PlacePin( wxDC* DC );
-    void           InitEditOnePin();
     void           GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id );
 
-    // Repetition automatique de placement de pins
+    // Automatic placement of pins
     void           RepeatPinItem( wxDC* DC, LIB_PIN* Pin );
 
 protected:

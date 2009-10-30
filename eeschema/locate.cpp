@@ -1,5 +1,5 @@
 /******************************************************/
-/* Routines de localisation d'un element d'un schema. */
+/* Routines for locating an element of a schematic.   */
 /******************************************************/
 
 #include "fctsys.h"
@@ -480,8 +480,8 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2, SCH_ITEM* DrawStruct )
     case TYPE_SCH_GLOBALLABEL:
         #undef STRUCT
         #define STRUCT ( (SCH_LABEL*) DrawStruct )
-        dx  = STRUCT->m_Size.x * ( STRUCT->GetLength() + 1);    /* longueur totale */
-        dy  = STRUCT->m_Size.y / 2;                             /* Demi hauteur */
+        dx  = STRUCT->m_Size.x * ( STRUCT->GetLength() + 1);  /* total length */
+        dy  = STRUCT->m_Size.y / 2;                           /* half height */
         xt1 = xt2 = STRUCT->m_Pos.x;
         yt1 = yt2 = STRUCT->m_Pos.y;
 
@@ -525,7 +525,7 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2, SCH_ITEM* DrawStruct )
     case DRAW_SHEET_STRUCT_TYPE:
         #undef STRUCT
         #define STRUCT ( (DrawSheetStruct*) DrawStruct )
-        /* Recalcul des coordonnees de l'encadrement du composant */
+        /* Recalculate the coordinates of the worksheet component */
         xt1 = STRUCT->m_Pos.x;
         yt1 = STRUCT->m_Pos.y;
         xt2 = STRUCT->m_Pos.x + STRUCT->m_Size.x;
@@ -556,12 +556,12 @@ static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
                           int StartX2, int StartY2, int EndX2, int EndY2 )
 /****************************************************************************/
 
-/* Routine detectant que le rectangle 1 (Box1) et le rectangle 2 (Box2) se
- *  recouvrent.
- *  Retourne TRUE ou FALSE.
+/*  Routine detects that the rectangle 1 (Box1) and the rectangle 2 (Box2) is
+ * Overlap.
+ * Returns TRUE or FALSE.
  *
- *  On Considere ici qu'il y a recouvrement si l'un au moins des coins
- *  d'un 'Box' est compris dans l'autre
+ * These assume that there is recovery if at least one corner
+ * A 'Box' is included in the other
  */
 {
     int cX, cY;
@@ -575,84 +575,49 @@ static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
     if( StartY2 > EndY2 )
         EXCHG( StartY2, EndY2 );
 
-    /* Tst des 4 coins du rectangle 1 */
-    cX = StartX1; cY = StartY1; /* 1er coin */
+    /* Test the 4 corners of the rectangle 1 */
+    cX = StartX1;
+    cY = StartY1;
     if( (cX >= StartX2) && (cX <= EndX2) && (cY >= StartY2) && (cY <= EndY2) )
         return TRUE;
 
-    cX = EndX1; cY = StartY1;   /* 2er coin */
+    cX = EndX1;
+    cY = StartY1;
     if( (cX >= StartX2) && (cX <= EndX2) && (cY >= StartY2) && (cY <= EndY2) )
         return TRUE;
 
-    cX = EndX1; cY = EndY1;   /* 3eme coin */
+    cX = EndX1;
+    cY = EndY1;
     if( (cX >= StartX2) && (cX <= EndX2) && (cY >= StartY2) && (cY <= EndY2) )
         return TRUE;
 
-    cX = StartX1; cY = EndY1;   /* 4eme coin */
+    cX = StartX1;
+    cY = EndY1;
     if( (cX >= StartX2) && (cX <= EndX2) && (cY >= StartY2) && (cY <= EndY2) )
         return TRUE;
 
-    /* Tst des 4 coins du rectangle 2 */
-    cX = StartX2; cY = StartY2;   /* 1er coin */
+    /* Test the 4 corners of the rectangle 2 */
+    cX = StartX2;
+    cY = StartY2;
     if( (cX >= StartX1) && (cX <= EndX1) && (cY >= StartY1) && (cY <= EndY1) )
         return TRUE;
 
-    cX = EndX2; cY = StartY2;   /* 2er coin */
+    cX = EndX2;
+    cY = StartY2;
     if( (cX >= StartX1) && (cX <= EndX1) && (cY >= StartY1) && (cY <= EndY1) )
         return TRUE;
 
-    cX = EndX2; cY = EndY2;   /* 3er coin */
+    cX = EndX2;
+    cY = EndY2;
     if( (cX >= StartX1) && (cX <= EndX1) && (cY >= StartY1) && (cY <= EndY1) )
         return TRUE;
 
-    cX = StartX2; cY = EndY2;   /* 4er coin */
+    cX = StartX2;
+    cY = EndY2;
     if( (cX >= StartX1) && (cX <= EndX1) && (cY >= StartY1) && (cY <= EndY1) )
         return TRUE;
-
 
     return FALSE;
-}
-
-
-/**
- * Find a PIN in a component by pin number.
- *
- * @param ePin_Number - pin number to locate.
- * @param eComponent - schematic component object to search.
- *
- * @return a pointer to the located the pin, or NULL if not found
- */
-LIB_PIN* LocatePinByNumber( const wxString& ePin_Number,
-                            SCH_COMPONENT*  eComponent )
-{
-    LIB_COMPONENT* Entry;
-    LIB_PIN_LIST pinList;
-    int Unit, Convert;
-
-    Entry = CMP_LIBRARY::FindLibraryComponent( eComponent->m_ChipName );
-
-    if( Entry == NULL )
-        return NULL;
-
-    wxASSERT( Entry->Type == ROOT );
-
-    Unit    = eComponent->m_Multi;
-    Convert = eComponent->m_Convert;
-
-    Entry->GetPins( pinList, Unit, Convert );
-
-    for( size_t i = 0; i < pinList.size(); i++ )
-    {
-        wxASSERT( pinList[i]->Type() == COMPONENT_PIN_DRAW_TYPE );
-
-        wxString pNumber;
-        pinList[i]->ReturnPinStringNum( pNumber );
-
-        if( ePin_Number == pNumber )
-            return pinList[i];
-    }
-
-    return NULL;
 }
 
 

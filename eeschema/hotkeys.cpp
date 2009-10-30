@@ -633,7 +633,10 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
         m_drawItem = LocateItemUsingCursor();
 
         if( m_drawItem && m_drawItem->Type() == COMPONENT_PIN_DRAW_TYPE )
-            InstallPineditFrame( this, DC, MousePos );
+        {
+            cmd.SetId( ID_LIBEDIT_EDIT_PIN );
+            GetEventHandler()->ProcessEvent( cmd );
+        }
 
         break;
 

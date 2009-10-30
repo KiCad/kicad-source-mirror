@@ -69,8 +69,7 @@ public:
      * Write the entry document information to a FILE in "*.dcm" format.
      *
      * @param aFile The FILE to write to.
-     *
-     * @return bool - true if success writing else false.
+     * @return True if success writing else false.
      */
     bool SaveDoc( FILE* aFile );
 
@@ -157,8 +156,7 @@ public:
      * Write the data structures out to a FILE in "*.lib" format.
      *
      * @param aFile - The FILE to write to.
-     *
-     * @return bool - true if success writing else false.
+     * @return True if success writing else false.
      */
     bool Save( FILE* aFile );
 
@@ -169,8 +167,7 @@ public:
      * @param line - The first line of the component definition.
      * @param lineNum - The current line number in the file.
      * @param errorMsg - Description of error on load failure.
-     *
-     * @return bool - Result of the load, false if there was an error.
+     * @return True if the load was successful, false if there was an error.
      */
     bool Load( FILE* file, char* line, int* lineNum, wxString& errorMsg );
     bool LoadField( char* line, wxString& errorMsg );
@@ -198,9 +195,7 @@ public:
      * Return pointer to the requested field.
      *
      * @param id - Id of field to return.
-     *
-     * @return LIB_FIELD* - Pointer to field if found.  NULL is returned if
-     *                      field not found.
+     * @return The field if found, otherwise NULL.
      */
     LIB_FIELD* GetField( int id );
 
@@ -220,7 +215,7 @@ public:
      * @param convert - Component conversion (DeMorgan) if available.
      * @param drawMode - Device context drawing mode, see wxDC.
      * @param color - Color to draw component.
-     * @param transformMatrix - Cooridinate adjustment settings.
+     * @param transformMatrix - Coordinate adjustment settings.
      * @param showPinText - Show pin text if true.
      * @param drawFields - Draw field text if true otherwise just draw
      *                     body items (useful to draw a body in schematic,
@@ -264,16 +259,14 @@ public:
                          WinEDA_DrawPanel* panel = NULL,
                          wxDC* dc = NULL );
 
-    /** GetNextDrawItem()
+    /**
      * Return the next draw object pointer.
      *
      * @param item - Pointer to the current draw item.  Setting item NULL
      *               with return the first item of type in the list.
      * @param type - type of searched item (filter).
      *               if TYPE_NOT_INIT search for all items types
-     *
-     * @return - Pointer to the next drawing object in the list if found,
-     *           otherwise NULL.
+     * @return - The next drawing object in the list if found, otherwise NULL.
      */
 
     LIB_DRAW_ITEM* GetNextDrawItem( LIB_DRAW_ITEM* item = NULL,
@@ -286,9 +279,7 @@ public:
      *
      * @param item - Pointer to the previous pin item, or NULL to get the
      *               first pin in the draw object list.
-     *
-     * @return - Pointer to the next pin object in the list if found,
-     *           otherwise NULL.
+     * @return - The next pin object in the list if found, otherwise NULL.
      */
     LIB_PIN* GetNextPin( LIB_PIN* item = NULL )
     {
@@ -313,6 +304,18 @@ public:
     void GetPins( LIB_PIN_LIST& pins, int unit = 0, int convert = 0 );
 
     /**
+     * Return pin object with the requested pin number.
+     *
+     * @param number - Number of the pin to find.
+     * @param unit - Unit of the component to find.  Set to 0 if a specific
+     *               unit number is not required.
+     * @param convert - Alternate body style filter (DeMorgan).  Set to 0 if
+     *                  no alternate body style is required.
+     * @return The pin object if found.  Otherwise NULL.
+     */
+    LIB_PIN* GetPin( const wxString& number, int unit = 0, int convert = 0 );
+
+    /**
      * Move the component offset.
      *
      * @param offset - Offset displacement.
@@ -327,7 +330,7 @@ public:
     /**
      * Test if component has more than one body conversion type (DeMorgan).
      *
-     * @return bool - True if component has more than one conversion.
+     * @return True if component has more than one conversion.
      */
     bool HasConversion() const;
 
@@ -337,8 +340,7 @@ public:
      * Alias name comparisons are case insensitive.
      *
      * @param name - Name of alias.
-     *
-     * @return bool - True if alias name in alias list.
+     * @return True if alias name in alias list.
      */
     bool HasAlias( const wxChar* name )
     {
@@ -362,9 +364,8 @@ public:
      * @param convert - Are the draw items being selected a conversion.
      * @param editPinByPin - Used to ignore pin selections when in edit pin
      *                       by pin mode is enabled.
-     *
-     * @return int - The number of draw object found inside the block select
-     *               rectangle.
+     * @return The number of draw objects found inside the block select
+     *         rectangle.
      */
     int SelectItems( EDA_Rect& rect, int unit, int convert,
                      bool editPinByPin );
@@ -378,7 +379,7 @@ public:
      * Deletes the select draw items marked by a block select.
      *
      * The name and reference field will not be deleted.  They are the
-     * minimum drawing items required for any component.  Thier properties
+     * minimum drawing items required for any component.  Their properties
      * can be changed but the cannot be removed.
      */
     void DeleteSelectedItems( void );
@@ -411,9 +412,7 @@ public:
      * @param convert - Body style of draw item.
      * @param type - Draw object type, set to 0 to search for any type.
      * @param pt - Coordinate for hit testing.
-     *
-     * @return LIB_DRAW_ITEM - Pointer the the draw object if found.
-     *                         Otherwise NULL.
+     * @return The draw object if found.  Otherwise NULL.
      */
     LIB_DRAW_ITEM* LocateDrawItem( int unit, int convert, KICAD_T type,
                                    const wxPoint& pt );
@@ -426,9 +425,7 @@ public:
      * @param type - Draw object type, set to 0 to search for any type.
      * @param pt - Coordinate for hit testing.
      * @param aTransMat = the transform matrix
-     *
-     * @return LIB_DRAW_ITEM - Pointer the the draw object if found.
-     *                         Otherwise NULL.
+     * @return The draw object if found.  Otherwise NULL.
      */
     LIB_DRAW_ITEM* LocateDrawItem( int unit, int convert, KICAD_T type,
                                    const wxPoint& pt,

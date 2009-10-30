@@ -194,10 +194,12 @@ void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
     switch( DrawEntry->Type() )
     {
-    case  COMPONENT_PIN_DRAW_TYPE:
+    case COMPONENT_PIN_DRAW_TYPE:
         if( DrawEntry->m_Flags == 0 )
         {
-            InstallPineditFrame( this, DC, pos );
+            wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+            cmd.SetId( ID_LIBEDIT_EDIT_PIN );
+            GetEventHandler()->ProcessEvent( cmd );
         }
         break;
 

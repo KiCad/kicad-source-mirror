@@ -63,7 +63,6 @@ void LIB_DRAW_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
     frame->ClearMsgPanel();
     frame->AppendMsgPanel( _( "Type" ), m_typeName, CYAN );
 
-    /* Affichage de l'appartenance */
     if( m_Unit == 0 )
         msg = _( "All" );
     else
@@ -147,7 +146,7 @@ LIB_ARC::LIB_ARC( const LIB_ARC& arc ) : LIB_DRAW_ITEM( arc )
  *  A centre_posx centre_posy rayon start_angle end_angle unit convert
  *  fill('N', 'F' ou 'f') startx starty endx endy
  */
-bool LIB_ARC::Save( FILE* ExportFile ) const
+bool LIB_ARC::Save( FILE* ExportFile )
 {
     int x1 = m_t1;
 
@@ -559,7 +558,7 @@ LIB_CIRCLE::LIB_CIRCLE( const LIB_CIRCLE& circle ) :
 }
 
 
-bool LIB_CIRCLE::Save( FILE* ExportFile ) const
+bool LIB_CIRCLE::Save( FILE* ExportFile )
 {
     if( fprintf( ExportFile, "C %d %d %d %d %d %d %c\n", m_Pos.x, m_Pos.y,
                  m_Radius, m_Unit, m_Convert, m_Width, fill_tab[m_Fill] ) < 0 )
@@ -825,7 +824,7 @@ LIB_RECTANGLE::LIB_RECTANGLE( const LIB_RECTANGLE& rect ) :
 }
 
 
-bool LIB_RECTANGLE::Save( FILE* ExportFile ) const
+bool LIB_RECTANGLE::Save( FILE* ExportFile )
 {
     if( fprintf( ExportFile, "S %d %d %d %d %d %d %d %c\n", m_Pos.x, m_Pos.y,
                  m_End.x, m_End.y, m_Unit, m_Convert, m_Width,
@@ -1110,7 +1109,7 @@ LIB_SEGMENT::LIB_SEGMENT( const LIB_SEGMENT& segment ) :
 }
 
 
-bool LIB_SEGMENT::Save( FILE* ExportFile ) const
+bool LIB_SEGMENT::Save( FILE* ExportFile )
 {
     if( fprintf( ExportFile, "L %d %d %d", m_Unit, m_Convert, m_Width ) )
         return false;
@@ -1330,7 +1329,7 @@ LIB_POLYLINE::LIB_POLYLINE( const LIB_POLYLINE& polyline ) :
 }
 
 
-bool LIB_POLYLINE::Save( FILE* ExportFile ) const
+bool LIB_POLYLINE::Save( FILE* ExportFile )
 {
     int ccount = GetCornerCount();
 
@@ -1705,7 +1704,7 @@ LIB_BEZIER::LIB_BEZIER( const LIB_BEZIER& bezier ) : LIB_DRAW_ITEM( bezier )
 }
 
 
-bool LIB_BEZIER::Save( FILE* ExportFile ) const
+bool LIB_BEZIER::Save( FILE* ExportFile )
 {
     int ccount = GetCornerCount();
 

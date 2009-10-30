@@ -30,7 +30,7 @@ LIB_TEXT::LIB_TEXT(LIB_COMPONENT * aParent) :
 }
 
 
-bool LIB_TEXT::Save( FILE* ExportFile ) const
+bool LIB_TEXT::Save( FILE* ExportFile )
 {
     wxString text = m_Text;
 

@@ -63,18 +63,18 @@ public:
     int GetPenSize( );
 
     /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
-     * format.
+     * Writes field object out to a FILE in "*.lib" format.
+     *
      * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
+     * @return True if success writing else false.
      */
-    virtual bool Save( FILE* aFile ) const;
+    virtual bool Save( FILE* aFile );
     virtual bool Load( char* line, wxString& errorMsg );
 
-    /** Function Copy
-     * copy parameters of this to Target. Pointers are not copied
-     * @param aTarget = the LIB_FIELD to set with "this" values
+    /**
+     * Copy parameters of this field to another field. Pointers are not copied.
+     *
+     * @param aTarget = Target field to copy values to.
      */
     void          Copy( LIB_FIELD* aTarget ) const;
 
@@ -87,26 +87,25 @@ public:
     /**
      * Return the bounding rectangle of the field text.
      *
-     * @return EDA_Rect - Bounding rectangle.
+     * @return Bounding rectangle.
      */
     virtual EDA_Rect GetBoundingBox();
 
     /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param refPos A wxPoint to test, in Field coordinate system
-     * @return bool - true if a hit, else false
+     * Test if the given point is within the bounds of this object.
+     *
+     * @param refPos A point to test in field coordinate system
+     * @return True if a hit, else false
      */
     bool HitTest( const wxPoint& refPos );
 
      /**
-      * Function HitTest
-     * @return true if the point aPosRef is near this object
-     * @param aPosRef = a wxPoint to test
-     * @param aThreshold = max distance to this object (usually the half
-     *                     thickness of a line)
-     * @param aTransMat = the transform matrix
-     */
+      * @param aPosRef = a wxPoint to test
+      * @param aThreshold = max distance to this object (usually the half
+      *                     thickness of a line)
+      * @param aTransMat = the transform matrix
+      * @return True if the point aPosRef is near this object
+      */
     virtual bool HitTest( wxPoint aPosRef, int aThreshold,
                           const int aTransMat[2][2] );
 
@@ -135,8 +134,7 @@ public:
      * the string U?A will be returned for unit = 1.
      *
      * @param unit - The package unit number.  Only effects reference field.
-     *
-     * @return wxString - Field text.
+     * @return Field text.
      */
     wxString GetFullText( int unit = 1 );
 

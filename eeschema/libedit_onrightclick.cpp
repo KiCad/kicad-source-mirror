@@ -233,7 +233,7 @@ void AddMenusForPin( wxMenu*              PopMenu,
 
     wxString msg;
     msg = AddHotkeyName( _( "Edit Pin " ), s_Libedit_Hokeys_Descr, HK_EDIT_PIN );
-    ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_PIN_EDIT, msg, edit_xpm );
+    ADD_MENUITEM( PopMenu, ID_LIBEDIT_EDIT_PIN, msg, edit_xpm );
 
     if( not_in_move )
     {

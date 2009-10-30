@@ -35,8 +35,7 @@ class LIB_PIN;
 
 
 /**
- * Enum ElectricPinType
- * is the set of schematic pin types, used in ERC tests.
+ * The component library pin object electrical types used in ERC tests.
  */
 enum ElectricPinType
 {
@@ -54,16 +53,15 @@ enum ElectricPinType
     PIN_NMAX            /* End of List (no used as pin type) */
 };
 
-/* Messages d'affichage du type electrique */
+/* Electrical pin type names. */
 extern const wxChar* MsgPinElectricType[];
 
-/* Autres bits: bits du membre .Flag des Pins */
-#define PINNOTDRAW 1        /* si 1: pin invisible */
+/* Pin visibility flag bit. */
+#define PINNOTDRAW 1    /* Set makes pin invisible */
 
 
 /**
- * Enum DrawPinShape
- * is the set of shapes allowed for pins.
+ * The component library pin object drawing shapes.
  */
 enum DrawPinShape
 {
@@ -76,10 +74,9 @@ enum DrawPinShape
 
 
 /**
- * Enum DrawPinOrient
- * is the set of orientations allowed for pins.
+ *  The component library pin object orientations.
  */
-enum  DrawPinOrient
+enum DrawPinOrient
 {
     PIN_RIGHT = 'R',
     PIN_LEFT  = 'L',
@@ -110,17 +107,25 @@ typedef std::vector< LIB_PIN* > LIB_PIN_LIST;
 /****************************************************************************/
 
 
-/* class LIB_DRAW_ITEM : Basic class for items used in a library component
+/**
+ * Base class for drawable items used in library components.
  *  (graphic shapes, texts, fields, pins)
  */
-
 class LIB_DRAW_ITEM : public EDA_BaseStruct
 {
 public:
-    int      m_Unit;     /* Unit identification (for multi part per package)
-                          * 0 if the item is common to all units */
-    int      m_Convert;  /* Shape identification (for parts which have a convert
-                          * shape) 0 if the item is common to all shapes */
+    /**
+     * Unit identification for multiple parts per package.  Set to 0 if the
+     * item is common to all units.
+     */
+    int      m_Unit;
+
+    /**
+     * Shape identification for alternate body styles.  Set 0 if the item
+     * is common to all body styles.  This is commonly referred to as
+     * DeMorgan style and this is typically how it is used in Kicad.
+     */
+    int      m_Convert;
     FILL_T   m_Fill;     /* NO_FILL, FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR.
                           * has meaning only for some items */
     wxString m_typeName; /* Name of object displayed in the message panel. */
@@ -137,40 +142,38 @@ public:
     virtual ~LIB_DRAW_ITEM() { }
 
     /**
-     * Function Draw (virtual pure)
-     *
      * Draw A body item
-     * @param aPanel = DrawPanel to use (can be null) mainly used for clipping
+     *
+     * @param aPanel - DrawPanel to use (can be null) mainly used for clipping
      *                 purposes
-     * @param aDC = Device Context (can be null)
-     * @param aOffset = offset to draw
-     * @param aColor = -1 to use the normal body item color, or use this color
+     * @param aDC - Device Context (can be null)
+     * @param aOffset - offset to draw
+     * @param aColor - -1 to use the normal body item color, or use this color
      *                 if >= 0
-     * @param aDrawMode = GR_OR, GR_XOR, ...
-     * @param aData = value or pointer used to pass others parameters,
+     * @param aDrawMode - GR_OR, GR_XOR, ...
+     * @param aData - value or pointer used to pass others parameters,
      *                depending on body items. used for some items to force
      *                to force no fill mode ( has meaning only for items what
      *                can be filled ). used in printing or moving objects mode
      *                or to pass reference to the lib component for pins
-     * @param aTransformMatrix = Transform Matrix (rotation, mirror ..)
+     * @param aTransformMatrix - Transform Matrix (rotation, mirror ..)
      */
     virtual void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC,
                        const wxPoint &aOffset, int aColor, int aDrawMode,
                        void* aData, const int aTransformMatrix[2][2] ) = 0;
 
-    /** Function GetPenSize virtual pure
+    /**
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize( ) = 0;
 
     /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
-     * format.
-     * @param aFile The FILE to write to.
+     * Write draw item object to a FILE in "*.lib" format.
+     *
+     * @param aFile - The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool Save( FILE* aFile ) const = 0;
+    virtual bool Save( FILE* aFile ) = 0;
     virtual bool Load( char* line, wxString& errorMsg ) = 0;
 
     LIB_COMPONENT * GetParent()
@@ -179,8 +182,8 @@ public:
     }
 
     /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
+     * Tests if the given point is within the bounds of this object.
+     *
      * @param refPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
@@ -189,17 +192,17 @@ public:
         return false;   // derived classes should override this function
     }
 
-    /** Function HitTest (overlaid)
-     * @return true if the point aPosRef is near this object
-     * @param aPosRef = a wxPoint to test
-     * @param aThreshold = max distance to this object (usually the half
+    /**
+     * @param aPosRef - a wxPoint to test
+     * @param aThreshold - max distance to this object (usually the half
      *                     thickness of a line)
-     * @param aTransMat = the transform matrix
+     * @param aTransMat - the transform matrix
+     * @return true if the point aPosRef is near this object
      */
     virtual bool HitTest( wxPoint aPosRef, int aThreshold,
                           const int aTransMat[2][2] ) = 0;
 
-   /** Function GetBoundingBox
+   /**
      * @return the boundary box for this, in library coordinates
      */
     virtual EDA_Rect GetBoundingBox()
@@ -223,7 +226,6 @@ public:
      * Test LIB_DRAW_ITEM objects for equivalence.
      *
      * @param other - Object to test against.
-     *
      * @return bool - True if object is identical to this object.
      */
     bool operator==( const LIB_DRAW_ITEM& other ) const;
@@ -236,7 +238,6 @@ public:
      * Test if another draw item is less than this draw object.
      *
      * @param other - Draw item to compare against.
-     *
      * @return bool - True if object is less than this object.
      */
     bool operator<( const LIB_DRAW_ITEM& other) const;
@@ -255,7 +256,6 @@ public:
      * DoTestInside method for each derived object type.
      *
      * @param rect - Rectangle to check against.
-     *
      * @return bool - True if object is inside rectangle.
      */
     bool Inside( EDA_Rect& rect ) { return DoTestInside( rect ); }
@@ -312,6 +312,21 @@ public:
      * @return bool - True if draw object can be fill.  Default is false.
      */
     bool IsFillable( void ) { return m_isFillable; }
+
+    /**
+     * Return the modified status of the draw object.
+     *
+     * @return bool - True if the draw object has been modified.
+     */
+    bool IsModified( void ) { return ( m_Flags & IS_CHANGED ) != 0; }
+
+    /**
+     * Return the new item status of the draw object.
+     *
+     * @return bool - True if the draw item has been added to the
+     *                parent component.
+     */
+    bool IsNew( void ) { return ( m_Flags & IS_NEW ) != 0; }
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy() = 0;
@@ -388,30 +403,29 @@ public:
 
 
     /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
-     * format.
+     * Write pin object to a FILE in "*.lib" format.
+     *
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool Save( FILE* aFile ) const;
+    virtual bool Save( FILE* aFile );
     virtual bool Load( char* line, wxString& errorMsg );
 
 
     /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
+     * Test if the given point is within the bounds of this object.
+     *
      * @param aRefPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
     virtual bool HitTest( const wxPoint& aRefPos );
 
-    /** Function HitTest
-     * @return true if the point aPosRef is near this object
-     * @param aPosRef = a wxPoint to test
-     * @param aThreshold = max distance to this object (usually the half
+    /**
+     * @param aPosRef - a wxPoint to test
+     * @param aThreshold - max distance to this object (usually the half
      *                     thickness of a line)
-     * @param aTransMat = the transform matrix
+     * @param aTransMat - the transform matrix
+     * @return true if the point aPosRef is near this object
      */
     virtual bool HitTest( wxPoint aPosRef, int aThreshold,
                           const int aTransMat[2][2] );
@@ -422,14 +436,18 @@ public:
 
     int ReturnPinDrawOrient( const int TransMat[2][2] );
 
-    /** Function ReturnPinStringNum
-     * fill a buffer with pin num as a wxString
-     *  Pin num is coded as a long or 4 ASCII chars
-     *  Used to print/draw the pin num
-     * @param aStringBuffer = the wxString to store the pin num as an unicode
-     *                         string
+    /**
+     * Fill a string buffer with pin number.
+     *
+     * Pin numbers are coded as a long or 4 ASCII characters.  Used to print
+     * or draw the pin number.
+     *
+     * @param aStringBuffer - the wxString to store the pin num as an unicode
+     *                        string
      */
     void         ReturnPinStringNum( wxString& aStringBuffer ) const;
+
+    wxString     GetNumber( void );
 
     /** Function ReturnPinStringNum (static function)
      * Pin num is coded as a long or 4 ascii chars
@@ -441,10 +459,144 @@ public:
 
     void         SetPinNumFromString( wxString& buffer );
 
-    /** Function GetPenSize
-     * @return the size of the "pen" that be used to draw or plot this item
+    /**
+     * Set the pin name.
+     *
+     * This will also all of the pin names marked by EnableEditMode().
+     *
+     * @param name - New pin name.
      */
-    virtual int GetPenSize( );
+    void SetName( const wxString& name );
+
+    /**
+     * Set the size of the pin name text.
+     *
+     * This will also update the text size of the name of the pins marked
+     * by EnableEditMode().
+     *
+     * @param size - The text size of the pin name in schematic units ( mils ).
+     */
+    void SetNameTextSize( int size );
+
+    /**
+     * Set the pin number.
+     *
+     * This will also all of the pin numbers marked by EnableEditMode().
+     *
+     * @param number - New pin number.
+     */
+    void SetNumber( const wxString& number );
+
+    /**
+     * Set the size of the pin number text.
+     *
+     * This will also update the text size of the number of the pins marked
+     * by EnableEditMode().
+     *
+     * @param size - The text size of the pin number in schematic
+     *               units ( mils ).
+     */
+    void SetNumberTextSize( int size );
+
+    /**
+     * Set orientation on the pin.
+     *
+     * This will also update the orientation of the pins marked by
+     * EnableEditMode().
+     *
+     * @param orientation - The orientation of the pin.
+     */
+    void SetOrientation( int orientation );
+
+    /**
+     * Set the draw style of the pin.
+     *
+     * This will also update the draw style of the pins marked by
+     * EnableEditMode().
+     *
+     * @param style - The draw style of the pin.
+     */
+    void SetDrawStyle( int style );
+
+    /**
+     * Set the electrical type of the pin.
+     *
+     * This will also update the electrical type of the pins marked by
+     * EnableEditMode().
+     *
+     * @param type - The electrical type of the pin.
+     */
+    void SetElectricalType( int style );
+
+    /**
+     * Set the pin length.
+     *
+     * This will also update the length of the pins marked by EnableEditMode().
+     *
+     * @param size - The length of the pin in mils.
+     */
+    void SetLength( int length );
+
+    /**
+     * Set the pin part number.
+     *
+     * If the pin is changed from not common to common to all parts, any
+     * linked pins will be removed from the parent component.
+     *
+     * @param part - Number of the part the pin belongs to.  Set to zero to
+     *               make pin common to all parts in a multi-part component.
+     */
+    void SetPartNumber( int part );
+
+    /**
+     * Set the body style (conversion) of the pin.
+     *
+     * If the pin is changed from not common to common to all body styles, any
+     * linked pins will be removed from the parent component.
+     *
+     * @param conversion - Body style of the pin.  Set to zero to make pin
+     *                     common to all body styles.
+     */
+    void SetConversion( int conversion );
+
+    /**
+     * Set or clear the visibility flag for the pin.
+     *
+     * This will also update the visibility of the pins marked by
+     * EnableEditMode().
+     *
+     * @param visible - True to make the pin visible or false to hide the pin.
+     */
+    void SetVisible( bool visible );
+
+    /**
+     * Enable or clear pin editing mode.
+     *
+     * The pin editing mode marks or unmarks all pins common to this
+     * pin object for further editing.  If any of the pin modifcation
+     * methods are called after enabling the editing mode, all pins
+     * marked for editing will have the same attribute changed.  The
+     * only case were this is not true making this pin common to all
+     * parts or body styles in the component.  See SetCommonToAllParts()
+     * and SetCommonToAllBodyStyles() for more information.
+     *
+     * @params enable - True marks all common pins for editing mode.  False
+     *                  clears the editing mode.
+     * @params editpinByPin - Enables the edit pin by pin mode.
+     */
+    void EnableEditMode( bool enable, bool pinByPin = false );
+
+    /**
+     * Return the visibility status of the draw object.
+     *
+     * @return bool - True if draw object is visible otherwise false.
+     */
+    bool IsVisible( void ) { return ( m_Attributs & PINNOTDRAW ) == 0; }
+
+    /**
+     * @return the size of the "pen" that be used to draw or plot this item.
+     */
+    virtual int GetPenSize();
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
                int aColor, int aDrawMode, void* aData,
@@ -466,6 +618,62 @@ public:
                        bool     DrawPinNum,
                        bool     DrawPinNameint,
                        int      aWidth );
+
+    /**
+     * Get a list of pin orientation names.
+     *
+     * @return wxArrayString - List of valid pin orientation names.
+     */
+    static wxArrayString GetOrientationNames( void );
+
+    /**
+     * Get the orientation code by index used to set the pin orientation.
+     *
+     * @param index - The index of the orientation code to look up.
+     * @return int - Orientation code if index is valid.  Returns right
+     *               orientation on index error.
+     */
+    static int GetOrientationCode( int index );
+
+    /**
+     * Get the index of the orientation code.
+     *
+     * @param code - The orientation code to look up.
+     * @return int - The index of the orientation code if found.  Otherwise,
+     *               return wxNOT_FOUND.
+     */
+    static int GetOrientationCodeIndex( int code );
+
+    /**
+     * Get a list of pin draw style names.
+     *
+     * @return wxArrayString - List of valid pin draw style names.
+     */
+    static wxArrayString GetStyleNames( void );
+
+    /**
+     * Get the pin draw style code by index used to set the pin draw style.
+     *
+     * @param index - The index of the pin draw style code to look up.
+     * @return int - Pin draw style code if index is valid.  Returns NONE
+     *               style on index error.
+     */
+    static int GetStyleCode( int index );
+
+    /**
+     * Get the index of the pin draw style code.
+     *
+     * @param code - The pin draw style code to look up.
+     * @return int - The index of the pin draw style code if found.  Otherwise,
+     *               return wxNOT_FOUND.
+     */
+    static int GetStyleCodeIndex( int code );
+
+    /**
+     * Get a list of pin electrical type names.
+     * @return wxArrayString - List of valid pin electrical type names.
+     */
+    static wxArrayString GetElectricalTypeNames( void );
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
@@ -500,12 +708,11 @@ class LIB_ARC : public LIB_DRAW_ITEM
 {
 public:
     int     m_Radius;
-    int     m_t1;
-    int     m_t2;       /* position des 2 extremites de l'arc en 0.1 degres */
+    int     m_t1;       /* First radius angle of the arc in 0.1 degrees. */
+    int     m_t2;       /* Second radius angle of the arc in 0.1 degrees. */
     wxPoint m_ArcStart;
-    wxPoint m_ArcEnd;   /* position des 2 extremites de l'arc en coord reelles*/
-    wxPoint m_Pos;      /* Position or centre (Arc and Circle) or start point
-                         * (segments) */
+    wxPoint m_ArcEnd;   /* Arc end position. */
+    wxPoint m_Pos;      /* Radius center point. */
     int     m_Width;    /* Line width */
 
 public:
@@ -519,29 +726,28 @@ public:
 
 
     /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
-     * format.
+     * Save arc object to a FILE in "*.lib" format.
+     *
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool Save( FILE* aFile ) const;
+    virtual bool Save( FILE* aFile );
     virtual bool Load( char* line, wxString& errorMsg );
 
     /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
+     * Tests if the given wxPoint is within the bounds of this object.
+     *
      * @param aRefPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
     virtual bool HitTest( const wxPoint& aRefPos );
 
-     /** Function HitTest
-     * @return true if the point aPosRef is near this object
-     * @param aPosRef = a wxPoint to test
-     * @param aThreshold = max distance to this object (usually the half
+     /**
+     * @param aPosRef - a wxPoint to test
+     * @param aThreshold - max distance to this object (usually the half
      *                     thickness of a line)
-     * @param aTransMat = the transform matrix
+     * @param aTransMat - the transform matrix
+     * @return true if the point aPosRef is near this object
      */
     virtual bool HitTest( wxPoint aPosRef, int aThreshold,
                           const int aTransMat[2][2] );
@@ -552,7 +758,7 @@ public:
 
     virtual EDA_Rect GetBoundingBox();
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
-    /** Function GetPenSize
+    /**
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize( );
@@ -604,34 +810,33 @@ public:
 
 
     /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
-     * format.
-     * @param aFile The FILE to write to.
+     * Write circle object to a FILE in "*.lib" format.
+     *
+     * @param aFile - The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool Save( FILE* aFile ) const;
+    virtual bool Save( FILE* aFile );
     virtual bool Load( char* line, wxString& errorMsg );
 
     /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param aRefPos A wxPoint to test
+     * Test if the given point is within the bounds of this object.
+     *
+     * @param aRefPos - A wxPoint to test
      * @return bool - true if a hit, else false
      */
     virtual bool HitTest( const wxPoint& aRefPos );
 
-     /** Function HitTest
-     * @return true if the point aPosRef is near this object
-     * @param aPosRef = a wxPoint to test
-     * @param aThreshold = max distance to this object (usually the half
-     *                     thickness of a line)
-     * @param aTransMat = the transform matrix
-     */
+     /**
+      * @param aPosRef - a wxPoint to test
+      * @param aThreshold - max distance to this object (usually the half
+      *                     thickness of a line)
+      * @param aTransMat - the transform matrix
+      * @return true if the point aPosRef is near this object
+      */
     virtual bool HitTest( wxPoint aPosRef, int aThreshold,
                           const int aTransMat[2][2] );
 
-    /** Function GetPenSize
+    /**
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize( );
@@ -687,37 +892,37 @@ public:
 
 
     /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
-     * format.
-     * @param aFile The FILE to write to.
+     * Write text object out to a FILE in "*.lib" format.
+     *
+     * @param aFile - The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool Save( FILE* aFile ) const;
+    virtual bool Save( FILE* aFile );
     virtual bool Load( char* line, wxString& errorMsg );
 
     /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param refPos A wxPoint to test
+     * Test if the given point is within the bounds of this object.
+     *
+     * @param refPos - A wxPoint to test
      * @return bool - true if a hit, else false
      */
     virtual bool HitTest( const wxPoint& refPos );
 
-     /** Function HitTest
-     * @return true if the point aPosRef is near a segment
-     * @param aPosRef = a wxPoint to test, in eeschema coordinates
-     * @param aThreshold = max distance to a segment
-     * @param aTransMat = the transform matrix
-     */
+     /**
+      * @param aPosRef = a wxPoint to test, in eeschema coordinates
+      * @param aThreshold = max distance to a segment
+      * @param aTransMat = the transform matrix
+      * @return true if the point aPosRef is near a segment
+      */
     virtual bool HitTest( wxPoint aPosRef, int aThreshold,
                           const int aTransMat[2][2] );
 
     /**
-     * Function HitTest (overlayed)
-     * tests if the given EDA_Rect intersect this object.
+     * Test if the given rectangle intersects this object.
+     *
      * For now, an ending point must be inside this rect.
-     * @param refArea : the given EDA_Rect
+     *
+     * @param refArea - the given EDA_Rect
      * @return bool - true if a hit, else false
      */
     virtual bool HitTest( EDA_Rect& refArea )
@@ -725,7 +930,7 @@ public:
         return TextHitTest( refArea );
     }
 
-    /** Function GetPenSize
+    /**
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize( );
@@ -786,34 +991,33 @@ public:
 
 
     /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
-     *  format.
-     * @param aFile The FILE to write to.
+     * Write rectangle object out to a FILE in "*.lib" format.
+     *
+     * @param aFile - The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool Save( FILE* aFile ) const;
+    virtual bool Save( FILE* aFile );
     virtual bool Load( char* line, wxString& errorMsg );
 
     /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param aRefPos A wxPoint to test
+     * Test if the given point is within the bounds of this object.
+     *
+     * @param aRefPos - A wxPoint to test
      * @return bool - true if a hit, else false
      */
     virtual bool HitTest( const wxPoint& aRefPos );
 
-    /** Function HitTest
-     * @return true if the point aPosRef is near this object
-     * @param aPosRef = a wxPoint to test
-     * @param aThreshold = max distance to this object (usually the half
+    /**
+     * @param aPosRef - a wxPoint to test
+     * @param aThreshold - max distance to this object (usually the half
      *                     thickness of a line)
-     * @param aTransMat = the transform matrix
+     * @param aTransMat - the transform matrix
+     * @return true if the point aPosRef is near this object
      */
     virtual bool HitTest( wxPoint aPosRef, int aThreshold,
                           const int aTransMat[2][2] );
 
-    /** Function GetPenSize
+    /**
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize( );
@@ -857,8 +1061,7 @@ class LIB_SEGMENT  : public LIB_DRAW_ITEM
 {
 public:
     wxPoint m_End;
-    wxPoint m_Pos;      /* Position or centre (Arc and Circle) or start point
-                         * (segments) */
+    wxPoint m_Pos;      /* Segment start point */
     int     m_Width;    /* Line width */
 
 public:
@@ -872,34 +1075,33 @@ public:
 
 
     /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
-     * format.
-     * @param aFile The FILE to write to.
+     * Writes segment object out to a FILE in "*.lib" format.
+     *
+     * @param aFile - The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool Save( FILE* aFile ) const;
+    virtual bool Save( FILE* aFile );
     virtual bool Load( char* line, wxString& errorMsg );
 
      /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param aRefPos A wxPoint to test
+     * Test if the given point is within the bounds of this object.
+     *
+     * @param aRefPos - A wxPoint to test
      * @return bool - true if a hit, else false
      */
     virtual bool HitTest( const wxPoint& aRefPos );
 
-    /** Function HitTest
-     * @return true if the point aPosRef is near this object
+    /**
      * @param aPosRef = a wxPoint to test
      * @param aThreshold = max distance to this object (usually the half
      *                     thickness of a line)
      * @param aTransMat = the transform matrix
+     * @return true if the point aPosRef is near this object
      */
     virtual bool HitTest( wxPoint aPosRef, int aThreshold,
                           const int aTransMat[2][2] );
 
-    /** Function GetPenSize
+    /**
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize( );
@@ -957,45 +1159,44 @@ public:
 
 
     /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
-     * format.
-     * @param aFile The FILE to write to.
+     * Write polyline object out to a FILE in "*.lib" format.
+     *
+     * @param aFile - The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool Save( FILE* aFile ) const;
+    virtual bool Save( FILE* aFile );
     virtual bool Load( char* line, wxString& errorMsg );
 
     void AddPoint( const wxPoint& point );
 
-    /** Function GetCornerCount
+    /**
      * @return the number of corners
      */
     unsigned GetCornerCount() const { return m_PolyPoints.size(); }
 
      /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param aRefPos A wxPoint to test
+     * Test if the given point is within the bounds of this object.
+     *
+     * @param aRefPos - A wxPoint to test
      * @return bool - true if a hit, else false
      */
     virtual bool HitTest( const wxPoint& aRefPos );
 
-    /** Function HitTest
-     * @return true if the point aPosRef is near a segment
+    /**
      * @param aPosRef = a wxPoint to test
      * @param aThreshold = max distance to a segment
      * @param aTransMat = the transform matrix
+     * @return true if the point aPosRef is near a segment
      */
     virtual bool HitTest( wxPoint aPosRef, int aThreshold,
                           const int aTransMat[2][2] );
 
-    /** Function GetBoundingBox
+    /**
      * @return the boundary box for this, in library coordinates
      */
     virtual EDA_Rect GetBoundingBox();
 
-    /** Function GetPenSize
+    /**
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize( );
@@ -1051,45 +1252,44 @@ public:
 
 
     /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
-     * format.
-     * @param aFile The FILE to write to.
+     * Write bezier curve object out to a FILE in "*.lib" format.
+     *
+     * @param aFile - The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool Save( FILE* aFile ) const;
+    virtual bool Save( FILE* aFile );
     virtual bool Load( char* line, wxString& errorMsg );
 
     void         AddPoint( const wxPoint& point );
 
-    /** Function GetCornerCount
+    /**
      * @return the number of corners
      */
     unsigned GetCornerCount() const { return m_PolyPoints.size(); }
 
     /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param aRefPos A wxPoint to test
+     * Test if the given point is within the bounds of this object.
+     *
+     * @param aRefPos - A wxPoint to test
      * @return bool - true if a hit, else false
      */
     virtual bool HitTest( const wxPoint& aRefPos );
 
-    /** Function HitTest
-     * @return true if the point aPosRef is near a segment
+    /**
      * @param aPosRef = a wxPoint to test
      * @param aThreshold = max distance to a segment
      * @param aTransMat = the transform matrix
+     * @return true if the point aPosRef is near a segment
      */
     virtual bool HitTest( wxPoint aPosRef, int aThreshold,
                           const int aTransMat[2][2] );
 
-    /** Function GetBoundingBox
+    /**
      * @return the boundary box for this, in library coordinates
      */
     virtual EDA_Rect GetBoundingBox();
 
-    /** Function GetPenSize
+    /**
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize( );

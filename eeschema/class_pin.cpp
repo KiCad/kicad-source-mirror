@@ -18,8 +18,78 @@
 #include "class_libentry.h"
 
 
-extern void PlotPinSymbol( PLOTTER* plotter, const wxPoint& pos,
-                           int len, int orient, int Shape );
+/**
+ * Note: The following name lists are sentence capitalized per the GNOME UI
+ *       standards for list controls.  Please do not change the capitalization
+ *       of these strings unless the GNOME UI standards are changed.
+ */
+static const wxString pin_orientation_names[] =
+{
+    _( "Right" ),
+    _( "Left" ),
+    _( "Up" ),
+    _( "Down" )
+};
+
+
+static const int pin_orientation_codes[] =
+{
+    PIN_RIGHT,
+    PIN_LEFT,
+    PIN_UP,
+    PIN_DOWN
+};
+
+
+#define PIN_ORIENTATION_CNT  ( sizeof( pin_orientation_names ) / \
+                               sizeof( wxString* ) )
+
+
+static const wxString pin_style_names[] =
+{
+    _( "Line" ),
+    _( "Inverted" ),
+    _( "Clock" ),
+    _( "Inverted clock" ),
+    _( "Input low" ),
+    _( "Clock low" ),
+    _( "Output low" )
+};
+
+
+#define PIN_STYLE_CNT  ( sizeof( pin_style_names ) / sizeof( wxString* ) )
+
+
+static const int pin_style_codes[] =
+{
+    NONE,
+    INVERT,
+    CLOCK,
+    CLOCK | INVERT,
+    LOWLEVEL_IN,
+    LOWLEVEL_IN | CLOCK,
+    LOWLEVEL_OUT
+};
+
+
+static const wxString pin_electrical_type_names[] =
+{
+    _( "Input" ),
+    _( "Output" ),
+    _( "Bidirectional" ),
+    _( "Tri-state" ),
+    _( "Passive" ),
+    _( "Unspecified" ),
+    _( "Power input" ),
+    _( "Power output" ),
+    _( "Open collector" ),
+    _( "Open emitter" ),
+    _( "Not connected" )
+};
+
+
+#define PIN_ELECTRICAL_TYPE_CNT ( sizeof( pin_electrical_type_names ) / \
+                                  sizeof( wxString* ) )
 
 
 const wxChar* MsgPinElectricType[] =
@@ -37,12 +107,17 @@ const wxChar* MsgPinElectricType[] =
     wxT( "?????" )
 };
 
+
+extern void PlotPinSymbol( PLOTTER* plotter, const wxPoint& pos,
+                           int len, int orient, int Shape );
+
+
 LIB_PIN::LIB_PIN(LIB_COMPONENT * aParent) :
     LIB_DRAW_ITEM( COMPONENT_PIN_DRAW_TYPE, aParent )
 {
     m_PinLen      = 300;              /* default Pin len */
     m_Orient      = PIN_RIGHT;        /* Pin oprient: Up, Down, Left, Right */
-    m_PinShape    = NONE;             /* Bit a bit: Pin shape (voir enum prec) */
+    m_PinShape    = NONE;             /* Pin shape, bitwise. */
     m_PinType     = PIN_UNSPECIFIED;  /* electrical type of pin */
     m_Attributs   = 0;                /* bit 0 != 0: pin invisible */
     m_PinNum      = 0;                /* pin number ( i.e. 4 codes ASCII ) */
@@ -74,6 +149,343 @@ LIB_PIN::LIB_PIN( const LIB_PIN& pin ) : LIB_DRAW_ITEM( pin )
     m_PinNamePositionOpt = pin.m_PinNamePositionOpt;
     m_Width              = pin.m_Width;
     m_PinName            = pin.m_PinName;
+}
+
+
+void LIB_PIN::SetName( const wxString& name )
+{
+    wxString tmp = ( name.IsEmpty() ) ? wxT( "~" ) : name;
+    tmp.Replace( wxT( " " ), wxT( "_" ) );
+
+    if( m_PinName != tmp )
+    {
+        m_PinName = tmp;
+        m_Flags |= IS_CHANGED;
+    }
+
+    if( GetParent() == NULL )
+        return;
+
+    LIB_PIN_LIST pinList;
+    GetParent()->GetPins( pinList );
+
+    for( size_t i = 0; i < pinList.size(); i++ )
+    {
+        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0
+            || pinList[i]->m_PinName == m_PinName )
+            continue;
+
+        pinList[i]->m_PinName = m_PinName;
+        pinList[i]->m_Flags |= IS_CHANGED;
+    }
+}
+
+
+void LIB_PIN::SetNameTextSize( int size )
+{
+    if( size != m_PinNameSize )
+    {
+        m_PinNameSize = size;
+        m_Flags |= IS_CHANGED;
+    }
+
+    if( GetParent() == NULL )
+        return;
+
+    LIB_PIN_LIST pinList;
+    GetParent()->GetPins( pinList );
+
+    for( size_t i = 0; i < pinList.size(); i++ )
+    {
+        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0
+            || pinList[i]->m_PinNameSize == size )
+            continue;
+
+        pinList[i]->m_PinNameSize = size;
+        pinList[i]->m_Flags |= IS_CHANGED;
+    }
+}
+
+
+void LIB_PIN::SetNumber( const wxString& number )
+{
+    wxString tmp = ( number.IsEmpty() ) ? wxT( "~" ) : number;
+    tmp.Replace( wxT( " " ), wxT( "_" ) );
+    long oldNumber = m_PinNum;
+    SetPinNumFromString( tmp );
+
+    if( m_PinNum != oldNumber )
+    {
+        m_Flags |= IS_CHANGED;
+    }
+
+    if( GetParent() == NULL )
+        return;
+
+    LIB_PIN_LIST pinList;
+    GetParent()->GetPins( pinList );
+
+    for( size_t i = 0; i < pinList.size(); i++ )
+    {
+        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0
+            || pinList[i]->m_PinNum == m_PinNum )
+            continue;
+
+        pinList[i]->m_PinNum = m_PinNum;
+        pinList[i]->m_Flags |= IS_CHANGED;
+    }
+}
+
+
+void LIB_PIN::SetNumberTextSize( int size )
+{
+    if( size != m_PinNumSize )
+    {
+        m_PinNumSize = size;
+        m_Flags |= IS_CHANGED;
+    }
+
+    if( GetParent() == NULL )
+        return;
+
+    LIB_PIN_LIST pinList;
+    GetParent()->GetPins( pinList );
+
+    for( size_t i = 0; i < pinList.size(); i++ )
+    {
+        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0
+            || pinList[i]->m_PinNumSize == size )
+            continue;
+
+        pinList[i]->m_PinNumSize = size;
+        pinList[i]->m_Flags |= IS_CHANGED;
+    }
+}
+
+
+void LIB_PIN::SetOrientation( int orientation )
+{
+    if( m_Orient != orientation )
+    {
+        m_Orient = orientation;
+        m_Flags |= IS_CHANGED;
+    }
+
+    if( GetParent() == NULL )
+        return;
+
+    LIB_PIN_LIST pinList;
+    GetParent()->GetPins( pinList );
+
+    for( size_t i = 0; i < pinList.size(); i++ )
+    {
+        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0
+            || pinList[i]->m_Orient == orientation )
+            continue;
+
+        pinList[i]->m_Orient = orientation;
+        pinList[i]->m_Flags |= IS_CHANGED;
+    }
+}
+
+
+void LIB_PIN::SetDrawStyle( int style )
+{
+    if( m_PinShape != style )
+    {
+        m_PinShape = style;
+        m_Flags |= IS_CHANGED;
+    }
+
+    if( GetParent() == NULL )
+        return;
+
+    LIB_PIN_LIST pinList;
+    GetParent()->GetPins( pinList );
+
+    for( size_t i = 0; i < pinList.size(); i++ )
+    {
+        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0
+            || pinList[i]->m_PinShape == style )
+            continue;
+
+        pinList[i]->m_PinShape = style;
+        pinList[i]->m_Flags |= IS_CHANGED;
+    }
+}
+
+
+void LIB_PIN::SetElectricalType( int type )
+{
+    if( m_PinType != type )
+    {
+        m_PinType = type;
+        m_Flags |= IS_CHANGED;
+    }
+
+    if( GetParent() == NULL )
+        return;
+
+    LIB_PIN_LIST pinList;
+    GetParent()->GetPins( pinList );
+
+    for( size_t i = 0; i < pinList.size(); i++ )
+    {
+        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0
+            || pinList[i]->m_PinType == type )
+            continue;
+
+        pinList[i]->m_PinType = type;
+        pinList[i]->m_Flags |= IS_CHANGED;
+    }
+}
+
+
+void LIB_PIN::SetLength( int length )
+{
+    if( m_PinLen != length )
+    {
+        m_PinLen = length;
+        m_Flags |= IS_CHANGED;
+    }
+
+    if( GetParent() == NULL )
+        return;
+
+    LIB_PIN_LIST pinList;
+    GetParent()->GetPins( pinList );
+
+    for( size_t i = 0; i < pinList.size(); i++ )
+    {
+        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0
+            || pinList[i]->m_Convert != m_Convert
+            || pinList[i]->m_PinLen == length )
+            continue;
+
+        pinList[i]->m_PinLen = length;
+        pinList[i]->m_Flags |= IS_CHANGED;
+    }
+}
+
+
+void LIB_PIN::SetPartNumber( int part )
+{
+    if( m_Unit == part )
+        return;
+
+    m_Unit = part;
+    m_Flags |= IS_CHANGED;
+
+    if( m_Unit == 0 )
+    {
+        LIB_PIN* pin;
+        LIB_PIN* tmp = GetParent()->GetNextPin();
+
+        while( tmp != NULL )
+        {
+            pin = tmp;
+            tmp = GetParent()->GetNextPin( pin );
+
+            if( pin->m_Flags == 0 || pin == this
+                || ( m_Convert && ( m_Convert != pin->m_Convert ) )
+                || ( m_Pos != pin->m_Pos )
+                || ( pin->m_Orient != m_Orient ) )
+                continue;
+
+            GetParent()->RemoveDrawItem( (LIB_DRAW_ITEM*) pin );
+        }
+    }
+}
+
+
+void LIB_PIN::SetConversion( int style )
+{
+    if( m_Convert == style )
+        return;
+
+    m_Convert = style;
+    m_Flags |= IS_CHANGED;
+
+    if( style == 0 )
+    {
+        LIB_PIN* pin;
+        LIB_PIN* tmp = GetParent()->GetNextPin();
+
+        while( tmp != NULL )
+        {
+            pin = tmp;
+            tmp = GetParent()->GetNextPin( pin );
+
+            if( ( pin->m_Flags & IS_LINKED ) == 0
+                || ( pin == this )
+                || ( m_Unit && ( m_Unit != pin->m_Unit ) )
+                || ( m_Pos != pin->m_Pos )
+                || ( pin->m_Orient != m_Orient ) )
+                continue;
+
+            GetParent()->RemoveDrawItem( (LIB_DRAW_ITEM*) pin );
+        }
+    }
+}
+
+
+void LIB_PIN::SetVisible( bool visible )
+{
+    if( visible == IsVisible() )
+        return;
+
+    if( visible )
+        m_Attributs &= ~PINNOTDRAW;
+    else
+        m_Attributs |= PINNOTDRAW;
+
+    m_Flags |= IS_CHANGED;
+
+    if( GetParent() == NULL )
+        return;
+
+    LIB_PIN_LIST pinList;
+    GetParent()->GetPins( pinList );
+
+    for( size_t i = 0; i < pinList.size(); i++ )
+    {
+        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0
+            || pinList[i]->IsVisible() == visible )
+            continue;
+
+        if( visible )
+            pinList[i]->m_Attributs &= ~PINNOTDRAW;
+        else
+            pinList[i]->m_Attributs |= PINNOTDRAW;
+
+        pinList[i]->m_Flags |= IS_CHANGED;
+    }
+}
+
+
+void LIB_PIN::EnableEditMode( bool enable, bool editPinByPin )
+{
+    LIB_PIN_LIST pinList;
+
+    if( GetParent() == NULL )
+        return;
+
+    GetParent()->GetPins( pinList );
+
+    for( size_t i = 0; i < pinList.size(); i++ )
+    {
+        if( pinList[i] == this )
+            continue;
+
+        if( ( pinList[i]->m_Pos == m_Pos )
+            && ( pinList[i]->m_Orient == m_Orient )
+            && ( !( m_Flags & IS_NEW ) )
+            && !editPinByPin == false
+            && enable )
+            pinList[i]->m_Flags |= IS_LINKED | IN_EDIT;
+        else
+            pinList[i]->m_Flags &= ~( IS_LINKED | IN_EDIT );
+    }
 }
 
 
@@ -110,7 +522,7 @@ bool LIB_PIN::HitTest( wxPoint aRefPos, int aThreshold,
 }
 
 
-bool LIB_PIN::Save( FILE* ExportFile ) const
+bool LIB_PIN::Save( FILE* ExportFile )
 {
     wxString StringPinNum;
     int      Etype;
@@ -203,6 +615,8 @@ bool LIB_PIN::Save( FILE* ExportFile ) const
 
     if( fprintf( ExportFile, "\n" ) < 0 )
         return false;
+
+    m_Flags &= ~IS_CHANGED;
 
     return true;
 }
@@ -363,7 +777,7 @@ void LIB_PIN::Draw( WinEDA_DrawPanel* aPanel,
     /* Calculate the pin position */
     wxPoint pos1 = TransformCoordinate( aTransformMatrix, m_Pos ) + aOffset;
 
-    /* Dessin de la pin et du symbole special associe */
+    /* Drawing from the pin and the special symbol combination */
     DrawPinSymbol( aPanel, aDC, pos1, orient, aDrawMode, aColor );
 
     if( DrawPinText )
@@ -554,6 +968,7 @@ void LIB_PIN::DrawPinSymbol( WinEDA_DrawPanel* aPanel,
 *  Current Zoom factor is taken into account.
 *  If TextInside then the text is been put inside,otherwise all is drawn outside.
 *  Pin Name:    substring beteween '~' is negated
+*  DrawMode = GR_OR, XOR ...
 *****************************************************************************/
 void LIB_PIN::DrawPinTexts( WinEDA_DrawPanel* panel,
                             wxDC*             DC,
@@ -564,7 +979,6 @@ void LIB_PIN::DrawPinTexts( WinEDA_DrawPanel* panel,
                             bool              DrawPinName,
                             int               Color,
                             int               DrawMode )
-/* DrawMode = GR_OR, XOR ... */
 {
     int        x, y, x1, y1;
     wxString   StringPinNum;
@@ -803,7 +1217,8 @@ void LIB_PIN::PlotPinTexts( PLOTTER *plotter,
     if( m_PinName.IsEmpty() )
         DrawPinName = FALSE;
 
-    if( TextInside )                                        /* Draw the text inside, but the pin numbers outside. */
+    /* Draw the text inside, but the pin numbers outside. */
+    if( TextInside )
     {
         if( (orient == PIN_LEFT) || (orient == PIN_RIGHT) ) /* Its an horizontal line. */
         {
@@ -944,12 +1359,9 @@ void LIB_PIN::PlotPinTexts( PLOTTER *plotter,
 }
 
 
-/******************************************/
-wxPoint LIB_PIN::ReturnPinEndPoint()
-/******************************************/
 
-/* return the pin end position, for a component in normal orient
- */
+/* return the pin end position, for a component in normal orient */
+wxPoint LIB_PIN::ReturnPinEndPoint()
 {
     wxPoint pos = m_Pos;
 
@@ -997,7 +1409,8 @@ int LIB_PIN::ReturnPinDrawOrient( const int TransMat[2][2] )
         end.x = 1; break;
     }
 
-    end    = TransformCoordinate( TransMat, end );    // = pos of end point, according to the component orientation
+    // = pos of end point, according to the component orientation
+    end = TransformCoordinate( TransMat, end );
     orient = PIN_UP;
     if( end.x == 0 )
     {
@@ -1026,6 +1439,7 @@ void LIB_PIN::ReturnPinStringNum( wxString& aStringBuffer ) const
     aStringBuffer = ReturnPinStringNum( m_PinNum );
 }
 
+
 /** Function ReturnPinStringNum (static function)
  *  Pin num is coded as a long or 4 ascii chars
  * @param aPinNum = a long containing a pin num
@@ -1041,6 +1455,12 @@ wxString LIB_PIN::ReturnPinStringNum( long aPinNum )
     wxString buffer = CONV_FROM_UTF8( ascii_buf );
 
     return buffer;
+}
+
+
+wxString LIB_PIN::GetNumber( void )
+{
+    return ReturnPinStringNum( m_PinNum );
 }
 
 
@@ -1067,9 +1487,7 @@ void LIB_PIN::SetPinNumFromString( wxString& buffer )
 }
 
 
-/*************************************/
 LIB_DRAW_ITEM* LIB_PIN::DoGenCopy()
-/*************************************/
 {
     LIB_PIN* newpin = new LIB_PIN( GetParent() );
 
@@ -1178,59 +1596,35 @@ void LIB_PIN::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 void LIB_PIN::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString Text;
-    int      ii;
 
     LIB_DRAW_ITEM::DisplayInfo( frame );
 
-    frame->AppendMsgPanel( _( "Pin name" ), m_PinName, DARKCYAN );
+    frame->AppendMsgPanel( _( "Name" ), m_PinName, DARKCYAN );
 
     if( m_PinNum == 0 )
         Text = wxT( "?" );
     else
         ReturnPinStringNum( Text );
 
-    frame->AppendMsgPanel( _( "Pin number" ), Text, DARKCYAN );
+    frame->AppendMsgPanel( _( "Number" ), Text, DARKCYAN );
 
-    ii = m_PinType;
-    frame->AppendMsgPanel( _( "Pin type" ), MsgPinElectricType[ii],
-                                    RED );
-
-    ii = m_Attributs;
-    if( ii & 1 )
-        Text = _( "Not visible" );
+    frame->AppendMsgPanel( _( "Type" ),
+                           pin_electrical_type_names[ m_PinType ], RED );
+    Text = pin_style_names[ GetStyleCodeIndex( m_PinShape ) ];
+    frame->AppendMsgPanel( _( "Style" ), Text, BLUE );
+    if( IsVisible() )
+        Text = _( "Yes" );
     else
-        Text = _( "Visible" );
-    frame->AppendMsgPanel( _( "Display" ), Text, DARKGREEN );
+        Text = _( "No" );
+    frame->AppendMsgPanel( _( "Visible" ), Text, DARKGREEN );
 
     /* Display pin length */
     Text = ReturnStringFromValue( g_UnitMetric, m_PinLen,
                                   EESCHEMA_INTERNAL_UNIT, true );
     frame->AppendMsgPanel( _( "Length" ), Text, MAGENTA );
 
-    switch( m_Orient )
-    {
-    case PIN_UP:
-        Text = _( "Up" );
-        break;
-
-    case PIN_DOWN:
-        Text = _( "Down" );
-        break;
-
-    case PIN_LEFT:
-        Text = _( "Left" );
-        break;
-
-    case PIN_RIGHT:
-        Text = _( "Right" );
-        break;
-
-    default:
-        Text = _( "Unknown" );
-        break;
-    }
-
-    frame->AppendMsgPanel( _( "Orientation" ), Text, MAGENTA );
+    Text = pin_orientation_names[ GetOrientationCodeIndex( m_Orient ) ];
+    frame->AppendMsgPanel( _( "Orientation" ), Text, DARKMAGENTA );
 }
 
 
@@ -1244,4 +1638,68 @@ EDA_Rect LIB_PIN::GetBoundingBox()
     pt.y *= -1;     // Reverse the Y axis, according to the schematic orientation
 
     return EDA_Rect( pt, wxSize( 1, 1 ) );
+}
+
+
+wxArrayString LIB_PIN::GetOrientationNames( void )
+{
+    return wxArrayString( PIN_ORIENTATION_CNT, pin_orientation_names );
+}
+
+
+int LIB_PIN::GetOrientationCode( int index )
+{
+    if( index >= 0 && index < (int) PIN_ORIENTATION_CNT )
+        return pin_orientation_codes[ index ];
+
+    return PIN_RIGHT;
+}
+
+
+int LIB_PIN::GetOrientationCodeIndex( int code )
+{
+    size_t i;
+
+    for( i = 0; i < PIN_ORIENTATION_CNT; i++ )
+    {
+        if( pin_orientation_codes[i] == code )
+            return (int) i;
+    }
+
+    return wxNOT_FOUND;
+}
+
+
+wxArrayString LIB_PIN::GetStyleNames( void )
+{
+    return wxArrayString( PIN_STYLE_CNT, pin_style_names );
+}
+
+
+int LIB_PIN::GetStyleCode( int index )
+{
+    if( index >= 0 && index < (int) PIN_STYLE_CNT )
+        return pin_style_codes[ index ];
+
+    return NONE;
+}
+
+
+int LIB_PIN::GetStyleCodeIndex( int code )
+{
+    size_t i;
+
+    for( i = 0; i < PIN_STYLE_CNT; i++ )
+    {
+        if( pin_style_codes[i] == code )
+            return (int) i;
+    }
+
+    return wxNOT_FOUND;
+}
+
+
+wxArrayString LIB_PIN::GetElectricalTypeNames( void )
+{
+    return wxArrayString( PIN_ELECTRICAL_TYPE_CNT, pin_electrical_type_names );
 }

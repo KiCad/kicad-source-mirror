@@ -17,8 +17,7 @@ WX_DECLARE_OBJARRAY( DrawSheetPath, ArrayOfSheetLists );
 
 
 /**
- * Struct Error
- * is a holder of an error message and may be thrown from functions.
+ * Holder of an error message and may be thrown from functions.
  */
 struct Error
 {
@@ -87,7 +86,7 @@ public:
                                        * first non-digits in the reference
                                        * fields. */
 
-    int             m_Convert;        /* Handle mutiple shape (for instance
+    int             m_Convert;        /* Handle multiple shape (for instance
                                        * De Morgan conversion) */
     int             m_Transform[2][2]; /* The rotation/mirror transformation
                                         * matrix. */
@@ -101,7 +100,7 @@ private:
      * format is
      * path reference multi
      * with:
-     * path = /<timestamp1>/<timestamp2> (subsheet path, = / for the root scheet)
+     * path = /<timestamp1>/<timestamp2> (subsheet path, = / for the root sheet)
      * reference = reference for this path (C23, R5, U78 ... )
      * multi = part selection in multi parts per package (0 or 1 for one part per package)
      */
@@ -118,7 +117,7 @@ public:
      *
      * @param libComponent - Component library object to create schematic
      *                       component from.
-     * @param sheet - Schemitic sheet the component is place into.
+     * @param sheet - Schematic sheet the component is place into.
      * @param unit - Part for components that have multiple parts per
      *               package.
      * @param convert - Use the alternate body style for the schematic
@@ -249,6 +248,14 @@ public:
      */
     int GetFieldCount() const { return (int) m_Fields.size(); }
 
+    /**
+     * Find a component pin by number.
+     *
+     * @param number - The number of the pin to find.
+     * @return Pin object if found, otherwise NULL.
+     */
+    LIB_PIN* GetPin( const wxString& number );
+
     virtual void            Draw( WinEDA_DrawPanel* panel,
                                   wxDC*             DC,
                                   const wxPoint&    offset,
@@ -310,7 +317,7 @@ public:
     // Geometric transforms (used in block operations):
     /** virtual function Move
      * move item to a new position.
-     * @param aMoveVector = the deplacement vector
+     * @param aMoveVector = the displacement vector
      */
     virtual void Move(const wxPoint& aMoveVector)
     {

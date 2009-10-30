@@ -1,6 +1,3 @@
-//*****************************************/
-/* prototypage des fonctions de EESchema */
-/*****************************************/
 
 #ifndef __PROTOS_H__
 #define __PROTOS_H__
@@ -58,7 +55,6 @@ bool MapAngles( int*      Angle1,
  *
  * @param aTransformMatrix = rotation, mirror .. matrix
  * @param aPosition = the position to transform
- *
  * @return the new coordinate
  */
 wxPoint        TransformCoordinate( const int      aTransformMatrix[2][2],
@@ -71,10 +67,6 @@ void           SnapLibItemPoint( int            OrigX,
                                  SCH_COMPONENT* DrawLibItem );
 bool           LibItemInBox( int x1, int y1, int x2, int y2,
                              SCH_COMPONENT* DrawLibItem );
-char*          StrPurge( char* text );
-
-/* Supprime les caracteres Space en debut de la ligne text
- *  retourne un pointeur sur le 1er caractere non Space de text */
 
 /************/
 /* BLOCK.CPP */
@@ -87,13 +79,10 @@ void      DeleteStruct( WinEDA_DrawPanel* panel,
 /*************/
 /* LOCATE.CPP */
 /*************/
-LIB_PIN*        LocatePinByNumber( const wxString& ePin_Number,
-                                   SCH_COMPONENT*  eComponent );
 
 SCH_COMPONENT*  LocateSmallestComponent( SCH_SCREEN* Screen );
 
-/* Recherche du plus petit (en surface) composant pointe par la souris */
-
+/* Find the item within block selection. */
 int             PickItemsInBlock( BLOCK_SELECTOR& aBlock,
                                   BASE_SCREEN*    screen );
 
@@ -123,14 +112,10 @@ int             PickItemsInBlock( BLOCK_SELECTOR& aBlock,
  *
  *
  *   Return:
- *       -Bloc search:
- *           pointeur sur liste de pointeurs de structures si Plusieurs
- *                   structures selectionnees.
- *           pointeur sur la structure si 1 seule
- *
- *       Positon search:
- *           pointeur sur la structure.
- *       Si pas de structures selectionnees: retourne NULL */
+ *     Pointer to list of pointers to structures if several items are selected.
+ *     Pointer to the structure if only 1 item is selected.
+ *     NULL if no items are selects.
+ */
 SCH_ITEM*          PickStruct( const wxPoint& refpos,
                                BASE_SCREEN*   screen,
                                int            SearchMask );
@@ -237,13 +222,14 @@ void InstallPineditFrame( WinEDA_LibeditFrame* parent,
 
 /**
  * Function DisplayComponentsNamesInLib
- * Routine de selection d'un composant en librairie, par affichage de la
- *   liste des composants de cette librairie
- *   Si Library == NULL, selection de librairie demandee
- *   sinon recherche uniquement dans library
- *   Retourne
- *       1 si composant selectionne
- *       0 si commande annulee
+ * Select component from list of components in this library
+ *
+ * If == NULL Library, selection of library REQUESTED
+ * If only in research library
+ *
+ * Returns
+ *   1 if selected component
+ *   0 if canceled order
  */
 int            DisplayComponentsNamesInLib( WinEDA_DrawFrame* frame,
                                             CMP_LIBRARY*      Library,
@@ -259,15 +245,13 @@ int            DisplayComponentsNamesInLib( WinEDA_DrawFrame* frame,
 CMP_LIBRARY* SelectLibraryFromList( WinEDA_DrawFrame* frame );
 
 /**
- * Function GetNameOfPartToLoad
- *   Routine de selection du nom d'un composant en librairie pour chargement,
- *   dans la librairie Library.
- *   Si Library == NULL, il y aura demande de selection d'une librairie
- *  Retourne
- *   1 si composant selectionne
- *   0 si commande annulee
- *   place le nom du composant a charger, selectionne a partir d'une liste dans
- *   BufName
+ * Get the name component from a library to load.
+ *
+ * If no library specified, there will be demand for selection of a library.
+ * Returns
+ *   1 if selected component
+ *   0 if canceled order
+ * Place the name of the selected component list in BufName
  */
 int            GetNameOfPartToLoad( WinEDA_DrawFrame* frame,
                                     CMP_LIBRARY*      Lib,
@@ -291,9 +275,6 @@ void SchematicCleanUp( SCH_SCREEN* screen, wxDC* DC );
  */
 
 void BreakSegmentOnJunction( SCH_SCREEN* Screen );
-
-/* Routine creant des debuts / fin de segment (BUS ou WIRES) sur les jonctions
- *   et les raccords */
 
 /* Break a segment ( BUS, WIRE ) int 2 segments at location aBreakpoint,
  * if aBreakpoint in on segment segment

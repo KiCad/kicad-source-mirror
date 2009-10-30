@@ -84,7 +84,7 @@ void LIB_FIELD::Init( int id )
 }
 
 
-bool LIB_FIELD::Save( FILE* ExportFile ) const
+bool LIB_FIELD::Save( FILE* ExportFile )
 {
     int      hjustify, vjustify;
     wxString text = m_Text;
@@ -144,14 +144,13 @@ bool LIB_FIELD::Load( char* line, wxString& errorMsg )
         return false;
     }
 
-    /* Recherche du debut des donnees (debut du texte suivant) */
+    /* Search the beginning of the data. */
     while( *line != 0 )
         line++;
 
     while( *line == 0 )
         line++;
 
-    /* recherche du texte */
     while( *line && (*line != '"') )
         line++;
 
@@ -161,7 +160,7 @@ bool LIB_FIELD::Load( char* line, wxString& errorMsg )
 
     text = line;
 
-    /* recherche fin de texte */
+    /* Find end of text. */
     while( *line && (*line != '"') )
         line++;
 
