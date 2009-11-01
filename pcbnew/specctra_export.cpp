@@ -783,16 +783,27 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IOErr
                 break;
 
             case S_CIRCLE:
+#if 0
                 // do not output a circle, freerouter does not understand it.
                 // this might be a mounting hole or something, ignore it without error
+                // because some of our demo boards have used the edges pcb layer to
+                // hold islanded circles, rather than simply using holes.
                 break;
+#else
+                // Do not output a circle, freerouter does not understand it.
+                // tell user his board has a problem, this is better than silently
+                // ignoring the error. "edges pcb" layer should not be used
+                // to hold islanded circles which could or should better be done
+                // as simple holes. (Some of our demo boards have this problem.)
+                // fall thru here to report the error.
+#endif
 
             default:
                 {
                     wxString error;
 
                     error.Printf( _("Unsupported DRAWSEGMENT type %s"),
-                      BOARD_ITEM::ShowShape( (Track_Shapes) graphic->m_Shape ).GetData() );
+                        GetChars( BOARD_ITEM::ShowShape( (Track_Shapes) graphic->m_Shape ) ) );
 
                     ThrowIOError( error );
                 }
