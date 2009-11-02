@@ -8,10 +8,10 @@ email address.
 ================================================================================
 ++pcbnew
   * Added exporting of netclass vias to specctra_export.
-  * DIALOG_DESIGN_RULES now remembers it last selected TAB and screen position and
+  * DIALOG_DESIGN_RULES now remembers its last selected TAB and screen position and
     window size, and its grid columns are automatically expanded to fit the
     column titles.  Remembering screen position and size allows someone with
-    multiple monitors, to have a given window always come up on the monitor last chosen
+    multiple monitors to have a given window always come up on the monitor last chosen
     for it.
 
 

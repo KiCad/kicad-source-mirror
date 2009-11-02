@@ -56,13 +56,12 @@ enum {
 
 const wxString DIALOG_DESIGN_RULES::wildCard = _("* (Any)");
 
-// dialog should remember it previously selected tab
+// dialog should remember its previously selected tab
 int DIALOG_DESIGN_RULES::s_LastTabSelection = -1;
 
 // dialog should remember its previous screen position and size
 wxPoint DIALOG_DESIGN_RULES::s_LastPos( -1, -1 );
 wxSize  DIALOG_DESIGN_RULES::s_LastSize;
-
 
 
 
