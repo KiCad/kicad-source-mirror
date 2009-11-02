@@ -668,6 +668,7 @@ PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter,
              // encode the drill value into the name for later import
              scale( aDrillDiameter )
              );
+
     name[ sizeof(name)-1 ] = 0;
     padstack->SetPadstackId( name );
 
@@ -1238,42 +1239,55 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
     }
 
 
-    //-----< output the vias >-----------------------------------------------
+    //-----< output vias used in netclasses and as stock >---------------------
     {
-        // ASSUME:  unique pads are now in the padstack list!  i.e. this code
-        // must follow the initial padstack construction code.
-        // Next we add the via's which may be used.
+        NETCLASSES& nclasses = aBoard->m_NetClasses;
 
-        int defaultViaSize = aBoard->m_NetClasses.GetDefault()->GetViaDiameter();
-        int defaultViaDrill = aBoard->m_NetClasses.GetDefault()->GetViaDrill();
-/**
- *@todo: *** output vias sizes and drill in NetClasses and in stock ***
-*/
-        /* I need at least one via for the (class...) scope below
-        if( defaultViaSize )
-        */
-        {
-            PADSTACK*   padstack = makeVia( defaultViaSize, defaultViaDrill,
-                                           0, aBoard->GetCopperLayerCount()-1 );
-            pcb->library->AddPadstack( padstack );
+        // Add the via from the Default netclass first.  The via container
+        // in pcb->library preserves the sequence of addition.
 
-            // remember this index, it is the default via and also the start of the
-            // vias within the padstack list.  Before this index are the pads.
-            // At this index and later are the vias.
-            pcb->library->SetViaStartIndex( pcb->library->padstacks.size()-1 );
-        }
+        NETCLASS*   netclass  = nclasses.GetDefault();
 
+        PADSTACK*   via = makeVia( netclass->GetViaDiameter(), netclass->GetViaDrill(),
+                                   0, aBoard->GetCopperLayerCount()-1 );
+
+        // we AppendVia() this first one, there is no way it can be a duplicate,
+        // the pcb->library via container is empty at this point.  After this,
+        // we'll have to use LookupVia().
+        wxASSERT( pcb->library->vias.size() == 0 );
+        pcb->library->AppendVia( via );
+
+        // output the stock vias, but preserve uniqueness in the via container by
+        // using LookupVia().
         for( unsigned i=0; i < aBoard->m_ViasDimensionsList.size(); ++i )
         {
-            int viaSize = aBoard->m_ViasDimensionsList[i].m_Diameter;
+            int viaSize  = aBoard->m_ViasDimensionsList[i].m_Diameter;
             int viaDrill = aBoard->m_ViasDimensionsList[i].m_Drill;
 
-            if( viaSize == defaultViaSize )
-                continue;
+            via = makeVia( viaSize, viaDrill,
+                           0, aBoard->GetCopperLayerCount()-1 );
 
-            PADSTACK*   padstack = makeVia( viaSize, viaDrill,
-                                           0, aBoard->GetCopperLayerCount()-1 );
-            pcb->library->AddPadstack( padstack );
+            // maybe add 'via' to the library, but only if unique.
+            PADSTACK* registered = pcb->library->LookupVia( via );
+            if( registered != via )
+                delete via;
+        }
+
+        // set the "spare via" index at the start of the
+        // pcb->library->spareViaIndex = pcb->library->vias.size();
+
+        // output the non-Default netclass vias
+        for( NETCLASSES::iterator nc = nclasses.begin();  nc != nclasses.end();  ++nc )
+        {
+            netclass = nc->second;
+
+            via = makeVia( netclass->GetViaDiameter(), netclass->GetViaDrill(),
+                           0, aBoard->GetCopperLayerCount()-1 );
+
+            // maybe add 'via' to the library, but only if unique.
+            PADSTACK* registered = pcb->library->LookupVia( via );
+            if( registered != via )
+                delete via;
         }
     }
 
@@ -1391,25 +1405,17 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
 
     //-----<via_descriptor>-------------------------------------------------
     {
-        // Output the vias in the padstack list here, by name.  This must
-        // be done after exporting existing vias as WIRE_VIAs.
-        VIA*        vias = pcb->structure->via;
-        PADSTACKS&  padstacks = pcb->library->padstacks;
-        int         viaNdx = pcb->library->via_start_index;
+        // The pcb->library will output <padstack_descriptors> which is a combined
+        // list of part padstacks and via padstacks.  specctra dsn uses the
+        // <via_descriptors> to say which of those padstacks are vias.
 
-        if( viaNdx != -1 )
+        // Output the vias in the padstack list here, by name only.  This must
+        // be done after exporting existing vias as WIRE_VIAs.
+        VIA*    vias = pcb->structure->via;
+
+        for(  unsigned viaNdx=0; viaNdx < pcb->library->vias.size();  ++viaNdx )
         {
-#if 1
-            for(  ; viaNdx < (int)padstacks.size();  ++viaNdx )
-            {
-                vias->AppendVia( padstacks[viaNdx].padstack_id.c_str() );
-            }
-#else
-            // output only the default via.   Then use class_descriptors to
-            // override the default.  No, this causes free router not to
-            // output the unmentioned vias into the session file.
-            vias->AppendVia( padstacks[viaNdx].padstack_id.c_str() );
-#endif
+            vias->AppendVia( pcb->library->vias[viaNdx].padstack_id.c_str() );
         }
     }
 
@@ -1417,19 +1423,48 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
     //-----<output NETCLASSs>----------------------------------------------------
     NETCLASSES& nclasses = aBoard->m_NetClasses;
 
-    exportNETCLASS( nclasses.GetDefault() );
+    exportNETCLASS( nclasses.GetDefault(), aBoard );
 
     for( NETCLASSES::iterator nc = nclasses.begin();  nc != nclasses.end();  ++nc )
     {
         NETCLASS*   netclass = nc->second;
-        exportNETCLASS( netclass );
+        exportNETCLASS( netclass, aBoard );
     }
 }
 
 
-void SPECCTRA_DB::exportNETCLASS( NETCLASS* aNetClass )
+void SPECCTRA_DB::exportNETCLASS( NETCLASS* aNetClass, BOARD* aBoard )
 {
-    char        text[80];
+
+/*  From page 11 of specctra spec:
+
+    Routing and Placement Rule Hierarchies
+
+    Routing and placement rules can be defined at multiple levels of design
+    specification. When a routing or placement rule is defined for an object at
+    multiple levels, a predefined routing or placement precedence order
+    automatically determines which rule to apply to the object. The routing rule
+    precedence order is
+
+        pcb < layer < class < class layer < group_set < group_set layer < net <
+        net layer < group < group layer < fromto < fromto layer < class_class <
+        class_class layer < padstack < region < class region < net region <
+        class_class region
+
+    A pcb rule (global rule for the PCB design) has the lowest precedence in the
+    hierarchy. A class-to-class region rule has the highest precedence. Rules
+    set at one level of the hierarchy override conflicting rules set at lower
+    levels. The placement rule precedence order is
+
+        pcb < image_set < image < component < super cluster < room <
+        room_image_set < family_family < image_image
+
+    A pcb rule (global rule for the PCB design) has the lowest precedence in the
+    hierarchy. An image-to-image rule has the highest precedence. Rules set at
+    one level of the hierarchy override conflicting rules set at lower levels.
+*/
+
+    char        text[256];
 
     CLASS*  clazz = new CLASS( pcb->network );
     pcb->network->classes.push_back( clazz );
@@ -1457,15 +1492,20 @@ void SPECCTRA_DB::exportNETCLASS( NETCLASS* aNetClass )
     if( aNetClass->GetName() == NETCLASS::Default )
     {
         clazz->class_id = "kicad_default";
+    }
 
-        int         viaNdx = pcb->library->via_start_index;
-        sprintf( text, "(use_via %s)", pcb->library->padstacks[viaNdx].padstack_id.c_str() );
-        clazz->circuit.push_back( text );
-    }
-    else
-    {
-        // @todo
-    }
+    // the easiest way to get the via name is to create a via (which generates
+    // the name internal to the PADSTACK), and then grab the name and then
+    // delete the via.  There are not that many netclasses so
+    // this should never become a performance issue.
+
+    PADSTACK* via = makeVia( aNetClass->GetViaDiameter(), aNetClass->GetViaDrill(),
+                             0, aBoard->GetCopperLayerCount()-1 );
+
+    snprintf( text, sizeof(text), "(use_via %s)", via->GetPadstackId().c_str() );
+    clazz->circuit.push_back( text );
+
+    delete via;
 }
 
 

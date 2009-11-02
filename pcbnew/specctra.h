@@ -2294,11 +2294,9 @@ class LIBRARY : public ELEM
 
     UNIT_RES*       unit;
     IMAGES          images;
-    PADSTACKS       padstacks;
 
-    /// The start of the vias within the padstacks, which trail the pads.
-    /// This field is not Format()ed.
-    int             via_start_index;
+    PADSTACKS       padstacks;      ///< all except vias, which are in 'vias'
+    PADSTACKS       vias;
 
 public:
 
@@ -2306,7 +2304,7 @@ public:
         ELEM( aType, aParent )
     {
         unit = 0;
-        via_start_index = -1;       // 0 or greater means there is at least one via
+//        via_start_index = -1;       // 0 or greater means there is at least one via
     }
     ~LIBRARY()
     {
@@ -2319,6 +2317,7 @@ public:
         padstacks.push_back( aPadstack );
     }
 
+/*
     void SetViaStartIndex( int aIndex )
     {
         via_start_index = aIndex;
@@ -2327,6 +2326,7 @@ public:
     {
         return via_start_index;
     }
+*/
 
 
     /**
@@ -2392,16 +2392,24 @@ public:
      */
     int FindVia( PADSTACK* aVia )
     {
-        if( via_start_index > -1 )
+        for( unsigned i=0;  i<vias.size();  ++i )
         {
-            for( unsigned i=via_start_index;  i<padstacks.size();  ++i )
-            {
-                if( 0 == PADSTACK::Compare( aVia, &padstacks[i] ) )
-                    return (int) i;
-            }
+            if( 0 == PADSTACK::Compare( aVia, &vias[i] ) )
+                return int( i );
         }
         return -1;
     }
+
+    /**
+     * Function AppendVia
+     * adds \a aVia to the internal via container.
+     */
+    void AppendVia( PADSTACK* aVia )
+    {
+        aVia->SetParent( this );
+        vias.push_back( aVia );
+    }
+
 
     /**
      * Function AppendPADSTACK
@@ -2426,10 +2434,10 @@ public:
         int ndx = FindVia( aVia );
         if( ndx == -1 )
         {
-            AppendPADSTACK( aVia );
+            AppendVia( aVia );
             return aVia;
         }
-        return &padstacks[ndx];
+        return &vias[ndx];
     }
 
     /**
@@ -2457,6 +2465,9 @@ public:
             i->Format( out, nestLevel );
 
         for( PADSTACKS::iterator i=padstacks.begin();  i!=padstacks.end();  ++i )
+            i->Format( out, nestLevel );
+
+        for( PADSTACKS::iterator i=vias.begin();  i!=vias.end();  ++i )
             i->Format( out, nestLevel );
     }
 
@@ -3930,7 +3941,7 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      * Function exportNETCLASS
      * exports \a aNetClass to the DSN file.
      */
-    void exportNETCLASS( NETCLASS* aNetClass );
+    void exportNETCLASS( NETCLASS* aNetClass, BOARD* aBoard );
 
 
     //-----</FromBOARD>------------------------------------------------------

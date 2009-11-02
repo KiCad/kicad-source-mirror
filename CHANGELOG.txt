@@ -4,6 +4,17 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-Nov-1 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew
+  * Added exporting of netclass vias to specctra_export.
+  * DIALOG_DESIGN_RULES now remembers it last selected TAB and screen position and
+    window size, and its grid columns are automatically expanded to fit the
+    column titles.  Remembering screen position and size allows someone with
+    multiple monitors, to have a given window always come up on the monitor last chosen
+    for it.
+
+
 2009-oct-30 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++pcbnew
@@ -17,8 +28,6 @@ email address.
     So the via hole edit options (in popup menu) does not exist no more.
     The global tracks widths and vias diameters and drills changes are now
     accessible by a specific dialog frame.
-
-
 
 
 2009-oct-27 UPDATE Jerry Jacobs <xor.gate.engineering@gmail.com>

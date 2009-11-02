@@ -56,6 +56,42 @@ enum {
 
 const wxString DIALOG_DESIGN_RULES::wildCard = _("* (Any)");
 
+// dialog should remember it previously selected tab
+int DIALOG_DESIGN_RULES::s_LastTabSelection = -1;
+
+// dialog should remember its previous screen position and size
+wxPoint DIALOG_DESIGN_RULES::s_LastPos( -1, -1 );
+wxSize  DIALOG_DESIGN_RULES::s_LastSize;
+
+
+
+
+/**
+ * Function EnsureGridColumnWidths
+ * resizes all the columns in a wxGrid based only on the requirements of the
+ * column titles and not on the grid cell requirements, assuming that the grid
+ * cell width requirements are narrower than the column title requirements.
+ */
+// @todo: maybe move this to common.cpp if it works.
+void EnsureGridColumnWidths( wxGrid* aGrid )
+{
+    wxScreenDC sDC;
+
+    sDC.SetFont( aGrid->GetLabelFont() );
+
+    int colCount = aGrid->GetNumberCols();
+    for( int col=0; col<colCount;  ++col )
+    {
+        // add two spaces to the text and size it.
+        wxString colText = aGrid->GetColLabelValue( col ) + ' ' + ' ';
+
+        wxSize needed = sDC.GetTextExtent( colText );
+
+        // set the width of this column
+        aGrid->SetColSize( col, needed.x );
+    }
+}
+
 
 /***********************************************************************************/
 DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( WinEDA_PcbFrame* parent ) :
@@ -64,6 +100,8 @@ DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( WinEDA_PcbFrame* parent ) :
 {
     m_Parent = parent;
     SetAutoLayout( true );
+
+    EnsureGridColumnWidths( m_grid );   // override any column widths set by wxformbuilder.
 
     wxListItem  column0;
     wxListItem  column1;
@@ -87,12 +125,24 @@ DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( WinEDA_PcbFrame* parent ) :
     m_rightListCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
     m_rightListCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
 
+    // if user has been into the dialog before, go back to same tab
+    if( s_LastTabSelection != -1 )
+    {
+        m_DRnotebook->SetSelection( s_LastTabSelection );
+    }
 
     InitDialogRules();
     Layout();
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
-    Center();
+
+    if( s_LastPos.x != -1 )
+    {
+        SetSize( s_LastSize );
+        SetPosition( s_LastPos );
+    }
+    else
+        Center();
 }
 
 
@@ -560,6 +610,12 @@ void DIALOG_DESIGN_RULES::CopyDimensionsListsToBoard( )
 void DIALOG_DESIGN_RULES::OnCancelButtonClick( wxCommandEvent& event )
 /*****************************************************************/
 {
+    s_LastTabSelection = m_DRnotebook->GetSelection();
+
+    // Save the dialog's position before finishing
+    s_LastPos  = GetPosition();
+    s_LastSize = GetSize();
+
     EndModal( wxID_CANCEL );
 }
 
@@ -568,6 +624,8 @@ void DIALOG_DESIGN_RULES::OnCancelButtonClick( wxCommandEvent& event )
 void DIALOG_DESIGN_RULES::OnOkButtonClick( wxCommandEvent& event )
 /**************************************************************************/
 {
+    s_LastTabSelection = m_DRnotebook->GetSelection();
+
     if( !TestDataValidity() )
     {
         DisplayError( this, _( "Errors detected, Abort" ) );
@@ -577,6 +635,10 @@ void DIALOG_DESIGN_RULES::OnOkButtonClick( wxCommandEvent& event )
     CopyRulesListToBoard();
     CopyGlobalRulesToBoard();
     CopyDimensionsListsToBoard( );
+
+    // Save the dialog's position before finishing
+    s_LastPos  = GetPosition();
+    s_LastSize = GetSize();
 
     EndModal( wxID_OK );
 

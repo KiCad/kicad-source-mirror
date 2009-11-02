@@ -29,10 +29,10 @@
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
-            <property name="minimum_size">600,520</property>
+            <property name="minimum_size">-1,-1</property>
             <property name="name">DIALOG_DESIGN_RULES_BASE</property>
             <property name="pos"></property>
-            <property name="size">850,692</property>
+            <property name="size">900,600</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass"></property>
             <property name="title">Design Rules Editor</property>
@@ -128,7 +128,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Net Classes Editor</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
@@ -206,7 +206,7 @@
                                                     <property name="col_label_values">&quot;Clearance&quot; &quot;Track Width&quot; &quot;Via Dia&quot; &quot;Via Drill&quot; &quot;uVia Dia&quot; &quot;uVia Drill&quot;</property>
                                                     <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
                                                     <property name="cols">6</property>
-                                                    <property name="column_sizes">100,100,100,100,100</property>
+                                                    <property name="column_sizes">100,120,84,85,81,90</property>
                                                     <property name="context_help"></property>
                                                     <property name="drag_col_move">0</property>
                                                     <property name="drag_col_size">1</property>
@@ -301,7 +301,7 @@
                                             </object>
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
-                                                <property name="flag">wxALIGN_CENTER_HORIZONTAL</property>
+                                                <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALL</property>
                                                 <property name="proportion">0</property>
                                                 <object class="wxBoxSizer" expanded="1">
                                                     <property name="minimum_size"></property>
@@ -969,7 +969,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Global Design Rules</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
@@ -2071,7 +2071,7 @@
                                                             <property name="font"></property>
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
-                                                            <property name="label"> </property>
+                                                            <property name="label"></property>
                                                             <property name="maximum_size"></property>
                                                             <property name="minimum_size"></property>
                                                             <property name="name">m_staticText8</property>

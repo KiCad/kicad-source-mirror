@@ -11,7 +11,7 @@
 
 DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 600,520 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 	
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
@@ -35,10 +35,11 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	
 	// Columns
 	m_grid->SetColSize( 0, 100 );
-	m_grid->SetColSize( 1, 100 );
-	m_grid->SetColSize( 2, 100 );
-	m_grid->SetColSize( 3, 100 );
-	m_grid->SetColSize( 4, 100 );
+	m_grid->SetColSize( 1, 120 );
+	m_grid->SetColSize( 2, 84 );
+	m_grid->SetColSize( 3, 85 );
+	m_grid->SetColSize( 4, 81 );
+	m_grid->SetColSize( 5, 90 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
 	m_grid->SetColLabelSize( 40 );
@@ -84,7 +85,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	
 	buttonBoxSizer->Add( m_moveUpButton, 0, wxRIGHT|wxLEFT, 5 );
 	
-	sbSizer1->Add( buttonBoxSizer, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+	sbSizer1->Add( buttonBoxSizer, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 	
 	bpanelNetClassesSizer->Add( sbSizer1, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -151,7 +152,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_panelNetClassesEditor->SetSizer( bpanelNetClassesSizer );
 	m_panelNetClassesEditor->Layout();
 	bpanelNetClassesSizer->Fit( m_panelNetClassesEditor );
-	m_DRnotebook->AddPage( m_panelNetClassesEditor, _("Net Classes Editor"), false );
+	m_DRnotebook->AddPage( m_panelNetClassesEditor, _("Net Classes Editor"), true );
 	m_panelGolbalDesignRules = new wxPanel( m_DRnotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
 	wxBoxSizer* bpanelGlobRulesSizer;
 	bpanelGlobRulesSizer = new wxBoxSizer( wxVERTICAL );
@@ -310,7 +311,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	wxStaticBoxSizer* sbTracksListSizer;
 	sbTracksListSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelGolbalDesignRules, wxID_ANY, _("Custom Track Widths:") ), wxVERTICAL );
 	
-	m_staticText8 = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _(" "), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText8 = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText8->Wrap( -1 );
 	sbTracksListSizer->Add( m_staticText8, 0, wxALL, 5 );
 	
@@ -355,7 +356,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_panelGolbalDesignRules->SetSizer( bpanelGlobRulesSizer );
 	m_panelGolbalDesignRules->Layout();
 	bpanelGlobRulesSizer->Fit( m_panelGolbalDesignRules );
-	m_DRnotebook->AddPage( m_panelGolbalDesignRules, _("Global Design Rules"), true );
+	m_DRnotebook->AddPage( m_panelGolbalDesignRules, _("Global Design Rules"), false );
 	
 	bMainSizer->Add( m_DRnotebook, 1, wxEXPAND | wxALL, 5 );
 	

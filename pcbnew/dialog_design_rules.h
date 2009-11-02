@@ -34,6 +34,11 @@ private:
     WinEDA_PcbFrame*        m_Parent;
     BOARD*                  m_Pcb;
 
+    static int              s_LastTabSelection;     ///< which tab user had open last
+
+    static wxSize		    s_LastSize;		        ///< last position and size
+    static wxPoint		    s_LastPos;
+
     /**
      * A two column table which gets filled once and never loses any elements, so it is
      * basically constant, except that the NETCUP::clazz member can change for any
@@ -53,7 +58,7 @@ private:
     void OnOkButtonClick( wxCommandEvent& event );
     void OnAddNetclassClick( wxCommandEvent& event );
     void OnRemoveNetclassClick( wxCommandEvent& event );
-	void OnMoveUpSelectedNetClass( wxCommandEvent& event );
+    void OnMoveUpSelectedNetClass( wxCommandEvent& event );
     void OnLeftCBSelection( wxCommandEvent& event );
     void OnRightCBSelection( wxCommandEvent& event );
     void OnRightToLeftCopyButton( wxCommandEvent& event );
