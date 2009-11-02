@@ -186,24 +186,6 @@ bool WinEDA_PcbFrame::Change_Net_Tracks_And_Vias_Sizes(
     if( aNetcode <= 0 )
         return false;
 
-    NETINFO_ITEM* net = GetBoard()->FindNet( aNetcode );
-    wxASSERT( net );
-    wxString      netName = net->GetNetname();
-    wxString      msg;
-    NETCLASS*     netClass = net->GetNetClass();
-    wxASSERT( netClass );
-    wxString      netClassName = netClass->GetName();
-    if( aUseNetclassValue )
-        msg.Printf( _(
-                   "Set tracks and vias sizes and drill to the Netclass \"%s\"default value (entire NET \"%s\") ?" ),
-               GetChars( netClassName ), GetChars( netName ) );
-    else
-        msg.Printf( _(
-                   "Set tracks and vias sizes and drill to the current values (entire NET \"%s\") ?" ),
-               GetChars( netClassName ), GetChars( netName ) );
-    if( !IsOK( this, msg ) )
-        return false;
-
     /* Examine segments */
     PICKED_ITEMS_LIST itemsListPicker;
     bool change = false;
@@ -231,22 +213,6 @@ bool WinEDA_PcbFrame::Reset_All_Tracks_And_Vias_To_Netclass_Values(
 /*************************************************************************/
 {
     TRACK* pt_segm;
-
-    if( aTrack && aVia )
-    {
-        if( !IsOK( this, _( "Set All Tracks and Vias to Netclass value" ) ) )
-            return false;
-    }
-    else if( aVia )
-    {
-        if( !IsOK( this, _( "Set All Via to Netclass value" ) ) )
-            return false;
-    }
-    else if( aTrack )
-    {
-        if( !IsOK( this, _( "Set All Track to Netclass value" ) ) )
-            return false;
-    }
 
     /* read and edit tracks and vias if required */
     PICKED_ITEMS_LIST itemsListPicker;

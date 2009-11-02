@@ -15,6 +15,19 @@ email address.
     for it.
 
 
+2009-oct-30 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+Replace library editor pin properties dialog box and minor update.
+* Replaced library pin properties dialog with wxFormBuilder version.
+* Remove DialogBlocks version of pin properties dialog.
+* Add pin properties dialog support code to pin object.
+* Create single event handler for displaying pin properties dialog.
+* Remove left over DialogBlocks project file for annotate dialog.
+* Fixed escape key bug in library editor new component dialog.
+* Add GetUnitsLabel() to get human readable units for dialog labels.
+* Translate French comments in all modified files.
+* Some minor clean up of Doxygen comments.
+
 2009-oct-30 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++pcbnew

@@ -139,12 +139,15 @@ void WinEDA_SchematicFrame::EditSchematicText( SCH_TEXT* TextStruct,
     if( TextStruct == NULL )
         return;
 
+    // Erase old text on screen
     DrawPanel->CursorOff( DC );
     RedrawOneStruct( DrawPanel, DC, TextStruct, g_XorMode );
 
     DialogLabelEditor::ShowModally( this, TextStruct );
 
-    RedrawOneStruct( DrawPanel, DC, TextStruct, GR_DEFAULT_DRAWMODE );
+    // Redraw nex text, if exists
+    if( ! TextStruct->m_Text.IsEmpty() )
+        RedrawOneStruct( DrawPanel, DC, TextStruct, GR_DEFAULT_DRAWMODE );
     DrawPanel->CursorOn( DC );
 }
 
@@ -163,11 +166,11 @@ void WinEDA_SchematicFrame::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
     if( TextStruct->m_Flags == 0 )
         SaveCopyInUndoList( TextStruct, UR_CHANGED );
 
-    /* Effacement du texte en cours */
+    /* Erase old text */
     DrawPanel->CursorOff( DC );
     RedrawOneStruct( DrawPanel, DC, TextStruct, g_XorMode );
 
-    /* Rotation du texte */
+    /* Rot text */
     int orient;
 
     switch( TextStruct->Type() )
@@ -187,7 +190,7 @@ void WinEDA_SchematicFrame::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 
     GetScreen()->SetModify();
 
-    /* Reaffichage */
+    /* redraw the new tewt */
     RedrawOneStruct( DrawPanel, DC, TextStruct, g_XorMode );
     DrawPanel->CursorOn( DC );
 }

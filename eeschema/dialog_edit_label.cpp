@@ -47,7 +47,7 @@ void DialogLabelEditor::init()
 {
     wxString msg;
     bool multine = false;
-    
+
     if( m_CurrentText->m_MultilineAllowed )
     {
         m_TextLabel = m_textCtrlMultiline;
@@ -166,6 +166,7 @@ void DialogLabelEditor::onEnterKey( wxCommandEvent& event )
 void DialogLabelEditor::OnButtonOKClick( wxCommandEvent& event )
 {
     TextPropertiesAccept( event );
+    EndModal( wxID_OK );
 }
 
 
@@ -176,6 +177,6 @@ void DialogLabelEditor::OnButtonOKClick( wxCommandEvent& event )
 void DialogLabelEditor::OnButtonCANCEL_Click( wxCommandEvent& event )
 {
     m_Parent->DrawPanel->MouseToCursorSchema();
-    EndModal( -1 );
+    EndModal( wxID_CANCEL );
 }
 

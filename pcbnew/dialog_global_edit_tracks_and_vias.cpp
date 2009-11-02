@@ -56,10 +56,10 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     }
 
     // Enable/disable the option "copy current to net" if we ause only default netclass values
-    if( ! board->m_TrackWidthSelector && !board->m_ViaSizeSelector )
+    if( !board->m_TrackWidthSelector && !board->m_ViaSizeSelector )
     {
-        m_Net2CurrValueButton->Enable(false);
-        m_Net2CurrValueText->Enable(false);
+        m_Net2CurrValueButton->Enable( false );
+        m_Net2CurrValueText->Enable( false );
     }
 
     // Display current values, and current netclass values:
@@ -74,6 +74,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     else
         msg = _( "Default" );
     m_gridDisplayCurrentSettings->SetCellValue( 1, 0, msg  );
+
     // recompute the column widths here, after setting texts
 
     value = netclass->GetViaDiameter();
@@ -127,7 +128,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
             m_gridDisplayCurrentSettings->SetReadOnly( ii, jj, true );
     }
 
-    m_gridDisplayCurrentSettings->Fit( );
+    m_gridDisplayCurrentSettings->Fit();
 }
 
 
@@ -136,23 +137,56 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnOkClick( wxCommandEvent& event )
 /*******************************************************************/
 {
     bool change = false;
+
     switch( event.GetId() )
     {
-        case ID_CURRENT_VALUES_TO_CURRENT_NET:
+    case ID_CURRENT_VALUES_TO_CURRENT_NET:
+        if( !IsOK( this,
+                  _( "Set current Net tracks and vias sizes and drill to the current values?" ) ) )
+            return;
+        {
+            wxBusyCursor dummy;
             change = m_Parent->Change_Net_Tracks_And_Vias_Sizes( m_Netcode, false );
-            break;
-        case ID_NETCLASS_VALUES_TO_CURRENT_NET:
+        }
+        break;
+
+    case ID_NETCLASS_VALUES_TO_CURRENT_NET:
+        if( !IsOK( this,
+                  _(
+                      "Set current Net tracks and vias sizes and drill to the Netclass default value?" ) ) )
+            return;
+        {
+            wxBusyCursor dummy;
             change = m_Parent->Change_Net_Tracks_And_Vias_Sizes( m_Netcode, true );
-            break;
-        case ID_ALL_TRACKS_VIAS:
+        }
+        break;
+
+    case ID_ALL_TRACKS_VIAS:
+        if( !IsOK( this, _( "Set All Tracks and Vias to Netclass value" ) ) )
+            return;
+        {
+            wxBusyCursor dummy;
             change = m_Parent->Reset_All_Tracks_And_Vias_To_Netclass_Values( true, true );
-            break;
-        case ID_ALL_VIAS:
+        }
+        break;
+
+    case ID_ALL_VIAS:
+        if( !IsOK( this, _( "Set All Via to Netclass value" ) ) )
+            return;
+        {
+            wxBusyCursor dummy;
             change = m_Parent->Reset_All_Tracks_And_Vias_To_Netclass_Values( false, true );
-            break;
-        case ID_ALL_TRACKS:
+        }
+        break;
+
+    case ID_ALL_TRACKS:
+        if( !IsOK( this, _( "Set All Track to Netclass value" ) ) )
+            return;
+        {
+            wxBusyCursor dummy;
             change = m_Parent->Reset_All_Tracks_And_Vias_To_Netclass_Values( true, false );
-            break;
+        }
+        break;
     }
 
     EndModal( 1 );
