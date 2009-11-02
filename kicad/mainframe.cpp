@@ -1,4 +1,5 @@
 /***********************************************************/
+
 /* mdiframe.cpp - WinEDA_MainFrame is the kicad main frame */
 /***********************************************************/
 
@@ -69,6 +70,7 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
     m_LeftWin->SetSashVisible( wxSASH_RIGHT, TRUE );
     m_LeftWin->SetExtraBorderSize( 2 );
 
+#if !KICAD_AUIMANAGER
     // Bottom Window: box to display messages
     m_BottomWin = new wxSashLayoutWindow( this, ID_BOTTOM_FRAME,
                                           wxDefaultPosition, wxDefaultSize,
@@ -83,7 +85,11 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
     m_DialogWin = new wxTextCtrl( m_BottomWin, wxID_ANY, wxEmptyString,
                                   wxDefaultPosition, wxDefaultSize,
                                   wxTE_MULTILINE | wxNO_BORDER | wxTE_READONLY );
-
+#else
+    m_DialogWin = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
+                                  wxDefaultPosition, wxDefaultSize,
+                                  wxTE_MULTILINE | wxNO_BORDER | wxTE_READONLY );
+#endif
     // m_CommandWin is the box with buttons which launch eechema, pcbnew ...
     m_CommandWin = new WinEDA_CommandFrame( this, ID_MAIN_COMMAND,
                                             wxPoint( m_LeftWin_Width, 0 ),
@@ -98,6 +104,38 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
 #ifdef KICAD_PYTHON
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::LoadProject" ) );
 #endif
+
+#if KICAD_AUIMANAGER
+    RecreateBaseHToolbar();
+
+    m_auimgr.SetManagedWindow(this);
+    
+    wxAuiPaneInfo horiz;
+    horiz.Gripper(false);
+    horiz.DockFixed(true);
+    horiz.Movable(false);
+    horiz.Floatable(false);
+    horiz.CloseButton(false);
+    horiz.CaptionVisible(false);
+    
+    wxAuiPaneInfo vert(horiz);
+    
+    vert.TopDockable(false).BottomDockable(false);
+    horiz.LeftDockable(false).RightDockable(false);
+    
+    m_auimgr.AddPane(m_HToolBar,
+        wxAuiPaneInfo(horiz).Name(wxT("m_HToolBar")).Top());
+    
+    m_auimgr.AddPane(m_DialogWin,
+        wxAuiPaneInfo(horiz).Name(wxT("m_DialogWin")).Center());
+
+    m_auimgr.AddPane(m_CommandWin,
+        wxAuiPaneInfo().Name(wxT("m_CommandWin")).CentrePane());
+
+    m_auimgr.AddPane(m_LeftWin,
+        wxAuiPaneInfo(horiz).Name(wxT("m_LeftWin")).Left().BestSize(clientsize.x/3,clientsize.y));
+    m_auimgr.Update();
+#endif
 }
 
 
@@ -105,6 +143,9 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
 WinEDA_MainFrame::~WinEDA_MainFrame()
 /*****************************************************************************/
 {
+#if KICAD_AUIMANAGER
+m_auimgr.UnInit();
+#endif
 }
 
 
@@ -195,7 +236,10 @@ void WinEDA_MainFrame::OnSize( wxSizeEvent& event )
     layout.LayoutFrame( this );
     if( m_CommandWin )
         m_CommandWin->Refresh( TRUE );
-
+#if KICAD_AUIMANAGER
+   if(m_auimgr.GetManagedWindow())
+       m_auimgr.Update();
+#endif
     event.Skip();
 }
 

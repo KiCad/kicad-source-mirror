@@ -23,8 +23,9 @@ void WinEDA_CvpcbFrame::ReCreateHToolbar()
         return;
 
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
-    SetToolBar( m_HToolBar );
-
+#if !KICAD_AUIMANAGER
+    SetToolBar( (wxToolBar *)m_HToolBar );
+#endif
     m_HToolBar->AddTool( ID_CVPCB_READ_INPUT_NETLIST, wxEmptyString,
                          wxBitmap( open_xpm ),
                          _( "Open a NetList file" ) );

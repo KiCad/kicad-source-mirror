@@ -126,7 +126,7 @@ void WinEDA_DisplayFrame::ReCreateHToolbar()
 
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
 
-    SetToolBar( m_HToolBar );
+    SetToolBar( (wxToolBar*) m_HToolBar );
 
     m_HToolBar->AddTool( ID_OPTIONS_SETUP, wxEmptyString,
                          wxBitmap( display_options_xpm ),

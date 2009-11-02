@@ -277,6 +277,7 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
             break;
 
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1:
+#if !KICAD_AUIMANAGER
         if( m_OptionsToolBar->GetToolState( id ) )  // show aux V toolbar (Microwave tool)
             ReCreateAuxVToolbar();
         else
@@ -289,6 +290,10 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 
             OnSize( SizeEv );
         }
+#else
+        m_auimgr.GetPane(wxT("m_AuxVToolBar")).Show( m_OptionsToolBar->GetToolState( id ) );
+        m_auimgr.Update();
+#endif
         break;
 
     default:
@@ -298,4 +303,5 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
     }
 
     SetToolbars();
+
 }

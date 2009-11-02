@@ -263,6 +263,46 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
 
     if( m_show_microwave_tools )
         ReCreateAuxVToolbar();
+
+#if KICAD_AUIMANAGER
+    m_auimgr.SetManagedWindow(this);
+ 
+    wxAuiPaneInfo horiz;
+    horiz.Gripper(false);
+    horiz.DockFixed(true);
+    horiz.Movable(false);
+    horiz.Floatable(false);
+    horiz.CloseButton(false);
+    horiz.CaptionVisible(false);
+
+    wxAuiPaneInfo vert(horiz);
+
+    vert.TopDockable(false).BottomDockable(false);
+    horiz.LeftDockable(false).RightDockable(false);
+
+    m_auimgr.AddPane(m_HToolBar,
+        wxAuiPaneInfo(horiz).Name(wxT("m_HToolBar")).Top().Row(0));
+
+    m_auimgr.AddPane(m_AuxiliaryToolBar,
+        wxAuiPaneInfo(horiz).Name(wxT("m_AuxiliaryToolBar")).Top().Row(1));
+
+    m_auimgr.AddPane(m_AuxVToolBar,
+        wxAuiPaneInfo(vert).Name(wxT("m_AuxVToolBar")).Right().Row(1).Hide());
+
+    m_auimgr.AddPane(m_VToolBar,
+        wxAuiPaneInfo(vert).Name(wxT("m_VToolBar")).Right());
+
+    m_auimgr.AddPane(m_OptionsToolBar,
+        wxAuiPaneInfo(vert).Name(wxT("m_OptionsToolBar")).Left());
+
+    m_auimgr.AddPane(DrawPanel, 
+        wxAuiPaneInfo().Name(wxT("DrawFrame")).CentrePane());
+
+    m_auimgr.AddPane(MsgPanel, 
+        wxAuiPaneInfo(horiz).Name(wxT("MsgPanel")).Bottom());
+
+    m_auimgr.Update();
+#endif
 }
 
 

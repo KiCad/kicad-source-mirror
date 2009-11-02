@@ -27,7 +27,10 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
     {
         m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR,
                                          true );
-        SetToolBar( m_HToolBar );
+
+#if !KICAD_AUIMANAGER
+        SetToolBar( (wxToolBar*)m_HToolBar );
+#endif
 
         // Set up toolbar
         m_HToolBar->AddTool( ID_LIBVIEW_SELECT_LIB, wxEmptyString,

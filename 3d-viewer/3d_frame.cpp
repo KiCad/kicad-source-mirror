@@ -23,6 +23,7 @@
 #include "trackball.h"
 
 #include <wx/colordlg.h>
+#include <wxstruct.h>
 
 Info_3D_Visu g_Parm_3D_Visu;
 double g_Draw3d_dx;
@@ -79,6 +80,30 @@ WinEDA3D_DrawFrame::WinEDA3D_DrawFrame( WinEDA_BasePcbFrame* parent,
 
     // Make a Pcb3D_GLCanvas
     m_Canvas = new Pcb3D_GLCanvas( this );
+#if KICAD_AUIMANAGER
+    m_auimgr.SetManagedWindow(this);
+    
+    wxAuiPaneInfo horiz;
+    horiz.Gripper(false);
+    horiz.DockFixed(true);
+    horiz.Movable(false);
+    horiz.Floatable(false);
+    horiz.CloseButton(false);
+    horiz.CaptionVisible(false);
+    
+    wxAuiPaneInfo vert(horiz);
+    
+    vert.TopDockable(false).BottomDockable(false);
+    horiz.LeftDockable(false).RightDockable(false);
+    
+    m_auimgr.AddPane(m_HToolBar,
+        wxAuiPaneInfo(horiz).Name(wxT("m_HToolBar")).Top());
+    
+    m_auimgr.AddPane(m_Canvas,
+        wxAuiPaneInfo().Name(wxT("DrawFrame")).CentrePane());
+
+    m_auimgr.Update();
+#endif
 }
 
 
@@ -127,7 +152,7 @@ void WinEDA3D_DrawFrame::GetSettings()
         config->Read( wxT( "BgColor_Blue" ),
                       &g_Parm_3D_Visu.m_BgColor.m_Blue, 0.0 );
     }
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && !defined( __WXOSX_COCOA__ )
 
     // for macOSX, the window must be below system (macOSX) toolbar
     if( m_FramePos.y < GetMBarHeight() )

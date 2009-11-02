@@ -27,8 +27,9 @@ void WinEDA_SchematicFrame::ReCreateHToolbar()
 
     wxString msg;
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
-    SetToolBar( m_HToolBar );
-
+#if !KICAD_AUIMANAGER
+    SetToolBar( (wxToolBar*)m_HToolBar );
+#endif
     // Set up toolbar
     m_HToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString, wxBitmap( new_xpm ),
                          _( "New schematic project" ) );

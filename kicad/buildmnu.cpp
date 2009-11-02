@@ -19,12 +19,12 @@ BEGIN_EVENT_TABLE( WinEDA_MainFrame, WinEDA_BasicFrame )
 /* Window events */
     EVT_SIZE( WinEDA_MainFrame::OnSize )
     EVT_CLOSE( WinEDA_MainFrame::OnCloseWindow )
-
+#if !KICAD_AUIMANAGER
 /* Sash drag events */
     EVT_SASH_DRAGGED( ID_LEFT_FRAME, WinEDA_MainFrame::OnSashDrag )
     EVT_SASH_DRAGGED( ID_BOTTOM_FRAME, WinEDA_MainFrame::OnSashDrag )
     EVT_SASH_DRAGGED( ID_MAIN_COMMAND, WinEDA_MainFrame::OnSashDrag )
-
+#endif
 /* Toolbar events */
     EVT_TOOL( ID_NEW_PROJECT, WinEDA_MainFrame::OnLoadProject )
     EVT_TOOL( ID_LOAD_PROJECT, WinEDA_MainFrame::OnLoadProject )
@@ -253,8 +253,9 @@ void WinEDA_MainFrame::RecreateBaseHToolbar()
 
     // Allocate memory for m_HToolBar
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
-    SetToolBar( m_HToolBar );
-
+#if !KICAD_AUIMANAGER
+    SetToolBar( (wxToolBar*)m_HToolBar );
+#endif
     // Set up toolbar
     m_HToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString,
                          wxBitmap( new_project_xpm ),

@@ -181,6 +181,33 @@ WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title, long  style ) :
 
     // Framesize and position
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+#if KICAD_AUIMANAGER
+    m_auimgr.SetManagedWindow(this);
+    
+    wxAuiPaneInfo horiz;
+    horiz.Gripper(false);
+    horiz.DockFixed(true);
+    horiz.Movable(false);
+    horiz.Floatable(false);
+    horiz.CloseButton(false);
+    horiz.CaptionVisible(false);
+    
+    wxAuiPaneInfo vert(horiz);
+    
+    vert.TopDockable(false).BottomDockable(false);
+    horiz.LeftDockable(false).RightDockable(false);
+    
+    m_auimgr.AddPane(m_HToolBar,
+        wxAuiPaneInfo(horiz).Name(wxT("m_HToolBar")).Top());
+    
+    m_auimgr.AddPane(m_FootprintList,
+        wxAuiPaneInfo(horiz).Name(wxT("m_FootprintList")).Left().BestSize(m_FrameSize.x * 0.3 ,m_FrameSize.y * 0.9));
+
+    m_auimgr.AddPane(m_ListCmp,
+        wxAuiPaneInfo().Name(wxT("m_ListCmp")).CentrePane());
+
+    m_auimgr.Update();
+#endif
 }
 
 
@@ -196,6 +223,10 @@ WinEDA_CvpcbFrame::~WinEDA_CvpcbFrame()
             ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST );
         config->Write( wxT( FILTERFOOTPRINTKEY ), state );
     }
+
+#if KICAD_AUIMANAGER
+    m_auimgr.UnInit();
+#endif 
 }
 
 

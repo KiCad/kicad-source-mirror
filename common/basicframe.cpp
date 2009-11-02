@@ -54,6 +54,7 @@ WinEDA_BasicFrame::WinEDA_BasicFrame( wxWindow* father,
                                                       * zone utilisateur de la fenetre principale */
     m_FramePos.x   = m_FramePos.y = 0;
     m_FrameSize.y -= m_MsgFrameHeight;
+
 }
 
 
@@ -114,7 +115,7 @@ void WinEDA_BasicFrame::LoadSettings()
     }
 
     // Ensure Window title bar is visible
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && !defined( __WXOSX_COCOA__ )
 
     // for macOSX, the window must be below system (macOSX) toolbar
     Ypos_min = GetMBarHeight();

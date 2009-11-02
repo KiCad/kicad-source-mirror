@@ -116,6 +116,9 @@ WinEDA_DrawFrame::~WinEDA_DrawFrame()
 {
     if( m_CurrentScreen != NULL )
         delete m_CurrentScreen;
+#if KICAD_AUIMANAGER
+    m_auimgr.UnInit();
+#endif
 }
 
 
@@ -322,6 +325,10 @@ void WinEDA_DrawFrame::SetToolbars()
 /***************************************/
 {
     DisplayUnitsMsg();
+#if KICAD_AUIMANAGER
+if(m_auimgr.GetManagedWindow())
+    m_auimgr.Update();
+#endif
 }
 
 
@@ -391,6 +398,7 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
     m_FrameSize = size;
     size.y -= m_MsgFrameHeight;
 
+#if !KICAD_AUIMANAGER
     if( MsgPanel ) // Positionnement en bas d'ecran
     {
         MsgPanel->SetSize( 0, size.y, size.x, m_MsgFrameHeight );
@@ -446,7 +454,7 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
                             size.y - opt_size.y - 1 );
         DrawPanel->Move( opt_size.x, opt_size.y + Auxtoolbar_size.y + 1 );
     }
-
+#endif
     SizeEv.Skip();
 }
 

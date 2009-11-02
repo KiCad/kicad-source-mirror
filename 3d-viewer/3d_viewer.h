@@ -138,7 +138,6 @@ private:
 #if wxCHECK_VERSION( 2, 9, 0 )
     wxGLContext* m_glRC;
 #endif
-
 public:
     Pcb3D_GLCanvas( WinEDA3D_DrawFrame *parent );
     ~Pcb3D_GLCanvas();
@@ -178,12 +177,16 @@ class WinEDA3D_DrawFrame: public wxFrame
 public:
     WinEDA_BasePcbFrame * m_Parent;
     Pcb3D_GLCanvas * m_Canvas;
-    wxToolBar * m_HToolBar;
-    wxToolBar * m_VToolBar;
+    WinEDA_Toolbar * m_HToolBar;
+    WinEDA_Toolbar * m_VToolBar;
     int m_InternalUnits;
     wxPoint m_FramePos;
     wxSize m_FrameSize;
 
+#if KICAD_AUIMANAGER
+    wxAuiManager      m_auimgr;
+	~WinEDA3D_DrawFrame() { m_auimgr.UnInit(); };
+#endif 
 private:
     wxString m_FrameName;       // name used for writting and reading setup
                                 // It is "Frame3D"

@@ -121,6 +121,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
     m_LibListSize.y = size.y;
 
     wxPoint win_pos( 0, 0 );
+#if !KICAD_AUIMANAGER
     if( Library == NULL )
     {
         // Creates the libraries window display
@@ -165,7 +166,30 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
                                m_CmpListWindow->GetClientSize() -
                                wxSize( EXTRA_BORDER_SIZE * 2, 0 ),
                                0, NULL, wxLB_HSCROLL );
+#else
+    if( Library == NULL )
+    {
+        m_LibList =
+            new wxListBox( this, ID_LIBVIEW_LIB_LIST,
+                           wxPoint( 0, 0 ),
+                           wxDefaultSize,
+                           0, NULL, wxLB_HSCROLL );
+    }
+    else
+    {
+        m_libraryName = Library->GetName();
+        m_entryName.Clear();
+        m_unit = 1;
+        m_convert = 1;
+        m_LibListSize.x = 0;
+    }
 
+    m_CmpList = new wxListBox( this , ID_LIBVIEW_CMP_LIST,
+                               wxPoint( 0, 0 ),
+                               wxDefaultSize,
+                               0, NULL, wxLB_HSCROLL );
+
+#endif
     if( m_LibList )
         ReCreateListLib();
     DisplayLibInfos();
@@ -173,6 +197,40 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
         DrawPanel->SetAcceleratorTable( table );
     Zoom_Automatique( false );
     Show( TRUE );
+
+#if KICAD_AUIMANAGER
+    m_auimgr.SetManagedWindow(this);
+
+    wxAuiPaneInfo horiz;
+    horiz.Gripper(false);
+    horiz.DockFixed(true);
+    horiz.Movable(false);
+    horiz.Floatable(false);
+    horiz.CloseButton(false);
+    horiz.CaptionVisible(false);
+
+    wxAuiPaneInfo vert(horiz);
+
+    vert.TopDockable(false).BottomDockable(false);
+    horiz.LeftDockable(false).RightDockable(false);
+
+    m_auimgr.AddPane(m_HToolBar,
+        wxAuiPaneInfo(horiz).Name(wxT("m_HToolBar")).Top().Row(0));
+
+    m_auimgr.AddPane(m_LibList,
+        wxAuiPaneInfo(vert).Name(wxT("m_LibList")).Left().Row(0));
+
+    m_auimgr.AddPane(m_CmpList,
+        wxAuiPaneInfo(vert).Name(wxT("m_CmpList")).Left().Row(1));
+
+    m_auimgr.AddPane(DrawPanel,
+        wxAuiPaneInfo(vert).Name(wxT("DrawFrame")).Center());
+
+    m_auimgr.AddPane(MsgPanel,
+        wxAuiPaneInfo(horiz).Name(wxT("MsgPanel")).Bottom());
+
+    m_auimgr.Update();
+#endif
 }
 
 
@@ -281,7 +339,10 @@ void WinEDA_ViewlibFrame::OnSize( wxSizeEvent& SizeEv )
         m_CmpList->SetSize( m_CmpListWindow->GetClientSize() -
                             wxSize( EXTRA_BORDER_SIZE * 2, 0 ) );
     }
-
+#if KICAD_AUIMANAGER
+	if(m_auimgr.GetManagedWindow())
+         m_auimgr.Update();
+#endif
     SizeEv.Skip();
 }
 
