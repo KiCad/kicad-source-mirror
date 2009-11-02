@@ -83,7 +83,7 @@ void EnsureGridColumnWidths( wxGrid* aGrid )
     for( int col=0; col<colCount;  ++col )
     {
         // add two spaces to the text and size it.
-        wxString colText = aGrid->GetColLabelValue( col ) + ' ' + ' ';
+        wxString colText = aGrid->GetColLabelValue( col ) + wxT( "  " );
 
         wxSize needed = sDC.GetTextExtent( colText );
 
