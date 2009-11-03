@@ -1,6 +1,6 @@
-/*********************************/
-/* Module de nettoyage du schema */
-/*********************************/
+/**************************************/
+/* Code to handle schematic clean up. */
+/**************************************/
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -15,21 +15,18 @@
 #include "netlist.h"
 
 
-/* Routines locales */
-static int TstAlignSegment( EDA_DrawLineStruct* RefSegm, EDA_DrawLineStruct* TstSegm );
-
-/* Variable locales */
+static int TstAlignSegment( EDA_DrawLineStruct* RefSegm,
+                            EDA_DrawLineStruct* TstSegm );
 
 
 /*******************************************/
 bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
-/*******************************************/
-
-/* Routine de nettoyage:
- *  - regroupe les segments de fils (ou de bus) alignes en 1 seul segment
- *  - Detecte les objets identiques superposes
- */
 {
+/*******************************************/
+/* Routine cleaning:
+ * - Includes segments or buses aligned in only 1 segment
+ * - Detects identical objects superimposed
+ */
     SCH_ITEM* DrawList, * TstDrawList;
     int       flag;
     bool      Modify = FALSE;
@@ -50,9 +47,10 @@ bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
                 {
                     flag = TstAlignSegment( (EDA_DrawLineStruct*) DrawList,
                                            (EDA_DrawLineStruct*) TstDrawList );
-                    if( flag )  /* Suppression de TstSegm */
+                    if( flag )
                     {
-                        /* keep the bits set in .m_Flags, because the deleted segment can be flagged */
+                        /* keep the bits set in .m_Flags, because the deleted
+                         * segment can be flagged */
                         DrawList->m_Flags |= TstDrawList->m_Flags;
                         EraseStruct( TstDrawList, this );
                         SetRefreshReq();
@@ -75,18 +73,16 @@ bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
 
 /***********************************************/
 void BreakSegmentOnJunction( SCH_SCREEN* Screen )
-/************************************************/
-
-/* Routine creant des debuts / fin de segment (BUS ou WIRES) sur les jonctions
- *  et les raccords
- */
 {
+/************************************************/
+/* Routine to start/end segment (BUS or wires) on junctions.
+ */
     SCH_ITEM* DrawList;
 
     if( Screen == NULL )
     {
         DisplayError( NULL,
-                     wxT( "BreakSegmentOnJunction() error: NULL screen" ) );
+                      wxT( "BreakSegmentOnJunction() error: NULL screen" ) );
         return;
     }
 
@@ -134,24 +130,28 @@ void BreakSegmentOnJunction( SCH_SCREEN* Screen )
  * ( excluding ends)
  * fill aPicklist with modified items if non null
  */
-void BreakSegment(SCH_SCREEN * aScreen, wxPoint aBreakpoint )
+void BreakSegment( SCH_SCREEN* aScreen, wxPoint aBreakpoint )
 {
     EDA_DrawLineStruct* segment, * NewSegment;
-    for( SCH_ITEM* DrawList = aScreen->EEDrawList;DrawList; DrawList = DrawList->Next() )
+
+    for( SCH_ITEM* DrawList = aScreen->EEDrawList; DrawList;
+         DrawList = DrawList->Next() )
     {
-    if( DrawList->Type() != DRAW_SEGMENT_STRUCT_TYPE )
-        continue;
+        if( DrawList->Type() != DRAW_SEGMENT_STRUCT_TYPE )
+            continue;
 
         segment = (EDA_DrawLineStruct*) DrawList;
 
         if( !TestSegmentHit( aBreakpoint, segment->m_Start, segment->m_End, 0 ) )
             continue;
 
-        /* Segment connecte: doit etre coupe en 2 si px,py n'est
+        /* * JP translate * Segment connecte: doit etre coupe en 2 si px,py
+         * n'est
          *  pas une extremite */
-        if( (segment->m_Start == aBreakpoint) || (segment->m_End == aBreakpoint ) )
+        if( ( segment->m_Start == aBreakpoint )
+           || ( segment->m_End == aBreakpoint ) )
             continue;
-        /* Ici il faut couper le segment en 2 */
+        /* Here we must cut the segment into 2. */
         NewSegment = segment->GenCopy();
         NewSegment->m_Start = aBreakpoint;
         segment->m_End = NewSegment->m_Start;
@@ -165,35 +165,36 @@ void BreakSegment(SCH_SCREEN * aScreen, wxPoint aBreakpoint )
 /***********************************************************/
 static int TstAlignSegment( EDA_DrawLineStruct* RefSegm,
                             EDA_DrawLineStruct* TstSegm )
+{
 /***********************************************************/
-
 /* Search if the 2 segments RefSegm and TstSegm are on a line.
- *  Retourn 0 if no
+ *  Return 0 if no
  *      1 if yes, and RefSegm is modified to be the equivalent segment
  */
-{
     if( RefSegm == TstSegm )
         return 0;
     if( RefSegm->GetLayer() != TstSegm->GetLayer() )
         return 0;
 
-    // search for a common end, and modify coordinates to ensure RefSegm->m_End == TstSegm->m_Start
+    // search for a common end, and modify coordinates to ensure RefSegm->m_End
+    // == TstSegm->m_Start
     if( RefSegm->m_Start == TstSegm->m_Start )
     {
-        if( RefSegm->m_End == TstSegm->m_End )          // trivial case: RefSegm and TstSegm are identical
+        if( RefSegm->m_End == TstSegm->m_End )
             return 1;
-        EXCHG( RefSegm->m_Start, RefSegm->m_End );      // at this point, RefSegm->m_End == TstSegm->m_Start
+        EXCHG( RefSegm->m_Start, RefSegm->m_End );
     }
     else if( RefSegm->m_Start == TstSegm->m_End )
     {
         EXCHG( RefSegm->m_Start, RefSegm->m_End );
-        EXCHG( TstSegm->m_Start, TstSegm->m_End );    // at this point, RefSegm->m_End == TstSegm->m_Start
+        EXCHG( TstSegm->m_Start, TstSegm->m_End );
     }
     else if( RefSegm->m_End == TstSegm->m_End )
     {
-        EXCHG( TstSegm->m_Start, TstSegm->m_End );      // at this point, RefSegm->m_End == TstSegm->m_Start
+        EXCHG( TstSegm->m_Start, TstSegm->m_End );
     }
-    else if( RefSegm->m_End != TstSegm->m_Start )       // No common end point, segments cannot be merged
+    else if( RefSegm->m_End != TstSegm->m_Start )
+        // No common end point, segments cannot be merged.
         return 0;
 
     /* Test alignment: */

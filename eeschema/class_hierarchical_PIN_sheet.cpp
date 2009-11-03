@@ -1,14 +1,14 @@
 /////////////////////////////////////////////////////////////////////////////
 
 // Name:        class_hierarchical_PIN_sheet.cpp
-// Purpose:		member functions Hierarchical_PIN_Sheet_Struct
-//				header = class_drawsheet.h
+// Purpose:     member functions Hierarchical_PIN_Sheet_Struct
+//              header = class_drawsheet.h
 // Author:      jean-pierre Charras
 // Modified by:
 // Created:     08/02/2006 18:37:02
 // RCS-ID:
 // Copyright:   License GNU
-// Licence:
+// License:
 /////////////////////////////////////////////////////////////////////////////
 
 #include "fctsys.h"
@@ -23,13 +23,14 @@
 
 
 /*******************************************************************/
-Hierarchical_PIN_Sheet_Struct::Hierarchical_PIN_Sheet_Struct( DrawSheetStruct* parent,
-                                                              const wxPoint&   pos,
-                                                              const wxString&  text ) :
+Hierarchical_PIN_Sheet_Struct::Hierarchical_PIN_Sheet_Struct(
+    DrawSheetStruct* parent,
+    const wxPoint& pos,
+    const wxString& text ) :
     SCH_ITEM( parent, DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE ),
     EDA_TextStruct( text )
-/*******************************************************************/
 {
+/*******************************************************************/
     wxASSERT( parent );
     wxASSERT( Pnext == NULL );
     m_Layer = LAYER_SHEETLABEL;
@@ -43,10 +44,11 @@ Hierarchical_PIN_Sheet_Struct::Hierarchical_PIN_Sheet_Struct( DrawSheetStruct* p
 
 /***********************************************************/
 Hierarchical_PIN_Sheet_Struct* Hierarchical_PIN_Sheet_Struct::GenCopy()
-/***********************************************************/
 {
+/***********************************************************/
     Hierarchical_PIN_Sheet_Struct* newitem =
-        new Hierarchical_PIN_Sheet_Struct( (DrawSheetStruct*) m_Parent, m_Pos, m_Text );
+        new Hierarchical_PIN_Sheet_Struct( (DrawSheetStruct*) m_Parent, m_Pos,
+                                           m_Text );
 
     newitem->m_Edge   = m_Edge;
     newitem->m_Shape  = m_Shape;
@@ -59,25 +61,28 @@ Hierarchical_PIN_Sheet_Struct* Hierarchical_PIN_Sheet_Struct::GenCopy()
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int Hierarchical_PIN_Sheet_Struct::GetPenSize( )
+int Hierarchical_PIN_Sheet_Struct::GetPenSize()
 {
     return g_DrawDefaultLineThickness;
 }
 
 
-/********************************************************************************************/
-void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                                          int DrawMode, int Color )
-/********************************************************************************************/
-/* Routine de dessin des Labels type hierarchie */
+/*****************************************************************************/
+void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel,
+                                          wxDC*             DC,
+                                          const wxPoint&    offset,
+                                          int               DrawMode,
+                                          int               Color )
 {
-    GRTextHorizJustifyType side;
-    EDA_Colors             txtcolor;
+/*****************************************************************************/
+/* Routine to create hierarchical labels */
+    GRTextHorizJustifyType       side;
+    EDA_Colors                   txtcolor;
     int posx, tposx, posy;
 
     static std::vector <wxPoint> Poly;
 
-    int LineWidth = GetPenSize( );
+    int LineWidth = GetPenSize();
 
     if( Color >= 0 )
         txtcolor = (EDA_Colors) Color;
@@ -85,8 +90,8 @@ void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, con
         txtcolor = ReturnLayerColor( m_Layer );
     GRSetDrawMode( DC, DrawMode );
 
-    posx   = m_Pos.x + offset.x;
-    posy   = m_Pos.y + offset.y;
+    posx = m_Pos.x + offset.x;
+    posy = m_Pos.y + offset.y;
     wxSize size = m_Size;
 
     if( !m_Text.IsEmpty() )
@@ -102,15 +107,15 @@ void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, con
             side  = GR_TEXT_HJUSTIFY_LEFT;
         }
         DrawGraphicText( panel, DC, wxPoint( tposx, posy ), txtcolor,
-                         m_Text, TEXT_ORIENT_HORIZ, size,
-                         side, GR_TEXT_VJUSTIFY_CENTER, LineWidth, false, false );
+                         m_Text, TEXT_ORIENT_HORIZ, size, side,
+                         GR_TEXT_VJUSTIFY_CENTER, LineWidth, false, false );
     }
 
     /* Draw the graphic symbol */
     CreateGraphicShape( Poly, m_Pos + offset );
     int FillShape = false;
     GRPoly( &panel->m_ClipBox, DC, Poly.size(), &Poly[0],
-            FillShape, LineWidth, txtcolor, txtcolor );     /* Poly Non rempli */
+            FillShape, LineWidth, txtcolor, txtcolor );
 }
 
 
@@ -119,8 +124,9 @@ void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel, wxDC* DC, con
  * @param aCorner_list = list to fill with polygon corners coordinates
  * @param Pos = Position of the shape
  */
-void Hierarchical_PIN_Sheet_Struct::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
-                                                        const wxPoint&         Pos )
+void Hierarchical_PIN_Sheet_Struct::CreateGraphicShape(
+    std::vector <wxPoint>& aCorner_list,
+    const wxPoint& Pos )
 {
     wxSize size = m_Size;
 
@@ -206,8 +212,7 @@ bool Hierarchical_PIN_Sheet_Struct::Save( FILE* aFile ) const
     }
 
     if( fprintf( aFile, "F%d \"%s\" %c %c %-3d %-3d %-3d\n", m_Number,
-                 CONV_TO_UTF8( m_Text ), type, side,
-                 m_Pos.x, m_Pos.y,
+                 CONV_TO_UTF8( m_Text ), type, side, m_Pos.x, m_Pos.y,
                  m_Size.x ) == EOF )
     {
         return false;
@@ -224,9 +229,8 @@ void Hierarchical_PIN_Sheet_Struct::Show( int nestLevel, std::ostream& os )
     wxString s = GetClass();
 
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">"
-                                 << " pin_name=\"" << CONV_TO_UTF8( m_Text ) << '"'
-                                 << "/>\n"
-                                 << std::flush;
+                                 << " pin_name=\"" << CONV_TO_UTF8( m_Text )
+                                 << '"' << "/>\n" << std::flush;
 
 //    NestedSpace( nestLevel, os ) << "</" << s.Lower().mb_str() << ">\n";
 }

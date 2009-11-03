@@ -66,9 +66,7 @@ int SCH_CMP_FIELD::GetPenSize()
 
 
 /**
- * Routine de trace des textes type Field du composant.
- *  entree:
- *      DrawMode: mode de trace
+ * Draw schematic component fields.
  */
 void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                           const wxPoint& offset, int DrawMode, int Color )
@@ -98,7 +96,7 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
     /* Calculate the text orientation, according to the component orientation/mirror */
     orient = m_Orient;
-    if( parentComponent->m_Transform[0][1] )  // Rotation du composant de 90deg
+    if( parentComponent->m_Transform[0][1] )  // Rotate component 90 degrees.
     {
         if( orient == TEXT_ORIENT_HORIZ )
             orient = TEXT_ORIENT_VERT;

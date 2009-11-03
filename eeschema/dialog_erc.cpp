@@ -5,7 +5,7 @@
 // Author:      jean-pierre Charras
 // Modified by:
 // Created:     02/07/2000
-// Licence:     GPL
+// License:     GPL
 /////////////////////////////////////////////////////////////////////////////
 #include "fctsys.h"
 #include "common.h"
@@ -24,12 +24,10 @@
 
 
 BEGIN_EVENT_TABLE( DIALOG_ERC, DIALOG_ERC_BASE )
-EVT_COMMAND_RANGE( ID_MATRIX_0,
-                   ID_MATRIX_0 + (PIN_NMAX * PIN_NMAX) - 1,
-                   wxEVT_COMMAND_BUTTON_CLICKED,
-                   DIALOG_ERC::ChangeErrorLevel )
+    EVT_COMMAND_RANGE( ID_MATRIX_0, ID_MATRIX_0 + ( PIN_NMAX * PIN_NMAX ) - 1,
+                       wxEVT_COMMAND_BUTTON_CLICKED,
+                       DIALOG_ERC::ChangeErrorLevel )
 END_EVENT_TABLE()
-
 
 DIALOG_ERC::DIALOG_ERC( WinEDA_SchematicFrame* parent ) :
     DIALOG_ERC_BASE( parent )
@@ -56,7 +54,9 @@ void DIALOG_ERC::Init()
     num.Printf( wxT( "%d" ), g_EESchemaVar.NbErrorErc );
     m_TotalErrCount->SetLabel( num );
 
-    num.Printf( wxT( "%d" ), g_EESchemaVar.NbErrorErc - g_EESchemaVar.NbWarningErc );
+    num.Printf( wxT(
+                    "%d" ), g_EESchemaVar.NbErrorErc -
+                g_EESchemaVar.NbWarningErc );
     m_LastErrCount->SetLabel( num );
 
     num.Printf( wxT( "%d" ), g_EESchemaVar.NbWarningErc );
@@ -71,10 +71,9 @@ void DIALOG_ERC::Init()
 
 /* wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_ERASE_DRC_MARKERS */
 void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
-
+{
 /* Delete the old ERC markers, over the whole hierarchy
  */
-{
     DeleteAllMarkers( MARK_ERC );
     m_MarkersList->ClearList();
     m_Parent->DrawPanel->Refresh();
@@ -104,8 +103,8 @@ void DIALOG_ERC::OnErcCmpClick( wxCommandEvent& event )
     wxSafeYield();      // m_MarkersList must be redraw
     wxArrayString messageList;
     TestErc( &messageList );
-    for ( unsigned ii = 0; ii < messageList.GetCount(); ii++ )
-        m_MessagesList->AppendText(messageList[ii]);
+    for( unsigned ii = 0; ii < messageList.GetCount(); ii++ )
+        m_MessagesList->AppendText( messageList[ii] );
 }
 
 
@@ -132,9 +131,11 @@ void DIALOG_ERC::OnLeftDClickMarkersList( wxCommandEvent& event )
 
     NotFound = TRUE;
     /* Search for the selected marker */
-    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
+    for( sheet = SheetList.GetFirst();
+        sheet != NULL;
+        sheet = SheetList.GetNext() )
     {
-        SCH_ITEM*item = (SCH_ITEM*) sheet->LastDrawList();
+        SCH_ITEM* item = (SCH_ITEM*) sheet->LastDrawList();
         while( item && NotFound )
         {
             if( item == marker )
@@ -160,7 +161,7 @@ void DIALOG_ERC::OnLeftDClickMarkersList( wxCommandEvent& event )
     {
         sheet->LastScreen()->SetZoom( m_Parent->GetScreen()->GetZoom() );
         *m_Parent->m_CurrentSheet = *sheet;
-        ActiveScreen    = m_Parent->m_CurrentSheet->LastScreen();
+        ActiveScreen = m_Parent->m_CurrentSheet->LastScreen();
         m_Parent->m_CurrentSheet->UpdateAllScreenReferences();
     }
 
@@ -171,11 +172,10 @@ void DIALOG_ERC::OnLeftDClickMarkersList( wxCommandEvent& event )
 
 /*********************************************/
 void DIALOG_ERC::ReBuildMatrixPanel()
-/*********************************************/
-
-/* Build or rebuild the panel showing the ERC confict matrix
- */
 {
+/*********************************************/
+/* Build or rebuild the panel showing the ERC conflict matrix
+ */
     int           ii, jj, event_id, text_height;
     wxPoint       pos, BoxMatrixPosition;
 
@@ -191,8 +191,8 @@ void DIALOG_ERC::ReBuildMatrixPanel()
         DiagErcTableInit = TRUE;
     }
 
-    // Get the current text size :
-    text = new wxStaticText( m_PanelERCOptions, -1, wxT( "W" ), pos );    // this is a dummy text
+    // Get the current text size: this is a dummy text.
+    text = new wxStaticText( m_PanelERCOptions, -1, wxT( "W" ), pos );
 
     text_height = text->GetRect().GetHeight();
     bitmap_size = MAX( bitmap_size, text_height );
@@ -218,7 +218,8 @@ void DIALOG_ERC::ReBuildMatrixPanel()
         for( ii = 0; ii < PIN_NMAX; ii++ )
         {
             y    = pos.y + (ii * bitmap_size);
-            text = new wxStaticText( m_PanelERCOptions, -1, CommentERC_H[ii], wxPoint( 5, y ) );
+            text = new wxStaticText( m_PanelERCOptions, -1, CommentERC_H[ii],
+                                     wxPoint( 5, y ) );
 
             x     = text->GetRect().GetRight();
             pos.x = MAX( pos.x, x );
@@ -239,37 +240,42 @@ void DIALOG_ERC::ReBuildMatrixPanel()
             if( (ii == jj) && !m_Initialized )
             {
                 wxPoint txtpos;
-                txtpos.x = x + 6; txtpos.y = y - bitmap_size;
-                text     = new wxStaticText( m_PanelERCOptions, -1, CommentERC_V[ii], txtpos );
+                txtpos.x = x + 6;
+                txtpos.y = y - bitmap_size;
+                text     = new wxStaticText( m_PanelERCOptions,
+                                             -1,
+                                             CommentERC_V[ii],
+                                             txtpos );
 
-                BoxMatrixMinSize.x = MAX( BoxMatrixMinSize.x, text->GetRect().GetRight() );
+                BoxMatrixMinSize.x = MAX( BoxMatrixMinSize.x,
+                                          text->GetRect().GetRight() );
             }
-            event_id = ID_MATRIX_0 + ii + (jj * PIN_NMAX);
+            event_id = ID_MATRIX_0 + ii + ( jj * PIN_NMAX );
             delete m_ButtonList[ii][jj];
 
             switch( diag )
             {
             case OK:
                 m_ButtonList[ii][jj] = new wxBitmapButton( m_PanelERCOptions,
-                                                          event_id,
-                                                          wxBitmap( erc_green_xpm ),
-                                                          wxPoint( x, y ) );
+                                                           event_id,
+                                                           wxBitmap( erc_green_xpm ),
+                                                           wxPoint( x, y ) );
 
                 break;
 
             case WAR:
                 m_ButtonList[ii][jj] = new wxBitmapButton( m_PanelERCOptions,
-                                                          event_id,
-                                                          wxBitmap( warning_xpm ),
-                                                          wxPoint( x, y ) );
+                                                           event_id,
+                                                           wxBitmap( warning_xpm ),
+                                                           wxPoint( x, y ) );
 
                 break;
 
             case ERR:
                 m_ButtonList[ii][jj] = new wxBitmapButton( m_PanelERCOptions,
-                                                          event_id,
-                                                          wxBitmap( error_xpm ),
-                                                          wxPoint( x, y ) );
+                                                           event_id,
+                                                           wxBitmap( error_xpm ),
+                                                           wxPoint( x, y ) );
 
                 break;
             }
@@ -296,7 +302,9 @@ void DIALOG_ERC::DisplayERC_MarkersList()
 
     m_MarkersList->ClearList();
 
-    for( DrawSheetPath* Sheet = SheetList.GetFirst(); Sheet != NULL; Sheet = SheetList.GetNext() )
+    for( DrawSheetPath* Sheet = SheetList.GetFirst();
+        Sheet != NULL;
+        Sheet = SheetList.GetNext() )
     {
         SCH_ITEM* DrawStruct = Sheet->LastDrawList();
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
@@ -304,7 +312,6 @@ void DIALOG_ERC::DisplayERC_MarkersList()
             if( DrawStruct->Type() != TYPE_MARKER_SCH )
                 continue;
 
-            /* Marqueur trouve */
             MARKER_SCH* Marker = (MARKER_SCH*) DrawStruct;
             if( Marker->GetMarkerType() != MARK_ERC )
                 continue;
@@ -312,7 +319,8 @@ void DIALOG_ERC::DisplayERC_MarkersList()
             /* Display diag */
 
 //            wxString msg;
-//            msg.Printf( _( "<b>sheet %s</b><ul>\n" ), Sheet->PathHumanReadable().GetData() );
+//            msg.Printf( _( "<b>sheet %s</b><ul>\n" ),
+// Sheet->PathHumanReadable().GetData() );
 //            msg += Marker->GetReporter().ShowHtml();
 //            m_MarkersList->Append( msg );
             m_MarkersList->AppendToList( Marker );
@@ -323,11 +331,10 @@ void DIALOG_ERC::DisplayERC_MarkersList()
 
 /**************************************************************/
 void DIALOG_ERC::ResetDefaultERCDiag( wxCommandEvent& event )
-/**************************************************************/
-
-/* Remet aux valeurs par defaut la matrice de diagnostic
- */
 {
+/**************************************************************/
+/* Resets the default values of the ERC matrix.
+ */
     memcpy( DiagErc, DefaultDiagErc, sizeof(DiagErc) );
     ReBuildMatrixPanel();
 }
@@ -335,11 +342,10 @@ void DIALOG_ERC::ResetDefaultERCDiag( wxCommandEvent& event )
 
 /************************************************************/
 void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
+{
 /************************************************************/
-
 /* Change the error level for the pressed button, on the matrix table
  */
-{
     int             id, level, ii, x, y;
     wxBitmapButton* Butt;
     const char**    new_bitmap_xpm = NULL;

@@ -76,7 +76,7 @@ bool operator<( const CMP_LIBRARY& item1, const CMP_LIBRARY& item2 )
 CMP_LIBRARY::CMP_LIBRARY( int type, const wxFileName& fileName )
 {
     m_Type         = type;      /* type indicator */
-    m_IsModified   = false;     /* flag indicateur d'edition */
+    m_IsModified   = false;     /* modified indicator */
     m_TimeStamp    = 0;
     m_Flags        = 0;
     m_IsCache      = false;
@@ -505,7 +505,7 @@ bool CMP_LIBRARY::Load( wxString& errMsg )
          * apparently started with EESchema-LIB.  Sometime after 2.0, it
          * was changed to EESchema-LIBRARY.  Therefore, the test for
          * EESchema-LIB will work in both cases.  Don't change this unless
-         * backwards compatability is no longer required.
+         * backwards compatibility is no longer required.
          */
         if( !tkn.HasMoreTokens()
             || !tkn.GetNextToken().Upper().StartsWith(wxT( "EESCHEMA-LIB" ) ) )
@@ -559,7 +559,7 @@ the current schematic." ),
         {
             if( !LoadHeader( f, &LineNum ) )
             {
-                errMsg = _( "An error occured attempting to read the header." );
+                errMsg = _( "An error occurred attempting to read the header." );
                 return false;
             }
 
@@ -659,14 +659,14 @@ bool CMP_LIBRARY::LoadDocs( wxString& errMsg )
 
     if( f == NULL )
     {
-        errMsg.Printf( _( "Could not open component document libray file <%s>." ),
+        errMsg.Printf( _( "Could not open component document library file <%s>." ),
                        GetChars( fn.GetFullPath() ) );
         return false;
     }
 
     if( GetLine( f, Line, &LineNum, sizeof(Line) ) == NULL )
     {
-        errMsg.Printf( _( "Component document libray file <%s> is empty." ),
+        errMsg.Printf( _( "Component document library file <%s> is empty." ),
                        GetChars( fn.GetFullPath() ) );
         fclose( f );
         return false;
@@ -765,7 +765,6 @@ bool CMP_LIBRARY::Save( const wxString& FullFileName, bool oldDocFormat )
 
     m_IsModified = false;
 
-    /* Creation de l'entete de la librairie */
     m_TimeStamp = GetTimeStamp();
     if( !SaveHeader( libfile ) )
     {

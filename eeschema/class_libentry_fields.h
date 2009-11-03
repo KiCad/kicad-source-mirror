@@ -1,5 +1,5 @@
 /**************************************************************/
-/*	Lib component definitions (libentry) definition of fields */
+/*  Lib component definitions (libentry) definition of fields */
 /**************************************************************/
 
 #ifndef CLASS_LIBENTRY_FIELDS_H

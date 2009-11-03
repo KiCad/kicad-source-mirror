@@ -49,9 +49,9 @@ const int BUTT_SIZE_Y = 20;
 #define ADR( numlayer ) & (g_LayerDescr.LayerColor[numlayer])
 
 
-/**********************************/
-/* Liste des menus de Menu_Layers */
-/**********************************/
+/********************/
+/* Layer menu list. */
+/********************/
 
 struct ColorButton
 {
@@ -239,7 +239,7 @@ static ColorButton* laytool_list[NB_BUTT] = {
     &Layer_SheetFileName_Item,
     &Layer_SheetName_Item,
     &Layer_SheetLabel_Item,
-	&Layer_HierarchicalLabel_Item,
+    &Layer_HierarchicalLabel_Item,
 
     &Layer_Erc_Warning_Item,
     &Layer_Erc_Error_Item,
@@ -288,9 +288,9 @@ static ButtonIndex* laytool_index[BUTTON_GROUPS] = {
 };
 
 
-/**************************************************************/
-/* classe derivee pour la frame de Configuration des couleurs */
-/**************************************************************/
+/***********************************************/
+/* Derived class for the frame color settings. */
+/***********************************************/
 
 class WinEDA_SetColorsFrame: public wxDialog
 {
@@ -319,7 +319,7 @@ private:
                  const wxSize& size = wxDefaultSize,
                  long style = SYMBOL_WINEDA_SETCOLORSFRAME_STYLE );
 
-    // Initialises member variables
+    // Initializes member variables
     void Init();
 
     // Creates the controls and sizers
@@ -342,5 +342,4 @@ public:
     ~WinEDA_SetColorsFrame();
 };
 
-#endif
-    // _EELAYER_H_
+#endif    // _EELAYER_H_

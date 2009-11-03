@@ -1,6 +1,6 @@
-/*************************************/
-/* Modules de creations de Bus Entry */
-/*************************************/
+/*****************************************************/
+/* Code to handle manipulation on bus entry objects. */
+/*****************************************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -13,21 +13,18 @@
 #include "general.h"
 #include "protos.h"
 
-/* Routines Locales */
-
-/* Variables locales */
 static int     s_LastShape = '\\';
 static wxPoint ItemInitialPosition;
 
 /**************************************************************/
 static void ExitBusEntry( WinEDA_DrawPanel* Panel, wxDC* DC )
-/**************************************************************/
-/* Routine de sortie des menus de trace */
 {
+/**************************************************************/
+/* Exit bus entry mode. */
     DrawBusEntryStruct* BusEntry =
         (DrawBusEntryStruct*) Panel->GetScreen()->GetCurItem();
 
-    if( BusEntry )  /* trace en cours */
+    if( BusEntry )
     {
         RedrawOneStruct( Panel, DC, BusEntry, g_XorMode );
         if( BusEntry->m_Flags & IS_NEW )
@@ -51,36 +48,36 @@ static void ExitBusEntry( WinEDA_DrawPanel* Panel, wxDC* DC )
 
 /************************************************************************/
 static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
-/************************************************************************/
-
-/*  Dessin du Segment "BusEntry" lors des deplacements du curseur
- */
 {
+/************************************************************************/
+/*  Drawing of the bus entry segment" while moving the cursor. */
     BASE_SCREEN*        screen   = panel->GetScreen();
     DrawBusEntryStruct* BusEntry = (DrawBusEntryStruct*) screen->GetCurItem();
 
     if( BusEntry == NULL )
         return;
 
-    /* effacement apres deplacement curseur */
+    /* Erase the last segment position. */
     if( erase )
         RedrawOneStruct( panel, DC, BusEntry, g_XorMode );
 
-    /* Reaffichage au bon endroit */
+    /* Redraw at the new position. */
     BusEntry->m_Pos = screen->m_Curseur;
     RedrawOneStruct( panel, DC, BusEntry, g_XorMode );
 }
 
 
 /**********************************************************************************/
-DrawBusEntryStruct* WinEDA_SchematicFrame::CreateBusEntry( wxDC* DC, int entry_type )
+DrawBusEntryStruct* WinEDA_SchematicFrame::CreateBusEntry( wxDC* DC,
+                                                           int   entry_type )
+{
 /**********************************************************************************/
-
 /* Create a new bus entry, and prepare moving function (for later place it)
  */
-{
-    DrawBusEntryStruct* BusEntry = new DrawBusEntryStruct( GetScreen()->m_Curseur,
-                                                           s_LastShape, entry_type );
+    DrawBusEntryStruct* BusEntry = new DrawBusEntryStruct(
+        GetScreen()->m_Curseur,
+        s_LastShape,
+        entry_type );
 
     BusEntry->m_Flags = IS_NEW;
 
@@ -98,12 +95,13 @@ DrawBusEntryStruct* WinEDA_SchematicFrame::CreateBusEntry( wxDC* DC, int entry_t
 /**************************************************************************/
 void WinEDA_SchematicFrame::StartMoveBusEntry( DrawBusEntryStruct* BusEntry,
                                                wxDC*               DC )
-/**************************************************************************/
 {
+/**************************************************************************/
     if( BusEntry == NULL )
         return;
 
-    if( (BusEntry->m_Flags & IS_NEW) == 0 )    // => not already in edit, save shape */
+    if( (BusEntry->m_Flags & IS_NEW) == 0 )    // => not already in edit, save
+                                               // shape */
     {
         delete g_ItemToUndoCopy;
         g_ItemToUndoCopy = BusEntry->GenCopy();
@@ -126,13 +124,13 @@ void WinEDA_SchematicFrame::StartMoveBusEntry( DrawBusEntryStruct* BusEntry,
 
 
 /************************************************************/
-void WinEDA_SchematicFrame::SetBusEntryShape( wxDC* DC,
-                                              DrawBusEntryStruct* BusEntry, int entry_shape )
+void WinEDA_SchematicFrame::SetBusEntryShape( wxDC*               DC,
+                                              DrawBusEntryStruct* BusEntry,
+                                              int                 entry_shape )
+{
 /************************************************************/
-
 /* set the shape of BusEntry (shape = / or \ )
  */
-{
     if( BusEntry == NULL )
         return;
 
@@ -169,8 +167,8 @@ void WinEDA_SchematicFrame::SetBusEntryShape( wxDC* DC,
 
 /************************************************************************/
 int WinEDA_SchematicFrame::GetBusEntryShape( DrawBusEntryStruct* BusEntry )
-/************************************************************************/
 {
+/************************************************************************/
     int entry_shape = '\\';
 
     if( BusEntry->m_Size.y < 0 )

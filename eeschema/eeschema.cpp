@@ -20,39 +20,38 @@
 
 // Global variables
 
-int       g_OptNetListUseNames; /* TRUE pour utiliser les noms de net plutot que
-                                 * les numeros (netlist PSPICE seulement) */
-SCH_ITEM* g_ItemToRepeat; /* pointeur sur la derniere structure
-                           * dessinee pouvant etre dupliquee par la commande
-                           * Repeat ( NULL si aucune struct existe ) */
+int       g_OptNetListUseNames; /* TRUE to use names rather than net
+                                 * The numbers (PSPICE netlist only) */
+SCH_ITEM* g_ItemToRepeat;       /* Pointer to the last structure
+                                 * for duplicatation by the repeat command.
+                                 * (NULL if no struct exists) */
 wxSize    g_RepeatStep;
 int       g_RepeatDeltaLabel;
 
-SCH_ITEM* g_ItemToUndoCopy; /* copy of last modified schematic item
-                             * before it is modified (used for undo managing
-                             * to restore old values ) */
+SCH_ITEM* g_ItemToUndoCopy;     /* copy of last modified schematic item
+                                 * before it is modified (used for undo
+                                 * managing to restore old values ) */
 
-bool      g_LastSearchIsMarker; /* True if last seach is a marker serach
+bool g_LastSearchIsMarker;      /* True if last seach is a marker serach
                                  * False for a schematic item search
                                  * Used for hotkey next search */
 
 /* Block operation (copy, paste) */
-BLOCK_SELECTOR g_BlockSaveDataList; // List of items to paste (Created by Block Save)
+BLOCK_SELECTOR           g_BlockSaveDataList;   // List of items to paste
+                                                // (Created by Block Save)
 
-// Gestion d'options
-bool      g_HVLines = true;   // Bool: force H or V directions (Wires, Bus ..)
+bool                     g_HVLines = true;      // Bool: force H or V
+                                                // directions (Wires, Bus ..)
 
 struct EESchemaVariables g_EESchemaVar;
 
-/* Variables globales pour Schematic Edit */
-int       g_DefaultTextLabelSize = DEFAULT_SIZE_TEXT;
+int g_DefaultTextLabelSize = DEFAULT_SIZE_TEXT;
 
 HPGL_Pen_Descr_Struct g_HPGL_Pen_Descr;
 
-//SCH_SCREEN * ScreenSch;
-DrawSheetStruct* g_RootSheet = NULL;
+DrawSheetStruct*      g_RootSheet = NULL;
 
-wxString   g_NetCmpExtBuffer( wxT( "cmp" ) );
+wxString       g_NetCmpExtBuffer( wxT( "cmp" ) );
 
 const wxString SymbolFileExtension( wxT( "sym" ) );
 const wxString CompLibFileExtension( wxT( "lib" ) );
@@ -60,22 +59,30 @@ const wxString CompLibFileExtension( wxT( "lib" ) );
 const wxString SymbolFileWildcard( wxT( "Kicad drawing symbol file (*.sym)|*.sym" ) );
 const wxString CompLibFileWildcard( wxT( "Kicad component library file (*.lib)|*.lib" ) );
 
-wxString   g_SimulatorCommandLine;  // ligne de commande pour l'appel au simulateur (gnucap, spice..)
-wxString   g_NetListerCommandLine;  // ligne de commande pour l'appel au simulateur (gnucap, spice..)
+// command line to call the simulator (gnucap, spice..)
+wxString    g_SimulatorCommandLine;
 
-LayerStruct g_LayerDescr;            /* couleurs des couches  */
+// command line to call the simulator net lister (gnucap, spice..)
+wxString    g_NetListerCommandLine;
 
-bool g_EditPinByPinIsOn = false;   /* true to do not synchronize pins edition
-                                             *  when they are at the same location */
+LayerStruct g_LayerDescr;            /* layer colors. */
 
-int  g_DrawDefaultLineThickness = 6; /* Default line (in EESCHEMA units) thickness
-                                                   *  used to draw/plot items having a default thickness line value (i.e. = 0 ).
-                                                   *  0 = single pixel line width
-                                                   */
+bool        g_EditPinByPinIsOn = false; /* true to do not synchronize pins
+                                         * edition  when they are at the
+                                         * same location */
+
+int         g_DrawDefaultLineThickness = 6; /* Default line thickness in
+                                             * EESCHEMA units used to
+                                             * draw/plot items having a
+                                             * default thickness line value
+                                             * (i.e. = 0 ). 0 = single pixel
+                                             * line width */
 
 // Color to draw selected items
 int g_ItemSelectetColor = BROWN;
-// Color to draw items flagged invisible, in libedit (they are insisible in eeschema
+
+// Color to draw items flagged invisible, in libedit (they are insisible
+// in eeschema
 int g_InvisibleItemColor = DARKGRAY;
 
 int DefaultTransformMatrix[2][2] = { { 1, 0 }, { 0, -1 } };
@@ -94,7 +101,7 @@ IMPLEMENT_APP( WinEDA_App )
 
 bool WinEDA_App::OnInit()
 {
-    wxFileName fn;
+    wxFileName             fn;
     WinEDA_SchematicFrame* frame = NULL;
 
     g_DebugLevel = 0;   // Debug level */
@@ -113,9 +120,10 @@ bool WinEDA_App::OnInit()
     /* init EESCHEMA */
     SeedLayers();
 
-    // read current setup and reopen last directory if no filename to open in command line
+    // read current setup and reopen last directory if no filename to open in
+    // command line
     bool reopenLastUsedDirectory = argc == 1;
-    GetSettings(reopenLastUsedDirectory);
+    GetSettings( reopenLastUsedDirectory );
 
     Read_Hotkey_Config( frame, false );   /* Must be called before creating
                                            * the main frame  in order to

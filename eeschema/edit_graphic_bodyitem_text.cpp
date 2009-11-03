@@ -1,11 +1,8 @@
-    /**********************************************/
-    /* EESchema - symbtext.cpp for Library Editor */
-    /**********************************************/
+/**********************************/
+/* edit_graphic_bodyitem_text.cpp */
+/**********************************/
 
-/* Menu et routines de creation, modification, suppression de textes
-    du type symbole
-    (textes autres que Fields)
-*/
+/* Code for editing component library text items, not fields. */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -143,8 +140,7 @@ void Dialog_BodyGraphicText_Properties::OnCancelClick( wxCommandEvent& event )
 /***************************************************************************/
 void Dialog_BodyGraphicText_Properties::OnOkClick( wxCommandEvent& event )
 /***************************************************************************/
-/* Met a jour les differents parametres pour le composant en cours d'edition
-*/
+/* Updates the different parameters for the component being edited */
 {
     wxString Line;
 
@@ -234,7 +230,7 @@ void WinEDA_LibeditFrame::EditSymbolText(wxDC* DC, LIB_DRAW_ITEM* DrawItem)
          || ( DrawItem->Type() != COMPONENT_GRAPHIC_TEXT_DRAW_TYPE ) )
         return;
 
-    /* Effacement ancien texte */
+    /* Deleting old text. */
     if( DC)
         DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, DrawMode, NULL,
                         DefaultTransformMatrix );
@@ -247,7 +243,7 @@ void WinEDA_LibeditFrame::EditSymbolText(wxDC* DC, LIB_DRAW_ITEM* DrawItem)
     frame->Destroy();
     GetScreen()->SetModify();
 
-    /* Affichage nouveau texte */
+    /* Display new text. */
     if( DC )
     {
         if ( ( DrawItem->m_Flags & IS_MOVED ) == 0 )

@@ -1,6 +1,6 @@
-/***********************************************************************/
-/* Methodes de base de gestion des classes des elements de schematique */
-/***********************************************************************/
+/*****************************/
+/* class_schematic_items.cpp */
+/*****************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -60,7 +60,7 @@ DrawBusEntryStruct* DrawBusEntryStruct::GenCopy()
 
 /**
  * Function Save
- * writes the data structures for this object out to a FILE in "*.brd" format.
+ * writes the data structures for this object out to a FILE in "*.sch" format.
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
@@ -162,7 +162,7 @@ DrawJunctionStruct* DrawJunctionStruct::GenCopy()
 
 /**
  * Function Save
- * writes the data structures for this object out to a FILE in "*.brd" format.
+ * writes the data structures for this object out to a FILE in "*.sch" format.
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
@@ -202,7 +202,7 @@ bool DrawJunctionStruct::HitTest( const wxPoint& aPosRef )
     wxPoint dist = aPosRef - m_Pos;
 
     return sqrt( ( (double) ( dist.x * dist.x ) ) +
-                ( (double) ( dist.y * dist.y ) ) ) < (DRAWJUNCTION_DIAMETER/2);
+                 ( (double) ( dist.y * dist.y ) ) ) < (DRAWJUNCTION_DIAMETER/2);
 }
 
 
@@ -217,7 +217,7 @@ int DrawJunctionStruct::GetPenSize()
 
 
 /*****************************************************************************
-* Routine to redraw connection struct.										 *
+* Routine to redraw connection struct.                                       *
 *****************************************************************************/
 void DrawJunctionStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                                const wxPoint& offset, int DrawMode, int Color )
@@ -231,7 +231,8 @@ void DrawJunctionStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     GRSetDrawMode( DC, DrawMode );
 
     GRFilledCircle( &panel->m_ClipBox, DC, m_Pos.x + offset.x,
-                    m_Pos.y + offset.y, (DRAWJUNCTION_DIAMETER/2), 0, color, color );
+                    m_Pos.y + offset.y, (DRAWJUNCTION_DIAMETER/2), 0, color,
+                    color );
 }
 
 
@@ -274,7 +275,7 @@ EDA_Rect DrawNoConnectStruct::GetBoundingBox()
 {
     const int DELTA = DRAWNOCONNECT_SIZE / 2;
     EDA_Rect  box( wxPoint( m_Pos.x - DELTA, m_Pos.y - DELTA ),
-                  wxSize( 2 * DELTA, 2 * DELTA ) );
+                   wxSize( 2 * DELTA, 2 * DELTA ) );
 
     box.Normalize();
     return box;
@@ -301,7 +302,7 @@ bool DrawNoConnectStruct::HitTest( const wxPoint& aPosRef )
 
 /**
  * Function Save
- * writes the data structures for this object out to a FILE in "*.brd" format.
+ * writes the data structures for this object out to a FILE in "*.sch" format.
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
@@ -364,7 +365,7 @@ EDA_DrawLineStruct::EDA_DrawLineStruct( const wxPoint& pos, int layer ) :
     switch( layer )
     {
     default:
-        m_Layer = LAYER_NOTES;     /* Mettre ds Notes */
+        m_Layer = LAYER_NOTES;
         break;
 
     case LAYER_WIRE:
@@ -435,7 +436,7 @@ EDA_Rect EDA_DrawLineStruct::GetBoundingBox()
 
     // return a rectangle which is [pos,dim) in nature.  therefore the +1
     EDA_Rect ret( wxPoint( xmin, ymin ),
-                 wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
+                  wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
 
     return ret;
 }
@@ -443,7 +444,7 @@ EDA_Rect EDA_DrawLineStruct::GetBoundingBox()
 
 /**
  * Function Save
- * writes the data structures for this object out to a FILE in "*.brd" format.
+ * writes the data structures for this object out to a FILE in "*.sch" format.
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
@@ -559,7 +560,7 @@ DrawPolylineStruct* DrawPolylineStruct::GenCopy()
 
 /**
  * Function Save
- * writes the data structures for this object out to a FILE in "*.brd" format.
+ * writes the data structures for this object out to a FILE in "*.sch" format.
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
@@ -575,7 +576,7 @@ bool DrawPolylineStruct::Save( FILE* aFile ) const
     if( GetLayer() == LAYER_BUS )
         layer = "Bus";
     if( fprintf( aFile, "Poly %s %s %d\n",
-                width, layer, GetCornerCount() ) == EOF )
+                 width, layer, GetCornerCount() ) == EOF )
     {
         return false;
     }

@@ -56,7 +56,7 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     DC->SetBackground( *wxBLACK_BRUSH );
     DC->SetBackgroundMode( wxTRANSPARENT );
 
-    DrawPanel->CursorOff( DC ); // effacement curseur
+    DrawPanel->CursorOff( DC );
 
     if( DrawPanel->ManageCurseur )
     {
@@ -73,7 +73,7 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness );
 
-    DrawPanel->CursorOn( DC );          // reaffichage curseur
+    DrawPanel->CursorOn( DC );
     if( DrawPanel->ManageCurseur )
     {
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
@@ -86,7 +86,7 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     {
         wxString msg = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
         title.Printf( wxT( "%s [%s]" ), msg.GetData(),
-                      GetScreen()->m_FileName.GetData() );
+                     GetScreen()->m_FileName.GetData() );
         SetTitle( title );
     }
     else
@@ -109,7 +109,7 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
  * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
  */
 void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref,
-                                  int PrintMask, bool  aPrintMirrorMode )
+                                  int PrintMask, bool aPrintMirrorMode )
 {
     wxBeginBusyCursor();
 
@@ -133,8 +133,10 @@ void RedrawStructList( WinEDA_DrawPanel* panel, wxDC* DC,
     {
         if( !(Structlist->m_Flags & IS_MOVED) )
         {
-// uncomment line below when there is a virtual EDA_BaseStruct::GetBoundingBox()
-            //      if( panel->m_ClipBox.Intersects( Structs->GetBoundingBox() ) )
+// uncomment line below when there is a virtual
+// EDA_BaseStruct::GetBoundingBox()
+            //      if( panel->m_ClipBox.Intersects( Structs->GetBoundingBox()
+            // ) )
             RedrawOneStruct( panel, DC, Structlist, DrawMode, Color );
         }
 
@@ -159,13 +161,11 @@ void RedrawOneStruct( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-
-/* Routine de redessin en mode fantome (Dessin simplifie en g_XorMode et
- * g_GhostColor
- * de structures.
- * Utilisee dans les deplacements de blocs
- */
-void DrawStructsInGhost( WinEDA_DrawPanel * aPanel, wxDC * aDC, SCH_ITEM * aItem, const wxPoint & aOffset )
+/* Routine for repainting item in ghost mode. Used in the block moves. */
+void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
+                         wxDC*             aDC,
+                         SCH_ITEM*         aItem,
+                         const wxPoint&    aOffset )
 {
     int DrawMode = g_XorMode;
     int width    = g_DrawDefaultLineThickness;
@@ -180,8 +180,12 @@ void DrawStructsInGhost( WinEDA_DrawPanel * aPanel, wxDC * aDC, SCH_ITEM * aItem
         GRMoveTo( Struct->m_PolyPoints[0].x + aOffset.x,
                   Struct->m_PolyPoints[0].y + aOffset.y );
         for( unsigned ii = 1; ii < Struct->GetCornerCount(); ii++ )
-            GRLineTo( &aPanel->m_ClipBox, aDC, Struct->m_PolyPoints[ii].x + aOffset.x,
-                      Struct->m_PolyPoints[ii].y + aOffset.y, width, g_GhostColor );
+            GRLineTo( &aPanel->m_ClipBox,
+                      aDC,
+                      Struct->m_PolyPoints[ii].x + aOffset.x,
+                      Struct->m_PolyPoints[ii].y + aOffset.y,
+                      width,
+                      g_GhostColor );
 
         break;
     }
@@ -192,7 +196,8 @@ void DrawStructsInGhost( WinEDA_DrawPanel * aPanel, wxDC * aDC, SCH_ITEM * aItem
         Struct = (EDA_DrawLineStruct*) aItem;
         if( (Struct->m_Flags & STARTPOINT) == 0 )
         {
-            GRMoveTo( Struct->m_Start.x + aOffset.x, Struct->m_Start.y + aOffset.y );
+            GRMoveTo( Struct->m_Start.x + aOffset.x,
+                      Struct->m_Start.y + aOffset.y );
         }
         else
         {
@@ -214,7 +219,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel * aPanel, wxDC * aDC, SCH_ITEM * aItem
     case DRAW_BUSENTRY_STRUCT_TYPE:
     {
         DrawBusEntryStruct* Struct = (DrawBusEntryStruct*) aItem;
-        wxPoint start = Struct->m_Pos + aOffset;
+        wxPoint             start  = Struct->m_Pos + aOffset;
         GRMoveTo( start.x, start.y );
         GRLineTo( &aPanel->m_ClipBox, aDC, Struct->m_Size.x + start.x,
                   Struct->m_Size.y + start.y, width, g_GhostColor );
@@ -269,9 +274,14 @@ void DrawStructsInGhost( WinEDA_DrawPanel * aPanel, wxDC * aDC, SCH_ITEM * aItem
     case DRAW_SHEET_STRUCT_TYPE:
     {
         DrawSheetStruct* Struct = (DrawSheetStruct*) aItem;
-        GRRect( &aPanel->m_ClipBox, aDC, Struct->m_Pos.x + aOffset.x,
-                Struct->m_Pos.y + aOffset.y, Struct->m_Pos.x + Struct->m_Size.x + aOffset.x,
-                Struct->m_Pos.y + Struct->m_Size.y + aOffset.y, width, g_GhostColor );
+        GRRect( &aPanel->m_ClipBox,
+                aDC,
+                Struct->m_Pos.x + aOffset.x,
+                Struct->m_Pos.y + aOffset.y,
+                Struct->m_Pos.x + Struct->m_Size.x + aOffset.x,
+                Struct->m_Pos.y + Struct->m_Size.y + aOffset.y,
+                width,
+                g_GhostColor );
         break;
     }
 

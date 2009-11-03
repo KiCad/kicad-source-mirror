@@ -2,9 +2,6 @@
 /*  EESchema - database.cpp */
 /****************************/
 
-/* Routine de selection d'un composant en librairie
- */
-
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
@@ -21,16 +18,16 @@
 
 
 /*
- *   Routine de selection du nom d'un composant en librairie pour chargement,
- *   Keys pointe la liste des mots cles de filtrage
- *   Si Keys = "", recherche des composants qui correspondent
- *  au masque BufName( avec * et ? )
+ * Routine name selection of a component library for loading,
+ * Keys leading the list of the keywords filter
+ * If Keys = "", research components that correspond
+ * BufName mask (with * and?)
  *
- *  Retourne
- *   TRUE si composant selectionne
- *   FALSE si commande annulee
- *   place le nom du composant a charger, selectionne a partir d'une liste dans
- *   BufName
+ * Returns
+ * TRUE if the selected component
+ * FALSE canceled order
+ * Place the name of the component has loaded, select from a list in
+ * BufName
  */
 wxString DataBaseGetName( WinEDA_DrawFrame* frame, wxString& Keys,
                           wxString& BufName )
@@ -41,7 +38,7 @@ wxString DataBaseGetName( WinEDA_DrawFrame* frame, wxString& Keys,
     BufName.MakeUpper();
     Keys.MakeUpper();
 
-    /* Examen de la liste des librairies pour comptage */
+    /* Review the list of libraries for counting. */
     BOOST_FOREACH( CMP_LIBRARY& lib, CMP_LIBRARY::GetLibraryList() )
     {
         lib.SearchEntryNames( nameList, BufName, Keys );

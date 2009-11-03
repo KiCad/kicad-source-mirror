@@ -393,7 +393,6 @@ bool LIB_FIELD::HitTest( wxPoint aPosRef, int aThreshold,
     return hit;
 }
 
-// Creation et Duplication d'un field
 LIB_DRAW_ITEM* LIB_FIELD::DoGenCopy()
 {
     LIB_FIELD* newfield = new LIB_FIELD( m_FieldId );

@@ -8,7 +8,7 @@
 
 #include "program.h"
 #include "general.h"
-#include "netlist.h" /* Definitions generales liees au calcul de netliste */
+#include "netlist.h"
 #include "protos.h"
 #include "class_library.h"
 
@@ -34,7 +34,8 @@ public:
     int                m_Type;
     DanglingEndHandle* m_Pnext;
 
-    DanglingEndHandle( int type ) {
+    DanglingEndHandle( int type )
+    {
         m_Item  = NULL;
         m_Type  = type;
         m_Pnext = NULL;
@@ -43,21 +44,21 @@ public:
 
 DanglingEndHandle* ItemList;
 
-static void         TestWireForDangling( EDA_DrawLineStruct* DrawRef,
-                                         WinEDA_SchematicFrame* frame, wxDC* DC );
-void                TestLabelForDangling( SCH_TEXT* label,
-                                          WinEDA_SchematicFrame* frame, wxDC* DC );
-DanglingEndHandle*  RebuildEndList( EDA_BaseStruct* DrawList );
+static void        TestWireForDangling( EDA_DrawLineStruct* DrawRef,
+                                        WinEDA_SchematicFrame* frame, wxDC* DC );
+void               TestLabelForDangling( SCH_TEXT*              label,
+                                         WinEDA_SchematicFrame* frame,
+                                         wxDC*                  DC );
+DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList );
 
 /**********************************************************/
 bool SegmentIntersect( int Sx1, int Sy1, int Sx2, int Sy2,
                        int Px1, int Py1 )
-/**********************************************************/
-
-/* Retourne TRUE si le point P est sur le segment S.
- *  Le segment est suppose horizontal ou vertical.
- */
 {
+/**********************************************************/
+/* Returns TRUE if the point P is on the segment S.
+ * The segment is assumed horizontal or vertical.
+ */
     int Sxmin, Sxmax, Symin, Symax;
 
     if( Sx1 == Sx2 )          /* Line S is vertical. */
@@ -81,29 +82,26 @@ bool SegmentIntersect( int Sx1, int Sy1, int Sx2, int Sy2,
         if( Py1 != Sy1 )
             return FALSE;
 
-        if( Px1 >= Sxmin  &&  Px1 <= Sxmax )
+        if( Px1 >= Sxmin && Px1 <= Sxmax )
             return TRUE;
         else
             return FALSE;
     }
     else
-        return FALSE;   // Segments quelconques
+        return FALSE;
 }
 
 
-/******************************************************************************/
 void WinEDA_SchematicFrame::TestDanglingEnds( SCH_ITEM* DrawList, wxDC* DC )
-/******************************************************************************/
-
-/* Met a jour les membres m_Dangling des wires, bus, labels
- */
 {
     if( ItemList )
     {
         const DanglingEndHandle* DanglingItem;
         const DanglingEndHandle* nextitem;
 
-        for( DanglingItem = ItemList; DanglingItem != NULL; DanglingItem = nextitem )
+        for( DanglingItem = ItemList;
+             DanglingItem != NULL;
+             DanglingItem = nextitem )
         {
             nextitem = DanglingItem->m_Pnext;
             SAFE_DELETE( DanglingItem );
@@ -112,8 +110,7 @@ void WinEDA_SchematicFrame::TestDanglingEnds( SCH_ITEM* DrawList, wxDC* DC )
 
     ItemList = RebuildEndList( DrawList );
 
-    // Controle des elements
-    for( SCH_ITEM* item = DrawList;  item;  item = item->Next() )
+    for( SCH_ITEM* item = DrawList; item; item = item->Next() )
     {
         switch( item->Type() )
         {
@@ -135,8 +132,7 @@ void WinEDA_SchematicFrame::TestDanglingEnds( SCH_ITEM* DrawList, wxDC* DC )
                 break;
             if( STRUCT->GetLayer() == LAYER_BUS )
             {
-                STRUCT->m_StartIsDangling   =
-                    STRUCT->m_EndIsDangling = FALSE;
+                STRUCT->m_StartIsDangling = STRUCT->m_EndIsDangling = FALSE;
                 break;
             }
             break;
@@ -148,7 +144,6 @@ void WinEDA_SchematicFrame::TestDanglingEnds( SCH_ITEM* DrawList, wxDC* DC )
 }
 
 
-
 /**
  * Test if point pos is on a pin end.
  *
@@ -156,8 +151,8 @@ void WinEDA_SchematicFrame::TestDanglingEnds( SCH_ITEM* DrawList, wxDC* DC )
  *
  * @return LIB_PIN - Pointer to the located pin or NULL if no pin was found.
  */
-LIB_PIN* WinEDA_SchematicFrame::LocatePinEnd( SCH_ITEM* DrawList,
-                                              const wxPoint&  pos )
+LIB_PIN* WinEDA_SchematicFrame::LocatePinEnd( SCH_ITEM*      DrawList,
+                                              const wxPoint& pos )
 {
     SCH_COMPONENT* DrawLibItem;
     LIB_PIN* Pin;
@@ -173,7 +168,7 @@ LIB_PIN* WinEDA_SchematicFrame::LocatePinEnd( SCH_ITEM* DrawList,
         NEGATE( pinpos.y );
 
     else
-        pinpos = TransformCoordinate( DrawLibItem->m_Transform, pinpos);
+        pinpos = TransformCoordinate( DrawLibItem->m_Transform, pinpos );
 
     if( pos == pinpos )
         return Pin;
@@ -184,8 +179,8 @@ LIB_PIN* WinEDA_SchematicFrame::LocatePinEnd( SCH_ITEM* DrawList,
 /****************************************************************************/
 void TestWireForDangling( EDA_DrawLineStruct* DrawRef,
                           WinEDA_SchematicFrame* frame, wxDC* DC )
-/****************************************************************************/
 {
+/****************************************************************************/
     DanglingEndHandle* terminal_item;
     bool Sdangstate = TRUE, Edangstate = TRUE;
 
@@ -215,16 +210,17 @@ void TestWireForDangling( EDA_DrawLineStruct* DrawRef,
         DrawRef->m_StartIsDangling = Sdangstate;
         DrawRef->m_EndIsDangling   = Edangstate;
         if( DC )
-            RedrawOneStruct( frame->DrawPanel, DC, DrawRef, GR_DEFAULT_DRAWMODE );
+            RedrawOneStruct( frame->DrawPanel, DC, DrawRef,
+                             GR_DEFAULT_DRAWMODE );
     }
 }
 
 
 /********************************************************/
-void TestLabelForDangling( SCH_TEXT* label,
-                           WinEDA_SchematicFrame* frame, wxDC* DC )
-/********************************************************/
+void TestLabelForDangling( SCH_TEXT* label, WinEDA_SchematicFrame* frame,
+                           wxDC* DC )
 {
+/********************************************************/
     DanglingEndHandle* terminal_item;
     bool dangstate = TRUE;
 
@@ -239,8 +235,8 @@ void TestLabelForDangling( SCH_TEXT* label,
         case PIN_END:
         case LABEL_END:
         case SHEET_LABEL_END:
-            if( (label->m_Pos.x == terminal_item->m_Pos.x)
-               && (label->m_Pos.y == terminal_item->m_Pos.y) )
+            if( ( label->m_Pos.x == terminal_item->m_Pos.x )
+               && ( label->m_Pos.y == terminal_item->m_Pos.y ) )
                 dangstate = FALSE;
             break;
 
@@ -277,9 +273,8 @@ void TestLabelForDangling( SCH_TEXT* label,
 }
 
 
-
-/* Retourne la position physique de la pin, qui d�pend de l'orientation
- *  du composant */
+/* Returns the physical position of the pin relative to the component
+ * orientation. */
 wxPoint ReturnPinPhysicalPosition( LIB_PIN* Pin, SCH_COMPONENT* DrawLibItem )
 {
     wxPoint PinPos = Pin->m_Pos;
@@ -297,8 +292,8 @@ wxPoint ReturnPinPhysicalPosition( LIB_PIN* Pin, SCH_COMPONENT* DrawLibItem )
 
 /***********************************************************/
 DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
-/***********************************************************/
 {
+/***********************************************************/
     DanglingEndHandle* StartList = NULL, * item, * lastitem = NULL;
     EDA_BaseStruct* DrawItem;
 
@@ -327,10 +322,12 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
                 #define STRUCT ( (EDA_DrawLineStruct*) DrawItem )
             if( STRUCT->GetLayer() == LAYER_NOTES )
                 break;
-            if( (STRUCT->GetLayer() == LAYER_BUS) || (STRUCT->GetLayer() == LAYER_WIRE) )
+            if( ( STRUCT->GetLayer() == LAYER_BUS )
+               || (STRUCT->GetLayer() == LAYER_WIRE ) )
             {
-                item = new DanglingEndHandle( (STRUCT->GetLayer() == LAYER_BUS) ?
-                                             BUS_START_END : WIRE_START_END );
+                item = new DanglingEndHandle(
+                     (STRUCT->GetLayer() == LAYER_BUS) ?
+                    BUS_START_END : WIRE_START_END );
 
                 item->m_Item = DrawItem;
                 item->m_Pos  = STRUCT->m_Start;
@@ -339,11 +336,12 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
                 else
                     StartList = item;
                 lastitem = item;
-                item = new DanglingEndHandle( (STRUCT->GetLayer() == LAYER_BUS) ?
-                                             BUS_END_END : WIRE_END_END );
+                item     =
+                    new DanglingEndHandle( (STRUCT->GetLayer() == LAYER_BUS) ?
+                                           BUS_END_END : WIRE_END_END );
 
-                item->m_Item      = DrawItem;
-                item->m_Pos       = STRUCT->m_End;
+                item->m_Item = DrawItem;
+                item->m_Pos  = STRUCT->m_End;
                 lastitem->m_Pnext = item;
                 lastitem = item;
             }
@@ -375,10 +373,10 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
             else
                 StartList = item;
             lastitem = item;
-            item = new DanglingEndHandle( ENTRY_END );
+            item     = new DanglingEndHandle( ENTRY_END );
 
-            item->m_Item      = DrawItem;
-            item->m_Pos       = STRUCT->m_End();
+            item->m_Item = DrawItem;
+            item->m_Pos  = STRUCT->m_End();
             lastitem->m_Pnext = item;
             lastitem = item;
             break;
@@ -402,7 +400,7 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
                     continue;
 
                 if( Pin->m_Convert && STRUCT->m_Convert
-                    && ( STRUCT->m_Convert != Pin->m_Convert ) )
+                   && ( STRUCT->m_Convert != Pin->m_Convert ) )
                     continue;
 
                 item = new DanglingEndHandle( PIN_END );
@@ -420,26 +418,29 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
         }
 
         case DRAW_SHEET_STRUCT_TYPE:
+        {
+            Hierarchical_PIN_Sheet_Struct* pinsheet;
+            for( pinsheet = ( (DrawSheetStruct*) DrawItem )->m_Label;
+                 pinsheet;
+                 pinsheet = pinsheet->Next() )
             {
-                Hierarchical_PIN_Sheet_Struct* pinsheet;
-                for( pinsheet = ((DrawSheetStruct*)DrawItem)->m_Label;  pinsheet;  pinsheet = pinsheet->Next() )
-                {
-                    wxASSERT( pinsheet->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE );
+                wxASSERT( pinsheet->Type() ==
+                          DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE );
 
-                    item = new DanglingEndHandle( SHEET_LABEL_END );
+                item = new DanglingEndHandle( SHEET_LABEL_END );
 
-                    item->m_Item = pinsheet;
-                    item->m_Pos  = pinsheet->m_Pos;
+                item->m_Item = pinsheet;
+                item->m_Pos  = pinsheet->m_Pos;
 
-                    if( lastitem )
-                        lastitem->m_Pnext = item;
-                    else
-                        StartList = item;
+                if( lastitem )
+                    lastitem->m_Pnext = item;
+                else
+                    StartList = item;
 
-                    lastitem = item;
-                }
+                lastitem = item;
             }
-            break;
+        }
+        break;
 
         default:
             ;

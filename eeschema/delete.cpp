@@ -1,5 +1,5 @@
 /************************************/
-/* Delete.cpp: routines d'effacement */
+/*           delete.cpp             */
 /************************************/
 
 #include "fctsys.h"
@@ -41,10 +41,10 @@ static int CountConnectedItems( WinEDA_SchematicFrame* frame,
             continue;
 
 
-        if( TstJunction && (Struct->Type() == DRAW_JUNCTION_STRUCT_TYPE) )
+        if( TstJunction && ( Struct->Type() == DRAW_JUNCTION_STRUCT_TYPE ) )
         {
             #define JUNCTION ( (DrawJunctionStruct*) Struct )
-            if( (JUNCTION->m_Pos.x == pos.x) && (JUNCTION->m_Pos.y == pos.y) )
+            if( JUNCTION->m_Pos == pos )
                 count++;
             #undef JUNCTION
         }
@@ -201,7 +201,7 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
                  removed_struct != NULL;
                  removed_struct = removed_struct->Next() )
             {
-                if( (removed_struct->m_Flags & STRUCT_DELETED) == 0 )
+                if( ( removed_struct->m_Flags & STRUCT_DELETED ) == 0 )
                     continue;
 
                 if( removed_struct->Type() != DRAW_SEGMENT_STRUCT_TYPE )
@@ -223,7 +223,7 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
                  removed_struct != NULL;
                  removed_struct = removed_struct->Next() )
             {
-                if( (removed_struct->m_Flags & STRUCT_DELETED) == 0 )
+                if( ( removed_struct->m_Flags & STRUCT_DELETED ) == 0 )
                     continue;
                 if( removed_struct->Type() != DRAW_SEGMENT_STRUCT_TYPE )
                     continue;
@@ -324,12 +324,12 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
 
 
 /*
- * Locate and delete the item found under the mouse cousor
+ * Locate and delete the item found under the mouse cursor
  * If more than one item found: the priority order is:
  *  1 : MARKER
  *  2 : JUNCTION
  *  2 : NOCONNECT
- *  3 : WIRE ou BUS
+ *  3 : WIRE or BUS
  *  4 : DRAWITEM
  *  5 : TEXT
  *  6 : COMPOSANT
@@ -376,16 +376,15 @@ bool LocateAndDeleteItem( WinEDA_SchematicFrame* frame, wxDC* DC )
 
 
 /*
- * Suppression definitive d'une structure dans une liste chainee
- * d'elements de dessin
- * DrawStruct = pointeur sur la structure
- * Screen = pointeur sur l'ecran d'appartenance
- * Le chainage de la liste est modifie.
+ * Remove definition of a structure in a linked list
+ * Elements of Drawing
+ *   DrawStruct * = pointer to the structure
+ *   Screen = pointer on the screen of belonging
  *
- * Remarque:
- * pour les structures DRAW_SHEET_STRUCT_TYPE, l'ecran et les structures
- *     correspondantes ne sont pas touches.
- * Ils doivent etre traites separement
+ * Note:
+ * DRAW_SHEET_STRUCT_TYPE structures for the screen and structures
+ * Corresponding keys are not.
+ * They must be treated separately
  */
 void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Screen )
 {
@@ -424,7 +423,7 @@ void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Screen )
             }
             else
             {
-                while( SheetLabel->Next() ) /* Examen de la liste dependante */
+                while( SheetLabel->Next() )
                 {
                     NextLabel =
                         (Hierarchical_PIN_Sheet_Struct*) SheetLabel->Next();
@@ -468,9 +467,6 @@ void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Screen )
 }
 
 
-/*
- * Effacement des marqueurs du type "type"
- */
 void DeleteAllMarkers( int type )
 {
     SCH_SCREEN* screen;
@@ -489,12 +485,11 @@ void DeleteAllMarkers( int type )
             if( DrawStruct->Type() != TYPE_MARKER_SCH )
                 continue;
 
-            /* Marqueur trouve */
             Marker = (MARKER_SCH*) DrawStruct;
             if( Marker->GetMarkerType() != type )
                 continue;
 
-            /* Suppression du marqueur */
+            /* Remove marker */
             EraseStruct( DrawStruct, screen );
         }
     }

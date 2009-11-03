@@ -18,12 +18,13 @@
 #include "class_marker_sch.h"
 
 
-/**************************************************************************************/
-SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool IncludePin )
-/**************************************************************************************/
-
+/*****************************************************************************/
+SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay(
+    bool IncludePin )
+{
+/*****************************************************************************/
 /** Function SchematicGeneralLocateAndDisplay
- * Overlayed function
+ * Overlaid function
  *  Find the schematic item at cursor position
  *  the priority order is:
  *  - marker
@@ -34,11 +35,10 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool Include
  *  - pin
  *  - component
  * @return  an EDA_BaseStruct pointer on the item or NULL if no item found
- * @param IncludePin = true to search for pins, fase to ignore them
+ * @param IncludePin = true to search for pins, false to ignore them
  *
- *  For some items, caracteristics are displayed on the screen.
+ *  For some items, characteristics are displayed on the screen.
  */
-{
     SCH_ITEM*      DrawStruct;
     wxString       msg;
     wxPoint        mouse_position = GetScreen()->m_MousePosition;
@@ -67,7 +67,7 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool Include
         Pin = LocateAnyPin( GetScreen()->EEDrawList, GetScreen()->m_Curseur,
                             &LibItem );
         if( Pin )
-            break; // Priority is probing a pin first
+            break;  // Priority is probing a pin first
         LibItem = (SCH_COMPONENT*) DrawStruct;
         SendMessageToPCBNEW( DrawStruct, LibItem );
         break;
@@ -92,20 +92,22 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool Include
                             LibItem->GetField( VALUE )->m_Text, DARKCYAN );
 
         // Cross probing:2 - pin found, and send a locate pin command to
-        // pcbnew (hightlight net)
+        // pcbnew (highlight net)
         SendMessageToPCBNEW( Pin, LibItem );
     }
     return DrawStruct;
 }
 
 
-/********************************************************************************************/
-SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay( const wxPoint& refpoint,
-                                                                    bool           IncludePin )
-/********************************************************************************************/
-
+/*****************************************************************************/
+SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay(
+    const wxPoint& refpoint,
+    bool
+    IncludePin )
+{
+/*****************************************************************************/
 /** Function SchematicGeneralLocateAndDisplay
- * Overlayed function
+ * Overlaid function
  *  Find the schematic item at a given position
  *  the priority order is:
  *  - marker
@@ -116,12 +118,11 @@ SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay( const wxPoint
  *  - pin
  *  - component
  * @return  an EDA_BaseStruct pointer on the item or NULL if no item found
- * @param refpoint = the wxPoint loaction where to search
- * @param IncludePin = true to search for pins, fase to ignore them
+ * @param refpoint = the wxPoint location where to search
+ * @param IncludePin = true to search for pins, false to ignore them
  *
- *  For some items, caracteristics are displayed on the screen.
+ *  For some items, characteristics are displayed on the screen.
  */
-{
     SCH_ITEM*      DrawStruct;
     LIB_PIN*       Pin;
     SCH_COMPONENT* LibItem;
@@ -148,10 +149,14 @@ SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay( const wxPoint
         return DrawStruct;
     }
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), WIREITEM | BUSITEM | RACCORDITEM );
-    if( DrawStruct )    // We have found a wire: Search for a connected pin at the same location
+    DrawStruct = (SCH_ITEM*) PickStruct( refpoint,
+                                         GetScreen(), WIREITEM | BUSITEM |
+                                         RACCORDITEM );
+    if( DrawStruct )    // We have found a wire: Search for a connected pin at
+                        // the same location
     {
-        Pin = LocateAnyPin( (SCH_ITEM*) m_CurrentSheet->LastDrawList(), refpoint, &LibItem );
+        Pin = LocateAnyPin(
+             (SCH_ITEM*) m_CurrentSheet->LastDrawList(), refpoint, &LibItem );
         if( Pin )
         {
             Pin->DisplayInfo( this );
@@ -176,7 +181,7 @@ SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay( const wxPoint
 
     /* search for a pin */
     Pin = LocateAnyPin( (SCH_ITEM*) m_CurrentSheet->LastDrawList(), refpoint,
-                        &LibItem );
+                       &LibItem );
     if( Pin )
     {
         Pin->DisplayInfo( this );
@@ -203,7 +208,6 @@ SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay( const wxPoint
         return DrawStruct;
     }
 
-    // Recherche des autres elements
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), SEARCHALL );
     if( DrawStruct )
     {
@@ -215,7 +219,7 @@ SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay( const wxPoint
 }
 
 
-void WinEDA_SchematicFrame::GeneralControle( wxDC* DC,
+void WinEDA_SchematicFrame::GeneralControle( wxDC*   DC,
                                              wxPoint MousePositionInPixels )
 {
     wxRealPoint delta;
@@ -241,27 +245,27 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC* DC,
     case 0:
         break;
 
-    case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
+    case WXK_NUMPAD8:
     case WXK_UP:
-        MousePositionInPixels.y -= wxRound(delta.y);
+        MousePositionInPixels.y -= wxRound( delta.y );
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
-    case WXK_NUMPAD2:       /* Deplacement curseur vers le bas */
+    case WXK_NUMPAD2:
     case WXK_DOWN:
-        MousePositionInPixels.y += wxRound(delta.y);
+        MousePositionInPixels.y += wxRound( delta.y );
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
-    case WXK_NUMPAD4:       /* Deplacement curseur vers la gauche */
+    case WXK_NUMPAD4:
     case WXK_LEFT:
-        MousePositionInPixels.x -= wxRound(delta.x);
+        MousePositionInPixels.x -= wxRound( delta.x );
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
-    case WXK_NUMPAD6:      /* Deplacement curseur vers la droite */
+    case WXK_NUMPAD6:
     case WXK_RIGHT:
-        MousePositionInPixels.x += wxRound(delta.x);
+        MousePositionInPixels.x += wxRound( delta.x );
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
@@ -270,10 +274,10 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC* DC,
         break;
     }
 
-    /* Recalcul de la position du curseur schema */
+    /* Update cursor position. */
     screen->m_Curseur = curpos;
 
-    /* Placement sur la grille generale */
+    /* Snap cursor to grid. */
     PutOnGrid( &(screen->m_Curseur) );
 
     if( screen->IsRefreshReq() )
@@ -303,12 +307,12 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC* DC,
             OnHotKey( DC, hotkey, NULL );
     }
 
-    UpdateStatusBar();    /* Display cursor coordintes info */
+    UpdateStatusBar();    /* Display cursor coordinates info */
     SetToolbars();
 }
 
 
-void WinEDA_LibeditFrame::GeneralControle( wxDC* DC,
+void WinEDA_LibeditFrame::GeneralControle( wxDC*   DC,
                                            wxPoint MousePositionInPixels )
 {
     wxRealPoint delta;
@@ -334,27 +338,27 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC* DC,
     case 0:
         break;
 
-    case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
+    case WXK_NUMPAD8:
     case WXK_UP:
-        MousePositionInPixels.y -= wxRound(delta.y);
+        MousePositionInPixels.y -= wxRound( delta.y );
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
-    case WXK_NUMPAD2:       /* Deplacement curseur vers le bas */
+    case WXK_NUMPAD2:
     case WXK_DOWN:
-        MousePositionInPixels.y += wxRound(delta.y);
+        MousePositionInPixels.y += wxRound( delta.y );
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
-    case WXK_NUMPAD4:       /* Deplacement curseur vers la gauche */
+    case WXK_NUMPAD4:
     case WXK_LEFT:
-        MousePositionInPixels.x -= wxRound(delta.x);
+        MousePositionInPixels.x -= wxRound( delta.x );
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
-    case WXK_NUMPAD6:      /* Deplacement curseur vers la droite */
+    case WXK_NUMPAD6:
     case WXK_RIGHT:
-        MousePositionInPixels.x += wxRound(delta.x);
+        MousePositionInPixels.x += wxRound( delta.x );
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
@@ -363,10 +367,10 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC* DC,
         break;
     }
 
-    /* Recalcul de la position du curseur schema */
+    /* Update the cursor position. */
     screen->m_Curseur = curpos;
 
-    /* Placement sur la grille generale */
+    /* Snap cursor to grid. */
     PutOnGrid( &(screen->m_Curseur) );
 
     if( screen->IsRefreshReq() )
@@ -396,7 +400,7 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC* DC,
             OnHotKey( DC, hotkey, NULL );
     }
 
-    UpdateStatusBar();    /* Affichage des coord curseur */
+    UpdateStatusBar();
 }
 
 
@@ -426,27 +430,27 @@ void WinEDA_ViewlibFrame::GeneralControle( wxDC*   DC,
     case 0:
         break;
 
-    case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
+    case WXK_NUMPAD8:
     case WXK_UP:
-        MousePositionInPixels.y -= wxRound(delta.y);
+        MousePositionInPixels.y -= wxRound( delta.y );
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
-    case WXK_NUMPAD2:       /* Deplacement curseur vers le bas */
+    case WXK_NUMPAD2:
     case WXK_DOWN:
-        MousePositionInPixels.y += wxRound(delta.y);
+        MousePositionInPixels.y += wxRound( delta.y );
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
-    case WXK_NUMPAD4:       /* Deplacement curseur vers la gauche */
+    case WXK_NUMPAD4:
     case WXK_LEFT:
-        MousePositionInPixels.x -= wxRound(delta.x);
+        MousePositionInPixels.x -= wxRound( delta.x );
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
-    case WXK_NUMPAD6:      /* Deplacement curseur vers la droite */
+    case WXK_NUMPAD6:
     case WXK_RIGHT:
-        MousePositionInPixels.x += wxRound(delta.x);
+        MousePositionInPixels.x += wxRound( delta.x );
         DrawPanel->MouseTo( MousePositionInPixels );
         break;
 
@@ -455,10 +459,10 @@ void WinEDA_ViewlibFrame::GeneralControle( wxDC*   DC,
         break;
     }
 
-    /* Recalcul de la position du curseur schema */
+    /* Update cursor position. */
     screen->m_Curseur = curpos;
 
-    /* Placement sur la grille generale */
+    /* Snap cursor to grid. */
     PutOnGrid( &(screen->m_Curseur) );
 
     if( screen->IsRefreshReq() )
@@ -488,6 +492,6 @@ void WinEDA_ViewlibFrame::GeneralControle( wxDC*   DC,
             OnHotKey( DC, hotkey, NULL );
     }
 
-    UpdateStatusBar();    /* Affichage des coord curseur */
+    UpdateStatusBar();
     SetToolbars();
 }

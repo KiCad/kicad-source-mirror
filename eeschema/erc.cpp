@@ -1,6 +1,6 @@
-/**************************************************/
-/* Module de tst "ERC" ( Electrical Rules Check ) */
-/**************************************************/
+/**************************************/
+/*  erc.cpp - Electrical Rules Check  */
+/**************************************/
 
 #include "fctsys.h"
 #include "common.h"
@@ -22,11 +22,11 @@
 
 /* ERC tests :
  *  1 - conflicts between connected pins ( example: 2 connected outputs )
- *  2 - minimal connections requirements ( 1 input *must* be connected to an output, or a passive pin )
+ *  2 - minimal connections requirements ( 1 input *must* be connected to an
+ * output, or a passive pin )
  */
 
 
-/* fonctions locales */
 static bool WriteDiagnosticERC( const wxString& FullFileName );
 static void Diagnose( WinEDA_DrawPanel* panel,
                       NETLIST_OBJECT* NetItemRef,
@@ -35,9 +35,9 @@ static void TestOthersItems( WinEDA_DrawPanel* panel,
                              unsigned NetItemRef,
                              unsigned NetStart,
                              int* NetNbItems, int* MinConnexion );
-static void TestLabel( WinEDA_DrawPanel*   panel,
-                       unsigned NetItemRef,
-                       unsigned StartNet );
+static void TestLabel( WinEDA_DrawPanel* panel,
+                       unsigned          NetItemRef,
+                       unsigned          StartNet );
 
 /* Local variables */
 int WriteFichierERC = FALSE;
@@ -48,17 +48,22 @@ int WriteFichierERC = FALSE;
  *  PIN_OUTPUT = usual output
  *  PIN_BIDI = input or output (like port for a microprocessor)
  *  PIN_TRISTATE = tris state bus pin
- *  PIN_PASSIVE = pin for passive components: must be connected, and can be connected to any pin
- *  PIN_UNSPECIFIED = unkown electrical properties: creates alway a warning when connected
- *  PIN_POWER_IN = power input (GND, VCC for ICs). Must be connected to a power output.
- *  PIN_POWER_OUT = output of a regulator: intended to be connected to power input pins
+ *  PIN_PASSIVE = pin for passive components: must be connected, and can be
+ * connected to any pin
+ *  PIN_UNSPECIFIED = unknown electrical properties: creates always a warning
+ * when connected
+ *  PIN_POWER_IN = power input (GND, VCC for ICs). Must be connected to a power
+ * output.
+ *  PIN_POWER_OUT = output of a regulator: intended to be connected to power
+ * input pins
  *  PIN_OPENCOLLECTOR = pin type open collector
  *  PIN_OPENEMITTER = pin type open emitter
  *  PIN_NC = not connected (must be left open)
  *
  *  Minimal requirements:
  *  All pins *must* be connected (except PIN_NC).
- *  When a pin is not connected in schematic, the user must place a "non connected" symbol to this pin.
+ *  When a pin is not connected in schematic, the user must place a "non
+ * connected" symbol to this pin.
  *  This ensures a forgotten connection will be detected.
  */
 
@@ -117,18 +122,18 @@ bool DiagErcTableInit;       // go to TRUE after DiagErc init
  */
 int DefaultDiagErc[PIN_NMAX][PIN_NMAX] =
 {
-    /*       I,   O,   Bi,  3S, Pas, UnS,PwrI,PwrO,  OC,  OE,  NC */
-/* I */  { OK,  OK,  OK,  OK,  OK,  WAR, OK,  OK,  OK,  OK,  WAR       },
-/* O */  { OK,  ERR, OK,  WAR, OK,  WAR, OK,  ERR, ERR, ERR, WAR       },
-/* Bi*/  { OK,  OK,  OK,  OK,  OK,  WAR, OK,  WAR, OK,  WAR, WAR       },
-/* 3S*/  { OK,  WAR, OK,  OK,  OK,  WAR, WAR, ERR, WAR, WAR, WAR       },
-/*Pas*/  { OK,  OK,  OK,  OK,  OK,  WAR, OK,  OK,  OK,  OK,  WAR       },
-/*UnS */ { WAR, WAR, WAR, WAR, WAR, WAR, WAR, WAR, WAR, WAR, WAR       },
-/*PwrI*/ { OK,  OK,  OK,  WAR, OK,  WAR, OK,  OK,  OK,  OK,  ERR       },
-/*PwrO*/ { OK,  ERR, WAR, ERR, OK,  WAR, OK,  ERR, ERR, ERR, WAR       },
-/* OC */ { OK,  ERR, OK,  WAR, OK,  WAR, OK,  ERR, OK,  OK,  WAR       },
-/* OE */ { OK,  ERR, WAR, WAR, OK,  WAR, OK,  ERR, OK,  OK,  WAR       },
-/* NC */ { WAR, WAR, WAR, WAR, WAR, WAR, WAR, WAR, WAR, WAR, WAR       }
+/*         I,   O,    Bi,   3S,   Pas,  UnS,  PwrI, PwrO, OC,   OE,   NC */
+/* I */  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   OK,   OK,   OK,   WAR },
+/* O */  { OK,  ERR,  OK,   WAR,  OK,   WAR,  OK,   ERR,  ERR,  ERR,  WAR },
+/* Bi*/  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   WAR,  OK,   WAR,  WAR },
+/* 3S*/  { OK,  WAR,  OK,   OK,   OK,   WAR,  WAR,  ERR,  WAR,  WAR,  WAR },
+/*Pas*/  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   OK,   OK,   OK,   WAR },
+/*UnS */ { WAR, WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR },
+/*PwrI*/ { OK,  OK,   OK,   WAR,  OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
+/*PwrO*/ { OK,  ERR,  WAR,  ERR,  OK,   WAR,  OK,   ERR,  ERR,  ERR,  WAR },
+/* OC */ { OK,  ERR,  OK,   WAR,  OK,   WAR,  OK,   ERR,  OK,   OK,   WAR },
+/* OE */ { OK,  ERR,  WAR,  WAR,  OK,   WAR,  OK,   ERR,  OK,   OK,   WAR },
+/* NC */ { WAR, WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR }
 };
 
 
@@ -136,9 +141,10 @@ int DefaultDiagErc[PIN_NMAX][PIN_NMAX] =
 #define DRV    3    /* Net driven by a signal (a pin output for instance) */
 #define NET_NC 2    /* Net "connected" to a "NoConnect symbol" */
 #define NOD    1    /* Net not driven ( Such as 2 or more connected inputs )*/
-#define NOC    0    /* Pin isolee, non connectee */
+#define NOC    0    /* Pin isolated, no connection */
 
-/* Look up table which gives the minimal drive for a pair of connected pins on a net
+/* Look up table which gives the minimal drive for a pair of connected pins on
+ * a net
  *  Initial state of a net is NOC (No Connection)
  *  Can be updated to NET_NC, or NOD (Not Driven) or DRV (DRIven)
  *
@@ -149,47 +155,52 @@ int DefaultDiagErc[PIN_NMAX][PIN_NMAX] =
  */
 static int MinimalReq[PIN_NMAX][PIN_NMAX] =
 {
-    /* In, Out,  Bi,  3S, Pas, UnS,PwrI,PwrO,  OC,  OE,  NC */
-/* In*/  {   NOD, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/*Out*/  {   DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NOC },
-/* Bi*/  {   DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/* 3S*/  {   DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/*Pas*/  {   DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/*UnS*/  {   DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/*PwrI*/ {   NOD, DRV, NOD, NOD, NOD, NOD, NOD, DRV, NOD, NOD, NOC },
-/*PwrO*/ {   DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NOC },
-/* OC*/  {   DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/* OE*/  {   DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/* NC*/  {   NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC }
+/*         In   Out, Bi,  3S,  Pas, UnS, PwrI,PwrO,OC,  OE,  NC */
+/* In*/  { NOD, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
+/*Out*/  { DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NOC },
+/* Bi*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
+/* 3S*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
+/*Pas*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
+/*UnS*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
+/*PwrI*/ { NOD, DRV, NOD, NOD, NOD, NOD, NOD, DRV, NOD, NOD, NOC },
+/*PwrO*/ { DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NOC },
+/* OC*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
+/* OE*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
+/* NC*/  { NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC }
 };
 
 
-
 /** Function TestDuplicateSheetNames( )
- * inside a given sheet, one cannot have sheets with duplicate names (file names can be duplicated).
+ * inside a given sheet, one cannot have sheets with duplicate names (file
+ * names can be duplicated).
  */
-int TestDuplicateSheetNames( )
+int TestDuplicateSheetNames()
 {
-    int err_count = 0;
+    int            err_count = 0;
     EDA_ScreenList ScreenList;      // Created the list of screen
-    for( SCH_SCREEN* Screen = ScreenList.GetFirst(); Screen != NULL; Screen = ScreenList.GetNext() )
+
+    for( SCH_SCREEN* Screen = ScreenList.GetFirst();
+         Screen != NULL;
+         Screen = ScreenList.GetNext() )
     {
-        for( SCH_ITEM* ref_item = Screen->EEDrawList; ref_item != NULL; ref_item = ref_item->Next() )
+        for( SCH_ITEM* ref_item = Screen->EEDrawList;
+             ref_item != NULL;
+             ref_item = ref_item->Next() )
         {
-            // search for a scheet;
+            // search for a sheet;
             if( ref_item->Type() != DRAW_SHEET_STRUCT_TYPE )
                 continue;
             for( SCH_ITEM* item_to_test = ref_item->Next();
-                item_to_test != NULL;
-                item_to_test = item_to_test->Next() )
+                 item_to_test != NULL;
+                 item_to_test = item_to_test->Next() )
             {
                 if( item_to_test->Type() != DRAW_SHEET_STRUCT_TYPE )
                     continue;
 
                 // We have found a second sheet: compare names
-                if( ( (DrawSheetStruct*) ref_item )->m_SheetName.CmpNoCase( ( (DrawSheetStruct*)
-                                                                             item_to_test )->
-                                                                           m_SheetName ) == 0 )
+                if( ( (DrawSheetStruct*) ref_item )->m_SheetName.CmpNoCase(
+                        ( ( DrawSheetStruct* ) item_to_test )-> m_SheetName )
+                    == 0 )
                 {
                     /* Create a new marker type ERC error*/
                     MARKER_SCH* Marker = new MARKER_SCH();
@@ -211,16 +222,17 @@ int TestDuplicateSheetNames( )
     return err_count;
 }
 
+
 /**************************************************/
 void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
-/**************************************************/
 {
-    wxFileName          fn;
-    unsigned NetItemRef;
-    unsigned OldItem;
-    unsigned StartNet;
+/**************************************************/
+    wxFileName fn;
+    unsigned   NetItemRef;
+    unsigned   OldItem;
+    unsigned   StartNet;
 
-    int NetNbItems, MinConn;
+    int        NetNbItems, MinConn;
 
     if( !DiagErcTableInit )
     {
@@ -251,7 +263,9 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     /* Cleanup the entire hierarchy */
     EDA_ScreenList ScreenList;
 
-    for( SCH_SCREEN* Screen = ScreenList.GetFirst(); Screen != NULL; Screen = ScreenList.GetNext() )
+    for( SCH_SCREEN* Screen = ScreenList.GetFirst();
+         Screen != NULL;
+         Screen = ScreenList.GetNext() )
     {
         bool ModifyWires;
         ModifyWires = Screen->SchematicCleanUp( NULL );
@@ -263,27 +277,29 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     }
 
     /* Test duplicate sheet names
-     * inside a given sheet, one cannot have sheets with duplicate names (file names can be duplicated).
+     * inside a given sheet, one cannot have sheets with duplicate names (file
+     * names can be duplicated).
      */
-    int errcnt = TestDuplicateSheetNames( );
-    g_EESchemaVar.NbErrorErc += errcnt;
+    int errcnt = TestDuplicateSheetNames();
+    g_EESchemaVar.NbErrorErc   += errcnt;
     g_EESchemaVar.NbWarningErc += errcnt;
 
     m_Parent->BuildNetListBase();
 
-    /* Reset the flag m_FlagOfConnection, that will be used next, in calculations */
-    for( unsigned ii = 0;  ii < g_NetObjectslist.size(); ii++ )
-       g_NetObjectslist[ii]->m_FlagOfConnection = UNCONNECTED;
+    /* Reset the flag m_FlagOfConnection, that will be used next, in
+     * calculations */
+    for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
+        g_NetObjectslist[ii]->m_FlagOfConnection = UNCONNECTED;
 
 
-    StartNet = OldItem = 0;
+    StartNet   = OldItem = 0;
     NetNbItems = 0;
     MinConn    = NOC;
 
     for( NetItemRef = 0; NetItemRef < g_NetObjectslist.size(); NetItemRef++ )
     {
-        /* Tst changement de net */
-        if( g_NetObjectslist[OldItem]->GetNet() != g_NetObjectslist[NetItemRef]->GetNet() )
+        if( g_NetObjectslist[OldItem]->GetNet() !=
+           g_NetObjectslist[NetItemRef]->GetNet() )
         {
             MinConn    = NOC;
             NetNbItems = 0;
@@ -310,19 +326,20 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
         case NET_SHEETLABEL:
         case NET_SHEETBUSLABELMEMBER:
 
-            // ERC problems when pin sheets do not match hierachical labels.
-            // Each pin sheet must match a hierachical label
-            // Each hierachicallabel must match a pin sheet
+            // ERC problems when pin sheets do not match hierarchical labels.
+            // Each pin sheet must match a hierarchical label
+            // Each hierarchical label must match a pin sheet
             TestLabel( m_Parent->DrawPanel, NetItemRef, StartNet );
             break;
 
         case NET_NOCONNECT:
 
-            // ERC problems when a noconnect symbol is connected to more than one pin.
+            // ERC problems when a noconnect symbol is connected to more than
+            // one pin.
             MinConn = NET_NC;
             if( NetNbItems != 0 )
                 Diagnose( m_Parent->DrawPanel,
-                    g_NetObjectslist[NetItemRef], NULL, MinConn, UNC );
+                          g_NetObjectslist[NetItemRef], NULL, MinConn, UNC );
             break;
 
         case NET_PIN:
@@ -341,7 +358,9 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     num.Printf( wxT( "%d" ), g_EESchemaVar.NbErrorErc );
     m_TotalErrCount->SetLabel( num );
 
-    num.Printf( wxT( "%d" ), g_EESchemaVar.NbErrorErc - g_EESchemaVar.NbWarningErc );
+    num.Printf( wxT(
+                    "%d" ), g_EESchemaVar.NbErrorErc -
+                g_EESchemaVar.NbWarningErc );
     m_LastErrCount->SetLabel( num );
 
     num.Printf( wxT( "%d" ), g_EESchemaVar.NbWarningErc );
@@ -353,7 +372,6 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     // Display new markers:
     m_Parent->DrawPanel->Refresh();
 
-    /* Generation ouverture fichier diag */
     if( WriteFichierERC == TRUE )
     {
         fn = g_RootSheet->m_AssociatedScreen->m_FileName;
@@ -370,7 +388,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
         {
             Close( TRUE );
             ExecuteFile( this, wxGetApp().GetEditorName(),
-                        QuoteFullPath( fn ) );
+                         QuoteFullPath( fn ) );
         }
     }
 }
@@ -381,13 +399,12 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
                       NETLIST_OBJECT* aNetItemRef,
                       NETLIST_OBJECT* aNetItemTst,
                       int aMinConn, int aDiag )
+{
 /********************************************************/
-
 /* Creates an ERC marker to show the ERC problem about aNetItemRef
  * or between aNetItemRef and aNetItemTst
  *  if MinConn < 0: this is an error on labels
  */
-{
     MARKER_SCH* Marker = NULL;
     SCH_SCREEN* screen;
     int         ii, jj;
@@ -395,7 +412,7 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
     if( aDiag == OK )
         return;
 
-    /* Creation du nouveau marqueur type Erreur ERC */
+    /* Create new marker for ERC error. */
     Marker = new MARKER_SCH();
     Marker->m_TimeStamp = GetTimeStamp();
 
@@ -408,19 +425,22 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
     g_EESchemaVar.NbWarningErc++;
 
     wxString msg;
-    if( aMinConn < 0 )   // Traitement des erreurs sur labels
+    if( aMinConn < 0 )
     {
         if( (aNetItemRef->m_Type == NET_HIERLABEL)
            || (aNetItemRef->m_Type == NET_HIERBUSLABELMEMBER) )
         {
             msg.Printf( _( "HLabel %s not connected to SheetLabel" ),
-                       aNetItemRef->m_Label->GetData() );
+                        aNetItemRef->m_Label->GetData() );
         }
         else
             msg.Printf( _( "SheetLabel %s not connected to HLabel" ),
-                       aNetItemRef->m_Label->GetData() );
+                        aNetItemRef->m_Label->GetData() );
 
-        Marker->SetData( ERCE_HIERACHICAL_LABEL, aNetItemRef->m_Start, msg, aNetItemRef->m_Start );
+        Marker->SetData( ERCE_HIERACHICAL_LABEL,
+                         aNetItemRef->m_Start,
+                         msg,
+                         aNetItemRef->m_Start );
         return;
     }
 
@@ -433,11 +453,12 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
     string_pinnum = CONV_FROM_UTF8( ascii_buf );
     cmp_ref = wxT( "?" );
     if( aNetItemRef->m_Type == NET_PIN && aNetItemRef->m_Link )
-        cmp_ref = ( (SCH_COMPONENT*) aNetItemRef->m_Link )->GetRef( &aNetItemRef->m_SheetList );
+        cmp_ref = ( (SCH_COMPONENT*) aNetItemRef->m_Link )->GetRef(
+            &aNetItemRef->m_SheetList );
 
     if( aNetItemTst == NULL )
     {
-        if( aMinConn == NOC )    /* 1 seul element dans le net */
+        if( aMinConn == NOC )    /* Only 1 element in the net. */
         {
             msg.Printf( _( "Cmp %s, Pin %s (%s) Unconnected" ),
                         cmp_ref.GetData(), string_pinnum.GetData(),
@@ -449,15 +470,14 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
             return;
         }
 
-        if( aMinConn == NOD )    /* pas de pilotage du net */
+        if( aMinConn == NOD )    /* Nothing driving the net. */
         {
             if( aNetItemRef->m_Type == NET_PIN && aNetItemRef->m_Link )
                 cmp_ref = ( (SCH_COMPONENT*) aNetItemRef->m_Link )->GetRef(
                     &aNetItemRef->m_SheetList );
-            msg.Printf(
-                _( "Cmp %s, Pin %s (%s) not driven (Net %d)" ),
-                cmp_ref.GetData(), string_pinnum.GetData(),
-                MsgPinElectricType[ii], aNetItemRef->GetNet() );
+            msg.Printf( _( "Cmp %s, Pin %s (%s) not driven (Net %d)" ),
+                        cmp_ref.GetData(), string_pinnum.GetData(),
+                        MsgPinElectricType[ii], aNetItemRef->GetNet() );
             Marker->SetData( ERCE_PIN_NOT_DRIVEN,
                              aNetItemRef->m_Start,
                              msg,
@@ -477,7 +497,7 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
         }
     }
 
-    if( aNetItemTst )         /* Erreur entre 2 pins */
+    if( aNetItemTst )         /* Error between 2 pins */
     {
         jj = aNetItemTst->m_ElectricalType;
         int errortype = ERCE_PIN_TO_PIN_WARNING;
@@ -493,16 +513,19 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
         alt_string_pinnum = CONV_FROM_UTF8( ascii_buf );
         alt_cmp = wxT( "?" );
         if( aNetItemTst->m_Type == NET_PIN && aNetItemTst->m_Link )
-            alt_cmp = ( (SCH_COMPONENT*) aNetItemTst->m_Link )->GetRef( &aNetItemTst->m_SheetList );
-        msg.Printf( _("Cmp %s, Pin %s (%s) connected to " ),
-                   cmp_ref.GetData(), string_pinnum.GetData(), MsgPinElectricType[ii] );
+            alt_cmp = ( (SCH_COMPONENT*) aNetItemTst->m_Link )->GetRef(
+                &aNetItemTst->m_SheetList );
+        msg.Printf( _( "Cmp %s, Pin %s (%s) connected to " ),
+                    cmp_ref.GetData(),
+                    string_pinnum.GetData(), MsgPinElectricType[ii] );
         Marker->SetData( errortype,
                          aNetItemRef->m_Start,
                          msg,
                          aNetItemRef->m_Start );
-        msg.Printf( _("Cmp %s, Pin %s (%s) (net %d)" ),
-                   alt_cmp.GetData(), alt_string_pinnum.GetData(), MsgPinElectricType[jj],
-                   aNetItemRef->GetNet() );
+        msg.Printf( _( "Cmp %s, Pin %s (%s) (net %d)" ),
+                    alt_cmp.GetData(),
+                    alt_string_pinnum.GetData(), MsgPinElectricType[jj],
+                    aNetItemRef->GetNet() );
         Marker->SetAuxiliaryData( msg, aNetItemTst->m_Start );
     }
 }
@@ -513,68 +536,90 @@ static void TestOthersItems( WinEDA_DrawPanel* panel,
                              unsigned NetItemRef,
                              unsigned netstart,
                              int* NetNbItems, int* MinConnexion )
-/********************************************************************/
-
-/* Routine testant les conflits electriques entre
- *  NetItemRef
- *  et les autres items du meme net
- */
 {
+/********************************************************************/
+/* Routine testing electrical conflicts between NetItemRef and other items
+ * of the same net
+ */
     unsigned NetItemTst;
 
-    int ref_elect_type, jj, erc = OK, local_minconn;
+    int      ref_elect_type, jj, erc = OK, local_minconn;
 
-    /* Analyse de la table des connexions : */
-
+    /* Analysis of the table of connections. */
     ref_elect_type = g_NetObjectslist[NetItemRef]->m_ElectricalType;
 
     NetItemTst    = netstart;
     local_minconn = NOC;
 
-    /* Test pins Pins connected to NetItemRef */
+    /* Test pins connected to NetItemRef */
     for( ; ; NetItemTst++ )
     {
         if( NetItemRef == NetItemTst )
             continue;
 
-        /* We examine only a given net. We stop the search if the net changes */
-        if( (NetItemTst >= g_NetObjectslist.size())                                     // End of list
-           || ( g_NetObjectslist[NetItemRef]->GetNet() != g_NetObjectslist[NetItemTst]->GetNet() ) )    // End of net
+        /* We examine only a given net. We stop the search if the net changes
+         **/
+        if( ( NetItemTst >= g_NetObjectslist.size() ) // End of list
+            || ( g_NetObjectslist[NetItemRef]->GetNet() !=
+                 g_NetObjectslist[NetItemTst]->GetNet() ) ) // End of net
         {
-            /* Fin de netcode trouve: Tst connexion minimum */
-            if( (*MinConnexion < NET_NC ) && (local_minconn < NET_NC ) )  /* Not connected or not driven pin */
+            /* End net code found: minimum connection test. */
+            if( (*MinConnexion < NET_NC ) && (local_minconn < NET_NC ) )
             {
+                /* Not connected or not driven pin. */
                 bool seterr = true;
-                if( local_minconn == NOC && g_NetObjectslist[NetItemRef]->m_Type == NET_PIN)
+                if( local_minconn == NOC
+                    && g_NetObjectslist[NetItemRef]->m_Type == NET_PIN )
                 {
-                    /* This pin is not connected: for multiple part per package, and duplicated pin,
-                    * search for an other instance of this pin
-                    * this will be flagged only is all instances of this pin are not connected
-                    * TODO test also if instances connected are connected to the same net
-                    */
-                    for ( unsigned duppin = 0; duppin < g_NetObjectslist.size(); duppin ++ )
+                    /* This pin is not connected: for multiple part per
+                     * package, and duplicated pin,
+                     * search for an other instance of this pin
+                     * this will be flagged only is all instances of this pin
+                     * are not connected
+                     * TODO test also if instances connected are connected to
+                     * the same net
+                     */
+                    for( unsigned duppin = 0;
+                         duppin < g_NetObjectslist.size();
+                         duppin++ )
                     {
-                        if ( g_NetObjectslist[duppin]->m_Type != NET_PIN )
+                        if( g_NetObjectslist[duppin]->m_Type != NET_PIN )
                             continue;
                         if( duppin == NetItemRef )
                             continue;
-                        if ( g_NetObjectslist[NetItemRef]->m_PinNum != g_NetObjectslist[duppin]->m_PinNum )
+                        if( g_NetObjectslist[NetItemRef]->m_PinNum !=
+                            g_NetObjectslist[duppin]->m_PinNum )
                             continue;
 
-                        if( ( (SCH_COMPONENT*) g_NetObjectslist[NetItemRef]->m_Link )->GetRef(&g_NetObjectslist[NetItemRef]->m_SheetList) !=
-                                ((SCH_COMPONENT*) g_NetObjectslist[duppin]->m_Link )->GetRef(&g_NetObjectslist[duppin]->m_SheetList) )
+                        if( ( (SCH_COMPONENT*) g_NetObjectslist[NetItemRef]->
+                             m_Link )->GetRef( &g_NetObjectslist[NetItemRef]->
+                                               m_SheetList ) !=
+                           ( (SCH_COMPONENT*) g_NetObjectslist[duppin]->m_Link )
+                           ->GetRef( &g_NetObjectslist[duppin]->m_SheetList ) )
                             continue;
-                        // Same component and same pin. Do dot create error for this pin
-                        // if the other pin is connected (i.e. if duppin net has an other item)
-                        if ( (duppin > 0) && (g_NetObjectslist[duppin]->GetNet() == g_NetObjectslist[duppin-1]->GetNet()))
+
+                        // Same component and same pin. Do dot create error for
+                        // this pin
+                        // if the other pin is connected (i.e. if duppin net
+                        // has an other item)
+                        if( (duppin > 0)
+                           && ( g_NetObjectslist[duppin]->GetNet() ==
+                               g_NetObjectslist[duppin - 1]->GetNet() ) )
                             seterr = false;
-                        if ( (duppin < g_NetObjectslist.size()-1) && (g_NetObjectslist[duppin]->GetNet() == g_NetObjectslist[duppin+1]->GetNet()) )
+                        if( (duppin < g_NetObjectslist.size() - 1)
+                           && ( g_NetObjectslist[duppin]->GetNet() ==
+                               g_NetObjectslist[duppin + 1]->GetNet() ) )
                             seterr = false;
                     }
                 }
-                if ( seterr )
-                    Diagnose( panel, g_NetObjectslist[NetItemRef], NULL, local_minconn, WAR );
-                *MinConnexion = DRV;   // inhibition autres messages de ce type pour ce net
+                if( seterr )
+                    Diagnose( panel,
+                              g_NetObjectslist[NetItemRef],
+                              NULL,
+                              local_minconn,
+                              WAR );
+                *MinConnexion = DRV;   // inhibiting other messages of this
+                                       // type for the net.
             }
             return;
         }
@@ -608,15 +653,20 @@ static void TestOthersItems( WinEDA_DrawPanel* panel,
                 break;
 
             *NetNbItems += 1;
-            if( erc == OK )         // 1 marqueur par pin maxi
+            if( erc == OK )
             {
                 erc = DiagErc[ref_elect_type][jj];
                 if( erc != OK )
                 {
                     if( g_NetObjectslist[NetItemTst]->m_FlagOfConnection == 0 )
                     {
-                        Diagnose( panel, g_NetObjectslist[NetItemRef], g_NetObjectslist[NetItemTst], 0, erc );
-                        g_NetObjectslist[NetItemTst]->m_FlagOfConnection = NOCONNECT_SYMBOL_PRESENT;
+                        Diagnose( panel,
+                                  g_NetObjectslist[NetItemRef],
+                                  g_NetObjectslist[NetItemTst],
+                                  0,
+                                  erc );
+                        g_NetObjectslist[NetItemTst]->m_FlagOfConnection =
+                            NOCONNECT_SYMBOL_PRESENT;
                     }
                 }
             }
@@ -628,11 +678,10 @@ static void TestOthersItems( WinEDA_DrawPanel* panel,
 
 /********************************************************/
 static bool WriteDiagnosticERC( const wxString& FullFileName )
+{
 /*********************************************************/
-
 /* Create the Diagnostic file (<xxx>.erc file)
  */
-{
     SCH_ITEM*      DrawStruct;
     MARKER_SCH*    Marker;
     char           Line[1024];
@@ -650,7 +699,9 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
 
     EDA_SheetList SheetList;
 
-    for( Sheet = SheetList.GetFirst(); Sheet != NULL; Sheet = SheetList.GetNext() )
+    for( Sheet = SheetList.GetFirst();
+        Sheet != NULL;
+        Sheet = SheetList.GetNext() )
     {
         if( Sheet->Last() == g_RootSheet )
         {
@@ -691,8 +742,8 @@ static bool IsLabelsConnected( NETLIST_OBJECT* a, NETLIST_OBJECT* b )
     int at = a->m_Type;
     int bt = b->m_Type;
 
-    if( (at == NET_HIERLABEL || at == NET_HIERBUSLABELMEMBER)
-       &&(bt == NET_SHEETLABEL || bt == NET_SHEETBUSLABELMEMBER) )
+    if( ( at == NET_HIERLABEL || at == NET_HIERBUSLABELMEMBER )
+       && ( bt == NET_SHEETLABEL || bt == NET_SHEETBUSLABELMEMBER ) )
     {
         if( a->m_SheetList == b->m_SheetListInclude )
         {
@@ -704,44 +755,46 @@ static bool IsLabelsConnected( NETLIST_OBJECT* a, NETLIST_OBJECT* b )
 
 
 /***********************************************************************/
-void TestLabel( WinEDA_DrawPanel*   panel,
-                unsigned NetItemRef,
-                unsigned StartNet )
-/***********************************************************************/
-
-/* Routine controlant qu'un sheetLabel est bien connecte a un Glabel de la
- *  sous-feuille correspondante
- */
+void TestLabel( WinEDA_DrawPanel* panel,
+                unsigned          NetItemRef,
+                unsigned          StartNet )
 {
+/***********************************************************************/
+/* Routine to perform erc on a sheetLabel that is connected to a corresponding
+ * sub sheet Glabel
+ */
     unsigned NetItemTst;
-    int erc = 1;
+    int      erc = 1;
 
 
     NetItemTst = StartNet;
 
-    /* Examen de la liste des Labels connectees a NetItemRef */
+    /* Review the list of labels connected to NetItemRef. */
     for( ; ; NetItemTst++ )
     {
         if( NetItemTst == NetItemRef )
             continue;
 
-        /* Est - on toujours dans le meme net ? */
+        /* Is always in the same net? */
         if( ( NetItemTst ==  g_NetObjectslist.size() )
-           || ( g_NetObjectslist[NetItemRef]->GetNet() != g_NetObjectslist[NetItemTst]->GetNet() ) )
+           || ( g_NetObjectslist[NetItemRef]->GetNet() !=
+                g_NetObjectslist[NetItemTst]->GetNet() ) )
         {
-            /* Fin de netcode trouve */
+            /* End Netcode found. */
             if( erc )
             {
-                /* GLabel ou SheetLabel orphelin */
+                /* Glabel or SheetLabel orphaned. */
                 Diagnose( panel, g_NetObjectslist[NetItemRef], NULL, -1, WAR );
             }
             return;
         }
-        if( IsLabelsConnected( g_NetObjectslist[NetItemRef], g_NetObjectslist[NetItemTst] ) )
+        if( IsLabelsConnected( g_NetObjectslist[NetItemRef],
+                               g_NetObjectslist[NetItemTst] ) )
             erc = 0;
 
         //same thing, different order.
-        if( IsLabelsConnected( g_NetObjectslist[NetItemTst], g_NetObjectslist[NetItemRef] ) )
+        if( IsLabelsConnected( g_NetObjectslist[NetItemTst],
+                               g_NetObjectslist[NetItemRef] ) )
             erc = 0;
     }
 }

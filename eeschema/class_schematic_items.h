@@ -5,17 +5,18 @@
 #ifndef CLASS_SCHEMATIC_ITEMS_H
 #define CLASS_SCHEMATIC_ITEMS_H
 
-#define DRAWJUNCTION_DIAMETER  32       /* Size (diameter) of junctions between wires */
-#define DRAWNOCONNECT_SIZE 48       /* Rayon du symbole No Connexion */
+#define DRAWJUNCTION_DIAMETER  32   /* Diameter of junction symbol between
+                                     * wires */
+#define DRAWNOCONNECT_SIZE 48       /* No symbol connection range. */
 
-/* flags pour BUS ENTRY (bus to bus ou wire to bus */
+/* Flags for BUS ENTRY (bus to bus or wire to bus */
 #define WIRE_TO_BUS 0
 #define BUS_TO_BUS  1
 
 
 /**
  * Class EDA_DrawLineStruct
- * is a segment decription base class to describe items which have 2 end
+ * is a segment description base class to describe items which have 2 end
  * points (track, wire, draw line ...)
  */
 class EDA_DrawLineStruct : public SCH_ITEM
@@ -26,7 +27,7 @@ public:
     wxPoint m_End;              // Line end point
 
     bool    m_StartIsDangling;
-    bool    m_EndIsDangling;    // TRUE si Start ou End not connected  (wires, tracks...)
+    bool    m_EndIsDangling;    // TRUE if not connected  (wires, tracks...)
 
 public:
     EDA_DrawLineStruct( const wxPoint& pos, int layer );
@@ -57,7 +58,7 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
+     * writes the data structures for this object out to a FILE in "*.sch"
      * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
@@ -72,7 +73,7 @@ public:
     // Geometric transforms (used in block operations):
     /** virtual function Move
      * move item to a new position.
-     * @param aMoveVector = the deplacement vector
+     * @param aMoveVector = the displacement vector
      */
     virtual void Move(const wxPoint& aMoveVector)
     {
@@ -102,7 +103,7 @@ public:
 };
 
 
-class DrawNoConnectStruct : public SCH_ITEM    /* Symboles de non connexion */
+class DrawNoConnectStruct : public SCH_ITEM
 {
 public:
     wxPoint m_Pos;                      /* XY coordinates of NoConnect. */
@@ -129,7 +130,7 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
+     * writes the data structures for this object out to a FILE in "*.sch"
      * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
@@ -146,7 +147,7 @@ public:
     // Geometric transforms (used in block operations):
     /** virtual function Move
      * move item to a new position.
-     * @param aMoveVector = the deplacement vector
+     * @param aMoveVector = the displacement vector
      */
     virtual void Move(const wxPoint& aMoveVector)
     {
@@ -168,7 +169,8 @@ public:
 
 /**
  * Class DrawBusEntryStruct
- * Struct de descr 1 raccord a 45 degres de BUS ou WIRE
+ *
+ * Defines a bus or wire entry.
  */
 class DrawBusEntryStruct  : public SCH_ITEM
 {
@@ -188,14 +190,14 @@ public:
 
 
     DrawBusEntryStruct* GenCopy();
-    wxPoint             m_End() const;  // retourne la coord de fin du raccord
+    wxPoint             m_End() const;
     virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                               const wxPoint& offset, int draw_mode,
                               int Color = -1 );
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
+     * writes the data structures for this object out to a FILE in "*.sch"
      * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
@@ -212,7 +214,7 @@ public:
     // Geometric transforms (used in block operations):
     /** virtual function Move
      * move item to a new position.
-     * @param aMoveVector = the deplacement vector
+     * @param aMoveVector = the displacement vector
      */
     virtual void Move(const wxPoint& aMoveVector)
     {
@@ -232,10 +234,10 @@ public:
     }
 };
 
-class DrawPolylineStruct  : public SCH_ITEM /* Polyligne (serie de segments) */
+class DrawPolylineStruct  : public SCH_ITEM
 {
 public:
-    int m_Width;                            /* Tickness */
+    int m_Width;                            /* Thickness */
     std::vector<wxPoint> m_PolyPoints;      // list of points (>= 2)
 
 public:
@@ -255,7 +257,7 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
+     * writes the data structures for this object out to a FILE in "*.sch"
      * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
@@ -284,7 +286,7 @@ public:
     // Geometric transforms (used in block operations):
     /** virtual function Move
      * move item to a new position.
-     * @param aMoveVector = the deplacement vector
+     * @param aMoveVector = the displacement vector
      */
     virtual void Move(const wxPoint& aMoveVector)
     {
@@ -342,7 +344,8 @@ public:
                               int Color = -1 );
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.sch"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
@@ -351,7 +354,7 @@ public:
     // Geometric transforms (used in block operations):
     /** virtual function Move
      * move item to a new position.
-     * @param aMoveVector = the deplacement vector
+     * @param aMoveVector = the displacement vector
      */
     virtual void Move(const wxPoint& aMoveVector)
     {

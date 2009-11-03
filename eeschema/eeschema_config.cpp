@@ -1,6 +1,6 @@
-/******************************************************/
-/** eeconfig.cpp : routines et menus de configuration */
-/*******************************************************/
+/******************/
+/** eeconfig.cpp **/
+/******************/
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -17,9 +17,6 @@
 #include "eeschema_config.h"
 #include "worksheet.h"
 #include "hotkeys.h"
-
-
-/* Variables locales */
 
 
 #define HOTKEY_FILENAME wxT( "eeschema" )
@@ -41,13 +38,14 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
         DisplayColorSetupFrame( this, pos );
         break;
 
-    case ID_CONFIG_REQ:             // Creation de la fenetre de configuration
+    case ID_CONFIG_REQ:             // Display the configuration window.
         InstallConfigFrame( pos );
         break;
 
     case ID_OPTIONS_SETUP:
         DisplayOptionFrame( this, pos );
-        DrawPanel->Refresh( TRUE );   // Redraw, because grid settings may have changed.
+        // Redraw, because grid settings may have changed.
+        DrawPanel->Refresh( TRUE );
         break;
 
     case ID_CONFIG_SAVE:
@@ -98,7 +96,8 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
         HandleHotkeyConfigMenuSelection( this, id );
         break;
 
-    case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:           // Display Current hotkey list for eeschema
+    case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
+        // Display current hotkey list for eeschema.
         DisplayHotkeyList( this, s_Schematic_Hokeys_Descr );
         break;
 
@@ -258,8 +257,9 @@ bool WinEDA_SchematicFrame::LoadProjectFile( const wxString& CfgFileName,
     /* User library path takes precedent over default library search paths. */
     wxGetApp().InsertLibraryPath( m_UserLibraryPath, 1 );
 
-    /* If the list is void, force loadind the library "power.lib" that is the "standard" library for power symbols
-    */
+    /* If the list is void, force loadind the library "power.lib" that is
+     * the "standard" library for power symbols.
+     */
     if( m_ComponentLibFiles.GetCount() == 0 )
         m_ComponentLibFiles.Add( wxT( "power" ) );
 

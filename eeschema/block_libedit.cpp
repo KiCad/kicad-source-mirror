@@ -1,6 +1,5 @@
 /****************************************************/
-/*  block_libedit.cpp                                */
-/* Gestion des Operations sur Blocks et Effacements */
+/*          block_libedit.cpp                       */
 /****************************************************/
 
 #include "fctsys.h"
@@ -191,10 +190,10 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
 
 
 /*
- * Routine to handle the BLOCK PLACE commande
+ * Routine to handle the BLOCK PLACE command
  *  Last routine for block operation for:
  *  - block move & drag
- *  - block copie & paste
+ *  - block copy & paste
  */
 void WinEDA_LibeditFrame::HandleBlockPlace( wxDC* DC )
 {
@@ -238,7 +237,7 @@ void WinEDA_LibeditFrame::HandleBlockPlace( wxDC* DC )
             m_component->CopySelectedItems( pt );
         break;
 
-    case BLOCK_PASTE:     /* Paste (recopie du dernier bloc sauve */
+    case BLOCK_PASTE:     /* Paste (recopy the last block saved) */
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
@@ -276,8 +275,8 @@ void WinEDA_LibeditFrame::HandleBlockPlace( wxDC* DC )
 
 
 /*
- * Retrace le contour du block de recherche de structures
- *  L'ensemble du block suit le curseur
+ * Traces the outline of the search block structures
+ * The entire block follows the cursor
  */
 void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
@@ -307,7 +306,7 @@ void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
                          true, true, true );
     }
 
-    /* Redessin nouvel affichage */
+    /* Repaint new view */
     PtBlock->m_MoveVector.x =
         screen->m_Curseur.x - PtBlock->m_BlockLastCursorPosition.x;
     PtBlock->m_MoveVector.y =
