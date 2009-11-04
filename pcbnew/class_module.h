@@ -31,22 +31,22 @@ enum Mod_Attribut       /* Attributs used for modules */
 
 
 /* flags for autoplace and autoroute (.m_ModuleStatus member) */
-#define MODULE_is_LOCKED    0x01    /* module LOCKED: no autoplace allowed */
-#define MODULE_is_PLACED    0x02    /* In autoplace: module automatically placed */
-#define MODULE_to_PLACE     0x04    /* In autoplace: module waiting for autoplace */
+#define MODULE_is_LOCKED 0x01       /* module LOCKED: no autoplace allowed */
+#define MODULE_is_PLACED 0x02       /* In autoplace: module automatically placed */
+#define MODULE_to_PLACE  0x04       /* In autoplace: module waiting for autoplace */
 
 class MODULE : public BOARD_ITEM
 {
 public:
-    wxPoint             m_Pos;             // Real coord on board
-    DLIST<D_PAD>        m_Pads;            /* Pad list (linked list) */
-    DLIST<BOARD_ITEM>   m_Drawings;        /* Graphic items list (linked list) */
-    DLIST<S3D_MASTER>   m_3D_Drawings;     /* First item of the 3D shapes (linked list)*/
-    TEXTE_MODULE*       m_Reference;       // Component reference (U34, R18..)
-    TEXTE_MODULE*       m_Value;           // Component value (74LS00, 22K..)
-    wxString            m_LibRef;          /* Name of the module in library (and the default value when loading amodule from the library) */
-    wxString            m_AlternateReference;  /* Used when m_Reference cannot be used to
-                                              * identify the footprint ( after a full reannotation of the schematic */
+    wxPoint           m_Pos;                // Real coord on board
+    DLIST<D_PAD>      m_Pads;               /* Pad list (linked list) */
+    DLIST<BOARD_ITEM> m_Drawings;           /* Graphic items list (linked list) */
+    DLIST<S3D_MASTER> m_3D_Drawings;        /* First item of the 3D shapes (linked list)*/
+    TEXTE_MODULE*     m_Reference;          // Component reference (U34, R18..)
+    TEXTE_MODULE*     m_Value;              // Component value (74LS00, 22K..)
+    wxString          m_LibRef;             /* Name of the module in library (and the default value when loading amodule from the library) */
+    wxString          m_AlternateReference;    /* Used when m_Reference cannot be used to
+                                                * identify the footprint ( after a full reannotation of the schematic */
 
     int           m_Attributs;          /* Flags(ORed bits) ( see Mod_Attribut ) */
     int           m_Orient;             /* orientation in 0.1 degrees */
@@ -69,15 +69,24 @@ public:
     wxString      m_Doc;                // Module Description (info for users)
     wxString      m_KeyWord;            // Keywords to select the module in lib
 
+    // Local clearance. When null, the netclasses values are used. Usually the local clearance is null
+    int           m_LocalClearance;
+
+    // Local mask margins: when NULL, the global design values are used
+    int           m_LocalSolderMaskMargin;                      // Local solder mask margin
+    int           m_LocalSolderPasteMargin;                     // Local solder paste margin absolute value
+    double        m_LocalSolderPasteMarginRatio;                // Local solder pask margin ratio value of pad size
+    // The final margin is the sum of these 2 values
+
 public:
     MODULE( BOARD* parent );
     MODULE( MODULE* module );
     ~MODULE();
 
-    MODULE*    Next() const { return (MODULE*) Pnext; }
-    MODULE*    Back() const { return (MODULE*) Pback; }
+    MODULE* Next() const { return (MODULE*) Pnext; }
+    MODULE* Back() const { return (MODULE*) Pback; }
 
-    void    Copy( MODULE* Module );     // Copy structure
+    void Copy( MODULE* Module );        // Copy structure
 
 
     /**
@@ -85,7 +94,7 @@ public:
      * adds the given item to this MODULE and takes ownership of its memory.
      * @param aBoardItem The item to add to this board.
      * @param doInsert If true, then insert, else append
-    void    Add( BOARD_ITEM* aBoardItem, bool doInsert = true );
+     *  void    Add( BOARD_ITEM* aBoardItem, bool doInsert = true );
      */
 
 
@@ -93,13 +102,13 @@ public:
      * Function Set_Rectangle_Encadrement()
      * calculates the bounding box for orient 0 et origin = module anchor)
      */
-    void    Set_Rectangle_Encadrement();
+    void     Set_Rectangle_Encadrement();
 
     /** function SetRectangleExinscrit()
      * Calculates the real bounding box accordint to theboard position, and real orientaion
      *  and also calculates the area value (used in automatic placement)
      */
-    void    SetRectangleExinscrit();
+    void     SetRectangleExinscrit();
 
     /**
      * Function GetBoundingBox
@@ -121,14 +130,15 @@ public:
 
 
     // Moves
-    void    SetPosition( const wxPoint& newpos );
-    void    SetOrientation( int newangle );
+    void         SetPosition( const wxPoint& newpos );
+    void         SetOrientation( int newangle );
+
     /**
      * Function Move
      * move this object.
      * @param const wxPoint& aMoveVector - the move vector for this object.
      */
-    virtual void Move(const wxPoint& aMoveVector);
+    virtual void Move( const wxPoint& aMoveVector );
 
     /**
      * Function Rotate
@@ -136,14 +146,14 @@ public:
      * @param const wxPoint& aRotCentre - the rotation point.
      * @param aAngle - the rotation angle in 0.1 degree.
      */
-    virtual void Rotate(const wxPoint& aRotCentre, int aAngle);
+    virtual void Rotate( const wxPoint& aRotCentre, int aAngle );
 
     /**
      * Function Flip
      * Flip this object, i.e. change the board side for this object
      * @param const wxPoint& aCentre - the rotation point.
      */
-    virtual void Flip(const wxPoint& aCentre );
+    virtual void Flip( const wxPoint& aCentre );
 
     /**
      * Function IsLocked
@@ -178,10 +188,10 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool    Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
-    int     Write_3D_Descr( FILE* File ) const;
-    int     ReadDescr( FILE* File, int* LineNum = NULL );
+    int  Write_3D_Descr( FILE* File ) const;
+    int  ReadDescr( FILE* File, int* LineNum = NULL );
 
     /**
      * Function Read_GPCB_Descr
@@ -190,10 +200,11 @@ public:
      * this is also the footprint name
      * @return bool - true if success reading else false.
      */
-    bool    Read_GPCB_Descr(const wxString & CmpFullFileName);
-    int     Read_3D_Descr( FILE* File, int* LineNum = NULL );
+    bool Read_GPCB_Descr( const wxString& CmpFullFileName );
+    int  Read_3D_Descr( FILE* File, int* LineNum = NULL );
 
     /* drawing functions */
+
     /** Function Draw
      * Draw the text accordint to the footprint pos and orient
      * @param panel = draw panel, Used to know the clip box
@@ -201,13 +212,16 @@ public:
      * @param offset = draw offset (usually wxPoint(0,0)
      * @param aDrawMode = GR_OR, GR_XOR..
      */
-    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset = ZeroOffset );
+    void Draw( WinEDA_DrawPanel* panel,
+               wxDC*             DC,
+               int               aDrawMode,
+               const wxPoint&    offset = ZeroOffset );
 
-    void    Draw3D( Pcb3D_GLCanvas* glcanvas );
-    void    DrawEdgesOnly( WinEDA_DrawPanel* panel, wxDC* DC,
-                           const wxPoint& offset, int draw_mode );
-    void    DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC,
-                       const wxPoint& offset, int dim_ancre, int draw_mode );
+    void Draw3D( Pcb3D_GLCanvas* glcanvas );
+    void DrawEdgesOnly( WinEDA_DrawPanel* panel, wxDC* DC,
+                        const wxPoint& offset, int draw_mode );
+    void DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC,
+                    const wxPoint& offset, int dim_ancre, int draw_mode );
 
     /**
      * Function DisplayInfo
@@ -215,7 +229,7 @@ public:
      * about this object into the frame's message panel.
      * @param frame A WinEDA_DrawFrame in which to print status information.
      */
-    void    DisplayInfo( WinEDA_DrawFrame* frame );
+    void DisplayInfo( WinEDA_DrawFrame* frame );
 
 
     /**
@@ -224,7 +238,7 @@ public:
      * @param refPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( const wxPoint& refPos );
+    bool HitTest( const wxPoint& refPos );
 
 
     /**
@@ -233,7 +247,7 @@ public:
      * @param refArea : the given EDA_Rect
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( EDA_Rect& refArea );
+    bool HitTest( EDA_Rect& refArea );
 
     /**
      * Function GetReference
@@ -243,6 +257,7 @@ public:
     {
         return m_Reference->m_Text;
     }
+
 
     /**
      * Function GetValue
@@ -261,7 +276,7 @@ public:
      * @param
      * @return D_PAD* - The first matching name is returned, or NULL if not found.
      */
-    D_PAD* FindPadByName( const wxString& aPadName ) const;
+    D_PAD*        FindPadByName( const wxString& aPadName ) const;
 
 
     /**
@@ -292,7 +307,7 @@ public:
     }
 
 
- #if defined (DEBUG)
+ #if defined(DEBUG)
 
     /**
      * Function Show

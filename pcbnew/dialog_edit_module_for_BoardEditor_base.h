@@ -66,13 +66,22 @@ class DIALOG_MODULE_BOARD_EDITOR_BASE : public wxDialog
 		wxTextCtrl* m_ModPositionY;
 		wxButton* m_buttonExchange;
 		wxButton* m_buttonModuleEditor;
-		
 		wxRadioBox* m_AttributsCtrl;
 		wxRadioBox* m_AutoPlaceCtrl;
 		wxStaticText* m_staticText11;
 		wxSlider* m_CostRot90Ctrl;
 		wxStaticText* m_staticText12;
 		wxSlider* m_CostRot180Ctrl;
+		wxStaticText* m_staticTextInfo;
+		wxStaticText* m_MaskClearanceTitle;
+		wxTextCtrl* m_SolderMaskMarginCtrl;
+		wxStaticText* m_SolderMaskMarginUnits;
+		wxStaticText* m_staticTextSolderPaste;
+		wxTextCtrl* m_SolderPasteMarginCtrl;
+		wxStaticText* m_SolderPasteMarginUnits;
+		wxStaticText* m_staticTextRatio;
+		wxTextCtrl* m_SolderPasteMarginRatioCtrl;
+		wxStaticText* m_SolderPasteRatioMarginUnits;
 		wxPanel* m_Panel3D;
 		wxStaticText* m_staticText3Dname;
 		wxListBox* m_3D_ShapeNameListBox;
@@ -99,7 +108,7 @@ class DIALOG_MODULE_BOARD_EDITOR_BASE : public wxDialog
 	
 	public:
 		wxStaticBoxSizer* m_Sizer3DValues;
-		DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Module properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 422,583 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Module properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 474,583 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_MODULE_BOARD_EDITOR_BASE();
 	
 };

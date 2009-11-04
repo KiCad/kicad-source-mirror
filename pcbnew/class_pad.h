@@ -9,8 +9,10 @@ class Pcb3D_GLCanvas;
 /* Default layers used for pads, accordint to the pad type.
  * this is default values only, they can be changed for a given pad
  */
+
 // PAD_STANDARD:
-#define PAD_STANDARD_DEFAULT_LAYERS ALL_CU_LAYERS | SILKSCREEN_LAYER_CMP | SOLDERMASK_LAYER_CU | SOLDERMASK_LAYER_CMP
+#define PAD_STANDARD_DEFAULT_LAYERS ALL_CU_LAYERS | SILKSCREEN_LAYER_CMP | SOLDERMASK_LAYER_CU | \
+    SOLDERMASK_LAYER_CMP
 
 // PAD_CONN:
 #define PAD_CONN_DEFAULT_LAYERS CMP_LAYER | SOLDERPASTE_LAYER_CMP | SOLDERMASK_LAYER_CMP
@@ -19,7 +21,8 @@ class Pcb3D_GLCanvas;
 #define PAD_SMD_DEFAULT_LAYERS CMP_LAYER | SOLDERMASK_LAYER_CMP
 
 //PAD_HOLE_NOT_PLATED:
-#define PAD_HOLE_NOT_PLATED_DEFAULT_LAYERS CUIVRE_LAYER | SILKSCREEN_LAYER_CMP | SOLDERMASK_LAYER_CU | SOLDERMASK_LAYER_CMP
+#define PAD_HOLE_NOT_PLATED_DEFAULT_LAYERS CUIVRE_LAYER | SILKSCREEN_LAYER_CMP | \
+    SOLDERMASK_LAYER_CU | SOLDERMASK_LAYER_CMP
 
 
 /* Definition type Structure d'un pad */
@@ -74,8 +77,19 @@ public:
     int     m_Attribut;             // NORMAL, PAD_SMD, PAD_CONN
     int     m_Orient;               // in 1/10 degrees
 
+    // Local clearance. When null, the module default value is used.
+    // when the module default value is null, the netclass value is used
+    // Usually the local clearance is null
+    int    m_LocalClearance;
+
+    // Local mask margins: when NULL, the parent footprint design values are used
+    int    m_LocalSolderMaskMargin;                             // Local solder mask margin
+    int    m_LocalSolderPasteMargin;                            // Local solder paste margin absolute value
+    double m_LocalSolderPasteMarginRatio;                       // Local solder pask margin ratio value of pad size
+    // The final margin is the sum of these 2 values
+
 private:
-    int     m_SubRatsnest;              // variable used in rats nest computations
+    int m_SubRatsnest;                  // variable used in rats nest computations
                                         // handle subnet (block) number in ratsnet connection
 
 public:
@@ -128,6 +142,29 @@ public:
         m_Pos = aPos;
     }
 
+
+    // Mask margins handling:
+
+    /** Function GetSolderMaskMargin
+     * @return the margin for the solder mask layer
+     * usually > 0 (mask shape bigger than pad
+     * value is
+     * 1 - the local value
+     * 2 - if null, the parent footprint value
+     * 1 - if null, the global value
+     */
+    int           GetSolderMaskMargin();
+
+    /** Function GetSolderPasteMargin
+     * @return the margin for the solder mask layer
+     * usually < 0 (mask shape smaller than pad
+     * because the margin can be dependant on the pad size, the margin has a x and a y value
+     * value is
+     * 1 - the local value
+     * 2 - if null, the parent footprint value
+     * 1 - if null, the global value
+     */
+    wxSize        GetSolderPasteMargin();
 
     /* Reading and writing data on files */
     int           ReadDescr( FILE* File, int* LineNum = NULL );
@@ -222,10 +259,11 @@ public:
      * move this object.
      * @param const wxPoint& aMoveVector - the move vector for this object.
      */
-    virtual void Move(const wxPoint& aMoveVector)
+    virtual void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
+
 
 #if defined(DEBUG)
 

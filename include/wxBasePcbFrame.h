@@ -287,9 +287,8 @@ public:
                             GRTraceMode     trace_mode );
     void         Genere_DXF( const wxString& FullFileName, int Layer, GRTraceMode trace_mode );
     void         Plot_Layer( PLOTTER* plotter, int Layer, GRTraceMode trace_mode );
-    void         Plot_Standard_Layer( PLOTTER* plotter, int masque_layer,
-                                      int garde, bool trace_via,
-                                      GRTraceMode trace_mode );
+    void         Plot_Standard_Layer( PLOTTER* aPlotter, int aLayerMask,
+                                      bool aPlotVia, GRTraceMode aPlotMode );
     void         Plot_Serigraphie( PLOTTER* plotter, int masque_layer, GRTraceMode trace_mode );
 
     /** function PlotDrillMark
@@ -298,7 +297,7 @@ public:
      * redraw the drill mark on a pad or via, as a negative (i.e. white) shape in FILLED plot mode
      * @param aPlotter = the PLOTTER
      * @param aTraceMode = the mode of plot (FILLED, SKETCH)
-     * @param aSmallDrillShape = true to plot a smalle drill shape, false to plot the actual drill shape
+     * @param aSmallDrillShape = true to plot a small drill shape, false to plot the actual drill shape
      */
     void         PlotDrillMark( PLOTTER* aPlotter, GRTraceMode aTraceMode, bool aSmallDrillShape );
 

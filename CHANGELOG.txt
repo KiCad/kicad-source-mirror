@@ -4,6 +4,24 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-Nov-04 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++pcbnew
+    Added: control of masks clearance
+    - Solder mask clearance can be now defined at footprint and pad level
+    - Solder paste clearance can be now defined as a global value
+        and also at footprint and pad level.
+        The clearance is defined by a constant value and a value proportional to the pad size.
+        The final value is the sum of the 2 partial values
+    Note: this is a work in progress:
+        currently, the pad dialog is not finished and does not
+        have an option to enter the mask values
+    Planned:
+        option to define a net clearance at pad level and footprint level,
+        as an alternate value to the Netclasses values.
+        this option could be useful to create fiducials, and for very small footprints.
+
+
 2009-Nov-1 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++pcbnew

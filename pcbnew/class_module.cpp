@@ -36,8 +36,12 @@ MODULE::MODULE( BOARD* parent ) :
     flag = 0;
     m_CntRot90 = m_CntRot180 = 0;
     m_Surface  = 0;
-    m_Link = 0;
+    m_Link     = 0;
     m_LastEdit_Time = time( NULL );
+    m_LocalClearance = 0;
+    m_LocalSolderMaskMargin  = 0;
+    m_LocalSolderPasteMargin = 0;
+    m_LocalSolderPasteMarginRatio = 0.0;
 
     m_Reference = new TEXTE_MODULE( this, TEXT_is_REFERENCE );
 
@@ -68,18 +72,19 @@ void MODULE::DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset
 
     GRSetDrawMode( DC, draw_mode );
 
-    if( g_DesignSettings.IsElementVisible( ANCHOR_VISIBLE ))
+    if( g_DesignSettings.IsElementVisible( ANCHOR_VISIBLE ) )
     {
         GRLine( &panel->m_ClipBox, DC,
-            m_Pos.x - offset.x - anchor_size, m_Pos.y - offset.y,
-            m_Pos.x - offset.x + anchor_size, m_Pos.y - offset.y,
-            0, g_AnchorColor );
+                m_Pos.x - offset.x - anchor_size, m_Pos.y - offset.y,
+                m_Pos.x - offset.x + anchor_size, m_Pos.y - offset.y,
+                0, g_AnchorColor );
         GRLine( &panel->m_ClipBox, DC,
-            m_Pos.x - offset.x, m_Pos.y - offset.y - anchor_size,
-            m_Pos.x - offset.x, m_Pos.y - offset.y + anchor_size,
-            0, g_AnchorColor );
+                m_Pos.x - offset.x, m_Pos.y - offset.y - anchor_size,
+                m_Pos.x - offset.x, m_Pos.y - offset.y + anchor_size,
+                0, g_AnchorColor );
     }
 }
+
 
 /*********************************/
 void MODULE::Copy( MODULE* aModule )
@@ -97,6 +102,9 @@ void MODULE::Copy( MODULE* aModule )
     m_LastEdit_Time = aModule->m_LastEdit_Time;
     m_Path          = aModule->m_Path; //is this correct behavior?
     m_TimeStamp     = GetTimeStamp();
+    m_LocalSolderMaskMargin  = aModule->m_LocalSolderMaskMargin;
+    m_LocalSolderPasteMargin = aModule->m_LocalSolderPasteMargin;
+    m_LocalSolderPasteMarginRatio = aModule->m_LocalSolderPasteMarginRatio;
 
     /* Copy des structures auxiliaires: Reference et value */
     m_Reference->Copy( aModule->m_Reference );
@@ -119,14 +127,14 @@ void MODULE::Copy( MODULE* aModule )
         switch( item->Type() )
         {
         case TYPE_TEXTE_MODULE:
-            TEXTE_MODULE* textm;
+            TEXTE_MODULE * textm;
             textm = new TEXTE_MODULE( this );
             textm->Copy( (TEXTE_MODULE*) item );
             m_Drawings.PushBack( textm );
             break;
 
         case TYPE_EDGE_MODULE:
-            EDGE_MODULE* edge;
+            EDGE_MODULE * edge;
             edge = new EDGE_MODULE( this );
             edge->Copy( (EDGE_MODULE*) item );
             m_Drawings.PushBack( edge );
@@ -138,16 +146,17 @@ void MODULE::Copy( MODULE* aModule )
         }
     }
 
-   /* Copy auxiliary data: 3D_Drawings info */
+    /* Copy auxiliary data: 3D_Drawings info */
     m_3D_Drawings.DeleteAll();
+
     // Ensure there is one (or more) item in m_3D_Drawings
     m_3D_Drawings.PushBack( new S3D_MASTER( this ) );   // push a void item
     for( S3D_MASTER* item = aModule->m_3D_Drawings;  item;  item = item->Next() )
     {
-        if ( item->m_Shape3DName.IsEmpty() )            // do not copy empty shapes.
+        if( item->m_Shape3DName.IsEmpty() )             // do not copy empty shapes.
             continue;
         S3D_MASTER* t3d = m_3D_Drawings;
-        if ( t3d && t3d->m_Shape3DName.IsEmpty() )      // The first entry can exist, but is empty : use it.
+        if( t3d && t3d->m_Shape3DName.IsEmpty() )       // The first entry can exist, but is empty : use it.
             t3d->Copy( item );
         else
         {
@@ -271,9 +280,9 @@ bool MODULE::Save( FILE* aFile ) const
         statusTxt[1] = '~';
 
     fprintf( aFile, "Po %d %d %d %d %8.8lX %8.8lX %s\n",
-        m_Pos.x, m_Pos.y,
-        m_Orient, m_Layer, m_LastEdit_Time,
-        m_TimeStamp, statusTxt );
+             m_Pos.x, m_Pos.y,
+             m_Orient, m_Layer, m_LastEdit_Time,
+             m_TimeStamp, statusTxt );
 
     fprintf( aFile, "Li %s\n", CONV_TO_UTF8( m_LibRef ) );
 
@@ -290,6 +299,12 @@ bool MODULE::Save( FILE* aFile ) const
     fprintf( aFile, "Sc %8.8lX\n", m_TimeStamp );
     fprintf( aFile, "AR %s\n", CONV_TO_UTF8( m_Path ) );
     fprintf( aFile, "Op %X %X 0\n", m_CntRot90, m_CntRot180 );
+    if( m_LocalSolderMaskMargin != 0 )
+        fprintf( aFile, ".SolderMask %d\n",m_LocalSolderMaskMargin );
+    if( m_LocalSolderPasteMargin != 0 )
+        fprintf( aFile, ".SolderPaste %d\n",m_LocalSolderPasteMargin);
+    if( m_LocalSolderPasteMarginRatio != 0)
+        fprintf( aFile, ".SolderPasteRatio %g\n",m_LocalSolderPasteMarginRatio);
 
     // attributes
     if( m_Attributs != MOD_DEFAULT )
@@ -322,7 +337,7 @@ bool MODULE::Save( FILE* aFile ) const
             break;
 
         default:
-#if defined (DEBUG)
+#if defined(DEBUG)
             printf( "MODULE::Save() ignoring type %d\n", item->Type() );
 #endif
             break;
@@ -352,7 +367,7 @@ int MODULE::Write_3D_Descr( FILE* File ) const
 /* Sauvegarde de la description 3D du MODULE
  */
 {
-    char             buf[512];
+    char buf[512];
 
     for( S3D_MASTER* t3D = m_3D_Drawings;  t3D;  t3D = t3D->Next() )
     {
@@ -363,21 +378,21 @@ int MODULE::Write_3D_Descr( FILE* File ) const
             fprintf( File, "Na \"%s\"\n", CONV_TO_UTF8( t3D->m_Shape3DName ) );
 
             sprintf( buf, "Sc %lf %lf %lf\n",
-                t3D->m_MatScale.x,
-                t3D->m_MatScale.y,
-                t3D->m_MatScale.z );
+                     t3D->m_MatScale.x,
+                     t3D->m_MatScale.y,
+                     t3D->m_MatScale.z );
             fprintf( File, "%s", to_point( buf ) );
 
             sprintf( buf, "Of %lf %lf %lf\n",
-                t3D->m_MatPosition.x,
-                t3D->m_MatPosition.y,
-                t3D->m_MatPosition.z );
+                     t3D->m_MatPosition.x,
+                     t3D->m_MatPosition.y,
+                     t3D->m_MatPosition.z );
             fprintf( File, "%s", to_point( buf ) );
 
             sprintf( buf, "Ro %lf %lf %lf\n",
-                t3D->m_MatRotation.x,
-                t3D->m_MatRotation.y,
-                t3D->m_MatRotation.z );
+                     t3D->m_MatRotation.x,
+                     t3D->m_MatRotation.y,
+                     t3D->m_MatRotation.z );
             fprintf( File, "%s", to_point( buf ) );
 
             fprintf( File, "$EndSHAPE3D\n" );
@@ -397,8 +412,8 @@ int MODULE::Read_3D_Descr( FILE* File, int* LineNum )
  *  retourne 0 si OK
  */
 {
-    char             Line[1024];
-    char*            text = Line + 3;
+    char        Line[1024];
+    char*       text = Line + 3;
 
     S3D_MASTER* t3D = m_3D_Drawings;
 
@@ -430,23 +445,23 @@ int MODULE::Read_3D_Descr( FILE* File, int* LineNum )
 
         case 'S':       // Scale
             sscanf( text, "%lf %lf %lf\n",
-                &t3D->m_MatScale.x,
-                &t3D->m_MatScale.y,
-                &t3D->m_MatScale.z );
+                    &t3D->m_MatScale.x,
+                    &t3D->m_MatScale.y,
+                    &t3D->m_MatScale.z );
             break;
 
         case 'O':       // Offset
             sscanf( text, "%lf %lf %lf\n",
-                &t3D->m_MatPosition.x,
-                &t3D->m_MatPosition.y,
-                &t3D->m_MatPosition.z );
+                    &t3D->m_MatPosition.x,
+                    &t3D->m_MatPosition.y,
+                    &t3D->m_MatPosition.z );
             break;
 
         case 'R':       // Rotation
             sscanf( text, "%lf %lf %lf\n",
-                &t3D->m_MatRotation.x,
-                &t3D->m_MatRotation.y,
-                &t3D->m_MatRotation.z );
+                    &t3D->m_MatRotation.x,
+                    &t3D->m_MatRotation.y,
+                    &t3D->m_MatRotation.z );
             break;
 
         default:
@@ -462,13 +477,13 @@ int MODULE::Read_3D_Descr( FILE* File, int* LineNum )
 int MODULE::ReadDescr( FILE* File, int* LineNum )
 /**************************************************/
 
-/* Lecture de la description d'un MODULE (format Ascii)
- *  la 1ere ligne de descr ($MODULE) est supposee etre deja lue
- *  retourne 0 si OK
+/* Read a MODULE description
+ *  The first description line ($MODULE) is already read
+ *  @return 0 if no error
  */
 {
-    char            Line[256], BufLine[256], BufCar1[128], * PtLine;
-    int             itmp1, itmp2;
+    char Line[256], BufLine[256], BufCar1[128], * PtLine;
+    int  itmp1, itmp2;
 
     while( GetLine( File, Line, LineNum, sizeof(Line) - 1 ) != NULL )
     {
@@ -496,15 +511,16 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
 
         PtLine = Line + 3;
 
-        /* Pointe 1er code utile de la ligne */
+        /* Decode the first code of the current line and read the correspondint data
+        */
         switch( Line[0] )
         {
         case 'P':
             memset( BufCar1, 0, sizeof(BufCar1) );
             sscanf( PtLine, "%d %d %d %d %lX %lX %s",
-                &m_Pos.x, &m_Pos.y,
-                &m_Orient, &m_Layer,
-                &m_LastEdit_Time, &m_TimeStamp, BufCar1 );
+                    &m_Pos.x, &m_Pos.y,
+                    &m_Orient, &m_Layer,
+                    &m_LastEdit_Time, &m_TimeStamp, BufCar1 );
 
             m_ModuleStatus = 0;
             if( BufCar1[0] == 'F' )
@@ -513,7 +529,7 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
                 m_ModuleStatus |= MODULE_is_PLACED;
             break;
 
-        case 'L':       /* Li = Lecture du nom librairie du module */
+        case 'L':       /* Li = read the library name of the footprint */
             *BufLine = 0;
             sscanf( PtLine, " %s", BufLine );
             m_LibRef = CONV_FROM_UTF8( BufLine );
@@ -524,7 +540,7 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
             break;
 
 
-        case 'O':       /* (Op)tions de placement auto */
+        case 'O':       /* (Op)tions for auto placement */
             itmp1 = itmp2 = 0;
             sscanf( PtLine, " %X %X", &itmp1, &itmp2 );
 
@@ -544,7 +560,7 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
         case 'A':
             if( Line[1] == 't' )
             {
-                /* At = (At)tributs du module */
+                /* At = (At)tributes of module */
                 if( strstr( PtLine, "SMD" ) )
                     m_Attributs |= MOD_CMS;
                 if( strstr( PtLine, "VIRTUAL" ) )
@@ -559,7 +575,7 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
             break;
 
         case 'T':    /* Read a footprint text description (ref, value, or drawing */
-            TEXTE_MODULE* textm;
+            TEXTE_MODULE * textm;
             sscanf( Line + 1, "%d", &itmp1 );
             if( itmp1 == TEXT_is_REFERENCE )
                 textm = m_Reference;
@@ -573,27 +589,35 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
             textm->ReadDescr( Line, File, LineNum );
             break;
 
-        case 'D':    /* lecture du contour */
-            EDGE_MODULE* edge;
+        case 'D':    /* read a drawing item */
+            EDGE_MODULE * edge;
             edge = new EDGE_MODULE( this );
             m_Drawings.PushBack( edge );
             edge->ReadDescr( Line, File, LineNum );
             edge->SetDrawCoord();
             break;
 
-        case 'C':    /* Lecture de la doc */
+        case 'C':    /* read documentation data */
             m_Doc = CONV_FROM_UTF8( StrPurge( PtLine ) );
             break;
 
-        case 'K':    /* Lecture de la liste des mots cle */
+        case 'K':    /* Read key words */
             m_KeyWord = CONV_FROM_UTF8( StrPurge( PtLine ) );
             break;
+
+        case '.':    /* Read specific data */
+            if( strnicmp(Line, ".SolderMask ", 12 ) == 0 )
+                m_LocalSolderMaskMargin = atoi(Line+12);
+            else if( strnicmp(Line, ".SolderPaste ", 13)  == 0 )
+                m_LocalSolderPasteMargin = atoi(Line+13);
+            else if( strnicmp(Line, ".SolderPasteRatio ", 18) == 0 )
+                m_LocalSolderPasteMarginRatio = atof(Line+18);
+           break;
 
         default:
             break;
         }
     }
-
     /* Recalculate the bounding box */
     Set_Rectangle_Encadrement();
     return 0;
@@ -613,9 +637,9 @@ void MODULE::Set_Rectangle_Encadrement()
  *      en coord relatives / position ancre
  */
 {
-    int          width;
-    int          cx, cy, uxf, uyf, rayon;
-    int          xmax, ymax;
+    int width;
+    int cx, cy, uxf, uyf, rayon;
+    int xmax, ymax;
 
 
     /* Init des pointeurs */
@@ -689,9 +713,9 @@ void MODULE::SetRectangleExinscrit()
  *  Met egalement a jour la surface (.m_Surface) du module.
  */
 {
-    int          width;
-    int          cx, cy, uxf, uyf, rayon;
-    int          xmax, ymax;
+    int width;
+    int cx, cy, uxf, uyf, rayon;
+    int xmax, ymax;
 
     m_RealBoundaryBox.m_Pos.x = xmax = m_Pos.x;
     m_RealBoundaryBox.m_Pos.y = ymax = m_Pos.y;
@@ -763,10 +787,10 @@ EDA_Rect MODULE::GetBoundingBox()
 {
     // Calculate area without text fields:
     SetRectangleExinscrit();
-    EDA_Rect      area = m_RealBoundaryBox;
+    EDA_Rect area = m_RealBoundaryBox;
 
     // Calculate extended area including text field:
-    EDA_Rect      text_area;
+    EDA_Rect text_area;
     text_area = m_Reference->GetBoundingBox();
     area.Merge( text_area );
 
@@ -777,14 +801,14 @@ EDA_Rect MODULE::GetBoundingBox()
     {
         if( edge->Type() != TYPE_TEXTE_MODULE )
             continue;
-        text_area = ((TEXTE_MODULE*)edge)->GetBoundingBox();
+        text_area = ( (TEXTE_MODULE*) edge )->GetBoundingBox();
         area.Merge( text_area );
     }
 
     // Add the Clearence shape size: (shape around the pads when the clearence is shown
     // Not optimized, but the draw cost is small (perhaps smaller than optimization)
     int biggest_clearance = GetBoard()->GetBiggestClearanceValue();
-    area.Inflate(biggest_clearance);
+    area.Inflate( biggest_clearance );
 
     return area;
 }
@@ -793,9 +817,10 @@ EDA_Rect MODULE::GetBoundingBox()
 /*******************************************************/
 void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
 /*******************************************************/
+
 /* Virtual function, from EDA_BaseStruct.
  * display module info on MsgPanel
-*/
+ */
 {
     int      nbpad;
     char     bufcar[512], Line[512];
@@ -841,7 +866,7 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
     msg.Printf( wxT( "%d" ), nbpad );
     frame->AppendMsgPanel( _( "Pads" ), msg, BLUE );
 
-    msg  = wxT( ".." );
+    msg = wxT( ".." );
     if( IsLocked() )
         msg[0] = 'L';
     if( m_ModuleStatus & MODULE_is_PLACED )
@@ -856,7 +881,7 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
     if(  m_3D_Drawings != NULL )
         msg = m_3D_Drawings->m_Shape3DName;
     else
-        msg = _("No 3D shape");
+        msg = _( "No 3D shape" );
     frame->AppendMsgPanel( _( "3D-Shape" ), msg, RED );
 
     wxString doc     = _( "Doc:  " ) + m_Doc;
@@ -925,6 +950,7 @@ D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
         if( buf == aPadName )
 #endif
 
+
             return pad;
     }
 
@@ -941,7 +967,7 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
     const KICAD_T* p    = scanTypes;
     bool           done = false;
 
-#if 0 && defined (DEBUG)
+#if 0 && defined(DEBUG)
     std::cout << GetClass().mb_str() << ' ';
 #endif
 
@@ -970,7 +996,7 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
             if( result == SEARCH_QUIT )
                 break;
 
-            // m_Drawings can hold TYPETEXTMODULE also, so fall thru
+        // m_Drawings can hold TYPETEXTMODULE also, so fall thru
 
         case TYPE_EDGE_MODULE:
             result = IterateForward( m_Drawings, inspector, testData, p );
@@ -1006,7 +1032,7 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
 }
 
 
-#if defined (DEBUG)
+#if defined(DEBUG)
 
 /**
  * Function Show

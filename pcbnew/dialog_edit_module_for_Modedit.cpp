@@ -132,6 +132,21 @@ void DIALOG_MODULE_MODULE_EDITOR::InitModeditProperties()
     BoxSizer = new wxBoxSizer( wxVERTICAL );
     m_3D_Rotation = new WinEDA_VertexCtrl( m_Panel3D, _( "Shape Rotation:" ), BoxSizer, 2, 1 );
     m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
+
+    // Initialize dialog relative to masks clearances
+    m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UnitMetric ) );
+    m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UnitMetric ) );
+
+    wxString  msg;
+    int Internal_Unit = m_Parent->m_InternalUnits;
+    PutValueInLocalUnits( *m_SolderMaskMarginCtrl,
+                          m_CurrentModule->m_LocalSolderMaskMargin,
+                          Internal_Unit );
+    PutValueInLocalUnits( *m_SolderPasteMarginCtrl,
+                          m_CurrentModule->m_LocalSolderPasteMargin,
+                          Internal_Unit );
+    msg.Printf( wxT( "%.1f" ), m_CurrentModule->m_LocalSolderPasteMarginRatio * 100.0 );
+    m_SolderPasteMarginRatioCtrl->SetValue( msg );
 }
 
 
@@ -314,6 +329,19 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
     // Init Fields:
     m_CurrentModule->m_Reference->Copy(m_ReferenceCopy );
     m_CurrentModule->m_Value->Copy(m_ValueCopy );
+
+    // Initialize masks clearances
+    m_CurrentModule->m_LocalSolderMaskMargin =
+        ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, m_Parent->m_InternalUnits );
+    m_CurrentModule->m_LocalSolderPasteMargin =
+        ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl, m_Parent->m_InternalUnits );
+    double   dtmp;
+    wxString msg = m_SolderPasteMarginRatioCtrl->GetValue();
+    msg.ToDouble( &dtmp );
+    // A margin ratio de -50% means no paste on a pad, the ratio must be >= 50 %
+    if( dtmp < -50 )
+        dtmp = -50;
+    m_CurrentModule->m_LocalSolderPasteMarginRatio = dtmp / 100;
 
     /* Update 3D shape list */
     int ii = m_3D_ShapeNameListBox->GetSelection();

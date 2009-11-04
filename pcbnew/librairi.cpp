@@ -88,6 +88,9 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
         Config->Write( EXPORT_IMPORT_LASTPATH_KEY, LastOpenedPathForLoading );
     }
 
+    // Switch the locale to standard C (needed to print floating point numbers like 1.3)
+    SetLocaleTo_C_standard( );
+
     /* Read header and test file type */
     GetLine( file, Line, &NbLine );
     if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
@@ -124,6 +127,7 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( wxDC* DC )
         module->ReadDescr( file, &NbLine );
         fclose( file );
     }
+    SetLocaleTo_Default( );      // revert to the current locale
 
     /* Insert footprint in list*/
     GetBoard()->Add( module );
@@ -197,6 +201,9 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
         Config->Write( EXPORT_IMPORT_LASTPATH_KEY, fn.GetPath() );
     }
 
+    // Switch the locale to standard C (needed to read floating point numbers like 1.3)
+    SetLocaleTo_C_standard();
+
     fprintf( file, "%s  %s\n", ENTETE_LIBRAIRIE, DateAndTime( Line ) );
     fputs( "$INDEX\n", file );
 
@@ -207,6 +214,8 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
 
     fputs( "$EndLIBRARY\n", file );
     fclose( file );
+    SetLocaleTo_Default( );      // revert to the current  locale
+
     msg.Printf( _( "Module exported in file <%s>" ), GetChars( fn.GetFullPath() ) );
     DisplayInfoMessage( this, msg );
 }
@@ -605,6 +614,9 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
 
     wxBeginBusyCursor();
 
+    // Switch the locale to standard C (needed to print floating point numbers like 1.3)
+    SetLocaleTo_C_standard( );
+
     /* Create the library header with a new date */
     fprintf( dest, ENTETE_LIBRAIRIE );
     fprintf( dest, "  %s\n$INDEX\n", DateAndTime( Line ) );
@@ -665,6 +677,7 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
     aModule->m_TimeStamp = tmp;
 
     fclose( dest );  fclose( lib_module );
+    SetLocaleTo_Default( );      // revert to the current  locale
 
     wxEndBusyCursor();
 

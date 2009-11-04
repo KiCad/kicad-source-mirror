@@ -16,7 +16,7 @@
 
 /*******************************************************************************************/
 void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
-                    const wxPoint& offset )
+                  const wxPoint& offset )
 /*******************************************************************************************/
 
 /** Draw a pad:
@@ -36,7 +36,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     wxPoint coord[4];
     int     fillpad = 0;
     wxPoint shape_pos;
-    int     mask_margin = 0;    // margin (clearance) used for some non copper layers
+    wxSize  mask_margin;       // margin (clearance) used for some non copper layers
 
     if( m_Flags & DO_NOT_DRAW )
         return;
@@ -166,19 +166,25 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     }
 
     // if Contrast mode is ON and a technical layer active, show pads on this layer
-    // so we can see pads on paste or solder layer
+    // so we can see pads on paste or solder layer and the size of the mask
     if( DisplayOpt.ContrastModeDisplay && screen->m_Active_Layer > LAST_COPPER_LAYER )
     {
         if( IsOnLayer( screen->m_Active_Layer ) )
         {
             color = g_DesignSettings.m_LayerColor[screen->m_Active_Layer];
+
             // In hight contrast mode, and if the active layer is the mask layer
             // shows the pad size with the mask clearance
             switch( screen->m_Active_Layer )
             {
             case SOLDERMASK_N_CU:
             case SOLDERMASK_N_CMP:
-                mask_margin = g_DesignSettings.m_MaskMargin;
+                mask_margin.x = mask_margin.y = GetSolderMaskMargin();
+                break;
+
+            case SOLDERPASTE_N_CU:
+            case SOLDERPASTE_N_CMP:
+                mask_margin = GetSolderPasteMargin();
                 break;
 
             default:
@@ -232,9 +238,9 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     {
     case PAD_CIRCLE:
         if( fillpad )
-            GRFilledCircle( &panel->m_ClipBox, DC, xc, yc, dx + mask_margin, 0, color, color );
+            GRFilledCircle( &panel->m_ClipBox, DC, xc, yc, dx + mask_margin.x, 0, color, color );
         else
-            GRCircle( &panel->m_ClipBox, DC, xc, yc, dx + mask_margin, 0, color );
+            GRCircle( &panel->m_ClipBox, DC, xc, yc, dx + mask_margin.x, 0, color );
 
         if( DisplayIsol )
         {
@@ -254,13 +260,13 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         {
             delta_cx = dx - dy;
             delta_cy = 0;
-            rotdx    = m_Size.y;
+            rotdx    = m_Size.y + (mask_margin.y*2);
         }
         else                /* ellipse verticale */
         {
             delta_cx = 0;
             delta_cy = dy - dx;
-            rotdx    = m_Size.x;
+            rotdx    = m_Size.x + (mask_margin.x*2);
         }
         RotatePoint( &delta_cx, &delta_cy, angle );
 
@@ -269,14 +275,14 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
             GRFillCSegm( &panel->m_ClipBox, DC,
                          ux0 + delta_cx, uy0 + delta_cy,
                          ux0 - delta_cx, uy0 - delta_cy,
-                         rotdx + mask_margin, color );
+                         rotdx, color );
         }
         else
         {
             GRCSegm( &panel->m_ClipBox, DC,
                      ux0 + delta_cx, uy0 + delta_cy,
                      ux0 - delta_cx, uy0 - delta_cy,
-                     rotdx + mask_margin, color );
+                     rotdx, color );
         }
 
         /* Trace de la marge d'isolement */
@@ -297,17 +303,17 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         ddx = (m_DeltaSize.x >> 1);
         ddy = (m_DeltaSize.y >> 1);      /* demi dim  dx et dy */
 
-        coord[0].x = -dx - ddy - mask_margin;
-        coord[0].y = +dy + ddx + mask_margin;
+        coord[0].x = -dx - ddy - mask_margin.x;
+        coord[0].y = +dy + ddx + mask_margin.y;
 
-        coord[1].x = -dx + ddy - mask_margin;
-        coord[1].y = -dy - ddx - mask_margin;
+        coord[1].x = -dx + ddy - mask_margin.x;
+        coord[1].y = -dy - ddx - mask_margin.y;
 
-        coord[2].x = +dx - ddy + mask_margin;
-        coord[2].y = -dy + ddx - mask_margin;
+        coord[2].x = +dx - ddy + mask_margin.x;
+        coord[2].y = -dy + ddx - mask_margin.y;
 
-        coord[3].x = +dx + ddy + mask_margin;
-        coord[3].y = +dy - ddx + mask_margin;
+        coord[3].x = +dx + ddy + mask_margin.x;
+        coord[3].y = +dy - ddx + mask_margin.y;
 
         for( ii = 0; ii < 4; ii++ )
         {
@@ -320,8 +326,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
 
         if( DisplayIsol )
         {
-            dx += padClearance - mask_margin;
-            dy += padClearance - mask_margin;
+            dx += padClearance;
+            dy += padClearance;
 
             coord[0].x = -dx - ddy;
             coord[0].y = dy + ddx;

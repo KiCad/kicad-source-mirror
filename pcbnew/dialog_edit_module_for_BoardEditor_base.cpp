@@ -98,13 +98,10 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	m_buttonModuleEditor = new wxButton( m_PanelProperties, ID_GOTO_MODULE_EDITOR, _("Module Editor"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PropRightSizer->Add( m_buttonModuleEditor, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
-	
-	m_PropRightSizer->Add( 0, 20, 0, 0, 5 );
-	
 	wxString m_AttributsCtrlChoices[] = { _("Normal"), _("Normal+Insert"), _("Virtual") };
 	int m_AttributsCtrlNChoices = sizeof( m_AttributsCtrlChoices ) / sizeof( wxString );
 	m_AttributsCtrl = new wxRadioBox( m_PanelProperties, wxID_ANY, _("Attributs:"), wxDefaultPosition, wxDefaultSize, m_AttributsCtrlNChoices, m_AttributsCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_AttributsCtrl->SetSelection( 0 );
+	m_AttributsCtrl->SetSelection( 1 );
 	m_PropRightSizer->Add( m_AttributsCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_AutoPlaceCtrlChoices[] = { _("Free"), _("Locked") };
@@ -114,23 +111,90 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	m_PropRightSizer->Add( m_AutoPlaceCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizerAutoplace;
-	sbSizerAutoplace = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Auto Move and Place") ), wxVERTICAL );
+	sbSizerAutoplace = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Auto Move and Place") ), wxHORIZONTAL );
+	
+	wxBoxSizer* bSizerRotOpt;
+	bSizerRotOpt = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticText11 = new wxStaticText( m_PanelProperties, wxID_ANY, _("Rotation 90 degree"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
-	sbSizerAutoplace->Add( m_staticText11, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerRotOpt->Add( m_staticText11, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_CostRot90Ctrl = new wxSlider( m_PanelProperties, wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
-	sbSizerAutoplace->Add( m_CostRot90Ctrl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerRotOpt->Add( m_CostRot90Ctrl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	sbSizerAutoplace->Add( bSizerRotOpt, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizerMoveOpt;
+	bSizerMoveOpt = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticText12 = new wxStaticText( m_PanelProperties, wxID_ANY, _("Rotation 180 degree"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
-	sbSizerAutoplace->Add( m_staticText12, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerMoveOpt->Add( m_staticText12, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_CostRot180Ctrl = new wxSlider( m_PanelProperties, wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
-	sbSizerAutoplace->Add( m_CostRot180Ctrl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerMoveOpt->Add( m_CostRot180Ctrl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	sbSizerAutoplace->Add( bSizerMoveOpt, 1, wxEXPAND, 5 );
 	
 	m_PropRightSizer->Add( sbSizerAutoplace, 1, wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* sbSizerLocalProperties;
+	sbSizerLocalProperties = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Masks clearances local values:") ), wxVERTICAL );
+	
+	m_staticTextInfo = new wxStaticText( m_PanelProperties, wxID_ANY, _("Set these values to 0 to use global values"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfo->Wrap( -1 );
+	m_staticTextInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	sbSizerLocalProperties->Add( m_staticTextInfo, 0, wxALL|wxALIGN_RIGHT, 5 );
+	
+	wxFlexGridSizer* fgSizerClearances;
+	fgSizerClearances = new wxFlexGridSizer( 3, 3, 0, 0 );
+	fgSizerClearances->SetFlexibleDirection( wxBOTH );
+	fgSizerClearances->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_MaskClearanceTitle = new wxStaticText( m_PanelProperties, wxID_ANY, _("Solder mask clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MaskClearanceTitle->Wrap( -1 );
+	fgSizerClearances->Add( m_MaskClearanceTitle, 0, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_SolderMaskMarginCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderMaskMarginCtrl->SetToolTip( _("This is the global clearance between pads and the solder mask\nThis value can be superseded by a pad local value.") );
+	
+	fgSizerClearances->Add( m_SolderMaskMarginCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_SolderMaskMarginUnits = new wxStaticText( m_PanelProperties, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderMaskMarginUnits->Wrap( -1 );
+	fgSizerClearances->Add( m_SolderMaskMarginUnits, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_staticTextSolderPaste = new wxStaticText( m_PanelProperties, wxID_ANY, _("Solder paste clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSolderPaste->Wrap( -1 );
+	fgSizerClearances->Add( m_staticTextSolderPaste, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_SolderPasteMarginCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderPasteMarginCtrl->SetToolTip( _("This is the global clearance between pads and the solder paste\nThis value can be superseded by a pad local values.\nThe final clearance value is the sum of this value and the clearance value ratio\nA negative value means a smaller mask size than pad size") );
+	
+	fgSizerClearances->Add( m_SolderPasteMarginCtrl, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_SolderPasteMarginUnits = new wxStaticText( m_PanelProperties, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderPasteMarginUnits->Wrap( -1 );
+	fgSizerClearances->Add( m_SolderPasteMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_staticTextRatio = new wxStaticText( m_PanelProperties, wxID_ANY, _("Solder mask ratio clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRatio->Wrap( -1 );
+	fgSizerClearances->Add( m_staticTextRatio, 0, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_SolderPasteMarginRatioCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderPasteMarginRatioCtrl->SetToolTip( _("This is the global clearance ratio in per cent between pads and the solder paste\nA value of 10 means the clearance value is 10% of the pad size\nThis value can be superseded by a pad local value.\nThe final clearance value is the sum of this value and the clearance value\nA negative value means a smaller mask size than pad size") );
+	
+	fgSizerClearances->Add( m_SolderPasteMarginRatioCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_SolderPasteRatioMarginUnits = new wxStaticText( m_PanelProperties, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderPasteRatioMarginUnits->Wrap( -1 );
+	fgSizerClearances->Add( m_SolderPasteRatioMarginUnits, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	sbSizerLocalProperties->Add( fgSizerClearances, 1, wxEXPAND, 5 );
+	
+	m_PropRightSizer->Add( sbSizerLocalProperties, 0, wxEXPAND, 5 );
 	
 	m_PanelPropertiesBoxSizer->Add( m_PropRightSizer, 0, 0, 5 );
 	

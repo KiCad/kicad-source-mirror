@@ -109,7 +109,7 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
     RecreateBaseHToolbar();
 
     m_auimgr.SetManagedWindow(this);
-    
+
     wxAuiPaneInfo horiz;
     horiz.Gripper(false);
     horiz.DockFixed(true);
@@ -117,15 +117,15 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
     horiz.Floatable(false);
     horiz.CloseButton(false);
     horiz.CaptionVisible(false);
-    
+
     wxAuiPaneInfo vert(horiz);
-    
+
     vert.TopDockable(false).BottomDockable(false);
     horiz.LeftDockable(false).RightDockable(false);
-    
+
     m_auimgr.AddPane(m_HToolBar,
         wxAuiPaneInfo(horiz).Name(wxT("m_HToolBar")).Top());
-    
+
     m_auimgr.AddPane(m_DialogWin,
         wxAuiPaneInfo(horiz).Name(wxT("m_DialogWin")).Center());
 
@@ -278,21 +278,6 @@ void WinEDA_MainFrame::OnCloseWindow( wxCloseEvent& Event )
     m_LeftWin->Show(false);
 
     Destroy();
-}
-
-
-/**********************************************************/
-void WinEDA_MainFrame::OnPaint( wxPaintEvent& event )
-/**********************************************************/
-{
-    event.Skip();
-}
-
-
-/*******************************************/
-void WinEDA_MainFrame::ReDraw( wxDC* DC )
-/*******************************************/
-{
 }
 
 

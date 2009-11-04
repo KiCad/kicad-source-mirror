@@ -623,10 +623,10 @@ static PARAM_CFG_INT HPGLrecouvrementCfg
 
 static PARAM_CFG_INT VernisEpargneGardeCfg
 (
-    wxT( "VEgarde" ),                       /* Keyword */
-    &g_DesignSettings.m_MaskMargin,         /* Parameter address */
-    100,                                    /* Default value */
-    0, 0xFFFF                               /* Min and max values*/
+    wxT( "VEgarde" ),                               /* Keyword */
+    &g_DesignSettings.m_SolderMaskMargin,           /* Parameter address */
+    100,                                            /* Default value */
+    0, 10000                                        /* Min and max values*/
 );
 
 static PARAM_CFG_INT DrawSegmLargeurCfg

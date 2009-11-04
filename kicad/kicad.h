@@ -98,8 +98,6 @@ public:
 
     void        OnCloseWindow( wxCloseEvent& Event );
     void        OnSize( wxSizeEvent& event );
-    void        OnPaint( wxPaintEvent& event );
-    void        ReDraw( wxDC* DC );
     void        OnSashDrag( wxSashEvent& event );
     void        OnLoadProject( wxCommandEvent& event );
     void        OnSaveProject( wxCommandEvent& event );

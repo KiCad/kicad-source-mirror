@@ -10,6 +10,7 @@
 #include "pcbnew.h"
 #include "trigo.h"
 #include "pcbnew_id.h"             // ID_TRACK_BUTT
+#include "class_board_design_settings.h"
 
 
 /*******************************/
@@ -18,22 +19,26 @@
 
 D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, TYPE_PAD )
 {
-    m_NumPadName   = 0;
+    m_NumPadName = 0;
 
     m_Size.x = m_Size.y = 500;          // give it a reasonnable size
-    m_Orient   = 0;                     // Pad rotation in 1/10 degrees
+    m_Orient = 0;                       // Pad rotation in 1/10 degrees
 
     if( m_Parent && (m_Parent->Type()  == TYPE_MODULE) )
     {
         m_Pos = ( (MODULE*) m_Parent )->GetPosition();
     }
 
-    m_PadShape = PAD_CIRCLE;            // Shape: PAD_CIRCLE, PAD_RECT PAD_OVAL PAD_TRAPEZOID
-    m_Attribut = PAD_STANDARD;          // Type: NORMAL, PAD_SMD, PAD_CONN
-    m_DrillShape   = PAD_CIRCLE;        // Drill shape = circle
+    m_PadShape     = PAD_CIRCLE;                    // Shape: PAD_CIRCLE, PAD_RECT PAD_OVAL PAD_TRAPEZOID
+    m_Attribut     = PAD_STANDARD;                  // Type: NORMAL, PAD_SMD, PAD_CONN
+    m_DrillShape   = PAD_CIRCLE;                    // Drill shape = circle
+    m_LocalClearance = 0;
+    m_LocalSolderMaskMargin  = 0;
+    m_LocalSolderPasteMargin = 0;
+    m_LocalSolderPasteMarginRatio = 0.0;
     m_Masque_Layer = PAD_STANDARD_DEFAULT_LAYERS;   // set layers mask to default for a standard pad
 
-    SetSubRatsnest( 0 );                // used in ratsnest calculations
+    SetSubRatsnest( 0 );                            // used in ratsnest calculations
     ComputeRayon();
 }
 
@@ -63,7 +68,7 @@ void D_PAD::ComputeRayon()
     case PAD_RECT:
     case PAD_TRAPEZOID:
         m_Rayon = (int) ( sqrt( (double) m_Size.y * m_Size.y
-                + (double) m_Size.x * m_Size.x ) / 2 );
+                               + (double) m_Size.x * m_Size.x ) / 2 );
         break;
     }
 }
@@ -161,9 +166,11 @@ void D_PAD::SetPadName( const wxString& name )
         m_Padname[ii] = 0;
 }
 
+
 /**************************************************/
-void D_PAD::SetNetname( const wxString & aNetname )
+void D_PAD::SetNetname( const wxString& aNetname )
 /**************************************************/
+
 /**
  * Function SetNetname
  * @param const wxString : the new netname
@@ -191,16 +198,88 @@ void D_PAD::Copy( D_PAD* source )
     m_Offset     = source->m_Offset;                            // Offset de la forme
     m_Size = source->m_Size;                                    // Dimension ( pour orient 0 )
     m_DeltaSize = source->m_DeltaSize;                          // delta sur formes rectangle -> trapezes
-    m_Pos0 = source->m_Pos0;                                    /* Coord relatives a l'ancre du pad en orientation 0 */
+    m_Pos0     = source->m_Pos0;                                /* Coord relatives a l'ancre du pad en orientation 0 */
     m_Rayon    = source->m_Rayon;                               // rayon du cercle exinscrit du pad
     m_PadShape = source->m_PadShape;                            // forme CERCLE, PAD_RECT PAD_OVAL PAD_TRAPEZOID ou libre
     m_Attribut = source->m_Attribut;                            // NORMAL, PAD_SMD, PAD_CONN, Bit 7 = STACK
     m_Orient   = source->m_Orient;                              // en 1/10 degres
+    m_LocalSolderMaskMargin  = source->m_LocalSolderMaskMargin;
+    m_LocalSolderPasteMargin = source->m_LocalSolderPasteMargin;
+    m_LocalSolderPasteMarginRatio = source->m_LocalSolderPasteMarginRatio;
 
     SetSubRatsnest( 0 );
     SetSubNet( 0 );
     m_Netname = source->m_Netname;
     m_ShortNetname = source->m_ShortNetname;
+}
+
+
+// Mask margins handling:
+
+/** Function GetSolderMaskMargin
+ * @return the margin for the solder mask layer
+ * usually > 0 (mask shape bigger than pad
+ * value is
+ * 1 - the local value
+ * 2 - if null, the parent footprint value
+ * 1 - if null, the global value
+ */
+int D_PAD::GetSolderMaskMargin()
+{
+    int margin = m_LocalSolderMaskMargin;
+    if ( margin == 0 )
+    {
+        if( GetParent() && ((MODULE*)GetParent())->m_LocalSolderMaskMargin )
+            margin = ((MODULE*)GetParent())->m_LocalSolderMaskMargin;
+    }
+    if ( margin == 0 )
+        margin = g_DesignSettings.m_SolderMaskMargin;
+
+    // ensure mask have a size alwyas >= 0
+    if( margin < 0 )
+    {
+        int minsize = - MIN( m_Size.x, m_Size.y) / 2;
+        if (margin < minsize )
+            minsize = minsize;
+    }
+    return margin;
+}
+
+
+/** Function GetSolderPasteMargin
+ * @return the margin for the solder mask layer
+ * usually < 0 (mask shape smaller than pad
+ * value is
+ * 1 - the local value
+ * 2 - if null, the parent footprint value
+ * 1 - if null, the global value
+ */
+wxSize D_PAD::GetSolderPasteMargin()
+{
+    int margin = m_LocalSolderPasteMargin;
+    if( margin == 0  && GetParent() )
+        margin = ((MODULE*)GetParent())->m_LocalSolderPasteMargin;
+    if( margin == 0  && GetParent() )
+        margin = g_DesignSettings.m_SolderPasteMargin;
+
+    double mratio = m_LocalSolderPasteMarginRatio;
+    if( mratio == 0.0 && GetParent() )
+        mratio = ((MODULE*)GetParent())->m_LocalSolderPasteMarginRatio;
+    if( mratio == 0.0 )
+        mratio = g_DesignSettings.m_SolderPasteMarginRatio;
+
+    wxSize pad_margin;
+    pad_margin.x = margin + wxRound(m_Size.x * mratio);
+    pad_margin.y = margin + wxRound(m_Size.y * mratio);
+
+    // ensure mask have a size alwyas >= 0
+    if (pad_margin.x < -m_Size.x/2 )
+        pad_margin.x = -m_Size.x/2;
+
+    if (pad_margin.y < -m_Size.y/2 )
+        pad_margin.y = -m_Size.y/2;
+
+    return pad_margin;
 }
 
 
@@ -231,11 +310,12 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
 
         PtLine = Line + 3;
 
-        /* Pointe 1er code utile de la ligne */
+        /* Decode the first code and read the corresponding data
+        */
         switch( Line[0] )
         {
-        case 'S':           /* Ligne de description de forme et dims*/
-            /* Lecture du nom pad */
+        case 'S': // = Sh
+            /* Read pad name */
             nn = 0;
             while( (*PtLine != '"') && *PtLine )
                 PtLine++;
@@ -260,13 +340,13 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
                 PtLine++;
 
             nn = sscanf( PtLine, " %s %d %d %d %d %d",
-                BufCar, &m_Size.x, &m_Size.y,
-                &m_DeltaSize.x, &m_DeltaSize.y,
-                &m_Orient );
+                         BufCar, &m_Size.x, &m_Size.y,
+                         &m_DeltaSize.x, &m_DeltaSize.y,
+                         &m_Orient );
 
             ll = 0xFF & BufCar[0];
 
-            /* Mise a jour de la forme */
+            /*Read pad shape */
             m_PadShape = PAD_CIRCLE;
 
             switch( ll )
@@ -290,7 +370,7 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
         case 'D':
             BufCar[0] = 0;
             nn = sscanf( PtLine, "%d %d %d %s %d %d", &m_Drill.x,
-                &m_Offset.x, &m_Offset.y, BufCar, &dx, &dy );
+                         &m_Offset.x, &m_Offset.y, BufCar, &dx, &dy );
             m_Drill.y    = m_Drill.x;
             m_DrillShape = PAD_CIRCLE;
 
@@ -306,11 +386,10 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
 
         case 'A':
             nn = sscanf( PtLine, "%s %s %X", BufLine, BufCar,
-                &m_Masque_Layer );
+                         &m_Masque_Layer );
 
-            /* Contenu de BufCar non encore utilise ( reserve pour evolutions
-             *  ulterieures */
-            /* Mise a jour de l'attribut */
+            /* BufCar is not used now */
+            /* update attributes */
             m_Attribut = PAD_STANDARD;
             if( strncmp( BufLine, "SMD", 3 ) == 0 )
                 m_Attribut = PAD_SMD;
@@ -320,19 +399,28 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
                 m_Attribut = PAD_HOLE_NOT_PLATED;
             break;
 
-        case 'N':       /* Lecture du netname */
+        case 'N':       /* Read Netname */
             int netcode;
             nn = sscanf( PtLine, "%d", &netcode );
             SetNet( netcode );
 
-            /* Lecture du netname */
+            /* read Netname */
             ReadDelimitedText( BufLine, PtLine, sizeof(BufLine) );
-            SetNetname(CONV_FROM_UTF8( StrPurge( BufLine ) ));
+            SetNetname( CONV_FROM_UTF8( StrPurge( BufLine ) ) );
             break;
 
         case 'P':
             nn    = sscanf( PtLine, "%d %d", &m_Pos0.x, &m_Pos0.y );
             m_Pos = m_Pos0;
+            break;
+
+        case '.':    /* Read specific data */
+            if( strnicmp(Line, ".SolderMask ", 12 ) == 0 )
+                m_LocalSolderMaskMargin = atoi(Line+12);
+            else if( strnicmp(Line, ".SolderPaste ", 13)  == 0 )
+                m_LocalSolderPasteMargin = atoi(Line+13);
+            else if( strnicmp(Line, ".SolderPasteRatio ", 18 ) == 0 )
+                m_LocalSolderPasteMarginRatio = atoi(Line+18);
             break;
 
         default:
@@ -352,14 +440,9 @@ bool D_PAD::Save( FILE* aFile ) const
     int         cshape;
     const char* texttype;
 
-    if( GetState( DELETED ) )
-        return true;
-
-    bool rc = false;
-
     // check the return values for first and last fprints() in this function
     if( fprintf( aFile, "$PAD\n" ) != sizeof("$PAD\n") - 1 )
-        goto out;
+        return false;
 
     switch( m_PadShape )
     {
@@ -382,8 +465,8 @@ bool D_PAD::Save( FILE* aFile ) const
     }
 
     fprintf( aFile, "Sh \"%.4s\" %c %d %d %d %d %d\n",
-        m_Padname, cshape, m_Size.x, m_Size.y,
-        m_DeltaSize.x, m_DeltaSize.y, m_Orient );
+             m_Padname, cshape, m_Size.x, m_Size.y,
+             m_DeltaSize.x, m_DeltaSize.y, m_Orient );
 
     fprintf( aFile, "Dr %d %d %d", m_Drill.x, m_Offset.x, m_Offset.y );
     if( m_DrillShape == PAD_OVAL )
@@ -418,13 +501,17 @@ bool D_PAD::Save( FILE* aFile ) const
 
     fprintf( aFile, "Po %d %d\n", m_Pos0.x, m_Pos0.y );
 
+    if( m_LocalSolderMaskMargin != 0 )
+        fprintf( aFile, ".SolderMask %d\n",m_LocalSolderMaskMargin );
+    if( m_LocalSolderPasteMargin != 0 )
+        fprintf( aFile, ".SolderPaste %d\n",m_LocalSolderPasteMargin);
+    if( m_LocalSolderPasteMarginRatio != 0)
+        fprintf( aFile, ".SolderPasteRatio %g\n",m_LocalSolderPasteMarginRatio);
+
     if( fprintf( aFile, "$EndPAD\n" ) != sizeof("$EndPAD\n") - 1 )
-        goto out;
+        return false;
 
-    rc = true;
-
-out:
-    return rc;
+    return true;
 }
 
 
@@ -551,7 +638,7 @@ void D_PAD::DisplayInfo( WinEDA_DrawFrame* frame )
     if( attribut > 3 )
         attribut = 3;
     frame->AppendMsgPanel( Msg_Pad_Shape[m_PadShape],
-        Msg_Pad_Attribut[attribut], DARKGREEN );
+                           Msg_Pad_Attribut[attribut], DARKGREEN );
 
     valeur_param( m_Size.x, Line );
     frame->AppendMsgPanel( _( "H Size" ), Line, RED );
@@ -577,7 +664,7 @@ void D_PAD::DisplayInfo( WinEDA_DrawFrame* frame )
     int module_orient = module ? module->m_Orient : 0;
     if( module_orient )
         Line.Printf( wxT( "%3.1f(+%3.1f)" ),
-            (float) ( m_Orient - module_orient ) / 10, (float) module_orient / 10 );
+                     (float) ( m_Orient - module_orient ) / 10, (float) module_orient / 10 );
     else
         Line.Printf( wxT( "%3.1f" ), (float) m_Orient / 10 );
     frame->AppendMsgPanel( _( "Orient" ), Line, BLUE );
@@ -674,7 +761,7 @@ int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
 }
 
 
-#if defined (DEBUG)
+#if defined(DEBUG)
 
 // @todo: could this be useable elsewhere also?
 static const char* ShowPadType( int aPadType )

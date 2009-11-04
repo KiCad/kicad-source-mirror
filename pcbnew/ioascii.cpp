@@ -556,9 +556,20 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
         }
         if( stricmp( Line, "Pad2MaskClearance" ) == 0 )
         {
-            g_DesignSettings.m_MaskMargin = atoi( data );
+            g_DesignSettings.m_SolderMaskMargin = atoi( data );
             continue;
         }
+        if( stricmp( Line, "Pad2PasteClearance" ) == 0 )
+        {
+            g_DesignSettings.m_SolderPasteMargin = atoi( data );
+            continue;
+        }
+        if( stricmp( Line, "Pad2PasteClearanceRatio" ) == 0 )
+        {
+            g_DesignSettings.m_SolderPasteMarginRatio = atof( data );
+            continue;
+        }
+
 #endif
     }
 
@@ -658,7 +669,11 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
     fprintf( aFile, "TextModWidth %d\n", ModuleTextWidth );
     fprintf( aFile, "PadSize %d %d\n", g_Pad_Master.m_Size.x, g_Pad_Master.m_Size.y );
     fprintf( aFile, "PadDrill %d\n", g_Pad_Master.m_Drill.x );
-    fprintf( aFile, "Pad2MaskClearance %d\n", g_DesignSettings.m_MaskMargin );
+    fprintf( aFile, "Pad2MaskClearance %d\n", g_DesignSettings.m_SolderMaskMargin );
+    if( g_DesignSettings.m_SolderPasteMargin != 0)
+        fprintf( aFile, "Pad2PasteClearance %d\n", g_DesignSettings.m_SolderPasteMargin );
+    if( g_DesignSettings.m_SolderPasteMarginRatio != 0 )
+        fprintf( aFile, "Pad2PasteClearanceRatio %g\n", g_DesignSettings.m_SolderPasteMarginRatio );
 
     fprintf( aFile, "AuxiliaryAxisOrg %d %d\n",
              aFrame->m_Auxiliary_Axis_Position.x, aFrame->m_Auxiliary_Axis_Position.y );
