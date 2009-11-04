@@ -1,12 +1,11 @@
-/***************************************/
-/*	GENERAL.H :  declarations communes */
-/***************************************/
+/***************/
+/*  GENERAL.H  */
+/***************/
 
 #ifndef _GENERAL_H_
 #define _GENERAL_H_
 
 
-/* Entete des fichiers schematique */
 #define EESCHEMA_VERSION 2
 
 #define SCHEMATIC_HEAD_STRING "Schematic File Version"
@@ -15,11 +14,10 @@
 
 #define MAX_PIN_INFO 10
 
-#define TXTMARGE 10                 /* Decalage (en 1/1000") des textes places
-                                     * sur fils ( labels, num pins ) */
+#define TXTMARGE 10                 /* Offset in mils for placement of labels
+                                     * and pin numbers. */
 
 #define HIGHLIGHT_COLOR WHITE
-
 
 /* Used for EDA_BaseStruct, .m_Select member */
 #define IS_SELECTED 1
@@ -32,10 +30,9 @@
 
 #define DANGLING_SYMBOL_SIZE 12
 
-/* Message de presentation */
 extern wxString g_DefaultSchematicFileName;
 
-/* Masque de recherche pour localisation d'objets a editer */
+/* Search mask for locating objects in editor. */
 #define LIBITEM                    1
 #define WIREITEM                   2
 #define BUSITEM                    4
@@ -53,12 +50,13 @@ extern wxString g_DefaultSchematicFileName;
 #define EXCLUDE_WIRE_BUS_ENDPOINTS 0x4000
 #define WIRE_BUS_ENDPOINTS_ONLY    0x8000
 
-#define SEARCHALL LIBITEM | WIREITEM | BUSITEM | RACCORDITEM | JUNCTIONITEM \
-    | DRAWITEM | TEXTITEM | LABELITEM | SHEETITEM | MARKERITEM \
-    | NOCONNECTITEM | SEARCH_PINITEM | SHEETLABELITEM
+#define SEARCHALL ( LIBITEM | WIREITEM | BUSITEM | RACCORDITEM |        \
+                    JUNCTIONITEM | DRAWITEM | TEXTITEM | LABELITEM |    \
+                    SHEETITEM | MARKERITEM | NOCONNECTITEM |            \
+                    SEARCH_PINITEM | SHEETLABELITEM )
 
-/* Numero des couches de travail */
-typedef enum {
+typedef enum
+{
     LAYER_WIRE,
     LAYER_BUS,
     LAYER_JUNCTION,
@@ -84,39 +82,44 @@ typedef enum {
     LAYER_ERC_ERR,
     LAYER_DEVICE_BACKGROUND,
 
-    MAX_LAYER                   /* Nombre de couches */
+    MAX_LAYER                   /* Maximum layers */
 } LayerNumber;
 
-typedef enum {
+
+typedef enum
+{
     FILE_SAVE_AS,
     FILE_SAVE_NEW
 } FileSaveType;
 
 
-/* variables generales */
-extern int            g_OptNetListUseNames; /* TRUE pour utiliser les noms de net plutot que
-                                             * les numeros (netlist PSPICE seulement) */
-extern SCH_ITEM*      g_ItemToRepeat; /* pointeur sur la derniere structure
-                                       * dessinee pouvant etre dupliquee par la commande
-                                       * Repeat ( NULL si aucune struct existe ) */
+extern int            g_OptNetListUseNames;  /* TRUE to use names rather than
+                                              * net numbers (PSPICE netlist
+                                              * only) */
+extern SCH_ITEM*      g_ItemToRepeat; /* Pointer to the last structure used
+                                       * by the repeat command.   NULL if no
+                                       * item to repeat */
 extern wxSize         g_RepeatStep;
 extern int            g_RepeatDeltaLabel;
 
 extern SCH_ITEM*      g_ItemToUndoCopy; /* copy of last modified schematic item
-                                         * before it is modified (used for undo managing to restore old values ) */
+                                         * before it is modified (used for undo
+                                         * managing to restore old values ) */
 
-extern bool           g_LastSearchIsMarker; // True if last seach is a marker serach
-// False for a schematic item search
-// Used for hotkey next search
+extern bool           g_LastSearchIsMarker; /* True if last search is a marker
+                                             * search.  False for a schematic
+                                             * item search.  Used for hotkey
+                                             * next search. */
 
 /* Block operation (copy, paste) */
-extern BLOCK_SELECTOR g_BlockSaveDataList; // List of items to paste (Created by Block Save)
+extern BLOCK_SELECTOR g_BlockSaveDataList; /* List of items to paste (Created
+                                            * by Block Save) */
 
-// Gestion d'options
+// Management options.
 extern bool      g_HVLines;
 
-// Gestion de diverses variables, options... devant etre memorisees mais
-// Remises a 0 lors d'un rechargement de projetc
+// Management variables, option ... to be stored.  Reset to 0 during a
+// project reload.
 struct EESchemaVariables
 {
     int NbErrorErc;
@@ -125,40 +128,19 @@ struct EESchemaVariables
 
 extern struct EESchemaVariables g_EESchemaVar;
 
-
-/* Variables globales pour Schematic Edit */
 extern int      g_DefaultTextLabelSize;
 
-
-/********************************************************/
-/* Description des structures des parametres principaux */
-/********************************************************/
-
-/* Gestion des trace sur table tracante */
-
-/* For HPGL plotting: Pen caract : */
 struct HPGL_Pen_Descr_Struct
 {
-    int m_Pen_Num;      /* num de plume a charger */
-    int m_Pen_Speed;    /* vitesse en cm/s */
+    int m_Pen_Num;      /* Pen number */
+    int m_Pen_Speed;    /* Pen speed in cm/s */
     int m_Pen_Diam;     /* Pen diameter in mils */
 };
 extern HPGL_Pen_Descr_Struct g_HPGL_Pen_Descr;
 
 /* First and main (root) screen */
-extern DrawSheetStruct* g_RootSheet;
+extern SCH_SHEET*     g_RootSheet;
 
-
-/*************************************/
-/* Gestion de recherche des elements */
-/*************************************/
-
-/* valeur de flag indicant si le pointeur de reference pour une localisation
- * est le curseur sur grille ou le curseur a deplacement fin hors grille */
-#define CURSEUR_ON_GRILLE  0
-#define CURSEUR_OFF_GRILLE 1
-
-/* Gestion des librairies schematiques */
 extern wxString       g_NetCmpExtBuffer;
 
 extern const wxString SymbolFileExtension;
@@ -167,23 +149,28 @@ extern const wxString SymbolFileWildcard;
 extern const wxString CompLibFileExtension;
 extern const wxString CompLibFileWildcard;
 
-extern wxString       g_SimulatorCommandLine;   // ligne de commande pour l'appel au simulateur (gnucap, spice..)
-extern wxString       g_NetListerCommandLine;   // ligne de commande pour l'appel au simulateur (gnucap, spice..)
+extern wxString       g_SimulatorCommandLine;
+extern wxString       g_NetListerCommandLine;
 
-extern LayerStruct    g_LayerDescr;             /* couleurs des couches  */
+extern LayerStruct    g_LayerDescr;
 
-extern bool           g_EditPinByPinIsOn;   /* true to do not synchronize pins edition
-                                             *  when they are at the same location */
+extern bool           g_EditPinByPinIsOn;   /* True to prevent displacing
+                                             * pins, when they are at the
+                                             * same position. */
 
-extern int            g_DrawDefaultLineThickness; /* Default line (in EESCHEMA units) thickness
-                                                   *  used to draw/plot items having a default thickness line value (i.e. = 0 ).
-                                                   *  0 = single pixel line width
+extern int            g_DrawDefaultLineThickness; /* Default line (in EESCHEMA
+                                                   * units) thickness used to
+                                                   * draw/plot items having a
+                                                   * default thickness line
+                                                   * value (i.e. = 0 ).
+                                                   * 0 = single pixel line width
                                                    */
 
 // Color to draw selected items
 extern int g_ItemSelectetColor;
 
-// Color to draw items flagged invisible, in libedit (they are insisible in eeschema
+// Color to draw items flagged invisible, in libedit (they are invisible in
+// eeschema
 extern int g_InvisibleItemColor;
 
 #endif   // _GENERAL_H_

@@ -51,19 +51,23 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
                              _( "Display next part" ) );
 
         m_HToolBar->AddSeparator();
-        msg = AddHotkeyName( _( "Zoom in" ), s_Viewlib_Hokeys_Descr, HK_ZOOM_IN );
+        msg = AddHotkeyName( _( "Zoom in" ), s_Viewlib_Hokeys_Descr,
+                             HK_ZOOM_IN );
         m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,
                              wxBitmap( zoom_in_xpm ), msg );
 
-        msg = AddHotkeyName( _( "Zoom out" ), s_Viewlib_Hokeys_Descr, HK_ZOOM_OUT );
+        msg = AddHotkeyName( _( "Zoom out" ), s_Viewlib_Hokeys_Descr,
+                             HK_ZOOM_OUT );
         m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
                              wxBitmap( zoom_out_xpm ), msg );
 
-        msg = AddHotkeyName( _( "Redraw view" ), s_Viewlib_Hokeys_Descr, HK_ZOOM_REDRAW );
+        msg = AddHotkeyName( _( "Redraw view" ), s_Viewlib_Hokeys_Descr,
+                             HK_ZOOM_REDRAW );
         m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                              wxBitmap( zoom_redraw_xpm ), msg );
 
-        msg = AddHotkeyName( _( "Zoom auto" ), s_Viewlib_Hokeys_Descr, HK_ZOOM_AUTO );
+        msg = AddHotkeyName( _( "Zoom auto" ), s_Viewlib_Hokeys_Descr,
+                             HK_ZOOM_AUTO );
         m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                              wxBitmap( zoom_auto_xpm ), msg );
 
@@ -91,12 +95,12 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
                              _( "View component documents" ) );
         m_HToolBar->EnableTool( ID_LIBVIEW_VIEWDOC, false );
 
-        if( m_Semaphore )   // The lib browser is called from a "load component" command
+        if( m_Semaphore )
         {
+            // The library browser is called from a "load component" command
             m_HToolBar->AddSeparator();
             m_HToolBar->AddTool( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC,
-                                 wxEmptyString,
-                                 wxBitmap( export_xpm ),
+                                 wxEmptyString, wxBitmap( export_xpm ),
                                  _( "Insert component in schematic" ) );
         }
 

@@ -2,11 +2,6 @@
 /*  EESchema - libedit.cpp  */
 /****************************/
 
-/* Routines de maintenanace des librairies:
- *   sauvegarde, modification de librairies.
- *   creation edition suppression de composants
- */
-
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
@@ -118,11 +113,11 @@ library \"%s\"." ),
 
 
 /*
- * Routine Pour Charger en memoire la copie de 1 libpart.
- *  retourne
- *  0 si OK
- *  1 si err
- *  m_component pointe la copie ainsi creee
+ * Routine to load into memory a copy of 1 library part.
+ * Returns
+ * 0 if OK
+ * 1 if error
+ * m_component advanced copy and created
  */
 bool WinEDA_LibeditFrame::LoadOneLibraryPartAux( CMP_LIB_ENTRY* LibEntry,
                                                  CMP_LIBRARY*   Library )
@@ -208,7 +203,7 @@ void WinEDA_LibeditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     DC->SetBackgroundMode( wxTRANSPARENT );
     GRResetPenAndBrush( DC );
 
-    DrawPanel->CursorOff( DC ); // erase cursor
+    DrawPanel->CursorOff( DC );
     if( DrawPanel->ManageCurseur )
     {
         DrawPanel->ManageCurseur( DrawPanel, DC, false );
@@ -289,8 +284,9 @@ void WinEDA_LibeditFrame::SaveActiveLibrary( wxCommandEvent& event )
 
 
 /*
- *  Affiche la documentation du composant selectionne
- *  Utilisïe lors de l'affichage de la liste des composants en librairie
+ * Display the documentation of the selected component.
+ *
+ * Used when displaying the list of library components.
  */
 void WinEDA_LibeditFrame::DisplayCmpDoc()
 {
@@ -354,16 +350,18 @@ void WinEDA_LibeditFrame::DisplayCmpDoc()
 
 
 /*
- * Routine de suppression d'un composant dans la librairie courante
- *  (effacement en memoire uniquement, le fichier n'est pas modifie)
- *  Le composant peut etre un alias, ou la definition de base.
- *  Si c'est un alias:
- *  il est supprime, et la liste des alias de la definition
- *  de base est modifiee
- *  Si c'est le composant de base:
- *  Si la liste des alias est nulle, il est supprime
- *  Sinon le premier alias devient le composant de base, et les autres
- *  alias deviennent dependants de celui ci.
+ * Delete component in the current library.
+ *
+ * (Delete only in memory, the file does not change)
+ *
+ * The entry can be an alias or a component.
+ * If an alias:
+ *   It is removed, and the list of alias is updated.
+ *
+ * If a component:
+ *   If the list of aliases is zero, it deletes the component
+ *   Otherwise the alias becomes the new component name, and the other
+ *   aliases become dependent on newly named component.
  */
 void WinEDA_LibeditFrame::DeleteOnePart( wxCommandEvent& event )
 {
@@ -515,7 +513,7 @@ lost!\n\nClear the current component from the screen?" ) ) )
     name = dlg.GetName().MakeUpper();
     name.Replace( wxT( " " ), wxT( "_" ) );
 
-    /* Test: y a t-il un composant deja de ce nom */
+    /* Test if there a component with this name already. */
     if( m_library && m_library->FindEntry( name ) )
     {
         wxString msg;
@@ -570,11 +568,11 @@ lost!\n\nClear the current component from the screen?" ) ) )
 
 
 /*
- * Routine de sauvegarde de la "partlib" courante dans la librairie courante
+ * Routine backup of "partlib" current in the current library.
  *
- * Sauvegarde en memoire uniquement, et PAS sur fichier
- * La routine efface l'ancien composant ( ou / et les alias ) a remplacer
- * s'il existe, et sauve le nouveau et cree les alias correspondants.
+ * Save in memory only and NOT on file.
+ * The routine deletes the old component (and / or aliases) to replace
+ * If any, and saves the new and creates the corresponding alias.
  */
 void WinEDA_LibeditFrame::SaveOnePartInMemory()
 {

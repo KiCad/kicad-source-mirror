@@ -100,8 +100,8 @@ NETLIST_OBJECT::NETLIST_OBJECT()
 {
     m_Type = NET_ITEM_UNSPECIFIED;              /* Type of this item (see NetObjetType enum) */
     m_Comp = NULL;                              /* Pointer on the library item that created this net object (the parent)*/
-    m_Link = NULL;       /* For Hierarchical_PIN_Sheet_Struct:
-                          * Pointer to the hierarchy sheet that contains this Hierarchical_PIN_Sheet_Struct
+    m_Link = NULL;       /* For SCH_SHEET_PIN:
+                          * Pointer to the hierarchy sheet that contains this SCH_SHEET_PIN
                           *  For Pins: pointer to the component that contains this pin
                           */
     m_Flag = 0;                                 /* flag used in calculations */

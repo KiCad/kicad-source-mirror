@@ -1,5 +1,5 @@
 /*********************************************/
-/*	eesave.cpp  Module to Save EESchema files */
+/*  eesave.cpp  Module to Save EESchema files */
 /*********************************************/
 
 #include "fctsys.h"
@@ -18,15 +18,13 @@
 #include <boost/foreach.hpp>
 
 
-/* Fonctions Locales */
 static void SaveLayers( FILE* f );
 
-/* Variables locales */
 
 /*****************************************************************************
-* Routine to save an EESchema file.											 *
-* FileSave controls how the file is to be saved - under what name.			 *
-* Returns TRUE if the file has been saved.									 *
+* Routine to save an EESchema file.                                          *
+* FileSave controls how the file is to be saved - under what name.           *
+* Returns TRUE if the file has been saved.                                   *
 *****************************************************************************/
 bool WinEDA_SchematicFrame::SaveEEFile( SCH_SCREEN* screen, int FileSave )
 {
@@ -106,16 +104,13 @@ bool WinEDA_SchematicFrame::SaveEEFile( SCH_SCREEN* screen, int FileSave )
 }
 
 
-/*****************************************/
-bool SCH_SCREEN::Save( FILE* aFile ) const
-/*****************************************/
-
 /**
  * Function Save
- * writes the data structures for this object out to a FILE in "*.brd" format.
+ * writes the data structures for this object out to a FILE in "*.sch" format.
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
+bool SCH_SCREEN::Save( FILE* aFile ) const
 {
     wxString       Name, msg;
     Ki_PageDescr*  PlotSheet;
@@ -145,9 +140,10 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
     fprintf( aFile, "$Descr %s %d %d\n", CONV_TO_UTF8( PlotSheet->m_Name ),
              PlotSheet->m_Size.x, PlotSheet->m_Size.y );
 
-    /* Write ScreenNumber and NumberOfScreen; not very meaningfull for SheetNumber and Sheet Count
-      * in a complex hierarchy, but usefull in simple hierarchy and flat hierarchy
-      * Used also to serach the root sheet ( ScreenNumber = 1 ) withing the files
+    /* Write ScreenNumber and NumberOfScreen; not very meaningfull for
+     * SheetNumber and Sheet Countin a complex hierarchy, but usefull in
+     * simple hierarchy and flat hierarchy.  Used also to serach the root
+     * sheet ( ScreenNumber = 1 ) within the files
      */
     fprintf( aFile, "Sheet %d %d\n", m_ScreenNumber, m_NumberOfScreen );
     fprintf( aFile, "Title \"%s\"\n", CONV_TO_UTF8( m_Title ) );
@@ -177,14 +173,12 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
 }
 
 
-/****************************/
-static void SaveLayers( FILE* f )
-/****************************/
-
 /* Save a Layer Structure to a file
  * theses infos are not used in eeschema
  */
+static void SaveLayers( FILE* f )
 {
-    fprintf( f, "EELAYER %2d %2d\n", g_LayerDescr.NumberOfLayers, g_LayerDescr.CurrentLayer );
+    fprintf( f, "EELAYER %2d %2d\n", g_LayerDescr.NumberOfLayers,
+             g_LayerDescr.CurrentLayer );
     fprintf( f, "EELAYER END\n" );
 }

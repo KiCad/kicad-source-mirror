@@ -1,6 +1,6 @@
-/*************************************************************************/
-/* viewlib_frame.cpp - fonctions des classes du type WinEDA_ViewlibFrame */
-/*************************************************************************/
+/***********************/
+/*  viewlib_frame.cpp  */
+/***********************/
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -102,11 +102,12 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
         SetWindowStyle( GetWindowStyle() | wxSTAY_ON_TOP );
 
     SetBaseScreen( new SCH_SCREEN() );
-    GetScreen()->m_Center = true;       // set to true to have the coordinates origine -0,0) centered on screen
+    GetScreen()->m_Center = true;      // Center coordinate origins on screen.
     LoadSettings();
-    // Initilialize grid id to a default value if not found in config or bad:
-    if( (m_LastGridSizeId <= 0) ||
-        (m_LastGridSizeId < (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
+
+    // Initialize grid id to a default value if not found in config or bad:
+    if( ( m_LastGridSizeId <= 0 ) ||
+        ( m_LastGridSizeId < ( ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000 ) ) )
         m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
@@ -121,6 +122,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
     m_LibListSize.y = size.y;
 
     wxPoint win_pos( 0, 0 );
+
 #if !KICAD_AUIMANAGER
     if( Library == NULL )
     {
@@ -190,6 +192,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
                                0, NULL, wxLB_HSCROLL );
 
 #endif
+
     if( m_LibList )
         ReCreateListLib();
     DisplayLibInfos();
@@ -199,35 +202,35 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
     Show( TRUE );
 
 #if KICAD_AUIMANAGER
-    m_auimgr.SetManagedWindow(this);
+    m_auimgr.SetManagedWindow( this );
 
     wxAuiPaneInfo horiz;
-    horiz.Gripper(false);
-    horiz.DockFixed(true);
-    horiz.Movable(false);
-    horiz.Floatable(false);
-    horiz.CloseButton(false);
-    horiz.CaptionVisible(false);
+    horiz.Gripper( false );
+    horiz.DockFixed( true );
+    horiz.Movable( false );
+    horiz.Floatable( false );
+    horiz.CloseButton( false );
+    horiz.CaptionVisible( false );
 
-    wxAuiPaneInfo vert(horiz);
+    wxAuiPaneInfo vert( horiz );
 
-    vert.TopDockable(false).BottomDockable(false);
-    horiz.LeftDockable(false).RightDockable(false);
+    vert.TopDockable( false ).BottomDockable( false );
+    horiz.LeftDockable( false ).RightDockable( false );
 
-    m_auimgr.AddPane(m_HToolBar,
-        wxAuiPaneInfo(horiz).Name(wxT("m_HToolBar")).Top().Row(0));
+    m_auimgr.AddPane( m_HToolBar,
+                      wxAuiPaneInfo( horiz ).Name( wxT ("m_HToolBar" ) ).Top().Row( 0 ) );
 
-    m_auimgr.AddPane(m_LibList,
-        wxAuiPaneInfo(vert).Name(wxT("m_LibList")).Left().Row(0));
+    m_auimgr.AddPane( m_LibList,
+                      wxAuiPaneInfo( vert ).Name( wxT( "m_LibList" ) ).Left().Row( 0 ) );
 
-    m_auimgr.AddPane(m_CmpList,
-        wxAuiPaneInfo(vert).Name(wxT("m_CmpList")).Left().Row(1));
+    m_auimgr.AddPane( m_CmpList,
+                      wxAuiPaneInfo( vert ).Name( wxT( "m_CmpList" ) ).Left().Row( 1 ) );
 
-    m_auimgr.AddPane(DrawPanel,
-        wxAuiPaneInfo(vert).Name(wxT("DrawFrame")).Center());
+    m_auimgr.AddPane( DrawPanel,
+                      wxAuiPaneInfo( vert ).Name( wxT( "DrawFrame" ) ).Center() );
 
-    m_auimgr.AddPane(MsgPanel,
-        wxAuiPaneInfo(horiz).Name(wxT("MsgPanel")).Bottom());
+    m_auimgr.AddPane( MsgPanel,
+                      wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
 
     m_auimgr.Update();
 #endif
@@ -339,10 +342,12 @@ void WinEDA_ViewlibFrame::OnSize( wxSizeEvent& SizeEv )
         m_CmpList->SetSize( m_CmpListWindow->GetClientSize() -
                             wxSize( EXTRA_BORDER_SIZE * 2, 0 ) );
     }
+
 #if KICAD_AUIMANAGER
-	if(m_auimgr.GetManagedWindow())
-         m_auimgr.Update();
+    if( m_auimgr.GetManagedWindow() )
+        m_auimgr.Update();
 #endif
+
     SizeEv.Skip();
 }
 
@@ -567,7 +572,7 @@ void WinEDA_ViewlibFrame::LoadSettings( )
     cfg->Read( LIBLIST_WIDTH_KEY, &m_LibListSize.x );
     cfg->Read( CMPLIST_WIDTH_KEY, &m_CmpListSize.x );
 
-    // set parameters to a resonnable value
+    // Set parameters to a reasonable value.
     if ( m_LibListSize.x > m_FrameSize.x/2 )
         m_LibListSize.x = m_FrameSize.x/2;
 

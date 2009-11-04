@@ -49,7 +49,7 @@ int g_DefaultTextLabelSize = DEFAULT_SIZE_TEXT;
 
 HPGL_Pen_Descr_Struct g_HPGL_Pen_Descr;
 
-DrawSheetStruct*      g_RootSheet = NULL;
+SCH_SHEET*     g_RootSheet = NULL;
 
 wxString       g_NetCmpExtBuffer( wxT( "cmp" ) );
 

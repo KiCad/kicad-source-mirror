@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        3d_class.cpp
 /////////////////////////////////////////////////////////////////////////////
 
@@ -14,37 +13,31 @@
 #include "3d_viewer.h"
 
 
-/****************************/
 S3D_Vertex::S3D_Vertex()
-/****************************/
 {
     x = y = z = 0.0;
 }
 
 
-/**************************************************************************/
 S3D_MATERIAL::S3D_MATERIAL( S3D_MASTER* father, const wxString& name ) :
     EDA_BaseStruct( father, NOT_USED )
-/**************************************************************************/
 {
     m_DiffuseColor.x   = m_DiffuseColor.y = m_DiffuseColor.z = 1.0;
     m_SpecularColor.x  = m_SpecularColor.y = m_SpecularColor.z = 1.0;
     m_AmbientIntensity = 1.0;
-    m_Transparency = 0.0;
-    m_Shininess    = 1.0;
+    m_Transparency     = 0.0;
+    m_Shininess = 1.0;
     m_Name = name;
 }
 
 
-/***********************************/
 void S3D_MATERIAL::SetMaterial()
-/***********************************/
 {
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
     glColor4f( m_DiffuseColor.x * m_AmbientIntensity,
-        m_DiffuseColor.y * m_AmbientIntensity,
-        m_DiffuseColor.z * m_AmbientIntensity,
-        1.0 - m_Transparency );
+               m_DiffuseColor.y * m_AmbientIntensity,
+               m_DiffuseColor.z * m_AmbientIntensity,
+               1.0 - m_Transparency );
 #if 0
     glColorMaterial( GL_FRONT_AND_BACK, GL_SPECULAR );
     glColor3f( m_SpecularColor.x, m_SpecularColor.y, m_SpecularColor.z );
@@ -53,9 +46,7 @@ void S3D_MATERIAL::SetMaterial()
 }
 
 
-/****************************************************/
 void S3D_MASTER::Copy( S3D_MASTER* pattern )
-/****************************************************/
 {
     m_Shape3DName = pattern->m_Shape3DName;
     m_MatScale    = pattern->m_MatScale;
@@ -66,10 +57,8 @@ void S3D_MASTER::Copy( S3D_MASTER* pattern )
 }
 
 
-/***************************************************************/
 S3D_MASTER::S3D_MASTER( EDA_BaseStruct* aParent ) :
     EDA_BaseStruct( aParent, NOT_USED )
-/***************************************************************/
 {
     m_MatScale.x  = m_MatScale.y = m_MatScale.z = 1.0;
     m_3D_Drawings = NULL;
@@ -77,9 +66,7 @@ S3D_MASTER::S3D_MASTER( EDA_BaseStruct* aParent ) :
 }
 
 
-/***************************************/
 S3D_MASTER:: ~S3D_MASTER()
-/***************************************/
 {
     Struct3D_Shape* next;
     S3D_MATERIAL*   nextmat;
@@ -90,7 +77,7 @@ S3D_MASTER:: ~S3D_MASTER()
         delete m_3D_Drawings;
     }
 
-    for( ; m_Materials != NULL;  m_Materials = nextmat )
+    for( ; m_Materials != NULL; m_Materials = nextmat )
     {
         nextmat = m_Materials->Next();
         delete m_Materials;
@@ -98,20 +85,16 @@ S3D_MASTER:: ~S3D_MASTER()
 }
 
 
-/***************************************************************/
 Struct3D_Shape::Struct3D_Shape( EDA_BaseStruct* aParent ) :
     EDA_BaseStruct( aParent, NOT_USED )
-/***************************************************************/
 {
-    m_3D_Coord      = NULL;
+    m_3D_Coord = NULL;
     m_3D_CoordIndex = NULL;
     m_3D_Points     = 0;
 }
 
 
-/***************************************/
 Struct3D_Shape:: ~Struct3D_Shape()
-/***************************************/
 {
     delete m_3D_Coord;
     delete m_3D_CoordIndex;

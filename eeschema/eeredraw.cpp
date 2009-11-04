@@ -273,7 +273,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
 
     case DRAW_SHEET_STRUCT_TYPE:
     {
-        DrawSheetStruct* Struct = (DrawSheetStruct*) aItem;
+        SCH_SHEET* Struct = (SCH_SHEET*) aItem;
         GRRect( &aPanel->m_ClipBox,
                 aDC,
                 Struct->m_Pos.x + aOffset.x,

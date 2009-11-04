@@ -1,11 +1,9 @@
 /*************************************************/
-/* Functions to Load  from file and save to file */
-/* the graphic shapes  used to draw a component  */
+/* Functions to Load from file and save to file  */
+/* the graphic shapes used to draw a component   */
 /* When using the import/export symbol options   */
 /* files are the *.sym files                     */
 /*************************************************/
-
-/* fichier symbedit.cpp */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -25,7 +23,7 @@
 
 
 /*
- * Read a component shape file (a symbol file *.sym )and add data (graphic
+ * Read a component shape file (symbol file *.sym ) and add data (graphic
  * items) to the current component.
  *
  * A symbol file *.sym has the same format as a library, and contains only
@@ -144,7 +142,6 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
     if( m_component->GetDrawItemList().empty() )
         return;
 
-    /* Creation du fichier symbole */
     wxString default_path = wxGetApp().ReturnLastVisitedLibraryPath();
 
     wxFileDialog dlg( this, _( "Export Symbol Drawings" ), default_path,
@@ -176,17 +173,15 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
     msg.Printf( _( "Save Symbol in [%s]" ), GetChars( fn.GetPath() ) );
     Affiche_Message( msg );
 
-    /* Creation de l'entete de la librairie */
     char Line[256];
     fprintf( ExportFile, "%s %d.%d  %s  Date: %s\n", LIBFILE_IDENT,
              LIB_VERSION_MAJOR, LIB_VERSION_MINOR,
              "SYMBOL", DateAndTime( Line ) );
 
-    /* Creation du commentaire donnant le nom du composant */
+    /* Component name. */
     fprintf( ExportFile, "# SYMBOL %s\n#\n",
              CONV_TO_UTF8( m_component->GetName() ) );
 
-    /* Generation des lignes utiles */
     fprintf( ExportFile, "DEF %s",
              CONV_TO_UTF8( m_component->GetName() ) );
     if( !m_component->GetReferenceField().m_Text.IsEmpty() )
@@ -202,7 +197,6 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
              m_component->m_DrawPinName ? 'Y' : 'N',
              1, 0 /* unused */, 'N' );
 
-    /* Position / orientation / visibilite des champs */
     m_component->GetReferenceField().Save( ExportFile );
     m_component->GetValueField().Save( ExportFile );
 
@@ -229,13 +223,11 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
 }
 
 
-/***************************************************************************/
-/* Routine de placement du point d'ancrage ( reference des coordonnes pour */
-/* le trace) du composant courant                                          */
-/*  Toutes les coord apparaissant dans les structures sont modifiees       */
-/*  pour repositionner le point repere par le curseur souris au point      */
-/*  d'ancrage ( coord 0,0 ).                                               */
-/***************************************************************************/
+/*
+ * Place anchor reference coordinators for current component
+ *
+ * All coordinates of the object are offset to the cursor position * /
+ */
 void WinEDA_LibeditFrame::PlaceAncre()
 {
     if( m_component == NULL )

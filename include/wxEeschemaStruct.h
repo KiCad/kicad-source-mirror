@@ -1,6 +1,5 @@
 /***********************************************************/
 /*              wxEeschemaStruct.h:                        */
-/* descriptions des principales classes derivees utilisees */
 /***********************************************************/
 
 #ifndef  WX_EESCHEMA_STRUCT_H
@@ -27,9 +26,9 @@ class DrawBusEntryStruct;
 class SCH_GLOBALLABEL;
 class SCH_TEXT;
 class EDA_DrawLineStruct;
-class DrawSheetStruct;
+class SCH_SHEET;
 class DrawSheetPath;
-class Hierarchical_PIN_Sheet_Struct;
+class SCH_SHEET_PIN;
 class SCH_COMPONENT;
 class SCH_CMP_FIELD;
 class LIB_PIN;
@@ -38,19 +37,19 @@ class DrawJunctionStruct;
 /* enum used in RotationMiroir() */
 enum fl_rot_cmp
 {
-    CMP_NORMAL,                   // orientation normale (O, pas de miroir)
-    CMP_ROTATE_CLOCKWISE,         // nouvelle rotation de -90
-    CMP_ROTATE_COUNTERCLOCKWISE,  // nouvelle rotation de +90
-    CMP_ORIENT_0,                 // orientation 0, pas de miroir, id CMP_NORMAL
-    CMP_ORIENT_90,                // orientation 90, pas de miroir
-    CMP_ORIENT_180,               // orientation 180, pas de miroir
-    CMP_ORIENT_270,               // orientation -90, pas de miroir
-    CMP_MIROIR_X = 0x100,         // miroir selon axe X
-    CMP_MIROIR_Y = 0x200          // miroir selon axe Y
+    CMP_NORMAL,                   // Normal orientation, no rotation or mirror
+    CMP_ROTATE_CLOCKWISE,         // Rotate -90
+    CMP_ROTATE_COUNTERCLOCKWISE,  // Rotate +90
+    CMP_ORIENT_0,                 // No rotation and no mirror id CMP_NORMAL
+    CMP_ORIENT_90,                // Rotate 90, no mirror
+    CMP_ORIENT_180,               // Rotate 180, no mirror
+    CMP_ORIENT_270,               // Rotate -90, no mirror
+    CMP_MIROIR_X = 0x100,         // Mirror around X axis
+    CMP_MIROIR_Y = 0x200          // Mirror around Y axis
 };
 
 /**
- * Schemitic editor (EESchema) main window.
+ * Schematic editor (EESchema) main window.
  */
 class WinEDA_SchematicFrame : public WinEDA_DrawFrame
 {
@@ -131,7 +130,7 @@ public:
     void             OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
     bool             OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
     void             OnSelectOptionToolbar( wxCommandEvent& event );
-    int              BestZoom();        // Retourne le meilleur zoom
+    int              BestZoom();
 
     SCH_ITEM*        SchematicGeneralLocateAndDisplay( bool IncludePin = TRUE );
     SCH_ITEM*        SchematicGeneralLocateAndDisplay( const wxPoint& refpoint,
@@ -141,8 +140,8 @@ public:
      * Function FillFootprintFieldForAllInstancesofComponent
      * searches for component "aReference", and places a Footprint in
      * Footprint field
-     * @param aReference = reference of the component to initialise
-     * @param aFootPrint = new value for the filed Fottprint component
+     * @param aReference = reference of the component to initialize
+     * @param aFootPrint = new value for the filed Footprint component
      * @param aSetVisible = true to have the field visible, false to set the
      *                      invisible flag
      * @return true if the given component is found
@@ -181,14 +180,14 @@ public:
 
     // Functions used for hierarchy handling
     void             InstallPreviousSheet();
-    void             InstallNextScreen( DrawSheetStruct* Sheet );
+    void             InstallNextScreen( SCH_SHEET* Sheet );
 
     /** Function GetUniqueFilenameForCurrentSheet
      * @return a filename that can be used in plot and print functions
-     * for the current screen anad sheet path.
-     * This filename is unique and must be used insteed of the sreen filename
-     * (or scheen filename) when one must creates file for each sheet in the
-     * heierarchy.  because in complex hierarchies a sheet and a SCH_SCREEN is
+     * for the current screen and sheet path.
+     * This filename is unique and must be used instead of the screen filename
+     * (or screen filename) when one must creates file for each sheet in the
+     * hierarchy.  because in complex hierarchies a sheet and a SCH_SCREEN is
      * used more than once
      * Name is <root sheet filename>-<sheet path>
      * and has no extension.
@@ -316,8 +315,8 @@ private:
 
     // Hierarchical Sheet & PinSheet
     void             InstallHierarchyFrame( wxDC* DC, wxPoint& pos );
-    DrawSheetStruct* CreateSheet( wxDC* DC );
-    void             ReSizeSheet( DrawSheetStruct* Sheet, wxDC* DC );
+    SCH_SHEET*       CreateSheet( wxDC* DC );
+    void             ReSizeSheet( SCH_SHEET* Sheet, wxDC* DC );
 
     /**
      * Use the component viewer to select component to import into schematic.
@@ -325,7 +324,7 @@ private:
     wxString         SelectFromLibBrowser( void );
 
 public:
-    bool             EditSheet( DrawSheetStruct* Sheet, wxDC* DC );
+    bool             EditSheet( SCH_SHEET* Sheet, wxDC* DC );
 
     /** Function UpdateSheetNumberAndDate
      * Set a sheet number, the sheet count for sheets in the whole schematic
@@ -334,20 +333,18 @@ public:
     void             UpdateSheetNumberAndDate();
 
 private:
-    void             StartMoveSheet( DrawSheetStruct* sheet, wxDC* DC );
-    Hierarchical_PIN_Sheet_Struct* Create_PinSheet( DrawSheetStruct* Sheet, wxDC* DC );
-    void             Edit_PinSheet( Hierarchical_PIN_Sheet_Struct* SheetLabel,
-                                    wxDC*                          DC );
-    void             StartMove_PinSheet( Hierarchical_PIN_Sheet_Struct* SheetLabel,
-                                         wxDC*                          DC );
-    void             Place_PinSheet( Hierarchical_PIN_Sheet_Struct* SheetLabel,
-                                     wxDC*                          DC );
-    Hierarchical_PIN_Sheet_Struct* Import_PinSheet( DrawSheetStruct* Sheet,
-                                                    wxDC* DC );
+    void             StartMoveSheet( SCH_SHEET* sheet, wxDC* DC );
+    SCH_SHEET_PIN*   Create_PinSheet( SCH_SHEET* Sheet, wxDC* DC );
+    void             Edit_PinSheet( SCH_SHEET_PIN* SheetLabel, wxDC* DC );
+    void             StartMove_PinSheet( SCH_SHEET_PIN* SheetLabel,
+                                         wxDC*          DC );
+    void             Place_PinSheet( SCH_SHEET_PIN* SheetLabel,
+                                     wxDC*          DC );
+    SCH_SHEET_PIN*   Import_PinSheet( SCH_SHEET* Sheet, wxDC* DC );
 
 public:
     void             DeleteSheetLabel( bool aRedraw,
-                                       Hierarchical_PIN_Sheet_Struct* aSheetLabelToDel );
+                                       SCH_SHEET_PIN* aSheetLabelToDel );
 
 private:
 
@@ -376,7 +373,6 @@ private:
     void             EditCmpFieldText( SCH_CMP_FIELD* Field, wxDC* DC );
     void             RotateCmpField( SCH_CMP_FIELD* Field, wxDC* DC );
 
-    /* Operations sur bloc */
     void             PasteListOfItems( wxDC* DC );
 
     /* Undo - redo */
@@ -410,7 +406,7 @@ private:
     /** Function PutDataInPreviousState()
      * Used in undo or redo command.
      * Put data pointed by List in the previous state, i.e. the state
-     * memorised by List
+     * memorized by List
      * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to
      *                undo/redo
      * @param aRedoCommand = a bool: true for redo, false for undo
@@ -437,17 +433,15 @@ private:
 public:
     void           Key( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
 
-    /* Gestion generale des operations sur block */
+    /* Block operations. */
     int            ReturnBlockCommand( int key );
     void           InitBlockPasteInfos();
     void           HandleBlockPlace( wxDC* DC );
     int            HandleBlockEnd( wxDC* DC );
     void           HandleBlockEndByPopUp( int Command, wxDC* DC );
 
-    // Repetition automatique de placements
     void           RepeatDrawItem( wxDC* DC );
 
-    // Test des points de connexion en l'air (dangling ends)
     void           TestDanglingEnds( SCH_ITEM* DrawList, wxDC* DC );
     LIB_PIN*       LocatePinEnd( SCH_ITEM* DrawList, const wxPoint& pos );
 

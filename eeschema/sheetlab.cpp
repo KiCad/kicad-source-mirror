@@ -1,6 +1,6 @@
-/**************************************************************************/
-/*	sheetlab.cpp  create and edit the Hierarchical_PIN_Sheet_Struct items */
-/**************************************************************************/
+/**********************************************************/
+/*	sheetlab.cpp  create and edit the SCH_SHEET_PIN items */
+/**********************************************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -13,12 +13,11 @@
 #include "protos.h"
 
 
-/* Routines Locales */
 static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC );
 static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
-/* Variables locales */
-static int CurrentTypeLabel = NET_INPUT;
+
+static int    CurrentTypeLabel = NET_INPUT;
 static wxSize NetSheetTextSize( DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT );
 
 /****************************************/
@@ -26,30 +25,25 @@ static wxSize NetSheetTextSize( DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT );
 /****************************************/
 
 
-
-/*****************************************************/
 class WinEDA_PinSheetPropertiesFrame : public wxDialog
-/*****************************************************/
 {
 private:
 
     WinEDA_SchematicFrame*  m_Parent;
-    Hierarchical_PIN_Sheet_Struct*   m_CurrentPinSheet;
+    SCH_SHEET_PIN*          m_CurrentPinSheet;
     wxRadioBox*             m_PinSheetType;
     wxRadioBox*             m_PinSheetShape;
     WinEDA_GraphicTextCtrl* m_TextWin;
 
-public:
-
-    // Constructor and destructor
-    WinEDA_PinSheetPropertiesFrame( WinEDA_SchematicFrame* parent,
-                                   Hierarchical_PIN_Sheet_Struct* curr_pinsheet,
-                                   const wxPoint& framepos = wxPoint( -1, -1 ) );
+public: WinEDA_PinSheetPropertiesFrame( WinEDA_SchematicFrame* parent,
+                                       SCH_SHEET_PIN* curr_pinsheet,
+                                       const wxPoint& framepos =
+                                           wxPoint( -1, -1 ) );
     ~WinEDA_PinSheetPropertiesFrame() { };
 
 private:
-    void    OnOkClick( wxCommandEvent& event );
-    void    OnCancelClick( wxCommandEvent& event );
+    void OnOkClick( wxCommandEvent& event );
+    void OnCancelClick( wxCommandEvent& event );
 
     DECLARE_EVENT_TABLE()
 };
@@ -60,14 +54,12 @@ BEGIN_EVENT_TABLE( WinEDA_PinSheetPropertiesFrame, wxDialog )
 END_EVENT_TABLE()
 
 
-/**********************************************************************************/
-WinEDA_PinSheetPropertiesFrame::WinEDA_PinSheetPropertiesFrame(
-    WinEDA_SchematicFrame* parent,
-    Hierarchical_PIN_Sheet_Struct*  curr_pinsheet,
-    const wxPoint&         framepos ) :
-    wxDialog( parent, -1, _( "PinSheet Properties:" ), framepos,
-              wxSize( 340, 220 ), DIALOG_STYLE )
-/**********************************************************************************/
+ WinEDA_PinSheetPropertiesFrame::WinEDA_PinSheetPropertiesFrame(
+     WinEDA_SchematicFrame* parent,
+     SCH_SHEET_PIN*         curr_pinsheet,
+     const wxPoint&         framepos ) :
+wxDialog( parent, -1, _( "PinSheet Properties:" ), framepos,
+          wxSize( 340, 220 ), DIALOG_STYLE )
 {
     wxPoint   pos;
     wxString  number;
@@ -101,7 +93,8 @@ WinEDA_PinSheetPropertiesFrame::WinEDA_PinSheetPropertiesFrame(
     #define NBSHAPES 5
     wxString shape_list[NBSHAPES] =
     {
-       _( "Input" ), _( "Output" ), _( "Bidi" ), _( "TriState" ), _( "Passive" )
+        _( "Input" ), _( "Output" ), _( "Bidi" ), _( "TriState" ),
+        _( "Passive" )
     };
     m_PinSheetShape = new wxRadioBox( this, -1, _( "PinSheet Shape:" ),
                                       wxDefaultPosition, wxSize( -1, -1 ),
@@ -114,38 +107,34 @@ WinEDA_PinSheetPropertiesFrame::WinEDA_PinSheetPropertiesFrame(
 }
 
 
-/************************************************************************/
-void WinEDA_PinSheetPropertiesFrame::OnCancelClick( wxCommandEvent& WXUNUSED (event) )
-/************************************************************************/
+void WinEDA_PinSheetPropertiesFrame::OnCancelClick( wxCommandEvent& WXUNUSED(
+                                                       event ) )
 {
     EndModal( -1 );
 }
 
 
-/***********************************************************************************/
 void WinEDA_PinSheetPropertiesFrame::OnOkClick( wxCommandEvent& event )
-/***********************************************************************************/
 {
     m_CurrentPinSheet->m_Text   = m_TextWin->GetText();
-    m_CurrentPinSheet->m_Size.x = m_CurrentPinSheet->m_Size.y = m_TextWin->GetTextSize();
+    m_CurrentPinSheet->m_Size.x = m_CurrentPinSheet->m_Size.y =
+        m_TextWin->GetTextSize();
 
     m_CurrentPinSheet->m_Shape = m_PinSheetShape->GetSelection();
     EndModal( 0 );
 }
 
 
-/*****************************************************************/
 static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
-/*****************************************************************/
 {
-    Hierarchical_PIN_Sheet_Struct* SheetLabel = (Hierarchical_PIN_Sheet_Struct*)
-                                       Panel->GetScreen()->GetCurItem();
+    SCH_SHEET_PIN* SheetLabel =
+        (SCH_SHEET_PIN*) Panel->GetScreen()->GetCurItem();
 
     if( SheetLabel == NULL )
         return;
 
     if( SheetLabel->m_Flags & IS_NEW )
-    {     /* Nouveau Placement en cours, on l'efface */
+    {
         RedrawOneStruct( Panel, DC, SheetLabel, g_XorMode );
         SAFE_DELETE( SheetLabel );
     }
@@ -161,21 +150,17 @@ static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
 }
 
 
-/* Cette routine place un nouveau NetSheet ou place un ancien en cours
- *  de deplacement
- *  Si le NetSheet est nouveau, il est pointe par NewSheetLabel
- */
-void Hierarchical_PIN_Sheet_Struct::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
+void SCH_SHEET_PIN::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 {
-    DrawSheetStruct* Sheet = (DrawSheetStruct*) GetParent();
+    SCH_SHEET* Sheet = (SCH_SHEET*) GetParent();
 
-    if( m_Flags & IS_NEW )  /* ajout a la liste des structures */
+    if( m_Flags & IS_NEW )
     {
         if( Sheet->m_Label == NULL )
             Sheet->m_Label = this;
         else
         {
-            Hierarchical_PIN_Sheet_Struct* pinsheet = Sheet->m_Label;
+            SCH_SHEET_PIN* pinsheet = Sheet->m_Label;
             while( pinsheet )
             {
                 if( pinsheet->Next() == NULL )
@@ -191,7 +176,9 @@ void Hierarchical_PIN_Sheet_Struct::Place( WinEDA_SchematicFrame* frame, wxDC* D
     m_Flags = 0;
     m_Pos.x = Sheet->m_Pos.x;
     m_Edge  = 0;
-    if( frame->GetScreen()->m_Curseur.x > ( Sheet->m_Pos.x + (Sheet->m_Size.x / 2) ) )
+
+    if( frame->GetScreen()->m_Curseur.x
+       > ( Sheet->m_Pos.x + (Sheet->m_Size.x / 2) ) )
     {
         m_Edge  = 1;
         m_Pos.x = Sheet->m_Pos.x + Sheet->m_Size.x;
@@ -210,11 +197,8 @@ void Hierarchical_PIN_Sheet_Struct::Place( WinEDA_SchematicFrame* frame, wxDC* D
 }
 
 
-/*******************************************************************************/
-void WinEDA_SchematicFrame::StartMove_PinSheet( Hierarchical_PIN_Sheet_Struct* SheetLabel,
-                                                wxDC*                 DC )
-/*******************************************************************************/
-/* Initialise un deplacement de NetSheet */
+void WinEDA_SchematicFrame::StartMove_PinSheet( SCH_SHEET_PIN* SheetLabel,
+                                                wxDC*          DC )
 {
     NetSheetTextSize     = SheetLabel->m_Size;
     CurrentTypeLabel     = SheetLabel->m_Shape;
@@ -226,19 +210,15 @@ void WinEDA_SchematicFrame::StartMove_PinSheet( Hierarchical_PIN_Sheet_Struct* S
 }
 
 
-/**********************************************************************/
-/* Routine de deplacement du  NetSheet actif selon la position souris */
-/**********************************************************************/
-
 static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
-    Hierarchical_PIN_Sheet_Struct* SheetLabel = (Hierarchical_PIN_Sheet_Struct*)
-                                       panel->GetScreen()->GetCurItem();
+    SCH_SHEET_PIN* SheetLabel =
+        (SCH_SHEET_PIN*) panel->GetScreen()->GetCurItem();
 
     if( SheetLabel == NULL )
         return;
 
-    DrawSheetStruct* Sheet = (DrawSheetStruct*) SheetLabel->GetParent();
+    SCH_SHEET* Sheet = (SCH_SHEET*) SheetLabel->GetParent();
 
     if( Sheet == NULL )
         return;
@@ -247,7 +227,9 @@ static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
     SheetLabel->m_Edge  = 0;
     SheetLabel->m_Pos.x = Sheet->m_Pos.x;
-    if( panel->GetScreen()->m_Curseur.x > ( Sheet->m_Pos.x + (Sheet->m_Size.x / 2) ) )
+
+    if( panel->GetScreen()->m_Curseur.x
+       > ( Sheet->m_Pos.x + (Sheet->m_Size.x / 2) ) )
     {
         SheetLabel->m_Edge  = 1;
         SheetLabel->m_Pos.x = Sheet->m_Pos.x + Sheet->m_Size.x;
@@ -263,11 +245,8 @@ static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 }
 
 
-/***************************************************************************/
-void WinEDA_SchematicFrame::Edit_PinSheet( Hierarchical_PIN_Sheet_Struct* SheetLabel,
-                                           wxDC*                 DC )
-/***************************************************************************/
-/* Modification du texte d'un net sheet */
+void WinEDA_SchematicFrame::Edit_PinSheet( SCH_SHEET_PIN* SheetLabel,
+                                           wxDC*          DC )
 {
     if( SheetLabel == NULL )
         return;
@@ -283,17 +262,13 @@ void WinEDA_SchematicFrame::Edit_PinSheet( Hierarchical_PIN_Sheet_Struct* SheetL
 }
 
 
-/***************************************************************/
-Hierarchical_PIN_Sheet_Struct* WinEDA_SchematicFrame::Create_PinSheet(
-    DrawSheetStruct* Sheet, wxDC* DC )
-/**************************************************************/
-
-/* Addition d'un nouveau PinSheet sur la feuille selectionnee, a l'endroit
- *  pointe par la souris
+/* Add a new sheet pin to the sheet at the current cursor position.
  */
+SCH_SHEET_PIN* WinEDA_SchematicFrame::Create_PinSheet( SCH_SHEET* Sheet,
+                                                       wxDC*      DC )
 {
-    wxString Line, Text;
-    Hierarchical_PIN_Sheet_Struct* NewSheetLabel;
+    wxString       Line, Text;
+    SCH_SHEET_PIN* NewSheetLabel;
 
     switch( CurrentTypeLabel )
     {
@@ -321,14 +296,13 @@ Hierarchical_PIN_Sheet_Struct* WinEDA_SchematicFrame::Create_PinSheet(
         break;
     }
 
-    Get_Message( Text, _("PinSheet"), Line, this );
+    Get_Message( Text, _( "PinSheet" ), Line, this );
     if( Line.IsEmpty() )
         return NULL;
 
     GetScreen()->SetModify();
 
-    /* Creation en memoire */
-    NewSheetLabel = new Hierarchical_PIN_Sheet_Struct( Sheet, wxPoint( 0, 0 ), Line );
+    NewSheetLabel = new SCH_SHEET_PIN( Sheet, wxPoint( 0, 0 ), Line );
     NewSheetLabel->m_Flags = IS_NEW;
     NewSheetLabel->m_Size  = NetSheetTextSize;
     NewSheetLabel->m_Shape = CurrentTypeLabel;
@@ -343,28 +317,28 @@ Hierarchical_PIN_Sheet_Struct* WinEDA_SchematicFrame::Create_PinSheet(
 }
 
 
-/*****************************************************************************/
-Hierarchical_PIN_Sheet_Struct* WinEDA_SchematicFrame::Import_PinSheet( DrawSheetStruct* Sheet, wxDC* DC )
-/*****************************************************************************/
-
-/* Permet de creer automatiquement les Sheet Labels a partir des Labels Globaux
- *  de la feuille de sous hierarchie correspondante
+/* Automatically create a sheet labels from global labels for each node in
+ * the corresponding hierarchy.
  */
+SCH_SHEET_PIN* WinEDA_SchematicFrame::Import_PinSheet( SCH_SHEET* Sheet,
+                                                       wxDC*      DC )
 {
-    EDA_BaseStruct*     	DrawStruct;
-    Hierarchical_PIN_Sheet_Struct* 	NewSheetLabel, * SheetLabel = NULL;
-    SCH_HIERLABEL* 	HLabel = NULL;
+    EDA_BaseStruct* DrawStruct;
+    SCH_SHEET_PIN*  NewSheetLabel, * SheetLabel = NULL;
+    SCH_HIERLABEL*  HLabel = NULL;
 
-    if(!Sheet->m_AssociatedScreen) return NULL;
+    if( !Sheet->m_AssociatedScreen )
+        return NULL;
     DrawStruct = Sheet->m_AssociatedScreen->EEDrawList;
-    HLabel = NULL;
+    HLabel     = NULL;
     for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
     {
         if( DrawStruct->Type() != TYPE_SCH_HIERLABEL )
             continue;
         HLabel = (SCH_HIERLABEL*) DrawStruct;
 
-        /* Ici un G-Label a ete trouve: y a t-il un SheetLabel correspondant */
+        /* A global label has been found: check is there a corresponding
+         *  sheet label. */
         SheetLabel = Sheet->m_Label;
         for( ; SheetLabel != NULL; SheetLabel = SheetLabel->Next() )
         {
@@ -374,22 +348,19 @@ Hierarchical_PIN_Sheet_Struct* WinEDA_SchematicFrame::Import_PinSheet( DrawSheet
             }
         }
 
-        /* Ici si SheetLabel == NULL le G-Label n'a pas de SheetLabel corresp */
         if( SheetLabel == NULL )
             break;
     }
 
     if( (HLabel == NULL ) || SheetLabel )
     {
-        DisplayError( this, _( "No New Hierarchal Label found" ), 10 );
+        DisplayError( this, _( "No new hierarchical labels found" ), 10 );
         return NULL;
     }
 
-    /* Ici H-Label n'a pas de SheetLabel corresp, on va le creer */
-
     GetScreen()->SetModify();
-    /* Creation en memoire */
-    NewSheetLabel = new Hierarchical_PIN_Sheet_Struct( Sheet, wxPoint( 0, 0 ), HLabel->m_Text );
+
+    NewSheetLabel = new SCH_SHEET_PIN( Sheet, wxPoint( 0, 0 ), HLabel->m_Text );
     NewSheetLabel->m_Flags = IS_NEW;
     NewSheetLabel->m_Size  = NetSheetTextSize;
     CurrentTypeLabel = NewSheetLabel->m_Shape = HLabel->m_Shape;
@@ -403,19 +374,16 @@ Hierarchical_PIN_Sheet_Struct* WinEDA_SchematicFrame::Import_PinSheet( DrawSheet
 }
 
 
-/**************************************************************/
-void WinEDA_SchematicFrame::DeleteSheetLabel( bool aRedraw,
-              Hierarchical_PIN_Sheet_Struct* aSheetLabelToDel )
-/**************************************************************/
-
 /*
- *  Routine de suppression de 1 Structure type (Hierarchical_PIN_Sheet_Struct.
- *  Cette Structure ne peut etre mise en pile "undelete" car il ne serait pas
- *  possible de la rattacher a la 'DrawSheetStruct' d'origine
- *  si aRedraw == true, effacement a l'ecran du dessin
+ * Remove sheet label.
+ *
+ * This sheet label can not be put in a pile "undelete" because it would not
+ * Possible to link it back it's 'SCH_SHEET' parent.
  */
+void WinEDA_SchematicFrame::DeleteSheetLabel( bool           aRedraw,
+                                              SCH_SHEET_PIN* aSheetLabelToDel )
 {
-    DrawSheetStruct* parent = (DrawSheetStruct*) aSheetLabelToDel->GetParent();
+    SCH_SHEET* parent = (SCH_SHEET*) aSheetLabelToDel->GetParent();
 
     wxASSERT( parent );
     wxASSERT( parent->Type() == DRAW_SHEET_STRUCT_TYPE );
@@ -426,10 +394,10 @@ void WinEDA_SchematicFrame::DeleteSheetLabel( bool aRedraw,
     std::cout << "\n\n\n" << std::flush;
 #endif
 
-    Hierarchical_PIN_Sheet_Struct*  prev = NULL;
+    SCH_SHEET_PIN* prev  = NULL;
+    SCH_SHEET_PIN* label = parent->m_Label;
 
-    Hierarchical_PIN_Sheet_Struct*  label = parent->m_Label;
-    for(  ; label;  prev=label, label=label->Next() )
+    for( ; label; prev = label, label = label->Next() )
     {
         if( label == aSheetLabelToDel )
         {

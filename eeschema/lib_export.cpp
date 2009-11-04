@@ -2,9 +2,9 @@
 /* EESchema - lib_export.cpp */
 /*****************************/
 
-/* Routines de maintenanace des librariries:
-  * sauvegarde, modification de librairies.
-  * creation edition suppression de composants
+/* Library maintenance routines.
+ * Backup modified libraries.
+ * Create, edit, and delete components.
  */
 
 #include "fctsys.h"
@@ -27,13 +27,11 @@
 extern int ExportPartId;
 
 
-/*************************************************/
-/* Routine de lecture de 1 description.
- * Le format est celui des librairies, mais on ne charge que 1 composant
- * ou le 1er composant s'il y en a plusieurs.
- * Si le premier composant est un alias, on chargera la racine correspondante
+/* Routine to read one part.
+ * The format is that of libraries, but it loads only 1 component.
+ * Or 1 component if there are several.
+ * If the first component is an alias, it will load the corresponding root.
  */
-/*************************************************/
 void WinEDA_LibeditFrame::OnImportPart( wxCommandEvent& event )
 {
     wxString       errMsg;
@@ -82,12 +80,12 @@ void WinEDA_LibeditFrame::OnImportPart( wxCommandEvent& event )
 }
 
 
-/* Routine de creation d'une nouvelle librairie et de sauvegarde du
- * composant courant dans cette librarie
- * si create_lib == TRUE sauvegarde dans le repertoire des libr
- * sinon: sauvegarde sous le nom demande sans modifications.
+/* Routine to create a new library and backup the current component in
+ * this library.
+ * Create_lib == TRUE if the backup directory of library.
+ * If not: backup as the request without modifications.
  *
- * Le format du fichier cree est dans tous les cas le meme.
+ * The file format is created in all cases the same.
  */
 void WinEDA_LibeditFrame::OnExportPart( wxCommandEvent& event )
 {

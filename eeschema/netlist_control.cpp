@@ -3,12 +3,12 @@
 /**********************************/
 
 /* Functions relatives to the dialog creating the netlist for pcbnew.
- * The dialo is a notebook with 4 fixed netlist format:
+ * The dialog is a notebook with 4 fixed netlist format:
  * PCBNEW ORCADPCB2 CADSTAR and SPICE
  * and up to CUSTOMPANEL_COUNTMAX (see netlist.h) user programmable format
  * calling an external converter with convert an intermediate format to the
  * user specific format.
- * these external converters are refered there as plugins,
+ * these external converters are referred there as plugins,
  * but there are not really plugins, there are only external binaries
  */
 
@@ -306,7 +306,7 @@ void WinEDA_NetlistFrame::InstallCustomPages()
         selected = m_Parent->m_NetlistFormat == ( NET_TYPE_CUSTOM1 + ii );
 
         /* Install the panel "Add Plugin" after
-         * the last initialised panel */
+         * the last initialized panel */
         previoustitle = title;
         if( title.IsEmpty() )
             CurrPage =
@@ -357,10 +357,10 @@ void WinEDA_NetlistFrame::SetupPluginData( wxCommandEvent& event )
     Mask = wxT( "*" );
     Path = wxGetApp().m_BinDir;
     FullFileName = EDA_FileSelector( _( "Plugin files:" ),
-                                     Path,          /* Chemin par defaut */
-                                     FullFileName,  /* nom fichier par defaut */
-                                     wxEmptyString, /* extension par defaut */
-                                     Mask,          /* Masque d'affichage */
+                                     Path,
+                                     FullFileName,
+                                     wxEmptyString,
+                                     Mask,
                                      this,
                                      wxFD_OPEN,
                                      TRUE
@@ -379,7 +379,8 @@ void WinEDA_NetlistFrame::SetupPluginData( wxCommandEvent& event )
     wxString title = CurrPage->m_TitleStringCtrl->GetValue();
     if( title.IsEmpty() )
         DisplayInfoMessage( this,
-                    _( "Do not forget to choose a title for this netlist control page" ) );
+                            _( "Do not forget to choose a title for this \
+netlist control page" ) );
 }
 
 
@@ -436,7 +437,7 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
 
 /** Function GenNetlist
  * Create the netlist file:
- * calcualte the filename with the suitable extentions
+ * calculate the filename with the suitable extensions
  * and run the netlist creator
  */
 {

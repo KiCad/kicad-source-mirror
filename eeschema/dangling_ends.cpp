@@ -419,8 +419,8 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
 
         case DRAW_SHEET_STRUCT_TYPE:
         {
-            Hierarchical_PIN_Sheet_Struct* pinsheet;
-            for( pinsheet = ( (DrawSheetStruct*) DrawItem )->m_Label;
+            SCH_SHEET_PIN* pinsheet;
+            for( pinsheet = ( (SCH_SHEET*) DrawItem )->m_Label;
                  pinsheet;
                  pinsheet = pinsheet->Next() )
             {

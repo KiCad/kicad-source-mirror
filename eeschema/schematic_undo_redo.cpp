@@ -138,8 +138,8 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
     case DRAW_SHEET_STRUCT_TYPE:
         #undef SOURCE
         #undef DEST
-        #define SOURCE ( (DrawSheetStruct*) aItem )
-        #define DEST   ( (DrawSheetStruct*) aImage )
+        #define SOURCE ( (SCH_SHEET*) aItem )
+        #define DEST   ( (SCH_SHEET*) aImage )
         DEST->SwapData( SOURCE );
         break;
 
@@ -154,8 +154,8 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
     case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
         #undef SOURCE
         #undef DEST
-        #define SOURCE ( (Hierarchical_PIN_Sheet_Struct*) aItem )
-        #define DEST   ( (Hierarchical_PIN_Sheet_Struct*) aImage )
+        #define SOURCE ( (SCH_SHEET_PIN*) aItem )
+        #define DEST   ( (SCH_SHEET_PIN*) aImage )
         EXCHG( SOURCE->m_Edge, DEST->m_Edge );
         EXCHG( SOURCE->m_Shape, DEST->m_Shape );
         break;

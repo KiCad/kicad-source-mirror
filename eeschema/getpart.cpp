@@ -20,11 +20,9 @@
 #include <boost/foreach.hpp>
 
 
-/* Routines Locales */
 static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC );
 
-/* Variables locales */
 static int     OldTransMat[2][2];
 static wxPoint OldPos;
 
@@ -200,7 +198,8 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
     Component = new SCH_COMPONENT( *Entry, GetSheet(), unit, convert,
                                    GetScreen()->m_Curseur, true );
 
-    // Set the component value (that can differ from component name in lib, for aliases)
+    // Set the component value (that can differ from component name in lib,
+    // for aliases)
     Component->GetField( VALUE )->m_Text = Name;
     Component->DisplayInfo( this );
 
@@ -210,10 +209,9 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
 }
 
 
-/**************************************************************************/
-/***                Routine de deplacement du composant.                ***/
-/***  Appele par GeneralControle grace a  ActiveScreen->ManageCurseur.  ***/
-/**************************************************************************/
+/**
+ * Move a component.
+ */
 static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
     wxPoint        move_vector;
@@ -222,7 +220,6 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
     SCH_COMPONENT* Component = (SCH_COMPONENT*) screen->GetCurItem();
 
-    /* Effacement du composant */
     if( erase )
     {
         DrawStructsInGhost( panel, DC, Component, wxPoint(0,0) );
@@ -236,8 +233,9 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
 
 /*
- * Routine permettant les rotations et les miroirs d'un composant
- *  Si DC = NULL : pas de redessin
+ * Routine to rotate and mirror a component.
+ *
+ ** If DC == NULL: no repaint
  */
 void WinEDA_SchematicFrame::CmpRotationMiroir( SCH_COMPONENT* DrawComponent,
                                                wxDC* DC, int type_rotate )
@@ -245,7 +243,7 @@ void WinEDA_SchematicFrame::CmpRotationMiroir( SCH_COMPONENT* DrawComponent,
     if( DrawComponent == NULL )
         return;
 
-    /* Efface le trace precedent */
+    /* Deletes the previous component. */
     if( DC )
     {
         DrawPanel->CursorOff( DC );
@@ -259,7 +257,7 @@ void WinEDA_SchematicFrame::CmpRotationMiroir( SCH_COMPONENT* DrawComponent,
 
     DrawComponent->SetRotationMiroir( type_rotate );
 
-    /* Redessine le composant dans la nouvelle position */
+    /* Redraw the component in the new position. */
     if( DC )
     {
         if( DrawComponent->m_Flags )
@@ -276,7 +274,7 @@ void WinEDA_SchematicFrame::CmpRotationMiroir( SCH_COMPONENT* DrawComponent,
 
 
 /*
- * Routine de sortie de la fonction de placement de composant
+ * Abort a place component command in progress.
  */
 static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
@@ -284,12 +282,12 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     SCH_COMPONENT* Component = (SCH_COMPONENT*) screen->GetCurItem();
 
-    if( Component->m_Flags & IS_NEW )    /* Nouveau Placement en cours, on l'efface */
+    if( Component->m_Flags & IS_NEW )
     {
         Component->m_Flags = 0;
         SAFE_DELETE( Component );
     }
-    else if( Component )   /* Deplacement ancien composant en cours */
+    else if( Component )
     {
         wxPoint move_vector = OldPos - Component->m_Pos;
         Component->Move( move_vector );
@@ -305,7 +303,7 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
 
 
 /*
- * Selection de l'unite dans les boitiers a multiples Parts
+ * Handle select part in multi-part component.
  */
 void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
                                          int unit, wxDC* DC )
@@ -333,17 +331,16 @@ void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
     if( unit > m_UnitCount )
         unit = m_UnitCount;
 
-    /* Efface le trace precedent */
     if( DrawComponent->m_Flags )
         DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint( 0, 0 ) );
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
 
-    /* Mise a jour du numero d'unite */
+    /* Update the unit number. */
     DrawComponent->SetUnitSelection( GetSheet(), unit );
     DrawComponent->m_Multi = unit;
 
-    /* Redessine le composant dans la nouvelle position */
+    /* Redraw the component in the new position. */
     if( DrawComponent->m_Flags )
         DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint( 0, 0 ) );
     else
@@ -374,7 +371,6 @@ void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
         return;
     }
 
-    /* Efface le trace precedent */
     if( DrawComponent->m_Flags )
         DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint( 0, 0 ) );
     else
@@ -390,7 +386,7 @@ void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
     if( DrawComponent->m_Convert > 2 )
         DrawComponent->m_Convert = 1;
 
-    /* Redessine le composant dans la nouvelle position */
+    /* Redraw the component in the new position. */
     if( DrawComponent->m_Flags & IS_MOVED )
         DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint( 0, 0 ) );
     else
@@ -432,9 +428,9 @@ void WinEDA_SchematicFrame::StartMovePart( SCH_COMPONENT* Component,
 #if 1
 
     // switch from normal mode to xor mode for the duration of the move, first
-    // by erasing fully any "normal drawing mode" primitives with the PostDirtyRect(),
-    // then by drawing the first time in xor mode so that subsequent xor
-    // drawing modes will fully erase this first copy.
+    // by erasing fully any "normal drawing mode" primitives with the
+    // PostDirtyRect(), then by drawing the first time in xor mode so that
+    // subsequent xor drawing modes will fully erase this first copy.
 
     Component->m_Flags |= IS_MOVED; // omit redrawing the component, erase only
     DrawPanel->PostDirtyRect( Component->GetBoundingBox() );

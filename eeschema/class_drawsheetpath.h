@@ -70,7 +70,7 @@ private:
 
 public:
 #define DSLSZ 32          // Max number of levels for a sheet path
-    DrawSheetStruct * m_sheets[DSLSZ];
+    SCH_SHEET * m_sheets[DSLSZ];
 
 public: DrawSheetPath();
     ~DrawSheetPath() { };
@@ -97,7 +97,7 @@ public: DrawSheetPath();
      * returns a pointer to the last sheet of the list
      * One can see the others sheet as the "path" to reach this last sheet
      */
-    DrawSheetStruct* Last();
+    SCH_SHEET* Last();
 
     /** Function LastScreen
      * @return the SCH_SCREEN relative to the last sheet in list
@@ -112,19 +112,19 @@ public: DrawSheetPath();
 
     /** Function Push
      * store (push) aSheet in list
-     * @param aSheet = pointer to the DrawSheetStruct to store in list
+     * @param aSheet = pointer to the SCH_SHEET to store in list
      * Push is used when entered a sheet to select or analyze it
      * This is like cd <directory> in directories navigation
      */
-    void             Push( DrawSheetStruct* aSheet );
+    void             Push( SCH_SHEET* aSheet );
 
     /** Function Pop
      * retrieves (pop) the last entered sheet and remove it from list
-     * @return a DrawSheetStruct* pointer to the removed sheet in list
+     * @return a SCH_SHEET* pointer to the removed sheet in list
      * Pop is used when leaving a sheet after a selection or analyze
      * This is like cd .. in directories navigation
      */
-    DrawSheetStruct* Pop();
+    SCH_SHEET* Pop();
 
     /** Function Path
      * the path uses the time stamps which do not changes even when editing
@@ -202,7 +202,7 @@ public:
      * If aSheet == NULL (default) build the whole list of sheets in hierarchy
      * So usually call it with no param.
      */
-    EDA_SheetList( DrawSheetStruct* aSheet = NULL );
+    EDA_SheetList( SCH_SHEET* aSheet = NULL );
 
     ~EDA_SheetList()
     {
@@ -243,7 +243,7 @@ private:
      * if aSheet = g_RootSheet, the full sheet path and sheet list is built
      * @param aSheet = the starting sheet from the built is made
      */
-    void           BuildSheetList( DrawSheetStruct* sheet );
+    void           BuildSheetList( SCH_SHEET* sheet );
 };
 
 #endif /* CLASS_DRAWSHEET_PATH_H */

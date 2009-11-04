@@ -15,12 +15,10 @@
 #include "class_library.h"
 
 
-/****************************************************************/
-void WinEDA_SchematicFrame::Save_File( wxCommandEvent& event )
-/****************************************************************/
 
 /* Commands to save project or the current page.
  */
+void WinEDA_SchematicFrame::Save_File( wxCommandEvent& event )
 {
     int id = event.GetId();
 
@@ -45,7 +43,7 @@ void WinEDA_SchematicFrame::Save_File( wxCommandEvent& event )
 }
 
 
-/*
+/**
  *  Load an entire project
  *
  *  Schematic root file and its subhierarchies, the configuration and the libs
@@ -60,7 +58,8 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
 
     EDA_ScreenList ScreenList;
 
-    for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
+    for( screen = ScreenList.GetFirst(); screen != NULL;
+         screen = ScreenList.GetNext() )
     {
         if( screen->IsModify() )
             break;
@@ -68,7 +67,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
 
     if( screen )
     {
-        if( !IsOK( this, _( "Clear Schematic Hierarchy (modified!)?" ) ) )
+        if( !IsOK( this, _( "Clear schematic hierarchy?" ) ) )
             return FALSE;
         if( g_RootSheet->m_AssociatedScreen->m_FileName != m_DefaultSchematicFileName )
             SetLastProject( g_RootSheet->m_AssociatedScreen->m_FileName );
@@ -126,7 +125,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
         return 1;
     }
 
-    // Rechargement de la configuration:
+    // Reloading configuration.
     msg = _( "Ready\nWorking dir: \n" ) + wxGetCwd();
     PrintMsg( msg );
 
@@ -145,7 +144,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
     /* Loading the project library cache
      * until apr 2009 the lib is named <root_name>.cache.lib
      * and after (due to code change): <root_name>-cache.lib
-     * so if the <name>-cache.lib is not foun, the od way will be tried
+     * so if the <name>-cache.lib is not found, the old way will be tried
     */
     bool use_oldcachename = false;
     wxFileName fn = g_RootSheet->m_AssociatedScreen->m_FileName;
@@ -208,11 +207,11 @@ Error: %s" ),
         return -1;
     }
 
-    //load the project.
+    // load the project.
     SAFE_DELETE( g_RootSheet->m_AssociatedScreen );
     bool diag = g_RootSheet->Load( this );
 
-    /* Reaffichage ecran de base (ROOT) si necessaire */
+    /* Redraw base screen (ROOT) if necessary. */
     ActiveScreen = GetScreen();
     ActiveScreen->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
     Zoom_Automatique( FALSE );
@@ -222,15 +221,13 @@ Error: %s" ),
 }
 
 
-/**********************************************************/
-SCH_SCREEN* WinEDA_SchematicFrame::CreateNewScreen(
-    SCH_SCREEN* OldScreen, int TimeStamp )
-/**********************************************************/
-
-/* Routine de creation ( par allocation memoire ) d'un nouvel ecran
-  *     cet ecran est en chainage arriere avec OldScreen
-  *     la valeur TimeStamp est attribuee au parametre NewScreen->TimeStamp
+/* Create a new screen
+ *
+ * This screen is chained with OldScreen.  The timestamp value is assigned to
+ * the parameter NewScreen-> TimeStamp
  */
+SCH_SCREEN* WinEDA_SchematicFrame::CreateNewScreen( SCH_SCREEN* OldScreen,
+                                                    int TimeStamp )
 {
     SCH_SCREEN* NewScreen;
 
@@ -247,13 +244,12 @@ SCH_SCREEN* WinEDA_SchematicFrame::CreateNewScreen(
 }
 
 
-/****************************************************/
-void WinEDA_SchematicFrame::SaveProject()
-/****************************************************/
-
-/* Saves the entire project and creates an archive for components
- *  the library archive name is <root_name>.cache.lib
+/**
+ *  Save the entire project and create an archive for components.
+ *
+ *  The library archive name is <root_name>.cache.lib
  */
+void WinEDA_SchematicFrame::SaveProject()
 {
     SCH_SCREEN*    screen;
     wxFileName     fn;
@@ -266,7 +262,7 @@ void WinEDA_SchematicFrame::SaveProject()
         SaveEEFile( screen, FILE_SAVE_AS );
     }
 
-    /* Creation du fichier d'archivage composants en repertoire courant */
+    /* Archive components in current directory. */
     fn = g_RootSheet->GetFileName();
     wxString cachename =  fn.GetName() + wxT("-cache");
     fn.SetName( cachename );
@@ -275,38 +271,13 @@ void WinEDA_SchematicFrame::SaveProject()
 }
 
 
-/************************/
-int CountCmpNumber()
-/************************/
+/**
+ * Return the number of components in the schematic.
+ *
+ * Power components are not included.
+ */
 
-/* Routine retournant le nombre de composants dans le schema,
- *  powers non comprises */
+int CountCmpNumber()
 {
     return g_RootSheet->ComponentCount();
-
-    /*
-      * BASE_SCREEN*    Window;
-      * EDA_BaseStruct* Phead;
-      * int             Nb = 0;
-     *
-     *
-     *
-      * Window = ScreenSch;
-      * while( Window )
-      * {
-      * for( Phead = Window->EEDrawList; Phead != NULL; Phead = Phead->Pnext )
-      * {
-      *     if( Phead->Type() == TYPE_SCH_COMPONENT )
-      *     {
-      *         DrawPartStruct* Cmp = (DrawPartStruct*) Phead;
-      *         if( Cmp->m_Field[VALUE].m_Text.GetChar( 0 ) != '#' )
-      *             Nb++;
-      *     }
-      * }
-     *
-      * Window = (BASE_SCREEN*) Window->Pnext;
-      * }
-     *
-      * return Nb;
-     */
 }

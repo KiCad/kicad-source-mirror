@@ -19,36 +19,32 @@
 #endif
 
 
-static void Draw3D_FilledCircle( double posx, double posy,
-                                 double rayon, double hole_rayon, double zpos );
+static void Draw3D_FilledCircle( double posx, double posy, double rayon,
+                                 double hole_rayon, double zpos );
 static void Draw3D_FilledSegment( double startx, double starty,
-                                  double endx, double endy, double width, double zpos );
-static void Draw3D_FilledCylinder( double posx, double posy,
-                                   double rayon, double height, double zpos );
-static void Draw3D_FilledSegmentWithHole( double startx,
-                                          double starty,
-                                          double endx,
-                                          double endy,
-                                          double width,
-                                          double holex,
-                                          double holey,
-                                          double holeradius,
+                                  double endx, double endy,
+                                  double width, double zpos );
+static void Draw3D_FilledCylinder( double posx, double posy, double rayon,
+                                   double height, double zpos );
+static void Draw3D_FilledSegmentWithHole( double startx, double starty,
+                                          double endx, double endy,
+                                          double width, double holex,
+                                          double holey, double holeradius,
                                           double zpos );
-static void    Draw3D_ArcSegment( double startx, double starty,
-                                  double endx, double endy, double width, double zpos );
-static void    Draw3D_CircleSegment( double startx, double starty,
-                                     double endx, double endy, double width, double zpos );
+static void Draw3D_ArcSegment( double startx, double starty, double endx,
+                               double endy, double width, double zpos );
+static void Draw3D_CircleSegment( double startx, double starty, double endx,
+                                  double endy, double width, double zpos );
 static int     Get3DLayerEnable( int act_layer );
 static GLfloat Get3DLayerSide( int act_layer );
 
-/******************************************/
+
 void Pcb3D_GLCanvas::Redraw( bool finish )
-/******************************************/
 {
 #if wxCHECK_VERSION( 2, 9, 0 )
-    SetCurrent(*m_glRC);
+    SetCurrent( *m_glRC );
 #else
-    SetCurrent( );
+    SetCurrent();
 #endif
 
     // Set the OpenGL viewport according to the client size of this canvas.
@@ -68,7 +64,7 @@ void Pcb3D_GLCanvas::Redraw( bool finish )
     /* transformations */
     GLfloat mat[4][4];
 
-    // Translatory motion first, so rotations don't mess up the orientation...
+    // Translate motion first, so rotations don't mess up the orientation...
     glTranslatef( g_Draw3d_dx, g_Draw3d_dy, 0.0F );
 
     build_rotmatrix( mat, g_Parm_3D_Visu.m_Quat );
@@ -92,20 +88,17 @@ void Pcb3D_GLCanvas::Redraw( bool finish )
 }
 
 
-/**********************************************/
-GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
-/**********************************************/
-
 /* Create the draw list items
  */
+GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
 {
     WinEDA_BasePcbFrame* pcbframe = m_Parent->m_Parent;
     BOARD* pcb = pcbframe->GetBoard();
     TRACK* track;
-    SEGZONE*             segzone;
+    SEGZONE* segzone;
     int ii;
 
-    wxBusyCursor         dummy;
+    wxBusyCursor dummy;
 
     m_gllist = glGenLists( 1 );
 
@@ -116,15 +109,17 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     g_Parm_3D_Visu.m_BoardPos.y = -g_Parm_3D_Visu.m_BoardPos.y;
     g_Parm_3D_Visu.m_Layers     = pcb->m_BoardSettings->GetCopperLayerCount();
 
-    // Ensure the board has 2 sides for 3D views, because it is hard to find a *really* single side board in the true life...
-    if ( g_Parm_3D_Visu.m_Layers < 2 )
+    // Ensure the board has 2 sides for 3D views, because it is hard to find
+    // a *really* single side board in the true life...
+    if( g_Parm_3D_Visu.m_Layers < 2 )
         g_Parm_3D_Visu.m_Layers = 2;
 
     g_Parm_3D_Visu.m_BoardScale = 2.0 / MAX( g_Parm_3D_Visu.m_BoardSize.x,
                                              g_Parm_3D_Visu.m_BoardSize.y );
+
     // @TODO: epoxy_width (board thickness) must be set by user,
     // because all boards thickness no not match with this setup:
-    //double epoxy_width = 1.6;    // epoxy width in mm
+    // double epoxy_width = 1.6;    // epoxy width in mm
 
     g_Parm_3D_Visu.m_Epoxy_Width = pcb->m_BoardSettings->m_LayerThickness
                                    * g_Parm_3D_Visu.m_BoardScale;
@@ -133,8 +128,9 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     for( ii = 0; ii < 32; ii++ )
     {
         if( ii < g_Parm_3D_Visu.m_Layers )
-            g_Parm_3D_Visu.m_LayerZcoord[ii] = g_Parm_3D_Visu.m_Epoxy_Width * ii
-                                               / (g_Parm_3D_Visu.m_Layers - 1);
+            g_Parm_3D_Visu.m_LayerZcoord[ii] =
+                g_Parm_3D_Visu.m_Epoxy_Width
+                * ii / (g_Parm_3D_Visu.m_Layers - 1);
         else
             g_Parm_3D_Visu.m_LayerZcoord[ii] = g_Parm_3D_Visu.m_Epoxy_Width;
     }
@@ -160,14 +156,14 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
         glEnable( GL_COLOR_MATERIAL );
         SetGLColor( WHITE );
         glBegin( GL_LINES );
-        glNormal3f( 0.0f, 0.0f, 1.0f );    // Normal is Z axis
+        glNormal3f( 0.0f, 0.0f, 1.0f );     // Normal is Z axis
         glVertex3f( 0.0f, 0.0f, 0.0f );
-        glVertex3f( 1.0f, 0.0f, 0.0f );    // X axis
+        glVertex3f( 1.0f, 0.0f, 0.0f );     // X axis
         glVertex3f( 0.0f, 0.0f, 0.0f );
-        glVertex3f( 0.0f, -1.0f, 0.0f );   // Y axis
-        glNormal3f( 1.0f, 0.0f, 0.0f );    // Normal is Y axis
+        glVertex3f( 0.0f, -1.0f, 0.0f );    // Y axis
+        glNormal3f( 1.0f, 0.0f, 0.0f );     // Normal is Y axis
         glVertex3f( 0.0f, 0.0f, 0.0f );
-        glVertex3f( 0.0f, 0.0f, 0.3f );    // Z axis
+        glVertex3f( 0.0f, 0.0f, 0.3f );     // Z axis
         glEnd();
     }
 
@@ -204,7 +200,8 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     glEnd();
 #endif
 
-    /* move the board in order to draw it with its centre at 0,0 3D coordinates */
+    /* move the board in order to draw it with its center at 0,0 3D
+     * coordinates */
     glTranslatef( -g_Parm_3D_Visu.m_BoardPos.x * g_Parm_3D_Visu.m_BoardScale,
                   -g_Parm_3D_Visu.m_BoardPos.y * g_Parm_3D_Visu.m_BoardScale,
                   0.0F );
@@ -239,24 +236,27 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
             int      imax = zone->m_FilledPolysList.size() - 1;
             CPolyPt* firstcorner = &zone->m_FilledPolysList[0];
             CPolyPt* begincorner = firstcorner;
-            SEGZONE  dummysegment(pcb);
+            SEGZONE  dummysegment( pcb );
             dummysegment.SetLayer( zone->GetLayer() );
-            dummysegment.m_Width   = zone->m_ZoneMinThickness;
+            dummysegment.m_Width = zone->m_ZoneMinThickness;
             for( int ic = 1; ic <= imax; ic++ )
             {
                 CPolyPt* endcorner = &zone->m_FilledPolysList[ic];
-                if( begincorner->utility == 0 )                 // Draw only basic outlines, not extra segments
+                if( begincorner->utility == 0 )
                 {
+                    // Draw only basic outlines, not extra segments
                     dummysegment.m_Start.x = begincorner->x;
                     dummysegment.m_Start.y = begincorner->y;
                     dummysegment.m_End.x   = endcorner->x;
                     dummysegment.m_End.y   = endcorner->y;
                     Draw3D_Track( &dummysegment );
                 }
-                if( (endcorner->end_contour) || (ic == imax) )      // the last corner of a filled area is found: draw it
+                if( (endcorner->end_contour) || (ic == imax) )
                 {
-                    if( endcorner->utility == 0 )                   // Draw only basic outlines, not extra segments
+                    // the last corner of a filled area is found: draw it
+                    if( endcorner->utility == 0 )
                     {
+                        // Draw only basic outlines, not extra segments
                         dummysegment.m_Start.x = endcorner->x;
                         dummysegment.m_Start.y = endcorner->y;
                         dummysegment.m_End.x   = firstcorner->x;
@@ -266,18 +266,20 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
                     }
                     ic++;
                     if( ic < imax - 1 )
-                        begincorner = firstcorner = &zone->m_FilledPolysList[ic];
+                        begincorner = firstcorner =
+                                          &zone->m_FilledPolysList[ic];
                 }
                 else
                     begincorner = endcorner;
-
             }
         }
     }
 
     /* draw graphic items */
     EDA_BaseStruct* PtStruct;
-    for( PtStruct = pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
+    for( PtStruct = pcb->m_Drawings;
+        PtStruct != NULL;
+        PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
         {
@@ -311,9 +313,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
 }
 
 
-/************************************************/
 void Pcb3D_GLCanvas::Draw3D_Track( TRACK* track )
-/************************************************/
 {
     double zpos;
     int    layer = track->GetLayer();
@@ -323,7 +323,7 @@ void Pcb3D_GLCanvas::Draw3D_Track( TRACK* track )
     if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
         return;
 
-    int    color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
+    int color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
 
     if( layer == LAST_COPPER_LAYER )
         layer = g_Parm_3D_Visu.m_Layers - 1;
@@ -341,12 +341,9 @@ void Pcb3D_GLCanvas::Draw3D_Track( TRACK* track )
 }
 
 
-/********************************************/
-void Pcb3D_GLCanvas::Draw3D_Via( SEGVIA* via )
-/*********************************************/
-
 /* 3D drawing for a VIA (cylinder + filled circles)
  */
+void Pcb3D_GLCanvas::Draw3D_Via( SEGVIA* via )
 {
     double x, y, r, hole;
     int    layer, top_layer, bottom_layer;
@@ -367,13 +364,15 @@ void Pcb3D_GLCanvas::Draw3D_Via( SEGVIA* via )
         zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
         if( layer < g_Parm_3D_Visu.m_Layers - 1 )
         {
-            if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
+            if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) ==
+                false )
                 continue;
             color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
         }
         else
         {
-            if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( CMP_N ) == false )
+            if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( CMP_N ) ==
+                false )
                 continue;
             color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[CMP_N];
         }
@@ -394,14 +393,14 @@ void Pcb3D_GLCanvas::Draw3D_Via( SEGVIA* via )
     // Drawing hole:
     color = g_Parm_3D_Visu.m_BoardSettings->m_ViaColor[via->m_Shape];
     SetGLColor( color );
-    height = g_Parm_3D_Visu.m_LayerZcoord[top_layer] - g_Parm_3D_Visu.m_LayerZcoord[bottom_layer];
-    Draw3D_FilledCylinder( x, -y, hole, height, g_Parm_3D_Visu.m_LayerZcoord[bottom_layer] );
+    height = g_Parm_3D_Visu.m_LayerZcoord[top_layer] -
+             g_Parm_3D_Visu.m_LayerZcoord[bottom_layer];
+    Draw3D_FilledCylinder( x, -y, hole, height,
+                           g_Parm_3D_Visu.m_LayerZcoord[bottom_layer] );
 }
 
 
-/*************************************************************/
 void Pcb3D_GLCanvas::Draw3D_DrawSegment( DRAWSEGMENT* segment )
-/*************************************************************/
 {
     double x, y, xf, yf;
     double zpos, w;
@@ -411,7 +410,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawSegment( DRAWSEGMENT* segment )
     if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
         return;
 
-    int    color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
+    int color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
 
     SetGLColor( color );
     w  = segment->m_Width * g_Parm_3D_Visu.m_BoardScale;
@@ -490,9 +489,7 @@ static void Draw3dTextSegm( int x0, int y0, int xf, int yf )
 }
 
 
-/*************************************************************/
 void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
-/*************************************************************/
 {
     int layer = text->GetLayer();
 
@@ -508,7 +505,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
     glNormal3f( 0.0, 0.0, Get3DLayerSide( layer ) );
     wxSize size = text->m_Size;
     if( text->m_Mirror )
-        NEGATE(size.x);
+        NEGATE( size.x );
     if( text->m_MultilineAllowed )
     {
         wxPoint        pos  = text->m_Pos;
@@ -522,11 +519,10 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
         {
             wxString txt = list->Item( i );
             DrawGraphicText( NULL, NULL, pos, (EDA_Colors) color,
-                     txt, text->m_Orient, size,
-                     text->m_HJustify, text->m_VJustify,
-                     text->m_Width, text->m_Italic,
-                     true,
-                     Draw3dTextSegm );
+                             txt, text->m_Orient, size,
+                             text->m_HJustify, text->m_VJustify,
+                             text->m_Width, text->m_Italic,
+                             true, Draw3dTextSegm );
             pos += offset;
         }
 
@@ -534,17 +530,15 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
     }
     else
         DrawGraphicText( NULL, NULL, text->m_Pos, (EDA_Colors) color,
-                     text->m_Text, text->m_Orient, size,
-                     text->m_HJustify, text->m_VJustify,
-                     text->m_Width, text->m_Italic,
-                     true,
-                     Draw3dTextSegm );
+                         text->m_Text, text->m_Orient, size,
+                         text->m_HJustify, text->m_VJustify,
+                         text->m_Width, text->m_Italic,
+                         true,
+                         Draw3dTextSegm );
 }
 
 
-/*********************************************/
 void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
-/*********************************************/
 {
     D_PAD* pad = m_Pads;
 
@@ -603,8 +597,9 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
         glPopMatrix();
     }
 
-    if( !As3dShape )    // The footprint does not have a 3D shape, draw its 2D shape instead
+    if( !As3dShape )
     {
+        // The footprint does not have a 3D shape, draw its 2D shape instead
         EDA_BaseStruct* Struct = m_Drawings;
         glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis
         for( ; Struct != NULL; Struct = Struct->Next() )
@@ -626,9 +621,7 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
 }
 
 
-/***************************************************/
 void EDGE_MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
-/***************************************************/
 {
     wxString s;
     int      dx, dy;
@@ -637,7 +630,7 @@ void EDGE_MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
     if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( m_Layer ) == false )
         return;
 
-    int      color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[m_Layer];
+    int color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[m_Layer];
 
 
     SetGLColor( color );
@@ -670,18 +663,14 @@ void EDGE_MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
 
     default:
         s.Printf( wxT( "Error: Shape nr %d not implemented!\n" ), m_Shape );
-        D(printf( "%s", CONV_TO_UTF8( s ) );)
+        D( printf( "%s", CONV_TO_UTF8( s ) ); )
         break;
     }
 }
 
 
-/***********************************************/
+/* Draw 3D pads. */
 void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
-/***********************************************/
-
-/* Dessin 3D des pads avec leur trou de percage
- */
 {
     int ii, ll, layer, nlmax;
     int ux0, uy0,
@@ -704,20 +693,20 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
     holeY = (double) m_Drill.y * scale / 2;
     hole  = MIN( holeX, holeY );
 
-    /* calcul du centre des formes des pads : */
+    /* Calculate the center of the pad. */
     shape_pos = ReturnShapePos();
     ux0 = shape_pos.x;
     uy0 = shape_pos.y;
     xc  = ux0;
     yc  = uy0;
 
-    /* le trace depend de la rotation de l'empreinte */
     dx = dx0 = m_Size.x >> 1;
-    dy = dy0 = m_Size.y >> 1; /* demi dim  dx et dy */
+    dy = dy0 = m_Size.y >> 1;
 
     angle  = m_Orient;
     drillx = m_Pos.x * scale;
     drilly = m_Pos.y * scale;
+
     /* Draw the pad hole (TODO: draw OBLONG hole) */
     if( holeX && holeY )
     {
@@ -746,10 +735,12 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
                 continue;
             if( (layer == COPPER_LAYER_N) && !Oncu )
                 continue;
-            if( (layer > FIRST_COPPER_LAYER) && (layer < LAST_COPPER_LAYER) && !Both )
+            if( (layer > FIRST_COPPER_LAYER) && (layer < LAST_COPPER_LAYER)
+               && !Both )
                 continue;
             color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
-            if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
+            if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) ==
+                false )
                 continue;
 
             SetGLColor( color );
@@ -765,15 +756,14 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
         break;
 
     case PAD_OVAL:
-        /* calcul de l'entraxe de l'ellipse */
-        if( dx > dy ) /* ellipse horizontale */
+        if( dx > dy ) /* Horizontal ellipse */
         {
             delta_cx = dx - dy;
             delta_cy = 0;
             w = m_Size.y * scale;
             delta_angle = angle + 900;
         }
-        else /* ellipse verticale */
+        else /* Vertical ellipse */
         {
             delta_cx = 0;
             delta_cy = dy - dx;
@@ -787,7 +777,9 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
             oy = (double) ( uy0 + delta_cy ) * scale;
             fx = (double) ( ux0 - delta_cx ) * scale;
             fy = (double) ( uy0 - delta_cy ) * scale;
-            for( layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; layer++ )
+            for( layer = FIRST_COPPER_LAYER;
+                 layer <= LAST_COPPER_LAYER;
+                 layer++ )
             {
                 if( layer && (layer == nlmax) )
                     layer = CMP_N;
@@ -795,11 +787,13 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
                     continue;
                 if( (layer == COPPER_LAYER_N) && !Oncu )
                     continue;
-                if( (layer > FIRST_COPPER_LAYER) && (layer < LAST_COPPER_LAYER) && !Both )
+                if( (layer > FIRST_COPPER_LAYER)
+                   && (layer < LAST_COPPER_LAYER) && !Both )
                     continue;
                 color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
                 glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0 );
-                if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
+                if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) ==
+                    false )
                     continue;
 
                 SetGLColor( color );
@@ -808,7 +802,8 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
                     zpos = zpos - 5 * g_Parm_3D_Visu.m_BoardScale;
                 else
                     zpos = zpos + 5 * g_Parm_3D_Visu.m_BoardScale;
-                Draw3D_FilledSegmentWithHole( ox, -oy, fx, -fy, w, drillx, -drilly, hole, zpos );
+                Draw3D_FilledSegmentWithHole( ox, -oy, fx, -fy, w, drillx,
+                                              -drilly, hole, zpos );
             }
         }
         break;
@@ -819,7 +814,7 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
     {
         int ddx, ddy;
         ddx = m_DeltaSize.x >> 1;
-        ddy = m_DeltaSize.y >> 1;      /* demi dim  dx et dy */
+        ddy = m_DeltaSize.y >> 1;
 
         coord[0][0] = -dx - ddy;
         coord[0][1] = +dy + ddx;
@@ -839,8 +834,8 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
             coord[ii][0] += ux0;
             coord[ii][1] += uy0;
             ll = ii * 2;
-            fcoord[ll][0] = coord[ii][0] *scale;
-            fcoord[ll][1] = coord[ii][1] *scale;
+            fcoord[ll][0] = coord[ii][0] * scale;
+            fcoord[ll][1] = coord[ii][1] * scale;
         }
 
         for( ii = 0; ii < 7; ii += 2 )
@@ -870,11 +865,13 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
                 continue;
             if( (layer == COPPER_LAYER_N) && !Oncu )
                 continue;
-            if( (layer > FIRST_COPPER_LAYER) && (layer < LAST_COPPER_LAYER) && !Both )
+            if( (layer > FIRST_COPPER_LAYER) && (layer < LAST_COPPER_LAYER)
+               && !Both )
                 continue;
             color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
             glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0 );
-            if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
+            if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) ==
+                false )
                 continue;
 
             SetGLColor( color );
@@ -903,9 +900,7 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
 }
 
 
-/*************************/
 void SetGLColor( int color )
-/*************************/
 {
     double       red, green, blue;
     StructColors colordata = ColorRefs[color & MASKCOLOR];
@@ -917,10 +912,8 @@ void SetGLColor( int color )
 }
 
 
-/********************************************************/
 static void Draw3D_FilledCircle( double posx, double posy,
                                  double rayon, double hole, double zpos )
-/********************************************************/
 {
     int    ii, slice = 16;
     double x, y;
@@ -942,10 +935,8 @@ static void Draw3D_FilledCircle( double posx, double posy,
 }
 
 
-/*********************************************************/
-static void Draw3D_FilledCylinder( double posx, double posy,
-                                   double rayon, double height, double zpos )
-/*********************************************************/
+static void Draw3D_FilledCylinder( double posx, double posy, double rayon,
+                                   double height, double zpos )
 {
     int        ii;
     double     x, y;
@@ -954,7 +945,7 @@ static void Draw3D_FilledCylinder( double posx, double posy,
     S3D_Vertex coords[4];
     double     tmp = DataScale3D;
 
-    DataScale3D = 1.0; // les coord sont deja a l'echelle pour Set_Object_Data();
+    DataScale3D = 1.0; // Coordinate is already in range for Set_Object_Data();
     coords[0].x = coords[1].x = posx + rayon;
     coords[0].y = coords[1].y = posy;
     coords[0].z = coords[3].z = zpos;
@@ -979,31 +970,25 @@ static void Draw3D_FilledCylinder( double posx, double posy,
 }
 
 
-/*****************************************************************/
-static void Draw3D_FilledSegment( double startx, double starty,
-                                  double endx, double endy, double width, double zpos )
-/*****************************************************************/
-
-/* trace un polygone semblable a un segment a bouts ronds
- */
+/* Draw a polygon similar to a segment has rounded tips */
+static void Draw3D_FilledSegment( double startx, double starty, double endx,
+                                  double endy, double width, double zpos )
 {
     double dx, dy, x, y, firstx = 0, firsty = 0;
     int    ii, angle;
 
-    // on va calculer les coordonnées du segment supposé horizontal,
-    // puis tourner les  cordonnes de l'angle voulu
-
+    // Calculate the coordinates of the segment assumed horizontal.
+    // Then turn the strips of the desired angle.
     dx    = endx - startx;
     dy    = endy - starty;
     angle = (int) ( ( atan2( dy, dx ) * 1800 / M_PI ) + 0.5 );
 
-    RotatePoint( &dx, &dy, angle );     // apres rotation: dx = longueur du segment
-                                        // dy = 0;
+    RotatePoint( &dx, &dy, angle );
     width /= 2;
 
     glBegin( GL_POLYGON );
 
-    // tracé de l'arrondi a droite (1er demi polygone a la fin du segment)
+    // Trace the flare to right (1st half polygon at the end of the segment)
     for( ii = 0; ii <= 8; ii++ )
     {
         x = 0.0;
@@ -1019,7 +1004,7 @@ static void Draw3D_FilledSegment( double startx, double starty,
         }
     }
 
-    // tracé de l'arrondi a gauche (2ieme demi polygone a l'origine du segment)
+    // Rounding the left (2nd half polygon is the origin of the segment)
     for( ii = 0; ii <= 8; ii++ )
     {
         int jj = ii * 225;
@@ -1034,44 +1019,35 @@ static void Draw3D_FilledSegment( double startx, double starty,
 }
 
 
-/*****************************************************************/
-static void Draw3D_FilledSegmentWithHole( double startx,
-                                          double starty,
-                                          double endx,
-                                          double endy,
-                                          double width,
-                                          double holex,
-                                          double holey,
-                                          double holeradius,
-                                          double zpos )
-/*****************************************************************/
-
-/* trace un polygone semblable a un segment a bouts ronds avec trou
+/* Draw a polygon similar to a segment ends with round hole
  */
+static void Draw3D_FilledSegmentWithHole( double startx, double starty,
+                                          double endx, double endy,
+                                          double width, double holex,
+                                          double holey, double holeradius,
+                                          double zpos )
 {
     double x, y, xin, yin;
     double firstx = 0, firsty = 0, firstxin = 0, firstyin = 0;
     int    ii, angle, theta;
 
-    // on va calculer les coordonnées du segment supposé horizontal,
-    // puis tourner les  cordonnes de l'angle voulu
-    // Tous des calculs se font avec startx, starty comme origine du tracé
-
+    // Calculate the coordinates of the segment assumed horizontal
+    // Then turn the strips of the desired angle
+    // All calculations are done with startx, starty as the origin of the route
     endx  -= startx;
     endy  -= starty;
     holex -= startx;
     holey -= starty;
     angle  = (int) ( ( atan2( endy, endx ) * 1800 / M_PI ) + 0.5 );
 
-    RotatePoint( &endx, &endy, angle );     // apres rotation: endx = longueur du segment
-                                            // endy = 0;
+    RotatePoint( &endx, &endy, angle );
     RotatePoint( &holex, &holey, angle );
     width /= 2;
 
     glBegin( GL_QUAD_STRIP );
 
-    // tracé de l'arrondi a droite (1er demi polygone a la fin du segment)
-    // autour du demi-trou de percage
+    // Path of the flare to right (1st half polygon at the end of the segment)
+    // around the half-hole drilling
     for( ii = 0; ii <= 8; ii++ )
     {
         x     = 0.0;
@@ -1087,7 +1063,7 @@ static void Draw3D_FilledSegmentWithHole( double startx,
         RotatePoint( &xin, &yin, -angle );
         glVertex3f( startx + xin, starty + yin, zpos );
         glVertex3f( startx + x, starty + y, zpos );
-        if( ii == 0 ) // Memorisation du point de départ du tracé
+        if( ii == 0 )
         {
             firstx   = startx + x;
             firsty   = starty + y;
@@ -1096,7 +1072,8 @@ static void Draw3D_FilledSegmentWithHole( double startx,
         }
     }
 
-    // tracé de l'arrondi a gauche (2ieme demi polygone a l'origine du segment)
+    // Layout of the rounded left (2nd half polygon is the origin of the
+    // segment)
     for( ii = 0; ii <= 8; ii++ )
     {
         theta = -ii * 225;
@@ -1118,15 +1095,15 @@ static void Draw3D_FilledSegmentWithHole( double startx,
 }
 
 
-/********************************************************/
-static void Draw3D_ArcSegment( double startx, double starty,
-                               double endx, double endy, double width, double zpos )
+static void Draw3D_ArcSegment( double startx, double starty, double endx,
+                               double endy, double width, double zpos )
 {
     int    ii, slice = 36;
     double x, y, hole, rayon;
     int    angle;
 
-    angle = static_cast<int>(atan2( startx - endx, starty - endy ) * 1800 / M_PI) + 900;
+    angle = static_cast<int>( atan2( startx - endx, starty - endy ) *
+                              1800 / M_PI ) + 900;
     rayon = hypot( startx - endx, starty - endy ) + ( width / 2);
     hole  = rayon - width;
 
@@ -1134,10 +1111,10 @@ static void Draw3D_ArcSegment( double startx, double starty,
     for( ii = 0; ii <= slice / 4; ii++ )
     {
         x = hole; y = 0.0;
-        RotatePoint( &x, &y, angle + (ii * 3600 / slice) );
+        RotatePoint( &x, &y, angle + ( ii * 3600 / slice ) );
         glVertex3f( x + startx, y + starty, zpos );
         x = rayon; y = 0.0;
-        RotatePoint( &x, &y, angle + (ii * 3600 / slice) );
+        RotatePoint( &x, &y, angle + ( ii * 3600 / slice ) );
         glVertex3f( x + startx, y + starty, zpos );
     }
 
@@ -1145,10 +1122,8 @@ static void Draw3D_ArcSegment( double startx, double starty,
 }
 
 
-/*******************************************************************/
-static void Draw3D_CircleSegment( double startx, double starty,
-                                  double endx, double endy, double width, double zpos )
-/*******************************************************************/
+static void Draw3D_CircleSegment( double startx, double starty, double endx,
+                                  double endy, double width, double zpos )
 {
     int    ii, slice = 36;
     double x, y, hole, rayon;
@@ -1171,9 +1146,7 @@ static void Draw3D_CircleSegment( double startx, double starty,
 }
 
 
-/******************************************/
 static int Get3DLayerEnable( int act_layer )
-/******************************************/
 {
     bool enablelayer;
 
@@ -1191,20 +1164,16 @@ static int Get3DLayerEnable( int act_layer )
 }
 
 
-/******************************************/
 static GLfloat Get3DLayerSide( int act_layer )
-/******************************************/
 {
     GLfloat nZ;
 
     nZ = 1.0;
-    if(
-        (act_layer <= LAST_COPPER_LAYER - 1)
-        || (act_layer == ADHESIVE_N_CU)
-        || (act_layer == SOLDERPASTE_N_CU)
-        || (act_layer == SILKSCREEN_N_CU)
-        || (act_layer == SOLDERMASK_N_CU)
-        )
+    if( ( act_layer <= LAST_COPPER_LAYER - 1 )
+       || ( act_layer == ADHESIVE_N_CU )
+       || ( act_layer == SOLDERPASTE_N_CU )
+       || ( act_layer == SILKSCREEN_N_CU )
+       || ( act_layer == SOLDERMASK_N_CU ) )
         nZ = -1.0;
     return nZ;
 }

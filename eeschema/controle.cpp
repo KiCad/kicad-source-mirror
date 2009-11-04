@@ -204,7 +204,7 @@ SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay(
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), SHEETITEM );
     if( DrawStruct )
     {
-        ( (DrawSheetStruct*) DrawStruct )->DisplayInfo( this );
+        ( (SCH_SHEET*) DrawStruct )->DisplayInfo( this );
         return DrawStruct;
     }
 

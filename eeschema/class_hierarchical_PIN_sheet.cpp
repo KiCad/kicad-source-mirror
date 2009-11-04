@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 // Name:        class_hierarchical_PIN_sheet.cpp
-// Purpose:     member functions Hierarchical_PIN_Sheet_Struct
+// Purpose:     member functions SCH_SHEET_PIN
 //              header = class_drawsheet.h
 // Author:      jean-pierre Charras
 // Modified by:
@@ -23,10 +23,9 @@
 
 
 /*******************************************************************/
-Hierarchical_PIN_Sheet_Struct::Hierarchical_PIN_Sheet_Struct(
-    DrawSheetStruct* parent,
-    const wxPoint& pos,
-    const wxString& text ) :
+SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent,
+                              const wxPoint& pos,
+                              const wxString& text ) :
     SCH_ITEM( parent, DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE ),
     EDA_TextStruct( text )
 {
@@ -43,12 +42,11 @@ Hierarchical_PIN_Sheet_Struct::Hierarchical_PIN_Sheet_Struct(
 
 
 /***********************************************************/
-Hierarchical_PIN_Sheet_Struct* Hierarchical_PIN_Sheet_Struct::GenCopy()
+SCH_SHEET_PIN* SCH_SHEET_PIN::GenCopy()
 {
 /***********************************************************/
-    Hierarchical_PIN_Sheet_Struct* newitem =
-        new Hierarchical_PIN_Sheet_Struct( (DrawSheetStruct*) m_Parent, m_Pos,
-                                           m_Text );
+    SCH_SHEET_PIN* newitem =
+        new SCH_SHEET_PIN( (SCH_SHEET*) m_Parent, m_Pos, m_Text );
 
     newitem->m_Edge   = m_Edge;
     newitem->m_Shape  = m_Shape;
@@ -61,18 +59,18 @@ Hierarchical_PIN_Sheet_Struct* Hierarchical_PIN_Sheet_Struct::GenCopy()
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int Hierarchical_PIN_Sheet_Struct::GetPenSize()
+int SCH_SHEET_PIN::GetPenSize()
 {
     return g_DrawDefaultLineThickness;
 }
 
 
 /*****************************************************************************/
-void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel,
-                                          wxDC*             DC,
-                                          const wxPoint&    offset,
-                                          int               DrawMode,
-                                          int               Color )
+void SCH_SHEET_PIN::Draw( WinEDA_DrawPanel* panel,
+                          wxDC*             DC,
+                          const wxPoint&    offset,
+                          int               DrawMode,
+                          int               Color )
 {
 /*****************************************************************************/
 /* Routine to create hierarchical labels */
@@ -124,9 +122,8 @@ void Hierarchical_PIN_Sheet_Struct::Draw( WinEDA_DrawPanel* panel,
  * @param aCorner_list = list to fill with polygon corners coordinates
  * @param Pos = Position of the shape
  */
-void Hierarchical_PIN_Sheet_Struct::CreateGraphicShape(
-    std::vector <wxPoint>& aCorner_list,
-    const wxPoint& Pos )
+void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
+                                        const wxPoint& Pos )
 {
     wxSize size = m_Size;
 
@@ -184,7 +181,7 @@ void Hierarchical_PIN_Sheet_Struct::CreateGraphicShape(
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
-bool Hierarchical_PIN_Sheet_Struct::Save( FILE* aFile ) const
+bool SCH_SHEET_PIN::Save( FILE* aFile ) const
 {
     int type = 'U', side = 'L';
 
@@ -223,7 +220,7 @@ bool Hierarchical_PIN_Sheet_Struct::Save( FILE* aFile ) const
 
 
 #if defined(DEBUG)
-void Hierarchical_PIN_Sheet_Struct::Show( int nestLevel, std::ostream& os )
+void SCH_SHEET_PIN::Show( int nestLevel, std::ostream& os )
 {
     // XML output:
     wxString s = GetClass();

@@ -1,5 +1,5 @@
 /***************************************************
- *	operations_on_item_lists.cpp
+ *  operations_on_item_lists.cpp
  * functions used in block commands, on lists of schematic items:
  * move, mirror, delete anc copy
  ****************************************************/
@@ -15,18 +15,14 @@
 #include "protos.h"
 
 
-/* Exported Functions */
 void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector );
 void MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint );
-void DeleteItemsInList( WinEDA_DrawPanel* panel,
+void DeleteItemsInList( WinEDA_DrawPanel*  panel,
                         PICKED_ITEMS_LIST& aItemsList );
 void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
                            const wxPoint aMoveVector  );
 
 
-/*****************************************************************************
-* Routine to Mirror objects.							 *
-*****************************************************************************/
 void MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint )
 {
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
@@ -38,12 +34,11 @@ void MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint )
 }
 
 
-
 /** Function MoveItemsInList
-*  Move a list of items to a givent move vector
-* @param aItemsList = list of picked items
-* @param aMoveVector = the move vector value
-*/
+ *  Move a list of items to a givent move vector
+ * @param aItemsList = list of picked items
+ * @param aMoveVector = the move vector value
+ */
 void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector )
 {
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
@@ -52,7 +47,6 @@ void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector )
         item->Move( aMoveVector );
     }
 }
-
 
 
 /** function DeleteItemsInList
@@ -69,17 +63,17 @@ void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList )
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
         SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
-        itemWrapper.m_PickedItem = item;
+        itemWrapper.m_PickedItem     = item;
         itemWrapper.m_UndoRedoStatus = UR_DELETED;
         if( item->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
         {
             /* this item is depending on a sheet, and is not in global list */
-            wxMessageBox( wxT(
-                             "DeleteItemsInList() err: unexpected DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE" ) );
+            wxMessageBox( wxT( "DeleteItemsInList() err: unexpected \
+DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE" ) );
 #if 0
-            Hierarchical_PIN_Sheet_Struct* pinlabel = (Hierarchical_PIN_Sheet_Struct*) item;
+            SCH_SHEET_PIN* pinlabel = (SCH_SHEET_PIN*) item;
             frame->DeleteSheetLabel( false, pinlabel->m_Parent );
-            itemWrapper.m_PickedItem = pinlabel->m_Parent;
+            itemWrapper.m_PickedItem     = pinlabel->m_Parent;
             itemWrapper.m_UndoRedoStatus = UR_CHANGED;
             itemsList.PushItem( itemWrapper );
 #endif
@@ -99,13 +93,10 @@ void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList )
 }
 
 
-/*********************************************************************************/
-void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct )
-/*********************************************************************************/
-
 /* Routine to delete an object from global drawing object list.
  *  Object is put in Undo list
  */
+void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct )
 {
     SCH_SCREEN*            screen = (SCH_SCREEN*) panel->GetScreen();
     WinEDA_SchematicFrame* frame  = (WinEDA_SchematicFrame*) panel->m_Parent;
@@ -115,17 +106,16 @@ void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct )
 
     if( DrawStruct->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
     {
-        /* Cette stucture est rattachee a une feuille, et n'est pas
-         *  accessible par la liste globale directement */
-        frame->SaveCopyInUndoList( (SCH_ITEM*)( (Hierarchical_PIN_Sheet_Struct
-                                                 *) DrawStruct )->GetParent(),
-                                  UR_CHANGED );
+        /* This structure is attached to a node, and is not accessible by
+         * the global list directly. */
+        frame->SaveCopyInUndoList(
+            (SCH_ITEM*) ( (SCH_SHEET_PIN*) DrawStruct )-> GetParent(),
+            UR_CHANGED );
         frame->DeleteSheetLabel( DC ? true : false,
-                                 (Hierarchical_PIN_Sheet_Struct*) DrawStruct );
+                                 (SCH_SHEET_PIN*) DrawStruct );
         return;
     }
-
-    else    /* structure classique */
+    else
     {
         screen->RemoveFromDrawList( DrawStruct );
 
@@ -140,14 +130,12 @@ void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct )
 }
 
 
-
-/*****************************************************************************/
-void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector )
-/*****************************************************************************/
-
-/* Routine to copy a new entity of an object for each object in list and reposition it.
+/* Routine to copy a new entity of an object for each object in list and
+ * reposition it.
  * Return the new created object list in aItemsList
  */
+void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
+                           const wxPoint aMoveVector )
 {
     SCH_ITEM* newitem;
 
@@ -178,7 +166,7 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList, co
 
             case DRAW_SHEET_STRUCT_TYPE:
             {
-                DrawSheetStruct* sheet = (DrawSheetStruct*) newitem;
+                SCH_SHEET* sheet = (SCH_SHEET*) newitem;
                 sheet->m_TimeStamp = GetTimeStamp();
                 sheet->SetSon( NULL );
                 break;
@@ -200,13 +188,10 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList, co
 }
 
 
-/************************************************************/
-SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct )
-/************************************************************/
-
 /* Routine to create a new copy of given struct.
  *  The new object is not put in draw list (not linked)
  */
+SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct )
 {
     SCH_ITEM* NewDrawStruct = NULL;
 
@@ -263,7 +248,7 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct )
         break;
 
     case DRAW_SHEET_STRUCT_TYPE:
-        NewDrawStruct = ( (DrawSheetStruct*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (SCH_SHEET*) DrawStruct )->GenCopy();
         break;
 
     default:
@@ -279,5 +264,3 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct )
     NewDrawStruct->m_Image = DrawStruct;
     return NewDrawStruct;
 }
-
-

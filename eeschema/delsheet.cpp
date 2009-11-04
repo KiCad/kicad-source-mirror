@@ -13,7 +13,7 @@
 
 
 /**************************************************************************/
-void DeleteSubHierarchy( DrawSheetStruct* FirstSheet, bool confirm_deletion )
+void DeleteSubHierarchy( SCH_SHEET* FirstSheet, bool confirm_deletion )
 /**************************************************************************/
 
 /*  Free (delete) all schematic data (include the sub hierarchy sheets )
@@ -59,7 +59,7 @@ void DeleteSubHierarchy( DrawSheetStruct* FirstSheet, bool confirm_deletion )
             EEDrawList = EEDrawList->Next();
             if( DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE )
             {
-                DeleteSubHierarchy( (DrawSheetStruct*) DrawStruct,
+                DeleteSubHierarchy( (SCH_SHEET*) DrawStruct,
                                     confirm_deletion );
             }
         }

@@ -148,30 +148,30 @@ BEGIN_EVENT_TABLE( WinEDA_LibeditFrame, WinEDA_DrawFrame )
 
 END_EVENT_TABLE()
 
-
-WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
+WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow* father,
                                           const wxString& title,
-                                          const wxPoint&  pos,
-                                          const wxSize&   size,
-                                          long            style ) :
+                                          const wxPoint& pos,
+                                          const wxSize& size,
+                                          long style ) :
     WinEDA_DrawFrame( father, LIBEDITOR_FRAME, title, pos, size, style )
 {
-    m_FrameName = wxT( "LibeditFrame" );
-    m_Draw_Axis = true;             // true to draw axis
-    m_Draw_Grid = true;             // true to draw grid
+    m_FrameName  = wxT( "LibeditFrame" );
+    m_Draw_Axis  = true;            // true to draw axis
+    m_Draw_Grid  = true;            // true to draw grid
     m_ConfigPath = wxT( "LibraryEditor" );
     SetShowDeMorgan( false );
     m_drawSpecificConvert = true;
-    m_drawSpecificUnit = false;
+    m_drawSpecificUnit    = false;
 
     // Give an icon
     SetIcon( wxIcon( libedit_xpm ) );
     SetBaseScreen( new SCH_SCREEN() );
     GetScreen()->m_Center = true;
     LoadSettings();
+
     // Initilialize grid id to a default value if not found in config or bad:
-    if( (m_LastGridSizeId <= 0) ||
-        (m_LastGridSizeId < (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
+    if( (m_LastGridSizeId <= 0)
+       || ( m_LastGridSizeId < (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000) ) )
         m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
@@ -189,32 +189,33 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
     Show( true );
 
 #if KICAD_AUIMANAGER
-    m_auimgr.SetManagedWindow(this);
-    
+    m_auimgr.SetManagedWindow( this );
+
     wxAuiPaneInfo horiz;
-    horiz.Gripper(false);
-    horiz.DockFixed(true);
-    horiz.Movable(false);
-    horiz.Floatable(false);
-    horiz.CloseButton(false);
-    horiz.CaptionVisible(false);
-    
-    wxAuiPaneInfo vert(horiz);
-    
-    vert.TopDockable(false).BottomDockable(false);
-    horiz.LeftDockable(false).RightDockable(false);
-    
-    m_auimgr.AddPane(m_HToolBar,
-        wxAuiPaneInfo(horiz).Name(wxT("m_HToolBar")).Top().Row(0));
-    
-    m_auimgr.AddPane(m_VToolBar,
-        wxAuiPaneInfo(vert).Name(wxT("m_VToolBar")).Right());
+    horiz.Gripper( false );
+    horiz.DockFixed( true );
+    horiz.Movable( false );
+    horiz.Floatable( false );
+    horiz.CloseButton( false );
+    horiz.CaptionVisible( false );
 
-    m_auimgr.AddPane(DrawPanel,
-        wxAuiPaneInfo().Name(wxT("DrawFrame")).CentrePane());
+    wxAuiPaneInfo vert( horiz );
 
-    m_auimgr.AddPane(MsgPanel,
-        wxAuiPaneInfo(horiz).Name(wxT("MsgPanel")).Bottom());
+    vert.TopDockable( false ).BottomDockable( false );
+    horiz.LeftDockable( false ).RightDockable( false );
+
+    m_auimgr.AddPane( m_HToolBar,
+                      wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().
+                      Row( 0 ) );
+
+    m_auimgr.AddPane( m_VToolBar,
+                      wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
+
+    m_auimgr.AddPane( DrawPanel,
+                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
+
+    m_auimgr.AddPane( MsgPanel,
+                      wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
     m_auimgr.Update();
 #endif
 }
@@ -224,6 +225,7 @@ WinEDA_LibeditFrame::~WinEDA_LibeditFrame()
 {
     WinEDA_SchematicFrame* frame =
         (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
+
     frame->m_LibeditFrame = NULL;
     m_drawItem = m_lastDrawItem = NULL;
 }
@@ -288,8 +290,7 @@ void WinEDA_LibeditFrame::OnCloseWindow( wxCloseEvent& Event )
             GetScreen()->ClrModify();
     }
 
-    BOOST_FOREACH( const CMP_LIBRARY& lib, CMP_LIBRARY::GetLibraryList() )
-    {
+    BOOST_FOREACH( const CMP_LIBRARY &lib, CMP_LIBRARY::GetLibraryList() ) {
         if( lib.IsModified() )
         {
             wxString msg;
@@ -351,8 +352,8 @@ int WinEDA_LibeditFrame::BestZoom()
     }
 
     size -= wxSize( 25, 25 );   // reserve 100 mils margin
-    ii = wxRound( ( (double) dx / (double) size.x ) *
-                  (double) GetScreen()->m_ZoomScalar );
+    ii    = wxRound( ( (double) dx / (double) size.x ) *
+                     (double) GetScreen()->m_ZoomScalar );
     jj = wxRound( ( (double) dy / (double) size.y ) *
                   (double) GetScreen()->m_ZoomScalar );
 
@@ -495,8 +496,8 @@ void WinEDA_LibeditFrame::OnUpdateDeMorganNormal( wxUpdateUIEvent& event )
     if( m_HToolBar == NULL )
         return;
 
-    event.Enable( GetShowDeMorgan() ||
-                  (m_component && m_component->HasConversion()) );
+    event.Enable( GetShowDeMorgan()
+                  || ( m_component && m_component->HasConversion() ) );
     m_HToolBar->ToggleTool( event.GetId(), m_convert <= 1 );
 }
 
@@ -506,8 +507,8 @@ void WinEDA_LibeditFrame::OnUpdateDeMorganConvert( wxUpdateUIEvent& event )
     if( m_HToolBar == NULL )
         return;
 
-    event.Enable( GetShowDeMorgan() ||
-                  (m_component && m_component->HasConversion()) );
+    event.Enable( GetShowDeMorgan()
+                  || ( m_component && m_component->HasConversion() ) );
     m_HToolBar->ToggleTool( event.GetId(), m_convert > 1 );
 }
 
@@ -521,7 +522,7 @@ void WinEDA_LibeditFrame::OnUpdateSelectAlias( wxUpdateUIEvent& event )
      * so use the pointer to alias combobox to directly enable or disable.
      */
     m_SelAliasBox->Enable( m_component != NULL
-                           && !m_component->m_AliasList.IsEmpty() );
+                          && !m_component->m_AliasList.IsEmpty() );
 }
 
 
@@ -533,7 +534,8 @@ void WinEDA_LibeditFrame::OnSelectAlias( wxCommandEvent& event )
 
     m_lastDrawItem = NULL;
 
-    if( m_SelAliasBox->GetStringSelection().CmpNoCase(m_component->GetName() ) == 0 )
+    if( m_SelAliasBox->GetStringSelection().CmpNoCase( m_component->GetName() )
+        == 0 )
         m_aliasName.Empty();
     else
         m_aliasName = m_SelAliasBox->GetStringSelection();
@@ -710,7 +712,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_LIBEDIT_IMPORT_BODY_BUTT:
         SetToolID( id, wxCURSOR_ARROW, _( "Import" ) );
-        LoadOneSymbol( );
+        LoadOneSymbol();
         SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         break;
 
@@ -767,6 +769,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
 
 
     case ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT:
+
         // Delete the last created segment, while creating a polyline draw item
         if( m_drawItem == NULL )
             break;

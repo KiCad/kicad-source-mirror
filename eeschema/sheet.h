@@ -71,7 +71,7 @@ public:
     /// Constructors
     WinEDA_SheetPropertiesFrame( );
     WinEDA_SheetPropertiesFrame( WinEDA_SchematicFrame* parent,
-			DrawSheetStruct * currentsheet, 
+			SCH_SHEET * currentsheet, 
 			wxWindowID id = SYMBOL_WINEDA_SHEETPROPERTIESFRAME_IDNAME,
 			const wxString& caption = SYMBOL_WINEDA_SHEETPROPERTIESFRAME_TITLE,
 			const wxPoint& pos = SYMBOL_WINEDA_SHEETPROPERTIESFRAME_POSITION,
@@ -118,7 +118,7 @@ public:
 ////@end WinEDA_SheetPropertiesFrame member variables
 
 	WinEDA_SchematicFrame * m_Parent;
-	DrawSheetStruct*  m_CurrentSheet;
+	SCH_SHEET*  m_CurrentSheet;
 };
 
 #endif

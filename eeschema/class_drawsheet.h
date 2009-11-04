@@ -7,17 +7,19 @@
 
 #include "base_struct.h"
 
-extern DrawSheetStruct* g_RootSheet;
+extern SCH_SHEET* g_RootSheet;
 
-/* class Hierarchical_PIN_Sheet_Struct
- *  a Hierarchical_PIN_Sheet_Struct is for a hierarchical sheet like a pin for
- * a component
- *  At root level, a Hierarchical_PIN_Sheet_Struct must be connected to a wire,
- * bus or label
- *  A sheet level it corresponds to a hierarchical label.
+/**
+ * Pin (label) used in sheets to create hierarchical schematics.
+ *
+ * A SCH_SHEET_PIN is used to create a hierarchical sheet in the same way a
+ * pin is used in a component.  It connects the ojects in the sheet object
+ * to the objects in the schecmitic page to the objects in the page that is
+ * represented by the sheet.  In a sheet object, a SCH_SHEET_PIN must be
+ * connected to a wire, bus, or label.  In the schematic page represented by
+ * the sheet, it corresponds to a hierarchical label.
  */
-class Hierarchical_PIN_Sheet_Struct : public SCH_ITEM,
-    public EDA_TextStruct
+class SCH_SHEET_PIN : public SCH_ITEM, public EDA_TextStruct
 {
 public:
     int  m_Edge, m_Shape;
@@ -26,23 +28,23 @@ public:
                         // m_Number >= 2
                         // value 0 is for sheet name and 1 for sheet filename
 
-public: Hierarchical_PIN_Sheet_Struct( DrawSheetStruct* parent,
-                                       const wxPoint& pos = wxPoint( 0, 0 ),
-                                       const wxString& text = wxEmptyString );
+public: SCH_SHEET_PIN( SCH_SHEET* parent,
+                       const wxPoint& pos = wxPoint( 0, 0 ),
+                       const wxString& text = wxEmptyString );
 
-    ~Hierarchical_PIN_Sheet_Struct() { }
+    ~SCH_SHEET_PIN() { }
 
     virtual wxString GetClass() const
     {
-        return wxT( "Hierarchical_PIN_Sheet_Struct" );
+        return wxT( "SCH_SHEET_PIN" );
     }
 
 
-    Hierarchical_PIN_Sheet_Struct* GenCopy();
+    SCH_SHEET_PIN* GenCopy();
 
-    Hierarchical_PIN_Sheet_Struct* Next()
+    SCH_SHEET_PIN* Next()
     {
-        return ( Hierarchical_PIN_Sheet_Struct*) Pnext;
+        return ( SCH_SHEET_PIN*) Pnext;
     }
 
     void Place( WinEDA_SchematicFrame* frame,
@@ -108,12 +110,12 @@ public: Hierarchical_PIN_Sheet_Struct( DrawSheetStruct* parent,
 };
 
 
-/* class DrawSheetStruct
+/* class SCH_SHEET
  * This class is the sheet symbol placed in a schematic, and is the entry point
  * for a sub schematic
  */
 
-class DrawSheetStruct : public SCH_ITEM
+class SCH_SHEET : public SCH_ITEM
 {
 public:
     wxString m_SheetName;               /* this is equivalent to C101 for
@@ -132,22 +134,23 @@ public:
     wxPoint     m_Pos;
     wxSize      m_Size;                 /* Position and Size of *sheet symbol */
     int         m_Layer;
-    Hierarchical_PIN_Sheet_Struct* m_Label; /* Points Be connection, linked
-                                             * list.*/
+    SCH_SHEET_PIN* m_Label;             /* Points Be connection, linked
+                                         * list.*/
     int         m_NbLabel;              /* Pins sheet (corresponding to
                                          * hierarchical labels) count */
     SCH_SCREEN* m_AssociatedScreen;     /* Associated Screen which
                                          * handle the physical data
                                          * In complex hierarchies we
-                                         * can have many DrawSheetStruct
+                                         * can have many SCH_SHEET
                                          * using the same data
                                          */
 
-public: DrawSheetStruct( const wxPoint& pos = wxPoint( 0, 0 ) );
-    ~DrawSheetStruct();
+public:
+    SCH_SHEET( const wxPoint& pos = wxPoint( 0, 0 ) );
+    ~SCH_SHEET();
     virtual wxString GetClass() const
     {
-        return wxT( "DrawSheetStruct" );
+        return wxT( "SCH_SHEET" );
     }
 
 
@@ -158,23 +161,23 @@ public: DrawSheetStruct( const wxPoint& pos = wxPoint( 0, 0 ) );
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool             Save( FILE* aFile ) const;
+    bool         Save( FILE* aFile ) const;
 
-    void             Place( WinEDA_SchematicFrame* frame, wxDC* DC );
-    DrawSheetStruct* GenCopy();
-    void             DisplayInfo( WinEDA_DrawFrame* frame );
+    void         Place( WinEDA_SchematicFrame* frame, wxDC* DC );
+    SCH_SHEET*   GenCopy();
+    void         DisplayInfo( WinEDA_DrawFrame* frame );
 
     /** Function CleanupSheet
      * Delete pinsheets which are not corresponding to a hierarchical label
      * @param aRedraw = true to redraw Sheet
      * @param aFrame = the schematic frame
      */
-    void             CleanupSheet( WinEDA_SchematicFrame* frame, bool aRedraw );
+    void         CleanupSheet( WinEDA_SchematicFrame* frame, bool aRedraw );
 
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int      GetPenSize();
+    virtual int  GetPenSize();
 
     /** Function Draw
      *  Draw the hierarchical sheet shape
@@ -185,11 +188,11 @@ public: DrawSheetStruct( const wxPoint& pos = wxPoint( 0, 0 ) );
      *  @param aColor = color used to draw sheet. Usually -1 to use the normal
      * color for sheet items
      */
-    void             Draw( WinEDA_DrawPanel* aPanel,
-                           wxDC*             aDC,
-                           const wxPoint&    aOffset,
-                           int               aDrawMode,
-                           int               aColor = -1 );
+    void         Draw( WinEDA_DrawPanel* aPanel,
+                       wxDC*             aDC,
+                       const wxPoint&    aOffset,
+                       int               aDrawMode,
+                       int               aColor = -1 );
 
     /** Function HitTest
      * @return true if the point aPosRef is within item area
@@ -202,7 +205,7 @@ public: DrawSheetStruct( const wxPoint& pos = wxPoint( 0, 0 ) );
      */
     EDA_Rect GetBoundingBox();
 
-    void     SwapData( DrawSheetStruct* copyitem );
+    void     SwapData( SCH_SHEET* copyitem );
 
     /** Function ComponentCount
      *  count our own components, without the power components.
@@ -277,7 +280,7 @@ public: DrawSheetStruct( const wxPoint& pos = wxPoint( 0, 0 ) );
     bool ChangeFileName( WinEDA_SchematicFrame* aFrame,
                          const wxString&        aFileName );
 
-    //void      RemoveSheet(DrawSheetStruct* sheet);
+    //void      RemoveSheet(SCH_SHEET* sheet);
     //to remove a sheet, just delete it
     //-- the destructor should take care of everything else.
 
@@ -290,7 +293,7 @@ public: DrawSheetStruct( const wxPoint& pos = wxPoint( 0, 0 ) );
     virtual void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
-        Hierarchical_PIN_Sheet_Struct* label = m_Label;
+        SCH_SHEET_PIN* label = m_Label;
         while( label != NULL )
         {
             label->Move( aMoveVector );

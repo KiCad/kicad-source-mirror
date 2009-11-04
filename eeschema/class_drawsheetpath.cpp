@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 // Name:        class_drawsheet.cpp
-// Purpose:     member functions for DrawSheetStruct
+// Purpose:     member functions for SCH_SHEET
 //              header = class_drawsheet.h
 // Author:      jean-pierre Charras
 // Modified by:
@@ -54,7 +54,7 @@ bool DrawSheetPath::BuildSheetPathInfoFromSheetPathValue(
     {
         if( schitem->Type() == DRAW_SHEET_STRUCT_TYPE )
         {
-            DrawSheetStruct* sheet = (DrawSheetStruct*) schitem;
+            SCH_SHEET* sheet = (SCH_SHEET*) schitem;
             Push( sheet );
             if( aPath == Path() )
                 return true;
@@ -102,7 +102,7 @@ int DrawSheetPath::Cmp( const DrawSheetPath& aSheetPathToTest ) const
  * returns a pointer to the last sheet of the list
  * One can see the others sheet as the "path" to reach this last sheet
  */
-DrawSheetStruct* DrawSheetPath::Last()
+SCH_SHEET* DrawSheetPath::Last()
 {
     if( m_numSheets )
         return m_sheets[m_numSheets - 1];
@@ -134,12 +134,12 @@ SCH_ITEM* DrawSheetPath::LastDrawList()
 
 
 /**************************************************/
-void DrawSheetPath::Push( DrawSheetStruct* aSheet )
+void DrawSheetPath::Push( SCH_SHEET* aSheet )
 {
 /**************************************************/
 /** Function Push
  * store (push) aSheet in list
- * @param aSheet = pointer to the DrawSheetStruct to store in list
+ * @param aSheet = pointer to the SCH_SHEET to store in list
  */
     if( m_numSheets > DSLSZ )
         wxMessageBox( wxT( "DrawSheetPath::Push() error: no room in buffer \
@@ -153,11 +153,11 @@ to store sheet" ) );
 }
 
 
-DrawSheetStruct* DrawSheetPath::Pop()
+SCH_SHEET* DrawSheetPath::Pop()
 {
 /** Function Pop
  * retrieves (pop) the last entered sheet and remove it from list
- * @return a DrawSheetStruct* pointer to the removed sheet in list
+ * @return a SCH_SHEET* pointer to the removed sheet in list
  */
     if( m_numSheets > 0 )
     {
@@ -287,7 +287,7 @@ bool DrawSheetPath::operator!=( const DrawSheetPath& d1 )
 
 
 /*******************************************************/
-EDA_SheetList::EDA_SheetList( DrawSheetStruct* aSheet )
+EDA_SheetList::EDA_SheetList( SCH_SHEET* aSheet )
 {
 /*******************************************************/
 /* The constructor: build the list of sheets from aSheet.
@@ -347,7 +347,7 @@ DrawSheetPath* EDA_SheetList::GetSheet( int aIndex )
 
 
 /************************************************************************/
-void EDA_SheetList::BuildSheetList( DrawSheetStruct* aSheet )
+void EDA_SheetList::BuildSheetList( SCH_SHEET* aSheet )
 {
 /************************************************************************/
 /** Function BuildSheetList
@@ -375,7 +375,7 @@ void EDA_SheetList::BuildSheetList( DrawSheetStruct* aSheet )
         {
             if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
             {
-                DrawSheetStruct* sheet = (DrawSheetStruct*) strct;
+                SCH_SHEET* sheet = (SCH_SHEET*) strct;
                 BuildSheetList( sheet );
             }
             strct = strct->Next();

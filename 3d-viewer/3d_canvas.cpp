@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        3d_canvas.cpp
 /////////////////////////////////////////////////////////////////////////////
 
@@ -35,39 +34,38 @@
  */
 
 BEGIN_EVENT_TABLE( Pcb3D_GLCanvas, wxGLCanvas )
-EVT_PAINT( Pcb3D_GLCanvas::OnPaint )
-EVT_CHAR( Pcb3D_GLCanvas::OnChar )
-EVT_MOUSE_EVENTS( Pcb3D_GLCanvas::OnMouseEvent )
-EVT_ERASE_BACKGROUND( Pcb3D_GLCanvas::OnEraseBackground )
-EVT_MENU_RANGE( ID_POPUP_3D_VIEW_START, ID_POPUP_3D_VIEW_END,
-                Pcb3D_GLCanvas::OnPopUpMenu )
+    EVT_PAINT( Pcb3D_GLCanvas::OnPaint )
+    EVT_CHAR( Pcb3D_GLCanvas::OnChar )
+    EVT_MOUSE_EVENTS( Pcb3D_GLCanvas::OnMouseEvent )
+    EVT_ERASE_BACKGROUND( Pcb3D_GLCanvas::OnEraseBackground )
+    EVT_MENU_RANGE( ID_POPUP_3D_VIEW_START, ID_POPUP_3D_VIEW_END,
+                    Pcb3D_GLCanvas::OnPopUpMenu )
 END_EVENT_TABLE()
 
-/*************************************************************************/
 Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent ) :
 #if wxCHECK_VERSION( 2, 9, 0 )
-    wxGLCanvas( parent, -1, NULL, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE )
+    wxGLCanvas( parent, -1, NULL, wxDefaultPosition, wxDefaultSize,
+                wxFULL_REPAINT_ON_RESIZE )
 #else
-    wxGLCanvas( parent, -1, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE )
+    wxGLCanvas( parent, -1, wxDefaultPosition, wxDefaultSize,
+                wxFULL_REPAINT_ON_RESIZE )
 #endif
-/*************************************************************************/
 {
     m_init   = FALSE;
     m_gllist = 0;
     m_Parent = parent;
 
 #if wxCHECK_VERSION( 2, 9, 0 )
+
     // Explicitly create a new rendering context instance for this canvas.
-    m_glRC = new wxGLContext(this);
+    m_glRC = new wxGLContext( this );
 #endif
 
     DisplayStatus();
 }
 
 
-/*************************************/
 Pcb3D_GLCanvas::~Pcb3D_GLCanvas()
-/*************************************/
 {
     ClearLists();
     m_init = FALSE;
@@ -77,9 +75,7 @@ Pcb3D_GLCanvas::~Pcb3D_GLCanvas()
 }
 
 
-/*************************************/
 void Pcb3D_GLCanvas::ClearLists()
-/*************************************/
 {
     if( m_gllist > 0 )
         glDeleteLists( m_gllist, 1 );
@@ -87,18 +83,14 @@ void Pcb3D_GLCanvas::ClearLists()
 }
 
 
-/*********************************************/
 void Pcb3D_GLCanvas::OnChar( wxKeyEvent& event )
-/*********************************************/
 {
     SetView3D( event.GetKeyCode() );
     event.Skip();
 }
 
 
-/*********************************************/
 void Pcb3D_GLCanvas::SetView3D( int keycode )
-/*********************************************/
 {
     int    ii;
     double delta_move = 0.7 * g_Parm_3D_Visu.m_Zoom;
@@ -214,9 +206,7 @@ void Pcb3D_GLCanvas::SetView3D( int keycode )
 }
 
 
-/********************************************************/
 void Pcb3D_GLCanvas::OnMouseEvent( wxMouseEvent& event )
-/********************************************************/
 {
     wxSize size( GetClientSize() );
     double spin_quat[4];
@@ -286,10 +276,14 @@ void Pcb3D_GLCanvas::OnMouseEvent( wxMouseEvent& event )
         else if( event.MiddleIsDown() )
         {
             /* middle button drag -> pan */
-            /* Current zoom and an additional factor are taken into account for the amount of panning. */
+
+            /* Current zoom and an additional factor are taken into account
+             * for the amount of panning. */
             const double PAN_FACTOR = 8.0 * g_Parm_3D_Visu.m_Zoom;
-            g_Draw3d_dx -= PAN_FACTOR * ( g_Parm_3D_Visu.m_Beginx - event.GetX() ) / size.x;
-            g_Draw3d_dy -= PAN_FACTOR * (event.GetY() - g_Parm_3D_Visu.m_Beginy) / size.y;
+            g_Draw3d_dx -= PAN_FACTOR *
+                           ( g_Parm_3D_Visu.m_Beginx - event.GetX() ) / size.x;
+            g_Draw3d_dy -= PAN_FACTOR *
+                           (event.GetY() - g_Parm_3D_Visu.m_Beginy) / size.y;
         }
 
         /* orientation has changed, redraw mesh */
@@ -302,80 +296,76 @@ void Pcb3D_GLCanvas::OnMouseEvent( wxMouseEvent& event )
 }
 
 
-/*******************************************************/
-void Pcb3D_GLCanvas::OnRightClick( wxMouseEvent& event )
-/*******************************************************/
-
-/* Construit et affiche un menu Popup lorsque on actionne le bouton droit
- *  de la souris
+/* Construct and display a popup menu when the right button is clicked.
  */
+void Pcb3D_GLCanvas::OnRightClick( wxMouseEvent& event )
 {
     wxPoint     pos;
     wxMenu      PopUpMenu;
 
     pos.x = event.GetX(); pos.y = event.GetY();
     wxMenuItem* item = new wxMenuItem( &PopUpMenu, ID_POPUP_ZOOMIN,
-                                      _( "Zoom +" ) );
+                                       _( "Zoom +" ) );
     item->SetBitmap( zoom_in_xpm );
     PopUpMenu.Append( item );
 
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_ZOOMOUT,
-                          _( "Zoom -" ) );
+                           _( "Zoom -" ) );
     item->SetBitmap( zoom_out_xpm );
     PopUpMenu.Append( item );
 
     PopUpMenu.AppendSeparator();
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_ZPOS,
-                          _( "Top View" ) );
+                           _( "Top View" ) );
     item->SetBitmap( axis3d_top_xpm );
     PopUpMenu.Append( item );
 
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_ZNEG,
-                          _( "Bottom View" ) );
+                           _( "Bottom View" ) );
     item->SetBitmap( axis3d_bottom_xpm );
     PopUpMenu.Append( item );
 
     PopUpMenu.AppendSeparator();
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_XPOS,
-                          _( "Right View" ) );
+                           _( "Right View" ) );
     item->SetBitmap( axis3d_right_xpm );
     PopUpMenu.Append( item );
 
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_XNEG,
-                          _( "Left View" ) );
+                           _( "Left View" ) );
     item->SetBitmap( axis3d_left_xpm );
     PopUpMenu.Append( item );
 
 
     PopUpMenu.AppendSeparator();
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_YPOS,
-                          _( "Front View" ) );
+                           _( "Front View" ) );
     item->SetBitmap( axis3d_front_xpm );
     PopUpMenu.Append( item );
 
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_YNEG,
-                          _( "Back View" ) );
+                           _( "Back View" ) );
     item->SetBitmap( axis3d_back_xpm );
     PopUpMenu.Append( item );
 
     PopUpMenu.AppendSeparator();
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_LEFT,
-                          _( "Move left <-" ) );
+                           _( "Move left <-" ) );
     item->SetBitmap( left_xpm );
     PopUpMenu.Append( item );
 
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_RIGHT,
-                          _( "Move right ->" ) );
+                           _( "Move right ->" ) );
     item->SetBitmap( right_xpm );
     PopUpMenu.Append( item );
 
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_UP,
-                          _( "Move Up ^" ) );
+                           _( "Move Up ^" ) );
     item->SetBitmap( up_xpm );
     PopUpMenu.Append( item );
 
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_DOWN,
-                          _( "Move Down" ) );
+                           _( "Move Down" ) );
     item->SetBitmap( down_xpm );
     PopUpMenu.Append( item );
 
@@ -383,9 +373,7 @@ void Pcb3D_GLCanvas::OnRightClick( wxMouseEvent& event )
 }
 
 
-/*******************************************************/
 void Pcb3D_GLCanvas::OnPopUpMenu( wxCommandEvent& event )
-/*******************************************************/
 {
     int key = 0;
 
@@ -447,9 +435,7 @@ void Pcb3D_GLCanvas::OnPopUpMenu( wxCommandEvent& event )
 }
 
 
-/***************************************/
 void Pcb3D_GLCanvas::DisplayStatus()
-/***************************************/
 {
     wxString msg;
 
@@ -464,30 +450,23 @@ void Pcb3D_GLCanvas::DisplayStatus()
 }
 
 
-/*************************************************/
 void Pcb3D_GLCanvas::OnPaint( wxPaintEvent& event )
-/*************************************************/
 {
     wxPaintDC dc( this );
+
     Redraw();
     event.Skip();
 }
 
 
-/***********************************************************/
 void Pcb3D_GLCanvas::OnEraseBackground( wxEraseEvent& event )
-/***********************************************************/
 {
     // Do nothing, to avoid flashing.
 }
 
 
-/****************************/
+/* Initialize broad parameters for OpenGL */
 void Pcb3D_GLCanvas::InitGL()
-/****************************/
-
-/* Int parametres generaux pour OPENGL
- */
 {
     wxSize size = GetClientSize();
 
@@ -517,7 +496,9 @@ void Pcb3D_GLCanvas::InitGL()
     }
 
     /* set viewing projection */
-    double ratio_HV = (double) size.x / size.y; // Ratio largeur /hauteur de la fenetre d'affichage
+
+    // Ratio width / height of the window display
+    double ratio_HV = (double) size.x / size.y;
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
 
@@ -541,17 +522,11 @@ void Pcb3D_GLCanvas::InitGL()
 
     /* Setup light souces: */
     SetLights();
-
-
 }
 
 
-/***********************************/
+/* Initialize OpenGL light sources. */
 void Pcb3D_GLCanvas::SetLights()
-/***********************************/
-
-/* Init sources lumineuses pour OPENGL
- */
 {
     double  light;
     GLfloat light_color[4];
@@ -576,13 +551,10 @@ void Pcb3D_GLCanvas::SetLights()
 }
 
 
-/**********************************************************/
-void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
-/**********************************************************/
-
 /* Create a Screenshot of the current 3D view.
  *  Output file format is png or jpeg, or image is copied on clipboard
  */
+void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
 {
     wxFileName fn( m_Parent->m_Parent->GetScreen()->m_FileName );
     wxString   FullFileName;
@@ -599,15 +571,10 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
         fn.SetExt( file_ext );
 
         FullFileName =
-            EDA_FileSelector( _( "3D Image filename:" ),
-                              wxEmptyString,    /* Chemin par defaut */
-                              fn.GetFullName(), /* nom fichier par defaut */
-                              file_ext,         /* extension par defaut */
-                              mask,             /* Masque d'affichage */
-                              this,
-                              wxFD_SAVE,
-                              TRUE
-                              );
+            EDA_FileSelector( _( "3D Image filename:" ), wxEmptyString,
+                              fn.GetFullName(), file_ext, mask, this,
+                              wxFD_SAVE, TRUE );
+
         if( FullFileName.IsEmpty() )
             return;
     }
@@ -630,8 +597,9 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
         {
             if( !wxTheClipboard->SetData( dobjBmp ) )
                 wxLogError( _T( "Failed to copy image to clipboard" ) );
-            wxTheClipboard->Flush();    /* the data on clipboard
-                                         *  will stay available after the application exits */
+            wxTheClipboard->Flush();    /* the data in clipboard will stay
+                                         * available after the
+                                         * application exits */
             wxTheClipboard->Close();
         }
     }
@@ -640,7 +608,8 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
         wxImage image = bitmap.ConvertToImage();
 
         if( !image.SaveFile( FullFileName,
-                             fmt_is_jpeg ? wxBITMAP_TYPE_JPEG : wxBITMAP_TYPE_PNG ) )
+                             fmt_is_jpeg ? wxBITMAP_TYPE_JPEG :
+                             wxBITMAP_TYPE_PNG ) )
             wxLogError( wxT( "Can't save file" ) );
 
         image.Destroy();

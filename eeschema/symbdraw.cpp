@@ -21,14 +21,13 @@
 #include "dialog_lib_edit_draw_item.h"
 
 
-/* Routines locales */
 static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static void ComputeArc( LIB_ARC* DrawItem, wxPoint ArcCentre );
 static void RedrawWhileMovingCursor( WinEDA_DrawPanel* panel,
                                      wxDC*             DC,
                                      bool              erase );
 
-/* Variables locales */
+
 static int     StateDrawArc, ArcStartX, ArcStartY, ArcEndX, ArcEndY;
 static wxPoint InitPosition, StartCursor, ItemPreviousPos;
 
@@ -264,8 +263,7 @@ error" ) );
 }
 
 
-/*
- * Routine de creation d'un nouvel element type LibraryDrawStruct
+/* Create new library component graphic object.
  */
 void WinEDA_LibeditFrame::GraphicItemBeginDraw( wxDC* DC )
 {
@@ -313,7 +311,7 @@ void WinEDA_LibeditFrame::GraphicItemBeginDraw( wxDC* DC )
 
 
 /*
- * Redraw the graphoc shape while moving
+ * Redraw the graphic shape while moving
  */
 static void RedrawWhileMovingCursor( WinEDA_DrawPanel* panel,
                                      wxDC*             DC,
@@ -329,7 +327,7 @@ static void RedrawWhileMovingCursor( WinEDA_DrawPanel* panel,
     BASE_SCREEN* Screen = panel->GetScreen();
     wxPoint      pos;
 
-    /* Erase shape in the old positon*/
+    /* Erase shape in the old position*/
     if( erase )
     {
         pos = ItemPreviousPos - StartCursor;
@@ -361,10 +359,7 @@ void WinEDA_LibeditFrame::StartMoveDrawSymbol( wxDC* DC )
 }
 
 
-/****************************************************************/
-/* Routine de Gestion des evenements souris lors de la creation */
-/* d'un nouvel element type LibraryDrawStruct                   */
-/****************************************************************/
+/* Manage mouse events when creating new graphic object. */
 static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
     int            dx, dy;
@@ -453,7 +448,7 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
         ( (LIB_SEGMENT*) item )->m_End = curr_pos;
         break;
 
-    case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:      /* Traite par des routines specifiques */
+    case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
         break;
 
     default:
@@ -488,11 +483,7 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
 
 /*
- * Place la structure courante en liste des structures du composant
- * courant, si elle existe et redessine toujours celle ci
- *  Parametres: (tous globaux)
- *      m_drawItem
- *      m_component
+ * Place the new graphic object in the list of component drawing objects.
  */
 void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
 {
@@ -501,7 +492,7 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
 
     if( m_drawItem->Type() == COMPONENT_ARC_DRAW_TYPE )
     {
-        if( StateDrawArc == 1 ) /* Trace d'arc en cours: doit etre termine */
+        if( StateDrawArc == 1 ) /* Trace arc under way must be completed. */
         {
             DisplayError( this, wxT( "Arc in progress.." ) );
             return;
@@ -575,36 +566,35 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
 }
 
 
-/***************************************************************/
-static void ComputeArc( LIB_ARC* DrawItem, wxPoint ArcCentre )
-/***************************************************************/
-
-/* routine d'ajustage des parametres de l'arc en cours de trace
- *  calcule le centre, rayon, angles pour que l'arc en cours
- *  passe par les points ArcStartX,Y et ArcEndX,Y avec le centre le plus proche
- *  de la pos souris
- *  Remarque: le centre n'est evidemment pas sur la grille
+/*
+ * Routine for adjusting the parameters of the arc currently being drawn.
+ * Calculates the center, radius, angles for the arc current
+ * Passes through the points ArcStartX, ArcEndX Y and Y with the nearest center
+ * of the mouse position.
+ * Note: The center is obviously not on the grid
  */
+static void ComputeArc( LIB_ARC* DrawItem, wxPoint ArcCentre )
 {
     int dx, dy;
-    int cX, cY;     /* Coord centre de l'arc */
+    int cX, cY;
     int angle;
 
     cX = ArcCentre.x;
     cY = ArcCentre.y;
 
-    cY = -cY;   /* Attention a l'orientation de l'axe Y */
+    cY = -cY;   /* Attention to the orientation of the axis Y. */
 
-    /* calcul de cX et cY pour que l'arc passe par ArcStartX,Y et ArcEndX,Y */
+    /* Calculating cX and cY for the arc passes through ArcStartX, ArcEndX,
+     * X and Y */
     dx    = ArcEndX - ArcStartX;
     dy    = ArcEndY - ArcStartY;
     cX   -= ArcStartX;
     cY   -= ArcStartY;
     angle = (int) ( atan2( (double) dy, (double) dx ) * 1800 / M_PI );
-    RotatePoint( &dx, &dy, angle );     /* Le segment dx, dy est horizontal */
-                                        /* -> dx = longueur, dy = 0 */
+    RotatePoint( &dx, &dy, angle );     /* The segment dx, dy is horizontal
+                                         * -> Length = dx, dy = 0 */
     RotatePoint( &cX, &cY, angle );
-    cX = dx / 2;                        /* cX, cY est sur la mediane du segment 0,0 a dx,0 */
+    cX = dx / 2;           /* cX, cY is on the median segment 0.0 a dx, 0 */
 
     RotatePoint( &cX, &cY, -angle );
     cX += ArcStartX;
@@ -633,9 +623,9 @@ static void ComputeArc( LIB_ARC* DrawItem, wxPoint ArcCentre )
     NORMALIZE_ANGLE( DrawItem->m_t1 );
     NORMALIZE_ANGLE( DrawItem->m_t2 );  // angles = 0 .. 3600
 
-    // limitation val abs a < 1800 (1/2 cercle) pour eviter Pbs d'affichage en miroir
-    // car en trace on suppose que l'arc fait moins de 180 deg pour trouver
-    // son orientation apres rot, miroir...
+    // Restrict angle to less than 180 to avoid PBS display mirror
+    // Trace because it is assumed that the arc is less than 180 deg to find
+    // orientation after rotate or mirror.
     if( (DrawItem->m_t2 - DrawItem->m_t1) > 1800 )
         DrawItem->m_t2 -= 3600;
     else if( (DrawItem->m_t2 - DrawItem->m_t1) <= -1800 )

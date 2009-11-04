@@ -1,7 +1,7 @@
-/**************************************************************/
-/*					libarch.cc								  */
-/* Module de generation du fichier d'archivage des composants */
-/**************************************************************/
+/*****************************************************/
+/*                  libarch.cpp                      */
+/* Module for generation of component archive files. */
+/*****************************************************/
 #include "fctsys.h"
 #include "common.h"
 #include "confirm.h"
@@ -29,7 +29,7 @@ bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName )
     libCache = new CMP_LIBRARY( LIBRARY_TYPE_EESCHEMA, ArchFullFileName );
     libCache->SetCache();
 
-    /* examine all screens (not scheets) used and build the list of components
+    /* examine all screens (not sheets) used and build the list of components
      * found in lib complex hierarchies are not a problem because we just want
      * to know used components in libraries
      */
@@ -52,7 +52,7 @@ bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName )
 
     if( !libCache->Save( ArchFullFileName ) )
     {
-        msg.Printf( _( "An error occurrred attempting to save component \
+        msg.Printf( _( "An error occurred attempting to save component \
 library <%s>." ), GetChars( ArchFullFileName ) );
         DisplayError( frame, msg );
         return false;

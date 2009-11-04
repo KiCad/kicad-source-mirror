@@ -687,13 +687,12 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
         if( Struct->Type() == DRAW_SHEET_STRUCT_TYPE )
         {
             // Add all pins sheets of a selected hierarchical sheet to the list
-            Hierarchical_PIN_Sheet_Struct* SLabel =
-                ( (DrawSheetStruct*) Struct )->m_Label;
+            SCH_SHEET_PIN* SLabel = ( (SCH_SHEET*) Struct )->m_Label;
             while( SLabel )
             {
                 if( SLabel->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
                     AddPickedItem( screen, SLabel->m_Pos );
-                SLabel = (Hierarchical_PIN_Sheet_Struct*) SLabel->Next();
+                SLabel = (SCH_SHEET_PIN*) SLabel->Next();
             }
         }
 

@@ -389,7 +389,7 @@ bool LocateAndDeleteItem( WinEDA_SchematicFrame* frame, wxDC* DC )
 void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Screen )
 {
     EDA_BaseStruct* DrawList;
-    Hierarchical_PIN_Sheet_Struct* SheetLabel, * NextLabel;
+    SCH_SHEET_PIN* SheetLabel, * NextLabel;
 
     if( DrawStruct == NULL )
         return;
@@ -409,14 +409,14 @@ void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Screen )
                 continue;
 
             /* See if our item is in this Sheet */
-            SheetLabel = ( (DrawSheetStruct*) DrawList )->m_Label;
+            SheetLabel = ( (SCH_SHEET*) DrawList )->m_Label;
             if( SheetLabel == NULL )
                 continue;
 
-            if( SheetLabel == (Hierarchical_PIN_Sheet_Struct*) DrawStruct )
+            if( SheetLabel == (SCH_SHEET_PIN*) DrawStruct )
             {
-                ( (DrawSheetStruct*) DrawList )->m_Label =
-                    (Hierarchical_PIN_Sheet_Struct*) SheetLabel->Next();
+                ( (SCH_SHEET*) DrawList )->m_Label =
+                    (SCH_SHEET_PIN*) SheetLabel->Next();
 
                 SAFE_DELETE( DrawStruct );
                 return;
@@ -425,10 +425,9 @@ void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Screen )
             {
                 while( SheetLabel->Next() )
                 {
-                    NextLabel =
-                        (Hierarchical_PIN_Sheet_Struct*) SheetLabel->Next();
+                    NextLabel = (SCH_SHEET_PIN*) SheetLabel->Next();
 
-                    if( NextLabel == (Hierarchical_PIN_Sheet_Struct*) DrawStruct )
+                    if( NextLabel == (SCH_SHEET_PIN*) DrawStruct )
                     {
                         SheetLabel->SetNext( (EDA_BaseStruct*) NextLabel->Next() );
                         SAFE_DELETE( DrawStruct );

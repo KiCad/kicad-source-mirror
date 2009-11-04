@@ -41,8 +41,8 @@ class NETLIST_OBJECT
 public:
     NetObjetType    m_Type;             /* Type of this item (see NetObjetType enum) */
     EDA_BaseStruct* m_Comp;             /* Pointer on the library item that created this net object (the parent)*/
-    SCH_ITEM*       m_Link;      /* For Hierarchical_PIN_Sheet_Struct:
-                                  * Pointer to the hierarchy sheet that contains this Hierarchical_PIN_Sheet_Struct
+    SCH_ITEM*       m_Link;      /* For SCH_SHEET_PIN:
+                                  * Pointer to the hierarchy sheet that contains this SCH_SHEET_PIN
                                   *  For Pins: pointer to the component that contains this pin
                                   */
     int           m_Flag;               /* flag used in calculations */

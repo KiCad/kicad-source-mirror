@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        3d_aux.cpp
 /////////////////////////////////////////////////////////////////////////////
 
@@ -23,9 +22,8 @@
 #include "3d_viewer.h"
 #include "trackball.h"
 
-/**************************************************************************/
+
 void S3D_MASTER::Set_Object_Coords( S3D_Vertex* coord, int nbcoord )
-/**************************************************************************/
 {
     int ii;
 
@@ -39,13 +37,13 @@ void S3D_MASTER::Set_Object_Coords( S3D_Vertex* coord, int nbcoord )
         /* adjust rotation */
         if( m_MatRotation.x )
             RotatePoint( &coord[ii].y, &coord[ii].z,
-                (int) (m_MatRotation.x * 10) );
+                        (int) (m_MatRotation.x * 10) );
         if( m_MatRotation.y )
             RotatePoint( &coord[ii].z, &coord[ii].x,
-                (int) (m_MatRotation.y * 10) );
+                        (int) (m_MatRotation.y * 10) );
         if( m_MatRotation.z )
             RotatePoint( &coord[ii].x, &coord[ii].y,
-                (int) (m_MatRotation.z * 10) );
+                        (int) (m_MatRotation.z * 10) );
         /* adjust offset position (offset is given in UNIT 3D (0.1 inch) */
 #define SCALE_3D_CONV (PCB_INTERNAL_UNIT / UNITS3D_TO_UNITSPCB)
         coord[ii].x += m_MatPosition.x * SCALE_3D_CONV;
@@ -55,9 +53,7 @@ void S3D_MASTER::Set_Object_Coords( S3D_Vertex* coord, int nbcoord )
 }
 
 
-/************************************************************/
 void Set_Object_Data( const S3D_Vertex* coord, int nbcoord )
-/************************************************************/
 {
     int     ii;
     GLfloat ax, ay, az, bx, by, bz, nx, ny, nz, r;
@@ -106,17 +102,15 @@ void Set_Object_Data( const S3D_Vertex* coord, int nbcoord )
     for( ii = 0; ii < nbcoord; ii++ )
     {
         glVertex3f( coord[ii].x * DataScale3D,
-            coord[ii].y * DataScale3D,
-            coord[ii].z * DataScale3D );
+                    coord[ii].y * DataScale3D,
+                    coord[ii].z * DataScale3D );
     }
 
     glEnd();
 }
 
 
-/**********************************************/
 GLuint Pcb3D_GLCanvas::DisplayCubeforTest()
-/**********************************************/
 {
     GLuint gllist = glGenLists( 1 );
 
@@ -158,7 +152,6 @@ GLuint Pcb3D_GLCanvas::DisplayCubeforTest()
 /* class Info_3D_Visu */
 /**********************/
 
-/* Constructor */
 Info_3D_Visu::Info_3D_Visu()
 {
     int ii;
@@ -176,8 +169,8 @@ Info_3D_Visu::Info_3D_Visu()
     m_Draw3DZone     = TRUE;
     m_Draw3DComments = TRUE;
     m_Draw3DDrawings = TRUE;
-    m_Draw3DEco1 = TRUE;
-    m_Draw3DEco2 = TRUE;
+    m_Draw3DEco1     = TRUE;
+    m_Draw3DEco2     = TRUE;
 }
 
 
@@ -186,11 +179,8 @@ Info_3D_Visu::~Info_3D_Visu()
 }
 
 
-/*****************************************************************/
-/* Classe pour afficher et editer un Vertex (triplet de valeurs),*/
-/* en INCHES ou MM ou sans unites								 */
-/*****************************************************************/
-
+/* Display and edit a Vertex (triplet of values) in INCHES or MM or without
+ * units */
 WinEDA_VertexCtrl::WinEDA_VertexCtrl( wxWindow* parent, const wxString& title,
                                       wxBoxSizer* BoxSizer,
                                       int units, int internal_unit )
@@ -207,73 +197,63 @@ WinEDA_VertexCtrl::WinEDA_VertexCtrl( wxWindow* parent, const wxString& title,
         text = title;
     text += ReturnUnitSymbol( units );
 
-    msgtitle = new                      wxStaticText( parent, -1, text, wxDefaultPosition, wxSize(
-            -1,
-            -1 ), 0 );
+    msgtitle = new wxStaticText( parent, -1, text, wxDefaultPosition,
+                                 wxSize( -1, -1 ), 0 );
 
-    BoxSizer->Add( msgtitle, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxBOTTOM | wxADJUST_MINSIZE );
+    BoxSizer->Add(
+        msgtitle,
+        wxGROW | wxLEFT | wxRIGHT | wxTOP | wxBOTTOM |
+        wxADJUST_MINSIZE );
 
-    wxFlexGridSizer* GridSizer = new    wxFlexGridSizer( 3, 2, 0, 0 );
+    wxFlexGridSizer* GridSizer = new wxFlexGridSizer( 3, 2, 0, 0 );
 
     BoxSizer->Add( GridSizer, 0, wxGROW | wxALL, 5 );
 
-    msgtitle = new                      wxStaticText( parent, -1, wxT( "X:" ) );
+    msgtitle = new wxStaticText( parent, -1, wxT( "X:" ) );
 
-    GridSizer->Add( msgtitle,
-        0,
-        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxADJUST_MINSIZE,
-        5 );
-    m_XValueCtrl = new                  wxTextCtrl( parent,
-        -1,
-        wxEmptyString,
-        wxDefaultPosition,
-        wxSize( -1, -1 ),
-        0 );
+    GridSizer->Add( msgtitle, 0,
+                    wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL |
+                    wxLEFT | wxRIGHT | wxADJUST_MINSIZE,
+                    5 );
+    m_XValueCtrl = new wxTextCtrl( parent, -1, wxEmptyString,
+                                   wxDefaultPosition, wxSize( -1, -1 ), 0 );
 
     GridSizer->Add( m_XValueCtrl,
-        0,
-        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT,
-        5 );
+                    0,
+                    wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL |
+                    wxLEFT | wxRIGHT,
+                    5 );
 
-    msgtitle = new                      wxStaticText( parent, -1, wxT(
-            "Y:" ), wxDefaultPosition, wxSize( -1,
-            -1 ), 0 );
-
-    GridSizer->Add( msgtitle,
-        0,
-        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxADJUST_MINSIZE,
-        5 );
-    m_YValueCtrl = new                  wxTextCtrl( parent,
-        -1,
-        wxEmptyString,
-        wxDefaultPosition,
-        wxSize( -1, -1 ),
-        0 );
-
-    GridSizer->Add( m_YValueCtrl,
-        0,
-        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT,
-        5 );
-
-    msgtitle = new                      wxStaticText( parent, -1, wxT(
-            "Z:" ), wxDefaultPosition, wxSize( -1,
-            -1 ), 0 );
+    msgtitle = new wxStaticText( parent, -1, wxT( "Y:" ), wxDefaultPosition,
+                                 wxSize( -1, -1 ), 0 );
 
     GridSizer->Add( msgtitle,
-        0,
-        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxADJUST_MINSIZE,
-        5 );
-    m_ZValueCtrl = new                  wxTextCtrl( parent,
-        -1,
-        wxEmptyString,
-        wxDefaultPosition,
-        wxSize( -1, -1 ),
-        0 );
+                    0,
+                    wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL |
+                    wxLEFT | wxRIGHT | wxADJUST_MINSIZE,
+                    5 );
+    m_YValueCtrl = new wxTextCtrl( parent, -1, wxEmptyString,
+                                   wxDefaultPosition, wxSize( -1, -1 ), 0 );
 
-    GridSizer->Add( m_ZValueCtrl,
-        0,
-        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT,
-        5 );
+    GridSizer->Add( m_YValueCtrl, 0,
+                    wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL |
+                    wxLEFT | wxRIGHT,
+                    5 );
+
+    msgtitle = new wxStaticText( parent, -1, wxT( "Z:" ), wxDefaultPosition,
+                                 wxSize( -1, -1 ), 0 );
+
+    GridSizer->Add( msgtitle, 0,
+                    wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL |
+                    wxLEFT | wxRIGHT | wxADJUST_MINSIZE,
+                    5 );
+    m_ZValueCtrl = new wxTextCtrl( parent, -1, wxEmptyString,
+                                   wxDefaultPosition, wxSize( -1, -1 ), 0 );
+
+    GridSizer->Add( m_ZValueCtrl, 0,
+                    wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL |
+                    wxLEFT | wxRIGHT,
+                    5 );
 }
 
 
@@ -282,12 +262,8 @@ WinEDA_VertexCtrl::~WinEDA_VertexCtrl()
 }
 
 
-/*******************************************/
+/* Returns (in internal units) to coordinate between (in user units) */
 S3D_Vertex WinEDA_VertexCtrl::GetValue()
-/*******************************************/
-
-/* Retourne (en unites internes) les coordonnes entrees (en unites utilisateur)
- */
 {
     S3D_Vertex value;
     double     dtmp;
@@ -302,9 +278,7 @@ S3D_Vertex WinEDA_VertexCtrl::GetValue()
 }
 
 
-/**************************************************/
 void WinEDA_VertexCtrl::SetValue( S3D_Vertex vertex )
-/**************************************************/
 {
     wxString text;
 
@@ -322,9 +296,7 @@ void WinEDA_VertexCtrl::SetValue( S3D_Vertex vertex )
 }
 
 
-/*****************************************/
 void WinEDA_VertexCtrl::Enable( bool onoff )
-/*****************************************/
 {
     m_XValueCtrl->Enable( onoff );
     m_YValueCtrl->Enable( onoff );

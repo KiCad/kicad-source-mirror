@@ -12,9 +12,9 @@ class SCH_COMPONENT;
 class BASE_SCREEN;
 class SCH_SCREEN;
 class SCH_ITEM;
-class Hierarchical_PIN_Sheet_Struct;
+class SCH_SHEET_PIN;
 class PLOTTER;
-class DrawSheetStruct;
+class SCH_SHEET;
 class LIB_PIN;
 
 
@@ -121,14 +121,13 @@ SCH_ITEM*          PickStruct( const wxPoint& refpos,
                                int            SearchMask );
 
 
-Hierarchical_PIN_Sheet_Struct* LocateSheetLabel( DrawSheetStruct* Sheet,
-                                                 const wxPoint&   pos );
+SCH_SHEET_PIN* LocateSheetLabel( SCH_SHEET* Sheet, const wxPoint& pos );
 LIB_PIN*                       LocateAnyPin( SCH_ITEM*       DrawList,
                                              const wxPoint&  RefPos,
                                              SCH_COMPONENT** libpart = NULL );
 
-Hierarchical_PIN_Sheet_Struct* LocateAnyPinSheet( const wxPoint& RefPos,
-                                                  SCH_ITEM*      DrawList );
+SCH_SHEET_PIN* LocateAnyPinSheet( const wxPoint& RefPos,
+                                  SCH_ITEM*      DrawList );
 
 
 /***************/
@@ -192,7 +191,7 @@ void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* drawlist );
 /***************/
 /* DELSHEET.CPP */
 /***************/
-void DeleteSubHierarchy( DrawSheetStruct* Sheet, bool confirm_deletion );
+void DeleteSubHierarchy( SCH_SHEET* Sheet, bool confirm_deletion );
 bool ClearProjectDrawList( SCH_SCREEN* FirstWindow, bool confirm_deletion );
 
 /* free the draw list screen->EEDrawList and the subhierarchies

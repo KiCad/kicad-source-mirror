@@ -27,7 +27,7 @@ private:
 
     // Flags
     wxSemaphore*        m_Semaphore;        // != NULL if the frame must emulate a modal dialog
-    wxString            m_ConfigPath;       // subpath for configuartion
+    wxString            m_ConfigPath;       // subpath for configuration
 
 public:
     WinEDA_ViewlibFrame( wxWindow*    father,
@@ -47,7 +47,7 @@ public:
     void ReCreateHToolbar();
     void ReCreateVToolbar();
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
-    int  BestZoom();    // Retourne le meilleur zoom
+    int  BestZoom();
     void ClickOnLibList( wxCommandEvent& event );
     void ClickOnCmpList( wxCommandEvent& event );
     void OnSetRelativeOffset( wxCommandEvent& event );

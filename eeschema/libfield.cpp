@@ -1,6 +1,6 @@
-/*********************************************************************/
-/*  EESchema - edition des librairies: Edition des champs ( Fields ) */
-/*********************************************************************/
+/*****************************************************/
+/*  Component library edit field manipulation code.  */
+/*****************************************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -15,11 +15,9 @@
 #include "class_library.h"
 
 
-/* Routines locales */
 static void ShowMoveField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
 
-/* Variables locales */
 extern int     m_unit;
 static wxPoint StartCursor, LastTextPosition;
 
@@ -49,9 +47,6 @@ static void ExitMoveField( WinEDA_DrawPanel* Panel, wxDC* DC )
 }
 
 
-/*
- * Initialise le deplacement d'un champ ( ref ou Name )
- */
 void WinEDA_LibeditFrame::StartMoveField( wxDC* DC, LIB_FIELD* field )
 {
     wxPoint startPos;
@@ -78,10 +73,10 @@ void WinEDA_LibeditFrame::StartMoveField( wxDC* DC, LIB_FIELD* field )
 }
 
 
-/*****************************************************************/
-/* Routine d'affichage du texte 'Field' en cours de deplacement. */
-/*  Routine normalement attachee au curseur                     */
-/*****************************************************************/
+/*
+ * Routine to display text 'Field' on the move.
+ * Normally called by cursor management code.
+ */
 static void ShowMoveField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
     WinEDA_LibeditFrame* parent = (WinEDA_LibeditFrame*) panel->GetParent();
@@ -228,9 +223,10 @@ not conflict with any library entries." ),
 
 
 /*
- * Routine de modification de l'orientation ( Horiz ou Vert. ) du champ.
- * si un champ est en cours d'edition, modif de celui ci.
- * sinon Modif du champ pointe par la souris
+ * Rotate a field horizontally or vertically.
+ *
+ * If a field is being edited, rotate.
+ * Otherwise rotate the field at the current cursor position.
  */
 void WinEDA_LibeditFrame::RotateField( wxDC* DC, LIB_FIELD* Field )
 {

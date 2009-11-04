@@ -300,7 +300,7 @@ static void GenListeGLabels( std::vector <LABEL_OBJECT>& aList )
 /* Fill aList  with Glabel info
  */
     SCH_ITEM*      DrawList;
-    Hierarchical_PIN_Sheet_Struct* PinLabel;
+    SCH_SHEET_PIN* PinLabel;
     DrawSheetPath* sheet;
 
     /* Build the sheet list */
@@ -327,7 +327,7 @@ static void GenListeGLabels( std::vector <LABEL_OBJECT>& aList )
 
             case DRAW_SHEET_STRUCT_TYPE:
             {
-                PinLabel = ( (DrawSheetStruct*) DrawList )->m_Label;
+                PinLabel = ( (SCH_SHEET*) DrawList )->m_Label;
                 while( PinLabel != NULL )
                 {
                     labet_object.m_LabelType =
@@ -427,12 +427,12 @@ bool SortLabelsByValue( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 )
     wxString* Text1, * Text2;
 
     if( obj1.m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
-        Text1 = &( (Hierarchical_PIN_Sheet_Struct*) (obj1.m_Label) )->m_Text;
+        Text1 = &( (SCH_SHEET_PIN*) (obj1.m_Label) )->m_Text;
     else
         Text1 = &( (SCH_TEXT*) (obj1.m_Label) )->m_Text;
 
     if( obj2.m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
-        Text2 = &( (Hierarchical_PIN_Sheet_Struct*) (obj2.m_Label) )->m_Text;
+        Text2 = &( (SCH_SHEET_PIN*) (obj2.m_Label) )->m_Text;
     else
         Text2 = &( (SCH_TEXT*) (obj2.m_Label) )->m_Text;
 
@@ -464,12 +464,12 @@ bool SortLabelsBySheet( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 )
     if( ii == 0 )
     {
         if( obj1.m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
-            Text1 = ( (Hierarchical_PIN_Sheet_Struct*) obj1.m_Label )->m_Text;
+            Text1 = ( (SCH_SHEET_PIN*) obj1.m_Label )->m_Text;
         else
             Text1 = ( (SCH_TEXT*) obj1.m_Label )->m_Text;
 
         if( obj2.m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
-            Text2 = ( (Hierarchical_PIN_Sheet_Struct*) obj2.m_Label )->m_Text;
+            Text2 = ( (SCH_SHEET_PIN*) obj2.m_Label )->m_Text;
         else
             Text2 = ( (SCH_TEXT*) obj2.m_Label )->m_Text;
 
@@ -804,7 +804,7 @@ static int PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList )
 {
 /************************************************************************/
     SCH_LABEL* DrawTextItem;
-    Hierarchical_PIN_Sheet_Struct* DrawSheetLabel;
+    SCH_SHEET_PIN* DrawSheetLabel;
     wxString msg, sheetpath;
     wxString labeltype;
 
@@ -835,8 +835,7 @@ static int PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList )
 
         case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
         {
-            DrawSheetLabel =
-                (Hierarchical_PIN_Sheet_Struct*) aList[ii].m_Label;
+            DrawSheetLabel = (SCH_SHEET_PIN*) aList[ii].m_Label;
             int jj = DrawSheetLabel->m_Shape;
             if( jj < 0 )
                 jj = NET_TMAX;

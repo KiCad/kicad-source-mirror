@@ -14,9 +14,9 @@
 #include "class_library.h"
 
 
-/* Routines Locales */
 static bool DrawStructInBox( int x1, int y1, int x2, int y2,
-                             SCH_ITEM *DrawStruct );
+                             SCH_ITEM* DrawStruct );
+
 static SCH_ITEM* LastSnappedStruct = NULL;
 static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
                           int StartX2, int StartY2, int EndX2, int EndY2 );
@@ -43,10 +43,10 @@ SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
     while( DrawList )
     {
         if( ( SnapPoint2( Screen->m_MousePosition, LIBITEM,
-                         DrawList, Screen->GetZoom() ) ) == FALSE )
+                          DrawList, Screen->GetZoom() ) ) == FALSE )
         {
             if( ( SnapPoint2( Screen->m_Curseur, LIBITEM,
-                             DrawList, Screen->GetScalingFactor() ) ) == FALSE )
+                              DrawList, Screen->GetScalingFactor() ) ) == FALSE )
                 break;
         }
         component = (SCH_COMPONENT*) LastSnappedStruct;
@@ -55,12 +55,14 @@ SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
         {
             lastcomponent = component;
             BoundaryBox   = lastcomponent->GetBoundaryBox();
-            sizeref = ABS( (float) BoundaryBox.GetWidth() * BoundaryBox.GetHeight() );
+            sizeref = ABS( (float) BoundaryBox.GetWidth() *
+                           BoundaryBox.GetHeight() );
         }
         else
         {
             BoundaryBox = component->GetBoundaryBox();
-            sizecurr    = ABS( (float) BoundaryBox.GetWidth() * BoundaryBox.GetHeight() );
+            sizecurr    = ABS( (float) BoundaryBox.GetWidth() *
+                               BoundaryBox.GetHeight() );
             if( sizeref > sizecurr )   // a smallest component is found
             {
                 sizeref = sizecurr;
@@ -73,10 +75,12 @@ SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
 }
 
 
-/********************************************************************************/
-SCH_ITEM* PickStruct( const wxPoint& refpos, BASE_SCREEN* screen, int SearchMask )
 /******************************************************************************/
-
+SCH_ITEM* PickStruct( const wxPoint& refpos,
+                      BASE_SCREEN*   screen,
+                      int            SearchMask )
+{
+/******************************************************************************/
 /* Search an item at pos refpos
  *  SearchMask = (bitwise OR):
  *  LIBITEM
@@ -94,9 +98,9 @@ SCH_ITEM* PickStruct( const wxPoint& refpos, BASE_SCREEN* screen, int SearchMask
  *  SHEETLABELITEM
  *  FIELDCMPITEM
  *
- *  if EXCLUDE_WIRE_BUS_ENDPOINTS is set, in wire ou bus search and locate,
+ *  if EXCLUDE_WIRE_BUS_ENDPOINTS is set, in wire or bus search and locate,
  *  start and end points are not included in search
- *  if WIRE_BUS_ENDPOINTS_ONLY is set, in wire ou bus search and locate,
+ *  if WIRE_BUS_ENDPOINTS_ONLY is set, in wire or bus search and locate,
  *  only start and end points are included in search
  *
  *
@@ -104,7 +108,6 @@ SCH_ITEM* PickStruct( const wxPoint& refpos, BASE_SCREEN* screen, int SearchMask
  *          pointer on item found or NULL
  *
  */
-{
     bool Snapped;
 
     if( screen == NULL || screen->EEDrawList == NULL )
@@ -118,7 +121,6 @@ SCH_ITEM* PickStruct( const wxPoint& refpos, BASE_SCREEN* screen, int SearchMask
     }
     return NULL;
 }
-
 
 
 /** Function PickStruct
@@ -146,18 +148,19 @@ int PickItemsInBlock( BLOCK_SELECTOR& aBlock, BASE_SCREEN* aScreen )
         EXCHG( y, OrigY );
 
     ITEM_PICKER picker;
-    SCH_ITEM* DrawStruct = aScreen->EEDrawList;
+    SCH_ITEM*   DrawStruct = aScreen->EEDrawList;
     for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
     {
         if( DrawStructInBox( OrigX, OrigY, x, y, DrawStruct ) )
         {
             /* Put this structure in the picked list: */
-            picker.m_PickedItem = DrawStruct;
+            picker.m_PickedItem     = DrawStruct;
             picker.m_PickedItemType = DrawStruct->Type();
-            aBlock.PushItem(picker);
+            aBlock.PushItem( picker );
             itemcount++;
         }
     }
+
     return itemcount;
 }
 
@@ -175,7 +178,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
 {
     for( ; DrawList != NULL; DrawList = DrawList->Next() )
     {
-        int hitminDist = MAX( g_DrawDefaultLineThickness, 3 ) ;
+        int hitminDist = MAX( g_DrawDefaultLineThickness, 3 );
         switch( DrawList->Type() )
         {
         case DRAW_POLYLINE_STRUCT_TYPE:
@@ -187,7 +190,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             for( unsigned i = 0; i < STRUCT->GetCornerCount() - 1; i++ )
             {
                 if( TestSegmentHit( aPosRef, STRUCT->m_PolyPoints[i],
-                                      STRUCT->m_PolyPoints[i + 1], hitminDist ) )
+                                    STRUCT->m_PolyPoints[i + 1], hitminDist ) )
                 {
                     LastSnappedStruct = DrawList;
                     return TRUE;
@@ -204,14 +207,18 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
 
             if( TestSegmentHit( aPosRef, STRUCT->m_Start, STRUCT->m_End, 0 ) )
             {
-                if( ( (SearchMask & DRAWITEM) && (STRUCT->GetLayer() == LAYER_NOTES) )
-                   || ( (SearchMask & WIREITEM) && (STRUCT->GetLayer() == LAYER_WIRE) )
-                   || ( (SearchMask & BUSITEM) && (STRUCT->GetLayer() == LAYER_BUS) )
+                if( ( (SearchMask & DRAWITEM)
+                     && (STRUCT->GetLayer() == LAYER_NOTES) )
+                   || ( (SearchMask & WIREITEM)
+                       && (STRUCT->GetLayer() == LAYER_WIRE) )
+                   || ( (SearchMask & BUSITEM)
+                       && (STRUCT->GetLayer() == LAYER_BUS) )
                     )
                 {
                     if( SearchMask & EXCLUDE_WIRE_BUS_ENDPOINTS )
                     {
-                        if( aPosRef == STRUCT->m_Start || aPosRef == STRUCT->m_End )
+                        if( aPosRef == STRUCT->m_Start || aPosRef ==
+                            STRUCT->m_End )
                             break;
                     }
 
@@ -234,7 +241,8 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             if( !( SearchMask & (RACCORDITEM) ) )
                 break;
 
-            if( TestSegmentHit( aPosRef, STRUCT->m_Pos, STRUCT->m_End(), hitminDist ) )
+            if( TestSegmentHit( aPosRef, STRUCT->m_Pos, STRUCT->m_End(),
+                                hitminDist ) )
             {
                 LastSnappedStruct = DrawList;
                 return TRUE;
@@ -271,7 +279,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             #define STRUCT ( (MARKER_SCH*) DrawList )
             if( !(SearchMask & MARKERITEM) )
                 break;
-            if( STRUCT->HitTest(aPosRef) )
+            if( STRUCT->HitTest( aPosRef ) )
             {
                 LastSnappedStruct = DrawList;
                 return TRUE;
@@ -296,7 +304,8 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
         case TYPE_SCH_GLOBALLABEL:
         case TYPE_SCH_HIERLABEL:
             #undef  STRUCT
-            #define STRUCT ( (SCH_TEXT*) DrawList )     // SCH_TEXT is the base class of these labels
+            #define STRUCT ( (SCH_TEXT*) DrawList ) // SCH_TEXT is the base
+                                                    // class of these labels
             if( !(SearchMask & LABELITEM) )
                 break;
             if( STRUCT->HitTest( aPosRef ) )
@@ -346,7 +355,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
 
         case DRAW_SHEET_STRUCT_TYPE:
             #undef STRUCT
-            #define STRUCT ( (DrawSheetStruct*) DrawList )
+            #define STRUCT ( (SCH_SHEET*) DrawList )
             if( !(SearchMask & SHEETITEM) )
                 break;
             if( STRUCT->HitTest( aPosRef ) )
@@ -359,7 +368,8 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
         default:
         {
             wxString msg;
-            msg.Printf( wxT( "SnapPoint2() error: unexpected struct type %d (" ), DrawList->Type() );
+            msg.Printf( wxT( "SnapPoint2() error: unexpected struct type %d (" ),
+                        DrawList->Type() );
             msg << DrawList->GetClass() << wxT( ")" );
             wxMessageBox( msg );
             break;
@@ -389,8 +399,10 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2, SCH_ITEM* DrawStruct )
         #define STRUCT ( (DrawPolylineStruct*) DrawStruct )
         for( unsigned i = 0; i < STRUCT->GetCornerCount(); i++ )
         {
-            if( STRUCT->m_PolyPoints[i].x >= x1 && STRUCT->m_PolyPoints[i].x <= x2
-                && STRUCT->m_PolyPoints[i].y >= y1 && STRUCT->m_PolyPoints[i].y <=y2 )
+            if( STRUCT->m_PolyPoints[i].x >= x1
+                && STRUCT->m_PolyPoints[i].x <= x2
+                && STRUCT->m_PolyPoints[i].y >= y1
+                && STRUCT->m_PolyPoints[i].y <=y2 )
                 return TRUE;
         }
 
@@ -480,8 +492,10 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2, SCH_ITEM* DrawStruct )
     case TYPE_SCH_GLOBALLABEL:
         #undef STRUCT
         #define STRUCT ( (SCH_LABEL*) DrawStruct )
-        dx  = STRUCT->m_Size.x * ( STRUCT->GetLength() + 1);  /* total length */
-        dy  = STRUCT->m_Size.y / 2;                           /* half height */
+        dx  = STRUCT->m_Size.x * ( STRUCT->GetLength() + 1);    /* total length
+                                                                 **/
+        dy  = STRUCT->m_Size.y / 2;                             /* half height
+                                                                 **/
         xt1 = xt2 = STRUCT->m_Pos.x;
         yt1 = yt2 = STRUCT->m_Pos.y;
 
@@ -524,7 +538,7 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2, SCH_ITEM* DrawStruct )
 
     case DRAW_SHEET_STRUCT_TYPE:
         #undef STRUCT
-        #define STRUCT ( (DrawSheetStruct*) DrawStruct )
+        #define STRUCT ( (SCH_SHEET*) DrawStruct )
         /* Recalculate the coordinates of the worksheet component */
         xt1 = STRUCT->m_Pos.x;
         yt1 = STRUCT->m_Pos.y;
@@ -539,9 +553,8 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2, SCH_ITEM* DrawStruct )
         break;
 
     default:
-        msg.Printf(
-            wxT( "DrawStructInBox() Err: unexpected StructType %d (" ),
-            DrawStruct->Type() );
+        msg.Printf( wxT( "DrawStructInBox() Err: unexpected StructType %d (" ),
+                    DrawStruct->Type() );
         msg << DrawStruct->GetClass() << wxT( ")" );
         wxMessageBox( msg );
         break;
@@ -554,8 +567,8 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2, SCH_ITEM* DrawStruct )
 /****************************************************************************/
 static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
                           int StartX2, int StartY2, int EndX2, int EndY2 )
+{
 /****************************************************************************/
-
 /*  Routine detects that the rectangle 1 (Box1) and the rectangle 2 (Box2) is
  * Overlap.
  * Returns TRUE or FALSE.
@@ -563,7 +576,6 @@ static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
  * These assume that there is recovery if at least one corner
  * A 'Box' is included in the other
  */
-{
     int cX, cY;
 
     if( StartX1 > EndX1 )
@@ -621,11 +633,10 @@ static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
 }
 
 
-Hierarchical_PIN_Sheet_Struct* LocateSheetLabel( DrawSheetStruct* Sheet,
-                                                 const wxPoint& pos )
+SCH_SHEET_PIN* LocateSheetLabel( SCH_SHEET* Sheet, const wxPoint& pos )
 {
     int size, dy, minx, maxx;
-    Hierarchical_PIN_Sheet_Struct* SheetLabel;
+    SCH_SHEET_PIN* SheetLabel;
 
     SheetLabel = Sheet->m_Label;
     while( SheetLabel
@@ -658,7 +669,7 @@ LIB_PIN* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos,
     LIB_PIN* Pin = NULL;
 
     for( DrawStruct = DrawList; DrawStruct != NULL;
-         DrawStruct = DrawStruct->Next() )
+        DrawStruct = DrawStruct->Next() )
     {
         if( DrawStruct->Type() != TYPE_SCH_COMPONENT )
             continue;
@@ -667,7 +678,8 @@ LIB_PIN* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos,
 
         if( Entry == NULL )
             continue;
-        /* we use LocateDrawItem to locate pîns. but this function suppose a
+
+        /* we use LocateDrawItem to locate pins. but this function suppose a
          * component.
          * at 0,0 location
          * So we must calculate the ref position relative to the component
@@ -687,20 +699,18 @@ LIB_PIN* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos,
 }
 
 
-Hierarchical_PIN_Sheet_Struct* LocateAnyPinSheet( const wxPoint& RefPos,
-                                                  SCH_ITEM*      DrawList )
+SCH_SHEET_PIN* LocateAnyPinSheet( const wxPoint& RefPos, SCH_ITEM* DrawList )
 {
     SCH_ITEM* DrawStruct;
-    Hierarchical_PIN_Sheet_Struct* PinSheet = NULL;
+    SCH_SHEET_PIN* PinSheet = NULL;
 
     for( DrawStruct = DrawList; DrawStruct != NULL;
-         DrawStruct = DrawStruct->Next() )
+        DrawStruct = DrawStruct->Next() )
     {
         if( DrawStruct->Type() != DRAW_SHEET_STRUCT_TYPE )
             continue;
 
-        PinSheet = LocateSheetLabel( (DrawSheetStruct*) DrawStruct,
-                                     RefPos );
+        PinSheet = LocateSheetLabel( (SCH_SHEET*) DrawStruct, RefPos );
         if( PinSheet )
             break;
     }

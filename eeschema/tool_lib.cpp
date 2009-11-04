@@ -1,6 +1,6 @@
-/********************************************/
-/*	tool_lib.cpp: construction des toolbars */
-/********************************************/
+/******************/
+/*  tool_lib.cpp  */
+/******************/
 
 #include "fctsys.h"
 #include "common.h"
@@ -154,7 +154,8 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_LIBEDIT_CHECK_PART, wxEmptyString,
-                         wxBitmap( erc_xpm ), _( "Test for duplicate pins and off grid pins" ) );
+                         wxBitmap( erc_xpm ),
+                         _( "Test for duplicate pins and off grid pins" ) );
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Zoom in" ), s_Libedit_Hokeys_Descr, HK_ZOOM_IN );

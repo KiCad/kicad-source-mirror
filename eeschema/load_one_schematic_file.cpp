@@ -1,5 +1,5 @@
 /****************************************/
-/*	Module to load/save EESchema files.	*/
+/*  Module to load/save EESchema files. */
 /****************************************/
 
 #include "fctsys.h"
@@ -29,7 +29,6 @@ extern int ReadPartDescr( wxWindow* frame, char* Line, FILE* f,
                           wxString& aMsgDiag, int* aLineNum,
                           BASE_SCREEN* Window );
 
-/* Fonctions locales */
 static void LoadLayers( FILE* f, int* linecnt );
 
 
@@ -118,7 +117,8 @@ again." );
     }
 
     // Read the rest of a potentially very long line.  fgets() puts a '\n' into
-    // the buffer if the end of line was reached.  Read until end of line if necessary.
+    // the buffer if the end of line was reached.  Read until end of line if
+    // necessary.
     if( Line[ strlen( Line )-1 ] != '\n' )
     {
         int c;
@@ -136,7 +136,7 @@ again." );
 
         switch( Line[0] )
         {
-        case '$':           /* identification de bloc */
+        case '$':           /* identification block */
             if( Line[1] == 'C' )
                 Failed = ReadPartDescr( this, Line, f, MsgDiag, &LineCount,
                                         screen );
@@ -148,32 +148,32 @@ again." );
             else if( Line[1] == 'D' )
                 Failed = ReadSchemaDescr( this, Line, f, MsgDiag, &LineCount,
                                           screen );
-	    else if( Line[1] == 'T' ) //text part
-	    {
-	      printf("**** TEXT PART\n");
-	      SCH_ITEM* Struct;
-	      Struct = ReadTextDescr( f, MsgDiag, Line, sizeof(Line),
-				      &LineCount, version);
-	      if( Struct )
-	      {
-		  Struct->SetNext( screen->EEDrawList );
-		  screen->EEDrawList = Struct;
-	      }
-	      else
-		  Failed = true;
-	    }
+        else if( Line[1] == 'T' ) //text part
+        {
+          printf("**** TEXT PART\n");
+          SCH_ITEM* Struct;
+          Struct = ReadTextDescr( f, MsgDiag, Line, sizeof(Line),
+                      &LineCount, version);
+          if( Struct )
+          {
+          Struct->SetNext( screen->EEDrawList );
+          screen->EEDrawList = Struct;
+          }
+          else
+          Failed = true;
+        }
 
             break;
 
-        case 'L':           /* Its a library item. */
+        case 'L':        /* Its a library item. */
             Failed = ReadPartDescr( this, Line, f, MsgDiag, &LineCount, screen );
-            break;          /* Fin lecture 1 composant */
+            break;
 
 
         case 'W':        /* Its a Segment (WIRE or BUS) item. */
             if( sscanf( SLine, "%s %s", Name1, Name2 ) != 2  )
             {
-                MsgDiag.Printf( wxT( "EESchema file Segment struct error at line %d, aborted" ),
+                MsgDiag.Printf( wxT( "EESchema file segment error at line %d, aborted" ),
                                 LineCount );
                 MsgDiag << wxT( "\n" ) << CONV_FROM_UTF8( Line );
                 Failed = true;
@@ -209,7 +209,7 @@ again." );
             break;
 
 
-        case 'E':        /* Its a Raccord (WIRE or BUS) item. */
+        case 'E':        /* Its a WIRE or BUS item. */
             if( sscanf( SLine, "%s %s", Name1, Name2 ) != 2  )
             {
                 MsgDiag.Printf( wxT( "EESchema file record struct error at line %d, aborted" ),
@@ -325,7 +325,8 @@ at line %d, aborted" ),
             break;
 
         case 'K':                       /* It is a Marker item. */
-            // Markers are no more read from file. they are only created on demand in schematic
+            // Markers are no more read from file. they are only created on
+            // demand in schematic
             break;
 
         case 'T':                       /* It is a text item. */
@@ -398,7 +399,7 @@ static void LoadLayers( FILE* f, int* linecnt )
     sscanf( Line, "%s %d %d", Name, &Number, &g_LayerDescr.CurrentLayer );
     if( strcmp( Name, "EELAYER" ) !=0 )
     {
-        /* error : init par defaut */
+        /* error : init par default */
         Number = MAX_LAYER;
     }
 

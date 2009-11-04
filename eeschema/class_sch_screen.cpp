@@ -251,7 +251,7 @@ void EDA_ScreenList::BuildScreenList( EDA_BaseStruct* s )
 {
     if( s && s->Type() == DRAW_SHEET_STRUCT_TYPE )
     {
-        DrawSheetStruct* ds = (DrawSheetStruct*) s;
+        SCH_SHEET* ds = (SCH_SHEET*) s;
         s = ds->m_AssociatedScreen;
     }
     if( s && s->Type() == SCREEN_STRUCT_TYPE )

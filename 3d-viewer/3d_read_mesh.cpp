@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        3d_read_mesh.cpp
 /////////////////////////////////////////////////////////////////////////////
 
@@ -18,9 +17,7 @@
 #include "3d_viewer.h"
 
 
-/***********************************/
-int S3D_MASTER:: ReadData()
-/************************************/
+int S3D_MASTER::ReadData()
 {
     char       line[1024], * text;
     wxFileName fn;
@@ -34,7 +31,7 @@ int S3D_MASTER:: ReadData()
     }
 
 
-    if( wxFileName::FileExists(m_Shape3DName) )
+    if( wxFileName::FileExists( m_Shape3DName ) )
         FullFilename = m_Shape3DName;
     else
     {
@@ -44,7 +41,7 @@ int S3D_MASTER:: ReadData()
         if( FullFilename.IsEmpty() )
         {
             wxLogDebug( _( "3D part library <%s> could not be found." ),
-                        GetChars( fn.GetFullPath() ) );
+                       GetChars( fn.GetFullPath() ) );
             return -1;
         }
     }
@@ -56,8 +53,9 @@ int S3D_MASTER:: ReadData()
         return -1;
     }
 
-    // Switch the locale to standard C (needed to print floating point numbers like 1.3)
-    SetLocaleTo_C_standard( );
+    // Switch the locale to standard C (needed to print floating point
+    // numbers like 1.3)
+    SetLocaleTo_C_standard();
     while( GetLine( file, line, &LineNum, 512 ) )
     {
         text = strtok( line, " \t\n\r" );
@@ -79,40 +77,36 @@ int S3D_MASTER:: ReadData()
     }
 
     fclose( file );
-    SetLocaleTo_Default( );      // revert to the current  locale
+    SetLocaleTo_Default();       // revert to the current locale
     return 0;
 }
 
 
-/*********************************************************/
-int S3D_MASTER:: ReadMaterial( FILE* file, int* LineNum )
-/*********************************************************/
-
 /*
- *  analyse la description du type:
- *      material DEF yellow Material {
- *        diffuseColor 1.00000 1.00000 0.00000e+0
- *        emissiveColor 0.00000e+0 0.00000e+0 0.00000e+0
- *        specularColor 1.00000 1.00000 1.00000
- *        ambientIntensity 1.00000
- *        transparency 0.00000e+0
- *        shininess 1.00000
- *      }
- *  ou du type:
- *      material USE yellow
+ * Analyzes the description of the type:
+ * DEF yellow material Material (
+ * DiffuseColor 1.00000 1.00000 0.00000e 0
+ * EmissiveColor 0.00000e 0 0.00000e 0 0.00000e 0
+ * SpecularColor 1.00000 1.00000 1.00000
+ * AmbientIntensity 1.00000
+ * Transparency 0.00000e 0
+ * Shininess 1.00000
+ *)
+ * Or type:
+ * USE yellow material
  */
+int S3D_MASTER:: ReadMaterial( FILE* file, int* LineNum )
 {
     char          line[512], * text, * command;
     wxString      mat_name;
     S3D_MATERIAL* material = NULL;
 
-    // Lecture de la commande:
     command  = strtok( NULL, " \t\n\r" );
     text     = strtok( NULL, " \t\n\r" );
     mat_name = CONV_FROM_UTF8( text );
     if( stricmp( command, "USE" ) == 0 )
     {
-        for( material = m_Materials;  material;  material = material->Next() )
+        for( material = m_Materials; material; material = material->Next() )
         {
             if( material->m_Name == mat_name )
             {
@@ -189,9 +183,7 @@ int S3D_MASTER:: ReadMaterial( FILE* file, int* LineNum )
 }
 
 
-/**********************************************************/
 int S3D_MASTER::ReadChildren( FILE* file, int* LineNum )
-/***********************************************************/
 {
     char line[1024], * text;
 
@@ -218,9 +210,7 @@ int S3D_MASTER::ReadChildren( FILE* file, int* LineNum )
 }
 
 
-/********************************************************/
 int S3D_MASTER::ReadShape( FILE* file, int* LineNum )
-/********************************************************/
 {
     char line[1024], * text;
     int  err = 1;
@@ -253,9 +243,7 @@ int S3D_MASTER::ReadShape( FILE* file, int* LineNum )
 }
 
 
-/*************************************************************/
 int S3D_MASTER::ReadAppearance( FILE* file, int* LineNum )
-/*************************************************************/
 {
     char line[1024], * text;
     int  err = 1;
@@ -285,11 +273,7 @@ int S3D_MASTER::ReadAppearance( FILE* file, int* LineNum )
 
 #define BUFSIZE 2000
 
-/************************************************************************************/
-double* ReadCoordsList( FILE* file, char* text_buffer, int* bufsize, int* LineNum )
-/************************************************************************************/
-
-/* Read a coordinate liste like:
+/* Read a coordinate list like:
  *      coord Coordinate { point [
  *        -5.24489 6.57640e-3 -9.42129e-2,
  *        -5.11821 6.57421e-3 0.542654,
@@ -305,6 +289,8 @@ double* ReadCoordsList( FILE* file, char* text_buffer, int* bufsize, int* LineNu
  *  text_buffer contains the first line of this node :
  *     "coord Coordinate { point ["
  */
+double* ReadCoordsList( FILE* file, char* text_buffer, int* bufsize,
+                        int* LineNum )
 {
     double*      data_list = NULL;
     unsigned int ii = 0, jj = 0, nn = BUFSIZE;
@@ -351,7 +337,8 @@ double* ReadCoordsList( FILE* file, char* text_buffer, int* bufsize, int* LineNu
                 if( ii >= nn )
                 {
                     nn *= 2;
-                    data_list = (double*) realloc( data_list, ( nn * sizeof(double) ) );
+                    data_list =
+                        (double*) realloc( data_list, ( nn * sizeof(double) ) );
                 }
                 HasData = FALSE;
                 if( *text == ']' )
@@ -384,9 +371,7 @@ double* ReadCoordsList( FILE* file, char* text_buffer, int* bufsize, int* LineNu
 }
 
 
-/***********************************************************/
 int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
-/***********************************************************/
 {
     char    line[1024], buffer[1024], * text;
     int     err    = 1;
@@ -430,7 +415,8 @@ int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
         if( stricmp( text, "normal" ) == 0 )
         {
             int     coord_number;
-            double* buf_points = ReadCoordsList( file, line, &coord_number, LineNum );
+            double* buf_points = ReadCoordsList( file, line, &coord_number,
+                                                 LineNum );
             continue;
             free( buf_points );
             continue;
@@ -457,7 +443,8 @@ int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
         if( stricmp( text, "color" ) == 0 )
         {
             int     coord_number;
-            double* buf_points = ReadCoordsList( file, line, &coord_number, LineNum );
+            double* buf_points = ReadCoordsList( file, line, &coord_number,
+                                                 LineNum );
             continue;
             free( buf_points );
             continue;
@@ -544,9 +531,7 @@ int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
 }
 
 
-/*********************************************************/
 int Struct3D_Shape:: ReadData( FILE* file, int* LineNum )
-/*********************************************************/
 {
     char line[512];
 

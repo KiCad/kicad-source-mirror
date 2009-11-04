@@ -17,19 +17,13 @@
 
 
 /* Local Variables : */
-static void Plot_Hierarchical_PIN_Sheet( PLOTTER*                       plotter,
-                                         Hierarchical_PIN_Sheet_Struct* Struct );
+static void Plot_Hierarchical_PIN_Sheet( PLOTTER* plotter,
+                                         SCH_SHEET_PIN* Struct );
 static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
                            int FieldNumber, int IsMulti, int DrawMode );
 
-/***/
 
-/**********************************************************/
 static void PlotNoConnectStruct( PLOTTER* plotter, DrawNoConnectStruct* Struct )
-/**********************************************************/
-
-/* Routine de dessin des symboles de "No Connexion" ..
- */
 {
 #define DELTA (DRAWNOCONNECT_SIZE / 2)
     int pX, pY;
@@ -44,10 +38,7 @@ static void PlotNoConnectStruct( PLOTTER* plotter, DrawNoConnectStruct* Struct )
 }
 
 
-/*************************************************/
 static void PlotLibPart( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem )
-/*************************************************/
-/* Polt a component */
 {
     LIB_COMPONENT* Entry;
     int            TransMat[2][2];
@@ -69,21 +60,17 @@ static void PlotLibPart( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem )
 }
 
 
-/*************************************************************/
+/* Plot field text.
+ * Input:
+ * DrawLibItem: pointer to the component
+ * FieldNumber: Number Field
+ * IsMulti: No Null flag if there are several sides by housing.
+ * Only useful for the field to add a reference to this one
+ * The identification from (A, B ...)
+ * DrawMode: trace mode
+ */
 static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
                            int FieldNumber, int IsMulti, int DrawMode )
-/**************************************************************/
-
-/* Routine de trace des textes type Field du composant.
- * entree:
- *     DrawLibItem: pointeur sur le composant
- *     FieldNumber: Numero du champ
- *     IsMulti: flag Non Null si il y a plusieurs parts par boitier.
- *             n'est utile que pour le champ reference pour ajouter a celui ci
- *             l'identification de la part ( A, B ... )
- *     DrawMode: mode de trace
- */
-
 {
     SCH_CMP_FIELD* field = DrawLibItem->GetField( FieldNumber );
     EDA_Colors     color = UNSPECIFIED_COLOR;
@@ -96,9 +83,10 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
     if( field->IsVoid() )
         return;
 
-    /* Calculate the text orientation, according to the component orientation/mirror */
+    /* Calculate the text orientation, according to the component
+     * orientation/mirror */
     int orient = field->m_Orient;
-    if( DrawLibItem->m_Transform[0][1] )  // Rotation du composant de 90deg
+    if( DrawLibItem->m_Transform[0][1] )  // Rotate component 90 deg.
     {
         if( orient == TEXT_ORIENT_HORIZ )
             orient = TEXT_ORIENT_VERT;
@@ -106,16 +94,17 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
             orient = TEXT_ORIENT_HORIZ;
     }
 
-    /* Calculate the text justification, according to the component orientation/mirror
+    /* Calculate the text justification, according to the component
+     * orientation/mirror
      * this is a bit complicated due to cumulative calculations:
      * - numerous cases (mirrored or not, rotation)
-     * - the DrawGraphicText function recalculate also H and H vustifications
-     *      according to the text orienation.
-     * - When a component is mirrored, the text is not mirrored and justifications
-     *      are complicated to calculate
+     * - the DrawGraphicText function recalculate also H and H justifications
+     *      according to the text orientation.
+     * - When a component is mirrored, the text is not mirrored and
+     *   justifications are complicated to calculate
      * so the more easily way is to use no justifications ( Centered text )
      * and use GetBoundaryBox to know the text coordinate considered as centered
-    */
+     */
     EDA_Rect BoundaryBox = field->GetBoundaryBox();
     GRTextHorizJustifyType hjustify = GR_TEXT_HJUSTIFY_CENTER;
     GRTextVertJustifyType vjustify = GR_TEXT_VJUSTIFY_CENTER;
@@ -131,7 +120,7 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
                        hjustify, vjustify,
                        thickness, field->m_Italic, field->m_Bold );
     }
-    else    /* We plt the reference, for a multiple parts per package */
+    else    /* We plot the reference, for a multiple parts per package */
     {
         /* Adding A, B ... to the reference */
         wxString Text;
@@ -152,13 +141,8 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
 }
 
 
-/**************************************************************************/
 void PlotPinSymbol( PLOTTER* plotter, const wxPoint& pos,
                     int len, int orient, int Shape )
-/**************************************************************************/
-
-/* Trace la pin du symbole en cours de trace
- */
 {
     int        MapX1, MapY1, x1, y1;
     EDA_Colors color = UNSPECIFIED_COLOR;
@@ -226,14 +210,16 @@ void PlotPinSymbol( PLOTTER* plotter, const wxPoint& pos,
     {
         if( MapY1 == 0 )        /* MapX1 = +- 1 */
         {
-            plotter->move_to( wxPoint( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2, y1 ) );
+            plotter->move_to( wxPoint( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2,
+                                       y1 ) );
             plotter->line_to( wxPoint( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2,
                                        y1 - IEEE_SYMBOL_PIN_DIM ) );
             plotter->finish_to( wxPoint( x1, y1 ) );
         }
         else    /* MapX1 = 0 */
         {
-            plotter->move_to( wxPoint( x1, y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 ) );
+            plotter->move_to( wxPoint( x1,
+                                       y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 ) );
             plotter->line_to( wxPoint( x1 - IEEE_SYMBOL_PIN_DIM,
                                        y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 ) );
             plotter->finish_to( wxPoint( x1, y1 ) );
@@ -246,25 +232,20 @@ void PlotPinSymbol( PLOTTER* plotter, const wxPoint& pos,
         if( MapY1 == 0 )        /* MapX1 = +- 1 */
         {
             plotter->move_to( wxPoint( x1, y1 - IEEE_SYMBOL_PIN_DIM ) );
-            plotter->finish_to( wxPoint( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2, y1 ) );
+            plotter->finish_to( wxPoint( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2,
+                                         y1 ) );
         }
         else    /* MapX1 = 0 */
         {
             plotter->move_to( wxPoint( x1 - IEEE_SYMBOL_PIN_DIM, y1 ) );
-            plotter->finish_to( wxPoint( x1, y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 ) );
+            plotter->finish_to( wxPoint( x1,
+                                         y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 ) );
         }
     }
 }
 
 
-/********************************************************************/
 static void PlotTextStruct( PLOTTER* plotter, SCH_TEXT* aSchText )
-/********************************************************************/
-
-/*
- * Routine de trace des Textes, Labels et Global-Labels.
- * Les textes peuvent avoir 4 directions.
- */
 {
     static std::vector <wxPoint> Poly;
 
@@ -299,42 +280,39 @@ static void PlotTextStruct( PLOTTER* plotter, SCH_TEXT* aSchText )
         for( unsigned i = 0; i<list->Count(); i++ )
         {
             wxString txt = list->Item( i );
-            plotter->text( pos,
-                           color, txt, aSchText->m_Orient, aSchText->m_Size,
-                           aSchText->m_HJustify, aSchText->m_VJustify,
-                           thickness, aSchText->m_Italic, aSchText->m_Bold );
+            plotter->text( pos, color, txt, aSchText->m_Orient,
+                           aSchText->m_Size, aSchText->m_HJustify,
+                           aSchText->m_VJustify, thickness,
+                           aSchText->m_Italic, aSchText->m_Bold );
             pos += offset;
         }
 
         delete (list);
     }
     else
-        plotter->text( textpos,
-                       color, aSchText->m_Text, aSchText->m_Orient, aSchText->m_Size,
-                       aSchText->m_HJustify, aSchText->m_VJustify,
-                       thickness, aSchText->m_Italic, aSchText->m_Bold );
+        plotter->text( textpos, color, aSchText->m_Text, aSchText->m_Orient,
+                       aSchText->m_Size, aSchText->m_HJustify,
+                       aSchText->m_VJustify, thickness, aSchText->m_Italic,
+                       aSchText->m_Bold );
 
-    /* Draw graphic symbol for global or hierachical labels */
+    /* Draw graphic symbol for global or hierarchical labels */
     if( aSchText->Type() == TYPE_SCH_GLOBALLABEL )
     {
-        ( (SCH_GLOBALLABEL*) aSchText )->CreateGraphicShape( Poly, aSchText->m_Pos );
+        ( (SCH_GLOBALLABEL*) aSchText )->CreateGraphicShape( Poly,
+                                                             aSchText->m_Pos );
         plotter->poly( Poly.size(), &Poly[0].x, NO_FILL );
     }
     if( aSchText->Type() == TYPE_SCH_HIERLABEL )
     {
-        ( (SCH_HIERLABEL*) aSchText )->CreateGraphicShape( Poly, aSchText->m_Pos );
+        ( (SCH_HIERLABEL*) aSchText )->CreateGraphicShape( Poly,
+                                                           aSchText->m_Pos );
         plotter->poly( Poly.size(), &Poly[0].x, NO_FILL );
     }
 }
 
 
-/*****************************************************************************************/
-static void Plot_Hierarchical_PIN_Sheet( PLOTTER*                       plotter,
-                                         Hierarchical_PIN_Sheet_Struct* aHierarchical_PIN )
-/****************************************************************************************/
-
-/* Plot a Hierarchical_PIN_Sheet
- */
+static void Plot_Hierarchical_PIN_Sheet( PLOTTER*       plotter,
+                                         SCH_SHEET_PIN* aHierarchical_PIN )
 {
     EDA_Colors txtcolor = UNSPECIFIED_COLOR;
     int        posx, tposx, posy, size;
@@ -361,10 +339,10 @@ static void Plot_Hierarchical_PIN_Sheet( PLOTTER*                       plotter,
     int thickness = aHierarchical_PIN->GetPenSize();
     plotter->set_current_line_width( thickness );
 
-    plotter->text( wxPoint( tposx, posy ), txtcolor,
-                   aHierarchical_PIN->m_Text, TEXT_ORIENT_HORIZ, wxSize( size, size ),
-                   side, GR_TEXT_VJUSTIFY_CENTER,
-                   thickness, aHierarchical_PIN->m_Italic, aHierarchical_PIN->m_Bold );
+    plotter->text( wxPoint( tposx, posy ), txtcolor, aHierarchical_PIN->m_Text,
+                   TEXT_ORIENT_HORIZ, wxSize( size, size ),
+                   side, GR_TEXT_VJUSTIFY_CENTER, thickness,
+                   aHierarchical_PIN->m_Italic, aHierarchical_PIN->m_Bold );
 
     /* Draw the associated graphic symbol */
     aHierarchical_PIN->CreateGraphicShape( Poly, aHierarchical_PIN->m_Pos );
@@ -373,12 +351,9 @@ static void Plot_Hierarchical_PIN_Sheet( PLOTTER*                       plotter,
 }
 
 
-/*************************************************/
-static void PlotSheetStruct( PLOTTER* plotter, DrawSheetStruct* Struct )
-/*************************************************/
-/* Routine de dessin du bloc type hierarchie */
+static void PlotSheetStruct( PLOTTER* plotter, SCH_SHEET* Struct )
 {
-    Hierarchical_PIN_Sheet_Struct* SheetLabelStruct;
+    SCH_SHEET_PIN* SheetLabelStruct;
     EDA_Colors txtcolor = UNSPECIFIED_COLOR;
     wxSize     size;
     wxString   Text;
@@ -424,9 +399,9 @@ static void PlotSheetStruct( PLOTTER* plotter, DrawSheetStruct* Struct )
 
     plotter->set_color( ReturnLayerColor( LAYER_SHEETFILENAME ) );
 
-    plotter->text( wxPoint( Struct->m_Pos.x, Struct->m_Pos.y + Struct->m_Size.y + 4 ),
-                   txtcolor,
-                   Text, TEXT_ORIENT_HORIZ, size,
+    plotter->text( wxPoint( Struct->m_Pos.x,
+                            Struct->m_Pos.y + Struct->m_Size.y + 4 ),
+                   txtcolor, Text, TEXT_ORIENT_HORIZ, size,
                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP,
                    thickness, italic, false );
 
@@ -442,9 +417,7 @@ static void PlotSheetStruct( PLOTTER* plotter, DrawSheetStruct* Struct )
 }
 
 
-/********************************************************/
 void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* aDrawlist )
-/*********************************************************/
 {
     while( aDrawlist )  /* Plot each item in draw list */
     {
@@ -489,7 +462,8 @@ void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* aDrawlist )
             #undef STRUCT
             #define STRUCT ( (DrawJunctionStruct*) aDrawlist )
             plotter->set_color( ReturnLayerColor( STRUCT->GetLayer() ) );
-            plotter->circle( STRUCT->m_Pos, DRAWJUNCTION_DIAMETER, FILLED_SHAPE );
+            plotter->circle( STRUCT->m_Pos, DRAWJUNCTION_DIAMETER,
+                             FILLED_SHAPE );
             break;
 
         case TYPE_SCH_TEXT:
@@ -514,7 +488,7 @@ void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* aDrawlist )
             break;
 
         case DRAW_SHEET_STRUCT_TYPE:
-            PlotSheetStruct( plotter, (DrawSheetStruct*) aDrawlist );
+            PlotSheetStruct( plotter, (SCH_SHEET*) aDrawlist );
             break;
 
         case DRAW_NOCONNECT_STRUCT_TYPE:

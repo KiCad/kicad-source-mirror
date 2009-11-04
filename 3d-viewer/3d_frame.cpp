@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        3d_frame.cpp
 /////////////////////////////////////////////////////////////////////////////
 
@@ -26,11 +25,11 @@
 #include <wxstruct.h>
 
 Info_3D_Visu g_Parm_3D_Visu;
-double g_Draw3d_dx;
-double g_Draw3d_dy;
-double ZBottom;
-double ZTop;
-double DataScale3D;  // coeff de conversion unites utilsateut -> unites 3D
+double       g_Draw3d_dx;
+double       g_Draw3d_dy;
+double       ZBottom;
+double       ZTop;
+double       DataScale3D; // 3D conversion units.
 
 
 BEGIN_EVENT_TABLE( WinEDA3D_DrawFrame, wxFrame )
@@ -45,20 +44,18 @@ BEGIN_EVENT_TABLE( WinEDA3D_DrawFrame, wxFrame )
     EVT_CLOSE( WinEDA3D_DrawFrame::OnCloseWindow )
 END_EVENT_TABLE()
 
-/*******************************************************************/
 WinEDA3D_DrawFrame::WinEDA3D_DrawFrame( WinEDA_BasePcbFrame* parent,
-                                        const wxString& title,
-                                        long style ) :
-    wxFrame( parent, DISPLAY3D_FRAME, title,
-             wxPoint( -1, -1 ), wxSize( -1, -1 ), style )
-/*******************************************************************/
+                                        const wxString&      title,
+                                        long                 style ) :
+    wxFrame( parent, DISPLAY3D_FRAME, title, wxPoint( -1, -1 ),
+             wxSize( -1, -1 ), style )
 {
     m_FrameName     = wxT( "Frame3D" );
     m_Canvas        = NULL;
     m_Parent        = parent;
     m_HToolBar      = NULL;
     m_VToolBar      = NULL;
-    m_InternalUnits = 10000;    // Unites internes = 1/10000 inch
+    m_InternalUnits = 10000;    // Internal units = 1/10000 inch
 
     // Give it an icon
     SetIcon( wxICON( icon_w3d ) );
@@ -80,44 +77,41 @@ WinEDA3D_DrawFrame::WinEDA3D_DrawFrame( WinEDA_BasePcbFrame* parent,
 
     // Make a Pcb3D_GLCanvas
     m_Canvas = new Pcb3D_GLCanvas( this );
+
 #if KICAD_AUIMANAGER
-    m_auimgr.SetManagedWindow(this);
-    
+    m_auimgr.SetManagedWindow( this );
+
     wxAuiPaneInfo horiz;
-    horiz.Gripper(false);
-    horiz.DockFixed(true);
-    horiz.Movable(false);
-    horiz.Floatable(false);
-    horiz.CloseButton(false);
-    horiz.CaptionVisible(false);
-    
-    wxAuiPaneInfo vert(horiz);
-    
-    vert.TopDockable(false).BottomDockable(false);
-    horiz.LeftDockable(false).RightDockable(false);
-    
-    m_auimgr.AddPane(m_HToolBar,
-        wxAuiPaneInfo(horiz).Name(wxT("m_HToolBar")).Top());
-    
-    m_auimgr.AddPane(m_Canvas,
-        wxAuiPaneInfo().Name(wxT("DrawFrame")).CentrePane());
+    horiz.Gripper( false );
+    horiz.DockFixed( true );
+    horiz.Movable( false );
+    horiz.Floatable( false );
+    horiz.CloseButton( false );
+    horiz.CaptionVisible( false );
+
+    wxAuiPaneInfo vert( horiz );
+
+    vert.TopDockable( false ).BottomDockable( false );
+    horiz.LeftDockable( false ).RightDockable( false );
+
+    m_auimgr.AddPane( m_HToolBar,
+                      wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top() );
+
+    m_auimgr.AddPane( m_Canvas,
+                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
     m_auimgr.Update();
 #endif
 }
 
 
-/***********************************************************/
 void WinEDA3D_DrawFrame::Exit3DFrame( wxCommandEvent& event )
-/***********************************************************/
 {
     Close( TRUE );
 }
 
 
-/***********************************************************/
 void WinEDA3D_DrawFrame::OnCloseWindow( wxCloseEvent& Event )
-/***********************************************************/
 {
     SaveSettings();
     if( m_Parent )
@@ -128,12 +122,11 @@ void WinEDA3D_DrawFrame::OnCloseWindow( wxCloseEvent& Event )
 }
 
 
-/******************************************/
 void WinEDA3D_DrawFrame::GetSettings()
-/******************************************/
 {
     wxString  text;
-    wxConfig* config = wxGetApp().m_EDA_Config;  //  Current config used by application
+    wxConfig* config = wxGetApp().m_EDA_Config;  // Current config used by
+                                                 // application
 
     if( config )
     {
@@ -161,12 +154,11 @@ void WinEDA3D_DrawFrame::GetSettings()
 }
 
 
-/*******************************************/
 void WinEDA3D_DrawFrame::SaveSettings()
-/*******************************************/
 {
     wxString  text;
-    wxConfig* Config = wxGetApp().m_EDA_Config;  //  Current config used by application
+    wxConfig* Config = wxGetApp().m_EDA_Config;  //  Current config used by
+                                                 // application
 
     if( !Config )
         return;
@@ -192,9 +184,7 @@ void WinEDA3D_DrawFrame::SaveSettings()
 }
 
 
-/***********************************************************/
 void WinEDA3D_DrawFrame::Process_Zoom( wxCommandEvent& event )
-/***********************************************************/
 {
     int ii;
 
@@ -231,40 +221,29 @@ void WinEDA3D_DrawFrame::Process_Zoom( wxCommandEvent& event )
 }
 
 
-/************************************************************************/
 void WinEDA3D_DrawFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
-/************************************************************************/
 {
 }
 
 
-/*******************************************************************************/
-void WinEDA3D_DrawFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
-/*******************************************************************************/
+void WinEDA3D_DrawFrame::OnRightClick( const wxPoint& MousePos,
+                                       wxMenu*        PopMenu )
 {
 }
 
 
-/************************************/
 int WinEDA3D_DrawFrame::BestZoom()
-/************************************/
-
-// Retourne le meilleur zoom
 {
     return 1;
 }
 
 
-/*******************************************************************/
 void WinEDA3D_DrawFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
-/*******************************************************************/
 {
 }
 
 
-/************************************************************************/
 void WinEDA3D_DrawFrame::Process_Special_Functions( wxCommandEvent& event )
-/************************************************************************/
 {
 #define ROT_ANGLE 10.0
 
@@ -354,8 +333,8 @@ void WinEDA3D_DrawFrame::Process_Special_Functions( wxCommandEvent& event )
         return;
 
     default:
-        wxMessageBox(
-            wxT( "WinEDA3D_DrawFrame::Process_Special_Functions() error: unknown command" ) );
+        wxMessageBox( wxT( "WinEDA3D_DrawFrame::Process_Special_Functions() \
+error: unknown command" ) );
         return;
     }
 
@@ -364,24 +343,20 @@ void WinEDA3D_DrawFrame::Process_Special_Functions( wxCommandEvent& event )
 }
 
 
-/*****************************************/
 void WinEDA3D_DrawFrame::NewDisplay()
-/*****************************************/
 {
     m_Canvas->ClearLists();
     m_Canvas->CreateDrawGL_List();
+
 //    m_Canvas->InitGL();
     m_Canvas->Refresh( true );
     m_Canvas->DisplayStatus();
 }
 
 
-/******************************************/
-void WinEDA3D_DrawFrame::Set3DBgColor()
-/******************************************/
-
 /* called to set the background color of the 3D scene
  */
+void WinEDA3D_DrawFrame::Set3DBgColor()
 {
     S3D_Color color;
     wxColour  newcolor, oldcolor;
@@ -401,9 +376,7 @@ void WinEDA3D_DrawFrame::Set3DBgColor()
 }
 
 
-/******************************************/
 void WinEDA3D_DrawFrame::Set3DAxisOnOff()
-/******************************************/
 {
     if( g_Parm_3D_Visu.m_Draw3DAxis )
         g_Parm_3D_Visu.m_Draw3DAxis = FALSE;
@@ -413,9 +386,7 @@ void WinEDA3D_DrawFrame::Set3DAxisOnOff()
 }
 
 
-/******************************************/
 void WinEDA3D_DrawFrame::Set3DModuleOnOff()
-/******************************************/
 {
     if( g_Parm_3D_Visu.m_Draw3DModule )
         g_Parm_3D_Visu.m_Draw3DModule = FALSE;
@@ -425,9 +396,7 @@ void WinEDA3D_DrawFrame::Set3DModuleOnOff()
 }
 
 
-/******************************************/
 void WinEDA3D_DrawFrame::Set3DZoneOnOff()
-/******************************************/
 {
     if( g_Parm_3D_Visu.m_Draw3DZone )
         g_Parm_3D_Visu.m_Draw3DZone = FALSE;
@@ -437,9 +406,7 @@ void WinEDA3D_DrawFrame::Set3DZoneOnOff()
 }
 
 
-/******************************************/
 void WinEDA3D_DrawFrame::Set3DCommentsOnOff()
-/******************************************/
 {
     if( g_Parm_3D_Visu.m_Draw3DComments )
         g_Parm_3D_Visu.m_Draw3DComments = FALSE;
@@ -449,9 +416,7 @@ void WinEDA3D_DrawFrame::Set3DCommentsOnOff()
 }
 
 
-/******************************************/
 void WinEDA3D_DrawFrame::Set3DDrawingsOnOff()
-/******************************************/
 {
     if( g_Parm_3D_Visu.m_Draw3DDrawings )
         g_Parm_3D_Visu.m_Draw3DDrawings = FALSE;
@@ -461,9 +426,7 @@ void WinEDA3D_DrawFrame::Set3DDrawingsOnOff()
 }
 
 
-/******************************************/
 void WinEDA3D_DrawFrame::Set3DEco1OnOff()
-/******************************************/
 {
     if( g_Parm_3D_Visu.m_Draw3DEco1 )
         g_Parm_3D_Visu.m_Draw3DEco1 = FALSE;
@@ -473,9 +436,7 @@ void WinEDA3D_DrawFrame::Set3DEco1OnOff()
 }
 
 
-/******************************************/
 void WinEDA3D_DrawFrame::Set3DEco2OnOff()
-/******************************************/
 {
     if( g_Parm_3D_Visu.m_Draw3DEco2 )
         g_Parm_3D_Visu.m_Draw3DEco2 = FALSE;

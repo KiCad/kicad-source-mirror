@@ -1,6 +1,6 @@
-/******************************************************/
-/* schedit.cpp: fonctions generales de la schematique */
-/******************************************************/
+/*****************/
+/*  schedit.cpp  */
+/*****************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -18,11 +18,6 @@
 #include "class_library.h"
 
 
-/*****************************************************************************
-*
-* Traite les selections d'outils et les commandes appelees du menu POPUP
-*
-*****************************************************************************/
 void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 {
     int         id = event.GetId();
@@ -118,9 +113,9 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_ADD_LABEL:
     case ID_POPUP_SCH_GETINFO_MARKER:
 
-        /* At this point: Do nothing. these commands do not need to stop the current command
-          * (mainly a block command) or reset the current state
-          * They will be executed later, in next switch structure.
+        /* At this point: Do nothing. these commands do not need to stop the
+         * current command (mainly a block command) or reset the current state
+         * They will be executed later, in next switch structure.
          */
         break;
 
@@ -134,7 +129,8 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         {
             DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
         }
-        /* ne devrait pas etre execute, sauf bug: */
+
+        /* Should not be executed, except bug. */
         if( screen->m_BlockLocate.m_Command != BLOCK_IDLE )
         {
             screen->m_BlockLocate.m_Command = BLOCK_IDLE;
@@ -144,14 +140,16 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_DELETE_CMP:
-    case ID_POPUP_SCH_DELETE:       // Stop the, current command, keep the current tool
+    case ID_POPUP_SCH_DELETE:
+        // Stop the current command but keep the current tool
         if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
         {
             DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
         }
         break;
 
-    default:        // Stop the current command, and deselect the current tool
+    default:
+        // Stop the current command and deselect the current tool
         if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
         {
             DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
@@ -162,9 +160,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
     }
 
-    // End switch commande en cours
-
-    switch( id )    // Command execution:
+    switch( id )
     {
     case ID_HIERARCHY:
         InstallHierarchyFrame( &dc, pos );
@@ -380,32 +376,34 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_RESIZE_SHEET:
         DrawPanel->MouseToCursorSchema();
-        ReSizeSheet( (DrawSheetStruct*) screen->GetCurItem(), &dc );
+        ReSizeSheet( (SCH_SHEET*) screen->GetCurItem(), &dc );
         TestDanglingEnds( screen->EEDrawList, &dc );
         break;
 
     case ID_POPUP_SCH_EDIT_SHEET:
-        EditSheet( (DrawSheetStruct*) screen->GetCurItem(), &dc );
+        EditSheet( (SCH_SHEET*) screen->GetCurItem(), &dc );
         break;
 
     case ID_POPUP_IMPORT_GLABEL:
-        if ( screen->GetCurItem() && screen->GetCurItem()->Type() == DRAW_SHEET_STRUCT_TYPE )
-            GetScreen()->SetCurItem( Import_PinSheet( (DrawSheetStruct*)screen->GetCurItem(), &dc ) );
+        if ( screen->GetCurItem()
+             && screen->GetCurItem()->Type() == DRAW_SHEET_STRUCT_TYPE )
+            GetScreen()->SetCurItem(
+                Import_PinSheet( (SCH_SHEET*)screen->GetCurItem(), &dc ) );
         break;
 
     case ID_POPUP_SCH_CLEANUP_SHEET:
-        if ( screen->GetCurItem() && screen->GetCurItem()->Type() == DRAW_SHEET_STRUCT_TYPE )
-            ( (DrawSheetStruct*) screen->GetCurItem() )->CleanupSheet( this, true );
+        if ( screen->GetCurItem()
+             && screen->GetCurItem()->Type() == DRAW_SHEET_STRUCT_TYPE )
+            ( (SCH_SHEET*) screen->GetCurItem() )->CleanupSheet( this, true );
         break;
 
     case ID_POPUP_SCH_EDIT_PINSHEET:
-        Edit_PinSheet( (Hierarchical_PIN_Sheet_Struct*) screen->GetCurItem(), &dc );
+        Edit_PinSheet( (SCH_SHEET_PIN*) screen->GetCurItem(), &dc );
         break;
 
     case ID_POPUP_SCH_MOVE_PINSHEET:
         DrawPanel->MouseToCursorSchema();
-        StartMove_PinSheet( (Hierarchical_PIN_Sheet_Struct*)
-                           screen->GetCurItem(), &dc );
+        StartMove_PinSheet( (SCH_SHEET_PIN*)screen->GetCurItem(), &dc );
         break;
 
     case ID_POPUP_SCH_DRAG_CMP_REQUEST:
@@ -446,12 +444,13 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
             if( !HandleBlockBegin( &dc, BLOCK_DRAG,
                                    screen->m_Curseur ) )
                 break;
-            // Ensure the block selection contains the segment, or one end of the segment
-            // the initial rect is only one point (w = h = 0)
+            // Ensure the block selection contains the segment, or one end of
+            // the segment.  The initial rect is only one point (w = h = 0)
             // The rect must contains one or 2 ends.
             // If only one end is selected, this is a drag Node
-            // if no ends selected, we adjust the rect area to contain the whole segment
-            // This works fine only for H and V segments and only if they do not cross a component
+            // if no ends selected, we adjust the rect area to contain the
+            // whole segment.  This works fine only for H and V segments and
+            // only if they do not cross a component
             // TODO: a better way to drag only wires
             EDA_DrawLineStruct* segm = (EDA_DrawLineStruct*)screen->GetCurItem();
             if( !screen->m_BlockLocate.Inside(segm->m_Start) &&
@@ -664,7 +663,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         EDA_BaseStruct* DrawStruct = screen->GetCurItem();
         if( DrawStruct && (DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE) )
         {
-            InstallNextScreen( (DrawSheetStruct*) DrawStruct );
+            InstallNextScreen( (SCH_SHEET*) DrawStruct );
         }
     }
         break;
@@ -741,13 +740,14 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_GETINFO_MARKER:
-        if( screen->GetCurItem() && screen->GetCurItem()->Type() == TYPE_MARKER_SCH )
+        if( screen->GetCurItem()
+            && screen->GetCurItem()->Type() == TYPE_MARKER_SCH )
             ((MARKER_SCH*)screen->GetCurItem())->DisplayMarkerInfo( this );
         break;
 
     default:        // Log error:
         DisplayError( this,
-                     wxT( "WinEDA_SchematicFrame::Process_Special_Functions error" ) );
+                      wxT( "WinEDA_SchematicFrame::Process_Special_Functions error" ) );
         break;
     }
 
@@ -759,9 +759,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 }
 
 
-/*************************************************************************************/
 void WinEDA_SchematicFrame::Process_Move_Item( SCH_ITEM* DrawStruct, wxDC*  DC )
-/*************************************************************************************/
 {
     if( DrawStruct == NULL )
         return;
@@ -792,7 +790,7 @@ void WinEDA_SchematicFrame::Process_Move_Item( SCH_ITEM* DrawStruct, wxDC*  DC )
         break;
 
     case DRAW_SHEET_STRUCT_TYPE:
-        StartMoveSheet( (DrawSheetStruct*) DrawStruct, DC );
+        StartMoveSheet( (SCH_SHEET*) DrawStruct, DC );
         break;
 
     case DRAW_NOCONNECT_STRUCT_TYPE:
