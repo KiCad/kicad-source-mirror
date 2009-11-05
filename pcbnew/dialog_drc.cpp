@@ -13,6 +13,12 @@
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
 
+
+// dialog should remember its previous screen position and size
+wxPoint DIALOG_DRC_CONTROL::s_LastPos( -1, -1 );
+wxSize  DIALOG_DRC_CONTROL::s_LastSize;
+
+
 /* class DIALOG_DRC_CONTROL: a dialog to set DRC parameters (clearance, min cooper size)
  * and run DRC tests
  */
@@ -27,6 +33,12 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, WinEDA_PcbFrame* parent ) 
     if( GetSizer() )
     {
         GetSizer()->SetSizeHints( this );
+    }
+
+    if( s_LastPos.x != -1 )
+    {
+        SetSize( s_LastSize );
+        SetPosition( s_LastPos );
     }
 }
 
@@ -50,7 +62,10 @@ void DIALOG_DRC_CONTROL::InitValues()
     AddUnitSymbol( *m_TrackMinWidthTitle );
     AddUnitSymbol( *m_ViaMinTitle );
     AddUnitSymbol( *m_MicroViaMinTitle );
+
+    /* this looks terrible! does not fit into text field, do it in wxformbuilder instead
     m_SetClearance->SetValue( _("Netclasses values"));
+    */
 
     Layout();      // adding the units above expanded Clearance text, now resize.
 
@@ -252,6 +267,11 @@ void DIALOG_DRC_CONTROL::OnOkClick( wxCommandEvent& event )
 {
     SetReturnCode( wxID_OK );
     SetDrcParmeters( );
+
+    // Save the dialog's position before finishing
+    s_LastPos  = GetPosition();
+    s_LastSize = GetSize();
+
     m_tester->DestroyDialog( wxID_OK );
 }
 
@@ -263,6 +283,11 @@ void DIALOG_DRC_CONTROL::OnOkClick( wxCommandEvent& event )
 void DIALOG_DRC_CONTROL::OnCancelClick( wxCommandEvent& event )
 {
     SetReturnCode( wxID_CANCEL );
+
+    // Save the dialog's position before finishing
+    s_LastPos  = GetPosition();
+    s_LastSize = GetSize();
+
     m_tester->DestroyDialog( wxID_CANCEL );
 }
 

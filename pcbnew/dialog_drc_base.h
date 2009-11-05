@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Dec 29 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -51,8 +51,8 @@ class DIALOG_DRC_CONTROL_BASE : public wxDialog
 	
 	protected:
 		wxStaticText* m_ClearanceTitle;
-		wxStaticText* m_ViaMinTitle;
 		wxStaticText* m_TrackMinWidthTitle;
+		wxStaticText* m_ViaMinTitle;
 		wxStaticText* m_MicroViaMinTitle;
 		wxButton* m_BrowseButton;
 		wxStaticText* m_staticText6;
@@ -86,14 +86,14 @@ class DIALOG_DRC_CONTROL_BASE : public wxDialog
 	
 	public:
 		wxTextCtrl* m_SetClearance;
-		wxTextCtrl* m_SetViaMinSizeCtrl;
 		wxTextCtrl* m_SetTrackMinWidthCtrl;
+		wxTextCtrl* m_SetViaMinSizeCtrl;
 		wxTextCtrl* m_SetMicroViakMinSizeCtrl;
 		wxCheckBox* m_CreateRptCtrl;
 		wxTextCtrl* m_RptFilenameCtrl;
 		DRCLISTBOX* m_ClearanceListBox;
 		DRCLISTBOX* m_UnconnectedListBox;
-		DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("DRC Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,508 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("DRC Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_DRC_CONTROL_BASE();
 	
 };

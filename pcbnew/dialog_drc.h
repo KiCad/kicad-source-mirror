@@ -40,9 +40,14 @@ class DIALOG_DRC_CONTROL: public DIALOG_DRC_CONTROL_BASE
 public:
     /// Constructors
     DIALOG_DRC_CONTROL( DRC* aTester, WinEDA_PcbFrame* parent );
-	~DIALOG_DRC_CONTROL(){};
+    ~DIALOG_DRC_CONTROL(){};
 
 private:
+
+    static wxSize		    s_LastSize;		        ///< last position and size
+    static wxPoint		    s_LastPos;
+
+
     /**
      * Function writeReport
      * outputs the MARKER items and unconnecte DRC_ITEMs with commentary to an

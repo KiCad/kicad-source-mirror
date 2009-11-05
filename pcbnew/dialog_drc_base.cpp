@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Dec 29 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -28,36 +28,37 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 	
 	wxFlexGridSizer* fgMinValuesSizer;
-	fgMinValuesSizer = new wxFlexGridSizer( 2, 4, 0, 0 );
-	fgMinValuesSizer->SetFlexibleDirection( wxBOTH );
+	fgMinValuesSizer = new wxFlexGridSizer( 4, 2, 0, 0 );
+	fgMinValuesSizer->AddGrowableCol( 1 );
+	fgMinValuesSizer->SetFlexibleDirection( wxHORIZONTAL );
 	fgMinValuesSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_ClearanceTitle = new wxStaticText( this, wxID_ANY, _("Clearance"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ClearanceTitle->Wrap( -1 );
-	fgMinValuesSizer->Add( m_ClearanceTitle, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_RIGHT, 5 );
+	fgMinValuesSizer->Add( m_ClearanceTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
-	m_SetClearance = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SetClearance = new wxTextCtrl( this, wxID_ANY, _("By Netclass"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SetClearance->Enable( false );
 	
-	fgMinValuesSizer->Add( m_SetClearance, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-	
-	m_ViaMinTitle = new wxStaticText( this, wxID_ANY, _("Via Min Size"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ViaMinTitle->Wrap( -1 );
-	fgMinValuesSizer->Add( m_ViaMinTitle, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_RIGHT, 5 );
-	
-	m_SetViaMinSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SetViaMinSizeCtrl->SetToolTip( _("In the clearance units, enter the clearance distance") );
-	
-	fgMinValuesSizer->Add( m_SetViaMinSizeCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgMinValuesSizer->Add( m_SetClearance, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
 	m_TrackMinWidthTitle = new wxStaticText( this, wxID_ANY, _("Track Min Width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackMinWidthTitle->Wrap( -1 );
-	fgMinValuesSizer->Add( m_TrackMinWidthTitle, 0, wxALIGN_RIGHT|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgMinValuesSizer->Add( m_TrackMinWidthTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
 	m_SetTrackMinWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_SetTrackMinWidthCtrl->SetToolTip( _("In the clearance units, enter the clearance distance") );
 	
-	fgMinValuesSizer->Add( m_SetTrackMinWidthCtrl, 0, wxALL, 5 );
+	fgMinValuesSizer->Add( m_SetTrackMinWidthCtrl, 0, wxALL|wxEXPAND, 5 );
+	
+	m_ViaMinTitle = new wxStaticText( this, wxID_ANY, _("Via Min Size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ViaMinTitle->Wrap( -1 );
+	fgMinValuesSizer->Add( m_ViaMinTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	
+	m_SetViaMinSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SetViaMinSizeCtrl->SetToolTip( _("In the clearance units, enter the clearance distance") );
+	
+	fgMinValuesSizer->Add( m_SetViaMinSizeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
 	m_MicroViaMinTitle = new wxStaticText( this, wxID_ANY, _("MicroVia Min Size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MicroViaMinTitle->Wrap( -1 );
@@ -66,7 +67,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	m_SetMicroViakMinSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_SetMicroViakMinSizeCtrl->SetToolTip( _("In the clearance units, enter the clearance distance") );
 	
-	fgMinValuesSizer->Add( m_SetMicroViakMinSizeCtrl, 0, wxALL, 5 );
+	fgMinValuesSizer->Add( m_SetMicroViakMinSizeCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	bSizer7->Add( fgMinValuesSizer, 1, wxEXPAND, 5 );
 	
@@ -88,11 +89,11 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	m_BrowseButton = new wxButton( this, ID_BUTTON_BROWSE_RPT_FILE, _("..."), wxDefaultPosition, wxDefaultSize, 0 );
 	ReportFileSizer->Add( m_BrowseButton, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	bSizer7->Add( ReportFileSizer, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizer7->Add( ReportFileSizer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
 	sbSizerOptions->Add( bSizer7, 1, wxEXPAND, 5 );
 	
-	m_CommandSizer->Add( sbSizerOptions, 0, 0, 5 );
+	m_CommandSizer->Add( sbSizerOptions, 1, 0, 5 );
 	
 	wxBoxSizer* bSizerMessages;
 	bSizerMessages = new wxBoxSizer( wxVERTICAL );
@@ -102,8 +103,6 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	bSizerMessages->Add( m_staticText6, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_Messages = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTE_MULTILINE|wxTE_READONLY );
-	m_Messages->SetMinSize( wxSize( 160,-1 ) );
-	
 	bSizerMessages->Add( m_Messages, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_CommandSizer->Add( bSizerMessages, 1, wxEXPAND, 5 );
@@ -147,7 +146,6 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	m_ClearanceListBox = new DRCLISTBOX( m_panelClearanceListBox, ID_CLEARANCE_LIST, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
 	m_ClearanceListBox->SetToolTip( _("MARKERs, double click any to go there in PCB, right click for popup menu") );
-	m_ClearanceListBox->SetMinSize( wxSize( 450,300 ) );
 	
 	bSizeClearanceBox->Add( m_ClearanceListBox, 1, wxALL|wxEXPAND, 5 );
 	
@@ -181,6 +179,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	this->SetSizer( m_MainSizer );
 	this->Layout();
+	m_MainSizer->Fit( this );
 	
 	// Connect Events
 	m_CreateRptCtrl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnReportCheckBoxClicked ), NULL, this );
