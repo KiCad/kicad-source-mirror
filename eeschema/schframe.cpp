@@ -190,7 +190,7 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow*       father,
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
-#if KICAD_AUIMANAGER
+#if defined(KICAD_AUIMANAGER)
     m_auimgr.SetManagedWindow( this );
 
     wxAuiPaneInfo horiz;

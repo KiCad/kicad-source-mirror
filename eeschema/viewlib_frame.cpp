@@ -123,7 +123,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
 
     wxPoint win_pos( 0, 0 );
 
-#if !KICAD_AUIMANAGER
+#if !defined(KICAD_AUIMANAGER)
     if( Library == NULL )
     {
         // Creates the libraries window display
@@ -201,7 +201,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
     Zoom_Automatique( false );
     Show( TRUE );
 
-#if KICAD_AUIMANAGER
+#if defined(KICAD_AUIMANAGER)
     m_auimgr.SetManagedWindow( this );
 
     wxAuiPaneInfo horiz;
@@ -343,7 +343,7 @@ void WinEDA_ViewlibFrame::OnSize( wxSizeEvent& SizeEv )
                             wxSize( EXTRA_BORDER_SIZE * 2, 0 ) );
     }
 
-#if KICAD_AUIMANAGER
+#if defined(KICAD_AUIMANAGER)
     if( m_auimgr.GetManagedWindow() )
         m_auimgr.Update();
 #endif

@@ -19,6 +19,16 @@ option(KICAD_CYRILLIC "enable/disable building using cyrillic (needs unicode) (d
 option(wxUSE_UNICODE "enable/disable building unicode (default OFF)")
 option(KICAD_GOST "enable/disable building using GOST notation for multiple gates per package (default OFF)")
 
+
+if(APPLE)
+    option(KICAD_AUIMANAGER "Enable use of wxAuiManager (default ON)" ON)
+    option(KICAD_AUITOOLBAR "Enable use of wxAuiToolBar (default ON)" ON)
+else(APPLE)
+    option(KICAD_AUIMANAGER "Enable use of wxAuiManager (default OFF)" OFF)
+    option(KICAD_AUITOOLBAR "Enable use of wxAuiToolBar (default OFF)" OFF)
+endif(APPLE)
+
+
 # Comment this out if you don't want to build with Python support.
 # OPTION(KICAD_PYTHON "enable/disable building with Python support (default OFF)")
 
@@ -119,7 +129,12 @@ check_find_package_result(OPENGL_FOUND "OpenGL")
 # Here you can define what libraries of wxWidgets you need for your
 # application. You can figure out what libraries you need here;
 # http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
-find_package(wxWidgets COMPONENTS gl html adv core net base QUIET)
+
+if( KICAD_AUIMANAGER OR KICAD_AUITOOLBAR )
+    find_package(wxWidgets COMPONENTS gl html adv core net base aui QUIET)
+else( KICAD_AUIMANAGER OR KICAD_AUITOOLBAR )
+    find_package(wxWidgets COMPONENTS gl html adv core net base QUIET)
+endif( KICAD_AUIMANAGER OR KICAD_AUITOOLBAR )
 check_find_package_result(wxWidgets_FOUND "wxWidgets")
 
 
@@ -128,6 +143,7 @@ include(${wxWidgets_USE_FILE})
 
 # Include MinGW resource compiler.
 include(MinGWResourceCompiler)
+
 
 # Generate build system specific header file.
 include(PerformFeatureChecks)

@@ -275,7 +275,7 @@ void WinEDA_PcbFrame::SetToolbars()
                                            _( "Hide invisible text" ) :
                                            _( "Show invisible text" ) );
 
-#if !KICAD_AUIMANAGER
+#if !defined(KICAD_AUIMANAGER)
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
                                       m_AuxVToolBar ? true : false );
 #else
@@ -290,7 +290,7 @@ void WinEDA_PcbFrame::SetToolbars()
     UpdateToolbarLayerInfo();
     PrepareLayerIndicator();
     DisplayUnitsMsg();
-#if KICAD_AUIMANAGER
+#if defined(KICAD_AUIMANAGER)
     if(m_auimgr.GetManagedWindow())
         m_auimgr.Update();
 #endif

@@ -185,7 +185,7 @@ public:
     wxPoint      m_FramePos;
     wxSize       m_FrameSize;
 
-#if KICAD_AUIMANAGER
+#if defined(KICAD_AUIMANAGER)
     wxAuiManager m_auimgr;
     ~WinEDA3D_DrawFrame() { m_auimgr.UnInit(); };
 #endif

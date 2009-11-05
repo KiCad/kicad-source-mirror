@@ -78,7 +78,7 @@ WinEDA3D_DrawFrame::WinEDA3D_DrawFrame( WinEDA_BasePcbFrame* parent,
     // Make a Pcb3D_GLCanvas
     m_Canvas = new Pcb3D_GLCanvas( this );
 
-#if KICAD_AUIMANAGER
+#if defined(KICAD_AUIMANAGER)
     m_auimgr.SetManagedWindow( this );
 
     wxAuiPaneInfo horiz;

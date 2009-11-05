@@ -70,7 +70,7 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
     m_LeftWin->SetSashVisible( wxSASH_RIGHT, TRUE );
     m_LeftWin->SetExtraBorderSize( 2 );
 
-#if !KICAD_AUIMANAGER
+#if !defined(KICAD_AUIMANAGER)
     // Bottom Window: box to display messages
     m_BottomWin = new wxSashLayoutWindow( this, ID_BOTTOM_FRAME,
                                           wxDefaultPosition, wxDefaultSize,
@@ -105,7 +105,7 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::LoadProject" ) );
 #endif
 
-#if KICAD_AUIMANAGER
+#if defined(KICAD_AUIMANAGER)
     RecreateBaseHToolbar();
 
     m_auimgr.SetManagedWindow(this);
@@ -143,7 +143,7 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
 WinEDA_MainFrame::~WinEDA_MainFrame()
 /*****************************************************************************/
 {
-#if KICAD_AUIMANAGER
+#if defined(KICAD_AUIMANAGER)
 m_auimgr.UnInit();
 #endif
 }
@@ -236,7 +236,7 @@ void WinEDA_MainFrame::OnSize( wxSizeEvent& event )
     layout.LayoutFrame( this );
     if( m_CommandWin )
         m_CommandWin->Refresh( TRUE );
-#if KICAD_AUIMANAGER
+#if defined(KICAD_AUIMANAGER)
    if(m_auimgr.GetManagedWindow())
        m_auimgr.Update();
 #endif

@@ -49,4 +49,8 @@
 #define strnicmp _strnicmp
 #endif
 
+
+#cmakedefine KICAD_AUIMANAGER 1
+#cmakedefine KICAD_AUITOOLBAR 1
+
 #endif  /* __CONFIG_H__ */

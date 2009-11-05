@@ -188,7 +188,7 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow* father,
     Zoom_Automatique( false );
     Show( true );
 
-#if KICAD_AUIMANAGER
+#if defined(KICAD_AUIMANAGER)
     m_auimgr.SetManagedWindow( this );
 
     wxAuiPaneInfo horiz;

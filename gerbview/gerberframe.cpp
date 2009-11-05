@@ -156,7 +156,7 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
     ReCreateHToolbar();
     ReCreateVToolbar();
     ReCreateOptToolbar();
-#if KICAD_AUIMANAGER
+#if defined(KICAD_AUIMANAGER)
     m_auimgr.SetManagedWindow(this);
 
     wxAuiPaneInfo horiz;
@@ -321,7 +321,7 @@ void WinEDA_GerberFrame::SetToolbars()
     }
 
     DisplayUnitsMsg();
-#if KICAD_AUIMANAGER
+#if defined(KICAD_AUIMANAGER)
    if(m_auimgr.GetManagedWindow())
        m_auimgr.Update();
 #endif

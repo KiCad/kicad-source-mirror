@@ -192,7 +192,7 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
 
     if( DrawPanel )
         DrawPanel->m_Block_Enable = TRUE;
-#if KICAD_AUIMANAGER
+#if defined(KICAD_AUIMANAGER)
     m_auimgr.SetManagedWindow(this);
 
     wxAuiPaneInfo horiz;
@@ -407,7 +407,7 @@ void WinEDA_ModuleEditFrame::SetToolbars()
     }
 
     DisplayUnitsMsg();
-#if KICAD_AUIMANAGER
+#if defined(KICAD_AUIMANAGER)
     if(m_auimgr.GetManagedWindow())
         m_auimgr.Update();
 #endif

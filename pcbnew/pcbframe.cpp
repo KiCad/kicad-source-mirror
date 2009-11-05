@@ -264,9 +264,9 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     if( m_show_microwave_tools )
         ReCreateAuxVToolbar();
 
-#if KICAD_AUIMANAGER
+#if defined(KICAD_AUIMANAGER)
     m_auimgr.SetManagedWindow(this);
- 
+
     wxAuiPaneInfo horiz;
     horiz.Gripper(false);
     horiz.DockFixed(true);
@@ -295,10 +295,10 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     m_auimgr.AddPane(m_OptionsToolBar,
         wxAuiPaneInfo(vert).Name(wxT("m_OptionsToolBar")).Left());
 
-    m_auimgr.AddPane(DrawPanel, 
+    m_auimgr.AddPane(DrawPanel,
         wxAuiPaneInfo().Name(wxT("DrawFrame")).CentrePane());
 
-    m_auimgr.AddPane(MsgPanel, 
+    m_auimgr.AddPane(MsgPanel,
         wxAuiPaneInfo(horiz).Name(wxT("MsgPanel")).Bottom());
 
     m_auimgr.Update();

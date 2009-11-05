@@ -6,12 +6,6 @@
 #ifndef  WXSTRUCT_H
 #define  WXSTRUCT_H
 
-// @todo: these 2 defines need to be moved into the top most CMakeLists.txt as a CMake OPTION.
-// and they need to be boiled down to a single OPTION, not 2, and we need to add the wxWidgets aui
-// library to the link image under these circumstances.  I volunteer, but need a day or so. Dick
-//#define KICAD_AUITOOLBAR 1
-//#define KICAD_AUIMANAGER 1
-
 
 #include <vector>
 
@@ -21,7 +15,7 @@
 #include <wx/wxhtml.h>
 #include <wx/laywin.h>
 
-#if defined(KICAD_AUIMANAGER)
+#if defined(KICAD_AUIMANAGER) || defined(KICAD_AUITOOLBAR)
 #include <wx/aui/aui.h>
 #endif
 
@@ -656,7 +650,7 @@ public:
 /* class WinEDA_Toolbar */
 /*************************/
 
-#if KICAD_AUITOOLBAR
+#if defined(KICAD_AUITOOLBAR)
 class WinEDA_Toolbar : public wxAuiToolBar
 #else
 class WinEDA_Toolbar : public wxToolBar
@@ -674,19 +668,20 @@ public:
                     wxWindowID id, bool horizontal );
     WinEDA_Toolbar* Next() { return Pnext; }
 
-#if KICAD_AUITOOLBAR
-    bool GetToolState(int toolId) {return GetToolToggled(toolId); };
+#if defined(KICAD_AUITOOLBAR)
+    bool GetToolState( int toolId ) { return GetToolToggled(toolId); };
 
-    void AddRadioTool(int toolid, const wxString& label, const wxBitmap& bitmap,
+    void AddRadioTool( int toolid, const wxString& label, const wxBitmap& bitmap,
                                     const wxBitmap& bmpDisabled = wxNullBitmap,
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
-                                    wxObject *data = NULL) {
-       AddTool( toolid, label, bitmap, bmpDisabled, wxITEM_CHECK, shortHelp, longHelp, data);
+                                    wxObject *data = NULL )
+    {
+       AddTool( toolid, label, bitmap, bmpDisabled, wxITEM_CHECK, shortHelp, longHelp, data );
     };
 
-    void SetToolNormalBitmap(int id, const wxBitmap& bitmap) {};
-    void SetRows(int nRows) {};
+    void SetToolNormalBitmap( int id, const wxBitmap& bitmap ) {};
+    void SetRows( int nRows ) {};
 #endif
 };
 

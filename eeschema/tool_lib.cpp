@@ -94,7 +94,7 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
         return;
 
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
-#if !KICAD_AUIMANAGER
+#if !defined(KICAD_AUIMANAGER)
     SetToolBar( (wxToolBar*)m_HToolBar );
 #endif
     // Set up toolbar
