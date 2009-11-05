@@ -10,8 +10,8 @@
 
 PIN::PIN()
 {
-    m_Index = 0;         /* variable utilisee selon types de netlistes */
-    m_Type = 0;          /* code type electrique ( Entree Sortie Passive..) */
+    m_Index = 0;         /* Variable used by types of netlists. */
+    m_Type = 0;          /* Electrical type. */
 }
 
 bool operator<( const PIN& item1, const PIN& item2 )

@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        dialog_cvpcb_config.cpp
 // Author:      jean-pierre Charras
 // Licence:     gpl
@@ -40,9 +39,7 @@ DIALOG_CVPCB_CONFIG::DIALOG_CVPCB_CONFIG( WinEDA_CvpcbFrame* parent ) :
 }
 
 
-/*************************************/
 void DIALOG_CVPCB_CONFIG::Init()
-/*************************************/
 {
     wxString msg;
 
@@ -73,15 +70,13 @@ void DIALOG_CVPCB_CONFIG::Init()
         m_DefaultLibraryPathslistBox->Append( libpaths[ii] );
     }
 
-    // select the first path afer the current path project
+    // select the first path after the current path project
     if( libpaths.GetCount() > 1 )
         m_DefaultLibraryPathslistBox->Select( 1 );
 }
 
 
-/******************************************************************/
 void DIALOG_CVPCB_CONFIG::OnCancelClick( wxCommandEvent& event )
-/******************************************************************/
 {
     // Recreate the user lib path
     if( m_LibPathChanged )
@@ -96,9 +91,7 @@ void DIALOG_CVPCB_CONFIG::OnCancelClick( wxCommandEvent& event )
 }
 
 
-/**************************************************************/
 void DIALOG_CVPCB_CONFIG::OnOkClick( wxCommandEvent& event )
-/**************************************************************/
 {
     m_Parent->m_DocModulesFileName = m_TextHelpModulesFileName->GetValue();
 
@@ -114,8 +107,8 @@ void DIALOG_CVPCB_CONFIG::OnOkClick( wxCommandEvent& event )
         }
     }
 
-
-    // Set new active library list if the lib list of if default path list was modified
+    // Set new active library list if the lib list of if default path list
+    // was modified
     if( m_LibListChanged || m_LibPathChanged )
     {
         // Recreate lib list
@@ -138,21 +131,16 @@ void DIALOG_CVPCB_CONFIG::OnOkClick( wxCommandEvent& event )
 }
 
 
-/**************************************************************/
 void DIALOG_CVPCB_CONFIG::OnCloseWindow( wxCloseEvent& event )
-/**************************************************************/
 {
     EndModal( 0 );
 }
 
 
-/*********************************************************************/
-void DIALOG_CVPCB_CONFIG::OnRemoveLibClick( wxCommandEvent& event )
-/*********************************************************************/
-
 /* Remove a library to the library list.
- * The real list (g_LibName_List) is not changed, so the change can be cancelled
+ * The real list (g_LibName_List) is not changed, so the change can be canceled
  */
+void DIALOG_CVPCB_CONFIG::OnRemoveLibClick( wxCommandEvent& event )
 {
     int        ii;
 
@@ -170,15 +158,12 @@ void DIALOG_CVPCB_CONFIG::OnRemoveLibClick( wxCommandEvent& event )
 }
 
 
-/**************************************************************************/
-void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
-/**************************************************************************/
-
 /* Insert or add a library to the library list:
  *   The new library is put in list before (insert button) the selection,
  *   or added (add button) to end of list
- * The real list (g_LibName_List) is not changed, so the change can be cancelled
+ * The real list (g_LibName_List) is not changed, so the change can be canceled
  */
+void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
 {
     int        ii;
     wxString   libfilename, wildcard;
@@ -235,7 +220,7 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
         fn.SetExt(wxEmptyString);
         libfilename = fn.GetFullPath();
 
-        //Add or insert new library name, if not already in list
+        // Add or insert new library name, if not already in list
         if( list->FindString( libfilename, fn.IsCaseSensitive() ) == wxNOT_FOUND )
         {
             m_LibListChanged = TRUE;
@@ -254,16 +239,14 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
 }
 
 
-/***********************************************************************/
 void DIALOG_CVPCB_CONFIG::OnAddOrInsertPath( wxCommandEvent& event )
-/***********************************************************************/
 {
     wxString path = wxGetApp().ReturnLastVisitedLibraryPath();
 
-    bool     select = EDA_DirectorySelector( _( "Default Path for Libraries" ),     /* Titre de la fenetre */
-                                             path,                                  /* Chemin par defaut */
+    bool     select = EDA_DirectorySelector( _( "Default Path for Libraries" ),
+                                             path,
                                              wxDD_DEFAULT_STYLE,
-                                             this,                                  /* parent frame */
+                                             this,
                                              wxDefaultPosition );
 
     if( !select )
@@ -303,9 +286,7 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertPath( wxCommandEvent& event )
 }
 
 
-/***********************************************************************/
 void DIALOG_CVPCB_CONFIG::OnRemoveUserPath( wxCommandEvent& event )
-/***********************************************************************/
 {
     int ii = m_listUserPaths->GetSelection();
 
@@ -328,9 +309,7 @@ void DIALOG_CVPCB_CONFIG::OnRemoveUserPath( wxCommandEvent& event )
 }
 
 
-/**************************************************************************/
 void DIALOG_CVPCB_CONFIG::OnBrowseModDocFile( wxCommandEvent& event )
-/**************************************************************************/
 {
     wxString FullFileName;
     wxString docpath, filename;

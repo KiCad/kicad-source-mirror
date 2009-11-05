@@ -1,6 +1,6 @@
-/*********************************************************************/
-/** setvisu() : initialisations de l'ecran d'affichage du composant **/
-/*********************************************************************/
+/**********************/
+/** displayframe.cpp **/
+/**********************/
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -17,15 +17,11 @@
 /*
  * NOTE: There is something in 3d_viewer.h that causes a compiler error in
  *       <boost/foreach.hpp> in Linux so move it after cvpcb.h where it is
- *       included to prevent the error from occuring.
+ *       included to prevent the error from occurring.
  */
 #include "3d_viewer.h"
 
 
-
-/*****************************************************************/
-/* Construction de la table des evenements pour WinEDA_DrawFrame */
-/*****************************************************************/
 
 BEGIN_EVENT_TABLE( WinEDA_DisplayFrame, WinEDA_BasePcbFrame )
     EVT_CLOSE( WinEDA_DisplayFrame::OnCloseWindow )
@@ -61,14 +57,15 @@ WinEDA_DisplayFrame::WinEDA_DisplayFrame( WinEDA_CvpcbFrame* father,
     SetBaseScreen( new PCB_SCREEN() );
 
     LoadSettings();
-    // Initilialize grid id to a default value if not found in config or bad:
+    // Internalize grid id to a default value if not found in config or bad:
     if( (m_LastGridSizeId <= 0) ||
         (m_LastGridSizeId < (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
         m_LastGridSizeId = ID_POPUP_GRID_LEVEL_500 - ID_POPUP_GRID_LEVEL_1000;
 
     // Initialize some display options
     DisplayOpt.DisplayPadIsol = false;      // Pad clearance has no meaning here
-    DisplayOpt.ShowTrackClearanceMode = 0;  // tracks and vias clearance has no meaning here
+    DisplayOpt.ShowTrackClearanceMode = 0;  /* tracks and vias clearance has
+                                             * no meaning here. */
 
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
@@ -78,9 +75,7 @@ WinEDA_DisplayFrame::WinEDA_DisplayFrame( WinEDA_CvpcbFrame* father,
 }
 
 
-/******************************************/
 WinEDA_DisplayFrame::~WinEDA_DisplayFrame()
-/******************************************/
 {
     delete GetBoard();
 
@@ -91,13 +86,10 @@ WinEDA_DisplayFrame::~WinEDA_DisplayFrame()
 }
 
 
-/************************************************************/
-void WinEDA_DisplayFrame::OnCloseWindow( wxCloseEvent& event )
-/************************************************************/
-
 /* Called when the frame is closed
  *  Save current settings (frame position and size
  */
+void WinEDA_DisplayFrame::OnCloseWindow( wxCloseEvent& event )
 {
     wxPoint pos;
     wxSize  size;
@@ -110,16 +102,12 @@ void WinEDA_DisplayFrame::OnCloseWindow( wxCloseEvent& event )
 }
 
 
-/************************************************/
 void WinEDA_DisplayFrame::ReCreateVToolbar()
-/************************************************/
 {
 }
 
 
-/************************************************/
 void WinEDA_DisplayFrame::ReCreateHToolbar()
-/************************************************/
 {
     if( m_HToolBar != NULL )
         return;
@@ -161,38 +149,29 @@ void WinEDA_DisplayFrame::ReCreateHToolbar()
 }
 
 
-/*******************************************/
 void WinEDA_DisplayFrame::SetToolbars()
-/*******************************************/
 {
 }
 
 
-/*************************************************************************/
 void WinEDA_DisplayFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
-/*************************************************************************/
 {
 }
 
 
-/*************************************************************************/
 void WinEDA_DisplayFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
-/*************************************************************************/
 {
 }
 
 
-/*********************************************************************************/
-bool WinEDA_DisplayFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
-/*********************************************************************************/
+bool WinEDA_DisplayFrame::OnRightClick( const wxPoint& MousePos,
+                                        wxMenu* PopMenu )
 {
     return true;
 }
 
 
-/****************************************************************/
 void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
-/****************************************************************/
 {
     wxRealPoint  delta;
     int     flagcurseur = 0;
@@ -325,7 +304,7 @@ void WinEDA_DisplayFrame::Show3D_Frame( wxCommandEvent& event )
     m_Draw3DFrame->Show( TRUE );
 }
 
-/* Virtual fonction needed by the PCB_SCREEN class derived from BASE_SCREEN
+/* Virtual function needed by the PCB_SCREEN class derived from BASE_SCREEN
 * this is a virtual pure function in BASE_SCREEN
 * do nothing in cvpcb
 * could be removed later

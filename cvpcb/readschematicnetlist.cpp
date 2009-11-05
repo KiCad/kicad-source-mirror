@@ -19,16 +19,16 @@
 #include "cvstruct.h"
 
 
-#define SEPARATEUR '|'  /* caractere separateur dans netliste */
+#define SEPARATEUR '|'  /* Separator character in NetList */
 
-/* routines locales : */
 
 static int ReadPinConnection( FILE* f, COMPONENT* CurrentCmp );
 
-/* Tri la liste des composants par ordre alphabetique et met a jour le nouveau
- * chainage avant/arriere retourne un pointeur sur le 1er element de la liste */
 
-#define BUFFER_CHAR_SIZE 1024   // Size of buffers used to  store netlist data
+/* Sort the list alphabetically by component and and returns
+ * a pointer to the 1st element of list */
+
+#define BUFFER_CHAR_SIZE 1024   // Size of buffers used to store netlist data
 
 
 /**
@@ -117,7 +117,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
     }
 
     /* Read the file header (must be  "( { OrCAD PCB" or "({ OrCAD PCB" )
-     * or "# EESchema Netliste"
+     * or "# EESchema Netlist"
      */
     result = fgets( Line, BUFFER_CHAR_SIZE, source );
     /* test for netlist type PCB2 */
@@ -231,9 +231,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
         while( Line[i] == ' ' )
             i++;
 
-        /* goto beginning of  reference */
-
-        /* debut reference trouv‚ */
+        /* goto beginning of reference */
         for( ; ; i++ )
         {
 #if defined(KICAD_GOST)
@@ -249,7 +247,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
         while( Line[i] == ' ' )
             i++;
 
-        /** goto beginning of  value */
+        /** goto beginning of value */
 
         for( ; ; i++ )
         {
@@ -348,13 +346,13 @@ int ReadPinConnection( FILE* f, COMPONENT* Cmp )
 
     for( ; ; )
     {
-        /* debut description trouv‚ */
+        /* Find beginning of description. */
         for( ; ; )
         {
             if( fgets( Line, BUFFER_CHAR_SIZE, f ) == 0 )
                 return -1;
 
-            /* remove blanks from the beginning of the line */
+            /* Remove blanks from the beginning of the line. */
             i = 0; while( Line[i] == ' ' )
                 i++;
 
@@ -368,14 +366,14 @@ int ReadPinConnection( FILE* f, COMPONENT* Cmp )
             if( Line[i] < ' ' )
                 continue;
 
-            /* fin de description ? */
+            /* End of description? */
             if( Line[i] == ')' )
                 return 0;
 
             net.Empty();
             numpin.Empty();
 
-            /* Read pin name , 4 letters */
+            /* Read pin name, 4 letters */
             for( jj = 0; jj < 4; jj++, i++ )
             {
                 if( Line[i] == ' ' )

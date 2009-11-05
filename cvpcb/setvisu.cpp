@@ -1,6 +1,6 @@
-/*********************************************************************/
-/** setvisu.cpp: initialisations de l'ecran d'affichage du composant **/
-/*********************************************************************/
+/*****************/
+/** setvisu.cpp **/
+/*****************/
 
 #include "fctsys.h"
 #include "common.h"
@@ -14,7 +14,7 @@
 /*
  * NOTE: There is something in 3d_viewer.h that causes a compiler error in
  *       <boost/foreach.hpp> in Linux so move it after cvpcb.h where it is
- *       included to prevent the error from occuring.
+ *       included to prevent the error from occurring.
  */
 #include "3d_viewer.h"
 

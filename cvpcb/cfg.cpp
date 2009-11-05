@@ -1,8 +1,6 @@
-/***************************************/
-/** cfg.cpp : configuration de CVPCB  **/
-/***************************************/
-
-/* lit ou met a jour la configuration de CVPCB */
+/*************/
+/** cfg.cpp **/
+/*************/
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -52,20 +50,19 @@ PARAM_CFG_ARRAY& WinEDA_CvpcbFrame::GetProjectFileParameters( void )
 
 
 /**
- * lit la configuration
- * 1 - lit cvpcb.cnf
- * 2 - si non trouve lit <chemin de cvpcb.exe>/cvpcb.cnf
- * 3 - si non trouve: init des variables aux valeurs par defaut
+ * Reads the configuration
+ * 1 - bed cvpcb.cnf
+ * 2 - if not in path of  <cvpcb.exe> / cvpcb.cnf
+ * 3 - If not found: init variables to default values
  *
- * Remarque:
- * le chemin de l'executable cvpcb.exe doit etre dans BinDir
+ * Note:
+ * The path of the executable must be in cvpcb.exe.
  *
  */
 void WinEDA_CvpcbFrame::LoadProjectFile( const wxString& FileName )
 {
     wxFileName fn = FileName;
 
-    /* Init des valeurs par defaut */
     m_ModuleLibNames.Clear();
     m_AliasLibNames.Clear();
 
@@ -85,9 +82,6 @@ void WinEDA_CvpcbFrame::LoadProjectFile( const wxString& FileName )
 }
 
 
-/* fonction relai d'appel a Save_Config,
- * la vraie fonction de sauvegarde de la config
- */
 void WinEDA_CvpcbFrame::Update_Config( wxCommandEvent& event )
 {
     SaveProjectFile( m_NetlistFileName.GetFullPath() );
@@ -106,7 +100,6 @@ void WinEDA_CvpcbFrame::SaveProjectFile( const wxString& fileName )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    /* ecriture de la configuration */
     wxGetApp().WriteProjectConfig( dlg.GetPath(), GROUP,
                                    GetProjectFileParameters() );
 }

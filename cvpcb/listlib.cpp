@@ -1,12 +1,12 @@
-/**************/
+/***************/
 /* listlib.cpp */
-/**************/
+/**(************/
+
 
 /*
- *  cherche toutes les ref <chemin lib>*.??? si nom fichier pr‚sent,
- *  ou examine <chemin lib>[MODULE.LIB]
+ * Searches for all ref <path lib> *.??? if offering their file name,
+ * or reviews <path lib> [MODULE.LIB]
  */
-
 #include "fctsys.h"
 #include "wxstruct.h"
 #include "common.h"
@@ -25,26 +25,25 @@
 static wxString s_files_not_found;
 static wxString s_files_invalid;
 
-/* routines locales : */
+
 static void ReadDocLib( const wxString& ModLibName, FOOTPRINT_LIST& list );
 
 
 /**
- * Routine lisant la liste des librairies, et generant la liste chainee
- *  des modules disponibles
+ * Read the list of libraries and generate a list modules.
  *
- *  Module descr format:
- *  $MODULE c64acmd
- *  Li c64acmd
- *  Cd Connecteur DIN Europe 96 Contacts AC male droit
- *  Kw PAD_CONN DIN
- *  $EndMODULE
+ * Module description format:
+ *   $MODULE c64acmd
+ *     Li c64acmd DIN connector
+ *     Cd Europe 96 Contact AC male right
+ *     Kw PAD_CONN DIN
+ *   $Endmodule
  *
  */
 bool LoadFootprintFiles( const wxArrayString& libNames,
                          FOOTPRINT_LIST& list )
 {
-    FILE*       file;   /* pour lecture librairie */
+    FILE*       file;
     char        buffer[1024];
     wxFileName  filename;
     int         end;
@@ -68,12 +67,10 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
     /* Parse Libraries Listed */
     for( i = 0; i < libNames.GetCount(); i++ )
     {
-        /* Calcul du nom complet de la librairie */
         filename = libNames[i];
         filename.SetExt( ModuleFileExtension );
 
         tmp = wxGetApp().FindLibraryPath( filename );
-
 
         if( !tmp )
         {
@@ -99,10 +96,9 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
             continue;
         }
 
-        /* TODO Lecture du nombre de composants */
+        /* TODO: Read the number of components. */
         fseek( file, 0, 0 );
 
-        /* TODO lecture nom des composants : */
         end = 0;
         while( !end && fgets( buffer, 255, file ) != NULL )
         {
@@ -162,13 +158,11 @@ bool LoadFootprintFiles( const wxArrayString& libNames,
 
 
 /**
- * Routine de lecture du fichier Doc associe a la librairie ModLibName.
- *   Cree en memoire la chaine liste des docs pointee par MList
- *   ModLibName = full file Name de la librairie Modules
+ * Read the file Doc combines a library ModLibName.
+ * Create the list of doc strings pointed to by list
+ * ModLibName = full file name of the library modules
  */
-static void
-ReadDocLib( const wxString& ModLibName,
-            FOOTPRINT_LIST& list )
+static void ReadDocLib( const wxString& ModLibName, FOOTPRINT_LIST& list )
 {
     FOOTPRINT* NewMod;
     char       Line[1024];
@@ -202,7 +196,7 @@ ReadDocLib( const wxString& ModLibName,
             continue;
         if( Line[1] == 'E' )
             break;
-        if( Line[1] == 'M' )    /* 1 module description */
+        if( Line[1] == 'M' )
         {
             /* Parse file line by line */
             while( GetLine( mdc_file, Line, NULL, sizeof(Line) - 1 ) )

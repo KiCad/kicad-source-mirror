@@ -1,7 +1,6 @@
-/***********************************************************/
-/*                      cvstruct.h  :                      */
-/* descriptions des principales classes derivees utilisees */
-/***********************************************************/
+/*********************************************************/
+/*                      cvstruct.h                       */
+/*********************************************************/
 
 #ifndef CVSTRUCT_H
 #define CVSTRUCT_H
@@ -59,7 +58,7 @@ public:
     FOOTPRINTS_LISTBOX*  m_FootprintList;
     COMPONENTS_LISTBOX*  m_ListCmp;
     WinEDA_DisplayFrame* DrawFrame;
-    WinEDA_Toolbar*      m_HToolBar; // Toolbar horizontal haut d'ecran
+    WinEDA_Toolbar*      m_HToolBar;
     wxFileName           m_NetlistFileName;
     wxArrayString        m_ModuleLibNames;
     wxArrayString        m_AliasLibNames;
@@ -76,7 +75,6 @@ protected:
     bool            m_isEESchemaNetlist;
     PARAM_CFG_ARRAY m_projectFileParams;
 
-    // Constructor and destructor
 public:
     WinEDA_CvpcbFrame( const wxString& title,
                        long            style = KICAD_DEFAULT_DRAWFRAME_STYLE );
@@ -86,7 +84,7 @@ public:
     void             OnLeftDClick( wxListEvent& event );
     void             OnSelectComponent( wxListEvent& event );
 
-    void             Update_Config( wxCommandEvent& event ); /* enregistrement de la config */
+    void             Update_Config( wxCommandEvent& event );
     void             OnQuit( wxCommandEvent& event );
     void             OnCloseWindow( wxCloseEvent& Event );
     void             OnSize( wxSizeEvent& SizeEvent );
@@ -269,7 +267,8 @@ public:
      * add a list of pickers to handle a list of items
      * @param aItemsList = the list of items modified by the command to undo
      * @param aTypeCommand = command type (see enum UndoRedoOpType)
-     * @param aTransformPoint = the reference point of the transformation, for commands like move
+     * @param aTransformPoint = the reference point of the transformation,
+     *                          for commands like move
      */
     virtual void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
                                      UndoRedoOpType aTypeCommand,

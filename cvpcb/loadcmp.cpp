@@ -1,6 +1,6 @@
-/***************************************************/
-/* Localisation des elements pointes par la souris */
-/***************************************************/
+/***************/
+/* loadcmp.cpp */
+/***************/
 
 #include "fctsys.h"
 #include "wxstruct.h"
@@ -16,17 +16,14 @@
 #include "cvstruct.h"
 
 
-/*****************************************************************
+/**
+ * Analyze the libraries to find the module.
+ * If this module is found, copy it into memory, and
+ * string end of the list of modules.
  *
- *   Analyse les LIBRAIRIES pour trouver le module demande
- *   Si ce module est trouve, le copie en memoire, et le
- *   chaine en fin de liste des modules
- *       - Entree:
- *           name_cmp = nom du module
- *       - Retour:
- *           Pointeur sur le nouveau module.
- *
- *****************************************************************/
+ * @param CmpName - Module name
+ * @return - Module if found otherwise NULL.
+ */
 MODULE* WinEDA_DisplayFrame::Get_Module( const wxString& CmpName )
 {
     int        LineNum, Found = 0;
@@ -39,7 +36,6 @@ MODULE* WinEDA_DisplayFrame::Get_Module( const wxString& CmpName )
 
     for( ii = 0; ii < parent->m_ModuleLibNames.GetCount(); ii++ )
     {
-        /* Calcul du nom complet de la librairie */
         fn = parent->m_ModuleLibNames[ii];
         fn.SetExt( ModuleFileExtension );
 
@@ -64,7 +60,7 @@ found in the default search paths." ),
             continue;
         }
 
-        /* lecture entete chaine definie par ENTETE_LIBRAIRIE */
+        /* Read header. */
         LineNum = 0;
         GetLine( file, Line, &LineNum );
         StrPurge( Line );
@@ -78,7 +74,6 @@ found in the default search paths." ),
             return NULL;
         }
 
-        /* Lecture de la liste des composants de la librairie */
         Found = 0;
         while( !Found && GetLine( file, Line, &LineNum ) )
         {
@@ -96,13 +91,12 @@ found in the default search paths." ),
                     if( stricmp( Line, CONV_TO_UTF8( CmpName ) ) == 0 )
                     {
                         Found = 1;
-                        break; /* Trouve! */
+                        break;
                     }
                 }
             }
         }
 
-        /* Lecture de la librairie */
         while( Found && GetLine( file, Line, &LineNum ) )
         {
             if( Line[0] != '$' )
@@ -114,15 +108,16 @@ found in the default search paths." ),
             if( strnicmp( Line, "$MODULE", 7 ) != 0 )
                 continue;
 
-            /* Lecture du nom du composant */
+            /* Read component name. */
             sscanf( Line + 7, " %s", Name );
-            if( stricmp( Name, CONV_TO_UTF8( CmpName ) ) == 0 )  /* composant localise */
+            if( stricmp( Name, CONV_TO_UTF8( CmpName ) ) == 0 )
             {
                 Module = new MODULE( GetBoard() );
-                // Switch the locale to standard C (needed to print floating point numbers like 1.3)
+                // Switch the locale to standard C (needed to print floating
+                // point numbers like 1.3)
                 SetLocaleTo_C_standard();
                 Module->ReadDescr( file, &LineNum );
-                SetLocaleTo_Default();       // revert to the current  locale
+                SetLocaleTo_Default();       // revert to the current locale
                 Module->SetPosition( wxPoint( 0, 0 ) );
                 fclose( file );
                 return Module;

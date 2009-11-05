@@ -1,7 +1,6 @@
-/*******************************************************************/
-/*  CVPCB: Routines de base :										  */
-/* lecture Netliste et creation des fenetres composants et modules */
-/*******************************************************************/
+/**************/
+/*  init.cpp  */
+/**************/
 
 #include "fctsys.h"
 #include "common.h"
@@ -15,12 +14,9 @@
 #include "cvstruct.h"
 
 
-/* routines locales : */
-
-
 /*
- *   - Affecte un module au composant selectionne
- *   - Selectionne le composant suivant
+ * Set the module to the selected component
+ * Selects the next component
  */
 void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
 {
@@ -49,7 +45,8 @@ void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
     Component->m_Module = package;
 
     Line.Printf( CMP_FORMAT, NumCmp + 1,
-                 GetChars( Component->m_Reference ), GetChars( Component->m_Value ),
+                 GetChars( Component->m_Reference ),
+                 GetChars( Component->m_Value ),
                  GetChars( Component->m_Module ) );
     m_modified = true;
 
@@ -70,9 +67,8 @@ void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
 }
 
 
-
 /*
- * Lecture de la netliste selon format, ainsi que du fichier des composants
+ * Read the netlist format and file components.
  */
 bool WinEDA_CvpcbFrame::ReadNetList()
 {
@@ -89,7 +85,6 @@ bool WinEDA_CvpcbFrame::ReadNetList()
         return false;
     }
 
-    /* lecture des correspondances */
     LoadComponentFile( m_NetlistFileName.GetFullPath(), m_components );
 
     if( m_ListCmp == NULL )
@@ -120,7 +115,7 @@ bool WinEDA_CvpcbFrame::ReadNetList()
                 m_undefinedComponentCnt );
     SetStatusText( msg, 1 );
 
-    /* Mise a jour du titre de la fenetre principale */
+    /* Update the title of the main window. */
     SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
               wxT( " " ) + m_NetlistFileName.GetFullPath() );
     return true;
@@ -128,9 +123,9 @@ bool WinEDA_CvpcbFrame::ReadNetList()
 
 
 /*
- * Sauvegarde des fichiers netliste et cmp
- *   Le nom complet du fichier Netliste doit etre dans FFileName.
- *   Le nom du fichier cmp en est deduit
+ * Backup and NetList cmp
+ * The full name of the netlist file must be in FFileName.
+ * The file name is deducted in cmp
  */
 int WinEDA_CvpcbFrame::SaveNetList( const wxString& fileName )
 {
@@ -158,7 +153,7 @@ int WinEDA_CvpcbFrame::SaveNetList( const wxString& fileName )
 
     if( netlist == 0 )
     {
-        DisplayError( this, _( "Unable to create netlist file" ) );
+        DisplayError( this, _( "Unable to create net list file" ) );
         return 0;
     }
 

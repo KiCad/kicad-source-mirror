@@ -2,10 +2,6 @@
 /* writenetlistpcbnew.cpp  */
 /***************************/
 
-/*
- * Complete la netliste (*.NET) en y placant les ref *.lib FORMAT PCBNEW ou
- * ORCADPCB
- */
 
 #include "fctsys.h"
 #include "common.h"
@@ -19,7 +15,7 @@
 
 #define MAX_LEN_NETNAME 16
 
-/* Routines locales */
+
 static void ChangePinNet( COMPONENT_LIST& list, wxString& PinNet,
                           int* netNumber, bool rightJustify );
 static void WriteFootprintFilterInfos( FILE* dest, COMPONENT_LIST& list );
@@ -66,6 +62,13 @@ static void RemoveDuplicatePins( COMPONENT& component )
 }
 
 
+/**
+ * Create Kicad net list file.
+ *
+ * @todo: None of the printf() call return values are checked for failure,
+ *        a value less than zero.  Check all printf() return values and
+ *        return a true(pass) or false(fail) to the caller.
+ */
 int GenNetlistPcbnew( FILE* file, COMPONENT_LIST& list, bool isEESchemaNetlist,
                       bool rightJustify )
 {
@@ -80,9 +83,6 @@ int GenNetlistPcbnew( FILE* file, COMPONENT_LIST& list, bool isEESchemaNetlist,
     else
         fprintf( file, "( { netlist created  %s }\n", Line );
 
-    /***********************/
-    /* Lecture de la liste */
-    /***********************/
 
     BOOST_FOREACH( COMPONENT& component, list )
     {
@@ -96,13 +96,11 @@ int GenNetlistPcbnew( FILE* file, COMPONENT_LIST& list, bool isEESchemaNetlist,
 
         fprintf( file, " %s ", CONV_TO_UTF8( component.m_Reference ) );
 
-        /* placement de la valeur */
         fprintf( file, "%s\n", CONV_TO_UTF8( component.m_Value ) );
 
         component.m_Pins.sort();
         RemoveDuplicatePins( component );
 
-        /* Placement de la liste des pins */
         BOOST_FOREACH( PIN& pin, component.m_Pins )
         {
             if( pin.m_Net.Len() > MAX_LEN_NETNAME )
@@ -164,7 +162,7 @@ void WriteFootprintFilterInfos( FILE* file, COMPONENT_LIST& list )
 }
 
 
-/*
+/* *** JP translate ***
  * Change le NetName PinNet par un nom compose des 8 derniers codes de PinNet
  * suivi de _Xnnnnn ou nnnnn est un nom de 0 a 99999
  */
@@ -178,12 +176,12 @@ static void ChangePinNet( COMPONENT_LIST& list, wxString& PinNet,
 
     OldName = PinNet;
 
-    if( rightJustify )  /* On conserve les 8 dernieres lettres du nom */
+    if( rightJustify )  /* Retain the last 8 letters of the name. */
     {
         NewName = OldName.Right( 8 );
         NewName << *netNumber;
     }
-    else             /* On conserve les 8 premieres lettres du nom */
+    else                /* Retain the first 8 letters of the name. */
     {
         NewName = OldName.Left( 8 );
         NewName << *netNumber;

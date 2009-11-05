@@ -1,10 +1,10 @@
-/***************/
-/* genorcad()  */
-/***************/
+/*****************/
+/* genorcad.cpp  */
+/*****************/
 
 /*
- *  ComplŠte la netliste (*.NET) en y placant les ref *.lib FORMAT ORCADPCB
- *  La valeur (Part Value) est tronquee a 16 lettres
+ * Create the netlist (* NET) by placing the *.lib ref FORMAT ORCADPCB
+ * The value (share value) is truncated to 16 letters.
  */
 
 #include "fctsys.h"
@@ -16,13 +16,13 @@
 
 #define MAX_LEN_NETNAME 16
 
-/* Routines locales */
+
 static void TriPinsModule( COMPONENT* CurrentCmp );
 static void ChangePinNet(  wxString& PinNet, bool rightJustify );
 
-/* Variables Locales */
-int NetNumCode;         /* Nombre utilise pour cree des NetNames lors de
-                         *  reaffectation de NetNames */
+
+int NetNumCode;         /* Number of used for NetNames created during
+                         * reallocation of NetNames. */
 
 int genorcad( bool rightJustify )
 {
@@ -34,10 +34,6 @@ int genorcad( bool rightJustify )
     NetNumCode = 1; DateAndTime( Line );
     fprintf( dest, "( { Netlist by %s, date = %s }\n",
              CONV_TO_UTF8( Title ), Line );
-
-    /***********************/
-    /* Lecture de la liste */
-    /***********************/
 
     CurrentCmp = BaseListeCmp;
     for( ; CurrentCmp != NULL; CurrentCmp = CurrentCmp->Pnext )
@@ -52,13 +48,11 @@ int genorcad( bool rightJustify )
 
         fprintf( dest, " %s ", CONV_TO_UTF8( CurrentCmp->m_Reference ) );
 
-        /* placement de la valeur */
         fprintf( dest, "%s\n", CONV_TO_UTF8( CurrentCmp->m_Value ) );
 
-        /* Tri des pins */
+        /* Sort pins. */
         TriPinsModule( CurrentCmp );
 
-        /* Placement de la liste des pins */
         Pin = CurrentCmp->m_Pins;
         for( ; Pin != NULL; Pin = Pin->Pnext )
         {
@@ -82,12 +76,8 @@ int genorcad( bool rightJustify )
 }
 
 
-/***********************************************/
+/* Sort pins */
 static void TriPinsModule( COMPONENT* CurrentCmp )
-/***********************************************/
-
-/* Tri et controle des pins du module CurrentCmp
- */
 {
     PIN* Pin, * NextPin, ** BasePin;
     int  nbpins = 0, ii;
@@ -96,11 +86,9 @@ static void TriPinsModule( COMPONENT* CurrentCmp )
     if( Pin == NULL )
         return;
 
-    /* comptage des pins */
     for( ; Pin != NULL; Pin = Pin->Pnext )
         nbpins++;
 
-    /* Tri des pins: etablissement de la liste des pointeurs */
     BasePin = (PIN**) MyZMalloc( nbpins * sizeof(PIN*) );
 
     Pin = CurrentCmp->m_Pins;
@@ -109,10 +97,8 @@ static void TriPinsModule( COMPONENT* CurrentCmp )
         BasePin[ii] = Pin;
     }
 
-    /* Tri des Pins */
     qsort( BasePin, nbpins, sizeof( COMPONENT*), PinCompare );
 
-    /* Remise a jour des pointeurs chaines */
     for( ii = 0; ii < nbpins - 1; ii++ )
     {
         BasePin[ii]->Pnext = BasePin[ii + 1];
@@ -123,7 +109,7 @@ static void TriPinsModule( COMPONENT* CurrentCmp )
 
     MyFree( BasePin );
 
-    /* Elimination des redondances */
+    /* Remove duplicate pins. */
     Pin = CurrentCmp->m_Pins;
     while( Pin != NULL )
     {
@@ -134,7 +120,7 @@ static void TriPinsModule( COMPONENT* CurrentCmp )
         {
             Pin = Pin->Pnext;  continue;
         }
-        /* 2 pins successives ont le meme numero */
+        /* Successive 2 pins have the same number. */
         if( Pin->m_PinNet != NextPin->m_PinNet )
         {
             wxString msg;
@@ -150,13 +136,12 @@ static void TriPinsModule( COMPONENT* CurrentCmp )
 }
 
 
-/*******************************************/
-static void ChangePinNet( wxString& PinNet, bool rightJustify )
-/*******************************************/
-
-/* Change le NetName PinNet par un nom compose des 8 derniers codes de PinNet
- *   suivi de _Xnnnnn ou nnnnn est un nom de 0 a 99999
+/* **** JP translate ****
+ *
+ * Change le NetName PinNet par un nom compose des 8 derniers codes de PinNet
+ * suivi de _Xnnnnn ou nnnnn est un nom de 0 a 99999
  */
+static void ChangePinNet( wxString& PinNet, bool rightJustify )
 {
     PIN*       Pin;
     COMPONENT* CurrentCmp;
@@ -166,11 +151,11 @@ static void ChangePinNet( wxString& PinNet, bool rightJustify )
 
     OldName = PinNet;
     ii = PinNet.Len();
-    if( rightJustify )  /* On conserve les 8 dernieres lettres du nom */
+    if( rightJustify )  /* Retain the last 8 letters of the name. */
     {
         NewName = OldName.Right( 8 ); NewName << NetNumCode;
     }
-    else             /* On conserve les 8 premieres lettres du nom */
+    else                /* Retains the 8 first letters of the name. */
     {
         NewName = OldName.Left( 8 ); NewName << NetNumCode;
     }

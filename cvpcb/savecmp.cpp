@@ -1,8 +1,6 @@
-/**************/
-/* savecmp()  */
-/**************/
-
-/* sauvegarde la liste des associations composants/empreintes */
+/****************/
+/* savecmp.cpp  */
+/****************/
 
 #include "fctsys.h"
 #include "wxstruct.h"
@@ -18,16 +16,17 @@
 #include "cvstruct.h"
 
 
-/* Chaines de caractere d'identification */
+/* File header. */
 char EnteteCmpMod[] = { "Cmp-Mod V01" };
 
 const wxString titleComponentLibErr( _( "Component Library Error" ) );
 
 
 /*
- * Routine de sauvegarde du fichier des modules
- *   Retourne 1 si OK
- *           0 si ecriture non faite
+ * Backup modules file.
+ *
+ * @param NetlistFullFileName - Name of net list file to save.
+ * @returns - 1 if OK, 0 if error.
  */
 int WinEDA_CvpcbFrame::SaveComponentList( const wxString& NetlistFullFileName )
 {
@@ -36,12 +35,11 @@ int WinEDA_CvpcbFrame::SaveComponentList( const wxString& NetlistFullFileName )
     char        Line[1024];
     wxString    Title = wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion();
 
-    /* calcul du nom du fichier */
     fn.SetExt( ComponentFileExtension );
 
     dest = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
     if( dest == NULL )
-        return 0;                   /* Erreur ecriture */
+        return 0;
 
     fprintf( dest, "%s", EnteteCmpMod );
     fprintf( dest, " Created by %s", CONV_TO_UTF8( Title ) );
@@ -68,7 +66,7 @@ int WinEDA_CvpcbFrame::SaveComponentList( const wxString& NetlistFullFileName )
 
 
 /*
- * recupere la liste des associations composants/empreintes
+ * Load list of associated components and footprints.
  */
 bool LoadComponentFile( const wxString& fileName, COMPONENT_LIST& list )
 {
@@ -78,7 +76,6 @@ bool LoadComponentFile( const wxString& fileName, COMPONENT_LIST& list )
     FILE*       source;
     wxFileName  fn = fileName;
 
-    /* calcul du nom du fichier */
     fn.SetExt( ComponentFileExtension );
 
     source = wxFopen( fn.GetFullPath(), wxT( "rt" ) );
@@ -90,7 +87,7 @@ bool LoadComponentFile( const wxString& fileName, COMPONENT_LIST& list )
         return false;
     }
 
-    /* Identification du Type de fichier CmpMod */
+    /* Identification of the type of file CmpMod */
     if( fgets( Line, 79, source ) == 0 )
     {
         msg.Printf( _( " <%s> does not appear to be a valid Kicad component library." ),
@@ -108,13 +105,12 @@ bool LoadComponentFile( const wxString& fileName, COMPONENT_LIST& list )
         return false;
     }
 
-    /* lecture de la liste */
     while( !eof && fgets( Line, 79, source ) != 0 )
     {
         if( strnicmp( Line, "EndListe", 8 ) == 0 )
             break;
 
-        /* Recherche du debut de description du composant */
+        /* Search the beginning of the component description. */
         if( strnicmp( Line, "BeginCmp", 8 ) != 0 )
             continue;
         timestamp.Empty();
@@ -171,16 +167,16 @@ bool LoadComponentFile( const wxString& fileName, COMPONENT_LIST& list )
                 ilib.Trim( FALSE );
                 continue;
             }
-        } /* Fin lecture description de 1 composant */
+        } /* End reading component description. */
 
-        /* Recherche du composant correspondant en netliste et
-         *    mise a jour de ses parametres */
+        /* Search corresponding component and NetList
+         * Update its parameters. */
         BOOST_FOREACH( COMPONENT& component, list )
         {
             if( namecmp != component.m_Reference )
                 continue;
 
-            /* composant identifie , copie du nom du module correspondant */
+            /* Copy the name of the corresponding module. */
             component.m_Module = ilib;
         }
     }

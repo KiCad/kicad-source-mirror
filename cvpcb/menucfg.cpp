@@ -1,5 +1,5 @@
 /***************************************/
-/* menucfg : buils the cvpcb main menu */
+/* menucfg : build the cvpcb main menu */
 /***************************************/
 
 #include "fctsys.h"
@@ -14,34 +14,24 @@
 #include "bitmaps.h"
 
 
-/*******************************************/
 void WinEDA_CvpcbFrame::ReCreateMenuBar()
-/*******************************************/
-
-/* Creation des menus de la fenetre principale
- */
 {
     wxMenuItem* item;
     wxMenuBar*  menuBar;
-
-    /* Destroy the existing menu bar so it can be rebuilt.  This allows
-     * language changes of the menu text on the fly. */
-//    if( menuBar )
-//        SetMenuBar( NULL );
 
     menuBar = new wxMenuBar();
 
     wxMenu* filesMenu = new wxMenu;
     item = new wxMenuItem( filesMenu, ID_LOAD_PROJECT,
                            _( "&Open" ),
-                           _( "Open a NetList file" ) );
+                           _( "Open a net list file" ) );
     item->SetBitmap( open_xpm );
     filesMenu->Append( item );
 
     filesMenu->AppendSeparator();
     item = new wxMenuItem( filesMenu, ID_SAVE_PROJECT,
                            _( "&Save As..." ),
-                           _( "Save New NetList and Footprints List files" ) );
+                           _( "Save new net list and footprint list files" ) );
     item->SetBitmap( save_xpm );
     filesMenu->Append( item );
 
@@ -51,13 +41,12 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
     item->SetBitmap( exit_xpm );
     filesMenu->Append( item );
 
-    // Creation des selections des anciens fichiers
     wxGetApp().m_fileHistory.AddFilesToMenu( filesMenu );
 
     // Menu Configuration:
     wxMenu* configmenu = new wxMenu;
     item = new wxMenuItem( configmenu, ID_CONFIG_REQ, _( "&Configuration" ),
-                           _( "Setting Libraries, Directories and others..." ) );
+                           _( "Set libraries and library search paths" ) );
     item->SetBitmap( config_xpm );
     configmenu->Append( item );
 
@@ -91,6 +80,7 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
     menuBar->Append( configmenu, _( "&Preferences" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
-    // Associate the menu bar with the frame
+    /* Calling SetMenuBar() will Destroy the existing menu bar so it can be
+     * rebuilt.  This allows language changes of the menu text on the fly. */
     SetMenuBar( menuBar );
 }

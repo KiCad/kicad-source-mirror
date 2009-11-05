@@ -2,7 +2,7 @@
 /* CVPCB: autosel.cpp  */
 /**********************/
 
-/* Routines de selection automatique des modules */
+/* Routines for automatic selection of modules. */
 
 #include "fctsys.h"
 #include "common.h"
@@ -81,7 +81,7 @@ void WinEDA_CvpcbFrame::AssocieModule( wxCommandEvent& event )
     if( m_components.empty() )
         return;
 
-    /* recherche des equivalences a travers les fichiers possibles */
+    /* Find equivalents in all available files. */
     for( ii = 0; ii < m_AliasLibNames.GetCount(); ii++ )
     {
         fn = m_AliasLibNames[ii];
@@ -106,7 +106,6 @@ found in the default search paths." ),
             continue;
         }
 
-        /* lecture fichier n */
         while( GetLine( file, Line, NULL, sizeof(Line) ) != NULL )
         {
             char* text = Line;
@@ -133,7 +132,7 @@ found in the default search paths." ),
         fclose( file );
     }
 
-    /* Display the number of footpint aliases.  */
+    /* Display the number of footprint aliases.  */
     msg.Printf( _( "%d footprint aliases found." ), aliases.size() );
     SetStatusText( msg, 0 );
 

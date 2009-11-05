@@ -1,6 +1,6 @@
-/***************************************************/
-/*	tool_cvpcb.cpp: construction du menu principal */
-/***************************************************/
+/********************/
+/*  tool_cvpcb.cpp  */
+/********************/
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -13,9 +13,7 @@
 #include "cvstruct.h"
 
 
-/*********************************************/
 void WinEDA_CvpcbFrame::ReCreateHToolbar()
-/*********************************************/
 {
     wxConfig* config = wxGetApp().m_EDA_Config;
 
@@ -23,16 +21,18 @@ void WinEDA_CvpcbFrame::ReCreateHToolbar()
         return;
 
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
+
 #if !defined(KICAD_AUIMANAGER)
     SetToolBar( (wxToolBar *)m_HToolBar );
 #endif
+
     m_HToolBar->AddTool( ID_CVPCB_READ_INPUT_NETLIST, wxEmptyString,
                          wxBitmap( open_xpm ),
-                         _( "Open a NetList file" ) );
+                         _( "Open a net list file" ) );
 
     m_HToolBar->AddTool( ID_CVPCB_SAVEQUITCVPCB, wxEmptyString,
                          wxBitmap( save_xpm ),
-                         _( "Save NetList and Footprints List files" ) );
+                         _( "Save net list and footprint files" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_CVPCB_CREATE_CONFIGWINDOW, wxEmptyString,
@@ -46,7 +46,7 @@ void WinEDA_CvpcbFrame::ReCreateHToolbar()
 
     m_HToolBar->AddTool( ID_CVPCB_AUTO_ASSOCIE, wxEmptyString,
                          wxBitmap( auto_associe_xpm ),
-                         _( "Automatic Association" ) );
+                         _( "Perform automatic footprint association" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_CVPCB_GOTO_PREVIOUSNA, wxEmptyString,

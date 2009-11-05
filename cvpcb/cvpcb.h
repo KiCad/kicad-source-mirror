@@ -1,6 +1,6 @@
-/**********************************************/
-/* CVPCB : declaration des variables globales */
-/**********************************************/
+/*********/
+/* CVPCB */
+/*********/
 
 #ifndef __CVPCB_H__
 #define __CVPCB_H__
@@ -11,7 +11,7 @@
 #include <boost/foreach.hpp>
 
 
-// config for footprints doc file acces
+// config for footprints doc file access
 #define DEFAULT_FOOTPRINTS_LIST_FILENAME wxT( "footprints_doc/footprints.pdf" )
 
 // Define print format to display a schematic component line
@@ -19,7 +19,7 @@
 
 #define FILTERFOOTPRINTKEY "FilterFootprint"
 
-/* Types de netliste: */
+/* Net list types. */
 #define TYPE_NON_SPECIFIE  0
 #define TYPE_ORCADPCB2     1
 #define TYPE_PCAD          2
@@ -30,12 +30,12 @@
 class PIN
 {
 public:
-    int       m_Index;     /* variable utilisee selon types de netlistes */
-    int       m_Type;      /* code type electrique ( Entree Sortie Passive..) */
-    wxString  m_Net;       /* Pointeur sur le texte nom de net */
+    int       m_Index;     /* Type of net list. */
+    int       m_Type;      /* Electrical connection type. */
+    wxString  m_Net;       /* Name of net. */
     wxString  m_Number;
     wxString  m_Name;
-    wxString  m_Repere;    /* utilise selon formats de netliste */
+    wxString  m_Repere;    /* Formats used by net lister. */
 
     PIN();
 };
@@ -55,14 +55,14 @@ extern bool same_pin_net( const PIN* item1, const PIN* item2 );
 class COMPONENT
 {
 public:
-    int           m_Num;       /* Numero d'ordre */
-    int           m_Multi;     /* Nombre d' unites par boitier */
-    PIN_LIST      m_Pins;      /* pointeur sur la liste des Pins */
-    wxString      m_Reference; /* U3, R5  ... */
-    wxString      m_Value;     /* 7400, 47K ... */
-    wxString      m_TimeStamp; /* Signature temporelle ("00000000" si absente) */
-    wxString      m_Module;    /* Nom du module (Package) corresp */
-    wxString      m_Repere;    /* utilise selon formats de netliste */
+    int           m_Num;       /* Component number. */
+    int           m_Multi;     /* Part if component has multiple parts. */
+    PIN_LIST      m_Pins;      /* List of component pins. */
+    wxString      m_Reference; /* Reference designator: U3, R5  ... */
+    wxString      m_Value;     /* Value: 7400, 47K ... */
+    wxString      m_TimeStamp; /* Time stamp ("00000000" if absent) */
+    wxString      m_Module;    /* Footprint (module) name. */
+    wxString      m_Repere;    /* Net list format */
     wxArrayString m_FootprintFilter;  /* List of allowed footprints (wildcards
                                        * allowed ). If empty: no filtering */
 
@@ -79,11 +79,11 @@ extern bool operator<( const COMPONENT& item1, const COMPONENT& item2 );
 class FOOTPRINT
 {
 public:
-    wxString  m_Module;     /* Nom du module */
-    wxString  m_LibName;    /* Nom de la librairie contenant ce module */
-    int       m_Num;        /* Numero d'ordre pour affichage sur la liste */
-    wxString  m_Doc;        /* Doc associee */
-    wxString  m_KeyWord;    /* Mots cles associes */
+    wxString  m_Module;     /* Module name. */
+    wxString  m_LibName;    /* Name of the library containing this module. */
+    int       m_Num;        /* Order number in the display list. */
+    wxString  m_Doc;        /* Footprint description. */
+    wxString  m_KeyWord;    /* Footprint key words. */
 
     FOOTPRINT();
 };
@@ -93,7 +93,6 @@ typedef boost::ptr_vector< FOOTPRINT > FOOTPRINT_LIST;
 /* FOOTPRINT object list sort function. */
 extern bool operator<( const FOOTPRINT& item1, const FOOTPRINT& item2 );
 
-/* Gestion des noms des librairies */
 extern const wxString FootprintAliasFileExtension;
 extern const wxString RetroFileExtension;
 extern const wxString ComponentFileExtension;

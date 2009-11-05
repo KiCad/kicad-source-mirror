@@ -1,8 +1,6 @@
-/***************/
-/* genstf()  */
-/***************/
-
-/* genere le fichier STF type 'ref' 'nom_empreinte' pour DRAFT */
+/*****************/
+/* genequiv.cpp  */
+/*****************/
 
 #include "fctsys.h"
 #include "wxstruct.h"
@@ -24,7 +22,6 @@ void WinEDA_CvpcbFrame::WriteStuffList( wxCommandEvent& event )
     if( m_components.empty() )
         return;
 
-    /* calcul du nom du fichier */
     fn.SetExt( RetroFileExtension );
 
     wxFileDialog dlg( this, wxT( "Save Stuff File" ), fn.GetPath(),
@@ -43,10 +40,8 @@ void WinEDA_CvpcbFrame::WriteStuffList( wxCommandEvent& event )
         return;
     }
 
-    /* Generation de la liste */
     BOOST_FOREACH( COMPONENT& component, m_components )
     {
-        /* génération du composant si son empreinte est définie */
         if( component.m_Module.empty() )
             continue;
         fprintf( FileEquiv, "comp = \"%s\" module = \"%s\"\n",

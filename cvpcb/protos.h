@@ -1,6 +1,6 @@
-		/**************************************/
-		/**	protos.h     liste des fonctions **/
-		/**************************************/
+/**************/
+/**	protos.h **/
+/**************/
 
 #ifndef PROTOS_H
 #define PROTOS_H
@@ -16,5 +16,5 @@ extern bool LoadFootprintFiles( const wxArrayString& libNames,
 FOOTPRINT* GetModuleDescrByName( const wxString& FootprintName,
                                  FOOTPRINT_LIST& list );
 
-#endif	// PROTOS_H
+#endif  // PROTOS_H
 
