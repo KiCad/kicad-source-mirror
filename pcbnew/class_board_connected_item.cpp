@@ -141,12 +141,6 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
             wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetNetClass(): NULL netclass") );
 #endif
     }
-    else
-    {
-#ifdef __WXDEBUG__
-        wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetNetClass(): NULL net") );
-#endif
-    }
 
     if( netclass )
         return netclass;

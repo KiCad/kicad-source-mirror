@@ -203,6 +203,7 @@ void D_PAD::Copy( D_PAD* source )
     m_PadShape = source->m_PadShape;                            // forme CERCLE, PAD_RECT PAD_OVAL PAD_TRAPEZOID ou libre
     m_Attribut = source->m_Attribut;                            // NORMAL, PAD_SMD, PAD_CONN, Bit 7 = STACK
     m_Orient   = source->m_Orient;                              // en 1/10 degres
+    m_LocalClearance  = source->m_LocalClearance;
     m_LocalSolderMaskMargin  = source->m_LocalSolderMaskMargin;
     m_LocalSolderPasteMargin = source->m_LocalSolderPasteMargin;
     m_LocalSolderPasteMarginRatio = source->m_LocalSolderPasteMarginRatio;
@@ -213,6 +214,38 @@ void D_PAD::Copy( D_PAD* source )
     m_ShortNetname = source->m_ShortNetname;
 }
 
+/** Virtual function GetClearance
+ * returns the clearance in 1/10000 inches.  If \a aItem is not NULL then the
+ * returned clearance is the greater of this object's NETCLASS clearance and
+ * aItem's NETCLASS clearance.  If \a aItem is NULL, then this objects clearance
+ * is returned.
+ * @param aItem is another BOARD_CONNECTED_ITEM or NULL
+ * @return int - the clearance in 1/10000 inches.
+*/
+int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
+{
+    int clearance = m_LocalClearance;
+    if ( clearance == 0 )
+    {
+        if( GetParent() && ((MODULE*)GetParent())->m_LocalClearance )
+            clearance = ((MODULE*)GetParent())->m_LocalClearance;
+    }
+
+    if( clearance == 0 )
+        return BOARD_CONNECTED_ITEM::GetClearance( aItem );
+
+    if( aItem )
+    {
+        NETCLASS*   hisclass = aItem->GetNetClass();
+        if( hisclass )
+        {
+            int hisClearance = hisclass->GetClearance();
+            return max( hisClearance, clearance );
+        }
+    }
+
+    return clearance;
+}
 
 // Mask margins handling:
 

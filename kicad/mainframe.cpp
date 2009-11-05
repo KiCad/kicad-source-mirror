@@ -126,11 +126,11 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
     m_auimgr.AddPane(m_HToolBar,
         wxAuiPaneInfo(horiz).Name(wxT("m_HToolBar")).Top());
 
-    m_auimgr.AddPane(m_DialogWin,
-        wxAuiPaneInfo(horiz).Name(wxT("m_DialogWin")).Center());
-
     m_auimgr.AddPane(m_CommandWin,
         wxAuiPaneInfo().Name(wxT("m_CommandWin")).CentrePane());
+
+    m_auimgr.AddPane(m_DialogWin,
+        wxAuiPaneInfo(horiz).Name(wxT("m_DialogWin")).CentrePane());
 
     m_auimgr.AddPane(m_LeftWin,
         wxAuiPaneInfo(horiz).Name(wxT("m_LeftWin")).Left().BestSize(clientsize.x/3,clientsize.y));
@@ -215,6 +215,10 @@ void WinEDA_MainFrame::OnSashDrag( wxSashEvent& event )
 void WinEDA_MainFrame::OnSize( wxSizeEvent& event )
 /************************************************/
 {
+#if defined(KICAD_AUIMANAGER)
+   if(m_auimgr.GetManagedWindow())
+       m_auimgr.Update();
+#else
     if( m_CommandWin && m_BottomWin )
     {
         int    w, h, dy;
@@ -236,9 +240,6 @@ void WinEDA_MainFrame::OnSize( wxSizeEvent& event )
     layout.LayoutFrame( this );
     if( m_CommandWin )
         m_CommandWin->Refresh( TRUE );
-#if defined(KICAD_AUIMANAGER)
-   if(m_auimgr.GetManagedWindow())
-       m_auimgr.Update();
 #endif
     event.Skip();
 }
