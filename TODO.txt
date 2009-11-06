@@ -1,95 +1,73 @@
 KiCad TODO List
 ===============
 
-CMAKE Todo
-----------
+CMAKE
+-----
 
-TODO:
 * Add install targets for binaries and resources on Mac.
-* Add PYTHON.
-* Testing.
-* More testing ...
+* Add Python.
 
 
+Common
+------
+* Grep for @TODO or TODO for sourcecode tasks
+* Translate comment from French to English
+* Use doxygen compatible comments on member functions (.h files)
+* Add tooltip text to all non-obvious controls in every dialog window.
+  Need to do this using DialogBlocks.
+* Component and module search displays in which library the
+  module or component lives.
+* Create a better and cleaner add component and footprint dialog.
+* List auto up and down scrolling.
+* Toolbars en menus should be equal.
+* Select one component, not a whole block
+  (like in PCB, EAGLE, MultiSim/Ultiboard)
+* Cursor selection
+  * Cross small
+  * Cross fullscreen
+  * Normal arrow
 
 
-Here are some source code maintenance tasks that need to be done, and maybe some
-folks will see these items and volunteer to do them.
+CvPCB
+-----
+* Preview of the already assigned footprint.
 
 
-*** @todo: grep for @todo and finish off those tasks, scattered throughout the source.
+EESchema
+--------
+* Use collector classes.
+* Drag and drop between two EESchema windows.
+
+GerbView
+--------
+* Need work as good as gerbv from gEDA
+  * Named layers
+  * List control for layer sort on the fly
+* Add excellon2 drill file support (small good library)
+* Fix the polygon bug.
+* Switch to use ZONE instead of SEGZONE for polygons.
 
 
-*** use BOARD_ITEM::MenuIcon() in the onrightclick.cpp
+KiCad
+-----
 
 
-*** Use DOXYGEN compatible comments on member functions.  As configured,
-Doxygen gives priority to comments in header files over *.cpp files.
-Review the generated docs and start to go through the source and make the
-generated doxygen docs readable and clear using the JavaDoc style comments,
-mostly in the header files.  The error and warning output of the doxygen
-compiler can help with this too.
-
-*** GerbView
-Need support for drill files like Excellon, the best is to write small library for parsing
-and displaying it.
-
-*** CVPCB
-Add preference (checkbox) to close cvpcb after saving netlist instead of automatic
-close after saving netlist, because this is not normal program behavoir to quit
-after save.
-
-*** Translate comments that are in French to English so there can be a broader
-understanding by new developers.
-
-
-*** Add tooltip text to all non-obvious controls in every dialog window.
-Need to do this using DialogBlocks.
-
-
-2009-02-10 08:58 Assigned To:
-asked by: Cfdev (Sourceforge Feature Request)
----------------------------------------------------------------------------
-PCBNEW Unroute function in rightclick menu (for component)
-
----Message---
-Hi all,
-It's would be nice to have on right click menu (on component) "unroute
-component".Currently, to do this, I use the deletion of the block but it's
-not good for that.
-(sample: popupmenu -> U10 -> Move,Drag....Unroute)
-thanks if you can do this.
-Cfdev
-
-
-2008-Dec-6 Assigned To:
-asked by: Dick Hollenbeck
-================================================================================
-1) Gerbview needs to work at least as well as gerv, that means adding named layers,
-   and a list control to sort the layer stack on the fly.  There seems to be a polygon bug
-   of some kind, don't know how long that's been in there.  (Dick)
-2) Add net class support to PCBNEW, so the round tripping to freerouter
-   is a dream (Dick)
-3) Document the specctra round tripper, and fix up the english translation
-   of help.  (Dick, native english speaker)
-4) Expose layer name editing in pcbnew (anyone), should dove tail with net
-   class editor from a UI perspective.
-
-** Should probably switch gerbview to use ZONE instead of SEGZONE for polygons.
-** Need to add ARC support to gerber polygons.
-** Need to add polygon aperture type.  Then example 2 in RS274xrevd_e.pdf will draw properly.
-
-
-2008-Feb-8 Assigned To: dick
-asked by: dick
-================================================================================
-specctra:
-Add net class support to pcbnew so that the export to specctra becomes richer.
-A netclass should hold a list of nets, track width, track spacing,
-via drill size and via copper diameter.
-
-
-2007-Nov-4 Assigned To: nobody
-asked by: jp Charras
-================================================================================
-Use the collector classes in eeschema.
+PCBNew
+------
+* Use BOARD_ITEM::MenuIcon() in the onrightclick.cpp
+* Add unroute option in rightclick menu for components
+* Add net class support
+  * So the round tripping to freerouter is a dream.
+  * So that the export to specctra becomes richer.
+  * Netclass should hold a lists of nets, track widths, track spacings,
+    via drill sizes and copper diameters.
+* Document specctra round tripper, and fix the english translation of help.
+* Expose layer name editing. Should dove tail with net class editor from
+  a UI perspective.
+* Add ARC support to gerber polygons.
+* Need to add polygon aperture type.
+  Then example 2 in RS274xrevd_e.pdf will draw properly.
+* Look at mouse auto-scroll modes (bug?)
+* Add the footprint name in the automatic placement file
+* Fix block copy/move preview to not view only a border, we should
+  see the moved/copied parts.

@@ -13,6 +13,9 @@
 # Usage:
 # .conkyrc: ${execi [time] /path/to/script/conky-rss.sh}
 #
+# Applications needed:
+# bash, cat, grep, sed, curl
+#
 # Usage Example
 # ${execi 300 /home/youruser/scripts/conky-rss.sh}
 
@@ -20,37 +23,42 @@
 URI=http://sourceforge.net/export/rss2_keepsake.php?group_id=145591 #URI of RSS Feed
 FEEDFILE="/tmp/kicad-svn-`date +%y%m%d-%H%M%S`.rss"
 URLFILE="/tmp/kicad-svn-`date +%y%m%d-%H%M%S`.url"
-LINES=4 #Number of headlines
 
-# Get feed and 
+# Get feed and save
 EXEC="/usr/bin/curl -s" #Path to curl
 `$EXEC $URI &> $FEEDFILE`
 
+# Get commit description
+cat $FEEDFILE                | \
+grep title                   | \
+sed -e 's/[ \t]*//'          | \
+sed -e '/activity/d'         | \
+sed -e '/artifact/d'         | \
+sed -e 's/<title>//'         | \
+sed -e 's/<\!\[CDATA\[//'    | \
+sed -e 's/\]\]>//'           | \
+sed -e 's/<\/title>//'
 
-# Get and filter and print content
-cat $FEEDFILE | grep title |\
-sed -e 's/[ \t]*//' |\
-sed -e 's/^<title><\!\[CDATA\[//' |\
-sed -e 's/\]\]><\/title>//' |\
-sed -e 's/ to the Kicad EDA SVN repository//' |\
-head -n $(($LINES + 1)) |\
-tail -n $(($LINES))
-
+# Space between descriptions and messages
 echo ""
 
-# Get latest commit url
-cat $FEEDFILE | grep link |\
-sed -e '2 s/<link>//' |\
-sed -e '/<link>/d' |\
-sed -e 's/[ \t]*//' |\
-sed -e 's/<\/link>//' \
-&> $URLFILE
+# Get viewvc urls only
+cat $FEEDFILE         | \
+grep link             | \
+sed -e '/tracker/d'   | \
+sed -e '/export/d'    | \
+sed -e 's/[ \t]*//'   | \
+sed -e 's/<link>//'   | \
+sed -e 's/<\/link>//' &> $URLFILE
 
-# Get commit message
-URL=`cat $URLFILE`
-curl -s $URL | grep vc_log |\
-sed -e 's/<td><pre class=\"vc_log\">//' |\
-sed -e 's/<\/pre><\/td>//'
+# Get commit messages from urls
+exec < $URLFILE
+while read LINE
+do
+	curl -s "$LINE" | \
+	grep vc_log  | \
+	sed -e 's/<td><pre class=\"vc_log\">//' |\
+	sed -e 's/<\/pre><\/td>//'
+done
 
-rm $URLFILE
-rm $FEEDFILE
+rm /tmp/kicad-svn-*
