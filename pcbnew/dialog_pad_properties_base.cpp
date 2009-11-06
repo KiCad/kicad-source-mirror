@@ -234,8 +234,10 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgClearancesGridSizer->SetFlexibleDirection( wxBOTH );
 	fgClearancesGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticTextNetClearance = new wxStaticText( this, wxID_ANY, _("Net Clearance"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextNetClearance = new wxStaticText( this, wxID_ANY, _("Net pad clearance"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextNetClearance->Wrap( -1 );
+	m_staticTextNetClearance->SetToolTip( _("This is the local net clearance for  pad.\nIf 0, the footprint local value or the Netclass value is used") );
+	
 	fgClearancesGridSizer->Add( m_staticTextNetClearance, 0, wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_NetClearanceValueCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -256,6 +258,8 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	m_MaskClearanceTitle = new wxStaticText( this, wxID_ANY, _("Solder mask clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MaskClearanceTitle->Wrap( -1 );
+	m_MaskClearanceTitle->SetToolTip( _("This is the local clearance between this  pad and the solder mask\nIf 0, the footprint local value or the global value is used") );
+	
 	fgClearancesGridSizer->Add( m_MaskClearanceTitle, 0, wxLEFT|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 	
 	m_SolderMaskMarginCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -267,6 +271,8 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	m_staticTextSolderPaste = new wxStaticText( this, wxID_ANY, _("Solder paste clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSolderPaste->Wrap( -1 );
+	m_staticTextSolderPaste->SetToolTip( _("This is the local clearance between this pad and the solder paste.\nIf 0 the footprint value or the global value is used..\nThe final clearance value is the sum of this value and the clearance value ratio\nA negative value means a smaller mask size than pad size") );
+	
 	fgClearancesGridSizer->Add( m_staticTextSolderPaste, 0, wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_SolderPasteMarginCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -278,6 +284,8 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	m_staticTextRatio = new wxStaticText( this, wxID_ANY, _("Solder mask ratio clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRatio->Wrap( -1 );
+	m_staticTextRatio->SetToolTip( _("This is the local clearance ratio in per cent between this pad and the solder paste.\nA value of 10 means the clearance value is 10% of the pad size\nIf 0 the footprint value or the global value is used..\nThe final clearance value is the sum of this value and the clearance value\nA negative value means a smaller mask size than pad size.") );
+	
 	fgClearancesGridSizer->Add( m_staticTextRatio, 0, wxLEFT|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 	
 	m_SolderPasteMarginRatioCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -289,7 +297,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	sbClearancesSizer->Add( fgClearancesGridSizer, 1, wxEXPAND, 5 );
 	
-	bMiddleSizer->Add( sbClearancesSizer, 1, wxEXPAND, 5 );
+	bMiddleSizer->Add( sbClearancesSizer, 0, wxEXPAND, 5 );
 	
 	bGeneralSizer->Add( bMiddleSizer, 1, wxEXPAND, 5 );
 	
@@ -372,7 +380,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
-	m_MainSizer->Add( m_sdbSizer1, 0, wxEXPAND, 5 );
+	m_MainSizer->Add( m_sdbSizer1, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	this->SetSizer( m_MainSizer );
 	this->Layout();

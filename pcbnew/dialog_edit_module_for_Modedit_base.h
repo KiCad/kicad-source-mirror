@@ -22,6 +22,7 @@
 #include <wx/radiobox.h>
 #include <wx/stattext.h>
 #include <wx/slider.h>
+#include <wx/statline.h>
 #include <wx/panel.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -63,6 +64,12 @@ class DIALOG_MODULE_MODULE_EDITOR_BASE : public wxDialog
 		wxStaticText* m_staticText12;
 		wxSlider* m_CostRot180Ctrl;
 		wxStaticText* m_staticTextInfo;
+		wxStaticText* m_staticTextNetClearance;
+		wxTextCtrl* m_NetClearanceValueCtrl;
+		wxStaticText* m_NetClearanceUnits;
+		wxStaticLine* m_staticline1;
+		wxStaticLine* m_staticline2;
+		wxStaticLine* m_staticline3;
 		wxStaticText* m_MaskClearanceTitle;
 		wxTextCtrl* m_SolderMaskMarginCtrl;
 		wxStaticText* m_SolderMaskMarginUnits;
@@ -95,7 +102,7 @@ class DIALOG_MODULE_MODULE_EDITOR_BASE : public wxDialog
 	
 	public:
 		wxStaticBoxSizer* m_Sizer3DValues;
-		DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Module properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 422,549 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Module properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 539,536 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_MODULE_MODULE_EDITOR_BASE();
 	
 };

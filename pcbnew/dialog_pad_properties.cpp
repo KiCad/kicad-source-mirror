@@ -110,6 +110,7 @@ void DIALOG_PAD_PROPERTIES::InitDialog( )
     int            tmp;
     wxCommandEvent cmd_event;
     int internalUnits = m_Parent->m_InternalUnits;
+    wxString msg;
 
     SetFocus();     // Required under wxGTK if we want to demiss the dialog with the ESC key
 
@@ -154,9 +155,14 @@ void DIALOG_PAD_PROPERTIES::InitDialog( )
 
     PutValueInLocalUnits( *m_NetClearanceValueCtrl, pad->m_LocalClearance, internalUnits );
     PutValueInLocalUnits( *m_SolderMaskMarginCtrl, pad->m_LocalSolderMaskMargin, internalUnits );
+    // These 2 parameters are usually < 0, so prepare entering a negative value, if current is 0
     PutValueInLocalUnits( *m_SolderPasteMarginCtrl, pad->m_LocalSolderPasteMargin, internalUnits );
-    wxString msg;
-    msg.Printf( wxT( "%.1f" ), pad->m_LocalSolderPasteMarginRatio * 100.0 );
+    if( pad->m_LocalSolderPasteMargin == 0 )
+        m_SolderPasteMarginCtrl->SetValue( wxT("-") + m_SolderPasteMarginCtrl->GetValue() );
+    if( pad->m_LocalSolderPasteMarginRatio == 0.0 )
+        msg.Printf( wxT( "-%.1f" ), pad->m_LocalSolderPasteMarginRatio * 100.0 );
+    else
+        msg.Printf( wxT( "%.1f" ), pad->m_LocalSolderPasteMarginRatio * 100.0 );
     m_SolderPasteMarginRatioCtrl->SetValue( msg );
 
     if( m_CurrentPad )

@@ -101,18 +101,27 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
     m_OrientValue->SetValue( msg );
     m_OrientValue->Enable( select );
 
-    // Initialize dilaog relative to masks clearances
+    // Initialize dialog relative to masks clearances
+    m_NetClearanceUnits->SetLabel( GetUnitsLabel( g_UnitMetric ) );
     m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UnitMetric ) );
     m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UnitMetric ) );
 
-    int Internal_Unit = m_Parent->m_InternalUnits;
+    int internalUnit = m_Parent->m_InternalUnits;
+    PutValueInLocalUnits( *m_NetClearanceValueCtrl,
+                          m_CurrentModule->m_LocalClearance, internalUnit );
     PutValueInLocalUnits( *m_SolderMaskMarginCtrl,
                           m_CurrentModule->m_LocalSolderMaskMargin,
-                          Internal_Unit );
+                          internalUnit );
+    // These 2 parameters are usually < 0, so prepare entering a negative value, if current is 0
     PutValueInLocalUnits( *m_SolderPasteMarginCtrl,
                           m_CurrentModule->m_LocalSolderPasteMargin,
-                          Internal_Unit );
-    msg.Printf( wxT( "%.1f" ), m_CurrentModule->m_LocalSolderPasteMarginRatio * 100.0 );
+                          internalUnit );
+    if( m_CurrentModule->m_LocalSolderPasteMargin == 0 )
+        m_SolderPasteMarginCtrl->SetValue( wxT("-") + m_SolderPasteMarginCtrl->GetValue() );
+    if( m_CurrentModule->m_LocalSolderPasteMarginRatio == 0.0 )
+        msg.Printf( wxT( "-%.1f" ), m_CurrentModule->m_LocalSolderPasteMarginRatio * 100.0 );
+    else
+        msg.Printf( wxT( "%.1f" ), m_CurrentModule->m_LocalSolderPasteMarginRatio * 100.0 );
     m_SolderPasteMarginRatioCtrl->SetValue( msg );
 }
 
@@ -430,6 +439,8 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     }
 
     // Initialize masks clearances
+    m_CurrentModule->m_LocalClearance =
+        ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl,  m_Parent->m_InternalUnits );
     m_CurrentModule->m_LocalSolderMaskMargin =
         ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, m_Parent->m_InternalUnits );
     m_CurrentModule->m_LocalSolderPasteMargin =

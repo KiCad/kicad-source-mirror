@@ -454,6 +454,8 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
                 m_LocalSolderPasteMargin = atoi(Line+13);
             else if( strnicmp(Line, ".SolderPasteRatio ", 18 ) == 0 )
                 m_LocalSolderPasteMarginRatio = atoi(Line+18);
+            else if( strnicmp(Line, ".LocalClearance ", 16 ) == 0 )
+                m_LocalClearance = atoi(Line+16);
             break;
 
         default:
@@ -540,6 +542,8 @@ bool D_PAD::Save( FILE* aFile ) const
         fprintf( aFile, ".SolderPaste %d\n",m_LocalSolderPasteMargin);
     if( m_LocalSolderPasteMarginRatio != 0)
         fprintf( aFile, ".SolderPasteRatio %g\n",m_LocalSolderPasteMarginRatio);
+    if( m_LocalClearance != 0 )
+        fprintf( aFile, ".LocalClearance %d\n",m_LocalClearance );
 
     if( fprintf( aFile, "$EndPAD\n" ) != sizeof("$EndPAD\n") - 1 )
         return false;
