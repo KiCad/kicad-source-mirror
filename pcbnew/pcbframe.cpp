@@ -244,10 +244,6 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     m_InternalUnits = PCB_INTERNAL_UNIT;    // Unites internes = 1/10000 inch
     SetBaseScreen( ScreenPcb );
     LoadSettings();
-    // Initilialize grid id to a default value if not found in config or bad:
-    if( (m_LastGridSizeId <= 0) ||
-        (m_LastGridSizeId < (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
-        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_500 - ID_POPUP_GRID_LEVEL_1000;
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnits, ID_POPUP_GRID_USER );
