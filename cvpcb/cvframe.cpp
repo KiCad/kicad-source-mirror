@@ -136,6 +136,12 @@ WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title,
     if( m_FrameSize.y < FRAME_MIN_SIZE_Y )
         m_FrameSize.y = FRAME_MIN_SIZE_Y;
 
+    // Set minimal frame width and height
+    SetSizeHints( FRAME_MIN_SIZE_X, FRAME_MIN_SIZE_Y, -1, -1, -1, -1 );
+
+    // Framesize and position
+    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+
     // create the status bar
     static const int dims[3] = { -1, -1, 250 };
 
@@ -149,6 +155,7 @@ WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title,
     BuildCmpListBox();
     BuildFOOTPRINTS_LISTBOX();
 
+#if !defined(KICAD_AUIMANAGER)
     /* Create size constraints of the component list window display. */
     wxLayoutConstraints* linkpos = new wxLayoutConstraints;
     linkpos->top.SameAs( this, wxTop );
@@ -166,12 +173,7 @@ WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title,
     linkpos->left.SameAs( m_ListCmp, wxRight );
     if( m_FootprintList )
         m_FootprintList->SetConstraints( linkpos );
-
-    // Set minimal frame width and height
-    SetSizeHints( FRAME_MIN_SIZE_X, FRAME_MIN_SIZE_Y, -1, -1, -1, -1 );
-
-    // Framesize and position
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+#endif
 
 #if defined(KICAD_AUIMANAGER)
     m_auimgr.SetManagedWindow( this );
@@ -184,20 +186,17 @@ WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title,
     horiz.CloseButton( false );
     horiz.CaptionVisible( false );
 
-    wxAuiPaneInfo vert( horiz );
-
-    vert.TopDockable( false ).BottomDockable( false );
     horiz.LeftDockable( false ).RightDockable( false );
 
     m_auimgr.AddPane( m_HToolBar,
                       wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top() );
 
+    m_auimgr.AddPane( m_ListCmp,
+                      wxAuiPaneInfo(horiz).Name( wxT( "m_ListCmp" ) ).CentrePane() );
+
     m_auimgr.AddPane( m_FootprintList,
                       wxAuiPaneInfo( horiz ).Name( wxT( "m_FootprintList" ) ).
-                      Left().BestSize( m_FrameSize.x * 0.3, m_FrameSize.y * 0.9 ) );
-
-    m_auimgr.AddPane( m_ListCmp,
-                      wxAuiPaneInfo().Name( wxT( "m_ListCmp" ) ).CentrePane() );
+                      Right().BestSize( m_FrameSize.x * 0.36, m_FrameSize.y ) );
 
     m_auimgr.Update();
 #endif
@@ -588,6 +587,17 @@ void WinEDA_CvpcbFrame::OnSelectComponent( wxListEvent& event )
  */
 void WinEDA_CvpcbFrame::OnSelectFilteringFootprint( wxCommandEvent& event )
 {
+    switch (event.GetId() )
+    {
+        case ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST:
+            m_HToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST, false );
+            break;
+        case ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST:
+            m_HToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, false );
+            break;
+        default:
+        break;
+    }
     wxListEvent l_event;
 
     OnSelectComponent( l_event );

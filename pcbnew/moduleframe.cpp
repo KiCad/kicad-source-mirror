@@ -175,10 +175,6 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
     ActiveScreen = GetScreen();
     GetScreen()->SetCurItem( NULL );
     LoadSettings();
-    // Initilialize grid id to a default value if not found in config or bad:
-    if( (m_LastGridSizeId <= 0) ||
-        (m_LastGridSizeId < (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
-        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_500 - ID_POPUP_GRID_LEVEL_1000;
 
     GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnits, ID_POPUP_GRID_USER );
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
@@ -400,10 +396,7 @@ void WinEDA_ModuleEditFrame::SetToolbars()
         }
 
         if( m_SelGridBox )
-        {
-            m_SelGridBox->SetSelection( ID_POPUP_GRID_LEVEL_1000 +
-                                        m_LastGridSizeId );
-        }
+            m_SelGridBox->SetSelection( m_LastGridSizeId );
     }
 
     DisplayUnitsMsg();

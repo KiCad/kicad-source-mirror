@@ -25,7 +25,7 @@
 
 BEGIN_EVENT_TABLE( WinEDA_DisplayFrame, WinEDA_BasePcbFrame )
     EVT_CLOSE( WinEDA_DisplayFrame::OnCloseWindow )
-    EVT_SIZE( WinEDA_DrawFrame::OnSize )
+    EVT_SIZE( WinEDA_DisplayFrame::OnSize )
     EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_DisplayFrame::OnZoom )
     EVT_TOOL( ID_OPTIONS_SETUP, WinEDA_DisplayFrame::InstallOptionsDisplay )
     EVT_TOOL( ID_CVPCB_SHOW3D_FRAME, WinEDA_DisplayFrame::Show3D_Frame )
@@ -59,8 +59,9 @@ WinEDA_DisplayFrame::WinEDA_DisplayFrame( WinEDA_CvpcbFrame* father,
     LoadSettings();
     // Internalize grid id to a default value if not found in config or bad:
     if( (m_LastGridSizeId <= 0) ||
-        (m_LastGridSizeId < (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
+        (m_LastGridSizeId > (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
         m_LastGridSizeId = ID_POPUP_GRID_LEVEL_500 - ID_POPUP_GRID_LEVEL_1000;
+    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
 
     // Initialize some display options
     DisplayOpt.DisplayPadIsol = false;      // Pad clearance has no meaning here
@@ -71,6 +72,39 @@ WinEDA_DisplayFrame::WinEDA_DisplayFrame( WinEDA_CvpcbFrame* father,
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     ReCreateHToolbar();
     ReCreateVToolbar();
+
+#if defined(KICAD_AUIMANAGER)
+    m_auimgr.SetManagedWindow( this );
+
+    wxAuiPaneInfo horiz;
+    horiz.Gripper( false );
+    horiz.DockFixed( true );
+    horiz.Movable( false );
+    horiz.Floatable( false );
+    horiz.CloseButton( false );
+    horiz.CaptionVisible( false );
+
+    wxAuiPaneInfo vert( horiz );
+
+    vert.TopDockable( false ).BottomDockable( false );
+    horiz.LeftDockable( false ).RightDockable( false );
+
+    m_auimgr.AddPane( m_HToolBar,
+                      wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().
+                     Row( 0 ) );
+
+    if( m_VToolBar )    // Currently, no vertical right toolbar.
+        m_auimgr.AddPane( m_VToolBar,
+                      wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
+
+    m_auimgr.AddPane( DrawPanel,
+                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
+
+    m_auimgr.AddPane( MsgPanel,
+                      wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
+
+    m_auimgr.Update();
+#endif
     Show( TRUE );
 }
 
@@ -84,7 +118,6 @@ WinEDA_DisplayFrame::~WinEDA_DisplayFrame()
 
     ( (WinEDA_CvpcbFrame*) wxGetApp().GetTopWindow() )->DrawFrame = NULL;
 }
-
 
 /* Called when the frame is closed
  *  Save current settings (frame position and size
@@ -104,6 +137,8 @@ void WinEDA_DisplayFrame::OnCloseWindow( wxCloseEvent& event )
 
 void WinEDA_DisplayFrame::ReCreateVToolbar()
 {
+    // Currently, no vertical right toolbar.
+    // So do nothing
 }
 
 

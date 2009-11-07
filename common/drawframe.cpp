@@ -398,9 +398,9 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
 
     GetClientSize( &size.x, &size.y );
     m_FrameSize = size;
-    size.y -= m_MsgFrameHeight;
 
 #if !defined(KICAD_AUIMANAGER)
+    size.y -= m_MsgFrameHeight;
     if( MsgPanel ) // Positionnement en bas d'ecran
     {
         MsgPanel->SetSize( 0, size.y, size.x, m_MsgFrameHeight );

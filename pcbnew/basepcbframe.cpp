@@ -381,19 +381,21 @@ void WinEDA_BasePcbFrame::LoadSettings()
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
     WinEDA_DrawFrame::LoadSettings();
+    // Ensure grid id is an existant grid id:
+    if( (m_LastGridSizeId <= 0) ||
+        (m_LastGridSizeId > (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
+        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_500 - ID_POPUP_GRID_LEVEL_1000;
+
     cfg->Read( m_FrameName + UserGridSizeXEntry, &m_UserGridSize.x, 0.01 );
     cfg->Read( m_FrameName + UserGridSizeYEntry, &m_UserGridSize.y, 0.01 );
-    cfg->Read( m_FrameName + UserGridUnitsEntry, &m_UserGridUnits,
-               ( long )INCHES );
+    cfg->Read( m_FrameName + UserGridUnitsEntry, &m_UserGridUnits, ( long )INCHES );
     cfg->Read( m_FrameName + DisplayPadFillEntry, &m_DisplayPadFill, true );
-    cfg->Read( m_FrameName + DisplayViaFillEntry, &m_DisplayViaFill, true );  //TODO: Will adding this line break tha pcbnew file compatibility?
+    cfg->Read( m_FrameName + DisplayViaFillEntry, &m_DisplayViaFill, true );
     cfg->Read( m_FrameName + DisplayPadNumberEntry, &m_DisplayPadNum, true );
-    cfg->Read( m_FrameName + DisplayModuleEdgeEntry, &m_DisplayModEdge,
-               ( long )FILLED );
+    cfg->Read( m_FrameName + DisplayModuleEdgeEntry, &m_DisplayModEdge, ( long )FILLED );
     if( m_DisplayModEdge < FILAIRE || m_DisplayModEdge > SKETCH )
         m_DisplayModEdge = FILLED;
-    cfg->Read( m_FrameName + DisplayModuleTextEntry, &m_DisplayModText,
-               ( long )FILLED );
+    cfg->Read( m_FrameName + DisplayModuleTextEntry, &m_DisplayModText, ( long )FILLED );
     if( m_DisplayModText < FILAIRE || m_DisplayModText > SKETCH )
         m_DisplayModText = FILLED;
 }
@@ -416,7 +418,7 @@ void WinEDA_BasePcbFrame::SaveSettings()
     cfg->Write( m_FrameName + UserGridSizeYEntry, m_UserGridSize.y );
     cfg->Write( m_FrameName + UserGridUnitsEntry, ( long )m_UserGridUnits );
     cfg->Write( m_FrameName + DisplayPadFillEntry, m_DisplayPadFill );
-    cfg->Write( m_FrameName + DisplayViaFillEntry, m_DisplayViaFill );  //TODO: Will adding this line break tha pcbnew file compatibility?
+    cfg->Write( m_FrameName + DisplayViaFillEntry, m_DisplayViaFill );
     cfg->Write( m_FrameName + DisplayPadNumberEntry, m_DisplayPadNum );
     cfg->Write( m_FrameName + DisplayModuleEdgeEntry, ( long )m_DisplayModEdge );
     cfg->Write( m_FrameName + DisplayModuleTextEntry, ( long )m_DisplayModText );

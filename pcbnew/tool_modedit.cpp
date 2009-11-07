@@ -319,8 +319,7 @@ void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
 
         m_SelGridBox->Append( msg, (void*) &GetScreen()->m_GridList[i].m_Id );
 
-        if( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId ==
-            GetScreen()->m_GridList[i].m_Id )
+        if( m_LastGridSizeId == GetScreen()->m_GridList[i].m_Id )
             m_SelGridBox->SetSelection( i );
     }
 
