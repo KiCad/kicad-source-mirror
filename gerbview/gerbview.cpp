@@ -26,7 +26,7 @@ wxString g_PenFilenameExt;
 
 int      g_DCodesColor;
 int      g_Default_GERBER_Format;
-int      g_Plot_Spot_Mini;        /* Diametre mini de l'ouverture pour */
+int      g_Plot_Spot_Mini;  /* Diameter of the opening mini-track for GERBER. */
 int      g_DisplayPolygonsModeSketch;
 
 GERBER*  g_GERBER_List[32];
@@ -37,7 +37,7 @@ IMPLEMENT_APP( WinEDA_App )
 
 bool WinEDA_App::OnInit()
 {
-    wxFileName fn;
+    wxFileName          fn;
     WinEDA_GerberFrame* frame = NULL;
 
     InitEDA_Appl( wxT( "GerbView" ), APP_TYPE_GERBVIEW );
@@ -47,9 +47,10 @@ bool WinEDA_App::OnInit()
 
     ActiveScreen = ScreenPcb;
 
-    // read current setup and reopen last directory if no filename to open in command line
+    // read current setup and reopen last directory if no filename to open in
+    // command line
     bool reopenLastUsedDirectory = argc == 1;
-    GetSettings(reopenLastUsedDirectory);
+    GetSettings( reopenLastUsedDirectory );
 
     extern PARAM_CFG_BASE* ParamCfgList[];
     wxGetApp().ReadCurrentSetupValues( ParamCfgList );
@@ -62,25 +63,28 @@ bool WinEDA_App::OnInit()
 
     g_DrawBgColor = BLACK;
 
-    Read_Hotkey_Config( frame, false );  /* Must be called before creating the main frame
-                                          *  in order to display the real hotkeys
-                                          *  in menus or tool tips */
+    Read_Hotkey_Config( frame, false );  /* Must be called before creating the
+                                          * main frame in order to display the
+                                          * real hotkeys in menus or tool tips
+                                          */
 
     frame = new  WinEDA_GerberFrame( NULL, wxT( "GerbView" ),
-                                     wxPoint( 0, 0 ),
-                                     wxSize( 600, 400 ) );
+                                    wxPoint( 0, 0 ),
+                                    wxSize( 600, 400 ) );
 
     /* Gerbview mainframe title */
     frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() );
     frame->SetBoard( new BOARD( NULL, frame ) );
 
     // Initialize some display options
-    DisplayOpt.DisplayPadIsol = false;      // Pad clearance has no meaning here
-    DisplayOpt.ShowTrackClearanceMode = 0;  // tracks and vias clearance has no meaning here
+    DisplayOpt.DisplayPadIsol = false;      // Pad clearance has no meaning
+                                            // here
+    DisplayOpt.ShowTrackClearanceMode = 0;  // tracks and vias clearance has no
+                                            // meaning here
 
-    SetTopWindow( frame );              // Set GerbView mainframe on top
-    frame->Show( TRUE );                // Show GerbView mainframe
-    frame->Zoom_Automatique( TRUE );    // Zoomfit drawing in frame
+    SetTopWindow( frame );                  // Set GerbView mainframe on top
+    frame->Show( TRUE );                    // Show GerbView mainframe
+    frame->Zoom_Automatique( TRUE );        // Zoomfit drawing in frame
 
     Read_Config();
 

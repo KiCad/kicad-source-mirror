@@ -1,6 +1,6 @@
-/********************************************************/
-/* Routine de lecture d'un fichier GERBER format RS274X */
-/********************************************************/
+/**************/
+/* rs274x.cpp */
+/**************/
 
 #include "fctsys.h"
 #include "common.h"
@@ -20,9 +20,9 @@ enum RS274X_PARAMETERS {
     INCH   = CODE( 'I', 'N' ),
     MILLIMETER = CODE( 'M', 'M' ),
     OFFSET = CODE( 'O', 'F' ),
-    SCALE_FACTOR    = CODE( 'S', 'F' ),
+    SCALE_FACTOR = CODE( 'S', 'F' ),
 
-    IMAGE_NAME      = CODE( 'I', 'N' ),
+    IMAGE_NAME   = CODE( 'I', 'N' ),
     IMAGE_JUSTIFY   = CODE( 'I', 'J' ),
     IMAGE_OFFSET    = CODE( 'I', 'O' ),
     IMAGE_POLARITY  = CODE( 'I', 'P' ),
@@ -39,9 +39,6 @@ enum RS274X_PARAMETERS {
     STEP_AND_REPEAT = CODE( 'S', 'P' ),
     ROTATE = CODE( 'R', 'O' )
 };
-
-
-/* Local Functions */
 
 
 /**
@@ -109,11 +106,9 @@ static double ReadDouble( char*& text )
 }
 
 
-/****************************************************************************/
 bool GERBER::ReadRS274XCommand( WinEDA_GerberFrame* frame, wxDC* DC,
                                 char buff[GERBER_BUFZ], char*& text )
 {
-/****************************************************************************/
     bool ok = true;
     int  code_command;
 
@@ -165,12 +160,10 @@ exit:
 }
 
 
-/*******************************************************************************/
 bool GERBER::ExecuteRS274XCommand( int    command,
                                    char   buff[GERBER_BUFZ],
                                    char*& text )
 {
-/*******************************************************************************/
     int      code;
     int      xy_seq_len, xy_seq_char;
     bool     ok = TRUE;
@@ -206,17 +199,18 @@ bool GERBER::ExecuteRS274XCommand( int    command,
                 text++;
                 break;
 
-            case 'A':           // Absolute coord
+            case 'A':       // Absolute coord
                 m_Relative = FALSE;
                 text++;
                 break;
 
-            case 'I':           // Absolute coord
+            case 'I':       // Absolute coord
                 m_Relative = TRUE;
                 text++;
                 break;
 
-            case 'N':           // Sequence code (followed by the number of digits for the X,Y command
+            case 'N':       // Sequence code (followed by the number of digits
+                            // for the X,Y command
                 text++;
                 xy_seq_char = *text++;
                 if( (xy_seq_char >= '0') && (xy_seq_char <= '9') )
@@ -224,14 +218,16 @@ bool GERBER::ExecuteRS274XCommand( int    command,
                 break;
 
             case 'X':
-            case 'Y':           // Valeurs transmises :2 (really xy_seq_len : FIX ME) digits
+            case 'Y':       // Values transmitted :2 (really xy_seq_len : FIX
+                            // ME) digits
             {
                 code = *(text++);
                 char ctmp = *(text++) - '0';
                 if( code == 'X' )
                 {
-                    m_FmtScale.x = *text - '0';                     // = nb chiffres apres la virgule
-                    m_FmtLen.x   = ctmp + m_FmtScale.x;             // = nb total de chiffres
+                    // number of digits after the decimal point
+                    m_FmtScale.x = *text - '0';
+                    m_FmtLen.x   = ctmp + m_FmtScale.x;
                 }
                 else
                 {
@@ -275,13 +271,13 @@ bool GERBER::ExecuteRS274XCommand( int    command,
         {
             switch( *text )
             {
-            case 'A':       // A axis offset in current unit (inch ou mm)
+            case 'A':       // A axis offset in current unit (inch or mm)
                 text++;
                 fcoord     = ReadDouble( text );
                 m_Offset.x = wxRound( fcoord * conv_scale );
                 break;
 
-            case 'B':       // B axis offset in current unit (inch ou mm)
+            case 'B':       // B axis offset in current unit (inch or mm)
                 text++;
                 fcoord     = ReadDouble( text );
                 m_Offset.y = wxRound( fcoord * conv_scale );
@@ -348,7 +344,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
         if( m_Current_File == 0 )
         {
             wxString msg;
-            msg.Printf( wxT( "fichier <%s> non trouve" ), line );
+            msg.Printf( wxT( "file <%s> not found." ), line );
             DisplayError( NULL, msg, 10 );
             ok = FALSE;
             m_Current_File = m_FilesList[m_FilesPtr];
@@ -393,7 +389,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
             text += 2;              // skip "C," for example
 
             dcode->m_Size.x = dcode->m_Size.y =
-                                  wxRound( ReadDouble( text ) * conv_scale );
+                wxRound( ReadDouble( text ) * conv_scale );
 
             switch( stdAperture )
             {
@@ -493,7 +489,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
             {
                 // @todo not found, don't know how to report an error
                 D( printf( "aperture macro %s not found\n",
-                           CONV_TO_UTF8( am_lookup.name ) ); )
+                          CONV_TO_UTF8( am_lookup.name ) ); )
                 ok = false;
                 break;
             }
@@ -514,10 +510,8 @@ bool GERBER::ExecuteRS274XCommand( int    command,
 }
 
 
-/*****************************************************************/
 bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
 {
-/*****************************************************************/
     for( ; ; )
     {
         while( (text < buff + GERBER_BUFZ) && *text )
@@ -541,12 +535,10 @@ bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
 }
 
 
-/*******************************************************************/
 bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
                                 char*& text,
                                 FILE*  gerber_file )
 {
-/*******************************************************************/
     APERTURE_MACRO am;
 
     // read macro name
@@ -633,7 +625,7 @@ bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
         }
 
         int i;
-        for( i = 0; i < paramCount && *text && *text != '*';  ++i )
+        for( i = 0; i < paramCount && *text && *text != '*'; ++i )
         {
             prim.params.push_back( DCODE_PARAM() );
 
@@ -648,7 +640,8 @@ bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
                 param.SetValue( ReadDouble( text ) );
         }
 
-        if( i < paramCount )  // maybe some day we can throw an exception and track a line number
+        if( i < paramCount )  // maybe some day we can throw an exception and
+                              // track a line number
             printf( "i=%d, insufficient parameters\n", i );
 
         // there are more parameters to read if this is an AMP_OUTLINE
@@ -660,7 +653,7 @@ bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
 
             paramCount = (int) prim.params[1].GetValue( 0 ) * 2 + 1;
 
-            for( int i = 0; i < paramCount && *text && *text != '*';  ++i )
+            for( int i = 0; i < paramCount && *text && *text != '*'; ++i )
             {
                 prim.params.push_back( DCODE_PARAM() );
 

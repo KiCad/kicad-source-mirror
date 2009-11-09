@@ -1,5 +1,5 @@
 /***********************************************************/
-/*                      wxGerberStruct.h:                     */
+/*                   wxGerberStruct.h:                     */
 /***********************************************************/
 
 #ifndef  WX_GERBER_STRUCT_H
@@ -58,7 +58,7 @@ public:
     void         OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void         OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
     bool         OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
-    int          BestZoom();    // Retourne le meilleur zoom
+    int          BestZoom();
     void         OnSelectOptionToolbar( wxCommandEvent& event );
     void         OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
 
@@ -176,7 +176,6 @@ public:
     void         CopyDCodesSizeToItems();
     void         Liste_D_Codes( wxDC* DC );
 
-    /* Fonctions specifiques */
     void         Trace_Gerber( wxDC* DC, int draw_mode, int printmasklayer );
 
     // Copper texts

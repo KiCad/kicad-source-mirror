@@ -1,8 +1,6 @@
-/**********************************************/
-/* GERBVIEW - Gestion des Options et Reglages */
-/**********************************************/
-
-/*	 Fichier reglage.cpp 	*/
+/***************/
+/* reglage.cpp */
+/***************/
 
 /*
  * Options for file extensions
@@ -16,13 +14,12 @@
 #include "pcbplot.h"
 #include "protos.h"
 
-/***********/
 
-enum {
+enum
+{
     ID_SAVE_CFG = 1000
 };
 
-/* Routines Locales */
 
 class WinEDA_ConfigFrame : public wxDialog
 {
@@ -36,7 +33,6 @@ private:
     WinEDA_EnterText*   TextPhotoExt;
     WinEDA_EnterText*   TextPenExt;
 
-    // Constructor and destructor
 public:
     WinEDA_ConfigFrame( WinEDA_GerberFrame* parent, const wxPoint& pos );
     ~WinEDA_ConfigFrame() { };
@@ -48,7 +44,8 @@ private:
 
     DECLARE_EVENT_TABLE()
 };
-/* Construction de la table des evenements pour WinEDA_ConfigFrame */
+
+
 BEGIN_EVENT_TABLE( WinEDA_ConfigFrame, wxDialog )
     EVT_BUTTON( ID_SAVE_CFG, WinEDA_ConfigFrame::SaveCfg )
     EVT_BUTTON( wxID_OK, WinEDA_ConfigFrame::OnOkClick )
@@ -56,14 +53,11 @@ BEGIN_EVENT_TABLE( WinEDA_ConfigFrame, wxDialog )
 END_EVENT_TABLE()
 
 
-/*****************************************************************/
-void WinEDA_GerberFrame::InstallConfigFrame( const wxPoint& pos )
-/*****************************************************************/
-
 /** Function InstallConfigFrame
-  * install the dialog box to configure some gerbview options
-  * manly the default file extensions
+ * install the dialog box to configure some gerbview options
+ * mainly the default file extensions
  */
+void WinEDA_GerberFrame::InstallConfigFrame( const wxPoint& pos )
 {
     WinEDA_ConfigFrame* CfgFrame = new WinEDA_ConfigFrame( this, pos );
 
@@ -72,19 +66,17 @@ void WinEDA_GerberFrame::InstallConfigFrame( const wxPoint& pos )
 }
 
 
-/************************************************************/
 WinEDA_ConfigFrame::WinEDA_ConfigFrame( WinEDA_GerberFrame* parent,
                                         const wxPoint&      framepos ) :
     wxDialog( parent, -1, wxEmptyString, framepos, wxSize( 300, 180 ),
               wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT )
-/************************************************************/
 {
     const int LEN_EXT = 100;
     wxString  title;
 
     m_Parent = parent;
 
-	/* Shows the config filename currently used : */
+    /* Shows the config filename currently used : */
     title = _( "from " ) + wxGetApp().m_CurrentOptionFile;
     SetTitle( title );
 
@@ -132,9 +124,7 @@ WinEDA_ConfigFrame::WinEDA_ConfigFrame( WinEDA_GerberFrame* parent,
 }
 
 
-/******************************************************************/
 void WinEDA_ConfigFrame::OnOkClick( wxCommandEvent& WXUNUSED (event) )
-/******************************************************************/
 {
     g_DrillFilenameExt = TextDrillExt->GetValue();
     g_PhotoFilenameExt = TextPhotoExt->GetValue();
@@ -144,17 +134,13 @@ void WinEDA_ConfigFrame::OnOkClick( wxCommandEvent& WXUNUSED (event) )
 }
 
 
-/******************************************************************/
 void WinEDA_ConfigFrame::OnCancelClick( wxCommandEvent& WXUNUSED (event) )
-/******************************************************************/
 {
     EndModal( -1 );
 }
 
 
-/******************************************************/
 void WinEDA_ConfigFrame::SaveCfg( wxCommandEvent& event )
-/******************************************************/
 {
     m_Parent->Update_config();
 }

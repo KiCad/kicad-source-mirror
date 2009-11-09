@@ -1,6 +1,6 @@
-/***************************************************/
-/* Localisation des elements pointes par la souris */
-/***************************************************/
+/************************************************/
+/* Locate items at the current cursor position. */
+/************************************************/
 
 #include "fctsys.h"
 #include "common.h"
@@ -12,50 +12,48 @@
 #include "protos.h"
 
 
-/* variables locales */
-int ux0, uy0, dx, dy, spot_cX, spot_cY;     /* Variables utilisees pour
-                                             *  la localisation des segments */
-/* fonctions locales */
+int ux0, uy0, dx, dy, spot_cX, spot_cY;
+
+
 static TRACK*       Locate_Zone( TRACK* start_adresse, int layer, int typeloc );
 static TRACK*       Locate_Zone( TRACK* start_adresse, wxPoint ref, int layer );
-static TRACK*       Locate_Pistes( TRACK* start_adresse, int Layer, int typeloc );
-static TRACK*       Locate_Pistes( TRACK* start_adresse, wxPoint ref, int Layer );
+static TRACK*       Locate_Pistes( TRACK* start_adresse,
+                                   int    Layer,
+                                   int    typeloc );
+static TRACK*       Locate_Pistes( TRACK*  start_adresse,
+                                   wxPoint ref,
+                                   int     Layer );
 static DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int typeloc );
 static TEXTE_PCB*   Locate_Texte_Pcb( TEXTE_PCB* pt_txt_pcb, int typeloc );
 static int          distance( int seuil );
 
-/**/
 
-/* Macro de calcul de la coord de pointage selon le curseur
- *  (ON/OFF grille) choisi
+/* Macro for calculating the coordinates of the cursor position.
  */
-#define SET_REF_POS( ref )  if( typeloc == CURSEUR_ON_GRILLE ) \
+#define SET_REF_POS( ref ) if( typeloc == CURSEUR_ON_GRILLE ) \
     { ref = ActiveScreen->m_Curseur; } \
     else { ref = ActiveScreen->m_MousePosition; }
 
 
-/*************************************************************/
-BOARD_ITEM* WinEDA_GerberFrame::Locate( int typeloc )
-/*************************************************************/
-
-/* Fonction de localisation generale
- *  Affiche les caract de la stucture localis�e et retourne un pointeur
- *  sur celle-ci
+/* Display the character of the localized STRUCTURE and return a pointer
+ * to it.
  */
+BOARD_ITEM* WinEDA_GerberFrame::Locate( int typeloc )
 {
     TEXTE_PCB*   pt_texte_pcb;
     TRACK*       Track, * TrackLocate;
     DRAWSEGMENT* DrawSegm;
     int          layer;
 
-    /* Localistion des pistes et vias, avec priorite aux vias */
+    /* Locate tracks and vias, with priority to vias */
     layer = GetScreen()->m_Active_Layer;
     Track = Locate_Pistes( GetBoard()->m_Track, -1, typeloc );
     if( Track != NULL )
     {
-        TrackLocate = Track;   /* Reperage d'une piste ou via */
-        /* recherche de 1 via eventuelle */
-        while( ( TrackLocate = Locate_Pistes( TrackLocate, layer, typeloc ) ) != NULL )
+        TrackLocate = Track;
+
+        while( ( TrackLocate = Locate_Pistes( TrackLocate,
+                                              layer, typeloc ) ) != NULL )
         {
             Track = TrackLocate;
             if( TrackLocate->Type() == TYPE_VIA )
@@ -68,8 +66,10 @@ BOARD_ITEM* WinEDA_GerberFrame::Locate( int typeloc )
     }
 
 
-    pt_texte_pcb = Locate_Texte_Pcb( (TEXTE_PCB*) GetBoard()->m_Drawings.GetFirst(), typeloc );
-    if( pt_texte_pcb ) // texte type PCB localise
+    pt_texte_pcb = Locate_Texte_Pcb(
+         (TEXTE_PCB*) GetBoard()->m_Drawings.GetFirst(), typeloc );
+
+    if( pt_texte_pcb )
     {
         pt_texte_pcb->DisplayInfo( this );
         return pt_texte_pcb;
@@ -81,7 +81,8 @@ BOARD_ITEM* WinEDA_GerberFrame::Locate( int typeloc )
     }
 
     if( ( TrackLocate = Locate_Zone( GetBoard()->m_Zone,
-                                    GetScreen()->m_Active_Layer, typeloc ) ) != NULL )
+                                     GetScreen()->m_Active_Layer,
+                                     typeloc ) ) != NULL )
     {
         TrackLocate->DisplayInfo( this );
         return TrackLocate;
@@ -92,21 +93,17 @@ BOARD_ITEM* WinEDA_GerberFrame::Locate( int typeloc )
 }
 
 
-/********************************************************/
-DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int typeloc )
-/********************************************************/
-
-/* Localisation de segments de contour du type edge pcb ou draw
- *  (selon couche active)
- *  Retourne:
- *      Pointeur sur DEBUT du segment localise
- *      NULL si rien trouve
+/* Locate of segments of pcb edge or draw as active layer.
+ * Returns:
+ *   Pointer to START segment if found
+ *   NULL if nothing found
  */
+DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int typeloc )
 {
-    BOARD_ITEM*     PtStruct;
-    DRAWSEGMENT*    pts;
-    wxPoint         ref;
-    PCB_SCREEN*     screen = (PCB_SCREEN*) ActiveScreen;
+    BOARD_ITEM*  PtStruct;
+    DRAWSEGMENT* pts;
+    wxPoint      ref;
+    PCB_SCREEN*  screen = (PCB_SCREEN*) ActiveScreen;
 
     SET_REF_POS( ref );
 
@@ -116,25 +113,27 @@ DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int typeloc )
         if( PtStruct->Type() != TYPE_DRAWSEGMENT )
             continue;
         pts = (DRAWSEGMENT*) PtStruct;
-        ux0 = pts->m_Start.x; uy0 = pts->m_Start.y;
-        /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-        dx      = pts->m_End.x - ux0; dy = pts->m_End.y - uy0;
-        spot_cX = ref.x - ux0; spot_cY = ref.y - uy0;
+        ux0 = pts->m_Start.x;
+        uy0 = pts->m_Start.y;
 
-        /* detection : */
+        dx = pts->m_End.x - ux0;
+        dy = pts->m_End.y - uy0;
+        spot_cX = ref.x - ux0;
+        spot_cY = ref.y - uy0;
+
         if( pts->GetLayer() != screen->m_Active_Layer )
             continue;
 
-        if( (pts->m_Shape == S_CIRCLE) || (pts->m_Shape == S_ARC) )
+        if( ( pts->m_Shape == S_CIRCLE ) || ( pts->m_Shape == S_ARC ) )
         {
             int rayon, dist, StAngle, EndAngle, MouseAngle;
             rayon = (int) hypot( (double) (dx), (double) (dy) );
             dist  = (int) hypot( (double) (spot_cX), (double) (spot_cY) );
-            if( abs( rayon - dist ) <= (pts->m_Width / 2) )
+            if( abs( rayon - dist ) <= ( pts->m_Width / 2 ) )
             {
                 if( pts->m_Shape == S_CIRCLE )
                     return pts;
-                /* pour un arc, controle complementaire */
+
                 MouseAngle = (int) ArcTangente( spot_cY, spot_cX );
                 StAngle    = (int) ArcTangente( dy, dx );
                 EndAngle   = StAngle + pts->m_Angle;
@@ -143,7 +142,7 @@ DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int typeloc )
                 {
                     StAngle -= 3600; EndAngle -= 3600;
                 }
-                if( (MouseAngle >= StAngle) && (MouseAngle <= EndAngle) )
+                if( ( MouseAngle >= StAngle ) && ( MouseAngle <= EndAngle ) )
                     return pts;
             }
         }
@@ -158,19 +157,13 @@ DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int typeloc )
 }
 
 
-/****************************************************************************/
-/* TRACK *Locate_Pistes(TRACK * start_adresse, int MasqueLayer,int typeloc)	*/
-/* TRACK *Locate_Pistes(TRACK * start_adresse, wxPoint ref, int MasqueLayer)*/
-/****************************************************************************/
-
 /*
- *  1 -  routine de localisation du segment de piste pointe par la souris.
- *  2 -  routine de localisation du segment de piste pointe par le point
- *          ref_pX , ref_pY.r
+ * 1 - Locate segment of track at current cursor position.
+ * 2 - Locate  segment of track point by point.
+ * Ref_pX, ref_pY.r
  *
- *  La recherche commence a l'adresse start_adresse
+ * The search begins to address start_adresse
  */
-
 TRACK* Locate_Pistes( TRACK* start_adresse, int Layer, int typeloc )
 {
     wxPoint ref;
@@ -183,25 +176,28 @@ TRACK* Locate_Pistes( TRACK* start_adresse, int Layer, int typeloc )
 
 TRACK* Locate_Pistes( TRACK* start_adresse, wxPoint ref, int Layer )
 {
-    TRACK* Track;               /* pointeur sur les pistes */
-    int    l_piste;             /* demi-largeur de la piste */
+    TRACK* Track;
+    int    l_piste;             /* half-width of the track */
 
     for( Track = start_adresse; Track != NULL; Track = Track->Next() )
     {
         if( Track->GetState( BUSY | DELETED ) )
             continue;
-        /* calcul des coordonnees du segment teste */
-        l_piste = Track->m_Width >> 1;                  /* l_piste = demi largeur piste */
-        ux0 = Track->m_Start.x; uy0 = Track->m_Start.y; /* coord de depart */
-        dx  = Track->m_End.x; dy = Track->m_End.y;      /* coord d'arrivee */
+        /* Calculate coordinates of the test segment. */
+        l_piste = Track->m_Width >> 1;
+        ux0     = Track->m_Start.x;
+        uy0     = Track->m_Start.y;
+        dx = Track->m_End.x;
+        dy = Track->m_End.y;
 
-        /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-        dx     -= ux0; dy -= uy0;
-        spot_cX = ref.x - ux0; spot_cY = ref.y - uy0;
+        dx -= ux0;
+        dy -= uy0;
+        spot_cX = ref.x - ux0;
+        spot_cY = ref.y - uy0;
 
-        if( Track->Type() == TYPE_VIA ) /* VIA rencontree */
+        if( Track->Type() == TYPE_VIA )
         {
-            if( (abs( spot_cX ) <= l_piste ) && (abs( spot_cY ) <=l_piste) )
+            if( ( abs( spot_cX ) <= l_piste ) && ( abs( spot_cY ) <=l_piste ) )
             {
                 return Track;
             }
@@ -210,7 +206,7 @@ TRACK* Locate_Pistes( TRACK* start_adresse, wxPoint ref, int Layer )
 
         if( Layer >= 0 )
             if( Track->GetLayer() != Layer )
-                continue;/* Segments sur couches differentes */
+                continue;
         if( distance( l_piste ) )
             return Track;
     }
@@ -219,22 +215,11 @@ TRACK* Locate_Pistes( TRACK* start_adresse, wxPoint ref, int Layer )
 }
 
 
-/****************************************************************/
-/* TRACK * Locate_Zone(TRACK * start_adresse, int layer,	 */
-/*											int typeloc)		*/
-/* TRACK * Locate_Zone(TRACK * start_adresse,wxPoint ref, int layer) */
-/****************************************************************/
-
 /*
- *  1 -  routine de localisation du segment de zone pointe par la souris.
- *  2 -  routine de localisation du segment de zone pointe par le point
- *          ref_pX , ref_pY.r
+ * Locate zone area at the cursor position.
  *
- *  Si layer == -1 , le tst de la couche n'est pas fait
- *
- *  La recherche commence a l'adresse start_adresse
+ * The search begins to address start_adresse
  */
-
 TRACK* Locate_Zone( TRACK* start_adresse, int layer, int typeloc )
 {
     wxPoint ref;
@@ -245,23 +230,30 @@ TRACK* Locate_Zone( TRACK* start_adresse, int layer, int typeloc )
 }
 
 
+/*
+ * Locate zone area at point.
+ *
+ * The search begins to address start_adresse
+ */
 TRACK* Locate_Zone( TRACK* start_adresse, wxPoint ref, int layer )
 {
-    TRACK* Zone;                /* pointeur sur les pistes */
-    int    l_segm;              /* demi-largeur de la piste */
+    TRACK* Zone;
+    int    l_segm;
 
     for( Zone = start_adresse; Zone != NULL; Zone = Zone->Next() )
     {
-        /* calcul des coordonnees du segment teste */
-        l_segm = Zone->m_Width >> 1;                        /* l_piste = demi largeur piste */
-        ux0    = Zone->m_Start.x; uy0 = Zone->m_Start.y;    /* coord de depart */
-        dx = Zone->m_End.x; dy = Zone->m_End.y;             /* coord d'arrivee */
+        l_segm = Zone->m_Width >> 1;
+        ux0    = Zone->m_Start.x;
+        uy0    = Zone->m_Start.y;
+        dx     = Zone->m_End.x;
+        dy     = Zone->m_End.y;
 
-        /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
-        dx     -= ux0; dy -= uy0;
-        spot_cX = ref.x - ux0; spot_cY = ref.y - uy0;
+        dx -= ux0;
+        dy -= uy0;
+        spot_cX = ref.x - ux0;
+        spot_cY = ref.y - uy0;
 
-        if( (layer != -1) && (Zone->GetLayer() != layer) )
+        if( ( layer != -1 ) && ( Zone->GetLayer() != layer ) )
             continue;
         if( distance( l_segm ) )
             return Zone;
@@ -271,15 +263,10 @@ TRACK* Locate_Zone( TRACK* start_adresse, wxPoint ref, int layer )
 }
 
 
-/***************************************************************/
-/* TEXTE_PCB * Locate_Texte_Pcb(char * pt_txt_pcb,int typeloc) */
-/***************************************************************/
-
-/* localisation des inscriptions sur le Pcb:
- *  entree : char pointeur sur le debut de la zone de recherche
- *  retour : pointeur sur la description du texte localise
+/* Location of text on the PCB:
+ * INPUT: char pointer to the beginning of the search area
+ * Return: pointer to the text description located.
  */
-
 TEXTE_PCB* Locate_Texte_Pcb( TEXTE_PCB* pt_txt_pcb, int typeloc )
 {
     int             angle;
@@ -295,14 +282,17 @@ TEXTE_PCB* Locate_Texte_Pcb( TEXTE_PCB* pt_txt_pcb, int typeloc )
         pt_txt_pcb = (TEXTE_PCB*) PtStruct;
 
         angle = pt_txt_pcb->m_Orient;
-        ux0   = pt_txt_pcb->m_Pos.x; uy0 = pt_txt_pcb->m_Pos.y;
+        ux0   = pt_txt_pcb->m_Pos.x;
+        uy0   = pt_txt_pcb->m_Pos.y;
         dx    = ( pt_txt_pcb->m_Size.x * pt_txt_pcb->GetLength() ) / 2;
         dy    = pt_txt_pcb->m_Size.y / 2;
 
-        dx *= 13; dx /= 9;  /* Facteur de forme des lettres : 13/9 */
+        dx *= 13;
+        dx /= 9;    /* Character for factor 13/9. */
 
-        /* la souris est-elle dans ce rectangle  autour du centre  */
-        spot_cX = ref.x - ux0; spot_cY = ref.y - uy0;
+        /* Cursor in the rectangle around the center.  */
+        spot_cX = ref.x - ux0;
+        spot_cY = ref.y - uy0;
         RotatePoint( &spot_cX, &spot_cY, -angle );
         if( ( abs( spot_cX ) <= abs( dx ) ) && ( abs( spot_cY ) <= abs( dy ) ) )
             return pt_txt_pcb;
@@ -312,155 +302,164 @@ TEXTE_PCB* Locate_Texte_Pcb( TEXTE_PCB* pt_txt_pcb, int typeloc )
 }
 
 
-/*****************************/
-/* int distance(int seuil) */
-/*****************************/
-
 /*
- *  Calcul de la distance du curseur souris a un segment de droite :
- *  ( piste, edge, contour module ..
- *  retourne:
- *      0 si distance > seuil
- *      1 si distance <= seuil
- *  Variables utilisees ( doivent etre initialisees avant appel , et
- *  sont ramenees au repere centre sur l'origine du segment)
- *      dx, dy = coord de l'extremite segment.
- *      spot_cX,spot_cY = coord du curseur souris
- *  la recherche se fait selon 4 cas:
- *      segment horizontal
- *      segment vertical
- *      segment 45
- *      segment quelconque
+ * Calculate the distance from the cursor to a line segment:
+ * (Track, edge, contour module ..
+ * Returns:
+ * 0 if distance > threshold
+ * 1 if distance <= threshold
+ * Variables used (must be initialized before use, and
+ * are brought to the mark center on the origin of the segment)
+ * dx, dy = coord of extremity segment.
+ * spot_cX, spot_cY = coord of mouse cursor
+ * Search 4 cases:
+ *   Horizontal segment
+ *   Vertical segment
+ *   Segment 45
+ *   Any segment
  */
-
 int distance( int seuil )
 {
-    int cXrot, cYrot,   /* coord du point (souris) dans le repere tourne */
-        segX, segY;     /* coord extremite segment tj >= 0 */
-    int pointX, pointY;/* coord point a tester dans repere modifie dans lequel
-                     *  segX et segY sont >=0 */
+    int cXrot, cYrot, segX, segY;
+    int pointX, pointY;
 
-    segX = dx; segY = dy; pointX = spot_cX; pointY = spot_cY;
+    segX = dx;
+    segY = dy;
+    pointX = spot_cX;
+    pointY = spot_cY;
 
-    /*Recalcul coord pour que le segment soit dans 1er quadrant (coord >= 0)*/
-    if( segX < 0 )   /* mise en >0 par symetrie par rapport a l'axe Y */
+    /* Reroute coordinate for the segment in 1st quadrant (coord> = 0). */
+    if( segX < 0 )   /* Set > 0 if symmetrical about the axis Y. */
     {
-        segX = -segX; pointX = -pointX;
+        segX   = -segX;
+        pointX = -pointX;
     }
-    if( segY < 0 )   /* mise en > 0 par symetrie par rapport a l'axe X */
+    if( segY < 0 )   /* Set > 0 if symmetrical about the axis X. */
     {
-        segY = -segY; pointY = -pointY;
+        segY   = -segY;
+        pointY = -pointY;
     }
 
 
-    if( segY == 0 ) /* piste Horizontale */
+    if( segY == 0 ) /* Horizontal track. */
     {
         if( abs( pointY ) <= seuil )
         {
-            if( (pointX >= 0) && (pointX <= segX) )
+            if( ( pointX >= 0 ) && ( pointX <= segX ) )
                 return 1;
-            /* Etude des extremites : cercle de rayon seuil */
-            if( (pointX < 0) && (pointX >= -seuil) )
+
+            if( ( pointX < 0 ) && ( pointX >= -seuil ) )
             {
-                if( ( (pointX * pointX) + (pointY * pointY) ) <= (seuil * seuil) )
+                if( ( ( pointX * pointX ) + ( pointY * pointY ) ) <=
+                    ( seuil * seuil ) )
                     return 1;
             }
-            if( (pointX > segX) && ( pointX <= (segX + seuil) ) )
+            if( ( pointX > segX ) && ( pointX <= ( segX + seuil ) ) )
             {
-                if( ( ( (pointX - segX) * (pointX - segX) ) + (pointY * pointY) ) <=
-                   (seuil * seuil) )
+                if( ( ( ( pointX - segX ) * ( pointX - segX ) ) +
+                      ( pointY * pointY ) ) <= ( seuil * seuil ) )
                     return 1;
             }
         }
     }
-    else if( segX == 0 ) /* piste verticale */
+    else if( segX == 0 ) /* Vertical track. */
     {
         if( abs( pointX ) <= seuil )
         {
-            if( (pointY >= 0 ) && (pointY <= segY) )
+            if( ( pointY >= 0 ) && ( pointY <= segY ) )
                 return 1;
-            if( (pointY < 0) && (pointY >= -seuil) )
+            if( ( pointY < 0 ) && ( pointY >= -seuil ) )
             {
-                if( ( (pointY * pointY) + (pointX * pointX) ) <= (seuil * seuil) )
+                if( ( (pointY * pointY ) + ( pointX * pointX ) ) <=
+                   ( seuil * seuil ) )
                     return 1;
             }
-            if( (pointY > segY) && ( pointY <= (segY + seuil) ) )
+            if( ( pointY > segY ) && ( pointY <= ( segY + seuil ) ) )
             {
-                if( ( ( (pointY - segY) * (pointY - segY) ) + (pointX * pointX) ) <=
-                   (seuil * seuil) )
+                if( ( ( ( pointY - segY ) * ( pointY - segY ) ) +
+                      ( pointX * pointX ) ) <= ( seuil * seuil ) )
                     return 1;
             }
         }
     }
-    else if( segX == segY )    /* piste a 45 degre */
+    else if( segX == segY )    /* 45 degree track. */
     {
-        /* on fait tourner les axes de 45 degre. la souris a alors les
-         *  coord : x1 = x*cos45 + y*sin45
-         *      y1 = y*cos45 - x*sin45
-         *  et le segment de piste est alors horizontal.
-         *  recalcul des coord de la souris ( sin45 = cos45 = .707 = 7/10
-         *  remarque : sin ou cos45 = .707, et lors du recalcul des coord
-         *  dx45 et dy45, lec coeff .707 est neglige, dx et dy sont en fait .707 fois
-         *  trop grands. (c.a.d trop petits)
-         *  spot_cX,Y doit etre * par .707 * .707 = 0.5 */
+        /* You spin axes of 45 degrees. mouse was then
+         * coord: x1 = x * y * cos45 + sin45
+         * y1 = y * cos45 - sin45 x *
+         * And the segment of track is horizontal.
+         * coord recalculation of the mouse (sin45 = cos45 = .707 = 7 / 10
+         * Note: sin or cos45 = .707, and when recalculating coord
+         * dX45 and dy45, lect coeff .707 is neglected, dx and dy are both
+         * actually .707
+         * too big. (security hole too small)
+         * spot_cX *, Y * must be by .707 * .707 = 0.5
+         */
 
         cXrot = (pointX + pointY) >> 1;
         cYrot = (pointY - pointX) >> 1;
 
-        /* recalcul des coord de l'extremite du segment , qui sera vertical
-         *  suite a l'orientation des axes sur l'ecran : dx45 = pointX (ou pointY)
-         *  et est en fait 1,414 plus grand , et dy45 = 0 */
-
-        // seuil doit etre * .707 pour tenir compte du coeff de reduction sur dx,dy
+        /* Recalculate coordinates of extremity segment, which will be vertical
+         * following the orientation of axes on the screen: DX45 = pointx
+         * (or pointy) and 1.414 is actually greater, and dy45 = 0
+         *
+         * Threshold should be .707 to reflect the difference in coeff dx, dy
+         */
         seuil *= 7; seuil /= 10;
-        if( abs( cYrot ) <= seuil ) /* ok sur axe vertical) */
+        if( abs( cYrot ) <= seuil )
         {
-            if( (cXrot >= 0) && (cXrot <= segX) )
+            if( ( cXrot >= 0 ) && ( cXrot <= segX ) )
                 return 1;
 
-            /* Etude des extremites : cercle de rayon seuil */
-            if( (cXrot < 0) && (cXrot >= -seuil) )
+            if( ( cXrot < 0 ) && ( cXrot >= -seuil ) )
             {
-                if( ( (cXrot * cXrot) + (cYrot * cYrot) ) <= (seuil * seuil) )
+                if( ( ( cXrot * cXrot ) + ( cYrot * cYrot ) )
+                    <= ( seuil * seuil ) )
                     return 1;
             }
-            if( (cXrot > segX) && ( cXrot <= (segX + seuil) ) )
+            if( ( cXrot > segX ) && ( cXrot <= ( segX + seuil ) ) )
             {
-                if( ( ( (cXrot - segX) * (cXrot - segX) ) + (cYrot * cYrot) ) <= (seuil * seuil) )
+                if( ( ( ( cXrot - segX ) * ( cXrot - segX ) ) +
+                      ( cYrot * cYrot ) ) <= ( seuil * seuil ) )
                     return 1;
             }
         }
     }
-    else    /* orientation quelconque */
+    else    /* Any orientation. */
     {
-        /* On fait un changement d'axe (rotation) de facon a ce que le segment
-         *  de piste soit horizontal dans le nouveau repere */
+        /* There is a change of axis (rotation), so that the segment
+         * track is horizontal in the new reference, */
         int angle;
 
         angle = (int) ( atan2( (double) segY, (double) segX ) * 1800 / M_PI);
-        cXrot = pointX; cYrot = pointY;
-        RotatePoint( &cXrot, &cYrot, angle );   /* Rotation du point a tester */
-        RotatePoint( &segX, &segY, angle );     /* Rotation du segment */
+        cXrot = pointX;
+        cYrot = pointY;
+        RotatePoint( &cXrot, &cYrot, angle );   /* Rotate test point. */
+        RotatePoint( &segX, &segY, angle );     /* Rotate segment. */
 
-        /*la piste est Horizontale , par suite des modifs de coordonnes
-         *  et d'axe, donc segX = longueur du segment */
+        /* The track is horizontal, following the changes to coordinate
+         * axis and, therefore segX = length of segment
+         */
 
-        if( abs( cYrot ) <= seuil ) /* ok sur axe vertical) */
+        if( abs( cYrot ) <= seuil )
         {
-            if( (cXrot >= 0) && (cXrot <= segX) )
+            if( ( cXrot >= 0 ) && ( cXrot <= segX ) )
                 return 1;
-            /* Etude des extremites : cercle de rayon seuil */
-            if( (cXrot < 0) && (cXrot >= -seuil) )
+
+            if( ( cXrot < 0 ) && ( cXrot >= -seuil ) )
             {
-                if( ( (cXrot * cXrot) + (cYrot * cYrot) ) <= (seuil * seuil) )
+                if( ( ( cXrot * cXrot ) + ( cYrot * cYrot ) )
+                    <= ( seuil * seuil ) )
                     return 1;
             }
-            if( (cXrot > segX) && ( cXrot <= (segX + seuil) ) )
+            if( ( cXrot > segX ) && ( cXrot <= ( segX + seuil ) ) )
             {
-                if( ( ( (cXrot - segX) * (cXrot - segX) ) + (cYrot * cYrot) ) <= (seuil * seuil) )
+                if( ( ( ( cXrot - segX ) * ( cXrot - segX ) ) +
+                      ( cYrot * cYrot ) ) <= ( seuil * seuil ) )
                     return 1;
             }
         }
     }
+
     return 0;
 }

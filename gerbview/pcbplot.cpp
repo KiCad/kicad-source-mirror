@@ -1,6 +1,6 @@
-		/************************************************/
-		/* Menu General de Trace (PLOT) fichier PLOT.CC */
-		/************************************************/
+/***************/
+/* pcbplot.cpp */
+/***************/
 
 #include "fctsys.h"
 #include "common.h"
@@ -15,13 +15,9 @@
 PCB_Plot_Options g_pcb_plot_options;
 
 
-/* variables locale : */
-
-/* Routines Locales */
-
-	/**************************************************************/
-	/* void WinEDA_BasePcbFrame::ToPlotter(wxCommandEvent& event) */
-	/***************************************************************/
+/**************************************************************/
+/* void WinEDA_BasePcbFrame::ToPlotter(wxCommandEvent& event) */
+/***************************************************************/
 
 void WinEDA_BasePcbFrame::ToPlotter(wxCommandEvent& event)
 {

@@ -1,6 +1,6 @@
-/*******************************************************/
-/* Menu General de Trace (PLOT): Fichier inclus PLOT.H */
-/*******************************************************/
+/**************/
+/* gerbview.h */
+/**************/
 
 #ifndef GERBVIEW_H
 #define GERBVIEW_H
@@ -12,13 +12,14 @@
 class WinEDA_GerberFrame;
 class BOARD;
 
-// Type d'action du phototraceur:
-#define GERB_ACTIVE_DRAW 1      // activation de lumiere ( baisser de plume)
-#define GERB_STOP_DRAW   2      // extinction de lumiere ( lever de plume)
+// Type of photoplotter action:
+#define GERB_ACTIVE_DRAW 1      // Activate light (lower pen)
+#define GERB_STOP_DRAW   2      // Extinguish light (lift pen)
 #define GERB_FLASH       3      // Flash
 
 
-typedef enum {
+typedef enum
+{
     FORMAT_HPGL,
     FORMAT_GERBER,
     FORMAT_POST
@@ -32,13 +33,9 @@ extern wxString g_PenFilenameExt;
 extern int      g_DCodesColor;
 extern int      g_Default_GERBER_Format;
 
-/* Gestion des ouvertures GERBER */
-extern int      g_Plot_Spot_Mini;    /* Diametre mini de l'ouverture pour trace GERBER */
+extern int      g_Plot_Spot_Mini;    /* Diameter of the opening mini-track for
+                                      * GERBER */
 
-
-/*************************************/
-/* Constantes utiles en trace GERBER */
-/*************************************/
 
 /**
  * Enum APERTURE_T
@@ -57,7 +54,8 @@ enum APERTURE_T
 
 
 // Interpolation type
-enum Gerb_Interpolation {
+enum Gerb_Interpolation
+{
     GERB_INTERPOL_LINEAR_1X = 0,
     GERB_INTERPOL_LINEAR_10X,
     GERB_INTERPOL_LINEAR_01X,
@@ -68,20 +66,21 @@ enum Gerb_Interpolation {
 
 
 // Command Type (GCodes)
-enum Gerb_GCommand {
-    GC_MOVE = 0,
-    GC_LINEAR_INTERPOL_1X    = 1,
-    GC_CIRCLE_NEG_INTERPOL   = 2,
-    GC_CIRCLE_POS_INTERPOL   = 3,
-    GC_COMMENT = 4,
-    GC_LINEAR_INTERPOL_10X   = 10,
-    GC_LINEAR_INTERPOL_0P1X  = 11,
-    GC_LINEAR_INTERPOL_0P01X = 12,
+enum Gerb_GCommand
+{
+    GC_MOVE                     = 0,
+    GC_LINEAR_INTERPOL_1X       = 1,
+    GC_CIRCLE_NEG_INTERPOL      = 2,
+    GC_CIRCLE_POS_INTERPOL      = 3,
+    GC_COMMENT                  = 4,
+    GC_LINEAR_INTERPOL_10X      = 10,
+    GC_LINEAR_INTERPOL_0P1X     = 11,
+    GC_LINEAR_INTERPOL_0P01X    = 12,
     GC_TURN_ON_POLY_FILL        = 36,
     GC_TURN_OFF_POLY_FILL       = 37,
-    GC_SELECT_TOOL = 54,
-    GC_PHOTO_MODE = 55,                 // can starts a D03 flash command: redundant with D03
-    GC_SPECIFY_INCHES = 70,
+    GC_SELECT_TOOL              = 54,
+    GC_PHOTO_MODE               = 55,          // can start a D03 flash command: redundant with D03
+    GC_SPECIFY_INCHES           = 70,
     GC_SPECIFY_MILLIMETERS      = 71,
     GC_TURN_OFF_360_INTERPOL    = 74,
     GC_TURN_ON_360_INTERPOL     = 75,
@@ -93,7 +92,8 @@ enum Gerb_GCommand {
 #define MAX_TOOLS   2048
 #define FIRST_DCODE 10
 
-enum Gerb_Analyse_Cmd {
+enum Gerb_Analyse_Cmd
+{
     CMD_IDLE = 0,
     END_BLOCK,
     ENTER_RS274X_CMD
@@ -104,10 +104,11 @@ class D_CODE;
 
 /**
  * Class DCODE_PARAM
- * holds a parameter for a DCODE or an "aperture macro" as defined within standard RS274X.
- * The \a value field can be a constant, i.e. "immediate" parameter or it may not be used
- * if this param is going to defer to the referencing aperture macro.  In that case, the
- * \a index field is an index into the aperture macro's paramters.
+ * holds a parameter for a DCODE or an "aperture macro" as defined within
+ * standard RS274X.  The \a value field can be a constant, i.e. "immediate"
+ * parameter or it may not be used if this param is going to defer to the
+ * referencing aperture macro.  In that case, the \a index field is an index
+ * into the aperture macro's parameters.
  */
 class DCODE_PARAM
 {
@@ -126,8 +127,8 @@ public:
 
     /**
      * Function IsImmediate
-     * tests if this DCODE_PARAM holds an immediate parameter or is a pointer into
-     * a parameter held by an owning D_CODE.
+     * tests if this DCODE_PARAM holds an immediate parameter or is a pointer
+     * into a parameter held by an owning D_CODE.
      */
     bool IsImmediate() const { return index == -1; }
 
@@ -142,8 +143,11 @@ public:
     }
 
 private:
-    int     index;      ///< if -1, then \a value field is an immediate value, else this is an index into parent's D_CODE.m_am_params.
-    double  value;      ///< if IsImmediate()==true then use the value, else not used.
+    int     index;      ///< if -1, then \a value field is an immediate value,
+                        //   else this is an index into parent's
+                        //   D_CODE.m_am_params.
+    double  value;      ///< if IsImmediate()==true then use the value, else
+                        //   not used.
 };
 
 
@@ -177,7 +181,8 @@ typedef std::vector<DCODE_PARAM>   DCODE_PARAMS;
 struct AM_PRIMITIVE
 {
     AM_PRIMITIVE_ID     primitive_id;   ///< The primitive type
-    DCODE_PARAMS        params;         ///< A sequence of parameters used by the primitive
+    DCODE_PARAMS        params;         ///< A sequence of parameters used by
+                                        //   the primitive
 
     /**
      * Function GetExposure
@@ -186,7 +191,8 @@ struct AM_PRIMITIVE
      */
     int GetExposure() const
     {
-        wxASSERT( params.size() && params[0].IsImmediate() );    // we have no D_CODE* for GetValue()
+        // No D_CODE* for GetValue()
+        wxASSERT( params.size() && params[0].IsImmediate() );
         return (int) params[0].GetValue( NULL );
     }
 };
@@ -207,7 +213,8 @@ struct APERTURE_MACRO
 
 /**
  * Struct APERTURE_MACRO_less_than
- * is used by std:set<APERTURE_MACRO> instantiation which uses APERTURE_MACRO.name as its key.
+ * is used by std:set<APERTURE_MACRO> instantiation which uses
+ * APERTURE_MACRO.name as its key.
  */
 struct APERTURE_MACRO_less_than
 {
@@ -236,7 +243,8 @@ class D_CODE
 {
     friend class DCODE_PARAM;
 
-    APERTURE_MACRO* m_Macro;    ///< no ownership, points to GERBER.m_aperture_macros element
+    APERTURE_MACRO* m_Macro;    ///< no ownership, points to
+                                //   GERBER.m_aperture_macros element
 
     /**
      * parameters used only when this D_CODE holds a reference to an aperture
@@ -245,13 +253,13 @@ class D_CODE
     DCODE_PARAMS   m_am_params;
 
 public:
-    wxSize      m_Size;        /* Dimensions horiz et Vert */
-    APERTURE_T  m_Shape;       /* shape ( Line, rect , circulaire , ovale .. ) */
-    int         m_Num_Dcode;   /* numero de code ( >= 10 ) */
-    wxSize      m_Drill;       /* dimension du trou central (s'il existe) */
-    int         m_DrillShape;  /* forme du trou central ( rond = 1, rect = 2 ) */
-    bool        m_InUse;       /* FALSE si non utilisé */
-    bool        m_Defined;     /* FALSE si non defini */
+    wxSize      m_Size;        /* Horizontal and vertical dimensions. */
+    APERTURE_T  m_Shape;       /* shape ( Line, rectangle, circle , oval .. ) */
+    int         m_Num_Dcode;   /* D code ( >= 10 ) */
+    wxSize      m_Drill;       /* dimension of the hole (if any) */
+    int         m_DrillShape;  /* shape of the hole (round = 1, rect = 2) */
+    bool        m_InUse;       /* FALSE if not used */
+    bool        m_Defined;     /* FALSE if not defined */
     wxString    m_SpecialDescr;
 
 public:
@@ -310,49 +318,49 @@ inline double DCODE_PARAM::GetValue( const D_CODE* aDcode ) const
  */
 class GERBER
 {
-    D_CODE*       m_Aperture_List[MAX_TOOLS];                   ///< Dcode (Aperture) List for this layer
-    bool          m_Exposure;                                   ///< whether an aperture macro tool is flashed on or off
+    D_CODE*       m_Aperture_List[MAX_TOOLS];   ///< Dcode (Aperture) List for this layer
+    bool          m_Exposure;                   ///< whether an aperture macro tool is flashed on or off
 
     BOARD*        m_Pcb;
 
 public:
-    wxString      m_FileName;                                   // Full File Name for this layer
-    wxString      m_Name;                                       // Layer name
-    int           m_Layer;                                      // Layer Number
-    bool          m_LayerNegative;                              // TRUE = Negative Layer
-    bool          m_GerbMetric;                                 // FALSE = Inches, TRUE = metric
-    bool          m_Relative;                                   // FALSE = absolute Coord, RUE = relative Coord
-    bool          m_NoTrailingZeros;                            // True: zeros a droite supprimés
-    bool          m_MirorA;                                     // True: miror / axe A (X)
-    bool          m_MirorB;                                     // True: miror / axe B (Y)
-    bool          m_Has_DCode;                                  // TRUE = DCodes in file (FALSE = no DCode->
+    wxString      m_FileName;                   // Full File Name for this layer
+    wxString      m_Name;                       // Layer name
+    int           m_Layer;                      // Layer Number
+    bool          m_LayerNegative;              // TRUE = Negative Layer
+    bool          m_GerbMetric;                 // FALSE = Inches, TRUE = metric
+    bool          m_Relative;                   // FALSE = absolute Coord, RUE = relative Coord
+    bool          m_NoTrailingZeros;            // True: remove tailing zeros.
+    bool          m_MirorA;                     // True: miror / axe A (X)
+    bool          m_MirorB;                     // True: miror / axe B (Y)
+    bool          m_Has_DCode;                  // TRUE = DCodes in file (FALSE = no DCode->
     // separate DCode file
-    wxPoint       m_Offset;                                     // Coord Offset
-    wxSize        m_FmtScale;                                   // Fmt 2.3: m_FmtScale = 3, fmt 3.4: m_FmtScale = 4
-    wxSize        m_FmtLen;                                     // Nb chars per coord. ex fmt 2.3, m_FmtLen = 5
-    wxRealPoint   m_LayerScale;                                 // scale (X et Y) pour cette layer
+    wxPoint       m_Offset;                     // Coord Offset
+    wxSize        m_FmtScale;                   // Fmt 2.3: m_FmtScale = 3, fmt 3.4: m_FmtScale = 4
+    wxSize        m_FmtLen;                     // Nb chars per coord. ex fmt 2.3, m_FmtLen = 5
+    wxRealPoint   m_LayerScale;                 // scale (X and Y) of layer.
     int           m_Rotation;
-    int           m_Iterpolation;                               // Linear, 90 arc, Circ.
-    bool          m_ImageNegative;                              // TRUE = Negative image
-    int           m_Current_Tool;                               // Current Tool (Dcode) number selected
-    int           m_Last_Pen_Command;                           // Current or last pen state (0..9, set by Dn option with n <10
-    int           m_CommandState;                               // donne l'etat de l'analyse des commandes gerber
-    wxPoint       m_CurrentPos;                                 // current specified coord for plot
-    wxPoint       m_PreviousPos;                                // old current specified coord for plot
-    wxPoint       m_IJPos;                                      // IJ coord (for arcs & circles )
+    int           m_Iterpolation;               // Linear, 90 arc, Circ.
+    bool          m_ImageNegative;              // TRUE = Negative image
+    int           m_Current_Tool;               // Current Tool (Dcode) number selected
+    int           m_Last_Pen_Command;           // Current or last pen state (0..9, set by Dn option with n <10
+    int           m_CommandState;               // state of gerber analysis command.
+    wxPoint       m_CurrentPos;                 // current specified coord for plot
+    wxPoint       m_PreviousPos;                // old current specified coord for plot
+    wxPoint       m_IJPos;                      // IJ coord (for arcs & circles )
 
-    FILE*         m_Current_File;                               // Current file to read
-    FILE*         m_FilesList[12];                              // Files list
-    int           m_FilesPtr;                                   // Stack pointer for files list
+    FILE*         m_Current_File;               // Current file to read
+    FILE*         m_FilesList[12];              // Files list
+    int           m_FilesPtr;                   // Stack pointer for files list
 
-    int           m_Selected_Tool;                              // Pour editions: Tool (Dcode) selectionné
+    int           m_Selected_Tool;              // Pour editions: Tool (Dcode) selectionné
 
-    int           m_Transform[2][2];                            // The rotation/mirror transformation matrix.
-    bool          m_360Arc_enbl;                                // Enbl 360 deg circular interpolation
-    bool          m_PolygonFillMode;                            // Enbl polygon mode (read coord as a polygone descr)
-    int           m_PolygonFillModeState;                       // In polygon mode: 0 = first segm, 1 = next segm
+    int           m_Transform[2][2];            // The rotation/mirror transformation matrix.
+    bool          m_360Arc_enbl;                // Enbl 360 deg circular interpolation
+    bool          m_PolygonFillMode;            // Enbl polygon mode (read coord as a polygon descr)
+    int           m_PolygonFillModeState;       // In polygon mode: 0 = first segm, 1 = next segm
 
-    APERTURE_MACRO_SET   m_aperture_macros;                     ///< a collection of APERTURE_MACROS, sorted by name
+    APERTURE_MACRO_SET   m_aperture_macros;     ///< a collection of APERTURE_MACROS, sorted by name
 
 public:
     GERBER( int layer );
@@ -367,7 +375,6 @@ public:
      */
     void    InitToolTable();
 
-    // Routines utilisées en lecture de ficher gerber
     wxPoint ReadXYCoord( char*& Text );
     wxPoint ReadIJCoord( char*& Text );
     int     ReturnGCodeNumber( char*& Text );
@@ -391,9 +398,10 @@ public:
 
     /**
      * Function ExecuteRS274XCommand
-     * executes 1 commande
+     * executes 1 command
      */
-    bool    ExecuteRS274XCommand( int command, char aBuff[GERBER_BUFZ], char*& text );
+    bool    ExecuteRS274XCommand( int command, char aBuff[GERBER_BUFZ],
+                                  char*& text );
 
 
     /**
@@ -401,11 +409,13 @@ public:
      * reads in an aperture macro and saves it in m_aperture_macros.
      * @param aBuff a character buffer at least GERBER_BUFZ long that can be
      *          used to read successive lines from the gerber file.
-     * @param text A reference to a character pointer which gives the initial text to read from.
+     * @param text A reference to a character pointer which gives the initial
+     *              text to read from.
      * @param gerber_file Which file to read from for continuation.
      * @return bool - true if a macro was read in successfully, else false.
      */
-    bool    ReadApertureMacro( char aBuff[GERBER_BUFZ], char*& text, FILE* gerber_file );
+    bool    ReadApertureMacro( char aBuff[GERBER_BUFZ], char*& text,
+                               FILE* gerber_file );
 
 
     /**
@@ -413,7 +423,8 @@ public:
      * returns a pointer to the D_CODE within this GERBER for the given
      * \a aDCODE.
      * @param aDCODE The numeric value of the D_CODE to look up.
-     * @param createIfNoExist If true, then create the D_CODE if it does not exist.
+     * @param createIfNoExist If true, then create the D_CODE if it does not
+     *                        exist.
      * @return D_CODE* - the one implied by the given \a aDCODE, or NULL
      *            if the requested \a aDCODE is out of range.
      */
@@ -423,11 +434,11 @@ public:
      * Function FindApertureMacro
      * looks up a previously read in aperture macro.
      * @param aLookup A dummy APERTURE_MACRO with [only] the name field set.
-     * @return APERTURE_MACRO* - the one with a matching name, or NULL if not found.
+     * @return APERTURE_MACRO* - the one with a matching name, or NULL if
+     *                           not found.
      */
     APERTURE_MACRO* FindApertureMacro( const APERTURE_MACRO& aLookup );
 };
-
 
 
 /**************/

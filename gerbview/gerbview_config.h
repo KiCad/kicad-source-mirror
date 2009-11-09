@@ -1,6 +1,6 @@
-/**********************************************************/
-/** cfg.h : configuration: definition des structures  **/
-/**********************************************************/
+/*************************/
+/** gerberview_config.h **/
+/*************************/
 
 #include "param_config.h"
 
@@ -13,382 +13,382 @@
 
 static PARAM_CFG_WXSTRING PhotoExtBufCfg
 (
-    wxT("PhoExt"),          /* identification */
-    &g_PhotoFilenameExt     /* Adresse du parametre */
+    wxT("PhoExt"),
+    &g_PhotoFilenameExt
 );
 
 static PARAM_CFG_WXSTRING PenExtBufCfg
 (
-    wxT("PenExt"),          /* identification */
-    &g_PenFilenameExt       /* Adresse du parametre */
+    wxT("PenExt"),
+    &g_PenFilenameExt
 );
 
 static PARAM_CFG_WXSTRING DrillExtBufCfg
 (
-    wxT("DrilExt"),       /* identification */
-    &g_DrillFilenameExt  /* Adresse du parametre */
+    wxT("DrilExt"),
+    &g_DrillFilenameExt
 );
 
-static PARAM_CFG_INT UnitCfg    // Unites; 0 inche, 1 mm
+static PARAM_CFG_INT UnitCfg    // Units; 0 inches, 1 mm
 (
-    wxT("Unite"),           /* identification */
-    &g_UnitMetric,      /* Adresse du parametre */
-    FALSE               /* Valeur par defaut */
+    wxT("Unite"),
+    &g_UnitMetric,
+    FALSE
 );
 
 static PARAM_CFG_INT GerberScaleCfg // default scale; 0 2.3, 1 3.4
 (
-    wxT("Def_fmt"),         /* identification */
-    &g_Default_GERBER_Format,           /* Adresse du parametre */
-    23,                 /* Valeur par defaut */
-    23, 66              /* Valeurs extremes */
+    wxT("Def_fmt"),
+    &g_Default_GERBER_Format,
+    23,
+    23, 66
 );
 
 static PARAM_CFG_BOOL SegmFillCfg
 (
     INSETUP,
-    wxT("SegFill"),             /* identification */
-    &DisplayOpt.DisplayPcbTrackFill,            /* Adresse du parametre */
-    TRUE                    /* Valeur par defaut */
+    wxT("SegFill"),
+    &DisplayOpt.DisplayPcbTrackFill,
+    TRUE
 );
 
 
 static PARAM_CFG_INT PadFillCfg
 (
     INSETUP,
-    wxT("PadFill"),             /* identification */
-    (int*)&DisplayOpt.DisplayPadFill, /* Adresse du parametre */
-    TRUE                    /* Valeur par defaut */
+    wxT("PadFill"),
+    (int*)&DisplayOpt.DisplayPadFill,
+    TRUE
 );
 
 static PARAM_CFG_INT ViaFillCfg
 (
     INSETUP,
-    wxT("ViaFill"),             /* identification */
-    (int*)&DisplayOpt.DisplayViaFill, /* Adresse du parametre */
-    TRUE                    /* Valeur par defaut */
+    wxT("ViaFill"),
+    (int*)&DisplayOpt.DisplayViaFill,
+    TRUE
 );
 
-static PARAM_CFG_BOOL PadShowNumCfg // Affiche DCodes
+static PARAM_CFG_BOOL PadShowNumCfg  // Show DCodes
 (
     INSETUP,
-    wxT("PadSNum"),                 /* identification */
-    &DisplayOpt.DisplayPadNum,  /* Adresse du parametre */
-    TRUE                        /* Valeur par defaut */
+    wxT("PadSNum"),
+    &DisplayOpt.DisplayPadNum,
+    TRUE
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer0Cfg
 (
     INSETUP,
-    wxT("ColLay0"),             /* identification */
-    &g_DesignSettings.m_LayerColor[0],      /* Adresse du parametre */
-    GREEN                   /* Valeur par defaut */
+    wxT("ColLay0"),
+    &g_DesignSettings.m_LayerColor[0],
+    GREEN
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer1Cfg
 (
     INSETUP,
-    wxT("ColLay1"),             /* identification */
-    &g_DesignSettings.m_LayerColor[1],      /* Adresse du parametre */
-    BLUE                    /* Valeur par defaut */
+    wxT("ColLay1"),
+    &g_DesignSettings.m_LayerColor[1],
+    BLUE
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer2Cfg
 (
     INSETUP,
-    wxT("ColLay2"),             /* identification */
-    &g_DesignSettings.m_LayerColor[2],      /* Adresse du parametre */
-    LIGHTGRAY               /* Valeur par defaut */
+    wxT("ColLay2"),
+    &g_DesignSettings.m_LayerColor[2],
+    LIGHTGRAY
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer3Cfg
 (
     INSETUP,
-    wxT("ColLay3"),             /* identification */
-    &g_DesignSettings.m_LayerColor[3],      /* Adresse du parametre */
-    5                       /* Valeur par defaut */
+    wxT("ColLay3"),
+    &g_DesignSettings.m_LayerColor[3],
+    5
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer4Cfg
 (
     INSETUP,
-    wxT("ColLay4"),             /* identification */
-    &g_DesignSettings.m_LayerColor[4],      /* Adresse du parametre */
-    4                       /* Valeur par defaut */
+    wxT("ColLay4"),
+    &g_DesignSettings.m_LayerColor[4],
+    4
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer5Cfg
 (
     INSETUP,
-    wxT("ColLay5"),             /* identification */
-    &g_DesignSettings.m_LayerColor[5],      /* Adresse du parametre */
-    5                       /* Valeur par defaut */
+    wxT("ColLay5"),
+    &g_DesignSettings.m_LayerColor[5],
+    5
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer6Cfg
 (
     INSETUP,
-    wxT("ColLay6"),             /* identification */
-    &g_DesignSettings.m_LayerColor[6],      /* Adresse du parametre */
-    6                       /* Valeur par defaut */
+    wxT("ColLay6"),
+    &g_DesignSettings.m_LayerColor[6],
+    6
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer7Cfg
 (
     INSETUP,
-    wxT("ColLay7"),             /* identification */
-    &g_DesignSettings.m_LayerColor[7],      /* Adresse du parametre */
-    5                       /* Valeur par defaut */
+    wxT("ColLay7"),
+    &g_DesignSettings.m_LayerColor[7],
+    5
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer8Cfg
 (
     INSETUP,
-    wxT("ColLay8"),             /* identification */
-    &g_DesignSettings.m_LayerColor[8],      /* Adresse du parametre */
-    7                       /* Valeur par defaut */
+    wxT("ColLay8"),
+    &g_DesignSettings.m_LayerColor[8],
+    7
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer9Cfg
 (
     INSETUP,
-    wxT("ColLay9"),         /* identification */
-    &g_DesignSettings.m_LayerColor[9],  /* Adresse du parametre */
-    1                   /* Valeur par defaut */
+    wxT("ColLay9"),
+    &g_DesignSettings.m_LayerColor[9],
+    1
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer10Cfg
 (
     INSETUP,
-    wxT("ColLayA"),         /* identification */
-    &g_DesignSettings.m_LayerColor[10], /* Adresse du parametre */
-    2                   /* Valeur par defaut */
+    wxT("ColLayA"),
+    &g_DesignSettings.m_LayerColor[10],
+    2
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer11Cfg
 (
     INSETUP,
-    wxT("ColLayB"),         /* identification */
-    &g_DesignSettings.m_LayerColor[11], /* Adresse du parametre */
-    3                   /* Valeur par defaut */
+    wxT("ColLayB"),
+    &g_DesignSettings.m_LayerColor[11],
+    3
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer12Cfg
 (
     INSETUP,
-    wxT("ColLayC"),         /* identification */
-    &g_DesignSettings.m_LayerColor[12], /* Adresse du parametre */
-    12                  /* Valeur par defaut */
+    wxT("ColLayC"),
+    &g_DesignSettings.m_LayerColor[12],
+    12
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer13Cfg
 (
     INSETUP,
-    wxT("ColLayD"),         /* identification */
-    &g_DesignSettings.m_LayerColor[13], /* Adresse du parametre */
-    13                  /* Valeur par defaut */
+    wxT("ColLayD"),
+    &g_DesignSettings.m_LayerColor[13],
+    13
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer14Cfg
 (
     INSETUP,
-    wxT("ColLayE"),         /* identification */
-    &g_DesignSettings.m_LayerColor[14], /* Adresse du parametre */
-    14                  /* Valeur par defaut */
+    wxT("ColLayE"),
+    &g_DesignSettings.m_LayerColor[14],
+    14
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer15Cfg
 (
     INSETUP,
-    wxT("ColLayF"),         /* identification */
-    &g_DesignSettings.m_LayerColor[15], /* Adresse du parametre */
-    RED             /* Valeur par defaut */
+    wxT("ColLayF"),
+    &g_DesignSettings.m_LayerColor[15],
+    RED
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer16Cfg
 (
     INSETUP,
-    wxT("ColLayG"),         /* identification */
-    &g_DesignSettings.m_LayerColor[16], /* Adresse du parametre */
-    1                   /* Valeur par defaut */
+    wxT("ColLayG"),
+    &g_DesignSettings.m_LayerColor[16],
+    1
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer17Cfg
 (
     INSETUP,
-    wxT("ColLayH"),         /* identification */
-    &g_DesignSettings.m_LayerColor[17], /* Adresse du parametre */
-    5                   /* Valeur par defaut */
+    wxT("ColLayH"),
+    &g_DesignSettings.m_LayerColor[17],
+    5
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer18Cfg
 (
     INSETUP,
-    wxT("ColLayI"),         /* identification */
-    &g_DesignSettings.m_LayerColor[18], /* Adresse du parametre */
-    11                  /* Valeur par defaut */
+    wxT("ColLayI"),
+    &g_DesignSettings.m_LayerColor[18],
+    11
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer19Cfg
 (
     INSETUP,
-    wxT("ColLayJ"),         /* identification */
-    &g_DesignSettings.m_LayerColor[19], /* Adresse du parametre */
-    4                   /* Valeur par defaut */
+    wxT("ColLayJ"),
+    &g_DesignSettings.m_LayerColor[19],
+    4
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer20Cfg
 (
     INSETUP,
-    wxT("ColLayK"),         /* identification */
-    &g_DesignSettings.m_LayerColor[20], /* Adresse du parametre */
-    5                   /* Valeur par defaut */
+    wxT("ColLayK"),
+    &g_DesignSettings.m_LayerColor[20],
+    5
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer21Cfg
 (
     INSETUP,
-    wxT("ColLayL"),         /* identification */
-    &g_DesignSettings.m_LayerColor[21], /* Adresse du parametre */
-    3                   /* Valeur par defaut */
+    wxT("ColLayL"),
+    &g_DesignSettings.m_LayerColor[21],
+    3
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer22Cfg
 (
     INSETUP,
-    wxT("ColLayM"),         /* identification */
-    &g_DesignSettings.m_LayerColor[22], /* Adresse du parametre */
-    6                   /* Valeur par defaut */
+    wxT("ColLayM"),
+    &g_DesignSettings.m_LayerColor[22],
+    6
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer23Cfg
 (
     INSETUP,
-    wxT("ColLayN"),         /* identification */
-    &g_DesignSettings.m_LayerColor[23], /* Adresse du parametre */
-    5                   /* Valeur par defaut */
+    wxT("ColLayN"),
+    &g_DesignSettings.m_LayerColor[23],
+    5
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer24Cfg
 (
     INSETUP,
-    wxT("ColLayO"),             /* identification */
-    &g_DesignSettings.m_LayerColor[24],     /* Adresse du parametre */
-    LIGHTGRAY               /* Valeur par defaut */
+    wxT("ColLayO"),
+    &g_DesignSettings.m_LayerColor[24],
+    LIGHTGRAY
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer25Cfg
 (
     INSETUP,
-    wxT("ColLayP"),         /* identification */
-    &g_DesignSettings.m_LayerColor[25], /* Adresse du parametre */
-    1                   /* Valeur par defaut */
+    wxT("ColLayP"),
+    &g_DesignSettings.m_LayerColor[25],
+    1
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer26Cfg
 (
     INSETUP,
-    wxT("ColLayQ"),         /* identification */
-    &g_DesignSettings.m_LayerColor[26], /* Adresse du parametre */
-    2                   /* Valeur par defaut */
+    wxT("ColLayQ"),
+    &g_DesignSettings.m_LayerColor[26],
+    2
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer27Cfg
 (
     INSETUP,
-    wxT("ColLayR"),             /* identification */
-    &g_DesignSettings.m_LayerColor[27],     /* Adresse du parametre */
-    14                      /* Valeur par defaut */
+    wxT("ColLayR"),
+    &g_DesignSettings.m_LayerColor[27],
+    14
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer28Cfg
 (
     INSETUP,
-    wxT("ColLayS"),             /* identification */
-    &g_DesignSettings.m_LayerColor[28],     /* Adresse du parametre */
-    YELLOW                  /* Valeur par defaut */
+    wxT("ColLayS"),
+    &g_DesignSettings.m_LayerColor[28],
+    YELLOW
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer29Cfg
 (
     INSETUP,
-    wxT("ColLayT"),         /* identification */
-    &g_DesignSettings.m_LayerColor[29], /* Adresse du parametre */
-    13                  /* Valeur par defaut */
+    wxT("ColLayT"),
+    &g_DesignSettings.m_LayerColor[29],
+    13
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer30Cfg
 (
     INSETUP,
-    wxT("ColLayU"),         /* identification */
-    &g_DesignSettings.m_LayerColor[30], /* Adresse du parametre */
-    14                  /* Valeur par defaut */
+    wxT("ColLayU"),
+    &g_DesignSettings.m_LayerColor[30],
+    14
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer31Cfg
 (
     INSETUP,
-    wxT("ColLayV"),         /* identification */
-    &g_DesignSettings.m_LayerColor[31], /* Adresse du parametre */
-    7                   /* Valeur par defaut */
+    wxT("ColLayV"),
+    &g_DesignSettings.m_LayerColor[31],
+    7
 );
 
 
 static PARAM_CFG_SETCOLOR ColorpcbGrilleCfg
 (
     INSETUP,
-    wxT("CoPcbGr"),             /* identification */
+    wxT("CoPcbGr"),
 //@@IMB: Wrong object    &g_DesignSettings.m_PcbGridColor, /* Adresse du parametre */
     &g_GridColor,       //@@IMB: This is the real variable.
-    DARKGRAY                /* Valeur par defaut */
+    DARKGRAY
 );
 
 static PARAM_CFG_SETCOLOR ColorDCodesCfg
 (
     INSETUP,
-    wxT("CoDCode"),             /* identification */
-    &g_DCodesColor, /* Adresse du parametre */
-    WHITE               /* Valeur par defaut */
+    wxT("CoDCode"),
+    &g_DCodesColor,
+    WHITE
 );
 
 static PARAM_CFG_INT GERBERSpotMiniCfg
 (
-    wxT("GERBmin"),         /* identification */
-    &g_Plot_Spot_Mini,          /* Adresse du parametre */
-    15,                 /* Valeur par defaut */
-    2,0xFFFF            /* Valeurs extremes */
+    wxT("GERBmin"),
+    &g_Plot_Spot_Mini,
+    15,
+    2,0xFFFF
 );
 
 static PARAM_CFG_INT DrawSegmLargeurCfg
 (
-    wxT("DrawLar"),         /* identification */
-    &g_DesignSettings.m_DrawSegmentWidth,       /* Adresse du parametre */
-    120,                /* Valeur par defaut */
-    0,10000             /* Valeurs extremes */
+    wxT("DrawLar"),
+    &g_DesignSettings.m_DrawSegmentWidth,
+    120,
+    0,10000
 );
 
 static PARAM_CFG_INT EdgeSegmLargeurCfg
 (
-    wxT("EdgeLar"),         /* identification */
-    &g_DesignSettings.m_EdgeSegmentWidth,       /* Adresse du parametre */
-    120,                /* Valeur par defaut */
-    0,10000             /* Valeurs extremes */
+    wxT("EdgeLar"),
+    &g_DesignSettings.m_EdgeSegmentWidth,
+    120,
+    0,10000
 );
 
 static PARAM_CFG_INT TimeOutCfg
 (
-    wxT("TimeOut"),         /* identification */
-    &g_TimeOut,             /* Adresse du parametre */
-    600,                    /* Valeur par defaut */
-    0,60000                 /* Valeurs extremes */
+    wxT("TimeOut"),
+    &g_TimeOut,
+    600,
+    0,60000
 );
 
 static PARAM_CFG_BOOL DisplPolairCfg
 (
     INSETUP,
-    wxT("DPolair"),             /* identification */
-    &DisplayOpt.DisplayPolarCood,   /* Adresse du parametre */
-    FALSE                       /* Valeur par defaut */
+    wxT("DPolair"),
+    &DisplayOpt.DisplayPolarCood,
+    FALSE
 );
 
 PARAM_CFG_BASE * ParamCfgList[] =

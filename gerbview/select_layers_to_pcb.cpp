@@ -13,12 +13,11 @@
 
 #include "wx/statline.h"
 
-/* Variables locales */
 #define LAYER_UNSELECTED NB_LAYERS
 
-static int    ButtonTable[32];          // Indexes buttons to Gerber layers
-static int    LayerLookUpTable[32];     // Indexes Gerber layers to PCB file layers
-wxStaticText* layer_list[32];           // Indexes text strings to buttons
+static int    ButtonTable[32];       // Indexes buttons to Gerber layers
+static int    LayerLookUpTable[32];  // Indexes Gerber layers to PCB file layers
+wxStaticText* layer_list[32];        // Indexes text strings to buttons
 
 enum swap_layer_id {
     ID_WINEDA_SWAPLAYERFRAME = 1800,
@@ -26,10 +25,6 @@ enum swap_layer_id {
     ID_TEXT_0 = ID_BUTTON_0 + 32
 };
 
-
-/***********************************************/
-/* classe pour la frame de selection de layers */
-/***********************************************/
 
 class WinEDA_SwapLayerFrame : public wxDialog
 {
@@ -46,7 +41,6 @@ private:
 
 public:
 
-    // Constructor and destructor
     WinEDA_SwapLayerFrame( WinEDA_GerberFrame* parent );
     ~WinEDA_SwapLayerFrame() {};
 
@@ -58,7 +52,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-/* Table des evenements pour WinEDA_SwapLayerFrame */
+
 BEGIN_EVENT_TABLE( WinEDA_SwapLayerFrame, wxDialog )
     EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + 31,
                        wxEVT_COMMAND_BUTTON_CLICKED,
@@ -68,13 +62,12 @@ BEGIN_EVENT_TABLE( WinEDA_SwapLayerFrame, wxDialog )
 END_EVENT_TABLE()
 
 
-/*************************************************************/
-int* InstallDialogLayerPairChoice( WinEDA_GerberFrame * parent ) {
-/*************************************************************/
 /* Install a dialog frame to choose the equivalence
  * between gerber layers and pcbnew layers
  * return the "lookup table" if ok, or NULL
  */
+int* InstallDialogLayerPairChoice( WinEDA_GerberFrame * parent )
+{
     WinEDA_SwapLayerFrame* frame = new WinEDA_SwapLayerFrame( parent );
 
     int ii = frame->ShowModal();
@@ -87,12 +80,10 @@ int* InstallDialogLayerPairChoice( WinEDA_GerberFrame * parent ) {
 }
 
 
-/*************************************************************************/
 WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_GerberFrame* parent ) :
     wxDialog( parent, -1, _( "Layer selection:" ), wxPoint( -1, -1 ),
               wxDefaultSize, wxDEFAULT_DIALOG_STYLE | MAYBE_RESIZE_BORDER )
 {
-/*************************************************************************/
     OuterBoxSizer = NULL;
     MainBoxSizer  = NULL;
     FlexColumnBoxSizer = NULL;
@@ -184,7 +175,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_GerberFrame* parent ) :
             // of those items are placed into the left hand column, middle
             // column, and right hand column (respectively) of the Flexgrid
             // sizer, and the color of the second text string is set to
-            // fushia or blue (to respectively indicate whether the Gerber
+            // fuchsia or blue (to respectively indicate whether the Gerber
             // layer has been mapped to a pcbnew layer or is not being
             // exported at all).  (Experimentation has shown that if a text
             // control is used to depict which pcbnew layer that each Gerber
@@ -249,7 +240,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_GerberFrame* parent ) :
         // Provide another text string to specify which pcbnew layer that this
         // Gerber layer is initially mapped to, and set the initial text to
         // specify the appropriate pcbnew layer, and set the foreground color
-        // of the text to fushia (to indicate that the layer is being exported).
+        // of the text to fuchsia (to indicate that the layer is being exported).
         item_ID = ID_TEXT_0 + ii;
 
         // When the first of these text strings is being added, determine what
@@ -367,7 +358,7 @@ void WinEDA_SwapLayerFrame::OnSelectLayer( wxCommandEvent& event )
         {
             layer_list[ii]->SetLabel( ReturnPcbLayerName( jj ) );
 
-            // Change the text color to fushia (to highlight
+            // Change the text color to fuchsia (to highlight
             // that this layer *is* being exported)
             layer_list[ii]->SetForegroundColour( wxColour( 255, 0, 128 ) );
         }
@@ -375,18 +366,14 @@ void WinEDA_SwapLayerFrame::OnSelectLayer( wxCommandEvent& event )
 }
 
 
-/*********************************************************/
 void WinEDA_SwapLayerFrame::OnCancelClick( wxCommandEvent& event )
-/*********************************************************/
 {
     EndModal( -1 );
 }
 
 
-/*********************************************************/
 void WinEDA_SwapLayerFrame::OnOkClick( wxCommandEvent& event )
 {
-/*********************************************************/
     int  ii;
     bool AsCmpLayer = false;
 

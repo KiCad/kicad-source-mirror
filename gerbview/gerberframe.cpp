@@ -1,6 +1,6 @@
-/******************************************************************/
-/* gerberframe.cpp - fonctions des classes du type WinEDA_GerberFrame */
-/******************************************************************/
+/*******************/
+/* gerberframe.cpp */
+/*******************/
 
 #ifdef __GNUG__
 #pragma implementation
@@ -94,15 +94,13 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
     EVT_KICAD_CHOICEBOX( ID_TOOLBARH_GERBER_SELECT_TOOL,
                          WinEDA_GerberFrame::Process_Special_Functions )
 
-
 // Vertical toolbar:
     EVT_TOOL( ID_NO_SELECT_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
     EVT_TOOL( ID_TRACK_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
     EVT_TOOL( ID_PCB_ZONES_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
     EVT_TOOL( ID_PCB_DELETE_ITEM_BUTT,
-              WinEDA_GerberFrame::Process_Special_Functions )
+          WinEDA_GerberFrame::Process_Special_Functions )
 
-// Annulation de commande en cours
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
                     WinEDA_GerberFrame::Process_Special_Functions )
 
@@ -116,11 +114,6 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
 
 END_EVENT_TABLE()
 
-
-/****************/
-/* Constructeur */
-/****************/
-
 WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
                                         const wxString& title,
                                         const wxPoint&  pos,
@@ -130,8 +123,8 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
 {
     m_FrameName = wxT( "GerberFrame" );
 
-    m_Draw_Axis      = true;   // true to show X and Y axis on screen
-    m_Draw_Sheet_Ref = FALSE;   // TRUE pour avoir le cartouche dessin�
+    m_Draw_Axis = true;         // true to show X and Y axis on screen
+    m_Draw_Sheet_Ref = FALSE;   // TRUE for reference drawings.
     if( DrawPanel )
         DrawPanel->m_Block_Enable = TRUE;
 
@@ -146,6 +139,7 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
     ActiveScreen = ScreenPcb;
 
     LoadSettings();
+
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
@@ -153,36 +147,37 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
     ReCreateHToolbar();
     ReCreateVToolbar();
     ReCreateOptToolbar();
+
 #if defined(KICAD_AUIMANAGER)
-    m_auimgr.SetManagedWindow(this);
+    m_auimgr.SetManagedWindow( this );
 
     wxAuiPaneInfo horiz;
-    horiz.Gripper(false);
-    horiz.DockFixed(true);
-    horiz.Movable(false);
-    horiz.Floatable(false);
-    horiz.CloseButton(false);
-    horiz.CaptionVisible(false);
+    horiz.Gripper( false );
+    horiz.DockFixed( true );
+    horiz.Movable( false );
+    horiz.Floatable( false );
+    horiz.CloseButton( false );
+    horiz.CaptionVisible( false );
 
-    wxAuiPaneInfo vert(horiz);
+    wxAuiPaneInfo vert( horiz );
 
-    vert.TopDockable(false).BottomDockable(false);
-    horiz.LeftDockable(false).RightDockable(false);
+    vert.TopDockable( false ).BottomDockable( false );
+    horiz.LeftDockable( false ).RightDockable( false );
 
-    m_auimgr.AddPane(m_HToolBar,
-        wxAuiPaneInfo(horiz).Name(wxT("m_HToolBar")).Top().Row(0));
+    m_auimgr.AddPane( m_HToolBar,
+                      wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
 
-    m_auimgr.AddPane(m_VToolBar,
-        wxAuiPaneInfo(vert).Name(wxT("m_VToolBar")).Right());
+    m_auimgr.AddPane( m_VToolBar,
+                      wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
 
-    m_auimgr.AddPane(m_OptionsToolBar,
-        wxAuiPaneInfo(vert).Name(wxT("m_OptionsToolBar")).Left());
+    m_auimgr.AddPane( m_OptionsToolBar,
+                      wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left() );
 
-    m_auimgr.AddPane(DrawPanel,
-        wxAuiPaneInfo().Name(wxT("DrawFrame")).CentrePane());
+    m_auimgr.AddPane( DrawPanel,
+                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
-    m_auimgr.AddPane(MsgPanel,
-        wxAuiPaneInfo(horiz).Name(wxT("MsgPanel")).Bottom());
+    m_auimgr.AddPane( MsgPanel,
+                      wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
 
     m_auimgr.Update();
 #endif
@@ -194,13 +189,10 @@ WinEDA_GerberFrame::~WinEDA_GerberFrame()
     SetBaseScreen( ScreenPcb );
     extern PARAM_CFG_BASE* ParamCfgList[];
     wxGetApp().SaveCurrentSetupValues( ParamCfgList );
-
 }
 
 
-/***********************************************************/
 void WinEDA_GerberFrame::OnCloseWindow( wxCloseEvent& Event )
-/***********************************************************/
 {
     PCB_SCREEN* screen = ScreenPcb;
 
@@ -221,7 +213,8 @@ void WinEDA_GerberFrame::OnCloseWindow( wxCloseEvent& Event )
         }
     }
 #endif
-    while( screen ) // suppression flag modify pour eviter d'autres message
+
+    while( screen ) // Modify delete flag to prevent further message.
     {
         screen->ClrModify();
         screen = screen->Next();
@@ -234,13 +227,10 @@ void WinEDA_GerberFrame::OnCloseWindow( wxCloseEvent& Event )
 }
 
 
-/*******************************************/
-void WinEDA_GerberFrame::SetToolbars()
-/*******************************************/
-
 /** Function SetToolbars()
- * Set the tools state for the toolbars, accordint to display options
+ * Set the tools state for the toolbars, according to display options
  */
+void WinEDA_GerberFrame::SetToolbars()
 {
     int     layer  = ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
     GERBER* gerber = g_GERBER_List[layer];
@@ -263,7 +253,7 @@ void WinEDA_GerberFrame::SetToolbars()
         ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer )
     {
         m_SelLayerBox->SetSelection(
-             ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
+            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
     }
 
     if( gerber )
@@ -318,16 +308,15 @@ void WinEDA_GerberFrame::SetToolbars()
     }
 
     DisplayUnitsMsg();
+
 #if defined(KICAD_AUIMANAGER)
-   if(m_auimgr.GetManagedWindow())
-       m_auimgr.Update();
+    if( m_auimgr.GetManagedWindow() )
+        m_auimgr.Update();
 #endif
 }
 
 
-/*************************************/
 int WinEDA_GerberFrame::BestZoom()
-/*************************************/
 {
     double x, y;
     wxSize size;
@@ -340,5 +329,5 @@ int WinEDA_GerberFrame::BestZoom()
           GetScreen()->GetGridSize().y ) / (double) size.y;
     GetScreen()->m_Curseur = GetBoard()->m_BoundaryBox.Centre();
 
-    return wxRound( MAX( x, y ) * (double)GetScreen()->m_ZoomScalar );
+    return wxRound( MAX( x, y ) * (double) GetScreen()->m_ZoomScalar );
 }

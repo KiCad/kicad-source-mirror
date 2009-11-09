@@ -1,8 +1,6 @@
-/********************************************/
-/* GERBVIEW - Gestion des Options et Reglages */
-/********************************************/
-
-/*	 File options.cpp   */
+/************************/
+/*   File options.cpp   */
+/************************/
 
 /*
  * Set the display options for Gerbview
@@ -21,13 +19,10 @@
 #include <wx/spinctrl.h>
 
 
-/*****************************************************************/
-void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
-/*****************************************************************/
-
 /** Function OnSelectOptionToolbar
  *  called to validate current choices
  */
+void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int id = event.GetId();
 
@@ -112,7 +107,7 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 
     default:
         DisplayError( this,
-                     wxT( "WinEDA_PcbFrame::OnSelectOptionToolbar error" ) );
+                      wxT( "WinEDA_PcbFrame::OnSelectOptionToolbar error" ) );
         break;
     }
 
@@ -120,9 +115,7 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 }
 
 
-/******************************************************/
 class WinEDA_GerberGeneralOptionsFrame : public wxDialog
-/******************************************************/
 {
 private:
 
@@ -132,7 +125,6 @@ private:
     wxRadioBox*          m_CursorShape;
     wxRadioBox*          m_GerberDefaultScale;
 
-    // Constructor and destructor
 public:
     WinEDA_GerberGeneralOptionsFrame( WinEDA_BasePcbFrame* parent,
                                       const wxPoint&       pos );
@@ -145,25 +137,19 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-/* Events table for WinEDA_GerberGeneralOptionsFrame */
+
 BEGIN_EVENT_TABLE( WinEDA_GerberGeneralOptionsFrame, wxDialog )
     EVT_BUTTON( wxID_OK, WinEDA_GerberGeneralOptionsFrame::OnOkClick )
     EVT_BUTTON( wxID_CANCEL, WinEDA_GerberGeneralOptionsFrame::OnCancelClick )
 END_EVENT_TABLE()
 
 
-/**********************************************************************************************/
 WinEDA_GerberGeneralOptionsFrame::WinEDA_GerberGeneralOptionsFrame(
     WinEDA_BasePcbFrame* parent,
-    const
-    wxPoint&             framepos ) :
+    const wxPoint&       framepos ) :
     wxDialog( parent, -1, _( "Gerbview Options" ),
               framepos, wxSize( 300, 240 ),
               wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT )
-/**********************************************************************************************/
-
-/** WinEDA_GerberGeneralOptionsFrame Constructor
- */
 {
     m_Parent = parent;
 
@@ -228,18 +214,14 @@ WinEDA_GerberGeneralOptionsFrame::WinEDA_GerberGeneralOptionsFrame(
 }
 
 
-/************************************************************************/
 void WinEDA_GerberGeneralOptionsFrame::OnCancelClick(
      wxCommandEvent& WXUNUSED(event) )
-/************************************************************************/
 {
     EndModal( -1 );
 }
 
 
-/*****************************************************************************/
 void WinEDA_GerberGeneralOptionsFrame::OnOkClick( wxCommandEvent& event )
-/*****************************************************************************/
 {
     DisplayOpt.DisplayPolarCood =
         (m_PolarDisplay->GetSelection() == 0) ? FALSE : TRUE;
@@ -253,7 +235,7 @@ void WinEDA_GerberGeneralOptionsFrame::OnOkClick( wxCommandEvent& event )
 
 
 /*******************************************/
-/* Dialog frame to select deisplay options */
+/* Dialog frame to select display options */
 /*******************************************/
 class WinEDA_LookFrame : public wxDialog
 {
@@ -261,14 +243,13 @@ private:
     WinEDA_BasePcbFrame* m_Parent;
     wxRadioBox*          m_OptDisplayLines;
     wxRadioBox*          m_OptDisplayFlashes;
-    wxRadioBox*          m_OptDisplayVias;		//@@@@TODO: Does it belong here?
+    wxRadioBox*          m_OptDisplayVias;      //@@@@TODO: Does it belong here?
     wxRadioBox*          m_OptDisplayPolygons;
     wxCheckBox*          m_OptDisplayDCodes;
     wxRadioBox*          m_OptDisplayDrawings;
 
 public:
 
-    // Constructor and destructor
     WinEDA_LookFrame( WinEDA_BasePcbFrame* parent, const wxPoint& pos );
     ~WinEDA_LookFrame() {};
 
@@ -279,20 +260,17 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-/* Construction de la table des evenements pour WinEDA_LookFrame */
 BEGIN_EVENT_TABLE( WinEDA_LookFrame, wxDialog )
     EVT_BUTTON( wxID_OK, WinEDA_LookFrame::OnOkClick )
     EVT_BUTTON( wxID_CANCEL, WinEDA_LookFrame::OnCancelClick )
 END_EVENT_TABLE()
 
 
-/*******************************************************************************/
 WinEDA_LookFrame::WinEDA_LookFrame( WinEDA_BasePcbFrame* parent,
                                     const wxPoint&       framepos ) :
     wxDialog( parent, -1, _( "Gerbview Draw Options" ), framepos,
               wxSize( 350, 200 ),
               wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT )
-/*******************************************************************************/
 {
     m_Parent = parent;
 
@@ -362,20 +340,13 @@ WinEDA_LookFrame::WinEDA_LookFrame( WinEDA_BasePcbFrame* parent,
 }
 
 
-/**************************************************************/
 void WinEDA_LookFrame::OnCancelClick( wxCommandEvent& WXUNUSED(event) )
-/**************************************************************/
 {
     EndModal( -1 );
 }
 
 
-/*************************************************************/
 void WinEDA_LookFrame::OnOkClick( wxCommandEvent& event )
-/*************************************************************/
-
-/* Met a jour les options
- */
 {
     if( m_OptDisplayLines->GetSelection() == 1 )
         DisplayOpt.DisplayPcbTrackFill = TRUE;
@@ -412,9 +383,7 @@ void WinEDA_LookFrame::OnOkClick( wxCommandEvent& event )
 }
 
 
-/***************************************************************************/
 void WinEDA_GerberFrame::InstallGerberOptionsFrame( const wxPoint& pos, int id )
-/***************************************************************************/
 {
     switch( id )
     {

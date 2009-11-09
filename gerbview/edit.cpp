@@ -1,6 +1,6 @@
-/******************************************************/
-/* edit.cpp: fonctions generales de l'edition du PCB */
-/******************************************************/
+/***********************************/
+/* edit.cpp: PCB editing functions */
+/***********************************/
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
@@ -13,21 +13,17 @@
 #include "protos.h"
 
 
-
-/************************************************************************/
-void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
-/************************************************************************/
-
-/* Traite les commandes declench�e par le bouton gauche de la souris,
- *  quand un outil est deja selectionn�
+/* Process the command triggered by the left button of the mouse when a tool
+ * is already selected.
  */
+void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 {
-    BOARD_ITEM*     DrawStruct = GetScreen()->GetCurItem();
-    wxString        msg;
+    BOARD_ITEM* DrawStruct = GetScreen()->GetCurItem();
+    wxString    msg;
 
     if( m_ID_current_state == 0 )
     {
-        if( DrawStruct && DrawStruct->m_Flags ) // Commande "POPUP" en cours
+        if( DrawStruct && DrawStruct->m_Flags )
         {
             msg.Printf( wxT( "WinEDA_GerberFrame::ProcessCommand err: Struct %d, m_Flags = %X" ),
                         (unsigned) DrawStruct->Type(),
@@ -70,18 +66,15 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 }
 
 
-/********************************************************************************/
-void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
-/********************************************************************************/
-
-/* Traite les selections d'outils et les commandes appelees du menu POPUP
+/* Handles the selection of tools, menu, and popup menu commands.
  */
+void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
 {
-    int           id    = event.GetId();
-    int           layer = GetScreen()->m_Active_Layer;
-    GERBER*       gerber_layer = g_GERBER_List[layer];
-    wxPoint       pos;
-    wxClientDC    dc( DrawPanel );
+    int        id    = event.GetId();
+    int        layer = GetScreen()->m_Active_Layer;
+    GERBER*    gerber_layer = g_GERBER_List[layer];
+    wxPoint    pos;
+    wxClientDC dc( DrawPanel );
 
     DrawPanel->PrepareGraphicContext( &dc );
 
@@ -89,7 +82,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
 
     pos.y += 20;
 
-    switch( id )   // Arret eventuel de la commande de d�placement en cours
+    switch( id )
     {
     case wxID_CUT:
     case wxID_COPY:
@@ -108,7 +101,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         {
             DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
         }
-        /* ne devrait pas etre execute, sauf bug */
+        /* Should not be executed, except bug */
         if( GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE )
         {
             GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
@@ -121,7 +114,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
             SetCursor( DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor );
         break;
 
-    default:        // Arret dea commande de d�placement en cours
+    default:
         if( DrawPanel->ManageCurseur
             && DrawPanel->ForceCloseManageCurseur )
         {
@@ -131,7 +124,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
     }
 
-    switch( id )   // Traitement des commandes
+    switch( id )
     {
     case ID_EXIT:
         Close( TRUE );
@@ -147,10 +140,12 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_GET_TOOLS:
+
 //			InstallToolsFrame(this, wxPoint(-1,-1) );
         break;
 
     case ID_FIND_ITEMS:
+
 //			InstallFindFrame(this, pos);
         break;
 
@@ -249,7 +244,8 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS:
         if( gerber_layer )
-            Delete_DCode_Items( &dc, gerber_layer->m_Selected_Tool, ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
+            Delete_DCode_Items( &dc, gerber_layer->m_Selected_Tool,
+                                ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
         break;
 
     default:
@@ -261,12 +257,9 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
 }
 
 
-/**************************************************************************/
-void WinEDA_GerberFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
-/**************************************************************************/
-
-/* Called on a double click:
+/* Called on a double click of left mouse button.
  */
+void WinEDA_GerberFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 {
     EDA_BaseStruct* DrawStruct = GetScreen()->GetCurItem();
     wxClientDC      dc( DrawPanel );
@@ -281,7 +274,7 @@ void WinEDA_GerberFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             DrawStruct = GerberGeneralLocateAndDisplay();
         }
 
-        break;      // end case 0
+        break;
 
     default:
         break;

@@ -1,6 +1,6 @@
 /*********************************************/
-/* Edition des pistes: Routines d'effacement */
-/* Effacement de segment, piste, net et zone */
+/* Edit Track: Erase Routines                */
+/* Drop the segment, track, and net area     */
 /*********************************************/
 
 #include "fctsys.h"
@@ -10,22 +10,16 @@
 #include "gerbview.h"
 #include "protos.h"
 
-/* Routines externes : */
 
-/* Routines Locales */
-
-/* Variables locales */
-
-
-/****************************************************************************************/
-void WinEDA_GerberFrame::Delete_DCode_Items( wxDC* DC, int dcode_value, int layer_number )
-/****************************************************************************************/
+void WinEDA_GerberFrame::Delete_DCode_Items( wxDC* DC,
+                                             int   dcode_value,
+                                             int   layer_number )
 {
     if( dcode_value < FIRST_DCODE )  // No tool selected
         return;
 
     TRACK* next;
-    for( TRACK* track = GetBoard()->m_Track;  track;  track = next  )
+    for( TRACK* track = GetBoard()->m_Track; track; track = next  )
     {
         next = track->Next();
 
@@ -42,28 +36,26 @@ void WinEDA_GerberFrame::Delete_DCode_Items( wxDC* DC, int dcode_value, int laye
 }
 
 
-/*****************************************************************/
-TRACK* WinEDA_GerberFrame::Delete_Segment( wxDC* DC, TRACK* Track )
-/*****************************************************************/
-
-/* Supprime 1 segment de piste.
- *  2 Cas possibles:
- *  Si On est en trace de nouvelle piste: Effacement du segment en
- *      cours de trace
- *  Sinon : Effacment du segment sous le curseur.
+/* Removes 1 segment of track.
+ *
+ * If There is evidence of new track: erase segment
+ * Otherwise: Delete segment under the cursor.
  */
+TRACK* WinEDA_GerberFrame::Delete_Segment( wxDC* DC, TRACK* Track )
 {
     if( Track == NULL )
         return NULL;
 
-    if( Track->m_Flags & IS_NEW )  // Trace en cours, on peut effacer le dernier segment
+    if( Track->m_Flags & IS_NEW )  // Trace in progress, delete the last
+                                   // segment
     {
         if( g_CurrentTrackList.GetCount() > 0 )
         {
-            // modification du trace
+            // Change track.
             delete g_CurrentTrackList.PopBack();
 
-            if( g_CurrentTrackList.GetCount() && g_CurrentTrackSegment->Type() == TYPE_VIA )
+            if( g_CurrentTrackList.GetCount()
+                && g_CurrentTrackSegment->Type() == TYPE_VIA )
             {
                 delete g_CurrentTrackList.PopBack();
             }
@@ -85,12 +77,11 @@ TRACK* WinEDA_GerberFrame::Delete_Segment( wxDC* DC, TRACK* Track )
         }
 
         return NULL;
-    } // Fin traitement si trace en cours
-
+    }
 
     Trace_Segment( DrawPanel, DC, Track, GR_XOR );
 
-    DLIST<TRACK>* container = (DLIST<TRACK>*) Track->GetList();
+    DLIST<TRACK>* container = (DLIST<TRACK>*)Track->GetList();
     wxASSERT( container );
     container->Remove( Track );
 

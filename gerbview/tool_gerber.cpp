@@ -1,5 +1,5 @@
 /***************************************************/
-/*	tool_gerber.cpp: Build tool bars and main menu */
+/*  tool_gerber.cpp: Build tool bars and main menu */
 /***************************************************/
 
 #include "fctsys.h"
@@ -12,12 +12,8 @@
 #include "bitmaps.h"
 #include "hotkeys.h"
 
-/***********************************************/
-void WinEDA_GerberFrame::ReCreateMenuBar( void )
-/***********************************************/
 
-/* Cree ou reinitialise le menu du haut d'ecran
- */
+void WinEDA_GerberFrame::ReCreateMenuBar( void )
 {
     wxMenuBar  *menuBar = GetMenuBar();
 
@@ -34,7 +30,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
                        FALSE );
 
     filesMenu->Append( ID_APPEND_FILE, _( "Load Gerber File" ),
-                       _( "Load new Gerber file on currrent layer" ),
+                       _( "Load new Gerber file on current layer" ),
                        FALSE );
 
     filesMenu->Append( ID_MENU_INC_LAYER_AND_APPEND_FILE,
@@ -79,15 +75,16 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
     // Configuration:
     wxMenu* configmenu = new wxMenu;
     ADD_MENUITEM_WITH_HELP( configmenu, ID_CONFIG_REQ, _( "&File Ext" ),
-                            _( "Setting Files extension" ), config_xpm );
+                            _( "Set files extensions" ), config_xpm );
     ADD_MENUITEM_WITH_HELP( configmenu, ID_COLORS_SETUP, _( "&Colors" ),
-                            _( "Select Colors and Display for layers" ),
+                            _( "Select colors and display for layers" ),
                             palette_xpm );
     ADD_MENUITEM_WITH_HELP( configmenu, ID_OPTIONS_SETUP, _( "&Options" ),
-                            _( " Select general options" ), preference_xpm );
+                            _( "Select general options" ), preference_xpm );
 
-    ADD_MENUITEM_WITH_HELP( configmenu, ID_PCB_DISPLAY_OPTIONS_SETUP, _( "Display" ),
-                            _( " Select how items are displayed" ),
+    ADD_MENUITEM_WITH_HELP( configmenu, ID_PCB_DISPLAY_OPTIONS_SETUP,
+                            _( "Display" ),
+                            _( "Select how items are displayed" ),
                             display_options_xpm );
 
     wxGetApp().AddMenuLanguageList( configmenu );
@@ -100,14 +97,11 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
     configmenu->AppendSeparator();
     AddHotkeyConfigMenu( configmenu );
 
-    // Menu drill ( generation fichiers percage)
-
-/*	wxMenu *drill_menu = new wxMenu;
+/*  wxMenu *drill_menu = new wxMenu;
  *  postprocess_menu->Append(ID_PCB_GEN_DRILL_FILE, "Create &Drill file",
  *                  "Gen Drill (EXCELLON] file and/or Drill sheet");
  */
 
-    // Menu d'outils divers
     wxMenu* miscellaneous_menu = new wxMenu;
     ADD_MENUITEM_WITH_HELP( miscellaneous_menu, ID_GERBVIEW_SHOW_LIST_DCODES,
                             _( "&List DCodes" ),
@@ -133,7 +127,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
     menuBar->Append( configmenu, _( "&Preferences" ) );
     menuBar->Append( miscellaneous_menu, _( "&Miscellaneous" ) );
 
-//		menuBar->Append(drill_menu, _("&Drill"));
+//      menuBar->Append(drill_menu, _("&Drill"));
     menuBar->Append( helpMenu, _( "&Help" ) );
 
     // Associate the menu bar with the frame
@@ -141,9 +135,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
 }
 
 
-/***********************************************/
 void WinEDA_GerberFrame::ReCreateHToolbar( void )
-/***********************************************/
 {
     int           layer = 0;
     GERBER*       gerber = NULL;
@@ -151,7 +143,7 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
     wxString      msg;
 
     // delete and recreate the toolbar
-    if( m_HToolBar  != NULL )
+    if( m_HToolBar != NULL )
         return;
 
     if( GetScreen() )
@@ -161,13 +153,15 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
     }
 
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
+
 #if !defined(KICAD_AUIMANAGER)
     SetToolBar( (wxToolBar*)m_HToolBar );
 #endif
+
     // Set up toolbar
     m_HToolBar->AddTool( ID_NEW_BOARD, wxEmptyString,
                           wxBitmap( new_xpm ),
-                         _( "New World" ) );
+                         _( "New world" ) );
 
     m_HToolBar->AddTool( ID_LOAD_FILE, wxEmptyString,
                          wxBitmap( open_xpm ),
@@ -208,7 +202,7 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_GEN_PRINT, wxEmptyString,
                          wxBitmap( print_button ),
-                         _( "Print World" ) );
+                         _( "Print world" ) );
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Zoom in" ), s_Gerbview_Hokeys_Descr, HK_ZOOM_IN );
@@ -227,7 +221,8 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
                          wxBitmap( zoom_redraw_xpm ),
                          msg );
 
-    msg = AddHotkeyName( _( "Zoom auto" ), s_Gerbview_Hokeys_Descr, HK_ZOOM_AUTO );
+    msg = AddHotkeyName( _( "Zoom auto" ), s_Gerbview_Hokeys_Descr,
+                         HK_ZOOM_AUTO );
     m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                          wxBitmap( zoom_auto_xpm ),
                          msg );
@@ -256,6 +251,7 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
     m_HToolBar->AddSeparator();
     choices.Clear();
     choices.Add( _( "No tool" ) );
+
     for( ii = 0; ii < MAX_TOOLS; ii++ )
     {
         wxString msg;
@@ -277,12 +273,10 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
 }
 
 
-/**********************************************/
-void WinEDA_GerberFrame::ReCreateVToolbar( void )
-/**********************************************/
 /**
-create or update the right vertical toolbar
-*/
+ * Create or update the right vertical toolbar
+ */
+void WinEDA_GerberFrame::ReCreateVToolbar( void )
 {
     if( m_VToolBar )
         return;
@@ -298,11 +292,11 @@ create or update the right vertical toolbar
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_COMPONENT_BUTT, wxEmptyString,
                          wxBitmap( component_button ),
-                         _( "Add Flashes" ) );
+                         _( "Add flashes" ) );
 
     m_VToolBar->AddTool( ID_BUS_BUTT, wxEmptyString,
                          wxBitmap( bus_button ),
-                         _( "Add Lines" ) );
+                         _( "Add lines" ) );
 
     m_VToolBar->AddTool( ID_JUNCTION_BUTT, wxEmptyString,
                          wxBitmap( junction_xpm ),
@@ -311,7 +305,7 @@ create or update the right vertical toolbar
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_PCB_ADD_TEXT_BUTT, wxEmptyString,
                          wxBitmap( tool_text_xpm ),
-                         _( "Add Text" ) );
+                         _( "Add text" ) );
 
 #endif
     m_VToolBar->AddSeparator();
@@ -324,52 +318,51 @@ create or update the right vertical toolbar
 }
 
 
-/************************************************/
-void WinEDA_GerberFrame::ReCreateOptToolbar( void )
-/************************************************/
 /**
-create or update the left vertical toolbar (option toolbar
-*/
+ * Create or update the left vertical toolbar (option toolbar
+ */
+void WinEDA_GerberFrame::ReCreateOptToolbar( void )
 {
     if( m_OptionsToolBar )
         return;
 
-    // creation du tool bar options
+    // creation of tool bar options
     m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this,
                                            ID_OPT_TOOLBAR, FALSE );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString,
                                 wxBitmap( grid_xpm ),
-                               _( "Display Grid OFF" ), wxITEM_CHECK );
+                               _( "Turn grid off" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
                                wxBitmap( polar_coord_xpm ),
-                               _( "Display Polar Coord ON" ), wxITEM_CHECK );
+                               _( "Turn polar coordinate on" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
                                wxBitmap( unit_inch_xpm ),
-                               _( "Units in inches" ), wxITEM_CHECK );
+                               _( "Set units to inches" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
                                wxBitmap( unit_mm_xpm ),
-                               _( "Units in millimeters" ), wxITEM_CHECK );
+                               _( "Set units to millimeters" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
                                wxBitmap( cursor_shape_xpm ),
-                               _( "Change Cursor Shape" ), wxITEM_CHECK );
+                               _( "Change cursor shape" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
                                wxBitmap( pad_sketch_xpm ),
-                               _( "Show Spots in Sketch Mode" ), wxITEM_CHECK );
+                               _( "Show spots in sketch mode" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH, wxEmptyString,
                                wxBitmap( showtrack_xpm ),
-                               _( "Show Lines in Sketch Mode" ), wxITEM_CHECK );
+                               _( "Show lines in sketch mode" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, wxEmptyString,
                                wxBitmap( opt_show_polygon_xpm ),
-                               _( "Show Polygons in Sketch Mode" ), wxITEM_CHECK );
+                               _( "Show polygons in sketch mode" ),
+                               wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_DCODES, wxEmptyString,
                                wxBitmap( show_dcodenumber_xpm ),

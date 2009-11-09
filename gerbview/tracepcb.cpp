@@ -18,41 +18,44 @@
 #include "class_board_design_settings.h"
 
 
-/************************************************************************************************************/
-void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmasklayer, bool aPrintMirrorMode )
-/*************************************************************************************************************/
 /* Draw gerbview layers, for printing
-*/
+ */
+void WinEDA_DrawPanel::PrintPage( wxDC* DC,
+                                  bool  Print_Sheet_Ref,
+                                  int   printmasklayer,
+                                  bool  aPrintMirrorMode )
 {
     DISPLAY_OPTIONS save_opt;
-    int DisplayPolygonsModeImg;
+    int             DisplayPolygonsModeImg;
 
     save_opt = DisplayOpt;
     if( printmasklayer & ALL_CU_LAYERS )
     {
-        DisplayOpt.DisplayPadFill  = true;
-        DisplayOpt.DisplayViaFill  = true;
+        DisplayOpt.DisplayPadFill = true;
+        DisplayOpt.DisplayViaFill = true;
     }
     else
     {
-        DisplayOpt.DisplayPadFill  = false;
-        DisplayOpt.DisplayViaFill  = false;
+        DisplayOpt.DisplayPadFill = false;
+        DisplayOpt.DisplayViaFill = false;
     }
-    DisplayOpt.DisplayPadNum       = 0;
-    DisplayOpt.DisplayPadNoConn    = 0;
-    DisplayOpt.DisplayPadIsol      = 0;
-    DisplayOpt.DisplayModEdge      = FILLED;
-    DisplayOpt.DisplayModText      = FILLED;
-    DisplayOpt.DisplayPcbTrackFill = FILLED;
+    DisplayOpt.DisplayPadNum = 0;
+    DisplayOpt.DisplayPadNoConn = 0;
+    DisplayOpt.DisplayPadIsol = 0;
+    DisplayOpt.DisplayModEdge = FILLED;
+    DisplayOpt.DisplayModText = FILLED;
+    DisplayOpt.DisplayPcbTrackFill    = FILLED;
     DisplayOpt.ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
-    DisplayOpt.DisplayDrawItems    = FILLED;
-    DisplayOpt.DisplayZonesMode = 0;
+    DisplayOpt.DisplayDrawItems       = FILLED;
+    DisplayOpt.DisplayZonesMode       = 0;
     DisplayPolygonsModeImg = g_DisplayPolygonsModeSketch;
     g_DisplayPolygonsModeSketch = 0;
 
     m_PrintIsMirrored = aPrintMirrorMode;
 
-    ( (WinEDA_GerberFrame*) m_Parent )->Trace_Gerber( DC, GR_COPY, printmasklayer );
+    ( (WinEDA_GerberFrame*) m_Parent )->Trace_Gerber( DC,
+                                                      GR_COPY,
+                                                      printmasklayer );
 
     if( Print_Sheet_Ref )
         m_Parent->TraceWorkSheet( DC, GetScreen(), 0 );
@@ -64,14 +67,11 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
 }
 
 
-/*******************************************************************/
-void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
-/*******************************************************************/
-
-/* Trace le PCB, et les elements complementaires ( axes, grille .. )
+/* Trace the PCB, and additional elements (axis, grid ..)
  */
+void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
-    PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
+    PCB_SCREEN* screen = (PCB_SCREEN*) GetScreen();
 
     if( !GetBoard() )
         return;
@@ -92,62 +92,67 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     DrawPanel->Trace_Curseur( DC );
 }
 
-/********************************************************************/
+
+/* Redraw the BOARD items but not cursors, axis or grid */
+
+// @todo: replace WinEDA_GerberFrame::Trace_Gerber() by this function
 void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
                   int aDrawMode, const wxPoint& offset )
-/********************************************************************/
-/* Redraw the BOARD items but not cursors, axis or grid */
-// @todo: replace WinEDA_GerberFrame::Trace_Gerber() by this function
 {
 }
 
 
-/***********************************************************************************/
-void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklayer )
-/***********************************************************************************/
 /*
-* Trace l'ensemble des elements du PCB sur l'ecran actif
-* @param DC = device context to draw
-* @param draw_mode = draw mode for the device context (GR_COPY, GR_OR, GR_XOR ..)
-* @param printmasklayer = mask for allowed layer (=-1 to draw all layers)
-*/
+ * Trace all elements of PCBs on the active screen.
+ *
+ * @param DC = device context to draw
+ * @param draw_mode = draw mode for the device context (GR_COPY, GR_OR, GR_XOR
+ * ..)
+ * @param printmasklayer = mask for allowed layer (=-1 to draw all layers)
+ */
+void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC,
+                                       int   draw_mode,
+                                       int   printmasklayer )
 {
     if( !GetBoard() )
         return;
 
-    bool    erase = false;
-    int     Color;
-    bool    filled;
+    bool erase = false;
+    int  Color;
+    bool filled;
 
     // Draw filled polygons
-    std::vector<wxPoint>    points;
+    std::vector<wxPoint> points;
 
-    // minimize reallocations of the vector's internal array by starting with a good sized one.
-    points.reserve(10000);
+    // minimize reallocations of the vector's internal array by starting with a
+    // good sized one.
+    points.reserve( 10000 );
 
-    for( TRACK* track = GetBoard()->m_Zone;  track;  track = track->Next() )
+    for( TRACK* track = GetBoard()->m_Zone; track; track = track->Next() )
     {
         if( !(track->ReturnMaskLayer() & printmasklayer) )
             continue;
 
-        D(printf("D:%p\n", track );)
+        D( printf( "D:%p\n", track ); )
 
         if( track->GetNet() == 0 )  // StartPoint
         {
-            if( points.size() )     // we have found a new polygon: Draw the old polygon
+            if( points.size() )     // we have found a new polygon: Draw the
+                                    // old polygon
             {
                 if( erase )
                 {
-                    Color = g_DrawBgColor;
+                    Color  = g_DrawBgColor;
                     filled = true;
                 }
                 else
                 {
-                    Color = g_DesignSettings.m_LayerColor[track->GetLayer()];
+                    Color  = g_DesignSettings.m_LayerColor[track->GetLayer()];
                     filled = (g_DisplayPolygonsModeSketch == 0);
                 }
 
-                GRClosedPoly( &DrawPanel->m_ClipBox, DC, points.size(), &points[0],
+                GRClosedPoly( &DrawPanel->m_ClipBox, DC,
+                              points.size(), &points[0],
                               filled, Color, Color );
             }
 
@@ -166,13 +171,13 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
         {
             if( erase )
             {
-                Color = g_DrawBgColor;
+                Color  = g_DrawBgColor;
                 filled = true;
             }
             else
             {
-                Color = g_DesignSettings.m_LayerColor[track->GetLayer()];
-                filled = (g_DisplayPolygonsModeSketch == 0);
+                Color  = g_DesignSettings.m_LayerColor[track->GetLayer()];
+                filled = ( g_DisplayPolygonsModeSketch == 0 );
             }
 
             GRClosedPoly( &DrawPanel->m_ClipBox, DC, points.size(), &points[0],
@@ -180,7 +185,8 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
         }
     }
 
-    // Draw tracks and flashes down here.  This will probably not be a final solution to drawing order issues
+    // Draw tracks and flashes down here.  This will probably not be a final
+    // solution to drawing order issues
     Draw_Track_Buffer( DrawPanel, DC, GetBoard(), draw_mode, printmasklayer );
 
     if( DisplayOpt.DisplayPadNum )
@@ -189,32 +195,34 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
     GetScreen()->ClrRefreshReq();
 }
 
-/***************************************************************************************************/
-void Draw_Track_Buffer( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int draw_mode,
-                        int printmasklayer )
-/***************************************************************************************************/
 
 /* Function to draw the tracks (i.e Spots or lines) in gerbview
  *  Polygons are not handled here (there are in Pcb->m_Zone)
  * @param DC = device context to draw
  * @param Pcb = Board to draw (only Pcb->m_Track is used)
- * @param draw_mode = draw mode for the device context (GR_COPY, GR_OR, GR_XOR ..)
+ * @param draw_mode = draw mode for the device context (GR_COPY, GR_OR, GR_XOR
+ * ..)
  * @param printmasklayer = mask for allowed layer (=-1 to draw all layers)
  */
+void Draw_Track_Buffer( WinEDA_DrawPanel* panel,
+                        wxDC*             DC,
+                        BOARD*            Pcb,
+                        int               draw_mode,
+                        int               printmasklayer )
 {
-    int           layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-    GERBER*       gerber = g_GERBER_List[layer];
-    int           dcode_hightlight = 0;
+    int     layer  = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    GERBER* gerber = g_GERBER_List[layer];
+    int     dcode_hightlight = 0;
 
     if( gerber )
         dcode_hightlight = gerber->m_Selected_Tool;
 
-    for( TRACK* track = Pcb->m_Track;  track;  track = track->Next() )
+    for( TRACK* track = Pcb->m_Track; track; track = track->Next() )
     {
         if( !(track->ReturnMaskLayer() & printmasklayer) )
             continue;
 
-        D(printf("D:%p\n", track );)
+        D( printf( "D:%p\n", track ); )
 
         if( dcode_hightlight == track->GetNet() && track->GetLayer()==layer )
             Trace_Segment( panel, DC, track, draw_mode | GR_SURBRILL );
@@ -226,15 +234,16 @@ void Draw_Track_Buffer( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int draw_
 
 #if 1
 
-/***********************************************************************************/
-void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mode )
-/***********************************************************************************/
 
-/* routine de trace de 1 segment de piste.
- *  Parametres :
- *  track = adresse de la description de la piste en buflib
- *  draw_mode = mode ( GR_XOR, GR_OR..)
+/* Trace 1 segment of track.
+ * Parameters:
+ * Track = address of the description of the track buflib
+ * Draw_mode = mode (GR_XOR, GR_OR ..)
  */
+void Trace_Segment( WinEDA_DrawPanel* panel,
+                    wxDC*             DC,
+                    TRACK*            track,
+                    int               draw_mode )
 {
     int         l_piste;
     int         color;
@@ -243,7 +252,8 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
     int         halfPenWidth;
     static bool show_err;
 
-    if( track->m_Flags & DRAW_ERASED )   // draw in background color, used by classs TRACK in gerbview
+    if( track->m_Flags & DRAW_ERASED )   // draw in background color, used by
+                                         // class TRACK in gerbview
     {
         color = g_DrawBgColor;
     }
@@ -267,7 +277,6 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
 
     GRSetDrawMode( DC, draw_mode );
 
-
     fillopt = DisplayOpt.DisplayPcbTrackFill ? FILLED : SKETCH;
 
     switch( track->m_Shape )
@@ -285,16 +294,32 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
 
         if( fillopt == SKETCH )
         {
-            // draw the border of the pen's path using two circles, each as narrow as possible
-            GRCircle( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-                      radius - halfPenWidth, 0, color );
-            GRCircle( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-                      radius + halfPenWidth, 0, color );
+            // draw the border of the pen's path using two circles, each as
+            // narrow as possible
+            GRCircle( &panel->m_ClipBox,
+                      DC,
+                      track->m_Start.x,
+                      track->m_Start.y,
+                      radius - halfPenWidth,
+                      0,
+                      color );
+            GRCircle( &panel->m_ClipBox,
+                      DC,
+                      track->m_Start.x,
+                      track->m_Start.y,
+                      radius + halfPenWidth,
+                      0,
+                      color );
         }
         else
         {
-            GRCircle( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
-                      radius, track->m_Width, color );
+            GRCircle( &panel->m_ClipBox,
+                      DC,
+                      track->m_Start.x,
+                      track->m_Start.y,
+                      radius,
+                      track->m_Width,
+                      color );
         }
         break;
 
@@ -402,12 +427,14 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
     }
 }
 
+
 #endif
 
 
-/*****************************************************************************************/
-void Affiche_DCodes_Pistes( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int drawmode )
-/*****************************************************************************************/
+void Affiche_DCodes_Pistes( WinEDA_DrawPanel* panel,
+                            wxDC*             DC,
+                            BOARD*            Pcb,
+                            int               drawmode )
 {
     TRACK*   track;
     wxPoint  pos;
@@ -418,24 +445,24 @@ void Affiche_DCodes_Pistes( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int d
     track = Pcb->m_Track;
     for( ; track != NULL; track = track->Next() )
     {
-        if( (track->m_Shape == S_ARC)
-         || (track->m_Shape == S_CIRCLE)
-         || (track->m_Shape == S_ARC_RECT) )
+        if( ( track->m_Shape == S_ARC )
+           || ( track->m_Shape == S_CIRCLE )
+           || ( track->m_Shape == S_ARC_RECT ) )
         {
             pos.x = track->m_Start.x;
             pos.y = track->m_Start.y;
         }
         else
         {
-            pos.x = (track->m_Start.x + track->m_End.x) / 2;
-            pos.y = (track->m_Start.y + track->m_End.y) / 2;
+            pos.x = ( track->m_Start.x + track->m_End.x ) / 2;
+            pos.y = ( track->m_Start.y + track->m_End.y ) / 2;
         }
 
         Line.Printf( wxT( "D%d" ), track->GetNet() );
 
         width  = track->m_Width;
         orient = TEXT_ORIENT_HORIZ;
-        if( track->m_Shape >= S_SPOT_CIRCLE )   // forme flash
+        if( track->m_Shape >= S_SPOT_CIRCLE )   // form flash
         {
             width /= 3;
         }
@@ -449,20 +476,19 @@ void Affiche_DCodes_Pistes( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int d
             width /= 2;
         }
 
-        DrawGraphicText( panel, DC,
-                         pos, (EDA_Colors) g_DCodesColor, Line,
+        DrawGraphicText( panel, DC, pos, (EDA_Colors) g_DCodesColor, Line,
                          orient, wxSize( width, width ),
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-			  0, false, false, false);
+                         0, false, false, false );
     }
 }
 
 
-/* Virtual fonction needed by the PCB_SCREEN class derived from BASE_SCREEN
-* this is a virtual pure function in BASE_SCREEN
-* do nothing in gerbview
-* could be removed later
-*/
-void PCB_SCREEN::ClearUndoORRedoList(UNDO_REDO_CONTAINER&, int )
+/* Virtual function needed by the PCB_SCREEN class derived from BASE_SCREEN
+ * this is a virtual pure function in BASE_SCREEN
+ * do nothing in gerbview
+ * could be removed later
+ */
+void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER&, int )
 {
 }

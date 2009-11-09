@@ -1,12 +1,6 @@
-/********************************************************/
-/* Routines generales de gestion des commandes usuelles */
-/********************************************************/
-
-/* fichier controle.cpp */
-
-/*
- *  Routines d'affichage grille, Boite de coordonnees, Curseurs, marqueurs ...
- */
+/****************/
+/* controle.cpp */
+/****************/
 
 #include "fctsys.h"
 #include "common.h"
@@ -17,25 +11,13 @@
 #include "protos.h"
 
 
-/**********************************************************************/
 BOARD_ITEM* WinEDA_GerberFrame::GerberGeneralLocateAndDisplay()
-/**********************************************************************/
 {
     return Locate( CURSEUR_OFF_GRILLE );
 }
 
 
-/****************************************************************/
 void WinEDA_GerberFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
-/****************************************************************/
-
-/* traitement des touches de fonctions utilisees ds tous les menus
- *  Zoom
- *  Redessin d'ecran
- *  Cht Unites
- *  Cht couches
- *  Remise a 0 de l'origine des coordonnees relatives
- */
 {
     wxRealPoint  delta;
     wxPoint curpos, oldpos;
@@ -68,25 +50,25 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     switch( g_KeyPressed )
     {
-    case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
+    case WXK_NUMPAD8:
     case WXK_UP:
         Mouse.y -= wxRound(delta.y);
         DrawPanel->MouseTo( Mouse );
         break;
 
-    case WXK_NUMPAD2:       /* Deplacement curseur vers le bas */
+    case WXK_NUMPAD2:
     case WXK_DOWN:
         Mouse.y += wxRound(delta.y);
         DrawPanel->MouseTo( Mouse );
         break;
 
-    case WXK_NUMPAD4:       /* Deplacement curseur vers la gauche */
+    case WXK_NUMPAD4:
     case WXK_LEFT:
         Mouse.x -= wxRound(delta.x);
         DrawPanel->MouseTo( Mouse );
         break;
 
-    case WXK_NUMPAD6:      /* Deplacement curseur vers la droite */
+    case WXK_NUMPAD6:
     case WXK_RIGHT:
         Mouse.x += wxRound(delta.x);
         DrawPanel->MouseTo( Mouse );
@@ -97,10 +79,8 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         break;
     }
 
-    /* Recalcul de la position du curseur schema */
     GetScreen()->m_Curseur = curpos;
 
-    /* Placement sur la grille generale */
     PutOnGrid( &GetScreen()->m_Curseur );
 
     if( oldpos != GetScreen()->m_Curseur )
@@ -129,5 +109,5 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     }
 
     SetToolbars();
-    UpdateStatusBar();    /* Affichage des coord curseur */
+    UpdateStatusBar();
 }

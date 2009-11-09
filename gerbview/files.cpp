@@ -1,6 +1,6 @@
-/******************************************************/
-/* Files.cp: Lecture / Sauvegarde des fichiers gerber */
-/******************************************************/
+/*************/
+/* files.cpp */
+/*************/
 
 #include "fctsys.h"
 #include "common.h"
@@ -13,8 +13,9 @@
 #include "protos.h"
 
 
-/* Routines locales */
-static void LoadDCodeFile( WinEDA_GerberFrame* frame, const wxString& FullFileName, wxDC* DC );
+static void LoadDCodeFile( WinEDA_GerberFrame* frame,
+                           const wxString&     FullFileName,
+                           wxDC*               DC );
 
 
 void WinEDA_GerberFrame::OnFileHistory( wxCommandEvent& event )
@@ -33,15 +34,11 @@ void WinEDA_GerberFrame::OnFileHistory( wxCommandEvent& event )
     }
 }
 
-/***************
-***************************************/
-void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
-/********************************************************/
 
-/* Gestion generale  des commandes de lecture de fichiers
- */
+/* File commands. */
+void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
 {
-    int id = event.GetId();
+    int        id = event.GetId();
 
     wxClientDC dc( DrawPanel );
 
@@ -58,17 +55,17 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
 
     case ID_MENU_INC_LAYER_AND_APPEND_FILE:
     case ID_INC_LAYER_AND_APPEND_FILE:
-        {
-            int origLayer = GetScreen()->m_Active_Layer;
+    {
+        int origLayer = GetScreen()->m_Active_Layer;
 
-            GetScreen()->m_Active_Layer++;
+        GetScreen()->m_Active_Layer++;
 
-            if( !LoadOneGerberFile( wxEmptyString, &dc, 0 ) )
-                GetScreen()->m_Active_Layer = origLayer;
+        if( !LoadOneGerberFile( wxEmptyString, &dc, 0 ) )
+            GetScreen()->m_Active_Layer = origLayer;
 
-            SetToolbars();
-        }
-        break;
+        SetToolbars();
+    }
+    break;
 
     case ID_APPEND_FILE:
         LoadOneGerberFile( wxEmptyString, &dc, 0 );
@@ -106,52 +103,49 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
 }
 
 
-/*******************************************************************************************/
-bool
-WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
-                                       wxDC* DC,
-                                         int mode )
-/*******************************************************************************************/
-
 /*
- *  Lecture d'un fichier PCB, le nom etant dans PcbNameBuffer.s
- *  retourne:
- *  0 si fichier non lu ( annulation de commande ... )
- *  1 si OK
+ * Load a PCB file.
+ *
+ * Returns:
+ *   0 if file not read (cancellation of order ...)
+ *   1 if OK
  */
+bool WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
+                                            wxDC*           DC,
+                                            int             mode )
 {
-    wxString filetypes;
+    wxString   filetypes;
     wxFileName filename = FullFileName;
 
     ActiveScreen = GetScreen();
 
     if( !filename.IsOk() )
     {
-		wxString current_path = filename.GetPath();
+        wxString current_path = filename.GetPath();
 
-		/* Standard gerber filetypes */
-		filetypes += _("Gerber files (.gbr .gbx .lgr .ger .pho)| \
-			*.gbr;*.GBR;*.gbx;*.GBX;*.lgr;*.LGR;*.ger;*.GER;*.pho;*.PHO|");
+        /* Standard gerber filetypes */
+        filetypes += _( "Gerber files (.gbr .gbx .lgr .ger .pho)| \
+.gbr;*.GBR;*.gbx;*.GBX;*.lgr;*.LGR;*.ger;*.GER;*.pho;*.PHO|" );
 
-		/* Special gerber filetypes */
-		filetypes += _("Top layer (*.GTL)|*.GTL;*.gtl|");
-		filetypes += _("Bottom layer (*.GBL)|*.GBL;*.gbl|");
-		filetypes += _("Bottom solder resist (*.GBS)|*.GBS;*.gbs|");
-		filetypes += _("Top solder resist (*.GTS)|*.GTS;*.gts|");
-		filetypes += _("Bottom overlay (*.GBO)|*.GBO;*.gbo|");
-		filetypes += _("Top overlay (*.GTO)|*.GTO;*.gto|");
-		filetypes += _("Bottom paste (*.GBP)|*.GBP;*.gbp|");
-		filetypes += _("Top paste (*.GTP)|*.GTP;*.gtp|");
-		filetypes += _("Keep-out layer (*.GKO)|*.GKO;*.gko|");
-		filetypes += _("Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|");
-		filetypes += _("Top Pad Master (*.GPT)|*.GPT;*.gpt|");
-		filetypes += _("Bottom Pad Master (*.GPB)|*.GPB;*.gpb|");
+        /* Special gerber filetypes */
+        filetypes += _( "Top layer (*.GTL)|*.GTL;*.gtl|" );
+        filetypes += _( "Bottom layer (*.GBL)|*.GBL;*.gbl|" );
+        filetypes += _( "Bottom solder resist (*.GBS)|*.GBS;*.gbs|" );
+        filetypes += _( "Top solder resist (*.GTS)|*.GTS;*.gts|" );
+        filetypes += _( "Bottom overlay (*.GBO)|*.GBO;*.gbo|" );
+        filetypes += _( "Top overlay (*.GTO)|*.GTO;*.gto|" );
+        filetypes += _( "Bottom paste (*.GBP)|*.GBP;*.gbp|" );
+        filetypes += _( "Top paste (*.GTP)|*.GTP;*.gtp|" );
+        filetypes += _( "Keep-out layer (*.GKO)|*.GKO;*.gko|" );
+        filetypes += _( "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|" );
+        filetypes += _( "Top Pad Master (*.GPT)|*.GPT;*.gpt|" );
+        filetypes += _( "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|" );
 
-		/* All filetypes */
-		filetypes += AllFilesWildcard;
+        /* All filetypes */
+        filetypes += AllFilesWildcard;
 
-		/* Get current path if emtpy */
-        if ( current_path.IsEmpty() )
+        /* Get current path if emtpy */
+        if( current_path.IsEmpty() )
             current_path = wxGetCwd();
 
         wxFileDialog dlg( this,
@@ -182,18 +176,18 @@ WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
 }
 
 
-/**********************************************************************************************/
-static void LoadDCodeFile( WinEDA_GerberFrame* frame, const wxString& FullFileName, wxDC* DC )
-/**********************************************************************************************/
-
 /*
- *  Lecture d'un fichier PCB, le nom etant dans PcbNameBuffer.s
- *  retourne:
- *  0 si fichier non lu ( annulation de commande ... )
- *  1 si OK
+ * Read a PCB file.
+ *
+ * Returns:
+ *   0 if file not read (cancellation of order ...)
+ *   1 if OK
  */
+static void LoadDCodeFile( WinEDA_GerberFrame* frame,
+                           const wxString&     FullFileName,
+                           wxDC*               DC )
 {
-    wxString wildcard;
+    wxString   wildcard;
     wxFileName fn = FullFileName;
 
     ActiveScreen = frame->GetScreen();
@@ -201,11 +195,12 @@ static void LoadDCodeFile( WinEDA_GerberFrame* frame, const wxString& FullFileNa
     if( !fn.IsOk() )
     {
         wildcard.Printf( _( "Gerber DCODE files (%s)|*.%s" ),
-                         GetChars( g_PenFilenameExt ), GetChars( g_PenFilenameExt ));
+                         GetChars( g_PenFilenameExt ),
+                         GetChars( g_PenFilenameExt ) );
         wildcard += AllFilesWildcard;
         fn = frame->GetScreen()->m_FileName;
         fn.SetExt( g_PenFilenameExt );
-        wxFileDialog dlg( ( wxWindow* )frame, _( "Load GERBER DCODE File" ),
+        wxFileDialog dlg( (wxWindow*) frame, _( "Load GERBER DCODE File" ),
                           fn.GetPath(), fn.GetFullName(), wildcard,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
@@ -221,14 +216,12 @@ static void LoadDCodeFile( WinEDA_GerberFrame* frame, const wxString& FullFileNa
 }
 
 
-/*******************************************************************************/
-bool WinEDA_GerberFrame::SaveGerberFile( const wxString& FullFileName, wxDC* DC )
-/*******************************************************************************/
-
-/* Sauvegarde du fichier PCB en format ASCII
+/* Save the file in ASCII PCB.
  */
+bool WinEDA_GerberFrame::SaveGerberFile( const wxString& FullFileName,
+                                         wxDC*           DC )
 {
-    wxString wildcard;
+    wxString   wildcard;
     wxFileName fn = FullFileName;
 
     if( !fn.IsOk() )
@@ -236,7 +229,8 @@ bool WinEDA_GerberFrame::SaveGerberFile( const wxString& FullFileName, wxDC* DC 
         fn = GetScreen()->m_FileName;
 
         wildcard.Printf( _( "Gerber DCODE files (%s)|*.%s" ),
-                         GetChars( g_PenFilenameExt ), GetChars( g_PenFilenameExt ));
+                         GetChars( g_PenFilenameExt ),
+                         GetChars( g_PenFilenameExt ) );
 
         wxFileDialog dlg( this, _( "Save Gerber File" ), fn.GetPath(),
                           fn.GetFullName(), wildcard,

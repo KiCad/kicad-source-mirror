@@ -1,6 +1,6 @@
-/******************************************************/
-/* edit.cpp: fonctions generales de l'edition du PCB */
-/******************************************************/
+/********************/
+/* onrightclick.cpp */
+/********************/
 
 #include "fctsys.h"
 #include "common.h"
@@ -11,27 +11,28 @@
 #include "pcbplot.h"
 #include "protos.h"
 
-/********************************************************************************/
-bool WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
-/********************************************************************************/
 
 /* Prepare the right-click pullup menu.
  * The menu already has a list of zoom commands.
  */
+bool WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos,
+                                       wxMenu*        PopMenu )
 {
-    BOARD_ITEM*     DrawStruct = GetScreen()->GetCurItem();
-    wxString        msg;
-    bool            BlockActive = (GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE);
+    BOARD_ITEM* DrawStruct = GetScreen()->GetCurItem();
+    wxString    msg;
+    bool        BlockActive =
+        (GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE);
 
-    DrawPanel->m_CanStartBlock = -1;    // Ne pas engager un debut de bloc sur validation menu
+    // Do not initiate a start block validation on menu.
+    DrawPanel->m_CanStartBlock = -1;
 
-    // Simple localisation des elements si possible
-    if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
+    // Simple location of elements where possible.
+    if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
     {
         DrawStruct = GerberGeneralLocateAndDisplay();
     }
 
-    // Si commande en cours: affichage fin de commande
+    // If command in progress, end command.
     if(  m_ID_current_state )
     {
         if( DrawStruct && DrawStruct->m_Flags )
@@ -46,16 +47,21 @@ bool WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu 
         {
             if( BlockActive )
             {
-                PopMenu->Append( ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel Block" ) );
-                PopMenu->Append( ID_POPUP_ZOOM_BLOCK, _( "Zoom Block (drag middle mouse)" ) );
+                PopMenu->Append( ID_POPUP_CANCEL_CURRENT_COMMAND,
+                                 _( "Cancel Block" ) );
+                PopMenu->Append( ID_POPUP_ZOOM_BLOCK,
+                                 _( "Zoom Block (drag middle mouse)" ) );
                 PopMenu->AppendSeparator();
                 PopMenu->Append( ID_POPUP_PLACE_BLOCK, _( "Place Block" ) );
-                PopMenu->Append( ID_POPUP_COPY_BLOCK, _( "Copy Block (shift mouse)" ) );
-                PopMenu->Append( ID_POPUP_DELETE_BLOCK, _( "Delete Block (ctrl + drag mouse)" ) );
+                PopMenu->Append( ID_POPUP_COPY_BLOCK,
+                                 _( "Copy Block (shift mouse)" ) );
+                PopMenu->Append( ID_POPUP_DELETE_BLOCK,
+                                 _( "Delete Block (ctrl + drag mouse)" ) );
                 PopMenu->Append( ID_POPUP_MIRROR_X_BLOCK, _( "Mirror Block" ) );
             }
             else
-                PopMenu->Append( ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ) );
+                PopMenu->Append( ID_POPUP_CANCEL_CURRENT_COMMAND,
+                                 _( "Cancel" ) );
             PopMenu->AppendSeparator();
         }
     }
@@ -63,7 +69,8 @@ bool WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu 
     if( BlockActive )
         return true;
 
-    PopMenu->Append( ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS, _( "Delete Dcode items" ) );
+    PopMenu->Append( ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS,
+                     _( "Delete Dcode items" ) );
 
     if( DrawStruct == NULL )
         return true;
@@ -81,9 +88,8 @@ bool WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu 
 
 
     default:
-        msg.Printf(
-            wxT( "WinEDA_GerberFrame::OnRightClick Error: illegal or unknown DrawType %d" ),
-            DrawStruct->Type() );
+        msg.Printf( wxT( "WinEDA_GerberFrame::OnRightClick Error: illegal or unknown DrawType %d" ),
+                    DrawStruct->Type() );
         DisplayError( this, msg );
         break;
     }
