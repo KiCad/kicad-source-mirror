@@ -61,8 +61,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
 /*******************************************************************/
 void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 /*******************************************************************/
-
-/* Trace le PCB, et les elements complementaires ( axes, grille .. )
+/* Redraws the full screen, including axis and grid
  */
 {
     PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
@@ -99,7 +98,7 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
 /***********************************************************************************/
 void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklayer )
 /***********************************************************************************/
-/* Draws the gerber items on screen
+/* Trace all elements of PCBs (i.e Spots, filled polygons or lines) on the active screen
 * @param DC = current device context
 * @param draw_mode = draw mode for the device context (GR_COPY, GR_OR, GR_XOR ..)
 * @param printmasklayer = mask for allowed layer (=-1 to draw all layers)
@@ -225,9 +224,9 @@ void Draw_Track_Buffer( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int draw_
 void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mode )
 /***********************************************************************************/
 
-/* routine de trace de 1 segment de piste.
- *  Parametres :
- *  track = adresse de la description de la piste en buflib
+/* Trace 1 segment of track (segment, spot...).
+ *  Parameters :
+ *  Track = a pointer on of the description of the track
  *  draw_mode = mode ( GR_XOR, GR_OR..)
  */
 {
