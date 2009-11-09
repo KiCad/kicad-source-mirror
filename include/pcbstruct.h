@@ -115,8 +115,9 @@
 #define LAST_NON_COPPER_LAYER  EDGE_N
 
 //      extra bits              0xE0000000
-/* masques generaux : */
-#define ALL_LAYERS       0x1FFFFFFF
+/* Helpful global layers maks : */
+#define ALL_LAYERS       0x1FFFFFFF             // Pcbnew used 29 layers
+#define FULL_LAYERS       0xFFFFFFFF            // Gerbview used 32 layers
 #define ALL_NO_CU_LAYERS 0x1FFF0000
 #define ALL_CU_LAYERS    0x0000FFFF
 #define INTERNAL_LAYERS  0x00007FFE             /* Bits layers internes */

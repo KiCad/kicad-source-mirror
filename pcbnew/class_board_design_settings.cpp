@@ -83,7 +83,8 @@ int EDA_BoardDesignSettings::GetVisibleLayers() const
 
 void EDA_BoardDesignSettings::SetVisibleLayers( int aMask )
 {
-    m_VisibleLayers = aMask & m_EnabledLayers & ALL_LAYERS;
+    // Altough Pcbnew uses only 29, Gerbview uses all 32 layers
+    m_VisibleLayers = aMask & m_EnabledLayers & FULL_LAYERS;
 }
 
 

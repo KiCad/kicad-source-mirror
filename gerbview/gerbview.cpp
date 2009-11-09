@@ -15,6 +15,7 @@
 #include "bitmaps.h"
 #include "protos.h"
 #include "zones.h"
+#include "class_board_design_settings.h"
 
 #include <wx/file.h>
 #include <wx/snglinst.h>
@@ -44,6 +45,8 @@ bool WinEDA_App::OnInit()
 
     ScreenPcb = new PCB_SCREEN();
     ScreenPcb->m_CurrentSheetDesc = &g_Sheet_GERBER;
+
+    g_DesignSettings.SetEnabledLayers( FULL_LAYERS );     // All 32 layers enabled at first.
 
     ActiveScreen = ScreenPcb;
 
