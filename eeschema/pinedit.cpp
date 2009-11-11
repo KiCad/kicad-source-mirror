@@ -74,7 +74,10 @@ void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
     {
         if( pin->IsNew() )
+        {
+            pin->m_Flags |= IS_CANCELLED;
             DrawPanel->UnManageCursor();
+        }
         return;
     }
 
@@ -296,7 +299,7 @@ static void DrawMovePin( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     /* Redraw pin in new position */
     CurrentPin->m_Pos.x = panel->GetScreen()->m_Curseur.x;
     CurrentPin->m_Pos.y = -panel->GetScreen()->m_Curseur.y;
-    CurrentPin->Draw( panel, DC, wxPoint( 0, 0 ), -1, wxCOPY,
+    CurrentPin->Draw( panel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
                       &showPinText, DefaultTransformMatrix );
 
     PinPreviousPos = CurrentPin->m_Pos;
@@ -412,8 +415,17 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
     GetEventHandler()->ProcessEvent( cmd );
     DrawPanel->MouseToCursorSchema();
     DrawPanel->m_IgnoreMouseEvents = false;
-    DrawPanel->ManageCurseur = DrawMovePin;
-    DrawPanel->ForceCloseManageCurseur = AbortPinMove;
+
+    if (pin->m_Flags & IS_CANCELLED)
+    {
+        DeletePin(DC, m_component, pin);
+        m_drawItem = NULL;
+    }
+    else
+    {
+        DrawPanel->ManageCurseur = DrawMovePin;
+        DrawPanel->ForceCloseManageCurseur = AbortPinMove;
+    }
 }
 
 

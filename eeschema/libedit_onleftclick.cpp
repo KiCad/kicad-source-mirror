@@ -34,10 +34,6 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
             switch( DrawEntry->Type() )
             {
-            case COMPONENT_PIN_DRAW_TYPE:
-                PlacePin( DC );
-                break;
-
             case COMPONENT_FIELD_DRAW_TYPE:
                 PlaceField( DC, (LIB_FIELD*) DrawEntry );
                 DrawEntry = NULL;
