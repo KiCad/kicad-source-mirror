@@ -36,12 +36,14 @@ class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS :
 private:
     WinEDA_PcbFrame* m_Parent;
     int m_Netcode;
+    int m_OptionID;
 
 public:
     DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( WinEDA_PcbFrame* aParent, int aNetcode );
     ~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS() {};
 
     // Virtual event handlers, overided here
+	void OnSelectionClick( wxCommandEvent& event ){ m_OptionID = event.GetId(); }
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
     void MyInit();

@@ -27,10 +27,11 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS(
 {
     m_Parent  = aParent;
     m_Netcode = aNetcode;
+    m_OptionID = 0;
     MyInit();
-    Layout();
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
+    Layout();
 }
 
 
@@ -55,11 +56,17 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
         netclass = netclasses.Find( board->m_CurrentNetClassName );
     }
 
-    // Enable/disable the option "copy current to net" if we ause only default netclass values
+    // Disable the option "copy current to net" if we have only default netclass values
     if( !board->m_TrackWidthSelector && !board->m_ViaSizeSelector )
     {
         m_Net2CurrValueButton->Enable( false );
-        m_Net2CurrValueText->Enable( false );
+        m_OptionID = ID_NETCLASS_VALUES_TO_CURRENT_NET;
+        m_NetUseNetclassValueButton->SetValue(true);
+    }
+    else
+     {
+        m_OptionID = ID_CURRENT_VALUES_TO_CURRENT_NET;
+        m_Net2CurrValueButton->SetValue(true);
     }
 
     // Display current values, and current netclass values:
@@ -121,7 +128,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     msg = _( "Default" );
     m_gridDisplayCurrentSettings->SetCellValue( 1, 4, msg  );
 
-    // Set all cells Roead Only
+    // Set all cells Read Only
     for( int ii = 0; ii < m_gridDisplayCurrentSettings->GetNumberRows(); ii++ )
     {
         for( int jj = 0; jj < m_gridDisplayCurrentSettings->GetNumberCols(); jj++ )
@@ -138,7 +145,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnOkClick( wxCommandEvent& event )
 {
     bool change = false;
 
-    switch( event.GetId() )
+    switch( m_OptionID )
     {
     case ID_CURRENT_VALUES_TO_CURRENT_NET:
         if( !IsOK( this,

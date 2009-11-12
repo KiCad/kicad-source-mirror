@@ -18,8 +18,8 @@
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/grid.h>
-#include <wx/statbox.h>
 #include <wx/statline.h>
+#include <wx/radiobut.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -39,31 +39,34 @@ class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE : public wxDialog
 	private:
 	
 	protected:
+		wxStaticText* m_staticText12;
+		
 		wxStaticText* m_CurrentNetText;
 		wxStaticText* m_CurrentNetName;
 		wxStaticText* m_CurrentNetclassText;
 		wxStaticText* m_CurrentNetclassName;
+		
 		wxGrid* m_gridDisplayCurrentSettings;
 		wxStaticLine* m_staticline1;
-		wxStaticText* m_Net2CurrValueText;
-		wxButton* m_Net2CurrValueButton;
-		wxStaticText* m_staticText5;
-		wxButton* m_button3;
-		wxStaticText* m_staticText6;
-		wxButton* m_button4;
-		wxStaticText* m_staticText7;
-		wxButton* m_button5;
-		wxStaticText* m_staticText8;
-		wxButton* m_button6;
-		wxButton* m_buttonCancel;
+		wxStaticText* m_staticText11;
+		
+		wxRadioButton* m_Net2CurrValueButton;
+		wxRadioButton* m_NetUseNetclassValueButton;
+		wxRadioButton* m_radioBtn3;
+		wxRadioButton* m_radioBtn4;
+		wxRadioButton* m_radioBtn5;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnSelectionClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
 		
 	
 	public:
-		DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 711,418 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Global Edition of Tracks and Vias"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 711,376 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE();
 	
 };

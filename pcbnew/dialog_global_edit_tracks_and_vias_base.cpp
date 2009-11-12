@@ -16,8 +16,23 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxStaticBoxSizer* sbCurrSettingsSizer;
-	sbCurrSettingsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Current Settings") ), wxVERTICAL );
+	wxBoxSizer* bSizerCurrSettings;
+	bSizerCurrSettings = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticText12 = new wxStaticText( this, wxID_ANY, _("Current Settings:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText12->Wrap( -1 );
+	m_staticText12->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	bSizerCurrSettings->Add( m_staticText12, 0, wxALL, 5 );
+	
+	wxBoxSizer* bSizerCurrSettingsLeft;
+	bSizerCurrSettingsLeft = new wxBoxSizer( wxHORIZONTAL );
+	
+	
+	bSizerCurrSettingsLeft->Add( 20, 0, 0, 0, 5 );
+	
+	wxBoxSizer* bSizerGrids;
+	bSizerGrids = new wxBoxSizer( wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizeNetInfo;
 	fgSizeNetInfo = new wxFlexGridSizer( 2, 2, 0, 0 );
@@ -26,17 +41,17 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	
 	m_CurrentNetText = new wxStaticText( this, wxID_ANY, _("Current Net:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CurrentNetText->Wrap( -1 );
-	fgSizeNetInfo->Add( m_CurrentNetText, 0, wxALL|wxALIGN_RIGHT, 5 );
+	fgSizeNetInfo->Add( m_CurrentNetText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_CurrentNetName = new wxStaticText( this, wxID_ANY, _("NetName"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CurrentNetName->Wrap( -1 );
 	m_CurrentNetName->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
-	fgSizeNetInfo->Add( m_CurrentNetName, 0, wxALL, 5 );
+	fgSizeNetInfo->Add( m_CurrentNetName, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_CurrentNetclassText = new wxStaticText( this, wxID_ANY, _("Current NetClass:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CurrentNetclassText->Wrap( -1 );
-	fgSizeNetInfo->Add( m_CurrentNetclassText, 0, wxALL|wxALIGN_RIGHT, 5 );
+	fgSizeNetInfo->Add( m_CurrentNetclassText, 0, wxALL, 5 );
 	
 	m_CurrentNetclassName = new wxStaticText( this, wxID_ANY, _("NetClassName"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_CurrentNetclassName->Wrap( -1 );
@@ -44,7 +59,10 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	
 	fgSizeNetInfo->Add( m_CurrentNetclassName, 0, wxALL, 5 );
 	
-	sbCurrSettingsSizer->Add( fgSizeNetInfo, 1, wxEXPAND, 5 );
+	bSizerGrids->Add( fgSizeNetInfo, 1, wxEXPAND, 5 );
+	
+	
+	bSizerGrids->Add( 10, 10, 0, 0, 5 );
 	
 	m_gridDisplayCurrentSettings = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
@@ -79,92 +97,85 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	
 	// Cell Defaults
 	m_gridDisplayCurrentSettings->SetDefaultCellAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	sbCurrSettingsSizer->Add( m_gridDisplayCurrentSettings, 0, wxALL|wxEXPAND, 5 );
+	bSizerGrids->Add( m_gridDisplayCurrentSettings, 0, wxALL|wxEXPAND, 5 );
 	
-	bMainSizer->Add( sbCurrSettingsSizer, 1, wxALL|wxEXPAND, 5 );
+	bSizerCurrSettingsLeft->Add( bSizerGrids, 1, wxEXPAND, 5 );
+	
+	bSizerCurrSettings->Add( bSizerCurrSettingsLeft, 1, wxEXPAND, 5 );
+	
+	bMainSizer->Add( bSizerCurrSettings, 0, 0, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	bMainSizer->Add( m_staticline1, 0, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bLowerSizer;
-	bLowerSizer = new wxBoxSizer( wxHORIZONTAL );
+	bLowerSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxStaticBoxSizer* sbSizerCommands;
-	sbSizerCommands = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
+	m_staticText11 = new wxStaticText( this, wxID_ANY, _("Global Edition Option:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText11->Wrap( -1 );
+	m_staticText11->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
-	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 5, 2, 0, 0 );
-	fgSizer2->SetFlexibleDirection( wxBOTH );
-	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	bLowerSizer->Add( m_staticText11, 0, wxALL, 5 );
 	
-	m_Net2CurrValueText = new wxStaticText( this, wxID_ANY, _("Set tracks and vias of the current Net to the current value"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Net2CurrValueText->Wrap( -1 );
-	fgSizer2->Add( m_Net2CurrValueText, 0, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	bMainSizer->Add( bLowerSizer, 0, wxALL|wxEXPAND, 5 );
 	
-	m_Net2CurrValueButton = new wxButton( this, ID_CURRENT_VALUES_TO_CURRENT_NET, _("Ok"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_Net2CurrValueButton, 0, wxALL|wxEXPAND, 5 );
+	wxBoxSizer* bSizerOptions;
+	bSizerOptions = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Set tracks and vias of the current Net to the Netclass value"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText5->Wrap( -1 );
-	fgSizer2->Add( m_staticText5, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 	
-	m_button3 = new wxButton( this, ID_NETCLASS_VALUES_TO_CURRENT_NET, _("Ok"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_button3, 0, wxALL, 5 );
+	bSizerOptions->Add( 20, 0, 0, 0, 5 );
 	
-	m_staticText6 = new wxStaticText( this, wxID_ANY, _("Set ALL tracks and vias to their Netclass value"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText6->Wrap( -1 );
-	fgSizer2->Add( m_staticText6, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+	wxBoxSizer* bSizerRadioButtons;
+	bSizerRadioButtons = new wxBoxSizer( wxVERTICAL );
 	
-	m_button4 = new wxButton( this, ID_ALL_TRACKS_VIAS, _("Ok"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_button4, 0, wxALL, 5 );
+	m_Net2CurrValueButton = new wxRadioButton( this, ID_CURRENT_VALUES_TO_CURRENT_NET, _("Set tracks and vias of the current Net to the current value"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerRadioButtons->Add( m_Net2CurrValueButton, 0, wxALL, 5 );
 	
-	m_staticText7 = new wxStaticText( this, wxID_ANY, _("Set ALL vias (no track) to their Netclass value"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText7->Wrap( -1 );
-	fgSizer2->Add( m_staticText7, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+	m_NetUseNetclassValueButton = new wxRadioButton( this, ID_NETCLASS_VALUES_TO_CURRENT_NET, _("Set tracks and vias of the current Net to the Netclass value"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerRadioButtons->Add( m_NetUseNetclassValueButton, 0, wxALL, 5 );
 	
-	m_button5 = new wxButton( this, ID_ALL_VIAS, _("Ok"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_button5, 0, wxALL, 5 );
+	m_radioBtn3 = new wxRadioButton( this, ID_ALL_TRACKS_VIAS, _("Set all tracks and vias to their Netclass value"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerRadioButtons->Add( m_radioBtn3, 0, wxALL, 5 );
 	
-	m_staticText8 = new wxStaticText( this, wxID_ANY, _("Set ALL tracks (no via) to their Netclass value"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText8->Wrap( -1 );
-	fgSizer2->Add( m_staticText8, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+	m_radioBtn4 = new wxRadioButton( this, ID_ALL_VIAS, _("Set all vias (no track) to their Netclass value"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerRadioButtons->Add( m_radioBtn4, 0, wxALL, 5 );
 	
-	m_button6 = new wxButton( this, ID_ALL_TRACKS, _("Ok"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_button6, 0, wxALL, 5 );
+	m_radioBtn5 = new wxRadioButton( this, ID_ALL_TRACKS, _("Set all tracks (no via) to their Netclass value"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerRadioButtons->Add( m_radioBtn5, 0, wxALL, 5 );
 	
-	sbSizerCommands->Add( fgSizer2, 1, wxEXPAND, 5 );
+	bSizerOptions->Add( bSizerRadioButtons, 1, wxEXPAND, 5 );
 	
-	bLowerSizer->Add( sbSizerCommands, 1, wxEXPAND, 5 );
+	bMainSizer->Add( bSizerOptions, 0, wxEXPAND, 5 );
 	
-	wxBoxSizer* bbuttonsSizer;
-	bbuttonsSizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	bbuttonsSizer->Add( m_buttonCancel, 0, wxALL|wxEXPAND, 5 );
-	
-	bLowerSizer->Add( bbuttonsSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
-	
-	bMainSizer->Add( bLowerSizer, 1, wxEXPAND|wxALL, 5 );
+	m_sdbSizer1 = new wxStdDialogButtonSizer();
+	m_sdbSizer1OK = new wxButton( this, wxID_OK );
+	m_sdbSizer1->AddButton( m_sdbSizer1OK );
+	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
+	m_sdbSizer1->Realize();
+	bMainSizer->Add( m_sdbSizer1, 0, wxEXPAND|wxALL, 5 );
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
 	
 	// Connect Events
-	m_Net2CurrValueButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnOkClick ), NULL, this );
-	m_button3->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnOkClick ), NULL, this );
-	m_button4->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnOkClick ), NULL, this );
-	m_button5->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnOkClick ), NULL, this );
-	m_button6->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnOkClick ), NULL, this );
-	m_buttonCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnCancelClick ), NULL, this );
+	m_Net2CurrValueButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnSelectionClick ), NULL, this );
+	m_NetUseNetclassValueButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnSelectionClick ), NULL, this );
+	m_radioBtn3->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnSelectionClick ), NULL, this );
+	m_radioBtn4->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnSelectionClick ), NULL, this );
+	m_radioBtn5->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnSelectionClick ), NULL, this );
+	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnCancelClick ), NULL, this );
+	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnOkClick ), NULL, this );
 }
 
 DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE()
 {
 	// Disconnect Events
-	m_Net2CurrValueButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnOkClick ), NULL, this );
-	m_button3->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnOkClick ), NULL, this );
-	m_button4->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnOkClick ), NULL, this );
-	m_button5->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnOkClick ), NULL, this );
-	m_button6->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnOkClick ), NULL, this );
-	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnCancelClick ), NULL, this );
+	m_Net2CurrValueButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnSelectionClick ), NULL, this );
+	m_NetUseNetclassValueButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnSelectionClick ), NULL, this );
+	m_radioBtn3->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnSelectionClick ), NULL, this );
+	m_radioBtn4->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnSelectionClick ), NULL, this );
+	m_radioBtn5->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnSelectionClick ), NULL, this );
+	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnCancelClick ), NULL, this );
+	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnOkClick ), NULL, this );
 }
