@@ -61,11 +61,10 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	m_gridDisplayCurrentSettings->EnableDragColSize( true );
 	m_gridDisplayCurrentSettings->SetColLabelSize( 30 );
 	m_gridDisplayCurrentSettings->SetColLabelValue( 0, _("Track size") );
-	m_gridDisplayCurrentSettings->SetColLabelValue( 1, _("Via size") );
-	m_gridDisplayCurrentSettings->SetColLabelValue( 2, _("Via Diameter") );
-	m_gridDisplayCurrentSettings->SetColLabelValue( 3, _("Via drill") );
-	m_gridDisplayCurrentSettings->SetColLabelValue( 4, _("uVia size") );
-	m_gridDisplayCurrentSettings->SetColLabelValue( 5, _("uVia Drill") );
+	m_gridDisplayCurrentSettings->SetColLabelValue( 1, _("Via diameter") );
+	m_gridDisplayCurrentSettings->SetColLabelValue( 2, _("Via drill") );
+	m_gridDisplayCurrentSettings->SetColLabelValue( 3, _("uVia size") );
+	m_gridDisplayCurrentSettings->SetColLabelValue( 4, _("uVia Drill") );
 	m_gridDisplayCurrentSettings->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
@@ -80,9 +79,9 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	
 	// Cell Defaults
 	m_gridDisplayCurrentSettings->SetDefaultCellAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	sbCurrSettingsSizer->Add( m_gridDisplayCurrentSettings, 0, wxTOP|wxBOTTOM, 5 );
+	sbCurrSettingsSizer->Add( m_gridDisplayCurrentSettings, 0, wxALL|wxEXPAND, 5 );
 	
-	bMainSizer->Add( sbCurrSettingsSizer, 0, wxEXPAND, 5 );
+	bMainSizer->Add( sbCurrSettingsSizer, 1, wxALL|wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
@@ -135,7 +134,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	
 	sbSizerCommands->Add( fgSizer2, 1, wxEXPAND, 5 );
 	
-	bLowerSizer->Add( sbSizerCommands, 1, 0, 5 );
+	bLowerSizer->Add( sbSizerCommands, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bbuttonsSizer;
 	bbuttonsSizer = new wxBoxSizer( wxVERTICAL );
@@ -145,7 +144,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	
 	bLowerSizer->Add( bbuttonsSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	bMainSizer->Add( bLowerSizer, 1, wxEXPAND, 5 );
+	bMainSizer->Add( bLowerSizer, 1, wxEXPAND|wxALL, 5 );
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();

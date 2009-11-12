@@ -22,6 +22,7 @@ static void CreateRoutesSection( FILE* file, BOARD* pcb );
 static void CreateSignalsSection( FILE* file, BOARD* pcb );
 static void CreateShapesSection( FILE* file, BOARD* pcb );
 static void CreatePadsShapesSection( FILE* file, BOARD* pcb );
+static void CreatePadsStacksSection( FILE* file, BOARD* pcb );
 static void FootprintWriteShape( FILE* File, MODULE* module );
 
 // layer name for Gencad export
@@ -72,8 +73,8 @@ void WinEDA_PcbFrame::ExportToGenCAD( wxCommandEvent& event )
     wxString   msg, ext, wildcard;
     FILE*      file;
 
-    ext = wxT( "gcd" );
-    wildcard = _( "GenCAD board files (.gcd)|*.gcd" );
+    ext = wxT( "cad" );
+    wildcard = _( "GenCAD 1.4 board files (.cad)|*.cad" );
     fn.SetExt( ext );
 
     wxFileDialog dlg( this, _( "Save GenCAD Board File" ), wxGetCwd(),
@@ -126,14 +127,20 @@ void WinEDA_PcbFrame::ExportToGenCAD( wxCommandEvent& event )
 
     /* Create the shapes list
      *  (shapes of pads and footprints */
-    CreatePadsShapesSection( file, GetBoard() );   // doit etre appele avant CreateShapesSection()
+    CreatePadsShapesSection( file, GetBoard() );   /* Must be called
+                                                    * before CreatePadsStacksSection and
+                                                    * CreateShapesSection()
+                                                    */
+    CreatePadsStacksSection( file, GetBoard() );
     CreateShapesSection( file, GetBoard() );
+
+    CreateDevicesSection( file, GetBoard() );
+    CreateComponentsSection( file, GetBoard() );
 
     /* Create the list of Nets: */
     CreateSignalsSection( file, GetBoard() );
 
-    CreateDevicesSection( file, GetBoard() );
-    CreateComponentsSection( file, GetBoard() );
+    // Cretaes the Routes section (i.e. the list of board tracks)
     CreateRoutesSection( file, GetBoard() );
 
     fclose( file );
@@ -168,6 +175,22 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
 /* Creates the pads shapes list ( 1 shape per pad )
  *  Uses .GetSubRatsnest member of class D_PAD, to handle the shape id (value 1 ..n)
  *  for pads shapes PAD1 to PADn
+ *
+ *  The PADS section is used to describe the shape of all the pads used on the printed circuit
+ *  board. The PADS section must be included, even if only a default pad is described and used for
+ *  all pads. The keywords used in the PADS section are:
+ *  $PADS
+ *  PAD <pad_name> <pad_type> <drill_size>
+ *  LINE <line_ref>
+ *  ARC <arc_ref>
+ *  CIRCLE <circle_ref>
+ *  RECTANGLE <rectangle_ref>
+ *  ATTRIBUTE <attrib_ref>
+ *  $ENDPADS
+ *  $PADS and $ENDPADS mark the PADS section of the GenCAD file. Each pad description
+ *  must start with a PAD keyword.
+ *  The layer in which a pad lies is defined in the SHAPE section of the GenCAD specification.
+ *  The pad is always placed on a shape at the pad origin, or in a pad stack at the pad stack origin.
  */
 {
     std::vector<D_PAD*> pads;
@@ -279,6 +302,25 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
 }
 
 
+/*****************************************************/
+void CreatePadsStacksSection( FILE* file, BOARD* pcb )
+/*****************************************************/
+
+/*The PADSTACKS section is optional, and is used to describe how a group of pads are
+ *  arranged. The keywords used in the PADSTACKS section are:
+ *  $PADSTACKS
+ *  PADSTACK <pad_name> <drill_size>
+ *  PAD <pad_name> <layer> <rot> <mirror>
+ *  ATTRIBUTE <attrib_ref>
+ *  $ENDPADSTACKS
+ *  $PADSTACKS and $ENDPADSTACKS mark the PADSTACKS section of the GenCAD file.
+ */
+{
+    fputs( "$PADSTACKS\n", file );
+    fputs( "$ENDPADSTACKS\n\n", file );
+}
+
+
 /**************************************************/
 void CreateShapesSection( FILE* file, BOARD* pcb )
 /**************************************************/
@@ -293,6 +335,7 @@ void CreateShapesSection( FILE* file, BOARD* pcb )
  *  Syntaxe:
  *  $SHAPES
  *  SHAPE <shape_name>
+ *  INSERT <string>         here <string> = "TH"
  *  shape_descr (line, arc ..)
  *  PIN <pin_name> <pad_name> <x_y_ref> <layer> <rot> <mirror>
  *
@@ -462,7 +505,7 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
         if( net->GetNet() <= 0 )  // dummy equipot (non connexion)
             continue;
 
-        msg = wxT( "\nSIGNAL " ) + net->GetNetname();
+        msg = wxT( "SIGNAL " ) + net->GetNetname();
 
         fputs( CONV_TO_UTF8( msg ), file );
         fputs( "\n", file );
@@ -498,7 +541,7 @@ bool CreateHeaderInfoData( FILE* file, WinEDA_PcbFrame* frame )
  */
 {
     wxString    msg;
-    PCB_SCREEN* screen = (PCB_SCREEN*)( frame->GetScreen() );
+    PCB_SCREEN* screen = (PCB_SCREEN*) ( frame->GetScreen() );
 
     fputs( "$HEADER\n", file );
     fputs( "GENCAD 1.4\n", file );
@@ -550,7 +593,8 @@ static int Track_list_Sort_by_Netcode( const void* refptr, const void* objptr )
 void CreateRoutesSection( FILE* file, BOARD* pcb )
 /*************************************************/
 
-/* Creates the tracks, vias
+/* Creates the section ROUTES
+ * that handles tracks, vias
  * TODO: add zones
  *  section:
  *  $ROUTE
@@ -606,7 +650,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
                 netname = net->GetNetname();
             else
                 netname = wxT( "_noname_" );
-            fprintf( file, "\nROUTE %s\n", CONV_TO_UTF8( netname ) );
+            fprintf( file, "ROUTE %s\n", CONV_TO_UTF8( netname ) );
         }
 
         if( old_width != track->m_Width )
@@ -647,7 +691,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
 void CreateDevicesSection( FILE* file, BOARD* pcb )
 /***************************************************/
 
-/* Creatthes the section $DEVICES
+/* Creates the section $DEVICES
  * This is a list of footprints properties
  *  ( Shapes are in section $SHAPE )
  */
@@ -682,7 +726,7 @@ void CreateDevicesSection( FILE* file, BOARD* pcb )
 void CreateBoardSection( FILE* file, BOARD* pcb )
 /*************************************************/
 
-/* Creatthe  section $BOARD.
+/* Creates the section $BOARD.
  *  We output here only the board boudary box
  */
 {
@@ -780,6 +824,7 @@ void FootprintWriteShape( FILE* file, MODULE* module )
  *  The shape is always given "normal" (Orient 0, not mirrored)
  *  Syntax:
  *  SHAPE <shape_name>
+ *  INSERT <string>         here <string> = "TH"
  *  shape_descr (line, arc ..):
  *  LINE startX startY endX endY
  *  ARC startX startY endX endY centreX centreY
@@ -792,7 +837,8 @@ void FootprintWriteShape( FILE* file, MODULE* module )
 
 
     /* creates header: */
-    fprintf( file, "\nSHAPE %s\n", CONV_TO_UTF8( module->m_Reference->m_Text ) );
+    fprintf( file, "SHAPE %s\n", CONV_TO_UTF8( module->m_Reference->m_Text ) );
+    fprintf( file, "INSERT %s\n", (module->m_Attributs & MOD_CMS) ? "SMD" : "TH" );
 
     /* creates Attributs */
     if( module->m_Attributs != MOD_DEFAULT )

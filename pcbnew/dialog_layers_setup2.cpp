@@ -174,6 +174,8 @@ DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( WinEDA_PcbFrame* parent ) :
     Init();
 
     SetAutoLayout( true );
+    Layout();
+    Center();
 }
 
 
