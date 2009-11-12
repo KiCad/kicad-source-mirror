@@ -1001,6 +1001,11 @@ void DialogLayerSetup::OnOKClick( wxCommandEvent& event )
     m_Pcb->m_BoardSettings->SetCopperLayerCount( NumberOfCopperLayers );
 
     m_Pcb->SetEnabledLayers( m_LayersMask );
+    /* Reset the layers visibility flag
+     *  Because it could creates SERIOUS mistakes for the user,
+     * if some layers are not visible after activating them ...
+     */
+    m_Pcb->SetVisibleLayers( m_LayersMask );
 
     for( int i = 0; i < NB_COPPER_LAYERS; i++ )
     {

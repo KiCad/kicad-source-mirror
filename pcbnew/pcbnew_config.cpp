@@ -177,7 +177,6 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose )
 bool WinEDA_PcbFrame::Read_Config( const wxString& projectFileName )
 {
     wxFileName fn = projectFileName;
-    int      ii;
 
     if( fn.GetExt() != ProjectFileExtension )
         fn.SetExt( ProjectFileExtension );
@@ -197,8 +196,7 @@ bool WinEDA_PcbFrame::Read_Config( const wxString& projectFileName )
      *  Because it could creates SERIOUS mistakes for the user,
      * if some items are not visible after loading a board...
      */
-    for( ii = 0; ii < LAYER_COUNT; ii++ )
-        g_DesignSettings.SetLayerVisibility( ii, true );
+    g_DesignSettings.SetVisibleLayers( FULL_LAYERS );
 
     DisplayOpt.Show_Modules_Cmp = true;
     DisplayOpt.Show_Modules_Cu = true;

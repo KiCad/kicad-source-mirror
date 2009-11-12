@@ -259,6 +259,12 @@ this file again."));
     /* Rebuild the new pad list (for drc and ratsnet control ...) */
     GetBoard()->m_Status_Pcb = 0;
 
+    /* Reset the layers visibility flag when loading a new config
+     *  Because it could creates SERIOUS mistakes for the user,
+     * if some layers are not visible after loading a board...
+     */
+    GetBoard()->SetVisibleLayers( GetBoard()->GetEnabledLayers() );
+
     // Display the loaded board:
     DrawPanel->Refresh( true);
     wxSafeYield();      // Needed if we want to see the board now.
