@@ -1,6 +1,6 @@
-/*******************************************************/
-/* class_pad_draw_function.cpp : functionsto draw pads */
-/*******************************************************/
+/*******************************/
+/* class_pad_draw_function.cpp */
+/*******************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -14,16 +14,13 @@
 #include "class_board_design_settings.h"
 
 
-/*******************************************************************************************/
-void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
-                  const wxPoint& offset )
-/*******************************************************************************************/
-
 /** Draw a pad:
  *  @param  DC = device context
  *  @param offset = draw offset
  *  @param draw_mode = mode: GR_OR, GR_XOR, GR_AND...
  */
+void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
+                  const wxPoint& offset )
 {
     int ii;
     int color = 0;
@@ -36,7 +33,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     wxPoint coord[4];
     int     fillpad = 0;
     wxPoint shape_pos;
-    wxSize  mask_margin;       // margin (clearance) used for some non copper layers
+    wxSize  mask_margin;  // margin (clearance) used for some non copper layers
 
     if( m_Flags & DO_NOT_DRAW )
         return;
@@ -123,7 +120,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
 
 
     // if PAD_SMD pad and high contrast mode
-    if( (m_Attribut==PAD_SMD || m_Attribut==PAD_CONN) && DisplayOpt.ContrastModeDisplay )
+    if( ( m_Attribut == PAD_SMD || m_Attribut == PAD_CONN )
+       && DisplayOpt.ContrastModeDisplay )
     {
         // when routing tracks
         if( frame && frame->m_ID_current_state == ID_TRACK_BUTT )
@@ -134,8 +132,10 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
             // if routing between copper and component layers,
             // or the current layer is one of said 2 external copper layers,
             // then highlight only the current layer.
-            if( ( (1 << routeTop) | (1 << routeBot) ) == (CUIVRE_LAYER | CMP_LAYER)
-               || ( (1 << screen->m_Active_Layer) & (CUIVRE_LAYER | CMP_LAYER) ) )
+            if( ( ( 1 << routeTop ) | ( 1 << routeBot ) )
+               == ( CUIVRE_LAYER | CMP_LAYER )
+               || ( ( 1 << screen->m_Active_Layer )
+                   & ( CUIVRE_LAYER | CMP_LAYER ) ) )
             {
                 if( !IsOnLayer( screen->m_Active_Layer ) )
                 {
@@ -143,9 +143,9 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
                     color |= DARKDARKGRAY;
                 }
             }
-            // else routing between an internal signal layer and some other layer.
-            // grey out all PAD_SMD pads not on current or the single selected
-            // external layer.
+            // else routing between an internal signal layer and some other
+            // layer.  Grey out all PAD_SMD pads not on current or the single
+            // selected external layer.
             else if( !IsOnLayer( screen->m_Active_Layer )
                     && !IsOnLayer( routeTop )
                     && !IsOnLayer( routeBot ) )
@@ -154,7 +154,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
                 color |= DARKDARKGRAY;
             }
         }
-        // when not edting tracks, show PAD_SMD components not on active layer as greyed out
+        // when not edting tracks, show PAD_SMD components not on active layer
+        // as greyed out
         else
         {
             if( !IsOnLayer( screen->m_Active_Layer ) )
@@ -165,16 +166,18 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         }
     }
 
-    // if Contrast mode is ON and a technical layer active, show pads on this layer
-    // so we can see pads on paste or solder layer and the size of the mask
-    if( DisplayOpt.ContrastModeDisplay && screen->m_Active_Layer > LAST_COPPER_LAYER )
+    // if Contrast mode is ON and a technical layer active, show pads on this
+    // layer so we can see pads on paste or solder layer and the size of the
+    // mask
+    if( DisplayOpt.ContrastModeDisplay
+        && screen->m_Active_Layer > LAST_COPPER_LAYER )
     {
         if( IsOnLayer( screen->m_Active_Layer ) )
         {
             color = g_DesignSettings.m_LayerColor[screen->m_Active_Layer];
 
-            // In hight contrast mode, and if the active layer is the mask layer
-            // shows the pad size with the mask clearance
+            // In hight contrast mode, and if the active layer is the mask
+            // layer shows the pad size with the mask clearance
             switch( screen->m_Active_Layer )
             {
             case SOLDERMASK_N_CU:
@@ -228,9 +231,9 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     SetAlpha( &color, 170 );
 
     /* Get the pad clearance. This has a meaning only for Pcbnew.
-     *  for Cvpcb (and Gerbview) GetClearance() creates debug errors because there is no
-     *  net classes so a call to GetClearance() is made only when needed
-     *  (never needed in Cvpcb nor in Gerbview)
+     *  for Cvpcb (and Gerbview) GetClearance() creates debug errors because
+     *  there is no net classes so a call to GetClearance() is made only when
+     *   needed (never needed in Cvpcb nor in Gerbview)
      */
     int padClearance = DisplayIsol ? GetClearance() : 0;
 
@@ -238,9 +241,11 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     {
     case PAD_CIRCLE:
         if( fillpad )
-            GRFilledCircle( &panel->m_ClipBox, DC, xc, yc, dx + mask_margin.x, 0, color, color );
+            GRFilledCircle( &panel->m_ClipBox, DC, xc, yc,
+                            dx + mask_margin.x, 0, color, color );
         else
-            GRCircle( &panel->m_ClipBox, DC, xc, yc, dx + mask_margin.x, 0, color );
+            GRCircle( &panel->m_ClipBox, DC, xc, yc, dx + mask_margin.x,
+                      0, color );
 
         if( DisplayIsol )
         {
@@ -255,18 +260,17 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         break;
 
     case PAD_OVAL:
-        /* calcul de l'entraxe de l'ellipse */
-        if( dx > dy )       /* ellipse horizontale */
+        if( dx > dy )       /* horizontal */
         {
             delta_cx = dx - dy;
             delta_cy = 0;
-            rotdx    = m_Size.y + (mask_margin.y*2);
+            rotdx    = m_Size.y + ( mask_margin.y * 2 );
         }
-        else                /* ellipse verticale */
+        else                /* vertical */
         {
             delta_cx = 0;
             delta_cy = dy - dx;
-            rotdx    = m_Size.x + (mask_margin.x*2);
+            rotdx    = m_Size.x + ( mask_margin.x * 2 );
         }
         RotatePoint( &delta_cx, &delta_cy, angle );
 
@@ -285,7 +289,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
                      rotdx, color );
         }
 
-        /* Trace de la marge d'isolement */
+        /* Draw the isolation line. */
         if( DisplayIsol )
         {
             rotdx = rotdx + 2 * padClearance;
@@ -300,8 +304,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     case PAD_TRAPEZOID:
     {
         int ddx, ddy;
-        ddx = (m_DeltaSize.x >> 1);
-        ddy = (m_DeltaSize.y >> 1);      /* demi dim  dx et dy */
+        ddx = ( m_DeltaSize.x >> 1 );
+        ddy = ( m_DeltaSize.y >> 1 );
 
         coord[0].x = -dx - ddy - mask_margin.x;
         coord[0].y = +dy + ddx + mask_margin.y;
@@ -373,7 +377,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
             color = g_DrawBgColor;
         }
         else
-            color = BLACK; // or DARKGRAY;
+            color = BLACK;  // or DARKGRAY;
 
         if( draw_mode != GR_XOR )
             GRSetDrawMode( DC, GR_COPY );
@@ -383,30 +387,32 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         switch( m_DrillShape )
         {
         case PAD_CIRCLE:
-            if( screen->Scale( hole ) > 1 ) /* draw hole if its size is enought */
-                GRFilledCircle( &panel->m_ClipBox, DC, cx0, cy0, hole, 0, color, color );
+            if( screen->Scale( hole ) > 1 ) /* draw hole if its size is enought
+                                             */
+                GRFilledCircle( &panel->m_ClipBox, DC, cx0, cy0, hole, 0,
+                                color, color );
             break;
 
         case PAD_OVAL:
             dx = m_Drill.x >> 1;
-            dy = m_Drill.y >> 1;            /* demi dim  dx et dy */
+            dy = m_Drill.y >> 1;
 
-            /* calcul de l'entraxe de l'ellipse */
-            if( m_Drill.x > m_Drill.y )     /* ellipse horizontale */
+            if( m_Drill.x > m_Drill.y )  /* horizontal */
             {
-                delta_cx = dx - dy; delta_cy = 0;
+                delta_cx = dx - dy;
+                delta_cy = 0;
                 rotdx    = m_Drill.y;
             }
-            else                /* ellipse verticale */
+            else                         /* vertical */
             {
-                delta_cx = 0; delta_cy = dy - dx;
+                delta_cx = 0;
+                delta_cy = dy - dx;
                 rotdx    = m_Drill.x;
             }
             RotatePoint( &delta_cx, &delta_cy, angle );
 
             GRFillCSegm( &panel->m_ClipBox, DC, cx0 + delta_cx, cy0 + delta_cy,
-                         cx0 - delta_cx, cy0 - delta_cy,
-                         rotdx, color );
+                         cx0 - delta_cx, cy0 - delta_cy, rotdx, color );
             break;
 
         default:
@@ -419,17 +425,17 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
 
     GRSetDrawMode( DC, draw_mode );
 
-    /* Trace du symbole "No connect" ( / ou \ ou croix en X) si necessaire : */
+    /* Draw "No connect" ( / or \ or cross X ) if necessary. : */
     if( m_Netname.IsEmpty() && DisplayOpt.DisplayPadNoConn )
     {
         dx0 = MIN( dx0, dy0 );
         int nc_color = BLUE;
 
-        if( m_Masque_Layer & CMP_LAYER ) /* Trace forme \ */
+        if( m_Masque_Layer & CMP_LAYER )    /* Draw \ */
             GRLine( &panel->m_ClipBox, DC, cx0 - dx0, cy0 - dx0,
                     cx0 + dx0, cy0 + dx0, 0, nc_color );
 
-        if( m_Masque_Layer & CUIVRE_LAYER ) /* Trace forme / */
+        if( m_Masque_Layer & CUIVRE_LAYER ) /* Draw / */
             GRLine( &panel->m_ClipBox, DC, cx0 + dx0, cy0 - dx0,
                     cx0 - dx0, cy0 + dx0, 0, nc_color );
     }
@@ -440,15 +446,17 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         display_padnum = false;
 
     bool display_netname = true;
-    if( (DisplayOpt.DisplayNetNamesMode == 0) || (DisplayOpt.DisplayNetNamesMode == 2) )
+    if( ( DisplayOpt.DisplayNetNamesMode == 0 )
+       || ( DisplayOpt.DisplayNetNamesMode == 2 ) )
         display_netname = false;
 
     if( !display_padnum && !display_netname )
         return;
 
-    wxPoint tpos0 = wxPoint( ux0, uy0 );        // Position of the centre of text
+    wxPoint tpos0 = wxPoint( ux0, uy0 );    // Position of the centre of text
     wxPoint tpos  = tpos0;
-    wxSize  AreaSize;                           // size of text area, normalized to AreaSize.y < AreaSize.x
+    wxSize  AreaSize;                       // size of text area, normalized to
+                                            // AreaSize.y < AreaSize.x
     int     shortname_len = m_ShortNetname.Len();
     if( !display_netname )
         shortname_len = 0;
@@ -462,22 +470,26 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         AreaSize.y = m_Size.x;
     }
 
-    if( shortname_len > 0 )             // if there is a netname, provides room to display this netname
+    if( shortname_len > 0 )             // if there is a netname, provides room
+                                        // to display this netname
     {
-        AreaSize.y /= 2;                // Text used only the upper area of the pad. The lower area displays the net name
+        AreaSize.y /= 2;                // Text used only the upper area of the
+                                        // pad. The lower area displays the net
+                                        // name
         tpos.y     -= AreaSize.y / 2;
     }
 
-    // Calculate the position of text, that is the middle point of the upper area of the pad
+    // Calculate the position of text, that is the middle point of the upper
+    // area of the pad
     RotatePoint( &tpos, wxPoint( ux0, uy0 ), angle );
 
     /* Draw text with an angle between -90 deg and + 90 deg */
     int t_angle = angle;
     NORMALIZE_ANGLE_90( t_angle );
 
-    /* Note: in next calculations, texte size is calculated for 3 or more chars.
-     *  Of course, pads numbers and nets names can have less than 3 chars.
-     *  but after some tries, i found this is gives the best look
+    /* Note: in next calculations, texte size is calculated for 3 or more
+     * chars.  Of course, pads numbers and nets names can have less than 3
+     * chars. but after some tries, i found this is gives the best look
      */
     #define MIN_CHAR_COUNT 3
     wxString buffer;
@@ -491,15 +503,17 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
 
         tsize = min( AreaSize.y, AreaSize.x / numpad_len );
         #define CHAR_SIZE_MIN 5
-        if( screen->Scale( tsize ) >= CHAR_SIZE_MIN )       // Not drawable when size too small.
+        if( screen->Scale( tsize ) >= CHAR_SIZE_MIN )   // Not drawable when
+                                                        // size too small.
         {
-            tsize = (int) ( tsize * 0.8 );                  // reserve room for marges and segments thickness
+            tsize = (int) ( tsize * 0.8 );              // reserve room for
+                                                        // marges and segments
+                                                        // thickness
 
-            DrawGraphicText( panel, DC, tpos,
-                             WHITE, buffer, t_angle, wxSize( tsize,
-                                                             tsize ),
-                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false,
-                             false, false );
+            DrawGraphicText( panel, DC, tpos, WHITE, buffer, t_angle,
+                             wxSize( tsize, tsize ), GR_TEXT_HJUSTIFY_CENTER,
+                             GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false,
+                             false );
         }
     }
 
@@ -510,20 +524,22 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     shortname_len = MAX( shortname_len, MIN_CHAR_COUNT );
     tsize = min( AreaSize.y, AreaSize.x / shortname_len );
 
-    if( screen->Scale( tsize ) >= CHAR_SIZE_MIN )   // Not drawable in size too small.
+    if( screen->Scale( tsize ) >= CHAR_SIZE_MIN )   // Not drawable in size too
+                                                    // small.
     {
-        if( !(!IsOnLayer( screen->m_Active_Layer )&& DisplayOpt.ContrastModeDisplay) )
+        if( !( !IsOnLayer( screen->m_Active_Layer )
+               && DisplayOpt.ContrastModeDisplay ) )
         {
             tpos = tpos0;
             if( display_padnum )
                 tpos.y += AreaSize.y / 2;
             RotatePoint( &tpos, wxPoint( ux0, uy0 ), angle );
 
-            tsize = (int) ( tsize * 0.8 );   // reserve room for marges and segments thickness
-            DrawGraphicText( panel, DC, tpos,
-                             WHITE, m_ShortNetname, t_angle, wxSize( tsize, tsize ),
-                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize / 7,
-                             false, false );
+            tsize = (int) ( tsize * 0.8 );   // reserve room for marges and
+                                             // segments thickness
+            DrawGraphicText( panel, DC, tpos, WHITE, m_ShortNetname, t_angle,
+                             wxSize( tsize, tsize ), GR_TEXT_HJUSTIFY_CENTER,
+                             GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false );
         }
     }
 }

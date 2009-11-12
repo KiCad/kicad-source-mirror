@@ -1,5 +1,5 @@
 /******************************************/
-/* Track editing: attribute flags edition */
+/* Track editing: attribute flags editing */
 /******************************************/
 
 #include "fctsys.h"
@@ -12,15 +12,12 @@
 #include "protos.h"
 
 
-/*****************************************************************************/
-void WinEDA_PcbFrame::Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On )
-/*****************************************************************************/
-
 /* Attribute change for 1 track segment.
  *  Attributes are
- *  SEGM_FIXE		protection against global delete
- *  SEGM_AR			AutoRouted segment
+ *  SEGM_FIXE       protection against global delete
+ *  SEGM_AR         AutoRouted segment
  */
+void WinEDA_PcbFrame::Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On )
 {
     if( track == NULL )
         return;
@@ -34,10 +31,8 @@ void WinEDA_PcbFrame::Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On )
 }
 
 
-/***************************************************************************/
-void WinEDA_PcbFrame::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
-/***************************************************************************/
 /* Attribute change for an entire track */
+void WinEDA_PcbFrame::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
 {
     TRACK* Track;
     int    nb_segm;
@@ -62,14 +57,11 @@ void WinEDA_PcbFrame::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
 }
 
 
-/***********************************************************************/
-void WinEDA_PcbFrame::Attribut_net( wxDC* DC, int net_code, bool Flag_On )
-/***********************************************************************/
-
 /* Modify the flag SEGM_FIXE according to Flag_On value,
  *  for all the segments related to net_code.
  *  if net_code < 0 all the segments are modified.
  */
+void WinEDA_PcbFrame::Attribut_net( wxDC* DC, int net_code, bool Flag_On )
 {
     TRACK* Track = GetBoard()->m_Track;
 

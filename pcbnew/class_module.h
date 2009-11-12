@@ -11,71 +11,82 @@ class S3D_MASTER;
 /* pad are in class_pad.xx          */
 /************************************/
 
-/* Format des modules:
- *  Description generale
- *  Description segments contour
- *  Description textes
- *  Description pastilles
- */
 
-/* Flags :*/
-
-enum Mod_Attribut       /* Attributs used for modules */
+enum Mod_Attribut       /* Attributes used for modules */
 {
     MOD_DEFAULT = 0,    /* Type default */
     MOD_CMS = 1,        /* Set for modules listed in the automatic insertion list
                          *  (usually SMD footprints) */
-    MOD_VIRTUAL = 2     /* Virtuel component: when created by copper shapes on board
-                         *  (Like edge card connectors, mounting hole...) */
+    MOD_VIRTUAL = 2     /* Virtual component: when created by copper shapes on
+                         * board (Like edge card connectors, mounting hole...) */
 };
 
 
 /* flags for autoplace and autoroute (.m_ModuleStatus member) */
-#define MODULE_is_LOCKED 0x01       /* module LOCKED: no autoplace allowed */
-#define MODULE_is_PLACED 0x02       /* In autoplace: module automatically placed */
-#define MODULE_to_PLACE  0x04       /* In autoplace: module waiting for autoplace */
+#define MODULE_is_LOCKED 0x01  /* module LOCKED: no autoplace allowed */
+#define MODULE_is_PLACED 0x02  /* In autoplace: module automatically placed */
+#define MODULE_to_PLACE  0x04  /* In autoplace: module waiting for autoplace */
 
 class MODULE : public BOARD_ITEM
 {
 public:
-    wxPoint           m_Pos;                // Real coord on board
-    DLIST<D_PAD>      m_Pads;               /* Pad list (linked list) */
-    DLIST<BOARD_ITEM> m_Drawings;           /* Graphic items list (linked list) */
-    DLIST<S3D_MASTER> m_3D_Drawings;        /* First item of the 3D shapes (linked list)*/
-    TEXTE_MODULE*     m_Reference;          // Component reference (U34, R18..)
-    TEXTE_MODULE*     m_Value;              // Component value (74LS00, 22K..)
-    wxString          m_LibRef;             /* Name of the module in library (and the default value when loading amodule from the library) */
-    wxString          m_AlternateReference;    /* Used when m_Reference cannot be used to
-                                                * identify the footprint ( after a full reannotation of the schematic */
+    wxPoint           m_Pos;           // Real coord on board
+    DLIST<D_PAD>      m_Pads;          /* Pad list (linked list) */
+    DLIST<BOARD_ITEM> m_Drawings;      /* Graphic items list (linked list) */
+    DLIST<S3D_MASTER> m_3D_Drawings;   /* First item of the 3D shapes (linked
+                                        * list)*/
+    TEXTE_MODULE*     m_Reference;     // Component reference (U34, R18..)
+    TEXTE_MODULE*     m_Value;         // Component value (74LS00, 22K..)
+    wxString          m_LibRef;        /* Name of the module in library (and
+                                        * the default value when loading a
+                                        *module from the library) */
+    wxString          m_AlternateReference;  /* Used when m_Reference cannot
+                                              * be used to identify the
+                                              * footprint ( after a full
+                                              * reannotation of the schematic */
 
-    int           m_Attributs;          /* Flags(ORed bits) ( see Mod_Attribut ) */
+    int           m_Attributs;          /* Flag bits ( see Mod_Attribut ) */
     int           m_Orient;             /* orientation in 0.1 degrees */
-    int           flag;                 /* flag utilise en trace rastnest et routage auto */
-    int           m_ModuleStatus;       /* For autoplace: flags (LOCKED, AUTOPLACED) */
-    EDA_Rect      m_BoundaryBox;        /* Bounding box coordinates relatives to the anchor, orient 0*/
-    EDA_Rect      m_RealBoundaryBox;    /* Bounding box : coordinates on board, real orientation */
+    int           flag;                 /* Use to trace rastnest and auto
+                                         * routing. */
+    int           m_ModuleStatus;       /* For autoplace: flags (LOCKED,
+                                         * AUTOPLACED) */
+    EDA_Rect      m_BoundaryBox;        /* Bounding box coordinates relatives
+                                         * to the anchor, orient 0*/
+    EDA_Rect      m_RealBoundaryBox;    /* Bounding box : coordinates on board,
+                                         * real orientation */
     int           m_PadNum;             // Pad count
-    int           m_AltPadNum;          // Pad with netcode > 0 (active pads)count
+    int           m_AltPadNum;          /* Pad with netcode > 0 (active pads)
+                                         * count */
 
-    int           m_CntRot90;           // Automatic placement : cost ( 0..10 ) for 90 degrees rotaion (Horiz<->Vertical)
-    int           m_CntRot180;          // Automatic placement : cost ( 0..10 ) for 180 degrees rotaion (UP <->Down)
-    wxSize        m_Ext;                // Automatic placement margin around the module
+    int           m_CntRot90;           /* Automatic placement : cost ( 0..10 )
+                                         * for 90 degrees rotation
+                                         * (Horiz<->Vertical) */
+    int           m_CntRot180;          /* Automatic placement : cost ( 0..10 )
+                                         * for 180 degrees rotation
+                                         * (UP <->Down) */
+    wxSize        m_Ext;                /* Automatic placement margin around
+                                         * the module */
     float         m_Surface;            // Bounding box area
 
-    unsigned long m_Link;               // Temporary variable ( used in editions, ...)
-    long          m_LastEdit_Time;      // Date de la derniere modification du module (gestion de librairies)
+    unsigned long m_Link;               /* Temporary variable ( used in
+                                         * editions, ...) */
+    long          m_LastEdit_Time;
     wxString      m_Path;
 
     wxString      m_Doc;                // Module Description (info for users)
     wxString      m_KeyWord;            // Keywords to select the module in lib
 
-    // Local clearance. When null, the netclasses values are used. Usually the local clearance is null
+    // Local clearance. When null, the netclasses values are used. Usually
+    // the local clearance is null
     int           m_LocalClearance;
 
     // Local mask margins: when NULL, the global design values are used
-    int           m_LocalSolderMaskMargin;                      // Local solder mask margin
-    int           m_LocalSolderPasteMargin;                     // Local solder paste margin absolute value
-    double        m_LocalSolderPasteMarginRatio;                // Local solder pask margin ratio value of pad size
+    int           m_LocalSolderMaskMargin;         // Solder mask margin
+    int           m_LocalSolderPasteMargin;        /* Solder paste margin
+                                                    * absolute value */
+    double        m_LocalSolderPasteMarginRatio;   /* Solder mask margin ratio
+                                                    * value of pad size */
     // The final margin is the sum of these 2 values
 
 public:
@@ -100,20 +111,21 @@ public:
 
     /**
      * Function Set_Rectangle_Encadrement()
-     * calculates the bounding box for orient 0 et origin = module anchor)
+     * calculates the bounding box for orient 0 at origin = module anchor)
      */
     void     Set_Rectangle_Encadrement();
 
     /** function SetRectangleExinscrit()
-     * Calculates the real bounding box accordint to theboard position, and real orientaion
-     *  and also calculates the area value (used in automatic placement)
+     * Calculates the real bounding box according to the board position,
+     * and real orientation and also calculates the area value (used in
+     * automatic placement)
      */
     void     SetRectangleExinscrit();
 
     /**
      * Function GetBoundingBox
      * returns the bounding box of this Footprint
-     * Mainly used to redraw the screen area occuped by the footprint
+     * Mainly used to redraw the screen area occupied by the footprint
      */
     EDA_Rect GetBoundingBox();
 
@@ -184,8 +196,9 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
-     * @param aFile The FILE to write to.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
+     * a@param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
     bool Save( FILE* aFile ) const;
@@ -206,7 +219,7 @@ public:
     /* drawing functions */
 
     /** Function Draw
-     * Draw the text accordint to the footprint pos and orient
+     * Draw the text according to the footprint pos and orient
      * @param panel = draw panel, Used to know the clip box
      * @param DC = Current Device Context
      * @param offset = draw offset (usually wxPoint(0,0)
@@ -242,7 +255,7 @@ public:
 
 
     /**
-     * Function HitTest (overlayed)
+     * Function HitTest (overlaid)
      * tests if the given EDA_Rect intersect the bounds of this object.
      * @param refArea : the given EDA_Rect
      * @return bool - true if a hit, else false
@@ -274,7 +287,8 @@ public:
      * returns a D_PAD* with a matching name.  Note that names may not be
      * unique, depending on how the foot print was created.
      * @param
-     * @return D_PAD* - The first matching name is returned, or NULL if not found.
+     * @return D_PAD* - The first matching name is returned, or NULL if not
+     *                  found.
      */
     D_PAD*        FindPadByName( const wxString& aPadName ) const;
 

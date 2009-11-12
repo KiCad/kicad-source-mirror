@@ -1,5 +1,5 @@
 /************************/
-/* file class_equipot.h */
+/* file class_netinfo.h */
 /************************/
 
 /*
@@ -11,33 +11,34 @@
 
 #include "class_netclass.h"
 
-// Forward declaration:
 class NETINFO_ITEM;
 
 
-/* Class RATSNEST_ITEM: describes a ratsnest line: a straight line connecting 2 pads */
+/* Class RATSNEST_ITEM: describes a ratsnest line: a straight line connecting
+ * 2 pads */
+
 /*****************************/
 /* flags for a RATSNEST_ITEM */
 /*****************************/
-#define CH_VISIBLE          1   /* affichage permanent demande */
-#define CH_UNROUTABLE       2   /* non route par l'autorouteur */
-#define CH_ROUTE_REQ        4   /* doit etre route par l'autorouteur */
-#define CH_ACTIF            8   /* chevelu non encore routé */
-#define LOCAL_RATSNEST_ITEM 0x8000    /* indique un chevelu reliant 2 pins d'un meme
-                                       *  module pour le calcul des chevelus relatifs a 1 seul module */
+#define CH_VISIBLE          1   /* Visible */
+#define CH_UNROUTABLE       2   /* Don't use autorouter. */
+#define CH_ROUTE_REQ        4   /* Must be routed by the autorouter. */
+#define CH_ACTIF            8   /* Not routed. */
+#define LOCAL_RATSNEST_ITEM 0x8000    /* Line between two pads of a single
+                                       * module. */
 
 class RATSNEST_ITEM
 {
 private:
-    int    m_NetCode;   // netcode ( = 1.. n ,  0 is the value used for not connected items)
+    int m_NetCode;      // netcode ( = 1.. n ,  0 is the value used for not
+                        // connected items)
 
 public:
-    int    m_Status;        // State: see previous defines (CH_ ...)
-    D_PAD* m_PadStart;      // pointer to the starting pad
-    D_PAD* m_PadEnd;        // pointer to ending pad
-    int    m_Lenght;        // lenght of the line (temporary used in some calculations)
+    int    m_Status;    // State: see previous defines (CH_ ...)
+    D_PAD* m_PadStart;  // pointer to the starting pad
+    D_PAD* m_PadEnd;    // pointer to ending pad
+    int    m_Lenght;    // length of the line (used in some calculations)
 
-    /* constructor */
     RATSNEST_ITEM();
 
     /**
@@ -58,7 +59,10 @@ public:
 
     /** function Draw
      */
-    void Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset );
+    void Draw( WinEDA_DrawPanel* panel,
+               wxDC*             DC,
+               int               aDrawMode,
+               const wxPoint&    offset );
 };
 
 /***************************************************************/
@@ -70,18 +74,21 @@ class NETINFO_LIST
 {
 private:
     BOARD* m_Parent;
-    std::vector<NETINFO_ITEM*> m_NetBuffer;                     // nets buffer list (name, design constraints ..
+    std::vector<NETINFO_ITEM*> m_NetBuffer;     // nets buffer list (name,
+                                                // design constraints ..
 
 public:
-    std::vector<D_PAD*>        m_PadsFullList;                  // Entry for a sorted pad list (used in ratsnest calculations)
+    std::vector<D_PAD*>        m_PadsFullList;  // Entry for a sorted pad
+                                                // list (used in ratsnest
+                                                // calculations)
 
-public:
-    NETINFO_LIST( BOARD* aParent );
+public: NETINFO_LIST( BOARD* aParent );
     ~NETINFO_LIST();
 
     /** Function GetItem
      * @param aNetcode = netcode to identify a given NETINFO_ITEM
-     * @return a NETINFO_ITEM pointer to the selected NETINFO_ITEM by its netcode, or NULL if not found
+     * @return a NETINFO_ITEM pointer to the selected NETINFO_ITEM by its
+     * netcode, or NULL if not found
      */
     NETINFO_ITEM* GetNetItem( int aNetcode );
 
@@ -151,32 +158,39 @@ private:
 class NETINFO_ITEM
 {
 private:
-    int               m_NetCode;        // this is a number equivalent to the net name
-                                        // Used for fast comparisons in rastnest and DRC computations.
+    int       m_NetCode;        // this is a number equivalent to the net name
+    // Used for fast comparisons in ratsnest and DRC computations.
 
-    wxString          m_Netname;        // Full net name like /mysheet/mysubsheet/vout used by eeschema
+    wxString  m_Netname;        // Full net name like /mysheet/mysubsheet/vout
+                                // used by eeschema
 
-    wxString          m_ShortNetname;   // short net name, like vout from /mysheet/mysubsheet/vout
+    wxString  m_ShortNetname;   // short net name, like vout from
+                                // /mysheet/mysubsheet/vout
 
-    wxString          m_NetClassName;   // Net Class name. if void this is equivalent to "default" (the first
-                                        // item of the net classes list
+    wxString  m_NetClassName;   // Net Class name. if void this is equivalent
+                                // to "default" (the first
+                                // item of the net classes list
 
-    NETCLASS*         m_NetClass;
+    NETCLASS* m_NetClass;
 
 
 public:
-    int     m_NbNodes;                              // Pads count for this net
-    int     m_NbLink;                               // Ratsnets count for this net
-    int     m_NbNoconn;                             // Ratsnets remaining to route count
-    int     m_Flag;                                 // used in some calculations. Had no special meaning
+    int m_NbNodes;                      // Pads count for this net
+    int m_NbLink;                       // Ratsnets count for this net
+    int m_NbNoconn;                     // Ratsnets remaining to route count
+    int m_Flag;                         // used in some calculations. Had no
+                                        // special meaning
 
-    std::vector <D_PAD*>         m_ListPad;         // List of pads connected to this net
+    std::vector <D_PAD*> m_ListPad;     // List of pads connected to this net
 
-    unsigned m_RatsnestStartIdx;                    /* Starting point of ratsnests of this net (included)
-                                                     * in a general buffer of ratsnest (a vector<RATSNEST_ITEM*> buffer)
-                                                     */
+    unsigned             m_RatsnestStartIdx; /* Starting point of ratsnests of
+                                              * this
+                                       * net (included) in a general buffer of
+                                       * ratsnest (a vector<RATSNEST_ITEM*>
+                                       * buffer) */
 
-    unsigned m_RatsnestEndIdx;                      // Ending point of ratsnests of this net (excluded) in this buffer
+    unsigned m_RatsnestEndIdx;         // Ending point of ratsnests of this net
+                                       // (excluded) in this buffer
 
     NETINFO_ITEM( BOARD_ITEM* aParent );
     ~NETINFO_ITEM();
@@ -187,28 +201,32 @@ public:
      */
     void SetClass( const NETCLASS* aNetClass )
     {
-        m_NetClass     = (NETCLASS*) aNetClass;
+        m_NetClass = (NETCLASS*) aNetClass;
         if( aNetClass )
             m_NetClassName = aNetClass->GetName();
         else
             m_NetClassName = NETCLASS::Default;
     }
 
+
     NETCLASS* GetNetClass()
     {
         return m_NetClass;
     }
 
+
     /**
      * Function GetClassName
      * returns the class name
      */
-    const wxString& GetClassName( ) const
+    const wxString& GetClassName() const
     {
         return m_NetClassName;
     }
 
+
 #if 1
+
     /**
      * Function GetTrackWidth
      * returns the width of tracks used to route this net.
@@ -221,6 +239,7 @@ public:
 
 
 #if 0
+
     /**
      * Function GetTrackMinWidth
      * returns the Minimum value for tracks thickness (used in DRC)
@@ -229,6 +248,8 @@ public:
     {
         return g_DesignSettings.m_TrackMinWidth;
     }
+
+
 #endif
 
     /**
@@ -240,6 +261,7 @@ public:
         wxASSERT( m_NetClass );
         return m_NetClass->GetViaDiameter();
     }
+
 
     /**
      * Function GetMicroViaSize
@@ -262,6 +284,7 @@ public:
         return m_NetClass->GetViaDrill();
     }
 
+
     /**
      * Function GetViaDrillSize
      * returns the size of via drills used to route this net
@@ -273,8 +296,8 @@ public:
     }
 
 
-
 #if 0
+
     /**
      * Function GetViaMinSize
      * returns the Minimum value for via sizes (used in DRC)
@@ -284,6 +307,8 @@ public:
         wxASSERT( m_NetClass );
         return m_NetClass->GetViaMinSize();
     }
+
+
 #endif
 
     /**
@@ -295,6 +320,8 @@ public:
         wxASSERT( m_NetClass );
         return m_NetClass->GetClearance();
     }
+
+
 #endif
 
     /* Reading and writing data on files */
@@ -302,7 +329,8 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
@@ -310,9 +338,11 @@ public:
 
 
     /** function Draw
-     * @todo we actually could show a NET, simply show all the tracks and pads or net name on pad and vias
+     * @todo we actually could show a NET, simply show all the tracks and
+     *       a pads or net name on pad and vias
      */
-    void Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset );
+    void Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode,
+               const wxPoint& offset );
 
 
     /**
@@ -354,9 +384,9 @@ public:
 };
 
 
-/****************************************************************/
-/* description d'un point de piste pour le suivi des connexions */
-/****************************************************************/
+/***********************************************************/
+/* Description of a trace point for monitoring connections */
+/***********************************************************/
 #define START_ON_PAD   0x10
 #define END_ON_PAD     0x20
 #define START_ON_TRACK 0x40
@@ -365,13 +395,14 @@ public:
 
 /* Status bit (OR'ed bits) for class BOARD member .m_Status_Pcb */
 enum StatusPcbFlags {
-    LISTE_PAD_OK = 1,                           /* Pad list is Ok */
-    LISTE_RATSNEST_ITEM_OK = 2,                 /* General Rastnest is Ok */
-    RATSNEST_ITEM_LOCAL_OK = 4,                 /* current MODULE rastnest is Ok */
-    CONNEXION_OK = 8,                           /* Bit indicant que la liste des connexions existe */
-    NET_CODES_OK = 0x10,    /* Bit indicant que les netcodes sont OK ( pas de modif
-                             *  de noms de net */
-    DO_NOT_SHOW_GENERAL_RASTNEST = 0x20         /* Do not display the general rastnest (used in module moves) */
+    LISTE_PAD_OK = 1,                       /* Pad list is Ok */
+    LISTE_RATSNEST_ITEM_OK = 2,             /* General Ratsnest is Ok */
+    RATSNEST_ITEM_LOCAL_OK = 4,             /* current MODULE ratsnest is Ok */
+    CONNEXION_OK = 8,                       /* List of connections exists. */
+    NET_CODES_OK = 0x10,                 /* Bit indicating that Netcode is OK,
+                                          * do not change net name.  */
+    DO_NOT_SHOW_GENERAL_RASTNEST = 0x20  /* Do not display the general
+                                          * ratsnest (used in module moves) */
 };
 
 

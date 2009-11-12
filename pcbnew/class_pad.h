@@ -6,7 +6,7 @@ class Pcb3D_GLCanvas;
 
 #include "pad_shapes.h"
 
-/* Default layers used for pads, accordint to the pad type.
+/* Default layers used for pads, according to the pad type.
  * this is default values only, they can be changed for a given pad
  */
 
@@ -25,7 +25,6 @@ class Pcb3D_GLCanvas;
     SOLDERMASK_LAYER_CU | SOLDERMASK_LAYER_CMP
 
 
-/* Definition type Structure d'un pad */
 class D_PAD : public BOARD_CONNECTED_ITEM
 {
 private:
@@ -54,11 +53,11 @@ public:
     wxSize m_Drill;                 // Drill diam (drill shape = PAD_CIRCLE) or drill size(shape = OVAL)
                                     // for drill shape = PAD_CIRCLE, drill diam = m_Drill.x
 
-    wxSize m_Offset;    /* This parameter is usefull only for oblong pads (it can be used for other
+    wxSize m_Offset;    /* This parameter is useful only for oblong pads (it can be used for other
                          * shapes, but without any interest).
                          * this is the offset between the pad hole and the pad shape (you must
                          * understand here pad shape = copper area around the hole)
-                         * Most of cases, the hole is the centre of the shape (m_Offset = 0).
+                         * Most of cases, the hole is the center of the shape (m_Offset = 0).
                          * But some board designers use oblong pads with a hole moved to one of the
                          * oblong pad shape ends.
                          * In all cases the pad position is the pad hole.
@@ -69,11 +68,11 @@ public:
 
     wxSize  m_Size;                 // X and Y size ( relative to orient 0)
 
-    wxSize  m_DeltaSize;            // delta sur formes rectangle -> trapezes
+    wxSize  m_DeltaSize;            // delta on rectangular shapes
 
     wxPoint m_Pos0;                 // Initial Pad position (i.e. pas position relative to the module anchor, orientation 0
 
-    int     m_Rayon;                // rayon du cercle exinscrit du pad
+    int     m_Rayon;                // radius of pad circle
     int     m_Attribut;             // NORMAL, PAD_SMD, PAD_CONN
     int     m_Orient;               // in 1/10 degrees
 
@@ -85,7 +84,7 @@ public:
     // Local mask margins: when NULL, the parent footprint design values are used
     int    m_LocalSolderMaskMargin;                             // Local solder mask margin
     int    m_LocalSolderPasteMargin;                            // Local solder paste margin absolute value
-    double m_LocalSolderPasteMarginRatio;                       // Local solder pask margin ratio value of pad size
+    double m_LocalSolderPasteMarginRatio;                       // Local solder mask margin ratio value of pad size
     // The final margin is the sum of these 2 values
 
 private:
@@ -169,7 +168,7 @@ public:
     /** Function GetSolderPasteMargin
      * @return the margin for the solder mask layer
      * usually < 0 (mask shape smaller than pad
-     * because the margin can be dependant on the pad size, the margin has a x and a y value
+     * because the margin can be dependent on the pad size, the margin has a x and a y value
      * value is
      * 1 - the local value
      * 2 - if null, the parent footprint value
@@ -199,8 +198,8 @@ public:
     void          SetPadName( const wxString& name );       // Change pad name
     wxString      ReturnStringPadName();                    // Return pad name as string in a wxString
     void          ReturnStringPadName( wxString& text );    // Return pad name as string in a buffer
-    void          ComputeRayon();                           // compute m_Rayon, rayon du cercle exinscrit
-    const wxPoint ReturnShapePos();                         // retourne la position
+    void          ComputeRayon();                           // compute radius
+    const wxPoint ReturnShapePos();
 
 
     /**
@@ -254,7 +253,7 @@ public:
     /**
      * Function GetBoundingBox
      * returns the bounding box of this pad
-     * Mainly used to redraw the screen area occuped by the pad
+     * Mainly used to redraw the screen area occupied by the pad
      */
     EDA_Rect   GetBoundingBox();
 

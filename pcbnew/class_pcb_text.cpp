@@ -28,13 +28,11 @@ TEXTE_PCB::TEXTE_PCB( BOARD_ITEM* parent ) :
 }
 
 
-/* Destructeur */
 TEXTE_PCB:: ~TEXTE_PCB()
 {
 }
 
 
-/* copie de stucture */
 void TEXTE_PCB::Copy( TEXTE_PCB* source )
 {
     m_Parent    = source->m_Parent;
@@ -56,31 +54,28 @@ void TEXTE_PCB::Copy( TEXTE_PCB* source )
 }
 
 
-/****************************************************************/
-int TEXTE_PCB::ReadTextePcbDescr( FILE* File, int* LineNum )
-/****************************************************************/
-
 /** Function ReadTextePcbDescr
- *  Read a pcb text description
- *  The format is like:
- *  $TEXTPCB
- *  Te "Text example"
- *  Po 66750 53450 600 800 150 0
- *  De 24 1 0 Italic
- *  $EndTEXTPCB
- *  for a single line text
+ * Read a text description from pcb file.
  *
- *  or
+ * For a single line text:
  *
- *  $TEXTPCB
- *  Te "Text example"
- *  nl "ligne 2"
- *  Po 66750 53450 600 800 150 0
- *  De 24 1 0 Italic
- *  $EndTEXTPCB
- *  for a multi line text
- *  nl "ligne nn"   is a line added to the current text
+ * $TEXTPCB
+ * Te "Text example"
+ * Po 66750 53450 600 800 150 0
+ * From 24 1 0 Italic
+ * $EndTEXTPCB
+ *
+ * For a multi line text
+ *
+ * $TEXTPCB
+ * Te "Text example"
+ * Nl "Line 2"
+ * Po 66750 53450 600 800 150 0
+ * From 24 1 0 Italic
+ * $EndTEXTPCB
+ * Nl "line nn" is a line added to the current text
  */
+int TEXTE_PCB::ReadTextePcbDescr( FILE* File, int* LineNum )
 {
     char text[1024], Line[1024];
     char style[256];
@@ -137,7 +132,7 @@ int TEXTE_PCB::ReadTextePcbDescr( FILE* File, int* LineNum )
         }
     }
 
-     // Set a reasonnable width:
+     // Set a reasonable width:
     if( m_Width < 1 )
         m_Width = 1;
     m_Width = Clamp_Text_PenSize( m_Width, m_Size );
@@ -146,9 +141,7 @@ int TEXTE_PCB::ReadTextePcbDescr( FILE* File, int* LineNum )
 }
 
 
-/*****************************************/
 bool TEXTE_PCB::Save( FILE* aFile ) const
-/*****************************************/
 {
     if( GetState( DELETED ) )
         return true;
@@ -185,17 +178,14 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
 }
 
 
-/**********************************************************************/
-void TEXTE_PCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                      int DrawMode, const wxPoint& offset )
-/**********************************************************************/
-
 /** Function Draw
  *  DrawMode = GR_OR, GR_XOR ..
  * Like tracks, texts are drawn in filled or sketch mode, never in line mode
  * because the line mode does not keep the actual size of the text
  * and the actual size is very important, especially for copper texts
  */
+void TEXTE_PCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                      int DrawMode, const wxPoint& offset )
 {
     if( g_DesignSettings.IsLayerVisible( m_Layer ) == false )
         return;
@@ -206,13 +196,10 @@ void TEXTE_PCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     if ( DisplayOpt.DisplayDrawItems == SKETCH)
         fillmode = SKETCH;
 
-    EDA_TextStruct::Draw(
-        panel, DC,
-        offset,
-        (EDA_Colors) color,
-        DrawMode, fillmode,
-        g_DesignSettings.IsElementVisible( ANCHOR_VISIBLE ) ?
-            (EDA_Colors) g_AnchorColor : UNSPECIFIED_COLOR );
+    EDA_TextStruct::Draw( panel, DC, offset, (EDA_Colors) color,
+                          DrawMode, fillmode,
+                          g_DesignSettings.IsElementVisible( ANCHOR_VISIBLE ) ?
+                          (EDA_Colors) g_AnchorColor : UNSPECIFIED_COLOR );
 }
 
 
@@ -260,6 +247,7 @@ void TEXTE_PCB::DisplayInfo( WinEDA_DrawFrame* frame )
     frame->AppendMsgPanel( _( "V Size" ), msg, RED );
 }
 
+
 /**
  * Function Rotate
  * Rotate this object.
@@ -276,6 +264,7 @@ void TEXTE_PCB::Rotate(const wxPoint& aRotCentre, int aAngle)
         m_Orient += 3600;
 }
 
+
 /**
  * Function Flip
  * Flip this object, i.e. change the board side for this object
@@ -283,15 +272,14 @@ void TEXTE_PCB::Rotate(const wxPoint& aRotCentre, int aAngle)
  */
 void TEXTE_PCB::Flip(const wxPoint& aCentre )
 {
-    m_Pos.y  = aCentre.y - (m_Pos.y - aCentre.y);
+    m_Pos.y  = aCentre.y - ( m_Pos.y - aCentre.y );
     NEGATE( m_Orient );
-    if( (GetLayer() == COPPER_LAYER_N) || (GetLayer() == CMP_N) )
+    if( ( GetLayer() == COPPER_LAYER_N ) || ( GetLayer() == CMP_N ) )
     {
-        m_Mirror = not m_Mirror;      /* inverse miroir */
+        m_Mirror = not m_Mirror;      /* inverse mirror */
     }
     SetLayer( ChangeSideNumLayer( GetLayer() ) );
 }
-
 
 
 #if defined(DEBUG)
@@ -309,7 +297,8 @@ void TEXTE_PCB::Show( int nestLevel, std::ostream& os )
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
     " string=\"" << m_Text.mb_str() << "\"/>\n";
 
-//    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
+//    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str()
+//                                 << ">\n";
 }
 
 

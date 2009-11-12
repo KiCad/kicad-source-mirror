@@ -1,5 +1,5 @@
 /*************************************************************************/
-/* NETINFO_ITEM class, to handle info on nets (netnames, net constraints ...) */
+/* NETINFO_ITEM class, to handle info on nets (netnames, net constraints */
 /*************************************************************************/
 
 #include "fctsys.h"
@@ -14,16 +14,16 @@
 /* class NETINFO_ITEM: handle data relative to a given net */
 /*********************************************************/
 
-/* Constructor */
 NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent )
 {
     SetNet( 0 );
-    m_NbNodes = 0;
-    m_NbLink = 0;
+    m_NbNodes  = 0;
+    m_NbLink   = 0;
     m_NbNoconn = 0;
-    m_Flag = 0;
-    m_RatsnestStartIdx = 0;    // Starting point of ratsnests of this net in a general buffer of ratsnest
-    m_RatsnestEndIdx   = 0;    // Ending point of ratsnests of this net
+    m_Flag     = 0;
+    m_RatsnestStartIdx = 0;     // Starting point of ratsnests of this net in a
+                                // general buffer of ratsnest
+    m_RatsnestEndIdx   = 0;     // Ending point of ratsnests of this net
 
     m_NetClassName = NETCLASS::Default;
 
@@ -37,14 +37,11 @@ NETINFO_ITEM::~NETINFO_ITEM()
 }
 
 
-/*********************************************************/
-int NETINFO_ITEM:: ReadDescr( FILE* File, int* LineNum )
-/*********************************************************/
-
-/* Routine de lecture de 1 descr Equipotentielle.
- *  retourne 0 si OK
- *          1 si lecture incomplete
+/* Read NETINFO_ITEM from file.
+ * Returns 0 if OK
+ * 1 if incomplete reading
  */
+int NETINFO_ITEM::ReadDescr( FILE* File, int* LineNum )
 {
     char Line[1024], Ltmp[1024];
     int  tmp;
@@ -54,7 +51,7 @@ int NETINFO_ITEM:: ReadDescr( FILE* File, int* LineNum )
         if( strnicmp( Line, "$End", 4 ) == 0 )
             return 0;
 
-        if( strncmp( Line, "Na", 2 ) == 0 ) /* Texte */
+        if( strncmp( Line, "Na", 2 ) == 0 )
         {
             sscanf( Line + 2, " %d", &tmp );
             SetNet( tmp );
@@ -69,13 +66,11 @@ int NETINFO_ITEM:: ReadDescr( FILE* File, int* LineNum )
 }
 
 
-/*******************************************/
-bool NETINFO_ITEM::Save( FILE* aFile ) const
-/*******************************************/
-
 /** Note: the old name of class NETINFO_ITEM was EQUIPOT
- * so in Save (and read) functions, for compatibility, we use EQUIPOT as keyword
+ * so in Save (and read) functions, for compatibility, we use EQUIPOT as
+ * keyword
  */
+bool NETINFO_ITEM::Save( FILE* aFile ) const
 {
     bool success = false;
 
@@ -108,7 +103,10 @@ void NETINFO_ITEM::SetNetname( const wxString& aNetname )
 
 /** function Draw (TODO)
  */
-void NETINFO_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& aOffset )
+void NETINFO_ITEM::Draw( WinEDA_DrawPanel* panel,
+                         wxDC*             DC,
+                         int               aDrawMode,
+                         const wxPoint&    aOffset )
 {
 }
 
@@ -176,18 +174,23 @@ void NETINFO_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
 
 RATSNEST_ITEM::RATSNEST_ITEM()
 {
-    m_NetCode  = 0;         // netcode ( = 1.. n ,  0 is the value used for not connected items)
+    m_NetCode  = 0;         // netcode ( = 1.. n ,  0 is the value used for not
+                            // connected items)
     m_Status   = 0;         // state
     m_PadStart = NULL;      // pointer to the starting pad
     m_PadEnd   = NULL;      // pointer to ending pad
-    m_Lenght   = 0;         // lenght of the line (temporary used in some calculations)
+    m_Lenght   = 0;         // length of the line (temporary used in some
+                            // calculations)
 }
 
 
 /** function Draw
  * Draws a line (a ratsnest) from the starting pad to the ending pad
  */
-void RATSNEST_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& aOffset )
+void RATSNEST_ITEM::Draw( WinEDA_DrawPanel* panel,
+                          wxDC*             DC,
+                          int               aDrawMode,
+                          const wxPoint&    aOffset )
 {
     GRLine( &panel->m_ClipBox, DC, m_PadStart->m_Pos - aOffset,
             m_PadEnd->m_Pos - aOffset, 0, g_DesignSettings.m_RatsnestColor );

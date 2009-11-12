@@ -1,5 +1,5 @@
 /****************************************************/
-/* fonctions de la classe MIRE (targets for photos) */
+/* MIRE class definition (targets for photos) */
 /****************************************************/
 
 #include "fctsys.h"
@@ -27,9 +27,7 @@ MIREPCB::~MIREPCB()
 }
 
 
-/**********************************/
 void MIREPCB::Copy( MIREPCB* source )
-/**********************************/
 {
     m_Layer     = source->m_Layer;
     m_Width     = source->m_Width;
@@ -40,19 +38,16 @@ void MIREPCB::Copy( MIREPCB* source )
 }
 
 
-/**************************************************************/
-bool MIREPCB::ReadMirePcbDescr( FILE* File, int* LineNum )
-/**************************************************************/
-
-/* Lecture de la description de 1 segment type Drawing PCB
+/* Read the description from the PCB file.
  */
+bool MIREPCB::ReadMirePcbDescr( FILE* File, int* LineNum )
 {
     char Line[256];
 
     while( GetLine( File, Line, LineNum ) != NULL )
     {
         if( strnicmp( Line, "$End", 4 ) == 0 )
-            return TRUE;                                /* fin de liste */
+            return TRUE;
         if( Line[0] == 'P' )
         {
             sscanf( Line + 2, " %X %d %d %d %d %d %lX",
@@ -69,9 +64,8 @@ bool MIREPCB::ReadMirePcbDescr( FILE* File, int* LineNum )
     return FALSE;
 }
 
-/**************************************/
+
 bool MIREPCB::Save( FILE* aFile ) const
-/**************************************/
 {
     if( GetState( DELETED ) )
         return true;
@@ -98,15 +92,12 @@ out:
 
 
 
-/**********************************************************/
+/* Draw MIREPCB object: 2 segments + 1 circle
+ * The circle radius is half the radius of the target
+ * 2 lines have length the diameter of the target
+ */
 void MIREPCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                     int mode_color, const wxPoint& offset )
-/**********************************************************/
-
-/* Affichage de 1 mire : 2 segments + 1 cercle
- *  le cercle a pour rayon le demi rayon de la mire
- *  les 2 traits ont pour longueur le diametre de la mire
- */
 {
     int rayon, ox, oy, gcolor, width;
     int dx1, dx2, dy1, dy2;
@@ -126,7 +117,6 @@ void MIREPCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     if( panel->GetScreen()->Scale( width ) < 2 )
         typeaff = FILAIRE;
 
-    /* Trace du cercle: */
     rayon = m_Size / 4;
 
     switch( typeaff )
@@ -145,15 +135,17 @@ void MIREPCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     }
 
 
-    /* Trace des 2 traits */
     rayon = m_Size / 2;
-    dx1   = rayon, dy1 = 0;
-    dx2   = 0, dy2 = rayon;
+    dx1   = rayon;
+    dy1   = 0;
+    dx2   = 0;
+    dy2   = rayon;
 
-    if( m_Shape ) /* Forme X */
+    if( m_Shape ) /* Form X */
     {
-        dx1 = dy1 = (rayon * 7) / 5;
-        dx2 = dx1; dy2 = -dy1;
+        dx1 = dy1 = ( rayon * 7 ) / 5;
+        dx2 = dx1;
+        dy2 = -dy1;
     }
 
     switch( typeaff )
@@ -189,8 +181,9 @@ bool MIREPCB::HitTest( const wxPoint& refPos )
     int dX    = refPos.x - m_Pos.x;
     int dY    = refPos.y - m_Pos.y;
     int rayon = m_Size / 2;
-    return abs(dX)<=rayon && abs(dY)<=rayon;
+    return abs( dX ) <= rayon && abs( dY ) <= rayon;
 }
+
 
 /**
  * Function HitTest (overlayed)
@@ -205,6 +198,7 @@ bool    MIREPCB::HitTest( EDA_Rect& refArea )
     return false;
 }
 
+
 /**
  * Function Rotate
  * Rotate this object.
@@ -216,6 +210,7 @@ void MIREPCB::Rotate(const wxPoint& aRotCentre, int aAngle)
     RotatePoint( &m_Pos, aRotCentre, aAngle );
 }
 
+
 /**
  * Function Flip
  * Flip this object, i.e. change the board side for this object
@@ -223,7 +218,6 @@ void MIREPCB::Rotate(const wxPoint& aRotCentre, int aAngle)
  */
 void MIREPCB::Flip(const wxPoint& aCentre )
 {
-    m_Pos.y  = aCentre.y - (m_Pos.y - aCentre.y);
+    m_Pos.y  = aCentre.y - ( m_Pos.y - aCentre.y );
     SetLayer( ChangeSideNumLayer( GetLayer() ) );
 }
-

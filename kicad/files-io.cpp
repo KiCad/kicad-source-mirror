@@ -126,7 +126,7 @@ void WinEDA_MainFrame::OnArchiveFiles( wxCommandEvent& event )
 
     wxFileName zip = dlg.GetPath();
 
-    /* Liste des extensions des fichiers à sauver */
+    /* List of file extensions to save. */
     static const wxChar* extList[] = {
         wxT( "*.sch" ), wxT( "*.lib" ), wxT( "*.cmp" ), wxT( "*.brd" ),
         wxT( "*.net" ), wxT( "*.pro" ), wxT( "*.pho" ), wxT( "*.py" ),

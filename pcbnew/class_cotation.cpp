@@ -1,6 +1,6 @@
-/************************************/
-/* fonctions de la classe COTATION */
-/************************************/
+/*****************************/
+/* COTATION class definition */
+/*****************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -25,7 +25,6 @@ COTATION::COTATION( BOARD_ITEM* aParent ) :
 }
 
 
-/* Effacement memoire de la structure */
 COTATION::~COTATION()
 {
     delete m_Text;
@@ -39,11 +38,9 @@ void COTATION:: SetText( const wxString& NewText )
 }
 
 
-/**********************************/
-wxString COTATION::GetText( void )
-/**********************************/
-/* Reutun the dimension text
+/* Return the dimension text
 */
+wxString COTATION::GetText( void )
 {
     return m_Text->m_Text;
 }
@@ -59,9 +56,8 @@ void  COTATION::SetLayer( int aLayer )
     m_Text->SetLayer( aLayer);
 }
 
-/*************************************/
+
 void COTATION::Copy( COTATION* source )
-/*************************************/
 {
     m_Value     = source->m_Value;
     SetLayer( source->GetLayer() );
@@ -72,26 +68,38 @@ void COTATION::Copy( COTATION* source )
     m_TimeStamp = GetTimeStamp();
     m_Text->Copy( source->m_Text );
 
-    Barre_ox    = source->Barre_ox; Barre_oy = source->Barre_oy;
-    Barre_fx    = source->Barre_fx; Barre_fy = source->Barre_fy;
-    TraitG_ox   = source->TraitG_ox; TraitG_oy = source->TraitG_oy;
-    TraitG_fx   = source->TraitG_fx; TraitG_fy = source->TraitG_fy;
-    TraitD_ox   = source->TraitD_ox; TraitD_oy = source->TraitD_oy;
-    TraitD_fx   = source->TraitD_fx; TraitD_fy = source->TraitD_fy;
-    FlecheD1_ox = source->FlecheD1_ox; FlecheD1_oy = source->FlecheD1_oy;
-    FlecheD1_fx = source->FlecheD1_fx; FlecheD1_fy = source->FlecheD1_fy;
-    FlecheD2_ox = source->FlecheD2_ox; FlecheD2_oy = source->FlecheD2_oy;
-    FlecheD2_fx = source->FlecheD2_fx; FlecheD2_fy = source->FlecheD2_fy;
-    FlecheG1_ox = source->FlecheG1_ox; FlecheG1_oy = source->FlecheG1_oy;
-    FlecheG1_fx = source->FlecheG1_fx; FlecheG1_fy = source->FlecheG1_fy;
-    FlecheG2_ox = source->FlecheG2_ox; FlecheG2_oy = source->FlecheG2_oy;
-    FlecheG2_fx = source->FlecheG2_fx; FlecheG2_fy = source->FlecheG2_fy;
+    Barre_ox    = source->Barre_ox;
+    Barre_oy    = source->Barre_oy;
+    Barre_fx    = source->Barre_fx;
+    Barre_fy    = source->Barre_fy;
+    TraitG_ox   = source->TraitG_ox;
+    TraitG_oy   = source->TraitG_oy;
+    TraitG_fx   = source->TraitG_fx;
+    TraitG_fy   = source->TraitG_fy;
+    TraitD_ox   = source->TraitD_ox;
+    TraitD_oy   = source->TraitD_oy;
+    TraitD_fx   = source->TraitD_fx;
+    TraitD_fy   = source->TraitD_fy;
+    FlecheD1_ox = source->FlecheD1_ox;
+    FlecheD1_oy = source->FlecheD1_oy;
+    FlecheD1_fx = source->FlecheD1_fx;
+    FlecheD1_fy = source->FlecheD1_fy;
+    FlecheD2_ox = source->FlecheD2_ox;
+    FlecheD2_oy = source->FlecheD2_oy;
+    FlecheD2_fx = source->FlecheD2_fx;
+    FlecheD2_fy = source->FlecheD2_fy;
+    FlecheG1_ox = source->FlecheG1_ox;
+    FlecheG1_oy = source->FlecheG1_oy;
+    FlecheG1_fx = source->FlecheG1_fx;
+    FlecheG1_fy = source->FlecheG1_fy;
+    FlecheG2_ox = source->FlecheG2_ox;
+    FlecheG2_oy = source->FlecheG2_oy;
+    FlecheG2_fx = source->FlecheG2_fx;
+    FlecheG2_fy = source->FlecheG2_fy;
 }
 
 
-/***************************************************************/
 bool COTATION::ReadCotationDescr( FILE* File, int* LineNum )
-/***************************************************************/
 {
     char Line[2048], Text[2048];
 
@@ -112,7 +120,6 @@ bool COTATION::ReadCotationDescr( FILE* File, int* LineNum )
 
             sscanf( Line + 2, " %d %d %lX", &m_Shape, &layer, &m_TimeStamp );
 
-            /* Mise a jour des param .layer des sous structures */
             if( layer < FIRST_NO_COPPER_LAYER )
                 layer = FIRST_NO_COPPER_LAYER;
             if( layer > LAST_NO_COPPER_LAYER )
@@ -132,14 +139,14 @@ bool COTATION::ReadCotationDescr( FILE* File, int* LineNum )
 
         if( Line[0] == 'P' )
         {
-			int normal_display = 1;
+            int normal_display = 1;
             sscanf( Line + 2, " %d %d %d %d %d %d %d",
                     &m_Text->m_Pos.x, &m_Text->m_Pos.y,
                     &m_Text->m_Size.x, &m_Text->m_Size.y,
                     &m_Text->m_Width, &m_Text->m_Orient,
                     &normal_display );
 
-			m_Text->m_Mirror = normal_display ? false : true;
+            m_Text->m_Mirror = normal_display ? false : true;
             m_Pos = m_Text->m_Pos;
             continue;
         }
@@ -214,41 +221,52 @@ bool COTATION::ReadCotationDescr( FILE* File, int* LineNum )
     return FALSE;
 }
 
-/****************************************/
-void COTATION::Move(const wxPoint& offset)
-/****************************************/
+
 /**
  * Function Move
  * @param offset : moving vector
  */
+void COTATION::Move(const wxPoint& offset)
 {
     m_Pos += offset;
     m_Text->m_Pos += offset;
-    Barre_ox    += offset.x; Barre_oy += offset.y;
-    Barre_fx    += offset.x; Barre_fy += offset.y;
-    TraitG_ox   += offset.x; TraitG_oy += offset.y;
-    TraitG_fx   += offset.x; TraitG_fy += offset.y;
-    TraitD_ox   += offset.x; TraitD_oy += offset.y;
-    TraitD_fx   += offset.x; TraitD_fy += offset.y;
-    FlecheG1_ox += offset.x; FlecheG1_oy += offset.y;
-    FlecheG1_fx += offset.x; FlecheG1_fy += offset.y;
-    FlecheG2_ox += offset.x; FlecheG2_oy += offset.y;
-    FlecheG2_fx += offset.x; FlecheG2_fy += offset.y;
-    FlecheD1_ox += offset.x; FlecheD1_oy += offset.y;
-    FlecheD1_fx += offset.x; FlecheD1_fy += offset.y;
-    FlecheD2_ox += offset.x; FlecheD2_oy += offset.y;
-    FlecheD2_fx += offset.x; FlecheD2_fy += offset.y;
+    Barre_ox    += offset.x;
+    Barre_oy    += offset.y;
+    Barre_fx    += offset.x;
+    Barre_fy    += offset.y;
+    TraitG_ox   += offset.x;
+    TraitG_oy   += offset.y;
+    TraitG_fx   += offset.x;
+    TraitG_fy   += offset.y;
+    TraitD_ox   += offset.x;
+    TraitD_oy   += offset.y;
+    TraitD_fx   += offset.x;
+    TraitD_fy   += offset.y;
+    FlecheG1_ox += offset.x;
+    FlecheG1_oy += offset.y;
+    FlecheG1_fx += offset.x;
+    FlecheG1_fy += offset.y;
+    FlecheG2_ox += offset.x;
+    FlecheG2_oy += offset.y;
+    FlecheG2_fx += offset.x;
+    FlecheG2_fy += offset.y;
+    FlecheD1_ox += offset.x;
+    FlecheD1_oy += offset.y;
+    FlecheD1_fx += offset.x;
+    FlecheD1_fy += offset.y;
+    FlecheD2_ox += offset.x;
+    FlecheD2_oy += offset.y;
+    FlecheD2_fx += offset.x;
+    FlecheD2_fy += offset.y;
 }
 
 
-/******************************************************/
-void COTATION::Rotate(const wxPoint& centre, int angle)
-/******************************************************/
 /**
  * Function Rotate
- * @param centre : Rotation point
+ * @param center : Rotation point
  * @param angle : Rotation angle in 0.1 degrees
  */
+void COTATION::Rotate(const wxPoint& centre, int angle)
 {
     RotatePoint( &m_Pos, centre, angle );
 
@@ -256,8 +274,7 @@ void COTATION::Rotate(const wxPoint& centre, int angle)
     m_Text->m_Orient += angle;
     if( m_Text->m_Orient >= 3600 )
         m_Text->m_Orient -= 3600;
-    if( (m_Text->m_Orient > 900)
-       && (m_Text->m_Orient <2700) )
+    if( ( m_Text->m_Orient > 900 ) && ( m_Text->m_Orient <2700 ) )
         m_Text->m_Orient -= 1800;
 
     RotatePoint( &Barre_ox, &Barre_oy, centre.x, centre.y, angle );
@@ -276,6 +293,7 @@ void COTATION::Rotate(const wxPoint& centre, int angle)
     RotatePoint( &FlecheD2_fx, &FlecheD2_fy, centre.x, centre.y, angle );
 }
 
+
 /**
  * Function Flip
  * Flip this object, i.e. change the board side for this object
@@ -287,9 +305,7 @@ void COTATION::Flip(const wxPoint& aCentre )
     SetLayer( ChangeSideNumLayer( GetLayer() ) );
 }
 
-/**********************************************/
-void COTATION::Mirror(const wxPoint& axis_pos)
-/**********************************************/
+
 /**
  * Function Mirror
  * Mirror the Dimension , relative to a given horizontal axis
@@ -297,6 +313,7 @@ void COTATION::Mirror(const wxPoint& axis_pos)
  * the layer is not changed
  * @param axis_pos : vertical axis position
  */
+void COTATION::Mirror(const wxPoint& axis_pos)
 {
 #define INVERT( pos )       (pos) = axis_pos.y - ( (pos) - axis_pos.y )
 #define INVERT_ANGLE( phi ) (phi) = -(phi)
@@ -305,7 +322,7 @@ void COTATION::Mirror(const wxPoint& axis_pos)
     INVERT_ANGLE( m_Text->m_Orient );
     if( m_Text->m_Orient >= 3600 )
         m_Text->m_Orient -= 3600;
-    if( (m_Text->m_Orient > 900) && (m_Text->m_Orient <2700) )
+    if( ( m_Text->m_Orient > 900 ) && ( m_Text->m_Orient < 2700 ) )
         m_Text->m_Orient -= 1800;
 
     INVERT( Barre_oy );
@@ -324,9 +341,8 @@ void COTATION::Mirror(const wxPoint& axis_pos)
     INVERT( FlecheD2_fy );
 }
 
-/****************************************/
+
 bool COTATION::Save( FILE* aFile ) const
-/****************************************/
 {
     if( GetState( DELETED ) )
         return true;
@@ -392,13 +408,10 @@ out:
 
 
 
-/************************************************************************/
+/* Print 1 dimension: series of n + 1 segments text
+ */
 void COTATION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                      int mode_color, const wxPoint& offset )
-/************************************************************************/
-
-/* impression de 1 cotation : serie de n segments + 1 texte
- */
 {
     int ox, oy, typeaff, width, gcolor;
 
@@ -504,11 +517,11 @@ bool COTATION::HitTest( const wxPoint& ref_pos )
     if( m_Text && m_Text->TextHitTest( ref_pos ) )
             return true;
 
-    /* Localisation des SEGMENTS ?) */
+    /* Locate SEGMENTS? */
     ux0 = Barre_ox;
     uy0 = Barre_oy;
 
-    /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
+    /* Recalculate coordinates with ux0, uy0 = origin. */
     dx = Barre_fx - ux0;
     dy = Barre_fy - uy0;
 
@@ -521,49 +534,42 @@ bool COTATION::HitTest( const wxPoint& ref_pos )
     ux0 = TraitG_ox;
     uy0 = TraitG_oy;
 
-    /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
     dx = TraitG_fx - ux0;
     dy = TraitG_fy - uy0;
 
     spot_cX = ref_pos.x - ux0;
     spot_cY = ref_pos.y - uy0;
 
-    /* detection : */
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
 
     ux0 = TraitD_ox;
     uy0 = TraitD_oy;
 
-    /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
     dx = TraitD_fx - ux0;
     dy = TraitD_fy - uy0;
 
     spot_cX = ref_pos.x - ux0;
     spot_cY = ref_pos.y - uy0;
 
-    /* detection : */
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
 
     ux0 = FlecheD1_ox;
     uy0 = FlecheD1_oy;
 
-    /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
     dx = FlecheD1_fx - ux0;
     dy = FlecheD1_fy - uy0;
 
     spot_cX = ref_pos.x - ux0;
     spot_cY = ref_pos.y - uy0;
 
-    /* detection : */
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
 
     ux0 = FlecheD2_ox;
     uy0 = FlecheD2_oy;
 
-    /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
     dx = FlecheD2_fx - ux0;
     dy = FlecheD2_fy - uy0;
 
@@ -576,7 +582,6 @@ bool COTATION::HitTest( const wxPoint& ref_pos )
     ux0 = FlecheG1_ox;
     uy0 = FlecheG1_oy;
 
-    /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
     dx = FlecheG1_fx - ux0;
     dy = FlecheG1_fy - uy0;
 
@@ -589,7 +594,6 @@ bool COTATION::HitTest( const wxPoint& ref_pos )
     ux0 = FlecheG2_ox;
     uy0 = FlecheG2_oy;
 
-    /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
     dx = FlecheG2_fx - ux0;
     dy = FlecheG2_fy - uy0;
 
@@ -602,13 +606,14 @@ bool COTATION::HitTest( const wxPoint& ref_pos )
     return false;
 }
 
+
 /**
- * Function HitTest (overlayed)
+ * Function HitTest (overlaid)
  * tests if the given EDA_Rect intersect this object.
  * @param EDA_Rect : the given EDA_Rect
  * @return bool - true if a hit, else false
  */
-bool    COTATION::HitTest( EDA_Rect& refArea )
+bool COTATION::HitTest( EDA_Rect& refArea )
 {
     if( refArea.Inside( m_Pos ) )
         return true;

@@ -1,6 +1,6 @@
-/************************************************************************/
-/* basepcbframe.cpp - fonctions des classes du type WinEDA_BasePcbFrame */
-/************************************************************************/
+/********************/
+/* basepcbframe.cpp */
+/********************/
 
 #ifdef __GNUG__
 #pragma implementation
@@ -43,10 +43,6 @@ BEGIN_EVENT_TABLE( WinEDA_BasePcbFrame, WinEDA_DrawFrame )
                     WinEDA_BasePcbFrame::ProcessItemSelection )
 END_EVENT_TABLE()
 
-
-/****************/
-/* Constructeur */
-/****************/
 
 WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow*       father,
                                           int             idtype,
@@ -95,12 +91,10 @@ void WinEDA_BasePcbFrame::SetBoard( BOARD* aBoard )
 }
 
 
-/**************************************/
-int WinEDA_BasePcbFrame::BestZoom( void )
-/**************************************/
 /**
  * Return the "best" zoom, i.e. the zoom which shows the entire board on screen
  */
+int WinEDA_BasePcbFrame::BestZoom( void )
 {
     int    dx, dy, ii, jj;
     int    bestzoom;
@@ -124,9 +118,7 @@ int WinEDA_BasePcbFrame::BestZoom( void )
 }
 
 
-/***********************************************************/
 void WinEDA_BasePcbFrame::CursorGoto(  const wxPoint& aPos )
-/***********************************************************/
 {
     // factored out of pcbnew/find.cpp
 
@@ -134,7 +126,7 @@ void WinEDA_BasePcbFrame::CursorGoto(  const wxPoint& aPos )
 
     wxClientDC dc( DrawPanel );
 
-    /* Il y a peut-etre necessite de recadrer le dessin: */
+    /* There may be need to reframe the drawing. */
     if( !DrawPanel->IsPointOnDisplay( aPos ) )
     {
         screen->m_Curseur = aPos;
@@ -151,27 +143,21 @@ void WinEDA_BasePcbFrame::CursorGoto(  const wxPoint& aPos )
 }
 
 
-/*************************************************/
-void WinEDA_BasePcbFrame::ReCreateMenuBar( void )
-/*************************************************/
-
 // Virtual function
+void WinEDA_BasePcbFrame::ReCreateMenuBar( void )
 {
 }
 
-/* Virtual functions: Do nothing for WinEDA_BasePcbFrame window */
 
+/* Virtual functions: Do nothing for WinEDA_BasePcbFrame window */
 void WinEDA_BasePcbFrame::Show3D_Frame( wxCommandEvent& event )
 {
 }
 
 
 
-/****************************************************************/
-void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
-/*****************************************************************/
-
 // Note: virtual, overridden in WinEDA_PcbFrame;
+void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
 {
     int preslayer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
 
@@ -200,8 +186,8 @@ void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
         // layers are also capable of being selected.
         else
         {
-            if( (layer != COPPER_LAYER_N) && (layer != LAYER_CMP_N)
-                && (layer >= m_Pcb->m_BoardSettings->GetCopperLayerCount() - 1) )
+            if( ( layer != COPPER_LAYER_N ) && ( layer != LAYER_CMP_N )
+                && ( layer >= m_Pcb->m_BoardSettings->GetCopperLayerCount() - 1 ) )
             {
                 return;
             }
@@ -244,9 +230,7 @@ void WinEDA_BasePcbFrame::ProcessItemSelection( wxCommandEvent& event )
 }
 
 
-/*****************************************************************/
 void WinEDA_BasePcbFrame::SetCurItem( BOARD_ITEM* aItem, bool aDisplayInfo )
-/*****************************************************************/
 {
     GetScreen()->SetCurItem( aItem );
 
@@ -275,20 +259,16 @@ void WinEDA_BasePcbFrame::SetCurItem( BOARD_ITEM* aItem, bool aDisplayInfo )
 }
 
 
-/*****************************************************************/
 BOARD_ITEM* WinEDA_BasePcbFrame::GetCurItem()
-/*****************************************************************/
 {
     return GetScreen()->GetCurItem();
 }
 
 
-/****************************************************************/
 GENERAL_COLLECTORS_GUIDE WinEDA_BasePcbFrame::GetCollectorsGuide()
-/****************************************************************/
 {
     GENERAL_COLLECTORS_GUIDE guide( m_Pcb->m_BoardSettings->GetVisibleLayers(),
-                                    ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
+                                    ( (PCB_SCREEN*)GetScreen())->m_Active_Layer );
 
     // account for the globals
     guide.SetIgnoreMTextsMarkedNoShow( ! g_DesignSettings.IsElementVisible( MODULE_TEXT_NOV_VISIBLE ));
@@ -324,10 +304,11 @@ void WinEDA_BasePcbFrame::SetToolID( int id, int new_cursor_id,
         DrawPanel->Refresh();
 }
 
-void WinEDA_BasePcbFrame::UpdateStatusBar()
+
 /*
  * Update the status bar information.
  */
+void WinEDA_BasePcbFrame::UpdateStatusBar()
 {
     WinEDA_DrawFrame::UpdateStatusBar();
 
@@ -351,7 +332,8 @@ void WinEDA_BasePcbFrame::UpdateStatusBar()
         theta = theta * 180.0 / M_PI;
 
         ro = sqrt( ( (double) dx * dx ) + ( (double) dy * dy ) );
-        Line.Printf( g_UnitMetric ? wxT( "Ro %.3f Th %.1f" ) : wxT( "Ro %.4f Th %.1f" ),
+        Line.Printf( g_UnitMetric ? wxT( "Ro %.3f Th %.1f" ) :
+                     wxT( "Ro %.4f Th %.1f" ),
                      To_User_Unit( g_UnitMetric, ro, m_InternalUnits ),
                      theta );
 
@@ -381,21 +363,24 @@ void WinEDA_BasePcbFrame::LoadSettings()
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
     WinEDA_DrawFrame::LoadSettings();
-    // Ensure grid id is an existant grid id:
+    // Ensure grid id is an existent grid id:
     if( (m_LastGridSizeId <= 0) ||
         (m_LastGridSizeId > (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
         m_LastGridSizeId = ID_POPUP_GRID_LEVEL_500 - ID_POPUP_GRID_LEVEL_1000;
 
     cfg->Read( m_FrameName + UserGridSizeXEntry, &m_UserGridSize.x, 0.01 );
     cfg->Read( m_FrameName + UserGridSizeYEntry, &m_UserGridSize.y, 0.01 );
-    cfg->Read( m_FrameName + UserGridUnitsEntry, &m_UserGridUnits, ( long )INCHES );
+    cfg->Read( m_FrameName + UserGridUnitsEntry, &m_UserGridUnits,
+               ( long )INCHES );
     cfg->Read( m_FrameName + DisplayPadFillEntry, &m_DisplayPadFill, true );
     cfg->Read( m_FrameName + DisplayViaFillEntry, &m_DisplayViaFill, true );
     cfg->Read( m_FrameName + DisplayPadNumberEntry, &m_DisplayPadNum, true );
-    cfg->Read( m_FrameName + DisplayModuleEdgeEntry, &m_DisplayModEdge, ( long )FILLED );
+    cfg->Read( m_FrameName + DisplayModuleEdgeEntry, &m_DisplayModEdge,
+               ( long )FILLED );
     if( m_DisplayModEdge < FILAIRE || m_DisplayModEdge > SKETCH )
         m_DisplayModEdge = FILLED;
-    cfg->Read( m_FrameName + DisplayModuleTextEntry, &m_DisplayModText, ( long )FILLED );
+    cfg->Read( m_FrameName + DisplayModuleTextEntry, &m_DisplayModText,
+               ( long )FILLED );
     if( m_DisplayModText < FILAIRE || m_DisplayModText > SKETCH )
         m_DisplayModText = FILLED;
 }

@@ -7,7 +7,6 @@
 #define TEXT_MODULE_H
 
 
-/* Description des Textes sur Modules : */
 #define TEXT_is_REFERENCE 0
 #define TEXT_is_VALUE     1
 #define TEXT_is_DIVERS    2
@@ -17,15 +16,15 @@ class TEXTE_MODULE : public BOARD_ITEM, public EDA_TextStruct
 {
 /* Note: orientation in 1/10 deg relative to the footprint
  * Physical orient is m_Orient + m_Parent->m_Orient
-*/
+ */
 public:
-    wxPoint  m_Pos0;        // text coordinates relatives to the footprint ancre, orient 0
+    wxPoint m_Pos0;         // text coordinates relatives to the footprint
+                            // ancre, orient 0
                             // Text coordinate ref point is the text centre
-    char     m_Type;        // 0: ref,1: val, others = 2..255
-	bool	 m_NoShow;		// true = invisible
+    char    m_Type;         // 0: ref,1: val, others = 2..255
+    bool    m_NoShow;       // true = invisible
 
-public:
-    TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
+public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
     ~TEXTE_MODULE();
 
     TEXTE_MODULE* Next() const { return (TEXTE_MODULE*) Pnext; }
@@ -42,33 +41,36 @@ public:
         return m_Pos;
     }
 
+
     void     Copy( TEXTE_MODULE* source ); // copy structure
 
     /* Gestion du texte */
     void     SetWidth( int new_width );
     int      GetLength();           /* text length */
-    int      GetDrawRotation();     // Return text rotation for drawings and plotting
+    int      GetDrawRotation();     // Return text rotation for drawings and
+                                    // plotting
 
     /** Function GetTextRect
-     * @return an EDA_Rect which gives the position and size of the text area (for the 0 orient text and footprint)
+     * @return an EDA_Rect which gives the position and size of the text area
+     * (for the 0 orient text and footprint)
      */
     EDA_Rect GetTextRect( void );
 
     /**
      * Function GetBoundingBox
-     * returns the bounding box of this Text (according to text and footprint orientation)
+     * returns the bounding box of this Text (according to text and footprint
+     * orientation)
      */
     EDA_Rect GetBoundingBox();
 
-    void     SetDrawCoord();      // mise a jour des coordonn�s absolues de trac�
+    void     SetDrawCoord();        // Set absolute coordinates.
 
-    // a partir des coord relatives
-
-    void     SetLocalCoord();     // mise a jour des coordonn�s relatives
+    void     SetLocalCoord();       // Set relative coordinates.
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
@@ -77,7 +79,8 @@ public:
     /**
      * Function ReadLineDescr
      * Read description from a given line in "*.brd" format.
-     * @param aLine The current line which contains the first line of description.
+     * @param aLine The current line which contains the first line of
+     *              description.
      * @param aLine The FILE to read next lines (currently not used).
      * @param LineNum a point to the line count (currently not used).
      * @return int - > 0 if success reading else 0.
@@ -93,8 +96,8 @@ public:
 
     /**
      * Function DisplayInfo
-     * has knowledge about the frame and how and where to put status information
-     * about this object into the frame's message panel.
+     * has knowledge about the frame and how and where to put status
+     * information about this object into the frame's message panel.
      * Is virtual from EDA_BaseStruct.
      * @param frame A WinEDA_DrawFrame in which to print status information.
      */
@@ -122,13 +125,13 @@ public:
 
     /**
      * Function IsOnOneOfTheseLayers
-     * returns true if this object is on one of the given layers.  Is virtual so
-     * objects like D_PAD, which reside on multiple layers, can do their own
+     * returns true if this object is on one of the given layers.  Is virtual
+     * so objects like D_PAD, which reside on multiple layers, can do their own
      * form of testing.
      * virtual inheritance from BOARD_ITEM.
      * @param aLayerMask The bit-mapped set of layers to test for.
      * @return bool - true if on one of the given layers, else false.
-      * bool IsOnOneOfTheseLayers( int aLayerMask ) const;
+     * bool IsOnOneOfTheseLayers( int aLayerMask ) const;
      */
 
 
@@ -143,7 +146,7 @@ public:
     }
 
 
-#if defined (DEBUG)
+#if defined(DEBUG)
 
     /**
      * Function Show

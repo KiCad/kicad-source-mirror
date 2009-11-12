@@ -1,7 +1,7 @@
-/**********************************************************************/
-/* fonctions membres des classes utilisees dans pcbnew (voir pcbstruct.h */
-/*    sauf routines relatives aux pistes (voir class_track.cpp)       */
-/**********************************************************************/
+/****************************************************************/
+/* member functions of classes used in pcbnew (see pcbstruct.h) */
+/* except for tracks (see class_track.cpp)                      */
+/****************************************************************/
 
 #include "fctsys.h"
 

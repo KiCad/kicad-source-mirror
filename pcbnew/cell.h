@@ -1,13 +1,15 @@
-/* Bits caracterisant une cellule */
-#define HOLE           (char)0x01  /* a conducting hole, ou obstacle */
-#define CELL_is_MODULE (char)0x02  /* autoplacement: occupe par un module */
-#define CELL_is_EDGE   (char)0x20  /* zone et autoplacement: cellule limitant un contour (Board, Zone) */
-#define CELL_is_FRIEND (char)0x40  /* zone et autoplacement: cellule faisant partie du net */
-#define CELL_is_ZONE   (char)0x80  /* zone et autoplacement: cellule disponible */
+/* Bits characterizing cell */
+#define HOLE           (char)0x01  /* a conducting hole or obstacle */
+#define CELL_is_MODULE (char)0x02  /* auto placement occupied by a module */
+#define CELL_is_EDGE   (char)0x20  /* Area and auto-placement: limiting cell
+                                    * contour (Board, Zone) */
+#define CELL_is_FRIEND (char)0x40  /* Area and auto-placement: cell part of the
+                                    * net */
+#define CELL_is_ZONE   (char)0x80  /* Area and auto-placement: cell available */
 
-/* Bits Masques de presence d'obstacles pour autoroutage */
-#define OCCUPE            1  /* autoroutage : obstacle pour pistes et vias */
-#define VIA_IMPOSSIBLE    2  /* autoroutage : obsacle pour vias */
+/* Bit masks for presence of obstacles to autorouting */
+#define OCCUPE            1  /* Autorouting: obstacle tracks and vias. */
+#define VIA_IMPOSSIBLE    2  /* Autorouting: obstacle for vias. */
 #define CURRENT_PAD       4
 
 

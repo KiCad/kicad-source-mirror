@@ -1,5 +1,5 @@
 /****************************************************/
-/* class_module.cpp : fonctions de la classe MODULE */
+/* class_module.cpp : EDGE_MODULE class definition. */
 /****************************************************/
 
 #include "fctsys.h"
@@ -14,11 +14,12 @@
 #include "pcbnew.h"
 #include "class_board_design_settings.h"
 
-#define MAX_WIDTH 10000     // Epaisseur (en 1/10000 ") max raisonnable des traits, textes...
+#define MAX_WIDTH 10000     /* Thickness (in 1 / 10000 ") of maximum reasonable
+                             * features, text... */
 
-/******************************************/
-/* class EDGE_MODULE ( contour de module ) */
-/******************************************/
+/*********************/
+/* class EDGE_MODULE */
+/*********************/
 
 EDGE_MODULE::EDGE_MODULE( MODULE* parent ) :
     BOARD_ITEM( parent, TYPE_EDGE_MODULE )
@@ -35,10 +36,7 @@ EDGE_MODULE::~EDGE_MODULE()
 }
 
 
-/********************************************/
 void EDGE_MODULE::Copy( EDGE_MODULE* source )
-/********************************************/
-// copy structure
 {
     if( source == NULL )
         return;
@@ -46,18 +44,17 @@ void EDGE_MODULE::Copy( EDGE_MODULE* source )
     m_Start  = source->m_Start;
     m_End    = source->m_End;
     m_Shape  = source->m_Shape;
-    m_Start0 = source->m_Start0;    // coord relatives a l'ancre du point de depart(Orient 0)
-    m_End0   = source->m_End0;      // coord relatives a l'ancre du point de fin (Orient 0)
-    m_Angle  = source->m_Angle;     // pour les arcs de cercle: longueur de l'arc en 0,1 degres
+    m_Start0 = source->m_Start0;
+    m_End0   = source->m_End0;
+    m_Angle  = source->m_Angle;
     m_Layer  = source->m_Layer;
     m_Width  = source->m_Width;
 
     m_PolyPoints = source->m_PolyPoints;    // std::vector copy
 }
 
-/***********************************/
+
 void EDGE_MODULE::SetDrawCoord()
-/***********************************/
 {
     MODULE* Module = (MODULE*) m_Parent;
 
@@ -74,19 +71,16 @@ void EDGE_MODULE::SetDrawCoord()
 }
 
 
-/********************************************************************************/
+/* Draw EDGE_MODULE:
+ * Entry: offset = offset trace
+ * Draw_mode mode = trace (GR_OR, GR_XOR, GR_AND)
+ * The contours are of different types:
+ * - Segment
+ * - Circles
+ * - Arcs
+ */
 void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                         int draw_mode, const wxPoint& offset )
-/********************************************************************************/
-
-/* Affichage d'un segment contour de module :
- *  Entree : ox, oy = offset de trace
- *  draw_mode = mode de trace ( GR_OR, GR_XOR, GR_AND)
- *      Les contours sont de differents type:
- *      - Segment
- *      - Cercles
- *      - Arcs
- */
 {
     int                  ux0, uy0, dx, dy, rayon, StAngle, EndAngle;
     int                  color, type_trace;
@@ -95,7 +89,7 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     WinEDA_BasePcbFrame* frame;
     MODULE*              Module = NULL;
 
-    if( m_Parent && (m_Parent->Type() == TYPE_MODULE) )
+    if( m_Parent && ( m_Parent->Type() == TYPE_MODULE ) )
         Module = (MODULE*) m_Parent;
 
     if( g_DesignSettings.IsLayerVisible( m_Layer ) == false )
@@ -190,7 +184,7 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         // We must compute true coordinates from m_PolyPoints
         // which are relative to module position, orientation 0
 
-        std::vector<wxPoint>		points = m_PolyPoints;
+        std::vector<wxPoint>        points = m_PolyPoints;
 
         for( unsigned ii = 0; ii < points.size(); ii++ )
         {
@@ -231,15 +225,18 @@ void EDGE_MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
 
     frame->AppendMsgPanel( _( "Graphic Item" ), wxEmptyString, DARKCYAN );
 
-    frame->AppendMsgPanel( _( "Module" ), module->m_Reference->m_Text, DARKCYAN );
+    frame->AppendMsgPanel( _( "Module" ), module->m_Reference->m_Text,
+                           DARKCYAN );
     frame->AppendMsgPanel( _( "Value" ), module->m_Value->m_Text, BLUE );
 
     msg.Printf( wxT( "%8.8lX" ), module->m_TimeStamp );
     frame->AppendMsgPanel( _( "TimeStamp" ), msg, BROWN );
 
-    frame->AppendMsgPanel( _( "Mod Layer" ), board->GetLayerName( module->GetLayer() ), RED );
+    frame->AppendMsgPanel( _( "Mod Layer" ),
+                           board->GetLayerName( module->GetLayer() ), RED );
 
-    frame->AppendMsgPanel( _( "Seg Layer" ), board->GetLayerName( GetLayer() ), RED );
+    frame->AppendMsgPanel( _( "Seg Layer" ),
+                           board->GetLayerName( GetLayer() ), RED );
 
     valeur_param( m_Width, msg );
     frame->AppendMsgPanel( _( "Width" ), msg, BLUE );
@@ -256,24 +253,24 @@ bool EDGE_MODULE::Save( FILE* aFile ) const
     {
     case S_SEGMENT:
         ret = fprintf( aFile, "DS %d %d %d %d %d %d\n",
-                 m_Start0.x, m_Start0.y,
-                 m_End0.x, m_End0.y,
-                 m_Width, m_Layer );
+                       m_Start0.x, m_Start0.y,
+                       m_End0.x, m_End0.y,
+                       m_Width, m_Layer );
         break;
 
     case S_CIRCLE:
         ret = fprintf( aFile, "DC %d %d %d %d %d %d\n",
-                 m_Start0.x, m_Start0.y,
-                 m_End0.x, m_End0.y,
-                 m_Width, m_Layer );
+                       m_Start0.x, m_Start0.y,
+                       m_End0.x, m_End0.y,
+                       m_Width, m_Layer );
         break;
 
     case S_ARC:
         ret = fprintf( aFile, "DA %d %d %d %d %d %d %d\n",
-                 m_Start0.x, m_Start0.y,
-                 m_End0.x, m_End0.y,
-                 m_Angle,
-                 m_Width, m_Layer );
+                       m_Start0.x, m_Start0.y,
+                       m_End0.x, m_End0.y,
+                       m_Angle,
+                       m_Width, m_Layer );
         break;
 
     case S_POLYGON:
@@ -284,7 +281,8 @@ bool EDGE_MODULE::Save( FILE* aFile ) const
                        m_Width, m_Layer );
 
         for( unsigned i=0;  i<m_PolyPoints.size();  ++i )
-            fprintf( aFile, "Dl %d %d\n",  m_PolyPoints[i].x, m_PolyPoints[i].y );
+            fprintf( aFile, "Dl %d %d\n", m_PolyPoints[i].x,
+                     m_PolyPoints[i].y );
         break;
 
     default:
@@ -299,13 +297,6 @@ bool EDGE_MODULE::Save( FILE* aFile ) const
 }
 
 
-
-
-/****************************************************************/
-int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
-                            int* LineNum )
-/***************************************************************/
-
 /* Read a description line like:
  *  DS 2600 0 2600 -600 120 21
  *  this description line is in Line
@@ -316,6 +307,8 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
  *  - Polygon
  *
  */
+int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
+                            int* LineNum )
 {
     int  ii;
     int  error = 0;
@@ -409,13 +402,13 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
         break;
     }
 
-    // Check for a reasonnable width:
+    // Check for a reasonable width:
     if( m_Width <= 1 )
         m_Width = 1;
     if( m_Width > MAX_WIDTH )
         m_Width = MAX_WIDTH;
 
-    // Check for a reasonnable layer:
+    // Check for a reasonable layer:
     // m_Layer must be >= FIRST_NON_COPPER_LAYER, but because microwave footprints
     // can use the copper layers m_Layer < FIRST_NON_COPPER_LAYER is allowed.
     // @todo: changes use of EDGE_MODULE these footprints and allows only m_Layer >= FIRST_NON_COPPER_LAYER
@@ -447,7 +440,6 @@ bool EDGE_MODULE::HitTest( const wxPoint& ref_pos )
     switch( m_Shape )
     {
     case S_SEGMENT:
-        /* recalcul des coordonnees avec ux0,uy0 = origine des coord. */
         spot_cX = ref_pos.x - ux0;
         spot_cY = ref_pos.y - uy0;
 
@@ -459,19 +451,20 @@ bool EDGE_MODULE::HitTest( const wxPoint& ref_pos )
 
     case S_CIRCLE:
         rayon = (int) hypot( (double) (uxf - ux0), (double) (uyf - uy0) );
-        dist  = (int) hypot( (double) (ref_pos.x - ux0), (double) (ref_pos.y - uy0) );
+        dist  = (int) hypot( (double) (ref_pos.x - ux0),
+                             (double) (ref_pos.y - uy0) );
         if( abs( rayon - dist ) <= m_Width )
             return true;
         break;
 
     case S_ARC:
         rayon = (int) hypot( (double) (uxf - ux0), (double) (uyf - uy0) );
-        dist  = (int) hypot( (double) (ref_pos.x - ux0), (double) (ref_pos.y - uy0) );
+        dist  = (int) hypot( (double) (ref_pos.x - ux0),
+                             (double) (ref_pos.y - uy0) );
 
         if( abs( rayon - dist ) > m_Width )
             break;
 
-        /* pour un arc, controle complementaire */
         int mouseAngle = (int) ArcTangente( ref_pos.y - uy0, ref_pos.x - ux0 );
         int stAngle    = (int) ArcTangente( uyf - uy0, uxf - ux0 );
         int endAngle   = stAngle + m_Angle;
@@ -493,6 +486,7 @@ bool EDGE_MODULE::HitTest( const wxPoint& ref_pos )
 
 
 #if defined(DEBUG)
+
 
 /**
  * Function Show

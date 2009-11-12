@@ -1067,7 +1067,7 @@ bool TRACK::HitTest( const wxPoint& ref_pos )
     int spot_cX = ref_pos.x - m_Start.x;
     int spot_cY = ref_pos.y - m_Start.y;
 
-    if( Type() == TYPE_VIA )   /* VIA rencontree */
+    if( Type() == TYPE_VIA )
     {
         return (double) spot_cX * spot_cX + (double) spot_cY * spot_cY <=
                (double) radius * radius;

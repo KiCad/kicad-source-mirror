@@ -1,6 +1,6 @@
-/************************************/
-/* fonctions de la classe COTATION */
-/************************************/
+/*****************************/
+/* COTATION class definition */
+/*****************************/
 #ifndef COTATION_H
 #define COTATION_H
 
@@ -13,9 +13,9 @@ public:
     wxPoint    m_Pos;
     int        m_Shape;
     int        m_Unit;  /* 0 = inches, 1 = mm */
-    int        m_Value; /* valeur en unites PCB de la cote */
+    int        m_Value; /* value of  PCB dimensions. */
 
-    TEXTE_PCB* m_Text;  /* pour affichage du texte */
+    TEXTE_PCB* m_Text;
     int        Barre_ox, Barre_oy, Barre_fx, Barre_fy;
     int        TraitG_ox, TraitG_oy, TraitG_fx, TraitG_fy;
     int        TraitD_ox, TraitD_oy, TraitD_fx, TraitD_fy;
@@ -54,7 +54,6 @@ public:
      */
     bool Save( FILE* aFile ) const;
 
-    /* Modification du texte de la cotation */
     void    SetText( const wxString& NewText );
     wxString GetText( void );
 
@@ -111,7 +110,7 @@ public:
     bool    HitTest( const wxPoint& ref_pos );
 
     /**
-     * Function HitTest (overlayed)
+     * Function HitTest (overlaid)
      * tests if the given EDA_Rect intersect this object.
      * For now, the anchor must be inside this rect.
      * @param refArea : the given EDA_Rect

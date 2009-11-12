@@ -1,5 +1,5 @@
 /****************************************************/
-/* fonctions de la classe MIRE (targets for photos) */
+/* MIREPCB class definition.  (targets for photos)  */
 /****************************************************/
 #ifndef MIRE_H
 #define MIRE_H
@@ -12,7 +12,7 @@ class MIREPCB : public BOARD_ITEM
 public:
     int     m_Width;
     wxPoint m_Pos;
-    int     m_Shape;            // bit 0 : 0 = forme +, 1 = forme X
+    int     m_Shape;            // bit 0 : 0 = draw +, 1 = draw X
     int     m_Size;
 
 public:
@@ -77,7 +77,7 @@ public:
     bool    HitTest( const wxPoint& refPos );
 
     /**
-     * Function HitTest (overlayed)
+     * Function HitTest (overlaid)
      * tests if the given EDA_Rect intersect this object.
      * For now, the anchor must be inside this rect.
      * @param refArea : the given EDA_Rect

@@ -28,7 +28,7 @@ class WinEDA_PrjFrame;
 /**
  * Command IDs for Kicad.
  *
- * Please add IDs that are unique to Kica  here and not in the global id.h
+ * Please add IDs that are unique to Kicad  here and not in the global id.h
  * file.  This will prevent the entire project from being rebuilt when adding
  * new commands to Kicad.
  */
@@ -64,10 +64,6 @@ enum id_kicad_frm
 };
 
 
-/*******************************************/
-/* classe pour la Fenetre generale de kicad*/
-/*******************************************/
-
 /* class WinEDA_MainFrame
  * This is the main kicad frame
  */
@@ -80,7 +76,7 @@ public:
     WinEDA_PrjFrame*     m_LeftWin;
     wxSashLayoutWindow*  m_BottomWin;
     wxTextCtrl*          m_DialogWin;
-    WinEDA_Toolbar*      m_VToolBar; // Verticam Toolbar (not used)
+    WinEDA_Toolbar*      m_VToolBar; // Vertical toolbar (not used)
     wxString             m_BoardFileName;
     wxString             m_SchematicRootFileName;
     wxFileName           m_ProjectFileName;
@@ -90,7 +86,6 @@ public:
 
 public:
 
-    // Constructor and destructor
     WinEDA_MainFrame( wxWindow* parent, const wxString& title,
                       const wxPoint& pos, const wxSize& size );
 
@@ -207,9 +202,9 @@ private:
 };
 
 
-/***********************************************************/
-/* Classes pour l'arbre de hierarchie de gestion du projet */
-/***********************************************************/
+/*********************************/
+/* Classes for the project tree. */
+/*********************************/
 
 /** class TreePrjItemData
  * Handle one item (a file or a directory name) for the tree file
@@ -414,7 +409,7 @@ public:
     WinEDA_TreePrj( WinEDA_PrjFrame* parent );
     ~WinEDA_TreePrj();
 private:
-    /* overlayed sort function */
+    /* overridden sort function */
     int OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 );
 };
 

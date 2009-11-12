@@ -1,6 +1,6 @@
-/******************************************************************/
-/* mdiframe.cpp - fonctions de la classe du type WinEDA_MainFrame */
-/******************************************************************/
+/*******************/
+/* preferences.cpp */
+/*******************/
 
 #ifdef __GNUG__
 #pragma implementation

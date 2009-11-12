@@ -17,7 +17,7 @@
 
 static const wxString GeneralGroupName( wxT( "/general" ) );
 
-/* Kicad project file entry namse. */
+/* Kicad project file entry names. */
 static const wxString SchematicRootNameEntry( wxT( "RootSch" ) );
 static const wxString BoardFileNameEntry( wxT( "BoardNm" ) );
 
@@ -130,7 +130,6 @@ void WinEDA_MainFrame::OnSaveProject( wxCommandEvent& event )
 
     m_ProjectFileName = dlg.GetPath();
 
-    /* ecriture de la configuration */
     wxGetApp().WriteProjectConfig( m_ProjectFileName.GetFullPath(),
                                    GeneralGroupName, NULL );
 }

@@ -1,11 +1,9 @@
-/**************************************************************/
-/* class_edge_module.h : description des contours d'un module */
-/**************************************************************/
+/*******************************************************/
+/* class_edge_module.h : EDGE_MODULE class definition. */
+/*******************************************************/
 
 class Pcb3D_GLCanvas;
 
-
-/* description des contours (empreintes ) et TYPES des CONTOURS : */
 
 class EDGE_MODULE : public BOARD_ITEM
 {
@@ -14,13 +12,13 @@ public:
     wxPoint m_Start;        // Line start point
     wxPoint m_End;          // Line end point
 
-    int     m_Shape;        // voir "enum Track_Shapes"
-    wxPoint m_Start0;       // coord relatives a l'ancre du point de depart(Orient 0)
-    wxPoint m_End0;         // coord relatives a l'ancre du point de fin (Orient 0)
+    int     m_Shape;        // enum Track_Shapes
+    wxPoint m_Start0;       // Start point.
+    wxPoint m_End0;         // End point.
 
-    int     m_Angle;        // pour les arcs de cercle: longueur de l'arc en 0,1 degres
+    int     m_Angle;        // Arcs: angle in 0.1 degrees
 
-    std::vector<wxPoint>		m_PolyPoints;   // For polygons: number of points (> 2)
+    std::vector<wxPoint> m_PolyPoints;   // For polygons: number of points (> 2)
                             // Coord are relative to Origin, orient 0
 
 public:
@@ -54,12 +52,11 @@ public:
 
     int     ReadDescr( char* Line, FILE* File, int* LineNum = NULL );
 
-    // Mise a jour des coordon�s pour l'affichage
     void    SetDrawCoord();
 
     /* drawing functions */
     void    Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                 int aDrawMode, const wxPoint& offset = ZeroOffset );
+                  int aDrawMode, const wxPoint& offset = ZeroOffset );
 
     void    Draw3D( Pcb3D_GLCanvas* glcanvas );
 

@@ -106,12 +106,12 @@ private:
     LAYER                    m_Layer[NB_COPPER_LAYERS];
 
 public:
-    WinEDA_BasePcbFrame*     m_PcbFrame;                    // Window de visualisation
+    WinEDA_BasePcbFrame*     m_PcbFrame;                    // Window of visualization
     EDA_Rect                 m_BoundaryBox;                 // Board size and position
     int m_Status_Pcb;                                       // Flags used in ratsnet calculation and update
     EDA_BoardDesignSettings* m_BoardSettings;               // Link to current design settings
     int m_NbNodes;                                          // Active pads (pads attached to a net ) count
-    int m_NbNoconnect;                                      // Active ratsnet count (rastnests not alraedy connected by tracks)
+    int m_NbNoconnect;                                      // Active ratsnet count (rastnests not already connected by tracks)
 
     DLIST<BOARD_ITEM>          m_Drawings;                  // linked list of lines & texts
     DLIST<MODULE>              m_Modules;                   // linked list of MODULEs
@@ -327,7 +327,7 @@ public:
     /* Functions to get some items count */
     int      GetNumSegmTrack();
     int      GetNumSegmZone();
-    unsigned GetNoconnectCount();        // retourne le nombre de connexions manquantes
+    unsigned GetNoconnectCount();        // Return the number of missing links.
 
     /**
      * Function GetNumRatsnests
@@ -353,7 +353,6 @@ public:
     }
 
 
-    // Calcul du rectangle d'encadrement:
     bool          ComputeBoundaryBox();
 
 
@@ -448,8 +447,8 @@ public:
     /**
      * Function SetCurrentNetClass
      * Must be called after a netclass selection (or after a netclass parameter change
-     * Initialise vias and tracks values displayed in comb boxs of the auxiliary toolbar
-     * and some others parametres (netclass name ....)
+     * Initialise vias and tracks values displayed in comb boxes of the auxiliary toolbar
+     * and some others parameters (netclass name ....)
      * @param aNetClassName = the new netclass name
      * @return true if lists of tracks and vias sizes are modified
      */
@@ -461,7 +460,7 @@ public:
     int           GetBiggestClearanceValue();
 
     /** function GetCurrentTrackWidth
-     * @return the current track width, accordint to the selected options
+     * @return the current track width, according to the selected options
      * ( using the default netclass value or a preset value )
      * the default netclass is always in m_TrackWidthList[0]
      */
@@ -471,7 +470,7 @@ public:
     }
 
     /** function GetCurrentViaSize
-     * @return the current via size, accordint to the selected options
+     * @return the current via size, according to the selected options
      * ( using the default netclass value or a preset value )
      * the default netclass is always in m_TrackWidthList[0]
      */
@@ -481,7 +480,7 @@ public:
     }
 
     /** function GetCurrentViaDrill
-     * @return the current via size, accordint to the selected options
+     * @return the current via size, according to the selected options
      * ( using the default netclass value or a preset value )
      * the default netclass is always in m_TrackWidthList[0]
      */
@@ -577,8 +576,8 @@ public:
     /**
      * Function SetAreasNetCodesFromNetNames
      * Set the .m_NetCode member of all copper areas, according to the area Net Name
-     * The SetNetCodesFromNetNames is an equivalent to net name, for fas comparisons.
-     * However the Netcode is an arbitrary equyivalence, it must be set after each netlist read
+     * The SetNetCodesFromNetNames is an equivalent to net name, for fast comparisons.
+     * However the Netcode is an arbitrary equivalence, it must be set after each netlist read
      * or net change
      * Must be called after pad netcodes are calculated
      * @return : error count
@@ -761,7 +760,7 @@ public:
      * If possible, combine 2 copper areas
      * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful in undo commands
      *                      can be NULL
-     * @param area_ref = tje main area (zone)
+     * @param area_ref = the main area (zone)
      * @param area_to_combine = the zone that can be merged with area_ref
      * area_ref must be BEFORE area_to_combine
      * area_to_combine will be deleted, if areas are combined
@@ -778,7 +777,7 @@ public:
      * Test Areas outlines for DRC:
      *      Test areas inside other areas
      *      Test areas too close
-     * @param aArea_To_Examine: area to compare with other areas. if NULL: all areas are compared tp all others
+     * @param aArea_To_Examine: area to compare with other areas. if NULL: all areas are compared to all others
      * @param aCreate_Markers: if true create DRC markers. False: do not creates anything
      * @return errors count
      */
@@ -790,7 +789,7 @@ public:
     /**
      * Function Test_Connection_To_Copper_Areas
      * init .m_ZoneSubnet parameter in tracks and pads according to the connections to areas found
-     * @param aNetcode = netcode to analyse. if -1, analyse all nets
+     * @param aNetcode = netcode to analyze. if -1, analyze all nets
      */
     void Test_Connections_To_Copper_Areas( int aNetcode = -1 );
 

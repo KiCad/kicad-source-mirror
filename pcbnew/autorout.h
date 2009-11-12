@@ -1,7 +1,5 @@
 /****************************************************/
 /*					AUTOROUT.H						*/
-/* declarations communes relative au routage	*/
-/* et placement automatique des composants			*/
 /****************************************************/
 
 #ifndef AUTOROUT_H
@@ -14,11 +12,7 @@
 #define ILLEGAL -1
 
 
-/***********************************************/
-/* description d'un segment de chevelu general */
-/***********************************************/
-
-/* Commandes d'autoplacement / autorouage possibles */
+/* Autorouter commands. */
 enum CommandOpt {
     PLACE_ALL,
     PLACE_OUT_OF_BOARD,
@@ -32,17 +26,14 @@ enum CommandOpt {
 };
 
 
-/* Variables et structures d'autoroutage */
-
-extern int E_scale;     /* facteur d'echelle des tables de distance */
+extern int E_scale;     /* Scaling factor of distance tables. */
 
 #define ONE_SIDE  0
 #define TWO_SIDES 1
 
-extern int Nb_Sides;    /* Nombre de couches pour autoroutage (0 ou 1) */
+extern int Nb_Sides;    /* Number of layers for autorouting (0 or 1) */
 
-/* Bits Flags de gestion de remplissage du BOARD */
-#define FORCE_PADS 1  /* pour forcage placement pads quel que soit le netcode */
+#define FORCE_PADS 1  /* Force placement of pads for any Netcode */
 
 /* board dimensions */
 extern int Nrows;
@@ -55,8 +46,7 @@ extern int ClosNodes;   /* total number of nodes closed */
 extern int MoveNodes;   /* total number of nodes moved */
 extern int MaxNodes;    /* maximum number of nodes opened at one time */
 
-/* Structures utiles a la generation du board en Bit Map */
-
+/* Structures useful to the generation of board as bitmap. */
 
 typedef char BoardCell;
 typedef int  DistCell;
@@ -65,8 +55,10 @@ class BOARDHEAD  /* header of blocks of BoardCell */
 {
 public:
     BoardCell* m_BoardSide[2];  /* ptr to block of memory: 2-sided board */
-    DistCell*  m_DistSide[2];   /* ptr to block of memory: path distance to cells */
-    char*      m_DirSide[2];    /* header of blocks of chars:pointers back to source */
+    DistCell*  m_DistSide[2];   /* ptr to block of memory: path distance to
+                                 * cells */
+    char*      m_DirSide[2];    /* header of blocks of chars:pointers back to
+                                 * source */
     bool       m_InitBoardDone;
     int        m_Layers;
     int        m_Nrows, m_Ncols;
@@ -82,7 +74,7 @@ public:
 extern BOARDHEAD Board;        /* 2-sided board */
 
 
-/* Constantes utilisees pour le trace des cellules sur le BOARD */
+/* Constants used to trace the cells on the BOARD */
 #define WRITE_CELL     0
 #define WRITE_OR_CELL  1
 #define WRITE_XOR_CELL 2

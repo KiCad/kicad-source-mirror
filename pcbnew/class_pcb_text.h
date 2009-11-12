@@ -1,6 +1,6 @@
-/************************************/
-/* fonctions de la classe TEXTE_PCB */
-/************************************/
+/********************************/
+/* TEXTE_PCB class definition. */
+/********************************/
 #ifndef CLASS_PCB_TEXT_H
 #define CLASS_PCB_TEXT_H
 
@@ -52,14 +52,16 @@ public:
     /* duplicate structure */
     void Copy( TEXTE_PCB* source );
 
-    void Draw( WinEDA_DrawPanel * panel, wxDC* DC, int aDrawMode, const wxPoint& offset = ZeroOffset );
+    void Draw( WinEDA_DrawPanel * panel, wxDC* DC, int aDrawMode,
+               const wxPoint& offset = ZeroOffset );
 
     // File Operations:
     int ReadTextePcbDescr( FILE* File, int* LineNum );
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to a FILE in "*.brd"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
@@ -88,7 +90,7 @@ public:
 
 
     /**
-     * Function HitTest (overlayed)
+     * Function HitTest (overlaid)
      * tests if the given EDA_Rect intersect this object.
      * @param refArea the given EDA_Rect to test
      * @return bool - true if a hit, else false
@@ -121,4 +123,4 @@ public:
 
 };
 
-#endif 	// #define CLASS_PCB_TEXT_H
+#endif  // #define CLASS_PCB_TEXT_H

@@ -18,41 +18,46 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 /* Class BOARD: */
 /*****************/
 
-/* Constructor */
 BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
     BOARD_ITEM( (BOARD_ITEM*)parent, TYPE_PCB ),
     m_NetClasses( this )
 {
-    m_PcbFrame      = frame;
-    m_Status_Pcb    = 0;                        // Mot d'etat: Bit 1 = Chevelu calcule
+    m_PcbFrame = frame;
+    m_Status_Pcb    = 0;                    // Status word: bit 1 = calculate.
     m_BoardSettings = &g_DesignSettings;
-    m_NbNodes     = 0;                          // nombre de pads connectes
-    m_NbNoconnect = 0;                          // nombre de chevelus actifs
+    m_NbNodes     = 0;                      // Number of connected pads.
+    m_NbNoconnect = 0;                      // Number of unconnected nets.
 
-    m_CurrentZoneContour = NULL;                // This ZONE_CONTAINER handle the zone contour cuurently in progress
-    m_NetInfo = new NETINFO_LIST( this );       // handle nets info list (name, design constraints ..
-    m_NetInfo->BuildListOfNets();               // prepare pads and nets lists containers.
+    m_CurrentZoneContour = NULL;            // This ZONE_CONTAINER handle the
+                                            // zone contour currently in
+                                            // progress
+    m_NetInfo = new NETINFO_LIST( this );   // handle nets info list (name,
+                                            // design constraints ..
+    m_NetInfo->BuildListOfNets();           // prepare pads and nets lists
+                                            // containers.
 
-    for( int layer = 0; layer < NB_COPPER_LAYERS;  ++layer )
+    for( int layer = 0; layer < NB_COPPER_LAYERS; ++layer )
     {
         m_Layer[layer].m_Name = ReturnPcbLayerName( layer, true );
         m_Layer[layer].m_Type = LT_SIGNAL;
     }
 
-    // Initial parameters for the default NETCLASS come from the global preferences
+    // Initial parameters for the default NETCLASS come from the global
+    // preferences
     // within g_DesignSettings via the NETCLASS() constructor.
-    // Should user eventually load a board from a disk file, then these defaults
+    // Should user eventually load a board from a disk file, then these
+    // defaults
     // will get overwritten during load.
-    m_NetClasses.GetDefault()->SetDescription( _( "This is the default net class." ) );
-    m_ViaSizeSelector = 0;
+    m_NetClasses.GetDefault()->SetDescription(
+        _( "This is the default net class." ) );
+    m_ViaSizeSelector    = 0;
     m_TrackWidthSelector = 0;
-    SetCurrentNetClass(m_NetClasses.GetDefault()->GetName( ));      // Initialize default values
+
+    // Initialize default values.
+    SetCurrentNetClass( m_NetClasses.GetDefault()->GetName() );
 }
 
 
-/***************/
-/* Destructeur */
-/***************/
 BOARD::~BOARD()
 {
     if( m_PcbFrame->GetScreen() )
@@ -77,21 +82,23 @@ BOARD::~BOARD()
     delete m_NetInfo;
 }
 
+
 /**
  * Function SetCurrentNetClass
- * Must be called after a netclass selection (or after a netclass parameter change
- * Initialise vias and tracks values displayed in combo boxs of the auxiliary toolbar
- * and some others parametres (netclass name ....)
+ * Must be called after a netclass selection (or after a netclass parameter
+ * change
+ * Initialize vias and tracks values displayed in combo boxes of the auxiliary
+ * toolbar and some other parameters (netclass name ....)
  * @param aNetClassName = the new netclass name
  * @return true if lists of tracks and vias sizes are modified
  */
- bool BOARD::SetCurrentNetClass( const wxString & aNetClassName)
+bool BOARD::SetCurrentNetClass( const wxString& aNetClassName )
 {
-    NETCLASS * netClass = m_NetClasses.Find(aNetClassName);
-    bool lists_sizes_modified = false;
+    NETCLASS* netClass = m_NetClasses.Find( aNetClassName );
+    bool      lists_sizes_modified = false;
 
     // if not found (should not happen) use the default
-    if ( netClass == NULL )
+    if( netClass == NULL )
         netClass = m_NetClasses.GetDefault();
 
     m_CurrentNetClassName = netClass->GetName();
@@ -101,12 +108,12 @@ BOARD::~BOARD()
     {
         VIA_DIMENSION viadim;
         lists_sizes_modified = true;
-        m_ViasDimensionsList.push_back(viadim);
+        m_ViasDimensionsList.push_back( viadim );
     }
     if( m_TrackWidthList.size() == 0 )
     {
         lists_sizes_modified = true;
-        m_TrackWidthList.push_back(0);
+        m_TrackWidthList.push_back( 0 );
     }
 
     /* note the m_ViasDimensionsList[0] and m_TrackWidthList[0] values
@@ -128,20 +135,26 @@ BOARD::~BOARD()
     return lists_sizes_modified;
 }
 
+
 /** function GetBiggestClearanceValue
- * @return the biggest clerance value found in NetClasses list
+ * @return the biggest clearance value found in NetClasses list
  */
 int BOARD::GetBiggestClearanceValue()
 {
     int clearance = m_NetClasses.GetDefault()->GetClearance();
+
     //Read list of Net Classes
-    for( NETCLASSES::const_iterator nc = m_NetClasses.begin();  nc != m_NetClasses.end(); nc++ )
+    for( NETCLASSES::const_iterator nc = m_NetClasses.begin();
+         nc != m_NetClasses.end();
+         nc++ )
     {
         NETCLASS* netclass = nc->second;
         clearance = MAX( clearance, netclass->GetClearance() );
     }
+
     return clearance;
 }
+
 
 /** function GetCurrentMicroViaSize
  * @return the current micro via size,
@@ -150,8 +163,10 @@ int BOARD::GetBiggestClearanceValue()
 int BOARD::GetCurrentMicroViaSize()
 {
     NETCLASS* netclass = m_NetClasses.Find( m_CurrentNetClassName );
+
     return netclass->GetuViaDiameter();
 }
+
 
 /** function GetCurrentMicroViaDrill
  * @return the current micro via drill,
@@ -160,16 +175,19 @@ int BOARD::GetCurrentMicroViaSize()
 int BOARD::GetCurrentMicroViaDrill()
 {
     NETCLASS* netclass = m_NetClasses.Find( m_CurrentNetClassName );
+
     return netclass->GetuViaDrill();
 }
 
+
 wxString BOARD::GetLayerName( int aLayerIndex ) const
 {
-    if( ! IsValidLayerIndex( aLayerIndex ))
+    if( !IsValidLayerIndex( aLayerIndex ) )
         return wxEmptyString;
 
     // copper layer names are stored in the BOARD.
-    if( IsValidCopperLayerIndex( aLayerIndex ) && m_BoardSettings->IsLayerEnabled( aLayerIndex ))
+    if( IsValidCopperLayerIndex( aLayerIndex )
+       && m_BoardSettings->IsLayerEnabled( aLayerIndex ) )
     {
         // default names were set in BOARD::BOARD() but they may be
         // over-ridden by BOARD::SetLayerName()
@@ -182,7 +200,7 @@ wxString BOARD::GetLayerName( int aLayerIndex ) const
 
 bool BOARD::SetLayerName( int aLayerIndex, const wxString& aLayerName )
 {
-    if( ! IsValidCopperLayerIndex( aLayerIndex ))
+    if( !IsValidCopperLayerIndex( aLayerIndex ) )
         return false;
 
     if( aLayerName == wxEmptyString  || aLayerName.Len() > 20 )
@@ -197,11 +215,12 @@ bool BOARD::SetLayerName( int aLayerIndex, const wxString& aLayerName )
     // replace any spaces with underscores before we do any comparing
     NameTemp.Replace( wxT( " " ), wxT( "_" ) );
 
-    if( m_BoardSettings->IsLayerEnabled( aLayerIndex ))
+    if( m_BoardSettings->IsLayerEnabled( aLayerIndex ) )
     {
         for( int i = 0; i < NB_COPPER_LAYERS; i++ )
         {
-            if( i != aLayerIndex && m_BoardSettings->IsLayerEnabled( i ) && NameTemp == m_Layer[i].m_Name )
+            if( i != aLayerIndex && m_BoardSettings->IsLayerEnabled( i )
+                && NameTemp == m_Layer[i].m_Name )
                 return false;
         }
 
@@ -216,12 +235,12 @@ bool BOARD::SetLayerName( int aLayerIndex, const wxString& aLayerName )
 
 LAYER_T BOARD::GetLayerType( int aLayerIndex ) const
 {
-    if( ! IsValidCopperLayerIndex( aLayerIndex ))
+    if( !IsValidCopperLayerIndex( aLayerIndex ) )
         return LT_SIGNAL;
 
     //@@IMB: The original test was broken due to the discontinuity
     // in the layer sequence.
-    if( m_BoardSettings->IsLayerEnabled( aLayerIndex ))
+    if( m_BoardSettings->IsLayerEnabled( aLayerIndex ) )
         return m_Layer[aLayerIndex].m_Type;
     return LT_SIGNAL;
 }
@@ -229,12 +248,12 @@ LAYER_T BOARD::GetLayerType( int aLayerIndex ) const
 
 bool BOARD::SetLayerType( int aLayerIndex, LAYER_T aLayerType )
 {
-    if( ! IsValidCopperLayerIndex( aLayerIndex ))
+    if( !IsValidCopperLayerIndex( aLayerIndex ) )
         return false;
 
     //@@IMB: The original test was broken due to the discontinuity
     // in the layer sequence.
-    if( m_BoardSettings->IsLayerEnabled( aLayerIndex ))
+    if( m_BoardSettings->IsLayerEnabled( aLayerIndex ) )
     {
         m_Layer[aLayerIndex].m_Type = aLayerType;
         return true;
@@ -251,16 +270,20 @@ const char* LAYER::ShowType( LAYER_T aType )
     {
     default:
     case LT_SIGNAL:
-        cp = "signal";      break;
+        cp = "signal";
+        break;
 
     case LT_POWER:
-        cp = "power";       break;
+        cp = "power";
+        break;
 
     case LT_MIXED:
-        cp = "mixed";       break;
+        cp = "mixed";
+        break;
 
     case LT_JUMPER:
-        cp = "jumper";      break;
+        cp = "jumper";
+        break;
     }
 
     return cp;
@@ -287,32 +310,38 @@ int BOARD::GetCopperLayerCount() const
     return m_BoardSettings->GetCopperLayerCount();
 }
 
+
 int BOARD::GetEnabledLayers() const
 {
     return m_BoardSettings->GetEnabledLayers();
 }
+
 
 int BOARD::GetVisibleLayers() const
 {
     return m_BoardSettings->GetVisibleLayers();
 }
 
+
 void BOARD::SetEnabledLayers( int aLayerMask )
 {
     m_BoardSettings->SetEnabledLayers( aLayerMask );
 }
+
 
 void BOARD::SetVisibleLayers( int aLayerMask )
 {
     m_BoardSettings->SetVisibleLayers( aLayerMask );
 }
 
+
 void BOARD::SetVisibleElements( int aMask )
 {
     m_BoardSettings->SetVisibleElements( aMask );
 }
 
-int  BOARD::GetVisibleElements() const
+
+int BOARD::GetVisibleElements() const
 {
     return m_BoardSettings->GetVisibleElements();
 }
@@ -372,7 +401,8 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         aBoardItem->SetParent( this );
 
         // Because the list of pads has changed, reset the status
-        // This indicate the list of pad and nets must be recalculated before use
+        // This indicate the list of pad and nets must be recalculated before
+        // use
         m_Status_Pcb = 0;
         break;
 
@@ -412,7 +442,7 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
     case TYPE_MARKER_PCB:
 
         // find the item in the vector, then remove it
-        for( unsigned i = 0;  i<m_markers.size();  ++i )
+        for( unsigned i = 0; i<m_markers.size(); ++i )
         {
             if( m_markers[i] == (MARKER_PCB*) aBoardItem )
             {
@@ -425,7 +455,7 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
 
     case TYPE_ZONE_CONTAINER:    // this one uses a vector
         // find the item in the vector, then delete then erase it.
-        for( unsigned i = 0;  i<m_ZoneDescriptorList.size();  ++i )
+        for( unsigned i = 0; i<m_ZoneDescriptorList.size(); ++i )
         {
             if( m_ZoneDescriptorList[i] == (ZONE_CONTAINER*) aBoardItem )
             {
@@ -469,7 +499,7 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
 void BOARD::DeleteMARKERs()
 {
     // the vector does not know how to delete the MARKER_PCB, it holds pointers
-    for( unsigned i = 0;  i<m_markers.size();  ++i )
+    for( unsigned i = 0; i<m_markers.size(); ++i )
         delete m_markers[i];
 
     m_markers.clear();
@@ -478,8 +508,9 @@ void BOARD::DeleteMARKERs()
 
 void BOARD::DeleteZONEOutlines()
 {
-    // the vector does not know how to delete the ZONE Outlines, it holds pointers
-    for( unsigned i = 0;  i<m_ZoneDescriptorList.size();  ++i )
+    // the vector does not know how to delete the ZONE Outlines, it holds
+    // pointers
+    for( unsigned i = 0; i<m_ZoneDescriptorList.size(); ++i )
         delete m_ZoneDescriptorList[i];
 
     m_ZoneDescriptorList.clear();
@@ -514,10 +545,6 @@ unsigned BOARD::GetNodesCount()
 }
 
 
-/***********************************/
-bool BOARD::ComputeBoundaryBox()
-/***********************************/
-
 /** Function ComputeBoundaryBox()
  * Calculate the bounding box of the board
  *  This box contains pcb edges, pads , vias and tracks
@@ -525,6 +552,7 @@ bool BOARD::ComputeBoundaryBox()
  *
  *  @return 0 for an empty board (no items), else 1
  */
+bool BOARD::ComputeBoundaryBox()
 {
     int             rayon, cx, cy, d, xmin, ymin, xmax, ymax;
     bool            hasItems = FALSE;
@@ -534,7 +562,7 @@ bool BOARD::ComputeBoundaryBox()
     xmin = ymin = 0x7FFFFFFFl;
     xmax = ymax = -0x7FFFFFFFl;
 
-    /* Analyse PCB edges*/
+    /* Analyze PCB edges*/
     PtStruct = m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
@@ -546,8 +574,9 @@ bool BOARD::ComputeBoundaryBox()
 
         if( ptr->m_Shape == S_CIRCLE )
         {
-            cx       = ptr->m_Start.x; cy = ptr->m_Start.y;
-            rayon    = (int) hypot( (double) ( ptr->m_End.x - cx ), (double) ( ptr->m_End.y - cy ) );
+            cx    = ptr->m_Start.x; cy = ptr->m_Start.y;
+            rayon = (int) hypot( (double) ( ptr->m_End.x - cx ),
+                                (double) ( ptr->m_End.y - cy ) );
             rayon   += d;
             xmin     = MIN( xmin, cx - rayon );
             ymin     = MIN( ymin, cy - rayon );
@@ -557,8 +586,8 @@ bool BOARD::ComputeBoundaryBox()
         }
         else
         {
-            cx       = MIN( ptr->m_Start.x, ptr->m_End.x );
-            cy       = MIN( ptr->m_Start.y, ptr->m_End.y );
+            cx = MIN( ptr->m_Start.x, ptr->m_End.x );
+            cy = MIN( ptr->m_Start.y, ptr->m_End.y );
             xmin     = MIN( xmin, cx - d );
             ymin     = MIN( ymin, cy - d );
             cx       = MAX( ptr->m_Start.x, ptr->m_End.x );
@@ -569,18 +598,22 @@ bool BOARD::ComputeBoundaryBox()
         }
     }
 
-    /* Analyse footprints  */
+    /* Analise footprints  */
 
-    for( MODULE* module = m_Modules;  module;  module = module->Next() )
+    for( MODULE* module = m_Modules; module; module = module->Next() )
     {
         hasItems = TRUE;
-        xmin     = MIN( xmin, ( module->m_Pos.x + module->m_BoundaryBox.GetX() ) );
-        ymin     = MIN( ymin, ( module->m_Pos.y + module->m_BoundaryBox.GetY() ) );
-        xmax     = MAX( xmax, module->m_Pos.x + module->m_BoundaryBox.GetRight() );
-        ymax     = MAX( ymax, module->m_Pos.y + module->m_BoundaryBox.GetBottom() );
+        xmin     = MIN( xmin, ( module->m_Pos.x
+                                + module->m_BoundaryBox.GetX() ) );
+        ymin     = MIN( ymin, ( module->m_Pos.y
+                                + module->m_BoundaryBox.GetY() ) );
+        xmax     = MAX( xmax, module->m_Pos.x
+                        + module->m_BoundaryBox.GetRight() );
+        ymax     = MAX( ymax,
+                        module->m_Pos.y + module->m_BoundaryBox.GetBottom() );
 
 
-        for( D_PAD* pt_pad = module->m_Pads;  pt_pad;  pt_pad = pt_pad->Next() )
+        for( D_PAD* pt_pad = module->m_Pads; pt_pad; pt_pad = pt_pad->Next() )
         {
             const wxPoint& pos = pt_pad->GetPosition();
 
@@ -592,12 +625,12 @@ bool BOARD::ComputeBoundaryBox()
         }
     }
 
-    /* Analyse track and zones */
-    for( TRACK* track = m_Track;  track;  track = track->Next() )
+    /* Analise track and zones */
+    for( TRACK* track = m_Track; track; track = track->Next() )
     {
-        d        = (track->m_Width / 2) + 1;
-        cx       = MIN( track->m_Start.x, track->m_End.x );
-        cy       = MIN( track->m_Start.y, track->m_End.y );
+        d = ( track->m_Width / 2 ) + 1;
+        cx = MIN( track->m_Start.x, track->m_End.x );
+        cy = MIN( track->m_Start.y, track->m_End.y );
         xmin     = MIN( xmin, cx - d );
         ymin     = MIN( ymin, cy - d );
         cx       = MAX( track->m_Start.x, track->m_End.x );
@@ -607,11 +640,11 @@ bool BOARD::ComputeBoundaryBox()
         hasItems = TRUE;
     }
 
-    for( TRACK* track = m_Zone;  track;  track = track->Next() )
+    for( TRACK* track = m_Zone; track; track = track->Next() )
     {
-        d        = (track->m_Width / 2) + 1;
-        cx       = MIN( track->m_Start.x, track->m_End.x );
-        cy       = MIN( track->m_Start.y, track->m_End.y );
+        d = ( track->m_Width / 2 ) + 1;
+        cx = MIN( track->m_Start.x, track->m_End.x );
+        cy = MIN( track->m_Start.y, track->m_End.y );
         xmin     = MIN( xmin, cx - d );
         ymin     = MIN( ymin, cy - d );
         cx       = MAX( track->m_Start.x, track->m_End.x );
@@ -648,17 +681,17 @@ bool BOARD::ComputeBoundaryBox()
 
 
 // virtual, see pcbstruct.h
+
+/* Display board statistics: pads, nets, connections.. count
+ */
 void BOARD::DisplayInfo( WinEDA_DrawFrame* frame )
 {
-    /* Display board statistics: pads, nets, connections.. count
-    */
-
     wxString txt;
 
     frame->ClearMsgPanel();
 
     int viasCount = 0;
-    for( BOARD_ITEM* item = m_Track;  item;  item = item->Next() )
+    for( BOARD_ITEM* item = m_Track; item; item = item->Next() )
     {
         if( item->Type() == TYPE_VIA )
             viasCount++;
@@ -688,7 +721,7 @@ void BOARD::DisplayInfo( WinEDA_DrawFrame* frame )
         frame->AppendMsgPanel( _( "Connect" ), txt, DARKGREEN );
 
         txt.Printf( wxT( "%d" ), GetNoconnectCount() );
-        frame->AppendMsgPanel( _( "NoConn" ), txt, BLUE );
+        frame->AppendMsgPanel( _( "Unconnected" ), txt, BLUE );
     }
 }
 
@@ -779,19 +812,23 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             ;
             break;
 
-#if 0       // both these are on same list, so we must scan it twice in order to get VIA priority,
-        // using new #else code below.
-        // But we are not using separte lists for TRACKs and SEGVIAs, because items are ordered (sortered) in the linked
+#if 0   // both these are on same list, so we must scan it twice in order
+        // to get VIA priority, using new #else code below.
+        // But we are not using separate lists for TRACKs and SEGVIAs, because
+        // items are ordered (sorted) in the linked
         // list by netcode AND by physical distance:
-        // when created, if a track or via is connected to an existing track or via, it is put in linked list
-        // after this existing track or via
+        // when created, if a track or via is connected to an existing track or
+        // via, it is put in linked list after this existing track or via
         // So usually, connected tracks or vias are grouped in this list
-        // So the algorithm (used in rastnest computations) which computes the track connectivity is faster (more than 100 time regarding to
-        // a non ordered list) because when it searchs for a connexion, first it tests the near (near in term of linked list) 50 items
+        // So the algorithm (used in rastnest computations) which computes the
+        // track connectivity is faster (more than 100 time regarding to
+        // a non ordered list) because when it searches for a connexion, first
+        // it tests the near (near in term of linked list) 50 items
         // from the current item (track or via) in test.
-        // Usually, because of this sort, a connected item (if exists) is found.
-        // If not found (and only in this case) an exhaustive (and time consumming) search is made,
-        // but this case is statistically rare.
+        // Usually, because of this sort, a connected item (if exists) is
+        // found.
+        // If not found (and only in this case) an exhaustive (and time
+        // consuming) search is made, but this case is statistically rare.
         case TYPE_VIA:
         case TYPE_TRACK:
             result = IterateForward( m_Track, inspector, testData, p );
@@ -829,7 +866,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
         case TYPE_MARKER_PCB:
 
             // MARKER_PCBS are in the m_markers std::vector
-            for( unsigned i = 0;  i<m_markers.size();  ++i )
+            for( unsigned i = 0; i<m_markers.size(); ++i )
             {
                 result = m_markers[i]->Visit( inspector, testData, p );
                 if( result == SEARCH_QUIT )
@@ -842,9 +879,11 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
         case TYPE_ZONE_CONTAINER:
 
             // TYPE_ZONE_CONTAINER are in the m_ZoneDescriptorList std::vector
-            for( unsigned i = 0;  i< m_ZoneDescriptorList.size();  ++i )
+            for( unsigned i = 0; i< m_ZoneDescriptorList.size(); ++i )
             {
-                result = m_ZoneDescriptorList[i]->Visit( inspector, testData, p );
+                result = m_ZoneDescriptorList[i]->Visit( inspector,
+                                                         testData,
+                                                         p );
                 if( result == SEARCH_QUIT )
                     break;
             }
@@ -886,7 +925,8 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
  *           found(0), layer(alayer), layer_mask( g_TabOneLayerMask[alayer] )
  *       {}
  *
- *       SEARCH_RESULT Inspect( EDA_BaseStruct* testItem, const void* testData )
+ *       SEARCH_RESULT Inspect( EDA_BaseStruct* testItem, const void* testData
+ * )
  *       {
  *           BOARD_ITEM*     item   = (BOARD_ITEM*) testItem;
  *           const wxPoint&  refPos = *(const wxPoint*) testData;
@@ -967,8 +1007,8 @@ NETINFO_ITEM* BOARD::FindNet( int anetcode ) const
     {
         if( anetcode != net->GetNet() )
         {
-           printf("FindNet() anetcode %d != GetNet() %d (net: %s)\n",
-                anetcode, net->GetNet(), CONV_TO_UTF8(net->GetNetname()));
+            printf( "FindNet() anetcode %d != GetNet() %d (net: %s)\n",
+                    anetcode, net->GetNet(), CONV_TO_UTF8( net->GetNetname() ) );
         }
     }
 #endif
@@ -978,7 +1018,7 @@ NETINFO_ITEM* BOARD::FindNet( int anetcode ) const
 
 
 /**
- * Function FindNet overlayed
+ * Function FindNet overlaid
  * searches for a net with the given name.
  * @param aNetname A Netname to search for.
  * @return NETINFO_ITEM* - the net or NULL if not found.
@@ -995,8 +1035,8 @@ NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
     // Search for a netname = aNetname
 #if 0
 
-    // Use a sequencial search: easy to understand, but slow
-    for( int ii = 1; ii < ncount;  ii++ )
+    // Use a sequential search: easy to understand, but slow
+    for( int ii = 1; ii < ncount; ii++ )
     {
         NETINFO_ITEM* item = m_NetInfo->GetNetItem( ii );
         if( item && item->GetNetname() == aNetname )
@@ -1009,7 +1049,8 @@ NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
 
     // Use a fast binary search,
     // this is possible because Nets are alphabetically ordered in list
-    // see NETINFO_LIST::BuildListOfNets() and NETINFO_LIST::Build_Pads_Full_List()
+    // see NETINFO_LIST::BuildListOfNets() and
+    // NETINFO_LIST::Build_Pads_Full_List()
     int imax  = ncount - 1;
     int index = imax;
     while( ncount > 0 )
@@ -1093,10 +1134,12 @@ static bool s_SortByNodes( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
 /**
  * Function ReturnSortedNetnamesList
  * @param aNames An array string to fill with net names.
- * @param aSortbyPadsCount : true = sort by active pads count, false = no sort (i.e. leave the sort by net names)
+ * @param aSortbyPadsCount : true = sort by active pads count, false = no sort
+ * (i.e. leave the sort by net names)
  * @return int - net names count.
  */
-int BOARD::ReturnSortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
+int BOARD::ReturnSortedNetnamesList( wxArrayString& aNames,
+                                     bool           aSortbyPadsCount )
 {
     if( m_NetInfo->GetCount() == 0 )
         return 0;
@@ -1123,9 +1166,7 @@ int BOARD::ReturnSortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCoun
 }
 
 
-/************************************/
 bool BOARD::Save( FILE* aFile ) const
-/************************************/
 {
     bool        rc = false;
     BOARD_ITEM* item;
@@ -1139,11 +1180,11 @@ bool BOARD::Save( FILE* aFile ) const
     m_NetClasses.Save( aFile );
 
     // save the modules
-    for( item = m_Modules;  item;  item = item->Next() )
+    for( item = m_Modules; item; item = item->Next() )
         if( !item->Save( aFile ) )
             goto out;
 
-    for( item = m_Drawings;  item;  item = item->Next() )
+    for( item = m_Drawings; item; item = item->Next() )
     {
         switch( item->Type() )
         {
@@ -1159,7 +1200,8 @@ bool BOARD::Save( FILE* aFile ) const
 
             // future: throw exception here
 #if defined(DEBUG)
-            printf( "BOARD::Save() ignoring m_Drawings type %d\n", item->Type() );
+            printf( "BOARD::Save() ignoring m_Drawings type %d\n",
+                    item->Type() );
 #endif
             break;
         }
@@ -1169,7 +1211,7 @@ bool BOARD::Save( FILE* aFile ) const
 
     // save the tracks & vias
     fprintf( aFile, "$TRACK\n" );
-    for( item = m_Track;  item;  item = item->Next() )
+    for( item = m_Track; item; item = item->Next() )
         if( !item->Save( aFile ) )
             goto out;
 
@@ -1177,7 +1219,7 @@ bool BOARD::Save( FILE* aFile ) const
 
     // save the zones
     fprintf( aFile, "$ZONE\n" );
-    for( item = m_Zone;  item;  item = item->Next() )
+    for( item = m_Zone; item; item = item->Next() )
         if( !item->Save( aFile ) )
             goto out;
 
@@ -1201,14 +1243,14 @@ out:
 }
 
 
-/***********************************************************************************************/
-void BOARD::RedrawAreasOutlines( WinEDA_DrawPanel* panel, wxDC* aDC, int aDrawMode, int aLayer )
-/***********************************************************************************************/
-
 /**
  * Function RedrawAreasOutlines
  * Redraw all areas outlines on layer aLayer ( redraw all if aLayer < 0 )
  */
+void BOARD::RedrawAreasOutlines( WinEDA_DrawPanel* panel,
+                                 wxDC*             aDC,
+                                 int               aDrawMode,
+                                 int               aLayer )
 {
     if( !aDC )
         return;
@@ -1222,14 +1264,14 @@ void BOARD::RedrawAreasOutlines( WinEDA_DrawPanel* panel, wxDC* aDC, int aDrawMo
 }
 
 
-/***********************************************************************************************/
-void BOARD::RedrawFilledAreas( WinEDA_DrawPanel* panel, wxDC* aDC, int aDrawMode, int aLayer )
-/***********************************************************************************************/
-
 /**
  * Function RedrawFilledAreas
  * Redraw all areas outlines on layer aLayer ( redraw all if aLayer < 0 )
  */
+void BOARD::RedrawFilledAreas( WinEDA_DrawPanel* panel,
+                               wxDC*             aDC,
+                               int               aDrawMode,
+                               int               aLayer )
 {
     if( !aDC )
         return;
@@ -1245,13 +1287,15 @@ void BOARD::RedrawFilledAreas( WinEDA_DrawPanel* panel, wxDC* aDC, int aDrawMode
 
 /**
  * Function HitTestForAnyFilledArea
- * tests if the given wxPoint is within the bounds of a filled area of this zone.
+ * tests if the given wxPoint is within the bounds of a filled area of this
+ * zone.
  * the test is made on zones on layer from aStartLayer to aEndLayer
  * Note: if a zone has its flag BUSY (in .m_State) is set, it is ignored.
  * @param refPos A wxPoint to test
  * @param aStartLayer the first layer to test
  * @param aEndLayer the last layer (-1 to ignore it) to test
- * @return ZONE_CONTAINER* return a pointer to the ZONE_CONTAINER found, else NULL
+ * @return ZONE_CONTAINER* return a pointer to the ZONE_CONTAINER found, else
+ * NULL
  */
 ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
                                                 int            aStartLayer,
@@ -1268,7 +1312,8 @@ ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
         int             layer = area->GetLayer();
         if( (layer < aStartLayer) || (layer > aEndLayer) )
             continue;
-        if( area->GetState( BUSY ) )      // In locate functions we must skip tagged items with BUSY flag set.
+        if( area->GetState( BUSY ) )      // In locate functions we must skip
+                                          // tagged items with BUSY flag set.
             continue;
         if( area->HitTestFilledArea( aRefPos ) )
             return area;
@@ -1280,9 +1325,12 @@ ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
 
 /**
  * Function SetAreasNetCodesFromNetNames
- * Set the .m_NetCode member of all copper areas, according to the area Net Name
- * The SetNetCodesFromNetNames is an equivalent to net name, for fast comparisons.
- * However the Netcode is an arbitrary equivalence, it must be set after each netlist read
+ * Set the .m_NetCode member of all copper areas, according to the area Net
+ * Name
+ * The SetNetCodesFromNetNames is an equivalent to net name, for fast
+ * comparisons.
+ * However the Netcode is an arbitrary equivalence, it must be set after each
+ * netlist read
  * or net change
  * Must be called after pad netcodes are calculated
  * @return : error count
@@ -1300,7 +1348,8 @@ int BOARD::SetAreasNetCodesFromNetNames( void )
             continue;
         }
 
-        if( GetArea( ii )->GetNet() != 0 )      // i.e. if this zone is connected to a net
+        if( GetArea( ii )->GetNet() != 0 )      // i.e. if this zone is
+                                                // connected to a net
         {
             const NETINFO_ITEM* net = FindNet( GetArea( ii )->m_Netname );
             if( net )
@@ -1310,7 +1359,8 @@ int BOARD::SetAreasNetCodesFromNetNames( void )
             else
             {
                 error_count++;
-                GetArea( ii )->SetNet( -1 );    //keep Net Name ane set m_NetCode to -1 : error flag
+                GetArea( ii )->SetNet( -1 );    // keep Net Name and set
+                                                // m_NetCode to -1 : error flag
             }
         }
     }
@@ -1333,7 +1383,8 @@ void BOARD::Show( int nestLevel, std::ostream& os )
     BOARD_ITEM* p;
 
     // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
+    NestedSpace( nestLevel,
+                 os ) << '<' << GetClass().Lower().mb_str() << ">\n";
 
     // specialization of the output:
     NestedSpace( nestLevel + 1, os ) << "<modules>\n";
@@ -1366,18 +1417,20 @@ void BOARD::Show( int nestLevel, std::ostream& os )
 
     /*
      *  NestedSpace( nestLevel+1, os ) << "<zone_container>\n";
-     *  for( ZONE_CONTAINERS::iterator i=m_ZoneDescriptorList.begin();  i!=m_ZoneDescriptorList.end();  ++i )
+     *  for( ZONE_CONTAINERS::iterator i=m_ZoneDescriptorList.begin();
+     *  i!=m_ZoneDescriptorList.end();  ++i )
      *   (*i)->Show( nestLevel+2, os );
      *  NestedSpace( nestLevel+1, os ) << "</zone_container>\n";
      */
 
     p = (BOARD_ITEM*) m_Son;
-    for( ; p;  p = p->Next() )
+    for( ; p; p = p->Next() )
     {
         p->Show( nestLevel + 1, os );
     }
 
-    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
+    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str()
+                                 << ">\n";
 }
 
 

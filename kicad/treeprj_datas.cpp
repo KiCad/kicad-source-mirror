@@ -22,11 +22,8 @@
 #include "wx/dir.h"
 
 
-/********************************************/
-/* Methodes pour l'arbre  gestion du projet */
-/********************************************/
-
 IMPLEMENT_ABSTRACT_CLASS( WinEDA_TreePrj, wxTreeCtrl )
+
 
 WinEDA_TreePrj::WinEDA_TreePrj( WinEDA_PrjFrame* parent ) :
     wxTreeCtrl( parent, ID_PROJECT_TREE,
@@ -61,16 +58,13 @@ WinEDA_TreePrj::~WinEDA_TreePrj()
 }
 
 
-/***************************************************************************************/
-int WinEDA_TreePrj::OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 )
-/***************************************************************************************/
-
 /* sort function for tree items.
  *  items are sorted :
  *  directory names first by alphabetic order
  *  root file names after
  *  file names last by alphabetic order
  */
+int WinEDA_TreePrj::OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 )
 {
     TreePrjItemData* myitem1 = (TreePrjItemData*) GetItemData( item1 );
     TreePrjItemData* myitem2 = (TreePrjItemData*) GetItemData( item2 );
@@ -89,11 +83,9 @@ int WinEDA_TreePrj::OnCompareItems( const wxTreeItemId& item1, const wxTreeItemI
 }
 
 
-/****************************************************************************************************/
 TreePrjItemData::TreePrjItemData( enum TreeFileType type, const wxString& data,
                                   wxTreeCtrl* parent ) :
     wxTreeItemData()
-/****************************************************************************************************/
 {
     m_Type       = type;
     m_Parent     = parent;
@@ -105,26 +97,23 @@ TreePrjItemData::TreePrjItemData( enum TreeFileType type, const wxString& data,
 #ifdef KICAD_PYTHON
 using namespace boost::python;
 
-/**************************************/
-object TreePrjItemData::GetIdPy() const
-/**************************************/
-
 // Convert the data to an id
+object TreePrjItemData::GetIdPy() const
 {
     wxTreeItemId* id = new wxTreeItemId();
 
     *id = GetId();
-    return object( handle<>( borrowed( wxPyConstructObject( id, wxT( "wxTreeItemId" ), true ) ) ) );
+    return object( handle<>( borrowed( wxPyConstructObject( id,
+                                                            wxT( "wxTreeItemId" ),
+                                                            true ) ) ) );
 }
 
 
 #endif
 
-/*******************************************/
-void TreePrjItemData::SetState( int state )
-/*******************************************/
 
 // Set the state used in the icon list
+void TreePrjItemData::SetState( int state )
 {
     wxImageList* imglist = m_Parent->GetImageList();
 
@@ -137,10 +126,8 @@ void TreePrjItemData::SetState( int state )
 }
 
 
-/*******************************************/
-wxString TreePrjItemData::GetDir() const
-/*******************************************/
 /* Get the directory containing the file */
+wxString TreePrjItemData::GetDir() const
 {
     if( TREE_DIRECTORY == m_Type )
         return m_FileName;
@@ -161,28 +148,25 @@ wxString TreePrjItemData::GetDir() const
 }
 
 
-/****************************************************************/
-void TreePrjItemData::OnRename( wxTreeEvent& event, bool check )
-/****************************************************************/
 /* Called upon tree item rename */
+void TreePrjItemData::OnRename( wxTreeEvent& event, bool check )
 {
     //this segfaults on linux (in wxEvtHandler::ProcessEvent), wx version 2.8.7
     //therefore, until it is fixed, we must cancel the rename.
     event.Veto();
     return;
+
     if( !Rename( event.GetLabel(), check ) )
         event.Veto();
 }
 
 
-/****************************************************/
-void TreePrjItemData::Move( TreePrjItemData* dest )
-/****************************************************/
-
 // Move the object to dest
+void TreePrjItemData::Move( TreePrjItemData* dest )
 {
     //function not safe.
     return;
+
     const wxString sep = wxFileName().GetPathSeparator();
 
     if( m_Type == TREE_DIRECTORY )
@@ -213,7 +197,8 @@ void TreePrjItemData::Move( TreePrjItemData* dest )
         return; // Same place ??
 
     // Move the file on the disk:
-#if ( ( wxMAJOR_VERSION < 2) || ( ( wxMAJOR_VERSION == 2)&& (wxMINOR_VERSION < 7 )  ) )
+#if ( ( wxMAJOR_VERSION < 2 ) || ( ( wxMAJOR_VERSION == 2 ) \
+                                   && ( wxMINOR_VERSION < 7 ) ) )
     if( !wxRenameFile( GetFileName(), destName ) )
 #else
     if( !wxRenameFile( GetFileName(), destName, false ) )
@@ -226,7 +211,7 @@ void TreePrjItemData::Move( TreePrjItemData* dest )
 
 #ifdef KICAD_PYTHON
     object param = make_tuple( PyHandler::Convert( m_FileName ),
-                              PyHandler::Convert( destName ) );
+                               PyHandler::Convert( destName ) );
     PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::MoveFile" ), param );
 #endif
 
@@ -255,10 +240,8 @@ void TreePrjItemData::Move( TreePrjItemData* dest )
 }
 
 
-/****************************************************************/
-bool TreePrjItemData::Rename( const wxString& name, bool check )
-/****************************************************************/
 /* rename the file checking if extension change occurs */
+bool TreePrjItemData::Rename( const wxString& name, bool check )
 {
     //this is broken & unsafe to use on linux.
     if( m_Type == TREE_DIRECTORY )
@@ -286,15 +269,17 @@ bool TreePrjItemData::Rename( const wxString& name, bool check )
     if( check && !ext.IsEmpty() && !reg.Matches( newFile ) )
     {
         wxMessageDialog dialog( m_Parent,
-          _( "Changing file extension will change file type.\n Do you want to continue ?" ),
-          _( "Rename File" ),
-          wxYES_NO | wxICON_QUESTION );
+                                _( "Changing file extension will change file \
+type.\n Do you want to continue ?" ),
+                                _( "Rename File" ),
+                                wxYES_NO | wxICON_QUESTION );
 
         if( wxID_YES != dialog.ShowModal() )
             return false;
     }
 
-#if ( ( wxMAJOR_VERSION < 2) || ( ( wxMAJOR_VERSION == 2) && (wxMINOR_VERSION < 7 )  ) )
+#if ( ( wxMAJOR_VERSION < 2 ) || ( ( wxMAJOR_VERSION == 2 ) \
+                                   && ( wxMINOR_VERSION < 7 ) ) )
     if( !wxRenameFile( m_FileName, newFile ) )
 #else
     if( !wxRenameFile( m_FileName, newFile, false ) )
@@ -320,7 +305,8 @@ bool TreePrjItemData::Delete( bool check )
 /*******************************************/
 /* delete a file */
 {
-    wxMessageDialog dialog( m_Parent, _ ("Do you really want to delete ") + GetFileName(),
+    wxMessageDialog dialog( m_Parent,
+                            _ ("Do you really want to delete ") + GetFileName(),
                             _( "Delete File" ), wxYES_NO | wxICON_QUESTION );
 
     if( !check || wxID_YES == dialog.ShowModal() )
@@ -344,7 +330,7 @@ bool TreePrjItemData::Delete( bool check )
 
 #ifdef KICAD_PYTHON
         PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::DeleteFile" ),
-                                               PyHandler::Convert( m_FileName ) );
+                                                PyHandler::Convert( m_FileName ) );
 #endif
         return true;
     }
@@ -352,10 +338,8 @@ bool TreePrjItemData::Delete( bool check )
 }
 
 
-/**********************************/
-void TreePrjItemData::Activate( WinEDA_PrjFrame* prjframe )
-/**********************************/
 /* Called under item activation */
+void TreePrjItemData::Activate( WinEDA_PrjFrame* prjframe )
 {
     wxString     sep = wxFileName().GetPathSeparator();
     wxString     FullFileName = GetFileName();
@@ -390,12 +374,12 @@ void TreePrjItemData::Activate( WinEDA_PrjFrame* prjframe )
 
             if( count == 0 )
             {
-                /*  The AddFile() text below should match the filter added to handle
-                    it in treeprj_frame.cpp in the line looking like this:
-                    m_Filters.push_back( wxT( "^no kicad files found" ) );
-                */
-				prjframe->AddFile(
-                    _( "no kicad files found in this directory" ), id );
+                /*  The AddFile() text below should match the filter added to
+                 * handle it in treeprj_frame.cpp in the line looking like this:
+                 *  m_Filters.push_back( wxT( "^no kicad files found" ) );
+                 */
+                prjframe->AddFile( _( "no kicad files found in this directory" ),
+                                   id );
             }
 
             /* Sort filenames by alphabetic order */
@@ -450,9 +434,7 @@ void TreePrjItemData::Activate( WinEDA_PrjFrame* prjframe )
 }
 
 
-/***************************************************/
 TreePrjItemData* WinEDA_PrjFrame::GetSelectedData()
-/***************************************************/
 {
     return dynamic_cast<TreePrjItemData*>( m_TreeProject->GetItemData( m_TreeProject->GetSelection() ) );
 }

@@ -13,48 +13,55 @@
 #include "pcbnew.h"
 #include "protos.h"
 
-/*************************************/
-int ChangeSideNumLayer( int oldlayer )
-/*************************************/
 
-/* Routine de recalcul du numero de couche lors des
- *  echanges cote cu/cmp pour les couches CU/CMP specialisees
- *  (cuivre, serigr., pate , soudure)
+/* Calculate the layer number for changing cu / cmp layers for Cu / CMP
+ * (Copper, Mask, Paste, solder)
  */
+int ChangeSideNumLayer( int oldlayer )
 {
     int newlayer;
 
     switch( oldlayer )
     {
     case COPPER_LAYER_N:
-        newlayer = CMP_N; break;
+        newlayer = CMP_N;
+        break;
 
     case CMP_N:
-        newlayer = COPPER_LAYER_N; break;
+        newlayer = COPPER_LAYER_N;
+        break;
 
     case SILKSCREEN_N_CU:
-        newlayer = SILKSCREEN_N_CMP; break;
+        newlayer = SILKSCREEN_N_CMP;
+        break;
 
     case SILKSCREEN_N_CMP:
-        newlayer = SILKSCREEN_N_CU; break;
+        newlayer = SILKSCREEN_N_CU;
+        break;
 
     case ADHESIVE_N_CU:
-        newlayer = ADHESIVE_N_CMP; break;
+        newlayer = ADHESIVE_N_CMP;
+        break;
 
     case ADHESIVE_N_CMP:
-        newlayer = ADHESIVE_N_CU; break;
+        newlayer = ADHESIVE_N_CU;
+        break;
 
     case SOLDERMASK_N_CU:
-        newlayer = SOLDERMASK_N_CMP; break;
+        newlayer = SOLDERMASK_N_CMP;
+        break;
 
     case SOLDERMASK_N_CMP:
-        newlayer = SOLDERMASK_N_CU; break;
+        newlayer = SOLDERMASK_N_CU;
+        break;
 
     case SOLDERPASTE_N_CU:
-        newlayer = SOLDERPASTE_N_CMP; break;
+        newlayer = SOLDERPASTE_N_CMP;
+        break;
 
     case SOLDERPASTE_N_CMP:
-        newlayer = SOLDERPASTE_N_CU; break;
+        newlayer = SOLDERPASTE_N_CU;
+        break;
 
     default:
         newlayer = oldlayer;
@@ -63,14 +70,12 @@ int ChangeSideNumLayer( int oldlayer )
     return newlayer;
 }
 
-/*********************************************/
-static int ChangeSideMaskLayer( int masque )
-/*********************************************/
 
-/* Routine de recalcul du masque-layer lors des
- *  echanges cote cu/cmp pour les couches CU/CMP specialisees
- *  (cuivre, serigr., pate , soudure)
+/* Change the mask layer during routing cu / cmp layers for
+ * Cu / CMP..
+ * (Copper, mask, paste, solder)
  */
+static int ChangeSideMaskLayer( int masque )
 {
     int newmasque;
 
@@ -126,6 +131,7 @@ void MODULE::Move(const wxPoint& aMoveVector)
     SetPosition( newpos );
 }
 
+
 /**
  * Function Rotate
  * Rotate this object.
@@ -139,6 +145,7 @@ void MODULE::Rotate(const wxPoint& aRotCentre, int aAngle)
     SetPosition( newpos );
     SetOrientation( m_Orient + aAngle );
 }
+
 
 /**
  * Function Flip
@@ -154,33 +161,33 @@ void MODULE::Flip(const wxPoint& aCentre )
 
     // Move module to its final position:
     wxPoint finalPos = m_Pos;
-    finalPos.y  = aCentre.y - (finalPos.y - aCentre.y);     /// Mirror the Y position
+    finalPos.y  = aCentre.y - ( finalPos.y - aCentre.y );     /// Mirror the Y position
      SetPosition(finalPos);
 
     /* Flip layer */
     SetLayer( ChangeSideNumLayer( GetLayer() ) );
 
-    /* Inversion miroir de l'orientation */
+    /* Reverse mirror orientation. */
     NEGATE( m_Orient );
     NORMALIZE_ANGLE_POS( m_Orient );
 
-    /* Inversion miroir + layers des pastilles */
+    /* Mirror inversion layers pads. */
     pt_pad = m_Pads;
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
         pt_pad->m_Pos.y      -= m_Pos.y;
         pt_pad->m_Pos.y       = -pt_pad->m_Pos.y;
         pt_pad->m_Pos.y      += m_Pos.y;
-        NEGATE(pt_pad->m_Pos0.y);
-        NEGATE(pt_pad->m_Offset.y);
-        NEGATE(pt_pad->m_DeltaSize.y);
+        NEGATE( pt_pad->m_Pos0.y );
+        NEGATE( pt_pad->m_Offset.y );
+        NEGATE( pt_pad->m_DeltaSize.y );
         NEGATE_AND_NORMALIZE_ANGLE_POS( pt_pad->m_Orient );
 
         /* flip pads layers*/
         pt_pad->m_Masque_Layer = ChangeSideMaskLayer( pt_pad->m_Masque_Layer );
     }
 
-    /* Inversion miroir de la Reference et mise en miroir : */
+    /* Mirror reference. */
     pt_texte = m_Reference;
     pt_texte->m_Pos.y -= m_Pos.y;
     pt_texte->m_Pos.y  = -pt_texte->m_Pos.y;
@@ -201,12 +208,12 @@ void MODULE::Flip(const wxPoint& aCentre )
        || (GetLayer() == ADHESIVE_N_CU) || (GetLayer() == COPPER_LAYER_N) )
         pt_texte->m_Mirror = true;
 
-    /* Inversion miroir de la Valeur et mise en miroir : */
+    /* Mirror value. */
     pt_texte = m_Value;
     pt_texte->m_Pos.y -= m_Pos.y;
-    NEGATE(pt_texte->m_Pos.y);
+    NEGATE( pt_texte->m_Pos.y );
     pt_texte->m_Pos.y += m_Pos.y;
-    NEGATE(pt_texte->m_Pos0.y);
+    NEGATE( pt_texte->m_Pos0.y );
     pt_texte->m_Mirror = false;
     NEGATE_AND_NORMALIZE_ANGLE_POS( pt_texte->m_Orient );
     pt_texte->SetLayer( GetLayer() );
@@ -222,7 +229,7 @@ void MODULE::Flip(const wxPoint& aCentre )
        || (GetLayer() == ADHESIVE_N_CU) || (GetLayer() == COPPER_LAYER_N) )
         pt_texte->m_Mirror = true;
 
-    /* Inversion miroir des dessins de l'empreinte : */
+    /* Reverse mirror footprints. */
     PtStruct = m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
@@ -236,9 +243,8 @@ void MODULE::Flip(const wxPoint& aCentre )
             pt_edgmod->m_End.y   -= m_Pos.y;
             pt_edgmod->m_End.y    = -pt_edgmod->m_End.y;
             pt_edgmod->m_End.y   += m_Pos.y;
-            /* inversion des coords locales */
-            NEGATE(pt_edgmod->m_Start0.y);
-            NEGATE(pt_edgmod->m_End0.y);
+            NEGATE( pt_edgmod->m_Start0.y );
+            NEGATE( pt_edgmod->m_End0.y );
             if( pt_edgmod->m_Shape == S_ARC )
             {
                 NEGATE(pt_edgmod->m_Angle);
@@ -248,12 +254,12 @@ void MODULE::Flip(const wxPoint& aCentre )
             break;
 
         case TYPE_TEXTE_MODULE:
-            /* Inversion miroir de la position et mise en miroir : */
+            /* Reverse mirror position and mirror. */
             pt_texte = (TEXTE_MODULE*) PtStruct;
             pt_texte->m_Pos.y -= m_Pos.y;
             pt_texte->m_Pos.y  = -pt_texte->m_Pos.y;
             pt_texte->m_Pos.y += m_Pos.y;
-            NEGATE(pt_texte->m_Pos0.y);
+            NEGATE( pt_texte->m_Pos0.y );
             pt_texte->m_Mirror = false;
             NEGATE_AND_NORMALIZE_ANGLE_POS( pt_texte->m_Orient );
 
@@ -281,40 +287,29 @@ void MODULE::Flip(const wxPoint& aCentre )
         }
     }
 
-    /* calcul du rectangle d'encadrement */
     Set_Rectangle_Encadrement();
 }
 
-
-/*************************************************/
 void MODULE::SetPosition( const wxPoint& newpos )
-/*************************************************/
-
-// replace le module en position newpos
 {
     int deltaX = newpos.x - m_Pos.x;
     int deltaY = newpos.y - m_Pos.y;
 
-    /* deplacement de l'ancre */
     m_Pos.x += deltaX;
     m_Pos.y += deltaY;
 
-    /* deplacement de la reference */
     m_Reference->m_Pos.x += deltaX;
     m_Reference->m_Pos.y += deltaY;
 
-    /* deplacement de la Valeur */
     m_Value->m_Pos.x += deltaX;
     m_Value->m_Pos.y += deltaY;
 
-    /* deplacement des pastilles */
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
         pad->m_Pos.x += deltaX;
         pad->m_Pos.y += deltaY;
     }
 
-    /* deplacement des dessins de l'empreinte : */
     EDA_BaseStruct* PtStruct = m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
@@ -336,7 +331,8 @@ void MODULE::SetPosition( const wxPoint& newpos )
         }
 
         default:
-            wxMessageBox( wxT( "Type Draw Indefini" ) ); break;
+            wxMessageBox( wxT( "Draw type undefined." ) );
+            break;
         }
     }
 
@@ -344,21 +340,15 @@ void MODULE::SetPosition( const wxPoint& newpos )
 }
 
 
-/*********************************************/
 void MODULE::SetOrientation( int newangle )
-/*********************************************/
-
-/* Tourne de newangle (en 0.1 degres) le module
- */
 {
     int px, py;
 
-    newangle -= m_Orient;       // = delta de rotation
+    newangle -= m_Orient;       // = Change in rotation
 
     m_Orient += newangle;
     NORMALIZE_ANGLE_POS( m_Orient );
 
-    /* deplacement et rotation des pastilles */
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
         px = pad->m_Pos0.x;
@@ -372,11 +362,11 @@ void MODULE::SetOrientation( int newangle )
         pad->m_Pos.y = m_Pos.y + py;
     }
 
-    /* mise a jour de la reference et de la valeur*/
+    /* Update of the reference and value. */
     m_Reference->SetDrawCoord();
     m_Value->SetDrawCoord();
 
-    /* deplacement des contours et textes de l'empreinte : */
+    /* Displace contours and text of the footprint. */
     for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
     {
         if( item->Type() == TYPE_EDGE_MODULE )
@@ -387,13 +377,10 @@ void MODULE::SetOrientation( int newangle )
 
         if( item->Type() == TYPE_TEXTE_MODULE )
         {
-            /* deplacement des inscriptions : */
             TEXTE_MODULE* pt_texte = (TEXTE_MODULE*) item;
             pt_texte->SetDrawCoord();
         }
     }
 
-    /* Recalcul du rectangle d'encadrement */
     Set_Rectangle_Encadrement();
 }
-

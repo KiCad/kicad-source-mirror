@@ -138,40 +138,40 @@ bool DRAWSEGMENT::ReadDrawSegmentDescr( FILE* File, int* LineNum )
             int status;
             char* token=0;
 
-			token = strtok(Line," ");
+            token = strtok(Line," ");
 
             for(int i=0; (token = strtok(NULL," ")) != NULL; i++){
-	        switch(i){
-			case 0:
-			    sscanf(token,"%d",&m_Layer);
-			    break;
-			case 1:
-			    sscanf(token,"%d",&m_Type);
-			    break;
-			case 2:
-			    sscanf(token,"%d",&m_Angle);
-			    break;
-			case 3:
-			    sscanf(token,"%lX",&m_TimeStamp);
-			    break;
-			case 4:
-			    sscanf(token,"%X",&status);
-			    break;
-			/* Bezier Control Points*/
-			case 5:
-			    sscanf(token,"%d",&m_BezierC1.x);
-			    break;
-			case 6:
-			    sscanf(token,"%d",&m_BezierC1.y);
-			    break;
-			case 7:
-			    sscanf(token,"%d",&m_BezierC2.x);
-			    break;
-			case 8:
-			    sscanf(token,"%d",&m_BezierC2.y);
-			    break;
-			default:
-			    break;
+            switch(i){
+            case 0:
+                sscanf(token,"%d",&m_Layer);
+                break;
+            case 1:
+                sscanf(token,"%d",&m_Type);
+                break;
+            case 2:
+                sscanf(token,"%d",&m_Angle);
+                break;
+            case 3:
+                sscanf(token,"%lX",&m_TimeStamp);
+                break;
+            case 4:
+                sscanf(token,"%X",&status);
+                break;
+            /* Bezier Control Points*/
+            case 5:
+                sscanf(token,"%d",&m_BezierC1.x);
+                break;
+            case 6:
+                sscanf(token,"%d",&m_BezierC1.y);
+                break;
+            case 7:
+                sscanf(token,"%d",&m_BezierC2.x);
+                break;
+            case 8:
+                sscanf(token,"%d",&m_BezierC2.y);
+                break;
+            default:
+                break;
                 }
             }
 
@@ -241,13 +241,11 @@ void DRAWSEGMENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     color = g_DesignSettings.m_LayerColor[GetLayer()];
 
     GRSetDrawMode( DC, draw_mode );
-    l_piste = m_Width >> 1;  /* l_piste = demi largeur piste */
+    l_piste = m_Width >> 1;  /* half trace width */
 
-    /* coord de depart */
     ux0 = m_Start.x;
     uy0 = m_Start.y;
 
-    /* coord d'arrivee */
     dx = m_End.x;
     dy = m_End.y;
 
@@ -287,7 +285,7 @@ void DRAWSEGMENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
             if( StAngle > EndAngle )
                 EXCHG( StAngle, EndAngle );
         }
-        else    //Mirrored mode: arc orientation is reversed
+        else    // Mirrored mode: arc orientation is reversed
         {
             if( StAngle < EndAngle )
                 EXCHG( StAngle, EndAngle );
@@ -317,20 +315,21 @@ void DRAWSEGMENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
             for (unsigned int i=1; i < m_BezierPoints.size(); i++) {
                 if( mode == FILAIRE )
                     GRLine( &panel->m_ClipBox, DC,
-							m_BezierPoints[i].x, m_BezierPoints[i].y,
-						    m_BezierPoints[i-1].x, m_BezierPoints[i-1].y, 0, color );
+                            m_BezierPoints[i].x, m_BezierPoints[i].y,
+                            m_BezierPoints[i-1].x, m_BezierPoints[i-1].y, 0,
+                            color );
                 else if( mode == SKETCH )
                 {
                     GRCSegm( &panel->m_ClipBox, DC,
-							m_BezierPoints[i].x, m_BezierPoints[i].y,
-						    m_BezierPoints[i-1].x, m_BezierPoints[i-1].y,
+                            m_BezierPoints[i].x, m_BezierPoints[i].y,
+                            m_BezierPoints[i-1].x, m_BezierPoints[i-1].y,
                              m_Width, color );
                 }
                 else
                 {
                     GRFillCSegm( &panel->m_ClipBox, DC,
-								m_BezierPoints[i].x, m_BezierPoints[i].y,
-								m_BezierPoints[i-1].x, m_BezierPoints[i-1].y,
+                                m_BezierPoints[i].x, m_BezierPoints[i].y,
+                                m_BezierPoints[i-1].x, m_BezierPoints[i-1].y,
                                  m_Width, color );
                 }
             }
@@ -418,7 +417,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& ref_pos )
     int ux0 = m_Start.x;
     int uy0 = m_Start.y;
 
-    /* recalcul des coordonnees avec ux0, uy0 = origine des coordonnees */
+    /* Calculate coordinates with ux0, uy0 = origin. */
     int dx = m_End.x - ux0;
     int dy = m_End.y - uy0;
 
@@ -439,7 +438,6 @@ bool DRAWSEGMENT::HitTest( const wxPoint& ref_pos )
                  if( m_Shape == S_CIRCLE )
                      return true;
 
-                    /* pour un arc, controle complementaire */
                     mouseAngle = (int) ArcTangente( spot_cY, spot_cX );
                     stAngle    = (int) ArcTangente( dy, dx );
                     endAngle   = stAngle + m_Angle;
@@ -458,7 +456,8 @@ bool DRAWSEGMENT::HitTest( const wxPoint& ref_pos )
         case S_CURVE:
             for( unsigned int i= 1; i < m_BezierPoints.size(); i++)
             {
-                if( TestSegmentHit( ref_pos,m_BezierPoints[i-1],m_BezierPoints[i-1], m_Width / 2 ) )
+                if( TestSegmentHit( ref_pos,m_BezierPoints[i-1],
+                                    m_BezierPoints[i-1], m_Width / 2 ) )
                     return true;
             }
             break;

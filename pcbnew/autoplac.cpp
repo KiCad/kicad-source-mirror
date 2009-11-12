@@ -1,8 +1,6 @@
-/*************************************************/
-/* Routines de placement automatique des MODULES */
-/*************************************************/
-
-/* Fichier autoplac.cpp */
+/*******************************************/
+/* Routines to automatically place MODULES */
+/*******************************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -19,59 +17,59 @@
 #include "protos.h"
 
 
-/************************************************************/
-/* Menu et Routines de placement automatique des composants */
-/************************************************************/
-
 #define GAIN     16
 #define PENALITE 500
 
-/* Penalite pour orientation donnee par CntRot90 et CntRot180:
- *  gradue de 0 ( rotation interdite ) a 10 ( rotation a cout null )
- *  Le cout est ici donne en majoration
+/* Penalty for guidance given by CntRot90 and CntRot180:
+ * graduated from 0 (rotation allowed) to 10 (rotation count null)
+ * the count is increased.
  */
-static const float OrientPenality[11] = {
-    2.0f,    /* CntRot = 0 en fait rotation interdite */
-    1.9f,    /* CntRot = 1 */
-    1.8f,    /* CntRot = 2 */
-    1.7f,    /* CntRot = 3 */
-    1.6f,    /* CntRot = 4 */
-    1.5f,    /* CntRot = 5 */
-    1.4f,    /* CntRot = 5 */
-    1.3f,    /* CntRot = 7 */
-    1.2f,    /* CntRot = 8 */
-    1.1f,    /* CntRot = 9 */
-    1.0f     /* CntRot = 10 rotation autorisee, penalite nulle */
+static const float OrientPenality[11] =
+{
+    2.0f,       /* CntRot = 0 rotation prohibited */
+    1.9f,       /* CntRot = 1 */
+    1.8f,       /* CntRot = 2 */
+    1.7f,       /* CntRot = 3 */
+    1.6f,       /* CntRot = 4 */
+    1.5f,       /* CntRot = 5 */
+    1.4f,       /* CntRot = 5 */
+    1.3f,       /* CntRot = 7 */
+    1.2f,       /* CntRot = 8 */
+    1.1f,       /* CntRot = 9 */
+    1.0f        /* CntRot = 10 rotation authorized, no penalty */
 };
 
-/* Etat d'une cellule */
+/* Cell states. */
 #define OUT_OF_BOARD      -2
 #define OCCUPED_By_MODULE -1
 
-/* variables locales */
-static wxPoint CurrPosition;    // position courante du module en cours de placement
+static wxPoint CurrPosition; // Current position of the current module
+                             // placement
 static bool    AutoPlaceShowAll = TRUE;
 
 float          MinCout;
 
-/* Fonctions locales */
-static int      TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide );
-static int      Tri_PlaceModules( MODULE** pt_ref, MODULE** pt_compare );
+static int  TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide );
+static int  Tri_PlaceModules( MODULE** pt_ref, MODULE** pt_compare );
 
-static void     TracePenaliteRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
-                                        int marge, int Penalite, int masque_layer );
-static MODULE*  PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC );
+static void TracePenaliteRectangle( BOARD* Pcb,
+                                    int    ux0,
+                                    int    uy0,
+                                    int    ux1,
+                                    int    uy1,
+                                    int    marge,
+                                    int    Penalite,
+                                    int    masque_layer );
+static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC );
 
 
-/********************************************************************************/
-void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
-/********************************************************************************/
-
-/* Routine de Placement Automatique des composants dans le contour du PCB
- *  Les composants ayant le status FIXE ne sont pas bouges
- *  Si le menu appelant est le placement de 1 module, il sera replace
+/* Routine to automatically place components in the contour of the PCB
+ * The components with the FIXED status are not moved.  If the menu is
+ * calling the placement of 1 module, it will be replaced.
  */
-
+void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module,
+                                       int     place_mode,
+                                       wxDC*   DC )
 {
     int      ii, activ;
     MODULE*  ThisModule = NULL;
@@ -79,7 +77,7 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC 
     wxPoint  PosOK;
     wxPoint  memopos;
     int      error;
-    int      NbModules      = 0;
+    int      NbModules = 0;
     int      NbTotalModules = 0;
     float    Pas;
     int      lay_tmp_TOP, lay_tmp_BOTTOM, OldPasRoute;
@@ -92,22 +90,22 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC 
 
     switch( place_mode )
     {
-    case  PLACE_1_MODULE:
+    case PLACE_1_MODULE:
         ThisModule = Module;
         if( ThisModule == NULL )
             return;
         ThisModule->m_ModuleStatus &= ~(MODULE_is_PLACED | MODULE_to_PLACE);
         break;
 
-    case  PLACE_OUT_OF_BOARD:
+    case PLACE_OUT_OF_BOARD:
         break;
 
-    case  PLACE_ALL:
+    case PLACE_ALL:
         if( !IsOK( this, _( "Footprints NOT LOCKED will be moved" ) ) )
             return;
         break;
 
-    case  PLACE_INCREMENTAL:
+    case PLACE_INCREMENTAL:
         if( !IsOK( this, _( "Footprints NOT PLACED will be moved" ) ) )
             return;
         break;
@@ -118,29 +116,27 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC 
     lay_tmp_TOP    = Route_Layer_TOP;
     OldPasRoute    = g_GridRoutingSize;
 
-    g_GridRoutingSize = (int)GetScreen()->GetGridSize().x;
+    g_GridRoutingSize = (int) GetScreen()->GetGridSize().x;
 
     // Ensure g_GridRoutingSize has a reasonnable value:
     if( g_GridRoutingSize < 10 )
-        g_GridRoutingSize = 10;                             // Min value = 1/1000 inch
+        g_GridRoutingSize = 10;                      // Min value = 1/1000 inch
 
     /* Compute module parmeters used in auto place */
     Module = GetBoard()->m_Modules;
-    for( ; Module != NULL; Module = Module->Next() ) // remise a jour du rect d'encadrement
+    for( ; Module != NULL; Module = Module->Next() )
     {
         Module->Set_Rectangle_Encadrement();
         Module->SetRectangleExinscrit();
     }
 
-    /* Generation du plan de placement */
     if( GenPlaceBoard() == 0 )
         return;
 
-    /* Mise a jour des parametres modules utiles au placement */
+    /* Updating the parameters useful for module placement. */
     BaseListeModules = GenListeModules( GetBoard(), &NbTotalModules );
     MyFree( BaseListeModules );
 
-    /* Placement des modules fixes sur le plan de placement */
     Module = GetBoard()->m_Modules;
     for( ; Module != NULL; Module = Module->Next() )
     {
@@ -148,12 +144,12 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC 
 
         switch( place_mode )
         {
-        case  PLACE_1_MODULE:
+        case PLACE_1_MODULE:
             if( ThisModule == Module )
                 Module->m_ModuleStatus |= MODULE_to_PLACE;
             break;
 
-        case  PLACE_OUT_OF_BOARD:
+        case PLACE_OUT_OF_BOARD:
             Module->m_ModuleStatus &= ~MODULE_is_PLACED;
             if( Module->m_ModuleStatus & MODULE_is_LOCKED )
                 break;
@@ -161,14 +157,14 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC 
                 Module->m_ModuleStatus |= MODULE_to_PLACE;
             break;
 
-        case  PLACE_ALL:
+        case PLACE_ALL:
             Module->m_ModuleStatus &= ~MODULE_is_PLACED;
             if( Module->m_ModuleStatus & MODULE_is_LOCKED )
                 break;
             Module->m_ModuleStatus |= MODULE_to_PLACE;
             break;
 
-        case  PLACE_INCREMENTAL:
+        case PLACE_INCREMENTAL:
             if( Module->m_ModuleStatus & MODULE_is_LOCKED )
             {
                 Module->m_ModuleStatus &= ~MODULE_is_PLACED; break;
@@ -190,8 +186,9 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC 
         }
     }
 
-    /* Placement des modules */
-    activ = 0; Pas = 100.0;
+    activ = 0;
+    Pas   = 100.0;
+
     if( NbModules )
         Pas = 100.0 / (float) NbModules;
     while( ( Module = PickModule( this, DC ) ) != NULL )
@@ -199,18 +196,18 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC 
         float BestScore;
         DisplayActivity( (int) (activ * Pas), wxEmptyString ); activ++;
 
-        /* Affichage du remplissage: surface de placement, obstacles, penalites */
+        /* Display fill area of interest, barriers, penalties. */
         DrawInfoPlace( DC );
 
-        /* Recherche du placement: orientation 0 */
         error     = RecherchePlacementModule( Module, DC );
         BestScore = MinCout;
-        PosOK = CurrPosition;
+        PosOK     = CurrPosition;
         if( error == ESC )
             goto end_of_tst;
 
-        /* Recherche du placement: orientation 180 */
+        /* Determine if the best orientation of a module is 180. */
         ii = Module->m_CntRot180 & 0x0F;
+
         if( ii != 0 )
         {
             int Angle_Rot_Module = 1800;
@@ -218,7 +215,7 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC 
             Module->SetRectangleExinscrit();
             error    = RecherchePlacementModule( Module, DC );
             MinCout *= OrientPenality[ii];
-            if( BestScore > MinCout )   /* Cette orientation est meilleure */
+            if( BestScore > MinCout )   /* This orientation is best. */
             {
                 PosOK     = CurrPosition;
                 BestScore = MinCout;
@@ -232,7 +229,7 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC 
                 goto end_of_tst;
         }
 
-        /* Recherche du placement: orientation 90 */
+        /* Determine if the best orientation of a module is 90. */
         ii = Module->m_CntRot90 & 0x0F;
         if( ii != 0 )
         {
@@ -240,7 +237,7 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC 
             Rotate_Module( DC, Module, Angle_Rot_Module, FALSE );
             error    = RecherchePlacementModule( Module, DC );
             MinCout *= OrientPenality[ii];
-            if( BestScore > MinCout )   /* Cette orientation est meilleure */
+            if( BestScore > MinCout )   /* This orientation is best. */
             {
                 PosOK     = CurrPosition;
                 BestScore = MinCout;
@@ -254,7 +251,7 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC 
                 goto end_of_tst;
         }
 
-        /* Recherche du placement: orientation -90 (ou 270 degres) */
+        /*  Determine if the best orientation of a module is 270. */
         ii = (Module->m_CntRot90 >> 4 ) & 0x0F;
         if( ii != 0 )
         {
@@ -262,7 +259,7 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC 
             Rotate_Module( DC, Module, Angle_Rot_Module, FALSE );
             error    = RecherchePlacementModule( Module, DC );
             MinCout *= OrientPenality[ii];
-            if( BestScore > MinCout )   /* Cette orientation est meilleure */
+            if( BestScore > MinCout )   /* This orientation is best. */
             {
                 PosOK     = CurrPosition;
                 BestScore = MinCout;
@@ -281,7 +278,7 @@ end_of_tst:
         if( error == ESC )
             break;
 
-        /* placement du module */
+        /* Place module. */
         CurrPosition = GetScreen()->m_Curseur;
         GetScreen()->m_Curseur = PosOK;
         Place_Module( Module, DC );
@@ -297,7 +294,6 @@ end_of_tst:
 
     CurrPosition = memopos;
 
-    /* Liberation de la memoire */
     Board.UnInitBoard();
 
     Route_Layer_TOP    = lay_tmp_TOP;
@@ -318,44 +314,39 @@ end_of_tst:
 }
 
 
-/**********************************************/
 void WinEDA_PcbFrame::DrawInfoPlace( wxDC* DC )
-/**********************************************/
-
-/* Affiche a l'ecran les infos de placement
- */
 {
-    int color, ii, jj;
-    int ox, oy;
+    int       color, ii, jj;
+    int       ox, oy;
     BoardCell top_state, bottom_state;
 
     GRSetDrawMode( DC, GR_COPY );
     for( ii = 0; ii < Nrows; ii++ )
     {
-        oy = GetBoard()->m_BoundaryBox.m_Pos.y + (ii * g_GridRoutingSize);
+        oy = GetBoard()->m_BoundaryBox.m_Pos.y + ( ii * g_GridRoutingSize );
 
         for( jj = 0; jj < Ncols; jj++ )
         {
-            ox = GetBoard()->m_BoundaryBox.m_Pos.x + (jj * g_GridRoutingSize);
-            /* surface de placement : */
+            ox = GetBoard()->m_BoundaryBox.m_Pos.x +
+                 (jj * g_GridRoutingSize);
             color = BLACK;
 
             top_state    = GetCell( ii, jj, TOP );
             bottom_state = GetCell( ii, jj, BOTTOM );
 
-            if( (top_state & CELL_is_ZONE) )
+            if( top_state & CELL_is_ZONE )
                 color = BLUE;
 
             /* obstacles */
-            if( (top_state & CELL_is_EDGE) || (bottom_state & CELL_is_EDGE) )
+            if( ( top_state & CELL_is_EDGE ) || ( bottom_state & CELL_is_EDGE ) )
                 color = WHITE;
 
-            else if( top_state & (HOLE | CELL_is_MODULE) )
+            else if( top_state & ( HOLE | CELL_is_MODULE ) )
                 color = LIGHTRED;
             else if( bottom_state & (HOLE | CELL_is_MODULE) )
                 color = LIGHTGREEN;
 
-            else /* Affichage du remplissage: Penalites */
+            else /* Display the filling and keep out regions. */
             {
                 if( GetDist( ii, jj, TOP ) || GetDist( ii, jj, BOTTOM ) )
                     color = DARKGRAY;
@@ -367,28 +358,25 @@ void WinEDA_PcbFrame::DrawInfoPlace( wxDC* DC )
 }
 
 
-/***************************************/
-int WinEDA_PcbFrame::GenPlaceBoard()
-/***************************************/
-
-/* Routine de generation du board ( cote composant + cote cuivre ) :
- *  Alloue la memoire necessaire pour representer en "bitmap" sur la grille
- *  courante:
- *  - la surface de placement des composant ( le board )
- *  - le bitmap des penalites
- *  et initialise les cellules du board a
- *   - HOLE pour les cellules occupees par un segment EDGE
- *   - CELL_is_ZONE pour les cellules internes au contour EDGE (s'il est ferme)
+/* Generate board (component side copper + rating):
+ * Allocate the memory needed to represent in "bitmap" on the grid
+ * Current:
+ * - The size of clearance area of component (the board)
+ * - The bitmap PENALTIES
+ * And initialize the cells of the board has
+ * - Hole in the cells occupied by a segment EDGE
+ * - CELL_is_ZONE for cell internal contour EDGE (if closed)
  *
- *  la surface de placement (board) donne les cellules internes au contour
- *  du pcb, et parmi celle-ci les cellules libres et les cellules deja occupees
+ * Placement surface (board) gives the cells internal to the contour
+ * PCB, and among the latter the free cells and cells already occupied
  *
- *  le bitmap des penalites donnent les cellules occupes par les modules,
- *  augmentes d'une surface de penalite liee au nombre de pads du module
+ * The bitmap PENALTIES give cells occupied by the modules,
+ * Plus a surface penalty related to the number of pads of the module
  *
- *  le bitmap des penalites est mis a 0
- *  l'occupation des cellules est laisse a 0
+ * Bitmap of the penalty is set to 0
+ * Occupation cell is a 0 leaves
  */
+int WinEDA_PcbFrame::GenPlaceBoard()
 {
     int             jj, ii;
     int             NbCells;
@@ -399,13 +387,15 @@ int WinEDA_PcbFrame::GenPlaceBoard()
 
     if( !SetBoardBoundaryBoxFromEdgesOnly() )
     {
-        DisplayError( this, _( "No edge PCB, Unknown board size!" ), 30 );
+        DisplayError( this, _( "No PCB edge found, unknown board size!" ) );
         return 0;
     }
 
     /* The boundary box must have its start point on placing grid: */
-    GetBoard()->m_BoundaryBox.m_Pos.x -= GetBoard()->m_BoundaryBox.m_Pos.x % g_GridRoutingSize;
-    GetBoard()->m_BoundaryBox.m_Pos.y -= GetBoard()->m_BoundaryBox.m_Pos.y % g_GridRoutingSize;
+    GetBoard()->m_BoundaryBox.m_Pos.x -= GetBoard()->m_BoundaryBox.m_Pos.x %
+                                         g_GridRoutingSize;
+    GetBoard()->m_BoundaryBox.m_Pos.y -= GetBoard()->m_BoundaryBox.m_Pos.y %
+                                         g_GridRoutingSize;
     /* The boundary box must have its end point on placing grid: */
     wxPoint end = GetBoard()->m_BoundaryBox.GetEnd();
     end.x -= end.x % g_GridRoutingSize; end.x += g_GridRoutingSize;
@@ -426,18 +416,18 @@ int WinEDA_PcbFrame::GenPlaceBoard()
     msg.Printf( wxT( "%d" ), NbCells );
     Affiche_1_Parametre( this, 14, _( "Cells." ), msg, YELLOW );
 
-    /* Choix du nombre de faces de placement */
+    /* Choose the number of board sides. */
     Nb_Sides = TWO_SIDES;
 
-    Affiche_1_Parametre( this, 22, wxT( "S" ), ( Nb_Sides == TWO_SIDES ) ? wxT( "2" ) : wxT(
-                             "1" ), WHITE );
+    Affiche_1_Parametre( this, 22, wxT( "S" ),
+                         ( Nb_Sides == TWO_SIDES ) ? wxT( "2" ) : wxT( "1" ),
+                         WHITE );
 
-    /* Creation du mapping du board */
     Board.InitBoard();
 
-    /* Affichage de la memoire utilisee */
+    /* Display memory usage. */
     msg.Printf( wxT( "%d" ), Board.m_MemSize / 1024 );
-    Affiche_1_Parametre( this, 24, wxT( "Mem(Ko)" ), msg, CYAN );
+    Affiche_1_Parametre( this, 24, wxT( "Mem(Kb)" ), msg, CYAN );
 
     Route_Layer_BOTTOM = CMP_N;
     if( Nb_Sides == TWO_SIDES )
@@ -450,7 +440,7 @@ int WinEDA_PcbFrame::GenPlaceBoard()
 
     TmpSegm.SetLayer( -1 );
     TmpSegm.SetNet( -1 );
-    TmpSegm.m_Width   = g_GridRoutingSize / 2;
+    TmpSegm.m_Width = g_GridRoutingSize / 2;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         DRAWSEGMENT* DrawSegm;
@@ -467,7 +457,8 @@ int WinEDA_PcbFrame::GenPlaceBoard()
             TmpSegm.m_Shape = DrawSegm->m_Shape;
             TmpSegm.m_Param = DrawSegm->m_Angle;
 
-            TraceSegmentPcb( GetBoard(), &TmpSegm, HOLE | CELL_is_EDGE, g_GridRoutingSize, WRITE_CELL );
+            TraceSegmentPcb( GetBoard(), &TmpSegm, HOLE | CELL_is_EDGE,
+                             g_GridRoutingSize, WRITE_CELL );
             break;
 
         case TYPE_TEXTE:
@@ -476,11 +467,12 @@ int WinEDA_PcbFrame::GenPlaceBoard()
         }
     }
 
-    /* Init du point d'accrochage de la zone */
+    /* Init the point of attachment to the area. */
     OrCell( Nrows / 2, Ncols / 2, BOTTOM, CELL_is_ZONE );
 
-    /* Remplissage des cellules de la couche BOTTOM */
-    ii = 1; jj = 1;
+    /* Fill bottom layer zones. */
+    ii = 1;
+    jj = 1;
 
     while( ii )
     {
@@ -489,21 +481,18 @@ int WinEDA_PcbFrame::GenPlaceBoard()
         ii = Propagation( this );
     }
 
-    /* Init de la couche TOP */
+    /* Initialize top layer. */
     if( Board.m_BoardSide[TOP] )
-        memcpy( Board.m_BoardSide[TOP], Board.m_BoardSide[BOTTOM], NbCells * sizeof(BoardCell) );
+        memcpy( Board.m_BoardSide[TOP], Board.m_BoardSide[BOTTOM],
+                NbCells * sizeof(BoardCell) );
 
     return 1;
 }
 
 
-/******************************************************/
-void WinEDA_PcbFrame::GenModuleOnBoard( MODULE* Module )
-/******************************************************/
-
-/* initialise sur le board de placement les cellules correspondantes au
- *  module Module
+/* Place module on board.
  */
+void WinEDA_PcbFrame::GenModuleOnBoard( MODULE* Module )
 {
     int    ox, oy, fx, fy, Penalite;
     int    marge = g_GridRoutingSize / 2;
@@ -547,15 +536,16 @@ void WinEDA_PcbFrame::GenModuleOnBoard( MODULE* Module )
     int trackWidth = GetBoard()->m_NetClasses.GetDefault()->GetTrackWidth();
     int clearance  = GetBoard()->m_NetClasses.GetDefault()->GetClearance();
 
-    /* Trace des pads et leur surface de securite */
+    /* Trace pads and surface safely. */
     marge = trackWidth + clearance;
 
     for( Pad = Module->m_Pads; Pad != NULL; Pad = Pad->Next() )
     {
-        Place_1_Pad_Board( GetBoard(), Pad, CELL_is_MODULE, marge, WRITE_OR_CELL );
+        Place_1_Pad_Board( GetBoard(), Pad, CELL_is_MODULE, marge,
+                           WRITE_OR_CELL );
     }
 
-    /* Trace de la penalite */
+    /* Trace clearance. */
     marge    = (g_GridRoutingSize * Module->m_PadNum ) / GAIN;
     Penalite = PENALITE;
     TracePenaliteRectangle( GetBoard(), ox, oy, fx, fy, marge, Penalite,
@@ -563,21 +553,19 @@ void WinEDA_PcbFrame::GenModuleOnBoard( MODULE* Module )
 }
 
 
-/************************************************************************/
-int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
-/************************************************************************/
-
 /*
- *  Routine Principale de recherche de la position optimale du module
- *  Entree:
- *      Module pointe la struct MODULE du module a placer.
- *  Retourne:
- *      1 si placement impossible, 0 si OK
- *      et MinCout = variable externe = cout du meilleur placement
+ * Search for the optimal position of the module.
+ * Entree:
+ * Module tip MODULE struct module's place.
+ * Returns:
+ * 1 if placement impossible, 0 if OK
+ * = MinCout and external variable = cost of best placement
  */
+int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
 {
     int     cx, cy;
-    int     ox, oy, fx, fy;/* cadre d'occupation du module centre sur le curseur */
+    int     ox, oy, fx, fy; /* occupying part of the module focuses on the
+                             * cursor */
     int     error = 1;
     int     DisplayChevelu = 0;
     wxPoint LastPosOK;
@@ -598,19 +586,18 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
 
     CurrPosition.x = GetBoard()->m_BoundaryBox.m_Pos.x - ox;
     CurrPosition.y = GetBoard()->m_BoundaryBox.m_Pos.y - oy;
-    /* remise sur la grille de placement: */
+    /* Module placement on grid. */
     CurrPosition.x -= CurrPosition.x % g_GridRoutingSize;
     CurrPosition.y -= CurrPosition.y % g_GridRoutingSize;
 
-    g_Offset_Module.x    = cx - CurrPosition.x;
-    g_Offset_Module.y    = cy - CurrPosition.y;
+    g_Offset_Module.x = cx - CurrPosition.x;
+    g_Offset_Module.y = cy - CurrPosition.y;
     GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
 
-    /* tst des pastilles traversantes, qui pour un circuit imprime ayant des
-     *  composants des 2 cotes, peuvent tomber sur un composant de cote oppose:
-     *  s'il y a au moins 1 pastille apparaissant sur l'autre cote, ce cote
-     *  est teste  */
-
+    /* Test pads, a printed circuit with components of the 2 dimensions
+     * can become a component on opposite side if there is at least 1 patch
+     * appearing on the other side.
+     */
     TstOtherSide = FALSE;
     if( Nb_Sides == TWO_SIDES )
     {
@@ -621,7 +608,7 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
 
         for( Pad = Module->m_Pads; Pad != NULL; Pad = Pad->Next() )
         {
-            if( (Pad->m_Masque_Layer & masque_otherlayer) == 0 )
+            if( ( Pad->m_Masque_Layer & masque_otherlayer ) == 0 )
                 continue;
             TstOtherSide = TRUE;
             break;
@@ -640,7 +627,7 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
         wxYield();
         if( DrawPanel->m_AbortRequest )
         {
-            if( IsOK( this, _( "Ok to abort ?" ) ) )
+            if( IsOK( this, _( "Ok to abort?" ) ) )
                 return ESC;
             else
                 DrawPanel->m_AbortRequest = FALSE;
@@ -654,7 +641,7 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
 
         g_Offset_Module.x = cx - CurrPosition.x;
         CurrPosition.y    = GetBoard()->m_BoundaryBox.m_Pos.y - oy;
-        /* remise sur la grille de placement: */
+        /* Placement on grid. */
         CurrPosition.y -= CurrPosition.y % g_GridRoutingSize;
 
         DrawModuleOutlines( DrawPanel, DC, Module );
@@ -662,7 +649,7 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
         for( ; CurrPosition.y < GetBoard()->m_BoundaryBox.GetBottom() - fy;
              CurrPosition.y += g_GridRoutingSize )
         {
-            /* effacement des traces */
+            /* Erase traces. */
             DrawModuleOutlines( DrawPanel, DC, Module );
             if( DisplayChevelu )
                 Compute_Ratsnest_PlaceModule( DC );
@@ -673,7 +660,7 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
             g_Offset_Module.y = cy - CurrPosition.y;
             DrawModuleOutlines( DrawPanel, DC, Module );
             Penalite = TstModuleOnBoard( GetBoard(), Module, TstOtherSide );
-            if( Penalite >= 0 ) /* c a d si le module peut etre place */
+            if( Penalite >= 0 ) /* c a d if the module can be placed. */
             {
                 error = 0;
                 build_ratsnest_module( DC, Module );
@@ -688,7 +675,8 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
                     wxString msg;
                     msg.Printf( wxT( "Score %d, pos %3.4f, %3.4f" ),
                                 (int) mincout,
-                                (float) LastPosOK.x / 10000, (float) LastPosOK.y / 10000 );
+                                (float) LastPosOK.x / 10000,
+                                (float) LastPosOK.y / 10000 );
                     Affiche_Message( msg );
                 }
             }
@@ -698,55 +686,55 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
         }
     }
 
-    DrawModuleOutlines( DrawPanel, DC, Module );  /* effacement du dernier trace */
+    DrawModuleOutlines( DrawPanel, DC, Module );  /* erasing the last traces */
     if( DisplayChevelu )
         Compute_Ratsnest_PlaceModule( DC );
 
-    /* Regeneration des variables modifiees */
+    /* Regeneration of the modified variable. */
     Module->m_RealBoundaryBox.m_Pos.x = ox + cx;
     Module->m_RealBoundaryBox.m_Pos.y = oy + cy;
     CurrPosition = LastPosOK;
 
-    GetBoard()->m_Status_Pcb &= ~(RATSNEST_ITEM_LOCAL_OK | LISTE_PAD_OK );
+    GetBoard()->m_Status_Pcb &= ~( RATSNEST_ITEM_LOCAL_OK | LISTE_PAD_OK );
 
     MinCout = mincout;
     return error;
 }
 
 
-/**************************************************************************/
-int TstRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int side )
-/**************************************************************************/
-
-/* tst si la surface rectangulaire (ux,y0 .. ux,y1):
- *  - est sur une zone libre ( retourne OCCUPED_By_MODULE sinon)
- *  - est sur la surface utile du board ( retourne OUT_OF_BOARD sinon)
+/* Test if the rectangular area (ux, ux .. y0, y1):
+ * - is a free zone (except OCCUPED_By_MODULE returns)
+ * - is on the working surface of the board (otherwise returns OUT_OF_BOARD)
  *
- *  retourne 0 si OK
+ * Returns 0 if OK
  */
+int TstRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int side )
 {
     int          row, col;
     int          row_min, row_max, col_min, col_max;
     unsigned int data;
 
-    ux0 -= Pcb->m_BoundaryBox.m_Pos.x; uy0 -= Pcb->m_BoundaryBox.m_Pos.y;
-    ux1 -= Pcb->m_BoundaryBox.m_Pos.x; uy1 -= Pcb->m_BoundaryBox.m_Pos.y;
+    ux0 -= Pcb->m_BoundaryBox.m_Pos.x;
+    uy0 -= Pcb->m_BoundaryBox.m_Pos.y;
+    ux1 -= Pcb->m_BoundaryBox.m_Pos.x;
+    uy1 -= Pcb->m_BoundaryBox.m_Pos.y;
 
-    /* Calcul des coord limites des cellules appartenant au rectangle */
     row_max = uy1 / g_GridRoutingSize;
     col_max = ux1 / g_GridRoutingSize;
-    row_min = uy0 / g_GridRoutingSize; if( uy0 > row_min * g_GridRoutingSize )
+    row_min = uy0 / g_GridRoutingSize;
+    if( uy0 > row_min * g_GridRoutingSize )
         row_min++;
-    col_min = ux0 / g_GridRoutingSize; if( ux0 > col_min * g_GridRoutingSize )
+    col_min = ux0 / g_GridRoutingSize;
+    if( ux0 > col_min * g_GridRoutingSize )
         col_min++;
 
     if( row_min < 0 )
         row_min = 0;
-    if( row_max >= (Nrows - 1) )
+    if( row_max >= ( Nrows - 1 ) )
         row_max = Nrows - 1;
     if( col_min < 0 )
         col_min = 0;
-    if( col_max >= (Ncols - 1) )
+    if( col_max >= ( Ncols - 1 ) )
         col_max = Ncols - 1;
 
     for( row = row_min; row <= row_max; row++ )
@@ -754,9 +742,9 @@ int TstRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int side )
         for( col = col_min; col <= col_max; col++ )
         {
             data = GetCell( row, col, side );
-            if( (data & CELL_is_ZONE) == 0 )    /* Cellule non autorisee */
+            if( ( data & CELL_is_ZONE ) == 0 )
                 return OUT_OF_BOARD;
-            if( data & CELL_is_MODULE )         /* Deja utilisee */
+            if( data & CELL_is_MODULE )
                 return OCCUPED_By_MODULE;
         }
     }
@@ -765,37 +753,38 @@ int TstRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int side )
 }
 
 
-/******************************************************************************/
+/* Calculates and returns the clearance area of the rectangular surface
+ * (ux, ux .. y0, y1):
+ * (Sum of cells in terms of distance)
+ */
 unsigned int CalculePenaliteRectangle( BOARD* Pcb, int ux0, int uy0,
                                        int ux1, int uy1, int side )
-/******************************************************************************/
-
-/* calcule et retourne la penalite de la surface rectangulaire (ux,y0 .. ux,y1):
- *  ( somme des valeurs des cellules du plan des Distances )
- */
 {
     int          row, col;
     int          row_min, row_max, col_min, col_max;
     unsigned int Penalite;
 
-    ux0 -= Pcb->m_BoundaryBox.m_Pos.x; uy0 -= Pcb->m_BoundaryBox.m_Pos.y;
-    ux1 -= Pcb->m_BoundaryBox.m_Pos.x; uy1 -= Pcb->m_BoundaryBox.m_Pos.y;
+    ux0 -= Pcb->m_BoundaryBox.m_Pos.x;
+    uy0 -= Pcb->m_BoundaryBox.m_Pos.y;
+    ux1 -= Pcb->m_BoundaryBox.m_Pos.x;
+    uy1 -= Pcb->m_BoundaryBox.m_Pos.y;
 
-    /* Calcul des coord limites des cellules appartenant au rectangle */
     row_max = uy1 / g_GridRoutingSize;
     col_max = ux1 / g_GridRoutingSize;
-    row_min = uy0 / g_GridRoutingSize; if( uy0 > row_min * g_GridRoutingSize )
+    row_min = uy0 / g_GridRoutingSize;
+    if( uy0 > row_min * g_GridRoutingSize )
         row_min++;
-    col_min = ux0 / g_GridRoutingSize; if( ux0 > col_min * g_GridRoutingSize )
+    col_min = ux0 / g_GridRoutingSize;
+    if( ux0 > col_min * g_GridRoutingSize )
         col_min++;
 
     if( row_min < 0 )
         row_min = 0;
-    if( row_max >= (Nrows - 1) )
+    if( row_max >= ( Nrows - 1 ) )
         row_max = Nrows - 1;
     if( col_min < 0 )
         col_min = 0;
-    if( col_max >= (Ncols - 1) )
+    if( col_max >= ( Ncols - 1 ) )
         col_max = Ncols - 1;
 
     Penalite = 0;
@@ -811,14 +800,11 @@ unsigned int CalculePenaliteRectangle( BOARD* Pcb, int ux0, int uy0,
 }
 
 
-/**********************************************************************/
-int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
-/**********************************************************************/
-
-/*  Teste si le module peut etre place sur le board.
- *  retourne de diagnostic de TstRectangle().
- *  le module est connu par son rectangle d'encadrement
+/* Test if the module can be placed on the board.
+ * Returns the value TstRectangle().
+ * Module is known by its rectangle
  */
+int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
 {
     int ox, oy, fx, fy;
     int error, Penalite, marge, side, otherside;
@@ -845,7 +831,7 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
             return error;
     }
 
-    marge = (g_GridRoutingSize * Module->m_PadNum ) / GAIN;
+    marge = ( g_GridRoutingSize * Module->m_PadNum ) / GAIN;
 
     Penalite = CalculePenaliteRectangle( Pcb, ox - marge, oy - marge,
                                          fx + marge, fy + marge, side );
@@ -853,32 +839,32 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
 }
 
 
-/************************************************************/
-float WinEDA_PcbFrame::Compute_Ratsnest_PlaceModule( wxDC* DC )
-/************************************************************/
-
-/* Routine affichant le chevelu du module en cours de deplacement, et
- *  evaluant le "cout" de la position.
- *  Le cout est la longueur des chevelus en distance de manhattan, avec
- *  penalite pour les inclinaisons se rapprochant de 45 degre
+/*
+ * Display the module's ratsnet during displacement, and
+ * assess the "cost" of the position.
+ * The cost is the longest ratsnest distance with penalty for connections
+ * approaching 45 degrees.
  */
+float WinEDA_PcbFrame::Compute_Ratsnest_PlaceModule( wxDC* DC )
 {
-    double    cout, icout;
-    int      ox, oy;
-    int      fx, fy;
-    int      dx, dy;
+    double cout, icout;
+    int    ox, oy;
+    int    fx, fy;
+    int    dx, dy;
 
-    if( (GetBoard()->m_Status_Pcb & RATSNEST_ITEM_LOCAL_OK) == 0 )
+    if( ( GetBoard()->m_Status_Pcb & RATSNEST_ITEM_LOCAL_OK ) == 0 )
         return -1;
     cout = 0;
 
     for( unsigned ii = 0; ii < GetBoard()->m_LocalRatsnest.size(); ii++ )
     {
         RATSNEST_ITEM* pt_local_chevelu = &GetBoard()->m_LocalRatsnest[ii];
-        if( !(pt_local_chevelu->m_Status & LOCAL_RATSNEST_ITEM) )
+        if( !( pt_local_chevelu->m_Status & LOCAL_RATSNEST_ITEM ) )
         {
-            ox = pt_local_chevelu->m_PadStart->GetPosition().x - g_Offset_Module.x;
-            oy = pt_local_chevelu->m_PadStart->GetPosition().y - g_Offset_Module.y;
+            ox = pt_local_chevelu->m_PadStart->GetPosition().x -
+                 g_Offset_Module.x;
+            oy = pt_local_chevelu->m_PadStart->GetPosition().y -
+                 g_Offset_Module.y;
             fx = pt_local_chevelu->m_PadEnd->GetPosition().x;
             fy = pt_local_chevelu->m_PadEnd->GetPosition().y;
 
@@ -888,7 +874,7 @@ float WinEDA_PcbFrame::Compute_Ratsnest_PlaceModule( wxDC* DC )
                         0, g_DesignSettings.m_RatsnestColor | GR_XOR );
             }
 
-            /* Evaluation du cout du chevelu: */
+            /* Cost of the ratsnest. */
             dx = fx - ox;
             dy = fy - oy;
 
@@ -896,34 +882,41 @@ float WinEDA_PcbFrame::Compute_Ratsnest_PlaceModule( wxDC* DC )
             dy = abs( dy );
 
             if( dx < dy )
-                EXCHG( dx, dy );/* dx >= dy */
+                EXCHG( dx, dy );  /* dx >= dy */
 
-            /* cout de la distance: */
+            /* Cost of the longest connection. */
             icout = (float) dx * dx;
 
-            /* cout de l'inclinaison */
+            /* Cost of inclination. */
             icout += 3 * (float) dy * dy;
             icout  = sqrt( icout );
-            cout  += icout; /* cout total = somme des couts de chaque chevelu */
+            cout  += icout; /* Total cost = sum of costs of each connection. */
         }
     }
 
-    return (float)cout;
+    return (float) cout;
 }
 
 
-/*****************************************************************/
-/* Construction de la zone de penalite ( rectangle ) d'un module */
-/*****************************************************************/
+/***********************************/
+/* Draw keep out area of a module. */
+/***********************************/
 
-/* les cellules ( du plan des Distances ) du rectangle x0,y0 a x1,y1 sont
+/* ???
+ * les cellules ( du plan des Distances ) du rectangle x0,y0 a x1,y1 sont
  *  incrementees de la valeur Penalite
  *  celles qui sont externes au rectangle, mais internes au rectangle
  *  x0,y0 -marge a x1,y1 + marge sont incrementees d'une valeur
  *  (Penalite ... 0) decroissante en fonction de leur eloignement
  */
-static void TracePenaliteRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
-                                    int marge, int Penalite, int masque_layer )
+static void TracePenaliteRectangle( BOARD* Pcb,
+                                    int    ux0,
+                                    int    uy0,
+                                    int    ux1,
+                                    int    uy1,
+                                    int    marge,
+                                    int    Penalite,
+                                    int    masque_layer )
 {
     int      row, col;
     int      row_min, row_max, col_min, col_max, pmarge;
@@ -932,16 +925,18 @@ static void TracePenaliteRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int u
     int      lgain, cgain;
 
     if( masque_layer & g_TabOneLayerMask[Route_Layer_BOTTOM] )
-        trace = 1;     /* Trace sur BOTTOM */
+        trace = 1;     /* Trace on bottom layer. */
 
-    if( (masque_layer & g_TabOneLayerMask[Route_Layer_TOP] ) && Nb_Sides )
-        trace |= 2;     /* Trace sur TOP */
+    if( ( masque_layer & g_TabOneLayerMask[Route_Layer_TOP] ) && Nb_Sides )
+        trace |= 2;    /* Trace on top layer. */
 
     if( trace == 0 )
         return;
 
-    ux0 -= Pcb->m_BoundaryBox.m_Pos.x; uy0 -= Pcb->m_BoundaryBox.m_Pos.y;
-    ux1 -= Pcb->m_BoundaryBox.m_Pos.x; uy1 -= Pcb->m_BoundaryBox.m_Pos.y;
+    ux0 -= Pcb->m_BoundaryBox.m_Pos.x;
+    uy0 -= Pcb->m_BoundaryBox.m_Pos.y;
+    ux1 -= Pcb->m_BoundaryBox.m_Pos.x;
+    uy1 -= Pcb->m_BoundaryBox.m_Pos.y;
 
     ux0 -= marge; ux1 += marge;
     uy0 -= marge; uy1 += marge;
@@ -949,7 +944,7 @@ static void TracePenaliteRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int u
     pmarge = marge / g_GridRoutingSize; if( pmarge < 1 )
         pmarge = 1;
 
-    /* Calcul des coord limites des cellules appartenant au rectangle */
+    /* Calculate the coordinate limits of the rectangle. */
     row_max = uy1 / g_GridRoutingSize;
     col_max = ux1 / g_GridRoutingSize;
     row_min = uy0 / g_GridRoutingSize; if( uy0 > row_min * g_GridRoutingSize )
@@ -970,22 +965,22 @@ static void TracePenaliteRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int u
     {
         lgain = 256;
         if( row < pmarge )
-            lgain = (256 * row) / pmarge;
+            lgain = ( 256 * row ) / pmarge;
         else if( row > row_max - pmarge )
-            lgain = ( 256 * (row_max - row) ) / pmarge;
+            lgain = ( 256 * ( row_max - row ) ) / pmarge;
 
         for( col = col_min; col <= col_max; col++ )
         {
             cgain = 256;
             LocalPenalite = Penalite;
             if( col < pmarge )
-                cgain = (256 * col) / pmarge;
+                cgain = ( 256 * col ) / pmarge;
             else if( col > col_max - pmarge )
-                cgain = ( 256 * (col_max - col) ) / pmarge;
+                cgain = ( 256 * ( col_max - col ) ) / pmarge;
 
-            cgain = (cgain * lgain) / 256;
+            cgain = ( cgain * lgain ) / 256;
             if( cgain != 256 )
-                LocalPenalite = (LocalPenalite * cgain) / 256;
+                LocalPenalite = ( LocalPenalite * cgain ) / 256;
             if( trace & 1 )
             {
                 data = GetDist( row, col, BOTTOM ) + LocalPenalite;
@@ -1002,9 +997,9 @@ static void TracePenaliteRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int u
 }
 
 
-/***************************************************/
-/* Routines de tri de modules, utilisee par qsort: */
-/***************************************************/
+/************************************/
+/* Sort routines for use with qsort */
+/************************************/
 
 static int Tri_PlaceModules( MODULE** pt_ref, MODULE** pt_compare )
 {
@@ -1036,15 +1031,12 @@ static int Tri_RatsModules( MODULE** pt_ref, MODULE** pt_compare )
 }
 
 
-/***************************************************************/
-static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
-/***************************************************************/
-
-/* Recherche le "meilleur" module a placer
- *  les criteres de choix sont:
- *  - maximum de chevelus avec les modules deja places
- *  - taille max, et nombre de pads max
+/* Find the "best" module place
+ * The criteria of choice are:
+ * - Maximum ratsnet with modules already placed
+ * - Max size, and number of pads max
  */
+static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
 {
     MODULE** BaseListeModules, ** pt_Dmod;
     MODULE*  Module = NULL, * AltModule = NULL;
@@ -1054,9 +1046,9 @@ static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
     if( BaseListeModules == NULL )
         return NULL;
 
-    /* Tri par surface decroissante des modules
-     *  (on place les plus gros en 1er), surface ponderee par le nombre de pads */
-
+    /* Sort surface area of modules from greatest to least.  Surface area
+     * weighted by the number of pads
+     */
     qsort( BaseListeModules, NbModules, sizeof(MODULE * *),
            ( int (*)( const void*, const void* ) )Tri_PlaceModules );
 
@@ -1069,10 +1061,13 @@ static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
         (*pt_Dmod)->DisplayInfo( pcbframe );
         pcbframe->build_ratsnest_module( DC, *pt_Dmod );
 
-        /* calcul du nombre de chevelus externes */
-        for( unsigned ii = 0; ii < pcbframe->GetBoard()->m_LocalRatsnest.size(); ii++ )
+        /* Calculate external ratsnet. */
+        for( unsigned ii = 0;
+             ii < pcbframe->GetBoard()->m_LocalRatsnest.size();
+             ii++ )
         {
-            if( (pcbframe->GetBoard()->m_LocalRatsnest[ii].m_Status & LOCAL_RATSNEST_ITEM) == 0 )
+            if( ( pcbframe->GetBoard()->m_LocalRatsnest[ii].m_Status &
+                  LOCAL_RATSNEST_ITEM ) == 0 )
                 (*pt_Dmod)->flag++;
         }
     }
@@ -1083,7 +1078,7 @@ static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
            ( int (*)( const void*, const void* ) )Tri_RatsModules );
 
 
-    /* Recherche du "meilleur" module */
+    /* Search for "best" module. */
     Module = NULL;
     for( pt_Dmod = BaseListeModules; *pt_Dmod != NULL; pt_Dmod++ )
     {
@@ -1103,30 +1098,28 @@ static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
 }
 
 
-/*******************************************************/
-bool WinEDA_PcbFrame::SetBoardBoundaryBoxFromEdgesOnly()
-/*******************************************************/
-
-/* Determine le rectangle d'encadrement du pcb, selon les contours
- *  (couche EDGE) uniquement
- *  Sortie:
- *  GetBoard()->m_BoundaryBox mis a jour
- *  Retourne FALSE si pas de contour
+/*
+ * Determine the rectangle of the pcb, according to the contours
+ * layer (EDGE) only
+ * Output:
+ *   GetBoard()->m_BoundaryBox updated
+ * Returns FALSE if no contour
  */
+bool WinEDA_PcbFrame::SetBoardBoundaryBoxFromEdgesOnly()
 {
-    int             rayon, cx, cy, d;
-    int             xmax, ymax;
-    BOARD_ITEM*     PtStruct;
-    DRAWSEGMENT*    ptr;
-    bool            succes = FALSE;
+    int          rayon, cx, cy, d;
+    int          xmax, ymax;
+    BOARD_ITEM*  PtStruct;
+    DRAWSEGMENT* ptr;
+    bool         succes = FALSE;
 
     if( GetBoard() == NULL )
         return FALSE;
 
-    GetBoard()->m_BoundaryBox.m_Pos.x = GetBoard()->m_BoundaryBox.m_Pos.y = 0x7FFFFFFFl;
+    GetBoard()->m_BoundaryBox.m_Pos.x = GetBoard()->m_BoundaryBox.m_Pos.y =
+        0x7FFFFFFFl;
     xmax = ymax = -0x7FFFFFFFl;
 
-    /* Analyse des Contours PCB */
     PtStruct = GetBoard()->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
@@ -1137,11 +1130,15 @@ bool WinEDA_PcbFrame::SetBoardBoundaryBoxFromEdgesOnly()
         d = (ptr->m_Width / 2) + 1;
         if( ptr->m_Shape == S_CIRCLE )
         {
-            cx     = ptr->m_Start.x; cy = ptr->m_Start.y;
-            rayon  = (int) hypot( (double) (ptr->m_End.x - cx), (double) (ptr->m_End.y - cy) );
+            cx    = ptr->m_Start.x; cy = ptr->m_Start.y;
+            rayon =
+                (int) hypot( (double) ( ptr->m_End.x - cx ),
+                            (double) ( ptr->m_End.y - cy ) );
             rayon += d;
-            GetBoard()->m_BoundaryBox.m_Pos.x = MIN( GetBoard()->m_BoundaryBox.m_Pos.x, cx - rayon );
-            GetBoard()->m_BoundaryBox.m_Pos.y = MIN( GetBoard()->m_BoundaryBox.m_Pos.y, cy - rayon );
+            GetBoard()->m_BoundaryBox.m_Pos.x = MIN(
+                GetBoard()->m_BoundaryBox.m_Pos.x, cx - rayon );
+            GetBoard()->m_BoundaryBox.m_Pos.y = MIN(
+                GetBoard()->m_BoundaryBox.m_Pos.y, cy - rayon );
             xmax = MAX( xmax, cx + rayon );
             ymax = MAX( ymax, cy + rayon );
         }
@@ -1149,8 +1146,10 @@ bool WinEDA_PcbFrame::SetBoardBoundaryBoxFromEdgesOnly()
         {
             cx = MIN( ptr->m_Start.x, ptr->m_End.x );
             cy = MIN( ptr->m_Start.y, ptr->m_End.y );
-            GetBoard()->m_BoundaryBox.m_Pos.x = MIN( GetBoard()->m_BoundaryBox.m_Pos.x, cx - d );
-            GetBoard()->m_BoundaryBox.m_Pos.y = MIN( GetBoard()->m_BoundaryBox.m_Pos.y, cy - d );
+            GetBoard()->m_BoundaryBox.m_Pos.x = MIN(
+                GetBoard()->m_BoundaryBox.m_Pos.x, cx - d );
+            GetBoard()->m_BoundaryBox.m_Pos.y = MIN(
+                GetBoard()->m_BoundaryBox.m_Pos.y, cy - d );
             cx   = MAX( ptr->m_Start.x, ptr->m_End.x );
             cy   = MAX( ptr->m_Start.y, ptr->m_End.y );
             xmax = MAX( xmax, cx + d );
@@ -1158,7 +1157,9 @@ bool WinEDA_PcbFrame::SetBoardBoundaryBoxFromEdgesOnly()
         }
     }
 
-    GetBoard()->m_BoundaryBox.SetWidth( xmax - GetBoard()->m_BoundaryBox.m_Pos.x );
-    GetBoard()->m_BoundaryBox.SetHeight( ymax - GetBoard()->m_BoundaryBox.m_Pos.y );
+    GetBoard()->m_BoundaryBox.SetWidth(
+        xmax - GetBoard()->m_BoundaryBox.m_Pos.x );
+    GetBoard()->m_BoundaryBox.SetHeight(
+        ymax - GetBoard()->m_BoundaryBox.m_Pos.y );
     return succes;
 }
