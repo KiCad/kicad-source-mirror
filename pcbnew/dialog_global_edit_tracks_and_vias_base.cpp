@@ -59,7 +59,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	
 	fgSizeNetInfo->Add( m_CurrentNetclassName, 0, wxALL, 5 );
 	
-	bSizerGrids->Add( fgSizeNetInfo, 1, wxEXPAND, 5 );
+	bSizerGrids->Add( fgSizeNetInfo, 0, wxEXPAND, 5 );
 	
 	
 	bSizerGrids->Add( 10, 10, 0, 0, 5 );
@@ -70,8 +70,8 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	m_gridDisplayCurrentSettings->CreateGrid( 2, 5 );
 	m_gridDisplayCurrentSettings->EnableEditing( true );
 	m_gridDisplayCurrentSettings->EnableGridLines( true );
-	m_gridDisplayCurrentSettings->EnableDragGridSize( false );
-	m_gridDisplayCurrentSettings->SetMargins( 0, 0 );
+	m_gridDisplayCurrentSettings->EnableDragGridSize( true );
+	m_gridDisplayCurrentSettings->SetMargins( 10, 0 );
 	
 	// Columns
 	m_gridDisplayCurrentSettings->AutoSizeColumns();
@@ -97,13 +97,13 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	
 	// Cell Defaults
 	m_gridDisplayCurrentSettings->SetDefaultCellAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	bSizerGrids->Add( m_gridDisplayCurrentSettings, 0, wxALL|wxEXPAND, 5 );
+	bSizerGrids->Add( m_gridDisplayCurrentSettings, 1, wxALL|wxEXPAND, 5 );
 	
 	bSizerCurrSettingsLeft->Add( bSizerGrids, 1, wxEXPAND, 5 );
 	
 	bSizerCurrSettings->Add( bSizerCurrSettingsLeft, 1, wxEXPAND, 5 );
 	
-	bMainSizer->Add( bSizerCurrSettings, 0, 0, 5 );
+	bMainSizer->Add( bSizerCurrSettings, 0, wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline1, 0, wxALL|wxEXPAND, 5 );
@@ -128,7 +128,8 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	wxBoxSizer* bSizerRadioButtons;
 	bSizerRadioButtons = new wxBoxSizer( wxVERTICAL );
 	
-	m_Net2CurrValueButton = new wxRadioButton( this, ID_CURRENT_VALUES_TO_CURRENT_NET, _("Set tracks and vias of the current Net to the current value"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Net2CurrValueButton = new wxRadioButton( this, ID_CURRENT_VALUES_TO_CURRENT_NET, _("Set tracks and vias of the current Net to the current value"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_Net2CurrValueButton->SetValue( true ); 
 	bSizerRadioButtons->Add( m_Net2CurrValueButton, 0, wxALL, 5 );
 	
 	m_NetUseNetclassValueButton = new wxRadioButton( this, ID_NETCLASS_VALUES_TO_CURRENT_NET, _("Set tracks and vias of the current Net to the Netclass value"), wxDefaultPosition, wxDefaultSize, 0 );

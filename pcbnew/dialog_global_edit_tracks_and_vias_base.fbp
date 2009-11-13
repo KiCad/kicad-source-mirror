@@ -77,7 +77,7 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag"></property>
+                    <property name="flag">wxEXPAND</property>
                     <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
@@ -166,7 +166,7 @@
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
                                             <property name="flag">wxEXPAND</property>
-                                            <property name="proportion">1</property>
+                                            <property name="proportion">0</property>
                                             <object class="wxFlexGridSizer" expanded="1">
                                                 <property name="cols">2</property>
                                                 <property name="flexible_direction">wxBOTH</property>
@@ -398,7 +398,7 @@
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
                                             <property name="flag">wxALL|wxEXPAND</property>
-                                            <property name="proportion">0</property>
+                                            <property name="proportion">1</property>
                                             <object class="wxGrid" expanded="1">
                                                 <property name="autosize_cols">1</property>
                                                 <property name="autosize_rows">1</property>
@@ -417,7 +417,7 @@
                                                 <property name="context_help"></property>
                                                 <property name="drag_col_move">0</property>
                                                 <property name="drag_col_size">1</property>
-                                                <property name="drag_grid_size">0</property>
+                                                <property name="drag_grid_size">1</property>
                                                 <property name="drag_row_size">1</property>
                                                 <property name="editing">1</property>
                                                 <property name="enabled">1</property>
@@ -431,7 +431,7 @@
                                                 <property name="label_font"></property>
                                                 <property name="label_text"></property>
                                                 <property name="margin_height">0</property>
-                                                <property name="margin_width">0</property>
+                                                <property name="margin_width">10</property>
                                                 <property name="maximum_size"></property>
                                                 <property name="minimum_size"></property>
                                                 <property name="name">m_gridDisplayCurrentSettings</property>
@@ -670,10 +670,10 @@
                                         <property name="permission">protected</property>
                                         <property name="pos"></property>
                                         <property name="size"></property>
-                                        <property name="style"></property>
+                                        <property name="style">wxRB_GROUP</property>
                                         <property name="subclass"></property>
                                         <property name="tooltip"></property>
-                                        <property name="value">0</property>
+                                        <property name="value">1</property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>

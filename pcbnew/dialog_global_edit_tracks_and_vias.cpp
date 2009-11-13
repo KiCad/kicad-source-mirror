@@ -16,7 +16,7 @@
 #include "dialog_global_edit_tracks_and_vias.h"
 
 /**
- *  DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE, derived from DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE_BASE
+ *  DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS, derived from DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE_BASE
  *  @see dialog_global_edit_tracks_and_vias_base.h and dialog_global_edit_tracks_and_vias_base.cpp,
  *  automatically created by wxFormBuilder
  */
@@ -29,7 +29,6 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS(
     m_Netcode = aNetcode;
     m_OptionID = 0;
     MyInit();
-    GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
     Layout();
 }
@@ -56,7 +55,9 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
         netclass = netclasses.Find( board->m_CurrentNetClassName );
     }
 
-    // Disable the option "copy current to net" if we have only default netclass values
+    /* Disable the option "copy current to net" if we have only default netclass values
+     * i.e. when m_TrackWidthSelector and m_ViaSizeSelector are set to 0
+     */
     if( !board->m_TrackWidthSelector && !board->m_ViaSizeSelector )
     {
         m_Net2CurrValueButton->Enable( false );
@@ -70,7 +71,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     }
 
     // Display current values, and current netclass values:
-    int value = netclass->GetTrackWidth();
+    int value = netclass->GetTrackWidth();      // Display track width
     msg = ReturnStringFromValue( g_UnitMetric, value, Internal_Unit, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 0, msg  );
     if( board->m_TrackWidthSelector )
@@ -82,9 +83,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
         msg = _( "Default" );
     m_gridDisplayCurrentSettings->SetCellValue( 1, 0, msg  );
 
-    // recompute the column widths here, after setting texts
-
-    value = netclass->GetViaDiameter();
+    value = netclass->GetViaDiameter();      // Display via diameter
     msg   = ReturnStringFromValue( g_UnitMetric, value, Internal_Unit, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 1, msg  );
     if( board->m_ViaSizeSelector )
@@ -96,7 +95,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
         msg = _( "Default" );
     m_gridDisplayCurrentSettings->SetCellValue( 1, 1, msg  );
 
-    value = netclass->GetViaDrill();
+    value = netclass->GetViaDrill();      // Display via drill
     msg   = ReturnStringFromValue( g_UnitMetric, value, Internal_Unit, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 2, msg  );
     value = board->GetCurrentViaDrill();
@@ -106,7 +105,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
         msg = _( "Default" );
     m_gridDisplayCurrentSettings->SetCellValue( 1, 2, msg  );
 
-    value = netclass->GetuViaDiameter();
+    value = netclass->GetuViaDiameter();      // Display micro via diameter
     msg   = ReturnStringFromValue( g_UnitMetric, value, Internal_Unit, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 3, msg  );
 #if 0   // Currently we use always the default netclass value
@@ -116,7 +115,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     msg = _( "Default" );
     m_gridDisplayCurrentSettings->SetCellValue( 1, 3, msg  );
 
-    value = netclass->GetuViaDrill();
+    value = netclass->GetuViaDrill();      // Display micro via drill
     msg   = ReturnStringFromValue( g_UnitMetric, value, Internal_Unit, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 4, msg  );
 #if 0   // Currently we use always the default netclass value
@@ -134,6 +133,9 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
         for( int jj = 0; jj < m_gridDisplayCurrentSettings->GetNumberCols(); jj++ )
             m_gridDisplayCurrentSettings->SetReadOnly( ii, jj, true );
     }
+    
+    // needs wxWidgets version >= 2.8.8:
+    m_gridDisplayCurrentSettings->SetRowLabelSize(wxGRID_AUTOSIZE);
 
     m_gridDisplayCurrentSettings->Fit();
 }
