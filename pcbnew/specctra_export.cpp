@@ -993,14 +993,20 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
         sprintf( rule, "(clearance %.6g)", clearance+safetyMargin );
         rules.push_back( rule );
 
-        // On a high density board, a typical solder mask clearance will be 2-3 mils.
+        // On a high density board (a board with 4 mil tracks, 4 mil spacing)
+        // a typical solder mask clearance will be 2-3 mils.
         // This exposes 2 to 3 mils of bare board around each pad, and would
         // leave only 1 to 2 mils of solder mask between the solder mask's boundary
         // to the edge of any trace within "clearance" of the pad.  So we need at least
         // 2 mils *extra* clearance for traces which would come near a pad on
         // a different net.  So if the baseline trace to trace clearance was say 4 mils, then
-        // the SMD to trace clearance should be at least 6 mils.  Also add our safetyMargin.
-        sprintf( rule, "(clearance %.6g (type default_smd))", clearance + 2.0 + safetyMargin );
+        // the SMD to trace clearance should be at least 6 mils.
+        double default_smd = clearance + safetyMargin;
+        if( default_smd <= 6.0 )
+            default_smd = 6.0;
+
+        sprintf( rule, "(clearance %.6g (type default_smd))", default_smd );
+
         rules.push_back( rule );
 
         /* see: http://www.freerouting.net/usren/viewtopic.php?f=5&t=339#p474
