@@ -141,6 +141,19 @@ public:
         m_Pos = aPos;
     }
 
+    /** function TransformPadWithClearanceToPolygon
+     * Convert the pad shape to a closed polygon
+     * Used in filling zones calculations
+     * Circles and arcs are approximated by segments
+     * @param aCornerBuffer = a buffer to store the polygon
+     * @param aClearanceValue = the clearance around the pad
+     * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+     * @param aCorrectionFactor = the correction to apply to circles radius to keep
+     * clearance when the circle is approxiamted by segment bigger or equal
+     * to the real clearance value (usually near from 1.0)
+    */
+    void TransformPadWithClearanceToPolygon( std::vector <wxPoint>& aCornerBuffer,
+            int aClearanceValue, int aCircleToSegmentsCount, double aCorrectionFactor );
 
      /**
      * Function GetClearance

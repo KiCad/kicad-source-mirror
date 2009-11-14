@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-11-13 17:41+0100\n"
-"PO-Revision-Date: 2009-11-13 17:47+0100\n"
+"PO-Revision-Date: 2009-11-13 20:06+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -286,7 +286,7 @@ msgstr "Inclure Modules"
 
 #: pcbnew/block.cpp:128
 msgid "Include tracks"
-msgstr "Inclure Pistes"
+msgstr "Inclure pistes"
 
 #: pcbnew/block.cpp:133
 msgid "Include zones"
@@ -3183,6 +3183,8 @@ msgid ""
 "Set these values to 0\n"
 "to use Parent footprint or global values"
 msgstr ""
+"Mettre ces valeurs à 0\n"
+"pour utiliser les valeurs du module parent ou les valeurs globales"
 
 #: pcbnew/dialog_pad_properties_base.cpp:237
 msgid "Net pad clearance"
@@ -3936,7 +3938,7 @@ msgstr "NETCLASS: '%s' a une isolation:%s qui est moins que la valeur globale:%s
 #: pcbnew/drc.cpp:340
 #, c-format
 msgid "NETCLASS: '%s' has TrackWidth:%s which is less than global:%s"
-msgstr ""
+msgstr "NETCLASS: '%s' a une largeur de piste: %s plust petite que la valeur globale:%s"
 
 #: pcbnew/drc.cpp:354
 #, c-format
@@ -4791,9 +4793,8 @@ msgid "Pads Mask Clearance"
 msgstr "Marge Masque des Pads"
 
 #: pcbnew/menubarpcb.cpp:232
-#, fuzzy
 msgid "Adjust the global clearance between pads and the solder resist mask"
-msgstr "Ceci est l'espace entre pads et le masque"
+msgstr "Ajuster la marge globale entre pads et le masque de vernis épargne"
 
 #: pcbnew/menubarpcb.cpp:242
 msgid "Texts and Drawings"
@@ -4990,7 +4991,7 @@ msgstr "<<<"
 
 #: pcbnew/dialog_design_rules_base.cpp:114
 msgid "Move the selected nets in the right list to the left list"
-msgstr ""
+msgstr "Déplacer les nets sélectionnés de la liste droite vers la liste gauche"
 
 #: pcbnew/dialog_design_rules_base.cpp:118
 msgid ">>>"
@@ -5356,7 +5357,7 @@ msgstr "Valeurs locales pour marges sur masques:"
 #: pcbnew/dialog_edit_module_for_Modedit_base.cpp:116
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:145
 msgid "Set these values to 0 to use global values"
-msgstr ""
+msgstr "Mettre ces valeurs à 0 pour utiliser les valeurs globales"
 
 #: pcbnew/dialog_edit_module_for_Modedit_base.cpp:127
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:156
@@ -8183,9 +8184,8 @@ msgid "Library browser"
 msgstr "Visualisateur des librairies"
 
 #: eeschema/tool_sch.cpp:58
-#, fuzzy
 msgid "Navigate schematic hierarchy"
-msgstr "Sauver le Projet schématique"
+msgstr "Navigateur de hiérarchie"
 
 #: eeschema/tool_sch.cpp:84
 msgid "Print schematic"
@@ -8212,9 +8212,8 @@ msgid "Schematic Electric Rules Check"
 msgstr "Contrôle des règles électriques"
 
 #: eeschema/tool_sch.cpp:129
-#, fuzzy
 msgid "Bill of material and/or Cross references"
-msgstr "Liste des composants et références croisées"
+msgstr "Liste des composants ou/et références croisées"
 
 #: eeschema/tool_sch.cpp:133
 msgid "Backannotate footprint"
@@ -8261,9 +8260,8 @@ msgid "Place hierarchical sheet"
 msgstr "Placer feuille hiérarchique"
 
 #: eeschema/tool_sch.cpp:215
-#, fuzzy
 msgid "Place a pin sheet, imported from the corresponding hierarchical label in sheet"
-msgstr "Placer une pin hiérarchique, importée d'un un label hiérarchique dans la feuille."
+msgstr "Placer une pin hiérarchique, importée du label hiérarchique correspondant dans la feuille."
 
 #: eeschema/tool_sch.cpp:220
 msgid "Place hierarchical pin to sheet"
@@ -10417,9 +10415,8 @@ msgid "&Configuration"
 msgstr "&Configuration"
 
 #: cvpcb/menucfg.cpp:49
-#, fuzzy
 msgid "Set libraries and library search paths"
-msgstr "Librairie modules PCB %s non trouvée dans les chemins de recherche"
+msgstr "Sélectionner les librairie et les chemins de recherche des librairies"
 
 #: cvpcb/menucfg.cpp:56
 msgid "Keep Open On Save"

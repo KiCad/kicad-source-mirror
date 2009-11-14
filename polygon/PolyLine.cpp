@@ -569,7 +569,7 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
         Another scaling with Grid is applied on top of it to create space in the integer number for
 		even smaller numbers.
    */
-    int GRID = 10000;       // initial value = 10000 in kbool example
+    int GRID = 1000;       // initial value = 10000 in kbool example
 
     aBooleng->SetMarge( MARGE );
     aBooleng->SetGrid( GRID );

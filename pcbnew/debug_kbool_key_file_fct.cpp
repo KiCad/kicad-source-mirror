@@ -4,6 +4,7 @@
 
 #include "fctsys.h"
 #include "common.h"
+#include "kicad_string.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "zones.h"
@@ -11,14 +12,22 @@
 
 #include "debug_kbool_key_file_fct.h"
 
-#ifdef CREATE_KBOOL_KEY_FILES
+#if defined (CREATE_KBOOL_KEY_FILES) || (CREATE_KBOOL_KEY_FILES_FIRST_PASS)
 
 static FILE*       kdebugFile;
-static const char * sDate_Time = "2009-09-07  15:59:24";
+static char sDate_Time[256];
 
 
 void CreateKeyFile()
 {
+    wxString   datetimestr;
+    wxDateTime datetime = wxDateTime::Now();
+    datetime.SetCountry( wxDateTime::Country_Default );
+    datetimestr = datetime.FormatISODate( )
+                + wxT("  ")
+                + datetime.FormatISOTime( );
+    strcpy(sDate_Time, CONV_TO_UTF8(datetimestr) );
+
     kdebugFile = fopen( KEYFILE_FILENAME, "wt" );
     if( kdebugFile )
     {
@@ -55,7 +64,7 @@ void CloseKeyFile()
 const char* sCurrEntityName = NULL;
 static int s_count;
 
-void OpenEntity( const char* aName )
+void OpenKeyFileEntity( const char* aName )
 {
     if( kdebugFile )
     {
@@ -69,21 +78,21 @@ void OpenEntity( const char* aName )
 }
 
 
-void CloseEntity()
+void CloseKeyFileEntity()
 {
     if( kdebugFile )
         fprintf( kdebugFile, "\nENDSTR %s;\n", sCurrEntityName );
 }
 
 
-void StartPolygon(int aCornersCount, int aLayer)
+void StartKeyFilePolygon(int aCornersCount, int aLayer)
 {
     fprintf( kdebugFile, "\nBOUNDARY; LAYER %d;  DATATYPE 0;\n", aLayer );
     fprintf( kdebugFile, "   XY %d;\n", aCornersCount );
     s_count = 0;
 }
 
-void EndElement()
+void EndKeyFileElement()
 {
     if ( s_count == 1 )
         fprintf( kdebugFile, "\n");
@@ -114,14 +123,14 @@ void CopyPolygonsFromFilledPolysListToKeyFile( ZONE_CONTAINER* aZone, int aLayer
         }
 
         // write corners:
-        StartPolygon( count+1, aLayer );
+        StartKeyFilePolygon( count+1, aLayer );
         corner = &aZone->m_FilledPolysList[ic];
         int startpointX = corner->x;
         int startpointY = corner->y;
         for( ; ic < corners_count; ic++ )
         {
             corner = &aZone->m_FilledPolysList[ic];
-            AddPointXY( corner->x, corner->y );
+            AddKeyFilePointXY( corner->x, corner->y );
             if( corner->end_contour )
             {
                 ic++;
@@ -129,21 +138,19 @@ void CopyPolygonsFromFilledPolysListToKeyFile( ZONE_CONTAINER* aZone, int aLayer
             }
         }
         // Close polygon:
-        AddPointXY( startpointX, startpointY );
-        EndElement();
+        AddKeyFilePointXY( startpointX, startpointY );
+        EndKeyFileElement();
     }
 }
 
-void AddPointXY( int aXcoord, int aYcoord)
+void AddKeyFilePointXY( int aXcoord, int aYcoord)
 {
     if ( s_count >= 2 )
     {
         s_count = 0;
         fprintf( kdebugFile, "\n");
     }
-    SetLocaleTo_C_standard();
     fprintf( kdebugFile, "   X %d; Y %d;", aXcoord, aYcoord );
-    SetLocaleTo_Default( );
     s_count ++;
 }
 

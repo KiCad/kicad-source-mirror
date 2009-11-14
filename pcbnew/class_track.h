@@ -148,6 +148,21 @@ public:
     /* divers */
     int Shape() const { return m_Shape & 0xFF; }
 
+    /** Function TransformTrackWithClearanceToPolygon
+     * Convert the track shape to a closed polygon
+     * Used in filling zones calculations
+     * Circles (vias) and arcs (ends of tracks) are approximated by segments
+     * @param aCornerBuffer = a buffer to store the polygon
+     * @param aClearanceValue = the clearance around the pad
+     * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+     * @param aCorrectionFactor = the correction to apply to circles radius to keep
+     * clearance when the circle is approxiamted by segment bigger or equal
+     * to the real clearance value (usually near from 1.0)
+     */
+    void TransformTrackWithClearanceToPolygon( std::vector <wxPoint>& aCornerBuffer,
+                                               int                    aClearanceValue,
+                                               int                    aCircleToSegmentsCount,
+                                               double                 aCorrectionFactor );
     /**
      * Function SetDrillValue
      * Set the drill value for vias

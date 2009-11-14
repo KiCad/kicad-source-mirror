@@ -11,10 +11,11 @@ set(PCBNEW_SRCS
     automove.cpp
     autoplac.cpp
     autorout.cpp
+    board.cpp
+    board_items_to_polygon_shape_transform.cpp
+    board_undo_redo.cpp
     block.cpp
     block_module_editor.cpp
-    board.cpp
-    board_undo_redo.cpp
     build_BOM_from_board.cpp
     clean.cpp
 #   cleaningoptions_dialog.cpp
