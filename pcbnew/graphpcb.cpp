@@ -1,8 +1,6 @@
-
-/* EDITEUR de PCB: AUTOROUTAGE: routines "graphiques" */
-/******************************************************/
-
-/* Fichier BOARD.CC */
+/****************************************************/
+/* PCB EDITOR: autorouting and "graphics" routines. */
+/****************************************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -14,60 +12,88 @@
 #include "trigo.h"
 #include "cell.h"
 
-/* Exported functions */
-int     ToMatrixCoordinate ( int aPhysicalCoordinate);
-void    TraceLignePcb( int x0, int y0, int x1, int y1, int layer, int color );
-void    TraceArc( int ux0, int uy0, int ux1, int uy1, int ArcAngle, int lg, int layer,
-                  int color, int op_logique );
+int  ToMatrixCoordinate( int aPhysicalCoordinate );
+void TraceLignePcb( int x0,
+                    int y0,
+                    int x1,
+                    int y1,
+                    int layer,
+                    int color );
+void TraceArc( int ux0,
+               int uy0,
+               int ux1,
+               int uy1,
+               int ArcAngle,
+               int lg,
+               int layer,
+               int color,
+               int op_logique );
 
 
-/* Local functions */
-static void    DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
-                        int color, int op_logique );
+static void DrawSegmentQcq( int ux0,
+                            int uy0,
+                            int ux1,
+                            int uy1,
+                            int lg,
+                            int layer,
+                            int color,
+                            int op_logique );
 
-static void    TraceFilledCercle( BOARD* Pcb, int cx, int cy, int rayon, int masque_layer,
-                           int color, int op_logique );
-static void    TraceCercle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
-                     int color, int op_logique );
+static void TraceFilledCercle( BOARD* Pcb,
+                               int    cx,
+                               int    cy,
+                               int    rayon,
+                               int    masque_layer,
+                               int    color,
+                               int    op_logique );
+static void TraceCercle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
+                         int color, int op_logique );
 
-/* Macro d'appel de mise a jour de cellules */
-#define OP_CELL( layer, dy, dx ) { if( layer < 0 ) \
-                                   { \
-                                       WriteCell( dy, dx, BOTTOM, color ); \
-                                       if( Nb_Sides ) \
-                                           WriteCell( dy, dx, TOP, color );\
-                                   } \
-                                   else { \
-                                       if( layer == Route_Layer_BOTTOM ) \
-                                           WriteCell( dy, dx, BOTTOM, color );\
-                                       if( Nb_Sides ) \
-                                           if( layer == Route_Layer_TOP ) \
-                                               WriteCell( dy, dx, TOP, color );\
-                                   } }
+/* Macro call to update cell. */
+#define OP_CELL( layer, dy, dx )                                        \
+    {                                                                   \
+        if( layer < 0 )                                                 \
+        {                                                               \
+            WriteCell( dy, dx, BOTTOM, color );                         \
+            if( Nb_Sides )                                              \
+                WriteCell( dy, dx, TOP, color );                        \
+        }                                                               \
+        else                                                            \
+        {                                                               \
+            if( layer == Route_Layer_BOTTOM )                           \
+                WriteCell( dy, dx, BOTTOM, color );                     \
+            if( Nb_Sides )                                              \
+                if( layer == Route_Layer_TOP )                          \
+                    WriteCell( dy, dx, TOP, color );                    \
+        }                                                               \
+    }
 
-int ToMatrixCoordinate ( int aPhysicalCoordinate)
+
 /** Function ToMatrixCoordinate
  * compute the coordinate in the routing matrix from the real (board) value
  * @param aPhysicalCoordinate = value to convert
  * @return the coordinate relative to the matrix
  */
+int ToMatrixCoordinate( int aPhysicalCoordinate )
 {
     return aPhysicalCoordinate / g_GridRoutingSize;
 }
 
-/******************************************************************************/
-void Place_1_Pad_Board( BOARD* Pcb, D_PAD* pt_pad, int color, int marge, int op_logique )
-/******************************************************************************/
 
-/* Initialise a la valeur color, les cellules du Board comprises dans la
- *  surface du pad pointe par pt_pad, avec la marge reservee pour l'isolement
- *  et la demi largeur de la piste
- *  Parametres:
- *      pt_pad : pointeur sur la description du pad
- *      color : masque a ecrire dans les cellules
- *      marge : valeur a ajouter au rayon ou demi cote du pad
- *      op_logique: type d'ecriture dans la cellule ( WRITE, OR )
+/* Initialize a color value, the cells included in the board edge of the
+ * pad surface by pt_pad, with the margin reserved for isolation and the
+ * half width of the runway
+ * Parameters:
+ * Pt_pad: pointer to the description of the pad
+ * color: mask write in cells
+ * margin: add a value to the radius or half the score pad
+ * op_logique: type of writing in the cell (WRITE, OR)
  */
+void Place_1_Pad_Board( BOARD* Pcb,
+                        D_PAD* pt_pad,
+                        int    color,
+                        int    marge,
+                        int    op_logique )
 {
     int     dx, dy;
     wxPoint shape_pos = pt_pad->ReturnShapePos();;
@@ -90,10 +116,12 @@ void Place_1_Pad_Board( BOARD* Pcb, D_PAD* pt_pad, int color, int marge, int op_
         dy += abs( pt_pad->m_DeltaSize.x ) / 2;
     }
 
-    if( (pt_pad->m_Orient % 900) == 0 )
-    {               /* Le pad est un rectangle horizontal ou vertical */
-        if( (pt_pad->m_Orient == 900 ) || (pt_pad->m_Orient == 2700) )
-        {           /* orient tournee de 90 deg */
+    if( ( pt_pad->m_Orient % 900 ) == 0 ) /* The pad is a rectangle
+                                           * horizontally or vertically. */
+    {
+        /* Orientation turned 90 deg. */
+        if( ( pt_pad->m_Orient == 900 ) || ( pt_pad->m_Orient == 2700 ) )
+        {
             EXCHG( dx, dy );
         }
 
@@ -111,19 +139,21 @@ void Place_1_Pad_Board( BOARD* Pcb, D_PAD* pt_pad, int color, int marge, int op_
 }
 
 
-/************************************************************************/
-void TraceFilledCercle( BOARD* Pcb, int cx, int cy, int rayon, int masque_layer,
-                        int color, int op_logique )
-/************************************************************************/
-
-/* Initialise a la valeur color, les cellules du Board comprises dans la
- *  surface du cercle de centre cx,cy.
- *  Parametres:
- *      rayon : valeur a ajouter au rayon ou demi cote du pad
- *      masque_layer = couches occupees
- *      color : masque a ecrire dans les cellules
- *      op_logique: type d'ecriture dans la cellule ( WRITE, OR )
+/* Initialize a color value, the cells included in the board rea of the
+ * circle center cx, cy.
+ * Parameters:
+ * radius: a value add to the radius or half the score pad
+ * masque_layer: layer occupied
+ * color: mask write in cells
+ * op_logique: type of writing in the cell (WRITE, OR)
  */
+void TraceFilledCercle( BOARD* Pcb,
+                        int    cx,
+                        int    cy,
+                        int    rayon,
+                        int    masque_layer,
+                        int    color,
+                        int    op_logique )
 {
     int   row, col;
     int   ux0, uy0, ux1, uy1;
@@ -131,21 +161,21 @@ void TraceFilledCercle( BOARD* Pcb, int cx, int cy, int rayon, int masque_layer,
     int   trace = 0;
     float fdistmin, fdistx, fdisty;
 
-    void  (*WriteCell)( int, int, int, BoardCell );
+    void  (* WriteCell)( int, int, int, BoardCell );
     int   tstwrite = 0;
     int   distmin;
 
-    /* Determination des couches occupees : */
+    /* Determine occupied layer. */
 
-    /* routage sur 1 seule couche:
-     *  sur bitmap BOTTOM et Route_Layer_B = Route_Layer_A*/
+    /* Single routing layer on bitmap and BOTTOM
+     * Route_Layer_B = Route_Layer_A */
 
     if( masque_layer & g_TabOneLayerMask[Route_Layer_BOTTOM] )
-        trace = 1;     /* Trace sur BOTTOM */
+        trace = 1;       /* Trace on BOTTOM */
 
     if( masque_layer & g_TabOneLayerMask[Route_Layer_TOP] )
         if( Nb_Sides )
-            trace |= 2;/* Trace sur TOP */
+            trace |= 2;  /* Trace on TOP */
 
     if( trace == 0 )
         return;
@@ -154,34 +184,44 @@ void TraceFilledCercle( BOARD* Pcb, int cx, int cy, int rayon, int masque_layer,
     {
     default:
     case WRITE_CELL:
-        WriteCell = SetCell; break;
+        WriteCell = SetCell;
+        break;
 
     case WRITE_OR_CELL:
-        WriteCell = OrCell; break;
+        WriteCell = OrCell;
+        break;
 
     case WRITE_XOR_CELL:
-        WriteCell = XorCell; break;
+        WriteCell = XorCell;
+        break;
 
     case WRITE_AND_CELL:
-        WriteCell = AndCell; break;
+        WriteCell = AndCell;
+        break;
 
     case WRITE_ADD_CELL:
-        WriteCell = AddCell; break;
+        WriteCell = AddCell;
+        break;
     }
 
-    cx -= Pcb->m_BoundaryBox.m_Pos.x; cy -= Pcb->m_BoundaryBox.m_Pos.y;
+    cx -= Pcb->m_BoundaryBox.m_Pos.x;
+    cy -= Pcb->m_BoundaryBox.m_Pos.y;
 
     distmin = rayon;
 
-    /* Calcul du rectangle d'encadrement du cercle*/
-    ux0 = cx - rayon; uy0 = cy - rayon;
-    ux1 = cx + rayon; uy1 = cy + rayon;
+    /* Calculate the bounding rectangle of the circle. */
+    ux0 = cx - rayon;
+    uy0 = cy - rayon;
+    ux1 = cx + rayon;
+    uy1 = cy + rayon;
 
-    /* Calcul des coord limites des cellules appartenant au rectangle */
+    /* Calculate limit coordinates of cells belonging to the rectangle. */
     row_max = uy1 / g_GridRoutingSize;
     col_max = ux1 / g_GridRoutingSize;
-    row_min = uy0 / g_GridRoutingSize;  // if (uy0 > row_min*g_GridRoutingSize ) row_min++;
-    col_min = ux0 / g_GridRoutingSize;  // if (ux0 > col_min*g_GridRoutingSize ) col_min++;
+    row_min = uy0 / g_GridRoutingSize;  // if (uy0 > row_min*g_GridRoutingSize
+                                        // ) row_min++;
+    col_min = ux0 / g_GridRoutingSize;  // if (ux0 > col_min*g_GridRoutingSize
+                                        // ) col_min++;
 
     if( row_min < 0 )
         row_min = 0;
@@ -192,7 +232,7 @@ void TraceFilledCercle( BOARD* Pcb, int cx, int cy, int rayon, int masque_layer,
     if( col_max >= (Ncols - 1) )
         col_max = Ncols - 1;
 
-    /* On s'assure que l'on place toujours au moins une cellule */
+    /* Calculate coordinate limits of cell belonging to the rectangle. */
     if( row_min > row_max )
         row_max = row_min;
     if( col_min > col_max )
@@ -202,14 +242,14 @@ void TraceFilledCercle( BOARD* Pcb, int cx, int cy, int rayon, int masque_layer,
 
     for( row = row_min; row <= row_max; row++ )
     {
-        fdisty  = (float) ( cy - (row * g_GridRoutingSize) );
+        fdisty  = (float) ( cy - ( row * g_GridRoutingSize ) );
         fdisty *= fdisty;
         for( col = col_min; col <= col_max; col++ )
         {
-            fdistx  = (float) ( cx - (col * g_GridRoutingSize) );
+            fdistx  = (float) ( cx - ( col * g_GridRoutingSize ) );
             fdistx *= fdistx;
 
-            if( fdistmin <= (fdistx + fdisty) )
+            if( fdistmin <= ( fdistx + fdisty ) )
                 continue;
 
             if( trace & 1 )
@@ -223,22 +263,23 @@ void TraceFilledCercle( BOARD* Pcb, int cx, int cy, int rayon, int masque_layer,
     if( tstwrite )
         return;
 
-    /* Si aucune cellule n'a ete ecrite, on touche les 4 voisins diagonaux
-     *  (cas defavorable: pad hors grille, au centre des 4 voisins diagonaux) */
-
+    /* If no cell has been written, it affects the 4 neighboring diagonal
+     * (Adverse event: pad off grid in the center of the 4 neighboring
+     * diagonal) */
     distmin  = g_GridRoutingSize / 2 + 1;
-    fdistmin = ( (float) distmin * distmin ) * 2; /* = dist centre au point diagonal*/
+    fdistmin = ( (float) distmin * distmin ) * 2; /* Distance to center point
+                                                   * diagonally */
 
     for( row = row_min; row <= row_max; row++ )
     {
-        fdisty  = (float) ( cy - (row * g_GridRoutingSize) );
+        fdisty  = (float) ( cy - ( row * g_GridRoutingSize ) );
         fdisty *= fdisty;
         for( col = col_min; col <= col_max; col++ )
         {
-            fdistx  = (float) ( cx - (col * g_GridRoutingSize) );
+            fdistx  = (float) ( cx - ( col * g_GridRoutingSize ) );
             fdistx *= fdistx;
 
-            if( fdistmin <= (fdistx + fdisty) )
+            if( fdistmin <= ( fdistx + fdisty ) )
                 continue;
 
             if( trace & 1 )
@@ -250,44 +291,46 @@ void TraceFilledCercle( BOARD* Pcb, int cx, int cy, int rayon, int masque_layer,
 }
 
 
-/******************************************************************************/
-void TraceSegmentPcb( BOARD* Pcb, TRACK* pt_segm, int color, int marge, int op_logique )
-/******************************************************************************/
-
-/* trace un Segment de piste sur le BOARD de routage
+/* Draws a segment of track on the BOARD.
  */
+void TraceSegmentPcb( BOARD* Pcb,
+                      TRACK* pt_segm,
+                      int    color,
+                      int    marge,
+                      int    op_logique )
 {
     int demi_pas, demi_largeur;
     int ux0, uy0, ux1, uy1;
 
 
     demi_pas     = g_GridRoutingSize / 2;
-    demi_largeur = (pt_segm->m_Width / 2) + marge;
-    /* Calcul du rectangle d'encadrement du segment ( si H,V ou Via) */
+    demi_largeur = ( pt_segm->m_Width / 2 ) + marge;
+    /* Calculate the bounding rectangle of the segment (if H, V or Via) */
     ux0 = pt_segm->m_Start.x - Pcb->m_BoundaryBox.m_Pos.x;
     uy0 = pt_segm->m_Start.y - Pcb->m_BoundaryBox.m_Pos.y;
     ux1 = pt_segm->m_End.x - Pcb->m_BoundaryBox.m_Pos.x;
     uy1 = pt_segm->m_End.y - Pcb->m_BoundaryBox.m_Pos.y;
 
-    /* Test si VIA (cercle plein a tracer) */
+    /* Test if VIA (filled circle was drawn) */
     if( pt_segm->Type() == TYPE_VIA )
     {
         int mask_layer = 0;
-        if ( pt_segm->IsOnLayer(Route_Layer_BOTTOM) )
+        if( pt_segm->IsOnLayer( Route_Layer_BOTTOM ) )
             mask_layer = 1 << Route_Layer_BOTTOM;
-        if ( pt_segm->IsOnLayer(Route_Layer_TOP) )
+        if( pt_segm->IsOnLayer( Route_Layer_TOP ) )
         {
-            if ( mask_layer == 0 )
+            if( mask_layer == 0 )
                 mask_layer = 1 << Route_Layer_TOP;
-            else mask_layer = -1;
+            else
+                mask_layer = -1;
         }
 
         if( color == VIA_IMPOSSIBLE )
             mask_layer = -1;
 
-        if ( mask_layer )
-            TraceFilledCercle( Pcb, pt_segm->m_Start.x, pt_segm->m_Start.y, demi_largeur,
-                           mask_layer, color, op_logique );
+        if( mask_layer )
+            TraceFilledCercle( Pcb, pt_segm->m_Start.x, pt_segm->m_Start.y,
+                               demi_largeur, mask_layer, color, op_logique );
         return;
     }
 
@@ -295,44 +338,52 @@ void TraceSegmentPcb( BOARD* Pcb, TRACK* pt_segm, int color, int marge, int op_l
     if( color == VIA_IMPOSSIBLE )
         layer = -1;
 
-    /* Le segment est ici un segment de droite ou un cercle ou un arc: */
+    /* The segment is here a straight line or a circle or an arc.: */
     if( pt_segm->m_Shape == S_CIRCLE )
     {
-        TraceCercle( ux0, uy0, ux1, uy1, demi_largeur, layer, color, op_logique );
+        TraceCercle( ux0, uy0, ux1, uy1, demi_largeur, layer, color,
+                     op_logique );
         return;
     }
 
     if( pt_segm->m_Shape == S_ARC )
     {
-        TraceArc( ux0, uy0, ux1, uy1, pt_segm->m_Param, demi_largeur, layer, color, op_logique );
+        TraceArc( ux0, uy0, ux1, uy1, pt_segm->m_Param, demi_largeur, layer,
+                  color, op_logique );
         return;
     }
 
-    /* Le segment est ici un segment de droite */
-    if( (ux0 != ux1) && (uy0 != uy1) ) // segment incline
+    /* The segment is here a line segment. */
+    if( ( ux0 != ux1 ) && ( uy0 != uy1 ) ) // Segment tilts.
     {
-        DrawSegmentQcq( ux0, uy0, ux1, uy1, demi_largeur, layer, color, op_logique );
+        DrawSegmentQcq( ux0, uy0, ux1, uy1, demi_largeur, layer, color,
+                        op_logique );
         return;
     }
 
-    // Ici le segment est HORIZONTAL ou VERTICAL
-//	DrawHVSegment(ux0,uy0,ux1,uy1,demi_largeur,layer,color,op_logique);              //F4EXB 051018-01
-    DrawSegmentQcq( ux0, uy0, ux1, uy1, demi_largeur, layer, color, op_logique );               //F4EXB 051018-01
-    return;                                                                                     //F4EXB 051018-01
+    // The segment is horizontal or vertical.
+//	DrawHVSegment(ux0,uy0,ux1,uy1,demi_largeur,layer,color,op_logique);
+    // F4EXB 051018-01
+    DrawSegmentQcq( ux0, uy0, ux1, uy1, demi_largeur, layer, color,
+                    op_logique );               // F4EXB 051018-01
+    return;                                     // F4EXB 051018-01
 }
 
 
-/******************************************************************************************/
-void TraceLignePcb( int x0, int y0, int x1, int y1, int layer, int color, int op_logique  )
-/******************************************************************************************/
-
-/* trace une ligne; si layer = -1 sur toutes les couches
+/* Draws a line, if layer = -1 on all layers
  */
+void TraceLignePcb( int x0,
+                    int y0,
+                    int x1,
+                    int y1,
+                    int layer,
+                    int color,
+                    int op_logique  )
 {
     int  dx, dy, lim;
     int  cumul, inc, il, delta;
 
-    void (*WriteCell)( int, int, int, BoardCell );
+    void (* WriteCell)( int, int, int, BoardCell );
 
     switch( op_logique )
     {
@@ -353,15 +404,15 @@ void TraceLignePcb( int x0, int y0, int x1, int y1, int layer, int color, int op
         WriteCell = AddCell; break;
     }
 
-    if( x0 == x1 )  // ligne verticale
+    if( x0 == x1 )  // Vertical.
     {
         if( y1 < y0 )
             EXCHG( y0, y1 );
-        dy = y0 / g_GridRoutingSize;
+        dy  = y0 / g_GridRoutingSize;
         lim = y1 / g_GridRoutingSize;
-        dx = x0 / g_GridRoutingSize;
-        /* Clipping aux limites du board */
-        if( (dx < 0) || (dx >= Ncols) )
+        dx  = x0 / g_GridRoutingSize;
+        /* Clipping limits of board. */
+        if( ( dx < 0 ) || ( dx >= Ncols ) )
             return;
         if( dy < 0 )
             dy = 0;
@@ -375,15 +426,15 @@ void TraceLignePcb( int x0, int y0, int x1, int y1, int layer, int color, int op
         return;
     }
 
-    if( y0 == y1 )  // ligne horizontale
+    if( y0 == y1 )  // Horizontal
     {
         if( x1 < x0 )
             EXCHG( x0, x1 );
-        dx = x0 / g_GridRoutingSize;
+        dx  = x0 / g_GridRoutingSize;
         lim = x1 / g_GridRoutingSize;
-        dy = y0 / g_GridRoutingSize;
-        /* Clipping aux limites du board */
-        if( (dy < 0) || (dy >= Nrows) )
+        dy  = y0 / g_GridRoutingSize;
+        /* Clipping limits of board. */
+        if( ( dy < 0 ) || ( dy >= Nrows ) )
             return;
         if( dx < 0 )
             dx = 0;
@@ -397,8 +448,8 @@ void TraceLignePcb( int x0, int y0, int x1, int y1, int layer, int color, int op
         return;
     }
 
-    /* Ici l'angle est quelconque: on utilise l'algorithme de LUCAS */
-    if( abs( x1 - x0 ) >= abs( y1 - y0 ) ) /* segment peu incline */
+    /* Here is some perspective: using the algorithm LUCAS. */
+    if( abs( x1 - x0 ) >= abs( y1 - y0 ) ) /* segment slightly inclined/ */
     {
         if( x1 < x0 )
         {
@@ -410,18 +461,24 @@ void TraceLignePcb( int x0, int y0, int x1, int y1, int layer, int color, int op
         dy  = y0 / g_GridRoutingSize;
         inc = 1; if( y1 < y0 )
             inc = -1;
-        il  = lim - dx; cumul = il / 2; delta = abs( y1 - y0 ) / g_GridRoutingSize;
+        il    = lim - dx; cumul = il / 2;
+        delta = abs( y1 - y0 ) / g_GridRoutingSize;
+
         for( ; dx <= lim; )
         {
-            if( (dx >= 0) && (dy >= 0)
-               && (dx < Ncols) && (dy < Nrows) )
+            if( ( dx >= 0 ) && ( dy >= 0 )
+               && ( dx < Ncols ) && ( dy < Nrows ) )
             {
                 OP_CELL( layer, dy, dx );
             }
-            dx++; cumul += delta;
+
+            dx++;
+            cumul += delta;
+
             if( cumul > il )
             {
-                cumul -= il; dy += inc;
+                cumul -= il;
+                dy    += inc;
             }
         }
     }
@@ -429,58 +486,63 @@ void TraceLignePcb( int x0, int y0, int x1, int y1, int layer, int color, int op
     {
         if( y1 < y0 )
         {
-            EXCHG( x1, x0 ); EXCHG( y1, y0 );
+            EXCHG( x1, x0 );
+            EXCHG( y1, y0 );
         }
 
         dy  = y0 / g_GridRoutingSize;
         lim = y1 / g_GridRoutingSize;
         dx  = x0 / g_GridRoutingSize;
-        inc = 1; if( x1 < x0 )
+        inc = 1;
+        if( x1 < x0 )
             inc = -1;
-        il  = lim - dy; cumul = il / 2; delta = abs( x1 - x0 ) / g_GridRoutingSize;
+
+        il    = lim - dy; cumul = il / 2;
+        delta = abs( x1 - x0 ) / g_GridRoutingSize;
+
         for( ; dy <= lim; )
         {
-            if( (dx >= 0) && (dy >= 0)
-               && (dx < Ncols) && (dy < Nrows) )
+            if( ( dx >= 0 ) && ( dy >= 0 )
+               && ( dx < Ncols ) && ( dy < Nrows ) )
             {
                 OP_CELL( layer, dy, dx );
             }
-            dy++; cumul += delta;
+
+            dy++;
+            cumul += delta;
+
             if( cumul > il )
             {
-                cumul -= il; dx += inc;
+                cumul -= il;
+                dx    += inc;
             }
         }
     }
 }
 
 
-/*****************************************************************/
-void TraceFilledRectangle( BOARD* Pcb,
-                           int ux0, int uy0, int ux1, int uy1,
-                           int masque_layer, int color, int op_logique )
-/*****************************************************************/
-
-/*  Fonction Surchargee.
+/* Overloaded functions.
  *
- *   Met a la valeur color l'ensemble des cellules du board inscrites dans
- *  le rectangle de coord ux0,uy0 ( angle haut a gauche )
- *  a ux1,uy1 ( angle bas a droite )
- *  Le rectangle est horizontal ( ou vertical )
- *  Coordonnees PCB.
+ * Uses the color value of all cells included in the board coordinate of
+ * the rectangle ux0, uy0 (top left corner)
+ * A UX1, UY1 (bottom right corner)
+ * The rectangle is horizontal (or vertical)
+ * Contact PCBs.
  */
+void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
+                           int masque_layer, int color, int op_logique )
 {
     int  row, col;
     int  row_min, row_max, col_min, col_max;
     int  trace = 0;
 
-    void (*WriteCell)( int, int, int, BoardCell );
+    void (* WriteCell)( int, int, int, BoardCell );
 
     if( masque_layer & g_TabOneLayerMask[Route_Layer_BOTTOM] )
-        trace = 1;     /* Trace sur BOTTOM */
+        trace = 1;     /* Trace on BOTTOM */
 
-    if( (masque_layer & g_TabOneLayerMask[Route_Layer_TOP] ) && Nb_Sides )
-        trace |= 2;     /* Trace sur TOP */
+    if( ( masque_layer & g_TabOneLayerMask[Route_Layer_TOP] ) && Nb_Sides )
+        trace |= 2;    /* Trace on TOP */
 
     if( trace == 0 )
         return;
@@ -489,39 +551,48 @@ void TraceFilledRectangle( BOARD* Pcb,
     {
     default:
     case WRITE_CELL:
-        WriteCell = SetCell; break;
+        WriteCell = SetCell;
+        break;
 
     case WRITE_OR_CELL:
-        WriteCell = OrCell; break;
+        WriteCell = OrCell;
+        break;
 
     case WRITE_XOR_CELL:
-        WriteCell = XorCell; break;
+        WriteCell = XorCell;
+        break;
 
     case WRITE_AND_CELL:
-        WriteCell = AndCell; break;
+        WriteCell = AndCell;
+        break;
 
     case WRITE_ADD_CELL:
-        WriteCell = AddCell; break;
+        WriteCell = AddCell;
+        break;
     }
 
-    ux0 -= Pcb->m_BoundaryBox.m_Pos.x; uy0 -= Pcb->m_BoundaryBox.m_Pos.y;
-    ux1 -= Pcb->m_BoundaryBox.m_Pos.x; uy1 -= Pcb->m_BoundaryBox.m_Pos.y;
+    ux0 -= Pcb->m_BoundaryBox.m_Pos.x;
+    uy0 -= Pcb->m_BoundaryBox.m_Pos.y;
+    ux1 -= Pcb->m_BoundaryBox.m_Pos.x;
+    uy1 -= Pcb->m_BoundaryBox.m_Pos.y;
 
-    /* Calcul des coord limites des cellules appartenant au rectangle */
+    /* Calculating limits coord cells belonging to the rectangle. */
     row_max = uy1 / g_GridRoutingSize;
     col_max = ux1 / g_GridRoutingSize;
-    row_min = uy0 / g_GridRoutingSize; if( uy0 > row_min * g_GridRoutingSize )
+    row_min = uy0 / g_GridRoutingSize;
+    if( uy0 > row_min * g_GridRoutingSize )
         row_min++;
-    col_min = ux0 / g_GridRoutingSize; if( ux0 > col_min * g_GridRoutingSize )
+    col_min = ux0 / g_GridRoutingSize;
+    if( ux0 > col_min * g_GridRoutingSize )
         col_min++;
 
     if( row_min < 0 )
         row_min = 0;
-    if( row_max >= (Nrows - 1) )
+    if( row_max >= ( Nrows - 1 ) )
         row_max = Nrows - 1;
     if( col_min < 0 )
         col_min = 0;
-    if( col_max >= (Ncols - 1) )
+    if( col_max >= ( Ncols - 1 ) )
         col_max = Ncols - 1;
 
     for( row = row_min; row <= row_max; row++ )
@@ -537,35 +608,33 @@ void TraceFilledRectangle( BOARD* Pcb,
 }
 
 
-/***********************************************************************************/
-void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int angle,
-                           int masque_layer, int color, int op_logique )
-/***********************************************************************************/
-
-/*  Fonction Surchargee.
+/* Overloaded functions.
  *
- *  Met a la valeur color l'ensemble des cellules du board inscrites dans
- *  le rectangle de coord ux0,uy0 ( angle haut a droite )
- *  a ux1,uy1 ( angle bas a gauche )
- *  Le rectangle est tourne de la valeur angle (en 0,1 degres)
- *  Coordonnees PCB.
+ * Uses the color value of all cells included in the board coordinate of the
+ * rectangle ux0, uy0 (top right corner)
+ * a UX1, UY1 (lower left corner)
+ * the rectangle is the value of turning angle (in degrees 0.1)
+ * contact PCBs.
  */
+void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
+                           int angle, int masque_layer, int color,
+                           int op_logique )
 {
     int  row, col;
-    int  cx, cy;    /* Centre du rectangle */
-    int  rayon;     /* rayon du cercle exinscrit */
+    int  cx, cy;    /* Center of rectangle */
+    int  rayon;     /* Radius of the circle */
     int  row_min, row_max, col_min, col_max;
     int  rotrow, rotcol;
     int  trace = 0;
 
-    void (*WriteCell)( int, int, int, BoardCell );
+    void (* WriteCell)( int, int, int, BoardCell );
 
     if( masque_layer & g_TabOneLayerMask[Route_Layer_BOTTOM] )
-        trace = 1;     /* Trace sur BOTTOM */
+        trace = 1;     /* Trace on BOTTOM */
 
     if( masque_layer & g_TabOneLayerMask[Route_Layer_TOP] )
         if( Nb_Sides )
-            trace |= 2;/* Trace sur TOP */
+            trace |= 2;  /* Trace on TOP */
 
     if( trace == 0 )
         return;
@@ -574,50 +643,61 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int a
     {
     default:
     case WRITE_CELL:
-        WriteCell = SetCell; break;
+        WriteCell = SetCell;
+        break;
 
     case WRITE_OR_CELL:
-        WriteCell = OrCell; break;
+        WriteCell = OrCell;
+        break;
 
     case WRITE_XOR_CELL:
-        WriteCell = XorCell; break;
+        WriteCell = XorCell;
+        break;
 
     case WRITE_AND_CELL:
-        WriteCell = AndCell; break;
+        WriteCell = AndCell;
+        break;
 
     case WRITE_ADD_CELL:
-        WriteCell = AddCell; break;
+        WriteCell = AddCell;
+        break;
     }
 
-    ux0 -= Pcb->m_BoundaryBox.m_Pos.x; uy0 -= Pcb->m_BoundaryBox.m_Pos.y;
-    ux1 -= Pcb->m_BoundaryBox.m_Pos.x; uy1 -= Pcb->m_BoundaryBox.m_Pos.y;
+    ux0 -= Pcb->m_BoundaryBox.m_Pos.x;
+    uy0 -= Pcb->m_BoundaryBox.m_Pos.y;
+    ux1 -= Pcb->m_BoundaryBox.m_Pos.x;
+    uy1 -= Pcb->m_BoundaryBox.m_Pos.y;
 
-    cx    = (ux0 + ux1) / 2; cy = (uy0 + uy1) / 2;
-    rayon = (int) sqrt( (double) (cx - ux0) * (cx - ux0)
-                       + (double) (cy - uy0) * (cy - uy0) );
+    cx    = (ux0 + ux1) / 2;
+    cy    = (uy0 + uy1) / 2;
+    rayon = (int) sqrt( (double) ( cx - ux0 ) * ( cx - ux0 )
+                       + (double) ( cy - uy0 ) * ( cy - uy0 ) );
 
-    /* Calcul des coord limites des cellules appartenant au rectangle */
-    row_max = (cy + rayon) / g_GridRoutingSize;
-    col_max = (cx + rayon) / g_GridRoutingSize;
-    row_min = (cy - rayon) / g_GridRoutingSize; if( uy0 > row_min * g_GridRoutingSize )
+    /* Calculating coordinate limits belonging to the rectangle. */
+    row_max = ( cy + rayon ) / g_GridRoutingSize;
+    col_max = ( cx + rayon ) / g_GridRoutingSize;
+    row_min = ( cy - rayon ) / g_GridRoutingSize;
+    if( uy0 > row_min * g_GridRoutingSize )
         row_min++;
-    col_min = (cx - rayon) / g_GridRoutingSize; if( ux0 > col_min * g_GridRoutingSize )
+    col_min = ( cx - rayon ) / g_GridRoutingSize;
+    if( ux0 > col_min * g_GridRoutingSize )
         col_min++;
 
     if( row_min < 0 )
         row_min = 0;
-    if( row_max >= (Nrows - 1) )
+    if( row_max >= ( Nrows - 1 ) )
         row_max = Nrows - 1;
     if( col_min < 0 )
         col_min = 0;
-    if( col_max >= (Ncols - 1) )
+    if( col_max >= ( Ncols - 1 ) )
         col_max = Ncols - 1;
 
     for( row = row_min; row <= row_max; row++ )
     {
         for( col = col_min; col <= col_max; col++ )
         {
-            rotrow = row * g_GridRoutingSize; rotcol = col * g_GridRoutingSize;
+            rotrow = row * g_GridRoutingSize;
+            rotcol = col * g_GridRoutingSize;
             RotatePoint( &rotcol, &rotrow, cx, cy, -angle );
             if( rotrow <= uy0 )
                 continue;
@@ -636,22 +716,20 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int a
 }
 
 
-/*****************************************************************/
+/* Fills all cells BOARD contained in the segment
+ * half-width lg, org ux, ux end y0, y1 is set to color.
+ * coordinates in PCB units (0.1 million) relating to the origin
+ * pt_pcb-> m_PcbBox.m_Xmin, Y's board.
+ */
 void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
                      int color, int op_logique )
-/*****************************************************************/
-
-/* Remplit toutes les cellules du BOARD contenues dans le segment
- *  de demi-largeur lg, org ux,y0 fin ux,y1 a la valeur color .
- *  coord en unites PCB (0.1 mil) relatives a l'origine pt_pcb->m_PcbBox.m_Xmin,Y du board.
- */
 {
     int  row, col;
     int  inc;
     int  row_max, col_max, row_min, col_min;
     int  demi_pas;
 
-    void (*WriteCell)( int, int, int, BoardCell );
+    void (* WriteCell)( int, int, int, BoardCell );
     int  angle;
     int  cx, cy, dx, dy;
 
@@ -659,101 +737,111 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
     {
     default:
     case WRITE_CELL:
-        WriteCell = SetCell; break;
+        WriteCell = SetCell;
+        break;
 
     case WRITE_OR_CELL:
-        WriteCell = OrCell; break;
+        WriteCell = OrCell;
+        break;
 
     case WRITE_XOR_CELL:
-        WriteCell = XorCell; break;
+        WriteCell = XorCell;
+        break;
 
     case WRITE_AND_CELL:
-        WriteCell = AndCell; break;
+        WriteCell = AndCell;
+        break;
 
     case WRITE_ADD_CELL:
-        WriteCell = AddCell; break;
+        WriteCell = AddCell;
+        break;
     }
 
-    /* on rend la coordonnee ux1 tj > ux0 , pour simplifier les calculs */
+    /* Make coordinate ux1 tj > ux0 to simplify calculations */
     if( ux1 < ux0 )
     {
-        EXCHG( ux1, ux0 ); EXCHG( uy1, uy0 );
+        EXCHG( ux1, ux0 );
+        EXCHG( uy1, uy0 );
     }
 
-    /* calcul de l'increment selon axe Y */
-    inc = 1; if( uy1 < uy0 )
+    /* Calculating the incrementing the Y axis */
+    inc = 1;
+    if( uy1 < uy0 )
         inc = -1;
 
-    /* Calcul de l'encadrement : */
     demi_pas = g_GridRoutingSize / 2;
 
-    col_min = (ux0 - lg) / g_GridRoutingSize;
+    col_min = ( ux0 - lg ) / g_GridRoutingSize;
     if( col_min < 0 )
         col_min = 0;
-    col_max = (ux1 + lg + demi_pas) / g_GridRoutingSize;
-    if( col_max > (Ncols - 1) )
+    col_max = ( ux1 + lg + demi_pas ) / g_GridRoutingSize;
+    if( col_max > ( Ncols - 1 ) )
         col_max = Ncols - 1;
 
     if( inc > 0 )
     {
-        row_min = (uy0 - lg) / g_GridRoutingSize;
-        row_max = (uy1 + lg + demi_pas) / g_GridRoutingSize;
+        row_min = ( uy0 - lg ) / g_GridRoutingSize;
+        row_max = ( uy1 + lg + demi_pas ) / g_GridRoutingSize;
     }
     else
     {
-        row_min = (uy1 - lg) / g_GridRoutingSize;
-        row_max = (uy0 + lg + demi_pas) / g_GridRoutingSize;
+        row_min = ( uy1 - lg ) / g_GridRoutingSize;
+        row_max = ( uy0 + lg + demi_pas ) / g_GridRoutingSize;
     }
 
     if( row_min < 0 )
         row_min = 0;
-    if( row_min > (Nrows - 1) )
+    if( row_min > ( Nrows - 1 ) )
         row_min = Nrows - 1;
     if( row_max < 0 )
         row_max = 0;
-    if( row_max > (Nrows - 1) )
+    if( row_max > ( Nrows - 1 ) )
         row_max = Nrows - 1;
 
+    dx = ux1 - ux0;
+    dy = uy1 - uy0;
 
-    dx = ux1 - ux0; dy = uy1 - uy0;
     if( dx )
-        angle = (int) (atan2( (double)dy, (double)dx ) * 1800 / M_PI);
+        angle = (int) ( atan2( (double) dy, (double) dx ) * 1800 / M_PI );
     else
     {
-        angle = 900; if( dy < 0 )
+        angle = 900;
+        if( dy < 0 )
             angle = -900;
     }
 
-    RotatePoint( &dx, &dy, angle );   /* dx = longueur, dy = 0 */
+    RotatePoint( &dx, &dy, angle );   /* dx = length, dy = 0 */
     for( col = col_min; col <= col_max; col++ )
     {
         int cxr;
-        cxr = (col * g_GridRoutingSize) - ux0;
-        for( row = row_min; row <= row_max;  row++ )
+        cxr = ( col * g_GridRoutingSize ) - ux0;
+        for( row = row_min; row <= row_max; row++ )
         {
             cy = (row * g_GridRoutingSize) - uy0;
             cx = cxr;
             RotatePoint( &cx, &cy, angle );
             if( abs( cy ) > lg )
-                continue;               /* Le point est trop loin sur l'axe Y */
+                continue;             /* The point is too far on the Y axis. */
 
-            /* ici le point a tester est proche du segment: la position
-             *  selon l'axe X doit etre testee */
-            if( (cx >= 0) && (cx <= dx) )
+            /* This point a test is close to the segment: the position
+             * along the X axis must be tested.
+             */
+            if( ( cx >= 0 ) && ( cx <= dx ) )
             {
                 OP_CELL( layer, row, col );
                 continue;
             }
-            /* examen des extremites qui sont arrondies */
-            if( (cx < 0) && (cx >= -lg) )
+            /* Examination of extremities are rounded. */
+            if( ( cx < 0 ) && ( cx >= -lg ) )
             {
-                if( ( (cx * cx) + (cy * cy) ) <= (lg * lg) )
+                if( ( ( cx * cx ) + ( cy * cy ) ) <= ( lg * lg ) )
                     OP_CELL( layer, row, col );
                 continue;
             }
-            if( (cx > dx) && ( cx <= (dx + lg) ) )
+            if( ( cx > dx ) && ( cx <= ( dx + lg ) ) )
             {
-                if( ( ( (cx - dx) * (cx - dx) ) + (cy * cy) ) <= (lg * lg) )
+                if( ( ( ( cx - dx ) * ( cx - dx ) ) + ( cy * cy ) )
+                   <= ( lg * lg ) )
                     OP_CELL( layer, row, col );
                 continue;
             }
@@ -761,28 +849,28 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
     }
 }
 
-/*****************************************************************/
+
+/* Fills all cells BOARD contained in the circle
+ * half-width lg center ux, ux through y0, y1 is set to color.
+ * coord in PCB units (0.1 million) relating to the origin
+ * pt_pcb-> m_PcbBox.m_Xmin, Y's board.
+ */
 void TraceCercle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
                   int color, int op_logique )
-/*****************************************************************/
-
-/* Remplit toutes les cellules du BOARD contenues dans le cercle
- *  de demi-largeur lg, centre ux,y0 passant par ux,y1 a la valeur color .
- *  coord en unites PCB (0.1 mil) relatives a l'origine pt_pcb->m_PcbBox.m_Xmin,Y du board.
- */
 {
     int rayon, nb_segm;
-    int x0, y0, // Point de depart du segment en cours de trace
-        x1, y1; // point d'arrivee
+    int x0, y0,             // Starting point of the current segment trace.
+        x1, y1;             // End point.
     int ii;
     int angle;
 
     rayon = (int) hypot( (double) (ux1 - ux0), (double) (uy1 - uy0) );
 
-    x0 = x1 = rayon; y0 = y1 = 0;
+    x0 = x1 = rayon;
+    y0 = y1 = 0;
     if( lg < 1 )
         lg = 1;
-    nb_segm = (2 * rayon) / lg;
+    nb_segm = ( 2 * rayon ) / lg;
     if( nb_segm < 5 )
         nb_segm = 5;
     if( nb_segm > 100 )
@@ -790,42 +878,42 @@ void TraceCercle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
     for( ii = 1; ii < nb_segm; ii++ )
     {
         angle = (3600 * ii) / nb_segm;
-        x1    = (int) (rayon * fcosinus[angle]);
-        y1    = (int) (rayon * fsinus[angle]);
-        DrawSegmentQcq( x0 + ux0, y0 + uy0, x1 + ux0, y1 + uy0, lg, layer, color, op_logique );
-        x0 = x1; y0 = y1;
+        x1    = (int) ( rayon * fcosinus[angle] );
+        y1    = (int) ( rayon * fsinus[angle] );
+        DrawSegmentQcq( x0 + ux0, y0 + uy0, x1 + ux0, y1 + uy0, lg,
+                        layer, color, op_logique );
+        x0 = x1;
+        y0 = y1;
     }
 
-    DrawSegmentQcq( x1 + ux0, y1 + uy0, ux0 + rayon, uy0, lg, layer, color, op_logique );
+    DrawSegmentQcq( x1 + ux0, y1 + uy0, ux0 + rayon, uy0, lg, layer,
+                    color, op_logique );
 }
 
 
-/****************************************************************************/
-void TraceArc( int ux0, int uy0, int ux1, int uy1, int ArcAngle, int lg, int layer,
-               int color, int op_logique )
-/****************************************************************************/
-
-/* Remplit toutes les cellules du BOARD contenues dans l'arc de "longueur" angle
- *  de demi-largeur lg, centre ux,y0 commencant en ux,y1 a la valeur color .
- *  coord en unites PCB (0.1 mil) relatives a l'origine
- *  pt_pcb->m_PcbBox.m_Xmin,Y du board.
+/* Fills all cells BOARD contained in the arc of "L" angle
+ * half-width lg ux center, starting in ux y0, y1 is set to color.
+ * coord in PCB units (0.1 million) relating to the origin
+ * Pt_pcb->m_PcbBox.m_Xmin, Y's board.
  */
+void TraceArc( int ux0, int uy0, int ux1, int uy1, int ArcAngle, int lg,
+               int layer, int color, int op_logique )
 {
     int rayon, nb_segm;
-    int x0, y0, // Point de depart du segment en cours de trace
-        x1, y1; // point d'arrivee
+    int x0, y0,             // Starting point of the current segment trace
+        x1, y1;             // End point
     int ii;
     int angle, StAngle;
 
 
     rayon = (int) hypot( (double) (ux1 - ux0), (double) (uy1 - uy0) );
 
-    x0      = ux1 - ux0;
-    y0      = uy1 - uy0;
+    x0 = ux1 - ux0;
+    y0 = uy1 - uy0;
     StAngle = ArcTangente( uy1 - uy0, ux1 - ux0 );
     if( lg < 1 )
         lg = 1;
-    nb_segm = (2 * rayon) / lg;
+    nb_segm = ( 2 * rayon ) / lg;
     nb_segm = ( nb_segm * abs( ArcAngle ) ) / 3600;
     if( nb_segm < 5 )
         nb_segm = 5;
@@ -834,7 +922,7 @@ void TraceArc( int ux0, int uy0, int ux1, int uy1, int ArcAngle, int lg, int lay
 
     for( ii = 1; ii <= nb_segm; ii++ )
     {
-        angle  = (ArcAngle * ii) / nb_segm;
+        angle  = ( ArcAngle * ii ) / nb_segm;
         angle += StAngle;
 
         while( angle >= 3600 )
@@ -843,11 +931,14 @@ void TraceArc( int ux0, int uy0, int ux1, int uy1, int ArcAngle, int lg, int lay
         while( angle < 0 )
             angle += 3600;
 
-        x1 = (int) (rayon * fcosinus[angle]);
-        y1 = (int) (rayon * fsinus[angle]);
-        DrawSegmentQcq( x0 + ux0, y0 + uy0, x1 + ux0, y1 + uy0, lg, layer, color, op_logique );
-        x0 = x1; y0 = y1;
+        x1 = (int) ( rayon * fcosinus[angle] );
+        y1 = (int) ( rayon * fsinus[angle] );
+        DrawSegmentQcq( x0 + ux0, y0 + uy0, x1 + ux0, y1 + uy0, lg, layer,
+                        color, op_logique );
+        x0 = x1;
+        y0 = y1;
     }
 
-//	  DrawSegmentQcq(x1+ux0,y1+uy0, ux0+rayon, uy0,lg,layer, color, op_logique);
+//	  DrawSegmentQcq(x1+ux0,y1+uy0, ux0+rayon, uy0,lg,layer, color,
+// op_logique);
 }

@@ -1,6 +1,6 @@
-/******************************************************/
-/* edit.cpp: fonctions generales de l'edition du PCB */
-/******************************************************/
+/**************************************/
+/* edit.cpp: edit PCB implementation. */
+/**************************************/
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -25,12 +25,8 @@ static void Process_Move_Item( WinEDA_PcbFrame* frame,
                                EDA_BaseStruct* DrawStruct, wxDC* DC );
 
 
-/*********************************************************************/
+/* Handles the selection of command events. */
 void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
-/*********************************************************************/
-
-/* Traite les selections d'outils et les commandes appelees du menu POPUP
- */
 {
     int         id = event.GetId();
     wxPoint     pos;
@@ -136,7 +132,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             SetCursor( DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor );
         break;
 
-    default:        // Finish (abort ) the command
+    default:        // Finish (abort) the command
         if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
             DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
 
@@ -298,7 +294,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_END_LINE:
         DrawPanel->MouseToCursorSchema();
 
-        //	EndSegment(&dc);
+        //  EndSegment(&dc);
         break;
 
     case ID_POPUP_PCB_EDIT_TRACK:
@@ -555,7 +551,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         GetBoard()->m_Zone.DeleteAll();                 // remove zone segments used to fill zones.
         for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
         {
-            // Remove filled aresa in zone
+            // Remove filled areas in zone
             ZONE_CONTAINER* zone_container = GetBoard()->GetArea( ii );
             zone_container->m_FilledPolysList.clear();;
         }
@@ -969,10 +965,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 }
 
 
-/****************************************************************/
 static void Process_Move_Item( WinEDA_PcbFrame* frame,
                                EDA_BaseStruct* DrawStruct, wxDC* DC )
-/****************************************************************/
 {
     if( DrawStruct == NULL )
         return;
@@ -996,9 +990,7 @@ static void Process_Move_Item( WinEDA_PcbFrame* frame,
 }
 
 
-/***************************************************************/
 void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
-/***************************************************************/
 {
     if( Item == NULL )
         return;
@@ -1071,7 +1063,7 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
     default:
     {
         wxString Line;
-        Line.Printf( wxT( "Remove: StructType %d Inattendu" ),
+        Line.Printf( wxT( "Remove: item type %d unknown." ),
                     Item->Type() );
         DisplayError( this, Line );
     }
@@ -1080,9 +1072,7 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
 }
 
 
-/****************************************************************/
 void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
-/*****************************************************************/
 {
     int preslayer = GetScreen()->m_Active_Layer;
 
@@ -1115,8 +1105,8 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
         // layers are also capable of being selected.
         else
         {
-            if( (layer != COPPER_LAYER_N) && (layer != LAYER_CMP_N)
-               && (layer >= GetBoard()->m_BoardSettings->GetCopperLayerCount() - 1) )
+            if( ( layer != COPPER_LAYER_N ) && ( layer != LAYER_CMP_N )
+               && ( layer >= GetBoard()->m_BoardSettings->GetCopperLayerCount() - 1 ) )
             {
                 // Uncomment following command (and line 17) to beep
                 // the speaker. (Doing that would provide feedback to
@@ -1132,7 +1122,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
         // See if we are drawing a segment; if so, add a via?
         if( m_ID_current_state == ID_TRACK_BUTT && current != NULL )
         {
-            if( current->Type() == TYPE_TRACK && (current->m_Flags & IS_NEW) )
+            if( current->Type() == TYPE_TRACK && ( current->m_Flags & IS_NEW ) )
             {
                 // Want to set the routing layers so that it switches properly -
                 // see the implementation of Other_Layer_Route - the working

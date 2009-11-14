@@ -1,6 +1,6 @@
-/*************************************************************************/
-/* Functions to create drill data used to create aFiles and report  aFiles */
-/*************************************************************************/
+/************************************************************************/
+/* Functions to create drill data used to create files and report files */
+/************************************************************************/
 
 #include "fctsys.h"
 
@@ -21,17 +21,13 @@ using namespace std;
 #include "class_board_design_settings.h"
 #include "gendrill.h"
 
-/**********************************************************************************/
+
 void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
                       Ki_PageDescr* aSheet,
                       std::vector<HOLE_INFO> aHoleListBuffer,
                       std::vector<DRILL_TOOL> aToolListBuffer,
                       bool aUnit_Drill_is_Inch, int format,
                       const wxPoint& auxoffset )
-/**********************************************************************************/
-
-/* Genere le plan de percage (Drill map)
- */
 {
     int             x, y;
     int             plotX, plotY, TextWidth;
@@ -47,15 +43,15 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
 
 
     SetLocaleTo_C_standard();  // Use the standard notation for float numbers
-    /* calcul des dimensions et centre du PCB */
+    /* Calculate dimensions and center of PCB */
     aPcb->ComputeBoundaryBox();
 
     dX = aPcb->m_BoundaryBox.GetWidth();
     dY = aPcb->m_BoundaryBox.GetHeight();
     BoardCentre = aPcb->m_BoundaryBox.Centre();
 
-    // Calcul de l'echelle du dessin du PCB,
-    // Echelle 1 en HPGL, dessin sur feuille A4 en PS, + texte description des symboles
+    // Calculate the scale for the format type, scale 1 in HPGL, drawing on
+    // an A4 sheet in PS, + text description of symbols
     switch( format )
     {
     case PLOT_FORMAT_GERBER:
@@ -65,7 +61,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
         plotter->set_viewport( offset, scale, 0 );
         break;
 
-    case PLOT_FORMAT_HPGL:     /* Calcul des echelles de conversion format HPGL */
+    case PLOT_FORMAT_HPGL:  /* Scale for HPGL format. */
     {
         offset.x = 0;
         offset.y = 0;
@@ -94,7 +90,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
 
         offset.x  = BoardCentre.x - (SheetSize.x / 2) / scale;
         offset.y  = BoardCentre.y - (SheetSize.y / 2) / scale;
-        offset.y += SheetSize.y / 8;      /* decalage pour legende */
+        offset.y += SheetSize.y / 8;      /* offset to legend */
         PS_PLOTTER* ps_plotter = new PS_PLOTTER;
         plotter = ps_plotter;
         ps_plotter->set_paper_size( SheetPS );
@@ -132,7 +128,8 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
         switch( PtStruct->Type() )
         {
         case TYPE_DRAWSEGMENT:
-            PlotDrawSegment( plotter, (DRAWSEGMENT*) PtStruct, EDGE_LAYER, FILLED );
+            PlotDrawSegment( plotter, (DRAWSEGMENT*) PtStruct, EDGE_LAYER,
+                             FILLED );
             break;
 
         case TYPE_TEXTE:
@@ -163,22 +160,23 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
     // Plot board outlines and drill map
     Gen_Drill_PcbMap( aPcb, plotter, aHoleListBuffer, aToolListBuffer );
 
-    /* Impression de la liste des symboles utilises */
-    CharSize = 800;                                             /* text size in 1/10000 mils */
-    double CharScale = 1.0 / scale;        /* real scale will be CharScale * scale_x,
-                                            *  because the global plot scale is scale_x */
-    TextWidth  = (int) ( (CharSize * CharScale) / 10 );         // Set text width (thickness)
+    /* Print a list of symbols used. */
+    CharSize = 800;                        /* text size in 1/10000 mils */
+    double CharScale = 1.0 / scale;        /* real scale will be CharScale
+                                            * scale_x, because the global
+                                            * plot scale is scale_x */
+    TextWidth  = (int) ( (CharSize * CharScale) / 10 );   // Set text width (thickness)
     intervalle = (int) ( CharSize * CharScale ) + TextWidth;
 
-    /* Trace des informations */
+    /* Trace information. */
     plotX = aPcb->m_BoundaryBox.GetX() + 200 * CharScale;
     plotY = aPcb->m_BoundaryBox.GetBottom() + intervalle;
 
     /* Plot title  "Info" */
     wxString Text = wxT( "Drill Map:" );
-    plotter->text( wxPoint( plotX, plotY ), BLACK,
-                   Text,
-                   0, wxSize( (int) ( CharSize * CharScale ), (int) ( CharSize * CharScale ) ),
+    plotter->text( wxPoint( plotX, plotY ), BLACK, Text, 0,
+                   wxSize( (int) ( CharSize * CharScale ),
+                           (int) ( CharSize * CharScale ) ),
                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                    TextWidth, false, false );
 
@@ -195,7 +193,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
         y = plotY + CharSize * CharScale;
         plotter->marker( wxPoint( x, y ), plot_diam, ii );
 
-        /* Trace de la legende associee */
+        /* Trace the legends. */
 
         // List the diameter of each drill in the selected Drill Unit,
         // and then its diameter in the other Drill Unit.
@@ -246,17 +244,14 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
 }
 
 
-/****************************************************************************************/
-void Gen_Drill_PcbMap( BOARD* aPcb, PLOTTER* plotter,
-                       std::vector<HOLE_INFO>& aHoleListBuffer,
-                       std::vector<DRILL_TOOL>& aToolListBuffer )
-/****************************************************************************************/
-
 /** Creates the drill map aFile in HPGL or POSTSCRIPT format
  * @param aPcb BOARD
  * @param aHoleListBuffer = std::vector<HOLE_INFO> list of holes descriptors
  * @param aToolListBuffer = std::vector<DRILL_TOOL> drill list buffer
  */
+void Gen_Drill_PcbMap( BOARD* aPcb, PLOTTER* plotter,
+                       std::vector<HOLE_INFO>& aHoleListBuffer,
+                       std::vector<DRILL_TOOL>& aToolListBuffer )
 {
     wxPoint pos;
 
@@ -291,17 +286,14 @@ void Gen_Drill_PcbMap( BOARD* aPcb, PLOTTER* plotter,
 }
 
 
-/**************************************************************************************************/
-void GenDrillReportFile( FILE* aFile, BOARD* aPcb, const wxString& aBoardFilename,
-                         bool aUnit_Drill_is_Inch,
-                         std::vector<HOLE_INFO>& aHoleListBuffer,
-                         std::vector<DRILL_TOOL>& aToolListBuffer
-                         )
-/*************************************************************************************************/
-
 /*
  *  Create a list of drill values and drill count
  */
+void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
+                         const wxString& aBoardFilename,
+                         bool aUnit_Drill_is_Inch,
+                         std::vector<HOLE_INFO>& aHoleListBuffer,
+                         std::vector<DRILL_TOOL>& aToolListBuffer )
 {
     unsigned TotalHoleCount;
     char     line[1024];
@@ -313,7 +305,8 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb, const wxString& aBoardFilenam
     fprintf( aFile, "Drill report for %s\n", CONV_TO_UTF8( aBoardFilename ) );
     fprintf( aFile, "Created on %s\n", DateAndTime( line ) );
 
-    // List which Drill Unit option had been selected for the associated drill aFile.
+    // List which Drill Unit option had been selected for the associated
+    // drill aFile.
     if( aUnit_Drill_is_Inch )
         fputs( "Selected Drill Unit: Imperial (\")\n\n", aFile );
     else
@@ -402,11 +395,13 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb, const wxString& aBoardFilenam
             layer2 = layer1 + 1;
         else
         {
-            if( layer2 >= LAYER_CMP_N )                                 // no more layer pair to consider
+            if( layer2 >= LAYER_CMP_N )    // no more layer pair to consider
                 break;
-            layer1++; layer2++;                                         // use next layer pair
-            if( layer2 == g_DesignSettings.GetCopperLayerCount() - 1 )     // The last layer is reached
-                layer2 = LAYER_CMP_N;                                   // the last layer is always the component layer
+            layer1++; layer2++;           // use next layer pair
+
+            if( layer2 == g_DesignSettings.GetCopperLayerCount() - 1 )
+                layer2 = LAYER_CMP_N;  // the last layer is always the
+                                       // component layer
         }
         gen_through_holes = false;
     }

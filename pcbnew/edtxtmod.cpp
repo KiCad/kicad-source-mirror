@@ -1,9 +1,6 @@
-/*************************************************************/
-/* Edition des Modules: Routines de modification des textes	 */
-/*			 sur les MODULES								  */
-/*************************************************************/
-
-/* Fichier EDTXTMOD.CPP */
+/********************/
+/* Edi module text. */
+/********************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -16,30 +13,31 @@
 #include "protos.h"
 
 
-/* Routines Locales */
-static void Show_MoveTexte_Module( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+static void Show_MoveTexte_Module( WinEDA_DrawPanel* panel,
+                                   wxDC*             DC,
+                                   bool              erase );
 static void AbortMoveTextModule( WinEDA_DrawPanel* Panel, wxDC* DC );
 
-/* local variables */
-wxPoint MoveVector;                     // Move vector for move edge, exported to dialog_edit mod_text.cpp
-static wxPoint TextInitialPosition;   // Mouse cursor inital position for undo/abort move command
-static int TextInitialOrientation;          // module text inital orientation for undo/abort move+rot command+rot
 
+wxPoint        MoveVector;              // Move vector for move edge, exported
+                                        // to dialog_edit mod_text.cpp
+static wxPoint TextInitialPosition;     // Mouse cursor initial position for
+                                        // undo/abort move command
+static int     TextInitialOrientation;  // module text initial orientation for
+                                        // undo/abort move+rot command+rot
 
-/******************************************************************************/
-TEXTE_MODULE* WinEDA_BasePcbFrame::CreateTextModule( MODULE* Module, wxDC* DC )
-/******************************************************************************/
 
 /* Add a new graphical text to the active module (footprint)
  *  Note there always are 2 texts: reference and value.
  *  New texts have the member TEXTE_MODULE.m_Type set to TEXT_is_DIVERS
  */
+TEXTE_MODULE* WinEDA_BasePcbFrame::CreateTextModule( MODULE* Module, wxDC* DC )
 {
     TEXTE_MODULE* Text;
 
     Text = new TEXTE_MODULE( Module );
 
-    /* Chainage de la nouvelle structure en tete de liste drawings */
+    /* Add the new text object to the beginning of the draw item list. */
     if( Module )
         Module->m_Drawings.PushFront( Text );
 
@@ -48,7 +46,8 @@ TEXTE_MODULE* WinEDA_BasePcbFrame::CreateTextModule( MODULE* Module, wxDC* DC )
     Text->m_Text = wxT( "text" );
 
     ModuleTextWidth = Clamp_Text_PenSize( ModuleTextWidth,
-            MIN(ModuleTextSize.x, ModuleTextSize.y), true );
+                                          MIN( ModuleTextSize.x,
+                                               ModuleTextSize.y ), true );
     Text->m_Size  = ModuleTextSize;
     Text->m_Width = ModuleTextWidth;
     Text->m_Pos   = GetScreen()->m_Curseur;
@@ -67,20 +66,20 @@ TEXTE_MODULE* WinEDA_BasePcbFrame::CreateTextModule( MODULE* Module, wxDC* DC )
 }
 
 
-/**************************************************************************/
+/* Rotate text 90 degrees.
+ */
 void WinEDA_BasePcbFrame::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
-/**************************************************************************/
-/* Rotation de 90 du texte d'un module */
 {
     if( Text == NULL )
         return;
 
     MODULE* module = (MODULE*) Text->GetParent();
 
-    if( module && module->m_Flags == 0 && Text->m_Flags == 0 )    // simple rot command
-    {    // prepare undo command
+    if( module && module->m_Flags == 0 && Text->m_Flags == 0 ) // prepare undo
+                                                               // command
+    {
         if( this->m_Ident == PCB_FRAME )
-            SaveCopyInUndoList( module,UR_CHANGED );
+            SaveCopyInUndoList( module, UR_CHANGED );
     }
 
     // we expect MoveVector to be (0,0) if there is no move in progress
@@ -90,9 +89,7 @@ void WinEDA_BasePcbFrame::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
     while( Text->m_Orient >= 1800 )
         Text->m_Orient -= 1800;
 
-    /* Redessin du Texte */
     Text->Draw( DrawPanel, DC, GR_XOR, MoveVector );
-
     Text->DisplayInfo( this );
 
     if( module )
@@ -101,13 +98,10 @@ void WinEDA_BasePcbFrame::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
 }
 
 
-/**************************************************************************/
-void WinEDA_BasePcbFrame::DeleteTextModule( TEXTE_MODULE* Text )
-/**************************************************************************/
-
 /*
- *  Supprime 1 texte sur module (si ce n'est pas la référence ou la valeur)
+ * Deletes text in module (if not the reference or value)
  */
+void WinEDA_BasePcbFrame::DeleteTextModule( TEXTE_MODULE* Text )
 {
     MODULE* Module;
 
@@ -119,8 +113,6 @@ void WinEDA_BasePcbFrame::DeleteTextModule( TEXTE_MODULE* Text )
     if( Text->m_Type == TEXT_is_DIVERS )
     {
         DrawPanel->PostDirtyRect( Text->GetBoundingBox() );
-
-        /* liberation de la memoire : */
         Text->DeleteStructure();
         GetScreen()->SetModify();
         Module->m_LastEdit_Time = time( NULL );
@@ -128,13 +120,12 @@ void WinEDA_BasePcbFrame::DeleteTextModule( TEXTE_MODULE* Text )
 }
 
 
-/*************************************************************/
-static void AbortMoveTextModule( WinEDA_DrawPanel* Panel, wxDC* DC )
-/*************************************************************/
 /*
- *  Routine de sortie du menu edit texte module
- *  Si un texte est selectionne, ses coord initiales sont regenerees
+ * Abort text move in progress.
+ *
+ * If a text is selected, its initial coordinates are regenerated.
  */
+static void AbortMoveTextModule( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
     BASE_SCREEN*  screen = Panel->GetScreen();
     TEXTE_MODULE* Text   = (TEXTE_MODULE*) screen->GetCurItem();
@@ -152,7 +143,7 @@ static void AbortMoveTextModule( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     // If the text was moved (the move does not change internal data)
     // it could be rotated while moving. So set old value for orientation
-    if ( (Text->m_Flags & IS_MOVED) )
+    if( (Text->m_Flags & IS_MOVED) )
         Text->m_Orient = TextInitialOrientation;
 
     /* Redraw the text */
@@ -168,12 +159,9 @@ static void AbortMoveTextModule( WinEDA_DrawPanel* Panel, wxDC* DC )
 }
 
 
-/****************************************************************************/
-void WinEDA_BasePcbFrame::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
-/****************************************************************************/
-
-/* Routine d'initialisation du deplacement d'un texte sur module
+/* Start a text move.
  */
+void WinEDA_BasePcbFrame::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 {
     MODULE* Module;
 
@@ -187,7 +175,7 @@ void WinEDA_BasePcbFrame::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 
     MoveVector.x = MoveVector.y = 0;
 
-    TextInitialPosition = Text->m_Pos;
+    TextInitialPosition    = Text->m_Pos;
     TextInitialOrientation = Text->m_Orient;
 
     Text->DisplayInfo( this );
@@ -200,40 +188,37 @@ void WinEDA_BasePcbFrame::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 }
 
 
-/*************************************************************************/
-void WinEDA_BasePcbFrame::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
-/*************************************************************************/
-
-/* Routine complementaire a StartMoveTexteModule().
- *  Place le texte en cours de deplacement
+/* Place the text a the cursor position when the left mouse button is clicked.
  */
+void WinEDA_BasePcbFrame::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 {
     if( Text != NULL )
     {
         DrawPanel->PostDirtyRect( Text->GetBoundingBox() );
 
-        /* mise a jour des coordonnées relatives a l'ancre */
+        /* Update the coordinates for anchor. */
         MODULE* Module = (MODULE*) Text->GetParent();
         if( Module )
         {
             // Prepare undo command (a rotation can be made while moving)
-            EXCHG(Text->m_Orient, TextInitialOrientation);
+            EXCHG( Text->m_Orient, TextInitialOrientation );
             if( m_Ident == PCB_FRAME )
-                SaveCopyInUndoList(Module, UR_CHANGED);
+                SaveCopyInUndoList( Module, UR_CHANGED );
             else
-                SaveCopyInUndoList(Module, UR_MODEDIT);
-            EXCHG(Text->m_Orient, TextInitialOrientation);
+                SaveCopyInUndoList( Module, UR_MODEDIT );
+            EXCHG( Text->m_Orient, TextInitialOrientation );
 
-            Text->m_Pos = GetScreen()->m_Curseur;   // Set the new position for text
+            // Set the new position for text.
+            Text->m_Pos = GetScreen()->m_Curseur;
             wxPoint textRelPos = Text->m_Pos - Module->m_Pos;
             RotatePoint( &textRelPos, -Module->m_Orient );
-            Text->m_Pos0  = textRelPos;
+            Text->m_Pos0    = textRelPos;
             Text->m_Flags   = 0;
             Module->m_Flags = 0;
             Module->m_LastEdit_Time = time( NULL );
             GetScreen()->SetModify();
 
-            /* Redessin du Texte */
+            /* Redraw text. */
             DrawPanel->PostDirtyRect( Text->GetBoundingBox() );
         }
         else
@@ -248,9 +233,8 @@ void WinEDA_BasePcbFrame::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 }
 
 
-/********************************************************************************/
-static void Show_MoveTexte_Module( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
-/********************************************************************************/
+static void Show_MoveTexte_Module( WinEDA_DrawPanel* panel, wxDC* DC,
+                                   bool erase )
 {
     BASE_SCREEN*  screen = panel->GetScreen();
     TEXTE_MODULE* Text   = (TEXTE_MODULE*) screen->GetCurItem();
@@ -258,7 +242,7 @@ static void Show_MoveTexte_Module( WinEDA_DrawPanel* panel, wxDC* DC, bool erase
     if( Text == NULL )
         return;
 
-    /* Undraw the text : */
+    /* Undraw the text */
     if( erase )
         Text->Draw( panel, DC, GR_XOR, MoveVector );
 

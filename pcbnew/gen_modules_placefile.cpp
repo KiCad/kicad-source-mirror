@@ -1,6 +1,6 @@
-/*************************************/
-/* fichier gen_modules_placefile.cpp */
-/*************************************/
+/*****************************/
+/* gen_modules_placefile.cpp */
+/*****************************/
 
 /*
  *  1 - create ascii files for automatic placement of smd components
@@ -16,7 +16,7 @@
 #include "trigo.h"
 #include "appl_wxstruct.h"
 
-class LIST_MOD      /* Permet de lister les elements utiles des modules */
+class LIST_MOD      /* Can list the elements of useful modules. */
 {
 public:
     MODULE*       m_Module;
@@ -25,13 +25,12 @@ public:
 };
 
 
-/* variables locale : */
-static wxPoint File_Place_Offset;   /* Offset des coord de placement pour le fichier généré */
+static wxPoint File_Place_Offset;  /* Offset coordinates for generated file. */
 
-/* Routines Locales */
 static void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile );
 
-/* Routine de tri utilisee par GenereModulesPosition() */
+
+/* Sort function use by GenereModulesPosition() */
 static int ListeModCmp( const void* o1, const void* o2 )
 {
     LIST_MOD*   ref = (LIST_MOD*) o1;
@@ -64,13 +63,9 @@ static bool HasNonSMDPins( MODULE* aModule )
 #endif
 
 
-/**************************************************************/
-void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
-/**************************************************************/
-
-/* Routine de generation du fichier de positionnement des modules,
- *  utilisé pour les machines de placement de composants
+/* Generate the module positions, used component placement.
  */
+void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 {
     bool        doBoardBack = false;
     MODULE*     module;
@@ -87,25 +82,26 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     FILE*       fpBack = 0;
     bool        switchedLocale = false;
 
-    /* Calcul des echelles de conversion */
+    /* Calculate conversion scales. */
     double conv_unit = 0.0001; /* unites = INCHES */
 
-//	if(IF_DRILL_METRIC) conv_unit = 0.000254; /* unites = mm */
+//  if(IF_DRILL_METRIC) conv_unit = 0.000254; /* unites = mm */
 
     File_Place_Offset = m_Auxiliary_Axis_Position;
 
-    /* Calcul du nombre de modules utiles ( Attribut CMS, non VIRTUAL ) ) */
+    /* Calculating the number of useful modules (CMS attribute, not VIRTUAL) */
     int moduleCount = 0;
 
     for( module = GetBoard()->m_Modules;  module;  module = module->Next() )
     {
         if( module->m_Attributs & MOD_VIRTUAL )
         {
-            D(printf("skipping module %s because it's virtual\n", CONV_TO_UTF8(module->GetReference()) );)
+            D( printf( "skipping module %s because it's virtual\n",
+                       CONV_TO_UTF8( module->GetReference() ) );)
             continue;
         }
 
-        if( (module->m_Attributs & MOD_CMS)  == 0 )
+        if( ( module->m_Attributs & MOD_CMS )  == 0 )
         {
 #if 1 && defined(DEBUG)  // enable this code to fix a bunch of mis-labeled modules:
             if( !HasNonSMDPins( module ) )
@@ -115,7 +111,8 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
             }
             else
             {
-                printf( "skipping %s because its attribute is not CMS and it has non SMD pins\n", CONV_TO_UTF8(module->GetReference()) );
+                printf( "skipping %s because its attribute is not CMS and it has non SMD pins\n",
+                        CONV_TO_UTF8(module->GetReference()) );
                 continue;
             }
 #else
@@ -131,7 +128,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 
     if( moduleCount == 0 )
     {
-        DisplayError( this, _( "No Modules for Automated Placement" ), 20 );
+        DisplayError( this, _( "No modules for automated placement." ) );
         return;
     }
 
@@ -165,11 +162,12 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
         }
     }
 
-    // Switch the locale to standard C (needed to print floating point numbers like 1.3)
+    // Switch the locale to standard C (needed to print floating point
+    // numbers like 1.3)
     SetLocaleTo_C_standard( );
     switchedLocale = true;
 
-    /* Affichage du bilan : */
+    /* Display results */
     MsgPanel->EraseMsgBox();
     Affiche_1_Parametre( this, 0, _( "Component side place file:" ),
                          fnFront.GetFullPath(), BLUE );
@@ -181,7 +179,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     msg.Empty(); msg << moduleCount;
     Affiche_1_Parametre( this, 65, _( "Module count" ), msg, RED );
 
-    /* Etablissement de la liste des modules par ordre alphabetique */
+    /* Sort the list of modules by alphabetical order */
     Liste = (LIST_MOD*) MyZMalloc( moduleCount * sizeof(LIST_MOD) );
 
     module = GetBoard()->m_Modules;
@@ -201,9 +199,9 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 
     qsort( Liste, moduleCount, sizeof(LIST_MOD), ListeModCmp );
 
-    /* Generation entete du fichier 'commentaires) */
+    /* Generation header file comments. */
     sprintf( line, "### Module positions - created on %s ###\n",
-            DateAndTime( Buff ) );
+             DateAndTime( Buff ) );
     fputs( line, fpFront );
     if( doBoardBack )
         fputs( line, fpBack );
@@ -234,13 +232,13 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     if( doBoardBack )
         fputs( line, fpBack );
 
-    /* Generation lignes utiles du fichier */
     for( int ii = 0; ii < moduleCount; ii++ )
     {
         wxPoint  module_pos;
         wxString ref = Liste[ii].m_Reference;
         wxString val = Liste[ii].m_Value;
-        sprintf( line, "%-8.8s %-16.16s ", CONV_TO_UTF8( ref ), CONV_TO_UTF8( val ) );
+        sprintf( line, "%-8.8s %-16.16s ", CONV_TO_UTF8( ref ),
+                 CONV_TO_UTF8( val ) );
 
         module_pos    = Liste[ii].m_Module->m_Pos;
         module_pos.x -= File_Place_Offset.x;
@@ -270,7 +268,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
         }
     }
 
-    /* Generation fin du fichier */
+    /* Generate EOF. */
     fputs( "## End\n", fpFront );
 
     if( doBoardBack )
@@ -291,7 +289,7 @@ exit:   // the only safe way out of here, no returns please.
         MyFree( Liste );
 
     if( switchedLocale )
-        SetLocaleTo_Default( );      // revert to the current  locale
+        SetLocaleTo_Default( );      // revert to the current locale
 
     if( fpFront )
         fclose( fpFront );
@@ -301,12 +299,9 @@ exit:   // the only safe way out of here, no returns please.
 }
 
 
-/**************************************************************/
-void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
-/**************************************************************/
-
 /* Print a module report.
  */
+void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
 {
     double   conv_unit;
     MODULE*  Module;
@@ -317,14 +312,12 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     FILE*    rptfile;
     wxPoint  module_pos;
 
-    /* Calcul des echelles de conversion */
     conv_unit = 0.0001; /* unites = INCHES */
 
-//	if(IF_DRILL_METRIC) conv_unit = 0.000254; /* unites = mm */
+//  if(IF_DRILL_METRIC) conv_unit = 0.000254; /* unites = mm */
 
     File_Place_Offset = wxPoint( 0, 0 );
 
-    /* Init nom fichier */
     fn = GetScreen()->m_FileName;
     fn.SetExt( wxT( "rpt" ) );
 
@@ -336,10 +329,11 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
         return;
     }
 
-    // Switch the locale to standard C (needed to print floating point numbers like 1.3)
+    // Switch the locale to standard C (needed to print floating point
+    // numbers like 1.3)
     SetLocaleTo_C_standard( );
 
-    /* Generation entete du fichier 'commentaires) */
+    /* Generate header file comments.) */
     sprintf( line, "## Module report - date %s\n", DateAndTime( Buff ) );
     fputs( line, rptfile );
 
@@ -348,7 +342,6 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     fputs( line, rptfile );
     fputs( "## Unit = inches, Angle = deg.\n", rptfile );
 
-    /* Generation lignes utiles du fichier */
     fputs( "##\n", rptfile );
     fputs( "\n$BeginDESCRIPTION\n", rptfile );
 
@@ -370,12 +363,15 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     Module = (MODULE*) GetBoard()->m_Modules;
     for( ; Module != NULL; Module = Module->Next() )
     {
-        sprintf( line, "$MODULE \"%s\"\n", CONV_TO_UTF8( Module->m_Reference->m_Text ) );
+        sprintf( line, "$MODULE \"%s\"\n",
+                 CONV_TO_UTF8( Module->m_Reference->m_Text ) );
         fputs( line, rptfile );
 
-        sprintf( line, "reference \"%s\"\n", CONV_TO_UTF8( Module->m_Reference->m_Text ) );
+        sprintf( line, "reference \"%s\"\n",
+                 CONV_TO_UTF8( Module->m_Reference->m_Text ) );
         fputs( line, rptfile );
-        sprintf( line, "value \"%s\"\n", CONV_TO_UTF8( Module->m_Value->m_Text ) );
+        sprintf( line, "value \"%s\"\n",
+                 CONV_TO_UTF8( Module->m_Value->m_Text ) );
         fputs( line, rptfile );
         sprintf( line, "footprint \"%s\"\n", CONV_TO_UTF8( Module->m_LibRef ) );
         fputs( line, rptfile );
@@ -429,7 +425,8 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
                      pad->m_Offset.y * conv_unit );
             fputs( line, rptfile );
 
-            sprintf( line, "orientation  %.2f\n", double(pad->m_Orient - Module->m_Orient) / 10 );
+            sprintf( line, "orientation  %.2f\n",
+                     double(pad->m_Orient - Module->m_Orient) / 10 );
             fputs( line, rptfile );
             const char* shape_name[6] =
                 { "??? ", "Circ", "Rect", "Oval", "trap", "spec" };
@@ -448,7 +445,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
         }
 
         fprintf( rptfile, "$EndMODULE  %s\n\n",
-                CONV_TO_UTF8(Module->m_Reference->m_Text ) );
+                 CONV_TO_UTF8(Module->m_Reference->m_Text ) );
     }
 
     /* Write board Edges */
@@ -462,36 +459,30 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
         WriteDrawSegmentPcb( (DRAWSEGMENT*) PtStruct, rptfile );
     }
 
-    /* Generation fin du fichier */
+    /* Generate EOF. */
     fputs( "$EndDESCRIPTION\n", rptfile );
     fclose( rptfile );
-    SetLocaleTo_Default( );      // revert to the current  locale
+    SetLocaleTo_Default( );      // revert to the current locale
 }
 
 
-/*******************************************************************/
-void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile )
-/*******************************************************************/
-
-/* Sortie sur rptfile d'un segment type drawing PCB:
- *      Les contours sont de differents type:
- *      segment
- *      cercle
- *      arc
+/* Output to rpt file a segment type from the PCB drawing.
+ * The contours are of different types:
+ * Segment
+ * Circle
+ * Arc
  */
+void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile )
 {
     double conv_unit, ux0, uy0, dx, dy;
     double rayon, width;
     char   line[1024];
 
-    /* Calcul des echelles de conversion */
-    conv_unit = 0.0001; /* unites = INCHES */
+    conv_unit = 0.0001; /* units = INCHES */
 
-    /* coord de depart */
     ux0 = PtDrawSegment->m_Start.x * conv_unit;
     uy0 = PtDrawSegment->m_Start.y * conv_unit;
 
-    /* coord d'arrivee */
     dx = PtDrawSegment->m_End.x * conv_unit;
     dy = PtDrawSegment->m_End.y * conv_unit;
 
@@ -520,7 +511,8 @@ void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile )
 
             fprintf( rptfile, "$ARC \n" );
             fprintf( rptfile, "centre %.6lf %.6lf\n", ux0, uy0 );
-            fprintf( rptfile, "start %.6lf %.6lf\n", endx * conv_unit, endy * conv_unit );
+            fprintf( rptfile, "start %.6lf %.6lf\n",
+                     endx * conv_unit, endy * conv_unit );
             fprintf( rptfile, "end %.6lf %.6lf\n", dx, dy );
             fprintf( rptfile, "width %.6lf\n", width );
             fprintf( rptfile, "$EndARC \n" );

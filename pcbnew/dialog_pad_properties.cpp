@@ -15,7 +15,7 @@ static wxString Current_PadNetName;
 
 
 #define NBSHAPES 4
-int CodeShape[NBSHAPES] = /* forme des pads  */
+int CodeShape[NBSHAPES] = /* Pad shapes.  */
 {
     PAD_CIRCLE, PAD_OVAL, PAD_RECT, PAD_TRAPEZOID
 };
@@ -409,7 +409,7 @@ void DIALOG_PAD_PROPERTIES::SetPadLayersList( long layer_mask )
 void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 /*************************************************************************/
 
-/* Met a jour les differents parametres pour le composant en cours d'édition
+/* Updates the different parameters for the component being edited.
  */
 {
     long PadLayerMask;

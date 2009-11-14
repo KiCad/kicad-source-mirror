@@ -1,6 +1,5 @@
 /*******************************/
-/* Edition des pistes			*/
-/* Routines de trace de pistes */
+/* Edit tracks          */
 /*******************************/
 
 #include "fctsys.h"
@@ -15,22 +14,19 @@
 #include "protos.h"
 
 
-/***********************************************/
+/* Displays or hides the ratsnest. */
 void WinEDA_PcbFrame::Ratsnest_On_Off( wxDC* DC )
-/***********************************************/
-
-/* Affiche ou efface le chevelu selon l'etat du bouton d'appel */
 {
     unsigned      ii;
 
-    if( (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
+    if( ( GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK ) == 0 )
     {
         if( g_Show_Ratsnest )
             Compile_Ratsnest( DC, TRUE );
         return;
     }
 
-    DrawGeneralRatsnest( DC, 0 ); /* effacement eventuel du chevelu affiche */
+    DrawGeneralRatsnest( DC, 0 );
 
     if( GetBoard()->GetRatsnestsCount() == 0 )
         return;
@@ -52,22 +48,19 @@ void WinEDA_PcbFrame::Ratsnest_On_Off( wxDC* DC )
 }
 
 
-/*************************************************************************/
-void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
-/*************************************************************************/
-
 /*
- *  change de couche la piste pointee par la souris :
- *  la piste doit etre sur une des couches de travail,
- *  elle est mise sur l'autre couche de travail, si cela est possible
- *  (ou si DRC = Off ).
+ * Exchange layer the track pointed to by the mouse:
+ * The track must be on one layer of work,
+ * It is put on another layer of work, if possible
+ * (Or DRC = Off).
  */
+void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
 {
     int    ii;
     TRACK* pt_track;
     int    l1, l2, nb_segm;
 
-    if( (pt_segm == NULL ) || ( pt_segm->Type() == TYPE_ZONE ) )
+    if( ( pt_segm == NULL ) || ( pt_segm->Type() == TYPE_ZONE ) )
     {
         return;
     }
@@ -77,13 +70,12 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
     pt_track = Marque_Une_Piste( GetBoard(), pt_segm, &nb_segm, NULL, true );
     Trace_Une_Piste( DrawPanel, DC, pt_track, nb_segm, GR_XOR );
 
-    /* effacement du flag BUSY et sauvegarde en membre .param de la couche
-     *  initiale */
+    /* Clear the BUSY flag and backup member. Param layer original. */
     ii = nb_segm; pt_segm = pt_track;
     for( ; ii > 0; ii--, pt_segm = (TRACK*) pt_segm->Next() )
     {
         pt_segm->SetState( BUSY, OFF );
-        pt_segm->m_Param = pt_segm->GetLayer();    /* pour sauvegarde */
+        pt_segm->m_Param = pt_segm->GetLayer();    /* For backup. */
     }
 
     ii = 0; pt_segm = pt_track;
@@ -92,7 +84,7 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
         if( pt_segm->Type() == TYPE_VIA )
             continue;
 
-        /* inversion des couches */
+        /* Invert layers. */
         if( pt_segm->GetLayer() == l1 )
             pt_segm->SetLayer( l2 );
         else if( pt_segm->GetLayer() == l2 )
@@ -100,21 +92,23 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
 
         if( Drc_On && BAD_DRC==m_drc->Drc( pt_segm, GetBoard()->m_Track ) )
         {
-            /* Annulation du changement */
-            ii = 0; pt_segm = pt_track;
+            /* Discard changes. */
+            ii = 0;
+            pt_segm = pt_track;
+
             for( ; ii < nb_segm; ii++, pt_segm = pt_segm->Next() )
             {
                 pt_segm->SetLayer( pt_segm->m_Param );
             }
 
             Trace_Une_Piste( DrawPanel, DC, pt_track, nb_segm, GR_OR );
-            DisplayError( this, _( "Drc error, cancelled" ), 10 );
+            DisplayError( this, _( "Drc error, canceled" ), 10 );
             return;
         }
     }
 
     Trace_Une_Piste( DrawPanel, DC, pt_track, nb_segm, GR_OR | GR_SURBRILL );
-    /* controle des extremites de segments: sont-ils sur un pad */
+    /* Control of segment end point, is it on a pad? */
     ii = 0; pt_segm = pt_track;
     for( ; ii < nb_segm; pt_segm = pt_segm->Next(), ii++ )
     {
@@ -128,19 +122,19 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
 }
 
 
-
-/****************************************************************/
 bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
-/****************************************************************/
 {
     unsigned    itmp;
 
     if( aTrack == NULL )
     {
-        if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer != ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP )
-            ((PCB_SCREEN*)GetScreen())->m_Active_Layer = ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP;
+        if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer !=
+            ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP )
+            ((PCB_SCREEN*)GetScreen())->m_Active_Layer =
+                ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP;
         else
-            ((PCB_SCREEN*)GetScreen())->m_Active_Layer = ((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM;
+            ((PCB_SCREEN*)GetScreen())->m_Active_Layer =
+                ((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM;
 
         UpdateStatusBar();
         SetToolbars();
@@ -148,12 +142,14 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     }
 
     /* Avoid more than one via on the current location: */
-    if( Locate_Via( GetBoard(), g_CurrentTrackSegment->m_End, g_CurrentTrackSegment->GetLayer() ) )
+    if( Locate_Via( GetBoard(), g_CurrentTrackSegment->m_End,
+                    g_CurrentTrackSegment->GetLayer() ) )
         return false;
 
     for( TRACK* segm = g_FirstTrackSegment;  segm;  segm = segm->Next() )
     {
-        if( segm->Type()==TYPE_VIA  &&  g_CurrentTrackSegment->m_End==segm->m_Start )
+        if( segm->Type()==TYPE_VIA
+            && g_CurrentTrackSegment->m_End==segm->m_Start )
             return false;
     }
 
@@ -164,15 +160,17 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
             /* DRC error, the change layer is not made */
             return false;
 
-        if( g_TwoSegmentTrackBuild && g_CurrentTrackSegment->Back() )    // We must handle 2 segments
+        // Handle 2 segments.
+        if( g_TwoSegmentTrackBuild && g_CurrentTrackSegment->Back() )
         {
-            if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment->Back(), GetBoard()->m_Track ) )
+            if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment->Back(),
+                                       GetBoard()->m_Track ) )
                 return false;
         }
     }
 
     /* Save current state before placing a via.
-     * If the via canot be placed this current state will be reused
+     * If the via cannot be placed this current state will be reused
      */
     itmp = g_CurrentTrackList.GetCount();
     Begin_Route( g_CurrentTrackSegment, DC );
@@ -188,21 +186,25 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     via->m_Start   = via->m_End = g_CurrentTrackSegment->m_End;
     int old_layer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
 
-    //swap the layers.
-    if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer != ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP )
-        ((PCB_SCREEN*)GetScreen())->m_Active_Layer = ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP;
+    // swap the layers.
+    if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer !=
+        ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP )
+        ((PCB_SCREEN*)GetScreen())->m_Active_Layer =
+            ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP;
     else
-        ((PCB_SCREEN*)GetScreen())->m_Active_Layer = ((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM;
+        ((PCB_SCREEN*)GetScreen())->m_Active_Layer =
+            ((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM;
 
     /* Adjust the via layer pair */
     switch ( via->Shape() )
     {
         case VIA_BLIND_BURIED:
-            via->SetLayerPair( old_layer, ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
+            via->SetLayerPair( old_layer,
+                               ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
             via->SetDrillValue( GetBoard()->GetCurrentViaDrill() );
             break;
 
-        case VIA_MICROVIA:	// from external to the near neghbour inner layer
+        case VIA_MICROVIA:  // from external to the near neighbor inner layer
             if ( old_layer == COPPER_LAYER_N )
                 ((PCB_SCREEN*)GetScreen())->m_Active_Layer = LAYER_N_2;
             else if ( old_layer == LAYER_CMP_N )
@@ -213,10 +215,11 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
             else if ( old_layer == GetBoard()->m_BoardSettings->GetCopperLayerCount() - 2 )
                 ((PCB_SCREEN*)GetScreen())->m_Active_Layer = LAYER_CMP_N;
             // else error
-            via->SetLayerPair( old_layer, ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
+            via->SetLayerPair( old_layer,
+                               ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
             {
                 NETINFO_ITEM* net = GetBoard()->FindNet( via->GetNet() );
-                via->m_Width   = net->GetMicroViaSize();
+                via->m_Width      = net->GetMicroViaSize();
             }
             break;
 
@@ -227,7 +230,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
             break;
     }
 
-    if( Drc_On &&  BAD_DRC==m_drc->Drc( via, GetBoard()->m_Track ) )
+    if( Drc_On && BAD_DRC==m_drc->Drc( via, GetBoard()->m_Track ) )
     {
         /* DRC fault: the Via cannot be placed here ... */
         delete via;
@@ -269,10 +272,11 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
      * and will be modified next
      */
 
-    track->SetLayer( ((PCB_SCREEN*)GetScreen())->m_Active_Layer ); // set the layer to the new value
+    // set the layer to the new value
+    track->SetLayer( ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
 
-    /* the start point is the via position,
-     * and the end point is the cursor which also is on the via (will change when moving mouse)
+    /* the start point is the via position and the end point is the cursor
+     * which also is on the via (will change when moving mouse)
      */
     track->m_Start = track->m_End = via->m_Start;
 
@@ -295,19 +299,18 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
 }
 
 
-/*************************************************/
-void WinEDA_PcbFrame::Affiche_Status_Net( wxDC* DC )
-/*************************************************/
-
-/* Affiche:
- *  le status du net en haut d'ecran du segment pointe par la souris
- *  ou le status PCB en bas d'ecran si pas de segment pointe
+/* Displays:
+ * The status of the net on top of the screen segment advanced by mouse.
+ * PCB status or bottom of screen if no segment peak.
  */
+void WinEDA_PcbFrame::Affiche_Status_Net( wxDC* DC )
 {
     TRACK* pt_segm;
-    int    masquelayer = g_TabOneLayerMask[((PCB_SCREEN*)GetScreen())->m_Active_Layer];
+    int    masquelayer =
+        g_TabOneLayerMask[((PCB_SCREEN*)GetScreen())->m_Active_Layer];
 
-    pt_segm = Locate_Pistes( GetBoard()->m_Track, masquelayer, CURSEUR_OFF_GRILLE );
+    pt_segm = Locate_Pistes( GetBoard()->m_Track, masquelayer,
+                             CURSEUR_OFF_GRILLE );
     if( pt_segm == NULL )
         GetBoard()->DisplayInfo( this );
     else
@@ -315,15 +318,12 @@ void WinEDA_PcbFrame::Affiche_Status_Net( wxDC* DC )
 }
 
 
-/**********************************************************************/
-void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
-/**********************************************************************/
-
-/* Affiche le ratsnest relatif
- *  au net du pad pointe par la souris
- *  ou au module localise par la souris
- *  Efface le chevelu affiche si aucun module ou pad n'est selectionne
+/* Draw ratsnest.
+ *
+ * The net edge pad with mouse or module locates the mouse.
+ * Delete if the ratsnest if no module or pad is selected.
  */
+void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
 {
     D_PAD*   pt_pad = NULL;
     MODULE*  Module = NULL;
@@ -331,7 +331,7 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
     if( g_Show_Ratsnest )
         return;
 
-    if( (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
+    if( ( GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK ) == 0 )
         Compile_Ratsnest( DC, TRUE );
 
     if( item )
@@ -342,7 +342,7 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
             Module = (MODULE*) pt_pad->GetParent();
         }
 
-        if( pt_pad ) /* Affichage du chevelu du net correspondant */
+        if( pt_pad ) /* Displaying the ratsnest of the corresponding net. */
         {
             pt_pad->DisplayInfo( this );
             for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
@@ -350,13 +350,13 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
                 RATSNEST_ITEM* net = &GetBoard()->m_FullRatsnest[ii];
                 if( net->GetNet() == pt_pad->GetNet() )
                 {
-                    if( (net->m_Status & CH_VISIBLE) != 0 )
+                    if( ( net->m_Status & CH_VISIBLE ) != 0 )
                         continue;
                     net->m_Status |= CH_VISIBLE;
-                    if( (net->m_Status & CH_ACTIF) == 0 )
+                    if( ( net->m_Status & CH_ACTIF ) == 0 )
                         continue;
 
-                    net->Draw( DrawPanel, DC, GR_XOR, wxPoint(0,0) );
+                    net->Draw( DrawPanel, DC, GR_XOR, wxPoint( 0, 0 ) );
                 }
             }
         }
@@ -364,7 +364,8 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
         {
             if( item->Type() == TYPE_TEXTE_MODULE )
             {
-                if( item->GetParent() && (item->GetParent()->Type()  == TYPE_MODULE) )
+                if( item->GetParent()
+                    && ( item->GetParent()->Type() == TYPE_MODULE ) )
                     Module = (MODULE*) item->GetParent();
             }
             else if( item->Type() == TYPE_MODULE )
@@ -378,10 +379,12 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
                 pt_pad = Module->m_Pads;
                 for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Next() )
                 {
-                    for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
+                    for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount();
+                         ii++ )
                     {
                         RATSNEST_ITEM* net = &GetBoard()->m_FullRatsnest[ii];
-                        if( (net->m_PadStart == pt_pad) || (net->m_PadEnd == pt_pad) )
+                        if( ( net->m_PadStart == pt_pad )
+                            || ( net->m_PadEnd == pt_pad ) )
                         {
                             if( net->m_Status & CH_VISIBLE )
                                 continue;
@@ -390,7 +393,7 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
                             if( (net->m_Status & CH_ACTIF) == 0 )
                                 continue;
 
-                            net->Draw( DrawPanel, DC, GR_XOR, wxPoint(0,0) );
+                            net->Draw( DrawPanel, DC, GR_XOR, wxPoint( 0, 0 ) );
                         }
                     }
                 }
@@ -400,8 +403,8 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
         }
     }
 
-    /* Effacement complet des selections  si aucun pad ou module n'a ete localise */
-    if( (pt_pad == NULL) && (Module == NULL) )
+    /* Erase if no pad or module has been selected. */
+    if( ( pt_pad == NULL ) && ( Module == NULL ) )
     {
         DrawGeneralRatsnest( DC );
 
@@ -411,12 +414,9 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
 }
 
 
-/*****************************************************/
-void WinEDA_PcbFrame::Affiche_PadsNoConnect( wxDC* DC )
-/*****************************************************/
-
-/* Hight light the unconnected pads
+/* High light the unconnected pads
  */
+void WinEDA_PcbFrame::Affiche_PadsNoConnect( wxDC* DC )
 {
     for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
     {

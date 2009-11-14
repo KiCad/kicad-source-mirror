@@ -344,7 +344,7 @@ int Build_Work( BOARD* Pcb )
     for( unsigned ii = 0; ii < Pcb->GetRatsnestsCount(); ii++ )
     {
         pt_rats = &Pcb->m_FullRatsnest[ii];
-        /* ??? On ne route que les chevelus actifs et routables */
+        /* TRANSLATE On ne route que les chevelus actifs et routables */
         if( (pt_rats->m_Status & CH_ACTIF) == 0 )
             continue;
         if( pt_rats->m_Status & CH_UNROUTABLE )

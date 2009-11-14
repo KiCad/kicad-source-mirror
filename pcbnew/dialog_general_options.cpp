@@ -2,10 +2,11 @@
 // Name:        dialog_general_options.cpp
 // Author:      jean-pierre Charras
 /////////////////////////////////////////////////////////////////////////////
+
 /* functions relatives to the dialogs opened from the main menu :
-    Preferences/general
-    Preferences/display
-*/
+ *   Preferences/general
+ *   Preferences/display
+ */
 #include "fctsys.h"
 #include "common.h"
 #include "class_drawpanel.h"
@@ -18,20 +19,17 @@
 #include "pcbnew_id.h"
 
 
-/***********************************************************************************/
-Dialog_GeneralOptions::Dialog_GeneralOptions( WinEDA_PcbFrame* parent, wxDC* DC ) :
-        DialogGeneralOptionsBoardEditor_base( parent )
-/***********************************************************************************/
+Dialog_GeneralOptions::Dialog_GeneralOptions( WinEDA_PcbFrame* parent,
+                                              wxDC*            DC ) :
+    DialogGeneralOptionsBoardEditor_base( parent )
 {
     m_Parent = parent;
-    m_DC = DC;
-
+    m_DC     = DC;
     init();
 }
 
-/********************************************************************/
+
 void Dialog_GeneralOptions::init()
-/********************************************************************/
 {
     SetFocus();
 
@@ -43,17 +41,18 @@ void Dialog_GeneralOptions::init()
     wxString timevalue;
     timevalue << g_TimeOut / 60;
     m_SaveTime->SetValue( timevalue );
+
 /*
-    int layer_count[] = {1,2,4,6,8,10,12,14,16};
-    m_LayerNumber->SetSelection(1);
-    for ( unsigned ii = 0; ii < sizeof(layer_count); ii++ )
-    {
-        if ( g_DesignSettings.m_CopperLayerCount != layer_count[ii] )
-            continue;
-        m_LayerNumber->SetSelection(ii);
-        break;
-    }
-*/
+ *   int layer_count[] = {1,2,4,6,8,10,12,14,16};
+ *   m_LayerNumber->SetSelection(1);
+ *   for ( unsigned ii = 0; ii < sizeof(layer_count); ii++ )
+ *   {
+ *       if ( g_DesignSettings.m_CopperLayerCount != layer_count[ii] )
+ *           continue;
+ *       m_LayerNumber->SetSelection(ii);
+ *       break;
+ *   }
+ */
     m_MaxShowLinks->SetValue( g_MaxLinksShowed );
 
     m_DrcOn->SetValue( Drc_On );
@@ -76,39 +75,34 @@ void Dialog_GeneralOptions::init()
 }
 
 
-/*****************************************************************/
 void Dialog_GeneralOptions::OnCancelClick( wxCommandEvent& event )
-/*****************************************************************/
 {
     event.Skip();
 }
 
 
-
-/**************************************************************************/
 void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
-/**************************************************************************/
 {
     int ii;
 
     DisplayOpt.DisplayPolarCood =
-        (m_PolarDisplay->GetSelection() == 0) ? FALSE : true;
+        ( m_PolarDisplay->GetSelection() == 0 ) ? FALSE : true;
     ii = g_UnitMetric;
-    g_UnitMetric = (m_UnitsSelection->GetSelection() == 0)  ? 0 : 1;
+    g_UnitMetric = ( m_UnitsSelection->GetSelection() == 0 )  ? 0 : 1;
     if( ii != g_UnitMetric )
         m_Parent->ReCreateAuxiliaryToolbar();
 
     m_Parent->m_CursorShape = m_CursorShape->GetSelection();
     g_TimeOut = 60 * m_SaveTime->GetValue();
 
-    /* Mise a jour de la combobox d'affichage de la couche active */
+    /* Updating the combobox to display the active layer. */
     g_MaxLinksShowed = m_MaxShowLinks->GetValue();
     Drc_On = m_DrcOn->GetValue();
     if( g_Show_Ratsnest != m_ShowGlobalRatsnest->GetValue() )
     {
         g_Show_Ratsnest = m_ShowGlobalRatsnest->GetValue();
         m_Parent->Ratsnest_On_Off( m_DC );
-        m_Parent->RedrawActiveWindow( m_DC, true);
+        m_Parent->RedrawActiveWindow( m_DC, true );
     }
     g_Show_Module_Ratsnest = m_ShowModuleRatsnest->GetValue();
     g_AutoDeleteOldTrack   = m_TrackAutodel->GetValue();
@@ -117,7 +111,7 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
     m_Parent->DrawPanel->m_AutoPAN_Enable = m_AutoPANOpt->GetValue();
     g_TwoSegmentTrackBuild = m_Track_DoubleSegm_Ctrl->GetValue();
 
-    g_MagneticPadOption = m_MagneticPadOptCtrl->GetSelection();
+    g_MagneticPadOption   = m_MagneticPadOptCtrl->GetSelection();
     g_MagneticTrackOption = m_MagneticTrackOptCtrl->GetSelection();
 
     EndModal( 1 );
@@ -126,45 +120,38 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
 
 #include "dialog_graphic_items_options.cpp"
 
-/*****************************************************************/
+
 void WinEDA_PcbFrame::InstallPcbOptionsFrame( const wxPoint& pos,
                                               wxDC* DC, int id )
-/*****************************************************************/
 {
     switch( id )
     {
-
     case ID_PCB_DRAWINGS_WIDTHS_SETUP:
-        {
-            WinEDA_GraphicItemsOptionsDialog dlg( this );
-            dlg.ShowModal();
-        }
-        break;
+    {
+        WinEDA_GraphicItemsOptionsDialog dlg( this );
+        dlg.ShowModal();
+    }
+    break;
 
     default:
-        wxMessageBox(wxT("InstallPcbOptionsFrame() id error"));
+        wxMessageBox( wxT( "InstallPcbOptionsFrame() id error" ) );
         break;
-
     }
 }
 
 
-/*******************************************************************/
 void WinEDA_ModuleEditFrame::InstallOptionsFrame( const wxPoint& pos )
-/*******************************************************************/
 {
     WinEDA_GraphicItemsOptionsDialog dlg( this );
+
     dlg.ShowModal();
 }
 
 
-/*****************************************************************/
-void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
-/*****************************************************************/
-
 /* Must be called on a click on the left toolbar (options toolbar
-  * Update variables according to the tools states
+ * Update variables according to the tools states
  */
+void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int id = event.GetId();
 
@@ -177,16 +164,16 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_GRID:
         m_Draw_Grid = m_OptionsToolBar->GetToolState( id );
-        DrawPanel->Refresh( );
+        DrawPanel->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_RATSNEST:
         g_Show_Ratsnest = m_OptionsToolBar->GetToolState( id );
         {
-        wxClientDC dc( DrawPanel );
-        DrawPanel->PrepareGraphicContext( &dc );
-        Ratsnest_On_Off( &dc );
-        RedrawActiveWindow( &dc, true);
+            wxClientDC dc( DrawPanel );
+            DrawPanel->PrepareGraphicContext( &dc );
+            Ratsnest_On_Off( &dc );
+            RedrawActiveWindow( &dc, true );
         }
         break;
 
@@ -201,7 +188,7 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         if( id == ID_TB_OPTIONS_SELECT_UNIT_INCH )
             g_UnitMetric = INCHES;
         m_TrackAndViasSizesList_Changed = true;
-        UpdateStatusBar();    /* Reaffichage des coord curseur */
+        UpdateStatusBar();
         ReCreateAuxiliaryToolbar();
         DisplayUnitsMsg();
         break;
@@ -209,7 +196,7 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
     case ID_TB_OPTIONS_SHOW_POLAR_COORD:
         Affiche_Message( wxEmptyString );
         DisplayOpt.DisplayPolarCood = m_OptionsToolBar->GetToolState( id );
-        UpdateStatusBar();    /* Reaffichage des coord curseur */
+        UpdateStatusBar();
         break;
 
     case ID_TB_OPTIONS_SELECT_CURSOR:
@@ -222,17 +209,17 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_ZONES:
         DisplayOpt.DisplayZonesMode = 0;
-        DrawPanel->Refresh( );
+        DrawPanel->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_DISABLE:
         DisplayOpt.DisplayZonesMode = 1;
-        DrawPanel->Refresh( );
+        DrawPanel->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY:
         DisplayOpt.DisplayZonesMode = 2;
-        DrawPanel->Refresh( );
+        DrawPanel->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
@@ -244,7 +231,7 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         {
             m_DisplayPadFill = DisplayOpt.DisplayPadFill = true;
         }
-        DrawPanel->Refresh( );
+        DrawPanel->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
@@ -256,29 +243,32 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         {
             m_DisplayViaFill = DisplayOpt.DisplayViaFill = true;
         }
-        DrawPanel->Refresh( );
+        DrawPanel->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill =
                                     !m_OptionsToolBar->GetToolState( id );
-        DrawPanel->Refresh( );
+        DrawPanel->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
         DisplayOpt.ContrastModeDisplay =
             m_OptionsToolBar->GetToolState( id );
-        DrawPanel->Refresh( );
+        DrawPanel->Refresh();
         break;
+
     case ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE:
-            g_DesignSettings.SetElementVisibility( MODULE_TEXT_NOV_VISIBLE,
-                                m_OptionsToolBar->GetToolState( id ));
-            DrawPanel->Refresh( );
-            break;
+        g_DesignSettings.SetElementVisibility( MODULE_TEXT_NOV_VISIBLE,
+                                               m_OptionsToolBar->GetToolState( id ) );
+        DrawPanel->Refresh();
+        break;
 
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1:
+
 #if !defined(KICAD_AUIMANAGER)
-        if( m_OptionsToolBar->GetToolState( id ) )  // show aux V toolbar (Microwave tool)
+        if( m_OptionsToolBar->GetToolState( id ) )  // show aux V toolbar
+                                                    // (Microwave tool)
             ReCreateAuxVToolbar();
         else
         {
@@ -291,17 +281,16 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
             OnSize( SizeEv );
         }
 #else
-        m_auimgr.GetPane(wxT("m_AuxVToolBar")).Show( m_OptionsToolBar->GetToolState( id ) );
+        m_auimgr.GetPane( wxT( "m_AuxVToolBar" ) ).Show( m_OptionsToolBar->GetToolState( id ) );
         m_auimgr.Update();
 #endif
         break;
 
     default:
         DisplayError( this,
-            wxT( "WinEDA_PcbFrame::OnSelectOptionToolbar error \n (event not handled!)" ) );
+                      wxT( "WinEDA_PcbFrame::OnSelectOptionToolbar error \n (event not handled!)" ) );
         break;
     }
 
     SetToolbars();
-
 }

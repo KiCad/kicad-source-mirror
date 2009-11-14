@@ -257,10 +257,10 @@ void DIALOG_MODULE_MODULE_EDITOR::Browse3DLib( wxCommandEvent& event )
     fullpath.Replace( wxT( "/" ), wxT( "\\" ) );
 #endif
     fullfilename = EDA_FileSelector( _( "3D Shape:" ),
-                                     fullpath,                  /* Chemin par defaut */
-                                     wxEmptyString,             /* nom fichier par defaut */
-                                     g_Shapes3DExtBuffer,       /* extension par defaut */
-                                     mask,                      /* Masque d'affichage */
+                                     fullpath,
+                                     wxEmptyString,
+                                     g_Shapes3DExtBuffer,
+                                     mask,
                                      this,
                                      wxFD_OPEN,
                                      TRUE

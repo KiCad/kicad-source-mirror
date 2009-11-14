@@ -1,6 +1,6 @@
-/*****************************/
-/* Localisation des elements */
-/*****************************/
+/*******************/
+/* Locate element. */
+/*******************/
 
 
 #include "fctsys.h"
@@ -28,20 +28,17 @@ wxPoint inline RefPos( int typeloc )
 }
 
 
-/*******************************************************************/
-TRACK* Locate_Via( BOARD* Pcb, const wxPoint& pos, int layer )
-/*******************************************************************/
-
-/* Localise une via au point pX,pY
- *  Si layer < 0 la via sera localisee quelle que soit la couche
- *  Si layer = 0 .. 15 la via sera localisee selon son type:
- *      - traversante : toutes couches
- *      - aveugle = entre couches utiles
- *      - borgnes idem
- *  Entree : coord du point de reference, couche
- *  Sortie: NULL si pas de via
- *          (TRACK*) adresse de la via
+/* Locates a via point pX, pY
+ * If layer < 0 will be located via whatever layer
+ * If layer = 0 .. 15 Via will be located according to its type:
+ * - Traverse: all layers
+ * - = Blind between layers useful
+ * - Blind idem
+ * Entry: coord point of reference, layer
+ * Output: NULL if not via
+ * (* TRACK) address via
  */
+TRACK* Locate_Via( BOARD* Pcb, const wxPoint& pos, int layer )
 {
     TRACK* track;
 
@@ -63,9 +60,7 @@ TRACK* Locate_Via( BOARD* Pcb, const wxPoint& pos, int layer )
 }
 
 
-/*******************************************************************/
 TRACK* Locate_Via_Area( TRACK* aStart, const wxPoint& pos, int layer )
-/*******************************************************************/
 {
     TRACK* track;
 
@@ -87,18 +82,15 @@ TRACK* Locate_Via_Area( TRACK* aStart, const wxPoint& pos, int layer )
 }
 
 
-/********************************************************************/
-D_PAD* Locate_Pad_Connecte( BOARD* Pcb, TRACK* ptr_piste, int extr )
-/********************************************************************/
-
-/* localisation de la pastille connectee au point de piste a tester
- *  entree : ptr_piste: pointeur sur le segment de piste
- *          extr = flag = START -> debut du segment a tester
- *                      = END -> fin du segment a tester
- *  retourne:
- *       un pointeur sur la description de la pastille si localisation
- *       pointeur NULL si pastille non trouvee
+/* Location of the pellet CONNECTED developed a test track
+ * input: ptr_piste: pointer to the segment of track
+ * Extr = flag = START -> beginning of the test segment
+ * END -> end of the segment to be tested
+ * Returns:
+ * A pointer to the description of the pad if found.
+ * NULL pointer if pad NOT FOUND
  */
+D_PAD* Locate_Pad_Connecte( BOARD* Pcb, TRACK* ptr_piste, int extr )
 {
     D_PAD*  ptr_pad = NULL;
     wxPoint ref_pos;
@@ -125,25 +117,18 @@ D_PAD* Locate_Pad_Connecte( BOARD* Pcb, TRACK* ptr_piste, int extr )
 }
 
 
-/*************************************************
- * D_PAD * Locate_Any_Pad( BOARD* Pcb, int typeloc, bool OnlyCurrentLayer)
- * D_PAD* Locate_Any_Pad( BOARD* Pcb, int ref_pos, bool OnlyCurrentLayer)
- *************************************************/
-
 /*
- *  localisation de la pastille pointee par la coordonnee ref_pos.x,,ref_pos.y, ou
- *  par la souris,  recherche faite sur toutes les empreintes.
- *  entree :
- *      - coord souris
- *       ou ref_pos
- *  retourne:
- *       pointeur sur la description de la pastille si localisation
- *       pointeur NULL si pastille non trouvee
- *       num_empr = numero d'empreinte du pad
+ * Locate pad pointed to by the coordinates ref_pos.x,, ref_pos.y or
+ * the mouse, search done on all tracks.
+ * Input:
+ * - mouse coord or ref_pos
+ * Returns:
+ * Pointer to the pad if found.
+ * NULL pointer if pad NOT FOUND
+ * Num_empr = number of fingerprint pad
  *
- *  la priorit� est donn�e a la couche active
+ * Priority is the active layer
  */
-
 D_PAD* Locate_Any_Pad( BOARD* Pcb, int typeloc, bool OnlyCurrentLayer )
 {
     wxPoint ref_pos = RefPos( typeloc );
@@ -151,9 +136,11 @@ D_PAD* Locate_Any_Pad( BOARD* Pcb, int typeloc, bool OnlyCurrentLayer )
 }
 
 
-D_PAD* Locate_Any_Pad( BOARD* Pcb, const wxPoint& ref_pos, bool OnlyCurrentLayer )
+D_PAD* Locate_Any_Pad( BOARD* Pcb, const wxPoint& ref_pos,
+                       bool OnlyCurrentLayer )
 {
-    int     layer_mask = g_TabOneLayerMask[ ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer];
+    int layer_mask =
+        g_TabOneLayerMask[ ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer];
 
     for( MODULE* module=Pcb->m_Modules;  module;   module = module->Next() )
     {
@@ -175,21 +162,15 @@ D_PAD* Locate_Any_Pad( BOARD* Pcb, const wxPoint& ref_pos, bool OnlyCurrentLayer
 }
 
 
-/******************************************************************************/
-/* D_PAD* Locate_Pads(MODULE * module, int masque_layer,int typeloc)          */
-/* D_PAD* Locate_Pads(MODULE * module, const wxPoint & ref_pos,int masque_layer) */
-/******************************************************************************/
-
-/* localisation de la pastille pointee par la coordonnee ref_pos.x,,ref_pos.y, ou
- *  par la souris,  concernant l'empreinte  en cours.
- *  entree :
- *      - parametres generaux de l'empreinte mise a jour par caract()
- *      - masque_layer = couche(s) (bit_masque)sur laquelle doit etre la pastille
- *  retourne:
- *       un pointeur sur la description de la pastille si localisation
- *       pointeur NULL si pastille non trouvee
+/* Locate pad pointed to by the coordinate ref_pos.x,, ref_pos.y or
+ * the mouse on the current footprint.
+ * Input:
+ * - General parameters of the footprint update by characters()
+ * - = Masque_layer layer(s) (bit_masque) which must be the pad
+ * Returns:
+ * A pointer to the pad if found
+ * NULL pointer if pad NOT FOUND
  */
-
 D_PAD* Locate_Pads( MODULE* module, int masque_layer, int typeloc )
 {
     wxPoint ref_pos = RefPos( typeloc );
@@ -201,8 +182,8 @@ D_PAD* Locate_Pads( MODULE* module, const wxPoint& ref_pos, int masque_layer )
 {
     for( D_PAD* pt_pad = module->m_Pads;   pt_pad;   pt_pad = pt_pad->Next() )
     {
-        /* ... et sur la bonne couche */
-        if( (pt_pad->m_Masque_Layer & masque_layer) == 0 )
+        /* ... and on the correct layer. */
+        if( ( pt_pad->m_Masque_Layer & masque_layer ) == 0 )
             continue;
 
         if( pt_pad->HitTest( ref_pos ) )
@@ -216,11 +197,12 @@ D_PAD* Locate_Pads( MODULE* module, const wxPoint& ref_pos, int masque_layer )
 /**
  * Function Locate_Prefered_Module
  * locates a footprint by its bounding rectangle.  If several footprints
- * are possible, then the priority is: the closest on the active layer, then closest.
+ * are possible, then the priority is: the closest on the active layer, then
+ * closest.
  * The current mouse or cursor coordinates are grabbed from the active window
- * to performe hit-testing.
- * distance is calculated via manhattan distance from the center of the bounding rectangle
- * to the cursor postition.
+ * to perform hit-testing.
+ * distance is calculated via manhattan distance from the center of the
+ * bounding rectangle to the cursor position.
  *
  * @param Pcb The BOARD to search within.
  * @param typeloc Flag bits, tuning the search, see pcbnew.h
@@ -229,13 +211,13 @@ D_PAD* Locate_Pads( MODULE* module, const wxPoint& ref_pos, int masque_layer )
 MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
 {
     MODULE* pt_module;
-    int     lx, ly;                         /* dimensions du rectangle d'encadrement du module */
-    MODULE* module      = NULL;             /* module localise sur la couche active */
-    MODULE* Altmodule   = NULL;             /* module localise sur les couches non actives */
-    int     min_dim     = 0x7FFFFFFF;       /* dim mini du module localise sur la couche active */
-    int     alt_min_dim = 0x7FFFFFFF;       /* dim mini du module localise sur les couches non actives */
-    int     layer;                          /* pour calcul de couches prioritaires */
-    wxPoint ref_pos;                        /* coord du point de reference pour la localisation */
+    int     lx, ly;
+    MODULE* module      = NULL;
+    MODULE* Altmodule   = NULL;
+    int     min_dim     = 0x7FFFFFFF;
+    int     alt_min_dim = 0x7FFFFFFF;
+    int     layer;
+    wxPoint ref_pos;
 
     ref_pos = RefPos( typeloc );
 
@@ -246,14 +228,16 @@ MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
         if( !pt_module->HitTest( ref_pos ) )
             continue;
 
-        // if caller wants to ignore locked modules, and this one is locked, skip it.
+        // if caller wants to ignore locked modules, and this one is locked,
+        // skip it.
         if( (typeloc & IGNORE_LOCKED) && pt_module->IsLocked() )
             continue;
 
-        /* calcul de priorite: la priorite est donnee a la couche
-         *  d'appartenance du module et a la couche cuivre si le module
-         *  est sur couche serigr,adhesive cuivre, a la couche cmp si le module
-         *  est sur couche serigr,adhesive composant */
+        /* Calculate priority: the priority is given to the layer of the
+         * module and the copper layer if the module layer is indelible,
+         * adhesive copper, a layer if cmp module layer is indelible,
+         * adhesive component.
+         */
         layer = pt_module->GetLayer();
 
         if( layer==ADHESIVE_N_CU || layer==SILKSCREEN_N_CU )
@@ -262,34 +246,37 @@ MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
         else if( layer==ADHESIVE_N_CMP || layer==SILKSCREEN_N_CMP )
             layer = CMP_N;
 
-        /* Localisation: test des dimensions minimales, choix du meilleur candidat */
+        /* Test of minimum size to choosing the best candidate. */
 
-        /* calcul des dimensions du cadre :*/
-        int offx = pt_module->m_BoundaryBox.m_Size.x/2 +
-                pt_module->m_BoundaryBox.m_Pos.x +
-                pt_module->m_Pos.x;
-        int offy = pt_module->m_BoundaryBox.m_Size.y/2
-                + pt_module->m_BoundaryBox.m_Pos.y
-                + pt_module->m_Pos.y;
+        int offx = pt_module->m_BoundaryBox.m_Size.x / 2 +
+            pt_module->m_BoundaryBox.m_Pos.x +
+            pt_module->m_Pos.x;
+        int offy = pt_module->m_BoundaryBox.m_Size.y / 2
+            + pt_module->m_BoundaryBox.m_Pos.y
+            + pt_module->m_Pos.y;
         //off x & offy point to the middle of the box.
-        int dist = abs(ref_pos.x - offx) + abs(ref_pos.y - offy);
+        int dist = abs( ref_pos.x - offx ) + abs( ref_pos.y - offy );
         lx = pt_module->m_BoundaryBox.GetWidth();
         ly = pt_module->m_BoundaryBox.GetHeight();
-        //int dist = MIN(lx, ly);  // to pick the smallest module (kinda screwy with same-sized modules -- this is bad!)
+        //int dist = MIN(lx, ly);  // to pick the smallest module (kinda
+        // screwy with same-sized modules -- this is bad!)
 
-        if( ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer == layer ){
-            if( dist <= min_dim ){
-                /* meilleure empreinte localisee sur couche active */
+        if( ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer == layer )
+        {
+            if( dist <= min_dim )
+            {
+                /* better footprint shown on the active layer */
                 module  = pt_module;
                 min_dim = dist;
             }
         }
-        else if( !(typeloc & MATCH_LAYER)
-            && ( !(typeloc & VISIBLE_ONLY) || IsModuleLayerVisible( layer ) ) )
+        else if( !( typeloc & MATCH_LAYER )
+            && ( !( typeloc & VISIBLE_ONLY )
+                 || IsModuleLayerVisible( layer ) ) )
         {
             if( dist <= alt_min_dim )
             {
-                /* meilleure empreinte localisee sur autres couches */
+                /* better footprint shown on other layers */
                 Altmodule   = pt_module;
                 alt_min_dim = dist;
             }
@@ -309,15 +296,14 @@ MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
     return NULL;
 }
 
-/******************************************************************/
-inline bool IsPointsAreNear(wxPoint & p1, wxPoint & p2, int max_dist)
-/******************************************************************/
+
 /*
-return true if the dist between p1 and p2 < max_dist
-Currently in test (currently rasnest algos work only if p1 == p2)
+ * return true if the dist between p1 and p2 < max_dist
+ * Currently in test (currently rasnest algos work only if p1 == p2)
 */
+inline bool IsPointsAreNear(wxPoint & p1, wxPoint & p2, int max_dist)
 {
-#if 0	// Do not change it: does not work
+#if 0   // Do not change it: does not work
 {
 int dist;
     dist = abs(p1.x - p2.x) + abs (p1.y - p2.y);
@@ -331,13 +317,11 @@ int dist;
     return false;
 }
 
-/**************************************************************/
-TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base,
-                               TRACK* pt_lim, int extr )
-/**************************************************************/
 
-/** Search for the track (or via) segment which is connected to the track segment PtRefSegm
- *  if extr == START, the starting track segment PtRefSegm is used to locate a connected segment
+/** Search for the track (or via) segment which is connected to the track
+ *  segment PtRefSegm
+ *  if extr == START, the starting track segment PtRefSegm is used to locate
+ *  a connected segment
  *  if extr == END, the ending track segment PtRefSegm is used
  *  The test connection consider only end track segments
  *
@@ -345,7 +329,8 @@ TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base,
  *  if pt_lim == NULL,  the search  is made from  pt_base to the end of list
  *
  *  In order to have a fast computation time:
- *  a first search is made considering only the +/- 50 next door neightbour of PtRefSegm.
+ *  a first search is made considering only the +/- 50 next door neighbor
+ *  of PtRefSegm.
  *  if no track is found : the entire list is tested
  *
  *  @param PtRefSegm = reference segment
@@ -353,6 +338,8 @@ TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base,
  *  @param pt_lim = upper limit for search (can be NULL)
  *  @param extr = START or END = end of ref track segment to use in tests
  */
+TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base,
+                               TRACK* pt_lim, int extr )
 {
     const int NEIGHTBOUR_COUNT_MAX = 50;
 
@@ -369,7 +356,6 @@ TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base,
 
     Reflayer = PtRefSegm->ReturnMaskLayer();
 
-    /* 1ere passe */
     PtSegmB = PtSegmN = PtRefSegm;
 
     for( ii = 0; ii < NEIGHTBOUR_COUNT_MAX; ii++ )
@@ -384,17 +370,18 @@ TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base,
             if( PtSegmN == PtRefSegm )
                 goto suite;
 
-            /* max_dist is the max distance between 2 track ends which ensure a copper continuty */
+            /* max_dist is the max distance between 2 track ends which
+             * ensure a copper continuity */
             max_dist = (PtSegmN->m_Width + PtRefSegm->m_Width)/2;
 
             if( IsPointsAreNear(pos_ref, PtSegmN->m_Start, max_dist) )
-            {       /* Test des couches */
+            {
                 if( Reflayer & PtSegmN->ReturnMaskLayer() )
                     return PtSegmN;
             }
 
             if( IsPointsAreNear(pos_ref, PtSegmN->m_End, max_dist) )
-            {       /* Test des couches */
+            {
                 if( Reflayer & PtSegmN->ReturnMaskLayer() )
                     return PtSegmN;
             }
@@ -415,13 +402,13 @@ suite:
             max_dist = (PtSegmB->m_Width + PtRefSegm->m_Width)/2;
 
             if( IsPointsAreNear(pos_ref, PtSegmB->m_Start, max_dist) )
-            {       /* Test des couches */
+            {
                 if( Reflayer & PtSegmB->ReturnMaskLayer() )
                     return PtSegmB;
             }
 
             if( IsPointsAreNear(pos_ref, PtSegmB->m_End, max_dist) )
-            {       /* Test des couches */
+            {
                 if( Reflayer & PtSegmB->ReturnMaskLayer() )
                     return PtSegmB;
             }
@@ -435,7 +422,7 @@ suite1:
         }
     }
 
-    /* Recherche generale */
+    /* General search. */
     for( PtSegmN = pt_base; PtSegmN != NULL; PtSegmN =  PtSegmN->Next() )
     {
         if( PtSegmN->GetState( DELETED | BUSY ) )
@@ -451,17 +438,16 @@ suite1:
             continue;
         }
 
+        max_dist = ( PtSegmN->m_Width + PtRefSegm->m_Width ) / 2;
 
-        max_dist = (PtSegmN->m_Width + PtRefSegm->m_Width)/2;
-
-        if( IsPointsAreNear(pos_ref,PtSegmN->m_Start, max_dist) )
-        {       /* Test des couches */
+        if( IsPointsAreNear( pos_ref, PtSegmN->m_Start, max_dist ) )
+        {
             if( Reflayer & PtSegmN->ReturnMaskLayer() )
                 return PtSegmN;
         }
 
-        if( IsPointsAreNear(pos_ref, PtSegmN->m_End, max_dist) )
-        {       /* Test des couches */
+        if( IsPointsAreNear( pos_ref, PtSegmN->m_End, max_dist ) )
+        {
             if( Reflayer & PtSegmN->ReturnMaskLayer() )
                 return PtSegmN;
         }
@@ -473,20 +459,13 @@ suite1:
 }
 
 
-/****************************************************************************/
-/* TRACK *Locate_Pistes(TRACK * start_adresse, int MasqueLayer,int typeloc) */
-/* TRACK *Locate_Pistes(TRACK * start_adresse, int ref_pos.x, int ref_pos.y,*/
-/*                                      int MasqueLayer)                    */
-/****************************************************************************/
-
 /*
- *  1 -  routine de localisation du segment de piste pointe par la souris.
- *  2 -  routine de localisation du segment de piste pointe par le point
- *          ref_pos.x , ref_pos.y.r
+ * 1 - Locate segment of track leading from the mouse.
+ * 2 - Locate segment of track point by point
+ * ref_pos.x, ref_pos.y.r
  *
- *  La recherche commence a l'adresse start_adresse
+ * The search begins to address start_adresse
  */
-
 TRACK* Locate_Pistes( TRACK* start_adresse, int MasqueLayer, int typeloc )
 {
     wxPoint ref_pos = RefPos( typeloc );
@@ -495,7 +474,8 @@ TRACK* Locate_Pistes( TRACK* start_adresse, int MasqueLayer, int typeloc )
 }
 
 
-TRACK* Locate_Pistes( TRACK* start_adresse, const wxPoint& ref_pos, int MasqueLayer )
+TRACK* Locate_Pistes( TRACK* start_adresse, const wxPoint& ref_pos,
+                      int MasqueLayer )
 {
     for( TRACK* track = start_adresse;   track;  track =  track->Next() )
     {
@@ -503,14 +483,16 @@ TRACK* Locate_Pistes( TRACK* start_adresse, const wxPoint& ref_pos, int MasqueLa
 
         if( track->GetState( BUSY | DELETED ) )
         {
-            // D(printf("track %p is BUSY | DELETED.  BUSY=%d  DELETED=%d\n", track, track->GetState(BUSY), track->GetState(DELETED) );)
+            // D( printf( "track %p is BUSY | DELETED. BUSY=%d DELETED=%d\n",
+            //            track, track->GetState( BUSY ),
+            //            track->GetState( DELETED ) );)
             continue;
         }
 
         if( g_DesignSettings.IsLayerVisible( layer ) == false )
             continue;
 
-        if( track->Type() == TYPE_VIA ) /* VIA rencontree */
+        if( track->Type() == TYPE_VIA ) /* VIA encountered. */
         {
             if( track->HitTest( ref_pos ) )
                 return track;
@@ -518,7 +500,7 @@ TRACK* Locate_Pistes( TRACK* start_adresse, const wxPoint& ref_pos, int MasqueLa
         else
         {
             if( (g_TabOneLayerMask[layer] & MasqueLayer) == 0 )
-                continue;   /* Segments sur couches differentes */
+                continue;   /* Segments on different layers. */
 
             if( track->HitTest( ref_pos ) )
                 return track;
@@ -528,22 +510,14 @@ TRACK* Locate_Pistes( TRACK* start_adresse, const wxPoint& ref_pos, int MasqueLa
     return NULL;
 }
 
-/****************************************************************/
-/* TRACK *  Locate_Zone(TRACK * start_adresse, int layer,    */
-/*                                          int typeloc)        */
-/* TRACK *  Locate_Zone(TRACK * start_adresse,              */
-/*                                      const wxPoint & ref_pos, */
-/*                                      int layer)              */
-/****************************************************************/
-
 /*
- *  1 -  routine de localisation du segment de zone pointe par la souris.
- *  2 -  routine de localisation du segment de zone pointe par le point
- *          ref_pos.x , ref_pos.y.r
+ * 1 - Locate zone area by the mouse.
+ * 2 - Locate zone area by point
+ * def_pos.x, ref_pos.y.r
  *
- *  Si layer == -1 , le tst de la couche n'est pas fait
+ * If layer == -1, tst layer is not
  *
- *  La recherche commence a l'adresse start_adresse
+ * The search begins to address start_adresse
  */
 TRACK* Locate_Zone( TRACK* start_adresse, int layer, int typeloc )
 {
@@ -568,21 +542,18 @@ TRACK* Locate_Zone( TRACK* start_adresse, const wxPoint& ref_pos, int layer )
 }
 
 
-
-/*******************************************************************************/
-D_PAD* Fast_Locate_Pad_Connecte( BOARD* Pcb, const wxPoint& ref_pos, int masque_layer )
-/*******************************************************************************/
-
-/* Routine cherchant le pad de centre px,py,
- *  sur la couche indiquee par masque_layer (bit a bit)
- *  ( extremite de piste )
- *  La liste des pads doit deja exister.
+/* Find the pad center px, py,
+ * The layer INDICATED BY masque_layer (bitwise)
+ * (Runway end)
+ * The list of pads must already exist.
  *
- *  retourne :
- *      NULL si pas de pad localise.
- *      pointeur sur la structure descr_pad correspondante si pad trouve
- *      (bonne position ET bonne couche).
+ * Returns:
+ *   NULL if no pad located.
+ *   Pointer to the structure corresponding descr_pad if pad found
+ * (Good position and good layer).
  */
+D_PAD* Fast_Locate_Pad_Connecte( BOARD* Pcb, const wxPoint& ref_pos,
+                                 int masque_layer )
 {
     for( unsigned i=0; i<Pcb->GetPadsCount();  ++i )
     {
@@ -591,7 +562,7 @@ D_PAD* Fast_Locate_Pad_Connecte( BOARD* Pcb, const wxPoint& ref_pos, int masque_
         if( pad->m_Pos != ref_pos )
             continue;
 
-        /* Pad peut-etre trouve ici : il doit etre sur la bonne couche */
+        /* Pad found, it must be on the correct layer */
         if( pad->m_Masque_Layer & masque_layer )
             return pad;
     }
@@ -600,18 +571,15 @@ D_PAD* Fast_Locate_Pad_Connecte( BOARD* Pcb, const wxPoint& ref_pos, int masque_
 }
 
 
-/***********************************************************************************/
+/* Locate segment with one end that coincides with the point x, y
+ * Data on layers by masklayer
+ * Research is done to address start_adr has end_adr
+ * If end_adr = NULL, end search list
+ * The segments of track marks with the flag are not DELETED or taken
+ * into account
+ */
 TRACK* Fast_Locate_Piste( TRACK* start_adr, TRACK* end_adr,
                           const wxPoint& ref_pos, int MaskLayer )
-/***********************************************************************************/
-
-/* Localiste le segment dont une extremite coincide avec le point x,y
- *  sur les couches donnees par masklayer
- *  la recherche se fait de l'adresse start_adr a end_adr
- *  si end_adr = NULL, recherche jusqu'a la fin de la liste
- *  Les segments de piste marques avec le flag DELETED ne sont pas
- *  pris en compte
- */
 {
     TRACK* PtSegm;
 
@@ -624,14 +592,12 @@ TRACK* Fast_Locate_Piste( TRACK* start_adr, TRACK* end_adr,
         {
             if( ref_pos == PtSegm->m_Start )
             {
-                /* Test des couches */
                 if( MaskLayer & PtSegm->ReturnMaskLayer() )
                     return PtSegm;
             }
 
             if( ref_pos == PtSegm->m_End )
             {
-                /* Test des couches */
                 if( MaskLayer & PtSegm->ReturnMaskLayer() )
                     return PtSegm;
             }
@@ -644,17 +610,13 @@ TRACK* Fast_Locate_Piste( TRACK* start_adr, TRACK* end_adr,
 }
 
 
-/*******************************************************************/
+/* Locates via through the point x, y, on layer data by masklayer.
+ * Search is done to address start_adr has end_adr.
+ * If end_adr = NULL, end search list
+ * Vias whose parameter has the State or DELETED bit BUSY = 1 are ignored
+ */
 TRACK* Fast_Locate_Via( TRACK* start_adr, TRACK* end_adr,
                         const wxPoint& pos, int MaskLayer )
-/*******************************************************************/
-
-/* Localise la via de centre le point x,y , sur les couches donnees
- *  par masklayer
- *  la recherche se fait de l'adresse start_adr a end_adr.
- *  si end_adr = NULL, recherche jusqu'a la fin de la liste
- *  les vias dont le parametre State a le bit DELETED ou BUSY = 1 sont ignorees
- */
 {
     TRACK* PtSegm;
 
@@ -666,7 +628,6 @@ TRACK* Fast_Locate_Via( TRACK* start_adr, TRACK* end_adr,
             {
                 if( PtSegm->GetState( BUSY | DELETED ) == 0 )
                 {
-                    /* Test des couches */
                     if( MaskLayer & PtSegm->ReturnMaskLayer() )
                         return PtSegm;
                 }
@@ -678,4 +639,3 @@ TRACK* Fast_Locate_Via( TRACK* start_adr, TRACK* end_adr,
 
     return NULL;
 }
-

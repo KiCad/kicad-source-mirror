@@ -1,6 +1,6 @@
 /************************************************/
 /* Module editor: Dialog box for editing module	*/
-/*  properties and carateristics				*/
+/*  properties and characteristics				*/
 /************************************************/
 
 #include "fctsys.h"
@@ -14,12 +14,11 @@
 
 #include "dialog_edit_module_for_BoardEditor.h"
 
-/*******************************************************************/
-void WinEDA_PcbFrame::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
-/*******************************************************************/
 
-/* Fonction relai d'installation de la frame d'édition des proprietes
- *  du module*/
+/*
+ * Show module property dialog.
+ */
+void WinEDA_PcbFrame::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
 {
     if( Module == NULL )
         return;
@@ -54,13 +53,10 @@ void WinEDA_PcbFrame::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
 }
 
 
-/*******************************************************************/
-void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod )
-/*******************************************************************/
-
 /*
- *  Repositionne l'ancre sous le curseur souris
+ * Position anchor under the cursor.
  */
+void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod )
 {
     wxPoint         moveVector;
     EDA_BaseStruct* PtStruct;
@@ -73,19 +69,19 @@ void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod )
 
     pt_mod->m_Pos = GetScreen()->m_Curseur;
 
-    /* Mise a jour des coord relatives des elements:
-     *  les coordonnees relatives sont relatives a l'ancre, pour orient 0.
-     *  il faut donc recalculer deltaX et deltaY en orientation 0 */
+    /* Update the relative coordinates:
+     * The coordinates are relative to the anchor point.
+     * Calculate deltaX and deltaY from the anchor. */
     RotatePoint( &moveVector, -pt_mod->m_Orient );
 
-    /* Mise a jour des coord relatives des pads */
+    /* Update the pad coordinates. */
     pt_pad = (D_PAD*) pt_mod->m_Pads;
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
         pt_pad->m_Pos0 += moveVector;
     }
 
-    /* Mise a jour des coord relatives contours .. */
+    /* Update the draw element coordinates. */
     PtStruct = pt_mod->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
@@ -113,9 +109,7 @@ void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod )
 }
 
 
-/**********************************************************************/
 void WinEDA_ModuleEditFrame::RemoveStruct( EDA_BaseStruct* Item )
-/**********************************************************************/
 {
     if( Item == NULL )
         return;
@@ -154,8 +148,8 @@ void WinEDA_ModuleEditFrame::RemoveStruct( EDA_BaseStruct* Item )
     default:
     {
         wxString Line;
-        Line.Printf( wxT( " Remove: StructType %d Inattendu" ),
-                    Item->Type() );
+        Line.Printf( wxT( " Remove: draw item type %d unknown." ),
+                     Item->Type() );
         DisplayError( this, Line );
     }
     break;

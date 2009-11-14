@@ -902,7 +902,7 @@ float WinEDA_PcbFrame::Compute_Ratsnest_PlaceModule( wxDC* DC )
 /* Draw keep out area of a module. */
 /***********************************/
 
-/* ???
+/* TRANSLATE
  * les cellules ( du plan des Distances ) du rectangle x0,y0 a x1,y1 sont
  *  incrementees de la valeur Penalite
  *  celles qui sont externes au rectangle, mais internes au rectangle
