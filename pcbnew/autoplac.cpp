@@ -902,12 +902,13 @@ float WinEDA_PcbFrame::Compute_Ratsnest_PlaceModule( wxDC* DC )
 /* Draw keep out area of a module. */
 /***********************************/
 
-/* TRANSLATE
- * les cellules ( du plan des Distances ) du rectangle x0,y0 a x1,y1 sont
- *  incrementees de la valeur Penalite
- *  celles qui sont externes au rectangle, mais internes au rectangle
- *  x0,y0 -marge a x1,y1 + marge sont incrementees d'une valeur
- *  (Penalite ... 0) decroissante en fonction de leur eloignement
+/* Buid the cost map.
+ * Cells ( in Dist mao ) inside the rect x0,y0 a x1,y1 are
+ *  incremented by value Penalite
+ *  Cell outside this rectangle, but inside the rectangle
+ *  x0,y0 -marge to x1,y1 + marge sont incrementede by a decreasing value
+ *  (Penalite ... 0). The decreasing value de pends on the distance to the first rectangle
+ *  Therefore the cost is hight in  rect x0,y0 a x1,y1, and decrease outside this rectangle
  */
 static void TracePenaliteRectangle( BOARD* Pcb,
                                     int    ux0,

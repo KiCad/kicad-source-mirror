@@ -226,8 +226,10 @@ DRAWSEGMENT* WinEDA_PcbFrame::Begin_DrawSegment( DRAWSEGMENT* Segment,
         DrawPanel->ManageCurseur = Montre_Position_NewSegment;
         DrawPanel->ForceCloseManageCurseur = Exit_EditEdge;
     }
-    else    /* TRANSLATE trace en cours : les coord du point d'arrivee ont
-             * ete mises a jour par la routine Montre_Position_NewSegment*/
+    else    /* The ending point ccordinate Segment->m_End was updated by he function
+             * Montre_Position_NewSegment() called on a move mouse event
+             * during the segment creation
+             */
     {
         if( Segment->m_Start != Segment->m_End )
         {

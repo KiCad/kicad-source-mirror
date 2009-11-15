@@ -344,8 +344,10 @@ int Build_Work( BOARD* Pcb )
     for( unsigned ii = 0; ii < Pcb->GetRatsnestsCount(); ii++ )
     {
         pt_rats = &Pcb->m_FullRatsnest[ii];
-        /* TRANSLATE On ne route que les chevelus actifs et routables */
-        if( (pt_rats->m_Status & CH_ACTIF) == 0 )
+        /* We consider her only ratsnets that are active ( obviously not yet routed)
+         * and routables (that are not yet attempt to be routed and fail
+         */
+         if( (pt_rats->m_Status & CH_ACTIF) == 0 )
             continue;
         if( pt_rats->m_Status & CH_UNROUTABLE )
             continue;

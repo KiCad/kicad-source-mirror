@@ -352,8 +352,10 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
         DrawPanel->ManageCurseur = ShowEdgeModule;
         DrawPanel->ForceCloseManageCurseur = Exit_EditEdge_Module;
     }
-    /* TRANSLATE trace en cours : les coord du point d'arrivee ont ete mises
-     * a jour par la routine Montre_Position_New_Edge_Module
+    /* Segment creation in progress.
+     * The ending coordinate are updated by the function
+     * Montre_Position_New_Edge_Module() called on move mouse event
+     * during the segment craetion
      */
     else
     {
