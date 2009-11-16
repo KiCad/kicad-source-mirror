@@ -5,6 +5,7 @@
 class Pcb3D_GLCanvas;
 
 #include "pad_shapes.h"
+#include "polyline.h"
 
 /* Default layers used for pads, according to the pad type.
  * this is default values only, they can be changed for a given pad
@@ -141,7 +142,7 @@ public:
         m_Pos = aPos;
     }
 
-    /** function TransformPadWithClearanceToPolygon
+    /** function TransformShapeWithClearanceToPolygon
      * Convert the pad shape to a closed polygon
      * Used in filling zones calculations
      * Circles and arcs are approximated by segments
@@ -152,7 +153,7 @@ public:
      * clearance when the circle is approxiamted by segment bigger or equal
      * to the real clearance value (usually near from 1.0)
     */
-    void TransformPadWithClearanceToPolygon( std::vector <wxPoint>& aCornerBuffer,
+    void TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
             int aClearanceValue, int aCircleToSegmentsCount, double aCorrectionFactor );
 
      /**

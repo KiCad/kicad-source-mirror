@@ -14,9 +14,15 @@
 
 #if defined (CREATE_KBOOL_KEY_FILES) || (CREATE_KBOOL_KEY_FILES_FIRST_PASS)
 
+// Helper class to handle a coordinate
+struct kfcoord
+{
+    int x, y;
+};
+
 static FILE*       kdebugFile;
 static char sDate_Time[256];
-
+static vector <kfcoord> s_EntityCoordinates;
 
 void CreateKeyFile()
 {
@@ -48,6 +54,8 @@ void CreateKeyFile()
     {
         wxMessageBox( wxT( "CreateKeyFile() cannot create output file" ) );
     }
+
+    s_EntityCoordinates.clear();
 }
 
 
@@ -58,11 +66,11 @@ void CloseKeyFile()
         fprintf( kdebugFile, "\nENDLIB;\n" );
         fclose( kdebugFile );
     }
+    s_EntityCoordinates.clear();
 }
 
 
 const char* sCurrEntityName = NULL;
-static int s_count;
 
 void OpenKeyFileEntity( const char* aName )
 {
@@ -74,7 +82,7 @@ void OpenKeyFileEntity( const char* aName )
         fprintf( kdebugFile, "STRNAME %s;\n", aName );
     }
     sCurrEntityName = aName;
-    s_count = 0;
+    s_EntityCoordinates.clear();
 }
 
 
@@ -84,20 +92,45 @@ void CloseKeyFileEntity()
         fprintf( kdebugFile, "\nENDSTR %s;\n", sCurrEntityName );
 }
 
-
-void StartKeyFilePolygon(int aCornersCount, int aLayer)
+/* start a polygon entity in key file
+*/
+void StartKeyFilePolygon( int aLayer)
 {
+    s_EntityCoordinates.clear();
     fprintf( kdebugFile, "\nBOUNDARY; LAYER %d;  DATATYPE 0;\n", aLayer );
-    fprintf( kdebugFile, "   XY %d;\n", aCornersCount );
-    s_count = 0;
 }
 
-void EndKeyFileElement()
+/* add a polygon corner to the current polygon entity in key file
+*/
+void AddKeyFilePointXY( int aXcoord, int aYcoord)
 {
-    if ( s_count == 1 )
-        fprintf( kdebugFile, "\n");
-    fprintf( kdebugFile, "\nENDEL;\n" );
-    s_count = 0;
+    kfcoord coord;
+    coord.x = aXcoord;
+    coord.y = aYcoord;
+    s_EntityCoordinates.push_back( coord );
+}
+
+
+/* Close a polygon entity in key file
+ * write the entire polygon data to the file
+*/
+void EndKeyFilePolygon()
+{
+    // Polygon must be closed: test for that and close it if needed
+    if( s_EntityCoordinates.size() )
+    {
+        if( s_EntityCoordinates.back().x != s_EntityCoordinates[0].x
+            || s_EntityCoordinates.back().y != s_EntityCoordinates[0].y )
+            s_EntityCoordinates.push_back( s_EntityCoordinates[0] );
+    }
+
+    fprintf( kdebugFile, "   XY %d;\n", s_EntityCoordinates.size() );
+
+    for( unsigned ii = 0; ii < s_EntityCoordinates.size(); ii ++ )
+        fprintf( kdebugFile, "   X %d; Y %d;\n",
+            s_EntityCoordinates[ii].x, s_EntityCoordinates[ii].y );
+    fprintf( kdebugFile, "ENDEL;\n" );
+    s_EntityCoordinates.clear();
 }
 
 void CopyPolygonsFromFilledPolysListToKeyFile( ZONE_CONTAINER* aZone, int aLayer )
@@ -106,30 +139,15 @@ void CopyPolygonsFromFilledPolysListToKeyFile( ZONE_CONTAINER* aZone, int aLayer
         return;
 
     unsigned corners_count = aZone->m_FilledPolysList.size();
-    int      count = 0;
     unsigned ic    = 0;
-    CPolyPt* corner;
-
     while( ic < corners_count )
     {
-        // Count corners:
-        count = 0;
-        for( unsigned ii = ic; ii < corners_count; ii++ )
-        {
-            corner = &aZone->m_FilledPolysList[ii];
-            count++;
-            if( corner->end_contour )
-                break;
-        }
 
-        // write corners:
-        StartKeyFilePolygon( count+1, aLayer );
-        corner = &aZone->m_FilledPolysList[ic];
-        int startpointX = corner->x;
-        int startpointY = corner->y;
+        // write polygon:
+        StartKeyFilePolygon( aLayer );
         for( ; ic < corners_count; ic++ )
         {
-            corner = &aZone->m_FilledPolysList[ic];
+            CPolyPt* corner = &aZone->m_FilledPolysList[ic];
             AddKeyFilePointXY( corner->x, corner->y );
             if( corner->end_contour )
             {
@@ -137,21 +155,8 @@ void CopyPolygonsFromFilledPolysListToKeyFile( ZONE_CONTAINER* aZone, int aLayer
                 break;
             }
         }
-        // Close polygon:
-        AddKeyFilePointXY( startpointX, startpointY );
-        EndKeyFileElement();
+        EndKeyFilePolygon();
     }
-}
-
-void AddKeyFilePointXY( int aXcoord, int aYcoord)
-{
-    if ( s_count >= 2 )
-    {
-        s_count = 0;
-        fprintf( kdebugFile, "\n");
-    }
-    fprintf( kdebugFile, "   X %d; Y %d;", aXcoord, aYcoord );
-    s_count ++;
 }
 
 #endif

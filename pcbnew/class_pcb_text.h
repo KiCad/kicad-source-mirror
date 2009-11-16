@@ -5,6 +5,7 @@
 #define CLASS_PCB_TEXT_H
 
 #include "base_struct.h"
+#include "polyline.h"
 
 class TEXTE_PCB : public BOARD_ITEM, public EDA_TextStruct
 {
@@ -109,6 +110,23 @@ public:
     {
         return wxT("PTEXT");
     }
+
+    /** Function TransformShapeWithClearanceToPolygon
+     * Convert the track shape to a closed polygon
+     * Used in filling zones calculations
+     * Circles and arcs are approximated by segments
+     * @param aCornerBuffer = a buffer to store the polygon
+     * @param aClearanceValue = the clearance around the pad
+     * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+     * @param aCorrectionFactor = the correction to apply to circles radius to keep
+     * clearance when the circle is approximated by segment bigger or equal
+     * to the real clearance value (usually near from 1.0)
+     */
+    void TransformShapeWithClearanceToPolygon(
+        std::vector <CPolyPt>& aCornerBuffer,
+        int                    aClearanceValue,
+        int                    aCircleToSegmentsCount,
+        double                 aCorrectionFactor );
 
 #if defined(DEBUG)
     /**

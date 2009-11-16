@@ -4,6 +4,7 @@
 
 #ifndef CLASS_DRAWSEGMENT_H
 #define CLASS_DRAWSEGMENT_H
+#include "polyline.h"
 
 class DRAWSEGMENT : public BOARD_ITEM
 {
@@ -15,8 +16,8 @@ public:
     int     m_Shape;            // Shape: line, Circle, Arc
     int     m_Type;             // Used in complex associations ( Dimensions.. )
     int     m_Angle;            // Used only for Arcs: Arc angle in 1/10 deg
-    wxPoint m_BezierC1;		// Bezier Control Point 1
-    wxPoint m_BezierC2;		// Bezier Control Point 1
+    wxPoint m_BezierC1;         // Bezier Control Point 1
+    wxPoint m_BezierC2;         // Bezier Control Point 1
 
     std::vector<wxPoint> m_BezierPoints;
 public:
@@ -42,13 +43,13 @@ public:
      * Function GetStart
      * returns the starting point of the graphic
      */
-    wxPoint GetStart() const;
+    wxPoint      GetStart() const;
 
     /**
      * Function GetEnd
      * returns the ending point of the graphic
      */
-    wxPoint GetEnd() const;
+    wxPoint      GetEnd() const;
 
     /**
      * Function Save
@@ -56,15 +57,15 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool    Save( FILE* aFile ) const;
+    bool         Save( FILE* aFile ) const;
 
-    bool    ReadDrawSegmentDescr( FILE* File, int* LineNum );
+    bool         ReadDrawSegmentDescr( FILE* File, int* LineNum );
 
-    void    Copy( DRAWSEGMENT* source );
+    void         Copy( DRAWSEGMENT* source );
 
 
-    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                      int aDrawMode, const wxPoint& offset = ZeroOffset );
+    void         Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                       int aDrawMode, const wxPoint& offset = ZeroOffset );
 
     /**
      * Function DisplayInfo
@@ -73,7 +74,7 @@ public:
      * Is virtual from EDA_BaseStruct.
      * @param frame A WinEDA_BasePcbFrame in which to print status information.
      */
-    virtual void    DisplayInfo( WinEDA_DrawFrame* frame );
+    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
 
 
     /**
@@ -82,7 +83,7 @@ public:
      * @param ref_pos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( const wxPoint& ref_pos );
+    bool         HitTest( const wxPoint& ref_pos );
 
     /**
      * Function HitTest (overlayed)
@@ -91,7 +92,7 @@ public:
      * @param refPos the given EDA_Rect to test
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( EDA_Rect& refArea );
+    bool         HitTest( EDA_Rect& refArea );
 
     /**
      * Function GetClass
@@ -116,16 +117,18 @@ public:
         return hypot( delta.x, delta.y );
     }
 
+
     /**
      * Function Move
      * move this object.
      * @param const wxPoint& aMoveVector - the move vector for this object.
      */
-    virtual void Move(const wxPoint& aMoveVector)
+    virtual void Move( const wxPoint& aMoveVector )
     {
         m_Start += aMoveVector;
-        m_End += aMoveVector;
+        m_End   += aMoveVector;
     }
+
 
     /**
      * Function Rotate
@@ -133,19 +136,37 @@ public:
      * @param const wxPoint& aRotCentre - the rotation point.
      * @param aAngle - the rotation angle in 0.1 degree.
      */
-    virtual void Rotate(const wxPoint& aRotCentre, int aAngle);
+    virtual void Rotate( const wxPoint& aRotCentre, int aAngle );
 
     /**
      * Function Flip
      * Flip this object, i.e. change the board side for this object
      * @param const wxPoint& aCentre - the rotation point.
      */
-    virtual void Flip(const wxPoint& aCentre );
+    virtual void Flip( const wxPoint& aCentre );
+
+    /** Function TransformShapeWithClearanceToPolygon
+     * Convert the track shape to a closed polygon
+     * Used in filling zones calculations
+     * Circles and arcs are approximated by segments
+     * @param aCornerBuffer = a buffer to store the polygon
+     * @param aClearanceValue = the clearance around the pad
+     * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+     * @param aCorrectionFactor = the correction to apply to circles radius to keep
+     * clearance when the circle is approxiamted by segment bigger or equal
+     * to the real clearance value (usually near from 1.0)
+     */
+    void         TransformShapeWithClearanceToPolygon(
+        std::vector <CPolyPt>& aCornerBuffer,
+        int                    aClearanceValue,
+        int
+                               aCircleToSegmentsCount,
+        double                 aCorrectionFactor );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os );
-#endif
 
+#endif
 };
 
 

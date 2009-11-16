@@ -38,9 +38,9 @@ void CloseKeyFileEntity();
 /* polygon creations:
 */
 void CopyPolygonsFromFilledPolysListToKeyFile( ZONE_CONTAINER* aZone, int aLayer);
-void StartKeyFilePolygon(int aCornersCount, int aLayer);
+void StartKeyFilePolygon( int aLayer);
 void AddKeyFilePointXY( int aXcoord, int aYcoord);
-void EndKeyFileElement();
+void EndKeyFilePolygon();
 
 #endif  // CREATE_KBOOL_KEY_FILES
 

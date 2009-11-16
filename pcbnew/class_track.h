@@ -6,6 +6,7 @@
 #define CLASS_TRACK_H
 
 #include "base_struct.h"
+#include "polyline.h"
 
 
 // Via attributes (m_Shape parmeter)
@@ -148,7 +149,7 @@ public:
     /* divers */
     int Shape() const { return m_Shape & 0xFF; }
 
-    /** Function TransformTrackWithClearanceToPolygon
+    /** Function TransformShapeWithClearanceToPolygon
      * Convert the track shape to a closed polygon
      * Used in filling zones calculations
      * Circles (vias) and arcs (ends of tracks) are approximated by segments
@@ -159,7 +160,7 @@ public:
      * clearance when the circle is approxiamted by segment bigger or equal
      * to the real clearance value (usually near from 1.0)
      */
-    void TransformTrackWithClearanceToPolygon( std::vector <wxPoint>& aCornerBuffer,
+    void TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
                                                int                    aClearanceValue,
                                                int                    aCircleToSegmentsCount,
                                                double                 aCorrectionFactor );
