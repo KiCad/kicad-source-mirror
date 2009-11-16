@@ -1,4 +1,5 @@
 //////////////////////////////////////
+
 // Name:        3d_draw.cpp
 //////////////////////////////////////
 
@@ -18,26 +19,35 @@
 #error Please set wxUSE_GLCANVAS to 1 in setup.h.
 #endif
 
-
-static void Draw3D_FilledCircle( double posx, double posy, double rayon,
-                                 double hole_rayon, double zpos );
-static void Draw3D_FilledSegment( double startx, double starty,
-                                  double endx, double endy,
-                                  double width, double zpos );
-static void Draw3D_FilledCylinder( double posx, double posy, double rayon,
-                                   double height, double zpos );
-static void Draw3D_FilledSegmentWithHole( double startx, double starty,
-                                          double endx, double endy,
-                                          double width, double holex,
-                                          double holey, double holeradius,
-                                          double zpos );
-static void Draw3D_ArcSegment( double startx, double starty, double endx,
-                               double endy, double width, double zpos );
-static void Draw3D_CircleSegment( double startx, double starty, double endx,
+static void    Draw3D_FilledCircle( double posx, double posy, double rayon,
+                                    double hole_rayon, double zpos );
+static void    Draw3D_FilledSegment( double startx, double starty,
+                                     double endx, double endy,
+                                     double width, double zpos );
+static void    Draw3D_FilledCylinder( double posx, double posy, double rayon,
+                                      double height, double zpos );
+static void    Draw3D_FilledSegmentWithHole( double startx, double starty,
+                                             double endx, double endy,
+                                             double width, double holex,
+                                             double holey, double holeradius,
+                                             double zpos );
+static void    Draw3D_ArcSegment( double startx, double starty, double endx,
                                   double endy, double width, double zpos );
+static void    Draw3D_CircleSegment( double startx, double starty, double endx,
+                                     double endy, double width, double zpos );
 static int     Get3DLayerEnable( int act_layer );
 static GLfloat Get3DLayerSide( int act_layer );
 
+
+#ifndef CALLBACK
+#define CALLBACK
+#endif
+
+// CALLBACK functions for GLU_TESS
+void CALLBACK tessBeginCB( GLenum which );
+void CALLBACK tessEndCB();
+void CALLBACK tessErrorCB( GLenum errorCode );
+void CALLBACK tessVertexCB( const GLvoid* data );
 
 void Pcb3D_GLCanvas::Redraw( bool finish )
 {
@@ -95,10 +105,10 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     WinEDA_BasePcbFrame* pcbframe = m_Parent->m_Parent;
     BOARD* pcb = pcbframe->GetBoard();
     TRACK* track;
-    SEGZONE* segzone;
+    SEGZONE*             segzone;
     int ii;
 
-    wxBusyCursor dummy;
+    wxBusyCursor         dummy;
 
     m_gllist = glGenLists( 1 );
 
@@ -218,11 +228,40 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
 
     if( g_Parm_3D_Visu.m_Draw3DZone )
     {
-        // Draw segments used to fill copper areas
+        // Draw segments used to fill copper areas. outdated!
         for( segzone = pcb->m_Zone; segzone != NULL; segzone = segzone->Next() )
         {
             if( segzone->Type() == TYPE_ZONE )
                 Draw3D_Track( segzone );
+        }
+
+        // Draw new segments
+        for( ii = 0; ii < pcb->GetAreaCount(); ii++ )
+        {
+            ZONE_CONTAINER* curr_zone = pcb->GetArea( ii );
+            if( curr_zone->m_FillMode == 0 )
+            {   // solid polygons only are used to fill areas
+                if( curr_zone->m_FilledPolysList.size() > 3 )
+                {
+                    Draw3D_SolidPolygonsInZones( curr_zone );
+                }
+            }
+            else
+            {
+                // segments are used to fill ares
+                for( unsigned iseg = 0; iseg < curr_zone->m_FillSegmList.size(); iseg++ )
+                {
+                    SEGZONE dummysegment( pcb );
+                    dummysegment.SetLayer( curr_zone->GetLayer() );
+                    dummysegment.m_Width = curr_zone->m_ZoneMinThickness;
+
+                    dummysegment.m_Start.x = curr_zone->m_FillSegmList[iseg].m_Start.x;
+                    dummysegment.m_Start.y = curr_zone->m_FillSegmList[iseg].m_Start.y;
+                    dummysegment.m_End.x   = curr_zone->m_FillSegmList[iseg].m_End.x;
+                    dummysegment.m_End.y   = curr_zone->m_FillSegmList[iseg].m_End.y;
+                    Draw3D_Track( &dummysegment );
+                }
+            }
         }
 
         // Draw copper areas outlines
@@ -338,6 +377,67 @@ void Pcb3D_GLCanvas::Draw3D_Track( TRACK* track )
     fx = track->m_End.x * g_Parm_3D_Visu.m_BoardScale;
     fy = track->m_End.y * g_Parm_3D_Visu.m_BoardScale;
     Draw3D_FilledSegment( ox, -oy, fx, -fy, w, zpos );
+}
+
+
+/** Function Draw3D_SolidPolygonsInZones
+ * draw all solid polygons used as filles areas in a zone
+ * @param aZone_c = the zone to draw
+*/
+void Pcb3D_GLCanvas::Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* zone_c )
+{
+    double zpos;
+    int    layer = zone_c->GetLayer();
+
+    if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
+        return;
+
+    int color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
+
+    if( layer == LAST_COPPER_LAYER )
+        layer = g_Parm_3D_Visu.m_Layers - 1;
+    zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
+    g_Parm_3D_Visu.m_ActZpos = zpos;
+
+
+    SetGLColor( color );
+    glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0 );
+
+    GLUtesselator* tess = gluNewTess();
+    gluTessCallback( tess, GLU_TESS_BEGIN, ( void (CALLBACK*)() )tessBeginCB );
+    gluTessCallback( tess, GLU_TESS_END, ( void (CALLBACK*)() )tessEndCB );
+    gluTessCallback( tess, GLU_TESS_ERROR, ( void (CALLBACK*)() )tessErrorCB );
+    gluTessCallback( tess, GLU_TESS_VERTEX, ( void (CALLBACK*)() )tessVertexCB );
+
+    GLdouble v_data[3];
+
+    //gluTessProperty(tess, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_NONZERO);
+    
+    // Draw solid areas contained in this zone
+    int      StartContour = 1;
+    for( unsigned ii = 0; ii < zone_c->m_FilledPolysList.size(); ii++ )
+    {
+        if( StartContour == 1 )
+        {
+            gluTessBeginPolygon( tess, 0 );
+            gluTessBeginContour( tess );
+            StartContour = 0;
+        }
+        v_data[0] = zone_c->m_FilledPolysList[ii].x * g_Parm_3D_Visu.m_BoardScale;
+        v_data[1] = zone_c->m_FilledPolysList[ii].y * g_Parm_3D_Visu.m_BoardScale * -1;
+        v_data[2] = zpos;
+        D( printf( "Tess gluTessVertex(%f,%f,%f)\n", v_data[0], v_data[1], v_data[2] ); )
+        gluTessVertex( tess, v_data, &zone_c->m_FilledPolysList[ii] );
+
+        if( zone_c->m_FilledPolysList[ii].end_contour == 1 )
+        {
+            gluTessEndContour( tess );
+            gluTessEndPolygon( tess );
+            StartContour = 1;
+        }
+    }
+
+    gluDeleteTess( tess );
 }
 
 
@@ -1176,4 +1276,51 @@ static GLfloat Get3DLayerSide( int act_layer )
        || ( act_layer == SOLDERMASK_N_CU ) )
         nZ = -1.0;
     return nZ;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// GLU_TESS CALLBACKS
+///////////////////////////////////////////////////////////////////////////////
+
+void CALLBACK tessBeginCB( GLenum which )
+{
+    glBegin( which );
+
+    // DEBUG //
+    D( printf( "Tess glBegin()\n" ); )
+}
+
+
+void CALLBACK tessEndCB()
+{
+    glEnd();
+
+    // DEBUG //
+    D( printf( "Tess glEnd()\n" ); )
+}
+
+
+void CALLBACK tessVertexCB( const GLvoid* data )
+{
+    // cast back to double type
+    const CPolyPt* ptr = (const CPolyPt*) data;
+
+    glVertex3f( (*ptr).x * g_Parm_3D_Visu.m_BoardScale,
+               (*ptr).y * g_Parm_3D_Visu.m_BoardScale * -1,
+               g_Parm_3D_Visu.m_ActZpos );
+
+    // DEBUG //
+    D( printf( "TessVertex glVertex3d(%d,%d,%f)\n", (*ptr).x, (*ptr).y, g_Parm_3D_Visu.m_ActZpos ); )
+}
+
+
+void CALLBACK tessErrorCB( GLenum errorCode )
+{
+    const GLubyte* errorStr;
+
+    errorStr = gluErrorString( errorCode );
+
+    // DEBUG //
+    D( printf( "Tess ERROR: %s\n", errorStr ); )
 }

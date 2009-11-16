@@ -123,6 +123,7 @@ public:
     double    m_BoardScale;     /* Normalization scale for coordinates:
                                  * when scaled between -1.0 and +1.0 */
     double    m_LayerZcoord[32];
+	double	  m_ActZpos;	
 public: Info_3D_Visu();
     ~Info_3D_Visu();
 };
@@ -164,6 +165,11 @@ public:
     void   InitGL();
     void   SetLights();
     void   Draw3D_Track( TRACK* track );
+    /** Function Draw3D_SolidPolygonsInZones
+     * draw all solid polygons used as filles areas in a zone
+     * @param aZone_c = the zone to draw
+    */
+	void   Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone_c );
     void   Draw3D_Via( SEGVIA* via );
     void   Draw3D_DrawSegment( DRAWSEGMENT* segment );
     void   Draw3D_DrawText( TEXTE_PCB* text );
