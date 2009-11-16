@@ -42,7 +42,7 @@ static const int pin_orientation_codes[] =
 
 
 #define PIN_ORIENTATION_CNT  ( sizeof( pin_orientation_names ) / \
-                               sizeof( wxString* ) )
+                               sizeof( wxString ) )
 
 
 static const wxString pin_style_names[] =
@@ -57,7 +57,7 @@ static const wxString pin_style_names[] =
 };
 
 
-#define PIN_STYLE_CNT  ( sizeof( pin_style_names ) / sizeof( wxString* ) )
+#define PIN_STYLE_CNT  ( sizeof( pin_style_names ) / sizeof( wxString ) )
 
 
 static const int pin_style_codes[] =
@@ -89,7 +89,7 @@ static const wxString pin_electrical_type_names[] =
 
 
 #define PIN_ELECTRICAL_TYPE_CNT ( sizeof( pin_electrical_type_names ) / \
-                                  sizeof( wxString* ) )
+                                  sizeof( wxString ) )
 
 
 const wxChar* MsgPinElectricType[] =
@@ -1609,8 +1609,9 @@ void LIB_PIN::DisplayInfo( WinEDA_DrawFrame* frame )
     frame->AppendMsgPanel( _( "Number" ), Text, DARKCYAN );
 
     frame->AppendMsgPanel( _( "Type" ),
-                           pin_electrical_type_names[ m_PinType ], RED );
-    Text = pin_style_names[ GetStyleCodeIndex( m_PinShape ) ];
+                           wxGetTranslation(pin_electrical_type_names[ m_PinType ]),
+                            RED );
+    Text = wxGetTranslation(pin_style_names[ GetStyleCodeIndex( m_PinShape ) ]);
     frame->AppendMsgPanel( _( "Style" ), Text, BLUE );
     if( IsVisible() )
         Text = _( "Yes" );
@@ -1623,7 +1624,7 @@ void LIB_PIN::DisplayInfo( WinEDA_DrawFrame* frame )
                                   EESCHEMA_INTERNAL_UNIT, true );
     frame->AppendMsgPanel( _( "Length" ), Text, MAGENTA );
 
-    Text = pin_orientation_names[ GetOrientationCodeIndex( m_Orient ) ];
+    Text = wxGetTranslation(pin_orientation_names[ GetOrientationCodeIndex( m_Orient ) ]);
     frame->AppendMsgPanel( _( "Orientation" ), Text, DARKMAGENTA );
 }
 
@@ -1643,7 +1644,10 @@ EDA_Rect LIB_PIN::GetBoundingBox()
 
 wxArrayString LIB_PIN::GetOrientationNames( void )
 {
-    return wxArrayString( PIN_ORIENTATION_CNT, pin_orientation_names );
+    wxArrayString tmp;
+    for( unsigned ii = 0; ii < PIN_ORIENTATION_CNT; ii++ )
+        tmp.Add(wxGetTranslation(pin_orientation_names[ii]));
+    return tmp;
 }
 
 
@@ -1672,7 +1676,10 @@ int LIB_PIN::GetOrientationCodeIndex( int code )
 
 wxArrayString LIB_PIN::GetStyleNames( void )
 {
-    return wxArrayString( PIN_STYLE_CNT, pin_style_names );
+    wxArrayString tmp;
+    for( unsigned ii = 0; ii < PIN_STYLE_CNT; ii++ )
+        tmp.Add(wxGetTranslation(pin_style_names[ii]));
+    return tmp;
 }
 
 
@@ -1701,5 +1708,8 @@ int LIB_PIN::GetStyleCodeIndex( int code )
 
 wxArrayString LIB_PIN::GetElectricalTypeNames( void )
 {
-    return wxArrayString( PIN_ELECTRICAL_TYPE_CNT, pin_electrical_type_names );
+    wxArrayString tmp;
+    for( unsigned ii = 0; ii < PIN_ELECTRICAL_TYPE_CNT; ii++ )
+        tmp.Add(wxGetTranslation(pin_electrical_type_names[ii]));
+    return tmp;
 }
