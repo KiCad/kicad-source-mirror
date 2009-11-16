@@ -540,17 +540,19 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
       Within the algorithm all input data is multiplied with DGRID, and the result
       is rounded to an integer.
    */
-    double DGRID = 1.0;     // round coordinate X or Y value in calculations to this (initial value = 1000.0 in kbool example)
+    double DGRID = 1000.0;     // round coordinate X or Y value in calculations to this (initial value = 1000.0 in kbool example)
                             // kbool uses DGRID to convert float user units to integer
                             // kbool unit = (int)(user unit * DGRID)
                             // Note: in kicad, coordinates are already integer so DGRID could be set to 1
-                            // we choose DGRID = 1.0
+                            // we can choose 1.0,
+                            // but choose DGRID = 1000.0 solves some filling problems
+//                             (perhaps because this allows a better precision in kbool internal calculations
 
-    double MARGE = 10.0;            // snap with in this range points to lines in the intersection routines
+    double MARGE = 1.0/DGRID;      // snap with in this range points to lines in the intersection routines
                                     // should always be >= 1/DGRID  a  MARGE >= 10/DGRID is ok
                                     // this is also used to remove small segments and to decide when
                                     // two segments are in line. ( initial value = 0.001 )
-                                    // For kicad we choose MARGE = 10, with DGRID = 1.0
+                                    // For kicad we choose MARGE = 1/DGRID
 
     double CORRECTIONFACTOR = 0.0;      // correct the polygons by this number: used in BOOL_CORRECTION operation
                                         // this operation shrinks a polygon if CORRECTIONFACTOR < 0
@@ -569,7 +571,13 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
         Another scaling with Grid is applied on top of it to create space in the integer number for
 		even smaller numbers.
    */
-    int GRID = 1000;       // initial value = 10000 in kbool example
+    int GRID = (int) 10000/DGRID;       // initial value = 10000 in kbool example
+                                        // But we use 10000/DGRID because the scalling is made
+                                        // by DGRID on integer pcbnew units and
+                                        // the global scalling ( GRID*DGRID) must be < 30000 to avoid
+                                        // overflow in calculations (made in long long in kbool)
+    if ( GRID <= 1 )    // Cannot be null!
+        GRID = 1;
 
     aBooleng->SetMarge( MARGE );
     aBooleng->SetGrid( GRID );
@@ -579,6 +587,7 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
     aBooleng->SetSmoothAber( SMOOTHABER );
     aBooleng->SetMaxlinemerge( MAXLINEMERGE );
     aBooleng->SetRoundfactor( ROUNDFACTOR );
+    aBooleng->SetWindingRule( TRUE );           // This is the default kbool value
 
     if( aConvertHoles )
     {
