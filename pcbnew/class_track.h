@@ -6,7 +6,7 @@
 #define CLASS_TRACK_H
 
 #include "base_struct.h"
-#include "polyline.h"
+#include "PolyLine.h"
 
 
 // Via attributes (m_Shape parmeter)

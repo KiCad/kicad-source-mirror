@@ -5,7 +5,7 @@
 #define CLASS_PCB_TEXT_H
 
 #include "base_struct.h"
-#include "polyline.h"
+#include "PolyLine.h"
 
 class TEXTE_PCB : public BOARD_ITEM, public EDA_TextStruct
 {

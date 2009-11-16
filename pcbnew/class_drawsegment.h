@@ -4,7 +4,7 @@
 
 #ifndef CLASS_DRAWSEGMENT_H
 #define CLASS_DRAWSEGMENT_H
-#include "polyline.h"
+#include "PolyLine.h"
 
 class DRAWSEGMENT : public BOARD_ITEM
 {

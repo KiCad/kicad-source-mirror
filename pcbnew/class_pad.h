@@ -5,7 +5,7 @@
 class Pcb3D_GLCanvas;
 
 #include "pad_shapes.h"
-#include "polyline.h"
+#include "PolyLine.h"
 
 /* Default layers used for pads, according to the pad type.
  * this is default values only, they can be changed for a given pad
