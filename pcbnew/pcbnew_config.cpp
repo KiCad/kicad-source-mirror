@@ -1,8 +1,6 @@
-/***********************************/
-/** pcbcfg() : configuration      **/
-/***********************************/
-
-/* lit ou met a jour la configuration de PCBNEW */
+/****************************************/
+/** pcbnew_config.cpp : configuration  **/
+/****************************************/
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -24,12 +22,10 @@
 #include "dialog_general_options.h"
 
 
-
 #define HOTKEY_FILENAME wxT( "pcbnew" )
 
-/***********************************************************/
+
 void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
-/***********************************************************/
 {
     int        id = event.GetId();
     wxPoint    pos;
@@ -54,7 +50,7 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
         DisplayDialogLayerSetup( this );
         break;
 
-    case ID_CONFIG_REQ:             // Creation de la fenetre de configuration
+    case ID_CONFIG_REQ:
         InstallConfigFrame( pos );
         break;
 
@@ -147,13 +143,10 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
 }
 
 
-/***************************************************************/
-bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose )
-/***************************************************************/
-
 /*
  * Read the hotkey files config for pcbnew and module_edit
  */
+bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose )
 {
     wxString FullFileName = ReturnHotkeyConfigFilePath(
         g_ConfigFileLocationChoice );
@@ -183,7 +176,7 @@ bool WinEDA_PcbFrame::Read_Config( const wxString& projectFileName )
 
     wxGetApp().RemoveLibraryPath( g_UserLibDirBuffer );
 
-    /* Init des valeurs par defaut */
+    /* Initialize default values. */
     g_LibName_List.Clear();
 
     wxGetApp().ReadProjectConfig( fn.GetFullPath(),
@@ -217,10 +210,7 @@ bool WinEDA_PcbFrame::Read_Config( const wxString& projectFileName )
 }
 
 
-/**********************************************************/
 void WinEDA_PcbFrame::Update_config( wxWindow* displayframe )
-/***********************************************************/
-/* enregistrement de la config */
 {
     wxFileName fn;
 
@@ -234,7 +224,6 @@ void WinEDA_PcbFrame::Update_config( wxWindow* displayframe )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    /* ecriture de la configuration */
     wxGetApp().WriteProjectConfig( fn.GetFullPath(), wxT( "/pcbnew" ),
                                    ParamCfgList );
 }

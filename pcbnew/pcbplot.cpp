@@ -1,6 +1,6 @@
-/***********************/
-/* fichier pcbplot.cpp */
-/***********************/
+/***************/
+/* pcbplot.cpp */
+/***************/
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -25,7 +25,7 @@
 #define OPTKEY_ALWAYS_PRINT_PADS  wxT( "PlotAlwaysPads" )
 #define OPTKEY_OUTPUT_FORMAT      wxT( "PlotOutputFormat" )
 
-// Define min et max reasonnable values for print scale
+// Define min and max reasonable values for print scale
 #define MIN_SCALE 0.01
 #define MAX_SCALE 100.0
 
@@ -130,15 +130,15 @@ public:
 
         // change the A4 to the simple postscript, according to the
         // PlotFormat enum
-	switch (radioNdx)
-	{
-	case 3:
+    switch (radioNdx)
+    {
+    case 3:
             radioNdx = PLOT_FORMAT_POST;
-	    break;
-	case 4:
-	    radioNdx = PLOT_FORMAT_DXF;
-	    break;
-	}
+        break;
+    case 4:
+        radioNdx = PLOT_FORMAT_DXF;
+        break;
+    }
 
         return PlotFormat( radioNdx );
     }
@@ -219,7 +219,7 @@ void WinEDA_PlotFrame::OnInitDialog( wxInitDialogEvent& event )
         wxT( "Gerber" ),
         wxT( "Postscript" ),
         wxT( "Postscript A4" ),
-	wxT( "DXF Export" )
+        wxT( "DXF Export" )
     };
 
     m_PlotFormatOpt = new wxRadioBox( this, ID_SEL_PLOT_FORMAT,
@@ -231,25 +231,24 @@ void WinEDA_PlotFrame::OnInitDialog( wxInitDialogEvent& event )
     if( config )
     {
         config->Read( OPTKEY_OUTPUT_FORMAT, &g_pcb_plot_options.PlotFormat );
-        config->Read( OPTKEY_PLOT_LINEWIDTH_VALUE, &g_pcb_plot_options.PlotLine_Width );
+        config->Read( OPTKEY_PLOT_LINEWIDTH_VALUE,
+                      &g_pcb_plot_options.PlotLine_Width );
     }
 
     m_PlotFormatOpt->SetSelection( g_pcb_plot_options.PlotFormat );
 
-
-    // Creation des menus d'option du format HPGL
     m_HPGL_OptionsBox = new wxStaticBox( this, wxID_ANY, _( "HPGL Options:" ) );
     wxStaticBoxSizer* HPGL_OptionsBoxSizer =
         new wxStaticBoxSizer( m_HPGL_OptionsBox, wxVERTICAL );
     MidRightBoxSizer->Add( HPGL_OptionsBoxSizer, 0, wxGROW | wxALL, 5 );
 
-    m_HPGLPenSizeOpt = new WinEDA_ValueCtrl( this, _( "Pen Size" ),
+    m_HPGLPenSizeOpt = new WinEDA_ValueCtrl( this, _( "Pen size" ),
                                              g_pcb_plot_options.HPGL_Pen_Diam,
                                              g_UnitMetric,
                                              HPGL_OptionsBoxSizer,
                                              UNITS_MILS );
 
-    // unites standards = cm  pour vitesse plume en HPGL
+    // Set units to cm for standard HPGL pen speed.
     m_HPGLPenSpeedOpt = new WinEDA_ValueCtrl( this, _( "Pen Speed (cm/s)" ),
                                               g_pcb_plot_options.HPGL_Pen_Speed, CENTIMETRE,
                                               HPGL_OptionsBoxSizer, 1 );
@@ -257,14 +256,14 @@ void WinEDA_PlotFrame::OnInitDialog( wxInitDialogEvent& event )
     m_HPGLPenSpeedOpt->SetToolTip( _( "Set pen speed in cm/s" ) );
 
     m_HPGLPenOverlayOpt = new WinEDA_ValueCtrl( this, _( "Pen ovr" ),
-                                                  g_pcb_plot_options.HPGL_Pen_Recouvrement,
-                                                  g_UnitMetric,
-                                                  HPGL_OptionsBoxSizer,
-                                                  UNITS_MILS );
+                                                g_pcb_plot_options.HPGL_Pen_Recouvrement,
+                                                g_UnitMetric,
+                                                HPGL_OptionsBoxSizer,
+                                                UNITS_MILS );
 
     m_HPGLPenOverlayOpt->SetToolTip( _( "Set plot overlay for filling" ) );
 
-    m_LinesWidth = new WinEDA_ValueCtrl( this, _( "Lines Width" ),
+    m_LinesWidth = new WinEDA_ValueCtrl( this, _( "Line width" ),
                                          g_pcb_plot_options.PlotLine_Width,
                                          g_UnitMetric,
                                          MidRightBoxSizer,
@@ -300,7 +299,7 @@ mode and plot pads outlines on silk screen layers" ) );
         config->Read( OPTKEY_YFINESCALE_ADJ, &m_YScaleAdjust );
     }
 
-    // Test for a reasonnable scale value. Set to 1 if problem
+    // Test for a reasonable scale value. Set to 1 if problem
     if( m_XScaleAdjust < MIN_SCALE || m_YScaleAdjust < MIN_SCALE
         || m_XScaleAdjust > MAX_SCALE || m_YScaleAdjust > MAX_SCALE )
         m_XScaleAdjust = m_YScaleAdjust = 1.0;
@@ -338,7 +337,7 @@ scale plotting" ) );
     button = new wxButton( this, wxID_CANCEL, _( "Close" ) );
     RightBoxSizer->Add( button, 0, wxGROW | wxALL, 5 );
 
-    // Creation de la liste des layers
+    // Create layer list.
     wxBoxSizer* OneColumnLayerBoxSizer = new wxBoxSizer( wxVERTICAL );
     LayersBoxSizer->Add( OneColumnLayerBoxSizer, 0, wxGROW | wxALL, 5 );
 
@@ -381,18 +380,18 @@ scale plotting" ) );
 
     m_Exclude_Edges_Pcb = new wxCheckBox( this,
                                           ID_EXCLUDE_EDGES_PCB,
-                                          _( "Exclude Edges_Pcb layer" ) );
+                                          _( "Exclude pcb edge layer" ) );
 
     m_Exclude_Edges_Pcb->SetValue( g_pcb_plot_options.Exclude_Edges_Pcb );
     m_Exclude_Edges_Pcb->SetToolTip(
-        _( "Exclude contents of Edges_Pcb layer from all other layers" ) );
+        _( "Exclude contents of the pcb edge layer from all other layers" ) );
     LeftBoxSizer->Add( m_Exclude_Edges_Pcb, 0, wxGROW | wxALL, 1 );
 
     // Option to plot page references:
     if( m_Parent->m_Print_Sheet_Ref )
     {
         m_Plot_Sheet_Ref = new wxCheckBox( this, ID_PRINT_REF,
-                                           _( "Print sheet ref" ) );
+                                           _( "Print sheet reference" ) );
 
         m_Plot_Sheet_Ref->SetValue( g_pcb_plot_options.Plot_Frame_Ref );
         LeftBoxSizer->Add( m_Plot_Sheet_Ref, 0, wxGROW | wxALL, 1 );
@@ -406,7 +405,8 @@ scale plotting" ) );
                                                 _( "Print pads on silkscreen" ) );
 
     if( config )
-        config->Read( OPTKEY_PADS_ON_SILKSCREEN, &g_pcb_plot_options.PlotPadsOnSilkLayer );
+        config->Read( OPTKEY_PADS_ON_SILKSCREEN,
+                      &g_pcb_plot_options.PlotPadsOnSilkLayer );
 
     m_Plot_Pads_on_Silkscreen->SetValue( &g_pcb_plot_options.PlotPadsOnSilkLayer );
     m_Plot_Pads_on_Silkscreen->SetToolTip(
@@ -416,7 +416,8 @@ scale plotting" ) );
     m_Force_Plot_Pads = new wxCheckBox( this, ID_FORCE_PRINT_PAD,
                                         _( "Always print pads" ) );
     if( config )
-        config->Read( OPTKEY_ALWAYS_PRINT_PADS, &g_pcb_plot_options.Plot_Pads_All_Layers );
+        config->Read( OPTKEY_ALWAYS_PRINT_PADS,
+                      &g_pcb_plot_options.Plot_Pads_All_Layers );
 
     m_Force_Plot_Pads->SetValue( g_pcb_plot_options.Plot_Pads_All_Layers );
     m_Force_Plot_Pads->SetToolTip( _( "Force print/plot pads on ALL layers" ) );
@@ -488,8 +489,8 @@ scale plotting" ) );
     m_Scale_Opt->SetSelection( g_pcb_plot_options.PlotScaleOpt );
     MidLeftBoxSizer->Add( m_Scale_Opt, 0, wxGROW | wxALL, 5 );
 
-    static const wxString list_opt3[3] = { _( "Line" ), _( "Filled" ), _(
-                                               "Sketch" ) };
+    static const wxString list_opt3[3] = { _( "Line" ), _( "Filled" ),
+                                           _( "Sketch" ) };
 
     m_PlotModeOpt = new wxRadioBox( this, ID_PLOT_MODE_OPT, _( "Plot Mode" ),
                                     wxDefaultPosition, wxDefaultSize,
@@ -545,10 +546,11 @@ void WinEDA_PlotFrame::CreateDrillFile( wxCommandEvent& event )
 void WinEDA_PlotFrame::OnSetScaleOpt( wxCommandEvent& event )
 {
     /* Disable sheet reference for scale != 1:1 */
-    bool scale1 = (m_Scale_Opt->GetSelection() == 1);
+    bool scale1 = ( m_Scale_Opt->GetSelection() == 1 );
     m_Plot_Sheet_Ref->Enable( scale1 );
-    if (!scale1)
-	m_Plot_Sheet_Ref->SetValue(false);
+
+    if ( !scale1 )
+        m_Plot_Sheet_Ref->SetValue( false );
 }
 
 void WinEDA_PlotFrame::SetCommands( wxCommandEvent& event )
@@ -661,7 +663,8 @@ void WinEDA_PlotFrame::SaveOptPlot( wxCommandEvent& event )
     g_pcb_plot_options.Sel_Texte_Invisible = m_Plot_Invisible_Text->GetValue();
 
     g_pcb_plot_options.PlotScaleOpt  = m_Scale_Opt->GetSelection();
-    g_pcb_plot_options.DrillShapeOpt = (PCB_Plot_Options::DrillShapeOptT) m_Drill_Shape_Opt->GetSelection();
+    g_pcb_plot_options.DrillShapeOpt =
+        (PCB_Plot_Options::DrillShapeOptT) m_Drill_Shape_Opt->GetSelection();
     g_pcb_plot_options.Plot_Set_MIROIR = m_PlotMirorOpt->GetValue();
     if( g_pcb_plot_options.Plot_Set_MIROIR )
         g_pcb_plot_options.PlotOrient = PLOT_MIROIR;
@@ -682,16 +685,19 @@ void WinEDA_PlotFrame::SaveOptPlot( wxCommandEvent& event )
 
     if( config )
     {
-        config->Write( OPTKEY_EDGELAYER_GERBER, g_pcb_plot_options.Exclude_Edges_Pcb );
+        config->Write( OPTKEY_EDGELAYER_GERBER,
+                       g_pcb_plot_options.Exclude_Edges_Pcb );
         config->Write( OPTKEY_XFINESCALE_ADJ, m_XScaleAdjust );
         config->Write( OPTKEY_YFINESCALE_ADJ, m_YScaleAdjust );
-        config->Write( OPTKEY_PADS_ON_SILKSCREEN, g_pcb_plot_options.PlotPadsOnSilkLayer );
-        config->Write( OPTKEY_ALWAYS_PRINT_PADS, g_pcb_plot_options.Plot_Pads_All_Layers );
+        config->Write( OPTKEY_PADS_ON_SILKSCREEN,
+                       g_pcb_plot_options.PlotPadsOnSilkLayer );
+        config->Write( OPTKEY_ALWAYS_PRINT_PADS,
+                       g_pcb_plot_options.Plot_Pads_All_Layers );
 
         int formatNdx = m_PlotFormatOpt->GetSelection();
         config->Write( OPTKEY_OUTPUT_FORMAT, formatNdx );
-
-        config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE, g_pcb_plot_options.PlotLine_Width );
+        config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE,
+                       g_pcb_plot_options.PlotLine_Width );
 
         wxString layerKey;
         for( int layer = 0;  layer<NB_LAYERS;  ++layer )
@@ -774,13 +780,13 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
         break;
     }
 
-    // Test for a reasonnable scale value
+    // Test for a reasonable scale value
     if( g_pcb_plot_options.Scale < MIN_SCALE )
         DisplayInfoMessage( this,
                             _( "Warning: Scale option set to a very small value" ) );
     if( g_pcb_plot_options.Scale > MAX_SCALE )
         DisplayInfoMessage( this,
-                           _( "Warning: Scale option set to a very large value" ) );
+                            _( "Warning: Scale option set to a very large value" ) );
 
     int mask = 1;
     s_SelectedLayers = 0;
@@ -795,7 +801,7 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
 
             fn = m_Parent->GetScreen()->m_FileName;
 
-            // Calcul du nom du fichier
+            // Create file name.
             fn.SetName( fn.GetName() + wxT( "-" ) +
                         board->GetLayerName( layer_to_plot ) );
             fn.SetExt( ext );
@@ -804,23 +810,23 @@ void WinEDA_PlotFrame::Plot( wxCommandEvent& event )
             {
             case PLOT_FORMAT_POST:
                 m_Parent->Genere_PS( fn.GetFullPath(), layer_to_plot, useA4(),
-			g_pcb_plot_options.Trace_Mode );
+                                     g_pcb_plot_options.Trace_Mode );
                 break;
 
             case PLOT_FORMAT_GERBER:
                 m_Parent->Genere_GERBER( fn.GetFullPath(), layer_to_plot,
                                          s_PlotOriginIsAuxAxis,
-					 g_pcb_plot_options.Trace_Mode );
+                     g_pcb_plot_options.Trace_Mode );
                 break;
 
             case PLOT_FORMAT_HPGL:
                 m_Parent->Genere_HPGL( fn.GetFullPath(), layer_to_plot,
-			g_pcb_plot_options.Trace_Mode );
+                                       g_pcb_plot_options.Trace_Mode );
                 break;
 
             case PLOT_FORMAT_DXF:
                 m_Parent->Genere_DXF( fn.GetFullPath(), layer_to_plot,
-			g_pcb_plot_options.Trace_Mode );
+                                      g_pcb_plot_options.Trace_Mode );
                 break;
             }
         }

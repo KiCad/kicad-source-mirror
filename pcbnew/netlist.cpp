@@ -3,24 +3,29 @@
 /***********************/
 
 /*
- *  Function to read a netlist. Whele readint a netlis:
+ *  Function to read a netlist. While reading a netlist:
  *  - Load new footprints
- *  - Initialise net info
+ *  - Initialize net info
  *  - Test for missing or extra footprints
  *  - Recalculate ratsnest
  *
  *  Important remark:
- *  When reading a netlist Pcbnew must identify existing footprints (link between existing footprints an components in netlist)
+ *  When reading a netlist Pcbnew must identify existing footprints (link
+ * between existing footprints an components in netlist)
  *  This identification can be from 2 fields:
  *      - The reference (U2, R5 ..): this is the normal mode
- *      - The Time Stamp (Signature Temporelle), useful after a full schematic reannotation
+ *      - The Time Stamp (Signature Temporelle), useful after a full schematic
+ * reannotation
  *          because references can be changed for the same schematic.
- *  So when reading a netlist this identification ReadPcbNetlist() has aselection of the way to identify footprints.
+ *  So when reading a netlist this identification ReadPcbNetlist() has
+ * selection of the way to identify footprints.
  *  If we want to fully reannotate a schematic this sequence must be used
  *   SAVE your board !!!
- *   Create and read the netlist (to ensure all info is correct, mainly references and time stamp)
+ *   Create and read the netlist (to ensure all info is correct, mainly
+ * references and time stamp)
  *   Reannotate the schematic (references will be changed, but not time stamp)
- *   Recreate and read the new netlist using the Time Stamp identification (that reinit the new references)
+ *   Recreate and read the new netlist using the Time Stamp identification
+ * (that reinit the new references)
  */
 #include "fctsys.h"
 #include "common.h"
@@ -39,7 +44,7 @@
 #define TESTONLY   1
 #define READMODULE 0
 
-/* Structures locales */
+
 class MODULEtoLOAD
 {
 public:
@@ -48,10 +53,9 @@ public:
     wxString      m_TimeStampPath;
     MODULEtoLOAD* m_Next;
 
-public:
-    MODULEtoLOAD( const wxString& libname,
-                  const wxString& cmpname,
-                  const wxString& timestamp_path )
+public: MODULEtoLOAD( const wxString& libname,
+                      const wxString& cmpname,
+                      const wxString& timestamp_path )
     {
         m_LibName = libname;
         m_CmpName = cmpname;
@@ -66,10 +70,11 @@ public:
     void SetNext( MODULEtoLOAD* next ) { m_Next = next; }
 };
 
-/* Fonctions locales : */
+
 static void    SortListModulesToLoadByLibname( int NbModules );
-static int     BuildFootprintsListFromNetlistFile( const wxString& aNetlistFullFilename,
-                                                   wxArrayString&  aBufName );
+static int     BuildFootprintsListFromNetlistFile(
+    const wxString& aNetlistFullFilename,
+    wxArrayString&  aBufName );
 static bool    OpenNetlistFile( const wxString& aFullFileName );
 static void    AddToList( const wxString& NameLibCmp,
                           const wxString& NameCmp,
@@ -93,28 +98,25 @@ static MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
 static void LoadListeModules( WinEDA_PcbFrame* aPcbFrame );
 
 
-/* Variables locales */
 static int           s_NbNewModules;
 static MODULEtoLOAD* s_ModuleToLoad_List;
 FILE* source;
 
 
-/************************************************************************/
-bool OpenNetlistFile( const wxString& aFullFileName )
-/************************************************************************/
-
 /** function OpenNetlistFile
  *  used to open a netlist file
  */
+bool OpenNetlistFile( const wxString& aFullFileName )
 {
     if( aFullFileName.IsEmpty() )
-        return FALSE; /* No filename: exit */
+        return FALSE;  /* No filename: exit */
 
     source = wxFopen( aFullFileName, wxT( "rt" ) );
     if( source == 0 )
     {
         wxString msg;
-        msg.Printf( _( "Netlist file %s not found" ), GetChars( aFullFileName ) );
+        msg.Printf( _( "Netlist file %s not found" ),
+                    GetChars( aFullFileName ) );
         DisplayError( NULL, msg );
         return FALSE;
     }
@@ -123,23 +125,14 @@ bool OpenNetlistFile( const wxString& aFullFileName )
 }
 
 
-/*******************************************************************************/
-void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
-                     const wxString&  aNetlistFullFilename,
-                     const wxString&  aCmpFullFileName,
-                     wxTextCtrl*      aMessageWindow,
-                     bool             aChangeFootprint,
-                     bool             aDeleteBadTracks,
-                     bool             aDeleteExtraFootprints,
-                     bool             aSelect_By_Timestamp )
-/********************************************************************************/
-
 /** Function ReadPcbNetlist
- * Update footprints (load missing footprints and delete on request extra footprints)
+ * Update footprints (load missing footprints and delete on request extra
+ * footprints)
  * Update connectivity info ( Net Name list )
  * Update Reference, value and "TIME STAMP"
  * @param aNetlistFullFilename = netlist file name (*.net)
- * @param aCmpFullFileName = cmp/footprint list file name (*.cmp) if not found, only the netmist will be used
+ * @param aCmpFullFileName = cmp/footprint list file name (*.cmp) if not found,
+ * only the netlist will be used
  *
  *  the format of the netlist is something like:
  # EESchema Netlist Version 1.0 generee le  18/5/2005-12:30:22
@@ -155,6 +148,14 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
  *  }
  * #End
  */
+void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
+                     const wxString&  aNetlistFullFilename,
+                     const wxString&  aCmpFullFileName,
+                     wxTextCtrl*      aMessageWindow,
+                     bool             aChangeFootprint,
+                     bool             aDeleteBadTracks,
+                     bool             aDeleteExtraFootprints,
+                     bool             aSelect_By_Timestamp )
 {
     int     LineNum, State, Comment;
     MODULE* Module = NULL;
@@ -169,7 +170,8 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
     if( aMessageWindow )
     {
         wxString msg;
-        msg.Printf( _( "Reading Netlist \"%s\"" ), GetChars( aNetlistFullFilename ) );
+        msg.Printf( _( "Reading Netlist \"%s\"" ),
+                    GetChars( aNetlistFullFilename ) );
         aMessageWindow->AppendText( msg + wxT( "\n" ) );
     }
 
@@ -183,7 +185,8 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
 
     wxBusyCursor dummy;        // Shows an hourglass while calculating
 
-    /* First, read the netlist: Build the list of footprints to load (new footprints)
+    /* First, read the netlist: Build the list of footprints to load (new
+     * footprints)
      */
     while( GetLine( source, Line, &LineNum ) )
     {
@@ -221,7 +224,7 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
             continue;
         }
 
-        if( State >= 3 ) /* la ligne de description d'un pad est ici non analysee */
+        if( State >= 3 ) /* Do not analyzed pad description here. */
         {
             State--;
         }
@@ -243,15 +246,18 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
         s_ModuleToLoad_List = NULL;
     }
 
-    /* Second read , All footprints are on board, one must update the schematic info (pad netnames) */
+    /* Second read , All footprints are on board, one must update the schematic
+     * info (pad netnames) */
     fseek( source, 0, SEEK_SET ); LineNum = 0;
     while( GetLine( source, Line, &LineNum ) )
     {
         Text = StrPurge( Line );
 
-        if( Comment )                                       /* we are reading a commment */
+        if( Comment )                                       /* we are reading a
+                                                             * comment */
         {
-            if( ( Text = strchr( Text, '}' ) ) == NULL )    /* this is the end of a comment */
+            if( ( Text = strchr( Text, '}' ) ) == NULL )    /* this is the end
+                                                             * of a comment */
                 continue;
             Comment = 0;
         }
@@ -277,7 +283,8 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
                                     READMODULE,
                                     aSelect_By_Timestamp,
                                     aChangeFootprint );
-            if( Module == NULL ) // the module could not be created (perhaps footprint not found in library)
+            if( Module == NULL ) // the module could not be created (perhaps
+                                 // footprint not found in library)
             {
                 continue;
             }
@@ -309,9 +316,9 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
     {
         wxArrayString ModuleListFromNetlist;
         /* Build list of modules in the netlist */
-        int           NbModulesNetListe = BuildFootprintsListFromNetlistFile(
-            aNetlistFullFilename,
-            ModuleListFromNetlist );
+        int NbModulesNetListe =
+            BuildFootprintsListFromNetlistFile( aNetlistFullFilename,
+                                                ModuleListFromNetlist );
         if( NbModulesNetListe  )
         {
             MODULE* NextModule;
@@ -321,23 +328,25 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
             {
                 int ii;
                 NextModule = Module->Next();
-                if( (Module->m_ModuleStatus & MODULE_is_LOCKED) )
+                if( Module->m_ModuleStatus & MODULE_is_LOCKED )
                     continue;
                 for( ii = 0; ii < NbModulesNetListe; ii++ )
                 {
                     if( Module->m_Reference->m_Text.CmpNoCase(
                             ModuleListFromNetlist[ii] ) == 0 )
                     {
-                        break; /* Module trouve en netliste */
+                        break; /* Module is already in net list. */
                     }
                 }
 
-                if( ii == NbModulesNetListe )   /* Module not found in netlist */
+                if( ii == NbModulesNetListe )   /* Module not found in
+                                                 * net list. */
                 {
                     if( ask_for_confirmation )
                     {
                         ask_for_confirmation = false;
-                        if( !IsOK( NULL, _( "Ok to delete footprints not in netlist ?" ) ) )
+                        if( !IsOK( NULL,
+                                   _( "Ok to delete footprints not in netlist?" ) ) )
                             break;
                     }
                     Module->DeleteStructure();
@@ -363,7 +372,22 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
 }
 
 
-/****************************************************************************/
+/* Load the description of a footprint, net list type Pcbnew
+ * and update the corresponding module.
+ *
+ * If TstOnly == 0 if the module does not exist, it is responsible
+ * If TstOnly! = 0 if the module does not exist, it is added to the list
+ * Load modules has
+ * Text contains the first line of description
+ * UseFichCmp is a flag
+ * If! = 0, file components. CMP will be used
+ * Is reset to 0 if the file does not exist
+ *
+ * Analyze lines like:
+ * ($ 40C08647 noname R20 4.7 K Lib = (R)
+ * (1 VCC)
+ * (2 MODB_1)
+ */
 MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
                        wxTextCtrl*      aMessageWindow,
                        const wxString&  aCmpFullFileName,
@@ -372,24 +396,6 @@ MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
                        int              TstOnly,
                        bool             aSelect_By_Timestamp,
                        bool             aChangeFootprint )
-/****************************************************************************/
-
-/* charge la description d'une empreinte, netliste type PCBNEW
- *  et met a jour le module correspondant
- *
- *  Si TstOnly == 0 si le module n'existe pas, il est charge
- *  Si TstOnly != 0 si le module n'existe pas, il est ajoute a la liste des
- *      modules a charger
- *  Text contient la premiere ligne de la description
- * UseFichCmp est un flag
- *          si != 0, le fichier des composants .CMP sera utilise
- *          est remis a 0 si le fichier n'existe pas
- *
- *  Analyse les lignes type:
- *  ( 40C08647 $noname R20 4,7K {Lib=R}
- *  (    1 VCC )
- *  (    2 MODB_1 )
- */
 {
     MODULE*  Module;
     char*    text;
@@ -429,7 +435,7 @@ MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
     if( Error > 0 )
         return NULL;
 
-    /* Tst si composant deja charge */
+    /* Test if module is already loaded. */
     Module = aFrame->GetBoard()->m_Modules;
     MODULE* NextModule;
 
@@ -446,7 +452,8 @@ MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
             if( TextCmpName.CmpNoCase( Module->m_Reference->m_Text ) == 0 )
                 Found = true;
         }
-        if( Found ) // test footprint matching for existing modules:  current m_LibRef and module name in netlist must match
+        if( Found ) // test footprint matching for existing modules:  current
+                    // m_LibRef and module name in netlist must match
         {
             if( TstOnly != TESTONLY )
             {
@@ -468,13 +475,20 @@ MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
                                                         NameLibCmp );
                     }
                 }
-                if( Module->m_LibRef.CmpNoCase( NameLibCmp ) != 0 ) // Module Mismatch: Current module and module specified in netlist are different.
+
+                /* Module mismatch: current module and module specified in
+                 * net list are  different.
+                 */
+                if( Module->m_LibRef.CmpNoCase( NameLibCmp ) != 0 )
                 {
-                    if( aChangeFootprint )                          // footprint exchange allowed:
+                    if( aChangeFootprint )   // footprint exchange allowed.
                     {
                         MODULE* NewModule =
-                            aFrame->Get_Librairie_Module( wxEmptyString, NameLibCmp, true );
-                        if( NewModule )  /* Change old module to the new module (and delete the old one)*/
+                            aFrame->Get_Librairie_Module( wxEmptyString,
+                                                          NameLibCmp,
+                                                          true );
+                        if( NewModule )  /* Change old module to the new module
+                                          * (and delete the old one) */
                         {
                             aFrame->Exchange_Module( Module, NewModule, NULL );
                             Module = NewModule;
@@ -483,18 +497,18 @@ MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
                     else
                     {
                         wxString msg;
-                        msg.Printf(
-                            _(
-                                "Component \"%s\": Mismatch! module is [%s] and netlist said [%s]\n" ),
-                            GetChars( TextCmpName ),
-                            GetChars( Module->m_LibRef ),
-                            GetChars( NameLibCmp ) );
+                        msg.Printf( _( "Component \"%s\": Mismatch! module \
+is [%s] and netlist said [%s]\n" ),
+                                    GetChars( TextCmpName ),
+                                    GetChars( Module->m_LibRef ),
+                                    GetChars( NameLibCmp ) );
 
                         if( aMessageWindow )
                             aMessageWindow->AppendText( msg );
                     }
                 }
             }
+
             break;
         }
     }
@@ -505,11 +519,17 @@ MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
         {
             if( aSelect_By_Timestamp == 1 )
             {
-                *UseFichCmp = ReadListeModules( aCmpFullFileName, NULL, &TimeStampPath, NameLibCmp );
+                *UseFichCmp = ReadListeModules( aCmpFullFileName,
+                                                NULL,
+                                                &TimeStampPath,
+                                                NameLibCmp );
             }
             else
             {
-                *UseFichCmp = ReadListeModules( aCmpFullFileName, &TextCmpName, NULL, NameLibCmp );
+                *UseFichCmp = ReadListeModules( aCmpFullFileName,
+                                                &TextCmpName,
+                                                NULL,
+                                                NameLibCmp );
             }
         }
 
@@ -521,11 +541,12 @@ MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
             if( aMessageWindow )
             {
                 wxString msg;
-                msg.Printf( _( "Component [%s] not found" ), GetChars( TextCmpName ) );
+                msg.Printf( _( "Component [%s] not found" ),
+                            GetChars( TextCmpName ) );
                 aMessageWindow->AppendText( msg + wxT( "\n" ) );
             }
         }
-        return NULL;    /* Le module n'avait pas pu etre charge */
+        return NULL;    /* The module could not be loaded. */
     }
 
     /* Fields update ( reference, value and "Time Stamp") */
@@ -533,20 +554,21 @@ MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
     Module->m_Value->m_Text     = TextValeur;
     Module->m_Path = TimeStampPath;
 
-    return Module;  /* composant trouve */
+    return Module;
 }
 
-
-/*******************************************************************************************/
-int SetPadNetName( wxWindow* frame, char* Text, MODULE* Module, wxTextCtrl* aMessageWindow )
-/*******************************************************************************************/
 
 /** Function SetPadNetName
  *  Update a pad netname in a given footprint
  *  @param Text = Text from netlist (format: (pad = net) )
  *  @param Module = the given footprint
- *  @param aMessageWindow = a wxTextCtrl to print error and warning message (can be NULL)
+ *  @param aMessageWindow = a wxTextCtrl to print error and warning message
+ * (can be NULL)
  */
+int SetPadNetName( wxWindow*   frame,
+                   char*       Text,
+                   MODULE*     Module,
+                   wxTextCtrl* aMessageWindow )
 {
     D_PAD*   pad;
     char*    TextPinName, * TextNetName;
@@ -567,11 +589,10 @@ int SetPadNetName( wxWindow* frame, char* Text, MODULE* Module, wxTextCtrl* aMes
     if( Error )
         return 0;
 
-    /* recherche du pad */
     pad = Module->m_Pads; trouve = FALSE;
     for( ; pad != NULL; pad = (D_PAD*) pad->Next() )
     {
-        if( strnicmp( TextPinName, pad->m_Padname, 4 ) == 0 ) /* trouve */
+        if( strnicmp( TextPinName, pad->m_Padname, 4 ) == 0 )
         {
             trouve = true;
             if( *TextNetName != '?' )
@@ -587,8 +608,8 @@ int SetPadNetName( wxWindow* frame, char* Text, MODULE* Module, wxTextCtrl* aMes
         {
             wxString pin_name = CONV_FROM_UTF8( TextPinName );
             Msg.Printf( _( "Module [%s]: Pad [%s] not found" ),
-                       GetChars( Module->m_Reference->m_Text ),
-                       GetChars( pin_name ) );
+                        GetChars( Module->m_Reference->m_Text ),
+                        GetChars( pin_name ) );
             aMessageWindow->AppendText( Msg + wxT( "\n" ) );
         }
     }
@@ -597,15 +618,12 @@ int SetPadNetName( wxWindow* frame, char* Text, MODULE* Module, wxTextCtrl* aMes
 }
 
 
-/*****************************************************/
-MODULE* WinEDA_PcbFrame::ListAndSelectModuleName( void )
-/*****************************************************/
-
 /**
  * build and shows a list of existing modules on board
- * The user can slect a module from this list
+ * The user can select a module from this list
  * @return a pointer to the selected module or NULL
  */
+MODULE* WinEDA_PcbFrame::ListAndSelectModuleName( void )
 {
     int     ii, jj;
     MODULE* Module;
@@ -643,12 +661,6 @@ MODULE* WinEDA_PcbFrame::ListAndSelectModuleName( void )
 }
 
 
-/*****************************************************************************************/
-void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       aFrame,
-                                                     const wxString& aNetlistFullFilename,
-                                                     BOARD*          aPcb )
-/******************************************************************************************/
-
 /** Function TestFor_Duplicate_Missing_And_Extra_Footprints
  * Build a list from the given board and netlist :
  *  1 - for duplicate footprints on board
@@ -658,9 +670,12 @@ void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       aFrame,
  * @param aNetlistFullFilename = the given netlist
  * @param aPcb = the given board
  */
+void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       aFrame,
+                                                     const wxString& aNetlistFullFilename,
+                                                     BOARD*          aPcb )
 #define MAX_LEN_TXT 32
 {
-    int               ii;
+    int ii;
     MODULE*           Module, * pt_aux;
     int               NbModulesNetListe, nberr = 0;
     WinEDA_TextFrame* List;
@@ -668,32 +683,38 @@ void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       aFrame,
 
     if( aPcb->m_Modules == NULL )
     {
-        DisplayInfoMessage( aFrame, _( "No modules" ), 10 ); return;
+        DisplayInfoMessage( aFrame, _( "No modules" ), 10 );
+        return;
     }
 
-    /* Construction de la liste des references des modules de la netliste */
-    NbModulesNetListe = BuildFootprintsListFromNetlistFile( aNetlistFullFilename,
-                                                            ModuleListFromNetlist );
+    /* Build the list of references of the net list modules. */
+
+    NbModulesNetListe =
+        BuildFootprintsListFromNetlistFile( aNetlistFullFilename,
+                                            ModuleListFromNetlist );
     if( NbModulesNetListe < 0 )
-        return; /* File not found */
+        return;  /* File not found */
 
     if( NbModulesNetListe == 0 )
     {
-        DisplayError( aFrame, _( "No modules in NetList" ), 10 ); return;
+        DisplayError( aFrame, _( "No modules in NetList" ), 10 );
+        return;
     }
 
     List = new WinEDA_TextFrame( aFrame, _( "Check Modules" ) );
 
-    /* recherche des doubles */
+    /* Search for duplicate footprints. */
     List->Append( _( "Duplicates" ) );
 
     Module = aPcb->m_Modules;
+
     for( ; Module != NULL; Module = Module->Next() )
     {
         pt_aux = Module->Next();
         for( ; pt_aux != NULL; pt_aux = pt_aux->Next() )
         {
-            if( Module->m_Reference->m_Text.CmpNoCase( pt_aux->m_Reference->m_Text ) == 0 )
+            if( Module->m_Reference->m_Text.CmpNoCase( pt_aux->m_Reference->
+                                                       m_Text ) == 0 )
             {
                 List->Append( Module->m_Reference->m_Text );
                 nberr++;
@@ -702,7 +723,7 @@ void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       aFrame,
         }
     }
 
-    /* recherche des manquants par rapport a la netliste*/
+    /* Search for the missing module by the net list. */
     List->Append( _( "Lack:" ) );
 
     for( ii = 0; ii < NbModulesNetListe; ii++ )
@@ -724,7 +745,7 @@ void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       aFrame,
         }
     }
 
-    /* recherche des modules supplementaires (i.e. Non en Netliste) */
+    /* Search for modules not in net list. */
     List->Append( _( "Not in Netlist:" ) );
 
     Module = (MODULE*) aPcb->m_Modules;
@@ -735,7 +756,7 @@ void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       aFrame,
             if( Module->m_Reference->m_Text.CmpNoCase(
                     ModuleListFromNetlist[ii] ) == 0 )
             {
-                break; /* Module trouve en netliste */
+                break; /* Module is in net list. */
             }
         }
 
@@ -750,17 +771,14 @@ void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       aFrame,
 }
 
 
-/***************************************************************************************/
-int BuildFootprintsListFromNetlistFile( const wxString& aNetlistFullFilename,
-                                        wxArrayString&  aBufName )
-/***************************************************************************************/
-
 /** Function BuildFootprintsListFromNetlistFile
  *  Fill BufName with footprints names read from the netlist.
  * @param aNetlistFullFilename = netlist file name
  * @param BufName = wxArrayString to fill with footprint names
  * @return Footprint count, or -1 if netlist file cannot opened
  */
+int BuildFootprintsListFromNetlistFile( const wxString& aNetlistFullFilename,
+                                        wxArrayString&  aBufName )
 {
     int  textlen;
     int  nb_modules_lus;
@@ -777,13 +795,13 @@ int BuildFootprintsListFromNetlistFile( const wxString& aNetlistFullFilename,
     while( GetLine( source, Line, &LineNum ) )
     {
         Text = StrPurge( Line );
-        if( Comment ) /* Commentaires en cours */
+        if( Comment )
         {
             if( ( Text = strchr( Text, '}' ) ) == NULL )
                 continue;
             Comment = 0;
         }
-        if( *Text == '{' ) /* Commentaires */
+        if( *Text == '{' ) /* Comments. */
         {
             Comment = 1;
             if( ( Text = strchr( Text, '}' ) ) == NULL )
@@ -801,8 +819,8 @@ int BuildFootprintsListFromNetlistFile( const wxString& aNetlistFullFilename,
             if( strtok( Line, " ()\t\n" ) == NULL )
                 Error = 1;  /* TimeStamp */
             if( ( LibModName = strtok( NULL, " ()\t\n" ) ) == NULL )
-                Error = 1;  /* nom Lib */
-            /* Lecture du nom (reference) du composant: */
+                Error = 1;
+            /* Load the name of the component. */
             if( ( Text = strtok( NULL, " ()\t\n" ) ) == NULL )
                 Error = 1;
             nb_modules_lus++;
@@ -812,37 +830,32 @@ int BuildFootprintsListFromNetlistFile( const wxString& aNetlistFullFilename,
 
         if( State >= 3 )
         {
-            State--; /* Lecture 1 ligne relative au Pad */
+            State--;
         }
     }
 
     fclose( source );
+
     return nb_modules_lus;
 }
 
 
-/*****************************************************************************************/
-int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
-                      const wxString* TimeStamp, wxString& NameModule )
-/*****************************************************************************************/
-
 /*
- *  Lit le fichier .CMP donnant l'equivalence Modules / Composants
- *  Retourne:
- *  Si ce fichier existe retourne :
- *      1 et le nom module dans NameModule
- *      -1 si module non trouve en fichier
- *  sinon 0;
+ * Get the file CMP giving the equivalence modules / components
+ * Returns:
+ * If this file exists returns:
+ * 1 and the module name in NameModule
+ * -1 If not found in module file
+ * Otherwise 0;
  *
- *  parametres d'appel:
- *      RefCmp		(NULL si selection par TimeStamp)
- *      TimeStamp	(signature temporelle si elle existe, NULL sinon)
- *      pointeur sur le buffer recevant le nom du module
+ * Call settings:
+ * RefCmp (NULL if selection by TimeStamp)
+ * TimeStamp (time signature if it exists, NULL otherwise)
+ * Pointer to the buffer receiving the name of the module
  *
- *  Exemple de fichier:
+ * Example file:
  *
- *  Cmp-Mod V01 Genere par PcbNew le 29/10/2003-13:11:6
- *
+ * Cmp-Mod V01 Genere by Pcbnew 29/10/2003-13: 11:6 *
  *  BeginCmp
  *  TimeStamp = /322D3011;
  *  Reference = BUS1;
@@ -858,6 +871,8 @@ int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
  *  EndCmp
  *
  */
+int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
+                      const wxString* TimeStamp, wxString& NameModule )
 {
     wxString refcurrcmp, timestamp, idmod;
     char     ia[1024];
@@ -872,7 +887,7 @@ int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
     {
         wxString msg;
         msg.Printf( _( "File <%s> not found, use Netlist for lib module selection" ),
-                   GetChars( CmpFullFileName ) );
+                    GetChars( CmpFullFileName ) );
         DisplayError( NULL, msg, 20 );
         return 0;
     }
@@ -882,7 +897,7 @@ int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
         if( strnicmp( ia, "BeginCmp", 8 ) != 0 )
             continue;
 
-        /* Ici une description de 1 composant commence */
+        /* Begin component description. */
         refcurrcmp.Empty();
         idmod.Empty();
         timestamp.Empty();
@@ -917,12 +932,10 @@ int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
             }
         }
 
-        /* Fin lecture 1 descr composant */
-
-        /* Test du Composant lu en fichier: est-il le bon */
+        /* Check if component read is valid. */
         if( RefCmp )
         {
-            if( RefCmp->CmpNoCase( refcurrcmp ) == 0 )  //Found!
+            if( RefCmp->CmpNoCase( refcurrcmp ) == 0 )  // Found!
             {
                 fclose( FichCmp );
                 NameModule = idmod;
@@ -931,7 +944,8 @@ int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
         }
         else if( TimeStamp )
         {
-            if( TimeStamp->CmpNoCase( timestamp )  == 0 && !timestamp.IsEmpty() ) //Found
+            if( TimeStamp->CmpNoCase( timestamp ) == 0
+                && !timestamp.IsEmpty() )                // Found
             {
                 fclose( FichCmp );
                 NameModule = idmod;
@@ -945,13 +959,12 @@ int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
 }
 
 
-/***********************************************************************************/
-void AddToList( const wxString& NameLibCmp, const wxString& CmpName, const wxString& path )
-/************************************************************************************/
-
-/* Fontion copiant en memoire de travail les caracteristiques
+/* ??? Fontion copiant en memoire de travail les caracteristiques
  *  des nouveaux modules
  */
+void AddToList( const wxString& NameLibCmp,
+                const wxString& CmpName,
+                const wxString& path )
 {
     MODULEtoLOAD* NewMod;
 
@@ -962,15 +975,11 @@ void AddToList( const wxString& NameLibCmp, const wxString& CmpName, const wxStr
 }
 
 
-/***************************************************************/
-void LoadListeModules( WinEDA_PcbFrame* aPcbFrame )
-/***************************************************************/
-
-/* Routine de chargement des nouveaux modules en une seule lecture des
- *  librairies
- *  Si un module vient d'etre charge il est duplique, ce qui evite une lecture
- *  inutile de la librairie
+/* Load new modules from library.
+ * If a module is being loaded it is duplicated, which avoids reading
+ * unnecessary library.
  */
+void LoadListeModules( WinEDA_PcbFrame* aPcbFrame )
 {
     MODULEtoLOAD* ref, * cmp;
     int           ii;
@@ -986,8 +995,10 @@ void LoadListeModules( WinEDA_PcbFrame* aPcbFrame )
     // Calculate the footprint "best" position:
     if( aPcbFrame->SetBoardBoundaryBoxFromEdgesOnly() )
     {
-        ModuleBestPosition.x = aPcbFrame->GetBoard()->m_BoundaryBox.GetRight() + 5000;
-        ModuleBestPosition.y = aPcbFrame->GetBoard()->m_BoundaryBox.GetBottom() + 10000;
+        ModuleBestPosition.x =
+            aPcbFrame->GetBoard()->m_BoundaryBox.GetRight() + 5000;
+        ModuleBestPosition.y =
+            aPcbFrame->GetBoard()->m_BoundaryBox.GetBottom() + 10000;
     }
     else
         ModuleBestPosition = wxPoint( 0, 0 );
@@ -997,30 +1008,34 @@ void LoadListeModules( WinEDA_PcbFrame* aPcbFrame )
         if( (ii == 0) || ( ref->m_LibName != cmp->m_LibName) )
         {
             /* New footprint : must be loaded from a library */
-            Module = aPcbFrame->Get_Librairie_Module( wxEmptyString, cmp->m_LibName, FALSE );
+            Module = aPcbFrame->Get_Librairie_Module( wxEmptyString,
+                                                      cmp->m_LibName,
+                                                      FALSE );
             ref    = cmp;
             if( Module == NULL )
             {
                 wxString msg;
                 msg.Printf( _( "Component [%s]: footprint <%s> not found" ),
-                           GetChars( cmp->m_CmpName ),
-                           GetChars( cmp->m_LibName ) );
+                            GetChars( cmp->m_CmpName ),
+                            GetChars( cmp->m_LibName ) );
                 DisplayError( NULL, msg );
                 continue;
             }
             Module->SetPosition( ModuleBestPosition );
 
-            /* Update schematic links : reference "Time Stamp" and schematic hierarchical path */
+            /* Update schematic links : reference "Time Stamp" and schematic
+             *hierarchical path */
             Module->m_Reference->m_Text = cmp->m_CmpName;
             Module->m_TimeStamp = GetTimeStamp();
             Module->m_Path = cmp->m_TimeStampPath;
         }
         else
         {
-            /* Footprint already loaded from a library, duplicate it (faster) */
+            /* Footprint already loaded from a library, duplicate it (faster)
+             */
             MODULE* newmodule;
             if( Module == NULL )
-                continue; /* module non existant en libr */
+                continue;            /* Module does not exist in library. */
 
             newmodule = new MODULE( aPcbFrame->GetBoard() );
             newmodule->Copy( Module );
@@ -1036,8 +1051,7 @@ void LoadListeModules( WinEDA_PcbFrame* aPcbFrame )
 }
 
 
-/* Routine utilisee par qsort pour le tri des modules a charger
- */
+/* Routines used by qsort to sort a load module. */
 static int SortByLibName( MODULEtoLOAD** ref, MODULEtoLOAD** cmp )
 {
     int ii = (*ref)->m_LibName.CmpNoCase( (*cmp)->m_LibName );
@@ -1046,12 +1060,9 @@ static int SortByLibName( MODULEtoLOAD** ref, MODULEtoLOAD** cmp )
 }
 
 
-/*************************************************/
-void SortListModulesToLoadByLibname( int NbModules )
-/**************************************************/
-
-/* Rearrage la liste des modules List par ordre alphabetique des noms lib des modules
+/* Sort the module list in alphabetical order by module name.
  */
+void SortListModulesToLoadByLibname( int NbModules )
 {
     MODULEtoLOAD** base_list, * item;
     int            ii;
@@ -1065,17 +1076,16 @@ void SortListModulesToLoadByLibname( int NbModules )
     }
 
     qsort( base_list, NbModules, sizeof(MODULEtoLOAD*),
-           ( int( * ) ( const void*, const void* ) )SortByLibName );
+           ( int ( * )( const void*, const void* ) )SortByLibName );
 
-    // Reconstruction du chainage:
     s_ModuleToLoad_List = *base_list;
+
     for( ii = 0; ii < NbModules - 1; ii++ )
     {
         item = base_list[ii];
         item->SetNext( base_list[ii + 1] );
     }
 
-    // Dernier item: Pnext = NULL:
     item = base_list[ii];
     item->SetNext( NULL );
 

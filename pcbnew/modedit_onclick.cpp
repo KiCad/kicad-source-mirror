@@ -16,12 +16,10 @@
 #include "protos.h"
 #include "pcbnew_id.h"
 
-/*************************************************************************/
-void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
-/*************************************************************************/
 
 /* Handle the left click in footprint editor
  */
+void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 {
     BOARD_ITEM* DrawStruct = GetCurItem();
 
@@ -48,10 +46,10 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             default:
             {
                 wxString msg;
-                msg.Printf(
-                    wxT(
-                        "WinEDA_ModEditFrame::OnLeftClick err: m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
-                    DrawStruct, DrawStruct->Type(), DrawStruct->m_Flags );
+                msg.Printf( wxT( "WinEDA_ModEditFrame::OnLeftClick err: \
+m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
+                            DrawStruct, DrawStruct->Type(),
+                            DrawStruct->m_Flags );
                 DisplayError( this, msg );
                 DrawStruct->m_Flags = 0;
                 break;
@@ -109,18 +107,22 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                     Begin_Edge_Module( (EDGE_MODULE*) DrawStruct, DC, 0 ) );
             }
             else
-                DisplayError( this, wxT( "ProcessCommand error: DrawStruct/ flags error" ) );
+                DisplayError( this,
+                              wxT( "ProcessCommand error: DrawStruct flags error" ) );
         }
         break;
 
     case ID_MODEDIT_DELETE_ITEM_BUTT:
-        if( DrawStruct && (DrawStruct->m_Flags != 0) )  // Item in edit, cannot delete it
+
+        // Item in edit, cannot delete it
+        if( DrawStruct && (DrawStruct->m_Flags != 0) )
             break;
         DrawStruct = ModeditLocateAndDisplay();
         if( DrawStruct == NULL || (DrawStruct->m_Flags != 0) )
             break;
-        if( DrawStruct->Type() != TYPE_MODULE ) //GetBoard()->m_Modules )     // Cannot delete the module itself
+        if( DrawStruct->Type() != TYPE_MODULE ) //GetBoard()->m_Modules )
         {
+            // Cannot delete the module itself
             SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
             RemoveStruct( DrawStruct );
             DrawStruct = NULL;
@@ -133,11 +135,13 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         MODULE* module = GetBoard()->m_Modules;
         module->m_Flags = 0;
         SaveCopyInUndoList( module, UR_MODEDIT );
-        Place_Ancre( module );      // set the new relatives internal coordinates of items
+        Place_Ancre( module );      // set the new relatives internal
+                                    // coordinates of items
         GetScreen()->m_Curseur = wxPoint( 0, 0 );
         Recadre_Trace( TRUE );
 
-        // Replace the module in position 0, to recalculate absolutes coordinates of items
+        // Replace the module in position 0, to recalculate absolutes
+        // coordinates of items
         module->SetPosition( wxPoint( 0, 0 ) );
         SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         SetCurItem( NULL );
@@ -160,7 +164,8 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     default:
         DrawPanel->SetCursor( wxCURSOR_ARROW );
-        DisplayError( this, wxT( "WinEDA_ModuleEditFrame::ProcessCommand error" ) );
+        DisplayError( this,
+                      wxT( "WinEDA_ModuleEditFrame::ProcessCommand error" ) );
         m_ID_current_state = 0;
         break;
     }
@@ -169,28 +174,26 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 }
 
 
-/*********************************************************************/
-bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
-                                           wxMenu*        PopMenu )
-/*********************************************************************/
-
 /* Handle the right click in the footprint editor:
  * Create the pull up menu
- * After this menu is built, the standart ZOOM menu is added
+ * After this menu is built, the standard ZOOM menu is added
  */
+bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
+                                           wxMenu*        PopMenu )
 {
     BOARD_ITEM* DrawStruct = GetCurItem();
     wxString    msg;
     bool        append_set_width = FALSE;
-    bool        BlockActive = (GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE);
+    bool        BlockActive =
+        ( GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE );
 
-    // Simple localisation des elements si possible
-    if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
+    // Simple location of elements where possible.
+    if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
     {
         SetCurItem( DrawStruct = ModeditLocateAndDisplay() );
     }
 
-    // Si commande en cours: affichage fin de commande
+    // End command in progress.
     if(  m_ID_current_state )
     {
         if( DrawStruct && DrawStruct->m_Flags )
@@ -207,23 +210,28 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
     {
         if( (DrawStruct && DrawStruct->m_Flags) || BlockActive )
         {
-            if( BlockActive )  // Put block commnands in list
+            if( BlockActive )  // Put block commands in list
             {
                 ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
                               _( "Cancel Block" ), cancel_xpm );
                 ADD_MENUITEM( PopMenu, ID_POPUP_ZOOM_BLOCK,
-                              _( "Zoom Block (drag middle mouse)" ), zoom_selected_xpm );
+                              _( "Zoom Block (drag middle mouse)" ),
+                              zoom_selected_xpm );
                 PopMenu->AppendSeparator();
                 ADD_MENUITEM( PopMenu, ID_POPUP_PLACE_BLOCK,
                               _( "Place Block" ), apply_xpm );
                 ADD_MENUITEM( PopMenu, ID_POPUP_COPY_BLOCK,
-                              _( "Copy Block (shift + drag mouse)" ), copyblock_xpm );
+                              _( "Copy Block (shift + drag mouse)" ),
+                              copyblock_xpm );
                 ADD_MENUITEM( PopMenu, ID_POPUP_MIRROR_X_BLOCK,
-                              _( "Mirror Block (alt + drag mouse)" ), mirror_H_xpm );
+                              _( "Mirror Block (alt + drag mouse)" ),
+                              mirror_H_xpm );
                 ADD_MENUITEM( PopMenu, ID_POPUP_ROTATE_BLOCK,
-                              _( "Rotate Block (ctrl + drag mouse)" ), rotate_pos_xpm );
+                              _( "Rotate Block (ctrl + drag mouse)" ),
+                              rotate_pos_xpm );
                 ADD_MENUITEM( PopMenu, ID_POPUP_DELETE_BLOCK,
-                              _( "Delete Block (shift+ctrl + drag mouse)" ), delete_xpm );
+                              _( "Delete Block (shift+ctrl + drag mouse)" ),
+                              delete_xpm );
             }
             else
             {
@@ -262,7 +270,8 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_PAD_REQUEST,
                           _( "Move Pad" ), move_pad_xpm );
         }
-        ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_PAD, _( "Edit Pad" ), options_pad_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_PAD, _( "Edit Pad" ),
+                      options_pad_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_IMPORT_PAD_SETTINGS,
                       _( "New Pad Settings" ), options_new_pad_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EXPORT_PAD_SETTINGS,
@@ -308,7 +317,8 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
                           _( "Place edge" ), apply_xpm );
         wxMenu* edit_mnu = new wxMenu;
         ADD_MENUITEM_WITH_SUBMENU( PopMenu, edit_mnu,
-                                   ID_POPUP_PCB_EDIT_EDGE, _( "Edit" ), edit_xpm );
+                                   ID_POPUP_PCB_EDIT_EDGE, _(
+                                       "Edit" ), edit_xpm );
         ADD_MENUITEM( edit_mnu, ID_POPUP_PCB_EDIT_WIDTH_CURRENT_EDGE,
                       _( "Edit Width (Current)" ), width_segment_xpm );
         ADD_MENUITEM( edit_mnu, ID_POPUP_PCB_EDIT_WIDTH_ALL_EDGE,
@@ -336,15 +346,13 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
     case TYPE_SCREEN:
     case TYPE_NOT_INIT:
     case TYPE_PCB:
-        msg.Printf(
-            wxT( "WinEDA_ModuleEditFrame::OnRightClick Error: illegal DrawType %d" ),
+        msg.Printf( wxT( "WinEDA_ModuleEditFrame::OnRightClick Error: illegal DrawType %d" ),
             DrawStruct->Type() );
         DisplayError( this, msg );
         break;
 
     default:
-        msg.Printf(
-            wxT( "WinEDA_ModuleEditFrame::OnRightClick Error: unknown DrawType %d" ),
+        msg.Printf( wxT( "WinEDA_ModuleEditFrame::OnRightClick Error: unknown DrawType %d" ),
             DrawStruct->Type() );
         DisplayError( this, msg );
         break;
@@ -353,9 +361,10 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
     PopMenu->AppendSeparator();
 
     if( append_set_width
-       || ( m_ID_current_state && ( (m_ID_current_state == ID_PCB_ADD_LINE_BUTT)
-                                   || (m_ID_current_state == ID_PCB_CIRCLE_BUTT)
-                                   || (m_ID_current_state == ID_PCB_ARC_BUTT) ) ) )
+       || ( m_ID_current_state
+           && ( ( m_ID_current_state == ID_PCB_ADD_LINE_BUTT )
+               || ( m_ID_current_state == ID_PCB_CIRCLE_BUTT )
+               || ( m_ID_current_state == ID_PCB_ARC_BUTT ) ) ) )
     {
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_ENTER_EDGE_WIDTH,
                       _( "Set Width" ), width_segment_xpm );
@@ -366,13 +375,10 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
 }
 
 
-/****************************************************************************/
-void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
-/****************************************************************************/
-
-/*  Handle the double click in the footprin editor:
+/*  Handle the double click in the footprint editor:
  *  If the double clicked item is editable: call the corresponding editor.
  */
+void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 {
     BOARD_ITEM* DrawStruct = GetCurItem();
     wxPoint     pos = GetPosition();
@@ -383,12 +389,12 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
     switch( m_ID_current_state )
     {
     case 0:
-        if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
+        if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
         {
             DrawStruct = ModeditLocateAndDisplay();
         }
 
-        if( (DrawStruct == NULL) || (DrawStruct->m_Flags != 0) )
+        if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags != 0 ) )
             break;
 
         // Item found
@@ -397,8 +403,7 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         switch( DrawStruct->Type() )
         {
         case TYPE_PAD:
-            InstallPadOptionsFrame(
-                (D_PAD*) DrawStruct, &dc, pos );
+            InstallPadOptionsFrame( (D_PAD*) DrawStruct, &dc, pos );
             DrawPanel->MouseToCursorSchema();
             break;
 
@@ -427,7 +432,7 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
     case ID_PCB_ADD_LINE_BUTT:
     {
-        if( DrawStruct && (DrawStruct->m_Flags & IS_NEW) )
+        if( DrawStruct && ( DrawStruct->m_Flags & IS_NEW ) )
         {
             End_Edge_Module( (EDGE_MODULE*) DrawStruct, DC );
             SetCurItem( NULL );

@@ -1,6 +1,6 @@
-/******************************************************************/
-/* menubarpcb.cpp - creation du menu general de l'editeur de board*/
-/******************************************************************/
+/*****************************************/
+/* menubarpcb.cpp - PCB editor menu bar. */
+/*****************************************/
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
@@ -11,12 +11,8 @@
 #include "hotkeys.h"
 #include "pcbnew_id.h"
 
-/***********************************************/
-void WinEDA_PcbFrame::ReCreateMenuBar()
-/***********************************************/
 
-/* Cree ou reinitialise le menu du haut d'ecran
- */
+void WinEDA_PcbFrame::ReCreateMenuBar()
 {
     wxMenuItem* item;
     wxMenuBar*  menuBar = GetMenuBar();
@@ -62,7 +58,8 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     // Add save menu
     filesMenu->AppendSeparator();
     item = new wxMenuItem( filesMenu, ID_SAVE_BOARD,
-                           _( "&Save Board\tCtrl-S" ), _( "Save current board" ) );
+                           _( "&Save Board\tCtrl-S" ),
+                           _( "Save current board" ) );
     item->SetBitmap( save_xpm );
     filesMenu->Append( item );
 
@@ -86,7 +83,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 
     // Add plot menu
     item = new wxMenuItem( filesMenu, ID_GEN_PLOT, _( "&Plot" ),
-                          _( "Plot (HPGL, PostScript, or Gerber format)" ) );
+                           _( "Plot (HPGL, PostScript, or Gerber format)" ) );
     item->SetBitmap( plot_xpm );
     filesMenu->Append( item );
 
@@ -96,7 +93,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 
     item = new wxMenuItem( submenuexport, ID_GEN_EXPORT_SPECCTRA,
                            _( "&Specctra DSN" ),
-                          _( "Export the current board to a \"Specctra DSN\" file" ) );
+                           _( "Export the current board to a \"Specctra DSN\" file" ) );
     item->SetBitmap( export_xpm );
     submenuexport->Append( item );
 
@@ -125,7 +122,8 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( import_xpm );    // @todo need better bitmap
     submenuImport->Append( item );
 
-    /* would be implemented in WinEDA_PcbFrame::ImportSpecctraDesign() in specctra_import.cpp
+    /* would be implemented in WinEDA_PcbFrame::ImportSpecctraDesign() in
+     * specctra_import.cpp
      *  item = new wxMenuItem(submenuImport, ID_GEN_IMPORT_SPECCTRA_DESIGN,
      *  _("&Specctra Design"), _("Import a \"Specctra Design\" (*.dsn) file") );
      *  item->SetBitmap(export_xpm);    // @todo need better bitmap
@@ -167,7 +165,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     wxGetApp().m_fileHistory.AddFilesToMenu( filesMenu );
 
     ///////////////////////////////////
-    // Preferences an configuration //
+    // Preferences and configuration //
     ///////////////////////////////////
     wxMenu* configmenu = new wxMenu;
     item = new wxMenuItem( configmenu, ID_CONFIG_REQ, _( "&Library" ),
@@ -175,8 +173,9 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( library_xpm );
     configmenu->Append( item );
 
-    item = new wxMenuItem( configmenu, ID_COLORS_SETUP, _( "&Colors and Visibility" ),
-                           _( "Select colors and visibilty of layers and some items" ) );
+    item = new wxMenuItem( configmenu, ID_COLORS_SETUP,
+                           _( "&Colors and Visibility" ),
+                           _( "Select colors and visibility of layers and some items" ) );
     item->SetBitmap( palette_xpm );
     configmenu->Append( item );
 
@@ -185,7 +184,8 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( preference_xpm );
     configmenu->Append( item );
 
-    item = new wxMenuItem( configmenu, ID_PCB_DISPLAY_OPTIONS_SETUP, _( "&Display" ),
+    item = new wxMenuItem( configmenu, ID_PCB_DISPLAY_OPTIONS_SETUP,
+                           _( "&Display" ),
                            _( "Select how items (pads, tracks texts ... ) are displayed" ) );
     item->SetBitmap( display_options_xpm );
     configmenu->Append( item );
@@ -206,13 +206,13 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     configmenu->Append( item );
 
 
-
     ////////////////////////////////////////////////////////////
     // Add access to the Design Rules Dialog and layers setup //
     ////////////////////////////////////////////////////////////
     wxMenu* designRulesMenu = new wxMenu;
     item = new wxMenuItem( designRulesMenu, ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG,
-                           _( "Design Rules" ), _( "Open the design rules dialog editor" ) );
+                           _( "Design Rules" ),
+                           _( "Open the design rules dialog editor" ) );
     item->SetBitmap( hammer_xpm );
     designRulesMenu->Append( item );
 
@@ -255,9 +255,6 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( save_xpm );
     sizes_menu->Append( item );
 
-    //////////////////////////////////////////////////////////////////
-    // Menu postprocess ( generation fichiers percage, placement... //
-    //////////////////////////////////////////////////////////////////
     wxMenu* postprocess_menu = new wxMenu;
     item = new wxMenuItem( postprocess_menu, ID_PCB_GEN_POS_MODULES_FILE,
                            _( "Generate &Modules Position" ),
@@ -283,9 +280,6 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( tools_xpm );
     postprocess_menu->Append( item );
 
-    //////////////////////////
-    // Menu d'outils divers //
-    //////////////////////////
     wxMenu* miscellaneous_menu = new wxMenu;
     item = new wxMenuItem( miscellaneous_menu, ID_PCB_GLOBAL_DELETE,
                            _( "Global &Deletions" ),
