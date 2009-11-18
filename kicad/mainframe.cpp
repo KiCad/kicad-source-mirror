@@ -17,31 +17,31 @@
 #include "confirm.h"
 #include "gestfich.h"
 #include "bitmaps.h"
+#include "macros.h"
 
 #include "kicad.h"
 
 
 static const wxString TreeFrameWidthEntry( wxT( "LeftWinWidth" ) );
-static const wxString CommandFrameWidthEntry( wxT( "CommandWinWidth" ) );
 
 
-WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
+WinEDA_MainFrame::WinEDA_MainFrame( wxWindow*       parent,
                                     const wxString& title,
-                                    const wxPoint& pos,
-                                    const wxSize& size ) :
+                                    const wxPoint&  pos,
+                                    const wxSize&   size ) :
     WinEDA_BasicFrame( parent, KICAD_MAIN_FRAME, title, pos, size )
 {
-    wxString  msg;
-    wxString  line;
-    wxSize    clientsize;
+    wxString msg;
+    wxString line;
+    wxSize   clientsize;
 
-    m_FrameName         = wxT( "KicadFrame" );
-    m_VToolBar          = NULL;
-    m_LeftWin           = NULL;
-    m_BottomWin         = NULL;
-    m_CommandWin        = NULL;
-    m_LeftWin_Width     = 200;
-    m_CommandWin_Height = 82;
+    m_FrameName            = wxT( "KicadFrame" );
+    m_VToolBar             = NULL;              // No Vertical tooolbar used here
+    m_LeftWin              = NULL;              // A shashwindow that contains the project tree
+    m_RightWin             = NULL;              /* A shashwindow that contains the buttons
+                                                 *  and the window display text
+                                                 */
+    m_LeftWin_Width        = MAX(60, GetSize().x/3 );
 
     LoadSettings();
 
@@ -55,47 +55,28 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
 
     // Give an icon
     #ifdef __WINDOWS__
-      SetIcon( wxICON( a_kicad_icon ) );
+    SetIcon( wxICON( a_kicad_icon ) );
     #else
-      SetIcon( wxICON( kicad_icon ) );
+    SetIcon( wxICON( kicad_icon ) );
     #endif
 
     clientsize = GetClientSize();
+    int rightWinWidth = clientsize.x - m_LeftWin_Width;
 
     // Left window: is the box which display tree project
-    m_LeftWin = new WinEDA_PrjFrame( this, wxDefaultPosition, wxDefaultSize );
+    m_LeftWin = new WinEDA_PrjFrame( this );
     m_LeftWin->SetDefaultSize( wxSize( m_LeftWin_Width, clientsize.y ) );
     m_LeftWin->SetOrientation( wxLAYOUT_VERTICAL );
     m_LeftWin->SetAlignment( wxLAYOUT_LEFT );
     m_LeftWin->SetSashVisible( wxSASH_RIGHT, TRUE );
     m_LeftWin->SetExtraBorderSize( 2 );
 
-#if !defined(KICAD_AUIMANAGER)
     // Bottom Window: box to display messages
-    m_BottomWin = new wxSashLayoutWindow( this, ID_BOTTOM_FRAME,
-                                          wxDefaultPosition, wxDefaultSize,
-                                          wxNO_BORDER | wxSW_3D );
-    m_BottomWin->SetDefaultSize( wxSize( clientsize.x, 150 ) );
-    m_BottomWin->SetOrientation( wxLAYOUT_HORIZONTAL );
-    m_BottomWin->SetAlignment  ( wxLAYOUT_BOTTOM );
-    m_BottomWin->SetSashVisible( wxSASH_TOP, TRUE );
-    m_BottomWin->SetSashVisible( wxSASH_LEFT, TRUE );
-    m_BottomWin->SetExtraBorderSize( 2 );
-
-    m_DialogWin = new wxTextCtrl( m_BottomWin, wxID_ANY, wxEmptyString,
-                                  wxDefaultPosition, wxDefaultSize,
-                                  wxTE_MULTILINE | wxNO_BORDER | wxTE_READONLY );
-#else
-    m_DialogWin = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
-                                  wxDefaultPosition, wxDefaultSize,
-                                  wxTE_MULTILINE | wxNO_BORDER | wxTE_READONLY );
-#endif
-    // m_CommandWin is the box with buttons which launch eechema, pcbnew ...
-    m_CommandWin = new WinEDA_CommandFrame( this, ID_MAIN_COMMAND,
-                                            wxPoint( m_LeftWin_Width, 0 ),
-                                            wxSize( clientsize.x,
-                                                    m_CommandWin_Height ),
-                                            wxNO_BORDER | wxSW_3D );
+    m_RightWin = new RIGHT_KM_FRAME( this );
+    m_RightWin->SetDefaultSize( wxSize( rightWinWidth, clientsize.y ) );
+    m_RightWin->SetOrientation( wxLAYOUT_VERTICAL );
+    m_RightWin->SetAlignment( wxLAYOUT_RIGHT );
+    m_RightWin->SetExtraBorderSize( 2 );
 
     msg = wxGetCwd();
     line.Printf( _( "Ready\nWorking dir: %s\n" ), msg.GetData() );
@@ -108,32 +89,30 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow* parent,
 #if defined(KICAD_AUIMANAGER)
     RecreateBaseHToolbar();
 
-    m_auimgr.SetManagedWindow(this);
+    m_auimgr.SetManagedWindow( this );
 
     wxAuiPaneInfo horiz;
-    horiz.Gripper(false);
-    horiz.DockFixed(true);
-    horiz.Movable(false);
-    horiz.Floatable(false);
-    horiz.CloseButton(false);
-    horiz.CaptionVisible(false);
+    horiz.Gripper( false );
+    horiz.DockFixed( true );
+    horiz.Movable( false );
+    horiz.Floatable( false );
+    horiz.CloseButton( false );
+    horiz.CaptionVisible( false );
 
-    wxAuiPaneInfo vert(horiz);
+    wxAuiPaneInfo vert( horiz );
 
-    vert.TopDockable(false).BottomDockable(false);
-    horiz.LeftDockable(false).RightDockable(false);
+    vert.TopDockable( false ).BottomDockable( false );
+    horiz.LeftDockable( false ).RightDockable( false );
 
-    m_auimgr.AddPane(m_HToolBar,
-        wxAuiPaneInfo(horiz).Name(wxT("m_HToolBar")).Top());
+    m_auimgr.AddPane( m_HToolBar,
+                     wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top() );
 
-    m_auimgr.AddPane(m_CommandWin,
-        wxAuiPaneInfo().Name(wxT("m_CommandWin")).CentrePane());
+    m_auimgr.AddPane( m_RightWin,
+                     wxAuiPaneInfo().Name( wxT( "m_RightWin" ) ).CentrePane() );
 
-    m_auimgr.AddPane(m_DialogWin,
-        wxAuiPaneInfo(horiz).Name(wxT("m_DialogWin")).CentrePane());
-
-    m_auimgr.AddPane(m_LeftWin,
-        wxAuiPaneInfo(horiz).Name(wxT("m_LeftWin")).Left().BestSize(clientsize.x/3,clientsize.y));
+    m_auimgr.AddPane( m_LeftWin,
+                     wxAuiPaneInfo( horiz ).Name( wxT( "m_LeftWin" ) ).
+                     Left().BestSize( m_LeftWin_Width, clientsize.y ) );
     m_auimgr.Update();
 #endif
 }
@@ -144,7 +123,7 @@ WinEDA_MainFrame::~WinEDA_MainFrame()
 /*****************************************************************************/
 {
 #if defined(KICAD_AUIMANAGER)
-m_auimgr.UnInit();
+    m_auimgr.UnInit();
 #endif
 }
 
@@ -152,14 +131,12 @@ m_auimgr.UnInit();
 /*******************************************************/
 void WinEDA_MainFrame::PrintMsg( const wxString& text )
 /*******************************************************/
+
 /*
  * Put text in the dialog frame
  */
 {
-    m_DialogWin->AppendText( text );
-#ifdef DEBUG
-    printf("%s\n", (const char*)text.mb_str() );
-#endif
+    m_RightWin->m_DialogWin->AppendText( text );
 }
 
 
@@ -170,43 +147,19 @@ void WinEDA_MainFrame::OnSashDrag( wxSashEvent& event )
 /* Resize windows when dragging window borders
  */
 {
-    int    w, h;
-    wxSize newsize;
+#if defined(KICAD_AUIMANAGER)
 
+#else
     if( event.GetDragStatus() == wxSASH_STATUS_OUT_OF_RANGE )
         return;
 
-    GetClientSize( &w, &h );
-
-    switch( event.GetId() )
-    {
-    case ID_LEFT_FRAME:
-    {
-        m_LeftWin->SetDefaultSize( wxSize( event.GetDragRect().width, -1 ) );
-        break;
-    }
-
-    case ID_BOTTOM_FRAME:
-    {
-        newsize = event.GetDragRect().GetSize();
-        m_LeftWin->SetDefaultSize( wxSize( w - newsize.x, -1 ) );
-        m_BottomWin->SetDefaultSize( wxSize( -1, newsize.y ) );
-        m_CommandWin->SetDefaultSize( wxSize( -1, h - newsize.y ) );
-        break;
-    }
-
-    case ID_MAIN_COMMAND:
-    {
-        newsize = event.GetDragRect().GetSize();
-        m_LeftWin->SetDefaultSize( wxSize( w - newsize.x, -1 ) );
-        m_CommandWin->SetDefaultSize( wxSize( -1, newsize.y ) );
-        m_BottomWin->SetDefaultSize( wxSize( -1, h - newsize.y ) );
-        break;
-    }
-    }
+    m_LeftWin_Width = event.GetDragRect().width;
+    m_LeftWin->SetDefaultSize( wxSize( m_LeftWin_Width, -1 ) );
 
     wxLayoutAlgorithm layout;
     layout.LayoutFrame( this );
+#endif
+
     event.Skip();
 }
 
@@ -216,30 +169,13 @@ void WinEDA_MainFrame::OnSize( wxSizeEvent& event )
 /************************************************/
 {
 #if defined(KICAD_AUIMANAGER)
-   if(m_auimgr.GetManagedWindow())
-       m_auimgr.Update();
-#else
-    if( m_CommandWin && m_BottomWin )
-    {
-        int    w, h, dy;
-        wxSize bsize, hsize;
-        GetClientSize( &w, &h );
-        bsize = m_BottomWin->GetSize();
-        hsize = m_CommandWin->GetSize();
-        dy    = h - hsize.y;
-        if( dy < 50 )
-        {
-            dy      = 50;
-            hsize.y = h - dy;
-        }
-        m_CommandWin->SetDefaultSize( wxSize( -1, hsize.y ) );
-        m_BottomWin->SetDefaultSize( wxSize( -1, dy ) );
-    }
+    if( m_auimgr.GetManagedWindow() )
+        m_auimgr.Update();
 
+#else
     wxLayoutAlgorithm layout;
     layout.LayoutFrame( this );
-    if( m_CommandWin )
-        m_CommandWin->Refresh( TRUE );
+
 #endif
     event.Skip();
 }
@@ -276,7 +212,7 @@ void WinEDA_MainFrame::OnCloseWindow( wxCloseEvent& Event )
         wxGetApp().m_HtmlCtrl = NULL;
     }
 
-    m_LeftWin->Show(false);
+    m_LeftWin->Show( false );
 
     Destroy();
 }
@@ -291,6 +227,7 @@ void WinEDA_MainFrame::OnExit( wxCommandEvent& event )
 void WinEDA_MainFrame::OnRunPcbNew( wxCommandEvent& event )
 {
     wxFileName fn( m_ProjectFileName );
+
     fn.SetExt( BoardFileExtension );
     ExecuteFile( this, PCBNEW_EXE, QuoteFullPath( fn ) );
 }
@@ -299,6 +236,7 @@ void WinEDA_MainFrame::OnRunPcbNew( wxCommandEvent& event )
 void WinEDA_MainFrame::OnRunCvpcb( wxCommandEvent& event )
 {
     wxFileName fn( m_ProjectFileName );
+
     fn.SetExt( NetlistFileExtension );
     ExecuteFile( this, CVPCB_EXE, QuoteFullPath( fn ) );
 }
@@ -307,6 +245,7 @@ void WinEDA_MainFrame::OnRunCvpcb( wxCommandEvent& event )
 void WinEDA_MainFrame::OnRunEeschema( wxCommandEvent& event )
 {
     wxFileName fn( m_ProjectFileName );
+
     fn.SetExt( SchematicFileExtension );
     ExecuteFile( this, EESCHEMA_EXE, QuoteFullPath( fn ) );
 }
@@ -315,8 +254,9 @@ void WinEDA_MainFrame::OnRunEeschema( wxCommandEvent& event )
 void WinEDA_MainFrame::OnRunGerbview( wxCommandEvent& event )
 {
     wxFileName fn( m_ProjectFileName );
+
     ExecuteFile( this, GERBVIEW_EXE,
-                 fn.GetPath( wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME ) );
+                fn.GetPath( wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME ) );
 }
 
 
@@ -341,12 +281,15 @@ void WinEDA_MainFrame::OnRunPythonScript( wxCommandEvent& event )
 
     PyHandler::GetInstance()->RunScript( dlg.GetPath() );
 }
+
+
 #endif
 
 
 void WinEDA_MainFrame::OnOpenFileInTextEditor( wxCommandEvent& event )
 {
     wxString mask( wxT( "*" ) );
+
 #ifdef __WINDOWS__
     mask += wxT( ".*" );
 #endif
@@ -354,12 +297,12 @@ void WinEDA_MainFrame::OnOpenFileInTextEditor( wxCommandEvent& event )
     mask = _( "Text file (" ) + mask + wxT( ")|" ) + mask;
 
     wxFileDialog dlg( this, _( "Load File to Edit" ), wxGetCwd(),
-                      wxEmptyString, mask,wxFD_OPEN );
+                      wxEmptyString, mask, wxFD_OPEN );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    if( ! dlg.GetPath().IsEmpty() &&  ! wxGetApp().GetEditorName().IsEmpty() )
+    if( !dlg.GetPath().IsEmpty() &&  !wxGetApp().GetEditorName().IsEmpty() )
         ExecuteFile( this, wxGetApp().GetEditorName(), dlg.GetPath() );
 }
 
@@ -372,12 +315,11 @@ void WinEDA_MainFrame::OnRefresh( wxCommandEvent& event )
 }
 
 
-
 /*********************************/
 void WinEDA_MainFrame::ClearMsg()
 /*********************************/
 {
-  m_DialogWin->Clear();
+    m_RightWin->m_DialogWin->Clear();
 }
 
 
@@ -395,7 +337,6 @@ void WinEDA_MainFrame::LoadSettings()
 
     WinEDA_BasicFrame::LoadSettings();
     cfg->Read( TreeFrameWidthEntry, &m_LeftWin_Width );
-    cfg->Read( CommandFrameWidthEntry, &m_CommandWin_Height );
 }
 
 
@@ -414,7 +355,6 @@ void WinEDA_MainFrame::SaveSettings()
     WinEDA_BasicFrame::SaveSettings();
 
     cfg->Write( TreeFrameWidthEntry, m_LeftWin->GetSize().x );
-    cfg->Write( CommandFrameWidthEntry, m_CommandWin->GetSize().y );
 }
 
 
@@ -425,4 +365,6 @@ void WinEDA_MainFrame::OnRefreshPy()
 {
     m_LeftWin->ReCreateTreePrj();
 }
+
+
 #endif

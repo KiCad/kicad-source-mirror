@@ -9,6 +9,7 @@ set(KICAD_SRCS
     commandframe.cpp
     files-io.cpp
     kicad.cpp
+    kicad-python.cpp
     mainframe.cpp
     preferences.cpp
     prjconfig.cpp

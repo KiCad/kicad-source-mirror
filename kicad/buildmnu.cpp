@@ -19,12 +19,8 @@ BEGIN_EVENT_TABLE( WinEDA_MainFrame, WinEDA_BasicFrame )
 /* Window events */
     EVT_SIZE( WinEDA_MainFrame::OnSize )
     EVT_CLOSE( WinEDA_MainFrame::OnCloseWindow )
-#if !defined(KICAD_AUIMANAGER)
 /* Sash drag events */
     EVT_SASH_DRAGGED( ID_LEFT_FRAME, WinEDA_MainFrame::OnSashDrag )
-    EVT_SASH_DRAGGED( ID_BOTTOM_FRAME, WinEDA_MainFrame::OnSashDrag )
-    EVT_SASH_DRAGGED( ID_MAIN_COMMAND, WinEDA_MainFrame::OnSashDrag )
-#endif
 /* Toolbar events */
     EVT_TOOL( ID_NEW_PROJECT, WinEDA_MainFrame::OnLoadProject )
     EVT_TOOL( ID_LOAD_PROJECT, WinEDA_MainFrame::OnLoadProject )

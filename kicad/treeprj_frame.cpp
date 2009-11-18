@@ -69,13 +69,11 @@ const wxString TextFileWildcard( wxT( "Text files (*.txt)|*.txt" ) );
  * @brief TODO
  */
 /******************************************************************/
-WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent,
-                                  const wxPoint&    pos,
-                                  const wxSize&     size ) :
+WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent ) :
     wxSashLayoutWindow( parent,
                         ID_LEFT_FRAME,
-                        pos,
-                        size,
+                        wxDefaultPosition,
+                        wxDefaultSize,
                         wxNO_BORDER | wxSW_3D )
 /******************************************************************/
 {

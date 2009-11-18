@@ -19,8 +19,7 @@
 #include "wxstruct.h"
 #include "appl_wxstruct.h"
 
-
-class WinEDA_CommandFrame;
+class RIGHT_KM_FRAME;
 class WinEDA_TreePrj;
 class WinEDA_PrjFrame;
 
@@ -33,10 +32,8 @@ class WinEDA_PrjFrame;
  * new commands to Kicad.
  */
 
-enum id_kicad_frm
-{
+enum id_kicad_frm {
     ID_LEFT_FRAME = ID_END_LIST,
-    ID_BOTTOM_FRAME,
     ID_PROJECT_TREE,
     ID_PROJECT_TXTEDIT,
     ID_PROJECT_TREE_REFRESH,
@@ -49,7 +46,6 @@ enum id_kicad_frm
     ID_PROJECT_RENAME,
     ID_PROJECT_OPEN_FILE_WITH_TEXT_EDITOR,
 
-    ID_MAIN_COMMAND,
     ID_TO_EDITOR,
     ID_TO_EESCHEMA,
     ID_TO_GERBVIEW,
@@ -71,18 +67,15 @@ class WinEDA_MainFrame : public WinEDA_BasicFrame
 {
     /* This class is the main entry point of the py API */
 public:
+    WinEDA_PrjFrame* m_LeftWin;
+    RIGHT_KM_FRAME*  m_RightWin;
+    WinEDA_Toolbar*  m_VToolBar;     // Vertical toolbar (not used)
+    wxString         m_BoardFileName;
+    wxString         m_SchematicRootFileName;
+    wxFileName       m_ProjectFileName;
 
-    WinEDA_CommandFrame* m_CommandWin;
-    WinEDA_PrjFrame*     m_LeftWin;
-    wxSashLayoutWindow*  m_BottomWin;
-    wxTextCtrl*          m_DialogWin;
-    WinEDA_Toolbar*      m_VToolBar; // Vertical toolbar (not used)
-    wxString             m_BoardFileName;
-    wxString             m_SchematicRootFileName;
-    wxFileName           m_ProjectFileName;
-
-    int     m_LeftWin_Width;
-    int     m_CommandWin_Height;
+private:
+    int m_LeftWin_Width;
 
 public:
 
@@ -91,59 +84,63 @@ public:
 
     ~WinEDA_MainFrame();
 
-    void        OnCloseWindow( wxCloseEvent& Event );
-    void        OnSize( wxSizeEvent& event );
-    void        OnSashDrag( wxSashEvent& event );
-    void        OnLoadProject( wxCommandEvent& event );
-    void        OnSaveProject( wxCommandEvent& event );
-    void        OnArchiveFiles( wxCommandEvent& event );
-    void        OnUnarchiveFiles( wxCommandEvent& event );
-    void        OnRunPcbNew( wxCommandEvent& event );
-    void        OnRunCvpcb( wxCommandEvent& event );
-    void        OnRunEeschema( wxCommandEvent& event );
-    void        OnRunGerbview( wxCommandEvent& event );
+    /** Function CreateCommandToolbar
+     * Create the main buttons (fast launch buttons)
+     */
+    void                  OnCloseWindow( wxCloseEvent& Event );
+    void                  OnSize( wxSizeEvent& event );
+    void                  OnSashDrag( wxSashEvent& event );
+    void                  OnLoadProject( wxCommandEvent& event );
+    void                  OnSaveProject( wxCommandEvent& event );
+    void                  OnArchiveFiles( wxCommandEvent& event );
+    void                  OnUnarchiveFiles( wxCommandEvent& event );
+    void                  OnRunPcbNew( wxCommandEvent& event );
+    void                  OnRunCvpcb( wxCommandEvent& event );
+    void                  OnRunEeschema( wxCommandEvent& event );
+    void                  OnRunGerbview( wxCommandEvent& event );
 
 #ifdef KICAD_PYTHON
-    void        OnRunPythonScript( wxCommandEvent& event );
+    void                  OnRunPythonScript( wxCommandEvent& event );
+
 #endif
 
-    void        OnOpenTextEditor( wxCommandEvent& event );
-    void        OnOpenFileInTextEditor( wxCommandEvent& event );
-    void        OnOpenFileInEditor( wxCommandEvent& event );
+    void                  OnOpenTextEditor( wxCommandEvent& event );
+    void                  OnOpenFileInTextEditor( wxCommandEvent& event );
+    void                  OnOpenFileInEditor( wxCommandEvent& event );
 
-    void        OnFileHistory( wxCommandEvent& event );
-    void        OnExit( wxCommandEvent& event );
-    void        Process_Preferences( wxCommandEvent& event );
-    void        ReCreateMenuBar();
-    void        RecreateBaseHToolbar();
-    void        PrintMsg( const wxString& text );
-    void        ClearMsg();
-    void        SetLanguage( wxCommandEvent& event );
-    void        OnRefresh( wxCommandEvent& event );
-    void        OnSelectDefaultPdfBrowser( wxCommandEvent& event );
-    void        OnSelectPreferredPdfBrowser( wxCommandEvent& event );
-    void        OnSelectPreferredEditor( wxCommandEvent& event );
+    void                  OnFileHistory( wxCommandEvent& event );
+    void                  OnExit( wxCommandEvent& event );
+    void                  Process_Preferences( wxCommandEvent& event );
+    void                  ReCreateMenuBar();
+    void                  RecreateBaseHToolbar();
+    void                  PrintMsg( const wxString& text );
+    void                  ClearMsg();
+    void                  SetLanguage( wxCommandEvent& event );
+    void                  OnRefresh( wxCommandEvent& event );
+    void                  OnSelectDefaultPdfBrowser( wxCommandEvent& event );
+    void                  OnSelectPreferredPdfBrowser( wxCommandEvent& event );
+    void                  OnSelectPreferredEditor( wxCommandEvent& event );
 
-    void        OnUpdateDefaultPdfBrowser( wxUpdateUIEvent& event );
-    void        OnUpdatePreferredPdfBrowser( wxUpdateUIEvent& event );
+    void                  OnUpdateDefaultPdfBrowser( wxUpdateUIEvent& event );
+    void                  OnUpdatePreferredPdfBrowser( wxUpdateUIEvent& event );
 
-    void        CreateNewProject( const wxString PrjFullFileName );
+    void                  CreateNewProject( const wxString PrjFullFileName );
 
-    void        LoadSettings();
-    void        SaveSettings();
+    void                  LoadSettings();
+    void                  SaveSettings();
 
 #ifdef KICAD_PYTHON
-    void        OnRefreshPy();
+    void                  OnRefreshPy();
 
-    boost::python::object   GetPrjName() const;
+    boost::python::object GetPrjName() const;
 
     WinEDA_MainFrame( const WinEDA_MainFrame& ) { }
 
     WinEDA_MainFrame() { }
 
-    boost::python::object   ToWx();
-    void                    AddFastLaunchPy( boost::python::object& button );
-    WinEDA_PrjFrame*        GetTree() const;
+    boost::python::object ToWx();
+    void                  AddFastLaunchPy( boost::python::object& button );
+    WinEDA_PrjFrame*      GetTree() const;
 
 #endif
 
@@ -166,39 +163,29 @@ enum TreeFileType {
     TREE_MAX,
 };
 
-
-/**************************************************************/
-/* class WinEDA_CommandFrame: window handling command buttons */
-/**************************************************************/
-
-/** class WinEDA_CommandFrame
- * This is the window handling the main tools to launch eeschema, cvpcb,
- * pcbnew and gerbview
+/** class RIGHT_KM_FRAME
  */
-class WinEDA_CommandFrame : public wxSashLayoutWindow
+class RIGHT_KM_FRAME : public wxSashLayoutWindow
 {
 public:
-    WinEDA_CommandFrame( wxWindow* parent, int id, wxPoint pos, wxSize size,
-                         long style );
-    ~WinEDA_CommandFrame()
-    { }
+    wxTextCtrl*      m_DialogWin;
+private:
+    WinEDA_MainFrame* m_Parent;
+    int m_ButtonsPanelHeight;
+    wxPanel*          m_ButtPanel;
+    wxPoint           m_ButtonLastPosition;     /* position of the last button in the window */
+    int m_ButtonSeparation;                     /* button distance in pixels */
 
-    /** Function AddFastLaunch
-      * add a Bitmap Button (fast launch button) to the window
-     */
 public:
-    void AddFastLaunch( wxBitmapButton * button );
+    RIGHT_KM_FRAME( WinEDA_MainFrame* parent );
+    ~RIGHT_KM_FRAME() { };
+    void OnSize( wxSizeEvent& event );
 
 private:
+    void CreateCommandToolbar( void );
+    void AddFastLaunch( wxBitmapButton* button );
 
-    /** Function CreateCommandToolbar
-      * Create the main buttons (fast launch buttons)
-     */
-    void    CreateCommandToolbar( void );
-
-private:
-    wxPoint m_ButtonLastPosition;   /** position of the last button in the window */
-    int     m_ButtonSeparation;     /** button distance in pixels */
+    DECLARE_EVENT_TABLE()
 };
 
 
@@ -228,9 +215,9 @@ public:
     TreePrjItemData() : m_Parent( NULL ) { }
 
     TreePrjItemData( const TreePrjItemData& src ) :
-        m_Type( src.m_Type )
-        , m_FileName( src.m_FileName )
-        , m_Parent( src.m_Parent )
+        m_Type( src.m_Type ),
+        m_FileName( src.m_FileName ),
+        m_Parent( src.m_Parent )
     {
         SetState( src.m_State );
     }
@@ -254,13 +241,13 @@ public:
     }
 
 
-    wxString    GetDir() const;
+    wxString GetDir() const;
 
-    void        OnRename( wxTreeEvent& event, bool check = true );
-    bool        Rename( const wxString& name, bool check = true );
-    bool        Delete( bool check = true );
-    void        Move( TreePrjItemData* dest );
-    void        Activate(WinEDA_PrjFrame* prjframe);
+    void     OnRename( wxTreeEvent& event, bool check = true );
+    bool     Rename( const wxString& name, bool check = true );
+    bool     Delete( bool check = true );
+    void     Move( TreePrjItemData* dest );
+    void     Activate( WinEDA_PrjFrame* prjframe );
 
     const wxMenu* GetMenu()
     {
@@ -268,18 +255,18 @@ public:
     }
 
 
-    void                    SetState( int state );
+    void                  SetState( int state );
 
 #ifdef KICAD_PYTHON
-    boost::python::object   GetFileNamePy() const;
-    bool                    RenamePy( const boost::python::str& newname,
-                                      bool check = true );
+    boost::python::object GetFileNamePy() const;
+    bool                  RenamePy( const boost::python::str& newname,
+                                    bool                      check = true );
 
-    boost::python::object   GetDirPy() const;
+    boost::python::object GetDirPy() const;
 
-    boost::python::object   GetIdPy() const;
+    boost::python::object GetIdPy() const;
 
-    boost::python::object   GetMenuPy();
+    boost::python::object GetMenuPy();
 
 #endif
 };
@@ -291,19 +278,19 @@ class WinEDA_PrjFrame : public wxSashLayoutWindow
 {
 private:
 
-    std::vector<wxMenu*>    m_ContextMenus;
-    std::vector<wxString>   m_Filters;
+    std::vector<wxMenu*>  m_ContextMenus;
+    std::vector<wxString> m_Filters;
 
     wxMenu*  m_PopupMenu;
     wxCursor m_DragCursor;
     wxCursor m_Default;
 
 protected:
-    wxMenu*           GetContextMenu( int type );
-    void              NewFile( TreeFileType type );
-    void              NewFile( const wxString& name, TreeFileType type,
-                               wxTreeItemId& root );
-    TreePrjItemData*  GetSelectedData();
+    wxMenu*          GetContextMenu( int type );
+    void             NewFile( TreeFileType type );
+    void             NewFile( const wxString& name, TreeFileType type,
+                              wxTreeItemId& root );
+    TreePrjItemData* GetSelectedData();
 
 public:
     WinEDA_MainFrame* m_Parent;
@@ -312,41 +299,40 @@ public:
     wxTreeItemId      m_root;
 
 public:
-    static wxString   GetFileExt( TreeFileType type );
-    static wxString   GetFileWildcard( TreeFileType type );
+    static wxString              GetFileExt( TreeFileType type );
+    static wxString              GetFileWildcard( TreeFileType type );
 
-    WinEDA_PrjFrame( WinEDA_MainFrame* parent,
-                     const wxPoint& pos, const wxSize& size );
+    WinEDA_PrjFrame( WinEDA_MainFrame* parent );
     ~WinEDA_PrjFrame();
-    void                            OnSelect( wxTreeEvent& Event );
-    void                            OnRenameAsk( wxTreeEvent& Event );
-    void                            OnRename( wxTreeEvent& Event );
-    void                            OnDragStart( wxTreeEvent& event );
-    void                            OnDragEnd( wxTreeEvent& event );
-    void                            OnRight( wxTreeEvent& Event );
-    void                            ReCreateTreePrj();
+    void                         OnSelect( wxTreeEvent& Event );
+    void                         OnRenameAsk( wxTreeEvent& Event );
+    void                         OnRename( wxTreeEvent& Event );
+    void                         OnDragStart( wxTreeEvent& event );
+    void                         OnDragEnd( wxTreeEvent& event );
+    void                         OnRight( wxTreeEvent& Event );
+    void                         ReCreateTreePrj();
 
-    void                            OnTxtEdit( wxCommandEvent& event );
+    void                         OnTxtEdit( wxCommandEvent& event );
 
-    void                            OnDeleteFile( wxCommandEvent& event );
-    void                            OnRenameFile( wxCommandEvent& event );
+    void                         OnDeleteFile( wxCommandEvent& event );
+    void                         OnRenameFile( wxCommandEvent& event );
 
-    void                            OnNewFile( wxCommandEvent& event );
-    void                            OnNewDirectory( wxCommandEvent& event );
-    void                            OnNewSchFile( wxCommandEvent& event );
-    void                            OnNewBrdFile( wxCommandEvent& event );
-    void                            OnNewPyFile( wxCommandEvent& event );
-    void                            OnNewGerberFile( wxCommandEvent& event );
-    void                            OnNewTxtFile( wxCommandEvent& event );
-    void                            OnNewNetFile( wxCommandEvent& event );
+    void                         OnNewFile( wxCommandEvent& event );
+    void                         OnNewDirectory( wxCommandEvent& event );
+    void                         OnNewSchFile( wxCommandEvent& event );
+    void                         OnNewBrdFile( wxCommandEvent& event );
+    void                         OnNewPyFile( wxCommandEvent& event );
+    void                         OnNewGerberFile( wxCommandEvent& event );
+    void                         OnNewTxtFile( wxCommandEvent& event );
+    void                         OnNewNetFile( wxCommandEvent& event );
 
-    void                            ClearFilters();
+    void                         ClearFilters();
 
-    const std::vector<wxString>&    GetFilters();
-    void                            RemoveFilter( const wxString& filter );
+    const std::vector<wxString>& GetFilters();
+    void                         RemoveFilter( const wxString& filter );
 
 #ifdef KICAD_PYTHON
-    boost::python::object           ToWx();
+    boost::python::object        ToWx();
 
     WinEDA_PrjFrame()
     {
@@ -358,31 +344,31 @@ public:
     }
 
 
-    void                    OnRunPy( wxCommandEvent& event );
+    void OnRunPy( wxCommandEvent& event );
 
     boost::python::object GetMenuPy( TreeFileType );
 
     boost::python::object GetFtExPy( TreeFileType ) const;
 
-    void                    RemoveFilterPy( const boost::python::str& filter );
-    void                    AddFilter( const boost::python::str& filter );
+    void                  RemoveFilterPy( const boost::python::str& filter );
+    void                  AddFilter( const boost::python::str& filter );
 
-    boost::python::object   GetTreeCtrl();
-    TreePrjItemData*        GetItemData( const boost::python::object& item );
-    void                    AddFilePy( const boost::python::str& name,
-                                       boost::python::object& root );
-    void                    NewFilePy( const boost::python::str& name,
-                                       TreeFileType              type,
-                                       boost::python::object&    root );
+    boost::python::object GetTreeCtrl();
+    TreePrjItemData*      GetItemData( const boost::python::object& item );
+    void                  AddFilePy( const boost::python::str& name,
+                                     boost::python::object&    root );
+    void                  NewFilePy( const boost::python::str& name,
+                                     TreeFileType              type,
+                                     boost::python::object&    root );
 
-    TreePrjItemData*        FindItemData( const boost::python::str& name );
+    TreePrjItemData*      FindItemData( const boost::python::str& name );
 
-    boost::python::object   GetCurrentMenu();
-    int                     AddStatePy( boost::python::object& bitmap );
+    boost::python::object GetCurrentMenu();
+    int                   AddStatePy( boost::python::object& bitmap );
 
 #endif
 
-    bool                    AddFile( const wxString& name, wxTreeItemId& root );
+    bool                  AddFile( const wxString& name, wxTreeItemId& root );
 
     DECLARE_EVENT_TABLE()
 };
