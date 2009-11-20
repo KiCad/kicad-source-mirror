@@ -50,7 +50,7 @@
 # define BOOST_BYTE_ORDER 1234
 #elif defined(__sparc) || defined(__sparc__) \
    || defined(_POWER) || defined(__powerpc__) \
-   || defined(__ppc__) || defined(__hpux) \
+   || defined(__ppc__) || defined(__hpux) || defined(__hppa) \
    || defined(_MIPSEB) || defined(_POWER) \
    || defined(__s390__)
 # define BOOST_BIG_ENDIAN

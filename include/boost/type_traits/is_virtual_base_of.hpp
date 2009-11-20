@@ -42,14 +42,14 @@ struct is_virtual_base_of_impl<Base, Derived, mpl::true_>
        X();
        X(const X&);
        X& operator=(const X&);
-       ~X();
+       ~X()throw();
     };
     struct Y : public virtual Derived 
     {
        Y();
        Y(const Y&);
        Y& operator=(const Y&);
-       ~Y();
+       ~Y()throw();
     };
 #else
     struct X : Derived, virtual Base 
@@ -57,14 +57,14 @@ struct is_virtual_base_of_impl<Base, Derived, mpl::true_>
        X();
        X(const X&);
        X& operator=(const X&);
-       ~X();
+       ~X()throw();
     };
     struct Y : Derived 
     {
        Y();
        Y(const Y&);
        Y& operator=(const Y&);
-       ~Y();
+       ~Y()throw();
     };
 #endif
     BOOST_STATIC_CONSTANT(bool, value = (sizeof(X)==sizeof(Y)));

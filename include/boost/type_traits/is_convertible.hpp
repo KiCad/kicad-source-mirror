@@ -256,7 +256,7 @@ struct is_convertible_basic_impl
 #ifdef BOOST_MSVC
 #pragma warning(push)
 #pragma warning(disable:4244)
-#if BOOST_WORKAROUND(_MSC_FULL_VER, >= 140050000)
+#if BOOST_WORKAROUND(BOOST_MSVC_FULL_VER, >= 140050000)
 #pragma warning(disable:6334)
 #endif
 #endif

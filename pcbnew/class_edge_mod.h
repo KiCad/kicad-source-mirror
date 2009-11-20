@@ -71,6 +71,15 @@ public:
 
 
     /**
+     * Function GetBoundingBox
+     * returns the orthogonal, bounding box of this object for display purposes.
+     * This box should be an enclosing perimeter for visible components of this
+     * object, and the units should be in the pcb or schematic coordinate system.
+     * It is OK to overestimate the size by a few counts.
+     */
+    virtual EDA_Rect GetBoundingBox();
+
+    /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
      * @param refPos A wxPoint to test
@@ -89,6 +98,23 @@ public:
         // return wxT( "EDGE" );  ?
     }
 
+    /** Function TransformShapeWithClearanceToPolygon
+     * Convert the track shape to a closed polygon
+     * Used in filling zones calculations
+     * Circles and arcs are approximated by segments
+     * @param aCornerBuffer = a buffer to store the polygon
+     * @param aClearanceValue = the clearance around the pad
+     * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+     * @param aCorrectionFactor = the correction to apply to circles radius to keep
+     * clearance when the circle is approxiamted by segment bigger or equal
+     * to the real clearance value (usually near from 1.0)
+     */
+    void         TransformShapeWithClearanceToPolygon(
+        std::vector <CPolyPt>& aCornerBuffer,
+        int                    aClearanceValue,
+        int
+                               aCircleToSegmentsCount,
+        double                 aCorrectionFactor );
 
 #if defined(DEBUG)
     /**

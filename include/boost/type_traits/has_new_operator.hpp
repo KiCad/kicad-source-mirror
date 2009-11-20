@@ -85,7 +85,7 @@ namespace detail {
             BOOST_STATIC_CONSTANT(unsigned, s1 = sizeof(has_new_operator_impl<T>::template check_sig<T>(0)));
             BOOST_STATIC_CONSTANT(unsigned, s2 = sizeof(has_new_operator_impl<T>::template check_sig2<T>(0)));
         #else
-            #if BOOST_WORKAROUND(_MSC_FULL_VER, >= 140050000)
+            #if BOOST_WORKAROUND(BOOST_MSVC_FULL_VER, >= 140050000)
                 #pragma warning(push)
                 #pragma warning(disable:6334)
             #endif
@@ -93,7 +93,7 @@ namespace detail {
             BOOST_STATIC_CONSTANT(unsigned, s1 = sizeof(check_sig<T>(0)));
             BOOST_STATIC_CONSTANT(unsigned, s2 = sizeof(check_sig2<T>(0)));
 
-            #if BOOST_WORKAROUND(_MSC_FULL_VER, >= 140050000)
+            #if BOOST_WORKAROUND(BOOST_MSVC_FULL_VER, >= 140050000)
                 #pragma warning(pop)
             #endif
         #endif

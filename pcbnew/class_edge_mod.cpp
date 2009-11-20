@@ -24,10 +24,10 @@
 EDGE_MODULE::EDGE_MODULE( MODULE* parent ) :
     BOARD_ITEM( parent, TYPE_EDGE_MODULE )
 {
-    m_Width     = 0;
-    m_Shape     = S_SEGMENT;
-    m_Angle     = 0;
-    m_Width     = 120;
+    m_Width = 0;
+    m_Shape = S_SEGMENT;
+    m_Angle = 0;
+    m_Width = 120;
 }
 
 
@@ -51,6 +51,78 @@ void EDGE_MODULE::Copy( EDGE_MODULE* source )
     m_Width  = source->m_Width;
 
     m_PolyPoints = source->m_PolyPoints;    // std::vector copy
+}
+
+
+/**
+ * Function GetBoundingBox
+ * returns the orthogonal, bounding box of this object for display purposes.
+ * This box should be an enclosing perimeter for visible components of this
+ * object, and the units should be in the pcb or schematic coordinate system.
+ * It is OK to overestimate the size by a few counts.
+ */
+EDA_Rect EDGE_MODULE::GetBoundingBox()
+{
+    EDA_Rect bbox;
+
+    bbox.SetOrigin( m_Start );
+
+    switch( m_Shape )
+    {
+    case S_SEGMENT:
+        bbox.SetEnd( m_End );
+        bbox.Inflate( (m_Width / 2) + 1 );
+        break;
+
+    case S_CIRCLE:
+    {
+        int rayon = (int) hypot( (double) (m_End.x - m_Start.x), (double) (m_End.y - m_Start.y) );
+        bbox.Inflate( rayon + 1 );
+    }
+    break;
+
+    case S_ARC:
+    {
+        int rayon = (int) hypot( (double) (m_End.x - m_Start.x), (double) (m_End.y - m_Start.y) );
+        bbox.Inflate( rayon + 1 );
+    }
+    break;
+
+    case S_POLYGON:
+    {
+        // We must compute true coordinates from m_PolyPoints
+        // which are relative to module position, orientation 0
+
+        std::vector<wxPoint> points = m_PolyPoints;
+        wxPoint p_end = m_Start;
+
+        MODULE* Module = (MODULE*) m_Parent;
+        for( unsigned ii = 0; ii < points.size(); ii++ )
+        {
+            wxPoint& pt = points[ii];
+
+            if( Module )
+            {
+                RotatePoint( &pt.x, &pt.y, Module->m_Orient );
+                pt.x += Module->m_Pos.x;
+                pt.y += Module->m_Pos.y;
+            }
+
+            pt.x += m_Start0.x;
+            pt.y += m_Start0.y;
+            bbox.m_Pos.x = MIN( bbox.m_Pos.x, pt.x );
+            bbox.m_Pos.y = MIN( bbox.m_Pos.y, pt.y );
+            p_end.x   = MAX( p_end.x, pt.x );
+            p_end.y   = MAX( p_end.y, pt.y );
+        }
+
+        bbox.SetEnd(p_end);
+        bbox.Inflate( 1 );
+        break;
+    }
+    }
+
+    return bbox;
 }
 
 
@@ -106,8 +178,8 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     ux0 = m_Start.x - offset.x;
     uy0 = m_Start.y - offset.y;
 
-    dx  = m_End.x - offset.x;
-    dy  = m_End.y - offset.y;
+    dx = m_End.x - offset.x;
+    dy = m_End.y - offset.y;
 
     GRSetDrawMode( DC, draw_mode );
     typeaff = frame->m_DisplayModEdge;
@@ -181,6 +253,7 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         break;
 
     case S_POLYGON:
+
         // We must compute true coordinates from m_PolyPoints
         // which are relative to module position, orientation 0
 
@@ -197,8 +270,8 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                 pt.y += Module->m_Pos.y;
             }
 
-            pt.x   += m_Start0.x - offset.x;
-            pt.y   += m_Start0.y - offset.y;
+            pt.x += m_Start0.x - offset.x;
+            pt.y += m_Start0.y - offset.y;
         }
 
         GRPoly( &panel->m_ClipBox, DC, points.size(), &points[0],
@@ -213,7 +286,8 @@ void EDGE_MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
 
-    MODULE* module = (MODULE*) m_Parent;
+    MODULE*  module = (MODULE*) m_Parent;
+
     if( !module )
         return;
 
@@ -277,15 +351,17 @@ bool EDGE_MODULE::Save( FILE* aFile ) const
         ret = fprintf( aFile, "DP %d %d %d %d %d %d %d\n",
                        m_Start0.x, m_Start0.y,
                        m_End0.x, m_End0.y,
-                       (int)m_PolyPoints.size(),
+                       (int) m_PolyPoints.size(),
                        m_Width, m_Layer );
 
-        for( unsigned i=0;  i<m_PolyPoints.size();  ++i )
+        for( unsigned i = 0;  i<m_PolyPoints.size();  ++i )
             fprintf( aFile, "Dl %d %d\n", m_PolyPoints[i].x,
                      m_PolyPoints[i].y );
+
         break;
 
     default:
+
         // future: throw an exception here
 #if defined(DEBUG)
         printf( "EDGE_MODULE::Save(): unexpected m_Shape: %d\n", m_Shape );
@@ -293,7 +369,7 @@ bool EDGE_MODULE::Save( FILE* aFile ) const
         break;
     }
 
-    return (ret > 5);
+    return ret > 5;
 }
 
 
@@ -342,7 +418,7 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
 
     switch( m_Shape )
     {
-    case  S_ARC:
+    case S_ARC:
         sscanf( Line + 3, "%d %d %d %d %d %d %d",
                 &m_Start0.x, &m_Start0.y,
                 &m_End0.x, &m_End0.y,
@@ -381,7 +457,7 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
                 int y;
                 sscanf( Buf + 3, "%d %d\n", &x, &y );
 
-                m_PolyPoints.push_back( wxPoint(x,y) );
+                m_PolyPoints.push_back( wxPoint( x, y ) );
 
                 (*LineNum)++;
             }
@@ -412,7 +488,7 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
     // m_Layer must be >= FIRST_NON_COPPER_LAYER, but because microwave footprints
     // can use the copper layers m_Layer < FIRST_NON_COPPER_LAYER is allowed.
     // @todo: changes use of EDGE_MODULE these footprints and allows only m_Layer >= FIRST_NON_COPPER_LAYER
-    if ( (m_Layer < 0) || (m_Layer > LAST_NON_COPPER_LAYER) )
+    if( (m_Layer < 0) || (m_Layer > LAST_NON_COPPER_LAYER) )
         m_Layer = SILKSCREEN_N_CMP;
     return error;
 }
@@ -426,10 +502,10 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
  */
 bool EDGE_MODULE::HitTest( const wxPoint& ref_pos )
 {
-    int             uxf, uyf;
-    int             rayon, dist;
-    int             dx, dy, spot_cX, spot_cY;
-    int             ux0, uy0;
+    int uxf, uyf;
+    int rayon, dist;
+    int dx, dy, spot_cX, spot_cY;
+    int ux0, uy0;
 
     ux0 = m_Start.x;
     uy0 = m_Start.y;
@@ -445,14 +521,14 @@ bool EDGE_MODULE::HitTest( const wxPoint& ref_pos )
 
         dx = uxf - ux0;
         dy = uyf - uy0;
-        if( DistanceTest( m_Width/2, dx, dy, spot_cX, spot_cY ) )
+        if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
             return true;
         break;
 
     case S_CIRCLE:
         rayon = (int) hypot( (double) (uxf - ux0), (double) (uyf - uy0) );
         dist  = (int) hypot( (double) (ref_pos.x - ux0),
-                             (double) (ref_pos.y - uy0) );
+                            (double) (ref_pos.y - uy0) );
         if( abs( rayon - dist ) <= m_Width )
             return true;
         break;
@@ -460,7 +536,7 @@ bool EDGE_MODULE::HitTest( const wxPoint& ref_pos )
     case S_ARC:
         rayon = (int) hypot( (double) (uxf - ux0), (double) (uyf - uy0) );
         dist  = (int) hypot( (double) (ref_pos.x - ux0),
-                             (double) (ref_pos.y - uy0) );
+                            (double) (ref_pos.y - uy0) );
 
         if( abs( rayon - dist ) > m_Width )
             break;
@@ -501,12 +577,13 @@ void EDGE_MODULE::Show( int nestLevel, std::ostream& os )
 
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-        " type=\"" << CONV_TO_UTF8(shape) << "\">";
+    " type=\"" << CONV_TO_UTF8( shape ) << "\">";
 
     os << " <start" << m_Start0 << "/>";
     os << " <end" << m_End0 << "/>";
 
     os << " </" << GetClass().Lower().mb_str() << ">\n";
 }
+
 
 #endif

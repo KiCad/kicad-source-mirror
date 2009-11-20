@@ -847,6 +847,7 @@ bool LIB_COMPONENT::LoadFootprints( FILE* file, char* line,
  *  The unit Unit, and the shape Convert are considered.
  *  If Unit == 0, Unit is not used
  *  if Convert == 0 Convert is non used
+ *  Invisible fields are not take in account
  **/
 /**********************************************************************/
 EDA_Rect LIB_COMPONENT::GetBoundaryBox( int Unit, int Convert )
@@ -862,7 +863,11 @@ EDA_Rect LIB_COMPONENT::GetBoundaryBox( int Unit, int Convert )
             && ( ( Convert > 0 ) && ( Convert != item.m_Convert ) ) )
             continue;
 
-        bBox.Merge( item.GetBoundingBox() );
+        if ( ( item.Type() == COMPONENT_FIELD_DRAW_TYPE )
+            && ( ( ( LIB_TEXT& ) item ).m_Attributs & TEXT_NO_VISIBLE) )
+            continue;
+
+    bBox.Merge( item.GetBoundingBox() );
     }
 
     return bBox;

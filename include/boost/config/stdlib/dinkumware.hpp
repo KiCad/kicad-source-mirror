@@ -55,8 +55,10 @@
 #  define BOOST_HAS_MACRO_USE_FACET
 #  ifndef _CPPLIB_VER
       // Updated Dinkum library defines this, and provides
-      // its own min and max definitions.
-#     define BOOST_NO_STD_MIN_MAX
+      // its own min and max definitions, as does MTA version.
+#     ifndef __MTA__ 
+#        define BOOST_NO_STD_MIN_MAX
+#     endif
 #     define BOOST_NO_MS_INT64_NUMERIC_LIMITS
 #  endif
 #endif

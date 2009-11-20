@@ -200,7 +200,7 @@ void WinEDA_ModuleEditFrame::ReCreateOptToolbar()
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString,
                                 wxBitmap( grid_xpm ),
-                               _( "Display Grid OFF" ), wxITEM_CHECK );
+                               _( "Hide grid" ), wxITEM_CHECK );
     m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID, m_Draw_Grid );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
@@ -217,22 +217,22 @@ void WinEDA_ModuleEditFrame::ReCreateOptToolbar()
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
                                wxBitmap( cursor_shape_xpm ),
-                               _( "Change Cursor Shape" ) );
+                               _( "Change Cursor Shape" ), wxITEM_CHECK  );
 
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
                                wxBitmap( pad_sketch_xpm ),
-                               _( "Show Pads Sketch" ) );
+                               _( "Show Pads Sketch" ), wxITEM_CHECK  );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
                                wxEmptyString,
                                wxBitmap( text_sketch_xpm ),
-                               _( "Show Texts Sketch" ) );
+                               _( "Show Texts Sketch" ), wxITEM_CHECK  );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
                                wxEmptyString,
                                wxBitmap( show_mod_edge_xpm ),
-                               _( "Show Edges Sketch" ) );
+                               _( "Show Edges Sketch" ), wxITEM_CHECK  );
 
     m_OptionsToolBar->Realize();
 

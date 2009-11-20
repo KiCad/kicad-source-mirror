@@ -164,6 +164,50 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon(
     }
 }
 
+/** Function EDGE_MODULE::TransformShapeWithClearanceToPolygon
+ * Convert the track shape to a closed polygon
+ * Used in filling zones calculations
+ * Circles and arcs are approximated by segments
+ * @param aCornerBuffer = a buffer to store the polygon
+ * @param aClearanceValue = the clearance around the pad
+ * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+ * @param aCorrectionFactor = the correction to apply to circles radius to keep
+ * clearance when the circle is approxiamted by segment bigger or equal
+ * to the real clearance value (usually near from 1.0)
+ */
+void EDGE_MODULE::TransformShapeWithClearanceToPolygon(
+    std::vector <CPolyPt>& aCornerBuffer,
+    int                    aClearanceValue,
+    int                    aCircleToSegmentsCount,
+    double                 aCorrectionFactor )
+{
+    switch( m_Shape )
+    {
+    case S_CIRCLE:
+        TransformArcToPolygon( aCornerBuffer, m_Start,         // Circle centre
+                              m_End, 3600,
+                              aCircleToSegmentsCount,
+                              m_Width + (2 * aClearanceValue) );
+        break;
+
+    case S_ARC:
+        TransformArcToPolygon( aCornerBuffer, m_Start,
+                              m_End, m_Angle,
+                              aCircleToSegmentsCount,
+                              m_Width + (2 * aClearanceValue) );
+        break;
+
+    case S_SEGMENT:
+        TransformRoundedEndsSegmentToPolygon(
+            aCornerBuffer, m_Start, m_End,
+            aCircleToSegmentsCount, m_Width + (2 * aClearanceValue) );
+        break;
+
+    default:
+        break;
+    }
+}
+
 
 /** Function TRACK::TransformShapeWithClearanceToPolygon
  * Convert the track shape to a closed polygon

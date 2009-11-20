@@ -20,7 +20,7 @@
 //
 // versions check:
 // last known and checked version is 0x610
-#if (__CODEGEARC__ > 0x610)
+#if (__CODEGEARC__ > 0x613)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  else
@@ -29,7 +29,7 @@
 #endif
 
 // CodeGear C++ Builder 2009
-#if (__CODEGEARC__ <= 0x610)
+#if (__CODEGEARC__ <= 0x613)
 #  define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #  define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
 #  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
@@ -42,6 +42,7 @@
 #  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #  define BOOST_NO_TYPENAME_WITH_CTOR    // Cannot use typename keyword when making temporaries of a dependant type
 #  define BOOST_NO_NESTED_FRIENDSHIP     // TC1 gives nested classes access rights as any other member
+#  define BOOST_SP_NO_SP_CONVERTIBLE
 
 // Temporary hack, until specific MPL preprocessed headers are generated
 #  define BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
@@ -80,11 +81,13 @@
 #define BOOST_NO_DEFAULTED_FUNCTIONS
 #define BOOST_NO_DELETED_FUNCTIONS
 #define BOOST_NO_EXTERN_TEMPLATE
+#define BOOST_NO_FUNCTION_TEMPLATE_DEFAULT_ARGS
 #define BOOST_NO_INITIALIZER_LISTS
 #define BOOST_NO_LAMBDAS
 #define BOOST_NO_NULLPTR
 #define BOOST_NO_RAW_LITERALS
 #define BOOST_NO_RVALUE_REFERENCES
+#define BOOST_NO_SFINAE_EXPR
 #define BOOST_NO_STATIC_ASSERT
 #define BOOST_NO_TEMPLATE_ALIASES
 #define BOOST_NO_UNICODE_LITERALS

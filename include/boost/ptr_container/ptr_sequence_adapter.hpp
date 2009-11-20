@@ -521,7 +521,7 @@ namespace ptr_container_detail
             {
                 for( ; old_size != size; ++old_size )
                     this->push_back( new BOOST_DEDUCED_TYPENAME 
-                                     boost::remove_pointer<value_type>::type ); 
+                                     boost::remove_pointer<value_type>::type() ); 
             }
 
             BOOST_ASSERT( this->size() == size );
@@ -555,7 +555,7 @@ namespace ptr_container_detail
             {
                 for( ; old_size != size; ++old_size )
                     this->push_front( new BOOST_DEDUCED_TYPENAME 
-                                      boost::remove_pointer<value_type>::type ); 
+                                      boost::remove_pointer<value_type>::type() ); 
             }
 
             BOOST_ASSERT( this->size() == size );

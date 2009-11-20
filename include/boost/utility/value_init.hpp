@@ -8,6 +8,7 @@
 // 24 Dec 2007 (Refactored and worked around various compiler bugs) Fernando Cacciola, Niels Dekker
 // 23 May 2008 (Fixed operator= const issue, added initialized_value) Niels Dekker, Fernando Cacciola
 // 21 Ago 2008 (Added swap) Niels Dekker, Fernando Cacciola
+// 20 Feb 2009 (Fixed logical const-ness issues) Niels Dekker, Fernando Cacciola
 //
 #ifndef BOOST_UTILITY_VALUE_INIT_21AGO2002_HPP
 #define BOOST_UTILITY_VALUE_INIT_21AGO2002_HPP
@@ -90,7 +91,12 @@ class value_initialized
       wrapper_address()->wrapper::~wrapper();
     }
 
-    T& data() const
+    T const & data() const
+    {
+      return wrapper_address()->data;
+    }
+
+    T& data()
     {
       return wrapper_address()->data;
     }
@@ -100,9 +106,13 @@ class value_initialized
       ::boost::swap( this->data(), arg.data() );
     }
 
-    operator T&() const { return this->data(); }
+    operator T const &() const { return this->data(); }
+
+    operator T&() { return this->data(); }
 
 } ;
+
+
 
 
 

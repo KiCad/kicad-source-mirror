@@ -296,8 +296,6 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
     // the changes
 
     m_HToolBar->Realize();
-
-    D( printf( "ReCreateHToolbar\n" ); )
     SetToolbars();
 }
 
@@ -400,8 +398,6 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
 #endif
 
     m_OptionsToolBar->Realize();
-
-    D(printf("ReCreateOptToolbar\n");)
     SetToolbars();
 }
 

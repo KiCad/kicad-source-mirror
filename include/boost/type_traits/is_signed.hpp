@@ -30,7 +30,7 @@ template <class T>
 struct is_signed_helper
 {
    typedef typename remove_cv<T>::type no_cv_t;
-   BOOST_STATIC_CONSTANT(bool, value = (static_cast<no_cv_t>(-1) < 0));
+   BOOST_STATIC_CONSTANT(bool, value = (!(static_cast<no_cv_t>(-1) > 0)));
 };
 
 template <bool integral_type>

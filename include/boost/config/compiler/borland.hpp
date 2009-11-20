@@ -17,7 +17,7 @@
 #endif
 
 // last known compiler version:
-#if (__BORLANDC__ > 0x610)
+#if (__BORLANDC__ > 0x613)
 //#  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 //#  else
@@ -107,30 +107,29 @@
 #  endif
 #endif
 
-// Borland C++ Builder 2007 December 2007 Update and below:
-//#if (__BORLANDC__ <= 0x593)
-#if (__BORLANDC__ <= 0x610)  // Beman has asked Alisdair for more info
+#if (__BORLANDC__ <= 0x613)  // Beman has asked Alisdair for more info
    // we shouldn't really need this - but too many things choke
    // without it, this needs more investigation:
 #  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #  define BOOST_NO_IS_ABSTRACT
 #  define BOOST_NO_FUNCTION_TYPE_SPECIALIZATIONS
+#  define BOOST_NO_USING_TEMPLATE
+#  define BOOST_SP_NO_SP_CONVERTIBLE
 
 // Temporary workaround
 #define BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
 #endif
 
 // Borland C++ Builder 2008 and below:
-#if (__BORLANDC__ <= 0x601)
 #  define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
-#  define BOOST_ILLEGAL_CV_REFERENCES
 #  define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
 #  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #  define BOOST_NO_TWO_PHASE_NAME_LOOKUP
-#  define BOOST_NO_USING_TEMPLATE
 #  define BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE
 #  define BOOST_NO_NESTED_FRIENDSHIP
 #  define BOOST_NO_TYPENAME_WITH_CTOR
+#if (__BORLANDC__ < 0x600)
+#  define BOOST_ILLEGAL_CV_REFERENCES
 #endif
 
 //
@@ -169,12 +168,14 @@
 #define BOOST_NO_CONSTEXPR
 #define BOOST_NO_DEFAULTED_FUNCTIONS
 #define BOOST_NO_DELETED_FUNCTIONS
+#define BOOST_NO_FUNCTION_TEMPLATE_DEFAULT_ARGS
 #define BOOST_NO_INITIALIZER_LISTS
 #define BOOST_NO_LAMBDAS
 #define BOOST_NO_NULLPTR
 #define BOOST_NO_RAW_LITERALS
 #define BOOST_NO_RVALUE_REFERENCES
 #define BOOST_NO_SCOPED_ENUMS
+#define BOOST_NO_SFINAE_EXPR
 #define BOOST_NO_TEMPLATE_ALIASES
 #define BOOST_NO_UNICODE_LITERALS    // UTF-8 still not supported
 #define BOOST_NO_VARIADIC_TEMPLATES
@@ -235,7 +236,7 @@
 //
 // ABI fixing headers:
 //
-#if __BORLANDC__ < 0x600 // not implemented for version 6 compiler yet
+#if __BORLANDC__ != 0x600 // not implemented for version 6 compiler yet
 #ifndef BOOST_ABI_PREFIX
 #  define BOOST_ABI_PREFIX "boost/config/abi/borland_prefix.hpp"
 #endif

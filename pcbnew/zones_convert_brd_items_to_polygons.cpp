@@ -254,6 +254,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         }
     }
 
+    have_poly_to_substract = false;
+
     /* Add holes (i.e. tracks and pads areas as polygons outlines)
      * in GroupB in Bool_Engine
      * Next : Add tracks and vias
@@ -274,14 +276,34 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         }
     }
 
+    static std::vector <CPolyPt> cornerBuffer;
+    cornerBuffer.clear();
+    /* Add module edge items that are on copper layers
+     * Pcbnew allows these items to be on copper layers in microwvae applictions
+     * This is a bad thing, but must be handle here, until a better way is found
+     */
+    for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
+    {
+        for( BOARD_ITEM* item = module->m_Drawings;  item;  item = item->Next() )
+        {
+            if( !item->IsOnLayer( GetLayer() ) )
+                continue;
+            if( item->Type( ) != TYPE_EDGE_MODULE)
+                continue;
+            item_boundingbox = item->GetBoundingBox();
+            if( item_boundingbox.Intersects( zone_boundingbox ) )
+            {
+                (( EDGE_MODULE* )item)->TransformShapeWithClearanceToPolygon(
+                cornerBuffer, m_ZoneClearance,
+                s_CircleToSegmentsCount, s_Correction );
+            }
+        }
+    }
     // Add graphic items (copper texts) and board edges
     for( BOARD_ITEM* item = aPcb->m_Drawings;  item;  item = item->Next() )
     {
         if( item->GetLayer() != GetLayer() && item->GetLayer() != EDGE_N )
             continue;
-
-        static std::vector <CPolyPt> cornerBuffer;
-        cornerBuffer.clear();
 
         switch( item->Type() )
         {
@@ -306,40 +328,38 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             break;
         }
 
-        if( cornerBuffer.size() == 0 )
-            continue;
+    }
 
-        // cornerBuffer can contain more than one polygon,
-        // so read cornerBuffer and verify if there is a end of polygon corner:
-        for( unsigned icnt = 0; icnt < cornerBuffer.size(); )
+    // cornerBuffer contains more than one polygon,
+    // so read cornerBuffer and verify if there is a end of polygon corner:
+    for( unsigned icnt = 0; icnt < cornerBuffer.size(); )
+    {
+        booleng->StartPolygonAdd( GROUP_B );
         {
-            booleng->StartPolygonAdd( GROUP_B );
+            have_poly_to_substract = true;
+            unsigned ii;
+            for( ii = icnt; ii < cornerBuffer.size(); ii++ )
             {
-                have_poly_to_substract = true;
-                unsigned ii;
-                for( ii = icnt; ii < cornerBuffer.size(); ii++ )
-                {
-                    booleng->AddPoint( cornerBuffer[ii].x, cornerBuffer[ii].y );
-                    if( cornerBuffer[ii].end_contour )
-                        break;
-                }
-
-                booleng->EndPolygonAdd();
-
-            #ifdef CREATE_KBOOL_KEY_FILES_FIRST_PASS
-                StartKeyFilePolygon( 1 );
-                for( ii = icnt; ii < cornerBuffer.size(); ii++ )
-                {
-                    AddKeyFilePointXY( cornerBuffer[ii].x, cornerBuffer[ii].y );
-                    if( cornerBuffer[ii].end_contour )
-                        break;
-                }
-
-                EndKeyFilePolygon();
-            #endif
-
-                icnt = ii + 1;
+                booleng->AddPoint( cornerBuffer[ii].x, cornerBuffer[ii].y );
+                if( cornerBuffer[ii].end_contour )
+                    break;
             }
+
+            booleng->EndPolygonAdd();
+
+        #ifdef CREATE_KBOOL_KEY_FILES_FIRST_PASS
+            StartKeyFilePolygon( 1 );
+            for( ii = icnt; ii < cornerBuffer.size(); ii++ )
+            {
+                AddKeyFilePointXY( cornerBuffer[ii].x, cornerBuffer[ii].y );
+                if( cornerBuffer[ii].end_contour )
+                    break;
+            }
+
+            EndKeyFilePolygon();
+        #endif
+
+            icnt = ii + 1;
         }
     }
 
