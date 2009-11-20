@@ -1,6 +1,6 @@
-/****************************/
-/* affichage des empreintes */
-/****************************/
+/*******************/
+/* Highlight nets. */
+/*******************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -16,22 +16,20 @@
 #define Pad_fill (Pad_Fill_Item.State == RUN)
 
 
-/*********************************************************/
-void WinEDA_PcbFrame::ListNetsAndSelect( wxCommandEvent& event )
-/*********************************************************/
-
 /** Function ListNetsAndSelect
  * called by a command event
  * displays the sorted list of nets in a dialog frame
- * If a net is selected, it is hightlighted
+ * If a net is selected, it is highlighted
  */
+void WinEDA_PcbFrame::ListNetsAndSelect( wxCommandEvent& event )
 {
     NETINFO_ITEM* net;
     wxString      netFilter;
     int           selection;
 
     netFilter = wxT( "*" );
-    Get_Message( _( "Filter for net names:" ), _( "Net Filter" ), netFilter, this );
+    Get_Message( _( "Filter for net names:" ), _( "Net Filter" ),
+                 netFilter, this );
     if( netFilter.IsEmpty() )
         return;
 
@@ -45,7 +43,7 @@ void WinEDA_PcbFrame::ListNetsAndSelect( wxCommandEvent& event )
             continue;
 
         Line.Printf( wxT( "net_code = %3.3d  [%.16s] " ), net->GetNet(),
-                    GetChars( net->GetNetname() ) );
+                     GetChars( net->GetNetname() ) );
         List.Append( Line );
     }
 
@@ -87,12 +85,10 @@ void WinEDA_PcbFrame::ListNetsAndSelect( wxCommandEvent& event )
 }
 
 
-/**************************************************/
+/* Locate track or pad and highlight the corresponding net
+ * Returns the Netcode, or -1 if no net located.
+ */
 int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
-/**************************************************/
-
-/* Localise track ou pad et met en surbrillance le net correspondant
- *  Retourne le netcode, ou -1 si pas de net localis�*/
 {
     if( g_HightLigt_Status )
         Hight_Light( DC );
@@ -145,14 +141,12 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
 }
 
 
-/*******************************************/
-void WinEDA_PcbFrame::Hight_Light( wxDC* DC )
-/*******************************************/
-
 /*
- *  fonction d'appel de Surbrillance a partir du menu
- *  Met ou supprime la surbrillance d'un net pointe par la souris
+ * Highlight command.
+ *
+ * Show or removes the net at the current cursor position.
  */
+void WinEDA_PcbFrame::Hight_Light( wxDC* DC )
 {
     g_HightLigt_Status = !g_HightLigt_Status;
 

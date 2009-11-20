@@ -14,12 +14,12 @@
 #define OPTKEY_PRINT_SCALE           wxT( "PrintScale" )
 #define OPTKEY_PRINT_MODULE_SCALE    wxT( "PrintModuleScale" )
 #define OPTKEY_PRINT_PAGE_FRAME      wxT( "PrintPageFrame" )
-#define OPTKEY_PRINT_MONOCHROME_MODE      wxT( "PrintMonochrome" )
+#define OPTKEY_PRINT_MONOCHROME_MODE wxT( "PrintMonochrome" )
 
-/* Constantes de conversion d'unites */
-/* coeff de conversion dim en 0.1 mil -> dim en unite PS: (unite PS = pouce) */
+/* Conversion unit constants. */
+/* Convert pcb dimension of 0.1 mil to PS units of inches. */
 #define SCALE_PS .0001
-/* coeff de conversion dim en 0,1 mil -> dim en unite HPGL: */
+/* Convert dimension 0.1 mil -> HPGL units: */
 #define SCALE_HPGL 0.102041
 
 /* Plot Options : */
@@ -29,7 +29,8 @@ public:
     bool        Exclude_Edges_Pcb;
     int         PlotLine_Width;
     bool        Plot_Frame_Ref;     // True to plot/print frame references
-    bool        DrawViaOnMaskLayer; // True if vias are drawn on Mask layer (ie protected by mask)
+    bool        DrawViaOnMaskLayer; // True if vias are drawn on Mask layer
+                                    // (ie protected by mask)
     GRTraceMode Trace_Mode;
     bool        Plot_Set_MIROIR;
     int         HPGL_Pen_Num;
@@ -39,14 +40,14 @@ public:
     int         PlotPSColorOpt;     // True for color Postscript output
     bool        Plot_PS_Negative;   // True to create a  negative board ps plot
 
-    /* Autorisation de trace des divers items en serigraphie */
+    /* Flags to enable or disable ploting of various PCB elements. */
     bool        Sel_Texte_Reference;
     bool        Sel_Texte_Valeur;
     bool        Sel_Texte_Divers;
     bool        Sel_Texte_Invisible;
     bool        PlotPadsOnSilkLayer;
-    bool        Plot_Pads_All_Layers; /* Plot pads meme n'appartenant pas a la
-                                  *      couche ( utile pour serigraphie) */
+    bool        Plot_Pads_All_Layers; /* Plot pads even outside the
+                                       * Layer (useful for silkscreen) */
 
     /* id for plot format (see enum PlotFormat in plot_common.h) */
     int PlotFormat;
@@ -68,17 +69,12 @@ public:
 
 extern PCB_Plot_Options g_pcb_plot_options;
 
-/*************************************/
-/* Constantes utiles en trace GERBER */
-/*************************************/
 
-/* PLOT_RTN.CC */
 void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int masque_layer,
                    GRTraceMode trace_mode );
 
-/* Trace 1 Texte type PCB , c.a.d autre que les textes sur modules,
- * prepare les parametres de trace de texte */
-
+/* Plat PCB text type, ie other than text on modules
+ * prepare the plot settings of text */
 void PlotDrawSegment( PLOTTER* plotter, DRAWSEGMENT* PtSegm, int masque_layer,
                       GRTraceMode trace_mode );
 

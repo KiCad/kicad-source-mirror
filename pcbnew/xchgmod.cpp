@@ -1,8 +1,6 @@
-/******************************/
-/* PCBNEW: echange de modules */
-/******************************/
-
-/* Fichier xchmod.cpp */
+/*******************************/
+/* Pcbnew: exchange of modules */
+/*******************************/
 
 #include "fctsys.h"
 #include "common.h"
@@ -14,46 +12,42 @@
 
 #include "dialog_exchange_modules_base.h"
 
-// Local variables:
-int s_SelectionMode = 0;    // Remember the last exchange option, when exit dialog.
 
-/************************************/
-/* class DIALOG_EXCHANGE_MODULE */
-/************************************/
+int s_SelectionMode = 0;    // Remember the last exchange option, when exit
+                            // dialog.
+
 
 class DIALOG_EXCHANGE_MODULE : public DIALOG_EXCHANGE_MODULE_BASE
 {
 private:
 
     WinEDA_PcbFrame* m_Parent;
-    MODULE* m_CurrentModule;
+    MODULE*          m_CurrentModule;
 
-public:
-
-    // Constructor and destructor
-    DIALOG_EXCHANGE_MODULE( WinEDA_PcbFrame* aParent, MODULE* aModule );
+public: DIALOG_EXCHANGE_MODULE( WinEDA_PcbFrame* aParent, MODULE* aModule );
     ~DIALOG_EXCHANGE_MODULE() { };
 
 private:
-    void    OnSelectionClicked( wxCommandEvent& event );
-    void    OnOkClick( wxCommandEvent& event );
-    void    OnQuit( wxCommandEvent& event );
-    void    BrowseAndSelectFootprint( wxCommandEvent& event );
-    void    Init();
+    void OnSelectionClicked( wxCommandEvent& event );
+    void OnOkClick( wxCommandEvent& event );
+    void OnQuit( wxCommandEvent& event );
+    void BrowseAndSelectFootprint( wxCommandEvent& event );
+    void Init();
 
-    void    Change_Module();
-    void    Change_ModuleId( bool aUseValue );
-    void    Change_ModuleAll();
-    int     Maj_ListeCmp( const wxString& reference, const wxString& old_name,
-                          const wxString& new_name, bool ShowError );
-    bool Change_1_Module( MODULE*         Module,
-                             const wxString& new_module,
-                             PICKED_ITEMS_LIST* aUndoPickList,
-                             bool            ShowError );
+    void Change_Module();
+    void Change_ModuleId( bool aUseValue );
+    void Change_ModuleAll();
+    int  Maj_ListeCmp( const wxString& reference, const wxString& old_name,
+                       const wxString& new_name, bool ShowError );
+    bool Change_1_Module( MODULE*            Module,
+                          const wxString&    new_module,
+                          PICKED_ITEMS_LIST* aUndoPickList,
+                          bool               ShowError );
 };
 
 
-DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( WinEDA_PcbFrame* parent, MODULE* Module ) :
+DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( WinEDA_PcbFrame* parent,
+                                                MODULE*          Module ) :
     DIALOG_EXCHANGE_MODULE_BASE( parent )
 {
     m_Parent = parent;
@@ -72,7 +66,7 @@ void WinEDA_PcbFrame::InstallExchangeModuleFrame( MODULE* Module )
 }
 
 
-void DIALOG_EXCHANGE_MODULE::OnQuit( wxCommandEvent& WXUNUSED(event) )
+void DIALOG_EXCHANGE_MODULE::OnQuit( wxCommandEvent& WXUNUSED( event ) )
 {
     s_SelectionMode = m_Selection->GetSelection();
     Close( true );    // true is to force the frame to close
@@ -137,15 +131,12 @@ void DIALOG_EXCHANGE_MODULE::OnSelectionClicked( wxCommandEvent& event )
 }
 
 
-/************************************************************************/
-
 /*
- *  Met a jour le fichier name.CMP (s'il existe) apres un echange de module
- *  (par la commande changeMod), si les modules sont geres par ce fichier
+ * Updates the file name.CMP (if any) after an exchange module
+ * (By command changeMod), if the modules are managed by this file
  *
- *  Si ShowError != 0 affiche message d'erreur si le fichier .cmp n'est pas
- *  trouve.
- *  Retoure 1 si erreur
+ * If ShowError! = 0 displays error message if the file. Cmp is not found.
+ * Return 1 if error
  */
 int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
                                           const wxString& old_name,
@@ -160,13 +151,12 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
     char*      result;                      // quiet compiler
 
     if( old_name == new_name )
-        return 0;                           /* pas de changement de nom */
+        return 0;                           /* no change of name */
 
-    /* Calcul nom fichier CMP par changement de l'extension du nom netliste */
+    /* Calculation CMP file name by changing the extension name NetList */
     fn = m_Parent->GetScreen()->m_FileName;
     fn.SetExt( NetCmpExtBuffer );
 
-    // Modification du fichier .cmp correcpondant
     FichCmp = wxFopen( fn.GetFullPath(), wxT( "rt" ) );
     if( FichCmp == NULL )
     {
@@ -178,7 +168,6 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
         return 1;
     }
 
-    /* Analyse du fichier et modif */
     tmpFileName = fn;
     tmpFileName.SetExt( wxT( "$$$" ) );
     NewFile = wxFopen( tmpFileName.GetFullPath(), wxT( "wt" ) );
@@ -187,7 +176,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
         if( ShowError )
         {
             msg.Printf( _( "Unable to create file %s" ),
-                       GetChars( tmpFileName.GetFullPath() ) );
+                        GetChars( tmpFileName.GetFullPath() ) );
             m_WinMessages->AppendText( msg );
         }
         return 1;
@@ -237,13 +226,12 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
 }
 
 
-/*
- * Routine de changement d'un module:
- *  Change le module pointe par la souris, par un autre en conservant
- *      - meme orientation
- *      - meme position
- *      - memes textes valeur et ref
- *      - memes netnames pour pads de meme nom
+/* Change the module at the current cursor position.
+ * Retains the following:
+ * - Same direction
+ * - Same position
+ * - Same text value and ref
+ * - Same NetNames for pads same name
  */
 void DIALOG_EXCHANGE_MODULE::Change_Module()
 {
@@ -266,15 +254,15 @@ void DIALOG_EXCHANGE_MODULE::Change_Module()
 
 
 /*
- * Routine de changement de tous les modules de meme nom lib que celui
- *  selectionne, en conservant
- *      - meme orientation
- *      - meme position
- *      - memes textes valeur et ref
- *      - memes netnames pour pads de meme nom
- *  et en remplacant l'ancien module par le noveau module
- *  Attention: m_CurrentModule ne pointe plus sur le module de reference
- *  puisque celui ci a ete change!!
+ * Change of all modules with the same name as that lib
+ * Retains:
+ * - Same direction
+ * - Same position
+ * - Same text value and ref
+ * - Same NetNames for pads same name
+ * And replacing the old module with the new module
+ * Note: m_CurrentModule no longer on the module reference
+ * since it has been changed!
  */
 void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
 {
@@ -284,7 +272,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
     wxString newmodulename = m_NewModule->GetValue();
     wxString value, lib_reference;
     bool     check_module_value = false;
-    int      ShowErr = 3;           // Affiche 3 messages d'err maxi
+    int      ShowErr = 3;           // Post 3 error messages max.
 
     if( m_Parent->GetBoard()->m_Modules == NULL )
         return;
@@ -297,25 +285,26 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
         check_module_value = true;
         value = m_CurrentModule->m_Value->m_Text;
         msg.Printf( _( "Change modules <%s> -> <%s> (val = %s)?" ),
-                   GetChars( m_CurrentModule->m_LibRef ),
-                   GetChars( newmodulename ),
-                   GetChars( m_CurrentModule->m_Value->m_Text ) );
+                    GetChars( m_CurrentModule->m_LibRef ),
+                    GetChars( newmodulename ),
+                    GetChars( m_CurrentModule->m_Value->m_Text ) );
     }
     else
     {
         msg.Printf( _( "Change modules <%s> -> <%s> ?" ),
-                   GetChars( lib_reference ), GetChars( newmodulename ) );
+                    GetChars( lib_reference ), GetChars( newmodulename ) );
     }
 
     if( !IsOK( this, msg ) )
         return;
 
-    /* Le changement s'effectue a partir du dernier module car la routine
-     *  Change_1_Module() modifie le dernier module de la liste
+    /* The change is done from the last module for the routine
+     * Change_1_Module () modifies the last module in the list.
      */
-
     PICKED_ITEMS_LIST pickList;
-   /* note: for the first module in chain (the last here), Module->Back() points the board or is NULL
+
+    /* note: for the first module in chain (the last here), Module->Back()
+     * points the board or is NULL
      */
     Module = m_Parent->GetBoard()->m_Modules.GetLast();
     for( ; Module && ( Module->Type() == TYPE_MODULE ); Module = PtBack )
@@ -346,18 +335,18 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
 
 
 /*
- * Routine de changement de tous les modules par les modules de meme nom lib:
- *  en conservant
- *      - meme orientation
- *      - meme position
- *      - memes textes valeur et ref
- *      - memes netnames pour pads de meme nom
+ * Change all modules with module of the same name in library.
+ * Maintains:
+ * - Same direction
+ * - Same position
+ * - Same text value and ref
+ * - Same NetNames for pads same name
  */
 void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
 {
     MODULE* Module, * PtBack;
     bool    change  = false;
-    int     ShowErr = 3; // Affiche 3 messages d'err maxi
+    int     ShowErr = 3;              // Post 3 error messages max.
 
     if( m_Parent->GetBoard()->m_Modules == NULL )
         return;
@@ -365,13 +354,13 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
     if( !IsOK( this, _( "Change ALL modules ?" ) ) )
         return;
 
-    /* Le changement s'effectue a partir du dernier module car la routine
-     *  Change_1_Module() modifie le dernier module de la liste
+    /* The change is done from the last module for the routine
+     * Change_1_Module () modifies the last module in the list
      */
+    PICKED_ITEMS_LIST pickList;
 
-     PICKED_ITEMS_LIST pickList;
-
-   /* note: for the first module in chain (the last here), Module->Back() points the board or is NULL
+    /* note: for the first module in chain (the last here), Module->Back()
+     * points the board or is NULL
      */
     Module = m_Parent->GetBoard()->m_Modules.GetLast();
     for( ; Module && ( Module->Type() == TYPE_MODULE ); Module = PtBack )
@@ -394,21 +383,20 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
 
 
 /*
- * Routine de changement d'un module:
- *  Change le module de numero empr, avec le module de nom new_module
- *      - meme orientation
- *      - meme position
- *      - memes textes valeur et ref
- *      - memes netnames pour pads de meme nom
- *  Retourne :
- *      false si pas de changement ( si le nouveau module n'est pas en libr)
- *      true si OK
- * Ratsnest *must be recalculated* after modules changes
+ * Change the number empr module with the module name new_module
+ * - Same direction
+ * - Same position
+ * - Same text value and ref
+ * - Same NetNames for pads same name
+ * Returns:
+ * False if no change (if the new module is not free)
+ * True if OK
+ * Ratsnest must be recalculated after module exchange
  */
-bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*         Module,
-                                                 const wxString& new_module,
-                                                 PICKED_ITEMS_LIST* aUndoPickList,
-                                                 bool            ShowError )
+bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            Module,
+                                              const wxString&    new_module,
+                                              PICKED_ITEMS_LIST* aUndoPickList,
+                                              bool               ShowError )
 {
     wxString namecmp, oldnamecmp;
     MODULE*  NewModule;
@@ -419,13 +407,14 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*         Module,
 
     wxBusyCursor dummy;
 
-    /* Memorisation des parametres utiles de l'ancien module */
+    /* Copy parameters from the old module. */
     oldnamecmp = Module->m_LibRef;
     namecmp    = new_module;
 
-    /* Chargement du module */
+    /* Load module. */
     Line.Printf( _( "Change module %s (%s)  " ),
-                GetChars( Module->m_Reference->m_Text ), GetChars( oldnamecmp ) );
+                 GetChars( Module->m_Reference->m_Text ),
+                 GetChars( oldnamecmp ) );
     m_WinMessages->AppendText( Line );
 
     namecmp.Trim( true );
@@ -433,7 +422,7 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*         Module,
     NewModule = m_Parent->Get_Librairie_Module( wxEmptyString,
                                                 namecmp,
                                                 ShowError );
-    if( NewModule == NULL )  /* Nouveau module NON trouve, reaffichage de l'ancien */
+    if( NewModule == NULL )  /* New module not found, redraw the old one. */
     {
         m_WinMessages->AppendText( wxT( "No\n" ) );
         return false;
@@ -460,16 +449,18 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*         Module,
  * OldModule is deleted or put in undo list.
  * @param aOldModule = footprint to replace
  * @param aNewModule = footprint to put
- * @param aUndoPickList = the undo list used to save  OldModule. If null, OldModule is deleted
+ * @param aUndoPickList = the undo list used to save  OldModule. If null,
+ * OldModule is deleted
  */
-void WinEDA_PcbFrame::Exchange_Module( MODULE*   aOldModule,
-                                              MODULE*   aNewModule,
-                                            PICKED_ITEMS_LIST* aUndoPickList)
+void WinEDA_PcbFrame::Exchange_Module( MODULE*            aOldModule,
+                                       MODULE*            aNewModule,
+                                       PICKED_ITEMS_LIST* aUndoPickList )
 {
-    wxPoint oldpos; /* memorisation temporaire pos curseur */
+    wxPoint oldpos;
     D_PAD*  pad, * old_pad;
 
-    if( (aOldModule->Type() != TYPE_MODULE) || (aNewModule->Type() != TYPE_MODULE) )
+    if( ( aOldModule->Type() != TYPE_MODULE )
+       || ( aNewModule->Type() != TYPE_MODULE ) )
     {
         wxMessageBox( wxT( "WinEDA_PcbFrame::Exchange_Module() StuctType error" ) );
         return;
@@ -481,7 +472,7 @@ void WinEDA_PcbFrame::Exchange_Module( MODULE*   aOldModule,
     oldpos = GetScreen()->m_Curseur;
     GetScreen()->m_Curseur = aOldModule->m_Pos;
 
-    /* place module without ratsnets refresh: this will be made later
+    /* place module without ratsnest refresh: this will be made later
      * when all modules are on board
      */
     Place_Module( aNewModule, NULL, true );
@@ -503,7 +494,7 @@ void WinEDA_PcbFrame::Exchange_Module( MODULE*   aOldModule,
     aNewModule->m_Reference->m_Text = aOldModule->m_Reference->m_Text;
     aNewModule->m_Value->m_Text     = aOldModule->m_Value->m_Text;
 
-    /* Mise a jour des autres parametres */
+    /* Updating other parameters */
     aNewModule->m_TimeStamp = aOldModule->m_TimeStamp;
     aNewModule->m_Path = aOldModule->m_Path;
 
@@ -517,7 +508,7 @@ void WinEDA_PcbFrame::Exchange_Module( MODULE*   aOldModule,
         for( ; old_pad != NULL; old_pad = old_pad->Next() )
         {
             if( strnicmp( pad->m_Padname, old_pad->m_Padname,
-                         sizeof(pad->m_Padname) ) == 0 )
+                          sizeof(pad->m_Padname) ) == 0 )
             {
                 pad->SetNetname( old_pad->GetNetname() );
                 pad->SetNet( old_pad->GetNet() );
@@ -527,13 +518,13 @@ void WinEDA_PcbFrame::Exchange_Module( MODULE*   aOldModule,
 
     if( aUndoPickList )
     {
-        GetBoard()->Remove(aOldModule);
-        ITEM_PICKER picker_old(aOldModule, UR_DELETED);
-        ITEM_PICKER picker_new(aNewModule, UR_NEW);
-        aUndoPickList->PushItem(picker_old);
-        aUndoPickList->PushItem(picker_new);
+        GetBoard()->Remove( aOldModule );
+        ITEM_PICKER picker_old( aOldModule, UR_DELETED );
+        ITEM_PICKER picker_new( aNewModule, UR_NEW );
+        aUndoPickList->PushItem( picker_old );
+        aUndoPickList->PushItem( picker_new );
     }
-    else /* Effacement de l'ancien module */
+    else
         aOldModule->DeleteStructure();
 
     GetBoard()->m_Status_Pcb = 0;
@@ -543,7 +534,7 @@ void WinEDA_PcbFrame::Exchange_Module( MODULE*   aOldModule,
 
 
 /*
- * affiche la liste des modules en librairie et selectione 1 nom
+ * Displays the list of modules in library name and select 1 name.
  */
 void DIALOG_EXCHANGE_MODULE::BrowseAndSelectFootprint( wxCommandEvent& event )
 {
@@ -580,7 +571,7 @@ void WinEDA_PcbFrame::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
         return;
     }
 
-    /* Calcul nom fichier CMP par changement de l'extension du nom netliste */
+    /* Calculation file name by changing the extension name to NetList */
     fn = GetScreen()->m_FileName;
     fn.SetExt( NetCmpExtBuffer );
     wildcard = _( "Component files (." ) + NetCmpExtBuffer + wxT( ")|*." ) +
@@ -605,7 +596,7 @@ void WinEDA_PcbFrame::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
 
     result = fgets( Line, sizeof(Line), FichCmp );
     fprintf( FichCmp, "Cmp-Mod V01 Genere par PcbNew le %s\n",
-            DateAndTime( Line ) );
+             DateAndTime( Line ) );
 
     for( ; Module != NULL; Module = Module->Next() )
     {
@@ -619,7 +610,7 @@ void WinEDA_PcbFrame::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
                  !Module->m_Value->m_Text.IsEmpty() ?
                  CONV_TO_UTF8( Module->m_Value->m_Text ) : "[NoVal]" );
         fprintf( FichCmp, "IdModule  = %s;\n",
-                CONV_TO_UTF8( Module->m_LibRef ) );
+                 CONV_TO_UTF8( Module->m_LibRef ) );
         fprintf( FichCmp, "EndCmp\n" );
     }
 

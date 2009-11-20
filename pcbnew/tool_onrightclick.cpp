@@ -1,6 +1,6 @@
-/********************************************************************************/
-/* tool_onrightclick.cpp: fonctions appel�s par le bouton droit sur un TOOL */
-/********************************************************************************/
+/*************************/
+/* tool_onrightclick.cpp */
+/*************************/
 
 #include "fctsys.h"
 #include "common.h"
@@ -12,9 +12,7 @@
 #include "pcbnew_id.h"
 
 
-/*****************************************************************/
 void WinEDA_PcbFrame::ToolOnRightClick( wxCommandEvent& event )
-/*****************************************************************/
 {
     wxPoint pos;
     int     id = event.GetSelection();
@@ -49,9 +47,7 @@ void WinEDA_PcbFrame::ToolOnRightClick( wxCommandEvent& event )
 }
 
 
-/************************************************************************/
 void WinEDA_ModuleEditFrame::ToolOnRightClick( wxCommandEvent& event )
-/************************************************************************/
 {
     wxPoint pos;
     int     id = event.GetSelection();

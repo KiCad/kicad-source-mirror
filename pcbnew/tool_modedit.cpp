@@ -1,6 +1,6 @@
-/*****************************************************************/
-/* tool_modeit.cpp: construction du menu de l'editeur de modules */
-/*****************************************************************/
+/***********************************************/
+/* tool_modeit.cpp: footprint editor toolbars. */
+/***********************************************/
 
 #include "fctsys.h"
 
@@ -22,10 +22,9 @@
 #define LISTBOX_WIDTH 120
 #endif
 
-/***************************************************/
-void WinEDA_ModuleEditFrame::ReCreateHToolbar()
-/***************************************************/
+
 /* Create the main horizontal toolbar for the footprint editor */
+void WinEDA_ModuleEditFrame::ReCreateHToolbar()
 {
     if( m_HToolBar  != NULL )
         return;
@@ -140,9 +139,7 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar()
 }
 
 
-/********************************************************/
 void WinEDA_ModuleEditFrame::ReCreateVToolbar()
-/********************************************************/
 {
     if( m_VToolBar )
         return;
@@ -192,14 +189,12 @@ void WinEDA_ModuleEditFrame::ReCreateVToolbar()
 }
 
 
-/*********************************************************/
 void WinEDA_ModuleEditFrame::ReCreateOptToolbar()
-/*********************************************************/
 {
     if( m_OptionsToolBar )
         return;
 
-    // creation du tool bar options
+    // Create options tool bar.
     m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this,
                                            ID_OPT_TOOLBAR, FALSE );
 
@@ -245,9 +240,7 @@ void WinEDA_ModuleEditFrame::ReCreateOptToolbar()
 }
 
 
-/*********************************************************/
 void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
-/*********************************************************/
 {
     size_t   i;
     wxString msg;
@@ -260,14 +253,14 @@ void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
         // Set up toolbar
         m_AuxiliaryToolBar->AddSeparator();
 
-        // Boite de selection du pas de grille
+        // Grid selection choice box.
         m_SelGridBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
                                             ID_ON_GRID_SELECT,
                                             wxPoint( -1, -1 ),
                                             wxSize( LISTBOX_WIDTH, -1 ) );
         m_AuxiliaryToolBar->AddControl( m_SelGridBox );
 
-        // Boite de selection du Zoom
+        // Zoom selection choice box.
         m_AuxiliaryToolBar->AddSeparator();
         m_SelZoomBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
                                             ID_ON_ZOOM_SELECT,
@@ -298,7 +291,7 @@ void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
         m_AuxiliaryToolBar->Realize();
     }
 
-    // mise a jour des affichages
+    // Update tool bar to reflect setting.
     m_SelGridBox->Clear();
     for( i = 0; i < GetScreen()->m_GridList.GetCount(); i++ )
     {

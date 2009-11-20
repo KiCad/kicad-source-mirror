@@ -15,10 +15,11 @@
 
 #include "wx/statline.h"
 
-/* Variables locales */
+
 #define LAYER_NO_CHANGE NB_LAYERS
 static int    New_Layer[NB_LAYERS];
 wxStaticText* layer_list[NB_LAYERS];
+
 
 enum swap_layer_id {
     ID_WINEDA_SWAPLAYERFRAME = 1800,
@@ -26,10 +27,6 @@ enum swap_layer_id {
     ID_TEXT_0 = ID_BUTTON_0 + NB_LAYERS
 };
 
-
-/***********************************************/
-/* classe pour la frame de selection de layers */
-/***********************************************/
 
 class WinEDA_SwapLayerFrame : public wxDialog
 {
@@ -46,7 +43,6 @@ private:
 
 public:
 
-    // Constructor and destructor
     WinEDA_SwapLayerFrame( WinEDA_BasePcbFrame* parent );
     ~WinEDA_SwapLayerFrame() { };
 
@@ -58,7 +54,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-/* Table des evenements pour WinEDA_SwapLayerFrame */
+
 BEGIN_EVENT_TABLE( WinEDA_SwapLayerFrame, wxDialog )
     EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + NB_LAYERS - 1,
                        wxEVT_COMMAND_BUTTON_CLICKED,
@@ -72,7 +68,6 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_BasePcbFrame* parent ) :
     wxDialog( parent, -1, _( "Swap Layers:" ), wxPoint( -1, -1 ),
               wxDefaultSize, wxDEFAULT_DIALOG_STYLE | MAYBE_RESIZE_BORDER )
 {
-/*************************************************************************/
     BOARD* board = parent->GetBoard();
 
     OuterBoxSizer = NULL;
@@ -357,7 +352,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
     if( ii != 1 )
         return; // (Canceled dialog box returns -1 instead)
 
-    /* Modifications des pistes */
+    /* Change traces. */
     pt_segm = GetBoard()->m_Track;
     for( ; pt_segm != NULL; pt_segm = pt_segm->Next() )
     {
@@ -385,7 +380,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
         }
     }
 
-    /* Modifications des zones */
+    /* Change zones. */
     for( pt_segm = GetBoard()->m_Zone;  pt_segm;  pt_segm = pt_segm->Next() )
     {
         GetScreen()->SetModify();
@@ -394,7 +389,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
             pt_segm->SetLayer( New_Layer[jj] );
     }
 
-    /* Modifications des autres segments */
+    /* Change other segments. */
     PtStruct = GetBoard()->m_Drawings;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {

@@ -1,6 +1,6 @@
 /****************************************************************
-*   toolbars_update_user_interface.cpp
-****************************************************************/
+ *   toolbars_update_user_interface.cpp
+ ****************************************************************/
 
 /*
  *  function to update toolbars UI after changing parameters
@@ -144,14 +144,15 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI()
 }
 
 
-/***************************************/
-void WinEDA_PcbFrame::SetToolbars()
-/***************************************/
-
 /*
- *  Active ou desactive les tools des toolbars, en fonction des commandes
- *  en cours
+ * Enable or disable the toolbar's controls, depending on the current
+ * state.
+ *
+ * @todo: All of this should be perform in appropriate wxUpdateUIEvent
+ *        handles.  This is not how it how updating user interface controls
+ *        is handle in wxWidgets.
  */
+void WinEDA_PcbFrame::SetToolbars()
 {
     bool state;
 
@@ -186,11 +187,9 @@ void WinEDA_PcbFrame::SetToolbars()
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_DRC_OFF,
                                       !Drc_On );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_DRC_OFF,
-                                           Drc_On ?
-                                           _(
-                                               "DRC Off (Disable !!!), Currently: DRC is active" )
-                                           :
-                                           _( "DRC On (Currently: DRC is inactive !!!)" ) );
+                                            Drc_On ?
+                                            _( "Disable design rule checking" ) :
+                                            _( "Enable design rule checking" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_MM,
                                       g_UnitMetric == MILLIMETRE ? TRUE : false );
@@ -200,14 +199,16 @@ void WinEDA_PcbFrame::SetToolbars()
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_POLAR_COORD,
                                       DisplayOpt.DisplayPolarCood );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLAR_COORD,
-                                           DisplayOpt.DisplayPolarCood ?
-                                           _( "Polar coords not show" ) :
-                                           _( "Display polar coords" ) );
+                                            DisplayOpt.DisplayPolarCood ?
+                                            _( "Display rectangular coordinates" ) :
+                                            _( "Display polar coordinates" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID,
                                       m_Draw_Grid );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_GRID,
-                                           m_Draw_Grid ? _( "Grid not show" ) : _( "Show grid" ) );
+                                            m_Draw_Grid ?
+                                            _( "Hide grid" ) :
+                                            _( "Show grid" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR,
                                       m_CursorShape );
@@ -215,62 +216,62 @@ void WinEDA_PcbFrame::SetToolbars()
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_RATSNEST,
                                       g_Show_Ratsnest );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_RATSNEST,
-                                           g_Show_Ratsnest ?
-                                           _( "Hide general ratsnest" ) :
-                                           _( "Show general ratsnest" ) );
+                                            g_Show_Ratsnest ?
+                                            _( "Hide board ratsnest" ) :
+                                            _( "Show board ratsnest" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
                                       g_Show_Module_Ratsnest );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
-                                           g_Show_Module_Ratsnest ?
-                                           _( "Hide module ratsnest" ) :
-                                           _( "Show module ratsnest" ) );
+                                            g_Show_Module_Ratsnest ?
+                                            _( "Hide module ratsnest" ) :
+                                            _( "Show module ratsnest" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_AUTO_DEL_TRACK,
                                       g_AutoDeleteOldTrack );
 
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_AUTO_DEL_TRACK,
-                                           g_AutoDeleteOldTrack ?
-                                           _( "Disable auto delete old track" ) :
-                                           _( "Enable auto delete old track" ) );
+                                            g_AutoDeleteOldTrack ?
+                                            _( "Disable auto delete old track" ) :
+                                            _( "Enable auto delete old track" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
                                       !m_DisplayPadFill );
 
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-                                           m_DisplayPadFill ?
-                                           _( "Show pads sketch mode" ) :
-                                           _( "Show pads filled mode" ) );
+                                            m_DisplayPadFill ?
+                                            _( "Show pads in outline mode" ) :
+                                            _( "Show pads in fill mode" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
                                       !m_DisplayViaFill );
 
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
-                                           m_DisplayViaFill ?
-                                           _( "Show vias sketch mode" ) :
-                                           _( "Show vias filled mode" ) );
+                                            m_DisplayViaFill ?
+                                            _( "Show vias in outline mode" ) :
+                                            _( "Show vias in fill mode" ) );
 
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
                                       !m_DisplayPcbTrackFill );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
-                                           m_DisplayPcbTrackFill ?
-                                           _( "Show tracks sketch mode" ) :
-                                           _( "Show tracks filled mode" ) );
+                                            m_DisplayPcbTrackFill ?
+                                            _( "Show tracks in outline mode" ) :
+                                            _( "Show tracks in fill mode" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
                                       DisplayOpt.ContrastModeDisplay );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
-                                           DisplayOpt.ContrastModeDisplay ?
-                                           _( "Normal contrast mode display" ) :
-                                           _( "High contrast mode display" ) );
+                                            DisplayOpt.ContrastModeDisplay ?
+                                            _( "Normal contrast display mode" ) :
+                                            _( "High contrast display mode" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
                             g_DesignSettings.IsElementVisible( MODULE_TEXT_NOV_VISIBLE ) );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
-                            g_DesignSettings.IsElementVisible( MODULE_TEXT_NOV_VISIBLE ) ?
-                                           _( "Hide invisible text" ) :
-                                           _( "Show invisible text" ) );
+                                            g_DesignSettings.IsElementVisible( MODULE_TEXT_NOV_VISIBLE ) ?
+                                            _( "Hide invisible text" ) :
+                                            _( "Show invisible text" ) );
 
 #if !defined(KICAD_AUIMANAGER)
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,

@@ -1,11 +1,9 @@
-/*****************************************/
-/* Routines generales d'affichage du PCB */
-/*****************************************/
-
-/* fichier tracepcb.cpp */
+/****************/
+/* tracepcb.cpp */
+/****************/
 
 /*
- *  Routines d'affichage grille, Boite de coordonnees, Curseurs, marqueurs ...
+ * Routines to display grid box coordinates, cursors, markers ...
  */
 
 #include <vector>
@@ -21,13 +19,9 @@
 #include "protos.h"
 
 
-/**********************************************************************/
-void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
-/**********************************************************************/
-
 /* Draw the footprint editor BOARD, and others elements : axis, grid ..
  */
-
+void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
 
@@ -59,12 +53,9 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 }
 
 
-/****************************************************************/
-void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
-/****************************************************************/
-
 /* Draw the BOARD, and others elements : axis, grid ..
  */
+void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     PCB_SCREEN* screen = GetScreen();
 
@@ -95,25 +86,24 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 }
 
 
-/********************************************************************/
+/* Redraw the BOARD items but not cursors, axis or grid */
 void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
                   int aDrawMode, const wxPoint& offset )
-/********************************************************************/
-/* Redraw the BOARD items but not cursors, axis or grid */
 {
     /* The order of drawing is flexible on some systems and not on others.  For
      * OSes which use OR to draw, the order is not important except for the
-     * effect of the highlight and its relationship to markers. See comment below.
-     * This order indepence comes from the fact that a binary OR operation is
+     * effect of the highlight and its relationship to markers. See comment
+     * below.
+     * This order independence comes from the fact that a binary OR operation is
      * commutative in nature.
      * However on the OSX, the OR operation is not used, and so this sequence
      * below is chosen to give MODULEs the highest visible priority.
      */
 
-
-    /* Draw all tracks and zones.  As long as dark colors are used for the tracks,
-     * Then the OR draw mode should show tracks underneath other tracks.  But a white
-     * track will cover any other color since it has more bits to OR in.
+    /* Draw all tracks and zones.  As long as dark colors are used for the
+     * tracks,  Then the OR draw mode should show tracks underneath other
+     * tracks.  But a white track will cover any other color since it has
+     * more bits to OR in.
      */
     for( TRACK* track = m_Track;  track;   track = track->Next() )
     {
@@ -191,7 +181,8 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
     if( g_HightLigt_Status )
         DrawHighLight( aPanel, DC, g_HightLigth_NetCode );
 
-    // draw the BOARD's markers last, otherwise the high light will erase any marker on a pad
+    // draw the BOARD's markers last, otherwise the high light will erase
+    // any marker on a pad
     for( unsigned i=0; i < m_markers.size();  ++i )
     {
         m_markers[i]->Draw( aPanel, DC, aDrawMode );
@@ -199,9 +190,7 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
 }
 
 
-/******************************************************************************/
 void BOARD::DrawHighLight( WinEDA_DrawPanel* aDrawPanel, wxDC* DC, int aNetCode )
-/******************************************************************************/
 {
     int draw_mode;
 
@@ -252,4 +241,3 @@ void BOARD::DrawHighLight( WinEDA_DrawPanel* aDrawPanel, wxDC* DC, int aNetCode 
         }
     }
 }
-

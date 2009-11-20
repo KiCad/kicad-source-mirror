@@ -1,6 +1,6 @@
-/*********************************************
+/*****************
 *   track.cpp
-*********************************************/
+*****************/
 
 #include "fctsys.h"
 
@@ -9,34 +9,44 @@
 
 #include "protos.h"
 
-/* Functions to reconize a track.
+/* Functions to recognize a track.
  *  A track is a list of connected segments (or/and vias)
  *  from a starting to an ending point
- *  starting and ending points are a pad or a point with more than 2 segments connected
- *  (and obviouly a dangling segment end)
+ *  starting and ending points are a pad or a point with more than 2 segments
+ *connected
+ *  (and obviously a dangling segment end)
  */
 
-typedef std::vector<TRACK*> TRACK_PTRS; // buffer of item candidates when search for items on the same track
+typedef std::vector<TRACK*> TRACK_PTRS; // buffer of item candidates when
+                                        // search for items on the same track
 
 
 /* Local functions */
-static void Marque_Chaine_segments( BOARD* Pcb, wxPoint ref_pos, int masklayer, TRACK_PTRS* aList );
+static void Marque_Chaine_segments( BOARD*      Pcb,
+                                    wxPoint     ref_pos,
+                                    int         masklayer,
+                                    TRACK_PTRS* aList );
 
 
 /**
  * Function Marque_Une_Piste
  * marks a chain of track segments, connected to aTrackList.
- * Each segment is marked by setting the BUSY bit into m_Flags.  Electrical continuity
- * is detected by walking each segment, and finally the segments are rearranged
- * into a contiguous chain within the given list.
- * @param aPcb = the board to analyse
- * @param aStartSegm The first interesting segment within a list of track segment of aPcb
- * @param aSegmCount = a pointer to an integer where to return the number of interesting segments
- * @param aTrackLen = a pointer to an integer where to return the lenght of the track
+ * Each segment is marked by setting the BUSY bit into m_Flags.  Electrical
+ * continuity is detected by walking each segment, and finally the segments
+ * are rearranged into a contiguous chain within the given list.
+ * @param aPcb = the board to analyze
+ * @param aStartSegm - The first interesting segment within a list of track
+ *                     segment of aPcb
+ * @param aSegmCount = a pointer to an integer where to return the number of
+ *                     interesting segments
+ * @param aTrackLen = a pointer to an integer where to return the length of the
+ *                    track
  * @param aReorder = bool:
- *  true for reorder the interesting segments (useful for track edition/deletion)
- *   in this case the flag BUSY is set (the user is responsible of flag clearing)
- *  false for no reorder : useful when we want just calculate the track lenght
+ *  true for reorder the interesting segments (useful for track
+ *edition/deletion)
+ *   in this case the flag BUSY is set (the user is responsible of flag
+ *clearing)
+ *  false for no reorder : useful when we want just calculate the track length
  *  in this case, flags are reset
  * @return TRACK* the first in the chain of interesting segments.
  */
@@ -70,10 +80,11 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
 
     trackList.push_back( aStartSegm );
 
-    /* Examine the initial track segment : if it is really a segment, this is easy.
+    /* Examine the initial track segment : if it is really a segment, this is
+     * easy.
      *  If it is a via, one must search for connected segments.
-     *  If <=2, this via connect 2 segments (or is connected to only one segment)
-     *      and this via and these 2 segments are a part of a track.
+     *  If <=2, this via connect 2 segments (or is connected to only one
+     *  segment) and this via and these 2 segments are a part of a track.
      *  If > 2 only this via is flagged (the track has only this via)
      */
     if( aStartSegm->Type() == TYPE_VIA )
@@ -91,34 +102,45 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
             Segm3 = Fast_Locate_Piste( Segm2->Next(), NULL,
                                        aStartSegm->m_Start, masque_layer );
         }
-        if( Segm3 )     // More than 2 segments are connected to this via. the "track" is only this via
+        if( Segm3 )     // More than 2 segments are connected to this via. the
+                        // "track" is only this via
         {
             if( aSegmCount )
                 *aSegmCount = 1;
             return aStartSegm;
         }
-        if( Segm1 )     // search for others segments connected to the initial segment start point
+        if( Segm1 )     // search for others segments connected to the initial
+                        // segment start point
         {
             masque_layer = Segm1->ReturnMaskLayer();
-            Marque_Chaine_segments(
-                aPcb, aStartSegm->m_Start, masque_layer, &trackList );
+            Marque_Chaine_segments( aPcb, aStartSegm->m_Start, masque_layer,
+                                    &trackList );
         }
-        if( Segm2 )     // search for others segments connected to the initial segment end point
+        if( Segm2 )     // search for others segments connected to the initial
+                        // segment end point
         {
             masque_layer = Segm2->ReturnMaskLayer();
-            Marque_Chaine_segments(
-                aPcb, aStartSegm->m_Start, masque_layer, &trackList );
+            Marque_Chaine_segments( aPcb, aStartSegm->m_Start, masque_layer,
+                                    &trackList );
         }
     }
     else    // mark the chain using both ends of the initial segment
     {
-        Marque_Chaine_segments( aPcb, aStartSegm->m_Start, masque_layer, &trackList );
-        Marque_Chaine_segments( aPcb, aStartSegm->m_End, masque_layer, &trackList );
+        Marque_Chaine_segments( aPcb,
+                                aStartSegm->m_Start,
+                                masque_layer,
+                                &trackList );
+        Marque_Chaine_segments( aPcb,
+                                aStartSegm->m_End,
+                                masque_layer,
+                                &trackList );
     }
 
-    //  Now we examine selected vias and flag them if they are on the track
-    // If a via is connected to only one or 2 segments, it is flagged (is on the track)
-    // If a via is connected to more than 2 segments, it is a track end, and it is removed from the list
+    // Now examine selected vias and flag them if they are on the track
+    // If a via is connected to only one or 2 segments, it is flagged (is on
+    // the track)
+    // If a via is connected to more than 2 segments, it is a track end, and it
+    // is removed from the list
     // go through the list backwards.
     for( int i = trackList.size() - 1;  i>=0;  --i )
     {
@@ -130,23 +152,30 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
         if( via == aStartSegm )
             continue;
 
-        via->SetState( BUSY, ON );  // Try to flag it. the flag will be cleared later if needed
+        via->SetState( BUSY, ON );  // Try to flag it. the flag will be cleared
+                                    // later if needed
 
         masque_layer = via->ReturnMaskLayer();
 
-        TRACK* track = Fast_Locate_Piste( aPcb->m_Track, NULL, via->m_Start, masque_layer );
+        TRACK* track = Fast_Locate_Piste( aPcb->m_Track,
+                                          NULL,
+                                          via->m_Start,
+                                          masque_layer );
 
         // Fast_Locate_Piste does not consider tracks flagged BUSY.
-        // So if no connected track found, this via is on the current track only: keep it
+        // So if no connected track found, this via is on the current track
+        // only: keep it
         if( track == NULL )
             continue;
 
-        /* if a track is found, this via connects also others segments of an other track
-         * This case happens when the vias ends the selected track.
-         * But must we consider this via is on the selected track, or on an other track.
-         * (this is important when selecting a track for deletion: must this via be deleted or not?)
-         * We consider here this via on the track if others segment connected to this via
-         * remain connected when removing this via.
+        /* If a track is found, this via connects also others segments of an
+         * other track.  This case happens when the vias ends the selected
+         * track but must we consider this via is on the selected track, or
+         * on an other track.
+         * (this is important when selecting a track for deletion: must this
+         * via be deleted or not?)
+         * We consider here this via on the track if others segment connected
+         * to this via remain connected when removing this via.
          * We search for all others segment connected together:
          * if there are on the same layer, the via is on the selected track
          * if there are on different layers, the via is on an other track
@@ -154,26 +183,30 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
         int layer = track->GetLayer();
 
         while( ( track = Fast_Locate_Piste( track->Next(), NULL,
-                                            via->m_Start, masque_layer ) ) != NULL )
+                                            via->m_Start,
+                                            masque_layer ) ) != NULL )
         {
             if( layer != track->GetLayer() )
             {
-                // The via connects segments of an other track: it is removed from list
-                // because it is member of an other track
+                // The via connects segments of an other track: it is removed
+                // from list because it is member of an other track
                 via->SetState( BUSY, OFF );
                 break;
             }
         }
     }
 
-    /* Rearrange the track list in order to have flagged segments linked from firstTrack
-     * So the NbSegmBusy segments are consecutive segments in list, the first item
-     * in the full track list is firstTrack, and the NbSegmBusy-1 next items
-     * (NbSegmBusy when including firstTrack) are the flagged segments
+    /* Rearrange the track list in order to have flagged segments linked
+     * from firstTrack so the NbSegmBusy segments are consecutive segments
+     * in list, the first item in the full track list is firstTrack, and
+     * the NbSegmBusy-1 next items (NbSegmBusy when including firstTrack)
+     * are the flagged segments
      */
     NbSegmBusy = 0;
     TRACK* firstTrack;
-    for( firstTrack = aPcb->m_Track;  firstTrack;  firstTrack = firstTrack->Next() )
+    for( firstTrack = aPcb->m_Track;
+         firstTrack;
+         firstTrack = firstTrack->Next() )
     {
         // Search for the first flagged BUSY segments
         if( firstTrack->GetState( BUSY ) )
@@ -233,11 +266,6 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
 }
 
 
-/********************************************************************************/
-static void Marque_Chaine_segments( BOARD* aPcb, wxPoint aRef_pos, int aLayerMask,
-                                    TRACK_PTRS* aList )
-/********************************************************************************/
-
 /**
  *  Function used by Marque_Une_Piste()
  *  - Set the BUSY flag of connected segments, the first search point is
@@ -247,40 +275,50 @@ static void Marque_Chaine_segments( BOARD* aPcb, wxPoint aRef_pos, int aLayerMas
  * @param Pcb = the board
  * @param aRef_pos = the reference coordinate of the starting search
  * @param aLayerMask = the allowed layers for segments to search
- *  (1 layer when starting point is on a segment, but more than one when starting point is on a via)
+ *  (1 layer when starting point is on a segment, but more than one when
+ *  starting point is on a via)
  * @param aList = the track list to fill with points of segments flagged
  */
+static void Marque_Chaine_segments( BOARD*      aPcb,
+                                    wxPoint     aRef_pos,
+                                    int         aLayerMask,
+                                    TRACK_PTRS* aList )
 {
-    TRACK* pt_segm,             // Pointe le segment courant analyse
-    * pt_via,                   // pointe la via reperee, eventuellement a detruire
-    * SegmentCandidate;         // pointe le segment a detruire (= NULL ou pt_segm
-    int    NbSegm;
+    TRACK* pt_segm,             // The current segment being analyzed.
+    * pt_via,                   // The via identified, eventually destroy
+
+    * SegmentCandidate;         // The end segment to destroy (or NULL =
+                                // pt_segm
+    int NbSegm;
 
     if( aPcb->m_Track == NULL )
         return;
 
-    /* Set the BUSY flag of all connected segments, first search starting at aRef_pos
+    /* Set the BUSY flag of all connected segments, first search starting at
+     * aRef_pos
      *  Search ends when:
      *     - a pad is found (end of a track)
      *     - a segment end has more than one other segment end connected
      *     - and obviously when no connected item found
-     *  Vias are a special case, because we must see others segment connected on others layers
-     *  and they change the layer mask. They can be a track end or not
-     * They will be analyser later, and vias on terminal points of the track will be
-     * considered as part of this track if they do not connect segments of an other track together
-     * and will be considered as part of an other track
-     * if when removing the via, the segments of taht other track are disconnected
+     *  Vias are a special case, because we must see others segment connected
+     *  on others layers and they change the layer mask. They can be a track
+     *  end or not
+     * They will be analyzer later, and vias on terminal points of the track
+     * will be considered as part of this track if they do not connect segments
+     * of an other track together and will be considered as part of an other
+     * track if when removing the via, the segments of that other track are
+     * disconnected
      */
     for( ; ; )
     {
         if( Fast_Locate_Pad_Connecte( aPcb, aRef_pos, aLayerMask ) != NULL )
             return;
 
-        /* Test for a via: a via changes the layer mask and can connect a lot of segments
-         * at location aRef_pos
-         * When found, the via is just pushed in list.
-         * Vias will be examined later, when all connected segment are found and push in list
-         * This is because whena via is found we do not know at this time the number of connected items
+        /* Test for a via: a via changes the layer mask and can connect a lot
+         * of segments at location aRef_pos. When found, the via is just
+         * pushed in list.  Vias will be examined later, when all connected
+         * segment are found and push in list.  This is because when a via
+         * is found we do not know at this time the number of connected items
          * and we do not know if this via is on the track or finish the track
          */
         pt_via = Fast_Locate_Via( aPcb->m_Track, NULL, aRef_pos, aLayerMask );
@@ -301,7 +339,8 @@ static void Marque_Chaine_segments( BOARD* aPcb, wxPoint aRef_pos, int aLayerMas
         while( ( pt_segm = Fast_Locate_Piste( pt_segm, NULL,
                                               aRef_pos, aLayerMask ) ) != NULL )
         {
-            if( pt_segm->GetState( BUSY ) ) // already found and selected: skip it
+            if( pt_segm->GetState( BUSY ) ) // already found and selected: skip
+                                            // it
             {
                 pt_segm = pt_segm->Next();
                 continue;
@@ -314,21 +353,25 @@ static void Marque_Chaine_segments( BOARD* aPcb, wxPoint aRef_pos, int aLayerMas
             }
 
             NbSegm++;
-            if( NbSegm == 1 ) /* First time we found a connected item: pt_segm is candidate */
+            if( NbSegm == 1 ) /* First time we found a connected item: pt_segm
+                               * is candidate */
             {
                 SegmentCandidate = pt_segm;
                 pt_segm = pt_segm->Next();
             }
-            else /* More than 1 segment connected -> this location is an end of the track */
+            else /* More than 1 segment connected -> this location is an end of
+                  * the track */
             {
                 return;
             }
         }
 
-        if( SegmentCandidate )      // A candidate is found: flag it an push it in list
+        if( SegmentCandidate )      // A candidate is found: flag it an push it
+                                    // in list
         {
-            /* Initialize parameters to search items connected to this candidate:
-             * we must analyse connections to its other end
+            /* Initialize parameters to search items connected to this
+             * candidate:
+             * we must analyze connections to its other end
              */
             aLayerMask = SegmentCandidate->ReturnMaskLayer();
 
@@ -341,7 +384,7 @@ static void Marque_Chaine_segments( BOARD* aPcb, wxPoint aRef_pos, int aLayerMas
                 aRef_pos = SegmentCandidate->m_Start;
             }
 
-            pt_segm = aPcb->m_Track; /* restart list of tracks to analyse */
+            pt_segm = aPcb->m_Track; /* restart list of tracks to analyze */
 
             /* flag this item an push it in list of selected items */
             aList->push_back( SegmentCandidate );
@@ -353,20 +396,18 @@ static void Marque_Chaine_segments( BOARD* aPcb, wxPoint aRef_pos, int aLayerMas
 }
 
 
-/********************************************************/
-int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
-                     TRACK** StartTrack, TRACK** EndTrack )
-/**********************************************************/
-
-/* Calculate the end points coordinates of a track (a list of connected segments)
+/* Calculate the end points coordinates of a track (a list of connected
+ * segments)
  * RefTrack is a segment of the track
  *  return 1 if OK, 0 when a track is a closed loop
  *  and the beginning and the end of the track in *StartTrack and *EndTrack
  *  Modify *StartTrack en *EndTrack  :
  *  (*StartTrack)->m_Start coordinate is the beginning of the track
  *  (*EndTrack)->m_End coordinate is the end of the track
- *  Segments connected must be consecutives in list
+ *  Segments connected must be consecutive in list
  */
+int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
+                     TRACK** StartTrack, TRACK** EndTrack )
 {
     TRACK* Track, * via, * segm, * TrackListEnd;
     int    NbEnds, masque_layer, ii, ok = 0;
@@ -374,21 +415,21 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
     if( NbSegm <= 1 )
     {
         *StartTrack = *EndTrack = RefTrack;
-        return 1;   /* cas trivial */
+        return 1;
     }
 
-    /* calcul de la limite d'analyse */
+    /* Calculation of the limit analysis. */
     *StartTrack  = *EndTrack = NULL;
     TrackListEnd = Track = RefTrack; ii = 0;
-    for( ; (Track != NULL) && (ii < NbSegm); ii++, Track = Track->Next() )
+    for( ; ( Track != NULL ) && ( ii < NbSegm ); ii++, Track = Track->Next() )
     {
         TrackListEnd   = Track;
         Track->m_Param = 0;
     }
 
-    /* Calcul des extremites */
+    /* Calculate the extremes. */
     NbEnds = 0; Track = RefTrack; ii = 0;
-    for( ; (Track != NULL) && (ii < NbSegm); ii++, Track = Track->Next() )
+    for( ; ( Track != NULL ) && ( ii < NbSegm ); ii++, Track = Track->Next() )
     {
         if( Track->Type() == TYPE_VIA )
             continue;
@@ -421,7 +462,7 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
                 int BeginPad, EndPad;
                 *EndTrack = Track;
 
-                /* permutation de ox,oy avec fx,fy */
+                /* Swap ox, oy with fx, fy */
                 BeginPad = Track->GetState( BEGIN_ONPAD );
                 EndPad   = Track->GetState( END_ONPAD );
 
@@ -463,7 +504,7 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
                 *StartTrack = Track;
                 NbEnds++;
 
-                /* permutation de ox,oy avec fx,fy */
+                /* Swap ox, oy with fx, fy */
                 BeginPad = Track->GetState( BEGIN_ONPAD );
                 EndPad   = Track->GetState( END_ONPAD );
 
@@ -490,17 +531,14 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
 }
 
 
-/***************************************************************************/
-void ListSetState( EDA_BaseStruct* Start, int NbItem, int State, int onoff )
-/***************************************************************************/
-
 /* Set to onoff the .m_State member, bit mask State of a list of items
  */
+void ListSetState( EDA_BaseStruct* Start, int NbItem, int State, int onoff )
 {
     if( Start == NULL )
         return;
 
-    for( ; (Start != NULL) && (NbItem > 0); NbItem--, Start = Start->Next() )
+    for( ; (Start != NULL ) && ( NbItem > 0 ); NbItem--, Start = Start->Next() )
     {
         Start->SetState( State, onoff );
     }

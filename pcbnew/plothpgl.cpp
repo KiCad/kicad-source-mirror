@@ -1,6 +1,6 @@
-/*******************************/
-/**** Routine de trace HPGL ****/
-/*******************************/
+/*******************/
+/**** Plot HPGL ****/
+/*******************/
 
 #include "fctsys.h"
 #include "common.h"
@@ -12,10 +12,9 @@
 
 #include "protos.h"
 
-/*****************************************************************************/
+
 void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
                                        GRTraceMode trace_mode )
-/*****************************************************************************/
 {
     wxSize        SheetSize;
     wxSize        BoardSize;
@@ -28,7 +27,7 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
     ClearMsgPanel();
 
     // Compute pen_dim (from g_HPGL_Pen_Diam in mils) in pcb units,
-    // with plot scale (if Scale is 2, pen diametre is always g_HPGL_Pen_Diam
+    // with plot scale (if Scale is 2, pen diameter is always g_HPGL_Pen_Diam
     // so apparent pen diam is real pen diam / Scale
     int pen_diam = wxRound( (g_pcb_plot_options.HPGL_Pen_Diam * U_PCB) / g_pcb_plot_options.Scale );
 
@@ -53,14 +52,14 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
     AppendMsgPanel( _( "File" ), FullFileName, CYAN );
 
     if( g_pcb_plot_options.PlotScaleOpt != 1 )
-        Center = TRUE; // Echelle != 1 donc trace centree du PCB
+        Center = TRUE; // Scale != 1 so center PCB plot.
 
 
-    // calcul en unites internes des dimensions des feuilles ( connues en 1/1000 pouce )
+    // Scale units from 0.0001" to HPGL plot units.
     SheetSize.x = currentsheet->m_Size.x * U_PCB;
     SheetSize.y = currentsheet->m_Size.y * U_PCB;
 
-    /* calcul des dimensions et centre du PCB */
+    /* Calculate the center of the PCB. */
     m_Pcb->ComputeBoundaryBox();
     BoardSize   = m_Pcb->m_BoundaryBox.GetSize();
     BoardCenter = m_Pcb->m_BoundaryBox.Centre();
@@ -70,18 +69,18 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
         double Xscale, Yscale;
 
         // Fit to 80% of the page
-        Xscale = ( (SheetSize.x * 0.8) / BoardSize.x );
-        Yscale = ( (SheetSize.y * 0.8) / BoardSize.y );
+        Xscale = ( ( SheetSize.x * 0.8 ) / BoardSize.x );
+        Yscale = ( ( SheetSize.y * 0.8 ) / BoardSize.y );
         scale  = MIN( Xscale, Yscale );
     }
     else
         scale = g_pcb_plot_options.Scale;
 
-    // Calcul du cadrage (echelle != 1 donc recadrage du trace)
+    // Calculate the page size offset.
     if( Center )
     {
-        offset.x = BoardCenter.x - (SheetSize.x / 2) / scale;
-        offset.y = BoardCenter.y - (SheetSize.y / 2) / scale;
+        offset.x = BoardCenter.x - ( SheetSize.x / 2 ) / scale;
+        offset.y = BoardCenter.y - ( SheetSize.y / 2 ) / scale;
     }
     else
     {

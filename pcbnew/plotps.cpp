@@ -1,6 +1,6 @@
-/*************************************/
-/**** Pcbnew: Routine de trace PS ****/
-/*************************************/
+/*************************/
+/**** Plot Postscript ****/
+/*************************/
 
 #include "fctsys.h"
 #include "common.h"
@@ -12,14 +12,12 @@
 
 #include "protos.h"
 
-/****************************************************************************/
+
+/* Generate a PostScript file (*. ps) of the circuit layer.
+ * If layer < 0: all layers are plotted.
+ */
 void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
                                      bool useA4, GRTraceMode trace_mode )
-/****************************************************************************/
-
-/* Genere un fichier POSTSCRIPT (*.ps) de trace du circuit, couche layer
- * if layer < 0: all layers
- */
 {
     wxSize        SheetSize;
     wxSize        PaperSize;
@@ -45,13 +43,12 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
     AppendMsgPanel( _( "File" ), FullFileName, CYAN );
 
     if( g_pcb_plot_options.PlotScaleOpt != 1 )
-        Center = TRUE; // Echelle != 1 donc trace centree du PCB
+        Center = TRUE;        // Scale != 1 so center plot.
 
     // Set default line width
     if( g_pcb_plot_options.PlotLine_Width < 1 )
         g_pcb_plot_options.PlotLine_Width = 1;
 
-    // calcul en unites internes des dimensions des feuilles ( connues en 1/1000 pouce )
     SheetSize.x = currentsheet->m_Size.x * U_PCB;
     SheetSize.y = currentsheet->m_Size.y * U_PCB;
 
@@ -69,7 +66,6 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
         paperscale = 1;
     }
 
-    /* calcul des dimensions et centre du PCB */
     m_Pcb->ComputeBoundaryBox();
     BoardSize   = m_Pcb->m_BoundaryBox.GetSize();
     BoardCenter = m_Pcb->m_BoundaryBox.Centre();
@@ -86,11 +82,10 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
     else
         scale = g_pcb_plot_options.Scale * paperscale;
 
-    // Calcul du cadrage (echelle != 1 donc recadrage du trace)
     if( Center )
     {
-        offset.x = BoardCenter.x - (PaperSize.x / 2) / scale;
-        offset.y = BoardCenter.y - (PaperSize.y / 2) / scale;
+        offset.x = BoardCenter.x - ( PaperSize.x / 2 ) / scale;
+        offset.y = BoardCenter.y - ( PaperSize.y / 2 ) / scale;
     }
     else
     {
@@ -119,9 +114,9 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
     // and switch the current color to WHITE
     if( g_pcb_plot_options.Plot_PS_Negative )
     {
-        int margin = 500;               // Add a 0.5 inch margin around the board
+        int margin = 500;              // Add a 0.5 inch margin around the board
         plotter->set_negative( true );
-        plotter->set_color( WHITE );    // Which will be plotted as black
+        plotter->set_color( WHITE );   // Which will be plotted as black
         plotter->rect( wxPoint( m_Pcb->m_BoundaryBox.GetX() - margin,
                                 m_Pcb->m_BoundaryBox.GetY() - margin ),
                        wxPoint( m_Pcb->m_BoundaryBox.GetRight() + margin,
