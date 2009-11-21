@@ -95,26 +95,21 @@ bool WinEDA_App::OnInit()
         return true;
 
     fn = argv[1];
-    fn.SetExt( g_PhotoFilenameExt );
 
     if( fn.IsOk() )
     {
-        wxClientDC dc( frame->DrawPanel );
-        frame->DrawPanel->PrepareGraphicContext( &dc );
-
         if( fn.DirExists() )
             wxSetWorkingDirectory( fn.GetPath() );
 
         // Load all files specified on the command line.
-        for( int i = 1; i < argc; ++i )
+        for( int ii = 1; ii < argc && ii <= LAYER_COUNT; ++ii )
         {
-            fn = wxFileName( argv[i] );
-            fn.SetExt( g_PhotoFilenameExt );
+            fn = wxFileName( argv[ii] );
 
             if( fn.FileExists() )
             {
-                ( (PCB_SCREEN*) frame->GetScreen() )->m_Active_Layer = i - 1;
-                frame->LoadOneGerberFile( fn.GetFullPath(), &dc, FALSE );
+                ( (PCB_SCREEN*) frame->GetScreen() )->m_Active_Layer = ii - 1;
+                frame->LoadOneGerberFile( fn.GetFullPath(), FALSE );
             }
         }
     }

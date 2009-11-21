@@ -181,7 +181,7 @@ public:
      * Function IsDrillDefault
      * @return true if the drill value is default value (-1)
     */
-    bool IsDrillDefault(void) { return m_Drill < 0; }
+    bool IsDrillDefault(void) { return m_Drill <= 0; }
 
     /**
      * Function GetDrillValue

@@ -102,8 +102,7 @@
  * CrLf after each command
  * G codes BROKE
  */
-bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
-                                           const wxString& GERBER_FullFileName,
+bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
                                            const wxString& D_Code_FullFileName )
 {
     int      G_commande = 0,
@@ -197,7 +196,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
             case 'D':       /* Line type Dxx : Tool selection (xx > 0) or
                              * command if xx = 0..9 */
                 D_commande = gerber->ReturnDCodeNumber( text );
-                gerber->Execute_DCODE_Command( this, DC, text, D_commande );
+                gerber->Execute_DCODE_Command( this, text, D_commande );
                 break;
 
             case 'X':
@@ -205,7 +204,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
                 pos = gerber->ReadXYCoord( text );
                 if( *text == '*' )      // command like X12550Y19250*
                 {
-                    gerber->Execute_DCODE_Command( this, DC, text,
+                    gerber->Execute_DCODE_Command( this, text,
                                                    gerber->m_Last_Pen_Command );
                 }
                 break;
@@ -220,7 +219,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
                 {
                     gerber->m_CommandState = ENTER_RS274X_CMD;
 
-                    if( !gerber->ReadRS274XCommand( this, DC, line, text ) )
+                    if( !gerber->ReadRS274XCommand( this, line, text ) )
                     {
                         error++;
                     }
@@ -244,7 +243,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( wxDC*           DC,
     if( error )
     {
         msg.Printf( _( "%d errors while reading Gerber file [%s]" ),
-                   error, GERBER_FullFileName.GetData() );
+                   error, GetChars(GERBER_FullFileName) );
         DisplayError( this, msg );
     }
     fclose( gerber->m_Current_File );

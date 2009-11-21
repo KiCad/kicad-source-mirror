@@ -14,8 +14,7 @@
 
 
 static void LoadDCodeFile( WinEDA_GerberFrame* frame,
-                           const wxString&     FullFileName,
-                           wxDC*               DC );
+                           const wxString&     FullFileName );
 
 
 void WinEDA_GerberFrame::OnFileHistory( wxCommandEvent& event )
@@ -26,11 +25,7 @@ void WinEDA_GerberFrame::OnFileHistory( wxCommandEvent& event )
 
     if( fn != wxEmptyString && Clear_Pcb( true ) )
     {
-        wxClientDC dc( DrawPanel );
-        DrawPanel->CursorOff( &dc );
-        LoadOneGerberFile( fn, &dc, false );
-        DrawPanel->MouseToCursorSchema();
-        DrawPanel->CursorOn( &dc );
+        LoadOneGerberFile( fn, false );
     }
 }
 
@@ -40,16 +35,12 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
 {
     int        id = event.GetId();
 
-    wxClientDC dc( DrawPanel );
-
-    DrawPanel->CursorOff( &dc );
-
     switch( id )
     {
     case ID_LOAD_FILE:
         if( Clear_Pcb( TRUE ) )
         {
-            LoadOneGerberFile( wxEmptyString, &dc, 0 );
+            LoadOneGerberFile( wxEmptyString, 0 );
         }
         break;
 
@@ -60,7 +51,7 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
 
         GetScreen()->m_Active_Layer++;
 
-        if( !LoadOneGerberFile( wxEmptyString, &dc, 0 ) )
+        if( !LoadOneGerberFile( wxEmptyString, 0 ) )
             GetScreen()->m_Active_Layer = origLayer;
 
         SetToolbars();
@@ -68,7 +59,7 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
     break;
 
     case ID_APPEND_FILE:
-        LoadOneGerberFile( wxEmptyString, &dc, 0 );
+        LoadOneGerberFile( wxEmptyString, 0 );
         break;
 
     case ID_NEW_BOARD:
@@ -82,24 +73,21 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
         break;
 
     case ID_GERBVIEW_LOAD_DCODE_FILE:
-        LoadDCodeFile( this, wxEmptyString, &dc );
+        LoadDCodeFile( this, wxEmptyString );
         break;
 
     case ID_SAVE_BOARD:
-        SaveGerberFile( GetScreen()->m_FileName, &dc );
+        SaveGerberFile( GetScreen()->m_FileName );
         break;
 
     case ID_SAVE_BOARD_AS:
-        SaveGerberFile( wxEmptyString, &dc );
+        SaveGerberFile( wxEmptyString );
         break;
 
     default:
         DisplayError( this, wxT( "File_io Internal Error" ) );
         break;
     }
-
-    DrawPanel->MouseToCursorSchema();
-    DrawPanel->CursorOn( &dc );
 }
 
 
@@ -111,8 +99,7 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
  *   1 if OK
  */
 bool WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
-                                            wxDC*           DC,
-                                            int             mode )
+                                           int             mode )
 {
     wxString   filetypes;
     wxFileName filename = FullFileName;
@@ -165,7 +152,7 @@ bool WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
     wxSetWorkingDirectory( filename.GetPath() );
     filename.SetExt( g_PenFilenameExt );
 
-    if( Read_GERBER_File( DC, GetScreen()->m_FileName, filename.GetFullPath() ) )
+    if( Read_GERBER_File( GetScreen()->m_FileName, filename.GetFullPath() ) )
         SetLastProject( GetScreen()->m_FileName );
 
     Zoom_Automatique( FALSE );
@@ -184,8 +171,7 @@ bool WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
  *   1 if OK
  */
 static void LoadDCodeFile( WinEDA_GerberFrame* frame,
-                           const wxString&     FullFileName,
-                           wxDC*               DC )
+                           const wxString&     FullFileName )
 {
     wxString   wildcard;
     wxFileName fn = FullFileName;
@@ -218,8 +204,7 @@ static void LoadDCodeFile( WinEDA_GerberFrame* frame,
 
 /* Save the file in ASCII PCB.
  */
-bool WinEDA_GerberFrame::SaveGerberFile( const wxString& FullFileName,
-                                         wxDC*           DC )
+bool WinEDA_GerberFrame::SaveGerberFile( const wxString& FullFileName )
 {
     wxString   wildcard;
     wxFileName fn = FullFileName;

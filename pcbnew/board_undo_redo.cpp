@@ -164,19 +164,28 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
 
     case TYPE_TRACK:
     case TYPE_VIA:
-        EXCHG( ( (TRACK*) aItem )->m_Start, ( (TRACK*) aImage )->m_Start );
-        EXCHG( ( (TRACK*) aItem )->m_End, ( (TRACK*) aImage )->m_End );
-        EXCHG( ( (TRACK*) aItem )->m_Width, ( (TRACK*) aImage )->m_Width );
-        EXCHG( ( (TRACK*) aItem )->m_Shape, ( (TRACK*) aImage )->m_Shape );
     {
-        int itmp = ((TRACK*) aItem )->GetDrillValue();
-        if( ((TRACK*) aItem )->IsDrillDefault() )
-            itmp = -1;
-        int atmp = ((TRACK*) aImage )->GetDrillValue();
-        if( ((TRACK*) aImage )->IsDrillDefault() )
+        TRACK* track = (TRACK*) aItem;
+        TRACK* image = (TRACK*) aImage;
+        EXCHG( track->m_Start, image->m_Start );
+        EXCHG( track->m_End, image->m_End );
+        EXCHG( track->m_Width, image->m_Width );
+        EXCHG( track->m_Shape, image->m_Shape );
+        int atmp = track->GetDrillValue();
+        if( track->IsDrillDefault() )
             atmp = -1;
-        ( (TRACK*) aItem )->SetDrillValue( atmp );
-        ( (TRACK*) aImage )->SetDrillValue(itmp);
+        int itmp = image->GetDrillValue();
+        if( image->IsDrillDefault() )
+            itmp = -1;
+        EXCHG(itmp, atmp );
+        if( atmp > 0 )
+            track->SetDrillValue( atmp );
+        else
+            track->SetDrillDefault();
+        if( itmp > 0 )
+            image->SetDrillValue( itmp );
+        else
+            image->SetDrillDefault();
     }
         break;
 

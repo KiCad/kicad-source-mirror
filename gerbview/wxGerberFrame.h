@@ -138,13 +138,11 @@ public:
 
     void         Files_io( wxCommandEvent& event );
     void         OnFileHistory( wxCommandEvent& event );
-    bool         LoadOneGerberFile( const wxString& FileName, wxDC* DC,
-                                    int mode );
-    int          ReadGerberFile( wxDC* DC, FILE* File, bool Append );
-    bool         Read_GERBER_File( wxDC*           DC,
-                                   const wxString& GERBER_FullFileName,
+    bool         LoadOneGerberFile( const wxString& FileName, int mode );
+    int          ReadGerberFile( FILE* File, bool Append );
+    bool         Read_GERBER_File( const wxString& GERBER_FullFileName,
                                    const wxString& D_Code_FullFileName );
-    bool         SaveGerberFile( const wxString& FileName, wxDC* DC );
+    bool         SaveGerberFile( const wxString& FileName );
 
     void         GeneralControle( wxDC* DC, wxPoint Mouse );
 

@@ -380,7 +380,7 @@ public:
     int     ReturnGCodeNumber( char*& Text );
     int     ReturnDCodeNumber( char*& Text );
     bool    Execute_G_Command( char*& text, int G_commande );
-    bool    Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
+    bool    Execute_DCODE_Command( WinEDA_GerberFrame* frame,
                                    char*& text, int D_commande );
 
    /**
@@ -393,7 +393,7 @@ public:
      * Function ReadRS274XCommand
      * reads a single RS274X command terminated with a %
      */
-    bool    ReadRS274XCommand( WinEDA_GerberFrame* frame, wxDC* DC,
+    bool    ReadRS274XCommand( WinEDA_GerberFrame* frame,
                                char aBuff[GERBER_BUFZ], char*& text );
 
     /**

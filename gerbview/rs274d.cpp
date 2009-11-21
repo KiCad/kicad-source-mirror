@@ -849,7 +849,7 @@ static bool mapExposure( int param1, bool curExposure, bool isNegative )
 }
 
 
-bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, wxDC* DC,
+bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame,
                                     char*& text, int D_commande )
 {
     wxSize     size( 15, 15 );

@@ -106,7 +106,7 @@ static double ReadDouble( char*& text )
 }
 
 
-bool GERBER::ReadRS274XCommand( WinEDA_GerberFrame* frame, wxDC* DC,
+bool GERBER::ReadRS274XCommand( WinEDA_GerberFrame* frame,
                                 char buff[GERBER_BUFZ], char*& text )
 {
     bool ok = true;

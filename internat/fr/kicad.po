@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-20 20:25+0100\n"
-"PO-Revision-Date: 2009-11-20 20:28+0100\n"
+"POT-Creation-Date: 2009-11-21 20:29+0100\n"
+"PO-Revision-Date: 2009-11-21 20:35+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -2552,49 +2552,9 @@ msgstr "Attention: option d'échelle ajustée à une valeur très grande"
 msgid "No layer selected"
 msgstr "Pas de couche sélectionnée"
 
-#: pcbnew/dialog_freeroute_exchange.cpp:179
-msgid "Export a Specctra Design (*.dsn) File"
-msgstr "Exporter un fichier de conception Specctra (*.dsn)"
-
-#: pcbnew/dialog_freeroute_exchange.cpp:181
-msgid "Export a Specctra DSN file (to FreeRouter)"
-msgstr "Exporter un fichier Specctra DSN (pour FreeRoute)"
-
-#: pcbnew/dialog_freeroute_exchange.cpp:184
-msgid "Launch FreeRouter via Java Web Start"
-msgstr "Lancer FreeRouter via Java Web Start"
-
-#: pcbnew/dialog_freeroute_exchange.cpp:186
-msgid "Use Java Web Start function to run FreeRouter via Internet (or your Browser if not found)"
-msgstr "Utiliser Java Web Start function pour lancer FreeRouter via Internet (ou votre Navigateur si non trouvé)"
-
-#: pcbnew/dialog_freeroute_exchange.cpp:189
-msgid "Back Import the Specctra Session (*.ses) File"
-msgstr "Importer un Fichier Specctra Session (*.ses)"
-
-#: pcbnew/dialog_freeroute_exchange.cpp:191
-msgid "Merge a session file created by FreeRouter with the current board."
-msgstr "Importer un fichier session créé par FreeRouter dans le C.I. courant."
-
-#: pcbnew/dialog_freeroute_exchange.cpp:198
-msgid "Visit FreeRouting.net website"
-msgstr "Visiter le site FreeRouting.net"
-
-#: pcbnew/dialog_freeroute_exchange.cpp:200
-msgid "Launch your browser and go to the FreeRouting.net website"
-msgstr "Lancer votre navigateur pour aller sur  FreeRouting.net"
-
-#: pcbnew/dialog_freeroute_exchange.cpp:203
-msgid "FreeRouting.net URL"
-msgstr "URL FreeRouting.net"
-
-#: pcbnew/dialog_freeroute_exchange.cpp:208
-msgid "The URL of the FreeRouting.net website"
-msgstr "L' URL du site FreeRouting.net"
-
-#: pcbnew/dialog_freeroute_exchange.cpp:214
-msgid "&Close"
-msgstr "&Fermer"
+#: pcbnew/dialog_freeroute_exchange.cpp:68
+msgid "Freeroute Help"
+msgstr ""
 
 #: pcbnew/dialog_edit_module_for_Modedit.cpp:83
 msgid "Use this attribute for most non smd components"
@@ -3925,10 +3885,6 @@ msgstr "Test module"
 msgid "Add Pads"
 msgstr "Addition de \"pins\""
 
-#: pcbnew/tool_modedit.cpp:203
-msgid "Display Grid OFF"
-msgstr "Suppression de l'affichage de la grille"
-
 #: pcbnew/tool_modedit.cpp:208
 msgid "Display Polar Coord ON"
 msgstr "Activer affichage coord Polaires"
@@ -4890,7 +4846,7 @@ msgstr "Effacer Marqueur"
 
 #: pcbnew/onrightclick.cpp:792
 msgid "Marker Error Info"
-msgstr "Info de Marqueurd'Erreur"
+msgstr "Info du Marqueur d'Erreur"
 
 #: pcbnew/onrightclick.cpp:812
 msgid "Auto Width"
@@ -4911,7 +4867,7 @@ msgstr "Utiliser les dimensions de pistes et vias de leur valeurs en Netclasse"
 #: pcbnew/onrightclick.cpp:832
 #, c-format
 msgid "Track %s"
-msgstr "Piste %s:"
+msgstr "Piste %s"
 
 #: pcbnew/onrightclick.cpp:834
 #: pcbnew/onrightclick.cpp:862
@@ -7400,6 +7356,10 @@ msgstr "Offset de tracé X"
 #: eeschema/plothpgl.cpp:330
 msgid "Plot Offset Y"
 msgstr "Offset de tracé Y"
+
+#: eeschema/plothpgl.cpp:372
+msgid "&Close"
+msgstr "&Fermer"
 
 #: eeschema/plothpgl.cpp:381
 msgid "&Accept Offset"
@@ -10444,6 +10404,7 @@ msgid "File <"
 msgstr "Fichier <"
 
 #: cvpcb/readschematicnetlist.cpp:115
+#: kicad/prjconfig.cpp:93
 msgid "> not found"
 msgstr ">  non trouvé"
 
@@ -11009,25 +10970,24 @@ msgstr "Polygones:"
 msgid "Show D codes"
 msgstr "Montrer DCodes"
 
-#: gerbview/readgerb.cpp:138
-#: gerbview/dcode.cpp:299
+#: gerbview/readgerb.cpp:137
 msgid "File "
 msgstr "Fichier "
 
-#: gerbview/readgerb.cpp:246
+#: gerbview/readgerb.cpp:245
 #, c-format
 msgid "%d errors while reading Gerber file [%s]"
 msgstr "%d erreurs pendant lecture fichier gerber [%s]"
 
-#: gerbview/readgerb.cpp:268
-#: gerbview/files.cpp:197
-#: gerbview/files.cpp:231
+#: gerbview/readgerb.cpp:267
+#: gerbview/files.cpp:183
+#: gerbview/files.cpp:216
 #, c-format
 msgid "Gerber DCODE files (%s)|*.%s"
 msgstr "Fichiers Gerber DCODE (%s)|*.%s"
 
-#: gerbview/readgerb.cpp:273
-#: gerbview/files.cpp:203
+#: gerbview/readgerb.cpp:272
+#: gerbview/files.cpp:189
 msgid "Load GERBER DCODE File"
 msgstr "Charger Fichier de DCodes"
 
@@ -11056,67 +11016,67 @@ msgstr "Effacer textes pcb"
 msgid "Delete layer %d?"
 msgstr "Effacer couche %d"
 
-#: gerbview/files.cpp:81
+#: gerbview/files.cpp:72
 msgid "Not yet available..."
 msgstr "non encore disponible"
 
-#: gerbview/files.cpp:127
+#: gerbview/files.cpp:114
 msgid "Gerber files (.gbr .gbx .lgr .ger .pho)| .gbr;*.GBR;*.gbx;*.GBX;*.lgr;*.LGR;*.ger;*.GER;*.pho;*.PHO|"
 msgstr "Fichiers Gerber (.gbr .gbx .lgr .ger .pho)| *.gbr;*.GBR;*.gbx;*.GBX;*.lgr;*.LGR;*.ger;*.GER;*.pho;*.PHO|"
 
-#: gerbview/files.cpp:131
+#: gerbview/files.cpp:118
 msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
 msgstr "Couche composant"
 
-#: gerbview/files.cpp:132
+#: gerbview/files.cpp:119
 msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
 msgstr "Couche cuivre"
 
-#: gerbview/files.cpp:133
+#: gerbview/files.cpp:120
 msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
 msgstr "Masque soudure cuivre (*.GBS)|*.GBS;*.gbs|"
 
-#: gerbview/files.cpp:134
+#: gerbview/files.cpp:121
 msgid "Top solder resist (*.GTS)|*.GTS;*.gts|"
 msgstr "Masque soudure composant (*.GTS)|*.GTS;*.gts|"
 
-#: gerbview/files.cpp:135
+#: gerbview/files.cpp:122
 msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
 msgstr ""
 
-#: gerbview/files.cpp:136
+#: gerbview/files.cpp:123
 msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
 msgstr ""
 
-#: gerbview/files.cpp:137
+#: gerbview/files.cpp:124
 msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
 msgstr "Bottom paste (*.GBP)|*.GBP;*.gbp|"
 
-#: gerbview/files.cpp:138
+#: gerbview/files.cpp:125
 msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
 msgstr "Masque pate à souder composant (*.GTP)|*.GTP;*.gtp|"
 
-#: gerbview/files.cpp:139
+#: gerbview/files.cpp:126
 msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
 msgstr ""
 
-#: gerbview/files.cpp:140
+#: gerbview/files.cpp:127
 msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 msgstr "Couches mécaniques (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 
-#: gerbview/files.cpp:141
+#: gerbview/files.cpp:128
 msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
 msgstr ""
 
-#: gerbview/files.cpp:142
+#: gerbview/files.cpp:129
 msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
 msgstr ""
 
-#: gerbview/files.cpp:152
+#: gerbview/files.cpp:139
 msgid "Open Gerber File"
 msgstr "Ouvrir Fichier Gerber"
 
-#: gerbview/files.cpp:235
+#: gerbview/files.cpp:220
 msgid "Save Gerber File"
 msgstr "Sauver Fichier Gerber"
 
@@ -12158,10 +12118,6 @@ msgstr "Options de Nettoyage"
 msgid "TextMod properties"
 msgstr "Propriétés du Texte sur Module"
 
-#: pcbnew/dialog_freeroute_exchange.h:46
-msgid "dialog_freeroute_exchange"
-msgstr "dialog_freeroute_exchange"
-
 #: pcbnew/dialog_initpcb.h:38
 msgid "Global Delete"
 msgstr "Effacements Globaux"
@@ -12567,6 +12523,35 @@ msgstr "DCodes id."
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "Export a Specctra Design (*.dsn) File"
+#~ msgstr "Exporter un fichier de conception Specctra (*.dsn)"
+#~ msgid "Export a Specctra DSN file (to FreeRouter)"
+#~ msgstr "Exporter un fichier Specctra DSN (pour FreeRoute)"
+#~ msgid "Launch FreeRouter via Java Web Start"
+#~ msgstr "Lancer FreeRouter via Java Web Start"
+#~ msgid ""
+#~ "Use Java Web Start function to run FreeRouter via Internet (or your "
+#~ "Browser if not found)"
+#~ msgstr ""
+#~ "Utiliser Java Web Start function pour lancer FreeRouter via Internet (ou "
+#~ "votre Navigateur si non trouvé)"
+#~ msgid "Back Import the Specctra Session (*.ses) File"
+#~ msgstr "Importer un Fichier Specctra Session (*.ses)"
+#~ msgid "Merge a session file created by FreeRouter with the current board."
+#~ msgstr ""
+#~ "Importer un fichier session créé par FreeRouter dans le C.I. courant."
+#~ msgid "Visit FreeRouting.net website"
+#~ msgstr "Visiter le site FreeRouting.net"
+#~ msgid "Launch your browser and go to the FreeRouting.net website"
+#~ msgstr "Lancer votre navigateur pour aller sur  FreeRouting.net"
+#~ msgid "FreeRouting.net URL"
+#~ msgstr "URL FreeRouting.net"
+#~ msgid "The URL of the FreeRouting.net website"
+#~ msgstr "L' URL du site FreeRouting.net"
+#~ msgid "Display Grid OFF"
+#~ msgstr "Suppression de l'affichage de la grille"
+#~ msgid "dialog_freeroute_exchange"
+#~ msgstr "dialog_freeroute_exchange"
 #~ msgid "Drc OFF"
 #~ msgstr "Drc DESACTIVEE"
 #~ msgid "Show General Ratsnest"
