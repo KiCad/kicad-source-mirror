@@ -51,14 +51,14 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
 
     EVT_MENU( ID_EXIT, WinEDA_GerberFrame::Process_Special_Functions )
 
-// menu Config
+// menu Preferences
     EVT_MENU_RANGE( ID_CONFIG_AND_PREFERENCES_START,
                     ID_CONFIG_AND_PREFERENCES_END,
                     WinEDA_GerberFrame::Process_Config )
 
     EVT_MENU( ID_COLORS_SETUP, WinEDA_GerberFrame::Process_Config )
-    EVT_MENU( ID_OPTIONS_SETUP, WinEDA_GerberFrame::Process_Config )
-    EVT_MENU( ID_PCB_DISPLAY_OPTIONS_SETUP, WinEDA_GerberFrame::Process_Config )
+    EVT_MENU( ID_OPTIONS_SETUP, WinEDA_GerberFrame::InstallGerberGeneralOptionsFrame )
+    EVT_MENU( ID_PCB_DISPLAY_OPTIONS_SETUP, WinEDA_GerberFrame::InstallGerberDisplayOptionsDialog )
 
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
                     WinEDA_DrawFrame::SetLanguage )
@@ -330,4 +330,55 @@ int WinEDA_GerberFrame::BestZoom()
     GetScreen()->m_Curseur = GetBoard()->m_BoundaryBox.Centre();
 
     return wxRound( MAX( x, y ) * (double) GetScreen()->m_ZoomScalar );
+}
+
+/**************************************/
+void WinEDA_GerberFrame::LoadSettings()
+/**************************************/
+{
+    wxConfig* config = wxGetApp().m_EDA_Config;
+
+    if( config == NULL )
+        return;
+
+    WinEDA_BasePcbFrame::LoadSettings();
+    long pageSize_opt;
+    config->Read( GerbviewShowPageSizeOption, &pageSize_opt, 0l );
+    int imax = 0;
+    for( ; g_GerberPageSizeList[imax] != NULL; imax++ );
+    if( pageSize_opt < 0 || pageSize_opt >= imax )
+        pageSize_opt = 0;
+    GetScreen()->m_CurrentSheetDesc = g_GerberPageSizeList[pageSize_opt];
+    if ( pageSize_opt > 0 )
+    {
+        m_Draw_Sheet_Ref = true;
+    }
+}
+
+/**************************************/
+void WinEDA_GerberFrame::SaveSettings()
+/**************************************/
+{
+    wxConfig* config = wxGetApp().m_EDA_Config;
+
+    if( config == NULL )
+        return;
+
+    WinEDA_BasePcbFrame::SaveSettings();
+
+    wxRealPoint GridSize = GetScreen()->GetGridSize();
+
+    long pageSize_opt = 0;
+    if( m_Draw_Sheet_Ref )
+    {
+        for( int ii = 1; g_GerberPageSizeList[ii] != NULL; ii++ )
+        {
+            if( GetScreen()->m_CurrentSheetDesc == g_GerberPageSizeList[ii] )
+            {
+                pageSize_opt = ii;
+                break;
+            }
+        }
+    }
+    config->Write( GerbviewShowPageSizeOption, pageSize_opt );
 }

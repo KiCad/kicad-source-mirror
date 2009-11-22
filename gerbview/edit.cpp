@@ -1,10 +1,11 @@
-/***********************************/
-/* edit.cpp: PCB editing functions */
-/***********************************/
+/***************************************/
+/* edit.cpp: Gerbview events functions */
+/***************************************/
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "common.h"
 #include "gestfich.h"
 #include "appl_wxstruct.h"
 

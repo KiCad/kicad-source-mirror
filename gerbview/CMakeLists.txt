@@ -18,6 +18,8 @@ set(GERBVIEW_SRCS
     files.cpp
     gerberframe.cpp
     gerbview_config.cpp
+    gerbview_dialog_display_options_frame_base.cpp
+    gerbview_dialog_display_options_frame.cpp
     gerbview.cpp
     hotkeys.cpp
     initpcb.cpp

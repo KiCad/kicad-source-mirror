@@ -36,6 +36,13 @@ extern int      g_Default_GERBER_Format;
 extern int      g_Plot_Spot_Mini;    /* Diameter of the opening mini-track for
                                       * GERBER */
 
+extern const wxString GerbviewProjectFileExt;
+extern const wxString GerbviewProjectFileWildcard;
+
+extern Ki_PageDescr* g_GerberPageSizeList[];
+
+// Config keywords
+extern const wxString GerbviewShowPageSizeOption;
 
 /**
  * Enum APERTURE_T

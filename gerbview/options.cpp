@@ -3,7 +3,7 @@
 /************************/
 
 /*
- * Set the display options for Gerbview
+ * Set some general options of Gerbview
  */
 
 
@@ -126,8 +126,7 @@ private:
     wxRadioBox*          m_GerberDefaultScale;
 
 public:
-    WinEDA_GerberGeneralOptionsFrame( WinEDA_BasePcbFrame* parent,
-                                      const wxPoint&       pos );
+    WinEDA_GerberGeneralOptionsFrame( WinEDA_BasePcbFrame* parent );
     ~WinEDA_GerberGeneralOptionsFrame() {};
 
 private:
@@ -145,10 +144,9 @@ END_EVENT_TABLE()
 
 
 WinEDA_GerberGeneralOptionsFrame::WinEDA_GerberGeneralOptionsFrame(
-    WinEDA_BasePcbFrame* parent,
-    const wxPoint&       framepos ) :
+    WinEDA_BasePcbFrame* parent ) :
     wxDialog( parent, -1, _( "Gerbview Options" ),
-              framepos, wxSize( 300, 240 ),
+              wxDefaultPosition, wxSize( 300, 240 ),
               wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT )
 {
     m_Parent = parent;
@@ -234,175 +232,8 @@ void WinEDA_GerberGeneralOptionsFrame::OnOkClick( wxCommandEvent& event )
 }
 
 
-/*******************************************/
-/* Dialog frame to select display options */
-/*******************************************/
-class WinEDA_LookFrame : public wxDialog
+void WinEDA_GerberFrame::InstallGerberGeneralOptionsFrame( wxCommandEvent& event )
 {
-private:
-    WinEDA_BasePcbFrame* m_Parent;
-    wxRadioBox*          m_OptDisplayLines;
-    wxRadioBox*          m_OptDisplayFlashes;
-    wxRadioBox*          m_OptDisplayVias;      //@@@@TODO: Does it belong here?
-    wxRadioBox*          m_OptDisplayPolygons;
-    wxCheckBox*          m_OptDisplayDCodes;
-    wxRadioBox*          m_OptDisplayDrawings;
-
-public:
-
-    WinEDA_LookFrame( WinEDA_BasePcbFrame* parent, const wxPoint& pos );
-    ~WinEDA_LookFrame() {};
-
-private:
-    void OnOkClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
-
-    DECLARE_EVENT_TABLE()
-};
-
-BEGIN_EVENT_TABLE( WinEDA_LookFrame, wxDialog )
-    EVT_BUTTON( wxID_OK, WinEDA_LookFrame::OnOkClick )
-    EVT_BUTTON( wxID_CANCEL, WinEDA_LookFrame::OnCancelClick )
-END_EVENT_TABLE()
-
-
-WinEDA_LookFrame::WinEDA_LookFrame( WinEDA_BasePcbFrame* parent,
-                                    const wxPoint&       framepos ) :
-    wxDialog( parent, -1, _( "Gerbview Draw Options" ), framepos,
-              wxSize( 350, 200 ),
-              wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT )
-{
-    m_Parent = parent;
-
-    wxBoxSizer* MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
-    SetSizer( MainBoxSizer );
-    wxBoxSizer* RightBoxSizer  = new wxBoxSizer( wxVERTICAL );
-    wxBoxSizer* MiddleBoxSizer = new wxBoxSizer( wxVERTICAL );
-    wxBoxSizer* LeftBoxSizer   = new wxBoxSizer( wxVERTICAL );
-    MainBoxSizer->Add( LeftBoxSizer, 0, wxGROW | wxALL, 5 );
-    MainBoxSizer->Add( MiddleBoxSizer, 0, wxGROW | wxALL, 5 );
-    MainBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
-
-    wxButton* Button = new wxButton( this, wxID_OK, _( "OK" ) );
-    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
-
-    Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
-    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
-
-    // Show Option Draw Tracks
-    wxString list_opt2[2] = { _( "Sketch" ), _( "Filled" ) };
-    m_OptDisplayLines = new wxRadioBox( this, -1, _( "Lines:" ),
-                                        wxDefaultPosition, wxDefaultSize,
-                                        2, list_opt2, 1 );
-    if( DisplayOpt.DisplayPcbTrackFill )
-        m_OptDisplayLines->SetSelection( 1 );
-    LeftBoxSizer->Add( m_OptDisplayLines, 0, wxGROW | wxALL, 5 );
-
-    m_OptDisplayFlashes = new wxRadioBox( this, -1, _( "Spots:" ),
-                                          wxDefaultPosition, wxDefaultSize,
-                                          2, list_opt2, 1 );
-    if( DisplayOpt.DisplayPadFill )
-        m_OptDisplayFlashes->SetSelection( 1 );
-    LeftBoxSizer->Add( m_OptDisplayFlashes, 0, wxGROW | wxALL, 5 );
-
-
-    m_OptDisplayVias = new wxRadioBox( this, -1, _( "Spots:" ),
-                                       wxDefaultPosition, wxDefaultSize,
-                                       2, list_opt2, 1 );
-    if( DisplayOpt.DisplayViaFill )
-        m_OptDisplayVias->SetSelection( 1 );
-    LeftBoxSizer->Add( m_OptDisplayVias, 0, wxGROW | wxALL, 5 );
-
-
-
-    // Show Option Draw polygons
-    m_OptDisplayPolygons = new wxRadioBox( this, -1, _( "Polygons:" ),
-                                           wxDefaultPosition, wxDefaultSize,
-                                           2, list_opt2, 1 );
-    if( g_DisplayPolygonsModeSketch == 0 )
-        m_OptDisplayPolygons->SetSelection( 1 );
-    LeftBoxSizer->Add( m_OptDisplayPolygons, 0, wxGROW | wxALL, 5 );
-
-    wxString list_opt3[3] = { _( "Sketch" ), _( "Filled" ), _( "Line" ) };
-    m_OptDisplayDrawings = new wxRadioBox( this, -1, _( "Display other items:" ),
-                                           wxDefaultPosition, wxDefaultSize,
-                                           3, list_opt3, 1 );
-    m_OptDisplayDrawings->SetSelection( DisplayOpt.DisplayDrawItems );
-    MiddleBoxSizer->Add( m_OptDisplayDrawings, 0, wxGROW | wxALL, 5 );
-
-    m_OptDisplayDCodes = new wxCheckBox( this, -1, _( "Show D codes" ) );
-    if( DisplayOpt.DisplayPadNum )
-        m_OptDisplayDCodes->SetValue( TRUE );
-    MiddleBoxSizer->Add( m_OptDisplayDCodes, 0, wxGROW | wxALL, 5 );
-
-    GetSizer()->Fit( this );
-    GetSizer()->SetSizeHints( this );
-}
-
-
-void WinEDA_LookFrame::OnCancelClick( wxCommandEvent& WXUNUSED(event) )
-{
-    EndModal( -1 );
-}
-
-
-void WinEDA_LookFrame::OnOkClick( wxCommandEvent& event )
-{
-    if( m_OptDisplayLines->GetSelection() == 1 )
-        DisplayOpt.DisplayPcbTrackFill = TRUE;
-    else
-        DisplayOpt.DisplayPcbTrackFill = FALSE;
-
-    if( m_OptDisplayFlashes->GetSelection() == 1 )
-        DisplayOpt.DisplayPadFill = true;
-    else
-        DisplayOpt.DisplayPadFill = false;
-
-    if( m_OptDisplayVias->GetSelection() == 1 )
-        DisplayOpt.DisplayViaFill = true;
-    else
-        DisplayOpt.DisplayViaFill = false;
-
-
-    if( m_OptDisplayPolygons->GetSelection() == 0 )
-        g_DisplayPolygonsModeSketch = 1;
-    else
-        g_DisplayPolygonsModeSketch = 0;
-
-    DisplayOpt.DisplayPadNum = m_OptDisplayDCodes->GetValue();
-
-    DisplayOpt.DisplayDrawItems = m_OptDisplayDrawings->GetSelection();
-
-    m_Parent->m_DisplayPadFill = DisplayOpt.DisplayPadFill;
-    m_Parent->m_DisplayViaFill = DisplayOpt.DisplayViaFill;
-    m_Parent->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
-
-    m_Parent->GetScreen()->SetRefreshReq();
-
-    EndModal( 1 );
-}
-
-
-void WinEDA_GerberFrame::InstallGerberOptionsFrame( const wxPoint& pos, int id )
-{
-    switch( id )
-    {
-    case ID_PCB_DISPLAY_OPTIONS_SETUP:
-    {
-        WinEDA_LookFrame* OptionsFrame =
-            new WinEDA_LookFrame( this, pos );
-        OptionsFrame->ShowModal();
-        OptionsFrame->Destroy();
-    }
-    break;
-
-    case ID_OPTIONS_SETUP:
-    {
-        WinEDA_GerberGeneralOptionsFrame* OptionsFrame =
-            new WinEDA_GerberGeneralOptionsFrame( this, pos );
-        OptionsFrame->ShowModal();
-        OptionsFrame->Destroy();
-    }
-    break;
-    }
+       WinEDA_GerberGeneralOptionsFrame dlg( this );
+       dlg.ShowModal();
 }

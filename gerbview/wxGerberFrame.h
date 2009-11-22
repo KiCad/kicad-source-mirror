@@ -49,6 +49,28 @@ public:
 
     void         Update_config();
     void         OnCloseWindow( wxCloseEvent& Event );
+    /**
+     * Load applications settings specific to the PCBNew.
+     *
+     * This overrides the base class WinEDA_BasePcbFrame::LoadSettings() to
+     * handle settings specific common to the PCB layout application.  It
+     * calls down to the base class to load settings common to all PCB type
+     * drawing frames.  Please put your application settings for PCBNew here
+     * to avoid having application settings loaded all over the place.
+     */
+    virtual void LoadSettings();
+
+    /**
+     * Save applications settings common to PCB draw frame objects.
+     *
+     * This overrides the base class WinEDA_BasePcbFrame::SaveSettings() to
+     * save settings specific to the PCB layout application main window.  It
+     * calls down to the base class to save settings common to all PCB type
+     * drawing frames.  Please put your application settings for PCBNew here
+     * to avoid having application settings saved all over the place.
+     */
+    virtual void SaveSettings();
+
     void         Process_Special_Functions( wxCommandEvent& event );
     void         RedrawActiveWindow( wxDC* DC, bool EraseBg );
     void         ReCreateHToolbar();
@@ -70,7 +92,8 @@ public:
     void         Process_Settings( wxCommandEvent& event );
     void         Process_Config( wxCommandEvent& event );
     void         InstallConfigFrame( const wxPoint& pos );
-    void         InstallGerberOptionsFrame( const wxPoint& pos, int id );
+    void         InstallGerberGeneralOptionsFrame( wxCommandEvent& event );
+    void         InstallGerberDisplayOptionsDialog( wxCommandEvent& event );
     void         InstallPcbGlobalDeleteFrame( const wxPoint& pos );
 
     /* handlers for block commands */

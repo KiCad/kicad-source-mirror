@@ -31,10 +31,8 @@ Ki_PageDescr  g_Sheet_B( wxSize( 17000, 11000 ), wxPoint( 0, 0 ), wxT( "B" ) );
 Ki_PageDescr  g_Sheet_C( wxSize( 22000, 17000 ), wxPoint( 0, 0 ), wxT( "C" ) );
 Ki_PageDescr  g_Sheet_D( wxSize( 34000, 22000 ), wxPoint( 0, 0 ), wxT( "D" ) );
 Ki_PageDescr  g_Sheet_E( wxSize( 44000, 34000 ), wxPoint( 0, 0 ), wxT( "E" ) );
-Ki_PageDescr  g_Sheet_GERBER( wxSize( 32000, 32000 ), wxPoint( 0, 0 ),
-                             wxT( "GERBER" ) );
-Ki_PageDescr  g_Sheet_user( wxSize( 17000, 11000 ), wxPoint( 0, 0 ),
-                           wxT( "User" ) );
+Ki_PageDescr  g_Sheet_GERBER( wxSize( 32000, 32000 ), wxPoint( 0, 0 ), wxT( "GERBER" ) );
+Ki_PageDescr  g_Sheet_user( wxSize( 17000, 11000 ), wxPoint( 0, 0 ), wxT( "User" ) );
 
 Ki_PageDescr* g_SheetSizeList[NB_ITEMS + 1] =
 {

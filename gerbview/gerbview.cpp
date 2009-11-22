@@ -30,7 +30,24 @@ int      g_Default_GERBER_Format;
 int      g_Plot_Spot_Mini;  /* Diameter of the opening mini-track for GERBER. */
 int      g_DisplayPolygonsModeSketch;
 
+
+const wxString GerbviewProjectFileExt( wxT( "cnf" ) );
+const wxString GerbviewProjectFileWildcard( _( "GerbView project files (.cnf)|*.cnf" ) );
+
+// Config keywords
+const wxString GerbviewShowPageSizeOption( wxT( "ShowPageSizeOpt" ) );
+
 GERBER*  g_GERBER_List[32];
+
+// List of page sizes
+Ki_PageDescr* g_GerberPageSizeList[] =
+{
+    &g_Sheet_GERBER,    // Full size page selection, and do not show page limits
+    &g_Sheet_GERBER,    // Full size page selection, and show page limits
+    &g_Sheet_A4,   &g_Sheet_A3, &g_Sheet_A2,
+    &g_Sheet_A,    &g_Sheet_B,  &g_Sheet_C,
+    NULL                // End of list
+ };
 
 
 IMPLEMENT_APP( WinEDA_App )

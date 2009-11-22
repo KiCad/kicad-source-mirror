@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-21 20:29+0100\n"
-"PO-Revision-Date: 2009-11-21 20:35+0100\n"
+"POT-Creation-Date: 2009-11-22 20:55+0100\n"
+"PO-Revision-Date: 2009-11-22 20:57+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -10925,50 +10925,29 @@ msgstr "Changer Nom Fichier"
 msgid "noname"
 msgstr "noname"
 
-#: gerbview/options.cpp:150
+#: gerbview/options.cpp:148
 msgid "Gerbview Options"
 msgstr "Gerbview Options "
 
-#: gerbview/options.cpp:187
+#: gerbview/options.cpp:185
 msgid "millimeters"
 msgstr "millimètres"
 
-#: gerbview/options.cpp:196
+#: gerbview/options.cpp:194
 msgid "Small"
 msgstr "Petit"
 
-#: gerbview/options.cpp:196
+#: gerbview/options.cpp:194
 msgid "Big"
 msgstr "Grand"
 
-#: gerbview/options.cpp:204
+#: gerbview/options.cpp:202
 msgid "format: 2.3"
 msgstr "Format 2.3"
 
-#: gerbview/options.cpp:204
+#: gerbview/options.cpp:202
 msgid "format 3.4"
 msgstr "Format 3.4"
-
-#: gerbview/options.cpp:271
-msgid "Gerbview Draw Options"
-msgstr "Options d'Affichage"
-
-#: gerbview/options.cpp:294
-msgid "Lines:"
-msgstr "Lignes:"
-
-#: gerbview/options.cpp:301
-#: gerbview/options.cpp:309
-msgid "Spots:"
-msgstr "Spots:"
-
-#: gerbview/options.cpp:319
-msgid "Polygons:"
-msgstr "Polygones:"
-
-#: gerbview/options.cpp:333
-msgid "Show D codes"
-msgstr "Montrer DCodes"
 
 #: gerbview/readgerb.cpp:137
 msgid "File "
@@ -10991,7 +10970,11 @@ msgstr "Fichiers Gerber DCODE (%s)|*.%s"
 msgid "Load GERBER DCODE File"
 msgstr "Charger Fichier de DCodes"
 
-#: gerbview/gerbview.cpp:63
+#: gerbview/gerbview.cpp:35
+msgid "GerbView project files (.cnf)|*.cnf"
+msgstr "Fichiers projet GerbView (.cnf)|*.cnf"
+
+#: gerbview/gerbview.cpp:80
 msgid "GerbView is already running. Continue?"
 msgstr "Gerbview est en cours d'exécution. Continuer ?"
 
@@ -11371,13 +11354,61 @@ msgstr "Afficher polygones en mode contour"
 msgid "Show dcode number"
 msgstr "Afficher le n° de DCode"
 
-#: gerbview/gerbview_config.cpp:25
-msgid "GerbView project files (.cnf)|*.cnf"
-msgstr "Fichiers projet GerbView (.cnf)|*.cnf"
-
-#: gerbview/gerbview_config.cpp:127
+#: gerbview/gerbview_config.cpp:118
 msgid "Save GerbView Project File"
 msgstr "Sauver Fichier Projet Gerbview"
+
+#: gerbview/gerbview_dialog_display_options_frame_base.cpp:27
+msgid "Lines:"
+msgstr "Lignes:"
+
+#: gerbview/gerbview_dialog_display_options_frame_base.cpp:33
+msgid "Spots:"
+msgstr "Spots:"
+
+#: gerbview/gerbview_dialog_display_options_frame_base.cpp:39
+msgid "Polygons:"
+msgstr "Polygones:"
+
+#: gerbview/gerbview_dialog_display_options_frame_base.cpp:51
+msgid "Full size. Do not show page limits"
+msgstr "Format maximum.Ne pas afficher les limites de page"
+
+#: gerbview/gerbview_dialog_display_options_frame_base.cpp:51
+msgid "Full size"
+msgstr "Format maximum"
+
+#: gerbview/gerbview_dialog_display_options_frame_base.cpp:51
+msgid "Size A4"
+msgstr "Format A4 "
+
+#: gerbview/gerbview_dialog_display_options_frame_base.cpp:51
+msgid "Size A3"
+msgstr "Format A3"
+
+#: gerbview/gerbview_dialog_display_options_frame_base.cpp:51
+msgid "Size A2"
+msgstr "Format A2"
+
+#: gerbview/gerbview_dialog_display_options_frame_base.cpp:51
+msgid "Size A"
+msgstr "Format A"
+
+#: gerbview/gerbview_dialog_display_options_frame_base.cpp:51
+msgid "Size B"
+msgstr "Format B"
+
+#: gerbview/gerbview_dialog_display_options_frame_base.cpp:51
+msgid "Size C"
+msgstr "Format C"
+
+#: gerbview/gerbview_dialog_display_options_frame_base.cpp:53
+msgid "Show Page Limits:"
+msgstr " Afficher Limites de Page"
+
+#: gerbview/gerbview_dialog_display_options_frame_base.cpp:60
+msgid "Show D codes"
+msgstr "Montrer DCodes"
 
 #: common/confirm.cpp:70
 msgid "Warning"
@@ -11533,159 +11564,159 @@ msgstr ""
 msgid "Unable to find a PDF viewer for"
 msgstr "Impossible de trouver un visualisateur PDF pour"
 
-#: common/common.cpp:59
+#: common/common.cpp:57
 msgid "Kicad project files (*.pro)|*.pro"
 msgstr "Fichiers projet Kicad  (*.pro)|*.pro"
 
-#: common/common.cpp:60
+#: common/common.cpp:58
 msgid "Kicad PCB files (*.brd)|*.brd"
 msgstr "Fichiers Kicad PCB (*.brd)|*.brd"
 
-#: common/common.cpp:61
+#: common/common.cpp:59
 msgid "Kicad schematic files (*.sch)|*.sch"
 msgstr "Fichiers schématiques Kicad (*.sch)|*.sch"
 
-#: common/common.cpp:62
+#: common/common.cpp:60
 msgid "Kicad netlist files (*.net)|*.net"
 msgstr "fichiers netlistes Kicad (*.net)|*.net"
 
-#: common/common.cpp:63
+#: common/common.cpp:61
 msgid "Gerber files (*.pho)|*.pho"
 msgstr "Fichiers Gerber (*.pho)|*.pho"
 
-#: common/common.cpp:64
+#: common/common.cpp:62
 msgid "Portable document format files (*.pdf)|*.pdf"
 msgstr "Fichiers \"Portable document format\"  (*.pdf)|*.pdf"
 
-#: common/common.cpp:65
+#: common/common.cpp:63
 msgid "All files (*)|*"
 msgstr "Tous les fichiers (*)|*"
 
-#: common/common.cpp:242
+#: common/common.cpp:240
 msgid " (\"):"
 msgstr " (\"):"
 
-#: common/common.cpp:272
+#: common/common.cpp:270
 msgid "centimeters"
 msgstr "centimètres"
 
-#: common/common.cpp:358
+#: common/common.cpp:356
 msgid " \""
 msgstr " \""
 
-#: common/common.cpp:586
+#: common/common.cpp:584
 msgid "Copper   "
 msgstr "Cuivre   "
 
-#: common/common.cpp:586
+#: common/common.cpp:584
 msgid "Inner L1 "
 msgstr "Interne 1"
 
-#: common/common.cpp:586
+#: common/common.cpp:584
 msgid "Inner L2 "
 msgstr "Interne 2"
 
-#: common/common.cpp:586
+#: common/common.cpp:584
 msgid "Inner L3 "
 msgstr "Interne 3"
 
-#: common/common.cpp:587
+#: common/common.cpp:585
 msgid "Inner L4 "
 msgstr "Interne 4"
 
-#: common/common.cpp:587
+#: common/common.cpp:585
 msgid "Inner L5 "
 msgstr "Interne 5"
 
-#: common/common.cpp:587
+#: common/common.cpp:585
 msgid "Inner L6 "
 msgstr "Interne 6"
 
-#: common/common.cpp:587
+#: common/common.cpp:585
 msgid "Inner L7 "
 msgstr "Interne 7"
 
-#: common/common.cpp:588
+#: common/common.cpp:586
 msgid "Inner L8 "
 msgstr "Interne 8"
 
-#: common/common.cpp:588
+#: common/common.cpp:586
 msgid "Inner L9 "
 msgstr "Interne 9"
 
-#: common/common.cpp:588
+#: common/common.cpp:586
 msgid "Inner L10"
 msgstr "Interne 10"
 
-#: common/common.cpp:588
+#: common/common.cpp:586
 msgid "Inner L11"
 msgstr "Interne 11"
 
-#: common/common.cpp:589
+#: common/common.cpp:587
 msgid "Inner L12"
 msgstr "Interne 12"
 
-#: common/common.cpp:589
+#: common/common.cpp:587
 msgid "Inner L13"
 msgstr "Interne 13"
 
-#: common/common.cpp:589
+#: common/common.cpp:587
 msgid "Inner L14"
 msgstr "Interne 14"
 
-#: common/common.cpp:590
+#: common/common.cpp:588
 msgid "Adhes Cop"
 msgstr "Adhes Cu "
 
-#: common/common.cpp:590
+#: common/common.cpp:588
 msgid "Adhes Cmp"
 msgstr "Adhes  Cmp"
 
-#: common/common.cpp:590
+#: common/common.cpp:588
 msgid "SoldP Cop"
 msgstr "SoldP Cu "
 
-#: common/common.cpp:590
+#: common/common.cpp:588
 msgid "SoldP Cmp"
 msgstr "SoldP Cmp"
 
-#: common/common.cpp:591
+#: common/common.cpp:589
 msgid "SilkS Cop"
 msgstr "Sérigr Cu "
 
-#: common/common.cpp:591
+#: common/common.cpp:589
 msgid "SilkS Cmp"
 msgstr "Sérigr Cmp"
 
-#: common/common.cpp:591
+#: common/common.cpp:589
 msgid "Mask Cop "
 msgstr "Masque Cu "
 
-#: common/common.cpp:591
+#: common/common.cpp:589
 msgid "Mask Cmp "
 msgstr "Masque Cmp"
 
-#: common/common.cpp:592
+#: common/common.cpp:590
 msgid "Drawings "
 msgstr "Drawings "
 
-#: common/common.cpp:592
+#: common/common.cpp:590
 msgid "Comments "
 msgstr "Commentaires "
 
-#: common/common.cpp:592
+#: common/common.cpp:590
 msgid "Eco1     "
 msgstr "Eco1     "
 
-#: common/common.cpp:592
+#: common/common.cpp:590
 msgid "Eco2     "
 msgstr "Eco2     "
 
-#: common/common.cpp:593
+#: common/common.cpp:591
 msgid "Edges Pcb"
 msgstr "Contour Pcb"
 
-#: common/common.cpp:593
+#: common/common.cpp:591
 msgid "BAD INDEX"
 msgstr "BAD INDEX"
 
@@ -12006,18 +12037,6 @@ msgstr "Couche ECO1 On/Off"
 msgid "Eco2 Layer On/Off"
 msgstr "Couche ECO2 On/Off"
 
-#: share/setpage.cpp:261
-msgid "Size A4"
-msgstr "Format A4 "
-
-#: share/setpage.cpp:262
-msgid "Size A3"
-msgstr "Format A3"
-
-#: share/setpage.cpp:263
-msgid "Size A2"
-msgstr "Format A2"
-
 #: share/setpage.cpp:264
 msgid "Size A1"
 msgstr "Format A1"
@@ -12025,18 +12044,6 @@ msgstr "Format A1"
 #: share/setpage.cpp:265
 msgid "Size A0"
 msgstr "Format A0"
-
-#: share/setpage.cpp:266
-msgid "Size A"
-msgstr "Format A"
-
-#: share/setpage.cpp:267
-msgid "Size B"
-msgstr "Format B"
-
-#: share/setpage.cpp:268
-msgid "Size C"
-msgstr "Format C"
 
 #: share/setpage.cpp:269
 msgid "Size D"
@@ -12519,10 +12526,17 @@ msgstr "Couche 32"
 msgid "D codes id."
 msgstr "DCodes id."
 
+#: gerbview/gerbview_dialog_display_options_frame_base.h:54
+msgid "Gerbview Draw Options"
+msgstr "Options d'Affichage"
+
 #: share/setpage.h:80
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#, fuzzy
+#~ msgid "Do Not Show"
+#~ msgstr "Ne pas montrer"
 #~ msgid "Export a Specctra Design (*.dsn) File"
 #~ msgstr "Exporter un fichier de conception Specctra (*.dsn)"
 #~ msgid "Export a Specctra DSN file (to FreeRouter)"

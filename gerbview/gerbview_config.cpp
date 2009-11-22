@@ -21,10 +21,6 @@
 #define HOTKEY_FILENAME wxT( "gerbview" )
 
 
-const wxString GerbviewProjectFileExt( wxT( "cnf" ) );
-const wxString GerbviewProjectFileWildcard( _( "GerbView project files (.cnf)|*.cnf" ) );
-
-
 void WinEDA_GerberFrame::Process_Config( wxCommandEvent& event )
 {
     int      id = event.GetId();
@@ -46,11 +42,6 @@ void WinEDA_GerberFrame::Process_Config( wxCommandEvent& event )
         InstallConfigFrame( pos );
         break;
     }
-
-    case ID_PCB_DISPLAY_OPTIONS_SETUP:
-    case ID_OPTIONS_SETUP:
-        InstallGerberOptionsFrame( pos, id );
-        break;
 
     case ID_CONFIG_SAVE:
         Update_config();
