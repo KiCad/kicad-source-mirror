@@ -19,11 +19,11 @@
 /*******************************************************************/
 
 TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
-    BOARD_ITEM( parent, TYPE_TEXTE_MODULE ), EDA_TextStruct ()
+    BOARD_ITEM( parent, TYPE_TEXTE_MODULE ), EDA_TextStruct()
 {
     MODULE* Module = (MODULE*) m_Parent;
 
-    m_Type   = text_type;       /* Reference */
+    m_Type = text_type;         /* Reference */
     if( (m_Type != TEXT_is_REFERENCE) && (m_Type != TEXT_is_VALUE) )
         m_Type = TEXT_is_DIVERS;
 
@@ -77,15 +77,15 @@ bool TEXTE_MODULE::Save( FILE* aFile ) const
         orient += parent->m_Orient;
 
     int ret = fprintf( aFile, "T%d %d %d %d %d %d %d %c %c %d %c\"%s\"\n",
-                       m_Type,
-                       m_Pos0.x, m_Pos0.y,
-                       m_Size.y, m_Size.x,
-                       orient,
-                       m_Width,
-                       m_Mirror ? 'M' : 'N', m_NoShow ? 'I' : 'V',
-                       GetLayer(),
-                       m_Italic ? 'I' : 'N',
-                       CONV_TO_UTF8( m_Text ) );
+                      m_Type,
+                      m_Pos0.x, m_Pos0.y,
+                      m_Size.y, m_Size.x,
+                      orient,
+                      m_Width,
+                      m_Mirror ? 'M' : 'N', m_NoShow ? 'I' : 'V',
+                      GetLayer(),
+                      m_Italic ? 'I' : 'N',
+                      CONV_TO_UTF8( m_Text ) );
 
     return ret > 20;
 }
@@ -101,21 +101,21 @@ bool TEXTE_MODULE::Save( FILE* aFile ) const
  */
 int TEXTE_MODULE::ReadDescr( char* aLine, FILE* aFile, int* aLineNum )
 {
-    int success = true;
+    int  success = true;
     int  type;
     int  layer;
     char BufCar1[128], BufCar2[128], BufCar3[128], BufLine[256];
 
-    layer      = SILKSCREEN_N_CMP;
+    layer = SILKSCREEN_N_CMP;
     BufCar1[0] = 0;
     BufCar2[0] = 0;
     BufCar3[0] = 0;
-    if ( sscanf( aLine + 1, "%d %d %d %d %d %d %d %s %s %d %s",
-        &type,
-        &m_Pos0.x, &m_Pos0.y,
-        &m_Size.y, &m_Size.x,
-        &m_Orient, &m_Width,
-        BufCar1, BufCar2, &layer, BufCar3 ) >= 10 )
+    if( sscanf( aLine + 1, "%d %d %d %d %d %d %d %s %s %d %s",
+                &type,
+                &m_Pos0.x, &m_Pos0.y,
+                &m_Size.y, &m_Size.x,
+                &m_Orient, &m_Width,
+                BufCar1, BufCar2, &layer, BufCar3 ) >= 10 )
         success = true;
 
     if( (type != TEXT_is_REFERENCE) && (type != TEXT_is_VALUE) )
@@ -124,7 +124,7 @@ int TEXTE_MODULE::ReadDescr( char* aLine, FILE* aFile, int* aLineNum )
 
     // Due to the pcbnew history, .m_Orient is saved in screen value
     // but it is handled as relative to its parent footprint
-    m_Orient -= ((MODULE * )m_Parent)->m_Orient;
+    m_Orient -= ( (MODULE*) m_Parent )->m_Orient;
     if( BufCar1[0] == 'M' )
         m_Mirror = true;
     else
@@ -163,12 +163,12 @@ int TEXTE_MODULE::ReadDescr( char* aLine, FILE* aFile, int* aLineNum )
     if( m_Size.y < TEXTS_MIN_SIZE )
         m_Size.y = TEXTS_MIN_SIZE;
 
-     // Set a reasonable width:
+    // Set a reasonable width:
     if( m_Width < 1 )
         m_Width = 1;
     m_Width = Clamp_Text_PenSize( m_Width, m_Size );
 
-   return success;
+    return success;
 }
 
 
@@ -336,7 +336,9 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     wxPoint              pos;      // Center of text
     PCB_SCREEN*          screen;
     WinEDA_BasePcbFrame* frame;
-    MODULE*              Module = (MODULE*) m_Parent;
+    MODULE*              Module = (MODULE*) m_Parent;   /* parent must *not* be null
+                                                         *  (a module text without a footprint parent has no sense)
+                                                         */
 
 
     if( panel == NULL )
@@ -353,7 +355,7 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     width  = m_Width;
 
     if( ( frame->m_DisplayModText == FILAIRE )
-        || ( screen->Scale( width ) < L_MIN_DESSIN ) )
+       || ( screen->Scale( width ) < L_MIN_DESSIN ) )
         width = 0;
     else if( frame->m_DisplayModText == SKETCH )
         width = -width;
@@ -371,18 +373,16 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
                 pos.x, pos.y + anchor_size, 0, g_AnchorColor );
     }
 
-    //@@@@IMB: BIG BIG BUG Here???? May Module be NULL?
     color = g_DesignSettings.m_LayerColor[Module->GetLayer()];
 
 
-    //@@IMB: Why the next ifs are testing for Module?
-    if( Module && Module->GetLayer() == COPPER_LAYER_N )
+    if( Module->GetLayer() == COPPER_LAYER_N )
     {
         if( g_DesignSettings.IsElementVisible( MODULE_TEXT_CU_VISIBLE ) == false )
             return;
         color = g_ModuleTextCUColor;
     }
-    else if( Module && Module->GetLayer() == CMP_N )
+    else if( Module->GetLayer() == CMP_N )
     {
         if( g_DesignSettings.IsElementVisible( MODULE_TEXT_CMP_VISIBLE ) == false )
             return;
@@ -419,11 +419,8 @@ int TEXTE_MODULE::GetDrawRotation()
     NORMALIZE_ANGLE_POS( rotation );
 
 //  For angle = 0 .. 180 deg
-//  if( (rotation > 900 ) && (rotation < 2700 ) ) rotation -= 1800;
     while( rotation > 900 )
         rotation -= 1800;
-
-    // For angle = -90 .. 90 deg
 
     return rotation;
 }
@@ -432,14 +429,16 @@ int TEXTE_MODULE::GetDrawRotation()
 // see class_text_mod.h
 void TEXTE_MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
 {
-    MODULE*  module = (MODULE*) m_Parent;
+    MODULE* module = (MODULE*) m_Parent;
+
     if( module == NULL )        // Happens in modedit, and for new texts
         return;
 
     wxString msg, Line;
     int      ii;
 
-    static const wxString text_type_msg[3] = {
+    static const wxString text_type_msg[3] =
+    {
         _( "Ref." ), _( "Value" ), _( "Text" )
     };
 
@@ -516,14 +515,14 @@ bool TEXTE_MODULE::IsOnLayer( int aLayer ) const
 
 
 /* see class_text_mod.h
-  * bool TEXTE_MODULE::IsOnOneOfTheseLayers( int aLayerMask ) const
-  * {
+ * bool TEXTE_MODULE::IsOnOneOfTheseLayers( int aLayerMask ) const
+ * {
  *
-  * }
+ * }
  */
 
 
-#if defined (DEBUG)
+#if defined(DEBUG)
 
 /**
  * Function Show

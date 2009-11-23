@@ -29,7 +29,7 @@ static EDGE_MODULE* gen_arc( MODULE*      aModule,
                              int          cX,
                              int          cY,
                              int          angle );
-static void         ShowCadreSelf( WinEDA_DrawPanel* panel,
+static void         ShowBoundingBoxMicroWaveInductor( WinEDA_DrawPanel* panel,
                                    wxDC*             DC,
                                    bool              erase );
 
@@ -57,8 +57,10 @@ static int     Self_On;
 static int     Bl_X0, Bl_Y0, Bl_Xf, Bl_Yf;
 
 
-/* ??? Routine d'affichage a l'ecran du cadre de la self */
-static void ShowCadreSelf( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+/* This function shows on screen the bounding box of the inductor that will be
+ * created at the end of the build inductor process
+ */
+static void ShowBoundingBoxMicroWaveInductor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
     int deltaX, deltaY;
 
@@ -132,7 +134,7 @@ void WinEDA_PcbFrame::Begin_Self( wxDC* DC )
     Bl_Xf = Bl_X0;
     Bl_Yf = Bl_Y0;
 
-    DrawPanel->ManageCurseur = ShowCadreSelf;
+    DrawPanel->ManageCurseur = ShowBoundingBoxMicroWaveInductor;
     DrawPanel->ForceCloseManageCurseur = Exit_Self;
     DrawPanel->ManageCurseur( DrawPanel, DC, 0 );
 }

@@ -1100,7 +1100,9 @@ static int Retrace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
 }
 
 
-/* ??? appelle la routine OrCell et place la piste reelle sur le pcb */
+/* This function is used by Retrace and read the autorouting matrix data cells to create
+ * the real track on the physical board
+ */
 static void OrCell_Trace( BOARD* pcb, int col, int row,
                           int side, int orient, int current_net_code )
 {

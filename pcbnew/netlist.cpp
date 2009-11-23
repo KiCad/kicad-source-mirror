@@ -959,12 +959,10 @@ int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
 }
 
 
-/* ??? Fontion copiant en memoire de travail les caracteristiques
- *  des nouveaux modules
+/* This function add to the current list of footprints found in netlist
+ *  a new MODULEtoLOAD item (a descriptor of footprints)
  */
-void AddToList( const wxString& NameLibCmp,
-                const wxString& CmpName,
-                const wxString& path )
+void AddToList( const wxString& NameLibCmp, const wxString& CmpName, const wxString& path )
 {
     MODULEtoLOAD* NewMod;
 

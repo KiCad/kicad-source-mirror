@@ -4,8 +4,8 @@
 
 
 /*
- * Searches for all ref <path lib> *.??? if offering their file name,
- * or reviews <path lib> [MODULE.LIB]
+ * Functions to read footprint libraries and create the list of availlable footprints
+ * and their documentation (comments and keywords)
  */
 #include "fctsys.h"
 #include "wxstruct.h"
