@@ -5,7 +5,7 @@
 #include "pcbstruct.h"
 #include "dlist.h"
 
-#define L_MIN_DESSIN 1  /* Min width segments to allow draws with tickness */
+#define L_MIN_DESSIN 1  /* Min width segments to allow draws with thickness */
 
 class DPAD;
 class BOARD_ITEM;
@@ -44,8 +44,6 @@ extern int g_PadCUColor;
 extern int g_PadCMPColor;
 
 
-
-/* variables generales */
 extern int    g_TimeOut;            // Timer for automatic saving
 extern int    g_SaveTime;           // Time for next saving
 
@@ -59,7 +57,7 @@ extern DLIST<TRACK> g_CurrentTrackList;
 #define g_FirstTrackSegment      \
     g_CurrentTrackList.GetFirst()   ///< first segment created
 
-extern PCB_SCREEN* ScreenPcb;       /* Ecran principal */
+extern PCB_SCREEN* ScreenPcb;
 extern BOARD*      g_ModuleEditor_Pcb;
 
 /* Pad editing */

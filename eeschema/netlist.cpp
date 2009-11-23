@@ -891,8 +891,7 @@ static void PointToPointConnect( NETLIST_OBJECT* Ref, int IsBus, int start )
  * Search if a junction is connected to segments and include the Netcode
  * objects connect to the junction.
  * The junction must have a valid Netcode
- * The list of objects is SUPPOSED class by NumSheet *JP translate*
- *  Croissants,
+ * The list of objects is SUPPOSED class by NumSheet ??? Croissants,
  * And research is done from the start element, 1st element
  * Leaf schema
  * (There can be no physical connection between elements of different sheets)

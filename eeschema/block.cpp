@@ -377,7 +377,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_DRAG:     /* move to Drag */
 
-        /* *JP translate*
+        /* ???
          * Effacement de la liste des structures de pointage,
          * qui est devenue erronnee
          */

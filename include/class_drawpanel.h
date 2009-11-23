@@ -3,9 +3,6 @@
  *  define class WinEDA_DrawPanel
  *************************************/
 
-/* Doit etre inclus dans "wxstruch.h"
- */
-
 #ifndef  PANEL_WXSTRUCT_H
 #define  PANEL_WXSTRUCT_H
 
@@ -17,49 +14,64 @@ class BASE_SCREEN;
 class PCB_SCREEN;
 
 
-/****************************************************/
-/* classe representant un ecran graphique de dessin */
-/****************************************************/
-
 class WinEDA_DrawPanel : public wxScrolledWindow
 {
 public:
     WinEDA_DrawFrame* m_Parent;
-    EDA_Rect          m_ClipBox;            // the clipbox used in screen redraw (usually gives the visible area in internal units)
-    wxPoint           m_CursorStartPos;     // utile dans controles du mouvement curseur
-    int  m_ScrollButt_unit;                 //	Valeur de l'unite de scroll en pixels pour les boutons de scroll
+    EDA_Rect          m_ClipBox;            // the clipbox used in screen
+                                            // redraw (usually gives the
+                                            // visible area in internal units)
+    wxPoint           m_CursorStartPos;     // useful in testing the cursor
+                                            // movement
 
-    bool m_AbortRequest;                    // Flag d'arret de commandes longues
-    bool m_AbortEnable;                     // TRUE si menu ou bouton Abort doit etre affiche
+    int  m_ScrollButt_unit;                 // scroll bar pixels per unit value
+
+
+    bool m_AbortRequest;                    // Flag to abort long commands
+    bool m_AbortEnable;                     // TRUE if abort button or menu to
+                                            // be displayed
+
 
     bool m_AutoPAN_Enable;                  // TRUE to allow auto pan
-    bool m_AutoPAN_Request;                 // TRUE to request an auto pan (will be made only if m_AutoPAN_Enable = true)
+    bool m_AutoPAN_Request;                 // TRUE to request an auto pan
+                                            // (will be made only if
+                                            // m_AutoPAN_Enable = true)
 
-    int  m_IgnoreMouseEvents;               //  when non-zero (true), then ignore mouse events
+    int  m_IgnoreMouseEvents;               //  when non-zero (true), then
+                                            // ignore mouse events
 
     bool m_Block_Enable;                    // TRUE to accept Block Commands
-    int  m_CanStartBlock;                   // >= 0 (or >= n) if a block can start
-    bool m_PrintIsMirrored;                 // True when drawing in mirror mode. Used in draw arc function,
-                                            // because arcs are oriented, and in mirror mode, orientations are reversed
-    // usefull to avoid false start block in certain cases (like switch from a sheet to an other scheet
-    int  m_PanelDefaultCursor;              // Current mouse cursor default shape id for this window
-    int  m_PanelCursor;                     // Current mouse cursor shape id for this window
-    int  m_CursorLevel;                     // Index for cursor redraw in XOR mode
+    int  m_CanStartBlock;                   // >= 0 (or >= n) if a block can
+                                            // start
+    bool m_PrintIsMirrored;                 // True when drawing in mirror
+                                            // mode. Used in draw arc function,
+                                            // because arcs are oriented, and
+                                            // in mirror mode, orientations are
+                                            // reversed
+    // useful to avoid false start block in certain cases (like switch from a
+    // sheet to an other sheet
+    int  m_PanelDefaultCursor;              // Current mouse cursor default
+                                            // shape id for this window
+    int  m_PanelCursor;                     // Current mouse cursor shape id
+                                            // for this window
+    int  m_CursorLevel;                     // Index for cursor redraw in XOR
+                                            // mode
+
 
     /* Cursor management (used in editing functions) */
-    void (*ManageCurseur)( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );              /* Fonction d'affichage sur deplacement souris
-                                                                                          *  si erase : effacement ancien affichage */
-    void (*ForceCloseManageCurseur)( WinEDA_DrawPanel* panel, wxDC* DC );              /* Fonction de fermeture forc�
-                                                                                        *  de la fonction ManageCurseur */
+
+    /* Mouse capture move callback function prototype. */
+    void (*ManageCurseur)( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+
+    /* Abort managed cursor callback function prototype. */
+    void (*ForceCloseManageCurseur)( WinEDA_DrawPanel* panel, wxDC* DC );
 
 public:
 
-    // Constructor and destructor
     WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id, const wxPoint& pos,
                       const wxSize& size );
     ~WinEDA_DrawPanel();
 
-    /****************************/
     BASE_SCREEN* GetScreen();
 
 
@@ -69,7 +81,10 @@ public:
     void         OnSize( wxSizeEvent& event );
     void         SetBoundaryBox();
     void         ReDraw( wxDC* DC, bool erasebg = TRUE );
-    void         PrintPage( wxDC* DC, bool Print_Sheet_Ref, int PrintMask, bool aPrintMirrorMode );
+    void         PrintPage( wxDC* DC,
+                            bool  Print_Sheet_Ref,
+                            int   PrintMask,
+                            bool  aPrintMirrorMode );
     void         DrawBackGround( wxDC* DC );
     void         DrawAuxiliaryAxis( wxDC* DC, int drawmode );
     void         OnEraseBackground( wxEraseEvent& event );
@@ -82,8 +97,6 @@ public:
     void         OnKeyEvent( wxKeyEvent& event );
 
     void         OnPan( wxCommandEvent& event );
-
-    /*************************/
 
     void         EraseScreen( wxDC* DC );
     void         OnScrollWin( wxCommandEvent& event );
@@ -100,7 +113,7 @@ public:
 
     /** Function CursorRealPosition
      * @return the position in user units of location ScreenPos
-     * @param ScreenPos = the screen (in pixel) position co convert
+     * @param ScreenPos = the screen (in pixel) position to convert
      */
     wxPoint      CursorRealPosition( const wxPoint& ScreenPos );
 
@@ -116,8 +129,8 @@ public:
      * along with any other recently posted rectangles is redrawn.  Conversion
      * to pixels is done in here.
      * @param aRect The rectangle to append, it must be orthogonal
-     *   (vertical and horizontal edges only), and it must be [,) in nature, i.e.
-     *   [pos, dim) == [inclusive, exclusive)
+     *   (vertical and horizontal edges only), and it must be [,) in nature,
+     *   i.e. [pos, dim) == [inclusive, exclusive)
      */
     void         PostDirtyRect( EDA_Rect aRect );
 
@@ -132,8 +145,9 @@ public:
 
     /**
      * Function ConvertPcbUnitsToPixelsUnits
-     * converts a given wxPoint position (in internal units) to units of pixels,
-     * relative to the current draw area (origin 0,0 is the left top visible
+     * converts a given wxPoint position (in internal units) to units of
+     * pixels, relative to the current draw area (origin 0,0 is the left
+     * top visible
      * corner of draw area) according to the current scroll and zoom.
      * @param aPosition = the position to convert
      */
@@ -144,9 +158,16 @@ public:
     void         MouseTo( const wxPoint& Mouse );
 
     /* Cursor functions */
-    void         Trace_Curseur( wxDC* DC, int color = WHITE );  // Draw the user cursor (grid cursor)
-    void         CursorOff( wxDC* DC );                         // remove the grid cursor from the display
-    void         CursorOn( wxDC* DC );                          // display the grid cursor
+    void         Trace_Curseur( wxDC* DC, int color = WHITE );  // Draw the
+                                                                // user cursor
+                                                                // (grid
+                                                                // cursor)
+    void         CursorOff( wxDC* DC );                         // remove the
+                                                                // grid cursor
+                                                                // from the
+                                                                // display
+    void         CursorOn( wxDC* DC );                          // display the
+                                                                // grid cursor
 
     /**
      * Release managed cursor.

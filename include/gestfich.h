@@ -1,5 +1,5 @@
 /**
- * This file is part of the common libary
+ * This file is part of the common library
  * TODO brief description
  * @file  gestfich.h
  * @see   common.h
@@ -21,77 +21,56 @@ class WinEDAListBox;
  * @param file = PDF file to open
  * @return true is success, false if no PDF viewer found
  */
-bool        OpenPDF( const wxString& file );
+bool     OpenPDF( const wxString& file );
 
-void        OpenFile( const wxString& file );
+void     OpenFile( const wxString& file );
 
-bool        EDA_DirectorySelector( const wxString& Title,           /* Titre de la fenetre */
-                                   wxString&       Path,            /* Chemin par defaut */
-                                   int             flag,            /* reserve */
-                                   wxWindow*       Frame,           /* parent frame */
-                                   const wxPoint&  Pos );
+bool     EDA_DirectorySelector( const wxString& Title,
+                                wxString&       Path,
+                                int             flag,       /* reserve */
+                                wxWindow*       Frame,
+                                const wxPoint&  Pos );
 
-wxString EDA_FileSelector( const wxString &Title,                   /* Window title */
-                           const wxString &Path,                    /* default path */
-                           const wxString &FileName,                /*  default filename */
-                           const wxString &Ext,                     /* default extension */
-                           const wxString &Mask,                    /* Display filename mask */
-                           wxWindow * Frame,                        /* parent frame */
-                           int flag,                                /* wxSAVE, wxOPEN ..*/
-                           const bool keep_working_directory,       /* true = do not change the C.W.D. */
-                           const wxPoint& Pos = wxPoint( -1, -1 )
-                           );
+wxString EDA_FileSelector( const wxString& Title,
+                           const wxString& Path,
+                           const wxString& FileName,
+                           const wxString& Ext,
+                           const wxString& Mask,
+                           wxWindow*       Frame,
+                           int             flag,
+                           const bool      keep_working_directory,
+                           const wxPoint&  Pos = wxPoint( -1, -1 ) );
 
 
-/* Calcule le nom complet d'un file d'apres les chaines
- *  dir = prefixe (chemin)
- *  shortname = nom avec ou sans chemin ou extension
- *  ext = extension
+/* Return file name without path or extension.
  *
- *  si la chaine name possede deja un chemin ou une extension, elles
- *  ne seront pas modifiees
- *
- *  retourne la chaine calculee */
-
-wxString    MakeReducedFileName( const wxString& fullfilename,
-                                 const wxString& default_path,
-                                 const wxString& default_ext );
-
-/* Calcule le nom "reduit" d'un file d'apres les chaines
- *  fullfilename = nom complet
- *  default_path = prefixe (chemin) par defaut
- *  default_ext = extension par defaut
- *
- *  retourne le nom reduit, c'est a dire:
- *  sans le chemin si le chemin est default_path
- *  avec ./ si si le chemin est le chemin courant
- *  sans l'extension si l'extension est default_ext
- *
- *  Renvoie un chemin en notation unix ('/' en separateur de repertoire)
+ * If the path is in the default kicad path, ./ is prepended to the
+ * file name.  If the file name has the default extension, the file
+ * name is returned without an extension.
  */
 
-WinEDAListBox*  GetFileNames( char* Directory, char* Mask );
+wxString MakeReducedFileName( const wxString& fullfilename,
+                              const wxString& default_path,
+                              const wxString& default_ext );
+
+WinEDAListBox* GetFileNames( char* Directory, char* Mask );
 
 
-/* Change l'extension du "filename FullFileName" en NewExt.
- *     Retourne FullFileName */
-
-int             ExecuteFile( wxWindow* frame, const wxString& ExecFile,
+int            ExecuteFile( wxWindow* frame, const wxString& ExecFile,
                              const wxString& param = wxEmptyString );
-void            AddDelimiterString( wxString& string );
-
-wxString        FindKicadHelpPath();
+void           AddDelimiterString( wxString& string );
 
 /* Find absolute path for kicad/help (or kicad/help/<language>) */
+wxString       FindKicadHelpPath();
 
-wxString        ReturnKicadDatasPath();
 
-/* Retourne le chemin des donnees communes de kicad. */
+/* Return the kicad common data path. */
+wxString       ReturnKicadDatasPath();
 
-wxString        FindKicadFile( const wxString& shortname );
 
 /* Search the executable file shortname in kicad binary path and return
- *  full file name if found or shortname */
+ * full file name if found or shortname */
+wxString       FindKicadFile( const wxString& shortname );
 
 
 /**
@@ -105,4 +84,3 @@ extern wxString QuoteFullPath( wxFileName& fn,
                                wxPathFormat format = wxPATH_NATIVE );
 
 #endif /* __INCLUDE__GESTFICH_H__ */
-

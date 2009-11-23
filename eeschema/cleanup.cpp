@@ -145,7 +145,8 @@ void BreakSegment( SCH_SCREEN* aScreen, wxPoint aBreakpoint )
         if( !TestSegmentHit( aBreakpoint, segment->m_Start, segment->m_End, 0 ) )
             continue;
 
-        /* * JP translate * Segment connecte: doit etre coupe en 2 si px,py
+        /* ???
+         * Segment connecte: doit etre coupe en 2 si px,py
          * n'est
          *  pas une extremite */
         if( ( segment->m_Start == aBreakpoint )

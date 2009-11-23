@@ -1,5 +1,5 @@
 /**
- * This file is part of the common libary \n
+ * This file is part of the common library \n
  * Custom string manipulation routines.
  * @file  kicad_string.h
  * @see   common.h, string.cpp
@@ -10,78 +10,74 @@
 #define __INCLUDE__KICAD_STRING_H__ 1
 
 
-char*       strupper( char* Text );
-char*       strlower( char* Text );
+char*    strupper( char* Text );
+char*    strlower( char* Text );
 
-int         ReadDelimitedText( char* dest,
-                               char* source,
-                                 int NbMaxChar );
+/* Read string delimited with (") character.
+ * Upload NbMaxChar max
+ * Returns the number of codes read in source
+ * dest is terminated by NULL
+ */
+int      ReadDelimitedText( char* dest,
+                            char* source,
+                            int   NbMaxChar );
 
-/* lit et place dans dest la chaine de caractere trouvee dans source,
- *   delimitee par " .
- *  transfere NbMaxChar max
- *   retourne le nombre de codes lus dans source
- *  dest est termine par NULL */
+/* Read one line line from a file.
+ * Returns the first useful line read by eliminating blank lines and comments.
+ */
+char*    GetLine( FILE* File,
+                  char* Line,
+                  int*  LineNum = NULL,
+                  int   SizeLine = 255 );
 
-char*       GetLine( FILE* File,
-                     char* Line,
-                      int* LineNum = NULL,
-                       int SizeLine = 255 );
+/* Remove leading and trailing whitespace.
+ */
+char*    StrPurge( char* text );
 
-/* Routine de lecture de 1 ligne utile
- *  retourne la 1ere ligne utile lue.
- *  elimine lignes vides et commentaires */
-char*       StrPurge( char* text );
 
-/* Supprime les caracteres Space en debut de la ligne text
- *  retourne un pointeur sur le 1er caractere non Space de text */
+/*Return a string giving the current date and time.
+*/
+char*    DateAndTime( char* line );
+wxString DateAndTime();
 
-char*       DateAndTime( char* line );
-wxString    DateAndTime();
-
-/* Retourne la chaine de caractere donnant date+heure */
-
-int         StrLenNumCmp( const wxChar* str1,
-                          const wxChar* str2,
-                            int NbMax );
 
 /*
- *  routine (compatible qsort() ) de comparaision pour classement alphab�tique
- *  Analogue a strncmp() mais les nombres sont compar�s selon leur valeur num�rique
- *  et non pas par leur code ascii */
+ * Routine (compatible with qsort ()) to sort by alphabetical order.
+ * Equivalent to strncmp () but the numbers are compared by their integer
+ * value not by their ASCII code.
+ */
+int      StrLenNumCmp( const wxChar* str1,
+                       const wxChar* str2,
+                       int           NbMax );
 
-int         StrNumICmp( const wxChar* str1,
-                        const wxChar* str2 );
+/*
+ * Routine (compatible with qsort ()) to sort by case insensitive alphabetical
+ * order.
+ * Equivalent to strnicmp () but the numbers are compared by their integer
+ * value not by their ASCII code.
+ */
+int      StrNumICmp( const wxChar* str1,
+                     const wxChar* str2 );
 
-/* routine (compatible qsort() ) de comparaison pour classement alphab�tique,
- *  avec lower case == upper case.
- *  Analogue a stricmp() mais les nombres sont compar�s selon leur valeur num�rique
- *  et non pas par leur code ascii */
 
-int         StrLenNumICmp( const wxChar* str1,
-                           const wxChar* str2,
-                                     int NbMax );
+int      StrLenNumICmp( const wxChar* str1,
+                        const wxChar* str2,
+                        int           NbMax );
 
-/* routine (compatible qsort() ) de comparaison pour classement alphab�tique,
- *  avec lower case == upper case.
- *  Analogue a stricmp() mais les nombres sont compar�s selon leur valeur num�rique
- *  et non pas par leur code ascii */
+/* Compare string against wild card pattern using the usual rules.
+ * (Wildcards *,?).
+ * The reference string is "pattern"
+ * If case_sensitive == TRUE (default), exact comparison
+ * Returns TRUE if pattern matched otherwise FALSE.
+ */
 
-bool        WildCompareString( const wxString& pattern,
-                               const wxString& string_to_tst,
-                                          bool case_sensitive = TRUE );
+bool     WildCompareString( const wxString& pattern,
+                            const wxString& string_to_tst,
+                            bool            case_sensitive = TRUE );
 
-/* compare 2 noms de composants, selon regles usuelles
- *  ( Jokers * , ? , autorises).
- *  la chaine de reference est "pattern"
- *  si case_sensitive == TRUE (default), comparaison exacte
- *  retourne TRUE si match FALSE si differences */
-
-char*       to_point( char* Text );
-
-/* convertit les , en . dans une chaine. utilise pour compenser la fct printf
- *  qui genere les flottants avec une virgule au lieu du point en mode international */
+/* Replaces decimal point with commas to generated international numbers.
+ */
+char*    to_point( char* Text );
 
 
 #endif /* __INCLUDE__KICAD_STRING_H__ */
-

@@ -1,20 +1,19 @@
-/********************/
-/* Fichier colors.h */
-/********************/
+/************/
+/* colors.h */
+/************/
 
 #ifndef _COLORS_H
 #define _COLORS_H
 
-/* Definitions des Numeros des Couleurs ( palette de 32) */
+/* Number of colors ( 32 bit palette. ) */
 #define NBCOLOR             24
 
-#define MASKCOLOR           31           ///< mask for color index into ColorRefs[]
+#define MASKCOLOR           31       ///< mask for color index into ColorRefs[]
 
-/// bit indicateur d'affichage (vu / non vu) des items : (defini dans les valeurs des couleurs
-//IMB: Not used anymore     #define ITEM_NOT_SHOW       (1<<18)         // 0x40000
+/// Flag bit display (seen / not seen) items: (defined in the color values
+//IMB: Not used anymore   #define ITEM_NOT_SHOW       (1<<18)      // 0x40000
 
-/// Definition du bit de surbrillance
-#define HIGHT_LIGHT_FLAG    (1<<19)         // 0x80000
+#define HIGHT_LIGHT_FLAG    ( 1<<19 )         // 0x80000
 
 
 /**
@@ -102,14 +101,13 @@ static inline wxColour MakeColour( int aColor )
 #endif
     int ndx = aColor & MASKCOLOR;
 
-    return wxColour(
-                ColorRefs[ndx].m_Red,
-                ColorRefs[ndx].m_Green,
-                ColorRefs[ndx].m_Blue
+    return wxColour( ColorRefs[ndx].m_Red,
+                     ColorRefs[ndx].m_Green,
+                     ColorRefs[ndx].m_Blue
 #if wxCHECK_VERSION(2,8,5)
-                ,(unsigned char) alpha
+                     ,(unsigned char) alpha
 #endif
-                );
+        );
 }
 
 #endif /* ifndef _COLORS_H */

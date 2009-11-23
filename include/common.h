@@ -17,15 +17,19 @@ class WinEDA_DrawPanel;
 
 
 /* Flag for special keys */
-#define GR_KB_RIGHTSHIFT    0x10000000              /* Keybd states: right shift key depressed */
-#define GR_KB_LEFTSHIFT     0x20000000              /* left shift key depressed */
-#define GR_KB_CTRL          0x40000000              /* CTRL depressed */
-#define GR_KB_ALT           0x80000000              /* ALT depressed */
-#define GR_KB_SHIFT         (GR_KB_LEFTSHIFT | GR_KB_RIGHTSHIFT)
-#define GR_KB_SHIFTCTRL     (GR_KB_SHIFT | GR_KB_CTRL)
-#define MOUSE_MIDDLE        0x08000000               /* Middle button mouse flag for block commands */
+#define GR_KB_RIGHTSHIFT 0x10000000                 /* Keybd states: right
+                                                     * shift key depressed */
+#define GR_KB_LEFTSHIFT  0x20000000                 /* left shift key depressed
+                                                     */
+#define GR_KB_CTRL       0x40000000                 /* CTRL depressed */
+#define GR_KB_ALT        0x80000000                 /* ALT depressed */
+#define GR_KB_SHIFT      (GR_KB_LEFTSHIFT | GR_KB_RIGHTSHIFT)
+#define GR_KB_SHIFTCTRL  (GR_KB_SHIFT | GR_KB_CTRL)
+#define MOUSE_MIDDLE     0x08000000                 /* Middle button mouse
+                                                     * flag for block commands
+                                                     */
 
-#define NB_ITEMS            11
+#define NB_ITEMS 11
 
 /* Pseudo key codes for command panning */
 enum pseudokeys {
@@ -62,8 +66,8 @@ enum pseudokeys {
 
 
 /* Graphic Texts Orientation in 0.1 degree*/
-#define TEXT_ORIENT_HORIZ  0
-#define TEXT_ORIENT_VERT   900
+#define TEXT_ORIENT_HORIZ 0
+#define TEXT_ORIENT_VERT  900
 
 #define ON  1
 #define OFF 0
@@ -73,10 +77,10 @@ enum pseudokeys {
 #define CENTIMETRE 2
 
 #if defined(KICAD_GOST)
-#define LEFTMARGIN 800 /* 20mm */
-#define RIGHTMARGIN 200 /* 5mm */
-#define TOPMARGIN 200 /* 5mm */
-#define BOTTOMMARGIN 200 /* 5mm */
+#define LEFTMARGIN   800    /* 20mm */
+#define RIGHTMARGIN  200    /* 5mm */
+#define TOPMARGIN    200    /* 5mm */
+#define BOTTOMMARGIN 200    /* 5mm */
 
 #endif
 /* forward declarations: */
@@ -94,17 +98,17 @@ private:
 
 public:
     WinEDA_TextFrame( wxWindow* parent, const wxString& title );
-    void    Append( const wxString& text );
+    void Append( const wxString& text );
 
 private:
-    void    D_ClickOnList( wxCommandEvent& event );
-    void    OnClose( wxCloseEvent& event );
+    void D_ClickOnList( wxCommandEvent& event );
+    void OnClose( wxCloseEvent& event );
 
     DECLARE_EVENT_TABLE()
 };
 
 
-/* Clsass to handle pages sizes:
+/* Class to handle pages sizes:
  */
 class Ki_PageDescr
 {
@@ -124,31 +128,31 @@ public:
 };
 
 
-extern Ki_PageDescr g_Sheet_A4;
-extern Ki_PageDescr g_Sheet_A3;
-extern Ki_PageDescr g_Sheet_A2;
-extern Ki_PageDescr g_Sheet_A1;
-extern Ki_PageDescr g_Sheet_A0;
-extern Ki_PageDescr g_Sheet_A;
-extern Ki_PageDescr g_Sheet_B;
-extern Ki_PageDescr g_Sheet_C;
-extern Ki_PageDescr g_Sheet_D;
-extern Ki_PageDescr g_Sheet_E;
-extern Ki_PageDescr g_Sheet_GERBER;
-extern Ki_PageDescr g_Sheet_user;
-extern Ki_PageDescr* g_SheetSizeList[];
+extern Ki_PageDescr   g_Sheet_A4;
+extern Ki_PageDescr   g_Sheet_A3;
+extern Ki_PageDescr   g_Sheet_A2;
+extern Ki_PageDescr   g_Sheet_A1;
+extern Ki_PageDescr   g_Sheet_A0;
+extern Ki_PageDescr   g_Sheet_A;
+extern Ki_PageDescr   g_Sheet_B;
+extern Ki_PageDescr   g_Sheet_C;
+extern Ki_PageDescr   g_Sheet_D;
+extern Ki_PageDescr   g_Sheet_E;
+extern Ki_PageDescr   g_Sheet_GERBER;
+extern Ki_PageDescr   g_Sheet_user;
+extern Ki_PageDescr*  g_SheetSizeList[];
 
 
-extern wxString g_ProductName;
+extern wxString       g_ProductName;
 
 /* Default user lib path can be left void, if the standard lib path is used */
-extern wxString g_UserLibDirBuffer;
+extern wxString       g_UserLibDirBuffer;
 
-extern int g_DebugLevel;      // 0= Pas de debug */
-extern int g_MouseOldButtons;
-extern int g_KeyPressed;
+extern int            g_DebugLevel;
+extern int            g_MouseOldButtons;
+extern int            g_KeyPressed;
 
-extern bool    g_ShowPageLimits;      // TRUE to display the page limits
+extern bool           g_ShowPageLimits; // TRUE to display the page limits
 
 /* File name extension definitions. */
 extern const wxString ProjectFileExtension;
@@ -168,17 +172,18 @@ extern const wxString AllFilesWildcard;
 
 
 // Name of default configuration file. (kicad.pro)
-extern wxString g_Prj_Default_Config_FullFilename;
-// Name of local configuration file. (<curr projet>.pro)
-extern wxString g_Prj_Config_LocalFilename;
+extern wxString     g_Prj_Default_Config_FullFilename;
 
-extern int   g_UnitMetric;   // display units mm = 1, inches = 0, cm = 2
+// Name of local configuration file. (<curr projet>.pro)
+extern wxString     g_Prj_Config_LocalFilename;
+
+extern int          g_UnitMetric; // display units mm = 1, inches = 0, cm = 2
 
 /* Draw color for moving objects: */
-extern int g_GhostColor;
+extern int          g_GhostColor;
 
 /* Draw color for grid: */
-extern int g_GridColor;
+extern int          g_GridColor;
 
 /* Current used screen: (not used in eeshema)*/
 extern BASE_SCREEN* ActiveScreen;
@@ -187,41 +192,46 @@ extern BASE_SCREEN* ActiveScreen;
 /* COMMON.CPP */
 
 /** function SetLocaleTo_C_standard
-because kicad is internationalized, switch internatization to "C" standard
-i.e. uses the . (dot) as separator in print/read float numbers
-(some contries (France, Germany ..) use , (comma) as separator)
-This function must be called before read or write ascii files using float numbers in data
-the SetLocaleTo_C_standard function must be called after reading or writing the file
-
-This is wrapper to the C setlocale( LC_NUMERIC, "C" ) function,
-but could make more easier an optional use of locale in kicad
-*/
-void SetLocaleTo_C_standard(void);
+ *  because kicad is internationalized, switch internalization to "C" standard
+ *  i.e. uses the . (dot) as separator in print/read float numbers
+ *  (some countries (France, Germany ..) use , (comma) as separator)
+ *  This function must be called before read or write ascii files using float
+ *  numbers in data the SetLocaleTo_C_standard function must be called after
+ *  reading or writing the file
+ *
+ *  This is wrapper to the C setlocale( LC_NUMERIC, "C" ) function,
+ *  but could make more easier an optional use of locale in kicad
+ */
+void               SetLocaleTo_C_standard( void );
 
 /** function SetLocaleTo_Default
-because kicad is internationalized, switch internatization to default
-to use the default separator in print/read float numbers
-(. (dot) but some contries (France, Germany ..) use , (comma) as separator)
-This function must be called after a call to SetLocaleTo_C_standard
-
-This is wrapper to the C setlocale( LC_NUMERIC, "" ) function,
-but could make more easier an optional use of locale in kicad
-*/
-void SetLocaleTo_Default(void);
+ *  because kicad is internationalized, switch internalization to default
+ *  to use the default separator in print/read float numbers
+ *  (. (dot) but some countries (France, Germany ..) use , (comma) as
+ *   separator)
+ *  This function must be called after a call to SetLocaleTo_C_standard
+ *
+ *  This is wrapper to the C setlocale( LC_NUMERIC, "" ) function,
+ *  but could make more easier an optional use of locale in kicad
+ */
+void               SetLocaleTo_Default( void );
 
 
 /**
  * Function EnsureTextCtrlWidth
- * sets the minimum pixel width on a text control in order to make a text string
- * be fully visible within it. The current font within the text control is considered.
+ * sets the minimum pixel width on a text control in order to make a text
+ * string be fully visible within it. The current font within the text
+ * control is considered.
  * The text can come either from the control or be given as an argument.
  * If the text control is larger than needed, then nothing is done.
  * @param aCtrl the text control to potentially make wider.
- * @param aString the text that is used in sizing the control's pixel width.  If NULL, then
+ * @param aString the text that is used in sizing the control's pixel width.
+ * If NULL, then
  *   the text already within the control is used.
  * @return bool - true if the \a aCtrl had its size changed, else false.
  */
-bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString = NULL );
+bool               EnsureTextCtrlWidth( wxTextCtrl*     aCtrl,
+                                        const wxString* aString = NULL );
 
 
 /**
@@ -232,19 +242,19 @@ bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString = NULL );
  * @param aPoint  The point to output.
  * @return wxString& - the input string
  */
-wxString& operator  <<( wxString& aString, const wxPoint& aPoint );
+wxString& operator <<( wxString& aString, const wxPoint& aPoint );
 
 
 /**
  * Function ProcessExecute
  * runs a child process.
- * @param aCommandLine The process and any arguments to it all in a single string.
+ * @param aCommandLine The process and any arguments to it all in a single
+ *                     string.
  * @param aFlags The same args as allowed for wxExecute()
  * @return bool - true if success, else false
  */
-bool        ProcessExecute( const wxString& aCommandLine,
-                            int aFlags = wxEXEC_ASYNC );
-
+bool               ProcessExecute( const wxString& aCommandLine,
+                                   int             aFlags = wxEXEC_ASYNC );
 
 
 /**
@@ -252,22 +262,24 @@ bool        ProcessExecute( const wxString& aCommandLine,
  * @return a wxString containing the name of the layer number "layer_number".
  * @param layer_number the layer number of the layer
  * @param is_filename if TRUE,  the name can be used for a file name (not
- *        internatinalized, no space)
+ *        internationalized, no space)
  */
-wxString    ReturnPcbLayerName( int layer_number, bool is_filename = FALSE );
+wxString           ReturnPcbLayerName( int  layer_number,
+                                       bool is_filename = FALSE );
 
 
 /*******************/
 /* about_kicad.cpp */
 /*******************/
-void        InitKiCadAbout( wxAboutDialogInfo& info);
+void InitKiCadAbout( wxAboutDialogInfo& info );
 
 
 /**************/
 /* common.cpp */
 /**************/
-wxString    GetBuildVersion(); /* Return the build date */
-wxString    GetAboutBuildVersion(); /* Return custom build date for about dialog */
+wxString GetBuildVersion();         /* Return the build date */
+wxString GetAboutBuildVersion();    /* Return custom build date for about
+                                     * dialog */
 
 /**
  * function Affiche_1_Parametre
@@ -281,18 +293,18 @@ wxString    GetAboutBuildVersion(); /* Return custom build date for about dialog
  * If "by posting on this line
  * Color = color display
  */
-void        Affiche_1_Parametre( WinEDA_DrawFrame* frame,
-                                 int               pos_X,
-                                 const wxString&   texte_H,
-                                 const wxString&   texte_L,
-                                 int               color );
+void     Affiche_1_Parametre( WinEDA_DrawFrame* frame,
+                              int               pos_X,
+                              const wxString&   texte_H,
+                              const wxString&   texte_L,
+                              int               color );
 
-int         GetTimeStamp();
+int GetTimeStamp();
 
-int         DisplayColorFrame( wxWindow* parent, int OldColor );
-int         GetCommandOptions( const int argc, const char** argv,
-                               const char* stringtst, const char** optarg,
-                               int* optind );
+int DisplayColorFrame( wxWindow* parent, int OldColor );
+int GetCommandOptions( const int argc, const char** argv,
+                       const char* stringtst, const char** optarg,
+                       int* optind );
 
 
 /* Returns to display the value of a parameter, by type of units selected
@@ -302,7 +314,7 @@ int         GetCommandOptions( const int argc, const char** argv,
  */
 const wxString& valeur_param( int valeur, wxString& buf_texte );
 
-wxString    ReturnUnitSymbol( int Units = g_UnitMetric );
+wxString        ReturnUnitSymbol( int Units = g_UnitMetric );
 
 /**
  * Get a human readable units string.
@@ -313,10 +325,10 @@ wxString    ReturnUnitSymbol( int Units = g_UnitMetric );
  * @param units - The units text to return.
  * @return The human readable units string.
  */
-wxString    GetUnitsLabel( int units );
+wxString        GetUnitsLabel( int units );
 
-int         ReturnValueFromString( int Units, const wxString& TextValue,
-                                   int Internal_Unit );
+int             ReturnValueFromString( int Units, const wxString& TextValue,
+                                       int Internal_Unit );
 
 /** Function ReturnStringFromValue
  * Return the string from Value, according to units (inch, mm ...) for display,
@@ -325,40 +337,49 @@ int         ReturnValueFromString( int Units, const wxString& TextValue,
  * @param aValue = value in Internal_Unit
  * @param aInternal_Unit = units per inch for Value
  * @param aAdd_unit_symbol = true to add symbol unit to the string value
- * @return a wxString what contains value and optionnaly the sumbol unit (like 2.000 mm)
+ * @return a wxString what contains value and optionally the symbol unit (like
+ *         2.000 mm)
  */
-wxString    ReturnStringFromValue( int aUnits, int aValue, int aInternal_Unit,
-                                   bool aAdd_unit_symbol = false );
+wxString        ReturnStringFromValue( int  aUnits,
+                                       int  aValue,
+                                       int  aInternal_Unit,
+                                       bool aAdd_unit_symbol = false );
 
-void        AddUnitSymbol( wxStaticText& Stext, int Units = g_UnitMetric );
+void            AddUnitSymbol( wxStaticText& Stext, int Units = g_UnitMetric );
 
 /* Add string "  (mm):" or " ("):" to the static text Stext.
  *  Used in dialog boxes for entering values depending on selected units */
-void        PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value,
-                                  int Internal_Unit );
+void            PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value,
+                                      int Internal_Unit );
 
 /* Convert the number Value in a string according to the internal units
- *  and the selected unit (g_UnitMetric) and put it in the wxTextCtrl TextCtrl */
-int         ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr,
-                                     int Internal_Unit );
+ *  and the selected unit (g_UnitMetric) and put it in the wxTextCtrl TextCtrl
+ **/
+int             ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr,
+                                         int               Internal_Unit );
 
-/* return a String List from a string, whith a specific splitter*/
-wxArrayString* wxStringSplit(wxString txt, wxChar splitter);
+/* return a String List from a string, with a specific splitter*/
+wxArrayString*  wxStringSplit( wxString txt, wxChar splitter );
 
 /**
  * Function To_User_Unit
  * Convert in inch or mm the variable "val" (double)given in internal units
  * @return the converted value, in double
- * @param is_metric : true if the result must be returned in mm , false if inches
+ * @param is_metric : true if the result must be returned in mm , false if
+ *                    inches
  * @param val : double : the given value
  * @param internal_unit_value = internal units per inch
  */
-double      To_User_Unit( bool is_metric, double val, int internal_unit_value );
+double          To_User_Unit( bool   is_metric,
+                              double val,
+                              int    internal_unit_value );
 
-int         From_User_Unit( bool is_metric, double val, int internal_unit_value );
-wxString    GenDate();
-void        MyFree( void* pt_mem );
-void*       MyZMalloc( size_t nb_octets );
-void*       MyMalloc( size_t nb_octets );
+int             From_User_Unit( bool   is_metric,
+                                double val,
+                                int    internal_unit_value );
+wxString        GenDate();
+void            MyFree( void* pt_mem );
+void*           MyZMalloc( size_t nb_octets );
+void*           MyMalloc( size_t nb_octets );
 
 #endif  /* __INCLUDE__COMMON_H__ */

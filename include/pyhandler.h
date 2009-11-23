@@ -1,5 +1,5 @@
 /****************************/
-/*		  pyhandler.h		*/
+/*        pyhandler.h       */
 /****************************/
 
 #ifndef PYHANDLER_H
@@ -37,15 +37,15 @@ protected:
         wxString                  name;
         std::vector< initfunc_t > registry;
 
-        ModuleRecord( const wxString &modName ) : 
-            name( modName ) 
+        ModuleRecord( const wxString &modName ) :
+            name( modName )
         {
         }
 
     };
-    
+
     std::vector< ModuleRecord > m_ModuleRegistry;
-    
+
     void DoInitModules();
 
     // Events
@@ -54,17 +54,17 @@ protected:
         wxString                             key;
         std::vector< boost::python::object > functors;
 
-        Event( const wxString &strKey ) : 
-            key( strKey ) 
+        Event( const wxString &strKey ) :
+            key( strKey )
         {
         }
     };
-    
+
     std::vector< Event > m_EventRegistry;
 
 public:
 
-    // Singletton handling:
+    // Singleton handling:
     static PyHandler*               GetInstance();
 
     ~PyHandler();

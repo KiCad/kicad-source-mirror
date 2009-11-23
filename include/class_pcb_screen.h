@@ -1,19 +1,17 @@
-/**************************************************************/
-/*  pcbstruct.h :  definition des structures de donnees type PCB */
-/**************************************************************/
+/****************/
+/*  pcbstruct.h */
+/****************/
 
 #ifndef __CLASSPCB_SCREEN_H__
 #define __CLASSPCB_SCREEN_H__
-
-#
 
 /* Handle info to display a board */
 class PCB_SCREEN : public BASE_SCREEN
 {
 public:
-    int m_Active_Layer;             /* ref couche active */
-    int m_Route_Layer_TOP;          /* ref couches actives */
-    int m_Route_Layer_BOTTOM;       /* pour placement vias et routage 2 couches */
+    int m_Active_Layer;
+    int m_Route_Layer_TOP;
+    int m_Route_Layer_BOTTOM;
 
 public:
     PCB_SCREEN();
@@ -29,10 +27,14 @@ public:
 
     /**
      * Function GetCurItem
-     * returns the currently selected BOARD_ITEM, overriding BASE_SCREEN::GetCurItem().
+     * returns the currently selected BOARD_ITEM, overriding
+     *BASE_SCREEN::GetCurItem().
      * @return BOARD_ITEM* - the one selected, or NULL.
      */
-    BOARD_ITEM* GetCurItem() const {  return (BOARD_ITEM*) BASE_SCREEN::GetCurItem(); }
+    BOARD_ITEM* GetCurItem() const
+    {
+        return (BOARD_ITEM*) BASE_SCREEN::GetCurItem();
+    }
 
     /**
      * Function SetCurItem
@@ -43,7 +45,7 @@ public:
 
 
     /* Return true if a microvia can be put on board
-     * A microvia ia a small via restricted to 2 near neighbour layers
+     * A microvia is a small via restricted to 2 near neighbor layers
      * because its is hole is made by laser which can penetrate only one layer
      * It is mainly used to connect BGA to the first inner layer
      * And it is allowed from an external layer to the first inner layer
@@ -51,6 +53,7 @@ public:
     bool IsMicroViaAcceptable( void );
 
     /* full undo redo management : */
+
     // use BASE_SCREEN::ClearUndoRedoList()
     // use BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aItem )
     // use BASE_SCREEN::PushCommandToRedoList( PICKED_ITEMS_LIST* aItem )
@@ -59,13 +62,14 @@ public:
      * free the undo or redo list from List element
      *  Wrappers are deleted.
      *  datas pointed by wrappers are deleted if not in use in schematic
-     *  i.e. when they are copy of a schematic item or they are no more in use (DELETED)
+     *  i.e. when they are copy of a schematic item or they are no more in use
+     *  (DELETED)
      * @param aList = the UNDO_REDO_CONTAINER to clear
      * @param aItemCount = the count of items to remove. < 0 for all items
      * items are removed from the beginning of the list.
      * So this function can be called to remove old commands
      */
-    void         ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 );
+    void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 );
 };
 
 

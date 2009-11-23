@@ -1,24 +1,19 @@
-/***************************************************/
-/* WORKSHEET.H: constantes pour trace du cartouche */
-/***************************************************/
-
-/****************************/
-/* Description du cartouche */
-/****************************/
+/***************/
+/* worksheet.h */
+/***************/
 
 /* Values are in 1/1000 inch */
 
 #ifndef __WORKSHEET_H__
 #define __WORKSHEET_H__
 
-#define GRID_REF_W       70     /* hauteur de la bande de reference grille */
-#define SIZETEXT         60     /* Dimension des textes du cartouche */
-#define SIZETEXT_REF     50     /* Dimension des lettres du marquage des reperes */
-#define PAS_REF          2000   /* pas des marquages de reference des reperes */
+#define GRID_REF_W       70     /* height of the band reference grid */
+#define SIZETEXT         60     /* worksheet text size */
+#define SIZETEXT_REF     50     /* worksheet frame reference text size */
+#define PAS_REF          2000   /* no reference markings on worksheet frame */
 #define TEXT_VTAB_HEIGHT SIZETEXT * 2
 
 #if defined(KICAD_GOST)
-/* Shtamp */
 #define STAMP_OX 185 * 10000 / 254
 #define STAMP_OY 55 * 10000 / 254
 
@@ -69,8 +64,8 @@
 #define STAMP_25  25 * 10000 / 254
 #endif
 
-/* Les coord ci dessous sont relatives au coin bas - droit de la feuille, et
- *  seront soustraires de cette origine
+/* The coordinates below are relative to the bottom right corner of page and
+ * will be subtracted from this origin.
  */
 #define BLOCK_OX                      4200
 #define BLOCK_KICAD_VERSION_X         BLOCK_OX - SIZETEXT
@@ -100,15 +95,15 @@
 struct Ki_WorkSheetData
 {
 public:
-    int               m_Type;           /* nombre permettant de reconnaitre la description */
+    int               m_Type;
     Ki_WorkSheetData* Pnext;
-    int               m_Posx, m_Posy;   /* position de l'element ou point de depart du segment */
-    int               m_Endx, m_Endy;   /* extremite d'un element type segment ou cadre */
-    const wxChar*     m_Legende;        /* Pour m_Textes: texte a afficher avant le texte lui meme */
-    const wxChar*     m_Text;           /* Pour m_Textes:pointeur sur le texte a afficher */
+    int               m_Posx, m_Posy;
+    int               m_Endx, m_Endy;
+    const wxChar*     m_Legende;
+    const wxChar*     m_Text;
 };
 
-/* Type des descriptions Ki_WorkSheetData */
+/* Work sheet structure type definitions. */
 enum TypeKi_WorkSheetData {
     WS_DATE,
     WS_REV,

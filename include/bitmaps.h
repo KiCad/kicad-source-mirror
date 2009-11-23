@@ -1,8 +1,6 @@
 
-// Largeur du toolbar vertical
 #define VTOOLBAR_WIDTH  26
 
-// dimension d'un tool vertical
 #define TOOL_SIZE       23
 
 // Please keep list sorted alphabetically, ignoring case.

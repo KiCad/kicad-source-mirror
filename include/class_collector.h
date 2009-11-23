@@ -3,22 +3,22 @@
  *
  * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2004-2007 Kicad Developers, see change_log.txt for contributors.
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html 
- * or you may search the http://www.gnu.org website for the version 2 license, 
- * or you may write to the Free Software Foundation, Inc., 
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
@@ -37,14 +37,14 @@ class EDA_BaseStruct;
 
 /**
  * Class COLLECTOR
- * is an abstract class that will find and hold all the objects according to 
+ * is an abstract class that will find and hold all the objects according to
  * an inspection done by the Inspect() function which must be implemented by
  * any derived class.  When Inspect() finds an object that it wants to collect,
- * i.e. one that it "likes", then it only has to do an Append( testItem ) 
+ * i.e. one that it "likes", then it only has to do an Append( testItem )
  * on it to add it to its collection, but in all cases for the scan to continue,
  * Inspect() must return SEARCH_CONTINUE.
  *
- * Later, after collection, the user can iterate through all the objects 
+ * Later, after collection, the user can iterate through all the objects
  * in the remembered collection using GetCount() and the [int] operator.
  */
 class COLLECTOR : public INSPECTOR
@@ -61,11 +61,11 @@ protected:
 
     /// A bounding box to test against, and that was used to make the collection.
     EDA_Rect        m_RefBox;
-    
+
     /// The time at which the collection was made.
     int             m_TimeAtCollection;
-    
-    
+
+
 public:
 
     COLLECTOR()
@@ -77,7 +77,7 @@ public:
     {
     }
 
-    
+
     /**
      * Function GetCount
      * returns the number of objects in the list
@@ -87,7 +87,7 @@ public:
         return (int) m_List.size();
     }
 
-    
+
     /**
      * Function Empty
      * sets the list to empty
@@ -97,7 +97,7 @@ public:
         m_List.clear();
     }
 
-    
+
     /**
      * Function Append
      * adds an item to the end of the list.
@@ -142,7 +142,7 @@ public:
         return &m_List[0];
     }
 
-    
+
     /**
      * Function SetScanTypes
      * records the list of KICAD_T types to consider for collection by
@@ -154,7 +154,7 @@ public:
     {
         m_ScanTypes = scanTypes;
     }
-    
+
     void SetTimeNow()
     {
         m_TimeAtCollection = GetTimeStamp();
@@ -169,12 +169,12 @@ public:
 
     void SetBoundingBox( const EDA_Rect& aRefBox ) { m_RefBox = aRefBox;  }
     const EDA_Rect& GetBoundingBox() const {  return m_RefBox; }
-    
-    
+
+
     /**
      * Function IsSimilarPointAndTime
-     * returns true if the given reference point is "similar" (defined here) 
-     * to the internal reference point and the current time is within a few 
+     * returns true if the given reference point is "similar" (defined here)
+     * to the internal reference point and the current time is within a few
      * seconds of the internal m_TimeAtCollection.
      *
      * @param aRefPos A wxPoint to compare to.
@@ -184,21 +184,21 @@ public:
     {
         const int distMax = 2;      // adjust these here
         const int timeMax = 3;      // seconds, I think
-        
+
         int dx = abs( aRefPos.x - m_RefPos.x );
         int dy = abs( aRefPos.y - m_RefPos.y );
-        
-        if( dx <= distMax && dy <= distMax 
+
+        if( dx <= distMax && dy <= distMax
                 && GetTimeStamp()-m_TimeAtCollection <= timeMax )
             return true;
         else
             return false;
     }
 
-    
+
     /**
      * Function Inspect
-     * is the examining function within the INSPECTOR which is passed to the 
+     * is the examining function within the INSPECTOR which is passed to the
      * Iterate function.  It is used primarily for searching, but not limited to
      * that.  It can also collect or modify the scanned objects.
      *
@@ -209,14 +209,14 @@ public:
      *   else SCAN_CONTINUE;
      *
      * implement in derived class:
-    SEARCH_RESULT virtual Inspect( EDA_BaseStruct* testItem, 
+    SEARCH_RESULT virtual Inspect( EDA_BaseStruct* testItem,
         const void* testData ) = 0;
-     */ 
-    
+     */
+
 
     /**
      * Function Collect
-     * scans an EDA_BaseStruct using this class's Inspector method, which does 
+     * scans an EDA_BaseStruct using this class's Inspector method, which does
      * the collection.
      * @param container An EDA_BaseStruct to scan, including those items it contains.
      * @param aRefPos A wxPoint to use in hit-testing.
@@ -226,14 +226,14 @@ public:
     virtual void Collect( EDA_BaseStruct* container, const wxPoint& aRefPos )
     {
         example implementation:
-        
+
         SetRefPos( aRefPos );    // remember where the snapshot was taken from
-        
+
         Empty();        // empty the collection
-        
+
         // visit the board with the INSPECTOR (me).
         container->Visit(   this,       // INSPECTOR* inspector
-                            NULL,       // const void* testData, 
+                            NULL,       // const void* testData,
                             m_ScanTypes);
         SetTimeNow();                   // when it was taken
     }

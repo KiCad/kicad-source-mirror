@@ -162,7 +162,7 @@ void WriteFootprintFilterInfos( FILE* file, COMPONENT_LIST& list )
 }
 
 
-/* *** JP translate ***
+/* ???
  * Change le NetName PinNet par un nom compose des 8 derniers codes de PinNet
  * suivi de _Xnnnnn ou nnnnn est un nom de 0 a 99999
  */

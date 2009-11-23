@@ -1,7 +1,6 @@
-/***********************************************************/
-/*                      wxstruct.h:                        */
-/* descriptions des principales classes derivees utilisees */
-/***********************************************************/
+/****************/
+/*  wxstruct.h  */
+/****************/
 
 #ifndef  WXSTRUCT_H
 #define  WXSTRUCT_H
@@ -32,13 +31,11 @@
 #endif
 
 //  Option for dialog boxes
-// #define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE|wxFRAME_FLOAT_ON_PARENT|wxSTAY_ON_TOP
 #define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT | \
     MAYBE_RESIZE_BORDER
 
 #define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS
 
-/*  Forward declarations of classes. */
 class EDA_BaseStruct;
 class EDA_Rect;
 class WinEDA_DrawPanel;
@@ -110,8 +107,6 @@ public:
 #endif
 
 public:
-
-    // Constructor and destructor
     WinEDA_BasicFrame( wxWindow* father, int idtype,
                        const wxString& title,
                        const wxPoint& pos, const wxSize& size,
@@ -152,22 +147,31 @@ class WinEDA_DrawFrame : public WinEDA_BasicFrame
 {
 public:
     WinEDA_DrawPanel* DrawPanel;            // Draw area
-    WinEDA_MsgPanel*  MsgPanel;             // Panel used to display some info (bottom of the screen)
+    WinEDA_MsgPanel*  MsgPanel;             // Panel used to display some
+                                            //  info (bottom of the screen)
     WinEDA_Toolbar*   m_VToolBar;           // Vertical (right side) Toolbar
-    WinEDA_Toolbar*   m_AuxVToolBar;        // Auxiliary Vertical (right side) Toolbar
+    WinEDA_Toolbar*   m_AuxVToolBar;        // Auxiliary Vertical (right side)
+                                            // Toolbar
     WinEDA_Toolbar*   m_OptionsToolBar;     // Options Toolbar (left side)
-    WinEDA_Toolbar*   m_AuxiliaryToolBar;   // Toolbar auxiliaire (utilis� dans pcbnew)
+    WinEDA_Toolbar*   m_AuxiliaryToolBar;   // Auxiliay Toolbar used in pcbnew
 
-    WinEDAChoiceBox*  m_SelGridBox;         // Dialog box to choose the grid size
-    WinEDAChoiceBox*  m_SelZoomBox;         // Dialog box to choose the Zoom value
+    WinEDAChoiceBox*  m_SelGridBox;         // Choice box to choose the grid
+                                            // size
+    WinEDAChoiceBox*  m_SelZoomBox;         // Choice box to choose the zoom
+                                            // value
 
-    int          m_CursorShape;             // shape for cursor (0 = default cursor)
-    int          m_ID_current_state;        // Id of active button on the vertical toolbar
-    int          m_ID_last_state;           // Id of previous active button on the vertical toolbar
-    int          m_HTOOL_current_state;     // Id of active button on horizontal toolbar
+    int          m_CursorShape;             // shape for cursor (0 = default
+                                            // cursor)
+    int          m_ID_current_state;        // Id of active button on the
+                                            // vertical toolbar
+    int          m_ID_last_state;           // Id of previous active button
+                                            // on the vertical toolbar
+    int          m_HTOOL_current_state;     // Id of active button on
+                                            // horizontal toolbar
 
     int          m_InternalUnits;           // Internal units count in 1 inch
-                                            // = 1000 for eeschema, = 10000 for PCBnew and Gerbview
+                                            // = 1000 for eeschema, = 10000
+                                            // for PCBnew and Gerbview
 
     int          m_UnitType;                // Internal Unit type (0 = inch)
     bool         m_Draw_Axis;               // TRUE to show X and Y axis
@@ -175,8 +179,11 @@ public:
     bool         m_Draw_Sheet_Ref;          // TRUE to show frame references
 
     bool         m_Print_Sheet_Ref;         // TRUE to print frame references
-    bool         m_Draw_Auxiliary_Axis;     /* TRUE to show auxiliary axis. Used in pcbnew:
-                                             *  the auxiliary axis is the origin of coordinates for drill, gerber and component position files
+    bool         m_Draw_Auxiliary_Axis;     /* TRUE to show auxiliary axis.
+                                             * Used in pcbnew: the auxiliary
+                                             * axis is the origin of
+                                             * coordinates for drill, gerber
+                                             * and component position files
                                              */
     wxPoint      m_Auxiliary_Axis_Position; /* position of the auxiliary axis */
 
@@ -187,11 +194,12 @@ private:
     BASE_SCREEN* m_CurrentScreen;           ///< current used SCREEN
 
 protected:
-    void            SetBaseScreen( BASE_SCREEN* aScreen ) { m_CurrentScreen = aScreen; }
+    void            SetBaseScreen( BASE_SCREEN* aScreen )
+    {
+        m_CurrentScreen = aScreen;
+    }
 
 public:
-
-    // Constructor and destructor
     WinEDA_DrawFrame( wxWindow* father, int idtype,
                       const wxString& title,
                       const wxPoint& pos, const wxSize& size,
@@ -247,7 +255,9 @@ public:
     virtual void     OnZoom( wxCommandEvent& event );
     void             OnGrid( int grid_type );
     void             Recadre_Trace( bool ToMouse );
-    void             PutOnGrid( wxPoint* coord ); /* set the coordiante "coord" to the nearest grid coordinate */
+    void             PutOnGrid( wxPoint* coord ); /* set the coordinate to
+                                                   * the nearest grid
+                                                   * coordinate */
     void             Zoom_Automatique( bool move_mouse_cursor );
 
     /* Set the zoom level to show the area Rect */
@@ -271,9 +281,11 @@ public:
      * Return the X,Y sheet references where the point position is located
      * @param aScreen = screen to use
      * @param aPosition = position to identify by YX ref
-     * @return a wxString containing the message locator like A3 or B6 (or ?? if out of page limits)
+     * @return a wxString containing the message locator like A3 or B6
+     *         (or ?? if out of page limits)
      */
-    wxString         GetXYSheetReferences( BASE_SCREEN* aScreen, const wxPoint& aPosition );
+    wxString         GetXYSheetReferences( BASE_SCREEN* aScreen,
+                                           const wxPoint& aPosition );
 
     void             DisplayToolMsg( const wxString& msg );
     void             Process_Zoom( wxCommandEvent& event );
@@ -281,7 +293,8 @@ public:
     virtual void     RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;
     virtual void     OnLeftClick( wxDC* DC, const wxPoint& MousePos ) = 0;
     virtual void     OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
-    virtual bool     OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
+    virtual bool     OnRightClick( const wxPoint& MousePos,
+                                   wxMenu* PopMenu ) = 0;
     virtual void     ToolOnRightClick( wxCommandEvent& event );
     void             AdjustScrollBars();
 
@@ -295,8 +308,8 @@ public:
      * a drawing function per se, but rather updates lines of text held by
      * the components within the status bar which is owned by the wxFrame.
      * <p>
-     * On a MAC, be careful about calling this function when there is an existing
-     * wxDC in existence on a sibling window.
+     * On a MAC, be careful about calling this function when there is an
+     * existing wxDC in existence on a sibling window.
      */
     virtual void     UpdateStatusBar();
 
@@ -305,7 +318,8 @@ public:
     /* Handlers for block commands */
     virtual int      ReturnBlockCommand( int key );
     virtual void     InitBlockPasteInfos();
-    virtual bool     HandleBlockBegin( wxDC* DC, int cmd_type, const wxPoint& startpos );
+    virtual bool     HandleBlockBegin( wxDC* DC, int cmd_type,
+                                       const wxPoint& startpos );
     virtual void     HandleBlockPlace( wxDC* DC );
     virtual int      HandleBlockEnd( wxDC* DC );
 
@@ -341,10 +355,6 @@ public:
     DECLARE_EVENT_TABLE();
 };
 
-
-/****************************************************/
-/* classe representant un ecran graphique de dessin */
-/****************************************************/
 
 /*********************************************************
 *   class WinEDA_MsgPanel : this is a panel to display various infos
@@ -410,12 +420,11 @@ protected:
 
 public:
     WinEDA_DrawFrame* m_Parent;
-    int m_BgColor;          // couleur de fond
+    int m_BgColor;
 
 public:
-
-    // Constructor and destructor
-    WinEDA_MsgPanel( WinEDA_DrawFrame* parent, int id, const wxPoint& pos, const wxSize& size );
+    WinEDA_MsgPanel( WinEDA_DrawFrame* parent, int id, const wxPoint& pos,
+                     const wxSize& size );
     ~WinEDA_MsgPanel();
 
 
@@ -465,8 +474,6 @@ private:
     wxStaticText* m_Title;
 
 public:
-
-    // Constructor and destructor
     WinEDA_EnterText( wxWindow* parent, const wxString& Title,
                       const wxString& TextToEdit, wxBoxSizer* BoxSizer,
                       const wxSize& Size, bool Multiline = false );
@@ -489,6 +496,7 @@ public:
     }
 };
 
+
 /************************************************************************/
 /* Class to edit/enter a graphic text and its dimension ( INCHES or MM )*/
 /************************************************************************/
@@ -503,8 +511,6 @@ private:
     wxStaticText* m_Title;
 
 public:
-
-    // Constructor and destructor
     WinEDA_GraphicTextCtrl( wxWindow* parent, const wxString& Title,
                             const wxString& TextToEdit, int textsize,
                             int units, wxBoxSizer* BoxSizer, int framelen = 200,
@@ -527,13 +533,15 @@ public:
      */
     static wxString FormatSize( int internalUnit, int units, int textSize );
 
-    static int      ParseSize( const wxString& sizeText, int internalUnit, int units );
+    static int      ParseSize( const wxString& sizeText, int internalUnit,
+                               int units );
 };
 
 
-/*************************************************************************************/
-/*Class to edit/enter a coordinate (pair of values) ( INCHES or MM ) in dialog boxes */
-/*************************************************************************************/
+/**************************************************************************/
+/* Class to edit/enter a coordinate (pair of values) ( INCHES or MM ) in  */
+/* dialog boxes,                                                          */
+/**************************************************************************/
 class WinEDA_PositionCtrl
 {
 public:
@@ -546,8 +554,6 @@ private:
     wxStaticText* m_TextX, * m_TextY;
 
 public:
-
-    // Constructor and destructor
     WinEDA_PositionCtrl( wxWindow* parent, const wxString& title,
                          const wxPoint& pos_to_edit,
                          int units, wxBoxSizer* BoxSizer,
@@ -560,6 +566,7 @@ public:
     wxPoint GetValue();
 };
 
+
 /*************************************************************
  *  Class to edit/enter a size (pair of values for X and Y size)
  *  ( INCHES or MM ) in dialog boxes
@@ -567,8 +574,6 @@ public:
 class WinEDA_SizeCtrl : public WinEDA_PositionCtrl
 {
 public:
-
-    // Constructor and destructor
     WinEDA_SizeCtrl( wxWindow* parent, const wxString& title,
                      const wxSize& size_to_edit,
                      int units, wxBoxSizer* BoxSizer,
@@ -582,11 +587,6 @@ public:
 /****************************************************************/
 /* Class to edit/enter a value ( INCHES or MM ) in dialog boxes */
 /****************************************************************/
-
-/* internal_unit est le nombre d'unites internes par inch
- *  - 1000 sur EESchema
- *  - 10000 sur PcbNew
- */
 class WinEDA_ValueCtrl
 {
 public:
@@ -598,8 +598,6 @@ private:
     wxStaticText* m_Text;
 
 public:
-
-    // Constructor and destructor
     WinEDA_ValueCtrl( wxWindow* parent, const wxString& title, int value,
                       int units, wxBoxSizer* BoxSizer,
                       int internal_unit = EESCHEMA_INTERNAL_UNIT );
@@ -616,6 +614,7 @@ public:
     }
 };
 
+
 /************************************************************************/
 /* Class to edit/enter a  pair of float (double) values in dialog boxes */
 /************************************************************************/
@@ -628,8 +627,6 @@ private:
     wxStaticText* m_Text;
 
 public:
-
-    // Constructor and destructor
     WinEDA_DFloatValueCtrl( wxWindow* parent, const wxString& title,
                             double value, wxBoxSizer* BoxSizer );
 
@@ -671,13 +668,16 @@ public:
 #if defined(KICAD_AUITOOLBAR)
     bool GetToolState( int toolId ) { return GetToolToggled(toolId); };
 
-    void AddRadioTool( int toolid, const wxString& label, const wxBitmap& bitmap,
-                                    const wxBitmap& bmpDisabled = wxNullBitmap,
-                                    const wxString& shortHelp = wxEmptyString,
-                                    const wxString& longHelp = wxEmptyString,
-                                    wxObject *data = NULL )
+    void AddRadioTool( int             toolid,
+                       const wxString& label,
+                       const wxBitmap& bitmap,
+                       const wxBitmap& bmpDisabled = wxNullBitmap,
+                       const wxString& shortHelp = wxEmptyString,
+                       const wxString& longHelp = wxEmptyString,
+                       wxObject*       data = NULL )
     {
-       AddTool( toolid, label, bitmap, bmpDisabled, wxITEM_CHECK, shortHelp, longHelp, data );
+       AddTool( toolid, label, bitmap, bmpDisabled, wxITEM_CHECK,
+                shortHelp, longHelp, data );
     };
 
     void SetToolNormalBitmap( int id, const wxBitmap& bitmap ) {};
