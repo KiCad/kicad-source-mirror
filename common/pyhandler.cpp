@@ -23,25 +23,39 @@ static object ChooseFile( str objTitle, str objMask, object objOpen )
     int open  = extract<int>( objOpen );
 
     wxString script = EDA_FileSelector( PyHandler::MakeStr( objTitle ),
-            wxEmptyString,		  		/* Chemin par defaut */
-            wxEmptyString,				/* nom fichier par defaut */
-            mask,			            /* extension par defaut */
-            mask,                       /* Masque d'affichage */
-            NULL,
-            open ? wxFD_OPEN : wxFD_SAVE,
-            TRUE
-            );
+                                        wxEmptyString,
+                                        wxEmptyString,
+                                        mask,
+                                        mask,
+                                        NULL,
+                                        open ? wxFD_OPEN : wxFD_SAVE,
+                                        TRUE );
 
     return PyHandler::Convert( script );
 }
 
-static void Print( str message ) { std::cout << extract<char *>(message) << std::endl; }
+static void Print( str message )
+{
+    std::cout << extract<char *>(message) << std::endl;
+}
+
+
 static void Clear() {}
 
+
 static void RegisterCb( str objKey, object callback )
-{ PyHandler::GetInstance()->RegisterCallback( PyHandler::MakeStr(objKey), callback ); }
+{
+    PyHandler::GetInstance()->RegisterCallback( PyHandler::MakeStr(objKey),
+                                                callback );
+}
+
+
 static void UnRegisterCb( str objKey, object callback )
-{ PyHandler::GetInstance()->UnRegisterCallback( PyHandler::MakeStr(objKey), callback ); }
+{
+    PyHandler::GetInstance()->UnRegisterCallback( PyHandler::MakeStr(objKey),
+                                                  callback );
+}
+
 
 static void init_base_utils()
 {
@@ -54,7 +68,13 @@ static void init_base_utils()
     def ( "Clear",              &Clear);
 }
 
-static void InitPyModules() { PyHandler::GetInstance()->InitNextModule(); } // Dummy boost callback
+
+// Dummy boost callback
+static void InitPyModules()
+{
+    PyHandler::GetInstance()->InitNextModule();
+}
+
 
 /*****************************************************************************/
 /*                                PyHandler                                  */
@@ -63,9 +83,21 @@ static void InitPyModules() { PyHandler::GetInstance()->InitNextModule(); } // D
 // std::vector< T > -> python object implicit conversion
 template <typename T> struct std_vector_to_tuple
 {
-	static PyObject * makeItem( const wxString & str ) { return boost::python::incref( PyHandler::Convert( str ).ptr() ); }
-	static PyObject * makeItem( const std::string & str ) { return boost::python::incref( boost::python::str( str.c_str() ).ptr() ); }
-	static PyObject * makeItem( int item ) { return boost::python::incref( PyInt_FromLong( item ) ); }
+	static PyObject * makeItem( const wxString & str )
+        {
+            return boost::python::incref( PyHandler::Convert( str ).ptr() );
+        }
+
+	static PyObject * makeItem( const std::string & str )
+        {
+            return boost::python::incref(
+                boost::python::str( str.c_str() ).ptr() );
+        }
+
+	static PyObject * makeItem( int item )
+        {
+            return boost::python::incref( PyInt_FromLong( item ) );
+        }
 
 	static PyObject * convert( const T& vect )
 	{
@@ -80,24 +112,26 @@ template <typename T> struct std_vector_to_tuple
 
 PyHandler* PyHandler::m_instance = NULL;
 
-PyHandler * PyHandler::GetInstance()
+
 /* Singleton implementation */
+PyHandler * PyHandler::GetInstance()
 {
-	if ( !PyHandler::m_instance )
+	if( !PyHandler::m_instance )
 	{
 		PyHandler::m_instance = new PyHandler();
 	}
 	return PyHandler::m_instance;
 }
 
-PyHandler::PyHandler()
+
 /* Init the Python env */
+PyHandler::PyHandler()
 {
     Py_Initialize();
     PyEval_InitThreads();
     m_ModulesLoaded = false;
     m_current = 0;
-    if ( !wxPyCoreAPI_IMPORT() )
+    if( !wxPyCoreAPI_IMPORT() )
     {
         std::cerr << "Can't get wx Python binding\n" ;
         PyErr_Print();
@@ -117,23 +151,30 @@ PyHandler::PyHandler()
 
     // Register converters
 
-    to_python_converter < std::vector< std::string >, std_vector_to_tuple< const std::vector < std::string > >  > ();
-    to_python_converter < std::vector< wxString >, std_vector_to_tuple< const std::vector < wxString > >  > ();
+    to_python_converter < std::vector< std::string >,
+        std_vector_to_tuple< const std::vector < std::string > >  > ();
+    to_python_converter < std::vector< wxString >,
+        std_vector_to_tuple< const std::vector < wxString > >  > ();
 }
+
 
 void PyHandler::DoInitModules()
 {
-    if ( m_ModulesLoaded ) return;
+    if ( m_ModulesLoaded )
+        return;
+
     m_ModulesLoaded = true;
 
     for ( unsigned int i = 0; i < m_ModuleRegistry.size(); i ++ )
     {
-        detail::init_module( m_ModuleRegistry[i].name.mb_str(), &InitPyModules );
+        detail::init_module( m_ModuleRegistry[i].name.mb_str(),
+                             &InitPyModules );
     }
 }
 
-int PyHandler::GetModuleIndex( const wxString & name ) const
+
 /* Returns the module index in the registry, -1 if not found*/
+int PyHandler::GetModuleIndex( const wxString & name ) const
 {
     for ( unsigned int i = 0; i < m_ModuleRegistry.size(); i ++ )
     {
@@ -142,10 +183,14 @@ int PyHandler::GetModuleIndex( const wxString & name ) const
     return -1;
 }
 
-void PyHandler::AddToModule( const wxString & name, PyHandler::initfunc_t initfunc )
+
 /* Adds an init function to a python module */
+void PyHandler::AddToModule( const wxString & name,
+                             PyHandler::initfunc_t initfunc )
 {
-    if (!initfunc) return;
+    if (!initfunc)
+        return;
+
     int i = GetModuleIndex( name );
 
     if ( -1 == i )
@@ -158,38 +203,48 @@ void PyHandler::AddToModule( const wxString & name, PyHandler::initfunc_t initfu
 }
 
 
-void PyHandler::InitNextModule()
 /* Called to initialize a module on py 'import module' */
+void PyHandler::InitNextModule()
 {
-    for ( unsigned int j = 0; j < m_ModuleRegistry[m_current].registry.size() ; j ++ )
+    for ( unsigned int j = 0;
+          j < m_ModuleRegistry[m_current].registry.size();
+          j++ )
     {
         m_ModuleRegistry[m_current].registry[j]();
     }
+
     m_current++;
 }
 
-PyHandler::~PyHandler()
+
 /* Closes the Python env */
+PyHandler::~PyHandler()
 {
     wxPyEndAllowThreads(m_mainTState);
 	Py_Finalize();
 }
 
-void PyHandler::RunBaseScripts( const wxString & base )
+
 /* Run scripts looking in 'base' directory */
+void PyHandler::RunBaseScripts( const wxString & base )
 {
     const wxString sep = wxFileName().GetPathSeparator();
 
 	// check if we can have a kicad_startup.py around ?
 	wxString script = base + wxT( "scripts" ) + sep + wxT( "kicad_startup.py" );
-	if ( wxFileExists( script ) ) RunScript( script );
+	if ( wxFileExists( script ) )
+        RunScript( script );
 
 	// First find scripts/<name>.py and run it if found :
 
-	script = base + wxString::FromAscii( "scripts" ) + sep + m_appName + wxString::FromAscii(".py");
-	if ( wxFileExists(  script ) ) RunScript( script );
+	script = base + wxString::FromAscii( "scripts" ) + sep + m_appName
+        + wxString::FromAscii(".py");
 
-	// Now lets see if we can find a suitable plugin directory (plugin/<name>) somewhere
+	if ( wxFileExists(  script ) )
+        RunScript( script );
+
+	// Now lets see if we can find a suitable plugin directory
+    // (plugin/<name>) somewhere
 
 	wxString pluginDir = base + wxT( "plugins" ) + sep + m_appName;
 	if ( wxDirExists( pluginDir ) )
@@ -205,8 +260,9 @@ void PyHandler::RunBaseScripts( const wxString & base )
 	}
 }
 
-void PyHandler::RunScripts()
+
 /* Run application startup scripts */
+void PyHandler::RunScripts()
 {
 	// SYSTEMWIDE:
 
@@ -216,15 +272,19 @@ void PyHandler::RunScripts()
 	if ( wxDirExists( dataPath ) )	RunBaseScripts( dataPath );
 
 	// USER Scripts:
-	wxString userDir = wxGetUserHome() + sep + wxString::FromAscii(".kicad.d") + sep;
-	if ( wxDirExists( userDir ) ) RunBaseScripts( userDir );
+	wxString userDir = wxGetUserHome() + sep
+        + wxString::FromAscii(".kicad.d") + sep;
+	if ( wxDirExists( userDir ) )
+        RunBaseScripts( userDir );
 	userDir = wxGetUserHome() + sep + wxString::FromAscii("_kicad_d") + sep;
-	if ( wxDirExists( userDir ) ) RunBaseScripts( userDir );
+	if ( wxDirExists( userDir ) )
+        RunBaseScripts( userDir );
 
 }
 
-bool PyHandler::RunScript( const wxString & name )
+
 /* Run the script specified by 'name' */
+bool PyHandler::RunScript( const wxString & name )
 {
     DoInitModules();
 
@@ -253,7 +313,8 @@ bool PyHandler::RunScript( const wxString & name )
         try
         {
             ns["currentScript"] = Convert( name );
-            handle<> ignored( PyRun_File( file, name.mb_str(), Py_file_input,  ns.ptr(), ns.ptr() ) );
+            handle<> ignored( PyRun_File( file, name.mb_str(), Py_file_input,
+                                          ns.ptr(), ns.ptr() ) );
         }
         catch ( error_already_set )
         {
@@ -267,6 +328,7 @@ bool PyHandler::RunScript( const wxString & name )
     wxPyEndBlockThreads(blocked);
 	return ret;
 }
+
 
 bool PyHandler::RunSimpleString( const wxString & code )
 /* Run the code in 'code' */
@@ -292,80 +354,114 @@ void PyHandler::SetAppName( const wxString & name )
 /* Set the application name in the python scope */
 {
 	m_appName = name;
-    object module(( handle<>(borrowed(PyImport_AddModule("__main__")))));
+    object module( ( handle<>( borrowed( PyImport_AddModule( "__main__") ) ) ) );
     object ns = module.attr( "__dict__" );
-	try {
+	try
+    {
 		ns["kicadApp"] = std::string( name.ToAscii() );
 	}
-	catch (error_already_set)
+	catch( error_already_set )
 	{
 		PyErr_Print();
 	}
 }
 
+
 const char * PyHandler::GetVersion() { return Py_GetVersion(); }
+
 
 // Event handling :
 
-void PyHandler::DeclareEvent( const wxString & key ) { m_EventRegistry.push_back( Event( key ) ); }
+void PyHandler::DeclareEvent( const wxString & key )
+{
+    m_EventRegistry.push_back( Event( key ) );
+}
+
 
 int PyHandler::GetEventIndex( const wxString & key )
 {
     for ( unsigned int i = 0; i < m_EventRegistry.size(); i ++ )
     {
-        if ( m_EventRegistry[i].key == key ) return i;
+        if ( m_EventRegistry[i].key == key )
+            return i;
     }
+
     return -1;
 }
 
-void PyHandler::TriggerEvent( const wxString & key ) { TriggerEvent( key, str( "" ) ); }
+
+void PyHandler::TriggerEvent( const wxString & key )
+{
+    TriggerEvent( key, str( "" ) );
+}
+
+
 void PyHandler::TriggerEvent( const wxString & key, const object & param )
 {
 
     int i = GetEventIndex( key );
-    if ( -1 == i ) return;
+    if ( -1 == i )
+        return;
 
     wxPyBlock_t blocked = wxPyBeginBlockThreads();
-    for ( unsigned int j = 0; j < m_EventRegistry[i].functors.size(); j++ )
+
+    for( unsigned int j = 0; j < m_EventRegistry[i].functors.size(); j++ )
     {
         try
         {
             m_EventRegistry[i].functors[j]( param );
         }
-        catch (error_already_set)
+        catch( error_already_set )
         {
-            std::cout << "Error in event " << key.mb_str() << " callback" << std::endl;
+            std::cout << "Error in event " << key.mb_str() << " callback"
+                      << std::endl;
             PyErr_Print();
         }
     }
-    wxPyEndBlockThreads(blocked);
+
+    wxPyEndBlockThreads( blocked );
 }
 
-void PyHandler::RegisterCallback( const wxString & key, const object & callback )
+
+void PyHandler::RegisterCallback( const wxString & key,
+                                  const object & callback )
 {
     int i = GetEventIndex( key );
-    if ( -1 == i ) return;
+
+    if( -1 == i )
+        return;
+
     m_EventRegistry[i].functors.push_back( callback );
 }
 
-void PyHandler::UnRegisterCallback( const wxString & key, const object & callback )
+
+void PyHandler::UnRegisterCallback( const wxString & key,
+                                    const object & callback )
 {
     int i = GetEventIndex( key );
-    if ( -1 == i ) return;
-    for ( unsigned int j = 0; j < m_EventRegistry[i].functors.size() ; j++ )
+    if( -1 == i )
+        return;
+    for( unsigned int j = 0; j < m_EventRegistry[i].functors.size() ; j++ )
     {
         if ( callback == m_EventRegistry[i].functors[j] )
         {
-            m_EventRegistry[i].functors.erase( m_EventRegistry[i].functors.begin() + j );
+            m_EventRegistry[i].functors.erase(
+                m_EventRegistry[i].functors.begin() + j );
             break;
         }
     }
 }
 
+
 // Object conversion:
 
-wxString PyHandler::MakeStr( const object & objStr ) { return wxString( extract<const char *>( objStr ), wxConvLocal ); }
+wxString PyHandler::MakeStr( const object & objStr )
+{
+    return wxString( extract<const char *>( objStr ), wxConvLocal );
+}
 
-object PyHandler::Convert( const wxString & wxStr ) { return str( std::string( wxStr.mb_str() ).c_str() ); }
 
-// vim: set tabstop=4 :
+object PyHandler::Convert( const wxString & wxStr )
+{
+    return str( std::string( wxStr.mb_str() ).c_str() );
+}

@@ -1,6 +1,6 @@
-/***************************************************************/
-/* base_screen.cpp - fonctions des classes du type BASE_SCREEN */
-/***************************************************************/
+/********************************************************/
+/* base_screen.cpp - BASE_SCREEN object implementation. */
+/********************************************************/
 
 #ifdef __GNUG__
 #pragma implementation
@@ -19,16 +19,14 @@ WX_DEFINE_OBJARRAY( GridArray );
 
 BASE_SCREEN* ActiveScreen = NULL;
 
-/* defines locaux */
-#define CURSOR_SIZE 12  /* taille de la croix du curseur PCB */
+#define CURSOR_SIZE 12  /* size of the cross cursor. */
 
-/*******************************************************/
-/* Class BASE_SCREEN: classe de gestion d'un affichage */
-/*******************************************************/
+
 BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_BaseStruct( aType )
 {
     EEDrawList         = NULL;   /* Schematic items list */
-    m_UndoRedoCountMax = 10;     /* undo/Redo command Max depth, 10 is a reasonnable value */
+    m_UndoRedoCountMax = 10;     /* undo/Redo command Max depth, 10 is a
+                                  * reasonable value */
     m_FirstRedraw      = TRUE;
     m_ScreenNumber     = 1;
     m_NumberOfScreen   = 1;  /* Hierarchy: Root: ScreenNumber = 1 */
@@ -45,16 +43,12 @@ BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_BaseStruct( aType )
 }
 
 
-/******************************/
 BASE_SCREEN::~BASE_SCREEN()
-/******************************/
 {
 }
 
 
-/*******************************/
 void BASE_SCREEN::InitDatas()
-/*******************************/
 {
     if( m_Center )
     {
@@ -73,16 +67,15 @@ void BASE_SCREEN::InitDatas()
 
     SetCurItem( NULL );
 
-    /* indicateurs divers */
-    m_FlagRefreshReq = 0;   /* Redraw screen requste flag */
-    m_FlagModified   = 0;   // Set when any change is made on borad
+    m_FlagRefreshReq = 0;   /* Redraw screen request flag */
+    m_FlagModified   = 0;   // Set when any change is made on broad
     m_FlagSave = 1;         // Used in auto save: set when an auto save is made
 }
 
 /**
  * Get screen units scalar.
  *
- * Default implimentation returns scalar used for schematic screen.  The
+ * Default implementation returns scalar used for schematic screen.  The
  * internal units used by the schematic screen is 1 mil (0.001").  Override
  * this in derived classes that require internal units other than 1 mil.
  */
@@ -91,9 +84,8 @@ int BASE_SCREEN::GetInternalUnits( void )
     return EESCHEMA_INTERNAL_UNIT;
 }
 
-/************************************/
+
 wxSize BASE_SCREEN::ReturnPageSize( void )
-/************************************/
 {
     int internal_units = GetInternalUnits();
 
@@ -107,9 +99,7 @@ wxSize BASE_SCREEN::ReturnPageSize( void )
  * @return the position in user units of location ScreenPos
  * @param ScreenPos = the screen (in pixel) position co convert
 */
-/******************************************************************/
 wxPoint BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
-/******************************************************************/
 {
     wxPoint curpos = ScreenPos;
     Unscale( curpos );
@@ -122,7 +112,7 @@ wxPoint BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
 }
 
 /** Function SetScalingFactor
- * calculates the .m_Zoom member to have a given scaling facort
+ * calculates the .m_Zoom member to have a given scaling factor
  * @param the the current scale used to draw items on screen
  * draw coordinates are user coordinates * GetScalingFactor( )
 */
@@ -163,6 +153,7 @@ int BASE_SCREEN::Scale( int coord )
 #endif
 }
 
+
 double BASE_SCREEN::Scale( double coord )
 {
 #ifdef WX_ZOOM
@@ -178,11 +169,13 @@ double BASE_SCREEN::Scale( double coord )
 #endif
 }
 
+
 void BASE_SCREEN::Scale( wxPoint& pt )
 {
     pt.x = Scale( pt.x );
     pt.y = Scale( pt.y );
 }
+
 
 void BASE_SCREEN::Scale( wxRealPoint& pt )
 {
@@ -336,12 +329,7 @@ bool BASE_SCREEN::SetLastZoom()
 }
 
 
-/********************************************/
 void BASE_SCREEN::SetGridList( GridArray& gridlist )
-/********************************************/
-
-/* init liste des zoom (NULL terminated)
- */
 {
     if( !m_GridList.IsEmpty() )
         m_GridList.Clear();
@@ -350,9 +338,7 @@ void BASE_SCREEN::SetGridList( GridArray& gridlist )
 }
 
 
-/**********************************************/
 void BASE_SCREEN::SetGrid( const wxRealPoint& size )
-/**********************************************/
 {
     wxASSERT( !m_GridList.IsEmpty() );
 
@@ -380,6 +366,7 @@ void BASE_SCREEN::SetGrid( const wxRealPoint& size )
                   size.x, size.y, m_Grid.m_Size.x, m_Grid.m_Size.y );
 }
 
+
 /* Set grid size from command ID. */
 void BASE_SCREEN::SetGrid( int id  )
 {
@@ -402,6 +389,7 @@ void BASE_SCREEN::SetGrid( int id  )
                   wxT( "grid size( %g, %g )." ), id, m_Grid.m_Size.x,
                   m_Grid.m_Size.y );
 }
+
 
 void BASE_SCREEN::AddGrid( const GRID_TYPE& grid )
 {
@@ -432,6 +420,7 @@ void BASE_SCREEN::AddGrid( const GRID_TYPE& grid )
     m_GridList.Add( grid );
 }
 
+
 void BASE_SCREEN::AddGrid( const wxRealPoint& size, int id )
 {
     GRID_TYPE grid;
@@ -440,6 +429,7 @@ void BASE_SCREEN::AddGrid( const wxRealPoint& size, int id )
     grid.m_Id = id;
     AddGrid( grid );
 }
+
 
 void BASE_SCREEN::AddGrid( const wxRealPoint& size, int units, int id )
 {
@@ -490,25 +480,19 @@ int BASE_SCREEN::GetGridId()
 }
 
 
-/*****************************************/
-void BASE_SCREEN::ClearUndoRedoList()
-/*****************************************/
-
 /* free the undo and the redo lists
  */
+void BASE_SCREEN::ClearUndoRedoList()
 {
     ClearUndoORRedoList( m_UndoList );
     ClearUndoORRedoList( m_RedoList );
 }
 
 
-/***********************************************************/
-void BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aNewitem )
-/************************************************************/
-
 /* Put aNewitem in top of undo list
- *  Deletes olds items if > count max.
+ *  Deletes old items if > count max.
  */
+void BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aNewitem )
 {
     m_UndoList.PushCommand( aNewitem );
 
@@ -519,9 +503,7 @@ void BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aNewitem )
 }
 
 
-/***********************************************************/
 void BASE_SCREEN::PushCommandToRedoList( PICKED_ITEMS_LIST* aNewitem )
-/***********************************************************/
 {
     m_RedoList.PushCommand( aNewitem );
 
@@ -532,17 +514,13 @@ void BASE_SCREEN::PushCommandToRedoList( PICKED_ITEMS_LIST* aNewitem )
 }
 
 
-/*****************************************************/
 PICKED_ITEMS_LIST* BASE_SCREEN::PopCommandFromUndoList( )
-/*****************************************************/
 {
     return m_UndoList.PopCommand( );
 }
 
 
-/******************************************************/
 PICKED_ITEMS_LIST* BASE_SCREEN::PopCommandFromRedoList( )
-/******************************************************/
 {
     return m_RedoList.PopCommand( );
 }
@@ -572,4 +550,3 @@ void BASE_SCREEN::Show( int nestLevel, std::ostream& os )
     NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 #endif
-

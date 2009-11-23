@@ -1,6 +1,6 @@
 /*********************************************/
-/*	             string.cpp				  	 */
-/*	 some useful functions to handle strings */
+/*               string.cpp                  */
+/*   some useful functions to handle strings */
 /*********************************************/
 
 #include "fctsys.h"
@@ -8,14 +8,11 @@
 #include "kicad_string.h"
 
 
-/*********************************************************************/
-int ReadDelimitedText( char* dest, char* source, int NbMaxChar )
-/*********************************************************************/
-
 /* read a double-quote delimited text from source and put it in in dest,
  *  read NbMaxChar bytes max
  *  return the char count read from source
  */
+int ReadDelimitedText( char* dest, char* source, int NbMaxChar )
 {
     int ii, jj, flag = 0;
 
@@ -23,11 +20,11 @@ int ReadDelimitedText( char* dest, char* source, int NbMaxChar )
     {
         if( *source == 0 )
             break;                      /* E.O.L. */
-        if( *source == '"' )            /* delimiteur trouve */
+        if( *source == '"' )            /* delimiter is " */
         {
             if( flag )
-                break;                  /* Fin de texte delimite */
-            flag = 1;                   /* Marque 1er delimiteur trouve */
+                break;                  /* End of delimited text */
+            flag = 1;                   /* First delimiter found. */
         }
         else if( flag )
         {
@@ -35,29 +32,26 @@ int ReadDelimitedText( char* dest, char* source, int NbMaxChar )
         }
     }
 
-    *dest = 0;  /* Null termined */
+    *dest = 0;  /* Null terminated */
     return jj;
 }
 
 
-/********************************/
-char* StrPurge( char* text )
-/********************************/
-
 /* Remove training spaces in text
  *  return a pointer on the first non space char in text
  */
+char* StrPurge( char* text )
 {
     char* ptspace;
 
     if( text == NULL )
         return NULL;
 
-    while( (*text <= ' ') && *text )
+    while( ( *text <= ' ' ) && *text )
         text++;
 
     ptspace = text + strlen( text ) - 1;
-    while( (*ptspace <= ' ') && *ptspace && (ptspace >= text) )
+    while( ( *ptspace <= ' ' ) && *ptspace && ( ptspace >= text ) )
     {
         *ptspace = 0; ptspace--;
     }
@@ -66,15 +60,12 @@ char* StrPurge( char* text )
 }
 
 
-/*****************************************************************/
-char* GetLine( FILE* File, char* Line, int* LineNum, int SizeLine )
-/*****************************************************************/
-
 /* Read lines from File
  *  Skip void lines and comments (starting by #)
  *  return the first non void line.
- *  increments *LineNum for ecah line
+ *  increments *LineNum for each line
  */
+char* GetLine( FILE* File, char* Line, int* LineNum, int SizeLine )
 {
     do  {
         if( fgets( Line, SizeLine, File ) == NULL )
@@ -89,13 +80,10 @@ char* GetLine( FILE* File, char* Line, int* LineNum, int SizeLine )
 }
 
 
-/*******************************/
-char* DateAndTime( char* aBuffer )
-/*******************************/
-
 /* return in aBuffer the date and time
  *  time is the local time.
  */
+char* DateAndTime( char* aBuffer )
 {
     wxString datetime;
 
@@ -106,14 +94,12 @@ char* DateAndTime( char* aBuffer )
 }
 
 
-/*******************************/
-wxString DateAndTime()
-/*******************************/
 
 /* return the date and time in a wxString
  *  note: does the same thing than strftime()
  *  time is the local time.
  */
+wxString DateAndTime()
 {
     wxString   Line;
 
@@ -126,20 +112,17 @@ wxString DateAndTime()
 }
 
 
-/************************************************************/
-int StrLenNumCmp( const wxChar* str1, const wxChar* str2, int NbMax )
-/************************************************************/
-
 /*
  *  sort() function
  *  Same as strncmp() but numbers in strings
  *  are compared according to the value, not the ascii value of each digit
  */
+int StrLenNumCmp( const wxChar* str1, const wxChar* str2, int NbMax )
 {
     int i;
     int nb1 = 0, nb2 = 0;
 
-    if( (str1 == NULL) || (str2 == NULL) )
+    if( ( str1 == NULL ) || ( str2 == NULL ) )
         return 0;
 
     for( i = 0; i < NbMax; i++ )
@@ -167,7 +150,7 @@ int StrLenNumCmp( const wxChar* str1, const wxChar* str2, int NbMax )
             return -1;
         if( *str1 > *str2 )
             return 1;
-        if( (*str1 == 0 ) && ( *str2 == 0 ) )
+        if( ( *str1 == 0 ) && ( *str2 == 0 ) )
             return 0;
         str1++; str2++;
     }
@@ -176,34 +159,28 @@ int StrLenNumCmp( const wxChar* str1, const wxChar* str2, int NbMax )
 }
 
 
-/***********************************************/
-int StrNumICmp( const wxChar* str1, const wxChar* str2 )
-/***********************************************/
-
 /*
  *  sort() function
  *  Same as stricmp() but numbers in strings
  *  are compared according to the value, not the ascii value of each digit
  */
+int StrNumICmp( const wxChar* str1, const wxChar* str2 )
 {
     return StrLenNumICmp( str1, str2, 32735 );
 }
 
-
-/**************************************************************/
-int StrLenNumICmp( const wxChar* str1, const wxChar* str2, int NbMax )
-/**************************************************************/
 
 /*
  *  sort() function
  *  Same as strnicmp() but numbers in strings
  *  are compared according to the value, not the ascii value of each digit
  */
+int StrLenNumICmp( const wxChar* str1, const wxChar* str2, int NbMax )
 {
     int i;
     int nb1 = 0, nb2 = 0;
 
-    if( (str1 == NULL) || (str2 == NULL) )
+    if( ( str1 == NULL ) || ( str2 == NULL ) )
         return 0;
 
     for( i = 0; i < NbMax; i++ )
@@ -240,16 +217,13 @@ int StrLenNumICmp( const wxChar* str1, const wxChar* str2, int NbMax )
 }
 
 
-/***********************************************************************/
-bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
-                        bool case_sensitive )
-/***********************************************************************/
-
 /* compare a string to a pattern
  *  ( usual chars * and ? allowed).
  *  if case_sensitive == true, comparison is case sensitive
  *  return true if match else false
  */
+bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
+                        bool case_sensitive )
 {
     const wxChar* cp = NULL, * mp = NULL;
     const wxChar* wild, * string;
@@ -270,9 +244,9 @@ bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
         string = _string_to_tst.GetData();
     }
 
-    while( (*string) && (*wild != '*') )
+    while( ( *string ) && ( *wild != '*' ) )
     {
-        if( (*wild != *string) && (*wild != '?') )
+        if( ( *wild != *string ) && ( *wild != '?' ) )
             return FALSE;
         wild++; string++;
     }
@@ -286,7 +260,7 @@ bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
             mp = wild;
             cp = string + 1;
         }
-        else if( (*wild == *string) || (*wild == '?') )
+        else if( ( *wild == *string ) || ( *wild == '?' ) )
         {
             wild++;
             string++;
@@ -307,15 +281,11 @@ bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
 }
 
 
-/***************************/
-char* to_point( char* Text )
-/**************************/
-
-/* convertit les , en . dans une chaine. utilise pour compenser
- *  l'internalisation de la fct printf
- *  qui genere les flottants avec une virgule au lieu du point
- * Obsolete: use SetLocaleTo_C_standard insteed
+/* Converts a string used to compensate for internalization of printf().
+ * Generated floats with a comma instead of point.
+ * Obsolete: use SetLocaleTo_C_standard instead
  */
+char* to_point( char* Text )
 {
     char* line = Text;
 
@@ -331,13 +301,10 @@ char* to_point( char* Text )
 }
 
 
-/********************************/
-char* strupper( char* Text )
-/********************************/
-
-/* Change les caracteres 'a' ... 'z' en 'A' ... 'Z'. dans la chaine Text.
- *  Retourne Text
+/* Convert string to upper case.
+ * Returns pointer to the converted string.
  */
+char* strupper( char* Text )
 {
     char* code = Text;
 
@@ -345,7 +312,7 @@ char* strupper( char* Text )
     {
         while( *code )
         {
-            if( (*code >= 'a') && (*code <= 'z') )
+            if( ( *code >= 'a' ) && ( *code <= 'z' ) )
                 *code += 'A' - 'a';
             code++;
         }

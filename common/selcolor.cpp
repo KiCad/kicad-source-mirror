@@ -1,10 +1,8 @@
-
 /****************/
 /* SELCOLOR.CPP */
 /****************/
 
-/* Affichage et selection de la palette des couleurs disponibles
- * dans une frame
+/* Dialog for selecting color from the palette of available colors.
  */
 
 #include "fctsys.h"
@@ -22,17 +20,10 @@ enum colors_id {
 };
 
 
-/*******************************************/
 class WinEDA_SelColorFrame : public wxDialog
-/*******************************************/
-
-/* Frame d'affichage de la palette des couleurs disponibles
- */
 {
 private:
 public:
-
-    // Constructor and destructor
     WinEDA_SelColorFrame( wxWindow* parent,
                           const wxPoint& framepos, int OldColor );
     ~WinEDA_SelColorFrame() {};
@@ -45,7 +36,6 @@ private:
 };
 
 
-/* Construction de la table des evenements pour FrameClassMain */
 BEGIN_EVENT_TABLE( WinEDA_SelColorFrame, wxDialog )
     EVT_BUTTON( wxID_CANCEL, WinEDA_SelColorFrame::OnCancel )
     EVT_COMMAND_RANGE( ID_COLOR_BLACK, ID_COLOR_BLACK + 31,

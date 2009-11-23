@@ -1,8 +1,6 @@
-/************************/
-/* Routines de rotation */
-/************************/
-
-/* Fichier TRIGO.CPP */
+/****************************/
+/* Trigonometric functions. */
+/****************************/
 
 #include "fctsys.h"
 #include "trigo.h"
@@ -24,16 +22,13 @@ bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist 
 }
 
 
-/************************************************************************/
-bool DistanceTest( int seuil, int dx, int dy, int spot_cX, int spot_cY )
-/************************************************************************/
-
 /** Function DistanceTest
- *  Calcul de la distance du curseur souris a un segment de droite :
- *  retourne:
- *      false si distance > seuil
- *      true  si distance <= seuil
+ * Calculate the distance from mouse cursor to a line segment.
+ * Returns:
+ * False if distance > threshold
+ * True if distance <= threshold
  */
+bool DistanceTest( int seuil, int dx, int dy, int spot_cX, int spot_cY )
 {
 /*  We can have 4 cases::
  *      horizontal segment
@@ -41,156 +36,162 @@ bool DistanceTest( int seuil, int dx, int dy, int spot_cX, int spot_cY )
  *      45 degrees segment
  *      other slopes
  */
-    int cXrot, cYrot,   /* coord du point (souris) dans le repere tourne */
-        segX, segY;     /* coord extremite segment tj >= 0 */
-    int pointX, pointY; /* coord point a tester dans repere modifie dans lequel
-                         * segX et segY sont >=0 */
+    int cXrot, cYrot, segX, segY;
+    int pointX, pointY;
 
     segX   = dx;
     segY   = dy;
     pointX = spot_cX;
     pointY = spot_cY;
 
-    /*Recalcul coord pour que le segment soit dans 1er quadrant (coord >= 0)*/
-    if( segX < 0 )   /* mise en >0 par symetrie par rapport a l'axe Y */
+    /*Recalculating coord for the segment is in 1st quadrant (coord >= 0)*/
+    if( segX < 0 )   /* set > 0 by symmetry about the Y axis */
     {
         segX   = -segX;
         pointX = -pointX;
     }
-    if( segY < 0 )   /* mise en > 0 par symetrie par rapport a l'axe X */
+    if( segY < 0 )   /* set > 0 by symmetry about the X axis */
     {
         segY   = -segY;
         pointY = -pointY;
     }
 
 
-    if( segY == 0 ) /* piste Horizontale */
+    if( segY == 0 ) /* horizontal */
     {
         if( abs( pointY ) <= seuil )
         {
-            if( (pointX >= 0) && (pointX <= segX) )
+            if( ( pointX >= 0 ) && ( pointX <= segX ) )
                 return 1;
-            /* Etude des extremites : cercle de rayon seuil */
-            if( (pointX < 0) && (pointX >= -seuil) )
+
+            if( ( pointX < 0 ) && ( pointX >= -seuil ) )
             {
-                if( ( (pointX * pointX) + (pointY * pointY) ) <= (seuil * seuil) )
+                if( ( ( pointX * pointX ) + ( pointY * pointY ) )
+                    <= ( seuil * seuil ) )
                     return true;
             }
-            if( (pointX > segX) && ( pointX <= (segX + seuil) ) )
+            if( ( pointX > segX ) && ( pointX <= ( segX + seuil ) ) )
             {
-                if( ( ( (pointX - segX) * (pointX - segX) ) + (pointY * pointY) ) <=
-                   (seuil * seuil) )
+                if( ( ( ( pointX - segX ) * ( pointX - segX ) )
+                      + ( pointY * pointY ) ) <= ( seuil * seuil ) )
                     return true;
             }
         }
     }
-    else if( segX == 0 ) /* piste verticale */
+    else if( segX == 0 ) /* vertical */
     {
         if( abs( pointX ) <= seuil )
         {
-            if( (pointY >= 0 ) && (pointY <= segY) )
+            if( ( pointY >= 0 ) && ( pointY <= segY ) )
                 return true;
-            if( (pointY < 0) && (pointY >= -seuil) )
+            if( ( pointY < 0 ) && ( pointY >= -seuil ) )
             {
-                if( ( (pointY * pointY) + (pointX * pointX) ) <= (seuil * seuil) )
+                if( ( ( pointY * pointY ) + ( pointX * pointX ) )
+                    <= ( seuil * seuil ) )
                     return true;
             }
-            if( (pointY > segY) && ( pointY <= (segY + seuil) ) )
+            if( ( pointY > segY ) && ( pointY <= ( segY + seuil ) ) )
             {
-                if( ( ( (pointY - segY) * (pointY - segY) ) + (pointX * pointX) ) <=
-                   (seuil * seuil) )
+                if( ( ( ( pointY - segY ) * ( pointY - segY ) )
+                      + ( pointX * pointX ) ) <= ( seuil * seuil ) )
                     return true;
             }
         }
     }
-    else if( segX == segY )    /* piste a 45 degre */
+    else if( segX == segY )    /* 45 degrees */
     {
-        /* on fait tourner les axes de 45 degre. la souris a alors les
-         *  coord : x1 = x*cos45 + y*sin45
-         *      y1 = y*cos45 - x*sin45
-         *  et le segment de piste est alors horizontal.
-         *  recalcul des coord de la souris ( sin45 = cos45 = .707 = 7/10
-         *  remarque : sin ou cos45 = .707, et lors du recalcul des coord
-         *  dx45 et dy45, lec coeff .707 est neglige, dx et dy sont en fait 0.707 fois
-         *  trop grands. (c.a.d trop petits)
-         *  spot_cX,Y doit etre * par .707 * .707 = 0.5 */
+        /* Rotate axes of 45 degrees. mouse was then
+         * Coord: x1 = x * y * cos45 + sin45
+         * y1 = y * cos45 - sin45 x *
+         * And the segment of track is horizontal.
+         * Coord recalculation of the mouse (sin45 = cos45 = .707 = 7 / 10
+         * Note: sin or cos45 = .707, and when recalculating coord
+         * dx45 and dy45, lect coeff .707 is neglected, dx and dy are
+         * actually 0707 times
+         * Too big. (security hole too small)
+         * Spot_cX, Y * must be by .707 * .707 = 0.5
+         */
 
         cXrot = (pointX + pointY) >> 1;
         cYrot = (pointY - pointX) >> 1;
 
-        /* recalcul des coord de l'extremite du segment , qui sera vertical
-         *  suite a l'orientation des axes sur l'ecran : dx45 = pointX (ou pointY)
-         *  et est en fait 1,414 plus grand , et dy45 = 0 */
+        /* Recalculating coord of segment extremity, which will be vertical
+         * following the orientation of axes on the screen: dx45 = pointx
+         * (or pointy) and 1.414 is actually greater, and dy45 = 0
+         */
 
-        // seuil doit etre * .707 pour tenir compte du coeff de reduction sur dx,dy
+        // * Threshold should be .707 to reflect the change in coeff dx, dy
         seuil *= 7;
         seuil /= 10;
 
-        if( abs( cYrot ) <= seuil ) /* ok sur axe vertical) */
+        if( abs( cYrot ) <= seuil ) /* ok on vertical axis */
         {
-            if( (cXrot >= 0) && (cXrot <= segX) )
+            if( ( cXrot >= 0 ) && ( cXrot <= segX ) )
                 return true;
 
-            /* Etude des extremites : cercle de rayon seuil */
-            if( (cXrot < 0) && (cXrot >= -seuil) )
+            /* Check extremes using the radius of a circle. */
+            if( ( cXrot < 0 ) && ( cXrot >= -seuil ) )
             {
-                if( ( (cXrot * cXrot) + (cYrot * cYrot) ) <= (seuil * seuil) )
+                if( ( ( cXrot * cXrot ) + ( cYrot * cYrot ) )
+                    <= ( seuil * seuil ) )
                     return true;
             }
-            if( (cXrot > segX) && ( cXrot <= (segX + seuil) ) )
+            if( ( cXrot > segX ) && ( cXrot <= ( segX + seuil ) ) )
             {
-                if( ( ( (cXrot - segX) * (cXrot - segX) ) + (cYrot * cYrot) ) <= (seuil * seuil) )
+                if( ( ( ( cXrot - segX ) * ( cXrot - segX ) )
+                      + ( cYrot * cYrot ) ) <= ( seuil * seuil ) )
                     return true;
             }
         }
     }
-    else    /* orientation quelconque */
+    else    /* any orientation */
     {
-        /* On fait un changement d'axe (rotation) de facon a ce que le segment
-         * de piste soit horizontal dans le nouveau repere */
+        /* There is a change of axis (rotation), so that the segment
+         * track is horizontal in the new reference
+         */
         int angle;
 
-        angle = wxRound( ( atan2( (double) segY, (double) segX ) * 1800.0 / M_PI ) );
+        angle = wxRound( ( atan2( (double) segY,
+                                  (double) segX ) * 1800.0 / M_PI ) );
         cXrot = pointX;
         cYrot = pointY;
 
-        RotatePoint( &cXrot, &cYrot, angle );   /* Rotation du point a tester */
-        RotatePoint( &segX, &segY, angle );     /* Rotation du segment */
+        RotatePoint( &cXrot, &cYrot, angle ); /* Rotate the point to be tested */
+        RotatePoint( &segX, &segY, angle );   /* Rotate the segment */
 
-        /* la piste est Horizontale , par suite des modifs de coordonnes
-         * et d'axe, donc segX = longueur du segment */
-
-        if( abs( cYrot ) <= seuil ) /* ok sur axe vertical) */
+        /* The track is horizontal, following the amendments to coordinate
+         * axis and, therefore segX = length of segment
+         */
+        if( abs( cYrot ) <= seuil ) /* vertical axis */
         {
-            if( (cXrot >= 0) && (cXrot <= segX) )
+            if( ( cXrot >= 0 ) && ( cXrot <= segX ) )
                 return true;
 
-            /* Etude des extremites : cercle de rayon seuil */
-            if( (cXrot < 0) && (cXrot >= -seuil) )
+            if( ( cXrot < 0 ) && ( cXrot >= -seuil ) )
             {
-                if( ( (cXrot * cXrot) + (cYrot * cYrot) ) <= (seuil * seuil) )
+                if( ( ( cXrot * cXrot ) + ( cYrot * cYrot ) )
+                    <= ( seuil * seuil ) )
                     return true;
             }
-            if( (cXrot > segX) && ( cXrot <= (segX + seuil) ) )
+            if( ( cXrot > segX ) && ( cXrot <= ( segX + seuil ) ) )
             {
-                if( ( ( (cXrot - segX) * (cXrot - segX) ) + (cYrot * cYrot) ) <= (seuil * seuil) )
+                if( ( ( ( cXrot - segX ) * ( cXrot - segX ) )
+                      + ( cYrot * cYrot ) ) <= ( seuil * seuil ) )
                     return true;
             }
         }
     }
+
     return false;
 }
 
 
-/***********************************/
-int ArcTangente( int dy, int dx )
-/***********************************/
-
-/* Retourne l'arc tangente en 0.1 degres du vecteur de coord dx, dy
- *  entre -1800 et 1800
- *  Analogue a atan2 ( mais plus rapide pour les calculs si
- *  l'angle est souvent 0, -1800, ou +- 900
+/* Return the arc tangent of 0.1 degrees coord vector dx, dy
+ * between -1800 and 1800
+ * Equivalent to atan2 (but faster for calculations if
+ * the angle is 0 to -1800, or + - 900
  */
+int ArcTangente( int dy, int dx )
 {
     double fangle;
 
@@ -231,15 +232,11 @@ int ArcTangente( int dy, int dx )
 }
 
 
-/*********************************************/
-void RotatePoint( int* pX, int* pY, int angle )
-/*********************************************/
-
 /*
- *  Fonction surchargee!
- *  calcule les nouvelles coord du point de coord pX, pY,
- *  pour une rotation de centre 0, 0, et d'angle angle ( en 1/10 degre)
+ * Calculate the new point of coord coord pX, pY,
+ * for a rotation center 0, 0, and angle in (1 / 10 degree)
  */
+void RotatePoint( int* pX, int* pY, int angle )
 {
     double fpx, fpy;
     int    tmp;
@@ -253,8 +250,7 @@ void RotatePoint( int* pX, int* pY, int angle )
     if( angle == 0 )
         return;
 
-    /* Calcul des coord :
-     *  coord:  xrot = y*sin + x*cos
+    /*  coord:  xrot = y*sin + x*cos
      *          yrot = y*cos - x*sin
      */
     if( angle == 900 )          /* sin = 1, cos = 0 */
@@ -276,8 +272,8 @@ void RotatePoint( int* pX, int* pY, int angle )
     }
     else
     {
-        fpx = (*pY * fsinus[angle]) + (*pX * fcosinus[angle]);
-        fpy = (*pY * fcosinus[angle]) - (*pX * fsinus[angle]);
+        fpx = ( *pY * fsinus[angle] ) + ( *pX * fcosinus[angle] );
+        fpy = ( *pY * fcosinus[angle] ) - ( *pX * fsinus[angle] );
 
         *pX = wxRound( fpx );
         *pY = wxRound( fpy );
@@ -285,15 +281,11 @@ void RotatePoint( int* pX, int* pY, int angle )
 }
 
 
-/************************************************************/
-void RotatePoint( int* pX, int* pY, int cx, int cy, int angle )
-/*************************************************************/
-
 /*
- *  Fonction surchargee!
- *  calcule les nouvelles coord du point de coord pX, pY,
- *  pour une rotation de centre cx, cy, et d'angle angle ( en 1/10 degre)
+ * Calculate the new point of coord coord pX, pY,
+ * for a rotation center cx, cy, and angle in (1 / 10 degree)
  */
+void RotatePoint( int* pX, int* pY, int cx, int cy, int angle )
 {
     int ox, oy;
 
@@ -307,15 +299,11 @@ void RotatePoint( int* pX, int* pY, int cx, int cy, int angle )
 }
 
 
-/********************************************/
-void RotatePoint( wxPoint* point, int angle )
-/********************************************/
-
 /*
- *  Fonction surchargee!
- *  calcule les nouvelles coord du point point,
- *  pour une rotation d'angle angle ( en 1/10 degre)
+ * Calculates the new coord point point
+ * for a rotation angle in (1 / 10 degree)
  */
+void RotatePoint( wxPoint* point, int angle )
 {
     int ox, oy;
 
@@ -328,15 +316,11 @@ void RotatePoint( wxPoint* point, int angle )
 }
 
 
-/*****************************************************************/
-void RotatePoint( wxPoint* point, const wxPoint& centre, int angle )
-/*****************************************************************/
-
 /*
- *  Fonction surchargee!
- *  calcule les nouvelles coord du point point,
- *  pour une rotation de centre centre, et d'angle angle ( en 1/10 degre)
+ * Calculates the new coord point point
+ * for a center rotation center and angle in (1 / 10 degree)
  */
+void RotatePoint( wxPoint* point, const wxPoint& centre, int angle )
 {
     int ox, oy;
 
@@ -349,9 +333,7 @@ void RotatePoint( wxPoint* point, const wxPoint& centre, int angle )
 }
 
 
-/*************************************************************************/
 void RotatePoint( double* pX, double* pY, double cx, double cy, int angle )
-/*************************************************************************/
 {
     double ox, oy;
 
@@ -365,14 +347,7 @@ void RotatePoint( double* pX, double* pY, double cx, double cy, int angle )
 }
 
 
-/*************************************************/
 void RotatePoint( double* pX, double* pY, int angle )
-/*************************************************/
-
-/* Calcul des coord :
- *      coord:  xrot = y*sin + x*cos
- *              yrot = y*cos - x*sin
- */
 {
     double tmp;
 

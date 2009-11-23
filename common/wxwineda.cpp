@@ -1,6 +1,6 @@
- /**********************************************************/
-/* wxwineda.cpp - fonctions des classes du type WinEDAxxxx */
-/**********************************************************/
+ /***************/
+/* wxwineda.cpp */
+/****************/
 
 #ifdef __GNUG__
 #pragma implementation
@@ -11,9 +11,9 @@
 #include "wxstruct.h"
 
 
-/**********************************************************************************/
-/* Classe WinEDA_EnterText pour entrer une ou plusieurs ligne texte au clavier dans les frames */
-/**********************************************************************************/
+/*
+ * Text entry dialog to enter one or more lines of text.
+ */
 WinEDA_EnterText::WinEDA_EnterText( wxWindow* parent,
                                     const wxString& Title,
                                     const wxString& TextToEdit,
@@ -26,26 +26,26 @@ WinEDA_EnterText::WinEDA_EnterText( wxWindow* parent,
 
     m_Title = new wxStaticText( parent, -1, Title );
 
-    BoxSizer->Add( m_Title, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+    BoxSizer->Add( m_Title, 0,
+                   wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
 
     long style = 0;
 
     if (Multiline)
       style = wxTE_MULTILINE;
 
-    m_FrameText = new   wxTextCtrl( parent, -1, TextToEdit, wxDefaultPosition, Size,style );
+    m_FrameText = new wxTextCtrl( parent, -1, TextToEdit, wxDefaultPosition,
+                                  Size,style );
 
     m_FrameText->SetInsertionPoint( 1 );
     BoxSizer->Add( m_FrameText,
-        0,
-        wxGROW | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxBOTTOM,
-        5 );
+                   0,
+                   wxGROW | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxBOTTOM,
+                   5 );
 }
 
 
-/****************************************/
 wxString WinEDA_EnterText::GetValue()
-/****************************************/
 {
     m_Modify  = m_FrameText->IsModified();
     m_NewText = m_FrameText->GetValue();
@@ -82,14 +82,17 @@ void WinEDA_EnterText::Enable( bool enbl )
 }
 
 
-/*********************************************************************/
-/* Classe pour editer un texte graphique + dimension en INCHES ou MM */
-/*********************************************************************/
-WinEDA_GraphicTextCtrl::WinEDA_GraphicTextCtrl( wxWindow* parent,
+/*******************************************************/
+/* Class to edit a graphic + text size in INCHES or MM */
+/*******************************************************/
+WinEDA_GraphicTextCtrl::WinEDA_GraphicTextCtrl( wxWindow*       parent,
                                                 const wxString& Title,
-                                                const wxString& TextToEdit, int textsize,
-                                                int units, wxBoxSizer* BoxSizer, int framelen,
-                                                int internal_unit )
+                                                const wxString& TextToEdit,
+                                                int             textsize,
+                                                int             units,
+                                                wxBoxSizer*     BoxSizer,
+                                                int             framelen,
+                                                int             internal_unit )
 {
     m_Units = units;
     m_Internal_Unit = internal_unit;
@@ -97,7 +100,8 @@ WinEDA_GraphicTextCtrl::WinEDA_GraphicTextCtrl( wxWindow* parent,
 
     m_Title = new wxStaticText( parent, -1, Title );
 
-    BoxSizer->Add( m_Title, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+    BoxSizer->Add( m_Title, 0,
+                   wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
 
     m_FrameText = new wxTextCtrl( parent, -1, TextToEdit );
 
@@ -108,12 +112,14 @@ WinEDA_GraphicTextCtrl::WinEDA_GraphicTextCtrl( wxWindow* parent,
         wxString      msg = _( "Size" ) + ReturnUnitSymbol( m_Units );
         wxStaticText* text = new wxStaticText( parent, -1, msg );
 
-        BoxSizer->Add( text, 0, wxGROW | wxLEFT | wxRIGHT | wxADJUST_MINSIZE, 5 );
+        BoxSizer->Add( text, 0,
+                       wxGROW | wxLEFT | wxRIGHT | wxADJUST_MINSIZE, 5 );
     }
 
     wxString value = FormatSize( m_Internal_Unit, m_Units, textsize );
 
-    m_FrameSize = new wxTextCtrl( parent, -1, value, wxDefaultPosition, wxSize( 70, -1 ) );
+    m_FrameSize = new wxTextCtrl( parent, -1, value, wxDefaultPosition,
+                                  wxSize( 70, -1 ) );
 
     BoxSizer->Add( m_FrameSize, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 }
@@ -128,11 +134,12 @@ WinEDA_GraphicTextCtrl::~WinEDA_GraphicTextCtrl()
 }
 
 
-wxString WinEDA_GraphicTextCtrl::FormatSize( int internalUnit, int units, int textSize )
+wxString WinEDA_GraphicTextCtrl::FormatSize( int internalUnit, int units,
+                                             int textSize )
 {
     wxString value;
 
-    // Limitation de la taille du texte a de valeurs raisonnables
+    // Limiting the size of the text of reasonable values.
     if( textSize < 10 )
         textSize = 10;
 
@@ -172,7 +179,8 @@ wxString WinEDA_GraphicTextCtrl::GetText()
 }
 
 
-int WinEDA_GraphicTextCtrl::ParseSize( const wxString& sizeText, int internalUnit, int units )
+int WinEDA_GraphicTextCtrl::ParseSize( const wxString& sizeText,
+                                       int internalUnit, int units )
 {
     int    textsize;
 
@@ -205,16 +213,15 @@ void WinEDA_GraphicTextCtrl::Enable( bool state )
 }
 
 
-/*****************************************************************/
-/* Classe pour afficher et editer une coordonnée en INCHES ou MM */
-/*****************************************************************/
-
-WinEDA_PositionCtrl::WinEDA_PositionCtrl( wxWindow* parent,
+/********************************************************/
+/* Class to display and edit a coordinated INCHES or MM */
+/********************************************************/
+WinEDA_PositionCtrl::WinEDA_PositionCtrl( wxWindow*       parent,
                                           const wxString& title,
-                                          const wxPoint& pos_to_edit,
-                                          int units,
-                                          wxBoxSizer* BoxSizer,
-                                          int internal_unit )
+                                          const wxPoint&  pos_to_edit,
+                                          int             units,
+                                          wxBoxSizer*     BoxSizer,
+                                          int             internal_unit )
 {
     wxString text;
 
@@ -225,10 +232,12 @@ WinEDA_PositionCtrl::WinEDA_PositionCtrl( wxWindow* parent,
     else
         text = title;
     text   += _( "X" ) + ReturnUnitSymbol( m_Units );
-    m_TextX = new       wxStaticText( parent, -1, text );
+    m_TextX = new wxStaticText( parent, -1, text );
 
-    BoxSizer->Add( m_TextX, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
-    m_FramePosX = new   wxTextCtrl( parent, -1, wxEmptyString, wxDefaultPosition );
+    BoxSizer->Add( m_TextX, 0,
+                   wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+    m_FramePosX = new wxTextCtrl( parent, -1, wxEmptyString,
+                                  wxDefaultPosition );
 
     BoxSizer->Add( m_FramePosX, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
@@ -238,11 +247,12 @@ WinEDA_PositionCtrl::WinEDA_PositionCtrl( wxWindow* parent,
     else
         text = title;
     text   += _( "Y" ) + ReturnUnitSymbol( m_Units );
-    m_TextY = new       wxStaticText( parent, -1, text );
+    m_TextY = new wxStaticText( parent, -1, text );
 
-    BoxSizer->Add( m_TextY, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+    BoxSizer->Add( m_TextY, 0,
+                   wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
 
-    m_FramePosY = new   wxTextCtrl( parent, -1, wxEmptyString );
+    m_FramePosY = new wxTextCtrl( parent, -1, wxEmptyString );
 
     BoxSizer->Add( m_FramePosY, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
@@ -259,12 +269,9 @@ WinEDA_PositionCtrl::~WinEDA_PositionCtrl()
 }
 
 
-/******************************************/
-wxPoint WinEDA_PositionCtrl::GetValue()
-/******************************************/
-
-/* Retourne (en unites internes) les coordonnes entrees (en unites utilisateur)
+/* Returns (in internal units) to coordinate between (in user units)
  */
+wxPoint WinEDA_PositionCtrl::GetValue()
 {
     wxPoint coord;
     double  value = 0;
@@ -278,18 +285,14 @@ wxPoint WinEDA_PositionCtrl::GetValue()
 }
 
 
-/************************************************************/
 void WinEDA_PositionCtrl::Enable( bool x_win_on, bool y_win_on )
-/************************************************************/
 {
     m_FramePosX->Enable( x_win_on );
     m_FramePosY->Enable( y_win_on );
 }
 
 
-/***********************************************************/
 void WinEDA_PositionCtrl::SetValue( int x_value, int y_value )
-/***********************************************************/
 {
     wxString msg;
 
@@ -320,9 +323,7 @@ WinEDA_SizeCtrl::WinEDA_SizeCtrl( wxWindow* parent, const wxString& title,
 }
 
 
-/*************************************/
 wxSize WinEDA_SizeCtrl::GetValue()
-/*************************************/
 {
     wxPoint pos = WinEDA_PositionCtrl::GetValue();
     wxSize  size;
@@ -333,15 +334,9 @@ wxSize WinEDA_SizeCtrl::GetValue()
 }
 
 
-/***********************************************************************/
-/* Classe pour afficher et editer une dimension en INCHES  MM ou autres*/
-/***********************************************************************/
-
-/* Unites:
-  * si units = 0 : unite = inch
-  * si units = 1 : unite = mm
-  * si units >1 : affichage direct
- */
+/**************************************************************/
+/* Class to display and edit a dimension INCHES, MM, or other */
+/**************************************************************/
 WinEDA_ValueCtrl::WinEDA_ValueCtrl( wxWindow* parent, const wxString& title,
                                     int value, int units, wxBoxSizer* BoxSizer,
                                     int internal_unit )
@@ -353,17 +348,19 @@ WinEDA_ValueCtrl::WinEDA_ValueCtrl( wxWindow* parent, const wxString& title,
     m_Value = value;
     label  += ReturnUnitSymbol( m_Units );
 
-    m_Text = new        wxStaticText( parent, -1, label );
+    m_Text = new wxStaticText( parent, -1, label );
 
-    BoxSizer->Add( m_Text, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+    BoxSizer->Add( m_Text, 0,
+                   wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
 
-    wxString stringvalue = ReturnStringFromValue( m_Units, m_Value, m_Internal_Unit );
+    wxString stringvalue = ReturnStringFromValue( m_Units, m_Value,
+                                                  m_Internal_Unit );
     m_ValueCtrl = new   wxTextCtrl( parent, -1, stringvalue );
 
     BoxSizer->Add( m_ValueCtrl,
-        0,
-        wxGROW | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxBOTTOM,
-        5 );
+                   0,
+                   wxGROW | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxBOTTOM,
+                   5 );
 }
 
 
@@ -374,9 +371,7 @@ WinEDA_ValueCtrl::~WinEDA_ValueCtrl()
 }
 
 
-/***********************************/
 int WinEDA_ValueCtrl::GetValue()
-/***********************************/
 {
     int      coord;
     wxString txtvalue = m_ValueCtrl->GetValue();
@@ -386,9 +381,7 @@ int WinEDA_ValueCtrl::GetValue()
 }
 
 
-/********************************************/
 void WinEDA_ValueCtrl::SetValue( int new_value )
-/********************************************/
 {
     wxString buffer;
 
@@ -399,7 +392,6 @@ void WinEDA_ValueCtrl::SetValue( int new_value )
 }
 
 
-/* Active ou desactive la frame: */
 void WinEDA_ValueCtrl::Enable( bool enbl )
 {
     m_ValueCtrl->Enable( enbl );
@@ -407,9 +399,9 @@ void WinEDA_ValueCtrl::Enable( bool enbl )
 }
 
 
-/***************************************************************/
-/* Classe pour afficher et editer une valeur en double flottant*/
-/***************************************************************/
+/**********************************************************************/
+/* Class to display and edit a double precision floating point value. */
+/**********************************************************************/
 WinEDA_DFloatValueCtrl::WinEDA_DFloatValueCtrl( wxWindow* parent,
                                                 const wxString& title,
                                                 double value,
@@ -458,7 +450,6 @@ void WinEDA_DFloatValueCtrl::SetValue( double new_value )
 }
 
 
-/* Active ou desactive la frame: */
 void WinEDA_DFloatValueCtrl::Enable( bool enbl )
 {
     m_ValueCtrl->Enable( enbl );

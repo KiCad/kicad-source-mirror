@@ -1,6 +1,6 @@
-/******************************************************************/
-/* drawframe.cpp - fonctions des classes du type WinEDA_DrawFrame */
-/******************************************************************/
+/*****************/
+/* drawframe.cpp */
+/*****************/
 
 #ifdef __GNUG__
 #pragma implementation
@@ -38,10 +38,6 @@ BEGIN_EVENT_TABLE( WinEDA_DrawFrame, WinEDA_BasicFrame )
 END_EVENT_TABLE()
 
 
-/*******************************************************/
-/* Constructeur de WinEDA_DrawFrame: la fenetre generale */
-/*******************************************************/
-
 WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
                                     const wxString& title,
                                     const wxPoint& pos, const wxSize& size,
@@ -63,11 +59,11 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     m_ID_current_state    = 0;
     m_ID_last_state       = 0;
     m_HTOOL_current_state = 0;
-    m_Draw_Axis           = FALSE;  // TRUE pour avoir les axes dessines
-    m_Draw_Grid           = FALSE;  // TRUE pour avoir la axes dessinee
-    m_Draw_Sheet_Ref      = FALSE;  // TRUE pour avoir le cartouche dessin�
-    m_Print_Sheet_Ref     = TRUE;   // TRUE pour avoir le cartouche imprim�
-    m_Draw_Auxiliary_Axis = FALSE;  // TRUE pour avoir les axes auxiliares dessines
+    m_Draw_Axis           = FALSE;  // TRUE to draw axis.
+    m_Draw_Grid           = FALSE;  // TRUE to show grid.
+    m_Draw_Sheet_Ref      = FALSE;  // TRUE to display reference sheet.
+    m_Print_Sheet_Ref     = TRUE;   // TRUE to print reference sheet.
+    m_Draw_Auxiliary_Axis = FALSE;  // TRUE draw auxilary axis.
     m_UnitType            = INTERNAL_UNIT_TYPE;    // Internal unit = inch
     m_CursorShape         = 0;
     m_LastGridSizeId      = 0;
@@ -79,11 +75,11 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
 
     SetSizeHints( minsize.x, minsize.y, -1, -1, -1, -1 );
 
-    /* Verification des parametres de creation */
+    /* Make sure window has a sane minimum size. */
     if( ( size.x < minsize.x ) || ( size.y < minsize.y ) )
         SetSize( 0, 0, minsize.x, minsize.y );
 
-    // Creation de la ligne de status
+    // Pane sizes for status bar.
     #define ZOOM_DISPLAY_SIZE       60
     #define COORD_DISPLAY_SIZE      156
     #define UNITS_DISPLAY_SIZE      50
@@ -97,8 +93,7 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     SetStatusWidths( 6, dims );
 
     // Create child subwindows.
-    GetClientSize( &m_FrameSize.x, &m_FrameSize.y );/* dimx, dimy = dimensions utiles de la
-                                                     *  zone utilisateur de la fenetre principale */
+    GetClientSize( &m_FrameSize.x, &m_FrameSize.y );
     m_FramePos.x   = m_FramePos.y = 0;
     m_FrameSize.y -= m_MsgFrameHeight;
 
@@ -123,30 +118,23 @@ WinEDA_DrawFrame::~WinEDA_DrawFrame()
 }
 
 
-/**************************************************************/
-void WinEDA_DrawFrame::Affiche_Message( const wxString& message )
-/**************************************************************/
-
 /*
- *  Display the message on the bottom the frame
+ *  Display the message in the first pane of the status bar.
  */
+void WinEDA_DrawFrame::Affiche_Message( const wxString& message )
 {
     SetStatusText( message, 0 );
 }
 
 
-/****************************************/
 void WinEDA_DrawFrame::EraseMsgBox()
-/****************************************/
 {
     if( MsgPanel )
         MsgPanel->EraseMsgBox();
 }
 
 
-/*******************************************************/
 void WinEDA_DrawFrame::OnActivate( wxActivateEvent& event )
-/*******************************************************/
 {
     m_FrameIsActive = event.GetActive();
     if( DrawPanel )
@@ -156,9 +144,7 @@ void WinEDA_DrawFrame::OnActivate( wxActivateEvent& event )
 }
 
 
-/****************************************************/
 void WinEDA_DrawFrame::OnMenuOpen( wxMenuEvent& event )
-/****************************************************/
 {
     if( DrawPanel )
         DrawPanel->m_CanStartBlock = -1;
@@ -166,35 +152,27 @@ void WinEDA_DrawFrame::OnMenuOpen( wxMenuEvent& event )
 }
 
 
-/*******************************************************/
+// Virtual function
 void WinEDA_DrawFrame::ReCreateAuxiliaryToolbar()
-/*******************************************************/
-// Virtual function
 {
 }
 
 
-/********************************************/
+// Virtual function
 void WinEDA_DrawFrame::ReCreateMenuBar()
-/********************************************/
-// Virtual function
 {
 }
 
 
-/****************************************************/
+// Virtual function
 void WinEDA_DrawFrame::OnHotKey( wxDC* DC, int hotkey,
                                  EDA_BaseStruct* DrawStruct )
-/****************************************************/
-// Virtual function
 {
 }
 
 
-/**************************************************************/
-void WinEDA_DrawFrame::ToolOnRightClick( wxCommandEvent& event )
-/**************************************************************/
 // Virtual function
+void WinEDA_DrawFrame::ToolOnRightClick( wxCommandEvent& event )
 {
 }
 
@@ -272,14 +250,14 @@ void WinEDA_DrawFrame::OnSelectGrid( wxCommandEvent& event )
 void WinEDA_DrawFrame::OnSelectZoom( wxCommandEvent& event )
 {
     if( m_SelZoomBox == NULL )
-        return;                        //Ne devrait pas se produire!
+        return;                        // Should not happen!
 
     int id = m_SelZoomBox->GetChoice();
 
     if( id < 0 || !( id < (int)m_SelZoomBox->GetCount() ) )
         return;
 
-    if( id == 0 )           // Auto zoom (Fit in Page)
+    if( id == 0 )                      // Auto zoom (Fit in Page)
     {
         Zoom_Automatique( true );
     }
@@ -295,35 +273,27 @@ void WinEDA_DrawFrame::OnSelectZoom( wxCommandEvent& event )
     }
 }
 
-/***********************************/
-int WinEDA_DrawFrame::GetZoom(void)
-/***********************************/
+
 /* Return the current zoom level */
+int WinEDA_DrawFrame::GetZoom(void)
 {
     return GetBaseScreen()->GetZoom();
 }
 
 
-/********************************************************/
 void WinEDA_DrawFrame::OnMouseEvent( wxMouseEvent& event )
-/********************************************************/
 {
     event.Skip();
 }
 
 
-/***********************************************************************/
-
-// Virtuelle
+// Virtual
 void WinEDA_DrawFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
-/***********************************************************************/
 {
 }
 
 
-/***************************************/
 void WinEDA_DrawFrame::SetToolbars()
-/***************************************/
 {
     DisplayUnitsMsg();
 
@@ -334,20 +304,15 @@ void WinEDA_DrawFrame::SetToolbars()
 }
 
 
-/********************************************************/
 void WinEDA_DrawFrame::DisplayToolMsg( const wxString& msg )
-/********************************************************/
 {
     SetStatusText( msg, 5 );
 }
 
 
-/*******************************************/
-void WinEDA_DrawFrame::DisplayUnitsMsg()
-/********************************************/
-
 /* Display current unit Selection on Statusbar
  */
+void WinEDA_DrawFrame::DisplayUnitsMsg()
 {
     wxString msg;
 
@@ -370,9 +335,7 @@ void WinEDA_DrawFrame::DisplayUnitsMsg()
 }
 
 
-/***************************************/
 void WinEDA_DrawFrame::ReDrawPanel()
-/***************************************/
 {
     if( DrawPanel == NULL )
         return;
@@ -384,12 +347,9 @@ void WinEDA_DrawFrame::ReDrawPanel()
 }
 
 
-/**************************************************/
-void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
-/**************************************************/
-
-/* recalcule les dimensions des toolbars et du panel d'affichage
+/* Recalculate the size of toolbars and display panel.
  */
+void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
 {
     wxSize size;
     wxSize opt_size;
@@ -401,21 +361,22 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
 
 #if !defined(KICAD_AUIMANAGER)
     size.y -= m_MsgFrameHeight;
-    if( MsgPanel ) // Positionnement en bas d'ecran
+
+    if( MsgPanel ) // Resize the message panel.
     {
         MsgPanel->SetSize( 0, size.y, size.x, m_MsgFrameHeight );
     }
 
-    if( m_AuxiliaryToolBar )            // est sous le m_HToolBar
+    if( m_AuxiliaryToolBar )        // Resize the auxilary horizontal tool bar.
     {
-        Auxtoolbar_size.x = size.x;     // = Largeur de la frame
+        Auxtoolbar_size.x = size.x;
         Auxtoolbar_size.y = m_AuxiliaryToolBar->GetSize().y;
         m_AuxiliaryToolBar->SetSize( Auxtoolbar_size );
         m_AuxiliaryToolBar->Move( 0, 0 );
         size.y -= Auxtoolbar_size.y;
     }
 
-    if( m_VToolBar )    // Toolbar de droite: hauteur = hauteur utile de la frame-Auxtoolbar
+    if( m_VToolBar )                // Resize the main right vertial tool bar.
     {
         Vtoolbar_size.x = m_VToolBar->GetSize().x;
         Vtoolbar_size.y = size.y;
@@ -424,7 +385,8 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
         m_VToolBar->Refresh();
     }
 
-    if( m_AuxVToolBar ) // auxiliary vertical right toolbar, showing tools fo microwave applications
+    if( m_AuxVToolBar )             // Resize the auxiliary right vertical
+                                    // toolbar.
     {
         Vtoolbar_size.x += m_AuxVToolBar->GetSize().x;
         Vtoolbar_size.y  = size.y;
@@ -461,20 +423,17 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
 }
 
 
-/*************************************************************************/
+/*
+ * Enables the icon of the selected tool in the vertical toolbar.
+ * (Or tool ID_NO_SELECT_BUTT default if no new selection)
+ * if (id >= 0)
+ * Updates all variables related:
+ * Message m_ID_current_state, cursor
+ * If (id < 0)
+ * Only updates the variables message and cursor
+ */
 void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
                                   const wxString& title )
-/*************************************************************************/
-
-/*
- *  Active l'icone de l'outil selectionne dans le toolbar Vertical
- *  ( ou l'outil par defaut ID_NO_SELECT_BUTT si pas de nouvelle selection )
- *  if ( id >= 0 )
- *  Met a jour toutes les variables associees:
- *      message, m_ID_current_state, curseur
- *  si ( id < 0 )
- *  Met a jour seulement les variables message et  curseur
- */
 {
     // Change Cursor
     if( DrawPanel )
@@ -488,7 +447,7 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
     if( id < 0 )
         return;
 
-    // Old Tool Inactif ou ID_NO_SELECT_BUTT actif si pas de nouveau Tool
+    // Old Tool ID_NO_SELECT_BUTT active or inactive if no new tool.
     if( m_ID_current_state )
     {
         if( m_VToolBar )
@@ -511,7 +470,6 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
             m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, TRUE );
     }
 
-    // New Tool Actif
     if( id )
     {
         if( m_VToolBar )
@@ -560,9 +518,7 @@ int WinEDA_DrawFrame::HandleBlockEnd( wxDC* DC )
 }
 
 
-/*********************************************/
 void WinEDA_DrawFrame::AdjustScrollBars()
-/*********************************************/
 {
     int     xUnit, yUnit;
     wxSize  draw_size, panel_size;
@@ -617,7 +573,7 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     xUnit = screen->Unscale( xUnit );
     yUnit = screen->Unscale( yUnit );
 
-    // Calcul de la position, curseur place au centre d'ecran
+    // Calculate the position, place the cursor at the center of screen.
     scrollbar_pos = screen->m_Curseur - screen->m_DrawOrg;
 
     scrollbar_pos.x -= panel_size.x / 2;
@@ -663,14 +619,11 @@ void WinEDA_DrawFrame::AdjustScrollBars()
 }
 
 
-/****************************************************/
-void WinEDA_DrawFrame::SetDrawBgColor( int color_num )
-/****************************************************/
-
-/* met a jour la couleur de fond pour les trac�s
- *  seules les couleurs BLACK ou WHITE sont autoris�es
- *  le parametre XorMode est mis a jour selon la couleur du fond
+/* Updates the background color for drawing panel.  The only valid colors
+ * are BLACK and WHITE.
+ * XorMode the parameter is updated according to the background color
  */
+void WinEDA_DrawFrame::SetDrawBgColor( int color_num )
 {
     if( ( color_num != WHITE ) && ( color_num != BLACK ) )
         color_num = BLACK;
@@ -687,15 +640,14 @@ void WinEDA_DrawFrame::SetDrawBgColor( int color_num )
     }
 
     if( DrawPanel )
-        DrawPanel->SetBackgroundColour( wxColour( ColorRefs[g_DrawBgColor].m_Red,
-                                                  ColorRefs[g_DrawBgColor].m_Green,
-                                                  ColorRefs[g_DrawBgColor].m_Blue ) );
+        DrawPanel->SetBackgroundColour(
+            wxColour( ColorRefs[g_DrawBgColor].m_Red,
+                      ColorRefs[g_DrawBgColor].m_Green,
+                      ColorRefs[g_DrawBgColor].m_Blue ) );
 }
 
 
-/********************************************************/
 void WinEDA_DrawFrame::SetLanguage( wxCommandEvent& event )
-/********************************************************/
 {
     int id = event.GetId();
 

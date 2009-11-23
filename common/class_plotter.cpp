@@ -11,7 +11,6 @@
 
 #include "fctsys.h"
 
-//#include "gr_basic.h"
 #include "trigo.h"
 #include "wxstruct.h"
 #include "base_struct.h"
@@ -37,27 +36,24 @@ PLOTTER::PLOTTER( PlotFormat aPlotType )
 }
 
 
-/********************************************************/
+/* Modifies coordinates pos.x and pos.y trace according to the orientation,
+ * scale factor, and offsets trace
+ */
 void PLOTTER::user_to_device_coordinates( wxPoint& pos )
-/********************************************************/
-
-/* modifie les coord pos.x et pos.y pour le trace selon l'orientation,
- * l'echelle, les offsets de trace */
 {
     pos.x = (int) ( (pos.x - plot_offset.x) * plot_scale * device_scale );
 
     if( plot_orient_options == PLOT_MIROIR )
-        pos.y = (int) ( (pos.y - plot_offset.y) * plot_scale * device_scale );
+        pos.y = (int) ( ( pos.y - plot_offset.y ) * plot_scale * device_scale );
     else
-        pos.y = (int) ( (paper_size.y - (pos.y - plot_offset.y) * plot_scale) * device_scale );
+        pos.y = (int) ( ( paper_size.y - ( pos.y - plot_offset.y )
+                          * plot_scale ) * device_scale );
 }
 
 
-/********************************************************************/
-void PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
-                   FILL_T fill, int width )
-/********************************************************************/
 /* Generic arc rendered as a polyline */
+void PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int radius,
+                   FILL_T fill, int width )
 {
     wxPoint   start, end;
     const int delta = 50;   /* increment (in 0.1 degrees) to draw circles */
@@ -69,54 +65,48 @@ void PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
     set_current_line_width( width );
     /* Please NOTE the different sign due to Y-axis flip */
     alpha   = StAngle / 1800.0 * M_PI;
-    start.x = centre.x + (int) ( rayon * cos( -alpha ) );
-    start.y = centre.y + (int) ( rayon * sin( -alpha ) );
+    start.x = centre.x + (int) ( radius * cos( -alpha ) );
+    start.y = centre.y + (int) ( radius * sin( -alpha ) );
     move_to( start );
     for( int ii = StAngle + delta; ii < EndAngle; ii += delta )
     {
         alpha = ii / 1800.0 * M_PI;
-        end.x = centre.x + (int) ( rayon * cos( -alpha ) );
-        end.y = centre.y + (int) ( rayon * sin( -alpha ) );
+        end.x = centre.x + (int) ( radius * cos( -alpha ) );
+        end.y = centre.y + (int) ( radius * sin( -alpha ) );
         line_to( end );
     }
 
     alpha = EndAngle / 1800.0 * M_PI;
-    end.x = centre.x + (int) ( rayon * cos( -alpha ) );
-    end.y = centre.y + (int) ( rayon * sin( -alpha ) );
+    end.x = centre.x + (int) ( radius * cos( -alpha ) );
+    end.y = centre.y + (int) ( radius * sin( -alpha ) );
     finish_to( end );
 }
 
 
-/************************************/
+/* Modifies size size.x and size.y trace according to the scale factor. */
 void PLOTTER::user_to_device_size( wxSize& size )
-/************************************/
-/* modifie les dimension size.x et size.y pour le trace selon l'echelle */
 {
     size.x = (int) ( size.x * plot_scale * device_scale );
     size.y = (int) ( size.y * plot_scale * device_scale );
 }
 
 
-/************************************/
 double PLOTTER::user_to_device_size( double size )
-/************************************/
 {
     return size * plot_scale * device_scale;
 }
 
 
-/************************************************************************************/
 void PLOTTER::center_square( const wxPoint& position, int diametre, FILL_T fill )
-/************************************************************************************/
 {
-    int rayon     = wxRound( diametre / 2.8284 );
+    int radius     = wxRound( diametre / 2.8284 );
     int coord[10] =
     {
-        position.x + rayon, position.y + rayon,
-        position.x + rayon, position.y - rayon,
-        position.x - rayon, position.y - rayon,
-        position.x - rayon, position.y + rayon,
-        position.x + rayon, position.y + rayon
+        position.x + radius, position.y + radius,
+        position.x + radius, position.y - radius,
+        position.x - radius, position.y - radius,
+        position.x - radius, position.y + radius,
+        position.x + radius, position.y + radius
     };
 
     if( fill )
@@ -130,18 +120,17 @@ void PLOTTER::center_square( const wxPoint& position, int diametre, FILL_T fill 
 }
 
 
-/************************************************************************************/
-void PLOTTER::center_lozenge( const wxPoint& position, int diametre, FILL_T fill )
-/************************************************************************************/
+void PLOTTER::center_lozenge( const wxPoint& position, int diametre,
+                              FILL_T fill )
 {
-    int rayon     = diametre / 2;
+    int radius     = diametre / 2;
     int coord[10] =
     {
-        position.x,         position.y + rayon,
-        position.x + rayon, position.y,
-        position.x,         position.y - rayon,
-        position.x - rayon, position.y,
-        position.x,         position.y + rayon,
+        position.x,         position.y + radius,
+        position.x + radius, position.y,
+        position.x,         position.y - radius,
+        position.x - radius, position.y,
+        position.x,         position.y + radius,
     };
 
     if( fill )
@@ -155,17 +144,14 @@ void PLOTTER::center_lozenge( const wxPoint& position, int diametre, FILL_T fill
 }
 
 
-/************************************************************************************/
-void PLOTTER::marker( const wxPoint& position, int diametre, int aShapeId )
-/************************************************************************************/
-
-/* Trace un motif de numero de forme aShapeId, aux coord x0, y0.
- *  x0, y0 = coordonnees tables
- *  diametre = diametre (coord table) du trou
- *  aShapeId = index ( permet de generer des formes caract )
+/* Draw a pattern shape number aShapeId, to coord x0, y0.
+ * x0, y0 = coordinates tables
+ * Diameter diameter = (coord table) hole
+ * AShapeId = index (used to generate forms characters)
  */
+void PLOTTER::marker( const wxPoint& position, int diametre, int aShapeId )
 {
-    int rayon = diametre / 2;
+    int radius = diametre / 2;
 
     int x0, y0;
 
@@ -173,84 +159,84 @@ void PLOTTER::marker( const wxPoint& position, int diametre, int aShapeId )
 
     switch( aShapeId )
     {
-    case 0:     /* vias : forme en X */
-        move_to( wxPoint( x0 - rayon, y0 - rayon ) );
-        line_to( wxPoint( x0 + rayon, y0 + rayon ) );
-        move_to( wxPoint( x0 + rayon, y0 - rayon ) );
-        finish_to( wxPoint( x0 - rayon, y0 + rayon ) );
+    case 0:     /* vias : X shape */
+        move_to( wxPoint( x0 - radius, y0 - radius ) );
+        line_to( wxPoint( x0 + radius, y0 + radius ) );
+        move_to( wxPoint( x0 + radius, y0 - radius ) );
+        finish_to( wxPoint( x0 - radius, y0 + radius ) );
         break;
 
-    case 1:     /* Cercle */
+    case 1:     /* Circle */
         circle( position, diametre, NO_FILL );
         break;
 
-    case 2:     /* forme en + */
-        move_to( wxPoint( x0, y0 - rayon ) );
-        line_to( wxPoint( x0, y0 + rayon ) );
-        move_to( wxPoint( x0 + rayon, y0 ) );
-        finish_to( wxPoint( x0 - rayon, y0 ) );
+    case 2:     /* + shape */
+        move_to( wxPoint( x0, y0 - radius ) );
+        line_to( wxPoint( x0, y0 + radius ) );
+        move_to( wxPoint( x0 + radius, y0 ) );
+        finish_to( wxPoint( x0 - radius, y0 ) );
         break;
 
-    case 3:     /* forme en X cercle */
+    case 3:     /* X shape in circle */
         circle( position, diametre, NO_FILL );
-        move_to( wxPoint( x0 - rayon, y0 - rayon ) );
-        line_to( wxPoint( x0 + rayon, y0 + rayon ) );
-        move_to( wxPoint( x0 + rayon, y0 - rayon ) );
-        finish_to( wxPoint( x0 - rayon, y0 + rayon ) );
+        move_to( wxPoint( x0 - radius, y0 - radius ) );
+        line_to( wxPoint( x0 + radius, y0 + radius ) );
+        move_to( wxPoint( x0 + radius, y0 - radius ) );
+        finish_to( wxPoint( x0 - radius, y0 + radius ) );
         break;
 
-    case 4:     /* forme en cercle barre de - */
+    case 4:     /* circle with bar - shape */
         circle( position, diametre, NO_FILL );
-        move_to( wxPoint( x0 - rayon, y0 ) );
-        finish_to( wxPoint( x0 + rayon, y0 ) );
+        move_to( wxPoint( x0 - radius, y0 ) );
+        finish_to( wxPoint( x0 + radius, y0 ) );
         break;
 
-    case 5:     /* forme en cercle barre de | */
+    case 5:     /* circle with bar | shape */
         circle( position, diametre, NO_FILL );
-        move_to( wxPoint( x0, y0 - rayon ) );
-        finish_to( wxPoint( x0, y0 + rayon ) );
+        move_to( wxPoint( x0, y0 - radius ) );
+        finish_to( wxPoint( x0, y0 + radius ) );
         break;
 
-    case 6:     /* forme en carre */
+    case 6:     /* square */
         center_square( position, diametre, NO_FILL );
         break;
 
-    case 7:     /* forme en losange */
+    case 7:     /* diamond */
         center_lozenge( position, diametre, NO_FILL );
         break;
 
-    case 8:     /* forme en carre barre par un X*/
+    case 8:     /* square with an X*/
         center_square( position, diametre, NO_FILL );
-        move_to( wxPoint( x0 - rayon, y0 - rayon ) );
-        line_to( wxPoint( x0 + rayon, y0 + rayon ) );
-        move_to( wxPoint( x0 + rayon, y0 - rayon ) );
-        finish_to( wxPoint( x0 - rayon, y0 + rayon ) );
+        move_to( wxPoint( x0 - radius, y0 - radius ) );
+        line_to( wxPoint( x0 + radius, y0 + radius ) );
+        move_to( wxPoint( x0 + radius, y0 - radius ) );
+        finish_to( wxPoint( x0 - radius, y0 + radius ) );
         break;
 
-    case 9:     /* forme en losange barre par un +*/
+    case 9:     /* diamond with a +*/
         center_lozenge( position, diametre, NO_FILL );
-        move_to( wxPoint( x0, y0 - rayon ) );
-        line_to( wxPoint( x0, y0 + rayon ) );
-        move_to( wxPoint( x0 + rayon, y0 ) );
-        finish_to( wxPoint( x0 - rayon, y0 ) );
+        move_to( wxPoint( x0, y0 - radius ) );
+        line_to( wxPoint( x0, y0 + radius ) );
+        move_to( wxPoint( x0 + radius, y0 ) );
+        finish_to( wxPoint( x0 - radius, y0 ) );
         break;
 
-    case 10:     /* forme en carre barre par un '/' */
+    case 10:     /* square with a '/' */
         center_square( position, diametre, NO_FILL );
-        move_to( wxPoint( x0 - rayon, y0 - rayon ) );
-        finish_to( wxPoint( x0 + rayon, y0 + rayon ) );
+        move_to( wxPoint( x0 - radius, y0 - radius ) );
+        finish_to( wxPoint( x0 + radius, y0 + radius ) );
         break;
 
-    case 11:     /* forme en losange barre par un |*/
+    case 11:     /* square with a |*/
         center_lozenge( position, diametre, NO_FILL );
-        move_to( wxPoint( x0, y0 - rayon ) );
-        finish_to( wxPoint( x0, y0 + rayon ) );
+        move_to( wxPoint( x0, y0 - radius ) );
+        finish_to( wxPoint( x0, y0 + radius ) );
         break;
 
-    case 12:     /* forme en losange barre par un -*/
+    case 12:     /* square with a -*/
         center_lozenge( position, diametre, NO_FILL );
-        move_to( wxPoint( x0 - rayon, y0 ) );
-        finish_to( wxPoint( x0 + rayon, y0 ) );
+        move_to( wxPoint( x0 - radius, y0 ) );
+        finish_to( wxPoint( x0 + radius, y0 ) );
         break;
 
     default:
@@ -260,12 +246,10 @@ void PLOTTER::marker( const wxPoint& position, int diametre, int aShapeId )
 }
 
 
-/***************************************************************/
+/* Convert a thick segment and plot it as an oval */
 void PLOTTER::segment_as_oval( wxPoint start, wxPoint end, int width,
                                GRTraceMode tracemode )
-/***************************************************************/
 {
-    /* Convert a thick segment and plot it as an oval */
     wxPoint center( (start.x + end.x) / 2, (start.y + end.y) / 2 );
     wxSize  size( end.x - start.x, end.y - start.y );
     int     orient;
@@ -275,64 +259,70 @@ void PLOTTER::segment_as_oval( wxPoint start, wxPoint end, int width,
     else if( size.x == 0 )
         orient = 900;
     else
-        orient = -(int) ( atan2( (double) size.y, (double) size.x ) * 1800.0 / M_PI );
-    size.x = (int) sqrt( ( (double) size.x * size.x ) + ( (double) size.y * size.y ) ) + width;
+        orient = -(int) ( atan2( (double) size.y,
+                                 (double) size.x ) * 1800.0 / M_PI );
+    size.x = (int) sqrt( ( (double) size.x * size.x )
+                       + ( (double) size.y * size.y ) ) + width;
     size.y = width;
 
     flash_pad_oval( center, size, orient, tracemode );
 }
 
 
-/***************************************************************/
 void PLOTTER::sketch_oval( wxPoint pos, wxSize size, int orient,
                            int width )
-/***************************************************************/
 {
     set_current_line_width( width );
     width = current_pen_width;
-    int rayon, deltaxy, cx, cy;
+    int radius, deltaxy, cx, cy;
+
     if( size.x > size.y )
     {
-        EXCHG( size.x, size.y ); orient += 900;
+        EXCHG( size.x, size.y );
+        orient += 900;
         if( orient >= 3600 )
             orient -= 3600;
     }
-    deltaxy = size.y - size.x; /* = distance entre centres de l'ovale */
-    rayon   = (size.x - width) / 2;
-    cx = -rayon; cy = -deltaxy / 2;
+
+    deltaxy = size.y - size.x;       /* distance between centers of the oval */
+    radius   = ( size.x - width ) / 2;
+    cx = -radius;
+    cy = -deltaxy / 2;
     RotatePoint( &cx, &cy, orient );
     move_to( wxPoint( cx + pos.x, cy + pos.y ) );
-    cx = -rayon; cy = deltaxy / 2;
+    cx = -radius;
+    cy = deltaxy / 2;
     RotatePoint( &cx, &cy, orient );
     finish_to( wxPoint( cx + pos.x, cy + pos.y ) );
 
-    cx = rayon; cy = -deltaxy / 2;
+    cx = radius;
+    cy = -deltaxy / 2;
     RotatePoint( &cx, &cy, orient );
     move_to( wxPoint( cx + pos.x, cy + pos.y ) );
-    cx = rayon; cy = deltaxy / 2;
+    cx = radius;
+    cy = deltaxy / 2;
     RotatePoint( &cx, &cy, orient );
     finish_to( wxPoint( cx + pos.x, cy + pos.y ) );
 
-    cx = 0; cy = deltaxy / 2;
+    cx = 0;
+    cy = deltaxy / 2;
     RotatePoint( &cx, &cy, orient );
     arc( wxPoint( cx + pos.x, cy + pos.y ),
          orient + 1800, orient + 3600,
-         rayon, NO_FILL );
-    cx = 0; cy = -deltaxy / 2;
+         radius, NO_FILL );
+    cx = 0;
+    cy = -deltaxy / 2;
     RotatePoint( &cx, &cy, orient );
     arc( wxPoint( cx + pos.x, cy + pos.y ),
          orient, orient + 1800,
-         rayon, NO_FILL );
+         radius, NO_FILL );
 }
 
 
-/***************************************************************/
-void PLOTTER::thick_segment( wxPoint start, wxPoint end, int width,
-                             GRTraceMode tracemode )
-/***************************************************************/
-
 /* Plot 1 segment like a track segment
  */
+void PLOTTER::thick_segment( wxPoint start, wxPoint end, int width,
+                             GRTraceMode tracemode )
 {
     switch( tracemode )
     {
@@ -351,24 +341,26 @@ void PLOTTER::thick_segment( wxPoint start, wxPoint end, int width,
 }
 
 
-void PLOTTER::thick_arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
+void PLOTTER::thick_arc( wxPoint centre, int StAngle, int EndAngle, int radius,
                          int width, GRTraceMode tracemode )
 {
     switch( tracemode )
     {
     case FILAIRE:
         set_current_line_width( -1 );
-        arc( centre, StAngle, EndAngle, rayon, NO_FILL, -1 );
+        arc( centre, StAngle, EndAngle, radius, NO_FILL, -1 );
         break;
 
     case FILLED:
-        arc( centre, StAngle, EndAngle, rayon, NO_FILL, width );
+        arc( centre, StAngle, EndAngle, radius, NO_FILL, width );
         break;
 
     case SKETCH:
         set_current_line_width( -1 );
-        arc( centre, StAngle, EndAngle, rayon - (width - current_pen_width) / 2, NO_FILL, -1 );
-        arc( centre, StAngle, EndAngle, rayon + (width - current_pen_width) / 2, NO_FILL, -1 );
+        arc( centre, StAngle, EndAngle,
+             radius - ( width - current_pen_width ) / 2, NO_FILL, -1 );
+        arc( centre, StAngle, EndAngle,
+             radius + ( width - current_pen_width ) / 2, NO_FILL, -1 );
         break;
     }
 }
@@ -426,14 +418,12 @@ void PLOTTER::thick_circle( wxPoint pos, int diametre, int width,
 }
 
 
-/*************************************************************************************/
 void PLOTTER::set_paper_size( Ki_PageDescr* asheet )
-/*************************************************************************************/
 {
     wxASSERT( !output_file );
     sheet = asheet;
 
-    // Sheets are in mils, plotter works with decimils
+    // Sheets are in mils, plotter works with decimals
     paper_size.x = sheet->m_Size.x * 10;
     paper_size.y = sheet->m_Size.y * 10;
 }

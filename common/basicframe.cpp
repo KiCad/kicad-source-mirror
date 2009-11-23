@@ -23,7 +23,6 @@
 /*
  * Class constructor for WinEDA_BasicFrame general options
  */
-/**********************************************************/
 WinEDA_BasicFrame::WinEDA_BasicFrame( wxWindow* father,
                                       int idtype,
                                       const wxString& title,
@@ -45,32 +44,27 @@ WinEDA_BasicFrame::WinEDA_BasicFrame( wxWindow* father,
 
     SetSizeHints( minsize.x, minsize.y, -1, -1, -1, -1 );
 
-    /* Verification des parametres de creation */
-    if( (size.x < minsize.x) || (size.y < minsize.y) )
+    if( ( size.x < minsize.x ) || ( size.y < minsize.y ) )
         SetSize( 0, 0, minsize.x, minsize.y );
 
     // Create child subwindows.
-    GetClientSize( &m_FrameSize.x, &m_FrameSize.y );  /* dimx, dimy = dimensions utiles de la
-                                                      * zone utilisateur de la fenetre principale */
+    GetClientSize( &m_FrameSize.x, &m_FrameSize.y ); /* dimensions of the user
+                                                      * area of the main
+                                                      * window */
     m_FramePos.x   = m_FramePos.y = 0;
     m_FrameSize.y -= m_MsgFrameHeight;
 
 }
 
 
-/*
- *
- */
-/******************************************/
 WinEDA_BasicFrame::~WinEDA_BasicFrame()
-/******************************************/
 {
     if( wxGetApp().m_HtmlCtrl )
         delete wxGetApp().m_HtmlCtrl;
     wxGetApp().m_HtmlCtrl = NULL;
 
-    /* This needed for OSX: avoids furter OnDraw processing after this destructor
-     * and before the native window is destroyed
+    /* This needed for OSX: avoids furter OnDraw processing after this
+     * destructor and before the native window is destroyed
      */
     this->Freeze( );
 }
@@ -79,9 +73,7 @@ WinEDA_BasicFrame::~WinEDA_BasicFrame()
 /*
  * Virtual function
  */
-/***********************************/
 void WinEDA_BasicFrame::ReCreateMenuBar()
-/***********************************/
 {
 
 }
@@ -158,9 +150,7 @@ void WinEDA_BasicFrame::SaveSettings()
 }
 
 
-/******************************************************/
 void WinEDA_BasicFrame::PrintMsg( const wxString& text )
-/******************************************************/
 {
     SetStatusText( text );
 }
@@ -169,9 +159,7 @@ void WinEDA_BasicFrame::PrintMsg( const wxString& text )
 /*
  * Display a bargraph (0 to 50 point length) for a PerCent value from 0 to 100
  */
-/*************************************************************************/
 void WinEDA_BasicFrame::DisplayActivity( int PerCent, const wxString& Text )
-/*************************************************************************/
 {
     wxString Line;
 
@@ -188,11 +176,9 @@ void WinEDA_BasicFrame::DisplayActivity( int PerCent, const wxString& Text )
 
 
 /*
- * Met a jour la liste des anciens projets
+ * Update the list of past projects.
  */
-/*******************************************************************/
 void WinEDA_BasicFrame::SetLastProject( const wxString& FullFileName )
-/*******************************************************************/
 {
     wxGetApp().m_fileHistory.AddFileToHistory( FullFileName );
     ReCreateMenuBar();
@@ -202,10 +188,8 @@ void WinEDA_BasicFrame::SetLastProject( const wxString& FullFileName )
 /*
  * Fetch the file name from the file history list.
  */
-/*********************************************************************/
 wxString WinEDA_BasicFrame::GetFileFromHistory( int cmdId,
                                                 const wxString& type )
-/*********************************************************************/
 {
     wxString fn, msg;
     size_t   i;
@@ -236,9 +220,7 @@ wxString WinEDA_BasicFrame::GetFileFromHistory( int cmdId,
 /*
  *
  */
-/**************************************************************/
 void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
-/**************************************************************/
 {
     wxString msg;
 
@@ -257,7 +239,8 @@ void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
     }
     else
     {
-        msg.Printf( _( "Help file %s not found" ), GetChars( wxGetApp().m_HelpFileName ) );
+        msg.Printf( _( "Help file %s not found" ),
+                    GetChars( wxGetApp().m_HelpFileName ) );
         DisplayError( this, msg );
     }
 
@@ -273,7 +256,7 @@ void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
         GetAssociatedDocument( this, helpFile );
 
 #else
-#	error Help files format not defined
+#   error Help files format not defined
 #endif
 }
 
@@ -281,9 +264,7 @@ void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
 /*
  *
  */
-/***********************************************************************/
 void WinEDA_BasicFrame::GetKicadAbout( wxCommandEvent& WXUNUSED(event) )
-/***********************************************************************/
 {
     wxAboutDialogInfo info;
     InitKiCadAbout(info);

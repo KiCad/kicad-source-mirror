@@ -4,8 +4,6 @@
 /*		EDA_TextStruct                  */
 /****************************************/
 
-/* Fichier base_struct.cpp */
-
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "trigo.h"
@@ -28,7 +26,7 @@ EDA_BaseStruct::EDA_BaseStruct( EDA_BaseStruct* parent, KICAD_T idType )
 {
     InitVars();
     m_StructType = idType;
-    m_Parent     = parent; /* Chainage hierarchique sur struct racine */
+    m_Parent     = parent;
 }
 
 

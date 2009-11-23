@@ -59,8 +59,10 @@ int g_TabAllCopperLayerMask[NB_COPPER_LAYERS] = {
 
 wxString g_ViaType_Name[4] = {
     _( "??? Via" ),            // Not used yet
-    _( "Micro Via" ),          // from external layer (TOP or BOTTOM) from the near neightbour inner layer only
-    _( "Blind/Buried Via" ),   // from inner or external to inner or external layer (no restriction)
+    _( "Micro Via" ),          // from external layer (TOP or BOTTOM) from
+                               // the near neighbor inner layer only
+    _( "Blind/Buried Via" ),   // from inner or external to inner or external
+                               // layer (no restriction)
     _( "Through Via" )         // Usual via (from TOP to BOTTOM layer only )
 };
 
@@ -86,7 +88,7 @@ const wxString PcbFileWildcard(
 
 int g_CurrentVersionPCB = 1;
 
-/* variables generales */
+
 int    g_TimeOut;            // Timer for automatic saving
 int    g_SaveTime;           // Time for next saving
 
@@ -97,7 +99,8 @@ int    g_ModuleTextNOVColor = DARKGRAY;
 int    g_PadCUColor         = GREEN;
 int    g_PadCMPColor        = RED;
 
-// Current designe settings:
+
+// Current design settings:
 class EDA_BoardDesignSettings g_DesignSettings;
 
 /**
@@ -116,13 +119,13 @@ int g_GridRoutingSize = 250;
 bool g_Zone_45_Only = FALSE;
 
 /* HPGL plot settings. */
-int g_HPGL_Pen_Num = 1;      /* num de plume a charger */
-int g_HPGL_Pen_Speed = 40;   /* vitesse en cm/s */
-int g_HPGL_Pen_Diam;         /* diametre en mils */
-int g_HPGL_Pen_Recouvrement; /* recouvrement en mils ( pour remplissages */
+int g_HPGL_Pen_Num = 1;      /* pen number */
+int g_HPGL_Pen_Speed = 40;   /* speed in cm/s */
+int g_HPGL_Pen_Diam;         /* diameter in mils */
+int g_HPGL_Pen_Recouvrement; /* recovery in mils ( for filling ) */
 
 float Scale_X;
-float Scale_Y;               /* coeff d'agrandissement en X et Y demandes */
+float Scale_Y;               /* scale factor in X and Y axis */
 
 int PlotMarge;
 int g_PlotLine_Width;

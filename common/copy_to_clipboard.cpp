@@ -1,9 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        copy_to_clipboard.cpp
 // Author:      jean-pierre Charras
 // Created:     18 aug 2006
-// Licence:   License GNU
+// Licence:     License GNU
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/metafile.h"
@@ -24,12 +23,11 @@ static const bool   Print_Sheet_Ref = TRUE;
 
 static bool DrawPage( WinEDA_DrawPanel* panel );
 
-/************************************************************/
-void WinEDA_DrawFrame::CopyToClipboard( wxCommandEvent& event )
-/************************************************************/
 
-/* calls the function to copy the current page or the current bock to the clipboard
+/* calls the function to copy the current page or the current bock to
+ * the clipboard
  */
+void WinEDA_DrawFrame::CopyToClipboard( wxCommandEvent& event )
 {
     DrawPage( DrawPanel );
 
@@ -50,14 +48,11 @@ void WinEDA_DrawFrame::CopyToClipboard( wxCommandEvent& event )
 }
 
 
-/*****************************************************************/
-bool DrawPage( WinEDA_DrawPanel* panel )
-/*****************************************************************/
-
 /* copy the current page or block to the clipboard ,
  * to export drawings to other applications (word processing ...)
- * Thi is not suitable for copy command within eeschema or pcbnew
+ * This is not suitable for copy command within eeschema or pcbnew
  */
+bool DrawPage( WinEDA_DrawPanel* panel )
 {
     bool    success = TRUE;
 
@@ -65,7 +60,7 @@ bool DrawPage( WinEDA_DrawPanel* panel )
     int     tmpzoom;
     wxPoint tmp_startvisu;
     wxPoint old_org;
-    wxPoint DrawOffset; // Offset de trace
+    wxPoint DrawOffset;
     int     ClipboardSizeX, ClipboardSizeY;
     bool    DrawBlock = FALSE;
     wxRect  DrawArea;
@@ -83,7 +78,7 @@ bool DrawPage( WinEDA_DrawPanel* panel )
         DrawArea.SetHeight( ActiveScreen->m_BlockLocate.GetHeight() );
     }
 
-    /* modification des cadrages et reglages locaux */
+    /* Change frames and local settings. */
     tmp_startvisu = ActiveScreen->m_StartVisu;
     tmpzoom = ActiveScreen->GetZoom();
     old_org = ActiveScreen->m_DrawOrg;
@@ -102,16 +97,19 @@ bool DrawPage( WinEDA_DrawPanel* panel )
     ClipboardSizeX = dc.MaxX() + 10;
     ClipboardSizeY = dc.MaxY() + 10;
     panel->m_ClipBox.SetX( 0 ); panel->m_ClipBox.SetY( 0 );
-    panel->m_ClipBox.SetWidth( 0x7FFFFF0 ); panel->m_ClipBox.SetHeight( 0x7FFFFF0 );
+    panel->m_ClipBox.SetWidth( 0x7FFFFF0 );
+    panel->m_ClipBox.SetHeight( 0x7FFFFF0 );
 
     if( DrawBlock )
     {
         dc.SetClippingRegion( DrawArea );
     }
+
     panel->PrintPage( &dc, Print_Sheet_Ref, -1, false );
     screen->m_IsPrinting = false;
     panel->m_ClipBox = tmp;
     wxMetafile* mf = dc.Close();
+
     if( mf )
     {
         success = mf->SetClipboard( ClipboardSizeX, ClipboardSizeY );

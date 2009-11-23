@@ -1,6 +1,6 @@
-/**************************************************/
-/* projet_config : routines de trace du cartouche */
-/**************************************************/
+/*********************/
+/* projet_config.cpp */
+/*********************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -23,14 +23,14 @@
 
 
 /**
- * Cree ou recree la configuration locale de kicad (filename.pro)
- * initialise:
- *     g_Prj_Config
- *     g_Prj_Config_LocalFilename
- *     g_Prj_Default_Config_FullFilename
- * return:
- *     true si config locale
- *     false si default config
+ * Creates or recreates the kicad project file. (filename.pro)
+ * Initialize:
+ * G_Prj_Config
+ * G_Prj_Config_LocalFilename
+ * G_Prj_Default_Config_FullFilename
+ * Return:
+ * True if local config
+ * False if default config
  */
 bool WinEDA_App::ReCreatePrjConfig( const wxString& fileName,
                                     const wxString& GroupName,
@@ -49,7 +49,7 @@ bool WinEDA_App::ReCreatePrjConfig( const wxString& fileName,
     /* Check the file name does not a kicad project extension.
      * This allows the user to enter a filename without extension
      * or use an existing name to create te project file
-    */
+     */
     if( fn.GetExt() != ProjectFileExtension )
     {
         fn.SetExt( ProjectFileExtension );
@@ -133,9 +133,9 @@ void WinEDA_App::WriteProjectConfig( const wxString&  fileName,
 
     ReCreatePrjConfig( fileName, GroupName, FORCE_LOCAL_CONFIG );
 
-    /* Write date ( surtout pour eviter bug de wxFileConfig
-     * qui se trompe de rubrique si declaration [xx] en premiere ligne
-     * (en fait si groupe vide) */
+    /* Write time (especially to avoid bug wxFileConfig that writes the
+     * wrong item if declaration [xx] in first line (If empty group)
+     */
     m_ProjectConfig->SetPath( wxCONFIG_PATH_SEPARATOR );
 
     msg = DateAndTime();
@@ -145,7 +145,7 @@ void WinEDA_App::WriteProjectConfig( const wxString&  fileName,
     m_ProjectConfig->Write( wxT( "last_client" ), msg );
 
     /* Save parameters */
-    m_ProjectConfig->DeleteGroup( GroupName );   // Erase all datas
+    m_ProjectConfig->DeleteGroup( GroupName );   // Erase all data
     m_ProjectConfig->Flush();
 
     m_ProjectConfig->SetPath( GroupName );
@@ -193,7 +193,7 @@ void WinEDA_App::WriteProjectConfig( const wxString&  fileName,
     m_ProjectConfig->Write( wxT( "last_client" ), GetAppName() );
 
     /* Save parameters */
-    m_ProjectConfig->DeleteGroup( GroupName );   // Erase all datas
+    m_ProjectConfig->DeleteGroup( GroupName );   // Erase all data
     m_ProjectConfig->Flush();
 
     m_ProjectConfig->SetPath( GroupName );
@@ -225,15 +225,12 @@ void WinEDA_App::WriteProjectConfig( const wxString&  fileName,
 }
 
 
-/*****************************************************************/
-void WinEDA_App::SaveCurrentSetupValues( PARAM_CFG_BASE** aList )
-/*****************************************************************/
-
 /** Function SaveCurrentSetupValues()
  * Save the current setup values in m_EDA_Config
  * saved parameters are parameters that have the .m_Setup member set to true
  * @param aList = array of PARAM_CFG_BASE pointers
  */
+void WinEDA_App::SaveCurrentSetupValues( PARAM_CFG_BASE** aList )
 {
     PARAM_CFG_BASE* pt_cfg;
 
@@ -393,15 +390,12 @@ bool WinEDA_App::ReadProjectConfig( const wxString&  local_config_filename,
 }
 
 
-/***************************************************************/
-void WinEDA_App::ReadCurrentSetupValues( PARAM_CFG_BASE** aList )
-/***************************************************************/
-
 /** Function ReadCurrentSetupValues()
  * Raed the current setup values previously saved, from m_EDA_Config
  * saved parameters are parameters that have the .m_Setup member set to true
  * @param aList = array of PARAM_CFG_BASE pointers
  */
+void WinEDA_App::ReadCurrentSetupValues( PARAM_CFG_BASE** aList )
 {
     PARAM_CFG_BASE* pt_cfg;
 
@@ -427,10 +421,6 @@ void WinEDA_App::ReadCurrentSetupValues( PARAM_CFG_ARRAY& List )
     }
 }
 
-
-/**************************************************************/
-/* Constructeurs des descripteurs de structs de configuration */
-/**************************************************************/
 
 PARAM_CFG_BASE::PARAM_CFG_BASE( const wxChar* ident, const paramcfg_id type,
                                 const wxChar* group )
@@ -495,8 +485,6 @@ void PARAM_CFG_INT::SaveParam( wxConfigBase* aConfig )
     aConfig->Write( m_Ident, *m_Pt_param );
 }
 
-
-/**************************************************************************/
 
 PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( const wxChar* ident, int* ptparam,
                                         int default_val,
@@ -614,8 +602,6 @@ void PARAM_CFG_DOUBLE::SaveParam( wxConfigBase* aConfig )
 }
 
 
-/***********************************************************************/
-
 PARAM_CFG_BOOL::PARAM_CFG_BOOL( const wxChar* ident, bool* ptparam,
                                 int default_val, const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_BOOL, group )
@@ -664,7 +650,6 @@ void PARAM_CFG_BOOL::SaveParam( wxConfigBase* aConfig )
 }
 
 
-/*********************************************************************/
 PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( const wxChar* ident,
                                         wxString*     ptparam,
                                         const wxChar* group ) :
@@ -708,7 +693,6 @@ void PARAM_CFG_WXSTRING::SaveParam( wxConfigBase* aConfig )
 }
 
 
-/***************************************************************************/
 PARAM_CFG_LIBNAME_LIST::PARAM_CFG_LIBNAME_LIST( const wxChar*  ident,
                                                 wxArrayString* ptparam,
                                                 const wxChar*  group ) :
@@ -726,7 +710,8 @@ void PARAM_CFG_LIBNAME_LIST::ReadParam( wxConfigBase* aConfig )
 {
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
-    int            indexlib = 1; // We start indexlib to 1 because first lib name is LibName1
+    int            indexlib = 1; // We start indexlib to 1 because first
+                                 // lib name is LibName1
     wxString       libname, id_lib;
     wxArrayString* libname_list = m_Pt_param;
     while( 1 )

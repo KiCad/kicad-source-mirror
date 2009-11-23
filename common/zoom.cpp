@@ -3,8 +3,7 @@
 /************/
 
 /*
- *  Fonctions de gestion du zoom, du pas de grille et du
- *  recadrage automatique
+ * Manage zoom, grid step, and auto crop.
  */
 
 #include "fctsys.h"
@@ -16,9 +15,6 @@
 #include "class_base_screen.h"
 #include "wxstruct.h"
 
-/**************************************************/
-void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
-/**************************************************/
 
 /** Compute draw offset (scroll bars and draw parameters)
  *  in order to have the current graphic cursor position at the screen center
@@ -27,6 +23,7 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
  *
  *  Note: Mac OS ** does not ** allow moving mouse cursor by program.
  */
+void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
 {
     PutOnGrid( &(GetBaseScreen()->m_Curseur) );
     AdjustScrollBars();
@@ -40,12 +37,10 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
 }
 
 
-/************************************************/
-void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
-/************************************************/
 /** Adjust the coordinate to the nearest grid value
 * @param coord = coordinate to adjust
 */
+void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
 {
     wxRealPoint grid_size = GetBaseScreen()->GetGridSize();
 
@@ -60,26 +55,20 @@ void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
 }
 
 
-/**************************************************************/
-void WinEDA_DrawFrame::Zoom_Automatique( bool move_mouse_cursor )
-/**************************************************************/
-
 /** Redraw the screen with the zoom level which shows all the page or the board
  */
+void WinEDA_DrawFrame::Zoom_Automatique( bool move_mouse_cursor )
 {
     if( GetBaseScreen()->SetZoom( BestZoom() ) )
         Recadre_Trace( move_mouse_cursor );
 }
 
 
-/*************************************************/
-void WinEDA_DrawFrame::Window_Zoom( EDA_Rect& Rect )
-/*************************************************/
-
 /** Compute the zoom factor and the new draw offset to draw the
  *  selected area (Rect) in full window screen
  *  @param Rect = selected area to show after zooming
  */
+void WinEDA_DrawFrame::Window_Zoom( EDA_Rect& Rect )
 {
     double   scalex, bestscale;
     wxSize size;
@@ -98,12 +87,10 @@ void WinEDA_DrawFrame::Window_Zoom( EDA_Rect& Rect )
 }
 
 
-/******************************************************/
-void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
-/******************************************************/
-/** Function OnZoom(
+/** Function OnZoom
  * Called from any zoom event (toolbar , hotkey or popup )
  */
+void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
 {
     if( DrawPanel == NULL )
     {
@@ -184,13 +171,10 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
 }
 
 
-/*************************************************************/
-void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
-/*************************************************************/
-
 /* add the zoom list menu the the MasterMenu.
  *  used in OnRightClick(wxMouseEvent& event)
  */
+void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
 {
     size_t      i;
     int         maxZoomIds;
@@ -228,7 +212,8 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
                         GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar );
         else
             msg.Printf( wxT( "%.1f" ),
-                        (float) GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar );
+                        (float) GetScreen()->m_ZoomList[i] /
+                        GetScreen()->m_ZoomScalar );
 
         zoom_choice->Append( ID_POPUP_ZOOM_LEVEL_START + i, _( "Zoom: " ) + msg,
                              wxEmptyString, wxITEM_CHECK );
@@ -258,7 +243,7 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
             }
             else
             {
-                if ( g_UnitMetric == 0 )	// inches
+                if ( g_UnitMetric == 0 )    // inches
                     msg.Printf( wxT( "%.1f mils" ), gridValue * 1000 );
                 else
                     msg.Printf( wxT( "%.3f mm" ), gridValue );

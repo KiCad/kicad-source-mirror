@@ -88,7 +88,6 @@ MARKER_BASE::MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
 }
 
 
-/* Effacement memoire de la structure */
 MARKER_BASE::~MARKER_BASE()
 {
 }

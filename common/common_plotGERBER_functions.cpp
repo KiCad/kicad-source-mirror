@@ -13,16 +13,13 @@
 #include "kicad_string.h"
 
 
-/***************************************************************************/
-void GERBER_PLOTTER::set_viewport( wxPoint offset,
-                                   double aScale, int orient )
-/***************************************************************************/
-
 /** function set_viewport
  * Set the plot offset for the current plotting
  * @param aOffset = plot offset
  * @param aScale = coordinate scale (scale coefficient for coordinates)
  */
+void GERBER_PLOTTER::set_viewport( wxPoint offset,
+                                   double aScale, int orient )
 {
     wxASSERT( !output_file );
     wxASSERT( orient == 0 );
@@ -31,19 +28,16 @@ void GERBER_PLOTTER::set_viewport( wxPoint offset,
     wxASSERT( aScale == 1 );
     plot_scale   = 1;
     device_scale = 1;
-    set_default_line_width( 100 );            /* epaisseur du trait standard en 1/1000 pouce */
+    set_default_line_width( 100 );  /* line thickness in 1 / 1000 inch */
 }
 
-
-/******************************************************************/
-void GERBER_PLOTTER::start_plot( FILE* aFile )
-/*****************************************************************/
 
 /** Function start_plot
  * Write GERBER header to file
  * initialize global variable g_Plot_PlotOutputFile
  * @param aFile: an opened file to write to
  */
+void GERBER_PLOTTER::start_plot( FILE* aFile )
 {
     char Line[1024];
 
@@ -53,7 +47,8 @@ void GERBER_PLOTTER::start_plot( FILE* aFile )
     output_file = work_file;
     DateAndTime( Line );
     wxString Title = creator + wxT( " " ) + GetBuildVersion();
-    fprintf( output_file, "G04 (created by %s) date %s*\n", CONV_TO_UTF8( Title ), Line );
+    fprintf( output_file, "G04 (created by %s) date %s*\n",
+             CONV_TO_UTF8( Title ), Line );
 
     // Specify linear interpol (G01), unit = INCH (G70), abs format (G90):
     fputs( "G01*\nG70*\nG90*\n", output_file );
@@ -69,9 +64,7 @@ void GERBER_PLOTTER::start_plot( FILE* aFile )
 }
 
 
-/******************************************************************/
 void GERBER_PLOTTER::end_plot()
-/*****************************************************************/
 {
     char     line[1024];
     wxString msg;
@@ -84,7 +77,7 @@ void GERBER_PLOTTER::end_plot()
     output_file = final_file;
 
 
-    // Placement des Apertures en RS274X
+    // Placement of apertures in RS274X
     while( fgets( line, 1024, work_file ) )
     {
         fputs( line, output_file );
@@ -101,24 +94,18 @@ void GERBER_PLOTTER::end_plot()
 }
 
 
-/*************************************************************************************/
-void GERBER_PLOTTER::set_default_line_width( int width )
-/*************************************************************************************/
-
 /* Set the default line width (in 1/1000 inch) for the current plotting
  */
+void GERBER_PLOTTER::set_default_line_width( int width )
 {
-    default_pen_width = width;      // epaisseur du trait standard en 1/1000 pouce
+    default_pen_width = width;
     current_aperture  = apertures.end();
 }
 
 
-/***************************************/
-void GERBER_PLOTTER::set_current_line_width( int width )
-/***************************************/
-
 /* Set the Current line width (in 1/1000 inch) for the next plot
  */
+void GERBER_PLOTTER::set_current_line_width( int width )
 {
     int pen_width;
 
@@ -132,10 +119,8 @@ void GERBER_PLOTTER::set_current_line_width( int width )
 }
 
 
-/******************************************************/
 std::vector<APERTURE>::iterator GERBER_PLOTTER::get_aperture( const wxSize&           size,
-                                                         APERTURE::Aperture_Type type )
-/******************************************************/
+                                                              APERTURE::Aperture_Type type )
 {
     int last_D_code = 9;
 
@@ -160,14 +145,14 @@ std::vector<APERTURE>::iterator GERBER_PLOTTER::get_aperture( const wxSize&     
 }
 
 
-/******************************************************/
-void GERBER_PLOTTER::select_aperture( const wxSize& size, APERTURE::Aperture_Type type )
-/******************************************************/
+void GERBER_PLOTTER::select_aperture( const wxSize&           size,
+                                      APERTURE::Aperture_Type type )
 {
     wxASSERT( output_file );
+
     if( ( current_aperture == apertures.end() )
-       || (current_aperture->type != type)
-       || (current_aperture->size != size) )
+       || ( current_aperture->type != type )
+       || ( current_aperture->size != size ) )
     {
         /* Pick an existing aperture or create a new one */
         current_aperture = get_aperture( size, type );
@@ -176,14 +161,10 @@ void GERBER_PLOTTER::select_aperture( const wxSize& size, APERTURE::Aperture_Typ
 }
 
 
-/******************************************************/
-void GERBER_PLOTTER::write_aperture_list()
-/******************************************************/
-
-/* Genere la liste courante des D_CODES
- * Retourne le nombre de D_Codes utilises
- * Genere une sequence RS274X
+/*Generate list of D_CODES.
+ * Returns the number of D_Codes generated in RS274X format.
  */
+void GERBER_PLOTTER::write_aperture_list()
 {
     wxASSERT( output_file );
     char cbuf[1024];
@@ -223,7 +204,6 @@ void GERBER_PLOTTER::write_aperture_list()
 }
 
 
-/**********************************************/
 void GERBER_PLOTTER::pen_to( wxPoint aPos, char plume )
 {
     wxASSERT( output_file );
@@ -246,9 +226,7 @@ void GERBER_PLOTTER::pen_to( wxPoint aPos, char plume )
 }
 
 
-/**************************************************************************/
 void GERBER_PLOTTER::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
-/**************************************************************************/
 {
     wxASSERT( output_file );
     int coord[10] =
@@ -263,22 +241,21 @@ void GERBER_PLOTTER::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
 }
 
 
-/*************************************************************************************/
-void GERBER_PLOTTER::circle( wxPoint aCentre, int aDiameter, FILL_T fill, int aWidth )
-/*************************************************************************************/
-
 /** Function circle
  * writes a non filled circle to output file
  * Plot one circle as segments (6 to 16 depending on its radius
- * @param aCentre = centre coordintes
+ * @param aCentre = center coordinates
  * @param aDiameter = diameter of the circle
  * @param aWidth = line width
  */
+void GERBER_PLOTTER::circle( wxPoint aCentre, int aDiameter, FILL_T fill,
+                             int aWidth )
 {
     wxASSERT( output_file );
     wxPoint   start, end;
     double    radius = aDiameter / 2;
-    const int delta  = 3600 / 32; /* increment (in 0.1 degrees) to draw circles */
+    const int delta  = 3600 / 32; /* increment (in 0.1 degrees) to draw
+                                   * circles */
 
     start.x = aCentre.x + wxRound( radius );
     start.y = aCentre.y;
@@ -295,17 +272,15 @@ void GERBER_PLOTTER::circle( wxPoint aCentre, int aDiameter, FILL_T fill, int aW
 }
 
 
-/***************************************************************/
-void GERBER_PLOTTER::poly( int aCornersCount, int* aCoord, FILL_T aFill, int aWidth )
-/***************************************************************/
-
 /** Function PlotFilledPolygon_GERBER
  * writes a filled polyline to output file
- * @param aCornersCount = numer of corners
+ * @param aCornersCount = number of corners
  * @param aCoord = buffer of corners coordinates
  * @param aFill = plot option (NO_FILL, FILLED_SHAPE, FILLED_WITH_BG_BODYCOLOR)
  * @param aCoord = buffer of corners coordinates
  */
+void GERBER_PLOTTER::poly( int aCornersCount, int* aCoord, FILL_T aFill,
+                           int aWidth )
 {
     wxASSERT( output_file );
     wxPoint pos, startpos;
@@ -361,30 +336,29 @@ void GERBER_PLOTTER::flash_pad_circle( wxPoint pos, int diametre,
 }
 
 
+/* Plot oval pad at position pos:
+ * Dimensions dx, dy,
+ * Orient Orient
+ * For a vertical or horizontal orientation, the shape is flashed
+ * For any orientation the shape is drawn as a segment
+ */
 void GERBER_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
                                      GRTraceMode trace_mode )
-
-/* Trace 1 pastille PAD_OVAL en position pos_X,Y:
- *     dimensions dx, dy,
- *     orientation orient
- * Pour une orientation verticale ou horizontale, la forme est flashee
- * Pour une orientation quelconque la forme est tracee comme un segment
- */
 {
     wxASSERT( output_file );
     int x0, y0, x1, y1, delta;
 
-    /* Trace de la forme flashee */
+    /* Plot a flashed shape. */
     if( ( orient == 0 || orient == 900 || orient == 1800 || orient == 2700 )
        && trace_mode == FILLED )
     {
-        if( orient == 900 || orient == 2700 ) /* orient tournee de 90 deg */
+        if( orient == 900 || orient == 2700 ) /* orientation turned 90 deg. */
             EXCHG( size.x, size.y );
         user_to_device_coordinates( pos );
         select_aperture( size, APERTURE::Oval );
         fprintf( output_file, "X%5.5dY%5.5dD03*\n", pos.x, pos.y );
     }
-    else /* Forme tracee comme un segment */
+    else /* Plot pad as a segment. */
     {
         if( size.x > size.y )
         {
@@ -396,7 +370,7 @@ void GERBER_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
         }
         if( trace_mode == FILLED )
         {
-            /* la pastille est ramenee a une pastille ovale avec dy > dx */
+            /* The pad  is reduced to an oval with dy > dx */
             delta = size.y - size.x;
             x0    = 0;
             y0    = -delta / 2;
@@ -414,25 +388,26 @@ void GERBER_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
 }
 
 
+/* Plot rectangular pad.
+ * Gives its center, size, and orientation
+ * For a vertical or horizontal shape, the shape is an aperture (Dcode) and
+ * it is flashed.
+ * For others shape the direction is plotted as a polygon.
+ */
 void GERBER_PLOTTER::flash_pad_rect( wxPoint pos, wxSize size,
                                      int orient, GRTraceMode trace_mode )
 
-/* Plot 1 rectangular pad
- * donne par son centre, ses dimensions, et son orientation
- * For a vertical or horizontal shape, the shape is an aperture (Dcode) and it is flashed
- * For others orientations the shape is plotted as a polygon
- */
 {
     wxASSERT( output_file );
-    /* Trace de la forme flashee */
+
+    /* Plot as flashed. */
     switch( orient )
     {
     case 900:
-    case 2700: /* la rotation de 90 ou 270 degres revient a permutter des dimensions */
+    case 2700:        /* rotation of 90 degrees or 270 returns dimensions */
         EXCHG( size.x, size.y );
 
     // Pass through
-
     case 0:
     case 1800:
         switch( trace_mode )
@@ -463,20 +438,16 @@ void GERBER_PLOTTER::flash_pad_rect( wxPoint pos, wxSize size,
 }
 
 
-void GERBER_PLOTTER::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
-                                       int orient, GRTraceMode trace_mode )
-
-/* Trace 1 pad trapezoidal donne par :
- *    son centre pos.x,pos.y
- *    ses dimensions size.x et size.y
- *    les variations delta.x et delta.y ( 1 des deux au moins doit etre nulle)
- *    son orientation orient en 0.1 degres
- *    le mode de trace (FILLED, SKETCH, FILAIRE)
+/* Plot trapezoidal pad.
+ * Pos is pad center
+ * Dimensions size.x and size.y
+ * Changes delta.x and delta.y (1 of at least two must be zero)
+ * Orientation east to 0.1 degrees
+ * Plot mode (FILLED, SKETCH, WIRED)
  *
- * Le trace n'est fait que pour un trapeze, c.a.d que delta.x ou delta.y
- *    = 0.
+ * The evidence is that a trapezoid, ie that delta.x or delta.y = 0.
  *
- *   les notation des sommets sont ( vis a vis de la table tracante )
+ * The rating of the vertexes are (vis a vis the plotter)
  *
  * "       0 ------------- 3   "
  * "        .             .    "
@@ -485,7 +456,7 @@ void GERBER_PLOTTER::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
  * "           1 ---- 2        "
  *
  *
- *   exemple de Disposition pour delta.y > 0, delta.x = 0
+ *   Example delta.y > 0, delta.x = 0
  * "           1 ---- 2        "
  * "          .         .      "
  * "         .     O     .     "
@@ -493,7 +464,7 @@ void GERBER_PLOTTER::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
  * "       0 ------------- 3   "
  *
  *
- *   exemple de Disposition pour delta.y = 0, delta.x > 0
+ *   Example delta.y = 0, delta.x > 0
  * "       0                  "
  * "       . .                "
  * "       .     .            "
@@ -506,6 +477,9 @@ void GERBER_PLOTTER::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
  * "       . .                "
  * "       1                  "
  */
+ void GERBER_PLOTTER::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
+                                        int orient, GRTraceMode trace_mode )
+
 {
     wxASSERT( output_file );
     int     ii, jj;
@@ -514,7 +488,8 @@ void GERBER_PLOTTER::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
     int     coord[10];
     int     ddx, ddy;
 
-    /* calcul des dimensions optimales du spot choisi = 1/4 plus petite dim */
+    /* Calculate the optimum size of the spot chosen by 1 / 4 of the
+     *smallest dimension */
     dx = size.x - abs( delta.y );
     dy = size.y - abs( delta.x );
 
@@ -532,8 +507,7 @@ void GERBER_PLOTTER::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
     polygon[3].x = +dx + ddy;
     polygon[3].y = +dy - ddx;
 
-    /* Dessin du polygone et Remplissage eventuel de l'interieur */
-
+    /* Draw the polygon and fill the interior as required. */
     for( ii = 0, jj = 0; ii < 4; ii++ )
     {
         RotatePoint( &polygon[ii].x, &polygon[ii].y, orient );

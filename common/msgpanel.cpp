@@ -1,6 +1,6 @@
-/******************************************************************/
-/* msgpanel.cpp - fonctions des classes du type WinEDA_MsgPanel */
-/******************************************************************/
+/****************/
+/* msgpanel.cpp */
+/****************/
 
 #ifdef __GNUG__
 #pragma implementation
@@ -12,15 +12,10 @@
 #include "colors.h"
 
 
-/* table des evenements captes par un WinEDA_MsgPanel */
 BEGIN_EVENT_TABLE( WinEDA_MsgPanel, wxPanel )
     EVT_PAINT( WinEDA_MsgPanel::OnPaint )
 END_EVENT_TABLE()
 
-
-/***********************************************************/
-/* Fonctions de base de WinEDA_MsgPanel: l'ecran de messages */
-/***********************************************************/
 
 WinEDA_MsgPanel::WinEDA_MsgPanel( WinEDA_DrawFrame* parent, int id,
                                   const wxPoint& pos, const wxSize& size ) :
@@ -75,9 +70,7 @@ wxSize WinEDA_MsgPanel::computeTextSize( const wxString& text )
 }
 
 
-/*************************************************/
 void WinEDA_MsgPanel::OnPaint( wxPaintEvent& event )
-/*************************************************/
 {
     wxPaintDC dc( this );
 
@@ -128,22 +121,18 @@ void WinEDA_MsgPanel::AppendMessage( const wxString& textUpper,
     Refresh();
 }
 
-/*****************************************************************************/
-void WinEDA_MsgPanel::Affiche_1_Parametre( int pos_X, const wxString& texte_H,
-                                           const wxString& texte_L, int color )
-/*****************************************************************************/
 
 /*
- *  Routine d'affichage d'un parametre.
- *  pos_X = cadrage horizontal
- *      si pos_X < 0 : la position horizontale est la derniere
- *          valeur demandee >= 0
- *  texte_H = texte a afficher en ligne superieure.
- *      si "", par d'affichage sur cette ligne
- *  texte_L = texte a afficher en ligne inferieure.
- *      si "", par d'affichage sur cette ligne
- *  color = couleur d'affichage
+ * Display a parameter in message panel.
+ * pos_X = horizontal position
+ * If pos_X < 0: horizontal position is the last
+ * Required value >= 0
+ * Texte_H = text to be displayed in top line.
+ * Texte_L = text to be displayed in bottom line.
+ * Color = color display
  */
+void WinEDA_MsgPanel::Affiche_1_Parametre( int pos_X, const wxString& texte_H,
+                                           const wxString& texte_L, int color )
 {
     wxPoint     pos;
     wxSize      drawSize = GetClientSize();
@@ -181,12 +170,12 @@ void WinEDA_MsgPanel::Affiche_1_Parametre( int pos_X, const wxString& texte_H,
 
         if( m_Items[ndx].m_X > item.m_X )
         {
-            m_Items.insert( m_Items.begin()+ndx, item );
+            m_Items.insert( m_Items.begin() + ndx, item );
             break;
         }
     }
 
-    if( ndx==limit )        // mutually exclusive with two above if tests
+    if( ndx == limit )        // mutually exclusive with two above if tests
     {
         m_Items.push_back( item );
     }
@@ -219,18 +208,14 @@ void WinEDA_MsgPanel::showItem( wxDC& dc, const MsgItem& aItem )
 }
 
 
-/****************************************/
 void WinEDA_MsgPanel::EraseMsgBox()
-/****************************************/
 {
    m_Items.clear();
    m_last_x = 0;
    Refresh();
 }
 
-/*******************************************/
 void WinEDA_MsgPanel::erase( wxDC* DC )
-/*******************************************/
 {
     wxPen   pen;
     wxBrush brush;

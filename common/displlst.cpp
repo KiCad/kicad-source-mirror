@@ -1,6 +1,6 @@
-/********************************/
-/*      MODULE displlst.cpp     */
-/********************************/
+/****************/
+/* displlst.cpp */
+/****************/
 
 #include "fctsys.h"
 #include "wxstruct.h"
@@ -10,13 +10,10 @@
 #include "kicad_string.h"
 
 
-/***********************/
-/* class WinEDAListBox */
-/***********************/
-
 enum listbox {
     ID_LISTBOX_LIST = 8000
 };
+
 
 BEGIN_EVENT_TABLE( WinEDAListBox, wxDialog )
     EVT_BUTTON( wxID_OK, WinEDAListBox::OnOkClick )
@@ -29,16 +26,11 @@ BEGIN_EVENT_TABLE( WinEDAListBox, wxDialog )
 END_EVENT_TABLE()
 
 
-/*******************************/
-/* Constructeur et destructeur */
-/*******************************/
-
-/* Permet l'affichage d'une liste d'elements pour selection.
- *  itemlist = pointeur sur la liste des pinteurs de noms
- *  reftext = preselection
- *  movefct = fonction de création de commentaires a afficher
+/* Used to display a list of elements for selection.
+ * ITEMLIST* = pointer to the list of names
+ * = Reftext preselection
+ * = Movefct callback function to display comments
  */
-
 WinEDAListBox::WinEDAListBox( WinEDA_DrawFrame* parent, const wxString& title,
                               const wxChar** itemlist, const wxString& reftext,
                               void(* movefct)(wxString& Text) ,
@@ -126,9 +118,7 @@ WinEDAListBox::~WinEDAListBox()
 }
 
 
-/******************************************/
 void WinEDAListBox::MoveMouseToOrigin()
-/******************************************/
 {
     int    x, y, w, h;
     wxSize list_size = m_List->GetSize();
@@ -141,9 +131,7 @@ void WinEDAListBox::MoveMouseToOrigin()
 }
 
 
-/*********************************************/
 wxString WinEDAListBox::GetTextSelection()
-/*********************************************/
 {
     wxString text = m_List->GetStringSelection();
 
@@ -151,33 +139,25 @@ wxString WinEDAListBox::GetTextSelection()
 }
 
 
-/***************************************************************/
 void WinEDAListBox::Append( const wxString& item )
-/***************************************************************/
 {
     m_List->Append( item );
 }
 
 
-/******************************************************************************/
 void WinEDAListBox::InsertItems( const wxArrayString& itemlist, int position )
-/******************************************************************************/
 {
     m_List->InsertItems( itemlist, position );
 }
 
 
-/************************************************/
 void WinEDAListBox::OnCancelClick( wxCommandEvent& event )
-/************************************************/
 {
     EndModal( -1 );
 }
 
 
-/*****************************************************/
 void WinEDAListBox::ClickOnList( wxCommandEvent& event )
-/*****************************************************/
 {
     wxString text;
 
@@ -191,9 +171,7 @@ void WinEDAListBox::ClickOnList( wxCommandEvent& event )
 }
 
 
-/*******************************************************/
 void WinEDAListBox::D_ClickOnList( wxCommandEvent& event )
-/*******************************************************/
 {
     int ii = m_List->GetSelection();
 
@@ -201,9 +179,7 @@ void WinEDAListBox::D_ClickOnList( wxCommandEvent& event )
 }
 
 
-/***********************************************/
 void WinEDAListBox::OnOkClick( wxCommandEvent& event )
-/***********************************************/
 {
     int ii = m_List->GetSelection();
 
@@ -211,29 +187,21 @@ void WinEDAListBox::OnOkClick( wxCommandEvent& event )
 }
 
 
-/***********************************************/
 void WinEDAListBox::OnClose( wxCloseEvent& event )
-/***********************************************/
 {
     EndModal( -1 );
 }
 
 
-/********************************************************************/
-static int SortItems( const wxString** ptr1, const wxString** ptr2 )
-/********************************************************************/
-
-/* Routines de comparaison pour le tri tri alphabetique,
- * avec traitement des nombres en tant que valeur numerique
+/* Sort alphabetically, case insensitive.
  */
+static int SortItems( const wxString** ptr1, const wxString** ptr2 )
 {
     return StrNumICmp( (*ptr1)->GetData(), (*ptr2)->GetData() );
 }
 
 
-/************************************/
 void WinEDAListBox:: SortList()
-/************************************/
 {
     int ii, NbItems = m_List->GetCount();
     const wxString** BufList;
@@ -261,9 +229,7 @@ void WinEDAListBox:: SortList()
 }
 
 
-/****************************************************/
 void WinEDAListBox::OnKeyEvent( wxKeyEvent& event )
-/****************************************************/
 {
     event.Skip();
 }

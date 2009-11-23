@@ -1,4 +1,3 @@
-
 ///////////////////////
 // Name: eda_dde.cpp //
 ///////////////////////
@@ -13,15 +12,16 @@
 
 wxString HOSTNAME( wxT( "localhost" ) );
 
-/* variables locales */
 
 // buffer for read and write data in socket connections
 #define IPC_BUF_SIZE 4096
+
 static char      client_ipc_buffer[IPC_BUF_SIZE];
 
 static wxServer* server;
 
 void      (*RemoteFct)(const char* cmd);
+
 
 void SetupServerFunction( void (*remotefct)(const char* remotecmd) )
 {
@@ -29,11 +29,11 @@ void SetupServerFunction( void (*remotefct)(const char* remotecmd) )
 }
 
 
-/*****************************/
-/* Routines liees au SERVEUR */
-/*****************************/
+/**********************************/
+/* Routines related to the server */
+/**********************************/
 
-/* Fonction d'initialisation d'un serveur socket
+/* Function to initialize a server socket
  */
 WinEDA_Server* CreateServer( wxWindow* window, int service )
 {
@@ -54,12 +54,9 @@ WinEDA_Server* CreateServer( wxWindow* window, int service )
 }
 
 
-/********************************************************/
-void WinEDA_DrawFrame::OnSockRequest( wxSocketEvent& evt )
-/********************************************************/
-
-/* Fonction appelee a chaque demande d'un client
+/* Function called on every client request.
  */
+void WinEDA_DrawFrame::OnSockRequest( wxSocketEvent& evt )
 {
     size_t        len;
     wxSocketBase* sock = evt.GetSocket();
@@ -69,8 +66,8 @@ void WinEDA_DrawFrame::OnSockRequest( wxSocketEvent& evt )
     case wxSOCKET_INPUT:
         sock->Read( client_ipc_buffer, 1 );
         if( sock->LastCount() == 0 )
-            break;                          // No data: Occurs on opening connection
-        
+            break;                    // No data, occurs on opening connection
+
         sock->Read( client_ipc_buffer + 1, IPC_BUF_SIZE - 2 );
         len = 1 + sock->LastCount();
         client_ipc_buffer[len] = 0;
@@ -89,12 +86,9 @@ void WinEDA_DrawFrame::OnSockRequest( wxSocketEvent& evt )
 }
 
 
-/**************************************************************/
-void WinEDA_DrawFrame::OnSockRequestServer( wxSocketEvent& evt )
-/**************************************************************/
-
-/* fonction appelée lors d'une demande de connexion d'un client
+/* Function called when a connection is requested by a client.
  */
+void WinEDA_DrawFrame::OnSockRequestServer( wxSocketEvent& evt )
 {
     wxSocketBase*   sock2;
     wxSocketServer* server = (wxSocketServer*) evt.GetSocket();
@@ -109,21 +103,18 @@ void WinEDA_DrawFrame::OnSockRequestServer( wxSocketEvent& evt )
 }
 
 
-/****************************/
-/* Routines liees au CLIENT */
-/*****************************/
-
-/**************************************************/
-bool SendCommand( int service, const char* cmdline )
-/**************************************************/
+/**********************************/
+/* Routines related to the CLIENT */
+/**********************************/
 
 /* Used by a client to sent (by a socket connection) a data to a server.
  *  - Open a Socket Client connection
  *  - Send the buffer cmdline
  *  - Close the socket connection
- * 
+ *
  *  service is the service number for the TC/IP connection
  */
+bool SendCommand( int service, const char* cmdline )
 {
     wxSocketClient* sock_client;
     bool            success = FALSE;
@@ -133,7 +124,8 @@ bool SendCommand( int service, const char* cmdline )
     addr.Hostname( HOSTNAME );
     addr.Service( service );
 
-    // Mini-tutorial for Connect() :-)	(JP CHARRAS Note: see wxWidgets: sockets/client.cpp sample)
+    // Mini-tutorial for Connect() :-)
+    // (JP CHARRAS Note: see wxWidgets: sockets/client.cpp sample)
     // ---------------------------
     //
     // There are two ways to use Connect(): blocking and non-blocking,
@@ -141,7 +133,7 @@ bool SendCommand( int service, const char* cmdline )
     //
     // Connect(addr, true) will wait until the connection completes,
     // returning true on success and false on failure. This call blocks
-    // the GUI (this might be changed in future releases to honour the
+    // the GUI (this might be changed in future releases to honor the
     // wxSOCKET_BLOCK flag).
     //
     // Connect(addr, false) will issue a nonblocking connection request
@@ -152,7 +144,7 @@ bool SendCommand( int service, const char* cmdline )
     // events (please read the documentation).
     //
     // WaitOnConnect() itself never blocks the GUI (this might change
-    // in the future to honour the wxSOCKET_BLOCK flag). This call will
+    // in the future to honor the wxSOCKET_BLOCK flag). This call will
     // return false on timeout, or true if the connection request
     // completes, which in turn might mean:
     //
@@ -181,7 +173,7 @@ bool SendCommand( int service, const char* cmdline )
     //   bool success = client->IsConnected();
     //
     // And that's all :-)
-    
+
     sock_client = new wxSocketClient();
     sock_client->SetTimeout( 2 ); // Time out in Seconds
     sock_client->Connect( addr, FALSE );

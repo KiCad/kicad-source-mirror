@@ -14,31 +14,25 @@
 #include "macros.h"
 
 
-/*****************************************/
-void WinEDA_App::ReadPdfBrowserInfos()
-/*****************************************/
-
 /* Read from Common config the Pdf browser choice
  */
+void WinEDA_App::ReadPdfBrowserInfos()
 {
     wxASSERT( m_EDA_CommonConfig != NULL );
 
-    m_PdfBrowserIsDefault = m_EDA_CommonConfig->Read( wxT( "PdfBrowserIsDefault" ),
-                                                  true );
+    m_PdfBrowserIsDefault =
+        m_EDA_CommonConfig->Read( wxT( "PdfBrowserIsDefault" ), true );
     m_PdfBrowser = m_EDA_CommonConfig->Read( wxT( "PdfBrowserName" ),
-                                         wxEmptyString );
+                                             wxEmptyString );
 
     if( m_PdfBrowser.IsEmpty() )
         m_PdfBrowserIsDefault = true;
 }
 
 
-/*****************************************/
-void WinEDA_App::WritePdfBrowserInfos()
-/*****************************************/
-
 /* Write into Common config the Pdf browser choice
  */
+void WinEDA_App::WritePdfBrowserInfos()
 {
     wxASSERT( m_EDA_CommonConfig != NULL );
 
@@ -46,7 +40,7 @@ void WinEDA_App::WritePdfBrowserInfos()
         m_PdfBrowserIsDefault = true;
 
     m_EDA_CommonConfig->Write( wxT( "PdfBrowserIsDefault" ),
-                           m_PdfBrowserIsDefault );
+                               m_PdfBrowserIsDefault );
     m_EDA_CommonConfig->Write( wxT( "PdfBrowserName" ), m_PdfBrowser );
 }
 
@@ -56,16 +50,18 @@ static wxMimeTypesManager*  mimeDatabase;
 static const wxFileTypeInfo EDAfallbacks[] =
 {
     wxFileTypeInfo( wxT( "text/html" ),
-        wxT( "wxhtml %s" ),
-        wxT( "wxhtml %s" ),
-        wxT( "html document (from Kicad)" ),
-        wxT( "htm" ),                         wxT( "html" ),NULL ),
+                    wxT( "wxhtml %s" ),
+                    wxT( "wxhtml %s" ),
+                    wxT( "html document (from Kicad)" ),
+                    wxT( "htm" ),
+                    wxT( "html" ),NULL ),
 
     wxFileTypeInfo( wxT( "application/sch" ),
-        wxT( "eeschema %s" ),
-        wxT( "eeschema -p %s" ),
-        wxT( "sch document (from Kicad)" ),
-        wxT( "sch" ),                         wxT( "SCH" ), NULL ),
+                    wxT( "eeschema %s" ),
+                    wxT( "eeschema -p %s" ),
+                    wxT( "sch document (from Kicad)" ),
+                    wxT( "sch" ),
+                    wxT( "SCH" ), NULL ),
 
     // must terminate the table with this!
     wxFileTypeInfo()
@@ -75,14 +71,15 @@ static const wxFileTypeInfo EDAfallbacks[] =
 /** Function GetAssociatedDocument
  * open a document (file) with the suitable browser
  * @param aFrame = main frame
- * if DocName is starting by http: or ftp: or www. the default internet browser is launched
+ * if DocName is starting by http: or ftp: or www. the default internet
+ * browser is launched
  * @param aDocName = filename of file to open (Full filename or short filename)
  * @param aPaths = a wxPathList to explore.
- *              if NULL or aDocName is a full filename, aPath is not used.
-*/
+ *                 if NULL or aDocName is a full filename, aPath is not used.
+ */
 bool    GetAssociatedDocument( wxFrame* aFrame,
-                        const wxString& aDocName,
-                        const wxPathList* aPaths)
+                               const wxString& aDocName,
+                               const wxPathList* aPaths)
 
 {
     wxString docname, fullfilename, file_ext;
@@ -91,7 +88,8 @@ bool    GetAssociatedDocument( wxFrame* aFrame,
     bool     success = FALSE;
 
     // Is an internet url
-    static const wxString url_header[3] = { wxT( "http:" ), wxT( "ftp:" ), wxT( "www." ) };
+    static const wxString url_header[3] = { wxT( "http:" ), wxT( "ftp:" ),
+                                            wxT( "www." ) };
 
     for( int ii = 0; ii < 3; ii++ )
     {
@@ -113,9 +111,10 @@ bool    GetAssociatedDocument( wxFrame* aFrame,
     /* Compute the full file name */
     if( wxIsAbsolutePath( aDocName ) || aPaths == NULL)
         fullfilename = aDocName;
-    /* If the file exists, this is a trivial case: return the filename "as this"
-     * the name can be an absolute path, or a relative path like ./filename or ../<filename>
-    */
+    /* If the file exists, this is a trivial case: return the filename
+     * "as this".  the name can be an absolute path, or a relative path
+     * like ./filename or ../<filename>
+     */
     else if( wxFileName::FileExists( aDocName ) )
         fullfilename = aDocName;
     else
@@ -132,17 +131,15 @@ bool    GetAssociatedDocument( wxFrame* aFrame,
 
     if( wxIsWild( fullfilename ) )
     {
-        fullfilename =
-            EDA_FileSelector( _( "Doc Files" ),     /* Titre de la fenetre */
-                wxPathOnly( fullfilename ),         /* Chemin par defaut */
-                fullfilename,                       /* nom fichier par defaut */
-                extension,                          /* extension par defaut */
-                mask,                               /* Masque d'affichage */
-                aFrame,                              /* parent frame */
-                wxFD_OPEN,                          /* wxSAVE, wxFD_OPEN ..*/
-                TRUE,                               /* true = ne change pas le repertoire courant */
-                wxPoint( -1, -1 )
-        );
+        fullfilename = EDA_FileSelector( _( "Doc Files" ),
+                                         wxPathOnly( fullfilename ),
+                                         fullfilename,
+                                         extension,
+                                         mask,
+                                         aFrame,
+                                         wxFD_OPEN,
+                                         TRUE,
+                                         wxPoint( -1, -1 ) );
         if( fullfilename.IsEmpty() )
             return FALSE;
     }
@@ -163,13 +160,13 @@ bool    GetAssociatedDocument( wxFrame* aFrame,
         return success;
     }
 
-    /* Try to launch some browser (usefull under linux) */
+    /* Try to launch some browser (useful under linux) */
     wxFileType* filetype;
 
     wxString    type;
     filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( file_ext );
 
-    if( !filetype )       // 2ieme tentative
+    if( !filetype )       // 2nd attempt.
     {
         mimeDatabase = new wxMimeTypesManager;
         mimeDatabase->AddFallbacks( EDAfallbacks );
@@ -199,17 +196,14 @@ bool    GetAssociatedDocument( wxFrame* aFrame,
 }
 
 
-/******************************************************************/
-int KeyWordOk( const wxString& KeyList, const wxString& Database )
-/******************************************************************/
-
-/* Recherche si dans le texte Database on retrouve tous les mots
- * cles donnes dans KeyList ( KeyList = suite de mots cles
- * separes par des espaces
- * Retourne:
- *     0 si aucun mot cle trouvé
- *     1 si mot cle trouvé
+/* Search if the text Database found all the words in the KeyList.
+ * Give articles in keylist (keylist = Following Keywords
+ * Separated by spaces
+ * Returns:
+ * 0 if no keyword found
+ * 1 if keyword found
  */
+int KeyWordOk( const wxString& KeyList, const wxString& Database )
 {
     wxString KeysCopy, DataList;
 
