@@ -126,7 +126,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 #endif
 
     /* Remove redundancies: sometime, zones are found twice,
-     * because zones can be are filled by overlapping segments (this is a fill option)
+     * because zones can be filled by overlapping segments (this is a fill option)
      */
     unsigned long timestampzone = 0;
 

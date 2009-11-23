@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Dec 29 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -54,9 +54,9 @@ DIALOG_FREEROUTE_BASE::DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id, c
 	
 	bLeftSubSizerSizer->Add( bLeftButtonsSizer, 1, wxEXPAND, 5 );
 	
-	bLeftSizer->Add( bLeftSubSizerSizer, 1, wxEXPAND, 5 );
+	bLeftSizer->Add( bLeftSubSizerSizer, 1, wxALL|wxEXPAND, 5 );
 	
-	bUpperSizer->Add( bLeftSizer, 1, wxEXPAND, 5 );
+	bUpperSizer->Add( bLeftSizer, 1, wxALIGN_TOP|wxALL|wxEXPAND, 5 );
 	
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bUpperSizer->Add( m_staticline2, 0, wxALL|wxEXPAND, 5 );
@@ -98,7 +98,7 @@ DIALOG_FREEROUTE_BASE::DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id, c
 	
 	bRightSizer->Add( bRightSubSizer, 1, wxEXPAND, 5 );
 	
-	bUpperSizer->Add( bRightSizer, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	bUpperSizer->Add( bRightSizer, 1, wxALIGN_TOP|wxALL|wxEXPAND, 5 );
 	
 	bMainSizer->Add( bUpperSizer, 1, wxEXPAND, 5 );
 	
@@ -115,6 +115,7 @@ DIALOG_FREEROUTE_BASE::DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id, c
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	// Connect Events
 	m_ExportDSN->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FREEROUTE_BASE::OnExportButtonClick ), NULL, this );

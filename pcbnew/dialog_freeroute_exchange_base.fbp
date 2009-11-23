@@ -32,8 +32,8 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_FREEROUTE_BASE</property>
             <property name="pos"></property>
-            <property name="size">631,211</property>
-            <property name="style">wxDEFAULT_DIALOG_STYLE</property>
+            <property name="size">-1,-1</property>
+            <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass"></property>
             <property name="title"></property>
             <property name="tooltip"></property>
@@ -86,7 +86,7 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND</property>
+                            <property name="flag">wxALIGN_TOP|wxALL|wxEXPAND</property>
                             <property name="proportion">1</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
@@ -146,7 +146,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND</property>
+                                    <property name="flag">wxALL|wxEXPAND</property>
                                     <property name="proportion">1</property>
                                     <object class="wxBoxSizer" expanded="1">
                                         <property name="minimum_size"></property>
@@ -385,7 +385,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND</property>
+                            <property name="flag">wxALIGN_TOP|wxALL|wxEXPAND</property>
                             <property name="proportion">1</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
