@@ -516,14 +516,14 @@ bool CMP_LIBRARY::Load( wxString& errMsg )
 
         if( !tkn.HasMoreTokens() )
         {
-            errMsg = _( "The file header is missing version and time stamp \
-information." );
+            errMsg = wxT(
+                "The file header is missing version and time stamp information." );
             return false;
         }
 
         if( tkn.GetNextToken() != wxT( "Version" ) || !tkn.HasMoreTokens() )
         {
-            errMsg = _( "The file header version information is invalid." );
+            errMsg = wxT( "The file header version information is invalid." );
             return false;
         }
 

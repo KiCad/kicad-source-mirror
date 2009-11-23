@@ -36,14 +36,14 @@ DIALOG_FREEROUTE::DIALOG_FREEROUTE( WinEDA_PcbFrame* parent ):
 {
     m_Parent = parent;
     MyInit();
-    Layout();
+
+    GetSizer()->SetSizeHints( this );
     Centre();
 }
 
 
 
-/*!
- * Member initialisation
+/* Specific data initialisation
  */
 
 void DIALOG_FREEROUTE::MyInit()

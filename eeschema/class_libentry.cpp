@@ -704,7 +704,7 @@ bool LIB_COMPONENT::LoadDrawEntries( FILE* f, char* line,
     {
         if( GetLine( f, line, lineNum, 1024 ) == NULL )
         {
-            errorMsg = _( "file ended prematurely loading component draw element" );
+            errorMsg = wxT( "file ended prematurely loading component draw element" );
             return false;
         }
 
@@ -759,7 +759,7 @@ bool LIB_COMPONENT::LoadDrawEntries( FILE* f, char* line,
             {
                 if( GetLine( f, line, lineNum, 1024 ) == NULL )
                 {
-                    errorMsg = _( "file ended prematurely while attempting \
+                    errorMsg = wxT( "file ended prematurely while attempting \
 to flush to end of drawing section." );
                     return false;
                 }

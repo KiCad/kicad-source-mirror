@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-22 20:55+0100\n"
-"PO-Revision-Date: 2009-11-22 20:57+0100\n"
+"POT-Creation-Date: 2009-11-23 18:13+0100\n"
+"PO-Revision-Date: 2009-11-23 18:22+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -2554,7 +2554,7 @@ msgstr "Pas de couche sélectionnée"
 
 #: pcbnew/dialog_freeroute_exchange.cpp:68
 msgid "Freeroute Help"
-msgstr ""
+msgstr "Aide Freeroute"
 
 #: pcbnew/dialog_edit_module_for_Modedit.cpp:83
 msgid "Use this attribute for most non smd components"
@@ -5666,6 +5666,8 @@ msgid ""
 "This is the global clearance between pads and the solder mask\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
+"Ceci est la marge globale entre pads et le vernis épargne masque de soudure\n"
+"Cette valeur peut être remplacée par les valeurs locales de l'empreinte ou du pad"
 
 #: pcbnew/dialog_mask_clearance_base.cpp:57
 msgid ""
@@ -5673,6 +5675,9 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "The final clearance value is the sum of this value and the clearance value ratio"
 msgstr ""
+"Ceci est la marge globale entre pads et le  masque de pate à souder\n"
+"Cette valeur peut être remplacée par les valeurs locales de l'empreinte ou du pad\n"
+"La valeur finale est la somme de cette valeur et de la valeur liée au coefficient"
 
 #: pcbnew/dialog_mask_clearance_base.cpp:70
 msgid ""
@@ -6489,6 +6494,9 @@ msgid ""
 "\n"
 "Clear the current component from the screen?"
 msgstr ""
+"Tous les changements du composant courant seront perdus\n"
+"\n"
+"Supprimer le composant courant de l'écran?"
 
 #: eeschema/libedit.cpp:509
 msgid "This new component has no name and cannot be created. Aborted"
@@ -7189,14 +7197,6 @@ msgstr "Fichier vide!"
 #: eeschema/class_library.cpp:513
 msgid "The file is NOT an EESCHEMA library!"
 msgstr "Le fichier n'est PAS une librairie EESCHEMA !"
-
-#: eeschema/class_library.cpp:519
-msgid "The file header is missing version and time stamp information."
-msgstr ""
-
-#: eeschema/class_library.cpp:526
-msgid "The file header version information is invalid."
-msgstr ""
 
 #: eeschema/class_library.cpp:538
 #, c-format
@@ -9235,6 +9235,8 @@ msgid ""
 "Check this option for components that have a De Morgan representation.\n"
 "This is usual for gates."
 msgstr ""
+"Cocher cette option pour les  composants qui ont une représentation dite De Morgan\n"
+"Ceci est usuel pour les portes."
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:33
 msgid "Show Pin Num"
@@ -9411,14 +9413,6 @@ msgstr "référence"
 #, c-format
 msgid "An attempt was made to remove the %s field from component %s in library %s."
 msgstr "Une tentative a été faite pour supprimer le champ %s du composant %s en librairie %s."
-
-#: eeschema/class_libentry.cpp:707
-msgid "file ended prematurely loading component draw element"
-msgstr ""
-
-#: eeschema/class_libentry.cpp:762
-msgid "file ended prematurely while attempting to flush to end of drawing section."
-msgstr ""
 
 #: eeschema/onrightclick.cpp:104
 msgid "Leave Sheet"
@@ -11147,20 +11141,20 @@ msgid "Ok to change the existing file ?"
 msgstr "D'accord pour changer le fichier existant ?"
 
 #: gerbview/tool_gerber.cpp:28
-msgid "Clear and Load Gerber File"
-msgstr "Effacer et Charger Fichier Gerber"
+msgid "Clear All and Load Gerber File"
+msgstr "Effacer Tout et Charger Fichier Gerber"
 
 #: gerbview/tool_gerber.cpp:29
-msgid "Clear all layers and Load new Gerber file"
-msgstr "Effacer toutes les couches et charger un fichier Gerber"
+msgid "Clear all layers and Load a new Gerber file on first layer"
+msgstr "Effacer toutes les couches et charger un fichier Gerber sur la premiere couche"
 
 #: gerbview/tool_gerber.cpp:32
-msgid "Load Gerber File"
-msgstr "Charger Fichier Gerber"
+msgid "Append Gerber File to Current Layer"
+msgstr "Ajouter un Fichier Gerber sur Couche Courante"
 
 #: gerbview/tool_gerber.cpp:33
-msgid "Load new Gerber file on current layer"
-msgstr "Charger nouveau fichier Gerber sur couche courante"
+msgid "Append a new Gerber file to the current layer"
+msgstr "Ajouter un nouveau fichier Gerber sur couche courante"
 
 #: gerbview/tool_gerber.cpp:37
 msgid "Inc Layer and load Gerber file"
@@ -11179,12 +11173,16 @@ msgid "Load D-Codes File"
 msgstr "Charger Fichier de DCodes"
 
 #: gerbview/tool_gerber.cpp:44
-msgid "Load Drill"
-msgstr "Charger Fichier de Perçage"
+msgid "Load EXCELLON Drill File"
+msgstr "Charger Fichier de Perçage EXCELLON"
 
 #: gerbview/tool_gerber.cpp:45
 msgid "Load excellon drill file"
 msgstr "Charger Fichier Excellon"
+
+#: gerbview/tool_gerber.cpp:48
+msgid "&Clear All"
+msgstr "&Effacer Tout"
 
 #: gerbview/tool_gerber.cpp:49
 msgid "Clear all layers"
@@ -11410,13 +11408,34 @@ msgstr " Afficher Limites de Page"
 msgid "Show D codes"
 msgstr "Montrer DCodes"
 
-#: common/confirm.cpp:70
-msgid "Warning"
-msgstr "Avertissement"
+#: common/gestfich.cpp:446
+#, c-format
+msgid "Command <%s> could not found"
+msgstr "Commande <%s> non trouvée"
 
-#: common/confirm.cpp:74
-msgid "Error"
-msgstr "Erreur"
+#: common/gestfich.cpp:545
+msgid "No default editor found, you must choose it"
+msgstr "Pas d'éditeur par défaut trouvé, vous devez en choisir un"
+
+#: common/gestfich.cpp:551
+msgid "Preferred Editor:"
+msgstr "Editeur préféré:"
+
+#: common/gestfich.cpp:645
+msgid "Problem while running the PDF viewer"
+msgstr "Problème en lançant le Visualisateur PDF"
+
+#: common/gestfich.cpp:646
+msgid ""
+"\n"
+" command is "
+msgstr ""
+"\n"
+" la commande est "
+
+#: common/gestfich.cpp:652
+msgid "Unable to find a PDF viewer for"
+msgstr "Impossible de trouver un visualisateur PDF pour"
 
 #: common/edaappl.cpp:112
 msgid "French"
@@ -11482,267 +11501,202 @@ msgstr "Langue"
 msgid "Select application language (only for testing!)"
 msgstr "Choisir la langue (seulement pour tests!)"
 
-#: common/eda_doc.cpp:152
+#: common/selcolor.cpp:67
+msgid "Colors"
+msgstr "Couleurs"
+
+#: common/confirm.cpp:79
+msgid "Warning"
+msgstr "Avertissement"
+
+#: common/confirm.cpp:83
+msgid "Error"
+msgstr "Erreur"
+
+#: common/eda_doc.cpp:149
 msgid "Doc File "
 msgstr "Fichier de Doc "
 
-#: common/eda_doc.cpp:193
+#: common/eda_doc.cpp:190
 #, c-format
 msgid "Unknown MIME type for doc file <%s>"
 msgstr "MIME type inconnu pour fichier Doc <%s>"
 
-#: common/selcolor.cpp:77
-msgid "Colors"
-msgstr "Couleurs"
+#: common/pcbcommon.cpp:61
+msgid "??? Via"
+msgstr "??? Via"
 
-#: common/block_commande.cpp:60
-msgid "Block Move"
-msgstr "Déplace Bloc"
+#: common/pcbcommon.cpp:64
+msgid "Blind/Buried Via"
+msgstr "Via Aveugle/Enterrée"
 
-#: common/block_commande.cpp:64
-msgid "Block Drag"
-msgstr "Drag Bloc"
+#: common/pcbcommon.cpp:66
+msgid "Through Via"
+msgstr "Via Traversante"
 
-#: common/block_commande.cpp:68
-msgid "Block Copy"
-msgstr "Copie Bloc"
+#: common/pcbcommon.cpp:84
+msgid "Kicad footprint library files (*.mod)|*.mod"
+msgstr "Fichiers Modules Kicad (*.mod)|*.mod"
 
-#: common/block_commande.cpp:72
-msgid "Block Delete"
-msgstr "Efface Bloc"
+#: common/pcbcommon.cpp:87
+msgid "Printed circuit board files (*.brd)|*.brd"
+msgstr "Fichiers circuits imprimés (*.brd)|*.brd"
 
-#: common/block_commande.cpp:76
-msgid "Block Save"
-msgstr "Sauve Bloc"
-
-#: common/block_commande.cpp:80
-msgid "Block Paste"
-msgstr "Duplic. Bloc"
-
-#: common/block_commande.cpp:84
-msgid "Win Zoom"
-msgstr "Win Zoom"
-
-#: common/block_commande.cpp:88
-msgid "Block Rotate"
-msgstr "Rotation Bloc"
-
-#: common/block_commande.cpp:92
-msgid "Block Flip"
-msgstr "Retournement Bloc"
-
-#: common/block_commande.cpp:97
-msgid "Block Mirror"
-msgstr "Bloc Miroir"
-
-#: common/gestfich.cpp:445
-#, c-format
-msgid "Command <%s> could not found"
-msgstr "Commande <%s> non trouvée"
-
-#: common/gestfich.cpp:545
-msgid "No default editor found, you must choose it"
-msgstr "Pas d'éditeur par défaut trouvé, vous devez en choisir un"
-
-#: common/gestfich.cpp:551
-msgid "Prefered Editor:"
-msgstr "Editeur préféré:"
-
-#: common/gestfich.cpp:647
-msgid "Problem while running the PDF viewer"
-msgstr "Problème en lançant le Visualisateur PDF"
-
-#: common/gestfich.cpp:648
-msgid ""
-"\n"
-" command is "
-msgstr ""
-"\n"
-" la commande est "
-
-#: common/gestfich.cpp:654
-msgid "Unable to find a PDF viewer for"
-msgstr "Impossible de trouver un visualisateur PDF pour"
-
-#: common/common.cpp:57
+#: common/common.cpp:60
 msgid "Kicad project files (*.pro)|*.pro"
 msgstr "Fichiers projet Kicad  (*.pro)|*.pro"
 
-#: common/common.cpp:58
+#: common/common.cpp:61
 msgid "Kicad PCB files (*.brd)|*.brd"
 msgstr "Fichiers Kicad PCB (*.brd)|*.brd"
 
-#: common/common.cpp:59
+#: common/common.cpp:62
 msgid "Kicad schematic files (*.sch)|*.sch"
 msgstr "Fichiers schématiques Kicad (*.sch)|*.sch"
 
-#: common/common.cpp:60
+#: common/common.cpp:63
 msgid "Kicad netlist files (*.net)|*.net"
 msgstr "fichiers netlistes Kicad (*.net)|*.net"
 
-#: common/common.cpp:61
+#: common/common.cpp:64
 msgid "Gerber files (*.pho)|*.pho"
 msgstr "Fichiers Gerber (*.pho)|*.pho"
 
-#: common/common.cpp:62
+#: common/common.cpp:65
 msgid "Portable document format files (*.pdf)|*.pdf"
 msgstr "Fichiers \"Portable document format\"  (*.pdf)|*.pdf"
 
-#: common/common.cpp:63
+#: common/common.cpp:66
 msgid "All files (*)|*"
 msgstr "Tous les fichiers (*)|*"
 
-#: common/common.cpp:240
+#: common/common.cpp:235
 msgid " (\"):"
 msgstr " (\"):"
 
-#: common/common.cpp:270
+#: common/common.cpp:265
 msgid "centimeters"
 msgstr "centimètres"
 
-#: common/common.cpp:356
+#: common/common.cpp:346
 msgid " \""
 msgstr " \""
 
-#: common/common.cpp:584
+#: common/common.cpp:553
 msgid "Copper   "
 msgstr "Cuivre   "
 
-#: common/common.cpp:584
+#: common/common.cpp:553
 msgid "Inner L1 "
 msgstr "Interne 1"
 
-#: common/common.cpp:584
+#: common/common.cpp:553
 msgid "Inner L2 "
 msgstr "Interne 2"
 
-#: common/common.cpp:584
+#: common/common.cpp:553
 msgid "Inner L3 "
 msgstr "Interne 3"
 
-#: common/common.cpp:585
+#: common/common.cpp:554
 msgid "Inner L4 "
 msgstr "Interne 4"
 
-#: common/common.cpp:585
+#: common/common.cpp:554
 msgid "Inner L5 "
 msgstr "Interne 5"
 
-#: common/common.cpp:585
+#: common/common.cpp:554
 msgid "Inner L6 "
 msgstr "Interne 6"
 
-#: common/common.cpp:585
+#: common/common.cpp:554
 msgid "Inner L7 "
 msgstr "Interne 7"
 
-#: common/common.cpp:586
+#: common/common.cpp:555
 msgid "Inner L8 "
 msgstr "Interne 8"
 
-#: common/common.cpp:586
+#: common/common.cpp:555
 msgid "Inner L9 "
 msgstr "Interne 9"
 
-#: common/common.cpp:586
+#: common/common.cpp:555
 msgid "Inner L10"
 msgstr "Interne 10"
 
-#: common/common.cpp:586
+#: common/common.cpp:555
 msgid "Inner L11"
 msgstr "Interne 11"
 
-#: common/common.cpp:587
+#: common/common.cpp:556
 msgid "Inner L12"
 msgstr "Interne 12"
 
-#: common/common.cpp:587
+#: common/common.cpp:556
 msgid "Inner L13"
 msgstr "Interne 13"
 
-#: common/common.cpp:587
+#: common/common.cpp:556
 msgid "Inner L14"
 msgstr "Interne 14"
 
-#: common/common.cpp:588
+#: common/common.cpp:557
 msgid "Adhes Cop"
 msgstr "Adhes Cu "
 
-#: common/common.cpp:588
+#: common/common.cpp:557
 msgid "Adhes Cmp"
 msgstr "Adhes  Cmp"
 
-#: common/common.cpp:588
+#: common/common.cpp:557
 msgid "SoldP Cop"
 msgstr "SoldP Cu "
 
-#: common/common.cpp:588
+#: common/common.cpp:557
 msgid "SoldP Cmp"
 msgstr "SoldP Cmp"
 
-#: common/common.cpp:589
+#: common/common.cpp:558
 msgid "SilkS Cop"
 msgstr "Sérigr Cu "
 
-#: common/common.cpp:589
+#: common/common.cpp:558
 msgid "SilkS Cmp"
 msgstr "Sérigr Cmp"
 
-#: common/common.cpp:589
+#: common/common.cpp:558
 msgid "Mask Cop "
 msgstr "Masque Cu "
 
-#: common/common.cpp:589
+#: common/common.cpp:558
 msgid "Mask Cmp "
 msgstr "Masque Cmp"
 
-#: common/common.cpp:590
+#: common/common.cpp:559
 msgid "Drawings "
 msgstr "Drawings "
 
-#: common/common.cpp:590
+#: common/common.cpp:559
 msgid "Comments "
 msgstr "Commentaires "
 
-#: common/common.cpp:590
+#: common/common.cpp:559
 msgid "Eco1     "
 msgstr "Eco1     "
 
-#: common/common.cpp:590
+#: common/common.cpp:559
 msgid "Eco2     "
 msgstr "Eco2     "
 
-#: common/common.cpp:591
+#: common/common.cpp:560
 msgid "Edges Pcb"
 msgstr "Contour Pcb"
 
-#: common/common.cpp:591
+#: common/common.cpp:560
 msgid "BAD INDEX"
 msgstr "BAD INDEX"
-
-#: common/zoom.cpp:204
-msgid "Center"
-msgstr "Centrer"
-
-#: common/zoom.cpp:212
-msgid "Zoom select"
-msgstr "Sélection Zoom"
-
-#: common/zoom.cpp:233
-msgid "Zoom: "
-msgstr "Zoom:  "
-
-#: common/zoom.cpp:244
-msgid "Grid Select"
-msgstr "Sélection Grille"
-
-#: common/zoom.cpp:265
-msgid "Grid: "
-msgstr "Grille: "
-
-#: common/drawframe.cpp:365
-msgid "??"
-msgstr "??"
 
 #: common/get_component_dialog.cpp:69
 msgid "History list:"
@@ -11760,11 +11714,53 @@ msgstr "Liste tous"
 msgid "Select by Browser"
 msgstr "Sélection par Viewer"
 
-#: common/class_marker_base.cpp:183
-msgid "Marker Info"
-msgstr "Info Marqueur"
+#: common/zoom.cpp:188
+msgid "Center"
+msgstr "Centrer"
 
-#: common/hotkeys_basic.cpp:322
+#: common/zoom.cpp:196
+msgid "Zoom select"
+msgstr "Sélection Zoom"
+
+#: common/zoom.cpp:218
+msgid "Zoom: "
+msgstr "Zoom:  "
+
+#: common/zoom.cpp:229
+msgid "Grid Select"
+msgstr "Sélection Grille"
+
+#: common/zoom.cpp:250
+msgid "Grid: "
+msgstr "Grille: "
+
+#: common/basicframe.cpp:208
+msgid " file <"
+msgstr " Fichier <"
+
+#: common/basicframe.cpp:208
+msgid "> was not found."
+msgstr ">  non trouvé."
+
+#: common/basicframe.cpp:242
+#, c-format
+msgid "Help file %s not found"
+msgstr "Fichier d'aide %s non trouvé"
+
+#: common/basicframe.cpp:251
+#, c-format
+msgid "Help file %s could not be found."
+msgstr "Fichier d'aide %s non trouvé."
+
+#: common/drawframe.cpp:330
+msgid "??"
+msgstr "??"
+
+#: common/dialog_load_error.cpp:7
+msgid "Load Error!"
+msgstr "Erreur de Chargement!"
+
+#: common/hotkeys_basic.cpp:316
 msgid ""
 "Current hotkey list:\n"
 "\n"
@@ -11772,123 +11768,125 @@ msgstr ""
 "Liste des Hotkeys courantes:\n"
 "\n"
 
-#: common/hotkeys_basic.cpp:330
+#: common/hotkeys_basic.cpp:324
 msgid "key "
 msgstr "touche: "
 
-#: common/hotkeys_basic.cpp:387
+#: common/hotkeys_basic.cpp:377
 msgid "Save Hotkey Configuration File:"
 msgstr "Sauver Fichier Configuration des Hotkeys:"
 
-#: common/hotkeys_basic.cpp:419
+#: common/hotkeys_basic.cpp:409
 msgid "Allowed keys:\n"
 msgstr "Touches autorisées:\n"
 
-#: common/hotkeys_basic.cpp:503
+#: common/hotkeys_basic.cpp:494
 msgid "Open Hotkey Configuration File:"
 msgstr "Ouvrir Fichier Configuration des Hotkeys:"
 
-#: common/hotkeys_basic.cpp:522
+#: common/hotkeys_basic.cpp:512
 msgid "Unable to read "
 msgstr "Impossible de lire "
 
-#: common/hotkeys_basic.cpp:645
+#: common/hotkeys_basic.cpp:630
 msgid "Show the current hotkey configuration"
 msgstr "Afficher la configuration actuelle des Hotkeys"
 
-#: common/hotkeys_basic.cpp:651
+#: common/hotkeys_basic.cpp:636
 msgid "(Re)create"
 msgstr "(Re)créer"
 
-#: common/hotkeys_basic.cpp:652
+#: common/hotkeys_basic.cpp:637
 msgid "Create or recreate the hotkey configuration file from current hotkey list"
 msgstr "Créer ou recréer le fichier configuration des Hotkeys à partir de la liste courante"
 
-#: common/hotkeys_basic.cpp:659
+#: common/hotkeys_basic.cpp:644
 msgid "Reload"
 msgstr "Recharger"
 
-#: common/hotkeys_basic.cpp:660
+#: common/hotkeys_basic.cpp:645
 msgid "Reload the hotkey configuration file"
 msgstr "Relire  les fichiers configuration des hotkeys"
 
-#: common/hotkeys_basic.cpp:667
+#: common/hotkeys_basic.cpp:652
 msgid "Edit the hotkey configuration file in a text editor"
 msgstr "Editer  les fichiers configuration des hotkeys"
 
-#: common/hotkeys_basic.cpp:673
+#: common/hotkeys_basic.cpp:658
 msgid "Hotkey"
 msgstr "Hotkey"
 
-#: common/hotkeys_basic.cpp:675
+#: common/hotkeys_basic.cpp:660
 msgid "Hotkey configuration and preferences"
 msgstr "Options et préférences générales des hotkeys"
 
-#: common/hotkeys_basic.cpp:682
+#: common/hotkeys_basic.cpp:668
 msgid "Home directory"
 msgstr "Répertoire d'accueil (home)"
 
-#: common/hotkeys_basic.cpp:683
+#: common/hotkeys_basic.cpp:669
 msgid "Use home directory to load or store Hotkey config files"
 msgstr "Utiliser le répertoire d'accueil pour charger ou sauver les fichiers de config  des Hotkeys"
 
-#: common/hotkeys_basic.cpp:689
+#: common/hotkeys_basic.cpp:676
 msgid "KiCad template directory"
 msgstr "kicad/template répertoire"
 
-#: common/hotkeys_basic.cpp:690
+#: common/hotkeys_basic.cpp:677
 msgid "Use kicad/template directory to load or store Hotkey config files"
 msgstr "Utiliser répertoire kicad/template pour charger ou sauver les fichiers de config  des Hotkeys"
 
-#: common/hotkeys_basic.cpp:697
+#: common/hotkeys_basic.cpp:683
 msgid "Location"
 msgstr "Emplacement"
 
-#: common/hotkeys_basic.cpp:698
+#: common/hotkeys_basic.cpp:684
 msgid "Select hotkey configuration file location"
 msgstr "Sélectionner l'emplacement du fichier fonfiguration des hotkeys:"
 
-#: common/pcbcommon.cpp:61
-msgid "??? Via"
-msgstr "??? Via"
+#: common/class_marker_base.cpp:182
+msgid "Marker Info"
+msgstr "Info Marqueur"
 
-#: common/pcbcommon.cpp:63
-msgid "Blind/Buried Via"
-msgstr "Via Aveugle/Enterrée"
+#: common/block_commande.cpp:47
+msgid "Block Move"
+msgstr "Déplace Bloc"
 
-#: common/pcbcommon.cpp:64
-msgid "Through Via"
-msgstr "Via Traversante"
+#: common/block_commande.cpp:51
+msgid "Block Drag"
+msgstr "Drag Bloc"
 
-#: common/pcbcommon.cpp:82
-msgid "Kicad footprint library files (*.mod)|*.mod"
-msgstr "Fichiers Modules Kicad (*.mod)|*.mod"
+#: common/block_commande.cpp:55
+msgid "Block Copy"
+msgstr "Copie Bloc"
 
-#: common/pcbcommon.cpp:85
-msgid "Printed circuit board files (*.brd)|*.brd"
-msgstr "Fichiers circuits imprimés (*.brd)|*.brd"
+#: common/block_commande.cpp:59
+msgid "Block Delete"
+msgstr "Efface Bloc"
 
-#: common/dialog_load_error.cpp:7
-msgid "Load Error!"
-msgstr "Erreur de Chargement!"
+#: common/block_commande.cpp:63
+msgid "Block Save"
+msgstr "Sauve Bloc"
 
-#: common/basicframe.cpp:224
-msgid " file <"
-msgstr " Fichier <"
+#: common/block_commande.cpp:67
+msgid "Block Paste"
+msgstr "Duplic. Bloc"
 
-#: common/basicframe.cpp:224
-msgid "> was not found."
-msgstr ">  non trouvé."
+#: common/block_commande.cpp:71
+msgid "Win Zoom"
+msgstr "Win Zoom"
 
-#: common/basicframe.cpp:260
-#, c-format
-msgid "Help file %s not found"
-msgstr "Fichier d'aide %s non trouvé"
+#: common/block_commande.cpp:75
+msgid "Block Rotate"
+msgstr "Rotation Bloc"
 
-#: common/basicframe.cpp:268
-#, c-format
-msgid "Help file %s could not be found."
-msgstr "Fichier d'aide %s non trouvé."
+#: common/block_commande.cpp:79
+msgid "Block Flip"
+msgstr "Retournement Bloc"
+
+#: common/block_commande.cpp:84
+msgid "Block Mirror"
+msgstr "Bloc Miroir"
 
 #: 3d-viewer/3d_aux.cpp:195
 msgid "Vertex "
@@ -12533,6 +12531,11 @@ msgstr "Options d'Affichage"
 #: share/setpage.h:80
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
+
+#~ msgid "Load Gerber File"
+#~ msgstr "Charger Fichier Gerber"
+#~ msgid "Load Drill"
+#~ msgstr "Charger Fichier de Perçage"
 
 #, fuzzy
 #~ msgid "Do Not Show"

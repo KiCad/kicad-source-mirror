@@ -25,12 +25,12 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
     menuBar = new wxMenuBar();
 
     wxMenu* filesMenu = new wxMenu;
-    filesMenu->Append( ID_LOAD_FILE, _( "Clear and Load Gerber File" ),
-                       _( "Clear all layers and Load new Gerber file" ),
+    filesMenu->Append( ID_LOAD_FILE, _( "Clear All and Load Gerber File" ),
+                       _( "Clear all layers and Load a new Gerber file on first layer" ),
                        FALSE );
 
-    filesMenu->Append( ID_APPEND_FILE, _( "Load Gerber File" ),
-                       _( "Load new Gerber file on current layer" ),
+    filesMenu->Append( ID_APPEND_FILE, _( "Append Gerber File to Current Layer" ),
+                       _( "Append a new Gerber file to the current layer" ),
                        FALSE );
 
     filesMenu->Append( ID_MENU_INC_LAYER_AND_APPEND_FILE,
@@ -41,11 +41,11 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
     filesMenu->Append( ID_GERBVIEW_LOAD_DCODE_FILE, _( "Load DCodes" ),
                        _( "Load D-Codes File" ), FALSE );
 #if 0
-    filesMenu->Append( ID_GERBVIEW_LOAD_DRILL_FILE, _( "Load Drill" ),
+    filesMenu->Append( ID_GERBVIEW_LOAD_DRILL_FILE, _( "Load EXCELLON Drill File" ),
                        _( "Load excellon drill file" ), FALSE );
 #endif
 
-    filesMenu->Append( ID_NEW_BOARD, _( "&New" ),
+    filesMenu->Append( ID_NEW_BOARD, _( "&Clear All" ),
                        _( "Clear all layers" ), FALSE );
 
     filesMenu->AppendSeparator();
