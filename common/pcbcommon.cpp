@@ -58,7 +58,7 @@ int g_TabAllCopperLayerMask[NB_COPPER_LAYERS] = {
 };
 
 wxString g_ViaType_Name[4] = {
-    _( "??? Via" ),            // Not used yet, do not exists
+    _( "??? Via" ),            // Not used yet, does not exist currently
     _( "Micro Via" ),          // from external layer (TOP or BOTTOM) from
                                // the near neighbor inner layer only
     _( "Blind/Buried Via" ),   // from inner or external to inner or external
