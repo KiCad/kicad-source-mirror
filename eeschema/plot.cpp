@@ -25,16 +25,16 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
 
 static void PlotNoConnectStruct( PLOTTER* plotter, DrawNoConnectStruct* Struct )
 {
-#define DELTA (DRAWNOCONNECT_SIZE / 2)
+    int delta = Struct->m_Size.x / 2;
     int pX, pY;
 
     pX = Struct->m_Pos.x; pY = Struct->m_Pos.y;
 
     plotter->set_current_line_width( Struct->GetPenSize() );
-    plotter->move_to( wxPoint( pX - DELTA, pY - DELTA ) );
-    plotter->finish_to( wxPoint( pX + DELTA, pY + DELTA ) );
-    plotter->move_to( wxPoint( pX + DELTA, pY - DELTA ) );
-    plotter->finish_to( wxPoint( pX - DELTA, pY + DELTA ) );
+    plotter->move_to( wxPoint( pX - delta, pY - delta ) );
+    plotter->finish_to( wxPoint( pX + delta, pY + delta ) );
+    plotter->move_to( wxPoint( pX + delta, pY - delta ) );
+    plotter->finish_to( wxPoint( pX - delta, pY + delta ) );
 }
 
 
@@ -462,8 +462,7 @@ void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* aDrawlist )
             #undef STRUCT
             #define STRUCT ( (DrawJunctionStruct*) aDrawlist )
             plotter->set_color( ReturnLayerColor( STRUCT->GetLayer() ) );
-            plotter->circle( STRUCT->m_Pos, DRAWJUNCTION_DIAMETER,
-                             FILLED_SHAPE );
+            plotter->circle( STRUCT->m_Pos, STRUCT->m_Size.x, FILLED_SHAPE );
             break;
 
         case TYPE_SCH_TEXT:

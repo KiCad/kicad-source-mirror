@@ -600,6 +600,19 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& aOffset,
     EXCHG( linewidth, m_Width );            // set initial value
     if( m_IsDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + aOffset, color );
+
+    // Enable these line to draw the bounding box (debug tests purposes only)
+#if 0
+    {
+        EDA_Rect BoundaryBox;
+        BoundaryBox = GetBoundingBox();
+        int x1 = BoundaryBox.GetX();
+        int y1 = BoundaryBox.GetY();
+        int x2 = BoundaryBox.GetRight();
+        int y2 = BoundaryBox.GetBottom();
+        GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
+    }
+#endif
 }
 
 
@@ -844,6 +857,19 @@ void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel,
 
     if( m_IsDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + offset, color );
+
+    // Enable these line to draw the bounding box (debug tests purposes only)
+#if 0
+    {
+        EDA_Rect BoundaryBox;
+        BoundaryBox = GetBoundingBox();
+        int x1 = BoundaryBox.GetX();
+        int y1 = BoundaryBox.GetY();
+        int x2 = BoundaryBox.GetRight();
+        int y2 = BoundaryBox.GetBottom();
+        GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
+    }
+#endif
 }
 
 
@@ -965,6 +991,19 @@ void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel,
 
     if( m_IsDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + aOffset, color );
+
+    // Enable these line to draw the bounding box (debug tests purposes only)
+#if 0
+    {
+        EDA_Rect BoundaryBox;
+        BoundaryBox = GetBoundingBox();
+        int x1 = BoundaryBox.GetX();
+        int y1 = BoundaryBox.GetY();
+        int x2 = BoundaryBox.GetRight();
+        int y2 = BoundaryBox.GetBottom();
+        GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
+    }
+#endif
 }
 
 
@@ -1109,9 +1148,9 @@ EDA_Rect SCH_GLOBALLABEL::GetBoundingBox()
 
 
 /***********************************/
-EDA_Rect SCH_TEXT::GetBoundingBox()
-{
+EDA_Rect SCH_LABEL::GetBoundingBox()
 /***********************************/
+{
     int x, y, dx, dy, length, height;
 
     x = m_Pos.x;
@@ -1155,4 +1194,30 @@ EDA_Rect SCH_TEXT::GetBoundingBox()
     EDA_Rect box( wxPoint( x, y ), wxSize( dx, dy ) );
     box.Normalize();
     return box;
+}
+
+/***********************************/
+EDA_Rect SCH_TEXT::GetBoundingBox()
+/***********************************/
+{
+    // We must pass the effective text thickness to GetTextBox
+    // when calculating the bounding box
+    int linewidth =
+        (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
+    EXCHG( linewidth, m_Width );            // Set the real width
+    EDA_Rect rect = GetTextBox( -1 );
+    EXCHG( linewidth, m_Width );            // set initial value
+
+    if( m_Orient )   // Rotate rect
+    {
+        wxPoint pos = rect.GetOrigin();
+        wxPoint end = rect.GetEnd();
+        RotatePoint( &pos, m_Pos, m_Orient );
+        RotatePoint( &end, m_Pos, m_Orient );
+        rect.SetOrigin(pos);
+        rect.SetEnd(end);
+    }
+
+    return rect;
 }

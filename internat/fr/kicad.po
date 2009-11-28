@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-23 18:13+0100\n"
-"PO-Revision-Date: 2009-11-23 18:22+0100\n"
+"POT-Creation-Date: 2009-11-27 09:37+0100\n"
+"PO-Revision-Date: 2009-11-27 09:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -968,7 +968,7 @@ msgstr "Pas en Netliste:"
 msgid "File <%s> not found, use Netlist for lib module selection"
 msgstr "Fichier <%s> non trouvé, Netliste utilisée pour sélection des  modules en lib."
 
-#: pcbnew/netlist.cpp:1018
+#: pcbnew/netlist.cpp:1016
 #, c-format
 msgid "Component [%s]: footprint <%s> not found"
 msgstr "Composant [%s]: Module <%s> non trouvé en librairie"
@@ -1005,121 +1005,121 @@ msgstr "Fenêtre 3D déjà ouverte"
 msgid "3D Viewer"
 msgstr "Visu 3D"
 
-#: pcbnew/muonde.cpp:225
+#: pcbnew/muonde.cpp:227
 msgid "Length(inch):"
 msgstr "Longueur (pouces):"
 
-#: pcbnew/muonde.cpp:225
-#: pcbnew/muonde.cpp:231
+#: pcbnew/muonde.cpp:227
+#: pcbnew/muonde.cpp:233
 msgid "Length"
 msgstr "Longueur"
 
-#: pcbnew/muonde.cpp:231
+#: pcbnew/muonde.cpp:233
 msgid "Length(mm):"
 msgstr "Long. (mm):"
 
-#: pcbnew/muonde.cpp:239
-#: pcbnew/muonde.cpp:695
-#: pcbnew/muonde.cpp:708
+#: pcbnew/muonde.cpp:241
+#: pcbnew/muonde.cpp:697
+#: pcbnew/muonde.cpp:710
 msgid "Incorrect number, abort"
 msgstr "Nombre incorrect, arrêt"
 
-#: pcbnew/muonde.cpp:247
+#: pcbnew/muonde.cpp:249
 msgid "Requested length < minimum length"
 msgstr "Longueur demandée < longueur minimum"
 
-#: pcbnew/muonde.cpp:269
+#: pcbnew/muonde.cpp:271
 msgid "Unable to create line: Requested length is too big"
 msgstr "Incapable de créer la ligne: longueur demandée trop grande"
 
-#: pcbnew/muonde.cpp:281
+#: pcbnew/muonde.cpp:283
 #, c-format
 msgid "Segment count = %d, length = "
 msgstr "Nbr segm = %d, longueur = "
 
-#: pcbnew/muonde.cpp:656
+#: pcbnew/muonde.cpp:658
 msgid "Gap"
 msgstr "Gap"
 
-#: pcbnew/muonde.cpp:661
+#: pcbnew/muonde.cpp:663
 msgid "Stub"
 msgstr "Stub"
 
-#: pcbnew/muonde.cpp:667
+#: pcbnew/muonde.cpp:669
 msgid "Arc Stub"
 msgstr "Arc Stub"
 
-#: pcbnew/muonde.cpp:682
+#: pcbnew/muonde.cpp:684
 msgid " (mm):"
 msgstr " (mm):"
 
-#: pcbnew/muonde.cpp:688
+#: pcbnew/muonde.cpp:690
 msgid " (inch):"
 msgstr " (pouce):"
 
-#: pcbnew/muonde.cpp:690
-#: pcbnew/muonde.cpp:705
+#: pcbnew/muonde.cpp:692
+#: pcbnew/muonde.cpp:707
 msgid "Create microwave module"
 msgstr "Créer Module MicroOnde"
 
-#: pcbnew/muonde.cpp:704
+#: pcbnew/muonde.cpp:706
 msgid "Angle (0.1deg):"
 msgstr "Angle (0.1deg):"
 
-#: pcbnew/muonde.cpp:826
+#: pcbnew/muonde.cpp:828
 msgid "Complex shape"
 msgstr "Forme complexe"
 
-#: pcbnew/muonde.cpp:851
+#: pcbnew/muonde.cpp:853
 msgid "Read Shape Description File..."
 msgstr "Lire Fichier de Description de Forme..."
 
-#: pcbnew/muonde.cpp:854
+#: pcbnew/muonde.cpp:856
 msgid "Symmetrical"
 msgstr "Symétrique"
 
-#: pcbnew/muonde.cpp:855
+#: pcbnew/muonde.cpp:857
 msgid "Mirrored"
 msgstr "Miroir"
 
-#: pcbnew/muonde.cpp:856
+#: pcbnew/muonde.cpp:858
 msgid "Shape Option"
 msgstr "Option Forme"
 
-#: pcbnew/muonde.cpp:916
+#: pcbnew/muonde.cpp:918
 msgid "Read descr shape file"
 msgstr "Lire fichier de description de forme"
 
-#: pcbnew/muonde.cpp:931
+#: pcbnew/muonde.cpp:933
 msgid "File not found"
 msgstr "fichier non trouvé"
 
-#: pcbnew/muonde.cpp:1039
+#: pcbnew/muonde.cpp:1041
 msgid "Shape has a null size!"
 msgstr "La forme a une taille nulle"
 
-#: pcbnew/muonde.cpp:1044
+#: pcbnew/muonde.cpp:1046
 msgid "Shape has no points!"
 msgstr "La forme n'a pas de points"
 
-#: pcbnew/muonde.cpp:1148
+#: pcbnew/muonde.cpp:1150
 msgid "No pad for this module"
 msgstr "Pas de pad dans ce module"
 
-#: pcbnew/muonde.cpp:1154
+#: pcbnew/muonde.cpp:1156
 msgid "Only one pad for this module"
 msgstr "Seulement un pad dans ce module"
 
-#: pcbnew/muonde.cpp:1168
+#: pcbnew/muonde.cpp:1170
 msgid "Gap (mm):"
 msgstr "Gap (mm):"
 
-#: pcbnew/muonde.cpp:1168
-#: pcbnew/muonde.cpp:1174
+#: pcbnew/muonde.cpp:1170
+#: pcbnew/muonde.cpp:1176
 msgid "Create Microwave Gap"
 msgstr "Créer Gap MicroOnde "
 
-#: pcbnew/muonde.cpp:1174
+#: pcbnew/muonde.cpp:1176
 msgid "Gap (inch):"
 msgstr "Gap (inch):"
 
@@ -1464,58 +1464,58 @@ msgstr "Erreur. Vous devez choisir une équipotentielle"
 msgid "You have chosen the \"not connected\" option. This will create insulated copper islands. Are you sure ?"
 msgstr "Vous avez choisi l'option \"non connecté\". Cela créera des blocs non connectés. Etes vous sûr ?"
 
-#: pcbnew/class_text_mod.cpp:443
+#: pcbnew/class_text_mod.cpp:442
 msgid "Ref."
 msgstr "Ref."
 
-#: pcbnew/class_text_mod.cpp:443
+#: pcbnew/class_text_mod.cpp:442
 msgid "Value"
 msgstr "Valeur"
 
-#: pcbnew/class_text_mod.cpp:443
-#: pcbnew/class_text_mod.cpp:452
+#: pcbnew/class_text_mod.cpp:442
+#: pcbnew/class_text_mod.cpp:451
 msgid "Text"
 msgstr "Texte"
 
-#: pcbnew/class_text_mod.cpp:449
+#: pcbnew/class_text_mod.cpp:448
 msgid "Module"
 msgstr "Module"
 
-#: pcbnew/class_text_mod.cpp:457
+#: pcbnew/class_text_mod.cpp:456
 #: pcbnew/class_zone.cpp:915
 msgid "Type"
 msgstr "Type"
 
-#: pcbnew/class_text_mod.cpp:460
+#: pcbnew/class_text_mod.cpp:459
 msgid "No"
 msgstr "Non"
 
-#: pcbnew/class_text_mod.cpp:462
+#: pcbnew/class_text_mod.cpp:461
 msgid "Yes"
 msgstr "Oui"
 
-#: pcbnew/class_text_mod.cpp:472
+#: pcbnew/class_text_mod.cpp:471
 #: pcbnew/class_zone.cpp:945
 msgid "Layer"
 msgstr "Couche"
 
-#: pcbnew/class_text_mod.cpp:474
+#: pcbnew/class_text_mod.cpp:473
 msgid " No"
 msgstr "Non"
 
-#: pcbnew/class_text_mod.cpp:476
+#: pcbnew/class_text_mod.cpp:475
 msgid " Yes"
 msgstr "Oui"
 
-#: pcbnew/class_text_mod.cpp:480
+#: pcbnew/class_text_mod.cpp:479
 msgid "Orient"
 msgstr "Orient"
 
-#: pcbnew/class_text_mod.cpp:486
+#: pcbnew/class_text_mod.cpp:485
 msgid "H Size"
 msgstr "Taille H"
 
-#: pcbnew/class_text_mod.cpp:489
+#: pcbnew/class_text_mod.cpp:488
 msgid "V Size"
 msgstr "Taille V"
 
@@ -5164,6 +5164,9 @@ msgid ""
 "can be used to replace default Netclass values \n"
 "on demand, for arbitrary via or track segments."
 msgstr ""
+"Diamètres de vias et largeurs de pistes spécifiques, qui\n"
+"peuvent être utilisées pour remplacer les valeurs par défault des Netclass\n"
+"quand c'est nécessaire, pour des vias ou segments de pistes arbitraires."
 
 #: pcbnew/dialog_design_rules_base.cpp:268
 msgid "Custom Via Sizes:"
@@ -7180,7 +7183,7 @@ msgstr "Ne peut ajouter un double de l'alias <%s> en librairie <%s>."
 #: eeschema/class_library.cpp:246
 #, c-format
 msgid "Conflict in library <%s>: alias <%s> already has root name <%s> and will not be assigned to root name <%s>."
-msgstr ""
+msgstr "Conflit en librairie <%s>: l'alias <%s> a déjà un composant racine <%s> et ne peut prendre ce nom <%s>."
 
 #: eeschema/class_library.cpp:476
 msgid "The component library file name is not set."
@@ -8680,7 +8683,7 @@ msgstr ""
 
 #: eeschema/edit_component_in_lib.cpp:402
 msgid "Delete alternate body style (DeMorgan) draw items from component?"
-msgstr ""
+msgstr "Supprimer les éléments de la représentation alternative (DeMorgan) di composant?"
 
 #: eeschema/edit_component_in_lib.cpp:426
 msgid "Doc Files"
@@ -9263,6 +9266,8 @@ msgid ""
 "Check this option to have pin names inside the body and pin number outside.\n"
 "If not checked pins names and pins numbers are outside."
 msgstr ""
+"Cocher cette option pour avoir les noms de pins à l'intérieur du corps et les numéros de pins à l'extérieur.\n"
+"Si non coché, les noms de pins et les numéros de pins sont à l'extérieur."
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:65
 msgid "Number of Units:"
@@ -11035,7 +11040,7 @@ msgstr "Masque pate à souder composant (*.GTP)|*.GTP;*.gtp|"
 
 #: gerbview/files.cpp:126
 msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
-msgstr ""
+msgstr "Couche de \"Keep-out\" (*.GKO)|*.GKO;*.gko|"
 
 #: gerbview/files.cpp:127
 msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"

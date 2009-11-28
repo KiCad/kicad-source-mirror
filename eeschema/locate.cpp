@@ -14,12 +14,9 @@
 #include "class_library.h"
 
 
-static bool DrawStructInBox( int x1, int y1, int x2, int y2,
-                             SCH_ITEM* DrawStruct );
+static bool IsItemInBox(EDA_Rect& aBox, SCH_ITEM* DrawStruct );
 
 static SCH_ITEM* LastSnappedStruct = NULL;
-static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
-                          int StartX2, int StartY2, int EndX2, int EndY2 );
 static bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
                         SCH_ITEM* DrawList, double aScaleFactor );
 
@@ -131,27 +128,22 @@ SCH_ITEM* PickStruct( const wxPoint& refpos,
  */
 int PickItemsInBlock( BLOCK_SELECTOR& aBlock, BASE_SCREEN* aScreen )
 {
-    int x, y, OrigX, OrigY;
     int itemcount = 0;
 
     if( aScreen == NULL )
         return itemcount;
 
-    OrigX = aBlock.GetX();
-    OrigY = aBlock.GetY();
-    x     = aBlock.GetRight();
-    y     = aBlock.GetBottom();
+    EDA_Rect area;
+    area.SetOrigin( aBlock.GetOrigin());
+    area.SetSize( aBlock.GetSize() );
 
-    if( x < OrigX )
-        EXCHG( x, OrigX );
-    if( y < OrigY )
-        EXCHG( y, OrigY );
+    area.Normalize();
 
     ITEM_PICKER picker;
     SCH_ITEM*   DrawStruct = aScreen->EEDrawList;
     for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
     {
-        if( DrawStructInBox( OrigX, OrigY, x, y, DrawStruct ) )
+        if( IsItemInBox( area, DrawStruct ) )
         {
             /* Put this structure in the picked list: */
             picker.m_PickedItem     = DrawStruct;
@@ -171,7 +163,7 @@ int PickItemsInBlock( BLOCK_SELECTOR& aBlock, BASE_SCREEN* aScreen )
 * Note we use L1 norm as distance measure, as it is the fastest.             *
 * This routine updates LastSnappedStruct to the last object used in to snap  *
 * a point. This variable is global to this module only (see above).          *
-* The routine returns TRUE if point was snapped.                             *
+* The routine returns true if point was snapped.                             *
 *****************************************************************************/
 bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
                  SCH_ITEM* DrawList, double aScaleFactor )
@@ -193,7 +185,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
                                     STRUCT->m_PolyPoints[i + 1], hitminDist ) )
                 {
                     LastSnappedStruct = DrawList;
-                    return TRUE;
+                    return true;
                 }
             }
 
@@ -229,7 +221,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
                     }
 
                     LastSnappedStruct = DrawList;
-                    return TRUE;
+                    return true;
                 }
             }
             break;
@@ -245,7 +237,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
                                 hitminDist ) )
             {
                 LastSnappedStruct = DrawList;
-                return TRUE;
+                return true;
             }
             break;
 
@@ -257,7 +249,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             if( STRUCT->HitTest( aPosRef ) )
             {
                 LastSnappedStruct = DrawList;
-                return TRUE;
+                return true;
             }
             break;
 
@@ -269,7 +261,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             if( STRUCT->HitTest( aPosRef ) )
             {
                 LastSnappedStruct = DrawList;
-                return TRUE;
+                return true;
             }
             break;
 
@@ -282,7 +274,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             if( STRUCT->HitTest( aPosRef ) )
             {
                 LastSnappedStruct = DrawList;
-                return TRUE;
+                return true;
             }
             break;
         }
@@ -295,7 +287,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             if( STRUCT->HitTest( aPosRef ) )
             {
                 LastSnappedStruct = DrawList;
-                return TRUE;
+                return true;
             }
             break;
 
@@ -311,7 +303,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             if( STRUCT->HitTest( aPosRef ) )
             {
                 LastSnappedStruct = DrawList;
-                return TRUE;
+                return true;
             }
             break;
 
@@ -336,7 +328,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
                     if( BoundaryBox.Inside( aPosRef ) )
                     {
                         LastSnappedStruct = field;
-                        return TRUE;
+                        return true;
                     }
                 }
             }
@@ -348,7 +340,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
                 if( BoundaryBox.Inside( aPosRef ) )
                 {
                     LastSnappedStruct = DrawList;
-                    return TRUE;
+                    return true;
                 }
             }
             break;
@@ -361,7 +353,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
             if( STRUCT->HitTest( aPosRef ) )
             {
                 LastSnappedStruct = DrawList;
-                return TRUE;
+                return true;
             }
             break;
 
@@ -383,14 +375,12 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
 
 /*****************************************************************************
 * Routine to test if an object has non empty intersection with the box       *
-* defined by x1/y1 and x2/y2 (x1 < x2, y1 < y2), and return TRUE if so. This *
+* defined by x1/y1 and x2/y2 (x1 < x2, y1 < y2), and return true if so. This *
 * routine is used to pick all points in a given box.                         *
 *****************************************************************************/
-bool DrawStructInBox( int x1, int y1, int x2, int y2, SCH_ITEM* DrawStruct )
+bool IsItemInBox( EDA_Rect& aBox, SCH_ITEM* DrawStruct )
 {
-    int xt1, yt1, xt2, yt2;
-    int dx, dy;
-    wxString msg;
+    EDA_Rect BoundaryBox;
 
     switch( DrawStruct->Type() )
     {
@@ -399,11 +389,8 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2, SCH_ITEM* DrawStruct )
         #define STRUCT ( (DrawPolylineStruct*) DrawStruct )
         for( unsigned i = 0; i < STRUCT->GetCornerCount(); i++ )
         {
-            if( STRUCT->m_PolyPoints[i].x >= x1
-                && STRUCT->m_PolyPoints[i].x <= x2
-                && STRUCT->m_PolyPoints[i].y >= y1
-                && STRUCT->m_PolyPoints[i].y <=y2 )
-                return TRUE;
+            if( aBox.Inside(STRUCT->m_PolyPoints[i]) )
+                return true;
         }
 
         break;
@@ -411,223 +398,49 @@ bool DrawStructInBox( int x1, int y1, int x2, int y2, SCH_ITEM* DrawStruct )
     case DRAW_SEGMENT_STRUCT_TYPE:
         #undef STRUCT
         #define STRUCT ( (EDA_DrawLineStruct*) DrawStruct )
-        if( STRUCT->m_Start.x >= x1 && STRUCT->m_Start.x <= x2
-            && STRUCT->m_Start.y >= y1 && STRUCT->m_Start.y <=y2 )
-            return TRUE;
-        if( (STRUCT->m_End.x >= x1) && (STRUCT->m_End.x <= x2)
-           && (STRUCT->m_End.y >= y1) && (STRUCT->m_End.y <=y2) )
-            return TRUE;
+        if( aBox.Inside(STRUCT->m_Start) )
+            return true;
+        if( aBox.Inside(STRUCT->m_End) )
+            return true;
         break;
 
     case DRAW_BUSENTRY_STRUCT_TYPE:
         #undef STRUCT
         #define STRUCT ( (DrawBusEntryStruct*) DrawStruct )
-        if( STRUCT->m_Pos.x >= x1 && STRUCT->m_Pos.x <= x2
-            && STRUCT->m_Pos.y >= y1 && STRUCT->m_Pos.y <=y2 )
-            return TRUE;
-        if( (STRUCT->m_End().x >= x1) && ( STRUCT->m_End().x <= x2)
-           && ( STRUCT->m_End().y >= y1) && ( STRUCT->m_End().y <=y2) )
-            return TRUE;
+        if( aBox.Inside(STRUCT->m_Pos) )
+            return true;
+        if( aBox.Inside(STRUCT->m_End() ) )
+            return true;
         break;
 
     case DRAW_JUNCTION_STRUCT_TYPE:
-        #undef STRUCT
-        #define STRUCT ( (DrawJunctionStruct*) DrawStruct )
-        if( (STRUCT->m_Pos.x >= x1) && (STRUCT->m_Pos.x <= x2)
-           && (STRUCT->m_Pos.y >= y1) && (STRUCT->m_Pos.y <= y2) )
-            return TRUE;
-        break;
-
-
     case DRAW_NOCONNECT_STRUCT_TYPE:
-        #undef STRUCT
-        #define STRUCT ( (DrawNoConnectStruct*) DrawStruct )
-        if( (STRUCT->m_Pos.x >= x1) && (STRUCT->m_Pos.x <= x2)
-           && (STRUCT->m_Pos.y >= y1) && (STRUCT->m_Pos.y <= y2) )
-            return TRUE;
-        break;
-
-
-    case TYPE_MARKER_SCH:
-        #undef STRUCT
-        #define STRUCT ( (MARKER_SCH*) DrawStruct )
-        if( (STRUCT->m_Pos.x >= x1) && (STRUCT->m_Pos.x <= x2)
-           && (STRUCT->m_Pos.y >= y1) && (STRUCT->m_Pos.y <= y2) )
-            return TRUE;
-        break;
-
     case TYPE_SCH_LABEL:
     case TYPE_SCH_TEXT:
-        #undef STRUCT
-        #define STRUCT ( (SCH_TEXT*) DrawStruct )
-        dx  = STRUCT->m_Size.x * STRUCT->GetLength();
-        dy  = STRUCT->m_Size.y;
-        xt1 = xt2 = STRUCT->m_Pos.x;
-        yt1 = yt2 = STRUCT->m_Pos.y;
-
-        switch( STRUCT->m_Orient )
-        {
-        case 0:             /* HORIZONTAL  Left justified */
-            xt2 += dx; yt2 -= dy;
-            break;
-
-        case 1:             /* VERTICAL UP */
-            xt2 -= dy; yt2 -= dx;
-            break;
-
-        case 2:             /* horizontal  Right justified  */
-            xt2 -= dx; yt2 -= dy;
-            break;
-
-        case 3:             /* vertical DOWN */
-            xt2 -= dy; yt2 += dx;
-            break;
-        }
-
-        if( IsBox1InBox2( xt1, yt1, xt2, yt2, x1, y1, x2, y2 ) )
-            return TRUE;
-        break;
-
     case TYPE_SCH_HIERLABEL:
     case TYPE_SCH_GLOBALLABEL:
-        #undef STRUCT
-        #define STRUCT ( (SCH_LABEL*) DrawStruct )
-        dx  = STRUCT->m_Size.x * ( STRUCT->GetLength() + 1);    /* total length
-                                                                 **/
-        dy  = STRUCT->m_Size.y / 2;                             /* half height
-                                                                 **/
-        xt1 = xt2 = STRUCT->m_Pos.x;
-        yt1 = yt2 = STRUCT->m_Pos.y;
-
-        switch( STRUCT->m_Orient )
-        {
-        case 0:             /* HORIZONTAL */
-            xt2 -= dx; yt2 += dy; yt1 -= dy;
-            break;
-
-        case 1:             /* VERTICAL UP */
-            xt1 -= dy; xt2 += dy; yt2 += dx;
-            break;
-
-        case 2:             /* horizontal inverse */
-            xt2 += dx; yt2 += dy; yt1 -= dy;
-            break;
-
-        case 3:             /* vertical DOWN */
-            xt1 -= dy; xt2 += dy; yt2 -= dx;
-            break;
-        }
-
-        if( IsBox1InBox2( xt1, yt1, xt2, yt2, x1, y1, x2, y2 ) )
-            return TRUE;
-        break;
-
     case TYPE_SCH_COMPONENT:
-    {
-        #undef STRUCT
-        #define STRUCT ( (SCH_COMPONENT*) DrawStruct )
-        EDA_Rect BoundaryBox = STRUCT->GetBoundaryBox();
-        xt1 = BoundaryBox.GetX();
-        yt1 = BoundaryBox.GetY();
-        xt2 = BoundaryBox.GetRight();
-        yt2 = BoundaryBox.GetBottom();
-        if( IsBox1InBox2( xt1, yt1, xt2, yt2, x1, y1, x2, y2 ) )
-            return TRUE;
-        break;
-    }
-
     case DRAW_SHEET_STRUCT_TYPE:
-        #undef STRUCT
-        #define STRUCT ( (SCH_SHEET*) DrawStruct )
-        /* Recalculate the coordinates of the worksheet component */
-        xt1 = STRUCT->m_Pos.x;
-        yt1 = STRUCT->m_Pos.y;
-        xt2 = STRUCT->m_Pos.x + STRUCT->m_Size.x;
-        yt2 = STRUCT->m_Pos.y + STRUCT->m_Size.y;
-
-        if( IsBox1InBox2( xt1, yt1, xt2, yt2, x1, y1, x2, y2 ) )
-            return TRUE;
+    case TYPE_MARKER_SCH:
+        BoundaryBox = DrawStruct->GetBoundingBox();
+        if( aBox.Intersects( BoundaryBox ) )
+            return true;
         break;
 
     case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
         break;
 
     default:
-        msg.Printf( wxT( "DrawStructInBox() Err: unexpected StructType %d (" ),
+    {
+        wxString msg;
+
+        msg.Printf( wxT( "IsItemInBox() Err: unexpected StructType %d (" ),
                     DrawStruct->Type() );
         msg << DrawStruct->GetClass() << wxT( ")" );
         wxMessageBox( msg );
         break;
     }
-
-    return FALSE;
-}
-
-
-/****************************************************************************/
-static bool IsBox1InBox2( int StartX1, int StartY1, int EndX1, int EndY1,
-                          int StartX2, int StartY2, int EndX2, int EndY2 )
-{
-/****************************************************************************/
-/*  Routine detects that the rectangle 1 (Box1) and the rectangle 2 (Box2) is
- * Overlap.
- * Returns TRUE or FALSE.
- *
- * These assume that there is recovery if at least one corner
- * A 'Box' is included in the other
- */
-    int cX, cY;
-
-    if( StartX1 > EndX1 )
-        EXCHG( StartX1, EndX1 );
-    if( StartX2 > EndX2 )
-        EXCHG( StartX2, EndX2 );
-    if( StartY1 > EndY1 )
-        EXCHG( StartY1, EndY1 );
-    if( StartY2 > EndY2 )
-        EXCHG( StartY2, EndY2 );
-
-    /* Test the 4 corners of the rectangle 1 */
-    cX = StartX1;
-    cY = StartY1;
-    if( (cX >= StartX2) && (cX <= EndX2) && (cY >= StartY2) && (cY <= EndY2) )
-        return TRUE;
-
-    cX = EndX1;
-    cY = StartY1;
-    if( (cX >= StartX2) && (cX <= EndX2) && (cY >= StartY2) && (cY <= EndY2) )
-        return TRUE;
-
-    cX = EndX1;
-    cY = EndY1;
-    if( (cX >= StartX2) && (cX <= EndX2) && (cY >= StartY2) && (cY <= EndY2) )
-        return TRUE;
-
-    cX = StartX1;
-    cY = EndY1;
-    if( (cX >= StartX2) && (cX <= EndX2) && (cY >= StartY2) && (cY <= EndY2) )
-        return TRUE;
-
-    /* Test the 4 corners of the rectangle 2 */
-    cX = StartX2;
-    cY = StartY2;
-    if( (cX >= StartX1) && (cX <= EndX1) && (cY >= StartY1) && (cY <= EndY1) )
-        return TRUE;
-
-    cX = EndX2;
-    cY = StartY2;
-    if( (cX >= StartX1) && (cX <= EndX1) && (cY >= StartY1) && (cY <= EndY1) )
-        return TRUE;
-
-    cX = EndX2;
-    cY = EndY2;
-    if( (cX >= StartX1) && (cX <= EndX1) && (cY >= StartY1) && (cY <= EndY1) )
-        return TRUE;
-
-    cX = StartX2;
-    cY = EndY2;
-    if( (cX >= StartX1) && (cX <= EndX1) && (cY >= StartY1) && (cY <= EndY1) )
-        return TRUE;
+    }
 
     return FALSE;
 }

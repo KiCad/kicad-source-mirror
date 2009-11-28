@@ -100,7 +100,7 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygon(
     CPolyPt  corners[4];    // Buffer of polygon corners
 
     EDA_Rect rect = GetTextBox( -1 );
-    rect.Inflate( aClearanceValue, aClearanceValue );
+    rect.Inflate( aClearanceValue );
     corners[0].x = rect.GetOrigin().x;
     corners[0].y = rect.GetOrigin().y;
     corners[1].y = corners[0].y;

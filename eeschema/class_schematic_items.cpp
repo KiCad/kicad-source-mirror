@@ -144,15 +144,20 @@ void DrawBusEntryStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 DrawJunctionStruct::DrawJunctionStruct( const wxPoint& pos ) :
     SCH_ITEM( NULL, DRAW_JUNCTION_STRUCT_TYPE )
 {
+#define DRAWJUNCTION_DIAMETER  32   /* Diameter of junction symbol between wires */
     m_Pos   = pos;
     m_Layer = LAYER_JUNCTION;
+    m_Size.x = m_Size.y = DRAWJUNCTION_DIAMETER;
+#undef DRAWJUNCTION_DIAMETER
 }
+
 
 
 DrawJunctionStruct* DrawJunctionStruct::GenCopy()
 {
     DrawJunctionStruct* newitem = new DrawJunctionStruct( m_Pos );
 
+    newitem->m_Size  = m_Size;
     newitem->m_Layer = m_Layer;
     newitem->m_Flags = m_Flags;
 
@@ -183,13 +188,11 @@ EDA_Rect DrawJunctionStruct::GetBoundingBox()
 
 // return a bounding box
 {
-    int      width = DRAWJUNCTION_DIAMETER;
-    int      xmin  = m_Pos.x - (DRAWJUNCTION_DIAMETER/2);
-    int      ymin  = m_Pos.y - (DRAWJUNCTION_DIAMETER/2);
+    EDA_Rect rect;
+    rect.SetOrigin(m_Pos);
+    rect.Inflate( (GetPenSize() + m_Size.x)/2);
 
-    EDA_Rect ret( wxPoint( xmin, ymin ), wxSize( width, width ) );
-
-    return ret;
+    return rect;
 };
 
 
@@ -202,7 +205,7 @@ bool DrawJunctionStruct::HitTest( const wxPoint& aPosRef )
     wxPoint dist = aPosRef - m_Pos;
 
     return sqrt( ( (double) ( dist.x * dist.x ) ) +
-                 ( (double) ( dist.y * dist.y ) ) ) < (DRAWJUNCTION_DIAMETER/2);
+                 ( (double) ( dist.y * dist.y ) ) ) < (m_Size.x/2);
 }
 
 
@@ -231,7 +234,7 @@ void DrawJunctionStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     GRSetDrawMode( DC, DrawMode );
 
     GRFilledCircle( &panel->m_ClipBox, DC, m_Pos.x + offset.x,
-                    m_Pos.y + offset.y, (DRAWJUNCTION_DIAMETER/2), 0, color,
+                    m_Pos.y + offset.y, (m_Size.x/2), 0, color,
                     color );
 }
 
@@ -257,7 +260,10 @@ void DrawJunctionStruct::Show( int nestLevel, std::ostream& os )
 DrawNoConnectStruct::DrawNoConnectStruct( const wxPoint& pos ) :
     SCH_ITEM( NULL, DRAW_NOCONNECT_STRUCT_TYPE )
 {
+#define DRAWNOCONNECT_SIZE 48       /* No symbol connection range. */
     m_Pos = pos;
+    m_Size.x = m_Size.y = DRAWNOCONNECT_SIZE;
+#undef DRAWNOCONNECT_SIZE
 }
 
 
@@ -265,6 +271,7 @@ DrawNoConnectStruct* DrawNoConnectStruct::GenCopy()
 {
     DrawNoConnectStruct* newitem = new DrawNoConnectStruct( m_Pos );
 
+    newitem->m_Size  = m_Size;
     newitem->m_Flags = m_Flags;
 
     return newitem;
@@ -273,11 +280,11 @@ DrawNoConnectStruct* DrawNoConnectStruct::GenCopy()
 
 EDA_Rect DrawNoConnectStruct::GetBoundingBox()
 {
-    const int DELTA = DRAWNOCONNECT_SIZE / 2;
-    EDA_Rect  box( wxPoint( m_Pos.x - DELTA, m_Pos.y - DELTA ),
-                   wxSize( 2 * DELTA, 2 * DELTA ) );
+    int delta = (GetPenSize() + m_Size.x)/2;
+    EDA_Rect  box;
+    box.SetOrigin( m_Pos );
+    box.Inflate(delta);
 
-    box.Normalize();
     return box;
 }
 
@@ -290,7 +297,7 @@ EDA_Rect DrawNoConnectStruct::GetBoundingBox()
 bool DrawNoConnectStruct::HitTest( const wxPoint& aPosRef )
 {
     int     width = g_DrawDefaultLineThickness;
-    int     delta = ( DRAWNOCONNECT_SIZE + width) / 2;
+    int     delta = ( m_Size.x + width) / 2;
 
     wxPoint dist = aPosRef - m_Pos;
 
@@ -331,7 +338,7 @@ int DrawNoConnectStruct::GetPenSize()
 void DrawNoConnectStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                                 const wxPoint& offset, int DrawMode, int Color )
 {
-    const int DELTA = (DRAWNOCONNECT_SIZE / 2);
+    int delta = m_Size.x / 2;
     int       pX, pY, color;
     int       width = g_DrawDefaultLineThickness;
 
@@ -343,10 +350,10 @@ void DrawNoConnectStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         color = ReturnLayerColor( LAYER_NOCONNECT );
     GRSetDrawMode( DC, DrawMode );
 
-    GRLine( &panel->m_ClipBox, DC, pX - DELTA, pY - DELTA, pX + DELTA,
-            pY + DELTA, width, color );
-    GRLine( &panel->m_ClipBox, DC, pX + DELTA, pY - DELTA, pX - DELTA,
-            pY + DELTA, width, color );
+    GRLine( &panel->m_ClipBox, DC, pX - delta, pY - delta, pX + delta,
+            pY + delta, width, color );
+    GRLine( &panel->m_ClipBox, DC, pX + delta, pY - delta, pX - delta,
+            pY + delta, width, color );
 }
 
 

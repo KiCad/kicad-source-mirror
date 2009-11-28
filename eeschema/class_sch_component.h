@@ -210,6 +210,14 @@ public:
     void            SetTimeStamp( long aNewTimeStamp);
 
     EDA_Rect        GetBoundaryBox() const;
+
+    /**
+     * Function GetBoundingBox
+     * returns the orthogonal, bounding box of this object for display purposes.
+     * This box should be an enclosing perimeter for visible components of this
+     * object, and the units should be in the pcb or schematic coordinate system.
+     * It is OK to overestimate the size by a few counts.
+     */
     EDA_Rect        GetBoundingBox();
 
     /**

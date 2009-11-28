@@ -5,10 +5,6 @@
 #ifndef CLASS_SCHEMATIC_ITEMS_H
 #define CLASS_SCHEMATIC_ITEMS_H
 
-#define DRAWJUNCTION_DIAMETER  32   /* Diameter of junction symbol between
-                                     * wires */
-#define DRAWNOCONNECT_SIZE 48       /* No symbol connection range. */
-
 /* Flags for BUS ENTRY (bus to bus or wire to bus */
 #define WIRE_TO_BUS 0
 #define BUS_TO_BUS  1
@@ -51,6 +47,13 @@ public:
     }
 
 
+    /**
+     * Function GetBoundingBox
+     * returns the orthogonal, bounding box of this object for display purposes.
+     * This box should be an enclosing perimeter for visible components of this
+     * object, and the units should be in the pcb or schematic coordinate system.
+     * It is OK to overestimate the size by a few counts.
+     */
     EDA_Rect     GetBoundingBox();
 
     virtual void Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
@@ -107,6 +110,7 @@ class DrawNoConnectStruct : public SCH_ITEM
 {
 public:
     wxPoint m_Pos;                      /* XY coordinates of NoConnect. */
+    wxSize m_Size;                      // size of this symbol
 
 public:
     DrawNoConnectStruct( const wxPoint& pos );
@@ -143,7 +147,15 @@ public:
      */
     bool HitTest( const wxPoint& aPosRef );
 
+    /**
+     * Function GetBoundingBox
+     * returns the orthogonal, bounding box of this object for display purposes.
+     * This box should be an enclosing perimeter for visible components of this
+     * object, and the units should be in the pcb or schematic coordinate system.
+     * It is OK to overestimate the size by a few counts.
+     */
     EDA_Rect             GetBoundingBox();
+
     // Geometric transforms (used in block operations):
     /** virtual function Move
      * move item to a new position.
@@ -204,6 +216,13 @@ public:
      */
     bool                Save( FILE* aFile ) const;
 
+    /**
+     * Function GetBoundingBox
+     * returns the orthogonal, bounding box of this object for display purposes.
+     * This box should be an enclosing perimeter for visible components of this
+     * object, and the units should be in the pcb or schematic coordinate system.
+     * It is OK to overestimate the size by a few counts.
+     */
     EDA_Rect            GetBoundingBox();
 
     /** Function GetPenSize
@@ -313,6 +332,7 @@ class DrawJunctionStruct : public SCH_ITEM
 {
 public:
     wxPoint m_Pos;                  /* XY coordinates of connection. */
+    wxSize m_Size;
 
 public:
     DrawJunctionStruct( const wxPoint& pos );
@@ -330,6 +350,13 @@ public:
      */
     bool HitTest( const wxPoint& aPosRef );
 
+    /**
+     * Function GetBoundingBox
+     * returns the orthogonal, bounding box of this object for display purposes.
+     * This box should be an enclosing perimeter for visible components of this
+     * object, and the units should be in the pcb or schematic coordinate system.
+     * It is OK to overestimate the size by a few counts.
+     */
     EDA_Rect            GetBoundingBox();
 
     DrawJunctionStruct* GenCopy();

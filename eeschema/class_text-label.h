@@ -104,6 +104,13 @@ public:
      */
     bool     HitTest( const wxPoint& aPosRef );
 
+    /**
+     * Function GetBoundingBox
+     * returns the orthogonal, bounding box of this object for display purposes.
+     * This box should be an enclosing perimeter for visible components of this
+     * object, and the units should be in the pcb or schematic coordinate system.
+     * It is OK to overestimate the size by a few counts.
+     */
     EDA_Rect GetBoundingBox();
 
     /**
@@ -187,6 +194,15 @@ public:
     virtual wxPoint GetSchematicTextOffset();
 
     /**
+     * Function GetBoundingBox
+     * returns the orthogonal, bounding box of this object for display purposes.
+     * This box should be an enclosing perimeter for visible components of this
+     * object, and the units should be in the pcb or schematic coordinate system.
+     * It is OK to overestimate the size by a few counts.
+     */
+    EDA_Rect GetBoundingBox();
+
+    /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.sch"
      * format.
@@ -253,6 +269,13 @@ public:
      */
     bool            HitTest( const wxPoint& aPosRef );
 
+    /**
+     * Function GetBoundingBox
+     * returns the orthogonal, bounding box of this object for display purposes.
+     * This box should be an enclosing perimeter for visible components of this
+     * object, and the units should be in the pcb or schematic coordinate system.
+     * It is OK to overestimate the size by a few counts.
+     */
     EDA_Rect        GetBoundingBox();
 
     /** function CreateGraphicShape
@@ -335,6 +358,13 @@ public:
      */
     bool            HitTest( const wxPoint& aPosRef );
 
+    /**
+     * Function GetBoundingBox
+     * returns the orthogonal, bounding box of this object for display purposes.
+     * This box should be an enclosing perimeter for visible components of this
+     * object, and the units should be in the pcb or schematic coordinate system.
+     * It is OK to overestimate the size by a few counts.
+     */
     EDA_Rect        GetBoundingBox();
 
     /** virtual function Mirror_Y

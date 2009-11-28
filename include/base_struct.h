@@ -166,9 +166,12 @@ public:
     }
 
 
-    void Normalize();                       // Ensure the height and width are
-                                            // >= 0
-    bool Inside( const wxPoint& point );    // Return TRUE if point is in Rect
+    /* Move this by the aMoveVector value (this is a relative move
+     */
+    void Move( const wxPoint& aMoveVector );
+
+    void    Normalize();                    // Ensure the height and width are >= 0
+    bool    Inside( const wxPoint& point ); // Return TRUE if point is in Rect
 
     bool Inside( int x, int y ) { return Inside( wxPoint( x, y ) ); }
     wxSize GetSize() { return m_Size; }
@@ -662,7 +665,7 @@ public:
      */
     int GetInterline()
     {
-        return ( ( m_Size.y * 13 ) / 10 ) + m_Width;
+        return (( m_Size.y * 14 ) / 10) + m_Width;
     }
 };
 

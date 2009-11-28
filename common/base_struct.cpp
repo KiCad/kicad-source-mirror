@@ -235,17 +235,18 @@ EDA_Rect EDA_TextStruct::GetTextBox( int aLine )
 
     // calculate the H and V size
     int    dx = LenSize( *text );
-    int    dy = m_Size.y + m_Width;
-    int extra_dy = (m_Size.y * 3)/10;      // extra dy value for letters like j and y
+    int    dy = GetInterline();
 
     /* Creates bounding box (rectangle) for an horizontal text */
     wxSize textsize = wxSize( dx, dy );
     rect.SetOrigin( m_Pos );
+    // extra dy interval for letters like j and y and ]
+    int extra_dy = dy - m_Size.y;
+    rect.Move(wxPoint(0, -extra_dy/2 ) ); // move origin by the half extra interval
 
-    // for multiline texts ans aLine < 0, merge all rectangles
+    // for multiline texts and aLine < 0, merge all rectangles
     if( m_MultilineAllowed && aLine < 0 )
     {
-        dy = GetInterline();
         for( unsigned ii = 1; ii < list->GetCount(); ii++ )
         {
             text = &list->Item( ii );
@@ -256,8 +257,8 @@ EDA_Rect EDA_TextStruct::GetTextBox( int aLine )
     }
     delete list;
 
-    textsize.y += extra_dy;
     rect.SetSize( textsize );
+    rect.Inflate( m_Width/2 );      // ensure a small margin
 
     /* Now, calculate the rect origin, according to text justification
      * At this point the rectangle origin is the text origin (m_Pos).
@@ -473,6 +474,16 @@ void EDA_Rect::Normalize()
     }
 }
 
+
+
+/** Function Move
+ * Move this rectangle by the aMoveVector value (this is a relative move)
+ * @param aMoveVector = a wxPoint that is the value to move this rectangle
+ */
+void EDA_Rect::Move( const wxPoint& aMoveVector )
+{
+    m_Pos += aMoveVector;
+}
 
 /*******************************************/
 bool EDA_Rect::Inside( const wxPoint& point )
