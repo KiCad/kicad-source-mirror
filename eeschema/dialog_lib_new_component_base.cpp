@@ -33,6 +33,8 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Component &name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
+	m_staticText2->SetToolTip( _("This is the component name in library,\nand also the default component value when loaded in the schematic.") );
+	
 	bSizer2->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	
@@ -54,6 +56,8 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	m_staticText3 = new wxStaticText( this, wxID_ANY, _("Default &reference designator:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
+	m_staticText3->SetToolTip( _("This is the reference used in schematic for annotation.\nDo not use digits in reference.") );
+	
 	bSizer3->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	
@@ -75,6 +79,8 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Number of &parts per package:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
+	m_staticText4->SetToolTip( _("This is the number of parts in this component package.\nA 74LS00 gate has 4 parts per packages.") );
+	
 	bSizer4->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	
@@ -96,6 +102,8 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	m_checkHasConversion = new wxCheckBox( this, wxID_ANY, _("Create component with &alternate body style (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
 	
+	m_checkHasConversion->SetToolTip( _("Check this option for components that have a De Morgan representation.\nThis is usual for gates.") );
+	
 	bSizer7->Add( m_checkHasConversion, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	bSizer5->Add( bSizer7, 0, wxALL|wxEXPAND, 0 );
@@ -108,6 +116,8 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	m_checkIsPowerSymbol = new wxCheckBox( this, wxID_ANY, _("Create component as power &symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	
+	m_checkIsPowerSymbol->SetToolTip( _("Check this option for power symbols.\nPower symbols have specific properties for Eeschema:\n- Value cannot be edited (to avoid mistakes) because this is the pin name that is important for a power symbol\n- Reference is updated automatically when a netlist is created (no need to run Annotate)") );
+	
 	bSizer8->Add( m_checkIsPowerSymbol, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	bSizer5->Add( bSizer8, 0, wxALL|wxEXPAND, 0 );
@@ -119,6 +129,8 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	bSizer9->Add( 12, 0, 0, wxEXPAND, 3 );
 	
 	m_checkLockItems = new wxCheckBox( this, wxID_ANY, _("Parts in package locked (cannot be swapped)"), wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_checkLockItems->SetToolTip( _("Check this option if Eeschema cannot change parts selections inside a given package\nThis happens when parts are different in this package.\nWhen this option is not checked, Eeschema automatically choose the parts in packages to minimize packages count") );
 	
 	bSizer9->Add( m_checkLockItems, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
@@ -141,6 +153,8 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	m_staticText41 = new wxStaticText( this, wxID_ANY, _("Pin text position &offset:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText41->Wrap( -1 );
+	m_staticText41->SetToolTip( _("Margin (in 0.001 inches) between a pin name position and the component body.\nA value from 10 to 40 is usually good.") );
+	
 	bSizer6->Add( m_staticText41, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	

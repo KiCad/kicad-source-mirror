@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-27 09:37+0100\n"
-"PO-Revision-Date: 2009-11-27 09:51+0100\n"
+"POT-Creation-Date: 2009-11-28 14:17+0100\n"
+"PO-Revision-Date: 2009-11-28 14:21+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -4374,22 +4374,22 @@ msgstr "NETCLASS: '%s' a une largeur de piste: %s plust petite que la valeur glo
 #: pcbnew/drc.cpp:354
 #, c-format
 msgid "NETCLASS: '%s' has Via Dia:%s which is less than global:%s"
-msgstr ""
+msgstr "NETCLASS: '%s' a un diamètre de via: %s qui est plus petit que la valeur globale: %s"
 
 #: pcbnew/drc.cpp:368
 #, c-format
 msgid "NETCLASS: '%s' has Via Drill:%s which is less than global:%s"
-msgstr ""
+msgstr "NETCLASS: '%s' a un perçage de via: %s qui est plus petit que la valeur globale: %s"
 
 #: pcbnew/drc.cpp:382
 #, c-format
 msgid "NETCLASS: '%s' has uVia Dia:%s which is less than global:%s"
-msgstr ""
+msgstr "NETCLASS: '%s' a un diamètre de microvia: %s qui est plus petit que la valeur globale: %s"
 
 #: pcbnew/drc.cpp:396
 #, c-format
 msgid "NETCLASS: '%s' has uVia Drill:%s which is less than global:%s"
-msgstr ""
+msgstr "NETCLASS: '%s' a un perçage de microvia: %s qui est plus petit que la valeur globale: %s"
 
 #: pcbnew/class_marker_pcb.cpp:68
 msgid "ErrType"
@@ -5714,7 +5714,7 @@ msgstr "Nb Modules"
 
 #: pcbnew/dialog_global_edit_tracks_and_vias.cpp:154
 msgid "Set current Net tracks and vias sizes and drill to the current values?"
-msgstr ""
+msgstr "Ajuster les tailleset perçage des vias et pistes du net courant aux valeurs courantes"
 
 #: pcbnew/dialog_global_edit_tracks_and_vias.cpp:165
 msgid "Set current Net tracks and vias sizes and drill to the Netclass default value?"
@@ -6528,6 +6528,28 @@ msgstr "Le composant \" %s\" existe, Le changer ?"
 msgid "Component %s saved in library %s"
 msgstr "Composant %s sauvé en librairie %s"
 
+#: eeschema/netlist.cpp:88
+msgid "List"
+msgstr "Liste"
+
+#: eeschema/netlist.cpp:106
+msgid "NbItems"
+msgstr "NbItems"
+
+#: eeschema/netlist.cpp:216
+#: eeschema/netlist.cpp:261
+#: eeschema/netlist.cpp:282
+msgid "Done"
+msgstr "Fini"
+
+#: eeschema/netlist.cpp:222
+msgid "Labels"
+msgstr "Labels"
+
+#: eeschema/netlist.cpp:265
+msgid "Hierar."
+msgstr "Hiérar."
+
 #: eeschema/symbedit.cpp:47
 msgid "Import Symbol Drawings"
 msgstr "Importer Symbole de Dessin"
@@ -6618,27 +6640,27 @@ msgstr "Impossible de créer le fichier "
 msgid "Library Browser"
 msgstr "Visualisateur de Librairies"
 
-#: eeschema/schframe.cpp:363
+#: eeschema/schframe.cpp:364
 msgid "Schematic modified, Save before exit ?"
 msgstr "Schématique modifiée,  Sauver avant de quitter ?"
 
-#: eeschema/schframe.cpp:502
+#: eeschema/schframe.cpp:503
 msgid "Draw wires and busses in any direction"
 msgstr "Tracer les fils et bus de n'importe quelle direction"
 
-#: eeschema/schframe.cpp:503
+#: eeschema/schframe.cpp:504
 msgid "Draw horizontal and vertical wires and busses only"
 msgstr "Autoriser fils et bus verticaux et horizontaux seulement"
 
-#: eeschema/schframe.cpp:513
+#: eeschema/schframe.cpp:514
 msgid "Do not show hidden pins"
 msgstr "Ne pas affichager les pins invisibles"
 
-#: eeschema/schframe.cpp:514
+#: eeschema/schframe.cpp:515
 msgid "Show hidden pins"
 msgstr "Force affichage des pins invisibles"
 
-#: eeschema/schframe.cpp:617
+#: eeschema/schframe.cpp:618
 msgid "Schematic"
 msgstr "Schématique"
 
@@ -6653,28 +6675,6 @@ msgstr "Navigateur"
 #: eeschema/hierarch.cpp:130
 msgid "Root"
 msgstr "Racine"
-
-#: eeschema/netlist.cpp:88
-msgid "List"
-msgstr "Liste"
-
-#: eeschema/netlist.cpp:106
-msgid "NbItems"
-msgstr "NbItems"
-
-#: eeschema/netlist.cpp:216
-#: eeschema/netlist.cpp:261
-#: eeschema/netlist.cpp:282
-msgid "Done"
-msgstr "Fini"
-
-#: eeschema/netlist.cpp:222
-msgid "Labels"
-msgstr "Labels"
-
-#: eeschema/netlist.cpp:265
-msgid "Hierar."
-msgstr "Hiérar."
 
 #: eeschema/sheet.cpp:180
 msgid "Sheetname:"
@@ -6832,6 +6832,8 @@ msgid ""
 "The field name <%s> conflicts with an existing entry in the component library <%s>.\n"
 "Please choose another name that does not conflict with any library entries."
 msgstr ""
+"Le nom du champ <%s> est en conflit avec un autre composant dans la libairie <%s>.\n"
+"SVP choisissez un autre nom qui me soit pas en conflit avec un composant en librairie."
 
 #: eeschema/libfield.cpp:208
 msgid "No new text: no change"
@@ -7170,10 +7172,14 @@ msgstr "et "
 msgid "key search criteria <"
 msgstr "critère de recherche par clé <"
 
-#: eeschema/class_library.cpp:24
+#: eeschema/class_library.cpp:25
 #, c-format
-msgid "Component library <%s> has duplicate entry name <%s>.  This may cause some unexpected behavior when loading components into a schematic."
+msgid ""
+"Library <%s> has duplicate entry name <%s>.\n"
+"This may cause some unexpected behavior when loading components into a schematic."
 msgstr ""
+"La librairie <%s> a une entrée dupliquée <%s>.\n"
+"Ceci peut causer un comportement inattendu lors du chargement des composants en schématique."
 
 #: eeschema/class_library.cpp:207
 #, c-format
@@ -7213,22 +7219,22 @@ msgstr ""
 msgid "An error occurred attempting to read the header."
 msgstr "Une erreur s'est produite lors de la lecture de l'entête."
 
-#: eeschema/class_library.cpp:592
+#: eeschema/class_library.cpp:593
 #, c-format
 msgid "Library <%s> component load error %s."
 msgstr "Librairie <%s> erreur de chargement du composant %s."
 
-#: eeschema/class_library.cpp:662
+#: eeschema/class_library.cpp:664
 #, c-format
 msgid "Could not open component document library file <%s>."
 msgstr "Ne peut ouvrir le fichier document librairie <%s>."
 
-#: eeschema/class_library.cpp:669
+#: eeschema/class_library.cpp:671
 #, c-format
 msgid "Component document library file <%s> is empty."
 msgstr "Fichier document de composants <%s> vide."
 
-#: eeschema/class_library.cpp:677
+#: eeschema/class_library.cpp:679
 #, c-format
 msgid "File <%s> is not a valid component library document file."
 msgstr "<%s> n'est pas un fichier documentation de composant valide."
@@ -8444,47 +8450,109 @@ msgstr "Options Générales"
 msgid "Component &name:"
 msgstr "&Nom du Composant!"
 
-#: eeschema/dialog_lib_new_component_base.cpp:55
+#: eeschema/dialog_lib_new_component_base.cpp:36
+msgid ""
+"This is the component name in library,\n"
+"and also the default component value when loaded in the schematic."
+msgstr ""
+"Ceci est le nom du composant en libairie,\n"
+"et c'est aussi la valeur par défaut du composant lorsqu'il est chargé en schématique."
+
+#: eeschema/dialog_lib_new_component_base.cpp:57
 msgid "Default &reference designator:"
 msgstr "Référence par défaut"
 
-#: eeschema/dialog_lib_new_component_base.cpp:76
+#: eeschema/dialog_lib_new_component_base.cpp:59
+msgid ""
+"This is the reference used in schematic for annotation.\n"
+"Do not use digits in reference."
+msgstr ""
+"Ceci est la référence utilisée en schématique pour l'annotation.\n"
+"Ne pas utiliser de chiffres dans la référence."
+
+#: eeschema/dialog_lib_new_component_base.cpp:80
 msgid "Number of &parts per package:"
 msgstr "Nombre de &parts par boitier"
 
-#: eeschema/dialog_lib_new_component_base.cpp:97
+#: eeschema/dialog_lib_new_component_base.cpp:82
+msgid ""
+"This is the number of parts in this component package.\n"
+"A 74LS00 gate has 4 parts per packages."
+msgstr ""
+"Ceci est le nombre de parts dans le boitier de ce composant.\n"
+"Une porte 74LS00 a 4 parts par boitier."
+
+#: eeschema/dialog_lib_new_component_base.cpp:103
 msgid "Create component with &alternate body style (DeMorgan)"
 msgstr "Créer un composant avec une forme &alternative (DeMorgan)"
 
-#: eeschema/dialog_lib_new_component_base.cpp:109
+#: eeschema/dialog_lib_new_component_base.cpp:105
+msgid ""
+"Check this option for components that have a De Morgan representation.\n"
+"This is usual for gates."
+msgstr ""
+"Cocher cette option pour les  composants qui ont une représentation dite De Morgan\n"
+"Ceci est usuel pour les portes."
+
+#: eeschema/dialog_lib_new_component_base.cpp:117
 msgid "Create component as power &symbol"
 msgstr "Créer composant comme &symbole d'alimentation"
 
-#: eeschema/dialog_lib_new_component_base.cpp:121
+#: eeschema/dialog_lib_new_component_base.cpp:119
+msgid ""
+"Check this option for power symbols.\n"
+"Power symbols have specific properties for Eeschema:\n"
+"- Value cannot be edited (to avoid mistakes) because this is the pin name that is important for a power symbol\n"
+"- Reference is updated automatically when a netlist is created (no need to run Annotate)"
+msgstr ""
+"Cocher cette option pour les symboles d'alimentation.\n"
+"Les symboles d'alimentation ont des propriétés spécifiques dans eeschema:\n"
+"- La valeur le peut pas être éditée (pour éviter des erreurs) car c'est le nom de la pin qui est important pour un symbole d'alimentation\n"
+"- La référence est mise à jour automatiquement lorsque une netliste est créée (pas besoin de lancer l'annotation)"
+
+#: eeschema/dialog_lib_new_component_base.cpp:131
 msgid "Parts in package locked (cannot be swapped)"
 msgstr "Les parts du boitier sont verrouillées (ne peuvent pas être interchangées)"
 
-#: eeschema/dialog_lib_new_component_base.cpp:130
+#: eeschema/dialog_lib_new_component_base.cpp:133
+msgid ""
+"Check this option if Eeschema cannot change parts selections inside a given package\n"
+"This happens when parts are different in this package.\n"
+"When this option is not checked, Eeschema automatically choose the parts in packages to minimize packages count"
+msgstr ""
+"Cocher cette options si Eeschema ne doit pas changer la sélection des parts dans un boitier donné.\n"
+"Ceci arrive quand les parts sont différentes dans ce boitier.\n"
+"Quand cette option n'est pas cochée, eeschema choisit automatiquement les parts dans les boitiers pour minimiser le nombre de boitiers."
+
+#: eeschema/dialog_lib_new_component_base.cpp:142
 msgid "Global Pin Settings"
 msgstr "Parametres Globaux des Pins"
 
-#: eeschema/dialog_lib_new_component_base.cpp:142
+#: eeschema/dialog_lib_new_component_base.cpp:154
 msgid "Pin text position &offset:"
-msgstr "Offset de position du text de la pin"
+msgstr "Offset de position du texte de la pin"
 
-#: eeschema/dialog_lib_new_component_base.cpp:152
+#: eeschema/dialog_lib_new_component_base.cpp:156
+msgid ""
+"Margin (in 0.001 inches) between a pin name position and the component body.\n"
+"A value from 10 to 40 is usually good."
+msgstr ""
+"Marge (en 0,001 pouce) entre la position des noms de pins et le corps du composant.\n"
+"Une valeur de 10 à 40 est usuellement bonne."
+
+#: eeschema/dialog_lib_new_component_base.cpp:166
 msgid "mils"
 msgstr "mils"
 
-#: eeschema/dialog_lib_new_component_base.cpp:164
+#: eeschema/dialog_lib_new_component_base.cpp:178
 msgid "Show pin n&umber text"
 msgstr "Afficher le &numéro de pin"
 
-#: eeschema/dialog_lib_new_component_base.cpp:177
+#: eeschema/dialog_lib_new_component_base.cpp:191
 msgid "Show pin name te&xt"
 msgstr "Afficher le N&om de Pin"
 
-#: eeschema/dialog_lib_new_component_base.cpp:190
+#: eeschema/dialog_lib_new_component_base.cpp:204
 msgid "Pin name &inside"
 msgstr "Nom de pin à l'&intérieur"
 
@@ -8679,7 +8747,7 @@ msgstr "Supprimer les parts supplémentaires du composant?"
 
 #: eeschema/edit_component_in_lib.cpp:395
 msgid "Add new pins for alternate body style ( DeMorgan ) to component?"
-msgstr ""
+msgstr "Ajouter les nouvelles pins pour la forme alternative (DeMorgan) au composant?"
 
 #: eeschema/edit_component_in_lib.cpp:402
 msgid "Delete alternate body style (DeMorgan) draw items from component?"
@@ -9233,14 +9301,6 @@ msgstr "Général :"
 msgid "As Convert"
 msgstr "A une forme \"convertie\""
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:29
-msgid ""
-"Check this option for components that have a De Morgan representation.\n"
-"This is usual for gates."
-msgstr ""
-"Cocher cette option pour les  composants qui ont une représentation dite De Morgan\n"
-"Ceci est usuel pour les portes."
-
 #: eeschema/dialog_edit_component_in_lib_base.cpp:33
 msgid "Show Pin Num"
 msgstr "Montre Numéro de Pin"
@@ -9273,56 +9333,82 @@ msgstr ""
 msgid "Number of Units:"
 msgstr "Nombre de Parts:"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:77
+#: eeschema/dialog_edit_component_in_lib_base.cpp:79
 msgid "Skew:"
 msgstr "Décalage:"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:93
-msgid ""
-"Check this option for power symbols.\n"
-"Power symbols have specific properties"
-msgstr ""
-"Activer cete option pour les symboles d'alimentation.\n"
-"Les symboles d'alimentation ont des propriétés spécifiques"
-
-#: eeschema/dialog_edit_component_in_lib_base.cpp:99
-msgid ""
-"Check this option if Eeschema cannot change parts selections inside a given package\n"
-"This happens when parts are different in this package."
-msgstr ""
-
-#: eeschema/dialog_edit_component_in_lib_base.cpp:111
+#: eeschema/dialog_edit_component_in_lib_base.cpp:115
 msgid "Description:"
 msgstr "Description:"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:118
+#: eeschema/dialog_edit_component_in_lib_base.cpp:117
+msgid ""
+"A short description that is displayed in Eeschema.\n"
+"Can be a very good help when selecting components in libraries components lists."
+msgstr ""
+"Une courte description qui est affichée dans Eeschema.\n"
+"Peut être une très bonne aide lors de la sélection de composants dans les listes de composants en librairies."
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:124
 msgid "Keywords:"
 msgstr "Mots Clés:"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:125
+#: eeschema/dialog_edit_component_in_lib_base.cpp:126
+msgid ""
+"Enter keys words that can be used to select this composant\n"
+"keys words cannot have spaces and are separated by a space"
+msgstr ""
+"Entrer les mots clés qui peuvent être utilisés pour sélectionner ce composant\n"
+"les mots clés ne diovent pas comporter des espaces, et sont séparés par un espace."
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:133
 msgid "DocFileName:"
 msgstr "Fichier de Doc:"
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:135
+msgid "Enter the documentation file (a .pdf document) associated to the component."
+msgstr "Entrer le fichier de documentation( un document .pdf) associé au coçmposant."
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:145
 msgid "Copy Doc"
 msgstr "Copie Doc"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:138
+#: eeschema/dialog_edit_component_in_lib_base.cpp:148
 msgid "Browse DocFiles"
 msgstr "Examen Fichiers de Doc"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:154
+#: eeschema/dialog_edit_component_in_lib_base.cpp:164
 msgid "Alias List:"
 msgstr "Liste des Alias:"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:172
-#: eeschema/dialog_edit_component_in_lib_base.cpp:206
+#: eeschema/dialog_edit_component_in_lib_base.cpp:166
+msgid ""
+"An alias is a component that uses the body of its root component.\n"
+"It has its own documentation and keywords.\n"
+"A fast way to extend a library with similar components"
+msgstr ""
+"Un alias est un composant qui utilise la repérentation de son composant racine.\n"
+"Il a sa propre documentation est ses mots clés.\n"
+"Un moyen rapide d'enrichir une librairie avec des composants similaires."
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:184
+#: eeschema/dialog_edit_component_in_lib_base.cpp:220
 msgid "Delete All"
 msgstr "Tout Supprimer"
 
-#: eeschema/dialog_edit_component_in_lib_base.cpp:188
+#: eeschema/dialog_edit_component_in_lib_base.cpp:200
 msgid "Footprints"
 msgstr "Modules"
+
+#: eeschema/dialog_edit_component_in_lib_base.cpp:202
+msgid ""
+"A list of footprints names that can be used for this component.\n"
+"Footprints names can used jockers.\n"
+"(like sm* to allow all footprints names starting by sm)."
+msgstr ""
+"Une liste d'empreintes qui peuvent être utilisées pour ce composant.\n"
+"Les noms d'empreintes peuvent utiliser des caractères jockers.\n"
+"(Comme sm* pour autoriser tous les noms d'empreintes commençant par sm)."
 
 #: eeschema/dialog_options.cpp:139
 #: eeschema/dialog_options.cpp:286
@@ -10137,11 +10223,6 @@ msgstr "Clock Active Bas"
 msgid "Active Low Output"
 msgstr "Sortie Active Bas"
 
-#: cvpcb/genorcad.cpp:127
-#, c-format
-msgid "%s %s pin %s : Different Nets"
-msgstr "%s %s pin %s :  Nets Differents"
-
 #: cvpcb/cvframe.cpp:280
 msgid ""
 "Net and component list modified.\n"
@@ -10222,6 +10303,11 @@ msgstr "Certains fichiers n'ont pas pu être trouvés!"
 #: cvpcb/listlib.cpp:147
 msgid "Some files are invalid!"
 msgstr "Certains fichiers sont invalides!"
+
+#: cvpcb/genorcad.cpp:127
+#, c-format
+msgid "%s %s pin %s : Different Nets"
+msgstr "%s %s pin %s :  Nets Differents"
 
 #: cvpcb/savecmp.cpp:84
 #, c-format
@@ -10421,6 +10507,11 @@ msgstr " Formats NetListe: EESchema"
 msgid "Netlist error: %s"
 msgstr "Erreur Netliste: %s"
 
+#: cvpcb/writenetlistpcbnew.cpp:52
+#, c-format
+msgid "Component %s %s pin %s : Different Nets"
+msgstr "Composant %s %s pin %s :  Nets Differents"
+
 #: cvpcb/tool_cvpcb.cpp:35
 msgid "Save net list and footprint files"
 msgstr "Sauver fichiers netliste et cmp"
@@ -10464,11 +10555,6 @@ msgstr "Montre la liste filtrée des modules pour le composant courant"
 #: cvpcb/tool_cvpcb.cpp:86
 msgid "Display the full footprint list (without filtering)"
 msgstr "Montre la liste complète des modules"
-
-#: cvpcb/writenetlistpcbnew.cpp:52
-#, c-format
-msgid "Component %s %s pin %s : Different Nets"
-msgstr "Composant %s %s pin %s :  Nets Differents"
 
 #: cvpcb/dialog_display_options.cpp:150
 #: cvpcb/dialog_display_options.cpp:162
@@ -12537,6 +12623,12 @@ msgstr "Options d'Affichage"
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid ""
+#~ "Check this option for power symbols.\n"
+#~ "Power symbols have specific properties"
+#~ msgstr ""
+#~ "Activer cete option pour les symboles d'alimentation.\n"
+#~ "Les symboles d'alimentation ont des propriétés spécifiques"
 #~ msgid "Load Gerber File"
 #~ msgstr "Charger Fichier Gerber"
 #~ msgid "Load Drill"

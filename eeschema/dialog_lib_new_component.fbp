@@ -175,7 +175,7 @@
                                         <property name="size"></property>
                                         <property name="style"></property>
                                         <property name="subclass"></property>
-                                        <property name="tooltip"></property>
+                                        <property name="tooltip">This is the component name in library,&#x0A;and also the default component value when loaded in the schematic.</property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
@@ -322,7 +322,7 @@
                                         <property name="size"></property>
                                         <property name="style"></property>
                                         <property name="subclass"></property>
-                                        <property name="tooltip"></property>
+                                        <property name="tooltip">This is the reference used in schematic for annotation.&#x0A;Do not use digits in reference.</property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
@@ -469,7 +469,7 @@
                                         <property name="size"></property>
                                         <property name="style"></property>
                                         <property name="subclass"></property>
-                                        <property name="tooltip"></property>
+                                        <property name="tooltip">This is the number of parts in this component package.&#x0A;A 74LS00 gate has 4 parts per packages.</property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
@@ -617,7 +617,7 @@
                                         <property name="size"></property>
                                         <property name="style"></property>
                                         <property name="subclass"></property>
-                                        <property name="tooltip"></property>
+                                        <property name="tooltip">Check this option for components that have a De Morgan representation.&#x0A;This is usual for gates.</property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
@@ -690,7 +690,7 @@
                                         <property name="size"></property>
                                         <property name="style"></property>
                                         <property name="subclass"></property>
-                                        <property name="tooltip"></property>
+                                        <property name="tooltip">Check this option for power symbols.&#x0A;Power symbols have specific properties for Eeschema:&#x0A;- Value cannot be edited (to avoid mistakes) because this is the pin name that is important for a power symbol&#x0A;- Reference is updated automatically when a netlist is created (no need to run Annotate)</property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
@@ -763,7 +763,7 @@
                                         <property name="size"></property>
                                         <property name="style"></property>
                                         <property name="subclass"></property>
-                                        <property name="tooltip"></property>
+                                        <property name="tooltip">Check this option if Eeschema cannot change parts selections inside a given package&#x0A;This happens when parts are different in this package.&#x0A;When this option is not checked, Eeschema automatically choose the parts in packages to minimize packages count</property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
@@ -896,7 +896,7 @@
                                         <property name="size"></property>
                                         <property name="style"></property>
                                         <property name="subclass"></property>
-                                        <property name="tooltip"></property>
+                                        <property name="tooltip">Margin (in 0.001 inches) between a pin name position and the component body.&#x0A;A value from 10 to 40 is usually good.</property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>

@@ -21,9 +21,9 @@
 #include <wx/regex.h>
 
 
-static const wxChar* duplicate_name_msg = _( "Component library <%s> has \
-duplicate entry name <%s>.  This may cause some unexpected behavior when \
-loading components into a schematic." );
+static const wxChar* duplicate_name_msg =
+_( "Library <%s> has duplicate entry name <%s>.\n\
+This may cause some unexpected behavior when loading components into a schematic." );
 
 
 static bool DuplicateEntryName( const CMP_LIB_ENTRY& item1,
@@ -578,7 +578,8 @@ the current schematic." ),
                  */
                 if( FindEntry( LibEntry->GetName() ) != NULL )
                 {
-                    wxLogWarning( duplicate_name_msg,
+                    wxString msg( wxGetTranslation(duplicate_name_msg));
+                    wxLogWarning( msg,
                                   GetChars( m_fileName.GetName() ),
                                   GetChars( LibEntry->GetName() ) );
                 }
@@ -615,7 +616,8 @@ void CMP_LIBRARY::LoadAliases( LIB_COMPONENT* component )
     {
         if( FindEntry( component->m_AliasList[ii] ) != NULL )
         {
-            wxLogError( duplicate_name_msg,
+            wxString msg( wxGetTranslation(duplicate_name_msg));
+            wxLogError( msg,
                         GetChars( m_fileName.GetName() ),
                         GetChars( component->m_AliasList[ii] ) );
         }

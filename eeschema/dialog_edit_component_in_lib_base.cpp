@@ -64,6 +64,8 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	
 	m_staticTextNbUnits = new wxStaticText( m_PanelBasic, wxID_ANY, _("Number of Units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextNbUnits->Wrap( -1 );
+	m_staticTextNbUnits->SetToolTip( _("This is the number of parts in this component package.\nA 74LS00 gate has 4 parts per packages.") );
+	
 	bSizernbunits->Add( m_staticTextNbUnits, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_SelNumberOfUnits = new wxSpinCtrl( m_PanelBasic, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 16, 1 );
@@ -76,6 +78,8 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	
 	m_staticTextskew = new wxStaticText( m_PanelBasic, wxID_ANY, _("Skew:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextskew->Wrap( -1 );
+	m_staticTextskew->SetToolTip( _("Margin (in 0.001 inches) between a pin name position and the component body.\nA value from 10 to 40 is usually good.") );
+	
 	bSizer17->Add( m_staticTextskew, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_SetSkew = new wxSpinCtrl( m_PanelBasic, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 100, 0 );
@@ -90,13 +94,13 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	
 	m_OptionPower = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Power Symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	
-	m_OptionPower->SetToolTip( _("Check this option for power symbols.\nPower symbols have specific properties") );
+	m_OptionPower->SetToolTip( _("Check this option for power symbols.\nPower symbols have specific properties for Eeschema:\n- Value cannot be edited (to avoid mistakes) because this is the pin name that is important for a power symbol\n- Reference is updated automatically when a netlist is created (no need to run Annotate)") );
 	
 	bSizerBasicPanel->Add( m_OptionPower, 0, wxALL, 5 );
 	
 	m_OptionPartsLocked = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Parts are locked"), wxDefaultPosition, wxDefaultSize, 0 );
 	
-	m_OptionPartsLocked->SetToolTip( _("Check this option if Eeschema cannot change parts selections inside a given package\nThis happens when parts are different in this package.") );
+	m_OptionPartsLocked->SetToolTip( _("Check this option if Eeschema cannot change parts selections inside a given package\nThis happens when parts are different in this package.\nWhen this option is not checked, Eeschema automatically choose the parts in packages to minimize packages count") );
 	
 	bSizerBasicPanel->Add( m_OptionPartsLocked, 0, wxALL, 5 );
 	
@@ -110,6 +114,8 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	
 	m_staticTextDescription = new wxStaticText( m_PanelDoc, wxID_ANY, _("Description:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDescription->Wrap( -1 );
+	m_staticTextDescription->SetToolTip( _("A short description that is displayed in Eeschema.\nCan be a very good help when selecting components in libraries components lists.") );
+	
 	m_PanelDocBoxSizer->Add( m_staticTextDescription, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_Doc = new wxTextCtrl( m_PanelDoc, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -117,6 +123,8 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	
 	m_staticTextKeywords = new wxStaticText( m_PanelDoc, wxID_ANY, _("Keywords:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextKeywords->Wrap( -1 );
+	m_staticTextKeywords->SetToolTip( _("Enter keys words that can be used to select this composant\nkeys words cannot have spaces and are separated by a space") );
+	
 	m_PanelDocBoxSizer->Add( m_staticTextKeywords, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_Keywords = new wxTextCtrl( m_PanelDoc, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -124,6 +132,8 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	
 	m_staticTextDocFileName = new wxStaticText( m_PanelDoc, wxID_ANY, _("DocFileName:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDocFileName->Wrap( -1 );
+	m_staticTextDocFileName->SetToolTip( _("Enter the documentation file (a .pdf document) associated to the component.") );
+	
 	m_PanelDocBoxSizer->Add( m_staticTextDocFileName, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_Docfile = new wxTextCtrl( m_PanelDoc, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 400,-1 ), 0 );
@@ -153,6 +163,8 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	
 	m_staticTextAlias = new wxStaticText( m_PanelAlias, wxID_ANY, _("Alias List:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextAlias->Wrap( -1 );
+	m_staticTextAlias->SetToolTip( _("An alias is a component that uses the body of its root component.\nIt has its own documentation and keywords.\nA fast way to extend a library with similar components") );
+	
 	bLeftBoxSizerPanelAlias->Add( m_staticTextAlias, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_PartAliasList = new wxListBox( m_PanelAlias, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
@@ -187,6 +199,8 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	
 	m_staticTextFootprints = new wxStaticText( m_PanelFootprintFilter, wxID_ANY, _("Footprints"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextFootprints->Wrap( -1 );
+	m_staticTextFootprints->SetToolTip( _("A list of footprints names that can be used for this component.\nFootprints names can used jockers.\n(like sm* to allow all footprints names starting by sm).") );
+	
 	bFpFilterLeftBoxSizer->Add( m_staticTextFootprints, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_FootprintFilterListBox = new wxListBox( m_PanelFootprintFilter, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
