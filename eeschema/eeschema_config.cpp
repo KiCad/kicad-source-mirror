@@ -10,13 +10,13 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
-
 #include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "eeschema_config.h"
 #include "worksheet.h"
 #include "hotkeys.h"
+#include "dialog_eeschema_options.h"
 
 
 #define HOTKEY_FILENAME wxT( "eeschema" )
@@ -40,12 +40,6 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
 
     case ID_CONFIG_REQ:             // Display the configuration window.
         InstallConfigFrame( pos );
-        break;
-
-    case ID_OPTIONS_SETUP:
-        DisplayOptionFrame( this, pos );
-        // Redraw, because grid settings may have changed.
-        DrawPanel->Refresh( TRUE );
         break;
 
     case ID_CONFIG_SAVE:
@@ -107,6 +101,54 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
 }
 
 
+void WinEDA_SchematicFrame::OnSetOptions( wxCommandEvent& event )
+{
+    wxArrayString units;
+    GridArray& grid_list = GetBaseScreen()->m_GridList;
+
+    DIALOG_EESCHEMA_OPTIONS dlg( this );
+
+    wxLogDebug( _( "Current grid array index %d." ),
+                grid_list.Index( GetBaseScreen()->GetGrid() ) );
+    units.Add( GetUnitsLabel( INCHES ) );
+    units.Add( GetUnitsLabel( MILLIMETRE ) );
+
+    dlg.SetUnits( units, g_UnitMetric );
+    dlg.SetGridSizes( grid_list, GetBaseScreen()->GetGridId() );
+    dlg.SetLineWidth( g_DrawDefaultLineThickness );
+    dlg.SetTextSize( g_DefaultTextLabelSize );
+    dlg.SetRepeatHorizontal( g_RepeatStep.x );
+    dlg.SetRepeatVertical( g_RepeatStep.y );
+    dlg.SetRepeatLabel( g_RepeatDeltaLabel );
+    dlg.SetShowGrid( m_Draw_Grid );
+    dlg.SetShowHiddenPins( m_ShowAllPins );
+    dlg.SetEnableAutoPan( DrawPanel->m_AutoPAN_Enable );
+    dlg.SetEnableAnyBusOrientation( g_HVLines );
+    dlg.SetShowPageLimits( g_ShowPageLimits );
+    dlg.Layout();
+    dlg.Fit();
+    dlg.SetMinSize( dlg.GetSize() );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    g_UnitMetric = dlg.GetUnitsSelection();
+    GetBaseScreen()->SetGrid(
+        grid_list[ (size_t) dlg.GetGridSelection() ].m_Size );
+    g_DrawDefaultLineThickness = dlg.GetLineWidth();
+    g_DefaultTextLabelSize = dlg.GetTextSize();
+    g_RepeatStep.x = dlg.GetRepeatHorizontal();
+    g_RepeatStep.y = dlg.GetRepeatVertical();
+    g_RepeatDeltaLabel = dlg.GetRepeatLabel();
+    m_Draw_Grid = dlg.GetShowGrid();
+    m_ShowAllPins = dlg.GetShowHiddenPins();
+    DrawPanel->m_AutoPAN_Enable = dlg.GetEnableAutoPan();
+    g_HVLines = dlg.GetEnableAnyBusOrientation();
+    g_ShowPageLimits = dlg.GetShowPageLimits();
+    DrawPanel->Refresh( true );
+}
+
+
 /*
  * Read the hotkey files config for eeschema and libedit
  */
@@ -116,7 +158,7 @@ bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose )
         g_ConfigFileLocationChoice );
 
     FullFileName += HOTKEY_FILENAME;
-    FullFileName += wxT(".");
+    FullFileName += wxT( "." );
     FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
     frame->ReadHotkeyConfigFile( FullFileName,
                                  s_Eeschema_Hokeys_Descr,
@@ -288,7 +330,6 @@ void WinEDA_SchematicFrame::SaveProjectFile( wxWindow* displayframe )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    /* ecriture de la configuration */
     wxGetApp().WriteProjectConfig( dlg.GetPath(), GROUP,
                                    GetProjectFileParameters() );
 }
@@ -415,7 +456,8 @@ void WinEDA_SchematicFrame::LoadSettings()
 
     wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
 
-    g_DrawDefaultLineThickness = cfg->Read( DefaultDrawLineWidthEntry, (long) 6 );
+    g_DrawDefaultLineThickness = cfg->Read( DefaultDrawLineWidthEntry,
+                                            (long) 6 );
     cfg->Read( ShowHiddenPinsEntry, &m_ShowAllPins, false );
     cfg->Read( HorzVertLinesOnlyEntry, &g_HVLines, true );
 }

@@ -265,6 +265,7 @@ private:
     void             OnOpenCvpcb( wxCommandEvent& event );
     void             OnOpenLibraryViewer( wxCommandEvent& event );
     void             OnOpenLibraryEditor( wxCommandEvent& event );
+    void             OnSetOptions( wxCommandEvent& event );
 
     /* User interface update event handlers. */
     void             OnUpdateBlockSelected( wxUpdateUIEvent& event );

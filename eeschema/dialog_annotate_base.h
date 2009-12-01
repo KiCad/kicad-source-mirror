@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Apr 21 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -53,12 +53,15 @@ class DIALOG_ANNOTATE_BASE : public wxDialog
 		wxRadioButton* m_rbResetAnnotation;
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_staticTextOrder;
-		wxStaticBitmap* annotate_down_right_bitmap;
 		wxRadioButton* m_rbSortBy_X_Position;
-		wxStaticBitmap* annotate_right_down_bitmap;
+		
+		wxStaticBitmap* annotate_down_right_bitmap;
 		wxRadioButton* m_rbSortBy_Y_Position;
-		wxStaticBitmap* annotate_by_value_bitmap;
+		
+		wxStaticBitmap* annotate_right_down_bitmap;
 		wxRadioButton* rbSortByValue;
+		
+		wxStaticBitmap* annotate_by_value_bitmap;
 		wxStaticLine* m_staticline5;
 		wxButton* m_btnClose;
 		wxButton* m_btnClear;
@@ -71,7 +74,7 @@ class DIALOG_ANNOTATE_BASE : public wxDialog
 		
 	
 	public:
-		DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 331,338 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Annotate Schematic"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_ANNOTATE_BASE();
 	
 };

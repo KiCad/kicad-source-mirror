@@ -71,6 +71,16 @@ void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
     dlg.SetAddToAllBodyStyles( pin->m_Convert == 0 );
     dlg.SetVisible( pin->IsVisible() );
 
+    /* This ugly hack fixes a bug in wxWidgets 2.8.7 and likely earlier
+     * versions for the flex grid sizer in wxGTK that prevents the last
+     * column from being sized correctly.  It doesn't cause any problems
+     * on win32 so it doesn't need to wrapped in ugly #ifdef __WXGTK__
+     * #endif.
+     */
+    dlg.Layout();
+    dlg.Fit();
+    dlg.SetMinSize( dlg.GetSize() );
+
     if( dlg.ShowModal() == wxID_CANCEL )
     {
         if( pin->IsNew() )
@@ -172,7 +182,7 @@ void WinEDA_LibeditFrame::PlacePin( wxDC* DC )
 
     // Tst for an other pin in same new position:
     for( Pin = m_component->GetNextPin(); Pin != NULL;
-        Pin = m_component->GetNextPin( Pin ) )
+         Pin = m_component->GetNextPin( Pin ) )
     {
         if( Pin == CurrentPin || newpos != Pin->m_Pos || Pin->m_Flags )
             continue;

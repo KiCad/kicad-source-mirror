@@ -52,6 +52,8 @@ set(EESCHEMA_SRCS
     dialog_edit_libentry_fields_in_lib_base.cpp
     dialog_eeschema_config.cpp
     dialog_eeschema_config_fbp.cpp
+    dialog_eeschema_options_base.cpp
+    dialog_eeschema_options.cpp
     dialog_erc.cpp
     dialog_erc_base.cpp
 #   dialog_find.cpp
@@ -61,7 +63,6 @@ set(EESCHEMA_SRCS
     dialog_lib_edit_pin_base.cpp
     dialog_lib_new_component.cpp
     dialog_lib_new_component_base.cpp
-    dialog_options.cpp
     dialog_print_using_printer_base.cpp
     dialog_print_using_printer.cpp
     dialog_SVG_print.cpp

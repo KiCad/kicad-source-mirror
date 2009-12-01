@@ -5,14 +5,6 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( wxWindow* parent ) :
 {
     /* Required to make escape key work correctly in wxGTK. */
     m_textName->SetFocus();
-
-    /* This ugly hack fixes a bug in wxWidgets 2.8.7 and likely earlier
-     * versions for the flex grid sizer in wxGTK that prevents the last
-     * column from being sized correctly.
-     */
-#ifdef __WXGTK__
-    m_staticNameTextSizeUnits->SetMinSize( wxSize( 75, -1 ) );
-#endif
 }
 
 

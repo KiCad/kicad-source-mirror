@@ -501,6 +501,8 @@ lost!\n\nClear the current component from the screen?" ) ) )
     m_drawItem = NULL;
 
     DIALOG_LIB_NEW_COMPONENT dlg( this );
+    dlg.SetMinSize( dlg.GetSize() );
+
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
