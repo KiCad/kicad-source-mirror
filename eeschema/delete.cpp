@@ -43,7 +43,7 @@ static int CountConnectedItems( WinEDA_SchematicFrame* frame,
 
         if( TstJunction && ( Struct->Type() == DRAW_JUNCTION_STRUCT_TYPE ) )
         {
-            #define JUNCTION ( (DrawJunctionStruct*) Struct )
+            #define JUNCTION ( (SCH_JUNCTION*) Struct )
             if( JUNCTION->m_Pos == pos )
                 count++;
             #undef JUNCTION
@@ -52,7 +52,7 @@ static int CountConnectedItems( WinEDA_SchematicFrame* frame,
         if( Struct->Type() != DRAW_SEGMENT_STRUCT_TYPE )
             continue;
 
-        #define SEGM ( (EDA_DrawLineStruct*) Struct )
+        #define SEGM ( (SCH_LINE*) Struct )
         if( SEGM->IsOneEndPointAt( pos ) )
             count++;
         #undef SEGM
@@ -71,7 +71,7 @@ static int CountConnectedItems( WinEDA_SchematicFrame* frame,
  * Used by WinEDA_SchematicFrame::DeleteConnection()
  */
 static bool MarkConnected( WinEDA_SchematicFrame* frame, SCH_ITEM* ListStruct,
-                           EDA_DrawLineStruct* segment )
+                           SCH_LINE* segment )
 {
     EDA_BaseStruct* Struct;
 
@@ -81,7 +81,7 @@ static bool MarkConnected( WinEDA_SchematicFrame* frame, SCH_ITEM* ListStruct,
             continue;
         if( Struct->Type() == DRAW_JUNCTION_STRUCT_TYPE )
         {
-        #define JUNCTION ( (DrawJunctionStruct*) Struct )
+        #define JUNCTION ( (SCH_JUNCTION*) Struct )
             if( segment->IsOneEndPointAt( JUNCTION->m_Pos ) )
                 Struct->m_Flags |= CANDIDATE;
             continue;
@@ -91,7 +91,7 @@ static bool MarkConnected( WinEDA_SchematicFrame* frame, SCH_ITEM* ListStruct,
         if( Struct->Type() != DRAW_SEGMENT_STRUCT_TYPE )
             continue;
 
-        #define SEGM ( (EDA_DrawLineStruct*) Struct )
+        #define SEGM ( (SCH_LINE*) Struct )
         if( segment->IsOneEndPointAt( SEGM->m_Start ) )
         {
             if( !frame->LocatePinEnd( ListStruct, SEGM->m_Start ) )
@@ -167,7 +167,7 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
             if( !(DelStruct->m_Flags & SELECTEDNODE) )
                 continue;
 
-            #define SEGM ( (EDA_DrawLineStruct*) DelStruct )
+            #define SEGM ( (SCH_LINE*) DelStruct )
             if( DelStruct->Type() != DRAW_SEGMENT_STRUCT_TYPE )
                 continue;
 
@@ -191,7 +191,7 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
                 continue;
 
             DelStruct->m_Flags |= SKIP_STRUCT;
-            #define SEGM ( (EDA_DrawLineStruct*) DelStruct )
+            #define SEGM ( (SCH_LINE*) DelStruct )
 
             /* Test the SEGM->m_Start point: if this point was connected to
              * an STRUCT_DELETED wire, and now is not connected, the wire can
@@ -207,7 +207,7 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
                 if( removed_struct->Type() != DRAW_SEGMENT_STRUCT_TYPE )
                     continue;
 
-                #define WIRE ( (EDA_DrawLineStruct*) removed_struct )
+                #define WIRE ( (SCH_LINE*) removed_struct )
                 if( WIRE->IsOneEndPointAt( SEGM->m_Start ) )
                     break;
             }
@@ -265,7 +265,7 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
 
             if( DelStruct->Type() == DRAW_JUNCTION_STRUCT_TYPE )
             {
-                #define JUNCTION ( (DrawJunctionStruct*) DelStruct )
+                #define JUNCTION ( (SCH_JUNCTION*) DelStruct )
                 count = CountConnectedItems( this, GetScreen()->EEDrawList,
                                              JUNCTION->m_Pos, FALSE );
                 if( count <= 2 )
@@ -441,7 +441,7 @@ void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Screen )
 
         return;
     }
-    else    // structure usuelle */
+    else
     {
         if( DrawStruct == Screen->EEDrawList )
         {
@@ -470,7 +470,7 @@ void DeleteAllMarkers( int type )
 {
     SCH_SCREEN* screen;
     SCH_ITEM * DrawStruct, * NextStruct;
-    MARKER_SCH* Marker;
+    SCH_MARKER* Marker;
 
     EDA_ScreenList ScreenList;
 
@@ -481,10 +481,10 @@ void DeleteAllMarkers( int type )
              DrawStruct = NextStruct )
         {
             NextStruct = DrawStruct->Next();
-            if( DrawStruct->Type() != TYPE_MARKER_SCH )
+            if( DrawStruct->Type() != TYPE_SCH_MARKER )
                 continue;
 
-            Marker = (MARKER_SCH*) DrawStruct;
+            Marker = (SCH_MARKER*) DrawStruct;
             if( Marker->GetMarkerType() != type )
                 continue;
 

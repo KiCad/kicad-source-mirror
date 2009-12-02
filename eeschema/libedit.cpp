@@ -508,7 +508,8 @@ lost!\n\nClear the current component from the screen?" ) ) )
 
     if( dlg.GetName().IsEmpty() )
     {
-        wxMessageBox(_("This new component has no name and cannot be created. Aborted"));
+        wxMessageBox( _( "This new component has no name and cannot be \
+created. Aborted" ) );
         return;
     }
 

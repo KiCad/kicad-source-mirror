@@ -50,7 +50,7 @@ public:
     LIB_COMPONENT* m_Entry;             // the source component in library
     int            m_Unit;              /* Selected part (For multi parts per
                                          * package) depending on sheet path */
-    DrawSheetPath  m_SheetPath;         /* the sheet path for this component */
+    SCH_SHEET_PATH m_SheetPath;         /* the sheet path for this component */
     unsigned long  m_TimeStamp;         /* unique identification number
                                          * depending on sheet path */
     bool           m_IsNew;             /* true for not yet annotated

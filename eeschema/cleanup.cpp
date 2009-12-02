@@ -15,18 +15,15 @@
 #include "netlist.h"
 
 
-static int TstAlignSegment( EDA_DrawLineStruct* RefSegm,
-                            EDA_DrawLineStruct* TstSegm );
+static int TstAlignSegment( SCH_LINE* RefSegm, SCH_LINE* TstSegm );
 
 
-/*******************************************/
-bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
-{
-/*******************************************/
 /* Routine cleaning:
  * - Includes segments or buses aligned in only 1 segment
  * - Detects identical objects superimposed
  */
+bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
+{
     SCH_ITEM* DrawList, * TstDrawList;
     int       flag;
     bool      Modify = FALSE;
@@ -45,8 +42,8 @@ bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
             {
                 if( TstDrawList->Type() == DRAW_SEGMENT_STRUCT_TYPE )
                 {
-                    flag = TstAlignSegment( (EDA_DrawLineStruct*) DrawList,
-                                           (EDA_DrawLineStruct*) TstDrawList );
+                    flag = TstAlignSegment( (SCH_LINE*) DrawList,
+                                            (SCH_LINE*) TstDrawList );
                     if( flag )
                     {
                         /* keep the bits set in .m_Flags, because the deleted
@@ -71,12 +68,10 @@ bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
 }
 
 
-/***********************************************/
-void BreakSegmentOnJunction( SCH_SCREEN* Screen )
-{
-/************************************************/
 /* Routine to start/end segment (BUS or wires) on junctions.
  */
+void BreakSegmentOnJunction( SCH_SCREEN* Screen )
+{
     SCH_ITEM* DrawList;
 
     if( Screen == NULL )
@@ -93,13 +88,13 @@ void BreakSegmentOnJunction( SCH_SCREEN* Screen )
         {
         case DRAW_JUNCTION_STRUCT_TYPE:
             #undef STRUCT
-            #define STRUCT ( (DrawJunctionStruct*) DrawList )
+            #define STRUCT ( (SCH_JUNCTION*) DrawList )
             BreakSegment( Screen, STRUCT->m_Pos );
             break;
 
         case DRAW_BUSENTRY_STRUCT_TYPE:
             #undef STRUCT
-            #define STRUCT ( (DrawBusEntryStruct*) DrawList )
+            #define STRUCT ( (SCH_BUS_ENTRY*) DrawList )
             BreakSegment( Screen, STRUCT->m_Pos );
             BreakSegment( Screen, STRUCT->m_End() );
             break;
@@ -111,7 +106,7 @@ void BreakSegmentOnJunction( SCH_SCREEN* Screen )
         case TYPE_SCH_HIERLABEL:
         case TYPE_SCH_COMPONENT:
         case DRAW_POLYLINE_STRUCT_TYPE:
-        case TYPE_MARKER_SCH:
+        case TYPE_SCH_MARKER:
         case TYPE_SCH_TEXT:
         case DRAW_SHEET_STRUCT_TYPE:
         case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
@@ -132,7 +127,7 @@ void BreakSegmentOnJunction( SCH_SCREEN* Screen )
  */
 void BreakSegment( SCH_SCREEN* aScreen, wxPoint aBreakpoint )
 {
-    EDA_DrawLineStruct* segment, * NewSegment;
+    SCH_LINE* segment, * NewSegment;
 
     for( SCH_ITEM* DrawList = aScreen->EEDrawList; DrawList;
          DrawList = DrawList->Next() )
@@ -140,7 +135,7 @@ void BreakSegment( SCH_SCREEN* aScreen, wxPoint aBreakpoint )
         if( DrawList->Type() != DRAW_SEGMENT_STRUCT_TYPE )
             continue;
 
-        segment = (EDA_DrawLineStruct*) DrawList;
+        segment = (SCH_LINE*) DrawList;
 
         if( !TestSegmentHit( aBreakpoint, segment->m_Start, segment->m_End, 0 ) )
             continue;
@@ -163,15 +158,12 @@ void BreakSegment( SCH_SCREEN* aScreen, wxPoint aBreakpoint )
 }
 
 
-/***********************************************************/
-static int TstAlignSegment( EDA_DrawLineStruct* RefSegm,
-                            EDA_DrawLineStruct* TstSegm )
-{
-/***********************************************************/
 /* Search if the 2 segments RefSegm and TstSegm are on a line.
  *  Return 0 if no
  *      1 if yes, and RefSegm is modified to be the equivalent segment
  */
+static int TstAlignSegment( SCH_LINE* RefSegm, SCH_LINE* TstSegm )
+{
     if( RefSegm == TstSegm )
         return 0;
     if( RefSegm->GetLayer() != TstSegm->GetLayer() )
@@ -219,8 +211,8 @@ static int TstAlignSegment( EDA_DrawLineStruct* RefSegm,
     {
         if( atan2( (double) ( RefSegm->m_Start.x - RefSegm->m_End.x ),
                   (double) ( RefSegm->m_Start.y - RefSegm->m_End.y ) ) ==
-           atan2( (double) ( TstSegm->m_Start.x - TstSegm->m_End.x ),
-                 (double) ( TstSegm->m_Start.y - TstSegm->m_End.y ) ) )
+            atan2( (double) ( TstSegm->m_Start.x - TstSegm->m_End.x ),
+                   (double) ( TstSegm->m_Start.y - TstSegm->m_End.y ) ) )
         {
             RefSegm->m_End = TstSegm->m_End;
             return 1;

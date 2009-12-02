@@ -15,7 +15,7 @@
 
 
 /* How to add a new hotkey:
- * add a new id in the enum hotkey_id_commnand like MY_NEW_ID_FUNCTION (see
+ * add a new id in the enum hotkey_id_command like MY_NEW_ID_FUNCTION (see
  * hotkeys.h).
  * add a new Ki_HotkeyInfo entry like:
  *  static Ki_HotkeyInfo HkMyNewEntry(wxT("Command Label"), MY_NEW_ID_FUNCTION,
@@ -130,7 +130,7 @@ Ki_HotkeyInfo* s_Schematic_Hotkey_List[] =
     NULL
 };
 
-// List of hotkey descriptors for libray editor
+// List of hotkey descriptors for library editor
 Ki_HotkeyInfo* s_LibEdit_Hotkey_List[] =
 {
     &HkInsertPin,
@@ -312,8 +312,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
             {
                 if( DrawStruct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
                 {
-                    EDA_DrawLineStruct* segment =
-                        (EDA_DrawLineStruct*) DrawStruct;
+                    SCH_LINE* segment = (SCH_LINE*) DrawStruct;
                     if( segment->GetLayer() != LAYER_WIRE )
                         break;
                 }
@@ -621,7 +620,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_REPEAT_LAST:
         if( m_lastDrawItem && (m_lastDrawItem->m_Flags == 0)
-           && (m_lastDrawItem->Type() == COMPONENT_PIN_DRAW_TYPE) )
+           && ( m_lastDrawItem->Type() == COMPONENT_PIN_DRAW_TYPE ) )
         {
             RepeatPinItem( DC, (LIB_PIN*) m_lastDrawItem );
         }

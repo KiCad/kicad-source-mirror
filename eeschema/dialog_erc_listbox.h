@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        dialog_erc.h
 // Author:      jean-pierre Charras
-// Licence:    GPL
+// Licence:     GPL
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef DIALOG_ERC_LISTBOX_H
@@ -23,12 +22,14 @@
 class ERC_HTML_LISTBOX : public wxHtmlListBox
 {
 private:
-    std::vector<MARKER_SCH*> m_MarkerList;     ///< wxHtmlListBox does not own the list, I do
+    std::vector<SCH_MARKER*> m_MarkerList;  ///< wxHtmlListBox does not own the list, I do
 
 public:
     ERC_HTML_LISTBOX( wxWindow* parent, wxWindowID id = wxID_ANY,
-                      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                      long style = 0, const wxString choices[] = NULL, int unused = 0 ) :
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      long style = 0, const wxString choices[] = NULL,
+                      int unused = 0 ) :
         wxHtmlListBox( parent, id, pos, size, style )
     {
     }
@@ -41,12 +42,12 @@ public:
 
     /**
      * Function SetList
-     * sets the DRC_ITEM_LIST for this listbox.  Ownership of the DRC_ITEM_LIST is
-     * transfered to this ERC_HTML_LISTBOX.
+     * sets the DRC_ITEM_LIST for this listbox.  Ownership of the DRC_ITEM_LIST
+     * is transferred to this ERC_HTML_LISTBOX.
      * @param aList The DRC_ITEM_LIST* containing the DRC_ITEMs which will be
      *  displayed in the wxHtmlListBox
      */
-    void AppendToList( MARKER_SCH* aItem )
+    void AppendToList( SCH_MARKER* aItem )
     {
         m_MarkerList.push_back( aItem);
         SetItemCount( m_MarkerList.size() );
@@ -58,7 +59,7 @@ public:
      * Function GetItem
      * returns a requested DRC_ITEM* or NULL.
      */
-    const MARKER_SCH* GetItem( unsigned aIndex )
+    const SCH_MARKER* GetItem( unsigned aIndex )
     {
         if( m_MarkerList.size() > aIndex )
         {
@@ -78,7 +79,7 @@ public:
     {
         if( m_MarkerList.size() > n && n >= 0 )
         {
-            const MARKER_SCH* item = m_MarkerList[ n ];
+            const SCH_MARKER* item = m_MarkerList[ n ];
             if( item )
                 return item->GetReporter().ShowHtml();
         }

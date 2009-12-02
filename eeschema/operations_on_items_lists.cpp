@@ -1,7 +1,7 @@
 /***************************************************
  *  operations_on_item_lists.cpp
  * functions used in block commands, on lists of schematic items:
- * move, mirror, delete anc copy
+ * move, mirror, delete and copy
  ****************************************************/
 
 #include "fctsys.h"
@@ -35,7 +35,7 @@ void MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint )
 
 
 /** Function MoveItemsInList
- *  Move a list of items to a givent move vector
+ *  Move a list of items to a given move vector
  * @param aItemsList = list of picked items
  * @param aMoveVector = the move vector value
  */
@@ -159,7 +159,7 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
             case TYPE_SCH_GLOBALLABEL:
             case TYPE_SCH_HIERLABEL:
             case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-            case TYPE_MARKER_SCH:
+            case TYPE_SCH_MARKER:
             case DRAW_NOCONNECT_STRUCT_TYPE:
             default:
                 break;
@@ -204,27 +204,27 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct )
     switch( DrawStruct->Type() )
     {
     case DRAW_POLYLINE_STRUCT_TYPE:
-        NewDrawStruct = ( (DrawPolylineStruct*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (SCH_POLYLINE*) DrawStruct )->GenCopy();
         break;
 
     case DRAW_SEGMENT_STRUCT_TYPE:
-        NewDrawStruct = ( (EDA_DrawLineStruct*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (SCH_LINE*) DrawStruct )->GenCopy();
         break;
 
     case DRAW_BUSENTRY_STRUCT_TYPE:
-        NewDrawStruct = ( (DrawBusEntryStruct*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (SCH_BUS_ENTRY*) DrawStruct )->GenCopy();
         break;
 
     case DRAW_JUNCTION_STRUCT_TYPE:
-        NewDrawStruct = ( (DrawJunctionStruct*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (SCH_JUNCTION*) DrawStruct )->GenCopy();
         break;
 
-    case TYPE_MARKER_SCH:
-        NewDrawStruct = ( (MARKER_SCH*) DrawStruct )->GenCopy();
+    case TYPE_SCH_MARKER:
+        NewDrawStruct = ( (SCH_MARKER*) DrawStruct )->GenCopy();
         break;
 
     case DRAW_NOCONNECT_STRUCT_TYPE:
-        NewDrawStruct = ( (DrawNoConnectStruct*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (SCH_NO_CONNECT*) DrawStruct )->GenCopy();
         break;
 
     case TYPE_SCH_TEXT:
@@ -254,8 +254,8 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct )
     default:
     {
         wxString msg;
-        msg << wxT( "DuplicateStruct error: unexpected StructType " ) <<
-        DrawStruct->Type() << wxT( " " ) << DrawStruct->GetClass();
+        msg << wxT( "DuplicateStruct error: unexpected StructType " )
+            << DrawStruct->Type() << wxT( " " ) << DrawStruct->GetClass();
         wxMessageBox( msg );
     }
     break;

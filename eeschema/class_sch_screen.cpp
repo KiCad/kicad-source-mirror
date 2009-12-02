@@ -10,9 +10,7 @@
 #include "protos.h"
 
 
-/******************************************************************/
 void SetaParent( EDA_BaseStruct* Struct, BASE_SCREEN* Screen )
-/******************************************************************/
 {
     switch( Struct->Type() )
     {
@@ -26,7 +24,7 @@ void SetaParent( EDA_BaseStruct* Struct, BASE_SCREEN* Screen )
     case DRAW_SEGMENT_STRUCT_TYPE:
     case DRAW_BUSENTRY_STRUCT_TYPE:
     case DRAW_SHEET_STRUCT_TYPE:
-    case TYPE_MARKER_SCH:
+    case TYPE_SCH_MARKER:
     case DRAW_NOCONNECT_STRUCT_TYPE:
         Struct->SetParent( Screen );
         break;
@@ -40,12 +38,9 @@ void SetaParent( EDA_BaseStruct* Struct, BASE_SCREEN* Screen )
 }
 
 
-/***********************************************************************/
-/* Class SCH_SCREEN: classe de gestion d'un affichage pour schematique */
-/***********************************************************************/
-
-/* Default EESchema zoom values. Limited to 17 values to keep a decent size to menus
-*/
+/* Default EESchema zoom values. Limited to 17 values to keep a decent size
+ * to menus
+ */
 static int SchematicZoomList[] =
 {
     5, 7, 10, 15, 20, 30, 40, 60, 80, 120, 160, 230, 320, 480, 640, 800, 1280
@@ -82,7 +77,6 @@ static GRID_TYPE SchematicGridList[] = {
                                   sizeof( GRID_TYPE ) )
 
 
-/* Constructeur de SCREEN */
 SCH_SCREEN::SCH_SCREEN( KICAD_T type ) : BASE_SCREEN( type )
 {
     size_t i;
@@ -96,27 +90,25 @@ SCH_SCREEN::SCH_SCREEN( KICAD_T type ) : BASE_SCREEN( type )
     for( i = 0; i < SCHEMATIC_GRID_LIST_CNT; i++ )
         AddGrid( SchematicGridList[i] );
 
-    SetGrid( wxRealPoint( 50, 50 ) );        /* usual grid size */
+    SetGrid( wxRealPoint( 50, 50 ) );   /* Default grid size. */
     m_RefCount = 0;
-    m_Center = false;                   // Suitable for schematic only. for libedit and viewlib, must be set to true
+    m_Center = false;                   /* Suitable for schematic only. For
+                                         * libedit and viewlib, must be set
+                                         * to true */
     InitDatas();
 }
 
 
-/****************************/
 SCH_SCREEN::~SCH_SCREEN()
-/****************************/
 {
     ClearUndoRedoList();
     FreeDrawList();
 }
 
-/***********************************/
-void SCH_SCREEN::FreeDrawList()
-/***********************************/
 
 /* Routine to clear (free) EESchema drawing list of a screen.
  */
+void SCH_SCREEN::FreeDrawList()
 {
     SCH_ITEM* DrawStruct;
 
@@ -131,13 +123,10 @@ void SCH_SCREEN::FreeDrawList()
 }
 
 
-/**************************************************************/
-void SCH_SCREEN::RemoveFromDrawList( SCH_ITEM * DrawStruct )
-/**************************************************************/
-
 /* If found in EEDrawList, remove DrawStruct from EEDrawList.
  *  DrawStruct is not deleted or modified
  */
+void SCH_SCREEN::RemoveFromDrawList( SCH_ITEM * DrawStruct )
 {
     if( DrawStruct == EEDrawList )
         EEDrawList = EEDrawList->Next();
@@ -157,9 +146,7 @@ void SCH_SCREEN::RemoveFromDrawList( SCH_ITEM * DrawStruct )
 }
 
 
-/**************************************************************/
 bool SCH_SCREEN::CheckIfOnDrawList( SCH_ITEM* st )
-/**************************************************************/
 {
     SCH_ITEM * DrawList = EEDrawList;
 
@@ -174,10 +161,8 @@ bool SCH_SCREEN::CheckIfOnDrawList( SCH_ITEM* st )
 }
 
 
-/**************************************************************/
 void SCH_SCREEN::AddToDrawList( SCH_ITEM* st )
-/**************************************************************/
-{ //simple function to add to the head of the drawlist.
+{
     st->SetNext( EEDrawList );
     EEDrawList = st;
 }
@@ -187,17 +172,14 @@ void SCH_SCREEN::AddToDrawList( SCH_ITEM* st )
 /* Class EDA_ScreenList to handle the list of screens in a hierarchy */
 /*********************************************************************/
 
-/********************************/
 EDA_ScreenList::EDA_ScreenList()
-/********************************/
 {
     m_Index = 0;
     BuildScreenList( g_RootSheet );
 }
 
-/*****************************************/
+
 SCH_SCREEN* EDA_ScreenList::GetFirst()
-/*****************************************/
 {
     m_Index = 0;
     if( m_List.GetCount() > 0 )
@@ -206,9 +188,7 @@ SCH_SCREEN* EDA_ScreenList::GetFirst()
 }
 
 
-/*****************************************/
 SCH_SCREEN* EDA_ScreenList::GetNext()
-/*****************************************/
 {
     if( m_Index < m_List.GetCount() )
         m_Index++;
@@ -216,12 +196,9 @@ SCH_SCREEN* EDA_ScreenList::GetNext()
 }
 
 
-/************************************************/
-SCH_SCREEN* EDA_ScreenList::GetScreen( unsigned int index )
-/************************************************/
-
 /* return the m_List[index] item
  */
+SCH_SCREEN* EDA_ScreenList::GetScreen( unsigned int index )
 {
     if( index < m_List.GetCount() )
         return m_List[index];
@@ -229,9 +206,7 @@ SCH_SCREEN* EDA_ScreenList::GetScreen( unsigned int index )
 }
 
 
-/************************************************/
 void EDA_ScreenList::AddScreenToList( SCH_SCREEN* testscreen )
-/************************************************/
 {
     if( testscreen == NULL )
         return;
@@ -245,9 +220,7 @@ void EDA_ScreenList::AddScreenToList( SCH_SCREEN* testscreen )
 }
 
 
-/************************************************************************/
 void EDA_ScreenList::BuildScreenList( EDA_BaseStruct* s )
-/************************************************************************/
 {
     if( s && s->Type() == DRAW_SHEET_STRUCT_TYPE )
     {
@@ -269,4 +242,3 @@ void EDA_ScreenList::BuildScreenList( EDA_BaseStruct* s )
         }
     }
 }
-

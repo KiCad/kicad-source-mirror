@@ -13,8 +13,8 @@ extern SCH_SHEET* g_RootSheet;
  * Pin (label) used in sheets to create hierarchical schematics.
  *
  * A SCH_SHEET_PIN is used to create a hierarchical sheet in the same way a
- * pin is used in a component.  It connects the ojects in the sheet object
- * to the objects in the schecmitic page to the objects in the page that is
+ * pin is used in a component.  It connects the objects in the sheet object
+ * to the objects in the schematic page to the objects in the page that is
  * represented by the sheet.  In a sheet object, a SCH_SHEET_PIN must be
  * connected to a wire, bus, or label.  In the schematic page represented by
  * the sheet, it corresponds to a hierarchical label.
@@ -238,14 +238,14 @@ public:
      *  search the existing hierarchy for an instance of screen "FileName".
      *  don't bother looking at the root sheet - it must be unique,
      *  no other references to its m_AssociatedScreen otherwise there would be
-     * loops
+     *  loops
      *  in the hierarchy.
      *  @param  aScreen = the SCH_SCREEN* screen that we search for
-     *  @param aList = the DrawSheetPath*  that must be used
+     *  @param aList = the SCH_SHEET_PATH*  that must be used
      *  @return true if found
      */
-    bool     LocatePathOfScreen( SCH_SCREEN*    aScreen,
-                                 DrawSheetPath* aList );
+    bool     LocatePathOfScreen( SCH_SCREEN*     aScreen,
+                                 SCH_SHEET_PATH* aList );
 
     /** Function CountSheets
      * calculates the number of sheets found in "this"
@@ -271,9 +271,9 @@ public:
      * Set a new filename and manage data and associated screen
      * The main difficulty is the filename change in a complex hierarchy.
      * - if new filename is not already used: change to the new name (and if an
-     * existing file is found, load it on request)
+     *   existing file is found, load it on request)
      * - if new filename is already used (a complex hierarchy) : reference the
-     * sheet.
+     *   sheet.
      * @param aFileName = the new filename
      * @param aFrame = the schematic frame
      */

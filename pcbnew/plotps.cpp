@@ -84,8 +84,10 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
 
     if( Center )
     {
-        offset.x = BoardCenter.x - ( PaperSize.x / 2 ) / scale;
-        offset.y = BoardCenter.y - ( PaperSize.y / 2 ) / scale;
+        offset.x = wxRound( (double) BoardCenter.x -
+                            ( (double) PaperSize.x / 2.0 ) / scale );
+        offset.y = wxRound( (double) BoardCenter.y -
+                            ( (double) PaperSize.y / 2.0 ) / scale );
     }
     else
     {

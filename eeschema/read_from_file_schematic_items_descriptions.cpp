@@ -246,7 +246,7 @@ int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
          * If F0 "text" for SheetName
          * F1 and "text" for filename
          */
-        ptcar = Line; while( *ptcar && (*ptcar != '"') )
+        ptcar = Line; while( *ptcar && ( *ptcar != '"' ) )
             ptcar++;
 
         if( *ptcar != '"' )
@@ -713,10 +713,10 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
                 // contiguous, no gaps.
                 while( fieldNdx >= component->GetFieldCount() )
                 {
-                    int           newNdx = component->GetFieldCount();
+                    int       newNdx = component->GetFieldCount();
 
-                    SCH_CMP_FIELD field( wxPoint( 0, 0 ), newNdx, component,
-                                         fieldName );
+                    SCH_FIELD field( wxPoint( 0, 0 ), newNdx, component,
+                                     fieldName );
                     component->AddField( field );
                 }
             }
@@ -794,12 +794,12 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
     }
 
     *aLineNum++;
-    if( (fgets( Line, 256 - 1, f ) == NULL)
-       || (sscanf( Line, "%d %d %d %d",
-                   &component->m_Transform[0][0],
-                   &component->m_Transform[0][1],
-                   &component->m_Transform[1][0],
-                   &component->m_Transform[1][1] ) != 4) )
+    if( ( fgets( Line, 256 - 1, f ) == NULL )
+       || ( sscanf( Line, "%d %d %d %d",
+                    &component->m_Transform[0][0],
+                    &component->m_Transform[0][1],
+                    &component->m_Transform[1][0],
+                    &component->m_Transform[1][1] ) != 4 ) )
     {
         aMsgDiag.Printf(
             wxT( "Component orient error at line %d, aborted" ),

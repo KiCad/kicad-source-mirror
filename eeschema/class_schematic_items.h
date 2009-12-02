@@ -11,11 +11,11 @@
 
 
 /**
- * Class EDA_DrawLineStruct
+ * Class SCH_LINE
  * is a segment description base class to describe items which have 2 end
  * points (track, wire, draw line ...)
  */
-class EDA_DrawLineStruct : public SCH_ITEM
+class SCH_LINE : public SCH_ITEM
 {
 public:
     int     m_Width;            // 0 = line, > 0 = tracks, bus ...
@@ -26,20 +26,20 @@ public:
     bool    m_EndIsDangling;    // TRUE if not connected  (wires, tracks...)
 
 public:
-    EDA_DrawLineStruct( const wxPoint& pos, int layer );
-    ~EDA_DrawLineStruct() { }
+    SCH_LINE( const wxPoint& pos, int layer );
+    ~SCH_LINE() { }
 
-    EDA_DrawLineStruct* Next() const { return (EDA_DrawLineStruct*) Pnext; }
-    EDA_DrawLineStruct* Back() const { return (EDA_DrawLineStruct*) Pback; }
+    SCH_LINE* Next() const { return (SCH_LINE*) Pnext; }
+    SCH_LINE* Back() const { return (SCH_LINE*) Pback; }
 
     virtual wxString GetClass() const
     {
-        return wxT( "EDA_DrawLine" );
+        return wxT( "SCH_LINE" );
     }
 
 
-    bool                IsOneEndPointAt( const wxPoint& pos );
-    EDA_DrawLineStruct* GenCopy();
+    bool      IsOneEndPointAt( const wxPoint& pos );
+    SCH_LINE* GenCopy();
 
     bool IsNull()
     {
@@ -106,22 +106,22 @@ public:
 };
 
 
-class DrawNoConnectStruct : public SCH_ITEM
+class SCH_NO_CONNECT : public SCH_ITEM
 {
 public:
     wxPoint m_Pos;                      /* XY coordinates of NoConnect. */
     wxSize m_Size;                      // size of this symbol
 
 public:
-    DrawNoConnectStruct( const wxPoint& pos );
-    ~DrawNoConnectStruct() { }
+    SCH_NO_CONNECT( const wxPoint& pos );
+    ~SCH_NO_CONNECT() { }
     virtual wxString GetClass() const
     {
-        return wxT( "DrawNoConnect" );
+        return wxT( "SCH_NO_CONNECT" );
     }
 
 
-    DrawNoConnectStruct* GenCopy();
+    SCH_NO_CONNECT* GenCopy();
 
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
@@ -149,10 +149,11 @@ public:
 
     /**
      * Function GetBoundingBox
-     * returns the orthogonal, bounding box of this object for display purposes.
-     * This box should be an enclosing perimeter for visible components of this
-     * object, and the units should be in the pcb or schematic coordinate system.
-     * It is OK to overestimate the size by a few counts.
+     * returns the orthogonal, bounding box of this object for display
+     * purposes.  This box should be an enclosing perimeter for visible
+     * components of this object, and the units should be in the pcb or
+     * schematic coordinate system.  It is OK to overestimate the size
+     * by a few counts.
      */
     EDA_Rect             GetBoundingBox();
 
@@ -180,11 +181,11 @@ public:
 
 
 /**
- * Class DrawBusEntryStruct
+ * Class SCH_BUS_ENTRY
  *
  * Defines a bus or wire entry.
  */
-class DrawBusEntryStruct  : public SCH_ITEM
+class SCH_BUS_ENTRY : public SCH_ITEM
 {
 public:
     int     m_Width;
@@ -192,20 +193,20 @@ public:
     wxSize  m_Size;
 
 public:
-    DrawBusEntryStruct( const wxPoint& pos, int shape, int id );
-    ~DrawBusEntryStruct() { }
+    SCH_BUS_ENTRY( const wxPoint& pos, int shape, int id );
+    ~SCH_BUS_ENTRY() { }
 
     virtual wxString GetClass() const
     {
-        return wxT( "DrawBusEntry" );
+        return wxT( "SCH_BUS_ENTRY" );
     }
 
 
-    DrawBusEntryStruct* GenCopy();
-    wxPoint             m_End() const;
-    virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                              const wxPoint& offset, int draw_mode,
-                              int Color = -1 );
+    SCH_BUS_ENTRY* GenCopy();
+    wxPoint        m_End() const;
+    virtual void   Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                         const wxPoint& offset, int draw_mode,
+                         int Color = -1 );
 
     /**
      * Function Save
@@ -214,16 +215,17 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool                Save( FILE* aFile ) const;
+    bool           Save( FILE* aFile ) const;
 
     /**
      * Function GetBoundingBox
-     * returns the orthogonal, bounding box of this object for display purposes.
-     * This box should be an enclosing perimeter for visible components of this
-     * object, and the units should be in the pcb or schematic coordinate system.
-     * It is OK to overestimate the size by a few counts.
+     * returns the orthogonal, bounding box of this object for display
+     * purposes.  This box should be an enclosing perimeter for visible
+     * components of this object, and the units should be in the pcb or
+     * schematic coordinate system.  It is OK to overestimate the size
+     * by a few counts.
      */
-    EDA_Rect            GetBoundingBox();
+    EDA_Rect       GetBoundingBox();
 
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
@@ -253,26 +255,26 @@ public:
     }
 };
 
-class DrawPolylineStruct  : public SCH_ITEM
+class SCH_POLYLINE : public SCH_ITEM
 {
 public:
     int m_Width;                            /* Thickness */
     std::vector<wxPoint> m_PolyPoints;      // list of points (>= 2)
 
 public:
-    DrawPolylineStruct( int layer );
-    ~DrawPolylineStruct();
+    SCH_POLYLINE( int layer );
+    ~SCH_POLYLINE();
 
     virtual wxString GetClass() const
     {
-        return wxT( "DrawPolyline" );
+        return wxT( "SCH_POLYLINE" );
     }
 
 
-    DrawPolylineStruct* GenCopy();
-    virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                              const wxPoint& offset, int draw_mode,
-                              int Color = -1 );
+    SCH_POLYLINE*  GenCopy();
+    virtual void   Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                         const wxPoint& offset, int draw_mode,
+                         int Color = -1 );
 
     /**
      * Function Save
@@ -281,12 +283,12 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool                Save( FILE* aFile ) const;
+    bool           Save( FILE* aFile ) const;
 
     /** Function AddPoint
      * add a corner to m_PolyPoints
      */
-    void             AddPoint( const wxPoint& point )
+    void           AddPoint( const wxPoint& point )
     {
         m_PolyPoints.push_back( point );
     }
@@ -328,19 +330,19 @@ public:
 };
 
 
-class DrawJunctionStruct : public SCH_ITEM
+class SCH_JUNCTION : public SCH_ITEM
 {
 public:
     wxPoint m_Pos;                  /* XY coordinates of connection. */
     wxSize m_Size;
 
 public:
-    DrawJunctionStruct( const wxPoint& pos );
-    ~DrawJunctionStruct() { }
+    SCH_JUNCTION( const wxPoint& pos );
+    ~SCH_JUNCTION() { }
 
     virtual wxString GetClass() const
     {
-        return wxT( "DrawJunction" );
+        return wxT( "SCH_JUNCTION" );
     }
 
 
@@ -352,23 +354,23 @@ public:
 
     /**
      * Function GetBoundingBox
-     * returns the orthogonal, bounding box of this object for display purposes.
-     * This box should be an enclosing perimeter for visible components of this
-     * object, and the units should be in the pcb or schematic coordinate system.
-     * It is OK to overestimate the size by a few counts.
+     * returns the orthogonal, bounding box of this object for display
+     * purposes.  This box should be an enclosing perimeter for visible
+     * components of this object, and the units should be in the pcb or
+     * schematic coordinate system.  It is OK to overestimate the size
+     * by a few counts.
      */
     EDA_Rect            GetBoundingBox();
 
-    DrawJunctionStruct* GenCopy();
+    SCH_JUNCTION* GenCopy();
 
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize( );
 
-    virtual void        Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                              const wxPoint& offset, int draw_mode,
-                              int Color = -1 );
+    virtual void  Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                        const wxPoint& offset, int draw_mode, int Color = -1 );
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.sch"
@@ -376,7 +378,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool                Save( FILE* aFile ) const;
+    bool          Save( FILE* aFile ) const;
 
     // Geometric transforms (used in block operations):
     /** virtual function Move
@@ -400,7 +402,7 @@ public:
     }
 
 #if defined(DEBUG)
-    void                Show( int nestLevel, std::ostream& os );
+    void         Show( int nestLevel, std::ostream& os );
 #endif
 };
 

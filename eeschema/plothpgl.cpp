@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        plothpgl.cpp
 // Purpose:
 // Author:      jean-pierre Charras
@@ -71,10 +70,8 @@ static Ki_PageDescr* Plot_sheet_list[] =
 };
 
 
-/**************************************************************/
 void WinEDA_SchematicFrame::ToPlot_HPGL( wxCommandEvent& event )
 {
-/**************************************************************/
     WinEDA_PlotHPGLFrame* HPGL_frame = new WinEDA_PlotHPGLFrame( this );
 
     HPGL_frame->ShowModal();
@@ -224,11 +221,10 @@ void WinEDA_PlotHPGLFrame::CreateControls()
     wxBoxSizer*       itemBoxSizer6 = new wxBoxSizer( wxVERTICAL );
     itemBoxSizer3->Add( itemBoxSizer6, 0, wxALIGN_TOP | wxALL, 5 );
 
-    wxStaticBox*      itemStaticBoxSizer7Static = new wxStaticBox(
-         itemDialog1, wxID_ANY, _( "Pen control:" ) );
-    wxStaticBoxSizer* itemStaticBoxSizer7 = new wxStaticBoxSizer(
-        itemStaticBoxSizer7Static,
-        wxVERTICAL );
+    wxStaticBox*      itemStaticBoxSizer7Static =
+        new wxStaticBox( itemDialog1, wxID_ANY, _( "Pen control:" ) );
+    wxStaticBoxSizer* itemStaticBoxSizer7 =
+        new wxStaticBoxSizer( itemStaticBoxSizer7Static, wxVERTICAL );
     itemBoxSizer6->Add( itemStaticBoxSizer7,
                         0,
                         wxALIGN_CENTER_HORIZONTAL | wxALL,
@@ -614,7 +610,7 @@ void WinEDA_PlotHPGLFrame::Plot_Schematic_HPGL( int Select_PlotAll,
     wxString               PlotFileName;
     SCH_SCREEN*            screen    = schframe->GetScreen();
     SCH_SCREEN*            oldscreen = screen;
-    DrawSheetPath*         sheetpath, * oldsheetpath = schframe->GetSheet();
+    SCH_SHEET_PATH*        sheetpath, * oldsheetpath = schframe->GetSheet();
     Ki_PageDescr*          PlotSheet;
     wxSize                 SheetSize;
     wxPoint                SheetOffset, PlotOffset;
@@ -625,10 +621,10 @@ void WinEDA_PlotHPGLFrame::Plot_Schematic_HPGL( int Select_PlotAll,
      *  because in complex hierarchies a SCH_SCREEN (a schematic drawings)
      *  is shared between many sheets
      */
-    EDA_SheetList SheetList( NULL );
+    SCH_SHEET_LIST SheetList( NULL );
 
     sheetpath = SheetList.GetFirst();
-    DrawSheetPath list;
+    SCH_SHEET_PATH list;
 
     while( true )
     {

@@ -18,11 +18,6 @@
 #include "class_marker_sch.h"
 
 
-/*****************************************************************************/
-SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay(
-    bool IncludePin )
-{
-/*****************************************************************************/
 /** Function SchematicGeneralLocateAndDisplay
  * Overlaid function
  *  Find the schematic item at cursor position
@@ -39,6 +34,9 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay(
  *
  *  For some items, characteristics are displayed on the screen.
  */
+SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay(
+    bool IncludePin )
+{
     SCH_ITEM*      DrawStruct;
     wxString       msg;
     wxPoint        mouse_position = GetScreen()->m_MousePosition;
@@ -99,13 +97,6 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay(
 }
 
 
-/*****************************************************************************/
-SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay(
-    const wxPoint& refpoint,
-    bool
-    IncludePin )
-{
-/*****************************************************************************/
 /** Function SchematicGeneralLocateAndDisplay
  * Overlaid function
  *  Find the schematic item at a given position
@@ -123,6 +114,11 @@ SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay(
  *
  *  For some items, characteristics are displayed on the screen.
  */
+SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay(
+    const wxPoint& refpoint,
+    bool
+    IncludePin )
+{
     SCH_ITEM*      DrawStruct;
     LIB_PIN*       Pin;
     SCH_COMPONENT* LibItem;
@@ -155,8 +151,8 @@ SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay(
     if( DrawStruct )    // We have found a wire: Search for a connected pin at
                         // the same location
     {
-        Pin = LocateAnyPin(
-             (SCH_ITEM*) m_CurrentSheet->LastDrawList(), refpoint, &LibItem );
+        Pin = LocateAnyPin( (SCH_ITEM*) m_CurrentSheet->LastDrawList(),
+                            refpoint, &LibItem );
         if( Pin )
         {
             Pin->DisplayInfo( this );
@@ -166,13 +162,14 @@ SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay(
         }
         else
             ClearMsgPanel();
+
         return DrawStruct;
     }
 
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), FIELDCMPITEM );
     if( DrawStruct )
     {
-        SCH_CMP_FIELD* Field = (SCH_CMP_FIELD*) DrawStruct;
+        SCH_FIELD* Field = (SCH_FIELD*) DrawStruct;
         LibItem = (SCH_COMPONENT*) Field->GetParent();
         LibItem->DisplayInfo( this );
 
@@ -181,7 +178,7 @@ SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay(
 
     /* search for a pin */
     Pin = LocateAnyPin( (SCH_ITEM*) m_CurrentSheet->LastDrawList(), refpoint,
-                       &LibItem );
+                        &LibItem );
     if( Pin )
     {
         Pin->DisplayInfo( this );
@@ -463,7 +460,7 @@ void WinEDA_ViewlibFrame::GeneralControle( wxDC*   DC,
     screen->m_Curseur = curpos;
 
     /* Snap cursor to grid. */
-    PutOnGrid( &(screen->m_Curseur) );
+    PutOnGrid( &screen->m_Curseur );
 
     if( screen->IsRefreshReq() )
     {

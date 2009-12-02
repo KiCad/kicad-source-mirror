@@ -356,10 +356,10 @@ void WinEDA_PlotPSFrame::CreatePSFile( int AllPages, int pagesize )
     WinEDA_SchematicFrame* schframe  = (WinEDA_SchematicFrame*) m_Parent;
     SCH_SCREEN*            screen    = schframe->GetScreen();
     SCH_SCREEN*            oldscreen = screen;
-    DrawSheetPath*         sheetpath, * oldsheetpath = schframe->GetSheet();
-    wxString PlotFileName;
+    SCH_SHEET_PATH*        sheetpath, * oldsheetpath = schframe->GetSheet();
+    wxString               PlotFileName;
     Ki_PageDescr*          PlotSheet, * RealSheet;
-    wxPoint plot_offset;
+    wxPoint                plot_offset;
 
     /* When printing all pages, the printed page is not the current page.
      *  In complex hierarchies, we must setup references and others parameters
@@ -367,10 +367,10 @@ void WinEDA_PlotPSFrame::CreatePSFile( int AllPages, int pagesize )
      *  because in complex hierarchies a SCH_SCREEN (a schematic drawings)
      *  is shared between many sheets
      */
-    EDA_SheetList SheetList( NULL );
+    SCH_SHEET_LIST SheetList( NULL );
 
     sheetpath = SheetList.GetFirst();
-    DrawSheetPath list;
+    SCH_SHEET_PATH list;
 
     while( true )
     {

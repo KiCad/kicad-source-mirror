@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        dialog_erc.cpp
 // Purpose:
 // Author:      jean-pierre Charras
@@ -116,18 +115,18 @@ void DIALOG_ERC::OnLeftDClickMarkersList( wxCommandEvent& event )
     if( index < 0 )
         return;
 
-    const MARKER_SCH* marker = m_MarkersList->GetItem( (unsigned) index );
+    const SCH_MARKER* marker = m_MarkersList->GetItem( (unsigned) index );
 
     EndModal( 1 );
 
 
     // Search for the selected marker
-    DrawSheetPath* sheet;
-    bool           NotFound;
-    wxPoint        pos = marker->m_Pos;
-    wxPoint        curpos, old_cursor_position;
+    SCH_SHEET_PATH* sheet;
+    bool            NotFound;
+    wxPoint         pos = marker->m_Pos;
+    wxPoint         curpos, old_cursor_position;
 
-    EDA_SheetList  SheetList;
+    SCH_SHEET_LIST  SheetList;
 
     NotFound = TRUE;
     /* Search for the selected marker */
@@ -170,12 +169,10 @@ void DIALOG_ERC::OnLeftDClickMarkersList( wxCommandEvent& event )
 }
 
 
-/*********************************************/
-void DIALOG_ERC::ReBuildMatrixPanel()
-{
-/*********************************************/
 /* Build or rebuild the panel showing the ERC conflict matrix
  */
+void DIALOG_ERC::ReBuildMatrixPanel()
+{
     int           ii, jj, event_id, text_height;
     wxPoint       pos, BoxMatrixPosition;
 
@@ -298,21 +295,21 @@ void DIALOG_ERC::ReBuildMatrixPanel()
  */
 void DIALOG_ERC::DisplayERC_MarkersList()
 {
-    EDA_SheetList SheetList;
+    SCH_SHEET_LIST SheetList;
 
     m_MarkersList->ClearList();
 
-    for( DrawSheetPath* Sheet = SheetList.GetFirst();
+    for( SCH_SHEET_PATH* Sheet = SheetList.GetFirst();
         Sheet != NULL;
         Sheet = SheetList.GetNext() )
     {
         SCH_ITEM* DrawStruct = Sheet->LastDrawList();
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
-            if( DrawStruct->Type() != TYPE_MARKER_SCH )
+            if( DrawStruct->Type() != TYPE_SCH_MARKER )
                 continue;
 
-            MARKER_SCH* Marker = (MARKER_SCH*) DrawStruct;
+            SCH_MARKER* Marker = (SCH_MARKER*) DrawStruct;
             if( Marker->GetMarkerType() != MARK_ERC )
                 continue;
 
@@ -329,23 +326,19 @@ void DIALOG_ERC::DisplayERC_MarkersList()
 }
 
 
-/**************************************************************/
-void DIALOG_ERC::ResetDefaultERCDiag( wxCommandEvent& event )
-{
-/**************************************************************/
 /* Resets the default values of the ERC matrix.
  */
+void DIALOG_ERC::ResetDefaultERCDiag( wxCommandEvent& event )
+{
     memcpy( DiagErc, DefaultDiagErc, sizeof(DiagErc) );
     ReBuildMatrixPanel();
 }
 
 
-/************************************************************/
-void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
-{
-/************************************************************/
 /* Change the error level for the pressed button, on the matrix table
  */
+void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
+{
     int             id, level, ii, x, y;
     wxBitmapButton* Butt;
     const char**    new_bitmap_xpm = NULL;

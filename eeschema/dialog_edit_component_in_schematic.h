@@ -7,13 +7,15 @@
 
 /**
  * class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC
- * is hand coded and implements DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP which is maintained by
- * wxFormBuilder.  Do not auto-generate this class or file, it is hand coded.
+ * is hand coded and implements DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP which
+ * is maintained by wxFormBuilder.  Do not auto-generate this class or file,
+ * it is hand coded.
  */
 class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP
 {
-    friend void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
-                          SCH_COMPONENT* aComponent );
+    friend void InstallCmpeditFrame( WinEDA_SchematicFrame* parent,
+                                     wxPoint&               pos,
+                                     SCH_COMPONENT*         aComponent );
 
     WinEDA_SchematicFrame* m_Parent;
     SCH_COMPONENT*         m_Cmp;
@@ -25,8 +27,8 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEM
     /// The size of the dialog window last time it was displayed;
     static wxSize          s_LastSize;
 
-    /// a copy of the edited component's SCH_CMP_FIELDs
-    SCH_CMP_FIELDS         m_FieldsBuf;
+    /// a copy of the edited component's SCH_FIELDs
+    SCH_FIELDS             m_FieldsBuf;
 
     void setSelectedFieldNdx( int aFieldNdx );
 
@@ -42,7 +44,8 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEM
 
     /**
      * Function copyPanelToSelectedField
-     * copies the values displayed on the panel fields to the currently selected field
+     * copies the values displayed on the panel fields to the currently
+     * selected field
      * @return bool - true if all fields are OK, else false if the user has put
      *   bad data into a field, and this value can be used to deny a row change.
      */
@@ -52,7 +55,7 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEM
 
     void copyPanelToOptions();
 
-    void setRowItem( int aFieldNdx, const SCH_CMP_FIELD& aField );
+    void setRowItem( int aFieldNdx, const SCH_FIELD& aField );
 
     // event handlers
     void OnListItemDeselected( wxListEvent& event );

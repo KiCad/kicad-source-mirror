@@ -7,7 +7,7 @@
 DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
     DIALOG_EESCHEMA_OPTIONS_BASE( parent )
 {
-
+    m_choiceUnits->SetFocus();
 }
 
 

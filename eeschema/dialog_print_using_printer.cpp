@@ -25,7 +25,8 @@
 
 #define PRINTMODECOLOR_KEY  wxT("PrintModeColor")
 
-// static print data and page setup data, to remember settings during the session
+// static print data and page setup data, to remember settings during the
+// session
 static wxPrintData* g_PrintData;
 
 // Variables locales
@@ -35,7 +36,7 @@ static bool         s_Print_Frame_Ref = true;
 
 
 /* Dialog to print schematic. Class derived from DIALOG_PRINT_USING_PRINTER_base
- *  created by wxFormBuilder
+ * created by wxFormBuilder
  */
 class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_base
 {
@@ -53,13 +54,10 @@ private:
     void OnPrintSetup( wxCommandEvent& event );
     void OnPrintPreview( wxCommandEvent& event );
     void OnPrintButtonClick( wxCommandEvent& event );
-	void OnButtonCancelClick( wxCommandEvent& event ){ Close(); }
+    void OnButtonCancelClick( wxCommandEvent& event ){ Close(); }
     void SetPenWidth();
 };
 
-/***************************/
-/* Gestion de l'impression */
-/***************************/
 
 class EDA_Printout : public wxPrintout
 {
@@ -85,18 +83,17 @@ public:
     bool OnPrintPage( int page );
     bool HasPage( int page );
     bool OnBeginDocument( int startPage, int endPage );
-    void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo );
+    void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom,
+                      int* selPageTo );
 
     void DrawPage();
 };
 
-/*******************************************************/
-void WinEDA_DrawFrame::ToPrinter( wxCommandEvent& event )
-/*******************************************************/
 
 /* Virtual function
  * Calls the print dialog for Eeschema
  */
+void WinEDA_DrawFrame::ToPrinter( wxCommandEvent& event )
 {
     if( g_PrintData == NULL )   // First call. creates print handlers
     {
@@ -104,31 +101,29 @@ void WinEDA_DrawFrame::ToPrinter( wxCommandEvent& event )
 
         if( !g_PrintData->Ok() )
         {
-            DisplayError( this, _( "Error Init Printer info" ) );
+            DisplayError( this,
+                          _( "Error initializing printer information." ) );
         }
-        g_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGHT;
+        g_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );
         g_PrintData->SetOrientation( DEFAULT_ORIENTATION_PAPER );
     }
 
     DIALOG_PRINT_USING_PRINTER* frame = new DIALOG_PRINT_USING_PRINTER( this );
 
-    frame->ShowModal(); frame->Destroy();
+    frame->ShowModal();
+    frame->Destroy();
 }
 
 
-/*************************************************************************************/
 DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( WinEDA_DrawFrame* parent ) :
     DIALOG_PRINT_USING_PRINTER_base( parent )
-/*************************************************************************************/
 {
     m_Parent = parent;
     m_Config = wxGetApp().m_EDA_Config;
 }
 
 
-/************************************************************************/
 void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
-/************************************************************************/
 {
     SetFocus();
 
@@ -137,24 +132,23 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
         m_Config->Read( PRINTMODECOLOR_KEY, &s_Print_Black_and_White );
     }
 
-    AddUnitSymbol(* m_TextPenWidth, g_DrawDefaultLineThickness );
+    AddUnitSymbol( *m_TextPenWidth, g_DrawDefaultLineThickness );
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue(g_UnitMetric, g_DrawDefaultLineThickness, m_Parent->m_InternalUnits ) );
+        ReturnStringFromValue( g_UnitMetric, g_DrawDefaultLineThickness,
+                               m_Parent->m_InternalUnits ) );
     m_Print_Sheet_Ref->SetValue( s_Print_Frame_Ref );
 
-    m_ModeColorOption->SetSelection( s_Print_Black_and_White ? 1 : 0);
-    m_Print_Sheet_Ref->SetValue(s_Print_Frame_Ref);
+    m_ModeColorOption->SetSelection( s_Print_Black_and_White ? 1 : 0 );
+    m_Print_Sheet_Ref->SetValue( s_Print_Frame_Ref );
 
-    if (GetSizer())
+    if ( GetSizer() )
     {
         GetSizer()->SetSizeHints(this);
     }
 }
 
 
-/*********************************************************************/
 void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
-/*********************************************************************/
 {
     s_Print_Black_and_White = m_ModeColorOption->GetSelection();
     s_Print_Frame_Ref = m_Print_Sheet_Ref->GetValue();
@@ -169,15 +163,13 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
 }
 
 
-/****************************************/
-void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
-/****************************************/
-
 /* Get the new pen width value, and verify min et max value
  * NOTE: g_PlotLine_Width is in internal units
  */
+void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
 {
-    g_DrawDefaultLineThickness = ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
+    g_DrawDefaultLineThickness =
+        ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
 
     if( g_DrawDefaultLineThickness > WIDTH_MAX_VALUE )
     {
@@ -190,16 +182,14 @@ void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
     }
 
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue(g_UnitMetric, g_DrawDefaultLineThickness, m_Parent->m_InternalUnits ) );
+        ReturnStringFromValue( g_UnitMetric, g_DrawDefaultLineThickness,
+                               m_Parent->m_InternalUnits ) );
 }
 
 
-/**********************************************************/
-void DIALOG_PRINT_USING_PRINTER::OnPrintSetup( wxCommandEvent& event )
-/**********************************************************/
-
 /* Open a dialog box for printer setup (printer options, page size ...)
  */
+void DIALOG_PRINT_USING_PRINTER::OnPrintSetup( wxCommandEvent& event )
 {
     wxPrintDialogData printDialogData( *g_PrintData );
 
@@ -212,16 +202,15 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintSetup( wxCommandEvent& event )
         *g_PrintData = printerDialog.GetPrintDialogData().GetPrintData();
     }
     else
-        DisplayError( this, _( "Printer Problem!" ) );
+    {
+        DisplayError( this, _( "Printer error!" ) );
+    }
 }
 
 
-/***********************************************************************/
-void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
-/***********************************************************************/
-
 /* Open and display a previewer frame for printing
  */
+void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 {
     wxSize  WSize;
     wxPoint WPos;
@@ -236,11 +225,12 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     wxString        title   = _("Preview");
     wxPrintPreview* preview =
         new wxPrintPreview( new EDA_Printout( this, m_Parent, title, print_ref ),
-                            new EDA_Printout( this, m_Parent, title, print_ref ), g_PrintData );
+                            new EDA_Printout( this, m_Parent, title, print_ref ),
+                            g_PrintData );
 
     if( preview == NULL )
     {
-        DisplayError( this, wxT( "OnPrintPreview() problem" ) );
+        DisplayError( this, wxT( "Print preview error!" ) );
         return;
     }
 
@@ -255,9 +245,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 }
 
 
-/**************************************************************************/
 void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
-/**************************************************************************/
 {
     bool print_ref = m_Print_Sheet_Ref->GetValue();
 
@@ -278,13 +266,13 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
 
 #if !defined(__WINDOWS__) && !wxCHECK_VERSION(2,9,0)
     wxDC*             dc = printout.GetDC();
-    ( (wxPostScriptDC*) dc )->SetResolution( 600 );  // Postscript DC resolution is 600 ppi
+    ( (wxPostScriptDC*) dc )->SetResolution( 600 );
 #endif
 
     if( !printer.Print( this, &printout, true ) )
     {
         if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
-            DisplayError( this, _( "There was a problem printing" ) );
+            DisplayError( this, _( "There was a problem printing." ) );
         return;
     }
     else
@@ -294,9 +282,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
 }
 
 
-/***************************************/
 bool EDA_Printout::OnPrintPage( int page )
-/***************************************/
 {
     wxString msg;
 
@@ -306,10 +292,10 @@ bool EDA_Printout::OnPrintPage( int page )
     WinEDA_SchematicFrame* schframe     = (WinEDA_SchematicFrame*) m_Parent;
     SCH_SCREEN*            screen       = schframe->GetScreen();
     SCH_SCREEN*            oldscreen    = screen;
-    DrawSheetPath*         oldsheetpath = schframe->GetSheet();
+    SCH_SHEET_PATH*        oldsheetpath = schframe->GetSheet();
 
 
-    DrawSheetPath          list;
+    SCH_SHEET_PATH         list;
     if( s_OptionPrintPage == 1 )
     {
         /* Print all pages, so when called, the page is not the current page.
@@ -317,8 +303,8 @@ bool EDA_Printout::OnPrintPage( int page )
          *  because in complex hierarchies a SCH_SCREEN (a schematic drawings)
          *  is shared between many sheets
          */
-        EDA_SheetList  SheetList( NULL );
-        DrawSheetPath* sheetpath = SheetList.GetSheet( page - 1 );
+        SCH_SHEET_LIST  SheetList( NULL );
+        SCH_SHEET_PATH* sheetpath = SheetList.GetSheet( page - 1 );
         if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
         {
             schframe->m_CurrentSheet = &list;
@@ -343,10 +329,8 @@ bool EDA_Printout::OnPrintPage( int page )
 }
 
 
-/*********************************************************/
 void EDA_Printout::GetPageInfo( int* minPage, int* maxPage,
                                 int* selPageFrom, int* selPageTo )
-/*********************************************************/
 {
     int ii = 1;
 
@@ -363,9 +347,7 @@ void EDA_Printout::GetPageInfo( int* minPage, int* maxPage,
 }
 
 
-/**************************************/
 bool EDA_Printout::HasPage( int pageNum )
-/**************************************/
 {
     int pageCount;
 
@@ -377,9 +359,7 @@ bool EDA_Printout::HasPage( int pageNum )
 }
 
 
-/*************************************************************/
 bool EDA_Printout::OnBeginDocument( int startPage, int endPage )
-/*************************************************************/
 {
     if( !wxPrintout::OnBeginDocument( startPage, endPage ) )
         return false;
@@ -388,13 +368,10 @@ bool EDA_Printout::OnBeginDocument( int startPage, int endPage )
 }
 
 
-/********************************/
-void EDA_Printout::DrawPage()
-/********************************/
-
 /*
  * This is the real print function: print the active screen
  */
+void EDA_Printout::DrawPage()
 {
     int     tmpzoom;
     wxPoint tmp_startvisu;
@@ -403,8 +380,8 @@ void EDA_Printout::DrawPage()
     wxSize  PlotAreaSize;   // plot area size in pixels
     double  scaleX, scaleY, scale;
     wxPoint old_org;
-    wxPoint DrawOffset; // Offset de trace
-    double     DrawZoom = 1;
+    wxPoint DrawOffset;
+    double  DrawZoom = 1;
     wxDC*   dc = GetDC();
 
     wxBusyCursor dummy;
@@ -420,9 +397,9 @@ void EDA_Printout::DrawPage()
     ActiveScreen->m_DrawOrg.x   = ActiveScreen->m_DrawOrg.y = 0;
     ActiveScreen->m_StartVisu.x = ActiveScreen->m_StartVisu.y = 0;
 
-    SheetSize    = ActiveScreen->m_CurrentSheetDesc->m_Size;    // size in 1/1000 inch
+    SheetSize    = ActiveScreen->m_CurrentSheetDesc->m_Size;  // size in 1/1000 inch
     SheetSize.x *= m_Parent->m_InternalUnits / 1000;
-    SheetSize.y *= m_Parent->m_InternalUnits / 1000;            // size in pixels
+    SheetSize.y *= m_Parent->m_InternalUnits / 1000;          // size in pixels
 
     // Get the size of the DC in pixels
     dc->GetSize( &PlotAreaSize.x, &PlotAreaSize.y );
@@ -430,9 +407,10 @@ void EDA_Printout::DrawPage()
     // Calculate a suitable scaling factor
     scaleX = (double) SheetSize.x / PlotAreaSize.x;
     scaleY = (double) SheetSize.y / PlotAreaSize.y;
-    scale  = wxMax( scaleX, scaleY ); // Use x or y scaling factor, whichever fits on the DC
+    scale  = wxMax( scaleX, scaleY ); // Use x or y scaling factor, whichever
+                                      // fits on the DC
 
-    // ajust the real draw scale
+    // adjust the real draw scale
     dc->SetUserScale( DrawZoom / scale, DrawZoom / scale );
 
     ActiveScreen->m_DrawOrg = DrawOffset;
@@ -440,7 +418,6 @@ void EDA_Printout::DrawPage()
     GRResetPenAndBrush( dc );
     if( s_Print_Black_and_White )
         GRForceBlackPen( true );
-
 
     /* set Pen min width (not used now) */
     SetPenMinWidth( 1 );

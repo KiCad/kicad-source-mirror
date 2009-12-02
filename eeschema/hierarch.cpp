@@ -26,14 +26,14 @@ enum
 
 class WinEDA_HierFrame;
 
-/* This class derived from wxTreeItemData stores the DrawSheetPath of each
+/* This class derived from wxTreeItemData stores the SCH_SHEET_PATH of each
  * sheet in hierarchy in each TreeItem, in its associated data buffer
 */
 class TreeItemData : public wxTreeItemData
 {
 public:
-    DrawSheetPath m_SheetPath;
-    TreeItemData( DrawSheetPath sheet ) : wxTreeItemData()
+    SCH_SHEET_PATH m_SheetPath;
+    TreeItemData( SCH_SHEET_PATH sheet ) : wxTreeItemData()
     {
         m_SheetPath = sheet;
     }
@@ -52,13 +52,14 @@ public:
 
     DECLARE_DYNAMIC_CLASS( WinEDA_Tree )
 };
+
 IMPLEMENT_DYNAMIC_CLASS( WinEDA_Tree, wxTreeCtrl )
 
 
 WinEDA_Tree::WinEDA_Tree( WinEDA_HierFrame* parent ) :
     wxTreeCtrl( (wxWindow*)parent, ID_TREECTRL_HIERARCHY,
-               wxDefaultPosition, wxDefaultSize,
-               wxTR_HAS_BUTTONS, wxDefaultValidator, wxT( "HierachyTreeCtrl" ) )
+                wxDefaultPosition, wxDefaultSize,
+                wxTR_HAS_BUTTONS, wxDefaultValidator, wxT( "HierachyTreeCtrl" ) )
 {
     m_Parent = parent;
 
@@ -86,7 +87,7 @@ private:
 
 public:
     WinEDA_HierFrame( WinEDA_SchematicFrame* parent, wxDC* DC, const wxPoint& pos );
-    void BuildSheetsTree( DrawSheetPath* list, wxTreeItemId* previousmenu );
+    void BuildSheetsTree( SCH_SHEET_PATH* list, wxTreeItemId* previousmenu );
 
     ~WinEDA_HierFrame();
 
@@ -99,18 +100,17 @@ private:
 };
 
 BEGIN_EVENT_TABLE( WinEDA_HierFrame, wxDialog )
-EVT_TREE_ITEM_ACTIVATED( ID_TREECTRL_HIERARCHY,
-    WinEDA_HierFrame::OnSelect )
+    EVT_TREE_ITEM_ACTIVATED( ID_TREECTRL_HIERARCHY,
+                             WinEDA_HierFrame::OnSelect )
 END_EVENT_TABLE()
 
 
-/*************************************************************************/
 void WinEDA_SchematicFrame::InstallHierarchyFrame( wxDC* DC, wxPoint& pos )
-/*************************************************************************/
 {
     WinEDA_HierFrame* treeframe = new WinEDA_HierFrame( this, DC, pos );
 
-    treeframe->ShowModal(); treeframe->Destroy();
+    treeframe->ShowModal();
+    treeframe->Destroy();
 }
 
 
@@ -129,7 +129,7 @@ WinEDA_HierFrame::WinEDA_HierFrame( WinEDA_SchematicFrame* parent, wxDC* DC,
 
     cellule = m_Tree->AddRoot( _( "Root" ), 0, 1 );
     m_Tree->SetItemBold( cellule, TRUE );
-    DrawSheetPath list;
+    SCH_SHEET_PATH list;
     list.Push( g_RootSheet );
     m_Tree->SetItemData( cellule, new TreeItemData( list ) );
 
@@ -167,9 +167,7 @@ WinEDA_HierFrame::~WinEDA_HierFrame()
 }
 
 
-/************************************************************************/
 void WinEDA_HierFrame::OnQuit( wxCommandEvent& WXUNUSED (event) )
-/************************************************************************/
 {
     // true is to force the frame to close
     Close( true );
@@ -180,7 +178,7 @@ void WinEDA_HierFrame::OnQuit( wxCommandEvent& WXUNUSED (event) )
  * Schematic
  * This routine is re-entrant!
  */
-void WinEDA_HierFrame::BuildSheetsTree( DrawSheetPath* list,
+void WinEDA_HierFrame::BuildSheetsTree( SCH_SHEET_PATH* list,
                                         wxTreeItemId*  previousmenu )
 
 {
@@ -261,11 +259,12 @@ void WinEDA_SchematicFrame::InstallPreviousSheet()
     ClearMsgPanel();
 
     //make a copy for testing purposes.
-    DrawSheetPath listtemp = *m_CurrentSheet;
+    SCH_SHEET_PATH listtemp = *m_CurrentSheet;
     listtemp.Pop();
     if( listtemp.LastScreen() == NULL )
     {
-        DisplayError( this, wxT( "InstallPreviousScreen() Error: Sheet not found" ) );
+        DisplayError( this,
+                      wxT( "InstallPreviousScreen() Error: Sheet not found" ) );
         return;
     }
     m_CurrentSheet->Pop();
@@ -316,11 +315,12 @@ static bool UpdateScreenFromSheet( WinEDA_SchematicFrame* frame )
                                      NewScreen->m_ScrollbarPos.x,
                                      NewScreen->m_ScrollbarPos.y, TRUE );
 
-    //update the References
+    // update the References
     frame->m_CurrentSheet->UpdateAllScreenReferences();
     frame->SetSheetNumberAndCount();
     frame->DrawPanel->m_CanStartBlock = -1;
     ActiveScreen = frame->m_CurrentSheet->LastScreen();
+
     if( NewScreen->m_FirstRedraw )
     {
         NewScreen->m_FirstRedraw = FALSE;

@@ -1,5 +1,5 @@
 /****************************************************/
-/*	BLOCK.CPP										*/
+/*  BLOCK.CPP                                       */
 /****************************************************/
 
 #include "fctsys.h"
@@ -39,13 +39,11 @@ static void     DrawMovingBlockOutlines( WinEDA_DrawPanel* panel,
 static void     SaveStructListForPaste( PICKED_ITEMS_LIST& aItemsList );
 
 
-/*************************************************************************/
-int WinEDA_SchematicFrame::ReturnBlockCommand( int key )
-{
-/*************************************************************************/
 /* Return the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
  *  the key (ALT, SHIFT ALT ..)
  */
+int WinEDA_SchematicFrame::ReturnBlockCommand( int key )
+{
     int cmd;
 
     switch( key )
@@ -80,12 +78,10 @@ int WinEDA_SchematicFrame::ReturnBlockCommand( int key )
 }
 
 
-/*************************************************/
-void WinEDA_SchematicFrame::InitBlockPasteInfos()
-{
-/*************************************************/
 /* Init the parameters used by the block paste command
  */
+void WinEDA_SchematicFrame::InitBlockPasteInfos()
+{
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
     block->m_ItemsSelection.CopyList( g_BlockSaveDataList.m_ItemsSelection );
@@ -93,15 +89,13 @@ void WinEDA_SchematicFrame::InitBlockPasteInfos()
 }
 
 
-/******************************************************/
-void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
-{
-/******************************************************/
 /* Routine to handle the BLOCK PLACE command
  *  Last routine for block operation for:
  *  - block move & drag
  *  - block copy & paste
  */
+void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
+{
     bool            err   = FALSE;
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
@@ -208,16 +202,14 @@ void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
 }
 
 
-/****************************************************/
-int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
-{
-/****************************************************/
 /* Manage end block command
  * Returns:
  * 0 if no features selected
  * 1 otherwise
  * -1 If control ended and components selection (block delete, block save)
  */
+int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
+{
     int             ii = 0;
     bool            zoom_command = FALSE;
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
@@ -244,7 +236,7 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
             DisplayError( this, wxT( "Error in HandleBlockPLace()" ) );
             break;
 
-        case BLOCK_DRAG: /* Drag */
+        case BLOCK_DRAG:    /* Drag */
             BreakSegmentOnJunction( (SCH_SCREEN*) GetScreen() );
 
         case BLOCK_MOVE:    /* Move */
@@ -283,7 +275,7 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
             DrawPanel->Refresh();
             break;
 
-        case BLOCK_SAVE: /* Save */
+        case BLOCK_SAVE:  /* Save */
             PickItemsInBlock( GetScreen()->m_BlockLocate, GetScreen() );
             DrawAndSizingBlockOutlines( DrawPanel, DC, FALSE );
             if( block->GetCount() )
@@ -349,14 +341,12 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
 }
 
 
-/***********************************************************************/
-void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
-{
-/***********************************************************************/
 /* Manage end block command from context menu.
  * Called after HandleBlockEnd.
  * From the command block move can execute a command other than block move.
  */
+void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
+{
     int             ii    = 0;
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
@@ -476,14 +466,12 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
 }
 
 
-/************************************************************************/
-static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
-                                     bool erase )
-{
-/************************************************************************/
 /* Traces the outline of the search block structures
  * The entire block follows the cursor
  */
+static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
+                                     bool erase )
+{
     BLOCK_SELECTOR* block = &panel->GetScreen()->m_BlockLocate;;
 
     BASE_SCREEN*    screen = panel->GetScreen();
@@ -513,15 +501,13 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-/*****************************************************************/
-void SaveStructListForPaste( PICKED_ITEMS_LIST& aItemsList )
-{
-/*****************************************************************/
 /* Routine to Save an object from global drawing object list.
  *  This routine is the same as delete but:
  *  - the original list is NOT removed.
  *  - List is saved in g_BlockSaveDataList
  */
+void SaveStructListForPaste( PICKED_ITEMS_LIST& aItemsList )
+{
     g_BlockSaveDataList.ClearListAndDeleteItems();      // delete previous
                                                         // saved list, if
                                                         // exists
@@ -542,7 +528,7 @@ void SaveStructListForPaste( PICKED_ITEMS_LIST& aItemsList )
 
 /*****************************************************************************
 * Routine to paste a structure from the g_BlockSaveDataList stack.
-*	This routine is the same as undelete but original list is NOT removed.
+*   This routine is the same as undelete but original list is NOT removed.
 *****************************************************************************/
 void WinEDA_SchematicFrame::PasteListOfItems( wxDC* DC )
 {
@@ -594,16 +580,14 @@ void WinEDA_SchematicFrame::PasteListOfItems( wxDC* DC )
 }
 
 
-/****************************************************/
-static void CollectStructsToDrag( SCH_SCREEN* screen )
-{
-/****************************************************/
 /* creates the list of items found when a drag block is initiated.
  * items are those selected in window block an some items outside this area but
  * connected to a selected item (connected wires to a component or an entry )
  */
-    SCH_ITEM*           Struct;
-    EDA_DrawLineStruct* SegmStruct;
+static void CollectStructsToDrag( SCH_SCREEN* screen )
+{
+    SCH_ITEM* Struct;
+    SCH_LINE* SegmStruct;
 
     PICKED_ITEMS_LIST*  pickedlist = &screen->m_BlockLocate.m_ItemsSelection;
 
@@ -645,7 +629,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
         Struct = (SCH_ITEM*) (SCH_ITEM*) pickedlist->GetPickedItem( ii );
         if( Struct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
         {
-            SegmStruct = (EDA_DrawLineStruct*) Struct;
+            SegmStruct = (SCH_LINE*) Struct;
             if( !screen->m_BlockLocate.Inside( SegmStruct->m_Start ) )
                 SegmStruct->m_Flags |= STARTPOINT;
 
@@ -698,7 +682,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
 
         if( Struct->Type() == DRAW_BUSENTRY_STRUCT_TYPE )
         {
-            DrawBusEntryStruct* item = (DrawBusEntryStruct*) Struct;
+            SCH_BUS_ENTRY* item = (SCH_BUS_ENTRY*) Struct;
             AddPickedItem( screen, item->m_Pos );
             AddPickedItem( screen, item->m_End() );
         }
@@ -706,16 +690,14 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
 }
 
 
-/******************************************************************/
-static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
-{
-/******************************************************************/
 /** AddPickedItem
  * add to the picked list in screen->m_BlockLocate items found at location
  * position
  * @param screen = the screen to consider
  * @param position = the wxPoint where items must be located to be select
  */
+static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
+{
     SCH_ITEM*          Struct;
 
     /* Review the list of already selected elements. */
@@ -729,7 +711,7 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
         {
         case DRAW_SEGMENT_STRUCT_TYPE:
                 #undef STRUCT
-                #define STRUCT ( (EDA_DrawLineStruct*) Struct )
+                #define STRUCT ( (SCH_LINE*) Struct )
             if( STRUCT->m_Start == position )
                 STRUCT->m_Flags &= ~STARTPOINT;
 
@@ -765,7 +747,7 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
 
         case DRAW_JUNCTION_STRUCT_TYPE:
                 #undef STRUCT
-                #define STRUCT ( (DrawJunctionStruct*) Struct )
+                #define STRUCT ( (SCH_JUNCTION*) Struct )
             if( Struct->m_Flags & SELECTED )
                 break;
             if( STRUCT->m_Pos != position )
@@ -775,7 +757,7 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
 
         case DRAW_SEGMENT_STRUCT_TYPE:
                 #undef STRUCT
-                #define STRUCT ( (EDA_DrawLineStruct*) Struct )
+                #define STRUCT ( (SCH_LINE*) Struct )
             if( Struct->m_Flags & SELECTED )
                 break;
             if( STRUCT->m_Start == position )
@@ -832,9 +814,9 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
         case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
             break;
 
-        case TYPE_MARKER_SCH:
+        case TYPE_SCH_MARKER:
                 #undef STRUCT
-                #define STRUCT ( (MARKER_SCH*) Struct )
+                #define STRUCT ( (SCH_MARKER*) Struct )
             if( Struct->m_Flags & SELECTED )
                 break;  /* Already in list */
             if( STRUCT->m_Pos != position )
@@ -845,7 +827,7 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
 
         case DRAW_NOCONNECT_STRUCT_TYPE:
                 #undef STRUCT
-                #define STRUCT ( (DrawNoConnectStruct*) Struct )
+                #define STRUCT ( (SCH_NO_CONNECT*) Struct )
             if( Struct->m_Flags & SELECTED )
                 break;  /* Already in list */
             if( STRUCT->m_Pos != position )
@@ -862,12 +844,6 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
 }
 
 
-/****************************************************************************/
-static LIB_PIN* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
-                                    wxPoint&       aPosition,
-                                    bool           aSearchFirst )
-{
-/****************************************************************************/
 /** GetNextPinPosition()
  * calculate position of the "next" pin of the aDrawLibItem component
  * @param aDrawLibItem = component to test.
@@ -876,6 +852,10 @@ static LIB_PIN* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
  * @param aSearchFirst = if true, search for the first pin
  * @return a pointer to the pin
  */
+static LIB_PIN* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
+                                    wxPoint&       aPosition,
+                                    bool           aSearchFirst )
+{
     static LIB_COMPONENT* Entry;
     static int Multi, convert, TransMat[2][2];
     static wxPoint CmpPosition;
@@ -908,7 +888,7 @@ static LIB_PIN* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
             continue;
 
         /* Calculate the pin position (according to the component orientation)
-         **/
+         */
         aPosition = TransformCoordinate( TransMat, Pin->m_Pos ) + CmpPosition;
         return Pin;
     }

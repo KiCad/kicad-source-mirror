@@ -203,7 +203,7 @@ int TestDuplicateSheetNames()
                     == 0 )
                 {
                     /* Create a new marker type ERC error*/
-                    MARKER_SCH* Marker = new MARKER_SCH();
+                    SCH_MARKER* Marker = new SCH_MARKER();
                     Marker->m_TimeStamp = GetTimeStamp();
                     Marker->SetData( ERCE_DUPLICATE_SHEET_NAME,
                                      ( (SCH_SHEET*) item_to_test )->m_Pos,
@@ -223,10 +223,8 @@ int TestDuplicateSheetNames()
 }
 
 
-/**************************************************/
 void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
 {
-/**************************************************/
     wxFileName fn;
     unsigned   NetItemRef;
     unsigned   OldItem;
@@ -247,7 +245,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     {
         if( aMessagesList )
         {
-            wxString msg = _( "Annotation Required!" );
+            wxString msg = _( "Annotation required!" );
             msg += wxT( "\n" );
             aMessagesList->Add( msg );
         }
@@ -394,18 +392,16 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
 }
 
 
-/********************************************************/
+/* Creates an ERC marker to show the ERC problem about aNetItemRef
+ * or between aNetItemRef and aNetItemTst
+ *  if MinConn < 0: this is an error on labels
+ */
 static void Diagnose( WinEDA_DrawPanel* aPanel,
                       NETLIST_OBJECT* aNetItemRef,
                       NETLIST_OBJECT* aNetItemTst,
                       int aMinConn, int aDiag )
 {
-/********************************************************/
-/* Creates an ERC marker to show the ERC problem about aNetItemRef
- * or between aNetItemRef and aNetItemTst
- *  if MinConn < 0: this is an error on labels
- */
-    MARKER_SCH* Marker = NULL;
+    SCH_MARKER* Marker = NULL;
     SCH_SCREEN* screen;
     int         ii, jj;
 
@@ -413,7 +409,7 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
         return;
 
     /* Create new marker for ERC error. */
-    Marker = new MARKER_SCH();
+    Marker = new SCH_MARKER();
     Marker->m_TimeStamp = GetTimeStamp();
 
     Marker->SetMarkerType( MARK_ERC );
@@ -531,16 +527,14 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
 }
 
 
-/********************************************************************/
+/* Routine testing electrical conflicts between NetItemRef and other items
+ * of the same net
+ */
 static void TestOthersItems( WinEDA_DrawPanel* panel,
                              unsigned NetItemRef,
                              unsigned netstart,
                              int* NetNbItems, int* MinConnexion )
 {
-/********************************************************************/
-/* Routine testing electrical conflicts between NetItemRef and other items
- * of the same net
- */
     unsigned NetItemTst;
 
     int      ref_elect_type, jj, erc = OK, local_minconn;
@@ -676,18 +670,16 @@ static void TestOthersItems( WinEDA_DrawPanel* panel,
 }
 
 
-/********************************************************/
-static bool WriteDiagnosticERC( const wxString& FullFileName )
-{
-/*********************************************************/
 /* Create the Diagnostic file (<xxx>.erc file)
  */
-    SCH_ITEM*      DrawStruct;
-    MARKER_SCH*    Marker;
-    char           Line[1024];
-    static FILE*   OutErc;
-    DrawSheetPath* Sheet;
-    wxString       msg;
+static bool WriteDiagnosticERC( const wxString& FullFileName )
+{
+    SCH_ITEM*       DrawStruct;
+    SCH_MARKER*     Marker;
+    char            Line[1024];
+    static FILE*    OutErc;
+    SCH_SHEET_PATH* Sheet;
+    wxString        msg;
 
     if( ( OutErc = wxFopen( FullFileName, wxT( "wt" ) ) ) == NULL )
         return FALSE;
@@ -697,7 +689,7 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
 
     fprintf( OutErc, "%s (%s)\n", CONV_TO_UTF8( msg ), Line );
 
-    EDA_SheetList SheetList;
+    SCH_SHEET_LIST SheetList;
 
     for( Sheet = SheetList.GetFirst();
         Sheet != NULL;
@@ -718,10 +710,10 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
         DrawStruct = Sheet->LastDrawList();
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
-            if( DrawStruct->Type() != TYPE_MARKER_SCH )
+            if( DrawStruct->Type() != TYPE_SCH_MARKER )
                 continue;
 
-            Marker = (MARKER_SCH*) DrawStruct;
+            Marker = (SCH_MARKER*) DrawStruct;
             if( Marker->GetMarkerType() != MARK_ERC )
                 continue;
             msg = Marker->GetReporter().ShowReport();
@@ -754,15 +746,13 @@ static bool IsLabelsConnected( NETLIST_OBJECT* a, NETLIST_OBJECT* b )
 }
 
 
-/***********************************************************************/
+/* Routine to perform erc on a sheetLabel that is connected to a corresponding
+ * sub sheet Glabel
+ */
 void TestLabel( WinEDA_DrawPanel* panel,
                 unsigned          NetItemRef,
                 unsigned          StartNet )
 {
-/***********************************************************************/
-/* Routine to perform erc on a sheetLabel that is connected to a corresponding
- * sub sheet Glabel
- */
     unsigned NetItemTst;
     int      erc = 1;
 

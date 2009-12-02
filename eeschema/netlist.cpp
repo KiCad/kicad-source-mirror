@@ -21,7 +21,7 @@ NETLIST_OBJECT_LIST g_NetObjectslist;
 
 static void PropageNetCode( int OldNetCode, int NewNetCode, int IsBus );
 static void SheetLabelConnect( NETLIST_OBJECT* SheetLabel );
-static void ListeObjetConnection( DrawSheetPath*       sheetlist,
+static void ListeObjetConnection( SCH_SHEET_PATH*      sheetlist,
                                   NETLIST_OBJECT_LIST& aNetItemBuffer );
 static int  ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer,
                                  NETLIST_OBJECT&      ObjNet );
@@ -77,11 +77,11 @@ void FreeNetObjectsList( NETLIST_OBJECT_LIST& aNetObjectsBuffer )
  */
 void WinEDA_SchematicFrame::BuildNetListBase()
 {
-    int            NetNumber;
-    int            NetCode;
-    DrawSheetPath* sheet;
-    wxString       msg, activity;
-    wxBusyCursor   Busy;
+    int             NetNumber;
+    int             NetCode;
+    SCH_SHEET_PATH* sheet;
+    wxString        msg, activity;
+    wxBusyCursor    Busy;
 
     NetNumber = 1;
 
@@ -91,7 +91,7 @@ void WinEDA_SchematicFrame::BuildNetListBase()
     FreeNetObjectsList( g_NetObjectslist );
 
     /* Build the sheet (not screen) list (flattened)*/
-    EDA_SheetList SheetListList;
+    SCH_SHEET_LIST SheetListList;
 
     /* Fill g_NetObjectslist with items used in connectivity calculation */
 
@@ -346,7 +346,7 @@ static void SheetLabelConnect( NETLIST_OBJECT* SheetLabel )
  * @param aNetItemBuffer: a std::vector to store pointer on NETLIST_OBJECT
  *                        created
  */
-static void ListeObjetConnection( DrawSheetPath*                sheetlist,
+static void ListeObjetConnection( SCH_SHEET_PATH*               sheetlist,
                                   std::vector<NETLIST_OBJECT*>& aNetItemBuffer )
 {
     int             ii;
@@ -356,7 +356,7 @@ static void ListeObjetConnection( DrawSheetPath*                sheetlist,
     LIB_COMPONENT*  Entry;
     LIB_PIN*        pin;
     SCH_SHEET_PIN*  SheetLabel;
-    DrawSheetPath   list;
+    SCH_SHEET_PATH  list;
 
     DrawList = sheetlist->LastScreen()->EEDrawList;
     for( ; DrawList; DrawList = DrawList->Next() )
@@ -365,7 +365,7 @@ static void ListeObjetConnection( DrawSheetPath*                sheetlist,
         {
         case DRAW_SEGMENT_STRUCT_TYPE:
             #undef STRUCT
-            #define STRUCT ( (EDA_DrawLineStruct*) DrawList )
+            #define STRUCT ( (SCH_LINE*) DrawList )
             if( (STRUCT->GetLayer() != LAYER_BUS)
                && (STRUCT->GetLayer() != LAYER_WIRE) )
                 break;
@@ -390,7 +390,7 @@ static void ListeObjetConnection( DrawSheetPath*                sheetlist,
 
         case DRAW_JUNCTION_STRUCT_TYPE:
             #undef STRUCT
-            #define STRUCT ( (DrawJunctionStruct*) DrawList )
+            #define STRUCT ( (SCH_JUNCTION*) DrawList )
             new_item = new NETLIST_OBJECT();
 
             new_item->m_SheetList = *sheetlist;
@@ -404,7 +404,7 @@ static void ListeObjetConnection( DrawSheetPath*                sheetlist,
 
         case DRAW_NOCONNECT_STRUCT_TYPE:
             #undef STRUCT
-            #define STRUCT ( (DrawNoConnectStruct*) DrawList )
+            #define STRUCT ( (SCH_NO_CONNECT*) DrawList )
             new_item = new NETLIST_OBJECT();
 
             new_item->m_SheetList = *sheetlist;
@@ -533,7 +533,7 @@ static void ListeObjetConnection( DrawSheetPath*                sheetlist,
 
         case DRAW_POLYLINE_STRUCT_TYPE:
         case DRAW_BUSENTRY_STRUCT_TYPE:
-        case TYPE_MARKER_SCH:
+        case TYPE_SCH_MARKER:
         case TYPE_SCH_TEXT:
             break;
 

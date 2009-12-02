@@ -16,11 +16,11 @@
  */
  #define BUS_WIDTH_EXPAND 1.4
 
-/****************************/
-/* class DrawBusEntryStruct */
-/***************************/
+/***********************/
+/* class SCH_BUS_ENTRY */
+/***********************/
 
-DrawBusEntryStruct::DrawBusEntryStruct( const wxPoint& pos, int shape, int id ) :
+SCH_BUS_ENTRY::SCH_BUS_ENTRY( const wxPoint& pos, int shape, int id ) :
     SCH_ITEM( NULL, DRAW_BUSENTRY_STRUCT_TYPE )
 {
     m_Pos    = pos;
@@ -39,15 +39,15 @@ DrawBusEntryStruct::DrawBusEntryStruct( const wxPoint& pos, int shape, int id ) 
 }
 
 
-wxPoint DrawBusEntryStruct::m_End() const
+wxPoint SCH_BUS_ENTRY::m_End() const
 {
     return wxPoint( m_Pos.x + m_Size.x, m_Pos.y + m_Size.y );
 }
 
 
-DrawBusEntryStruct* DrawBusEntryStruct::GenCopy()
+SCH_BUS_ENTRY* SCH_BUS_ENTRY::GenCopy()
 {
-    DrawBusEntryStruct* newitem = new DrawBusEntryStruct( m_Pos, 0, 0 );
+    SCH_BUS_ENTRY* newitem = new SCH_BUS_ENTRY( m_Pos, 0, 0 );
 
     newitem->m_Layer = m_Layer;
     newitem->m_Width = m_Width;
@@ -64,7 +64,7 @@ DrawBusEntryStruct* DrawBusEntryStruct::GenCopy()
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
-bool DrawBusEntryStruct::Save( FILE* aFile ) const
+bool SCH_BUS_ENTRY::Save( FILE* aFile ) const
 {
     bool        success = true;
 
@@ -90,14 +90,14 @@ bool DrawBusEntryStruct::Save( FILE* aFile ) const
 }
 
 
-EDA_Rect DrawBusEntryStruct::GetBoundingBox()
+EDA_Rect SCH_BUS_ENTRY::GetBoundingBox()
 {
     int      dx = m_Pos.x - m_End().x;
     int      dy = m_Pos.y - m_End().y;
     EDA_Rect box( wxPoint( m_Pos.x, m_Pos.y ), wxSize( dx, dy ) );
 
     box.Normalize();
-    int      width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    int      width = ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
     box.Inflate( width / 2, width / 2 );
 
     return box;
@@ -107,9 +107,9 @@ EDA_Rect DrawBusEntryStruct::GetBoundingBox()
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int DrawBusEntryStruct::GetPenSize()
+int SCH_BUS_ENTRY::GetPenSize()
 {
-    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    int pensize = ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 
     if( m_Layer == LAYER_BUS && m_Width == 0 )
     {
@@ -121,8 +121,8 @@ int DrawBusEntryStruct::GetPenSize()
 }
 
 
-void DrawBusEntryStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                               const wxPoint& offset, int DrawMode, int Color )
+void SCH_BUS_ENTRY::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                          const wxPoint& offset, int DrawMode, int Color )
 {
     int color;
 
@@ -137,14 +137,14 @@ void DrawBusEntryStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-/****************************/
-/* class DrawJunctionStruct */
-/***************************/
+/**********************/
+/* class SCH_JUNCTION */
+/**********************/
 
-DrawJunctionStruct::DrawJunctionStruct( const wxPoint& pos ) :
+SCH_JUNCTION::SCH_JUNCTION( const wxPoint& pos ) :
     SCH_ITEM( NULL, DRAW_JUNCTION_STRUCT_TYPE )
 {
-#define DRAWJUNCTION_DIAMETER  32   /* Diameter of junction symbol between wires */
+#define DRAWJUNCTION_DIAMETER  32  /* Diameter of junction symbol between wires */
     m_Pos   = pos;
     m_Layer = LAYER_JUNCTION;
     m_Size.x = m_Size.y = DRAWJUNCTION_DIAMETER;
@@ -153,9 +153,9 @@ DrawJunctionStruct::DrawJunctionStruct( const wxPoint& pos ) :
 
 
 
-DrawJunctionStruct* DrawJunctionStruct::GenCopy()
+SCH_JUNCTION* SCH_JUNCTION::GenCopy()
 {
-    DrawJunctionStruct* newitem = new DrawJunctionStruct( m_Pos );
+    SCH_JUNCTION* newitem = new SCH_JUNCTION( m_Pos );
 
     newitem->m_Size  = m_Size;
     newitem->m_Layer = m_Layer;
@@ -171,7 +171,7 @@ DrawJunctionStruct* DrawJunctionStruct::GenCopy()
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
-bool DrawJunctionStruct::Save( FILE* aFile ) const
+bool SCH_JUNCTION::Save( FILE* aFile ) const
 {
     bool success = true;
 
@@ -184,13 +184,11 @@ bool DrawJunctionStruct::Save( FILE* aFile ) const
 }
 
 
-EDA_Rect DrawJunctionStruct::GetBoundingBox()
-
-// return a bounding box
+EDA_Rect SCH_JUNCTION::GetBoundingBox()
 {
     EDA_Rect rect;
-    rect.SetOrigin(m_Pos);
-    rect.Inflate( (GetPenSize() + m_Size.x)/2);
+    rect.SetOrigin( m_Pos );
+    rect.Inflate( ( GetPenSize() + m_Size.x ) / 2 );
 
     return rect;
 };
@@ -200,20 +198,20 @@ EDA_Rect DrawJunctionStruct::GetBoundingBox()
  * @return true if the point aPosRef is within item area
  * @param aPosRef = a wxPoint to test
  */
-bool DrawJunctionStruct::HitTest( const wxPoint& aPosRef )
+bool SCH_JUNCTION::HitTest( const wxPoint& aPosRef )
 {
     wxPoint dist = aPosRef - m_Pos;
 
     return sqrt( ( (double) ( dist.x * dist.x ) ) +
-                 ( (double) ( dist.y * dist.y ) ) ) < (m_Size.x/2);
+                 ( (double) ( dist.y * dist.y ) ) ) < ( m_Size.x / 2 );
 }
 
 
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
- * has no meaning for DrawJunctionStruct
+ * has no meaning for SCH_JUNCTION
  */
-int DrawJunctionStruct::GetPenSize()
+int SCH_JUNCTION::GetPenSize()
 {
     return 0;
 }
@@ -222,8 +220,8 @@ int DrawJunctionStruct::GetPenSize()
 /*****************************************************************************
 * Routine to redraw connection struct.                                       *
 *****************************************************************************/
-void DrawJunctionStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                               const wxPoint& offset, int DrawMode, int Color )
+void SCH_JUNCTION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                         const wxPoint& offset, int DrawMode, int Color )
 {
     int color;
 
@@ -240,7 +238,7 @@ void DrawJunctionStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
 
 #if defined(DEBUG)
-void DrawJunctionStruct::Show( int nestLevel, std::ostream& os )
+void SCH_JUNCTION::Show( int nestLevel, std::ostream& os )
 {
     // XML output:
     wxString s = GetClass();
@@ -253,11 +251,11 @@ void DrawJunctionStruct::Show( int nestLevel, std::ostream& os )
 #endif
 
 
-/*****************************/
-/* class DrawNoConnectStruct */
-/*****************************/
+/************************/
+/* class SCH_NO_CONNECT */
+/************************/
 
-DrawNoConnectStruct::DrawNoConnectStruct( const wxPoint& pos ) :
+SCH_NO_CONNECT::SCH_NO_CONNECT( const wxPoint& pos ) :
     SCH_ITEM( NULL, DRAW_NOCONNECT_STRUCT_TYPE )
 {
 #define DRAWNOCONNECT_SIZE 48       /* No symbol connection range. */
@@ -267,9 +265,9 @@ DrawNoConnectStruct::DrawNoConnectStruct( const wxPoint& pos ) :
 }
 
 
-DrawNoConnectStruct* DrawNoConnectStruct::GenCopy()
+SCH_NO_CONNECT* SCH_NO_CONNECT::GenCopy()
 {
-    DrawNoConnectStruct* newitem = new DrawNoConnectStruct( m_Pos );
+    SCH_NO_CONNECT* newitem = new SCH_NO_CONNECT( m_Pos );
 
     newitem->m_Size  = m_Size;
     newitem->m_Flags = m_Flags;
@@ -278,12 +276,12 @@ DrawNoConnectStruct* DrawNoConnectStruct::GenCopy()
 }
 
 
-EDA_Rect DrawNoConnectStruct::GetBoundingBox()
+EDA_Rect SCH_NO_CONNECT::GetBoundingBox()
 {
-    int delta = (GetPenSize() + m_Size.x)/2;
+    int delta = ( GetPenSize() + m_Size.x ) / 2;
     EDA_Rect  box;
     box.SetOrigin( m_Pos );
-    box.Inflate(delta);
+    box.Inflate( delta );
 
     return box;
 }
@@ -294,14 +292,14 @@ EDA_Rect DrawNoConnectStruct::GetBoundingBox()
  * @return true if the point aPosRef is within item area
  * @param aPosRef = a wxPoint to test
  */
-bool DrawNoConnectStruct::HitTest( const wxPoint& aPosRef )
+bool SCH_NO_CONNECT::HitTest( const wxPoint& aPosRef )
 {
     int     width = g_DrawDefaultLineThickness;
-    int     delta = ( m_Size.x + width) / 2;
+    int     delta = ( m_Size.x + width ) / 2;
 
     wxPoint dist = aPosRef - m_Pos;
 
-    if( (ABS( dist.x ) <= delta) && (ABS( dist.y ) <= delta) )
+    if( ( ABS( dist.x ) <= delta ) && ( ABS( dist.y ) <= delta ) )
         return true;
     return false;
 }
@@ -313,7 +311,7 @@ bool DrawNoConnectStruct::HitTest( const wxPoint& aPosRef )
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
-bool DrawNoConnectStruct::Save( FILE* aFile ) const
+bool SCH_NO_CONNECT::Save( FILE* aFile ) const
 {
     bool success = true;
 
@@ -329,20 +327,21 @@ bool DrawNoConnectStruct::Save( FILE* aFile ) const
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int DrawNoConnectStruct::GetPenSize()
+int SCH_NO_CONNECT::GetPenSize()
 {
     return g_DrawDefaultLineThickness;
 }
 
 
-void DrawNoConnectStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                                const wxPoint& offset, int DrawMode, int Color )
+void SCH_NO_CONNECT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                           const wxPoint& offset, int DrawMode, int Color )
 {
-    int delta = m_Size.x / 2;
     int       pX, pY, color;
+    int       delta = m_Size.x / 2;
     int       width = g_DrawDefaultLineThickness;
 
-    pX = m_Pos.x + offset.x; pY = m_Pos.y + offset.y;
+    pX = m_Pos.x + offset.x;
+    pY = m_Pos.y + offset.y;
 
     if( Color >= 0 )
         color = Color;
@@ -357,11 +356,11 @@ void DrawNoConnectStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-/***************************/
-/* Class EDA_DrawLineStruct */
-/***************************/
+/******************/
+/* Class SCH_LINE */
+/******************/
 
-EDA_DrawLineStruct::EDA_DrawLineStruct( const wxPoint& pos, int layer ) :
+SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
     SCH_ITEM( NULL, DRAW_SEGMENT_STRUCT_TYPE )
 {
     m_Start = pos;
@@ -386,9 +385,9 @@ EDA_DrawLineStruct::EDA_DrawLineStruct( const wxPoint& pos, int layer ) :
 }
 
 
-EDA_DrawLineStruct* EDA_DrawLineStruct::GenCopy()
+SCH_LINE* SCH_LINE::GenCopy()
 {
-    EDA_DrawLineStruct* newitem = new EDA_DrawLineStruct( m_Start, m_Layer );
+    SCH_LINE* newitem = new SCH_LINE( m_Start, m_Layer );
 
     newitem->m_End = m_End;
 
@@ -396,11 +395,11 @@ EDA_DrawLineStruct* EDA_DrawLineStruct::GenCopy()
 }
 
 
-bool EDA_DrawLineStruct::IsOneEndPointAt( const wxPoint& pos )
+bool SCH_LINE::IsOneEndPointAt( const wxPoint& pos )
 {
-    if( (pos.x == m_Start.x) && (pos.y == m_Start.y) )
+    if( ( pos.x == m_Start.x ) && ( pos.y == m_Start.y ) )
         return TRUE;
-    if( (pos.x == m_End.x) && (pos.y == m_End.y) )
+    if( ( pos.x == m_End.x ) && ( pos.y == m_End.y ) )
         return TRUE;
     return FALSE;
 }
@@ -415,23 +414,23 @@ bool EDA_DrawLineStruct::IsOneEndPointAt( const wxPoint& pos )
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
-void EDA_DrawLineStruct::Show( int nestLevel, std::ostream& os )
+void SCH_LINE::Show( int nestLevel, std::ostream& os )
 {
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-    " layer=\"" << m_Layer << '"' <<
-    " width=\"" << m_Width << '"' <<
-    " startIsDangling=\"" << m_StartIsDangling << '"' <<
-    " endIsDangling=\"" << m_EndIsDangling << '"' << ">" <<
-    " <start" << m_Start << "/>" <<
-    " <end" << m_End << "/>" <<
-    "</" << GetClass().Lower().mb_str() << ">\n";
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
+                                 << " layer=\"" << m_Layer << '"'
+                                 << " width=\"" << m_Width << '"'
+                                 << " startIsDangling=\"" << m_StartIsDangling
+                                 << '"' << " endIsDangling=\""
+                                 << m_EndIsDangling << '"' << ">"
+                                 << " <start" << m_Start << "/>"
+                                 << " <end" << m_End << "/>" << "</"
+                                 << GetClass().Lower().mb_str() << ">\n";
 }
-
 
 #endif
 
 
-EDA_Rect EDA_DrawLineStruct::GetBoundingBox()
+EDA_Rect SCH_LINE::GetBoundingBox()
 {
     int      width = 25;
 
@@ -455,7 +454,7 @@ EDA_Rect EDA_DrawLineStruct::GetBoundingBox()
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
-bool EDA_DrawLineStruct::Save( FILE* aFile ) const
+bool SCH_LINE::Save( FILE* aFile ) const
 {
     bool        success = true;
 
@@ -483,9 +482,9 @@ bool EDA_DrawLineStruct::Save( FILE* aFile ) const
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int EDA_DrawLineStruct::GetPenSize()
+int SCH_LINE::GetPenSize()
 {
-    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    int pensize = ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 
     if( m_Layer == LAYER_BUS && m_Width == 0 )
     {
@@ -497,8 +496,8 @@ int EDA_DrawLineStruct::GetPenSize()
 }
 
 
-void EDA_DrawLineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                               const wxPoint& offset, int DrawMode, int Color )
+void SCH_LINE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+                     int DrawMode, int Color )
 {
     int color;
     int width = GetPenSize();
@@ -527,11 +526,11 @@ void EDA_DrawLineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-/****************************/
-/* Class DrawPolylineStruct */
-/****************************/
+/***********************/
+/* Class SCH_POLYLINE */
+/***********************/
 
-DrawPolylineStruct::DrawPolylineStruct( int layer ) :
+SCH_POLYLINE::SCH_POLYLINE( int layer ) :
     SCH_ITEM( NULL, DRAW_POLYLINE_STRUCT_TYPE )
 {
     m_Width = 0;
@@ -551,14 +550,14 @@ DrawPolylineStruct::DrawPolylineStruct( int layer ) :
 }
 
 
-DrawPolylineStruct::~DrawPolylineStruct()
+SCH_POLYLINE::~SCH_POLYLINE()
 {
 }
 
 
-DrawPolylineStruct* DrawPolylineStruct::GenCopy()
+SCH_POLYLINE* SCH_POLYLINE::GenCopy()
 {
-    DrawPolylineStruct* newitem = new DrawPolylineStruct( m_Layer );
+    SCH_POLYLINE* newitem = new SCH_POLYLINE( m_Layer );
 
     newitem->m_PolyPoints = m_PolyPoints;   // std::vector copy
     return newitem;
@@ -571,7 +570,7 @@ DrawPolylineStruct* DrawPolylineStruct::GenCopy()
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
-bool DrawPolylineStruct::Save( FILE* aFile ) const
+bool SCH_POLYLINE::Save( FILE* aFile ) const
 {
     bool        success = true;
 
@@ -604,16 +603,16 @@ bool DrawPolylineStruct::Save( FILE* aFile ) const
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int DrawPolylineStruct::GetPenSize()
+int SCH_POLYLINE::GetPenSize()
 {
-    int pensize = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    int pensize = ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 
     return pensize;
 }
 
 
-void DrawPolylineStruct::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                               const wxPoint& offset, int DrawMode, int Color )
+void SCH_POLYLINE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                         const wxPoint& offset, int DrawMode, int Color )
 {
     int color;
     int width = GetPenSize();

@@ -23,7 +23,7 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
                            int FieldNumber, int IsMulti, int DrawMode );
 
 
-static void PlotNoConnectStruct( PLOTTER* plotter, DrawNoConnectStruct* Struct )
+static void PlotNoConnectStruct( PLOTTER* plotter, SCH_NO_CONNECT* Struct )
 {
     int delta = Struct->m_Size.x / 2;
     int pX, pY;
@@ -72,8 +72,8 @@ static void PlotLibPart( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem )
 static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
                            int FieldNumber, int IsMulti, int DrawMode )
 {
-    SCH_CMP_FIELD* field = DrawLibItem->GetField( FieldNumber );
-    EDA_Colors     color = UNSPECIFIED_COLOR;
+    SCH_FIELD* field = DrawLibItem->GetField( FieldNumber );
+    EDA_Colors color = UNSPECIFIED_COLOR;
 
     color = ReturnLayerColor( field->GetLayer() );
 
@@ -433,7 +433,7 @@ void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* aDrawlist )
             if( aDrawlist->Type() == DRAW_BUSENTRY_STRUCT_TYPE )
             {
             #undef STRUCT
-            #define STRUCT ( (DrawBusEntryStruct*) aDrawlist )
+            #define STRUCT ( (SCH_BUS_ENTRY*) aDrawlist )
                 StartPos = STRUCT->m_Pos;
                 EndPos   = STRUCT->m_End();
                 layer    = STRUCT->GetLayer();
@@ -442,7 +442,7 @@ void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* aDrawlist )
             else
             {
             #undef STRUCT
-            #define STRUCT ( (EDA_DrawLineStruct*) aDrawlist )
+            #define STRUCT ( (SCH_LINE*) aDrawlist )
                 StartPos = STRUCT->m_Start;
                 EndPos   = STRUCT->m_End;
                 layer    = STRUCT->GetLayer();
@@ -460,7 +460,7 @@ void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* aDrawlist )
 
         case DRAW_JUNCTION_STRUCT_TYPE:
             #undef STRUCT
-            #define STRUCT ( (DrawJunctionStruct*) aDrawlist )
+            #define STRUCT ( (SCH_JUNCTION*) aDrawlist )
             plotter->set_color( ReturnLayerColor( STRUCT->GetLayer() ) );
             plotter->circle( STRUCT->m_Pos, STRUCT->m_Size.x, FILLED_SHAPE );
             break;
@@ -483,7 +483,7 @@ void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* aDrawlist )
         case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
             break;
 
-        case TYPE_MARKER_SCH:
+        case TYPE_SCH_MARKER:
             break;
 
         case DRAW_SHEET_STRUCT_TYPE:
@@ -492,7 +492,7 @@ void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* aDrawlist )
 
         case DRAW_NOCONNECT_STRUCT_TYPE:
             plotter->set_color( ReturnLayerColor( LAYER_NOCONNECT ) );
-            PlotNoConnectStruct( plotter, (DrawNoConnectStruct*) aDrawlist );
+            PlotNoConnectStruct( plotter, (SCH_NO_CONNECT*) aDrawlist );
             break;
 
         default:

@@ -2,24 +2,24 @@
 ** General UI Guidelines for KICAD Development
 
 
-Capitalization:  
+Capitalization:
 
     For any visible text used within Kicad, follow recommendations here:
     http://library.gnome.org/devel/hig-book/2.20/design-text-labels.html.en#layout-capitalization
     This applies to all Menus, Titles, Labels, Tooltips, Buttons, etc.
 
 
-Dialogs:  
+Dialogs:
 
     Follow the recommendations here:
     http://library.gnome.org/devel/hig-book/2.20/windows-dialog.html.en
     paying particular attention to "initial focus", "sensible default values",
     "default buttons", ESC key termination.
-    
-    Use wxWidgets "sizers" in all dialogs, no matter how simple they are: 
+
+    Use wxWidgets "sizers" in all dialogs, no matter how simple they are:
     http://zetcode.com/tutorials/wxwidgetstutorial/layoutmanagement
     and keep dialogs resizeable.
-    
+
     Configure the sizers so that as the dialog window is expanded, the most
     sensible use of the increased dialog window occurs automatically by the
     sizers. For example, in the DRC dialog of PCBNEW, sizers should be used to
@@ -28,11 +28,20 @@ Dialogs:
     expands the dialog window, making it easier to read more DRC error messages.
     In other dialogs without one component more important than the others, the
     sizers might be configured to position the controls to sensible positions
-    near the perimeter of the increasingly larger dialog box, not necesarily
-    leaving them all bundled tightly together.  The dialog box should look 
+    near the perimeter of the increasingly larger dialog box, not necessarily
+    leaving them all bundled tightly together.  The dialog box should look
     nice at any size large enough to show all the components.
-    
-    Use tooltips to explain the functionality of each non-obvious control.  
+
+    Use tooltips to explain the functionality of each non-obvious control.
     This is important because the help files and the wiki often lag behind
     the source code.
-    
+
+    Avoid defining initial dialog sizes if possible.  Let the sizers do their
+    job.  After the dialog is fit to the sizers, set the minimum size to the
+    current size to prevent the dialog controls from being obscured when
+    resizing the dialog.  If the labels or text of the dialog controls are,
+    set or changed at run time.  Rerun wxWindow::Fit() to allow the dialog to
+    re-size and adjust for the new control widths.  This can all be done after
+    the dialog is created but before it is shown or use class methods to
+    re-size the dialog as required.  Reset the minimum size to the updated
+    dialog size.

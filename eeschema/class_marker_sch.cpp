@@ -1,6 +1,6 @@
-/***********************************************************************/
-/* Methodes de base de gestion des classes des elements de schematique */
-/***********************************************************************/
+/*******************************************/
+/* Schematic marker object implementation. */
+/*******************************************/
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
@@ -13,7 +13,7 @@
 #include "erc.h"
 
 /* Marker are mainly used to show an ERC error
- * but they could be used to give a specifi info
+ * but they could be used to give a specific info
  */
 
 
@@ -28,31 +28,30 @@ const wxChar* NameMarqueurType[] =
 
 
 /**************************/
-/* class MARKER_SCH */
+/* class SCH_MARKER */
 /**************************/
 
-MARKER_SCH::MARKER_SCH() :
-    SCH_ITEM( NULL, TYPE_MARKER_SCH ),
-    MARKER_BASE()
+SCH_MARKER::SCH_MARKER() : SCH_ITEM( NULL, TYPE_SCH_MARKER ), MARKER_BASE()
 {
 }
 
 
-MARKER_SCH::MARKER_SCH( const wxPoint& pos, const wxString& text ) :
-    SCH_ITEM( NULL, TYPE_MARKER_SCH ),
+SCH_MARKER::SCH_MARKER( const wxPoint& pos, const wxString& text ) :
+    SCH_ITEM( NULL, TYPE_SCH_MARKER ),
     MARKER_BASE( 0, pos, text, pos )
 {
 }
 
 
-MARKER_SCH::~MARKER_SCH()
+SCH_MARKER::~SCH_MARKER()
 {
 }
 
 
-MARKER_SCH* MARKER_SCH::GenCopy()
+SCH_MARKER* SCH_MARKER::GenCopy()
 {
-    MARKER_SCH* newitem = new MARKER_SCH( GetPos(), GetReporter().GetMainText() );
+    SCH_MARKER* newitem = new SCH_MARKER( GetPos(),
+                                          GetReporter().GetMainText() );
 
     newitem->SetMarkerType( GetMarkerType() );
     newitem->SetErrorLevel( GetErrorLevel() );
@@ -70,11 +69,11 @@ MARKER_SCH* MARKER_SCH::GenCopy()
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
-void MARKER_SCH::Show( int nestLevel, std::ostream& os )
+void SCH_MARKER::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << GetPos()
-                                 << "/>\n";
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
+                                 << GetPos() << "/>\n";
 }
 
 
@@ -86,23 +85,21 @@ void MARKER_SCH::Show( int nestLevel, std::ostream& os )
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
-bool MARKER_SCH::Save( FILE* aFile ) const
+bool SCH_MARKER::Save( FILE* aFile ) const
 {
     return true;
 }
 
 
-/****************************************************************************/
-void MARKER_SCH::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+void SCH_MARKER::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                        const wxPoint& aOffset, int aDrawMode, int aColor )
-/****************************************************************************/
 {
     EDA_Colors color = (EDA_Colors) m_Color;
     EDA_Colors tmp   = color;
 
     if( GetMarkerType() == MARK_ERC )
     {
-        color = (GetErrorLevel() == WAR ) ?
+        color = ( GetErrorLevel() == WAR ) ?
                 (EDA_Colors) g_LayerDescr.LayerColor[LAYER_ERC_WARN] :
                 (EDA_Colors) g_LayerDescr.LayerColor[LAYER_ERC_ERR];
     }
@@ -124,7 +121,7 @@ void MARKER_SCH::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  * object, and the units should be in the pcb or schematic coordinate system.
  * It is OK to overestimate the size by a few counts.
  */
-EDA_Rect MARKER_SCH::GetBoundingBox()
+EDA_Rect SCH_MARKER::GetBoundingBox()
 {
     return GetBoundingBoxMarker();
 }

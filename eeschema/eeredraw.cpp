@@ -176,7 +176,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
     {
     case DRAW_POLYLINE_STRUCT_TYPE:
     {
-        DrawPolylineStruct* Struct = (DrawPolylineStruct*) aItem;
+        SCH_POLYLINE* Struct = (SCH_POLYLINE*) aItem;
         GRMoveTo( Struct->m_PolyPoints[0].x + aOffset.x,
                   Struct->m_PolyPoints[0].y + aOffset.y );
         for( unsigned ii = 1; ii < Struct->GetCornerCount(); ii++ )
@@ -192,8 +192,8 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
 
     case DRAW_SEGMENT_STRUCT_TYPE:
     {
-        EDA_DrawLineStruct* Struct;
-        Struct = (EDA_DrawLineStruct*) aItem;
+        SCH_LINE* Struct;
+        Struct = (SCH_LINE*) aItem;
         if( (Struct->m_Flags & STARTPOINT) == 0 )
         {
             GRMoveTo( Struct->m_Start.x + aOffset.x,
@@ -218,8 +218,8 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
 
     case DRAW_BUSENTRY_STRUCT_TYPE:
     {
-        DrawBusEntryStruct* Struct = (DrawBusEntryStruct*) aItem;
-        wxPoint             start  = Struct->m_Pos + aOffset;
+        SCH_BUS_ENTRY* Struct = (SCH_BUS_ENTRY*) aItem;
+        wxPoint        start  = Struct->m_Pos + aOffset;
         GRMoveTo( start.x, start.y );
         GRLineTo( &aPanel->m_ClipBox, aDC, Struct->m_Size.x + start.x,
                   Struct->m_Size.y + start.y, width, g_GhostColor );
@@ -228,8 +228,8 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
 
     case DRAW_JUNCTION_STRUCT_TYPE:
     {
-        DrawJunctionStruct* Struct;
-        Struct = (DrawJunctionStruct*) aItem;
+        SCH_JUNCTION* Struct;
+        Struct = (SCH_JUNCTION*) aItem;
         Struct->Draw( aPanel, aDC, aOffset, DrawMode, g_GhostColor );
         break;
     }
@@ -254,8 +254,8 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
 
     case DRAW_NOCONNECT_STRUCT_TYPE:
     {
-        DrawNoConnectStruct* Struct;
-        Struct = (DrawNoConnectStruct*) aItem;
+        SCH_NO_CONNECT* Struct;
+        Struct = (SCH_NO_CONNECT*) aItem;
         Struct->Draw( aPanel, aDC, aOffset, DrawMode, g_GhostColor );
         break;
     }
@@ -286,7 +286,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
     }
 
     case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-    case TYPE_MARKER_SCH:
+    case TYPE_SCH_MARKER:
         break;
 
     default:

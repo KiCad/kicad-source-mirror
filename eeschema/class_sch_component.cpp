@@ -16,8 +16,8 @@
 #include <wx/tokenzr.h>
 
 
-/* Local variables */
 static LIB_COMPONENT* DummyCmp;
+
 
 /* Descr component <DUMMY> used when a component is not found in library,
  *  to draw a dummy shape
@@ -50,7 +50,6 @@ void CreateDummyCmp()
 }
 
 
-/*******************************************************************/
 SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
     SCH_ITEM( aParent, TYPE_SCH_COMPONENT )
 {
@@ -58,9 +57,9 @@ SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
 }
 
 
-SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, DrawSheetPath* sheet,
-                              int unit, int convert, const wxPoint& pos,
-                              bool setNewItemFlag ) :
+SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent,
+                              SCH_SHEET_PATH* sheet, int unit, int convert,
+                              const wxPoint& pos, bool setNewItemFlag ) :
     SCH_ITEM( NULL, TYPE_SCH_COMPONENT )
 {
     size_t         i;
@@ -90,13 +89,13 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, DrawSheetPath* sheet,
         {
             while( (int) i >= GetFieldCount() )
             {
-                SCH_CMP_FIELD field( wxPoint( 0, 0 ), GetFieldCount(), this,
-                                     ReturnDefaultFieldName( i ) );
+                SCH_FIELD field( wxPoint( 0, 0 ), GetFieldCount(), this,
+                                 ReturnDefaultFieldName( i ) );
                 AddField( field );
             }
         }
 
-        SCH_CMP_FIELD* schField = GetField( i );
+        SCH_FIELD* schField = GetField( i );
 
         schField->m_Pos = m_Pos + libFields[i].m_Pos;
         schField->ImportValues( libFields[i] );
@@ -160,16 +159,16 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
 
     for( int i = 0; i < NUMBER_OF_FIELDS; ++i )
     {
-        SCH_CMP_FIELD field( pos, i, this, ReturnDefaultFieldName( i ) );
+        SCH_FIELD field( pos, i, this, ReturnDefaultFieldName( i ) );
 
         if( i==REFERENCE )
             field.SetLayer( LAYER_REFERENCEPART );
         else if( i==VALUE )
             field.SetLayer( LAYER_VALUEPART );
 
-        // else keep LAYER_FIELDS from SCH_CMP_FIELD constructor
+        // else keep LAYER_FIELDS from SCH_FIELD constructor
 
-        // SCH_CMP_FIELD's implicitly created copy constructor is called in here
+        // SCH_FIELD's implicitly created copy constructor is called in here
         AddField( field );
     }
 
@@ -204,7 +203,7 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                  dummy ? 0 : m_Convert, DrawMode, Color, m_Transform,
                  DrawPinText, false );
 
-    SCH_CMP_FIELD* field = GetField( REFERENCE );
+    SCH_FIELD* field = GetField( REFERENCE );
 
     if( ( ( field->m_Attributs & TEXT_NO_VISIBLE ) == 0 )
         && !( field->m_Flags & IS_MOVED ) )
@@ -295,11 +294,9 @@ void SCH_COMPONENT::AddHierarchicalReference( const wxString& aPath,
 }
 
 
-/****************************************************************/
 wxString SCH_COMPONENT::ReturnFieldName( int aFieldNdx ) const
-/****************************************************************/
 {
-    SCH_CMP_FIELD* field = GetField( aFieldNdx );
+    SCH_FIELD* field = GetField( aFieldNdx );
 
     if( field )
     {
@@ -313,9 +310,7 @@ wxString SCH_COMPONENT::ReturnFieldName( int aFieldNdx ) const
 }
 
 
-/****************************************************************/
-wxString SCH_COMPONENT::GetPath( DrawSheetPath* sheet )
-/****************************************************************/
+wxString SCH_COMPONENT::GetPath( SCH_SHEET_PATH* sheet )
 {
     wxString str;
 
@@ -324,9 +319,7 @@ wxString SCH_COMPONENT::GetPath( DrawSheetPath* sheet )
 }
 
 
-/********************************************************************/
-const wxString SCH_COMPONENT::GetRef( DrawSheetPath* sheet )
-/********************************************************************/
+const wxString SCH_COMPONENT::GetRef( SCH_SHEET_PATH* sheet )
 {
     wxString          path = GetPath( sheet );
     wxString          h_path, h_ref;
@@ -362,9 +355,7 @@ const wxString SCH_COMPONENT::GetRef( DrawSheetPath* sheet )
 }
 
 
-/***********************************************************************/
-void SCH_COMPONENT::SetRef( DrawSheetPath* sheet, const wxString& ref )
-/***********************************************************************/
+void SCH_COMPONENT::SetRef( SCH_SHEET_PATH* sheet, const wxString& ref )
 {
     wxString          path = GetPath( sheet );
 
@@ -374,14 +365,14 @@ void SCH_COMPONENT::SetRef( DrawSheetPath* sheet, const wxString& ref )
     wxStringTokenizer tokenizer;
     wxString          separators( wxT( " " ) );
 
-    //check to see if it is already there before inserting it
+    // check to see if it is already there before inserting it
     for( unsigned ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
     {
         tokenizer.SetString( m_PathsAndReferences[ii], separators );
         h_path = tokenizer.GetNextToken();
         if( h_path.Cmp( path ) == 0 )
         {
-            //just update the reference text, not the timestamp.
+            // just update the reference text, not the timestamp.
             h_ref  = h_path + wxT( " " ) + ref;
             h_ref += wxT( " " );
             tokenizer.GetNextToken();               // Skip old reference
@@ -395,7 +386,7 @@ void SCH_COMPONENT::SetRef( DrawSheetPath* sheet, const wxString& ref )
     if( notInArray )
         AddHierarchicalReference( path, ref, m_Multi );
 
-    SCH_CMP_FIELD* rf = GetField( REFERENCE );
+    SCH_FIELD* rf = GetField( REFERENCE );
 
     if( rf->m_Text.IsEmpty()
         || ( abs( rf->m_Pos.x - m_Pos.x ) +
@@ -430,7 +421,8 @@ void SCH_COMPONENT::SetTimeStamp( long aNewTimeStamp)
     m_TimeStamp = aNewTimeStamp;
     for( unsigned ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
     {
-        m_PathsAndReferences[ii].Replace(string_oldtimestamp.GetData(), string_timestamp.GetData());
+        m_PathsAndReferences[ii].Replace( string_oldtimestamp.GetData(),
+                                          string_timestamp.GetData() );
    }
 }
 
@@ -438,7 +430,7 @@ void SCH_COMPONENT::SetTimeStamp( long aNewTimeStamp)
 /***********************************************************/
 //returns the unit selection, for the given sheet path.
 /***********************************************************/
-int SCH_COMPONENT::GetUnitSelection( DrawSheetPath* aSheet )
+int SCH_COMPONENT::GetUnitSelection( SCH_SHEET_PATH* aSheet )
 {
     wxString          path = GetPath( aSheet );
     wxString          h_path, h_multi;
@@ -469,7 +461,8 @@ int SCH_COMPONENT::GetUnitSelection( DrawSheetPath* aSheet )
 /****************************************************************************/
 //Set the unit selection, for the given sheet path.
 /****************************************************************************/
-void SCH_COMPONENT::SetUnitSelection( DrawSheetPath* aSheet, int aUnitSelection )
+void SCH_COMPONENT::SetUnitSelection( SCH_SHEET_PATH* aSheet,
+                                      int             aUnitSelection )
 {
     wxString          path = GetPath( aSheet );
 
@@ -503,9 +496,9 @@ void SCH_COMPONENT::SetUnitSelection( DrawSheetPath* aSheet, int aUnitSelection 
 }
 
 
-SCH_CMP_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
+SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
 {
-    const SCH_CMP_FIELD* field;
+    const SCH_FIELD* field;
 
     if( (unsigned) aFieldNdx < m_Fields.size() )
         field = &m_Fields[aFieldNdx];
@@ -515,11 +508,11 @@ SCH_CMP_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
     wxASSERT( field );
 
     // use case to remove const-ness
-    return (SCH_CMP_FIELD*) field;
+    return (SCH_FIELD*) field;
 }
 
 
-void SCH_COMPONENT::AddField( const SCH_CMP_FIELD& aField )
+void SCH_COMPONENT::AddField( const SCH_FIELD& aField )
 {
     m_Fields.push_back( aField );
 }
@@ -585,11 +578,9 @@ EDA_Rect SCH_COMPONENT::GetBoundaryBox() const
 }
 
 
-/**************************************************************************/
 /* Used if undo / redo command:
  *  swap data between this and copyitem
  */
-/**************************************************************************/
 void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
 {
     EXCHG( m_ChipName, copyitem->m_ChipName );
@@ -617,9 +608,7 @@ void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
 }
 
 
-/***********************************************************************/
 void SCH_COMPONENT::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
-/***********************************************************************/
 {
     /* save old text in undo list */
     if( g_ItemToUndoCopy
@@ -644,10 +633,10 @@ void SCH_COMPONENT::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 
 /**
  * Suppress annotation ( i.i IC23 changed to IC? and part reset to 1)
- * @param aSheet: DrawSheetPath value: if NULL remove all annotations,
+ * @param aSheet: SCH_SHEET_PATH value: if NULL remove all annotations,
  *                else remove annotation relative to this sheetpath
  */
-void SCH_COMPONENT::ClearAnnotation( DrawSheetPath* aSheet )
+void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheet )
 {
     wxString       defRef    = m_PrefixString;
     bool           KeepMulti = false;
@@ -770,42 +759,42 @@ void SCH_COMPONENT::SetRotationMiroir( int type_rotate )
         SetRotationMiroir( CMP_ROTATE_CLOCKWISE );
         break;
 
-    case (CMP_ORIENT_0 + CMP_MIROIR_X):
+    case ( CMP_ORIENT_0 + CMP_MIROIR_X ):
         SetRotationMiroir( CMP_ORIENT_0 );
         SetRotationMiroir( CMP_MIROIR_X );
         break;
 
-    case (CMP_ORIENT_0 + CMP_MIROIR_Y):
+    case ( CMP_ORIENT_0 + CMP_MIROIR_Y ):
         SetRotationMiroir( CMP_ORIENT_0 );
         SetRotationMiroir( CMP_MIROIR_Y );
         break;
 
-    case (CMP_ORIENT_90 + CMP_MIROIR_X):
+    case ( CMP_ORIENT_90 + CMP_MIROIR_X ):
         SetRotationMiroir( CMP_ORIENT_90 );
         SetRotationMiroir( CMP_MIROIR_X );
         break;
 
-    case (CMP_ORIENT_90 + CMP_MIROIR_Y):
+    case ( CMP_ORIENT_90 + CMP_MIROIR_Y ):
         SetRotationMiroir( CMP_ORIENT_90 );
         SetRotationMiroir( CMP_MIROIR_Y );
         break;
 
-    case (CMP_ORIENT_180 + CMP_MIROIR_X):
+    case ( CMP_ORIENT_180 + CMP_MIROIR_X ):
         SetRotationMiroir( CMP_ORIENT_180 );
         SetRotationMiroir( CMP_MIROIR_X );
         break;
 
-    case (CMP_ORIENT_180 + CMP_MIROIR_Y):
+    case ( CMP_ORIENT_180 + CMP_MIROIR_Y ):
         SetRotationMiroir( CMP_ORIENT_180 );
         SetRotationMiroir( CMP_MIROIR_Y );
         break;
 
-    case (CMP_ORIENT_270 + CMP_MIROIR_X):
+    case ( CMP_ORIENT_270 + CMP_MIROIR_X ):
         SetRotationMiroir( CMP_ORIENT_270 );
         SetRotationMiroir( CMP_MIROIR_X );
         break;
 
-    case (CMP_ORIENT_270 + CMP_MIROIR_Y):
+    case ( CMP_ORIENT_270 + CMP_MIROIR_Y ):
         SetRotationMiroir( CMP_ORIENT_270 );
         SetRotationMiroir( CMP_MIROIR_Y );
         break;
@@ -850,30 +839,35 @@ void SCH_COMPONENT::SetRotationMiroir( int type_rotate )
 }
 
 
-int SCH_COMPONENT::GetRotationMiroir()
 /** function GetRotationMiroir()
  * Used to display component orientation (in dialog editor or info)
  * @return the orientation and mirror
  * Note: Because there are different ways to have a given orientation/mirror,
- * the orientation/mirror is not necessary wht the used does
+ * the orientation/mirror is not necessary what the used does
  * (example : a mirrorX then a mirrorY give no mirror but rotate the component).
  * So this function find a rotation and a mirror value
  * ( CMP_MIROIR_X because this is the first mirror option tested)
  *  but can differs from the orientation made by an user
- * ( a CMP_MIROIR_Y is find as a CMP_MIROIR_X + orientation 180, because they are equivalent)
+ * ( a CMP_MIROIR_Y is find as a CMP_MIROIR_X + orientation 180, because they
+ * are equivalent)
  *
-*/
+ */
+int SCH_COMPONENT::GetRotationMiroir()
 {
     int  type_rotate = CMP_ORIENT_0;
     int  ComponentMatOrient[2][2];
     int  ii;
 
     #define ROTATE_VALUES_COUNT 12
-    int rotate_value[ROTATE_VALUES_COUNT] =    // list of all possibilities, but only the first 8 are actually used
+
+    // list of all possibilities, but only the first 8 are actually used
+    int rotate_value[ROTATE_VALUES_COUNT] =
     {
         CMP_ORIENT_0, CMP_ORIENT_90, CMP_ORIENT_180, CMP_ORIENT_270,
-        CMP_MIROIR_X + CMP_ORIENT_0, CMP_MIROIR_X + CMP_ORIENT_90, CMP_MIROIR_X + CMP_ORIENT_180, CMP_MIROIR_X + CMP_ORIENT_270,
-        CMP_MIROIR_Y + CMP_ORIENT_0, CMP_MIROIR_Y + CMP_ORIENT_90, CMP_MIROIR_Y + CMP_ORIENT_180, CMP_MIROIR_Y + CMP_ORIENT_270
+        CMP_MIROIR_X + CMP_ORIENT_0, CMP_MIROIR_X + CMP_ORIENT_90,
+        CMP_MIROIR_X + CMP_ORIENT_180, CMP_MIROIR_X + CMP_ORIENT_270,
+        CMP_MIROIR_Y + CMP_ORIENT_0, CMP_MIROIR_Y + CMP_ORIENT_90,
+        CMP_MIROIR_Y + CMP_ORIENT_180, CMP_MIROIR_Y + CMP_ORIENT_270
     };
 
     // Try to find the current transform option:
@@ -883,7 +877,8 @@ int SCH_COMPONENT::GetRotationMiroir()
     {
         type_rotate = rotate_value[ii];
         SetRotationMiroir( type_rotate );
-        if( memcmp( ComponentMatOrient, m_Transform, sizeof(ComponentMatOrient) ) == 0 )
+        if( memcmp( ComponentMatOrient, m_Transform,
+                    sizeof(ComponentMatOrient) ) == 0 )
             return type_rotate;
     }
 
@@ -921,10 +916,12 @@ wxPoint SCH_COMPONENT::GetScreenCoord( const wxPoint& coord )
 void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-        " ref=\"" << ReturnFieldName( 0 ) << '"' << " chipName=\"" <<
-        m_ChipName.mb_str() << '"' <<  m_Pos << " layer=\"" << m_Layer <<
-        '"' << "/>\n";
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
+                                 << " ref=\"" << ReturnFieldName( 0 )
+                                 << '"' << " chipName=\""
+                                 << m_ChipName.mb_str() << '"' <<  m_Pos
+                                 << " layer=\"" << m_Layer
+                                 << '"' << "/>\n";
 
     // skip the reference, it's been output already.
     for( int i = 1; i < GetFieldCount();  ++i )
@@ -933,13 +930,15 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
 
         if( !value.IsEmpty() )
         {
-            NestedSpace( nestLevel + 1, os ) << "<field" << " name=\"" <<
-                ReturnFieldName( i ).mb_str() << '"' <<  " value=\"" <<
-                value.mb_str() << "\"/>\n";
+            NestedSpace( nestLevel + 1, os ) << "<field" << " name=\""
+                                             << ReturnFieldName( i ).mb_str()
+                                             << '"' <<  " value=\""
+                                             << value.mb_str() << "\"/>\n";
         }
     }
 
-    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
+    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str()
+                                 << ">\n";
 }
 
 #endif
@@ -1037,8 +1036,8 @@ bool SCH_COMPONENT::Save( FILE* f ) const
 
     for( int fieldNdx = 0; fieldNdx < GetFieldCount(); ++fieldNdx )
     {
-        SCH_CMP_FIELD* field = GetField( fieldNdx );
-        wxString       defaultName = ReturnDefaultFieldName( fieldNdx );
+        SCH_FIELD* field = GetField( fieldNdx );
+        wxString   defaultName = ReturnDefaultFieldName( fieldNdx );
 
         // only save the field if there is a value in the field or if field name
         // is different than the default field name
@@ -1049,7 +1048,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
             return false;
     }
 
-    /* Generation du num unit, position, box ( ancienne norme )*/
+    /* Unit number, position, box ( old standard ) */
     if( fprintf( f, "\t%-4d %-4d %-4d\n", m_Multi, m_Pos.x, m_Pos.y ) == EOF )
         return false;
 
@@ -1130,7 +1129,8 @@ void SCH_COMPONENT::Mirror_Y(int aYaxis_position)
 
     for( int ii = 0; ii < GetFieldCount(); ii++ )
     {
-        /* move the fields to the new position because the component itself has moved */
+        /* move the fields to the new position because the component itself
+         * has moved */
         GetField( ii )->m_Pos.x -= dx;
     }
 }

@@ -18,9 +18,9 @@
 
 
 static void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame );
-static void AddMenusForWire( wxMenu* PopMenu, EDA_DrawLineStruct* Wire,
+static void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire,
                              WinEDA_SchematicFrame* frame );
-static void AddMenusForBus( wxMenu* PopMenu, EDA_DrawLineStruct* Bus,
+static void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus,
                             WinEDA_SchematicFrame* frame );
 static void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet );
 static void AddMenusForPinSheet( wxMenu* PopMenu, SCH_SHEET_PIN* PinSheet );
@@ -29,10 +29,10 @@ static void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label );
 static void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel );
 static void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* GLabel );
 static void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component );
-static void AddMenusForComponentField( wxMenu* PopMenu, SCH_CMP_FIELD* Field );
-static void AddMenusForJunction( wxMenu* PopMenu, DrawJunctionStruct* Junction,
+static void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field );
+static void AddMenusForJunction( wxMenu* PopMenu, SCH_JUNCTION* Junction,
                                  WinEDA_SchematicFrame* frame );
-static void AddMenusForMarkers( wxMenu* aPopMenu, MARKER_SCH* aMarker,
+static void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker,
                                 WinEDA_SchematicFrame* aFrame );
 
 
@@ -121,14 +121,14 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         break;
 
     case DRAW_JUNCTION_STRUCT_TYPE:
-        AddMenusForJunction( PopMenu, (DrawJunctionStruct*) DrawStruct, this );
+        AddMenusForJunction( PopMenu, (SCH_JUNCTION*) DrawStruct, this );
         break;
 
     case DRAW_BUSENTRY_STRUCT_TYPE:
         if( !flags )
             ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
                           _( "Move Bus Entry" ), move_xpm );
-        if( GetBusEntryShape( (DrawBusEntryStruct*) DrawStruct ) == '\\' )
+        if( GetBusEntryShape( (SCH_BUS_ENTRY*) DrawStruct ) == '\\' )
             PopMenu->Append( ID_POPUP_SCH_ENTRY_SELECT_SLASH,
                             _( "Set Bus Entry /" ) );
         else
@@ -138,8 +138,8 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
                       _( "Delete Bus Entry" ), delete_bus_xpm );
         break;
 
-    case TYPE_MARKER_SCH:
-        AddMenusForMarkers( PopMenu, (MARKER_SCH*) DrawStruct, this );
+    case TYPE_SCH_MARKER:
+        AddMenusForMarkers( PopMenu, (SCH_MARKER*) DrawStruct, this );
         break;
 
     case TYPE_SCH_TEXT:
@@ -160,7 +160,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
 
     case DRAW_PART_TEXT_STRUCT_TYPE:
     {
-        AddMenusForComponentField( PopMenu, (SCH_CMP_FIELD*) DrawStruct );
+        AddMenusForComponentField( PopMenu, (SCH_FIELD*) DrawStruct );
         if( flags )
             break;
 
@@ -187,11 +187,11 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         switch( DrawStruct->GetLayer() )
         {
         case LAYER_WIRE:
-            AddMenusForWire( PopMenu, (EDA_DrawLineStruct*) DrawStruct, this );
+            AddMenusForWire( PopMenu, (SCH_LINE*) DrawStruct, this );
             break;
 
         case LAYER_BUS:
-            AddMenusForBus( PopMenu, (EDA_DrawLineStruct*) DrawStruct, this );
+            AddMenusForBus( PopMenu, (SCH_LINE*) DrawStruct, this );
             break;
 
         default:
@@ -227,7 +227,7 @@ DrawType %d" ),
 }
 
 
-void AddMenusForComponentField( wxMenu* PopMenu, SCH_CMP_FIELD* Field )
+void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field )
 {
     if( !Field->m_Flags )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
@@ -486,7 +486,7 @@ void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
 }
 
 
-void AddMenusForJunction( wxMenu* PopMenu, DrawJunctionStruct* Junction,
+void AddMenusForJunction( wxMenu* PopMenu, SCH_JUNCTION* Junction,
                           WinEDA_SchematicFrame* frame )
 {
     bool is_new = (Junction->m_Flags & IS_NEW) ? TRUE : FALSE;
@@ -513,7 +513,7 @@ void AddMenusForJunction( wxMenu* PopMenu, DrawJunctionStruct* Junction,
 }
 
 
-void AddMenusForWire( wxMenu* PopMenu, EDA_DrawLineStruct* Wire,
+void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire,
                       WinEDA_SchematicFrame* frame )
 {
     bool    is_new = (Wire->m_Flags & IS_NEW) ? TRUE : FALSE;
@@ -554,7 +554,7 @@ void AddMenusForWire( wxMenu* PopMenu, EDA_DrawLineStruct* Wire,
 }
 
 
-void AddMenusForBus( wxMenu* PopMenu, EDA_DrawLineStruct* Bus,
+void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus,
                      WinEDA_SchematicFrame* frame )
 {
     bool    is_new = (Bus->m_Flags & IS_NEW) ? TRUE : FALSE;
@@ -673,7 +673,7 @@ void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame )
 }
 
 
-void AddMenusForMarkers( wxMenu* aPopMenu, MARKER_SCH* aMarker,
+void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker,
                          WinEDA_SchematicFrame* aFrame )
 {
     ADD_MENUITEM( aPopMenu, ID_POPUP_SCH_DELETE, _( "Delete Marker" ),

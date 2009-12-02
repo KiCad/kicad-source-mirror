@@ -29,10 +29,6 @@
 #include "libviewfrm.h"
 
 
-/*******************************/
-/* class WinEDA_SchematicFrame */
-/*******************************/
-
 BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
     EVT_SOCKET( ID_EDA_SOCKET_EVENT_SERV,
                 WinEDA_DrawFrame::OnSockRequestServer )
@@ -102,14 +98,14 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
     EVT_MENU( ID_KICAD_ABOUT, WinEDA_DrawFrame::GetKicadAbout )
 
     // Tools and buttons for vertical toolbar.
-    EVT_TOOL( ID_NO_SELECT_BUTT, WinEDA_SchematicFrame::Process_Special_Functions )
+    EVT_TOOL( ID_NO_SELECT_BUTT,
+              WinEDA_SchematicFrame::Process_Special_Functions )
     EVT_TOOL_RANGE( ID_SCHEMATIC_VERTICAL_TOOLBAR_START,
                     ID_SCHEMATIC_VERTICAL_TOOLBAR_END,
                     WinEDA_SchematicFrame::Process_Special_Functions )
 
     EVT_MENU_RANGE( ID_POPUP_START_RANGE, ID_POPUP_END_RANGE,
                     WinEDA_SchematicFrame::Process_Special_Functions )
-
 
     // Tools and buttons options toolbar
     EVT_TOOL_RANGE( ID_TB_OPTIONS_START, ID_TB_OPTIONS_END,
@@ -139,9 +135,6 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
                          WinEDA_SchematicFrame::OnUpdateUnits )
 END_EVENT_TABLE()
 
-/****************/
-/* Constructor */
-/****************/
 
 WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow*       father,
                                               const wxString& title,
@@ -153,7 +146,7 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow*       father,
     m_FrameName = wxT( "SchematicFrame" );
     m_Draw_Axis = FALSE;                // TRUE to show axis
     m_Draw_Sheet_Ref = TRUE;            // TRUE to show sheet references
-    m_CurrentSheet   = new DrawSheetPath();
+    m_CurrentSheet   = new SCH_SHEET_PATH();
     m_CurrentField   = NULL;
     m_Multiflag     = 0;
     m_TextFieldSize = DEFAULT_SIZE_TEXT;
@@ -228,14 +221,10 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow*       father,
 }
 
 
-/***************/
-/* Destructor */
-/***************/
-
 WinEDA_SchematicFrame::~WinEDA_SchematicFrame()
 {
     SAFE_DELETE( g_RootSheet );
-    SAFE_DELETE( m_CurrentSheet ); //a DrawSheetPath, on the heap.
+    SAFE_DELETE( m_CurrentSheet ); //a SCH_SHEET_PATH, on the heap.
     m_CurrentSheet = NULL;
 }
 
@@ -246,37 +235,32 @@ BASE_SCREEN* WinEDA_SchematicFrame::GetBaseScreen() const
 }
 
 
-/***************/
-/* utility functions */
-/***************/
-DrawSheetPath* WinEDA_SchematicFrame::GetSheet()
+SCH_SHEET_PATH* WinEDA_SchematicFrame::GetSheet()
 {
     return m_CurrentSheet;
 }
 
 
-/****************************************************/
-void WinEDA_SchematicFrame::SetSheetNumberAndCount()
-{
-/****************************************************/
 /** Function SetSheetNumberAndCount
  * Set the m_ScreenNumber and m_NumberOfScreen members for screens
  * must be called after a delete or add sheet command, and when entering a
  * sheet
  */
+void WinEDA_SchematicFrame::SetSheetNumberAndCount()
+{
     SCH_SCREEN*    screen = GetScreen();
     EDA_ScreenList s_list;
 
     /* Set the sheet count, and the sheet number (1 for root sheet)
      */
-    int           sheet_count = g_RootSheet->CountSheets();
-    int           SheetNumber = 1;
-    wxString      current_sheetpath = m_CurrentSheet->Path();
-    EDA_SheetList SheetList;
+    int            sheet_count = g_RootSheet->CountSheets();
+    int            SheetNumber = 1;
+    wxString       current_sheetpath = m_CurrentSheet->Path();
+    SCH_SHEET_LIST SheetList;
 
     // Examine all sheets path to find the current sheets path,
     // and count them from root to the current sheet path:
-    DrawSheetPath* sheet;
+    SCH_SHEET_PATH* sheet;
 
     for( sheet = SheetList.GetFirst(); sheet != NULL;
         sheet = SheetList.GetNext() )
@@ -298,9 +282,7 @@ void WinEDA_SchematicFrame::SetSheetNumberAndCount()
 }
 
 
-/***************************************************/
 SCH_SCREEN* WinEDA_SchematicFrame::GetScreen() const
-/***************************************************/
 {
     return m_CurrentSheet->LastScreen();
 }
@@ -337,11 +319,9 @@ void WinEDA_SchematicFrame::CreateScreens()
 }
 
 
-/*****************************************************************/
 void WinEDA_SchematicFrame::OnCloseWindow( wxCloseEvent& Event )
 {
-/*****************************************************************/
-    DrawSheetPath* sheet;
+    SCH_SHEET_PATH* sheet;
 
     if( m_LibeditFrame ) // Can close component editor ?
     {
@@ -349,7 +329,7 @@ void WinEDA_SchematicFrame::OnCloseWindow( wxCloseEvent& Event )
             return;
     }
 
-    EDA_SheetList SheetList;
+    SCH_SHEET_LIST SheetList;
 
     for( sheet = SheetList.GetFirst(); sheet != NULL;
         sheet = SheetList.GetNext() )
@@ -404,10 +384,8 @@ void WinEDA_SchematicFrame::OnCloseWindow( wxCloseEvent& Event )
 }
 
 
-/************************************/
 int WinEDA_SchematicFrame::BestZoom()
 {
-/************************************/
     int    dx, dy;
     wxSize size;
     double zoom;
@@ -426,10 +404,6 @@ int WinEDA_SchematicFrame::BestZoom()
 }
 
 
-/*******************************************************************/
-wxString WinEDA_SchematicFrame::GetUniqueFilenameForCurrentSheet()
-{
-/*******************************************************************/
 /** Function GetUniqueFilenameForCurrentSheet
  * @return a filename that can be used in plot and print functions
  * for the current screen and sheet path.
@@ -442,6 +416,8 @@ wxString WinEDA_SchematicFrame::GetUniqueFilenameForCurrentSheet()
  * and has no extension.
  * However if filename is too long name is <sheet filename>-<sheet number>
  */
+wxString WinEDA_SchematicFrame::GetUniqueFilenameForCurrentSheet()
+{
     wxFileName fn = g_RootSheet->GetFileName();
     wxString   filename = fn.GetName();
 
@@ -500,8 +476,8 @@ void WinEDA_SchematicFrame::OnUpdateSchematicRedo( wxUpdateUIEvent& event )
 void WinEDA_SchematicFrame::OnUpdateBusOrientation( wxUpdateUIEvent& event )
 {
     wxString tool_tip = g_HVLines ?
-                        _( "Draw wires and busses in any direction" ) :
-                        _( "Draw horizontal and vertical wires and busses only" );
+                        _( "Draw wires and buses in any direction" ) :
+                        _( "Draw horizontal and vertical wires and buses only" );
 
     m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_BUS_WIRES_ORIENT, g_HVLines );
     m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_BUS_WIRES_ORIENT,
@@ -544,10 +520,8 @@ void WinEDA_SchematicFrame::OnUpdateGrid( wxUpdateUIEvent& event )
 }
 
 
-/**************************************************************/
 void WinEDA_SchematicFrame::OnAnnotate( wxCommandEvent& event )
 {
-/**************************************************************/
     DIALOG_ANNOTATE* dlg = new DIALOG_ANNOTATE( this );
 
     dlg->ShowModal();
@@ -555,10 +529,8 @@ void WinEDA_SchematicFrame::OnAnnotate( wxCommandEvent& event )
 }
 
 
-/*********************************************************/
 void WinEDA_SchematicFrame::OnErc( wxCommandEvent& event )
 {
-/*********************************************************/
     DIALOG_ERC* dlg = new DIALOG_ERC( this );
 
     dlg->ShowModal();
@@ -566,10 +538,8 @@ void WinEDA_SchematicFrame::OnErc( wxCommandEvent& event )
 }
 
 
-/*******************************************************************/
 void WinEDA_SchematicFrame::OnCreateNetlist( wxCommandEvent& event )
 {
-/*******************************************************************/
     int i;
 
     if( m_NetlistFormat <  NET_TYPE_PCBNEW )
@@ -586,10 +556,8 @@ void WinEDA_SchematicFrame::OnCreateNetlist( wxCommandEvent& event )
 }
 
 
-/**********************************************************************/
 void WinEDA_SchematicFrame::OnCreateBillOfMaterials( wxCommandEvent& )
 {
-/**********************************************************************/
     DIALOG_BUILD_BOM* dlg = new DIALOG_BUILD_BOM( this );
 
     dlg->ShowModal();
@@ -597,10 +565,8 @@ void WinEDA_SchematicFrame::OnCreateBillOfMaterials( wxCommandEvent& )
 }
 
 
-/*******************************************************************/
 void WinEDA_SchematicFrame::OnFindItems( wxCommandEvent& event )
 {
-/*******************************************************************/
     this->DrawPanel->m_IgnoreMouseEvents = TRUE;
     WinEDA_FindFrame* dlg = new WinEDA_FindFrame( this );
     dlg->ShowModal();
@@ -609,10 +575,8 @@ void WinEDA_SchematicFrame::OnFindItems( wxCommandEvent& event )
 }
 
 
-/***************************************************************/
 void WinEDA_SchematicFrame::OnLoadFile( wxCommandEvent& event )
 {
-/***************************************************************/
     wxString fn;
 
     fn = GetFileFromHistory( event.GetId(), _( "Schematic" ) );
@@ -625,35 +589,27 @@ void WinEDA_SchematicFrame::OnLoadFile( wxCommandEvent& event )
 }
 
 
-/*******************************************************************/
 void WinEDA_SchematicFrame::OnLoadStuffFile( wxCommandEvent& event )
 {
-/*******************************************************************/
     ReadInputStuffFile();
     DrawPanel->Refresh();
 }
 
 
-/****************************************************************/
 void WinEDA_SchematicFrame::OnNewProject( wxCommandEvent& event )
 {
-/****************************************************************/
     LoadOneEEProject( wxEmptyString, true );
 }
 
 
-/*****************************************************************/
 void WinEDA_SchematicFrame::OnLoadProject( wxCommandEvent& event )
 {
-/*****************************************************************/
     LoadOneEEProject( wxEmptyString, false );
 }
 
 
-/****************************************************************/
 void WinEDA_SchematicFrame::OnOpenPcbnew( wxCommandEvent& event )
 {
-/****************************************************************/
     wxFileName fn = g_RootSheet->m_AssociatedScreen->m_FileName;
 
     if( fn.IsOk() )
@@ -666,10 +622,8 @@ void WinEDA_SchematicFrame::OnOpenPcbnew( wxCommandEvent& event )
 }
 
 
-/***************************************************************/
 void WinEDA_SchematicFrame::OnOpenCvpcb( wxCommandEvent& event )
 {
-/***************************************************************/
     wxFileName fn = g_RootSheet->m_AssociatedScreen->m_FileName;
 
     fn.SetExt( NetlistFileExtension );
@@ -683,10 +637,8 @@ void WinEDA_SchematicFrame::OnOpenCvpcb( wxCommandEvent& event )
 }
 
 
-/*************************************************************************/
 void WinEDA_SchematicFrame::OnOpenLibraryViewer( wxCommandEvent& event )
 {
-/*************************************************************************/
     if( m_ViewlibFrame )
     {
         m_ViewlibFrame->Show( TRUE );
@@ -699,10 +651,8 @@ void WinEDA_SchematicFrame::OnOpenLibraryViewer( wxCommandEvent& event )
 }
 
 
-/*************************************************************************/
 void WinEDA_SchematicFrame::OnOpenLibraryEditor( wxCommandEvent& event )
 {
-/*************************************************************************/
     if( m_LibeditFrame )
     {
         m_LibeditFrame->Show( TRUE );

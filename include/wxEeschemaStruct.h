@@ -16,23 +16,22 @@ class SCH_SCREEN;
 class DRAWSEGMENT;
 class DrawPickedStruct;
 class SCH_ITEM;
-class DrawNoConnectStruct;
+class SCH_NO_CONNECT;
 class CMP_LIBRARY;
 class LIB_COMPONENT;
 class CMP_LIB_ENTRY;
 class LIB_DRAW_ITEM;
 class EDA_BaseStruct;
-class DrawBusEntryStruct;
+class SCH_BUS_ENTRY;
 class SCH_GLOBALLABEL;
 class SCH_TEXT;
-class EDA_DrawLineStruct;
 class SCH_SHEET;
-class DrawSheetPath;
+class SCH_SHEET_PATH;
 class SCH_SHEET_PIN;
 class SCH_COMPONENT;
-class SCH_CMP_FIELD;
+class SCH_FIELD;
 class LIB_PIN;
-class DrawJunctionStruct;
+class SCH_JUNCTION;
 
 /* enum used in RotationMiroir() */
 enum fl_rot_cmp
@@ -55,7 +54,7 @@ class WinEDA_SchematicFrame : public WinEDA_DrawFrame
 {
 public:
     WinEDAChoiceBox*     m_SelPartBox;
-    DrawSheetPath*       m_CurrentSheet;    ///< which sheet we are presently working on.
+    SCH_SHEET_PATH*      m_CurrentSheet;    ///< which sheet we are presently working on.
     int                  m_Multiflag;
     int                  m_NetlistFormat;
     bool                 m_ShowAllPins;
@@ -68,7 +67,7 @@ public:
 
 private:
     wxString             m_DefaultSchematicFileName;
-    SCH_CMP_FIELD*       m_CurrentField;
+    SCH_FIELD*       m_CurrentField;
     int                  m_TextFieldSize;
     bool                 m_ShowGrid;
     PARAM_CFG_ARRAY      m_projectFileParams;
@@ -108,15 +107,15 @@ public:
                    int             hotkey,
                    EDA_BaseStruct* DrawStruct );
 
-    SCH_CMP_FIELD*   GetCurrentField() { return m_CurrentField; }
+    SCH_FIELD*       GetCurrentField() { return m_CurrentField; }
 
-    void             SetCurrentField( SCH_CMP_FIELD* aCurrentField )
+    void             SetCurrentField( SCH_FIELD* aCurrentField )
     {
         m_CurrentField = aCurrentField;
     }
 
 
-    DrawSheetPath*   GetSheet();
+    SCH_SHEET_PATH*  GetSheet();
 
     SCH_SCREEN*      GetScreen() const;
 
@@ -279,21 +278,21 @@ private:
     void             OnUpdateBusOrientation( wxUpdateUIEvent& event );
 
     // Bus Entry
-    DrawBusEntryStruct* CreateBusEntry( wxDC* DC, int entry_type );
-    void             SetBusEntryShape( wxDC*               DC,
-                                       DrawBusEntryStruct* BusEntry,
-                                       int                 entry_type );
-    int              GetBusEntryShape( DrawBusEntryStruct* BusEntry );
-    void             StartMoveBusEntry( DrawBusEntryStruct* DrawLibItem,
+    SCH_BUS_ENTRY*   CreateBusEntry( wxDC* DC, int entry_type );
+    void             SetBusEntryShape( wxDC*          DC,
+                                       SCH_BUS_ENTRY* BusEntry,
+                                       int            entry_type );
+    int              GetBusEntryShape( SCH_BUS_ENTRY* BusEntry );
+    void             StartMoveBusEntry( SCH_BUS_ENTRY* DrawLibItem,
                                         wxDC* DC );
 
     // NoConnect
-    DrawNoConnectStruct* CreateNewNoConnectStruct( wxDC* DC );
+    SCH_NO_CONNECT*  CreateNewNoConnectStruct( wxDC* DC );
 
     // Junction
-    DrawJunctionStruct*  CreateNewJunctionStruct( wxDC*          DC,
-                                                  const wxPoint& pos,
-                                                  bool           PutInUndoList = FALSE );
+    SCH_JUNCTION*    CreateNewJunctionStruct( wxDC*          DC,
+                                              const wxPoint& pos,
+                                              bool           PutInUndoList = FALSE );
 
     // Text ,label, glabel
     SCH_TEXT*        CreateNewText( wxDC* DC, int type );
@@ -344,7 +343,7 @@ private:
     SCH_SHEET_PIN*   Import_PinSheet( SCH_SHEET* Sheet, wxDC* DC );
 
 public:
-    void             DeleteSheetLabel( bool aRedraw,
+    void             DeleteSheetLabel( bool           aRedraw,
                                        SCH_SHEET_PIN* aSheetLabelToDel );
 
 private:
@@ -358,7 +357,7 @@ private:
 
 public:
     void             CmpRotationMiroir( SCH_COMPONENT* DrawComponent,
-                                      wxDC* DC, int type_rotate );
+                                        wxDC* DC, int type_rotate );
 
 private:
     void             SelPartUnit( SCH_COMPONENT* DrawComponent,
@@ -369,10 +368,10 @@ private:
                                              wxDC*          DC );
     void             EditComponentValue( SCH_COMPONENT* DrawLibItem, wxDC* DC );
     void             EditComponentFootprint( SCH_COMPONENT* DrawLibItem,
-                                           wxDC*          DC );
-    void             StartMoveCmpField( SCH_CMP_FIELD* Field, wxDC* DC );
-    void             EditCmpFieldText( SCH_CMP_FIELD* Field, wxDC* DC );
-    void             RotateCmpField( SCH_CMP_FIELD* Field, wxDC* DC );
+                                             wxDC*          DC );
+    void             StartMoveCmpField( SCH_FIELD* Field, wxDC* DC );
+    void             EditCmpFieldText( SCH_FIELD* Field, wxDC* DC );
+    void             RotateCmpField( SCH_FIELD* Field, wxDC* DC );
 
     void             PasteListOfItems( wxDC* DC );
 
@@ -389,7 +388,7 @@ public:
      */
     void SaveCopyInUndoList( SCH_ITEM* aItemToCopy,
                              UndoRedoOpType aTypeCommand,
-                             const wxPoint& aTransformPoint = wxPoint(0,0) );
+                             const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
     /** Function SaveCopyInUndoList (overloaded).
      * Creates a new entry in undo list of commands.
@@ -401,7 +400,7 @@ public:
      */
     void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
                              UndoRedoOpType aTypeCommand,
-                             const wxPoint& aTransformPoint = wxPoint(0,0) );
+                             const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
 private:
     /** Function PutDataInPreviousState()

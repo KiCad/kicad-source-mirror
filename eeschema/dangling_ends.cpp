@@ -44,21 +44,21 @@ public:
 
 DanglingEndHandle* ItemList;
 
-static void        TestWireForDangling( EDA_DrawLineStruct* DrawRef,
-                                        WinEDA_SchematicFrame* frame, wxDC* DC );
+static void        TestWireForDangling( SCH_LINE*              DrawRef,
+                                        WinEDA_SchematicFrame* frame,
+                                        wxDC*                  DC );
 void               TestLabelForDangling( SCH_TEXT*              label,
                                          WinEDA_SchematicFrame* frame,
                                          wxDC*                  DC );
 DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList );
 
-/**********************************************************/
-bool SegmentIntersect( int Sx1, int Sy1, int Sx2, int Sy2,
-                       int Px1, int Py1 )
-{
-/**********************************************************/
+
 /* Returns TRUE if the point P is on the segment S.
  * The segment is assumed horizontal or vertical.
  */
+bool SegmentIntersect( int Sx1, int Sy1, int Sx2, int Sy2,
+                       int Px1, int Py1 )
+{
     int Sxmin, Sxmax, Symin, Symax;
 
     if( Sx1 == Sx2 )          /* Line S is vertical. */
@@ -122,7 +122,7 @@ void WinEDA_SchematicFrame::TestDanglingEnds( SCH_ITEM* DrawList, wxDC* DC )
 
         case DRAW_SEGMENT_STRUCT_TYPE:
             #undef STRUCT
-            #define STRUCT ( (EDA_DrawLineStruct*) item )
+            #define STRUCT ( (SCH_LINE*) item )
             if( STRUCT->GetLayer() == LAYER_WIRE )
             {
                 TestWireForDangling( STRUCT, this, DC );
@@ -176,11 +176,9 @@ LIB_PIN* WinEDA_SchematicFrame::LocatePinEnd( SCH_ITEM*      DrawList,
 }
 
 
-/****************************************************************************/
-void TestWireForDangling( EDA_DrawLineStruct* DrawRef,
-                          WinEDA_SchematicFrame* frame, wxDC* DC )
+void TestWireForDangling( SCH_LINE* DrawRef, WinEDA_SchematicFrame* frame,
+                          wxDC* DC )
 {
-/****************************************************************************/
     DanglingEndHandle* terminal_item;
     bool Sdangstate = TRUE, Edangstate = TRUE;
 
@@ -216,11 +214,9 @@ void TestWireForDangling( EDA_DrawLineStruct* DrawRef,
 }
 
 
-/********************************************************/
 void TestLabelForDangling( SCH_TEXT* label, WinEDA_SchematicFrame* frame,
                            wxDC* DC )
 {
-/********************************************************/
     DanglingEndHandle* terminal_item;
     bool dangstate = TRUE;
 
@@ -290,10 +286,8 @@ wxPoint ReturnPinPhysicalPosition( LIB_PIN* Pin, SCH_COMPONENT* DrawLibItem )
 }
 
 
-/***********************************************************/
 DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
 {
-/***********************************************************/
     DanglingEndHandle* StartList = NULL, * item, * lastitem = NULL;
     EDA_BaseStruct* DrawItem;
 
@@ -319,7 +313,7 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
 
         case DRAW_SEGMENT_STRUCT_TYPE:
                 #undef STRUCT
-                #define STRUCT ( (EDA_DrawLineStruct*) DrawItem )
+                #define STRUCT ( (SCH_LINE*) DrawItem )
             if( STRUCT->GetLayer() == LAYER_NOTES )
                 break;
             if( ( STRUCT->GetLayer() == LAYER_BUS )
@@ -349,7 +343,7 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
 
         case DRAW_JUNCTION_STRUCT_TYPE:
                 #undef STRUCT
-                #define STRUCT ( (DrawJunctionStruct*) DrawItem )
+                #define STRUCT ( (SCH_JUNCTION*) DrawItem )
             item = new DanglingEndHandle( JUNCTION_END );
 
             item->m_Item = DrawItem;
@@ -363,7 +357,7 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
 
         case DRAW_BUSENTRY_STRUCT_TYPE:
                 #undef STRUCT
-                #define STRUCT ( (DrawBusEntryStruct*) DrawItem )
+                #define STRUCT ( (SCH_BUS_ENTRY*) DrawItem )
             item = new DanglingEndHandle( ENTRY_END );
 
             item->m_Item = DrawItem;

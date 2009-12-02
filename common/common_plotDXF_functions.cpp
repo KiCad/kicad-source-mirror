@@ -193,7 +193,7 @@ void DXF_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int radius,
         return;
 
     user_to_device_coordinates( centre );
-    radius = user_to_device_size( radius );
+    radius = wxRound( user_to_device_size( radius ) );
 
     /* DXF ARC */
     wxString cname = ColorRefs[current_color].m_Name;

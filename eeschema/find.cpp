@@ -1,5 +1,5 @@
 /****************************************************************/
-/* EESchema: find.cpp (functions for seraching a schematic item */
+/* EESchema: find.cpp (functions for searching a schematic item */
 /****************************************************************/
 
 /*
@@ -31,14 +31,11 @@ static wxString s_OldStringFound;
 #include "dialog_find.cpp"
 
 
-/**************************************************************/
-void WinEDA_FindFrame::FindMarker( wxCommandEvent& event )
-/**************************************************************/
-
 /*  Search markers in whole hierarchy.
  *  Mouse cursor is put on the marker
  *  search the first marker, or next marker
  */
+void WinEDA_FindFrame::FindMarker( wxCommandEvent& event )
 {
     int id = event.GetId();
 
@@ -51,19 +48,12 @@ void WinEDA_FindFrame::FindMarker( wxCommandEvent& event )
 }
 
 
-/************************************************************************/
-SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem(
-    const wxString& component_reference, bool Find_in_hierarchy,
-    int SearchType,
-    const wxString& text_to_find,
-    bool mouseWarp )
-/************************************************************************/
-
 /**
  * Function FindComponentAndItem
  * finds a Component in the schematic, and an item in this component.
  * @param component_reference The component reference to find.
- * @param text_to_find The text to search for, either in value, reference or elsewhere.
+ * @param text_to_find - The text to search for, either in value, reference
+ *                       or elsewhere.
  * @param Find_in_hierarchy:  false => Search is made in current sheet
  *                     true => the whole hierarchy
  * @param SearchType:  0 => find component
@@ -73,18 +63,22 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem(
  *                     >= 4 => unused (same as 0)
  * @param mouseWarp If true, then move the mouse cursor to the item.
  */
+SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem(
+    const wxString& component_reference, bool Find_in_hierarchy,
+    int SearchType,
+    const wxString& text_to_find,
+    bool mouseWarp )
 {
-    DrawSheetPath* sheet, * SheetWithComponentFound = NULL;
-    SCH_ITEM*      DrawList     = NULL;
-    SCH_COMPONENT* Component    = NULL;
-    wxSize         DrawAreaSize = DrawPanel->GetClientSize();
-    wxPoint        pos, curpos;
-    bool           DoCenterAndRedraw = FALSE;
-    bool           NotFound = true;
-    wxString       msg;
-    LIB_PIN*       pin;
-
-    EDA_SheetList  SheetList;
+    SCH_SHEET_PATH* sheet, * SheetWithComponentFound = NULL;
+    SCH_ITEM*       DrawList     = NULL;
+    SCH_COMPONENT*  Component    = NULL;
+    wxSize          DrawAreaSize = DrawPanel->GetClientSize();
+    wxPoint         pos, curpos;
+    bool            DoCenterAndRedraw = FALSE;
+    bool            NotFound = true;
+    wxString        msg;
+    LIB_PIN*        pin;
+    SCH_SHEET_LIST  SheetList;
 
     sheet = SheetList.GetFirst();
     if( !Find_in_hierarchy )
@@ -93,7 +87,8 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem(
     for( ; sheet != NULL; sheet = SheetList.GetNext() )
     {
         DrawList = (SCH_ITEM*) sheet->LastDrawList();
-        for( ; (DrawList != NULL) && (NotFound == true); DrawList = DrawList->Next() )
+        for( ; ( DrawList != NULL ) && ( NotFound == true );
+             DrawList = DrawList->Next() )
         {
             if( DrawList->Type() == TYPE_SCH_COMPONENT )
             {
@@ -113,7 +108,8 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem(
                         break;
 
                     case 1:                 // find a pin
-                        pos = pSch->m_Pos;  // temporary: will be changed if the pin is found
+                        pos = pSch->m_Pos;  /* temporary: will be changed if
+                                             * the pin is found */
                         pin = pSch->GetPin( text_to_find );
                         if( pin == NULL )
                             break;
@@ -172,8 +168,8 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem(
 
         /* There may be need to reframe the drawing */
         #define MARGIN 30
-        if( (curpos.x <= MARGIN) || (curpos.x >= DrawAreaSize.x - MARGIN)
-           || (curpos.y <= MARGIN) || (curpos.y >= DrawAreaSize.y - MARGIN) )
+        if( ( curpos.x <= MARGIN ) || ( curpos.x >= DrawAreaSize.x - MARGIN )
+           || ( curpos.y <= MARGIN ) || ( curpos.y >= DrawAreaSize.y - MARGIN ) )
         {
             DoCenterAndRedraw = true;;
         }
@@ -257,43 +253,41 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem(
 }
 
 
-/*****************************************************************/
-SCH_ITEM* WinEDA_SchematicFrame::FindMarker( int SearchType )
-/*****************************************************************/
-
 /* Search markers in whole the hierarchy.
  *  Mouse cursor is put on the marker
  *  SearchType = 0: search the first marker, else search next marker
  */
+SCH_ITEM* WinEDA_SchematicFrame::FindMarker( int SearchType )
 {
-    DrawSheetPath*    sheet, * FirstSheet = NULL;
-    SCH_ITEM*         DrawList, * FirstStruct = NULL, * Struct = NULL;
-    MARKER_SCH* Marker = NULL;
-    int StartCount;
-    bool NotFound;
-    wxPoint           firstpos, pos;
-    wxSize            DrawAreaSize = DrawPanel->GetClientSize();
-    wxPoint           curpos, old_cursor_position;
-    bool DoCenterAndRedraw = FALSE;
-    wxString          msg, WildText;
+    SCH_SHEET_PATH* sheet, * FirstSheet = NULL;
+    SCH_ITEM*       DrawList, * FirstStruct = NULL, * Struct = NULL;
+    SCH_MARKER*     Marker = NULL;
+    int             StartCount;
+    bool            NotFound;
+    wxPoint         firstpos, pos;
+    wxSize          DrawAreaSize = DrawPanel->GetClientSize();
+    wxPoint         curpos, old_cursor_position;
+    bool            DoCenterAndRedraw = FALSE;
+    wxString        msg, WildText;
 
     g_LastSearchIsMarker = TRUE;
     /* Set s_MarkerCount to 0 if we are look for the first marker */
     if( SearchType == 0 )
         s_MarkerCount = 0;
 
-    EDA_SheetList SheetList;
+    SCH_SHEET_LIST SheetList;
 
     NotFound = TRUE; StartCount = 0;
     /* Search for s_MarkerCount markers */
-    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
+    for( sheet = SheetList.GetFirst(); sheet != NULL;
+         sheet = SheetList.GetNext() )
     {
         DrawList = (SCH_ITEM*) sheet->LastDrawList();
         while( DrawList && NotFound )
         {
-            if( DrawList->Type() == TYPE_MARKER_SCH )
+            if( DrawList->Type() == TYPE_SCH_MARKER )
             {
-                Marker   = (MARKER_SCH*) DrawList;
+                Marker   = (SCH_MARKER*) DrawList;
                 NotFound = FALSE;
                 pos = Marker->m_Pos;
                 if( FirstSheet == NULL )    /* First item found */
@@ -305,9 +299,10 @@ SCH_ITEM* WinEDA_SchematicFrame::FindMarker( int SearchType )
                 StartCount++;
                 if( s_MarkerCount >= StartCount )
                 {
-                    NotFound = TRUE;        /* Search for other markers */
+                    NotFound = TRUE;       /* Search for other markers */
                 }
-                else                        /* We have found s_MarkerCount markers -> Ok */
+                else                        /* We have found s_MarkerCount
+                                             * markers -> Ok */
                 {
                     Struct = DrawList; s_MarkerCount++; break;
                 }
@@ -319,7 +314,8 @@ SCH_ITEM* WinEDA_SchematicFrame::FindMarker( int SearchType )
             break;
     }
 
-    if( NotFound && FirstSheet )       // markers are found, but we have reach the last marker */
+    if( NotFound && FirstSheet )       /* markers are found, but we have
+                                        * reach the last marker */
     {
         // After the last marker, the first marker is used */
         NotFound = FALSE; sheet = FirstSheet;
@@ -349,8 +345,8 @@ SCH_ITEM* WinEDA_SchematicFrame::FindMarker( int SearchType )
 
         // reposition the window if the chosen marker is off screen.
         #define MARGIN 30
-        if( (curpos.x <= MARGIN) || (curpos.x >= DrawAreaSize.x - MARGIN)
-           || (curpos.y <= MARGIN) || (curpos.y >= DrawAreaSize.y - MARGIN) )
+        if( ( curpos.x <= MARGIN ) || ( curpos.x >= DrawAreaSize.x - MARGIN )
+           || ( curpos.y <= MARGIN ) || ( curpos.y >= DrawAreaSize.y - MARGIN ) )
         {
             DoCenterAndRedraw = true;;
         }
@@ -370,7 +366,8 @@ SCH_ITEM* WinEDA_SchematicFrame::FindMarker( int SearchType )
             DrawPanel->CursorOn( &dc );
         }
         wxString path = sheet->Path();
-        msg.Printf( _( "Marker %d found in %s" ), s_MarkerCount, path.GetData() );
+        msg.Printf( _( "Marker %d found in %s" ),
+                    s_MarkerCount, path.GetData() );
         Affiche_Message( msg );
     }
     else
@@ -384,13 +381,10 @@ SCH_ITEM* WinEDA_SchematicFrame::FindMarker( int SearchType )
 }
 
 
-/**************************************************************/
-void WinEDA_FindFrame::FindSchematicItem( wxCommandEvent& event )
-/**************************************************************/
-
 /* Find a string in schematic.
  *  Call to WinEDA_SchematicFrame::FindSchematicItem()
  */
+void WinEDA_FindFrame::FindSchematicItem( wxCommandEvent& event )
 {
     int id = event.GetId();
 
@@ -405,31 +399,30 @@ void WinEDA_FindFrame::FindSchematicItem( wxCommandEvent& event )
 }
 
 
-/************************************************************************/
-SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
-    const wxString& pattern, int SearchType, bool mouseWarp )
-/************************************************************************/
-
 /**
  * Function FindSchematicItem
  * finds a string in the schematic.
- * @param pattern The text to search for, either in value, reference or elsewhere.
+ * @param pattern The text to search for, either in value, reference or
+ *                 elsewhere.
  * @param SearchType:  0 => Search is made in current sheet
  *                     1 => the whole hierarchy
  *                     2 => or for the next item
  * @param mouseWarp If true, then move the mouse cursor to the item.
  */
+SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem( const wxString& pattern,
+                                                    int             SearchType,
+                                                    bool            mouseWarp )
 {
-    DrawSheetPath* Sheet, * FirstSheet = NULL;
-    SCH_ITEM*      DrawList = NULL, * FirstStruct = NULL, * Struct = NULL;
-    int            StartCount;
-    bool           NotFound;
-    wxPoint        firstpos, pos, old_cursor_position;
-    static int     Find_in_hierarchy;
-    wxSize         DrawAreaSize = DrawPanel->GetClientSize();
-    wxPoint        curpos;
-    bool           DoCenterAndRedraw = FALSE;
-    wxString       msg, WildText;
+    SCH_SHEET_PATH* Sheet, * FirstSheet = NULL;
+    SCH_ITEM*       DrawList = NULL, * FirstStruct = NULL, * Struct = NULL;
+    int             StartCount;
+    bool            NotFound;
+    wxPoint         firstpos, pos, old_cursor_position;
+    static int      Find_in_hierarchy;
+    wxSize          DrawAreaSize = DrawPanel->GetClientSize();
+    wxPoint         curpos;
+    bool            DoCenterAndRedraw = FALSE;
+    wxString        msg, WildText;
 
     g_LastSearchIsMarker = FALSE;
 
@@ -452,7 +445,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
     NotFound   = TRUE;
     StartCount = 0;
 
-    EDA_SheetList SheetList;
+    SCH_SHEET_LIST SheetList;
 
     Sheet = SheetList.GetFirst();
     if( !Find_in_hierarchy )
@@ -474,7 +467,9 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
                     pos = pSch->GetField( REFERENCE )->m_Pos;
                     break;
                 }
-                if( WildCompareString( WildText, pSch->GetField( VALUE )->m_Text, FALSE ) )
+                if( WildCompareString( WildText,
+                                       pSch->GetField( VALUE )->m_Text,
+                                       false ) )
                 {
                     NotFound = FALSE;
                     pos = pSch->GetField( VALUE )->m_Pos;
@@ -611,7 +606,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem(
         if( !mouseWarp )
         {
             // if called from RemoteCommand() don't popup the dialog which
-            // needs to be dismissed, user is in PCBNEW, and does'nt want to
+            // needs to be dismissed, user is in PCBNEW, and doesn't want to
             // bother with dismissing the dialog in EESCHEMA.
             msg = WildText + _( " Not Found" );
             DisplayError( this, msg, 10 );
@@ -700,9 +695,8 @@ void WinEDA_FindFrame::LocatePartInLibs( wxCommandEvent& event )
 }
 
 
-/***************************************************************************************/
-int WinEDA_FindFrame::ExploreAllLibraries( const wxString& wildmask, wxString& FindList )
-/***************************************************************************************/
+int WinEDA_FindFrame::ExploreAllLibraries( const wxString& wildmask,
+                                           wxString&       FindList )
 {
     wxString FullFileName;
     FILE*    file;
@@ -713,7 +707,8 @@ int WinEDA_FindFrame::ExploreAllLibraries( const wxString& wildmask, wxString& F
     for( unsigned ii = 0; ii < wxGetApp().GetLibraryPathList().GetCount(); ii++ )
     {
         path = wxGetApp().GetLibraryPathList()[ii] + STRING_DIR_SEP;
-        FullFileName = wxFindFirstFile( path + wxT( "*." ) + CompLibFileExtension );
+        FullFileName = wxFindFirstFile( path + wxT( "*." ) +
+                                        CompLibFileExtension );
 
         while( !FullFileName.IsEmpty() )
         {
@@ -725,7 +720,8 @@ int WinEDA_FindFrame::ExploreAllLibraries( const wxString& wildmask, wxString& F
             {
                 if( strnicmp( Line, "DEF", 3 ) == 0 )
                 {
-                    /* Read one DEF part from library: DEF 74LS00 U 0 30 Y Y 4 0 N */
+                    /* Read one DEF part from library:
+                     * DEF 74LS00 U 0 30 Y Y 4 0 N */
                     strtok( Line, " \t\r\n" );
                     name = strtok( NULL, " \t\r\n" );
                     wxString st_name = CONV_FROM_UTF8( name );
@@ -740,7 +736,8 @@ int WinEDA_FindFrame::ExploreAllLibraries( const wxString& wildmask, wxString& F
                 }
                 else if( strnicmp( Line, "ALIAS", 5 ) == 0 )
                 {
-                    /* Read one ALIAS part from library: ALIAS 74HC00 74HCT00 7400 74LS37 */
+                    /* Read one ALIAS part from library:
+                     * ALIAS 74HC00 74HCT00 7400 74LS37 */
                     strtok( Line, " \t\r\n" );
                     while( ( name = strtok( NULL, " \t\r\n" ) ) != NULL )
                     {

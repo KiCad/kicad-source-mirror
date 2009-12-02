@@ -39,20 +39,20 @@ static void LoadLayers( FILE* f, int* linecnt );
 bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen,
                                            const wxString& FullFileName )
 {
-    char                 Line[1024], * SLine;
-    char                 Name1[256],
-                         Name2[256];
-    int                  ii, layer;
-    wxPoint              pos;
-    bool                 Failed = FALSE;
-    SCH_ITEM*            Phead, * Pnext;
-    DrawJunctionStruct*  ConnectionStruct;
-    DrawPolylineStruct*  PolylineStruct;
-    EDA_DrawLineStruct*  SegmentStruct;
-    DrawBusEntryStruct*  RaccordStruct;
-    DrawNoConnectStruct* NoConnectStruct;
-    int                  LineCount;
-    wxString             MsgDiag;   /* Error and log messages */
+    char            Line[1024], * SLine;
+    char            Name1[256],
+                    Name2[256];
+    int             ii, layer;
+    wxPoint         pos;
+    bool            Failed = FALSE;
+    SCH_ITEM*       Phead, * Pnext;
+    SCH_JUNCTION*   ConnectionStruct;
+    SCH_POLYLINE*   PolylineStruct;
+    SCH_LINE*       SegmentStruct;
+    SCH_BUS_ENTRY*  RaccordStruct;
+    SCH_NO_CONNECT* NoConnectStruct;
+    int             LineCount;
+    wxString        MsgDiag;   /* Error and log messages */
 
     FILE*                f;
 
@@ -185,7 +185,7 @@ again." );
             if( Name1[0] == 'B' )
                 layer = LAYER_BUS;
 
-            SegmentStruct = new EDA_DrawLineStruct( wxPoint( 0, 0 ), layer );
+            SegmentStruct = new SCH_LINE( wxPoint( 0, 0 ), layer );
 
             LineCount++;
             if( fgets( Line, 256 - 1, f ) == NULL
@@ -222,7 +222,7 @@ again." );
             ii = WIRE_TO_BUS;
             if( Name1[0] == 'B' )
                 ii = BUS_TO_BUS;
-            RaccordStruct = new DrawBusEntryStruct( wxPoint( 0, 0 ), '\\', ii );
+            RaccordStruct = new SCH_BUS_ENTRY( wxPoint( 0, 0 ), '\\', ii );
 
             LineCount++;
             if( fgets( Line, 256 - 1, f ) == NULL
@@ -262,7 +262,7 @@ again." );
             if( Name2[0] == 'B' )
                 layer = LAYER_BUS;
 
-            PolylineStruct = new DrawPolylineStruct( layer );
+            PolylineStruct = new SCH_POLYLINE( layer );
             for( unsigned jj = 0; jj < (unsigned)ii; jj++ )
             {
                 LineCount++;
@@ -290,13 +290,14 @@ at line %d, aborted" ),
             break;
 
         case 'C':                       /* It is a connection item. */
-            ConnectionStruct = new DrawJunctionStruct( wxPoint( 0, 0 ) );
+            ConnectionStruct = new SCH_JUNCTION( wxPoint( 0, 0 ) );
 
             if( sscanf( SLine, "%s %d %d", Name1, &ConnectionStruct->m_Pos.x,
                         &ConnectionStruct->m_Pos.y ) != 3 )
             {
                 MsgDiag.Printf( wxT( "EESchema file connection struct error \
-                                      at line %d, aborted" ), LineCount );
+at line %d, aborted" ),
+                                LineCount );
                 MsgDiag << wxT( "\n" ) << CONV_FROM_UTF8( Line );
                 Failed = true;
                 SAFE_DELETE( ConnectionStruct );
@@ -318,7 +319,7 @@ at line %d, aborted" ),
             }
             else
             {
-                NoConnectStruct = new DrawNoConnectStruct( pos );
+                NoConnectStruct = new SCH_NO_CONNECT( pos );
                 NoConnectStruct->SetNext( screen->EEDrawList );
                 screen->EEDrawList = NoConnectStruct;
             }

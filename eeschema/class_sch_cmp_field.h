@@ -2,10 +2,10 @@
 /* Definitions for the component fields classes for EESchema */
 /*************************************************************/
 
-#ifndef CLASS_SCH_CMP_FIELD_H
-#define CLASS_SCH_CMP_FIELD_H
+#ifndef CLASS_SCH_FIELD_H
+#define CLASS_SCH_FIELD_H
 
-/* Fields are texts attached to a component, having a specuial meaning
+/* Fields are texts attached to a component, having a special meaning
  * Fields 0 and 1 are very important: reference and value
  * Field 2 is used as default footprint name.
  * Field 3 is reserved (not currently used
@@ -19,29 +19,33 @@ class LIB_FIELD;
 
 
 /**
- * Class SCH_CMP_FIELD
- * instances are attached to a component and provide a place for the component's value,
+ * Class SCH_FIELD
+ * instances are attached to a component and provide a place for the
+ * component's value,
  * reference designator, footprint, and user definable name-value pairs of
  * arbitrary purpose.
  */
-class SCH_CMP_FIELD : public SCH_ITEM, public EDA_TextStruct
+class SCH_FIELD : public SCH_ITEM, public EDA_TextStruct
 {
 public:
-    int      m_FieldId;         // Field indicator type (REFERENCE, VALUE or other id)
+    int      m_FieldId;         /* Field indicator type (REFERENCE, VALUE or
+                                 * other id) */
 
     wxString m_Name;            /* Field name (ref, value,pcb, sheet, filed 1..
                                  *  and for fields 1 to 8 the name is editable
                                  */
 
-    bool     m_AddExtraText;    // Mainly for REFERENCE, add extra info (for REFERENCE: add part selection text
+    bool     m_AddExtraText;    /* Mainly for REFERENCE, add extra info
+                                 * (for REFERENCE: add part selection text */
 
 public:
-    SCH_CMP_FIELD( const wxPoint& aPos,  int aFieldId, SCH_COMPONENT* aParent, wxString aName = wxEmptyString );
-    ~SCH_CMP_FIELD();
+    SCH_FIELD( const wxPoint& aPos,  int aFieldId, SCH_COMPONENT* aParent,
+               wxString aName = wxEmptyString );
+    ~SCH_FIELD();
 
     virtual wxString GetClass() const
     {
-        return wxT( "SCH_CMP_FIELD" );
+        return wxT( "SCH_FIELD" );
     }
 
 
@@ -49,7 +53,7 @@ public:
 
     EDA_Rect GetBoundaryBox() const;
     bool     IsVoid();
-    void     SwapData( SCH_CMP_FIELD* copyitem );
+    void     SwapData( SCH_FIELD* copyitem );
 
     /** Function ImportValues
      * copy parameters from a source.
@@ -74,7 +78,8 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.sch" format.
+     * writes the data structures for this object out to a FILE in "*.sch"
+     * format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
@@ -83,7 +88,7 @@ public:
     // Geometric transforms (used in block operations):
     /** virtual function Move
      * move item to a new position.
-     * @param aMoveVector = the deplacement vector
+     * @param aMoveVector = the displacement vector
      */
     virtual void Move(const wxPoint& aMoveVector)
     {
@@ -98,10 +103,10 @@ public:
     {
         /* Do Nothing: fields are never mirrored alone.
          * they are moved when the parent component is mirrored
-         * this function is only needed by the virtual pure function of the master class
-         */
+         * this function is only needed by the virtual pure function of the
+         * master class */
     }
 };
 
 
-#endif /* CLASS_SCH_CMP_FIELD_H */
+#endif /* CLASS_SCH_FIELD_H */

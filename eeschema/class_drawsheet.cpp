@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        class_drawsheet.cpp
 // Purpose:     member functions for SCH_SHEET
 //              header = class_drawsheet.h
@@ -23,11 +22,9 @@
 #include "protos.h"
 
 
-/***********************************************************/
 SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
     SCH_ITEM( NULL, DRAW_SHEET_STRUCT_TYPE )
 {
-/***********************************************************/
     m_Label = NULL;
     m_NbLabel = 0;
     m_Layer = LAYER_SHEET;
@@ -40,10 +37,8 @@ SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
 }
 
 
-/**************************************/
 SCH_SHEET::~SCH_SHEET()
 {
-/**************************************/
     SCH_SHEET_PIN* label = m_Label, * next_label;
 
     while( label )
@@ -53,8 +48,8 @@ SCH_SHEET::~SCH_SHEET()
         label = next_label;
     }
 
-    //also, look at the associated sheet & its reference count
-    //perhaps it should be deleted also.
+    // also, look at the associated sheet & its reference count
+    // perhaps it should be deleted also.
     if( m_AssociatedScreen )
     {
         m_AssociatedScreen->m_RefCount--;
@@ -64,51 +59,37 @@ SCH_SHEET::~SCH_SHEET()
 }
 
 
-/**********************************************/
-bool SCH_SHEET::Save( FILE* aFile ) const
-/***********************************************/
 /** Function Save
  * writes the data structures for this object out to a FILE in "*.brd" format.
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
+bool SCH_SHEET::Save( FILE* aFile ) const
 {
-    bool Success = true;
     SCH_SHEET_PIN* SheetLabel;
 
-    fprintf( aFile, "$Sheet\n" );
-
-    if( fprintf( aFile, "S %-4d %-4d %-4d %-4d\n",
-                 m_Pos.x, m_Pos.y,
-                 m_Size.x, m_Size.y ) == EOF )
-    {
-        Success = false;
-        return Success;
-    }
+    if( fprintf( aFile, "$Sheet\n" ) == EOF
+        || fprintf( aFile, "S %-4d %-4d %-4d %-4d\n",
+                    m_Pos.x, m_Pos.y, m_Size.x, m_Size.y ) == EOF )
+        return false;
 
     //save the unique timestamp, like other schematic parts.
-    if( fprintf( aFile, "U %8.8lX\n", m_TimeStamp )  == EOF )
-    {
-        Success = false; return Success;
-    }
+    if( fprintf( aFile, "U %8.8lX\n", m_TimeStamp ) == EOF )
+        return false;
 
     /* Save schematic sheetname and filename. */
     if( !m_SheetName.IsEmpty() )
     {
         if( fprintf( aFile, "F0 \"%s\" %d\n", CONV_TO_UTF8( m_SheetName ),
                      m_SheetNameSize ) == EOF )
-        {
-            Success = false; return Success;
-        }
+            return false;
     }
 
     if( !m_FileName.IsEmpty() )
     {
         if( fprintf( aFile, "F1 \"%s\" %d\n", CONV_TO_UTF8( m_FileName ),
                      m_FileNameSize ) == EOF )
-        {
-            Success = false; return Success;
-        }
+            return false;
     }
 
     /* Create the list of labels in the sheet. */
@@ -122,18 +103,18 @@ bool SCH_SHEET::Save( FILE* aFile ) const
         SheetLabel = SheetLabel->Next();
     }
 
-    fprintf( aFile, "$EndSheet\n" );
-    return Success;
+    if( fprintf( aFile, "$EndSheet\n" ) == EOF )
+        return false;
+
+    return true;
 }
 
 
-/***********************************************/
-SCH_SHEET* SCH_SHEET::GenCopy()
-{
-/***********************************************/
 /* creates a copy of a sheet
  *  The linked data itself (EEDrawList) is not duplicated
  */
+SCH_SHEET* SCH_SHEET::GenCopy()
+{
     SCH_SHEET* newitem = new SCH_SHEET( m_Pos );
 
 
@@ -179,13 +160,11 @@ SCH_SHEET* SCH_SHEET::GenCopy()
 }
 
 
-/**********************************************************/
-void SCH_SHEET::SwapData( SCH_SHEET* copyitem )
-{
-/**********************************************************/
 /* Used if undo / redo command:
  *  swap data between this and copyitem
  */
+void SCH_SHEET::SwapData( SCH_SHEET* copyitem )
+{
     EXCHG( m_Pos, copyitem->m_Pos );
     EXCHG( m_Size, copyitem->m_Size );
     EXCHG( m_SheetName, copyitem->m_SheetName );
@@ -194,7 +173,7 @@ void SCH_SHEET::SwapData( SCH_SHEET* copyitem )
     EXCHG( m_Label, copyitem->m_Label );
     EXCHG( m_NbLabel, copyitem->m_NbLabel );
 
-    // Ensure sheet labels have their .m_Parent member poiuntin really on their
+    // Ensure sheet labels have their .m_Parent member pointing really on their
     // parent, after swapping.
     SCH_SHEET_PIN* label = m_Label;
     while( label )
@@ -212,12 +191,10 @@ void SCH_SHEET::SwapData( SCH_SHEET* copyitem )
 }
 
 
-/********************************************************************/
 void SCH_SHEET::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 {
-/********************************************************************/
     /* Place list structures for new sheet. */
-    bool isnew = (m_Flags & IS_NEW) ? true : false;
+    bool isnew = ( m_Flags & IS_NEW ) ? true : false;
 
     if( isnew )
     {
@@ -240,16 +217,14 @@ void SCH_SHEET::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 }
 
 
-/********************************************************************/
-void SCH_SHEET::CleanupSheet( WinEDA_SchematicFrame* aFrame,
-                                    bool                   aRedraw )
-{
-/********************************************************************/
 /** Function CleanupSheet
  * Delete pinsheets which are not corresponding to a hierarchical label
  * @param aRedraw = true to redraw Sheet
  * @param aFrame = the schematic frame
  */
+void SCH_SHEET::CleanupSheet( WinEDA_SchematicFrame* aFrame,
+                              bool                   aRedraw )
+{
     SCH_SHEET_PIN* Pinsheet, * NextPinsheet;
 
     if( !IsOK( aFrame, _( "Ok to cleanup this sheet" ) ) )
@@ -297,11 +272,6 @@ int SCH_SHEET::GetPenSize()
 }
 
 
-/*****************************************************************************/
-void SCH_SHEET::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                      const wxPoint& aOffset, int aDrawMode, int aColor )
-{
-/*****************************************************************************/
 /** Function Draw
  *  Draw the hierarchical sheet shape
  *  @param aPanel = the current DrawPanel
@@ -311,6 +281,9 @@ void SCH_SHEET::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  *  @param aColor = color used to draw sheet. Usually -1 to use the normal
  * color for sheet items
  */
+void SCH_SHEET::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                      const wxPoint& aOffset, int aDrawMode, int aColor )
+{
     SCH_SHEET_PIN* SheetLabelStruct;
     int      txtcolor;
     wxString Text;
@@ -364,13 +337,11 @@ void SCH_SHEET::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 }
 
 
-/*****************************************/
-EDA_Rect SCH_SHEET::GetBoundingBox()
-{
-/*****************************************/
 /** Function GetBoundingBox
  *  @return an EDA_Rect giving the bounding box of the sheet
  */
+EDA_Rect SCH_SHEET::GetBoundingBox()
+{
     int      dx, dy;
 
     // Determine length of texts
@@ -389,28 +360,24 @@ EDA_Rect SCH_SHEET::GetBoundingBox()
 }
 
 
-/************************************************/
-bool SCH_SHEET::HitTest( const wxPoint& aPosRef )
-{
-/************************************************/
 /** Function HitTest
  * @return true if the point aPosRef is within item area
  * @param aPosRef = a wxPoint to test
  */
+bool SCH_SHEET::HitTest( const wxPoint& aPosRef )
+{
     EDA_Rect rect = GetBoundingBox();
 
     return rect.Inside( aPosRef );
 }
 
 
-/************************************/
-int SCH_SHEET::ComponentCount()
-{
-/************************************/
 /** Function ComponentCount
  *  count our own components, without the power components.
  *  @return the component count.
  */
+int SCH_SHEET::ComponentCount()
+{
     int n = 0;
 
     if( m_AssociatedScreen )
@@ -431,20 +398,19 @@ int SCH_SHEET::ComponentCount()
             }
         }
     }
+
     return n;
 }
 
 
-/*****************************************************************************/
-bool SCH_SHEET::SearchHierarchy( wxString aFilename, SCH_SCREEN** aScreen )
-{
-/*****************************************************************************/
 /** Function SearchHierarchy
  *  search the existing hierarchy for an instance of screen "FileName".
  *  @param aFilename = the filename to find
  *  @param aFilename = a location to return a pointer to the screen (if found)
  *  @return bool if found, and a pointer to the screen
  */
+bool SCH_SHEET::SearchHierarchy( wxString aFilename, SCH_SCREEN** aScreen )
+{
     if( m_AssociatedScreen )
     {
         EDA_BaseStruct* strct = m_AssociatedScreen->EEDrawList;
@@ -459,20 +425,18 @@ bool SCH_SHEET::SearchHierarchy( wxString aFilename, SCH_SCREEN** aScreen )
                     *aScreen = ss->m_AssociatedScreen;
                     return true;
                 }
+
                 if( ss->SearchHierarchy( aFilename, aScreen ) )
                     return true;
             }
             strct = strct->Next();
         }
     }
+
     return false;
 }
 
 
-/*******************************************************************************/
-bool SCH_SHEET::LocatePathOfScreen( SCH_SCREEN* aScreen, DrawSheetPath* aList )
-{
-/*******************************************************************************/
 /** Function LocatePathOfScreen
  *  search the existing hierarchy for an instance of screen "FileName".
  *  don't bother looking at the root sheet - it must be unique,
@@ -480,9 +444,11 @@ bool SCH_SHEET::LocatePathOfScreen( SCH_SCREEN* aScreen, DrawSheetPath* aList )
  * loops
  *  in the hierarchy.
  *  @param  aScreen = the SCH_SCREEN* screen that we search for
- *  @param aList = the DrawSheetPath*  that must be used
+ *  @param aList = the SCH_SHEET_PATH*  that must be used
  *  @return true if found
  */
+bool SCH_SHEET::LocatePathOfScreen( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aList )
+{
     if( m_AssociatedScreen )
     {
         aList->Push( this );
@@ -506,10 +472,6 @@ bool SCH_SHEET::LocatePathOfScreen( SCH_SCREEN* aScreen, DrawSheetPath* aList )
 }
 
 
-/**********************************************************/
-bool SCH_SHEET::Load( WinEDA_SchematicFrame* aFrame )
-{
-/***********************************************************/
 /** Function Load.
  *  for the sheet: load the file m_FileName
  *  if a screen already exists, the file is already read.
@@ -518,6 +480,8 @@ bool SCH_SHEET::Load( WinEDA_SchematicFrame* aFrame )
  *  @param aFrame = a WinEDA_SchematicFrame pointer to the maim schematic frame
  *  @return true if OK
  */
+bool SCH_SHEET::Load( WinEDA_SchematicFrame* aFrame )
+{
     bool success = true;
 
     if( !m_AssociatedScreen )
@@ -552,19 +516,18 @@ bool SCH_SHEET::Load( WinEDA_SchematicFrame* aFrame )
             }
         }
     }
+
     return success;
 }
 
 
-/**********************************/
-int SCH_SHEET::CountSheets()
-{
-/**********************************/
 /** Function CountSheets
  * calculates the number of sheets found in "this"
  * this number includes the full subsheets count
  * @return the full count of sheets+subsheets contained by "this"
  */
+int SCH_SHEET::CountSheets()
+{
     int count = 1; //1 = this!!
 
     if( m_AssociatedScreen )
@@ -583,19 +546,12 @@ int SCH_SHEET::CountSheets()
 }
 
 
-/******************************************/
 wxString SCH_SHEET::GetFileName( void )
 {
-/******************************************/
     return m_FileName;
 }
 
 
-/************************************************************************/
-bool SCH_SHEET::ChangeFileName( WinEDA_SchematicFrame* aFrame,
-                                      const wxString&        aFileName )
-{
-/************************************************************************/
 /** Function ChangeFileName
  * Set a new filename and manage data and associated screen
  * The main difficulty is the filename change in a complex hierarchy.
@@ -606,7 +562,10 @@ bool SCH_SHEET::ChangeFileName( WinEDA_SchematicFrame* aFrame,
  * @param aFileName = the new filename
  * @param aFrame = the schematic frame
  */
-    if( (GetFileName() == aFileName) && m_AssociatedScreen )
+bool SCH_SHEET::ChangeFileName( WinEDA_SchematicFrame* aFrame,
+                                const wxString&        aFileName )
+{
+    if( ( GetFileName() == aFileName ) && m_AssociatedScreen )
         return true;
 
     SCH_SCREEN* Screen_to_use = NULL;
@@ -706,7 +665,6 @@ otherwise delete current sheet data)" );
 }
 
 
-/***********************************************************/
 void SCH_SHEET::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     frame->ClearMsgPanel();
@@ -743,7 +701,8 @@ void SCH_SHEET::Show( int nestLevel, std::ostream& os )
     wxString s = GetClass();
 
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">"
-                                 << " sheet_name=\"" << CONV_TO_UTF8( m_SheetName )
+                                 << " sheet_name=\""
+                                 << CONV_TO_UTF8( m_SheetName )
                                  << '"' << ">\n";
 
     // show all the pins, and check the linked list integrity

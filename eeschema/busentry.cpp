@@ -16,13 +16,12 @@
 static int     s_LastShape = '\\';
 static wxPoint ItemInitialPosition;
 
-/**************************************************************/
+
 static void ExitBusEntry( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
-/**************************************************************/
-/* Exit bus entry mode. */
-    DrawBusEntryStruct* BusEntry =
-        (DrawBusEntryStruct*) Panel->GetScreen()->GetCurItem();
+    /* Exit bus entry mode. */
+    SCH_BUS_ENTRY* BusEntry =
+        (SCH_BUS_ENTRY*) Panel->GetScreen()->GetCurItem();
 
     if( BusEntry )
     {
@@ -46,13 +45,11 @@ static void ExitBusEntry( WinEDA_DrawPanel* Panel, wxDC* DC )
 }
 
 
-/************************************************************************/
 static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
-/************************************************************************/
-/*  Drawing of the bus entry segment" while moving the cursor. */
-    BASE_SCREEN*        screen   = panel->GetScreen();
-    DrawBusEntryStruct* BusEntry = (DrawBusEntryStruct*) screen->GetCurItem();
+    /*  Drawing of the bus entry segment" while moving the cursor. */
+    BASE_SCREEN*   screen   = panel->GetScreen();
+    SCH_BUS_ENTRY* BusEntry = (SCH_BUS_ENTRY*) screen->GetCurItem();
 
     if( BusEntry == NULL )
         return;
@@ -67,17 +64,14 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 }
 
 
-/**********************************************************************************/
-DrawBusEntryStruct* WinEDA_SchematicFrame::CreateBusEntry( wxDC* DC,
-                                                           int   entry_type )
+SCH_BUS_ENTRY* WinEDA_SchematicFrame::CreateBusEntry( wxDC* DC,
+                                                      int   entry_type )
 {
-/**********************************************************************************/
-/* Create a new bus entry, and prepare moving function (for later place it)
- */
-    DrawBusEntryStruct* BusEntry = new DrawBusEntryStruct(
-        GetScreen()->m_Curseur,
-        s_LastShape,
-        entry_type );
+    /* Create a new bus entry, and prepare moving function (for later place it)
+     */
+    SCH_BUS_ENTRY* BusEntry = new SCH_BUS_ENTRY( GetScreen()->m_Curseur,
+                                                 s_LastShape,
+                                                 entry_type );
 
     BusEntry->m_Flags = IS_NEW;
 
@@ -92,11 +86,9 @@ DrawBusEntryStruct* WinEDA_SchematicFrame::CreateBusEntry( wxDC* DC,
 }
 
 
-/**************************************************************************/
-void WinEDA_SchematicFrame::StartMoveBusEntry( DrawBusEntryStruct* BusEntry,
-                                               wxDC*               DC )
+void WinEDA_SchematicFrame::StartMoveBusEntry( SCH_BUS_ENTRY* BusEntry,
+                                               wxDC*          DC )
 {
-/**************************************************************************/
     if( BusEntry == NULL )
         return;
 
@@ -123,14 +115,12 @@ void WinEDA_SchematicFrame::StartMoveBusEntry( DrawBusEntryStruct* BusEntry,
 }
 
 
-/************************************************************/
-void WinEDA_SchematicFrame::SetBusEntryShape( wxDC*               DC,
-                                              DrawBusEntryStruct* BusEntry,
-                                              int                 entry_shape )
-{
-/************************************************************/
 /* set the shape of BusEntry (shape = / or \ )
  */
+void WinEDA_SchematicFrame::SetBusEntryShape( wxDC*          DC,
+                                              SCH_BUS_ENTRY* BusEntry,
+                                              int            entry_shape )
+{
     if( BusEntry == NULL )
         return;
 
@@ -165,10 +155,8 @@ void WinEDA_SchematicFrame::SetBusEntryShape( wxDC*               DC,
 }
 
 
-/************************************************************************/
-int WinEDA_SchematicFrame::GetBusEntryShape( DrawBusEntryStruct* BusEntry )
+int WinEDA_SchematicFrame::GetBusEntryShape( SCH_BUS_ENTRY* BusEntry )
 {
-/************************************************************************/
     int entry_shape = '\\';
 
     if( BusEntry->m_Size.y < 0 )

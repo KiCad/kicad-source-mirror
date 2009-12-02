@@ -17,6 +17,12 @@
 #include "class_library.h"
 
 
+/**
+ * @bug - Every place in this file where fprintf() is used and the return
+ *        is not checked is a bug.  The fprintf() function can fail and
+ *        returns a value less than 0 when it does.
+ */
+
 static void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
                                    const wxString&        FullFileName );
 static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f,
@@ -27,33 +33,31 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
                                 bool use_netnames );
 
 static void WriteGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
-static void AddPinToComponentPinList( SCH_COMPONENT* Component,
-                                      DrawSheetPath* sheet,
-                                      LIB_PIN*       PinEntry );
-static void FindAllsInstancesOfComponent( SCH_COMPONENT* Component,
-                                          LIB_COMPONENT* Entry,
-                                          DrawSheetPath* Sheet_in );
+static void AddPinToComponentPinList( SCH_COMPONENT*  Component,
+                                      SCH_SHEET_PATH* sheet,
+                                      LIB_PIN*        PinEntry );
+static void FindAllsInstancesOfComponent( SCH_COMPONENT*  Component,
+                                          LIB_COMPONENT*  Entry,
+                                          SCH_SHEET_PATH* Sheet_in );
 static bool SortPinsByNum( NETLIST_OBJECT* Pin1, NETLIST_OBJECT* Pin2 );
 static void EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList );
 
 static void ClearUsedFlags( void );
 
 
-/* Local variables */
 static NETLIST_OBJECT_LIST s_SortedComponentPinList;
 
 // list of references already found for multi part per packages components
 // (used to avoid to used more than one time a component)
 static wxArrayString s_ReferencesAlreadyFound;
 
-/******************************************************************************/
-void WriteNetList( WinEDA_SchematicFrame* frame, const wxString& FileNameNL,
-                   bool use_netnames )
-{
-/*******************************************************************************/
+
 /* Create the netlist file ( Format is given by frame->m_NetlistFormat )
  *  bool use_netnames is used only for Spice netlist
  */
+void WriteNetList( WinEDA_SchematicFrame* frame, const wxString& FileNameNL,
+                   bool use_netnames )
+{
     FILE* f = NULL;
 
     if( frame->m_NetlistFormat < NET_TYPE_CUSTOM1 )
@@ -106,7 +110,7 @@ void WriteNetList( WinEDA_SchematicFrame* frame, const wxString& FileNameNL,
  */
 static SCH_COMPONENT* FindNextComponentAndCreatPinList(
     EDA_BaseStruct* DrawList,
-    DrawSheetPath*  sheet )
+    SCH_SHEET_PATH* sheet )
 {
     SCH_COMPONENT* Component = NULL;
     LIB_COMPONENT* Entry;
@@ -254,7 +258,7 @@ void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
                             const wxString&        FullFileName )
 {
     wxString        Line, FootprintName;
-    DrawSheetPath*  sheet;
+    SCH_SHEET_PATH* sheet;
     EDA_BaseStruct* SchItem;
     SCH_COMPONENT*  Component;
     wxString        netname;
@@ -276,7 +280,7 @@ void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
 
     /* Create netlist module section */
     fprintf( tmpfile, "$BeginComponentList\n" );
-    EDA_SheetList SheetList;
+    SCH_SHEET_LIST SheetList;
 
     for( sheet = SheetList.GetFirst();
         sheet != NULL;
@@ -381,7 +385,7 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
                                 bool use_netnames )
 {
     char            Line[1024];
-    DrawSheetPath*  sheet;
+    SCH_SHEET_PATH* sheet;
     EDA_BaseStruct* DrawList;
     SCH_COMPONENT*  Component;
     int             nbitems;
@@ -402,7 +406,7 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
      * commands) and create text list starting by [+]pspice , or [+]gnucap
      * (simulator commands) */
     bufnum[BUFYPOS_LEN] = 0;
-    EDA_SheetList SheetList;
+    SCH_SHEET_LIST SheetList;
 
     for( sheet = SheetList.GetFirst();
          sheet != NULL;
@@ -541,9 +545,9 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame,
 {
     wxString Line, FootprintName;
     char Buf[256];
-    DrawSheetPath* sheet;
+    SCH_SHEET_PATH* sheet;
     EDA_BaseStruct* DrawList;
-    SCH_COMPONENT* Component;
+    SCH_COMPONENT*  Component;
     OBJ_CMP_TO_LIST* CmpList = NULL;
     int CmpListCount = 0, CmpListSize = 1000;
 
@@ -556,9 +560,9 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame,
 
     /* Create netlist module section */
     ClearUsedFlags();   /* Reset the flags FlagControlMulti in all schematic
-                         *files*/
+                         * files*/
 
-    EDA_SheetList SheetList;
+    SCH_SHEET_LIST SheetList;
 
     for( sheet = SheetList.GetFirst();
         sheet != NULL;
@@ -574,14 +578,13 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame,
                 break;
 
             /* Get the Component FootprintFilter and put the component in
-             *CmpList if filter is not void */
+             * CmpList if filter is not void */
             LIB_COMPONENT* Entry =
                 CMP_LIBRARY::FindLibraryComponent( Component->m_ChipName );
 
             if( Entry != NULL )
             {
-                if( Entry->m_FootprintList.GetCount() != 0 )   /* Put in list
-                                                                **/
+                if( Entry->m_FootprintList.GetCount() != 0 ) /* Put in list */
                 {
                     if( CmpList == NULL )
                     {
@@ -678,7 +681,8 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame,
             /* Write the footprint list */
             for( unsigned jj = 0; jj < Entry->m_FootprintList.GetCount(); jj++ )
             {
-                fprintf( f, " %s\n", CONV_TO_UTF8( Entry->m_FootprintList[jj] ) );
+                fprintf( f, " %s\n",
+                         CONV_TO_UTF8( Entry->m_FootprintList[jj] ) );
             }
 
             fprintf( f, "$endlist\n" );
@@ -705,7 +709,7 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame,
  * created by BuildNetList() in the table g_NetObjectslist
  */
 static void AddPinToComponentPinList( SCH_COMPONENT* Component,
-                                      DrawSheetPath* sheetlist, LIB_PIN* Pin )
+                                      SCH_SHEET_PATH* sheetlist, LIB_PIN* Pin )
 {
     /* Search the PIN description for Pin in g_NetObjectslist*/
     for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
@@ -797,17 +801,17 @@ static void EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
  * Calls AddPinToComponentPinList() to and pins founds to the current
  * component pin list
  */
-static void FindAllsInstancesOfComponent( SCH_COMPONENT* Component_in,
-                                          LIB_COMPONENT* Entry,
-                                          DrawSheetPath* Sheet_in )
+static void FindAllsInstancesOfComponent( SCH_COMPONENT*  Component_in,
+                                          LIB_COMPONENT*  Entry,
+                                          SCH_SHEET_PATH* Sheet_in )
 {
     EDA_BaseStruct* SchItem;
     SCH_COMPONENT* Component2;
     LIB_PIN* pin;
-    DrawSheetPath* sheet;
+    SCH_SHEET_PATH* sheet;
     wxString str, Reference = Component_in->GetRef( Sheet_in );
 
-    EDA_SheetList SheetList;
+    SCH_SHEET_LIST SheetList;
 
     for( sheet = SheetList.GetFirst(); sheet != NULL;
          sheet = SheetList.GetNext() )
@@ -991,7 +995,7 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
     wxString msg;
     wxString FootprintName;
     char Line[1024];
-    DrawSheetPath* sheet;
+    SCH_SHEET_PATH* sheet;
     EDA_BaseStruct* DrawList;
     SCH_COMPONENT* Component;
     wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
@@ -1006,7 +1010,7 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
     /* Create netlist module section */
     ClearUsedFlags();   /* Reset the flags FlagControlMulti in all schematic
                          *files*/
-    EDA_SheetList SheetList;
+    SCH_SHEET_LIST SheetList;
 
     for( sheet = SheetList.GetFirst();
          sheet != NULL;

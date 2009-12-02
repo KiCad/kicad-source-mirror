@@ -79,8 +79,10 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
     // Calculate the page size offset.
     if( Center )
     {
-        offset.x = BoardCenter.x - ( SheetSize.x / 2 ) / scale;
-        offset.y = BoardCenter.y - ( SheetSize.y / 2 ) / scale;
+        offset.x = wxRound( (double) BoardCenter.x -
+                            ( (double) SheetSize.x / 2.0 ) / scale );
+        offset.y = wxRound( (double) BoardCenter.y -
+                            ( (double) SheetSize.y / 2.0 ) / scale );
     }
     else
     {

@@ -7,13 +7,10 @@
 
 
 #include "class_sch_screen.h"
-#include <wx/arrstr.h>
-#include <wx/dynarray.h>
-
 #include "class_sch_cmp_field.h"
 
 
-WX_DECLARE_OBJARRAY( DrawSheetPath, ArrayOfSheetLists );
+class SCH_SHEET_PATH;
 
 
 /**
@@ -58,8 +55,8 @@ enum  NumFieldType {
 };
 
 
-/// A container for several SCH_CMP_FIELD items
-typedef std::vector<SCH_CMP_FIELD>  SCH_CMP_FIELDS;
+/// A container for several SCH_FIELD items
+typedef std::vector<SCH_FIELD>  SCH_FIELDS;
 
 
 /**
@@ -93,7 +90,7 @@ public:
 
 private:
 
-    SCH_CMP_FIELDS  m_Fields;         ///< variable length list of fields
+    SCH_FIELDS      m_Fields;         ///< variable length list of fields
 
 
     /* Hierarchical references.
@@ -102,7 +99,8 @@ private:
      * with:
      * path = /<timestamp1>/<timestamp2> (subsheet path, = / for the root sheet)
      * reference = reference for this path (C23, R5, U78 ... )
-     * multi = part selection in multi parts per package (0 or 1 for one part per package)
+     * multi = part selection in multi parts per package (0 or 1 for one part
+     *         per package)
      */
     wxArrayString m_PathsAndReferences;
 
@@ -125,7 +123,7 @@ public:
      * @param pos - Position to place new component.
      * @param setNewItemFlag - Set the component IS_NEW and IS_MOVED flags.
      */
-    SCH_COMPONENT( LIB_COMPONENT& libComponent, DrawSheetPath* sheet,
+    SCH_COMPONENT( LIB_COMPONENT& libComponent, SCH_SHEET_PATH* sheet,
                    int unit = 0, int convert = 0,
                    const wxPoint& pos = wxPoint( 0, 0 ),
                    bool setNewItemFlag = false );
@@ -134,7 +132,7 @@ public:
      * Copy Constructor
      * clones \a aTemplate into this object.  All fields are copied as is except
      * for the linked list management pointers which are set to NULL, and the
-     * SCH_CMP_FIELD's m_Parent pointers which are set to the new parent,
+     * SCH_FIELD's m_Parent pointers which are set to the new parent,
      * i.e. this new object.
      */
     SCH_COMPONENT( const SCH_COMPONENT& aTemplate );
@@ -164,7 +162,7 @@ public:
      * @param aFile The FILE to read from.
      * @throw Error containing the error message text if there is a file format
      *   error or if the disk read has failed.
-    void            Load( FILE* aFile ) throw( Error );
+     *  void            Load( FILE* aFile ) throw( Error );
      */
 
     /**
@@ -183,12 +181,14 @@ public:
      * Used to display component orientation (in dialog editor or info)
      * @return the orientation and mirror
      * Note: Because there are different ways to have a given orientation/mirror,
-     * the orientation/mirror is not necessary wht the used does
-     * (example : a mirrorX then a mirrorY give no mirror but rotate the component).
+     * the orientation/mirror is not necessary what the used does
+     * (example : a mirrorX then a mirrorY give no mirror but rotate the
+     * component).
      * So this function find a rotation and a mirror value
      * ( CMP_MIROIR_X because this is the first mirror option tested)
      *  but can differs from the orientation made by an user
-     * ( a CMP_MIROIR_Y is find as a CMP_MIROIR_X + orientation 180, because they are equivalent)
+     * ( a CMP_MIROIR_Y is find as a CMP_MIROIR_X + orientation 180, because
+     * they are equivalent)
      */
     int             GetRotationMiroir();
 
@@ -197,10 +197,10 @@ public:
 
     /**
      * Suppress annotation ( i.i IC23 changed to IC? and part reset to 1)
-     * @param aSheet: DrawSheetPath value: if NULL remove all annotations,
+     * @param aSheet: SCH_SHEET_PATH value: if NULL remove all annotations,
      *             else remove annotation relative to this sheetpath
      */
-    void            ClearAnnotation( DrawSheetPath* aSheet );
+    void            ClearAnnotation( SCH_SHEET_PATH* aSheet );
 
     /** function SetTimeStamp
      * Change the old time stamp to the new time stamp.
@@ -232,19 +232,19 @@ public:
      * Function GetField
      * returns a field.
      * @param aFieldNdx An index into the array of fields
-     * @return SCH_CMP_FIELD* - the field value or NULL if does not exist
+     * @return SCH_FIELD* - the field value or NULL if does not exist
      */
-    SCH_CMP_FIELD* GetField( int aFieldNdx ) const;
+    SCH_FIELD* GetField( int aFieldNdx ) const;
 
     /**
      * Function AddField
      * adds a field to the component.  The field is copied as it is put into
      * the component.
-     * @param aField A const reference to the SCH_CMP_FIELD to add.
+     * @param aField A const reference to the SCH_FIELD to add.
      */
-    void AddField( const SCH_CMP_FIELD& aField );
+    void AddField( const SCH_FIELD& aField );
 
-    void SetFields( const SCH_CMP_FIELDS& aFields )
+    void SetFields( const SCH_FIELDS& aFields )
     {
         m_Fields = aFields;     // vector copying, length is changed possibly
     }
@@ -285,20 +285,20 @@ public:
     void                    Place( WinEDA_SchematicFrame* frame, wxDC* DC );
 
     // returns a unique ID, in the form of a path.
-    wxString                GetPath( DrawSheetPath* sheet );
+    wxString                GetPath( SCH_SHEET_PATH* sheet );
 
     /**
      * Function GetRef
      * returns the reference, for the given sheet path.
      */
-    const wxString          GetRef( DrawSheetPath* sheet );
+    const wxString          GetRef( SCH_SHEET_PATH* sheet );
 
     // Set the reference, for the given sheet path.
-    void                    SetRef( DrawSheetPath* sheet, const wxString& ref );
+    void                    SetRef( SCH_SHEET_PATH* sheet, const wxString& ref );
 
     /**
      * Function AddHierarchicalReference
-     * adds a full hierachical reference (path + local reference)
+     * adds a full hierarchical reference (path + local reference)
      * @param aPath = hierarchical path (/<sheet timestamp>/component
      *                timestamp> like /05678E50/A23EF560)
      * @param aRef = local reference like C45, R56
@@ -309,16 +309,17 @@ public:
                                                       const wxString& aRef,
                                                       int aMulti );
 
-    //returns the unit selection, for the given sheet path.
-    int                     GetUnitSelection( DrawSheetPath* aSheet );
+    // returns the unit selection, for the given sheet path.
+    int                     GetUnitSelection( SCH_SHEET_PATH* aSheet );
 
-    //Set the unit selection, for the given sheet path.
-    void                    SetUnitSelection( DrawSheetPath* aSheet,
+    // Set the unit selection, for the given sheet path.
+    void                    SetUnitSelection( SCH_SHEET_PATH* aSheet,
                                               int aUnitSelection );
 
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
-     * for a component, has no meaning, but it is necessary to satisfy the SCH_ITEM class requirements
+     * for a component, has no meaning, but it is necessary to satisfy the
+     * SCH_ITEM class requirements.
      */
     virtual int GetPenSize( ) { return 0; }
 
@@ -327,11 +328,11 @@ public:
      * move item to a new position.
      * @param aMoveVector = the displacement vector
      */
-    virtual void Move(const wxPoint& aMoveVector)
+    virtual void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
         for( int ii = 0; ii < GetFieldCount(); ii++ )
-            GetField( ii )->Move(aMoveVector);
+            GetField( ii )->Move( aMoveVector );
     }
 
     /** virtual function Mirror_Y
@@ -349,7 +350,7 @@ public:
      *          of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
-    void                    Show( int nestLevel, std::ostream& os );
+    void         Show( int nestLevel, std::ostream& os );
 
 #endif
 };

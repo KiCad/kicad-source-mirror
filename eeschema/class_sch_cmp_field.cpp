@@ -1,8 +1,8 @@
 /**************************************************************/
-/* class_sch_cmp_field.cpp : handle the  class SCH_CMP_FIELD  */
+/* class_sch_cmp_field.cpp : handle the  class SCH_FIELD  */
 /**************************************************************/
 
-/* Fields are texts attached to a component, having a specuial meaning
+/* Fields are texts attached to a component, having a special meaning
  * Fields 0 and 1 are very important: reference and value
  * Field 2 is used as default footprint name.
  * Field 3 is reserved (not currently used
@@ -24,8 +24,8 @@
 #include "class_library.h"
 
 
-SCH_CMP_FIELD::SCH_CMP_FIELD( const wxPoint& aPos, int aFieldId,
-                              SCH_COMPONENT* aParent, wxString aName ) :
+SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId,
+                      SCH_COMPONENT* aParent, wxString aName ) :
     SCH_ITEM( aParent, DRAW_PART_TEXT_STRUCT_TYPE ),
     EDA_TextStruct()
 {
@@ -39,7 +39,7 @@ SCH_CMP_FIELD::SCH_CMP_FIELD( const wxPoint& aPos, int aFieldId,
 }
 
 
-SCH_CMP_FIELD::~SCH_CMP_FIELD()
+SCH_FIELD::~SCH_FIELD()
 {
 }
 
@@ -47,7 +47,7 @@ SCH_CMP_FIELD::~SCH_CMP_FIELD()
 /** Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int SCH_CMP_FIELD::GetPenSize()
+int SCH_FIELD::GetPenSize()
 {
     int pensize = m_Width;
 
@@ -68,8 +68,8 @@ int SCH_CMP_FIELD::GetPenSize()
 /**
  * Draw schematic component fields.
  */
-void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                          const wxPoint& offset, int DrawMode, int Color )
+void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                      const wxPoint& offset, int DrawMode, int Color )
 {
     int            orient;
     EDA_Colors     color;
@@ -94,7 +94,8 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
     GRSetDrawMode( DC, DrawMode );
 
-    /* Calculate the text orientation, according to the component orientation/mirror */
+    /* Calculate the text orientation, according to the component
+     * orientation/mirror */
     orient = m_Orient;
     if( parentComponent->m_Transform[0][1] )  // Rotate component 90 degrees.
     {
@@ -104,13 +105,14 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
             orient = TEXT_ORIENT_HORIZ;
     }
 
-    /* Calculate the text justification, according to the component orientation/mirror
-     * this is a bit complicated due to cumulative calculations:
+    /* Calculate the text justification, according to the component
+     * orientation/mirror this is a bit complicated due to cumulative
+     * calculations:
      * - numerous cases (mirrored or not, rotation)
-     * - the DrawGraphicText function recalculate also H and H vustifications
-     *      according to the text orienation.
-     * - When a component is mirrored, the text is not mirrored and justifications
-     *      are complicated to calculate
+     * - the DrawGraphicText function recalculate also H and H justifications
+     *      according to the text orientation.
+     * - When a component is mirrored, the text is not mirrored and
+     *   justifications are complicated to calculate
      * so the more easily way is to use no justifications ( Centered text )
      * and use GetBoundaryBox to know the text coordinate considered as centered
     */
@@ -126,7 +128,7 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     else
         color = ReturnLayerColor( LAYER_FIELDS );
 
-    if( !m_AddExtraText || (m_FieldId != REFERENCE) )
+    if( !m_AddExtraText || ( m_FieldId != REFERENCE ) )
     {
         DrawGraphicText( panel, DC, textpos, color, m_Text,
                          orient,
@@ -156,6 +158,7 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     /* Enable this to draw the bounding box around the text field to validate
      * the bounding box calculations.
     */
+
 #if 0
     // Draw boundary box:
     int x1 = BoundaryBox.GetX();
@@ -164,7 +167,8 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     int y2 = BoundaryBox.GetBottom();
     GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
     // Draw the text anchor point
-    /* Calculate the text position, according to the component orientation/mirror */
+    /* Calculate the text position, according to the component
+     * orientation/mirror */
     textpos  = m_Pos - parentComponent->m_Pos;
     textpos  = parentComponent->GetScreenCoord( textpos );
     textpos += parentComponent->m_Pos;
@@ -173,7 +177,6 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     int len = 10;
     GRLine( &panel->m_ClipBox, DC, x1 - len, y1, x1 + len, y1, 0, BLUE );
     GRLine( &panel->m_ClipBox, DC, x1, y1 - len, x1, y1 +len, 0, BLUE );
-
 #endif
 }
 
@@ -185,7 +188,7 @@ void SCH_CMP_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
  * used to init a field from the model read from a lib entry
  * @param aSource = the LIB_FIELD to read
  */
-void SCH_CMP_FIELD::ImportValues( const LIB_FIELD& aSource )
+void SCH_FIELD::ImportValues( const LIB_FIELD& aSource )
 {
     m_Orient    = aSource.m_Orient;
     m_Size      = aSource.m_Size;
@@ -203,7 +206,7 @@ void SCH_CMP_FIELD::ImportValues( const LIB_FIELD& aSource )
  * Used if undo / redo command:
  *  swap data between this and copyitem
  */
-void SCH_CMP_FIELD::SwapData( SCH_CMP_FIELD* copyitem )
+void SCH_FIELD::SwapData( SCH_FIELD* copyitem )
 {
     EXCHG( m_Text, copyitem->m_Text );
     EXCHG( m_Layer, copyitem->m_Layer );
@@ -224,7 +227,7 @@ void SCH_CMP_FIELD::SwapData( SCH_CMP_FIELD* copyitem )
  * return True if the field is void, i.e.:
  *  contains  "~" or ""
  */
-bool SCH_CMP_FIELD::IsVoid()
+bool SCH_FIELD::IsVoid()
 {
     if( m_Text.IsEmpty() || m_Text == wxT( "~" ) )
         return true;
@@ -238,7 +241,7 @@ bool SCH_CMP_FIELD::IsVoid()
  *         a text field,
  *  according to the component position, rotation, mirror ...
  */
-EDA_Rect SCH_CMP_FIELD::GetBoundaryBox() const
+EDA_Rect SCH_FIELD::GetBoundaryBox() const
 {
     EDA_Rect       BoundaryBox;
     int            hjustify, vjustify;
@@ -257,12 +260,13 @@ EDA_Rect SCH_CMP_FIELD::GetBoundaryBox() const
     hjustify = m_HJustify;
     vjustify = m_VJustify;
 
-    x2 = pos.x + (parentComponent->m_Transform[0][0] *x1)
-         + (parentComponent->m_Transform[0][1] *y1);
-    y2 = pos.y + (parentComponent->m_Transform[1][0] *x1)
-         + (parentComponent->m_Transform[1][1] *y1);
+    x2 = pos.x + ( parentComponent->m_Transform[0][0] * x1 )
+         + ( parentComponent->m_Transform[0][1] * y1 );
+    y2 = pos.y + ( parentComponent->m_Transform[1][0] * x1 )
+         + ( parentComponent->m_Transform[1][1] * y1 );
 
-    /* Calculate the text orientation, according to the component orientation/mirror */
+    /* Calculate the text orientation, according to the component
+     * orientation/mirror */
     if( parentComponent->m_Transform[0][1] )
     {
         if( orient == TEXT_ORIENT_HORIZ )
@@ -271,7 +275,8 @@ EDA_Rect SCH_CMP_FIELD::GetBoundaryBox() const
             orient = TEXT_ORIENT_HORIZ;
     }
 
-    /* Calculate the text justification, according to the component orientation/mirror */
+    /* Calculate the text justification, according to the component
+     * orientation/mirror */
     if( parentComponent->m_Transform[0][1] )
     {
         /* is it mirrored (for text justify)*/
@@ -328,14 +333,14 @@ EDA_Rect SCH_CMP_FIELD::GetBoundaryBox() const
     BoundaryBox.SetHeight( dy );
 
     // Take thickness in account:
-    int linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    int linewidth = ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
     BoundaryBox.Inflate( linewidth, linewidth );
 
     return BoundaryBox;
 }
 
 
-bool SCH_CMP_FIELD::Save( FILE* aFile ) const
+bool SCH_FIELD::Save( FILE* aFile ) const
 {
     char hjustify = 'C';
 
@@ -382,7 +387,7 @@ bool SCH_CMP_FIELD::Save( FILE* aFile ) const
 }
 
 
-void SCH_CMP_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
+void SCH_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 {
     int            fieldNdx;
     LIB_COMPONENT* Entry;

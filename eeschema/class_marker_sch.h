@@ -2,8 +2,8 @@
 /* classes to handle markers used in schematic ... */
 /***************************************************/
 
-#ifndef _TYPE_MARKER_SCH_H_
-#define _TYPE_MARKER_SCH_H_
+#ifndef _TYPE_SCH_MARKER_H_
+#define _TYPE_SCH_MARKER_H_
 
 #include "sch_item_struct.h"
 #include "class_marker_base.h"
@@ -24,19 +24,19 @@ enum TypeMarker {      /* Markers type */
 extern const wxChar* NameMarqueurType[];
 
 
-class MARKER_SCH : public SCH_ITEM , public MARKER_BASE
+class SCH_MARKER : public SCH_ITEM , public MARKER_BASE
 {
 public:
-    MARKER_SCH( );
-    MARKER_SCH( const wxPoint& aPos, const wxString& aText );
-    ~MARKER_SCH();
+    SCH_MARKER( );
+    SCH_MARKER( const wxPoint& aPos, const wxString& aText );
+    ~SCH_MARKER();
     virtual wxString GetClass() const
     {
-        return wxT( "MARKER_SCH" );
+        return wxT( "SCH_MARKER" );
     }
 
 
-    MARKER_SCH* GenCopy();
+    SCH_MARKER* GenCopy();
 
     virtual void      Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                             const wxPoint& aOffset, int aDraw_mode,
@@ -54,7 +54,8 @@ public:
 
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
-     * for a marker, has no meaning, but it is necessary to satisfy the SCH_ITEM class requirements
+     * for a marker, has no meaning, but it is necessary to satisfy the
+     * SCH_ITEM class requirements
      */
     virtual int GetPenSize( ) { return 0; };
 
@@ -80,7 +81,7 @@ public:
     // Geometric transforms (used in block operations):
     /** virtual function Move
      * move item to a new position.
-     * @param aMoveVector = the deplacement vector
+     * @param aMoveVector = the displacement vector
      */
     virtual void Move(const wxPoint& aMoveVector)
     {
@@ -103,4 +104,4 @@ public:
 #endif
 };
 
-#endif /* _TYPE_MARKER_SCH_H_ */
+#endif /* _TYPE_SCH_MARKER_H_ */

@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        plotdxf.cpp
 // Purpose:
 // Author:      Lorenzo Marcantonio
@@ -309,23 +308,19 @@ void WinEDA_PlotDXFFrame::OnCancelClick( wxCommandEvent& event )
 }
 
 
-/*****************************************/
 void WinEDA_PlotDXFFrame::InitOptVars()
 {
-/*****************************************/
     Plot_Sheet_Ref  = m_Plot_Sheet_Ref->GetValue();
     PlotDXFColorOpt = m_PlotDXFColorOption->GetSelection();
 }
 
 
-/*************************************************************/
 void WinEDA_PlotDXFFrame::CreateDXFFile( int AllPages )
 {
-/*************************************************************/
     WinEDA_SchematicFrame* schframe  = (WinEDA_SchematicFrame*) m_Parent;
     SCH_SCREEN*            screen    = schframe->GetScreen();
     SCH_SCREEN*            oldscreen = screen;
-    DrawSheetPath*         sheetpath, * oldsheetpath = schframe->GetSheet();
+    SCH_SHEET_PATH*        sheetpath, * oldsheetpath = schframe->GetSheet();
     wxString               PlotFileName;
     Ki_PageDescr*          PlotSheet;
     wxPoint                plot_offset;
@@ -336,10 +331,10 @@ void WinEDA_PlotDXFFrame::CreateDXFFile( int AllPages )
      *  because in complex hierarchies a SCH_SCREEN (a schematic drawings)
      *  is shared between many sheets
      */
-    EDA_SheetList SheetList( NULL );
+    SCH_SHEET_LIST SheetList( NULL );
 
     sheetpath = SheetList.GetFirst();
-    DrawSheetPath list;
+    SCH_SHEET_PATH list;
 
     while( true )
     {
