@@ -299,7 +299,7 @@ static void DrawMovePin( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     /* Erase pin in old position */
     if( erase || CurrentPin->IsNew() )
     {
-        wxLogDebug( _( "Initial pin position (%d, %d)" ),
+        wxLogDebug( wxT( "Initial pin position (%d, %d)" ),
                     PinPreviousPos.x, PinPreviousPos.y );
         CurrentPin->m_Pos = PinPreviousPos;
         CurrentPin->Draw( panel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
@@ -417,7 +417,7 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
                    DefaultTransformMatrix );
 
     PinPreviousPos = pin->m_Pos;
-    wxLogDebug( _( "Initial pin position (%d, %d)" ),
+    wxLogDebug( wxT( "Initial pin position (%d, %d)" ),
                 PinPreviousPos.x, PinPreviousPos.y );
     DrawPanel->m_IgnoreMouseEvents = true;
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );

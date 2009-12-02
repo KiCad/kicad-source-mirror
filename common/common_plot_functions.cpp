@@ -32,6 +32,11 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
     int      conv_unit = screen->GetInternalUnits() / 1000;
     wxString msg;
     wxSize   text_size;
+#if defined(KICAD_GOST)
+    wxSize   text_size2;
+    wxSize   text_size3;
+    wxSize   text_size1_5;
+#endif
     int      UpperLimit = VARIABLE_BLOCK_START_POSITION;
     bool     italic     = false;
     bool     bold = false;
@@ -234,6 +239,12 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
     text_size.x = SIZETEXT * conv_unit;
     text_size.y = SIZETEXT * conv_unit;
 #if defined(KICAD_GOST)
+    text_size2.x = SIZETEXT * conv_unit * 2;
+    text_size2.y = SIZETEXT * conv_unit * 2;
+    text_size3.x = SIZETEXT * conv_unit * 3;
+    text_size3.y = SIZETEXT * conv_unit * 3;
+    text_size1_5.x = SIZETEXT * conv_unit * 1.5;
+    text_size1_5.y = SIZETEXT * conv_unit * 1.5;
     ref.x = PageSize.x - Sheet->m_RightMargin;
     ref.y = PageSize.y - Sheet->m_BottomMargin;
 
@@ -261,7 +272,8 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             case WS_PODPIS:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                plotter->text( pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
+                plotter->text( pos, color,
+                               msg.GetData(), TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                thickness, italic, false );
                 break;
@@ -273,7 +285,8 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
                 msg << screen->m_ScreenNumber;
-                plotter->text( pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
+                plotter->text( pos, color,
+                               msg.GetData(), TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                thickness, italic, false );
                 break;
@@ -282,27 +295,82 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
                 msg << screen->m_NumberOfScreen;
-                plotter->text( pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
+                plotter->text( pos, color,
+                               msg.GetData(), TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                thickness, italic, false );
                 break;
 
             case WS_COMPANY_NAME:
+                msg = screen->m_Company;
+                if( !msg.IsEmpty() )
+                {
+                    plotter->text( pos, color,
+                                   msg.GetData(), TEXT_ORIENT_HORIZ, text_size1_5,
+                                   GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                   thickness, italic, false );
+                }
                 break;
 
             case WS_TITLE:
+                msg = screen->m_Title;
+                if( !msg.IsEmpty() )
+                {
+                    plotter->text( pos, color,
+                                   msg.GetData(), TEXT_ORIENT_HORIZ, text_size1_5,
+                                   GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                   thickness, italic, false );
+                }
                 break;
 
             case WS_COMMENT1:
+                msg = screen->m_Commentaire1;
+                if( !msg.IsEmpty() )
+                {
+                    plotter->text( pos, color,
+                                   msg.GetData(), TEXT_ORIENT_HORIZ, text_size3,
+                                   GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                   thickness, italic, false );
+                    pos.x = (Sheet->m_LeftMargin + 1260) * conv_unit;
+                    pos.y = (Sheet->m_TopMargin + 270) * conv_unit;
+                    plotter->text( pos, color,
+                                   msg.GetData(), 1800, text_size2,
+                                   GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                   thickness, italic, false );
+                }
                 break;
 
             case WS_COMMENT2:
+                msg = screen->m_Commentaire2;
+                if( !msg.IsEmpty() )
+                {
+                    plotter->text( pos, color,
+                                   msg.GetData(), TEXT_ORIENT_HORIZ, text_size,
+                                   GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                                   thickness, italic, false );
+                }
                 break;
 
             case WS_COMMENT3:
+                msg = screen->m_Commentaire3;
+                if( !msg.IsEmpty() )
+                {
+                    plotter->text( pos, color,
+                                   msg.GetData(), TEXT_ORIENT_HORIZ, text_size,
+                                   GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                                   thickness, italic, false );
+                }
                 break;
 
             case WS_COMMENT4:
+                msg = screen->m_Commentaire4;
+                if( !msg.IsEmpty() )
+                {
+                    plotter->text( pos, color,
+                                   msg.GetData(), TEXT_ORIENT_HORIZ, text_size,
+                                   GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                                   thickness, italic, false );
+                }
                 break;
 
             case WS_UPPER_SEGMENT:
@@ -330,6 +398,22 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             {
             case WS_CADRE:
             /* Begin list number > 1 */
+                msg = screen->m_Commentaire1;
+                if( !msg.IsEmpty() )
+                {
+                    plotter->text( pos, color,
+                                   msg.GetData(), TEXT_ORIENT_HORIZ, text_size3,
+                                   GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                   thickness, italic, false );
+                    pos.x = (Sheet->m_LeftMargin + 1260) * conv_unit;
+                    pos.y = (Sheet->m_TopMargin + 270) * conv_unit;
+                    plotter->text( pos, color,
+                                   msg.GetData(), 1800, text_size2,
+                                   GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                   thickness, italic, false );
+                }
+                break;
+
             case WS_PODPIS_D:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;

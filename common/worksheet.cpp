@@ -86,11 +86,13 @@ Ki_WorkSheetData WS_Title =
 {
     WS_TITLE,
     &WS_SheetFilename,
-    BLOCK_TITLE_X,    BLOCK_TITLE_Y,
-    0,                0,
 #if defined(KICAD_GOST)
+    STAMP_X_85,       STAMP_Y_25 + 90,
+    0,                0,
     NULL,             NULL
 #else
+    BLOCK_TITLE_X,    BLOCK_TITLE_Y,
+    0,                0,
     wxT( "Title: " ), NULL
 #endif
 };
@@ -117,8 +119,13 @@ Ki_WorkSheetData WS_Company =
 {
     WS_COMPANY_NAME,
     &WS_Comment1,
+#if defined(KICAD_GOST)
+    STAMP_X_50 / 2, STAMP_Y_0 + 270,
+    0,              0,
+#else
     BLOCK_COMMENT_X,BLOCK_COMPANY_Y,
     0,              0,
+#endif
     NULL,           NULL
 };
 
@@ -127,7 +134,7 @@ Ki_WorkSheetData WS_Comment1 =
     WS_COMMENT1,
     &WS_Comment2,
 #if defined(KICAD_GOST)
-    STAMP_OX,       STAMP_OY,
+    STAMP_X_120 / 2,STAMP_Y_40 + 270,
     STAMP_OX,       0,
 #else
     BLOCK_COMMENT_X,BLOCK_COMMENT1_Y,
@@ -141,7 +148,7 @@ Ki_WorkSheetData WS_Comment2 =
     WS_COMMENT2,
     &WS_Comment3,
 #if defined(KICAD_GOST)
-    STAMP_OX,       STAMP_OY,
+    STAMP_X_168 - 30,      STAMP_Y_25 + 90,
     STAMP_OX,       0,
 #else
     BLOCK_COMMENT_X,BLOCK_COMMENT2_Y,
@@ -155,7 +162,7 @@ Ki_WorkSheetData WS_Comment3 =
     WS_COMMENT3,
     &WS_Comment4,
 #if defined(KICAD_GOST)
-    STAMP_OX,       STAMP_OY,
+    STAMP_X_168 - 30,      STAMP_Y_20 + 90,
     STAMP_OX,       0,
 #else
     BLOCK_COMMENT_X,BLOCK_COMMENT3_Y,
@@ -169,7 +176,7 @@ Ki_WorkSheetData WS_Comment4 =
     WS_COMMENT4,
     &WS_MostLeftLine,
 #if defined(KICAD_GOST)
-    STAMP_OX,        STAMP_OY,
+    STAMP_X_168 - 30,      STAMP_Y_0 + 90,
     STAMP_OX,        0,
 #else
     BLOCK_COMMENT_X, BLOCK_COMMENT4_Y,
@@ -584,7 +591,7 @@ Ki_WorkSheetData WS_CADRE_D =
 {
     WS_CADRE,
     &WS_Segm1_D,
-    STAMP_OX,   0,
+    STAMP_X_65,      STAMP_Y_0 + 270,
     0,          0,
     NULL,       NULL
 };
@@ -935,6 +942,11 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen,
     Ki_WorkSheetData* WsItem;
     int scale = m_InternalUnits / 1000;
     wxSize size( SIZETEXT * scale, SIZETEXT * scale );
+#if defined(KICAD_GOST)
+    wxSize size2( SIZETEXT * scale * 2, SIZETEXT * scale * 2);
+    wxSize size3( SIZETEXT * scale * 3, SIZETEXT * scale * 3);
+    wxSize size1_5( SIZETEXT * scale * 1.5, SIZETEXT * scale * 1.5);
+#endif
     wxSize size_ref( SIZETEXT_REF * scale, SIZETEXT_REF * scale );
 
     wxString msg;
@@ -1152,21 +1164,79 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen,
                 break;
 
             case WS_COMPANY_NAME:
+                msg = screen->m_Company;
+                if( !msg.IsEmpty() )
+                {
+                    DrawGraphicText( DrawPanel, DC, pos, Color,
+                                     msg, TEXT_ORIENT_HORIZ, size1_5,
+                                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                     width,
+                                     false, false );
+                }
                 break;
 
             case WS_TITLE:
+                msg = screen->m_Title;
+                if( !msg.IsEmpty() )
+                {
+                    DrawGraphicText( DrawPanel, DC, pos, Color,
+                                     msg, TEXT_ORIENT_HORIZ, size1_5,
+                                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                     width,
+                                     false, false );
+                }
                 break;
 
             case WS_COMMENT1:
+                msg = screen->m_Commentaire1;
+                if( !msg.IsEmpty() )
+                {
+                    DrawGraphicText( DrawPanel, DC, pos, Color,
+                                     msg, TEXT_ORIENT_HORIZ, size3,
+                                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                     width,
+                                     false, false );
+                    pos.x = (Sheet->m_LeftMargin + 1260) * scale;
+                    pos.y = (Sheet->m_TopMargin + 270) * scale;
+                    DrawGraphicText( DrawPanel, DC, pos, Color,
+                                     msg, 1800, size2,
+                                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                     width,
+                                     false, false );
+                }
                 break;
 
             case WS_COMMENT2:
+                msg = screen->m_Commentaire2;
+                if( !msg.IsEmpty() )
+                {
+                    DrawGraphicText( DrawPanel, DC, pos, Color,
+                                     msg, TEXT_ORIENT_HORIZ, size,
+                                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                                     width, false, false );
+                }
                 break;
 
             case WS_COMMENT3:
+                msg = screen->m_Commentaire3;
+                if( !msg.IsEmpty() )
+                {
+                    DrawGraphicText( DrawPanel, DC, pos, Color,
+                                     msg, TEXT_ORIENT_HORIZ, size,
+                                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                                     width, false, false );
+                }
                 break;
 
             case WS_COMMENT4:
+                msg = screen->m_Commentaire4;
+                if( !msg.IsEmpty() )
+                {
+                    DrawGraphicText( DrawPanel, DC, pos, Color,
+                                     msg, TEXT_ORIENT_HORIZ, size,
+                                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                                     width, false, false );
+                }
                 break;
 
             case WS_UPPER_SEGMENT:
@@ -1197,41 +1267,42 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen,
             {
             case WS_CADRE:
             /* Begin list number > 1 */
+                msg = screen->m_Commentaire1;
+                if( !msg.IsEmpty() )
+                {
+                    DrawGraphicText( DrawPanel, DC, pos, Color,
+                                     msg, TEXT_ORIENT_HORIZ, size3,
+                                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                     width,
+                                     false, false );
+                    pos.x = (Sheet->m_LeftMargin + 1260) * scale;
+                    pos.y = (Sheet->m_TopMargin + 270) * scale;
+                    DrawGraphicText( DrawPanel, DC, pos, Color,
+                                     msg, 1800, size2,
+                                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                     width,
+                                     false, false );
+                }
+                break;
+
             case WS_PODPIS_D:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                DrawGraphicText( DrawPanel,
-                                 DC,
-                                 pos,
-                                 Color,
-                                 msg,
-                                 TEXT_ORIENT_HORIZ,
-                                 size,
-                                 GR_TEXT_HJUSTIFY_LEFT,
-                                 GR_TEXT_VJUSTIFY_CENTER,
+                DrawGraphicText( DrawPanel, DC, pos, Color,
+                                 msg, TEXT_ORIENT_HORIZ, size,
+                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                  width,
-                                 false,
-                                 false,
-                                 false );
+                                 false, false, false );
                 break;
 
             case WS_IDENTSHEET_D:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
                 msg << screen->m_ScreenNumber;
-                DrawGraphicText( DrawPanel,
-                                 DC,
-                                 pos,
-                                 Color,
-                                 msg,
-                                 TEXT_ORIENT_HORIZ,
-                                 size,
-                                 GR_TEXT_HJUSTIFY_LEFT,
-                                 GR_TEXT_VJUSTIFY_CENTER,
-                                 width,
-                                 false,
-                                 false,
-                                 false );
+                DrawGraphicText( DrawPanel, DC, pos, Color,
+                                 msg, TEXT_ORIENT_HORIZ, size,
+                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                                 width, false, false, false );
                 break;
 
             case WS_LEFT_SEGMENT_D:

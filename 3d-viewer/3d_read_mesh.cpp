@@ -40,7 +40,7 @@ int S3D_MASTER::ReadData()
 
         if( FullFilename.IsEmpty() )
         {
-            wxLogDebug( _( "3D part library <%s> could not be found." ),
+            wxLogDebug( wxT( "3D part library <%s> could not be found." ),
                        GetChars( fn.GetFullPath() ) );
             return -1;
         }

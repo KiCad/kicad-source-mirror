@@ -159,7 +159,7 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
 
         if( ( i < 0 ) || ( (size_t) i >= screen->m_ZoomList.GetCount() ) )
         {
-            wxLogDebug( _T( "%s %d: index %d is outside the bounds of the zoom list." ),
+            wxLogDebug( wxT( "%s %d: index %d is outside the bounds of the zoom list." ),
                         __TFILE__, __LINE__, i );
             return;
         }

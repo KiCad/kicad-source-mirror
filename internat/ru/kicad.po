@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-11-26 21:07+0300\n"
-"PO-Revision-Date: 2009-12-02 08:19+0300\n"
+"PO-Revision-Date: 2009-12-02 16:03+0300\n"
 "Last-Translator: faa <faa@ntcsm.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "MIME-Version: 1.0\n"
@@ -1095,11 +1095,6 @@ msgstr ""
 msgid "Read Project File"
 msgstr "Читать файл проекта"
 
-#: eeschema/eeschema_config.cpp:111
-#, c-format
-msgid "Current grid array index %d."
-msgstr "Текущий индекс сетки %d."
-
 #: eeschema/eeschema_config.cpp:326
 msgid "Save Project Settings"
 msgstr "Сохранить настройки проекта"
@@ -1440,12 +1435,6 @@ msgstr "Была сделана попытка удалить поле %s у к�
 #: eeschema/pinedit.cpp:194
 msgid "This position is already occupied by another pin. Continue?"
 msgstr "Позиция занята другим выводом. Продолжить?"
-
-#: eeschema/pinedit.cpp:302
-#: eeschema/pinedit.cpp:420
-#, c-format
-msgid "Initial pin position (%d, %d)"
-msgstr "Начальная позиция вывода (%d, %d)"
 
 #: eeschema/pinedit.cpp:626
 msgid "No pins!"
@@ -5459,7 +5448,7 @@ msgstr "Просмотр выбранного посад.места"
 
 #: cvpcb/tool_cvpcb.cpp:49
 msgid "Perform automatic footprint association"
-msgstr "Perform automatic footprint association"
+msgstr "Выполнить автоматический выбор посадочных мест"
 
 #: cvpcb/tool_cvpcb.cpp:54
 msgid "Select previous free component"
@@ -7167,11 +7156,6 @@ msgstr "Сдвинуть вниз"
 #: 3d-viewer/3d_canvas.cpp:574
 msgid "3D Image filename:"
 msgstr "Имя файла 3D изображения:"
-
-#: 3d-viewer/3d_read_mesh.cpp:43
-#, c-format
-msgid "3D part library <%s> could not be found."
-msgstr "3D библиотека <%s> не найдена."
 
 #: 3d-viewer/3d_aux.cpp:195
 msgid "Vertex "
@@ -10225,11 +10209,11 @@ msgstr "Ввод значения зазора в единицах (mils или 
 
 #: pcbnew/dialog_drc_base.cpp:54
 msgid "Min via size"
-msgstr "Минимальный размер переходного отверстия"
+msgstr "Мин. размер переходного отверстия"
 
 #: pcbnew/dialog_drc_base.cpp:63
 msgid "Min uVia size"
-msgstr "Минимальный размер микропереходного отверстия"
+msgstr "Мин. размер микропереходного отверстия"
 
 #: pcbnew/dialog_drc_base.cpp:75
 msgid "Create Report File"
@@ -10397,12 +10381,12 @@ msgstr "Печать выбранного"
 msgid "Print Board"
 msgstr "Печать платы"
 
-#: pcbnew/hotkeys.cpp:480
+#: pcbnew/hotkeys.cpp:544
 #, c-format
 msgid "Footprint %s found, but locked"
 msgstr "Посадочное место %s найдено, не заблокировано"
 
-#: pcbnew/hotkeys.cpp:647
+#: pcbnew/hotkeys.cpp:726
 msgid "Delete module?"
 msgstr "Удалить модуль?"
 
@@ -10582,7 +10566,7 @@ msgstr "Считать список цепей"
 
 #: pcbnew/tool_pcb.cpp:270
 msgid "Perform design rules check"
-msgstr "Perform design rules check"
+msgstr "Выполнить проверку правил проекттрования"
 
 #: pcbnew/tool_pcb.cpp:283
 msgid "Manual and automatic move or place of modules"
@@ -12358,11 +12342,11 @@ msgstr ""
 
 #: pcbnew/dialog_design_rules_base.cpp:180
 msgid "Min via diameter"
-msgstr "Минимальный диаметр переходного отверстия"
+msgstr "Мин. диаметр переходного отверстия"
 
 #: pcbnew/dialog_design_rules_base.cpp:187
 msgid "Min via drill dia"
-msgstr "Минимальный диаметр сверла переходного отверстия"
+msgstr "Мин. диаметр сверла переходного отверстия"
 
 #: pcbnew/dialog_design_rules_base.cpp:199
 msgid "Micro Via Options:"
@@ -12386,11 +12370,11 @@ msgstr ""
 
 #: pcbnew/dialog_design_rules_base.cpp:215
 msgid "Min uvia diameter"
-msgstr "Минимальный диаметр микропереходного отверстия"
+msgstr "Мин. диаметр микропереходного отверстия"
 
 #: pcbnew/dialog_design_rules_base.cpp:223
 msgid "Min uvia drill dia"
-msgstr "Минимальное сверло микропереходного отверстия"
+msgstr "Мин. сверло микропереходного отверстия"
 
 #: pcbnew/dialog_design_rules_base.cpp:236
 msgid "Minimum Allowed Values:"
@@ -12403,12 +12387,12 @@ msgid ""
 "on demand, for arbitrary via or track segments."
 msgstr ""
 "Особые диаметры переходных отверстий и ширины дорожек, которые \n"
-"могут использоваться для замены значений класса цепи \n"
-"при необходимости для произвольных переходных отверстий и сегментов дорожек."
+"при необходимости могут использоваться для замены значений класса цепи \n"
+"для произвольных переходных отверстий и сегментов дорожек."
 
 #: pcbnew/dialog_design_rules_base.cpp:268
 msgid "Custom Via Sizes:"
-msgstr "Заказанные переходные отверстия:"
+msgstr "Особые переходные отверстия:"
 
 #: pcbnew/dialog_design_rules_base.cpp:270
 msgid "Drill value: a blank or 0 => default Netclass value"
@@ -12448,7 +12432,7 @@ msgstr "Via 7"
 
 #: pcbnew/dialog_design_rules_base.cpp:312
 msgid "Custom Track Widths:"
-msgstr "Заказанные дорожки:"
+msgstr "Особые дорожки:"
 
 #: pcbnew/dialog_design_rules_base.cpp:337
 msgid "Track 1"

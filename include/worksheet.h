@@ -43,8 +43,10 @@
 #define STAMP_X_45  45 * 10000 / 254
 #define STAMP_X_50  50 * 10000 / 254
 #define STAMP_X_53  53 * 10000 / 254
+#define STAMP_X_65  65 * 10000 / 254
 #define STAMP_X_70  70 * 10000 / 254
 #define STAMP_X_84  84 * 10000 / 254
+#define STAMP_X_85  85 * 10000 / 254
 #define STAMP_X_120 120 * 10000 / 254
 #define STAMP_X_130 130 * 10000 / 254
 #define STAMP_X_137 137 * 10000 / 254
