@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-11-26 21:07+0300\n"
-"PO-Revision-Date: 2009-12-02 16:03+0300\n"
+"PO-Revision-Date: 2009-12-02 16:22+0300\n"
 "Last-Translator: faa <faa@ntcsm.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "MIME-Version: 1.0\n"
@@ -9180,7 +9180,7 @@ msgstr "Установки и свойства слоев"
 #: pcbnew/menubarpcb.cpp:231
 #: pcbnew/dialog_mask_clearance_base.h:63
 msgid "Pads Mask Clearance"
-msgstr "Зазор маски контактной .пллощадки"
+msgstr "Зазоры контактной площадки"
 
 #: pcbnew/menubarpcb.cpp:232
 msgid "Adjust the global clearance between pads and the solder resist mask"
@@ -12937,7 +12937,7 @@ msgstr "Файл %s не найден"
 
 #: pcbnew/dialog_mask_clearance_base.cpp:28
 msgid "Dimensions:"
-msgstr "Размерная линия:"
+msgstr "Размеры:"
 
 #: pcbnew/dialog_mask_clearance_base.cpp:30
 msgid ""
