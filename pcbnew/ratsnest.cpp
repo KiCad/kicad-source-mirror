@@ -505,7 +505,7 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
     // erase the ratsnest displayed on screen if needed
     for( unsigned ii = 0; ii < m_Pcb->GetRatsnestsCount(); ii++ )
     {
-        if( !g_Show_Ratsnest && DC )  // Clear VISIBLE flag
+        if( !g_Show_Ratsnest )  // Clear VISIBLE flag
             m_Pcb->m_FullRatsnest[ii].m_Status &= ~CH_VISIBLE;
 
         if( DC )

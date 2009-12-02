@@ -598,7 +598,7 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
         if( zone->GetCornerPosition( ii - 1 ) != zone->GetCornerPosition( ii ) )
         {
             if( (Drc_On && m_drc->Drc( zone, ii - 1 ) == OK_DRC)
-               || !zone->IsOnCopperLayer() ) // Ok, we can add a new corner
+                || !Drc_On || !zone->IsOnCopperLayer() ) // Ok, we can add a new corner
             {
                 zone->AppendCorner( GetScreen()->m_Curseur );
                 SetCurItem( zone );     // calls DisplayInfo().
