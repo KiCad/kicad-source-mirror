@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-28 14:17+0100\n"
-"PO-Revision-Date: 2009-11-28 14:21+0100\n"
+"POT-Creation-Date: 2009-12-02 10:24+0100\n"
+"PO-Revision-Date: 2009-12-02 10:25+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -2720,7 +2720,7 @@ msgstr "Simple Face"
 
 #: pcbnew/dialog_layers_setup.cpp:119
 msgid "Single Side, SMD on Back"
-msgstr ""
+msgstr "Simple face, CMS coté Cuivre"
 
 #: pcbnew/dialog_layers_setup.cpp:120
 msgid "Two Layers, Parts on Front"
@@ -6350,12 +6350,59 @@ msgstr "Ajout Composant"
 msgid "Add Power"
 msgstr "Ajouter Alims"
 
+#: eeschema/pinedit.cpp:194
+msgid "This position is already occupied by another pin. Continue?"
+msgstr "Position occupée par une autre pin. Continuer ?"
+
+#: eeschema/pinedit.cpp:302
+#: eeschema/pinedit.cpp:420
+#, c-format
+msgid "Initial pin position (%d, %d)"
+msgstr "Position initiane de la pin (%d, %d)"
+
+#: eeschema/pinedit.cpp:626
+msgid "No pins!"
+msgstr "Pas de Pins!"
+
+#: eeschema/pinedit.cpp:637
+msgid "Marker Information"
+msgstr "Info Marqueur"
+
+#: eeschema/pinedit.cpp:656
+#, c-format
+msgid "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"
+msgstr "<b>Pin dupliquée %s</b> \"%s\" en position <b>(%.3f, %.3f)</b> en conflit avec pin %s \"%s\" en position <b>(%.3f, %.3f)</b>"
+
+#: eeschema/pinedit.cpp:669
+#: eeschema/pinedit.cpp:708
+#, c-format
+msgid " in part %c"
+msgstr " en composant %c"
+
+#: eeschema/pinedit.cpp:676
+#: eeschema/pinedit.cpp:715
+msgid "  of converted"
+msgstr "  de converti"
+
+#: eeschema/pinedit.cpp:678
+#: eeschema/pinedit.cpp:717
+msgid "  of normal"
+msgstr "  de normal"
+
+#: eeschema/pinedit.cpp:699
+#, c-format
+msgid "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
+msgstr "<b>Pin %s hors grille </b> \"%s\" en position <b>(%.3f, %.3f)</b>"
+
+#: eeschema/pinedit.cpp:726
+msgid "No off grid or duplicate pins were found."
+msgstr "Pas de  pins doublées ou hors grille trouvées"
+
 #: eeschema/libedit.cpp:25
 msgid "Component Library Editor: "
 msgstr "Editeur de Composants"
 
 #: eeschema/libedit.cpp:30
-#: eeschema/viewlibs.cpp:115
 msgid "no library selected"
 msgstr "Pas de librairie sélectionnée"
 
@@ -6412,12 +6459,10 @@ msgid "Document file \""
 msgstr "Fichier de doc \""
 
 #: eeschema/libedit.cpp:303
-#: eeschema/viewlibs.cpp:314
 msgid "Part"
 msgstr "Part"
 
 #: eeschema/libedit.cpp:315
-#: eeschema/viewlibs.cpp:315
 msgid "Alias"
 msgstr "Alias"
 
@@ -6442,12 +6487,10 @@ msgid "Component"
 msgstr "Composant"
 
 #: eeschema/libedit.cpp:341
-#: eeschema/viewlibs.cpp:316
 msgid "Description"
 msgstr "Description"
 
 #: eeschema/libedit.cpp:348
-#: eeschema/viewlibs.cpp:317
 msgid "Key words"
 msgstr "Mots clé"
 
@@ -6501,32 +6544,56 @@ msgstr ""
 "\n"
 "Supprimer le composant courant de l'écran?"
 
-#: eeschema/libedit.cpp:509
+#: eeschema/libedit.cpp:511
 msgid "This new component has no name and cannot be created. Aborted"
 msgstr "Ce noveau composant n'a pas de nom et ne peut être créé, Abandon"
 
-#: eeschema/libedit.cpp:520
+#: eeschema/libedit.cpp:522
 #, c-format
 msgid "Component \"%s\" already exists in library \"%s\"."
 msgstr "Composant \"%s\" déjà  existant en librairie \"%s\"."
 
-#: eeschema/libedit.cpp:585
+#: eeschema/libedit.cpp:587
 msgid "No component to save."
 msgstr "Pas de composant à sauver."
 
-#: eeschema/libedit.cpp:594
+#: eeschema/libedit.cpp:596
 msgid "No library specified."
 msgstr "Pas de librairie spécifiée."
 
-#: eeschema/libedit.cpp:604
+#: eeschema/libedit.cpp:606
 #, c-format
 msgid "Component \"%s\" exists. Change it?"
 msgstr "Le composant \" %s\" existe, Le changer ?"
 
-#: eeschema/libedit.cpp:622
+#: eeschema/libedit.cpp:624
 #, c-format
 msgid "Component %s saved in library %s"
 msgstr "Composant %s sauvé en librairie %s"
+
+#: eeschema/schframe.cpp:364
+msgid "Schematic modified, Save before exit ?"
+msgstr "Schématique modifiée,  Sauver avant de quitter ?"
+
+#: eeschema/schframe.cpp:503
+msgid "Draw wires and busses in any direction"
+msgstr "Tracer les fils et bus de n'importe quelle direction"
+
+#: eeschema/schframe.cpp:504
+msgid "Draw horizontal and vertical wires and busses only"
+msgstr "Autoriser fils et bus verticaux et horizontaux seulement"
+
+#: eeschema/schframe.cpp:514
+msgid "Do not show hidden pins"
+msgstr "Ne pas affichager les pins invisibles"
+
+#: eeschema/schframe.cpp:515
+msgid "Show hidden pins"
+msgstr "Force affichage des pins invisibles"
+
+#: eeschema/schframe.cpp:618
+msgid "Schematic"
+msgstr "Schématique"
 
 #: eeschema/netlist.cpp:88
 msgid "List"
@@ -6639,30 +6706,6 @@ msgstr "Impossible de créer le fichier "
 #: eeschema/viewlibs.cpp:108
 msgid "Library Browser"
 msgstr "Visualisateur de Librairies"
-
-#: eeschema/schframe.cpp:364
-msgid "Schematic modified, Save before exit ?"
-msgstr "Schématique modifiée,  Sauver avant de quitter ?"
-
-#: eeschema/schframe.cpp:503
-msgid "Draw wires and busses in any direction"
-msgstr "Tracer les fils et bus de n'importe quelle direction"
-
-#: eeschema/schframe.cpp:504
-msgid "Draw horizontal and vertical wires and busses only"
-msgstr "Autoriser fils et bus verticaux et horizontaux seulement"
-
-#: eeschema/schframe.cpp:514
-msgid "Do not show hidden pins"
-msgstr "Ne pas affichager les pins invisibles"
-
-#: eeschema/schframe.cpp:515
-msgid "Show hidden pins"
-msgstr "Force affichage des pins invisibles"
-
-#: eeschema/schframe.cpp:618
-msgid "Schematic"
-msgstr "Schématique"
 
 #: eeschema/eeredraw.cpp:95
 msgid "Sheet"
@@ -7061,6 +7104,10 @@ msgstr "Noir"
 #: eeschema/eelayer.cpp:247
 msgid "Background Color:"
 msgstr "Couleur du Fond:"
+
+#: eeschema/eeschema_config.cpp:326
+msgid "Save Project Settings"
+msgstr "Sauver Optionsr Projet"
 
 #: eeschema/erc.cpp:210
 msgid "Duplicate Sheet name"
@@ -7917,12 +7964,10 @@ msgid "Check if you want this field's text rotated 90 degrees"
 msgstr "Activer si vous voulez avoir le texte de ce champ tourné à 90°"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:136
-#: eeschema/dialog_edit_label_base.cpp:43
 msgid "Bold"
 msgstr "Gras"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:136
-#: eeschema/dialog_edit_label_base.cpp:43
 msgid "Bold Italic"
 msgstr "Gras Italique"
 
@@ -8089,54 +8134,6 @@ msgstr "Champ 8"
 #: eeschema/dialog_build_BOM_base.cpp:120
 msgid "All existing users fields"
 msgstr "Tous les champs existants"
-
-#: eeschema/pinedit.cpp:184
-msgid "This position is already occupied by another pin. Continue?"
-msgstr "Position occupée par une autre pin. Continuer ?"
-
-#: eeschema/pinedit.cpp:292
-#: eeschema/pinedit.cpp:410
-#, c-format
-msgid "Initial pin position (%d, %d)"
-msgstr "Position initiane de la pin (%d, %d)"
-
-#: eeschema/pinedit.cpp:616
-msgid "No pins!"
-msgstr "Pas de Pins!"
-
-#: eeschema/pinedit.cpp:627
-msgid "Marker Information"
-msgstr "Info Marqueur"
-
-#: eeschema/pinedit.cpp:646
-#, c-format
-msgid "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"
-msgstr "<b>Pin dupliquée %s</b> \"%s\" en position <b>(%.3f, %.3f)</b> en conflit avec pin %s \"%s\" en position <b>(%.3f, %.3f)</b>"
-
-#: eeschema/pinedit.cpp:659
-#: eeschema/pinedit.cpp:698
-#, c-format
-msgid " in part %c"
-msgstr " en composant %c"
-
-#: eeschema/pinedit.cpp:666
-#: eeschema/pinedit.cpp:705
-msgid "  of converted"
-msgstr "  de converti"
-
-#: eeschema/pinedit.cpp:668
-#: eeschema/pinedit.cpp:707
-msgid "  of normal"
-msgstr "  de normal"
-
-#: eeschema/pinedit.cpp:689
-#, c-format
-msgid "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
-msgstr "<b>Pin %s hors grille </b> \"%s\" en position <b>(%.3f, %.3f)</b>"
-
-#: eeschema/pinedit.cpp:716
-msgid "No off grid or duplicate pins were found."
-msgstr "Pas de  pins doublées ou hors grille trouvées"
 
 #: eeschema/tool_sch.cpp:37
 msgid "Open schematic project"
@@ -8319,6 +8316,50 @@ msgstr ""
 #, c-format
 msgid "File <%s> not found."
 msgstr "Fichier <%s> non trouvé"
+
+#: eeschema/dialog_annotate_base.cpp:22
+msgid "Scope"
+msgstr "Sélection"
+
+#: eeschema/dialog_annotate_base.cpp:31
+msgid "Use the &entire schematic"
+msgstr "Utiliser la schématique &entière"
+
+#: eeschema/dialog_annotate_base.cpp:34
+msgid "Use the current &page only"
+msgstr "Utiliser la &feuille active uniquement"
+
+#: eeschema/dialog_annotate_base.cpp:40
+msgid "&Keep existing annotation"
+msgstr "&Garder l'annotation existante"
+
+#: eeschema/dialog_annotate_base.cpp:43
+msgid "&Reset existing annotation"
+msgstr "&Supprimer l'annotation existante"
+
+#: eeschema/dialog_annotate_base.cpp:51
+msgid "Annotation Order"
+msgstr "Sens de Annotation"
+
+#: eeschema/dialog_annotate_base.cpp:63
+msgid "Sort Components by &X Position"
+msgstr "Trier les Composants par Position &X"
+
+#: eeschema/dialog_annotate_base.cpp:77
+msgid "Sort Components by &Y Position"
+msgstr "Trier les Composants par Position &Y"
+
+#: eeschema/dialog_annotate_base.cpp:91
+msgid "Sort Components by &Value"
+msgstr "Trier Composants par &Valeur"
+
+#: eeschema/dialog_annotate_base.cpp:113
+msgid "Clear Annotation"
+msgstr "Suppression Annotation"
+
+#: eeschema/dialog_annotate_base.cpp:116
+msgid "Annotation"
+msgstr "Annotation"
 
 #: eeschema/build_BOM.cpp:51
 msgid "Bill of Materials file (*.lst)|*.lst"
@@ -9169,10 +9210,6 @@ msgstr "Les librairies suivantes n'ont pas pu être trouvées:"
 msgid "text only had %d parameters of the required 8"
 msgstr "le texte a seulement %d paramètres sur les 8 requis"
 
-#: eeschema/eeschema_config.cpp:284
-msgid "Save Project Settings"
-msgstr "Sauver Optionsr Projet"
-
 #: eeschema/class_drc_erc_item.cpp:39
 msgid "ERC err unspecified"
 msgstr "Erreur ERC non specifiée"
@@ -9409,84 +9446,6 @@ msgstr ""
 "Une liste d'empreintes qui peuvent être utilisées pour ce composant.\n"
 "Les noms d'empreintes peuvent utiliser des caractères jockers.\n"
 "(Comme sm* pour autoriser tous les noms d'empreintes commençant par sm)."
-
-#: eeschema/dialog_options.cpp:139
-#: eeschema/dialog_options.cpp:286
-msgid "Delta Step X"
-msgstr "Incrément X"
-
-#: eeschema/dialog_options.cpp:144
-#: eeschema/dialog_options.cpp:292
-msgid "Delta Step Y"
-msgstr "Incrément Y"
-
-#: eeschema/dialog_options.cpp:213
-msgid "Draw Options:"
-msgstr "Options de Tracé:"
-
-#: eeschema/dialog_options.cpp:222
-msgid "Normal (50 mils)"
-msgstr "Normal (50 mils)"
-
-#: eeschema/dialog_options.cpp:223
-msgid "Small (25 mils)"
-msgstr "Petit (25 mils)"
-
-#: eeschema/dialog_options.cpp:224
-msgid "Very small (10 mils)"
-msgstr "Très petit (10 mils)"
-
-#: eeschema/dialog_options.cpp:225
-msgid "Special (5 mils)"
-msgstr "Spécial (5 mils)"
-
-#: eeschema/dialog_options.cpp:226
-msgid "Special (2 mils)"
-msgstr "Spécial (2 mils)"
-
-#: eeschema/dialog_options.cpp:227
-msgid "Special (1 mil)"
-msgstr "Spécial (1 mil)"
-
-#: eeschema/dialog_options.cpp:228
-msgid "Grid Size"
-msgstr "Dim Grille"
-
-#: eeschema/dialog_options.cpp:234
-msgid "Show alls"
-msgstr "Tout Afficher"
-
-#: eeschema/dialog_options.cpp:235
-msgid "Show pins"
-msgstr "Montrer Pins"
-
-#: eeschema/dialog_options.cpp:247
-msgid "millimeter"
-msgstr "millimètre"
-
-#: eeschema/dialog_options.cpp:248
-msgid "inches"
-msgstr "Pouces"
-
-#: eeschema/dialog_options.cpp:257
-msgid "Horiz/Vertical"
-msgstr "Horiz/Vertical"
-
-#: eeschema/dialog_options.cpp:259
-msgid "Wires - Bus orient"
-msgstr "Fils-Bus Orient"
-
-#: eeschema/dialog_options.cpp:282
-msgid "Auto increment params"
-msgstr "Auto incrément params"
-
-#: eeschema/dialog_options.cpp:298
-msgid "Delta Label:"
-msgstr "Incrément Label:"
-
-#: eeschema/dialog_options.cpp:315
-msgid "Default Label Size"
-msgstr "Taille Label par défaut"
 
 #: eeschema/class_libentry.cpp:67
 msgid "none"
@@ -10040,50 +9999,6 @@ msgstr "Remplissage en &avant plan"
 msgid "Fill &background"
 msgstr "Remplissage en a&rriere plan"
 
-#: eeschema/dialog_annotate_base.cpp:22
-msgid "Scope"
-msgstr "Sélection"
-
-#: eeschema/dialog_annotate_base.cpp:31
-msgid "Use the &entire schematic"
-msgstr "Utiliser la schématique &entière"
-
-#: eeschema/dialog_annotate_base.cpp:34
-msgid "Use the current &page only"
-msgstr "Utiliser la &feuille active uniquement"
-
-#: eeschema/dialog_annotate_base.cpp:40
-msgid "&Keep existing annotation"
-msgstr "&Garder l'annotation existante"
-
-#: eeschema/dialog_annotate_base.cpp:43
-msgid "&Reset existing annotation"
-msgstr "&Supprimer l'annotation existante"
-
-#: eeschema/dialog_annotate_base.cpp:51
-msgid "Annotation Order"
-msgstr "Sens de Annotation"
-
-#: eeschema/dialog_annotate_base.cpp:66
-msgid "Sort Components by &X Position"
-msgstr "Trier les Composants par Position &X"
-
-#: eeschema/dialog_annotate_base.cpp:77
-msgid "Sort Components by &Y Position"
-msgstr "Trier les Composants par Position &Y"
-
-#: eeschema/dialog_annotate_base.cpp:88
-msgid "Sort Components by &Value"
-msgstr "Trier Composants par &Valeur"
-
-#: eeschema/dialog_annotate_base.cpp:106
-msgid "Clear Annotation"
-msgstr "Suppression Annotation"
-
-#: eeschema/dialog_annotate_base.cpp:109
-msgid "Annotation"
-msgstr "Annotation"
-
 #: eeschema/save_schemas.cpp:66
 msgid "Schematic Files"
 msgstr "Fichiers Schématiques"
@@ -10116,6 +10031,54 @@ msgstr " a été créé par une version plus ancienne de Eeschema. Il sera enreg
 #: eeschema/load_one_schematic_file.cpp:382
 msgid "Done Loading "
 msgstr "Chargement terminé "
+
+#: eeschema/dialog_eeschema_options_base.cpp:34
+msgid "Mesurement &units:"
+msgstr "&Unités de mesure:"
+
+#: eeschema/dialog_eeschema_options_base.cpp:46
+msgid "&Grid size:"
+msgstr "Dim &Grille:"
+
+#: eeschema/dialog_eeschema_options_base.cpp:59
+msgid "Default &line width:"
+msgstr "Epaiss. &ligne par défaut:"
+
+#: eeschema/dialog_eeschema_options_base.cpp:70
+msgid "Default text &size:"
+msgstr "Dim. &texte par défaut:"
+
+#: eeschema/dialog_eeschema_options_base.cpp:81
+msgid "Repeat draw item &horizontal displacement:"
+msgstr "Déplacement &horizontal en répétition d'items:"
+
+#: eeschema/dialog_eeschema_options_base.cpp:92
+msgid "Repeat draw item &vertical displacement:"
+msgstr "Déplacement &vertical en répétition d'items:"
+
+#: eeschema/dialog_eeschema_options_base.cpp:103
+msgid "&Repeat label increment:"
+msgstr "Incémentation des labels en répétition:"
+
+#: eeschema/dialog_eeschema_options_base.cpp:118
+msgid "Show g&rid"
+msgstr "Afficher g&rille"
+
+#: eeschema/dialog_eeschema_options_base.cpp:122
+msgid "Show hi&dden pins"
+msgstr "Force affichage des pins &invisibles"
+
+#: eeschema/dialog_eeschema_options_base.cpp:126
+msgid "Enable automatic &panning"
+msgstr "Active le \"&panning\" automatique"
+
+#: eeschema/dialog_eeschema_options_base.cpp:130
+msgid "Allow buses and wires to be placed in any &orientation"
+msgstr "Autorise les bus et fils a être placés en &orientation quelconque"
+
+#: eeschema/dialog_eeschema_options_base.cpp:134
+msgid "Show p&age limits"
+msgstr " Afficher limites de p&age"
 
 #: eeschema/component_wizard/dialog_component_setup.cpp:137
 msgid "Quick KICAD Library Component Builder"
@@ -11110,7 +11073,7 @@ msgstr "Masque soudure composant (*.GTS)|*.GTS;*.gts|"
 
 #: gerbview/files.cpp:122
 msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
-msgstr ""
+msgstr "Simple face, CMS coté Cuivre."
 
 #: gerbview/files.cpp:123
 msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
@@ -11665,6 +11628,10 @@ msgstr "Tous les fichiers (*)|*"
 msgid " (\"):"
 msgstr " (\"):"
 
+#: common/common.cpp:257
+msgid "inches"
+msgstr "Pouces"
+
 #: common/common.cpp:265
 msgid "centimeters"
 msgstr "centimètres"
@@ -12016,12 +11983,10 @@ msgid "Back View"
 msgstr "Vue arrière"
 
 #: 3d-viewer/3d_canvas.cpp:353
-#: 3d-viewer/3d_toolbar.cpp:85
 msgid "Move left <-"
 msgstr "Vers la gauche <-"
 
 #: 3d-viewer/3d_canvas.cpp:358
-#: 3d-viewer/3d_toolbar.cpp:88
 msgid "Move right ->"
 msgstr "Vers la droite ->"
 
@@ -12315,7 +12280,6 @@ msgid "Exchange Modules"
 msgstr "Echange modules:"
 
 #: pcbnew/dialog_edit_module_for_Modedit_base.h:105
-#: pcbnew/dialog_edit_module_for_BoardEditor_base.h:118
 msgid "Module properties"
 msgstr "Propriétés du Module"
 
@@ -12330,10 +12294,6 @@ msgstr "Edition Globale de Pistes et Vias"
 #: eeschema/sheet.h:47
 msgid "Sheet properties"
 msgstr "Propriétés de la feuille"
-
-#: eeschema/dialog_options.h:55
-msgid "General Options"
-msgstr "Options Générales"
 
 #: eeschema/eelayer.h:35
 msgid "EESchema Colors"
@@ -12451,6 +12411,10 @@ msgstr "Propriétés des Champs"
 msgid "Pin Properties"
 msgstr "Propriétés des Pins"
 
+#: eeschema/dialog_annotate_base.h:77
+msgid "Annotate Schematic"
+msgstr "Annotation de la Schématique"
+
 #: eeschema/dialog_edit_component_in_lib_base.h:107
 msgid "Lib Component Properties"
 msgstr "Propriétés du composant librairie"
@@ -12462,6 +12426,10 @@ msgstr "Propriétés de l'Elément Graphique"
 #: eeschema/dialog_erc_base.h:94
 msgid "EESchema Erc"
 msgstr "EESchema Erc"
+
+#: eeschema/dialog_eeschema_options_base.h:77
+msgid "Schematic Editor Options"
+msgstr "Options de l'Editeur de Schematique"
 
 #: eeschema/dialog_build_BOM_base.h:69
 msgid "List of Material"
@@ -12623,6 +12591,42 @@ msgstr "Options d'Affichage"
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "Delta Step X"
+#~ msgstr "Incrément X"
+#~ msgid "Delta Step Y"
+#~ msgstr "Incrément Y"
+#~ msgid "Draw Options:"
+#~ msgstr "Options de Tracé:"
+#~ msgid "Normal (50 mils)"
+#~ msgstr "Normal (50 mils)"
+#~ msgid "Small (25 mils)"
+#~ msgstr "Petit (25 mils)"
+#~ msgid "Very small (10 mils)"
+#~ msgstr "Très petit (10 mils)"
+#~ msgid "Special (5 mils)"
+#~ msgstr "Spécial (5 mils)"
+#~ msgid "Special (2 mils)"
+#~ msgstr "Spécial (2 mils)"
+#~ msgid "Special (1 mil)"
+#~ msgstr "Spécial (1 mil)"
+#~ msgid "Show alls"
+#~ msgstr "Tout Afficher"
+#~ msgid "Show pins"
+#~ msgstr "Montrer Pins"
+#~ msgid "millimeter"
+#~ msgstr "millimètre"
+#~ msgid "Horiz/Vertical"
+#~ msgstr "Horiz/Vertical"
+#~ msgid "Wires - Bus orient"
+#~ msgstr "Fils-Bus Orient"
+#~ msgid "Auto increment params"
+#~ msgstr "Auto incrément params"
+#~ msgid "Delta Label:"
+#~ msgstr "Incrément Label:"
+#~ msgid "Default Label Size"
+#~ msgstr "Taille Label par défaut"
+#~ msgid "General Options"
+#~ msgstr "Options Générales"
 #~ msgid ""
 #~ "Check this option for power symbols.\n"
 #~ "Power symbols have specific properties"
@@ -12756,8 +12760,6 @@ msgstr "Ajustage opt Page"
 #~ msgstr "Ceci est l'espace entre pads et le masque"
 #~ msgid "Schematic hierarchy navigator"
 #~ msgstr "Navigation dans la hiérarchie"
-#~ msgid "Schematic Annotation"
-#~ msgstr "Annotation des composants"
 #~ msgid "Show Hidden Pins"
 #~ msgstr "Force affichage des pins invisibles"
 #~ msgid "Setting Libraries, Directories and others..."
@@ -13038,8 +13040,6 @@ msgstr "Ajustage opt Page"
 #~ msgstr "Entrer la largeur de piste courante"
 #~ msgid "This is the clearance between tracks, vias and pads for DRC."
 #~ msgstr "Ceci est l'isolation entre pistes, vias et pads pour le calcul DRC."
-#~ msgid "Delete units"
-#~ msgstr "Supprimer  unité"
 #~ msgid "Create pins for convert items."
 #~ msgstr "Créér les pins des unitées converties."
 #~ msgid "Part as \"De Morgan\" anymore"

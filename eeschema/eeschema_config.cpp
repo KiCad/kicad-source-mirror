@@ -108,7 +108,7 @@ void WinEDA_SchematicFrame::OnSetOptions( wxCommandEvent& event )
 
     DIALOG_EESCHEMA_OPTIONS dlg( this );
 
-    wxLogDebug( _( "Current grid array index %d." ),
+    wxLogDebug( wxT( "Current grid array index %d." ),
                 grid_list.Index( GetBaseScreen()->GetGrid() ) );
     units.Add( GetUnitsLabel( INCHES ) );
     units.Add( GetUnitsLabel( MILLIMETRE ) );

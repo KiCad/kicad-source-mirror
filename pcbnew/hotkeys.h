@@ -21,11 +21,11 @@ enum hotkey_id_commnand {
     HK_MOVE_FOOTPRINT,
     HK_DRAG_FOOTPRINT,
     HK_FLIP_FOOTPRINT,
-	  HK_GET_AND_MOVE_FOOTPRINT,
+    HK_GET_AND_MOVE_FOOTPRINT,
     HK_LOCK_UNLOCK_FOOTPRINT,
     HK_ADD_VIA,
-	  HK_ADD_MICROVIA,
-	  HK_END_TRACK,
+    HK_ADD_MICROVIA,
+    HK_END_TRACK,
     HK_SAVE_BOARD, HK_LOAD_BOARD,
     HK_SWITCH_UNITS,
     HK_SWITCH_TRACK_DISPLAY_MODE,
@@ -56,9 +56,11 @@ enum hotkey_id_commnand {
 
 // List of hotkey descriptors for pcbnew
 extern struct Ki_HotkeyInfoSectionDescriptor s_Pcbnew_Editor_Hokeys_Descr[];
+
 // List of hotkey descriptors for the board editor only
 extern struct Ki_HotkeyInfoSectionDescriptor s_Board_Editor_Hokeys_Descr[];
+
 // List of hotkey descriptors for the footprint editor only
 extern struct Ki_HotkeyInfoSectionDescriptor s_Module_Editor_Hokeys_Descr[];
 
-#endif		// KOTKEYS_H
+#endif      // KOTKEYS_H
