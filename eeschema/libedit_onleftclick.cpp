@@ -39,6 +39,11 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 DrawEntry = NULL;
                 break;
 
+            case COMPONENT_PIN_DRAW_TYPE:
+                PlacePin( DC );
+                DrawEntry = NULL;
+                break;
+
             default:
                 EndDrawGraphicItem( DC );
                 break;
@@ -157,41 +162,38 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 {
     wxPoint        pos = GetPosition();
-    LIB_DRAW_ITEM* DrawEntry = m_drawItem;
 
     if( m_component == NULL )
         return;
 
-    if( ( DrawEntry == NULL ) || ( DrawEntry->m_Flags == 0 ) )
+    if( ( m_drawItem == NULL ) || ( m_drawItem->m_Flags == 0 ) )
     {   // We can locate an item
-        DrawEntry = m_drawItem =
+        m_drawItem =
             m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
                                          GetScreen()->m_MousePosition );
-        if( DrawEntry == NULL )
+        if( m_drawItem == NULL )
         {
-            DrawEntry = m_drawItem =
+            m_drawItem =
                 m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
                                              GetScreen()->m_Curseur );
         }
-        if( DrawEntry == NULL )
+        if( m_drawItem == NULL )
         {
             EditComponentProperties();
         }
     }
 
-    if( DrawEntry )
-        DrawEntry->DisplayInfo( this );
+    if( m_drawItem )
+        m_drawItem->DisplayInfo( this );
     else
         return;
 
-    m_drawItem = DrawEntry;
-
     DrawPanel->m_IgnoreMouseEvents = TRUE;
 
-    switch( DrawEntry->Type() )
+    switch( m_drawItem->Type() )
     {
     case COMPONENT_PIN_DRAW_TYPE:
-        if( DrawEntry->m_Flags == 0 )
+        if( m_drawItem->m_Flags == 0 )
         {
             wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
             cmd.SetId( ID_LIBEDIT_EDIT_PIN );
@@ -202,35 +204,35 @@ void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
     case COMPONENT_ARC_DRAW_TYPE:
     case COMPONENT_CIRCLE_DRAW_TYPE:
     case COMPONENT_RECT_DRAW_TYPE:
-        if( DrawEntry->m_Flags == 0 )
+        if( m_drawItem->m_Flags == 0 )
         {
-            EditGraphicSymbol( DC, DrawEntry );
+            EditGraphicSymbol( DC, m_drawItem );
         }
         break;
 
     case COMPONENT_LINE_DRAW_TYPE:
     case COMPONENT_POLYLINE_DRAW_TYPE:
-        if( DrawEntry->m_Flags == 0 )
+        if( m_drawItem->m_Flags == 0 )
         {
-            EditGraphicSymbol( DC, DrawEntry );
+            EditGraphicSymbol( DC, m_drawItem );
         }
-        else if( DrawEntry->m_Flags & IS_NEW )
+        else if( m_drawItem->m_Flags & IS_NEW )
         {
             EndDrawGraphicItem( DC );
         }
         break;
 
     case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
-        if( DrawEntry->m_Flags == 0 )
+        if( m_drawItem->m_Flags == 0 )
         {
-            EditSymbolText( DC, DrawEntry );
+            EditSymbolText( DC, m_drawItem );
         }
         break;
 
     case COMPONENT_FIELD_DRAW_TYPE:
-        if( DrawEntry->m_Flags == 0 )
+        if( m_drawItem->m_Flags == 0 )
         {
-            EditField( DC, (LIB_FIELD*) DrawEntry );
+            EditField( DC, (LIB_FIELD*) m_drawItem );
         }
         break;
 
@@ -239,7 +241,7 @@ void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         wxString msg;
         msg.Printf( wxT( "WinEDA_LibeditFrame::OnLeftDClick Error: unknown \
 StructType %d" ),
-                    DrawEntry->Type() );
+                    m_drawItem->Type() );
         DisplayError( this, msg );
         break;
     }

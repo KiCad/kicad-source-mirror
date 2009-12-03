@@ -43,6 +43,7 @@ void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
     if( m_drawItem == NULL || m_drawItem->Type() != COMPONENT_PIN_DRAW_TYPE )
         return;
 
+    int item_flags = m_drawItem->m_Flags;       // save flags to restore them after editing
     LIB_PIN* pin = (LIB_PIN*) m_drawItem;
 
     DIALOG_LIB_EDIT_PIN dlg( this );
@@ -131,6 +132,9 @@ void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
     }
 
     pin->EnableEditMode( false, g_EditPinByPinIsOn );
+
+    // Restore pin flags, that can be changed by the dialog editor
+    pin->m_Flags = item_flags;
 }
 
 

@@ -12,6 +12,14 @@ email address.
     This makes it easier to preview the page in a browser.  Then autogenerate
     the *.h file from the html using a CMake script.
 
+2009-Dec-2 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+Compiler warning, object name, bug, and string fixes.
+* Fixed EESchema options dialog focus bug so escape key now works in GTK.
+* Rename schematic objects for improved readability.
+* Fixed GCC compiler warnings in plot code.
+* Added paragraph in UIpolicies.txt about setting dialog box sizes.
+* Lots of message box string clean up.
 
 2009-Nov-05 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================

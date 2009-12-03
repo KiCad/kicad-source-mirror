@@ -2,10 +2,9 @@
 <!-- This file is used to autogenerate a *.h file, but you can load it into a browser to preview -->
 <h1>Freerouter Guidelines:</h1>
 <ol>
-<li> in pcbnew: establish the number of layers, and save the new *.brd file.</li><br>
-
-<li> in a text editor: load the board (*.brd) file, and edit the layer names and types.
-     These should look something like this:
+<li> in pcbnew, using the Layers Setup dialog:</li><br>
+ <li>choose the number of layers, and enter the name of each layer.</li><br>
+    These should look something like this:
 <ul>
     <li>Layer[0] Back signal</li>
     <li>Layer[1] Power power</li>
@@ -13,14 +12,13 @@
     <li>Layer[3] H1_Signal signal</li>
     <li>Layer[4] Ground power</li>
     <li>Layer[15] Front signal</li>
-
 </ul><br>
-    Notice that after the layer name there is a layer type field, either 'signal' or 'power'.
+    Notice that after the layer name there is a layer type field, either 'signal' or 'power'.<br>
     Any layer identified as 'power' will be removed from the layer menu in Freerouter,
     as this will be assumed to contain a power zone.
-</li><br>
+</li><br><br>
 
-<li> in pcbnew: re-load the board, and establish board perimeter.</li><br>
+<li> in pcbnew:  establish board perimeter.</li><br>
 
 <li> in pcbnew: load in the netlist so you have all the components defined and instantiated.</li><br>
 

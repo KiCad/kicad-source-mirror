@@ -65,7 +65,7 @@ static Ki_HotkeyInfo HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F'
                                  + GR_KB_CTRL );
 static Ki_HotkeyInfo HkBackspace( wxT( "Delete track segment" ), HK_BACK_SPACE,
                                   WXK_BACK );
-static Ki_HotkeyInfo HkAddNewTrack( wxT( "Add New Track/Segment" ), HK_ADD_NEW_TRACK, 'X' );
+static Ki_HotkeyInfo HkAddNewTrack( wxT( "Add new track" ), HK_ADD_NEW_TRACK, 'X' );
 static Ki_HotkeyInfo HkAddVia( wxT( "Add Via" ), HK_ADD_VIA, 'V' );
 static Ki_HotkeyInfo HkAddMicroVia( wxT( "Add MicroVia" ), HK_ADD_MICROVIA, 'V'
                                     + GR_KB_CTRL );
@@ -97,7 +97,6 @@ static Ki_HotkeyInfo HkSwitchUnits( wxT( "Switch Units" ), HK_SWITCH_UNITS, 'U'
 static Ki_HotkeyInfo HkTrackDisplayMode( wxT( "Track Display Mode" ),
                                          HK_SWITCH_TRACK_DISPLAY_MODE, 'K' );
 static Ki_HotkeyInfo HkAddModule( wxT( "Add Module" ), HK_ADD_MODULE, 'O' );
-static Ki_HotkeyInfo HkAddTrack( wxT( "Add Track or Via" ), HK_ADD_TRACK, 'J' );
 
 // List of common hotkey descriptors
 Ki_HotkeyInfo
@@ -122,7 +121,7 @@ Ki_HotkeyInfo* s_board_edit_Hotkey_List[] =
     &HkSwitch2InnerLayer2,     &HkSwitch2InnerLayer3,        &HkSwitch2InnerLayer4,
     &HkSwitch2InnerLayer5,     &HkSwitch2InnerLayer6,        &HkSwitch2ComponentLayer,
     &HkSwitch2NextCopperLayer, &HkSwitch2PreviousCopperLayer,&HkAddModule,
-    &HkAddTrack,               NULL
+    NULL
 };
 
 // List of hotkey descriptors for the module editor
@@ -318,11 +317,6 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         GetEventHandler()->ProcessEvent( cmd );
         break;
 
-    case HK_ADD_TRACK:
-        cmd.SetId( ID_TRACK_BUTT );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
     case HK_ZOOM_AUTO:
         cmd.SetId( ID_ZOOM_PAGE );
         GetEventHandler()->ProcessEvent( cmd );
@@ -468,9 +462,18 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         break;
 
     case HK_ADD_NEW_TRACK: // Start new track
-        if( m_ID_current_state == ID_TRACK_BUTT && GetScreen()->m_Active_Layer
-            <= CMP_N )
+        if( GetScreen()->m_Active_Layer > CMP_N )
+            break;
+
+        if( m_ID_current_state != ID_TRACK_BUTT && ItemFree )
         {
+            cmd.SetId( ID_TRACK_BUTT );
+            GetEventHandler()->ProcessEvent( cmd );
+        }
+
+        if( m_ID_current_state != ID_TRACK_BUTT )
+            break;
+ 
             if( ItemFree ) // no track in progress: 
             {
                 TRACK* track = Begin_Route( NULL, DC );
@@ -487,7 +490,6 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
                     SetCurItem( track, false );
                 DrawPanel->m_AutoPAN_Request = true;
             }
-        }
         break;
 
     // Footprint edition:
