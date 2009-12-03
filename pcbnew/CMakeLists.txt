@@ -188,7 +188,7 @@ if(APPLE)
     set(MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
-
+# Create a C++ compilable string initializer containing html text into a *.h file:
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help_html.h
     COMMAND $(CMAKE_COMMAND)
@@ -200,9 +200,10 @@ add_custom_command(
        from ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help.html"
     )
 
-#add_dependencies( dialog_freeroute_exchange.cpp ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help_html.h )
-
-set_source_files_properties( dialog_freeroute_exchange.cpp PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help_html.h )
+set_source_files_properties( dialog_freeroute_exchange.cpp
+    PROPERTIES
+        OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help_html.h
+    )
 
 add_executable(pcbnew WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS}
     ${PCBNEW_EXTRA_SRCS}
