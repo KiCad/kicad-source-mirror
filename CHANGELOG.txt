@@ -5,6 +5,14 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2009-Dec-3 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew
+    Make the source file to the specctra freerouter help panel be html, not *.h
+    This makes it easier to preview the page in a browser.  Then autogenerate
+    the *.h file from the html using a CMake script.
+
+
 2009-Nov-05 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++pcbnew

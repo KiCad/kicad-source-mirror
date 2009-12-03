@@ -41,7 +41,7 @@ set(PCBNEW_SRCS
     dialog_edit_module_text_base.cpp
     dialog_exchange_modules_base.cpp
     dialog_freeroute_exchange.cpp
-	dialog_freeroute_exchange_base.cpp
+    dialog_freeroute_exchange_base.cpp
 #   dialog_gendrill.cpp
     dialog_general_options.cpp
     dialog_general_options_BoardEditor_base.cpp
@@ -188,7 +188,26 @@ if(APPLE)
     set(MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
-add_executable(pcbnew WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS} ${PCBNEW_EXTRA_SRCS} ${PCBNEW_RESOURCES})
+
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help_html.h
+    COMMAND $(CMAKE_COMMAND)
+        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help.html
+        -DoutputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help_html.h
+        -P ${CMAKE_MODULE_PATH}/Html2C.cmake
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help.html
+    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help_html.h
+       from ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help.html"
+    )
+
+#add_dependencies( dialog_freeroute_exchange.cpp ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help_html.h )
+
+set_source_files_properties( dialog_freeroute_exchange.cpp PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help_html.h )
+
+add_executable(pcbnew WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS}
+    ${PCBNEW_EXTRA_SRCS}
+    ${PCBNEW_RESOURCES}
+    )
 
 if(APPLE)
     set_target_properties(pcbnew PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
