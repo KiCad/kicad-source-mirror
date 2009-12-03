@@ -65,6 +65,7 @@ static Ki_HotkeyInfo HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F'
                                  + GR_KB_CTRL );
 static Ki_HotkeyInfo HkBackspace( wxT( "Delete track segment" ), HK_BACK_SPACE,
                                   WXK_BACK );
+static Ki_HotkeyInfo HkAddNewTrack( wxT( "Add New Track/Segment" ), HK_ADD_NEW_TRACK, 'X' );
 static Ki_HotkeyInfo HkAddVia( wxT( "Add Via" ), HK_ADD_VIA, 'V' );
 static Ki_HotkeyInfo HkAddMicroVia( wxT( "Add MicroVia" ), HK_ADD_MICROVIA, 'V'
                                     + GR_KB_CTRL );
@@ -111,8 +112,9 @@ Ki_HotkeyInfo
 Ki_HotkeyInfo* s_board_edit_Hotkey_List[] =
 {
     &HkTrackDisplayMode,       &HkDelete,
-    &HkBackspace,              &HkAddVia,                    &HkAddMicroVia,
-    &HkEndTrack,           &HkMoveFootprint,
+    &HkBackspace,
+    &HkAddNewTrack,            &HkAddVia,                 &HkAddMicroVia,
+    &HkEndTrack,               &HkMoveFootprint,
     &HkFlipFootprint,          &HkRotateFootprint,           &HkDragFootprint,
     &HkGetAndMoveFootprint,    &HkLock_Unlock_Footprint,     &HkSavefile,
     &HkLoadfile,               &HkFindItem,                  &HkSwitch2CopperLayer,
@@ -463,6 +465,29 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         Other_Layer_Route( (TRACK*) GetCurItem(), DC ); // place via and switch layer
         if( DisplayOpt.ContrastModeDisplay )
             GetScreen()->SetRefreshReq();
+        break;
+
+    case HK_ADD_NEW_TRACK: // Start new track
+        if( m_ID_current_state == ID_TRACK_BUTT && GetScreen()->m_Active_Layer
+            <= CMP_N )
+        {
+            if( ItemFree ) // no track in progress: 
+            {
+                TRACK* track = Begin_Route( NULL, DC );
+                SetCurItem( track );
+                if( track )
+                    DrawPanel->m_AutoPAN_Request = true;
+            }
+            else if( GetCurItem()->m_Flags & IS_NEW )
+            {
+                TRACK* track = Begin_Route( (TRACK*) GetCurItem(), DC );
+                // SetCurItem() must not write to the msg panel
+                // because a track info is displayed while moving the mouse cursor
+                if( track )  // A new segment was created
+                    SetCurItem( track, false );
+                DrawPanel->m_AutoPAN_Request = true;
+            }
+        }
         break;
 
     // Footprint edition:
