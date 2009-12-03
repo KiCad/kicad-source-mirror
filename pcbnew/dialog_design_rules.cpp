@@ -641,6 +641,8 @@ void DIALOG_DESIGN_RULES::OnOkButtonClick( wxCommandEvent& event )
 
     EndModal( wxID_OK );
 
+    m_Pcb->SetCurrentNetClass( NETCLASS::Default );
+    m_Parent->m_TrackAndViasSizesList_Changed = true;
     m_Parent->AuxiliaryToolBar_Update_UI();
 }
 

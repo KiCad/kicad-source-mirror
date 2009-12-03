@@ -597,9 +597,10 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
         /* edge in progress : the current corner coordinate was set by Show_New_Edge_While_Move_Mouse */
         if( zone->GetCornerPosition( ii - 1 ) != zone->GetCornerPosition( ii ) )
         {
-            if( (Drc_On && m_drc->Drc( zone, ii - 1 ) == OK_DRC)
-                || !Drc_On || !zone->IsOnCopperLayer() ) // Ok, we can add a new corner
-            {
+            if( !Drc_On || !zone->IsOnCopperLayer()
+                || ( m_drc->Drc( zone, ii - 1 ) == OK_DRC )
+                )
+            {   // Ok, we can add a new corner
                 zone->AppendCorner( GetScreen()->m_Curseur );
                 SetCurItem( zone );     // calls DisplayInfo().
             }

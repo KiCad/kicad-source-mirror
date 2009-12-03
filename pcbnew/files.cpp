@@ -265,6 +265,12 @@ this file again."));
      */
     GetBoard()->SetVisibleLayers( GetBoard()->GetEnabledLayers() );
 
+    // Update info shown by the horizontal toolbars
+    GetBoard()->SetCurrentNetClass( NETCLASS::Default );
+    m_TrackAndViasSizesList_Changed = true;
+    ReCreateLayerBox( NULL );
+    AuxiliaryToolBar_Update_UI();
+
     // Display the loaded board:
     DrawPanel->Refresh( true);
     wxSafeYield();      // Needed if we want to see the board now.

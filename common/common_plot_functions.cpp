@@ -273,7 +273,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
                 plotter->text( pos, color,
-                               msg.GetData(), TEXT_ORIENT_HORIZ, text_size,
+                               msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                thickness, italic, false );
                 break;
@@ -286,7 +286,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                     msg = WsItem->m_Legende;
                 msg << screen->m_ScreenNumber;
                 plotter->text( pos, color,
-                               msg.GetData(), TEXT_ORIENT_HORIZ, text_size,
+                               msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                thickness, italic, false );
                 break;
@@ -296,7 +296,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                     msg = WsItem->m_Legende;
                 msg << screen->m_NumberOfScreen;
                 plotter->text( pos, color,
-                               msg.GetData(), TEXT_ORIENT_HORIZ, text_size,
+                               msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                thickness, italic, false );
                 break;
@@ -306,7 +306,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 if( !msg.IsEmpty() )
                 {
                     plotter->text( pos, color,
-                                   msg.GetData(), TEXT_ORIENT_HORIZ, text_size1_5,
+                                   msg, TEXT_ORIENT_HORIZ, text_size1_5,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
                 }
@@ -317,7 +317,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 if( !msg.IsEmpty() )
                 {
                     plotter->text( pos, color,
-                                   msg.GetData(), TEXT_ORIENT_HORIZ, text_size1_5,
+                                   msg, TEXT_ORIENT_HORIZ, text_size1_5,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
                 }
@@ -328,7 +328,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 if( !msg.IsEmpty() )
                 {
                     plotter->text( pos, color,
-                                   msg.GetData(), TEXT_ORIENT_HORIZ, text_size3,
+                                   msg, TEXT_ORIENT_HORIZ, text_size3,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
                     pos.x = (Sheet->m_LeftMargin + 1260) * conv_unit;
@@ -345,7 +345,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 if( !msg.IsEmpty() )
                 {
                     plotter->text( pos, color,
-                                   msg.GetData(), TEXT_ORIENT_HORIZ, text_size,
+                                   msg, TEXT_ORIENT_HORIZ, text_size,
                                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
                 }
@@ -356,7 +356,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 if( !msg.IsEmpty() )
                 {
                     plotter->text( pos, color,
-                                   msg.GetData(), TEXT_ORIENT_HORIZ, text_size,
+                                   msg, TEXT_ORIENT_HORIZ, text_size,
                                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
                 }
@@ -367,7 +367,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 if( !msg.IsEmpty() )
                 {
                     plotter->text( pos, color,
-                                   msg.GetData(), TEXT_ORIENT_HORIZ, text_size,
+                                   msg, TEXT_ORIENT_HORIZ, text_size,
                                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
                 }
@@ -402,13 +402,13 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 if( !msg.IsEmpty() )
                 {
                     plotter->text( pos, color,
-                                   msg.GetData(), TEXT_ORIENT_HORIZ, text_size3,
+                                   msg, TEXT_ORIENT_HORIZ, text_size3,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
                     pos.x = (Sheet->m_LeftMargin + 1260) * conv_unit;
                     pos.y = (Sheet->m_TopMargin + 270) * conv_unit;
                     plotter->text( pos, color,
-                                   msg.GetData(), 1800, text_size2,
+                                   msg, 1800, text_size2,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
                 }
@@ -556,7 +556,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
         if( !msg.IsEmpty() )
         {
             plotter->text( pos, color,
-                           msg.GetData(), TEXT_ORIENT_HORIZ, text_size,
+                           msg, TEXT_ORIENT_HORIZ, text_size,
                            GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                            thickness, italic, bold );
         }
