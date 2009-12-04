@@ -50,7 +50,6 @@ enum hotkey_id_commnand {
     HK_SWITCH_LAYER_TO_INNER13,
     HK_SWITCH_LAYER_TO_INNER14,
     HK_ADD_MODULE,
-    HK_ADD_TRACK,
     HK_MOVE_TRACK,
     HK_SLIDE_TRACK
 };
