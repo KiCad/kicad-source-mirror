@@ -34,6 +34,8 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, WinEDA_PcbFrame* parent ) 
     {
         GetSizer()->SetSizeHints( this );
     }
+    
+    Centre();
 }
 
 

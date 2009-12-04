@@ -235,7 +235,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_sdbSizer2Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer2->AddButton( m_sdbSizer2Cancel );
 	m_sdbSizer2->Realize();
-	bMainSizer->Add( m_sdbSizer2, 0, wxEXPAND, 5 );
+	bMainSizer->Add( m_sdbSizer2, 0, wxEXPAND|wxALL, 5 );
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();

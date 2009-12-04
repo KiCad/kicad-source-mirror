@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-03 10:25+0100\n"
-"PO-Revision-Date: 2009-12-03 10:25+0100\n"
+"PO-Revision-Date: 2009-12-04 08:16+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -9998,7 +9998,7 @@ msgstr "Ajouter à toutes les &parts du boitier"
 
 #: eeschema/dialog_lib_edit_pin_base.cpp:137
 msgid "Add to all alternate &body styles (DeMorgan)"
-msgstr "Ajuoter à toutes les forme &alternatives (DeMorgan)"
+msgstr "Ajouter à toutes les forme &alternatives (DeMorgan)"
 
 #: eeschema/dialog_lib_edit_pin_base.cpp:141
 msgid "&Visible"
