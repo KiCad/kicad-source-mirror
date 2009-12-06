@@ -301,10 +301,8 @@ static void DrawMovePin( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     bool    showPinText = true;
 
     /* Erase pin in old position */
-    if( erase || CurrentPin->IsNew() )
+    if( erase )
     {
-        wxLogDebug( wxT( "Initial pin position (%d, %d)" ),
-                    PinPreviousPos.x, PinPreviousPos.y );
         CurrentPin->m_Pos = PinPreviousPos;
         CurrentPin->Draw( panel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
                           &showPinText, DefaultTransformMatrix );
@@ -379,9 +377,6 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
 
     pin = new LIB_PIN( m_component );
 
-    if( pin == NULL )
-        return;
-
     m_drawItem = pin;
 
     pin->m_Flags   = IS_NEW;
@@ -416,13 +411,7 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
     else
         pin->m_Attributs |= PINNOTDRAW;
 
-    if( DC )
-        pin->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, wxCOPY, &showPinText,
-                   DefaultTransformMatrix );
-
     PinPreviousPos = pin->m_Pos;
-    wxLogDebug( wxT( "Initial pin position (%d, %d)" ),
-                PinPreviousPos.x, PinPreviousPos.y );
     DrawPanel->m_IgnoreMouseEvents = true;
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetId( ID_LIBEDIT_EDIT_PIN );
@@ -432,13 +421,17 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
 
     if (pin->m_Flags & IS_CANCELLED)
     {
-        DeletePin(DC, m_component, pin);
+        DeletePin(NULL, m_component, pin);
         m_drawItem = NULL;
     }
     else
     {
         DrawPanel->ManageCurseur = DrawMovePin;
         DrawPanel->ForceCloseManageCurseur = AbortPinMove;
+        if( DC )
+            pin->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, wxCOPY, &showPinText,
+                       DefaultTransformMatrix );
+
     }
 }
 

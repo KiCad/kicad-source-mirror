@@ -81,7 +81,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
         if( DrawEntry->m_Flags == 0 )
         {
             msg = AddHotkeyName( _( "Move Arc " ), s_Libedit_Hokeys_Descr,
-                                 HK_MOVE_PIN );
+                                 HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_arc_xpm );
         }
@@ -100,7 +100,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
         if( DrawEntry->m_Flags == 0 )
         {
             msg = AddHotkeyName( _( "Move Circle " ), s_Libedit_Hokeys_Descr,
-                                 HK_MOVE_PIN );
+                                 HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_circle_xpm );
         }
@@ -119,7 +119,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
         if( DrawEntry->m_Flags == 0 )
         {
             msg = AddHotkeyName( _( "Move Rect " ), s_Libedit_Hokeys_Descr,
-                                 HK_MOVE_PIN );
+                                 HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_rectangle_xpm );
         }
@@ -138,7 +138,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
         if( DrawEntry->m_Flags == 0 )
         {
             msg = AddHotkeyName( _( "Move Text " ), s_Libedit_Hokeys_Descr,
-                                 HK_MOVE_PIN );
+                                 HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_text_xpm );
         }
@@ -159,7 +159,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
         if( DrawEntry->m_Flags == 0 )
         {
             msg = AddHotkeyName( _( "Move Line " ), s_Libedit_Hokeys_Descr,
-                                 HK_MOVE_PIN );
+                                 HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_line_xpm );
         }
@@ -194,7 +194,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
         if( DrawEntry->m_Flags == 0 )
         {
             msg = AddHotkeyName( _( "Move Field " ), s_Libedit_Hokeys_Descr,
-                                 HK_MOVE_PIN );
+                                 HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_field_xpm );
         }
@@ -226,12 +226,16 @@ void AddMenusForPin( wxMenu*              PopMenu,
 {
     bool selected    = (Pin->m_Selected & IS_SELECTED) != 0;
     bool not_in_move = (Pin->m_Flags == 0);
+    wxString msg;
 
     if( not_in_move )
+    {
+        msg = AddHotkeyName( _( "Move Pin " ), s_Libedit_Hokeys_Descr,
+                                 HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
-                      _( "Move Pin" ), move_xpm );
+                      msg, move_xpm );
+    }
 
-    wxString msg;
     msg = AddHotkeyName( _( "Edit Pin " ), s_Libedit_Hokeys_Descr, HK_EDIT_PIN );
     ADD_MENUITEM( PopMenu, ID_LIBEDIT_EDIT_PIN, msg, edit_xpm );
 

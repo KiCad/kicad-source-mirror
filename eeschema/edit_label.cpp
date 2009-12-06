@@ -195,10 +195,10 @@ void WinEDA_SchematicFrame::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 
 /*************************************************************************/
 SCH_TEXT* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
-{
 /*************************************************************************/
 /* Routine to create new text struct (GraphicText, label or Glabel).
  */
+{
     SCH_TEXT* NewText = NULL;
 
     g_ItemToRepeat = NULL;

@@ -101,7 +101,7 @@ static Ki_HotkeyInfo HkNextSearch( wxT( "Next Search" ), HK_NEXT_SEARCH,
 static Ki_HotkeyInfo HkInsertPin( wxT( "Repeat Pin" ), HK_REPEAT_LAST,
                                   WXK_INSERT );
 static Ki_HotkeyInfo HkEditPin( wxT( "Edit Pin" ), HK_EDIT_PIN, 'E' );
-static Ki_HotkeyInfo HkMovePin( wxT( "Move Pin" ), HK_MOVE_PIN, 'M' );
+static Ki_HotkeyInfo HkMovePin( wxT( "Move Pin" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
 static Ki_HotkeyInfo HkDeletePin( wxT( "Delete Pin" ), HK_DELETE_PIN,
                                   WXK_DELETE );
 
@@ -650,7 +650,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
         }
         break;
 
-    case HK_MOVE_PIN:
+    case HK_LIBEDIT_MOVE_GRAPHIC_ITEM:
         m_drawItem = LocateItemUsingCursor();
 
         if( m_drawItem )

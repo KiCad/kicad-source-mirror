@@ -35,6 +35,7 @@ DIALOG_ERC::DIALOG_ERC( WinEDA_SchematicFrame* parent ) :
     Init();
 
     GetSizer()->SetSizeHints( this );
+    Centre();
 }
 
 

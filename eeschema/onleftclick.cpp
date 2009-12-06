@@ -217,20 +217,6 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         }
         break;
 
-        if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
-        {
-            GetScreen()->SetCurItem( CreateNewText( DC, LAYER_HIERLABEL ) );
-            DrawPanel->m_AutoPAN_Request = TRUE;
-        }
-        else
-        {
-            DrawStruct->Place( this, DC );
-            DrawPanel->m_AutoPAN_Request = FALSE;
-            TestDanglingEnds( GetScreen()->EEDrawList, NULL );
-            DrawPanel->Refresh( TRUE );
-        }
-        break;
-
     case ID_SHEET_SYMBOL_BUTT:
         if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
         {

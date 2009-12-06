@@ -335,7 +335,7 @@ public:
 private:
     void             StartMoveSheet( SCH_SHEET* sheet, wxDC* DC );
     SCH_SHEET_PIN*   Create_PinSheet( SCH_SHEET* Sheet, wxDC* DC );
-    void             Edit_PinSheet( SCH_SHEET_PIN* SheetLabel, wxDC* DC );
+    int              Edit_PinSheet( SCH_SHEET_PIN* SheetLabel, wxDC* DC );
     void             StartMove_PinSheet( SCH_SHEET_PIN* SheetLabel,
                                          wxDC*          DC );
     void             Place_PinSheet( SCH_SHEET_PIN* SheetLabel,

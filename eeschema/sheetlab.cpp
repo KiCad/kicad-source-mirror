@@ -17,7 +17,7 @@ static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC );
 static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
 
-static int    CurrentTypeLabel = NET_INPUT;
+static int    s_CurrentTypeLabel = NET_INPUT;
 static wxSize NetSheetTextSize( DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT );
 
 /****************************************/
@@ -49,24 +49,23 @@ private:
 };
 
 BEGIN_EVENT_TABLE( WinEDA_PinSheetPropertiesFrame, wxDialog )
-    EVT_BUTTON( wxID_OK, WinEDA_PinSheetPropertiesFrame::OnOkClick )
-    EVT_BUTTON( wxID_CANCEL, WinEDA_PinSheetPropertiesFrame::OnCancelClick )
+EVT_BUTTON( wxID_OK, WinEDA_PinSheetPropertiesFrame::OnOkClick )
+EVT_BUTTON( wxID_CANCEL, WinEDA_PinSheetPropertiesFrame::OnCancelClick )
 END_EVENT_TABLE()
 
 
- WinEDA_PinSheetPropertiesFrame::WinEDA_PinSheetPropertiesFrame(
-     WinEDA_SchematicFrame* parent,
-     SCH_SHEET_PIN*         curr_pinsheet,
-     const wxPoint&         framepos ) :
-wxDialog( parent, -1, _( "PinSheet Properties:" ), framepos,
-          wxSize( 340, 220 ), DIALOG_STYLE )
+WinEDA_PinSheetPropertiesFrame::WinEDA_PinSheetPropertiesFrame(
+    WinEDA_SchematicFrame* parent,
+    SCH_SHEET_PIN*         curr_pinsheet,
+    const wxPoint&         framepos ) :
+    wxDialog( parent, -1, _( "PinSheet Properties:" ), framepos,
+              wxSize( 340, 220 ), DIALOG_STYLE )
 {
     wxPoint   pos;
     wxString  number;
     wxButton* Button;
 
     m_Parent = parent;
-    Centre();
 
     wxBoxSizer* MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( MainBoxSizer );
@@ -102,15 +101,18 @@ wxDialog( parent, -1, _( "PinSheet Properties:" ), framepos,
     m_PinSheetShape->SetSelection( m_CurrentPinSheet->m_Shape );
     LeftBoxSizer->Add( m_PinSheetShape, 0, wxGROW | wxALL, 5 );
 
+    m_TextWin->SetFocus();
+
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
+    Centre();
 }
 
 
 void WinEDA_PinSheetPropertiesFrame::OnCancelClick( wxCommandEvent& WXUNUSED(
-                                                       event ) )
+                                                       event) )
 {
-    EndModal( -1 );
+    EndModal( wxID_CANCEL );
 }
 
 
@@ -118,10 +120,10 @@ void WinEDA_PinSheetPropertiesFrame::OnOkClick( wxCommandEvent& event )
 {
     m_CurrentPinSheet->m_Text   = m_TextWin->GetText();
     m_CurrentPinSheet->m_Size.x = m_CurrentPinSheet->m_Size.y =
-        m_TextWin->GetTextSize();
+                                      m_TextWin->GetTextSize();
 
     m_CurrentPinSheet->m_Shape = m_PinSheetShape->GetSelection();
-    EndModal( 0 );
+    EndModal( wxID_OK );
 }
 
 
@@ -177,8 +179,7 @@ void SCH_SHEET_PIN::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
     m_Pos.x = Sheet->m_Pos.x;
     m_Edge  = 0;
 
-    if( frame->GetScreen()->m_Curseur.x
-       > ( Sheet->m_Pos.x + (Sheet->m_Size.x / 2) ) )
+    if( frame->GetScreen()->m_Curseur.x > ( Sheet->m_Pos.x + (Sheet->m_Size.x / 2) ) )
     {
         m_Edge  = 1;
         m_Pos.x = Sheet->m_Pos.x + Sheet->m_Size.x;
@@ -201,7 +202,7 @@ void WinEDA_SchematicFrame::StartMove_PinSheet( SCH_SHEET_PIN* SheetLabel,
                                                 wxDC*          DC )
 {
     NetSheetTextSize     = SheetLabel->m_Size;
-    CurrentTypeLabel     = SheetLabel->m_Shape;
+    s_CurrentTypeLabel   = SheetLabel->m_Shape;
     SheetLabel->m_Flags |= IS_MOVED;
 
     DrawPanel->ManageCurseur = Move_PinSheet;
@@ -228,8 +229,7 @@ static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     SheetLabel->m_Edge  = 0;
     SheetLabel->m_Pos.x = Sheet->m_Pos.x;
 
-    if( panel->GetScreen()->m_Curseur.x
-       > ( Sheet->m_Pos.x + (Sheet->m_Size.x / 2) ) )
+    if( panel->GetScreen()->m_Curseur.x > ( Sheet->m_Pos.x + (Sheet->m_Size.x / 2) ) )
     {
         SheetLabel->m_Edge  = 1;
         SheetLabel->m_Pos.x = Sheet->m_Pos.x + Sheet->m_Size.x;
@@ -245,20 +245,25 @@ static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 }
 
 
-void WinEDA_SchematicFrame::Edit_PinSheet( SCH_SHEET_PIN* SheetLabel,
+int WinEDA_SchematicFrame::Edit_PinSheet( SCH_SHEET_PIN* SheetLabel,
                                            wxDC*          DC )
 {
     if( SheetLabel == NULL )
-        return;
+        return wxID_CANCEL;
 
-    RedrawOneStruct( DrawPanel, DC, SheetLabel, g_XorMode );
+    if( DC )
+        RedrawOneStruct( DrawPanel, DC, SheetLabel, g_XorMode );
 
     WinEDA_PinSheetPropertiesFrame* frame =
         new WinEDA_PinSheetPropertiesFrame( this, SheetLabel );
 
-    frame->ShowModal(); frame->Destroy();
+    int diag = frame->ShowModal();
+    frame->Destroy();
 
-    RedrawOneStruct( DrawPanel, DC, SheetLabel, GR_DEFAULT_DRAWMODE );
+    if ( DC )
+        RedrawOneStruct( DrawPanel, DC, SheetLabel, GR_DEFAULT_DRAWMODE );
+
+    return diag;
 }
 
 
@@ -270,49 +275,26 @@ SCH_SHEET_PIN* WinEDA_SchematicFrame::Create_PinSheet( SCH_SHEET* Sheet,
     wxString       Line, Text;
     SCH_SHEET_PIN* NewSheetLabel;
 
-    switch( CurrentTypeLabel )
-    {
-    default:
-        CurrentTypeLabel = NET_INPUT;
-
-    case NET_INPUT:
-        Text = wxT( "Pin Input: " );
-        break;
-
-    case NET_OUTPUT:
-        Text = wxT( "Pin Output: " );
-        break;
-
-    case NET_BIDI:
-        Text = wxT( "Pin BiDi: " );
-        break;
-
-    case NET_TRISTATE:
-        Text = wxT( "Pin TriStat: " );
-        break;
-
-    case NET_UNSPECIFIED:
-        Text = wxT( "Pin Unspec.: " );
-        break;
-    }
-
-    Get_Message( Text, _( "PinSheet" ), Line, this );
-    if( Line.IsEmpty() )
-        return NULL;
-
-    GetScreen()->SetModify();
-
     NewSheetLabel = new SCH_SHEET_PIN( Sheet, wxPoint( 0, 0 ), Line );
     NewSheetLabel->m_Flags = IS_NEW;
     NewSheetLabel->m_Size  = NetSheetTextSize;
-    NewSheetLabel->m_Shape = CurrentTypeLabel;
+    NewSheetLabel->m_Shape = s_CurrentTypeLabel;
 
+    int diag = Edit_PinSheet( NewSheetLabel, NULL );
+
+    if( NewSheetLabel->m_Text.IsEmpty() || (diag == wxID_CANCEL) )
+    {
+        delete NewSheetLabel;
+        return NULL;
+    }
     GetScreen()->SetCurItem( NewSheetLabel );
+    s_CurrentTypeLabel = NewSheetLabel->m_Shape;
 
     DrawPanel->ManageCurseur = Move_PinSheet;
     DrawPanel->ForceCloseManageCurseur = ExitPinSheet;
     DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
 
+    GetScreen()->SetModify();
     return NewSheetLabel;
 }
 
@@ -363,7 +345,7 @@ SCH_SHEET_PIN* WinEDA_SchematicFrame::Import_PinSheet( SCH_SHEET* Sheet,
     NewSheetLabel = new SCH_SHEET_PIN( Sheet, wxPoint( 0, 0 ), HLabel->m_Text );
     NewSheetLabel->m_Flags = IS_NEW;
     NewSheetLabel->m_Size  = NetSheetTextSize;
-    CurrentTypeLabel = NewSheetLabel->m_Shape = HLabel->m_Shape;
+    s_CurrentTypeLabel     = NewSheetLabel->m_Shape = HLabel->m_Shape;
 
     GetScreen()->SetCurItem( NewSheetLabel );
     DrawPanel->ManageCurseur = Move_PinSheet;

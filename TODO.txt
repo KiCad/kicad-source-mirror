@@ -11,7 +11,6 @@ CMAKE
 Common
 ------
 * Grep for @TODO or TODO for sourcecode tasks
-* Translate comment from French to English
 * Use doxygen compatible comments on member functions (.h files)
 * Add tooltip text to all non-obvious controls in every dialog window.
   Need to do this using DialogBlocks.
@@ -56,11 +55,6 @@ PCBNew
 ------
 * Use BOARD_ITEM::MenuIcon() in the onrightclick.cpp
 * Add unroute option in rightclick menu for components
-* Add net class support
-  * So the round tripping to freerouter is a dream.
-  * So that the export to specctra becomes richer.
-  * Netclass should hold a lists of nets, track widths, track spacings,
-    via drill sizes and copper diameters.
 * Document specctra round tripper, and fix the english translation of help.
 * Expose layer name editing. Should dove tail with net class editor from
   a UI perspective.
