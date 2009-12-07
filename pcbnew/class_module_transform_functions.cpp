@@ -23,12 +23,12 @@ int ChangeSideNumLayer( int oldlayer )
 
     switch( oldlayer )
     {
-    case COPPER_LAYER_N:
-        newlayer = CMP_N;
+    case LAYER_N_BACK:
+        newlayer = LAYER_N_FRONT;
         break;
 
-    case CMP_N:
-        newlayer = COPPER_LAYER_N;
+    case LAYER_N_FRONT:
+        newlayer = LAYER_N_BACK;
         break;
 
     case SILKSCREEN_N_CU:
@@ -198,14 +198,14 @@ void MODULE::Flip(const wxPoint& aCentre )
     pt_texte->SetLayer( GetLayer() );
     pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
 
-    if( GetLayer() == COPPER_LAYER_N )
+    if( GetLayer() == LAYER_N_BACK )
         pt_texte->SetLayer( SILKSCREEN_N_CU );
 
-    if( GetLayer() == CMP_N )
+    if( GetLayer() == LAYER_N_FRONT )
         pt_texte->SetLayer( SILKSCREEN_N_CMP );
 
     if( (GetLayer() == SILKSCREEN_N_CU)
-       || (GetLayer() == ADHESIVE_N_CU) || (GetLayer() == COPPER_LAYER_N) )
+       || (GetLayer() == ADHESIVE_N_CU) || (GetLayer() == LAYER_N_BACK) )
         pt_texte->m_Mirror = true;
 
     /* Mirror value. */
@@ -219,14 +219,14 @@ void MODULE::Flip(const wxPoint& aCentre )
     pt_texte->SetLayer( GetLayer() );
     pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
 
-    if( GetLayer() == COPPER_LAYER_N )
+    if( GetLayer() == LAYER_N_BACK )
         pt_texte->SetLayer( SILKSCREEN_N_CU );
 
-    if( GetLayer() == CMP_N )
+    if( GetLayer() == LAYER_N_FRONT )
         pt_texte->SetLayer( SILKSCREEN_N_CMP );
 
     if( (GetLayer() == SILKSCREEN_N_CU)
-       || (GetLayer() == ADHESIVE_N_CU) || (GetLayer() == COPPER_LAYER_N) )
+       || (GetLayer() == ADHESIVE_N_CU) || (GetLayer() == LAYER_N_BACK) )
         pt_texte->m_Mirror = true;
 
     /* Reverse mirror footprints. */
@@ -266,15 +266,15 @@ void MODULE::Flip(const wxPoint& aCentre )
             pt_texte->SetLayer( GetLayer() );
             pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
 
-            if( GetLayer() == COPPER_LAYER_N )
+            if( GetLayer() == LAYER_N_BACK )
                 pt_texte->SetLayer( SILKSCREEN_N_CU );
 
-            if( GetLayer() == CMP_N )
+            if( GetLayer() == LAYER_N_FRONT )
                 pt_texte->SetLayer( SILKSCREEN_N_CMP );
 
             if(  GetLayer() == SILKSCREEN_N_CU
                  || GetLayer() == ADHESIVE_N_CU
-                 || GetLayer() == COPPER_LAYER_N )
+                 || GetLayer() == LAYER_N_BACK )
             {
                 pt_texte->m_Mirror = true;
             }

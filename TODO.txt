@@ -53,6 +53,8 @@ KiCad
 
 PCBNew
 ------
+* Fix DIALOG_PAD_PROPERTIES_BASE class to use actual layer names in the BOARD.
+
 * Use BOARD_ITEM::MenuIcon() in the onrightclick.cpp
 * Add unroute option in rightclick menu for components
 * Document specctra round tripper, and fix the english translation of help.

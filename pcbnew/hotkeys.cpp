@@ -231,12 +231,13 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:
         ll = GetScreen()->m_Active_Layer;
-        if( (ll <= COPPER_LAYER_N) || (ll > CMP_N) )
+        if( (ll <= LAYER_N_BACK) || (ll > LAYER_N_FRONT) )
             break;
+
         if( GetBoard()->m_BoardSettings->GetCopperLayerCount() < 2 ) // Single layer
-            ll = COPPER_LAYER_N;
-        else if( ll == CMP_N )
-            ll = MAX( COPPER_LAYER_N,
+            ll = LAYER_N_BACK;
+        else if( ll == LAYER_N_FRONT )
+            ll = MAX( LAYER_N_BACK,
                       GetBoard()->m_BoardSettings->GetCopperLayerCount() - 2 );
         else
             ll--;
@@ -245,23 +246,23 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
 
     case HK_SWITCH_LAYER_TO_NEXT:
         ll = GetScreen()->m_Active_Layer;
-        if( (ll < COPPER_LAYER_N) || (ll >= CMP_N) )
+        if( (ll < LAYER_N_BACK) || (ll >= LAYER_N_FRONT) )
             break;
         if( GetBoard()->m_BoardSettings->GetCopperLayerCount() < 2 ) // Single layer
-            ll = COPPER_LAYER_N;
+            ll = LAYER_N_BACK;
         else if( ll >= GetBoard()->m_BoardSettings->GetCopperLayerCount() - 2 )
-            ll = CMP_N;
+            ll = LAYER_N_FRONT;
         else
             ll++;
         SwitchLayer( DC, ll );
         break;
 
     case HK_SWITCH_LAYER_TO_COMPONENT:
-        SwitchLayer( DC, CMP_N );
+        SwitchLayer( DC, LAYER_N_FRONT );
         break;
 
     case HK_SWITCH_LAYER_TO_COPPER:
-        SwitchLayer( DC, COPPER_LAYER_N );
+        SwitchLayer( DC, LAYER_N_BACK );
         break;
 
     case HK_SWITCH_LAYER_TO_INNER1:
@@ -343,7 +344,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
 
     case HK_BACK_SPACE:
         if( m_ID_current_state == ID_TRACK_BUTT && GetScreen()->m_Active_Layer
-            <= CMP_N )
+            <= LAYER_N_FRONT )
         {
             if( ItemFree )
             {
@@ -462,7 +463,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         break;
 
     case HK_ADD_NEW_TRACK: // Start new track
-        if( GetScreen()->m_Active_Layer > CMP_N )
+        if( GetScreen()->m_Active_Layer > LAYER_N_FRONT )
             break;
 
         if( m_ID_current_state != ID_TRACK_BUTT && ItemFree )
@@ -473,8 +474,8 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
 
         if( m_ID_current_state != ID_TRACK_BUTT )
             break;
- 
-            if( ItemFree ) // no track in progress: 
+
+            if( ItemFree ) // no track in progress:
             {
                 TRACK* track = Begin_Route( NULL, DC );
                 SetCurItem( track );
@@ -723,7 +724,7 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
     switch( m_ID_current_state )
     {
     case ID_TRACK_BUTT:
-        if( GetScreen()->m_Active_Layer > CMP_N )
+        if( GetScreen()->m_Active_Layer > LAYER_N_FRONT )
             return FALSE;
         if( ItemFree )
         {

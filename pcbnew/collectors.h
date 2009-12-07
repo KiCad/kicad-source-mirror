@@ -360,7 +360,7 @@ public:
      */
     GENERAL_COLLECTORS_GUIDE( int aVisibleLayerMask, int aPreferredLayer )
     {
-        m_PreferredLayer            = LAYER_CMP_N;
+        m_PreferredLayer            = LAYER_N_FRONT;
         m_IgnorePreferredLayer      = false;
         m_LayerLocked               = 0;
         m_LayerVisible              = aVisibleLayerMask;

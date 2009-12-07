@@ -123,8 +123,11 @@ void EDA_BoardDesignSettings::SetCopperLayerCount( int aNewLayerCount )
     // ensure consistency with the m_EnabledLayers member
     m_EnabledLayers &= ~ALL_CU_LAYERS;
     m_EnabledLayers |= CUIVRE_LAYER;
+
     if( m_CopperLayerCount > 1 )
         m_EnabledLayers |= CMP_LAYER;
+
     for( int ii = 1; ii < aNewLayerCount - 1; ii++ )
         m_EnabledLayers |= 1 << ii;
 }
+

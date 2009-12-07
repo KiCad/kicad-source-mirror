@@ -61,7 +61,7 @@ enum button_types
     type_element,
     type_visual
 };
-    
+
 
 struct ColorButton
 {
@@ -94,8 +94,8 @@ static ColorButton Layer_1_Butt =
 {
     type_layer,                  // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
-    COPPER_LAYER_N,             // Layer
-    ADR( COPPER_LAYER_N )       // Address of optional parameter
+    LAYER_N_BACK,             // Layer
+    ADR( LAYER_N_BACK )       // Address of optional parameter
 };
 
 static ColorButton Layer_2_Butt =
@@ -214,8 +214,8 @@ static ColorButton Layer_16_Butt =
 {
     type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
-    CMP_N,                      // Layer
-    ADR( CMP_N )                // Address of optional parameter
+    LAYER_N_FRONT,              // Layer
+    ADR( LAYER_N_FRONT )        // Address of optional parameter
 };
 
 
@@ -372,7 +372,7 @@ static ColorButton Ratsnest_Butt =
 static ColorButton Pad_Cu_Butt =
 {
     type_element,                               // Toggle ITEM_NOT_SHOW bit of the color variable
-    _( "Pad Cu" ),                              // Title
+    _( "Pad Back" ),                            // Title
     PAD_CU_VISIBLE,
     &g_PadCUColor                               // Address of optional parameter
 };
@@ -380,7 +380,7 @@ static ColorButton Pad_Cu_Butt =
 static ColorButton Pad_Cmp_Butt =
 {
     type_element,                               // Toggle ITEM_NOT_SHOW bit of the color variable
-    _( "Pad Cmp" ),                             // Title
+    _( "Pad Front" ),                           // Title
     PAD_CMP_VISIBLE,
     &g_PadCMPColor                              // Address of optional parameter
 };
@@ -388,7 +388,7 @@ static ColorButton Pad_Cmp_Butt =
 static ColorButton Text_Mod_Cu_Butt =
 {
     type_element,                               // Toggle ITEM_NOT_SHOW bit of the color variable
-    _( "Text Module Cu" ),                      // Title
+    _( "Text Module Back" ),                    // Title
     MODULE_TEXT_CU_VISIBLE,
     &g_ModuleTextCUColor                        // Address of optional parameter
 };
@@ -396,7 +396,7 @@ static ColorButton Text_Mod_Cu_Butt =
 static ColorButton Text_Mod_Cmp_Butt =
 {
     type_element,                               // Toggle ITEM_NOT_SHOW bit of the color variable
-    _( "Text Module Cmp" ),                     // Title
+    _( "Text Module Front" ),                   // Title
     MODULE_TEXT_CMP_VISIBLE,
     &g_ModuleTextCMPColor                       // Address of optional parameter
 };
@@ -438,7 +438,7 @@ static ColorButton Show_Pads_Noconnect_Butt =
 static ColorButton Show_Modules_Cmp_Butt =
 {
     type_visual,
-    _( "Show Modules Cmp" ),                    // Title
+    _( "Show Modules Front" ),                  // Title
     -1,
     NULL,                                       // Address of optional parameter
     &DisplayOpt.Show_Modules_Cmp                // Address of boolean display control parameter to toggle
@@ -447,7 +447,7 @@ static ColorButton Show_Modules_Cmp_Butt =
 static ColorButton Show_Modules_Cu_Butt =
 {
     type_visual,
-    _( "Show Modules Cu" ),                     // Title
+    _( "Show Modules Back" ),                   // Title
     -1,
     NULL,                                       // Address of optional parameter
     &DisplayOpt.Show_Modules_Cu                 // Address of boolean display control parameter to toggle

@@ -264,8 +264,8 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
     bool       ExistsBuriedVias = false;  /* If true, drill files are created
                                            * layer pair by layer pair for
                                            * buried vias */
-    int        layer1 = COPPER_LAYER_N;
-    int        layer2 = LAYER_CMP_N;
+    int        layer1 = LAYER_N_BACK;
+    int        layer2 = LAYER_N_FRONT;
     bool       gen_through_holes = true;
 
     UpdateConfig(); /* set params and Save drill options */
@@ -293,11 +293,11 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
 
             if( !gen_through_holes )
             {
-                if( layer1 == COPPER_LAYER_N )
+                if( layer1 == LAYER_N_BACK )
                     layer_extend << wxT( "-copper" );
                 else
                     layer_extend << wxT( "-inner" ) << layer1;
-                if( layer2 == LAYER_CMP_N )
+                if( layer2 == LAYER_N_FRONT )
                     layer_extend << wxT( "-cmp" );
                 else
                     layer_extend << wxT( "-inner" ) << layer2;
@@ -359,13 +359,13 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
             layer2 = layer1 + 1;
         else
         {
-            if( layer2 >= LAYER_CMP_N )    // no more layer pair to consider
+            if( layer2 >= LAYER_N_FRONT )    // no more layer pair to consider
                 break;
             layer1++;
             layer2++;                      // use next layer pair
 
             if( layer2 == g_DesignSettings.GetCopperLayerCount() - 1 )
-                layer2 = LAYER_CMP_N;      // the last layer is always the
+                layer2 = LAYER_N_FRONT;      // the last layer is always the
                                            // component layer
         }
 

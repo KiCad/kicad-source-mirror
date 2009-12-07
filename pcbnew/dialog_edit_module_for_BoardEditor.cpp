@@ -64,7 +64,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
     AddUnitSymbol( *YPositionStatic, g_UnitMetric );
 
     m_LayerCtrl->SetSelection(
-         (m_CurrentModule->GetLayer() == COPPER_LAYER_N) ? 1 : 0 );
+         (m_CurrentModule->GetLayer() == LAYER_N_BACK) ? 1 : 0 );
 
     bool select = FALSE;
     switch( m_CurrentModule->m_Orient )
@@ -469,10 +469,10 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
 
     if( m_LayerCtrl->GetSelection() == 0 )     // layer req = COMPONENT
     {
-        if( m_CurrentModule->GetLayer() == COPPER_LAYER_N )
+        if( m_CurrentModule->GetLayer() == LAYER_N_BACK )
             change_layer = TRUE;
     }
-    else if( m_CurrentModule->GetLayer() == CMP_N )
+    else if( m_CurrentModule->GetLayer() == LAYER_N_FRONT )
         change_layer = TRUE;
 
     if( change_layer )

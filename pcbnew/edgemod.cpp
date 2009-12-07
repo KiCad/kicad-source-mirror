@@ -171,7 +171,7 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge )
     if( new_layer < 0 )
         return;
 
-    if( new_layer >= FIRST_COPPER_LAYER && new_layer <= LAST_COPPER_LAYER )
+    if( IsValidCopperLayerIndex( new_layer ) )
     {
         /* an edge is put on a copper layer, and it is very dangerous. a
          *confirmation is requested */
@@ -330,9 +330,9 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
         Edge->m_Width = ModuleSegmentWidth;
         Edge->SetLayer( module->GetLayer() );
 
-        if( module->GetLayer() == CMP_N )
+        if( module->GetLayer() == LAYER_N_FRONT )
             Edge->SetLayer( SILKSCREEN_N_CMP );
-        if( module->GetLayer() == COPPER_LAYER_N )
+        if( module->GetLayer() == LAYER_N_BACK )
             Edge->SetLayer( SILKSCREEN_N_CU );
 
         /* Initialise the starting point of the new segment or arc */

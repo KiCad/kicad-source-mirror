@@ -215,9 +215,9 @@ static void Print_Module( WinEDA_DrawPanel* panel, wxDC* DC,
     /* Print footprint graphic shapes */
     PtStruct = Module->m_Drawings;
     mlayer   = g_TabOneLayerMask[Module->GetLayer()];
-    if( Module->GetLayer() == COPPER_LAYER_N )
+    if( Module->GetLayer() == LAYER_N_BACK )
         mlayer = SILKSCREEN_LAYER_CU;
-    else if( Module->GetLayer() == CMP_N )
+    else if( Module->GetLayer() == LAYER_N_FRONT )
         mlayer = SILKSCREEN_LAYER_CMP;
 
     if( mlayer & masklayer )

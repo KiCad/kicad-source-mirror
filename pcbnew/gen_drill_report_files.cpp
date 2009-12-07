@@ -297,8 +297,8 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
 {
     unsigned TotalHoleCount;
     char     line[1024];
-    int      layer1 = COPPER_LAYER_N;
-    int      layer2 = LAYER_CMP_N;
+    int      layer1 = LAYER_N_BACK;
+    int      layer2 = LAYER_N_FRONT;
     bool     gen_through_holes = true;
 
 
@@ -334,7 +334,7 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
         }
         else
         {
-            if( layer1 == COPPER_LAYER_N )  // First partial hole list
+            if( layer1 == LAYER_N_BACK )  // First partial hole list
             {
                 sprintf( line, "Drill report for buried and blind vias :\n\n" );
                 fputs( line, aFile );
@@ -395,12 +395,12 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
             layer2 = layer1 + 1;
         else
         {
-            if( layer2 >= LAYER_CMP_N )    // no more layer pair to consider
+            if( layer2 >= LAYER_N_FRONT )    // no more layer pair to consider
                 break;
             layer1++; layer2++;           // use next layer pair
 
             if( layer2 == g_DesignSettings.GetCopperLayerCount() - 1 )
-                layer2 = LAYER_CMP_N;  // the last layer is always the
+                layer2 = LAYER_N_FRONT;  // the last layer is always the
                                        // component layer
         }
         gen_through_holes = false;

@@ -38,16 +38,16 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
 
         int moduleLayer = Module->GetLayer();
 
-        if( moduleLayer == COPPER_LAYER_N )
+        if( moduleLayer == LAYER_N_BACK )
             SetLayer( SILKSCREEN_N_CU );
-        else if( moduleLayer == CMP_N )
+        else if( moduleLayer == LAYER_N_FRONT )
             SetLayer( SILKSCREEN_N_CMP );
         else
             SetLayer( moduleLayer );
 
         if(  moduleLayer == SILKSCREEN_N_CU
              || moduleLayer == ADHESIVE_N_CU
-             || moduleLayer == COPPER_LAYER_N )
+             || moduleLayer == LAYER_N_BACK )
         {
             m_Mirror = true;
         }
@@ -144,9 +144,9 @@ int TEXTE_MODULE::ReadDescr( char* aLine, FILE* aFile, int* aLineNum )
         layer = 0;
     if( layer > LAST_NO_COPPER_LAYER )
         layer = LAST_NO_COPPER_LAYER;
-    if( layer == COPPER_LAYER_N )
+    if( layer == LAYER_N_BACK )
         layer = SILKSCREEN_N_CU;
-    else if( layer == CMP_N )
+    else if( layer == LAYER_N_FRONT )
         layer = SILKSCREEN_N_CMP;
 
     SetLayer( layer );
@@ -376,13 +376,13 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     color = g_DesignSettings.m_LayerColor[Module->GetLayer()];
 
 
-    if( Module->GetLayer() == COPPER_LAYER_N )
+    if( Module->GetLayer() == LAYER_N_BACK )
     {
         if( g_DesignSettings.IsElementVisible( MODULE_TEXT_CU_VISIBLE ) == false )
             return;
         color = g_ModuleTextCUColor;
     }
-    else if( Module->GetLayer() == CMP_N )
+    else if( Module->GetLayer() == LAYER_N_FRONT )
     {
         if( g_DesignSettings.IsElementVisible( MODULE_TEXT_CMP_VISIBLE ) == false )
             return;
@@ -499,12 +499,12 @@ bool TEXTE_MODULE::IsOnLayer( int aLayer ) const
     if( aLayer == GetParent()->GetLayer() )
         return true;
 
-    if( aLayer == COPPER_LAYER_N )
+    if( aLayer == LAYER_N_BACK )
     {
         if( m_Layer==ADHESIVE_N_CU || m_Layer==SILKSCREEN_N_CU )
             return true;
     }
-    else if( aLayer == CMP_N )
+    else if( aLayer == LAYER_N_FRONT )
     {
         if( m_Layer==ADHESIVE_N_CMP || m_Layer==SILKSCREEN_N_CMP )
             return true;

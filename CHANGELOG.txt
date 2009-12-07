@@ -4,6 +4,24 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-Dec-6 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew & gerbview
+  * Moved ReturnLayerName() to static BOARD::GetDefaultLayerName() and migrated
+    to a Specctra DSN compatible default layer naming scheme:
+        Component becomes Front, Copper becomes Back.
+  * set_color.h: Cmp becomes Front, Cu becomes Back.
+  * D_PAD::DisplayInfo() changed to use actual copper layer names.
+  * more layer setup dialog work, moved all programmatic wxControl instantiation
+    into the wxFormbuilder environment, but this is fraught with danger:
+    wxFlexGridSizer used the tallest control to establish the row heights, so
+    be careful about changing control borders in the scroll panel. The vertical
+    size can explode since just a couple of pixels times the number of rows
+    is substantial.  Currently I am setting a 5 pixel border only left, top, and right
+    but not bottom.
+  * Set copper layer count is back in place as a hack until I can get the enabled
+    layer bit map fully operational.
+
 
 2009-Dec-3 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================

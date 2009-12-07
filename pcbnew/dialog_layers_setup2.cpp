@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2009 Isaac Marino Bavaresco, isaacbavaresco@yahoo.com.br
+ * Copyright (C) 2009 Isaac Marino Bavaresco, isaacbavaresco@yahoo.com.br
  * Copyright (C) 2009 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2009 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2009 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,25 +36,8 @@
 
 #include "pcbnew_id.h"
 #include "dialog_layers_setup2.h"
-#include "wx/generic/gridctrl.h"
 
-// Fields Positions on layer grid
-#define LAYERS_GRID_NAME_POSITION       0
-#define LAYERS_GRID_ENABLED_POSITION    1
-#define LAYERS_GRID_TYPE_POSITION       2
-
-
-
-// Define as 1 to show the layers in Pcbnew's original order
-#define ORIGINAL_KICAD_LAYER_ORDER  0
-
-// IDs for the dialog controls
-enum
-{
-    ID_LAYERNAMES   = ( wxID_HIGHEST + 1 ),
-    ID_CHECKBOXES   = ( ID_LAYERNAMES + NB_LAYERS ),
-    ID_LAYERTYPES   = ( ID_CHECKBOXES + NB_LAYERS ),
-};
+#include "class_board_design_settings.h"
 
 
 // We want our dialog to remember its previous screen position
@@ -62,17 +45,8 @@ wxPoint DIALOG_LAYERS_SETUP::s_LastPos( -1, -1 );
 wxSize  DIALOG_LAYERS_SETUP::s_LastSize;
 
 
+/*
 // Layer order on the list panel
-
-#if ORIGINAL_KICAD_LAYER_ORDER
-
-// Kicad's original order
-
-static const int LayerOrder[NB_LAYERS] =
-{  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15,
-  16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28 };
-
-#else
 
 // Real board order
 
@@ -80,14 +54,13 @@ static const int LayerOrder[NB_LAYERS] =
 { 17, 19, 21, 23, 15, 14, 13, 12, 11, 10,  9,  8,  7,  6,  5,  4,
    3,  2,  1,  0, 22, 20, 18, 16, 28, 27, 26, 25, 24 };
 
-#endif
-
 // This function translates from the dialog's layer order to Kicad's layer order.
 
-static int GetlayerNumber( int Row )
+static int GetLayerNumber( int aRow )
 {
     return LayerOrder[Row];
 }
+
 
 // Categories for coloring the rows backgrounds (0 means default dialog color).
 static const int LayerCategories[NB_LAYERS] =
@@ -104,6 +77,7 @@ static const wxString LayerCategoriesNames[NB_LAYERS] =
     _( "Auxiliary" )                    // 5
 };
 
+
 // Names for the presets
 static const wxString PresetsChoiceChoices[] =
 {
@@ -117,6 +91,8 @@ static const wxString PresetsChoiceChoices[] =
 };
 
 #define PRESETS_CHOICE_N_CHOICES DIM(m_PresetsChoiceChoices)
+*/
+
 
 // Bit masks (for all layers) for each defined preset
 static const int Presets[] =
@@ -153,14 +129,16 @@ static const int CopperMasks[] =
 
 // Names for the types of copper layers
 
-static const wxString LayerTypeChoiceChoices[] =
+/*
+static const wxString layerTypeChoiceChoices[] =
 {
-    wxT("Signal"),
-    wxT("Power"),
-    wxT("Mixed"),
-    wxT("Jumper")
+    // these may not be translated since they come from Specctra.
+    wxT("signal"),
+    wxT("power"),
+    wxT("mixed"),
+    wxT("jumper")
 };
-#define LAYER_TYPE_CHOICE_N_CHOICES  DIM(LayerTypeChoiceChoices)
+*/
 
 
 /***********************************************************************************/
@@ -171,106 +149,237 @@ DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( WinEDA_PcbFrame* parent ) :
     m_Parent    = parent;
     m_Pcb       = m_Parent->GetBoard();
 
-    Init();
+    init();
 
     SetAutoLayout( true );
     Layout();
+
     Center();
+
+    m_sdbSizer2OK->SetFocus();
 }
 
 
-#define WX_COMMON_FLAGS   (wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT)
-
-
 /********************************************************************/
-void DIALOG_LAYERS_SETUP::Init()
+void DIALOG_LAYERS_SETUP::init()
 /********************************************************************/
 {
-    // delete the junk controls, which were put in only for WYSIWYG design formatting purposes.
-    delete m_junkStaticText;
-    delete m_junkCheckBox;
-    delete m_junkChoice;
 
-    // We need a sizer to organize the controls inside the wxScrolledWindow.
-    // We must adjust manually the widths of the column captions and controls.
+    // temporary: set copper layer count without regard to enabled layer mask.
+    static const int copperCount[] = {1,2,4,6,8,10,12,14,16};
 
-    int col1Width;
+    m_CopperLayersChoice->SetSelection(1);
+
+    int boardsCopperCount = m_Pcb->GetCopperLayerCount();
+
+    D(printf("boardsCopperCount=%d\n", boardsCopperCount );)
+
+    for( unsigned i = 0;  i<sizeof(copperCount);  ++i )
     {
-        // We create a wxStaticText just to query its size.
-        // The layer names are restricted to 20 characters, so 20 "W" is the widest possible text,
-        // plus 1 "W" to compensate for the wxTextCtrl border.
-        wxStaticText *text = new wxStaticText( this, wxID_ANY, wxT( "WWWWWWWWWWWWWWWWWWWWW" ));
-        col1Width = text->GetSize().x;
-        // It is important to delete the temporary text, or else it will appear in the top
-        // left corner of the dialog.
-        delete text;
+        if( boardsCopperCount == copperCount[i] )
+        {
+            m_CopperLayersChoice->SetSelection(i);
+            break;
+        }
     }
 
-    // The second column will have the width of its caption, because the check boxes are
-    // narrower than the caption.
-    int col2Width = m_LayerEnabledCaption->GetSize().x;
 
-    // The third column width will be the widest of all of its controls.
-    // Inside the loop we will update col3Width if some control is wider.
-    int col3Width = m_LayerTypeCaption->GetSize().x;
+    // Establish all the board's layer names into the dialog presentation, by
+    // obtaining them from BOARD::GetLayerName() which calls
+    // BOARD::GetDefaultLayerName() for non-coppers.
+    static const short nameIds[] = {
+        ID_ADHESFRONTNAME,
+        ID_SOLDPFRONTNAME,
+        ID_SILKSFRONTNAME,
+        ID_MASKFRONTNAME,
+        ID_FRONTNAME,
+        ID_INNER2NAME,
+        ID_INNER3NAME,
+        ID_INNER4NAME,
+        ID_INNER5NAME,
+        ID_INNER6NAME,
+        ID_INNER7NAME,
+        ID_INNER8NAME,
+        ID_INNER9NAME,
+        ID_INNER10NAME,
+        ID_INNER11NAME,
+        ID_INNER12NAME,
+        ID_INNER13NAME,
+        ID_INNER14NAME,
+        ID_INNER15NAME,
+        ID_BACKNAME,
+        ID_MASKBACKNAME,
+        ID_SILKSBACKNAME,
+        ID_SOLDPBACKNAME,
+        ID_ADHESBACKNAME,
+        ID_PCBEDGESNAME,
+        ID_ECO2NAME,
+        ID_ECO1NAME,
+        ID_COMMENTSNAME,
+        ID_DRAWINGSNAME,
+    };
 
-    // Iterate for every layer.
-    for( int i = 0; i < NB_LAYERS; i++ )
+    for( unsigned i=0;  i<DIM(nameIds);  ++i )
     {
-        // Obtain the layer number which lies in this row.
-        int layerNumber = GetlayerNumber( i );
+        int layer;
 
-        // Here we create the control for the first column (layer name).
-
-        if( layerNumber < NB_COPPER_LAYERS )
+        switch( nameIds[i] )
         {
-            // For the copper layers we need a wxTextCtrl.
-
-            m_textCtrl1[layerNumber] = new wxTextCtrl( m_LayersListPanel, ID_LAYERNAMES+i, m_Pcb->GetLayerName( layerNumber ), wxDefaultPosition, wxDefaultSize, 0 );
-            m_textCtrl1[layerNumber]->SetMaxLength( 20 );
-            m_textCtrl1[layerNumber]->SetMinSize( wxSize( col1Width, -1 ));
-            m_LayerListFlexGridSizer->Add( m_textCtrl1[layerNumber], 1, WX_COMMON_FLAGS | wxEXPAND, 5 );
+        case ID_ADHESFRONTNAME:     layer = ADHESIVE_N_CMP;     break;
+        case ID_SOLDPFRONTNAME:     layer = SOLDERPASTE_N_CMP;  break;
+        case ID_SILKSFRONTNAME:     layer = SILKSCREEN_N_CMP;   break;
+        case ID_MASKFRONTNAME:      layer = SOLDERMASK_N_CMP;   break;
+        case ID_FRONTNAME:          layer = LAYER_N_FRONT;      break;
+        case ID_INNER2NAME:         layer = LAYER_N_2;          break;
+        case ID_INNER3NAME:         layer = LAYER_N_3;          break;
+        case ID_INNER4NAME:         layer = LAYER_N_4;          break;
+        case ID_INNER5NAME:         layer = LAYER_N_5;          break;
+        case ID_INNER6NAME:         layer = LAYER_N_6;          break;
+        case ID_INNER7NAME:         layer = LAYER_N_7;          break;
+        case ID_INNER8NAME:         layer = LAYER_N_8;          break;
+        case ID_INNER9NAME:         layer = LAYER_N_9;          break;
+        case ID_INNER10NAME:        layer = LAYER_N_10;         break;
+        case ID_INNER11NAME:        layer = LAYER_N_11;         break;
+        case ID_INNER12NAME:        layer = LAYER_N_12;         break;
+        case ID_INNER13NAME:        layer = LAYER_N_13;         break;
+        case ID_INNER14NAME:        layer = LAYER_N_14;         break;
+        case ID_INNER15NAME:        layer = LAYER_N_15;         break;
+        case ID_BACKNAME:           layer = LAYER_N_BACK;       break;
+        case ID_MASKBACKNAME:       layer = SOLDERMASK_N_CU;    break;
+        case ID_SILKSBACKNAME:      layer = SILKSCREEN_N_CU;    break;
+        case ID_SOLDPBACKNAME:      layer = SOLDERPASTE_N_CU;   break;
+        case ID_ADHESBACKNAME:      layer = ADHESIVE_N_CU;      break;
+        case ID_PCBEDGESNAME:       layer = EDGE_N;             break;
+        case ID_ECO2NAME:           layer = ECO2_N;             break;
+        case ID_ECO1NAME:           layer = ECO1_N;             break;
+        case ID_COMMENTSNAME:       layer = COMMENT_N;          break;
+        case ID_DRAWINGSNAME:       layer = DRAW_N;             break;
+        default:                    continue;
         }
-        else
-        {
-            // For the non-copper layers we need a wxStaticText.
-            wxStaticText*   layerName;
 
-            layerName = new wxStaticText( m_LayersListPanel, wxID_ANY, m_Pcb->GetLayerName( layerNumber ), wxDefaultPosition, wxDefaultSize, 0 );
-            layerName->Wrap( -1 );
-            layerName->SetMinSize( wxSize( col1Width, -1 ));
-            m_LayerListFlexGridSizer->Add( layerName, 1, WX_COMMON_FLAGS, 5 );
+        // both wxStaticText and wxTextControl are derived from wxControl,
+        // which has a SetLabel() function.
 
-        }
+        wxControl*  ctl = (wxControl*) FindWindowById( nameIds[i] )
 
-        // Here we create the control for the second column (layer enabled), a wxCheckBox.
+        wxASSERT( ctl );
 
-        m_checkBox[layerNumber] = new wxCheckBox( m_LayersListPanel, ID_CHECKBOXES+i, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-        m_checkBox[layerNumber]->SetMinSize( wxSize( col2Width, -1 ));
-        m_LayerListFlexGridSizer->Add( m_checkBox[layerNumber], 1, WX_COMMON_FLAGS | wxALIGN_CENTER_HORIZONTAL, 5 );
-
-        // Here we create the control for the third column (layer type).
-
-        if( layerNumber < NB_COPPER_LAYERS )
-        {
-            // For the copper layers we need a wxChoice.
-
-            m_choice5[layerNumber] = new wxChoice( m_LayersListPanel, ID_LAYERTYPES+i, wxDefaultPosition, wxDefaultSize, LAYER_TYPE_CHOICE_N_CHOICES, LayerTypeChoiceChoices, 0 );
-            m_choice5[layerNumber]->SetSelection( 0 );
-            m_LayerListFlexGridSizer->Add( m_choice5[layerNumber], 1, WX_COMMON_FLAGS, 5 );
-            col3Width = max( col3Width, m_choice5[layerNumber]->GetBestSize().x );
-        }
-        else
-        {
-            // For the non-copper layers we need a wxStaticText.
-            wxStaticText*   staticText2;
-
-            staticText2 = new wxStaticText( m_LayersListPanel, wxID_ANY, LayerCategoriesNames[LayerCategories[layerNumber]], wxDefaultPosition, wxDefaultSize, 0 );
-            staticText2->Wrap( -1 );
-            m_LayerListFlexGridSizer->Add( staticText2, 1, WX_COMMON_FLAGS, 5 );
-            col3Width = max( col3Width, staticText2->GetBestSize().x );
-        }
+        if( ctl )
+            ctl->SetLabel( m_Pcb->GetLayerName( layer ) );
     }
+
+
+/* names only:
+ID_ADHESFRONTNAME
+ID_SOLDPFRONTNAME
+ID_SILKSFRONTNAME
+ID_MASKFRONTNAME
+ID_FRONTNAME
+ID_INNER2NAME
+ID_INNER3NAME
+ID_INNER4NAME
+ID_INNER5NAME
+ID_INNER6NAME
+ID_INNER7NAME
+ID_INNER8NAME
+ID_INNER9NAME
+ID_INNER10NAME
+ID_INNER11NAME
+ID_INNER12NAME
+ID_INNER13NAME
+ID_INNER14NAME
+ID_INNER15NAME
+ID_BACKNAME
+ID_MASKBACKNAME
+ID_SILKSBACKNAME
+ID_SOLDPBACKNAME
+ID_ADHESBACKNAME
+ID_PCBEDGESNAME
+ID_ECO2NAME
+ID_ECO1NAME
+ID_COMMENTSNAME
+ID_DRAWINGSNAME
+
+
+
+clean ids:
+
+ID_ADHESFRONTNAME
+ID_ADHESFRONTCHECKBOX
+ID_SOLDPFRONTNAME
+ID_SOLDPFRONTCHECKBOX
+ID_SILKSFRONTNAME
+ID_SILKSFRONTCHECKBOX
+ID_MASKFRONTNAME
+ID_MASKFRONTCHECKBOX
+ID_FRONTNAME
+ID_FRONTCHECKBOX
+ID_FRONTCHOICE
+ID_INNER2NAME
+ID_INNER2CHECKBOX
+ID_INNER2CHOICE
+ID_INNER3NAME
+ID_INNER3CHECKBOX
+ID_INNER3CHOICE
+ID_INNER4NAME
+ID_INNER4CHECKBOX
+ID_INNER4CHOICE
+ID_INNER5NAME
+ID_INNER5CHECKBOX
+ID_INNER5CHOICE
+ID_INNER6NAME
+ID_INNER6CHECKBOX
+ID_INNER6CHOICE
+ID_INNER7NAME
+ID_INNER7CHECKBOX
+ID_INNER7CHOICE
+ID_INNER8NAME
+ID_INNER8CHECKBOX
+ID_INNER8CHOICE
+ID_INNER9NAME
+ID_INNER9CHECKBOX
+ID_INNER9CHOICE
+ID_INNER10NAME
+ID_INNER10CHECKBOX
+ID_INNER10CHOICE
+ID_INNER11NAME
+ID_INNER11CHECKBOX
+ID_INNER11CHOICE
+ID_INNER12NAME
+ID_INNER12CHECKBOX
+ID_INNER12CHOICE
+ID_INNER13NAME
+ID_INNER13CHECKBOX
+ID_INNER13CHOICE
+ID_INNER14NAME
+ID_INNER14CHECKBOX
+ID_INNER14CHOICE
+ID_INNER15NAME
+ID_INNER15CHECKBOX
+ID_INNER15CHOICE
+ID_BACKNAME
+ID_BACKCHECKBOX
+ID_BACKCHOICE
+ID_MASKBACKNAME
+ID_SILKSBACKNAME
+ID_SILKSBACKCHECKBOX
+ID_SOLDPBACKNAME
+ID_SOLDPBACKCHECKBOX
+ID_ADHESBACKNAME
+ID_ADHESBACKCHECKBOX
+ID_PCBEDGESNAME
+ID_PCBEDGESCHECKBOX
+ID_ECO2NAME
+ID_ECHO2CHECKBOX
+ID_ECO1NAME
+ID_ECO1CHECKBOX
+ID_COMMENTSNAME
+ID_COMMENTSCHECKBOX
+ID_DRAWINGSNAME
+ID_DRAWINGSCHECKBOX
+*/
+
+
 
     // @todo overload a layout function so we can reposition the column titles,
     // which should probably not go in a sizer of their own so that we do not have
@@ -290,11 +399,11 @@ void DIALOG_LAYERS_SETUP::SetRoutableLayerStatus()
     m_gridLayersProperties->SetColFormatBool( LAYERS_GRID_ENABLED_POSITION );
     for( int ii = 0; ii <  m_gridLayersProperties->GetNumberRows(); ii++ )
     {
-        int      layer = LAYER_CMP_N - ii;
+        int      layer = LAYER_N_FRONT - ii;
         wxString value = layer < (m_ActivesLayersCount - 1) ? wxT( "1" ) : wxT( "0" );
-        if( m_ActivesLayersCount > 1 && layer == LAYER_CMP_N )
+        if( m_ActivesLayersCount > 1 && layer == LAYER_N_FRONT )
             value = wxT( "1" );
-        if(  layer == COPPER_LAYER_N )
+        if(  layer == LAYER_N_BACK )
             value = wxT( "1" );
         m_gridLayersProperties->SetCellValue( ii, LAYERS_GRID_ENABLED_POSITION, value );
         m_gridLayersProperties->SetReadOnly( ii, LAYERS_GRID_ENABLED_POSITION );
@@ -320,6 +429,17 @@ void DIALOG_LAYERS_SETUP::OnCancelButtonClick( wxCommandEvent& event )
 void DIALOG_LAYERS_SETUP::OnOkButtonClick( wxCommandEvent& event )
 /**************************************************************************/
 {
+
+    // temporary code to set the copper layer count until the custom layer enabling is in place:
+
+    int copperLayerCount = m_CopperLayersChoice->GetSelection() * 2;
+    if( copperLayerCount <= 0 )
+        copperLayerCount = 1;
+
+    g_DesignSettings.SetCopperLayerCount( copperLayerCount );
+    m_Parent->ReCreateLayerBox( NULL );
+
+
 /*
     if( !TestDataValidity() )
     {
@@ -333,9 +453,9 @@ void DIALOG_LAYERS_SETUP::OnOkButtonClick( wxCommandEvent& event )
     for( int ii = 0; ii <  m_gridLayersProperties->GetNumberRows(); ii++ )
     {
         wxString layer_name = m_gridLayersProperties->GetCellValue( ii, LAYERS_GRID_NAME_POSITION );
-        if( layer_name != m_Pcb->GetLayerName( LAYER_CMP_N - ii ) )
+        if( layer_name != m_Pcb->GetLayerName( LAYER_N_FRONT - ii ) )
         {
-            m_Pcb->SetLayerName( LAYER_CMP_N - ii, layer_name );
+            m_Pcb->SetLayerName( LAYER_N_FRONT - ii, layer_name );
         }
     }
 
@@ -343,7 +463,7 @@ void DIALOG_LAYERS_SETUP::OnOkButtonClick( wxCommandEvent& event )
     for( int ii = 0; ii <  m_gridLayersProperties->GetNumberRows(); ii++ )
     {
         wxString txt   = m_gridLayersProperties->GetCellValue( ii, LAYERS_GRID_TYPE_POSITION );
-        int      layer = LAYER_CMP_N - ii;
+        int      layer = LAYER_N_FRONT - ii;
         for( int jj = 0; jj < 3; jj++ )
         {
             if( m_LayersTypeName[jj] == txt )

@@ -47,7 +47,7 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
     else
     {
         Route_Layer_TOP =
-            Route_Layer_BOTTOM = COPPER_LAYER_N;
+            Route_Layer_BOTTOM = LAYER_N_BACK;
     }
 
     switch( mode )

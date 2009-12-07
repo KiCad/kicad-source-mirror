@@ -162,8 +162,8 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE*  File,
         if( makeType == TYPE_VIA ) // Ensure layers are OK when possible:
         {
             if( newTrack->Shape() == VIA_THROUGH )
-                ( (SEGVIA*) newTrack )->SetLayerPair( LAYER_CMP_N,
-                                                      COPPER_LAYER_N );
+                ( (SEGVIA*) newTrack )->SetLayerPair( LAYER_N_FRONT,
+                                                      LAYER_N_BACK );
         }
 
         newTrack->SetNet( net_code );

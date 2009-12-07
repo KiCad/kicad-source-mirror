@@ -268,7 +268,7 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
         via->SetDrillValue( drillDiam );
         via->m_Shape = VIA_THROUGH;
         via->m_Width = viaDiam;
-        via->SetLayerPair( CMP_N, COPPER_LAYER_N );
+        via->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
     }
     else if( shapeCount == copperLayerCount )
     {
@@ -286,7 +286,7 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
         via->SetDrillValue( drillDiam );
         via->m_Shape = VIA_THROUGH;
         via->m_Width = viaDiam;
-        via->SetLayerPair( CMP_N, COPPER_LAYER_N );
+        via->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
     }
     else    // VIA_MICROVIA or VIA_BLIND_BURIED
     {
@@ -408,7 +408,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
             {
                 // convert from degrees to tenths of degrees used in Kicad.
                 int orientation = (int) (place->rotation * 10.0);
-                if( module->GetLayer() != CMP_N )
+                if( module->GetLayer() != LAYER_N_FRONT )
                 {
                     // module is on copper layer (back)
                     module->Flip( module->m_Pos );
@@ -418,7 +418,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
             else if( place->side == T_back )
             {
                 int orientation = (int) ((place->rotation + 180.0) * 10.0);
-                if( module->GetLayer() != COPPER_LAYER_N )
+                if( module->GetLayer() != LAYER_N_BACK )
                 {
                     // module is on component layer (front)
                     module->Flip( module->m_Pos );

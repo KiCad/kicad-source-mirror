@@ -748,7 +748,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
         Module->m_Drawings.PushFront( edge );
 
         edge->m_Shape = S_POLYGON;
-        edge->SetLayer( LAYER_CMP_N );
+        edge->SetLayer( LAYER_N_FRONT );
 
         int numPoints = angle / 50 + 3;     // Note: angles are in 0.1 degrees
         edge->m_PolyPoints.reserve( numPoints );
@@ -1064,7 +1064,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape()
     Module->m_Drawings.PushFront( edge );
 
     edge->m_Shape = S_POLYGON;
-    edge->SetLayer( LAYER_CMP_N );
+    edge->SetLayer( LAYER_N_FRONT );
     npoints = PolyEdgesCount;
 
     edge->m_PolyPoints.reserve( 2 * PolyEdgesCount + 2 );

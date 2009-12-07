@@ -106,7 +106,7 @@ void WinEDA_PcbFrame::ExportToGenCAD( wxCommandEvent& event )
     for( module = GetBoard()->m_Modules; module != NULL; module = module->Next() )
     {
         module->flag = 0;
-        if( module->GetLayer() == COPPER_LAYER_N )
+        if( module->GetLayer() == LAYER_N_BACK )
         {
             module->Flip( module->m_Pos );
             module->flag = 1;
@@ -356,14 +356,14 @@ void CreateShapesSection( FILE* file, BOARD* pcb )
             layer = "ALL";
             if( ( pad->m_Masque_Layer & ALL_CU_LAYERS ) == CUIVRE_LAYER )
             {
-                if( module->GetLayer() == CMP_N )
+                if( module->GetLayer() == LAYER_N_FRONT )
                     layer = "BOTTOM";
                 else
                     layer = "TOP";
             }
             else if( ( pad->m_Masque_Layer & ALL_CU_LAYERS ) == CMP_LAYER )
             {
-                if( module->GetLayer() == CMP_N )
+                if( module->GetLayer() == LAYER_N_FRONT )
                     layer = "TOP";
                 else
                     layer = "BOTTOM";

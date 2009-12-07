@@ -149,6 +149,19 @@ public:
     ~BOARD();
 
     /**
+     * Function GetDefaultLayerName
+     * returns a default name of a PCB layer when given \a aLayerNumber.  This
+     * function is static so it can be called without a BOARD instance.  Use
+     * GetLayerName() if want the layer names of a specific BOARD, which could
+     * be different than the default if the user has renamed any copper layers.
+     *
+     * @param  aLayerNumber is the layer number to fetch
+     * @return wxString - containing the layer name or "BAD INDEX" if aLayerNumber
+     *                      is not legal
+     */
+    static wxString GetDefaultLayerName( int aLayerNumber );
+
+    /**
      * Function GetPosition
      * is here to satisfy BOARD_ITEM's requirements, but this implementation
      * is a dummy.
@@ -287,7 +300,7 @@ public:
      * Function GetLayerName
      * returns the name of the copper layer given by aLayerIndex.
      *
-     * @param aLayerIndex A layer index, like COPPER_LAYER_N, etc.
+     * @param aLayerIndex A layer index, like LAYER_N_BACK, etc.
      * @return wxString - the layer name.
      */
     wxString GetLayerName( int aLayerIndex ) const;
@@ -296,7 +309,7 @@ public:
      * Function SetLayerName
      * changes the name of the layer given by aLayerIndex.
      *
-     * @param aLayerIndex A layer index, like COPPER_LAYER_N, etc.
+     * @param aLayerIndex A layer index, like LAYER_N_BACK, etc.
      * @param aLayerName The new layer name
      * @return bool - true if aLayerName was legal and unique amoung other
      *   layer names at other layer indices and aLayerIndex was within range, else false.
@@ -307,7 +320,7 @@ public:
      * Function GetLayerType
      * returns the type of the copper layer given by aLayerIndex.
      *
-     * @param aLayerIndex A layer index, like COPPER_LAYER_N, etc.
+     * @param aLayerIndex A layer index, like LAYER_N_BACK, etc.
      * @return LAYER_T - the layer type, or LAYER_T(-1) if the
      *  index was out of range.
      */
@@ -317,7 +330,7 @@ public:
      * Function SetLayerName
      * changes the name of the layer given by aLayerIndex.
      *
-     * @param aLayerIndex A layer index, like COPPER_LAYER_N, etc.
+     * @param aLayerIndex A layer index, like LAYER_N_BACK, etc.
      * @param aLayerType The new layer type.
      * @return bool - true if aLayerType was legal and aLayerIndex was within range, else false.
      */

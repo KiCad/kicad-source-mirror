@@ -251,10 +251,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
 
         if( module )
         {
-            if( m_Guide->IgnoreMTextsOnCopper() && module->GetLayer()==COPPER_LAYER_N )
+            if( m_Guide->IgnoreMTextsOnCopper() && module->GetLayer()==LAYER_N_BACK )
                 goto exit;
 
-            if( m_Guide->IgnoreMTextsOnCmp() && module->GetLayer()==LAYER_CMP_N )
+            if( m_Guide->IgnoreMTextsOnCmp() && module->GetLayer()==LAYER_N_FRONT )
                 goto exit;
         }
         break;
@@ -271,10 +271,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
 
     if( module )    // true from case TYPE_PAD, TYPE_TEXTE_MODULE, or TYPE_MODULE
     {
-        if( m_Guide->IgnoreModulesOnCu() && module->GetLayer()==COPPER_LAYER_N )
+        if( m_Guide->IgnoreModulesOnCu() && module->GetLayer()==LAYER_N_BACK )
             goto exit;
 
-        if( m_Guide->IgnoreModulesOnCmp() && module->GetLayer()==LAYER_CMP_N )
+        if( m_Guide->IgnoreModulesOnCmp() && module->GetLayer()==LAYER_N_FRONT )
             goto exit;
     }
 

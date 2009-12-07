@@ -274,7 +274,7 @@ void TEXTE_PCB::Flip(const wxPoint& aCentre )
 {
     m_Pos.y  = aCentre.y - ( m_Pos.y - aCentre.y );
     NEGATE( m_Orient );
-    if( ( GetLayer() == COPPER_LAYER_N ) || ( GetLayer() == CMP_N ) )
+    if( ( GetLayer() == LAYER_N_BACK ) || ( GetLayer() == LAYER_N_FRONT ) )
     {
         m_Mirror = not m_Mirror;      /* inverse mirror */
     }

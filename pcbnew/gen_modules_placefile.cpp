@@ -120,7 +120,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 #endif
         }
 
-        if( module->GetLayer() == COPPER_LAYER_N )
+        if( module->GetLayer() == LAYER_N_BACK )
             doBoardBack = true;
 
         moduleCount++;
@@ -133,7 +133,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     }
 
     fnFront = GetScreen()->m_FileName;
-    frontLayerName = GetBoard()->GetLayerName( CMP_N );
+    frontLayerName = GetBoard()->GetLayerName( LAYER_N_FRONT );
     fnFront.SetName( fnFront.GetName() + frontLayerName );
     fnFront.SetExt( wxT( "pos") );
 
@@ -148,7 +148,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     if( doBoardBack )
     {
         fnBack = GetScreen()->m_FileName;
-        backLayerName = GetBoard()->GetLayerName( COPPER_LAYER_N );
+        backLayerName = GetBoard()->GetLayerName( LAYER_N_BACK );
         fnBack.SetName( fnBack.GetName() + backLayerName );
         fnBack.SetExt( wxT( "pos" ) );
 
@@ -252,15 +252,15 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 
         int layer = Liste[ii].m_Module->GetLayer();
 
-        wxASSERT( layer==CMP_N || layer==COPPER_LAYER_N );
+        wxASSERT( layer==LAYER_N_FRONT || layer==LAYER_N_BACK );
 
-        if( layer == CMP_N )
+        if( layer == LAYER_N_FRONT )
         {
             strcat( line, CONV_TO_UTF8( frontLayerName ) );
             strcat( line, "\n" );
             fputs( line, fpFront );
         }
-        else if( layer == COPPER_LAYER_N )
+        else if( layer == LAYER_N_BACK )
         {
             strcat( line, CONV_TO_UTF8( backLayerName ) );
             strcat( line, "\n" );
@@ -396,9 +396,9 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
         fputs( line, rptfile );
 
         sprintf( line, "orientation  %.2f\n", (double) Module->m_Orient / 10 );
-        if( Module->GetLayer() == CMP_N )
+        if( Module->GetLayer() == LAYER_N_FRONT )
             strcat( line, "layer component\n" );
-        else if( Module->GetLayer() == COPPER_LAYER_N )
+        else if( Module->GetLayer() == LAYER_N_BACK )
             strcat( line, "layer copper\n" );
         else
             strcat( line, "layer other\n" );

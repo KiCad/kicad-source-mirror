@@ -130,12 +130,12 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
     int layer_cnt = board->GetCopperLayerCount();
     for( int ii = 0; ii < board->GetCopperLayerCount(); ii++ )
     {
-        int layer_number = COPPER_LAYER_N;
+        int layer_number = LAYER_N_BACK;
 
         if( layer_cnt <= 1 || ii < layer_cnt - 1 )
             layer_number = ii;
         else if( ii == layer_cnt - 1 )
-            layer_number = LAYER_CMP_N;
+            layer_number = LAYER_N_FRONT;
 
         m_LayerId[ii] = layer_number;
 

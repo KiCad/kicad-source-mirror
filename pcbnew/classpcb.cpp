@@ -96,9 +96,9 @@ void PCB_SCREEN::Init()
 /*************************/
 {
     InitDatas();
-    m_Active_Layer       = COPPER_LAYER_N;      /* default active layer = bottom layer */
-    m_Route_Layer_TOP    = CMP_N;               /* default layers pair for vias (bottom to top) */
-    m_Route_Layer_BOTTOM = COPPER_LAYER_N;
+    m_Active_Layer       = LAYER_N_BACK;      /* default active layer = bottom layer */
+    m_Route_Layer_TOP    = LAYER_N_FRONT;                /* default layers pair for vias (bottom to top) */
+    m_Route_Layer_BOTTOM = LAYER_N_BACK;
     m_Zoom = 150;                               /* a default value for zoom */
 }
 
@@ -123,8 +123,8 @@ bool PCB_SCREEN::IsMicroViaAcceptable( void )
         return false;   // Obvious..
     if( copperlayercnt < 4 )
         return false;   // Only on multilayer boards..
-    if( ( m_Active_Layer == COPPER_LAYER_N )
-       || ( m_Active_Layer == LAYER_CMP_N )
+    if( ( m_Active_Layer == LAYER_N_BACK )
+       || ( m_Active_Layer == LAYER_N_FRONT )
        || ( m_Active_Layer == g_DesignSettings.GetCopperLayerCount( ) - 2 )
        || ( m_Active_Layer == LAYER_N_2 ) )
         return true;

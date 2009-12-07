@@ -373,8 +373,8 @@ void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
 {
     if( Shape() == VIA_THROUGH )
     {
-        top_layer    = LAYER_CMP_N;
-        bottom_layer = COPPER_LAYER_N;
+        top_layer    = LAYER_N_FRONT;
+        bottom_layer = LAYER_N_BACK;
     }
 
     if( bottom_layer > top_layer )
@@ -396,8 +396,8 @@ void SEGVIA::ReturnLayerPair( int* top_layer, int* bottom_layer ) const
  *  @param bottom_layer = pointer to the last layer (can be null)
  */
 {
-    int b_layer = COPPER_LAYER_N;
-    int t_layer = LAYER_CMP_N;
+    int b_layer = LAYER_N_BACK;
+    int t_layer = LAYER_N_FRONT;
 
     if( Shape() != VIA_THROUGH )
     {
@@ -828,7 +828,7 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
     {
         int ax, ay, bx, by;
 
-        if( IsOnLayer( COPPER_LAYER_N ) )
+        if( IsOnLayer( LAYER_N_BACK ) )
         {
             ax = rayon; ay = 0;
             bx = drill_rayon; by = 0;

@@ -30,7 +30,7 @@ MODULE::MODULE( BOARD* parent ) :
     BOARD_ITEM( parent, TYPE_MODULE )
 {
     m_Attributs    = MOD_DEFAULT;
-    m_Layer        = CMP_N;
+    m_Layer        = LAYER_N_FRONT;
     m_Orient       = 0;
     m_ModuleStatus = 0;
     flag = 0;

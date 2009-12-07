@@ -257,17 +257,6 @@ bool               ProcessExecute( const wxString& aCommandLine,
                                    int             aFlags = wxEXEC_ASYNC );
 
 
-/**
- * Function ReturnPcbLayerName
- * @return a wxString containing the name of the layer number "layer_number".
- * @param layer_number the layer number of the layer
- * @param is_filename if TRUE,  the name can be used for a file name (not
- *        internationalized, no space)
- */
-wxString           ReturnPcbLayerName( int  layer_number,
-                                       bool is_filename = FALSE );
-
-
 /*******************/
 /* about_kicad.cpp */
 /*******************/

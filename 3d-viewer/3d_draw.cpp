@@ -189,7 +189,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     param = g_Parm_3D_Visu.m_LayerZcoord[15];
     glFogfv( GL_FOG_END, &param );
     glBegin( GL_QUADS );
-    SetGLColor( g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[CMP_N] );
+    SetGLColor( g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[LAYER_N_FRONT] );
     double sx   = DataScale3D * g_Parm_3D_Visu.m_BoardSize.x / 2;
     double sy   = DataScale3D * g_Parm_3D_Visu.m_BoardSize.y / 2;
     double zpos = g_Parm_3D_Visu.m_LayerZcoord[15];
@@ -201,7 +201,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     glVertex3f( sx, -sy, zpos );
     glEnd();
     glBegin( GL_QUADS );
-    SetGLColor( g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[COPPER_LAYER_N] );
+    SetGLColor( g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[LAYER_N_BACK] );
     glNormal3f( 0.0, 0.0, -1.0 ); // Normal is -Z axis
     glVertex3f( -sx, -sy, 0 );
     glVertex3f( -sx, sy, 0 );
@@ -369,7 +369,7 @@ void Pcb3D_GLCanvas::Draw3D_Track( TRACK* track )
     zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
 
     SetGLColor( color );
-    glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0 );
+    glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
 
     w  = track->m_Width * g_Parm_3D_Visu.m_BoardScale;
     ox = track->m_Start.x * g_Parm_3D_Visu.m_BoardScale;
@@ -401,7 +401,7 @@ void Pcb3D_GLCanvas::Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* zone_c )
 
 
     SetGLColor( color );
-    glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0 );
+    glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
 
     GLUtesselator* tess = gluNewTess();
     gluTessCallback( tess, GLU_TESS_BEGIN, ( void (CALLBACK*)() )tessBeginCB );
@@ -412,7 +412,7 @@ void Pcb3D_GLCanvas::Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* zone_c )
     GLdouble v_data[3];
 
     //gluTessProperty(tess, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_NONZERO);
-    
+
     // Draw solid areas contained in this zone
     int      StartContour = 1;
     for( unsigned ii = 0; ii < zone_c->m_FilledPolysList.size(); ii++ )
@@ -471,17 +471,17 @@ void Pcb3D_GLCanvas::Draw3D_Via( SEGVIA* via )
         }
         else
         {
-            if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( CMP_N ) ==
+            if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( LAYER_N_FRONT ) ==
                 false )
                 continue;
-            color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[CMP_N];
+            color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[LAYER_N_FRONT];
         }
 
         SetGLColor( color );
 
         // SetGLColor( LIGHTGRAY );
-        glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0 );
-        if( layer == COPPER_LAYER_N )
+        glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
+        if( layer == LAYER_N_BACK )
             zpos = zpos - 5 * g_Parm_3D_Visu.m_BoardScale;
         else
             zpos = zpos + 5 * g_Parm_3D_Visu.m_BoardScale;
@@ -523,7 +523,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawSegment( DRAWSEGMENT* segment )
     {
         for( layer = 0; layer < g_Parm_3D_Visu.m_Layers; layer++ )
         {
-            glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0 );
+            glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
             zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
 
             switch( segment->m_Shape )
@@ -645,12 +645,12 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
 #if 0
     if( !DisplayOpt.Show_Modules_Cmp )
     {
-        if( m_Layer == CMP_N )
+        if( m_Layer == LAYER_N_FRONT )
             return;
     }
     if( !DisplayOpt.Show_Modules_Cu )
     {
-        if( m_Layer == COPPER_LAYER_N )
+        if( m_Layer == LAYER_N_BACK )
             return;
     }
 #endif
@@ -678,7 +678,7 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
         {
             glRotatef( (double) m_Orient / 10, 0.0, 0.0, 1.0 );
         }
-        if( m_Layer == COPPER_LAYER_N )
+        if( m_Layer == LAYER_N_BACK )
         {
             glRotatef( 180.0, 0.0, 1.0, 0.0 );
             glRotatef( 180.0, 0.0, 0.0, 1.0 );
@@ -734,7 +734,7 @@ void EDGE_MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
 
 
     SetGLColor( color );
-    glNormal3f( 0.0, 0.0, (m_Layer == COPPER_LAYER_N) ? -1.0 : 1.0 );
+    glNormal3f( 0.0, 0.0, (m_Layer == LAYER_N_BACK) ? -1.0 : 1.0 );
     scale = g_Parm_3D_Visu.m_BoardScale;
 
     dx   = m_End.x;
@@ -812,7 +812,7 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
     {
         SetGLColor( DARKGRAY );
         Draw3D_FilledCylinder( drillx, -drilly, hole,
-                               g_Parm_3D_Visu.m_LayerZcoord[CMP_N], 0.0 );
+                               g_Parm_3D_Visu.m_LayerZcoord[LAYER_N_FRONT], 0.0 );
     }
 
     glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis
@@ -830,10 +830,10 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
         for( layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; layer++ )
         {
             if( layer && (layer == nlmax) )
-                layer = CMP_N;
-            if( (layer == CMP_N) && !Oncmp )
+                layer = LAYER_N_FRONT;
+            if( (layer == LAYER_N_FRONT) && !Oncmp )
                 continue;
-            if( (layer == COPPER_LAYER_N) && !Oncu )
+            if( (layer == LAYER_N_BACK) && !Oncu )
                 continue;
             if( (layer > FIRST_COPPER_LAYER) && (layer < LAST_COPPER_LAYER)
                && !Both )
@@ -844,9 +844,9 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
                 continue;
 
             SetGLColor( color );
-            glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0 );
+            glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
             zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
-            if( layer == COPPER_LAYER_N )
+            if( layer == LAYER_N_BACK )
                 zpos = zpos - 5 * g_Parm_3D_Visu.m_BoardScale;
             else
                 zpos = zpos + 5 * g_Parm_3D_Visu.m_BoardScale;
@@ -882,23 +882,23 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
                  layer++ )
             {
                 if( layer && (layer == nlmax) )
-                    layer = CMP_N;
-                if( (layer == CMP_N) && !Oncmp )
+                    layer = LAYER_N_FRONT;
+                if( (layer == LAYER_N_FRONT) && !Oncmp )
                     continue;
-                if( (layer == COPPER_LAYER_N) && !Oncu )
+                if( (layer == LAYER_N_BACK) && !Oncu )
                     continue;
                 if( (layer > FIRST_COPPER_LAYER)
                    && (layer < LAST_COPPER_LAYER) && !Both )
                     continue;
                 color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
-                glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0 );
+                glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
                 if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) ==
                     false )
                     continue;
 
                 SetGLColor( color );
                 zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
-                if( layer == COPPER_LAYER_N )
+                if( layer == LAYER_N_BACK )
                     zpos = zpos - 5 * g_Parm_3D_Visu.m_BoardScale;
                 else
                     zpos = zpos + 5 * g_Parm_3D_Visu.m_BoardScale;
@@ -960,23 +960,23 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
         for( layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; layer++ )
         {
             if( layer && (layer == nlmax) )
-                layer = CMP_N;
-            if( (layer == CMP_N) && !Oncmp )
+                layer = LAYER_N_FRONT;
+            if( (layer == LAYER_N_FRONT) && !Oncmp )
                 continue;
-            if( (layer == COPPER_LAYER_N) && !Oncu )
+            if( (layer == LAYER_N_BACK) && !Oncu )
                 continue;
             if( (layer > FIRST_COPPER_LAYER) && (layer < LAST_COPPER_LAYER)
                && !Both )
                 continue;
             color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
-            glNormal3f( 0.0, 0.0, (layer == COPPER_LAYER_N) ? -1.0 : 1.0 );
+            glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
             if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) ==
                 false )
                 continue;
 
             SetGLColor( color );
             zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
-            if( layer == COPPER_LAYER_N )
+            if( layer == LAYER_N_BACK )
                 zpos = zpos - 5 * g_Parm_3D_Visu.m_BoardScale;
             else
                 zpos = zpos + 5 * g_Parm_3D_Visu.m_BoardScale;

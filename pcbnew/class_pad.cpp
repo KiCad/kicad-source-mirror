@@ -540,20 +540,15 @@ bool D_PAD::Save( FILE* aFile ) const
 
 void D_PAD::DisplayInfo( WinEDA_DrawFrame* frame )
 {
-    int      ii;
-    MODULE*  module;
-    wxString Line;
+    MODULE*     module;
+    wxString    Line;
+    BOARD*      board;
 
     /* Pad messages */
     static const wxString Msg_Pad_Shape[6] =
-    { wxT( "??? " ), wxT( "Circ" ), wxT( "Rect" ), wxT( "Oval" ), wxT( "trap" ),
-      wxT( "spec" ) };
-
-    static const wxString Msg_Pad_Layer[9] =
     {
-        wxT( "??? " ), wxT( "cmp   " ), wxT( "cu    " ), wxT( "cmp+cu " ),
-        wxT( "int    " ), wxT( "cmp+int " ), wxT( "cu+int " ),
-        wxT( "all    " ), wxT( "No copp" )
+        wxT( "??? " ), wxT( "Circ" ), wxT( "Rect" ), wxT( "Oval" ), wxT( "trap" ),
+        wxT( "spec" )
     };
 
     static const wxString Msg_Pad_Attribut[5] =
@@ -570,6 +565,7 @@ void D_PAD::DisplayInfo( WinEDA_DrawFrame* frame )
         ReturnStringPadName( Line );
         frame->AppendMsgPanel( _( "RefP" ), Line, BROWN );
     }
+
     frame->AppendMsgPanel( _( "Net" ), m_Netname, DARKCYAN );
 
     /* For test and debug only: display m_physical_connexion and
@@ -580,85 +576,112 @@ void D_PAD::DisplayInfo( WinEDA_DrawFrame* frame )
     frame->AppendMsgPanel( wxT( "L-P-Z" ), Line, DARKGREEN );
 #endif
 
-    wxString LayerInfo;
+    board = GetBoard();
 
-    ii = 0;
-    if( m_Masque_Layer & CUIVRE_LAYER )
-        ii = 2;
-    if( m_Masque_Layer & CMP_LAYER )
-        ii += 1;
-    if( (m_Masque_Layer & ALL_CU_LAYERS) == ALL_CU_LAYERS )
-        ii = 7;
+    wxString layerInfo;
 
-    LayerInfo = Msg_Pad_Layer[ii];
-    if( (m_Masque_Layer & ALL_CU_LAYERS) == 0 )
+    if( (m_Masque_Layer & ALL_CU_LAYERS) == 0 )     // pad is not on any copper layers
     {
-        if( m_Masque_Layer )
-            LayerInfo = Msg_Pad_Layer[8];
-
         switch( m_Masque_Layer & ~ALL_CU_LAYERS )
         {
         case ADHESIVE_LAYER_CU:
-            LayerInfo = ReturnPcbLayerName( ADHESIVE_N_CU );
+            layerInfo = board->GetLayerName( ADHESIVE_N_CU );
             break;
 
         case ADHESIVE_LAYER_CMP:
-            LayerInfo = ReturnPcbLayerName( ADHESIVE_N_CMP );
+            layerInfo = board->GetLayerName( ADHESIVE_N_CMP );
             break;
 
         case SOLDERPASTE_LAYER_CU:
-            LayerInfo = ReturnPcbLayerName( SOLDERPASTE_N_CU );
+            layerInfo = board->GetLayerName( SOLDERPASTE_N_CU );
             break;
 
         case SOLDERPASTE_LAYER_CMP:
-            LayerInfo = ReturnPcbLayerName( SOLDERPASTE_N_CMP );
+            layerInfo = board->GetLayerName( SOLDERPASTE_N_CMP );
             break;
 
         case SILKSCREEN_LAYER_CU:
-            LayerInfo = ReturnPcbLayerName( SILKSCREEN_N_CU );
+            layerInfo = board->GetLayerName( SILKSCREEN_N_CU );
             break;
 
         case SILKSCREEN_LAYER_CMP:
-            LayerInfo = ReturnPcbLayerName( SILKSCREEN_N_CMP );
+            layerInfo = board->GetLayerName( SILKSCREEN_N_CMP );
             break;
 
         case SOLDERMASK_LAYER_CU:
-            LayerInfo = ReturnPcbLayerName( SOLDERMASK_N_CU );
+            layerInfo = board->GetLayerName( SOLDERMASK_N_CU );
             break;
 
         case SOLDERMASK_LAYER_CMP:
-            LayerInfo = ReturnPcbLayerName( SOLDERMASK_N_CMP );
+            layerInfo = board->GetLayerName( SOLDERMASK_N_CMP );
             break;
 
         case DRAW_LAYER:
-            LayerInfo = ReturnPcbLayerName( DRAW_N );
+            layerInfo = board->GetLayerName( DRAW_N );
             break;
 
         case COMMENT_LAYER:
-            LayerInfo = ReturnPcbLayerName( COMMENT_N );
+            layerInfo = board->GetLayerName( COMMENT_N );
             break;
 
         case ECO1_LAYER:
-            LayerInfo = ReturnPcbLayerName( ECO1_N );
+            layerInfo = board->GetLayerName( ECO1_N );
             break;
 
         case ECO2_LAYER:
-            LayerInfo = ReturnPcbLayerName( ECO2_N );
+            layerInfo = board->GetLayerName( ECO2_N );
             break;
 
         case EDGE_LAYER:
-            LayerInfo = ReturnPcbLayerName( EDGE_N );
+            layerInfo = board->GetLayerName( EDGE_N );
             break;
 
         default:
+            layerInfo = _( "Non-copper" );
             break;
         }
     }
-    frame->AppendMsgPanel( _( "Layer" ), LayerInfo, DARKGREEN );
+    else
+    {
+#define INTERIOR_COPPER     (ALL_CU_LAYERS & ~(CUIVRE_LAYER | CMP_LAYER))
+
+        static const wxChar* andInternal = _( " & int" );
+
+        if( (m_Masque_Layer & (CUIVRE_LAYER | CMP_LAYER)) == CUIVRE_LAYER )
+        {
+            layerInfo = board->GetLayerName( LAYER_N_BACK );
+
+            if( m_Masque_Layer & INTERIOR_COPPER )
+                layerInfo += andInternal;
+        }
+
+        else if( (m_Masque_Layer & (CUIVRE_LAYER | CMP_LAYER)) == (CUIVRE_LAYER | CMP_LAYER) )
+        {
+            layerInfo = board->GetLayerName( LAYER_N_BACK ) + wxT(", ") +
+                        board->GetLayerName( LAYER_N_FRONT );
+
+            if( m_Masque_Layer & INTERIOR_COPPER )
+                layerInfo += andInternal;
+        }
+
+        else if( (m_Masque_Layer & (CUIVRE_LAYER | CMP_LAYER)) == CMP_LAYER )
+        {
+            layerInfo = board->GetLayerName( LAYER_N_FRONT );
+
+            if( m_Masque_Layer & INTERIOR_COPPER )
+                layerInfo += andInternal;
+        }
+
+        else // necessarily true: if( m_Masque_Layer & INTERIOR_COPPER )
+            layerInfo = _( "internal" );
+    }
+
+    frame->AppendMsgPanel( _( "Layer" ), layerInfo, DARKGREEN );
 
     int attribut = m_Attribut & 15;
     if( attribut > 3 )
         attribut = 3;
+
     frame->AppendMsgPanel( Msg_Pad_Shape[m_PadShape],
                            Msg_Pad_Attribut[attribut], DARKGREEN );
 
@@ -682,7 +705,6 @@ void D_PAD::DisplayInfo( WinEDA_DrawFrame* frame )
         frame->AppendMsgPanel( _( "Drill X / Y" ), Line, RED );
     }
 
-
     int module_orient = module ? module->m_Orient : 0;
     if( module_orient )
         Line.Printf( wxT( "%3.1f(+%3.1f)" ),
@@ -690,6 +712,7 @@ void D_PAD::DisplayInfo( WinEDA_DrawFrame* frame )
                      (float) module_orient / 10 );
     else
         Line.Printf( wxT( "%3.1f" ), (float) m_Orient / 10 );
+
     frame->AppendMsgPanel( _( "Orient" ), Line, BLUE );
 
     valeur_param( m_Pos.x, Line );

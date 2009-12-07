@@ -1520,7 +1520,7 @@ void SPECCTRA_DB::FlipMODULEs( BOARD* aBoard )
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
     {
         module->flag = 0;
-        if( module->GetLayer() == COPPER_LAYER_N )
+        if( module->GetLayer() == LAYER_N_BACK )
         {
             module->Flip( module->m_Pos );
             module->flag = 1;

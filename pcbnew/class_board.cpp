@@ -38,7 +38,7 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
 
     for( int layer = 0; layer < NB_COPPER_LAYERS; ++layer )
     {
-        m_Layer[layer].m_Name = ReturnPcbLayerName( layer, true );
+        m_Layer[layer].m_Name = GetDefaultLayerName( layer );
         m_Layer[layer].m_Type = LT_SIGNAL;
     }
 
@@ -180,6 +180,7 @@ int BOARD::GetCurrentMicroViaDrill()
 }
 
 
+
 wxString BOARD::GetLayerName( int aLayerIndex ) const
 {
     if( !IsValidLayerIndex( aLayerIndex ) )
@@ -194,7 +195,53 @@ wxString BOARD::GetLayerName( int aLayerIndex ) const
         return m_Layer[aLayerIndex].m_Name;
     }
 
-    return ReturnPcbLayerName( aLayerIndex, true );
+    return GetDefaultLayerName( aLayerIndex );
+}
+
+
+wxString BOARD::GetDefaultLayerName( int aLayerNumber )
+{
+    const wxChar* txt;
+
+    // These are only default layer names.  For PCBNEW, the copper names
+    // may be over-ridden in the BOARD (*.brd) file.
+
+    // Use a switch to explicitly show the mapping more clearly
+    switch( aLayerNumber )
+    {
+    case LAYER_N_FRONT:     txt = _( "Front" );         break;
+    case LAYER_N_2:         txt = _( "Inner2" );        break;
+    case LAYER_N_3:         txt = _( "Inner3" );        break;
+    case LAYER_N_4:         txt = _( "Inner4" );        break;
+    case LAYER_N_5:         txt = _( "Inner5" );        break;
+    case LAYER_N_6:         txt = _( "Inner6" );        break;
+    case LAYER_N_7:         txt = _( "Inner7" );        break;
+    case LAYER_N_8:         txt = _( "Inner8" );        break;
+    case LAYER_N_9:         txt = _( "Inner9" );        break;
+    case LAYER_N_10:        txt = _( "Inner10" );       break;
+    case LAYER_N_11:        txt = _( "Inner11" );       break;
+    case LAYER_N_12:        txt = _( "Inner12" );       break;
+    case LAYER_N_13:        txt = _( "Inner13" );       break;
+    case LAYER_N_14:        txt = _( "Inner14" );       break;
+    case LAYER_N_15:        txt = _( "Inner15" );       break;
+    case LAYER_N_BACK:      txt = _( "Back" );          break;
+    case ADHESIVE_N_CU:     txt = _( "Adhes_Back" );    break;
+    case ADHESIVE_N_CMP:    txt = _( "Adhes_Front" );   break;
+    case SOLDERPASTE_N_CU:  txt = _( "SoldP_Back" );    break;
+    case SOLDERPASTE_N_CMP: txt = _( "SoldP_Front" );   break;
+    case SILKSCREEN_N_CU:   txt = _( "SilkS_Back" );    break;
+    case SILKSCREEN_N_CMP:  txt = _( "SilkS_Front" );   break;
+    case SOLDERMASK_N_CU:   txt = _( "Mask_Back" );     break;
+    case SOLDERMASK_N_CMP:  txt = _( "Mask_Front" );    break;
+    case DRAW_N:            txt = _( "Drawings" );      break;
+    case COMMENT_N:         txt = _( "Comments" );      break;
+    case ECO1_N:            txt = _( "Eco1" );          break;
+    case ECO2_N:            txt = _( "Eco2" );          break;
+    case EDGE_N:            txt = _( "PCB_Edges" );     break;
+    default:                txt = _( "BAD INDEX" );     break;
+    }
+
+    return wxString( txt );
 }
 
 

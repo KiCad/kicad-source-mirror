@@ -535,51 +535,6 @@ void MyFree( void* pt_mem )
         free( pt_mem );
 }
 
-
-/*
- * Return the name of the layer number "layer_number".
- *  if omitSpacePadding == TRUE, the name can be used for a file name
- *  (no spaces, replaced by _)
- */
-wxString ReturnPcbLayerName( int layer_number, bool omitSpacePadding )
-{
-    const unsigned LAYER_LIMIT = 29;
-
-    // These are only default layer names.  For PCBNEW, the copper names
-    // may be over-ridden in the BOARD file *.brd.
-
-    static const wxString layer_name_list[] =
-    {
-        _( "Copper   " ), _( "Inner L1 " ), _( "Inner L2 " ), _( "Inner L3 " ),
-        _( "Inner L4 " ), _( "Inner L5 " ), _( "Inner L6 " ), _( "Inner L7 " ),
-        _( "Inner L8 " ), _( "Inner L9 " ), _( "Inner L10" ), _( "Inner L11" ),
-        _( "Inner L12" ), _( "Inner L13" ), _( "Inner L14" ), _( "Component" ),
-        _( "Adhes Cop" ), _( "Adhes Cmp" ), _( "SoldP Cop" ), _( "SoldP Cmp" ),
-        _( "SilkS Cop" ), _( "SilkS Cmp" ), _( "Mask Cop " ), _( "Mask Cmp " ),
-        _( "Drawings " ), _( "Comments " ), _( "Eco1     " ), _( "Eco2     " ),
-        _( "Edges Pcb" ), _( "BAD INDEX" )
-    };
-
-    if( (unsigned) layer_number > LAYER_LIMIT )
-        layer_number = LAYER_LIMIT;
-
-    const wxString* p = &layer_name_list[layer_number];
-
-    if( omitSpacePadding )
-    {
-        wxString ret = *p;  // copy the string
-
-        // modify the copy
-        ret.Trim();
-        ret.Replace( wxT( " " ), wxT( "_" ) );
-
-        return ret;
-    }
-    else
-        return *p;
-}
-
-
 enum textbox {
     ID_TEXTBOX_LIST = 8010
 };

@@ -139,7 +139,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_GerberFrame* parent ) :
 
         if( (pcb_layer_number == g_DesignSettings.GetCopperLayerCount() - 1)
            && (g_DesignSettings.GetCopperLayerCount() > 1) )
-            pcb_layer_number = CMP_N;
+            pcb_layer_number = LAYER_N_FRONT;
 
         ButtonTable[nb_items] = ii;
         LayerLookUpTable[ii]  = pcb_layer_number;
@@ -259,17 +259,17 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_GerberFrame* parent ) :
 
             for( int jj = 0; jj < NB_LAYERS; jj++ )
             {
-                text->SetLabel( ReturnPcbLayerName( jj ) );
+                text->SetLabel( BOARD::GetDefaultLayerName( jj ) );
                 if( goodSize.x < text->GetSize().x )
                     goodSize.x = text->GetSize().x;
             }
 
-            msg = ReturnPcbLayerName( LayerLookUpTable[ButtonTable[ii]] );
+            msg = BOARD::GetDefaultLayerName( LayerLookUpTable[ButtonTable[ii]] );
             text->SetLabel( msg );
         }
         else
         {
-            msg  = ReturnPcbLayerName( LayerLookUpTable[ButtonTable[ii]] );
+            msg  = BOARD::GetDefaultLayerName( LayerLookUpTable[ButtonTable[ii]] );
             text = new wxStaticText( this, item_ID, msg, wxDefaultPosition,
                                      wxDefaultSize, 0 );
         }
@@ -356,7 +356,7 @@ void WinEDA_SwapLayerFrame::OnSelectLayer( wxCommandEvent& event )
         }
         else
         {
-            layer_list[ii]->SetLabel( ReturnPcbLayerName( jj ) );
+            layer_list[ii]->SetLabel( BOARD::GetDefaultLayerName( jj ) );
 
             // Change the text color to fuchsia (to highlight
             // that this layer *is* being exported)
@@ -383,7 +383,7 @@ void WinEDA_SwapLayerFrame::OnOkClick( wxCommandEvent& event )
     int layers_count = 1;
     for( ii = 0; ii < 32; ii++ )
     {
-        if( LayerLookUpTable[ii] == CMP_N )
+        if( LayerLookUpTable[ii] == LAYER_N_FRONT )
             AsCmpLayer = true;
         else
         {

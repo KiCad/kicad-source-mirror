@@ -159,14 +159,14 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
 
         if( !DisplayOpt.Show_Modules_Cmp )
         {
-            if( module->GetLayer() == CMP_N )
+            if( module->GetLayer() == LAYER_N_FRONT )
                 display = FALSE;
             layerMask &= ~CMP_LAYER;
         }
 
         if( !DisplayOpt.Show_Modules_Cu )
         {
-            if( module->GetLayer() == COPPER_LAYER_N )
+            if( module->GetLayer() == LAYER_N_BACK )
                 display = FALSE;
             layerMask &= ~CUIVRE_LAYER;
         }

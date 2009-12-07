@@ -429,10 +429,10 @@ int WinEDA_PcbFrame::GenPlaceBoard()
     msg.Printf( wxT( "%d" ), Board.m_MemSize / 1024 );
     Affiche_1_Parametre( this, 24, wxT( "Mem(Kb)" ), msg, CYAN );
 
-    Route_Layer_BOTTOM = CMP_N;
+    Route_Layer_BOTTOM = LAYER_N_FRONT;
     if( Nb_Sides == TWO_SIDES )
-        Route_Layer_BOTTOM = COPPER_LAYER_N;
-    Route_Layer_TOP = CMP_N;
+        Route_Layer_BOTTOM = LAYER_N_BACK;
+    Route_Layer_TOP = LAYER_N_FRONT;
 
     /* Place the edge layer segments */
     PtStruct = GetBoard()->m_Drawings;
@@ -525,9 +525,9 @@ void WinEDA_PcbFrame::GenModuleOnBoard( MODULE* Module )
         fy = GetBoard()->m_BoundaryBox.GetBottom();
 
     masque_layer = 0;
-    if( Module->GetLayer() == CMP_N )
+    if( Module->GetLayer() == LAYER_N_FRONT )
         masque_layer = CMP_LAYER;
-    if( Module->GetLayer() == COPPER_LAYER_N )
+    if( Module->GetLayer() == LAYER_N_BACK )
         masque_layer = CUIVRE_LAYER;
 
     TraceFilledRectangle( GetBoard(), ox, oy, fx, fy, masque_layer,
@@ -603,7 +603,7 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
     {
         D_PAD* Pad; int masque_otherlayer;
         masque_otherlayer = CUIVRE_LAYER;
-        if( Module->GetLayer() == COPPER_LAYER_N )
+        if( Module->GetLayer() == LAYER_N_BACK )
             masque_otherlayer = CMP_LAYER;
 
         for( Pad = Module->m_Pads; Pad != NULL; Pad = Pad->Next() )
@@ -810,7 +810,7 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
     int error, Penalite, marge, side, otherside;
 
     side = TOP; otherside = BOTTOM;
-    if( Module->GetLayer() == COPPER_LAYER_N )
+    if( Module->GetLayer() == LAYER_N_BACK )
     {
         side = BOTTOM; otherside = TOP;
     }

@@ -353,8 +353,8 @@ void WinEDA_PcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
 {
     if( Module == NULL )
         return;
-    if( ( Module->GetLayer() != CMP_N )
-        && ( Module->GetLayer() != COPPER_LAYER_N ) )
+    if( ( Module->GetLayer() != LAYER_N_FRONT )
+        && ( Module->GetLayer() != LAYER_N_BACK ) )
         return;
 
     GetScreen()->SetModify();

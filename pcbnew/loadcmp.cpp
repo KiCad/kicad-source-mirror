@@ -78,7 +78,7 @@ void WinEDA_ModuleEditFrame::Load_Module_From_BOARD( MODULE* Module )
 
     GetScreen()->m_Curseur.x = GetScreen()->m_Curseur.y = 0;
     Place_Module( Module, NULL );
-    if( Module->GetLayer() != CMP_N )
+    if( Module->GetLayer() != LAYER_N_FRONT )
         Module->Flip( Module->m_Pos );
     Rotate_Module( NULL, Module, 0, FALSE );
     GetScreen()->ClrModify();

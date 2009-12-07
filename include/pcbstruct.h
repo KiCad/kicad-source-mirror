@@ -10,113 +10,111 @@
 #include "class_board_item.h"
 
 // Definitions relatives aux libraries
-#define ENTETE_LIBRAIRIE "PCBNEW-LibModule-V1"
-#define ENTETE_LIBDOC    "PCBNEW-LibDoc----V1"
-#define L_ENTETE_LIB     18
-#define EXT_DOC          wxT( "mdc" )
+#define ENTETE_LIBRAIRIE        "PCBNEW-LibModule-V1"
+#define ENTETE_LIBDOC           "PCBNEW-LibDoc----V1"
+#define L_ENTETE_LIB            18
+#define EXT_DOC                 wxT( "mdc" )
 
 
-#define FLAG1       (1 << 13)   /* flag for free local computations */
-#define FLAG0       (1 << 12)   /* flag for free local computations */
-#define BEGIN_ONPAD (1 << 11)   /* flag indicating a start of segment pad */
-#define END_ONPAD   (1 << 10)   /* flag indicating an end of segment pad */
-#define BUSY        (1 << 9)    /* flag indicating that the structure has
-                                 * already been edited, in some routines */
-#define DELETED     (1 << 8)    /* flag indicating structures erased nd set
-                                 * string "DELETED" */
-#define NO_TRACE    (1 << 7)    /* The element must not be displayed */
+#define FLAG1                   (1 << 13)   // flag for free local computations
+#define FLAG0                   (1 << 12)   // flag for free local computations
+#define BEGIN_ONPAD             (1 << 11)   // flag indicating a start of segment pad
+#define END_ONPAD               (1 << 10)   // flag indicating an end of segment pad
+#define BUSY                    (1 << 9)    // flag indicating that the structure has
+                                            // already been edited, in some routines
+#define DELETED                 (1 << 8)    // structures erased and set string "DELETED"
+#define NO_TRACE                (1 << 7)    // The element must not be displayed
 
-#define SURBRILL  (1 << 5)      /* element highlighted */
-#define DRAG      (1 << 4)      /* segment in drag mode */
-#define EDIT      (1 << 3)      /* element being edited */
-#define SEGM_FIXE (1 << 2)      /* segment fixed (not erase global) */
-#define SEGM_AR   (1 << 1)      /* segment marked for auto routing */
-#define CHAIN     (1 << 0)      /* mark segment */
+#define SURBRILL                (1 << 5)    // element highlighted
+#define DRAG                    (1 << 4)    // segment in drag mode
+#define EDIT                    (1 << 3)    // element being edited
+#define SEGM_FIXE               (1 << 2)    // segment fixed (not erase global)
+#define SEGM_AR                 (1 << 1)    // segment marked for auto routing
+#define CHAIN                   (1 << 0)    // mark segment
 
 
 /* Layer identification (layer number) */
-#define FIRST_COPPER_LAYER 0
-#define COPPER_LAYER_N     0
-#define LAYER_N_2          1
-#define LAYER_N_3          2
-#define LAYER_N_4          3
-#define LAYER_N_5          4
-#define LAYER_N_6          5
-#define LAYER_N_7          6
-#define LAYER_N_8          7
-#define LAYER_N_9          8
-#define LAYER_N_10         9
-#define LAYER_N_11         10
-#define LAYER_N_12         11
-#define LAYER_N_13         12
-#define LAYER_N_14         13
-#define LAYER_N_15         14
-#define LAYER_CMP_N        15
-#define CMP_N              15
-#define LAST_COPPER_LAYER  15
-#define NB_COPPER_LAYERS   (LAST_COPPER_LAYER + 1)
+#define FIRST_COPPER_LAYER      0
+#define LAYER_N_BACK            0
+#define LAYER_N_2               1
+#define LAYER_N_3               2
+#define LAYER_N_4               3
+#define LAYER_N_5               4
+#define LAYER_N_6               5
+#define LAYER_N_7               6
+#define LAYER_N_8               7
+#define LAYER_N_9               8
+#define LAYER_N_10              9
+#define LAYER_N_11              10
+#define LAYER_N_12              11
+#define LAYER_N_13              12
+#define LAYER_N_14              13
+#define LAYER_N_15              14
+#define LAYER_N_FRONT           15
+#define LAST_COPPER_LAYER       LAYER_N_FRONT
+#define NB_COPPER_LAYERS        (LAST_COPPER_LAYER + 1)
 
-#define FIRST_NO_COPPER_LAYER 16
-#define ADHESIVE_N_CU         16
-#define ADHESIVE_N_CMP        17
-#define SOLDERPASTE_N_CU      18
-#define SOLDERPASTE_N_CMP     19
-#define SILKSCREEN_N_CU       20
-#define SILKSCREEN_N_CMP      21
-#define SOLDERMASK_N_CU       22
-#define SOLDERMASK_N_CMP      23
-#define DRAW_N                24
-#define COMMENT_N             25
-#define ECO1_N                26
-#define ECO2_N                27
-#define EDGE_N                28
-#define LAST_NO_COPPER_LAYER  28
-#define NB_LAYERS             (LAST_NO_COPPER_LAYER + 1)
+#define FIRST_NO_COPPER_LAYER   16
+#define ADHESIVE_N_CU           16
+#define ADHESIVE_N_CMP          17
+#define SOLDERPASTE_N_CU        18
+#define SOLDERPASTE_N_CMP       19
+#define SILKSCREEN_N_CU         20
+#define SILKSCREEN_N_CMP        21
+#define SOLDERMASK_N_CU         22
+#define SOLDERMASK_N_CMP        23
+#define DRAW_N                  24
+#define COMMENT_N               25
+#define ECO1_N                  26
+#define ECO2_N                  27
+#define EDGE_N                  28
+#define LAST_NO_COPPER_LAYER    28
+#define NB_LAYERS               (LAST_NO_COPPER_LAYER + 1)
 
-#define LAYER_COUNT 32
+#define LAYER_COUNT             32
 
 
-#define CUIVRE_LAYER          (1 << COPPER_LAYER_N)  ///< bit mask for copper layer
-#define LAYER_2               (1 << LAYER_N_2)       ///< bit mask for layer 2
-#define LAYER_3               (1 << LAYER_N_3)       ///< bit mask for layer 3
-#define LAYER_4               (1 << LAYER_N_4)       ///< bit mask for layer 4
-#define LAYER_5               (1 << LAYER_N_5)       ///< bit mask for layer 5
-#define LAYER_6               (1 << LAYER_N_6)       ///< bit mask for layer 6
-#define LAYER_7               (1 << LAYER_N_7)       ///< bit mask for layer 7
-#define LAYER_8               (1 << LAYER_N_8)       ///< bit mask for layer 8
-#define LAYER_9               (1 << LAYER_N_9)       ///< bit mask for layer 9
-#define LAYER_10              (1 << LAYER_N_10)      ///< bit mask for layer 10
-#define LAYER_11              (1 << LAYER_N_11)      ///< bit mask for layer 11
-#define LAYER_12              (1 << LAYER_N_12)      ///< bit mask for layer 12
-#define LAYER_13              (1 << LAYER_N_13)      ///< bit mask for layer 13
-#define LAYER_14              (1 << LAYER_N_14)      ///< bit mask for layer 14
-#define LAYER_15              (1 << LAYER_N_15)      ///< bit mask for layer 15
-#define CMP_LAYER             (1 << LAYER_CMP_N)     ///< bit mask for component layer
-#define ADHESIVE_LAYER_CU     (1 << ADHESIVE_N_CU)
-#define ADHESIVE_LAYER_CMP    (1 << ADHESIVE_N_CMP)
-#define SOLDERPASTE_LAYER_CU  (1 << SOLDERPASTE_N_CU)
-#define SOLDERPASTE_LAYER_CMP (1 << SOLDERPASTE_N_CMP)
-#define SILKSCREEN_LAYER_CU   (1 << SILKSCREEN_N_CU)
-#define SILKSCREEN_LAYER_CMP  (1 << SILKSCREEN_N_CMP)
-#define SOLDERMASK_LAYER_CU   (1 << SOLDERMASK_N_CU)
-#define SOLDERMASK_LAYER_CMP  (1 << SOLDERMASK_N_CMP)
-#define DRAW_LAYER            (1 << DRAW_N)
-#define COMMENT_LAYER         (1 << COMMENT_N)
-#define ECO1_LAYER            (1 << ECO1_N)
-#define ECO2_LAYER            (1 << ECO2_N)
-#define EDGE_LAYER            (1 << EDGE_N)
+#define CUIVRE_LAYER            (1 << LAYER_N_BACK)     ///< bit mask for copper layer
+#define LAYER_2                 (1 << LAYER_N_2)        ///< bit mask for layer 2
+#define LAYER_3                 (1 << LAYER_N_3)        ///< bit mask for layer 3
+#define LAYER_4                 (1 << LAYER_N_4)        ///< bit mask for layer 4
+#define LAYER_5                 (1 << LAYER_N_5)        ///< bit mask for layer 5
+#define LAYER_6                 (1 << LAYER_N_6)        ///< bit mask for layer 6
+#define LAYER_7                 (1 << LAYER_N_7)        ///< bit mask for layer 7
+#define LAYER_8                 (1 << LAYER_N_8)        ///< bit mask for layer 8
+#define LAYER_9                 (1 << LAYER_N_9)        ///< bit mask for layer 9
+#define LAYER_10                (1 << LAYER_N_10)       ///< bit mask for layer 10
+#define LAYER_11                (1 << LAYER_N_11)       ///< bit mask for layer 11
+#define LAYER_12                (1 << LAYER_N_12)       ///< bit mask for layer 12
+#define LAYER_13                (1 << LAYER_N_13)       ///< bit mask for layer 13
+#define LAYER_14                (1 << LAYER_N_14)       ///< bit mask for layer 14
+#define LAYER_15                (1 << LAYER_N_15)       ///< bit mask for layer 15
+#define CMP_LAYER               (1 << LAYER_N_FRONT)    ///< bit mask for component layer
+#define ADHESIVE_LAYER_CU       (1 << ADHESIVE_N_CU)
+#define ADHESIVE_LAYER_CMP      (1 << ADHESIVE_N_CMP)
+#define SOLDERPASTE_LAYER_CU    (1 << SOLDERPASTE_N_CU)
+#define SOLDERPASTE_LAYER_CMP   (1 << SOLDERPASTE_N_CMP)
+#define SILKSCREEN_LAYER_CU     (1 << SILKSCREEN_N_CU)
+#define SILKSCREEN_LAYER_CMP    (1 << SILKSCREEN_N_CMP)
+#define SOLDERMASK_LAYER_CU     (1 << SOLDERMASK_N_CU)
+#define SOLDERMASK_LAYER_CMP    (1 << SOLDERMASK_N_CMP)
+#define DRAW_LAYER              (1 << DRAW_N)
+#define COMMENT_LAYER           (1 << COMMENT_N)
+#define ECO1_LAYER              (1 << ECO1_N)
+#define ECO2_LAYER              (1 << ECO2_N)
+#define EDGE_LAYER              (1 << EDGE_N)
 
-#define FIRST_NON_COPPER_LAYER ADHESIVE_N_CU
-#define LAST_NON_COPPER_LAYER  EDGE_N
+#define FIRST_NON_COPPER_LAYER  ADHESIVE_N_CU
+#define LAST_NON_COPPER_LAYER   EDGE_N
 
 //      extra bits              0xE0000000
 /* Helpful global layers mask : */
-#define ALL_LAYERS       0x1FFFFFFF             // Pcbnew used 29 layers
-#define FULL_LAYERS       0xFFFFFFFF            // Gerbview used 32 layers
-#define ALL_NO_CU_LAYERS 0x1FFF0000
-#define ALL_CU_LAYERS    0x0000FFFF
-#define INTERNAL_LAYERS  0x00007FFE
-#define EXTERNAL_LAYERS  0x00008001
+#define ALL_LAYERS              0x1FFFFFFF              // Pcbnew used 29 layers
+#define FULL_LAYERS             0xFFFFFFFF              // Gerbview used 32 layers
+#define ALL_NO_CU_LAYERS        0x1FFF0000
+#define ALL_CU_LAYERS           0x0000FFFF
+#define INTERNAL_LAYERS         0x00007FFE
+#define EXTERNAL_LAYERS         0x00008001
 
 class NETINFO_ITEM;
 class MARKER_PCB;
@@ -163,8 +161,7 @@ inline bool IsValidLayerIndex( int aLayerIndex )
  */
 inline bool IsValidCopperLayerIndex( int aLayerIndex )
 {
-    return aLayerIndex >= FIRST_COPPER_LAYER
-        && aLayerIndex <= LAST_COPPER_LAYER;
+    return aLayerIndex >= FIRST_COPPER_LAYER && aLayerIndex <= LAST_COPPER_LAYER;
 }
 
 /**
@@ -272,5 +269,4 @@ public:
     DISPLAY_OPTIONS();
 };
 
-
-#endif /* PCBSTRUCT_H */
+#endif // PCBSTRUCT_H

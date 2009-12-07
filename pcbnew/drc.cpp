@@ -770,9 +770,9 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 EXCHG( layer1, layer2 );
 
             // test:
-            if( layer1 == COPPER_LAYER_N && layer2 == LAYER_N_2 )
+            if( layer1 == LAYER_N_BACK && layer2 == LAYER_N_2 )
                 err = false;
-            if( layer1 == (g_DesignSettings.GetCopperLayerCount() - 2 ) && layer2 == LAYER_CMP_N )
+            if( layer1 == (g_DesignSettings.GetCopperLayerCount() - 2 ) && layer2 == LAYER_N_FRONT )
                 err = false;
             if( err )
             {

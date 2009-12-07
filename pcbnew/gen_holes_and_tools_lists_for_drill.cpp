@@ -87,8 +87,8 @@ void Build_Holes_List( BOARD* aPcb,
         if( (new_hole.m_Hole_Top_Layer < aLastLayer) && (aLastLayer >= 0) )
             continue;
 
-        if( aExcludeThroughHoles  && (new_hole.m_Hole_Bottom_Layer == COPPER_LAYER_N)
-           && (new_hole.m_Hole_Top_Layer == LAYER_CMP_N) )
+        if( aExcludeThroughHoles  && (new_hole.m_Hole_Bottom_Layer == LAYER_N_BACK)
+           && (new_hole.m_Hole_Top_Layer == LAYER_N_FRONT) )
             continue;
 
         aHoleListBuffer.push_back( new_hole );
@@ -117,8 +117,8 @@ void Build_Holes_List( BOARD* aPcb,
                 new_hole.m_Hole_SizeY = pad->m_Drill.y;
                 new_hole.m_Hole_Pos_X = pad->m_Pos.x;
                 new_hole.m_Hole_Pos_Y = pad->m_Pos.y;               // hole position
-                new_hole.m_Hole_Bottom_Layer = COPPER_LAYER_N;
-                new_hole.m_Hole_Top_Layer    = LAYER_CMP_N;         // pad holes are through holes
+                new_hole.m_Hole_Bottom_Layer = LAYER_N_BACK;
+                new_hole.m_Hole_Top_Layer    = LAYER_N_FRONT;         // pad holes are through holes
                 aHoleListBuffer.push_back( new_hole );
             }
         }

@@ -70,7 +70,7 @@ public:
      * @param aLayerIndex = The index of the layer to be tested
      * @return bool - true if the layer is visible.
      */
-    inline bool IsLayerVisible( int aLayerIndex ) const
+    bool IsLayerVisible( int aLayerIndex ) const
     {
         if( aLayerIndex < 0 || aLayerIndex >= 32 ) //@@IMB: Altough Pcbnew uses only 29, Gerbview uses all 32 layers
             return false;
@@ -93,7 +93,7 @@ public:
      * returns a bit-mask of all the element categories that are visible
      * @return int - the visible element categories in bit-mapped form.
      */
-    inline int GetVisibleElements() const
+    int GetVisibleElements() const
     {
         return m_VisibleElements;
     }
@@ -104,7 +104,7 @@ public:
      * changes the bit-mask of visible element categories
      * @param aMask = The new bit-mask of visible element categories
      */
-    inline void SetVisibleElements( int aMask )
+    void SetVisibleElements( int aMask )
     {
         m_VisibleElements = aMask;
     }
@@ -116,7 +116,7 @@ public:
      * @param aCategoryIndex = The index of the element category to be tested.
      * @return bool - true if the element is visible.
      */
-    inline bool IsElementVisible( int aCategoryIndex ) const
+    bool IsElementVisible( int aCategoryIndex ) const
     {
         if( aCategoryIndex < 0 || aCategoryIndex > PAD_CMP_VISIBLE )
             return false;
@@ -164,7 +164,7 @@ public:
      * @param aLayerIndex = The index of the layer to be tested
      * @return bool - true if the layer is enabled
      */
-    inline bool IsLayerEnabled( int aLayerIndex )
+    bool IsLayerEnabled( int aLayerIndex )
     {
         return (bool) ( m_EnabledLayers & 1 << aLayerIndex );
     }
@@ -174,7 +174,7 @@ public:
      * Function GetCopperLayerCount
      * @return int - the number of neabled copper layers
      */
-    inline int GetCopperLayerCount() const
+    int GetCopperLayerCount() const
     {
         return m_CopperLayerCount;
     }
