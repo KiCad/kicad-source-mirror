@@ -556,7 +556,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -620,7 +620,7 @@
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">wxID_ANY</property>
+                                            <property name="id">ID_ADHESFRONTCHOICE</property>
                                             <property name="label">Off-board, manufacturing</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
@@ -764,7 +764,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -828,7 +828,7 @@
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">wxID_ANY</property>
+                                            <property name="id">ID_SOLDPFRONTCHOICE</property>
                                             <property name="label">Off-board, manufacturing</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
@@ -972,7 +972,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -1036,7 +1036,7 @@
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">wxID_ANY</property>
+                                            <property name="id">ID_SILKSFRONTCHOICE</property>
                                             <property name="label">On-board, non-copper</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
@@ -1180,7 +1180,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -1244,7 +1244,7 @@
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">wxID_ANY</property>
+                                            <property name="id">ID_MASKFRONTCHOICE</property>
                                             <property name="label">On-board, non-copper</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
@@ -1306,7 +1306,7 @@
                                             <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
-                                            <property name="value">Front</property>
+                                            <property name="value">Front_later</property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
@@ -1392,7 +1392,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -1604,7 +1604,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -1816,7 +1816,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -2028,7 +2028,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -2240,7 +2240,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -2452,7 +2452,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -2664,7 +2664,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -2876,7 +2876,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -3088,7 +3088,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -3300,7 +3300,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -3512,7 +3512,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -3724,7 +3724,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -3936,7 +3936,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -4148,7 +4148,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -4360,7 +4360,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -4572,7 +4572,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -4780,7 +4780,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -4790,7 +4790,7 @@
                                                         <property name="fg"></property>
                                                         <property name="font"></property>
                                                         <property name="hidden">0</property>
-                                                        <property name="id">ID_MASKFRONTCHECKBOX</property>
+                                                        <property name="id">ID_MASKBACKCHECKBOX</property>
                                                         <property name="label"></property>
                                                         <property name="maximum_size"></property>
                                                         <property name="minimum_size"></property>
@@ -4844,7 +4844,7 @@
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">wxID_ANY</property>
+                                            <property name="id">ID_MASKBACKCHOICE</property>
                                             <property name="label">On-board, non-copper</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
@@ -4988,7 +4988,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -5052,7 +5052,7 @@
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">wxID_ANY</property>
+                                            <property name="id">ID_SILKSBACKCHOICE</property>
                                             <property name="label">On-board, non-copper</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
@@ -5196,7 +5196,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -5260,7 +5260,7 @@
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">wxID_ANY</property>
+                                            <property name="id">ID_SOLDPBACKCHOICE</property>
                                             <property name="label">Off-board, manufacturing</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
@@ -5404,7 +5404,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -5468,7 +5468,7 @@
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">wxID_ANY</property>
+                                            <property name="id">ID_ADHESBACKCHOICE</property>
                                             <property name="label">Off-board, manufacturing</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
@@ -5612,7 +5612,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -5676,7 +5676,7 @@
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">wxID_ANY</property>
+                                            <property name="id">ID_PCBEDGESCHOICE</property>
                                             <property name="label">Board contour</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
@@ -5820,7 +5820,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -5830,7 +5830,7 @@
                                                         <property name="fg"></property>
                                                         <property name="font"></property>
                                                         <property name="hidden">0</property>
-                                                        <property name="id">ID_ECHO2CHECKBOX</property>
+                                                        <property name="id">ID_ECO2CHECKBOX</property>
                                                         <property name="label"></property>
                                                         <property name="maximum_size"></property>
                                                         <property name="minimum_size"></property>
@@ -5884,7 +5884,7 @@
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">wxID_ANY</property>
+                                            <property name="id">ID_ECO2CHOICE</property>
                                             <property name="label">Auxiliary</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
@@ -6028,7 +6028,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -6092,7 +6092,7 @@
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">wxID_ANY</property>
+                                            <property name="id">ID_ECO1CHOICE</property>
                                             <property name="label">Auxiliary</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
@@ -6236,7 +6236,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -6300,7 +6300,7 @@
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">wxID_ANY</property>
+                                            <property name="id">ID_COMMENTSCHOICE</property>
                                             <property name="label">Auxiliary</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
@@ -6444,7 +6444,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxCheckBox" expanded="1">
                                                         <property name="bg"></property>
@@ -6499,7 +6499,7 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                        <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
                                         <property name="proportion">0</property>
                                         <object class="wxStaticText" expanded="1">
                                             <property name="bg"></property>
@@ -6508,7 +6508,7 @@
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">wxID_ANY</property>
+                                            <property name="id">ID_DRAWINGSCHOICE</property>
                                             <property name="label">Auxiliary</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>

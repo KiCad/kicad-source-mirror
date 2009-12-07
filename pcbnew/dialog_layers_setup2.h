@@ -42,22 +42,27 @@ private:
 
     BOARD*              m_Pcb;
 
-private:
-
     void init();
+
+    void showBoardLayerNames();
+
+    void showSelectedLayerCheckBoxes();
+
+    void showLayerTypes();
+
 
     void OnCancelButtonClick( wxCommandEvent& event );
     void OnOkButtonClick( wxCommandEvent& event );
     void OnLayerCountClick( wxCommandEvent& event );
-//		void OnLayerGridLeftClick( wxGridEvent& event ){ event.Skip(); }
-//		void OnLayerGridRighttClick( wxGridEvent& event ){ event.Skip(); }
+
     void SetRoutableLayerStatus( );
     bool TestDataValidity();
-
 
 public:
     DIALOG_LAYERS_SETUP( WinEDA_PcbFrame* parent );
     ~DIALOG_LAYERS_SETUP( ) { };
+
+    bool Show( bool show );     // overload stock function
 
 };
 

@@ -48,12 +48,6 @@ wxSize  DIALOG_LAYERS_SETUP::s_LastSize;
 /*
 // Layer order on the list panel
 
-// Real board order
-
-static const int LayerOrder[NB_LAYERS] =
-{ 17, 19, 21, 23, 15, 14, 13, 12, 11, 10,  9,  8,  7,  6,  5,  4,
-   3,  2,  1,  0, 22, 20, 18, 16, 28, 27, 26, 25, 24 };
-
 // This function translates from the dialog's layer order to Kicad's layer order.
 
 static int GetLayerNumber( int aRow )
@@ -127,6 +121,104 @@ static const int CopperMasks[] =
 };
 
 
+// The sequence of the layer oriented rows in the scrollPanel:
+static const short layerOrder[NB_LAYERS] = {
+    ADHESIVE_N_CMP,
+    SOLDERPASTE_N_CMP,
+    SILKSCREEN_N_CMP,
+    SOLDERMASK_N_CMP,
+    LAYER_N_FRONT,
+    LAYER_N_2,
+    LAYER_N_3,
+    LAYER_N_4,
+    LAYER_N_5,
+    LAYER_N_6,
+    LAYER_N_7,
+    LAYER_N_8,
+    LAYER_N_9,
+    LAYER_N_10,
+    LAYER_N_11,
+    LAYER_N_12,
+    LAYER_N_13,
+    LAYER_N_14,
+    LAYER_N_15,
+    LAYER_N_BACK,
+    SOLDERMASK_N_CU,
+    SILKSCREEN_N_CU,
+    SOLDERPASTE_N_CU,
+    ADHESIVE_N_CU,
+    EDGE_N,
+    ECO2_N,
+    ECO1_N,
+    COMMENT_N,
+    DRAW_N,
+};
+
+
+struct IDs
+{
+    IDs( int aName, int aCheckBox, int aChoice )
+    {
+        name     = aName;
+        checkbox = aCheckBox;
+        choice   = aChoice;
+    }
+
+    short   name;
+    short   checkbox;
+    short   choice;
+};
+
+
+/**
+ * Function getIDs
+ * maps \a aLayerNumber to the two wx IDs for that layer which are
+ * the layer name control ID and the checkbox control ID.
+ */
+static IDs getIDs( int aLayerNumber )
+{
+#define RET(x)    return IDs( x##NAME, x##CHECKBOX, x##CHOICE );
+
+    switch( aLayerNumber )
+    {
+    case ADHESIVE_N_CMP:    RET( ID_ADHESFRONT );
+    case SOLDERPASTE_N_CMP: RET( ID_SOLDPFRONT );
+    case SILKSCREEN_N_CMP:  RET( ID_SILKSFRONT );
+    case SOLDERMASK_N_CMP:  RET( ID_MASKFRONT );
+    case LAYER_N_FRONT:     RET( ID_FRONT );
+    case LAYER_N_2:         RET( ID_INNER2 );
+    case LAYER_N_3:         RET( ID_INNER3 );
+    case LAYER_N_4:         RET( ID_INNER4 );
+    case LAYER_N_5:         RET( ID_INNER5 );
+    case LAYER_N_6:         RET( ID_INNER6 );
+    case LAYER_N_7:         RET( ID_INNER7 );
+    case LAYER_N_8:         RET( ID_INNER8 );
+    case LAYER_N_9:         RET( ID_INNER9 );
+    case LAYER_N_10:        RET( ID_INNER10 );
+    case LAYER_N_11:        RET( ID_INNER11 );
+    case LAYER_N_12:        RET( ID_INNER12 );
+    case LAYER_N_13:        RET( ID_INNER13 );
+    case LAYER_N_14:        RET( ID_INNER14 );
+    case LAYER_N_15:        RET( ID_INNER15 );
+    case LAYER_N_BACK:      RET( ID_BACK );
+    case SOLDERMASK_N_CU:   RET( ID_MASKBACK );
+    case SILKSCREEN_N_CU:   RET( ID_SILKSBACK );
+    case SOLDERPASTE_N_CU:  RET( ID_SOLDPBACK );
+    case ADHESIVE_N_CU:     RET( ID_ADHESBACK );
+    case EDGE_N:            RET( ID_PCBEDGES );
+    case ECO2_N:            RET( ID_ECO2 );
+    case ECO1_N:            RET( ID_ECO1 );
+    case COMMENT_N:         RET( ID_COMMENTS );
+    case DRAW_N:            RET( ID_DRAWINGS );
+    default:
+        // wxDEBUGMSG( "bad layer id" );
+        return IDs( 0, 0, 0 );
+    }
+
+#undef RET
+}
+
+
 // Names for the types of copper layers
 
 /*
@@ -160,6 +252,100 @@ DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( WinEDA_PcbFrame* parent ) :
 }
 
 
+bool DIALOG_LAYERS_SETUP::Show( bool show )
+{
+    bool ret;
+
+    if( show )
+    {
+        if( s_LastPos.x != -1 )
+        {
+            SetSize( s_LastPos.x, s_LastPos.y, s_LastSize.x, s_LastSize.y, 0 );
+        }
+        ret = DIALOG_LAYERS_SETUP_BASE2::Show( show );
+    }
+    else
+    {
+        // Save the dialog's position before hiding
+        s_LastPos  = GetPosition();
+        s_LastSize = GetSize();
+
+        ret = DIALOG_LAYERS_SETUP_BASE2::Show( show );
+    }
+
+    return ret;
+}
+
+
+
+
+void DIALOG_LAYERS_SETUP::showBoardLayerNames()
+{
+    // Establish all the board's layer names into the dialog presentation, by
+    // obtaining them from BOARD::GetLayerName() which calls
+    // BOARD::GetDefaultLayerName() for non-coppers.
+
+    for( unsigned i=0;  i<DIM(layerOrder);  ++i )
+    {
+        int layer = layerOrder[i];
+
+        int nameId = getIDs( layer ).name;
+
+        wxControl*  ctl = (wxControl*) FindWindowById( nameId );
+
+        wxASSERT( ctl );
+
+        if( ctl )
+        {
+            wxString lname = m_Pcb->GetLayerName( layer );
+
+            D(printf("layerName[%d]=%s\n", layer, CONV_TO_UTF8( lname ) );)
+
+            if( ctl->IsKindOf( CLASSINFO(wxTextCtrl) ) )
+                ((wxTextCtrl*)ctl)->SetValue( lname );     // wxTextCtrl
+            else
+                ctl->SetLabel( lname );     // wxStaticText
+        }
+    }
+}
+
+
+void DIALOG_LAYERS_SETUP::showSelectedLayerCheckBoxes()
+{
+    int enabledLayers = m_Pcb->GetEnabledLayers();
+
+    for( unsigned i=0;  i<DIM(layerOrder);  ++i )
+    {
+        int layer = layerOrder[i];
+
+        int checkBoxId = getIDs( layer ).checkbox;
+
+        wxCheckBox*  ctl = (wxCheckBox*) FindWindowById( checkBoxId );
+
+        wxASSERT( ctl );
+
+        if( ctl )
+            ctl->SetValue(  (1<<layer) & enabledLayers );
+    }
+}
+
+void DIALOG_LAYERS_SETUP::showLayerTypes()
+{
+    for( int copperLayer =  FIRST_COPPER_LAYER;
+             copperLayer <= LAST_COPPER_LAYER; ++copperLayer )
+    {
+        int choiceId = getIDs( copperLayer ).choice;
+
+        wxChoice* ctl = (wxChoice*) FindWindowById( choiceId );
+
+        wxASSERT( ctl );
+
+        if( ctl )
+            ctl->SetSelection( m_Pcb->GetLayerType( copperLayer ) );
+    }
+}
+
+
 /********************************************************************/
 void DIALOG_LAYERS_SETUP::init()
 /********************************************************************/
@@ -183,91 +369,11 @@ void DIALOG_LAYERS_SETUP::init()
         }
     }
 
+    showBoardLayerNames();
 
-    // Establish all the board's layer names into the dialog presentation, by
-    // obtaining them from BOARD::GetLayerName() which calls
-    // BOARD::GetDefaultLayerName() for non-coppers.
-    static const short nameIds[] = {
-        ID_ADHESFRONTNAME,
-        ID_SOLDPFRONTNAME,
-        ID_SILKSFRONTNAME,
-        ID_MASKFRONTNAME,
-        ID_FRONTNAME,
-        ID_INNER2NAME,
-        ID_INNER3NAME,
-        ID_INNER4NAME,
-        ID_INNER5NAME,
-        ID_INNER6NAME,
-        ID_INNER7NAME,
-        ID_INNER8NAME,
-        ID_INNER9NAME,
-        ID_INNER10NAME,
-        ID_INNER11NAME,
-        ID_INNER12NAME,
-        ID_INNER13NAME,
-        ID_INNER14NAME,
-        ID_INNER15NAME,
-        ID_BACKNAME,
-        ID_MASKBACKNAME,
-        ID_SILKSBACKNAME,
-        ID_SOLDPBACKNAME,
-        ID_ADHESBACKNAME,
-        ID_PCBEDGESNAME,
-        ID_ECO2NAME,
-        ID_ECO1NAME,
-        ID_COMMENTSNAME,
-        ID_DRAWINGSNAME,
-    };
+    showSelectedLayerCheckBoxes();
 
-    for( unsigned i=0;  i<DIM(nameIds);  ++i )
-    {
-        int layer;
-
-        switch( nameIds[i] )
-        {
-        case ID_ADHESFRONTNAME:     layer = ADHESIVE_N_CMP;     break;
-        case ID_SOLDPFRONTNAME:     layer = SOLDERPASTE_N_CMP;  break;
-        case ID_SILKSFRONTNAME:     layer = SILKSCREEN_N_CMP;   break;
-        case ID_MASKFRONTNAME:      layer = SOLDERMASK_N_CMP;   break;
-        case ID_FRONTNAME:          layer = LAYER_N_FRONT;      break;
-        case ID_INNER2NAME:         layer = LAYER_N_2;          break;
-        case ID_INNER3NAME:         layer = LAYER_N_3;          break;
-        case ID_INNER4NAME:         layer = LAYER_N_4;          break;
-        case ID_INNER5NAME:         layer = LAYER_N_5;          break;
-        case ID_INNER6NAME:         layer = LAYER_N_6;          break;
-        case ID_INNER7NAME:         layer = LAYER_N_7;          break;
-        case ID_INNER8NAME:         layer = LAYER_N_8;          break;
-        case ID_INNER9NAME:         layer = LAYER_N_9;          break;
-        case ID_INNER10NAME:        layer = LAYER_N_10;         break;
-        case ID_INNER11NAME:        layer = LAYER_N_11;         break;
-        case ID_INNER12NAME:        layer = LAYER_N_12;         break;
-        case ID_INNER13NAME:        layer = LAYER_N_13;         break;
-        case ID_INNER14NAME:        layer = LAYER_N_14;         break;
-        case ID_INNER15NAME:        layer = LAYER_N_15;         break;
-        case ID_BACKNAME:           layer = LAYER_N_BACK;       break;
-        case ID_MASKBACKNAME:       layer = SOLDERMASK_N_CU;    break;
-        case ID_SILKSBACKNAME:      layer = SILKSCREEN_N_CU;    break;
-        case ID_SOLDPBACKNAME:      layer = SOLDERPASTE_N_CU;   break;
-        case ID_ADHESBACKNAME:      layer = ADHESIVE_N_CU;      break;
-        case ID_PCBEDGESNAME:       layer = EDGE_N;             break;
-        case ID_ECO2NAME:           layer = ECO2_N;             break;
-        case ID_ECO1NAME:           layer = ECO1_N;             break;
-        case ID_COMMENTSNAME:       layer = COMMENT_N;          break;
-        case ID_DRAWINGSNAME:       layer = DRAW_N;             break;
-        default:                    continue;
-        }
-
-        // both wxStaticText and wxTextControl are derived from wxControl,
-        // which has a SetLabel() function.
-
-        wxControl*  ctl = (wxControl*) FindWindowById( nameIds[i] )
-
-        wxASSERT( ctl );
-
-        if( ctl )
-            ctl->SetLabel( m_Pcb->GetLayerName( layer ) );
-    }
-
+    showLayerTypes();
 
 /* names only:
 ID_ADHESFRONTNAME

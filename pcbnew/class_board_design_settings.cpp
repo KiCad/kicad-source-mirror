@@ -36,11 +36,12 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     };
 
     m_EnabledLayers = ALL_LAYERS;                       // All layers enabled at first.
-                                                        // SetCopperLayerCount() will adjust thist.
-    m_VisibleLayers   = 0xffffffff;                     // IMB: All layers visible at first. TODO: Use a macro for the initial value.
-    m_VisibleElements = 0x00000fff;                     // IMB: All elements visible at first. TODO: Use a macro for the initial value.
+                                                        // SetCopperLayerCount() will adjust this.
+    m_VisibleLayers   = 0xffffffff;                     // All layers visible at first.
+    m_VisibleElements = 0x00000fff;                     // All elements visible at first. TODO: Use a macro for the initial value.
 
     SetCopperLayerCount( 2 );                           // Default design is a double sided board
+
     m_CurrentViaType = VIA_THROUGH;                     // via type (VIA_BLIND_BURIED, VIA_THROUGH VIA_MICROVIA)
     m_UseConnectedTrackWidth = false;                   // if true, when creating a new track starting on an existing track, use this track width
     m_MicroViasAllowed = false;                         // true to allow micro vias
@@ -53,6 +54,7 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
     m_ViasMinDrill      = 200;                          // vias (not micro vias) min drill diameter
     m_MicroViasMinSize  = 200;                          // micro vias (not vias) min diameter
     m_MicroViasMinDrill = 50;                           // micro vias (not vias) min drill diameter
+
     // Global mask margins:
     m_SolderMaskMargin  = 150;                          // Solder mask margin
     m_SolderPasteMargin = 0;                            // Solder paste margin absolute value
@@ -111,11 +113,6 @@ void EDA_BoardDesignSettings::SetElementVisibility( int aElementCategory, bool a
 }
 
 
-/**
- * Function SetCopperLayerCount
- * do what its name says...
- * @param aNewLayerCount = The new number of enabled copper layers
- */
 void EDA_BoardDesignSettings::SetCopperLayerCount( int aNewLayerCount )
 {
     m_CopperLayerCount = aNewLayerCount;
