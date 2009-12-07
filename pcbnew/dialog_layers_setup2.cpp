@@ -172,8 +172,8 @@ struct IDs
 
 /**
  * Function getIDs
- * maps \a aLayerNumber to the two wx IDs for that layer which are
- * the layer name control ID and the checkbox control ID.
+ * maps \a aLayerNumber to the wx IDs for that layer which are
+ * the layer name control ID, checkbox control ID, and choice control ID
  */
 static IDs getIDs( int aLayerNumber )
 {
@@ -639,9 +639,10 @@ bool DIALOG_LAYERS_SETUP::TestDataValidity()
 
 void DisplayDialogLayerSetup( WinEDA_PcbFrame* parent )
 {
-    DIALOG_LAYERS_SETUP* frame = new DIALOG_LAYERS_SETUP( parent );
-    frame->ShowModal();
-    frame->Destroy();
+    DIALOG_LAYERS_SETUP frame( parent );
+
+    frame.ShowModal();
+    frame.Destroy();
 }
 
 //==============================================================================
