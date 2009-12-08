@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-11-26 21:07+0300\n"
-"PO-Revision-Date: 2009-12-07 14:33+0300\n"
+"PO-Revision-Date: 2009-12-08 09:22+0300\n"
 "Last-Translator: faa <faa@ntcsm.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "MIME-Version: 1.0\n"
@@ -12387,11 +12387,11 @@ msgstr ""
 
 #: pcbnew/dialog_design_rules_base.cpp:180
 msgid "Min via diameter"
-msgstr "Мин. диаметр переходного отверстия"
+msgstr "Мин.диаметр перех. отв."
 
 #: pcbnew/dialog_design_rules_base.cpp:187
 msgid "Min via drill dia"
-msgstr "Мин. диаметр сверла переходного отверстия"
+msgstr "Мин.диаметр сверла перех. отв."
 
 #: pcbnew/dialog_design_rules_base.cpp:199
 msgid "Micro Via Options:"
@@ -12415,11 +12415,11 @@ msgstr ""
 
 #: pcbnew/dialog_design_rules_base.cpp:215
 msgid "Min uvia diameter"
-msgstr "Мин. диаметр микропереходного отверстия"
+msgstr "Мин.диаметр микроперех. отв."
 
 #: pcbnew/dialog_design_rules_base.cpp:223
 msgid "Min uvia drill dia"
-msgstr "Мин. сверло микропереходного отверстия"
+msgstr "Мин.сверло микроперех. отв."
 
 #: pcbnew/dialog_design_rules_base.cpp:236
 msgid "Minimum Allowed Values:"
@@ -12509,7 +12509,7 @@ msgstr "Track 7"
 
 #: pcbnew/dialog_design_rules_base.cpp:359
 msgid "Global Design Rules"
-msgstr "Глобальные правила проектирования"
+msgstr "Общие правила проектирования"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:224
 #: pcbnew/dialog_edit_module_for_Modedit.cpp:83
