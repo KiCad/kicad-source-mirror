@@ -50,6 +50,7 @@ class DIALOG_PADS_MASK_CLEARANCE_BASE : public wxDialog
 		wxStaticText* m_staticTextRatio;
 		wxTextCtrl* m_SolderPasteMarginRatioCtrl;
 		wxStaticText* m_SolderPasteRatioMarginUnits;
+		wxStaticLine* m_staticline11;
 		wxStdDialogButtonSizer* m_sdbButtonsSizer;
 		wxButton* m_sdbButtonsSizerOK;
 		wxButton* m_sdbButtonsSizerCancel;
@@ -60,7 +61,7 @@ class DIALOG_PADS_MASK_CLEARANCE_BASE : public wxDialog
 		
 	
 	public:
-		DIALOG_PADS_MASK_CLEARANCE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pads Mask Clearance"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 358,237 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_PADS_MASK_CLEARANCE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pads Mask Clearance"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 361,253 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_PADS_MASK_CLEARANCE_BASE();
 	
 };

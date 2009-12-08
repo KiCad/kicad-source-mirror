@@ -98,7 +98,7 @@ bool WinEDA_ViewlibFrame::OnRightClick( const wxPoint& MousePos,
 }
 
 
-/* Affiche en Ligne d'info la librairie en cours de visualisation */
+/* Displays the name of the current opened library in the caption */
 void WinEDA_ViewlibFrame::DisplayLibInfos()
 {
     wxString     msg;
@@ -120,7 +120,7 @@ void WinEDA_ViewlibFrame::DisplayLibInfos()
 
 
 /*****************************************/
-/* Routine to Select Current library      */
+/* Function to Select Current library      */
 /*****************************************/
 void WinEDA_ViewlibFrame::SelectCurrentLibrary()
 {
@@ -246,10 +246,10 @@ void WinEDA_ViewlibFrame::ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag )
 }
 
 
-/*****************************************************************************/
-/* Routine d'affichage du composant selectionne                              */
-/*  Si Le composant est un alias, le composant ROOT est recherche et affiche */
-/*****************************************************************************/
+/** function RedrawActiveWindow
+ * Display the current selected component.
+ * If the component is an alias, the ROOT component is displayed
+*/
 void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     LIB_COMPONENT* component;

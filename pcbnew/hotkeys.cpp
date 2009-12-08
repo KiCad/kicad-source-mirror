@@ -35,9 +35,9 @@
 /* local variables */
 /* Hotkey list: */
 static Ki_HotkeyInfo HkSwitch2CopperLayer( wxT( "Switch to Copper layer" ),
-                                           HK_SWITCH_LAYER_TO_COPPER, WXK_PAGEUP );
+                                           HK_SWITCH_LAYER_TO_COPPER, WXK_PAGEDOWN );
 static Ki_HotkeyInfo HkSwitch2ComponentLayer( wxT( "Switch to Component layer" ),
-                                              HK_SWITCH_LAYER_TO_COMPONENT, WXK_PAGEDOWN );
+                                              HK_SWITCH_LAYER_TO_COMPONENT, WXK_PAGEUP );
 static Ki_HotkeyInfo HkSwitch2InnerLayer1( wxT( "Switch to Inner layer 1" ),
                                            HK_SWITCH_LAYER_TO_INNER1, WXK_F5 );
 static Ki_HotkeyInfo HkSwitch2InnerLayer2( wxT( "Switch to Inner layer 2" ),
@@ -112,7 +112,7 @@ Ki_HotkeyInfo* s_board_edit_Hotkey_List[] =
 {
     &HkTrackDisplayMode,       &HkDelete,
     &HkBackspace,
-    &HkAddNewTrack,            &HkAddVia,                 &HkAddMicroVia,
+    &HkAddNewTrack,            &HkAddVia,                    &HkAddMicroVia,
     &HkEndTrack,               &HkMoveFootprint,
     &HkFlipFootprint,          &HkRotateFootprint,           &HkDragFootprint,
     &HkGetAndMoveFootprint,    &HkLock_Unlock_Footprint,     &HkSavefile,
@@ -128,55 +128,40 @@ Ki_HotkeyInfo* s_board_edit_Hotkey_List[] =
 Ki_HotkeyInfo* s_module_edit_Hotkey_List[] = { NULL };
 
 // list of sections and corresponding hotkey list for pcbnew (used to create an hotkey config file)
-struct Ki_HotkeyInfoSectionDescriptor s_Pcbnew_Editor_Hokeys_Descr[] = { {
-                                                                             &g_CommonSectionTag,
-                                                                             s_Common_Hotkey_List,
-                                                                             "Common keys"
-                                                                         },
-                                                                         {
-                                                                             &
-                                                                             g_BoardEditorSectionTag,
-                                                                             s_board_edit_Hotkey_List,
-                                                                             "Board editor keys"
-                                                                         }, {
-                                                                             &
-                                                                             g_ModuleEditSectionTag,
-                                                                             s_module_edit_Hotkey_List,
-                                                                             "Footprint editor keys"
-                                                                         }, {
-                                                                             NULL,
-                                                                             NULL, NULL
-                                                                         } };
+struct Ki_HotkeyInfoSectionDescriptor s_Pcbnew_Editor_Hokeys_Descr[] =
+{ {
+      &g_CommonSectionTag, s_Common_Hotkey_List, "Common keys"
+  },
+  {
+      &g_BoardEditorSectionTag, s_board_edit_Hotkey_List, "Board editor keys"
+  },{
+      &g_ModuleEditSectionTag, s_module_edit_Hotkey_List, "Footprint editor keys"
+  },{
+      NULL, NULL, NULL
+  } };
 
 // list of sections and corresponding hotkey list for the board editor (used to list current hotkeys)
-struct Ki_HotkeyInfoSectionDescriptor s_Board_Editor_Hokeys_Descr[] = { {
-                                                                            &g_CommonSectionTag,
-                                                                            s_Common_Hotkey_List,
-                                                                            NULL
-                                                                        }, {
-                                                                            &
-                                                                            g_BoardEditorSectionTag,
-                                                                            s_board_edit_Hotkey_List,
-                                                                            NULL
-                                                                        }, {
-                                                                            NULL,
-                                                                            NULL, NULL
-                                                                        } };
+struct Ki_HotkeyInfoSectionDescriptor s_Board_Editor_Hokeys_Descr[] =
+{ {
+      &g_CommonSectionTag,
+      s_Common_Hotkey_List,
+      NULL
+  },{
+      &g_BoardEditorSectionTag, s_board_edit_Hotkey_List, NULL
+  },{
+      NULL, NULL, NULL
+  } };
 
 // list of sections and corresponding hotkey list for the footprint editor (used to list current hotkeys)
-struct Ki_HotkeyInfoSectionDescriptor s_Module_Editor_Hokeys_Descr[] = { {
-                                                                             &g_CommonSectionTag,
-                                                                             s_Common_Hotkey_List,
-                                                                             NULL
-                                                                         }, {
-                                                                             &
-                                                                             g_ModuleEditSectionTag,
-                                                                             s_module_edit_Hotkey_List,
-                                                                             NULL
-                                                                         }, {
-                                                                             NULL,
-                                                                             NULL, NULL
-                                                                         } };
+struct Ki_HotkeyInfoSectionDescriptor
+s_Module_Editor_Hokeys_Descr[] =
+{ {
+      &g_CommonSectionTag, s_Common_Hotkey_List, NULL
+  },{
+      &g_ModuleEditSectionTag, s_module_edit_Hotkey_List, NULL
+  },{
+      NULL, NULL, NULL
+  } };
 
 /***********************************************************/
 void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct )
@@ -475,22 +460,23 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         if( m_ID_current_state != ID_TRACK_BUTT )
             break;
 
-            if( ItemFree ) // no track in progress:
-            {
-                TRACK* track = Begin_Route( NULL, DC );
-                SetCurItem( track );
-                if( track )
-                    DrawPanel->m_AutoPAN_Request = true;
-            }
-            else if( GetCurItem()->m_Flags & IS_NEW )
-            {
-                TRACK* track = Begin_Route( (TRACK*) GetCurItem(), DC );
-                // SetCurItem() must not write to the msg panel
-                // because a track info is displayed while moving the mouse cursor
-                if( track )  // A new segment was created
-                    SetCurItem( track, false );
+        if( ItemFree )     // no track in progress:
+        {
+            TRACK* track = Begin_Route( NULL, DC );
+            SetCurItem( track );
+            if( track )
                 DrawPanel->m_AutoPAN_Request = true;
-            }
+        }
+        else if( GetCurItem()->m_Flags & IS_NEW )
+        {
+            TRACK* track = Begin_Route( (TRACK*) GetCurItem(), DC );
+
+            // SetCurItem() must not write to the msg panel
+            // because a track info is displayed while moving the mouse cursor
+            if( track )      // A new segment was created
+                SetCurItem( track, false );
+            DrawPanel->m_AutoPAN_Request = true;
+        }
         break;
 
     // Footprint edition:
@@ -605,13 +591,13 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
 
             switch( HK_Descr->m_Idcommand )
             {
-            case HK_ROTATE_FOOTPRINT: // Rotation
+            case HK_ROTATE_FOOTPRINT:           // Rotation
                 if( module->m_Flags == 0 )      // not currently in edit, prepare undo command
                     SaveCopyInUndoList( module, UR_ROTATED, module->m_Pos );
                 Rotate_Module( DC, module, 900, TRUE );
                 break;
 
-            case HK_FLIP_FOOTPRINT: // move to other side
+            case HK_FLIP_FOOTPRINT:             // move to other side
                 if( module->m_Flags == 0 )      // not currently in edit, prepare undo command
                     SaveCopyInUndoList( module, UR_FLIPPED, module->m_Pos );
                 Change_Side_Module( module, DC );

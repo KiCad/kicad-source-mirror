@@ -84,13 +84,16 @@ DIALOG_PADS_MASK_CLEARANCE_BASE::DIALOG_PADS_MASK_CLEARANCE_BASE( wxWindow* pare
 	
 	bMainSizer->Add( bMainUpperSizer, 1, wxEXPAND, 5 );
 	
+	m_staticline11 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bMainSizer->Add( m_staticline11, 0, wxEXPAND | wxALL, 5 );
+	
 	m_sdbButtonsSizer = new wxStdDialogButtonSizer();
 	m_sdbButtonsSizerOK = new wxButton( this, wxID_OK );
 	m_sdbButtonsSizer->AddButton( m_sdbButtonsSizerOK );
 	m_sdbButtonsSizerCancel = new wxButton( this, wxID_CANCEL );
 	m_sdbButtonsSizer->AddButton( m_sdbButtonsSizerCancel );
 	m_sdbButtonsSizer->Realize();
-	bMainSizer->Add( m_sdbButtonsSizer, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+	bMainSizer->Add( m_sdbButtonsSizer, 0, wxALIGN_CENTER_HORIZONTAL|wxBOTTOM, 5 );
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();

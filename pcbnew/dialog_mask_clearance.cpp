@@ -42,11 +42,20 @@ void DIALOG_PADS_MASK_CLEARANCE::MyInit()
     PutValueInLocalUnits( *m_SolderMaskMarginCtrl,
                           g_DesignSettings.m_SolderMaskMargin,
                           Internal_Unit );
+
+    // These 2 parameters are usually < 0, so prepare entering a negative
+    // value, if current is 0
     PutValueInLocalUnits( *m_SolderPasteMarginCtrl,
                           g_DesignSettings.m_SolderPasteMargin,
                           Internal_Unit );
+    if( g_DesignSettings.m_SolderPasteMargin == 0 )
+        m_SolderPasteMarginCtrl->SetValue( wxT( "-" ) +
+                                           m_SolderPasteMarginCtrl->GetValue() );
     wxString msg;
-    msg.Printf( wxT( "%f" ), g_DesignSettings.m_SolderPasteMarginRatio * 100.0 );
+    if( g_DesignSettings.m_SolderPasteMarginRatio == 0 )
+        msg.Printf( wxT( "-%f" ), g_DesignSettings.m_SolderPasteMarginRatio * 100.0 );
+    else
+        msg.Printf( wxT( "%f" ), g_DesignSettings.m_SolderPasteMarginRatio * 100.0 );
     m_SolderPasteMarginRatioCtrl->SetValue( msg );
 }
 

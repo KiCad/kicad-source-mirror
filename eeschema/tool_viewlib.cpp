@@ -144,11 +144,11 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
     }
 
 
-    int jj = 1;
+    int parts_count = 1;
     if( component )
-        jj = MAX( component->GetPartCount(), 1 );
+        parts_count = MAX( component->GetPartCount(), 1 );
     SelpartBox->Clear();
-    for( ii = 0; ii < jj; ii++ )
+    for( ii = 0; ii < parts_count; ii++ )
     {
         wxString msg;
         msg.Printf( _( "Part %c" ), 'A' + ii );
@@ -156,7 +156,7 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
     }
 
     SelpartBox->SetSelection( (m_unit > 0 ) ? m_unit - 1 : 0 );
-    SelpartBox->Enable( component && component->HasConversion() );
+    SelpartBox->Enable( parts_count > 1 );
 
     m_HToolBar->EnableTool( ID_LIBVIEW_VIEWDOC,
                             entry && ( entry->m_DocFile != wxEmptyString ) );
