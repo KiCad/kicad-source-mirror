@@ -10,6 +10,10 @@ CMAKE
 
 Common
 ------
+*BUGS*
+* PCBNew and EEschema opened and rotating a footprint in pcbnew let the
+  EESchema drawing flikker/refresh.
+
 * Grep for @TODO or TODO for sourcecode tasks
 * Use doxygen compatible comments on member functions (.h files)
 * Add tooltip text to all non-obvious controls in every dialog window.
@@ -18,14 +22,21 @@ Common
   module or component lives.
 * Create a better and cleaner add component and footprint dialog.
 * List auto up and down scrolling.
-* Toolbars en menus should be equal.
+* Toolbars and menus should be equal.
 * Select one component, not a whole block
   (like in PCB, EAGLE, MultiSim/Ultiboard)
 * Cursor selection
   * Cross small
   * Cross fullscreen
   * Normal arrow
-
+* (Main) dialog(s) title(s) should always be the same and not change over time
+  when not needed. For example KiCad - <file loaded> or PCBNew - <file loaded>.
+  We dont have to see which build in the titlebar. This makes documentation
+  screenshots also easier. We already have the build information in the about
+  dialog.
+* Integer/long/double input boxes should handle comma and dot separated values,
+  not only comma.
+* Undo/Redo should have more steps (or could be setable).
 
 CvPCB
 -----
@@ -34,6 +45,14 @@ CvPCB
 
 EESchema
 --------
+*BUGS*
+* If we add multiple leds and connect them with one wire there is no junction
+  placed between the ends, then I have to place manual the junctions or else it
+  is not connected in the netlist so only one led/connection is made
+  (for example to the Power GND symbol).
+
+*Improvements*
+* Component add list browser with optional component preview.
 * Use collector classes.
 * Drag and drop between two EESchema windows.
 
@@ -53,7 +72,18 @@ KiCad
 
 PCBNew
 ------
+*BUGS*
+* Backspace hotkey for deleting track segment doesn't work.
+* Delete hotkey for deleting a track doesn't work.
+* Fix block copy/move preview to not view only a border, we should
+  see the moved/copied parts.
+
 * Fix DIALOG_PAD_PROPERTIES_BASE class to use actual layer names in the BOARD.
+
+* Via's
+  * Show via's like normal pad but with different colors, not only circles.
+  * Resizing/placing vias should not be so odd, should be easier and more
+    advanced features like the other EDA applications.
 
 * Use BOARD_ITEM::MenuIcon() in the onrightclick.cpp
 * Add unroute option in rightclick menu for components
@@ -65,5 +95,4 @@ PCBNew
   Then example 2 in RS274xrevd_e.pdf will draw properly.
 * Look at mouse auto-scroll modes (bug?)
 * Add the footprint name in the automatic placement file
-* Fix block copy/move preview to not view only a border, we should
-  see the moved/copied parts.
+* Footprint list should also have a footprint preview.
