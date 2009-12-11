@@ -107,6 +107,9 @@ const char* DSNLEXER::Syntax( int aTok )
     case DSN_NONE:
         ret = "NONE";
         break;
+    case DSN_STRING_QUOTE:
+        ret = "string_quote";   // a special DSN syntax token, see specctra spec.
+        break;
     case DSN_QUOTE_DEF:
         ret = "quoted text delimiter";
         break;
@@ -160,6 +163,7 @@ const char* DSNLEXER::GetTokenText( int aTok )
 
 void DSNLEXER::ThrowIOError( wxString aText, int charOffset ) throw (IOError)
 {
+    // append to aText, do not overwrite
     aText << wxT(" ") << _("in file") << wxT(" \"") << filename
           << wxT("\" ") << _("on line") << wxT(" ") << reader.LineNumber()
           << wxT(" ") << _("at offset") << wxT(" ") << charOffset;
@@ -192,6 +196,8 @@ int DSNLEXER::NextTok() throw (IOError)
         if( cur >= limit )
         {
 L_read:
+            // blank lines are returned as "\n" and will have a len of 1.
+            // EOF will have a len of 0 and so is detectable.
             int len = readLine();
             if( len == 0 )
             {
@@ -235,8 +241,7 @@ L_read:
                 ThrowIOError( errtxt, CurOffset() );
             }
 
-            curText.clear();
-            curText += cc;
+            curText = cc;
 
             head = cur+1;
 
@@ -251,9 +256,7 @@ L_read:
 
         if( *cur == '(' )
         {
-            curText.clear();
-            curText += *cur;
-
+            curText = *cur;
             curTok = DSN_LEFT;
             head = cur+1;
             goto exit;
@@ -261,9 +264,7 @@ L_read:
 
         if( *cur == ')' )
         {
-            curText.clear();
-            curText += *cur;
-
+            curText = *cur;
             curTok = DSN_RIGHT;
             head = cur+1;
             goto exit;
@@ -275,10 +276,9 @@ L_read:
         */
         if( *cur == '-' && cur>start && !isSpace( cur[-1] ) )
         {
-            head = cur+1;
-            curText.clear();
-            curText += '-';
+            curText = '-';
             curTok = DSN_DASH;
+            head = cur+1;
             goto exit;
         }
 
