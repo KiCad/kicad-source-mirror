@@ -4,6 +4,21 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2009-Dec-10 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++all
+  * Factored out the DSNLEXER class so it can be re-used more generally.  The
+    constructor takes a keyword table, so it can be used for arbitrary DSN
+    syntax files of your own chosing.  Simply create an enum {} with all your
+    unique tokens in it.  Then create a KEYWORD table.  See SPECCTRA_DB::keywords[].
+    The reason you want an enum is to give the C++ debugger better type information
+    so it can show symbolic integer symbols.
+  * Factored out common richio.cpp and richio.h
+    which is what DSNLEXER uses.
+  * Fixed some minor issues with reading circuit descriptor from a *.dsn file.
+
+
 2009-Dec-6 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++pcbnew & gerbview

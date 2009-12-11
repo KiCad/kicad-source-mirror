@@ -13,7 +13,7 @@ set(COMMON_SRCS
     bezier_curves.cpp
     block_commande.cpp
     class_marker_base.cpp
-	class_plotter.cpp
+    class_plotter.cpp
     class_undoredo_container.cpp
     common.cpp
     common_plot_functions.cpp
@@ -24,13 +24,14 @@ set(COMMON_SRCS
     confirm.cpp
     copy_to_clipboard.cpp
     dialog_display_info_HTML_base.cpp
-	dialog_load_error.cpp
+    dialog_load_error.cpp
     dcsvg.cpp
     displlst.cpp
     dlist.cpp
     drawframe.cpp
     drawpanel.cpp
     drawtxt.cpp
+    dsnlexer.cpp
     edaappl.cpp
     eda_dde.cpp
     eda_doc.cpp
@@ -41,6 +42,7 @@ set(COMMON_SRCS
     msgpanel.cpp
     projet_config.cpp
 #   pyhandler.cpp
+    richio.cpp
     selcolor.cpp
     string.cpp
     toolbars.cpp

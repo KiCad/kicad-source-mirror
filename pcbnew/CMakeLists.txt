@@ -78,7 +78,6 @@ set(PCBNEW_SRCS
     dist.cpp
     dragsegm.cpp
     drc.cpp
-    dsn.cpp
     edgemod.cpp
     edit.cpp
     editedge.cpp
@@ -222,9 +221,9 @@ install(TARGETS pcbnew
 
 
 # This one gets made only when testing.
-add_executable(dsntest EXCLUDE_FROM_ALL dsn.cpp)
-target_link_libraries(dsntest common ${wxWidgets_LIBRARIES})
+#add_executable(dsntest EXCLUDE_FROM_ALL dsn.cpp)
+#target_link_libraries(dsntest common ${wxWidgets_LIBRARIES})
 
 # This one gets made only when testing.
-add_executable(specctra_test EXCLUDE_FROM_ALL specctra.cpp dsn.cpp)
+add_executable(specctra_test EXCLUDE_FROM_ALL specctra.cpp)
 target_link_libraries(specctra_test common ${wxWidgets_LIBRARIES})

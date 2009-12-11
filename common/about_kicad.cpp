@@ -11,14 +11,6 @@
 #define BUILD_VERSION "(2009-12-05-unstable)"
 
 
-#ifdef HAVE_SVN_VERSION
-#include "version.h"
-wxString g_BuildVersion( wxT( KICAD_SVN_VERSION ) );
-#else
-wxString g_BuildVersion( wxT( BUILD_VERSION ) );
-#endif
-
-
 #if defined(HAVE_SVN_VERSION) || defined(HAVE_SVN_REVISION)
 #  include "version.h"
 #ifndef KICAD_ABOUT_VERSION
@@ -28,6 +20,15 @@ wxString g_BuildAboutVersion( wxT( KICAD_ABOUT_VERSION ) );
 #else
 wxString g_BuildAboutVersion( wxT( BUILD_VERSION ) );
 #endif
+
+
+/** Function GetAboutBuildVersion()
+ * Return custom build date for about dialog
+ */
+wxString GetAboutBuildVersion()
+{
+    return g_BuildAboutVersion;
+}
 
 
 /**********************************/
@@ -40,13 +41,13 @@ wxString SetMsg( const wxString& msg )
  * Perhaps depending on wxWidgets versions
  */
 {
-	wxString message;
+    wxString message;
 
 #if 1	/* Windows */
-	message = wxT( "\n" );
+    message = wxT( "\n" );
 #endif
-	message << msg;
-	return message;
+    message << msg;
+    return message;
 }
 
 
@@ -54,116 +55,116 @@ wxString SetMsg( const wxString& msg )
 void InitKiCadAbout( wxAboutDialogInfo& info )
 /**************************************************/
 {
-	/* Set name and title */
-	info.SetName( wxGetApp().GetTitle() );
+    /* Set name and title */
+    info.SetName( wxGetApp().GetTitle() );
 
-	/* Set description */
-	wxString description;
+    /* Set description */
+    wxString description;
 
-	/* KiCad build version */
-	description << ( _T( "Build: " ) ) << GetAboutBuildVersion();
+    /* KiCad build version */
+    description << ( _T( "Build: " ) ) << GetAboutBuildVersion();
 
-	/* Print for wxversion */
-	description << ( wxT( "\n\nwxWidgets " ) )
-		<< wxMAJOR_VERSION
-		<< wxT( "." )
-		<< wxMINOR_VERSION << wxT( "." )
-		<< wxRELEASE_NUMBER
+    /* Print for wxversion */
+    description << ( wxT( "\n\nwxWidgets " ) )
+        << wxMAJOR_VERSION
+        << wxT( "." )
+        << wxMINOR_VERSION << wxT( "." )
+        << wxRELEASE_NUMBER
 
-	/* Show Unicode or Ansi version */
+    /* Show Unicode or Ansi version */
 #if wxUSE_UNICODE
-		<< ( wxT( " Unicode " ) );
+        << ( wxT( " Unicode " ) );
 #		else
-		<< ( wxT( " Ansi " ) );
+        << ( wxT( " Ansi " ) );
 #endif
 
 
 
-	/**************************
- 	 * Check Operating System *
- 	 **************************/
+    /**************************
+     * Check Operating System *
+     **************************/
 #if defined __WINDOWS__
     description << ( wxT( "on Windows" ) );
 
-	/* Check for wxMAC */
+    /* Check for wxMAC */
 #	elif defined __WXMAC__
-	description << ( wxT( "on Macintosh" ) );
+    description << ( wxT( "on Macintosh" ) );
 
-	/* Linux 64 bits */
+    /* Linux 64 bits */
 #	elif defined _LP64 && __LINUX__
-	description << ( wxT( "on 64 Bits GNU/Linux" ) );
+    description << ( wxT( "on 64 Bits GNU/Linux" ) );
 
-	/* Linux 32 bits */
+    /* Linux 32 bits */
 #	elif defined __LINUX__
-	description << ( wxT( "on 32 Bits GNU/Linux" ) );
+    description << ( wxT( "on 32 Bits GNU/Linux" ) );
 
-	/* OpenBSD */
+    /* OpenBSD */
 #	elif defined __OpenBSD__
-	description << ( wxT ("on OpenBSD") );
+    description << ( wxT ("on OpenBSD") );
 
-	/* FreeBSD */
+    /* FreeBSD */
 #	elif defined __FreeBSD__
-	description << ( wxT ("on FreeBSD") );
+    description << ( wxT ("on FreeBSD") );
 
 #endif
 
     /* Websites */
-	description << wxT( "\n\nKiCad on the web\n\n" );
-	description << wxT( "http://iut-tice.ujf-grenoble.fr/kicad \n" );
-	description << wxT( "http://kicad.sourceforge.net \n" );
-	description << wxT( "http://www.kicadlib.org" );
+    description << wxT( "\n\nKiCad on the web\n\n" );
+    description << wxT( "http://iut-tice.ujf-grenoble.fr/kicad \n" );
+    description << wxT( "http://kicad.sourceforge.net \n" );
+    description << wxT( "http://www.kicadlib.org" );
 
-	/* Set the complete about description */
-	info.SetDescription( description );
+    /* Set the complete about description */
+    info.SetDescription( description );
 
-	/* Set copyright dialog */
-	info.SetCopyright( _T( "(C) 1992-2009 KiCad Developers Team" ) );
+    /* Set copyright dialog */
+    info.SetCopyright( _T( "(C) 1992-2009 KiCad Developers Team" ) );
 
-	/* Set license dialog */
-	info.SetLicence( wxString::FromAscii
-	(	"The complete KiCad EDA Suite is released under the\n"
-		"GNU General Public License version 2.\n"
-		"See <http://www.gnu.org/licenses/> for more information."
-	));
+    /* Set license dialog */
+    info.SetLicence( wxString::FromAscii
+    (	"The complete KiCad EDA Suite is released under the\n"
+        "GNU General Public License version 2.\n"
+        "See <http://www.gnu.org/licenses/> for more information."
+    ));
 
-	/* Add developers */
-	info.AddDeveloper( wxT( "Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>" ) );
-	info.AddDeveloper( SetMsg( wxT( "Dick Hollenbeck <dick@softplc.com>" ) ) );
-	info.AddDeveloper( SetMsg( wxT( "Hauptmech <hauptmech@gmail.com>") ) );
-	info.AddDeveloper( SetMsg( wxT( "Jerry Jacobs <jerkejacobs@gmail.com>" ) ) );
-	info.AddDeveloper( SetMsg( wxT( "Jonas Diemer <diemer@gmx.de>" ) ) );
-	info.AddDeveloper( SetMsg( wxT( "KBool Library <http://boolean.klaasholwerda.nl/bool.html>" ) ) );
-	info.AddDeveloper( SetMsg( wxT( "Lorenzo <lomarcan@tin.it>" ) ) );
-	info.AddDeveloper( SetMsg( wxT( "Marco Serantoni <marco.serantoni@gmail.com>" ) ) );
-	info.AddDeveloper( SetMsg( wxT( "Rok Markovic <rok@kanardia.eu>" ) ) );
-	info.AddDeveloper( SetMsg( wxT( "Tim Hanson <sideskate@gmail.com>" ) ) );
-	info.AddDeveloper( SetMsg( wxT( "Vesa Solonen <vesa.solonen@hut.fi>" ) ) );
-	info.AddDeveloper( SetMsg( wxT( "Wayne Stambaugh <stambaughw@verizon.net>" ) ) );
+    /* Add developers */
+    info.AddDeveloper( wxT( "Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>" ) );
+    info.AddDeveloper( SetMsg( wxT( "Dick Hollenbeck <dick@softplc.com>" ) ) );
+    info.AddDeveloper( SetMsg( wxT( "Hauptmech <hauptmech@gmail.com>") ) );
+    info.AddDeveloper( SetMsg( wxT( "Jerry Jacobs <jerkejacobs@gmail.com>" ) ) );
+    info.AddDeveloper( SetMsg( wxT( "Jonas Diemer <diemer@gmx.de>" ) ) );
+    info.AddDeveloper( SetMsg( wxT( "KBool Library <http://boolean.klaasholwerda.nl/bool.html>" ) ) );
+    info.AddDeveloper( SetMsg( wxT( "Lorenzo <lomarcan@tin.it>" ) ) );
+    info.AddDeveloper( SetMsg( wxT( "Marco Serantoni <marco.serantoni@gmail.com>" ) ) );
+    info.AddDeveloper( SetMsg( wxT( "Rok Markovic <rok@kanardia.eu>" ) ) );
+    info.AddDeveloper( SetMsg( wxT( "Tim Hanson <sideskate@gmail.com>" ) ) );
+    info.AddDeveloper( SetMsg( wxT( "Vesa Solonen <vesa.solonen@hut.fi>" ) ) );
+    info.AddDeveloper( SetMsg( wxT( "Wayne Stambaugh <stambaughw@verizon.net>" ) ) );
 
-	/* Add document writers*/
-	info.AddDocWriter( wxT( "Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>" ) );
-	info.AddDocWriter( SetMsg( wxT( "Igor Plyatov <plyatov@gmail.com>" ) ) );
+    /* Add document writers*/
+    info.AddDocWriter( wxT( "Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>" ) );
+    info.AddDocWriter( SetMsg( wxT( "Igor Plyatov <plyatov@gmail.com>" ) ) );
 
-	/* Add translators */
-	info.AddTranslator( wxT( "Czech (CZ) Martin Kratoška <martin@ok1rr.com>" ) );
-	info.AddTranslator( SetMsg( wxT( "Dutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>" ) ) );
-	info.AddTranslator( SetMsg( wxT( "French (FR) Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>" ) ) );
-	info.AddTranslator( SetMsg( wxT( "Polish (PL) Mateusz Skowroński <skowri@gmail.com>" ) ) );
-	info.AddTranslator( SetMsg( wxT( "Portuguese (PT) Renie Marquet <reniemarquet@uol.com.br>" ) ) );
-	info.AddTranslator( SetMsg( wxT( "Russian (RU) Igor Plyatov <plyatov@gmail.com>" ) ) );
-	info.AddTranslator( SetMsg( wxT( "Spanish (ES) Pedro Martin del Valle <pkicad@yahoo.es>" ) ) );
-	info.AddTranslator( SetMsg( wxT( "Spanish (ES) Iñigo Zuluaga <inigo_zuluaga@yahoo.es>" ) ) );
-	info.AddTranslator( SetMsg( wxT( "German (DE) Rafael Sokolowski <rafael.sokolowski@web.de>" ) ) );
+    /* Add translators */
+    info.AddTranslator( wxT( "Czech (CZ) Martin Kratoška <martin@ok1rr.com>" ) );
+    info.AddTranslator( SetMsg( wxT( "Dutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>" ) ) );
+    info.AddTranslator( SetMsg( wxT( "French (FR) Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>" ) ) );
+    info.AddTranslator( SetMsg( wxT( "Polish (PL) Mateusz Skowroński <skowri@gmail.com>" ) ) );
+    info.AddTranslator( SetMsg( wxT( "Portuguese (PT) Renie Marquet <reniemarquet@uol.com.br>" ) ) );
+    info.AddTranslator( SetMsg( wxT( "Russian (RU) Igor Plyatov <plyatov@gmail.com>" ) ) );
+    info.AddTranslator( SetMsg( wxT( "Spanish (ES) Pedro Martin del Valle <pkicad@yahoo.es>" ) ) );
+    info.AddTranslator( SetMsg( wxT( "Spanish (ES) Iñigo Zuluaga <inigo_zuluaga@yahoo.es>" ) ) );
+    info.AddTranslator( SetMsg( wxT( "German (DE) Rafael Sokolowski <rafael.sokolowski@web.de>" ) ) );
 
-	/* TODO are these all russian translators, placed them here now              TODO
-		TODO or else align them below other language maintainer with mail adres   TODO*/
-	info.AddTranslator( SetMsg( wxT( "\nRemy Halvick" ) ) );
-	info.AddTranslator( SetMsg( wxT( "David Briscoe" ) ) );
-	info.AddTranslator( SetMsg( wxT( "Dominique Laigle" ) ) );
-	info.AddTranslator( SetMsg( wxT( "Paul Burke" ) ) );
+    /* TODO are these all russian translators, placed them here now              TODO
+        TODO or else align them below other language maintainer with mail adres   TODO*/
+    info.AddTranslator( SetMsg( wxT( "\nRemy Halvick" ) ) );
+    info.AddTranslator( SetMsg( wxT( "David Briscoe" ) ) );
+    info.AddTranslator( SetMsg( wxT( "Dominique Laigle" ) ) );
+    info.AddTranslator( SetMsg( wxT( "Paul Burke" ) ) );
 
-	/* Add programm credits for icons */
-	info.AddArtist( wxT( "Icons by Iñigo Zuluagaz <inigo_zuluaga@yahoo.es>" ) );
-	info.AddArtist( SetMsg( wxT( "3D modules by Renie Marquet <reniemarquet@uol.com.br>" ) ) );
-	info.AddArtist( SetMsg( wxT( "3D modules by Christophe Boschat <nox454@hotmail.fr>" ) ) );
+    /* Add programm credits for icons */
+    info.AddArtist( wxT( "Icons by Iñigo Zuluagaz <inigo_zuluaga@yahoo.es>" ) );
+    info.AddArtist( SetMsg( wxT( "3D modules by Renie Marquet <reniemarquet@uol.com.br>" ) ) );
+    info.AddArtist( SetMsg( wxT( "3D modules by Christophe Boschat <nox454@hotmail.fr>" ) ) );
 }

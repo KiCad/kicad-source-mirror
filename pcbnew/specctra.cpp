@@ -47,20 +47,21 @@
 */
 
 
+
 #include <cstdarg>
 #include <cstdio>
 
 #include "specctra.h"
+#include "common.h"             // IsOK() & EDA_FileSelector()
 
 #include <wx/ffile.h>
 
-
 // To build the DSN beautifier and unit tester, simply uncomment this and then
 // use CMake's makefile to build target "specctra_test".
-#define STANDALONE        // define "stand alone, i.e. unit testing"
+//#define SPECCTRA_TEST  // define for "stand alone, i.e. unit testing"
 
 
-#if defined(STANDALONE)
+#if defined(SPECCTRA_TEST)
  #define EDA_BASE           // build_version.h behavior
  #undef  COMMON_GLOBL
  #define COMMON_GLOBL       // build_version.h behavior
@@ -72,11 +73,445 @@ namespace DSN {
 
 #define NESTWIDTH           2   ///< how many spaces per nestLevel
 
+#define TOKDEF(x)    { #x, T_##x }
+
+// This MUST be sorted alphabetically, and the order of enum DSN_T {} be
+// identially alphabetized. These MUST all be lower case because of the
+// conversion to lowercase in findToken().
+const KEYWORD SPECCTRA_DB::keywords[] = {
+
+    // Note that TOKDEF(string_quote) has been moved to the
+    // DSNLEXER, and DSN_SYNTAX_T enum, and the string for it is "string_quote".
+
+    TOKDEF(absolute),
+    TOKDEF(added),
+    TOKDEF(add_group),
+    TOKDEF(add_pins),
+    TOKDEF(allow_antenna),
+    TOKDEF(allow_redundant_wiring),
+    TOKDEF(amp),
+    TOKDEF(ancestor),
+    TOKDEF(antipad),
+    TOKDEF(aperture_type),
+    TOKDEF(array),
+    TOKDEF(attach),
+    TOKDEF(attr),
+    TOKDEF(average_pair_length),
+    TOKDEF(back),
+    TOKDEF(base_design),
+    TOKDEF(bbv_ctr2ctr),
+    TOKDEF(bend_keepout),
+    TOKDEF(bond),
+    TOKDEF(both),
+    TOKDEF(bottom),
+    TOKDEF(bottom_layer_sel),
+    TOKDEF(boundary),
+    TOKDEF(brickpat),
+    TOKDEF(bundle),
+    TOKDEF(bus),
+    TOKDEF(bypass),
+    TOKDEF(capacitance_resolution),
+    TOKDEF(capacitor),
+    TOKDEF(case_sensitive),
+    TOKDEF(cct1),
+    TOKDEF(cct1a),
+    TOKDEF(center_center),
+    TOKDEF(checking_trim_by_pin),
+    TOKDEF(circ),
+    TOKDEF(circle),
+    TOKDEF(circuit),
+    TOKDEF(class),
+    TOKDEF(class_class),
+    TOKDEF(classes),
+    TOKDEF(clear),
+    TOKDEF(clearance),
+    TOKDEF(cluster),
+    TOKDEF(cm),
+    TOKDEF(color),
+    TOKDEF(colors),
+    TOKDEF(comment),
+    TOKDEF(comp),
+    TOKDEF(comp_edge_center),
+    TOKDEF(comp_order),
+    TOKDEF(component),
+    TOKDEF(composite),
+    TOKDEF(conductance_resolution),
+    TOKDEF(conductor),
+    TOKDEF(conflict),
+    TOKDEF(connect),
+    TOKDEF(constant),
+    TOKDEF(contact),
+    TOKDEF(control),
+    TOKDEF(corner),
+    TOKDEF(corners),
+    TOKDEF(cost),
+    TOKDEF(created_time),
+    TOKDEF(cross),
+    TOKDEF(crosstalk_model),
+    TOKDEF(current_resolution),
+    TOKDEF(delete_pins),
+    TOKDEF(deleted),
+    TOKDEF(deleted_keepout),
+    TOKDEF(delta),
+    TOKDEF(diagonal),
+    TOKDEF(direction),
+    TOKDEF(directory),
+    TOKDEF(discrete),
+    TOKDEF(effective_via_length),
+    TOKDEF(elongate_keepout),
+    TOKDEF(exclude),
+    TOKDEF(expose),
+    TOKDEF(extra_image_directory),
+    TOKDEF(family),
+    TOKDEF(family_family),
+    TOKDEF(family_family_spacing),
+    TOKDEF(fanout),
+    TOKDEF(farad),
+    TOKDEF(file),
+    TOKDEF(fit),
+    TOKDEF(fix),
+    TOKDEF(flip_style),
+    TOKDEF(floor_plan),
+    TOKDEF(footprint),
+    TOKDEF(forbidden),
+    TOKDEF(force_to_terminal_point),
+    TOKDEF(forgotten),
+    TOKDEF(free),
+    TOKDEF(fromto),
+    TOKDEF(front),
+    TOKDEF(front_only),
+    TOKDEF(gap),
+    TOKDEF(gate),
+    TOKDEF(gates),
+    TOKDEF(generated_by_freeroute),
+    TOKDEF(global),
+    TOKDEF(grid),
+    TOKDEF(group),
+    TOKDEF(group_set),
+    TOKDEF(guide),
+    TOKDEF(hard),
+    TOKDEF(height),
+    TOKDEF(high),
+    TOKDEF(history),
+    TOKDEF(horizontal),
+    TOKDEF(host_cad),
+    TOKDEF(host_version),
+    TOKDEF(image),
+    TOKDEF(image_conductor),
+    TOKDEF(image_image),
+    TOKDEF(image_image_spacing),
+    TOKDEF(image_outline_clearance),
+    TOKDEF(image_set),
+    TOKDEF(image_type),
+    TOKDEF(inch),
+    TOKDEF(include),
+    TOKDEF(include_pins_in_crosstalk),
+    TOKDEF(inductance_resolution),
+    TOKDEF(insert),
+    TOKDEF(instcnfg),
+    TOKDEF(inter_layer_clearance),
+    TOKDEF(jumper),
+    TOKDEF(junction_type),
+    TOKDEF(keepout),
+    TOKDEF(kg),
+    TOKDEF(kohm),
+    TOKDEF(large),
+    TOKDEF(large_large),
+    TOKDEF(layer),
+    TOKDEF(layer_depth),
+    TOKDEF(layer_noise_weight),
+    TOKDEF(layer_pair),
+    TOKDEF(layer_rule),
+    TOKDEF(length),
+    TOKDEF(length_amplitude),
+    TOKDEF(length_factor),
+    TOKDEF(length_gap),
+    TOKDEF(library),
+    TOKDEF(library_out),
+    TOKDEF(limit),
+    TOKDEF(limit_bends),
+    TOKDEF(limit_crossing),
+    TOKDEF(limit_vias),
+    TOKDEF(limit_way),
+    TOKDEF(linear),
+    TOKDEF(linear_interpolation),
+    TOKDEF(load),
+    TOKDEF(lock_type),
+    TOKDEF(logical_part),
+    TOKDEF(logical_part_mapping),
+    TOKDEF(low),
+    TOKDEF(match_fromto_delay),
+    TOKDEF(match_fromto_length),
+    TOKDEF(match_group_delay),
+    TOKDEF(match_group_length),
+    TOKDEF(match_net_delay),
+    TOKDEF(match_net_length),
+    TOKDEF(max_delay),
+    TOKDEF(max_len),
+    TOKDEF(max_length),
+    TOKDEF(max_noise),
+    TOKDEF(max_restricted_layer_length),
+    TOKDEF(max_stagger),
+    TOKDEF(max_stub),
+    TOKDEF(max_total_delay),
+    TOKDEF(max_total_length),
+    TOKDEF(max_total_vias),
+    TOKDEF(medium),
+    TOKDEF(mhenry),
+    TOKDEF(mho),
+    TOKDEF(microvia),
+    TOKDEF(mid_driven),
+    TOKDEF(mil),
+    TOKDEF(min_gap),
+    TOKDEF(mirror),
+    TOKDEF(mirror_first),
+    TOKDEF(mixed),
+    TOKDEF(mm),
+    TOKDEF(negative_diagonal),
+    TOKDEF(net),
+    TOKDEF(net_number),
+    TOKDEF(net_out),
+    TOKDEF(net_pin_changes),
+    TOKDEF(nets),
+    TOKDEF(network),
+    TOKDEF(network_out),
+    TOKDEF(no),
+    TOKDEF(noexpose),
+    TOKDEF(noise_accumulation),
+    TOKDEF(noise_calculation),
+    TOKDEF(normal),
+    TOKDEF(object_type),
+    TOKDEF(off),
+    TOKDEF(off_grid),
+    TOKDEF(offset),
+    TOKDEF(on),
+    TOKDEF(open),
+    TOKDEF(opposite_side),
+    TOKDEF(order),
+    TOKDEF(orthogonal),
+    TOKDEF(outline),
+    TOKDEF(overlap),
+    TOKDEF(pad),
+    TOKDEF(pad_pad),
+    TOKDEF(padstack),
+    TOKDEF(pair),
+    TOKDEF(parallel),
+    TOKDEF(parallel_noise),
+    TOKDEF(parallel_segment),
+    TOKDEF(parser),
+    TOKDEF(part_library),
+    TOKDEF(path),
+    TOKDEF(pcb),
+    TOKDEF(permit_orient),
+    TOKDEF(permit_side),
+    TOKDEF(physical),
+    TOKDEF(physical_part_mapping),
+    TOKDEF(piggyback),
+    TOKDEF(pin),
+    TOKDEF(pin_allow),
+    TOKDEF(pin_cap_via),
+    TOKDEF(pin_via_cap),
+    TOKDEF(pin_width_taper),
+    TOKDEF(pins),
+    TOKDEF(pintype),
+    TOKDEF(place),
+    TOKDEF(place_boundary),
+    TOKDEF(place_control),
+    TOKDEF(place_keepout),
+    TOKDEF(place_rule),
+    TOKDEF(placement),
+    TOKDEF(plan),
+    TOKDEF(plane),
+    TOKDEF(pn),
+    TOKDEF(point),
+    TOKDEF(polyline_path),      // used by freerouting.com
+    TOKDEF(polygon),
+    TOKDEF(position),
+    TOKDEF(positive_diagonal),
+    TOKDEF(power),
+    TOKDEF(power_dissipation),
+    TOKDEF(power_fanout),
+    TOKDEF(prefix),
+    TOKDEF(primary),
+    TOKDEF(priority),
+    TOKDEF(property),
+    TOKDEF(protect),
+    TOKDEF(qarc),
+    TOKDEF(quarter),
+    TOKDEF(radius),
+    TOKDEF(ratio),
+    TOKDEF(ratio_tolerance),
+    TOKDEF(rect),
+    TOKDEF(reduced),
+    TOKDEF(region),
+    TOKDEF(region_class),
+    TOKDEF(region_class_class),
+    TOKDEF(region_net),
+    TOKDEF(relative_delay),
+    TOKDEF(relative_group_delay),
+    TOKDEF(relative_group_length),
+    TOKDEF(relative_length),
+    TOKDEF(reorder),
+    TOKDEF(reroute_order_viols),
+    TOKDEF(resistance_resolution),
+    TOKDEF(resistor),
+    TOKDEF(resolution),
+    TOKDEF(restricted_layer_length_factor),
+    TOKDEF(room),
+    TOKDEF(rotate),
+    TOKDEF(rotate_first),
+    TOKDEF(round),
+    TOKDEF(roundoff_rotation),
+    TOKDEF(route),
+    TOKDEF(route_to_fanout_only),
+    TOKDEF(routes),
+    TOKDEF(routes_include),
+    TOKDEF(rule),
+    TOKDEF(same_net_checking),
+    TOKDEF(sample_window),
+    TOKDEF(saturation_length),
+    TOKDEF(sec),
+    TOKDEF(secondary),
+    TOKDEF(self),
+    TOKDEF(sequence_number),
+    TOKDEF(session),
+    TOKDEF(set_color),
+    TOKDEF(set_pattern),
+    TOKDEF(shape),
+    TOKDEF(shield),
+    TOKDEF(shield_gap),
+    TOKDEF(shield_loop),
+    TOKDEF(shield_tie_down_interval),
+    TOKDEF(shield_width),
+    TOKDEF(side),
+    TOKDEF(signal),
+    TOKDEF(site),
+    TOKDEF(small),
+    TOKDEF(smd),
+    TOKDEF(snap),
+    TOKDEF(snap_angle),
+    TOKDEF(soft),
+    TOKDEF(source),
+    TOKDEF(space_in_quoted_tokens),
+    TOKDEF(spacing),
+    TOKDEF(spare),
+    TOKDEF(spiral_via),
+    TOKDEF(square),
+    TOKDEF(stack_via),
+    TOKDEF(stack_via_depth),
+    TOKDEF(standard),
+    TOKDEF(starburst),
+    TOKDEF(status),
+    TOKDEF(structure),
+    TOKDEF(structure_out),
+    TOKDEF(subgate),
+    TOKDEF(subgates),
+    TOKDEF(substituted),
+    TOKDEF(such),
+    TOKDEF(suffix),
+    TOKDEF(super_placement),
+    TOKDEF(supply),
+    TOKDEF(supply_pin),
+    TOKDEF(swapping),
+    TOKDEF(switch_window),
+    TOKDEF(system),
+    TOKDEF(tandem_noise),
+    TOKDEF(tandem_segment),
+    TOKDEF(tandem_shield_overhang),
+    TOKDEF(terminal),
+    TOKDEF(terminator),
+    TOKDEF(term_only),
+    TOKDEF(test),
+    TOKDEF(test_points),
+    TOKDEF(testpoint),
+    TOKDEF(threshold),
+    TOKDEF(time_length_factor),
+    TOKDEF(time_resolution),
+    TOKDEF(tjunction),
+    TOKDEF(tolerance),
+    TOKDEF(top),
+    TOKDEF(topology),
+    TOKDEF(total),
+    TOKDEF(track_id),
+    TOKDEF(turret),
+    TOKDEF(type),
+    TOKDEF(um),
+    TOKDEF(unassigned),
+    TOKDEF(unconnects),
+    TOKDEF(unit),
+    TOKDEF(up),
+    TOKDEF(use_array),
+    TOKDEF(use_layer),
+    TOKDEF(use_net),
+    TOKDEF(use_via),
+    TOKDEF(value),
+    TOKDEF(vertical),
+    TOKDEF(via),
+    TOKDEF(via_array_template),
+    TOKDEF(via_at_smd),
+    TOKDEF(via_keepout),
+    TOKDEF(via_number),
+    TOKDEF(via_rotate_first),
+    TOKDEF(via_site),
+    TOKDEF(via_size),
+    TOKDEF(virtual_pin),
+    TOKDEF(volt),
+    TOKDEF(voltage_resolution),
+    TOKDEF(was_is),
+    TOKDEF(way),
+    TOKDEF(weight),
+    TOKDEF(width),
+    TOKDEF(window),
+    TOKDEF(wire),
+    TOKDEF(wire_keepout),
+    TOKDEF(wires),
+    TOKDEF(wires_include),
+    TOKDEF(wiring),
+    TOKDEF(write_resolution),
+    TOKDEF(x),
+    TOKDEF(xy),
+    TOKDEF(y),
+};
+
+const unsigned SPECCTRA_DB::keywordCount = DIM(SPECCTRA_DB::keywords);
 
 
 //-----<SPECCTRA_DB>-------------------------------------------------
 
-#if !defined(STANDALONE)
+const char* SPECCTRA_DB::TokenName( int aTok )
+{
+    const char* ret;
+
+    if( (unsigned) aTok < keywordCount )
+    {
+        ret = keywords[aTok].name;
+    }
+    else if( aTok < 0 )
+    {
+        return DSNLEXER::Syntax( aTok );
+    }
+    else
+        ret = "token too big";
+
+    return ret;
+}
+
+const char* GetTokenText( int aTok )
+{
+    return SPECCTRA_DB::TokenName( aTok );
+}
+
+wxString SPECCTRA_DB::GetTokenString( int aTok )
+{
+    wxString    ret;
+
+    ret << wxT("'") << CONV_FROM_UTF8( GetTokenText(aTok) ) << wxT("'");
+
+    return ret;
+}
+
+
+#if !defined(SPECCTRA_TEST)
 
 void SPECCTRA_DB::buildLayerMaps( BOARD* aBoard )
 {
@@ -131,7 +566,7 @@ void SPECCTRA_DB::ThrowIOError( const wxChar* fmt, ... ) throw( IOError )
 void SPECCTRA_DB::expecting( DSN_T aTok ) throw( IOError )
 {
     wxString    errText( _("Expecting") );
-    errText << wxT(" ") << LEXER::GetTokenString( aTok );
+    errText << wxT(" ") << GetTokenString( aTok );
     lexer->ThrowIOError( errText, lexer->CurOffset() );
 }
 
@@ -145,7 +580,7 @@ void SPECCTRA_DB::expecting( const char* text ) throw( IOError )
 void SPECCTRA_DB::unexpected( DSN_T aTok ) throw( IOError )
 {
     wxString    errText( _("Unexpected") );
-    errText << wxT(" ") << LEXER::GetTokenString( aTok );
+    errText << wxT(" ") << GetTokenString( aTok );
     lexer->ThrowIOError( errText, lexer->CurOffset() );
 }
 
@@ -159,7 +594,7 @@ void SPECCTRA_DB::unexpected( const char* text ) throw( IOError )
 
 DSN_T SPECCTRA_DB::nextTok()
 {
-    DSN_T ret = lexer->NextTok();
+    DSN_T   ret = (DSN_T) lexer->NextTok();
     return ret;
 }
 
@@ -198,7 +633,7 @@ DSN_T SPECCTRA_DB::needSYMBOL() throw( IOError )
 
 DSN_T SPECCTRA_DB::needSYMBOLorNUMBER() throw( IOError )
 {
-    DSN_T tok = nextTok();
+    DSN_T  tok = nextTok();
     if( !isSymbol( tok ) && tok!=T_NUMBER )
         expecting( "symbol|number" );
     return tok;
@@ -206,11 +641,11 @@ DSN_T SPECCTRA_DB::needSYMBOLorNUMBER() throw( IOError )
 
 void SPECCTRA_DB::readCOMPnPIN( std::string* component_id, std::string* pin_id ) throw( IOError )
 {
-    DSN_T tok;
+    DSN_T  tok;
 
     static const char pin_def[] = "<pin_reference>::=<component_id>-<pin_id>";
 
-    if( !isSymbol( lexer->CurTok() ) )
+    if( !isSymbol( (DSN_T) lexer->CurTok() ) )
         expecting( pin_def );
 
     // case for:  A12-14, i.e. no wrapping quotes.  This should be a single
@@ -329,7 +764,7 @@ void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IOError )
     delete lexer;
     lexer = 0;
 
-    lexer = new LEXER( file.fp(), filename );
+    lexer = new DSNLEXER( file.fp(), filename, SPECCTRA_DB::keywords, SPECCTRA_DB::keywordCount );
 
     if( nextTok() != T_LEFT )
         expecting( T_LEFT );
@@ -359,7 +794,7 @@ void SPECCTRA_DB::LoadSESSION( const wxString& filename ) throw( IOError )
     delete lexer;
     lexer = 0;
 
-    lexer = new LEXER( file.fp(), filename );
+    lexer = new DSNLEXER( file.fp(), filename, SPECCTRA_DB::keywords, SPECCTRA_DB::keywordCount );
 
     if( nextTok() != T_LEFT )
         expecting( T_LEFT );
@@ -508,7 +943,7 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
         tok = nextTok();
         switch( tok )
         {
-        case T_string_quote:
+        case T_STRING_QUOTE:
             tok = nextTok();
             if( tok != T_QUOTE_DEF )
                 expecting( T_QUOTE_DEF );
@@ -1200,7 +1635,7 @@ void SPECCTRA_DB::doSTRINGPROP( STRINGPROP* growth ) throw( IOError )
 
 void SPECCTRA_DB::doTOKPROP( TOKPROP* growth ) throw( IOError )
 {
-    DSN_T   tok = nextTok();
+    DSN_T tok = nextTok();
 
     if( tok<0 )
         unexpected( lexer->CurText() );
@@ -2613,9 +3048,6 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IOError )
                 int             bracketNesting = 1; // we already saw the opening T_LEFT
                 DSN_T           tok = T_NONE;
 
-                builder += '(';
-                builder += lexer->CurText();
-
                 while( bracketNesting!=0 && tok!=T_EOF )
                 {
                     tok = nextTok();
@@ -2628,7 +3060,9 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IOError )
 
                     if( bracketNesting >= 1 )
                     {
-                        if( lexer->PrevTok() != T_LEFT && tok!=T_RIGHT )
+                        DSN_T prevTok = (DSN_T) lexer->PrevTok();
+
+                        if( prevTok!=T_LEFT && prevTok!=T_circuit && tok!=T_RIGHT )
                             builder += ' ';
 
                         if( tok==T_STRING )
@@ -2644,9 +3078,8 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IOError )
                     // to bracketNesting == 0, then save the builder and break;
                     if( bracketNesting == 0 )
                     {
-                        builder += ')';
-                       growth->circuit.push_back( builder );
-                       break;
+                        growth->circuit.push_back( builder );
+                        break;
                     }
                 }
 
@@ -2656,7 +3089,7 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IOError )
             break;
 
         default:
-                unexpected( lexer->CurText() );
+            unexpected( lexer->CurText() );
         }                                       // switch
 
         tok = nextTok();
@@ -3518,41 +3951,6 @@ int SPECCTRA_DB::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
     return total;
 }
 
-// factor out a common GetQuoteChar
-
-const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, const char* quote_char )
-{
-    // Include '#' so a symbol is not confused with a comment.  We intend
-    // to wrap any symbol starting with a '#'.
-    // Our LEXER class handles comments, and comments appear to be an extension
-    // to the SPECCTRA DSN specification.
-    if( *wrapee == '#' )
-        return quote_char;
-
-    if( strlen(wrapee)==0 )
-        return quote_char;
-
-    bool isFirst = true;
-
-    for(  ; *wrapee;  ++wrapee, isFirst=false )
-    {
-        static const char quoteThese[] = "\t ()"
-            "%"     // per Alfons of freerouting.net, he does not like this unquoted as of 1-Feb-2008
-            "{}"    // guessing that these are problems too
-            ;
-
-        // if the string to be wrapped (wrapee) has a delimiter in it,
-        // return the quote_char so caller wraps the wrapee.
-        if( strchr( quoteThese, *wrapee ) )
-            return quote_char;
-
-        if( !isFirst  &&  '-' == *wrapee )
-            return quote_char;
-    }
-
-    return "";  // caller does not need to wrap, can use an unwrapped string.
-}
-
 
 const char* SPECCTRA_DB::GetQuoteChar( const char* wrapee )
 {
@@ -3627,91 +4025,6 @@ PCB* SPECCTRA_DB::MakePCB()
 }
 
 
-//-----<STRINGFORMATTER>----------------------------------------------------
-
-const char* STRINGFORMATTER::GetQuoteChar( const char* wrapee )
-{
-    // for what we are using STRINGFORMATTER for at this time, we can return the nul string
-    // always.
-
-    return "";
-//    return OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, "\"" );
-}
-
-int STRINGFORMATTER::vprint( const char* fmt,  va_list ap )
-{
-    int ret = vsnprintf( &buffer[0], buffer.size(), fmt, ap );
-    if( ret >= (int) buffer.size() )
-    {
-        buffer.reserve( ret+200 );
-        ret = vsnprintf( &buffer[0], buffer.size(), fmt, ap );
-    }
-
-    if( ret > 0 )
-        mystring.append( (const char*) &buffer[0] );
-
-    return ret;
-}
-
-
-int STRINGFORMATTER::sprint( const char* fmt, ... )
-{
-    va_list     args;
-
-    va_start( args, fmt );
-    int ret = vprint( fmt, args);
-    va_end( args );
-
-    return ret;
-}
-
-
-int STRINGFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
-{
-    va_list     args;
-
-    va_start( args, fmt );
-
-    int result = 0;
-    int total  = 0;
-
-    for( int i=0; i<nestLevel;  ++i )
-    {
-        result = sprint( "%*c", NESTWIDTH, ' ' );
-        if( result < 0 )
-            break;
-
-        total += result;
-    }
-
-    if( result<0 || (result=vprint( fmt, args ))<0 )
-    {
-        throw IOError( _("Error writing to STRINGFORMATTER") );
-    }
-
-    va_end( args );
-
-    total += result;
-    return total;
-}
-
-
-void STRINGFORMATTER::StripUseless()
-{
-    std::string  copy = mystring;
-
-    mystring.clear();
-
-    for( std::string::iterator i=copy.begin();  i!=copy.end();  ++i )
-    {
-        if( !isspace( *i ) && *i!=')' && *i!='(' && *i!='"' )
-        {
-            mystring += *i;
-        }
-    }
-}
-
-
 //-----<ELEM>---------------------------------------------------------------
 
 ELEM::ELEM( DSN_T aType, ELEM* aParent ) :
@@ -3725,6 +4038,10 @@ ELEM::~ELEM()
 {
 }
 
+const char* ELEM::Name() const
+{
+    return SPECCTRA_DB::TokenName( type );
+}
 
 UNIT_RES* ELEM::GetUnits() const
 {
@@ -3737,7 +4054,7 @@ UNIT_RES* ELEM::GetUnits() const
 
 void ELEM::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 {
-    out->Print( nestLevel, "(%s\n", LEXER::GetTokenText( Type() ) );
+    out->Print( nestLevel, "(%s\n", Name() );
 
     FormatContents( out, nestLevel+1 );
 
@@ -3903,7 +4220,7 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         useMultiLine = true;
 
-        out->Print( nestLevel, "(%s %s%s%s\n", LEXER::GetTokenText( Type() ),
+        out->Print( nestLevel, "(%s %s%s%s\n", Name(),
                                 quote, component_id.c_str(), quote );
 
         out->Print( nestLevel+1, "%s", "" );
@@ -3912,7 +4229,7 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         useMultiLine = false;
 
-        out->Print( nestLevel, "(%s %s%s%s", LEXER::GetTokenText( Type() ),
+        out->Print( nestLevel, "(%s %s%s%s", Name(),
                                 quote, component_id.c_str(), quote );
     }
 
@@ -3920,7 +4237,7 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         out->Print( 0, " %.6g %.6g", vertex.x, vertex.y );
 
-        out->Print( 0, " %s", LEXER::GetTokenText( side ) );
+        out->Print( 0, " %s", GetTokenText( side ) );
 
         out->Print( 0, " %.6g", rotation );
     }
@@ -3929,13 +4246,13 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 
     if( mirror != T_NONE )
     {
-        out->Print( 0, "%s(mirror %s)", space, LEXER::GetTokenText( mirror ) );
+        out->Print( 0, "%s(mirror %s)", space, GetTokenText( mirror ) );
         space = "";
     }
 
     if( status != T_NONE )
     {
-        out->Print( 0, "%s(status %s)", space, LEXER::GetTokenText( status ) );
+        out->Print( 0, "%s(status %s)", space, GetTokenText( status ) );
         space = "";
     }
 
@@ -3967,8 +4284,7 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
             out->Print( nestLevel+1, ")\n" );
         }
         if( lock_type != T_NONE )
-            out->Print( nestLevel+1, "(lock_type %s)\n",
-                       LEXER::GetTokenText(lock_type) );
+            out->Print( nestLevel+1, "(lock_type %s)\n", GetTokenText(lock_type) );
         if( rules )
             rules->Format( out, nestLevel+1 );
 
@@ -3986,8 +4302,7 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     {
         if( lock_type != T_NONE )
         {
-            out->Print( 0, "%s(lock_type %s)", space,
-                       LEXER::GetTokenText(lock_type) );
+            out->Print( 0, "%s(lock_type %s)", space, GetTokenText(lock_type) );
             space = "";
         }
 
@@ -4002,16 +4317,17 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
     out->Print( 0, ")\n" );
 }
 
-
 } // namespace DSN
 
 
-// unit test this source file
+// unit test this source file.  You can use the beautifiers below to output
+// exactly what you read in but beautified and without #comments.  This can
+// then be used along with program 'diff' to test the parsing and formatting
+// of every element.  You may have to run the first output back through to
+// get two files that should match, the 2nd and 3rd outputs.
 
-#if defined(STANDALONE)
 
-
-#include "common.h"             // IsOK() & EDA_FileSelector()
+#if defined(SPECCTRA_TEST)
 
 using namespace DSN;
 
@@ -4035,8 +4351,8 @@ int main( int argc, char** argv )
 
     try
     {
-        db.LoadPCB( filename );
-//        db.LoadSESSION( filename );
+//        db.LoadPCB( filename );
+        db.LoadSESSION( filename );
     }
     catch( IOError ioe )
     {
@@ -4048,17 +4364,24 @@ int main( int argc, char** argv )
         fprintf( stderr, "loaded OK\n" );
 
     // export what we read in, making this test program basically a beautifier
-//    db.ExportSESSION( wxT("/tmp/export.ses") );
-//    db.ExportPCB( wxT("/tmp/export.dsn") );
-
-    DSN::PCB* pcb = db.GetPCB();
-
-    // hose the beautified DSN file to stdout.
+    // hose the beautified DSN file to stdout.  If an exception occurred,
+    // we will be outputting only a portion of what we wanted to read in.
     db.SetFILE( stdout );
+
+#if 0
+    // export a PCB
+    DSN::PCB* pcb = db.GetPCB();
     pcb->Format( &db, 0 );
+
+#else
+    // export a SESSION file.
+    DSN::SESSION* ses = db.GetSESSION();
+    ses->Format( &db, 0 );
+#endif
 
     SetLocaleTo_Default( );      // revert to the current locale
 }
+
 
 #endif
 

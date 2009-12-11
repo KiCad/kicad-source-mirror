@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2007-2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2007 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -257,8 +257,8 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
         shape = (SHAPE*) (*aPadstack)[0];
         DSN_T type = shape->shape->Type();
         if( type != T_circle )
-            ThrowIOError( _( "Unsupported via shape: \"%s\""),
-                     GetChars( LEXER::GetTokenString( type ) ) );
+            ThrowIOError( _( "Unsupported via shape: %s"),
+                     GetChars( GetTokenString( type ) ) );
 
         CIRCLE* circle = (CIRCLE*) shape->shape;
         int viaDiam = scale( circle->diameter, routeResolution );
@@ -275,8 +275,8 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
         shape = (SHAPE*) (*aPadstack)[0];
         DSN_T type = shape->shape->Type();
         if( type != T_circle )
-            ThrowIOError( _( "Unsupported via shape: \"%s\""),
-                     GetChars( LEXER::GetTokenString( type ) ) );
+            ThrowIOError( _( "Unsupported via shape: %s"),
+                     GetChars( GetTokenString( type ) ) );
 
         CIRCLE* circle = (CIRCLE*) shape->shape;
         int viaDiam = scale( circle->diameter, routeResolution );
@@ -299,8 +299,8 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
             shape = (SHAPE*) (*aPadstack)[i];
             DSN_T type = shape->shape->Type();
             if( type != T_circle )
-                ThrowIOError( _( "Unsupported via shape: \"%s\""),
-                         GetChars( LEXER::GetTokenString( type ) ) );
+                ThrowIOError( _( "Unsupported via shape: %s"),
+                         GetChars( GetTokenString( type ) ) );
 
             CIRCLE* circle = (CIRCLE*) shape->shape;
 
@@ -473,7 +473,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
                 wxString netId = CONV_FROM_UTF8( wire->net_id.c_str() );
                 ThrowIOError(
                     _("Unsupported wire shape: \"%s\" for net: \"%s\""),
-                    LEXER::GetTokenString(shape).GetData(),
+                    DLEX::GetTokenString(shape).GetData(),
                     netId.GetData()
                     );
                 */
