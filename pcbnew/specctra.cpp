@@ -57,7 +57,7 @@
 
 // To build the DSN beautifier and unit tester, simply uncomment this and then
 // use CMake's makefile to build target "specctra_test".
-//#define STANDALONE        // define "stand alone, i.e. unit testing"
+#define STANDALONE        // define "stand alone, i.e. unit testing"
 
 
 #if defined(STANDALONE)
@@ -4009,6 +4009,9 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 // unit test this source file
 
 #if defined(STANDALONE)
+
+
+#include "common.h"             // IsOK() & EDA_FileSelector()
 
 using namespace DSN;
 
