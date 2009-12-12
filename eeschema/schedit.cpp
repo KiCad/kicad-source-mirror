@@ -416,8 +416,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_MOVE_ITEM_REQUEST:
         DrawPanel->MouseToCursorSchema();
-        if( (id == ID_POPUP_SCH_DRAG_CMP_REQUEST ) ||
-            (id == ID_POPUP_SCH_DRAG_WIRE_REQUEST ) )
+        if( id == ID_POPUP_SCH_DRAG_CMP_REQUEST )
         {
             // The easiest way to handle a drag component is to simulate a
             // block drag command
@@ -426,6 +425,8 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
                 if( !HandleBlockBegin( &dc, BLOCK_DRAG,
                                        screen->m_Curseur ) )
                     break;
+                // Give a non null size to the search block:
+                screen->m_BlockLocate.Inflate(1);
                 HandleBlockEnd( &dc );
             }
         }

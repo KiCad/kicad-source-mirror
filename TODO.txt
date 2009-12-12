@@ -10,10 +10,6 @@ CMAKE
 
 Common
 ------
-*BUGS*
-* PCBNew and EEschema opened and rotating a footprint in pcbnew let the
-  EESchema drawing flikker/refresh.
-
 * Grep for @TODO or TODO for sourcecode tasks
 * Use doxygen compatible comments on member functions (.h files)
 * Add tooltip text to all non-obvious controls in every dialog window.
@@ -23,12 +19,6 @@ Common
 * Create a better and cleaner add component and footprint dialog.
 * List auto up and down scrolling.
 * Toolbars and menus should be equal.
-* Select one component, not a whole block
-  (like in PCB, EAGLE, MultiSim/Ultiboard)
-* Cursor selection
-  * Cross small
-  * Cross fullscreen
-  * Normal arrow
 * (Main) dialog(s) title(s) should always be the same and not change over time
   when not needed. For example KiCad - <file loaded> or PCBNew - <file loaded>.
   We dont have to see which build in the titlebar. This makes documentation
@@ -45,11 +35,6 @@ CvPCB
 
 EESchema
 --------
-*BUGS*
-* If we add multiple leds and connect them with one wire there is no junction
-  placed between the ends, then I have to place manual the junctions or else it
-  is not connected in the netlist so only one led/connection is made
-  (for example to the Power GND symbol).
 
 *Improvements*
 * Component add list browser with optional component preview.
@@ -79,11 +64,6 @@ PCBNew
   see the moved/copied parts.
 
 * Fix DIALOG_PAD_PROPERTIES_BASE class to use actual layer names in the BOARD.
-
-* Via's
-  * Show via's like normal pad but with different colors, not only circles.
-  * Resizing/placing vias should not be so odd, should be easier and more
-    advanced features like the other EDA applications.
 
 * Use BOARD_ITEM::MenuIcon() in the onrightclick.cpp
 * Add unroute option in rightclick menu for components
