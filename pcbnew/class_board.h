@@ -327,8 +327,8 @@ public:
     LAYER_T  GetLayerType( int aLayerIndex ) const;
 
     /**
-     * Function SetLayerName
-     * changes the name of the layer given by aLayerIndex.
+     * Function SetLayerType
+     * changes the type of the layer given by aLayerIndex.
      *
      * @param aLayerIndex A layer index, like LAYER_N_BACK, etc.
      * @param aLayerType The new layer type.

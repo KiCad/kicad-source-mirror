@@ -38,25 +38,37 @@ private:
 
     WinEDA_PcbFrame*    m_Parent;
 
-//    int                 m_ActivesLayersCount;
+    int                 m_CopperLayerCount;
+    int                 m_EnabledLayers;
 
     BOARD*              m_Pcb;
 
     void init();
 
+    void setLayerCheckBox( int layer, bool isChecked );
+    void setCopperLayerCheckBoxes( int copperCount );
+
+    void showCopperChoice( int copperCount );
     void showBoardLayerNames();
-
-    void showSelectedLayerCheckBoxes();
-
+    void showSelectedLayerCheckBoxes( int enableLayerMask );
     void showLayerTypes();
+    void showPresets( int enabledLayerMask );
+
+    /** return the selected layer mask within the UI checkboxes */
+    int getUILayerMask();
+    wxString getLayerName( int layer );
+    int getLayerTypeIndex( int layer );
 
 
     void OnCancelButtonClick( wxCommandEvent& event );
     void OnOkButtonClick( wxCommandEvent& event );
-    void OnLayerCountClick( wxCommandEvent& event );
+    void OnCheckBox( wxCommandEvent& event );
+    void DenyChangeCheckBox( wxCommandEvent& event );
+    void OnPresetsChoice( wxCommandEvent& event );
+    void OnCopperLayersChoice( wxCommandEvent& event );
 
-    void SetRoutableLayerStatus( );
-    bool TestDataValidity();
+    bool testLayerNames();
+
 
 public:
     DIALOG_LAYERS_SETUP( WinEDA_PcbFrame* parent );

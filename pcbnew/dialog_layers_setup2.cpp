@@ -45,116 +45,38 @@ wxPoint DIALOG_LAYERS_SETUP::s_LastPos( -1, -1 );
 wxSize  DIALOG_LAYERS_SETUP::s_LastSize;
 
 
-/*
-// Layer order on the list panel
-
-// This function translates from the dialog's layer order to Kicad's layer order.
-
-static int GetLayerNumber( int aRow )
+// Layer bit masks for each defined "Preset Layer Grouping"
+static const int presets[] =
 {
-    return LayerOrder[Row];
-}
+#define FRONT_AUX   (SILKSCREEN_LAYER_CMP | SOLDERMASK_LAYER_CMP  | ADHESIVE_LAYER_CMP | SOLDERPASTE_LAYER_CMP)
+#define BACK_AUX    (SILKSCREEN_LAYER_CU  | SOLDERMASK_LAYER_CU   | ADHESIVE_LAYER_CU  | SOLDERPASTE_LAYER_CU)
 
+    0,  // shift the array index up by one, matches with "Custom".
 
-// Categories for coloring the rows backgrounds (0 means default dialog color).
-static const int LayerCategories[NB_LAYERS] =
-{  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 2, 2, 2, 2, 5, 5, 5, 5, 4 };
+    // "Two layers, parts on Front only"
+    EDGE_LAYER | CMP_LAYER | CUIVRE_LAYER | FRONT_AUX,
 
- // Descriptive types for non-copper layers
-static const wxString LayerCategoriesNames[NB_LAYERS] =
-{
-    _( "Unknown" ),                     // Not used
-    _( "Off-board, manufacturing" ),    // 1
-    _( "On-board, non-copper" ),        // 2
-    _( "On-board, copper" ),            // 3
-    _( "Board contour" ),               // 4
-    _( "Auxiliary" )                    // 5
+    // "Two layers, parts on Back only",
+    EDGE_LAYER | CMP_LAYER | CUIVRE_LAYER | BACK_AUX,
+
+    // "Two layers, parts on Front and Back",
+    EDGE_LAYER | CMP_LAYER | CUIVRE_LAYER | BACK_AUX | FRONT_AUX,
+
+    // "Four layers, parts on Front only"
+    EDGE_LAYER | CMP_LAYER | CUIVRE_LAYER | LAYER_2 | LAYER_3 | FRONT_AUX,
+
+    // "Four layers, parts on Front and Back"
+    EDGE_LAYER | CMP_LAYER | CUIVRE_LAYER | LAYER_2 | LAYER_3 | FRONT_AUX | BACK_AUX,
+
+    //  "All layers on",
+    ALL_LAYERS,
 };
 
 
-// Names for the presets
-static const wxString PresetsChoiceChoices[] =
-{
-    _("All Layers On"),
-    _("Single Side"),
-    _("Single Side, SMD on Back"),
-    _("Two Layers, Parts on Front"),
-    _("Two Layers, Parts on Both Faces"),
-    _("Four Layers, Parts on Front"),
-    _("Four Layers, Parts on Both Faces")
-};
-
-#define PRESETS_CHOICE_N_CHOICES DIM(m_PresetsChoiceChoices)
-*/
-
-
-// Bit masks (for all layers) for each defined preset
-static const int Presets[] =
-{
-    ALL_LAYERS,                                                                     // 0x1fffffff
-    SILKSCREEN_LAYER_CMP | CUIVRE_LAYER | SOLDERMASK_LAYER_CU | EDGE_LAYER,         // 0x10600001
-    SILKSCREEN_LAYER_CMP | CUIVRE_LAYER | SOLDERMASK_LAYER_CU |
-        ADHESIVE_LAYER_CU | EDGE_LAYER,                                             // 0x10610001
-    SILKSCREEN_LAYER_CMP | SOLDERMASK_LAYER_CMP | CMP_LAYER | CUIVRE_LAYER |
-        SOLDERMASK_LAYER_CU | EDGE_LAYER,                                           // 0x10e08001
-    SILKSCREEN_LAYER_CMP | SOLDERMASK_LAYER_CMP | CMP_LAYER | CUIVRE_LAYER |
-        SOLDERMASK_LAYER_CU | SILKSCREEN_LAYER_CU | EDGE_LAYER,                     // 0x10f08001
-    SILKSCREEN_LAYER_CMP | SOLDERMASK_LAYER_CMP | CMP_LAYER | LAYER_3 |
-        LAYER_2 | CUIVRE_LAYER | SOLDERMASK_LAYER_CU | EDGE_LAYER,                  // 0x10e08007
-    SILKSCREEN_LAYER_CMP | SOLDERMASK_LAYER_CMP | CMP_LAYER | LAYER_3 | LAYER_2 |
-        CUIVRE_LAYER | SOLDERMASK_LAYER_CU | SILKSCREEN_LAYER_CU | EDGE_LAYER       // 0x10f08007
-};
-
-
-// Bit masks for copper layers, one for each option in the copper layer choice widget
-static const int CopperMasks[] =
-{
-    0x00000001,
-    0x00008001,
-    0x00008007,
-    0x0000801f,
-    0x0000807f,
-    0x000081ff,
-    0x000087ff,
-    0x00009fff,
-    0x0000ffff
-};
-
-
-// The sequence of the layer oriented rows in the scrollPanel:
-static const short layerOrder[NB_LAYERS] = {
-    ADHESIVE_N_CMP,
-    SOLDERPASTE_N_CMP,
-    SILKSCREEN_N_CMP,
-    SOLDERMASK_N_CMP,
-    LAYER_N_FRONT,
-    LAYER_N_2,
-    LAYER_N_3,
-    LAYER_N_4,
-    LAYER_N_5,
-    LAYER_N_6,
-    LAYER_N_7,
-    LAYER_N_8,
-    LAYER_N_9,
-    LAYER_N_10,
-    LAYER_N_11,
-    LAYER_N_12,
-    LAYER_N_13,
-    LAYER_N_14,
-    LAYER_N_15,
-    LAYER_N_BACK,
-    SOLDERMASK_N_CU,
-    SILKSCREEN_N_CU,
-    SOLDERPASTE_N_CU,
-    ADHESIVE_N_CU,
-    EDGE_N,
-    ECO2_N,
-    ECO1_N,
-    COMMENT_N,
-    DRAW_N,
-};
-
-
+/**
+ * Class IDs
+ * holds the 3 ui control ids for a single board layer.
+ */
 struct IDs
 {
     IDs( int aName, int aCheckBox, int aChoice )
@@ -219,20 +141,6 @@ static IDs getIDs( int aLayerNumber )
 }
 
 
-// Names for the types of copper layers
-
-/*
-static const wxString layerTypeChoiceChoices[] =
-{
-    // these may not be translated since they come from Specctra.
-    wxT("signal"),
-    wxT("power"),
-    wxT("mixed"),
-    wxT("jumper")
-};
-*/
-
-
 /***********************************************************************************/
 DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( WinEDA_PcbFrame* parent ) :
     DIALOG_LAYERS_SETUP_BASE2( parent )
@@ -277,6 +185,22 @@ bool DIALOG_LAYERS_SETUP::Show( bool show )
 }
 
 
+void DIALOG_LAYERS_SETUP::showCopperChoice( int copperCount )
+{
+    static const int copperCounts[] = { 2,4,6,8,10,12,14,16 };
+
+    D(printf("boardsCopperCount=%d\n", copperCount );)
+
+    for( unsigned i = 0;  i<sizeof(copperCounts);  ++i )
+    {
+        // note this will change a one layer board to 2:
+        if( copperCount <= copperCounts[i] )
+        {
+            m_CopperLayersChoice->SetSelection(i);
+            break;
+        }
+    }
+}
 
 
 void DIALOG_LAYERS_SETUP::showBoardLayerNames()
@@ -285,10 +209,8 @@ void DIALOG_LAYERS_SETUP::showBoardLayerNames()
     // obtaining them from BOARD::GetLayerName() which calls
     // BOARD::GetDefaultLayerName() for non-coppers.
 
-    for( unsigned i=0;  i<DIM(layerOrder);  ++i )
+    for( int layer=0; layer<NB_LAYERS;  ++layer )
     {
-        int layer = layerOrder[i];
-
         int nameId = getIDs( layer ).name;
 
         wxControl*  ctl = (wxControl*) FindWindowById( nameId );
@@ -310,24 +232,31 @@ void DIALOG_LAYERS_SETUP::showBoardLayerNames()
 }
 
 
-void DIALOG_LAYERS_SETUP::showSelectedLayerCheckBoxes()
+void DIALOG_LAYERS_SETUP::showSelectedLayerCheckBoxes( int enabledLayers )
 {
-    int enabledLayers = m_Pcb->GetEnabledLayers();
-
-    for( unsigned i=0;  i<DIM(layerOrder);  ++i )
+    for( int layer=0;  layer<NB_LAYERS;  ++layer )
     {
-        int layer = layerOrder[i];
-
-        int checkBoxId = getIDs( layer ).checkbox;
-
-        wxCheckBox*  ctl = (wxCheckBox*) FindWindowById( checkBoxId );
-
-        wxASSERT( ctl );
-
-        if( ctl )
-            ctl->SetValue(  (1<<layer) & enabledLayers );
+        setLayerCheckBox( layer, (1<<layer) & enabledLayers  );
     }
 }
+
+
+void DIALOG_LAYERS_SETUP::showPresets( int enabledLayers )
+{
+    int presetsNdx = 0;     // the "Custom" setting, matches nothing
+
+    for( unsigned i=1; i<DIM(presets);  ++i )
+    {
+        if( enabledLayers == presets[i] )
+        {
+            presetsNdx = i;
+            break;
+        }
+    }
+
+    m_PresetsChoice->SetSelection( presetsNdx );
+}
+
 
 void DIALOG_LAYERS_SETUP::showLayerTypes()
 {
@@ -350,142 +279,16 @@ void DIALOG_LAYERS_SETUP::showLayerTypes()
 void DIALOG_LAYERS_SETUP::init()
 /********************************************************************/
 {
-
-    // temporary: set copper layer count without regard to enabled layer mask.
-    static const int copperCount[] = {1,2,4,6,8,10,12,14,16};
-
-    m_CopperLayersChoice->SetSelection(1);
-
-    int boardsCopperCount = m_Pcb->GetCopperLayerCount();
-
-    D(printf("boardsCopperCount=%d\n", boardsCopperCount );)
-
-    for( unsigned i = 0;  i<sizeof(copperCount);  ++i )
-    {
-        if( boardsCopperCount == copperCount[i] )
-        {
-            m_CopperLayersChoice->SetSelection(i);
-            break;
-        }
-    }
+    m_CopperLayerCount = m_Pcb->GetCopperLayerCount();
+    showCopperChoice( m_CopperLayerCount );
 
     showBoardLayerNames();
 
-    showSelectedLayerCheckBoxes();
+    m_EnabledLayers = m_Pcb->GetEnabledLayers();
+    showSelectedLayerCheckBoxes( m_EnabledLayers );
+    showPresets( m_EnabledLayers );
 
     showLayerTypes();
-
-/* names only:
-ID_ADHESFRONTNAME
-ID_SOLDPFRONTNAME
-ID_SILKSFRONTNAME
-ID_MASKFRONTNAME
-ID_FRONTNAME
-ID_INNER2NAME
-ID_INNER3NAME
-ID_INNER4NAME
-ID_INNER5NAME
-ID_INNER6NAME
-ID_INNER7NAME
-ID_INNER8NAME
-ID_INNER9NAME
-ID_INNER10NAME
-ID_INNER11NAME
-ID_INNER12NAME
-ID_INNER13NAME
-ID_INNER14NAME
-ID_INNER15NAME
-ID_BACKNAME
-ID_MASKBACKNAME
-ID_SILKSBACKNAME
-ID_SOLDPBACKNAME
-ID_ADHESBACKNAME
-ID_PCBEDGESNAME
-ID_ECO2NAME
-ID_ECO1NAME
-ID_COMMENTSNAME
-ID_DRAWINGSNAME
-
-
-
-clean ids:
-
-ID_ADHESFRONTNAME
-ID_ADHESFRONTCHECKBOX
-ID_SOLDPFRONTNAME
-ID_SOLDPFRONTCHECKBOX
-ID_SILKSFRONTNAME
-ID_SILKSFRONTCHECKBOX
-ID_MASKFRONTNAME
-ID_MASKFRONTCHECKBOX
-ID_FRONTNAME
-ID_FRONTCHECKBOX
-ID_FRONTCHOICE
-ID_INNER2NAME
-ID_INNER2CHECKBOX
-ID_INNER2CHOICE
-ID_INNER3NAME
-ID_INNER3CHECKBOX
-ID_INNER3CHOICE
-ID_INNER4NAME
-ID_INNER4CHECKBOX
-ID_INNER4CHOICE
-ID_INNER5NAME
-ID_INNER5CHECKBOX
-ID_INNER5CHOICE
-ID_INNER6NAME
-ID_INNER6CHECKBOX
-ID_INNER6CHOICE
-ID_INNER7NAME
-ID_INNER7CHECKBOX
-ID_INNER7CHOICE
-ID_INNER8NAME
-ID_INNER8CHECKBOX
-ID_INNER8CHOICE
-ID_INNER9NAME
-ID_INNER9CHECKBOX
-ID_INNER9CHOICE
-ID_INNER10NAME
-ID_INNER10CHECKBOX
-ID_INNER10CHOICE
-ID_INNER11NAME
-ID_INNER11CHECKBOX
-ID_INNER11CHOICE
-ID_INNER12NAME
-ID_INNER12CHECKBOX
-ID_INNER12CHOICE
-ID_INNER13NAME
-ID_INNER13CHECKBOX
-ID_INNER13CHOICE
-ID_INNER14NAME
-ID_INNER14CHECKBOX
-ID_INNER14CHOICE
-ID_INNER15NAME
-ID_INNER15CHECKBOX
-ID_INNER15CHOICE
-ID_BACKNAME
-ID_BACKCHECKBOX
-ID_BACKCHOICE
-ID_MASKBACKNAME
-ID_SILKSBACKNAME
-ID_SILKSBACKCHECKBOX
-ID_SOLDPBACKNAME
-ID_SOLDPBACKCHECKBOX
-ID_ADHESBACKNAME
-ID_ADHESBACKCHECKBOX
-ID_PCBEDGESNAME
-ID_PCBEDGESCHECKBOX
-ID_ECO2NAME
-ID_ECHO2CHECKBOX
-ID_ECO1NAME
-ID_ECO1CHECKBOX
-ID_COMMENTSNAME
-ID_COMMENTSCHECKBOX
-ID_DRAWINGSNAME
-ID_DRAWINGSCHECKBOX
-*/
-
-
 
     // @todo overload a layout function so we can reposition the column titles,
     // which should probably not go in a sizer of their own so that we do not have
@@ -497,28 +300,129 @@ ID_DRAWINGSCHECKBOX
 }
 
 
-/* Initialize the Routable column, and the R/W property of some cells
- */
-void DIALOG_LAYERS_SETUP::SetRoutableLayerStatus()
+int DIALOG_LAYERS_SETUP::getUILayerMask()
 {
-/*
-    m_gridLayersProperties->SetColFormatBool( LAYERS_GRID_ENABLED_POSITION );
-    for( int ii = 0; ii <  m_gridLayersProperties->GetNumberRows(); ii++ )
-    {
-        int      layer = LAYER_N_FRONT - ii;
-        wxString value = layer < (m_ActivesLayersCount - 1) ? wxT( "1" ) : wxT( "0" );
-        if( m_ActivesLayersCount > 1 && layer == LAYER_N_FRONT )
-            value = wxT( "1" );
-        if(  layer == LAYER_N_BACK )
-            value = wxT( "1" );
-        m_gridLayersProperties->SetCellValue( ii, LAYERS_GRID_ENABLED_POSITION, value );
-        m_gridLayersProperties->SetReadOnly( ii, LAYERS_GRID_ENABLED_POSITION );
+    int layerMaskResult = 0;
 
-        // Set to Read Only cell for non existing copper layers:
-        m_gridLayersProperties->SetReadOnly( ii, LAYERS_GRID_TYPE_POSITION, value != wxT( "1" ) );
-        m_gridLayersProperties->SetReadOnly( ii, LAYERS_GRID_NAME_POSITION, value != wxT( "1" ) );
+    for( int layer=0;  layer<NB_LAYERS;  ++layer )
+    {
+        int checkBoxId = getIDs( layer ).checkbox;
+
+        wxCheckBox*  ctl = (wxCheckBox*) FindWindowById( checkBoxId );
+
+        wxASSERT( ctl );
+
+        if( ctl && ctl->GetValue() )
+        {
+            layerMaskResult |= (1 << layer);
+        }
     }
-*/
+
+    return layerMaskResult;
+}
+
+
+void DIALOG_LAYERS_SETUP::setLayerCheckBox( int layer, bool isChecked )
+{
+    int checkBoxId = getIDs( layer ).checkbox;
+
+    wxCheckBox*  ctl = (wxCheckBox*) FindWindowById( checkBoxId );
+
+    wxASSERT( ctl );
+
+    if( ctl )
+        ctl->SetValue(  isChecked );
+}
+
+
+void DIALOG_LAYERS_SETUP::setCopperLayerCheckBoxes( int copperCount )
+{
+    if( copperCount > 0 )
+    {
+        setLayerCheckBox( LAYER_N_BACK, true );
+        --copperCount;
+    }
+
+    if( copperCount > 0 )
+    {
+        setLayerCheckBox( LAYER_N_FRONT, true );
+        --copperCount;
+    }
+    else
+    {
+        setLayerCheckBox( LAYER_N_FRONT, false );
+    }
+
+    int layer;
+    for( layer=LAYER_N_2;  copperCount > 0;  ++layer, --copperCount )
+    {
+        setLayerCheckBox( layer, true );
+    }
+
+    for( ;  layer < NB_COPPER_LAYERS-1;  ++layer )
+    {
+        setLayerCheckBox( layer, false );
+    }
+}
+
+
+void DIALOG_LAYERS_SETUP::OnCheckBox( wxCommandEvent& event )
+{
+    m_EnabledLayers = getUILayerMask();
+
+    showPresets( m_EnabledLayers );
+}
+
+
+void DIALOG_LAYERS_SETUP::DenyChangeCheckBox( wxCommandEvent& event )
+{
+    // user may not change copper layer checkboxes from anything other than
+    // the one place, the drop down m_CopperLayersChoice control.
+
+    // I tried to simply diable the copper CheckBoxes but they look like crap,
+    // so leave them enabled and reverse the user's attempt to toggle them.
+
+    setCopperLayerCheckBoxes( m_CopperLayerCount );
+}
+
+
+void DIALOG_LAYERS_SETUP::OnPresetsChoice( wxCommandEvent& event )
+{
+    unsigned presetNdx = m_PresetsChoice->GetCurrentSelection();
+
+    if( presetNdx == 0 )        // the Custom setting controls nothing.
+        return;
+
+    if( presetNdx < DIM(presets) )
+    {
+        m_EnabledLayers = presets[ presetNdx ];
+
+        int coppersMask = m_EnabledLayers & ALL_CU_LAYERS;
+
+        int copperCount = 0;
+        while( coppersMask )
+        {
+            if( coppersMask & 1 )
+                ++copperCount;
+
+            coppersMask >>= 1;
+        }
+
+        m_CopperLayerCount = copperCount;
+        showCopperChoice( m_CopperLayerCount );
+
+        showSelectedLayerCheckBoxes( m_EnabledLayers );
+    }
+}
+
+
+void DIALOG_LAYERS_SETUP::OnCopperLayersChoice( wxCommandEvent& event )
+{
+    m_CopperLayerCount = m_CopperLayersChoice->GetCurrentSelection() * 2 + 2;
+
+    setCopperLayerCheckBoxes( m_CopperLayerCount );
+
+//    event.Skip();
 }
 
 
@@ -535,107 +439,139 @@ void DIALOG_LAYERS_SETUP::OnCancelButtonClick( wxCommandEvent& event )
 void DIALOG_LAYERS_SETUP::OnOkButtonClick( wxCommandEvent& event )
 /**************************************************************************/
 {
-
-    // temporary code to set the copper layer count until the custom layer enabling is in place:
-
-    int copperLayerCount = m_CopperLayersChoice->GetSelection() * 2;
-    if( copperLayerCount <= 0 )
-        copperLayerCount = 1;
-
-    g_DesignSettings.SetCopperLayerCount( copperLayerCount );
-    m_Parent->ReCreateLayerBox( NULL );
-
-
-/*
-    if( !TestDataValidity() )
+    if( testLayerNames() )
     {
-        DisplayError( this, _( "Errors detected, Abort" ) );
-        return;
-    }
+        wxString name;
 
-    g_DesignSettings.m_CopperLayerCount = m_ActivesLayersCount;
+        m_Pcb->SetEnabledLayers( m_EnabledLayers );
 
-    // Initialize the new layer name
-    for( int ii = 0; ii <  m_gridLayersProperties->GetNumberRows(); ii++ )
-    {
-        wxString layer_name = m_gridLayersProperties->GetCellValue( ii, LAYERS_GRID_NAME_POSITION );
-        if( layer_name != m_Pcb->GetLayerName( LAYER_N_FRONT - ii ) )
+        for( int layer =  FIRST_COPPER_LAYER;
+                 layer <= LAST_COPPER_LAYER; ++layer )
         {
-            m_Pcb->SetLayerName( LAYER_N_FRONT - ii, layer_name );
-        }
-    }
-
-    // Initialize the layer type
-    for( int ii = 0; ii <  m_gridLayersProperties->GetNumberRows(); ii++ )
-    {
-        wxString txt   = m_gridLayersProperties->GetCellValue( ii, LAYERS_GRID_TYPE_POSITION );
-        int      layer = LAYER_N_FRONT - ii;
-        for( int jj = 0; jj < 3; jj++ )
-        {
-            if( m_LayersTypeName[jj] == txt )
+            if( (1<<layer) & m_EnabledLayers )
             {
-                m_Pcb->SetLayerType( layer, m_LayersType[jj] );
-                break;
+                name = getLayerName( layer );
+
+                m_Pcb->SetLayerName( layer, name );
+
+                LAYER_T t = (LAYER_T) getLayerTypeIndex(layer);
+
+                m_Pcb->SetLayerType( layer, t );
             }
         }
+
+        m_Parent->ReCreateLayerBox( NULL );
+
+        EndModal( wxID_OK );
     }
-    m_Parent->ReCreateLayerBox( NULL );
-*/
-    EndModal( wxID_OK );
 }
 
-
-/**************************************************************************/
-void DIALOG_LAYERS_SETUP::OnLayerCountClick( wxCommandEvent& event )
-/**************************************************************************/
+int DIALOG_LAYERS_SETUP::getLayerTypeIndex( int layer )
 {
-/*
-    m_ActivesLayersCount = m_LayersCountSelection->GetSelection() * 2;
-    if( m_ActivesLayersCount <= 0 )
-        m_ActivesLayersCount = 1;
+    int choiceId = getIDs( layer ).choice;
+    int ret = 0;
 
-    // Reinit the routable layers status
-    SetRoutableLayerStatus();
-*/
+    wxChoice*  ctl = (wxChoice*) FindWindowById( choiceId );
+
+    wxASSERT( ctl );
+
+    if( ctl )
+        ret = ctl->GetCurrentSelection();   // indices must have same sequence as LAYER_T
+
+    return ret;
 }
 
-
-/* TestDataValidity
- * Performs a control of data validity
- * set the background of a bad cell in RED and display an info message
- * @return true if Ok, false if error
- */
-bool DIALOG_LAYERS_SETUP::TestDataValidity()
+wxString DIALOG_LAYERS_SETUP::getLayerName( int layer )
 {
-    bool success = true;
-/*
-    m_MessagesList->SetPage(wxEmptyString); // Clear message list
+    wxString ret;
 
-    //  Test duplicate layers names
-    for( int ii = 0; ii < m_gridLayersProperties->GetNumberRows() - 1; ii++ )
+    int nameId = getIDs( layer ).name;
+
+    wxTextCtrl*  ctl = (wxTextCtrl*) FindWindowById( nameId );
+
+    wxASSERT( ctl );
+
+    if( ctl )
+        ret = ctl->GetValue().Trim();
+
+    return ret;
+}
+
+static bool hasOneOf( const wxString& str, const wxString& chars )
+{
+    for( unsigned i=0; i<chars.Len();  ++i )
+        if( str.Find( chars[i] ) != wxNOT_FOUND )
+            return true;
+    return false;
+}
+
+bool DIALOG_LAYERS_SETUP::testLayerNames()
+{
+    std::vector<wxString>    names;
+
+    wxTextCtrl*  ctl;
+
+    for( int layer=0;  layer<=LAST_COPPER_LAYER;  ++layer )
     {
-        wxString value = m_gridLayersProperties->GetCellValue( ii, LAYERS_GRID_NAME_POSITION );
-        for( int jj = ii+1; jj < m_gridLayersProperties->GetNumberRows(); jj++ )
+        // we _can_ rely on m_EnabledLayers being current here:
+        if( !(m_EnabledLayers & (1<<layer)) )
+            continue;
+
+        wxString name = getLayerName( layer );
+
+        //D(printf("name[%d]=%s\n", layer, CONV_TO_UTF8(name) );)
+
+        int nameId = getIDs( layer ).name;
+
+        ctl = (wxTextCtrl*) FindWindowById( nameId );
+
+        // check name for legality.
+        // 1) cannot be blank.
+        // 2) cannot have blanks.
+        // 3) cannot have " chars
+        // 4) cannot be 'signal'
+        // 5) must be unique.
+
+        static const wxString badchars( wxT("%$\" ") );
+
+        if( name == wxEmptyString )
         {
-            wxString othervalue = m_gridLayersProperties->GetCellValue( ii,
-                                                                        LAYERS_GRID_NAME_POSITION );
-            othervalue = m_gridLayersProperties->GetCellValue( jj, LAYERS_GRID_NAME_POSITION );
-            if( value.CmpNoCase( othervalue ) == 0 )   // Already exists!
+            DisplayError( this, _("Layer name may not be empty" ) );
+            ctl->SetFocus();    // on the bad name
+            return false;
+        }
+
+        if( hasOneOf( name, badchars ) )
+        {
+            DisplayError( this, _("Layer name has an illegal character, one of: '") + badchars + wxT("'") );
+            ctl->SetFocus();    // on the bad name
+            return false;
+        }
+
+        if( name == wxT("signal") )
+        {
+            DisplayError( this, _("'signal' is a reserved layer name") );
+            ctl->SetFocus();    // on the bad name
+            return false;
+        }
+
+        for( std::vector<wxString>::iterator it = names.begin();  it != names.end();  ++it )
+        {
+            if( name == *it )
             {
-                wxString text;
-                text.Printf( _(
-                                "<small>This layer name <b>%s</b> is already existing<br>" ),
-                            GetChars( value ) );
-                m_MessagesList->AppendToPage( text );
-                success = false;
+                DisplayError( this, _("Layer name is a duplicate of another") );
+                ctl->SetFocus();    // on the bad name
+                return false;
             }
         }
+
+        names.push_back( name );
     }
-*/
-    return success;
+
+    return true;
 }
-//==============================================================================
-// Invoke the dialog.
+
+
 
 void DisplayDialogLayerSetup( WinEDA_PcbFrame* parent )
 {
@@ -645,4 +581,3 @@ void DisplayDialogLayerSetup( WinEDA_PcbFrame* parent )
     frame.Destroy();
 }
 
-//==============================================================================

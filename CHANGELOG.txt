@@ -4,6 +4,18 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-Dec-11 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew
+    Finished the Layer Setup Dialog.  I assumed that the new layer order will
+    be in place soon.  It works fine now, but the layer order is probably
+    misleading, since it does not reflect the current stackup but rather the
+    future stackup.  I dropped support for a single layer board. The minimum
+    is two copper layers.  Avoid the side you don't want anything on.
+
+    Within a month I should have the layer visibility and selection widget
+    in place.
+
 
 2009-Dec-10 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================

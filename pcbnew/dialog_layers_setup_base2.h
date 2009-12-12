@@ -252,6 +252,10 @@ class DIALOG_LAYERS_SETUP_BASE2 : public wxDialog
 		wxButton* m_sdbSizer2Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnPresetsChoice( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnCopperLayersChoice( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnCheckBox( wxCommandEvent& event ){ event.Skip(); }
+		virtual void DenyChangeCheckBox( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnCancelButtonClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnOkButtonClick( wxCommandEvent& event ){ event.Skip(); }
 		
