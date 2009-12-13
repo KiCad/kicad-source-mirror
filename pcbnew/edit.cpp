@@ -33,10 +33,10 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     int         itmp;
     wxClientDC  dc( DrawPanel );
+    DrawPanel->PrepareGraphicContext( &dc );
     BOARD_ITEM* DrawStruct = GetCurItem();
 
     DrawPanel->CursorOff( &dc );
-    DrawPanel->PrepareGraphicContext( &dc );
 
     wxGetMousePosition( &pos.x, &pos.y );
 

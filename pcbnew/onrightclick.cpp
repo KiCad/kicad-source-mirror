@@ -722,18 +722,17 @@ void WinEDA_PcbFrame::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
     sub_menu_Pad->AppendSeparator();
 
     ADD_MENUITEM_WITH_HELP( sub_menu_Pad, ID_POPUP_PCB_IMPORT_PAD_SETTINGS,
-                            _( "New Pad Settings" ),
-                            _( "Copy current pad settings to this pad" ),
+                            _( "Copy Current Settings to this Pad" ),
+                            wxEmptyString,
                             options_new_pad_xpm );
     ADD_MENUITEM_WITH_HELP( sub_menu_Pad, ID_POPUP_PCB_EXPORT_PAD_SETTINGS,
-                            _( "Export Pad Settings" ),
-                            _( "Copy this pad settings to current pad settings" ),
+                            _( "Copy this Pad Settings to Current Settings" ),
+                            wxEmptyString,
                             export_options_pad_xpm );
 
     ADD_MENUITEM_WITH_HELP( sub_menu_Pad, ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS,
-                            _( "Global Pad Settings" ),
-                            _(
-                                "Copy this pad settings to all pads in this footprint (or similar footprints)" ),
+                            _( "Global Pads Edition" ),
+                            _( "Copy this pad settings to all pads in this footprint (or similar footprints)" ),
                             global_options_pad_xpm );
     sub_menu_Pad->AppendSeparator();
 

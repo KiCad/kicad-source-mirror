@@ -3,184 +3,107 @@
 /*************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
+
+//#include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "pcbnew.h"
-#include "trigo.h"
 
-#include "drag.h"
+//#include "trigo.h"
 
-#include "protos.h"
+//#include "drag.h"
 
-/* Variables Locales */
-static bool Pad_Shape_Filter  = TRUE;
-static bool Pad_Layer_Filter  = TRUE;
-static bool Pad_Orient_Filter = TRUE;
-static bool Pad_Size_Change   = TRUE;
-static bool Pad_Shape_Change  = FALSE;
-static bool Pad_Orient_Change = FALSE;
-static bool Pad_Drill_Change  = TRUE;
-
-enum id_pad_global_edit {
-    ID_CHANGE_CURRENT_MODULE = 1900,
-    ID_CHANGE_ID_MODULES,
-    ID_CHANGE_GET_PAD_SETTINGS
-};
+//#include "protos.h"
+#include "dialog_global_pads_edition_base.h"
 
 
 /************************************/
-/* class WinEDA_PadGlobalEditFrame */
+/* class DIALOG_GLOBAL_PADS_EDITION */
 /************************************/
 
-class WinEDA_PadGlobalEditFrame : public wxDialog
+class DIALOG_GLOBAL_PADS_EDITION : public DIALOG_GLOBAL_PADS_EDITION_BASE
 {
 private:
-
     WinEDA_BasePcbFrame* m_Parent;
-    D_PAD* CurrentPad;
-    wxCheckBox*          m_Pad_Shape_Filter;
-    wxCheckBox*          m_Pad_Layer_Filter;
-    wxCheckBox*          m_Pad_Orient_Filter;
-    wxCheckBox*          m_Pad_Size_Change;
-    wxCheckBox*          m_Pad_Shape_Change;
-    wxCheckBox*          m_Pad_Drill_Change;
-    wxCheckBox*          m_Pad_Orient_Change;
+    D_PAD*      m_CurrentPad;
 
 public:
-    WinEDA_PadGlobalEditFrame( WinEDA_BasePcbFrame* parent, D_PAD* Pad );
-    ~WinEDA_PadGlobalEditFrame() { }
+    static bool m_Pad_Shape_Filter;
+    static bool m_Pad_Layer_Filter;
+    static bool m_Pad_Orient_Filter;
+
+public:
+    DIALOG_GLOBAL_PADS_EDITION( WinEDA_BasePcbFrame* parent, D_PAD* Pad );
+    ~DIALOG_GLOBAL_PADS_EDITION() { }
 
 private:
+    void InstallPadEditor( wxCommandEvent& event );
     void PadPropertiesAccept( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
-
-    DECLARE_EVENT_TABLE()
 };
 
-BEGIN_EVENT_TABLE( WinEDA_PadGlobalEditFrame, wxDialog )
-    EVT_BUTTON( ID_CHANGE_CURRENT_MODULE,
-                WinEDA_PadGlobalEditFrame::PadPropertiesAccept )
-    EVT_BUTTON( ID_CHANGE_ID_MODULES,
-                WinEDA_PadGlobalEditFrame::PadPropertiesAccept )
-    EVT_BUTTON( ID_CHANGE_GET_PAD_SETTINGS,
-                WinEDA_PadGlobalEditFrame::PadPropertiesAccept )
-    EVT_BUTTON( wxID_CANCEL, WinEDA_PadGlobalEditFrame::OnCancelClick )
-END_EVENT_TABLE()
 
-WinEDA_PadGlobalEditFrame::WinEDA_PadGlobalEditFrame(
+DIALOG_GLOBAL_PADS_EDITION::DIALOG_GLOBAL_PADS_EDITION(
     WinEDA_BasePcbFrame* parent,
     D_PAD*               Pad ) :
-    wxDialog( parent, -1, _( "Edit Pads Global" ), wxDefaultPosition,
-              wxSize( 310, 235 ), DIALOG_STYLE )
+    DIALOG_GLOBAL_PADS_EDITION_BASE( parent )
 {
-    wxPoint   pos;
-    wxButton* Button;
-
-    m_Parent = parent;
-    Centre();
-
-    CurrentPad = Pad;
-
-    /* Create command buttons. */
-    pos.x  = 150;
-    pos.y  = 10;
-    Button = new wxButton( this, ID_CHANGE_GET_PAD_SETTINGS,
-                           _( "Pad Settings..." ), pos );
-
-    pos.y += Button->GetDefaultSize().y + 50;
-    Button = new wxButton( this, ID_CHANGE_CURRENT_MODULE,
-                           _( "Change Module" ), pos );
-
-    pos.y += Button->GetDefaultSize().y + 10;
-    Button = new wxButton( this, ID_CHANGE_ID_MODULES,
-                           _( "Change ID Modules" ), pos );
-
-    pos.y += Button->GetDefaultSize().y + 10;
-    Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ), pos );
+    m_Parent     = parent;
+    m_CurrentPad = Pad;
 
     // Pad filter selection.
-    pos.x = 5;
-    pos.y = 5;
-    new wxStaticBox( this, -1, _( "Pad Filter :" ), pos, wxSize( 130, 75 ) );
+    m_Pad_Shape_Filter_CB->SetValue( m_Pad_Shape_Filter );
+    m_Pad_Layer_Filter_CB->SetValue( m_Pad_Layer_Filter );
+    m_Pad_Orient_Filter_CB->SetValue( m_Pad_Orient_Filter );
 
-    pos.x += 5;
-    pos.y += 18;
-    m_Pad_Shape_Filter = new wxCheckBox( this, -1, _( "Shape Filter" ), pos );
-
-    m_Pad_Shape_Filter->SetValue( Pad_Shape_Filter );
-
-    pos.y += 18;
-    m_Pad_Layer_Filter = new wxCheckBox( this, -1, _( "Layer Filter" ), pos );
-
-    m_Pad_Layer_Filter->SetValue( Pad_Layer_Filter );
-
-    pos.y += 18;
-    m_Pad_Orient_Filter = new wxCheckBox( this, -1, _( "Orient Filter" ), pos );
-
-    m_Pad_Orient_Filter->SetValue( Pad_Orient_Filter );
-
-    // Items a editer
-    pos.x -= 5;
-    pos.y += 25;
-    new wxStaticBox( this, -1, _( "Change Items :" ), pos, wxSize( 130, 95 ) );
-
-    pos.x += 5;
-    pos.y += 18;
-    m_Pad_Size_Change = new wxCheckBox( this, -1, _( "Change Size" ), pos );
-
-    m_Pad_Size_Change->SetValue( Pad_Size_Change );
-
-    pos.y += 18;
-    m_Pad_Shape_Change = new wxCheckBox( this, -1, _( "Change Shape" ), pos );
-
-    m_Pad_Shape_Change->SetValue( Pad_Shape_Change );
-
-    pos.y += 18;
-    m_Pad_Drill_Change = new wxCheckBox( this, -1, _( "Change Drill" ), pos );
-
-    m_Pad_Drill_Change->SetValue( Pad_Drill_Change );
-
-    pos.y += 18;
-    m_Pad_Orient_Change = new wxCheckBox( this, -1, _( "Change Orientation" ),
-                                          pos );
-
-    m_Pad_Orient_Change->SetValue( Pad_Orient_Change );
+    GetSizer()->Fit( this );
+    Centre();
 }
 
 
-void WinEDA_PadGlobalEditFrame::OnCancelClick( wxCommandEvent& WXUNUSED( event ) )
+/*Class DIALOG_GLOBAL_PADS_EDITION static variables */
+bool DIALOG_GLOBAL_PADS_EDITION::m_Pad_Shape_Filter  = true;
+bool DIALOG_GLOBAL_PADS_EDITION::m_Pad_Layer_Filter  = true;
+bool DIALOG_GLOBAL_PADS_EDITION::m_Pad_Orient_Filter = true;
+
+
+void DIALOG_GLOBAL_PADS_EDITION::OnCancelClick( wxCommandEvent& event )
 {
     EndModal( -1 );
 }
 
 
+/* Calls the Pad editor.
+ */
+void DIALOG_GLOBAL_PADS_EDITION::InstallPadEditor( wxCommandEvent& event )
+{
+    wxClientDC dc( m_Parent->DrawPanel );
+
+    m_Parent->DrawPanel->PrepareGraphicContext( &dc );
+    m_Parent->DrawPanel->CursorOff( &dc );
+    m_Parent->InstallPadOptionsFrame( m_CurrentPad, &dc, wxDefaultPosition );
+    m_Parent->DrawPanel->CursorOn( &dc );
+}
+
+
 /* Update the parameters for the component being edited.
  */
-void WinEDA_PadGlobalEditFrame::PadPropertiesAccept( wxCommandEvent& event )
+void DIALOG_GLOBAL_PADS_EDITION::PadPropertiesAccept( wxCommandEvent& event )
 {
     int returncode = 0;
 
     switch( event.GetId() )
     {
-    case ID_CHANGE_GET_PAD_SETTINGS:
-        m_Parent->InstallPadOptionsFrame( NULL, NULL, wxPoint( -1, -1 ) );
-        break;
-
     case ID_CHANGE_ID_MODULES:
         returncode = 1;
 
     // Fall through
 
     case ID_CHANGE_CURRENT_MODULE:
-        Pad_Shape_Filter  = m_Pad_Shape_Filter->GetValue();
-        Pad_Layer_Filter  = m_Pad_Layer_Filter->GetValue();
-        Pad_Orient_Filter = m_Pad_Orient_Filter->GetValue();
-        Pad_Size_Change   = m_Pad_Size_Change->GetValue();
-        Pad_Shape_Change  = m_Pad_Shape_Change->GetValue();
-        Pad_Drill_Change  = m_Pad_Drill_Change->GetValue();
-        Pad_Orient_Change = m_Pad_Orient_Change->GetValue();
+        m_Pad_Shape_Filter  = m_Pad_Shape_Filter_CB->GetValue();
+        m_Pad_Layer_Filter  = m_Pad_Layer_Filter_CB->GetValue();
+        m_Pad_Orient_Filter = m_Pad_Orient_Filter_CB->GetValue();
         EndModal( returncode );
         break;
     }
@@ -198,53 +121,88 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 {
     MODULE* Module_Ref, * Module;
     int     diag;
-    bool    Edit_Same_Modules = FALSE;
+    bool    edit_Same_Modules = false;
 
     if( aPad == NULL )
-        return;
+        aPad = &g_Pad_Master;
 
     Module = (MODULE*) aPad->GetParent();
 
     if( Module == NULL )
     {
         DisplayError( this,
-                      wxT( "Global_Import_Pad_Settings() Error: NULL module" ) );
+                     wxT( "Global_Import_Pad_Settings() Error: NULL module" ) );
         return;
     }
 
-    wxString ref_name_module = Module->m_LibRef;
-
     Module->DisplayInfo( this );
 
-    WinEDA_PadGlobalEditFrame* frame = new WinEDA_PadGlobalEditFrame( this,
-                                                                      aPad );
+    DIALOG_GLOBAL_PADS_EDITION* dlg = new DIALOG_GLOBAL_PADS_EDITION( this, aPad );
 
-    diag = frame->ShowModal();
-    frame->Destroy();
+    diag = dlg->ShowModal();
+    dlg->Destroy();
 
     if( diag == -1 )
         return;
     if( diag == 1 )
-        Edit_Same_Modules = TRUE;
+        edit_Same_Modules = true;
 
     /* Search and copy the name of library reference. */
     Module_Ref = Module;
+    int pad_orient = aPad->m_Orient - Module_Ref->m_Orient;
 
-    /* Update the modules or module. */
-
+    // Prepare une undo list:
+    PICKED_ITEMS_LIST itemsList;
     Module = (MODULE*) m_Pcb->m_Modules;
     for( ; Module != NULL; Module = Module->Next() )
     {
-        if( !Edit_Same_Modules )
-            if( Module != Module_Ref )
-                continue;
-
-        if( ref_name_module != Module->m_LibRef )
+        if( !edit_Same_Modules && (Module != Module_Ref) )
             continue;
 
-        Module->DisplayInfo( this );
+        if( Module->m_LibRef != Module->m_LibRef )
+            continue;
 
-        /* Erase module */
+        bool   saveMe = false;
+        D_PAD* pt_pad = (D_PAD*) Module->m_Pads;
+        for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
+        {
+            /* Filters changes prohibited. */
+            if( DIALOG_GLOBAL_PADS_EDITION::m_Pad_Shape_Filter
+               && ( pt_pad->m_PadShape != aPad->m_PadShape ) )
+                continue;
+
+            if( DIALOG_GLOBAL_PADS_EDITION::m_Pad_Orient_Filter
+               && ( (pt_pad->m_Orient - Module->m_Orient) != pad_orient ) )
+                continue;
+
+            if( DIALOG_GLOBAL_PADS_EDITION::m_Pad_Layer_Filter
+               && ( pt_pad->m_Masque_Layer != aPad->m_Masque_Layer ) )
+                continue;
+
+            saveMe = true;
+        }
+
+        if( saveMe )
+        {
+            ITEM_PICKER itemWrapper( Module, UR_CHANGED );
+            itemWrapper.m_PickedItemType = Module->Type();
+            itemsList.PushItem( itemWrapper );
+        }
+    }
+
+    SaveCopyInUndoList( itemsList, UR_CHANGED );
+
+    /* Update the current module and same others modules if requested. */
+    Module = (MODULE*) m_Pcb->m_Modules;
+    for( ; Module != NULL; Module = Module->Next() )
+    {
+        if( !edit_Same_Modules && (Module != Module_Ref) )
+            continue;
+
+        if( Module->m_LibRef != Module->m_LibRef )
+            continue;
+
+        /* Erase module on screen */
         if( aDraw )
         {
             Module->m_Flags |= DO_NOT_DRAW;
@@ -256,22 +214,17 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
         {
             /* Filters changes prohibited. */
-            if( Pad_Shape_Filter )
-            {
-                if( pt_pad->m_PadShape != g_Pad_Master.m_PadShape )
-                    continue;
-            }
+            if( DIALOG_GLOBAL_PADS_EDITION::m_Pad_Shape_Filter
+               && ( pt_pad->m_PadShape != aPad->m_PadShape ) )
+                continue;
 
-            if( Pad_Orient_Filter )
-            {
-                if( (pt_pad->m_Orient - Module->m_Orient) !=
-                   g_Pad_Master.m_Orient )
-                    continue;
-            }
+            if( DIALOG_GLOBAL_PADS_EDITION::m_Pad_Orient_Filter
+               && ( (pt_pad->m_Orient - Module->m_Orient) != pad_orient ) )
+                continue;
 
-            if( Pad_Layer_Filter )
+            if( DIALOG_GLOBAL_PADS_EDITION::m_Pad_Layer_Filter )
             {
-                if( pt_pad->m_Masque_Layer != g_Pad_Master.m_Masque_Layer )
+                if( pt_pad->m_Masque_Layer != aPad->m_Masque_Layer )
                     continue;
                 else
                     m_Pcb->m_Status_Pcb &=
@@ -279,41 +232,37 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
             }
 
             /* Change characteristics.: */
-            if( Pad_Shape_Change )
-            {
-                pt_pad->m_Attribut = g_Pad_Master.m_Attribut;
-                pt_pad->m_PadShape = g_Pad_Master.m_PadShape;
-            }
+            pt_pad->m_Attribut = aPad->m_Attribut;
+            pt_pad->m_PadShape = aPad->m_PadShape;
 
-            pt_pad->m_Masque_Layer = g_Pad_Master.m_Masque_Layer;
+            pt_pad->m_Masque_Layer = aPad->m_Masque_Layer;
 
-            if( Pad_Size_Change )
-            {
-                pt_pad->m_Size = g_Pad_Master.m_Size;
-                pt_pad->m_DeltaSize = g_Pad_Master.m_DeltaSize;
-                pt_pad->m_Offset    = g_Pad_Master.m_Offset;
-            }
+            pt_pad->m_Size = aPad->m_Size;
+            pt_pad->m_DeltaSize = aPad->m_DeltaSize;
+            pt_pad->m_Offset    = aPad->m_Offset;
 
-            if( Pad_Drill_Change )
-            {
-                pt_pad->m_Drill = g_Pad_Master.m_Drill;
-                pt_pad->m_DrillShape = g_Pad_Master.m_DrillShape;
-            }
+            pt_pad->m_Drill = aPad->m_Drill;
+            pt_pad->m_DrillShape = aPad->m_DrillShape;
 
-            if( Pad_Orient_Change )
-            {
-                pt_pad->m_Orient = g_Pad_Master.m_Orient + Module->m_Orient;
-            }
+            pt_pad->m_Orient = pad_orient + Module->m_Orient;
 
-            if( g_Pad_Master.m_PadShape != PAD_TRAPEZOID )
+            // copy also local mask margins,
+            // because these parameters usually depend on
+            // pads sizes and layers
+            pt_pad->m_LocalSolderMaskMargin  = aPad->m_LocalSolderMaskMargin;
+            pt_pad->m_LocalSolderPasteMargin = aPad->m_LocalSolderPasteMargin;
+            pt_pad->m_LocalSolderPasteMarginRatio = aPad->m_LocalSolderPasteMarginRatio;
+
+
+            if( pt_pad->m_PadShape != PAD_TRAPEZOID )
             {
                 pt_pad->m_DeltaSize.x = 0;
                 pt_pad->m_DeltaSize.y = 0;
             }
-            if( g_Pad_Master.m_PadShape == PAD_CIRCLE )
+            if( pt_pad->m_PadShape == PAD_CIRCLE )
                 pt_pad->m_Size.y = pt_pad->m_Size.x;
 
-            switch( g_Pad_Master.m_Attribut & 0x7F )
+            switch( pt_pad->m_Attribut & 0x7F )
             {
             case PAD_SMD:
             case PAD_CONN:

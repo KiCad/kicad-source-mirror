@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-12 09:09+0100\n"
-"PO-Revision-Date: 2009-12-12 09:14+0100\n"
+"POT-Creation-Date: 2009-12-13 11:15+0100\n"
+"PO-Revision-Date: 2009-12-13 11:16+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -4791,7 +4791,7 @@ msgstr "Supprimer Contour de Zone"
 #: pcbnew/onrightclick.cpp:622
 #: pcbnew/onrightclick.cpp:667
 #: pcbnew/onrightclick.cpp:717
-#: pcbnew/onrightclick.cpp:774
+#: pcbnew/onrightclick.cpp:773
 msgid "Move"
 msgstr "Déplacer"
 
@@ -4812,66 +4812,70 @@ msgstr "Rotation -"
 msgid "Flip"
 msgstr "Change côté"
 
-#: pcbnew/onrightclick.cpp:726
-msgid "Copy current pad settings to this pad"
-msgstr "Copier les réglages courants pour ce pad"
+#: pcbnew/onrightclick.cpp:725
+msgid "Copy Current Settings to this Pad"
+msgstr "Copier les Réglages Courants dans ce Pad"
 
-#: pcbnew/onrightclick.cpp:730
-msgid "Copy this pad settings to current pad settings"
-msgstr "Copier les caractéristiques de ce pad vers les caractéristiques courantes"
+#: pcbnew/onrightclick.cpp:729
+msgid "Copy this Pad Settings to Current Settings"
+msgstr "Copier les Caractéristiques de ce Pad dans les Caractéristiques Courantes"
 
-#: pcbnew/onrightclick.cpp:736
+#: pcbnew/onrightclick.cpp:734
+msgid "Global Pads Edition"
+msgstr "Edition Globale des Pads"
+
+#: pcbnew/onrightclick.cpp:735
 msgid "Copy this pad settings to all pads in this footprint (or similar footprints)"
 msgstr "Copier les caractéristiques de ce pad vers tous les autres pads de ce module( ou modules similaires)"
 
-#: pcbnew/onrightclick.cpp:745
+#: pcbnew/onrightclick.cpp:744
 msgid "Autoroute Pad"
 msgstr "Autoroute Pad"
 
-#: pcbnew/onrightclick.cpp:746
+#: pcbnew/onrightclick.cpp:745
 msgid "Autoroute Net"
 msgstr "Autoroute Net"
 
-#: pcbnew/onrightclick.cpp:791
+#: pcbnew/onrightclick.cpp:790
 msgid "Delete Marker"
 msgstr "Effacer Marqueur"
 
-#: pcbnew/onrightclick.cpp:792
+#: pcbnew/onrightclick.cpp:791
 msgid "Marker Error Info"
 msgstr "Info du Marqueur d'Erreur"
 
-#: pcbnew/onrightclick.cpp:812
+#: pcbnew/onrightclick.cpp:811
 msgid "Auto Width"
 msgstr "Epaisseur Automatique"
 
-#: pcbnew/onrightclick.cpp:814
+#: pcbnew/onrightclick.cpp:813
 msgid "Use the track width when starting on a track, otherwise the current track width"
 msgstr "Si on démarre sur une piste existante, utiliser sa largeur,  sinon utiliser la largeur  courante"
 
-#: pcbnew/onrightclick.cpp:824
+#: pcbnew/onrightclick.cpp:823
 msgid "Use Netclass Values"
 msgstr "Utiliser les Valeurs des NetClass"
 
-#: pcbnew/onrightclick.cpp:825
+#: pcbnew/onrightclick.cpp:824
 msgid "Use track and via sizes from their Netclass values"
 msgstr "Utiliser les dimensions de pistes et vias de leur valeurs en Netclasse"
 
-#: pcbnew/onrightclick.cpp:832
+#: pcbnew/onrightclick.cpp:831
 #, c-format
 msgid "Track %s"
 msgstr "Piste %s"
 
-#: pcbnew/onrightclick.cpp:834
-#: pcbnew/onrightclick.cpp:862
+#: pcbnew/onrightclick.cpp:833
+#: pcbnew/onrightclick.cpp:861
 msgid " (use NetClass)"
 msgstr " (NetClass)"
 
-#: pcbnew/onrightclick.cpp:856
+#: pcbnew/onrightclick.cpp:855
 #, c-format
 msgid "Via %s"
 msgstr "Via %s"
 
-#: pcbnew/onrightclick.cpp:859
+#: pcbnew/onrightclick.cpp:858
 #, c-format
 msgid "Via %s; (drl %s)"
 msgstr "Via %s; (perçage %s)"
@@ -5568,58 +5572,6 @@ msgstr "Créer Fichier "
 #: pcbnew/dialog_SVG_print.cpp:209
 msgid " error"
 msgstr " erreur"
-
-#: pcbnew/globaleditpad.cpp:75
-msgid "Edit Pads Global"
-msgstr "Pads: Edition globale"
-
-#: pcbnew/globaleditpad.cpp:90
-msgid "Pad Settings..."
-msgstr "Caract pad ..."
-
-#: pcbnew/globaleditpad.cpp:94
-msgid "Change Module"
-msgstr "Change module"
-
-#: pcbnew/globaleditpad.cpp:98
-msgid "Change ID Modules"
-msgstr "Change Modules ident."
-
-#: pcbnew/globaleditpad.cpp:106
-msgid "Pad Filter :"
-msgstr "Filtre Pad :"
-
-#: pcbnew/globaleditpad.cpp:110
-msgid "Shape Filter"
-msgstr "Filtre sur forme"
-
-#: pcbnew/globaleditpad.cpp:115
-msgid "Layer Filter"
-msgstr "Filtre sur couche"
-
-#: pcbnew/globaleditpad.cpp:120
-msgid "Orient Filter"
-msgstr "Filtre Orientation"
-
-#: pcbnew/globaleditpad.cpp:127
-msgid "Change Items :"
-msgstr "Eléments à changer:"
-
-#: pcbnew/globaleditpad.cpp:131
-msgid "Change Size"
-msgstr "Change Taille"
-
-#: pcbnew/globaleditpad.cpp:136
-msgid "Change Shape"
-msgstr "Change Forme"
-
-#: pcbnew/globaleditpad.cpp:141
-msgid "Change Drill"
-msgstr "Change Perçage"
-
-#: pcbnew/globaleditpad.cpp:146
-msgid "Change Orientation"
-msgstr "Change Orientation"
 
 #: pcbnew/onleftclick.cpp:201
 msgid "Graphic not authorized on Copper layers"
@@ -9918,7 +9870,6 @@ msgid "General :"
 msgstr "Général :"
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:27
-#: eeschema/dialog_create_component.cpp:172
 msgid "As Convert"
 msgstr "A une forme \"convertie\""
 
@@ -9931,7 +9882,6 @@ msgid "Show or hide pin numbers"
 msgstr "Affichage ou non des numéroes de pins"
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:40
-#: eeschema/dialog_create_component.cpp:241
 msgid "Show Pin Name"
 msgstr "Montre Nom de Pin"
 
@@ -9940,7 +9890,6 @@ msgid "Show or hide pin names"
 msgstr "Affichage ou non des noms des pins"
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:47
-#: eeschema/dialog_create_component.cpp:245
 msgid "Pin Name Inside"
 msgstr "Nom de pin à l'intérieur"
 
@@ -9957,7 +9906,6 @@ msgid "Number of Units:"
 msgstr "Nombre de Parts:"
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:79
-#: eeschema/dialog_create_component.cpp:249
 msgid "Skew:"
 msgstr "Décalage:"
 
@@ -12216,10 +12164,12 @@ msgid "Back View"
 msgstr "Vue arrière"
 
 #: 3d-viewer/3d_canvas.cpp:353
+#: 3d-viewer/3d_toolbar.cpp:85
 msgid "Move left <-"
 msgstr "Vers la gauche <-"
 
 #: 3d-viewer/3d_canvas.cpp:358
+#: 3d-viewer/3d_toolbar.cpp:88
 msgid "Move right ->"
 msgstr "Vers la droite ->"
 
@@ -12504,6 +12454,7 @@ msgid "Exchange Modules"
 msgstr "Echange modules:"
 
 #: pcbnew/dialog_edit_module_for_Modedit_base.h:105
+#: pcbnew/dialog_edit_module_for_BoardEditor_base.h:118
 msgid "Module properties"
 msgstr "Propriétés du Module"
 
@@ -12819,6 +12770,40 @@ msgstr "Options d'Affichage"
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#, fuzzy
+#~ msgid "Set to Current Settings"
+#~ msgstr "Ajustages Courants:"
+
+#, fuzzy
+#~ msgid "Use this Pad Settings as Current"
+#~ msgstr ""
+#~ "Copier les caractéristiques de ce pad vers les caractéristiques courantes"
+#~ msgid "Edit Pads Global"
+#~ msgstr "Pads: Edition globale"
+#~ msgid "Pad Settings..."
+#~ msgstr "Caract pad ..."
+#~ msgid "Change Module"
+#~ msgstr "Change module"
+#~ msgid "Change ID Modules"
+#~ msgstr "Change Modules ident."
+#~ msgid "Pad Filter :"
+#~ msgstr "Filtre Pad :"
+#~ msgid "Shape Filter"
+#~ msgstr "Filtre sur forme"
+#~ msgid "Layer Filter"
+#~ msgstr "Filtre sur couche"
+#~ msgid "Orient Filter"
+#~ msgstr "Filtre Orientation"
+#~ msgid "Change Items :"
+#~ msgstr "Eléments à changer:"
+#~ msgid "Change Size"
+#~ msgstr "Change Taille"
+#~ msgid "Change Shape"
+#~ msgstr "Change Forme"
+#~ msgid "Change Drill"
+#~ msgstr "Change Perçage"
+#~ msgid "Change Orientation"
+#~ msgstr "Change Orientation"
 #~ msgid "Single Sided"
 #~ msgstr "Simple Face"
 #~ msgid "Single Sided, SMD on Back"
