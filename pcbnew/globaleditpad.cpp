@@ -57,12 +57,14 @@ DIALOG_GLOBAL_PADS_EDITION::DIALOG_GLOBAL_PADS_EDITION(
     m_Pad_Layer_Filter_CB->SetValue( m_Pad_Layer_Filter );
     m_Pad_Orient_Filter_CB->SetValue( m_Pad_Orient_Filter );
 
+    SetFocus();
+
     GetSizer()->Fit( this );
     Centre();
 }
 
 
-/*Class DIALOG_GLOBAL_PADS_EDITION static variables */
+/* Class DIALOG_GLOBAL_PADS_EDITION static variables */
 bool DIALOG_GLOBAL_PADS_EDITION::m_Pad_Shape_Filter  = true;
 bool DIALOG_GLOBAL_PADS_EDITION::m_Pad_Layer_Filter  = true;
 bool DIALOG_GLOBAL_PADS_EDITION::m_Pad_Orient_Filter = true;
