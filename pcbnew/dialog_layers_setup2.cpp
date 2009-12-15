@@ -443,6 +443,7 @@ void DIALOG_LAYERS_SETUP::OnOkButtonClick( wxCommandEvent& event )
     {
         wxString name;
 
+        m_EnabledLayers = getUILayerMask();
         m_Pcb->SetEnabledLayers( m_EnabledLayers );
 
         for( int layer =  FIRST_COPPER_LAYER;

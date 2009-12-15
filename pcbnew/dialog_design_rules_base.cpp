@@ -16,7 +16,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_DRnotebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_LEFT );
+	m_DRnotebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_TOP );
 	m_panelNetClassesEditor = new wxPanel( m_DRnotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
 	wxBoxSizer* bpanelNetClassesSizer;
 	bpanelNetClassesSizer = new wxBoxSizer( wxVERTICAL );
@@ -152,7 +152,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_panelNetClassesEditor->SetSizer( bpanelNetClassesSizer );
 	m_panelNetClassesEditor->Layout();
 	bpanelNetClassesSizer->Fit( m_panelNetClassesEditor );
-	m_DRnotebook->AddPage( m_panelNetClassesEditor, _("Net Classes Editor"), false );
+	m_DRnotebook->AddPage( m_panelNetClassesEditor, _("Net Classes Editor"), true );
 	m_panelGolbalDesignRules = new wxPanel( m_DRnotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
 	wxBoxSizer* bpanelGlobRulesSizer;
 	bpanelGlobRulesSizer = new wxBoxSizer( wxVERTICAL );
@@ -356,7 +356,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_panelGolbalDesignRules->SetSizer( bpanelGlobRulesSizer );
 	m_panelGolbalDesignRules->Layout();
 	bpanelGlobRulesSizer->Fit( m_panelGolbalDesignRules );
-	m_DRnotebook->AddPage( m_panelGolbalDesignRules, _("Global Design Rules"), true );
+	m_DRnotebook->AddPage( m_panelGolbalDesignRules, _("Global Design Rules"), false );
 	
 	bMainSizer->Add( m_DRnotebook, 1, wxEXPAND | wxALL, 5 );
 	
