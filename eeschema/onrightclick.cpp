@@ -255,7 +255,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 
     if( libEntry )
     {
-        if( libEntry->Type == ALIAS )
+        if( libEntry->isAlias() )
             libComponent = ( (LIB_ALIAS*) libEntry )->GetComponent();
         else
             libComponent = (LIB_COMPONENT*) libEntry;
@@ -300,7 +300,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
     ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_CMP, msg,
                   edit_component_xpm );
 
-    if( libEntry && libEntry->m_Options != ENTRY_POWER )
+    if( libEntry && libEntry->isNormal() )
     {
         msg = AddHotkeyName( _( "Value " ), s_Schematic_Hokeys_Descr,
                              HK_EDIT_COMPONENT_VALUE );
@@ -348,7 +348,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
                       _( "Delete Component" ), delete_xpm );
     }
 
-    if( libEntry && !libEntry->m_DocFile.IsEmpty() )
+    if( libEntry && !libEntry->GetDocFileName().IsEmpty() )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DISPLAYDOC_CMP, _( "Doc" ),
                       datasheet_xpm );
 }

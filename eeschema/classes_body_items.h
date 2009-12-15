@@ -37,8 +37,7 @@ class LIB_PIN;
 /**
  * The component library pin object electrical types used in ERC tests.
  */
-enum ElectricPinType
-{
+enum ElectricPinType {
     PIN_INPUT,
     PIN_OUTPUT,
     PIN_BIDI,
@@ -63,8 +62,7 @@ extern const wxChar* MsgPinElectricType[];
 /**
  * The component library pin object drawing shapes.
  */
-enum DrawPinShape
-{
+enum DrawPinShape {
     NONE         = 0,
     INVERT       = 1,
     CLOCK        = 2,
@@ -76,8 +74,7 @@ enum DrawPinShape
 /**
  *  The component library pin object orientations.
  */
-enum DrawPinOrient
-{
+enum DrawPinOrient {
     PIN_RIGHT = 'R',
     PIN_LEFT  = 'L',
     PIN_UP    = 'U',
@@ -137,12 +134,12 @@ public:
     }
 
 
-    LIB_DRAW_ITEM( KICAD_T struct_type, LIB_COMPONENT * aParent );
-    LIB_DRAW_ITEM( const LIB_DRAW_ITEM& item );
+    LIB_DRAW_ITEM( KICAD_T aType, LIB_COMPONENT * aParent );
+    LIB_DRAW_ITEM( const LIB_DRAW_ITEM& aItem );
     virtual ~LIB_DRAW_ITEM() { }
 
     /**
-     * Draw A body item
+     * Draw a body item
      *
      * @param aPanel - DrawPanel to use (can be null) mainly used for clipping
      *                 purposes
@@ -165,18 +162,19 @@ public:
     /**
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int GetPenSize( ) = 0;
+    virtual int GetPenSize() = 0;
 
     /**
-     * Write draw item object to a FILE in "*.lib" format.
+     * Write draw item object to /a aFile in "*.lib" format.
      *
-     * @param aFile - The FILE to write to.
-     * @return bool - true if success writing else false.
+     * @param aFile - The file to write to.
+     * @param aErrorMsg - Error message if write fails.
+     * @return - true if success writing else false.
      */
     virtual bool Save( FILE* aFile ) = 0;
-    virtual bool Load( char* line, wxString& errorMsg ) = 0;
+    virtual bool Load( char* aLine, wxString& aErrorMsg ) = 0;
 
-    LIB_COMPONENT * GetParent()
+    LIB_COMPONENT* GetParent()
     {
         return (LIB_COMPONENT *)m_Parent;
     }
@@ -184,12 +182,14 @@ public:
     /**
      * Tests if the given point is within the bounds of this object.
      *
-     * @param refPos A wxPoint to test
-     * @return bool - true if a hit, else false
+     * Derived classes should override this function.
+     *
+     * @param aPosition - The coordinats to test.
+     * @return - true if a hit, else false
      */
-    virtual bool HitTest( const wxPoint& refPos )
+    virtual bool HitTest( const wxPoint& aPosition )
     {
-        return false;   // derived classes should override this function
+        return false;
     }
 
     /**
@@ -197,7 +197,7 @@ public:
      * @param aThreshold - max distance to this object (usually the half
      *                     thickness of a line)
      * @param aTransMat - the transform matrix
-     * @return true if the point aPosRef is near this object
+     * @return - true if the point aPosRef is near this object
      */
     virtual bool HitTest( wxPoint aPosRef, int aThreshold,
                           const int aTransMat[2][2] ) = 0;
@@ -210,7 +210,7 @@ public:
         return EDA_BaseStruct::GetBoundingBox();
     }
 
-    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+    virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
 
     /**
      * Make a copy of this draw item.
@@ -225,29 +225,29 @@ public:
     /**
      * Test LIB_DRAW_ITEM objects for equivalence.
      *
-     * @param other - Object to test against.
-     * @return bool - True if object is identical to this object.
+     * @param aOther - Object to test against.
+     * @return - True if object is identical to this object.
      */
-    bool operator==( const LIB_DRAW_ITEM& other ) const;
-    bool operator==( const LIB_DRAW_ITEM* other ) const
+    bool operator==( const LIB_DRAW_ITEM& aOther ) const;
+    bool operator==( const LIB_DRAW_ITEM* aOther ) const
     {
-        return *this == *other;
+        return *this == *aOther;
     }
 
     /**
      * Test if another draw item is less than this draw object.
      *
-     * @param other - Draw item to compare against.
-     * @return bool - True if object is less than this object.
+     * @param aOther - Draw item to compare against.
+     * @return - True if object is less than this object.
      */
-    bool operator<( const LIB_DRAW_ITEM& other) const;
+    bool operator<( const LIB_DRAW_ITEM& aOther) const;
 
     /**
      * Set drawing object offset from the current position.
      *
-     * @param offset - Cooridinates to offset position.
+     * @param aOffset - Cooridinates to offset position.
      */
-    void SetOffset( const wxPoint& offset ) { DoOffset( offset ); }
+    void SetOffset( const wxPoint& aOffset ) { DoOffset( aOffset ); }
 
     /**
      * Test if any part of the draw object is inside rectangle bounds.
@@ -255,53 +255,56 @@ public:
      * This is used for block selection.  The real work is done by the
      * DoTestInside method for each derived object type.
      *
-     * @param rect - Rectangle to check against.
-     * @return bool - True if object is inside rectangle.
+     * @param aRect - Rectangle to check against.
+     * @return - True if object is inside rectangle.
      */
-    bool Inside( EDA_Rect& rect ) { return DoTestInside( rect ); }
+    bool Inside( EDA_Rect& aRect ) { return DoTestInside( aRect ); }
 
     /**
-     * Move a draw object to a new position.
+     * Move a draw object to a new /a aPosition.
      *
      * The real work is done by the DoMove method for each derived object type.
      *
-     * @param newPosition - Position to move draw item to.
+     * @param aPosition - Position to move draw item to.
      */
-    void Move( const wxPoint& newPosition ) { DoMove( newPosition ); }
+    void Move( const wxPoint& aPosition ) { DoMove( aPosition ); }
 
     /**
      * Return the current draw object start position.
      */
-    wxPoint GetPosition( void ) { return DoGetPosition(); }
+    wxPoint GetPosition() { return DoGetPosition(); }
 
     /**
      * Mirror the draw object along the horizontal (X) axis about a point.
      *
-     * @param center - Point to mirror around.
+     * @param aCenter - Point to mirror around.
      */
-    void MirrorHorizontal( const wxPoint& center )
+    void MirrorHorizontal( const wxPoint& aCenter )
     {
-        DoMirrorHorizontal( center );
+        DoMirrorHorizontal( aCenter );
     }
 
     /**
      * Plot the draw item using the plot object.
      *
-     * @param plotter - The plot object to plot to.
+     * @param aPlotter - The plot object to plot to.
+     * @param aOffset - Plot offset position.
+     * @param aFill - Flag to indicate whether or not the object is filled.
+     * @param aTransform - The plot transform.
      */
-    void Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-               const int transform[2][2] )
+    void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+               const int aTransform[2][2] )
     {
-        DoPlot( plotter, offset, fill, transform );
+        DoPlot( aPlotter, aOffset, aFill, aTransform );
     }
 
     /**
      * Return the width of the draw item.
      *
-     * @return int - Width of draw object.
+     * @return Width of draw object.
      */
-    int GetWidth( void ) { return DoGetWidth(); }
-    void SetWidth( int width ) { DoSetWidth( width ); }
+    int GetWidth() { return DoGetWidth(); }
+    void SetWidth( int aWidth ) { DoSetWidth( aWidth ); }
 
     /**
      * Check if draw object can be filled.
@@ -309,24 +312,23 @@ public:
      * The default setting is false.  If the derived object support filling,
      * set the m_isFillable member to true.
      *
-     * @return bool - True if draw object can be fill.  Default is false.
+     * @return - True if draw object can be fill.  Default is false.
      */
-    bool IsFillable( void ) { return m_isFillable; }
+    bool IsFillable() { return m_isFillable; }
 
     /**
      * Return the modified status of the draw object.
      *
-     * @return bool - True if the draw object has been modified.
+     * @return - True if the draw object has been modified.
      */
-    bool IsModified( void ) { return ( m_Flags & IS_CHANGED ) != 0; }
+    bool IsModified() { return ( m_Flags & IS_CHANGED ) != 0; }
 
     /**
      * Return the new item status of the draw object.
      *
-     * @return bool - True if the draw item has been added to the
-     *                parent component.
+     * @return - True if the draw item has been added to the parent component.
      */
-    bool IsNew( void ) { return ( m_Flags & IS_NEW ) != 0; }
+    bool IsNew() { return ( m_Flags & IS_NEW ) != 0; }
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy() = 0;
@@ -342,16 +344,16 @@ protected:
      *      - KICAD_T enum value.
      *      - Result of derived classes comparison.
      */
-    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const = 0;
-    virtual void DoOffset( const wxPoint& offset ) = 0;
-    virtual bool DoTestInside( EDA_Rect& rect ) = 0;
-    virtual void DoMove( const wxPoint& newPosition ) = 0;
-    virtual wxPoint DoGetPosition( void ) = 0;
-    virtual void DoMirrorHorizontal( const wxPoint& center ) = 0;
-    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                         const int transform[2][2] ) = 0;
-    virtual int DoGetWidth( void ) = 0;
-    virtual void DoSetWidth( int width ) = 0;
+    virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const = 0;
+    virtual void DoOffset( const wxPoint& aOffset ) = 0;
+    virtual bool DoTestInside( EDA_Rect& aRect ) = 0;
+    virtual void DoMove( const wxPoint& aPosition ) = 0;
+    virtual wxPoint DoGetPosition() = 0;
+    virtual void DoMirrorHorizontal( const wxPoint& aCenter ) = 0;
+    virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                         const int aTransform[2][2] ) = 0;
+    virtual int DoGetWidth() = 0;
+    virtual void DoSetWidth( int aWidth ) = 0;
 
     /** Flag to indicate if draw item is fillable.  Default is false. */
     bool m_isFillable;
@@ -390,7 +392,7 @@ public:
 
 public:
     LIB_PIN(LIB_COMPONENT * aParent);
-    LIB_PIN( const LIB_PIN& pin );
+    LIB_PIN( const LIB_PIN& aPin );
     ~LIB_PIN() { }
 
     LIB_PIN* Next() const { return (LIB_PIN*) Pnext; }
@@ -406,17 +408,17 @@ public:
      * Write pin object to a FILE in "*.lib" format.
      *
      * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
+     * @return - true if success writing else false.
      */
     virtual bool Save( FILE* aFile );
-    virtual bool Load( char* line, wxString& errorMsg );
+    virtual bool Load( char* aLine, wxString& aErrorMsg );
 
 
     /**
      * Test if the given point is within the bounds of this object.
      *
      * @param aRefPos A wxPoint to test
-     * @return bool - true if a hit, else false
+     * @return - true if a hit, else false
      */
     virtual bool HitTest( const wxPoint& aRefPos );
 
@@ -425,10 +427,9 @@ public:
      * @param aThreshold - max distance to this object (usually the half
      *                     thickness of a line)
      * @param aTransMat - the transform matrix
-     * @return true if the point aPosRef is near this object
+     * @return - true if the point aPosRef is near this object
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold,
-                          const int aTransMat[2][2] );
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
 
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
     virtual EDA_Rect GetBoundingBox();
@@ -447,7 +448,7 @@ public:
      */
     void         ReturnPinStringNum( wxString& aStringBuffer ) const;
 
-    wxString     GetNumber( void );
+    wxString     GetNumber();
 
     /** Function ReturnPinStringNum (static function)
      * Pin num is coded as a long or 4 ascii chars
@@ -457,7 +458,7 @@ public:
      */
     static wxString ReturnPinStringNum( long aPinNum );
 
-    void         SetPinNumFromString( wxString& buffer );
+    void         SetPinNumFromString( wxString& aBuffer );
 
     /**
      * Set the pin name.
@@ -466,26 +467,26 @@ public:
      *
      * @param name - New pin name.
      */
-    void SetName( const wxString& name );
+    void SetName( const wxString& aName );
 
     /**
-     * Set the size of the pin name text.
+     * Set the /a aSize of the pin name text.
      *
      * This will also update the text size of the name of the pins marked
      * by EnableEditMode().
      *
-     * @param size - The text size of the pin name in schematic units ( mils ).
+     * @param aSize - The text size of the pin name in schematic units ( mils ).
      */
-    void SetNameTextSize( int size );
+    void SetNameTextSize( int aSize );
 
     /**
      * Set the pin number.
      *
      * This will also all of the pin numbers marked by EnableEditMode().
      *
-     * @param number - New pin number.
+     * @param aNumber - New pin number.
      */
-    void SetNumber( const wxString& number );
+    void SetNumber( const wxString& aNumber );
 
     /**
      * Set the size of the pin number text.
@@ -493,10 +494,10 @@ public:
      * This will also update the text size of the number of the pins marked
      * by EnableEditMode().
      *
-     * @param size - The text size of the pin number in schematic
-     *               units ( mils ).
+     * @param aSize - The text size of the pin number in schematic
+     *                units ( mils ).
      */
-    void SetNumberTextSize( int size );
+    void SetNumberTextSize( int aSize );
 
     /**
      * Set orientation on the pin.
@@ -504,9 +505,9 @@ public:
      * This will also update the orientation of the pins marked by
      * EnableEditMode().
      *
-     * @param orientation - The orientation of the pin.
+     * @param aOrientation - The orientation of the pin.
      */
-    void SetOrientation( int orientation );
+    void SetOrientation( int aOrientation );
 
     /**
      * Set the draw style of the pin.
@@ -514,9 +515,9 @@ public:
      * This will also update the draw style of the pins marked by
      * EnableEditMode().
      *
-     * @param style - The draw style of the pin.
+     * @param aStyle - The draw style of the pin.
      */
-    void SetDrawStyle( int style );
+    void SetDrawStyle( int aStyle );
 
     /**
      * Set the electrical type of the pin.
@@ -524,18 +525,18 @@ public:
      * This will also update the electrical type of the pins marked by
      * EnableEditMode().
      *
-     * @param type - The electrical type of the pin.
+     * @param aType - The electrical type of the pin.
      */
-    void SetElectricalType( int style );
+    void SetElectricalType( int aType );
 
     /**
      * Set the pin length.
      *
      * This will also update the length of the pins marked by EnableEditMode().
      *
-     * @param size - The length of the pin in mils.
+     * @param aLength - The length of the pin in mils.
      */
-    void SetLength( int length );
+    void SetLength( int aLength );
 
     /**
      * Set the pin part number.
@@ -543,10 +544,10 @@ public:
      * If the pin is changed from not common to common to all parts, any
      * linked pins will be removed from the parent component.
      *
-     * @param part - Number of the part the pin belongs to.  Set to zero to
-     *               make pin common to all parts in a multi-part component.
+     * @param aPart - Number of the part the pin belongs to.  Set to zero to
+     *                make pin common to all parts in a multi-part component.
      */
-    void SetPartNumber( int part );
+    void SetPartNumber( int aPart );
 
     /**
      * Set the body style (conversion) of the pin.
@@ -557,7 +558,7 @@ public:
      * @param conversion - Body style of the pin.  Set to zero to make pin
      *                     common to all body styles.
      */
-    void SetConversion( int conversion );
+    void SetConversion( int aConversion );
 
     /**
      * Set or clear the visibility flag for the pin.
@@ -565,9 +566,9 @@ public:
      * This will also update the visibility of the pins marked by
      * EnableEditMode().
      *
-     * @param visible - True to make the pin visible or false to hide the pin.
+     * @param aVisible - True to make the pin visible or false to hide the pin.
      */
-    void SetVisible( bool visible );
+    void SetVisible( bool aVisible );
 
     /**
      * Enable or clear pin editing mode.
@@ -580,18 +581,18 @@ public:
      * parts or body styles in the component.  See SetCommonToAllParts()
      * and SetCommonToAllBodyStyles() for more information.
      *
-     * @params enable - True marks all common pins for editing mode.  False
-     *                  clears the editing mode.
-     * @params editpinByPin - Enables the edit pin by pin mode.
+     * @params aEnable - True marks all common pins for editing mode.  False
+     *                   clears the editing mode.
+     * @params aEditpinByPin - Enables the edit pin by pin mode.
      */
-    void EnableEditMode( bool enable, bool pinByPin = false );
+    void EnableEditMode( bool aEnable, bool aEditPinByPin = false );
 
     /**
      * Return the visibility status of the draw object.
      *
-     * @return bool - True if draw object is visible otherwise false.
+     * @return True if draw object is visible otherwise false.
      */
-    bool IsVisible( void ) { return ( m_Attributs & PINNOTDRAW ) == 0; }
+    bool IsVisible() { return ( m_Attributs & PINNOTDRAW ) == 0; }
 
     /**
      * @return the size of the "pen" that be used to draw or plot this item.
@@ -599,81 +600,79 @@ public:
     virtual int GetPenSize();
 
     void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
-               int aColor, int aDrawMode, void* aData,
-               const int aTransformMatrix[2][2] );
+               int aColor, int aDrawMode, void* aData, const int aTransformMatrix[2][2] );
 
-    void DrawPinSymbol( WinEDA_DrawPanel* panel, wxDC* DC,
-                        const wxPoint& pin_pos, int orient,
-                        int DrawMode, int Color = -1 );
+    void DrawPinSymbol( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                        int aOrientation, int aDrawMode, int aColor = -1 );
 
-    void DrawPinTexts( WinEDA_DrawPanel* panel, wxDC* DC,
-                       wxPoint& pin_pos, int orient,
-                       int TextInside, bool DrawPinNum,
-                       bool DrawPinName, int Color, int DrawMode );
+    void DrawPinTexts( WinEDA_DrawPanel* aPanel, wxDC* aDC, wxPoint& aPosition,
+                       int aOrientation, int TextInside, bool DrawPinNum, bool DrawPinName,
+                       int aColor, int aDrawMode );
 
-    void PlotPinTexts( PLOTTER *plotter,
-                       wxPoint& pin_pos,
-                       int      orient,
-                       int      TextInside,
-                       bool     DrawPinNum,
-                       bool     DrawPinNameint,
+    void PlotPinTexts( PLOTTER *aPlotter,
+                       wxPoint& aPosition,
+                       int      aOrientation,
+                       int      aTextInside,
+                       bool     aDrawPinNum,
+                       bool     aDrawPinName,
                        int      aWidth );
 
     /**
      * Get a list of pin orientation names.
      *
-     * @return wxArrayString - List of valid pin orientation names.
+     * @return List of valid pin orientation names.
      */
-    static wxArrayString GetOrientationNames( void );
+    static wxArrayString GetOrientationNames();
 
     /**
      * Get the orientation code by index used to set the pin orientation.
      *
-     * @param index - The index of the orientation code to look up.
-     * @return int - Orientation code if index is valid.  Returns right
-     *               orientation on index error.
+     * @param aIndex - The index of the orientation code to look up.
+     * @return Orientation code if index is valid.  Returns right
+     *         orientation on index error.
      */
-    static int GetOrientationCode( int index );
+    static int GetOrientationCode( int aIndex );
 
     /**
      * Get the index of the orientation code.
      *
-     * @param code - The orientation code to look up.
-     * @return int - The index of the orientation code if found.  Otherwise,
-     *               return wxNOT_FOUND.
+     * @param aCode - The orientation code to look up.
+     * @return  The index of the orientation code if found.  Otherwise,
+     *          return wxNOT_FOUND.
      */
-    static int GetOrientationCodeIndex( int code );
+    static int GetOrientationCodeIndex( int aCode );
 
     /**
      * Get a list of pin draw style names.
      *
-     * @return wxArrayString - List of valid pin draw style names.
+     * @return  List of valid pin draw style names.
      */
-    static wxArrayString GetStyleNames( void );
+    static wxArrayString GetStyleNames();
 
     /**
      * Get the pin draw style code by index used to set the pin draw style.
      *
-     * @param index - The index of the pin draw style code to look up.
-     * @return int - Pin draw style code if index is valid.  Returns NONE
-     *               style on index error.
+     * @param aIndex - The index of the pin draw style code to look up.
+     * @return  Pin draw style code if index is valid.  Returns NONE
+     *          style on index error.
      */
-    static int GetStyleCode( int index );
+    static int GetStyleCode( int aIndex );
 
     /**
      * Get the index of the pin draw style code.
      *
-     * @param code - The pin draw style code to look up.
-     * @return int - The index of the pin draw style code if found.  Otherwise,
-     *               return wxNOT_FOUND.
+     * @param aCode - The pin draw style code to look up.
+     * @return The index of the pin draw style code if found.  Otherwise,
+     *         return wxNOT_FOUND.
      */
-    static int GetStyleCodeIndex( int code );
+    static int GetStyleCodeIndex( int aCode );
 
     /**
      * Get a list of pin electrical type names.
-     * @return wxArrayString - List of valid pin electrical type names.
+     *
+     * @return  List of valid pin electrical type names.
      */
-    static wxArrayString GetElectricalTypeNames( void );
+    static wxArrayString GetElectricalTypeNames();
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
@@ -687,16 +686,16 @@ protected:
      *      - Pin horizontal (X) position.
      *      - Pin vertical (Y) position.
      */
-    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
-    virtual void DoOffset( const wxPoint& offset );
-    virtual bool DoTestInside( EDA_Rect& rect );
-    virtual void DoMove( const wxPoint& newPosition );
-    virtual wxPoint DoGetPosition( void ) { return m_Pos; }
-    virtual void DoMirrorHorizontal( const wxPoint& center );
-    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                         const int transform[2][2] );
-    virtual int DoGetWidth( void ) { return m_Width; }
-    virtual void DoSetWidth( int width ) { m_Width = width; }
+    virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
+    virtual void DoOffset( const wxPoint& aOffset );
+    virtual bool DoTestInside( EDA_Rect& aRect );
+    virtual void DoMove( const wxPoint& aPosition );
+    virtual wxPoint DoGetPosition() { return m_Pos; }
+    virtual void DoMirrorHorizontal( const wxPoint& aCenter );
+    virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                         const int aTransform[2][2] );
+    virtual int DoGetWidth() { return m_Width; }
+    virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };
 
 
@@ -717,7 +716,7 @@ public:
 
 public:
     LIB_ARC(LIB_COMPONENT * aParent);
-    LIB_ARC( const LIB_ARC& arc );
+    LIB_ARC( const LIB_ARC& aArc );
     ~LIB_ARC() { }
     virtual wxString GetClass() const
     {
@@ -729,16 +728,16 @@ public:
      * Save arc object to a FILE in "*.lib" format.
      *
      * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
+     * @return - True if success writing else false.
      */
     virtual bool Save( FILE* aFile );
-    virtual bool Load( char* line, wxString& errorMsg );
+    virtual bool Load( char* aLine, wxString& aErrorMsg );
 
     /**
      * Tests if the given wxPoint is within the bounds of this object.
      *
-     * @param aRefPos A wxPoint to test
-     * @return bool - true if a hit, else false
+     * @param aRefPos - Coordinates to test
+     * @return - True if a hit, else false
      */
     virtual bool HitTest( const wxPoint& aRefPos );
 
@@ -747,7 +746,7 @@ public:
      * @param aThreshold - max distance to this object (usually the half
      *                     thickness of a line)
      * @param aTransMat - the transform matrix
-     * @return true if the point aPosRef is near this object
+     * @return - True if the point aPosRef is near this object
      */
     virtual bool HitTest( wxPoint aPosRef, int aThreshold,
                           const int aTransMat[2][2] );
@@ -775,16 +774,16 @@ protected:
      *      - Arc start angle.
      *      - Arc end angle.
      */
-    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
-    virtual void DoOffset( const wxPoint& offset );
-    virtual bool DoTestInside( EDA_Rect& rect );
-    virtual void DoMove( const wxPoint& newPosition );
-    virtual wxPoint DoGetPosition( void ) { return m_Pos; }
-    virtual void DoMirrorHorizontal( const wxPoint& center );
-    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                         const int transform[2][2] );
-    virtual int DoGetWidth( void ) { return m_Width; }
-    virtual void DoSetWidth( int width ) { m_Width = width; }
+    virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
+    virtual void DoOffset( const wxPoint& aOffset );
+    virtual bool DoTestInside( EDA_Rect& aRect );
+    virtual void DoMove( const wxPoint& aPosition );
+    virtual wxPoint DoGetPosition() { return m_Pos; }
+    virtual void DoMirrorHorizontal( const wxPoint& aCenter );
+    virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                         const int aTransform[2][2] );
+    virtual int DoGetWidth() { return m_Width; }
+    virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };
 
 
@@ -801,7 +800,7 @@ public:
 
 public:
     LIB_CIRCLE(LIB_COMPONENT * aParent);
-    LIB_CIRCLE( const LIB_CIRCLE& circle );
+    LIB_CIRCLE( const LIB_CIRCLE& aCircle );
     ~LIB_CIRCLE() { }
     virtual wxString GetClass() const
     {
@@ -813,10 +812,10 @@ public:
      * Write circle object to a FILE in "*.lib" format.
      *
      * @param aFile - The FILE to write to.
-     * @return bool - true if success writing else false.
+     * @return - true if success writing else false.
      */
     virtual bool Save( FILE* aFile );
-    virtual bool Load( char* line, wxString& errorMsg );
+    virtual bool Load( char* aLine, wxString& aErrorMsg );
 
     /**
      * Test if the given point is within the bounds of this object.
@@ -841,12 +840,12 @@ public:
      */
     virtual int GetPenSize( );
 
-    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
+    void Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint &aOffset,
                int aColor, int aDrawMode, void* aData,
                const int aTransformMatrix[2][2] );
 
     virtual EDA_Rect GetBoundingBox();
-    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+    virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
@@ -859,17 +858,17 @@ protected:
      *      - Circle vertical (Y) position.
      *      - Circle radius.
      */
-    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
+    virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
 
-    virtual void DoOffset( const wxPoint& offset );
-    virtual bool DoTestInside( EDA_Rect& rect );
-    virtual void DoMove( const wxPoint& newPosition );
-    virtual wxPoint DoGetPosition( void ) { return m_Pos; }
-    virtual void DoMirrorHorizontal( const wxPoint& center );
-    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                         const int transform[2][2] );
-    virtual int DoGetWidth( void ) { return m_Width; }
-    virtual void DoSetWidth( int width ) { m_Width = width; }
+    virtual void DoOffset( const wxPoint& aOffset );
+    virtual bool DoTestInside( EDA_Rect& aRect );
+    virtual void DoMove( const wxPoint& aPosition );
+    virtual wxPoint DoGetPosition() { return m_Pos; }
+    virtual void DoMirrorHorizontal( const wxPoint& aCenter );
+    virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                         const int aTransform[2][2] );
+    virtual int DoGetWidth() { return m_Width; }
+    virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };
 
 
@@ -883,7 +882,7 @@ class LIB_TEXT : public LIB_DRAW_ITEM, public EDA_TextStruct
 {
 public:
     LIB_TEXT(LIB_COMPONENT * aParent);
-    LIB_TEXT( const LIB_TEXT& text );
+    LIB_TEXT( const LIB_TEXT& aText );
     ~LIB_TEXT() { }
     virtual wxString GetClass() const
     {
@@ -895,16 +894,16 @@ public:
      * Write text object out to a FILE in "*.lib" format.
      *
      * @param aFile - The FILE to write to.
-     * @return bool - true if success writing else false.
+     * @return - true if success writing else false.
      */
     virtual bool Save( FILE* aFile );
-    virtual bool Load( char* line, wxString& errorMsg );
+    virtual bool Load( char* aLine, wxString& aErrorMsg );
 
     /**
      * Test if the given point is within the bounds of this object.
      *
      * @param refPos - A wxPoint to test
-     * @return bool - true if a hit, else false
+     * @return - true if a hit, else false
      */
     virtual bool HitTest( const wxPoint& refPos );
 
@@ -922,12 +921,12 @@ public:
      *
      * For now, an ending point must be inside this rect.
      *
-     * @param refArea - the given EDA_Rect
-     * @return bool - true if a hit, else false
+     * @param aRect - the given EDA_Rect
+     * @return - true if a hit, else false
      */
-    virtual bool HitTest( EDA_Rect& refArea )
+    virtual bool HitTest( EDA_Rect& aRect )
     {
-        return TextHitTest( refArea );
+        return TextHitTest( aRect );
     }
 
     /**
@@ -939,7 +938,7 @@ public:
                int aColor, int aDrawMode, void* aData,
                const int aTransformMatrix[2][2] );
 
-    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+    virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
 
     virtual EDA_Rect GetBoundingBox();
 
@@ -956,17 +955,17 @@ protected:
      *      - Text width.
      *      - Text height.
      */
-    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
+    virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
 
-    virtual void DoOffset( const wxPoint& offset );
-    virtual bool DoTestInside( EDA_Rect& rect );
-    virtual void DoMove( const wxPoint& newPosition );
-    virtual wxPoint DoGetPosition( void ) { return m_Pos; }
-    virtual void DoMirrorHorizontal( const wxPoint& center );
-    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                         const int transform[2][2] );
-    virtual int DoGetWidth( void ) { return m_Width; }
-    virtual void DoSetWidth( int width ) { m_Width = width; }
+    virtual void DoOffset( const wxPoint& aOffset );
+    virtual bool DoTestInside( EDA_Rect& aRect );
+    virtual void DoMove( const wxPoint& aPosition );
+    virtual wxPoint DoGetPosition() { return m_Pos; }
+    virtual void DoMirrorHorizontal( const wxPoint& aCenter );
+    virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                         const int aTransform[2][2] );
+    virtual int DoGetWidth() { return m_Width; }
+    virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };
 
 
@@ -982,7 +981,7 @@ public:
 
 public:
     LIB_RECTANGLE(LIB_COMPONENT * aParent);
-    LIB_RECTANGLE( const LIB_RECTANGLE& rect );
+    LIB_RECTANGLE( const LIB_RECTANGLE& aRect );
     ~LIB_RECTANGLE() { }
     virtual wxString GetClass() const
     {
@@ -994,16 +993,16 @@ public:
      * Write rectangle object out to a FILE in "*.lib" format.
      *
      * @param aFile - The FILE to write to.
-     * @return bool - true if success writing else false.
+     * @return - true if success writing else false.
      */
     virtual bool Save( FILE* aFile );
-    virtual bool Load( char* line, wxString& errorMsg );
+    virtual bool Load( char* aLine, wxString& aErrorMsg );
 
     /**
      * Test if the given point is within the bounds of this object.
      *
      * @param aRefPos - A wxPoint to test
-     * @return bool - true if a hit, else false
+     * @return - true if a hit, else false
      */
     virtual bool HitTest( const wxPoint& aRefPos );
 
@@ -1027,7 +1026,7 @@ public:
                const int aTransformMatrix[2][2] );
 
     virtual EDA_Rect GetBoundingBox();
-    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+    virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
@@ -1041,18 +1040,19 @@ protected:
      *      - Rectangle horizontal (X) end position.
      *      - Rectangle vertical (Y) end position.
      */
-    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
+    virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
 
-    virtual void DoOffset( const wxPoint& offset );
-    virtual bool DoTestInside( EDA_Rect& rect );
-    virtual void DoMove( const wxPoint& newPosition );
-    virtual wxPoint DoGetPosition( void ) { return m_Pos; }
-    virtual void DoMirrorHorizontal( const wxPoint& center );
-    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                         const int transform[2][2] );
-    virtual int DoGetWidth( void ) { return m_Width; }
-    virtual void DoSetWidth( int width ) { m_Width = width; }
+    virtual void DoOffset( const wxPoint& aOffset );
+    virtual bool DoTestInside( EDA_Rect& aRect );
+    virtual void DoMove( const wxPoint& aPosition );
+    virtual wxPoint DoGetPosition() { return m_Pos; }
+    virtual void DoMirrorHorizontal( const wxPoint& aCenter );
+    virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                         const int aTransform[2][2] );
+    virtual int DoGetWidth() { return m_Width; }
+    virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };
+
 
 /**********************************/
 /* Graphic Body Item: single line */
@@ -1066,7 +1066,7 @@ public:
 
 public:
     LIB_SEGMENT(LIB_COMPONENT * aParent);
-    LIB_SEGMENT( const LIB_SEGMENT& segment );
+    LIB_SEGMENT( const LIB_SEGMENT& aSegment );
     ~LIB_SEGMENT() { }
     virtual wxString GetClass() const
     {
@@ -1078,10 +1078,10 @@ public:
      * Writes segment object out to a FILE in "*.lib" format.
      *
      * @param aFile - The FILE to write to.
-     * @return bool - true if success writing else false.
+     * @return - true if success writing else false.
      */
     virtual bool Save( FILE* aFile );
-    virtual bool Load( char* line, wxString& errorMsg );
+    virtual bool Load( char* aLine, wxString& aErrorMsg );
 
      /**
      * Test if the given point is within the bounds of this object.
@@ -1110,7 +1110,7 @@ public:
                int aColor, int aDrawMode, void* aData,
                const int aTransformMatrix[2][2] );
 
-    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+    virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
@@ -1124,17 +1124,17 @@ protected:
      *      - Line segment horizontal (X) end position.
      *      - Line segment vertical (Y) end position.
      */
-    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
+    virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
 
-    virtual void DoOffset( const wxPoint& offset );
-    virtual bool DoTestInside( EDA_Rect& rect );
-    virtual void DoMove( const wxPoint& newPosition );
-    virtual wxPoint DoGetPosition( void ) { return m_Pos; }
-    virtual void DoMirrorHorizontal( const wxPoint& center );
-    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                         const int transform[2][2] );
-    virtual int DoGetWidth( void ) { return m_Width; }
-    virtual void DoSetWidth( int width ) { m_Width = width; }
+    virtual void DoOffset( const wxPoint& aOffset );
+    virtual bool DoTestInside( EDA_Rect& aRect );
+    virtual void DoMove( const wxPoint& aPosition );
+    virtual wxPoint DoGetPosition() { return m_Pos; }
+    virtual void DoMirrorHorizontal( const wxPoint& aCenter );
+    virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                         const int aTransform[2][2] );
+    virtual int DoGetWidth() { return m_Width; }
+    virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };
 
 
@@ -1149,7 +1149,7 @@ public:
 
 public:
     LIB_POLYLINE(LIB_COMPONENT * aParent);
-    LIB_POLYLINE( const LIB_POLYLINE& polyline );
+    LIB_POLYLINE( const LIB_POLYLINE& aPolyline );
     ~LIB_POLYLINE() { }
 
     virtual wxString GetClass() const
@@ -1162,12 +1162,12 @@ public:
      * Write polyline object out to a FILE in "*.lib" format.
      *
      * @param aFile - The FILE to write to.
-     * @return bool - true if success writing else false.
+     * @return - true if success writing else false.
      */
     virtual bool Save( FILE* aFile );
-    virtual bool Load( char* line, wxString& errorMsg );
+    virtual bool Load( char* aLine, wxString& aErrorMsg );
 
-    void AddPoint( const wxPoint& point );
+    void AddPoint( const wxPoint& aPoint );
 
     /**
      * @return the number of corners
@@ -1178,7 +1178,7 @@ public:
      * Test if the given point is within the bounds of this object.
      *
      * @param aRefPos - A wxPoint to test
-     * @return bool - true if a hit, else false
+     * @return - true if a hit, else false
      */
     virtual bool HitTest( const wxPoint& aRefPos );
 
@@ -1205,7 +1205,7 @@ public:
                int aColor, int aDrawMode, void* aData,
                const int aTransformMatrix[2][2] );
 
-    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+    virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
@@ -1217,18 +1217,19 @@ protected:
      *      - Line segment point horizontal (X) position.
      *      - Line segment point vertical (Y) position.
      */
-    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
+    virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
 
-    virtual void DoOffset( const wxPoint& offset );
-    virtual bool DoTestInside( EDA_Rect& rect );
-    virtual void DoMove( const wxPoint& newPosition );
-    virtual wxPoint DoGetPosition( void ) { return m_PolyPoints[0]; }
-    virtual void DoMirrorHorizontal( const wxPoint& center );
-    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                         const int transform[2][2] );
-    virtual int DoGetWidth( void ) { return m_Width; }
-    virtual void DoSetWidth( int width ) { m_Width = width; }
+    virtual void DoOffset( const wxPoint& aOffset );
+    virtual bool DoTestInside( EDA_Rect& aRect );
+    virtual void DoMove( const wxPoint& aPosition );
+    virtual wxPoint DoGetPosition() { return m_PolyPoints[0]; }
+    virtual void DoMirrorHorizontal( const wxPoint& aCenter );
+    virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                         const int aTransform[2][2] );
+    virtual int DoGetWidth() { return m_Width; }
+    virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };
+
 
 /**********************************************************/
 /* Graphic Body Item: Bezier Curve (set of lines) */
@@ -1242,7 +1243,7 @@ public:
 
 public:
     LIB_BEZIER( LIB_COMPONENT * aParent );
-    LIB_BEZIER( const LIB_BEZIER& bezier );
+    LIB_BEZIER( const LIB_BEZIER& aBezier );
     ~LIB_BEZIER() { }
 
     virtual wxString GetClass() const
@@ -1255,12 +1256,12 @@ public:
      * Write bezier curve object out to a FILE in "*.lib" format.
      *
      * @param aFile - The FILE to write to.
-     * @return bool - true if success writing else false.
+     * @return true if success writing else false.
      */
     virtual bool Save( FILE* aFile );
-    virtual bool Load( char* line, wxString& errorMsg );
+    virtual bool Load( char* aLine, wxString& aErrorMsg );
 
-    void         AddPoint( const wxPoint& point );
+    void         AddPoint( const wxPoint& aPoint );
 
     /**
      * @return the number of corners
@@ -1271,7 +1272,7 @@ public:
      * Test if the given point is within the bounds of this object.
      *
      * @param aRefPos - A wxPoint to test
-     * @return bool - true if a hit, else false
+     * @return true if a hit, else false
      */
     virtual bool HitTest( const wxPoint& aRefPos );
 
@@ -1298,7 +1299,7 @@ public:
                int aColor, int aDrawMode, void* aData,
                const int aTransformMatrix[2][2] );
 
-    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+    virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
@@ -1310,17 +1311,17 @@ protected:
      *      - Bezier point horizontal (X) point position.
      *      - Bezier point vertical (Y) point position.
      */
-    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
+    virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
 
-    virtual void DoOffset( const wxPoint& offset );
-    virtual bool DoTestInside( EDA_Rect& rect );
-    virtual void DoMove( const wxPoint& newPosition );
-    virtual wxPoint DoGetPosition( void ) { return m_PolyPoints[0]; }
-    virtual void DoMirrorHorizontal( const wxPoint& center );
-    virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                         const int transform[2][2] );
-    virtual int DoGetWidth( void ) { return m_Width; }
-    virtual void DoSetWidth( int width ) { m_Width = width; }
+    virtual void DoOffset( const wxPoint& aOffset );
+    virtual bool DoTestInside( EDA_Rect& aRect );
+    virtual void DoMove( const wxPoint& aPosition );
+    virtual wxPoint DoGetPosition() { return m_PolyPoints[0]; }
+    virtual void DoMirrorHorizontal( const wxPoint& aCenter );
+    virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                         const int aTransform[2][2] );
+    virtual int DoGetWidth() { return m_Width; }
+    virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };
 
 #endif  //  CLASSES_BODY_ITEMS_H

@@ -379,7 +379,8 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_EDIT_SHEET:
-        EditSheet( (SCH_SHEET*) screen->GetCurItem(), &dc );
+        if( EditSheet( (SCH_SHEET*) screen->GetCurItem(), &dc ) )
+            screen->SetModify();
         break;
 
     case ID_POPUP_IMPORT_GLABEL:
@@ -645,10 +646,10 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
             LibEntry = CMP_LIBRARY::FindLibraryEntry(
                 ( (SCH_COMPONENT*) screen->GetCurItem() )->m_ChipName );
 
-            if( LibEntry && LibEntry->m_DocFile != wxEmptyString )
+            if( LibEntry && LibEntry->GetDocFileName() != wxEmptyString )
             {
-                GetAssociatedDocument( this, LibEntry->m_DocFile ,
-                                       & wxGetApp().GetLibraryPathList() );
+                GetAssociatedDocument( this, LibEntry->GetDocFileName(),
+                                       &wxGetApp().GetLibraryPathList() );
             }
         }
         break;

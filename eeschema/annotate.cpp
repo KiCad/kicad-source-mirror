@@ -75,7 +75,7 @@ void ReAnnotatePowerSymbolsOnly( void )
             LIB_COMPONENT* Entry =
                 CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
 
-            if( (Entry == NULL) || (Entry->m_Options != ENTRY_POWER) )
+            if( ( Entry == NULL ) || !Entry->isPower() )
                 continue;
 
             //DrawLibItem->ClearAnnotation(sheet); this clears all annotation :(

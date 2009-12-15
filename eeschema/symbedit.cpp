@@ -20,6 +20,7 @@
 #include "class_library.h"
 
 #include <boost/foreach.hpp>
+#include <wx/ffile.h>
 
 
 /*
@@ -32,7 +33,6 @@
 void WinEDA_LibeditFrame::LoadOneSymbol( void )
 {
     LIB_COMPONENT* Component;
-    FILE*          ImportFile;
     wxString       msg, err;
     CMP_LIBRARY*   Lib;
 
@@ -58,17 +58,6 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
     wxFileName fn = dlg.GetPath();
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 
-    /* Load data */
-    ImportFile = wxFopen( fn.GetFullPath(), wxT( "rt" ) );
-
-    if( ImportFile == NULL )
-    {
-        msg.Printf( _( "Failed to open Symbol File <%s>" ),
-                    GetChars( fn.GetFullPath() ) );
-        DisplayError( this, msg );
-        return;
-    }
-
     Lib = new CMP_LIBRARY( LIBRARY_TYPE_SYMBOL, fn );
 
     if( !Lib->Load( err ) )
@@ -76,12 +65,9 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
         msg.Printf( _( "Error <%s> occurred loading symbol library <%s>." ),
                     GetChars( err ), GetChars( fn.GetName() ) );
         DisplayError( this, msg );
-        fclose( ImportFile );
         delete Lib;
         return;
     }
-
-    fclose( ImportFile );
 
     if( Lib->IsEmpty() )
     {
@@ -92,7 +78,11 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
     }
 
     if( Lib->GetCount() > 1 )
-        DisplayError( this, _( "Warning: more than 1 part in symbol file." ) );
+    {
+        msg.Printf( _( "More than one part in symbol file <%s>." ),
+                    GetChars( fn.GetName() ) );
+        wxMessageBox( msg, _( "Warning" ), wxOK | wxICON_EXCLAMATION, this );
+    }
 
     Component = (LIB_COMPONENT*) Lib->GetFirstEntry();
     LIB_DRAW_ITEM_LIST& drawList = Component->GetDrawItemList();
@@ -113,10 +103,7 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
         m_component->AddDrawItem( newItem );
     }
 
-    // Remove duplicated drawings:
     m_component->RemoveDuplicateDrawItems();
-
-    // Clear flags
     m_component->ClearSelectedItems();
 
     GetScreen()->SetModify();
@@ -127,7 +114,7 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
 
 
 /*
- * Save in file the current symbol.
+ * Save the current symbol to a file.
  *
  * The symbol file format is like the standard libraries, but there is only
  * one symbol.
@@ -137,7 +124,6 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
 void WinEDA_LibeditFrame::SaveOneSymbol()
 {
     wxString msg;
-    FILE*    ExportFile;
 
     if( m_component->GetDrawItemList().empty() )
         return;
@@ -160,49 +146,56 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
 
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 
-    ExportFile = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
+    wxFFile file( fn.GetFullPath(), wxT( "wt" ) );
 
-    if( ExportFile == NULL )
+    if( !file.IsOpened() )
     {
-        msg.Printf( _( "Unable to create <%s>" ),
+        msg.Printf( _( "Unable to create file <%s>" ),
                     GetChars( fn.GetFullPath() ) );
         DisplayError( this, msg );
         return;
     }
 
-    msg.Printf( _( "Save Symbol in [%s]" ), GetChars( fn.GetPath() ) );
+    msg.Printf( _( "Saving symbol in [%s]" ), GetChars( fn.GetPath() ) );
     Affiche_Message( msg );
 
-    char Line[256];
-    fprintf( ExportFile, "%s %d.%d  %s  Date: %s\n", LIBFILE_IDENT,
-             LIB_VERSION_MAJOR, LIB_VERSION_MINOR,
-             "SYMBOL", DateAndTime( Line ) );
+    wxString line;
 
-    /* Component name. */
-    fprintf( ExportFile, "# SYMBOL %s\n#\n",
-             CONV_TO_UTF8( m_component->GetName() ) );
+    /* File header */
+    line << wxT( LIBFILE_IDENT ) << wxT( " " ) << LIB_VERSION_MAJOR
+         << wxT( "." ) << LIB_VERSION_MINOR << wxT( "  SYMBOL  " )
+         << wxT( "Date: " ) << DateAndTime() << wxT( "\n" );
 
-    fprintf( ExportFile, "DEF %s",
-             CONV_TO_UTF8( m_component->GetName() ) );
+    /* Component name comment and definition. */
+    line << wxT( "# SYMBOL " ) << m_component->GetName() << wxT( "\n#\nDEF " )
+         << m_component->GetName() << wxT( " " );
+
     if( !m_component->GetReferenceField().m_Text.IsEmpty() )
-        fprintf( ExportFile, " %s",
-                 CONV_TO_UTF8( m_component->GetReferenceField().m_Text ) );
+        line << m_component->GetReferenceField().m_Text << wxT( " " );
     else
-        fprintf( ExportFile, " ~" );
+        line << wxT( "~ " );
 
-    fprintf( ExportFile, " %d %d %c %c %d %d %c\n",
-             0, /* unused */
-             m_component->m_TextInside,
-             m_component->m_DrawPinNum ? 'Y' : 'N',
-             m_component->m_DrawPinName ? 'Y' : 'N',
-             1, 0 /* unused */, 'N' );
+    line << 0 << wxT( " " ) << m_component->m_TextInside << wxT( " " );
 
-    m_component->GetReferenceField().Save( ExportFile );
-    m_component->GetValueField().Save( ExportFile );
+    if( m_component->m_DrawPinNum )
+        line << wxT( "Y " );
+    else
+        line << wxT( "N " );
+
+    if( m_component->m_DrawPinName )
+        line << wxT( "Y " );
+    else
+        line << wxT( "N " );
+
+    line << wxT( "1 0 N\n" );
+
+    if( !file.Write( line )
+        || !m_component->GetReferenceField().Save( file.fp() )
+        || !m_component->GetValueField().Save( file.fp() )
+        || !file.Write( wxT( "DRAW\n" ) ) )
+        return;
 
     LIB_DRAW_ITEM_LIST& drawList = m_component->GetDrawItemList();
-
-    fprintf( ExportFile, "DRAW\n" );
 
     BOOST_FOREACH( LIB_DRAW_ITEM& item, drawList )
     {
@@ -214,19 +207,20 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
         if( m_convert && item.m_Convert && ( item.m_Convert != m_convert ) )
             continue;
 
-        item.Save( ExportFile );
+        if( !item.Save( file.fp() ) )
+            return;
     }
 
-    fprintf( ExportFile, "ENDDRAW\n" );
-    fprintf( ExportFile, "ENDDEF\n" );
-    fclose( ExportFile );
+    if( !file.Write( wxT( "ENDDRAW\n" ) )
+        || !file.Write( wxT( "ENDDEF\n" ) ) )
+        return;
 }
 
 
 /*
  * Place anchor reference coordinators for current component
  *
- * All coordinates of the object are offset to the cursor position * /
+ * All coordinates of the object are offset to the cursor position.
  */
 void WinEDA_LibeditFrame::PlaceAncre()
 {

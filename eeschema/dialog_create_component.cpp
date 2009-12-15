@@ -114,10 +114,10 @@ void WinEDA_CreateCmpDialog::SetComponentData( LIB_COMPONENT & component )
 	else
 		component.m_TextInside = m_SetSkew->GetValue();
 
-	if ( m_IsPowerSymbol->GetValue() == TRUE)
-		component.m_Options = ENTRY_POWER;
+	if ( m_IsPowerSymbol->GetValue() == TRUE )
+		component.SetPower();
 	else
-		component.m_Options = ENTRY_NORMAL;
+		component.SetNormal();
 
 	/* Set the option "Units locked".
 	Obviously, cannot be TRUE if there is only one part */

@@ -51,8 +51,8 @@ void WinEDA_ViewlibFrame::Process_Special_Functions( wxCommandEvent& event )
         LibEntry = CMP_LIBRARY::FindLibraryEntry( m_entryName,
                                                   m_libraryName );
 
-        if( LibEntry && ( !LibEntry->m_DocFile.IsEmpty() ) )
-            GetAssociatedDocument( this, LibEntry->m_DocFile,
+        if( LibEntry && ( !LibEntry->GetDocFileName().IsEmpty() ) )
+            GetAssociatedDocument( this, LibEntry->GetDocFileName(),
                                    &wxGetApp().GetLibraryPathList() );
         break;
 
@@ -280,12 +280,12 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     DrawPanel->DrawBackGround( DC );
 
-    if( entry->Type != ROOT )
+    if( entry->isAlias() )
     {
         LIB_ALIAS* alias = (LIB_ALIAS*) entry;
         component = alias->GetComponent();
 
-        wxASSERT( component != NULL && component->Type == ROOT );
+        wxASSERT( component != NULL && component->isComponent() );
 
         msg = alias->GetName();
 
@@ -313,8 +313,8 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     ClearMsgPanel();
     AppendMsgPanel( _( "Part" ), component->GetName(), BLUE, 6 );
     AppendMsgPanel( _( "Alias" ), msg, RED, 6 );
-    AppendMsgPanel( _( "Description" ), entry->m_Doc, CYAN, 6 );
-    AppendMsgPanel( _( "Key words" ), entry->m_KeyWord, DARKDARKGRAY );
+    AppendMsgPanel( _( "Description" ), entry->GetDescription(), CYAN, 6 );
+    AppendMsgPanel( _( "Key words" ), entry->GetKeyWords(), DARKDARKGRAY );
 
     DrawPanel->Trace_Curseur( DC );
 }

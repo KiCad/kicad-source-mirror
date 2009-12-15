@@ -38,19 +38,26 @@ enum  LibrEntryOptions
  */
 class CMP_LIB_ENTRY : public EDA_BaseStruct
 {
-public:
-    LibrEntryType    Type;      /* Type = ROOT;
-                                 *      = ALIAS pour struct LibraryAliasType */
-    wxString         m_Doc;     /* documentation for info */
-    wxString         m_KeyWord; /* keyword list (used to select a group of
-                                 * components by keyword) */
-    wxString         m_DocFile; /* Associate doc file name */
-    LibrEntryOptions m_Options; // special features (i.e. Entry is a POWER)
+
+protected:
+    wxString         name;
+
+    /** Library object that entry is attached to. */
+    CMP_LIBRARY*     library;
+
+    /** Entry type, either ROOT or ALIAS. */
+    LibrEntryType    type;
+
+    wxString         description;  /* documentation for info */
+    wxString         keyWords;     /* keyword list (used for search for
+                                    * components by keyword) */
+    wxString         docFileName;  /* Associate doc file name */
+    LibrEntryOptions options;      // special features (i.e. Entry is a POWER)
 
 public:
-    CMP_LIB_ENTRY( LibrEntryType CmpType, const wxString& name,
-                   CMP_LIBRARY* lib = NULL );
-    CMP_LIB_ENTRY( CMP_LIB_ENTRY& entry, CMP_LIBRARY* lib = NULL );
+    CMP_LIB_ENTRY( LibrEntryType aType, const wxString& aName,
+                   CMP_LIBRARY* aLibrary = NULL );
+    CMP_LIB_ENTRY( CMP_LIB_ENTRY& aEntry, CMP_LIBRARY* aLibrary = NULL );
 
     virtual ~CMP_LIB_ENTRY();
 
@@ -61,9 +68,42 @@ public:
 
     wxString GetLibraryName();
 
-    virtual const wxString& GetName() const { return m_Name; }
+    virtual const wxString& GetName() const { return name; }
 
-    virtual void SetName( const wxString& name ) { m_Name = name; }
+    virtual void SetName( const wxString& aName ) { name = aName; }
+
+    bool isComponent() { return type == ROOT; }
+
+    bool isAlias() { return type == ALIAS; }
+
+    int GetType() { return type; }
+
+    bool isPower() { return options == ENTRY_POWER; }
+    bool isNormal() { return options == ENTRY_NORMAL; }
+
+    void SetPower() { options = ENTRY_POWER; }
+    void SetNormal() { options = ENTRY_NORMAL; }
+
+    void SetDescription( const wxString& aDescription )
+    {
+        description = aDescription;
+    }
+
+    wxString GetDescription() { return description; }
+
+    void SetKeyWords( const wxString& aKeyWords )
+    {
+        keyWords = aKeyWords;
+    }
+
+    wxString GetKeyWords() { return keyWords; }
+
+    void SetDocFileName( const wxString& aDocFileName )
+    {
+        docFileName = aDocFileName;
+    }
+
+    wxString GetDocFileName() { return docFileName; }
 
     /**
      * Write the entry document information to a FILE in "*.dcm" format.
@@ -76,26 +116,19 @@ public:
     /**
      * Case insensitive comparison of the component entry name.
      */
-    bool operator==( const wxChar* name ) const;
-    bool operator!=( const wxChar* name ) const
+    bool operator==( const wxChar* aName ) const;
+    bool operator!=( const wxChar* aName ) const
     {
-        return !( *this == name );
+        return !( *this == aName );
     }
-
-protected:
-    wxString         m_Name;
-
-    /** Library object that entry is attached to. */
-    CMP_LIBRARY*     m_lib;
 };
 
 
 typedef boost::ptr_vector< CMP_LIB_ENTRY > LIB_ENTRY_LIST;
 
-extern bool operator<( const CMP_LIB_ENTRY& item1, const CMP_LIB_ENTRY& item2 );
+extern bool operator<( const CMP_LIB_ENTRY& aItem1, const CMP_LIB_ENTRY& aItem2 );
 
-extern int LibraryEntryCompare( const CMP_LIB_ENTRY* LE1,
-                                const CMP_LIB_ENTRY* LE2 );
+extern int LibraryEntryCompare( const CMP_LIB_ENTRY* aItem1, const CMP_LIB_ENTRY* aItem2 );
 
 
 /**
@@ -126,8 +159,8 @@ public:
     long               m_LastDate;       // Last change Date
 
 protected:
-    int                m_UnitCount;      /* Units (or sections) per package */
-    LIB_DRAW_ITEM_LIST m_Drawings;       /* How to draw this part */
+    int                unitCount;      /* Units (parts) per package */
+    LIB_DRAW_ITEM_LIST drawings;       /* How to draw this part */
 
 public:
     virtual wxString GetClass() const
@@ -136,21 +169,21 @@ public:
     }
 
 
-    virtual void SetName( const wxString& name )
+    virtual void SetName( const wxString& aName )
     {
-        CMP_LIB_ENTRY::SetName( name );
-        GetValueField().m_Text = name;
+        CMP_LIB_ENTRY::SetName( aName );
+        GetValueField().m_Text = aName;
     }
 
-    LIB_COMPONENT( const wxString& name, CMP_LIBRARY* lib = NULL );
-    LIB_COMPONENT( LIB_COMPONENT& component, CMP_LIBRARY* lib = NULL );
+    LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary = NULL );
+    LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary = NULL );
 
     ~LIB_COMPONENT();
 
-    EDA_Rect GetBoundaryBox( int Unit, int Convert );
+    EDA_Rect GetBoundaryBox( int aUnit, int aConvert );
 
-    bool SaveDateAndTime( FILE* ExportFile );
-    bool LoadDateAndTime( char* Line );
+    bool SaveDateAndTime( FILE* aFile );
+    bool LoadDateAndTime( char* aLine );
 
     /**
      * Write the data structures out to a FILE in "*.lib" format.
@@ -161,21 +194,21 @@ public:
     bool Save( FILE* aFile );
 
     /**
-     * Load component definition from file.
+     * Load component definition from /a aFile.
      *
-     * @param file - File descriptor of file to load form.
-     * @param line - The first line of the component definition.
-     * @param lineNum - The current line number in the file.
-     * @param errorMsg - Description of error on load failure.
+     * @param aFile - File descriptor of file to load form.
+     * @param aLine - The first line of the component definition.
+     * @param aLineNum - The current line number in the file.
+     * @param aErrorMsg - Description of error on load failure.
      * @return True if the load was successful, false if there was an error.
      */
-    bool Load( FILE* file, char* line, int* lineNum, wxString& errorMsg );
-    bool LoadField( char* line, wxString& errorMsg );
-    bool LoadDrawEntries( FILE* f, char* line,
-                          int* lineNum, wxString& errorMsg );
-    bool LoadAliases( char* line, wxString& Error );
-    bool LoadFootprints( FILE* file, char* line,
-                         int* lineNum, wxString& errorMsg );
+    bool Load( FILE* aFile, char* aLine, int* aLineNum, wxString& aErrorMsg );
+    bool LoadField( char* aLine, wxString& aErrorMsg );
+    bool LoadDrawEntries( FILE* aFile, char* aLine,
+                          int* aLineNum, wxString& aErrorMsg );
+    bool LoadAliases( char* aLine, wxString& aErrorMsg );
+    bool LoadFootprints( FILE* aFile, char* aLine,
+                         int* aLineNum, wxString& aErrorMsg );
 
     /**
      * Initialize fields from a vector of fields.
@@ -187,90 +220,90 @@ public:
     /**
      * Return list of field references of component.
      *
-     * @param list - List to add field references to.
+     * @param aList - List to add field references to.
      */
-    void GetFields( LIB_FIELD_LIST& list );
+    void GetFields( LIB_FIELD_LIST& aList );
 
     /**
      * Return pointer to the requested field.
      *
-     * @param id - Id of field to return.
+     * @param aId - Id of field to return.
      * @return The field if found, otherwise NULL.
      */
-    LIB_FIELD* GetField( int id );
+    LIB_FIELD* GetField( int aId );
 
     /** Return reference to the value field. */
-    LIB_FIELD& GetValueField( void );
+    LIB_FIELD& GetValueField();
 
     /** Return reference to the reference designator field. */
-    LIB_FIELD& GetReferenceField( void );
+    LIB_FIELD& GetReferenceField();
 
     /**
      * Draw component.
      *
-     * @param panel - Window to draw on.
-     * @param dc - Device context to draw on.
-     * @param offset - Position to component.
-     * @param multi - Component unit if multiple parts per component.
-     * @param convert - Component conversion (DeMorgan) if available.
-     * @param drawMode - Device context drawing mode, see wxDC.
-     * @param color - Color to draw component.
-     * @param transformMatrix - Coordinate adjustment settings.
-     * @param showPinText - Show pin text if true.
-     * @param drawFields - Draw field text if true otherwise just draw
-     *                     body items (useful to draw a body in schematic,
-     *                     because fields of schematic components replace
-     *                     the lib component fields).
-     * @param onlySelected - Draws only the body items that are selected.
-     *                       Used for block move redraws.
+     * @param aPanel - Window to draw on.
+     * @param aDc - Device context to draw on.
+     * @param aOffset - Position to component.
+     * @param aMulti - Component unit if multiple parts per component.
+     * @param aConvert - Component conversion (DeMorgan) if available.
+     * @param aDrawMode - Device context drawing mode, see wxDC.
+     * @param aColor - Color to draw component.
+     * @param aTransformMatrix - Coordinate adjustment settings.
+     * @param aShowPinText - Show pin text if true.
+     * @param aDrawFields - Draw field text if true otherwise just draw
+     *                      body items (useful to draw a body in schematic,
+     *                      because fields of schematic components replace
+     *                      the lib component fields).
+     * @param aOnlySelected - Draws only the body items that are selected.
+     *                        Used for block move redraws.
      */
-    void Draw( WinEDA_DrawPanel* panel, wxDC* dc, const wxPoint& offset,
-               int multi, int convert, int drawMode, int color = -1,
-               const int transformMatrix[2][2] = DefaultTransformMatrix,
-               bool showPinText = true, bool drawFields = true,
-               bool onlySelected = false );
+    void Draw( WinEDA_DrawPanel* aPanel, wxDC* aDc, const wxPoint& aOffset,
+               int aMulti, int aConvert, int aDrawMode, int aColor = -1,
+               const int aTransform[2][2] = DefaultTransformMatrix,
+               bool aShowPinText = true, bool aDrawFields = true,
+               bool aOnlySelected = false );
 
     /**
      * Plot component to plotter.
      *
-     * @param plotter - Plotter object to plot to.
-     * @param unit - Component part to plot.
-     * @param convert - Component alternate body style to plot.
-     * @param transform - Component plot transform matrix.
+     * @param aPlotter - Plotter object to plot to.
+     * @param aUnit - Component part to plot.
+     * @param aConvert - Component alternate body style to plot.
+     * @param aTransform - Component plot transform matrix.
      */
-    void Plot( PLOTTER* plotter, int unit, int convert, const wxPoint& offset,
-               const int transform[2][2] );
+    void Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& aOffset,
+               const int aTransform[2][2] );
 
     /**
-     * Add a new draw item to the draw object list.
+     * Add a new draw /a aItem to the draw object list.
      *
      * @param item - New draw object to add to component.
      */
-    void AddDrawItem( LIB_DRAW_ITEM* item );
+    void AddDrawItem( LIB_DRAW_ITEM* aItem );
 
     /**
-     * Remove draw item from list.
+     * Remove draw /a aItem from list.
      *
-     * @param item - Draw item to remove from list.
-     * @param panel - Panel to remove part from.
-     * @param dc - Device context to remove part from.
+     * @param aItem - Draw item to remove from list.
+     * @param aPanel - Panel to remove part from.
+     * @param aDc - Device context to remove part from.
      */
-    void RemoveDrawItem( LIB_DRAW_ITEM* item,
-                         WinEDA_DrawPanel* panel = NULL,
-                         wxDC* dc = NULL );
+    void RemoveDrawItem( LIB_DRAW_ITEM* aItem,
+                         WinEDA_DrawPanel* aPanel = NULL,
+                         wxDC* aDc = NULL );
 
     /**
      * Return the next draw object pointer.
      *
-     * @param item - Pointer to the current draw item.  Setting item NULL
-     *               with return the first item of type in the list.
-     * @param type - type of searched item (filter).
-     *               if TYPE_NOT_INIT search for all items types
+     * @param aItem - Pointer to the current draw item.  Setting item NULL
+     *                with return the first item of type in the list.
+     * @param aType - type of searched item (filter).
+     *                if TYPE_NOT_INIT search for all items types
      * @return - The next drawing object in the list if found, otherwise NULL.
      */
 
-    LIB_DRAW_ITEM* GetNextDrawItem( LIB_DRAW_ITEM* item = NULL,
-                                    KICAD_T type = TYPE_NOT_INIT );
+    LIB_DRAW_ITEM* GetNextDrawItem( LIB_DRAW_ITEM* aItem = NULL,
+                                    KICAD_T aType = TYPE_NOT_INIT );
 
     /**
      * Return the next pin object from the draw list.
@@ -281,9 +314,9 @@ public:
      *               first pin in the draw object list.
      * @return - The next pin object in the list if found, otherwise NULL.
      */
-    LIB_PIN* GetNextPin( LIB_PIN* item = NULL )
+    LIB_PIN* GetNextPin( LIB_PIN* aItem = NULL )
     {
-        return (LIB_PIN*) GetNextDrawItem( (LIB_DRAW_ITEM*) item,
+        return (LIB_PIN*) GetNextDrawItem( (LIB_DRAW_ITEM*) aItem,
                                            COMPONENT_PIN_DRAW_TYPE );
     }
 
@@ -295,32 +328,32 @@ public:
      * Deleting any of the objects will leave list in a unstable state
      * and will likely segfault when the list is destroyed.
      *
-     * @param list - Pin list to place pin object pointers into.
-     * @param unit - Unit number of pin to add to list.  Set to 0 to
-     *               get pins from any component part.
-     * @param convert - Convert number of pin to add to list.  Set to 0 to
-     *                  get pins from any convert of component.
+     * @param aList - Pin list to place pin object pointers into.
+     * @param aUnit - Unit number of pin to add to list.  Set to 0 to
+     *                get pins from any component part.
+     * @param aConvert - Convert number of pin to add to list.  Set to 0 to
+     *                   get pins from any convert of component.
      */
-    void GetPins( LIB_PIN_LIST& pins, int unit = 0, int convert = 0 );
+    void GetPins( LIB_PIN_LIST& aList, int aUnit = 0, int aConvert = 0 );
 
     /**
-     * Return pin object with the requested pin number.
+     * Return pin object with the requested pin /a aNumber.
      *
-     * @param number - Number of the pin to find.
-     * @param unit - Unit of the component to find.  Set to 0 if a specific
-     *               unit number is not required.
-     * @param convert - Alternate body style filter (DeMorgan).  Set to 0 if
-     *                  no alternate body style is required.
+     * @param aNumber - Number of the pin to find.
+     * @param aUnit - Unit of the component to find.  Set to 0 if a specific
+     *                unit number is not required.
+     * @param aConvert - Alternate body style filter (DeMorgan).  Set to 0 if
+     *                   no alternate body style is required.
      * @return The pin object if found.  Otherwise NULL.
      */
-    LIB_PIN* GetPin( const wxString& number, int unit = 0, int convert = 0 );
+    LIB_PIN* GetPin( const wxString& aNumber, int aUnit = 0, int aConvert = 0 );
 
     /**
-     * Move the component offset.
+     * Move the component /a aOffset.
      *
-     * @param offset - Offset displacement.
+     * @param aOffset - Offset displacement.
      */
-    void SetOffset( const wxPoint& offset );
+    void SetOffset( const wxPoint& aOffset );
 
     /**
      * Remove duplicate draw items from list.
@@ -335,23 +368,23 @@ public:
     bool HasConversion() const;
 
     /**
-     * Test if alias name is in component alias list.
+     * Test if alias /a aName is in component alias list.
      *
      * Alias name comparisons are case insensitive.
      *
-     * @param name - Name of alias.
+     * @param aName - Name of alias.
      * @return True if alias name in alias list.
      */
-    bool HasAlias( const wxChar* name )
+    bool HasAlias( const wxChar* aName )
     {
-        wxASSERT( name != NULL );
-        return m_AliasList.Index( name ) != wxNOT_FOUND;
+        wxASSERT( aName != NULL );
+        return m_AliasList.Index( aName ) != wxNOT_FOUND;
     }
 
     /**
      * Clears the status flag all draw objects in this component.
      */
-    void ClearStatus( void );
+    void ClearStatus();
 
     /**
      * Checks all draw objects of component to see if they are with block.
@@ -359,21 +392,21 @@ public:
      * Use this method to mark draw objects as selected during block
      * functions.
      *
-     * @param rect - The bounding rectangle to test in draw items are inside.
-     * @param unit - The current unit number to test against.
-     * @param convert - Are the draw items being selected a conversion.
-     * @param editPinByPin - Used to ignore pin selections when in edit pin
-     *                       by pin mode is enabled.
+     * @param aRect - The bounding rectangle to test in draw items are inside.
+     * @param aUnit - The current unit number to test against.
+     * @param aConvert - Are the draw items being selected a conversion.
+     * @param aEditPinByPin - Used to ignore pin selections when in edit pin
+     *                        by pin mode is enabled.
      * @return The number of draw objects found inside the block select
      *         rectangle.
      */
-    int SelectItems( EDA_Rect& rect, int unit, int convert,
-                     bool editPinByPin );
+    int SelectItems( EDA_Rect& aRect, int aUnit, int aConvert,
+                     bool aEditPinByPin );
 
     /**
      * Clears all the draw items marked by a block select.
      */
-    void ClearSelectedItems( void );
+    void ClearSelectedItems();
 
     /**
      * Deletes the select draw items marked by a block select.
@@ -382,12 +415,12 @@ public:
      * minimum drawing items required for any component.  Their properties
      * can be changed but the cannot be removed.
      */
-    void DeleteSelectedItems( void );
+    void DeleteSelectedItems();
 
     /**
      * Move the selected draw items marked by a block select.
      */
-    void MoveSelectedItems( const wxPoint& offset );
+    void MoveSelectedItems( const wxPoint& aOffset );
 
     /**
      * Make a copy of the selected draw items marked by a block select.
@@ -396,47 +429,47 @@ public:
      * Copying fields would result in duplicate fields which does not
      * make sense in this context.
      */
-    void CopySelectedItems( const wxPoint& offset );
+    void CopySelectedItems( const wxPoint& aOffset );
 
     /**
      * Horizontally (X axis) mirror selected draw items about a point.
      *
-     * @param center - Center point to mirror around.
+     * @param aCenter - Center point to mirror around.
      */
-    void MirrorSelectedItemsH( const wxPoint& center );
+    void MirrorSelectedItemsH( const wxPoint& aCenter );
 
     /**
      * Locate a draw object.
      *
-     * @param unit - Unit number of draw item.
-     * @param convert - Body style of draw item.
-     * @param type - Draw object type, set to 0 to search for any type.
-     * @param pt - Coordinate for hit testing.
+     * @param aUnit - Unit number of draw item.
+     * @param aConvert - Body style of draw item.
+     * @param aType - Draw object type, set to 0 to search for any type.
+     * @param aPoint - Coordinate for hit testing.
      * @return The draw object if found.  Otherwise NULL.
      */
-    LIB_DRAW_ITEM* LocateDrawItem( int unit, int convert, KICAD_T type,
-                                   const wxPoint& pt );
+    LIB_DRAW_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
+                                   const wxPoint& aPoint );
 
     /**
      * Locate a draw object (overlaid)
      *
-     * @param unit - Unit number of draw item.
-     * @param convert - Body style of draw item.
-     * @param type - Draw object type, set to 0 to search for any type.
-     * @param pt - Coordinate for hit testing.
-     * @param aTransMat = the transform matrix
+     * @param aUnit - Unit number of draw item.
+     * @param aConvert - Body style of draw item.
+     * @param aType - Draw object type, set to 0 to search for any type.
+     * @param aPoint - Coordinate for hit testing.
+     * @param aTransform = the transform matrix
      * @return The draw object if found.  Otherwise NULL.
      */
-    LIB_DRAW_ITEM* LocateDrawItem( int unit, int convert, KICAD_T type,
-                                   const wxPoint& pt,
-                                   const int aTransMat[2][2] );
+    LIB_DRAW_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
+                                   const wxPoint& aPoint,
+                                   const int aTransfrom[2][2] );
 
     /**
      * Return a reference to the draw item list.
      *
      * @return LIB_DRAW_ITEM_LIST& - Reference to the draw item object list.
      */
-    LIB_DRAW_ITEM_LIST& GetDrawItemList( void ) { return m_Drawings; }
+    LIB_DRAW_ITEM_LIST& GetDrawItemList() { return drawings; }
 
     /**
      * Set the part per package count.
@@ -450,7 +483,7 @@ public:
      */
     void SetPartCount( int count );
 
-    int GetPartCount( void ) { return m_UnitCount; }
+    int GetPartCount() { return unitCount; }
 
     /**
      * Set or clear the alternate body style (DeMorgan) for the component.
@@ -461,9 +494,9 @@ public:
      * asConvert is true, than the base draw items are duplicated and
      * added to the component.
      *
-     * @param asConvert - Set or clear the component alternate body style.
+     * @param aSetConvert - Set or clear the component alternate body style.
      */
-    void SetConversion( bool asConvert );
+    void SetConversion( bool aSetConvert );
 };
 
 
@@ -476,12 +509,19 @@ public:
 class LIB_ALIAS : public CMP_LIB_ENTRY
 {
 protected:
-    LIB_COMPONENT* m_root;    /* Root component of the alias. */
+    /**
+     * The actual component of the alias.
+     *
+     * @note - Do not delete the root component.  The root component is owned
+     *         by library the component is part of.  Deleting the root component
+     *         will likely cause EESchema to crash.
+     */
+    LIB_COMPONENT* root;
 
 public:
-    LIB_ALIAS( const wxString& name, LIB_COMPONENT* root,
-               CMP_LIBRARY* lib = NULL );
-    LIB_ALIAS( LIB_ALIAS& alias, CMP_LIBRARY* lib = NULL );
+    LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aComponent,
+               CMP_LIBRARY* aLibrary = NULL );
+    LIB_ALIAS( LIB_ALIAS& aAlias, CMP_LIBRARY* aLibrary = NULL );
     ~LIB_ALIAS();
 
     virtual wxString GetClass() const
@@ -492,15 +532,15 @@ public:
     /**
      * Get the alias root component.
      */
-    LIB_COMPONENT* GetComponent( void ) const
+    LIB_COMPONENT* GetComponent() const
     {
-        return m_root;
+        return root;
     }
 
     /**
      * Set the alias root component.
      */
-    void SetComponent( LIB_COMPONENT* component );
+    void SetComponent( LIB_COMPONENT* aComponent );
 };
 
 

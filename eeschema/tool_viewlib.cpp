@@ -159,7 +159,7 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
     SelpartBox->Enable( parts_count > 1 );
 
     m_HToolBar->EnableTool( ID_LIBVIEW_VIEWDOC,
-                            entry && ( entry->m_DocFile != wxEmptyString ) );
+                            entry && ( entry->GetDocFileName() != wxEmptyString ) );
 }
 
 

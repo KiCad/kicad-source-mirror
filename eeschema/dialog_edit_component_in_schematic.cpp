@@ -267,7 +267,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     LIB_COMPONENT* entry =
         CMP_LIBRARY::FindLibraryComponent( m_Cmp->m_ChipName );
 
-    if( entry &&  entry->m_Options == ENTRY_POWER )
+    if( entry &&  entry->isPower() )
         m_FieldsBuf[VALUE].m_Text = m_Cmp->m_ChipName;
 
     // copy all the fields back, and change the length of m_Fields.
@@ -527,7 +527,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
 
     // For power symbols, the value is NOR editable, because value and pin
     // name must be same and can be edited only in library editor
-    if( fieldNdx == VALUE && m_LibEntry && m_LibEntry->m_Options == ENTRY_POWER )
+    if( fieldNdx == VALUE && m_LibEntry && m_LibEntry->isPower() )
         fieldValueTextCtrl->Enable( false );
     else
         fieldValueTextCtrl->Enable( true );

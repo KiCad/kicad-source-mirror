@@ -525,7 +525,7 @@ LIB_PIN* SCH_COMPONENT::GetPin( const wxString& number )
     if( Entry == NULL )
         return NULL;
 
-    wxASSERT( Entry->Type == ROOT );
+    wxASSERT( Entry->isComponent() );
 
     return Entry->GetPin( number, m_Multi, m_Convert );
 }
@@ -1099,7 +1099,7 @@ void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
                            GetRef(((WinEDA_SchematicFrame*)frame)->GetSheet()),
                            DARKCYAN );
 
-    if( Entry->m_Options == ENTRY_POWER )
+    if( Entry->isPower() )
         msg = _( "Power symbol" );
     else
         msg = _( "Name" );
@@ -1110,8 +1110,8 @@ void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
     msg = Entry->GetLibraryName();
 
     frame->AppendMsgPanel( _( "Library" ), msg, DARKRED );
-    frame->AppendMsgPanel( _( "Description" ), Entry->m_Doc, DARKCYAN );
-    frame->AppendMsgPanel( _( "Key words" ), Entry->m_KeyWord, DARKCYAN );
+    frame->AppendMsgPanel( _( "Description" ), Entry->GetDescription(), DARKCYAN );
+    frame->AppendMsgPanel( _( "Key words" ), Entry->GetKeyWords(), DARKCYAN );
 }
 
 /** virtual function Mirror_Y

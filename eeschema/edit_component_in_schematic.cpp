@@ -102,7 +102,7 @@ void WinEDA_SchematicFrame::EditCmpFieldText( SCH_FIELD* Field, wxDC* DC )
     {
         Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->m_ChipName );
 
-        if( Entry && (Entry->m_Options == ENTRY_POWER) )
+        if( Entry && Entry->isPower() )
         {
             DisplayInfoMessage( this, _( "Part is a POWER, value cannot be \
 modified!\nYou must create a new power"  ) );

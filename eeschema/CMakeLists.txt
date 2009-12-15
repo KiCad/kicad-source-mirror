@@ -65,6 +65,8 @@ set(EESCHEMA_SRCS
     dialog_lib_new_component_base.cpp
     dialog_print_using_printer_base.cpp
     dialog_print_using_printer.cpp
+    dialog_sch_sheet_props.cpp
+    dialog_sch_sheet_props_base.cpp
     dialog_SVG_print.cpp
     dialog_SVG_print_base.cpp
     edit_component_in_lib.cpp

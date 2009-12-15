@@ -61,15 +61,13 @@ class CMP_LIBRARY
 {
 public:
     int            m_Type;         /* type indicator */
-    wxString       m_Header;       /* first line of loaded library. */
-    unsigned long  m_TimeStamp;    // Signature temporelle
-    int            m_Flags;        // variable used in some functions
+    int            m_Flags;
 
 public:
-    CMP_LIBRARY( int type, const wxFileName& fullname );
-    CMP_LIBRARY( int type, const wxString& fullname )
+    CMP_LIBRARY( int aType, const wxFileName& aFileName );
+    CMP_LIBRARY( int aType, const wxString& aFileName )
     {
-        CMP_LIBRARY( type, wxFileName( fullname ) );
+        CMP_LIBRARY( aType, wxFileName( aFileName ) );
     }
     ~CMP_LIBRARY();
 
@@ -86,12 +84,12 @@ public:
      * component library already exists, it is backup up in file *.bak.
      *
      * @param aFullFileName - The library filename with path.
-     * @param oldDocFormat - Save the document information in a separate
-     *                       file if true.  The default is to save as the
-     *                       current library file format.
+     * @param aOldDocFormat - Save the document information in a separate
+     *                        file if true.  The default is to save as the
+     *                        current library file format.
      * @return True if success writing else false.
      */
-    bool Save( const wxString& aFullFileName, bool oldDocFormat = false );
+    bool Save( const wxString& aFullFileName, bool aOldDocFormat = false );
 
     /**
      * Save library document information to file.
@@ -102,25 +100,25 @@ public:
      * @param aFullFileName - The library filename with path.
      * @return True if success writing else false.
      */
-    bool SaveDocFile( const wxString& FullFileName );
+    bool SaveDocFile( const wxString& aFullFileName );
 
     /**
      * Load library from file.
      *
-     * @param errMsg - Error message if load fails.
+     * @param aErrorMsg - Error message if load fails.
      * @return True if load was successful otherwise false.
      */
-    bool Load( wxString& errMsg );
+    bool Load( wxString& aErrorMsg );
 
-    bool LoadDocs( wxString& errMsg );
+    bool LoadDocs( wxString& aErrorMsg );
 
 private:
-    bool SaveHeader( FILE* file );
+    bool SaveHeader( FILE* aFile );
 
-    bool LoadHeader( FILE* file, int* LineNum );
-    void LoadAliases( LIB_COMPONENT* component );
+    bool LoadHeader( FILE* aFile, int* aLineNum );
+    void LoadAliases( LIB_COMPONENT* aComponent );
 
-    void RemoveEntry( const wxString& name );
+    void RemoveEntry( const wxString& aName );
 
 public:
     /**
@@ -130,7 +128,7 @@ public:
      */
     bool IsEmpty() const
     {
-        return m_Entries.empty();
+        return entries.empty();
     }
 
     /**
@@ -140,29 +138,29 @@ public:
      */
     int GetCount() const
     {
-        return m_Entries.size();
+        return entries.size();
     }
 
     bool IsModified() const
     {
-        return m_IsModified;
+        return isModified;
     }
 
-    bool IsCache() const { return m_IsCache; }
+    bool IsCache() const { return isCache; }
 
-    void SetModified( void ) { m_IsModified = true; }
+    void SetModified( void ) { isModified = true; }
 
-    void SetCache( void ) { m_IsCache = true; }
+    void SetCache( void ) { isCache = true; }
 
     /**
      * Load a string array with the names of all the entries in this library.
      *
-     * @param names - String array to place entry names into.
-     * @param sort - Sort names if true.
-     * @param makeUpperCase - Force entry names to upper case.
+     * @param aNames - String array to place entry names into.
+     * @param aSort - Sort names if true.
+     * @param aMakeUpperCase - Force entry names to upper case.
      */
-    void GetEntryNames( wxArrayString& names, bool sort = true,
-                        bool makeUpperCase = true );
+    void GetEntryNames( wxArrayString& aNames, bool aSort = true,
+                        bool aMakeUpperCase = true );
 
     /**
      * Load string array with entry names matching name and/or key word.
@@ -171,72 +169,70 @@ public:
      * WildCompareString().  The names array will be populated with the
      * library entry names that meat the search criteria on exit.
      *
-     * @param names - String array to place entry names into.
-     * @param nameSearch - Name wild card search criteria.
-     * @param keySearch - Key word search criteria.
-     * @param sort - Sort names if true.
+     * @param aNames - String array to place entry names into.
+     * @param aNameSearch - Name wild card search criteria.
+     * @param aKeySearch - Key word search criteria.
+     * @param aSort - Sort names if true.
      */
-    void SearchEntryNames( wxArrayString& names,
-                           const wxString& nameSearch = wxEmptyString,
-                           const wxString& keySearch = wxEmptyString,
-                           bool sort = true );
+    void SearchEntryNames( wxArrayString& aNames,
+                           const wxString& aNameSearch = wxEmptyString,
+                           const wxString& aKeySearch = wxEmptyString,
+                           bool aSort = true );
 
     /**
      * Find components in library by key word regular expression search.
      *
-     * @param names - String array to place found component names into.
-     * @param re - Regular expression used to seach component key words.
-     * @param sort - Sort component name list.
+     * @param aNames - String array to place found component names into.
+     * @param aRe - Regular expression used to seach component key words.
+     * @param aSort - Sort component name list.
      */
-    void SearchEntryNames( wxArrayString& names, const wxRegEx& re,
-                           bool sort = true );
+    void SearchEntryNames( wxArrayString& aNames, const wxRegEx& aRe,
+                           bool aSort = true );
 
     /**
      * Find entry by name.
      *
-     * @param name - Name of entry, case insensitive.
-     * @return Pointer to entry if found.  NULL if not found.
+     * @param aName - Name of entry, case insensitive.
+     * @return Entry if found.  NULL if not found.
      */
-    CMP_LIB_ENTRY* FindEntry( const wxChar* name );
+    CMP_LIB_ENTRY* FindEntry( const wxChar* aName );
 
     /**
-     * Find entry by name and type.
+     * Find entry by /a aName and /a aType.
      *
-     * @param name - Name of entry, case insensitive.
-     * @param type - Type of entry, root or alias.
-     * @return Pointer to entry if found.  NULL if not found.
+     * @param aName - Name of entry, case insensitive.
+     * @param aType - Type of entry, root or alias.
+     * @return Entry if found.  NULL if not found.
      */
-    CMP_LIB_ENTRY* FindEntry( const wxChar* name, LibrEntryType type );
+    CMP_LIB_ENTRY* FindEntry( const wxChar* aName, LibrEntryType aType );
 
     /**
-     * Find component by name.
+     * Find component by /a aName.
      *
      * This is a helper for FindEntry so casting a CMP_LIB_ENTRY pointer to
      * a LIB_COMPONENT pointer is not required.
      *
-     * @param name - Name of component, case insensitive.
-     * @param searchAliases - Searches for component by alias name as well as
-     *                        component name if true.
-     * @return Pointer to component if found.  NULL if not found.
+     * @param aName - Name of component, case insensitive.
+     * @return Component if found.  NULL if not found.
      */
-    LIB_COMPONENT* FindComponent( const wxChar* name );
+    LIB_COMPONENT* FindComponent( const wxChar* aName );
 
     /**
-     * Find alias by name.
+     * Find alias by /a nName.
      *
      * This is a helper for FindEntry so casting a CMP_LIB_ENTRY pointer to
      * a LIB_ALIAS pointer is not required.
      *
-     * @param name - Name of alias, case insensitive.
-     * @return Pointer to alias if found.  NULL if not found.
+     * @param aName - Name of alias, case insensitive.
+     * @return Alias if found.  NULL if not found.
      */
-    LIB_ALIAS* FindAlias( const wxChar* name )
+    LIB_ALIAS* FindAlias( const wxChar* aName )
     {
-        return (LIB_ALIAS*) FindEntry( name, ALIAS );
+        return (LIB_ALIAS*) FindEntry( aName, ALIAS );
     }
 
     /**
-     * Add a new alias entry to the library.
+     * Add a new /a aAlias entry to the library.
      *
      * First check if a component or alias with the same name already exists
      * in the library and add alias if no conflict occurs.  Once the alias
@@ -244,21 +240,21 @@ public:
      * alias pointer will render the library unstable.  Use RemoveEntry to
      * remove the alias from the library.
      *
-     * @param alias - Alias to add to library.
-     * @return True if alias added to library.  False if conflict exists.
+     * @param aAlias - Alias to add to library.
+     * @return True if alias added to library.  False if a conflict exists.
      */
-    bool AddAlias( LIB_ALIAS* alias );
+    bool AddAlias( LIB_ALIAS* aAlias );
 
     /**
-     * Add component entry to library.
+     * Add /a aComponent entry to library.
      *
-     * @param cmp - Component to add.
-     * @return Pointer to added component if successful.
+     * @param aComponent - Component to add.
+     * @return Added component if successful.
      */
-    LIB_COMPONENT* AddComponent( LIB_COMPONENT* cmp );
+    LIB_COMPONENT* AddComponent( LIB_COMPONENT* aComponent );
 
     /**
-     * Remove an entry from the library.
+     * Remove an /a aEntry from the library.
      *
      * If the entry is an alias, the alias is removed from the library and from
      * the alias list of the root component.  If the entry is a root component
@@ -267,18 +263,18 @@ public:
      * the first alias and the root name for all remaining aliases are updated
      * to reflect the new root name.
      *
-     * @param entry - Entry to remove from library.
+     * @param aEntry - Entry to remove from library.
      */
-    void RemoveEntry( CMP_LIB_ENTRY* entry );
+    void RemoveEntry( CMP_LIB_ENTRY* aEntry );
 
     /**
      * Replace an existing component entry in the library.
      *
-     * @param oldComponent - The component to replace.
-     * @param newComponent - The new component.
+     * @param aOldComponent - The component to replace.
+     * @param aNewComponent - The new component.
      */
-    LIB_COMPONENT* ReplaceComponent( LIB_COMPONENT* oldComponent,
-                                     LIB_COMPONENT* newComponent );
+    LIB_COMPONENT* ReplaceComponent( LIB_COMPONENT* aOldComponent,
+                                     LIB_COMPONENT* aNewComponent );
 
     /**
      * Return the first entry in the library.
@@ -287,55 +283,55 @@ public:
      */
     CMP_LIB_ENTRY* GetFirstEntry()
     {
-        return &m_Entries.front();
+        return &entries.front();
     }
 
     /**
-     * Find next library entry by name.
+     * Find next library entry by /a aName.
      *
      * If the name of the entry is the last entry in the library, the first
      * entry in the list is returned.
      *
-     * @param name - Name of current entry.
-     * @return Pointer to next entry if entry name is found. Otherwise NULL.
+     * @param aName - Name of current entry.
+     * @return Next entry if entry name is found. Otherwise NULL.
      */
-    CMP_LIB_ENTRY* GetNextEntry( const wxChar* name );
+    CMP_LIB_ENTRY* GetNextEntry( const wxChar* aName );
 
 
     /**
-     * Find previous library entry by name.
+     * Find previous library entry by /a aName.
      *
      * If the name of the entry is the first entry in the library, the last
      * entry in the list is returned.
      *
-     * @param name - Name of current entry.
+     * @param aName - Name of current entry.
      * @return Previous entry if entry name is found, otherwise NULL.
      */
-    CMP_LIB_ENTRY* GetPreviousEntry( const wxChar* name );
+    CMP_LIB_ENTRY* GetPreviousEntry( const wxChar* aName );
 
     /**
      * Return the file name without path or extension.
      *
      * @return Name of library file.
      */
-    wxString GetName() const { return m_fileName.GetName(); }
+    wxString GetName() const { return fileName.GetName(); }
 
     /**
      * Return the full file library name with path and extension.
      *
      * @return Full library file name with path and extension.
      */
-    wxString GetFullFileName() { return m_fileName.GetFullPath(); }
+    wxString GetFullFileName() { return fileName.GetFullPath(); }
 
     /**
      * Set the component library file name.
      *
-     * @param fileName - New library file name.
+     * @param aFileName - New library file name.
      */
-    void SetFileName( const wxFileName fileName )
+    void SetFileName( const wxFileName aFileName )
     {
-        if( fileName != m_fileName )
-            m_fileName = fileName;
+        if( aFileName != fileName )
+            fileName = aFileName;
     }
 
     /*
@@ -348,57 +344,57 @@ public:
     /**
      * Load a component library file.
      *
-     * @param fileName - File name of the component library to load.
-     * @param errMsg - Error message if the component library failed to load.
+     * @param aFileName - File name of the component library to load.
+     * @param aErrorMsg - Error message if the component library failed to load.
      * @return Library object if library file loaded successfully,
      *         otherwise NULL.
      */
-    static CMP_LIBRARY* LoadLibrary( const wxFileName& fileName,
-                                     wxString& errMsg );
+    static CMP_LIBRARY* LoadLibrary( const wxFileName& aFileName,
+                                     wxString& aErrorMsg );
 
     /**
      * Add a compnent library to the library list.
      *
-     * @param fileName - File name object of component library.
-     * @param errMsg - Error message if the component library failed to load.
+     * @param aFileName - File name object of component library.
+     * @param aErrorMsg - Error message if the component library failed to load.
      * @return True if library loaded properly otherwise false.
      */
-    static bool AddLibrary( const wxFileName& fileName, wxString& errMsg );
+    static bool AddLibrary( const wxFileName& aFileName, wxString& aErrorMsg );
 
     /**
      * Insert a compnent library to the library list.
      *
-     * @param fileName - File name object of component library.
-     * @param errMsg - Error message if the component library failed to load.
-     * @param i - Iterator to insert library in front of.
+     * @param aFileName - File name object of component library.
+     * @param aErrerMsg - Error message if the component library failed to load.
+     * @param aIteratir - Iterator to insert library in front of.
      * @return True if library loaded properly otherwise false.
      */
-    static bool AddLibrary( const wxFileName& fileName, wxString& errMsg,
-                            CMP_LIBRARY_LIST::iterator& i );
+    static bool AddLibrary( const wxFileName& aFileName, wxString& aErrorMsg,
+                            CMP_LIBRARY_LIST::iterator& aIterator );
 
     /**
      * Remove component library from the library list.
      *
-     * @param name - Name of component library to remove.
+     * @param aName - Name of component library to remove.
      */
-    static void RemoveLibrary( const wxString& name );
+    static void RemoveLibrary( const wxString& aName );
 
     /**
-     * Find component library by name.
+     * Find component library by /a aName.
      *
-     * @param name - Library file name without path or extension to find.
-     * @return Pointer to component library if found, otherwise NULL.
+     * @param aName - Library file name without path or extension to find.
+     * @return Component library if found, otherwise NULL.
      */
-    static CMP_LIBRARY* FindLibrary( const wxString& name );
+    static CMP_LIBRARY* FindLibrary( const wxString& aName );
 
     /**
      * Get the list of component library file names without path and extension.
      *
-     * @param sorted - Sort the list of name if true.  Otherwise use the
-     *                 library load order.
+     * @param aSorted - Sort the list of name if true.  Otherwise use the
+     *                  library load order.
      * @return The list of library names.
      */
-    static wxArrayString GetLibraryNames( bool sorted = true );
+    static wxArrayString GetLibraryNames( bool aSorted = true );
 
     /**
      * Search all libraries in the list for a component.
@@ -406,60 +402,60 @@ public:
      * A component object will always be returned.  If the entry found
      * is an alias.  The root component will be found and returned.
      *
-     * @param name - Name of component to search for.
-     * @param libNaem - Name of the library to search for component.
+     * @param aCompoentName - Name of component to search for.
+     * @param aLibraryName - Name of the library to search for component.
      * @return The component object if found, otherwise NULL.
      */
-    static LIB_COMPONENT* FindLibraryComponent(
-        const wxString& name, const wxString& libName = wxEmptyString );
+    static LIB_COMPONENT* FindLibraryComponent( const wxString& aComponentName,
+                                                const wxString& aLibraryName = wxEmptyString );
 
     /**
      * Search all libraries in the list for an entry.
      *
      * The object can be either a component or an alias.
      *
-     * @param name - Name of component to search for.
-     * @param libNaem - Name of the library to search for entry.
+     * @param aEntryName - Name of entry to search for.
+     * @param aLibraryName - Name of the library to search.
      * @return The entry object if found, otherwise NULL.
      */
-    static CMP_LIB_ENTRY* FindLibraryEntry(
-        const wxString& name,
-        const wxString& libName = wxEmptyString );
+    static CMP_LIB_ENTRY* FindLibraryEntry( const wxString& aEntryName,
+                                            const wxString& aLibraryName = wxEmptyString );
 
     /**
      * Remove all cache libraries from library list.
      */
-    static void RemoveCacheLibrary( void );
+    static void RemoveCacheLibrary();
 
-    static int GetLibraryCount( void ) { return m_LibraryList.size(); }
+    static int GetLibraryCount() { return libraryList.size(); }
 
-    static CMP_LIBRARY_LIST& GetLibraryList( void )
+    static CMP_LIBRARY_LIST& GetLibraryList()
     {
-        return m_LibraryList;
+        return libraryList;
     }
 
-    static void SetSortOrder( const wxArrayString& sortOrder )
+    static void SetSortOrder( const wxArrayString& aSortOrder )
     {
-        m_LibraryListSortOrder = sortOrder;
+        libraryListSortOrder = aSortOrder;
     }
 
     static wxArrayString& GetSortOrder( void )
     {
-        return m_LibraryListSortOrder;
+        return libraryListSortOrder;
     }
 
 protected:
-    wxFileName     m_fileName;      /* Library file name. */
-    wxDateTime     m_DateTime;      /* Library save time and date. */
-    int            m_verMajor;      /* Library major version number. */
-    int            m_verMinor;      /* Library minor version number. */
-    LIB_ENTRY_LIST m_Entries;       /* Parts themselves are saved here. */
-    bool           m_IsModified;    /* Library modification status. */
-    bool           m_IsCache;       /* False for the "standard" libraries,
+    wxFileName     fileName;        /* Library file name. */
+    wxDateTime     timeStamp;       /* Library save time and date. */
+    int            versionMajor;    /* Library major version number. */
+    int            versionMinor;    /* Library minor version number. */
+    LIB_ENTRY_LIST entries;         /* Parts themselves are saved here. */
+    bool           isModified;      /* Library modification status. */
+    bool           isCache;         /* False for the "standard" libraries,
                                      * True for the library cache */
+    wxString       header;          /* first line of loaded library. */
 
-    static CMP_LIBRARY_LIST m_LibraryList;
-    static wxArrayString    m_LibraryListSortOrder;
+    static CMP_LIBRARY_LIST libraryList;
+    static wxArrayString    libraryListSortOrder;
 
     friend class CMP_LIB_ENTRY;
 };
@@ -468,7 +464,7 @@ protected:
 /**
  * Case insensitive library name comparison.
  */
-extern bool operator==( const CMP_LIBRARY& lib, const wxChar* name );
-extern bool operator!=( const CMP_LIBRARY& lib, const wxChar* name );
+extern bool operator==( const CMP_LIBRARY& aLibrary, const wxChar* aName );
+extern bool operator!=( const CMP_LIBRARY& aLibrary, const wxChar* aName );
 
 #endif  //  CLASS_LIBRARY_H

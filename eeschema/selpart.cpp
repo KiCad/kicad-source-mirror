@@ -69,6 +69,9 @@ int DisplayComponentsNamesInLib( WinEDA_DrawFrame* frame,
     ListNames = (const wxChar**) MyZMalloc( ( nameList.GetCount() + 1 ) *
                                             sizeof( wxChar* ) );
 
+    if( ListNames == NULL )
+        return 0;
+
     for( i = 0; i < nameList.GetCount(); i++ )
         ListNames[i] = (const wxChar*) nameList[i];
 

@@ -1234,15 +1234,14 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
 wxPoint rotate( wxPoint p, int angle )
 {
     wxPoint n;
-    float theta = M_PI * angle/1800;
-    n.x = float(p.x) * cos(theta) - float(p.y) * sin(theta);
-    n.y = p.x * sin(theta) + p.y * cos(theta);
+    double theta = M_PI * (double) angle / 1800.0;
+    n.x = wxRound( (double ) p.x * cos( theta ) - (double) p.y * sin( theta ) );
+    n.y = wxRound( p.x * sin( theta ) + p.y * cos( theta ) );
     return n;
 }
 
-/**************************************************************************************/
+
 bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
-/***************************************************************************************/
 {
     wxPoint rel_pos;
     int     dist;;

@@ -138,12 +138,12 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPartAux( CMP_LIB_ENTRY* LibEntry,
     cmpName = LibEntry->GetName();
     m_aliasName.Empty();
 
-    if( LibEntry->Type != ROOT )
+    if( LibEntry->isAlias() )
     {
         LIB_ALIAS* alias = (LIB_ALIAS*) LibEntry;
         component = alias->GetComponent();
 
-        wxASSERT( component != NULL && component->Type == ROOT );
+        wxASSERT( component != NULL && component->isComponent() );
 
         wxLogDebug( wxT( "\"<%s>\" is alias of \"<%s>\"" ),
                     GetChars( cmpName ),
@@ -326,7 +326,7 @@ void WinEDA_LibeditFrame::DisplayCmpDoc()
 
     AppendMsgPanel( _( "Body" ), msg, GREEN, 8 );
 
-    if( m_component->m_Options == ENTRY_POWER )
+    if( m_component->isPower() )
         msg = _( "Power Symbol" );
     else
         msg = _( "Component" );
@@ -334,16 +334,16 @@ void WinEDA_LibeditFrame::DisplayCmpDoc()
     AppendMsgPanel( _( "Type" ), msg, MAGENTA, 8 );
 
     if( alias != NULL )
-        msg = alias->m_Doc;
+        msg = alias->GetDescription();
     else
-        msg = m_component->m_Doc;
+        msg = m_component->GetDescription();
 
     AppendMsgPanel( _( "Description" ), msg, CYAN, 8 );
 
     if( alias != NULL )
-        msg = alias->m_KeyWord;
+        msg = alias->GetKeyWords();
     else
-        msg = m_component->m_KeyWord;
+        msg = m_component->GetKeyWords();
 
     AppendMsgPanel( _( "Key words" ), msg, DARKDARKGRAY );
 }
@@ -542,8 +542,11 @@ created. Aborted" ) );
             component->m_TextInside = 1;
     }
     else
+    {
         component->m_TextInside = 0;
-    component->m_Options = ( dlg.GetPowerSymbol() ) ? ENTRY_POWER : ENTRY_NORMAL;
+    }
+
+    ( dlg.GetPowerSymbol() ) ? component->SetPower() : component->SetNormal();
     component->m_DrawPinNum = dlg.GetShowPinNumber();
     component->m_DrawPinName = dlg.GetShowPinName();
     component->m_UnitSelectionLocked = dlg.GetLockItems();
@@ -612,7 +615,7 @@ void WinEDA_LibeditFrame::SaveOnePartInMemory()
 
     m_drawItem = m_lastDrawItem = NULL;
 
-    wxASSERT( m_component->Type == ROOT );
+    wxASSERT( m_component->isComponent() );
 
     if( oldComponent != NULL )
         Component = m_library->ReplaceComponent( oldComponent, m_component );

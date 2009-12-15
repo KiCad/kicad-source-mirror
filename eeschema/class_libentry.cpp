@@ -23,34 +23,26 @@
 /* class CMP_LIB_ENTRY */
 /*********************/
 
-/* Basic class for library component description
- *  Not directly used
- *  Used to create the 2 derived classes :
- *      - LIB_ALIAS
- *      - LIB_COMPONENT
- */
-
-/********************************************************************/
-CMP_LIB_ENTRY::CMP_LIB_ENTRY( LibrEntryType type, const wxString& name,
-                              CMP_LIBRARY* lib ) :
+CMP_LIB_ENTRY::CMP_LIB_ENTRY( LibrEntryType aType, const wxString& aName,
+                              CMP_LIBRARY* aLibrary ) :
     EDA_BaseStruct( LIBCOMPONENT_STRUCT_TYPE )
 {
-    Type = type;
-    m_Name = name;
-    m_lib = lib;
+    type = aType;
+    name = aName;
+    library = aLibrary;
 }
 
 
-CMP_LIB_ENTRY::CMP_LIB_ENTRY( CMP_LIB_ENTRY& entry, CMP_LIBRARY* lib ) :
-    EDA_BaseStruct( entry )
+CMP_LIB_ENTRY::CMP_LIB_ENTRY( CMP_LIB_ENTRY& aEntry, CMP_LIBRARY* aLibrary ) :
+    EDA_BaseStruct( aEntry )
 {
-    Type = entry.Type;
-    m_Name = entry.m_Name;
-    m_Doc = entry.m_Doc;
-    m_KeyWord = entry.m_KeyWord;
-    m_DocFile = entry.m_DocFile;
-    m_Options = entry.m_Options;
-    m_lib = lib;
+    type = aEntry.type;
+    name = aEntry.name;
+    description = aEntry.description;
+    keyWords = aEntry.keyWords;
+    docFileName = aEntry.docFileName;
+    options = aEntry.options;
+    library = aLibrary;
 }
 
 
@@ -61,8 +53,8 @@ CMP_LIB_ENTRY::~CMP_LIB_ENTRY()
 
 wxString CMP_LIB_ENTRY::GetLibraryName()
 {
-    if( m_lib != NULL )
-        return m_lib->GetName();
+    if( library != NULL )
+        return library->GetName();
 
     return wxString( _( "none" ) );
 }
@@ -78,22 +70,22 @@ wxString CMP_LIB_ENTRY::GetLibraryName()
  */
 bool CMP_LIB_ENTRY::SaveDoc( FILE* aFile )
 {
-    if( m_Doc.IsEmpty() && m_KeyWord.IsEmpty() && m_DocFile.IsEmpty() )
+    if( description.IsEmpty() && keyWords.IsEmpty() && docFileName.IsEmpty() )
         return true;
 
-    if( fprintf( aFile, "#\n$CMP %s\n", CONV_TO_UTF8( m_Name ) ) < 0 )
+    if( fprintf( aFile, "#\n$CMP %s\n", CONV_TO_UTF8( name ) ) < 0 )
         return false;
 
-    if( ! m_Doc.IsEmpty()
-        && fprintf( aFile, "D %s\n", CONV_TO_UTF8( m_Doc ) ) < 0 )
+    if( ! description.IsEmpty()
+        && fprintf( aFile, "D %s\n", CONV_TO_UTF8( description ) ) < 0 )
         return false;
 
-    if( ! m_KeyWord.IsEmpty()
-        && fprintf( aFile, "K %s\n", CONV_TO_UTF8( m_KeyWord ) ) < 0 )
+    if( ! keyWords.IsEmpty()
+        && fprintf( aFile, "K %s\n", CONV_TO_UTF8( keyWords ) ) < 0 )
         return false;
 
-    if( ! m_DocFile.IsEmpty()
-        && fprintf( aFile, "F %s\n", CONV_TO_UTF8( m_DocFile ) ) < 0 )
+    if( ! docFileName.IsEmpty()
+        && fprintf( aFile, "F %s\n", CONV_TO_UTF8( docFileName ) ) < 0 )
         return false;
 
     if( fprintf( aFile, "$ENDCMP\n" ) < 0 )
@@ -103,21 +95,21 @@ bool CMP_LIB_ENTRY::SaveDoc( FILE* aFile )
 }
 
 
-bool CMP_LIB_ENTRY::operator==( const wxChar* name ) const
+bool CMP_LIB_ENTRY::operator==( const wxChar* aName ) const
 {
-    return m_Name.CmpNoCase( name ) == 0;
+    return name.CmpNoCase( aName ) == 0;
 }
 
 
-bool operator<( const CMP_LIB_ENTRY& item1, const CMP_LIB_ENTRY& item2 )
+bool operator<( const CMP_LIB_ENTRY& aItem1, const CMP_LIB_ENTRY& aItem2 )
 {
-    return item1.GetName().CmpNoCase( item2.GetName() ) < 0;
+    return aItem1.GetName().CmpNoCase( aItem2.GetName() ) < 0;
 }
 
 
-int LibraryEntryCompare( const CMP_LIB_ENTRY* LE1, const CMP_LIB_ENTRY* LE2 )
+int LibraryEntryCompare( const CMP_LIB_ENTRY* aItem1, const CMP_LIB_ENTRY* aItem2 )
 {
-    return LE1->GetName().CmpNoCase( LE2->GetName() );
+    return aItem1->GetName().CmpNoCase( aItem2->GetName() );
 }
 
 
@@ -134,20 +126,20 @@ int LibraryEntryCompare( const CMP_LIB_ENTRY* LE1, const CMP_LIB_ENTRY* LE2 )
  *  (like 74LS00, 74HC00 ... and many op amps )
  */
 
-LIB_ALIAS::LIB_ALIAS( const wxString& name, LIB_COMPONENT* root,
-                      CMP_LIBRARY* lib ) :
-    CMP_LIB_ENTRY( ALIAS, name, lib )
+LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aComponent,
+                      CMP_LIBRARY* aLibrary ) :
+    CMP_LIB_ENTRY( ALIAS, aName, aLibrary )
 {
-    wxASSERT( root != NULL && root->Type == ROOT );
+    wxASSERT( aComponent != NULL && aComponent->isComponent() );
 
-    m_root = root;
+    root = aComponent;
 }
 
 
-LIB_ALIAS::LIB_ALIAS( LIB_ALIAS& alias, CMP_LIBRARY* lib ) :
-    CMP_LIB_ENTRY( alias )
+LIB_ALIAS::LIB_ALIAS( LIB_ALIAS& aAlias, CMP_LIBRARY* aLibrary ) :
+    CMP_LIB_ENTRY( aAlias )
 {
-    m_root = alias.m_root;
+    root = aAlias.root;
 }
 
 
@@ -156,11 +148,11 @@ LIB_ALIAS::~LIB_ALIAS()
 }
 
 
-void LIB_ALIAS::SetComponent( LIB_COMPONENT* root )
+void LIB_ALIAS::SetComponent( LIB_COMPONENT* aComponent )
 {
-    wxASSERT( root != NULL && root->Type == ROOT );
+    wxASSERT( aComponent != NULL && aComponent->isComponent() );
 
-    m_root =  root;
+    root = aComponent;
 }
 
 
@@ -170,13 +162,13 @@ void LIB_ALIAS::SetComponent( LIB_COMPONENT* root )
 
 /* This is a standard component  (in library)
  */
-LIB_COMPONENT::LIB_COMPONENT( const wxString& name, CMP_LIBRARY* lib ) :
-    CMP_LIB_ENTRY( ROOT, name, lib )
+LIB_COMPONENT::LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary ) :
+    CMP_LIB_ENTRY( ROOT, aName, aLibrary )
 {
     m_LastDate            = 0;
-    m_UnitCount           = 1;
+    unitCount             = 1;
     m_TextInside          = 40;
-    m_Options             = ENTRY_NORMAL;
+    options             = ENTRY_NORMAL;
     m_UnitSelectionLocked = FALSE;
     m_DrawPinNum          = 1;
     m_DrawPinName         = 1;
@@ -185,34 +177,34 @@ LIB_COMPONENT::LIB_COMPONENT( const wxString& name, CMP_LIBRARY* lib ) :
      * designator field.
      */
     LIB_FIELD* value = new LIB_FIELD( this, VALUE );
-    value->m_Text = name;
-    m_Drawings.push_back( value );
-    m_Drawings.push_back( new LIB_FIELD( this, REFERENCE ) );
+    value->m_Text = aName;
+    drawings.push_back( value );
+    drawings.push_back( new LIB_FIELD( this, REFERENCE ) );
 }
 
 
-LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& component, CMP_LIBRARY* lib ) :
-    CMP_LIB_ENTRY( component, lib )
+LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary ) :
+    CMP_LIB_ENTRY( aComponent, aLibrary )
 {
     LIB_DRAW_ITEM* newItem;
 
-    m_AliasList           = component.m_AliasList;
-    m_FootprintList       = component.m_FootprintList;
-    m_UnitCount           = component.m_UnitCount;
-    m_UnitSelectionLocked = component.m_UnitSelectionLocked;
-    m_TextInside          = component.m_TextInside;
-    m_DrawPinNum          = component.m_DrawPinNum;
-    m_DrawPinName         = component.m_DrawPinName;
-    m_LastDate            = component.m_LastDate;
+    m_AliasList           = aComponent.m_AliasList;
+    m_FootprintList       = aComponent.m_FootprintList;
+    unitCount             = aComponent.unitCount;
+    m_UnitSelectionLocked = aComponent.m_UnitSelectionLocked;
+    m_TextInside          = aComponent.m_TextInside;
+    m_DrawPinNum          = aComponent.m_DrawPinNum;
+    m_DrawPinName         = aComponent.m_DrawPinName;
+    m_LastDate            = aComponent.m_LastDate;
 
-    BOOST_FOREACH( LIB_DRAW_ITEM& oldItem, component.GetDrawItemList() )
+    BOOST_FOREACH( LIB_DRAW_ITEM& oldItem, aComponent.GetDrawItemList() )
     {
         if( ( oldItem.m_Flags & IS_NEW ) != 0 )
             continue;
 
         newItem = oldItem.GenCopy();
         newItem->SetParent( this );
-        m_Drawings.push_back( newItem );
+        drawings.push_back( newItem );
     }
 }
 
@@ -222,20 +214,20 @@ LIB_COMPONENT::~LIB_COMPONENT()
 }
 
 
-void LIB_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
-                          const wxPoint& offset, int multi,
-                          int convert, int drawMode, int color,
-                          const int transformMatrix[2][2],
-                          bool showPinText, bool drawFields,
-                          bool onlySelected )
+void LIB_COMPONENT::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDc,
+                          const wxPoint& aOffset, int aMulti,
+                          int aConvert, int aDrawMode, int aColor,
+                          const int aTransformMatrix[2][2],
+                          bool aShowPinText, bool aDrawFields,
+                          bool aOnlySelected )
 {
-    BASE_SCREEN*   screen = panel->GetScreen();
+    BASE_SCREEN*   screen = aPanel->GetScreen();
 
-    GRSetDrawMode( dc, drawMode );
+    GRSetDrawMode( aDc, aDrawMode );
 
-    BOOST_FOREACH( LIB_DRAW_ITEM& drawItem, m_Drawings )
+    BOOST_FOREACH( LIB_DRAW_ITEM& drawItem, drawings )
     {
-        if( onlySelected && drawItem.m_Selected == 0 )
+        if( aOnlySelected && drawItem.m_Selected == 0 )
             continue;
 
         // Do not draw an item while moving (the cursor handler does that)
@@ -243,85 +235,85 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* dc,
             continue;
 
         /* Do not draw items not attached to the current part */
-        if( multi && drawItem.m_Unit && ( drawItem.m_Unit != multi ) )
+        if( aMulti && drawItem.m_Unit && ( drawItem.m_Unit != aMulti ) )
             continue;
 
-        if( convert && drawItem.m_Convert && ( drawItem.m_Convert != convert ) )
+        if( aConvert && drawItem.m_Convert && ( drawItem.m_Convert != aConvert ) )
             continue;
 
-        if( !drawFields && drawItem.Type() == COMPONENT_FIELD_DRAW_TYPE )
+        if( !aDrawFields && drawItem.Type() == COMPONENT_FIELD_DRAW_TYPE )
             continue;
 
         if( drawItem.Type() == COMPONENT_PIN_DRAW_TYPE )
         {
-            drawItem.Draw( panel, dc, offset, color, drawMode,
-                           (void*) showPinText, transformMatrix );
+            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode,
+                           (void*) aShowPinText, aTransformMatrix );
         }
         else if( drawItem.Type() == COMPONENT_FIELD_DRAW_TYPE )
         {
-            drawItem.Draw( panel, dc, offset, color, drawMode,
-                           (void*) NULL, transformMatrix );
+            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode,
+                           (void*) NULL, aTransformMatrix );
         }
         else
         {
             bool forceNoFill = ( screen->m_IsPrinting
                                  && drawItem.m_Fill == FILLED_WITH_BG_BODYCOLOR
                                  && GetGRForceBlackPenState() );
-            drawItem.Draw( panel, dc, offset, color, drawMode,
-                           (void*) forceNoFill, transformMatrix );
+            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode,
+                           (void*) forceNoFill, aTransformMatrix );
         }
 
     }
 
     /* Enable this to draw the anchor of the component. */
 #if 0
-    int len = panel->GetScreen()->Unscale( 3 );
-    GRLine( &panel->m_ClipBox, dc, offset.x, offset.y - len, offset.x,
-            offset.y + len, 0, color );
-    GRLine( &panel->m_ClipBox, dc, offset.x - len, offset.y, offset.x + len,
-            offset.y, 0, color );
+    int len = aPanel->GetScreen()->Unscale( 3 );
+    GRLine( &aPanel->m_ClipBox, aDc, aOffset.x, aOffset.y - len, aOffset.x,
+            aOffset.y + len, 0, aColor );
+    GRLine( &aPanel->m_ClipBox, aDc, aOffset.x - len, aOffset.y, aOffset.x + len,
+            aOffset.y, 0, aColor );
 #endif
 
     /* Enable this to draw the bounding box around the component to validate
      * the bounding box calculations. */
 #if 0
-    EDA_Rect bBox = GetBoundaryBox( multi, convert );
-    GRRect( &panel->m_ClipBox, dc, bBox.GetOrigin().x, bBox.GetOrigin().y,
+    EDA_Rect bBox = GetBoundaryBox( aMulti, aConvert );
+    GRRect( &aPanel->m_ClipBox, aDc, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
 }
 
 
-void LIB_COMPONENT::Plot( PLOTTER* plotter, int unit, int convert,
-                          const wxPoint& offset, const int transform[2][2] )
+void LIB_COMPONENT::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
+                          const wxPoint& aOffset, const int aTransform[2][2] )
 {
-    wxASSERT( plotter != NULL );
+    wxASSERT( aPlotter != NULL );
 
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
     {
-        if( unit && item.m_Unit && ( item.m_Unit != unit ) )
+        if( aUnit && item.m_Unit && ( item.m_Unit != aUnit ) )
             continue;
-        if( convert && item.m_Convert && ( item.m_Convert != convert ) )
+        if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
             continue;
 
-        plotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-        bool fill = plotter->get_color_mode();
+        aPlotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
+        bool fill = aPlotter->get_color_mode();
 
-        item.Plot( plotter, offset, fill, transform );
+        item.Plot( aPlotter, aOffset, fill, aTransform );
     }
 }
 
 
-void LIB_COMPONENT::RemoveDrawItem( LIB_DRAW_ITEM* item,
-                                    WinEDA_DrawPanel* panel,
-                                    wxDC* dc )
+void LIB_COMPONENT::RemoveDrawItem( LIB_DRAW_ITEM* aItem,
+                                    WinEDA_DrawPanel* aPanel,
+                                    wxDC* aDc )
 {
-    wxASSERT( item != NULL );
+    wxASSERT( aItem != NULL );
 
     /* Value and reference fields cannot be removed. */
-    if( item->Type() == COMPONENT_FIELD_DRAW_TYPE )
+    if( aItem->Type() == COMPONENT_FIELD_DRAW_TYPE )
     {
-        LIB_FIELD* field = (LIB_FIELD*)item;
+        LIB_FIELD* field = (LIB_FIELD*)aItem;
 
         if( field->m_FieldId == VALUE || field->m_FieldId == REFERENCE )
         {
@@ -338,49 +330,49 @@ from component %s in library %s." ),
 
     LIB_DRAW_ITEM_LIST::iterator i;
 
-    if( dc != NULL )
-        item->Draw( panel, dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
+    if( aDc != NULL )
+        aItem->Draw( aPanel, aDc, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
                     DefaultTransformMatrix );
 
-    for( i = m_Drawings.begin(); i < m_Drawings.end(); i++ )
+    for( i = drawings.begin(); i < drawings.end(); i++ )
     {
-        if( *i == item )
+        if( *i == aItem )
         {
-            m_Drawings.erase( i );
+            drawings.erase( i );
             break;
         }
     }
 }
 
 
-void LIB_COMPONENT::AddDrawItem( LIB_DRAW_ITEM* item )
+void LIB_COMPONENT::AddDrawItem( LIB_DRAW_ITEM* aItem )
 {
-    wxASSERT( item != NULL );
+    wxASSERT( aItem != NULL );
 
-    m_Drawings.push_back( item );
-    m_Drawings.sort();
+    drawings.push_back( aItem );
+    drawings.sort();
 }
 
 
-LIB_DRAW_ITEM* LIB_COMPONENT::GetNextDrawItem( LIB_DRAW_ITEM* item,
-                                               KICAD_T type )
+LIB_DRAW_ITEM* LIB_COMPONENT::GetNextDrawItem( LIB_DRAW_ITEM* aItem,
+                                               KICAD_T aType )
 {
     /* Return the next draw object pointer.
      * If item is NULL return the first item of type in the list.
      */
-    if( m_Drawings.empty() )
+    if( drawings.empty() )
         return NULL;
 
-    if( item == NULL && type == TYPE_NOT_INIT )    // type is unspecified
-        return &m_Drawings[0];
+    if( aItem == NULL && aType == TYPE_NOT_INIT )    // type is unspecified
+        return &drawings[0];
 
     // Search for last item
     size_t idx = 0;
-    if( item )
+    if( aItem )
     {
-        for( ; idx < m_Drawings.size(); idx++ )
+        for( ; idx < drawings.size(); idx++ )
         {
-            if( item == &m_Drawings[idx] )
+            if( aItem == &drawings[idx] )
             {
                 idx++;   // Prepare the next item search
                 break;
@@ -389,49 +381,48 @@ LIB_DRAW_ITEM* LIB_COMPONENT::GetNextDrawItem( LIB_DRAW_ITEM* item,
     }
 
     // Search the next item
-    for( ; idx < m_Drawings.size(); idx++ )
+    for( ; idx < drawings.size(); idx++ )
     {
-        if( type == TYPE_NOT_INIT || m_Drawings[ idx ].Type() == type )
-            return &m_Drawings[ idx ];
+        if( aType == TYPE_NOT_INIT || drawings[ idx ].Type() == aType )
+            return &drawings[ idx ];
     }
 
     return NULL;
 }
 
-/*************************************************************************/
-void LIB_COMPONENT::GetPins( LIB_PIN_LIST& pins, int unit, int convert )
-/*************************************************************************/
+
+void LIB_COMPONENT::GetPins( LIB_PIN_LIST& aList, int aUnit, int aConvert )
 {
     /* Notes:
-     * when unit == 0: no unit filtering
-     * when convert == 0: no convert (shape selection) filtering
+     * when aUnit == 0: no unit filtering
+     * when aConvert == 0: no convert (shape selection) filtering
      * when .m_Unit == 0, the body item is common to units
      * when .m_Convert == 0, the body item is common to shapes
      */
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
     {
         if( item.Type() != COMPONENT_PIN_DRAW_TYPE )    // we search pins only
             continue;
 
         // Unit filtering:
-        if( unit && item.m_Unit && ( item.m_Unit != unit ) )
+        if( aUnit && item.m_Unit && ( item.m_Unit != aUnit ) )
              continue;
 
         // Shape filtering:
-        if( convert && item.m_Convert && ( item.m_Convert != convert ) )
+        if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
             continue;
 
-        pins.push_back( (LIB_PIN*) &item );
+        aList.push_back( (LIB_PIN*) &item );
     }
 }
 
 
-LIB_PIN* LIB_COMPONENT::GetPin( const wxString& number, int unit, int convert )
+LIB_PIN* LIB_COMPONENT::GetPin( const wxString& aNumber, int aUnit, int aConvert )
 {
     wxString     pNumber;
     LIB_PIN_LIST pinList;
 
-    GetPins( pinList, unit, convert );
+    GetPins( pinList, aUnit, aConvert );
 
     for( size_t i = 0; i < pinList.size(); i++ )
     {
@@ -439,7 +430,7 @@ LIB_PIN* LIB_COMPONENT::GetPin( const wxString& number, int unit, int convert )
 
         pinList[i]->ReturnPinStringNum( pNumber );
 
-        if( number == pNumber )
+        if( aNumber == pNumber )
             return pinList[i];
     }
 
@@ -488,8 +479,8 @@ bool LIB_COMPONENT::Save( FILE* aFile )
                  0, m_TextInside,
                  m_DrawPinNum ? 'Y' : 'N',
                  m_DrawPinName ? 'Y' : 'N',
-                 m_UnitCount, m_UnitSelectionLocked ? 'L' : 'F',
-                 m_Options == ENTRY_POWER ? 'P' : 'N' ) < 0 )
+                 unitCount, m_UnitSelectionLocked ? 'L' : 'F',
+                 options == ENTRY_POWER ? 'P' : 'N' ) < 0 )
         return false;
 
     if( !SaveDateAndTime( aFile ) )
@@ -541,16 +532,16 @@ bool LIB_COMPONENT::Save( FILE* aFile )
     }
 
     /* Save graphics items (including pins) */
-    if( !m_Drawings.empty() )
+    if( !drawings.empty() )
     {
         /* we sort the draw items, in order to have an edition more easy,
          *  when a file editing "by hand" is made */
-        m_Drawings.sort();
+        drawings.sort();
 
         if( fprintf( aFile, "DRAW\n" ) < 0 )
             return false;
 
-        BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
+        BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
         {
             if( item.Type() == COMPONENT_FIELD_DRAW_TYPE )
                 continue;
@@ -568,23 +559,23 @@ bool LIB_COMPONENT::Save( FILE* aFile )
     return true;
 }
 
-bool LIB_COMPONENT::Load( FILE* file, char* line, int* lineNum,
-                          wxString& errorMsg )
+bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum,
+                          wxString& aErrorMsg )
 {
     int      unused;
     char*    p;
-    char*    name;
+    char*    componentName;
     char*    prefix = NULL;
 
     bool     Res;
     wxString Msg;
 
-    p = strtok( line, " \t\r\n" );
+    p = strtok( aLine, " \t\r\n" );
 
     if( strcmp( p, "DEF" ) != 0 )
     {
-        errorMsg.Printf( wxT( "DEF command expected in line %d, aborted." ),
-                         *lineNum );
+        aErrorMsg.Printf( wxT( "DEF command expected in line %d, aborted." ),
+                          *aLineNum );
         return false;
     }
 
@@ -592,24 +583,24 @@ bool LIB_COMPONENT::Load( FILE* file, char* line, int* lineNum,
     char drawnum = 0;
     char drawname = 0;
 
-    if( ( name = strtok( NULL, " \t\n" ) ) == NULL       /* Part name: */
-        || ( prefix = strtok( NULL, " \t\n" ) ) == NULL  /* Prefix name: */
-        || ( p = strtok( NULL, " \t\n" ) ) == NULL       /* NumOfPins: */
+    if( ( componentName = strtok( NULL, " \t\n" ) ) == NULL  /* Part name: */
+        || ( prefix = strtok( NULL, " \t\n" ) ) == NULL      /* Prefix name: */
+        || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* NumOfPins: */
         || sscanf( p, "%d", &unused ) != 1
-        || ( p = strtok( NULL, " \t\n" ) ) == NULL       /* TextInside: */
+        || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* TextInside: */
         || sscanf( p, "%d", &m_TextInside ) != 1
-        || ( p = strtok( NULL, " \t\n" ) ) == NULL       /* DrawNums: */
+        || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* DrawNums: */
         || sscanf( p, "%c", &drawnum ) != 1
-        || ( p = strtok( NULL, " \t\n" ) ) == NULL       /* DrawNums: */
+        || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* DrawNums: */
         || sscanf( p, "%c", &drawname ) != 1
-        || ( p = strtok( NULL, " \t\n" ) ) == NULL       /* m_UnitCount: */
-        || sscanf( p, "%d", &m_UnitCount ) != 1 )
+        || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* unitCount: */
+        || sscanf( p, "%d", &unitCount ) != 1 )
     {
-        errorMsg.Printf( wxT( "Wrong DEF format in line %d, skipped." ),
-                         *lineNum );
-        while( GetLine( file, line, lineNum, 1024 ) )
+        aErrorMsg.Printf( wxT( "Wrong DEF format in line %d, skipped." ),
+                          *aLineNum );
+        while( GetLine( aFile, aLine, aLineNum, 1024 ) )
         {
-            p = strtok( line, " \t\n" );
+            p = strtok( aLine, " \t\n" );
             if( stricmp( p, "ENDDEF" ) == 0 )
                 break;
         }
@@ -617,20 +608,20 @@ bool LIB_COMPONENT::Load( FILE* file, char* line, int* lineNum,
         return false;
     }
 
-    m_DrawPinNum  = (drawnum == 'N') ? FALSE : true;
-    m_DrawPinName = (drawname == 'N') ? FALSE : true;
+    m_DrawPinNum  = ( drawnum == 'N' ) ? FALSE : true;
+    m_DrawPinName = ( drawname == 'N' ) ? FALSE : true;
 
     /* Copy part name and prefix. */
     LIB_FIELD& value = GetValueField();
 
-    strupper( name );
-    if( name[0] != '~' )
+    strupper( componentName );
+    if( componentName[0] != '~' )
     {
-        m_Name = value.m_Text = CONV_FROM_UTF8( name );
+        name = value.m_Text = CONV_FROM_UTF8( componentName );
     }
     else
     {
-        m_Name = value.m_Text = CONV_FROM_UTF8( &name[1] );
+        name = value.m_Text = CONV_FROM_UTF8( &componentName[1] );
         value.m_Attributs |= TEXT_NO_VISIBLE;
     }
 
@@ -650,70 +641,70 @@ bool LIB_COMPONENT::Load( FILE* file, char* line, int* lineNum,
     if( ( p = strtok( NULL, " \t\n" ) ) != NULL && *p == 'L' )
         m_UnitSelectionLocked = true;
     if( ( p = strtok( NULL, " \t\n" ) ) != NULL  && *p == 'P' )
-        m_Options = ENTRY_POWER;
+        options = ENTRY_POWER;
 
     /* Read next lines */
-    while( GetLine( file, line, lineNum, 1024 ) )
+    while( GetLine( aFile, aLine, aLineNum, 1024 ) )
     {
-        p = strtok( line, " \t\n" );
+        p = strtok( aLine, " \t\n" );
 
         /* This is the error flag ( if an error occurs, Res = FALSE) */
         Res = true;
 
-        if( (line[0] == 'T') && (line[1] == 'i') )
-            Res = LoadDateAndTime( line );
-        else if( line[0] == 'F' )
-            Res = LoadField( line, Msg );
+        if( (aLine[0] == 'T') && (aLine[1] == 'i') )
+            Res = LoadDateAndTime( aLine );
+        else if( aLine[0] == 'F' )
+            Res = LoadField( aLine, Msg );
         else if( strcmp( p, "ENDDEF" ) == 0 )
             break;
         else if( strcmp( p, "DRAW" ) == 0 )
-            Res = LoadDrawEntries( file, line, lineNum, Msg );
+            Res = LoadDrawEntries( aFile, aLine, aLineNum, Msg );
         else if( strncmp( p, "ALIAS", 5 ) == 0 )
         {
             p = strtok( NULL, "\r\n" );
-            Res = LoadAliases( p, errorMsg );
+            Res = LoadAliases( p, aErrorMsg );
         }
         else if( strncmp( p, "$FPLIST", 5 ) == 0 )
-            Res = LoadFootprints( file, line, lineNum, Msg );
+            Res = LoadFootprints( aFile, aLine, aLineNum, Msg );
 
         /* End line or block analysis: test for an error */
         if( !Res )
         {
             if( Msg.IsEmpty() )
-                errorMsg.Printf( wxT( "error occurred at line %d " ), *lineNum );
+                aErrorMsg.Printf( wxT( "error occurred at line %d " ), *aLineNum );
             else
-                errorMsg.Printf( wxT( "error <%s> occurred at line %d " ),
-                                 GetChars( Msg ), *lineNum );
+                aErrorMsg.Printf( wxT( "error <%s> occurred at line %d " ),
+                                  GetChars( Msg ), *aLineNum );
             return false;
         }
     }
 
     /* If we are here, this part is O.k. - put it in: */
-    m_Drawings.sort();
+    drawings.sort();
 
     return true;
 }
 
 
-bool LIB_COMPONENT::LoadDrawEntries( FILE* f, char* line,
-                                     int* lineNum, wxString& errorMsg )
+bool LIB_COMPONENT::LoadDrawEntries( FILE* aFile, char* aLine,
+                                     int* aLineNum, wxString& aErrorMsg )
 {
     LIB_DRAW_ITEM* newEntry = NULL;
 
     while( true )
     {
-        if( GetLine( f, line, lineNum, 1024 ) == NULL )
+        if( GetLine( aFile, aLine, aLineNum, 1024 ) == NULL )
         {
-            errorMsg = wxT( "file ended prematurely loading component draw element" );
+            aErrorMsg = wxT( "file ended prematurely loading component draw element" );
             return false;
         }
 
-        if( strncmp( line, "ENDDRAW", 7 ) == 0 )
+        if( strncmp( aLine, "ENDDRAW", 7 ) == 0 )
             break;
 
         newEntry = NULL;
 
-        switch( line[0] )
+        switch( aLine[0] )
         {
         case 'A':    /* Arc */
             newEntry = ( LIB_DRAW_ITEM* ) new LIB_ARC(this);
@@ -744,32 +735,32 @@ bool LIB_COMPONENT::LoadDrawEntries( FILE* f, char* line,
             break;
 
         default:
-            errorMsg.Printf( wxT( "undefined DRAW command %c" ), line[0] );
+            aErrorMsg.Printf( wxT( "undefined DRAW command %c" ), aLine[0] );
             return false;
         }
 
-        if( !newEntry->Load( line, errorMsg ) )
+        if( !newEntry->Load( aLine, aErrorMsg ) )
         {
-            errorMsg.Printf( wxT( "error <%s> in DRAW command %c" ),
-                             GetChars( errorMsg ), line[0] );
+            aErrorMsg.Printf( wxT( "error <%s> in DRAW command %c" ),
+                              GetChars( aErrorMsg ), aLine[0] );
             SAFE_DELETE( newEntry );
 
             /* Flush till end of draw section */
             do
             {
-                if( GetLine( f, line, lineNum, 1024 ) == NULL )
+                if( GetLine( aFile, aLine, aLineNum, 1024 ) == NULL )
                 {
-                    errorMsg = wxT( "file ended prematurely while attempting \
+                    aErrorMsg = wxT( "file ended prematurely while attempting \
 to flush to end of drawing section." );
                     return false;
                 }
-            } while( strncmp( line, "ENDDRAW", 7 ) != 0 );
+            } while( strncmp( aLine, "ENDDRAW", 7 ) != 0 );
 
             return false;
         }
         else
         {
-            m_Drawings.push_back( newEntry );
+            drawings.push_back( newEntry );
         }
     }
 
@@ -777,9 +768,9 @@ to flush to end of drawing section." );
 }
 
 
-bool LIB_COMPONENT::LoadAliases( char* line, wxString& errorMsg )
+bool LIB_COMPONENT::LoadAliases( char* aLine, wxString& aErrorMsg )
 {
-    char* text = strtok( line, " \t\r\n" );
+    char* text = strtok( aLine, " \t\r\n" );
 
     while( text )
     {
@@ -791,11 +782,11 @@ bool LIB_COMPONENT::LoadAliases( char* line, wxString& errorMsg )
 }
 
 
-bool LIB_COMPONENT::LoadField( char* line, wxString& errorMsg )
+bool LIB_COMPONENT::LoadField( char* aLine, wxString& aErrorMsg )
 {
     LIB_FIELD* field = new LIB_FIELD( this );
 
-    if ( !field->Load( line, errorMsg ) )
+    if ( !field->Load( aLine, aErrorMsg ) )
     {
         SAFE_DELETE( field );
         return false;
@@ -809,33 +800,33 @@ bool LIB_COMPONENT::LoadField( char* line, wxString& errorMsg )
     else if ( field->m_FieldId == VALUE )
     {
         GetValueField() = *field;
-        m_Name = field->m_Text;
+        name = field->m_Text;
         SAFE_DELETE( field );
     }
     else
     {
-        m_Drawings.push_back( field );
+        drawings.push_back( field );
     }
 
     return true;
 }
 
 
-bool LIB_COMPONENT::LoadFootprints( FILE* file, char* line,
-                                    int* lineNum, wxString& errorMsg )
+bool LIB_COMPONENT::LoadFootprints( FILE* aFile, char* aLine,
+                                    int* aLineNum, wxString& aErrorMsg )
 {
     while( true )
     {
-        if( GetLine( file, line, lineNum, 1024 ) == NULL )
+        if( GetLine( aFile, aLine, aLineNum, 1024 ) == NULL )
         {
-            errorMsg = wxT( "file ended prematurely while loading footprints" );
+            aErrorMsg = wxT( "file ended prematurely while loading footprints" );
             return false;
         }
 
-        if( stricmp( line, "$ENDFPLIST" ) == 0 )
+        if( stricmp( aLine, "$ENDFPLIST" ) == 0 )
             break;
 
-        m_FootprintList.Add( CONV_FROM_UTF8( line + 1 ) );
+        m_FootprintList.Add( CONV_FROM_UTF8( aLine + 1 ) );
     }
 
     return true;
@@ -844,30 +835,30 @@ bool LIB_COMPONENT::LoadFootprints( FILE* file, char* line,
 
 /**********************************************************************/
 /* Return the component boundary box ( in user coordinates )
- *  The unit Unit, and the shape Convert are considered.
- *  If Unit == 0, Unit is not used
- *  if Convert == 0 Convert is non used
+ *  The unit aUnit, and the shape aConvert are considered.
+ *  If aUnit == 0, unit is not used
+ *  if aConvert == 0 Convert is non used
  *  Invisible fields are not take in account
  **/
 /**********************************************************************/
-EDA_Rect LIB_COMPONENT::GetBoundaryBox( int Unit, int Convert )
+EDA_Rect LIB_COMPONENT::GetBoundaryBox( int aUnit, int aConvert )
 {
     EDA_Rect bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
 
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
     {
-        if( ( item.m_Unit > 0 ) && ( ( m_UnitCount > 1 ) && ( Unit > 0 )
-                                     && ( Unit != item.m_Unit ) ) )
+        if( ( item.m_Unit > 0 ) && ( ( unitCount > 1 ) && ( aUnit > 0 )
+                                     && ( aUnit != item.m_Unit ) ) )
             continue;
         if( item.m_Convert > 0
-            && ( ( Convert > 0 ) && ( Convert != item.m_Convert ) ) )
+            && ( ( aConvert > 0 ) && ( aConvert != item.m_Convert ) ) )
             continue;
 
         if ( ( item.Type() == COMPONENT_FIELD_DRAW_TYPE )
-            && ( ( ( LIB_TEXT& ) item ).m_Attributs & TEXT_NO_VISIBLE) )
+            && ( ( ( LIB_TEXT& ) item ).m_Attributs & TEXT_NO_VISIBLE ) )
             continue;
 
-    bBox.Merge( item.GetBoundingBox() );
+        bBox.Merge( item.GetBoundingBox() );
     }
 
     return bBox;
@@ -891,7 +882,7 @@ void LIB_COMPONENT::SetFields( const std::vector <LIB_FIELD> aFields )
             *field = aFields[i];
 
             if( (int) i == VALUE )
-                m_Name = field->m_Text;
+                name = field->m_Text;
 
             continue;
         }
@@ -901,36 +892,36 @@ void LIB_COMPONENT::SetFields( const std::vector <LIB_FIELD> aFields )
             continue;
 
         field = new LIB_FIELD( aFields[i] );
-        m_Drawings.push_back( field );
+        drawings.push_back( field );
     }
 
-    m_Drawings.sort();
+    drawings.sort();
 }
 
 
-void LIB_COMPONENT::GetFields( LIB_FIELD_LIST& list )
+void LIB_COMPONENT::GetFields( LIB_FIELD_LIST& aList )
 {
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
     {
         if( item.Type() != COMPONENT_FIELD_DRAW_TYPE )
             continue;
 
         LIB_FIELD* field = ( LIB_FIELD* ) &item;
-        list.push_back( *field );
+        aList.push_back( *field );
     }
 }
 
 
-LIB_FIELD* LIB_COMPONENT::GetField( int id )
+LIB_FIELD* LIB_COMPONENT::GetField( int aId )
 {
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
     {
         if( item.Type() != COMPONENT_FIELD_DRAW_TYPE )
             continue;
 
         LIB_FIELD* field = ( LIB_FIELD* ) &item;
 
-        if( field->m_FieldId == id )
+        if( field->m_FieldId == aId )
             return field;
     }
 
@@ -938,7 +929,7 @@ LIB_FIELD* LIB_COMPONENT::GetField( int id )
 }
 
 
-LIB_FIELD& LIB_COMPONENT::GetValueField( void )
+LIB_FIELD& LIB_COMPONENT::GetValueField()
 {
     LIB_FIELD* field = GetField( VALUE );
     wxASSERT( field != NULL );
@@ -946,7 +937,7 @@ LIB_FIELD& LIB_COMPONENT::GetValueField( void )
 }
 
 
-LIB_FIELD& LIB_COMPONENT::GetReferenceField( void )
+LIB_FIELD& LIB_COMPONENT::GetReferenceField()
 {
     LIB_FIELD* field = GetField( REFERENCE );
     wxASSERT( field != NULL );
@@ -958,7 +949,7 @@ LIB_FIELD& LIB_COMPONENT::GetReferenceField( void )
  * Read date and time of component in the format:
  *  "Ti yy/mm/jj hh:mm:ss"
  */
-bool LIB_COMPONENT::SaveDateAndTime( FILE* file )
+bool LIB_COMPONENT::SaveDateAndTime( FILE* aFile )
 {
     int year, mon, day, hour, min, sec;
 
@@ -972,7 +963,7 @@ bool LIB_COMPONENT::SaveDateAndTime( FILE* file )
     mon  = ( m_LastDate >> 22 ) & 15;
     year = ( m_LastDate >> 26 ) + 1990;
 
-    if ( fprintf( file, "Ti %d/%d/%d %d:%d:%d\n",
+    if ( fprintf( aFile, "Ti %d/%d/%d %d:%d:%d\n",
                   year, mon, day, hour, min, sec ) < 0 )
         return false;
 
@@ -982,16 +973,16 @@ bool LIB_COMPONENT::SaveDateAndTime( FILE* file )
 /* lit date et time de modif composant sous le format:
  *  "Ti yy/mm/jj hh:mm:ss"
  */
-bool LIB_COMPONENT::LoadDateAndTime( char* Line )
+bool LIB_COMPONENT::LoadDateAndTime( char* aLine )
 {
     int   year, mon, day, hour, min, sec;
     char* text;
 
     year = mon = day = hour = min = sec = 0;
-    text = strtok( Line, " \r\t\n" );
+    text = strtok( aLine, " \r\t\n" );
     text = strtok( NULL, " \r\t\n" );
 
-    if (sscanf( Line, "%d/%d/%d %d:%d:%d",
+    if (sscanf( aLine, "%d/%d/%d %d:%d:%d",
                 &year, &mon, &day, &hour, &min, &sec ) != 6 )
         return false;
 
@@ -1003,24 +994,24 @@ bool LIB_COMPONENT::LoadDateAndTime( char* Line )
 }
 
 
-void LIB_COMPONENT::SetOffset( const wxPoint& offset )
+void LIB_COMPONENT::SetOffset( const wxPoint& aOffset )
 {
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
     {
-        item.SetOffset( offset );
+        item.SetOffset( aOffset );
     }
 }
 
 
 void LIB_COMPONENT::RemoveDuplicateDrawItems()
 {
-    m_Drawings.unique();
+    drawings.unique();
 }
 
 
 bool LIB_COMPONENT::HasConversion() const
 {
-    BOOST_FOREACH( const LIB_DRAW_ITEM& item, m_Drawings )
+    BOOST_FOREACH( const LIB_DRAW_ITEM& item, drawings )
     {
         if( item.m_Convert > 1 )
             return true;
@@ -1030,84 +1021,84 @@ bool LIB_COMPONENT::HasConversion() const
 }
 
 
-void LIB_COMPONENT::ClearStatus( void )
+void LIB_COMPONENT::ClearStatus()
 {
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
         item.m_Flags = 0;
 }
 
 
-int LIB_COMPONENT::SelectItems( EDA_Rect& rect, int unit, int convert,
-                                bool editPinByPin )
+int LIB_COMPONENT::SelectItems( EDA_Rect& aRect, int aUnit, int aConvert,
+                                bool aEditPinByPin )
 {
-    int ItemsCount = 0;
+    int itemCount = 0;
 
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
     {
         item.m_Selected = 0;
 
-        if( ( item.m_Unit && item.m_Unit != unit )
-            || ( item.m_Convert && item.m_Convert != convert ) )
+        if( ( item.m_Unit && item.m_Unit != aUnit )
+            || ( item.m_Convert && item.m_Convert != aConvert ) )
         {
             if( item.Type() != COMPONENT_PIN_DRAW_TYPE )
                 continue;
 
              // Specific rules for pins.
-            if( editPinByPin || m_UnitSelectionLocked
-                || ( item.m_Convert && item.m_Convert != convert ) )
+            if( aEditPinByPin || m_UnitSelectionLocked
+                || ( item.m_Convert && item.m_Convert != aConvert ) )
                 continue;
         }
 
-        if( item.Inside( rect ) )
+        if( item.Inside( aRect ) )
         {
             item.m_Selected = IS_SELECTED;
-            ItemsCount++;
+            itemCount++;
         }
     }
 
-    return ItemsCount;
+    return itemCount;
 }
 
 
-void LIB_COMPONENT::MoveSelectedItems( const wxPoint& offset )
+void LIB_COMPONENT::MoveSelectedItems( const wxPoint& aOffset )
 {
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
     {
         if( item.m_Selected == 0 )
             continue;
 
-        item.SetOffset( offset );
+        item.SetOffset( aOffset );
         item.m_Flags = item.m_Selected = 0;
     }
 
-    m_Drawings.sort();
+    drawings.sort();
 }
 
 
-void LIB_COMPONENT::ClearSelectedItems( void )
+void LIB_COMPONENT::ClearSelectedItems()
 {
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
         item.m_Flags = item.m_Selected = 0;
 }
 
 
-void LIB_COMPONENT::DeleteSelectedItems( void )
+void LIB_COMPONENT::DeleteSelectedItems()
 {
-    LIB_DRAW_ITEM_LIST::iterator i = m_Drawings.begin();
+    LIB_DRAW_ITEM_LIST::iterator i = drawings.begin();
 
-    while( i != m_Drawings.end() )
+    while( i != drawings.end() )
     {
         if( i->m_Selected == 0 )
             i++;
         else
-            i = m_Drawings.erase( i );
+            i = drawings.erase( i );
     }
 }
 
 
-void LIB_COMPONENT::CopySelectedItems( const wxPoint& offset )
+void LIB_COMPONENT::CopySelectedItems( const wxPoint& aOffset )
 {
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
     {
         if( item.m_Selected == 0 )
             continue;
@@ -1115,25 +1106,26 @@ void LIB_COMPONENT::CopySelectedItems( const wxPoint& offset )
         item.m_Selected = 0;
         LIB_DRAW_ITEM* newItem = item.GenCopy();
         newItem->m_Selected = IS_SELECTED;
-        m_Drawings.push_back( newItem );
+        drawings.push_back( newItem );
     }
 
-    MoveSelectedItems( offset );
-    m_Drawings.sort();
+    MoveSelectedItems( aOffset );
+    drawings.sort();
 }
 
-void LIB_COMPONENT::MirrorSelectedItemsH( const wxPoint& center )
+
+void LIB_COMPONENT::MirrorSelectedItemsH( const wxPoint& aCenter )
 {
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
     {
         if( item.m_Selected == 0 )
             continue;
 
-        item.SetOffset( center );
+        item.SetOffset( aCenter );
         item.m_Flags = item.m_Selected = 0;
     }
 
-    m_Drawings.sort();
+    drawings.sort();
 }
 
 
@@ -1141,25 +1133,25 @@ void LIB_COMPONENT::MirrorSelectedItemsH( const wxPoint& center )
 /**
  * Locate a draw object.
  *
- * @param unit - Unit number of draw item.
- * @param convert - Body style of draw item.
- * @param type - Draw object type, set to 0 to search for any type.
- * @param pt - Coordinate for hit testing.
+ * @param aUnit - Unit number of draw item.
+ * @param aConvert - Body style of draw item.
+ * @param aType - Draw object type, set to 0 to search for any type.
+ * @param aPoint - Coordinate for hit testing.
  *
  * @return LIB_DRAW_ITEM - Pointer the the draw object if found.
  *                         Otherwise NULL.
  */
-LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int unit, int convert,
-                                              KICAD_T type, const wxPoint& pt )
+LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert,
+                                              KICAD_T aType, const wxPoint& aPoint )
 {
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
     {
-        if( ( unit && item.m_Unit && ( unit != item.m_Unit) )
-            || ( convert && item.m_Convert && ( convert != item.m_Convert ) )
-            || ( ( item.Type() != type ) && ( type != TYPE_NOT_INIT ) ) )
+        if( ( aUnit && item.m_Unit && ( aUnit != item.m_Unit) )
+            || ( aConvert && item.m_Convert && ( aConvert != item.m_Convert ) )
+            || ( ( item.Type() != aType ) && ( aType != TYPE_NOT_INIT ) ) )
             continue;
 
-        if( item.HitTest( pt ) )
+        if( item.HitTest( aPoint ) )
             return &item;
     }
 
@@ -1171,16 +1163,15 @@ LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int unit, int convert,
  * @param aPosRef = a wxPoint to test
  * @param aThreshold = max distance to this object (usually the half
  *                     thickness of a line)
- * @param aTransMat = the transform matrix
+ * @param aTransform = the transform matrix
  *
  * @return LIB_DRAW_ITEM - Pointer the the draw object if found.
  *                         Otherwise NULL.
  */
-LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int unit, int convert,
-                                              KICAD_T type, const wxPoint& pt,
-                                              const int aTransMat[2][2] )
+LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
+                                              const wxPoint& aPoint, const int aTransform[2][2] )
 {
-    /* we use LocateDrawItem( int unit, int convert, KICAD_T type, const
+    /* we use LocateDrawItem( int aUnit, int convert, KICAD_T type, const
      * wxPoint& pt ) to search items.
      * because this function uses DefaultTransformMatrix as orient/mirror matrix
      * we temporary copy aTransMat in DefaultTransformMatrix
@@ -1191,11 +1182,11 @@ LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int unit, int convert,
     {
         for ( int jj = 0; jj < 2; jj++ )
         {
-            matrix[ii][jj] = aTransMat[ii][jj];
+            matrix[ii][jj] = aTransform[ii][jj];
             EXCHG( matrix[ii][jj], DefaultTransformMatrix[ii][jj] );
         }
     }
-    item = LocateDrawItem( unit, convert, type, pt );
+    item = LocateDrawItem( aUnit, aConvert, aType, aPoint );
     //Restore matrix
     for ( int ii = 0; ii < 2; ii++ )
     {
@@ -1209,58 +1200,59 @@ LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int unit, int convert,
 }
 
 
-void LIB_COMPONENT::SetPartCount( int count )
+void LIB_COMPONENT::SetPartCount( int aCount )
 {
     LIB_DRAW_ITEM_LIST::iterator i;
 
-    if( m_UnitCount == count )
+    if( unitCount == aCount )
         return;
 
-    if( count < m_UnitCount )
+    if( aCount < unitCount )
     {
-        i = m_Drawings.begin();
+        i = drawings.begin();
 
-        while( i != m_Drawings.end() )
+        while( i != drawings.end() )
         {
-            if( i->m_Unit > count )
-                i = m_Drawings.erase( i );
+            if( i->m_Unit > aCount )
+                i = drawings.erase( i );
             else
                 i++;
         }
     }
     else
     {
-        int prevCount = m_UnitCount;
+        int prevCount = unitCount;
 
-        for( i = m_Drawings.begin(); i != m_Drawings.end(); i++ )
+        for( i = drawings.begin(); i != drawings.end(); i++ )
         {
             if( i->m_Unit != 1 )
                 continue;
 
-            for( int j = prevCount + 1; j <= count; j++ )
+            for( int j = prevCount + 1; j <= aCount; j++ )
             {
                 LIB_DRAW_ITEM* newItem = i->GenCopy();
                 newItem->m_Unit = j;
-                m_Drawings.push_back( newItem );
+                drawings.push_back( newItem );
             }
         }
 
-        m_Drawings.sort();
+        drawings.sort();
     }
 
-    m_UnitCount = count;
+    unitCount = aCount;
 }
 
 
-void LIB_COMPONENT::SetConversion( bool asConvert )
+void LIB_COMPONENT::SetConversion( bool aSetConvert )
 {
-    if( asConvert == HasConversion() )
+    if( aSetConvert == HasConversion() )
         return;
+
     // Duplicate items to create the converted shape
-    if( asConvert )
+    if( aSetConvert )
     {
 
-        BOOST_FOREACH( LIB_DRAW_ITEM& item, m_Drawings )
+        BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
         {
             /* Only pins are duplicated. */
             if( item.Type() != COMPONENT_PIN_DRAW_TYPE )
@@ -1269,7 +1261,7 @@ void LIB_COMPONENT::SetConversion( bool asConvert )
             {
                 LIB_DRAW_ITEM* newItem = item.GenCopy();
                 newItem->m_Convert = 2;
-                m_Drawings.push_back( newItem );
+                drawings.push_back( newItem );
             }
         }
     }
@@ -1277,12 +1269,12 @@ void LIB_COMPONENT::SetConversion( bool asConvert )
     {
         // Delete converted shape items becuase the converted shape does
         // not exist
-        LIB_DRAW_ITEM_LIST::iterator i = m_Drawings.begin();
+        LIB_DRAW_ITEM_LIST::iterator i = drawings.begin();
 
-        while( i != m_Drawings.end() )
+        while( i != drawings.end() )
         {
             if( i->m_Convert > 1 )
-                i = m_Drawings.erase( i );
+                i = drawings.erase( i );
             else
                 i++;
         }

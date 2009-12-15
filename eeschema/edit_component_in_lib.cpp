@@ -75,9 +75,9 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitPanelDoc()
             return;
     }
 
-    m_Doc->SetValue( entry->m_Doc );
-    m_Keywords->SetValue( entry->m_KeyWord );
-    m_Docfile->SetValue( entry->m_DocFile );
+    m_Doc->SetValue( entry->GetDescription() );
+    m_Keywords->SetValue( entry->GetKeyWords() );
+    m_Docfile->SetValue( entry->GetDocFileName() );
 }
 
 
@@ -109,7 +109,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitBasicPanel()
     m_PinsNameInsideButt->SetValue( component->m_TextInside != 0 );
     m_SelNumberOfUnits->SetValue( component->GetPartCount() );
     m_SetSkew->SetValue( component->m_TextInside );
-    m_OptionPower->SetValue( component->m_Options == ENTRY_POWER );
+    m_OptionPower->SetValue( component->isPower() );
     m_OptionPartsLocked->SetValue( component->m_UnitSelectionLocked );
 }
 
@@ -152,9 +152,9 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
     }
     else
     {
-        entry->m_Doc = m_Doc->GetValue();
-        entry->m_KeyWord = m_Keywords->GetValue();
-        entry->m_DocFile = m_Docfile->GetValue();
+        entry->SetDescription( m_Doc->GetValue() );
+        entry->SetKeyWords( m_Keywords->GetValue() );
+        entry->SetDocFileName( m_Docfile->GetValue() );
     }
 
     if( m_PartAliasList->GetStrings() != component->m_AliasList )
@@ -230,9 +230,9 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
     }
 
     if( m_OptionPower->GetValue() == true )
-        component->m_Options = ENTRY_POWER;
+        component->SetPower();
     else
-        component->m_Options = ENTRY_NORMAL;
+        component->SetNormal();
 
     /* Set the option "Units locked".
      *  Obviously, cannot be true if there is only one part */
@@ -257,9 +257,9 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::CopyDocToAlias( wxCommandEvent& WXUNUSED 
     if( component == NULL || m_Parent->GetAliasName().IsEmpty() )
         return;
 
-    m_Doc->SetValue( component->m_Doc );
-    m_Docfile->SetValue( component->m_DocFile );
-    m_Keywords->SetValue( component->m_KeyWord );
+    m_Doc->SetValue( component->GetDescription() );
+    m_Docfile->SetValue( component->GetDocFileName() );
+    m_Keywords->SetValue( component->GetKeyWords() );
 }
 
 
