@@ -608,6 +608,10 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum,
         return false;
     }
 
+    // Ensure unitCount is >= 1 (could be read as 0 in old libraries)
+    if( unitCount < 1 )
+        unitCount = 1;
+
     m_DrawPinNum  = ( drawnum == 'N' ) ? FALSE : true;
     m_DrawPinName = ( drawname == 'N' ) ? FALSE : true;
 
@@ -1202,13 +1206,12 @@ LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert, KICAD_T a
 
 void LIB_COMPONENT::SetPartCount( int aCount )
 {
-    LIB_DRAW_ITEM_LIST::iterator i;
-
     if( unitCount == aCount )
         return;
 
     if( aCount < unitCount )
     {
+        LIB_DRAW_ITEM_LIST::iterator i;
         i = drawings.begin();
 
         while( i != drawings.end() )
@@ -1223,14 +1226,18 @@ void LIB_COMPONENT::SetPartCount( int aCount )
     {
         int prevCount = unitCount;
 
-        for( i = drawings.begin(); i != drawings.end(); i++ )
+        // We cannot use an iterator here, because when adding items in vector
+        // the buffer can be reallocated, that change the previous value of
+        // .begin() and .end() iterators and invalidate others iterators
+        unsigned imax = drawings.size();
+        for( unsigned ii = 0; ii < imax; ii++ )
         {
-            if( i->m_Unit != 1 )
+            if( drawings[ii].m_Unit != 1 )
                 continue;
 
             for( int j = prevCount + 1; j <= aCount; j++ )
             {
-                LIB_DRAW_ITEM* newItem = i->GenCopy();
+                LIB_DRAW_ITEM* newItem = drawings[ii].GenCopy();
                 newItem->m_Unit = j;
                 drawings.push_back( newItem );
             }
@@ -1267,7 +1274,7 @@ void LIB_COMPONENT::SetConversion( bool aSetConvert )
     }
     else
     {
-        // Delete converted shape items becuase the converted shape does
+        // Delete converted shape items because the converted shape does
         // not exist
         LIB_DRAW_ITEM_LIST::iterator i = drawings.begin();
 
