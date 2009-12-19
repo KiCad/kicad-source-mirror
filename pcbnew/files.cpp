@@ -270,7 +270,7 @@ this file again."));
     AuxiliaryToolBar_Update_UI();
 
     // Display the loaded board:
-    DrawPanel->Refresh( true);
+    Zoom_Automatique( false );
     wxSafeYield();      // Needed if we want to see the board now.
 
     // Compile rastnest and displays net info

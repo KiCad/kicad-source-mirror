@@ -19,12 +19,10 @@
 #include "pcbnew_id.h"
 
 
-Dialog_GeneralOptions::Dialog_GeneralOptions( WinEDA_PcbFrame* parent,
-                                              wxDC*            DC ) :
+Dialog_GeneralOptions::Dialog_GeneralOptions( WinEDA_PcbFrame* parent ) :
     DialogGeneralOptionsBoardEditor_base( parent )
 {
     m_Parent = parent;
-    m_DC     = DC;
     init();
 }
 
@@ -101,8 +99,8 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
     if( g_Show_Ratsnest != m_ShowGlobalRatsnest->GetValue() )
     {
         g_Show_Ratsnest = m_ShowGlobalRatsnest->GetValue();
-        m_Parent->Ratsnest_On_Off( m_DC );
-        m_Parent->RedrawActiveWindow( m_DC, true );
+        m_Parent->Ratsnest_On_Off( NULL );
+        m_Parent->DrawPanel->Refresh( );
     }
     g_Show_Module_Ratsnest = m_ShowModuleRatsnest->GetValue();
     g_AutoDeleteOldTrack   = m_TrackAutodel->GetValue();
@@ -121,8 +119,7 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
 #include "dialog_graphic_items_options.cpp"
 
 
-void WinEDA_PcbFrame::InstallPcbOptionsFrame( const wxPoint& pos,
-                                              wxDC* DC, int id )
+void WinEDA_PcbFrame::InstallPcbOptionsFrame( int id )
 {
     switch( id )
     {

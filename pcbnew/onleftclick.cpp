@@ -426,7 +426,7 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         case TYPE_PAD:
-            InstallPadOptionsFrame( (D_PAD*) DrawStruct, DC, pos );
+            InstallPadOptionsFrame( (D_PAD*) DrawStruct );
             DrawPanel->MouseToCursorSchema();
             break;
 

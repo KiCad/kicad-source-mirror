@@ -689,7 +689,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_EDIT_PAD:
-        InstallPadOptionsFrame( (D_PAD*) GetCurItem(), &dc, pos );
+        InstallPadOptionsFrame( (D_PAD*) GetCurItem() );
         DrawPanel->MouseToCursorSchema();
         break;
 

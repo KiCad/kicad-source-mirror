@@ -401,7 +401,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_PAD_SETTINGS:
-        InstallPadOptionsFrame( NULL, NULL, wxPoint( -1, -1 ) );
+        InstallPadOptionsFrame( NULL );
         break;
 
     case ID_MODEDIT_CHECK:
@@ -427,7 +427,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         else
         {
             SetToolID( id, wxCURSOR_ARROW, _( "Pad Settings" ) );
-            InstallPadOptionsFrame( NULL, NULL, wxPoint( -1, -1 ) );
+            InstallPadOptionsFrame( NULL );
             SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         }
         break;
@@ -491,8 +491,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_EDIT_PAD:
     {
-        InstallPadOptionsFrame( (D_PAD*) GetScreen()->GetCurItem(),
-                                &dc, pos );
+        InstallPadOptionsFrame( (D_PAD*) GetScreen()->GetCurItem() );
         DrawPanel->MouseToCursorSchema();
     }
     break;
@@ -626,7 +625,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
             if( item->Type() != TYPE_PAD )
                 item = NULL;
         }
-        InstallPadOptionsFrame( (D_PAD*) item, &dc, pos );
+        InstallPadOptionsFrame( (D_PAD*) item );
     }
     break;
 

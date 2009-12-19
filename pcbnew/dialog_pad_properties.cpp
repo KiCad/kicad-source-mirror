@@ -55,11 +55,10 @@ class DIALOG_PAD_PROPERTIES : public DIALOG_PAD_PROPERTIES_BASE
 {
 public:
     WinEDA_BasePcbFrame* m_Parent;
-    wxDC*                m_DC;
     D_PAD*               m_CurrentPad;
 
 public:
-    DIALOG_PAD_PROPERTIES( WinEDA_BasePcbFrame* parent, D_PAD* Pad, wxDC* DC );
+    DIALOG_PAD_PROPERTIES( WinEDA_BasePcbFrame* parent, D_PAD* Pad );
     void InitDialog( );
     void OnPadShapeSelection( wxCommandEvent& event );
     void OnDrillShapeSelected( wxCommandEvent& event );
@@ -72,12 +71,11 @@ public:
 
 
 /*******************************************************************************************/
-DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( WinEDA_BasePcbFrame* parent, D_PAD* Pad, wxDC* DC ) :
+DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( WinEDA_BasePcbFrame* parent, D_PAD* Pad ) :
     DIALOG_PAD_PROPERTIES_BASE( parent )
 /*******************************************************************************************/
 {
     m_Parent = parent;
-    m_DC = DC;
     m_CurrentPad = Pad;
 
     if( m_CurrentPad )
@@ -95,10 +93,10 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( WinEDA_BasePcbFrame* parent, D_PAD
 
 
 /*************************************************************/
-void WinEDA_BasePcbFrame::InstallPadOptionsFrame( D_PAD* Pad, wxDC* DC, const wxPoint& pos )
+void WinEDA_BasePcbFrame::InstallPadOptionsFrame( D_PAD* Pad )
 /*************************************************************/
 {
-    DIALOG_PAD_PROPERTIES dlg( this, Pad, DC );
+    DIALOG_PAD_PROPERTIES dlg( this, Pad );
     dlg.ShowModal();
 }
 
@@ -418,9 +416,6 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
     int internalUnits = m_Parent->m_InternalUnits;
     wxString msg;
 
-    if( m_DC )
-        m_Parent->DrawPanel->CursorOff( m_DC );
-
     g_Pad_Master.m_Attribut = CodeType[m_PadType->GetSelection()];
     g_Pad_Master.m_PadShape = CodeShape[m_PadShape->GetSelection()];
 
@@ -489,11 +484,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
     }
 
     if( error )
-    {
-        if( m_DC )
-            m_Parent->DrawPanel->CursorOn( m_DC );
-        return;
-    }
+         return;
 
     PadLayerMask = 0;
     if( m_PadLayerCu->GetValue() )
@@ -533,12 +524,12 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         m_Parent->SaveCopyInUndoList( Module, UR_CHANGED );
         Module->m_LastEdit_Time = time( NULL );
 
-        if( m_DC ) // redraw the area where the pad was, without pad (delete pad on screen)
-        {
-            m_CurrentPad->m_Flags |= DO_NOT_DRAW;
-            m_Parent->DrawPanel->PostDirtyRect( m_CurrentPad->GetBoundingBox() );
-            m_CurrentPad->m_Flags &= ~DO_NOT_DRAW;
-        }
+        // redraw the area where the pad was, without pad (delete pad on screen)
+        m_CurrentPad->m_Flags |= DO_NOT_DRAW;
+        m_Parent->DrawPanel->PostDirtyRect( m_CurrentPad->GetBoundingBox() );
+        m_CurrentPad->m_Flags &= ~DO_NOT_DRAW;
+
+        // Update values
         m_CurrentPad->m_PadShape = g_Pad_Master.m_PadShape;
         m_CurrentPad->m_Attribut = g_Pad_Master.m_Attribut;
         if( m_CurrentPad->m_Pos != g_Pad_Master.m_Pos )
@@ -634,15 +625,13 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 
         Module->Set_Rectangle_Encadrement();
         m_CurrentPad->DisplayInfo( m_Parent );
-        if( m_DC )  // redraw the area where the pad was
-            m_Parent->DrawPanel->PostDirtyRect( m_CurrentPad->GetBoundingBox() );
+        // redraw the area where the pad was
+        m_Parent->DrawPanel->PostDirtyRect( m_CurrentPad->GetBoundingBox() );
         m_Parent->GetScreen()->SetModify();
     }
 
     EndModal(1);
 
-    if( m_DC )
-        m_Parent->DrawPanel->CursorOn( m_DC );
     if( RastnestIsChanged )  // The net ratsnest must be recalculated
         m_Parent->GetBoard()->m_Status_Pcb = 0;
 }

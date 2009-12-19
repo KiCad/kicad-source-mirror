@@ -38,7 +38,7 @@ void WinEDA_PcbFrame::ToolOnRightClick( wxCommandEvent& event )
     case ID_PCB_ADD_LINE_BUTT:
     case ID_PCB_COTATION_BUTT:
     case ID_PCB_ADD_TEXT_BUTT:
-        InstallPcbOptionsFrame( pos, NULL, ID_PCB_DRAWINGS_WIDTHS_SETUP );
+        InstallPcbOptionsFrame( ID_PCB_DRAWINGS_WIDTHS_SETUP );
         break;
 
     default:
@@ -59,7 +59,7 @@ void WinEDA_ModuleEditFrame::ToolOnRightClick( wxCommandEvent& event )
     switch( id )
     {
     case ID_MODEDIT_ADD_PAD:
-        InstallPadOptionsFrame( NULL, NULL, wxPoint( -1, -1 ) );
+        InstallPadOptionsFrame( NULL );
         break;
 
     case ID_PCB_CIRCLE_BUTT:

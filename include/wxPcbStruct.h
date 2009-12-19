@@ -298,9 +298,7 @@ public:
 
     void SetToolbars();
     void Process_Settings( wxCommandEvent& event );
-    void InstallPcbOptionsFrame( const wxPoint& pos,
-                                 wxDC*          DC,
-                                 int            id );
+    void InstallPcbOptionsFrame( int id );
     void InstallDisplayOptionsDialog( wxCommandEvent& aEvent );
     void InstallPcbGlobalDeleteFrame( const wxPoint& pos );
 

@@ -335,15 +335,6 @@ void WinEDA_DrawFrame::DisplayUnitsMsg()
 }
 
 
-void WinEDA_DrawFrame::ReDrawPanel()
-{
-    if( DrawPanel == NULL )
-        return;
-
-    KicadGraphicContext dc( DrawPanel );
-    DrawPanel->ReDraw( &dc );
-}
-
 
 /* Recalculate the size of toolbars and display panel.
  */

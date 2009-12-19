@@ -80,11 +80,7 @@ void DIALOG_GLOBAL_PADS_EDITION::OnCancelClick( wxCommandEvent& event )
  */
 void DIALOG_GLOBAL_PADS_EDITION::InstallPadEditor( wxCommandEvent& event )
 {
-    KicadGraphicContext dc( m_Parent->DrawPanel );
-
-    m_Parent->DrawPanel->CursorOff( &dc );
-    m_Parent->InstallPadOptionsFrame( m_CurrentPad, &dc, wxDefaultPosition );
-    m_Parent->DrawPanel->CursorOn( &dc );
+    m_Parent->InstallPadOptionsFrame( m_CurrentPad );
 }
 
 

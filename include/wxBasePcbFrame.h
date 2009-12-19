@@ -236,9 +236,7 @@ public:
                                         wxDC*         DC );
     TEXTE_MODULE* CreateTextModule( MODULE* Module, wxDC* DC );
 
-    void          InstallPadOptionsFrame( D_PAD*         pad,
-                                          wxDC*          DC,
-                                          const wxPoint& pos );
+    void          InstallPadOptionsFrame( D_PAD*         pad );
     void          InstallTextModOptionsFrame( TEXTE_MODULE* TextMod,
                                               wxDC*         DC );
 

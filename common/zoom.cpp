@@ -27,7 +27,8 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
 {
     PutOnGrid( &(GetBaseScreen()->m_Curseur) );
     AdjustScrollBars();
-    ReDrawPanel();
+    KicadGraphicContext dc( DrawPanel );
+    DrawPanel->ReDraw( &dc );
 
     /* Move the mouse cursor to the on grid graphic cursor position */
     if( ToMouse == TRUE )
@@ -55,12 +56,13 @@ void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
 }
 
 
-/** Redraw the screen with the zoom level which shows all the page or the board
+/** Redraw the screen with best zoom level and the best centering
+ * that shows all the page or the board
  */
 void WinEDA_DrawFrame::Zoom_Automatique( bool move_mouse_cursor )
 {
-    if( GetBaseScreen()->SetZoom( BestZoom() ) )
-        Recadre_Trace( move_mouse_cursor );
+    GetBaseScreen()->SetZoom( BestZoom() ); // Set the best zoom
+    Recadre_Trace( move_mouse_cursor );     // Set the best centering and refresh the screen
 }
 
 
@@ -93,11 +95,7 @@ void WinEDA_DrawFrame::Window_Zoom( EDA_Rect& Rect )
 void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
 {
     if( DrawPanel == NULL )
-    {
-        wxLogDebug( wxT( "%s, %d: DrawPanel object is undefined ." ),
-                    __TFILE__, __LINE__ );
-        return;
-    }
+       return;
 
     int          i;
     int          id = event.GetId();
@@ -131,7 +129,10 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
     case ID_ZOOM_REDRAW:
         // DrawPanel->Refresh(); usually good,
         // but does not work under linux, when called from here (wxGTK bug ?)
-        ReDrawPanel();
+        {
+        KicadGraphicContext dc( DrawPanel );
+        DrawPanel->ReDraw( &dc );
+        }
         break;
 
     case ID_POPUP_ZOOM_CENTER:
@@ -139,12 +140,7 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
         break;
 
     case ID_ZOOM_PAGE:
-        // With Zoom_Automatique(), the "Zoom Auto" button (and hotkey)
-        // does nothing if the view is already at the correct
-        // zoom level, but needs to be shifted (centered).
-        //Zoom_Automatique( false );
-        GetBaseScreen()->SetZoom( BestZoom() );
-        Recadre_Trace( false );
+        Zoom_Automatique( false );
         break;
 
     case ID_POPUP_ZOOM_SELECT:

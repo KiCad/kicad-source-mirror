@@ -215,6 +215,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
 {
     m_FrameName = wxT( "PcbFrame" );
     m_Draw_Sheet_Ref = true;            // true to display sheet references
+    m_Draw_Axis = false;                 // true to display X and Y axis
     m_Draw_Auxiliary_Axis = true;
     m_SelTrackWidthBox    = NULL;
     m_SelViaSizeBox = NULL;

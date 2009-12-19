@@ -30,8 +30,6 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
     int        id = event.GetId();
     wxPoint    pos;
 
-    KicadGraphicContext dc( DrawPanel );
-
     wxFileName fn;
 
     pos    = GetPosition();
@@ -61,17 +59,17 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
 
     case ID_OPTIONS_SETUP:
         {
-            Dialog_GeneralOptions dlg( this, &dc );
+            Dialog_GeneralOptions dlg( this );
             dlg.ShowModal();
         }
         break;
 
     case ID_PCB_DRAWINGS_WIDTHS_SETUP:
-        InstallPcbOptionsFrame( pos, &dc, id );
+        InstallPcbOptionsFrame( id );
         break;
 
     case ID_PCB_PAD_SETUP:
-        InstallPadOptionsFrame( NULL, NULL, pos );
+        InstallPadOptionsFrame( NULL );
         break;
 
     case ID_CONFIG_SAVE:
