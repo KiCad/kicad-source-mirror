@@ -30,11 +30,9 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
     int        id = event.GetId();
     wxPoint    pos;
 
-    wxClientDC dc( DrawPanel );
+    KicadGraphicContext dc( DrawPanel );
 
     wxFileName fn;
-
-    DrawPanel->PrepareGraphicContext( &dc );
 
     pos    = GetPosition();
     pos.x += 20;

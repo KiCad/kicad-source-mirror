@@ -382,9 +382,6 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 {
     BOARD_ITEM* DrawStruct = GetCurItem();
     wxPoint     pos = GetPosition();
-    wxClientDC  dc( DrawPanel );
-
-    DrawPanel->PrepareGraphicContext( &dc );
 
     switch( m_ID_current_state )
     {
@@ -403,7 +400,7 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         switch( DrawStruct->Type() )
         {
         case TYPE_PAD:
-            InstallPadOptionsFrame( (D_PAD*) DrawStruct, &dc, pos );
+            InstallPadOptionsFrame( (D_PAD*) DrawStruct, DC, pos );
             DrawPanel->MouseToCursorSchema();
             break;
 
@@ -420,7 +417,7 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
         case TYPE_TEXTE_MODULE:
-            InstallTextModOptionsFrame( (TEXTE_MODULE*) DrawStruct, &dc );
+            InstallTextModOptionsFrame( (TEXTE_MODULE*) DrawStruct, DC );
             DrawPanel->MouseToCursorSchema();
             break;
 

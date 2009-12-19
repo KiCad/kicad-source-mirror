@@ -722,8 +722,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     if( entry == NULL )
         return;
 
-    wxClientDC dc( m_Parent->DrawPanel );
-    m_Parent->DrawPanel->PrepareGraphicContext( &dc );
+    KicadGraphicContext dc( m_Parent->DrawPanel );
 
     RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, g_XorMode );
 

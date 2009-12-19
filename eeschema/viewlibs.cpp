@@ -189,9 +189,6 @@ void WinEDA_ViewlibFrame::ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag )
     int            NumOfParts = 0;
     CMP_LIB_ENTRY* LibEntry;
     wxString       CmpName;
-    wxClientDC     dc( DrawPanel );
-
-    DrawPanel->PrepareGraphicContext( &dc );
 
     if( Lib )
         NumOfParts = Lib->GetCount();
@@ -234,7 +231,7 @@ void WinEDA_ViewlibFrame::ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag )
     m_entryName = CmpName;
     DisplayLibInfos();
     Zoom_Automatique( false );
-    RedrawActiveWindow( &dc, true );
+    DrawPanel->Refresh( );
 
     if( m_CmpList )
     {

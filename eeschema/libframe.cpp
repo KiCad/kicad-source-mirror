@@ -604,11 +604,9 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
     int        id = event.GetId();
     wxPoint    pos;
 
-    wxClientDC dc( DrawPanel );
+    KicadGraphicContext dc( DrawPanel );
 
     DrawPanel->m_IgnoreMouseEvents = true;
-
-    DrawPanel->PrepareGraphicContext( &dc );
 
     wxGetMousePosition( &pos.x, &pos.y );
     pos.y += 20;

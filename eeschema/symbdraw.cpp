@@ -72,13 +72,6 @@ void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
     if( !( DrawItem->m_Flags & IS_NEW ) )
         SaveCopyInUndoList( DrawItem->GetParent() );
 
-    wxClientDC dc( DrawPanel );
-
-    DrawPanel->PrepareGraphicContext( &dc );
-
-    DrawItem->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode,
-                    NULL, DefaultTransformMatrix );
-
     if( m_drawSpecificUnit )
         DrawItem->m_Unit = GetUnit();
     else
@@ -97,9 +90,6 @@ void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
     if( component )
         component->GetDrawItemList().sort();
     GetScreen()->SetModify();
-
-    DrawItem->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode,
-                    NULL, DefaultTransformMatrix );
 
     DrawItem->DisplayInfo( this );
     DrawPanel->Refresh();

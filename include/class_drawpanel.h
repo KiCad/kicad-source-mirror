@@ -75,7 +75,6 @@ public:
     BASE_SCREEN* GetScreen();
 
 
-    void         PrepareGraphicContext( wxDC* DC );
     bool         IsPointOnDisplay( wxPoint ref_pos );
     void         OnPaint( wxPaintEvent& event );
     void         OnSize( wxSizeEvent& event );
@@ -181,5 +180,12 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
+// Helper class to handle the client Device Context
+class KicadGraphicContext : public wxClientDC
+{
+public:
+    KicadGraphicContext( WinEDA_DrawPanel * aDrawPanel );
+    ~KicadGraphicContext();
+};
 
 #endif  /* #ifndef PANEL_WXSTRUCT_H */

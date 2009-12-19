@@ -32,8 +32,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     wxPoint     pos;
 
     int         itmp;
-    wxClientDC  dc( DrawPanel );
-    DrawPanel->PrepareGraphicContext( &dc );
+    KicadGraphicContext  dc( DrawPanel );
     BOARD_ITEM* DrawStruct = GetCurItem();
 
     DrawPanel->CursorOff( &dc );

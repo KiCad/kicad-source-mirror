@@ -147,9 +147,8 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     wxPoint    pos;
     bool       redraw = false;
 
-    wxClientDC dc( DrawPanel );
+    KicadGraphicContext dc( DrawPanel );
 
-    DrawPanel->PrepareGraphicContext( &dc );
     wxGetMousePosition( &pos.x, &pos.y );
 
     pos.y += 20;

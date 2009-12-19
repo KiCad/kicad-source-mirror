@@ -179,9 +179,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem(
             Recadre_Trace( mouseWarp );
         else
         {
-            wxClientDC dc( DrawPanel );
-
-            DrawPanel->PrepareGraphicContext( &dc );
+            KicadGraphicContext dc( DrawPanel );
 
             EXCHG( old_cursor_position, sheet->LastScreen()->m_Curseur );
             DrawPanel->CursorOff( &dc );
@@ -356,9 +354,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindMarker( int SearchType )
             Recadre_Trace( TRUE );
         else
         {
-            wxClientDC dc( DrawPanel );
-
-            DrawPanel->PrepareGraphicContext( &dc );
+            KicadGraphicContext dc( DrawPanel );
             EXCHG( old_cursor_position, sheet->LastScreen()->m_Curseur );
             DrawPanel->CursorOff( &dc );
             DrawPanel->MouseTo( curpos );
@@ -581,9 +577,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem( const wxString& pattern,
             Recadre_Trace( mouseWarp );
         else
         {
-            wxClientDC dc( DrawPanel );
-
-            DrawPanel->PrepareGraphicContext( &dc );
+            KicadGraphicContext dc( DrawPanel );
 
             EXCHG( old_cursor_position, Sheet->LastScreen()->m_Curseur );
             DrawPanel->CursorOff( &dc );

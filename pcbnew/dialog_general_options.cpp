@@ -169,12 +169,8 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_RATSNEST:
         g_Show_Ratsnest = m_OptionsToolBar->GetToolState( id );
-        {
-            wxClientDC dc( DrawPanel );
-            DrawPanel->PrepareGraphicContext( &dc );
-            Ratsnest_On_Off( &dc );
-            RedrawActiveWindow( &dc, true );
-        }
+        Ratsnest_On_Off( NULL );
+        DrawPanel->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_RATSNEST:

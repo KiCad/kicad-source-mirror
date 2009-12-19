@@ -22,10 +22,8 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 {
     int         id = event.GetId();
     wxPoint     pos;
-    wxClientDC  dc( DrawPanel );
+    KicadGraphicContext  dc( DrawPanel );
     SCH_SCREEN* screen = GetScreen();
-
-    DrawPanel->PrepareGraphicContext( &dc );
 
     pos = wxGetMousePosition();
 

@@ -36,13 +36,11 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxPoint    pos;
-    wxClientDC dc( DrawPanel );
+    KicadGraphicContext dc( DrawPanel );
     bool       on_state;
 
     if( m_HToolBar == NULL )
         return;
-
-    DrawPanel->PrepareGraphicContext( &dc );
 
     wxGetMousePosition( &pos.x, &pos.y );
 

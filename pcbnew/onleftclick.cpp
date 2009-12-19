@@ -388,9 +388,6 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 {
     BOARD_ITEM* DrawStruct = GetCurItem();
     wxPoint     pos = GetPosition();
-    wxClientDC  dc( DrawPanel );
-
-    DrawPanel->PrepareGraphicContext( &dc );
 
     switch( m_ID_current_state )
     {
@@ -429,38 +426,38 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         case TYPE_PAD:
-            InstallPadOptionsFrame( (D_PAD*) DrawStruct, &dc, pos );
+            InstallPadOptionsFrame( (D_PAD*) DrawStruct, DC, pos );
             DrawPanel->MouseToCursorSchema();
             break;
 
         case TYPE_MODULE:
-            InstallModuleOptionsFrame( (MODULE*) DrawStruct, &dc );
+            InstallModuleOptionsFrame( (MODULE*) DrawStruct, DC );
             DrawPanel->MouseToCursorSchema();
             break;
 
         case TYPE_MIRE:
-            InstallMireOptionsFrame( (MIREPCB*) DrawStruct, &dc, pos );
+            InstallMireOptionsFrame( (MIREPCB*) DrawStruct, DC, pos );
             DrawPanel->MouseToCursorSchema();
             break;
 
         case TYPE_COTATION:
-            Install_Edit_Cotation( (COTATION*) DrawStruct, &dc, pos );
+            Install_Edit_Cotation( (COTATION*) DrawStruct, DC, pos );
             DrawPanel->MouseToCursorSchema();
             break;
 
         case TYPE_TEXTE_MODULE:
-            InstallTextModOptionsFrame( (TEXTE_MODULE*) DrawStruct, &dc );
+            InstallTextModOptionsFrame( (TEXTE_MODULE*) DrawStruct, DC );
             DrawPanel->MouseToCursorSchema();
             break;
 
         case TYPE_DRAWSEGMENT:
-            InstallGraphicItemPropertiesDialog( (DRAWSEGMENT*) DrawStruct, &dc );
+            InstallGraphicItemPropertiesDialog( (DRAWSEGMENT*) DrawStruct, DC );
             break;
 
         case TYPE_ZONE_CONTAINER:
             if( DrawStruct->m_Flags )
                 break;
-            Edit_Zone_Params( &dc, (ZONE_CONTAINER*) DrawStruct );
+            Edit_Zone_Params( DC, (ZONE_CONTAINER*) DrawStruct );
             break;
 
         default:
@@ -498,7 +495,7 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         }
         if( (DrawStruct->m_Flags & IS_NEW) )
         {
-            End_Edge( (DRAWSEGMENT*) DrawStruct, &dc );
+            End_Edge( (DRAWSEGMENT*) DrawStruct, DC );
             DrawPanel->m_AutoPAN_Request = false;
             SetCurItem( NULL );
         }

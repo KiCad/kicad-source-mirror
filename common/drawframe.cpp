@@ -340,9 +340,7 @@ void WinEDA_DrawFrame::ReDrawPanel()
     if( DrawPanel == NULL )
         return;
 
-    wxClientDC dc( DrawPanel );
-
-    DrawPanel->PrepareGraphicContext( &dc );
+    KicadGraphicContext dc( DrawPanel );
     DrawPanel->ReDraw( &dc );
 }
 
@@ -599,9 +597,8 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     int x, y, scroll_x, scroll_y;
     double scale_x, scale_y;
 
-    wxClientDC DC( this );
+    DrawPanel DC( this );
 
-    DrawPanel->PrepareGraphicContext( &DC );
     x = DC.LogicalToDeviceXRel( draw_size.GetWidth() );
     y = DC.LogicalToDeviceYRel( draw_size.GetHeight() );
 

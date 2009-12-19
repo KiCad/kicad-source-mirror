@@ -39,9 +39,7 @@ void WinEDA_DrawFrame::CopyToClipboard( wxCommandEvent& event )
 
         if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
         {
-            wxClientDC dc( DrawPanel );
-
-            DrawPanel->PrepareGraphicContext( &dc );
+            KicadGraphicContext dc( DrawPanel );
             DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
         }
     }

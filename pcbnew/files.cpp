@@ -17,7 +17,7 @@
 void WinEDA_PcbFrame::OnFileHistory( wxCommandEvent& event )
 {
     wxString fn;
-    wxClientDC dc( DrawPanel );
+    KicadGraphicContext dc( DrawPanel );
 
     fn = GetFileFromHistory( event.GetId(), _( "Printed circuit board" ) );
 
@@ -25,7 +25,6 @@ void WinEDA_PcbFrame::OnFileHistory( wxCommandEvent& event )
     {
         if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
         {
-            DrawPanel->PrepareGraphicContext( &dc );
             DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
         }
 
@@ -52,8 +51,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
     // If an edition is in progress, stop it
     if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
     {
-        wxClientDC dc( DrawPanel );
-        DrawPanel->PrepareGraphicContext( &dc );
+        KicadGraphicContext dc( DrawPanel );
         DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
     }
     SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );

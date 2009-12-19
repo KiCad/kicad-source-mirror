@@ -72,9 +72,7 @@ void WinEDA_PcbFrame::ListNetsAndSelect( wxCommandEvent& event )
 
     if( found )
     {
-        wxClientDC dc( DrawPanel );
-
-        DrawPanel->PrepareGraphicContext( &dc );
+        KicadGraphicContext dc( DrawPanel );
 
         if( g_HightLigt_Status )
             Hight_Light( &dc );

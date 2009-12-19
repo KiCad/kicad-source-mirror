@@ -18,15 +18,12 @@
 void WinEDA_ModuleEditFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int        id = event.GetId();
-    wxClientDC dc( DrawPanel );
 
-    DrawPanel->CursorOff( &dc );
-    DrawPanel->PrepareGraphicContext( &dc );
     switch( id )
     {
     case ID_TB_OPTIONS_SHOW_GRID:
         m_Draw_Grid = m_OptionsToolBar->GetToolState( id );
-        DrawPanel->ReDraw( &dc, TRUE );
+        DrawPanel->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SELECT_UNIT_MM:
@@ -51,24 +48,24 @@ void WinEDA_ModuleEditFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
         m_DisplayPadFill = !m_OptionsToolBar->GetToolState( id );
-        DrawPanel->ReDraw( &dc, TRUE );
+        DrawPanel->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
         m_DisplayViaFill = !m_OptionsToolBar->GetToolState( id );
-        DrawPanel->ReDraw( &dc, TRUE );
+        DrawPanel->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:
         m_DisplayModText =
             m_OptionsToolBar->GetToolState( id ) ? SKETCH : FILLED;
-        DrawPanel->ReDraw( &dc, TRUE );
+        DrawPanel->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH:
         m_DisplayModEdge =
             m_OptionsToolBar->GetToolState( id ) ? SKETCH : FILLED;
-        DrawPanel->ReDraw( &dc, TRUE );
+        DrawPanel->Refresh( );
         break;
 
     default:
@@ -78,5 +75,4 @@ void WinEDA_ModuleEditFrame::OnSelectOptionToolbar( wxCommandEvent& event )
     }
 
     SetToolbars();
-    DrawPanel->CursorOn( &dc );
 }

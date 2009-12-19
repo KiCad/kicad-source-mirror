@@ -16,6 +16,26 @@
 #define CURSOR_SIZE 12           // Cursor size in pixels
 
 
+// Helper class to handle the client Device Context
+KicadGraphicContext::KicadGraphicContext( WinEDA_DrawPanel * aDrawPanel )
+    : wxClientDC(aDrawPanel)
+{
+    GRResetPenAndBrush( this );
+    SetBackgroundMode( wxTRANSPARENT );
+#ifdef WX_ZOOM
+    double scale = aDrawPanel->GetScreen()->GetScalingFactor();
+    SetUserScale( scale, scale );
+    wxPoint origin = aDrawPanel->GetScreen()->m_DrawOrg;
+    SetLogicalOrigin( origin.x, origin.y );
+#endif
+    aDrawPanel->SetBoundaryBox();
+}
+
+KicadGraphicContext::~KicadGraphicContext( )
+{
+}
+
+
 /* Used to inhibit a response to a mouse left button release, after a
  * double click (when releasing the left button at the end of the second
  * click.  Used in eeschema to inhibit a mouse left release command when
@@ -172,19 +192,6 @@ wxRealPoint WinEDA_DrawPanel::GetGrid()
 }
 
 
-void WinEDA_DrawPanel::PrepareGraphicContext( wxDC* DC )
-{
-    GRResetPenAndBrush( DC );
-    DC->SetBackgroundMode( wxTRANSPARENT );
-#ifdef WX_ZOOM
-    double scale = GetScreen()->GetScalingFactor();
-    DC->SetUserScale( scale, scale );
-    wxPoint origin = GetScreen()->m_DrawOrg;
-    DC->SetLogicalOrigin( origin.x, origin.y );
-#endif
-    SetBoundaryBox();
-}
-
 
 /** Calculate the cursor position in internal units.
  * @return  position (in internal units)
@@ -194,8 +201,8 @@ wxPoint WinEDA_DrawPanel::CursorRealPosition( const wxPoint& ScreenPos )
 {
 #ifdef WX_ZOOM
     wxCoord x, y;
-    wxClientDC DC( this );
-    PrepareGraphicContext( &DC );
+    KicadGraphicContext DC( this );
+
     x = DC.DeviceToLogicalX( ScreenPos.x );
     y = DC.DeviceToLogicalY( ScreenPos.y );
     return wxPoint( x, y );
@@ -304,8 +311,8 @@ wxPoint WinEDA_DrawPanel::CursorScreenPosition()
 {
 #ifdef WX_ZOOM
     wxCoord x, y;
-    wxClientDC DC( this );
-    PrepareGraphicContext( &DC );
+    KicadGraphicContext DC( this );
+
     x = DC.LogicalToDeviceX( GetScreen()->m_Curseur.x );
     y = DC.LogicalToDeviceY( GetScreen()->m_Curseur.y );
     return wxPoint( x, y );
@@ -332,8 +339,7 @@ wxPoint WinEDA_DrawPanel::GetScreenCenterRealPosition( void )
     GetScreen()->Unscale( realpos );
 #ifdef WX_ZOOM
 //    wxCoord x, y;
-//    wxClientDC DC( this );
-//    PrepareGraphicContext( &DC );
+//    KicadGraphicContext DC( this );
 //    realpos.x = DC.DeviceToLogicalX( realpos.x );
 //    realpos.y = DC.DeviceToLogicalY( realpos.y );
 #else
@@ -567,7 +573,6 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
     wxRect    PaintClipBox;
     wxPoint   org;
 
-    PrepareGraphicContext( &paintDC );
     tmp = m_ClipBox;
 
     org = m_ClipBox.GetOrigin();
@@ -1010,11 +1015,11 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     screen->m_MousePosition =
         CursorRealPosition( screen->m_MousePositionInPixels );
 
-    wxClientDC DC( this );
+    KicadGraphicContext DC( this );
+
     int        kbstat = 0;
 
     DC.SetBackground( *wxBLACK_BRUSH );
-    PrepareGraphicContext( &DC );
 
     g_KeyPressed = localkey;
 
@@ -1259,10 +1264,10 @@ void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
     if( event.ShiftDown() && (key > 256) )
         localkey |= GR_KB_SHIFT;
 
-    wxClientDC DC( this );
+    KicadGraphicContext DC( this );
+
     BASE_SCREEN* Screen = GetScreen();
 
-    PrepareGraphicContext( &DC );
 
     g_KeyPressed = localkey;
 

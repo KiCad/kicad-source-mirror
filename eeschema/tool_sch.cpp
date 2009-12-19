@@ -287,9 +287,7 @@ void WinEDA_SchematicFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         return;
 
     int        id = event.GetId();
-    wxClientDC dc( DrawPanel );
-
-    DrawPanel->PrepareGraphicContext( &dc );
+    KicadGraphicContext dc( DrawPanel );
 
     switch( id )
     {

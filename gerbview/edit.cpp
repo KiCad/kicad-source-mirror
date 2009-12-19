@@ -75,9 +75,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
     int        layer = GetScreen()->m_Active_Layer;
     GERBER*    gerber_layer = g_GERBER_List[layer];
     wxPoint    pos;
-    wxClientDC dc( DrawPanel );
-
-    DrawPanel->PrepareGraphicContext( &dc );
+    KicadGraphicContext dc( DrawPanel );
 
     wxGetMousePosition( &pos.x, &pos.y );
 
@@ -263,9 +261,6 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
 void WinEDA_GerberFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 {
     EDA_BaseStruct* DrawStruct = GetScreen()->GetCurItem();
-    wxClientDC      dc( DrawPanel );
-
-    DrawPanel->PrepareGraphicContext( &dc );
 
     switch( m_ID_current_state )
     {
