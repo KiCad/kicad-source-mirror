@@ -7,11 +7,11 @@
         <property name="disconnect_events">1</property>
         <property name="encoding">UTF-8</property>
         <property name="event_generation">connect</property>
-        <property name="file">dialog_layers_setup_base2</property>
+        <property name="file">dialog_layers_setup_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
         <property name="internationalize">1</property>
-        <property name="name">DIALOG_LAYERS_SETUP_BASE2</property>
+        <property name="name">DIALOG_LAYERS_SETUP_BASE</property>
         <property name="namespace"></property>
         <property name="path">.</property>
         <property name="precompiled_header"></property>
@@ -30,7 +30,7 @@
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size">600,600</property>
-            <property name="name">DIALOG_LAYERS_SETUP_BASE2</property>
+            <property name="name">DIALOG_LAYERS_SETUP_BASE</property>
             <property name="pos"></property>
             <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
@@ -1509,7 +1509,7 @@
                                             <property name="hidden">0</property>
                                             <property name="id">ID_INNER2NAME</property>
                                             <property name="maximum_size"></property>
-                                            <property name="maxlength">0</property>
+                                            <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_Inner2Name</property>
                                             <property name="permission">protected</property>
@@ -1721,7 +1721,7 @@
                                             <property name="hidden">0</property>
                                             <property name="id">ID_INNER3NAME</property>
                                             <property name="maximum_size"></property>
-                                            <property name="maxlength">0</property>
+                                            <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_Inner3Name</property>
                                             <property name="permission">protected</property>
@@ -1933,7 +1933,7 @@
                                             <property name="hidden">0</property>
                                             <property name="id">ID_INNER4NAME</property>
                                             <property name="maximum_size"></property>
-                                            <property name="maxlength">0</property>
+                                            <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_Inner4Name</property>
                                             <property name="permission">protected</property>
@@ -2145,7 +2145,7 @@
                                             <property name="hidden">0</property>
                                             <property name="id">ID_INNER5NAME</property>
                                             <property name="maximum_size"></property>
-                                            <property name="maxlength">0</property>
+                                            <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_Inner5Name</property>
                                             <property name="permission">protected</property>
@@ -2311,7 +2311,7 @@
                                             <property name="name">m_Inner5Choice</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
-                                            <property name="selection">3</property>
+                                            <property name="selection">0</property>
                                             <property name="size"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
@@ -2357,7 +2357,7 @@
                                             <property name="hidden">0</property>
                                             <property name="id">ID_INNER6NAME</property>
                                             <property name="maximum_size"></property>
-                                            <property name="maxlength">0</property>
+                                            <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_Inner6Name</property>
                                             <property name="permission">protected</property>
@@ -2569,7 +2569,7 @@
                                             <property name="hidden">0</property>
                                             <property name="id">ID_INNER7NAME</property>
                                             <property name="maximum_size"></property>
-                                            <property name="maxlength">0</property>
+                                            <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_Inner7Name</property>
                                             <property name="permission">protected</property>
@@ -2781,7 +2781,7 @@
                                             <property name="hidden">0</property>
                                             <property name="id">ID_INNER8NAME</property>
                                             <property name="maximum_size"></property>
-                                            <property name="maxlength">0</property>
+                                            <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_Inner8Name</property>
                                             <property name="permission">protected</property>
@@ -2993,7 +2993,7 @@
                                             <property name="hidden">0</property>
                                             <property name="id">ID_INNER9NAME</property>
                                             <property name="maximum_size"></property>
-                                            <property name="maxlength">0</property>
+                                            <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_Inner9Name</property>
                                             <property name="permission">protected</property>
@@ -3205,7 +3205,7 @@
                                             <property name="hidden">0</property>
                                             <property name="id">ID_INNER10NAME</property>
                                             <property name="maximum_size"></property>
-                                            <property name="maxlength">0</property>
+                                            <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_Inner10Name</property>
                                             <property name="permission">protected</property>
@@ -3417,7 +3417,7 @@
                                             <property name="hidden">0</property>
                                             <property name="id">ID_INNER11NAME</property>
                                             <property name="maximum_size"></property>
-                                            <property name="maxlength">0</property>
+                                            <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_Inner11Name</property>
                                             <property name="permission">protected</property>
@@ -3629,7 +3629,7 @@
                                             <property name="hidden">0</property>
                                             <property name="id">ID_INNER12NAME</property>
                                             <property name="maximum_size"></property>
-                                            <property name="maxlength">0</property>
+                                            <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_Inner12Name</property>
                                             <property name="permission">protected</property>
@@ -3841,7 +3841,7 @@
                                             <property name="hidden">0</property>
                                             <property name="id">ID_INNER13NAME</property>
                                             <property name="maximum_size"></property>
-                                            <property name="maxlength">0</property>
+                                            <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_Inner13Name</property>
                                             <property name="permission">protected</property>
@@ -4053,7 +4053,7 @@
                                             <property name="hidden">0</property>
                                             <property name="id">ID_INNER14NAME</property>
                                             <property name="maximum_size"></property>
-                                            <property name="maxlength">0</property>
+                                            <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_Inner14Name</property>
                                             <property name="permission">protected</property>
@@ -4265,7 +4265,7 @@
                                             <property name="hidden">0</property>
                                             <property name="id">ID_INNER15NAME</property>
                                             <property name="maximum_size"></property>
-                                            <property name="maxlength">0</property>
+                                            <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_Inner15Name</property>
                                             <property name="permission">protected</property>
@@ -4477,7 +4477,7 @@
                                             <property name="hidden">0</property>
                                             <property name="id">ID_BACKNAME</property>
                                             <property name="maximum_size"></property>
-                                            <property name="maxlength">0</property>
+                                            <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_BackName</property>
                                             <property name="permission">protected</property>

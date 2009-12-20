@@ -5,8 +5,8 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_layers_setup_base2__
-#define __dialog_layers_setup_base2__
+#ifndef __dialog_layers_setup_base__
+#define __dialog_layers_setup_base__
 
 #include <wx/intl.h>
 
@@ -117,9 +117,9 @@
 #define ID_DRAWINGSCHOICE 1086
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_LAYERS_SETUP_BASE2
+/// Class DIALOG_LAYERS_SETUP_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_LAYERS_SETUP_BASE2 : public wxDialog 
+class DIALOG_LAYERS_SETUP_BASE : public wxDialog 
 {
 	private:
 	
@@ -261,9 +261,9 @@ class DIALOG_LAYERS_SETUP_BASE2 : public wxDialog
 		
 	
 	public:
-		DIALOG_LAYERS_SETUP_BASE2( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Layer Setup"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-		~DIALOG_LAYERS_SETUP_BASE2();
+		DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Layer Setup"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		~DIALOG_LAYERS_SETUP_BASE();
 	
 };
 
-#endif //__dialog_layers_setup_base2__
+#endif //__dialog_layers_setup_base__

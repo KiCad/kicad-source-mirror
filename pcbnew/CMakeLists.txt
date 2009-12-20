@@ -53,12 +53,8 @@ set(PCBNEW_SRCS
     dialog_graphic_item_properties_base.cpp
 #   dialog_initpcb.cpp
 
-#   Bear with us temporarily while we play with a couple of strategies, Dick.
-#   Eventually these filenames will get changed.
-#    dialog_layers_setup.cpp
-    dialog_layers_setup2.cpp
-    dialog_layers_setup_base2.cpp
-
+    dialog_layers_setup.cpp
+    dialog_layers_setup_base.cpp
     dialog_netlist.cpp
     dialog_netlist_fbp.cpp
     dialog_pcb_text_properties.cpp

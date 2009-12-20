@@ -4,6 +4,13 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2009-Dec-20 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew
+    Renamed dialog_layers_setup* files.
+    Got rid of the header file since there was only one file including it.
+
+
 2009-Dec-11 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++pcbnew
