@@ -24,8 +24,6 @@
  */
 
 
-/* functions relatives to the design rules editor
- */
 #include "fctsys.h"
 #include "common.h"
 #include "class_drawpanel.h"
@@ -425,7 +423,7 @@ void DIALOG_LAYERS_SETUP::OnCheckBox( wxCommandEvent& event )
 void DIALOG_LAYERS_SETUP::DenyChangeCheckBox( wxCommandEvent& event )
 {
     // user may not change copper layer checkboxes from anything other than
-    // the one place, the drop down m_CopperLayersChoice control.
+    // either presets choice or the copper layer choice controls.
 
     // I tried to simply diable the copper CheckBoxes but they look like crap,
     // so leave them enabled and reverse the user's attempt to toggle them.
@@ -470,9 +468,10 @@ void DIALOG_LAYERS_SETUP::OnCopperLayersChoice( wxCommandEvent& event )
 
     setCopperLayerCheckBoxes( m_CopperLayerCount );
 
-//    event.Skip();
-}
+    m_EnabledLayers = getUILayerMask();
 
+    showPresets( m_EnabledLayers );
+}
 
 
 /*****************************************************************/
