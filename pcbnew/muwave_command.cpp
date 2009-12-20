@@ -10,6 +10,7 @@
 #include "wxPcbStruct.h"
 
 #include "pcbnew_id.h"
+#include "kicad_device_context.h"
 
 #include "protos.h"
 
@@ -20,7 +21,7 @@ void WinEDA_PcbFrame::ProcessMuWaveFunctions( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxPoint    pos;
-    KicadGraphicContext dc( DrawPanel );
+    INSTALL_DC( dc, DrawPanel );
 
     wxGetMousePosition( &pos.x, &pos.y );
 
@@ -32,12 +33,7 @@ void WinEDA_PcbFrame::ProcessMuWaveFunctions( wxCommandEvent& event )
         break;
 
     default:        // End block command in progress.
-        if( DrawPanel->ManageCurseur
-            && DrawPanel->ForceCloseManageCurseur )
-        {
-            DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
-        }
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        DrawPanel->UnManageCursor( );
         break;
     }
 

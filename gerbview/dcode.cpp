@@ -464,7 +464,7 @@ void WinEDA_GerberFrame::CopyDCodesSizeToItems()
 }
 
 
-void WinEDA_GerberFrame::Liste_D_Codes( wxDC* DC )
+void WinEDA_GerberFrame::Liste_D_Codes( )
 {
     int               ii, jj;
     D_CODE*           pt_D_code;
@@ -523,13 +523,4 @@ void WinEDA_GerberFrame::Liste_D_Codes( wxDC* DC )
     List->Destroy();
     if( ii < 0 )
         return;
-
-#if 0
-
-    // Highlight segment corresponding to dCode selected.
-    if( Etat_Surbrillance )
-        Hight_Light( DrawPanel, DC );
-    net_code_Surbrillance = (GetScreen()->m_Active_Layer << 16) + ii;
-    Hight_Light( DrawPanel, DC );
-#endif
 }

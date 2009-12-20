@@ -17,6 +17,8 @@
 #include "libeditfrm.h"
 #include "class_library.h"
 
+#include "kicad_device_context.h"
+
 #include <boost/foreach.hpp>
 
 
@@ -604,8 +606,6 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
     int        id = event.GetId();
     wxPoint    pos;
 
-    KicadGraphicContext dc( DrawPanel );
-
     DrawPanel->m_IgnoreMouseEvents = true;
 
     wxGetMousePosition( &pos.x, &pos.y );
@@ -621,7 +621,6 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINSIZE_ITEM:
     case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNAMESIZE_ITEM:
     case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNUMSIZE_ITEM:
-    case ID_POPUP_LIBEDIT_CANCEL_EDITING:
     case ID_POPUP_ZOOM_BLOCK:
     case ID_POPUP_DELETE_BLOCK:
     case ID_POPUP_COPY_BLOCK:
@@ -632,18 +631,23 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT:
         break;
 
-    case ID_POPUP_LIBEDIT_DELETE_ITEM:
+    case ID_POPUP_LIBEDIT_CANCEL_EDITING:
         if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
-            DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
+            DrawPanel->UnManageCursor( );
+        else
+            DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
+        break;
+
+    case ID_POPUP_LIBEDIT_DELETE_ITEM:
+        DrawPanel->UnManageCursor( );
         break;
 
     default:
-        if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
-            DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW, wxEmptyString );
         break;
     }
 
+    INSTALL_DC( dc, DrawPanel );
     switch( id )
     {
     case ID_LIBEDIT_SELECT_CURRENT_LIB:
@@ -671,13 +675,6 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
             GetEventHandler()->ProcessEvent( cmd );
             SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         }
-        break;
-
-    case ID_POPUP_LIBEDIT_CANCEL_EDITING:
-        if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
-            DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
-        else
-            SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         break;
 
     case ID_NO_SELECT_BUTT:

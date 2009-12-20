@@ -195,30 +195,15 @@ public:
      */
     int          Read_D_Code_File( const wxString& D_Code_FullFileName );
     void         CopyDCodesSizeToItems();
-    void         Liste_D_Codes( wxDC* DC );
+    void         Liste_D_Codes(  );
 
     void         Trace_Gerber( wxDC* DC, int draw_mode, int printmasklayer );
-
-    // Copper texts
-    void         Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
-    TEXTE_PCB*   Create_Texte_Pcb( wxDC* DC );
-    void         Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
-    void         StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC );
-    void         Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
 
     // PCB handling
     bool         Clear_Pcb( bool query );
     void         Erase_Current_Layer( bool query );
-    void         Erase_Zones( bool query );
-    void         Erase_Segments_Pcb( bool is_edges, bool query );
-    void         Erase_Pistes( int masque_type, bool query );
-    void         Erase_Textes_Pcb( bool query );
     void         Delete_DCode_Items( wxDC* DC, int dcode_value, int layer_number );
-
-    TRACK*       Begin_Route( TRACK* track, wxDC* DC );
-    void         End_Route( TRACK* track, wxDC* DC );
-    TRACK*       Delete_Segment( wxDC* DC, TRACK* Track );
-    int          Edit_TrackSegm_Width( wxDC* DC, TRACK* segm );
+      TRACK*       Delete_Segment( wxDC* DC, TRACK* Track );
 
     // Conversion function
     void         ExportDataInPcbnewFormat( wxCommandEvent& event );

@@ -16,13 +16,13 @@
 #include "eeschema_id.h"
 #include "protos.h"
 #include "class_library.h"
+#include "kicad_device_context.h"
 
 
 void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 {
     int         id = event.GetId();
     wxPoint     pos;
-    KicadGraphicContext  dc( DrawPanel );
     SCH_SCREEN* screen = GetScreen();
 
     pos = wxGetMousePosition();
@@ -123,10 +123,8 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
                                                 DrawPanel->
                                                 m_PanelDefaultCursor ) );
 
-        if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
-        {
-            DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
-        }
+        // Stop the current command (if any) but keep the current tool
+        DrawPanel->UnManageCursor( );
 
         /* Should not be executed, except bug. */
         if( screen->m_BlockLocate.m_Command != BLOCK_IDLE )
@@ -139,25 +137,19 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_DELETE_CMP:
     case ID_POPUP_SCH_DELETE:
-        // Stop the current command but keep the current tool
-        if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
-        {
-            DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
-        }
+        // Stop the current command (if any) but keep the current tool
+        DrawPanel->UnManageCursor( );
         break;
 
     default:
         // Stop the current command and deselect the current tool
-        if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
-        {
-            DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
-        }
         DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor =
                                        wxCURSOR_ARROW;
-        SetToolID( 0, DrawPanel->m_PanelCursor, wxEmptyString );
+        DrawPanel->UnManageCursor( 0, DrawPanel->m_PanelCursor );
         break;
     }
 
+    INSTALL_DC( dc, DrawPanel );
     switch( id )
     {
     case ID_HIERARCHY:

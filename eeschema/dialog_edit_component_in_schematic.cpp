@@ -707,6 +707,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     chipnameTextCtrl->SetValue( m_Cmp->m_ChipName );
 }
 
+#include "kicad_device_context.h"
 
 /* reinitialise components parametres to default values found in lib
  */
@@ -722,7 +723,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     if( entry == NULL )
         return;
 
-    KicadGraphicContext dc( m_Parent->DrawPanel );
+    INSTALL_DC( dc, m_Parent->DrawPanel );
 
     RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, g_XorMode );
 

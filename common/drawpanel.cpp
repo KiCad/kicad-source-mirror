@@ -12,6 +12,7 @@
 #include "class_base_screen.h"
 #include "wxstruct.h"
 
+#include "kicad_device_context.h"
 
 #define CURSOR_SIZE 12           // Cursor size in pixels
 
@@ -69,6 +70,7 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
                       wxBORDER | wxNO_FULL_REPAINT_ON_RESIZE )
 {
     m_Parent          = parent;
+    wxASSERT( m_Parent );
     m_ScrollButt_unit = 40;
 
     SetBackgroundColour( wxColour( ColorRefs[g_DrawBgColor].m_Red,
@@ -201,7 +203,7 @@ wxPoint WinEDA_DrawPanel::CursorRealPosition( const wxPoint& ScreenPos )
 {
 #ifdef WX_ZOOM
     wxCoord x, y;
-    KicadGraphicContext DC( this );
+    INSTALL_DC( DC, this );
 
     x = DC.DeviceToLogicalX( ScreenPos.x );
     y = DC.DeviceToLogicalY( ScreenPos.y );
@@ -311,7 +313,7 @@ wxPoint WinEDA_DrawPanel::CursorScreenPosition()
 {
 #ifdef WX_ZOOM
     wxCoord x, y;
-    KicadGraphicContext DC( this );
+    INSTALL_DC ( DC, this );
 
     x = DC.LogicalToDeviceX( GetScreen()->m_Curseur.x );
     y = DC.LogicalToDeviceY( GetScreen()->m_Curseur.y );
@@ -339,7 +341,7 @@ wxPoint WinEDA_DrawPanel::GetScreenCenterRealPosition( void )
     GetScreen()->Unscale( realpos );
 #ifdef WX_ZOOM
 //    wxCoord x, y;
-//    KicadGraphicContext DC( this );
+//    INSTALL_DC( DC, this );
 //    realpos.x = DC.DeviceToLogicalX( realpos.x );
 //    realpos.y = DC.DeviceToLogicalY( realpos.y );
 #else
@@ -567,7 +569,11 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
     // Fix for pixel offset bug http://trac.wxwidgets.org/ticket/4187
     paintDC.GetGraphicsContext()->Translate(0.5, 0.5);
 #else
+    #ifdef KICAD_USE_BUFFERED_DC
+    wxBufferedPaintDC paintDC( this );
+    #else
     wxPaintDC paintDC( this );
+    #endif
 #endif
     EDA_Rect  tmp;
     wxRect    PaintClipBox;
@@ -1015,7 +1021,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     screen->m_MousePosition =
         CursorRealPosition( screen->m_MousePositionInPixels );
 
-    KicadGraphicContext DC( this );
+    INSTALL_DC( DC, this );
 
     int        kbstat = 0;
 
@@ -1264,7 +1270,7 @@ void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
     if( event.ShiftDown() && (key > 256) )
         localkey |= GR_KB_SHIFT;
 
-    KicadGraphicContext DC( this );
+    INSTALL_DC(DC, this );
 
     BASE_SCREEN* Screen = GetScreen();
 
@@ -1345,18 +1351,15 @@ void WinEDA_DrawPanel::OnPan( wxCommandEvent& event )
 void WinEDA_DrawPanel::UnManageCursor( int id, int cursor,
                                        const wxString& title )
 {
-    wxClientDC dc( this );
-
     if( ManageCurseur && ForceCloseManageCurseur )
     {
+        INSTALL_DC( dc, this );
         ForceCloseManageCurseur( this, &dc );
         m_AutoPAN_Request = false;
-
-        if( id != -1 && cursor != -1 )
-        {
-            wxASSERT( cursor > wxCURSOR_NONE && cursor < wxCURSOR_MAX );
-
-            m_Parent->SetToolID( id, cursor, title );
-        }
+    }
+    if( id != -1 && cursor != -1 )
+    {
+        wxASSERT( cursor > wxCURSOR_NONE && cursor < wxCURSOR_MAX );
+        m_Parent->SetToolID( id, cursor, title );
     }
 }

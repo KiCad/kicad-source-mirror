@@ -287,7 +287,6 @@ void WinEDA_SchematicFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         return;
 
     int        id = event.GetId();
-    KicadGraphicContext dc( DrawPanel );
 
     switch( id )
     {
@@ -309,14 +308,13 @@ void WinEDA_SchematicFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SELECT_CURSOR:
-        DrawPanel->CursorOff( &dc );
         m_CursorShape = m_OptionsToolBar->GetToolState( id );
-        DrawPanel->CursorOn( &dc );
+        DrawPanel->Refresh( );
         break;
 
     case ID_TB_OPTIONS_HIDDEN_PINS:
         m_ShowAllPins = m_OptionsToolBar->GetToolState( id );
-        DrawPanel->ReDraw( &dc, TRUE );
+        DrawPanel->Refresh( );
         break;
 
     case ID_TB_OPTIONS_BUS_WIRES_ORIENT:

@@ -16,6 +16,8 @@
 #include "autorout.h"
 #include "protos.h"
 
+#include "kicad_device_context.h"
+
 #include "dialog_global_edit_tracks_and_vias.h"
 
 // Uncomment following line to enable wxBell() command (which beeps speaker)
@@ -32,7 +34,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     wxPoint     pos;
 
     int         itmp;
-    KicadGraphicContext  dc( DrawPanel );
+    INSTALL_DC( dc, DrawPanel );
     BOARD_ITEM* DrawStruct = GetCurItem();
 
     DrawPanel->CursorOff( &dc );

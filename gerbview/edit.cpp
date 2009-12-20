@@ -12,6 +12,7 @@
 #include "gerbview.h"
 #include "pcbplot.h"
 #include "protos.h"
+#include "kicad_device_context.h"
 
 
 /* Process the command triggered by the left button of the mouse when a tool
@@ -61,7 +62,6 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     default:
         DisplayError( this, wxT( "WinEDA_GerberFrame::ProcessCommand error" ) );
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         break;
     }
 }
@@ -75,7 +75,6 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
     int        layer = GetScreen()->m_Active_Layer;
     GERBER*    gerber_layer = g_GERBER_List[layer];
     wxPoint    pos;
-    KicadGraphicContext dc( DrawPanel );
 
     wxGetMousePosition( &pos.x, &pos.y );
 
@@ -95,11 +94,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
-        if( DrawPanel->ManageCurseur
-            && DrawPanel->ForceCloseManageCurseur )
-        {
-            DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
-        }
+        DrawPanel->UnManageCursor( );
         /* Should not be executed, except bug */
         if( GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE )
         {
@@ -114,15 +109,11 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:
-        if( DrawPanel->ManageCurseur
-            && DrawPanel->ForceCloseManageCurseur )
-        {
-            DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
-        }
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW, wxEmptyString );
         break;
     }
 
+    INSTALL_DC( dc, DrawPanel );
     switch( id )
     {
     case ID_EXIT:
@@ -194,7 +185,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_GERBVIEW_SHOW_LIST_DCODES:
-        Liste_D_Codes( &dc );
+        Liste_D_Codes( );
         break;
 
     case ID_GERBVIEW_SHOW_SOURCE:

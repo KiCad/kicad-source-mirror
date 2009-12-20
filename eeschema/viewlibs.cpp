@@ -282,7 +282,16 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         LIB_ALIAS* alias = (LIB_ALIAS*) entry;
         component = alias->GetComponent();
 
-        wxASSERT( component != NULL && component->isComponent() );
+        if( component == NULL )     // Should not occur
+        {
+            wxASSERT( component != NULL );
+            return;
+        }
+        if( ! component->isComponent() )
+        {
+            wxASSERT( component->isComponent() );
+            return;
+        }
 
         msg = alias->GetName();
 

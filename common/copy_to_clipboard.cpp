@@ -37,11 +37,7 @@ void WinEDA_DrawFrame::CopyToClipboard( wxCommandEvent& event )
             DrawPanel->SetCursor( wxCursor( DrawPanel->m_PanelCursor =
                         DrawPanel->m_PanelDefaultCursor ) );
 
-        if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
-        {
-            KicadGraphicContext dc( DrawPanel );
-            DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
-        }
+        DrawPanel->UnManageCursor(  );
     }
 }
 

@@ -17,6 +17,8 @@
 #include "wxPcbStruct.h"
 #include "protos.h"
 
+#include "kicad_device_context.h"
+
 #include "dialog_edit_module_for_Modedit.h"
 
 #include "collectors.h"
@@ -147,7 +149,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     wxPoint    pos;
     bool       redraw = false;
 
-    KicadGraphicContext dc( DrawPanel );
+    INSTALL_DC( dc, DrawPanel );
 
     wxGetMousePosition( &pos.x, &pos.y );
 

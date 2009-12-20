@@ -12,6 +12,8 @@
 #include "wxPcbStruct.h"
 #include "collectors.h"
 
+#include "kicad_device_context.h"
+
 
 #define Pad_fill (Pad_Fill_Item.State == RUN)
 
@@ -72,7 +74,7 @@ void WinEDA_PcbFrame::ListNetsAndSelect( wxCommandEvent& event )
 
     if( found )
     {
-        KicadGraphicContext dc( DrawPanel );
+        INSTALL_DC( dc, DrawPanel );
 
         if( g_HightLigt_Status )
             Hight_Light( &dc );

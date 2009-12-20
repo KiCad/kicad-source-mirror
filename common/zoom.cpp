@@ -15,6 +15,7 @@
 #include "class_base_screen.h"
 #include "wxstruct.h"
 
+#include "kicad_device_context.h"
 
 /** Compute draw offset (scroll bars and draw parameters)
  *  in order to have the current graphic cursor position at the screen center
@@ -27,7 +28,7 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
 {
     PutOnGrid( &(GetBaseScreen()->m_Curseur) );
     AdjustScrollBars();
-    KicadGraphicContext dc( DrawPanel );
+    INSTALL_DC( dc, DrawPanel ) ;
     DrawPanel->ReDraw( &dc );
 
     /* Move the mouse cursor to the on grid graphic cursor position */
@@ -130,7 +131,7 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
         // DrawPanel->Refresh(); usually good,
         // but does not work under linux, when called from here (wxGTK bug ?)
         {
-        KicadGraphicContext dc( DrawPanel );
+        INSTALL_DC( dc, DrawPanel );
         DrawPanel->ReDraw( &dc );
         }
         break;

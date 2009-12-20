@@ -180,12 +180,4 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
-// Helper class to handle the client Device Context
-class KicadGraphicContext : public wxClientDC
-{
-public:
-    KicadGraphicContext( WinEDA_DrawPanel * aDrawPanel );
-    ~KicadGraphicContext();
-};
-
 #endif  /* #ifndef PANEL_WXSTRUCT_H */

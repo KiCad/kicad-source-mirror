@@ -21,6 +21,8 @@
 #include "protos.h"
 #include "class_library.h"
 
+#include "kicad_device_context.h"
+
 #include <boost/foreach.hpp>
 
 
@@ -179,7 +181,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem(
             Recadre_Trace( mouseWarp );
         else
         {
-            KicadGraphicContext dc( DrawPanel );
+            INSTALL_DC( dc, DrawPanel );
 
             EXCHG( old_cursor_position, sheet->LastScreen()->m_Curseur );
             DrawPanel->CursorOff( &dc );
@@ -354,7 +356,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindMarker( int SearchType )
             Recadre_Trace( TRUE );
         else
         {
-            KicadGraphicContext dc( DrawPanel );
+            INSTALL_DC( dc, DrawPanel );
             EXCHG( old_cursor_position, sheet->LastScreen()->m_Curseur );
             DrawPanel->CursorOff( &dc );
             DrawPanel->MouseTo( curpos );
@@ -577,7 +579,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindSchematicItem( const wxString& pattern,
             Recadre_Trace( mouseWarp );
         else
         {
-            KicadGraphicContext dc( DrawPanel );
+            INSTALL_DC( dc, DrawPanel );
 
             EXCHG( old_cursor_position, Sheet->LastScreen()->m_Curseur );
             DrawPanel->CursorOff( &dc );

@@ -91,8 +91,7 @@ void WinEDA_PcbFrame::ExportToGenCAD( wxCommandEvent& event )
 
     offsetX = m_Auxiliary_Axis_Position.x;
     offsetY = m_Auxiliary_Axis_Position.y;
-    KicadGraphicContext dc( DrawPanel );
-    Compile_Ratsnest( &dc, TRUE );
+    Compile_Ratsnest( NULL, TRUE );
 
     /* Temporary modification of footprints that are flipped (i.e. on bottom
      * layer) to convert them to non flipped footprints.

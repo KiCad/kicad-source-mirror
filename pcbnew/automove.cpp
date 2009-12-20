@@ -15,6 +15,7 @@
 #include "pcbnew_id.h"
 #include "protos.h"
 
+#include "kicad_device_context.h"
 
 typedef enum {
     FIXE_MODULE,
@@ -36,7 +37,7 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxPoint    pos;
-    KicadGraphicContext dc( DrawPanel );
+    INSTALL_DC( dc, DrawPanel );
     bool       on_state;
 
     if( m_HToolBar == NULL )
@@ -59,12 +60,7 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
         break;
 
     default:   // Abort a current command (if any)
-        if( DrawPanel->ManageCurseur
-            && DrawPanel->ForceCloseManageCurseur )
-        {
-            DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
-        }
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
         break;
     }
 
