@@ -11,7 +11,7 @@
 
 DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 600,600 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( 550,600 ), wxDefaultSize );
 	
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
@@ -126,6 +126,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	
 	m_SilkSFrontCheckBox = new wxCheckBox( m_SilkSFrontPanel, ID_SILKSFRONTCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
+	m_SilkSFrontCheckBox->SetToolTip( _("If you want a silk screen layer for the front side of the board") );
+	
 	bSizer5->Add( m_SilkSFrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_SilkSFrontPanel->SetSizer( bSizer5 );
@@ -149,6 +151,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	
 	m_MaskFrontCheckBox = new wxCheckBox( m_MaskFrontPanel, ID_MASKFRONTCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
+	m_MaskFrontCheckBox->SetToolTip( _("If you want a solder mask layer for the front of the board") );
+	
 	bSizer8->Add( m_MaskFrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_MaskFrontPanel->SetSizer( bSizer8 );
@@ -162,6 +166,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	
 	m_FrontName = new wxTextCtrl( m_LayersListPanel, ID_FRONTNAME, _("Front_later"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_FrontName->SetMaxLength( 20 ); 
+	m_FrontName->SetToolTip( _("Layer name of front (top) copper layer") );
+	
 	m_LayerListFlexGridSizer->Add( m_FrontName, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_FrontPanel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -171,6 +177,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
 	
 	m_FrontCheckBox = new wxCheckBox( m_FrontPanel, ID_FRONTCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_FrontCheckBox->SetToolTip( _("If you want a front copper layer") );
 	
 	bSizer9->Add( m_FrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
@@ -183,6 +191,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	int m_FrontChoiceNChoices = sizeof( m_FrontChoiceChoices ) / sizeof( wxString );
 	m_FrontChoice = new wxChoice( m_LayersListPanel, ID_FRONTCHOICE, wxDefaultPosition, wxDefaultSize, m_FrontChoiceNChoices, m_FrontChoiceChoices, 0 );
 	m_FrontChoice->SetSelection( 0 );
+	m_FrontChoice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
 	m_LayerListFlexGridSizer->Add( m_FrontChoice, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_Inner2Name = new wxTextCtrl( m_LayersListPanel, ID_INNER2NAME, _("Inner2"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -208,6 +218,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	int m_Inner2ChoiceNChoices = sizeof( m_Inner2ChoiceChoices ) / sizeof( wxString );
 	m_Inner2Choice = new wxChoice( m_LayersListPanel, ID_INNER2CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner2ChoiceNChoices, m_Inner2ChoiceChoices, 0 );
 	m_Inner2Choice->SetSelection( 0 );
+	m_Inner2Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
 	m_LayerListFlexGridSizer->Add( m_Inner2Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_Inner3Name = new wxTextCtrl( m_LayersListPanel, ID_INNER3NAME, _("Inner3"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -233,6 +245,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	int m_Inner3ChoiceNChoices = sizeof( m_Inner3ChoiceChoices ) / sizeof( wxString );
 	m_Inner3Choice = new wxChoice( m_LayersListPanel, ID_INNER3CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner3ChoiceNChoices, m_Inner3ChoiceChoices, 0 );
 	m_Inner3Choice->SetSelection( 0 );
+	m_Inner3Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
 	m_LayerListFlexGridSizer->Add( m_Inner3Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_Inner4Name = new wxTextCtrl( m_LayersListPanel, ID_INNER4NAME, _("Inner4"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -258,6 +272,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	int m_Inner4ChoiceNChoices = sizeof( m_Inner4ChoiceChoices ) / sizeof( wxString );
 	m_Inner4Choice = new wxChoice( m_LayersListPanel, ID_INNER4CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner4ChoiceNChoices, m_Inner4ChoiceChoices, 0 );
 	m_Inner4Choice->SetSelection( 0 );
+	m_Inner4Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
 	m_LayerListFlexGridSizer->Add( m_Inner4Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_Inner5Name = new wxTextCtrl( m_LayersListPanel, ID_INNER5NAME, _("Inner5"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -283,6 +299,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	int m_Inner5ChoiceNChoices = sizeof( m_Inner5ChoiceChoices ) / sizeof( wxString );
 	m_Inner5Choice = new wxChoice( m_LayersListPanel, ID_INNER5CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner5ChoiceNChoices, m_Inner5ChoiceChoices, 0 );
 	m_Inner5Choice->SetSelection( 0 );
+	m_Inner5Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
 	m_LayerListFlexGridSizer->Add( m_Inner5Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_Inner6Name = new wxTextCtrl( m_LayersListPanel, ID_INNER6NAME, _("Inner6"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -308,6 +326,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	int m_Inner6ChoiceNChoices = sizeof( m_Inner6ChoiceChoices ) / sizeof( wxString );
 	m_Inner6Choice = new wxChoice( m_LayersListPanel, ID_INNER6CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner6ChoiceNChoices, m_Inner6ChoiceChoices, 0 );
 	m_Inner6Choice->SetSelection( 0 );
+	m_Inner6Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
 	m_LayerListFlexGridSizer->Add( m_Inner6Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_Inner7Name = new wxTextCtrl( m_LayersListPanel, ID_INNER7NAME, _("Inner7"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -333,6 +353,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	int m_Inner7ChoiceNChoices = sizeof( m_Inner7ChoiceChoices ) / sizeof( wxString );
 	m_Inner7Choice = new wxChoice( m_LayersListPanel, ID_INNER7CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner7ChoiceNChoices, m_Inner7ChoiceChoices, 0 );
 	m_Inner7Choice->SetSelection( 0 );
+	m_Inner7Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
 	m_LayerListFlexGridSizer->Add( m_Inner7Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_Inner8Name = new wxTextCtrl( m_LayersListPanel, ID_INNER8NAME, _("Inner8"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -358,6 +380,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	int m_Inner8ChoiceNChoices = sizeof( m_Inner8ChoiceChoices ) / sizeof( wxString );
 	m_Inner8Choice = new wxChoice( m_LayersListPanel, ID_INNER8CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner8ChoiceNChoices, m_Inner8ChoiceChoices, 0 );
 	m_Inner8Choice->SetSelection( 0 );
+	m_Inner8Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
 	m_LayerListFlexGridSizer->Add( m_Inner8Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_Inner9Name = new wxTextCtrl( m_LayersListPanel, ID_INNER9NAME, _("Inner9"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -383,6 +407,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	int m_Inner9ChoiceNChoices = sizeof( m_Inner9ChoiceChoices ) / sizeof( wxString );
 	m_Inner9Choice = new wxChoice( m_LayersListPanel, ID_INNER9CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner9ChoiceNChoices, m_Inner9ChoiceChoices, 0 );
 	m_Inner9Choice->SetSelection( 0 );
+	m_Inner9Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
 	m_LayerListFlexGridSizer->Add( m_Inner9Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_Inner10Name = new wxTextCtrl( m_LayersListPanel, ID_INNER10NAME, _("Inner10"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -408,6 +434,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	int m_Inner10ChoiceNChoices = sizeof( m_Inner10ChoiceChoices ) / sizeof( wxString );
 	m_Inner10Choice = new wxChoice( m_LayersListPanel, ID_INNER10CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner10ChoiceNChoices, m_Inner10ChoiceChoices, 0 );
 	m_Inner10Choice->SetSelection( 0 );
+	m_Inner10Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
 	m_LayerListFlexGridSizer->Add( m_Inner10Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_Inner11Name = new wxTextCtrl( m_LayersListPanel, ID_INNER11NAME, _("Inner11"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -433,6 +461,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	int m_Inner11ChoiceNChoices = sizeof( m_Inner11ChoiceChoices ) / sizeof( wxString );
 	m_Inner11Choice = new wxChoice( m_LayersListPanel, ID_INNER11CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner11ChoiceNChoices, m_Inner11ChoiceChoices, 0 );
 	m_Inner11Choice->SetSelection( 0 );
+	m_Inner11Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
 	m_LayerListFlexGridSizer->Add( m_Inner11Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_Inner12Name = new wxTextCtrl( m_LayersListPanel, ID_INNER12NAME, _("Inner12"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -458,6 +488,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	int m_Inner12ChoiceNChoices = sizeof( m_Inner12ChoiceChoices ) / sizeof( wxString );
 	m_Inner12Choice = new wxChoice( m_LayersListPanel, ID_INNER12CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner12ChoiceNChoices, m_Inner12ChoiceChoices, 0 );
 	m_Inner12Choice->SetSelection( 0 );
+	m_Inner12Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
 	m_LayerListFlexGridSizer->Add( m_Inner12Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_Inner13Name = new wxTextCtrl( m_LayersListPanel, ID_INNER13NAME, _("Inner13"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -483,6 +515,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	int m_Inner13ChoiceNChoices = sizeof( m_Inner13ChoiceChoices ) / sizeof( wxString );
 	m_Inner13Choice = new wxChoice( m_LayersListPanel, ID_INNER13CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner13ChoiceNChoices, m_Inner13ChoiceChoices, 0 );
 	m_Inner13Choice->SetSelection( 0 );
+	m_Inner13Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
 	m_LayerListFlexGridSizer->Add( m_Inner13Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_Inner14Name = new wxTextCtrl( m_LayersListPanel, ID_INNER14NAME, _("Inner14"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -508,6 +542,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	int m_Inner14ChoiceNChoices = sizeof( m_Inner14ChoiceChoices ) / sizeof( wxString );
 	m_Inner14Choice = new wxChoice( m_LayersListPanel, ID_INNER14CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner14ChoiceNChoices, m_Inner14ChoiceChoices, 0 );
 	m_Inner14Choice->SetSelection( 0 );
+	m_Inner14Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
 	m_LayerListFlexGridSizer->Add( m_Inner14Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_Inner15Name = new wxTextCtrl( m_LayersListPanel, ID_INNER15NAME, _("Inner15"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -533,10 +569,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	int m_Inner15ChoiceNChoices = sizeof( m_Inner15ChoiceChoices ) / sizeof( wxString );
 	m_Inner15Choice = new wxChoice( m_LayersListPanel, ID_INNER15CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner15ChoiceNChoices, m_Inner15ChoiceChoices, 0 );
 	m_Inner15Choice->SetSelection( 0 );
+	m_Inner15Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
 	m_LayerListFlexGridSizer->Add( m_Inner15Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_BackName = new wxTextCtrl( m_LayersListPanel, ID_BACKNAME, _("Back"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_BackName->SetMaxLength( 20 ); 
+	m_BackName->SetToolTip( _("Layer name of back (bottom) copper layer") );
+	
 	m_LayerListFlexGridSizer->Add( m_BackName, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_BackPanel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -546,6 +586,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bBackSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_BackCheckBox = new wxCheckBox( m_BackPanel, ID_BACKCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_BackCheckBox->SetToolTip( _("If you want a back copper layer") );
 	
 	bBackSizer->Add( m_BackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
@@ -558,6 +600,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	int m_BackChoiceNChoices = sizeof( m_BackChoiceChoices ) / sizeof( wxString );
 	m_BackChoice = new wxChoice( m_LayersListPanel, ID_BACKCHOICE, wxDefaultPosition, wxDefaultSize, m_BackChoiceNChoices, m_BackChoiceChoices, 0 );
 	m_BackChoice->SetSelection( 0 );
+	m_BackChoice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
 	m_LayerListFlexGridSizer->Add( m_BackChoice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_MaskBackName = new wxStaticText( m_LayersListPanel, ID_MASKBACKNAME, _("Mask_Back_later"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -571,6 +615,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer24 = new wxBoxSizer( wxVERTICAL );
 	
 	m_MaskBackCheckBox = new wxCheckBox( m_panel21, ID_MASKBACKCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_MaskBackCheckBox->SetToolTip( _("If you want a solder mask layer for the back side of the board") );
 	
 	bSizer24->Add( m_MaskBackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
@@ -595,6 +641,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	
 	m_SilkSBackCheckBox = new wxCheckBox( m_panel22, ID_SILKSBACKCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
+	m_SilkSBackCheckBox->SetToolTip( _("If you want a silk screen layer for the back side of the board") );
+	
 	bSizer25->Add( m_SilkSBackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_panel22->SetSizer( bSizer25 );
@@ -617,6 +665,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer26 = new wxBoxSizer( wxVERTICAL );
 	
 	m_SoldPBackCheckBox = new wxCheckBox( m_panel23, ID_SOLDPBACKCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_SoldPBackCheckBox->SetToolTip( _("If you want a solder paste layer for the back side of the board") );
 	
 	bSizer26->Add( m_SoldPBackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
@@ -641,6 +691,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	
 	m_AdhesBackCheckBox = new wxCheckBox( m_panel24, ID_ADHESBACKCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
+	m_AdhesBackCheckBox->SetToolTip( _("If you want an adhesive layer for the back side of the board") );
+	
 	bSizer27->Add( m_AdhesBackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_panel24->SetSizer( bSizer27 );
@@ -663,6 +715,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer28 = new wxBoxSizer( wxVERTICAL );
 	
 	m_PCBEdgesCheckBox = new wxCheckBox( m_panel25, ID_PCBEDGESCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_PCBEdgesCheckBox->SetToolTip( _("If you want a board perimeter layer") );
 	
 	bSizer28->Add( m_PCBEdgesCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
@@ -733,6 +787,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	
 	m_CommentsCheckBox = new wxCheckBox( m_panel28, ID_COMMENTSCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
+	m_CommentsCheckBox->SetToolTip( _("If you want a separate layer for comments or notes") );
+	
 	bSizer31->Add( m_CommentsCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_panel28->SetSizer( bSizer31 );
@@ -755,6 +811,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer32 = new wxBoxSizer( wxVERTICAL );
 	
 	m_DrawingsCheckBox = new wxCheckBox( m_panel29, ID_DRAWINGSCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_DrawingsCheckBox->SetToolTip( _("If you want a layer for documentation drawings") );
 	
 	bSizer32->Add( m_DrawingsCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	

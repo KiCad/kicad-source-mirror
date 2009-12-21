@@ -128,7 +128,6 @@ private:
         wxSize txtz;
 
         txtz = m_NameStaticText->GetSize();
-//        m_NameStaticText->Move( 0, 5 );
         m_NameStaticText->Move( offset + (widths[0] - txtz.x)/2, 5 );
         offset += widths[0];
 
@@ -265,15 +264,14 @@ DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( WinEDA_PcbFrame* parent ) :
     // these 3 controls are handled outside wxformbuilder so that we can add
     // them without a sizer.  Then we position them manually based on the column
     // widths from m_LayerListFexGridSizer->GetColWidths()
-    m_NameStaticText = new wxStaticText( m_TitlePanel, -1, _("Name"), wxDefaultPosition, wxDefaultSize, 0 );
-    m_TitlePanel->AddChild( m_NameStaticText );
+    m_NameStaticText = new wxStaticText( m_TitlePanel, wxID_ANY, _("Name"), wxDefaultPosition, wxDefaultSize, 0 );
 
-    m_EnabledStaticText = new wxStaticText( m_TitlePanel, -1, _("Enabled"), wxDefaultPosition, wxDefaultSize, 0 );
-    m_TitlePanel->AddChild( m_NameStaticText );
+    m_EnabledStaticText = new wxStaticText( m_TitlePanel, wxID_ANY, _("Enabled"), wxDefaultPosition, wxDefaultSize, 0 );
 
-    m_TypeStaticText = new wxStaticText( m_TitlePanel, -1, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
-    m_TitlePanel->AddChild( m_TypeStaticText );
+    m_TypeStaticText = new wxStaticText( m_TitlePanel, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
 
+    // set the height of the title panel to be the size of any wxStaticText object
+    // plus 10 so we can have a border of 5 on both top and bottom.
     m_TitlePanel->SetMinSize( wxSize( -1, m_AdhesFrontName->GetSize().y+10 ) );
 
     Layout();
