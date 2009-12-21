@@ -263,7 +263,7 @@ DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( WinEDA_PcbFrame* parent ) :
 
     // these 3 controls are handled outside wxformbuilder so that we can add
     // them without a sizer.  Then we position them manually based on the column
-    // widths from m_LayerListFexGridSizer->GetColWidths()
+    // widths from m_LayerListFlexGridSizer->GetColWidths()
     m_NameStaticText = new wxStaticText( m_TitlePanel, wxID_ANY, _("Name"), wxDefaultPosition, wxDefaultSize, 0 );
 
     m_EnabledStaticText = new wxStaticText( m_TitlePanel, wxID_ANY, _("Enabled"), wxDefaultPosition, wxDefaultSize, 0 );
