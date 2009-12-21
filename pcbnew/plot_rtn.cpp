@@ -757,14 +757,14 @@ void WinEDA_BasePcbFrame::Plot_Layer( PLOTTER* plotter, int Layer,
         }
         break;
 
-    case SOLDERMASK_N_CU:
-    case SOLDERMASK_N_CMP:
+    case SOLDERMASK_N_BACK:
+    case SOLDERMASK_N_FRONT:
         Plot_Standard_Layer( plotter, layer_mask,
                              g_pcb_plot_options.DrawViaOnMaskLayer, trace_mode );
         break;
 
-    case SOLDERPASTE_N_CU:
-    case SOLDERPASTE_N_CMP:
+    case SOLDERPASTE_N_BACK:
+    case SOLDERPASTE_N_FRONT:
         Plot_Standard_Layer( plotter, layer_mask, false, trace_mode );
         break;
 

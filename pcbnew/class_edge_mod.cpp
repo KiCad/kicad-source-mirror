@@ -489,7 +489,7 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
     // can use the copper layers m_Layer < FIRST_NON_COPPER_LAYER is allowed.
     // @todo: changes use of EDGE_MODULE these footprints and allows only m_Layer >= FIRST_NON_COPPER_LAYER
     if( (m_Layer < 0) || (m_Layer > LAST_NON_COPPER_LAYER) )
-        m_Layer = SILKSCREEN_N_CMP;
+        m_Layer = SILKSCREEN_N_FRONT;
     return error;
 }
 

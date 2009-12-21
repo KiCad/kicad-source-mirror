@@ -440,7 +440,7 @@ void CreateComponentsSection( FILE* file, BOARD* pcb )
         for( ii = 0; ii < 2; ii++ )
         {
             int      orient = PtTexte->m_Orient;
-            wxString layer  = GenCAD_Layer_Name[SILKSCREEN_N_CMP];
+            wxString layer  = GenCAD_Layer_Name[SILKSCREEN_N_FRONT];
             fprintf( file, "TEXT %d %d %d %d.%d %s %s \"%s\"",
                      PtTexte->m_Pos0.x, -PtTexte->m_Pos0.y,
                      PtTexte->m_Size.x,

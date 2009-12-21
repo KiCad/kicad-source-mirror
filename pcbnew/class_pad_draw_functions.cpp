@@ -61,35 +61,35 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         switch( m_Masque_Layer & ~ALL_CU_LAYERS )
         {
         case ADHESIVE_LAYER_CU:
-            color = g_DesignSettings.m_LayerColor[ADHESIVE_N_CU];
+            color = g_DesignSettings.m_LayerColor[ADHESIVE_N_BACK];
             break;
 
         case ADHESIVE_LAYER_CMP:
-            color = g_DesignSettings.m_LayerColor[ADHESIVE_N_CMP];
+            color = g_DesignSettings.m_LayerColor[ADHESIVE_N_FRONT];
             break;
 
         case SOLDERPASTE_LAYER_CU:
-            color = g_DesignSettings.m_LayerColor[SOLDERPASTE_N_CU];
+            color = g_DesignSettings.m_LayerColor[SOLDERPASTE_N_BACK];
             break;
 
         case SOLDERPASTE_LAYER_CMP:
-            color = g_DesignSettings.m_LayerColor[SOLDERPASTE_N_CMP];
+            color = g_DesignSettings.m_LayerColor[SOLDERPASTE_N_FRONT];
             break;
 
         case SILKSCREEN_LAYER_CU:
-            color = g_DesignSettings.m_LayerColor[SILKSCREEN_N_CU];
+            color = g_DesignSettings.m_LayerColor[SILKSCREEN_N_BACK];
             break;
 
         case SILKSCREEN_LAYER_CMP:
-            color = g_DesignSettings.m_LayerColor[SILKSCREEN_N_CMP];
+            color = g_DesignSettings.m_LayerColor[SILKSCREEN_N_FRONT];
             break;
 
         case SOLDERMASK_LAYER_CU:
-            color = g_DesignSettings.m_LayerColor[SOLDERMASK_N_CU];
+            color = g_DesignSettings.m_LayerColor[SOLDERMASK_N_BACK];
             break;
 
         case SOLDERMASK_LAYER_CMP:
-            color = g_DesignSettings.m_LayerColor[SOLDERMASK_N_CMP];
+            color = g_DesignSettings.m_LayerColor[SOLDERMASK_N_FRONT];
             break;
 
         case DRAW_LAYER:
@@ -180,13 +180,13 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
             // layer shows the pad size with the mask clearance
             switch( screen->m_Active_Layer )
             {
-            case SOLDERMASK_N_CU:
-            case SOLDERMASK_N_CMP:
+            case SOLDERMASK_N_BACK:
+            case SOLDERMASK_N_FRONT:
                 mask_margin.x = mask_margin.y = GetSolderMaskMargin();
                 break;
 
-            case SOLDERPASTE_N_CU:
-            case SOLDERPASTE_N_CMP:
+            case SOLDERPASTE_N_BACK:
+            case SOLDERPASTE_N_FRONT:
                 mask_margin = GetSolderPasteMargin();
                 break;
 

@@ -55,14 +55,14 @@
 #define NB_COPPER_LAYERS        (LAST_COPPER_LAYER + 1)
 
 #define FIRST_NO_COPPER_LAYER   16
-#define ADHESIVE_N_CU           16
-#define ADHESIVE_N_CMP          17
-#define SOLDERPASTE_N_CU        18
-#define SOLDERPASTE_N_CMP       19
-#define SILKSCREEN_N_CU         20
-#define SILKSCREEN_N_CMP        21
-#define SOLDERMASK_N_CU         22
-#define SOLDERMASK_N_CMP        23
+#define ADHESIVE_N_BACK           16
+#define ADHESIVE_N_FRONT          17
+#define SOLDERPASTE_N_BACK        18
+#define SOLDERPASTE_N_FRONT       19
+#define SILKSCREEN_N_BACK         20
+#define SILKSCREEN_N_FRONT        21
+#define SOLDERMASK_N_BACK         22
+#define SOLDERMASK_N_FRONT        23
 #define DRAW_N                  24
 #define COMMENT_N               25
 #define ECO1_N                  26
@@ -90,21 +90,21 @@
 #define LAYER_14                (1 << LAYER_N_14)       ///< bit mask for layer 14
 #define LAYER_15                (1 << LAYER_N_15)       ///< bit mask for layer 15
 #define LAYER_FRONT             (1 << LAYER_N_FRONT)    ///< bit mask for component layer
-#define ADHESIVE_LAYER_CU       (1 << ADHESIVE_N_CU)
-#define ADHESIVE_LAYER_CMP      (1 << ADHESIVE_N_CMP)
-#define SOLDERPASTE_LAYER_CU    (1 << SOLDERPASTE_N_CU)
-#define SOLDERPASTE_LAYER_CMP   (1 << SOLDERPASTE_N_CMP)
-#define SILKSCREEN_LAYER_CU     (1 << SILKSCREEN_N_CU)
-#define SILKSCREEN_LAYER_CMP    (1 << SILKSCREEN_N_CMP)
-#define SOLDERMASK_LAYER_CU     (1 << SOLDERMASK_N_CU)
-#define SOLDERMASK_LAYER_CMP    (1 << SOLDERMASK_N_CMP)
+#define ADHESIVE_LAYER_CU       (1 << ADHESIVE_N_BACK)
+#define ADHESIVE_LAYER_CMP      (1 << ADHESIVE_N_FRONT)
+#define SOLDERPASTE_LAYER_CU    (1 << SOLDERPASTE_N_BACK)
+#define SOLDERPASTE_LAYER_CMP   (1 << SOLDERPASTE_N_FRONT)
+#define SILKSCREEN_LAYER_CU     (1 << SILKSCREEN_N_BACK)
+#define SILKSCREEN_LAYER_CMP    (1 << SILKSCREEN_N_FRONT)
+#define SOLDERMASK_LAYER_CU     (1 << SOLDERMASK_N_BACK)
+#define SOLDERMASK_LAYER_CMP    (1 << SOLDERMASK_N_FRONT)
 #define DRAW_LAYER              (1 << DRAW_N)
 #define COMMENT_LAYER           (1 << COMMENT_N)
 #define ECO1_LAYER              (1 << ECO1_N)
 #define ECO2_LAYER              (1 << ECO2_N)
 #define EDGE_LAYER              (1 << EDGE_N)
 
-#define FIRST_NON_COPPER_LAYER  ADHESIVE_N_CU
+#define FIRST_NON_COPPER_LAYER  ADHESIVE_N_BACK
 #define LAST_NON_COPPER_LAYER   EDGE_N
 
 //      extra bits              0xE0000000

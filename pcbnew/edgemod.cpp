@@ -158,7 +158,7 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Width( EDGE_MODULE* Edge )
 void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge )
 {
     MODULE* Module    = GetBoard()->m_Modules;
-    int     new_layer = SILKSCREEN_N_CMP;
+    int     new_layer = SILKSCREEN_N_FRONT;
 
     if( Edge != NULL )
         new_layer = Edge->GetLayer();
@@ -331,9 +331,9 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
         Edge->SetLayer( module->GetLayer() );
 
         if( module->GetLayer() == LAYER_N_FRONT )
-            Edge->SetLayer( SILKSCREEN_N_CMP );
+            Edge->SetLayer( SILKSCREEN_N_FRONT );
         if( module->GetLayer() == LAYER_N_BACK )
-            Edge->SetLayer( SILKSCREEN_N_CU );
+            Edge->SetLayer( SILKSCREEN_N_BACK );
 
         /* Initialise the starting point of the new segment or arc */
         Edge->m_Start = GetScreen()->m_Curseur;

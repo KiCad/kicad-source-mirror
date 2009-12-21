@@ -229,64 +229,64 @@ static ColorButton Layer_17_Butt =
 {
     type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
-    ADHESIVE_N_CU,              // Layer
-    ADR( ADHESIVE_N_CU )        // Address of optional parameter
+    ADHESIVE_N_BACK,              // Layer
+    ADR( ADHESIVE_N_BACK )        // Address of optional parameter
 };
 
 static ColorButton Layer_18_Butt =
 {
     type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
-    ADHESIVE_N_CMP,             // Layer
-    ADR( ADHESIVE_N_CMP )       // Address of optional parameter
+    ADHESIVE_N_FRONT,             // Layer
+    ADR( ADHESIVE_N_FRONT )       // Address of optional parameter
 };
 
 static ColorButton Layer_19_Butt =
 {
     type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
-    SOLDERPASTE_N_CU,           // Layer
-    ADR( SOLDERPASTE_N_CU )     // Address of optional parameter
+    SOLDERPASTE_N_BACK,           // Layer
+    ADR( SOLDERPASTE_N_BACK )     // Address of optional parameter
 };
 
 static ColorButton Layer_20_Butt =
 {
     type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
-    SOLDERPASTE_N_CMP,          // Layer
-    ADR( SOLDERPASTE_N_CMP ),   // Address of optional parameter
+    SOLDERPASTE_N_FRONT,          // Layer
+    ADR( SOLDERPASTE_N_FRONT ),   // Address of optional parameter
 };
 
 static ColorButton Layer_21_Butt =
 {
     type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
-    SILKSCREEN_N_CU,            // Layer
-    ADR( SILKSCREEN_N_CU )      // Address of optional parameter
+    SILKSCREEN_N_BACK,            // Layer
+    ADR( SILKSCREEN_N_BACK )      // Address of optional parameter
 };
 
 static ColorButton Layer_22_Butt =
 {
     type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
-    SILKSCREEN_N_CMP,           // Layer
-    ADR( SILKSCREEN_N_CMP )     // Address of optional parameter
+    SILKSCREEN_N_FRONT,           // Layer
+    ADR( SILKSCREEN_N_FRONT )     // Address of optional parameter
 };
 
 static ColorButton Layer_23_Butt =
 {
     type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
-    SOLDERMASK_N_CU,            // Layer
-    ADR( SOLDERMASK_N_CU )      // Address of optional parameter
+    SOLDERMASK_N_BACK,            // Layer
+    ADR( SOLDERMASK_N_BACK )      // Address of optional parameter
 };
 
 static ColorButton Layer_24_Butt =
 {
     type_layer,                 // Toggle ITEM_NOT_SHOW bit of the color variable
     wxEmptyString,
-    SOLDERMASK_N_CMP,           // Layer
-    ADR( SOLDERMASK_N_CMP )     // Address of optional parameter
+    SOLDERMASK_N_FRONT,           // Layer
+    ADR( SOLDERMASK_N_FRONT )     // Address of optional parameter
 };
 
 static ColorButton Layer_25_Butt =

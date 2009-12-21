@@ -240,10 +240,10 @@ MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
          */
         layer = pt_module->GetLayer();
 
-        if( layer==ADHESIVE_N_CU || layer==SILKSCREEN_N_CU )
+        if( layer==ADHESIVE_N_BACK || layer==SILKSCREEN_N_BACK )
             layer = LAYER_N_BACK;
 
-        else if( layer==ADHESIVE_N_CMP || layer==SILKSCREEN_N_CMP )
+        else if( layer==ADHESIVE_N_FRONT || layer==SILKSCREEN_N_FRONT )
             layer = LAYER_N_FRONT;
 
         /* Test of minimum size to choosing the best candidate. */

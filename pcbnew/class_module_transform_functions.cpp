@@ -31,36 +31,36 @@ int ChangeSideNumLayer( int oldlayer )
         newlayer = LAYER_N_BACK;
         break;
 
-    case SILKSCREEN_N_CU:
-        newlayer = SILKSCREEN_N_CMP;
+    case SILKSCREEN_N_BACK:
+        newlayer = SILKSCREEN_N_FRONT;
         break;
 
-    case SILKSCREEN_N_CMP:
-        newlayer = SILKSCREEN_N_CU;
+    case SILKSCREEN_N_FRONT:
+        newlayer = SILKSCREEN_N_BACK;
         break;
 
-    case ADHESIVE_N_CU:
-        newlayer = ADHESIVE_N_CMP;
+    case ADHESIVE_N_BACK:
+        newlayer = ADHESIVE_N_FRONT;
         break;
 
-    case ADHESIVE_N_CMP:
-        newlayer = ADHESIVE_N_CU;
+    case ADHESIVE_N_FRONT:
+        newlayer = ADHESIVE_N_BACK;
         break;
 
-    case SOLDERMASK_N_CU:
-        newlayer = SOLDERMASK_N_CMP;
+    case SOLDERMASK_N_BACK:
+        newlayer = SOLDERMASK_N_FRONT;
         break;
 
-    case SOLDERMASK_N_CMP:
-        newlayer = SOLDERMASK_N_CU;
+    case SOLDERMASK_N_FRONT:
+        newlayer = SOLDERMASK_N_BACK;
         break;
 
-    case SOLDERPASTE_N_CU:
-        newlayer = SOLDERPASTE_N_CMP;
+    case SOLDERPASTE_N_BACK:
+        newlayer = SOLDERPASTE_N_FRONT;
         break;
 
-    case SOLDERPASTE_N_CMP:
-        newlayer = SOLDERPASTE_N_CU;
+    case SOLDERPASTE_N_FRONT:
+        newlayer = SOLDERPASTE_N_BACK;
         break;
 
     default:
@@ -199,13 +199,13 @@ void MODULE::Flip(const wxPoint& aCentre )
     pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
 
     if( GetLayer() == LAYER_N_BACK )
-        pt_texte->SetLayer( SILKSCREEN_N_CU );
+        pt_texte->SetLayer( SILKSCREEN_N_BACK );
 
     if( GetLayer() == LAYER_N_FRONT )
-        pt_texte->SetLayer( SILKSCREEN_N_CMP );
+        pt_texte->SetLayer( SILKSCREEN_N_FRONT );
 
-    if( (GetLayer() == SILKSCREEN_N_CU)
-       || (GetLayer() == ADHESIVE_N_CU) || (GetLayer() == LAYER_N_BACK) )
+    if( (GetLayer() == SILKSCREEN_N_BACK)
+       || (GetLayer() == ADHESIVE_N_BACK) || (GetLayer() == LAYER_N_BACK) )
         pt_texte->m_Mirror = true;
 
     /* Mirror value. */
@@ -220,13 +220,13 @@ void MODULE::Flip(const wxPoint& aCentre )
     pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
 
     if( GetLayer() == LAYER_N_BACK )
-        pt_texte->SetLayer( SILKSCREEN_N_CU );
+        pt_texte->SetLayer( SILKSCREEN_N_BACK );
 
     if( GetLayer() == LAYER_N_FRONT )
-        pt_texte->SetLayer( SILKSCREEN_N_CMP );
+        pt_texte->SetLayer( SILKSCREEN_N_FRONT );
 
-    if( (GetLayer() == SILKSCREEN_N_CU)
-       || (GetLayer() == ADHESIVE_N_CU) || (GetLayer() == LAYER_N_BACK) )
+    if( (GetLayer() == SILKSCREEN_N_BACK)
+       || (GetLayer() == ADHESIVE_N_BACK) || (GetLayer() == LAYER_N_BACK) )
         pt_texte->m_Mirror = true;
 
     /* Reverse mirror footprints. */
@@ -267,13 +267,13 @@ void MODULE::Flip(const wxPoint& aCentre )
             pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
 
             if( GetLayer() == LAYER_N_BACK )
-                pt_texte->SetLayer( SILKSCREEN_N_CU );
+                pt_texte->SetLayer( SILKSCREEN_N_BACK );
 
             if( GetLayer() == LAYER_N_FRONT )
-                pt_texte->SetLayer( SILKSCREEN_N_CMP );
+                pt_texte->SetLayer( SILKSCREEN_N_FRONT );
 
-            if(  GetLayer() == SILKSCREEN_N_CU
-                 || GetLayer() == ADHESIVE_N_CU
+            if(  GetLayer() == SILKSCREEN_N_BACK
+                 || GetLayer() == ADHESIVE_N_BACK
                  || GetLayer() == LAYER_N_BACK )
             {
                 pt_texte->m_Mirror = true;

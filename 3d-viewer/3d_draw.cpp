@@ -147,10 +147,10 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
 
     GLfloat zpos_cu  = 10 * g_Parm_3D_Visu.m_BoardScale;
     GLfloat zpos_cmp = g_Parm_3D_Visu.m_Epoxy_Width + zpos_cu;
-    g_Parm_3D_Visu.m_LayerZcoord[ADHESIVE_N_CU]    = -zpos_cu * 2;
-    g_Parm_3D_Visu.m_LayerZcoord[ADHESIVE_N_CMP]   = zpos_cmp + zpos_cu;
-    g_Parm_3D_Visu.m_LayerZcoord[SILKSCREEN_N_CU]  = -zpos_cu;
-    g_Parm_3D_Visu.m_LayerZcoord[SILKSCREEN_N_CMP] = zpos_cmp;
+    g_Parm_3D_Visu.m_LayerZcoord[ADHESIVE_N_BACK]    = -zpos_cu * 2;
+    g_Parm_3D_Visu.m_LayerZcoord[ADHESIVE_N_FRONT]   = zpos_cmp + zpos_cu;
+    g_Parm_3D_Visu.m_LayerZcoord[SILKSCREEN_N_BACK]  = -zpos_cu;
+    g_Parm_3D_Visu.m_LayerZcoord[SILKSCREEN_N_FRONT] = zpos_cmp;
     g_Parm_3D_Visu.m_LayerZcoord[DRAW_N]    = zpos_cmp + zpos_cu;
     g_Parm_3D_Visu.m_LayerZcoord[COMMENT_N] = zpos_cmp + zpos_cu;
     g_Parm_3D_Visu.m_LayerZcoord[ECO1_N]    = zpos_cmp + zpos_cu;
@@ -1270,10 +1270,10 @@ static GLfloat Get3DLayerSide( int act_layer )
 
     nZ = 1.0;
     if( ( act_layer <= LAST_COPPER_LAYER - 1 )
-       || ( act_layer == ADHESIVE_N_CU )
-       || ( act_layer == SOLDERPASTE_N_CU )
-       || ( act_layer == SILKSCREEN_N_CU )
-       || ( act_layer == SOLDERMASK_N_CU ) )
+       || ( act_layer == ADHESIVE_N_BACK )
+       || ( act_layer == SOLDERPASTE_N_BACK )
+       || ( act_layer == SILKSCREEN_N_BACK )
+       || ( act_layer == SOLDERMASK_N_BACK ) )
         nZ = -1.0;
     return nZ;
 }

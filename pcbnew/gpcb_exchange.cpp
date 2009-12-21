@@ -247,7 +247,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
         if( params[0].CmpNoCase( wxT( "ElementLine" ) ) == 0 )      // line descr
         {                                                           // Format: ElementLine [X1 Y1 X2 Y2 Thickness]
             DrawSegm = new EDGE_MODULE( this );
-            DrawSegm->SetLayer( SILKSCREEN_N_CMP );
+            DrawSegm->SetLayer( SILKSCREEN_N_FRONT );
             DrawSegm->m_Shape = S_SEGMENT;
 
             m_Drawings.PushBack( DrawSegm );
@@ -276,7 +276,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
         {                                                           // format: ElementArc [X Y Width Height StartAngle DeltaAngle Thickness]
             // pcbnew does know ellipse so we must have Width = Height
             DrawSegm = new EDGE_MODULE( this );
-            DrawSegm->SetLayer( SILKSCREEN_N_CMP );
+            DrawSegm->SetLayer( SILKSCREEN_N_FRONT );
             DrawSegm->m_Shape = S_ARC;
 
             m_Drawings.PushBack( DrawSegm );

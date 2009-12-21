@@ -31,7 +31,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
     m_Size.x = m_Size.y = 400;
     m_Width  = 120;   /* Set default dimension to a reasonable value. */
 
-    SetLayer( SILKSCREEN_N_CMP );
+    SetLayer( SILKSCREEN_N_FRONT );
     if( Module && ( Module->Type() == TYPE_MODULE ) )
     {
         m_Pos = Module->m_Pos;
@@ -39,14 +39,14 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
         int moduleLayer = Module->GetLayer();
 
         if( moduleLayer == LAYER_N_BACK )
-            SetLayer( SILKSCREEN_N_CU );
+            SetLayer( SILKSCREEN_N_BACK );
         else if( moduleLayer == LAYER_N_FRONT )
-            SetLayer( SILKSCREEN_N_CMP );
+            SetLayer( SILKSCREEN_N_FRONT );
         else
             SetLayer( moduleLayer );
 
-        if(  moduleLayer == SILKSCREEN_N_CU
-             || moduleLayer == ADHESIVE_N_CU
+        if(  moduleLayer == SILKSCREEN_N_BACK
+             || moduleLayer == ADHESIVE_N_BACK
              || moduleLayer == LAYER_N_BACK )
         {
             m_Mirror = true;
@@ -106,7 +106,7 @@ int TEXTE_MODULE::ReadDescr( char* aLine, FILE* aFile, int* aLineNum )
     int  layer;
     char BufCar1[128], BufCar2[128], BufCar3[128], BufLine[256];
 
-    layer = SILKSCREEN_N_CMP;
+    layer = SILKSCREEN_N_FRONT;
     BufCar1[0] = 0;
     BufCar2[0] = 0;
     BufCar3[0] = 0;
@@ -145,9 +145,9 @@ int TEXTE_MODULE::ReadDescr( char* aLine, FILE* aFile, int* aLineNum )
     if( layer > LAST_NO_COPPER_LAYER )
         layer = LAST_NO_COPPER_LAYER;
     if( layer == LAYER_N_BACK )
-        layer = SILKSCREEN_N_CU;
+        layer = SILKSCREEN_N_BACK;
     else if( layer == LAYER_N_FRONT )
-        layer = SILKSCREEN_N_CMP;
+        layer = SILKSCREEN_N_FRONT;
 
     SetLayer( layer );
 
@@ -501,12 +501,12 @@ bool TEXTE_MODULE::IsOnLayer( int aLayer ) const
 
     if( aLayer == LAYER_N_BACK )
     {
-        if( m_Layer==ADHESIVE_N_CU || m_Layer==SILKSCREEN_N_CU )
+        if( m_Layer==ADHESIVE_N_BACK || m_Layer==SILKSCREEN_N_BACK )
             return true;
     }
     else if( aLayer == LAYER_N_FRONT )
     {
-        if( m_Layer==ADHESIVE_N_CMP || m_Layer==SILKSCREEN_N_CMP )
+        if( m_Layer==ADHESIVE_N_FRONT || m_Layer==SILKSCREEN_N_FRONT )
             return true;
     }
 

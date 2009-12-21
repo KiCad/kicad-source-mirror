@@ -241,6 +241,7 @@ void WinEDA_SetColorsFrame::CreateControls()
         {
             case type_layer:
                 CheckBox->SetValue( g_DesignSettings.IsLayerVisible( laytool_list[lyr]->m_LayerNumber ));
+                CheckBox->Enable(g_DesignSettings.IsLayerEnabled( laytool_list[lyr]->m_LayerNumber ) );
                 break;
 
             case type_via:
@@ -379,24 +380,6 @@ bool WinEDA_SetColorsFrame::ShowToolTips()
 }
 
 
-/**********************************************************/
-wxBitmap WinEDA_SetColorsFrame::GetBitmapResource( const wxString& name )
-/**********************************************************/
-{
-    wxUnusedVar(name);
-    return wxNullBitmap;
-}
-
-
-/**********************************************************/
-wxIcon WinEDA_SetColorsFrame::GetIconResource( const wxString& name )
-/**********************************************************/
-{
-    wxUnusedVar(name);
-    return wxNullIcon;
-}
-
-
 /**********************************************************************/
 void WinEDA_SetColorsFrame::OnOkClick( wxCommandEvent& WXUNUSED (event) )
 /**********************************************************************/
@@ -508,6 +491,8 @@ void WinEDA_SetColorsFrame::ResetDisplayLayersCu( wxCommandEvent& event )
 
     for( int lyr = 0; lyr < 16; lyr++ )
     {
+        if( ! laytool_list[lyr]->m_CheckBox->IsEnabled() )
+            continue;
         laytool_list[lyr]->m_CheckBox->SetValue( NewState );
     }
 }

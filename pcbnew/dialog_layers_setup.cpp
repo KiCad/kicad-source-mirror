@@ -201,10 +201,10 @@ CTLs DIALOG_LAYERS_SETUP::getCTLs( int aLayerNumber )
 
     switch( aLayerNumber )
     {
-    case ADHESIVE_N_CMP:    RETAUX( m_AdhesFront );
-    case SOLDERPASTE_N_CMP: RETAUX( m_SoldPFront );
-    case SILKSCREEN_N_CMP:  RETAUX( m_SilkSFront );
-    case SOLDERMASK_N_CMP:  RETAUX( m_MaskFront );
+    case ADHESIVE_N_FRONT:    RETAUX( m_AdhesFront );
+    case SOLDERPASTE_N_FRONT: RETAUX( m_SoldPFront );
+    case SILKSCREEN_N_FRONT:  RETAUX( m_SilkSFront );
+    case SOLDERMASK_N_FRONT:  RETAUX( m_MaskFront );
     case LAYER_N_FRONT:     RETCOP( m_Front );
     case LAYER_N_2:         RETCOP( m_Inner2 );
     case LAYER_N_3:         RETCOP( m_Inner3 );
@@ -221,10 +221,10 @@ CTLs DIALOG_LAYERS_SETUP::getCTLs( int aLayerNumber )
     case LAYER_N_14:        RETCOP( m_Inner14 );
     case LAYER_N_15:        RETCOP( m_Inner15 );
     case LAYER_N_BACK:      RETCOP( m_Back );
-    case SOLDERMASK_N_CU:   RETAUX( m_MaskBack );
-    case SILKSCREEN_N_CU:   RETAUX( m_SilkSBack );
-    case SOLDERPASTE_N_CU:  RETAUX( m_SoldPBack );
-    case ADHESIVE_N_CU:     RETAUX( m_AdhesBack );
+    case SOLDERMASK_N_BACK:   RETAUX( m_MaskBack );
+    case SILKSCREEN_N_BACK:   RETAUX( m_SilkSBack );
+    case SOLDERPASTE_N_BACK:  RETAUX( m_SoldPBack );
+    case ADHESIVE_N_BACK:     RETAUX( m_AdhesBack );
     case EDGE_N:            RETAUX( m_PCBEdges );
     case ECO2_N:            RETAUX( m_Eco2 );
     case ECO1_N:            RETAUX( m_Eco1 );
