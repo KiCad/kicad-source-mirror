@@ -317,12 +317,12 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
         {                                                   //	format: Pad [x1 y1 x2 y2 thickness clearance mask "name" "pad_number" flags]
             Pad = new D_PAD( this );
             Pad->m_PadShape     = PAD_RECT;
-            Pad->m_Masque_Layer = CMP_LAYER | SOLDERMASK_LAYER_CMP | SOLDERPASTE_LAYER_CMP;
+            Pad->m_Masque_Layer = LAYER_FRONT | SOLDERMASK_LAYER_CMP | SOLDERPASTE_LAYER_CMP;
 
             // Set shape from flags
             iflgidx = params.GetCount() - 2;
             if( TestFlags( params[iflgidx], 0x0080, wxT( "onsolder" ) ) )
-                Pad->m_Masque_Layer = CUIVRE_LAYER | SOLDERMASK_LAYER_CU | SOLDERPASTE_LAYER_CU;
+                Pad->m_Masque_Layer = LAYER_BACK | SOLDERMASK_LAYER_CU | SOLDERPASTE_LAYER_CU;
 
             for( unsigned ii = 0; ii < 5; ii++ )
             {

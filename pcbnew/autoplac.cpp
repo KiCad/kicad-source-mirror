@@ -526,9 +526,9 @@ void WinEDA_PcbFrame::GenModuleOnBoard( MODULE* Module )
 
     masque_layer = 0;
     if( Module->GetLayer() == LAYER_N_FRONT )
-        masque_layer = CMP_LAYER;
+        masque_layer = LAYER_FRONT;
     if( Module->GetLayer() == LAYER_N_BACK )
-        masque_layer = CUIVRE_LAYER;
+        masque_layer = LAYER_BACK;
 
     TraceFilledRectangle( GetBoard(), ox, oy, fx, fy, masque_layer,
                           CELL_is_MODULE, WRITE_OR_CELL );
@@ -602,9 +602,9 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
     if( Nb_Sides == TWO_SIDES )
     {
         D_PAD* Pad; int masque_otherlayer;
-        masque_otherlayer = CUIVRE_LAYER;
+        masque_otherlayer = LAYER_BACK;
         if( Module->GetLayer() == LAYER_N_BACK )
-            masque_otherlayer = CMP_LAYER;
+            masque_otherlayer = LAYER_FRONT;
 
         for( Pad = Module->m_Pads; Pad != NULL; Pad = Pad->Next() )
         {

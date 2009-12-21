@@ -98,9 +98,9 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( PLOTTER*    plotter,
                 if( (pt_pad->m_Masque_Layer & masque_layer) == 0
                    /* Copper pads go on copper silk, component
                     * pads go on component silk */
-                   && ( ( (pt_pad->m_Masque_Layer & CUIVRE_LAYER) == 0 )
+                   && ( ( (pt_pad->m_Masque_Layer & LAYER_BACK) == 0 )
                        || ( (masque_layer & SILKSCREEN_LAYER_CU) == 0 ) )
-                   && ( ( (pt_pad->m_Masque_Layer & CMP_LAYER) == 0 )
+                   && ( ( (pt_pad->m_Masque_Layer & LAYER_FRONT) == 0 )
                        || ( (masque_layer & SILKSCREEN_LAYER_CMP) == 0 ) ) )
                 {
                     if( !g_pcb_plot_options.Plot_Pads_All_Layers )
@@ -921,9 +921,9 @@ void WinEDA_BasePcbFrame::Plot_Standard_Layer( PLOTTER*    aPlotter,
             // is SOLDERMASK_LAYER_CU or SOLDERMASK_LAYER_CMP,vias are drawn,
             // if they are on an external copper layer
             int via_mask_layer = Via->ReturnMaskLayer();
-            if( via_mask_layer & CUIVRE_LAYER )
+            if( via_mask_layer & LAYER_BACK )
                 via_mask_layer |= SOLDERMASK_LAYER_CU;
-            if( via_mask_layer & CMP_LAYER )
+            if( via_mask_layer & LAYER_FRONT )
                 via_mask_layer |= SOLDERMASK_LAYER_CMP;
             if( ( via_mask_layer & aLayerMask ) == 0 )
                 continue;

@@ -43,7 +43,7 @@ PCB_Plot_Options::PCB_Plot_Options()
     PlotScaleOpt = 1;
 }
 
-static long s_SelectedLayers = CUIVRE_LAYER | CMP_LAYER |
+static long s_SelectedLayers = LAYER_BACK | LAYER_FRONT |
                                SILKSCREEN_LAYER_CMP | SILKSCREEN_LAYER_CU;
 
 static bool s_PlotOriginIsAuxAxis = FALSE;

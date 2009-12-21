@@ -79,17 +79,17 @@ static int ChangeSideMaskLayer( int masque )
 {
     int newmasque;
 
-    newmasque = masque & ~(CUIVRE_LAYER | CMP_LAYER |
+    newmasque = masque & ~(LAYER_BACK | LAYER_FRONT |
                            SILKSCREEN_LAYER_CU | SILKSCREEN_LAYER_CMP |
                            ADHESIVE_LAYER_CU | ADHESIVE_LAYER_CMP |
                            SOLDERMASK_LAYER_CU | SOLDERMASK_LAYER_CMP |
                            SOLDERPASTE_LAYER_CU | SOLDERPASTE_LAYER_CMP |
                            ADHESIVE_LAYER_CU | ADHESIVE_LAYER_CMP);
 
-    if( masque & CUIVRE_LAYER )
-        newmasque |= CMP_LAYER;
-    if( masque & CMP_LAYER )
-        newmasque |= CUIVRE_LAYER;
+    if( masque & LAYER_BACK )
+        newmasque |= LAYER_FRONT;
+    if( masque & LAYER_FRONT )
+        newmasque |= LAYER_BACK;
 
     if( masque & SILKSCREEN_LAYER_CU )
         newmasque |= SILKSCREEN_LAYER_CMP;

@@ -595,7 +595,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( const wxString& name,
         pad->m_Pos = Module->m_Pos;
         pad->m_PadShape     = PAD_RECT;
         pad->m_Attribut     = PAD_SMD;
-        pad->m_Masque_Layer = CMP_LAYER;
+        pad->m_Masque_Layer = LAYER_FRONT;
         Line.Printf( wxT( "%d" ), pad_num );
         pad->SetPadName( Line );
         pad_num++;

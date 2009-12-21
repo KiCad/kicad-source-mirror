@@ -48,10 +48,10 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         fillpad = 0;
 #endif
 
-    if( m_Masque_Layer & CMP_LAYER )
+    if( m_Masque_Layer & LAYER_FRONT )
         color = g_PadCMPColor;
 
-    if( m_Masque_Layer & CUIVRE_LAYER )
+    if( m_Masque_Layer & LAYER_BACK )
         color |= g_PadCUColor;
 
     if( color == 0 ) /* Not on copper layer */
@@ -133,9 +133,9 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
             // or the current layer is one of said 2 external copper layers,
             // then highlight only the current layer.
             if( ( ( 1 << routeTop ) | ( 1 << routeBot ) )
-               == ( CUIVRE_LAYER | CMP_LAYER )
+               == ( LAYER_BACK | LAYER_FRONT )
                || ( ( 1 << screen->m_Active_Layer )
-                   & ( CUIVRE_LAYER | CMP_LAYER ) ) )
+                   & ( LAYER_BACK | LAYER_FRONT ) ) )
             {
                 if( !IsOnLayer( screen->m_Active_Layer ) )
                 {
@@ -431,11 +431,11 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         dx0 = MIN( dx0, dy0 );
         int nc_color = BLUE;
 
-        if( m_Masque_Layer & CMP_LAYER )    /* Draw \ */
+        if( m_Masque_Layer & LAYER_FRONT )    /* Draw \ */
             GRLine( &panel->m_ClipBox, DC, cx0 - dx0, cy0 - dx0,
                     cx0 + dx0, cy0 + dx0, 0, nc_color );
 
-        if( m_Masque_Layer & CUIVRE_LAYER ) /* Draw / */
+        if( m_Masque_Layer & LAYER_BACK ) /* Draw / */
             GRLine( &panel->m_ClipBox, DC, cx0 + dx0, cy0 - dx0,
                     cx0 - dx0, cy0 + dx0, 0, nc_color );
     }

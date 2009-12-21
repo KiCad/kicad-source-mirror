@@ -194,7 +194,7 @@ public:
      * Function ReturnMaskLayer
      * returns a "layer mask", which is a bitmap of all layers on which the
      * TRACK segment or SEGVIA physically resides.
-     * @return int - a layer mask, see pcbstruct.h's CUIVRE_LAYER, etc.
+     * @return int - a layer mask, see pcbstruct.h's LAYER_BACK, etc.
      */
     int             ReturnMaskLayer();
 

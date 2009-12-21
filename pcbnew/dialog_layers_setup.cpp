@@ -175,19 +175,19 @@ static const int presets[] =
     0,  // shift the array index up by one, matches with "Custom".
 
     // "Two layers, parts on Front only"
-    EDGE_LAYER | CMP_LAYER | CUIVRE_LAYER | FRONT_AUX,
+    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | FRONT_AUX,
 
     // "Two layers, parts on Back only",
-    EDGE_LAYER | CMP_LAYER | CUIVRE_LAYER | BACK_AUX,
+    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | BACK_AUX,
 
     // "Two layers, parts on Front and Back",
-    EDGE_LAYER | CMP_LAYER | CUIVRE_LAYER | BACK_AUX | FRONT_AUX,
+    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | BACK_AUX | FRONT_AUX,
 
     // "Four layers, parts on Front only"
-    EDGE_LAYER | CMP_LAYER | CUIVRE_LAYER | LAYER_2 | LAYER_3 | FRONT_AUX,
+    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | LAYER_2 | LAYER_3 | FRONT_AUX,
 
     // "Four layers, parts on Front and Back"
-    EDGE_LAYER | CMP_LAYER | CUIVRE_LAYER | LAYER_2 | LAYER_3 | FRONT_AUX | BACK_AUX,
+    EDGE_LAYER | LAYER_FRONT | LAYER_BACK | LAYER_2 | LAYER_3 | FRONT_AUX | BACK_AUX,
 
     //  "All layers on",
     ALL_LAYERS,

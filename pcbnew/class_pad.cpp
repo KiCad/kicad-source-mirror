@@ -643,11 +643,11 @@ void D_PAD::DisplayInfo( WinEDA_DrawFrame* frame )
     }
     else
     {
-#define INTERIOR_COPPER     (ALL_CU_LAYERS & ~(CUIVRE_LAYER | CMP_LAYER))
+#define INTERIOR_COPPER     (ALL_CU_LAYERS & ~(LAYER_BACK | LAYER_FRONT))
 
         static const wxChar* andInternal = _( " & int" );
 
-        if( (m_Masque_Layer & (CUIVRE_LAYER | CMP_LAYER)) == CUIVRE_LAYER )
+        if( (m_Masque_Layer & (LAYER_BACK | LAYER_FRONT)) == LAYER_BACK )
         {
             layerInfo = board->GetLayerName( LAYER_N_BACK );
 
@@ -655,7 +655,7 @@ void D_PAD::DisplayInfo( WinEDA_DrawFrame* frame )
                 layerInfo += andInternal;
         }
 
-        else if( (m_Masque_Layer & (CUIVRE_LAYER | CMP_LAYER)) == (CUIVRE_LAYER | CMP_LAYER) )
+        else if( (m_Masque_Layer & (LAYER_BACK | LAYER_FRONT)) == (LAYER_BACK | LAYER_FRONT) )
         {
             layerInfo = board->GetLayerName( LAYER_N_BACK ) + wxT(", ") +
                         board->GetLayerName( LAYER_N_FRONT );
@@ -664,7 +664,7 @@ void D_PAD::DisplayInfo( WinEDA_DrawFrame* frame )
                 layerInfo += andInternal;
         }
 
-        else if( (m_Masque_Layer & (CUIVRE_LAYER | CMP_LAYER)) == CMP_LAYER )
+        else if( (m_Masque_Layer & (LAYER_BACK | LAYER_FRONT)) == LAYER_FRONT )
         {
             layerInfo = board->GetLayerName( LAYER_N_FRONT );
 

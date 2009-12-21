@@ -30,7 +30,7 @@
 static int  s_PrintPenMinWidth  = 1;
 static bool s_Print_Frame_Ref   = true;
 static int  s_PlotBlackAndWhite = 0;
-static long s_SelectedLayers    = CUIVRE_LAYER | CMP_LAYER |
+static long s_SelectedLayers    = LAYER_BACK | LAYER_FRONT |
                                   SILKSCREEN_LAYER_CMP | SILKSCREEN_LAYER_CU;
 
 class DIALOG_SVG_PRINT : public DIALOG_SVG_PRINT_base

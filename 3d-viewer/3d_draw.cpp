@@ -817,8 +817,8 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
 
     glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis
     nlmax = g_Parm_3D_Visu.m_Layers - 1;
-    Oncu  = (m_Masque_Layer & CUIVRE_LAYER) ? TRUE : FALSE;
-    Oncmp = (m_Masque_Layer & CMP_LAYER) ? TRUE : FALSE;
+    Oncu  = (m_Masque_Layer & LAYER_BACK) ? TRUE : FALSE;
+    Oncmp = (m_Masque_Layer & LAYER_FRONT) ? TRUE : FALSE;
     Both  = Oncu && Oncmp;
 
     switch( m_PadShape & 0x7F )

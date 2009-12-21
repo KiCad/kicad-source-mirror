@@ -65,9 +65,9 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
                 << wxT( "\" (" );
         if ( (pad->m_Masque_Layer & ALL_CU_LAYERS) == ALL_CU_LAYERS )
             text << _("all copper layers");
-        else if( (pad->m_Masque_Layer & CUIVRE_LAYER) == CUIVRE_LAYER )
+        else if( (pad->m_Masque_Layer & LAYER_BACK) == LAYER_BACK )
             text << aPcb->GetLayerName( LAYER_N_BACK ).Trim();
-        else if( (pad->m_Masque_Layer & CMP_LAYER) == CMP_LAYER )
+        else if( (pad->m_Masque_Layer & LAYER_FRONT) == LAYER_FRONT )
             text << aPcb->GetLayerName( LAYER_N_FRONT );
         else text << _("???");
         text << _( ") of " ) << ( (MODULE*) GetParent() )->GetReference();

@@ -381,8 +381,8 @@ void DIALOG_PAD_PROPERTIES::SetPadLayersList( long layer_mask )
  * @param layer_mask = pad layer mask (ORed layers bit mask)
  */
 {
-    m_PadLayerCu->SetValue( ( layer_mask & CUIVRE_LAYER ) );
-    m_PadLayerCmp->SetValue( ( layer_mask & CMP_LAYER ) );
+    m_PadLayerCu->SetValue( ( layer_mask & LAYER_BACK ) );
+    m_PadLayerCmp->SetValue( ( layer_mask & LAYER_FRONT ) );
 
     m_PadLayerAdhCmp->SetValue( ( layer_mask & ADHESIVE_LAYER_CMP ) );
     m_PadLayerAdhCu->SetValue( ( layer_mask & ADHESIVE_LAYER_CU ) );
@@ -488,10 +488,10 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 
     PadLayerMask = 0;
     if( m_PadLayerCu->GetValue() )
-        PadLayerMask |= CUIVRE_LAYER;
+        PadLayerMask |= LAYER_BACK;
     if( m_PadLayerCmp->GetValue() )
-        PadLayerMask |= CMP_LAYER;
-    if( ( PadLayerMask & (CUIVRE_LAYER | CMP_LAYER) ) == (CUIVRE_LAYER | CMP_LAYER) )
+        PadLayerMask |= LAYER_FRONT;
+    if( ( PadLayerMask & (LAYER_BACK | LAYER_FRONT) ) == (LAYER_BACK | LAYER_FRONT) )
         PadLayerMask |= ALL_CU_LAYERS;
     if( m_PadLayerAdhCmp->GetValue() )
         PadLayerMask |= ADHESIVE_LAYER_CMP;

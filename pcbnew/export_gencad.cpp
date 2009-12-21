@@ -351,14 +351,14 @@ void CreateShapesSection( FILE* file, BOARD* pcb )
         for( pad = module->m_Pads; pad != NULL; pad = pad->Next() )
         {
             layer = "ALL";
-            if( ( pad->m_Masque_Layer & ALL_CU_LAYERS ) == CUIVRE_LAYER )
+            if( ( pad->m_Masque_Layer & ALL_CU_LAYERS ) == LAYER_BACK )
             {
                 if( module->GetLayer() == LAYER_N_FRONT )
                     layer = "BOTTOM";
                 else
                     layer = "TOP";
             }
-            else if( ( pad->m_Masque_Layer & ALL_CU_LAYERS ) == CMP_LAYER )
+            else if( ( pad->m_Masque_Layer & ALL_CU_LAYERS ) == LAYER_FRONT )
             {
                 if( module->GetLayer() == LAYER_N_FRONT )
                     layer = "TOP";
