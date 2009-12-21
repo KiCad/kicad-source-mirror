@@ -16,8 +16,10 @@ class PCB_SCREEN;
 
 class WinEDA_DrawPanel : public wxScrolledWindow
 {
-public:
+private:
     WinEDA_DrawFrame* m_Parent;
+
+public:
     EDA_Rect          m_ClipBox;            // the clipbox used in screen
                                             // redraw (usually gives the
                                             // visible area in internal units)
@@ -74,12 +76,13 @@ public:
 
     BASE_SCREEN* GetScreen();
 
+    WinEDA_DrawFrame* GetParent()
+    {
+        return m_Parent;
+    }
 
-    bool         IsPointOnDisplay( wxPoint ref_pos );
     void         OnPaint( wxPaintEvent& event );
     void         OnSize( wxSizeEvent& event );
-    void         SetBoundaryBox();
-    void         ReDraw( wxDC* DC, bool erasebg = TRUE );
     void         PrintPage( wxDC* DC,
                             bool  Print_Sheet_Ref,
                             int   PrintMask,
@@ -109,6 +112,10 @@ public:
     void         AddMenuZoom( wxMenu* MasterMenu );
     bool         OnRightClick( wxMouseEvent& event );
     void         Process_Special_Functions( wxCommandEvent& event );
+
+    bool         IsPointOnDisplay( wxPoint ref_pos );
+    void         SetBoundaryBox();
+    void         ReDraw( wxDC* DC, bool erasebg = TRUE );
 
     /** Function CursorRealPosition
      * @return the position in user units of location ScreenPos
@@ -157,16 +164,12 @@ public:
     void         MouseTo( const wxPoint& Mouse );
 
     /* Cursor functions */
-    void         Trace_Curseur( wxDC* DC, int color = WHITE );  // Draw the
-                                                                // user cursor
-                                                                // (grid
-                                                                // cursor)
-    void         CursorOff( wxDC* DC );                         // remove the
-                                                                // grid cursor
-                                                                // from the
-                                                                // display
-    void         CursorOn( wxDC* DC );                          // display the
-                                                                // grid cursor
+    // Draw the user cursor (grid cursor)
+    void         Trace_Curseur( wxDC* DC, int color = WHITE );
+    // remove the grid cursor from the display
+    void         CursorOff( wxDC* DC );
+    // display the grid cursor
+    void         CursorOn( wxDC* DC );
 
     /**
      * Release managed cursor.

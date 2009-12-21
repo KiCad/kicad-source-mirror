@@ -29,6 +29,13 @@ private:
     wxSemaphore*        m_Semaphore;        // != NULL if the frame must emulate a modal dialog
     wxString            m_ConfigPath;       // subpath for configuration
 
+protected:
+    static wxString m_libraryName;
+    static wxString m_entryName;
+    static int      m_unit;
+    static int      m_convert;
+    static wxSize   m_clientSize;
+
 public:
     WinEDA_ViewlibFrame( wxWindow*    father,
                          CMP_LIBRARY* Library = NULL,
@@ -70,13 +77,6 @@ private:
     void ExportToSchematicLibraryPart( wxCommandEvent& event );
     void ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag );
     bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
-
-protected:
-    static wxString m_libraryName;
-    static wxString m_entryName;
-    static int      m_unit;
-    static int      m_convert;
-    static wxSize   m_clientSize;
 
     DECLARE_EVENT_TABLE()
 };

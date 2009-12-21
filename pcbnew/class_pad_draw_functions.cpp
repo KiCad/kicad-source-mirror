@@ -38,7 +38,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     if( m_Flags & DO_NOT_DRAW )
         return;
 
-    WinEDA_BasePcbFrame* frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
+    WinEDA_BasePcbFrame* frame  = (WinEDA_BasePcbFrame*) panel->GetParent();
     PCB_SCREEN*          screen = frame->GetScreen();
     if( frame->m_DisplayPadFill == FILLED )
         fillpad = 1;

@@ -74,6 +74,7 @@
 #define LAYER_COUNT             32
 
 
+#define LAYER_BACK              (1 << LAYER_N_BACK)     ///< bit mask for copper layer
 #define CUIVRE_LAYER            (1 << LAYER_N_BACK)     ///< bit mask for copper layer
 #define LAYER_2                 (1 << LAYER_N_2)        ///< bit mask for layer 2
 #define LAYER_3                 (1 << LAYER_N_3)        ///< bit mask for layer 3
@@ -90,6 +91,7 @@
 #define LAYER_14                (1 << LAYER_N_14)       ///< bit mask for layer 14
 #define LAYER_15                (1 << LAYER_N_15)       ///< bit mask for layer 15
 #define CMP_LAYER               (1 << LAYER_N_FRONT)    ///< bit mask for component layer
+#define LAYER_FRONT             (1 << LAYER_N_FRONT)    ///< bit mask for component layer
 #define ADHESIVE_LAYER_CU       (1 << ADHESIVE_N_CU)
 #define ADHESIVE_LAYER_CMP      (1 << ADHESIVE_N_CMP)
 #define SOLDERPASTE_LAYER_CU    (1 << SOLDERPASTE_N_CU)

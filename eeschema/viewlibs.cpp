@@ -204,8 +204,7 @@ void WinEDA_ViewlibFrame::ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag )
 
     if( Flag == NEW_PART )
     {
-        DisplayComponentsNamesInLib( this, Lib, CmpName,
-                                     m_entryName );
+        DisplayComponentsNamesInLib( this, Lib, CmpName, m_entryName );
     }
 
     if( Flag == NEXT_PART )

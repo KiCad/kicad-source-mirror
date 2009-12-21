@@ -192,7 +192,7 @@ static void Exit_EditEdge( WinEDA_DrawPanel* Panel, wxDC* DC )
     }
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    ( (WinEDA_PcbFrame*) Panel->m_Parent )->SetCurItem( NULL );
+    ( (WinEDA_PcbFrame*) Panel->GetParent() )->SetCurItem( NULL );
 }
 
 

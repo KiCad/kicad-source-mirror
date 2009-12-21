@@ -103,8 +103,6 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
 
 WinEDA_DrawPanel::~WinEDA_DrawPanel()
 {
-    wxASSERT( wxGetApp().m_EDA_Config != NULL );
-
     wxGetApp().m_EDA_Config->Write( wxT( "AutoPAN" ), m_AutoPAN_Enable );
 }
 
@@ -112,9 +110,6 @@ WinEDA_DrawPanel::~WinEDA_DrawPanel()
 BASE_SCREEN* WinEDA_DrawPanel::GetScreen()
 {
     WinEDA_DrawFrame* parentFrame = m_Parent;
-
-    wxASSERT( parentFrame );
-
     return parentFrame->GetBaseScreen();
 }
 

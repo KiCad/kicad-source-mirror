@@ -113,7 +113,7 @@ static void AbortSymbolTraceOn( WinEDA_DrawPanel* Panel, wxDC* DC )
     if( item->m_Flags & IS_NEW )
     {
         if( item->Type() == COMPONENT_ARC_DRAW_TYPE )
-            Panel->m_Parent->RedrawActiveWindow( DC, TRUE );
+            Panel->GetParent()->RedrawActiveWindow( DC, TRUE );
         else
             item->Draw( Panel, DC, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
                         DefaultTransformMatrix );

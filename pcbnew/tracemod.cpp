@@ -33,7 +33,7 @@ void Trace_Pads_Only( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module,
     WinEDA_BasePcbFrame* frame;
 
     screen = (PCB_SCREEN*) panel->GetScreen();
-    frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
+    frame  = (WinEDA_BasePcbFrame*) panel->GetParent();
 
     tmp = frame->m_DisplayPadFill;
     frame->m_DisplayPadFill = FALSE;

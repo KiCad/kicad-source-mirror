@@ -35,7 +35,7 @@ static PICKED_ITEMS_LIST s_ItemsListPicker;
  */
 static void Exit_Editrack( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
-    WinEDA_PcbFrame* frame = (WinEDA_PcbFrame*) Panel->m_Parent;
+    WinEDA_PcbFrame* frame = (WinEDA_PcbFrame*) Panel->GetParent();
     TRACK*           track = (TRACK*) frame->GetCurItem();
 
     if( track && ( track->Type()==TYPE_VIA || track->Type()==TYPE_TRACK ) )
@@ -616,7 +616,7 @@ TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack )
  */
 static void PushTrack( WinEDA_DrawPanel* panel )
 {
-    BOARD*  pcb    = ( (WinEDA_BasePcbFrame*) (panel->m_Parent) )->GetBoard();
+    BOARD*  pcb    = ( (WinEDA_BasePcbFrame*) (panel->GetParent()) )->GetBoard();
     wxPoint cursor = ActiveScreen->m_Curseur;
     wxPoint cv, vec, n;
     TRACK*  track = g_CurrentTrackSegment;
@@ -682,7 +682,7 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel,
     D( g_CurrentTrackList.VerifyListIntegrity(); );
 
     PCB_SCREEN*          screen = (PCB_SCREEN*) panel->GetScreen();
-    WinEDA_BasePcbFrame* frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
+    WinEDA_BasePcbFrame* frame  = (WinEDA_BasePcbFrame*) panel->GetParent();
 
     bool      Track_fill_copy = DisplayOpt.DisplayPcbTrackFill;
     DisplayOpt.DisplayPcbTrackFill = true;

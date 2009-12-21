@@ -715,7 +715,7 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
     int fillvia = 0;
-    WinEDA_BasePcbFrame* frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
+    WinEDA_BasePcbFrame* frame  = (WinEDA_BasePcbFrame*) panel->GetParent();
     PCB_SCREEN*          screen = frame->GetScreen();
 
     if( frame->m_DisplayViaFill == FILLED )

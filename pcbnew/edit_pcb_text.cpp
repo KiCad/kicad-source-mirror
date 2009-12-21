@@ -33,7 +33,7 @@ void Abort_Edit_Pcb_Text( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    ( (WinEDA_PcbFrame*) Panel->m_Parent )->SetCurItem( NULL );
+    ( (WinEDA_PcbFrame*) Panel->GetParent() )->SetCurItem( NULL );
 
     TEXTE_PCB* TextePcb = (TEXTE_PCB*) Panel->GetScreen()->GetCurItem();
 

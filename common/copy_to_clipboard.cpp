@@ -61,7 +61,7 @@ bool DrawPage( WinEDA_DrawPanel* panel )
     BASE_SCREEN* screen = panel->GetScreen();
 
     /* scale is the ratio resolution/internal units */
-    float   scale = 82.0 / panel->m_Parent->m_InternalUnits;
+    float   scale = 82.0 / panel->GetParent()->m_InternalUnits;
 
     if( ActiveScreen->m_BlockLocate.m_Command != BLOCK_IDLE )
     {

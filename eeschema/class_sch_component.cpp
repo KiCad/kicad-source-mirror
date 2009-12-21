@@ -578,7 +578,7 @@ EDA_Rect SCH_COMPONENT::GetBoundaryBox() const
 }
 
 
-/* Used if undo / redo command:
+/* Used in undo / redo command:
  *  swap data between this and copyitem
  */
 void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )

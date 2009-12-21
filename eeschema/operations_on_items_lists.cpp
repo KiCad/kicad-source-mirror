@@ -56,7 +56,7 @@ void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector )
 void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList )
 {
     SCH_SCREEN*            screen = (SCH_SCREEN*) panel->GetScreen();
-    WinEDA_SchematicFrame* frame  = (WinEDA_SchematicFrame*) panel->m_Parent;
+    WinEDA_SchematicFrame* frame  = (WinEDA_SchematicFrame*) panel->GetParent();
     PICKED_ITEMS_LIST      itemsList;
     ITEM_PICKER            itemWrapper;
 
@@ -99,7 +99,7 @@ DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE" ) );
 void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct )
 {
     SCH_SCREEN*            screen = (SCH_SCREEN*) panel->GetScreen();
-    WinEDA_SchematicFrame* frame  = (WinEDA_SchematicFrame*) panel->m_Parent;
+    WinEDA_SchematicFrame* frame  = (WinEDA_SchematicFrame*) panel->GetParent();
 
     if( !DrawStruct )
         return;

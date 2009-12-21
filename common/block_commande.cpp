@@ -287,8 +287,8 @@ void AbortBlockCurrentCommand( WinEDA_DrawPanel* Panel, wxDC* DC )
     screen->m_BlockLocate.m_State = STATE_NO_BLOCK;
 
     screen->m_BlockLocate.m_Command = BLOCK_ABORT;
-    Panel->m_Parent->HandleBlockEnd( DC );
+    Panel->GetParent()->HandleBlockEnd( DC );
 
     screen->m_BlockLocate.m_Command = BLOCK_IDLE;
-    Panel->m_Parent->DisplayToolMsg( wxEmptyString );
+    Panel->GetParent()->DisplayToolMsg( wxEmptyString );
 }

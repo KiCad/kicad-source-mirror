@@ -62,7 +62,7 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     Panel->GetScreen()->m_Curseur = oldpos;
     g_HightLigt_Status = FALSE;
-    ( (WinEDA_PcbFrame*) Panel->m_Parent )->GetBoard()->DrawHighLight(
+    ( (WinEDA_PcbFrame*) Panel->GetParent() )->GetBoard()->DrawHighLight(
         Panel,
         DC,
         g_HightLigth_NetCode );
@@ -107,7 +107,7 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    ( (WinEDA_PcbFrame*) Panel->m_Parent )->SetCurItem( NULL );
+    ( (WinEDA_PcbFrame*) Panel->GetParent() )->SetCurItem( NULL );
 
     /* Undo move and redraw trace segments. */
     DRAG_SEGM* pt_drag = g_DragSegmentList;
@@ -126,7 +126,7 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
     g_HightLigth_NetCode = Old_HightLigth_NetCode;
     g_HightLigt_Status   = Old_HightLigt_Status;
     if( g_HightLigt_Status )
-        ( (WinEDA_PcbFrame*) Panel->m_Parent )->GetBoard()->DrawHighLight(
+        ( (WinEDA_PcbFrame*) Panel->GetParent() )->GetBoard()->DrawHighLight(
             Panel,
             DC,
             g_HightLigth_NetCode );
@@ -194,7 +194,7 @@ static void Show_MoveNode( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     DisplayOpt.DisplayPcbTrackFill = track_fill_copy;
 
     // Display track length
-    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) panel->m_Parent;
+    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) panel->GetParent();
     Track->DisplayInfo( frame );
 }
 
@@ -454,7 +454,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( WinEDA_DrawPanel* panel,
         tSegmentToEnd->Draw( panel, DC, draw_mode );
 
     // Display track length
-    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) panel->m_Parent;
+    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) panel->GetParent();
     Track->DisplayInfo( frame );
 }
 

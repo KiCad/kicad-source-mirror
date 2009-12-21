@@ -148,14 +148,7 @@ public:
      * changes the bit-mask of enabled layers
      * @param aMask = The new bit-mask of enabled layers
      */
-    void SetEnabledLayers( int aMask )
-    {
-        // TODO; ensure consistency with m_CopperLayerCount
-        m_EnabledLayers = aMask;
-
-        // A disabled layer cannot be visible
-        m_VisibleLayers &= aMask;
-    }
+    void SetEnabledLayers( int aMask );
 
 
     /**

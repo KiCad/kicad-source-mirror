@@ -119,12 +119,39 @@ void EDA_BoardDesignSettings::SetCopperLayerCount( int aNewLayerCount )
 
     // ensure consistency with the m_EnabledLayers member
     m_EnabledLayers &= ~ALL_CU_LAYERS;
-    m_EnabledLayers |= CUIVRE_LAYER;
+    m_EnabledLayers |= LAYER_BACK;
 
     if( m_CopperLayerCount > 1 )
-        m_EnabledLayers |= CMP_LAYER;
+        m_EnabledLayers |= LAYER_FRONT;
 
     for( int ii = 1; ii < aNewLayerCount - 1; ii++ )
         m_EnabledLayers |= 1 << ii;
+}
+
+/**
+ * Function SetEnabledLayers
+ * changes the bit-mask of enabled layers
+ * @param aMask = The new bit-mask of enabled layers
+ */
+void EDA_BoardDesignSettings::SetEnabledLayers( int aMask )
+{
+    m_EnabledLayers = aMask;
+
+    // Ensure consistency with m_CopperLayerCount
+    long enabledLayers = aMask & ~ALL_CU_LAYERS;
+    // Back and front layers are always existing (but not necessary enabled)
+    // so we must count them
+    enabledLayers |= LAYER_BACK|LAYER_FRONT;
+
+    long mask = 1;
+    m_CopperLayerCount = 0;
+    for( int ii = 0; ii < NB_COPPER_LAYERS; ii++, mask <<= 1 )
+    {
+        if( (aMask & mask) )
+            m_CopperLayerCount ++;
+    }
+
+    // A disabled layer cannot be visible
+    m_VisibleLayers &= aMask;
 }
 

@@ -53,7 +53,7 @@ void Show_Pads_On_Off( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* module )
  */
 void Rastnest_On_Off( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* module )
 {
-    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) panel->m_Parent;
+    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) panel->GetParent();
 
     frame->build_ratsnest_module( DC, module );
     frame->trace_ratsnest_module( DC );
@@ -153,7 +153,7 @@ void Abort_MoveOrCopyModule( WinEDA_DrawPanel* Panel, wxDC* DC )
     DRAG_SEGM*            pt_drag;
     TRACK*                pt_segm;
     MODULE*               module;
-    WinEDA_PcbFrame*      pcbframe = (WinEDA_PcbFrame*) Panel->m_Parent;
+    WinEDA_PcbFrame*      pcbframe = (WinEDA_PcbFrame*) Panel->GetParent();
 
     module = (MODULE*) pcbframe->GetScreen()->GetCurItem();
     pcbframe->GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
@@ -594,7 +594,7 @@ void DrawModuleOutlines( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* module )
 
     if( g_Show_Module_Ratsnest && panel )
     {
-        WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) panel->m_Parent;
+        WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) panel->GetParent();
         frame->build_ratsnest_module( DC, module );
         frame->trace_ratsnest_module( DC );
     }

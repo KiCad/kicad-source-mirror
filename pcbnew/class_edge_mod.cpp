@@ -169,7 +169,7 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
     color = g_DesignSettings.m_LayerColor[m_Layer];
 
-    frame = (WinEDA_BasePcbFrame*) panel->m_Parent;
+    frame = (WinEDA_BasePcbFrame*) panel->GetParent();
 
     screen = frame->GetScreen();
 
@@ -189,7 +189,7 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         if( !typeaff )
             typeaff = SKETCH;
     }
-    if( panel->GetScreen()->Scale( m_Width ) < L_MIN_DESSIN )
+    if( screen->Scale( m_Width ) < L_MIN_DESSIN )
         typeaff = FILAIRE;
 
     switch( type_trace )

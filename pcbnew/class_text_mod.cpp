@@ -345,7 +345,7 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         return;
 
     screen = (PCB_SCREEN*) panel->GetScreen();
-    frame  = (WinEDA_BasePcbFrame*) panel->m_Parent;
+    frame  = (WinEDA_BasePcbFrame*) panel->GetParent();
 
     pos.x = m_Pos.x - offset.x;
     pos.y = m_Pos.y - offset.y;

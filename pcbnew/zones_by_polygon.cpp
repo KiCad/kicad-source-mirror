@@ -139,7 +139,7 @@ static void Abort_Zone_Create_Outline( WinEDA_DrawPanel* Panel, wxDC* DC )
  * cancels the Begin_Zone command if at least one EDGE_ZONE was created.
  */
 {
-    WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) Panel->m_Parent;
+    WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) Panel->GetParent();
     ZONE_CONTAINER*  zone = pcbframe->GetBoard()->m_CurrentZoneContour;
 
     if( zone )
@@ -383,7 +383,7 @@ void Abort_Zone_Move_Corner_Or_Outlines( WinEDA_DrawPanel* Panel, wxDC* DC )
  * cancels the Begin_Zone state if at least one EDGE_ZONE has been created.
  */
 {
-    WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) Panel->m_Parent;
+    WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) Panel->GetParent();
     ZONE_CONTAINER*  zone_container = (ZONE_CONTAINER*) pcbframe->GetCurItem();
 
     if( zone_container->m_Flags == IS_MOVED )
@@ -431,7 +431,7 @@ void Show_Zone_Corner_Or_Outline_While_Move_Mouse( WinEDA_DrawPanel* Panel, wxDC
 /* Redraws the zone outline when moving a corner according to the cursor position
  */
 {
-    WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) Panel->m_Parent;
+    WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) Panel->GetParent();
     ZONE_CONTAINER*  zone = (ZONE_CONTAINER*) pcbframe->GetCurItem();
 
     if( erase )    /* Undraw edge in old position*/
@@ -727,7 +727,7 @@ static void Show_New_Edge_While_Move_Mouse( WinEDA_DrawPanel* panel, wxDC* DC, b
 /* Redraws the zone outlines when moving mouse
  */
 {
-    WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) panel->m_Parent;
+    WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) panel->GetParent();
     wxPoint          c_pos    = pcbframe->GetScreen()->m_Curseur;
     ZONE_CONTAINER*  zone = pcbframe->GetBoard()->m_CurrentZoneContour;
 

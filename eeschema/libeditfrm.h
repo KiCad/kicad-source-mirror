@@ -102,7 +102,7 @@ public:
 
     void               SetConvert( int convert )
     {
-        wxASSERT( convert >= 1 );
+        wxASSERT( convert >= 0 );
         m_convert = convert;
     }
 
