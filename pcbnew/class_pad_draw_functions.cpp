@@ -60,35 +60,35 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         // else use DARKGRAY
         switch( m_Masque_Layer & ~ALL_CU_LAYERS )
         {
-        case ADHESIVE_LAYER_CU:
+        case ADHESIVE_LAYER_BACK:
             color = g_DesignSettings.m_LayerColor[ADHESIVE_N_BACK];
             break;
 
-        case ADHESIVE_LAYER_CMP:
+        case ADHESIVE_LAYER_FRONT:
             color = g_DesignSettings.m_LayerColor[ADHESIVE_N_FRONT];
             break;
 
-        case SOLDERPASTE_LAYER_CU:
+        case SOLDERPASTE_LAYER_BACK:
             color = g_DesignSettings.m_LayerColor[SOLDERPASTE_N_BACK];
             break;
 
-        case SOLDERPASTE_LAYER_CMP:
+        case SOLDERPASTE_LAYER_FRONT:
             color = g_DesignSettings.m_LayerColor[SOLDERPASTE_N_FRONT];
             break;
 
-        case SILKSCREEN_LAYER_CU:
+        case SILKSCREEN_LAYER_BACK:
             color = g_DesignSettings.m_LayerColor[SILKSCREEN_N_BACK];
             break;
 
-        case SILKSCREEN_LAYER_CMP:
+        case SILKSCREEN_LAYER_FRONT:
             color = g_DesignSettings.m_LayerColor[SILKSCREEN_N_FRONT];
             break;
 
-        case SOLDERMASK_LAYER_CU:
+        case SOLDERMASK_LAYER_BACK:
             color = g_DesignSettings.m_LayerColor[SOLDERMASK_N_BACK];
             break;
 
-        case SOLDERMASK_LAYER_CMP:
+        case SOLDERMASK_LAYER_FRONT:
             color = g_DesignSettings.m_LayerColor[SOLDERMASK_N_FRONT];
             break;
 

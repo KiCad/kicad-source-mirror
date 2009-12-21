@@ -44,7 +44,7 @@ PCB_Plot_Options::PCB_Plot_Options()
 }
 
 static long s_SelectedLayers = LAYER_BACK | LAYER_FRONT |
-                               SILKSCREEN_LAYER_CMP | SILKSCREEN_LAYER_CU;
+                               SILKSCREEN_LAYER_FRONT | SILKSCREEN_LAYER_BACK;
 
 static bool s_PlotOriginIsAuxAxis = FALSE;
 

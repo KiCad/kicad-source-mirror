@@ -317,12 +317,12 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
         {                                                   //	format: Pad [x1 y1 x2 y2 thickness clearance mask "name" "pad_number" flags]
             Pad = new D_PAD( this );
             Pad->m_PadShape     = PAD_RECT;
-            Pad->m_Masque_Layer = LAYER_FRONT | SOLDERMASK_LAYER_CMP | SOLDERPASTE_LAYER_CMP;
+            Pad->m_Masque_Layer = LAYER_FRONT | SOLDERMASK_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT;
 
             // Set shape from flags
             iflgidx = params.GetCount() - 2;
             if( TestFlags( params[iflgidx], 0x0080, wxT( "onsolder" ) ) )
-                Pad->m_Masque_Layer = LAYER_BACK | SOLDERMASK_LAYER_CU | SOLDERPASTE_LAYER_CU;
+                Pad->m_Masque_Layer = LAYER_BACK | SOLDERMASK_LAYER_BACK | SOLDERPASTE_LAYER_BACK;
 
             for( unsigned ii = 0; ii < 5; ii++ )
             {
@@ -367,9 +367,9 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             Pad = new D_PAD( this );
             Pad->m_PadShape     = PAD_ROUND;
             Pad->m_Masque_Layer = ALL_CU_LAYERS |
-                                  SILKSCREEN_LAYER_CMP |
-                                  SOLDERMASK_LAYER_CMP |
-                                  SOLDERMASK_LAYER_CU;
+                                  SILKSCREEN_LAYER_FRONT |
+                                  SOLDERMASK_LAYER_FRONT |
+                                  SOLDERMASK_LAYER_BACK;
             iflgidx = params.GetCount() - 2;
 
             if( TestFlags( params[iflgidx], 0x0100, wxT( "square" ) ) )

@@ -216,9 +216,9 @@ static void Print_Module( WinEDA_DrawPanel* panel, wxDC* DC,
     PtStruct = Module->m_Drawings;
     mlayer   = g_TabOneLayerMask[Module->GetLayer()];
     if( Module->GetLayer() == LAYER_N_BACK )
-        mlayer = SILKSCREEN_LAYER_CU;
+        mlayer = SILKSCREEN_LAYER_BACK;
     else if( Module->GetLayer() == LAYER_N_FRONT )
-        mlayer = SILKSCREEN_LAYER_CMP;
+        mlayer = SILKSCREEN_LAYER_FRONT;
 
     if( mlayer & masklayer )
     {

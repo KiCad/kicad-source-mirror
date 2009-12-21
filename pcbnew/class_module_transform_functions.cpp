@@ -80,41 +80,41 @@ static int ChangeSideMaskLayer( int masque )
     int newmasque;
 
     newmasque = masque & ~(LAYER_BACK | LAYER_FRONT |
-                           SILKSCREEN_LAYER_CU | SILKSCREEN_LAYER_CMP |
-                           ADHESIVE_LAYER_CU | ADHESIVE_LAYER_CMP |
-                           SOLDERMASK_LAYER_CU | SOLDERMASK_LAYER_CMP |
-                           SOLDERPASTE_LAYER_CU | SOLDERPASTE_LAYER_CMP |
-                           ADHESIVE_LAYER_CU | ADHESIVE_LAYER_CMP);
+                           SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT |
+                           ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT |
+                           SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT |
+                           SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT |
+                           ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT);
 
     if( masque & LAYER_BACK )
         newmasque |= LAYER_FRONT;
     if( masque & LAYER_FRONT )
         newmasque |= LAYER_BACK;
 
-    if( masque & SILKSCREEN_LAYER_CU )
-        newmasque |= SILKSCREEN_LAYER_CMP;
-    if( masque & SILKSCREEN_LAYER_CMP )
-        newmasque |= SILKSCREEN_LAYER_CU;
+    if( masque & SILKSCREEN_LAYER_BACK )
+        newmasque |= SILKSCREEN_LAYER_FRONT;
+    if( masque & SILKSCREEN_LAYER_FRONT )
+        newmasque |= SILKSCREEN_LAYER_BACK;
 
-    if( masque & ADHESIVE_LAYER_CU )
-        newmasque |= ADHESIVE_LAYER_CMP;
-    if( masque & ADHESIVE_LAYER_CMP )
-        newmasque |= ADHESIVE_LAYER_CU;
+    if( masque & ADHESIVE_LAYER_BACK )
+        newmasque |= ADHESIVE_LAYER_FRONT;
+    if( masque & ADHESIVE_LAYER_FRONT )
+        newmasque |= ADHESIVE_LAYER_BACK;
 
-    if( masque & SOLDERMASK_LAYER_CU )
-        newmasque |= SOLDERMASK_LAYER_CMP;
-    if( masque & SOLDERMASK_LAYER_CMP )
-        newmasque |= SOLDERMASK_LAYER_CU;
+    if( masque & SOLDERMASK_LAYER_BACK )
+        newmasque |= SOLDERMASK_LAYER_FRONT;
+    if( masque & SOLDERMASK_LAYER_FRONT )
+        newmasque |= SOLDERMASK_LAYER_BACK;
 
-    if( masque & SOLDERPASTE_LAYER_CU )
-        newmasque |= SOLDERPASTE_LAYER_CMP;
-    if( masque & SOLDERPASTE_LAYER_CMP )
-        newmasque |= SOLDERPASTE_LAYER_CU;
+    if( masque & SOLDERPASTE_LAYER_BACK )
+        newmasque |= SOLDERPASTE_LAYER_FRONT;
+    if( masque & SOLDERPASTE_LAYER_FRONT )
+        newmasque |= SOLDERPASTE_LAYER_BACK;
 
-    if( masque & ADHESIVE_LAYER_CU )
-        newmasque |= ADHESIVE_LAYER_CMP;
-    if( masque & ADHESIVE_LAYER_CMP )
-        newmasque |= ADHESIVE_LAYER_CU;
+    if( masque & ADHESIVE_LAYER_BACK )
+        newmasque |= ADHESIVE_LAYER_FRONT;
+    if( masque & ADHESIVE_LAYER_FRONT )
+        newmasque |= ADHESIVE_LAYER_BACK;
 
     return newmasque;
 }

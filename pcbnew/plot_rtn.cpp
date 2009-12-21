@@ -99,9 +99,9 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( PLOTTER*    plotter,
                    /* Copper pads go on copper silk, component
                     * pads go on component silk */
                    && ( ( (pt_pad->m_Masque_Layer & LAYER_BACK) == 0 )
-                       || ( (masque_layer & SILKSCREEN_LAYER_CU) == 0 ) )
+                       || ( (masque_layer & SILKSCREEN_LAYER_BACK) == 0 ) )
                    && ( ( (pt_pad->m_Masque_Layer & LAYER_FRONT) == 0 )
-                       || ( (masque_layer & SILKSCREEN_LAYER_CMP) == 0 ) ) )
+                       || ( (masque_layer & SILKSCREEN_LAYER_FRONT) == 0 ) ) )
                 {
                     if( !g_pcb_plot_options.Plot_Pads_All_Layers )
                         continue;
@@ -854,16 +854,16 @@ void WinEDA_BasePcbFrame::Plot_Standard_Layer( PLOTTER*    aPlotter,
             pos = shape_pos;
             wxSize margin;
             switch( aLayerMask &
-                   ( SOLDERMASK_LAYER_CU | SOLDERMASK_LAYER_CMP |
-                     SOLDERPASTE_LAYER_CU | SOLDERPASTE_LAYER_CMP ) )
+                   ( SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT |
+                     SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT ) )
             {
-            case SOLDERMASK_LAYER_CMP:
-            case SOLDERMASK_LAYER_CU:
+            case SOLDERMASK_LAYER_FRONT:
+            case SOLDERMASK_LAYER_BACK:
                 margin.x = margin.y = pad->GetSolderMaskMargin();
                 break;
 
-            case SOLDERPASTE_LAYER_CMP:
-            case SOLDERPASTE_LAYER_CU:
+            case SOLDERPASTE_LAYER_FRONT:
+            case SOLDERPASTE_LAYER_BACK:
                 margin = pad->GetSolderPasteMargin();
                 break;
 
@@ -918,13 +918,13 @@ void WinEDA_BasePcbFrame::Plot_Standard_Layer( PLOTTER*    aPlotter,
             SEGVIA* Via = (SEGVIA*) track;
 
             // vias are not plotted if not on selected layer, but if layer
-            // is SOLDERMASK_LAYER_CU or SOLDERMASK_LAYER_CMP,vias are drawn,
+            // is SOLDERMASK_LAYER_BACK or SOLDERMASK_LAYER_FRONT,vias are drawn,
             // if they are on an external copper layer
             int via_mask_layer = Via->ReturnMaskLayer();
             if( via_mask_layer & LAYER_BACK )
-                via_mask_layer |= SOLDERMASK_LAYER_CU;
+                via_mask_layer |= SOLDERMASK_LAYER_BACK;
             if( via_mask_layer & LAYER_FRONT )
-                via_mask_layer |= SOLDERMASK_LAYER_CMP;
+                via_mask_layer |= SOLDERMASK_LAYER_FRONT;
             if( ( via_mask_layer & aLayerMask ) == 0 )
                 continue;
 
@@ -932,7 +932,7 @@ void WinEDA_BasePcbFrame::Plot_Standard_Layer( PLOTTER*    aPlotter,
 
             // If the current layer is a solder mask, use the global mask
             // clearance for vias
-            if( ( aLayerMask & ( SOLDERMASK_LAYER_CU | SOLDERMASK_LAYER_CMP ) ) )
+            if( ( aLayerMask & ( SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT ) ) )
                 via_margin = g_DesignSettings.m_SolderMaskMargin;
             pos    = Via->m_Start;
             size.x = size.y = Via->m_Width + 2 * via_margin;

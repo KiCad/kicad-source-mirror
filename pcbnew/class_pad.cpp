@@ -584,35 +584,35 @@ void D_PAD::DisplayInfo( WinEDA_DrawFrame* frame )
     {
         switch( m_Masque_Layer & ~ALL_CU_LAYERS )
         {
-        case ADHESIVE_LAYER_CU:
+        case ADHESIVE_LAYER_BACK:
             layerInfo = board->GetLayerName( ADHESIVE_N_BACK );
             break;
 
-        case ADHESIVE_LAYER_CMP:
+        case ADHESIVE_LAYER_FRONT:
             layerInfo = board->GetLayerName( ADHESIVE_N_FRONT );
             break;
 
-        case SOLDERPASTE_LAYER_CU:
+        case SOLDERPASTE_LAYER_BACK:
             layerInfo = board->GetLayerName( SOLDERPASTE_N_BACK );
             break;
 
-        case SOLDERPASTE_LAYER_CMP:
+        case SOLDERPASTE_LAYER_FRONT:
             layerInfo = board->GetLayerName( SOLDERPASTE_N_FRONT );
             break;
 
-        case SILKSCREEN_LAYER_CU:
+        case SILKSCREEN_LAYER_BACK:
             layerInfo = board->GetLayerName( SILKSCREEN_N_BACK );
             break;
 
-        case SILKSCREEN_LAYER_CMP:
+        case SILKSCREEN_LAYER_FRONT:
             layerInfo = board->GetLayerName( SILKSCREEN_N_FRONT );
             break;
 
-        case SOLDERMASK_LAYER_CU:
+        case SOLDERMASK_LAYER_BACK:
             layerInfo = board->GetLayerName( SOLDERMASK_N_BACK );
             break;
 
-        case SOLDERMASK_LAYER_CMP:
+        case SOLDERMASK_LAYER_FRONT:
             layerInfo = board->GetLayerName( SOLDERMASK_N_FRONT );
             break;
 

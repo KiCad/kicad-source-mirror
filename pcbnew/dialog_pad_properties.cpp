@@ -384,17 +384,17 @@ void DIALOG_PAD_PROPERTIES::SetPadLayersList( long layer_mask )
     m_PadLayerCu->SetValue( ( layer_mask & LAYER_BACK ) );
     m_PadLayerCmp->SetValue( ( layer_mask & LAYER_FRONT ) );
 
-    m_PadLayerAdhCmp->SetValue( ( layer_mask & ADHESIVE_LAYER_CMP ) );
-    m_PadLayerAdhCu->SetValue( ( layer_mask & ADHESIVE_LAYER_CU ) );
+    m_PadLayerAdhCmp->SetValue( ( layer_mask & ADHESIVE_LAYER_FRONT ) );
+    m_PadLayerAdhCu->SetValue( ( layer_mask & ADHESIVE_LAYER_BACK ) );
 
-    m_PadLayerPateCmp->SetValue( ( layer_mask & SOLDERPASTE_LAYER_CMP ) );
-    m_PadLayerPateCu->SetValue( ( layer_mask & SOLDERPASTE_LAYER_CU ) );
+    m_PadLayerPateCmp->SetValue( ( layer_mask & SOLDERPASTE_LAYER_FRONT ) );
+    m_PadLayerPateCu->SetValue( ( layer_mask & SOLDERPASTE_LAYER_BACK ) );
 
-    m_PadLayerSilkCmp->SetValue( ( layer_mask & SILKSCREEN_LAYER_CMP ) );
-    m_PadLayerSilkCu->SetValue( ( layer_mask & SILKSCREEN_LAYER_CU ) );
+    m_PadLayerSilkCmp->SetValue( ( layer_mask & SILKSCREEN_LAYER_FRONT ) );
+    m_PadLayerSilkCu->SetValue( ( layer_mask & SILKSCREEN_LAYER_BACK ) );
 
-    m_PadLayerMaskCmp->SetValue( ( layer_mask & SOLDERMASK_LAYER_CMP ) );
-    m_PadLayerMaskCu->SetValue( ( layer_mask & SOLDERMASK_LAYER_CU ) );
+    m_PadLayerMaskCmp->SetValue( ( layer_mask & SOLDERMASK_LAYER_FRONT ) );
+    m_PadLayerMaskCu->SetValue( ( layer_mask & SOLDERMASK_LAYER_BACK ) );
 
     m_PadLayerECO1->SetValue( ( layer_mask & ECO1_LAYER ) );
     m_PadLayerECO2->SetValue( ( layer_mask & ECO2_LAYER ) );
@@ -494,21 +494,21 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
     if( ( PadLayerMask & (LAYER_BACK | LAYER_FRONT) ) == (LAYER_BACK | LAYER_FRONT) )
         PadLayerMask |= ALL_CU_LAYERS;
     if( m_PadLayerAdhCmp->GetValue() )
-        PadLayerMask |= ADHESIVE_LAYER_CMP;
+        PadLayerMask |= ADHESIVE_LAYER_FRONT;
     if( m_PadLayerAdhCu->GetValue() )
-        PadLayerMask |= ADHESIVE_LAYER_CU;
+        PadLayerMask |= ADHESIVE_LAYER_BACK;
     if( m_PadLayerPateCmp->GetValue() )
-        PadLayerMask |= SOLDERPASTE_LAYER_CMP;
+        PadLayerMask |= SOLDERPASTE_LAYER_FRONT;
     if( m_PadLayerPateCu->GetValue() )
-        PadLayerMask |= SOLDERPASTE_LAYER_CU;
+        PadLayerMask |= SOLDERPASTE_LAYER_BACK;
     if( m_PadLayerSilkCmp->GetValue() )
-        PadLayerMask |= SILKSCREEN_LAYER_CMP;
+        PadLayerMask |= SILKSCREEN_LAYER_FRONT;
     if( m_PadLayerSilkCu->GetValue() )
-        PadLayerMask |= SILKSCREEN_LAYER_CU;
+        PadLayerMask |= SILKSCREEN_LAYER_BACK;
     if( m_PadLayerMaskCmp->GetValue() )
-        PadLayerMask |= SOLDERMASK_LAYER_CMP;
+        PadLayerMask |= SOLDERMASK_LAYER_FRONT;
     if( m_PadLayerMaskCu->GetValue() )
-        PadLayerMask |= SOLDERMASK_LAYER_CU;
+        PadLayerMask |= SOLDERMASK_LAYER_BACK;
     if( m_PadLayerECO1->GetValue() )
         PadLayerMask |= ECO1_LAYER;
     if( m_PadLayerECO2->GetValue() )
