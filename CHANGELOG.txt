@@ -9,6 +9,9 @@ email address.
 ++pcbnew
     Renamed dialog_layers_setup* files.
     Got rid of the header file since there was only one file including it.
+    Auto-position the column titles based on flexgridsizer colun widths.
+    Added m_TitlePanel with contrasting background color (whose color value may not
+    be ideal for all platforms).
 
 
 2009-Dec-11 UPDATE Dick Hollenbeck <dick@softplc.com>

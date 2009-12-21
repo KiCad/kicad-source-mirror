@@ -49,25 +49,12 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bCaptionsSizer;
 	bCaptionsSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_LayerNameCaption = new wxStaticText( this, wxID_ANY, _("Name"), wxDefaultPosition, wxSize( -1,-1 ), wxALIGN_CENTRE );
-	m_LayerNameCaption->Wrap( -1 );
-	m_LayerNameCaption->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_TitlePanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxRAISED_BORDER|wxTAB_TRAVERSAL );
+	m_TitlePanel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVECAPTION ) );
 	
-	bCaptionsSizer->Add( m_LayerNameCaption, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bCaptionsSizer->Add( m_TitlePanel, 1, wxEXPAND, 5 );
 	
-	m_LayerEnabledCaption = new wxStaticText( this, wxID_ANY, _("Enabled"), wxDefaultPosition, wxSize( -1,-1 ), wxALIGN_CENTRE );
-	m_LayerEnabledCaption->Wrap( -1 );
-	m_LayerEnabledCaption->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
-	
-	bCaptionsSizer->Add( m_LayerEnabledCaption, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-	
-	m_LayerTypeCaption = new wxStaticText( this, wxID_ANY, _("Type"), wxDefaultPosition, wxSize( -1,-1 ), wxALIGN_CENTRE );
-	m_LayerTypeCaption->Wrap( -1 );
-	m_LayerTypeCaption->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
-	
-	bCaptionsSizer->Add( m_LayerTypeCaption, 0, wxALIGN_CENTER_VERTICAL, 5 );
-	
-	sbLayersSizer->Add( bCaptionsSizer, 0, wxALIGN_CENTER|wxLEFT|wxRIGHT, 5 );
+	sbLayersSizer->Add( bCaptionsSizer, 0, wxALIGN_CENTER|wxEXPAND, 5 );
 	
 	m_LayersListPanel = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxALWAYS_SHOW_SB|wxRAISED_BORDER|wxTAB_TRAVERSAL|wxVSCROLL );
 	m_LayersListPanel->SetScrollRate( 0, 5 );

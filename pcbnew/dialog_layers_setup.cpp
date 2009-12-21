@@ -69,7 +69,10 @@ private:
 
     BOARD*              m_Pcb;
 
-    void init();
+    wxStaticText*       m_NameStaticText;
+    wxStaticText*       m_EnabledStaticText;
+    wxStaticText*       m_TypeStaticText;
+
 
     void setLayerCheckBox( int layer, bool isChecked );
     void setCopperLayerCheckBoxes( int copperCount );
@@ -117,6 +120,26 @@ private:
         return (wxChoice*) getCTLs( aLayer ).choice;
     }
 
+    void moveTitles()
+    {
+        wxArrayInt widths = m_LayerListFlexGridSizer->GetColWidths();
+
+        int offset = 0;
+        wxSize txtz;
+
+        txtz = m_NameStaticText->GetSize();
+//        m_NameStaticText->Move( 0, 5 );
+        m_NameStaticText->Move( offset + (widths[0] - txtz.x)/2, 5 );
+        offset += widths[0];
+
+        txtz = m_EnabledStaticText->GetSize();
+        m_EnabledStaticText->Move( offset + (widths[1] - txtz.x)/2, 5 );
+        offset += widths[1];
+
+        txtz = m_TypeStaticText->GetSize();
+        m_TypeStaticText->Move( offset + (widths[2] - txtz.x)/2, 5 );
+    }
+
 
 public:
     DIALOG_LAYERS_SETUP( WinEDA_PcbFrame* parent );
@@ -124,6 +147,18 @@ public:
 
     bool Show( bool show );     // overload stock function
 
+    /**
+     * Function Layout
+     * overrides the standard Layout() function so that the column titles can
+     * be positioned using information in the flexgridsizer.
+     */
+    bool Layout()
+    {
+        bool ret = DIALOG_LAYERS_SETUP_BASE::Layout();
+
+        moveTitles();
+        return ret;
+    }
 };
 
 
@@ -214,9 +249,33 @@ DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( WinEDA_PcbFrame* parent ) :
     m_Parent    = parent;
     m_Pcb       = m_Parent->GetBoard();
 
-    init();
+    m_CopperLayerCount = m_Pcb->GetCopperLayerCount();
+    showCopperChoice( m_CopperLayerCount );
+
+    showBoardLayerNames();
+
+    m_EnabledLayers = m_Pcb->GetEnabledLayers();
+    showSelectedLayerCheckBoxes( m_EnabledLayers );
+    showPresets( m_EnabledLayers );
+
+    showLayerTypes();
 
     SetAutoLayout( true );
+
+    // these 3 controls are handled outside wxformbuilder so that we can add
+    // them without a sizer.  Then we position them manually based on the column
+    // widths from m_LayerListFexGridSizer->GetColWidths()
+    m_NameStaticText = new wxStaticText( m_TitlePanel, -1, _("Name"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_TitlePanel->AddChild( m_NameStaticText );
+
+    m_EnabledStaticText = new wxStaticText( m_TitlePanel, -1, _("Enabled"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_TitlePanel->AddChild( m_NameStaticText );
+
+    m_TypeStaticText = new wxStaticText( m_TitlePanel, -1, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_TitlePanel->AddChild( m_TypeStaticText );
+
+    m_TitlePanel->SetMinSize( wxSize( -1, m_AdhesFrontName->GetSize().y+10 ) );
+
     Layout();
 
     Center();
@@ -329,31 +388,6 @@ void DIALOG_LAYERS_SETUP::showLayerTypes()
         wxChoice* ctl = getChoice( copperLayer );
         ctl->SetSelection( m_Pcb->GetLayerType( copperLayer ) );
     }
-}
-
-
-/********************************************************************/
-void DIALOG_LAYERS_SETUP::init()
-/********************************************************************/
-{
-    m_CopperLayerCount = m_Pcb->GetCopperLayerCount();
-    showCopperChoice( m_CopperLayerCount );
-
-    showBoardLayerNames();
-
-    m_EnabledLayers = m_Pcb->GetEnabledLayers();
-    showSelectedLayerCheckBoxes( m_EnabledLayers );
-    showPresets( m_EnabledLayers );
-
-    showLayerTypes();
-
-    // @todo overload a layout function so we can reposition the column titles,
-    // which should probably not go in a sizer of their own so that we do not have
-    // to fight to position them, Dick.  Will work this out next.
-
-
-    // Adjust the vertical scroll rate so our list scrolls always one full line each time.
-//    m_LayersListPanel->SetScrollRate( 0, m_textCtrl1[0]->GetSize().y );
 }
 
 
@@ -609,7 +643,6 @@ bool DIALOG_LAYERS_SETUP::testLayerNames()
 }
 
 
-
 void DisplayDialogLayerSetup( WinEDA_PcbFrame* parent )
 {
     DIALOG_LAYERS_SETUP frame( parent );
@@ -617,4 +650,3 @@ void DisplayDialogLayerSetup( WinEDA_PcbFrame* parent )
     frame.ShowModal();
     frame.Destroy();
 }
-

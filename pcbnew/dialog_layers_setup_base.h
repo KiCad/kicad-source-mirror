@@ -18,9 +18,9 @@
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
+#include <wx/panel.h>
 #include <wx/stattext.h>
 #include <wx/checkbox.h>
-#include <wx/panel.h>
 #include <wx/textctrl.h>
 #include <wx/scrolwin.h>
 #include <wx/button.h>
@@ -126,9 +126,7 @@ class DIALOG_LAYERS_SETUP_BASE : public wxDialog
 	protected:
 		wxChoice* m_PresetsChoice;
 		wxChoice* m_CopperLayersChoice;
-		wxStaticText* m_LayerNameCaption;
-		wxStaticText* m_LayerEnabledCaption;
-		wxStaticText* m_LayerTypeCaption;
+		wxPanel* m_TitlePanel;
 		wxScrolledWindow* m_LayersListPanel;
 		wxFlexGridSizer* m_LayerListFlexGridSizer;
 		wxStaticText* m_AdhesFrontName;
