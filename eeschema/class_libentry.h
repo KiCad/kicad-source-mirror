@@ -515,11 +515,13 @@ protected:
      * @note - Do not delete the root component.  The root component is owned
      *         by library the component is part of.  Deleting the root component
      *         will likely cause EESchema to crash.
+     *         Or, if the root component is deleted, aliases must be deleted or their .root member
+     *         must be changed to point a new root component
      */
     LIB_COMPONENT* root;
 
 public:
-    LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aComponent,
+    LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aRootComponent,
                CMP_LIBRARY* aLibrary = NULL );
     LIB_ALIAS( LIB_ALIAS& aAlias, CMP_LIBRARY* aLibrary = NULL );
     ~LIB_ALIAS();

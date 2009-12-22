@@ -126,13 +126,13 @@ int LibraryEntryCompare( const CMP_LIB_ENTRY* aItem1, const CMP_LIB_ENTRY* aItem
  *  (like 74LS00, 74HC00 ... and many op amps )
  */
 
-LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aComponent,
+LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aRootComponent,
                       CMP_LIBRARY* aLibrary ) :
     CMP_LIB_ENTRY( ALIAS, aName, aLibrary )
 {
-    wxASSERT( aComponent != NULL && aComponent->isComponent() );
+    wxASSERT( aRootComponent != NULL && aRootComponent->isComponent() );
 
-    root = aComponent;
+    root = aRootComponent;
 }
 
 

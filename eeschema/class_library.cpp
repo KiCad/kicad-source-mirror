@@ -356,60 +356,43 @@ library <%s>" ),
 LIB_COMPONENT* CMP_LIBRARY::ReplaceComponent( LIB_COMPONENT* aOldComponent,
                                               LIB_COMPONENT* aNewComponent )
 {
-    wxASSERT( aOldComponent != NULL && aNewComponent != NULL
-              && aOldComponent->GetName().CmpNoCase( aNewComponent->GetName() )== 0 );
+    wxASSERT( aOldComponent != NULL );
+    wxASSERT( aNewComponent != NULL );
+    wxASSERT( aOldComponent->GetName().CmpNoCase( aNewComponent->GetName() )== 0 );
 
     size_t i;
-    int index;
-    LIB_ALIAS* alias;
-
-    if( aOldComponent->m_AliasList != aNewComponent->m_AliasList )
-    {
-        /* Remove extra aliases. */
-        for( i = 0; i < aOldComponent->m_AliasList.GetCount(); i++ )
-        {
-             index =
-                aNewComponent->m_AliasList.Index( aOldComponent->m_AliasList[ i ] );
-
-            if( index != wxNOT_FOUND )
-                continue;
-
-            wxLogDebug( wxT( "Removing extra alias <%s> from component <%s> in library <%s>." ),
-                        GetChars( aOldComponent->m_AliasList[ i ] ),
-                        GetChars( aOldComponent->GetName() ),
-                        GetChars( fileName.GetName() ) );
-
-            RemoveEntry( aOldComponent->m_AliasList[ i ] );
-        }
-
-        /* Add new aliases. */
-        for( i = 0; i < aNewComponent->m_AliasList.GetCount(); i++ )
-        {
-             index = aOldComponent->m_AliasList.Index( aNewComponent->m_AliasList[ i ] );
-
-            if( index != wxNOT_FOUND
-                || FindEntry( aNewComponent->m_AliasList[ i ] ) != NULL )
-                continue;
-
-            wxLogDebug( wxT( "Adding extra alias <%s> from component <%s> in library <%s>." ),
-                        GetChars( aNewComponent->m_AliasList[ i ] ),
-                        GetChars( aNewComponent->GetName() ),
-                        GetChars( fileName.GetName() ) );
-
-            alias = new LIB_ALIAS( aNewComponent->m_AliasList[ i ], aNewComponent );
-            entries.push_back( alias );
-        }
-    }
-
-    RemoveEntry( aOldComponent->GetName() );
 
     LIB_COMPONENT* newCmp = new LIB_COMPONENT( *aNewComponent, this );
 
-    if( newCmp == NULL )
-        return NULL;
+    /* We want to remove the old root component, so we must remove old aliases.
+     * even if they are not modified, because their root component will be removed
+    */
+    for( i = 0; i < aOldComponent->m_AliasList.GetCount(); i++ )
+    {
+/*        wxLogDebug( wxT( "Removing alias <%s> from component <%s> in library <%s>." ),
+                    GetChars( aOldComponent->m_AliasList[ i ] ),
+                    GetChars( aOldComponent->GetName() ),
+                    GetChars( fileName.GetName() ) );
+*/
+        RemoveEntry( aOldComponent->m_AliasList[ i ] );
+    }
 
+    /* Now, add current aliases. */
+    for( i = 0; i < aNewComponent->m_AliasList.GetCount(); i++ )
+    {
+/*        wxLogDebug( wxT( "Adding alias <%s> from component <%s> in library <%s>." ),
+                    GetChars( aNewComponent->m_AliasList[ i ] ),
+                    GetChars( aNewComponent->GetName() ),
+                    GetChars( fileName.GetName() ) );
+*/
+        LIB_ALIAS* alias = new LIB_ALIAS( aNewComponent->m_AliasList[ i ], newCmp );
+        entries.push_back( alias );
+    }
+
+    RemoveEntry( aOldComponent->GetName() );
     entries.push_back( (CMP_LIB_ENTRY*) newCmp );
     entries.sort();
+
     isModified = true;
     return newCmp;
 }
