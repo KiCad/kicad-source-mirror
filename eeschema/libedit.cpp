@@ -24,6 +24,8 @@ void WinEDA_LibeditFrame::DisplayLibInfos()
 {
     wxString msg = _( "Component Library Editor: " );
 
+    EnsureActiveLibExists();
+
     if( m_library )
         msg += m_library->GetFullFileName();
     else

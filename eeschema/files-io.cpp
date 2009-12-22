@@ -13,6 +13,7 @@
 #include "protos.h"
 #include "eeschema_id.h"
 #include "class_library.h"
+#include "libeditfrm.h"
 
 
 
@@ -104,8 +105,6 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
 
     GetScreen()->ClrModify();
 
-    //m_CurrentSheet->m_AssociatedScreen->Pnext = NULL; should be by default
-
     if( IsNew )
     {
         screen->m_CurrentSheetDesc = &g_Sheet_A4;
@@ -130,6 +129,10 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
     PrintMsg( msg );
 
     LoadProjectFile( wxEmptyString, FALSE );
+
+    // Clear (if needed) the current active library in libedit because it could be
+    // removed from memory
+    WinEDA_LibeditFrame::EnsureActiveLibExists();
 
     // Delete old caches.
     CMP_LIBRARY::RemoveCacheLibrary();

@@ -63,6 +63,24 @@ public:
     int            m_Type;         /* type indicator */
     int            m_Flags;
 
+protected:
+    wxFileName     fileName;        /* Library file name. */
+    wxDateTime     timeStamp;       /* Library save time and date. */
+    int            versionMajor;    /* Library major version number. */
+    int            versionMinor;    /* Library minor version number. */
+    LIB_ENTRY_LIST entries;         /* Parts themselves are saved here. */
+    bool           isCache;         /* False for the "standard" libraries,
+                                     * True for the library cache */
+    wxString       header;          /* first line of loaded library. */
+
+    static CMP_LIBRARY_LIST libraryList;
+    static wxArrayString    libraryListSortOrder;
+
+    friend class CMP_LIB_ENTRY;
+
+private:
+    bool           isModified;      /* Library modification status. */
+
 public:
     CMP_LIBRARY( int aType, const wxFileName& aFileName );
     CMP_LIBRARY( int aType, const wxString& aFileName )
@@ -70,6 +88,12 @@ public:
         CMP_LIBRARY( aType, wxFileName( aFileName ) );
     }
     ~CMP_LIBRARY();
+
+    /** Modify flags handling:
+     */
+    void SetModifyFlags( ) { isModified = true; }
+    void ClearModifyFlag( ) { isModified = false; }
+    bool getModifyFlag( ) { return isModified;}
 
     /**
      * Save library to file.
@@ -152,7 +176,7 @@ public:
 
     void SetCache( void ) { isCache = true; }
 
-    /**
+   /**
      * Load a string array with the names of all the entries in this library.
      *
      * @param aNames - String array to place entry names into.
@@ -341,6 +365,14 @@ public:
      * of safety from abusing the library list.
      */
 
+     /**
+     * Test for an existing library.
+     *
+     * @param aLibptr - aLibptr.
+     * @return true found.  false if not found.
+     */
+
+    static bool LibraryExists( const CMP_LIBRARY* aLibptr );
     /**
      * Load a component library file.
      *
@@ -442,22 +474,6 @@ public:
     {
         return libraryListSortOrder;
     }
-
-protected:
-    wxFileName     fileName;        /* Library file name. */
-    wxDateTime     timeStamp;       /* Library save time and date. */
-    int            versionMajor;    /* Library major version number. */
-    int            versionMinor;    /* Library minor version number. */
-    LIB_ENTRY_LIST entries;         /* Parts themselves are saved here. */
-    bool           isModified;      /* Library modification status. */
-    bool           isCache;         /* False for the "standard" libraries,
-                                     * True for the library cache */
-    wxString       header;          /* first line of loaded library. */
-
-    static CMP_LIBRARY_LIST libraryList;
-    static wxArrayString    libraryListSortOrder;
-
-    friend class CMP_LIB_ENTRY;
 };
 
 

@@ -72,6 +72,10 @@ public:
     int  GetConvert( void ) { return m_convert; }
 
 private:
+    /** OnActivate event funtion( virtual )
+     */
+    virtual void     OnActivate( wxActivateEvent& event );
+
     void SelectCurrentLibrary();
     void SelectAndViewLibraryPart( int option );
     void ExportToSchematicLibraryPart( wxCommandEvent& event );

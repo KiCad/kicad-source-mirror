@@ -43,6 +43,7 @@ int CreateNewLibAndSavePartId = ::wxNewId();
  */
 LIB_COMPONENT* WinEDA_LibeditFrame::m_component = NULL;
 CMP_LIBRARY* WinEDA_LibeditFrame::m_library = NULL;
+
 wxString WinEDA_LibeditFrame::m_aliasName;
 int WinEDA_LibeditFrame::m_unit = 1;
 int WinEDA_LibeditFrame::m_convert = 1;
@@ -62,6 +63,7 @@ FILL_T WinEDA_LibeditFrame::m_drawFillStyle = NO_FILL;
 BEGIN_EVENT_TABLE( WinEDA_LibeditFrame, WinEDA_DrawFrame )
     EVT_CLOSE( WinEDA_LibeditFrame::OnCloseWindow )
     EVT_SIZE( WinEDA_LibeditFrame::OnSize )
+    EVT_ACTIVATE( WinEDA_LibeditFrame::OnActivate )
 
 /* Main horizontal toolbar. */
     EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_LibeditFrame::OnZoom )
@@ -181,6 +183,8 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow* father,
 
     if( DrawPanel )
         DrawPanel->m_Block_Enable = true;
+
+    EnsureActiveLibExists();
     ReCreateHToolbar();
     ReCreateVToolbar();
     DisplayLibInfos();
@@ -904,4 +908,30 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     if( m_ID_current_state == 0 )
         m_lastDrawItem = NULL;
+}
+
+/** Called on activate the frame.
+ * Test if the current library exists
+ * the library list can be changed by the schematic editor after reloading a new schematic
+ * and the current m_library can point a non existent lib.
+ */
+void WinEDA_LibeditFrame::OnActivate( wxActivateEvent& event )
+{
+    WinEDA_DrawFrame::OnActivate( event );
+
+    // Verify the existence of the current active library
+    // (can be removed or changed by the schematic editor)
+    EnsureActiveLibExists();
+}
+
+void WinEDA_LibeditFrame::EnsureActiveLibExists()
+{
+    if( m_library == NULL )
+        return;
+
+    bool exists = CMP_LIBRARY::LibraryExists( m_library );
+    if ( exists )
+        return;
+    else
+        m_library = NULL;
 }

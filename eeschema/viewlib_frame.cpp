@@ -33,7 +33,7 @@ BEGIN_EVENT_TABLE( WinEDA_ViewlibFrame, WinEDA_DrawFrame )
     /* Window events */
     EVT_CLOSE( WinEDA_ViewlibFrame::OnCloseWindow )
     EVT_SIZE( WinEDA_ViewlibFrame::OnSize )
-    EVT_ACTIVATE( WinEDA_DrawFrame::OnActivate )
+    EVT_ACTIVATE( WinEDA_ViewlibFrame::OnActivate )
 
     /* Sash drag events */
     EVT_SASH_DRAGGED( ID_LIBVIEW_LIBWINDOW, WinEDA_ViewlibFrame::OnSashDrag )
@@ -195,7 +195,9 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
 
     if( m_LibList )
         ReCreateListLib();
+
     DisplayLibInfos();
+
     if( DrawPanel )
         DrawPanel->SetAcceleratorTable( table );
     Zoom_Automatique( false );
@@ -599,4 +601,16 @@ void WinEDA_ViewlibFrame::SaveSettings()
     if ( m_LibListSize.x )
         cfg->Write( LIBLIST_WIDTH_KEY, m_LibListSize.x );
     cfg->Write( CMPLIST_WIDTH_KEY, m_CmpListSize.x );
+}
+
+/** Called on activate the frame.
+ * Reload the libraries lists that can be changed by the schematic editor or the library editor
+ */
+void WinEDA_ViewlibFrame::OnActivate( wxActivateEvent& event )
+{
+    WinEDA_DrawFrame::OnActivate( event );
+
+    if( m_LibList )
+        ReCreateListLib();
+    DisplayLibInfos();
 }

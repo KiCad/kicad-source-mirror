@@ -34,6 +34,12 @@ public:
 
     ~WinEDA_LibeditFrame();
 
+    /** Function EnsureActiveLibExists
+     * Must be called after the libraries are reloaded
+     * (for instance after loading a schematic project)
+     */
+    static void EnsureActiveLibExists();
+
     void Process_Special_Functions( wxCommandEvent& event );
     void OnImportPart( wxCommandEvent& event );
     void OnExportPart( wxCommandEvent& event );
@@ -127,6 +133,10 @@ public:
 
 private:
 
+    /** OnActivate event funtion( virtual )
+     */
+    virtual void     OnActivate( wxActivateEvent& event );
+
     // General:
     void           SaveOnePartInMemory();
     void           SelectActiveLibrary();
@@ -209,11 +219,11 @@ protected:
     /** Default line width for drawing or editing graphic items. */
     static int            m_drawLineWidth;
 
+    /** The current active libary. NULL if no active library is selected. */
+    static CMP_LIBRARY*   m_library;
     /** The current component being edited.  NULL if no component is selected. */
     static LIB_COMPONENT* m_component;
 
-    /** The current active libary.   NULL if no library is active. */
-    static CMP_LIBRARY*   m_library;
     static LIB_DRAW_ITEM* m_lastDrawItem;
     static LIB_DRAW_ITEM* m_drawItem;
     static wxString       m_aliasName;

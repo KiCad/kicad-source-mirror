@@ -210,7 +210,7 @@ bool CMP_LIBRARY::AddAlias( LIB_ALIAS* aAlias )
     }
 
     entries.push_back( (CMP_LIB_ENTRY*) aAlias );
-    isModified = true;
+    SetModifyFlags( );
     return true;
 }
 
@@ -225,7 +225,7 @@ LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
         return NULL;
 
     entries.push_back( (CMP_LIB_ENTRY*) newCmp );
-    isModified = true;
+    SetModifyFlags( );
 
     /* Cache libraries are component only libraries.  Do not create alias
      * entries. */
@@ -280,7 +280,7 @@ void CMP_LIBRARY::RemoveEntry( CMP_LIB_ENTRY* aEntry )
     LIB_COMPONENT* root;
     LIB_ALIAS*  alias;
 
-    isModified = true;
+    SetModifyFlags( );
 
     if( aEntry->isAlias() )
     {
@@ -393,7 +393,7 @@ LIB_COMPONENT* CMP_LIBRARY::ReplaceComponent( LIB_COMPONENT* aOldComponent,
     entries.push_back( (CMP_LIB_ENTRY*) newCmp );
     entries.sort();
 
-    isModified = true;
+    SetModifyFlags( );
     return newCmp;
 }
 
@@ -739,7 +739,7 @@ bool CMP_LIBRARY::Save( const wxString& aFullFileName, bool aOldDocFormat )
         return false;
     }
 
-    isModified = false;
+    ClearModifyFlag( );
 
     timeStamp = GetTimeStamp();
     if( !SaveHeader( libfile ) )
@@ -944,6 +944,22 @@ void CMP_LIBRARY::RemoveLibrary( const wxString& aName )
     }
 }
 
+
+ /**
+ * Test for an existing library.
+ * @param aLibptr - aLibptr.
+ * @return true found.  false if not found.
+ */
+bool CMP_LIBRARY::LibraryExists( const CMP_LIBRARY* aLibptr )
+{
+    BOOST_FOREACH( CMP_LIBRARY& lib, libraryList )
+    {
+        if( &lib == aLibptr )
+            return true;
+    }
+
+    return false;
+}
 
 CMP_LIBRARY* CMP_LIBRARY::FindLibrary( const wxString& aName )
 {

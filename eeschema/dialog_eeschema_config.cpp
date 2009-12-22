@@ -17,6 +17,7 @@
 #include "general.h"
 #include "protos.h"
 #include "netlist.h"
+#include "libeditfrm.h"
 #include "libviewfrm.h"
 
 #include <wx/tokenzr.h>
@@ -160,8 +161,9 @@ void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
 
         // take new list in account
         m_Parent->LoadLibraries();
-        if( m_Parent->m_ViewlibFrame )
-            m_Parent->m_ViewlibFrame->ReCreateListLib();
+        // Clear (if needed) the current active library in libedit because it could be
+        // removed from memory
+        WinEDA_LibeditFrame::EnsureActiveLibExists();
     }
 
     m_Parent->SaveProjectFile( this );

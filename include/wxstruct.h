@@ -272,7 +272,6 @@ public:
     void             ToPrinter( wxCommandEvent& event );
     void             SVG_Print( wxCommandEvent& event );
 
-    void             OnActivate( wxActivateEvent& event );
     void             TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_width );
     void             PlotWorkSheet( PLOTTER *plotter, BASE_SCREEN* screen );
 
@@ -297,6 +296,12 @@ public:
     virtual void     ToolOnRightClick( wxCommandEvent& event );
     void             AdjustScrollBars();
 
+    /** OnActivate event function (virtual)
+     * called when activating the frame.
+     * in derived classes with a virtual OnActivate function,
+     * do not forget to call the WinEDA_DrawFrame::OnActivate( event )  basic function
+     */
+    virtual void     OnActivate( wxActivateEvent& event );
     /**
      * Function UpdateStatusBar
      * updates the status bar information.
