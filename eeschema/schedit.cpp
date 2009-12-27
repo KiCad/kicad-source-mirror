@@ -262,7 +262,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_EDIT_TEXT:
-        EditSchematicText( (SCH_TEXT*) screen->GetCurItem(), &dc );
+        EditSchematicText( (SCH_TEXT*) screen->GetCurItem() );
         break;
 
     case ID_POPUP_SCH_ROTATE_TEXT:

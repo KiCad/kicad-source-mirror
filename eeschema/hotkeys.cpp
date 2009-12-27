@@ -74,17 +74,17 @@ static Ki_HotkeyInfo HkMirrorXComponent( wxT( "Mirror X Component" ),
                                          HK_MIRROR_X_COMPONENT, 'X' );
 static Ki_HotkeyInfo HkOrientNormalComponent( wxT( "Orient Normal Component" ),
                                               HK_ORIENT_NORMAL_COMPONENT, 'N' );
-static Ki_HotkeyInfo HkRotateComponent( wxT( "Rotate Component" ),
-                                        HK_ROTATE_COMPONENT, 'R' );
-static Ki_HotkeyInfo HkEditComponent( wxT( "Edit Component" ),
-                                           HK_EDIT_COMPONENT, 'E' );
+static Ki_HotkeyInfo HkRotateComponent( wxT( "Rotate Component or Label" ),
+                                        HK_ROTATE_COMPONENT_OR_LABEL, 'R' );
+static Ki_HotkeyInfo HkEditComponent( wxT( "Edit Component or Label" ),
+                                           HK_EDIT_COMPONENT_OR_LABEL, 'E' );
 static Ki_HotkeyInfo HkEditComponentValue( wxT( "Edit Component Value" ),
                                            HK_EDIT_COMPONENT_VALUE, 'V' );
 static Ki_HotkeyInfo HkEditComponentFootprint( wxT( "Edit Component Footprint" ),
                                                HK_EDIT_COMPONENT_FOOTPRINT,
                                                'F' );
-static Ki_HotkeyInfo HkMoveComponent( wxT( "Move Component" ),
-                                      HK_MOVE_COMPONENT, 'M',
+static Ki_HotkeyInfo HkMoveComponent( wxT( "Move Component or Label" ),
+                                      HK_MOVE_COMPONENT_OR_LABEL, 'M',
                                       ID_POPUP_SCH_MOVE_CMP_REQUEST );
 static Ki_HotkeyInfo HkDragComponent( wxT( "Drag Component" ),
                                       HK_DRAG_COMPONENT, 'G',
@@ -327,7 +327,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         }
         break;
 
-    case HK_ROTATE_COMPONENT:       // Component Rotation
+    case HK_ROTATE_COMPONENT_OR_LABEL:       // Component Rotation
         if( DrawStruct == NULL )
         {
             DrawStruct = PickStruct( GetScreen()->m_Curseur,
@@ -416,7 +416,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_DRAG_COMPONENT:         // Start drag Component
-    case HK_MOVE_COMPONENT:         // Start move Component
+    case HK_MOVE_COMPONENT_OR_LABEL:         // Start move Component
         if( ItemInEdit )
             break;
 
@@ -463,7 +463,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         }
         break;
 
-    case HK_EDIT_COMPONENT:
+    case HK_EDIT_COMPONENT_OR_LABEL:
 
         if( ItemInEdit )
             break;
@@ -490,7 +490,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         case TYPE_SCH_LABEL:
         case TYPE_SCH_GLOBALLABEL:
         case TYPE_SCH_HIERLABEL:
-            EditSchematicText( (SCH_TEXT*) DrawStruct, DC );
+            EditSchematicText( (SCH_TEXT*) DrawStruct );
             break;
 
         default:

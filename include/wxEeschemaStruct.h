@@ -296,7 +296,7 @@ private:
 
     // Text ,label, glabel
     SCH_TEXT*        CreateNewText( wxDC* DC, int type );
-    void             EditSchematicText( SCH_TEXT* TextStruct, wxDC* DC );
+    void             EditSchematicText( SCH_TEXT* TextStruct );
     void             ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC );
     void             StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC );
     void             ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newtype );

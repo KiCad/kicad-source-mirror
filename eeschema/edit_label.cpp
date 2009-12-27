@@ -15,9 +15,6 @@
 #include "general.h"
 #include "protos.h"
 
-#include "dialog_edit_label.h"
-
-
 static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static void ExitMoveTexte( WinEDA_DrawPanel* panel, wxDC* DC );
 
@@ -27,59 +24,6 @@ static int     OldOrient;
 static wxSize  OldSize;
 static int     s_DefaultShapeGLabel  = (int) NET_INPUT;
 static int     s_DefaultOrientGLabel = 0;
-
-
-/****************************************************************************/
-void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& event )
-{
-/****************************************************************************/
-    wxString text;
-    int      value;
-
-    /* save old text in undo list if not already in edit */
-    if( m_CurrentText->m_Flags == 0 )
-        m_Parent->SaveCopyInUndoList( m_CurrentText, UR_CHANGED );
-
-    text = m_TextLabel->GetValue();
-    if( !text.IsEmpty() )
-        m_CurrentText->m_Text = text;
-    else if( (m_CurrentText->m_Flags & IS_NEW) == 0 )
-        DisplayError( this, _( "Empty Text!" ) );
-
-    m_CurrentText->SetSchematicTextOrientation( m_TextOrient->GetSelection() );
-    text  = m_TextSize->GetValue();
-    value = ReturnValueFromString( g_UnitMetric, text,
-                                   m_Parent->m_InternalUnits );
-    m_CurrentText->m_Size.x = m_CurrentText->m_Size.y = value;
-    if( m_TextShape )
-        m_CurrentText->m_Shape = m_TextShape->GetSelection();
-
-    int style = m_TextStyle->GetSelection();
-    if( ( style & 1 ) )
-        m_CurrentText->m_Italic = 1;
-    else
-        m_CurrentText->m_Italic = 0;
-
-    if( ( style & 2 ) )
-    {
-        m_CurrentText->m_Bold  = true;
-        m_CurrentText->m_Width = GetPenSizeForBold( m_CurrentText->m_Size.x );
-    }
-    else
-    {
-        m_CurrentText->m_Bold  = false;
-        m_CurrentText->m_Width = 0;
-    }
-
-    m_Parent->GetScreen()->SetModify();
-
-    /* Make the text size as new default size if it is a new text */
-    if( (m_CurrentText->m_Flags & IS_NEW) != 0 )
-        g_DefaultTextLabelSize = m_CurrentText->m_Size.x;
-
-    m_Parent->DrawPanel->MouseToCursorSchema();
-    EndModal( 0 );
-}
 
 
 /*****************************************************************************/
@@ -124,30 +68,6 @@ void WinEDA_SchematicFrame::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
     GetScreen()->SetCurItem( TextStruct );
     DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
 
-    DrawPanel->CursorOn( DC );
-}
-
-
-/*************************************************************************/
-void WinEDA_SchematicFrame::EditSchematicText( SCH_TEXT* TextStruct,
-                                               wxDC*     DC )
-{
-/*************************************************************************/
-/* Edit the properties of the text (Label, Global label, graphic text).. )
- *  pointed by "TextStruct"
- */
-    if( TextStruct == NULL )
-        return;
-
-    // Erase old text on screen
-    DrawPanel->CursorOff( DC );
-    RedrawOneStruct( DrawPanel, DC, TextStruct, g_XorMode );
-
-    DialogLabelEditor::ShowModally( this, TextStruct );
-
-    // Redraw nex text, if exists
-    if( ! TextStruct->m_Text.IsEmpty() )
-        RedrawOneStruct( DrawPanel, DC, TextStruct, GR_DEFAULT_DRAWMODE );
     DrawPanel->CursorOn( DC );
 }
 
@@ -235,7 +155,7 @@ SCH_TEXT* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
     NewText->m_Flags  = IS_NEW | IS_MOVED;
 
     RedrawOneStruct( DrawPanel, DC, NewText, g_XorMode );
-    EditSchematicText( NewText, DC );
+    EditSchematicText( NewText );
 
     if( NewText->m_Text.IsEmpty() )
     {

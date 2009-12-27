@@ -17,25 +17,15 @@ private:
     SCH_TEXT * m_CurrentText;
     wxTextCtrl* m_TextLabel;
 
-protected:
-    // these are protected so that the static ShowModally() gets used.
+public:
     DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT * CurrentText);
     ~DialogLabelEditor(){};
 
 
 public:
 
-    /**
-     * Function ShowModally
-     * is a static function that constructs and then displays one of these dialogs.
-     * @param parent
-     * @param CurrentText is one of several classes derived from SCH_TEXT
-     * @return int - the result Dialog::ShowModal()
-     */
-    static int ShowModally(  WinEDA_SchematicFrame* parent, SCH_TEXT * CurrentText );
-
 private:
-    void init( );
+    void InitDialog( );
   	void onEnterKey( wxCommandEvent& event );
     void OnButtonOKClick( wxCommandEvent& event );
     void OnButtonCANCEL_Click( wxCommandEvent& event );

@@ -265,7 +265,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
     {
         msg = _( "Move Component" );
         msg << wxT( " " ) << Component->GetField( REFERENCE )->m_Text;
-        msg = AddHotkeyName( msg, s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT );
+        msg = AddHotkeyName( msg, s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT_OR_LABEL );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_CMP_REQUEST,
                       msg, move_xpm );
         msg = AddHotkeyName( _( "Drag Component" ), s_Schematic_Hokeys_Descr,
@@ -276,7 +276,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 
     wxMenu* orientmenu = new wxMenu;
     msg = AddHotkeyName( _( "Rotate +" ), s_Schematic_Hokeys_Descr,
-                         HK_ROTATE_COMPONENT );
+                         HK_ROTATE_COMPONENT_OR_LABEL );
     ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE,
                   msg, rotate_pos_xpm );
     ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ROTATE_CMP_CLOCKWISE,
@@ -296,7 +296,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 
     wxMenu* editmenu = new wxMenu;
     msg = AddHotkeyName( _( "Edit" ), s_Schematic_Hokeys_Descr,
-                         HK_EDIT_COMPONENT );
+                         HK_EDIT_COMPONENT_OR_LABEL );
     ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_CMP, msg,
                   edit_component_xpm );
 
@@ -362,14 +362,18 @@ void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
     if( !GLabel->m_Flags )
     {
         msg = AddHotkeyName( _( "Move Global Label" ),
-                             s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT );
+                             s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT_OR_LABEL );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
                       msg, move_text_xpm );
     }
+    msg = AddHotkeyName( _( "Rotate Global Label" ), s_Schematic_Hokeys_Descr,
+                             HK_ROTATE_COMPONENT_OR_LABEL );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT,
-                  _( "Rotate Global Label" ), rotate_glabel_xpm );
+                  msg, rotate_glabel_xpm );
+    msg = AddHotkeyName( _( "Edit Global Label" ), s_Schematic_Hokeys_Descr,
+                             HK_EDIT_COMPONENT_OR_LABEL );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT,
-                  _( "Edit Global Label" ), edit_text_xpm );
+                  msg, edit_text_xpm );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE,
                   _( "Delete Global Label" ), delete_text_xpm );
 
@@ -395,12 +399,16 @@ void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
     {
         msg = AddHotkeyName( _( "Move Hierarchical Label" ),
                              s_Schematic_Hokeys_Descr,
-                             HK_MOVE_COMPONENT );
+                             HK_MOVE_COMPONENT_OR_LABEL );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
                       msg, move_text_xpm );
     }
+    msg = AddHotkeyName( _( "Rotate Hierarchical Label" ), s_Schematic_Hokeys_Descr,
+                             HK_ROTATE_COMPONENT_OR_LABEL );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT,
                   _( "Rotate Hierarchical Label" ), rotate_glabel_xpm );
+    msg = AddHotkeyName( _( "Edit Hierarchical Label" ), s_Schematic_Hokeys_Descr,
+                             HK_EDIT_COMPONENT_OR_LABEL );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT,
                   _( "Edit Hierarchical Label" ), edit_text_xpm );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE,
@@ -427,14 +435,18 @@ void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
     if( !Label->m_Flags )
     {
         msg = AddHotkeyName( _( "Move Label" ), s_Schematic_Hokeys_Descr,
-                             HK_MOVE_COMPONENT );
+                             HK_MOVE_COMPONENT_OR_LABEL );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
                       msg, move_text_xpm );
     }
+    msg = AddHotkeyName( _( "Rotate Label" ), s_Schematic_Hokeys_Descr,
+                             HK_ROTATE_COMPONENT_OR_LABEL );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT,
-                  _( "Rotate Label" ), rotate_pos_xpm );
+                  msg, rotate_pos_xpm );
+    msg = AddHotkeyName( _( "Edit Label" ), s_Schematic_Hokeys_Descr,
+                             HK_EDIT_COMPONENT_OR_LABEL );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT,
-                  _( "Edit Label" ), edit_text_xpm );
+                  msg, edit_text_xpm );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE,
                   _( "Delete Label" ), delete_text_xpm );
 
@@ -453,14 +465,24 @@ void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
 
 void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
 {
+    wxString msg;
     wxMenu* menu_change_type = new wxMenu;
 
     if( !Text->m_Flags )
+    {
+        msg = AddHotkeyName( _( "Move Text" ),
+                             s_Schematic_Hokeys_Descr,
+                             HK_MOVE_COMPONENT_OR_LABEL );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
-                      _( "Move Text" ), move_text_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, _( "Rotate Text" ),
+                      msg, move_text_xpm );
+    }
+    msg = AddHotkeyName( _( "Rotate Text" ), s_Schematic_Hokeys_Descr,
+                             HK_ROTATE_COMPONENT_OR_LABEL );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, msg,
                   rotate_pos_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT, _( "Edit Text" ),
+    msg = AddHotkeyName( _( "Edit Text" ), s_Schematic_Hokeys_Descr,
+                             HK_EDIT_COMPONENT_OR_LABEL );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT, msg,
                   edit_text_xpm );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Text" ),
                   delete_text_xpm );

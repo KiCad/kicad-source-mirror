@@ -343,7 +343,7 @@ void WinEDA_SchematicFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         case TYPE_SCH_LABEL:
         case TYPE_SCH_GLOBALLABEL:
         case TYPE_SCH_HIERLABEL:
-            EditSchematicText( (SCH_TEXT*) DrawStruct, DC );
+            EditSchematicText( (SCH_TEXT*) DrawStruct );
             break;
 
         case DRAW_PART_TEXT_STRUCT_TYPE:

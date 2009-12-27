@@ -173,7 +173,7 @@ static void Show_MoveNode( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     }
 
     /* Redraw the current moved track segments */
-    Trace_Une_Piste( panel, DC, NewTrack, NbPtNewTrack, GR_XOR );
+    Trace_Une_Piste( panel, DC, NewTrack, NbPtNewTrack, draw_mode );
 
     DRAG_SEGM* pt_drag = g_DragSegmentList;
     for( ; pt_drag != NULL; pt_drag = pt_drag->Pnext )

@@ -14,22 +14,24 @@
 #include "class_drawpanel.h"
 #include "program.h"
 #include "general.h"
+#include "drawtxt.h"
+#include "confirm.h"
 #include "dialog_edit_label.h"
 
 
-int DialogLabelEditor::ShowModally(  WinEDA_SchematicFrame* parent, SCH_TEXT * CurrentText )
+/*************************************************************************/
+void WinEDA_SchematicFrame::EditSchematicText( SCH_TEXT* TextStruct )
 {
-    int ret;
+/*************************************************************************/
+/* Edit the properties of the text (Label, Global label, graphic text).. )
+ *  pointed by "TextStruct"
+ */
+    if( TextStruct == NULL )
+        return;
 
-    DialogLabelEditor* dialog = new DialogLabelEditor( parent, CurrentText );
+    DialogLabelEditor dialog( this, TextStruct );
+    dialog.ShowModal();
 
-    // doing any post construction resizing is better done here than in
-    // OnInitDialog() since it tends to flash/redraw the dialog less.
-    dialog->init();
-
-    ret = dialog->ShowModal();
-    dialog->Destroy();
-    return ret;
 }
 
 
@@ -39,11 +41,14 @@ DialogLabelEditor::DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT* C
 {
     m_Parent = parent;
     m_CurrentText = CurrentText;
-    init();
+    InitDialog();
+
+    GetSizer()->SetSizeHints(this);
+    Centre();
 }
 
 
-void DialogLabelEditor::init()
+void DialogLabelEditor::InitDialog()
 {
     wxString msg;
     bool multine = false;
@@ -143,11 +148,6 @@ void DialogLabelEditor::init()
     {
         m_TextShape->Show( false );
     }
-
-    if( GetSizer() )
-    {
-        GetSizer()->SetSizeHints( this );
-    }
 }
 
 /*!
@@ -179,4 +179,60 @@ void DialogLabelEditor::OnButtonCANCEL_Click( wxCommandEvent& event )
     m_Parent->DrawPanel->MouseToCursorSchema();
     EndModal( wxID_CANCEL );
 }
+
+/****************************************************************************/
+void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& event )
+{
+/****************************************************************************/
+    wxString text;
+    int      value;
+
+    /* save old text in undo list if not already in edit */
+    if( m_CurrentText->m_Flags == 0 )
+        m_Parent->SaveCopyInUndoList( m_CurrentText, UR_CHANGED );
+
+    m_Parent->DrawPanel->PostDirtyRect( m_CurrentText->GetBoundingBox() );
+
+    text = m_TextLabel->GetValue();
+    if( !text.IsEmpty() )
+        m_CurrentText->m_Text = text;
+    else if( (m_CurrentText->m_Flags & IS_NEW) == 0 )
+        DisplayError( this, _( "Empty Text!" ) );
+
+    m_CurrentText->SetSchematicTextOrientation( m_TextOrient->GetSelection() );
+    text  = m_TextSize->GetValue();
+    value = ReturnValueFromString( g_UnitMetric, text,
+                                   m_Parent->m_InternalUnits );
+    m_CurrentText->m_Size.x = m_CurrentText->m_Size.y = value;
+    if( m_TextShape )
+        m_CurrentText->m_Shape = m_TextShape->GetSelection();
+
+    int style = m_TextStyle->GetSelection();
+    if( ( style & 1 ) )
+        m_CurrentText->m_Italic = 1;
+    else
+        m_CurrentText->m_Italic = 0;
+
+    if( ( style & 2 ) )
+    {
+        m_CurrentText->m_Bold  = true;
+        m_CurrentText->m_Width = GetPenSizeForBold( m_CurrentText->m_Size.x );
+    }
+    else
+    {
+        m_CurrentText->m_Bold  = false;
+        m_CurrentText->m_Width = 0;
+    }
+
+    m_Parent->GetScreen()->SetModify();
+
+    /* Make the text size as new default size if it is a new text */
+    if( (m_CurrentText->m_Flags & IS_NEW) != 0 )
+        g_DefaultTextLabelSize = m_CurrentText->m_Size.x;
+
+    m_Parent->DrawPanel->PostDirtyRect( m_CurrentText->GetBoundingBox() );
+    m_Parent->DrawPanel->MouseToCursorSchema();
+    EndModal( 0 );
+}
+
 
