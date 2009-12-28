@@ -87,7 +87,7 @@ void WinEDA_PcbFrame::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     msg << _("Id") << wxT("\";\"");
     msg << _("Designator") << wxT("\";\"");
     msg << _("Package") << wxT("\";\"");
-    msg << _("Number") << wxT("\";\"");
+    msg << _("Quantity") << wxT("\";\"");
     msg << _("Designation") << wxT("\";\"");
     msg << _("Supplier and ref") << wxT("\";\n" );
     fprintf( FichBom, "%s", CONV_TO_UTF8( msg ) );
