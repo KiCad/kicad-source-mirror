@@ -226,10 +226,13 @@ EDA_Rect EDA_TextStruct::GetTextBox( int aLine )
     if( m_MultilineAllowed )
     {
         list = wxStringSplit( m_Text, '\n' );
-        if( aLine >= 0 && (aLine < (int)list->GetCount()) )
-            text = &list->Item( aLine );
-        else
-            text = &list->Item( 0 );
+        if ( list->GetCount() )     // GetCount() == 0 for void strings
+        {
+            if( aLine >= 0 && (aLine < (int)list->GetCount()) )
+                text = &list->Item( aLine );
+            else
+                text = &list->Item( 0 );
+        }
     }
 
 
@@ -245,7 +248,7 @@ EDA_Rect EDA_TextStruct::GetTextBox( int aLine )
     rect.Move(wxPoint(0, -extra_dy/2 ) ); // move origin by the half extra interval
 
     // for multiline texts and aLine < 0, merge all rectangles
-    if( m_MultilineAllowed && aLine < 0 )
+    if( m_MultilineAllowed && list && aLine < 0 )
     {
         for( unsigned ii = 1; ii < list->GetCount(); ii++ )
         {
