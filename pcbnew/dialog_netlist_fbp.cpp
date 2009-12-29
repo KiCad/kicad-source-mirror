@@ -87,7 +87,7 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	
 	bUpperSizer->Add( bRightSizerButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	bMainSizer->Add( bUpperSizer, 1, wxEXPAND, 5 );
+	bMainSizer->Add( bUpperSizer, 0, wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
@@ -104,6 +104,8 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	bMainSizer->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_MessageWindow = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CHARWRAP|wxTE_MULTILINE|wxTE_READONLY|wxTE_WORDWRAP );
+	m_MessageWindow->SetMinSize( wxSize( -1,200 ) );
+	
 	bMainSizer->Add( m_MessageWindow, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	this->SetSizer( bMainSizer );

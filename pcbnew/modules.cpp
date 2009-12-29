@@ -460,6 +460,10 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module,
 
     newpos = GetScreen()->m_Curseur;
     module->SetPosition( newpos );
+    module->m_Flags  = 0;
+
+    delete s_ModuleInitialCopy;
+    s_ModuleInitialCopy = NULL;
 
     if( DC )
         module->Draw( DrawPanel, DC, GR_OR );
@@ -480,6 +484,11 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module,
         // Delete drag list
         EraseDragListe();
     }
+
+    g_Drag_Pistes_On = FALSE;
+    DrawPanel->ManageCurseur = NULL;
+    DrawPanel->ForceCloseManageCurseur = NULL;
+
     if( !aDoNotRecreateRatsnest )
         Compile_Ratsnest( DC, true );
 
@@ -488,13 +497,6 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module,
 
     module->DisplayInfo( this );
 
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
-    module->m_Flags  = 0;
-    g_Drag_Pistes_On = FALSE;
-
-    delete s_ModuleInitialCopy;
-    s_ModuleInitialCopy = NULL;
 }
 
 
