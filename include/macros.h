@@ -21,8 +21,16 @@
  */
 static inline const wxChar* GetChars( wxString s )
 {
-#if wxCHECK_VERSION(2,9,0)
-    return (const wxChar*) s.wx_str();
+#if wxCHECK_VERSION( 2, 9, 0 )
+
+/* To be Fixed:
+ *   Currently, access to the actual character data in <wxString::Printf
+ *   is a moving target
+ *   So, with wxWidgets 2.9.0 this line is subject to change:
+ */
+
+//    return (const wxChar*) s.wx_str();
+    return (const wxChar*) s.c_str();
 #else
     return s.GetData();
 #endif
@@ -40,9 +48,10 @@ static inline const wxChar* GetChars( wxString s )
 #define ABS( y ) ( (y) >= 0 ? (y) : ( -(y) ) )
 #endif
 
-#define NEGATE(x) (x = -x)
+#define NEGATE( x ) (x = -x)
+
 /// # of elements in an arrray
-#define DIM(x)           (sizeof(x)/sizeof((x)[0]))
+#define DIM( x ) ( sizeof(x) / sizeof( (x)[0] ) )
 
 
 #define DEG2RAD( Deg ) ( (Deg) * M_PI / 180.0 )
@@ -52,28 +61,28 @@ static inline const wxChar* GetChars( wxString s )
 #define NORMALIZE_ANGLE( Angle ) { while( Angle < 0 ) \
                                        Angle += 3600;\
                                    while( Angle > 3600 ) \
-                                       Angle -= 3600; }
+                                       Angle -= 3600;}
 
 /* Normalize angle to be in the 0.0 .. 360.0 range: */
 #define NORMALIZE_ANGLE_POS( Angle ) { while( Angle < 0 ) \
                                            Angle += 3600;while( Angle >= 3600 ) \
-                                           Angle -= 3600; }
+                                           Angle -= 3600;}
 #define NEGATE_AND_NORMALIZE_ANGLE_POS( Angle ) \
     { Angle = -Angle; while( Angle < 0 ) \
           Angle += 3600;while( Angle >= 3600 ) \
-          Angle -= 3600; }
+          Angle -= 3600;}
 
 /* Normalize angle to be in the -90.0 .. 90.0 range */
 #define NORMALIZE_ANGLE_90( Angle ) { while( Angle < -900 ) \
                                           Angle += 1800;\
                                       while( Angle > 900 ) \
-                                          Angle -= 1800; }
+                                          Angle -= 1800;}
 
 /* Normalize angle to be in the -180.0 .. 180.0 range */
 #define NORMALIZE_ANGLE_180( Angle ) { while( Angle <= -1800 ) \
-                                          Angle += 3600;\
-                                      while( Angle > 1800 ) \
-                                          Angle -= 3600; }
+                                           Angle += 3600;\
+                                       while( Angle > 1800 ) \
+                                           Angle -= 3600;}
 
 /*****************************/
 /* macro to exchange 2 items */
@@ -104,7 +113,7 @@ BOOST_TYPEOF_REGISTER_TYPE( const D_PAD* );
 class BOARD_ITEM;
 BOOST_TYPEOF_REGISTER_TYPE( BOARD_ITEM* );
 
-#define EXCHG( a, b ) { BOOST_TYPEOF(a) __temp__ = (a);      \
+#define EXCHG( a, b ) { BOOST_TYPEOF( a ) __temp__ = (a);      \
                         (a) = (b);                           \
                         (b) = __temp__; }
 
@@ -140,7 +149,7 @@ static inline void ADD_MENUITEM_WITH_SUBMENU( wxMenu* menu, wxMenu* submenu,
                                               int id, const wxString& text,
                                               const wxBitmap& icon )
 {
-    wxMenuItem*    l_item;
+    wxMenuItem* l_item;
 
     l_item = new wxMenuItem( menu, id, text );
     l_item->SetSubMenu( submenu );
@@ -155,7 +164,7 @@ static inline void ADD_MENUITEM_WITH_HELP_AND_SUBMENU( wxMenu*         menu,
                                                        const wxString& help,
                                                        const wxBitmap& icon )
 {
-    wxMenuItem*    l_item;
+    wxMenuItem* l_item;
 
     l_item = new wxMenuItem( menu, id, text, help );
     l_item->SetSubMenu( submenu );

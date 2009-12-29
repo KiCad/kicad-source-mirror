@@ -30,8 +30,11 @@ public:
 KicadGraphicContext _cDC( parent );\
 wxBufferedDC name(&_cDC, _cDC.GetSize() );
 
+#define INSTALL_PAINTDC(name,parent) wxBufferedPaintDC name(parent )
+
 #else
-#define INSTALL_DC(name,parent) KicadGraphicContext name( parent );
+#define INSTALL_DC(name,parent) KicadGraphicContext name( parent )
+#define INSTALL_PAINTDC(name,parent) wxPaintDC name( parent )
 #endif
 
 #endif // __KICAD_DEVICE_CONTEXT_H__

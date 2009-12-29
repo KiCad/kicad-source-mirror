@@ -654,6 +654,9 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
     INSTALL_DC( dc, DrawPanel );
     switch( id )
     {
+    case ID_POPUP_LIBEDIT_CANCEL_EDITING:
+        break;
+
     case ID_LIBEDIT_SELECT_CURRENT_LIB:
         SelectActiveLibrary();
         break;

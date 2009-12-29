@@ -76,13 +76,14 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
     SetBackgroundColour( wxColour( ColorRefs[g_DrawBgColor].m_Red,
                                    ColorRefs[g_DrawBgColor].m_Green,
                                    ColorRefs[g_DrawBgColor].m_Blue ) );
+    SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 
     EnableScrolling( TRUE, TRUE );
     m_ClipBox.SetSize( size );
     m_ClipBox.SetX( 0 );
     m_ClipBox.SetY( 0 );
     m_CanStartBlock     = -1; // Command block can start if >= 0
-    m_AbortEnable       = m_AbortRequest = FALSE;
+    m_AbortEnable       = m_AbortRequest = false;
     m_AutoPAN_Enable    = TRUE;
     m_IgnoreMouseEvents = 0;
 
@@ -93,8 +94,8 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
         wxGetApp().m_EDA_Config->Read( wxT( "AutoPAN" ), &m_AutoPAN_Enable,
                                        true );
 
-    m_AutoPAN_Request    = FALSE;
-    m_Block_Enable       = FALSE;
+    m_AutoPAN_Request    = false;
+    m_Block_Enable       = false;
     m_PanelDefaultCursor = m_PanelCursor = wxCURSOR_ARROW;
     m_CursorLevel = 0;
     m_PrintIsMirrored = false;
@@ -212,7 +213,7 @@ wxPoint WinEDA_DrawPanel::CursorRealPosition( const wxPoint& ScreenPos )
 /** Function IsPointOnDisplay
  * @param ref_pos is the position to test in pixels, relative to the panel.
  * @return TRUE if ref_pos is a point currently visible on screen
- *         FALSE if ref_pos is out of screen
+ *         false if ref_pos is out of screen
  */
 bool WinEDA_DrawPanel::IsPointOnDisplay( wxPoint ref_pos )
 {
@@ -225,7 +226,7 @@ bool WinEDA_DrawPanel::IsPointOnDisplay( wxPoint ref_pos )
     // Slightly decreased the size of the useful screen area  to avoid drawing
     // limits.
     #define PIXEL_MARGIN 8
-    display_rect.Inflate( -PIXEL_MARGIN, -PIXEL_MARGIN );
+    display_rect.Inflate( -PIXEL_MARGIN );
 
     // Convert physical coordinates.
     pos = CalcUnscrolledPosition( display_rect.GetPosition() );
@@ -564,11 +565,7 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
     // Fix for pixel offset bug http://trac.wxwidgets.org/ticket/4187
     paintDC.GetGraphicsContext()->Translate(0.5, 0.5);
 #else
-    #ifdef KICAD_USE_BUFFERED_DC
-    wxBufferedPaintDC paintDC( this );
-    #else
-    wxPaintDC paintDC( this );
-    #endif
+    INSTALL_PAINTDC( paintDC, this );
 #endif
     EDA_Rect  tmp;
     wxRect    PaintClipBox;
@@ -622,7 +619,7 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
 #endif
 
     // Be sure the drawpanel clipbox is bigger than the region to repair:
-    m_ClipBox.Inflate(1,1); // Give it one pixel more in each direction
+    m_ClipBox.Inflate(1); // Give it one pixel more in each direction
 
 #if 0 && defined (DEBUG)
     printf( "2) PaintClipBox=(%d, %d, %d, %d) org=(%d, %d) m_ClipBox=(%d, %d, %d, %d)\n",
@@ -705,7 +702,7 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     BASE_SCREEN* screen = GetScreen();
     int          ii, jj, xg, yg, color;
     wxRealPoint  screen_grid_size;
-    bool         drawgrid = FALSE;
+    bool         drawgrid = false;
     wxSize       size;
     wxPoint      org;
 
@@ -729,7 +726,7 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
         dgrid.x *= 2;
     }
     if( dgrid.x < 5 )
-        drawgrid = FALSE; // The grid is too small: do not show it
+        drawgrid = false; // The grid is too small: do not show it
 
     if( dgrid.y < 5 )
     {
@@ -737,7 +734,7 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
         dgrid.y *= 2;
     }
     if( dgrid.y < 5 )
-        drawgrid = FALSE; // The grid is too small
+        drawgrid = false; // The grid is too small
 
     GetViewStart( &org.x, &org.y );
     GetScrollPixelsPerUnit( &ii, &jj );
@@ -856,7 +853,7 @@ bool WinEDA_DrawPanel::OnRightClick( wxMouseEvent& event )
     m_IgnoreMouseEvents = TRUE;
     PopupMenu( &MasterMenu, pos );
     MouseToCursorSchema();
-    m_IgnoreMouseEvents = FALSE;
+    m_IgnoreMouseEvents = false;
 
     return true;
 }
@@ -866,7 +863,7 @@ bool WinEDA_DrawPanel::OnRightClick( wxMouseEvent& event )
 void WinEDA_DrawPanel::OnMouseLeaving( wxMouseEvent& event )
 {
     if( ManageCurseur == NULL )          // No command in progress.
-        m_AutoPAN_Request = FALSE;
+        m_AutoPAN_Request = false;
 
     if( !m_AutoPAN_Enable || !m_AutoPAN_Request || m_IgnoreMouseEvents )
         return;
@@ -899,11 +896,12 @@ void WinEDA_DrawPanel::OnMouseWheel( wxMouseEvent& event )
     if( event.GetWheelRotation() == 0 || !GetParent()->IsEnabled()
         || !rect.Contains( event.GetPosition() ) )
     {
+#if 0
         wxLogDebug( wxT( "OnMouseWheel() position(%d, %d) " ) \
                     wxT( "rectangle(%d, %d, %d, %d)" ),
                     event.GetPosition().x, event.GetPosition().y,
                     rect.x, rect.y, rect.width, rect.height );
-
+#endif
         event.Skip();
         return;
     }
@@ -964,7 +962,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
     }
 
     if( ManageCurseur == NULL )  // No command in progress
-        m_AutoPAN_Request = FALSE;
+        m_AutoPAN_Request = false;
 
     if( m_Parent->m_FrameIsActive )
         SetFocus();
@@ -1123,7 +1121,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
         {
             if( screen->m_BlockLocate.m_State == STATE_BLOCK_MOVE )
             {
-                m_AutoPAN_Request = FALSE;
+                m_AutoPAN_Request = false;
                 m_Parent->HandleBlockPlace( &DC );
                 s_IgnoreNextLeftButtonRelease = true;
             }
@@ -1188,13 +1186,13 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
                 if( ForceCloseManageCurseur )
                 {
                     ForceCloseManageCurseur( this, &DC );
-                    m_AutoPAN_Request = FALSE;
+                    m_AutoPAN_Request = false;
                 }
                 SetCursor( m_PanelCursor = m_PanelDefaultCursor );
             }
             else if( screen->m_BlockLocate.m_State == STATE_BLOCK_END )
             {
-                m_AutoPAN_Request = FALSE;
+                m_AutoPAN_Request = false;
                 m_Parent->HandleBlockEnd( &DC );
                 SetCursor( m_PanelCursor = m_PanelDefaultCursor );
                 if( screen->m_BlockLocate.m_State == STATE_BLOCK_MOVE )
@@ -1216,7 +1214,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
             if( ForceCloseManageCurseur )
             {
                 ForceCloseManageCurseur( this, &DC );
-                m_AutoPAN_Request = FALSE;
+                m_AutoPAN_Request = false;
             }
         }
     }
@@ -1237,7 +1235,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
 {
     long    key, localkey;
-    bool    escape = FALSE;
+    bool    escape = false;
     wxPoint pos;
 
     key = localkey = event.GetKeyCode();

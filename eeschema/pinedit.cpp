@@ -178,8 +178,12 @@ void WinEDA_LibeditFrame::PlacePin( wxDC* DC )
     wxPoint  newpos;
     bool     status;
 
-    if( CurrentPin == NULL )
+    // Some tests
+    if( (CurrentPin == NULL) || (CurrentPin->Type() != COMPONENT_PIN_DRAW_TYPE) )
+    {
+        wxMessageBox( wxT("WinEDA_LibeditFrame::PlacePin() error") );
         return;
+    }
 
     newpos.x = GetScreen()->m_Curseur.x;
     newpos.y = -GetScreen()->m_Curseur.y;
@@ -544,20 +548,15 @@ void WinEDA_LibeditFrame::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
 {
     LIB_PIN* Pin;
     wxString msg;
-    int      ox = 0, oy = 0;
 
     if( m_component == NULL || SourcePin == NULL
         || SourcePin->Type() != COMPONENT_PIN_DRAW_TYPE )
         return;
 
     Pin = (LIB_PIN*) SourcePin->GenCopy();
-    m_component->AddDrawItem( Pin );
-
     Pin->m_Flags  = IS_NEW;
     Pin->m_Pos.x += g_RepeatStep.x;
-    ox = Pin->m_Pos.x;
     Pin->m_Pos.y += -g_RepeatStep.y;
-    oy = Pin->m_Pos.y;
     IncrementLabelMember( Pin->m_PinName );
 
     Pin->ReturnPinStringNum( msg );
@@ -573,7 +572,12 @@ void WinEDA_LibeditFrame::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
     DrawPanel->CursorOff( DC );
     GetScreen()->m_Curseur.x = Pin->m_Pos.x;
     GetScreen()->m_Curseur.y = -Pin->m_Pos.y;
+    
+    // Add this new pin in list, and creates pins for others parts if needed
+    m_drawItem = Pin;
     PlacePin( DC );
+    m_lastDrawItem = Pin;
+
     GetScreen()->m_Curseur = savepos;
     DrawPanel->CursorOn( DC );
 

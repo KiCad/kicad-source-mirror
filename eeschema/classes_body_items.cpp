@@ -1561,7 +1561,7 @@ void LIB_POLYLINE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
         if( Buf_Poly_Drawings == NULL )
         {
-            DisplayError( NULL, _( "Cannot allocate memory to draw polylines." ) );
+            DisplayError( NULL, wxT( "Cannot allocate memory to draw polylines." ) );
         }
     }
 

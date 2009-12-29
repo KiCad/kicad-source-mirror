@@ -21,7 +21,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("&Name:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Pin &name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
 	fgSizer1->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
@@ -42,8 +42,10 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	m_staticNameTextSizeUnits->Wrap( -1 );
 	fgSizer1->Add( m_staticNameTextSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_staticText4 = new wxStaticText( this, wxID_ANY, _("N&umber:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Pin n&umber:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
+	m_staticText4->SetToolTip( _("Pin number: 1 to 4 ASCII letters and/or digits") );
+	
 	fgSizer1->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_textNumber = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -86,8 +88,10 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	m_staticLengthUnits->Wrap( -1 );
 	fgSizer1->Add( m_staticLengthUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_staticText6 = new wxStaticText( this, wxID_ANY, _("&Electical type:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6 = new wxStaticText( this, wxID_ANY, _("&Electrical type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText6->Wrap( -1 );
+	m_staticText6->SetToolTip( _("Used by the ERC.") );
+	
 	fgSizer1->Add( m_staticText6, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	wxArrayString m_choiceElectricalTypeChoices;
@@ -107,7 +111,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	
 	fgSizer1->Add( 0, 0, 0, wxEXPAND, 3 );
 	
-	m_staticText7 = new wxStaticText( this, wxID_ANY, _("&Style:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText7 = new wxStaticText( this, wxID_ANY, _("Graphic &Style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7->Wrap( -1 );
 	fgSizer1->Add( m_staticText7, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	

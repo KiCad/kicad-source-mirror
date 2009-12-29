@@ -103,7 +103,7 @@
                                 <property name="font"></property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">&amp;Name:</property>
+                                <property name="label">Pin &amp;name:</property>
                                 <property name="maximum_size"></property>
                                 <property name="minimum_size"></property>
                                 <property name="name">m_staticText1</property>
@@ -376,7 +376,7 @@
                                 <property name="font"></property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">N&amp;umber:</property>
+                                <property name="label">Pin n&amp;umber:</property>
                                 <property name="maximum_size"></property>
                                 <property name="minimum_size"></property>
                                 <property name="name">m_staticText4</property>
@@ -385,7 +385,7 @@
                                 <property name="size"></property>
                                 <property name="style"></property>
                                 <property name="subclass"></property>
-                                <property name="tooltip"></property>
+                                <property name="tooltip">Pin number: 1 to 4 ASCII letters and/or digits</property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
@@ -918,7 +918,7 @@
                                 <property name="font"></property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">&amp;Electical type:</property>
+                                <property name="label">&amp;Electrical type:</property>
                                 <property name="maximum_size"></property>
                                 <property name="minimum_size"></property>
                                 <property name="name">m_staticText6</property>
@@ -927,7 +927,7 @@
                                 <property name="size"></property>
                                 <property name="style"></property>
                                 <property name="subclass"></property>
-                                <property name="tooltip"></property>
+                                <property name="tooltip">Used by the ERC.</property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
@@ -1060,7 +1060,7 @@
                                 <property name="font"></property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">&amp;Style:</property>
+                                <property name="label">Graphic &amp;Style:</property>
                                 <property name="maximum_size"></property>
                                 <property name="minimum_size"></property>
                                 <property name="name">m_staticText7</property>

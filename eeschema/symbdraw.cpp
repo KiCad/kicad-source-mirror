@@ -214,7 +214,13 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry,
         Text->m_Orient  = m_textOrientation;
         Text->m_Pos   = GetScreen()->m_Curseur;
         NEGATE( Text->m_Pos.y );
+        
+        // Enter the graphic text info
+        DrawPanel->m_IgnoreMouseEvents = true;
         EditSymbolText( NULL, Text );
+        DrawPanel->MouseToCursorSchema();
+        DrawPanel->m_IgnoreMouseEvents = false;
+        
         if( Text->m_Text.IsEmpty() )
         {
             SAFE_DELETE( Text );
