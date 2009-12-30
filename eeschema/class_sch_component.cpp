@@ -205,8 +205,7 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
     SCH_FIELD* field = GetField( REFERENCE );
 
-    if( ( ( field->m_Attributs & TEXT_NO_VISIBLE ) == 0 )
-        && !( field->m_Flags & IS_MOVED ) )
+    if( field->IsVisible() && !( field->m_Flags & IS_MOVED ) )
     {
         if( Entry->GetPartCount() > 1 )
         {
@@ -236,23 +235,20 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     {
         EDA_Rect BoundaryBox;
         BoundaryBox = GetBoundaryBox();
-        int x1 = BoundaryBox.GetX();
-        int y1 = BoundaryBox.GetY();
-        int x2 = BoundaryBox.GetRight();
-        int y2 = BoundaryBox.GetBottom();
-        GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
-        BoundaryBox = GetField( REFERENCE )->GetBoundaryBox();
-        x1 = BoundaryBox.GetX();
-        y1 = BoundaryBox.GetY();
-        x2 = BoundaryBox.GetRight();
-        y2 = BoundaryBox.GetBottom();
-        GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
-        BoundaryBox = GetField( VALUE )->GetBoundaryBox();
-        x1 = BoundaryBox.GetX();
-        y1 = BoundaryBox.GetY();
-        x2 = BoundaryBox.GetRight();
-        y2 = BoundaryBox.GetBottom();
-        GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
+        GRRect( &panel->m_ClipBox, DC, BoundaryBox, BROWN );
+#if 1
+        if( GetField( REFERENCE )->IsVisible() )
+        {
+            BoundaryBox = GetField( REFERENCE )->GetBoundaryBox();
+            GRRect( &panel->m_ClipBox, DC, BoundaryBox, BROWN );
+        }
+
+        if( GetField( VALUE )->IsVisible() )
+        {
+            BoundaryBox = GetField( VALUE )->GetBoundaryBox();
+            GRRect( &panel->m_ClipBox, DC, BoundaryBox, BROWN );
+        }
+#endif
     }
 #endif
 }
@@ -530,7 +526,13 @@ LIB_PIN* SCH_COMPONENT::GetPin( const wxString& number )
     return Entry->GetPin( number, m_Multi, m_Convert );
 }
 
-
+/**
+ * Function GetBoundaryBox
+ * returns the orthogonal, bounding box of this object for display purposes.
+ * This box should be an enclosing perimeter for graphic items and pins.
+ * this include only fields defined in library
+ * use GetBoundingBox() to include fields in schematic
+ */
 EDA_Rect SCH_COMPONENT::GetBoundaryBox() const
 {
     LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
@@ -1064,6 +1066,13 @@ bool SCH_COMPONENT::Save( FILE* f ) const
 }
 
 
+/**
+ * Function GetBoundingBox
+ * returns the orthogonal, bounding box of this object for display purposes.
+ * This box should be an enclosing perimeter for visible components of this
+ * object, and the units should be in the pcb or schematic coordinate system.
+ * It is OK to overestimate the size by a few counts.
+ */
 EDA_Rect SCH_COMPONENT::GetBoundingBox()
 {
     const int PADDING = 40;
@@ -1074,11 +1083,13 @@ EDA_Rect SCH_COMPONENT::GetBoundingBox()
     // Include BoundingBoxes of fields
     for( int ii = 0; ii < GetFieldCount(); ii++ )
     {
+        if( ! GetField( ii )->IsVisible() )
+            continue;
         bbox.Merge( GetField( ii )->GetBoundaryBox() );
     }
 
     // ... add padding
-    bbox.Inflate( PADDING, PADDING );
+    bbox.Inflate( PADDING );
 
     return bbox;
 }

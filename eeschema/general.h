@@ -22,8 +22,6 @@
 /* Used for EDA_BaseStruct, .m_Select member */
 #define IS_SELECTED 1
 
-#define TEXT_NO_VISIBLE 1
-
 
 //#define GR_DEFAULT_DRAWMODE GR_COPY
 #define GR_DEFAULT_DRAWMODE GR_COPY

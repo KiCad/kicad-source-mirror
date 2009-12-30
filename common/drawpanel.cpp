@@ -521,7 +521,7 @@ void WinEDA_DrawPanel::EraseScreen( wxDC* DC )
 #ifndef WX_ZOOM
     GRSFilledRect( &m_ClipBox, DC, m_ClipBox.GetX(), m_ClipBox.GetY(),
                    m_ClipBox.GetRight(), m_ClipBox.GetBottom(),
-                   g_DrawBgColor, g_DrawBgColor );
+                   0, g_DrawBgColor, g_DrawBgColor );
 #else
     EDA_Rect tmp = m_ClipBox;
 
@@ -534,7 +534,7 @@ void WinEDA_DrawPanel::EraseScreen( wxDC* DC )
 
     GRSFilledRect( &m_ClipBox, DC, m_ClipBox.GetX(), m_ClipBox.GetY(),
                    m_ClipBox.GetRight(), m_ClipBox.GetBottom(),
-                   g_DrawBgColor, g_DrawBgColor );
+                   0, g_DrawBgColor, g_DrawBgColor );
 
     m_ClipBox = tmp;
 #endif

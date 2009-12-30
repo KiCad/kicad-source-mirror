@@ -209,6 +209,13 @@ public:
      */
     void            SetTimeStamp( long aNewTimeStamp);
 
+    /**
+     * Function GetBoundaryBox
+     * returns the orthogonal, bounding box of this object for display purposes.
+     * This box should be an enclosing perimeter for graphic items and pins.
+     * this include only fields defined in library
+     * use GetBoundingBox() to include fields in schematic
+     */
     EDA_Rect        GetBoundaryBox() const;
 
     /**

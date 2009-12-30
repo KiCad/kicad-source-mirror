@@ -110,9 +110,14 @@ bool WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
     {
         wxString current_path = filename.GetPath();
 
-        /* Standard gerber filetypes */
-        filetypes += _( "Gerber files (.gbr .gbx .lgr .ger .pho)| \
-.gbr;*.GBR;*.gbx;*.GBX;*.lgr;*.LGR;*.ger;*.GER;*.pho;*.PHO|" );
+        /* Standard gerber filetypes
+         * (See http://en.wikipedia.org/wiki/Gerber_File)
+         * the .pho extension is the default used in Pcbnew
+         */
+        filetypes = _( "Gerber files (.gb* .gt* .lgr .ger .pho)" );
+        filetypes << wxT("|");
+        filetypes += wxT("*.gb*;*.GB*;.gt*;.GT*;.gko;.GKO;*.GPB;*.gpb;*.lgr;*.LGR;*.ger;*.GER;*.pho;*.PHO" );
+        filetypes << wxT("|");
 
         /* Special gerber filetypes */
         filetypes += _( "Top layer (*.GTL)|*.GTL;*.gtl|" );

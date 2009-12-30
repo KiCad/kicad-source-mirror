@@ -451,7 +451,7 @@ bool LIB_COMPONENT::Save( FILE* aFile )
     if( fprintf( aFile, "DEF" ) < 0 )
         return false;
 
-    if( ( value.m_Attributs & TEXT_NO_VISIBLE ) == 0 )
+    if( value.IsVisible() )
     {
         if( fprintf( aFile, " %s", CONV_TO_UTF8( value.m_Text ) ) < 0 )
             return false;
@@ -859,7 +859,7 @@ EDA_Rect LIB_COMPONENT::GetBoundaryBox( int aUnit, int aConvert )
             continue;
 
         if ( ( item.Type() == COMPONENT_FIELD_DRAW_TYPE )
-            && ( ( ( LIB_TEXT& ) item ).m_Attributs & TEXT_NO_VISIBLE ) )
+            && !( ( LIB_FIELD& ) item ).IsVisible() )
             continue;
 
         bBox.Merge( item.GetBoundingBox() );

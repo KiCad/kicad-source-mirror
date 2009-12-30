@@ -58,6 +58,10 @@ void GRForceBlackPen( bool flagforce );
 bool GetGRForceBlackPenState( void );
 void SetPenMinWidth( int minwidth );
 
+void GRSPutPixel( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int color );
+void GRSFilledRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
+                    int x2, int y2, int width, int Color, int BgColor );
+
 void GRLine( EDA_Rect* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd,
              int aWidth, int aColor );
 void GRLine( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2,
@@ -205,24 +209,19 @@ void GRSetColor( int Color );
 void GRSetDefaultPalette();
 int  GRGetColor();
 void GRPutPixel( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int color );
-void GRSPutPixel( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int color );
 int  GRGetPixel( wxDC* DC, int x, int y );
 void GRFilledRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
                    int x2, int y2, int Color, int BgColor );
 void GRFilledRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
                    int x2, int y2, int width, int Color, int BgColor );
-void GRSFilledRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
-                    int x2, int y2, int Color, int BgColor );
-void GRSFilledRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
-                    int x2, int y2, int width, int Color, int BgColor );
 void GRRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
              int x2, int y2, int Color );
+void GRRect( EDA_Rect* ClipBox, wxDC* DC,const EDA_Rect& aRect,
+             int Color );
 void GRRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
              int x2, int y2, int width, int Color );
-void GRSRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
-              int x2, int y2, int Color );
-void GRSRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
-              int x2, int y2, int width, int Color );
+void GRRect( EDA_Rect* aClipBox, wxDC* aDC,const EDA_Rect& aRect,
+             int aWidth, int aColor );
 
 
 #endif      /* define GR_BASIC */

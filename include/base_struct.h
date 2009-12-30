@@ -175,15 +175,15 @@ public:
 
     bool Inside( int x, int y ) { return Inside( wxPoint( x, y ) ); }
     wxSize GetSize() { return m_Size; }
-    int GetX() { return m_Pos.x; }
-    int GetY() { return m_Pos.y; }
+    int GetX() const { return m_Pos.x; }
+    int GetY() const { return m_Pos.y; }
     wxPoint GetOrigin() { return m_Pos; }
     wxPoint GetPosition() { return m_Pos; }
-    wxPoint GetEnd() { return wxPoint( GetRight(), GetBottom() ); }
-    int GetWidth() { return m_Size.x; }
-    int GetHeight() { return m_Size.y; }
-    int GetRight() { return m_Pos.x + m_Size.x; }
-    int GetBottom() { return m_Pos.y + m_Size.y; }
+    wxPoint GetEnd() const { return wxPoint( GetRight(), GetBottom() ); }
+    int GetWidth() const { return m_Size.x; }
+    int GetHeight() const { return m_Size.y; }
+    int GetRight() const { return m_Pos.x + m_Size.x; }
+    int GetBottom() const { return m_Pos.y + m_Size.y; }
     void SetOrigin( const wxPoint& pos ) { m_Pos = pos; }
     void SetOrigin( int x, int y ) { m_Pos.x = x; m_Pos.y = y; }
     void SetSize( const wxSize& size ) { m_Size = size; }

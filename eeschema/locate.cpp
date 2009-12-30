@@ -417,10 +417,17 @@ bool IsItemInBox( EDA_Rect& aBox, SCH_ITEM* DrawStruct )
     case TYPE_SCH_TEXT:
     case TYPE_SCH_HIERLABEL:
     case TYPE_SCH_GLOBALLABEL:
-    case TYPE_SCH_COMPONENT:
     case DRAW_SHEET_STRUCT_TYPE:
     case TYPE_SCH_MARKER:
         BoundaryBox = DrawStruct->GetBoundingBox();
+        if( aBox.Intersects( BoundaryBox ) )
+            return true;
+        break;
+
+    case TYPE_SCH_COMPONENT:
+        // Use a more restrictive area than GetBoundingBox()
+        // Area is restricted to the body area, excludint fields outside this area
+        BoundaryBox = ((SCH_COMPONENT*)DrawStruct)->GetBoundaryBox();
         if( aBox.Intersects( BoundaryBox ) )
             return true;
         break;

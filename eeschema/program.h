@@ -5,6 +5,9 @@
 #ifndef PROGRAM_H
 #define PROGRAM_H
 
+#define HIGHLIGHT_COLOR WHITE
+#define TEXT_NO_VISIBLE 1
+
 #include "wxEeschemaStruct.h"
 #include "macros.h"
 #include "base_struct.h"
@@ -17,9 +20,6 @@
 #include "class_text-label.h"
 #include "class_schematic_items.h"
 
-#define HIGHLIGHT_COLOR WHITE
-
-#define TEXT_NO_VISIBLE 1
 
 /* Rotation, mirror of graphic items in components bodies are handled by a
  * transform matrix.  The default matix is useful to draw lib entries with

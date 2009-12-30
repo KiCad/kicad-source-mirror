@@ -40,8 +40,11 @@ const wxChar* s_AllowedExtensionsToList[] =
     wxT( "^[^$].*\\.brd$" ),
     wxT( "^.*\\.net$" ),
     wxT( "^.*\\.txt$" ),
-    wxT( "^.*\\.pho$" ),
-    wxT( "^.*\\.gbr$" ),
+    wxT( "^.*\\.pho$" ),        // Gerber file
+    wxT( "^.*\\.gbr$" ),        // Gerber file
+    wxT( "^.*\\.gb[alops]$" ),  // Gerber back (or bottom) layer file
+    wxT( "^.*\\.gt[alops]$" ),  // Gerber front (or top) layer file
+    wxT( "^.*\\.g[0-9]{1,2}$" ),     // Gerber inner layer file
     wxT( "^.*\\.odt$" ),
     wxT( "^.*\\.sxw$" ),
     wxT( "^.*\\.htm$" ),

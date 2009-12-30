@@ -84,9 +84,16 @@ public:
                int aColor, int aDrawMode, void* aData,
                const int aTransformMatrix[2][2] );
 
+    /** Function IsVisible
+     * @return true is this field is visible, false if flagged invisible
+     */
+    bool IsVisible()
+    {
+        return (m_Attributs & TEXT_NO_VISIBLE) == 0 ? true : false;
+    }
+
     /**
      * Return the bounding rectangle of the field text.
-     *
      * @return Bounding rectangle.
      */
     virtual EDA_Rect GetBoundingBox();

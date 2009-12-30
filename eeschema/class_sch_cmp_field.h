@@ -67,6 +67,14 @@ public:
      */
     int GetPenSize( );
 
+    /** Function IsVisible
+     * @return true is this field is visible, false if flagged invisible
+     */
+    bool IsVisible()
+    {
+        return (m_Attributs & TEXT_NO_VISIBLE) == 0 ? true : false;
+    }
+
     /**
      * Function Draw
      */

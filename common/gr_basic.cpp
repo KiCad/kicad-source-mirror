@@ -60,14 +60,21 @@ static int          PenMinWidth = 1; /* minimum pen width (must be> 0)
                                       * (Useful for printing)  */
 static bool         ForceBlackPen;   /* if true: draws in black instead of
                                       * color for printing. */
-static int          xcliplo   = 0,
-                    ycliplo   = 0,
-                    xcliphi   = 2000,
-                    ycliphi   = 2000;
-static int   lastcolor        = -1;
-static int   lastwidth        = -1;
+static int          xcliplo = 0,
+                    ycliplo = 0,
+                    xcliphi = 2000,
+                    ycliphi = 2000;
+static int   lastcolor      = -1;
+static int   lastwidth      = -1;
 static int   s_Last_Pen_Style = -1;
 static wxDC* lastDC = NULL;
+
+
+/* Local functions: */
+static void GRSRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
+              int x2, int y2, int Color );
+static void GRSRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
+              int x2, int y2, int width, int Color );
 
 /*
  * Macro clipping the trace of a line:
@@ -362,8 +369,12 @@ void GRSetDrawMode( wxDC* DC, int draw_mode )
     if( draw_mode & GR_OR )
 #if defined(__WXMAC__) && (wxMAC_USE_CORE_GRAPHICS || wxCHECK_VERSION( 2, 9, 0 ) )
 
+
+
         DC->SetLogicalFunction( wxCOPY );
 #else
+
+
 
         DC->SetLogicalFunction( wxOR );
 #endif
@@ -372,8 +383,12 @@ void GRSetDrawMode( wxDC* DC, int draw_mode )
     else if( draw_mode & GR_NXOR )
 #if defined(__WXMAC__) && (wxMAC_USE_CORE_GRAPHICS || wxCHECK_VERSION( 2, 9, 0 ) )
 
+
+
         DC->SetLogicalFunction( wxXOR );
 #else
+
+
 
         DC->SetLogicalFunction( wxEQUIV );
 #endif
@@ -1397,7 +1412,7 @@ void GRArc( EDA_Rect* ClipBox, wxDC* DC, int xc, int yc, int StAngle,
     GRSetColorPen( DC, Color );
     GRSetBrush( DC, Color, FALSE );
     DC->DrawArc( GRMapX( xc + x1 ), GRMapY( yc - y1 ), GRMapX( xc + x2 ),
-                 GRMapY( yc - y2 ), GRMapX( xc ), GRMapY( yc ) );
+                GRMapY( yc - y2 ), GRMapX( xc ), GRMapY( yc ) );
 }
 
 
@@ -1422,13 +1437,9 @@ void GRArc( EDA_Rect* ClipBox,
 /*
  * Draw a rectangle in drawing space.
  */
-void GRRect( EDA_Rect* ClipBox,
-             wxDC*     DC,
-             int       x1,
-             int       y1,
-             int       x2,
-             int       y2,
-             int       Color )
+void GRRect( EDA_Rect* ClipBox, wxDC* DC,
+             int x1, int y1, int x2, int y2,
+             int Color )
 {
     x1 = GRMapX( x1 );
     y1 = GRMapY( y1 );
@@ -1438,18 +1449,25 @@ void GRRect( EDA_Rect* ClipBox,
     GRSRect( ClipBox, DC, x1, y1, x2, y2, Color );
 }
 
+void GRRect( EDA_Rect* aClipBox, wxDC* aDC,
+             const EDA_Rect& aRect,
+             int aColor )
+{
+    int x1 = GRMapX( aRect.GetX() );
+    int y1 = GRMapY( aRect.GetY() );
+    int x2 = GRMapX( aRect.GetRight() );
+    int y2 = GRMapY( aRect.GetBottom() );
+
+    GRSRect( aClipBox, aDC, x1, y1, x2, y2, aColor );
+}
+
 
 /*
- * Draw a rectangle in drawing space.
+ * Draw a rectangle (thick lines) in drawing space.
  */
-void GRRect( EDA_Rect* ClipBox,
-             wxDC*     DC,
-             int       x1,
-             int       y1,
-             int       x2,
-             int       y2,
-             int       width,
-             int       Color )
+void GRRect( EDA_Rect* ClipBox, wxDC* DC,
+             int x1, int y1, int x2, int y2,
+             int width, int Color )
 {
     x1    = GRMapX( x1 );
     y1    = GRMapY( y1 );
@@ -1458,6 +1476,20 @@ void GRRect( EDA_Rect* ClipBox,
     width = ZoomValue( width );
 
     GRSRect( ClipBox, DC, x1, y1, x2, y2, width, Color );
+}
+
+void GRRect( EDA_Rect* aClipBox, wxDC* aDC,
+             const EDA_Rect& aRect,
+             int aWidth, int aColor )
+{
+    int x1 = GRMapX( aRect.GetX() );
+    int y1 = GRMapY( aRect.GetY() );
+    int x2 = GRMapX( aRect.GetRight() );
+    int y2 = GRMapY( aRect.GetBottom() );
+
+    int width = ZoomValue( aWidth );
+
+    GRSRect( aClipBox, aDC, x1, y1, x2, y2, width, aColor );
 }
 
 
@@ -1543,31 +1575,10 @@ void GRSRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
 }
 
 
-/*
- * Draw a filled rectangle in screen space.
- */
-void GRSFilledRect( EDA_Rect* ClipBox,
-                    wxDC*     DC,
-                    int       x1,
-                    int       y1,
-                    int       x2,
-                    int       y2,
-                    int       Color,
-                    int       BgColor )
-{
-    GRSFilledRect( ClipBox, DC, x1, y1, x2, y2, 0, Color, BgColor );
-}
 
-
-void GRSFilledRect( EDA_Rect* ClipBox,
-                    wxDC*     DC,
-                    int       x1,
-                    int       y1,
-                    int       x2,
-                    int       y2,
-                    int       width,
-                    int       Color,
-                    int       BgColor )
+void GRSFilledRect( EDA_Rect* ClipBox, wxDC*     DC,
+                    int       x1, int       y1, int       x2, int       y2,
+                    int       width, int       Color, int       BgColor )
 {
     if( x1 > x2 )
         EXCHG( x1, x2 );
@@ -1635,11 +1646,11 @@ void ClipAndDrawFilledPoly( EDA_Rect* aClipBox,
     clippedPolygon.clear();
     for( int ii = 0; ii < n; ii++ )
         inputPolygon.push_back( PointF( (REAL) aPoints[ii].x,
-                                        (REAL) aPoints[ii].y ) );
+                                       (REAL) aPoints[ii].y ) );
 
     RectF window( (REAL) aClipBox->GetX(), (REAL) aClipBox->GetY(),
-                  (REAL) aClipBox->GetWidth(),
-                  (REAL) aClipBox->GetHeight() );
+                 (REAL) aClipBox->GetWidth(),
+                 (REAL) aClipBox->GetHeight() );
 
     SutherlandHodgman sh( window );
     sh.Clip( inputPolygon, outputPolygon );
@@ -1649,12 +1660,13 @@ void ClipAndDrawFilledPoly( EDA_Rect* aClipBox,
          ++cit )
     {
         clippedPolygon.push_back( wxPoint( wxRound( cit->X ),
-                                           wxRound( cit->Y ) ) );
+                                          wxRound( cit->Y ) ) );
     }
 
     if( clippedPolygon.size() )
         aDC->DrawPolygon( clippedPolygon.size(), &clippedPolygon[0] );
 }
+
 
 #endif
 
