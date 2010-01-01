@@ -16,7 +16,7 @@
 /* Generate a PostScript file (*. ps) of the circuit layer.
  * If layer < 0: all layers are plotted.
  */
-void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
+bool WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
                                      bool useA4, GRTraceMode trace_mode )
 {
     wxSize        SheetSize;
@@ -29,18 +29,13 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
     Ki_PageDescr* SheetPS;
     wxPoint       offset;
 
-    ClearMsgPanel();
-
     FILE* output_file = wxFopen( FullFileName, wxT( "wt" ) );
     if( output_file == NULL )
     {
-        wxString msg = _( "Unable to create file " ) + FullFileName;
-        DisplayError( this, msg );
-        return;
+        return false;
     }
 
     SetLocaleTo_C_standard();
-    AppendMsgPanel( _( "File" ), FullFileName, CYAN );
 
     if( g_pcb_plot_options.PlotScaleOpt != 1 )
         Center = TRUE;        // Scale != 1 so center plot.
@@ -131,4 +126,6 @@ void WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
     plotter->end_plot();
     delete plotter;
     SetLocaleTo_Default();
+
+    return true;
 }

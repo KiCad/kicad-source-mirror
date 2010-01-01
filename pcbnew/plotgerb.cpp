@@ -21,7 +21,7 @@
 #include "protos.h"
 
 /********************************************************************************/
-void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer,
+bool WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer,
                                          bool PlotOriginIsAuxAxis,
                                          GRTraceMode trace_mode )
 /********************************************************************************/
@@ -33,9 +33,13 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
  * format 3.4 uses the native pcbnew units (1/10000 inch).
  */
 {
-    wxPoint offset;
+    FILE* output_file = wxFopen( FullFileName, wxT( "wt" ) );
+    if( output_file == NULL )
+    {
+        return false;
+    }
 
-    ClearMsgPanel();
+    wxPoint offset;
 
     /* Calculate scaling from pcbnew units (in 0.1 mil or 0.0001 inch) to gerber units */
     double scale = g_pcb_plot_options.Scale;
@@ -48,14 +52,6 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
         offset.y = 0;
     }
 
-    FILE* output_file = wxFopen( FullFileName, wxT( "wt" ) );
-    if( output_file == NULL )
-    {
-        wxString msg = _( "unable to create file " ) + FullFileName;
-        DisplayError( this, msg );
-        return;
-    }
-
     SetLocaleTo_C_standard();
     PLOTTER* plotter = new GERBER_PLOTTER();
     /* No mirror and scaling for gerbers! */
@@ -63,8 +59,6 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
     plotter->set_default_line_width( g_pcb_plot_options.PlotLine_Width );
     plotter->set_creator( wxT( "PCBNEW-RS274X" ) );
     plotter->set_filename( FullFileName );
-
-    AppendMsgPanel( _( "File" ), FullFileName, CYAN );
 
     plotter->start_plot( output_file );
 
@@ -76,4 +70,6 @@ void WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
     plotter->end_plot();
     delete plotter;
     SetLocaleTo_Default();
+
+    return true;
 }

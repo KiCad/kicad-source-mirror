@@ -305,20 +305,21 @@ public:
     void     RecalculateAllTracksNetcode();
 
     /* Plotting functions:
+     * Return true if OK, false if the file is not created (or has a problem)
      */
-    void     ToPlotter( wxCommandEvent& event );
-    void     Genere_GERBER( const wxString& FullFileName,
+
+    bool     Genere_GERBER( const wxString& FullFileName,
                             int             Layer,
                             bool            PlotOriginIsAuxAxis,
                             GRTraceMode     trace_mode );
-    void     Genere_HPGL( const wxString& FullFileName,
+    bool     Genere_HPGL( const wxString& FullFileName,
                           int             Layer,
                           GRTraceMode     trace_mode );
-    void     Genere_PS( const wxString& FullFileName,
+    bool     Genere_PS( const wxString& FullFileName,
                         int             Layer,
                         bool            useA4,
                         GRTraceMode     trace_mode );
-    void     Genere_DXF( const wxString& FullFileName,
+    bool     Genere_DXF( const wxString& FullFileName,
                          int             Layer,
                          GRTraceMode     trace_mode );
     void     Plot_Layer( PLOTTER*    plotter,

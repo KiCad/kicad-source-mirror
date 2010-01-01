@@ -116,7 +116,7 @@ bool WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
          */
         filetypes = _( "Gerber files (.gb* .gt* .lgr .ger .pho)" );
         filetypes << wxT("|");
-        filetypes += wxT("*.gb*;*.GB*;.gt*;.GT*;.gko;.GKO;*.GPB;*.gpb;*.lgr;*.LGR;*.ger;*.GER;*.pho;*.PHO" );
+        filetypes += wxT("*.gb*;*.GB*;*.gt*;*.GT*;*.gko;*.GKO;*.GPB;*.gpb;*.lgr;*.LGR;*.ger;*.GER;*.pho;*.PHO" );
         filetypes << wxT("|");
 
         /* Special gerber filetypes */

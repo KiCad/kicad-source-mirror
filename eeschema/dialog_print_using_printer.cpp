@@ -41,11 +41,11 @@ static bool         s_Print_Frame_Ref = true;
 class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_base
 {
 private:
-    WinEDA_DrawFrame* m_Parent;
+    WinEDA_SchematicFrame* m_Parent;
     wxConfig*         m_Config;
 
 public:
-    DIALOG_PRINT_USING_PRINTER( WinEDA_DrawFrame* parent );
+    DIALOG_PRINT_USING_PRINTER( WinEDA_SchematicFrame* parent );
     ~DIALOG_PRINT_USING_PRINTER() {};
 
 private:
@@ -93,7 +93,7 @@ public:
 /* Virtual function
  * Calls the print dialog for Eeschema
  */
-void WinEDA_DrawFrame::ToPrinter( wxCommandEvent& event )
+void WinEDA_SchematicFrame::ToPrinter( wxCommandEvent& event )
 {
     if( g_PrintData == NULL )   // First call. creates print handlers
     {
@@ -115,7 +115,7 @@ void WinEDA_DrawFrame::ToPrinter( wxCommandEvent& event )
 }
 
 
-DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( WinEDA_DrawFrame* parent ) :
+DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( WinEDA_SchematicFrame* parent ) :
     DIALOG_PRINT_USING_PRINTER_base( parent )
 {
     m_Parent = parent;

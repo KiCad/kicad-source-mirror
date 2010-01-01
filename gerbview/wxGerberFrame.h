@@ -1,5 +1,5 @@
 /***********************************************************/
-/*                   wxGerberStruct.h:                     */
+/*                   wxGerberFrame.h:                     */
 /***********************************************************/
 
 #ifndef  WX_GERBER_STRUCT_H
@@ -145,6 +145,18 @@ public:
 
     void         InstallDrillFrame( wxCommandEvent& event );
     void         ToPostProcess( wxCommandEvent& event );
+
+    /** Function ToPlotter
+     * Open a dialog frame to create plot and drill files
+     * relative to the current board
+     */
+    void ToPlotter( wxCommandEvent& event );
+
+    /** Function ToPrinter
+     * Open a dialog frame to print layers
+     */
+    void ToPrinter( wxCommandEvent& event );
+
     void         Genere_HPGL( const wxString& FullFileName, int Layers );
     void         Genere_GERBER( const wxString& FullFileName, int Layers );
     void         Genere_PS( const wxString& FullFileName, int Layers );

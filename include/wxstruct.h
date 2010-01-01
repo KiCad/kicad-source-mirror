@@ -269,7 +269,6 @@ public:
     /* Return the current zoom level */
     int              GetZoom( void );
 
-    void             ToPrinter( wxCommandEvent& event );
     void             SVG_Print( wxCommandEvent& event );
 
     void             TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_width );

@@ -87,6 +87,17 @@ public:
 
     ~WinEDA_PcbFrame();
 
+    /** Function ToPlotter
+     * Open a dialog frame to create plot and drill files
+     * relative to the current board
+     */
+    void             ToPlotter( wxCommandEvent& event );
+
+    /** function ToPrinter
+     * Install the print dialog
+     */
+    void             ToPrinter( wxCommandEvent& event );
+
     void             GetKicadAbout( wxCommandEvent& event );
 
     // Configurations:
@@ -183,9 +194,9 @@ public:
      *commands like move
      */
     virtual void     SaveCopyInUndoList( BOARD_ITEM* aItemToCopy,
-                                         UndoRedoOpType aTypeCommand,
-                                         const wxPoint& aTransformPoint =
-                                         wxPoint( 0, 0 ) );
+                                        UndoRedoOpType aTypeCommand,
+                                        const wxPoint& aTransformPoint =
+                                            wxPoint( 0, 0 ) );
 
     /** Function SaveCopyInUndoList (overloaded).
      * Creates a new entry in undo list of commands.
@@ -196,9 +207,9 @@ public:
      *commands like move
      */
     virtual void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
-                                     UndoRedoOpType aTypeCommand,
-                                     const wxPoint& aTransformPoint =
-                                     wxPoint( 0, 0 ) );
+                                    UndoRedoOpType aTypeCommand,
+                                    const wxPoint& aTransformPoint =
+                                        wxPoint( 0, 0 ) );
 
     /** Function PutDataInPreviousState()
      * Used in undo or redo command.
@@ -859,10 +870,10 @@ public:
      * @param aTransformPoint = the reference point of the transformation, for
      *                          commands like move
      */
-    virtual void SaveCopyInUndoList( BOARD_ITEM*    aItem,
-                                     UndoRedoOpType aTypeCommand,
-                                     const wxPoint& aTransformPoint =
-                                     wxPoint( 0, 0 ) );
+    virtual void SaveCopyInUndoList( BOARD_ITEM* aItem,
+                                    UndoRedoOpType aTypeCommand,
+                                    const wxPoint& aTransformPoint =
+                                        wxPoint( 0, 0 ) );
 
     /** Function SaveCopyInUndoList (overloaded).
      * Creates a new entry in undo list of commands.
@@ -873,25 +884,25 @@ public:
      *                          commands like move
      */
     virtual void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
-                                     UndoRedoOpType     aTypeCommand,
-                                     const wxPoint& aTransformPoint =
-                                     wxPoint( 0, 0 ) );
+                                    UndoRedoOpType aTypeCommand,
+                                    const wxPoint& aTransformPoint =
+                                        wxPoint( 0, 0 ) );
 
 private:
-    void    GetComponentFromUndoList( wxCommandEvent& event );
-    void    GetComponentFromRedoList( wxCommandEvent& event );
+    void         GetComponentFromUndoList( wxCommandEvent& event );
+    void         GetComponentFromRedoList( wxCommandEvent& event );
 
 public:
 
     // Footprint edition
-    void    Place_Ancre( MODULE* module );
-    void    RemoveStruct( EDA_BaseStruct* Item );
-    void    Transform( MODULE* module, int transform );
+    void         Place_Ancre( MODULE* module );
+    void         RemoveStruct( EDA_BaseStruct* Item );
+    void         Transform( MODULE* module, int transform );
 
     // loading Footprint
-    MODULE* Import_Module( wxDC* DC );
-    void    Export_Module( MODULE* ptmod, bool createlib );
-    void    Load_Module_From_BOARD( MODULE* Module );
+    MODULE*      Import_Module( wxDC* DC );
+    void         Export_Module( MODULE* ptmod, bool createlib );
+    void         Load_Module_From_BOARD( MODULE* Module );
 
     // functions to edit footprint edges
 

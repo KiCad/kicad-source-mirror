@@ -65,8 +65,10 @@ set(PCBNEW_SRCS
     dialog_pcbnew_config_libs_and_paths.cpp
     dialog_pcbnew_config_libs_and_paths_fbp.cpp
     dialog_print_for_modedit.cpp
+    dialog_plot_base.cpp
     dialog_print_for_modedit_base.cpp
     dialog_print_using_printer.cpp
+    dialog_print_using_printer_base.cpp
     dialog_orient_footprints.cpp
     dialog_mask_clearance.cpp
     dialog_mask_clearance_base.cpp

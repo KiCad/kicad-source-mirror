@@ -12,23 +12,18 @@
 
 #include "protos.h"
 
-void WinEDA_BasePcbFrame::Genere_DXF( const wxString& FullFileName, int Layer,
+bool WinEDA_BasePcbFrame::Genere_DXF( const wxString& FullFileName, int Layer,
                                       GRTraceMode trace_mode )
 {
     Ki_PageDescr* currentsheet = GetScreen()->m_CurrentSheetDesc;
 
-    ClearMsgPanel();
-
     FILE* output_file = wxFopen( FullFileName, wxT( "wt" ) );
     if( output_file == NULL )
     {
-        wxString msg = _( "Unable to create file " ) + FullFileName;
-        DisplayError( this, msg );
-        return;
+        return false;
     }
 
     SetLocaleTo_C_standard();
-    AppendMsgPanel( _( "File" ), FullFileName, CYAN );
 
     DXF_PLOTTER* plotter = new DXF_PLOTTER();
     plotter->set_paper_size( currentsheet );
@@ -44,4 +39,6 @@ void WinEDA_BasePcbFrame::Genere_DXF( const wxString& FullFileName, int Layer,
     plotter->end_plot();
     delete plotter;
     SetLocaleTo_Default();
+
+    return true;
 }

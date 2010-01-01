@@ -83,7 +83,6 @@ set(PCB_COMMON_SRCS
     ../pcbnew/collectors.cpp
     ../pcbnew/sel_layer.cpp
     ../pcbnew/tracemod.cpp
-    ../pcbnew/dialog_print_using_printer_base.cpp
 )
 
 add_library(pcbcommon ${PCB_COMMON_SRCS})

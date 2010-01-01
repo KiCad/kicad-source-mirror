@@ -202,6 +202,11 @@ public:
      */
     void             SetSheetNumberAndCount();
 
+    /** function ToPrinter
+     * Install the print dialog
+     */
+    void             ToPrinter( wxCommandEvent& event );
+
     // Plot functions:
     void             ToPlot_PS( wxCommandEvent& event );
     void             ToPlot_HPGL( wxCommandEvent& event );

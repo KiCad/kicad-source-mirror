@@ -592,6 +592,7 @@ static PARAM_CFG_SETCOLOR ColorCheveluCfg
 
 static PARAM_CFG_INT HPGLpenNumCfg
 (
+    INSETUP,
     wxT( "HPGLnum" ),
     &g_pcb_plot_options.HPGL_Pen_Num,
     1,
@@ -600,6 +601,7 @@ static PARAM_CFG_INT HPGLpenNumCfg
 
 static PARAM_CFG_INT HPGLdiamCfg    // HPGL pen size (mils)
 (
+    INSETUP,
     wxT( "HPGdiam" ),
     &g_pcb_plot_options.HPGL_Pen_Diam,
     15,
@@ -608,6 +610,7 @@ static PARAM_CFG_INT HPGLdiamCfg    // HPGL pen size (mils)
 
 static PARAM_CFG_INT HPGLspeedCfg   //HPGL pen speed (cm/s)
 (
+    INSETUP,
     wxT( "HPGLSpd" ),
     &g_pcb_plot_options.HPGL_Pen_Speed,
     20,
@@ -616,6 +619,7 @@ static PARAM_CFG_INT HPGLspeedCfg   //HPGL pen speed (cm/s)
 
 static PARAM_CFG_INT HPGLrecouvrementCfg
 (
+    INSETUP,
     wxT( "HPGLrec" ),
     &g_pcb_plot_options.HPGL_Pen_Recouvrement,
     2,

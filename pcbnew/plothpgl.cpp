@@ -13,7 +13,7 @@
 #include "protos.h"
 
 
-void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
+bool WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
                                        GRTraceMode trace_mode )
 {
     wxSize        SheetSize;
@@ -24,8 +24,11 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
     double        scale;
     wxPoint       offset;
 
-    ClearMsgPanel();
-
+    FILE* output_file = wxFopen( FullFileName, wxT( "wt" ) );
+    if( output_file == NULL )
+    {
+        return false;
+    }
     // Compute pen_dim (from g_HPGL_Pen_Diam in mils) in pcb units,
     // with plot scale (if Scale is 2, pen diameter is always g_HPGL_Pen_Diam
     // so apparent pen diam is real pen diam / Scale
@@ -40,16 +43,8 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
     int   pen_recouvrement = wxRound(
         g_pcb_plot_options.HPGL_Pen_Recouvrement * 10.0 / g_pcb_plot_options.Scale );
 
-    FILE* output_file = wxFopen( FullFileName, wxT( "wt" ) );
-    if( output_file == NULL )
-    {
-        wxString msg = _( "Unable to create file " ) + FullFileName;
-        DisplayError( this, msg );
-        return;
-    }
 
     SetLocaleTo_C_standard();
-    AppendMsgPanel( _( "File" ), FullFileName, CYAN );
 
     if( g_pcb_plot_options.PlotScaleOpt != 1 )
         Center = TRUE; // Scale != 1 so center PCB plot.
@@ -112,4 +107,6 @@ void WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
     plotter->end_plot();
     delete plotter;
     SetLocaleTo_Default();
+
+    return true;
 }

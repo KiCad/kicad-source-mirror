@@ -545,6 +545,7 @@ void DIALOG_LAYERS_SETUP::OnOkButtonClick( wxCommandEvent& event )
             }
         }
 
+        m_Parent->GetScreen()->SetModify();
         m_Parent->ReCreateLayerBox( NULL );
 
         EndModal( wxID_OK );

@@ -69,6 +69,9 @@
 #define ECO2_N                  27
 #define EDGE_N                  28
 #define LAST_NO_COPPER_LAYER    28
+#define UNUSED_LAYER_29         29
+#define UNUSED_LAYER_30         30
+#define UNUSED_LAYER_31         31
 #define NB_LAYERS               (LAST_NO_COPPER_LAYER + 1)
 
 #define LAYER_COUNT             32
@@ -115,6 +118,28 @@
 #define ALL_CU_LAYERS           0x0000FFFF
 #define INTERNAL_LAYERS         0x00007FFE
 #define EXTERNAL_LAYERS         0x00008001
+
+
+// layers order in dialogs (plot, print and toolbars)
+// in same order than in setup layers dialog
+// (Front or Top to Back or Bottom)
+#define DECLARE_LAYERS_ORDER_LIST(list) int list[LAYER_COUNT] =\
+{   LAYER_N_FRONT,\
+    LAYER_N_15, LAYER_N_14, LAYER_N_13, LAYER_N_12,\
+    LAYER_N_11, LAYER_N_10, LAYER_N_9, LAYER_N_8,\
+    LAYER_N_7, LAYER_N_6, LAYER_N_5, LAYER_N_4,\
+    LAYER_N_3, LAYER_N_2,\
+    LAYER_N_BACK,\
+    ADHESIVE_N_FRONT , ADHESIVE_N_BACK,\
+    SOLDERPASTE_N_FRONT, SOLDERPASTE_N_BACK,\
+    SILKSCREEN_N_FRONT, SILKSCREEN_N_BACK,\
+    SOLDERMASK_N_FRONT, SOLDERMASK_N_BACK,\
+    DRAW_N,\
+    COMMENT_N,\
+    ECO1_N, ECO2_N,\
+    EDGE_N,\
+    UNUSED_LAYER_29, UNUSED_LAYER_30, UNUSED_LAYER_31\
+};
 
 class NETINFO_ITEM;
 class MARKER_PCB;

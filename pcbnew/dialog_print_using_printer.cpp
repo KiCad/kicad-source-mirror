@@ -15,7 +15,9 @@
 #include "printout_controler.h"
 
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "pcbplot.h"
+#include "class_board_design_settings.h"
 
 #define WIDTH_MAX_VALUE           1000
 #define WIDTH_MIN_VALUE           1
@@ -41,13 +43,13 @@ static PRINT_PARAMETERS  s_Parameters;
 class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_base
 {
 private:
-    WinEDA_DrawFrame* m_Parent;
+    WinEDA_PcbFrame* m_Parent;
     wxConfig*         m_Config;
     wxCheckBox*       m_BoxSelectLayer[32];
     static bool       m_ExcludeEdgeLayer;
 
 public:
-    DIALOG_PRINT_USING_PRINTER( WinEDA_DrawFrame* parent );
+    DIALOG_PRINT_USING_PRINTER( WinEDA_PcbFrame* parent );
     ~DIALOG_PRINT_USING_PRINTER() {};
 
 private:
@@ -74,7 +76,7 @@ bool DIALOG_PRINT_USING_PRINTER::m_ExcludeEdgeLayer;
 
 
 /*******************************************************/
-void WinEDA_DrawFrame::ToPrinter( wxCommandEvent& event )
+void WinEDA_PcbFrame::ToPrinter( wxCommandEvent& event )
 /*******************************************************/
 
 /* Virtual function:
@@ -100,13 +102,13 @@ void WinEDA_DrawFrame::ToPrinter( wxCommandEvent& event )
 
 
 /*************************************************************************************/
-DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( WinEDA_DrawFrame* parent ) :
+DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( WinEDA_PcbFrame* parent ) :
     DIALOG_PRINT_USING_PRINTER_base( parent )
 /*************************************************************************************/
 {
     m_Parent = parent;
     m_Config = wxGetApp().m_EDA_Config;
-    
+
     InitValues( );
 
     if( GetSizer() )
@@ -123,45 +125,56 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     SetFocus();
     int      layer_max = NB_LAYERS;
     wxString msg;
+    BOARD*   board = m_Parent->GetBoard();
 
-    #ifdef GERBVIEW
-    layer_max = 32;
-    m_ExcludeEdgeLayer = true;    // no meaning in gerbview
-    m_Exclude_Edges_Pcb->Show( false );
-    msg = _( "Layers:" );
-
-    // Set wxRadioBox title to "Layers:" for copper layers and thechincal layers
-    // Because in Gerbview , al layers are only graphic layers (layer id has no meaning)
-    m_CopperLayersBoxSizer->GetStaticBox()->SetLabel( msg );
-    m_TechnicalLayersBoxSizer->GetStaticBox()->SetLabel( msg );
-    #endif
-
-    /* Create layer list */
-    int mask = 1, ii;
-    for( ii = 0; ii < layer_max; ii++, mask <<= 1 )
+     // Create layer list.
+    int      layer;
+    wxString layerKey;
+    for( layer = 0; layer < NB_LAYERS; ++layer )
     {
-#ifdef GERBVIEW
-        msg = _( "Layer" );
-        msg << wxT( " " ) << ii + 1;
-#else
-        msg = ( (WinEDA_BasePcbFrame*) m_Parent )->GetBoard()->GetLayerName( ii );
-#endif
-        m_BoxSelectLayer[ii] = new wxCheckBox( this, -1, msg );
-
-        if( mask & s_SelectedLayers )
-            m_BoxSelectLayer[ii]->SetValue( TRUE );
-        if( ii < 16 )
-            m_CopperLayersBoxSizer->Add( m_BoxSelectLayer[ii],
-                                         wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE );
+        if( !board->m_BoardSettings->IsLayerEnabled( layer ) )
+            m_BoxSelectLayer[layer] = NULL;
         else
-            m_TechnicalLayersBoxSizer->Add( m_BoxSelectLayer[ii],
-                                            wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE );
+        m_BoxSelectLayer[layer] =
+            new wxCheckBox( this, -1, board->GetLayerName( layer ) );
     }
 
+    // Add wxCheckBoxes in layers lists dialog
+    //  List layers in same order than in setup layers dialog
+    // (Front or Top to Back or Bottom)
+    DECLARE_LAYERS_ORDER_LIST(layersOrder);
+    for( int layer_idx = 0; layer_idx < NB_LAYERS; ++layer_idx )
+    {
+        layer = layersOrder[layer_idx];
+
+        wxASSERT(layer < NB_LAYERS);
+
+        if( m_BoxSelectLayer[layer] == NULL )
+            continue;
+
+        if( layer < NB_COPPER_LAYERS )
+            m_CopperLayersBoxSizer->Add( m_BoxSelectLayer[layer],
+                                     0, wxGROW | wxALL, 1 );
+        else
+            m_TechnicalLayersBoxSizer->Add( m_BoxSelectLayer[layer],
+                                     0, wxGROW | wxALL, 1 );
+
+
+        layerKey.Printf( OPTKEY_LAYERBASE, layer );
+        bool option;
+        if( m_Config->Read( layerKey, &option ) )
+            m_BoxSelectLayer[layer]->SetValue( option );
+        else
+        {
+            long mask = 1 << layer;
+            if( mask & s_SelectedLayers )
+                m_BoxSelectLayer[layer]->SetValue( true );
+        }
+    }
+
+
     // Option for excluding contents of "Edges Pcb" layer
-#ifndef GERBVIEW
     m_Exclude_Edges_Pcb->Show( true );
-#endif
 
     // Read the scale adjust option
     int scale_idx = 4; // default selected scale = ScaleList[4] = 1.000
@@ -185,6 +198,9 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
         s_SelectedLayers = 0;
         for( int layer = 0;  layer<layer_max;  ++layer )
         {
+            if( m_BoxSelectLayer[layer] == NULL )
+                continue;
+
             wxString layerKey;
             bool     option;
 
@@ -231,20 +247,19 @@ int DIALOG_PRINT_USING_PRINTER::SetLayerMaskFromListSelection()
     int page_count;
     int layers_count = NB_LAYERS;
 
-    if( m_Parent->m_Ident == GERBER_FRAME )
-        layers_count = 32;
-
     s_Parameters.m_PrintMaskLayer = 0;
     int ii;
     for( ii = 0, page_count = 0; ii < layers_count; ii++ )
     {
+        if( m_BoxSelectLayer[ii] == NULL )
+            continue;
         if( m_BoxSelectLayer[ii]->IsChecked() )
         {
             page_count++;
             s_Parameters.m_PrintMaskLayer |= 1 << ii;
         }
     }
-    
+
     // In pcbnew: force the EDGE layer to be printed or not with the other layers
     m_ExcludeEdgeLayer = m_Exclude_Edges_Pcb->IsChecked();
     if( m_ExcludeEdgeLayer )
@@ -273,11 +288,10 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
         m_Config->Write( OPTKEY_PRINT_PAGE_FRAME, s_Parameters.m_Print_Sheet_Ref);
         m_Config->Write( OPTKEY_PRINT_MONOCHROME_MODE, s_Parameters.m_Print_Black_and_White);
         wxString layerKey;
-        int      layers_count = NB_LAYERS;
-        if( m_Parent->m_Ident == GERBER_FRAME )
-            layers_count = 32;
-        for( int layer = 0;  layer<layers_count;  ++layer )
+        for( int layer = 0; layer < NB_LAYERS;  ++layer )
         {
+            if( m_BoxSelectLayer[layer] == NULL )
+                continue;
             layerKey.Printf( OPTKEY_LAYERBASE, layer );
             m_Config->Write( layerKey, m_BoxSelectLayer[layer]->IsChecked() );
         }
@@ -292,12 +306,12 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters( )
 {
     s_Parameters.m_PrintMirror = m_Print_Mirror->GetValue();
     s_Parameters.m_Print_Sheet_Ref = m_Print_Sheet_Ref->GetValue();
-    s_Parameters.m_Print_Black_and_White = 
+    s_Parameters.m_Print_Black_and_White =
         m_ModeColorOption->GetSelection() != 0;
 
     if( m_PagesOption )
         s_Parameters.m_OptionPrintPage = m_PagesOption->GetSelection() != 0;
-    
+
 
     SetLayerMaskFromListSelection();
 

@@ -11,6 +11,8 @@
 #define OPTKEY_PRINT_X_FINESCALE_ADJ wxT( "PrintXFineScaleAdj" )
 #define OPTKEY_PRINT_Y_FINESCALE_ADJ wxT( "PrintYFineScaleAdj" )
 #define OPTKEY_PRINT_SCALE           wxT( "PrintScale" )
+#define OPTKEY_PRINT_PAGE_FRAME      wxT( "PrintPageFrame" )
+#define OPTKEY_PRINT_MONOCHROME_MODE wxT( "PrintMonochrome" )
 
 /* Plot Options : */
 struct PCB_Plot_Options
@@ -18,8 +20,6 @@ struct PCB_Plot_Options
     bool Exclude_Edges_Pcb;
     int PlotLine_Width;
     bool Plot_Frame_Ref;       // True to plot/print frame references
-    bool DrawViaOnMaskLayer;   // True if vias are drawn on Mask layer
-                               // (ie protected by mask)
     int Plot_Mode;
     bool Plot_Set_MIROIR;
     bool Sel_Rotate_Window;
@@ -31,22 +31,14 @@ struct PCB_Plot_Options
     int PlotPSColorOpt;        // True for color Postscript output
     bool Plot_PS_Negative;     // True to create a negative board ps plot
 
-    /* Settings to trace the various items in silkscreen. */
-    bool Sel_Texte_Reference;
-    bool Sel_Texte_Valeur;
-    bool Sel_Texte_Divers;
-    bool Sel_Texte_Invisible;
-    bool PlotPadsOnSilkLayer;
-    /* Plot pads even outside the layer (useful for silkscreen) */
-    bool Plot_Pads_All_Layers;
-
     /* id for plot format (see enum PlotFormat in plot_common.h) */
     int PlotFormat;
     int PlotOrient;
     int PlotScaleOpt;
     int DrillShapeOpt;
-    double Scale_X;
-    double Scale_Y;
+    double         Scale;
+    double         ScaleAdjX;
+    double         ScaleAdjY;
 };
 extern PCB_Plot_Options g_pcb_plot_options;
 

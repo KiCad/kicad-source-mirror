@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-30 18:30+0100\n"
-"PO-Revision-Date: 2009-12-30 18:34+0100\n"
+"POT-Creation-Date: 2010-01-01 10:53+0100\n"
+"PO-Revision-Date: 2010-01-01 10:54+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -1525,10 +1525,6 @@ msgstr "Rot de la forme"
 msgid "3D Shape:"
 msgstr "Forme 3D:"
 
-#: pcbnew/plotdxf.cpp:31
-msgid "File"
-msgstr "Fichier"
-
 #: pcbnew/set_color.cpp:278
 #: pcbnew/set_color.cpp:304
 msgid "Show None"
@@ -2423,254 +2419,26 @@ msgstr "&3D Visu"
 msgid "&Help"
 msgstr "&Aide"
 
-#: pcbnew/pcbplot.cpp:184
-#: pcbnew/pcbplot.cpp:328
-msgid "Plot"
-msgstr "Tracer"
-
-#: pcbnew/pcbplot.cpp:232
-msgid "Plot Format"
-msgstr "Format de tracé"
-
-#: pcbnew/pcbplot.cpp:243
-msgid "HPGL Options:"
-msgstr "Options HPGL:"
-
-#: pcbnew/pcbplot.cpp:248
-msgid "Pen size"
-msgstr "Diam plume"
-
-#: pcbnew/pcbplot.cpp:255
-msgid "Pen Speed (cm/s)"
-msgstr "Vitesse Plume ( cm/s )"
-
-#: pcbnew/pcbplot.cpp:259
-msgid "Set pen speed in cm/s"
-msgstr "Ajuster Vitesse plume en centimètres par seconde"
-
-#: pcbnew/pcbplot.cpp:261
-msgid "Pen ovr"
-msgstr "Recouvrement"
-
-#: pcbnew/pcbplot.cpp:267
-msgid "Set plot overlay for filling"
-msgstr "Ajuste recouvrement des tracés pour les remplissages"
-
-#: pcbnew/pcbplot.cpp:269
-msgid "Line width"
-msgstr "Epaisseur ligne"
-
-#: pcbnew/pcbplot.cpp:276
-msgid "Set lines width used to plot in sketch mode and plot pads outlines on silk screen layers"
-msgstr "Ajuste l'épaisseur des lignes utilisées pour tracer en mode contour et pour les contours des pads sur les couches de sérigraphie"
-
-#: pcbnew/pcbplot.cpp:281
-msgid "Absolute"
-msgstr "Absolu"
-
-#: pcbnew/pcbplot.cpp:281
-msgid "Auxiliary axis"
-msgstr "Axe Auxiliaire"
-
-#: pcbnew/pcbplot.cpp:284
-msgid "Plot Origin"
-msgstr "Origine des Coord de Tracé"
-
-#: pcbnew/pcbplot.cpp:309
-msgid "X scale adjust"
-msgstr "Ajustage Echelle X"
-
-#: pcbnew/pcbplot.cpp:312
-msgid "Set X scale adjust for exact scale plotting"
-msgstr "Ajuster échelle X pour traçage à l'échelle exacte"
-
-#: pcbnew/pcbplot.cpp:316
-msgid "Y scale adjust"
-msgstr "Ajustage Echelle Y"
-
-#: pcbnew/pcbplot.cpp:319
-msgid "Set Y scale adjust for exact scale plotting"
-msgstr "Ajuster échelle Y pour traçage à l'échelle exacte"
-
-#: pcbnew/pcbplot.cpp:322
-msgid "Plot negative"
-msgstr "Tracé en Négatif"
-
-#: pcbnew/pcbplot.cpp:331
-msgid "Save Options"
-msgstr "Sauver Options"
-
-#: pcbnew/pcbplot.cpp:335
-msgid "Generate drill file"
-msgstr "Créer Fichier de perçage"
-
-#: pcbnew/pcbplot.cpp:338
-msgid "Close"
-msgstr "Fermer"
-
-#: pcbnew/pcbplot.cpp:384
-msgid "Use Proper Gerber Extensions"
-msgstr "Utiliser Extensions Gerber Particulières"
-
-#: pcbnew/pcbplot.cpp:390
-msgid "Use Proper Gerber Extensions - .GBL, .GTL, etc..."
-msgstr "Utiliser les extensions GERBER specifiques aux couches - .GBL, .GTL, etc..."
-
-#: pcbnew/pcbplot.cpp:397
-msgid "Exclude pcb edge layer"
-msgstr "Exclure couche contours PCB"
-
-#: pcbnew/pcbplot.cpp:401
-msgid "Exclude contents of the pcb edge layer from all other layers"
-msgstr "Exclure les tracés contour PCB des autres couches"
-
-#: pcbnew/pcbplot.cpp:408
-msgid "Print sheet reference"
-msgstr "Imprimer cartouche"
-
-#: pcbnew/pcbplot.cpp:419
-msgid "Print pads on silkscreen"
-msgstr "Pads sur Sérigraphie"
-
-#: pcbnew/pcbplot.cpp:426
-msgid "Enable/disable print/plot pads on silkscreen layers"
-msgstr "Active/désactive tracé des pastilles sur les couches de sérigraphie"
-
-#: pcbnew/pcbplot.cpp:430
-msgid "Always print pads"
-msgstr "Toujours tracer pads"
-
-#: pcbnew/pcbplot.cpp:435
-msgid "Force print/plot pads on ALL layers"
-msgstr "Force le tracé des pastilles sur TOUTES les couches"
-
-#: pcbnew/pcbplot.cpp:440
-msgid "Print module value"
-msgstr "Imprimer Valeur Module"
-
-#: pcbnew/pcbplot.cpp:444
-msgid "Enable/disable print/plot module value on silkscreen layers"
-msgstr "Active/désactive le tracé des textes valeurs des modules sur couches de sérigraphie"
-
-#: pcbnew/pcbplot.cpp:448
-msgid "Print module reference"
-msgstr "Imprimer Référence Module"
-
-#: pcbnew/pcbplot.cpp:452
-msgid "Enable/disable print/plot module reference on silkscreen layers"
-msgstr "Active/désactive le tracé des textes référence des modules sur couches de sérigraphie"
-
-#: pcbnew/pcbplot.cpp:456
-msgid "Print other module texts"
-msgstr "Imprimer autres textes  module"
-
-#: pcbnew/pcbplot.cpp:460
-msgid "Enable/disable print/plot module field texts on silkscreen layers"
-msgstr "Active/désactive le tracé des textes des champs des modules sur couches de sérigraphie"
-
-#: pcbnew/pcbplot.cpp:465
-msgid "Force print invisible texts"
-msgstr "Force tracé textes invisibles"
-
-#: pcbnew/pcbplot.cpp:469
-msgid "Force print/plot module invisible texts on silkscreen layers"
-msgstr "Force le tracé des textes invisibles sur couches de sérigraphie"
-
-#: pcbnew/pcbplot.cpp:475
-msgid "No drill mark"
-msgstr "Pas de marque"
-
-#: pcbnew/pcbplot.cpp:476
-msgid "Small mark"
-msgstr "Petite marque"
-
-#: pcbnew/pcbplot.cpp:477
-msgid "Real drill"
-msgstr "Perçage réel"
-
-#: pcbnew/pcbplot.cpp:481
-msgid "Pads Drill Opt"
-msgstr "Options Perçage Pads"
-
-#: pcbnew/pcbplot.cpp:490
-msgid "Auto scale"
-msgstr "Ech. auto"
-
-#: pcbnew/pcbplot.cpp:491
-msgid "Scale 1"
-msgstr "Echelle 1"
-
-#: pcbnew/pcbplot.cpp:492
-msgid "Scale 1.5"
-msgstr "Echelle 1,5"
-
-#: pcbnew/pcbplot.cpp:493
-msgid "Scale 2"
-msgstr "Echelle 2"
-
-#: pcbnew/pcbplot.cpp:494
-msgid "Scale 3"
-msgstr "Echelle 3"
-
-#: pcbnew/pcbplot.cpp:498
-msgid "Scale Opt"
-msgstr "Echelle"
-
-#: pcbnew/pcbplot.cpp:507
-msgid "Line"
-msgstr "Ligne"
-
-#: pcbnew/pcbplot.cpp:507
-msgid "Filled"
-msgstr "Plein"
-
-#: pcbnew/pcbplot.cpp:508
-msgid "Sketch"
-msgstr "Contour"
-
-#: pcbnew/pcbplot.cpp:511
-msgid "Plot Mode"
-msgstr "Mode de Tracé"
-
-#: pcbnew/pcbplot.cpp:519
-msgid "Plot mirror"
-msgstr "Tracé Miroir"
-
-#: pcbnew/pcbplot.cpp:525
-msgid "Vias on mask"
-msgstr "Vias sur masque"
-
-#: pcbnew/pcbplot.cpp:529
-msgid "Print/plot vias on mask layers. They are in this case not protected"
-msgstr "Trace vias sur vernis épargne. Elles seront non protégées"
-
-#: pcbnew/pcbplot.cpp:784
-msgid "Adobe post script files (.ps)|*.ps"
-msgstr "Fichiers Adobe post script  (.ps)|*.ps"
-
-#: pcbnew/pcbplot.cpp:790
-msgid "GERBER photo plot files (.pho .gbr)|*.pho;*.gbr"
-msgstr "Fichiers photraçage GERBER (.pho .gbr)|*.pho;*.gbr"
-
-#: pcbnew/pcbplot.cpp:808
+#: pcbnew/pcbplot.cpp:583
 msgid "Warning: Scale option set to a very small value"
 msgstr "Attention: option d'échelle ajustée à une valeur très petite"
 
-#: pcbnew/pcbplot.cpp:811
+#: pcbnew/pcbplot.cpp:586
 msgid "Warning: Scale option set to a very large value"
 msgstr "Attention: option d'échelle ajustée à une valeur très grande"
 
-#: pcbnew/pcbplot.cpp:939
+#: pcbnew/pcbplot.cpp:715
+#, c-format
+msgid "Plot file <%s> created"
+msgstr "Fichier de tracé <%s> créé"
+
+#: pcbnew/pcbplot.cpp:727
 msgid "No layer selected"
 msgstr "Pas de couche sélectionnée"
 
 #: pcbnew/dialog_freeroute_exchange.cpp:68
 msgid "Freeroute Help"
 msgstr "Aide Freeroute"
-
-#: pcbnew/plotgerb.cpp:54
-msgid "unable to create file "
-msgstr "Impossible de créer  fichier "
 
 #: pcbnew/swap_layers.cpp:68
 msgid "Swap Layers:"
@@ -2933,6 +2701,11 @@ msgstr "H, V et 45  deg"
 #: pcbnew/dialog_non_copper_zones_properties_base.cpp:50
 msgid "Zone Edges Orient"
 msgstr "Direction contours zone"
+
+#: pcbnew/dialog_non_copper_zones_properties_base.cpp:54
+#: pcbnew/dialog_copper_zones_base.cpp:107
+msgid "Line"
+msgstr "Ligne"
 
 #: pcbnew/dialog_non_copper_zones_properties_base.cpp:54
 msgid "Hatched Outline"
@@ -4087,6 +3860,14 @@ msgid "Scale 1.4"
 msgstr "Echelle 1,4"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:46
+msgid "Scale 2"
+msgstr "Echelle 2"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:46
+msgid "Scale 3"
+msgstr "Echelle 3"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:46
 msgid "Scale 4"
 msgstr "Echelle 4"
 
@@ -4098,9 +3879,17 @@ msgstr "Echelle approx.:"
 msgid "X Scale Adjust"
 msgstr "Ajustage Echelle X"
 
+#: pcbnew/dialog_print_using_printer_base.cpp:57
+msgid "Set X scale adjust for exact scale plotting"
+msgstr "Ajuster échelle X pour traçage à l'échelle exacte"
+
 #: pcbnew/dialog_print_using_printer_base.cpp:61
 msgid "Y Scale Adjust"
 msgstr "Ajustage Echelle Y"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:66
+msgid "Set Y scale adjust for exact scale plotting"
+msgstr "Ajuster échelle Y pour traçage à l'échelle exacte"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:78
 msgid "Pen Width Mini"
@@ -4141,6 +3930,11 @@ msgstr "Prévisualisation"
 #: pcbnew/dialog_print_using_printer_base.cpp:125
 msgid "Print"
 msgstr "Imprimer"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:128
+#: pcbnew/dialog_netlist_fbp.cpp:85
+msgid "Close"
+msgstr "Fermer"
 
 #: pcbnew/dialog_netlist_fbp.cpp:25
 msgid "Timestamp"
@@ -4848,19 +4642,19 @@ msgstr ""
 "Chemins (chemins système et chemins utilisateurs) utilisés pour chercher et charger les fichiers libriries et documentation des composants.\n"
 "Triés par ordre de priorité décroissante."
 
-#: pcbnew/dialog_print_using_printer.cpp:90
+#: pcbnew/dialog_print_using_printer.cpp:91
 msgid "Error Init Printer info"
 msgstr "Erreur Init info imprimante"
 
-#: pcbnew/dialog_print_using_printer.cpp:372
+#: pcbnew/dialog_print_using_printer.cpp:384
 msgid "Printer Problem!"
 msgstr "Problème d'imprimante"
 
-#: pcbnew/dialog_print_using_printer.cpp:386
+#: pcbnew/dialog_print_using_printer.cpp:398
 msgid "Print Preview"
 msgstr "Prévisualisation"
 
-#: pcbnew/dialog_print_using_printer.cpp:453
+#: pcbnew/dialog_print_using_printer.cpp:465
 msgid "There was a problem printing"
 msgstr "Il y a un problème d'impression"
 
@@ -5177,19 +4971,19 @@ msgstr "Nom"
 msgid "Enabled"
 msgstr "Activé"
 
-#: pcbnew/dialog_layers_setup.cpp:613
+#: pcbnew/dialog_layers_setup.cpp:614
 msgid "Layer name may not be empty"
 msgstr "Le nom d'une couche ne peut pas être vide"
 
-#: pcbnew/dialog_layers_setup.cpp:620
+#: pcbnew/dialog_layers_setup.cpp:621
 msgid "Layer name has an illegal character, one of: '"
 msgstr "Le nom d'une couche contient un des caracteres interdit: '"
 
-#: pcbnew/dialog_layers_setup.cpp:627
+#: pcbnew/dialog_layers_setup.cpp:628
 msgid "'signal' is a reserved layer name"
 msgstr "'signal' is a nom de couche réservé"
 
-#: pcbnew/dialog_layers_setup.cpp:636
+#: pcbnew/dialog_layers_setup.cpp:637
 msgid "Layer name is a duplicate of another"
 msgstr "Le nom de la couche est un double d'une autre couche"
 
@@ -6078,6 +5872,22 @@ msgstr "Ajuster Toutes les Pistes à la Valeur en NetClass"
 msgid "Tracks and vias:"
 msgstr "Pistes et vias:"
 
+#: pcbnew/dialog_display_options_base.cpp:22
+#: pcbnew/dialog_display_options_base.cpp:67
+#: pcbnew/dialog_display_options_base.cpp:73
+#: pcbnew/dialog_display_options_base.cpp:84
+#: pcbnew/dialog_display_options_base.cpp:118
+msgid "Sketch"
+msgstr "Contour"
+
+#: pcbnew/dialog_display_options_base.cpp:22
+#: pcbnew/dialog_display_options_base.cpp:67
+#: pcbnew/dialog_display_options_base.cpp:73
+#: pcbnew/dialog_display_options_base.cpp:84
+#: pcbnew/dialog_display_options_base.cpp:118
+msgid "Filled"
+msgstr "Plein"
+
 #: pcbnew/dialog_display_options_base.cpp:24
 msgid "Tracks:"
 msgstr "Pistes:"
@@ -6228,6 +6038,10 @@ msgstr "Long. Net"
 #: pcbnew/dialog_print_for_modedit.cpp:242
 msgid "Print Footprint"
 msgstr "Imprimer Module"
+
+#: pcbnew/dialog_print_for_modedit_base.cpp:22
+msgid "Scale 1"
+msgstr "Echelle 1"
 
 #: pcbnew/dialog_print_for_modedit_base.cpp:22
 msgid "Scale 8"
@@ -6545,6 +6359,202 @@ msgstr "Ajuster toutes vias (pas les pistes) à leurs valeurs en Netclass"
 #: pcbnew/dialog_global_edit_tracks_and_vias_base.cpp:144
 msgid "Set all tracks (no via) to their Netclass value"
 msgstr "Ajuster toutes Pistes (pas les Vias) à leurs Valeurs en NetClass"
+
+#: pcbnew/dialog_plot_base.cpp:38
+msgid "Use Proper Gerber Extensions"
+msgstr "Utiliser Extensions Gerber Particulières"
+
+#: pcbnew/dialog_plot_base.cpp:40
+msgid "Use Proper Gerber Extensions - .GBL, .GTL, etc..."
+msgstr "Utiliser les extensions GERBER specifiques aux couches - .GBL, .GTL, etc..."
+
+#: pcbnew/dialog_plot_base.cpp:44
+msgid "Exclude pcb edge layer"
+msgstr "Exclure couche contours PCB"
+
+#: pcbnew/dialog_plot_base.cpp:46
+msgid "Exclude contents of the pcb edge layer from all other layers"
+msgstr "Exclure les tracés contour PCB des autres couches"
+
+#: pcbnew/dialog_plot_base.cpp:50
+msgid "Print sheet reference"
+msgstr "Imprimer cartouche"
+
+#: pcbnew/dialog_plot_base.cpp:54
+msgid "Print pads on silkscreen"
+msgstr "Pads sur Sérigraphie"
+
+#: pcbnew/dialog_plot_base.cpp:56
+msgid "Enable/disable print/plot pads on silkscreen layers"
+msgstr "Active/désactive tracé des pastilles sur les couches de sérigraphie"
+
+#: pcbnew/dialog_plot_base.cpp:60
+msgid "Always print pads"
+msgstr "Toujours tracer pads"
+
+#: pcbnew/dialog_plot_base.cpp:62
+msgid "Force print/plot pads on ALL layers"
+msgstr "Force le tracé des pastilles sur TOUTES les couches"
+
+#: pcbnew/dialog_plot_base.cpp:66
+msgid "Print module value"
+msgstr "Imprimer Valeur Module"
+
+#: pcbnew/dialog_plot_base.cpp:70
+msgid "Print module reference"
+msgstr "Imprimer Référence Module"
+
+#: pcbnew/dialog_plot_base.cpp:74
+msgid "Print other module texts"
+msgstr "Imprimer autres textes  module"
+
+#: pcbnew/dialog_plot_base.cpp:76
+msgid "Enable/disable print/plot module field texts on silkscreen layers"
+msgstr "Active/désactive le tracé des textes des champs des modules sur couches de sérigraphie"
+
+#: pcbnew/dialog_plot_base.cpp:80
+msgid "Force print invisible texts"
+msgstr "Force tracé textes invisibles"
+
+#: pcbnew/dialog_plot_base.cpp:82
+msgid "Force print/plot module invisible texts on silkscreen layers"
+msgstr "Force le tracé des textes invisibles sur couches de sérigraphie"
+
+#: pcbnew/dialog_plot_base.cpp:91
+msgid "No drill mark"
+msgstr "Pas de marque"
+
+#: pcbnew/dialog_plot_base.cpp:91
+msgid "Small mark"
+msgstr "Petite marque"
+
+#: pcbnew/dialog_plot_base.cpp:91
+msgid "Real drill"
+msgstr "Perçage réel"
+
+#: pcbnew/dialog_plot_base.cpp:93
+msgid "Pads Drill Opt"
+msgstr "Options Perçage Pads"
+
+#: pcbnew/dialog_plot_base.cpp:97
+msgid "Auto scale"
+msgstr "Ech. auto"
+
+#: pcbnew/dialog_plot_base.cpp:97
+msgid "Scale 1.5"
+msgstr "Echelle 1,5"
+
+#: pcbnew/dialog_plot_base.cpp:99
+msgid "Scale Opt"
+msgstr "Echelle"
+
+#: pcbnew/dialog_plot_base.cpp:105
+msgid "Plot Mode"
+msgstr "Mode de Tracé"
+
+#: pcbnew/dialog_plot_base.cpp:109
+msgid "Absolute"
+msgstr "Absolu"
+
+#: pcbnew/dialog_plot_base.cpp:109
+msgid "Auxiliary axis"
+msgstr "Axe Auxiliaire"
+
+#: pcbnew/dialog_plot_base.cpp:111
+msgid "Plot Origin"
+msgstr "Origine des Coord de Tracé"
+
+#: pcbnew/dialog_plot_base.cpp:120
+msgid "HPGL"
+msgstr "HPGL"
+
+#: pcbnew/dialog_plot_base.cpp:120
+msgid "Gerber"
+msgstr "Gerber"
+
+#: pcbnew/dialog_plot_base.cpp:120
+msgid "Postscript"
+msgstr "Postscript"
+
+#: pcbnew/dialog_plot_base.cpp:120
+msgid "Postscript A4"
+msgstr "Postscript A4"
+
+#: pcbnew/dialog_plot_base.cpp:120
+msgid "DXF Export"
+msgstr "Export DXF"
+
+#: pcbnew/dialog_plot_base.cpp:122
+msgid "Plot Format"
+msgstr "Format de tracé"
+
+#: pcbnew/dialog_plot_base.cpp:127
+msgid "HPGL Options:"
+msgstr "Options HPGL:"
+
+#: pcbnew/dialog_plot_base.cpp:129
+msgid "Pen size"
+msgstr "Diam plume"
+
+#: pcbnew/dialog_plot_base.cpp:136
+msgid "Pen Speed (cm/s)"
+msgstr "Vitesse Plume ( cm/s )"
+
+#: pcbnew/dialog_plot_base.cpp:141
+msgid "Set pen speed in cm/s"
+msgstr "Ajuster Vitesse plume en centimètres par seconde"
+
+#: pcbnew/dialog_plot_base.cpp:145
+msgid "Pen ovr"
+msgstr "Recouvrement"
+
+#: pcbnew/dialog_plot_base.cpp:150
+msgid "Set plot overlay for filling"
+msgstr "Ajuste recouvrement des tracés pour les remplissages"
+
+#: pcbnew/dialog_plot_base.cpp:157
+msgid "PS Options:"
+msgstr "Options PS:"
+
+#: pcbnew/dialog_plot_base.cpp:159
+msgid "Plot negative"
+msgstr "Tracé en Négatif"
+
+#: pcbnew/dialog_plot_base.cpp:170
+msgid "Plot mirror"
+msgstr "Tracé Miroir"
+
+#: pcbnew/dialog_plot_base.cpp:174
+msgid "Vias on mask"
+msgstr "Vias sur masque"
+
+#: pcbnew/dialog_plot_base.cpp:176
+msgid "Print/plot vias on mask layers. They are in this case not protected"
+msgstr "Trace vias sur vernis épargne. Elles seront non protégées"
+
+#: pcbnew/dialog_plot_base.cpp:180
+msgid "Line width"
+msgstr "Epaisseur ligne"
+
+#: pcbnew/dialog_plot_base.cpp:190
+msgid "X scale adjust"
+msgstr "Ajustage Echelle X"
+
+#: pcbnew/dialog_plot_base.cpp:199
+msgid "Y scale adjust"
+msgstr "Ajustage Echelle Y"
+
+#: pcbnew/dialog_plot_base.cpp:209
+msgid "Plot"
+msgstr "Tracer"
+
+#: pcbnew/dialog_plot_base.cpp:213
+msgid "Save Options"
+msgstr "Sauver Options"
+
+#: pcbnew/dialog_plot_base.cpp:216
+msgid "Generate drill file"
+msgstr "Créer Fichier de perçage"
 
 #: pcbnew/toolbars_update_user_interface.cpp:39
 msgid " mils"
@@ -7552,6 +7562,7 @@ msgid "&New"
 msgstr "&Nouveau"
 
 #: eeschema/menubar.cpp:43
+#: eeschema/tool_sch.cpp:34
 msgid "New schematic project"
 msgstr "Nouveau Projet schématique"
 
@@ -7696,6 +7707,7 @@ msgid "W&ire to bus entry"
 msgstr "Entrées de bus (type fil vers bus)"
 
 #: eeschema/menubar.cpp:215
+#: eeschema/tool_sch.cpp:179
 msgid "Place a wire to bus entry"
 msgstr "Placer une Entrée de Bus (type fil vers bus)"
 
@@ -7704,6 +7716,7 @@ msgid "B&us to bus entry"
 msgstr "Entrées de bus (type bus vers bus)"
 
 #: eeschema/menubar.cpp:221
+#: eeschema/tool_sch.cpp:183
 msgid "Place a bus to bus entry"
 msgstr "Placer une Entrée de Bus (type bus vers bus)"
 
@@ -7720,6 +7733,7 @@ msgid "Net name"
 msgstr "Net Name"
 
 #: eeschema/menubar.cpp:231
+#: eeschema/tool_sch.cpp:192
 msgid "Place net name"
 msgstr "Place  nom de net"
 
@@ -7744,6 +7758,7 @@ msgid "Hierarchical label"
 msgstr "Label Hiérarchique"
 
 #: eeschema/menubar.cpp:250
+#: eeschema/tool_sch.cpp:206
 msgid "Place a hierarchical label. This label will be seen as a pin sheet in the sheet symbol"
 msgstr "Placer un label hiérachique. Ce label sera vu comme une pin dans la feuille mère symbole"
 
@@ -7784,6 +7799,7 @@ msgid "Graphic text (comment)"
 msgstr "Textes graphiques (commentaires)"
 
 #: eeschema/menubar.cpp:286
+#: eeschema/tool_sch.cpp:229
 msgid "Place graphic text (comment)"
 msgstr "Placer textes graphiques (commentaires)"
 
@@ -11368,14 +11384,14 @@ msgid "%d errors while reading Gerber file [%s]"
 msgstr "%d erreurs pendant lecture fichier gerber [%s]"
 
 #: gerbview/readgerb.cpp:267
-#: gerbview/files.cpp:185
-#: gerbview/files.cpp:218
+#: gerbview/files.cpp:188
+#: gerbview/files.cpp:221
 #, c-format
 msgid "Gerber DCODE files (%s)|*.%s"
 msgstr "Fichiers Gerber DCODE (%s)|*.%s"
 
 #: gerbview/readgerb.cpp:272
-#: gerbview/files.cpp:191
+#: gerbview/files.cpp:194
 msgid "Load GERBER DCODE File"
 msgstr "Charger Fichier de DCodes"
 
@@ -11391,63 +11407,63 @@ msgstr "Gerbview est en cours d'exécution. Continuer ?"
 msgid "Not yet available..."
 msgstr "non encore disponible"
 
-#: gerbview/files.cpp:114
+#: gerbview/files.cpp:117
 msgid "Gerber files (.gb* .gt* .lgr .ger .pho)"
 msgstr "Fichiers Gerber .gb* .gt* .lgr .ger .pho)"
 
-#: gerbview/files.cpp:120
+#: gerbview/files.cpp:123
 msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
 msgstr "Couche composant"
 
-#: gerbview/files.cpp:121
+#: gerbview/files.cpp:124
 msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
 msgstr "Couche cuivre"
 
-#: gerbview/files.cpp:122
+#: gerbview/files.cpp:125
 msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
 msgstr "Masque soudure cuivre (*.GBS)|*.GBS;*.gbs|"
 
-#: gerbview/files.cpp:123
+#: gerbview/files.cpp:126
 msgid "Top solder resist (*.GTS)|*.GTS;*.gts|"
 msgstr "Masque soudure composant (*.GTS)|*.GTS;*.gts|"
 
-#: gerbview/files.cpp:124
+#: gerbview/files.cpp:127
 msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
 msgstr "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
 
-#: gerbview/files.cpp:125
+#: gerbview/files.cpp:128
 msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
 msgstr "Top overlay (*.GTO)|*.GTO;*.gto|"
 
-#: gerbview/files.cpp:126
+#: gerbview/files.cpp:129
 msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
 msgstr "Masque pate à souder cuivre (*.GBP)|*.GBP;*.gbp|"
 
-#: gerbview/files.cpp:127
+#: gerbview/files.cpp:130
 msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
 msgstr "Masque pate à souder composant (*.GTP)|*.GTP;*.gtp|"
 
-#: gerbview/files.cpp:128
+#: gerbview/files.cpp:131
 msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
 msgstr "Couche de \"Keep-out\" (*.GKO)|*.GKO;*.gko|"
 
-#: gerbview/files.cpp:129
+#: gerbview/files.cpp:132
 msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 msgstr "Couches mécaniques (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 
-#: gerbview/files.cpp:130
+#: gerbview/files.cpp:133
 msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
 msgstr "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
 
-#: gerbview/files.cpp:131
+#: gerbview/files.cpp:134
 msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
 msgstr "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
 
-#: gerbview/files.cpp:141
+#: gerbview/files.cpp:144
 msgid "Open Gerber File"
 msgstr "Ouvrir Fichier Gerber"
 
-#: gerbview/files.cpp:222
+#: gerbview/files.cpp:225
 msgid "Save Gerber File"
 msgstr "Sauver Fichier Gerber"
 
@@ -12850,6 +12866,28 @@ msgstr "Options d'Affichage"
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "File"
+#~ msgstr "Fichier"
+#~ msgid ""
+#~ "Set lines width used to plot in sketch mode and plot pads outlines on "
+#~ "silk screen layers"
+#~ msgstr ""
+#~ "Ajuste l'épaisseur des lignes utilisées pour tracer en mode contour et "
+#~ "pour les contours des pads sur les couches de sérigraphie"
+#~ msgid "Enable/disable print/plot module value on silkscreen layers"
+#~ msgstr ""
+#~ "Active/désactive le tracé des textes valeurs des modules sur couches de "
+#~ "sérigraphie"
+#~ msgid "Enable/disable print/plot module reference on silkscreen layers"
+#~ msgstr ""
+#~ "Active/désactive le tracé des textes référence des modules sur couches de "
+#~ "sérigraphie"
+#~ msgid "Adobe post script files (.ps)|*.ps"
+#~ msgstr "Fichiers Adobe post script  (.ps)|*.ps"
+#~ msgid "GERBER photo plot files (.pho .gbr)|*.pho;*.gbr"
+#~ msgstr "Fichiers photraçage GERBER (.pho .gbr)|*.pho;*.gbr"
+#~ msgid "unable to create file "
+#~ msgstr "Impossible de créer  fichier "
 #~ msgid ""
 #~ "Gerber files (.gbr .gbx .lgr .ger .pho)| .gbr;*.GBR;*.gbx;*.GBX;*.lgr;*."
 #~ "LGR;*.ger;*.GER;*.pho;*.PHO|"

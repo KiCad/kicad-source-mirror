@@ -12,6 +12,8 @@ set(GERBVIEW_SRCS
     controle.cpp
     dcode.cpp
     deltrack.cpp
+    dialog_print_using_printer.cpp
+	dialog_print_using_printer_base.cpp
     dummy_functions.cpp
     edit.cpp
     export_to_pcbnew.cpp
@@ -39,7 +41,6 @@ set(GERBVIEW_SRCS
 
 set(GERBVIEW_EXTRA_SRCS
     ../share/setpage.cpp
-    ../pcbnew/dialog_print_using_printer.cpp
     ../pcbnew/printout_controler.cpp
 )
 
