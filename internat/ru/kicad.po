@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-02 02:54+0300\n"
-"PO-Revision-Date: 2010-01-02 02:56+0300\n"
+"PO-Revision-Date: 2010-01-02 14:29+0300\n"
 "Last-Translator: Andrey Fedorushkov <andrf@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "MIME-Version: 1.0\n"
@@ -3023,7 +3023,7 @@ msgstr "Сортировка компонентов по X-координате"
 
 #: eeschema/dialog_annotate_base.cpp:77
 msgid "Sort Components by &Y Position"
-msgstr "Сортировка компонентов по X-координате"
+msgstr "Сортировка компонентов по Y-координате"
 
 #: eeschema/dialog_annotate_base.cpp:91
 msgid "Sort Components by &Value"
