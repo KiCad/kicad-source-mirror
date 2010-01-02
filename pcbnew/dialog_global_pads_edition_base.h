@@ -49,7 +49,7 @@ class DIALOG_GLOBAL_PADS_EDITION_BASE : public wxDialog
 		
 	
 	public:
-		DIALOG_GLOBAL_PADS_EDITION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Global Pads Edition"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 482,165 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_GLOBAL_PADS_EDITION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _( "Global Pads Edition" ), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 482,165 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_GLOBAL_PADS_EDITION_BASE();
 	
 };
