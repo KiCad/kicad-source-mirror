@@ -7,10 +7,10 @@ email address.
 ================================================================================
 ++pcbnew
     - fixed a potential bug in a fill zone function: AddClearanceAreasPolygonsToPolysList()
-    - Try to fix a problem with AddClearanceAreasPolygonsToPolysList() in Window Vista a Window 7
+    - Try to fix a problem with AddClearanceAreasPolygonsToPolysList() under Window Vista and Window 7
       This is perhaps a problem in kbool library
-      (a bug in Bool_Engine destructor ?
-      Its happens when:
+      (a bug in Bool_Engine destructor ?)
+      It happens when:
       - a lot of polygon corners are added in group A
       - nothing in group B
       - No operation asked in kbool engine ( that also has a bug if an operation is asked
@@ -22,8 +22,8 @@ email address.
       - No problem under XP and Linux.
     -Workaround:
       Leave the group A void if group B is void.
-      I am not sure this fix the problem.
-      Just its solves this problem with 2 samples boards that crash Pcbnew without this change.
+      I am not sure this change fix the problem.
+      Just it solves this problem with 2 samples boards that crash Pcbnew without this change.
 
 2010-Jan-01 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
