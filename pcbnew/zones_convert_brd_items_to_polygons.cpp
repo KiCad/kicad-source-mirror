@@ -177,11 +177,6 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     booleng = new Bool_Engine();
     ArmBoolEng( booleng, true );
 
-    /* Add the main corrected polygon (i.e. the filled area using only one outline)
-     * in GroupA in Bool_Engine
-     */
-    CopyPolygonsFromFilledPolysListToBoolengine( booleng, GROUP_A );
-
     /* Calculates the clearance value that meet DRC requirements
      * from m_ZoneClearance and clearance from the corresponding netclass
      * We have a "local" clearance in zones because most of time
@@ -218,6 +213,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      */
     int item_clearance;
     have_poly_to_substract = false;
+
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
         for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
@@ -253,8 +249,6 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             }
         }
     }
-
-    have_poly_to_substract = false;
 
     /* Add holes (i.e. tracks and pads areas as polygons outlines)
      * in GroupB in Bool_Engine
@@ -371,6 +365,11 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
     if( have_poly_to_substract )
     {
+        /* Add the main corrected polygon (i.e. the filled area using only one outline)
+         * in GroupA in Bool_Engine
+         */
+        CopyPolygonsFromFilledPolysListToBoolengine( booleng, GROUP_A );
+
         booleng->Do_Operation( BOOL_A_SUB_B );
 
         /* put these areas in m_FilledPolysList */
@@ -461,10 +460,6 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     booleng = new Bool_Engine();
     ArmBoolEng( booleng, true );
 
-/* Add the main corrected polygon (i.e. the filled area using only one outline)
- * in GroupA in Bool_Engine
- */
-    CopyPolygonsFromFilledPolysListToBoolengine( booleng, GROUP_A );
 
 /*
  * Test and add polygons to remove thermal stubs.
@@ -586,6 +581,11 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 /* compute copper areas */
     if( have_poly_to_substract )
     {
+    /* Add the main corrected polygon (i.e. the filled area using only one outline)
+     * in GroupA in Bool_Engine
+     */
+        CopyPolygonsFromFilledPolysListToBoolengine( booleng, GROUP_A );
+
         booleng->Do_Operation( BOOL_A_SUB_B );
 
         /* put these areas in m_FilledPolysList */

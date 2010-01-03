@@ -3,6 +3,27 @@ KiCad ChangeLog 2009
 
 Please add newer entries at the top, list the date and your name with
 email address.
+2010-Jan-03 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++pcbnew
+    - fixed a potential bug in a fill zone function: AddClearanceAreasPolygonsToPolysList()
+    - Try to fix a problem with AddClearanceAreasPolygonsToPolysList() in Window Vista a Window 7
+      This is perhaps a problem in kbool library
+      (a bug in Bool_Engine destructor ?
+      Its happens when:
+      - a lot of polygon corners are added in group A
+      - nothing in group B
+      - No operation asked in kbool engine ( that also has a bug if an operation is asked
+        with no polygon in group B)
+      - and call the Bool_Engine destructor.
+      Could be a stack error or overflow, very hard to locate and debug.
+      - Under Vista seems create always a crash.
+      - Under Window 7 sometimes create a crash.
+      - No problem under XP and Linux.
+    -Workaround:
+      Leave the group A void if group B is void.
+      I am not sure this fix the problem.
+      Just its solves this problem with 2 samples boards that crash Pcbnew without this change.
 
 2010-Jan-01 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================

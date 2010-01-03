@@ -8,7 +8,7 @@
 
 // Comment this line to use the standard wxClientDC
 // and uncomment to use buffered DC
-// #define KICAD_USE_BUFFERED_DC    // Currently for tests
+// #define KICAD_USE_BUFFERED_DC    // Currently under test
 
 #ifdef KICAD_USE_BUFFERED_DC
 #include <wx/dcbuffer.h>
