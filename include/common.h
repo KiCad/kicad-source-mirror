@@ -267,8 +267,6 @@ void InitKiCadAbout( wxAboutDialogInfo& info );
 /* common.cpp */
 /**************/
 wxString GetBuildVersion();         /* Return the build date */
-wxString GetAboutBuildVersion();    /* Return custom build date for about
-                                     * dialog */
 
 /**
  * function Affiche_1_Parametre

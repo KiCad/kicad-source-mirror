@@ -69,15 +69,6 @@ DIALOG_PRINT_USING_PRINTER_base::DIALOG_PRINT_USING_PRINTER_base( wxWindow* pare
 	wxStaticBoxSizer* sbOptionsSizer;
 	sbOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options:") ), wxVERTICAL );
 	
-	m_TextPenWidth = new wxStaticText( this, wxID_ANY, _("Pen Width Mini"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_TextPenWidth->Wrap( -1 );
-	sbOptionsSizer->Add( m_TextPenWidth, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_DialogPenWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_DialogPenWidth->SetToolTip( _("Selection of the minimum pen thickness used to draw items.") );
-	
-	sbOptionsSizer->Add( m_DialogPenWidth, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-	
 	m_Print_Mirror = new wxCheckBox( this, wxID_ANY, _("Mirror"), wxDefaultPosition, wxDefaultSize, 0 );
 	
 	sbOptionsSizer->Add( m_Print_Mirror, 0, wxALL, 5 );

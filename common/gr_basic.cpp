@@ -285,8 +285,13 @@ void GRResetPenAndBrush( wxDC* DC )
 void SetPenMinWidth( int minwidth )
 {
     PenMinWidth = minwidth;
-    if( PenMinWidth < 1 )
-        PenMinWidth = 1;
+    if( PenMinWidth < 0 )
+        PenMinWidth = 0;
+}
+
+int GetPenMinWidth( )
+{
+    return PenMinWidth;
 }
 
 
@@ -1035,16 +1040,6 @@ static void GRSClosedPoly( EDA_Rect* ClipBox,
         }
     }
 }
-
-
-/* not used
- * static void GRSClosedPoly( EDA_Rect* ClipBox, wxDC* DC, int n, wxPoint
- * Points[],
- *                 bool Fill, int Color, int BgColor )
- * {
- * GRSClosedPoly( ClipBox, DC, n, Points, Fill, 0, Color, BgColor );
- * }
- */
 
 
 /*

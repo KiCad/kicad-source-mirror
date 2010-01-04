@@ -118,28 +118,6 @@ int g_GridRoutingSize = 250;
 
 bool g_Zone_45_Only = FALSE;
 
-/* HPGL plot settings. */
-int g_HPGL_Pen_Num = 1;      /* pen number */
-int g_HPGL_Pen_Speed = 40;   /* speed in cm/s */
-int g_HPGL_Pen_Diam;         /* diameter in mils */
-int g_HPGL_Pen_Recouvrement; /* recovery in mils ( for filling ) */
-
-float Scale_X;
-float Scale_Y;               /* scale factor in X and Y axis */
-
-int PlotMarge;
-int g_PlotLine_Width;
-int g_PlotFormat = PLOT_FORMAT_GERBER;
-int g_PlotOrient;
-
-wxPoint g_PlotOffset;
-
-FILE* dest = NULL;
-
-/* id for plot format (see enum PlotFormat in plot_common.h) */
-int g_PlotScaleOpt;
-int g_DrillShapeOpt;
-
 // Default setting used when creating a new zone
 ZONE_SETTING g_Zone_Default_Setting;
 

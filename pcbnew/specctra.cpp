@@ -4170,7 +4170,8 @@ PARSER::PARSER( ELEM* aParent ) :
     generated_by_freeroute = false;
 
     host_cad = "Kicad's PCBNEW";
-    host_version = CONV_TO_UTF8(g_BuildVersion);
+    wxString msg = GetBuildVersion();
+    host_version = CONV_TO_UTF8(msg);
 }
 
 

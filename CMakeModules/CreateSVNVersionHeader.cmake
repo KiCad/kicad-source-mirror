@@ -37,14 +37,12 @@ macro(create_svn_version_header)
     endif(Subversion_FOUND)
 
     # Check to make sure 'svn info' command did not fail.  Otherwise fallback
-    # to vesion strings defined in "<kicad-src-dir>/include/build_version.h".
+    # to version strings defined in "<kicad-src-dir>/include/build_version.h".
     if(Kicad_WC_LAST_CHANGED_DATE)
         string(REGEX REPLACE "^([0-9]+)\\-([0-9]+)\\-([0-9]+).*" "\\1\\2\\3"
                _kicad_svn_date ${Kicad_WC_LAST_CHANGED_DATE})
-        set(KICAD_SVN_VERSION
+        set(KICAD_BUILD_VERSION
             "(${_kicad_svn_date} SVN-R${Kicad_WC_LAST_CHANGED_REV})")
-        set(KICAD_ABOUT_VERSION
-            "SVN-R${Kicad_WC_LAST_CHANGED_REV} (${_kicad_svn_date})")
 
         # Definition to conditionally use date and revision returned from the
         # Subversion info command instead of hand coded date and revision in
@@ -58,7 +56,6 @@ macro(create_svn_version_header)
         configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/version.h.cmake
                        ${CMAKE_BINARY_DIR}/version.h)
 
-        message(STATUS "Kicad SVN version: ${KICAD_SVN_VERSION}")
-        message(STATUS "Kicad about version: ${KICAD_ABOUT_VERSION}")
+        message(STATUS "Kicad SVN build version: ${KICAD_BUILD_VERSION}")
     endif(Kicad_WC_LAST_CHANGED_DATE)
 endmacro(create_svn_version_header)

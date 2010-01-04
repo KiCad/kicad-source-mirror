@@ -118,26 +118,6 @@ StructColors ColorRefs[NBCOLOR] =
 };
 
 
-#define BUILD_VERSION "(2009-12-05-unstable)"
-
-
-#ifdef HAVE_SVN_VERSION
-#include "version.h"
-wxString g_BuildVersion( wxT( KICAD_SVN_VERSION ) );
-#else
-wxString g_BuildVersion( wxT( BUILD_VERSION ) );
-#endif
-
-
-/** Function GetBuildVersion()
- * Return the build date
- */
-wxString GetBuildVersion()
-{
-    return g_BuildVersion;
-}
-
-
 /** function SetLocaleTo_C_standard
  * because kicad is internationalized, switch internalization to "C" standard
  * i.e. uses the . (dot) as separator in print/read float numbers

@@ -49,8 +49,6 @@ class DIALOG_PRINT_USING_PRINTER_base : public wxDialog
 		wxTextCtrl* m_FineAdjustXscaleOpt;
 		wxStaticText* m_FineAdjustYscaleTitle;
 		wxTextCtrl* m_FineAdjustYscaleOpt;
-		wxStaticText* m_TextPenWidth;
-		wxTextCtrl* m_DialogPenWidth;
 		wxCheckBox* m_Print_Mirror;
 		wxRadioBox* m_ModeColorOption;
 		wxRadioBox* m_PagesOption;

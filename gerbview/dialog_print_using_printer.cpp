@@ -48,7 +48,6 @@ private:
     WinEDA_GerberFrame* m_Parent;
     wxConfig*         m_Config;
     wxCheckBox*       m_BoxSelectLayer[32];
-    static bool       m_ExcludeEdgeLayer;
 
 public:
     DIALOG_PRINT_USING_PRINTER( WinEDA_GerberFrame* parent );
@@ -63,7 +62,6 @@ private:
 
     void OnButtonCancelClick( wxCommandEvent& event ) { Close(); }
     void SetPrintParameters( );
-    void SetPenWidth();
     void InitValues( );
 
 public:
@@ -71,8 +69,6 @@ public:
     bool PrintUsingSinglePage() { return m_PagesOption->GetSelection(); }
     int SetLayerMaskFromListSelection();
 };
-
-bool DIALOG_PRINT_USING_PRINTER::m_ExcludeEdgeLayer;
 
 
 
@@ -128,7 +124,6 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     wxString msg;
 
     layer_max = 32;
-    m_ExcludeEdgeLayer = true;    // no meaning in gerbview
 
     /* Create layer list */
     int mask = 1, ii;
@@ -154,7 +149,6 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
 
     if( m_Config )
     {
-        m_Config->Read( OPTKEY_PLOT_LINEWIDTH_VALUE, &s_Parameters.m_PenMinSize );
         m_Config->Read( OPTKEY_PRINT_X_FINESCALE_ADJ, &s_Parameters.m_XScaleAdjust );
         m_Config->Read( OPTKEY_PRINT_Y_FINESCALE_ADJ, &s_Parameters.m_YScaleAdjust );
         m_Config->Read( OPTKEY_PRINT_SCALE, &scale_idx );
@@ -206,10 +200,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     else
         m_ModeColorOption->SetSelection( 0 );
 
-    AddUnitSymbol( *m_TextPenWidth, g_UnitMetric );
-    m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UnitMetric, s_Parameters.m_PenMinSize, m_Parent->m_InternalUnits ) );
-
+    s_Parameters.m_PenMinSize = 0;
 
     // Create scale adjust option
     msg.Printf( wxT( "%f" ), s_Parameters.m_XScaleAdjust );
@@ -249,7 +240,6 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
 
     if( m_Config )
     {
-        m_Config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE, s_Parameters.m_PenMinSize );
         m_Config->Write( OPTKEY_PRINT_X_FINESCALE_ADJ, s_Parameters.m_XScaleAdjust );
         m_Config->Write( OPTKEY_PRINT_Y_FINESCALE_ADJ, s_Parameters.m_YScaleAdjust );
         m_Config->Write( OPTKEY_PRINT_SCALE, m_ScaleOption->GetSelection() );
@@ -301,34 +291,7 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters( )
     }
     g_pcb_plot_options.ScaleAdjX = s_Parameters.m_XScaleAdjust;
     g_pcb_plot_options.ScaleAdjX = s_Parameters.m_YScaleAdjust;
-    SetPenWidth();
 }
-
-
-/**********************************************/
-void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
-/***********************************************/
-
-/* Get the new pen width value, and verify min et max value
- * NOTE: s_Parameters.m_PenMinSize is in internal units
- */
-{
-    s_Parameters.m_PenMinSize = ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
-
-    if( s_Parameters.m_PenMinSize > WIDTH_MAX_VALUE )
-    {
-        s_Parameters.m_PenMinSize = WIDTH_MAX_VALUE;
-    }
-
-    if( s_Parameters.m_PenMinSize < WIDTH_MIN_VALUE )
-    {
-        s_Parameters.m_PenMinSize = WIDTH_MIN_VALUE;
-    }
-
-    m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UnitMetric, s_Parameters.m_PenMinSize, m_Parent->m_InternalUnits ) );
-}
-
 
 /**********************************************************/
 void DIALOG_PRINT_USING_PRINTER::OnPrintSetup( wxCommandEvent& event )

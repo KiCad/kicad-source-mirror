@@ -57,6 +57,7 @@ void GRForceBlackPen( bool flagforce );
  */
 bool GetGRForceBlackPenState( void );
 void SetPenMinWidth( int minwidth );
+int GetPenMinWidth( );
 
 void GRSPutPixel( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int color );
 void GRSFilledRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,

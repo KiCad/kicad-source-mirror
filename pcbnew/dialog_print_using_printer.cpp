@@ -54,7 +54,6 @@ public:
 
 private:
     void OnCloseWindow( wxCloseEvent& event );
-    void OnInitDialog( wxInitDialogEvent& event );
     void OnPrintSetup( wxCommandEvent& event );
     void OnPrintPreview( wxCommandEvent& event );
     void OnPrintButtonClick( wxCommandEvent& event );

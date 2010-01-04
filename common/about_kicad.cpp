@@ -8,28 +8,27 @@
 #include "appl_wxstruct.h"
 
 
-#define BUILD_VERSION "(2009-12-05-unstable)"
 
-
-#if defined(HAVE_SVN_VERSION) || defined(HAVE_SVN_REVISION)
-#  include "version.h"
-#ifndef KICAD_ABOUT_VERSION
-#define KICAD_ABOUT_VERSION BUILD_VERSION
-#endif
-wxString g_BuildAboutVersion( wxT( KICAD_ABOUT_VERSION ) );
-#else
-wxString g_BuildAboutVersion( wxT( BUILD_VERSION ) );
+#ifdef HAVE_SVN_VERSION
+#include "version.h"    // define the KICAD_BUILD_VERSION
 #endif
 
+#ifndef KICAD_BUILD_VERSION
+#define KICAD_BUILD_VERSION "(2010-01-04)"
+#endif
 
-/** Function GetAboutBuildVersion()
- * Return custom build date for about dialog
+#define VERSION_STABILITY "unstable"
+
+/** Function GetBuildVersion()
+ * Return the build date and version
  */
-wxString GetAboutBuildVersion()
+wxString GetBuildVersion()
 {
-    return g_BuildAboutVersion;
+    wxString msg;
+    msg.Printf( wxT("%s-%s"),
+        wxT( KICAD_BUILD_VERSION ), wxT(VERSION_STABILITY));
+    return msg;
 }
-
 
 /**********************************/
 wxString SetMsg( const wxString& msg )
@@ -62,7 +61,7 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
     wxString description;
 
     /* KiCad build version */
-    description << ( _T( "Build: " ) ) << GetAboutBuildVersion();
+    description << ( _T( "Build: " ) ) << GetBuildVersion();
 
     /* Print for wxversion */
     description << ( wxT( "\n\nwxWidgets " ) )
