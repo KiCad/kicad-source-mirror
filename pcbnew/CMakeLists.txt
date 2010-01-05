@@ -226,3 +226,11 @@ install(TARGETS pcbnew
 # This one gets made only when testing.
 add_executable(specctra_test EXCLUDE_FROM_ALL specctra.cpp)
 target_link_libraries(specctra_test common ${wxWidgets_LIBRARIES})
+
+# This one gets made only when testing.
+add_executable(layer_widget_test EXCLUDE_FROM_ALL
+    layer_panel_base.cpp
+    layer_widget.cpp
+    )
+target_link_libraries(layer_widget_test ${wxWidgets_LIBRARIES})
+
