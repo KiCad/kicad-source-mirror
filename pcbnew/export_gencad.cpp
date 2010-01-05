@@ -13,6 +13,8 @@
 #include "wxPcbStruct.h"
 #include "trigo.h"
 
+#include "build_version.h"
+
 bool        CreateHeaderInfoData( FILE* file, WinEDA_PcbFrame* frame );
 static void CreateTracksInfoData( FILE* file, BOARD* pcb );
 static void CreateBoardSection( FILE* file, BOARD* pcb );

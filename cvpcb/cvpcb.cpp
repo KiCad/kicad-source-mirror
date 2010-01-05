@@ -15,6 +15,8 @@
 #include "protos.h"
 #include "cvstruct.h"
 
+#include "build_version.h"
+
 #include <wx/snglinst.h>
 
 

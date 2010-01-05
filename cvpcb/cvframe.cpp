@@ -16,6 +16,7 @@
 #include "cvstruct.h"
 #include "dialog_cvpcb_config.h"
 
+#include "build_version.h"
 
 #define FRAME_MIN_SIZE_X 450
 #define FRAME_MIN_SIZE_Y 300

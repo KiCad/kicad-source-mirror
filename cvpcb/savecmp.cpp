@@ -15,6 +15,8 @@
 #include "protos.h"
 #include "cvstruct.h"
 
+#include "build_version.h"
+
 
 /* File header. */
 char EnteteCmpMod[] = { "Cmp-Mod V01" };

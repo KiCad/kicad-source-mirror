@@ -22,6 +22,8 @@
 
 #include "gendrill.h"
 
+#include "build_version.h"
+
 const wxString DrillFileExtension( wxT( "drl" ) );
 
 const wxString DrillFileWildcard( _( "Drill files (*.drl)|*.drl" ) );

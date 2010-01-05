@@ -15,6 +15,8 @@
 #include "prjconfig.h"
 #include "kicad.h"
 
+#include "build_version.h"
+
 static const wxString GeneralGroupName( wxT( "/general" ) );
 
 /* Kicad project file entry names. */

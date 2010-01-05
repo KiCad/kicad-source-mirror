@@ -21,6 +21,8 @@
 #include "cvpcb.h"
 #endif
 
+#include "build_version.h"
+
 #include "pcbnew_id.h"
 
 /* ASCII format of structures:

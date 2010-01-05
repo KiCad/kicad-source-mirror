@@ -7,28 +7,8 @@
 #include "common.h"
 #include "appl_wxstruct.h"
 
+#include "build_version.h"
 
-
-#ifdef HAVE_SVN_VERSION
-#include "version.h"    // define the KICAD_BUILD_VERSION
-#endif
-
-#ifndef KICAD_BUILD_VERSION
-#define KICAD_BUILD_VERSION "(2010-01-04)"
-#endif
-
-#define VERSION_STABILITY "unstable"
-
-/** Function GetBuildVersion()
- * Return the build date and version
- */
-wxString GetBuildVersion()
-{
-    wxString msg;
-    msg.Printf( wxT("%s-%s"),
-        wxT( KICAD_BUILD_VERSION ), wxT(VERSION_STABILITY));
-    return msg;
-}
 
 /**********************************/
 wxString SetMsg( const wxString& msg )

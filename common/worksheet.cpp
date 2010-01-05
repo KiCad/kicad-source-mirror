@@ -14,6 +14,7 @@
 #include "appl_wxstruct.h"
 #include "worksheet.h"
 
+#include "build_version.h"
 
 /* Must be defined in main applications: */
 

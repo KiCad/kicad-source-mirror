@@ -19,12 +19,12 @@
 #include "cell.h"
 #include "worksheet.h"
 #include "zones.h"
+#include "drag.h"
+#include "eda_dde.h"
+
+#include "build_version.h"
 
 #include "protos.h"
-
-#include "drag.h"
-
-#include "eda_dde.h"
 
 bool Drc_On = true;
 bool g_AutoDeleteOldTrack = true;

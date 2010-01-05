@@ -16,6 +16,8 @@
 #include "trigo.h"
 #include "appl_wxstruct.h"
 
+#include "build_version.h"
+
 class LIST_MOD      /* Can list the elements of useful modules. */
 {
 public:

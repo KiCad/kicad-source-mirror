@@ -17,6 +17,8 @@
 #include "zones.h"
 #include "class_board_design_settings.h"
 
+#include "build_version.h"
+
 #include <wx/file.h>
 #include <wx/snglinst.h>
 

@@ -12,6 +12,7 @@ set(COMMON_SRCS
     basicframe.cpp
     bezier_curves.cpp
     block_commande.cpp
+    build_version.cpp
     class_marker_base.cpp
     class_plotter.cpp
     class_undoredo_container.cpp

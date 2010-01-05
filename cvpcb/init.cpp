@@ -13,6 +13,7 @@
 #include "protos.h"
 #include "cvstruct.h"
 
+#include "build_version.h"
 
 /*
  * Set the module to the selected component

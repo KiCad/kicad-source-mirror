@@ -14,6 +14,7 @@
 #include "protos.h"
 #include "class_library.h"
 
+#include "build_version.h"
 
 static EDA_BaseStruct* HighLightStruct = NULL;
 

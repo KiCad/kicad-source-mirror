@@ -26,6 +26,8 @@
 #include "kicad.h"
 #include "macros.h"
 
+#include "build_version.h"
+
 #ifdef KICAD_PYTHON
  #include <pyhandler.h>
  using namespace boost::python;

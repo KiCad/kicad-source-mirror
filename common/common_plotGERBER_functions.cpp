@@ -12,6 +12,8 @@
 #include "macros.h"
 #include "kicad_string.h"
 
+#include "build_version.h"
+
 
 /** function set_viewport
  * Set the plot offset for the current plotting

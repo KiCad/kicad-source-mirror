@@ -13,6 +13,8 @@
 
 #include "general.h"
 
+#include "build_version.h"
+
 
 /** function FillFootprintFieldForAllInstancesofComponent
  * Search for component "aReference", and place a Footprint in Footprint field

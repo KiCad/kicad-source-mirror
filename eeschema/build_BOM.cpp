@@ -21,6 +21,8 @@
 #include "netlist.h"
 #include "protos.h"
 
+#include "build_version.h"
+
 #include "dialog_build_BOM.h"
 
 

@@ -16,6 +16,7 @@
 #include "protos.h"
 #include "class_library.h"
 
+#include "build_version.h"
 
 /**
  * @bug - Every place in this file where fprintf() is used and the return
