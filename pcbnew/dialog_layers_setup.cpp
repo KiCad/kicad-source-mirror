@@ -311,7 +311,7 @@ void DIALOG_LAYERS_SETUP::showCopperChoice( int copperCount )
 {
     static const int copperCounts[] = { 2,4,6,8,10,12,14,16 };
 
-    D(printf("boardsCopperCount=%d\n", copperCount );)
+    //D(printf("boardsCopperCount=%d\n", copperCount );)
 
     for( unsigned i = 0;  i<sizeof(copperCounts);  ++i )
     {
@@ -341,7 +341,7 @@ void DIALOG_LAYERS_SETUP::showBoardLayerNames()
         {
             wxString lname = m_Pcb->GetLayerName( layer );
 
-            D(printf("layerName[%d]=%s\n", layer, CONV_TO_UTF8( lname ) );)
+            //D(printf("layerName[%d]=%s\n", layer, CONV_TO_UTF8( lname ) );)
 
             if( ctl->IsKindOf( CLASSINFO(wxTextCtrl) ) )
                 ((wxTextCtrl*)ctl)->SetValue( lname );     // wxTextCtrl
