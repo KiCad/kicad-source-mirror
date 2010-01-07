@@ -17,7 +17,6 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
-#include <wx/statbox.h>
 #include <wx/panel.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -40,9 +39,9 @@ class LAYER_PANEL_BASE : public wxPanel
 		wxScrolledWindow* m_LayerScrolledWindow;
 		wxFlexGridSizer* m_LayersFlexGridSizer;
 		wxPanel* m_Page1Panel;
-		wxScrolledWindow* m_scrolledWindow2;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnLeftDblClickLayers( wxMouseEvent& event ){ event.Skip(); }
 		virtual void OnLeftDownLayers( wxMouseEvent& event ){ event.Skip(); }
 		virtual void OnRightDownLayers( wxMouseEvent& event ){ event.Skip(); }
 		

@@ -38,7 +38,55 @@
 #include "layer_panel_base.h"
 #include "colors.h"
 #include <wx/wx.h>
+#include <wx/statbmp.h>
 #include <wx/aui/aui.h>
+
+//#include "rightarrow.xpm"
+
+
+
+/* XPM */
+static const char * clear_xpm[] = {
+"32 14 1 1",
+" 	c None",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                ",
+"                                "};
+
+/* XPM */
+static const char * rightarrow_xpm[] = {
+"32 14 5 1",
+" 	c None",
+".	c white",
+"X	c #8080ff",
+"o	c BLUE",
+"O	c gray56",
+"      .              ..         ",
+"                     .XX        ",
+"                     .XXX       ",
+"                     .XXXX      ",
+"  ....................XXXXX     ",
+"   .XXXXXXXXXXXXXXXXXXXXXXXX    ",
+"   .XXXXXXXXXXXXXXXXXXXXXXXXX   ",
+"   .oooooooooooooooooooooooooO  ",
+"   .ooooooooooooooooooooooooO   ",
+"     OOOOOOOOOOOOOOOOOoooooO    ",
+"                      ooooO     ",
+"                      oooO      ",
+"                      ooO       ",
+"                      oO        "};
+
 
 
 /**
@@ -70,26 +118,36 @@ class BOARD;
  */
 class LAYER_PANEL : public LAYER_PANEL_BASE
 {
-    BOARD*  m_Board;
+    BOARD*          m_Board;
 
-#define LAYER_COLUMN_COUNT  3
+    wxBitmap*       m_BlankBitmap;
+    wxBitmap*       m_RightArrowBitmap;
+    wxSize          m_BitmapSize;
+
+    wxStaticBitmap* m_Bitmaps[32];
+
+    int             m_CurrentRow;
+
+
+#define LAYER_COLUMN_COUNT  4
+
 
     class MYSTATICTEXT : public wxStaticText
     {
     public:
-        MYSTATICTEXT( wxWindow *parent, wxWindowID id, const wxString &label,
+        MYSTATICTEXT( LAYER_PANEL* aLayerPanel, wxWindowID id, const wxString &label,
                 const wxPoint &pos=wxDefaultPosition, const wxSize &size=wxDefaultSize,
                 long style=0, const wxString &name=wxStaticTextNameStr) :
-            wxStaticText( parent, id, label, pos, size, style, name )
+            wxStaticText( aLayerPanel->m_LayerScrolledWindow, id, label, pos, size, style, name )
         {
-            //Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_PANEL::OnLeftDownLayers ), NULL, parent );
-            //Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_PANEL::OnRightDownLayers ), NULL, parent );
+            Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_PANEL::OnLeftDownLayers ), NULL, aLayerPanel );
+            Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_PANEL::OnRightDownLayers ), NULL, aLayerPanel );
         }
 
         ~MYSTATICTEXT()
         {
-            //Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_PANEL::OnLeftDownLayers ), NULL, GetParent() );
-            //Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_PANEL::OnRightDownLayers ), NULL, GetParent() );
+            Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_PANEL::OnLeftDownLayers ), NULL, NULL );
+            Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_PANEL::OnRightDownLayers ), NULL, NULL );
         }
     };
 
@@ -113,10 +171,11 @@ class LAYER_PANEL : public LAYER_PANEL_BASE
     }
      */
 
+
     static wxBitmapButton* makeColorButton( int aColorIndex, int aID, wxWindow* aParent )
     {
-        const int BUTT_SIZE_X = 25;
-        const int BUTT_SIZE_Y = 20;
+        const int BUTT_SIZE_X = 32;
+        const int BUTT_SIZE_Y = 22;
 
         // dynamically make a wxBitMap and brush it with the appropriate color,
         // then create a wxBitmapButton from it.
@@ -126,16 +185,18 @@ class LAYER_PANEL : public LAYER_PANEL_BASE
         wxMemoryDC  iconDC;
 
         iconDC.SelectObject( bitmap );
-        iconDC.SetPen( *wxBLACK_PEN );
 
         brush.SetColour( MakeColour( aColorIndex ) );
+
         brush.SetStyle( wxSOLID );
         iconDC.SetBrush( brush );
 
         iconDC.DrawRectangle( 0, 0, BUTT_SIZE_X, BUTT_SIZE_Y );
 
-        return new wxBitmapButton( aParent, aID, bitmap,
-            wxDefaultPosition, wxSize(BUTT_SIZE_X, BUTT_SIZE_Y) );
+        wxBitmapButton* ret = new wxBitmapButton( aParent, aID, bitmap,
+            wxDefaultPosition, wxSize(BUTT_SIZE_X, BUTT_SIZE_Y), wxBORDER_RAISED );
+
+        return ret;
     }
 
     void insertLayerRow( int aRow, const LAYER_SPEC& aSpec )
@@ -149,19 +210,32 @@ class LAYER_PANEL : public LAYER_PANEL_BASE
         flags.Align(wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
 
         // column 0
+#if 1
+        m_Bitmaps[aRow] = new wxStaticBitmap( m_LayerScrolledWindow, -1, *m_BlankBitmap,
+                            wxDefaultPosition, m_BitmapSize );
+
+        m_LayersFlexGridSizer->Insert( index+0, m_Bitmaps[aRow], wxSizerFlags().Align( wxALIGN_CENTER_VERTICAL ) );
+#else
         m_LayersFlexGridSizer->Insert( index+0,
                 makeColorButton( aSpec.colorIndex, 0, m_LayerScrolledWindow ),
                 flags );
+#endif
 
         // column 1
-        m_LayersFlexGridSizer->Insert( index+1,
-                new wxCheckBox( m_LayerScrolledWindow, aSpec.checkBoxId, wxEmptyString ),
-                flags );
+        wxBitmapButton* bb = makeColorButton( aSpec.colorIndex, 0, m_LayerScrolledWindow );
+        bb->SetToolTip( _("Double click to change layer color" ) );
+        m_LayersFlexGridSizer->Insert( index+1, bb, flags );
 
         // column 2
-        m_LayersFlexGridSizer->Insert( index+2,
-                new MYSTATICTEXT( m_LayerScrolledWindow, -1, aSpec.layerName ),
-                wxSizerFlags() );
+        MYSTATICTEXT* st = new MYSTATICTEXT( this, -1, aSpec.layerName );
+        st->SetToolTip( _( "Click here to select this layer" ) );
+        m_LayersFlexGridSizer->Insert( index+2, st,
+                wxSizerFlags().Align( wxALIGN_CENTER_VERTICAL ) );
+
+        // column 3
+        wxCheckBox* cb = new wxCheckBox( m_LayerScrolledWindow, aSpec.checkBoxId, wxEmptyString );
+        cb->SetToolTip( _( "Enable this for visibility" ) );
+        m_LayersFlexGridSizer->Insert( index+3, cb, flags );
     }
 
 
@@ -173,9 +247,47 @@ class LAYER_PANEL : public LAYER_PANEL_BASE
     {
         printf("OnRightDownLayers\n");
     }
+    void OnLeftDClickLayers( wxMouseEvent& event )
+    {
+        printf("OnLeftDblClickLayers\n");
+    }
+
+
+    /**
+     * Function getLayerComp
+     * returns the component within the m_LayersFlexGridSizer at aSizerNdx.
+     */
+    wxWindow* getLayerComp( int aSizerNdx )
+    {
+        return m_LayersFlexGridSizer->GetChildren()[aSizerNdx]->GetWindow();
+    }
 
 
 public:
+
+    /**
+     * Function GetLayerRowCount
+     * returns the number of rows in the layer tab.
+     */
+    int GetLayerRowCount()
+    {
+        int controlCount = m_LayersFlexGridSizer->GetChildren().GetCount();
+        return controlCount / LAYER_COLUMN_COUNT;
+    }
+
+
+    void SelectLayerRow( int aRow )
+    {
+        int newNdx = LAYER_COLUMN_COUNT * aRow;
+        int oldNdx = LAYER_COLUMN_COUNT * m_CurrentRow;
+
+        wxStaticBitmap* oldbm = (wxStaticBitmap*) getLayerComp( oldNdx );
+        wxStaticBitmap* newbm = (wxStaticBitmap*) getLayerComp( newNdx );
+
+        oldbm->SetBitmap( *m_BlankBitmap );
+        newbm->SetBitmap( *m_RightArrowBitmap );
+    }
+
 
     /** Constructor */
     LAYER_PANEL( wxWindow* parent, BOARD* aBoard ) :
@@ -183,10 +295,21 @@ public:
     {
         m_Board = aBoard;
 
-        insertLayerRow( 0, LAYER_SPEC( wxT("layer 1"), RED ) );
+        m_CurrentRow = 0;
 
+        m_RightArrowBitmap = new wxBitmap( rightarrow_xpm );
+        m_BlankBitmap = new wxBitmap( clear_xpm );     // translucent
+
+        m_BitmapSize = wxSize(m_BlankBitmap->GetWidth(), m_BlankBitmap->GetHeight());
+
+        insertLayerRow( 0, LAYER_SPEC( wxT("layer 1"), RED ) );
         insertLayerRow( 1, LAYER_SPEC( wxT("layer 2"), GREEN ) );
+        insertLayerRow( 2, LAYER_SPEC( wxT("layer_3_you"), BLUE ) );
+        insertLayerRow( 3, LAYER_SPEC( wxT("brown_layer"), BROWN ) );
+
+        SelectLayerRow( 1 );
     }
+
 
 };
 
