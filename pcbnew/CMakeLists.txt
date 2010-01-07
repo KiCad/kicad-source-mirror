@@ -232,5 +232,5 @@ add_executable(layer_widget_test EXCLUDE_FROM_ALL
     layer_panel_base.cpp
     layer_widget.cpp
     )
-target_link_libraries(layer_widget_test ${wxWidgets_LIBRARIES})
+target_link_libraries(layer_widget_test common ${wxWidgets_LIBRARIES})
 
