@@ -44,48 +44,47 @@
 //#include "rightarrow.xpm"
 
 
-
 /* XPM */
 static const char * clear_xpm[] = {
-"32 14 1 1",
+"28 14 1 1",
 " 	c None",
-"                                ",
-"                                ",
-"                                ",
-"                                ",
-"                                ",
-"                                ",
-"                                ",
-"                                ",
-"                                ",
-"                                ",
-"                                ",
-"                                ",
-"                                ",
-"                                "};
+"                            ",
+"                            ",
+"                            ",
+"                            ",
+"                            ",
+"                            ",
+"                            ",
+"                            ",
+"                            ",
+"                            ",
+"                            ",
+"                            ",
+"                            ",
+"                            "};
 
 /* XPM */
 static const char * rightarrow_xpm[] = {
-"32 14 5 1",
+"28 14 5 1",
 " 	c None",
 ".	c white",
 "X	c #8080ff",
 "o	c BLUE",
 "O	c gray56",
-"      .              ..         ",
-"                     .XX        ",
-"                     .XXX       ",
-"                     .XXXX      ",
-"  ....................XXXXX     ",
-"   .XXXXXXXXXXXXXXXXXXXXXXXX    ",
-"   .XXXXXXXXXXXXXXXXXXXXXXXXX   ",
-"   .oooooooooooooooooooooooooO  ",
-"   .ooooooooooooooooooooooooO   ",
-"     OOOOOOOOOOOOOOOOOoooooO    ",
-"                      ooooO     ",
-"                      oooO      ",
-"                      ooO       ",
-"                      oO        "};
+"    .              ..       ",
+"                   .XX      ",
+"                   .XXX     ",
+"                   .XXXX    ",
+"    ................XXXXX   ",
+"    XXXXXXXXXXXXXXXXXXXXXX  ",
+"    XXXXXXXXXXXXXXXXXXXXXXX ",
+"    oooooooooooooooooooooooO",
+"    ooooooooooooooooooooooO ",
+"     OOOOOOOOOOOOOOOoooooO  ",
+"                    ooooO   ",
+"                    oooO    ",
+"                    ooO     ",
+"                    oO      "};
 
 
 
@@ -95,15 +94,14 @@ static const char * rightarrow_xpm[] = {
  */
 struct LAYER_SPEC
 {
-    int         colorIndex;
-    int         checkBoxId;
-    int         layer;
     wxString    layerName;
+    int         layer;
+    int         colorIndex;
 
-
-    LAYER_SPEC( const wxString& aLayerName, int aColorIndex = 0 )
+    LAYER_SPEC( const wxString& aLayerName, int aLayer, int aColorIndex = 0 )
     {
         layerName  = aLayerName;
+        layer      = aLayer;
         colorIndex = aColorIndex;
     }
 };
@@ -124,32 +122,12 @@ class LAYER_PANEL : public LAYER_PANEL_BASE
     wxBitmap*       m_RightArrowBitmap;
     wxSize          m_BitmapSize;
 
-    wxStaticBitmap* m_Bitmaps[32];
+    wxStaticBitmap* m_Bitmaps[64];
 
     int             m_CurrentRow;
 
 
 #define LAYER_COLUMN_COUNT  4
-
-
-    class MYSTATICTEXT : public wxStaticText
-    {
-    public:
-        MYSTATICTEXT( LAYER_PANEL* aLayerPanel, wxWindowID id, const wxString &label,
-                const wxPoint &pos=wxDefaultPosition, const wxSize &size=wxDefaultSize,
-                long style=0, const wxString &name=wxStaticTextNameStr) :
-            wxStaticText( aLayerPanel->m_LayerScrolledWindow, id, label, pos, size, style, name )
-        {
-            Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_PANEL::OnLeftDownLayers ), NULL, aLayerPanel );
-            Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_PANEL::OnRightDownLayers ), NULL, aLayerPanel );
-        }
-
-        ~MYSTATICTEXT()
-        {
-            Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_PANEL::OnLeftDownLayers ), NULL, NULL );
-            Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_PANEL::OnRightDownLayers ), NULL, NULL );
-        }
-    };
 
 
     /**
@@ -172,7 +150,7 @@ class LAYER_PANEL : public LAYER_PANEL_BASE
      */
 
 
-    static wxBitmapButton* makeColorButton( int aColorIndex, int aID, wxWindow* aParent )
+    wxBitmapButton* makeColorButton( int aColorIndex, int aID )
     {
         const int BUTT_SIZE_X = 32;
         const int BUTT_SIZE_Y = 22;
@@ -193,12 +171,24 @@ class LAYER_PANEL : public LAYER_PANEL_BASE
 
         iconDC.DrawRectangle( 0, 0, BUTT_SIZE_X, BUTT_SIZE_Y );
 
-        wxBitmapButton* ret = new wxBitmapButton( aParent, aID, bitmap,
+        wxBitmapButton* ret = new wxBitmapButton( m_LayerScrolledWindow, aID, bitmap,
             wxDefaultPosition, wxSize(BUTT_SIZE_X, BUTT_SIZE_Y), wxBORDER_RAISED );
+
+        ret->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_PANEL::OnLeftDownLayers ), NULL, this );
+        ret->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_PANEL::OnRightDownLayers ), NULL, this );
+
+        /* cannot get this event without also the wxEVT_LEFT_DOWN firing first
+        ret->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( LAYER_PANEL::OnLeftDClickLayers ), NULL, this );
+        */
 
         return ret;
     }
 
+
+    /**
+     * Function insertLayerRow
+     * appends or inserts a new row in the layer portion of the widget.
+     */
     void insertLayerRow( int aRow, const LAYER_SPEC& aSpec )
     {
         wxASSERT( aRow >= 0 );
@@ -210,30 +200,25 @@ class LAYER_PANEL : public LAYER_PANEL_BASE
         flags.Align(wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
 
         // column 0
-#if 1
-        m_Bitmaps[aRow] = new wxStaticBitmap( m_LayerScrolledWindow, -1, *m_BlankBitmap,
+        m_Bitmaps[aRow] = new wxStaticBitmap( m_LayerScrolledWindow, aSpec.layer, *m_BlankBitmap,
                             wxDefaultPosition, m_BitmapSize );
-
+        m_Bitmaps[aRow]->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_PANEL::OnLeftDownLayers ), NULL, this );
         m_LayersFlexGridSizer->Insert( index+0, m_Bitmaps[aRow], wxSizerFlags().Align( wxALIGN_CENTER_VERTICAL ) );
-#else
-        m_LayersFlexGridSizer->Insert( index+0,
-                makeColorButton( aSpec.colorIndex, 0, m_LayerScrolledWindow ),
-                flags );
-#endif
 
         // column 1
-        wxBitmapButton* bb = makeColorButton( aSpec.colorIndex, 0, m_LayerScrolledWindow );
-        bb->SetToolTip( _("Double click to change layer color" ) );
-        m_LayersFlexGridSizer->Insert( index+1, bb, flags );
+        wxBitmapButton* bmb = makeColorButton( aSpec.colorIndex, aSpec.layer );
+        bmb->SetToolTip( _("Right click to change layer color" ) );
+        m_LayersFlexGridSizer->Insert( index+1, bmb, flags );
 
         // column 2
-        MYSTATICTEXT* st = new MYSTATICTEXT( this, -1, aSpec.layerName );
+        wxStaticText* st = new wxStaticText( m_LayerScrolledWindow, aSpec.layer, aSpec.layerName );
+        st->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_PANEL::OnLeftDownLayers ), NULL, this );
         st->SetToolTip( _( "Click here to select this layer" ) );
         m_LayersFlexGridSizer->Insert( index+2, st,
                 wxSizerFlags().Align( wxALIGN_CENTER_VERTICAL ) );
 
         // column 3
-        wxCheckBox* cb = new wxCheckBox( m_LayerScrolledWindow, aSpec.checkBoxId, wxEmptyString );
+        wxCheckBox* cb = new wxCheckBox( m_LayerScrolledWindow, aSpec.layer, wxEmptyString );
         cb->SetToolTip( _( "Enable this for visibility" ) );
         m_LayersFlexGridSizer->Insert( index+3, cb, flags );
     }
@@ -241,25 +226,89 @@ class LAYER_PANEL : public LAYER_PANEL_BASE
 
     void OnLeftDownLayers( wxMouseEvent& event )
     {
-        printf("OnLeftDownLayers\n");
+        wxObject* eventSource = event.GetEventObject();
+
+        // if mouse event is coming from the m_LayerScrolledWindow and not one
+        // of its children, we have to find the row manually based on y coord.
+        if( eventSource == (wxObject*) m_LayerScrolledWindow )
+        {
+            int y = event.GetY();
+
+            wxArrayInt heights = m_LayersFlexGridSizer->GetRowHeights();
+
+            int height = 0;
+
+            int rowCount = GetLayerRowCount();
+            int row;
+            for( row = 0;  row<rowCount;  ++row )
+            {
+                if( y < height + heights[row] )
+                    break;
+
+                height += heights[row];
+            }
+
+            if( row >= rowCount )
+                row = rowCount - 1;
+
+            SelectLayerRow( row );
+        }
+
+        // all nested controls on a given row will have the layer index as their ID
+        else
+        {
+            int layer = ((wxWindow*)eventSource)->GetId();
+            int row   = findLayerRow( layer );
+
+            SelectLayerRow( row );
+        }
     }
+
     void OnRightDownLayers( wxMouseEvent& event )
     {
         printf("OnRightDownLayers\n");
     }
+
+
+    /**
+     * Function OnLeftDClickLayers
+     * is called when a user double clicks on one of the color buttons.
     void OnLeftDClickLayers( wxMouseEvent& event )
     {
         printf("OnLeftDblClickLayers\n");
     }
+     */
 
 
     /**
      * Function getLayerComp
      * returns the component within the m_LayersFlexGridSizer at aSizerNdx.
+     *
+     * @param aSizerNdx is the 0 based index into all the wxWindows which have
+     *   been added to the m_LayersFlexGridSizer.
      */
     wxWindow* getLayerComp( int aSizerNdx )
     {
         return m_LayersFlexGridSizer->GetChildren()[aSizerNdx]->GetWindow();
+    }
+
+    /**
+     * Function findLayerRow
+     * returns the row index that \a aLayer resides in, or -1 if not found.
+     */
+    int findLayerRow( int aLayer )
+    {
+        int count = GetLayerRowCount();
+        for( int row=0;  row<count; ++row )
+        {
+            // column 0 in the layer scroll window has a wxStaticBitmap, get its ID.
+            wxStaticBitmap* bm = (wxStaticBitmap*) getLayerComp( row * LAYER_COLUMN_COUNT + 0 );
+
+            if( aLayer == bm->GetId() )
+                return row;
+        }
+
+        return -1;
     }
 
 
@@ -278,6 +327,8 @@ public:
 
     void SelectLayerRow( int aRow )
     {
+        wxASSERT( (unsigned) aRow < GetLayerRowCount() );
+
         int newNdx = LAYER_COLUMN_COUNT * aRow;
         int oldNdx = LAYER_COLUMN_COUNT * m_CurrentRow;
 
@@ -286,6 +337,8 @@ public:
 
         oldbm->SetBitmap( *m_BlankBitmap );
         newbm->SetBitmap( *m_RightArrowBitmap );
+
+        m_CurrentRow = aRow;
     }
 
 
@@ -297,15 +350,17 @@ public:
 
         m_CurrentRow = 0;
 
+        memset( m_Bitmaps, 0, sizeof(m_Bitmaps) );
+
         m_RightArrowBitmap = new wxBitmap( rightarrow_xpm );
         m_BlankBitmap = new wxBitmap( clear_xpm );     // translucent
 
         m_BitmapSize = wxSize(m_BlankBitmap->GetWidth(), m_BlankBitmap->GetHeight());
 
-        insertLayerRow( 0, LAYER_SPEC( wxT("layer 1"), RED ) );
-        insertLayerRow( 1, LAYER_SPEC( wxT("layer 2"), GREEN ) );
-        insertLayerRow( 2, LAYER_SPEC( wxT("layer_3_you"), BLUE ) );
-        insertLayerRow( 3, LAYER_SPEC( wxT("brown_layer"), BROWN ) );
+        insertLayerRow( 0, LAYER_SPEC( wxT("layer 1"), 0, RED ) );
+        insertLayerRow( 1, LAYER_SPEC( wxT("layer 2"), 1, GREEN ) );
+        insertLayerRow( 2, LAYER_SPEC( wxT("brown_layer"), 2, BROWN ) );
+        insertLayerRow( 3, LAYER_SPEC( wxT("layer_4_you"), 3, BLUE ) );
 
         SelectLayerRow( 1 );
     }

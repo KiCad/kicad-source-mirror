@@ -219,7 +219,7 @@
                                                 <property name="flexible_direction">wxHORIZONTAL</property>
                                                 <property name="growablecols"></property>
                                                 <property name="growablerows"></property>
-                                                <property name="hgap">3</property>
+                                                <property name="hgap">5</property>
                                                 <property name="minimum_size"></property>
                                                 <property name="name">m_LayersFlexGridSizer</property>
                                                 <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>

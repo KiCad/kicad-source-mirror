@@ -25,7 +25,7 @@ LAYER_PANEL_BASE::LAYER_PANEL_BASE( wxWindow* parent, wxWindowID id, const wxPoi
 	
 	m_LayerScrolledWindow = new wxScrolledWindow( m_LayerPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 	m_LayerScrolledWindow->SetScrollRate( 5, 5 );
-	m_LayersFlexGridSizer = new wxFlexGridSizer( 0, 4, 3, 3 );
+	m_LayersFlexGridSizer = new wxFlexGridSizer( 0, 4, 3, 5 );
 	m_LayersFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
 	m_LayersFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
