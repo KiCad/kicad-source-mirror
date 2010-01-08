@@ -43,7 +43,7 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
         break;
 
     case ID_CONFIG_SAVE:
-        SaveProjectFile( this );
+        SaveProjectFile( this, false );
         break;
 
     case ID_CONFIG_READ:
@@ -316,16 +316,18 @@ bool WinEDA_SchematicFrame::LoadProjectFile( const wxString& CfgFileName,
 /*
  * Save the Kicad project file (*.pro) settings specific to EESchema.
  */
-void WinEDA_SchematicFrame::SaveProjectFile( wxWindow* displayframe )
+void WinEDA_SchematicFrame::SaveProjectFile( wxWindow* displayframe, bool askoverwrite )
 {
     wxFileName fn;
 
     fn = g_RootSheet->m_AssociatedScreen->m_FileName  /*ConfigFileName*/;
     fn.SetExt( ProjectFileExtension );
 
+    int options = wxFD_SAVE;
+    if( askoverwrite )
+        options |= wxFD_OVERWRITE_PROMPT;
     wxFileDialog dlg( this, _( "Save Project Settings" ), wxGetCwd(),
-                      fn.GetFullName(), ProjectFileWildcard,
-                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      fn.GetFullName(), ProjectFileWildcard, options );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

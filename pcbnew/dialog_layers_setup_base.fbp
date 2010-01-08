@@ -245,7 +245,7 @@
                                         <property name="bg">wxSYS_COLOUR_ACTIVECAPTION</property>
                                         <property name="context_help"></property>
                                         <property name="enabled">1</property>
-                                        <property name="fg"></property>
+                                        <property name="fg">wxSYS_COLOUR_CAPTIONTEXT</property>
                                         <property name="font"></property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>

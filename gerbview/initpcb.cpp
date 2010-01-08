@@ -19,14 +19,10 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
     if( GetBoard() == NULL )
         return FALSE;
 
-    if( query )
+    if( query && GetScreen()->IsModify() )
     {
-        if( GetBoard()->m_Drawings || GetBoard()->m_Track
-            || GetBoard()->m_Zone )
-        {
-            if( !IsOK( this, _( "Current data will be lost?" ) ) )
-                return FALSE;
-        }
+        if( !IsOK( this, _( "Current data will be lost?" ) ) )
+            return FALSE;
     }
 
     GetBoard()->m_Drawings.DeleteAll();

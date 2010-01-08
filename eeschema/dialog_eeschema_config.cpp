@@ -166,7 +166,7 @@ void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
         WinEDA_LibeditFrame::EnsureActiveLibExists();
     }
 
-    m_Parent->SaveProjectFile( this );
+    m_Parent->SaveProjectFile( this, false );
     EndModal( wxID_OK );
 }
 

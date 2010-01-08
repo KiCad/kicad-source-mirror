@@ -115,7 +115,6 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
     char*    text;
     int      layer;         /* current layer used in gerbview */
     GERBER*  gerber;
-    wxPoint  pos;
     int      error = 0;
 
     layer = GetScreen()->m_Active_Layer;
@@ -201,7 +200,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
 
             case 'X':
             case 'Y':                   /* Move or draw command */
-                pos = gerber->ReadXYCoord( text );
+                 gerber->m_CurrentPos = gerber->ReadXYCoord( text );
                 if( *text == '*' )      // command like X12550Y19250*
                 {
                     gerber->Execute_DCODE_Command( this, text,
@@ -211,7 +210,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
 
             case 'I':
             case 'J':       /* Auxiliary Move command */
-                pos = gerber->ReadIJCoord( text );
+                 gerber->m_IJPos = gerber->ReadIJCoord( text );
                 break;
 
             case '%':

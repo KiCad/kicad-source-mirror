@@ -89,7 +89,7 @@ public:
     void GeneralControle( wxDC* DC, wxPoint MousePositionInPixels );
 
     PARAM_CFG_ARRAY& GetProjectFileParameters( void );
-    void SaveProjectFile( wxWindow* displayframe );
+    void SaveProjectFile( wxWindow* displayframe, bool askoverwrite = true );
     bool LoadProjectFile( const wxString& CfgFileName, bool ForceRereadConfig );
 
     PARAM_CFG_ARRAY& GetConfigurationSettings( void );

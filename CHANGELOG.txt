@@ -3,6 +3,15 @@ KiCad ChangeLog 2009
 
 Please add newer entries at the top, list the date and your name with
 email address.
+
+2010-Jan-08 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++Gerbview
+    Added support of arcs in polygons outlines.
+    Needed to show copper areas in some gerber files
+    Not fully tested but works better than without this support...
+
+
 2010-Jan-03 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++pcbnew

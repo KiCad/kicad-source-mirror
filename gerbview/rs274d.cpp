@@ -9,7 +9,10 @@
 #include "macros.h"
 #include "gerbview.h"
 #include "pcbplot.h"
+#include "trigo.h"
 #include "protos.h"
+
+#include <math.h>
 
 #define IsNumber( x ) ( ( ( (x) >= '0' ) && ( (x) <='9' ) )   \
                        || ( (x) == '-' ) || ( (x) == '+' )  || ( (x) == '.' ) )
@@ -373,12 +376,142 @@ static void fillArcTRACK(  TRACK* aTrack, int Dcode_index, int aLayer,
 }
 
 
+/**
+ * Function fillArcPOLY
+ * creates an arc G code when found in poly outlines.
+ * <p>
+ * if multiquadrant == true : arc can be 0 to 360 degrees
+ *   and \a rel_center is the center coordinate relative to start point.
+ * <p>
+ * if multiquadrant == false arc can be only 0 to 90 deg,
+ *     and only in the same quadrant :
+ * <ul>
+ * <li> absolute angle 0 to 90 (quadrant 1) or
+ * <li> absolute angle 90 to 180 (quadrant 2) or
+ * <li> absolute angle 180 to 270 (quadrant 3) or
+ * <li> absolute angle 270 to 0 (quadrant 4)
+ * </ul><p>
+ * @param aPcb is the board.
+ * @param aLayer is the layer index to set into the TRACK
+ * @param aStart is the starting point
+ * @param aEnd is the ending point
+ * @param rel_center is the center coordinate relative to start point,
+ *   given in ABSOLUTE VALUE and the sign of values x et y de rel_center
+ *   must be calculated from the previously given constraint: arc only in the
+ * same quadrant.
+ * @param aDiameter The diameter of the round flash
+ * @param aWidth is the pen width.
+ * @param isDark True if flash is positive and should use a drawing
+ *   color other than the background color, else use the background color
+ *   when drawing so that an erasure happens.
+ * @return a pointer to the first segment created
+ */
+static SEGZONE * fillArcPOLY(  BOARD * aPcb, int aLayer,
+                           const wxPoint& aStart, const wxPoint& aEnd,
+                           const wxPoint& rel_center,
+                           bool clockwise, bool multiquadrant, bool isDark )
+{
+    /* in order to calculate arc parameters, we use fillArcTRACK
+     * so we muse create a dummy track and use its geometric parmeters
+     */
+    static TRACK dummyTrack(NULL);
+    SEGZONE * firstSegment = NULL;
+
+    fillArcTRACK(  &dummyTrack, 0, aLayer,
+                           aStart, aEnd,
+                           rel_center, 0,
+                           clockwise, multiquadrant, isDark );
+
+    // dummyTrack has right geometric parameters, and has its Y coordinates negated (to match the pcbnew Y axis).
+    // Approximate arc by 36 segments per 360 degree
+    const int increment_angle = 360/36;
+
+    wxPoint center;
+    center.x = dummyTrack.m_Param;
+    center.y = dummyTrack.GetSubNet();
+
+    // Calculate relative coordinates;
+    wxPoint start = dummyTrack.m_Start - center;
+    wxPoint end = dummyTrack.m_End - center;
+
+    /* Calculate angle arc
+     * angle is here clockwise because Y axis is reversed
+     */
+    double start_angle =
+        atan2( (double)start.y, (double)start.x );
+    start_angle = 180 * start_angle / M_PI;
+    double end_angle =
+        atan2( (double)end.y , (double)end.x );
+    end_angle = 180 * end_angle / M_PI;
+    double angle = start_angle - end_angle;
+
+//    D( printf( " >>>> st %d,%d angle %f, end %d,%d angle %f delta %f\n",
+//        start.x, start.y, start_angle, end.x, end.y, end_angle, angle ) );
+    if( !clockwise )
+    {
+        EXCHG(start, end);
+        D( printf( " >>>> reverse arc\n") );
+    }
+
+    // Normalize angle
+    while ( angle > 360.0 )
+        angle -= 360.0;
+    while ( angle < 0.0 )
+        angle += 360.0;
+
+    int count = (int) (angle / increment_angle );
+    if( count <= 0 )
+        count = 1;
+//    D( printf( " >>>> angle %f, cnt %d sens %d\n", angle, count, clockwise ) );
+
+    // calculate segments
+    wxPoint start_arc = start;
+    for( int ii = 1; ii <= count; ii++ )
+    {
+        wxPoint end_arc = start;
+        int rot = 10 * ii * increment_angle;    // rot is in 0.1 deg
+        if( ii < count )
+        {
+            if( clockwise )
+                RotatePoint(&end_arc, rot);
+            else
+                RotatePoint(&end_arc, -rot);
+        }
+        else
+            end_arc = end;
+        SEGZONE * edge_poly = new SEGZONE( aPcb );
+        if( firstSegment == NULL )
+            firstSegment = edge_poly;
+        aPcb->m_Zone.Append( edge_poly );
+//        D( printf( " >> Add arc %d rot %d, edge poly item %d,%d to %d,%d\n",
+//                ii, rot, start_arc.x, start_arc.y,end_arc.x, end_arc.y ); )
+
+        edge_poly->SetLayer( aLayer );
+        edge_poly->m_Width = 1;
+
+        edge_poly->m_Start = start_arc + center;
+        edge_poly->m_End = end_arc + center;
+
+        // the first track of each polygon has a netcode of zero,
+        // otherwise one.
+        // set netcode to 1. the calling function is responsible
+        // to set the first point to 0
+        edge_poly->SetNet( 1 );
+        if( !isDark )
+        {
+            edge_poly->m_Flags |= DRAW_ERASED;
+        }
+        start_arc = end_arc;
+    }
+
+    return firstSegment;
+}
+
+
+
+
 /* These routines read the text string point from Text.
  * After use, advanced Text the beginning of the sequence unread
- */
-
-
-/* Returns the current coord pointed to by Text (XnnnnYmmmm)
  */
 wxPoint GERBER::ReadXYCoord( char*& Text )
 {
@@ -748,12 +881,12 @@ bool GERBER::Execute_G_Command( char*& text, int G_commande )
         break;
 
     case GC_SPECIFY_ABSOLUES_COORD:
-        m_Relative = false;         // false = absolute Coord, RUE = relative
+        m_Relative = false;         // false = absolute Coord, true = relative
                                     // Coord
         break;
 
     case GC_SPECIFY_RELATIVEES_COORD:
-        m_Relative = true;          // false = absolute Coord, RUE = relative
+        m_Relative = true;          // false = absolute Coord, true = relative
                                     // Coord
         break;
 
@@ -888,35 +1021,55 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame,
 
     if( m_PolygonFillMode )    // Enter a polygon description:
     {
+        SEGZONE* edge_poly;
         switch( D_commande )
         {
         case 1:     // code D01 Draw line, exposure ON
             m_Exposure = true;
 
-            SEGZONE* edge_poly;
-            edge_poly = new SEGZONE( pcb );
-            pcb->m_Zone.Append( edge_poly );
-            D( printf( "R:%p\n", edge_poly ); )
-
-            edge_poly->SetLayer( activeLayer );
-            edge_poly->m_Width = 1;
-
-            edge_poly->m_Start = m_PreviousPos;
-            NEGATE( edge_poly->m_Start.y );
-
-            edge_poly->m_End = m_CurrentPos;
-            NEGATE( edge_poly->m_End.y );
-
-            edge_poly->SetNet( m_PolygonFillModeState );
-
-            // the first track of each polygon has a netcode of zero,
-            // otherwise one.  Set the erasure flag in that special track,
-            // if a negative polygon.
-            if( !m_PolygonFillModeState )
+            switch( m_Iterpolation )
             {
-                if( m_LayerNegative ^ m_ImageNegative )
-                    edge_poly->m_Flags |= DRAW_ERASED;
-                D( printf( "\nm_Flags=0x%08X\n", edge_poly->m_Flags ); )
+            case GERB_INTERPOL_ARC_NEG:
+            case GERB_INTERPOL_ARC_POS:
+                D( printf( "Add arc poly %d,%d to %d,%d fill %d interpol %d 360_enb %d\n",
+                        m_PreviousPos.x, m_PreviousPos.y, m_CurrentPos.x,
+                        m_CurrentPos.y, m_PolygonFillModeState, m_Iterpolation, m_360Arc_enbl ); )
+                edge_poly = fillArcPOLY( pcb, activeLayer, m_PreviousPos,
+                              m_CurrentPos, m_IJPos,
+                              ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ?
+                              false : true, m_360Arc_enbl,
+                              !(m_LayerNegative ^ m_ImageNegative) );
+                edge_poly->SetNet( m_PolygonFillModeState );
+                break;
+
+            default:
+                edge_poly = new SEGZONE( pcb );
+                pcb->m_Zone.Append( edge_poly );
+                D( printf( "Add poly edge %d,%d to %d,%d fill %d\n",
+                        m_PreviousPos.x, m_PreviousPos.y,
+                        m_CurrentPos.x, m_CurrentPos.y, m_Iterpolation ); )
+
+                edge_poly->SetLayer( activeLayer );
+                edge_poly->m_Width = 1;
+
+                edge_poly->m_Start = m_PreviousPos;
+                NEGATE( edge_poly->m_Start.y );
+
+                edge_poly->m_End = m_CurrentPos;
+                NEGATE( edge_poly->m_End.y );
+
+                edge_poly->SetNet( m_PolygonFillModeState );
+
+                // the first track of each polygon has a netcode of zero,
+                // otherwise one.  Set the erasure flag in that special track,
+                // if a negative polygon.
+                if( !m_PolygonFillModeState )
+                {
+                    if( m_LayerNegative ^ m_ImageNegative )
+                        edge_poly->m_Flags |= DRAW_ERASED;
+                    D( printf( "\nm_Flags=0x%08X\n", edge_poly->m_Flags ); )
+                }
+                break;
             }
 
             m_PreviousPos = m_CurrentPos;
