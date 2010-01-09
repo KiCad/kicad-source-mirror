@@ -10,22 +10,29 @@
 #include "pcbnew.h"
 #include "class_board_design_settings.h"
 #include "pcbplot.h"
+#include "printout_controler.h"
 #include "protos.h"
 
 
-static void Print_Module( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module,
-                          int draw_mode, int masklayer );
+static void Print_Module( WinEDA_DrawPanel* aPanel, wxDC* aDC, MODULE* aModule,
+                          int aDraw_mode, int aMasklayer,
+                          PRINT_PARAMETERS::DrillShapeOptT aDrillShapeOpt );
 
 
 /** Function PrintPage
  * Used to print the board (on printer, or when creating SVF files).
- *  Print the board, but only layers allowed by aPrintMaskLayer
- *  ( printmasklayer is a 32 bits mask: bit n = 1 -> layer n is printed)
+ * Print the board, but only layers allowed by aPrintMaskLayer
+ * @param aDC = the print device context
+ * @param aPrint_Sheet_Ref = true to print frame references
+ * @param aPrint_Sheet_Ref = a 32 bits mask: bit n = 1 -> layer n is printed
+ * @param aPrintMirrorMode = true to plot mirrored
+ * @param aData = a pointer to an optional data (NULL if not used)
  */
 void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
                                   bool  aPrint_Sheet_Ref,
                                   int   aPrintMaskLayer,
-                                  bool  aPrintMirrorMode )
+                                  bool  aPrintMirrorMode,
+                                  void * aData)
 {
     MODULE* Module;
     int drawmode = GR_COPY;
@@ -33,6 +40,11 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
     TRACK*               pt_piste;
     WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) m_Parent;
     BOARD*               Pcb   = frame->GetBoard();
+    PRINT_PARAMETERS * printParameters = (PRINT_PARAMETERS*) aData; // can be null
+
+    PRINT_PARAMETERS::DrillShapeOptT drillShapeOpt = PRINT_PARAMETERS::FULL_DRILL_SHAPE;
+    if( printParameters )
+        drillShapeOpt = printParameters->m_DrillShapeOpt;
 
     save_opt = DisplayOpt;
     if( aPrintMaskLayer & ALL_CU_LAYERS )
@@ -101,14 +113,11 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
             int rayon = pt_piste->m_Width >> 1;
             int color = g_DesignSettings.m_ViaColor[pt_piste->m_Shape];
             GRSetDrawMode( aDC, drawmode );
-            GRFilledCircle( &m_ClipBox,
-                            aDC,
+            GRFilledCircle( &m_ClipBox, aDC,
                             pt_piste->m_Start.x,
                             pt_piste->m_Start.y,
                             rayon,
-                            0,
-                            color,
-                            color );
+                            0, color, color );
         }
         else
             pt_piste->Draw( this, aDC, drawmode );
@@ -138,35 +147,37 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
     Module = (MODULE*) Pcb->m_Modules;
     for( ; Module != NULL; Module = Module->Next() )
     {
-        Print_Module( this, aDC, Module, drawmode, aPrintMaskLayer );
+        Print_Module( this, aDC, Module, drawmode, aPrintMaskLayer, drillShapeOpt );
     }
 
     /* Print via holes in bg color: Not sure it is good for buried or blind
      * vias */
-    pt_piste = Pcb->m_Track;
-    int  color = g_DrawBgColor;
-    bool blackpenstate = GetGRForceBlackPenState();
-    GRForceBlackPen( false );
-    GRSetDrawMode( aDC, GR_COPY );
-    for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
+    if( drillShapeOpt != PRINT_PARAMETERS::NO_DRILL_SHAPE )
     {
-        if( ( aPrintMaskLayer & pt_piste->ReturnMaskLayer() ) == 0 )
-            continue;
-        if( pt_piste->Type() == TYPE_VIA ) /* VIA encountered. */
+        pt_piste = Pcb->m_Track;
+        int  color = g_DrawBgColor;
+        bool blackpenstate = GetGRForceBlackPenState();
+        GRForceBlackPen( false );
+        GRSetDrawMode( aDC, GR_COPY );
+        for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
         {
-            int rayon = pt_piste->GetDrillValue() / 2;
-            GRFilledCircle( &m_ClipBox,
-                            aDC,
-                            pt_piste->m_Start.x,
-                            pt_piste->m_Start.y,
-                            rayon,
-                            0,
-                            color,
-                            color );
+            if( ( aPrintMaskLayer & pt_piste->ReturnMaskLayer() ) == 0 )
+                continue;
+            if( pt_piste->Type() == TYPE_VIA ) /* VIA encountered. */
+            {
+                int diameter;
+                if( drillShapeOpt == PRINT_PARAMETERS::SMALL_DRILL_SHAPE )
+                    diameter = min( SMALL_DRILL, pt_piste->GetDrillValue());
+                else
+                    diameter = pt_piste->GetDrillValue();
+                GRFilledCircle( &m_ClipBox, aDC,
+                                pt_piste->m_Start.x, pt_piste->m_Start.y,
+                                diameter/2,
+                                0, color, color );
+            }
         }
+        GRForceBlackPen( blackpenstate );
     }
-
-    GRForceBlackPen( blackpenstate );
 
     if( aPrint_Sheet_Ref )
         m_Parent->TraceWorkSheet( aDC, GetScreen(), 10 );
@@ -181,8 +192,9 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
 }
 
 
-static void Print_Module( WinEDA_DrawPanel* panel, wxDC* DC,
-                          MODULE* Module, int draw_mode, int masklayer )
+static void Print_Module( WinEDA_DrawPanel* aPanel, wxDC* aDC, MODULE* aModule,
+                          int aDraw_mode, int aMasklayer,
+                          PRINT_PARAMETERS::DrillShapeOptT aDrillShapeOpt )
 {
     D_PAD*          pt_pad;
     EDA_BaseStruct* PtStruct;
@@ -190,42 +202,60 @@ static void Print_Module( WinEDA_DrawPanel* panel, wxDC* DC,
     int             mlayer;
 
     /* Print pads */
-    pt_pad = Module->m_Pads;
+    pt_pad = aModule->m_Pads;
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
-        if( (pt_pad->m_Masque_Layer & masklayer ) == 0 )
+        if( (pt_pad->m_Masque_Layer & aMasklayer ) == 0 )
             continue;
 
         // Usually we draw pads in sketch mode on non copper layers:
-        if( (masklayer & ALL_CU_LAYERS) == 0 )
+        if( (aMasklayer & ALL_CU_LAYERS) == 0 )
         {
             int tmp_fill =
-                ( (WinEDA_BasePcbFrame*) panel->GetParent() )->m_DisplayPadFill;
+                ( (WinEDA_BasePcbFrame*) aPanel->GetParent() )->m_DisplayPadFill;
 
             // Switch in sketch mode
-            ( (WinEDA_BasePcbFrame*) panel->GetParent() )->m_DisplayPadFill = 0;
-            pt_pad->Draw( panel, DC, draw_mode );
-            ( (WinEDA_BasePcbFrame*) panel->GetParent() )->m_DisplayPadFill =
+            ( (WinEDA_BasePcbFrame*) aPanel->GetParent() )->m_DisplayPadFill = 0;
+            pt_pad->Draw( aPanel, aDC, aDraw_mode );
+            ( (WinEDA_BasePcbFrame*) aPanel->GetParent() )->m_DisplayPadFill =
                 tmp_fill;
         }
         else    // on copper layer, draw pads according to current options
-            pt_pad->Draw( panel, DC, draw_mode );
+        {
+            // Manage hole according to the print drill option
+            wxSize drill_tmp = pt_pad->m_Drill;
+            switch ( aDrillShapeOpt )
+            {
+                case PRINT_PARAMETERS::NO_DRILL_SHAPE:
+                    pt_pad->m_Drill = wxSize(0,0);
+                    break;
+                case PRINT_PARAMETERS::SMALL_DRILL_SHAPE:
+                    pt_pad->m_Drill.x = MIN(SMALL_DRILL,pt_pad->m_Drill.x);
+                    pt_pad->m_Drill.y = MIN(SMALL_DRILL,pt_pad->m_Drill.y);
+                    break;
+                case PRINT_PARAMETERS::FULL_DRILL_SHAPE:
+                    // Do nothing
+                    break;
+            }
+            pt_pad->Draw( aPanel, aDC, aDraw_mode );
+            pt_pad->m_Drill = drill_tmp;
+        }
     }
 
     /* Print footprint graphic shapes */
-    PtStruct = Module->m_Drawings;
-    mlayer   = g_TabOneLayerMask[Module->GetLayer()];
-    if( Module->GetLayer() == LAYER_N_BACK )
+    PtStruct = aModule->m_Drawings;
+    mlayer   = g_TabOneLayerMask[aModule->GetLayer()];
+    if( aModule->GetLayer() == LAYER_N_BACK )
         mlayer = SILKSCREEN_LAYER_BACK;
-    else if( Module->GetLayer() == LAYER_N_FRONT )
+    else if( aModule->GetLayer() == LAYER_N_FRONT )
         mlayer = SILKSCREEN_LAYER_FRONT;
 
-    if( mlayer & masklayer )
+    if( mlayer & aMasklayer )
     {
-        if( !Module->m_Reference->m_NoShow )
-            Module->m_Reference->Draw( panel, DC, draw_mode );
-        if( !Module->m_Value->m_NoShow )
-            Module->m_Value->Draw( panel, DC, draw_mode );
+        if( !aModule->m_Reference->m_NoShow )
+            aModule->m_Reference->Draw( aPanel, aDC, aDraw_mode );
+        if( !aModule->m_Value->m_NoShow )
+            aModule->m_Value->Draw( aPanel, aDC, aDraw_mode );
     }
 
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
@@ -233,19 +263,19 @@ static void Print_Module( WinEDA_DrawPanel* panel, wxDC* DC,
         switch( PtStruct->Type() )
         {
         case TYPE_TEXTE_MODULE:
-            if( (mlayer & masklayer ) == 0 )
+            if( (mlayer & aMasklayer ) == 0 )
                 break;
 
             TextMod = (TEXTE_MODULE*) PtStruct;
-            TextMod->Draw( panel, DC, draw_mode );
+            TextMod->Draw( aPanel, aDC, aDraw_mode );
             break;
 
         case TYPE_EDGE_MODULE:
         {
             EDGE_MODULE* edge = (EDGE_MODULE*) PtStruct;
-            if( ( g_TabOneLayerMask[edge->GetLayer()] & masklayer ) == 0 )
+            if( ( g_TabOneLayerMask[edge->GetLayer()] & aMasklayer ) == 0 )
                 break;
-            edge->Draw( panel, DC, draw_mode );
+            edge->Draw( aPanel, aDC, aDraw_mode );
             break;
         }
 

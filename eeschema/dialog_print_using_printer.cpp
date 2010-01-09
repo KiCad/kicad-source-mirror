@@ -432,7 +432,7 @@ void EDA_Printout::DrawPage()
     screen->m_IsPrinting = true;
     int bg_color = g_DrawBgColor;
 
-    panel->PrintPage( dc, m_Print_Sheet_Ref, 0xFFFFFFFF, false );
+    panel->PrintPage( dc, m_Print_Sheet_Ref, 0xFFFFFFFF, false, NULL );
 
     g_DrawBgColor    = bg_color;
     screen->m_IsPrinting = false;

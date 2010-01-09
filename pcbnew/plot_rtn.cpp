@@ -1003,7 +1003,6 @@ void WinEDA_BasePcbFrame::PlotDrillMark( PLOTTER*    aPlotter,
                                          GRTraceMode aTraceMode,
                                          bool        aSmallDrillShape )
 {
-    const int SMALL_DRILL = 150;
     wxPoint   pos;
     wxSize    diam;
     MODULE*   Module;

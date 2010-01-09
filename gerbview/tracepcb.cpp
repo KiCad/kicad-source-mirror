@@ -25,11 +25,17 @@ static void Draw_Track_Buffer( WinEDA_DrawPanel* panel,
 static void Affiche_DCodes_Pistes( WinEDA_DrawPanel* panel, wxDC* DC,
                             BOARD* Pcb, int drawmode );
 
-/************************************************************************************************************/
-void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmasklayer, bool aPrintMirrorMode )
-/*************************************************************************************************************/
-/* Draw gerbview layers, for printing
-*/
+/** Function PrintPage
+ * Used to print the board (on printer, or when creating SVF files).
+ * Print the board, but only layers allowed by aPrintMaskLayer
+ * @param aDC = the print device context
+ * @param aPrint_Sheet_Ref = true to print frame references
+ * @param aPrint_Sheet_Ref = a 32 bits mask: bit n = 1 -> layer n is printed
+ * @param aPrintMirrorMode = true to plot mirrored
+ * @param aData = a pointer to an optional data (not used here: can be NULL)
+ */
+void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintmasklayer,
+                                bool aPrintMirrorMode, void * aData )
 {
     DISPLAY_OPTIONS save_opt;
     int DisplayPolygonsModeImg;
@@ -46,10 +52,10 @@ void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref, int printmaskl
 
     m_PrintIsMirrored = aPrintMirrorMode;
 
-    ( (WinEDA_GerberFrame*) m_Parent )->Trace_Gerber( DC, GR_COPY, printmasklayer );
+    ( (WinEDA_GerberFrame*) m_Parent )->Trace_Gerber( aDC, GR_COPY, aPrintmasklayer );
 
-    if( Print_Sheet_Ref )
-        m_Parent->TraceWorkSheet( DC, GetScreen(), 0 );
+    if( aPrint_Sheet_Ref )
+        m_Parent->TraceWorkSheet( aDC, GetScreen(), 0 );
 
     m_PrintIsMirrored = false;
 
@@ -178,7 +184,7 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
 
     // Draw tracks and flashes down here.  This will probably not be a final solution to drawing order issues
     Draw_Track_Buffer( DrawPanel, DC, GetBoard(), draw_mode, printmasklayer );
-    
+
     SetPenMinWidth( tmp );
 
     if( DisplayOpt.DisplayPadNum )

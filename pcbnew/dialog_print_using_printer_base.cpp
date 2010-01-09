@@ -46,7 +46,7 @@ DIALOG_PRINT_USING_PRINTER_base::DIALOG_PRINT_USING_PRINTER_base( wxWindow* pare
 	wxString m_ScaleOptionChoices[] = { _("fit in page"), _("Scale 0.5"), _("Scale 0.7"), _("Approx. Scale 1"), _("Accurate Scale 1"), _("Scale 1.4"), _("Scale 2"), _("Scale 3"), _("Scale 4") };
 	int m_ScaleOptionNChoices = sizeof( m_ScaleOptionChoices ) / sizeof( wxString );
 	m_ScaleOption = new wxRadioBox( this, wxID_ANY, _("Approx. Scale:"), wxDefaultPosition, wxDefaultSize, m_ScaleOptionNChoices, m_ScaleOptionChoices, 1, wxRA_SPECIFY_COLS );
-	m_ScaleOption->SetSelection( 3 );
+	m_ScaleOption->SetSelection( 4 );
 	bmiddleLeftSizer->Add( m_ScaleOption, 0, wxALL, 5 );
 	
 	m_FineAdjustXscaleTitle = new wxStaticText( this, wxID_ANY, _("X Scale Adjust"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -89,13 +89,19 @@ DIALOG_PRINT_USING_PRINTER_base::DIALOG_PRINT_USING_PRINTER_base( wxWindow* pare
 	
 	m_Print_Sheet_Ref->SetToolTip( _("Print (or not) the Frame references.") );
 	
-	sbOptionsSizer->Add( m_Print_Sheet_Ref, 0, wxALL, 5 );
+	sbOptionsSizer->Add( m_Print_Sheet_Ref, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_Print_Mirror = new wxCheckBox( this, wxID_ANY, _("Mirror"), wxDefaultPosition, wxDefaultSize, 0 );
 	
 	sbOptionsSizer->Add( m_Print_Mirror, 0, wxALL, 5 );
 	
 	bmiddleRightSizer->Add( sbOptionsSizer, 0, wxEXPAND|wxALL, 5 );
+	
+	wxString m_Drill_Shape_OptChoices[] = { _("No drill mark"), _("Small mark"), _("Real drill") };
+	int m_Drill_Shape_OptNChoices = sizeof( m_Drill_Shape_OptChoices ) / sizeof( wxString );
+	m_Drill_Shape_Opt = new wxRadioBox( this, wxID_ANY, _("Pads Drill Opt"), wxDefaultPosition, wxDefaultSize, m_Drill_Shape_OptNChoices, m_Drill_Shape_OptChoices, 1, wxRA_SPECIFY_COLS );
+	m_Drill_Shape_Opt->SetSelection( 1 );
+	bmiddleRightSizer->Add( m_Drill_Shape_Opt, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_ModeColorOptionChoices[] = { _("Color"), _("Black and white") };
 	int m_ModeColorOptionNChoices = sizeof( m_ModeColorOptionChoices ) / sizeof( wxString );
@@ -105,30 +111,36 @@ DIALOG_PRINT_USING_PRINTER_base::DIALOG_PRINT_USING_PRINTER_base( wxWindow* pare
 	
 	bmiddleRightSizer->Add( m_ModeColorOption, 0, wxALL|wxEXPAND, 5 );
 	
-	wxString m_PagesOptionChoices[] = { _("1 Page per Layer"), _("Single page") };
-	int m_PagesOptionNChoices = sizeof( m_PagesOptionChoices ) / sizeof( wxString );
-	m_PagesOption = new wxRadioBox( this, wxID_PAGE_MODE, _("Page Print"), wxDefaultPosition, wxDefaultSize, m_PagesOptionNChoices, m_PagesOptionChoices, 1, wxRA_SPECIFY_COLS );
-	m_PagesOption->SetSelection( 0 );
-	bmiddleRightSizer->Add( m_PagesOption, 0, wxALL|wxEXPAND, 5 );
-	
 	bMainSizer->Add( bmiddleRightSizer, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bbuttonsSizer;
 	bbuttonsSizer = new wxBoxSizer( wxVERTICAL );
 	
+	wxString m_PagesOptionChoices[] = { _("1 Page per Layer"), _("Single page") };
+	int m_PagesOptionNChoices = sizeof( m_PagesOptionChoices ) / sizeof( wxString );
+	m_PagesOption = new wxRadioBox( this, wxID_PAGE_MODE, _("Page Print"), wxDefaultPosition, wxDefaultSize, m_PagesOptionNChoices, m_PagesOptionChoices, 1, wxRA_SPECIFY_COLS );
+	m_PagesOption->SetSelection( 0 );
+	bbuttonsSizer->Add( m_PagesOption, 0, wxALL|wxEXPAND, 5 );
+	
+	
+	bbuttonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	
 	m_buttonOption = new wxButton( this, wxID_PRINT_OPTIONS, _("Page Options"), wxDefaultPosition, wxDefaultSize, 0 );
-	bbuttonsSizer->Add( m_buttonOption, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	bbuttonsSizer->Add( m_buttonOption, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_buttonPreview = new wxButton( this, wxID_PREVIEW, _("Preview"), wxDefaultPosition, wxDefaultSize, 0 );
-	bbuttonsSizer->Add( m_buttonPreview, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	bbuttonsSizer->Add( m_buttonPreview, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_buttonPrint = new wxButton( this, wxID_PRINT_ALL, _("Print"), wxDefaultPosition, wxDefaultSize, 0 );
-	bbuttonsSizer->Add( m_buttonPrint, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	bbuttonsSizer->Add( m_buttonPrint, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_buttonQuit = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
-	bbuttonsSizer->Add( m_buttonQuit, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	bbuttonsSizer->Add( m_buttonQuit, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
-	bMainSizer->Add( bbuttonsSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	
+	bbuttonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	bMainSizer->Add( bbuttonsSizer, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();

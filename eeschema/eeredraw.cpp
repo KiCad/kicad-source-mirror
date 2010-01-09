@@ -104,20 +104,22 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
  * PrintPage
  * used to print a page.
  * Print the page pointed by ActiveScreen, set by the calling print function
- * @param DC = wxDC given by the calling print function
- * @param Print_Sheet_Ref = true to print page references
- * @param PrintMask = not used here
+ * @param aDC = wxDC given by the calling print function
+ * @param aPrint_Sheet_Ref = true to print page references
+ * @param aPrintMask = not used here
  * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
+ * @param aData = a pointer on an auxiliary data (not used here)
  */
-void WinEDA_DrawPanel::PrintPage( wxDC* DC, bool Print_Sheet_Ref,
-                                  int PrintMask, bool aPrintMirrorMode )
+void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
+                                  int aPrintMask, bool aPrintMirrorMode,
+                                    void * aData)
 {
     wxBeginBusyCursor();
 
-    RedrawStructList( this, DC, ActiveScreen->EEDrawList, GR_COPY );
+    RedrawStructList( this, aDC, ActiveScreen->EEDrawList, GR_COPY );
 
-    if( Print_Sheet_Ref )
-        m_Parent->TraceWorkSheet( DC, ActiveScreen, g_DrawDefaultLineThickness );
+    if( aPrint_Sheet_Ref )
+        m_Parent->TraceWorkSheet( aDC, ActiveScreen, g_DrawDefaultLineThickness );
 
     wxEndBusyCursor();
 }

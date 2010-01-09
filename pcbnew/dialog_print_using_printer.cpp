@@ -186,6 +186,9 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
         m_Config->Read( OPTKEY_PRINT_SCALE, &scale_idx );
         m_Config->Read( OPTKEY_PRINT_PAGE_FRAME, &s_Parameters.m_Print_Sheet_Ref, 1);
         m_Config->Read( OPTKEY_PRINT_MONOCHROME_MODE, &s_Parameters.m_Print_Black_and_White, 1);
+        int tmp;
+        m_Config->Read( OPTKEY_PRINT_PADS_DRILL,  &tmp, PRINT_PARAMETERS::SMALL_DRILL_SHAPE );
+        s_Parameters.m_DrillShapeOpt = (PRINT_PARAMETERS::DrillShapeOptT) tmp;
 
         // Test for a reasonnable scale value. Set to 1 if problem
         if( s_Parameters.m_XScaleAdjust < MIN_SCALE ||
@@ -220,6 +223,8 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     m_Exclude_Edges_Pcb->SetValue(m_ExcludeEdgeLayer);
     m_Print_Sheet_Ref->SetValue( s_Parameters.m_Print_Sheet_Ref );
 
+    // Options to plot pads and vias holes
+    m_Drill_Shape_Opt->SetSelection( s_Parameters.m_DrillShapeOpt );
 
     if( s_Parameters.m_Print_Black_and_White )
         m_ModeColorOption->SetSelection( 1 );
@@ -286,6 +291,7 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
         m_Config->Write( OPTKEY_PRINT_SCALE, m_ScaleOption->GetSelection() );
         m_Config->Write( OPTKEY_PRINT_PAGE_FRAME, s_Parameters.m_Print_Sheet_Ref);
         m_Config->Write( OPTKEY_PRINT_MONOCHROME_MODE, s_Parameters.m_Print_Black_and_White);
+        m_Config->Write( OPTKEY_PRINT_PADS_DRILL, (long) s_Parameters.m_DrillShapeOpt );
         wxString layerKey;
         for( int layer = 0; layer < NB_LAYERS;  ++layer )
         {
@@ -307,6 +313,9 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters( )
     s_Parameters.m_Print_Sheet_Ref = m_Print_Sheet_Ref->GetValue();
     s_Parameters.m_Print_Black_and_White =
         m_ModeColorOption->GetSelection() != 0;
+
+    s_Parameters.m_DrillShapeOpt =
+        (PRINT_PARAMETERS::DrillShapeOptT) m_Drill_Shape_Opt->GetSelection();
 
     if( m_PagesOption )
         s_Parameters.m_OptionPrintPage = m_PagesOption->GetSelection() != 0;

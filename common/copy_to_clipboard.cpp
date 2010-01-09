@@ -99,7 +99,7 @@ bool DrawPage( WinEDA_DrawPanel* panel )
         dc.SetClippingRegion( DrawArea );
     }
 
-    panel->PrintPage( &dc, Print_Sheet_Ref, -1, false );
+    panel->PrintPage( &dc, Print_Sheet_Ref, -1, false, NULL );
     screen->m_IsPrinting = false;
     panel->m_ClipBox = tmp;
     wxMetafile* mf = dc.Close();

@@ -55,12 +55,15 @@ class DIALOG_PRINT_USING_PRINTER_base : public wxDialog
 		wxTextCtrl* m_DialogPenWidth;
 		wxCheckBox* m_Print_Sheet_Ref;
 		wxCheckBox* m_Print_Mirror;
+		wxRadioBox* m_Drill_Shape_Opt;
 		wxRadioBox* m_ModeColorOption;
 		wxRadioBox* m_PagesOption;
+		
 		wxButton* m_buttonOption;
 		wxButton* m_buttonPreview;
 		wxButton* m_buttonPrint;
 		wxButton* m_buttonQuit;
+		
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ){ event.Skip(); }
@@ -71,7 +74,7 @@ class DIALOG_PRINT_USING_PRINTER_base : public wxDialog
 		
 	
 	public:
-		DIALOG_PRINT_USING_PRINTER_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 551,314 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_PRINT_USING_PRINTER_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 551,315 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_PRINT_USING_PRINTER_base();
 	
 };

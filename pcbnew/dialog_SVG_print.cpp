@@ -263,7 +263,7 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     SetLocaleTo_C_standard();       // Switch the locale to standard C (needed
                                     // to print floating point numbers like
                                     // 1.3)
-    panel->PrintPage( &dc, aPrint_Framet_Ref, m_PrintMaskLayer, false );
+    panel->PrintPage( &dc, aPrint_Framet_Ref, m_PrintMaskLayer, false, NULL );
     SetLocaleTo_Default();          // revert to the current  locale
     screen->m_IsPrinting = false;
     panel->m_ClipBox     = tmp;

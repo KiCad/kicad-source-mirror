@@ -31,6 +31,13 @@ public:
     bool   m_ForceCentered;                     // Forge plot origin to page centre (used in modedit)
     int    m_Flags;                             // auxiliary variable: can be used to pass some other info
 
+    enum DrillShapeOptT {
+        NO_DRILL_SHAPE    = 0,
+        SMALL_DRILL_SHAPE = 1,
+        FULL_DRILL_SHAPE  = 2
+    };
+    DrillShapeOptT m_DrillShapeOpt;               // Options to print pads and vias holes
+
 public:
     PRINT_PARAMETERS();
 };

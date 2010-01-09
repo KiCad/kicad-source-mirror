@@ -15,12 +15,16 @@
 #define OPTKEY_PRINT_MODULE_SCALE    wxT( "PrintModuleScale" )
 #define OPTKEY_PRINT_PAGE_FRAME      wxT( "PrintPageFrame" )
 #define OPTKEY_PRINT_MONOCHROME_MODE wxT( "PrintMonochrome" )
+#define OPTKEY_PRINT_PADS_DRILL      wxT( "PrintPadsDrillOpt" )
 
 /* Conversion unit constants. */
 /* Convert pcb dimension of 0.1 mil to PS units of inches. */
 #define SCALE_PS .0001
 /* Convert dimension 0.1 mil -> HPGL units: */
 #define SCALE_HPGL 0.102041
+
+// Small drill marks diameter value (in internal value = 1/10000 inch)
+#define SMALL_DRILL 150
 
 /* Plot Options : */
 class PCB_Plot_Options

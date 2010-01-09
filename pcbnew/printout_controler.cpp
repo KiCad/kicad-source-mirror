@@ -31,6 +31,7 @@ PRINT_PARAMETERS::PRINT_PARAMETERS()
     m_PageCount     = 1;
     m_ForceCentered = false;
     m_Flags = 0;
+    m_DrillShapeOpt = PRINT_PARAMETERS::SMALL_DRILL_SHAPE;
 }
 
 
@@ -282,13 +283,13 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
      * 2 - Plot in OR mode on black "local" background
      */
     if( !m_PrintParams.m_Print_Black_and_White )
-    {
+    {   // Creates a "local" black background
         GRForceBlackPen( true );
-        panel->PrintPage( dc, 0, m_PrintParams.m_PrintMaskLayer, printMirror );
+        panel->PrintPage( dc, 0, m_PrintParams.m_PrintMaskLayer, printMirror, &m_PrintParams );
         GRForceBlackPen( false );
     }
 
-    panel->PrintPage( dc, 0, m_PrintParams.m_PrintMaskLayer, printMirror );
+    panel->PrintPage( dc, 0, m_PrintParams.m_PrintMaskLayer, printMirror, &m_PrintParams );
 
     g_DrawBgColor = bg_color;
     m_Parent->GetBaseScreen()->m_IsPrinting = false;
