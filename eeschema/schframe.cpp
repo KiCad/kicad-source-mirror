@@ -58,6 +58,8 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
     EVT_MENU( ID_GEN_COPY_BLOCK_TO_CLIPBOARD, WinEDA_DrawFrame::CopyToClipboard )
     EVT_MENU( ID_EXIT, WinEDA_SchematicFrame::OnExit )
 
+    EVT_MENU( ID_POPUP_SCH_COPY_ITEM, WinEDA_SchematicFrame::OnCopySchematicItemRequest )
+
     EVT_MENU_RANGE( ID_CONFIG_AND_PREFERENCES_START,
                     ID_CONFIG_AND_PREFERENCES_END,
                     WinEDA_SchematicFrame::Process_Config )

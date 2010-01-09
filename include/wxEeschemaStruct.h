@@ -271,6 +271,9 @@ private:
     void             OnOpenLibraryEditor( wxCommandEvent& event );
     void             OnSetOptions( wxCommandEvent& event );
 
+    /* edition events functions */
+    void             OnCopySchematicItemRequest( wxCommandEvent& event );
+
     /* User interface update event handlers. */
     void             OnUpdateBlockSelected( wxUpdateUIEvent& event );
     void             OnUpdatePaste( wxUpdateUIEvent& event );

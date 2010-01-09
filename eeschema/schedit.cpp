@@ -564,27 +564,6 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
             &dc );
         break;
 
-    case ID_POPUP_SCH_COPY_COMPONENT_CMP:
-        DrawPanel->MouseToCursorSchema();
-        {
-            SCH_COMPONENT* olditem, * newitem;
-            if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
-                screen->SetCurItem( LocateSmallestComponent( screen ) );
-            olditem = (SCH_COMPONENT*) screen->GetCurItem();
-            if( olditem == NULL )
-                break;
-            newitem = olditem->GenCopy();
-            newitem->m_TimeStamp = GetTimeStamp();
-            newitem->ClearAnnotation(NULL);
-            newitem->m_Flags = IS_NEW;
-            StartMovePart( newitem, &dc );
-
-            /* Redraw the original part, because StartMovePart() has erase
-             * it from screen */
-            RedrawOneStruct( DrawPanel, &dc, olditem, GR_DEFAULT_DRAWMODE );
-        }
-        break;
-
     case ID_POPUP_SCH_SELECT_UNIT1:
     case ID_POPUP_SCH_SELECT_UNIT2:
     case ID_POPUP_SCH_SELECT_UNIT3:

@@ -79,6 +79,7 @@ set(EESCHEMA_SRCS
     eeschema.cpp
     eeschema_config.cpp
     erc.cpp
+    events_called_functions_for_edit.cpp
     files-io.cpp
     find.cpp
     getpart.cpp

@@ -83,9 +83,14 @@ static Ki_HotkeyInfo HkEditComponentValue( wxT( "Edit Component Value" ),
 static Ki_HotkeyInfo HkEditComponentFootprint( wxT( "Edit Component Footprint" ),
                                                HK_EDIT_COMPONENT_FOOTPRINT,
                                                'F' );
-static Ki_HotkeyInfo HkMoveComponent( wxT( "Move Component or Label" ),
+static Ki_HotkeyInfo HkMoveComponentOrText( wxT( "Move Component or Label" ),
                                       HK_MOVE_COMPONENT_OR_LABEL, 'M',
                                       ID_POPUP_SCH_MOVE_CMP_REQUEST );
+
+static Ki_HotkeyInfo HkCopyComponentOrText( wxT( "Copy Component or Label" ),
+                                      HK_COPY_COMPONENT_OR_LABEL, 'C',
+                                      ID_POPUP_SCH_COPY_ITEM );
+
 static Ki_HotkeyInfo HkDragComponent( wxT( "Drag Component" ),
                                       HK_DRAG_COMPONENT, 'G',
                                       ID_POPUP_SCH_DRAG_CMP_REQUEST );
@@ -122,7 +127,8 @@ Ki_HotkeyInfo* s_Schematic_Hotkey_List[] =
 {
     &HkNextSearch,
     &HkDelete,               &HkInsert,                 &HkMove2Drag,
-    &HkMoveComponent,        &HkDragComponent,          &HkAddComponent,
+    &HkMoveComponentOrText,  &HkCopyComponentOrText,
+    &HkDragComponent,        &HkAddComponent,
     &HkRotateComponent,      &HkMirrorXComponent,       &HkMirrorYComponent,
     &HkOrientNormalComponent,
     &HkEditComponent,&HkEditComponentValue,&HkEditComponentFootprint,
@@ -415,9 +421,10 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         }
         break;
 
-    case HK_DRAG_COMPONENT:         // Start drag Component
-    case HK_MOVE_COMPONENT_OR_LABEL:         // Start move Component
-        if( ItemInEdit )
+    case HK_DRAG_COMPONENT:                 // Start drag component
+    case HK_MOVE_COMPONENT_OR_LABEL:         // Start move component or text/label
+    case HK_COPY_COMPONENT_OR_LABEL:         // Duplicate component or text/label
+         if( ItemInEdit )
             break;
 
         if( DrawStruct == NULL )
@@ -433,6 +440,14 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                 break;
         }
 
+        if( HK_Descr->m_Idcommand == HK_COPY_COMPONENT_OR_LABEL )
+        {
+            GetScreen()->SetCurItem( (SCH_ITEM*) DrawStruct );
+            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED,
+                              HK_Descr->m_IdMenuEvent );
+            wxPostEvent( this, event );
+            break;
+        }
 
         switch( DrawStruct->Type() )
         {
