@@ -57,8 +57,9 @@ while read LINE
 do
 	curl -s "$LINE" | \
 	grep vc_log  | \
-	sed -e 's/<td><pre class=\"vc_log\">//' |\
-	sed -e 's/<\/pre><\/td>//'
+	sed -e 's/<td><pre class=\"vc_log\">//' | \
+	sed -e 's/<\/pre><\/td>//' | \
+	sed -e '/<style/d'
 done
 
 rm /tmp/kicad-svn-*

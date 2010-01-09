@@ -1402,11 +1402,11 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
 
         RotatePoint( &sx, &sy, m_segmAngle );       // True start point coordinate of the equivalent segment
 
-        m_spotcx = rel_pos.x + sx;
-        m_spotcy = rel_pos.y + sy;               // pad position / segment origin
+        m_spotcx = rel_pos.x - sx;
+        m_spotcy = rel_pos.y - sy;               // pad position / segment origin
 
-        m_finx = -sx;
-        m_finy = -sy;                             // end of segment coordinate
+        m_finx = - 2 * sx;
+        m_finy = - 2 * sy;                             // end of segment coordinate
         diag = checkClearanceSegmToPad( aPad, segm_width / 2, dist_min );
         break;
     }

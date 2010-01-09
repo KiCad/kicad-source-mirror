@@ -97,7 +97,7 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
     info.SetDescription( description );
 
     /* Set copyright dialog */
-    info.SetCopyright( _T( "(C) 1992-2009 KiCad Developers Team" ) );
+    info.SetCopyright( _T( "(C) 1992-2010 KiCad Developers Team" ) );
 
     /* Set license dialog */
     info.SetLicence( wxString::FromAscii
@@ -110,7 +110,7 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
     info.AddDeveloper( wxT( "Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>" ) );
     info.AddDeveloper( SetMsg( wxT( "Dick Hollenbeck <dick@softplc.com>" ) ) );
     info.AddDeveloper( SetMsg( wxT( "Hauptmech <hauptmech@gmail.com>") ) );
-    info.AddDeveloper( SetMsg( wxT( "Jerry Jacobs <jerkejacobs@gmail.com>" ) ) );
+    info.AddDeveloper( SetMsg( wxT( "Jerry Jacobs <xor.gate.engineering@gmail.com>" ) ) );
     info.AddDeveloper( SetMsg( wxT( "Jonas Diemer <diemer@gmx.de>" ) ) );
     info.AddDeveloper( SetMsg( wxT( "KBool Library <http://boolean.klaasholwerda.nl/bool.html>" ) ) );
     info.AddDeveloper( SetMsg( wxT( "Lorenzo <lomarcan@tin.it>" ) ) );
@@ -126,7 +126,7 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
 
     /* Add translators */
     info.AddTranslator( wxT( "Czech (CZ) Martin Kratoška <martin@ok1rr.com>" ) );
-    info.AddTranslator( SetMsg( wxT( "Dutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>" ) ) );
+    info.AddTranslator( SetMsg( wxT( "Dutch (NL) Jerry Jacobs <xor.gate.engineering@gmail.com>" ) ) );
     info.AddTranslator( SetMsg( wxT( "French (FR) Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>" ) ) );
     info.AddTranslator( SetMsg( wxT( "Polish (PL) Mateusz Skowroński <skowri@gmail.com>" ) ) );
     info.AddTranslator( SetMsg( wxT( "Portuguese (PT) Renie Marquet <reniemarquet@uol.com.br>" ) ) );

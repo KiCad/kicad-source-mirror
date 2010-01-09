@@ -44,7 +44,7 @@ my $no_options                = 0; # No options given
 # Commands
 ###
 my $command_silent     = '&> /dev/null';          # Nullify stderr and stdout from commands
-my $command_cmake      = "cmake -DCMAKE_BUILD_TYPE=Debug -DwxWidgets_USE_DEBUG=ON $svn_path_local"; # Where cmake looks for CMakeLists.txt
+my $command_cmake      = "cmake -DCMAKE_BUILD_TYPE=Debug -DwxWidgets_USE_DEBUG=ON -DKICAD_AUIMANAGER=ON -DKICAD_AUITOOLBAR=ON $svn_path_local"; # Where cmake looks for CMakeLists.txt
 my $command_svn_update = 'svn update';            # Subversion update command
 
 ###

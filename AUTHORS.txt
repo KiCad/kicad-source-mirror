@@ -13,7 +13,7 @@ Saint Martin d'HËres
 
 == Contributors
 Dick Hollenbeck <dick@softplc.com>
-Jerry Jacobs <jerkejacobs@gmail.com>
+Jerry Jacobs <xor.gate.engineering@gmail.com>
 Jonas Diemer <diemer@gmx.de>
 KBool Library http://boolean.klaasholwerda.nl/bool.html
 Rok Markovic <rok@kanardia.eu>
@@ -29,7 +29,7 @@ Igor Plyatov <plyatov@gmail.com>
 
 == Translators
 Czech (CZ) Martin Krato≈°ka <martin@ok1rr.com>
-Dutch (NL) Jerry Jacobs <jerkejacobs@gmail.com>
+Dutch (NL) Jerry Jacobs <xor.gate.engineering@gmail.com>
 French (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 Polish (PL) Mateusz Skowroøski <skowri@gmail.com>
 Portuguese (PT) Renie Marquet <reniemarquet@uol.com.br>"
