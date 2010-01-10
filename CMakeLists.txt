@@ -60,6 +60,14 @@ if(KICAD_GOST)
     add_definitions(-DKICAD_GOST)
 endif(KICAD_GOST)
 
+if(KICAD_AUIMANAGER)
+    add_definitions(-DKICAD_AUIMANAGER)
+endif(KICAD_AUIMANAGER)
+
+if(KICAD_AUITOOLBAR)
+    add_definitions(-DKICAD_AUITOOLBAR)
+endif(KICAD_AUITOOLBAR)
+
 # Locations for install targets.
 set(KICAD_BIN bin
     CACHE PATH "Location of KiCad binaries.")
