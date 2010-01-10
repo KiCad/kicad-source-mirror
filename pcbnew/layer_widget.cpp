@@ -76,7 +76,7 @@ static const char * rightarrow_xpm[] = {
 "X	c #8080ff",
 "o	c BLUE",
 "O	c gray56",
-"    .              ..       ",
+"                   .X       ",
 "                   .XX      ",
 "                   .XXX     ",
 "                   .XXXX    ",
@@ -317,6 +317,9 @@ public:
 
         SelectLayerRow( 1 );
 
+        m_LayerScrolledWindow->FitInside();
+        m_LayerScrolledWindow->SetMinSize( m_LayerScrolledWindow->GetSize() );
+
         Fit();
 
         SetMinSize( GetSize() );
@@ -418,6 +421,9 @@ class MYFRAME : public wxFrame
         MYFRAME*    frame;
 
     public:
+        // your constructor could take a BOARD argument.  here I leave it
+        // out because this source module wants to know nothing of BOARDs
+        // to maximize re-use.
         MYLAYERS( wxWindow* aParent, MYFRAME* aFrame ) :
             LAYER_WIDGET( aParent ),
             frame( aFrame )
@@ -438,14 +444,13 @@ class MYFRAME : public wxFrame
 
 
 public:
-    MYFRAME( wxWindow * parent ) : wxFrame( parent, -1, _( "wxAUI Test" ),
-                                            wxDefaultPosition, wxSize( 800, 600 ),
-                                            wxDEFAULT_FRAME_STYLE )
+    MYFRAME( wxWindow * parent ) :
+        wxFrame( parent, -1, _( "wxAUI Test" ), wxDefaultPosition,
+            wxSize( 800, 600 ), wxDEFAULT_FRAME_STYLE )
     {
         // notify wxAUI which frame to use
         m_mgr.SetManagedWindow( this );
 
-        // create several text controls
         wxPanel* layerWidget = new MYLAYERS( this, this );
 
         wxTextCtrl* text2 = new wxTextCtrl( this, -1, _( "Pane 2 - sample text" ),
@@ -457,7 +462,16 @@ public:
                                             wxNO_BORDER | wxTE_MULTILINE );
 
         // add the panes to the manager
-        m_mgr.AddPane( layerWidget, wxLEFT, wxT( "Layer Visibility" ) );
+        wxAuiPaneInfo li;
+        li.MinSize( ayerWidget->GetSize() );    // ignored on linux
+        li.BestSize( layerWidget->GetSize() );
+        li.Left();
+        li.MaximizeButton( false );
+        li.MinimizeButton( false );
+        li.CloseButton( false );
+        li.Caption( wxT( "Layers" ) );
+        m_mgr.AddPane( layerWidget, li );
+
         m_mgr.AddPane( text2, wxBOTTOM, wxT( "Pane Number Two" ) );
         m_mgr.AddPane( text3, wxCENTER );
 
