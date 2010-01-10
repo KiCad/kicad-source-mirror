@@ -19,7 +19,6 @@
 #include "wxstruct.h"
 #include "macros.h"
 
-
 /*
  * Class constructor for WinEDA_BasicFrame general options
  */

@@ -18,7 +18,8 @@
  */
 enum id_gerbview_frm
 {
-    ID_GERBVIEW_SHOW_LIST_DCODES,
+    // A MenuItem ID of Zero does not work under Mac,first id = 1
+    ID_GERBVIEW_SHOW_LIST_DCODES = 1,
     ID_GERBVIEW_LOAD_DRILL_FILE,
     ID_GERBVIEW_LOAD_DCODE_FILE,
     ID_TOOLBARH_GERBER_SELECT_TOOL,
