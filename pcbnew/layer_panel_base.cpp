@@ -11,7 +11,7 @@
 
 LAYER_PANEL_BASE::LAYER_PANEL_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
-	this->SetMinSize( wxSize( 400,400 ) );
+	this->SetMinSize( wxSize( 100,100 ) );
 	
 	wxBoxSizer* boxSizer;
 	boxSizer = new wxBoxSizer( wxVERTICAL );
@@ -51,7 +51,6 @@ LAYER_PANEL_BASE::LAYER_PANEL_BASE( wxWindow* parent, wxWindowID id, const wxPoi
 	
 	this->SetSizer( boxSizer );
 	this->Layout();
-	boxSizer->Fit( this );
 	
 	// Connect Events
 	m_LayerScrolledWindow->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( LAYER_PANEL_BASE::OnLeftDblClickLayers ), NULL, this );

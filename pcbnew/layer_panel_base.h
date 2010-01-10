@@ -47,7 +47,7 @@ class LAYER_PANEL_BASE : public wxPanel
 		
 	
 	public:
-		LAYER_PANEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL );
+		LAYER_PANEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 183,184 ), long style = wxTAB_TRAVERSAL );
 		~LAYER_PANEL_BASE();
 	
 };

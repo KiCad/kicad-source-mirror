@@ -37,7 +37,7 @@
 #include <wx/statbmp.h>
 #include <wx/aui/aui.h>
 
-//#include "fctsys.h"
+#include "macros.h"
 #include "common.h"
 
 #include "layer_panel_base.h"
@@ -101,13 +101,13 @@ struct LAYER_SPEC
 {
     wxString    layerName;
     int         layer;
-    int         colorIndex;
+    int         color;
 
-    LAYER_SPEC( const wxString& aLayerName, int aLayer, int aColorIndex = 0 )
+    LAYER_SPEC( const wxString& aLayerName, int aLayer, int aColor = 0 )
     {
         layerName  = aLayerName;
         layer      = aLayer;
-        colorIndex = aColorIndex;
+        color = aColor;
     }
 };
 
@@ -132,6 +132,8 @@ class LAYER_WIDGET : public LAYER_PANEL_BASE
 
 #define MAX_LAYER_ROWS      64
 #define LAYER_COLUMN_COUNT  4
+#define BUTT_SIZE_X         32
+#define BUTT_SIZE_Y         22
 
 protected:
     wxBitmap*       m_BlankBitmap;
@@ -140,33 +142,39 @@ protected:
     wxStaticBitmap* m_Bitmaps[MAX_LAYER_ROWS];
     int             m_CurrentRow;           ///< selected row of layer list
 
-
-    /**
-     * Function makeColorButton
-     * creates a wxBitmapButton and assigns it a solid color and a control ID
-     */
-    wxBitmapButton* makeColorButton( int aColorIndex, int aID )
+    wxBitmap makeBitmap( int aColor )
     {
-        const int BUTT_SIZE_X = 32;
-        const int BUTT_SIZE_Y = 22;
-
-        // dynamically make a wxBitMap and brush it with the appropriate color,
-        // then create a wxBitmapButton from it.
-
         wxBitmap    bitmap( BUTT_SIZE_X, BUTT_SIZE_Y );
         wxBrush     brush;
         wxMemoryDC  iconDC;
 
         iconDC.SelectObject( bitmap );
 
-        brush.SetColour( MakeColour( aColorIndex ) );
+        brush.SetColour( MakeColour( aColor ) );
         brush.SetStyle( wxSOLID );
         iconDC.SetBrush( brush );
 
         iconDC.DrawRectangle( 0, 0, BUTT_SIZE_X, BUTT_SIZE_Y );
 
+        return bitmap;
+    }
+
+
+    /**
+     * Function makeColorButton
+     * creates a wxBitmapButton and assigns it a solid color and a control ID
+     */
+    wxBitmapButton* makeColorButton( int aColor, int aID )
+    {
+        // dynamically make a wxBitMap and brush it with the appropriate color,
+        // then create a wxBitmapButton from it.
+        wxBitmap bitmap = makeBitmap( aColor );
+
         wxBitmapButton* ret = new wxBitmapButton( m_LayerScrolledWindow, aID, bitmap,
             wxDefaultPosition, wxSize(BUTT_SIZE_X, BUTT_SIZE_Y), wxBORDER_RAISED );
+
+        // save the color value in the name, no where else to put it.
+        ret->SetName( makeColorTxt( aColor ) );
 
         ret->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
         ret->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnRightDownLayers ), NULL, this );
@@ -219,9 +227,40 @@ protected:
             SelectLayerRow( row );
     }
 
+    /**
+     * Function makeColorTxt
+     * returns a string containing the numeric value of the color.
+     * in a form like 0x00000000.  (Color is currently an index, not RGB).
+     */
+    wxString makeColorTxt( int aColor )
+    {
+        char colorValue[64];
+        sprintf( colorValue, "0x%08x", aColor );
+        return wxString( CONV_FROM_UTF8(colorValue) );
+    }
+
+    /**
+     * Function OnRightDownLayers
+     * is called only from the color button when user right clicks.
+     */
     void OnRightDownLayers( wxMouseEvent& event )
     {
-        printf("OnRightDownLayers\n");
+        wxBitmapButton* eventSource = (wxBitmapButton*) event.GetEventObject();
+
+        wxString colorTxt = eventSource->GetName();
+
+        int oldColor = strtoul( CONV_TO_UTF8(colorTxt), NULL, 0 );
+
+        int newColor = DisplayColorFrame( this, oldColor );
+
+        if( newColor >= 0 )
+        {
+            eventSource->SetName( makeColorTxt( newColor ) );
+
+            wxBitmap bm = makeBitmap( newColor );
+
+            eventSource->SetBitmapLabel( bm );
+        }
     }
 
     /**
@@ -277,7 +316,7 @@ protected:
             new wxSizerItem( m_Bitmaps[aRow], wxSizerFlags().Align( wxALIGN_CENTER_VERTICAL ) ) );
 
         // column 1
-        wxBitmapButton* bmb = makeColorButton( aSpec.colorIndex, aSpec.layer );
+        wxBitmapButton* bmb = makeColorButton( aSpec.color, aSpec.layer );
         bmb->SetToolTip( _("Right click to change layer color, left click to select layer" ) );
         m_LayersFlexGridSizer->Insert( index+1,
             new wxSizerItem( bmb, flags ) );
@@ -317,10 +356,7 @@ public:
 
         SelectLayerRow( 1 );
 
-        m_LayerScrolledWindow->FitInside();
-        m_LayerScrolledWindow->SetMinSize( m_LayerScrolledWindow->GetSize() );
-
-        Fit();
+        FitInside();
 
         SetMinSize( GetSize() );
     }
@@ -463,7 +499,7 @@ public:
 
         // add the panes to the manager
         wxAuiPaneInfo li;
-        li.MinSize( ayerWidget->GetSize() );    // ignored on linux
+        li.MinSize( layerWidget->GetSize() );    // ignored on linux
         li.BestSize( layerWidget->GetSize() );
         li.Left();
         li.MaximizeButton( false );
@@ -491,7 +527,8 @@ private:
 
 
 // our normal wxApp-derived class, as usual
-class MyApp : public wxApp {
+class MyApp : public wxApp
+{
 public:
 
     bool OnInit()
