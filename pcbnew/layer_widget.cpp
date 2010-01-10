@@ -129,14 +129,17 @@ struct LAYER_SPEC
  */
 class LAYER_WIDGET : public LAYER_PANEL_BASE
 {
+
+#define MAX_LAYER_ROWS      64
+#define LAYER_COLUMN_COUNT  4
+
 protected:
     wxBitmap*       m_BlankBitmap;
     wxBitmap*       m_RightArrowBitmap;
     wxSize          m_BitmapSize;
-    wxStaticBitmap* m_Bitmaps[64];
-    int             m_CurrentRow;       ///< visual row of layer list
+    wxStaticBitmap* m_Bitmaps[MAX_LAYER_ROWS];
+    int             m_CurrentRow;           ///< selected row of layer list
 
-#define LAYER_COLUMN_COUNT  4
 
     /**
      * Function makeColorButton
@@ -221,7 +224,6 @@ protected:
         printf("OnRightDownLayers\n");
     }
 
-
     /**
      * Function getLayerComp
      * returns the component within the m_LayersFlexGridSizer at aSizerNdx.
@@ -253,14 +255,13 @@ protected:
         return -1;
     }
 
-
     /**
      * Function insertLayerRow
      * appends or inserts a new row in the layer portion of the widget.
      */
     void insertLayerRow( int aRow, const LAYER_SPEC& aSpec )
     {
-        wxASSERT( aRow >= 0 );
+        wxASSERT( aRow >= 0 && aRow < MAX_LAYER_ROWS );
 
         size_t index = aRow * LAYER_COLUMN_COUNT;
 
@@ -272,24 +273,26 @@ protected:
         m_Bitmaps[aRow] = new wxStaticBitmap( m_LayerScrolledWindow, aSpec.layer, *m_BlankBitmap,
                             wxDefaultPosition, m_BitmapSize );
         m_Bitmaps[aRow]->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
-        m_LayersFlexGridSizer->Insert( index+0, m_Bitmaps[aRow], wxSizerFlags().Align( wxALIGN_CENTER_VERTICAL ) );
+        m_LayersFlexGridSizer->Insert( index+0,
+            new wxSizerItem( m_Bitmaps[aRow], wxSizerFlags().Align( wxALIGN_CENTER_VERTICAL ) ) );
 
         // column 1
         wxBitmapButton* bmb = makeColorButton( aSpec.colorIndex, aSpec.layer );
         bmb->SetToolTip( _("Right click to change layer color, left click to select layer" ) );
-        m_LayersFlexGridSizer->Insert( index+1, bmb, flags );
+        m_LayersFlexGridSizer->Insert( index+1,
+            new wxSizerItem( bmb, flags ) );
 
         // column 2
         wxStaticText* st = new wxStaticText( m_LayerScrolledWindow, aSpec.layer, aSpec.layerName );
         st->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
         st->SetToolTip( _( "Click here to select this layer" ) );
-        m_LayersFlexGridSizer->Insert( index+2, st,
-                wxSizerFlags().Align( wxALIGN_CENTER_VERTICAL ) );
+        m_LayersFlexGridSizer->Insert( index+2,
+            new wxSizerItem( st, wxSizerFlags().Align( wxALIGN_CENTER_VERTICAL )) );
 
         // column 3
         wxCheckBox* cb = new wxCheckBox( m_LayerScrolledWindow, aSpec.layer, wxEmptyString );
         cb->SetToolTip( _( "Enable this for visibility" ) );
-        m_LayersFlexGridSizer->Insert( index+3, cb, flags );
+        m_LayersFlexGridSizer->Insert( index+3, new wxSizerItem( cb, flags ) );
     }
 
 public:
@@ -313,6 +316,10 @@ public:
         AppendLayerRow(  LAYER_SPEC( wxT("layer_4_you"), 3, BLUE ) );
 
         SelectLayerRow( 1 );
+
+        Fit();
+
+        SetMinSize( GetSize() );
     }
 
 
@@ -362,7 +369,6 @@ public:
         return false;
     }
 
-
     /**
      * Function SelectLayer
      * changes the row selection in the layer list to the given layer.
@@ -373,6 +379,7 @@ public:
         return SelectLayerRow( row );
     }
 
+    //-----<abstract functions>-------------------------------------------
 
     /**
      * Function ColorChange
@@ -387,15 +394,10 @@ public:
      * will handle this accordingly, and can deny the change by returning false.
      */
     virtual bool LayerChange( int aLayer ) = 0;
+
+    //-----</abstract functions>------------------------------------------
+
 };
-
-
-
-/**
- *  class LAYER_WIDGET : public wxPanel
- *  {
- *  };
- */
 
 
 #if defined(STAND_ALONE)
@@ -408,6 +410,9 @@ public:
  */
 class MYFRAME : public wxFrame
 {
+
+    // example of how to derive from LAYER_WIDGET in order to provide the
+    // abstract methods.
     class MYLAYERS : public LAYER_WIDGET
     {
         MYFRAME*    frame;
