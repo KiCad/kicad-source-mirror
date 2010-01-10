@@ -110,4 +110,7 @@ static inline wxColour MakeColour( int aColor )
         );
 }
 
+int DisplayColorFrame( wxWindow* parent, int OldColor );
+
+
 #endif /* ifndef _COLORS_H */
