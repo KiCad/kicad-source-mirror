@@ -49,6 +49,9 @@
 */
 
 
+#define LAYER_COLUMN_COUNT  4
+
+
 /* XPM */
 static const char * clear_xpm[] = {
 "28 14 1 1",
@@ -92,6 +95,43 @@ static const char * rightarrow_xpm[] = {
 "                    oO      "};
 
 
+/**
+ * Function layerId
+ * is here to allow saving a layer index within a control as its wxControl id,
+ * but to do so in a way that all child wxControl ids within a wxWindow are unique,
+ * since this is required by Windows.
+ * @see getLayerId()
+ */
+static int layerId( int aColumn, int aLayer )
+{
+    int id = aLayer * LAYER_COLUMN_COUNT + aColumn;
+    return id;
+}
+
+
+/**
+ * Function getLayerId
+ * decodes \a aControlId to return a layer.
+ */
+static int getLayerId( int aControlId )
+{
+    int layer = aControlId / LAYER_COLUMN_COUNT;    // rounding is OK.
+    return layer;
+}
+
+
+/**
+ * Function makeColorTxt
+ * returns a string containing the numeric value of the color.
+ * in a form like 0x00000000.  (Color is currently an index, not RGB).
+ */
+static wxString makeColorTxt( int aColor )
+{
+    char colorValue[64];
+    sprintf( colorValue, "0x%08x", aColor );
+    return wxString( CONV_FROM_UTF8(colorValue) );
+}
+
 
 /**
  * Struct LAYER_SPEC
@@ -123,28 +163,31 @@ struct LAYER_SPEC
  * it has no knowledge of a BOARD or anything.  To use it you must derive from
  * this class and implement the abstract functions:
  * <p>
- * void ColorChange( int aLayer, int aColor );
+ * void OnColorChange( int aLayer, int aColor );
  * <p>
- * bool LayerChange( int aLayer );
+ * bool OnLayerSelect( int aLayer );
+ * <p>
+ * void OnLayerVisible( int aLayer, bool isVisible );
  */
 class LAYER_WIDGET : public LAYER_PANEL_BASE
 {
 
 #define MAX_LAYER_ROWS      64
-#define LAYER_COLUMN_COUNT  4
 #define BUTT_SIZE_X         32
 #define BUTT_SIZE_Y         22
+#define BUTT_VOID           6
 
 protected:
     wxBitmap*       m_BlankBitmap;
     wxBitmap*       m_RightArrowBitmap;
     wxSize          m_BitmapSize;
-    wxStaticBitmap* m_Bitmaps[MAX_LAYER_ROWS];
     int             m_CurrentRow;           ///< selected row of layer list
 
-    wxBitmap makeBitmap( int aColor )
+    static wxBitmap makeBitmap( int aColor )
     {
-        wxBitmap    bitmap( BUTT_SIZE_X, BUTT_SIZE_Y );
+        // the bitmap will be 8 pixels smaller than the button, leaving a
+        // border of 4 pixels on each side.
+        wxBitmap    bitmap( BUTT_SIZE_X - 2 * BUTT_VOID, BUTT_SIZE_Y - 2 * BUTT_VOID );
         wxBrush     brush;
         wxMemoryDC  iconDC;
 
@@ -154,7 +197,7 @@ protected:
         brush.SetStyle( wxSOLID );
         iconDC.SetBrush( brush );
 
-        iconDC.DrawRectangle( 0, 0, BUTT_SIZE_X, BUTT_SIZE_Y );
+        iconDC.DrawRectangle( 0, 0, BUTT_SIZE_X - 2 * BUTT_VOID, BUTT_SIZE_Y - 2 * BUTT_VOID );
 
         return bitmap;
     }
@@ -175,14 +218,6 @@ protected:
 
         // save the color value in the name, no where else to put it.
         ret->SetName( makeColorTxt( aColor ) );
-
-        ret->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
-        ret->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnRightDownLayers ), NULL, this );
-
-        /* cannot get this event without also the wxEVT_LEFT_DOWN firing first
-        ret->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( LAYER_WIDGET::OnLeftDClickLayers ), NULL, this );
-        */
-
         return ret;
     }
 
@@ -191,11 +226,11 @@ protected:
     {
         int row;
 
-        wxObject* eventSource = event.GetEventObject();
+        wxWindow* eventSource = (wxWindow*) event.GetEventObject();
 
         // if mouse event is coming from the m_LayerScrolledWindow and not one
         // of its children, we have to find the row manually based on y coord.
-        if( eventSource == (wxObject*) m_LayerScrolledWindow )
+        if( eventSource == m_LayerScrolledWindow )
         {
             int y = event.GetY();
 
@@ -216,41 +251,29 @@ protected:
                 row = rowCount - 1;
         }
 
-        // all nested controls on a given row will have the layer index as their ID
         else
         {
-            int layer = ((wxWindow*)eventSource)->GetId();
+            // all nested controls on a given row will have their ID encoded with
+            // makeLayerId(), and the corresponding decoding is getLayerId()
+            int layer = getLayerId( eventSource ->GetId() );
             row   = findLayerRow( layer );
         }
 
-        if( LayerChange( row ) )    // if owner allows this change.
+        if( OnLayerSelect( row ) )    // if client allows this change.
             SelectLayerRow( row );
     }
 
     /**
-     * Function makeColorTxt
-     * returns a string containing the numeric value of the color.
-     * in a form like 0x00000000.  (Color is currently an index, not RGB).
+     * Function OnMiddleDownLayerColor
+     * is called only from a color button when user right clicks.
      */
-    wxString makeColorTxt( int aColor )
-    {
-        char colorValue[64];
-        sprintf( colorValue, "0x%08x", aColor );
-        return wxString( CONV_FROM_UTF8(colorValue) );
-    }
-
-    /**
-     * Function OnRightDownLayers
-     * is called only from the color button when user right clicks.
-     */
-    void OnRightDownLayers( wxMouseEvent& event )
+    void OnMiddleDownLayerColor( wxMouseEvent& event )
     {
         wxBitmapButton* eventSource = (wxBitmapButton*) event.GetEventObject();
 
         wxString colorTxt = eventSource->GetName();
 
         int oldColor = strtoul( CONV_TO_UTF8(colorTxt), NULL, 0 );
-
         int newColor = DisplayColorFrame( this, oldColor );
 
         if( newColor >= 0 )
@@ -258,10 +281,41 @@ protected:
             eventSource->SetName( makeColorTxt( newColor ) );
 
             wxBitmap bm = makeBitmap( newColor );
-
             eventSource->SetBitmapLabel( bm );
+
+            int layer = getLayerId( eventSource->GetId() );
+
+            // tell the client code.
+            OnColorChange( layer, newColor );
         }
     }
+
+
+    /**
+     * Function OnRightDownLayers
+     * puts up a popup menu for the layer panel.
+     */
+    void OnRightDownLayers( wxMouseEvent& event )
+    {
+        // popup menu
+        printf( "OnRightDownLayers\n" );
+    }
+
+
+    /**
+     * Function OnLayerCheckBox
+     * handles the "is layer visible" checkbox and propogates the
+     * event to the client's notification function.
+     */
+    void OnLayerCheckBox( wxCommandEvent& event )
+    {
+        wxCheckBox* eventSource = (wxCheckBox*) event.GetEventObject();
+
+        int layer = getLayerId( eventSource->GetId() );
+
+        OnLayerVisible( layer, eventSource->IsChecked() );
+    }
+
 
     /**
      * Function getLayerComp
@@ -287,7 +341,7 @@ protected:
             // column 0 in the layer scroll window has a wxStaticBitmap, get its ID.
             wxStaticBitmap* bm = (wxStaticBitmap*) getLayerComp( row * LAYER_COLUMN_COUNT + 0 );
 
-            if( aLayer == bm->GetId() )
+            if( aLayer == getLayerId( bm->GetId() ))
                 return row;
         }
 
@@ -309,30 +363,37 @@ protected:
         flags.Align(wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
 
         // column 0
-        m_Bitmaps[aRow] = new wxStaticBitmap( m_LayerScrolledWindow, aSpec.layer, *m_BlankBitmap,
-                            wxDefaultPosition, m_BitmapSize );
-        m_Bitmaps[aRow]->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
+        wxStaticBitmap* sbm = new wxStaticBitmap( m_LayerScrolledWindow, layerId( 0, aSpec.layer ),
+                                *m_BlankBitmap, wxDefaultPosition, m_BitmapSize );
+        sbm->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
+        sbm->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnRightDownLayers ), NULL, this );
         m_LayersFlexGridSizer->Insert( index+0,
-            new wxSizerItem( m_Bitmaps[aRow], wxSizerFlags().Align( wxALIGN_CENTER_VERTICAL ) ) );
+            new wxSizerItem( sbm, wxSizerFlags().Align( wxALIGN_CENTER_VERTICAL ) ) );
 
         // column 1
-        wxBitmapButton* bmb = makeColorButton( aSpec.color, aSpec.layer );
+        wxBitmapButton* bmb = makeColorButton( aSpec.color, layerId( 1, aSpec.layer ) );
+        bmb->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
+        bmb->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownLayerColor ), NULL, this );
+        bmb->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnRightDownLayers ), NULL, this );
         bmb->SetToolTip( _("Right click to change layer color, left click to select layer" ) );
         m_LayersFlexGridSizer->Insert( index+1,
             new wxSizerItem( bmb, flags ) );
 
         // column 2
-        wxStaticText* st = new wxStaticText( m_LayerScrolledWindow, aSpec.layer, aSpec.layerName );
+        wxStaticText* st = new wxStaticText( m_LayerScrolledWindow, layerId( 2, aSpec.layer ), aSpec.layerName );
         st->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
+        st->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnRightDownLayers ), NULL, this );
         st->SetToolTip( _( "Click here to select this layer" ) );
         m_LayersFlexGridSizer->Insert( index+2,
             new wxSizerItem( st, wxSizerFlags().Align( wxALIGN_CENTER_VERTICAL )) );
 
         // column 3
-        wxCheckBox* cb = new wxCheckBox( m_LayerScrolledWindow, aSpec.layer, wxEmptyString );
+        wxCheckBox* cb = new wxCheckBox( m_LayerScrolledWindow, layerId( 3, aSpec.layer ), wxEmptyString );
+        cb->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( LAYER_WIDGET::OnLayerCheckBox ), NULL, this );
         cb->SetToolTip( _( "Enable this for visibility" ) );
         m_LayersFlexGridSizer->Insert( index+3, new wxSizerItem( cb, flags ) );
     }
+
 
 public:
 
@@ -342,12 +403,13 @@ public:
     {
         m_CurrentRow = 0;
 
-        memset( m_Bitmaps, 0, sizeof(m_Bitmaps) );
-
         m_RightArrowBitmap = new wxBitmap( rightarrow_xpm );
         m_BlankBitmap = new wxBitmap( clear_xpm );     // translucent
 
         m_BitmapSize = wxSize(m_BlankBitmap->GetWidth(), m_BlankBitmap->GetHeight());
+
+        m_LayerScrolledWindow->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnRightDownLayers ), NULL, this );
+
 
         AppendLayerRow(  LAYER_SPEC( wxT("layer 1"), 0, RED ) );
         AppendLayerRow(  LAYER_SPEC( wxT("layer 2"), 1, GREEN ) );
@@ -356,9 +418,41 @@ public:
 
         SelectLayerRow( 1 );
 
-        FitInside();
+        SetMinSize( GetPreferredSize() );
+    }
 
-        SetMinSize( GetSize() );
+
+    /**
+     * Function GetPreferredSize
+     * returns the preferred minimum size, taking into consideration the
+     * dynamic content.  Nothing in wxWidgets was reliable enough.
+     */
+    wxSize GetPreferredSize()
+    {
+        m_LayersFlexGridSizer->Layout();
+
+        wxArrayInt widths = m_LayersFlexGridSizer->GetColWidths();
+        int totWidth = 0;
+        for( int i=0;  i<LAYER_COLUMN_COUNT;  ++i )
+        {
+            totWidth += widths[i] + m_LayersFlexGridSizer->GetHGap();
+            printf("widths[%d]:%d\n", i, widths[i] );
+        }
+
+        wxArrayInt heights = m_LayersFlexGridSizer->GetRowHeights();
+        int totHeight = 0;
+        int rowCount = GetLayerRowCount();
+        for( int i=0; i<rowCount;  ++i )
+        {
+            totHeight += heights[i] + m_LayersFlexGridSizer->GetVGap();
+            printf("heights[%d]:%d\n", i, heights[i] );
+        }
+
+        wxSize layerPanelSize( totWidth, totHeight );
+
+        // this aint done yet, just a place holder for more work.
+
+        return layerPanelSize;
     }
 
 
@@ -366,12 +460,11 @@ public:
      * Function GetLayerRowCount
      * returns the number of rows in the layer tab.
      */
-    int GetLayerRowCount()
+    int GetLayerRowCount() const
     {
         int controlCount = m_LayersFlexGridSizer->GetChildren().GetCount();
         return controlCount / LAYER_COLUMN_COUNT;
     }
-
 
     /**
      * Function AppendLayerRow
@@ -383,6 +476,15 @@ public:
         insertLayerRow( nextRow, aSpec );
     }
 
+    /**
+     * Function ClearLayerRows
+     * empties out the layer rows.
+     */
+    void ClearLayerRows()
+    {
+        m_LayerScrolledWindow->DestroyChildren();
+    }
+
 
     /**
      * Function SelectLayerRow
@@ -390,6 +492,9 @@ public:
      */
     bool SelectLayerRow( int aRow )
     {
+        // enable the layer tab at index 0
+        m_notebook->ChangeSelection( 0 );
+
         if( (unsigned) aRow < (unsigned) GetLayerRowCount() )
         {
             int newNdx = LAYER_COLUMN_COUNT * aRow;
@@ -403,6 +508,18 @@ public:
 
             m_CurrentRow = aRow;
 
+            // Change the focus to the wxBitmapButton in column 1 for this row.
+            // We really do not need or want the focus, but because we get focus
+            // and it changes the appearance of these wxBitmapButtons, if any focused
+            // button is going to look different, we want it to be the current
+            // row.
+            getLayerComp( newNdx + 1 /* 1 is column */ )->SetFocus();
+
+            // Make sure the desired layer row is visible.
+            // It seems that as of 2.8.2, setting the focus
+            // does this and generally I don't expect the scrolling to be needed at all because
+            // the minimum window size may end up being established by the number of layers.
+
             return true;
         }
         return false;
@@ -410,7 +527,7 @@ public:
 
     /**
      * Function SelectLayer
-     * changes the row selection in the layer list to the given layer.
+     * changes the row selection in the layer list to \a aLayer provided.
      */
     bool SelectLayer( int aLayer )
     {
@@ -418,21 +535,29 @@ public:
         return SelectLayerRow( row );
     }
 
+
     //-----<abstract functions>-------------------------------------------
 
     /**
-     * Function ColorChange
-     * is called whenever the user changes the color of a layer.  Derived
+     * Function OnColorChange
+     * is called to notify client code about a layer color change.  Derived
      * classes will handle this accordingly.
      */
-    virtual void ColorChange( int aLayer, int aColor ) = 0;
+    virtual void OnColorChange( int aLayer, int aColor ) = 0;
 
     /**
-     * Function LayerChange
-     * is called whenever the user selects a different layer.  Derived classes
-     * will handle this accordingly, and can deny the change by returning false.
+     * Function OnLayerSelect
+     * is called to notify client code whenever the user selects a different
+     * layer.  Derived classes will handle this accordingly, and can deny
+     * the change by returning false.
      */
-    virtual bool LayerChange( int aLayer ) = 0;
+    virtual bool OnLayerSelect( int aLayer ) = 0;
+
+    /**
+     * Function OnLayerVisible
+     * is called to notify client code about a layer visibility change.
+     */
+    virtual void OnLayerVisible( int aLayer, bool isVisible ) = 0;
 
     //-----</abstract functions>------------------------------------------
 
@@ -449,7 +574,6 @@ public:
  */
 class MYFRAME : public wxFrame
 {
-
     // example of how to derive from LAYER_WIDGET in order to provide the
     // abstract methods.
     class MYLAYERS : public LAYER_WIDGET
@@ -466,15 +590,27 @@ class MYFRAME : public wxFrame
         {
         }
 
-        void ColorChange( int aLayer, int aColor )
+        void OnColorChange( int aLayer, int aColor )
         {
-            printf("ColorChange( aLayer:%d, aColor:%d )\n", aLayer, aColor );
+            printf( "OnColorChange( aLayer:%d, aColor:%d )\n", aLayer, aColor );
+
+            // a test trigger only
+            if( aLayer == 2 )
+            {
+                ClearLayerRows();
+                printf(" GetLayerRowCount(): %d\n", GetLayerRowCount() );
+            }
         }
 
-        bool LayerChange( int aLayer )
+        bool OnLayerSelect( int aLayer )
         {
-            printf( "LayerChange( aLayer:%d )\n", aLayer );
+            printf( "OnLayerSelect( aLayer:%d )\n", aLayer );
             return true;
+        }
+
+        void OnLayerVisible( int aLayer, bool isVisible )
+        {
+            printf( "OnLayerVisible( aLayer:%d, isVisible:%d )\n", aLayer, isVisible );
         }
     };
 
@@ -487,7 +623,7 @@ public:
         // notify wxAUI which frame to use
         m_mgr.SetManagedWindow( this );
 
-        wxPanel* layerWidget = new MYLAYERS( this, this );
+        MYLAYERS* layerWidget = new MYLAYERS( this, this );
 
         wxTextCtrl* text2 = new wxTextCtrl( this, -1, _( "Pane 2 - sample text" ),
                                             wxDefaultPosition, wxSize( 200, 150 ),
@@ -499,11 +635,11 @@ public:
 
         // add the panes to the manager
         wxAuiPaneInfo li;
-        li.MinSize( layerWidget->GetSize() );    // ignored on linux
-        li.BestSize( layerWidget->GetSize() );
+        li.MinSize( layerWidget->GetPreferredSize() );    // ignored on linux
+        li.BestSize( layerWidget->GetPreferredSize() );
         li.Left();
-        li.MaximizeButton( false );
-        li.MinimizeButton( false );
+        li.MaximizeButton( true );
+        li.MinimizeButton( true );
         li.CloseButton( false );
         li.Caption( wxT( "Layers" ) );
         m_mgr.AddPane( layerWidget, li );
@@ -544,4 +680,4 @@ public:
 DECLARE_APP( MyApp );
 IMPLEMENT_APP( MyApp );
 
-#endif
+#endif  // STAND_ALONE
