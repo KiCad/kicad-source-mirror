@@ -149,7 +149,8 @@ public:
     void   OnPaint( wxPaintEvent& event );
     void   OnEraseBackground( wxEraseEvent& event );
     void   OnChar( wxKeyEvent& event );
-    void   OnMouseEvent( wxMouseEvent& event );
+    void   OnMouseWheel( wxMouseEvent& event );
+    void   OnMouseMove( wxMouseEvent& event );
     void   OnRightClick( wxMouseEvent& event );
     void   OnPopUpMenu( wxCommandEvent& event );
     void   TakeScreenshot( wxCommandEvent& event );

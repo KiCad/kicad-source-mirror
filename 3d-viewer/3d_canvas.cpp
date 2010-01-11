@@ -1,13 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        3d_canvas.cpp
 /////////////////////////////////////////////////////////////////////////////
-
-
-#ifdef __GNUG__
-#pragma implementation
-#pragma interface
-#endif
-
 #include "fctsys.h"
 #include "trigo.h"
 
@@ -35,8 +28,13 @@
 
 BEGIN_EVENT_TABLE( Pcb3D_GLCanvas, wxGLCanvas )
     EVT_PAINT( Pcb3D_GLCanvas::OnPaint )
+    // key event:
     EVT_CHAR( Pcb3D_GLCanvas::OnChar )
-    EVT_MOUSE_EVENTS( Pcb3D_GLCanvas::OnMouseEvent )
+    // mouse events
+    EVT_RIGHT_DOWN( Pcb3D_GLCanvas::OnRightClick )
+    EVT_MOUSEWHEEL( Pcb3D_GLCanvas::OnMouseWheel )
+    EVT_MOTION( Pcb3D_GLCanvas::OnMouseMove )
+    // other events
     EVT_ERASE_BACKGROUND( Pcb3D_GLCanvas::OnEraseBackground )
     EVT_MENU_RANGE( ID_POPUP_3D_VIEW_START, ID_POPUP_3D_VIEW_END,
                     Pcb3D_GLCanvas::OnPopUpMenu )
@@ -205,60 +203,59 @@ void Pcb3D_GLCanvas::SetView3D( int keycode )
     Refresh( FALSE );
 }
 
-
-void Pcb3D_GLCanvas::OnMouseEvent( wxMouseEvent& event )
+void Pcb3D_GLCanvas::OnMouseWheel( wxMouseEvent& event )
 {
     wxSize size( GetClientSize() );
-    double spin_quat[4];
 
-
-    if( event.RightDown() )
+    if( event.ShiftDown() )
     {
-        OnRightClick( event ); return;
-    }
-
-    if( event.m_wheelRotation )
-    {
-        if( event.ShiftDown() )
+        if( event.GetWheelRotation() < 0 )
         {
-            if( event.GetWheelRotation() < 0 )
-            {
-                /* up */
-                SetView3D( WXK_UP );
-            }
-            else
-            {
-                /* down */
-                SetView3D( WXK_DOWN );
-            }
-        }
-        else if( event.ControlDown() )
-        {
-            if( event.GetWheelRotation() > 0 )
-            {
-                /* right */
-                SetView3D( WXK_RIGHT );
-            }
-            else
-            {
-                /* left */
-                SetView3D( WXK_LEFT );
-            }
+            /* up */
+            SetView3D( WXK_UP );
         }
         else
         {
-            if( event.GetWheelRotation() > 0 )
-            {
-                g_Parm_3D_Visu.m_Zoom /= 1.4;
-                if( g_Parm_3D_Visu.m_Zoom <= 0.01 )
-                    g_Parm_3D_Visu.m_Zoom = 0.01;
-            }
-            else
-                g_Parm_3D_Visu.m_Zoom *= 1.4;
-            DisplayStatus();
-            Refresh( FALSE );
+            /* down */
+            SetView3D( WXK_DOWN );
         }
     }
+    else if( event.ControlDown() )
+    {
+        if( event.GetWheelRotation() > 0 )
+        {
+            /* right */
+            SetView3D( WXK_RIGHT );
+        }
+        else
+        {
+            /* left */
+            SetView3D( WXK_LEFT );
+        }
+    }
+    else
+    {
+        if( event.GetWheelRotation() > 0 )
+        {
+            g_Parm_3D_Visu.m_Zoom /= 1.4;
+            if( g_Parm_3D_Visu.m_Zoom <= 0.01 )
+                g_Parm_3D_Visu.m_Zoom = 0.01;
+        }
+        else
+            g_Parm_3D_Visu.m_Zoom *= 1.4;
+        DisplayStatus();
+        Refresh( FALSE );
+    }
+
+    g_Parm_3D_Visu.m_Beginx = event.GetX();
+    g_Parm_3D_Visu.m_Beginy = event.GetY();
+}
+
+
+void Pcb3D_GLCanvas::OnMouseMove( wxMouseEvent& event )
+{
+    wxSize size( GetClientSize() );
+    double spin_quat[4];
 
     if( event.Dragging() )
     {
