@@ -75,9 +75,10 @@ void AddRoundedEndsSegmentPolygon( Bool_Engine* aBooleng,
 
 // Local Variables:
 /* how many segments are used to create a polygon from a circle: */
-static int s_CircleToSegmentsCount = 16;   /* default value. the real value will be changed to 32
-                                            * if g_Zone_Arc_Approximation == 1
-                                            */
+static int s_CircleToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_LOW_DEF;   /* default value. the real value will be changed to
+                                                                           * ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF
+                                                                           * if m_ArcToSegmentsCount == ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF
+                                                                           */
 double     s_Correction; /* mult coeff used to enlarge rounded and oval pads (and vias)
                           * because the segment approximation for arcs and circles
                           * create a smaller gap than a true circle
@@ -129,10 +130,10 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     bool have_poly_to_substract = false;
 
     // Set the number of segments in arc approximations
-    if( m_ArcToSegmentsCount == 32  )
-        s_CircleToSegmentsCount = 32;
+    if( m_ArcToSegmentsCount == ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF  )
+        s_CircleToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF;
     else
-        s_CircleToSegmentsCount = 16;
+        s_CircleToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_LOW_DEF;
 
     /* calculates the coeff to compensate radius reduction of holes clearance
      * due to the segment approx.

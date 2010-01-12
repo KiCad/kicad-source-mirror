@@ -99,7 +99,6 @@ public:
                             void* aData );
     void         DrawBackGround( wxDC* DC );
     void         DrawAuxiliaryAxis( wxDC* DC, int drawmode );
-    void         OnEraseBackground( wxEraseEvent& event );
     void         OnActivate( wxActivateEvent& event );
 
     /* Mouse and keys events */

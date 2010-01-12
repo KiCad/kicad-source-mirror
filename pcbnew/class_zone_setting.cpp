@@ -30,8 +30,9 @@ ZONE_SETTING::ZONE_SETTING( void )
     m_NetcodeSelection   = 0;                                       // Net code selection for the current zone
     m_CurrentZone_Layer  = 0;                                       // Layer used to create the current zone
     m_Zone_HatchingStyle = CPolyLine::DIAGONAL_EDGE;                // Option to show the zone area (outlines only, short hatches or full hatches
-    m_ArcToSegmentsCount = 16;                  /* Option to select number of segments to approximate a circle
-                                                 * 16 or 32 segments */
+    m_ArcToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_LOW_DEF;      /* Option to select number of segments to approximate a circle
+                                                                    * ARC_APPROX_SEGMENTS_COUNT_LOW_DEF
+                                                                    * or ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF segments */
     m_ThermalReliefGapValue = 200;                                  // tickness of the gap in thermal reliefs
     m_ThermalReliefCopperBridgeValue = 200;                         // tickness of the copper bridge in thermal reliefs
 

@@ -421,12 +421,6 @@ void WinEDA_DrawPanel::OnActivate( wxActivateEvent& event )
 }
 
 
-void WinEDA_DrawPanel::OnEraseBackground( wxEraseEvent& event )
-{
-    event.Skip();
-}
-
-
 void WinEDA_DrawPanel::OnScroll( wxScrollWinEvent& event )
 {
     int id = event.GetEventType();

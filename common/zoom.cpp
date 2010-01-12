@@ -15,8 +15,6 @@
 #include "class_base_screen.h"
 #include "wxstruct.h"
 
-#include "kicad_device_context.h"
-
 /** Compute draw offset (scroll bars and draw parameters)
  *  in order to have the current graphic cursor position at the screen center
  *  @param ToMouse if TRUE, the mouse cursor is moved
@@ -28,8 +26,8 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
 {
     PutOnGrid( &(GetBaseScreen()->m_Curseur) );
     AdjustScrollBars();
-    INSTALL_DC( dc, DrawPanel ) ;
-    DrawPanel->ReDraw( &dc );
+    DrawPanel->Refresh();   // send OnPaint event
+    wxSafeYield();          // needed to allow OnPaint event execution here
 
     /* Move the mouse cursor to the on grid graphic cursor position */
     if( ToMouse == TRUE )
@@ -40,8 +38,8 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
 
 
 /** Adjust the coordinate to the nearest grid value
-* @param coord = coordinate to adjust
-*/
+ * @param coord = coordinate to adjust
+ */
 void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
 {
     wxRealPoint grid_size = GetBaseScreen()->GetGridSize();
@@ -52,7 +50,7 @@ void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
         coord->x = wxRound( tmp * grid_size.x );
 
         tmp = wxRound( coord->y / grid_size.y );
-        coord->y = wxRound ( tmp * grid_size.y );
+        coord->y = wxRound( tmp * grid_size.y );
     }
 }
 
@@ -73,15 +71,16 @@ void WinEDA_DrawFrame::Zoom_Automatique( bool move_mouse_cursor )
  */
 void WinEDA_DrawFrame::Window_Zoom( EDA_Rect& Rect )
 {
-    double   scalex, bestscale;
+    double scalex, bestscale;
     wxSize size;
 
     /* Compute the best zoom */
     Rect.Normalize();
-    size     = DrawPanel->GetClientSize();
+    size = DrawPanel->GetClientSize();
+
     // Use ceil to at least show the full rect
-    scalex       = (double) Rect.GetSize().x / size.x;
-    bestscale       = (double)Rect.GetSize().y / size.y;
+    scalex    = (double) Rect.GetSize().x / size.x;
+    bestscale = (double) Rect.GetSize().y / size.y;
     bestscale = MAX( bestscale, scalex );
 
     GetBaseScreen()->SetScalingFactor( bestscale );
@@ -96,7 +95,7 @@ void WinEDA_DrawFrame::Window_Zoom( EDA_Rect& Rect )
 void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
 {
     if( DrawPanel == NULL )
-       return;
+        return;
 
     int          i;
     int          id = event.GetId();
@@ -107,7 +106,8 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
     {
     case ID_POPUP_ZOOM_IN:
         zoom_at_cursor = true;
-        // fall thru
+
+    // fall thru
 
     case ID_ZOOM_IN:
         if( id == ID_ZOOM_IN )
@@ -118,7 +118,8 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
 
     case ID_POPUP_ZOOM_OUT:
         zoom_at_cursor = true;
-        // fall thru
+
+    // fall thru
 
     case ID_ZOOM_OUT:
         if( id == ID_ZOOM_OUT )
@@ -128,12 +129,7 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
         break;
 
     case ID_ZOOM_REDRAW:
-        // DrawPanel->Refresh(); usually good,
-        // but does not work under linux, when called from here (wxGTK bug ?)
-        {
-        INSTALL_DC( dc, DrawPanel );
-        DrawPanel->ReDraw( &dc );
-        }
+        DrawPanel->Refresh();
         break;
 
     case ID_POPUP_ZOOM_CENTER:
@@ -199,12 +195,12 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
     zoom = GetScreen()->GetZoom();
     maxZoomIds = ID_POPUP_ZOOM_LEVEL_END - ID_POPUP_ZOOM_LEVEL_START;
     maxZoomIds = ( (size_t) maxZoomIds < GetScreen()->m_ZoomList.GetCount() ) ?
-        maxZoomIds : GetScreen()->m_ZoomList.GetCount();
+                 maxZoomIds : GetScreen()->m_ZoomList.GetCount();
 
     /* Populate zoom submenu. */
     for( i = 0; i < (size_t) maxZoomIds; i++ )
     {
-        if ( ( GetScreen()->m_ZoomList[i] % GetScreen()->m_ZoomScalar ) == 0 )
+        if( ( GetScreen()->m_ZoomList[i] % GetScreen()->m_ZoomScalar ) == 0 )
             msg.Printf( wxT( "%u" ),
                         GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar );
         else
@@ -240,7 +236,7 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
             }
             else
             {
-                if ( g_UnitMetric == 0 )    // inches
+                if( g_UnitMetric == 0 )     // inches
                     msg.Printf( wxT( "%.1f mils" ), gridValue * 1000 );
                 else
                     msg.Printf( wxT( "%.3f mm" ), gridValue );

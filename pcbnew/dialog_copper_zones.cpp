@@ -33,7 +33,7 @@ dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* z
     m_Config = wxGetApp().m_EDA_Config;
     m_Zone_Setting = zone_setting;
     m_NetSorting   = 1;     // 0 = alphabetic sort, 1 = pad count sort, and filtering net names
-    m_OnExitCode = ZONE_ABORT;
+    m_OnExitCode   = ZONE_ABORT;
 
     if( m_Config )
     {
@@ -124,7 +124,8 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
         break;
     }
 
-    m_ArcApproximationOpt->SetSelection( m_Zone_Setting->m_ArcToSegmentsCount == 32 ? 1 : 0 );
+    m_ArcApproximationOpt->SetSelection(
+        m_Zone_Setting->m_ArcToSegmentsCount == ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF ? 1 : 0 );
 
     /* build copper layers list */
     int layer_cnt = board->GetCopperLayerCount();
@@ -253,7 +254,9 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
         break;
     }
 
-    m_Zone_Setting->m_ArcToSegmentsCount = m_ArcApproximationOpt->GetSelection() == 1 ? 32 : 16;
+    m_Zone_Setting->m_ArcToSegmentsCount = m_ArcApproximationOpt->GetSelection() == 1 ?
+                                           ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF :
+                                           ARC_APPROX_SEGMENTS_COUNT_LOW_DEF;
 
     if( m_Config )
     {
@@ -437,6 +440,7 @@ void dialog_copper_zone::ExportSetupToOtherCopperZones( wxCommandEvent& event )
         m_Zone_Setting->ExportSetting( *zone, false );  // false = partiel export
         m_Parent->GetScreen()->SetModify();
     }
+
     m_OnExitCode = ZONE_EXPORT_VALUES;     // values are exported to others zones
 }
 

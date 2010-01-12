@@ -318,7 +318,7 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
         else if( strnicmp( Line, "ZOptions", 8 ) == 0 )    // Options info found
         {
             int  fillmode = 1;
-            int  arcsegmentcount = 16;
+            int  arcsegmentcount = ARC_APPROX_SEGMENTS_COUNT_LOW_DEF;
             char fillstate = 'F';
             text = Line + 8;
             ret  = sscanf( text, "%d %d %c %d %d", &fillmode, &arcsegmentcount, &fillstate,
@@ -329,8 +329,8 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
             else
                 m_FillMode = fillmode ? 1 : 0;
 
-            if( arcsegmentcount >= 32 )
-                m_ArcToSegmentsCount = 32;
+            if( arcsegmentcount >= ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF )
+                m_ArcToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF;
 
             m_IsFilled = fillstate == 'F' ? true : false;
         }

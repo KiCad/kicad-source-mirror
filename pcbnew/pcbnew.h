@@ -10,6 +10,10 @@
 
 #define U_PCB (PCB_INTERNAL_UNIT / EESCHEMA_INTERNAL_UNIT)
 
+// Arcs are appromed by segments: define the number of segments per 360 deg (kicad use 0.1 deg approx:
+#define ARC_APPROX_SEGMENTS_COUNT_LOW_DEF 16        // be aware 3600/ARC_APPROX_SEGMENTS_COUNT_LOW_DEF is an integer
+#define ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF 32
+
 /* Flag used in locate functions
  * the locate ref point is the on grid cursor or the off grid mouse cursor */
 #define CURSEUR_ON_GRILLE  (0 << 0)
