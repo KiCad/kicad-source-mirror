@@ -757,14 +757,18 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
     if( drawgrid )
     {
         m_Parent->PutOnGrid( &org );
-
         GRSetColorPen( DC, color );
+        int xpos, ypos;
+
+#if 0   // Use a pixel based draw to display grid
+        // There is a lot of calls, so the cost is hight
+        // and grid is slowly drawn on some platforms
         for( ii = 0; ; ii++ )
         {
             xg =  wxRound(ii * screen_grid_size.x);
             if( xg > size.x )
                 break;
-            int xpos = org.x + xg;
+            xpos = org.x + xg;
             xpos = GRMapX( xpos );
             for( jj = 0; ; jj++ )
             {
@@ -775,7 +779,32 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
                 DC->DrawPoint( xpos, GRMapY( ypos ) );
             }
 
-         }
+        }
+#else   // Currently on test: Use a fast way to draw the grid
+        // a grid column is drawn; and then copied to others grid columns
+        // this is possible because the grid is drawn only after clearing the screen.
+        ii = 1;
+        xg =  wxRound(ii * screen_grid_size.x);
+        int x0pos = GRMapX( org.x + xg);
+        for( jj = 0; ; jj++ )
+        {
+            yg = wxRound(jj * screen_grid_size.y);
+            if( yg > size.y )
+                break;
+            ypos = org.y + yg;
+            DC->DrawPoint( x0pos, GRMapY( ypos ) );
+        }
+
+        ypos = GRMapY(org.y);
+        for( ii = 2; ; ii++ )
+        {
+            xg =  wxRound(ii * screen_grid_size.x);
+            if( xg > size.x )
+                break;
+            xpos = GRMapX( org.x + xg );
+            DC->Blit( xpos, ypos, 1, size.y, DC, x0pos, ypos  );
+        }
+#endif
     }
 
     /* Draw axis */
