@@ -43,8 +43,8 @@ enum fl_rot_cmp
     CMP_ORIENT_90,                // Rotate 90, no mirror
     CMP_ORIENT_180,               // Rotate 180, no mirror
     CMP_ORIENT_270,               // Rotate -90, no mirror
-    CMP_MIROIR_X = 0x100,         // Mirror around X axis
-    CMP_MIROIR_Y = 0x200          // Mirror around Y axis
+    CMP_MIRROR_X = 0x100,         // Mirror around X axis
+    CMP_MIRROR_Y = 0x200          // Mirror around Y axis
 };
 
 /**

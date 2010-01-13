@@ -1,6 +1,6 @@
-/*********************************************/
+/**********************************************/
 /*  eesave.cpp  Module to Save EESchema files */
-/*********************************************/
+/**********************************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -16,9 +16,6 @@
 #include "class_library.h"
 
 #include <boost/foreach.hpp>
-
-
-static void SaveLayers( FILE* f );
 
 
 /*****************************************************************************
@@ -112,73 +109,51 @@ bool WinEDA_SchematicFrame::SaveEEFile( SCH_SCREEN* screen, int FileSave )
  */
 bool SCH_SCREEN::Save( FILE* aFile ) const
 {
-    wxString       Name, msg;
-    Ki_PageDescr*  PlotSheet;
-
-    wxString datetime = DateAndTime(  );
-
     // Creates header
     if( fprintf( aFile, "%s %s %d", EESCHEMA_FILE_STAMP,
-                 SCHEMATIC_HEAD_STRING, EESCHEMA_VERSION ) == EOF )
-        return FALSE;
-
-    if( fprintf( aFile, "  date %s\n", CONV_TO_UTF8(datetime) ) == EOF )
+                 SCHEMATIC_HEAD_STRING, EESCHEMA_VERSION ) < 0
+        || fprintf( aFile, "  date %s\n", CONV_TO_UTF8( DateAndTime() ) ) < 0 )
         return FALSE;
 
     BOOST_FOREACH( const CMP_LIBRARY& lib, CMP_LIBRARY::GetLibraryList() )
     {
-        Name = lib.GetName();
-        if( fprintf( aFile, "LIBS:%s\n", CONV_TO_UTF8( Name ) ) == EOF )
+        if( fprintf( aFile, "LIBS:%s\n", CONV_TO_UTF8( lib.GetName() ) ) < 0 )
             return FALSE;
     }
 
-    SaveLayers( aFile );
+    if( fprintf( aFile, "EELAYER %2d %2d\n", g_LayerDescr.NumberOfLayers,
+                 g_LayerDescr.CurrentLayer ) < 0
+        || fprintf( aFile, "EELAYER END\n" ) < 0 )
+        return FALSE;
 
-    /* Write page info */
-
-    PlotSheet = m_CurrentSheetDesc;
-    fprintf( aFile, "$Descr %s %d %d\n", CONV_TO_UTF8( PlotSheet->m_Name ),
-             PlotSheet->m_Size.x, PlotSheet->m_Size.y );
-
-    /* Write ScreenNumber and NumberOfScreen; not very meaningfull for
-     * SheetNumber and Sheet Countin a complex hierarchy, but usefull in
-     * simple hierarchy and flat hierarchy.  Used also to serach the root
+    /* Write page info, ScreenNumber and NumberOfScreen; not very meaningful for
+     * SheetNumber and Sheet Count in a complex hierarchy, but useful in
+     * simple hierarchy and flat hierarchy.  Used also to search the root
      * sheet ( ScreenNumber = 1 ) within the files
      */
-    fprintf( aFile, "Sheet %d %d\n", m_ScreenNumber, m_NumberOfScreen );
-    fprintf( aFile, "Title \"%s\"\n", CONV_TO_UTF8( m_Title ) );
-    fprintf( aFile, "Date \"%s\"\n", CONV_TO_UTF8( m_Date ) );
-    fprintf( aFile, "Rev \"%s\"\n", CONV_TO_UTF8( m_Revision ) );
-    fprintf( aFile, "Comp \"%s\"\n", CONV_TO_UTF8( m_Company ) );
-    fprintf( aFile, "Comment1 \"%s\"\n", CONV_TO_UTF8( m_Commentaire1 ) );
-    fprintf( aFile, "Comment2 \"%s\"\n", CONV_TO_UTF8( m_Commentaire2 ) );
-    fprintf( aFile, "Comment3 \"%s\"\n", CONV_TO_UTF8( m_Commentaire3 ) );
-    fprintf( aFile, "Comment4 \"%s\"\n", CONV_TO_UTF8( m_Commentaire4 ) );
 
-    fprintf( aFile, "$EndDescr\n" );
+    if( fprintf( aFile, "$Descr %s %d %d\n", CONV_TO_UTF8( m_CurrentSheetDesc->m_Name ),
+                 m_CurrentSheetDesc->m_Size.x, m_CurrentSheetDesc->m_Size.y ) < 0
+        || fprintf( aFile, "Sheet %d %d\n", m_ScreenNumber, m_NumberOfScreen ) < 0
+        || fprintf( aFile, "Title \"%s\"\n", CONV_TO_UTF8( m_Title ) ) < 0
+        || fprintf( aFile, "Date \"%s\"\n", CONV_TO_UTF8( m_Date ) ) < 0
+        || fprintf( aFile, "Rev \"%s\"\n", CONV_TO_UTF8( m_Revision ) ) < 0
+        || fprintf( aFile, "Comp \"%s\"\n", CONV_TO_UTF8( m_Company ) ) < 0
+        || fprintf( aFile, "Comment1 \"%s\"\n", CONV_TO_UTF8( m_Commentaire1 ) ) < 0
+        || fprintf( aFile, "Comment2 \"%s\"\n", CONV_TO_UTF8( m_Commentaire2 ) ) < 0
+        || fprintf( aFile, "Comment3 \"%s\"\n", CONV_TO_UTF8( m_Commentaire3 ) ) < 0
+        || fprintf( aFile, "Comment4 \"%s\"\n", CONV_TO_UTF8( m_Commentaire4 ) ) < 0
+        || fprintf( aFile, "$EndDescr\n" ) < 0 )
+        return FALSE;
 
-    /* Saving schematic items */
-    bool failed = false;
-
-    for( SCH_ITEM* item = EEDrawList; item && !failed; item = item->Next() )
+    for( SCH_ITEM* item = EEDrawList; item; item = item->Next() )
     {
         if( !item->Save( aFile ) )
-            failed = true;
+            return FALSE;
     }
 
-    if( fprintf( aFile, "$EndSCHEMATC\n" ) == EOF )
-        failed = true;
+    if( fprintf( aFile, "$EndSCHEMATC\n" ) < 0 )
+        return FALSE;
 
-    return !failed;
-}
-
-
-/* Save a Layer Structure to a file
- * theses infos are not used in eeschema
- */
-static void SaveLayers( FILE* f )
-{
-    fprintf( f, "EELAYER %2d %2d\n", g_LayerDescr.NumberOfLayers,
-             g_LayerDescr.CurrentLayer );
-    fprintf( f, "EELAYER END\n" );
+    return TRUE;
 }

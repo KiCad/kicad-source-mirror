@@ -1,5 +1,4 @@
 /***********************************************************/
-
 /* mdiframe.cpp - WinEDA_MainFrame is the kicad main frame */
 /***********************************************************/
 
@@ -41,7 +40,7 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow*       parent,
     m_RightWin             = NULL;              /* A shashwindow that contains the buttons
                                                  *  and the window display text
                                                  */
-    m_LeftWin_Width        = MAX(60, GetSize().x/3 );
+    m_LeftWin_Width        = MAX( 60, GetSize().x/3 );
 
     LoadSettings();
 
@@ -61,22 +60,29 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow*       parent,
     #endif
 
     clientsize = GetClientSize();
-    int rightWinWidth = clientsize.x - m_LeftWin_Width;
 
     // Left window: is the box which display tree project
     m_LeftWin = new WinEDA_PrjFrame( this );
+
+    // Bottom Window: box to display messages
+    m_RightWin = new RIGHT_KM_FRAME( this );
+
+    /* Setting the sash control interferes with wxAUIManager and prevents the
+     * right and left window panes from being resized.
+     */
+#ifndef KICAD_AUIMANAGER
     m_LeftWin->SetDefaultSize( wxSize( m_LeftWin_Width, clientsize.y ) );
     m_LeftWin->SetOrientation( wxLAYOUT_VERTICAL );
     m_LeftWin->SetAlignment( wxLAYOUT_LEFT );
     m_LeftWin->SetSashVisible( wxSASH_RIGHT, TRUE );
     m_LeftWin->SetExtraBorderSize( 2 );
 
-    // Bottom Window: box to display messages
-    m_RightWin = new RIGHT_KM_FRAME( this );
+    int rightWinWidth = clientsize.x - m_LeftWin_Width;
     m_RightWin->SetDefaultSize( wxSize( rightWinWidth, clientsize.y ) );
     m_RightWin->SetOrientation( wxLAYOUT_VERTICAL );
     m_RightWin->SetAlignment( wxLAYOUT_RIGHT );
     m_RightWin->SetExtraBorderSize( 2 );
+#endif
 
     msg = wxGetCwd();
     line.Printf( _( "Ready\nWorking dir: %s\n" ), msg.GetData() );
@@ -98,29 +104,28 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow*       parent,
     horiz.Floatable( false );
     horiz.CloseButton( false );
     horiz.CaptionVisible( false );
+    horiz.LeftDockable( false );
+    horiz.RightDockable( false );
 
-    wxAuiPaneInfo vert( horiz );
+    if( m_HToolBar )
+        m_auimgr.AddPane( m_HToolBar,
+                          wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().Layer( 1 ) );
 
-    vert.TopDockable( false ).BottomDockable( false );
-    horiz.LeftDockable( false ).RightDockable( false );
+    if( m_RightWin )
+        m_auimgr.AddPane( m_RightWin,
+                          wxAuiPaneInfo().Name( wxT( "m_RightWin" ) ).CentrePane().Layer( 1 ) );
 
-    m_auimgr.AddPane( m_HToolBar,
-                     wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top() );
-
-    m_auimgr.AddPane( m_RightWin,
-                     wxAuiPaneInfo().Name( wxT( "m_RightWin" ) ).CentrePane() );
-
-    m_auimgr.AddPane( m_LeftWin,
-                     wxAuiPaneInfo( horiz ).Name( wxT( "m_LeftWin" ) ).
-                     Left().BestSize( m_LeftWin_Width, clientsize.y ) );
+    if( m_LeftWin )
+        m_auimgr.AddPane( m_LeftWin,
+                          wxAuiPaneInfo().Name( wxT( "m_LeftWin" ) ).Floatable( false ).
+                          CloseButton( false ).Left().BestSize( m_LeftWin_Width, clientsize.y ).
+                          Layer( 1 ).CaptionVisible( false ) );
     m_auimgr.Update();
 #endif
 }
 
 
-/*****************************************************************************/
 WinEDA_MainFrame::~WinEDA_MainFrame()
-/*****************************************************************************/
 {
 #if defined(KICAD_AUIMANAGER)
     m_auimgr.UnInit();
@@ -128,24 +133,18 @@ WinEDA_MainFrame::~WinEDA_MainFrame()
 }
 
 
-/*******************************************************/
-void WinEDA_MainFrame::PrintMsg( const wxString& text )
-/*******************************************************/
-
 /*
  * Put text in the dialog frame
  */
+void WinEDA_MainFrame::PrintMsg( const wxString& text )
 {
     m_RightWin->m_DialogWin->AppendText( text );
 }
 
 
-/****************************************************/
-void WinEDA_MainFrame::OnSashDrag( wxSashEvent& event )
-/****************************************************/
-
 /* Resize windows when dragging window borders
  */
+void WinEDA_MainFrame::OnSashDrag( wxSashEvent& event )
 {
 #if defined(KICAD_AUIMANAGER)
 
@@ -164,9 +163,7 @@ void WinEDA_MainFrame::OnSashDrag( wxSashEvent& event )
 }
 
 
-/************************************************/
 void WinEDA_MainFrame::OnSize( wxSizeEvent& event )
-/************************************************/
 {
 #if defined(KICAD_AUIMANAGER)
     if( m_auimgr.GetManagedWindow() )
@@ -181,9 +178,7 @@ void WinEDA_MainFrame::OnSize( wxSizeEvent& event )
 }
 
 
-/**********************************************************/
 void WinEDA_MainFrame::OnCloseWindow( wxCloseEvent& Event )
-/**********************************************************/
 {
     int px, py;
 
@@ -256,7 +251,7 @@ void WinEDA_MainFrame::OnRunGerbview( wxCommandEvent& event )
     wxFileName fn( m_ProjectFileName );
 
     ExecuteFile( this, GERBVIEW_EXE,
-                fn.GetPath( wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME ) );
+                 fn.GetPath( wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME ) );
 }
 
 
@@ -307,17 +302,13 @@ void WinEDA_MainFrame::OnOpenFileInTextEditor( wxCommandEvent& event )
 }
 
 
-/********************************************************/
 void WinEDA_MainFrame::OnRefresh( wxCommandEvent& event )
-/********************************************************/
 {
     m_LeftWin->ReCreateTreePrj();
 }
 
 
-/*********************************/
 void WinEDA_MainFrame::ClearMsg()
-/*********************************/
 {
     m_RightWin->m_DialogWin->Clear();
 }
@@ -359,12 +350,10 @@ void WinEDA_MainFrame::SaveSettings()
 
 
 #ifdef KICAD_PYTHON
-/*****************************************************************************/
+
 void WinEDA_MainFrame::OnRefreshPy()
-/*****************************************************************************/
 {
     m_LeftWin->ReCreateTreePrj();
 }
-
 
 #endif

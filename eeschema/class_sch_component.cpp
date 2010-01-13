@@ -703,12 +703,12 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheet )
  *  which is applied to the initial transform.
  */
 /*****************************************************************/
-void SCH_COMPONENT::SetRotationMiroir( int type_rotate )
+void SCH_COMPONENT::SetOrientation( int aOrientation )
 {
     int  TempMat[2][2];
     bool Transform = FALSE;
 
-    switch( type_rotate )
+    switch( aOrientation )
     {
     case CMP_ORIENT_0:
     case CMP_NORMAL:            /* Position Initiale */
@@ -731,14 +731,14 @@ void SCH_COMPONENT::SetRotationMiroir( int type_rotate )
         Transform = TRUE;
         break;
 
-    case CMP_MIROIR_Y:          /* MirrorY */
+    case CMP_MIRROR_Y:          /* MirrorY */
         TempMat[0][0] = -1;
         TempMat[1][1] = 1;
         TempMat[0][1] = TempMat[1][0] = 0;
         Transform = TRUE;
         break;
 
-    case CMP_MIROIR_X:            /* MirrorX */
+    case CMP_MIRROR_X:            /* MirrorX */
         TempMat[0][0] = 1;
         TempMat[1][1] = -1;
         TempMat[0][1] = TempMat[1][0] = 0;
@@ -746,59 +746,59 @@ void SCH_COMPONENT::SetRotationMiroir( int type_rotate )
         break;
 
     case CMP_ORIENT_90:
-        SetRotationMiroir( CMP_ORIENT_0 );
-        SetRotationMiroir( CMP_ROTATE_COUNTERCLOCKWISE );
+        SetOrientation( CMP_ORIENT_0 );
+        SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
         break;
 
     case CMP_ORIENT_180:
-        SetRotationMiroir( CMP_ORIENT_0 );
-        SetRotationMiroir( CMP_ROTATE_COUNTERCLOCKWISE );
-        SetRotationMiroir( CMP_ROTATE_COUNTERCLOCKWISE );
+        SetOrientation( CMP_ORIENT_0 );
+        SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
+        SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
         break;
 
     case CMP_ORIENT_270:
-        SetRotationMiroir( CMP_ORIENT_0 );
-        SetRotationMiroir( CMP_ROTATE_CLOCKWISE );
+        SetOrientation( CMP_ORIENT_0 );
+        SetOrientation( CMP_ROTATE_CLOCKWISE );
         break;
 
-    case ( CMP_ORIENT_0 + CMP_MIROIR_X ):
-        SetRotationMiroir( CMP_ORIENT_0 );
-        SetRotationMiroir( CMP_MIROIR_X );
+    case ( CMP_ORIENT_0 + CMP_MIRROR_X ):
+        SetOrientation( CMP_ORIENT_0 );
+        SetOrientation( CMP_MIRROR_X );
         break;
 
-    case ( CMP_ORIENT_0 + CMP_MIROIR_Y ):
-        SetRotationMiroir( CMP_ORIENT_0 );
-        SetRotationMiroir( CMP_MIROIR_Y );
+    case ( CMP_ORIENT_0 + CMP_MIRROR_Y ):
+        SetOrientation( CMP_ORIENT_0 );
+        SetOrientation( CMP_MIRROR_Y );
         break;
 
-    case ( CMP_ORIENT_90 + CMP_MIROIR_X ):
-        SetRotationMiroir( CMP_ORIENT_90 );
-        SetRotationMiroir( CMP_MIROIR_X );
+    case ( CMP_ORIENT_90 + CMP_MIRROR_X ):
+        SetOrientation( CMP_ORIENT_90 );
+        SetOrientation( CMP_MIRROR_X );
         break;
 
-    case ( CMP_ORIENT_90 + CMP_MIROIR_Y ):
-        SetRotationMiroir( CMP_ORIENT_90 );
-        SetRotationMiroir( CMP_MIROIR_Y );
+    case ( CMP_ORIENT_90 + CMP_MIRROR_Y ):
+        SetOrientation( CMP_ORIENT_90 );
+        SetOrientation( CMP_MIRROR_Y );
         break;
 
-    case ( CMP_ORIENT_180 + CMP_MIROIR_X ):
-        SetRotationMiroir( CMP_ORIENT_180 );
-        SetRotationMiroir( CMP_MIROIR_X );
+    case ( CMP_ORIENT_180 + CMP_MIRROR_X ):
+        SetOrientation( CMP_ORIENT_180 );
+        SetOrientation( CMP_MIRROR_X );
         break;
 
-    case ( CMP_ORIENT_180 + CMP_MIROIR_Y ):
-        SetRotationMiroir( CMP_ORIENT_180 );
-        SetRotationMiroir( CMP_MIROIR_Y );
+    case ( CMP_ORIENT_180 + CMP_MIRROR_Y ):
+        SetOrientation( CMP_ORIENT_180 );
+        SetOrientation( CMP_MIRROR_Y );
         break;
 
-    case ( CMP_ORIENT_270 + CMP_MIROIR_X ):
-        SetRotationMiroir( CMP_ORIENT_270 );
-        SetRotationMiroir( CMP_MIROIR_X );
+    case ( CMP_ORIENT_270 + CMP_MIRROR_X ):
+        SetOrientation( CMP_ORIENT_270 );
+        SetOrientation( CMP_MIRROR_X );
         break;
 
-    case ( CMP_ORIENT_270 + CMP_MIROIR_Y ):
-        SetRotationMiroir( CMP_ORIENT_270 );
-        SetRotationMiroir( CMP_MIROIR_Y );
+    case ( CMP_ORIENT_270 + CMP_MIRROR_Y ):
+        SetOrientation( CMP_ORIENT_270 );
+        SetOrientation( CMP_MIRROR_Y );
         break;
 
     default:
@@ -841,20 +841,20 @@ void SCH_COMPONENT::SetRotationMiroir( int type_rotate )
 }
 
 
-/** function GetRotationMiroir()
+/** function GetOrientation()
  * Used to display component orientation (in dialog editor or info)
  * @return the orientation and mirror
  * Note: Because there are different ways to have a given orientation/mirror,
  * the orientation/mirror is not necessary what the used does
  * (example : a mirrorX then a mirrorY give no mirror but rotate the component).
  * So this function find a rotation and a mirror value
- * ( CMP_MIROIR_X because this is the first mirror option tested)
+ * ( CMP_MIRROR_X because this is the first mirror option tested)
  *  but can differs from the orientation made by an user
- * ( a CMP_MIROIR_Y is find as a CMP_MIROIR_X + orientation 180, because they
+ * ( a CMP_MIRROR_Y is find as a CMP_MIRROR_X + orientation 180, because they
  * are equivalent)
  *
  */
-int SCH_COMPONENT::GetRotationMiroir()
+int SCH_COMPONENT::GetOrientation()
 {
     int  type_rotate = CMP_ORIENT_0;
     int  ComponentMatOrient[2][2];
@@ -866,10 +866,10 @@ int SCH_COMPONENT::GetRotationMiroir()
     int rotate_value[ROTATE_VALUES_COUNT] =
     {
         CMP_ORIENT_0, CMP_ORIENT_90, CMP_ORIENT_180, CMP_ORIENT_270,
-        CMP_MIROIR_X + CMP_ORIENT_0, CMP_MIROIR_X + CMP_ORIENT_90,
-        CMP_MIROIR_X + CMP_ORIENT_180, CMP_MIROIR_X + CMP_ORIENT_270,
-        CMP_MIROIR_Y + CMP_ORIENT_0, CMP_MIROIR_Y + CMP_ORIENT_90,
-        CMP_MIROIR_Y + CMP_ORIENT_180, CMP_MIROIR_Y + CMP_ORIENT_270
+        CMP_MIRROR_X + CMP_ORIENT_0, CMP_MIRROR_X + CMP_ORIENT_90,
+        CMP_MIRROR_X + CMP_ORIENT_180, CMP_MIRROR_X + CMP_ORIENT_270,
+        CMP_MIRROR_Y + CMP_ORIENT_0, CMP_MIRROR_Y + CMP_ORIENT_90,
+        CMP_MIRROR_Y + CMP_ORIENT_180, CMP_MIRROR_Y + CMP_ORIENT_270
     };
 
     // Try to find the current transform option:
@@ -878,7 +878,7 @@ int SCH_COMPONENT::GetRotationMiroir()
     for( ii = 0; ii < ROTATE_VALUES_COUNT; ii++ )
     {
         type_rotate = rotate_value[ii];
-        SetRotationMiroir( type_rotate );
+        SetOrientation( type_rotate );
         if( memcmp( ComponentMatOrient, m_Transform,
                     sizeof(ComponentMatOrient) ) == 0 )
             return type_rotate;
@@ -1132,7 +1132,7 @@ void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
 void SCH_COMPONENT::Mirror_Y(int aYaxis_position)
 {
     int dx = m_Pos.x;
-    SetRotationMiroir( CMP_MIROIR_Y );
+    SetOrientation( CMP_MIRROR_Y );
     m_Pos.x -= aYaxis_position;
     NEGATE( m_Pos.x );
     m_Pos.x += aYaxis_position;

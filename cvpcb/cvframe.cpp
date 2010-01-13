@@ -189,15 +189,18 @@ WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title,
 
     horiz.LeftDockable( false ).RightDockable( false );
 
-    m_auimgr.AddPane( m_HToolBar,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top() );
+    if( m_HToolBar )
+        m_auimgr.AddPane( m_HToolBar,
+                          wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top() );
 
-    m_auimgr.AddPane( m_ListCmp,
-                      wxAuiPaneInfo(horiz).Name( wxT( "m_ListCmp" ) ).CentrePane() );
+    if( m_ListCmp )
+        m_auimgr.AddPane( m_ListCmp,
+                          wxAuiPaneInfo(horiz).Name( wxT( "m_ListCmp" ) ).CentrePane() );
 
-    m_auimgr.AddPane( m_FootprintList,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "m_FootprintList" ) ).
-                      Right().BestSize( m_FrameSize.x * 0.36, m_FrameSize.y ) );
+    if( m_FootprintList )
+        m_auimgr.AddPane( m_FootprintList,
+                          wxAuiPaneInfo( horiz ).Name( wxT( "m_FootprintList" ) ).
+                          Right().BestSize( m_FrameSize.x * 0.36, m_FrameSize.y ) );
 
     m_auimgr.Update();
 #endif

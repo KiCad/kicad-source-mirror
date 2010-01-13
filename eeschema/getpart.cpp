@@ -255,7 +255,7 @@ void WinEDA_SchematicFrame::CmpRotationMiroir( SCH_COMPONENT* DrawComponent,
         }
     }
 
-    DrawComponent->SetRotationMiroir( type_rotate );
+    DrawComponent->SetOrientation( type_rotate );
 
     /* Redraw the component in the new position. */
     if( DC )

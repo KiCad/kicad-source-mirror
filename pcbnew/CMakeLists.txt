@@ -219,18 +219,21 @@ install(TARGETS pcbnew
         COMPONENT binary)
 
 
-# This one gets made only when testing.
-#add_executable(dsntest EXCLUDE_FROM_ALL dsn.cpp)
-#target_link_libraries(dsntest common ${wxWidgets_LIBRARIES})
+# The specctra test fails to build properly using MS Visual Studio.
+if(NOT MSVC)
+    # This one gets made only when testing.
+    #add_executable(dsntest EXCLUDE_FROM_ALL dsn.cpp)
+    #target_link_libraries(dsntest common ${wxWidgets_LIBRARIES})
+
+    # This one gets made only when testing.
+    add_executable(specctra_test EXCLUDE_FROM_ALL specctra.cpp)
+    target_link_libraries(specctra_test common ${wxWidgets_LIBRARIES})
+
+endif(NOT MSVC)
 
 # This one gets made only when testing.
-add_executable(specctra_test EXCLUDE_FROM_ALL specctra.cpp)
-target_link_libraries(specctra_test common ${wxWidgets_LIBRARIES})
-
-# This one gets made only when testing.
-add_executable(layer_widget_test EXCLUDE_FROM_ALL
+add_executable(layer_widget_test WIN32 EXCLUDE_FROM_ALL
     layer_panel_base.cpp
     layer_widget.cpp
     )
 target_link_libraries(layer_widget_test common ${wxWidgets_LIBRARIES})
-

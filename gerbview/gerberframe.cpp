@@ -164,20 +164,25 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
     vert.TopDockable( false ).BottomDockable( false );
     horiz.LeftDockable( false ).RightDockable( false );
 
-    m_auimgr.AddPane( m_HToolBar,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
+    if( m_HToolBar )
+        m_auimgr.AddPane( m_HToolBar,
+                          wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
 
-    m_auimgr.AddPane( m_VToolBar,
-                      wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
+    if( m_VToolBar )
+        m_auimgr.AddPane( m_VToolBar,
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
 
-    m_auimgr.AddPane( m_OptionsToolBar,
-                      wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left() );
+    if( m_OptionsToolBar )
+        m_auimgr.AddPane( m_OptionsToolBar,
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left() );
 
-    m_auimgr.AddPane( DrawPanel,
-                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
+    if( DrawPanel )
+        m_auimgr.AddPane( DrawPanel,
+                          wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
-    m_auimgr.AddPane( MsgPanel,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
+    if( MsgPanel )
+        m_auimgr.AddPane( MsgPanel,
+                          wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
 
     m_auimgr.Update();
 #endif

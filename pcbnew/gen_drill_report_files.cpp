@@ -88,8 +88,8 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
 
         scale = MIN( Xscale, Yscale );
 
-        offset.x  = BoardCentre.x - (SheetSize.x / 2) / scale;
-        offset.y  = BoardCentre.y - (SheetSize.y / 2) / scale;
+        offset.x  = (int) ( (double) BoardCentre.x - ( (double) SheetSize.x / 2.0 ) / scale );
+        offset.y  = (int) ( (double) BoardCentre.y - ( (double) SheetSize.y / 2.0 ) / scale );
         offset.y += SheetSize.y / 8;      /* offset to legend */
         PS_PLOTTER* ps_plotter = new PS_PLOTTER;
         plotter = ps_plotter;
@@ -169,7 +169,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
     intervalle = (int) ( CharSize * CharScale ) + TextWidth;
 
     /* Trace information. */
-    plotX = aPcb->m_BoundaryBox.GetX() + 200 * CharScale;
+    plotX = (int) ( (double) aPcb->m_BoundaryBox.GetX() + 200.0 * CharScale );
     plotY = aPcb->m_BoundaryBox.GetBottom() + intervalle;
 
     /* Plot title  "Info" */
@@ -189,8 +189,8 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
         plotY += intervalle;
 
         plot_diam = (int) ( aToolListBuffer[ii].m_Diameter );
-        x = plotX - 200 * CharScale - plot_diam / 2;
-        y = plotY + CharSize * CharScale;
+        x = (int) ( (double) plotX - 200.0 * CharScale - (double)plot_diam / 2.0 );
+        y = (int) ( (double) plotY + (double) CharSize * CharScale );
         plotter->marker( wxPoint( x, y ), plot_diam, ii );
 
         /* Trace the legends. */

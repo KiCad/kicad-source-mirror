@@ -798,12 +798,12 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel,
     isegm->DisplayInfoBase( frame );
 
     // Add current track length
-    int      trackLen = 0;
+    double   trackLen = 0.0;
     wxString msg;
     for( TRACK* track = g_FirstTrackSegment; track; track = track->Next() )
         trackLen += track->GetLength();
 
-    valeur_param( trackLen, msg );
+    valeur_param( wxRound( trackLen ), msg );
     frame->AppendMsgPanel( _( "Track Len" ), msg, DARKCYAN );
 
     // Add current segments count (number of segments in this new track):

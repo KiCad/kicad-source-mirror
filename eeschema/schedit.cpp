@@ -483,10 +483,10 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
             switch( id )
             {
             case ID_POPUP_SCH_MIROR_X_CMP:
-                option = CMP_MIROIR_X; break;
+                option = CMP_MIRROR_X; break;
 
             case ID_POPUP_SCH_MIROR_Y_CMP:
-                option = CMP_MIROIR_Y; break;
+                option = CMP_MIRROR_Y; break;
 
             case ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE:
                 option = CMP_ROTATE_COUNTERCLOCKWISE; break;

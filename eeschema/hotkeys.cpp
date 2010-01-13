@@ -388,7 +388,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                 SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, UR_CHANGED );
                 RefreshToolBar = TRUE;
             }
-            CmpRotationMiroir( (SCH_COMPONENT*) DrawStruct, DC, CMP_MIROIR_Y );
+            CmpRotationMiroir( (SCH_COMPONENT*) DrawStruct, DC, CMP_MIRROR_Y );
         }
         break;
 
@@ -402,7 +402,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                 SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, UR_CHANGED );
                 RefreshToolBar = TRUE;
             }
-            CmpRotationMiroir( (SCH_COMPONENT*) DrawStruct, DC, CMP_MIROIR_X );
+            CmpRotationMiroir( (SCH_COMPONENT*) DrawStruct, DC, CMP_MIRROR_X );
         }
         break;
 

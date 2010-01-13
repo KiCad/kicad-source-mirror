@@ -176,8 +176,9 @@ public:
         return new SCH_COMPONENT( *this );
     }
 
-    void            SetRotationMiroir( int type );
-    /** function GetRotationMiroir()
+    void            SetOrientation( int aOrientation );
+
+    /** function GetOrientation()
      * Used to display component orientation (in dialog editor or info)
      * @return the orientation and mirror
      * Note: Because there are different ways to have a given orientation/mirror,
@@ -185,12 +186,12 @@ public:
      * (example : a mirrorX then a mirrorY give no mirror but rotate the
      * component).
      * So this function find a rotation and a mirror value
-     * ( CMP_MIROIR_X because this is the first mirror option tested)
+     * ( CMP_MIRROR_X because this is the first mirror option tested)
      *  but can differs from the orientation made by an user
-     * ( a CMP_MIROIR_Y is find as a CMP_MIROIR_X + orientation 180, because
+     * ( a CMP_MIRROR_Y is find as a CMP_MIRROR_X + orientation 180, because
      * they are equivalent)
      */
-    int             GetRotationMiroir();
+    int             GetOrientation();
 
     wxPoint         GetScreenCoord( const wxPoint& coord );
     void            DisplayInfo( WinEDA_DrawFrame* frame );

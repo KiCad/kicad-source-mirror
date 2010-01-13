@@ -160,7 +160,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     userscale = m_PrintParams.m_PrintScale;
     if( userscale == 0 )            //  fit in page
     {
-        int extra_margin = 8000;    // Margin = 8000/2 units pcb = 0,4 inch
+        int extra_margin = 0;    // Margin = 8000/2 units pcb = 0,4 inch
         SheetSize.x = pcbframe->GetBoard()->m_BoundaryBox.GetWidth() + extra_margin;
         SheetSize.y = pcbframe->GetBoard()->m_BoundaryBox.GetHeight() + extra_margin;
         userscale   = 0.99;
@@ -174,8 +174,8 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     }
 
     // Calculate a suitable scaling factor
-    scaleX = (double) SheetSize.x / PlotAreaSize.x;
-    scaleY = (double) SheetSize.y / PlotAreaSize.y;
+    scaleX = (double) SheetSize.x / (double) PlotAreaSize.x;
+    scaleY = (double) SheetSize.y / (double) PlotAreaSize.y;
     scale  = wxMax( scaleX, scaleY ) / userscale; // Use x or y scaling factor, whichever fits on the DC
 
     // ajust the real draw scale
@@ -187,15 +187,18 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     {
         int w, h;
         GetPPIPrinter( &w, &h );
-        accurate_Xscale = ( (double) ( DrawZoom * w ) ) / PCB_INTERNAL_UNIT;
-        accurate_Yscale = ( (double) ( DrawZoom * h ) ) / PCB_INTERNAL_UNIT;
+        accurate_Xscale = ( (double) ( DrawZoom * w ) ) / (double) PCB_INTERNAL_UNIT;
+        accurate_Yscale = ( (double) ( DrawZoom * h ) ) / (double) PCB_INTERNAL_UNIT;
+
         if( IsPreview() )  // Scale must take in account the DC size in Preview
         {
             // Get the size of the DC in pixels
             dc->GetSize( &PlotAreaSize.x, &PlotAreaSize.y );
             GetPageSizePixels( &w, &h );
-            accurate_Xscale *= PlotAreaSize.x; accurate_Xscale /= w;
-            accurate_Yscale *= PlotAreaSize.y; accurate_Yscale /= h;
+            accurate_Xscale *= PlotAreaSize.x;
+            accurate_Xscale /= (double) w;
+            accurate_Yscale *= PlotAreaSize.y;
+            accurate_Yscale /= (double) h;
         }
         accurate_Xscale *= m_PrintParams.m_XScaleAdjust;
         accurate_Yscale *= m_PrintParams.m_YScaleAdjust;
@@ -211,11 +214,13 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
        || (m_PrintParams.m_PrintScale > 1.0)        //  scale > 1
        || (m_PrintParams.m_PrintScale == 0) )       //  fit in page
     {
-        DrawOffset.x -= (int) ( (PlotAreaSize.x / 2) * scale );
-        DrawOffset.y -= (int) ( (PlotAreaSize.y / 2) * scale );
+        DrawOffset.x -= wxRound( ( (double) PlotAreaSize.x / 2.0 ) * scale );
+        DrawOffset.y -= wxRound( ( (double) PlotAreaSize.y / 2.0 ) * scale );
     }
-    DrawOffset.x += (int) ( (SheetSize.x / 2) * (m_PrintParams.m_XScaleAdjust - 1.0) );
-    DrawOffset.y += (int) ( (SheetSize.y / 2) * (m_PrintParams.m_YScaleAdjust - 1.0) );
+    DrawOffset.x += wxRound( ( (double) SheetSize.x / 2.0 ) *
+                             ( m_PrintParams.m_XScaleAdjust - 1.0 ) );
+    DrawOffset.y += wxRound( ( (double) SheetSize.y / 2.0 ) *
+                             ( m_PrintParams.m_YScaleAdjust - 1.0 ) );
 
     ActiveScreen->m_DrawOrg = DrawOffset;
 
@@ -235,13 +240,13 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
 
     SetPenMinWidth( m_PrintParams.m_PenMinSize );
 
-    if( m_PrintParams.m_Print_Sheet_Ref )
-        m_Parent->TraceWorkSheet( dc, ActiveScreen, 0 );
-
-    if( userscale == 1.0 ) // Draw the Sheet refs at optimum scale, and board at 1.0 scale
+    if( userscale == 1.0 )
     {
         dc->SetUserScale( accurate_Xscale, accurate_Yscale );
     }
+
+    if( m_PrintParams.m_Print_Sheet_Ref )
+        m_Parent->TraceWorkSheet( dc, ActiveScreen, 0 );
 
     if( printMirror )
     {

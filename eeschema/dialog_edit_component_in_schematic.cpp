@@ -201,19 +201,19 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
     switch( orientationRadioBox->GetSelection() )
     {
     case 0:
-        m_Cmp->SetRotationMiroir( CMP_ORIENT_0 );
+        m_Cmp->SetOrientation( CMP_ORIENT_0 );
         break;
 
     case 1:
-        m_Cmp->SetRotationMiroir( CMP_ORIENT_90 );
+        m_Cmp->SetOrientation( CMP_ORIENT_90 );
         break;
 
     case 2:
-        m_Cmp->SetRotationMiroir( CMP_ORIENT_180 );
+        m_Cmp->SetOrientation( CMP_ORIENT_180 );
         break;
 
     case 3:
-        m_Cmp->SetRotationMiroir( CMP_ORIENT_270 );
+        m_Cmp->SetOrientation( CMP_ORIENT_270 );
         break;
     }
 
@@ -225,11 +225,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
         break;
 
     case 1:
-        m_Cmp->SetRotationMiroir( CMP_MIROIR_X );
+        m_Cmp->SetOrientation( CMP_MIRROR_X );
         break;
 
     case 2:
-        m_Cmp->SetRotationMiroir( CMP_MIROIR_Y );
+        m_Cmp->SetOrientation( CMP_MIRROR_Y );
         break;
     }
 }
@@ -663,8 +663,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     if( choiceCount <= 1 )
         unitChoice->Enable( false );
 
-    int orientation = m_Cmp->GetRotationMiroir()
-        & ~( CMP_MIROIR_X | CMP_MIROIR_Y );
+    int orientation = m_Cmp->GetOrientation()
+        & ~( CMP_MIRROR_X | CMP_MIRROR_Y );
 
     if( orientation == CMP_ORIENT_90 )
         orientationRadioBox->SetSelection( 1 );
@@ -675,14 +675,14 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     else
         orientationRadioBox->SetSelection( 0 );
 
-    int mirror = m_Cmp->GetRotationMiroir() & ( CMP_MIROIR_X | CMP_MIROIR_Y );
+    int mirror = m_Cmp->GetOrientation() & ( CMP_MIRROR_X | CMP_MIRROR_Y );
 
-    if( mirror == CMP_MIROIR_X )
+    if( mirror == CMP_MIRROR_X )
     {
         mirrorRadioBox->SetSelection( 1 );
         D( printf( "mirror=X,1\n" ); )
     }
-    else if( mirror == CMP_MIROIR_Y )
+    else if( mirror == CMP_MIRROR_Y )
     {
         mirrorRadioBox->SetSelection( 2 );
         D( printf( "mirror=Y,2\n" ); )
@@ -742,7 +742,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     m_Cmp->GetField( VALUE )->m_Pos = valField.m_Pos + m_Cmp->m_Pos;
     m_Cmp->GetField( VALUE )->ImportValues( valField );
 
-    m_Cmp->SetRotationMiroir( CMP_NORMAL );
+    m_Cmp->SetOrientation( CMP_NORMAL );
 
     m_Parent->GetScreen()->SetModify();
 
