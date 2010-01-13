@@ -224,33 +224,10 @@ Error: %s" ),
 }
 
 
-/* Create a new screen
- *
- * This screen is chained with OldScreen.  The timestamp value is assigned to
- * the parameter NewScreen-> TimeStamp
- */
-SCH_SCREEN* WinEDA_SchematicFrame::CreateNewScreen( SCH_SCREEN* OldScreen,
-                                                    int TimeStamp )
-{
-    SCH_SCREEN* NewScreen;
-
-    NewScreen = new SCH_SCREEN();
-
-    NewScreen->SetRefreshReq();
-    if( OldScreen )
-        NewScreen->m_Company = OldScreen->m_Company;
-    NewScreen->m_TimeStamp = TimeStamp;
-
-    NewScreen->SetBack( OldScreen );
-
-    return NewScreen;
-}
-
-
 /**
  *  Save the entire project and create an archive for components.
  *
- *  The library archive name is <root_name>.cache.lib
+ *  The library archive name is <root_name>-cache.lib
  */
 void WinEDA_SchematicFrame::SaveProject()
 {

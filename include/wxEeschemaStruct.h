@@ -233,7 +233,6 @@ public:
                                        bool  aSetFielsAttributeToVisible );
 
     bool             SaveEEFile( SCH_SCREEN* screen, int FileSave );
-    SCH_SCREEN*      CreateNewScreen( SCH_SCREEN* OldScreen, int TimeStamp );
 
     // General search:
 

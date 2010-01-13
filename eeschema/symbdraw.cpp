@@ -112,11 +112,14 @@ static void AbortSymbolTraceOn( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     if( item->m_Flags & IS_NEW )
     {
-        if( item->Type() == COMPONENT_ARC_DRAW_TYPE )
-            Panel->GetParent()->RedrawActiveWindow( DC, TRUE );
-        else
-            item->Draw( Panel, DC, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
-                        DefaultTransformMatrix );
+        if( DC )
+        {
+            if( item->Type() == COMPONENT_ARC_DRAW_TYPE )
+                Panel->GetParent()->DrawPanel->Refresh( );
+            else
+                item->Draw( Panel, DC, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
+                            DefaultTransformMatrix );
+        }
 
         SAFE_DELETE( item );
         parent->SetDrawItem( NULL );
@@ -214,13 +217,13 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry,
         Text->m_Orient  = m_textOrientation;
         Text->m_Pos   = GetScreen()->m_Curseur;
         NEGATE( Text->m_Pos.y );
-        
+
         // Enter the graphic text info
         DrawPanel->m_IgnoreMouseEvents = true;
         EditSymbolText( NULL, Text );
         DrawPanel->MouseToCursorSchema();
         DrawPanel->m_IgnoreMouseEvents = false;
-        
+
         if( Text->m_Text.IsEmpty() )
         {
             SAFE_DELETE( Text );

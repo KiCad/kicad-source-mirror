@@ -28,10 +28,6 @@ bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
     int       flag;
     bool      Modify = FALSE;
 
-    WinEDA_SchematicFrame* frame;
-
-    frame = (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
-
     DrawList = EEDrawList;
     for( ; DrawList != NULL; DrawList = DrawList->Next() )
     {
@@ -63,7 +59,10 @@ bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
         }
     }
 
+    WinEDA_SchematicFrame* frame;
+    frame = (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
     frame->TestDanglingEnds( EEDrawList, DC );
+
     return Modify;
 }
 

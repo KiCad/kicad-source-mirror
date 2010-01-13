@@ -287,9 +287,6 @@ void WinEDA_ViewlibFrame::OnSashDrag( wxSashEvent& event )
     // Now, we must recalculate the position and size of subwindows
     wxSizeEvent SizeEv;
     OnSize( SizeEv );
-
-    // Ensure the panel is always redrawn (sometimes some garbage remains):
-    DrawPanel->Refresh();
 }
 
 
@@ -351,6 +348,9 @@ void WinEDA_ViewlibFrame::OnSize( wxSizeEvent& SizeEv )
 #endif
 
     SizeEv.Skip();
+
+    // Ensure the panel is always redrawn (sometimes some garbage remains):
+    DrawPanel->Refresh();
 }
 
 

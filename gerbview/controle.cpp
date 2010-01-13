@@ -25,7 +25,8 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     if( GetScreen()->IsRefreshReq() )
     {
-        RedrawActiveWindow( DC, TRUE );
+        DrawPanel->Refresh( );
+        wxSafeYield();
 
         // We must return here, instead of proceeding.
         // If we let the cursor move during a refresh request,
@@ -105,7 +106,8 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     if( GetScreen()->IsRefreshReq() )
     {
-        RedrawActiveWindow( DC, TRUE );
+        DrawPanel->Refresh( );
+        wxSafeYield();
     }
 
     SetToolbars();

@@ -730,7 +730,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         // test if the via size is smaller than minimum
         if( aRefSeg->Shape() == VIA_MICROVIA )
         {
-            if( aRefSeg->m_Width < netclass->GetuViaDiameter() )
+            if( aRefSeg->m_Width < netclass->GetuViaMinDiameter() )
             {
                 m_currentMarker = fillMarker( aRefSeg, NULL,
                                               DRCE_TOO_SMALL_MICROVIA, m_currentMarker );
@@ -739,7 +739,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         }
         else
         {
-            if( aRefSeg->m_Width < netclass->GetViaDiameter() )
+            if( aRefSeg->m_Width < netclass->GetViaMinDiameter() )
             {
                 m_currentMarker = fillMarker( aRefSeg, NULL,
                                               DRCE_TOO_SMALL_VIA, m_currentMarker );
@@ -784,7 +784,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     }
     else    // This is a track segment
     {
-        if( aRefSeg->m_Width < netclass->GetTrackWidth() )
+        if( aRefSeg->m_Width < netclass->GetTrackMinWidth() )
         {
             m_currentMarker = fillMarker( aRefSeg, NULL,
                                           DRCE_TOO_SMALL_TRACK_WIDTH, m_currentMarker );

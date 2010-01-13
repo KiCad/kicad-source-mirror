@@ -272,6 +272,12 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
 
     // copy all the fields back, and change the length of m_Fields.
     m_Cmp->SetFields( m_FieldsBuf );
+    
+    // Reference has a specific initialisation, depending on the current active sheet
+    // because for a given component, in a complexe hierarchy, there are more than one
+    // reference.
+    m_Cmp->SetRef( m_Parent->GetSheet(), m_FieldsBuf[REFERENCE].m_Text );
+
 
     m_Parent->GetScreen()->SetModify();
 

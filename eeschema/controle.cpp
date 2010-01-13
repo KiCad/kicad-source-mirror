@@ -279,7 +279,8 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC*   DC,
 
     if( screen->IsRefreshReq() )
     {
-        RedrawActiveWindow( DC, TRUE );
+        DrawPanel->Refresh( );
+        wxSafeYield();
     }
 
     if( oldpos != screen->m_Curseur )
@@ -372,7 +373,8 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC*   DC,
 
     if( screen->IsRefreshReq() )
     {
-        RedrawActiveWindow( DC, TRUE );
+        DrawPanel->Refresh( );
+        wxSafeYield();
     }
 
     if( oldpos != screen->m_Curseur )
@@ -464,7 +466,8 @@ void WinEDA_ViewlibFrame::GeneralControle( wxDC*   DC,
 
     if( screen->IsRefreshReq() )
     {
-        RedrawActiveWindow( DC, TRUE );
+        DrawPanel->Refresh( );
+        wxSafeYield();
     }
 
     if( oldpos != screen->m_Curseur )

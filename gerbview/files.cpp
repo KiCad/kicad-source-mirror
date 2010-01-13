@@ -65,7 +65,7 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
     case ID_NEW_BOARD:
         Clear_Pcb( true );
         Zoom_Automatique( false );
-        GetScreen()->SetRefreshReq();
+        DrawPanel->Refresh();
         break;
 
     case ID_GERBVIEW_LOAD_DRILL_FILE:

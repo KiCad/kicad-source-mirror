@@ -131,7 +131,7 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
     GetBoard()->m_Status_Pcb |= DO_NOT_SHOW_GENERAL_RASTNEST;
     DrawPanel->ManageCurseur  = Montre_Position_Empreinte;
     DrawPanel->ForceCloseManageCurseur = Abort_MoveOrCopyModule;
-    DrawPanel->m_AutoPAN_Request = TRUE;
+    DrawPanel->m_AutoPAN_Request = true;
 
     // Erase the module.
     if( DC )
@@ -290,7 +290,7 @@ void Montre_Position_Empreinte( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
  * The ratsnest and pad list are recalculated
  * @param module = footprint to delete
  * @param DC = currentDevice Context. if NULL: do not redraw new ratsnest and
- * dirty rectangle
+ * screen
  * @param aPromptBeforeDeleting : if true: ask for confirmation before deleting
  */
 bool WinEDA_PcbFrame::Delete_Module( MODULE* module,
@@ -307,9 +307,9 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module,
     /* Confirm module delete. */
     if( aAskBeforeDeleting )
     {
-        msg << _( "Delete Module" ) << wxT( " " ) << module->m_Reference->m_Text
-            << wxT( "  (" ) << _( "Value " ) << module->m_Value->m_Text
-            << wxT( ") ?" );
+        msg.Printf( _( "Delete Module %s (value %s) ?"),
+                    GetChars(module->m_Reference->m_Text),
+                    GetChars(module->m_Value->m_Text) );
         if( !IsOK( this, msg ) )
         {
             return FALSE;
@@ -318,13 +318,6 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module,
 
     GetScreen()->SetModify();
 
-    /* Erase ratsnest if needed
-     * Dirty rectangle is not used here because usually using a XOR draw mode
-     * gives good results (very few artifacts) for ratsnest
-     */
-    if( g_Show_Ratsnest )
-        DrawGeneralRatsnest( DC );
-
     /* Remove module from list, and put it in undo command list */
     m_Pcb->m_Modules.Remove( module );
     module->SetState( DELETED, ON );
@@ -332,11 +325,11 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module,
 
     Compile_Ratsnest( DC, true );
 
-    // redraw the area where the module was
+    // Redraw the full screen to ensure perfect display of board and ratsnest.
     if( DC )
-        DrawPanel->PostDirtyRect( module->GetBoundingBox() );
-    RedrawActiveWindow( DC, TRUE );
-    return TRUE;
+        DrawPanel->Refresh( );
+
+    return true;
 }
 
 
@@ -493,7 +486,7 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module,
         Compile_Ratsnest( DC, true );
 
     if( DC )
-        RedrawActiveWindow( DC, TRUE );
+        DrawPanel->Refresh( );
 
     module->DisplayInfo( this );
 
@@ -502,7 +495,7 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module,
 
 /*
  * Rotate the footprint angle degrees in the direction < 0.
- * If incremental == TRUE, the rotation is made from the last orientation,
+ * If incremental == true, the rotation is made from the last orientation,
  * If the module is placed in the absolute orientation angle.
  * If DC == NULL, the component does not redraw.
  * Otherwise, it erases and redraws turns
@@ -549,18 +542,19 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
 
     if( DC )
     {
-        if( !( module->m_Flags & IS_MOVED ) ) /* Rotation simple */
-        {
+        if( !( module->m_Flags & IS_MOVED ) )
+        {   //  not beiing moved: redraw the module and update ratsnest
             module->Draw( DrawPanel, DC, GR_OR );
-
             Compile_Ratsnest( DC, true );
         }
         else
-        {
+        {   // Beiing moved: just redraw it
             DrawModuleOutlines( DrawPanel, DC, module );
             Dessine_Segments_Dragges( DrawPanel, DC );
         }
-        RedrawActiveWindow( DC, TRUE );
+
+        if( module->m_Flags == 0 )  // module not in edit: redraw full screen
+            DrawPanel->Refresh( );
     }
 }
 

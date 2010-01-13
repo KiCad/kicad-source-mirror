@@ -397,3 +397,31 @@ bool NETCLASS::ReadDescr( FILE* aFile, int* aLineNum )
 
     return result;
 }
+
+
+int NETCLASS::GetTrackMinWidth() const
+{
+    return m_Parent->m_BoardSettings->m_TrackMinWidth;
+}
+
+int NETCLASS::GetViaMinDiameter() const
+{
+    return m_Parent->m_BoardSettings->m_ViasMinSize;
+}
+
+int NETCLASS::GetViaMinDrill() const
+{
+    return m_Parent->m_BoardSettings->m_ViasMinDrill;
+}
+
+int NETCLASS::GetuViaMinDiameter() const
+{
+    return m_Parent->m_BoardSettings->m_MicroViasMinSize;
+}
+
+int NETCLASS::GetuViaMinDrill() const
+{
+    return m_Parent->m_BoardSettings->m_MicroViasMinDrill;
+}
+
+

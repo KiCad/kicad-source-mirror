@@ -163,18 +163,23 @@ public:
     void    SetClearance( int aClearance )  { m_Clearance = aClearance; }
 
     int     GetTrackWidth() const           { return m_TrackWidth; }
+    int     GetTrackMinWidth() const;
     void    SetTrackWidth( int aWidth )     { m_TrackWidth = aWidth; }
 
     int     GetViaDiameter() const          { return m_ViaDia; }
+    int     GetViaMinDiameter() const;
     void    SetViaDiameter( int aDia )      { m_ViaDia = aDia; }
 
     int     GetViaDrill() const             { return m_ViaDrill; }
+    int     GetViaMinDrill() const;
     void    SetViaDrill( int aSize )        { m_ViaDrill = aSize; }
 
     int     GetuViaDiameter() const         { return m_uViaDia; }
+    int     GetuViaMinDiameter() const;
     void    SetuViaDiameter( int aSize )    { m_uViaDia = aSize; }
 
     int     GetuViaDrill() const            { return m_uViaDrill; }
+    int     GetuViaMinDrill() const;
     void    SetuViaDrill( int aSize )       { m_uViaDrill = aSize; }
 
 

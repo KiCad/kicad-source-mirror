@@ -368,10 +368,10 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     if( GetScreen()->IsRefreshReq() )
     {
-        RedrawActiveWindow( DC, TRUE );
+        DrawPanel->Refresh( );
+        wxSafeYield();
     }
 
     SetToolbars();
-
     UpdateStatusBar();    /* Display new cursor coordinates */
 }

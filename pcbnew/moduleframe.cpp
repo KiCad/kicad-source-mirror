@@ -436,7 +436,7 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     if( GetScreen()->IsRefreshReq() )
     {
-        RedrawActiveWindow( DC, TRUE );
+        DrawPanel->Refresh( );
 
         // We must return here, instead of proceeding.
         // If we let the cursor move during a refresh request,
@@ -515,9 +515,9 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     if( GetScreen()->IsRefreshReq() )
     {
-        RedrawActiveWindow( DC, TRUE );
+        DrawPanel->Refresh( );
+        wxSafeYield();
     }
-
     SetToolbars();
     UpdateStatusBar();
 }

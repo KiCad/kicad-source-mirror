@@ -7,7 +7,7 @@
 #include "hotkeys.h"
 
 #include "gerbview.h"
-#include "protos.h"
+#include "class_drawpanel.h"
 
 /* How to add a new hotkey:
  *  add a new id in the enum hotkey_id_commnand like MY_NEW_ID_FUNCTION.
@@ -139,7 +139,7 @@ void WinEDA_GerberFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_SWITCH_TRACK_DISPLAY_MODE:
         DisplayOpt.DisplayPcbTrackFill ^= 1; DisplayOpt.DisplayPcbTrackFill &= 1;
-        GetScreen()->SetRefreshReq();
+        DrawPanel->Refresh();
         break;
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:
