@@ -12,6 +12,7 @@
 #include "class_base_screen.h"
 #include "wxstruct.h"
 
+#include <wx/wupdlock.h>
 #include "kicad_device_context.h"
 
 #define CURSOR_SIZE 12           // Cursor size in pixels
@@ -760,9 +761,18 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
         GRSetColorPen( DC, color );
         int xpos, ypos;
 
-#if 0   // Use a pixel based draw to display grid
+
+        // Draw grid: the best algorithm depend on the platform.
+        // under macOSX, the first method is better
+        // under window, the second method is better
+        // Under linux, to be tested (could be depend on linux versions
+        // so perhaps could be necessary to set this option at run time.
+
+#if defined ( __WXMAC__ )
+        // Use a pixel based draw to display grid
         // There is a lot of calls, so the cost is hight
         // and grid is slowly drawn on some platforms
+        wxWindowUpdateLocker(this); // under macOSX: drawings are faster with this
         for( ii = 0; ; ii++ )
         {
             xg =  wxRound(ii * screen_grid_size.x);
@@ -775,14 +785,16 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
                 yg = wxRound(jj * screen_grid_size.y);
                 if( yg > size.y )
                     break;
-                int ypos = org.y + yg;
+                ypos = org.y + yg;
                 DC->DrawPoint( xpos, GRMapY( ypos ) );
             }
 
         }
 #else   // Currently on test: Use a fast way to draw the grid
+        // But this is fast if the Blit function is fast. Not true on all platforms
         // a grid column is drawn; and then copied to others grid columns
         // this is possible because the grid is drawn only after clearing the screen.
+        // under MACOSX, is very slow
         ii = 1;
         xg =  wxRound(ii * screen_grid_size.x);
         int x0pos = GRMapX( org.x + xg);
