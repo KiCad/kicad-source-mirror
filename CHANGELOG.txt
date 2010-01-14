@@ -4,6 +4,18 @@ KiCad ChangeLog 2009
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-Jan-13 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+Minor bug fixes, compiler warning fixes and code cleaning.
+
+* Fix debug asserts when passing NULL pointers to wxAuiPaneInfo.
+* Fix Kicad main window sash sizer bug when using wxAui.
+* Remove specctra_test from Visual Studio builds to prevent build errors.
+* Add WIN32 to layer widget test so it will build properly on Visual Studio.
+* Fixed compiler conversion warnings in PCBNew.
+* Fixed worksheet print scaling in PCBNew.
+* Minor code renaming.
+
 2010-Jan-12 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++All

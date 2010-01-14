@@ -659,14 +659,11 @@ class WinEDA_Toolbar : public wxToolBar
 public:
     wxWindow*       m_Parent;
     id_toolbar      m_Ident;
-    WinEDA_Toolbar* Pnext;
-    bool            m_Horizontal;
-    int             m_Size;
+    bool            m_Horizontal;       // some auxilary TB are horizontal, others vertical
 
 public:
     WinEDA_Toolbar( id_toolbar type, wxWindow* parent,
                     wxWindowID id, bool horizontal );
-    WinEDA_Toolbar* Next() { return Pnext; }
 
 #if defined(KICAD_AUITOOLBAR)
     bool GetToolState( int toolId ) { return GetToolToggled(toolId); };
@@ -686,6 +683,11 @@ public:
     void SetToolNormalBitmap( int id, const wxBitmap& bitmap ) {};
     void SetRows( int nRows ) {};
 #endif
+    
+    /** Function GetDimension
+     * @return the dimension of this toolbar (Height if horizontal, Width if vertical.
+     */
+    int GetDimension( );
 };
 
 

@@ -340,72 +340,61 @@ void WinEDA_DrawFrame::DisplayUnitsMsg()
  */
 void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
 {
-    wxSize size;
-    wxSize opt_size;
-    wxSize Vtoolbar_size;
-    wxSize Auxtoolbar_size;
-
-    GetClientSize( &size.x, &size.y );
-    m_FrameSize = size;
+    m_FrameSize = GetClientSize( );
 
 #if !defined(KICAD_AUIMANAGER)
-    size.y -= m_MsgFrameHeight;
+    wxSize clientSize = m_FrameSize;
+    wxPoint clientPosition;
+    int default_value = -1;
+    
+    // Ugly fix for a problem found in recent linux version
+    // where default value is broken
+#ifdef __WXGTK__
+    if( GetToolBar() )  // use main tool bar dimension as default value
+        default_value = GetToolBar()->GetSize().y;
+#endif
+
+    clientSize.y -= m_MsgFrameHeight;
 
     if( MsgPanel ) // Resize the message panel.
     {
-        MsgPanel->SetSize( 0, size.y, size.x, m_MsgFrameHeight );
+        MsgPanel->SetSize( 0, clientSize.y, clientSize.x, m_MsgFrameHeight );
     }
 
     if( m_AuxiliaryToolBar )        // Resize the auxilary horizontal tool bar.
     {
-        Auxtoolbar_size.x = size.x;
-        Auxtoolbar_size.y = m_AuxiliaryToolBar->GetSize().y;
-        m_AuxiliaryToolBar->SetSize( Auxtoolbar_size );
+        m_AuxiliaryToolBar->SetSize( clientSize.x, default_value);
         m_AuxiliaryToolBar->Move( 0, 0 );
-        size.y -= Auxtoolbar_size.y;
+        clientSize.y -= m_AuxiliaryToolBar->GetDimension();
+        clientPosition.y = m_AuxiliaryToolBar->GetDimension();
     }
 
-    if( m_VToolBar )                // Resize the main right vertial tool bar.
+    if( m_VToolBar )                // Resize the main right vertical tool bar.
     {
-        Vtoolbar_size.x = m_VToolBar->GetSize().x;
-        Vtoolbar_size.y = size.y;
-        m_VToolBar->SetSize( Vtoolbar_size );
-        m_VToolBar->Move( size.x - Vtoolbar_size.x, Auxtoolbar_size.y );
-        m_VToolBar->Refresh();
+        m_VToolBar->SetSize(default_value, clientSize.y );
+        clientSize.x -= m_VToolBar->GetDimension();
+        m_VToolBar->Move( clientSize.x, clientPosition.y );
     }
 
-    if( m_AuxVToolBar )             // Resize the auxiliary right vertical
-                                    // toolbar.
+    if( m_AuxVToolBar )             // Resize the auxiliary right vertical toolbar.
     {
-        Vtoolbar_size.x += m_AuxVToolBar->GetSize().x;
-        Vtoolbar_size.y  = size.y;
-        m_AuxVToolBar->SetSize( m_AuxVToolBar->GetSize().x, Vtoolbar_size.y );
-        m_AuxVToolBar->Move( size.x - Vtoolbar_size.x, Auxtoolbar_size.y );
-        m_AuxVToolBar->Refresh();
-    }
-    if( m_OptionsToolBar )
-    {
-        if( m_OptionsToolBar->m_Horizontal )
-        {
-            opt_size.x = 0;
-            opt_size.y = m_OptionsToolBar->GetSize().y;
-            m_OptionsToolBar->SetSize( Auxtoolbar_size.x, 0,
-                                       size.x, opt_size.y );
-        }
-        else
-        {
-            opt_size.x = m_OptionsToolBar->GetSize().x;
-            opt_size.y = 0;
-            m_OptionsToolBar->SetSize( 0, Auxtoolbar_size.y,
-                                       opt_size.x, size.y );
-        }
+        m_AuxVToolBar->SetSize( default_value, clientSize.y );
+        clientSize.x -= m_AuxVToolBar->GetDimension();
+        m_AuxVToolBar->Move( clientSize.x, clientPosition.y );
     }
 
+    if( m_OptionsToolBar )          // Resize the main left vertical tool bar.
+    {
+        m_OptionsToolBar->SetSize( default_value, clientSize.y );
+        clientSize.x -= m_OptionsToolBar->GetDimension( );
+        m_OptionsToolBar->Move( 0, clientPosition.y );
+        clientPosition.x += m_OptionsToolBar->GetDimension( ); 
+    }
+    
     if( DrawPanel )
     {
-        DrawPanel->SetSize( size.x - Vtoolbar_size.x - opt_size.x,
-                            size.y - opt_size.y - 1 );
-        DrawPanel->Move( opt_size.x, opt_size.y + Auxtoolbar_size.y + 1 );
+        DrawPanel->SetSize( clientPosition.x, clientPosition.y,
+                clientSize.x, clientSize.y );
     }
 #endif
     SizeEv.Skip();

@@ -76,8 +76,9 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
     SetBackgroundColour( wxColour( ColorRefs[g_DrawBgColor].m_Red,
                                    ColorRefs[g_DrawBgColor].m_Green,
                                    ColorRefs[g_DrawBgColor].m_Blue ) );
+#if defined KICAD_USE_BUFFERED_DC || defined KICAD_USE_BUFFERED_PAINTDC
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
-
+#endif
     EnableScrolling( TRUE, TRUE );
     m_ClipBox.SetSize( size );
     m_ClipBox.SetX( 0 );

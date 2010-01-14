@@ -109,8 +109,14 @@ int WinEDA_BasePcbFrame::BestZoom( void )
     dy = m_Pcb->m_BoundaryBox.GetHeight();
 
     size     = DrawPanel->GetClientSize();
-    ii       = ( dx + (size.x / 2) ) / size.x;
-    jj       = ( dy + (size.y / 2) ) / size.y;
+    if( size.x )
+        ii       = ( dx + (size.x / 2) ) / size.x;
+    else
+        ii = 31;
+    if ( size.y )
+        jj       = ( dy + (size.y / 2) ) / size.y;
+    else
+        jj = 31;
     bestzoom = MAX( ii, jj ) + 1;
     GetScreen()->m_Curseur = m_Pcb->m_BoundaryBox.Centre();
 
