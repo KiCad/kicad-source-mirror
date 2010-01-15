@@ -769,11 +769,13 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
         // Under linux, to be tested (could be depend on linux versions
         // so perhaps could be necessary to set this option at run time.
 
-#ifndef __WXMSW__
+#if 1
         // Use a pixel based draw to display grid
         // There is a lot of calls, so the cost is hight
         // and grid is slowly drawn on some platforms
+#if defined ( __WXMAC__ )
         wxWindowUpdateLocker(this); // under macOSX: drawings are faster with this
+#endif
         for( ii = 0; ; ii++ )
         {
             xg =  wxRound(ii * screen_grid_size.x);
@@ -792,10 +794,11 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
 
         }
 #else   // Currently on test: Use a fast way to draw the grid
-        // But this is fast if the Blit function is fast. Not true on all platforms
+        // But this is fast only if the Blit function is fast. Not true on all platforms
         // a grid column is drawn; and then copied to others grid columns
         // this is possible because the grid is drawn only after clearing the screen.
-        // under MACOSX, is very slow and seems crash under Linux
+        // under MACOSX, is very slow
+        wxSize screenSize = GetClientSize();
         ii = 1;
         xg =  wxRound(ii * screen_grid_size.x);
         int x0pos = GRMapX( org.x + xg);
@@ -815,7 +818,7 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
             if( xg > size.x )
                 break;
             xpos = GRMapX( org.x + xg );
-            DC->Blit( xpos, ypos, 1, size.y, DC, x0pos, ypos  );
+            DC->Blit( xpos, ypos, 1, screenSize.y, DC, x0pos, ypos  );
         }
 #endif
     }
