@@ -106,10 +106,10 @@ void WinEDA_BasicFrame::LoadSettings()
     }
 
     // Ensure Window title bar is visible
-#if defined( __WXMAC__ ) && !defined( __WXOSX_COCOA__ )
-
+#if defined( __WXMAC__ )
     // for macOSX, the window must be below system (macOSX) toolbar
-    Ypos_min = GetMBarHeight();
+//    Ypos_min = GetMBarHeight(); seems no more exist in ne API (subject to change)
+    Ypos_min = 20;
 #else
     Ypos_min = 0;
 #endif

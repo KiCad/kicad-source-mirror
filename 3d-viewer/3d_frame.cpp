@@ -145,11 +145,10 @@ void WinEDA3D_DrawFrame::GetSettings()
         config->Read( wxT( "BgColor_Blue" ),
                       &g_Parm_3D_Visu.m_BgColor.m_Blue, 0.0 );
     }
-#if defined( __WXMAC__ ) && !defined( __WXOSX_COCOA__ )
-
+#if defined( __WXMAC__ )
     // for macOSX, the window must be below system (macOSX) toolbar
-    if( m_FramePos.y < GetMBarHeight() )
-        m_FramePos.y = GetMBarHeight();
+    if( m_FramePos.y < 20 )
+        m_FramePos.y = 20;
 #endif
 }
 
