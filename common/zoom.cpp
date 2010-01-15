@@ -26,15 +26,22 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
 {
     PutOnGrid( &(GetBaseScreen()->m_Curseur) );
     AdjustScrollBars();
+
+    DrawPanel->m_IgnoreMouseEvents = true;
     DrawPanel->Refresh();   // send OnPaint event
-    wxSafeYield();          // needed to allow OnPaint event execution here
+
+    // wxSafeYield() is better here, but creates flicker under Linux
+    // because it temporary disables menus and toolbars
+    // TODO: find a better way to manage refresh screen and mouse move
+    wxYield();          // needed to allow OnPaint event execution here
+    DrawPanel->m_IgnoreMouseEvents = false;
 
     /* Move the mouse cursor to the on grid graphic cursor position */
     if( ToMouse == TRUE )
     {
         DrawPanel->MouseToCursorSchema();
     }
-}
+ }
 
 
 /** Adjust the coordinate to the nearest grid value

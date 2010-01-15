@@ -769,7 +769,7 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
         // Under linux, to be tested (could be depend on linux versions
         // so perhaps could be necessary to set this option at run time.
 
-#if defined ( __WXMAC__ )
+#ifndef __WXMSW__
         // Use a pixel based draw to display grid
         // There is a lot of calls, so the cost is hight
         // and grid is slowly drawn on some platforms
@@ -795,7 +795,7 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
         // But this is fast if the Blit function is fast. Not true on all platforms
         // a grid column is drawn; and then copied to others grid columns
         // this is possible because the grid is drawn only after clearing the screen.
-        // under MACOSX, is very slow
+        // under MACOSX, is very slow and seems crash under Linux
         ii = 1;
         xg =  wxRound(ii * screen_grid_size.x);
         int x0pos = GRMapX( org.x + xg);
@@ -925,6 +925,9 @@ void WinEDA_DrawPanel::OnMouseLeaving( wxMouseEvent& event )
  */
 void WinEDA_DrawPanel::OnMouseWheel( wxMouseEvent& event )
 {
+    if( m_IgnoreMouseEvents )
+        return;
+
     wxRect rect = wxRect( wxPoint( 0, 0), GetClientSize() );
 
     /* Ignore scroll events if the cursor is outside the drawing area. */
