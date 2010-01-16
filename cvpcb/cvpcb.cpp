@@ -32,9 +32,42 @@ const wxString FootprintAliasFileWildcard( _( "Kicad footprint alias files (*.eq
 const wxString titleLibLoadError( _( "Library Load Error" ) );
 
 
+/* MacOSX: Needed for file association 
+ * http://wiki.wxwidgets.org/WxMac-specific_topics
+ */
+void WinEDA_App::MacOpenFile(const wxString &fileName) {
+    wxFileName    fn = fileName;
+    wxString      oldPath;
+    WinEDA_CvpcbFrame * frame = ((WinEDA_CvpcbFrame*)GetTopWindow());
+
+    if( frame->m_NetlistFileName.DirExists() )
+        oldPath = frame->m_NetlistFileName.GetPath();
+
+    /* Update the library search path list. */
+    if( wxGetApp().GetLibraryPathList().Index( oldPath ) != wxNOT_FOUND )
+        wxGetApp().GetLibraryPathList().Remove( oldPath );
+    wxGetApp().GetLibraryPathList().Insert( fn.GetPath(), 0 );
+
+    frame->m_NetlistFileName = fn;
+
+    if( frame->ReadNetList() )
+    {
+        frame->SetLastProject( fn.GetFullPath() );
+
+        frame->SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
+                  wxT( " " ) + fn.GetFullPath() );
+    }
+    else
+    {
+        frame->SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() );
+    }
+
+    frame->ReCreateMenuBar();
+
+}
+
 // Create a new application object
 IMPLEMENT_APP( WinEDA_App )
-
 
 /************************************/
 /* Called to initialize the program */

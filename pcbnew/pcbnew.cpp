@@ -66,6 +66,15 @@ wxString g_DocModulesFileName = wxT("footprints_doc/footprints.pdf");
 
 IMPLEMENT_APP( WinEDA_App )
 
+/* MacOSX: Needed for file association
+ * http://wiki.wxwidgets.org/WxMac-specific_topics 
+ */
+void WinEDA_App::MacOpenFile(const wxString &fileName) {
+    WinEDA_PcbFrame * frame = ((WinEDA_PcbFrame*) GetTopWindow());;
+    frame->LoadOnePcbFile( fileName, FALSE );
+}
+
+
 /****************************/
 bool WinEDA_App::OnInit()
 /****************************/

@@ -82,6 +82,8 @@ public: WinEDA_App();
     bool      SetBinDir();
     void      SetDefaultSearchPaths( void );
 
+    virtual void MacOpenFile(const wxString &fileName);
+
     /** Function InitEDA_Appl
      * initialize some general parameters
      *  - Default paths (help, libs, bin)and configuration files names

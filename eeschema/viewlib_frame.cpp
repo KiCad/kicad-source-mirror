@@ -119,17 +119,16 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
     wxSize  size = GetClientSize();
     size.y -= m_MsgFrameHeight + 2;
 
-    m_LibListSize.y = size.y;
+    m_LibListSize.y = -1;
 
     wxPoint win_pos( 0, 0 );
 
-#if !defined(KICAD_AUIMANAGER)
     if( Library == NULL )
     {
         // Creates the libraries window display
         m_LibListWindow =
             new wxSashLayoutWindow( this, ID_LIBVIEW_LIBWINDOW, win_pos,
-                                    m_LibListSize, wxCLIP_CHILDREN | wxSW_3D,
+                                    wxDefaultSize, wxCLIP_CHILDREN | wxSW_3D,
                                     wxT( "LibWindow" ) );
         m_LibListWindow->SetOrientation( wxLAYOUT_VERTICAL );
         m_LibListWindow->SetAlignment( wxLAYOUT_LEFT );
@@ -137,9 +136,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
         m_LibListWindow->SetExtraBorderSize( EXTRA_BORDER_SIZE );
         m_LibList =
             new wxListBox( m_LibListWindow, ID_LIBVIEW_LIB_LIST,
-                           wxPoint( 0, 0 ),
-                           m_LibListWindow->GetClientSize() -
-                           wxSize( EXTRA_BORDER_SIZE * 2, 0 ),
+                           wxPoint( 0, 0 ), wxDefaultSize,
                            0, NULL, wxLB_HSCROLL );
     }
     else
@@ -154,9 +151,8 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
     // Creates the component window display
     m_CmpListSize.y = size.y;
     win_pos.x = m_LibListSize.x;
-    win_pos.y = 0;
     m_CmpListWindow = new wxSashLayoutWindow( this, ID_LIBVIEW_CMPWINDOW,
-                                              win_pos, m_CmpListSize,
+                                              win_pos, wxDefaultSize,
                                               wxCLIP_CHILDREN | wxSW_3D,
                                               wxT( "CmpWindow" ) );
     m_CmpListWindow->SetOrientation( wxLAYOUT_VERTICAL );
@@ -164,34 +160,8 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
     m_CmpListWindow->SetSashVisible( wxSASH_RIGHT, TRUE );
     m_CmpListWindow->SetExtraBorderSize( EXTRA_BORDER_SIZE );
     m_CmpList = new wxListBox( m_CmpListWindow, ID_LIBVIEW_CMP_LIST,
-                               wxPoint( 0, 0 ),
-                               m_CmpListWindow->GetClientSize() -
-                               wxSize( EXTRA_BORDER_SIZE * 2, 0 ),
+                               wxPoint( 0, 0 ), wxDefaultSize,
                                0, NULL, wxLB_HSCROLL );
-#else
-    if( Library == NULL )
-    {
-        m_LibList =
-            new wxListBox( this, ID_LIBVIEW_LIB_LIST,
-                           wxPoint( 0, 0 ),
-                           wxDefaultSize,
-                           0, NULL, wxLB_HSCROLL );
-    }
-    else
-    {
-        m_libraryName = Library->GetName();
-        m_entryName.Clear();
-        m_unit = 1;
-        m_convert = 1;
-        m_LibListSize.x = 0;
-    }
-
-    m_CmpList = new wxListBox( this , ID_LIBVIEW_CMP_LIST,
-                               wxPoint( 0, 0 ),
-                               wxDefaultSize,
-                               0, NULL, wxLB_HSCROLL );
-
-#endif
 
     if( m_LibList )
         ReCreateListLib();
@@ -219,22 +189,47 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
     vert.TopDockable( false ).BottomDockable( false );
     horiz.LeftDockable( false ).RightDockable( false );
 
+    // Manage main toolbal
     m_auimgr.AddPane( m_HToolBar,
                       wxAuiPaneInfo( horiz ).Name( wxT ("m_HToolBar" ) ).Top().Row( 0 ) );
 
-    m_auimgr.AddPane( m_LibList,
-                      wxAuiPaneInfo( vert ).Name( wxT( "m_LibList" ) ).Left().Row( 0 ) );
+    wxSize minsize(60,-1);
+    // Manage the left window (list of libraries)
+    if( m_LibListWindow )
+        m_auimgr.AddPane( m_LibListWindow,
+                      wxAuiPaneInfo( vert ).Name( wxT( "m_LibList" ) ).
+                      Left().Row( 0 ).MinSize(minsize) );
 
-    m_auimgr.AddPane( m_CmpList,
-                      wxAuiPaneInfo( vert ).Name( wxT( "m_CmpList" ) ).Left().Row( 1 ) );
+    // Manage the list of components)
+    m_auimgr.AddPane( m_CmpListWindow,
+                      wxAuiPaneInfo( vert ).Name( wxT( "m_CmpList" ) ).
+                      Left().Row( 1 ).MinSize(minsize) );
 
+    // Manage the draw panel
     m_auimgr.AddPane( DrawPanel,
-                      wxAuiPaneInfo( vert ).Name( wxT( "DrawFrame" ) ).Center() );
+                      wxAuiPaneInfo( vert ).Name( wxT( "DrawFrame" ) ).Centre() );
 
+    // Manage the message panel
     m_auimgr.AddPane( MsgPanel,
                       wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
 
+    /* Now the minimum windows are fixed, set library list
+    and component list of the previous values from last viewlib use
+    */
+    if( m_LibListWindow )
+    {
+        wxAuiPaneInfo& pane = m_auimgr.GetPane(m_LibListWindow);
+        pane.MinSize( wxSize(m_LibListSize.x, -1));
+    }
+    wxAuiPaneInfo& pane = m_auimgr.GetPane(m_CmpListWindow);
+    pane.MinSize(wxSize(m_CmpListSize.x, -1));
+
     m_auimgr.Update();
+
+#else
+    m_CmpListWindow->SetSize(m_CmpListSize);
+    if( m_LibListWindow )
+        m_LibListWindow->SetSize(m_LibListSize);
 #endif
 }
 
@@ -267,6 +262,7 @@ void WinEDA_ViewlibFrame::OnSashDrag( wxSashEvent& event )
     m_LibListSize.y = GetClientSize().y - m_MsgFrameHeight;
     m_CmpListSize.y = m_LibListSize.y;
 
+#ifndef KICAD_AUIMANAGER
     switch( event.GetId() )
     {
     case ID_LIBVIEW_LIBWINDOW:
@@ -275,6 +271,7 @@ void WinEDA_ViewlibFrame::OnSashDrag( wxSashEvent& event )
             m_LibListSize.x = event.GetDragRect().width;
             m_LibListWindow->SetSize( m_LibListSize );
             m_CmpListWindow->SetPosition( wxPoint( m_LibListSize.x, 0 ) );
+            m_CmpListWindow->SetSize( m_CmpListSize );
         }
         break;
 
@@ -287,30 +284,38 @@ void WinEDA_ViewlibFrame::OnSashDrag( wxSashEvent& event )
     // Now, we must recalculate the position and size of subwindows
     wxSizeEvent SizeEv;
     OnSize( SizeEv );
+#else
+    switch( event.GetId() )
+    {
+    case ID_LIBVIEW_LIBWINDOW:
+        if( m_LibListWindow )
+        {
+            wxAuiPaneInfo& pane = m_auimgr.GetPane(m_LibListWindow);
+            m_LibListSize.x = event.GetDragRect().width;
+            pane.MinSize(m_LibListSize);
+            m_auimgr.Update();
+        }
+        break;
+
+    case ID_LIBVIEW_CMPWINDOW:
+    {
+            wxAuiPaneInfo& pane = m_auimgr.GetPane(m_CmpListWindow);
+            m_CmpListSize.x = event.GetDragRect().width;
+            pane.MinSize(m_CmpListSize);
+            m_auimgr.Update();
+    }
+        break;
+    }
+#endif
 }
 
 
 void WinEDA_ViewlibFrame::OnSize( wxSizeEvent& SizeEv )
 {
-    wxSize clientsize;
-    wxSize maintoolbar_size;
-    wxSize Vtoolbar_size;
-
-    clientsize    = GetClientSize();
+#ifndef KICAD_AUIMANAGER
+    wxSize clientsize = GetClientSize();
     m_FrameSize   = clientsize;
     clientsize.y -= m_MsgFrameHeight;
-
-    if( m_HToolBar )
-    {
-        maintoolbar_size = m_HToolBar->GetSize();
-    }
-
-    if( m_VToolBar )
-    {
-        Vtoolbar_size = m_VToolBar->GetSize();
-        m_VToolBar->SetSize( clientsize.x - maintoolbar_size.y, 0, -1,
-                             clientsize.y );
-    }
 
     if( MsgPanel )
     {
@@ -319,10 +324,9 @@ void WinEDA_ViewlibFrame::OnSize( wxSizeEvent& SizeEv )
 
     if( DrawPanel )
     {
-        DrawPanel->SetSize( m_LibListSize.x + m_CmpListSize.x, 0,
-                            clientsize.x - Vtoolbar_size.x -
-                            m_LibListSize.x - m_CmpListSize.x,
-                            clientsize.y );
+        int xpos = m_LibListSize.x + m_CmpListSize.x;
+        DrawPanel->SetSize( xpos, 0,
+                            clientsize.x - xpos, clientsize.y );
     }
 
     if( m_LibList && m_LibListWindow )
@@ -342,15 +346,17 @@ void WinEDA_ViewlibFrame::OnSize( wxSizeEvent& SizeEv )
                             wxSize( EXTRA_BORDER_SIZE * 2, 0 ) );
     }
 
-#if defined(KICAD_AUIMANAGER)
-    if( m_auimgr.GetManagedWindow() )
-        m_auimgr.Update();
-#endif
-
     SizeEv.Skip();
 
     // Ensure the panel is always redrawn (sometimes some garbage remains):
     DrawPanel->Refresh();
+#else
+    if( m_auimgr.GetManagedWindow() )
+        m_auimgr.Update();
+
+    SizeEv.Skip();
+#endif
+
 }
 
 

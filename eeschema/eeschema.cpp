@@ -99,6 +99,15 @@ int DefaultTransformMatrix[2][2] = { { 1, 0 }, { 0, -1 } };
 // not wxApp)
 IMPLEMENT_APP( WinEDA_App )
 
+/* MacOSX: Needed for file association 
+ * http://wiki.wxwidgets.org/WxMac-specific_topics
+ */
+void WinEDA_App::MacOpenFile(const wxString &fileName) {
+    WinEDA_SchematicFrame * frame = ((WinEDA_SchematicFrame*) GetTopWindow());
+    frame->LoadOneEEProject( fileName, false );
+}
+
+
 bool WinEDA_App::OnInit()
 {
     wxFileName             fn;

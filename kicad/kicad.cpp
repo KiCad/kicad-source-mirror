@@ -47,6 +47,39 @@ void  ShowLogo( char* FonteFileName );
 // Create a new application object
 IMPLEMENT_APP( WinEDA_App )
 
+/* MacOSX: Needed for file association 
+ * http://wiki.wxwidgets.org/WxMac-specific_topics
+ */
+void WinEDA_App::MacOpenFile(const wxString &fileName) {
+    WinEDA_MainFrame * frame = ((WinEDA_MainFrame*)GetTopWindow());
+    wxFileName    fn = fileName;
+
+    frame->m_ProjectFileName = fn;
+
+    if( m_fileHistory.GetCount() )
+    {
+        frame->m_ProjectFileName = m_fileHistory.GetHistoryFile( 0 );
+        if( !frame->m_ProjectFileName.FileExists() )
+            m_fileHistory.RemoveFileFromHistory( 0 );
+        else
+        {
+            wxCommandEvent cmd( 0, wxID_FILE1 );
+            frame->OnFileHistory( cmd );
+        }
+    }
+
+    frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() +
+                     wxT( " " ) + frame->m_ProjectFileName.GetFullPath() );
+    frame->ReCreateMenuBar();
+    frame->RecreateBaseHToolbar();
+
+    frame->m_LeftWin->ReCreateTreePrj();
+
+    frame->PrintMsg( _( "Working dir: " ) + frame->m_ProjectFileName.GetPath() +
+              _( "\nProject: " ) + frame->m_ProjectFileName.GetFullName() +
+              wxT( "\n" ) );
+}
+
 
 /*****************************************************************************/
 bool WinEDA_App::OnInit()

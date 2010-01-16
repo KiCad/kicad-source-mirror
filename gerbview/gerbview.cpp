@@ -54,6 +54,14 @@ Ki_PageDescr* g_GerberPageSizeList[] =
 
 IMPLEMENT_APP( WinEDA_App )
 
+/* MacOSX: Needed for file association 
+ * http://wiki.wxwidgets.org/WxMac-specific_topics
+ */
+void WinEDA_App::MacOpenFile(const wxString &fileName) {
+    WinEDA_GerberFrame * frame = ((WinEDA_GerberFrame*)GetTopWindow());
+    frame->LoadOneGerberFile( fileName, FALSE );
+}
+
 
 bool WinEDA_App::OnInit()
 {
