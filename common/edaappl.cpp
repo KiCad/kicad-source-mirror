@@ -499,6 +499,10 @@ void WinEDA_App::SetDefaultSearchPaths( void )
     * figure out a way to implement this without #ifdef, please do. */
 #ifdef __WXMSW__
     tmp.AddEnvList( wxT( "PROGRAMFILES" ) );
+#elif __WXMAC__
+    m_searchPaths.Add( wxT("/Library/Application Support/kicad") );
+    m_searchPaths.Add( wxString(wxGetenv(wxT("HOME"))) +
+      wxT("/Library/Application Support/kicad") );
 #else
     tmp.AddEnvList( wxT( "PATH" ) );
 #endif
