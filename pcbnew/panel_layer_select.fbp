@@ -198,7 +198,7 @@
                                             <event name="OnKeyUp"></event>
                                             <event name="OnKillFocus"></event>
                                             <event name="OnLeaveWindow"></event>
-                                            <event name="OnLeftDClick">OnLeftDblClickLayers</event>
+                                            <event name="OnLeftDClick"></event>
                                             <event name="OnLeftDown">OnLeftDownLayers</event>
                                             <event name="OnLeftUp"></event>
                                             <event name="OnMiddleDClick"></event>
@@ -246,7 +246,7 @@
                                 <property name="id">wxID_ANY</property>
                                 <property name="maximum_size"></property>
                                 <property name="minimum_size"></property>
-                                <property name="name">m_Page1Panel</property>
+                                <property name="name">m_RenderingPanel</property>
                                 <property name="permission">protected</property>
                                 <property name="pos"></property>
                                 <property name="size"></property>
@@ -283,6 +283,69 @@
                                     <property name="name">bSizer4</property>
                                     <property name="orient">wxVERTICAL</property>
                                     <property name="permission">none</property>
+                                    <object class="sizeritem" expanded="1">
+                                        <property name="border">5</property>
+                                        <property name="flag">wxALL|wxEXPAND</property>
+                                        <property name="proportion">1</property>
+                                        <object class="wxScrolledWindow" expanded="1">
+                                            <property name="bg"></property>
+                                            <property name="context_help"></property>
+                                            <property name="enabled">1</property>
+                                            <property name="fg"></property>
+                                            <property name="font"></property>
+                                            <property name="hidden">0</property>
+                                            <property name="id">wxID_ANY</property>
+                                            <property name="maximum_size"></property>
+                                            <property name="minimum_size"></property>
+                                            <property name="name">m_RenderScrolledWindow</property>
+                                            <property name="permission">protected</property>
+                                            <property name="pos"></property>
+                                            <property name="scroll_rate_x">5</property>
+                                            <property name="scroll_rate_y">5</property>
+                                            <property name="size"></property>
+                                            <property name="subclass"></property>
+                                            <property name="tooltip"></property>
+                                            <property name="window_extra_style"></property>
+                                            <property name="window_name"></property>
+                                            <property name="window_style">wxVSCROLL</property>
+                                            <event name="OnChar"></event>
+                                            <event name="OnEnterWindow"></event>
+                                            <event name="OnEraseBackground"></event>
+                                            <event name="OnKeyDown"></event>
+                                            <event name="OnKeyUp"></event>
+                                            <event name="OnKillFocus"></event>
+                                            <event name="OnLeaveWindow"></event>
+                                            <event name="OnLeftDClick"></event>
+                                            <event name="OnLeftDown"></event>
+                                            <event name="OnLeftUp"></event>
+                                            <event name="OnMiddleDClick"></event>
+                                            <event name="OnMiddleDown"></event>
+                                            <event name="OnMiddleUp"></event>
+                                            <event name="OnMotion"></event>
+                                            <event name="OnMouseEvents"></event>
+                                            <event name="OnMouseWheel"></event>
+                                            <event name="OnPaint"></event>
+                                            <event name="OnRightDClick"></event>
+                                            <event name="OnRightDown"></event>
+                                            <event name="OnRightUp"></event>
+                                            <event name="OnSetFocus"></event>
+                                            <event name="OnSize"></event>
+                                            <event name="OnUpdateUI"></event>
+                                            <object class="wxFlexGridSizer" expanded="1">
+                                                <property name="cols">2</property>
+                                                <property name="flexible_direction">wxHORIZONTAL</property>
+                                                <property name="growablecols"></property>
+                                                <property name="growablerows"></property>
+                                                <property name="hgap">3</property>
+                                                <property name="minimum_size"></property>
+                                                <property name="name">m_RenderFlexGridSizer</property>
+                                                <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
+                                                <property name="permission">protected</property>
+                                                <property name="rows">0</property>
+                                                <property name="vgap">1</property>
+                                            </object>
+                                        </object>
+                                    </object>
                                 </object>
                             </object>
                         </object>

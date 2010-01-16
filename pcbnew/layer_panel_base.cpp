@@ -36,16 +36,27 @@ LAYER_PANEL_BASE::LAYER_PANEL_BASE( wxWindow* parent, wxWindowID id, const wxPoi
 	m_LayerPanel->Layout();
 	bSizer3->Fit( m_LayerPanel );
 	m_notebook->AddPage( m_LayerPanel, _("Layers"), true );
-	m_Page1Panel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_Page1Panel->SetToolTip( _("Part depiction and visibility") );
+	m_RenderingPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_RenderingPanel->SetToolTip( _("Part depiction and visibility") );
 	
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 	
-	m_Page1Panel->SetSizer( bSizer4 );
-	m_Page1Panel->Layout();
-	bSizer4->Fit( m_Page1Panel );
-	m_notebook->AddPage( m_Page1Panel, _("Rendering"), false );
+	m_RenderScrolledWindow = new wxScrolledWindow( m_RenderingPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
+	m_RenderScrolledWindow->SetScrollRate( 5, 5 );
+	m_RenderFlexGridSizer = new wxFlexGridSizer( 0, 2, 1, 3 );
+	m_RenderFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
+	m_RenderFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_RenderScrolledWindow->SetSizer( m_RenderFlexGridSizer );
+	m_RenderScrolledWindow->Layout();
+	m_RenderFlexGridSizer->Fit( m_RenderScrolledWindow );
+	bSizer4->Add( m_RenderScrolledWindow, 1, wxALL|wxEXPAND, 5 );
+	
+	m_RenderingPanel->SetSizer( bSizer4 );
+	m_RenderingPanel->Layout();
+	bSizer4->Fit( m_RenderingPanel );
+	m_notebook->AddPage( m_RenderingPanel, _("Rendering"), false );
 	
 	boxSizer->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 	
@@ -53,7 +64,6 @@ LAYER_PANEL_BASE::LAYER_PANEL_BASE( wxWindow* parent, wxWindowID id, const wxPoi
 	this->Layout();
 	
 	// Connect Events
-	m_LayerScrolledWindow->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( LAYER_PANEL_BASE::OnLeftDblClickLayers ), NULL, this );
 	m_LayerScrolledWindow->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_PANEL_BASE::OnLeftDownLayers ), NULL, this );
 	m_LayerScrolledWindow->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_PANEL_BASE::OnRightDownLayers ), NULL, this );
 }
@@ -61,7 +71,6 @@ LAYER_PANEL_BASE::LAYER_PANEL_BASE( wxWindow* parent, wxWindowID id, const wxPoi
 LAYER_PANEL_BASE::~LAYER_PANEL_BASE()
 {
 	// Disconnect Events
-	m_LayerScrolledWindow->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( LAYER_PANEL_BASE::OnLeftDblClickLayers ), NULL, this );
 	m_LayerScrolledWindow->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_PANEL_BASE::OnLeftDownLayers ), NULL, this );
 	m_LayerScrolledWindow->Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_PANEL_BASE::OnRightDownLayers ), NULL, this );
 }

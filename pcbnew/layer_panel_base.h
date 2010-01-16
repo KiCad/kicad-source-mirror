@@ -38,10 +38,11 @@ class LAYER_PANEL_BASE : public wxPanel
 		wxPanel* m_LayerPanel;
 		wxScrolledWindow* m_LayerScrolledWindow;
 		wxFlexGridSizer* m_LayersFlexGridSizer;
-		wxPanel* m_Page1Panel;
+		wxPanel* m_RenderingPanel;
+		wxScrolledWindow* m_RenderScrolledWindow;
+		wxFlexGridSizer* m_RenderFlexGridSizer;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnLeftDblClickLayers( wxMouseEvent& event ){ event.Skip(); }
 		virtual void OnLeftDownLayers( wxMouseEvent& event ){ event.Skip(); }
 		virtual void OnRightDownLayers( wxMouseEvent& event ){ event.Skip(); }
 		
