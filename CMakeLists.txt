@@ -139,8 +139,12 @@ check_find_package_result(OPENGL_FOUND "OpenGL")
 # http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
 
 if( KICAD_AUIMANAGER OR KICAD_AUITOOLBAR )
-    find_package(wxWidgets COMPONENTS gl adv html core net base QUIET)
-#    find_package(wxWidgets COMPONENTS gl adv html core net base QUIET)
+    find_package(wxWidgets COMPONENTS gl aui adv html core net base QUIET)
+
+    # On Apple only wxwidgets 2.9 or higher doesn't need to find aui part of base
+    if(APPLE)
+		find_package(wxWidgets COMPONENTS gl adv html core net base QUIET)
+	endif(APPLE)
 else( KICAD_AUIMANAGER OR KICAD_AUITOOLBAR )
     find_package(wxWidgets COMPONENTS gl adv html core net base QUIET)
 endif( KICAD_AUIMANAGER OR KICAD_AUITOOLBAR )
