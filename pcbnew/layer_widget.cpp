@@ -52,7 +52,7 @@
 
 
 #define LYR_COLUMN_COUNT        4           ///< Layer tab column count
-#define RND_COLUMN_COUNT        2           ///< Rendering tab column count
+#define RND_COLUMN_COUNT        3           ///< Rendering tab column count
 
 #define ID_SHOW_ALL_COPPERS     wxID_HIGHEST
 #define ID_SHOW_NO_COPPERS      (wxID_HIGHEST+1)
@@ -500,26 +500,27 @@ protected:
         bmb->SetToolTip( _("Middle click for color change" ) );
         m_RenderFlexGridSizer->Insert( index+col, new wxSizerItem( bmb, flags ) );
 
-#if 1
+#if 0
         // column 1
         col = 1;
-        wxCheckBox* cb = new wxCheckBox( m_RenderScrolledWindow, encodeId( col, aSpec.id ), aSpec.rowName );
+        wxCheckBox* cb = new wxCheckBox( m_RenderScrolledWindow, encodeId( col, aSpec.id ), aSpec.rowName,
+            wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
         cb->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( LAYER_WIDGET::OnRenderCheckBox ), NULL, this );
 //        cb->SetToolTip( _( "Enable this for visibility" ) );
         m_RenderFlexGridSizer->Insert( index+col, new wxSizerItem( cb, flags ) );
 #else
         // column 1
         col = 1;
-        wxStaticText* st = new wxStaticText( m_RenderScrolledWindow, encodeId( col, aSpec.id ), aSpec.rowName );
-        m_RenderFlexGridSizer->Insert( index+col,
-            new wxSizerItem( st, wxSizerFlags().Align( wxALIGN_CENTER_VERTICAL )) );
-
-        // column 2
-        col = 2;
         wxCheckBox* cb = new wxCheckBox( m_RenderScrolledWindow, encodeId( col, aSpec.id ), wxEmptyString );
         cb->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( LAYER_WIDGET::OnRenderCheckBox ), NULL, this );
 //        cb->SetToolTip( _( "Enable this for visibility" ) );
         m_RenderFlexGridSizer->Insert( index+col, new wxSizerItem( cb, flags ) );
+
+        // column 2
+        col = 2;
+        wxStaticText* st = new wxStaticText( m_RenderScrolledWindow, encodeId( col, aSpec.id ), aSpec.rowName );
+        m_RenderFlexGridSizer->Insert( index+col,
+            new wxSizerItem( st, wxSizerFlags().Align( wxALIGN_CENTER_VERTICAL )) );
 #endif
     }
 
@@ -541,7 +542,7 @@ public:
         m_LayerScrolledWindow->Connect( wxEVT_RIGHT_DOWN,
             wxMouseEventHandler( LAYER_WIDGET::OnRightDownLayers ), NULL, this );
 
-        // since Popupmenu() call this->ProcessEvent() we must call this->Connect()
+        // since Popupmenu() calls this->ProcessEvent() we must call this->Connect()
         // and not m_LayerScrolledWindow->Connect()
         Connect( ID_SHOW_ALL_COPPERS, ID_SHOW_NO_COPPERS,
                 wxEVT_COMMAND_MENU_SELECTED,
@@ -550,44 +551,69 @@ public:
 
 
     /**
-     * Function GetPreferredSize
+     * Function GetBestSize
      * returns the preferred minimum size, taking into consideration the
      * dynamic content.  Nothing in wxWidgets was reliable enough.
      */
-    wxSize GetPreferredSize()
+    wxSize GetBestSize() const
     {
-        FitInside();
-
         // size of m_LayerScrolledWindow --------------
         wxArrayInt widths = m_LayersFlexGridSizer->GetColWidths();
         int totWidth = 0;
-        for( int i=0;  i<LYR_COLUMN_COUNT;  ++i )
+        for( int i=0;  i<LYR_COLUMN_COUNT && i<(int)widths.GetCount();  ++i )
         {
             totWidth += widths[i] + m_LayersFlexGridSizer->GetHGap();
             // printf("widths[%d]:%d\n", i, widths[i] );
         }
 
         wxArrayInt heights = m_LayersFlexGridSizer->GetRowHeights();
-        int totHeight = 2 * heights[0]; // use 2 row heights to approximate tab height
+        int totHeight = 0;
         int rowCount = GetLayerRowCount();
-        for( int i=0; i<rowCount;  ++i )
+        for( int i=0; i<rowCount && i<(int)heights.GetCount();  ++i )
         {
             totHeight += heights[i] + m_LayersFlexGridSizer->GetVGap();
             // printf("heights[%d]:%d\n", i, heights[i] );
         }
 
-        // on linux: trial and error min until horizontal scroll bar goes away.
-        // I think this is to account for the top most window's frame:
+        // Account for the parent's frame:
         totWidth += 10;
 
-        wxSize layerWindowSize( totWidth, totHeight );
+        if( heights.GetCount() )
+            totHeight += 2 * heights[0]; // use 2 row heights to approximate tab height
+        else
+            totHeight += 20;        // not used except before adding rows.
 
-        return layerWindowSize;
-    }
+        wxSize layerz( totWidth, totHeight );
 
-    void SetPreferredSize()
-    {
-        SetMinSize( GetPreferredSize() );
+        // size of m_RenderScrolledWindow --------------
+        widths = m_RenderFlexGridSizer->GetColWidths();
+        totWidth = 0;
+        for( int i=0;  i<RND_COLUMN_COUNT && i<(int)widths.GetCount();  ++i )
+        {
+            totWidth += widths[i] + m_RenderFlexGridSizer->GetHGap();
+            // printf("widths[%d]:%d\n", i, widths[i] );
+        }
+
+        heights = m_RenderFlexGridSizer->GetRowHeights();
+        totHeight = 0;
+        rowCount = GetRenderRowCount();
+        for( int i=0; i<rowCount && i<(int)heights.GetCount();  ++i )
+        {
+            totHeight += heights[i] + m_RenderFlexGridSizer->GetVGap();
+            // printf("heights[%d]:%d\n", i, heights[i] );
+        }
+
+        // account for the parent's frame, this one void space of 10 PLUS a border:
+        totWidth += 20;
+
+        if( heights.GetCount() )
+            totHeight += 2 * heights[0]; // use 2 row heights to approximate tab height
+        else
+            totHeight += 20;    // not used except before adding rows
+
+        wxSize renderz( totWidth, totHeight );
+
+        return wxSize( max(renderz.x,layerz.x), max(renderz.y,layerz.y) );
     }
 
 
@@ -620,6 +646,7 @@ public:
     {
         int nextRow = GetLayerRowCount();
         insertLayerRow( nextRow, aRow );
+        FitInside();
     }
 
     /**
@@ -640,6 +667,7 @@ public:
     {
         int nextRow = GetRenderRowCount();
         insertRenderRow( nextRow, aRow );
+        FitInside();
     }
 
     /**
@@ -852,16 +880,14 @@ public:
         lw->AppendLayerRow( LAYER_WIDGET::ROW( wxT("brown_layer"), 2, BROWN ) );
         lw->AppendLayerRow( LAYER_WIDGET::ROW( wxT("layer_4_you"), 3, BLUE, false ) );
 
-        lw->AppendRenderRow( LAYER_WIDGET::ROW( wxT("With Ears"), 0, GREEN ) );
+        lw->AppendRenderRow( LAYER_WIDGET::ROW( wxT("With Very Large Ears"), 0, GREEN ) );
         lw->AppendRenderRow( LAYER_WIDGET::ROW( wxT("With Legs"), 1, YELLOW ) );
-
-        lw->SetPreferredSize();
 
         lw->SelectLayerRow( 1 );
 
         wxAuiPaneInfo li;
-        li.MinSize( lw->GetPreferredSize() );
-        li.BestSize( lw->GetPreferredSize() );
+        li.MinSize( lw->GetBestSize() );
+        li.BestSize( lw->GetBestSize() );
         li.Left();
 //        li.MaximizeButton( true );
 //        li.MinimizeButton( true );
