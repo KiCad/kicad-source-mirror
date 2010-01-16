@@ -10,6 +10,7 @@
 #include "gestfich.h"
 #include "bitmaps.h"
 #include "eda_dde.h"
+#include "id.h"
 
 #include "program.h"
 #include "general.h"
@@ -110,6 +111,14 @@ void WinEDA_App::MacOpenFile(const wxString &fileName) {
 
 bool WinEDA_App::OnInit()
 {
+#ifdef __WXMAC__
+	wxApp::SetExitOnFrameDelete(false);
+	wxApp::s_macAboutMenuItemId = ID_KICAD_ABOUT;
+	wxApp::s_macPreferencesMenuItemId = ID_CONFIG_REQ;
+#endif /* __WXMAC__ */
+
+
+
     wxFileName             fn;
     WinEDA_SchematicFrame* frame = NULL;
 

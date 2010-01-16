@@ -36,17 +36,24 @@ if(APPLE)
     set(MACOSX_BUNDLE_NAME kicad)
 endif(APPLE)
 
-add_executable(kicad WIN32 MACOSX_BUNDLE ${KICAD_SRCS} ${KICAD_EXTRA_SRCS} ${KICAD_RESOURCES})
-
 if(APPLE)
-    set_target_properties(kicad PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+	add_executable(KiCad MACOSX_BUNDLE ${KICAD_SRCS} ${KICAD_EXTRA_SRCS} ${KICAD_RESOURCES})
+else(APPLE)
+	add_executable(kicad WIN32 ${KICAD_SRCS} ${KICAD_EXTRA_SRCS} ${KICAD_RESOURCES})
 endif(APPLE)
 
-target_link_libraries(kicad common bitmaps ${wxWidgets_LIBRARIES})
-
-install(TARGETS kicad
+if(APPLE)
+    set_target_properties(KiCad PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+	target_link_libraries(KiCad common bitmaps ${wxWidgets_LIBRARIES})
+install(TARGETS KiCad
         DESTINATION ${KICAD_BIN}
         COMPONENT binary)
+else(APPLE)
+	target_link_libraries(kicad common bitmaps ${wxWidgets_LIBRARIES})
+	install(TARGETS kicad
+        DESTINATION ${KICAD_BIN}
+        COMPONENT binary)
+endif(APPLE)
 
 if(KICAD_MINIZIP)
     add_subdirectory(minizip)

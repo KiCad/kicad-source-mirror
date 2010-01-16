@@ -6,6 +6,15 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ../pcbnew
                     ../polygon
                     ${CMAKE_SOURCE_DIR}/common)
+##
+# Name of target on OSX is also the title of the application
+# on other targets this should be as normal
+##
+if(APPLE)
+	set(CVPCB_NAME CvPCB)
+else(APPLE)
+	set(CVPCB_NAME cvpcb)
+endif(APPLE)
 
 set(CVPCB_SRCS
     autosel.cpp
@@ -41,6 +50,9 @@ if(WIN32)
     endif(MINGW)
 endif(WIN32)
 
+###
+# CvPCB.app resources
+###
 if(APPLE)
     set(CVPCB_RESOURCES cvpcb.icns cvpcb_doc.icns)
     set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/cvpcb.icns"
@@ -49,17 +61,19 @@ if(APPLE)
                                 PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     set(MACOSX_BUNDLE_ICON_FILE cvpcb.icns)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.cvpcb)
-    set(MACOSX_BUNDLE_NAME cvpcb)
 endif(APPLE)
 
-add_executable(cvpcb WIN32 MACOSX_BUNDLE ${CVPCB_SRCS} ${CVPCB_RESOURCES})
+add_executable(${CVPCB_NAME} WIN32 MACOSX_BUNDLE ${CVPCB_SRCS} ${CVPCB_RESOURCES})
 
+###
+# CvPCB.app creation
+###
 if(APPLE)
-    set_target_properties(cvpcb PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+    set_target_properties(${CVPCB_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
-target_link_libraries(cvpcb 3d-viewer common pcbcommon polygon bitmaps kbool ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES})
+target_link_libraries(${CVPCB_NAME} 3d-viewer common pcbcommon polygon bitmaps kbool ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES})
 
-install(TARGETS cvpcb
+install(TARGETS ${CVPCB_NAME}
         DESTINATION ${KICAD_BIN}
         COMPONENT binary)

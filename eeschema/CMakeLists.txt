@@ -4,6 +4,15 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_SOURCE_DIR}/common
                     ${Boost_INCLUDE_DIR}
                    )
+##
+# Name of target on OSX is also the title of the application
+# on other targets this should be as normal
+##
+if(APPLE)
+	set(EESCHEMA_NAME EESchema)
+else(APPLE)
+	set(EESCHEMA_NAME eeschema)
+endif(APPLE)
 
 set(EESCHEMA_SRCS
     annotate.cpp
@@ -146,18 +155,17 @@ if(APPLE)
                                 PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     set(MACOSX_BUNDLE_ICON_FILE eeschema.icns)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.eeschema)
-    set(MACOSX_BUNDLE_NAME eeschema)
 endif(APPLE)
 
-add_executable(eeschema WIN32 MACOSX_BUNDLE ${EESCHEMA_SRCS} ${EESCHEMA_EXTRA_SRCS} ${EESCHEMA_RESOURCES})
+add_executable(${EESCHEMA_NAME} WIN32 MACOSX_BUNDLE ${EESCHEMA_SRCS} ${EESCHEMA_EXTRA_SRCS} ${EESCHEMA_RESOURCES})
 
 if(APPLE)
-    set_target_properties(eeschema PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+    set_target_properties(${EESCHEMA_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
-target_link_libraries(eeschema common bitmaps ${wxWidgets_LIBRARIES})
+target_link_libraries(${EESCHEMA_NAME} common bitmaps ${wxWidgets_LIBRARIES})
 
-install(TARGETS eeschema
+install(TARGETS ${EESCHEMA_NAME}
         DESTINATION ${KICAD_BIN}
         COMPONENT binary)
 

@@ -79,7 +79,7 @@ bool WinEDA_App::OnInit()
     wxString           msg;
     WinEDA_CvpcbFrame* frame   = NULL;
 
-    InitEDA_Appl( wxT( "Cvpcb" ), APP_TYPE_CVPCB );
+    InitEDA_Appl( wxT( "CvPCB" ), APP_TYPE_CVPCB );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {

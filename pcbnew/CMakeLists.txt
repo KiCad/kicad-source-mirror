@@ -4,6 +4,15 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${Boost_INCLUDE_DIR}
                     ../3d-viewer
                     ../polygon)
+##
+# Name of target on OSX is also the title of the application
+# on other targets this should be as normal
+##
+if(APPLE)
+	set(PCBNEW_NAME PCBNew)
+else(APPLE)
+	set(PCBNEW_NAME pcbnew)
+endif(APPLE)
 
 # Many of the commented out ones are nested in *.cpp files for dialogs
 set(PCBNEW_SRCS
@@ -182,7 +191,6 @@ if(APPLE)
                                 PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     set(MACOSX_BUNDLE_ICON_FILE pcbnew.icns)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.pcbnew)
-    set(MACOSX_BUNDLE_NAME pcbnew)
     set(MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
@@ -203,18 +211,18 @@ set_source_files_properties( dialog_freeroute_exchange.cpp
         OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help_html.h
     )
 
-add_executable(pcbnew WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS}
+add_executable(${PCBNEW_NAME} WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS}
     ${PCBNEW_EXTRA_SRCS}
     ${PCBNEW_RESOURCES}
     )
 
 if(APPLE)
-    set_target_properties(pcbnew PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+    set_target_properties(${PCBNEW_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
-target_link_libraries(pcbnew 3d-viewer common pcbcommon polygon bitmaps kbool ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES})
+target_link_libraries(${PCBNEW_NAME} 3d-viewer common pcbcommon polygon bitmaps kbool ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES})
 
-install(TARGETS pcbnew
+install(TARGETS ${PCBNEW_NAME}
         DESTINATION ${KICAD_BIN}
         COMPONENT binary)
 

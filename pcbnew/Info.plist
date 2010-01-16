@@ -18,7 +18,7 @@
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>pcbnew</string>
+	<string>PCBNew</string>
 	<key>CFBundleGetInfoString</key>
 	<string></string>
 	<key>CFBundleIconFile</key>
@@ -30,7 +30,7 @@
 	<key>CFBundleLongVersionString</key>
 	<string></string>
 	<key>CFBundleName</key>
-	<string>pcbnew</string>
+	<string>PCBNew</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
