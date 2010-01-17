@@ -14,6 +14,7 @@
 #include "class_drawpanel.h"
 #include "class_base_screen.h"
 #include "wxstruct.h"
+#include "kicad_device_context.h"
 
 /** Compute draw offset (scroll bars and draw parameters)
  *  in order to have the current graphic cursor position at the screen center
@@ -27,14 +28,15 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
     PutOnGrid( &(GetBaseScreen()->m_Curseur) );
     AdjustScrollBars();
 
-    DrawPanel->m_IgnoreMouseEvents = true;
-    DrawPanel->Refresh();   // send OnPaint event
 
-    // wxSafeYield() is better here, but creates flicker under Linux
-    // because it temporary disables menus and toolbars
-    // TODO: find a better way to manage refresh screen and mouse move
-    wxYield();          // needed to allow OnPaint event execution here
-    DrawPanel->m_IgnoreMouseEvents = false;
+    /* We do not use here DrawPanel->Refresh() because
+     * the redraw is delayed and the mouse events (from MouseToCursorSchema ot others)
+     * during this delay create problems: the mouse cursor position is false in calculations.
+     * TODO: see exactly how the mouse creates problems when moving during refresh
+     * use Refresh() and update() do not change problems
+     */
+    INSTALL_DC(dc,DrawPanel);
+    DrawPanel->ReDraw( &dc );
 
     /* Move the mouse cursor to the on grid graphic cursor position */
     if( ToMouse == TRUE )
