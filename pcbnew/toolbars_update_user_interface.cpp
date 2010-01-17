@@ -275,7 +275,7 @@ void WinEDA_PcbFrame::SetToolbars()
 
 #if !defined(KICAD_AUIMANAGER)
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
-                                      m_AuxVToolBar ? true : false );
+                                      (m_AuxVToolBar && m_AuxVToolBar->IsShown()) ? true : false );
 #else
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
                                       m_auimgr.GetPane(wxT("m_AuxVToolBar")).IsShown() );

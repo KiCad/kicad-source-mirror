@@ -346,7 +346,7 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
     wxSize clientSize = m_FrameSize;
     wxPoint clientPosition;
     int default_value = -1;
-    
+
     // Ugly fix for a problem found in recent linux version
     // where default value is broken
 #ifdef __WXGTK__
@@ -361,7 +361,7 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
         MsgPanel->SetSize( 0, clientSize.y, clientSize.x, m_MsgFrameHeight );
     }
 
-    if( m_AuxiliaryToolBar )        // Resize the auxilary horizontal tool bar.
+    if( m_AuxiliaryToolBar && m_AuxiliaryToolBar->IsShown() )        // Resize the auxilary horizontal tool bar.
     {
         m_AuxiliaryToolBar->SetSize( clientSize.x, default_value);
         m_AuxiliaryToolBar->Move( 0, 0 );
@@ -369,28 +369,28 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
         clientPosition.y = m_AuxiliaryToolBar->GetDimension();
     }
 
-    if( m_VToolBar )                // Resize the main right vertical tool bar.
+    if( m_VToolBar && m_VToolBar->IsShown() )                // Resize the main right vertical tool bar.
     {
         m_VToolBar->SetSize(default_value, clientSize.y );
         clientSize.x -= m_VToolBar->GetDimension();
         m_VToolBar->Move( clientSize.x, clientPosition.y );
     }
 
-    if( m_AuxVToolBar )             // Resize the auxiliary right vertical toolbar.
+    if( m_AuxVToolBar && m_AuxVToolBar->IsShown() )             // Resize the auxiliary right vertical toolbar.
     {
         m_AuxVToolBar->SetSize( default_value, clientSize.y );
         clientSize.x -= m_AuxVToolBar->GetDimension();
         m_AuxVToolBar->Move( clientSize.x, clientPosition.y );
     }
 
-    if( m_OptionsToolBar )          // Resize the main left vertical tool bar.
+    if( m_OptionsToolBar && m_OptionsToolBar->IsShown() )          // Resize the main left vertical tool bar.
     {
         m_OptionsToolBar->SetSize( default_value, clientSize.y );
         clientSize.x -= m_OptionsToolBar->GetDimension( );
         m_OptionsToolBar->Move( 0, clientPosition.y );
-        clientPosition.x += m_OptionsToolBar->GetDimension( ); 
+        clientPosition.x += m_OptionsToolBar->GetDimension( );
     }
-    
+
     if( DrawPanel )
     {
         DrawPanel->SetSize( clientPosition.x, clientPosition.y,

@@ -255,8 +255,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
-    if( m_show_microwave_tools )
-        ReCreateAuxVToolbar();
+    ReCreateAuxVToolbar();
 
 #if defined(KICAD_AUIMANAGER)
     m_auimgr.SetManagedWindow( this );
@@ -303,7 +302,12 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
                           wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
 
     m_auimgr.Update();
+#else
+
+    if( m_AuxVToolBar )
+        m_AuxVToolBar->Show(m_show_microwave_tools);
 #endif
+
 }
 
 
@@ -416,5 +420,5 @@ void WinEDA_PcbFrame::SaveSettings()
 
     config->Write( PCB_MAGNETIC_PADS_OPT, (long) g_MagneticPadOption );
     config->Write( PCB_MAGNETIC_TRACKS_OPT, (long) g_MagneticTrackOption );
-    config->Write( SHOW_MICROWAVE_TOOLS, ( m_AuxVToolBar ) ? true : false );
+    config->Write( SHOW_MICROWAVE_TOOLS, ( m_AuxVToolBar && m_AuxVToolBar->IsShown() ) ? true : false );
 }

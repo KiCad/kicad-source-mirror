@@ -97,8 +97,31 @@ public:
                             int   aPrintMask,
                             bool  aPrintMirrorMode,
                             void* aData );
+
+    /**  Function DrawBackGround
+     * @param DC = current Device Context
+     * Draws (if allowed) :
+     * the grid
+     * X and Y axis
+     * X and Y auxiliary axis
+     */
     void         DrawBackGround( wxDC* DC );
+
+    /**  Function DrawGrid
+     * @param DC = current Device Context
+     * draws the grid
+     *  - the grid is drawn only if the zoom level allows a good visibility
+     *  - the grid is always centered on the screen center
+     */
+    void         DrawGrid( wxDC* DC );
+
+    /** function DrawAuxiliaryAxis
+     * Draw the Auxiliary Axis, used in pcbnew which as origin coordinates
+     * for gerber and excellon files
+     * @param DC = current Device Context
+     */
     void         DrawAuxiliaryAxis( wxDC* DC, int drawmode );
+
     void         OnActivate( wxActivateEvent& event );
 
     /* Mouse and keys events */
