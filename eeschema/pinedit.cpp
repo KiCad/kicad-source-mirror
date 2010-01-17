@@ -37,6 +37,38 @@ static bool    LastPinCommonConvert = false;
 static bool    LastPinCommonUnit    = false;
 static bool    LastPinVisible       = true;
 
+void WinEDA_LibeditFrame::OnRotatePin( wxCommandEvent& event ){
+
+	// Check, if the item is a pin, else return
+	if( m_drawItem == NULL || m_drawItem->Type() != COMPONENT_PIN_DRAW_TYPE )
+		return;
+
+	// save flags to restore them after rotating
+	int item_flags = m_drawItem->m_Flags;
+	LIB_PIN* pin = (LIB_PIN*) m_drawItem;
+
+	// Save old pin orientation
+	LastPinOrient = pin -> m_Orient;
+	SaveCopyInUndoList( pin->GetParent() );
+
+	// Get the actual pin orientation index
+	int orientationIndex = pin -> GetOrientationCodeIndex(pin -> m_Orient);
+
+	// Compute the next orientation, swap lower two bits for the right order
+	orientationIndex = ((orientationIndex & 2) >> 1) | ((orientationIndex & 1) << 1);
+	orientationIndex = orientationIndex + 1;
+	orientationIndex = ((orientationIndex & 2) >> 1) | ((orientationIndex & 1) << 1);
+
+	// Set the new orientation
+	pin->SetOrientation(pin->GetOrientationCode(orientationIndex));
+
+	GetScreen()->SetModify();
+	pin->DisplayInfo( this );
+	DrawPanel->Refresh();
+
+	// Restore pin flags
+	pin->m_Flags = item_flags;
+}
 
 void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
 {

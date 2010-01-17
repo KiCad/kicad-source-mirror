@@ -49,13 +49,12 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     item->SetBitmap( open_xpm );
     filesMenu->Append( item );
 
-    filesMenu->AppendSeparator();
-    item = new wxMenuItem( filesMenu, ID_SAVE_PROJECT, _( "&Save Project" ),
-                           _( "Save all sheets in the schematic project" ) );
-    item->SetBitmap( save_project_xpm );
-    filesMenu->Append( item );
+    /* Open Recent submenu */
+    wxMenu* openRecentMenu = new wxMenu();
+    wxGetApp().m_fileHistory.AddFilesToMenu( openRecentMenu );
+    filesMenu->AppendSubMenu( openRecentMenu, _( "Open &Recent" ),
+                              _( "Open a recent opened document" ) );
 
-    filesMenu->AppendSeparator();
     item = new wxMenuItem( filesMenu, ID_SAVE_ONE_SHEET, _( "&Save" ),
                            _( "Save only current schematic sheet" ) );
     item->SetBitmap( save_xpm );
@@ -66,8 +65,15 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     item->SetBitmap( save_as_xpm );
     filesMenu->Append( item );
 
-    // Print and Plot section:
     filesMenu->AppendSeparator();
+    item = new wxMenuItem( filesMenu, ID_SAVE_PROJECT, _( "&Save Project" ),
+                           _( "Save all sheets in the schematic project" ) );
+    item->SetBitmap( save_project_xpm );
+    filesMenu->Append( item );
+
+    filesMenu->AppendSeparator();
+
+    // Print and Plot section:
     item = new wxMenuItem( filesMenu, ID_GEN_PRINT, _( "P&rint" ),
                            _( "Print schematic sheet" ) );
     item->SetBitmap( print_button );
@@ -116,8 +122,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     item->SetBitmap( exit_xpm );
     filesMenu->Append( item );
 
-    /* Add the file history */
-    wxGetApp().m_fileHistory.AddFilesToMenu( filesMenu );
+
 
     // Menu Edit:
     wxMenu* editMenu = new wxMenu;

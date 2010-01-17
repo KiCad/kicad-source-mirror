@@ -115,6 +115,8 @@ BEGIN_EVENT_TABLE( WinEDA_LibeditFrame, WinEDA_DrawFrame )
 /* Context menu events and commands. */
     EVT_MENU( ID_LIBEDIT_EDIT_PIN, WinEDA_LibeditFrame::OnEditPin )
 
+    EVT_MENU( ID_LIBEDIT_ROTATE_PIN, WinEDA_LibeditFrame::OnRotatePin )
+
     EVT_MENU_RANGE( ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_ITEM,
                     ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT,
                     WinEDA_LibeditFrame::Process_Special_Functions )

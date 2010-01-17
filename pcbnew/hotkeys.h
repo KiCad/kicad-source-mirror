@@ -1,8 +1,9 @@
-/***************/
-/* hotkeys.h */
-/***************/
-#ifndef KOTKEYS_H
-#define KOTKEYS_H
+/**
+ * @file hotkeys.h
+ * PCBNew hotkeys
+ */
+#ifndef _PCBNEW_KOTKEYS_H
+#define _PCBNEW_HOTKEYS_H
 
 #include "hotkeys_basic.h"
 
@@ -63,4 +64,4 @@ extern struct Ki_HotkeyInfoSectionDescriptor s_Board_Editor_Hokeys_Descr[];
 // List of hotkey descriptors for the footprint editor only
 extern struct Ki_HotkeyInfoSectionDescriptor s_Module_Editor_Hokeys_Descr[];
 
-#endif      // KOTKEYS_H
+#endif /* _PCBNEW_HOTKEYS_H_ */

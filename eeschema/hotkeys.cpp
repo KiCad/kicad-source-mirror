@@ -74,8 +74,8 @@ static Ki_HotkeyInfo HkMirrorXComponent( wxT( "Mirror X Component" ),
                                          HK_MIRROR_X_COMPONENT, 'X' );
 static Ki_HotkeyInfo HkOrientNormalComponent( wxT( "Orient Normal Component" ),
                                               HK_ORIENT_NORMAL_COMPONENT, 'N' );
-static Ki_HotkeyInfo HkRotateComponent( wxT( "Rotate Component or Label" ),
-                                        HK_ROTATE_COMPONENT_OR_LABEL, 'R' );
+static Ki_HotkeyInfo HkRotateComponentOrItem( wxT( "Rotate Schematic Item" ),
+                                        HK_ROTATE_COMPONENT_OR_ITEM, 'R' );
 static Ki_HotkeyInfo HkEditComponent( wxT( "Edit Component or Label" ),
                                            HK_EDIT_COMPONENT_OR_LABEL, 'E' );
 static Ki_HotkeyInfo HkEditComponentValue( wxT( "Edit Component Value" ),
@@ -83,8 +83,8 @@ static Ki_HotkeyInfo HkEditComponentValue( wxT( "Edit Component Value" ),
 static Ki_HotkeyInfo HkEditComponentFootprint( wxT( "Edit Component Footprint" ),
                                                HK_EDIT_COMPONENT_FOOTPRINT,
                                                'F' );
-static Ki_HotkeyInfo HkMoveComponentOrText( wxT( "Move Component or Label" ),
-                                      HK_MOVE_COMPONENT_OR_LABEL, 'M',
+static Ki_HotkeyInfo HkMoveComponentOrItem( wxT( "Move Schematic Item" ),
+                                      HK_MOVE_COMPONENT_OR_ITEM, 'M',
                                       ID_POPUP_SCH_MOVE_CMP_REQUEST );
 
 static Ki_HotkeyInfo HkCopyComponentOrText( wxT( "Copy Component or Label" ),
@@ -107,6 +107,7 @@ static Ki_HotkeyInfo HkInsertPin( wxT( "Repeat Pin" ), HK_REPEAT_LAST,
                                   WXK_INSERT );
 static Ki_HotkeyInfo HkEditPin( wxT( "Edit Pin" ), HK_EDIT_PIN, 'E' );
 static Ki_HotkeyInfo HkMovePin( wxT( "Move Pin" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
+static Ki_HotkeyInfo HkRotatePin( wxT( "Rotate Pin" ), HK_LIBEDIT_ROTATE_PIN, 'R' );
 static Ki_HotkeyInfo HkDeletePin( wxT( "Delete Pin" ), HK_DELETE_PIN,
                                   WXK_DELETE );
 
@@ -127,9 +128,9 @@ Ki_HotkeyInfo* s_Schematic_Hotkey_List[] =
 {
     &HkNextSearch,
     &HkDelete,               &HkInsert,                 &HkMove2Drag,
-    &HkMoveComponentOrText,  &HkCopyComponentOrText,
+    &HkMoveComponentOrItem,  &HkCopyComponentOrText,
     &HkDragComponent,        &HkAddComponent,
-    &HkRotateComponent,      &HkMirrorXComponent,       &HkMirrorYComponent,
+    &HkRotateComponentOrItem,      &HkMirrorXComponent,       &HkMirrorYComponent,
     &HkOrientNormalComponent,
     &HkEditComponent,&HkEditComponentValue,&HkEditComponentFootprint,
     &HkBeginWire,
@@ -143,6 +144,7 @@ Ki_HotkeyInfo* s_LibEdit_Hotkey_List[] =
     &HkEditPin,
     &HkMovePin,
     &HkDeletePin,
+    &HkRotatePin,
     NULL
 };
 
@@ -333,47 +335,53 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         }
         break;
 
-    case HK_ROTATE_COMPONENT_OR_LABEL:       // Component Rotation
+    case HK_ROTATE_COMPONENT_OR_ITEM:       // Component or other schematic item rotation
+
         if( DrawStruct == NULL )
         {
-            DrawStruct = PickStruct( GetScreen()->m_Curseur,
-                                     GetScreen(), LIBITEM | TEXTITEM |
-                                     LABELITEM );
+        	// Find the schematic object to rotate under the cursor
+        	DrawStruct = SchematicGeneralLocateAndDisplay( false );
+
             if( DrawStruct == NULL )
                 break;
+
             if( DrawStruct->Type() == TYPE_SCH_COMPONENT )
                 DrawStruct = LocateSmallestComponent( GetScreen() );
+
             if( DrawStruct == NULL )
                 break;
         }
 
-        switch( DrawStruct->Type() )
+        if (DrawStruct)
         {
-        case TYPE_SCH_COMPONENT:
-            if( DrawStruct->m_Flags == 0 )
+        	GetScreen()->SetCurItem( (SCH_ITEM*) DrawStruct );
+
+			// Create the events for rotating a component or other schematic item
+            wxCommandEvent eventRotateComponent( wxEVT_COMMAND_TOOL_CLICKED,
+            		ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE );
+            wxCommandEvent eventRotateText(wxEVT_COMMAND_TOOL_CLICKED,
+            		ID_POPUP_SCH_ROTATE_TEXT );
+            wxCommandEvent eventRotateField(wxEVT_COMMAND_TOOL_CLICKED,
+            		ID_POPUP_SCH_ROTATE_FIELD );
+
+            switch( DrawStruct->Type() )
             {
-                SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, UR_CHANGED );
-                RefreshToolBar = TRUE;
+			case TYPE_SCH_COMPONENT:
+				wxPostEvent( this, eventRotateComponent );
+				break;
+
+			case TYPE_SCH_TEXT:
+			case TYPE_SCH_LABEL:
+			case TYPE_SCH_GLOBALLABEL:
+			case TYPE_SCH_HIERLABEL:
+				wxPostEvent( this, eventRotateText );
+				break;
+			case DRAW_PART_TEXT_STRUCT_TYPE:
+				wxPostEvent( this, eventRotateField );
+
+			default:
+				;
             }
-
-            CmpRotationMiroir( (SCH_COMPONENT*) DrawStruct, DC,
-                               CMP_ROTATE_COUNTERCLOCKWISE );
-            break;
-
-        case TYPE_SCH_TEXT:
-        case TYPE_SCH_LABEL:
-        case TYPE_SCH_GLOBALLABEL:
-        case TYPE_SCH_HIERLABEL:
-            if( DrawStruct->m_Flags == 0 )
-            {
-                SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, UR_CHANGED );
-                RefreshToolBar = TRUE;
-            }
-            ChangeTextOrient( (SCH_TEXT*) DrawStruct, DC );
-            break;
-
-        default:
-            ;
         }
 
         break;
@@ -422,20 +430,33 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_DRAG_COMPONENT:                 // Start drag component
-    case HK_MOVE_COMPONENT_OR_LABEL:         // Start move component or text/label
+    case HK_MOVE_COMPONENT_OR_ITEM:         // Start move component or other schematic item
     case HK_COPY_COMPONENT_OR_LABEL:         // Duplicate component or text/label
-         if( ItemInEdit )
+        if( ItemInEdit )
             break;
 
         if( DrawStruct == NULL )
         {
-            DrawStruct = PickStruct( GetScreen()->m_Curseur,
-                                     GetScreen(), LIBITEM | TEXTITEM |
-                                     LABELITEM );
+        	// Find the schematic object to move under the cursor
+            DrawStruct = SchematicGeneralLocateAndDisplay( false );
+
             if( DrawStruct == NULL )
                 break;
             if( DrawStruct->Type() == TYPE_SCH_COMPONENT )
                 DrawStruct = LocateSmallestComponent( GetScreen() );
+            if( DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE ){
+            	// If it's a sheet, then check if a pinsheet is under the cursor
+            	SCH_SHEET_PIN* slabel = LocateSheetLabel( (SCH_SHEET*) DrawStruct,
+															GetScreen()->m_Curseur );
+            	if (slabel)
+            		DrawStruct = slabel;
+            }
+            if (DrawStruct->Type() == DRAW_JUNCTION_STRUCT_TYPE){
+            	// If it's a junction, pick the underlying wire instead
+            	DrawStruct = PickStruct( GetScreen()->m_Curseur,
+            	                                     GetScreen(), WIREITEM);
+            }
+
             if( DrawStruct == NULL )
                 break;
         }
@@ -449,33 +470,52 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
             break;
         }
 
-        switch( DrawStruct->Type() )
-        {
-        case TYPE_SCH_COMPONENT:
-            if( DrawStruct && (DrawStruct->m_Flags ==0) )
-            {
-                GetScreen()->SetCurItem( (SCH_ITEM*) DrawStruct );
-                wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED,
-                                  HK_Descr->m_IdMenuEvent );
-                wxPostEvent( this, event );
-            }
-            break;
+        if( DrawStruct && (DrawStruct->m_Flags == 0) ){
+            GetScreen()->SetCurItem( (SCH_ITEM*) DrawStruct );
 
-        case TYPE_SCH_TEXT:
-        case TYPE_SCH_LABEL:
-        case TYPE_SCH_GLOBALLABEL:
-        case TYPE_SCH_HIERLABEL:
-            if( DrawStruct->m_Flags == 0 )
-            {
-                SaveCopyInUndoList( (SCH_ITEM*) DrawStruct, UR_CHANGED );
-                RefreshToolBar = TRUE;
-            }
-            StartMoveTexte( (SCH_TEXT*) DrawStruct, DC );
-            break;
+			// Create the events for moving a component or other schematic item
+            wxCommandEvent eventMoveComponent( wxEVT_COMMAND_TOOL_CLICKED,
+            									HK_Descr->m_IdMenuEvent );
+            wxCommandEvent eventMoveItem(wxEVT_COMMAND_TOOL_CLICKED,
+            									ID_POPUP_SCH_MOVE_ITEM_REQUEST );
+            wxCommandEvent eventMovePinsheet(wxEVT_COMMAND_TOOL_CLICKED,
+												ID_POPUP_SCH_MOVE_PINSHEET);
+            wxCommandEvent eventDragWire(wxEVT_COMMAND_TOOL_CLICKED,
+												ID_POPUP_SCH_DRAG_WIRE_REQUEST);
 
-        default:
-            ;
+            switch( DrawStruct->Type() )
+            {
+
+				// select the correct event for moving an schematic object
+				// and add it to the event queue
+				case TYPE_SCH_COMPONENT:
+					wxPostEvent( this, eventMoveComponent );
+					break;
+
+				case TYPE_SCH_TEXT:
+		        case TYPE_SCH_LABEL:
+		        case TYPE_SCH_GLOBALLABEL:
+		        case TYPE_SCH_HIERLABEL:
+		        case DRAW_SHEET_STRUCT_TYPE:
+		        case DRAW_PART_TEXT_STRUCT_TYPE:
+		        case DRAW_BUSENTRY_STRUCT_TYPE:
+		        	wxPostEvent( this, eventMoveItem );
+		            break;
+
+		        case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+		        	wxPostEvent( this, eventMovePinsheet );
+		        	break;
+
+		        case DRAW_SEGMENT_STRUCT_TYPE:
+		        	if (((SCH_ITEM*)DrawStruct)->GetLayer() == LAYER_WIRE)
+		        		wxPostEvent( this, eventDragWire );
+		        	break;
+
+		        default:
+		            ;
+            }
         }
+
         break;
 
     case HK_EDIT_COMPONENT_OR_LABEL:
@@ -486,7 +526,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         {
             DrawStruct = PickStruct( GetScreen()->m_Curseur,
                                      GetScreen(), LIBITEM | TEXTITEM |
-                                     LABELITEM );
+                                     LABELITEM | SHEETITEM );
             if( DrawStruct == NULL )
                 break;
             if( DrawStruct->Type() == TYPE_SCH_COMPONENT )
@@ -495,21 +535,32 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                 break;
         }
 
-        switch( DrawStruct->Type() )
+        if( DrawStruct )
         {
-        case TYPE_SCH_COMPONENT:
-            InstallCmpeditFrame( this, MousePos,(SCH_COMPONENT*) DrawStruct );
-            break;
 
-        case TYPE_SCH_TEXT:
-        case TYPE_SCH_LABEL:
-        case TYPE_SCH_GLOBALLABEL:
-        case TYPE_SCH_HIERLABEL:
-            EditSchematicText( (SCH_TEXT*) DrawStruct );
-            break;
+        	wxCommandEvent eventEditPinsheet(wxEVT_COMMAND_TOOL_CLICKED,
+        											ID_POPUP_SCH_EDIT_SHEET);
+        	switch( DrawStruct->Type() )
+        	{
+        	case TYPE_SCH_COMPONENT:
+        		InstallCmpeditFrame( this, MousePos,(SCH_COMPONENT*) DrawStruct );
+        		break;
 
-        default:
-            ;
+        	case DRAW_SHEET_STRUCT_TYPE:
+        		GetScreen()->SetCurItem( (SCH_ITEM*) DrawStruct );
+        		wxPostEvent( this, eventEditPinsheet );
+        		break;
+
+        	case TYPE_SCH_TEXT:
+        	case TYPE_SCH_LABEL:
+        	case TYPE_SCH_GLOBALLABEL:
+        	case TYPE_SCH_HIERLABEL:
+        		EditSchematicText( (SCH_TEXT*) DrawStruct );
+        		break;
+
+        	default:
+        		;
+        	}
         }
         break;
 
@@ -653,6 +704,18 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
         }
 
         break;
+
+    case HK_LIBEDIT_ROTATE_PIN:
+    	m_drawItem = LocateItemUsingCursor();
+
+    	if( m_drawItem && m_drawItem->Type() == COMPONENT_PIN_DRAW_TYPE )
+    	{
+    		cmd.SetId( ID_LIBEDIT_ROTATE_PIN );
+    		GetEventHandler()->ProcessEvent( cmd );
+    	}
+
+    	break;
+
 
     case HK_DELETE_PIN:
         m_drawItem = LocateItemUsingCursor();

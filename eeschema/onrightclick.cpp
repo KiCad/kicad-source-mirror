@@ -15,6 +15,9 @@
 #include "protos.h"
 #include "hotkeys.h"
 #include "class_library.h"
+#include <iostream>
+using namespace std;
+
 
 
 static void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame );
@@ -57,10 +60,17 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         return true;
     }
 
+    if (DrawStruct)
+        	cout << "Drawstruct Type before: " << DrawStruct -> Type() << endl;
+
     // Try to locate items at cursor position.
     if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
     {
         DrawStruct = SchematicGeneralLocateAndDisplay( false );
+        if (DrawStruct)
+            	cout << "Drawstruct Type locate : " << DrawStruct -> Type() << endl;
+
+
         if( DrawStruct && (DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE) )
         {
             SCH_SHEET_PIN* slabel;
@@ -70,6 +80,9 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
                 DrawStruct = slabel;
         }
     }
+
+    if (DrawStruct)
+    	cout << "Drawstruct Type : " << DrawStruct -> Type() << endl;
 
     // If Command in progress: add "cancel" and "end tool" menu
     if(  m_ID_current_state )
@@ -125,9 +138,13 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         break;
 
     case DRAW_BUSENTRY_STRUCT_TYPE:
-        if( !flags )
+        if( !flags ){
+        	wxString msg = AddHotkeyName( _( "Move Bus Entry" ),
+                    s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT_OR_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
-                          _( "Move Bus Entry" ), move_xpm );
+                          msg, move_xpm );
+        }
+
         if( GetBusEntryShape( (SCH_BUS_ENTRY*) DrawStruct ) == '\\' )
             PopMenu->Append( ID_POPUP_SCH_ENTRY_SELECT_SLASH,
                             _( "Set Bus Entry /" ) );
@@ -229,11 +246,19 @@ DrawType %d" ),
 
 void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field )
 {
-    if( !Field->m_Flags )
+	wxString msg;
+
+    if( !Field->m_Flags ){
+    	msg = AddHotkeyName( _( "Move Field" ),
+				s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT_OR_ITEM );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
-                      _( "Move Field" ), move_text_xpm );
+                      msg, move_text_xpm );
+    }
+
+    msg = AddHotkeyName( _( "Rotate Field" ),
+				s_Schematic_Hokeys_Descr, HK_ROTATE_COMPONENT_OR_ITEM );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_FIELD,
-                  _( "Rotate Field" ), rotate_field_xpm );
+                  msg, rotate_field_xpm );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_FIELD,
                   _( "Edit Field" ), edit_text_xpm );
 }
@@ -265,7 +290,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
     {
         msg = _( "Move Component" );
         msg << wxT( " " ) << Component->GetField( REFERENCE )->m_Text;
-        msg = AddHotkeyName( msg, s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT_OR_LABEL );
+        msg = AddHotkeyName( msg, s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT_OR_ITEM );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_CMP_REQUEST,
                       msg, move_xpm );
         msg = AddHotkeyName( _( "Drag Component" ), s_Schematic_Hokeys_Descr,
@@ -276,7 +301,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 
     wxMenu* orientmenu = new wxMenu;
     msg = AddHotkeyName( _( "Rotate +" ), s_Schematic_Hokeys_Descr,
-                         HK_ROTATE_COMPONENT_OR_LABEL );
+                         HK_ROTATE_COMPONENT_OR_ITEM );
     ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE,
                   msg, rotate_pos_xpm );
     ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ROTATE_CMP_CLOCKWISE,
@@ -367,7 +392,7 @@ void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
     if( !GLabel->m_Flags )
     {
         msg = AddHotkeyName( _( "Move Global Label" ),
-                             s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT_OR_LABEL );
+                             s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT_OR_ITEM );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
                       msg, move_text_xpm );
         msg = AddHotkeyName( _( "Copy Global Label" ),
@@ -377,7 +402,7 @@ void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
                       msg, copy_button );
     }
     msg = AddHotkeyName( _( "Rotate Global Label" ), s_Schematic_Hokeys_Descr,
-                             HK_ROTATE_COMPONENT_OR_LABEL );
+                             HK_ROTATE_COMPONENT_OR_ITEM );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT,
                   msg, rotate_glabel_xpm );
     msg = AddHotkeyName( _( "Edit Global Label" ), s_Schematic_Hokeys_Descr,
@@ -411,7 +436,7 @@ void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
     {
         msg = AddHotkeyName( _( "Move Hierarchical Label" ),
                              s_Schematic_Hokeys_Descr,
-                             HK_MOVE_COMPONENT_OR_LABEL );
+                             HK_MOVE_COMPONENT_OR_ITEM );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
                       msg, move_text_xpm );
         msg = AddHotkeyName( _( "Copy Hierarchical Label" ),
@@ -421,7 +446,7 @@ void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
                       msg, copy_button );
     }
     msg = AddHotkeyName( _( "Rotate Hierarchical Label" ), s_Schematic_Hokeys_Descr,
-                             HK_ROTATE_COMPONENT_OR_LABEL );
+                             HK_ROTATE_COMPONENT_OR_ITEM );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT,
                   _( "Rotate Hierarchical Label" ), rotate_glabel_xpm );
     msg = AddHotkeyName( _( "Edit Hierarchical Label" ), s_Schematic_Hokeys_Descr,
@@ -454,7 +479,7 @@ void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
     if( !Label->m_Flags )
     {
         msg = AddHotkeyName( _( "Move Label" ), s_Schematic_Hokeys_Descr,
-                             HK_MOVE_COMPONENT_OR_LABEL );
+                             HK_MOVE_COMPONENT_OR_ITEM );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
                       msg, move_text_xpm );
         msg = AddHotkeyName( _( "Copy Label" ),
@@ -464,7 +489,7 @@ void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
                       msg, copy_button );
     }
     msg = AddHotkeyName( _( "Rotate Label" ), s_Schematic_Hokeys_Descr,
-                             HK_ROTATE_COMPONENT_OR_LABEL );
+                             HK_ROTATE_COMPONENT_OR_ITEM );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT,
                   msg, rotate_pos_xpm );
     msg = AddHotkeyName( _( "Edit Label" ), s_Schematic_Hokeys_Descr,
@@ -498,7 +523,7 @@ void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
     {
         msg = AddHotkeyName( _( "Move Text" ),
                              s_Schematic_Hokeys_Descr,
-                             HK_MOVE_COMPONENT_OR_LABEL );
+                             HK_MOVE_COMPONENT_OR_ITEM );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
                       msg, move_text_xpm );
         msg = AddHotkeyName( _( "Copy Text" ),
@@ -508,7 +533,7 @@ void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
                       msg, copy_button );
     }
     msg = AddHotkeyName( _( "Rotate Text" ), s_Schematic_Hokeys_Descr,
-                             HK_ROTATE_COMPONENT_OR_LABEL );
+                             HK_ROTATE_COMPONENT_OR_ITEM );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, msg,
                   rotate_pos_xpm );
     msg = AddHotkeyName( _( "Edit Text" ), s_Schematic_Hokeys_Descr,
@@ -584,7 +609,9 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire,
         return;
     }
 
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DRAG_WIRE_REQUEST, _( "Drag Wire" ),
+    msg = AddHotkeyName( _( "Drag Wire" ), s_Schematic_Hokeys_Descr,
+						HK_DRAG_COMPONENT );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DRAG_WIRE_REQUEST, msg,
                   move_track_xpm );
     PopMenu->AppendSeparator();
     msg = AddHotkeyName( _( "Delete Wire" ), s_Schematic_Hokeys_Descr,
@@ -649,13 +676,17 @@ void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus,
 
 void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
 {
+	wxString msg;
+
     if( !Sheet->m_Flags )
     {
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ENTER_SHEET,
                       _( "Enter Sheet" ), enter_sheet_xpm );
         PopMenu->AppendSeparator();
+        msg = AddHotkeyName( _( "Move Sheet" ),
+                                     s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT_OR_ITEM );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
-                      _( "Move Sheet" ), move_sheet_xpm );
+                      msg, move_sheet_xpm );
     }
 
     if( Sheet->m_Flags )
@@ -665,8 +696,12 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
     }
     else
     {
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_SHEET, _( "Edit Sheet" ),
+    	msg = AddHotkeyName( _( "Edit Sheet" ),
+                s_Schematic_Hokeys_Descr, HK_EDIT_COMPONENT_OR_LABEL );
+
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_SHEET, msg,
                       edit_sheet_xpm );
+
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_RESIZE_SHEET, _( "Resize Sheet" ),
                       resize_sheet_xpm );
         PopMenu->AppendSeparator();
@@ -684,9 +719,14 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
 
 void AddMenusForPinSheet( wxMenu* PopMenu, SCH_SHEET_PIN* PinSheet )
 {
-    if( !PinSheet->m_Flags )
+	wxString msg;
+
+    if( !PinSheet->m_Flags ){
+    	msg = AddHotkeyName( _( "Move PinSheet" ),
+							 s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT_OR_ITEM );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_PINSHEET,
-                      _( "Move PinSheet" ), move_xpm );
+                      msg, move_xpm );
+    }
 
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_PINSHEET, _( "Edit PinSheet" ),
                   edit_xpm );

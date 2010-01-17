@@ -239,6 +239,9 @@ void AddMenusForPin( wxMenu*              PopMenu,
     msg = AddHotkeyName( _( "Edit Pin " ), s_Libedit_Hokeys_Descr, HK_EDIT_PIN );
     ADD_MENUITEM( PopMenu, ID_LIBEDIT_EDIT_PIN, msg, edit_xpm );
 
+    msg = AddHotkeyName( _( "Rotate Pin " ), s_Libedit_Hokeys_Descr, HK_LIBEDIT_ROTATE_PIN );
+        ADD_MENUITEM( PopMenu, ID_LIBEDIT_ROTATE_PIN, msg, rotate_pin_xpm );
+
     if( not_in_move )
     {
         msg = AddHotkeyName( _( "Delete Pin " ), s_Libedit_Hokeys_Descr,

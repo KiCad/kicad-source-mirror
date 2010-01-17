@@ -115,8 +115,8 @@ set(PCBNEW_SRCS
     loadcmp.cpp
     locate.cpp
     magnetic_tracks_functions.cpp
-    menubarmodedit.cpp
-    menubarpcb.cpp
+    menubar_modedit.cpp
+    menubar_pcbframe.cpp
     mirepcb.cpp
     modedit.cpp
     modedit_onclick.cpp

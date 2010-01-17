@@ -54,6 +54,7 @@ public:
     void OnCheckComponent( wxCommandEvent& event );
     void OnSelectBodyStyle( wxCommandEvent& event );
     void OnEditPin( wxCommandEvent& event );
+    void OnRotatePin( wxCommandEvent& event );
 
     void OnUpdateEditingPart( wxUpdateUIEvent& event );
     void OnUpdateNotEditingPart( wxUpdateUIEvent& event );

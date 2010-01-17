@@ -412,6 +412,12 @@ bool IsItemInBox( EDA_Rect& aBox, SCH_ITEM* DrawStruct )
         break;
 
     case DRAW_JUNCTION_STRUCT_TYPE:
+		#undef STRUCT
+        #define STRUCT ( (SCH_JUNCTION*) DrawStruct )
+    	if( aBox.Inside(STRUCT->m_Pos) )
+    		return true;
+    	break;
+
     case DRAW_NOCONNECT_STRUCT_TYPE:
     case TYPE_SCH_LABEL:
     case TYPE_SCH_TEXT:
