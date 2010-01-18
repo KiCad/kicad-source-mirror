@@ -5,6 +5,18 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2010-Jan-18 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++any
+    Finished up complete implementation of class LAYER_WIDGET and am now ready to
+    integrate it into PCBNEW.  This class was kept as general as possible by
+    omitting as many Kicad document structures as possible, and so can be used
+    in GERBVIEW.  For GERBVIEW it could benefit from some minor additional
+    work such as a "move up" function for layer order changes.  This is a matter
+    of rearranging wxWindows within the m_LayersFlexGridSizer.
+    Integration into PCBNEW should be done in just a few days.
+
+
 2010-Jan-17 UPDATE Jerry Jacobs <xor.gate.engineering[at]gmail[dot]com>
 ================================================================================
 + EESchema
