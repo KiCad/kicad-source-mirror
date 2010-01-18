@@ -19,7 +19,6 @@ set(BITMAP_SRCS
     Add_Circle.xpm
     Add_Component.xpm
     Add_Corner.xpm
-    add_dimension.xpm
     Add_Dashed_Line.xpm
     add_dimension.xpm
     Add_Entry.xpm
