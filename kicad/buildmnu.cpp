@@ -29,7 +29,7 @@ BEGIN_EVENT_TABLE( WinEDA_MainFrame, WinEDA_BasicFrame )
 
 /* Menu events */
     EVT_MENU( ID_SAVE_PROJECT, WinEDA_MainFrame::OnSaveProject )
-    EVT_MENU( ID_EXIT, WinEDA_MainFrame::OnExit )
+    EVT_MENU( wxID_EXIT, WinEDA_MainFrame::OnExit )
     EVT_MENU( ID_TO_EDITOR, WinEDA_MainFrame::OnOpenTextEditor )
     EVT_MENU( ID_BROWSE_AN_SELECT_FILE,
               WinEDA_MainFrame::OnOpenFileInTextEditor )
@@ -127,11 +127,16 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     // Separator
     filesMenu->AppendSeparator();
 
-    // Exit
-    item = new wxMenuItem( filesMenu, ID_EXIT, _( "E&xit" ),
-                           _( "Quit kicad" ) );
+    /* Quit on all platforms except WXMAC */
+#if !defined( __WXMAC__ )
+
+    filesMenu->AppendSeparator();
+    item = new wxMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ),
+                          _( "Quit KiCad" ) );
     item->SetBitmap( exit_xpm );
     filesMenu->Append( item );
+
+#endif /* !defined( __WXMAC__ ) */
 
     /* Add the file history */
     wxGetApp().m_fileHistory.AddFilesToMenu( filesMenu );
@@ -222,11 +227,16 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     item->SetBitmap( help_xpm );
     helpMenu->Append( item );
 
-    // About Kicad
+    // About on all platforms except WXMAC */
+#if !defined( __WXMAC__ )
+
+    helpMenu->AppendSeparator();
     item = new wxMenuItem( helpMenu, ID_KICAD_ABOUT, _( "&About" ),
                            _( "About kicad project manager" ) );
     item->SetBitmap( info_xpm );
     helpMenu->Append( item );
+
+#endif /* !defined( __WXMAC__ ) */
 
     // Append menus to menuBar
     menuBar->Append( filesMenu, _( "&File" ) );

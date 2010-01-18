@@ -36,7 +36,7 @@ const wxString titleLibLoadError( _( "Library Load Error" ) );
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
 void WinEDA_App::MacOpenFile(const wxString &fileName) {
-    wxFileName    fn = fileName;
+    wxFileName    filename = fileName;
     wxString      oldPath;
     WinEDA_CvpcbFrame * frame = ((WinEDA_CvpcbFrame*)GetTopWindow());
 
@@ -46,16 +46,16 @@ void WinEDA_App::MacOpenFile(const wxString &fileName) {
     /* Update the library search path list. */
     if( wxGetApp().GetLibraryPathList().Index( oldPath ) != wxNOT_FOUND )
         wxGetApp().GetLibraryPathList().Remove( oldPath );
-    wxGetApp().GetLibraryPathList().Insert( fn.GetPath(), 0 );
+    wxGetApp().GetLibraryPathList().Insert( filename.GetPath(), 0 );
 
-    frame->m_NetlistFileName = fn;
+    frame->m_NetlistFileName = filename;
 
     if( frame->ReadNetList() )
     {
-        frame->SetLastProject( fn.GetFullPath() );
+        frame->SetLastProject( filename.GetFullPath() );
 
         frame->SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
-                  wxT( " " ) + fn.GetFullPath() );
+                  wxT( " " ) + filename.GetFullPath() );
     }
     else
     {
@@ -75,8 +75,16 @@ IMPLEMENT_APP( WinEDA_App )
 
 bool WinEDA_App::OnInit()
 {
-    wxFileName         fn;
-    wxString           msg;
+     /* WXMAC application specific */
+#ifdef __WXMAC__
+//	wxApp::SetExitOnFrameDelete(false);
+//	wxApp::s_macAboutMenuItemId = ID_KICAD_ABOUT;
+	wxApp::s_macPreferencesMenuItemId = ID_OPTIONS_SETUP;
+#endif /* __WXMAC__ */
+
+
+    wxFileName         filename;
+    wxString           message;
     WinEDA_CvpcbFrame* frame   = NULL;
 
     InitEDA_Appl( wxT( "CvPCB" ), APP_TYPE_CVPCB );
@@ -89,8 +97,8 @@ bool WinEDA_App::OnInit()
 
     if( argc > 1 )
     {
-        fn = argv[1];
-        wxSetWorkingDirectory( fn.GetPath() );
+        filename = argv[1];
+        wxSetWorkingDirectory( filename.GetPath() );
     }
 
     // read current setup and reopen last directory if no filename to open in command line
@@ -105,17 +113,17 @@ bool WinEDA_App::OnInit()
     // Show the frame
     SetTopWindow( frame );
 
-    frame->LoadProjectFile( fn.GetFullPath() );
+    frame->LoadProjectFile( filename.GetFullPath() );
     frame->Show( TRUE );
     frame->BuildFOOTPRINTS_LISTBOX();
 
-    if( fn.IsOk() && fn.FileExists() )
+    if( filename.IsOk() && filename.FileExists() )
     {
-        frame->m_NetlistFileName = fn;
+        frame->m_NetlistFileName = filename;
 
         if( frame->ReadNetList() )
         {
-            frame->m_NetlistFileExtension = fn.GetExt();
+            frame->m_NetlistFileExtension = filename.GetExt();
             return true;
         }
     }

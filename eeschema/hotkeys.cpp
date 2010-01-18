@@ -47,22 +47,50 @@
 /* local variables */
 /* Hotkey list: */
 
-// Common commands
-static Ki_HotkeyInfo HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO,
+/**
+ * Common commands
+ */
+
+/* Fit on Screen */
+static Ki_HotkeyInfo HkZoomAuto( wxT( "Fit on Screen" ), HK_ZOOM_AUTO,
                                    WXK_HOME );
+
 static Ki_HotkeyInfo HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER,
                                    WXK_F4 );
 static Ki_HotkeyInfo HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW,
                                    WXK_F3 );
-static Ki_HotkeyInfo HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
-static Ki_HotkeyInfo HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
+
+/* Zoom In */
+#if !defined( __WXMAC__ )
+    static Ki_HotkeyInfo HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
+#else
+    static Ki_HotkeyInfo HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, GR_KB_CTRL + '+' );
+#endif
+
+/* Zoom Out */
+#if !defined( __WXMAC__ )
+    static Ki_HotkeyInfo HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
+#else
+    static Ki_HotkeyInfo HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, GR_KB_CTRL + '-' );
+#endif
+
 static Ki_HotkeyInfo HkHelp( wxT( "Help: this message" ), HK_HELP, '?' );
 static Ki_HotkeyInfo HkResetLocalCoord( wxT( "Reset local coord." ),
                                         HK_RESET_LOCAL_COORD, ' ' );
+
+/* Undo */
 static Ki_HotkeyInfo HkUndo( wxT( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z',
                              (int) ID_SCHEMATIC_UNDO );
-static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y',
+
+/* Redo */
+#if !defined( __WXMAC__ )
+    static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y',
                              (int) ID_SCHEMATIC_REDO );
+#else
+    static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO,
+                                 GR_KB_SHIFT + GR_KB_CTRL + 'Z',
+                                 (int) ID_SCHEMATIC_REDO );
+#endif
 
 // Schematic editor
 static Ki_HotkeyInfo HkBeginWire( wxT( "begin Wire" ), HK_BEGIN_WIRE, 'W' );

@@ -1,7 +1,7 @@
-/***************************************/
-/* menucfg : build the cvpcb main menu */
-/***************************************/
-
+/**
+ * @file menubar.cpp
+ * (Re)Create the CvPCB main MenuBar
+ */
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
@@ -28,6 +28,16 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
     item->SetBitmap( open_xpm );
     filesMenu->Append( item );
 
+   /* Open Recent submenu */
+    wxMenu* openRecentMenu = new wxMenu();
+    wxGetApp().m_fileHistory.AddFilesToMenu( openRecentMenu );
+    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentMenu,
+                                          -1, _( "Open &Recent" ),
+                     _("Open a recent opened netlist document" ),
+                                               open_project_xpm );
+
+
+
     filesMenu->AppendSeparator();
     item = new wxMenuItem( filesMenu, ID_SAVE_PROJECT,
                            _( "&Save As..." ),
@@ -35,13 +45,15 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
     item->SetBitmap( save_xpm );
     filesMenu->Append( item );
 
+    /* Quit on all platforms except WXMAC */
+#if !defined(__WXMAC__)
+
     filesMenu->AppendSeparator();
-    item = new wxMenuItem( filesMenu, ID_CVPCB_QUIT, _( "E&xit" ),
-                           _( "Quit Cvpcb" ) );
-    item->SetBitmap( exit_xpm );
+    item = new wxMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ),
+                           _( "Quit CvPCB" ) );
     filesMenu->Append( item );
 
-    wxGetApp().m_fileHistory.AddFilesToMenu( filesMenu );
+#endif /* !defined( __WXMAC__) */
 
     // Menu Configuration:
     wxMenu* configmenu = new wxMenu;
@@ -70,12 +82,21 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
                            _( "Open the cvpcb manual" ) );
     item->SetBitmap( help_xpm );
     helpMenu->Append( item );
+
+    /* About on all platforms except WXMAC */
+#if !defined(__WXMAC__)
+
     item = new wxMenuItem( helpMenu, ID_KICAD_ABOUT,
-                           _( "&About cvpcb" ),
+                           _( "&About" ),
                            _( "About cvpcb schematic to pcb converter" ) );
     item->SetBitmap( info_xpm );
     helpMenu->Append( item );
 
+#endif /* !defined(__WXMAC__) */
+
+    /**
+     * Create the menubar and append all submenus
+     */
     menuBar->Append( filesMenu, _( "&File" ) );
     menuBar->Append( configmenu, _( "&Preferences" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
@@ -84,3 +105,4 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
      * rebuilt.  This allows language changes of the menu text on the fly. */
     SetMenuBar( menuBar );
 }
+

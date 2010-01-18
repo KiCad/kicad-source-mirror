@@ -35,7 +35,7 @@ BEGIN_EVENT_TABLE( WinEDA_CvpcbFrame, WinEDA_BasicFrame )
               WinEDA_CvpcbFrame::LoadNetList )
     EVT_MENU( ID_SAVE_PROJECT,
               WinEDA_CvpcbFrame::SaveQuitCvpcb )
-    EVT_MENU( ID_CVPCB_QUIT,
+    EVT_MENU( wxID_EXIT,
               WinEDA_CvpcbFrame::OnQuit )
     EVT_MENU( ID_GENERAL_HELP,
               WinEDA_CvpcbFrame::GetKicadHelp )

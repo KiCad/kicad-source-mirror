@@ -7,13 +7,13 @@
 # Original credits by Adium developers !
 # http://www.adium.im
 ###########
-VERSION=20100116
+VERSION=20100118
 
 ###########
 # Variables
 ###########
 BUILD_DIR=build
-APP_DIR=bin
+APP_DIR=release
 KICAD_DIR=$(BUILD_DIR)
 RELEASE_NAME=kicad-$(VERSION)
 

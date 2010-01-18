@@ -5,6 +5,17 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2010-Jan-17 UPDATE Jerry Jacobs <xor.gate.engineering[at]gmail[dot]com>
+================================================================================
+More work to make kicad more Mac OS X compliant.
+* Workaround for wxAboutDialog bug.
+* WXMAC needs wxID_EXIT to make closing the application function properly.
+* Workaround for hotkeys, on Mac OS X we can't use Fx keys.
+  This needs to be further implemented and is a work in progress.
+  We need to modify the hotkey code to display Mac OS X the
+  special modifier keys in the hotkey list.
+
+
 2010-Jan-18 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++any

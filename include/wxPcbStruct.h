@@ -87,6 +87,8 @@ public:
 
     ~WinEDA_PcbFrame();
 
+    void             OnQuit( wxCommandEvent & WXUNUSED(event) );
+
     /** Function ToPlotter
      * Open a dialog frame to create plot and drill files
      * relative to the current board

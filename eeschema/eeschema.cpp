@@ -111,15 +111,15 @@ void WinEDA_App::MacOpenFile(const wxString &fileName) {
 
 bool WinEDA_App::OnInit()
 {
+    /* WXMAC application specific */
 #ifdef __WXMAC__
-	wxApp::SetExitOnFrameDelete(false);
-	wxApp::s_macAboutMenuItemId = ID_KICAD_ABOUT;
-	wxApp::s_macPreferencesMenuItemId = ID_CONFIG_REQ;
+//	wxApp::SetExitOnFrameDelete(false);
+//	wxApp::s_macAboutMenuItemId = ID_KICAD_ABOUT;
+	wxApp::s_macPreferencesMenuItemId = ID_OPTIONS_SETUP;
 #endif /* __WXMAC__ */
 
 
-
-    wxFileName             fn;
+    wxFileName             filename;
     WinEDA_SchematicFrame* frame = NULL;
 
     g_DebugLevel = 0;   // Debug level */
@@ -133,7 +133,7 @@ bool WinEDA_App::OnInit()
     }
 
     if( argc > 1 )
-        fn = argv[1];
+        filename = argv[1];
 
     /* init EESCHEMA */
     SeedLayers();
@@ -166,13 +166,13 @@ bool WinEDA_App::OnInit()
     frame->Zoom_Automatique( TRUE );
 
     /* Load file specified in the command line. */
-    if( fn.IsOk() )
+    if( filename.IsOk() )
     {
-        if( fn.GetExt() != SchematicFileExtension )
-            fn.SetExt( SchematicFileExtension );
-        wxSetWorkingDirectory( fn.GetPath() );
+        if( filename.GetExt() != SchematicFileExtension )
+            filename.SetExt( SchematicFileExtension );
+        wxSetWorkingDirectory( filename.GetPath() );
         if( frame->DrawPanel
-            && frame->LoadOneEEProject( fn.GetFullPath(), false ) <= 0 )
+            && frame->LoadOneEEProject( filename.GetFullPath(), false ) <= 0 )
             frame->DrawPanel->Refresh( true );
     }
     else

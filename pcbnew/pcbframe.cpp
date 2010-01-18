@@ -72,7 +72,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_MENU( ID_MENU_ARCHIVE_ALL_MODULES,
               WinEDA_PcbFrame::Process_Special_Functions )
 
-    EVT_MENU( ID_EXIT, WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_MENU( wxID_EXIT, WinEDA_PcbFrame::OnQuit )
 
     // menu Config
     EVT_MENU_RANGE( ID_CONFIG_AND_PREFERENCES_START,
@@ -319,6 +319,10 @@ WinEDA_PcbFrame::~WinEDA_PcbFrame()
     delete m_drc;
 }
 
+void WinEDA_PcbFrame::OnQuit( wxCommandEvent & WXUNUSED(event) )
+{
+    Close(true);
+}
 
 void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
 {

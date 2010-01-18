@@ -3,10 +3,16 @@ KiCad TODO List
 
 CMAKE
 -----
-
 * Add install targets for binaries and resources on Mac.
 * Add Python.
 
+WXMAC Platform
+--------------
+* Fix hotkey list to match CMD key
+* Fix AddHotkeyName to let wxWidgets handle Ctrl to CMD key
+* Fix About dialog crash, or trash wxAboutDialog and create our own
+  About dialog to match all platforms. (wxAboutDialog different on platforms)
+* Fix toolbar button tooltips.
 
 Common
 ------

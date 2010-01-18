@@ -56,7 +56,7 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
     EVT_MENU( ID_GEN_PLOT_DXF, WinEDA_SchematicFrame::ToPlot_DXF )
     EVT_MENU( ID_GEN_COPY_SHEET_TO_CLIPBOARD, WinEDA_DrawFrame::CopyToClipboard )
     EVT_MENU( ID_GEN_COPY_BLOCK_TO_CLIPBOARD, WinEDA_DrawFrame::CopyToClipboard )
-    EVT_MENU( ID_EXIT, WinEDA_SchematicFrame::OnExit )
+    EVT_MENU( wxID_EXIT, WinEDA_SchematicFrame::OnExit )
 
     EVT_MENU( ID_POPUP_SCH_COPY_ITEM, WinEDA_SchematicFrame::OnCopySchematicItemRequest )
 

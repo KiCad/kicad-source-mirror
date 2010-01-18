@@ -27,6 +27,7 @@ static void Process_Move_Item( WinEDA_PcbFrame* frame,
                                EDA_BaseStruct* DrawStruct, wxDC* DC );
 
 
+
 /* Handles the selection of command events. */
 void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 {
@@ -149,10 +150,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     switch( id )   // Execute command
     {
     case 0:
-        break;
-
-    case ID_EXIT:
-        Close( true );
         break;
 
     case ID_OPEN_MODULE_EDITOR:

@@ -799,7 +799,7 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
     // Under linux, to be tested (could be depend on linux versions
     // so perhaps could be necessary to set this option at run time.
 
-#if 0
+#if defined( __WXMAC__ )
 
     // Use a pixel based draw to display grid
     // There is a lot of calls, so the cost is hight

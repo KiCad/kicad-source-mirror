@@ -21,6 +21,7 @@
 #include "zones.h"
 #include "drag.h"
 #include "eda_dde.h"
+#include "id.h"
 
 #include "build_version.h"
 
@@ -79,6 +80,14 @@ void WinEDA_App::MacOpenFile(const wxString &fileName) {
 bool WinEDA_App::OnInit()
 /****************************/
 {
+    /* WXMAC application specific */
+#ifdef __WXMAC__
+//	wxApp::SetExitOnFrameDelete(false);
+//	wxApp::s_macAboutMenuItemId = ID_KICAD_ABOUT;
+	wxApp::s_macPreferencesMenuItemId = ID_OPTIONS_SETUP;
+#endif /* __WXMAC__ */
+
+
     wxFileName fn;
     WinEDA_PcbFrame* frame = NULL;
 
