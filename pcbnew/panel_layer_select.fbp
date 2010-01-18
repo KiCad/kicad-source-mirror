@@ -27,10 +27,10 @@
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
-            <property name="minimum_size">100,100</property>
+            <property name="minimum_size">-1,-1</property>
             <property name="name">LAYER_PANEL_BASE</property>
             <property name="pos"></property>
-            <property name="size">183,184</property>
+            <property name="size">200,200</property>
             <property name="subclass">; </property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
@@ -332,7 +332,7 @@
                                             <event name="OnSize"></event>
                                             <event name="OnUpdateUI"></event>
                                             <object class="wxFlexGridSizer" expanded="1">
-                                                <property name="cols">3</property>
+                                                <property name="cols">2</property>
                                                 <property name="flexible_direction">wxHORIZONTAL</property>
                                                 <property name="growablecols"></property>
                                                 <property name="growablerows"></property>

@@ -11,8 +11,6 @@
 
 LAYER_PANEL_BASE::LAYER_PANEL_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
-	this->SetMinSize( wxSize( 100,100 ) );
-	
 	wxBoxSizer* boxSizer;
 	boxSizer = new wxBoxSizer( wxVERTICAL );
 	
@@ -42,7 +40,7 @@ LAYER_PANEL_BASE::LAYER_PANEL_BASE( wxWindow* parent, wxWindowID id, const wxPoi
 	
 	m_RenderScrolledWindow = new wxScrolledWindow( m_RenderingPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxVSCROLL );
 	m_RenderScrolledWindow->SetScrollRate( 5, 5 );
-	m_RenderFlexGridSizer = new wxFlexGridSizer( 0, 3, 1, 3 );
+	m_RenderFlexGridSizer = new wxFlexGridSizer( 0, 2, 1, 3 );
 	m_RenderFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
 	m_RenderFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
 	
