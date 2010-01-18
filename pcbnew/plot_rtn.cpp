@@ -83,8 +83,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( PLOTTER*    plotter,
     Plot_Edges_Modules( plotter, m_Pcb, masque_layer, trace_mode );
 
     /* Plot pads (creates pads outlines, for pads on silkscreen layers) */
-    if( g_pcb_plot_options.PlotPadsOnSilkLayer
-        || g_pcb_plot_options.Plot_Pads_All_Layers )
+    if( g_pcb_plot_options.PlotPadsOnSilkLayer )
     {
         for( MODULE* Module = m_Pcb->m_Modules;
              Module;
@@ -94,18 +93,9 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( PLOTTER*    plotter,
                  pt_pad != NULL;
                  pt_pad = pt_pad->Next() )
             {
-                /* Seen if the pad is on this layer */
-                if( (pt_pad->m_Masque_Layer & masque_layer) == 0
-                   /* Copper pads go on copper silk, component
-                    * pads go on component silk */
-                   && ( ( (pt_pad->m_Masque_Layer & LAYER_BACK) == 0 )
-                       || ( (masque_layer & SILKSCREEN_LAYER_BACK) == 0 ) )
-                   && ( ( (pt_pad->m_Masque_Layer & LAYER_FRONT) == 0 )
-                       || ( (masque_layer & SILKSCREEN_LAYER_FRONT) == 0 ) ) )
-                {
-                    if( !g_pcb_plot_options.Plot_Pads_All_Layers )
-                        continue;
-                }
+                /* See if the pad is on this layer */
+                if( (pt_pad->m_Masque_Layer & masque_layer) == 0 )
+                    continue;
 
                 shape_pos = pt_pad->ReturnShapePos();
                 pos  = shape_pos;

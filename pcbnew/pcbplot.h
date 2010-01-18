@@ -49,9 +49,7 @@ public:
     bool        Sel_Texte_Valeur;
     bool        Sel_Texte_Divers;
     bool        Sel_Texte_Invisible;
-    bool        PlotPadsOnSilkLayer;
-    bool        Plot_Pads_All_Layers; /* Plot pads even outside the
-                                       * Layer (useful for silkscreen) */
+    bool        PlotPadsOnSilkLayer; /* allows pads on silkscreen */
 
     /* id for plot format (see enum PlotFormat in plot_common.h) */
     int PlotFormat;

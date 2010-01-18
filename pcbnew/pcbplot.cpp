@@ -26,7 +26,6 @@
 #define OPTKEY_XFINESCALE_ADJ     wxT( "PlotXFineScaleAdj" )
 #define OPTKEY_YFINESCALE_ADJ     wxT( "PlotYFineScaleAdj" )
 #define OPTKEY_PADS_ON_SILKSCREEN wxT( "PlotPadsOnSilkscreen" )
-#define OPTKEY_ALWAYS_PRINT_PADS  wxT( "PlotAlwaysPads" )
 #define OPTKEY_OUTPUT_FORMAT      wxT( "PlotOutputFormat" )
 
 // Define min and max reasonable values for print scale
@@ -259,12 +258,7 @@ void DIALOG_PLOT::Init_Dialog()
     m_Config->Read( OPTKEY_PADS_ON_SILKSCREEN,
                     &g_pcb_plot_options.PlotPadsOnSilkLayer );
 
-    m_Plot_Pads_on_Silkscreen->SetValue( &g_pcb_plot_options.PlotPadsOnSilkLayer );
-
-    m_Config->Read( OPTKEY_ALWAYS_PRINT_PADS,
-                    &g_pcb_plot_options.Plot_Pads_All_Layers );
-
-    m_Force_Plot_Pads->SetValue( g_pcb_plot_options.Plot_Pads_All_Layers );
+    m_Plot_Pads_on_Silkscreen->SetValue( g_pcb_plot_options.PlotPadsOnSilkLayer );
 
     // Options to plot texts on footprints
     m_Plot_Text_Value->SetValue( g_pcb_plot_options.Sel_Texte_Valeur );
@@ -426,8 +420,7 @@ void DIALOG_PLOT::SaveOptPlot( wxCommandEvent& event )
         g_pcb_plot_options.Plot_Frame_Ref = m_Plot_Sheet_Ref->GetValue();
 
     g_pcb_plot_options.PlotPadsOnSilkLayer  = m_Plot_Pads_on_Silkscreen->GetValue();
-    g_pcb_plot_options.Plot_Pads_All_Layers = m_Force_Plot_Pads->GetValue();
-
+ 
     s_PlotOriginIsAuxAxis =
         (m_Choice_Plot_Offset->GetSelection() == 0) ? FALSE : TRUE;
 
@@ -476,8 +469,6 @@ void DIALOG_PLOT::SaveOptPlot( wxCommandEvent& event )
     m_Config->Write( OPTKEY_YFINESCALE_ADJ, m_YScaleAdjust );
     m_Config->Write( OPTKEY_PADS_ON_SILKSCREEN,
                      g_pcb_plot_options.PlotPadsOnSilkLayer );
-    m_Config->Write( OPTKEY_ALWAYS_PRINT_PADS,
-                     g_pcb_plot_options.Plot_Pads_All_Layers );
 
     int formatNdx = m_PlotFormatOpt->GetSelection();
     m_Config->Write( OPTKEY_OUTPUT_FORMAT, formatNdx );

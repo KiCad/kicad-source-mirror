@@ -37,8 +37,7 @@ class DIALOG_PLOT_BASE : public wxDialog
 		enum
 		{
 			ID_USE_GERBER_EXTENSIONS = 1000,
-			ID_PRINT_PAD_ON_SILKSCREEN,
-			ID_FORCE_PRINT_PAD,
+			ID_ALLOW_PRINT_PAD_ON_SILKSCREEN,
 			ID_PRINT_VALUE,
 			ID_PRINT_REF,
 			ID_PRINT_MODULE_TEXTS,
@@ -57,7 +56,6 @@ class DIALOG_PLOT_BASE : public wxDialog
 		wxCheckBox* m_Exclude_Edges_Pcb;
 		wxCheckBox* m_Plot_Sheet_Ref;
 		wxCheckBox* m_Plot_Pads_on_Silkscreen;
-		wxCheckBox* m_Force_Plot_Pads;
 		wxCheckBox* m_Plot_Text_Value;
 		wxCheckBox* m_Plot_Text_Ref;
 		wxCheckBox* m_Plot_Text_Div;

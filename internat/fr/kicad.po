@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-18 14:19+0100\n"
-"PO-Revision-Date: 2010-01-18 14:19+0100\n"
+"POT-Creation-Date: 2010-01-18 16:50+0100\n"
+"PO-Revision-Date: 2010-01-18 16:50+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -2369,20 +2369,20 @@ msgstr "&Règles de Conception"
 msgid "&Help"
 msgstr "&Aide"
 
-#: pcbnew/pcbplot.cpp:567
+#: pcbnew/pcbplot.cpp:561
 msgid "Warning: Scale option set to a very small value"
 msgstr "Attention: option d'échelle ajustée à une valeur très petite"
 
-#: pcbnew/pcbplot.cpp:570
+#: pcbnew/pcbplot.cpp:564
 msgid "Warning: Scale option set to a very large value"
 msgstr "Attention: option d'échelle ajustée à une valeur très grande"
 
-#: pcbnew/pcbplot.cpp:699
+#: pcbnew/pcbplot.cpp:693
 #, c-format
 msgid "Plot file <%s> created"
 msgstr "Fichier de tracé <%s> créé"
 
-#: pcbnew/pcbplot.cpp:711
+#: pcbnew/pcbplot.cpp:705
 msgid "No layer selected"
 msgstr "Pas de couche sélectionnée"
 
@@ -6475,163 +6475,161 @@ msgstr "Exclure les tracés contour PCB des autres couches"
 msgid "Print sheet reference"
 msgstr "Imprimer cartouche"
 
-#: pcbnew/dialog_plot_base.cpp:54
+#: pcbnew/dialog_plot_base.cpp:55
 msgid "Print pads on silkscreen"
 msgstr "Pads sur Sérigraphie"
 
-#: pcbnew/dialog_plot_base.cpp:56
-msgid "Enable/disable print/plot pads on silkscreen layers"
-msgstr "Active/désactive tracé des pastilles sur les couches de sérigraphie"
-
-#: pcbnew/dialog_plot_base.cpp:60
-msgid "Always print pads"
-msgstr "Toujours tracer pads"
+#: pcbnew/dialog_plot_base.cpp:58
+msgid ""
+"Enable/disable print/plot pads on silkscreen layers\n"
+"When disable, pads are never potted on silkscreen layers\n"
+"When enable, pads are potted only if they appear on silkscreen layers"
+msgstr ""
+"Autorise/interdit le tracé des pads sur les couches de sérigraphie\n"
+"Si interdit, les pads ne sont jamais traçés sur les couches de sérigraphie\n"
+"Si autorisé, les pads sont traçés seulemnt s'ils apparaissent sur les couches de sérigraphie"
 
 #: pcbnew/dialog_plot_base.cpp:62
-msgid "Force print/plot pads on ALL layers"
-msgstr "Force le tracé des pastilles sur TOUTES les couches"
-
-#: pcbnew/dialog_plot_base.cpp:66
 msgid "Print module value"
 msgstr "Imprimer Valeur Module"
 
-#: pcbnew/dialog_plot_base.cpp:70
+#: pcbnew/dialog_plot_base.cpp:67
 msgid "Print module reference"
 msgstr "Imprimer Référence Module"
 
-#: pcbnew/dialog_plot_base.cpp:74
+#: pcbnew/dialog_plot_base.cpp:72
 msgid "Print other module texts"
 msgstr "Imprimer autres textes  module"
 
-#: pcbnew/dialog_plot_base.cpp:76
+#: pcbnew/dialog_plot_base.cpp:75
 msgid "Enable/disable print/plot module field texts on silkscreen layers"
 msgstr "Active/désactive le tracé des textes des champs des modules sur couches de sérigraphie"
 
-#: pcbnew/dialog_plot_base.cpp:80
+#: pcbnew/dialog_plot_base.cpp:79
 msgid "Force print invisible texts"
 msgstr "Force tracé textes invisibles"
 
-#: pcbnew/dialog_plot_base.cpp:82
+#: pcbnew/dialog_plot_base.cpp:81
 msgid "Force print/plot module invisible texts on silkscreen layers"
 msgstr "Force le tracé des textes invisibles sur couches de sérigraphie"
 
-#: pcbnew/dialog_plot_base.cpp:97
+#: pcbnew/dialog_plot_base.cpp:96
 msgid "Auto scale"
 msgstr "Ech. auto"
 
-#: pcbnew/dialog_plot_base.cpp:97
+#: pcbnew/dialog_plot_base.cpp:96
 msgid "Scale 1.5"
 msgstr "Echelle 1,5"
 
-#: pcbnew/dialog_plot_base.cpp:99
+#: pcbnew/dialog_plot_base.cpp:98
 msgid "Scale Opt"
 msgstr "Echelle"
 
-#: pcbnew/dialog_plot_base.cpp:105
+#: pcbnew/dialog_plot_base.cpp:104
 msgid "Plot Mode"
 msgstr "Mode de Tracé"
 
-#: pcbnew/dialog_plot_base.cpp:109
+#: pcbnew/dialog_plot_base.cpp:108
 msgid "Absolute"
 msgstr "Absolu"
 
-#: pcbnew/dialog_plot_base.cpp:109
+#: pcbnew/dialog_plot_base.cpp:108
 msgid "Auxiliary axis"
 msgstr "Axe Auxiliaire"
 
-#: pcbnew/dialog_plot_base.cpp:111
+#: pcbnew/dialog_plot_base.cpp:110
 msgid "Plot Origin"
 msgstr "Origine des Coord de Tracé"
 
-#: pcbnew/dialog_plot_base.cpp:120
+#: pcbnew/dialog_plot_base.cpp:119
 msgid "HPGL"
 msgstr "HPGL"
 
-#: pcbnew/dialog_plot_base.cpp:120
+#: pcbnew/dialog_plot_base.cpp:119
 msgid "Gerber"
 msgstr "Gerber"
 
-#: pcbnew/dialog_plot_base.cpp:120
+#: pcbnew/dialog_plot_base.cpp:119
 msgid "Postscript"
 msgstr "Postscript"
 
-#: pcbnew/dialog_plot_base.cpp:120
+#: pcbnew/dialog_plot_base.cpp:119
 msgid "Postscript A4"
 msgstr "Postscript A4"
 
-#: pcbnew/dialog_plot_base.cpp:120
+#: pcbnew/dialog_plot_base.cpp:119
 msgid "DXF Export"
 msgstr "Export DXF"
 
-#: pcbnew/dialog_plot_base.cpp:122
+#: pcbnew/dialog_plot_base.cpp:121
 msgid "Plot Format"
 msgstr "Format de tracé"
 
-#: pcbnew/dialog_plot_base.cpp:127
+#: pcbnew/dialog_plot_base.cpp:126
 msgid "HPGL Options:"
 msgstr "Options HPGL:"
 
-#: pcbnew/dialog_plot_base.cpp:129
+#: pcbnew/dialog_plot_base.cpp:128
 msgid "Pen size"
 msgstr "Diam plume"
 
-#: pcbnew/dialog_plot_base.cpp:136
+#: pcbnew/dialog_plot_base.cpp:135
 msgid "Pen Speed (cm/s)"
 msgstr "Vitesse Plume ( cm/s )"
 
-#: pcbnew/dialog_plot_base.cpp:141
+#: pcbnew/dialog_plot_base.cpp:140
 msgid "Set pen speed in cm/s"
 msgstr "Ajuster Vitesse plume en centimètres par seconde"
 
-#: pcbnew/dialog_plot_base.cpp:145
+#: pcbnew/dialog_plot_base.cpp:144
 msgid "Pen ovr"
 msgstr "Recouvrement"
 
-#: pcbnew/dialog_plot_base.cpp:150
+#: pcbnew/dialog_plot_base.cpp:149
 msgid "Set plot overlay for filling"
 msgstr "Ajuste recouvrement des tracés pour les remplissages"
 
-#: pcbnew/dialog_plot_base.cpp:157
+#: pcbnew/dialog_plot_base.cpp:156
 msgid "PS Options:"
 msgstr "Options PS:"
 
-#: pcbnew/dialog_plot_base.cpp:159
+#: pcbnew/dialog_plot_base.cpp:158
 msgid "Plot negative"
 msgstr "Tracé en Négatif"
 
-#: pcbnew/dialog_plot_base.cpp:170
+#: pcbnew/dialog_plot_base.cpp:169
 msgid "Plot mirror"
 msgstr "Tracé Miroir"
 
-#: pcbnew/dialog_plot_base.cpp:174
+#: pcbnew/dialog_plot_base.cpp:173
 msgid "Vias on mask"
 msgstr "Vias sur masque"
 
-#: pcbnew/dialog_plot_base.cpp:176
+#: pcbnew/dialog_plot_base.cpp:175
 msgid "Print/plot vias on mask layers. They are in this case not protected"
 msgstr "Trace vias sur vernis épargne. Elles seront non protégées"
 
-#: pcbnew/dialog_plot_base.cpp:180
+#: pcbnew/dialog_plot_base.cpp:179
 msgid "Line width"
 msgstr "Epaisseur ligne"
 
-#: pcbnew/dialog_plot_base.cpp:190
+#: pcbnew/dialog_plot_base.cpp:189
 msgid "X scale adjust"
 msgstr "Ajustage Echelle X"
 
-#: pcbnew/dialog_plot_base.cpp:199
+#: pcbnew/dialog_plot_base.cpp:198
 msgid "Y scale adjust"
 msgstr "Ajustage Echelle Y"
 
-#: pcbnew/dialog_plot_base.cpp:209
+#: pcbnew/dialog_plot_base.cpp:208
 msgid "Plot"
 msgstr "Tracer"
 
-#: pcbnew/dialog_plot_base.cpp:213
+#: pcbnew/dialog_plot_base.cpp:212
 msgid "Save Options"
 msgstr "Sauver Options"
 
-#: pcbnew/dialog_plot_base.cpp:216
+#: pcbnew/dialog_plot_base.cpp:215
 msgid "Generate drill file"
 msgstr "Créer Fichier de perçage"
 
@@ -12995,6 +12993,12 @@ msgstr "Options d'Affichage"
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "Enable/disable print/plot pads on silkscreen layers"
+#~ msgstr "Active/désactive tracé des pastilles sur les couches de sérigraphie"
+#~ msgid "Always print pads"
+#~ msgstr "Toujours tracer pads"
+#~ msgid "Force print/plot pads on ALL layers"
+#~ msgstr "Force le tracé des pastilles sur TOUTES les couches"
 #~ msgid "Adjust pads shape, dimensions, layers"
 #~ msgstr ""
 #~ "Ajuster les caracteristiques par défaut des pads, les dimensions des "

@@ -51,17 +51,11 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	bLeftSizer->Add( m_Plot_Sheet_Ref, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_Plot_Pads_on_Silkscreen = new wxCheckBox( this, ID_PRINT_PAD_ON_SILKSCREEN, _("Print pads on silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Plot_Pads_on_Silkscreen = new wxCheckBox( this, ID_ALLOW_PRINT_PAD_ON_SILKSCREEN, _("Print pads on silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
 	
-	m_Plot_Pads_on_Silkscreen->SetToolTip( _("Enable/disable print/plot pads on silkscreen layers") );
+	m_Plot_Pads_on_Silkscreen->SetToolTip( _("Enable/disable print/plot pads on silkscreen layers\nWhen disable, pads are never potted on silkscreen layers\nWhen enable, pads are potted only if they appear on silkscreen layers") );
 	
 	bLeftSizer->Add( m_Plot_Pads_on_Silkscreen, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_Force_Plot_Pads = new wxCheckBox( this, ID_FORCE_PRINT_PAD, _("Always print pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	
-	m_Force_Plot_Pads->SetToolTip( _("Force print/plot pads on ALL layers") );
-	
-	bLeftSizer->Add( m_Force_Plot_Pads, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_Plot_Text_Value = new wxCheckBox( this, ID_PRINT_VALUE, _("Print module value"), wxDefaultPosition, wxDefaultSize, 0 );
 	
