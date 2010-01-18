@@ -43,6 +43,8 @@ class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_base
 private:
     WinEDA_SchematicFrame* m_Parent;
     wxConfig*         m_Config;
+    static wxPoint      s_LastPos;
+    static wxSize       s_LastSize;
 
 public:
     DIALOG_PRINT_USING_PRINTER( WinEDA_SchematicFrame* parent );
@@ -56,6 +58,8 @@ private:
     void OnPrintButtonClick( wxCommandEvent& event );
     void OnButtonCancelClick( wxCommandEvent& event ){ Close(); }
     void SetPenWidth();
+
+    bool Show( bool show );     // overload stock function
 };
 
 
@@ -88,6 +92,10 @@ public:
 
     void DrawPage();
 };
+
+// We want our dialog to remember its previous screen position
+wxPoint DIALOG_PRINT_USING_PRINTER::s_LastPos( -1, -1 );
+wxSize  DIALOG_PRINT_USING_PRINTER::s_LastSize;
 
 
 /* Virtual function
@@ -147,6 +155,31 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
     }
 }
 
+/*************************************************/
+bool DIALOG_PRINT_USING_PRINTER::Show( bool show )
+/*************************************************/
+{
+    bool ret;
+
+    if( show )
+    {
+        if( s_LastPos.x != -1 )
+        {
+            SetSize( s_LastPos.x, s_LastPos.y, s_LastSize.x, s_LastSize.y, 0 );
+        }
+        ret = DIALOG_PRINT_USING_PRINTER_base::Show( show );
+    }
+    else
+    {
+        // Save the dialog's position before hiding
+        s_LastPos  = GetPosition();
+        s_LastSize = GetSize();
+
+        ret = DIALOG_PRINT_USING_PRINTER_base::Show( show );
+    }
+
+    return ret;
+}
 
 void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
 {
