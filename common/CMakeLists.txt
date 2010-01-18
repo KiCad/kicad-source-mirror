@@ -62,7 +62,7 @@ set(PCB_COMMON_SRCS
     ../pcbnew/class_board_connected_item.cpp
     ../pcbnew/class_board_design_settings.cpp
     ../pcbnew/class_board_item.cpp
-    ../pcbnew/class_cotation.cpp
+    ../pcbnew/class_dimension.cpp
     ../pcbnew/class_drawsegment.cpp
     ../pcbnew/class_drc_item.cpp
     ../pcbnew/class_edge_mod.cpp

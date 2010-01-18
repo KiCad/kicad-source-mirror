@@ -292,7 +292,7 @@ const char** BOARD_ITEM::MenuIcon() const
         break;
 
     case TYPE_COTATION:
-        xpm = add_cotation_xpm;
+        xpm = add_dimension_xpm;
         break;
 
     case TYPE_MIRE:

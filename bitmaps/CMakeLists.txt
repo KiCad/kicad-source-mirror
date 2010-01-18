@@ -19,8 +19,9 @@ set(BITMAP_SRCS
     Add_Circle.xpm
     Add_Component.xpm
     Add_Corner.xpm
-    add_cotation.xpm
+    add_dimension.xpm
     Add_Dashed_Line.xpm
+    add_dimension.xpm
     Add_Entry.xpm
     Add_GLabel.xpm
     add_hierarchical_label.xpm
@@ -146,6 +147,7 @@ set(BITMAP_SRCS
     Hidden_Pin.xpm
     Hierarchy_cursor.xpm
     Hierarchy_Nav.xpm
+    hotkeys.xpm
     icon_3d.xpm
     icon_cvpcb_small.xpm
     icon_cvpcb.xpm

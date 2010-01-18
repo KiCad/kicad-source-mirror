@@ -1,8 +1,8 @@
 /*****************************/
 /* COTATION class definition */
 /*****************************/
-#ifndef COTATION_H
-#define COTATION_H
+#ifndef DIMENSION_H
+#define DIMENSION_H
 
 #include "base_struct.h"
 
@@ -130,4 +130,4 @@ public:
     }
 };
 
-#endif  // #define COTATION_H
+#endif  // #define DIMENSION_H

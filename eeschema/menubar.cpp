@@ -52,23 +52,29 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     /* Open Recent submenu */
     wxMenu* openRecentMenu = new wxMenu();
     wxGetApp().m_fileHistory.AddFilesToMenu( openRecentMenu );
-    filesMenu->AppendSubMenu( openRecentMenu, _( "Open &Recent" ),
-                              _( "Open a recent opened document" ) );
+    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentMenu,
+                                        -1, _( "Open &Recent" ),
+                              _("Open a recent opened schematic project" ), open_project_xpm );
 
-    item = new wxMenuItem( filesMenu, ID_SAVE_ONE_SHEET, _( "&Save" ),
+    // Save menus:
+    filesMenu->AppendSeparator();
+    
+    // Normal save command:
+    item = new wxMenuItem( filesMenu, ID_SAVE_PROJECT, _( "&Save Whole Schematic Project" ),
+                           _( "Save all sheets in the schematic project" ) );
+    item->SetBitmap( save_project_xpm );
+    filesMenu->Append( item );
+
+    // Save current sheet only
+    item = new wxMenuItem( filesMenu, ID_SAVE_ONE_SHEET, _( "&Save Current Sheet Only" ),
                            _( "Save only current schematic sheet" ) );
     item->SetBitmap( save_xpm );
     filesMenu->Append( item );
 
-    item = new wxMenuItem( filesMenu, ID_SAVE_ONE_SHEET_AS, _( "Save &as..." ),
+    // Save current sheet only and ask for a new name
+    item = new wxMenuItem( filesMenu, ID_SAVE_ONE_SHEET_AS, _( "Save Current Sheet &as..." ),
                            _( "Save current schematic sheet as..." ) );
     item->SetBitmap( save_as_xpm );
-    filesMenu->Append( item );
-
-    filesMenu->AppendSeparator();
-    item = new wxMenuItem( filesMenu, ID_SAVE_PROJECT, _( "&Save Project" ),
-                           _( "Save all sheets in the schematic project" ) );
-    item->SetBitmap( save_project_xpm );
     filesMenu->Append( item );
 
     filesMenu->AppendSeparator();

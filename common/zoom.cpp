@@ -40,9 +40,7 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
 
     /* Move the mouse cursor to the on grid graphic cursor position */
     if( ToMouse == TRUE )
-    {
         DrawPanel->MouseToCursorSchema();
-    }
  }
 
 

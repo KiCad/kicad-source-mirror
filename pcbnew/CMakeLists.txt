@@ -30,7 +30,7 @@ set(PCBNEW_SRCS
 #   cleaningoptions_dialog.cpp
     connect.cpp
     controle.cpp
-    cotation.cpp
+    dimension.cpp
     cross-probing.cpp
     debug_kbool_key_file_fct.cpp
     deltrack.cpp

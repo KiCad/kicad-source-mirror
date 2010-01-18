@@ -1,8 +1,6 @@
 /* XPM */
-#ifndef XPMMAIN
-extern const char* add_cotation_xpm[];
-#else
-const char * add_cotation_xpm[] = {
+const char * add_dimension_xpm[] = {
+/* columns rows colors const chars-per-pixel */
 "16 16 14 1",
 " 	c None",
 ".	c #000000",
@@ -34,5 +32,3 @@ const char * add_cotation_xpm[] = {
 "+             + ",
 "+             + ",
 "                "};
-
-#endif

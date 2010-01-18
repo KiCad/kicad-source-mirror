@@ -615,25 +615,25 @@ wxString ReturnHotkeyConfigFilePath( int choice )
 /** add hotkey config options submenu to a menu
  * @param menu : initial menu
  */
-void AddHotkeyConfigMenu( wxMenu* menu )
+void AddHotkeyConfigMenu( wxMenu* aMenu )
 {
+    if( aMenu == NULL )
+        return;
+
     wxMenuItem* item;
     wxMenu* HotkeySubmenu = new wxMenu();
 
-    if( menu == NULL )
-        return;
-
-    /* Show hotkey configuration */
+    /* List existing hotkey menu*/
     item = new wxMenuItem( HotkeySubmenu,
                            ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
-                           _( "Show" ),
-                           _( "Show the current hotkey configuration" ) );
+                           _( "List Current Keys" ),
+                           _( "Displays the current hotkeys list and corresponding commands" ) );
     item->SetBitmap( info_xpm );
     HotkeySubmenu->Append( item );
 
     /* (Re)create hotkey file */
     item = new wxMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_CREATE_CONFIG,
-                           _( "(Re)create" ),
+                           _( "(Re)create Hotkeys File" ),
                            _( "Create or recreate the hotkey configuration file from current hotkey list" )
                            );
     item->SetBitmap( save_setup_xpm );
@@ -641,23 +641,22 @@ void AddHotkeyConfigMenu( wxMenu* menu )
 
     /* Reload hotkey file */
     item = new wxMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_READ_CONFIG,
-                           _( "Reload" ),
+                           _( "Reload Hotkeys File" ),
                            _( "Reload the hotkey configuration file" ) );
     item->SetBitmap( reload_xpm );
     HotkeySubmenu->Append( item );
 
     /* Edit hotkey file */
     item = new wxMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_EDIT_CONFIG,
-                          _( "Edit" ),
+                          _( "Edit Hotkeys File" ),
                           _( "Edit the hotkey configuration file in a text editor" ) );
     item->SetBitmap( editor_xpm );
     HotkeySubmenu->Append( item );
 
     /* Append HotkeySubmenu to menu */
-    menu->Append( ID_PREFERENCES_HOTKEY_SUBMENU,
-                  _("Hotkey"),
-                  HotkeySubmenu,
-                  _("Hotkey configuration and preferences"));
+    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( aMenu, HotkeySubmenu,
+                                        ID_PREFERENCES_HOTKEY_SUBMENU, _( "Hotkeys" ),
+                              _("Hotkeys configuration and preferences" ), hotkeys_xpm );
 
     /* Hotkey path */
     wxMenu* HotkeyLocationSubmenu = new wxMenu();

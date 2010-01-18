@@ -510,12 +510,15 @@ bool CMP_LIBRARY::Load( wxString& aErrorMsg )
             || !vers.GetNextToken().ToLong( & minor ) || minor < 0L
             || minor > 99 )
         {
-            wxLogWarning( _( "The component library <%s> header version \
+#if 0   // Note for defeloppers:
+        // Not sure this warning is very useful: old designs *must* be always loadable
+            wxLogWarning( wxT( "The component library <%s> header version \
 number is invalid.\n\nIn future versions of EESchema this library may not \
 load correctly.  To resolve this problem open the library in the library \
 editor and save it.  If this library is the project cache library, save \
 the current schematic." ),
                           GetChars( GetName() ) );
+#endif
         }
         else
         {

@@ -458,7 +458,7 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
 
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_PCB_COTATION_BUTT, wxEmptyString,
-                         wxBitmap( add_cotation_xpm ),
+                         wxBitmap( add_dimension_xpm ),
                          _( "Add dimension" ), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_PCB_MIRE_BUTT, wxEmptyString,

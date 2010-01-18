@@ -225,7 +225,7 @@ enum DisplayViaMode {
 
 #include "class_drawsegment.h"
 #include "class_pcb_text.h"
-#include "class_cotation.h"
+#include "class_dimension.h"
 #include "class_mire.h"
 #include "class_track.h"
 #include "class_marker_pcb.h"
