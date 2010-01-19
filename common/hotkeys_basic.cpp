@@ -162,7 +162,7 @@ static struct hotkey_name_descr s_Hotkey_Name_List[] =
 };
 
 
-/*
+/** function ReturnKeyNameFromKeyCode
  * return the key name from the key code
  * Only some wxWidgets key values are handled for function key ( see
  * s_Hotkey_Name_List[] )
@@ -201,7 +201,7 @@ wxString ReturnKeyNameFromKeyCode( int keycode )
 }
 
 
-/*
+/** function AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
  * @param List = pointer to a Ki_HotkeyInfo list of commands
  * @param CommandId = Command Id value
@@ -219,7 +219,7 @@ wxString AddHotkeyName( const wxString& text, Ki_HotkeyInfo** List,
 }
 
 
-/*
+/** function AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
  * @param List = pointer to a Ki_HotkeyInfoSectionDescriptor* DescrList of
  * commands
@@ -249,7 +249,7 @@ wxString AddHotkeyName( const wxString&                        text,
 }
 
 
-/*
+/** function ReturnKeyNameFromCommandId
  * return the key name from the Command id value ( m_Idcommand member value)
  * @param List = pointer to a Ki_HotkeyInfo list of commands
  * @param CommandId = Command Id value
@@ -273,7 +273,7 @@ wxString ReturnKeyNameFromCommandId( Ki_HotkeyInfo** List, int CommandId )
 }
 
 
-/*
+/** function ReturnKeyCodeFromKeyName
  * return the key code from its key name
  * Only some wxWidgets key values are handled for function key
  * @param keyname = wxString key name to find in s_Hotkey_Name_List[],
@@ -300,7 +300,7 @@ static int ReturnKeyCodeFromKeyName( const wxString& keyname )
 }
 
 
-/*
+/** function DisplayHotkeyList
  * Displays the current hotkey list
  * @param frame = current active frame
  * @param List = pointer to a Ki_HotkeyInfoSectionDescriptor list
@@ -331,7 +331,7 @@ void DisplayHotkeyList( WinEDA_DrawFrame*                      frame,
 }
 
 
-/*
+/** function GetDescriptorFromHotkey
  * Return a Ki_HotkeyInfo * pointer fron a key code for OnHotKey() function
  * @param key = key code (ascii value, or wxWidgets value for function keys
  * @param List = pointer to a Ki_HotkeyInfo list of commands

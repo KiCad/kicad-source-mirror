@@ -245,8 +245,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 #else
     text = _( "Undo\tCtrl+Z" );
 #endif
-
-    item = new wxMenuItem( editMenu, ID_UNDO_BUTT, text,
+    item = new wxMenuItem( editMenu, wxID_UNDO, text,
                            _( "Undo last edition" ), wxITEM_NORMAL );
     item->SetBitmap( undo_xpm );
     editMenu->Append( item );
@@ -257,8 +256,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 #else
     text = _( "Redo\tShift+Ctrl+Z" );
 #endif
-
-    item = new wxMenuItem( editMenu, ID_REDO_BUTT, text,
+    item = new wxMenuItem( editMenu, wxID_REDO, text,
                            _( "Redo the last undo command" ), wxITEM_NORMAL );
     item->SetBitmap( redo_xpm );
     editMenu->Append( item );
@@ -376,10 +374,11 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 
 
     /* 3D Display */
-    item = new wxMenuItem( viewMenu, ID_MENU_PCB_SHOW_3D_FRAME,
-                          _( "3D Display" ), _( "Show board in the 3D viewer" ) );
+    wxMenu* Display3DMenu = new wxMenu;
+    item = new wxMenuItem( Display3DMenu, ID_MENU_PCB_SHOW_3D_FRAME,
+                           _( "3D Display" ), _( "Show board in 3D viewer" ) );
     item->SetBitmap( show_3d_xpm );
-    viewMenu->Append( item );
+    Display3DMenu->Append( item );
 
 
     /**
@@ -525,6 +524,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( configmenu, _( "&Preferences" ) );
     menuBar->Append( designRulesMenu, _( "&Design Rules" ) );
+    menuBar->Append( Display3DMenu, _( "&3D Display" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
     /* Associate the menu bar with the frame */

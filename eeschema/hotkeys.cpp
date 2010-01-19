@@ -80,12 +80,12 @@ static Ki_HotkeyInfo HkResetLocalCoord( wxT( "Reset local coord." ),
 
 /* Undo */
 static Ki_HotkeyInfo HkUndo( wxT( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z',
-                             (int) ID_SCHEMATIC_UNDO );
+                             (int) wxID_UNDO );
 
 /* Redo */
 #if !defined( __WXMAC__ )
     static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y',
-                             (int) ID_SCHEMATIC_REDO );
+                             (int) wxID_REDO );
 #else
     static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO,
                                  GR_KB_SHIFT + GR_KB_CTRL + 'Z',
@@ -699,7 +699,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_UNDO:
         if( !ItemInEdit )
         {
-            toolCmd.SetId( ID_LIBEDIT_UNDO );
+            toolCmd.SetId( wxID_UNDO );
             GetEventHandler()->ProcessEvent( toolCmd );
         }
         break;
@@ -707,7 +707,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_REDO:
         if( !ItemInEdit )
         {
-            toolCmd.SetId( ID_LIBEDIT_REDO );
+            toolCmd.SetId( wxID_REDO );
             GetEventHandler()->ProcessEvent( toolCmd );
         }
         break;

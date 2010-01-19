@@ -86,12 +86,43 @@ static Ki_HotkeyInfo HkDelete( wxT( "Delete Track or Footprint" ), HK_DELETE,
                                WXK_DELETE );
 static Ki_HotkeyInfo HkResetLocalCoord( wxT( "Reset local coord." ),
                                         HK_RESET_LOCAL_COORD, ' ' );
+
 static Ki_HotkeyInfo HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
 static Ki_HotkeyInfo HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
 static Ki_HotkeyInfo HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
-static Ki_HotkeyInfo HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
+
+/* Zoom In */
+#if !defined( __WXMAC__ )
 static Ki_HotkeyInfo HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
+#else
+static Ki_HotkeyInfo HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, GR_KB_CTRL + '+' );
+#endif
+
+/* Zoom Out */
+#if !defined( __WXMAC__ )
+static Ki_HotkeyInfo HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
+#else
+static Ki_HotkeyInfo HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, GR_KB_CTRL + '-' );
+#endif
+
 static Ki_HotkeyInfo HkHelp( wxT( "Help: this message" ), HK_HELP, '?' );
+
+
+/* Undo */
+static Ki_HotkeyInfo HkUndo( wxT( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z',
+                             (int) wxID_UNDO );
+
+/* Redo */
+#if !defined( __WXMAC__ )
+static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y',
+                             (int) wxID_REDO );
+#else
+static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO,
+                             GR_KB_SHIFT + GR_KB_CTRL + 'Z',
+                             (int) wxID_REDO );
+#endif
+
+
 static Ki_HotkeyInfo HkSwitchUnits( wxT( "Switch Units" ), HK_SWITCH_UNITS, 'U'
                                     + GR_KB_CTRL );
 static Ki_HotkeyInfo HkTrackDisplayMode( wxT( "Track Display Mode" ),
@@ -99,12 +130,13 @@ static Ki_HotkeyInfo HkTrackDisplayMode( wxT( "Track Display Mode" ),
 static Ki_HotkeyInfo HkAddModule( wxT( "Add Module" ), HK_ADD_MODULE, 'O' );
 
 // List of common hotkey descriptors
-Ki_HotkeyInfo
-* s_Common_Hotkey_List[] =
+Ki_HotkeyInfo*       s_Common_Hotkey_List[] =
 {
     &HkHelp,        &HkZoomIn,          &HkZoomOut,
     &HkZoomRedraw,  &HkZoomCenter,      &HkZoomAuto,
-    &HkSwitchUnits, &HkResetLocalCoord, NULL
+    &HkSwitchUnits, &HkResetLocalCoord,
+    &HkUndo,        &HkRedo,
+    NULL
 };
 
 // List of hotkey descriptors for pcbnew
@@ -143,8 +175,7 @@ struct Ki_HotkeyInfoSectionDescriptor s_Pcbnew_Editor_Hokeys_Descr[] =
 // list of sections and corresponding hotkey list for the board editor (used to list current hotkeys)
 struct Ki_HotkeyInfoSectionDescriptor s_Board_Editor_Hokeys_Descr[] =
 { {
-      &g_CommonSectionTag,
-      s_Common_Hotkey_List,
+      &g_CommonSectionTag, s_Common_Hotkey_List,
       NULL
   },{
       &g_BoardEditorSectionTag, s_board_edit_Hotkey_List, NULL
@@ -153,8 +184,7 @@ struct Ki_HotkeyInfoSectionDescriptor s_Board_Editor_Hokeys_Descr[] =
   } };
 
 // list of sections and corresponding hotkey list for the footprint editor (used to list current hotkeys)
-struct Ki_HotkeyInfoSectionDescriptor
-s_Module_Editor_Hokeys_Descr[] =
+struct Ki_HotkeyInfoSectionDescriptor s_Module_Editor_Hokeys_Descr[] =
 { {
       &g_CommonSectionTag, s_Common_Hotkey_List, NULL
   },{
@@ -192,12 +222,13 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
     if( (hotkey & GR_KB_CTRL) != 0 )
         hotkey += 'A' - 1;
 
-    /* Convert lower to upper case (the usual toupper function has problem with non ascii codes like function keys */
+    /* Convert lower to upper case
+     * (the usual toupper function has problem with non ascii codes like function keys
+     */
     if( (hotkey >= 'a') && (hotkey <= 'z') )
         hotkey += 'A' - 'a';
 
-    Ki_HotkeyInfo* HK_Descr = GetDescriptorFromHotkey( hotkey,
-                                                       s_Common_Hotkey_List );
+    Ki_HotkeyInfo* HK_Descr = GetDescriptorFromHotkey( hotkey, s_Common_Hotkey_List );
 
     if( HK_Descr == NULL )
         HK_Descr = GetDescriptorFromHotkey( hotkey, s_board_edit_Hotkey_List );
@@ -306,6 +337,16 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
     case HK_ZOOM_AUTO:
         cmd.SetId( ID_ZOOM_PAGE );
         GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_UNDO:
+    case HK_REDO:
+        if( ItemFree )
+        {
+            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED,
+                                  HK_Descr->m_IdMenuEvent );
+            wxPostEvent( this, event );
+        }
         break;
 
     case HK_RESET_LOCAL_COORD: /*Reset the relative coord  */
@@ -631,17 +672,23 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* DC, int hotkey,
     if( hotkey == 0 )
         return;
 
+    bool           ItemFree = (GetCurItem() == 0 || GetCurItem()->m_Flags == 0);
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
+
+    // Remap the control key Ctrl A (0x01) to GR_KB_CTRL + 'A' (just easier to handle...)
+    if( (hotkey & GR_KB_CTRL) != 0 )
+        hotkey += 'A' - 1;
 
     /* Convert lower to upper case (the usual toupper function has problem with non ascii codes like function keys */
     if( (hotkey >= 'a') && (hotkey <= 'z') )
         hotkey += 'A' - 'a';
 
-    Ki_HotkeyInfo* HK_Descr = GetDescriptorFromHotkey( hotkey,
-                                                       s_Common_Hotkey_List );
+    Ki_HotkeyInfo* HK_Descr = GetDescriptorFromHotkey( hotkey, s_Common_Hotkey_List );
+
     if( HK_Descr == NULL )
         HK_Descr = GetDescriptorFromHotkey( hotkey, s_module_edit_Hotkey_List );
+
     if( HK_Descr == NULL )
         return;
 
@@ -682,6 +729,16 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_ZOOM_CENTER:
         cmd.SetId( ID_POPUP_ZOOM_CENTER );
         GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_UNDO:
+    case HK_REDO:
+        if( ItemFree )
+        {
+            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED,
+                                  HK_Descr->m_IdMenuEvent );
+            wxPostEvent( this, event );
+        }
         break;
 
     case HK_ZOOM_AUTO:

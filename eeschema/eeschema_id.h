@@ -14,10 +14,8 @@
 
 enum id_eeschema_frm
 {
-    /* Schecmatic editor horizontal toolbar IDs */
-    ID_SCHEMATIC_UNDO = ID_END_LIST,
-    ID_SCHEMATIC_REDO,
-    ID_HIERARCHY,
+    /* Schematic editor horizontal toolbar IDs */
+    ID_HIERARCHY = ID_END_LIST,
     ID_TO_LIBVIEW,
     ID_GET_ANNOTATE,
     ID_GET_ERC,
@@ -138,8 +136,6 @@ enum id_eeschema_frm
 	ID_LIBEDIT_GET_FRAME_EDIT_PART,
 	ID_LIBEDIT_GET_FRAME_EDIT_FIELDS,
 	ID_LIBEDIT_DELETE_PART,
-	ID_LIBEDIT_UNDO,
-	ID_LIBEDIT_REDO,
 	ID_DE_MORGAN_NORMAL_BUTT,
 	ID_DE_MORGAN_CONVERT_BUTT,
 	ID_LIBEDIT_EDIT_PIN_BY_PIN,

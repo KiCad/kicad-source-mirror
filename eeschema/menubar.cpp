@@ -63,24 +63,24 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     /* Separator */
     filesMenu->AppendSeparator();
-    
+
     /* Save */
-    item = new wxMenuItem( filesMenu, ID_SAVE_ONE_SHEET, _( "&Save\tCtrl+S" ),
+    /* Save Project */
+    item = new wxMenuItem( filesMenu, ID_SAVE_PROJECT, _( "&Save Whole Schematic Project\tCtrl+S" ),
+                           _( "Save all sheets in the schematic project" ) );
+    item->SetBitmap( save_project_xpm );
+    filesMenu->Append( item );
+
+    item = new wxMenuItem( filesMenu, ID_SAVE_ONE_SHEET, _( "&Save Current Sheet Only" ),
                            _( "Save only current schematic sheet" ) );
     item->SetBitmap( save_xpm );
     filesMenu->Append( item );
 
     /* Save as... */
     item = new wxMenuItem( filesMenu, ID_SAVE_ONE_SHEET_AS,
-                           _( "Save &as...\tShift+Ctrl+S" ),
+                           _( "Save Current Sheet &as\tShift+Ctrl+S" ),
                            _( "Save current schematic sheet as..." ) );
     item->SetBitmap( save_as_xpm );
-    filesMenu->Append( item );
-
-    /* Save Project */
-    item = new wxMenuItem( filesMenu, ID_SAVE_PROJECT, _( "&Save Project" ),
-                           _( "Save all sheets in the schematic project" ) );
-    item->SetBitmap( save_project_xpm );
     filesMenu->Append( item );
 
     /* Separator */
@@ -157,7 +157,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     text = _( "Undo\tCtrl+Z" );
 #endif
 
-    item = new wxMenuItem( editMenu, ID_SCHEMATIC_UNDO, text,
+    item = new wxMenuItem( editMenu, wxID_UNDO, text,
                            _( "Undo last edition" ), wxITEM_NORMAL );
     item->SetBitmap( undo_xpm );
     editMenu->Append( item );
@@ -169,7 +169,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     text = _( "Redo\tShift+Ctrl+Z" );
 #endif
 
-    item = new wxMenuItem( editMenu, ID_SCHEMATIC_REDO, text,
+    item = new wxMenuItem( editMenu, wxID_REDO, text,
                            _( "Redo the last undo command" ), wxITEM_NORMAL );
     item->SetBitmap( redo_xpm );
     editMenu->Append( item );

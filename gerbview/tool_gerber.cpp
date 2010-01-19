@@ -195,7 +195,7 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
                          _( "Paste" ) );
 #endif
 
-    m_HToolBar->AddTool( ID_UNDO_BUTT, wxEmptyString,
+    m_HToolBar->AddTool( wxID_UNDO, wxEmptyString,
                          wxBitmap( undelete_xpm ),
                          _( "Undelete" ) );
 

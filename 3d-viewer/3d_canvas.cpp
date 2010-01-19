@@ -1,4 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
+
 // Name:        3d_canvas.cpp
 /////////////////////////////////////////////////////////////////////////////
 #include "fctsys.h"
@@ -12,6 +13,7 @@
 
 #include "wx/dataobj.h"
 #include "wx/clipbrd.h"
+#include <wx/wupdlock.h>
 
 #include "gestfich.h"
 
@@ -27,17 +29,20 @@
  */
 
 BEGIN_EVENT_TABLE( Pcb3D_GLCanvas, wxGLCanvas )
-    EVT_PAINT( Pcb3D_GLCanvas::OnPaint )
-    // key event:
-    EVT_CHAR( Pcb3D_GLCanvas::OnChar )
-    // mouse events
-    EVT_RIGHT_DOWN( Pcb3D_GLCanvas::OnRightClick )
-    EVT_MOUSEWHEEL( Pcb3D_GLCanvas::OnMouseWheel )
-    EVT_MOTION( Pcb3D_GLCanvas::OnMouseMove )
-    // other events
-    EVT_ERASE_BACKGROUND( Pcb3D_GLCanvas::OnEraseBackground )
-    EVT_MENU_RANGE( ID_POPUP_3D_VIEW_START, ID_POPUP_3D_VIEW_END,
-                    Pcb3D_GLCanvas::OnPopUpMenu )
+EVT_PAINT( Pcb3D_GLCanvas::OnPaint )
+
+// key event:
+EVT_CHAR( Pcb3D_GLCanvas::OnChar )
+
+// mouse events
+EVT_RIGHT_DOWN( Pcb3D_GLCanvas::OnRightClick )
+EVT_MOUSEWHEEL( Pcb3D_GLCanvas::OnMouseWheel )
+EVT_MOTION( Pcb3D_GLCanvas::OnMouseMove )
+
+// other events
+EVT_ERASE_BACKGROUND( Pcb3D_GLCanvas::OnEraseBackground )
+EVT_MENU_RANGE( ID_POPUP_3D_VIEW_START, ID_POPUP_3D_VIEW_END,
+                Pcb3D_GLCanvas::OnPopUpMenu )
 END_EVENT_TABLE()
 
 Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent ) :
@@ -203,6 +208,7 @@ void Pcb3D_GLCanvas::SetView3D( int keycode )
     Refresh( FALSE );
 }
 
+
 void Pcb3D_GLCanvas::OnMouseWheel( wxMouseEvent& event )
 {
     wxSize size( GetClientSize() );
@@ -302,67 +308,67 @@ void Pcb3D_GLCanvas::OnRightClick( wxMouseEvent& event )
 
     pos.x = event.GetX(); pos.y = event.GetY();
     wxMenuItem* item = new wxMenuItem( &PopUpMenu, ID_POPUP_ZOOMIN,
-                                       _( "Zoom +" ) );
+                                      _( "Zoom +" ) );
     item->SetBitmap( zoom_in_xpm );
     PopUpMenu.Append( item );
 
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_ZOOMOUT,
-                           _( "Zoom -" ) );
+                          _( "Zoom -" ) );
     item->SetBitmap( zoom_out_xpm );
     PopUpMenu.Append( item );
 
     PopUpMenu.AppendSeparator();
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_ZPOS,
-                           _( "Top View" ) );
+                          _( "Top View" ) );
     item->SetBitmap( axis3d_top_xpm );
     PopUpMenu.Append( item );
 
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_ZNEG,
-                           _( "Bottom View" ) );
+                          _( "Bottom View" ) );
     item->SetBitmap( axis3d_bottom_xpm );
     PopUpMenu.Append( item );
 
     PopUpMenu.AppendSeparator();
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_XPOS,
-                           _( "Right View" ) );
+                          _( "Right View" ) );
     item->SetBitmap( axis3d_right_xpm );
     PopUpMenu.Append( item );
 
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_XNEG,
-                           _( "Left View" ) );
+                          _( "Left View" ) );
     item->SetBitmap( axis3d_left_xpm );
     PopUpMenu.Append( item );
 
 
     PopUpMenu.AppendSeparator();
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_YPOS,
-                           _( "Front View" ) );
+                          _( "Front View" ) );
     item->SetBitmap( axis3d_front_xpm );
     PopUpMenu.Append( item );
 
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_YNEG,
-                           _( "Back View" ) );
+                          _( "Back View" ) );
     item->SetBitmap( axis3d_back_xpm );
     PopUpMenu.Append( item );
 
     PopUpMenu.AppendSeparator();
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_LEFT,
-                           _( "Move left <-" ) );
+                          _( "Move left <-" ) );
     item->SetBitmap( left_xpm );
     PopUpMenu.Append( item );
 
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_RIGHT,
-                           _( "Move right ->" ) );
+                          _( "Move right ->" ) );
     item->SetBitmap( right_xpm );
     PopUpMenu.Append( item );
 
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_UP,
-                           _( "Move Up ^" ) );
+                          _( "Move Up ^" ) );
     item->SetBitmap( up_xpm );
     PopUpMenu.Append( item );
 
     item = new wxMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_DOWN,
-                           _( "Move Down" ) );
+                          _( "Move Down" ) );
     item->SetBitmap( down_xpm );
     PopUpMenu.Append( item );
 
@@ -579,12 +585,52 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
     Redraw( true );
 
     wxSize     image_size = GetClientSize();
+ #ifndef __WXMAC__
     wxClientDC dc( this );
     wxBitmap   bitmap( image_size.x, image_size.y );
     wxMemoryDC memdc;
     memdc.SelectObject( bitmap );
     memdc.Blit( 0, 0, image_size.x, image_size.y, &dc, 0, 0 );
     memdc.SelectObject( wxNullBitmap );
+#else
+    struct vieport_params
+    {
+        GLint originx;
+        GLint originy;
+        GLint x;
+        GLint y;
+    } viewport;
+
+    wxWindowUpdateLocker noUpdates( this );
+    glGetIntegerv( GL_VIEWPORT, (GLint*) &viewport );
+
+    unsigned char*       pixelbuffer = (unsigned char*) malloc( viewport.x * viewport.y * 3 );
+    unsigned char*       alphabuffer = (unsigned char*) malloc( viewport.x * viewport.y );
+    wxImage image( viewport.x, viewport.y );
+
+    glPixelStorei( GL_PACK_ALIGNMEN T, 1 );
+    glReadBuffer( GL_BACK_LEFT );
+    glReadPixels( viewport.originx,
+                  viewport.originy,
+                  viewport.x,
+                  viewport.y,
+                  GL_RGB,
+                  GL_UNSIGNED_ BYTE,
+                  pixelbuffer );
+    glReadPixels( viewport.originx,
+                  viewport.originy,
+                  viewport.x,
+                  viewport.y,
+                  GL_ALPHA,
+                  GL_UNSIGNED_ BYTE,
+                  alphabuffer );
+
+
+    image.SetData( pixelbuffer );
+    image.SetAlpha( alphabuffer );
+    image = image.Mirror( false );
+    wxBitmap bitmap( image );
+#endif
 
     if( event.GetId() == ID_TOOL_SCREENCOPY_TOCLIBBOARD )
     {

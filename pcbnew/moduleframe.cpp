@@ -74,9 +74,9 @@ BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, WinEDA_BasePcbFrame )
               WinEDA_ModuleEditFrame::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_EDIT_MODULE_PROPERTIES,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_UNDO,
+    EVT_TOOL( wxID_UNDO,
               WinEDA_ModuleEditFrame::GetComponentFromUndoList )
-    EVT_TOOL( ID_MODEDIT_REDO,
+    EVT_TOOL( wxID_REDO,
               WinEDA_ModuleEditFrame::GetComponentFromRedoList )
 
     // Vertical toolbar (left click):
@@ -316,9 +316,9 @@ void WinEDA_ModuleEditFrame::SetToolbars()
 
     if( GetScreen() )
     {
-        m_HToolBar->EnableTool( ID_MODEDIT_UNDO,
+        m_HToolBar->EnableTool( wxID_UNDO,
                                 GetScreen()->GetUndoCommandCount()>0 && active );
-        m_HToolBar->EnableTool( ID_MODEDIT_REDO,
+        m_HToolBar->EnableTool( wxID_REDO,
                                 GetScreen()->GetRedoCommandCount()>0 && active );
     }
 

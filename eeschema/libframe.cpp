@@ -79,9 +79,9 @@ BEGIN_EVENT_TABLE( WinEDA_LibeditFrame, WinEDA_DrawFrame )
               WinEDA_LibeditFrame::LoadOneLibraryPart )
     EVT_TOOL( ID_LIBEDIT_SAVE_CURRENT_PART,
               WinEDA_LibeditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_LIBEDIT_UNDO,
+    EVT_TOOL( wxID_UNDO,
               WinEDA_LibeditFrame::GetComponentFromUndoList )
-    EVT_TOOL( ID_LIBEDIT_REDO,
+    EVT_TOOL( wxID_REDO,
               WinEDA_LibeditFrame::GetComponentFromRedoList )
     EVT_TOOL( ID_LIBEDIT_GET_FRAME_EDIT_PART,
               WinEDA_LibeditFrame::OnEditComponentProperties )
@@ -134,8 +134,8 @@ BEGIN_EVENT_TABLE( WinEDA_LibeditFrame, WinEDA_DrawFrame )
                    WinEDA_LibeditFrame::OnUpdateEditingPart )
     EVT_UPDATE_UI( ID_LIBEDIT_CHECK_PART,
                    WinEDA_LibeditFrame::OnUpdateEditingPart )
-    EVT_UPDATE_UI( ID_LIBEDIT_UNDO, WinEDA_LibeditFrame::OnUpdateUndo )
-    EVT_UPDATE_UI( ID_LIBEDIT_REDO, WinEDA_LibeditFrame::OnUpdateRedo )
+    EVT_UPDATE_UI( wxID_UNDO, WinEDA_LibeditFrame::OnUpdateUndo )
+    EVT_UPDATE_UI( wxID_REDO, WinEDA_LibeditFrame::OnUpdateRedo )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE_CURRENT_LIB,
                    WinEDA_LibeditFrame::OnUpdateSaveCurrentLib )
     EVT_UPDATE_UI( ID_LIBEDIT_VIEW_DOC, WinEDA_LibeditFrame::OnUpdateViewDoc )

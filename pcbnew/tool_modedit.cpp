@@ -87,9 +87,9 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar()
 
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_MODEDIT_UNDO, wxEmptyString, wxBitmap( undo_xpm ),
+    m_HToolBar->AddTool( wxID_UNDO, wxEmptyString, wxBitmap( undo_xpm ),
                          _( "Undo last edition" ) );
-    m_HToolBar->AddTool( ID_MODEDIT_REDO, wxEmptyString, wxBitmap( redo_xpm ),
+    m_HToolBar->AddTool( wxID_REDO, wxEmptyString, wxBitmap( redo_xpm ),
                          _( "Redo the last undo command" ) );
 
     m_HToolBar->AddSeparator();

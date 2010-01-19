@@ -177,10 +177,10 @@ void WinEDA_PcbFrame::SetToolbars()
     m_HToolBar->EnableTool( wxID_PASTE, false );
 
     state = GetScreen()->GetUndoCommandCount() > 0;
-    m_HToolBar->EnableTool( ID_UNDO_BUTT, state );
+    m_HToolBar->EnableTool( wxID_UNDO, state );
 
     state = GetScreen()->GetRedoCommandCount() > 0;
-    m_HToolBar->EnableTool( ID_REDO_BUTT, state );
+    m_HToolBar->EnableTool( wxID_REDO, state );
 
     if( m_OptionsToolBar )
     {

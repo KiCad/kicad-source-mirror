@@ -16,6 +16,8 @@ enum hotkey_id_commnand {
     HK_ZOOM_REDRAW,
     HK_ZOOM_CENTER,
     HK_ZOOM_AUTO,
+	HK_UNDO,
+	HK_REDO,
     HK_DELETE,
     HK_BACK_SPACE,
     HK_ROTATE_FOOTPRINT,

@@ -82,9 +82,9 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
     EVT_TOOL( wxID_CUT, WinEDA_SchematicFrame::Process_Special_Functions )
     EVT_TOOL( wxID_COPY, WinEDA_SchematicFrame::Process_Special_Functions )
     EVT_TOOL( wxID_PASTE, WinEDA_SchematicFrame::Process_Special_Functions )
-    EVT_TOOL( ID_SCHEMATIC_UNDO,
+    EVT_TOOL( wxID_UNDO,
               WinEDA_SchematicFrame::GetSchematicFromUndoList )
-    EVT_TOOL( ID_SCHEMATIC_REDO,
+    EVT_TOOL( wxID_REDO,
               WinEDA_SchematicFrame::GetSchematicFromRedoList )
     EVT_TOOL( ID_GET_ANNOTATE, WinEDA_SchematicFrame::OnAnnotate )
     EVT_TOOL( ID_GEN_PRINT, WinEDA_SchematicFrame::ToPrinter )
@@ -120,9 +120,9 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
     EVT_UPDATE_UI( wxID_CUT, WinEDA_SchematicFrame::OnUpdateBlockSelected )
     EVT_UPDATE_UI( wxID_COPY, WinEDA_SchematicFrame::OnUpdateBlockSelected )
     EVT_UPDATE_UI( wxID_PASTE, WinEDA_SchematicFrame::OnUpdatePaste )
-    EVT_UPDATE_UI( ID_SCHEMATIC_UNDO,
+    EVT_UPDATE_UI( wxID_UNDO,
                    WinEDA_SchematicFrame::OnUpdateSchematicUndo )
-    EVT_UPDATE_UI( ID_SCHEMATIC_REDO,
+    EVT_UPDATE_UI( wxID_REDO,
                    WinEDA_SchematicFrame::OnUpdateSchematicRedo )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_GRID,
                    WinEDA_SchematicFrame::OnUpdateGrid )

@@ -136,11 +136,11 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Undo last command" ), s_Schematic_Hokeys_Descr,
                          HK_UNDO );
-    m_HToolBar->AddTool( ID_LIBEDIT_UNDO, wxEmptyString, wxBitmap( undo_xpm ),
+    m_HToolBar->AddTool( wxID_UNDO, wxEmptyString, wxBitmap( undo_xpm ),
                          msg );
     msg = AddHotkeyName( _( "Redo the last command" ), s_Schematic_Hokeys_Descr,
                          HK_REDO );
-    m_HToolBar->AddTool( ID_LIBEDIT_REDO, wxEmptyString, wxBitmap( redo_xpm ),
+    m_HToolBar->AddTool( wxID_REDO, wxEmptyString, wxBitmap( redo_xpm ),
                          msg );
 
     m_HToolBar->AddSeparator();
