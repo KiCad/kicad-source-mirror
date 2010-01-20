@@ -28,6 +28,7 @@ DIALOG_PADS_MASK_CLEARANCE::DIALOG_PADS_MASK_CLEARANCE( WinEDA_PcbFrame* parent 
     m_Parent = parent;
     MyInit();
     GetSizer()->SetSizeHints( this );
+    Centre();
 }
 
 

@@ -89,6 +89,8 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( WinEDA_BasePcbFrame* parent, D_PAD
     {
         GetSizer()->SetSizeHints( this );
     }
+
+    Center();
 }
 
 

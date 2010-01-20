@@ -126,6 +126,7 @@ set(BITMAP_SRCS
     Export_Module.xpm
     Export_Options_Pad.xpm
     export.xpm
+    fabrication.xpm
     File_FootPrint.xpm
     fill_zone.xpm
     find_xpm.xpm
@@ -285,6 +286,7 @@ set(BITMAP_SRCS
     Orient.xpm
     Pad_Sketch.xpm
     pad.xpm
+    pads_mask_layers.xpm
     palette.xpm
     part_properties.xpm
     paste.xpm

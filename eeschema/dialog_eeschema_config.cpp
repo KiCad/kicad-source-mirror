@@ -297,6 +297,20 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertPath( wxCommandEvent& event )
             if ( jj >= 0 )
                 ipos = jj;
         }
+
+        // Ask the user if this is a relative path
+        int diag = wxMessageBox(
+            _( "Use a relative path?" ),
+            _( "Path type" ),
+            wxYES_NO | wxICON_QUESTION, this );
+
+        if( diag == wxYES )
+        {   // Make it relative
+            wxFileName fn = path;
+            fn.MakeRelativeTo( wxT(".") );
+            path = fn.GetPathWithSep() + fn.GetFullName();
+        }
+
         m_listUserPaths->Insert(path, ipos);
         m_LibPathChanged = true;
         wxGetApp().InsertLibraryPath( path, ipos+1 );

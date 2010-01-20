@@ -279,6 +279,22 @@ void DIALOG_MODULE_MODULE_EDITOR::Browse3DLib( wxCommandEvent& event )
      * because it preserve use of default libraries paths, when the path is a sub path of these default paths
      */
     shortfilename = wxGetApp().ReturnFilenameWithRelativePathInLibPath( fullfilename );
+
+    wxFileName aux = shortfilename;
+    if( aux.IsAbsolute() )
+    {   // Absolute path, ask if the user wants a relative one
+        int diag = wxMessageBox(
+            _( "Use a relative path?" ),
+            _( "Path type" ),
+            wxYES_NO | wxICON_QUESTION, this );
+
+        if( diag == wxYES )
+        {   // Make it relative
+            aux.MakeRelativeTo( wxT(".") );
+            shortfilename = aux.GetPathWithSep() + aux.GetFullName();
+        }
+    }
+
     S3D_MASTER* new3DShape = new S3D_MASTER(NULL);
     new3DShape->m_Shape3DName = shortfilename;
     m_Shapes3D_list.push_back( new3DShape );

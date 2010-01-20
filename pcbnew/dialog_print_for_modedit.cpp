@@ -44,7 +44,6 @@ public:
 
 private:
     void OnCloseWindow( wxCloseEvent& event );
-    void OnInitDialog( wxInitDialogEvent& event );
     void OnPrintSetup( wxCommandEvent& event );
     void OnPrintPreview( wxCommandEvent& event );
     void OnPrintButtonClick( wxCommandEvent& event );
@@ -89,10 +88,8 @@ DIALOG_PRINT_FOR_MODEDIT::DIALOG_PRINT_FOR_MODEDIT( WinEDA_DrawFrame* parent ) :
     m_Config = wxGetApp().m_EDA_Config;
     InitValues();
 
-    if( GetSizer() )
-    {
-        GetSizer()->SetSizeHints( this );
-    }
+    GetSizer()->SetSizeHints( this );
+    Center();
 }
 
 

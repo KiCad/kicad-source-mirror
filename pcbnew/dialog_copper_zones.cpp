@@ -41,6 +41,12 @@ dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* z
     }
 
     SetReturnCode( ZONE_ABORT ); // Will be changed on buttons click
+
+    if( GetSizer() )
+    {
+        GetSizer()->SetSizeHints( this );
+    }
+    Center();
 }
 
 
@@ -198,11 +204,6 @@ void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
             }
         }
     }
-    if( GetSizer() )
-    {
-        GetSizer()->SetSizeHints( this );
-    }
-    Center();
 }
 
 

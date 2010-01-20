@@ -24,6 +24,9 @@ Dialog_GeneralOptions::Dialog_GeneralOptions( WinEDA_PcbFrame* parent ) :
 {
     m_Parent = parent;
     init();
+
+    GetSizer()->SetSizeHints( this );
+    Center();
 }
 
 
@@ -65,11 +68,6 @@ void Dialog_GeneralOptions::init()
 
     m_MagneticPadOptCtrl->SetSelection( g_MagneticPadOption );
     m_MagneticTrackOptCtrl->SetSelection( g_MagneticTrackOption );
-
-    if( GetSizer() )
-    {
-        GetSizer()->SetSizeHints( this );
-    }
 }
 
 

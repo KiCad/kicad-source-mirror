@@ -129,7 +129,8 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     /* Fabrications Outputs submenu append */
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, fabricationOutputsMenu,
                                         -1, _( "Fabrication Outputs" ),
-                                        _( "Generate files for fabrication" ), export_xpm );
+                                        _( "Generate files for fabrication" ),
+                                        fabrication_xpm );
 
     /* Import submenu */
     wxMenu* submenuImport = new wxMenu();
@@ -266,7 +267,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 
     /* Find */
 #if !defined( __WXMAC__)
-    text = AddHotkeyName( _( "&Find..." ), s_Pcbnew_Editor_Hokeys_Descr, HK_FIND_ITEM );
+    text = AddHotkeyName( _( "&Find" ), s_Pcbnew_Editor_Hokeys_Descr, HK_FIND_ITEM );
 #else
     text = _( "Find\tCtrl+F" );
 #endif
@@ -288,7 +289,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 
     /* Tracks */
     item = new wxMenuItem( editMenu, ID_MENU_PCB_CLEAN,
-                          _( "&Tracks" ),
+                          _( "&Tracks and Vias Cleanup" ),
                           _(
                               "Clean stubs, vias, delete break points, or connect dangling tracks to pads and vias" ) );
     item->SetBitmap( delete_body_xpm );
@@ -438,7 +439,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item = new wxMenuItem( dimensionsMenu, ID_PCB_MASK_CLEARANCE,
                           _( "Pads Mask Clearance" ),
                           _( "Adjust the global clearance between pads and the solder resist mask" ) );
-    item->SetBitmap( pad_xpm );
+    item->SetBitmap( pads_mask_layers_xpm );
     dimensionsMenu->Append( item );
 
 

@@ -223,10 +223,10 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     /* Zoom out */
 #if !defined( __WXMAC__)
-    text = AddHotkeyName( _( "Zoom Out\t" ), s_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Zoom Out" ), s_Schematic_Hokeys_Descr,
                          HK_ZOOM_OUT );
 #else
-    text = _( "Zoom out\tCtrl+-" );
+    text = _( "Zoom Out\tCtrl+-" );
 #endif /* !defined( __WXMAC__) */
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, _( "Zoom Out" ),
