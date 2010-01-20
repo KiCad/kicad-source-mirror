@@ -60,16 +60,10 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
         return true;
     }
 
-    if (DrawStruct)
-        	cout << "Drawstruct Type before: " << DrawStruct -> Type() << endl;
-
     // Try to locate items at cursor position.
     if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
     {
         DrawStruct = SchematicGeneralLocateAndDisplay( false );
-        if (DrawStruct)
-            	cout << "Drawstruct Type locate : " << DrawStruct -> Type() << endl;
-
 
         if( DrawStruct && (DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE) )
         {
@@ -80,9 +74,6 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos,
                 DrawStruct = slabel;
         }
     }
-
-    if (DrawStruct)
-    	cout << "Drawstruct Type : " << DrawStruct -> Type() << endl;
 
     // If Command in progress: add "cancel" and "end tool" menu
     if(  m_ID_current_state )

@@ -43,13 +43,13 @@ int g_ConfigFileLocationChoice;
 Ki_HotkeyInfo::Ki_HotkeyInfo( const wxChar* infomsg, int idcommand,
                               int keycode, int idmenuevent )
 {
-    m_KeyCode     = keycode;        // Key code (ascii value for ascii keys
-                                    // or wxWidgets code for function key
-    m_InfoMsg     = infomsg;        // info message.
-    m_Idcommand   = idcommand;      // internal id for the corresponding
-                                    // command (see hotkey_id_commnand list)
+    m_KeyCode = keycode;            // Key code (ascii value for ascii keys
+    // or wxWidgets code for function key
+    m_InfoMsg   = infomsg;          // info message.
+    m_Idcommand = idcommand;        // internal id for the corresponding
+    // command (see hotkey_id_commnand list)
     m_IdMenuEvent = idmenuevent;    // id to call the corresponding event
-                                    // (if any) (see id.h)
+    // (if any) (see id.h)
 }
 
 
@@ -58,107 +58,140 @@ Ki_HotkeyInfo::Ki_HotkeyInfo( const wxChar* infomsg, int idcommand,
 struct hotkey_name_descr
 {
     const wxChar* m_Name;
-    int     m_KeyCode;
+    int           m_KeyCode;
 };
-
 
 static struct hotkey_name_descr s_Hotkey_Name_List[] =
 {
-    { wxT( "F1" ),        WXK_F1           },
-    { wxT( "F2" ),        WXK_F2           },
-    { wxT( "F3" ),        WXK_F3           },
-    { wxT( "F4" ),        WXK_F4           },
-    { wxT( "F5" ),        WXK_F5           },
-    { wxT( "F6" ),        WXK_F6           },
-    { wxT( "F7" ),        WXK_F7           },
-    { wxT( "F8" ),        WXK_F8           },
-    { wxT( "F9" ),        WXK_F9           },
-    { wxT( "F10" ),       WXK_F10          },
-    { wxT( "F11" ),       WXK_F11          },
-    { wxT( "F12" ),       WXK_F12          },
+    { wxT( "F1" ),           WXK_F1                         },
+    { wxT( "F2" ),           WXK_F2                         },
+    { wxT( "F3" ),           WXK_F3                         },
+    { wxT( "F4" ),           WXK_F4                         },
+    { wxT( "F5" ),           WXK_F5                         },
+    { wxT( "F6" ),           WXK_F6                         },
+    { wxT( "F7" ),           WXK_F7                         },
+    { wxT( "F8" ),           WXK_F8                         },
+    { wxT( "F9" ),           WXK_F9                         },
+    { wxT( "F10" ),          WXK_F10                        },
+    { wxT( "F11" ),          WXK_F11                        },
+    { wxT( "F12" ),          WXK_F12                        },
 
-    { wxT( "Esc" ),       WXK_ESCAPE       },
-    { wxT( "Delete" ),    WXK_DELETE       },
-    { wxT( "Tab" ),       '\t'             },
-    { wxT( "Backspace" ), WXK_BACK         },
-    { wxT( "Insert" ),    WXK_INSERT       },
+    { wxT( "Esc" ),          WXK_ESCAPE                     },
+    { wxT( "Del" ),          WXK_DELETE                     },
+    { wxT( "Tab" ),          '\t'                           },
+    { wxT( "BkSp" ),         WXK_BACK                       },
+    { wxT( "Ins" ),          WXK_INSERT                     },
 
-    { wxT( "Home" ),      WXK_HOME         },
-    { wxT( "End" ),       WXK_END          },
-    { wxT( "Page Up" ),   WXK_PAGEUP       },
-    { wxT( "Page Down" ), WXK_PAGEDOWN     },
-    { wxT( "+" ),         '+'              },
-    { wxT( "-" ),         '-'              },
+    { wxT( "Home" ),         WXK_HOME                       },
+    { wxT( "End" ),          WXK_END                        },
+    { wxT( "PgUp" ),         WXK_PAGEUP                     },
+    { wxT( "PgDn" ),         WXK_PAGEDOWN                   },
+    { wxT( "+" ),            '+'                            },
+    { wxT( "-" ),            '-'                            },
 
-    { wxT( "Up" ),        WXK_UP           },
-    { wxT( "Down" ),      WXK_DOWN         },
-    { wxT( "Left" ),      WXK_LEFT         },
-    { wxT( "Right" ),     WXK_RIGHT        },
+    { wxT( "Up" ),           WXK_UP                         },
+    { wxT( "Down" ),         WXK_DOWN                       },
+    { wxT( "Left" ),         WXK_LEFT                       },
+    { wxT( "Right" ),        WXK_RIGHT                      },
 
-    { wxT( "space" ),     ' '              },
-    { wxT( "?" ),         '?'              },
-    { wxT( "!" ),         '!'              },
-    { wxT( ":" ),         ':'              },
-    { wxT( "," ),         ','              },
-    { wxT( "*" ),         '*'              },
-    { wxT( "+" ),         '+'              },
-    { wxT( "-" ),         '-'              },
-    { wxT( "%%" ),        '%'              },
-    { wxT( "A" ),         'A'              },
-    { wxT( "B" ),         'B'              },
-    { wxT( "C" ),         'C'              },
-    { wxT( "D" ),         'D'              },
-    { wxT( "E" ),         'E'              },
-    { wxT( "F" ),         'F'              },
-    { wxT( "G" ),         'G'              },
-    { wxT( "H" ),         'H'              },
-    { wxT( "I" ),         'I'              },
-    { wxT( "J" ),         'J'              },
-    { wxT( "K" ),         'K'              },
-    { wxT( "L" ),         'L'              },
-    { wxT( "M" ),         'M'              },
-    { wxT( "N" ),         'N'              },
-    { wxT( "O" ),         'O'              },
-    { wxT( "P" ),         'P'              },
-    { wxT( "Q" ),         'Q'              },
-    { wxT( "R" ),         'R'              },
-    { wxT( "S" ),         'S'              },
-    { wxT( "T" ),         'T'              },
-    { wxT( "U" ),         'U'              },
-    { wxT( "V" ),         'V'              },
-    { wxT( "W" ),         'W'              },
-    { wxT( "X" ),         'X'              },
-    { wxT( "Y" ),         'Y'              },
-    { wxT( "Z" ),         'Z'              },
+    { wxT( "space" ),        ' '                            },
+    { wxT( "?" ),            '?'                            },
+    { wxT( "!" ),            '!'                            },
+    { wxT( ":" ),            ':'                            },
+    { wxT( "," ),            ','                            },
+    { wxT( "*" ),            '*'                            },
+    { wxT( "+" ),            '+'                            },
+    { wxT( "-" ),            '-'                            },
+    { wxT( "%%" ),           '%'                            },
+    { wxT( "A" ),            'A'                            },
+    { wxT( "B" ),            'B'                            },
+    { wxT( "C" ),            'C'                            },
+    { wxT( "D" ),            'D'                            },
+    { wxT( "E" ),            'E'                            },
+    { wxT( "F" ),            'F'                            },
+    { wxT( "G" ),            'G'                            },
+    { wxT( "H" ),            'H'                            },
+    { wxT( "I" ),            'I'                            },
+    { wxT( "J" ),            'J'                            },
+    { wxT( "K" ),            'K'                            },
+    { wxT( "L" ),            'L'                            },
+    { wxT( "M" ),            'M'                            },
+    { wxT( "N" ),            'N'                            },
+    { wxT( "O" ),            'O'                            },
+    { wxT( "P" ),            'P'                            },
+    { wxT( "Q" ),            'Q'                            },
+    { wxT( "R" ),            'R'                            },
+    { wxT( "S" ),            'S'                            },
+    { wxT( "T" ),            'T'                            },
+    { wxT( "U" ),            'U'                            },
+    { wxT( "V" ),            'V'                            },
+    { wxT( "W" ),            'W'                            },
+    { wxT( "X" ),            'X'                            },
+    { wxT( "Y" ),            'Y'                            },
+    { wxT( "Z" ),            'Z'                            },
 
-    { wxT( "Ctrl A" ),    GR_KB_CTRL + 'A' },
-    { wxT( "Ctrl B" ),    GR_KB_CTRL + 'B' },
-    { wxT( "Ctrl C" ),    GR_KB_CTRL + 'C' },
-    { wxT( "Ctrl D" ),    GR_KB_CTRL + 'D' },
-    { wxT( "Ctrl E" ),    GR_KB_CTRL + 'E' },
-    { wxT( "Ctrl F" ),    GR_KB_CTRL + 'F' },
-    { wxT( "Ctrl G" ),    GR_KB_CTRL + 'G' },
-    { wxT( "Ctrl H" ),    GR_KB_CTRL + 'H' },
-    { wxT( "Ctrl I" ),    GR_KB_CTRL + 'I' },
-    { wxT( "Ctrl J" ),    GR_KB_CTRL + 'J' },
-    { wxT( "Ctrl K" ),    GR_KB_CTRL + 'K' },
-    { wxT( "Ctrl L" ),    GR_KB_CTRL + 'L' },
-    { wxT( "Ctrl M" ),    GR_KB_CTRL + 'M' },
-    { wxT( "Ctrl N" ),    GR_KB_CTRL + 'N' },
-    { wxT( "Ctrl O" ),    GR_KB_CTRL + 'O' },
-    { wxT( "Ctrl P" ),    GR_KB_CTRL + 'P' },
-    { wxT( "Ctrl Q" ),    GR_KB_CTRL + 'Q' },
-    { wxT( "Ctrl R" ),    GR_KB_CTRL + 'R' },
-    { wxT( "Ctrl S" ),    GR_KB_CTRL + 'S' },
-    { wxT( "Ctrl T" ),    GR_KB_CTRL + 'T' },
-    { wxT( "Ctrl U" ),    GR_KB_CTRL + 'U' },
-    { wxT( "Ctrl V" ),    GR_KB_CTRL + 'V' },
-    { wxT( "Ctrl W" ),    GR_KB_CTRL + 'W' },
-    { wxT( "Ctrl X" ),    GR_KB_CTRL + 'X' },
-    { wxT( "Ctrl Y" ),    GR_KB_CTRL + 'Y' },
-    { wxT( "Ctrl Z" ),    GR_KB_CTRL + 'Z' },
+    { wxT( "Ctrl++" ),       GR_KB_CTRL + '+'               },
+    { wxT( "Ctrl+-" ),       GR_KB_CTRL + '-'               },
 
-    { wxT( "" ),          0                } // Do not change: end of list
+    { wxT( "Ctrl+A" ),       GR_KB_CTRL + 'A'               },
+    { wxT( "Ctrl+B" ),       GR_KB_CTRL + 'B'               },
+    { wxT( "Ctrl+C" ),       GR_KB_CTRL + 'C'               },
+    { wxT( "Ctrl+D" ),       GR_KB_CTRL + 'D'               },
+    { wxT( "Ctrl+E" ),       GR_KB_CTRL + 'E'               },
+    { wxT( "Ctrl+F" ),       GR_KB_CTRL + 'F'               },
+    { wxT( "Ctrl+G" ),       GR_KB_CTRL + 'G'               },
+    { wxT( "Ctrl+H" ),       GR_KB_CTRL + 'H'               },
+    { wxT( "Ctrl+I" ),       GR_KB_CTRL + 'I'               },
+    { wxT( "Ctrl+J" ),       GR_KB_CTRL + 'J'               },
+    { wxT( "Ctrl+K" ),       GR_KB_CTRL + 'K'               },
+    { wxT( "Ctrl+L" ),       GR_KB_CTRL + 'L'               },
+    { wxT( "Ctrl+M" ),       GR_KB_CTRL + 'M'               },
+    { wxT( "Ctrl+N" ),       GR_KB_CTRL + 'N'               },
+    { wxT( "Ctrl+O" ),       GR_KB_CTRL + 'O'               },
+    { wxT( "Ctrl+P" ),       GR_KB_CTRL + 'P'               },
+    { wxT( "Ctrl+Q" ),       GR_KB_CTRL + 'Q'               },
+    { wxT( "Ctrl+R" ),       GR_KB_CTRL + 'R'               },
+    { wxT( "Ctrl+S" ),       GR_KB_CTRL + 'S'               },
+    { wxT( "Ctrl+T" ),       GR_KB_CTRL + 'T'               },
+    { wxT( "Ctrl+U" ),       GR_KB_CTRL + 'U'               },
+    { wxT( "Ctrl+V" ),       GR_KB_CTRL + 'V'               },
+    { wxT( "Ctrl+W" ),       GR_KB_CTRL + 'W'               },
+    { wxT( "Ctrl+X" ),       GR_KB_CTRL + 'X'               },
+    { wxT( "Ctrl+Y" ),       GR_KB_CTRL + 'Y'               },
+    { wxT( "Ctrl+Z" ),       GR_KB_CTRL + 'Z'               },
+
+    { wxT( "Shift+Ctrl++" ), GR_KB_SHIFT + GR_KB_CTRL + '+' },
+    { wxT( "Shift+Ctrl+-" ), GR_KB_SHIFT + GR_KB_CTRL + '-' },
+
+    { wxT( "Shift+Ctrl+A" ), GR_KB_SHIFT + GR_KB_CTRL + 'A' },
+    { wxT( "Shift+Ctrl+B" ), GR_KB_SHIFT + GR_KB_CTRL + 'B' },
+    { wxT( "Shift+Ctrl+C" ), GR_KB_SHIFT + GR_KB_CTRL + 'C' },
+    { wxT( "Shift+Ctrl+D" ), GR_KB_SHIFT + GR_KB_CTRL + 'D' },
+    { wxT( "Shift+Ctrl+E" ), GR_KB_SHIFT + GR_KB_CTRL + 'E' },
+    { wxT( "Shift+Ctrl+F" ), GR_KB_SHIFT + GR_KB_CTRL + 'F' },
+    { wxT( "Shift+Ctrl+G" ), GR_KB_SHIFT + GR_KB_CTRL + 'G' },
+    { wxT( "Shift+Ctrl+H" ), GR_KB_SHIFT + GR_KB_CTRL + 'H' },
+    { wxT( "Shift+Ctrl+I" ), GR_KB_SHIFT + GR_KB_CTRL + 'I' },
+    { wxT( "Shift+Ctrl+J" ), GR_KB_SHIFT + GR_KB_CTRL + 'J' },
+    { wxT( "Shift+Ctrl+K" ), GR_KB_SHIFT + GR_KB_CTRL + 'K' },
+    { wxT( "Shift+Ctrl+L" ), GR_KB_SHIFT + GR_KB_CTRL + 'L' },
+    { wxT( "Shift+Ctrl+M" ), GR_KB_SHIFT + GR_KB_CTRL + 'M' },
+    { wxT( "Shift+Ctrl+N" ), GR_KB_SHIFT + GR_KB_CTRL + 'N' },
+    { wxT( "Shift+Ctrl+O" ), GR_KB_SHIFT + GR_KB_CTRL + 'O' },
+    { wxT( "Shift+Ctrl+P" ), GR_KB_SHIFT + GR_KB_CTRL + 'P' },
+    { wxT( "Shift+Ctrl+Q" ), GR_KB_SHIFT + GR_KB_CTRL + 'Q' },
+    { wxT( "Shift+Ctrl+R" ), GR_KB_SHIFT + GR_KB_CTRL + 'R' },
+    { wxT( "Shift+Ctrl+S" ), GR_KB_SHIFT + GR_KB_CTRL + 'S' },
+    { wxT( "Shift+Ctrl+T" ), GR_KB_SHIFT + GR_KB_CTRL + 'T' },
+    { wxT( "Shift+Ctrl+U" ), GR_KB_SHIFT + GR_KB_CTRL + 'U' },
+    { wxT( "Shift+Ctrl+V" ), GR_KB_SHIFT + GR_KB_CTRL + 'V' },
+    { wxT( "Shift+Ctrl+W" ), GR_KB_SHIFT + GR_KB_CTRL + 'W' },
+    { wxT( "Shift+Ctrl+X" ), GR_KB_SHIFT + GR_KB_CTRL + 'X' },
+    { wxT( "Shift+Ctrl+Y" ), GR_KB_SHIFT + GR_KB_CTRL + 'Y' },
+    { wxT( "Shift+Ctrl+Z" ), GR_KB_SHIFT + GR_KB_CTRL + 'Z' },
+
+    // Do not change this line: end of list
+    { wxT( "" ),             0                              }
 };
 
 
@@ -175,11 +208,11 @@ wxString ReturnKeyNameFromKeyCode( int keycode )
     int      ii;
 
     if( (keycode & GR_KB_CTRL) != 0 )
-        modifier << wxT( "Ctrl " );
+        modifier << wxT( "Ctrl+" );
     if( (keycode & GR_KB_ALT) != 0 )
-        modifier << wxT( "Alt " );
+        modifier << wxT( "Alt+" );
     if( (keycode & GR_KB_SHIFT) != 0 )
-        modifier << wxT( "Shift " );
+        modifier << wxT( "Shift+" );
 
     keycode &= ~( GR_KB_CTRL | GR_KB_ALT | GR_KB_SHIFT );
     for( ii = 0; ; ii++ )
@@ -214,7 +247,7 @@ wxString AddHotkeyName( const wxString& text, Ki_HotkeyInfo** List,
     wxString keyname = ReturnKeyNameFromCommandId( List, CommandId );
 
     if( !keyname.IsEmpty() )
-        msg << wxT( " (" ) << keyname << wxT( ")" );
+        msg << wxT( "\t" ) << keyname;
     return msg;
 }
 
@@ -240,7 +273,7 @@ wxString AddHotkeyName( const wxString&                        text,
         keyname = ReturnKeyNameFromCommandId( List, CommandId );
         if( !keyname.IsEmpty() )
         {
-            msg << wxT( " (" ) << keyname << wxT( ")" );
+            msg << wxT( "\t" ) << keyname;
             break;
         }
     }
@@ -277,7 +310,7 @@ wxString ReturnKeyNameFromCommandId( Ki_HotkeyInfo** List, int CommandId )
  * return the key code from its key name
  * Only some wxWidgets key values are handled for function key
  * @param keyname = wxString key name to find in s_Hotkey_Name_List[],
- *                  like F2 or space or an usual (ascii) char.
+ *   like F2 or space or an usual (ascii) char.
  * @return the key code
  */
 static int ReturnKeyCodeFromKeyName( const wxString& keyname )
@@ -304,7 +337,7 @@ static int ReturnKeyCodeFromKeyName( const wxString& keyname )
  * Displays the current hotkey list
  * @param frame = current active frame
  * @param List = pointer to a Ki_HotkeyInfoSectionDescriptor list
- *               (Null terminated)
+ *(Null terminated)
  * @return none
  */
 void DisplayHotkeyList( WinEDA_DrawFrame*                      frame,
@@ -323,7 +356,7 @@ void DisplayHotkeyList( WinEDA_DrawFrame*                      frame,
             Ki_HotkeyInfo* hk_decr = *List;
             msg    += _( "key " );
             keyname = ReturnKeyNameFromKeyCode( hk_decr->m_KeyCode );
-            msg += keyname + wxT( ":    " ) + hk_decr->m_InfoMsg + wxT( "\n" );
+            msg    += keyname + wxT( ":    " ) + hk_decr->m_InfoMsg + wxT( "\n" );
         }
     }
 
@@ -353,7 +386,7 @@ Ki_HotkeyInfo* GetDescriptorFromHotkey( int key, Ki_HotkeyInfo** List )
 /*
  * Create a configuration file (*.key) from the current hotkey list
  * @param Filename = default full file name to create. If void, A filename
- *                   will be asked
+ *    will be asked
  * @param List = pointer to the current hotkey list.
  * the ouput format is: shortcut  "key"  "function"
  * lines starting with # are comments
@@ -468,7 +501,7 @@ int WinEDA_BasicFrame::WriteHotkeyConfigFile(
  * Read a configuration file (<file>.key) and fill the current hotkey list
  * with hotkeys
  * @param Filename = default full file name to create. If void, A filename
- *                   will be asked
+ *    will be asked
  * @param DescList = current hotkey list descr. to initialise.
  * the input format is: shortcut  "key"  "function"
  * lines starting by # are ignored (comments)
@@ -556,7 +589,7 @@ int WinEDA_BasicFrame::ReadHotkeyConfigFile(
 
         /* Get the command name */
         fctname = strtok( NULL, "\"\n\r" );
-        msg = CONV_FROM_UTF8( fctname );
+        msg     = CONV_FROM_UTF8( fctname );
 
         /* search the hotkey in current hotkey list */
         for( Ki_HotkeyInfo** List = CurrentHotkeyList; *List != NULL; List++ )
@@ -585,16 +618,17 @@ int WinEDA_BasicFrame::ReadHotkeyConfigFile(
  */
 wxString ReturnHotkeyConfigFilePath( int choice )
 {
-    wxString path;
+    wxString     path;
     wxAppTraits* traits = wxGetApp().GetTraits();
 
     switch( choice )
     {
     case 0:
         path = traits->GetStandardPaths().GetUserConfigDir() +
-            wxFileName::GetPathSeparator();
+               wxFileName::GetPathSeparator();
 
     case 1:
+
         /* TODO: This is broken under a normal Poxis system.  Users
          *       generally do no have write permissions to this path
          *       and there is no provision for prompting for the root
@@ -621,28 +655,29 @@ void AddHotkeyConfigMenu( wxMenu* aMenu )
         return;
 
     wxMenuItem* item;
-    wxMenu* HotkeySubmenu = new wxMenu();
+    wxMenu*     HotkeySubmenu = new wxMenu();
 
     /* List existing hotkey menu*/
     item = new wxMenuItem( HotkeySubmenu,
-                           ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
-                           _( "List Current Keys" ),
-                           _( "Displays the current hotkeys list and corresponding commands" ) );
+                          ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
+                          _( "List Current Keys" ),
+                          _( "Displays the current hotkeys list and corresponding commands" ) );
     item->SetBitmap( info_xpm );
     HotkeySubmenu->Append( item );
 
     /* (Re)create hotkey file */
     item = new wxMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_CREATE_CONFIG,
                            _( "(Re)create Hotkeys File" ),
-                           _( "Create or recreate the hotkey configuration file from current hotkey list" )
+                           _(
+                               "Create or recreate the hotkey configuration file from current hotkey list" )
                            );
     item->SetBitmap( save_setup_xpm );
     HotkeySubmenu->Append( item );
 
     /* Reload hotkey file */
     item = new wxMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_READ_CONFIG,
-                           _( "Reload Hotkeys File" ),
-                           _( "Reload the hotkey configuration file" ) );
+                          _( "Reload Hotkeys File" ),
+                          _( "Reload the hotkey configuration file" ) );
     item->SetBitmap( reload_xpm );
     HotkeySubmenu->Append( item );
 
@@ -656,7 +691,7 @@ void AddHotkeyConfigMenu( wxMenu* aMenu )
     /* Append HotkeySubmenu to menu */
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( aMenu, HotkeySubmenu,
                                         ID_PREFERENCES_HOTKEY_SUBMENU, _( "Hotkeys" ),
-                              _("Hotkeys configuration and preferences" ), hotkeys_xpm );
+                                        _( "Hotkeys configuration and preferences" ), hotkeys_xpm );
 
     /* Hotkey path */
     wxMenu* HotkeyLocationSubmenu = new wxMenu();
@@ -698,7 +733,7 @@ void HandleHotkeyConfigMenuSelection( WinEDA_DrawFrame* frame, int id )
 {
     wxMenuBar* menu = frame->GetMenuBar();
 
-    wxConfig* config = wxGetApp().m_EDA_CommonConfig;
+    wxConfig*  config = wxGetApp().m_EDA_CommonConfig;
 
     switch( id )
     {

@@ -1344,6 +1344,13 @@ void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
     if( event.ShiftDown() && (key > 256) )
         localkey |= GR_KB_SHIFT;
 
+    /* Normalize keys code to easily handle keys from Ctrl+A to Ctrl+Z
+     * They have an ascii code from 1 to 27 remapped
+     * GR_KB_CTRL + 'A' to GR_KB_CTRL + 'Z'
+     */
+    if( (localkey & (GR_KB_CTRL|GR_KB_ALT|GR_KB_SHIFT)) == GR_KB_CTRL )
+        localkey += 'A' - 1;
+
     INSTALL_DC( DC, this );
 
     BASE_SCREEN* Screen = GetScreen();

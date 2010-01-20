@@ -233,10 +233,6 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
     wxPoint MousePos = GetScreen()->m_MousePosition;
 
-    // Remap the control key Ctrl A (0x01) to GR_KB_CTRL + 'A' (easier to
-    // handle...)
-    if( (hotkey & GR_KB_CTRL) != 0 )
-        hotkey += 'A' - 1;
     /* Convert lower to upper case (the usual toupper function has problem
      * with non ascii codes like function keys */
     if( (hotkey >= 'a') && (hotkey <= 'z') )
@@ -639,11 +635,6 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
 
     if( hotkey == 0 )
         return;
-
-    // Remap the control key Ctrl A (0x01) to GR_KB_CTRL + 'A' (easier to
-    // handle...)
-    if( (hotkey & GR_KB_CTRL) != 0 )
-        hotkey += 'A' - 1;
 
     /* Convert lower to upper case (the usual toupper function has problem
      * with non ascii codes like function keys */

@@ -151,11 +151,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     wxMenu* editMenu = new wxMenu;
 
     /* Undo */
-#if !defined( __WXMAC__)
     text  = AddHotkeyName( _( "Undo" ), s_Schematic_Hokeys_Descr, HK_UNDO);
-#else
-    text = _( "Undo\tCtrl+Z" );
-#endif
 
     item = new wxMenuItem( editMenu, wxID_UNDO, text,
                            _( "Undo last edition" ), wxITEM_NORMAL );
@@ -163,11 +159,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     editMenu->Append( item );
 
     /* Redo */
-#if !defined( __WXMAC__)
     text  = AddHotkeyName( _( "Redo" ), s_Schematic_Hokeys_Descr, HK_REDO);
-#else
-    text = _( "Redo\tShift+Ctrl+Z" );
-#endif
 
     item = new wxMenuItem( editMenu, wxID_REDO, text,
                            _( "Redo the last undo command" ), wxITEM_NORMAL );

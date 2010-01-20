@@ -218,10 +218,6 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
 
     MODULE* module = NULL;
 
-    // Remap the control key Ctrl A (0x01) to GR_KB_CTRL + 'A' (just easier to handle...)
-    if( (hotkey & GR_KB_CTRL) != 0 )
-        hotkey += 'A' - 1;
-
     /* Convert lower to upper case
      * (the usual toupper function has problem with non ascii codes like function keys
      */
@@ -675,10 +671,6 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* DC, int hotkey,
     bool           ItemFree = (GetCurItem() == 0 || GetCurItem()->m_Flags == 0);
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
-
-    // Remap the control key Ctrl A (0x01) to GR_KB_CTRL + 'A' (just easier to handle...)
-    if( (hotkey & GR_KB_CTRL) != 0 )
-        hotkey += 'A' - 1;
 
     /* Convert lower to upper case (the usual toupper function has problem with non ascii codes like function keys */
     if( (hotkey >= 'a') && (hotkey <= 'z') )

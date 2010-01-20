@@ -84,9 +84,6 @@ void WinEDA_GerberFrame::OnHotKey( wxDC* DC, int hotkey,
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
-    // Remap the control key Ctrl A (0x01) to GR_KB_CTRL + 'A' (easier to handle...)
-    if( (hotkey & GR_KB_CTRL) != 0 )
-        hotkey += 'A' - 1;
     /* Convert lower to upper case (the usual toupper function has problem with non ascii codes like function keys */
     if( (hotkey >= 'a') && (hotkey <= 'z') )
         hotkey += 'A' - 'a';
