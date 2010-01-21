@@ -378,7 +378,7 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
                             *m_BlankBitmap, wxDefaultPosition, m_BitmapSize );
     sbm->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
     sbm->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnRightDownLayers ), NULL, this );
-    m_LayersFlexGridSizer->Insert( index+col, sbm, 0, flags );
+    m_LayersFlexGridSizer->wxSizer::Insert( index+col, sbm, 0, flags );
 
     // column 1
     col = 1;
@@ -387,7 +387,7 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     bmb->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownLayerColor ), NULL, this );
     bmb->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnRightDownLayers ), NULL, this );
     bmb->SetToolTip( _("Left click to select, middle click for color change, right click for menu" ) );
-    m_LayersFlexGridSizer->Insert( index+col, bmb, 0, flags );
+    m_LayersFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );
 
     // column 2
     col = 2;
@@ -395,7 +395,7 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     st->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
     st->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnRightDownLayers ), NULL, this );
     st->SetToolTip( aSpec.tooltip );
-    m_LayersFlexGridSizer->Insert( index+col, st, 0, flags );
+    m_LayersFlexGridSizer->wxSizer::Insert( index+col, st, 0, flags );
 
     // column 3
     col = 3;
@@ -403,7 +403,7 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     cb->SetValue( aSpec.state );
     cb->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( LAYER_WIDGET::OnLayerCheckBox ), NULL, this );
     cb->SetToolTip( _( "Enable this for visibility" ) );
-    m_LayersFlexGridSizer->Insert( index+col, cb, 0, flags );
+    m_LayersFlexGridSizer->wxSizer::Insert( index+col, cb, 0, flags );
 }
 
 
@@ -422,7 +422,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
         wxBitmapButton* bmb = makeColorButton( m_RenderScrolledWindow, aSpec.color, encodeId( col, aSpec.id ) );
         bmb->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownRenderColor ), NULL, this );
         bmb->SetToolTip( _("Middle click for color change" ) );
-        m_RenderFlexGridSizer->Insert( index+col, bmb, 0, flags );
+        m_RenderFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );
 
         // could add a left click handler on the color button that toggles checkbox.
     }
@@ -430,7 +430,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
     {
         // need a place holder within the sizer to keep grid full.
         wxPanel* invisible = new wxPanel( m_RenderScrolledWindow );
-        m_RenderFlexGridSizer->Insert( index+col, invisible, 0, flags );
+        m_RenderFlexGridSizer->wxSizer::Insert( index+col, invisible, 0, flags );
     }
 
     // column 1
@@ -440,7 +440,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
     cb->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED,
         wxCommandEventHandler( LAYER_WIDGET::OnRenderCheckBox ), NULL, this );
     cb->SetToolTip( aSpec.tooltip );
-    m_RenderFlexGridSizer->Insert( index+col, cb, 0, flags );
+    m_RenderFlexGridSizer->wxSizer::Insert( index+col, cb, 0, flags );
 }
 
 
