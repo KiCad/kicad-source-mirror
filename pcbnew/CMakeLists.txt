@@ -9,9 +9,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 # on other targets this should be as normal
 ##
 if(APPLE)
-	set(PCBNEW_NAME PCBNew)
+    set(PCBNEW_NAME PCBNew)
 else(APPLE)
-	set(PCBNEW_NAME pcbnew)
+    set(PCBNEW_NAME pcbnew)
 endif(APPLE)
 
 # Many of the commented out ones are nested in *.cpp files for dialogs
@@ -111,6 +111,8 @@ set(PCBNEW_SRCS
     ioascii.cpp
     print_board_functions.cpp
     printout_controler.cpp
+    layer_panel_base.cpp
+    layer_widget.cpp
     librairi.cpp
     loadcmp.cpp
     locate.cpp

@@ -5,6 +5,8 @@
 #ifndef _BOARD_DESIGN_SETTING_H
 #define _BOARD_DESIGN_SETTING_H
 
+#include "pcbstruct.h"      // NB_COLORS
+
 // Class for handle current printed board design settings
 class EDA_BoardDesignSettings
 {
@@ -38,7 +40,7 @@ protected:
 public:
 
     // Color options for screen display of the Printed Board:
-    int m_LayerColor[32];                           // Layer colors (tracks and graphic items)
+    int m_LayerColor[NB_LAYERS];                    ///< Layer colors (tracks and graphic items)
 
     int m_ViaColor[4];                              // Via color (depending on is type)
 
@@ -120,7 +122,7 @@ public:
     {
         if( aCategoryIndex < 0 || aCategoryIndex > PAD_CMP_VISIBLE )
             return false;
-        return (bool) ( m_VisibleElements & 1 << aCategoryIndex );
+        return (bool) ( m_VisibleElements & (1 << aCategoryIndex) );
     }
 
 
@@ -179,6 +181,34 @@ public:
      * @param aNewLayerCount = The new number of enabled copper layers
      */
     void SetCopperLayerCount( int aNewLayerCount );
+
+    /**
+     * Function GetLayerColor
+     * returns the color for aLayer which is one of the layer indices given
+     * in pcbstruct.h
+     */
+    int GetLayerColor( int aLayer )
+    {
+        if( (unsigned) aLayer < (unsigned) NB_LAYERS )
+        {
+            return m_LayerColor[aLayer];
+        }
+        return -1;
+    }
+
+    /**
+     * Function SetLayerColor
+     * sets the color for aLayer which is one of the layer indices given
+     * in pcbstruct.h
+     */
+    void SetLayerColor( int aLayer, int aColor )
+    {
+        if( (unsigned) aLayer < (unsigned) NB_LAYERS )
+        {
+            m_LayerColor[aLayer] = aColor;
+        }
+    }
+
 };
 
 

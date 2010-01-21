@@ -900,12 +900,6 @@ static bool ReadSheetDescr( BASE_SCREEN* screen, FILE* File, int* LineNum )
 }
 
 
-/** ReadPcbFile
- * Read a board file  <file>.brd
- * @param Append if 0: a previously loaded board is deleted before loading
- *               the file else all items of the board file are added to the
- *               existing board
- */
 int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 {
     char         Line[1024];

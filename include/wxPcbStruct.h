@@ -6,10 +6,9 @@
 #define  WXPCB_STRUCT_H
 
 
-#include <vector>
-
 #include "wxstruct.h"
 #include "base_struct.h"
+#include "layer_widget.h"
 
 #ifndef PCB_INTERNAL_UNIT
 #define PCB_INTERNAL_UNIT 10000
@@ -50,6 +49,46 @@ class GENERAL_COLLECTORS_GUIDE;
 /*****************************************************/
 class WinEDA_PcbFrame : public WinEDA_BasePcbFrame
 {
+protected:
+
+    /**
+     * Class LYRS
+     * is here to implement the abtract functions of LAYER_WIDGET so they
+     * may be tied into this frame's data.
+     */
+    class LYRS : public LAYER_WIDGET
+    {
+        WinEDA_PcbFrame*    myframe;
+
+    public:
+        LYRS( WinEDA_PcbFrame* aParent ) :
+            LAYER_WIDGET( aParent ),
+            myframe( aParent )
+        {
+        }
+
+        //-----<implement LAYER_WIDGET abstract functions>---
+        void OnLayerColorChange( int aLayer, int aColor );
+        bool OnLayerSelect( int aLayer );
+        void OnLayerVisible( int aLayer, bool isVisible, bool isFinal );
+        void OnRenderColorChange( int aId, int aColor );
+        void OnRenderEnable( int aId, bool isEnabled );
+        //-----</implement LAYER_WIDGET abstract functions>---------------
+    };
+
+    /// render rows are fixed, layer rows are dynamically determined.
+    static LAYER_WIDGET::ROW renderRows[];
+
+    LYRS*            m_Layers;              // established in constructor
+
+    /**
+     * Function ReFillLayerWidget
+     * changes out all the layers in m_Layers and may be called upon
+     * loading a new BOARD.
+     */
+    void ReFillLayerWidget();
+
+
 public:
     WinEDAChoiceBox* m_SelLayerBox;         // a combo box to display and
                                             // select active layer
@@ -323,7 +362,17 @@ public:
     void OnFileHistory( wxCommandEvent& event );
     void Files_io( wxCommandEvent& event );
     bool LoadOnePcbFile( const wxString& FileName, bool Append );
+
+
+    /**
+     * Function ReadPcbFile
+     * reads a board file  <file>.brd
+     * @param Append if 0: a previously loaded board is deleted before loading
+     *               the file else all items of the board file are added to the
+     *               existing board
+     */
     int  ReadPcbFile( FILE* File, bool Append );
+
     bool SavePcbFile( const wxString& FileName );
     int  SavePcbFormatAscii( FILE* File );
     bool WriteGeneralDescrPcb( FILE* File );

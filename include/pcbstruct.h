@@ -55,14 +55,14 @@
 #define NB_COPPER_LAYERS        (LAST_COPPER_LAYER + 1)
 
 #define FIRST_NO_COPPER_LAYER   16
-#define ADHESIVE_N_BACK           16
-#define ADHESIVE_N_FRONT          17
-#define SOLDERPASTE_N_BACK        18
-#define SOLDERPASTE_N_FRONT       19
-#define SILKSCREEN_N_BACK         20
-#define SILKSCREEN_N_FRONT        21
-#define SOLDERMASK_N_BACK         22
-#define SOLDERMASK_N_FRONT        23
+#define ADHESIVE_N_BACK         16
+#define ADHESIVE_N_FRONT        17
+#define SOLDERPASTE_N_BACK      18
+#define SOLDERPASTE_N_FRONT     19
+#define SILKSCREEN_N_BACK       20
+#define SILKSCREEN_N_FRONT      21
+#define SOLDERMASK_N_BACK       22
+#define SOLDERMASK_N_FRONT      23
 #define DRAW_N                  24
 #define COMMENT_N               25
 #define ECO1_N                  26

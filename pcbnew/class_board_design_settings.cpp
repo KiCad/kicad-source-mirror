@@ -85,7 +85,7 @@ int EDA_BoardDesignSettings::GetVisibleLayers() const
 
 void EDA_BoardDesignSettings::SetVisibleLayers( int aMask )
 {
-    // Altough Pcbnew uses only 29, Gerbview uses all 32 layers
+    // Although Pcbnew uses only 29, Gerbview uses all 32 layers
     m_VisibleLayers = aMask & m_EnabledLayers & FULL_LAYERS;
 }
 
@@ -115,6 +115,8 @@ void EDA_BoardDesignSettings::SetElementVisibility( int aElementCategory, bool a
 
 void EDA_BoardDesignSettings::SetCopperLayerCount( int aNewLayerCount )
 {
+    // if( aNewLayerCount < 2 ) aNewLayerCount = 2;
+
     m_CopperLayerCount = aNewLayerCount;
 
     // ensure consistency with the m_EnabledLayers member
@@ -135,23 +137,20 @@ void EDA_BoardDesignSettings::SetCopperLayerCount( int aNewLayerCount )
  */
 void EDA_BoardDesignSettings::SetEnabledLayers( int aMask )
 {
+    // Back and front layers are always enabled.
+    aMask |= LAYER_BACK | LAYER_FRONT;
+
     m_EnabledLayers = aMask;
-
-    // Ensure consistency with m_CopperLayerCount
-    long enabledLayers = aMask & ~ALL_CU_LAYERS;
-    // Back and front layers are always existing (but not necessary enabled)
-    // so we must count them
-    enabledLayers |= LAYER_BACK|LAYER_FRONT;
-
-    long mask = 1;
-    m_CopperLayerCount = 0;
-    for( int ii = 0; ii < NB_COPPER_LAYERS; ii++, mask <<= 1 )
-    {
-        if( (aMask & mask) )
-            m_CopperLayerCount ++;
-    }
 
     // A disabled layer cannot be visible
     m_VisibleLayers &= aMask;
+
+    // update m_CopperLayerCount to ensure its consistency with m_EnabledLayers
+    m_CopperLayerCount = 0;
+    for( int ii = 0;  aMask && ii < NB_COPPER_LAYERS;  ii++, aMask >>= 1 )
+    {
+        if( aMask & 1 )
+            m_CopperLayerCount++;
+    }
 }
 

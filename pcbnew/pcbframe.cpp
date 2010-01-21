@@ -207,6 +207,25 @@ END_EVENT_TABLE()
 
 ///////****************************///////////:
 
+
+// the fixed "Rendering" tab rows within the LAYER_WIDGET:
+LAYER_WIDGET::ROW WinEDA_PcbFrame::renderRows[] = {
+                        // text                 id      color       tooltip                 checked
+    LAYER_WIDGET::ROW( _( "Through Via"),       0,      LIGHTBLUE,  _("Show through vias")          ),
+    LAYER_WIDGET::ROW( _( "Blind/Buried Via"),  1,      YELLOW,     _("Show blind or buried vias")  ),
+    LAYER_WIDGET::ROW( _( "Micro Via" ),        2,      BROWN,      _("Show micro vias") ),
+    LAYER_WIDGET::ROW( _( "Ratsnets" ),         3,      BLUE,       _("Show the ratsnest") ),
+    LAYER_WIDGET::ROW( _( "Mod Text Back" ),    4,      WHITE,      _("Show footprint text residing on board's back") ),
+    LAYER_WIDGET::ROW( _( "Mod Text Front" ),   5,      WHITE,      _("Show footprint text residing on board's front") ),
+    LAYER_WIDGET::ROW( _( "Mod Text Hide" ),    6,      WHITE,      _("TBD") ),
+    LAYER_WIDGET::ROW( _( "Anchors" ),          7,      WHITE,      _("TBD") ),
+//    LAYER_WIDGET::ROW( _( "Grid" ),             8,      WHITE,      _("Show grid") ),
+    LAYER_WIDGET::ROW( _( "Not Connecteds" ),   9,      -1,         _("TBD") ),
+    LAYER_WIDGET::ROW( _( "Modules Front" ),    10,     -1,         _("TBD") ),
+    LAYER_WIDGET::ROW( _( "Modules Back" ),     11,     -1,         _("TBD") ),
+};
+
+
 WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
                                   const wxString& title,
                                   const wxPoint& pos, const wxSize& size,
@@ -222,6 +241,9 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     m_SelLayerBox   = NULL;
     m_TrackAndViasSizesList_Changed = false;
     m_show_microwave_tools = false;
+
+    m_Layers = new LYRS( this );
+    m_Layers->AppendRenderRows( renderRows, DIM(renderRows) );
 
     SetBoard( new BOARD( NULL, this ) );
     m_TrackAndViasSizesList_Changed = true;
@@ -273,6 +295,15 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     vert.TopDockable( false ).BottomDockable( false );
     horiz.LeftDockable( false ).RightDockable( false );
 
+    // LAYER_WIDGET is floatable, but initially docked at far right
+    wxAuiPaneInfo   lyrs;
+    lyrs.MinSize( m_Layers->GetBestSize() );    // updated in ReFillLayerWidget
+    lyrs.BestSize( m_Layers->GetBestSize() );
+    lyrs.CloseButton( false );
+    lyrs.Caption( wxT( "Layers" ) );
+    lyrs.IsFloatable();
+
+
     if( m_HToolBar )
         m_auimgr.AddPane( m_HToolBar,
                           wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
@@ -283,11 +314,13 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
 
     if( m_AuxVToolBar )
         m_auimgr.AddPane( m_AuxVToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_AuxVToolBar" ) ).Right().Row( 1 ).Hide() );
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_AuxVToolBar" ) ).Right().Row( 2 ).Hide() );
 
     if( m_VToolBar )
         m_auimgr.AddPane( m_VToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right().Row( 1 ) );
+
+    m_auimgr.AddPane( m_Layers, lyrs.Right().Row( 0 ) );
 
     if( m_OptionsToolBar )
         m_auimgr.AddPane( m_OptionsToolBar,
@@ -308,6 +341,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
         m_AuxVToolBar->Show(m_show_microwave_tools);
 #endif
 
+    ReFillLayerWidget();    // this is near end because contents establishes size
 }
 
 
@@ -318,6 +352,95 @@ WinEDA_PcbFrame::~WinEDA_PcbFrame()
     wxGetApp().SaveCurrentSetupValues( ParamCfgList );
     delete m_drc;
 }
+
+
+//-----<LAYER_WIDGET callbacks>-------------------------------------------
+
+void WinEDA_PcbFrame::LYRS::OnLayerColorChange( int aLayer, int aColor )
+{
+    myframe->GetBoard()->SetLayerColor( aLayer, aColor );
+    myframe->DrawPanel->Refresh();
+}
+
+bool WinEDA_PcbFrame::LYRS::OnLayerSelect( int aLayer )
+{
+    // @todo
+    return true;
+}
+
+void WinEDA_PcbFrame::LYRS::OnLayerVisible( int aLayer, bool isVisible, bool isFinal )
+{
+    BOARD* brd = myframe->GetBoard();
+
+    int visibleLayers = brd->GetVisibleLayers();
+
+    if( isVisible )
+        visibleLayers |= (1 << aLayer);
+    else
+        visibleLayers &= ~(1 << aLayer);
+
+    brd->SetVisibleLayers( visibleLayers );
+
+    if( isFinal )
+        myframe->DrawPanel->Refresh();
+}
+
+void WinEDA_PcbFrame::LYRS::OnRenderColorChange( int aId, int aColor )
+{
+    // @todo
+    //myframe->GetBoard()->SetLayerColor( aId, aColor );
+    //myframe->DrawPanel->Refresh();
+}
+
+void WinEDA_PcbFrame::LYRS::OnRenderEnable( int aId, bool isEnabled )
+{
+    // @todo
+    // mframe->GetBoard()->Set
+}
+
+//-----</LAYER_WIDGET callbacks>------------------------------------------
+
+void WinEDA_PcbFrame::ReFillLayerWidget()
+{
+    BOARD*  brd = GetBoard();
+    int     layer;
+
+    int enabledLayers = brd->GetEnabledLayers();
+
+    m_Layers->Freeze();     // no screen updates until done modifying
+
+    m_Layers->ClearLayerRows();
+
+    // show all coppers first, with front on top, back on bottom, then technical layers
+
+    layer = LAYER_N_FRONT;
+    if( enabledLayers & (1 << layer) )
+    {
+        m_Layers->AppendLayerRow( LAYER_WIDGET::ROW(
+            brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ), _("Front copper layer"), true ) );
+    }
+
+    for( layer = LAYER_N_FRONT-1;  layer >= 1;  --layer )
+    {
+        if( enabledLayers & (1 << layer) )
+        {
+            m_Layers->AppendLayerRow( LAYER_WIDGET::ROW(
+                brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ), _("An innner copper layer"), true ) );
+        }
+    }
+
+    layer = LAYER_N_BACK;
+    if( enabledLayers & (1 << layer) )
+    {
+        m_Layers->AppendLayerRow( LAYER_WIDGET::ROW(
+            brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ), _("Back copper layer"), true ) );
+    }
+
+    m_Layers->SelectLayer( LAYER_N_FRONT );
+
+    m_Layers->Thaw();
+}
+
 
 void WinEDA_PcbFrame::OnQuit( wxCommandEvent & WXUNUSED(event) )
 {

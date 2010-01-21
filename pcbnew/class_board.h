@@ -87,6 +87,7 @@ public:
     }
 };
 
+
 /**
  * Class BOARD
  * holds information pertinent to a PCBNEW printed circuit board.
@@ -245,7 +246,10 @@ public:
      * Function GetCopperLayerCount
      * @return int - The number of copper layers in the BOARD.
      */
-    int      GetCopperLayerCount() const;
+    int GetCopperLayerCount() const;
+
+    void SetCopperLayerCount( int aCount );
+
 
     /**
      * Function GetEnabledLayers
@@ -256,20 +260,20 @@ public:
     int GetEnabledLayers() const;
 
     /**
-     * Function GetVisibleLayers
-     * is a proxy function that calls the correspondent function in m_BoardSettings
-     * Returns a bit-mask of all the layers that are visible
-     * @return int - the visible layers in bit-mapped form.
-     */
-    int GetVisibleLayers() const;
-
-    /**
      * Function SetEnabledLayers
      * is a proxy function that calls the correspondent function in m_BoardSettings
      * Changes the bit-mask of enabled layers
      * @param aMask = The new bit-mask of enabled layers
      */
     void SetEnabledLayers( int aLayerMask );
+
+    /**
+     * Function GetVisibleLayers
+     * is a proxy function that calls the correspondent function in m_BoardSettings
+     * Returns a bit-mask of all the layers that are visible
+     * @return int - the visible layers in bit-mapped form.
+     */
+    int GetVisibleLayers() const;
 
     /**
      * Function SetVisibleLayers
@@ -280,6 +284,14 @@ public:
     void SetVisibleLayers( int aLayerMask );
 
     /**
+     * Function GetVisibleElements
+     * is a proxy function that calls the correspondent function in m_BoardSettings
+     * returns a bit-mask of all the element categories that are visible
+     * @return int - the visible element categories in bit-mapped form.
+     */
+    int  GetVisibleElements() const;
+
+    /**
      * Function SetVisibleElements
      * is a proxy function that calls the correspondent function in m_BoardSettings
      * changes the bit-mask of visible element categories
@@ -288,17 +300,8 @@ public:
     void SetVisibleElements( int aMask );
 
     /**
-     * Function GetVisibleElements
-     * is a proxy function that calls the correspondent function in m_BoardSettings
-     * returns a bit-mask of all the element categories that are visible
-     * @return int - the visible element categories in bit-mapped form.
-     */
-    int  GetVisibleElements() const;
-
-
-    /**
      * Function GetLayerName
-     * returns the name of the copper layer given by aLayerIndex.
+     * returns the name of the layer given by aLayerIndex.
      *
      * @param aLayerIndex A layer index, like LAYER_N_BACK, etc.
      * @return wxString - the layer name.
@@ -336,6 +339,13 @@ public:
      */
     bool     SetLayerType( int aLayerIndex, LAYER_T aLayerType );
 
+    /**
+     * Function SetLayerColor
+     * changes a layer color for any valid layer, including non-copper ones.
+     */
+    void     SetLayerColor( int aLayer, int aColor );
+
+    int      GetLayerColor( int aLayer );
 
     /* Functions to get some items count */
     int      GetNumSegmTrack();

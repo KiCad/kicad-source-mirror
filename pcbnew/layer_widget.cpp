@@ -29,9 +29,16 @@
 */
 
 
-#define STAND_ALONE     1   // define to enable test program for LAYER_WIDGET
+//#define STAND_ALONE     1   // define to enable test program for LAYER_WIDGET
 // also enable KICAD_AUIMANAGER and KICAD_AUITOOLBAR in ccmake to
 // build this test program
+
+#include <wx/wx.h>
+#include <wx/statbmp.h>
+
+#include "macros.h"
+#include "common.h"
+#include "colors.h"
 
 #include "layer_widget.h"
 
@@ -40,6 +47,11 @@
 
 #define LYR_COLUMN_COUNT        4           ///< Layer tab column count
 #define RND_COLUMN_COUNT        2           ///< Rendering tab column count
+
+#define BUTT_SIZE_X             32
+#define BUTT_SIZE_Y             22
+#define BUTT_VOID               6
+
 
 #define ID_SHOW_ALL_COPPERS     wxID_HIGHEST
 #define ID_SHOW_NO_COPPERS      (wxID_HIGHEST+1)
@@ -120,9 +132,9 @@ static int getDecodedId( int aControlId )
  */
 static wxString makeColorTxt( int aColor )
 {
-    char colorValue[64];
-    sprintf( colorValue, "0x%08x", aColor );
-    return wxString( CONV_FROM_UTF8(colorValue) );
+    wxString txt;
+    txt.Printf( wxT("0x%08x"), aColor );
+    return txt;
 }
 
 
@@ -200,10 +212,7 @@ void LAYER_WIDGET::OnLeftDownLayers( wxMouseEvent& event )
         SelectLayerRow( row );
 }
 
-/**
- * Function OnMiddleDownLayerColor
- * is called only from a color button when user right clicks.
- */
+
 void LAYER_WIDGET::OnMiddleDownLayerColor( wxMouseEvent& event )
 {
     wxBitmapButton* eventSource = (wxBitmapButton*) event.GetEventObject();
@@ -228,10 +237,6 @@ void LAYER_WIDGET::OnMiddleDownLayerColor( wxMouseEvent& event )
 }
 
 
-/**
- * Function OnRightDownLayers
- * puts up a popup menu for the layer panel.
- */
 void LAYER_WIDGET::OnRightDownLayers( wxMouseEvent& event )
 {
     wxMenu          menu;
@@ -262,7 +267,19 @@ void LAYER_WIDGET::OnPopupSelection( wxCommandEvent& event )
     case ID_SHOW_NO_COPPERS:
         visible = false;
     L_change_coppers:
+        int lastCu = -1;
         rowCount = GetLayerRowCount();
+        for( int row=rowCount-1;  row>=0;  --row )
+        {
+            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row*LYR_COLUMN_COUNT + 3 );
+            int layer = getDecodedId( cb->GetId() );
+            if( IsValidCopperLayerIndex( layer ) )
+            {
+                lastCu = row;
+                break;
+            }
+        }
+
         for( int row=0;  row<rowCount;  ++row )
         {
             wxCheckBox* cb = (wxCheckBox*) getLayerComp( row*LYR_COLUMN_COUNT + 3 );
@@ -271,7 +288,13 @@ void LAYER_WIDGET::OnPopupSelection( wxCommandEvent& event )
             if( IsValidCopperLayerIndex( layer ) )
             {
                 cb->SetValue( visible );
-                OnLayerVisible( layer, visible );
+
+                bool isLastCopperLayer = (row==lastCu);
+
+                OnLayerVisible( layer, visible, isLastCopperLayer );
+
+                if( isLastCopperLayer )
+                    break;
             }
         }
         break;
@@ -279,11 +302,6 @@ void LAYER_WIDGET::OnPopupSelection( wxCommandEvent& event )
 }
 
 
-/**
- * Function OnLayerCheckBox
- * handles the "is layer visible" checkbox and propogates the
- * event to the client's notification function.
- */
 void LAYER_WIDGET::OnLayerCheckBox( wxCommandEvent& event )
 {
     wxCheckBox* eventSource = (wxCheckBox*) event.GetEventObject();
@@ -323,14 +341,6 @@ void LAYER_WIDGET::OnRenderCheckBox( wxCommandEvent& event )
 }
 
 
-/**
- * Function getLayerComp
- * returns the component within the m_LayersFlexGridSizer at aSizerNdx or
- * NULL if \a aSizerNdx is out of range.
- *
- * @param aSizerNdx is the 0 based index into all the wxWindows which have
- *   been added to the m_LayersFlexGridSizer.
- */
 wxWindow* LAYER_WIDGET::getLayerComp( int aSizerNdx )
 {
     if( (unsigned) aSizerNdx < m_LayersFlexGridSizer->GetChildren().GetCount() )
@@ -338,10 +348,7 @@ wxWindow* LAYER_WIDGET::getLayerComp( int aSizerNdx )
     return NULL;
 }
 
-/**
- * Function findLayerRow
- * returns the row index that \a aLayer resides in, or -1 if not found.
- */
+
 int LAYER_WIDGET::findLayerRow( int aLayer )
 {
     int count = GetLayerRowCount();
@@ -356,10 +363,7 @@ int LAYER_WIDGET::findLayerRow( int aLayer )
     return -1;
 }
 
-/**
- * Function insertLayerRow
- * appends or inserts a new row in the layer portion of the widget.
- */
+
 void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
 {
     wxASSERT( aRow >= 0 && aRow < MAX_LAYER_ROWS );
@@ -402,6 +406,7 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     m_LayersFlexGridSizer->Insert( index+col, cb, 0, flags );
 }
 
+
 void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
 {
     wxASSERT( aRow >= 0 && aRow < MAX_LAYER_ROWS );
@@ -421,7 +426,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
 
         // could add a left click handler on the color button that toggles checkbox.
     }
-    else    // no color selection wanted
+    else    // == -1, no color selection wanted
     {
         // need a place holder within the sizer to keep grid full.
         wxPanel* invisible = new wxPanel( m_RenderScrolledWindow );
@@ -441,7 +446,6 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
 
 //-----<public>-------------------------------------------------------
 
-/** Constructor */
 LAYER_WIDGET::LAYER_WIDGET( wxWindow* parent ) :
     LAYER_PANEL_BASE( parent )
 {
@@ -554,13 +558,13 @@ void LAYER_WIDGET::AppendLayerRow( const ROW& aRow )
 {
     int nextRow = GetLayerRowCount();
     insertLayerRow( nextRow, aRow );
-    FitInside();
+    UpdateLayouts();
 }
 
 
 void LAYER_WIDGET::ClearLayerRows()
 {
-    m_LayerScrolledWindow->DestroyChildren();
+    m_LayersFlexGridSizer->Clear( true );
 }
 
 
@@ -568,13 +572,13 @@ void LAYER_WIDGET::AppendRenderRow( const ROW& aRow )
 {
     int nextRow = GetRenderRowCount();
     insertRenderRow( nextRow, aRow );
-    FitInside();
+    UpdateLayouts();
 }
 
 
 void LAYER_WIDGET::ClearRenderRows()
 {
-    m_RenderScrolledWindow->DestroyChildren();
+    m_RenderFlexGridSizer->Clear( true );
 }
 
 
@@ -641,8 +645,16 @@ void LAYER_WIDGET::SetLayerVisible( int aLayer, bool isVisible )
     }
 }
 
+void LAYER_WIDGET::UpdateLayouts()
+{
+    m_LayersFlexGridSizer->Layout();
+    m_RenderFlexGridSizer->Layout();
+}
 
 #if defined(STAND_ALONE)
+
+#include <wx/aui/aui.h>
+
 
 /**
  * Class MYFRAME
@@ -687,9 +699,9 @@ class MYFRAME : public wxFrame
             return true;
         }
 
-        void OnLayerVisible( int aLayer, bool isVisible )
+        void OnLayerVisible( int aLayer, bool isVisible, bool isFinal )
         {
-            printf( "OnLayerVisible( aLayer:%d, isVisible:%d )\n", aLayer, isVisible );
+            printf( "OnLayerVisible( aLayer:%d, isVisible:%d isFinal:%d)\n", aLayer, isVisible, isFinal );
         }
 
         void OnRenderColorChange( int aId, int aColor )
@@ -715,15 +727,23 @@ public:
         MYLAYERS* lw = new MYLAYERS( this, this );
 
         // add some layer rows
-        lw->AppendLayerRow( LAYER_WIDGET::ROW( wxT("layer 1"), 0, RED, _("RED"), false ) );
-        lw->AppendLayerRow( LAYER_WIDGET::ROW( wxT("layer 2"), 1, GREEN, _("GREEN"), true ) );
-        lw->AppendLayerRow( LAYER_WIDGET::ROW( wxT("brown_layer"), 2, BROWN, _("BROWN"), true ) );
-        lw->AppendLayerRow( LAYER_WIDGET::ROW( wxT("layer_4_you"), 3, BLUE, _("BLUE"), false ) );
+        static const LAYER_WIDGET::ROW layerRows[] = {
+            LAYER_WIDGET::ROW( wxT("layer 1"), 0, RED, _("RED"), false ),
+            LAYER_WIDGET::ROW( wxT("layer 2"), 1, GREEN, _("GREEN"), true ),
+            LAYER_WIDGET::ROW( wxT("brown_layer"), 2, BROWN, _("BROWN"), true ),
+            LAYER_WIDGET::ROW( wxT("layer_4_you"), 3, BLUE, _("BLUE"), false ),
+        };
+
+        lw->AppendLayerRows( layerRows, DIM(layerRows) );
 
         // add some render rows
-        lw->AppendRenderRow( LAYER_WIDGET::ROW( wxT("With Very Large Ears"), 0, -1, _("Spock here") ) );
-        lw->AppendRenderRow( LAYER_WIDGET::ROW( wxT("With Legs"), 1, YELLOW ) );
-        lw->AppendRenderRow( LAYER_WIDGET::ROW( wxT("With Oval Eyes"), 1, BROWN, _("My eyes are upon you") ) );
+        static const LAYER_WIDGET::ROW renderRows[] = {
+            LAYER_WIDGET::ROW( wxT("With Very Large Ears"), 0, -1, _("Spock here") ),
+            LAYER_WIDGET::ROW( wxT("With Legs"), 1, YELLOW ),
+            LAYER_WIDGET::ROW( wxT("With Oval Eyes"), 1, BROWN, _("My eyes are upon you") ),
+        };
+
+        lw->AppendRenderRows( renderRows, DIM(renderRows) );
 
         lw->SelectLayerRow( 1 );
 

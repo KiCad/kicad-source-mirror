@@ -176,13 +176,18 @@ bool WinEDA_PcbFrame::Clear_Pcb( bool aQuery )
     GetScreen()->SetGrid( gridsize );
 
     g_HightLigt_Status = 0;
+
     // Enable all layers (SetCopperLayerCount() will adjust the copper layers enabled)
-    g_DesignSettings.SetEnabledLayers(ALL_LAYERS);
+    GetBoard()->SetEnabledLayers(ALL_LAYERS);
+
     // Default copper layers count set to 2: double layer board
-    g_DesignSettings.SetCopperLayerCount(2);
+    GetBoard()->SetCopperLayerCount(2);
 
     // Update display:
-    g_DesignSettings.SetVisibleLayers( ALL_LAYERS );
+    GetBoard()->SetVisibleLayers( ALL_LAYERS );
+
+    ReFillLayerWidget();
+
     SetToolbars();
     Zoom_Automatique( true );
 

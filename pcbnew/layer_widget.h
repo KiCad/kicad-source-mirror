@@ -25,20 +25,7 @@
 #ifndef LAYERWIDGET_H_
 #define LAYERWIDGET_H_
 
-#include <wx/wx.h>
-#include <wx/statbmp.h>
-#include <wx/aui/aui.h>
-
-#include "macros.h"
-#include "common.h"
-
 #include "layer_panel_base.h"
-#include "colors.h"
-
-/* no external data knowledge needed or wanted
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-*/
 
 
 /**
@@ -59,7 +46,6 @@
  */
 class LAYER_WIDGET : public LAYER_PANEL_BASE
 {
-
 public:
     /**
      * Struct ROW
@@ -87,11 +73,6 @@ public:
 
 
 protected:
-
-#define MAX_LAYER_ROWS      64
-#define BUTT_SIZE_X         32
-#define BUTT_SIZE_Y         22
-#define BUTT_VOID           6
 
     wxBitmap*       m_BlankBitmap;
     wxBitmap*       m_RightArrowBitmap;
@@ -190,6 +171,19 @@ public:
      */
     void AppendLayerRow( const ROW& aRow );
 
+#define MAX_LAYER_ROWS          64  ///< cannot append more than this number of rows
+
+    /**
+     * Function AppendLayerRows
+     * appends new rows in the layer portion of the widget.  The user must
+     * ensure that ROW::id is unique for all existing rows on Windows.
+     */
+    void AppendLayerRows( const ROW* aRowsArray, int aRowCount )
+    {
+        for( int row=0;  row<aRowCount;  ++row )
+            AppendLayerRow( aRowsArray[row] );
+    }
+
     /**
      * Function ClearLayerRows
      * empties out the layer rows.
@@ -202,6 +196,18 @@ public:
      * ensure that ROW::id is unique for all existing rows on Windows.
      */
     void AppendRenderRow( const ROW& aRow );
+
+    /**
+     * Function AppendRenderRows
+     * appends new rows in the render portion of the widget.  The user must
+     * ensure that ROW::id is unique for all existing rows on Windows.
+     */
+    void AppendRenderRows( const ROW* aRowsArray, int aRowCount )
+    {
+        for( int row=0;  row<aRowCount;  ++row )
+            AppendRenderRow( aRowsArray[row] );
+    }
+
 
     /**
      * Function ClearRenderRows
@@ -233,6 +239,7 @@ public:
      */
     void SetLayerVisible( int aLayer, bool isVisible );
 
+    void UpdateLayouts();
 
     //-----<abstract functions>-------------------------------------------
 
@@ -254,8 +261,12 @@ public:
     /**
      * Function OnLayerVisible
      * is called to notify client code about a layer visibility change.
+     *
+     * @param isFinal is true when this is the last of potentially several
+     *  such calls, and can be used to decide when to update the screen only
+     *  one time instead of several times in the midst of a multiple layer change.
      */
-    virtual void OnLayerVisible( int aLayer, bool isVisible ) = 0;
+    virtual void OnLayerVisible( int aLayer, bool isVisible, bool isFinal = true ) = 0;
 
     /**
      * Function OnRenderColorChange

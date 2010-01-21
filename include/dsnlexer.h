@@ -56,7 +56,8 @@ struct KEYWORD
  * to the parser if it wants also to support them.
  */
 enum DSN_SYNTAX_T {
-    DSN_NONE = -10,
+    DSN_NONE = -11,
+    DSN_COMMENT = -10,
     DSN_STRING_QUOTE = -9,
     DSN_QUOTE_DEF = -8,
     DSN_DASH = -7,
@@ -84,6 +85,7 @@ class DSNLEXER
     LINE_READER         reader;
     int                 stringDelimiter;
     bool                space_in_quoted_tokens; ///< blank spaces within quoted strings
+    bool                comments_are_tokens;    ///< true if should return comments as tokens
 
     wxString            filename;
     int                 prevTok;        ///< curTok from previous NextTok() call.
@@ -106,6 +108,18 @@ class DSNLEXER
 
         return len;
     }
+
+
+    /**
+     * Function readLineOrCmt
+     * reads a line from the LINE_READER and returns either:
+     * <ol>
+     * <li> a positive line length (a +1 if empty line)
+     * <li> zero of end of file.
+     * <li> DSN_COMMENT if the line is a comment
+     * </ol>
+     */
+    int readLineOrCmt();
 
 
     /**
@@ -169,6 +183,19 @@ public:
     {
         bool old = space_in_quoted_tokens;
         space_in_quoted_tokens = val;
+        return old;
+    }
+
+    /**
+     * Function SetCommentsAreTokens
+     * changes the handling of comments.  If set true, comments are returns
+     * as single line strings with a terminating newline, else they are
+     * consumed by the lexer and not returned.
+     */
+    bool SetCommentsAreTokens( bool val )
+    {
+        bool old = comments_are_tokens;
+        comments_are_tokens = val;
         return old;
     }
 

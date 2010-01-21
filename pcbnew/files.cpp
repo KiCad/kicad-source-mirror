@@ -254,6 +254,9 @@ this file again."));
     // Update info shown by the horizontal toolbars
     GetBoard()->SetCurrentNetClass( NETCLASS::Default );
     m_TrackAndViasSizesList_Changed = true;
+
+    ReFillLayerWidget();
+
     ReCreateLayerBox( NULL );
     AuxiliaryToolBar_Update_UI();
 
