@@ -378,20 +378,20 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
 
     if( Module->GetLayer() == LAYER_N_BACK )
     {
-        if( g_DesignSettings.IsElementVisible( MODULE_TEXT_CU_VISIBLE ) == false )
+        if( g_DesignSettings.IsElementVisible( MOD_TEXT_BK_VISIBLE ) == false )
             return;
         color = g_ModuleTextCUColor;
     }
     else if( Module->GetLayer() == LAYER_N_FRONT )
     {
-        if( g_DesignSettings.IsElementVisible( MODULE_TEXT_CMP_VISIBLE ) == false )
+        if( g_DesignSettings.IsElementVisible( MOD_TEXT_FR_VISIBLE ) == false )
             return;
         color = g_ModuleTextCMPColor;
     }
 
     if( m_NoShow )
     {
-        if( g_DesignSettings.IsElementVisible( MODULE_TEXT_NOV_VISIBLE ) == false )
+        if( g_DesignSettings.IsElementVisible( MOD_TEXT_INVISIBLE ) == false )
             return;
         color = g_ModuleTextNOVColor;
     }

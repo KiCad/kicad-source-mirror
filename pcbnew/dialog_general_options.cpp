@@ -250,7 +250,7 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE:
-        g_DesignSettings.SetElementVisibility( MODULE_TEXT_NOV_VISIBLE,
+        g_DesignSettings.SetElementVisibility( MOD_TEXT_INVISIBLE,
                                                m_OptionsToolBar->GetToolState( id ) );
         DrawPanel->Refresh();
         break;

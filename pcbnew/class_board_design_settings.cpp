@@ -104,7 +104,7 @@ void EDA_BoardDesignSettings::SetLayerVisibility( int aLayerIndex, bool aNewStat
 
 void EDA_BoardDesignSettings::SetElementVisibility( int aElementCategory, bool aNewState )
 {
-    if( aElementCategory < 0 || aElementCategory > PAD_CMP_VISIBLE )
+    if( aElementCategory < 0 || aElementCategory >= END_VISIBLE )
         return;
     if( aNewState )
         m_VisibleElements |= 1 << aElementCategory;

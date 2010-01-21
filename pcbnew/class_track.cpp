@@ -725,7 +725,7 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
 
     color = g_DesignSettings.m_ViaColor[m_Shape];
 
-    if( g_DesignSettings.IsElementVisible( VIAS_VISIBLE + m_Shape ) == false
+    if( g_DesignSettings.IsElementVisible( PCB_VISIBLE(VIAS_VISIBLE + m_Shape) ) == false
         && ( color & HIGHT_LIGHT_FLAG ) != HIGHT_LIGHT_FLAG )
         return;
 

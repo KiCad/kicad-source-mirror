@@ -78,7 +78,7 @@ public:
             return false;
 
         // If a layer is disabled, it is automatically invisible
-        return (bool) ( m_VisibleLayers & m_EnabledLayers & 1 << aLayerIndex );
+        return (bool) ( m_VisibleLayers & m_EnabledLayers & (1 << aLayerIndex) );
     }
 
 
@@ -111,28 +111,27 @@ public:
         m_VisibleElements = aMask;
     }
 
-
     /**
      * Function IsElementVisible
-     * tests whether a given element category is visible
-     * @param aCategoryIndex = The index of the element category to be tested.
+     * tests whether a given element category is visible. Keep this as an
+     * inline function.
+     * @param aPCB_VISIBLE is from the enum by the same name
      * @return bool - true if the element is visible.
+     * @see enum PCB_VISIBLE
      */
-    bool IsElementVisible( int aCategoryIndex ) const
+    bool IsElementVisible( int aPCB_VISIBLE ) const
     {
-        if( aCategoryIndex < 0 || aCategoryIndex > PAD_CMP_VISIBLE )
-            return false;
-        return (bool) ( m_VisibleElements & (1 << aCategoryIndex) );
+        return bool( m_VisibleElements & (1 << aPCB_VISIBLE) );
     }
-
 
     /**
      * Function SetElementVisibility
      * changes the visibility of an element category
-     * @param aCategoryIndex = The index of the element category to be changed
+     * @param aPCB_VISIBLE is from the enum by the same name
      * @param aNewState = The new visibility state of the element category
+     * @see enum PCB_VISIBLE
      */
-    void SetElementVisibility( int aCategoryIndex, bool aNewState );
+    void SetElementVisibility( int aPCB_VISIBLE, bool aNewState );
 
     /**
      * Function GetEnabledLayers
@@ -144,14 +143,12 @@ public:
         return m_EnabledLayers;
     }
 
-
     /**
      * Function SetEnabledLayers
      * changes the bit-mask of enabled layers
      * @param aMask = The new bit-mask of enabled layers
      */
     void SetEnabledLayers( int aMask );
-
 
     /**
      * Function IsLayerEnabled
@@ -161,7 +158,7 @@ public:
      */
     bool IsLayerEnabled( int aLayerIndex )
     {
-        return (bool) ( m_EnabledLayers & 1 << aLayerIndex );
+        return bool( m_EnabledLayers & (1 << aLayerIndex) );
     }
 
 

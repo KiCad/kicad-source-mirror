@@ -189,13 +189,13 @@ bool WinEDA_PcbFrame::Read_Config( const wxString& projectFileName )
 
     DisplayOpt.Show_Modules_Cmp = true;
     DisplayOpt.Show_Modules_Cu = true;
-    g_DesignSettings.SetElementVisibility( MODULE_TEXT_NOV_VISIBLE, true );
-    g_DesignSettings.SetElementVisibility( MODULE_TEXT_CMP_VISIBLE, true );
-    g_DesignSettings.SetElementVisibility( MODULE_TEXT_CU_VISIBLE, true );
-    g_DesignSettings.SetElementVisibility( PAD_CMP_VISIBLE, true );
-    g_DesignSettings.SetElementVisibility( PAD_CU_VISIBLE, true );
+    g_DesignSettings.SetElementVisibility( MOD_TEXT_INVISIBLE, true );
+    g_DesignSettings.SetElementVisibility( MOD_TEXT_FR_VISIBLE, true );
+    g_DesignSettings.SetElementVisibility( MOD_TEXT_BK_VISIBLE, true );
+    g_DesignSettings.SetElementVisibility( PAD_BK_VISIBLE, true );
+    g_DesignSettings.SetElementVisibility( PAD_BK_VISIBLE, true );
     g_DesignSettings.SetElementVisibility( VIA_THROUGH_VISIBLE, true );
-    g_DesignSettings.SetElementVisibility( VIA_BLIND_BURIED_VISIBLE, true );
+    g_DesignSettings.SetElementVisibility( VIA_BBLIND_VISIBLE, true );
     g_DesignSettings.SetElementVisibility( VIA_MICROVIA_VISIBLE, true );
 
     // Items that can remain not visible: comment them if you want.

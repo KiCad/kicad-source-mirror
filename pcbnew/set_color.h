@@ -373,7 +373,7 @@ static ColorButton Pad_Cu_Butt =
 {
     type_element,                               // Toggle ITEM_NOT_SHOW bit of the color variable
     _( "Pad Back" ),                            // Title
-    PAD_CU_VISIBLE,
+    PAD_BK_VISIBLE,
     &g_PadCUColor                               // Address of optional parameter
 };
 
@@ -381,7 +381,7 @@ static ColorButton Pad_Cmp_Butt =
 {
     type_element,                               // Toggle ITEM_NOT_SHOW bit of the color variable
     _( "Pad Front" ),                           // Title
-    PAD_CMP_VISIBLE,
+    PAD_FR_VISIBLE,
     &g_PadCMPColor                              // Address of optional parameter
 };
 
@@ -389,7 +389,7 @@ static ColorButton Text_Mod_Cu_Butt =
 {
     type_element,                               // Toggle ITEM_NOT_SHOW bit of the color variable
     _( "Text Module Back" ),                    // Title
-    MODULE_TEXT_CU_VISIBLE,
+    MOD_TEXT_BK_VISIBLE,
     &g_ModuleTextCUColor                        // Address of optional parameter
 };
 
@@ -397,7 +397,7 @@ static ColorButton Text_Mod_Cmp_Butt =
 {
     type_element,                               // Toggle ITEM_NOT_SHOW bit of the color variable
     _( "Text Module Front" ),                   // Title
-    MODULE_TEXT_CMP_VISIBLE,
+    MOD_TEXT_FR_VISIBLE,
     &g_ModuleTextCMPColor                       // Address of optional parameter
 };
 
@@ -405,13 +405,13 @@ static ColorButton Text_Mod_NoVisible_Butt =
 {
     type_element,                               // Toggle ITEM_NOT_SHOW bit of the color variable
     _( "Text Module invisible" ),               // Title
-    MODULE_TEXT_NOV_VISIBLE,
+    MOD_TEXT_INVISIBLE,
     &g_ModuleTextNOVColor                       // Address of optional parameter
 };
 
 static ColorButton Anchors_Butt =
 {
-    type_element,                               // Toggle ITEM_NOT_SHOW bit of the color variable
+    type_element,                               // Toggle ITEM_NOT_SHOW bit of the color variableg_ModuleTextNOVColor
     _( "Anchors" ),                             // Title
     ANCHOR_VISIBLE,
     &g_AnchorColor                              // Address of optional parameter

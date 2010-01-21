@@ -74,6 +74,7 @@ public:
 
 protected:
 
+    wxWindow*       m_OriginalParent;
     wxBitmap*       m_BlankBitmap;
     wxBitmap*       m_RightArrowBitmap;
     wxSize          m_BitmapSize;
@@ -138,6 +139,12 @@ protected:
     void insertLayerRow( int aRow, const ROW& aSpec );
 
     void insertRenderRow( int aRow, const ROW& aSpec );
+
+    /**
+     * Function passOnFocus
+     * gives away the keyboard focus up to the main parent window.
+     */
+    void passOnFocus();
 
 public:
 
@@ -240,6 +247,22 @@ public:
     void SetLayerVisible( int aLayer, bool isVisible );
 
     void UpdateLayouts();
+
+/*  did not help:
+    void Freeze()
+    {
+        LAYER_PANEL_BASE::Freeze();
+        m_LayerScrolledWindow->Freeze();
+        m_RenderScrolledWindow->Freeze();
+    }
+
+    void Thaw()
+    {
+        m_RenderScrolledWindow->Thaw();
+        m_LayerScrolledWindow->Thaw();
+        LAYER_PANEL_BASE::Thaw();
+    }
+*/
 
     //-----<abstract functions>-------------------------------------------
 

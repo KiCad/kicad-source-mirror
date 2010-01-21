@@ -396,10 +396,62 @@ int BOARD::GetVisibleElements() const
     return m_BoardSettings->GetVisibleElements();
 }
 
+
+int BOARD::GetVisibleElementColor( int aPCB_VISIBLE )
+{
+    int color = -1;
+
+    // @todo move these globals into the board.
+    switch( aPCB_VISIBLE )
+    {
+    case VIAS_VISIBLE:              color = m_BoardSettings->m_ViaColor[VIA_THROUGH];       break;
+    case VIA_MICROVIA_VISIBLE:      color = m_BoardSettings->m_ViaColor[VIA_MICROVIA];      break;
+    case VIA_BBLIND_VISIBLE:        color = m_BoardSettings->m_ViaColor[VIA_BLIND_BURIED];  break;
+    case VIA_THROUGH_VISIBLE:       color = g_ModuleTextCUColor;    break;
+    case MOD_TEXT_FR_VISIBLE:       color = g_ModuleTextCUColor;    break;
+    case MOD_TEXT_BK_VISIBLE:       color = g_ModuleTextCUColor;    break;
+    case MOD_TEXT_INVISIBLE:   color = g_ModuleTextNOVColor;   break;
+    case ANCHOR_VISIBLE:            color = g_AnchorColor;          break;
+    case PAD_FR_VISIBLE:            color = g_PadCMPColor;          break;
+    case PAD_BK_VISIBLE:            color = g_PadCUColor;           break;
+    case RATSNEST_VISIBLE:          color = m_BoardSettings->m_RatsnestColor; break;
+    case GRID_VISIBLE:              color = g_GridColor;            break;
+    default:
+        wxLogDebug("BOARD::GetVisibleElementColor(): bad arg %d", aPCB_VISIBLE );
+    }
+
+    return color;
+}
+
+
+void BOARD::SetVisibleElementColor( int aPCB_VISIBLE, int aColor )
+{
+    // @todo move these globals into the board.
+    switch( aPCB_VISIBLE )
+    {
+    case VIAS_VISIBLE:              m_BoardSettings->m_ViaColor[VIA_THROUGH] = aColor;       break;
+    case VIA_MICROVIA_VISIBLE:      m_BoardSettings->m_ViaColor[VIA_MICROVIA] = aColor;      break;
+    case VIA_BBLIND_VISIBLE:        m_BoardSettings->m_ViaColor[VIA_BLIND_BURIED] = aColor;  break;
+    case VIA_THROUGH_VISIBLE:       g_ModuleTextCUColor = aColor;       break;
+    case MOD_TEXT_FR_VISIBLE:       g_ModuleTextCUColor = aColor;       break;
+    case MOD_TEXT_BK_VISIBLE:  g_ModuleTextCUColor = aColor;            break;
+    case MOD_TEXT_INVISIBLE:   g_ModuleTextNOVColor = aColor;      break;
+    case ANCHOR_VISIBLE:            g_AnchorColor = aColor;             break;
+    case PAD_FR_VISIBLE:            g_PadCMPColor = aColor;             break;
+    case PAD_BK_VISIBLE:            g_PadCUColor = aColor;                      break;
+    case RATSNEST_VISIBLE:          m_BoardSettings->m_RatsnestColor = aColor;  break;
+    case GRID_VISIBLE:              g_GridColor = aColor;                       break;
+    default:
+        wxLogDebug("BOARD::SetVisibleElementColor(): bad arg %d", aPCB_VISIBLE );
+    }
+}
+
+
 void BOARD::SetLayerColor( int aLayer, int aColor )
 {
     m_BoardSettings->SetLayerColor( aLayer, aColor );
 }
+
 
 int BOARD::GetLayerColor( int aLayer )
 {

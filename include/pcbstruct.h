@@ -93,14 +93,14 @@
 #define LAYER_14                (1 << LAYER_N_14)       ///< bit mask for layer 14
 #define LAYER_15                (1 << LAYER_N_15)       ///< bit mask for layer 15
 #define LAYER_FRONT             (1 << LAYER_N_FRONT)    ///< bit mask for component layer
-#define ADHESIVE_LAYER_BACK       (1 << ADHESIVE_N_BACK)
-#define ADHESIVE_LAYER_FRONT      (1 << ADHESIVE_N_FRONT)
-#define SOLDERPASTE_LAYER_BACK    (1 << SOLDERPASTE_N_BACK)
-#define SOLDERPASTE_LAYER_FRONT   (1 << SOLDERPASTE_N_FRONT)
-#define SILKSCREEN_LAYER_BACK     (1 << SILKSCREEN_N_BACK)
-#define SILKSCREEN_LAYER_FRONT    (1 << SILKSCREEN_N_FRONT)
-#define SOLDERMASK_LAYER_BACK     (1 << SOLDERMASK_N_BACK)
-#define SOLDERMASK_LAYER_FRONT    (1 << SOLDERMASK_N_FRONT)
+#define ADHESIVE_LAYER_BACK     (1 << ADHESIVE_N_BACK)
+#define ADHESIVE_LAYER_FRONT    (1 << ADHESIVE_N_FRONT)
+#define SOLDERPASTE_LAYER_BACK  (1 << SOLDERPASTE_N_BACK)
+#define SOLDERPASTE_LAYER_FRONT (1 << SOLDERPASTE_N_FRONT)
+#define SILKSCREEN_LAYER_BACK   (1 << SILKSCREEN_N_BACK)
+#define SILKSCREEN_LAYER_FRONT  (1 << SILKSCREEN_N_FRONT)
+#define SOLDERMASK_LAYER_BACK   (1 << SOLDERMASK_N_BACK)
+#define SOLDERMASK_LAYER_FRONT  (1 << SOLDERMASK_N_FRONT)
 #define DRAW_LAYER              (1 << DRAW_N)
 #define COMMENT_LAYER           (1 << COMMENT_N)
 #define ECO1_LAYER              (1 << ECO1_N)
@@ -152,20 +152,36 @@ class RATSNEST_ITEM;
 /* Class to handle a board */
 #include "class_board.h"
 
-enum ELEMENTS_NUMBERS
+
+/**
+ * Enum PCB_VISIBLE
+ * is a set of visible PCB elements.
+ * @see BOARD::SetVisibleElementColor()
+ * @see BOARD::SetVisibleElement()
+ */
+enum PCB_VISIBLE
 {
-    VIAS_VISIBLE                = 0,
-    VIA_NOT_DEFINED_VISIBLE     =  VIAS_VISIBLE,
+    VIAS_VISIBLE,
     VIA_MICROVIA_VISIBLE,
-    VIA_BLIND_BURIED_VISIBLE,
+    VIA_BBLIND_VISIBLE,
     VIA_THROUGH_VISIBLE,
-    MODULE_TEXT_CMP_VISIBLE,
-    MODULE_TEXT_CU_VISIBLE,
-    MODULE_TEXT_NOV_VISIBLE,
+    MOD_TEXT_FR_VISIBLE,
+    MOD_TEXT_BK_VISIBLE,
+    MOD_TEXT_INVISIBLE,         ///< text marked as invisible
     ANCHOR_VISIBLE,
-    PAD_CU_VISIBLE,
-    PAD_CMP_VISIBLE
+    PAD_FR_VISIBLE,
+    PAD_BK_VISIBLE,
+    RATSNEST_VISIBLE,
+    GRID_VISIBLE,
+
+    // the rest of these do not currently support color changes:
+    NO_CONNECTS_VISIBLE,        ///< show a marker on pads with no nets
+    MOD_FR_VISIBLE,             ///< show modules on front
+    MOD_BK_VISIBLE,             ///< show modules on back
+
+    END_VISIBLE  // sentinel
 };
+
 
 /**
  * Function IsValidLayerIndex

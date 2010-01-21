@@ -267,9 +267,9 @@ void WinEDA_PcbFrame::SetToolbars()
                                             _( "High contrast display mode" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
-                            g_DesignSettings.IsElementVisible( MODULE_TEXT_NOV_VISIBLE ) );
+                            g_DesignSettings.IsElementVisible( MOD_TEXT_INVISIBLE ) );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
-                                            g_DesignSettings.IsElementVisible( MODULE_TEXT_NOV_VISIBLE ) ?
+                                            g_DesignSettings.IsElementVisible( MOD_TEXT_INVISIBLE ) ?
                                             _( "Hide invisible text" ) :
                                             _( "Show invisible text" ) );
 

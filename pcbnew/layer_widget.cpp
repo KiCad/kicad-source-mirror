@@ -210,6 +210,8 @@ void LAYER_WIDGET::OnLeftDownLayers( wxMouseEvent& event )
 
     if( OnLayerSelect( row ) )    // if client allows this change.
         SelectLayerRow( row );
+
+    passOnFocus();
 }
 
 
@@ -234,6 +236,8 @@ void LAYER_WIDGET::OnMiddleDownLayerColor( wxMouseEvent& event )
         // tell the client code.
         OnLayerColorChange( layer, newColor );
     }
+
+    passOnFocus();
 }
 
 
@@ -250,6 +254,8 @@ void LAYER_WIDGET::OnRightDownLayers( wxMouseEvent& event )
         _( "Hide All Cu" ) ) );
 
     PopupMenu( &menu );
+
+    passOnFocus();
 }
 
 void LAYER_WIDGET::OnPopupSelection( wxCommandEvent& event )
@@ -307,6 +313,7 @@ void LAYER_WIDGET::OnLayerCheckBox( wxCommandEvent& event )
     wxCheckBox* eventSource = (wxCheckBox*) event.GetEventObject();
     int layer = getDecodedId( eventSource->GetId() );
     OnLayerVisible( layer, eventSource->IsChecked() );
+    passOnFocus();
 }
 
 
@@ -331,6 +338,7 @@ void LAYER_WIDGET::OnMiddleDownRenderColor( wxMouseEvent& event )
         // tell the client code.
         OnRenderColorChange( id, newColor );
     }
+    passOnFocus();
 }
 
 void LAYER_WIDGET::OnRenderCheckBox( wxCommandEvent& event )
@@ -338,6 +346,7 @@ void LAYER_WIDGET::OnRenderCheckBox( wxCommandEvent& event )
     wxCheckBox* eventSource = (wxCheckBox*) event.GetEventObject();
     int id = getDecodedId( eventSource->GetId() );
     OnRenderEnable( id, eventSource->IsChecked() );
+    passOnFocus();
 }
 
 
@@ -437,10 +446,20 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
     col = 1;
     wxCheckBox* cb = new wxCheckBox( m_RenderScrolledWindow, encodeId( col, aSpec.id ),
                         aSpec.rowName, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+    cb->SetValue( aSpec.state );
     cb->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED,
         wxCommandEventHandler( LAYER_WIDGET::OnRenderCheckBox ), NULL, this );
     cb->SetToolTip( aSpec.tooltip );
     m_RenderFlexGridSizer->wxSizer::Insert( index+col, cb, 0, flags );
+}
+
+
+void LAYER_WIDGET::passOnFocus()
+{
+    wxWindow* parent = GetParent();
+    parent->SetFocus();
+
+//    printf( "passOnFocus() %p %p\n", parent, m_OriginalParent );
 }
 
 
@@ -449,6 +468,8 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
 LAYER_WIDGET::LAYER_WIDGET( wxWindow* parent ) :
     LAYER_PANEL_BASE( parent )
 {
+    m_OriginalParent = parent;
+
     m_CurrentRow = -1;
 
     m_RightArrowBitmap = new wxBitmap( rightarrow_xpm );
@@ -601,18 +622,16 @@ void LAYER_WIDGET::SelectLayerRow( int aRow )
     {
         newbm->SetBitmap( *m_RightArrowBitmap );
 
-        // Change the focus to the wxBitmapButton in column 1 for this row.
-        // We really do not need or want the focus, but because we get focus
-        // and it changes the appearance of these wxBitmapButtons, if any focused
-        // button is going to look different, we want it to be the current
-        // row.
-        getLayerComp( newNdx + 1 /* 1 is column */ )->SetFocus();
-
         // Make sure the desired layer row is visible.
-        // It seems that as of 2.8.2, setting the focus
-        // does this and generally I don't expect the scrolling to be needed at all because
-        // the minimum window size may end up being established by the number of layers.
+        // It seems that as of 2.8.2, setting the focus does this.
+        // I don't expect the scrolling to be needed at all because
+        // the minimum window size may end up being established so that the
+        // scroll bars will not be visible.
+        getLayerComp( newNdx + 1 /* 1 is column */ )->SetFocus();
     }
+
+    // give the focus back to the app.
+    passOnFocus();
 }
 
 
@@ -649,6 +668,7 @@ void LAYER_WIDGET::UpdateLayouts()
 {
     m_LayersFlexGridSizer->Layout();
     m_RenderFlexGridSizer->Layout();
+    FitInside();
 }
 
 #if defined(STAND_ALONE)

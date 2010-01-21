@@ -67,27 +67,16 @@ protected:
         {
         }
 
-        //-----<implement LAYER_WIDGET abstract functions>---
+        //-----<implement LAYER_WIDGET abstract callback functions>-----------
         void OnLayerColorChange( int aLayer, int aColor );
         bool OnLayerSelect( int aLayer );
         void OnLayerVisible( int aLayer, bool isVisible, bool isFinal );
         void OnRenderColorChange( int aId, int aColor );
         void OnRenderEnable( int aId, bool isEnabled );
-        //-----</implement LAYER_WIDGET abstract functions>---------------
+        //-----</implement LAYER_WIDGET abstract callback functions>----------
     };
 
-    /// render rows are fixed, layer rows are dynamically determined.
-    static LAYER_WIDGET::ROW renderRows[];
-
     LYRS*            m_Layers;              // established in constructor
-
-    /**
-     * Function ReFillLayerWidget
-     * changes out all the layers in m_Layers and may be called upon
-     * loading a new BOARD.
-     */
-    void ReFillLayerWidget();
-
 
 public:
     WinEDAChoiceBox* m_SelLayerBox;         // a combo box to display and
@@ -176,6 +165,13 @@ public:
     void             ReCreateOptToolbar();
     void             ReCreateMenuBar();
     WinEDAChoiceBox* ReCreateLayerBox( WinEDA_Toolbar* parent );
+
+    /**
+     * Function ReFillLayerWidget
+     * changes out all the layers in m_Layers and may be called upon
+     * loading a new BOARD.
+     */
+    void             ReFillLayerWidget();
 
     void             Show3D_Frame( wxCommandEvent& event );
     void             GeneralControle( wxDC* DC, wxPoint Mouse );

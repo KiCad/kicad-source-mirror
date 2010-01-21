@@ -287,7 +287,8 @@ public:
      * Function GetVisibleElements
      * is a proxy function that calls the correspondent function in m_BoardSettings
      * returns a bit-mask of all the element categories that are visible
-     * @return int - the visible element categories in bit-mapped form.
+     * @return int - the visible element bitmap or-ed from enum PCB_VISIBLE
+     * @see enum PCB_VISIBLE
      */
     int  GetVisibleElements() const;
 
@@ -295,9 +296,19 @@ public:
      * Function SetVisibleElements
      * is a proxy function that calls the correspondent function in m_BoardSettings
      * changes the bit-mask of visible element categories
-     * @param aMask = The new bit-mask of visible element categories
+     * @param aMask = The new bit-mask of visible element bitmap or-ed from enum PCB_VISIBLE
+     * @see enum PCB_VISIBLE
      */
     void SetVisibleElements( int aMask );
+
+    /**
+     * Function GetVisibleElementColor
+     * returns the color of a pcb visible element.
+     * @see enum PCB_VISIBLE
+     */
+    int  GetVisibleElementColor( int aPCB_VISIBLE );
+    void SetVisibleElementColor( int aPCB_VISIBLE, int aColor );
+
 
     /**
      * Function GetLayerName
@@ -345,7 +356,12 @@ public:
      */
     void     SetLayerColor( int aLayer, int aColor );
 
+    /**
+     * Function GetLayerColor
+     * gets a layer color for any valid layer, including non-copper ones.
+     */
     int      GetLayerColor( int aLayer );
+
 
     /* Functions to get some items count */
     int      GetNumSegmTrack();
