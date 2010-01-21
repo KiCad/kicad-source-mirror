@@ -4,6 +4,12 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-Jan-21 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew
+    Integration of LAYER_WIDGET into WinEDA_PcbFrame.  See
+    TODO.txt for more things that need to be done.
+
 
 2010-Jan-17 UPDATE Jerry Jacobs <xor.gate.engineering[at]gmail[dot]com>
 ================================================================================

@@ -59,6 +59,13 @@ GerbView
 
 KiCad
 -----
+Add to the Wiki what the minimum screen size resolution requirement is to run
+Kicad, so that people do not try and use the program and then whine that they
+cannot see everything they need.  We cannot make everyone happy, and by trying
+to make those with crappy computers happy, we risk making those with high res
+computers unhappy.  Establish a minimum, then ignore support complaints coming
+from folks with less than that minimum.
+
 
 
 PCBNew
@@ -82,3 +89,26 @@ PCBNew
 * Look at mouse auto-scroll modes (bug?)
 * Add the footprint name in the automatic placement file
 * Footprint list should also have a footprint preview.
+
+
+LAYER_WIDGET for PCBNEW
+-----------------------
+L1) Keyboard focus is getting stuck in layer widget and then hotkeys do not work.
+    There is probably a solution to be found and it may involve asking on the
+    wxWidgets mailing list.
+
+L2) Hook in bool WinEDA_PcbFrame::LYRS::OnLayerSelect( int aLayer )
+
+L3) When a layer changes via a hotkey, then call WinEDA_PcbFrame->m_Layers->SelectLayer()
+
+L4) Move popup menu code from class LAYER_WIDGET into WinEDA_PcbFrame::LYRS so as
+    to keep LAYER_WIDGET fully usage agnostic.  Remove #include "pcbstruct.h"      // IsValidCopperLayerIndex()
+    from layer_widget.cpp.
+
+L5) Add to moved popu menu code the ability to save the current layer widget
+    color and enable settings with an additional menu item.
+
+L6) Test, and fix up any remaining issues with the PCB_VISIBLE support, several
+    items which are stored on globals could and should be stored in
+    EDA_Settings.m_VisibleElements using enum PCB_VISIBLE.
+
