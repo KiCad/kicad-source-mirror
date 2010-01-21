@@ -126,22 +126,19 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
     }
 
     // Must be AFTER Realize():
+    m_HToolBar->EnableTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, asdeMorgan );
+    m_HToolBar->EnableTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, asdeMorgan );
     if( asdeMorgan )
     {
-        m_HToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT,
-                                (m_convert <= 1) ? true : false );
-        m_HToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT,
-                                (m_convert >= 2) ? true : false );
-        m_HToolBar->EnableTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, true );
-        m_HToolBar->EnableTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, true );
+        bool normal = m_convert <= 1;
+        m_HToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT,normal );
+        m_HToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, !normal );
     }
     else
     {
         m_HToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, true  );
         m_HToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, false );
-        m_HToolBar->EnableTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, false );
-        m_HToolBar->EnableTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, false );
-    }
+     }
 
 
     int parts_count = 1;

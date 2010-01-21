@@ -718,7 +718,7 @@ class MYFRAME : public wxFrame
 
 public:
     MYFRAME( wxWindow * parent ) :
-        wxFrame( parent, -1, _( "wxAUI Test" ), wxDefaultPosition,
+        wxFrame( parent, -1, wxT( "wxAUI Test" ), wxDefaultPosition,
             wxSize( 800, 600 ), wxDEFAULT_FRAME_STYLE )
     {
         // notify wxAUI which frame to use
@@ -728,19 +728,19 @@ public:
 
         // add some layer rows
         static const LAYER_WIDGET::ROW layerRows[] = {
-            LAYER_WIDGET::ROW( wxT("layer 1"), 0, RED, _("RED"), false ),
-            LAYER_WIDGET::ROW( wxT("layer 2"), 1, GREEN, _("GREEN"), true ),
-            LAYER_WIDGET::ROW( wxT("brown_layer"), 2, BROWN, _("BROWN"), true ),
-            LAYER_WIDGET::ROW( wxT("layer_4_you"), 3, BLUE, _("BLUE"), false ),
+            LAYER_WIDGET::ROW( wxT("layer 1"), 0, RED, wxT("RED"), false ),
+            LAYER_WIDGET::ROW( wxT("layer 2"), 1, GREEN, wxT("GREEN"), true ),
+            LAYER_WIDGET::ROW( wxT("brown_layer"), 2, BROWN, wxT("BROWN"), true ),
+            LAYER_WIDGET::ROW( wxT("layer_4_you"), 3, BLUE, wxT("BLUE"), false ),
         };
 
         lw->AppendLayerRows( layerRows, DIM(layerRows) );
 
         // add some render rows
         static const LAYER_WIDGET::ROW renderRows[] = {
-            LAYER_WIDGET::ROW( wxT("With Very Large Ears"), 0, -1, _("Spock here") ),
+            LAYER_WIDGET::ROW( wxT("With Very Large Ears"), 0, -1, wxT("Spock here") ),
             LAYER_WIDGET::ROW( wxT("With Legs"), 1, YELLOW ),
-            LAYER_WIDGET::ROW( wxT("With Oval Eyes"), 1, BROWN, _("My eyes are upon you") ),
+            LAYER_WIDGET::ROW( wxT("With Oval Eyes"), 1, BROWN, wxT("My eyes are upon you") ),
         };
 
         lw->AppendRenderRows( renderRows, DIM(renderRows) );
@@ -758,12 +758,12 @@ public:
         m_mgr.AddPane( lw, li );
 
 
-        wxTextCtrl* text2 = new wxTextCtrl( this, -1, _( "Pane 2 - sample text" ),
+        wxTextCtrl* text2 = new wxTextCtrl( this, -1, wxT( "Pane 2 - sample text" ),
                                             wxDefaultPosition, wxSize( 200, 150 ),
                                             wxNO_BORDER | wxTE_MULTILINE );
         m_mgr.AddPane( text2, wxBOTTOM, wxT( "Pane Number Two" ) );
 
-        wxTextCtrl* text3 = new wxTextCtrl( this, -1, _( "Main content window" ),
+        wxTextCtrl* text3 = new wxTextCtrl( this, -1, wxT( "Main content window" ),
                                             wxDefaultPosition, wxSize( 200, 150 ),
                                             wxNO_BORDER | wxTE_MULTILINE );
         m_mgr.AddPane( text3, wxCENTER );

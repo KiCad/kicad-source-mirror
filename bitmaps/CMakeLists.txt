@@ -190,6 +190,7 @@ set(BITMAP_SRCS
     Lang_Ru.xpm
     Lang_Sl.xpm
     Language.xpm
+    layers_manager.xpm
     Leave_Sheet.xpm
     left.xpm
     libedit_icon.xpm

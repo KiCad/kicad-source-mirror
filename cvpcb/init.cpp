@@ -139,7 +139,7 @@ int WinEDA_CvpcbFrame::SaveNetList( const wxString& fileName )
 
     wxFileDialog dlg( this, _( "Save Net and Component List" ), fn.GetPath(),
                       fn.GetFullName(), NetlistFileWildcard,
-                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      wxFD_SAVE/*| wxFD_OVERWRITE_PROMPT*/ );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;

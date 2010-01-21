@@ -192,6 +192,7 @@ void RATSNEST_ITEM::Draw( WinEDA_DrawPanel* panel,
                           int               aDrawMode,
                           const wxPoint&    aOffset )
 {
+    GRSetDrawMode( DC, aDrawMode );
     GRLine( &panel->m_ClipBox, DC, m_PadStart->m_Pos - aOffset,
             m_PadEnd->m_Pos - aOffset, 0, g_DesignSettings.m_RatsnestColor );
 }

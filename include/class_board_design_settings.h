@@ -40,7 +40,7 @@ protected:
 public:
 
     // Color options for screen display of the Printed Board:
-    int m_LayerColor[NB_LAYERS];                    ///< Layer colors (tracks and graphic items)
+    int m_LayerColor[LAYER_COUNT];                    ///< Layer colors (tracks and graphic items)
 
     int m_ViaColor[4];                              // Via color (depending on is type)
 

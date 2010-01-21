@@ -104,6 +104,7 @@ public:
     bool             m_TrackAndViasSizesList_Changed;
 
     bool             m_show_microwave_tools;
+    bool             m_show_layer_manager_tools;
 
 private:
 

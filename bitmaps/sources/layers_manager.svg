@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:export-ydpi="90"
+   inkscape:export-xdpi="90"
+   inkscape:export-filename="F:\kicad-sourceforge\trunk\kicad\bitmaps\sources\layers_manager.png"
+   width="16"
+   height="16"
+   id="svg11300"
+   sodipodi:version="0.32"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="layers_manager.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   version="1.1">
+  <title
+     id="title2867">fabrication.svg</title>
+  <defs
+     id="defs3">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 8 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="16 : 8 : 1"
+       inkscape:persp3d-origin="8 : 5.3333333 : 1"
+       id="perspective62" />
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2250">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop2252" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop2254" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2265">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop2267" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop2269" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2257">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop2259" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop2261" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3087">
+      <stop
+         style="stop-color:#3465a4;stop-opacity:1;"
+         offset="0"
+         id="stop3089" />
+      <stop
+         id="stop3095"
+         offset="0"
+         style="stop-color:#9fbce1;stop-opacity:1;" />
+      <stop
+         style="stop-color:#6b95ca;stop-opacity:1;"
+         offset="0"
+         id="stop2242" />
+      <stop
+         id="stop2244"
+         offset="0.75"
+         style="stop-color:#3d6aa5;stop-opacity:1;" />
+      <stop
+         style="stop-color:#386eb4;stop-opacity:1;"
+         offset="1"
+         id="stop3091" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3077">
+      <stop
+         style="stop-color:#98a0a9;stop-opacity:1;"
+         offset="0"
+         id="stop3079" />
+      <stop
+         style="stop-color:#c3d0dd;stop-opacity:1;"
+         offset="1"
+         id="stop3081" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3061">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3063" />
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="1"
+         id="stop3065" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3049">
+      <stop
+         style="stop-color:#b6b6b6;stop-opacity:1;"
+         offset="0"
+         id="stop3051" />
+      <stop
+         id="stop2262"
+         offset="0.5"
+         style="stop-color:#f2f2f2;stop-opacity:1;" />
+      <stop
+         style="stop-color:#fafafa;stop-opacity:1;"
+         offset="0.67612958"
+         id="stop2264" />
+      <stop
+         id="stop2268"
+         offset="0.84051722"
+         style="stop-color:#d8d8d8;stop-opacity:1;" />
+      <stop
+         id="stop2266"
+         offset="0.875"
+         style="stop-color:#f2f2f2;stop-opacity:1;" />
+      <stop
+         style="stop-color:#dbdbdb;stop-opacity:1;"
+         offset="1"
+         id="stop3053" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3041">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3043" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop3045" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3041"
+       id="radialGradient3047"
+       cx="24.8125"
+       cy="39.125"
+       fx="24.8125"
+       fy="39.125"
+       r="17.6875"
+       gradientTransform="matrix(1,0,0,0.374558,0,24.47041)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3061"
+       id="linearGradient3067"
+       x1="50.152931"
+       y1="-3.6324477"
+       x2="25.291086"
+       y2="-4.3002653"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.25783861,0,0,0.2595286,32.155794,28.984379)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3087"
+       id="linearGradient3093"
+       x1="9.7503242"
+       y1="32.28376"
+       x2="16.915297"
+       y2="39.443218"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.28963035,0,0,0.22349527,2.044995,37.38192)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2257"
+       id="linearGradient2263"
+       x1="12.004697"
+       y1="35.688461"
+       x2="10.650805"
+       y2="33.194965"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.33216589,-0.00670924,0.00869457,0.2563181,1.7338281,36.137935)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2265"
+       id="linearGradient2271"
+       x1="14.017542"
+       y1="36.942543"
+       x2="15.415793"
+       y2="38.268368"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.28957395,-0.0044084,0.0057129,0.22345175,1.92189,37.152949)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2250"
+       id="linearGradient2256"
+       x1="31.177404"
+       y1="19.821514"
+       x2="40.859177"
+       y2="9.6568537"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.3297737,0,0,0.25447215,1.2083631,36.117783)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3041"
+       id="radialGradient2260"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,0.374558,0,24.47041)"
+       cx="24.8125"
+       cy="39.125"
+       fx="24.8125"
+       fy="39.125"
+       r="17.6875" />
+  </defs>
+  <sodipodi:namedview
+     stroke="#204a87"
+     fill="#3465a4"
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="0.25490196"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="32"
+     inkscape:cx="5.730549"
+     inkscape:cy="7.311168"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     inkscape:showpageshadow="false"
+     inkscape:window-width="1280"
+     inkscape:window-height="968"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2865"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       empcolor="#0000ff"
+       empopacity="0.1372549"
+       dotted="true" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata4">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Jakub Steiner</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:source />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+        <dc:title>fabrication.svg</dc:title>
+        <dc:subject>
+          <rdf:Bag />
+        </dc:subject>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     transform="translate(0,-32)">
+    <path
+       style="color:#000000;fill:url(#linearGradient3093);fill-opacity:1;fill-rule:nonzero;stroke:#204a87;stroke-width:0.28968632;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible"
+       d="m 4,47.21571 c 0.434176,0.372862 1.6401905,0.54156 2.1750038,-0.180652 0.2331858,-0.314894 0.6905276,-1.196733 2.7308986,-2.613753 0.3426828,-0.23772 0.7056856,-0.781518 0.3979535,-1.074855 L 8.5073723,42.731837 c -0.3258341,-0.27937 -1.2315119,-0.149058 -1.6030876,0.241972 -1.1076301,1.169603 -2.9172027,2.100637 -3.3252766,2.213098 -0.7808777,0.215204 -0.69299,1.103429 -0.1763706,1.52594 L 4,47.21571 z"
+       id="path2142"
+       sodipodi:nodetypes="ccccccscc"
+       inkscape:export-filename="F:\kicad-sourceforge\trunk\kicad\bitmaps\sources\layers_manager.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:nodetypes="csccccscc"
+       id="path2270"
+       d="m 4.1123506,46.929462 c 0.4752915,0.444211 1.5168053,0.549973 1.8438178,-0.0943 C 6.1808455,46.3925 7.0555089,45.393372 8.6595158,44.279403 8.9289111,44.092522 9.2142805,43.665024 8.972361,43.434421 L 8.3462174,42.951254 C 8.0900679,42.731632 7.378083,42.834074 7.085974,43.141476 6.2152275,44.060942 4.2883902,45.26366 3.8226159,45.382263 3.1014687,45.565892 3.2366106,46.201994 3.6427431,46.534144 l 0.4696075,0.395318 z"
+       style="opacity:0.19886367;color:#000000;fill:none;stroke:#ffffff;stroke-width:0.28968629;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible"
+       inkscape:export-filename="F:\kicad-sourceforge\trunk\kicad\bitmaps\sources\layers_manager.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#008000"
+       id="rect2932"
+       width="13.536558"
+       height="10.298958"
+       x="-7.8830147"
+       y="32.956669"
+       transform="matrix(1,0,0.23919332,0.97097197,0,0)"
+       rx="0.25089604"
+       ry="0.38427848"
+       inkscape:export-filename="F:\kicad-sourceforge\trunk\kicad\bitmaps\sources\layers_manager.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;stroke:#de0000;stroke-width:1.47709787px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 2.181818,33 12,33 l 2.181818,6 0,0"
+       id="path2934"
+       inkscape:export-filename="F:\kicad-sourceforge\trunk\kicad\bitmaps\sources\layers_manager.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;fill:#654032;fill-opacity:1;fill-rule:nonzero;stroke:#c0754f;stroke-width:0.28968632;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible"
+       d="m 7.1135263,41.516582 6.2632577,4.944832 c 0.253425,0.223496 1.056431,0.39623 1.592967,0 0.518114,-0.382628 0.398239,-0.921917 -0.108613,-1.313035 L 8.8513085,40.17561 C 9.5932991,38.585159 8.0915464,37.249291 6.1541258,37.535572 L 5.737782,37.828908 7.0411183,38.778763 7.1135269,39.616872 6.1404167,40.30232 4.977503,40.203545 3.7827781,39.3375 c 0,0 -0.4188528,0.31934 -0.4188528,0.31934 -0.1948182,1.435556 1.7503483,2.718584 3.7496016,1.85974 z"
+       id="path2140"
+       sodipodi:nodetypes="cczcccccccccsc"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       inkscape:export-filename="F:\kicad-sourceforge\trunk\kicad\bitmaps\sources\layers_manager.png" />
+    <path
+       sodipodi:nodetypes="cczccccccccccc"
+       id="path3057"
+       d="m 7.1830003,41.191983 6.3326047,5.09647 c 0.196185,0.173014 0.817816,0.306731 1.233161,0 0.401088,-0.296203 0.308289,-0.713682 -0.08408,-1.016456 l -6.098022,-4.99304 c 0.4946607,-1.654068 -0.6129792,-2.5459 -2.2618478,-2.514092 l -0.089082,0.06956 1.188149,0.823539 0.042924,1.06415 L 6.255036,40.561489 4.8560349,40.444888 3.8084818,39.683639 3.6921913,39.793082 c -0.1030543,1.51888 2.1407982,2.210031 3.4908092,1.398901 z"
+       style="opacity:0.42613639;color:#000000;fill:none;stroke:#ffffff;stroke-width:0.28968617;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible"
+       inkscape:export-filename="F:\kicad-sourceforge\trunk\kicad\bitmaps\sources\layers_manager.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="opacity:0.17045456;color:#000000;fill:none;stroke:url(#linearGradient3067);stroke-width:0.29453531;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible"
+       id="rect3059"
+       width="6.8309965"
+       height="0.6073972"
+       x="38.866058"
+       y="27.72298"
+       rx="0.25948578"
+       ry="0.26118657"
+       transform="matrix(0.78399442,0.62076787,-0.79922251,0.60103526,0,0)"
+       inkscape:export-filename="F:\kicad-sourceforge\trunk\kicad\bitmaps\sources\layers_manager.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;fill:#5d969f;fill-opacity:1;fill-rule:nonzero;stroke:#304279;stroke-width:0.28968632;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible"
+       d="m 8.6278738,43.783853 c 0.2748799,-0.18181 4.3806592,-3.422271 4.3806592,-3.422271 l 1.013705,-0.05588 1.592967,-1.704153 -1.327117,-0.912333 -2.063615,1.368911 0,0.782233 -4.1996404,3.366397 c -0.1991207,0.153653 0.3496145,0.74471 0.6030412,0.577089 z"
+       id="path2144"
+       sodipodi:nodetypes="ccccccccc"
+       inkscape:export-filename="F:\kicad-sourceforge\trunk\kicad\bitmaps\sources\layers_manager.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:nodetypes="ccccccccc"
+       id="path3085"
+       d="m 8.5959495,43.519221 c 0.2132886,-0.141073 4.2951045,-3.366617 4.2951045,-3.366617 l 0.965769,-0.06312 1.389638,-1.440838 L 14.293505,38 l -1.806031,1.200465 0.05121,0.72549 -4.1802469,3.382525 c -0.1545052,0.119226 0.040879,0.340795 0.2375212,0.210732 z"
+       style="opacity:0.53977272;color:#000000;fill:none;stroke:url(#linearGradient2256);stroke-width:0.28968653;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible"
+       inkscape:export-filename="F:\kicad-sourceforge\trunk\kicad\bitmaps\sources\layers_manager.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="arc"
+       style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#a1a1a1;stroke-width:1.13860166;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible"
+       id="path2146"
+       sodipodi:cx="41.875"
+       sodipodi:cy="37.5"
+       sodipodi:rx="1.375"
+       sodipodi:ry="1.375"
+       d="m 43.25,37.5 c 0,0.759392 -0.615608,1.375 -1.375,1.375 -0.759392,0 -1.375,-0.615608 -1.375,-1.375 0,-0.759392 0.615608,-1.375 1.375,-1.375 0.759392,0 1.375,0.615608 1.375,1.375 z"
+       transform="matrix(0.28963038,0,0,0.22349527,2.0087911,37.409856)"
+       inkscape:export-filename="F:\kicad-sourceforge\trunk\kicad\bitmaps\sources\layers_manager.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="arc"
+       style="opacity:0.60227272;color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible"
+       id="path3101"
+       sodipodi:cx="19.003494"
+       sodipodi:cy="28.20101"
+       sodipodi:rx="1.767767"
+       sodipodi:ry="1.767767"
+       d="m 20.771261,28.20101 c 0,0.97631 -0.791456,1.767767 -1.767767,1.767767 -0.97631,0 -1.767767,-0.791457 -1.767767,-1.767767 0,-0.976311 0.791457,-1.767767 1.767767,-1.767767 0.976311,0 1.767767,0.791456 1.767767,1.767767 z"
+       transform="matrix(0.18825988,0,0,0.14527205,4.2273913,38.980877)"
+       inkscape:export-filename="F:\kicad-sourceforge\trunk\kicad\bitmaps\sources\layers_manager.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;fill:none;stroke:url(#linearGradient2263);stroke-width:0.66468823;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible"
+       d="m 7.3681746,43.656471 c 0,0 -2.3644414,1.857549 -3.4720711,2.172441"
+       id="path3103"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="F:\kicad-sourceforge\trunk\kicad\bitmaps\sources\layers_manager.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="opacity:0.27840911;color:#000000;fill:none;stroke:url(#linearGradient2271);stroke-width:0.66468823;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible"
+       d="m 8.0757695,44.072843 c 0,0 -2.4148549,1.683945 -2.9395217,2.763579"
+       id="path2247"
+       sodipodi:nodetypes="cc"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       inkscape:export-filename="F:\kicad-sourceforge\trunk\kicad\bitmaps\sources\layers_manager.png" />
+  </g>
+</svg>

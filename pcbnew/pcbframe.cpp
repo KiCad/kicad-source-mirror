@@ -23,7 +23,7 @@
 #define PCB_MAGNETIC_PADS_OPT   wxT( "PcbMagPadOpt" )
 #define PCB_MAGNETIC_TRACKS_OPT wxT( "PcbMagTrackOpt" )
 #define SHOW_MICROWAVE_TOOLS    wxT( "ShowMicrowaveTools" )
-
+#define SHOW_LAYER_MANAGER_TOOLS    wxT( "ShowLayerManagerTools" )
 
 BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_SOCKET( ID_EDA_SOCKET_EVENT_SERV, WinEDA_PcbFrame::OnSockRequestServer )
@@ -153,6 +153,8 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     // Option toolbar
     EVT_TOOL_RANGE( ID_TB_OPTIONS_START, ID_TB_OPTIONS_END,
                     WinEDA_PcbFrame::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
+                    WinEDA_PcbFrame::OnSelectOptionToolbar)
 
     // Vertical toolbar:
     EVT_TOOL( ID_NO_SELECT_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
@@ -241,6 +243,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     m_SelLayerBox   = NULL;
     m_TrackAndViasSizesList_Changed = false;
     m_show_microwave_tools = false;
+    m_show_layer_manager_tools = true;
 
     m_Layers = new LYRS( this );
     m_Layers->AppendRenderRows( renderRows, DIM(renderRows) );
@@ -320,11 +323,16 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
         m_auimgr.AddPane( m_VToolBar,
                           wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right().Row( 1 ) );
 
-    m_auimgr.AddPane( m_Layers, lyrs.Right().Row( 0 ) );
+    m_auimgr.AddPane( m_Layers, lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Row( 0 ) );
 
     if( m_OptionsToolBar )
+    {
         m_auimgr.AddPane( m_OptionsToolBar,
                           wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left() );
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
+                                      m_show_layer_manager_tools );
+        m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
+    }
 
     if( DrawPanel )
         m_auimgr.AddPane( DrawPanel,
@@ -531,6 +539,7 @@ void WinEDA_PcbFrame::LoadSettings()
     config->Read( PCB_MAGNETIC_PADS_OPT, &g_MagneticPadOption );
     config->Read( PCB_MAGNETIC_TRACKS_OPT, &g_MagneticTrackOption );
     config->Read( SHOW_MICROWAVE_TOOLS, &m_show_microwave_tools );
+    config->Read( SHOW_LAYER_MANAGER_TOOLS, &m_show_layer_manager_tools );
 }
 
 
@@ -547,5 +556,8 @@ void WinEDA_PcbFrame::SaveSettings()
 
     config->Write( PCB_MAGNETIC_PADS_OPT, (long) g_MagneticPadOption );
     config->Write( PCB_MAGNETIC_TRACKS_OPT, (long) g_MagneticTrackOption );
-    config->Write( SHOW_MICROWAVE_TOOLS, ( m_AuxVToolBar && m_AuxVToolBar->IsShown() ) ? true : false );
+    config->Write( SHOW_MICROWAVE_TOOLS,
+        ( m_AuxVToolBar && m_AuxVToolBar->IsShown() ) ? true : false );
+    config->Write( SHOW_LAYER_MANAGER_TOOLS, (long)m_show_layer_manager_tools );
+
 }

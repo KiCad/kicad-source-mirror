@@ -495,7 +495,7 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
         TRACK* firstTrack = g_FirstTrackSegment;
         int    newCount   = g_CurrentTrackList.GetCount();
 
-        // Put entire new current segment list in BOARD, ans prepare undo
+        // Put entire new current segment list in BOARD, and prepare undo
         // command
         TRACK* track;
         TRACK* insertBeforeMe = g_CurrentTrackSegment->GetBestInsertPoint(
@@ -526,10 +526,8 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
         SaveCopyInUndoList( s_ItemsListPicker, UR_UNSPECIFIED );
         s_ItemsListPicker.ClearItemsList(); // s_ItemsListPicker is no more
                                             // owner of picked items
-
         /* compute the new rastnest */
         test_1_net_connexion( DC, netcode );
-
         GetScreen()->SetModify();
         GetBoard()->DisplayInfo( this );
     }

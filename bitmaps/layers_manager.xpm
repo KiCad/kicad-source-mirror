@@ -1,0 +1,38 @@
+/* XPM */
+const char *layers_manager_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 16 1",
+"X c #3A3916",
+"o c #165304",
+"& c #534D52",
+"; c #375884",
+"  c #1A6C08",
+". c #AE1D04",
+"O c None",
+"% c #678B87",
+"$ c #616E7F",
+"# c #6A4E40",
+"- c #587FAA",
+"+ c #0A8108",
+": c #9CBADC",
+"@ c #796E50",
+"= c #2E2320",
+"* c #7699AC",
+/* pixels */
+"  ..........XoOO",
+"oo........... OO",
+"X++++++++++ .oOO",
+"O+++++++++++..XO",
+"O ++++++++++X.oO",
+"Oo++++@ ++++ .#O",
+"OX++++@@@+++ $%&",
+"OO+@ ++@@+++%*$X",
+"OO @@@@##@+%%@+o",
+"OOo+@@@@#&*%+++ ",
+"OOOOOOO=$*$@OOOO",
+"OOOOO=$*-$##@=OO",
+"OOOO&-*-;OX@#@XO",
+"OOO;:*$;OOO=@@%=",
+"OOO;--;OOOOOO#@O",
+"OOOO&&OOOOOOOOOO"
+};

@@ -182,6 +182,7 @@ extern const char* lang_pt_xpm[];
 extern const char* lang_ru_xpm[];
 extern const char* lang_sl_xpm[];
 extern const char* language_xpm[];
+extern const char* layers_manager_xpm[];
 extern const char* leave_sheet_xpm[];
 extern const char* left_xpm[];
 extern const char* libedit_icon_xpm[];

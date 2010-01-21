@@ -529,18 +529,17 @@ void WinEDA_BasePcbFrame::DrawGeneralRatsnest( wxDC* DC, int net_code )
         return;
     if( DC == NULL )
         return;
-
+    int state = CH_VISIBLE | CH_ACTIF;
     for( unsigned ii = 0; ii < m_Pcb->GetRatsnestsCount(); ii++ )
     {
-        if( ( m_Pcb->m_FullRatsnest[ii].m_Status &
-             ( CH_VISIBLE | CH_ACTIF ) ) !=
-           ( CH_VISIBLE | CH_ACTIF ) )
+        RATSNEST_ITEM& item = m_Pcb->m_FullRatsnest[ii];
+        if( ( item.m_Status & state ) != state )
             continue;
 
-        if( ( net_code <= 0 )
-            || ( net_code == m_Pcb->m_FullRatsnest[ii].GetNet() ) )
-            m_Pcb->m_FullRatsnest[ii].Draw( DrawPanel, DC, GR_XOR,
-                                            wxPoint( 0, 0 ) );
+        if( ( net_code <= 0 ) || ( net_code == item.GetNet() ) )
+        {
+            item.Draw( DrawPanel, DC, GR_XOR, wxPoint( 0, 0 ) );
+        }
     }
 }
 

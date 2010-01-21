@@ -256,15 +256,25 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1:
+        m_show_microwave_tools = m_OptionsToolBar->GetToolState( id );
 #if !defined(KICAD_AUIMANAGER)
         // show auxiliary Vertical toolbar (Microwave tool)
-        m_AuxVToolBar->Show(m_OptionsToolBar->GetToolState( id ));
+        m_AuxVToolBar->Show(m_show_microwave_tools);
         {
         wxSizeEvent SizeEv( GetSize() );
         OnSize( SizeEv );
         }
 #else
-        m_auimgr.GetPane( wxT( "m_AuxVToolBar" ) ).Show( m_OptionsToolBar->GetToolState( id ) );
+        m_auimgr.GetPane( wxT( "m_AuxVToolBar" ) ).Show( m_show_microwave_tools );
+        m_auimgr.Update();
+#endif
+        break;
+
+    case ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR:
+#if defined(KICAD_AUIMANAGER)
+        // show auxiliary Vertical layers and visibility manager toolbar
+        m_show_layer_manager_tools = m_OptionsToolBar->GetToolState( id );
+        m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
         m_auimgr.Update();
 #endif
         break;

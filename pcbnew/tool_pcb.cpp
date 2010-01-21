@@ -24,15 +24,14 @@
 
 #include "hotkeys.h"
 
-#define MUWAVE_ENBL
-
 #define SEL_LAYER_HELP _( \
         "Show active layer selections\nand select layer pair for route and place via" )
 
 /* Data to build the layer pair indicator button */
 static wxBitmap*  LayerPairBitmap = NULL;
 
-static const char s_BitmapLayerIcon[16][16] = {
+static const char s_BitmapLayerIcon[16][16] =
+{
     // 0 = draw pixel with active layer color
     // 1 = draw pixel with top layer color (top/bottom layer used in
     //     autoroute and place via)
@@ -70,19 +69,22 @@ void WinEDA_PcbFrame::PrepareLayerIndicator()
                previous_Route_Layer_BOTTOM_color, previous_via_color;
 
     /* get colors, and redraw bitmap button only on changes */
-    active_layer_color = g_DesignSettings.m_LayerColor[((PCB_SCREEN*)GetScreen())->m_Active_Layer];
+    active_layer_color =
+        g_DesignSettings.m_LayerColor[( (PCB_SCREEN*) GetScreen() )->m_Active_Layer];
     if( previous_active_layer_color != active_layer_color )
     {
         previous_active_layer_color = active_layer_color;
         change = true;
     }
-    Route_Layer_TOP_color = g_DesignSettings.m_LayerColor[((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP];
+    Route_Layer_TOP_color =
+        g_DesignSettings.m_LayerColor[( (PCB_SCREEN*) GetScreen() )->m_Route_Layer_TOP];
     if( previous_Route_Layer_TOP_color != Route_Layer_TOP_color )
     {
         previous_Route_Layer_TOP_color = Route_Layer_TOP_color;
         change = true;
     }
-    Route_Layer_BOTTOM_color = g_DesignSettings.m_LayerColor[((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM];
+    Route_Layer_BOTTOM_color =
+        g_DesignSettings.m_LayerColor[( (PCB_SCREEN*) GetScreen() )->m_Route_Layer_BOTTOM];
     if( previous_Route_Layer_BOTTOM_color != Route_Layer_BOTTOM_color )
     {
         previous_Route_Layer_BOTTOM_color = Route_Layer_BOTTOM_color;
@@ -177,7 +179,7 @@ void WinEDA_PcbFrame::PrepareLayerIndicator()
 
 
 /* Creates or updates the main horizontal toolbar for the board editor
-*/
+ */
 void WinEDA_PcbFrame::ReCreateHToolbar()
 {
     wxString msg;
@@ -192,48 +194,49 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
     m_HToolBar->SetRows( 1 );
 #if !defined(KICAD_AUIMANAGER)
-    SetToolBar( (wxToolBar*)m_HToolBar );
+    SetToolBar( (wxToolBar*) m_HToolBar );
 #endif
+
     // Set up toolbar
     m_HToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, wxBitmap( new_xpm ),
-                         _( "New board" ) );
+                        _( "New board" ) );
     m_HToolBar->AddTool( ID_LOAD_FILE, wxEmptyString, wxBitmap( open_xpm ),
-                         _( "Open existing board" ) );
+                        _( "Open existing board" ) );
     m_HToolBar->AddTool( ID_SAVE_BOARD, wxEmptyString, wxBitmap( save_xpm ),
-                         _( "Save board" ) );
+                        _( "Save board" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_SHEET_SET, wxEmptyString, wxBitmap( sheetset_xpm ),
-                         _( "Page settings (size, texts)" ) );
+                        _( "Page settings (size, texts)" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_OPEN_MODULE_EDITOR, wxEmptyString,
-                         wxBitmap( modedit_xpm ),
-                         _( "Open module editor" ) );
+                        wxBitmap( modedit_xpm ),
+                        _( "Open module editor" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( wxID_CUT, wxEmptyString, wxBitmap( cut_button ),
-                         _( "Cut selected item" ) );
+                        _( "Cut selected item" ) );
 
 #if 0
     m_HToolBar->AddTool( wxID_COPY, wxEmptyString, wxBitmap( copy_button ),
-                         _( "Copy selected item" ) );
+                        _( "Copy selected item" ) );
 
     m_HToolBar->AddTool( wxID_PASTE, wxEmptyString, wxBitmap( paste_xpm ),
-                         _( "Paste" ) );
+                        _( "Paste" ) );
 #endif
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( wxID_UNDO, wxEmptyString, wxBitmap( undo_xpm ),
-                         _( "Undo last edition" ) );
+                        _( "Undo last edition" ) );
     m_HToolBar->AddTool( wxID_REDO, wxEmptyString, wxBitmap( redo_xpm ),
-                         _( "Redo the last undo command" ) );
+                        _( "Redo the last undo command" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_GEN_PRINT, wxEmptyString, wxBitmap( print_button ),
-                         _( "Print board" ) );
+                        _( "Print board" ) );
     m_HToolBar->AddTool( ID_GEN_PLOT, wxEmptyString, wxBitmap( plot_xpm ),
-                         _( "Plot (HPGL, PostScript, or GERBER format)" ) );
+                        _( "Plot (HPGL, PostScript, or GERBER format)" ) );
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Zoom in" ), s_Board_Editor_Hokeys_Descr,
@@ -265,9 +268,9 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, wxBitmap( netlist_xpm ),
-                         _( "Read netlist" ) );
+                        _( "Read netlist" ) );
     m_HToolBar->AddTool( ID_DRC_CONTROL, wxEmptyString, wxBitmap( erc_xpm ),
-                         _( "Perform design rules check" ) );
+                        _( "Perform design rules check" ) );
 
     m_HToolBar->AddSeparator();
 
@@ -289,8 +292,8 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
     // Fast call to FreeROUTE Web Bases router
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, wxEmptyString,
-                         wxBitmap( web_support_xpm ),
-                         _( "Fast access to theWeb Based FreeROUTE advanced router" ) );
+                        wxBitmap( web_support_xpm ),
+                        _( "Fast access to theWeb Based FreeROUTE advanced router" ) );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
@@ -345,18 +348,18 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
 
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddRadioTool( ID_TB_OPTIONS_SHOW_ZONES, wxEmptyString,
-                                    wxBitmap( show_zone_xpm ), wxNullBitmap,
-                                    _( "Show filled areas in zones" ) );
+                                   wxBitmap( show_zone_xpm ), wxNullBitmap,
+                                   _( "Show filled areas in zones" ) );
     m_OptionsToolBar->AddRadioTool( ID_TB_OPTIONS_SHOW_ZONES_DISABLE,
-                                    wxEmptyString,
-                                    wxBitmap( show_zone_disable_xpm ),
-                                    wxNullBitmap,
-                                    _( "Do not show filled areas in zones" ));
+                                   wxEmptyString,
+                                   wxBitmap( show_zone_disable_xpm ),
+                                   wxNullBitmap,
+                                   _( "Do not show filled areas in zones" ) );
     m_OptionsToolBar->AddRadioTool( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY,
-                                    wxEmptyString,
-                                    wxBitmap( show_zone_outline_only_xpm ),
-                                    wxNullBitmap,
-                                    _( "Show outlines of filled areas only in zones" ) );
+                                   wxEmptyString,
+                                   wxBitmap( show_zone_outline_only_xpm ),
+                                   wxNullBitmap,
+                                   _( "Show outlines of filled areas only in zones" ) );
 
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
@@ -385,17 +388,23 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
                                _( "Show invisible text" ),
                                wxITEM_CHECK );
     m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
-                                  g_DesignSettings.IsElementVisible( MODULE_TEXT_NOV_VISIBLE ));
+                                 g_DesignSettings.IsElementVisible( MODULE_TEXT_NOV_VISIBLE ) );
 
 
-#ifdef MUWAVE_ENBL
     m_OptionsToolBar->AddSeparator();
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
+                               wxEmptyString,
+                               wxBitmap( layers_manager_xpm ),
+                               _(
+                                   "Display/remove auxiliary vertical toolbar (tools for micro wave applications)\n This is a experimental feature (under development)" ),
+                               wxITEM_CHECK );
+
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
                                wxEmptyString,
                                wxBitmap( mw_toolbar_xpm ),
-                               _( "Display/remove auxiliary vertical toolbar (tools for micro wave applications)\n This is a experimental feature (under development)" ),
+                               _(
+                                   "Display/remove auxiliary vertical toolbar (tools for micro wave applications)\n This is a experimental feature (under development)" ),
                                wxITEM_CHECK );
-#endif
 
     m_OptionsToolBar->Realize();
     SetToolbars();
@@ -494,18 +503,18 @@ void WinEDA_PcbFrame::ReCreateAuxVToolbar()
 
     // Set up toolbar
     m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_SELF_CMD, wxEmptyString,
-                            wxBitmap( mw_Add_Line_xpm ),
-                            _( "Create line of specified length for microwave applications" ) );
+                           wxBitmap( mw_Add_Line_xpm ),
+                           _( "Create line of specified length for microwave applications" ) );
 
     m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_GAP_CMD, wxEmptyString,
-                            wxBitmap( mw_Add_Gap_xpm ),
-                            _( "Create gap of specified length for microwave applications" ) );
+                           wxBitmap( mw_Add_Gap_xpm ),
+                           _( "Create gap of specified length for microwave applications" ) );
 
     m_AuxVToolBar->AddSeparator();
 
     m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_STUB_CMD, wxEmptyString,
-                            wxBitmap( mw_Add_Stub_xpm ),
-                            _( "Create stub of specified length for microwave applications" ) );
+                           wxBitmap( mw_Add_Stub_xpm ),
+                           _( "Create stub of specified length for microwave applications" ) );
 
     m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_STUB_ARC_CMD, wxEmptyString,
                             wxBitmap( mw_Add_stub_arc_xpm ),
@@ -513,8 +522,8 @@ void WinEDA_PcbFrame::ReCreateAuxVToolbar()
                             );
 
     m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_FUNCTION_SHAPE_CMD, wxEmptyString,
-                            wxBitmap( mw_Add_Shape_xpm ),
-                            _( "Create a polynomial shape for microwave applications" ) );
+                           wxBitmap( mw_Add_Shape_xpm ),
+                           _( "Create a polynomial shape for microwave applications" ) );
 
     m_AuxVToolBar->Realize();
 
@@ -547,17 +556,17 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
 
         // Creates box to display and choose tracks widths:
         m_SelTrackWidthBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
-                                                  ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
-                                                  wxPoint( -1, -1 ),
-                                                  wxSize( LISTBOX_WIDTH, -1 ) );
+                                                 ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
+                                                 wxPoint( -1, -1 ),
+                                                 wxSize( LISTBOX_WIDTH, -1 ) );
         m_AuxiliaryToolBar->AddControl( m_SelTrackWidthBox );
         m_AuxiliaryToolBar->AddSeparator();
 
         // Creates box to display and choose vias diameters:
         m_SelViaSizeBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
-                                               ID_AUX_TOOLBAR_PCB_VIA_SIZE,
-                                               wxPoint( -1, -1 ),
-                                               wxSize( (LISTBOX_WIDTH*12)/10, -1 ) );
+                                              ID_AUX_TOOLBAR_PCB_VIA_SIZE,
+                                              wxPoint( -1, -1 ),
+                                              wxSize( (LISTBOX_WIDTH * 12) / 10, -1 ) );
         m_AuxiliaryToolBar->AddControl( m_SelViaSizeBox );
         m_AuxiliaryToolBar->AddSeparator();
 
@@ -566,7 +575,7 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
                                          wxEmptyString, wxPoint( -1, -1 ),
                                          wxSize( LISTBOX_WIDTH + 10, -1 ),
                                          wxTE_READONLY );
-        m_ClearanceBox->SetToolTip(_("Current NetClass clearance value") );
+        m_ClearanceBox->SetToolTip( _( "Current NetClass clearance value" ) );
         m_AuxiliaryToolBar->AddControl( m_ClearanceBox );
         m_AuxiliaryToolBar->AddSeparator();
 
@@ -575,7 +584,7 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
                                                 wxEmptyString, wxPoint( -1, -1 ),
                                                 wxSize( LISTBOX_WIDTH, -1 ),
                                                 wxTE_READONLY );
-        m_NetClassSelectedBox->SetToolTip(_("Name of the current NetClass") );
+        m_NetClassSelectedBox->SetToolTip( _( "Name of the current NetClass" ) );
         m_AuxiliaryToolBar->AddControl( m_NetClassSelectedBox );
         m_AuxiliaryToolBar->AddSeparator();
 
@@ -584,36 +593,37 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
         m_AuxiliaryToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
                                      wxEmptyString,
                                      wxBitmap( auto_track_width_xpm ),
-                                     _( "Auto track width: when starting on \
-an existing track use its width\notherwise, use current width setting" ),
+                                     _(
+                                         "Auto track width: when starting on \
+an existing track use its width\notherwise, use current width setting"                                                                                 ),
                                      wxITEM_CHECK );
 
         // Add the box to display and select the current grid size:
         m_AuxiliaryToolBar->AddSeparator();
         m_SelGridBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
-                                            ID_ON_GRID_SELECT,
-                                            wxPoint( -1, -1 ),
-                                            wxSize( LISTBOX_WIDTH, -1 ) );
+                                           ID_ON_GRID_SELECT,
+                                           wxPoint( -1, -1 ),
+                                           wxSize( LISTBOX_WIDTH, -1 ) );
         m_AuxiliaryToolBar->AddControl( m_SelGridBox );
 
         //  Add the box to display and select the current Zoom
         m_AuxiliaryToolBar->AddSeparator();
         m_SelZoomBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
-                                            ID_ON_ZOOM_SELECT,
-                                            wxPoint( -1, -1 ),
-                                            wxSize( LISTBOX_WIDTH, -1 ) );
+                                           ID_ON_ZOOM_SELECT,
+                                           wxPoint( -1, -1 ),
+                                           wxSize( LISTBOX_WIDTH, -1 ) );
         msg = _( "Auto" );
         m_SelZoomBox->Append( msg );
-        for( int i = 0; i < (int)GetScreen()->m_ZoomList.GetCount(); i++ )
+        for( int i = 0; i < (int) GetScreen()->m_ZoomList.GetCount(); i++ )
         {
             msg = _( "Zoom " );
-            if ( (GetScreen()->m_ZoomList[i] % GetScreen()->m_ZoomScalar) == 0 )
+            if( (GetScreen()->m_ZoomList[i] % GetScreen()->m_ZoomScalar) == 0 )
                 msg << GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar;
             else
             {
                 wxString value;
                 value.Printf( wxT( "%.1f" ),
-                              (float)GetScreen()->m_ZoomList[i] /
+                              (float) GetScreen()->m_ZoomList[i] /
                               GetScreen()->m_ZoomScalar );
                 msg += value;
             }
@@ -628,7 +638,7 @@ an existing track use its width\notherwise, use current width setting" ),
 
     // Update displayed values
     m_SelGridBox->Clear();
-    wxString format = _( "Grid");
+    wxString format = _( "Grid" );
     if( g_UnitMetric == INCHES )
         format += wxT( " %.1f" );
     else
@@ -636,9 +646,9 @@ an existing track use its width\notherwise, use current width setting" ),
 
     for( i = 0; i < GetScreen()->m_GridList.GetCount(); i++ )
     {
-        GRID_TYPE grid = GetScreen()->m_GridList[i];
-        double value = To_User_Unit( g_UnitMetric, grid.m_Size.x,
-                                     m_InternalUnits );
+        GRID_TYPE grid  = GetScreen()->m_GridList[i];
+        double    value = To_User_Unit( g_UnitMetric, grid.m_Size.x,
+                                        m_InternalUnits );
         if( grid.m_Id != ID_POPUP_GRID_USER )
         {
             if( g_UnitMetric == INCHES )
@@ -655,7 +665,7 @@ an existing track use its width\notherwise, use current width setting" ),
             m_SelGridBox->SetSelection( i );
     }
 
-    m_TrackAndViasSizesList_Changed    = true;
+    m_TrackAndViasSizesList_Changed = true;
     ReCreateLayerBox( NULL );
 
     SetToolbars();
@@ -669,13 +679,13 @@ void WinEDA_PcbFrame::UpdateToolbarLayerInfo()
     // Enable the display on the correct layer
     // To avoid reentrancy ( Bug wxGTK Linux version? ), the selection is
     // made where it is bad ( corrected on wxGTK 2.6.0 )
-    int     count = m_SelLayerBox->GetCount();
-    int     choice = m_SelLayerBox->GetChoice();
-    int     layer = GetScreen()->m_Active_Layer;
+    int count  = m_SelLayerBox->GetCount();
+    int choice = m_SelLayerBox->GetChoice();
+    int layer  = GetScreen()->m_Active_Layer;
 
-    for( int listNdx=0;  listNdx<count;  ++listNdx )
+    for( int listNdx = 0;  listNdx<count;  ++listNdx )
     {
-        if( (int) (size_t) m_SelLayerBox->GetClientData( listNdx ) == layer )
+        if( (int) ( size_t ) m_SelLayerBox->GetClientData( listNdx ) == layer )
         {
             if( listNdx != choice )
                 m_SelLayerBox->SetSelection( listNdx );
@@ -695,11 +705,11 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
         m_SelLayerBox = new WinEDAChoiceBox( parent,
                                              ID_TOOLBARH_PCB_SELECT_LAYER,
                                              wxPoint( -1, -1 ),
-#if defined (__UNIX__)
+#if defined(__UNIX__)
 
-                                             // Width enough for the longest
-                                             // string: "Component (Page Down)"
-                                             // Maybe that string is too long?
+                                                // Width enough for the longest
+                                                // string: "Component (Page Down)"
+                                                // Maybe that string is too long?
                                              wxSize( 230, -1 )
 #else
                                              wxSize( LISTBOX_WIDTH + 30, -1 )
@@ -709,20 +719,16 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
         parent->AddControl( m_SelLayerBox );
     }
 
-/*
-    int     layer_mask = g_TabAllCopperLayerMask[g_DesignSettings.m_CopperLayerCount - 1];
-
-    layer_mask |= ALL_NO_CU_LAYERS;
-*/
     int      layer_mask = g_DesignSettings.GetEnabledLayers();
-    unsigned length  = 0;
+    unsigned length     = 0;
 
     m_SelLayerBox->Clear();
 
-    for( int layer=0, listNdx=0;  layer <= EDGE_N;  layer++ )
+    for( int layer = 0, listNdx = 0;  layer <= EDGE_N;  layer++ )
     {
         // List to append hotkeys in layer box selection
-        static const int HK_SwitchLayer[EDGE_N + 1] = {
+        static const int HK_SwitchLayer[EDGE_N + 1] =
+        {
             HK_SWITCH_LAYER_TO_COPPER,
             HK_SWITCH_LAYER_TO_INNER1,
             HK_SWITCH_LAYER_TO_INNER2,
@@ -746,10 +752,13 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
             wxString msg = GetBoard()->GetLayerName( layer );
             msg = AddHotkeyName( msg, s_Board_Editor_Hokeys_Descr,
                                  HK_SwitchLayer[layer] );
+
+            /* we are using tabs in AddHotkeyName message.
+             *  this is not handled by m_SelLayerBox.
+             *  so we replace them by 3 spaces
+             */
+            msg.Replace( wxT( "\t"), wxT( "   " ) );
             m_SelLayerBox->Append( msg );
-
-            //D(printf("appending layername=%s, ndx=%d, layer=%d\n", CONV_TO_UTF8(msg), listNdx, layer );)
-
             m_SelLayerBox->SetClientData( listNdx, (void*) layer );
             length = MAX( length, msg.Len() );
             listNdx++;
