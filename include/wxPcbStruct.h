@@ -61,8 +61,8 @@ protected:
         WinEDA_PcbFrame*    myframe;
 
     public:
-        LYRS( WinEDA_PcbFrame* aParent ) :
-            LAYER_WIDGET( aParent ),
+        LYRS( WinEDA_PcbFrame* aParent, wxWindow* aFocusOwner ) :
+            LAYER_WIDGET( aParent, aFocusOwner ),
             myframe( aParent )
         {
         }
