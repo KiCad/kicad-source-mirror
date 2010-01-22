@@ -228,7 +228,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     m_show_microwave_tools = false;
     m_show_layer_manager_tools = true;
 
-    m_Layers = new LYRS( this );
+    m_Layers = new LYRS( this, DrawPanel );
 
     SetBoard( new BOARD( NULL, this ) );
 

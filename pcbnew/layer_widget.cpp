@@ -35,6 +35,7 @@
 
 #include <wx/wx.h>
 #include <wx/statbmp.h>
+#include <wx/notebook.h>
 
 #include "macros.h"
 #include "common.h"
@@ -350,6 +351,15 @@ void LAYER_WIDGET::OnRenderCheckBox( wxCommandEvent& event )
 }
 
 
+void LAYER_WIDGET::OnTabChange( wxNotebookEvent& event )
+{
+//    printf("OnTabChange\n");
+//    passOnFocus();        // this segfaults, cannot enable it.
+    // maybe we need to find a way to call the stock tab change event handler
+    // first, then call passOnFocus() before we consider this event done.
+}
+
+
 wxWindow* LAYER_WIDGET::getLayerComp( int aSizerNdx )
 {
     if( (unsigned) aSizerNdx < m_LayersFlexGridSizer->GetChildren().GetCount() )
@@ -456,19 +466,16 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
 
 void LAYER_WIDGET::passOnFocus()
 {
-    wxWindow* parent = GetParent();
-    parent->SetFocus();
-
-//    printf( "passOnFocus() %p %p\n", parent, m_OriginalParent );
+    m_FocusOwner->SetFocus();
 }
 
 
 //-----<public>-------------------------------------------------------
 
-LAYER_WIDGET::LAYER_WIDGET( wxWindow* parent ) :
-    LAYER_PANEL_BASE( parent )
+LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner ) :
+    LAYER_PANEL_BASE( aParent )
 {
-    m_OriginalParent = parent;
+    m_FocusOwner = aFocusOwner;
 
     m_CurrentRow = -1;
 
@@ -486,6 +493,10 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* parent ) :
     Connect( ID_SHOW_ALL_COPPERS, ID_SHOW_NO_COPPERS,
             wxEVT_COMMAND_MENU_SELECTED,
         wxCommandEventHandler( LAYER_WIDGET::OnPopupSelection ), NULL, this );
+
+    // trap the tab changes so that we can call passOnFocus().
+    m_notebook->Connect( -1, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
+        wxNotebookEventHandler( LAYER_WIDGET::OnTabChange ) );
 }
 
 

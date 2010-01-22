@@ -74,7 +74,7 @@ public:
 
 protected:
 
-    wxWindow*       m_OriginalParent;
+    wxWindow*       m_FocusOwner;
     wxBitmap*       m_BlankBitmap;
     wxBitmap*       m_RightArrowBitmap;
     wxSize          m_BitmapSize;
@@ -116,6 +116,9 @@ protected:
 
     void OnRenderCheckBox( wxCommandEvent& event );
 
+    void OnTabChange( wxNotebookEvent& event );
+
+
     /**
      * Function getLayerComp
      * returns the component within the m_LayersFlexGridSizer at aSizerNdx or
@@ -148,8 +151,11 @@ protected:
 
 public:
 
-    /** Constructor */
-    LAYER_WIDGET( wxWindow* parent );
+    /** Constructor
+     * @param aFocusOwner is the window that should be sent the focus after
+     * every operation.
+     */
+    LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner );
 
     /**
      * Function GetBestSize
