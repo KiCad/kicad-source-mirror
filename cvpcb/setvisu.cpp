@@ -92,16 +92,14 @@ void WinEDA_DisplayFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     ActiveScreen = (PCB_SCREEN*) GetScreen();
 
-    if( EraseBg )
-        DrawPanel->EraseScreen( DC );
-
     DrawPanel->DrawBackGround( DC );
     GetBoard()->Draw( DrawPanel, DC, GR_COPY );
 
     MODULE* Module = GetBoard()->m_Modules;
     if ( Module )
         Module->DisplayInfo( this );
-    DrawPanel->Trace_Curseur( DC );
+
+    DrawPanel->DrawCursor( DC );
 }
 
 

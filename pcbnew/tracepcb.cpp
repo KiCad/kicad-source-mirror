@@ -31,9 +31,6 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     ActiveScreen = screen;
     GRSetDrawMode( DC, GR_COPY );
 
-    if( EraseBg )
-        DrawPanel->EraseScreen( DC );
-
     DrawPanel->DrawBackGround( DC );
     TraceWorkSheet( DC, screen, 0 );
 
@@ -43,13 +40,13 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         module->Draw( DrawPanel, DC, GR_OR );
     }
 
+    screen->ClrRefreshReq();
+
     if( DrawPanel->ManageCurseur )
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
     /* Redraw the cursor */
-    DrawPanel->Trace_Curseur( DC );
-
-    screen->ClrRefreshReq();
+    DrawPanel->DrawCursor( DC );
 }
 
 
@@ -65,9 +62,6 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     ActiveScreen = screen;
     GRSetDrawMode( DC, GR_COPY );
 
-    if( EraseBg )
-        DrawPanel->EraseScreen( DC );
-
     DrawPanel->DrawBackGround( DC );
 
     TraceWorkSheet( DC, GetScreen(), 0 );
@@ -82,7 +76,7 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
     // Redraw the cursor
-    DrawPanel->Trace_Curseur( DC );
+    DrawPanel->DrawCursor( DC );
 }
 
 

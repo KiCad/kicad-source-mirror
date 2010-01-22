@@ -266,14 +266,6 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( entry == NULL )
         return;
 
-    /* Forcage de la reinit de la brosse et plume courante */
-    GRResetPenAndBrush( DC );
-    DC->SetBackground( *wxBLACK_BRUSH );
-    DC->SetBackgroundMode( wxTRANSPARENT );
-
-    if( EraseBg )
-        DrawPanel->EraseScreen( DC );
-
     DrawPanel->DrawBackGround( DC );
 
     if( entry->isAlias() )
@@ -312,6 +304,9 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), m_unit, m_convert,
                      GR_DEFAULT_DRAWMODE );
 
+    /* Redraw the cursor */
+    DrawPanel->DrawCursor( DC );
+
     if( !tmp.IsEmpty() )
         component->SetName( tmp );
 
@@ -320,6 +315,4 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     AppendMsgPanel( _( "Alias" ), msg, RED, 6 );
     AppendMsgPanel( _( "Description" ), entry->GetDescription(), CYAN, 6 );
     AppendMsgPanel( _( "Key words" ), entry->GetKeyWords(), DARKDARKGRAY );
-
-    DrawPanel->Trace_Curseur( DC );
 }

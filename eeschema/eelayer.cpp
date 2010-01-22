@@ -378,7 +378,8 @@ void WinEDA_SetColorsFrame::UpdateLayerSettings()
         g_DrawBgColor = WHITE;
     else
         g_DrawBgColor = BLACK;
-    m_Parent->SetDrawBgColor( g_DrawBgColor );
+
+    m_Parent->Refresh();
 }
 
 

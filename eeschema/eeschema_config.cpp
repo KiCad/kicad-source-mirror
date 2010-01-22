@@ -305,7 +305,6 @@ bool WinEDA_SchematicFrame::LoadProjectFile( const wxString& CfgFileName,
     if( m_ComponentLibFiles.GetCount() == 0 )
         m_ComponentLibFiles.Add( wxT( "power" ) );
 
-    SetDrawBgColor( g_DrawBgColor );
     LoadLibraries();
     GetBaseScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 

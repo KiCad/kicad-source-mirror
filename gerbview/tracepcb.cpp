@@ -77,9 +77,6 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     ActiveScreen = screen;
     GRSetDrawMode( DC, GR_COPY );
 
-    if( EraseBg )
-        DrawPanel->EraseScreen( DC );
-
     DrawPanel->DrawBackGround( DC );
 
     Trace_Gerber( DC, GR_COPY, -1 );
@@ -88,7 +85,7 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( DrawPanel->ManageCurseur )
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
-    DrawPanel->Trace_Curseur( DC );
+    DrawPanel->DrawCursor( DC );
 }
 
 /********************************************************************/

@@ -224,7 +224,6 @@ public:
     void             Affiche_Message( const wxString& message );
     void             EraseMsgBox();
     void             Process_PageSettings( wxCommandEvent& event );
-    void             SetDrawBgColor( int color_num );
     virtual void     SetToolbars();
     void             SetLanguage( wxCommandEvent& event );
     virtual void     ReCreateHToolbar() = 0;

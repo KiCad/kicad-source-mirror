@@ -297,7 +297,7 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     if( GetScreen()->IsRefreshReq() )
     {
         flagcurseur = 2;
-        RedrawActiveWindow( DC, TRUE );
+        Refresh();
     }
 
     if( oldpos != GetScreen()->m_Curseur )

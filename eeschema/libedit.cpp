@@ -201,33 +201,19 @@ void WinEDA_LibeditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     ActiveScreen = GetScreen();
 
-    DC->SetBackground( *wxBLACK_BRUSH );
-    DC->SetBackgroundMode( wxTRANSPARENT );
-    GRResetPenAndBrush( DC );
-
-    DrawPanel->CursorOff( DC );
-    if( DrawPanel->ManageCurseur )
-    {
-        DrawPanel->ManageCurseur( DrawPanel, DC, false );
-    }
-
-    if( EraseBg )
-        DrawPanel->EraseScreen( DC );
-
     DrawPanel->DrawBackGround( DC );
 
     if( m_component )
         m_component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), m_unit,
                            m_convert, GR_DEFAULT_DRAWMODE );
 
-    DrawPanel->CursorOn( DC ); // redraw cursor
+    GetScreen()->ClrRefreshReq();
 
     if( DrawPanel->ManageCurseur )
-    {
         DrawPanel->ManageCurseur( DrawPanel, DC, false );
-    }
 
-    GetScreen()->ClrRefreshReq();
+    DrawPanel->DrawCursor( DC );
+
     DisplayLibInfos();
     UpdateStatusBar();
 }

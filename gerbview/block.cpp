@@ -297,7 +297,7 @@ void WinEDA_GerberFrame::Block_Delete( wxDC* DC )
         }
     }
 
-    RedrawActiveWindow( DC, TRUE );
+    Refresh();
 }
 
 

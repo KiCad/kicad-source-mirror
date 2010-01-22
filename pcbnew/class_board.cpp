@@ -417,7 +417,7 @@ int BOARD::GetVisibleElementColor( int aPCB_VISIBLE )
     case RATSNEST_VISIBLE:          color = m_BoardSettings->m_RatsnestColor; break;
     case GRID_VISIBLE:              color = g_GridColor;            break;
     default:
-        wxLogDebug("BOARD::GetVisibleElementColor(): bad arg %d", aPCB_VISIBLE );
+        wxLogDebug( wxT( "BOARD::GetVisibleElementColor(): bad arg %d" ), aPCB_VISIBLE );
     }
 
     return color;
@@ -442,7 +442,7 @@ void BOARD::SetVisibleElementColor( int aPCB_VISIBLE, int aColor )
     case RATSNEST_VISIBLE:          m_BoardSettings->m_RatsnestColor = aColor;  break;
     case GRID_VISIBLE:              g_GridColor = aColor;                       break;
     default:
-        wxLogDebug("BOARD::SetVisibleElementColor(): bad arg %d", aPCB_VISIBLE );
+        wxLogDebug( wxT( "BOARD::SetVisibleElementColor(): bad arg %d" ), aPCB_VISIBLE );
     }
 }
 

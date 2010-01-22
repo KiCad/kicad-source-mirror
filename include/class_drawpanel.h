@@ -196,8 +196,20 @@ public:
     void         MouseTo( const wxPoint& Mouse );
 
     /* Cursor functions */
-    // Draw the user cursor (grid cursor)
-    void         Trace_Curseur( wxDC* DC, int color = WHITE );
+    /**
+     * Draw the user cursor.
+     *
+     * The user cursor is not the mouse cursor although they may be at the
+     * same screen position.  The mouse cursor is still render by the OS.
+     * This is a drawn cursor that is used to snap to grid when grid snapping
+     * is enabled.  This is required because OSX does not allow moving the
+     * cursor programmatically.
+     *
+     * @param aDC - the device context to draw the cursor
+     * @param aColor - the color to draw the cursor
+     */
+    void         DrawCursor( wxDC* aDC, int aColor = WHITE );
+
     // remove the grid cursor from the display
     void         CursorOff( wxDC* DC );
     // display the grid cursor

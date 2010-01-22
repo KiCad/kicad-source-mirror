@@ -200,7 +200,7 @@ WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title,
     if( m_FootprintList )
         m_auimgr.AddPane( m_FootprintList,
                           wxAuiPaneInfo( horiz ).Name( wxT( "m_FootprintList" ) ).
-                          Right().BestSize( m_FrameSize.x * 0.36, m_FrameSize.y ) );
+                          Right().BestSize( (int) ( m_FrameSize.x * 0.36 ), m_FrameSize.y ) );
 
     m_auimgr.Update();
 #endif

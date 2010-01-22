@@ -121,32 +121,32 @@ BASE_SCREEN* WinEDA_DrawPanel::GetScreen()
 /*
  *  Draw the schematic cursor which is usually on grid
  */
-void WinEDA_DrawPanel::Trace_Curseur( wxDC* DC, int color )
+void WinEDA_DrawPanel::DrawCursor( wxDC* aDC, int aColor )
 {
-    if( m_CursorLevel != 0 ||  DC == NULL )
+    if( m_CursorLevel != 0 || aDC == NULL )
         return;
 
     wxPoint Cursor = GetScreen()->m_Curseur;
 
-    GRSetDrawMode( DC, GR_XOR );
+    GRSetDrawMode( aDC, GR_XOR );
     if( m_Parent->m_CursorShape == 1 )    /* Draws a crosshair. */
     {
         int dx = GetScreen()->Unscale( m_ClipBox.GetWidth() );
         int dy = GetScreen()->Unscale( m_ClipBox.GetHeight() );
 
-        GRLine( &m_ClipBox, DC, Cursor.x - dx, Cursor.y,
-                Cursor.x + dx, Cursor.y, 0, color );            // Y axis
-        GRLine( &m_ClipBox, DC, Cursor.x, Cursor.y - dx,
-                Cursor.x, Cursor.y + dy, 0, color );            // X axis
+        GRLine( &m_ClipBox, aDC, Cursor.x - dx, Cursor.y,
+                Cursor.x + dx, Cursor.y, 0, aColor );            // Y axis
+        GRLine( &m_ClipBox, aDC, Cursor.x, Cursor.y - dx,
+                Cursor.x, Cursor.y + dy, 0, aColor );            // X axis
     }
     else
     {
         int len = GetScreen()->Unscale( CURSOR_SIZE );
 
-        GRLine( &m_ClipBox, DC, Cursor.x - len, Cursor.y,
-                Cursor.x + len, Cursor.y, 0, color );
-        GRLine( &m_ClipBox, DC, Cursor.x, Cursor.y - len,
-                Cursor.x, Cursor.y + len, 0, color );
+        GRLine( &m_ClipBox, aDC, Cursor.x - len, Cursor.y,
+                Cursor.x + len, Cursor.y, 0, aColor );
+        GRLine( &m_ClipBox, aDC, Cursor.x, Cursor.y - len,
+                Cursor.x, Cursor.y + len, 0, aColor );
     }
 }
 
@@ -157,7 +157,7 @@ void WinEDA_DrawPanel::Trace_Curseur( wxDC* DC, int color )
  */
 void WinEDA_DrawPanel::CursorOff( wxDC* DC )
 {
-    Trace_Curseur( DC );
+    DrawCursor( DC );
     --m_CursorLevel;
 }
 
@@ -168,7 +168,7 @@ void WinEDA_DrawPanel::CursorOff( wxDC* DC )
 void WinEDA_DrawPanel::CursorOn( wxDC* DC )
 {
     ++m_CursorLevel;
-    Trace_Curseur( DC );
+    DrawCursor( DC );
 
     if( m_CursorLevel > 0 )  // Shouldn't happen, but just in case ..
         m_CursorLevel = 0;

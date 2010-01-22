@@ -596,34 +596,6 @@ void WinEDA_DrawFrame::AdjustScrollBars()
 }
 
 
-/* Updates the background color for drawing panel.  The only valid colors
- * are BLACK and WHITE.
- * XorMode the parameter is updated according to the background color
- */
-void WinEDA_DrawFrame::SetDrawBgColor( int color_num )
-{
-    if( ( color_num != WHITE ) && ( color_num != BLACK ) )
-        color_num = BLACK;
-    g_DrawBgColor = color_num;
-    if( color_num == WHITE )
-    {
-        g_XorMode    = GR_NXOR;
-        g_GhostColor = BLACK;
-    }
-    else
-    {
-        g_XorMode    = GR_XOR;
-        g_GhostColor = WHITE;
-    }
-
-    if( DrawPanel )
-        DrawPanel->SetBackgroundColour(
-            wxColour( ColorRefs[g_DrawBgColor].m_Red,
-                      ColorRefs[g_DrawBgColor].m_Green,
-                      ColorRefs[g_DrawBgColor].m_Blue ) );
-}
-
-
 void WinEDA_DrawFrame::SetLanguage( wxCommandEvent& event )
 {
     int id = event.GetId();

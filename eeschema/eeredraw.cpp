@@ -52,21 +52,6 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     ActiveScreen = GetScreen();
 
-    /* Reinit draw and pen parameters */
-    GRResetPenAndBrush( DC );
-    DC->SetBackground( *wxBLACK_BRUSH );
-    DC->SetBackgroundMode( wxTRANSPARENT );
-
-    DrawPanel->CursorOff( DC );
-
-    if( DrawPanel->ManageCurseur )
-    {
-        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
-    }
-
-    if( EraseBg )
-        DrawPanel->EraseScreen( DC );
-
     DrawPanel->DrawBackGround( DC );
 
     RedrawStructList( DrawPanel, DC, GetScreen()->EEDrawList,
@@ -74,13 +59,12 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness );
 
-    DrawPanel->CursorOn( DC );
-    if( DrawPanel->ManageCurseur )
-    {
-        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
-    }
-
     GetScreen()->ClrRefreshReq();
+
+    if( DrawPanel->ManageCurseur )
+        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+
+    DrawPanel->DrawCursor( DC );
 
     // Display the sheet filename, and the sheet path, for non root sheets
     if( GetScreen()->m_FileName == m_DefaultSchematicFileName )
