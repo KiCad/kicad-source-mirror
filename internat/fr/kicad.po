@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-21 20:46+0100\n"
-"PO-Revision-Date: 2010-01-21 20:46+0100\n"
+"POT-Creation-Date: 2010-01-22 11:29+0100\n"
+"PO-Revision-Date: 2010-01-22 11:34+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -358,287 +358,6 @@ msgstr "Epaisseur Contour"
 #: pcbnew/edgemod.cpp:227
 msgid "Incorrect number, no change"
 msgstr "Nombre incorrect, pas de changement"
-
-#: pcbnew/tool_pcb.cpp:28
-msgid ""
-"Show active layer selections\n"
-"and select layer pair for route and place via"
-msgstr ""
-"Affiche sélections couche active\n"
-"et sélection paire de couches pour routage et placement via"
-
-#: pcbnew/tool_pcb.cpp:202
-msgid "New board"
-msgstr "Nouveau Circuit Imprimé"
-
-#: pcbnew/tool_pcb.cpp:204
-msgid "Open existing board"
-msgstr "Ouvrir C.I. existant"
-
-#: pcbnew/tool_pcb.cpp:206
-msgid "Save board"
-msgstr "Sauver Circuit Imprimé"
-
-#: pcbnew/tool_pcb.cpp:210
-msgid "Page settings (size, texts)"
-msgstr "Ajustage de la feuille de dessin (dimensions, textes)"
-
-#: pcbnew/tool_pcb.cpp:215
-msgid "Open module editor"
-msgstr "Ouvrir Editeur de modules"
-
-#: pcbnew/tool_pcb.cpp:219
-msgid "Cut selected item"
-msgstr "Suppression des éléments sélectionnés"
-
-#: pcbnew/tool_pcb.cpp:223
-msgid "Copy selected item"
-msgstr "Copie des éléments sélectionnés"
-
-#: pcbnew/tool_pcb.cpp:226
-msgid "Paste"
-msgstr "Copie des éléments sauvegardés"
-
-#: pcbnew/tool_pcb.cpp:231
-msgid "Undo last edition"
-msgstr "Défait dernière édition"
-
-#: pcbnew/tool_pcb.cpp:233
-msgid "Redo the last undo command"
-msgstr "Refait la dernière commande defaite"
-
-#: pcbnew/tool_pcb.cpp:237
-msgid "Print board"
-msgstr "Imprimer C.I."
-
-#: pcbnew/tool_pcb.cpp:239
-msgid "Plot (HPGL, PostScript, or GERBER format)"
-msgstr "Tracer en format HPGL,  POSTSCRIPT ou GERBER"
-
-#: pcbnew/tool_pcb.cpp:242
-msgid "Zoom in"
-msgstr "Zoom +"
-
-#: pcbnew/tool_pcb.cpp:247
-msgid "Zoom out"
-msgstr "Zoom -"
-
-#: pcbnew/tool_pcb.cpp:252
-msgid "Redraw view"
-msgstr "Redessin de l'écran"
-
-#: pcbnew/tool_pcb.cpp:257
-msgid "Zoom auto"
-msgstr "Zoom Automatique"
-
-#: pcbnew/tool_pcb.cpp:263
-msgid "Find components and texts"
-msgstr "Recherche de composants et textes"
-
-#: pcbnew/tool_pcb.cpp:271
-msgid "Read netlist"
-msgstr "Lire Netliste"
-
-#: pcbnew/tool_pcb.cpp:273
-msgid "Perform design rules check"
-msgstr "Exécute le contrôle des règles de conception"
-
-#: pcbnew/tool_pcb.cpp:286
-msgid "Manual and automatic move or place of modules"
-msgstr "Mode module: déplacements ou placement manuel ou automatique des modules"
-
-#: pcbnew/tool_pcb.cpp:290
-msgid "Mode Track and Autorouting"
-msgstr "Mode Pistes et Autoroutage"
-
-#: pcbnew/tool_pcb.cpp:296
-msgid "Fast access to theWeb Based FreeROUTE advanced router"
-msgstr "Acces rapide au routeur avancé  FreeROUTE sur le Web"
-
-#: pcbnew/tool_pcb.cpp:316
-msgid "Enable design rule checking"
-msgstr "Active le contrôle des règles de conception"
-
-#: pcbnew/tool_pcb.cpp:320
-msgid "Hide grid"
-msgstr "Ne pas afficher la grille"
-
-#: pcbnew/tool_pcb.cpp:323
-msgid "Display polar coordinates"
-msgstr "Affichage coord polaires"
-
-#: pcbnew/tool_pcb.cpp:326
-msgid "Units in inches"
-msgstr "Unités en pouces"
-
-#: pcbnew/tool_pcb.cpp:329
-msgid "Units in millimeters"
-msgstr "Unités en millimètres"
-
-#: pcbnew/tool_pcb.cpp:332
-msgid "Change cursor shape"
-msgstr "Changer la forme du curseur"
-
-#: pcbnew/tool_pcb.cpp:337
-msgid "Show board ratsnest"
-msgstr "Montrer le chevelu général"
-
-#: pcbnew/tool_pcb.cpp:340
-msgid "Show module ratsnest when moving"
-msgstr "Montrer le chevelu du module pendant le déplacement"
-
-#: pcbnew/tool_pcb.cpp:346
-msgid "Enable automatic track deletion"
-msgstr "Active l'effacement de piste automatique lorsque l'on recrée une piste."
-
-#: pcbnew/tool_pcb.cpp:352
-msgid "Show filled areas in zones"
-msgstr "Afficher les surfaces remplies dans les zones"
-
-#: pcbnew/tool_pcb.cpp:357
-msgid "Do not show filled areas in zones"
-msgstr "Ne pas afficher les surfaces remplies dans les zones"
-
-#: pcbnew/tool_pcb.cpp:362
-msgid "Show outlines of filled areas only in zones"
-msgstr "Afficher uniquement  les contours des surfaces remplies dans les zones"
-
-#: pcbnew/tool_pcb.cpp:367
-msgid "Show pads in outline mode"
-msgstr "Afficher pastilles en mode contour"
-
-#: pcbnew/tool_pcb.cpp:371
-msgid "Show vias in outline mode"
-msgstr "Afficher pastilles en mode contour"
-
-#: pcbnew/tool_pcb.cpp:375
-msgid "Show tracks in outline mode"
-msgstr "Afficher pistes en mode contour"
-
-#: pcbnew/tool_pcb.cpp:381
-msgid "Enable high contrast display mode"
-msgstr "Active le mode d'affichage haut contraste"
-
-#: pcbnew/tool_pcb.cpp:388
-msgid "Show invisible text"
-msgstr "Montrer textes invisibles"
-
-#: pcbnew/tool_pcb.cpp:399
-#: pcbnew/tool_pcb.cpp:408
-msgid ""
-"Display/remove auxiliary vertical toolbar (tools for micro wave applications)\n"
-" This is a experimental feature (under development)"
-msgstr ""
-"Affiche/supprime le toolbar vertical auxiliaire (outils pour applications micro-ondes)\n"
-"C'est un outil expérimental (en cours de développement)"
-
-#: pcbnew/tool_pcb.cpp:432
-msgid "Highlight net"
-msgstr "Surbrillance net"
-
-#: pcbnew/tool_pcb.cpp:437
-msgid "Display local ratsnest"
-msgstr "Afficher le chevelu local"
-
-#: pcbnew/tool_pcb.cpp:443
-msgid "Add modules"
-msgstr "Addition de Modules"
-
-#: pcbnew/tool_pcb.cpp:447
-msgid "Add tracks and vias"
-msgstr "Ajouter pistes et vias"
-
-#: pcbnew/tool_pcb.cpp:451
-msgid "Add zones"
-msgstr "Addition de Zones"
-
-#: pcbnew/tool_pcb.cpp:456
-msgid "Add graphic line or polygon"
-msgstr "Addition de lignes ou polygones graphiques"
-
-#: pcbnew/tool_pcb.cpp:460
-msgid "Add graphic circle"
-msgstr "Addition de graphiques (Cercle)"
-
-#: pcbnew/tool_pcb.cpp:464
-msgid "Add graphic arc"
-msgstr "Addition de graphiques (Arc de Cercle)"
-
-#: pcbnew/tool_pcb.cpp:468
-msgid "Add text"
-msgstr "Ajout de Texte"
-
-#: pcbnew/tool_pcb.cpp:473
-msgid "Add dimension"
-msgstr "Ajout des cotes"
-
-#: pcbnew/tool_pcb.cpp:477
-msgid "Add layer alignment target"
-msgstr "Ajouter Mire de superposition"
-
-#: pcbnew/tool_pcb.cpp:482
-msgid "Delete items"
-msgstr "Suppression d'éléments"
-
-#: pcbnew/tool_pcb.cpp:487
-msgid "Offset adjust for drill and place files"
-msgstr "Ajuste offset pour fichier de perçage et placement"
-
-#: pcbnew/tool_pcb.cpp:509
-msgid "Create line of specified length for microwave applications"
-msgstr "Création de lignes de longueur spécifiée (pour applications micro-ondes)"
-
-#: pcbnew/tool_pcb.cpp:513
-msgid "Create gap of specified length for microwave applications"
-msgstr "Création de gaps de longueur spécifiée (pour applications micro-ondes)"
-
-#: pcbnew/tool_pcb.cpp:519
-msgid "Create stub of specified length for microwave applications"
-msgstr "Création de stub de longueur spécifiée (pour applications micro-ondes)"
-
-#: pcbnew/tool_pcb.cpp:523
-msgid "Create stub (arc) of specified length for microwave applications"
-msgstr "Création de stub (arc) de longueur spécifiée (pour applications micro-ondes)"
-
-#: pcbnew/tool_pcb.cpp:528
-msgid "Create a polynomial shape for microwave applications"
-msgstr "Création de formes polynomiales (pour applications micro-ondes)"
-
-#: pcbnew/tool_pcb.cpp:580
-msgid "Current NetClass clearance value"
-msgstr "Valeur isolation NetClass courante"
-
-#: pcbnew/tool_pcb.cpp:589
-msgid "Name of the current NetClass"
-msgstr "Nom de la NetClass courante"
-
-#: pcbnew/tool_pcb.cpp:599
-msgid ""
-"Auto track width: when starting on an existing track use its width\n"
-"otherwise, use current width setting"
-msgstr ""
-"Largeur de piste automatique: si on démarre sur une piste existante, utiliser sa largeur\n"
-" sinon utiliser la largeur  courante"
-
-#: pcbnew/tool_pcb.cpp:617
-msgid "Auto"
-msgstr "Auto"
-
-#: pcbnew/tool_pcb.cpp:621
-msgid "Zoom "
-msgstr "Zoom "
-
-#: pcbnew/tool_pcb.cpp:643
-msgid "Grid"
-msgstr "Grille"
-
-#: pcbnew/tool_pcb.cpp:662
-msgid "User Grid"
-msgstr "Grille perso"
-
-#: pcbnew/tool_pcb.cpp:770
-msgid "+/- to switch"
-msgstr "+/- pour commuter"
 
 #: pcbnew/deltrack.cpp:144
 msgid "Delete NET?"
@@ -1037,109 +756,290 @@ msgstr "Module %s trouvé, mais verrouillé"
 msgid "Delete module?"
 msgstr "Effacer Module?"
 
-#: pcbnew/pcbframe.cpp:216
-msgid "Through Via"
-msgstr "Via Traversante"
-
-#: pcbnew/pcbframe.cpp:216
-msgid "Show through vias"
-msgstr "Afficher vias traversantes"
-
-#: pcbnew/pcbframe.cpp:217
-msgid "Blind/Buried Via"
-msgstr "Via Aveugle/Enterrée"
-
-#: pcbnew/pcbframe.cpp:217
-msgid "Show blind or buried vias"
-msgstr "Afficher vias enterrées/aveugles"
-
-#: pcbnew/pcbframe.cpp:218
-msgid "Micro Via"
-msgstr "Micro Via"
-
-#: pcbnew/pcbframe.cpp:218
-msgid "Show micro vias"
-msgstr "Afficher micro vias"
-
-#: pcbnew/pcbframe.cpp:219
-msgid "Ratsnets"
-msgstr "Chevelu"
-
-#: pcbnew/pcbframe.cpp:219
-msgid "Show the ratsnest"
-msgstr "Montrer le chevelu"
-
-#: pcbnew/pcbframe.cpp:220
-msgid "Mod Text Back"
-msgstr "Texte Mod. Dessous"
-
-#: pcbnew/pcbframe.cpp:220
-msgid "Show footprint text residing on board's back"
-msgstr "Afficher les textes sur modules situés sur le dessous du ciruit imprimé"
-
-#: pcbnew/pcbframe.cpp:221
-msgid "Mod Text Front"
-msgstr "Texte Mod. Dessus"
-
-#: pcbnew/pcbframe.cpp:221
-msgid "Show footprint text residing on board's front"
-msgstr "Afficher les textes sur modules situés sur le dessus du ciruit imprimé"
-
-#: pcbnew/pcbframe.cpp:222
-msgid "Mod Text Hide"
-msgstr "Cacher Textes Mod."
-
-#: pcbnew/pcbframe.cpp:222
-#: pcbnew/pcbframe.cpp:223
-#: pcbnew/pcbframe.cpp:225
-#: pcbnew/pcbframe.cpp:226
-#: pcbnew/pcbframe.cpp:227
-msgid "TBD"
+#: pcbnew/tool_pcb.cpp:28
+msgid ""
+"Show active layer selections\n"
+"and select layer pair for route and place via"
 msgstr ""
+"Affiche sélections couche active\n"
+"et sélection paire de couches pour routage et placement via"
 
-#: pcbnew/pcbframe.cpp:223
-msgid "Anchors"
-msgstr "Ancres"
+#: pcbnew/tool_pcb.cpp:197
+msgid "New board"
+msgstr "Nouveau Circuit Imprimé"
 
-#: pcbnew/pcbframe.cpp:225
-msgid "Not Connecteds"
-msgstr "Non connectés"
+#: pcbnew/tool_pcb.cpp:199
+msgid "Open existing board"
+msgstr "Ouvrir C.I. existant"
 
-#: pcbnew/pcbframe.cpp:226
-msgid "Modules Front"
-msgstr "Modules Dessus"
+#: pcbnew/tool_pcb.cpp:201
+msgid "Save board"
+msgstr "Sauver Circuit Imprimé"
 
-#: pcbnew/pcbframe.cpp:227
-msgid "Modules Back"
-msgstr "Modules Dessous"
+#: pcbnew/tool_pcb.cpp:205
+msgid "Page settings (size, texts)"
+msgstr "Ajustage de la feuille de dessin (dimensions, textes)"
 
-#: pcbnew/pcbframe.cpp:422
-msgid "Front copper layer"
-msgstr "Couche cuivre dessus"
+#: pcbnew/tool_pcb.cpp:210
+msgid "Open module editor"
+msgstr "Ouvrir Editeur de modules"
 
-#: pcbnew/pcbframe.cpp:430
-msgid "An innner copper layer"
-msgstr "Couche interne"
+#: pcbnew/tool_pcb.cpp:214
+msgid "Cut selected item"
+msgstr "Suppression des éléments sélectionnés"
 
-#: pcbnew/pcbframe.cpp:438
-msgid "Back copper layer"
-msgstr "Couche cuivre dessous"
+#: pcbnew/tool_pcb.cpp:218
+msgid "Copy selected item"
+msgstr "Copie des éléments sélectionnés"
 
-#: pcbnew/pcbframe.cpp:459
-msgid "Board modified, Save before exit ?"
-msgstr "Circuit Imprimé modifié,  Sauver avant de quitter ?"
+#: pcbnew/tool_pcb.cpp:221
+msgid "Paste"
+msgstr "Copie des éléments sauvegardés"
 
-#: pcbnew/pcbframe.cpp:460
-msgid "Confirmation"
-msgstr "Confirmation"
+#: pcbnew/tool_pcb.cpp:226
+msgid "Undo last edition"
+msgstr "Défait dernière édition"
 
-#: pcbnew/pcbframe.cpp:499
-msgid "3D Frame already opened"
-msgstr "Fenêtre 3D déjà ouverte"
+#: pcbnew/tool_pcb.cpp:228
+msgid "Redo the last undo command"
+msgstr "Refait la dernière commande defaite"
 
-#: pcbnew/pcbframe.cpp:503
-msgid "3D Viewer"
-msgstr "Visu 3D"
+#: pcbnew/tool_pcb.cpp:232
+msgid "Print board"
+msgstr "Imprimer C.I."
+
+#: pcbnew/tool_pcb.cpp:234
+msgid "Plot (HPGL, PostScript, or GERBER format)"
+msgstr "Tracer en format HPGL,  POSTSCRIPT ou GERBER"
+
+#: pcbnew/tool_pcb.cpp:237
+msgid "Zoom in"
+msgstr "Zoom +"
+
+#: pcbnew/tool_pcb.cpp:242
+msgid "Zoom out"
+msgstr "Zoom -"
+
+#: pcbnew/tool_pcb.cpp:247
+msgid "Redraw view"
+msgstr "Redessin de l'écran"
+
+#: pcbnew/tool_pcb.cpp:252
+msgid "Zoom auto"
+msgstr "Zoom Automatique"
+
+#: pcbnew/tool_pcb.cpp:258
+msgid "Find components and texts"
+msgstr "Recherche de composants et textes"
+
+#: pcbnew/tool_pcb.cpp:266
+msgid "Read netlist"
+msgstr "Lire Netliste"
+
+#: pcbnew/tool_pcb.cpp:268
+msgid "Perform design rules check"
+msgstr "Exécute le contrôle des règles de conception"
+
+#: pcbnew/tool_pcb.cpp:281
+msgid "Manual and automatic move or place of modules"
+msgstr "Mode module: déplacements ou placement manuel ou automatique des modules"
+
+#: pcbnew/tool_pcb.cpp:285
+msgid "Mode Track and Autorouting"
+msgstr "Mode Pistes et Autoroutage"
+
+#: pcbnew/tool_pcb.cpp:291
+msgid "Fast access to theWeb Based FreeROUTE advanced router"
+msgstr "Acces rapide au routeur avancé  FreeROUTE sur le Web"
+
+#: pcbnew/tool_pcb.cpp:311
+msgid "Enable design rule checking"
+msgstr "Active le contrôle des règles de conception"
+
+#: pcbnew/tool_pcb.cpp:315
+msgid "Hide grid"
+msgstr "Ne pas afficher la grille"
+
+#: pcbnew/tool_pcb.cpp:318
+msgid "Display polar coordinates"
+msgstr "Affichage coord polaires"
+
+#: pcbnew/tool_pcb.cpp:321
+msgid "Units in inches"
+msgstr "Unités en pouces"
+
+#: pcbnew/tool_pcb.cpp:324
+msgid "Units in millimeters"
+msgstr "Unités en millimètres"
+
+#: pcbnew/tool_pcb.cpp:327
+msgid "Change cursor shape"
+msgstr "Changer la forme du curseur"
+
+#: pcbnew/tool_pcb.cpp:332
+msgid "Show board ratsnest"
+msgstr "Montrer le chevelu général"
+
+#: pcbnew/tool_pcb.cpp:335
+msgid "Show module ratsnest when moving"
+msgstr "Montrer le chevelu du module pendant le déplacement"
+
+#: pcbnew/tool_pcb.cpp:341
+msgid "Enable automatic track deletion"
+msgstr "Active l'effacement de piste automatique lorsque l'on recrée une piste."
+
+#: pcbnew/tool_pcb.cpp:347
+msgid "Show filled areas in zones"
+msgstr "Afficher les surfaces remplies dans les zones"
+
+#: pcbnew/tool_pcb.cpp:352
+msgid "Do not show filled areas in zones"
+msgstr "Ne pas afficher les surfaces remplies dans les zones"
+
+#: pcbnew/tool_pcb.cpp:357
+msgid "Show outlines of filled areas only in zones"
+msgstr "Afficher uniquement  les contours des surfaces remplies dans les zones"
+
+#: pcbnew/tool_pcb.cpp:362
+msgid "Show pads in outline mode"
+msgstr "Afficher pastilles en mode contour"
+
+#: pcbnew/tool_pcb.cpp:366
+msgid "Show vias in outline mode"
+msgstr "Afficher pastilles en mode contour"
+
+#: pcbnew/tool_pcb.cpp:370
+msgid "Show tracks in outline mode"
+msgstr "Afficher pistes en mode contour"
+
+#: pcbnew/tool_pcb.cpp:376
+msgid "Enable high contrast display mode"
+msgstr "Active le mode d'affichage haut contraste"
+
+#: pcbnew/tool_pcb.cpp:383
+msgid "Show invisible text"
+msgstr "Montrer textes invisibles"
+
+#: pcbnew/tool_pcb.cpp:393
+msgid "Show/hide the layers manager toolbar"
+msgstr "Afficher/cacher le gestionnaire de couches"
+
+#: pcbnew/tool_pcb.cpp:398
+#, fuzzy
+msgid ""
+"Show/hide the toolbar for microwaves tools\n"
+" This is a experimental feature (under development)"
+msgstr ""
+"Affiche/supprime le toolbar vertical auxiliaire (outils pour applications micro-ondes)\n"
+"C'est un outil expérimental (en cours de développement)"
+
+#: pcbnew/tool_pcb.cpp:423
+msgid "Highlight net"
+msgstr "Surbrillance net"
+
+#: pcbnew/tool_pcb.cpp:428
+msgid "Display local ratsnest"
+msgstr "Afficher le chevelu local"
+
+#: pcbnew/tool_pcb.cpp:434
+msgid "Add modules"
+msgstr "Addition de Modules"
+
+#: pcbnew/tool_pcb.cpp:438
+msgid "Add tracks and vias"
+msgstr "Ajouter pistes et vias"
+
+#: pcbnew/tool_pcb.cpp:442
+msgid "Add zones"
+msgstr "Addition de Zones"
+
+#: pcbnew/tool_pcb.cpp:447
+msgid "Add graphic line or polygon"
+msgstr "Addition de lignes ou polygones graphiques"
+
+#: pcbnew/tool_pcb.cpp:451
+msgid "Add graphic circle"
+msgstr "Addition de graphiques (Cercle)"
+
+#: pcbnew/tool_pcb.cpp:455
+msgid "Add graphic arc"
+msgstr "Addition de graphiques (Arc de Cercle)"
+
+#: pcbnew/tool_pcb.cpp:459
+msgid "Add text"
+msgstr "Ajout de Texte"
+
+#: pcbnew/tool_pcb.cpp:464
+msgid "Add dimension"
+msgstr "Ajout des cotes"
+
+#: pcbnew/tool_pcb.cpp:468
+msgid "Add layer alignment target"
+msgstr "Ajouter Mire de superposition"
+
+#: pcbnew/tool_pcb.cpp:473
+msgid "Delete items"
+msgstr "Suppression d'éléments"
+
+#: pcbnew/tool_pcb.cpp:478
+msgid "Offset adjust for drill and place files"
+msgstr "Ajuste offset pour fichier de perçage et placement"
+
+#: pcbnew/tool_pcb.cpp:500
+msgid "Create line of specified length for microwave applications"
+msgstr "Création de lignes de longueur spécifiée (pour applications micro-ondes)"
+
+#: pcbnew/tool_pcb.cpp:504
+msgid "Create gap of specified length for microwave applications"
+msgstr "Création de gaps de longueur spécifiée (pour applications micro-ondes)"
+
+#: pcbnew/tool_pcb.cpp:510
+msgid "Create stub of specified length for microwave applications"
+msgstr "Création de stub de longueur spécifiée (pour applications micro-ondes)"
+
+#: pcbnew/tool_pcb.cpp:514
+msgid "Create stub (arc) of specified length for microwave applications"
+msgstr "Création de stub (arc) de longueur spécifiée (pour applications micro-ondes)"
+
+#: pcbnew/tool_pcb.cpp:519
+msgid "Create a polynomial shape for microwave applications"
+msgstr "Création de formes polynomiales (pour applications micro-ondes)"
+
+#: pcbnew/tool_pcb.cpp:571
+msgid "Current NetClass clearance value"
+msgstr "Valeur isolation NetClass courante"
+
+#: pcbnew/tool_pcb.cpp:580
+msgid "Name of the current NetClass"
+msgstr "Nom de la NetClass courante"
+
+#: pcbnew/tool_pcb.cpp:589
+msgid ""
+"Auto track width: when starting on an existing track use its width\n"
+"otherwise, use current width setting"
+msgstr ""
+"Largeur de piste automatique: si on démarre sur une piste existante, utiliser sa largeur\n"
+" sinon utiliser la largeur  courante"
+
+#: pcbnew/tool_pcb.cpp:607
+msgid "Auto"
+msgstr "Auto"
+
+#: pcbnew/tool_pcb.cpp:611
+msgid "Zoom "
+msgstr "Zoom "
+
+#: pcbnew/tool_pcb.cpp:633
+msgid "Grid"
+msgstr "Grille"
+
+#: pcbnew/tool_pcb.cpp:652
+msgid "User Grid"
+msgstr "Grille perso"
+
+#: pcbnew/tool_pcb.cpp:767
+msgid "+/- to switch"
+msgstr "+/- pour commuter"
 
 #: pcbnew/netlist.cpp:118
 #, c-format
@@ -2059,6 +1959,191 @@ msgstr "Chercher Marqueur"
 msgid "Find Next Marker"
 msgstr "Marqueur Suivant"
 
+#: pcbnew/pcbframe.cpp:277
+msgid "Through Via"
+msgstr "Via Traversante"
+
+#: pcbnew/pcbframe.cpp:277
+msgid "Show through vias"
+msgstr "Afficher vias traversantes"
+
+#: pcbnew/pcbframe.cpp:278
+msgid "Bl/Buried Via"
+msgstr "Via Av/Enterrée"
+
+#: pcbnew/pcbframe.cpp:278
+msgid "Show blind or buried vias"
+msgstr "Afficher vias enterrées/aveugles"
+
+#: pcbnew/pcbframe.cpp:279
+msgid "Micro Via"
+msgstr "Micro Via"
+
+#: pcbnew/pcbframe.cpp:279
+msgid "Show micro vias"
+msgstr "Afficher micro vias"
+
+#: pcbnew/pcbframe.cpp:280
+msgid "Ratsnest"
+msgstr "Chevelu"
+
+#: pcbnew/pcbframe.cpp:280
+msgid "Show unconnected nets as a ratsnest"
+msgstr "Afficher les connexions maquantes comme chevelul"
+
+#: pcbnew/pcbframe.cpp:282
+msgid "Pads Front"
+msgstr "Pad Dessus"
+
+#: pcbnew/pcbframe.cpp:282
+msgid "Show footprint pads on board's front"
+msgstr "Afficher les pads placés sur le dessus du ciruit imprimé"
+
+#: pcbnew/pcbframe.cpp:283
+msgid "Pads Back"
+msgstr "Pads Dessous"
+
+#: pcbnew/pcbframe.cpp:283
+msgid "Show footprint pads on board's back"
+msgstr "Afficher les pads placés sur le dessous du ciruit imprimé"
+
+#: pcbnew/pcbframe.cpp:285
+msgid "Text Front"
+msgstr "Texte Dessus"
+
+#: pcbnew/pcbframe.cpp:285
+#: pcbnew/pcbframe.cpp:286
+msgid "Show footprint text on board's back"
+msgstr "Afficher les textes sur modules situés sur le dessous du ciruit imprimé"
+
+#: pcbnew/pcbframe.cpp:286
+msgid "Text Back"
+msgstr "Texte Dessous"
+
+#: pcbnew/pcbframe.cpp:287
+msgid "Hidden Text"
+msgstr "Texte Invisible"
+
+#: pcbnew/pcbframe.cpp:287
+msgid "Show footprint text marked as invisible"
+msgstr "Afficher les textes sur modules marqués comme invisibles"
+
+#: pcbnew/pcbframe.cpp:289
+msgid "Anchors"
+msgstr "Ancres"
+
+#: pcbnew/pcbframe.cpp:289
+msgid "Show footprint and text origins as a cross"
+msgstr "Afficher origines des textes et modules par une croix"
+
+#: pcbnew/pcbframe.cpp:290
+msgid "Show the (x,y) grid dots"
+msgstr "Afficher les points de grille"
+
+#: pcbnew/pcbframe.cpp:291
+msgid "No-Connects"
+msgstr "Non Connectés"
+
+#: pcbnew/pcbframe.cpp:291
+msgid "Show a marker on pads which have no net connected"
+msgstr "Afficher un marqueur sur pads qui ne sont pad connectés"
+
+#: pcbnew/pcbframe.cpp:292
+msgid "Modules Front"
+msgstr "Modules Dessus"
+
+#: pcbnew/pcbframe.cpp:292
+msgid "Show footprints that are on board's front"
+msgstr "Afficher les modules situés sur le dessus du ciruit imprimé"
+
+#: pcbnew/pcbframe.cpp:293
+msgid "Modules Back"
+msgstr "Modules Dessous"
+
+#: pcbnew/pcbframe.cpp:293
+msgid "Show footprints that are on board's back"
+msgstr "Afficher les modules situés sur le dessous du ciruit imprimé"
+
+#: pcbnew/pcbframe.cpp:497
+msgid "Front copper layer"
+msgstr "Couche cuivre dessus"
+
+#: pcbnew/pcbframe.cpp:505
+msgid "An innner copper layer"
+msgstr "Couche interne"
+
+#: pcbnew/pcbframe.cpp:513
+msgid "Back copper layer"
+msgstr "Couche cuivre dessous"
+
+#: pcbnew/pcbframe.cpp:523
+msgid "Adhesive on board's front"
+msgstr "Afficher couche adhésive situés sur le dessus du ciruit imprimé"
+
+#: pcbnew/pcbframe.cpp:524
+msgid "Adhesive on board's back"
+msgstr "Couche adhésive sur le dessous du circuit imprimé"
+
+#: pcbnew/pcbframe.cpp:525
+msgid "Solder paste on board's front"
+msgstr "Couche de pâte à souder sur dessus du circuit imprimé"
+
+#: pcbnew/pcbframe.cpp:526
+msgid "Solder paste on board's back"
+msgstr "Couche de pate à souder sur dessous du circuit imprimé"
+
+#: pcbnew/pcbframe.cpp:527
+msgid "Silkscreen on board's front"
+msgstr "Sérigraphie sur le dessus du ciruit imprimé"
+
+#: pcbnew/pcbframe.cpp:528
+msgid "Silkscreen on board's back"
+msgstr "Sérigraphie sur le dessous du ciruit imprimé "
+
+#: pcbnew/pcbframe.cpp:529
+msgid "Solder mask on board's front"
+msgstr "Couche masque soudure sur le dessus du ciruit imprimée"
+
+#: pcbnew/pcbframe.cpp:530
+msgid "Solder mask on board's back"
+msgstr "Couche masque soudure sur le dessous du ciruit imprimée"
+
+#: pcbnew/pcbframe.cpp:531
+msgid "Explanatory drawings"
+msgstr "Couche dessins explicatifs"
+
+#: pcbnew/pcbframe.cpp:532
+msgid "Explanatory comments"
+msgstr "Couche commentaires"
+
+#: pcbnew/pcbframe.cpp:533
+msgid "TDB"
+msgstr ""
+
+#: pcbnew/pcbframe.cpp:534
+msgid "TBD"
+msgstr ""
+
+#: pcbnew/pcbframe.cpp:535
+msgid "Board's perimeter definition"
+msgstr "Couche de définition des contours du circuit imprimé"
+
+#: pcbnew/pcbframe.cpp:579
+msgid "Board modified, Save before exit ?"
+msgstr "Circuit Imprimé modifié,  Sauver avant de quitter ?"
+
+#: pcbnew/pcbframe.cpp:580
+msgid "Confirmation"
+msgstr "Confirmation"
+
+#: pcbnew/pcbframe.cpp:619
+msgid "3D Frame already opened"
+msgstr "Fenêtre 3D déjà ouverte"
+
+#: pcbnew/pcbframe.cpp:623
+msgid "3D Viewer"
+msgstr "Visu 3D"
+
 #: pcbnew/editrack.cpp:805
 msgid "Track Len"
 msgstr "Long. Piste"
@@ -2071,157 +2156,13 @@ msgstr "Nb Segms"
 msgid "Error: Unexpected end of file !"
 msgstr "Erreur: Fin de fichier inattendue !"
 
-#: pcbnew/class_board.cpp:52
-msgid "This is the default net class."
-msgstr "Ceci est la Netclass par défaut"
+#: pcbnew/layer_panel_base.cpp:36
+msgid "Layers"
+msgstr "Couches"
 
-#: pcbnew/class_board.cpp:212
-msgid "Front"
-msgstr "Dessus"
-
-#: pcbnew/class_board.cpp:213
-msgid "Inner2"
-msgstr "Interne2"
-
-#: pcbnew/class_board.cpp:214
-msgid "Inner3"
-msgstr "Interne3"
-
-#: pcbnew/class_board.cpp:215
-msgid "Inner4"
-msgstr "Interne4"
-
-#: pcbnew/class_board.cpp:216
-msgid "Inner5"
-msgstr "Interne5"
-
-#: pcbnew/class_board.cpp:217
-msgid "Inner6"
-msgstr "Interne6"
-
-#: pcbnew/class_board.cpp:218
-msgid "Inner7"
-msgstr "Interne7"
-
-#: pcbnew/class_board.cpp:219
-msgid "Inner8"
-msgstr "Interne8"
-
-#: pcbnew/class_board.cpp:220
-msgid "Inner9"
-msgstr "Interne9"
-
-#: pcbnew/class_board.cpp:221
-msgid "Inner10"
-msgstr "Interne10"
-
-#: pcbnew/class_board.cpp:222
-msgid "Inner11"
-msgstr "Interne11"
-
-#: pcbnew/class_board.cpp:223
-msgid "Inner12"
-msgstr "Interne12"
-
-#: pcbnew/class_board.cpp:224
-msgid "Inner13"
-msgstr "Interne13"
-
-#: pcbnew/class_board.cpp:225
-msgid "Inner14"
-msgstr "Interne14"
-
-#: pcbnew/class_board.cpp:226
-msgid "Inner15"
-msgstr "Interne15"
-
-#: pcbnew/class_board.cpp:227
-msgid "Back"
-msgstr "Dessous"
-
-#: pcbnew/class_board.cpp:228
-msgid "Adhes_Back"
-msgstr "Adhes_Dessous"
-
-#: pcbnew/class_board.cpp:229
-msgid "Adhes_Front"
-msgstr "Adhes_Dessus"
-
-#: pcbnew/class_board.cpp:230
-msgid "SoldP_Back"
-msgstr "SoldP_Dessous"
-
-#: pcbnew/class_board.cpp:231
-msgid "SoldP_Front"
-msgstr "SoldP_Dessus"
-
-#: pcbnew/class_board.cpp:232
-msgid "SilkS_Back"
-msgstr "SilkS_Dessous"
-
-#: pcbnew/class_board.cpp:233
-msgid "SilkS_Front"
-msgstr "Sérigr_Dessus"
-
-#: pcbnew/class_board.cpp:234
-msgid "Mask_Back"
-msgstr "Masque_Dessous"
-
-#: pcbnew/class_board.cpp:235
-msgid "Mask_Front"
-msgstr "Masque_Dessus"
-
-#: pcbnew/class_board.cpp:236
-msgid "Drawings"
-msgstr "Drawings "
-
-#: pcbnew/class_board.cpp:237
-msgid "Comments"
-msgstr "Commentaires "
-
-#: pcbnew/class_board.cpp:238
-msgid "Eco1"
-msgstr "Eco1     "
-
-#: pcbnew/class_board.cpp:239
-msgid "Eco2"
-msgstr "Eco2     "
-
-#: pcbnew/class_board.cpp:240
-msgid "PCB_Edges"
-msgstr "Contours_PCB"
-
-#: pcbnew/class_board.cpp:241
-msgid "BAD INDEX"
-msgstr "BAD INDEX"
-
-#: pcbnew/class_board.cpp:761
-msgid "Pads"
-msgstr "Pads"
-
-#: pcbnew/class_board.cpp:764
-msgid "Vias"
-msgstr "Vias"
-
-#: pcbnew/class_board.cpp:767
-msgid "Nodes"
-msgstr "Nodes"
-
-#: pcbnew/class_board.cpp:770
-msgid "Nets"
-msgstr "Nets"
-
-#: pcbnew/class_board.cpp:778
-msgid "Links"
-msgstr "Liens"
-
-#: pcbnew/class_board.cpp:781
-msgid "Connect"
-msgstr "Connect"
-
-#: pcbnew/class_board.cpp:784
-msgid "Unconnected"
-msgstr "Non connecté"
+#: pcbnew/layer_panel_base.cpp:55
+msgid "Rendering"
+msgstr "Aspect"
 
 #: pcbnew/pcbplot.cpp:558
 msgid "Warning: Scale option set to a very small value"
@@ -2375,6 +2316,30 @@ msgstr "Problèmes / Marqueurs"
 #: pcbnew/dialog_drc_base.cpp:164
 msgid "A list of unconnected pads, right click for popup menu"
 msgstr "Pour une liste de pads non connecté, clic droit pour ouvrir un menu"
+
+#: pcbnew/dialog_drc_base.cpp:171
+msgid "Unconnected"
+msgstr "Non connecté"
+
+#: pcbnew/layer_widget.cpp:251
+msgid "Show All Cu"
+msgstr "Afficher toutes couches cuivre"
+
+#: pcbnew/layer_widget.cpp:254
+msgid "Hide All Cu"
+msgstr "Cacher Cu"
+
+#: pcbnew/layer_widget.cpp:398
+msgid "Left click to select, middle click for color change, right click for menu"
+msgstr "Cliquer sur bouton gauche pour selectionner, du milieu pour changer la couleur, droit pour le menu"
+
+#: pcbnew/layer_widget.cpp:414
+msgid "Enable this for visibility"
+msgstr "Activer ceci pour activer la visibilité"
+
+#: pcbnew/layer_widget.cpp:433
+msgid "Middle click for color change"
+msgstr "Clicquer sur bouton du milieu pour changer la couleur"
 
 #: pcbnew/moduleframe.cpp:251
 msgid "Module Editor: Module modified! Continue?"
@@ -3638,37 +3603,29 @@ msgstr "Visible"
 msgid "Invisible"
 msgstr "Invisible"
 
-#: pcbnew/class_track.cpp:920
-msgid "Track Length"
-msgstr "Long. Piste"
+#: pcbnew/dialog_layers_setup.cpp:267
+msgid "Name"
+msgstr "Nom"
 
-#: pcbnew/class_track.cpp:979
-msgid "Flags"
-msgstr "Flags"
+#: pcbnew/dialog_layers_setup.cpp:269
+msgid "Enabled"
+msgstr "Activé"
 
-#: pcbnew/class_track.cpp:991
-msgid "Status"
-msgstr "Status"
+#: pcbnew/dialog_layers_setup.cpp:615
+msgid "Layer name may not be empty"
+msgstr "Le nom d'une couche ne peut pas être vide"
 
-#: pcbnew/class_track.cpp:1014
-msgid "Diam"
-msgstr "Diam"
+#: pcbnew/dialog_layers_setup.cpp:622
+msgid "Layer name has an illegal character, one of: '"
+msgstr "Le nom d'une couche contient un des caracteres interdit: '"
 
-#: pcbnew/class_track.cpp:1025
-msgid "(Specific)"
-msgstr "(Specifique)"
+#: pcbnew/dialog_layers_setup.cpp:629
+msgid "'signal' is a reserved layer name"
+msgstr "'signal' is a nom de couche réservé"
 
-#: pcbnew/class_track.cpp:1027
-msgid "(Default)"
-msgstr "(Défaut)"
-
-#: pcbnew/class_track.cpp:1040
-msgid "Net Class"
-msgstr "Classe d'Equipot"
-
-#: pcbnew/class_track.cpp:1047
-msgid "Segment Length"
-msgstr "Long. Segment"
+#: pcbnew/dialog_layers_setup.cpp:638
+msgid "Layer name is a duplicate of another"
+msgstr "Le nom de la couche est un double d'une autre couche"
 
 #: pcbnew/class_drawsegment.cpp:373
 msgid "Shape"
@@ -3919,18 +3876,6 @@ msgstr "Fichier Netliste:"
 #: pcbnew/class_marker_pcb.cpp:68
 msgid "ErrType"
 msgstr "Type Err"
-
-#: pcbnew/class_text_mod.cpp:442
-msgid "Ref."
-msgstr "Ref."
-
-#: pcbnew/class_text_mod.cpp:473
-msgid " No"
-msgstr "Non"
-
-#: pcbnew/class_text_mod.cpp:475
-msgid " Yes"
-msgstr "Oui"
 
 #: pcbnew/dialog_orient_footprints.cpp:138
 msgid "Orientation:"
@@ -4447,7 +4392,6 @@ msgstr ""
 
 #: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:36
 #: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:83
-#: pcbnew/dialog_design_rules_base.cpp:73
 msgid "Add"
 msgstr "Ajouter"
 
@@ -4466,7 +4410,6 @@ msgstr "Ajouter une nouvelle librairie avant la librairie sélectionnée, et la 
 
 #: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:46
 #: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:89
-#: pcbnew/dialog_design_rules_base.cpp:78
 msgid "Remove"
 msgstr "Enlever"
 
@@ -4479,7 +4422,6 @@ msgid "Footprint documentation file"
 msgstr "Fichier documentation des modules"
 
 #: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:61
-#: pcbnew/dialog_exchange_modules_base.cpp:68
 msgid "Browse"
 msgstr "Examiner"
 
@@ -4526,6 +4468,10 @@ msgstr "Last Change"
 #: pcbnew/class_module.cpp:844
 msgid "Netlist path"
 msgstr "Chemin Netliste "
+
+#: pcbnew/class_module.cpp:858
+msgid "Pads"
+msgstr "Pads"
 
 #: pcbnew/class_module.cpp:865
 msgid "Stat"
@@ -4824,29 +4770,17 @@ msgstr "Le composant avec valeur \"%s\" a une référence vide."
 msgid "Multiple components have identical reference IDs of \"%s\"."
 msgstr "Multiple composants ont une reference identique  \"%s\"."
 
-#: pcbnew/dialog_layers_setup.cpp:267
-msgid "Name"
-msgstr "Nom"
+#: pcbnew/class_text_mod.cpp:442
+msgid "Ref."
+msgstr "Ref."
 
-#: pcbnew/dialog_layers_setup.cpp:269
-msgid "Enabled"
-msgstr "Activé"
+#: pcbnew/class_text_mod.cpp:473
+msgid " No"
+msgstr "Non"
 
-#: pcbnew/dialog_layers_setup.cpp:614
-msgid "Layer name may not be empty"
-msgstr "Le nom d'une couche ne peut pas être vide"
-
-#: pcbnew/dialog_layers_setup.cpp:621
-msgid "Layer name has an illegal character, one of: '"
-msgstr "Le nom d'une couche contient un des caracteres interdit: '"
-
-#: pcbnew/dialog_layers_setup.cpp:628
-msgid "'signal' is a reserved layer name"
-msgstr "'signal' is a nom de couche réservé"
-
-#: pcbnew/dialog_layers_setup.cpp:637
-msgid "Layer name is a duplicate of another"
-msgstr "Le nom de la couche est un double d'une autre couche"
+#: pcbnew/class_text_mod.cpp:475
+msgid " Yes"
+msgstr "Oui"
 
 #: pcbnew/modedit_onclick.cpp:218
 msgid "Zoom Block (drag middle mouse)"
@@ -4996,7 +4930,6 @@ msgid "Save DRC Report File"
 msgstr "Sauver Fichier Rapport DRC:"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:24
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:24
 msgid "Fields:"
 msgstr "Champs:"
 
@@ -5041,62 +4974,50 @@ msgid "Change Module(s)"
 msgstr "Change module(s)"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:101
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:72
 msgid "Normal+Insert"
 msgstr "Normal+Insert"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:101
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:72
 msgid "Virtual"
 msgstr "Virtuel"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:103
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:74
 msgid "Attributs:"
 msgstr "Attributs:"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:107
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:78
 msgid "Free"
 msgstr "Libre"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:107
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:78
 msgid "Locked"
 msgstr "Verrouillé"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:109
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:80
 msgid "Move and Auto Place"
 msgstr "Déplacement et Placement Automatique"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:114
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:85
 msgid "Auto Move and Place"
 msgstr "Move et Place Automatiques"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:119
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:90
 msgid "Rotation 90 degree"
 msgstr "Rotation 90 degrés"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:131
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:102
 msgid "Rotation 180 degree"
 msgstr "Rotation 180 degrés"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:143
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:114
 msgid "Masks clearances local values:"
 msgstr "Valeurs locales pour marges sur masques:"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:145
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:116
 msgid "Set these values to 0 to use global values"
 msgstr "Mettre ces valeurs à 0 pour utiliser les valeurs globales"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:156
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:127
 msgid "All pads nets clearance"
 msgstr "Isolation pour tous les pads"
 
@@ -5111,7 +5032,6 @@ msgstr ""
 "Cette valeur peut être remplacée par une valeur locale d'un pad"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:180
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:149
 msgid ""
 "This is the local clearance between pads and the solder mask\n"
 "for this footprint\n"
@@ -5124,7 +5044,6 @@ msgstr ""
 "Si 0, la valeur globale sera utilisée"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:193
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:162
 msgid ""
 "This is the local clearance between pads and the solder paste\n"
 "for this footprint.\n"
@@ -5139,7 +5058,6 @@ msgstr ""
 "Une valeur négative signifie que le masque est plus petit que le pad"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:206
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:175
 msgid ""
 "This is the local clearance ratio in per cent between pads and the solder paste\n"
 "for this footprint.\n"
@@ -5156,37 +5074,30 @@ msgstr ""
 "Une valeur négative signifie que le masque est plus petit que le pad."
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:226
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:195
 msgid "Properties"
 msgstr "Propriétés"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:231
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:200
 msgid "3D Shape Name"
 msgstr "3D forme"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:241
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:210
 msgid "3D Scale and Pos"
 msgstr "Echelle et Position 3D"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:248
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:217
 msgid "Browse Shapes"
 msgstr "Examen Fichiers de Formes"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:251
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:220
 msgid "Add 3D Shape"
 msgstr "Ajout Forme 3D"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:254
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:223
 msgid "Remove 3D Shape"
 msgstr "Suppr. Forme 3D:"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:264
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:233
 msgid "3D settings"
 msgstr "3D Caract"
 
@@ -5266,18 +5177,37 @@ msgstr "Créer Fichier "
 msgid " error"
 msgstr " erreur"
 
-#: pcbnew/pcbnew_config.cpp:84
-msgid "Read Project File"
-msgstr "Lire Fichier Projet"
+#: pcbnew/class_track.cpp:920
+msgid "Track Length"
+msgstr "Long. Piste"
 
-#: pcbnew/pcbnew_config.cpp:94
-#, c-format
-msgid "File %s not found"
-msgstr "Fichier %s non trouvé"
+#: pcbnew/class_track.cpp:979
+msgid "Flags"
+msgstr "Flags"
 
-#: pcbnew/pcbnew_config.cpp:216
-msgid "Save Project File"
-msgstr "Sauver Fichier Projet"
+#: pcbnew/class_track.cpp:991
+msgid "Status"
+msgstr "Status"
+
+#: pcbnew/class_track.cpp:1014
+msgid "Diam"
+msgstr "Diam"
+
+#: pcbnew/class_track.cpp:1025
+msgid "(Specific)"
+msgstr "(Specifique)"
+
+#: pcbnew/class_track.cpp:1027
+msgid "(Default)"
+msgstr "(Défaut)"
+
+#: pcbnew/class_track.cpp:1040
+msgid "Net Class"
+msgstr "Classe d'Equipot"
+
+#: pcbnew/class_track.cpp:1047
+msgid "Segment Length"
+msgstr "Long. Segment"
 
 #: pcbnew/muwave_command.cpp:43
 msgid "Add Line"
@@ -5457,10 +5387,6 @@ msgstr "14"
 msgid "16"
 msgstr "16"
 
-#: pcbnew/dialog_layers_setup_base.cpp:47
-msgid "Layers"
-msgstr "Couches"
-
 #: pcbnew/dialog_layers_setup_base.cpp:68
 msgid "Adhes_Front_later"
 msgstr "Adhes_Dessus_réserve"
@@ -5613,6 +5539,66 @@ msgstr "jumper"
 #: pcbnew/dialog_layers_setup_base.cpp:604
 msgid "Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus."
 msgstr "Type de couches cuivre pour Freerouter. Les couches type \"Power\" sont supprimées du menu des couches de Freerouter."
+
+#: pcbnew/dialog_layers_setup_base.cpp:199
+msgid "Inner2"
+msgstr "Interne2"
+
+#: pcbnew/dialog_layers_setup_base.cpp:226
+msgid "Inner3"
+msgstr "Interne3"
+
+#: pcbnew/dialog_layers_setup_base.cpp:253
+msgid "Inner4"
+msgstr "Interne4"
+
+#: pcbnew/dialog_layers_setup_base.cpp:280
+msgid "Inner5"
+msgstr "Interne5"
+
+#: pcbnew/dialog_layers_setup_base.cpp:307
+msgid "Inner6"
+msgstr "Interne6"
+
+#: pcbnew/dialog_layers_setup_base.cpp:334
+msgid "Inner7"
+msgstr "Interne7"
+
+#: pcbnew/dialog_layers_setup_base.cpp:361
+msgid "Inner8"
+msgstr "Interne8"
+
+#: pcbnew/dialog_layers_setup_base.cpp:388
+msgid "Inner9"
+msgstr "Interne9"
+
+#: pcbnew/dialog_layers_setup_base.cpp:415
+msgid "Inner10"
+msgstr "Interne10"
+
+#: pcbnew/dialog_layers_setup_base.cpp:442
+msgid "Inner11"
+msgstr "Interne11"
+
+#: pcbnew/dialog_layers_setup_base.cpp:469
+msgid "Inner12"
+msgstr "Interne12"
+
+#: pcbnew/dialog_layers_setup_base.cpp:496
+msgid "Inner13"
+msgstr "Interne13"
+
+#: pcbnew/dialog_layers_setup_base.cpp:523
+msgid "Inner14"
+msgstr "Interne14"
+
+#: pcbnew/dialog_layers_setup_base.cpp:550
+msgid "Inner15"
+msgstr "Interne15"
+
+#: pcbnew/dialog_layers_setup_base.cpp:577
+msgid "Back"
+msgstr "Dessous"
 
 #: pcbnew/dialog_layers_setup_base.cpp:579
 msgid "Layer name of back (bottom) copper layer"
@@ -5873,6 +5859,19 @@ msgstr "Afficher autres éléments"
 msgid "Show page limits"
 msgstr " Afficher limites de page"
 
+#: pcbnew/pcbnew_config.cpp:84
+msgid "Read Project File"
+msgstr "Lire Fichier Projet"
+
+#: pcbnew/pcbnew_config.cpp:94
+#, c-format
+msgid "File %s not found"
+msgstr "Fichier %s non trouvé"
+
+#: pcbnew/pcbnew_config.cpp:216
+msgid "Save Project File"
+msgstr "Sauver Fichier Projet"
+
 #: pcbnew/class_netinfo_item.cpp:132
 msgid "Net Name"
 msgstr "Nom Equipot"
@@ -5880,6 +5879,11 @@ msgstr "Nom Equipot"
 #: pcbnew/class_netinfo_item.cpp:135
 msgid "Net Code"
 msgstr "Net Code"
+
+#: pcbnew/class_netinfo_item.cpp:164
+#: pcbnew/class_board.cpp:816
+msgid "Vias"
+msgstr "Vias"
 
 #: pcbnew/class_netinfo_item.cpp:167
 msgid "Net Length"
@@ -5918,25 +5922,85 @@ msgstr "Fichier placement côté cuivre:"
 msgid "Module count"
 msgstr "Nb Modules"
 
-#: pcbnew/layer_widget.cpp:247
-msgid "Show All Cu"
-msgstr "Afficher toutes couches cuivre"
+#: pcbnew/class_board.cpp:52
+msgid "This is the default net class."
+msgstr "Ceci est la Netclass par défaut"
 
-#: pcbnew/layer_widget.cpp:250
-msgid "Hide All Cu"
-msgstr "Cacher Cu"
+#: pcbnew/class_board.cpp:212
+msgid "Front"
+msgstr "Dessus"
 
-#: pcbnew/layer_widget.cpp:389
-msgid "Left click to select, middle click for color change, right click for menu"
-msgstr "Cliquer sur bouton gauche pour selectionner, du milieu pour changer la couleur, droit pour le menu"
+#: pcbnew/class_board.cpp:228
+msgid "Adhes_Back"
+msgstr "Adhes_Dessous"
 
-#: pcbnew/layer_widget.cpp:405
-msgid "Enable this for visibility"
-msgstr "Activer ceci pour activer la visibilité"
+#: pcbnew/class_board.cpp:229
+msgid "Adhes_Front"
+msgstr "Adhes_Dessus"
 
-#: pcbnew/layer_widget.cpp:424
-msgid "Middle click for color change"
-msgstr "Clicquer sur bouton du milieu pour changer la couleur"
+#: pcbnew/class_board.cpp:230
+msgid "SoldP_Back"
+msgstr "SoldP_Dessous"
+
+#: pcbnew/class_board.cpp:231
+msgid "SoldP_Front"
+msgstr "SoldP_Dessus"
+
+#: pcbnew/class_board.cpp:232
+msgid "SilkS_Back"
+msgstr "SilkS_Dessous"
+
+#: pcbnew/class_board.cpp:233
+msgid "SilkS_Front"
+msgstr "Sérigr_Dessus"
+
+#: pcbnew/class_board.cpp:234
+msgid "Mask_Back"
+msgstr "Masque_Dessous"
+
+#: pcbnew/class_board.cpp:235
+msgid "Mask_Front"
+msgstr "Masque_Dessus"
+
+#: pcbnew/class_board.cpp:236
+msgid "Drawings"
+msgstr "Drawings "
+
+#: pcbnew/class_board.cpp:237
+msgid "Comments"
+msgstr "Commentaires "
+
+#: pcbnew/class_board.cpp:238
+msgid "Eco1"
+msgstr "Eco1     "
+
+#: pcbnew/class_board.cpp:239
+msgid "Eco2"
+msgstr "Eco2     "
+
+#: pcbnew/class_board.cpp:240
+msgid "PCB_Edges"
+msgstr "Contours_PCB"
+
+#: pcbnew/class_board.cpp:241
+msgid "BAD INDEX"
+msgstr "BAD INDEX"
+
+#: pcbnew/class_board.cpp:819
+msgid "Nodes"
+msgstr "Nodes"
+
+#: pcbnew/class_board.cpp:822
+msgid "Nets"
+msgstr "Nets"
+
+#: pcbnew/class_board.cpp:830
+msgid "Links"
+msgstr "Liens"
+
+#: pcbnew/class_board.cpp:833
+msgid "Connect"
+msgstr "Connect"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:22
 msgid "No Display"
@@ -6329,71 +6393,6 @@ msgstr "Sauver Options"
 msgid "Generate drill file"
 msgstr "Créer Fichier de perçage"
 
-#: pcbnew/toolbars_update_user_interface.cpp:39
-msgid " mils"
-msgstr " mils"
-
-#: pcbnew/toolbars_update_user_interface.cpp:41
-msgid " mm"
-msgstr " mm"
-
-#: pcbnew/toolbars_update_user_interface.cpp:54
-msgid "NetClass: "
-msgstr "NetClass: "
-
-#: pcbnew/toolbars_update_user_interface.cpp:95
-#: pcbnew/toolbars_update_user_interface.cpp:115
-msgid " *"
-msgstr " *"
-
-#: pcbnew/toolbars_update_user_interface.cpp:191
-msgid "Disable design rule checking"
-msgstr "Désactive le contrôle des règles de conception"
-
-#: pcbnew/toolbars_update_user_interface.cpp:220
-msgid "Hide board ratsnest"
-msgstr "Ne pas montrer le chevelu général"
-
-#: pcbnew/toolbars_update_user_interface.cpp:227
-msgid "Hide module ratsnest"
-msgstr "Ne pas montrer le chevelu du module"
-
-#: pcbnew/toolbars_update_user_interface.cpp:228
-msgid "Show module ratsnest"
-msgstr "Montrer le chevelu du module"
-
-#: pcbnew/toolbars_update_user_interface.cpp:235
-msgid "Disable auto delete old track"
-msgstr "Ne pas Autoriser l'effacement automatique des pistes"
-
-#: pcbnew/toolbars_update_user_interface.cpp:236
-msgid "Enable auto delete old track"
-msgstr "Autoriser l'effacement automatique des pistes"
-
-#: pcbnew/toolbars_update_user_interface.cpp:244
-msgid "Show pads in fill mode"
-msgstr "Afficher pads en mode plein"
-
-#: pcbnew/toolbars_update_user_interface.cpp:252
-msgid "Show vias in fill mode"
-msgstr "Afficher vias en mode plein"
-
-#: pcbnew/toolbars_update_user_interface.cpp:260
-msgid "Show tracks in fill mode"
-msgstr "Afficher pistes en mode plein"
-
-#: pcbnew/toolbars_update_user_interface.cpp:266
-msgid "Normal contrast display mode"
-msgstr "Mode d'affichage contraste normal"
-
-#: pcbnew/toolbars_update_user_interface.cpp:267
-msgid "High contrast display mode"
-msgstr "Mode d'affichage haut contraste"
-
-#: pcbnew/toolbars_update_user_interface.cpp:273
-msgid "Hide invisible text"
-msgstr "Cacher textes invisibles"
-
 #: pcbnew/dialog_global_pads_edition_base.cpp:23
 msgid "Pad Filter :"
 msgstr "Filtre Pad :"
@@ -6441,10 +6440,6 @@ msgid ""
 msgstr ""
 "Plan de perçage: trop de diamètres différents pour tracer 1 symbole par diamètre (max 13)\n"
 "Le tracé utilise des cercles pour quelques valeurs "
-
-#: pcbnew/layer_panel_base.cpp:55
-msgid "Rendering"
-msgstr "Aspect"
 
 #: pcbnew/menubar_pcbframe.cpp:39
 msgid "&New\tCtrl+N"
@@ -6894,6 +6889,71 @@ msgstr "&Préférences"
 #: pcbnew/menubar_pcbframe.cpp:527
 msgid "&Design Rules"
 msgstr "&Règles de Conception"
+
+#: pcbnew/toolbars_update_user_interface.cpp:39
+msgid " mils"
+msgstr " mils"
+
+#: pcbnew/toolbars_update_user_interface.cpp:41
+msgid " mm"
+msgstr " mm"
+
+#: pcbnew/toolbars_update_user_interface.cpp:54
+msgid "NetClass: "
+msgstr "NetClass: "
+
+#: pcbnew/toolbars_update_user_interface.cpp:95
+#: pcbnew/toolbars_update_user_interface.cpp:115
+msgid " *"
+msgstr " *"
+
+#: pcbnew/toolbars_update_user_interface.cpp:191
+msgid "Disable design rule checking"
+msgstr "Désactive le contrôle des règles de conception"
+
+#: pcbnew/toolbars_update_user_interface.cpp:220
+msgid "Hide board ratsnest"
+msgstr "Ne pas montrer le chevelu général"
+
+#: pcbnew/toolbars_update_user_interface.cpp:227
+msgid "Hide module ratsnest"
+msgstr "Ne pas montrer le chevelu du module"
+
+#: pcbnew/toolbars_update_user_interface.cpp:228
+msgid "Show module ratsnest"
+msgstr "Montrer le chevelu du module"
+
+#: pcbnew/toolbars_update_user_interface.cpp:235
+msgid "Disable auto delete old track"
+msgstr "Ne pas Autoriser l'effacement automatique des pistes"
+
+#: pcbnew/toolbars_update_user_interface.cpp:236
+msgid "Enable auto delete old track"
+msgstr "Autoriser l'effacement automatique des pistes"
+
+#: pcbnew/toolbars_update_user_interface.cpp:244
+msgid "Show pads in fill mode"
+msgstr "Afficher pads en mode plein"
+
+#: pcbnew/toolbars_update_user_interface.cpp:252
+msgid "Show vias in fill mode"
+msgstr "Afficher vias en mode plein"
+
+#: pcbnew/toolbars_update_user_interface.cpp:260
+msgid "Show tracks in fill mode"
+msgstr "Afficher pistes en mode plein"
+
+#: pcbnew/toolbars_update_user_interface.cpp:266
+msgid "Normal contrast display mode"
+msgstr "Mode d'affichage contraste normal"
+
+#: pcbnew/toolbars_update_user_interface.cpp:267
+msgid "High contrast display mode"
+msgstr "Mode d'affichage haut contraste"
+
+#: pcbnew/toolbars_update_user_interface.cpp:273
+msgid "Hide invisible text"
+msgstr "Cacher textes invisibles"
 
 #: eeschema/plotps.cpp:165
 msgid "Page Size A4"
@@ -12182,6 +12242,10 @@ msgstr "MIME type inconnu pour fichier Doc <%s>"
 msgid "??? Via"
 msgstr "??? Via"
 
+#: common/pcbcommon.cpp:64
+msgid "Blind/Buried Via"
+msgstr "Via Aveugle/Enterrée"
+
 #: common/pcbcommon.cpp:84
 msgid "Kicad footprint library files (*.mod)|*.mod"
 msgstr "Fichiers Modules Kicad (*.mod)|*.mod"
@@ -12742,54 +12806,6 @@ msgstr "Effacements Globaux"
 msgid "Footprints Orientation"
 msgstr "Orientation des Modules"
 
-#: pcbnew/set_color.h:36
-msgid "Pcbnew Layer Colors:"
-msgstr "Pcbnew: Couleur des Couches"
-
-#: pcbnew/set_color.h:224
-msgid "Tech Layers"
-msgstr "Couches Tech."
-
-#: pcbnew/set_color.h:335
-msgid "Others"
-msgstr "Autres"
-
-#: pcbnew/set_color.h:366
-msgid "Ratsnest"
-msgstr "Chevelu"
-
-#: pcbnew/set_color.h:375
-msgid "Pad Back"
-msgstr "Pad Dessous"
-
-#: pcbnew/set_color.h:383
-msgid "Pad Front"
-msgstr "Pad Dessus"
-
-#: pcbnew/set_color.h:391
-msgid "Text Module Back"
-msgstr "Texte Module Dessous"
-
-#: pcbnew/set_color.h:399
-msgid "Text Module Front"
-msgstr "Texte Module Dessus"
-
-#: pcbnew/set_color.h:407
-msgid "Text Module invisible"
-msgstr "Texte Module invisible"
-
-#: pcbnew/set_color.h:432
-msgid "Show Noconnect"
-msgstr "Montrer Non Conn"
-
-#: pcbnew/set_color.h:441
-msgid "Show Modules Front"
-msgstr "Afficher Modules Dessus"
-
-#: pcbnew/set_color.h:450
-msgid "Show Modules Back"
-msgstr "Afficher Modules Dessous"
-
 #: pcbnew/dialog_netlist_fbp.h:68
 msgid "Netlist Dialog"
 msgstr "Dialogue Netliste"
@@ -12838,6 +12854,50 @@ msgstr "Propriétés du Module"
 #: pcbnew/dialog_design_rules_base.h:111
 msgid "Design Rules Editor"
 msgstr "Editeur de Règles de Conception"
+
+#: pcbnew/set_color.h:36
+msgid "Pcbnew Layer Colors:"
+msgstr "Pcbnew: Couleur des Couches"
+
+#: pcbnew/set_color.h:224
+msgid "Tech Layers"
+msgstr "Couches Tech."
+
+#: pcbnew/set_color.h:335
+msgid "Others"
+msgstr "Autres"
+
+#: pcbnew/set_color.h:375
+msgid "Pad Back"
+msgstr "Pad Dessous"
+
+#: pcbnew/set_color.h:383
+msgid "Pad Front"
+msgstr "Pad Dessus"
+
+#: pcbnew/set_color.h:391
+msgid "Text Module Back"
+msgstr "Texte Module Dessous"
+
+#: pcbnew/set_color.h:399
+msgid "Text Module Front"
+msgstr "Texte Module Dessus"
+
+#: pcbnew/set_color.h:407
+msgid "Text Module invisible"
+msgstr "Texte Module invisible"
+
+#: pcbnew/set_color.h:432
+msgid "Show Noconnect"
+msgstr "Montrer Non Conn"
+
+#: pcbnew/set_color.h:441
+msgid "Show Modules Front"
+msgstr "Afficher Modules Dessus"
+
+#: pcbnew/set_color.h:450
+msgid "Show Modules Back"
+msgstr "Afficher Modules Dessous"
 
 #: pcbnew/dialog_global_edit_tracks_and_vias_base.h:69
 msgid "Global Edition of Tracks and Vias"
@@ -13143,6 +13203,12 @@ msgstr "Options d'Affichage"
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "Ratsnets"
+#~ msgstr "Chevelu"
+#~ msgid "Show the ratsnest"
+#~ msgstr "Montrer le chevelu"
+#~ msgid "Mod Text Hide"
+#~ msgstr "Cacher Textes Mod."
 #~ msgid "RED"
 #~ msgstr "ROUGE"
 #~ msgid "GREEN"
@@ -13491,8 +13557,6 @@ msgstr "Ajustage opt Page"
 #~ msgstr "Grille non montrée"
 #~ msgid "Hide general ratsnest"
 #~ msgstr "Ne pas afficher le chevelu général"
-#~ msgid "Show general ratsnest"
-#~ msgstr "Afficher le chevelu général"
 #~ msgid "Show pads sketch mode"
 #~ msgstr "Afficher pastilles en mode contour"
 #~ msgid "Show pads filled mode"

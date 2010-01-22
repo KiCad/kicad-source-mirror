@@ -24,8 +24,6 @@
 
 #include "hotkeys.h"
 
-#define MUWAVE_ENBL
-
 #define SEL_LAYER_HELP _( \
         "Show active layer selections\nand select layer pair for route and place via" )
 
@@ -387,15 +385,19 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
     m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
                                   g_DesignSettings.IsElementVisible( MOD_TEXT_INVISIBLE ));
 
-
-#ifdef MUWAVE_ENBL
     m_OptionsToolBar->AddSeparator();
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR, 	 
+	                                wxEmptyString, 	 
+	                                wxBitmap( layers_manager_xpm ), 	 
+	                                _( 	 
+                                    "Show/hide the layers manager toolbar" ), 	 
+	                                wxITEM_CHECK ); 	 
+	m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
                                wxEmptyString,
                                wxBitmap( mw_toolbar_xpm ),
-                               _( "Display/remove auxiliary vertical toolbar (tools for micro wave applications)\n This is a experimental feature (under development)" ),
+ _( "Show/hide the toolbar for microwaves tools\n This is a experimental feature (under development)" ),
                                wxITEM_CHECK );
-#endif
+
 
     m_OptionsToolBar->Realize();
     SetToolbars();
@@ -746,6 +748,12 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
             wxString msg = GetBoard()->GetLayerName( layer );
             msg = AddHotkeyName( msg, s_Board_Editor_Hokeys_Descr,
                                  HK_SwitchLayer[layer] );
+  	 
+            /* we are using tabs in AddHotkeyName message. 	 
+             *  this is not handled by m_SelLayerBox. 	 
+             *  so we replace them by 3 spaces 	 
+             */ 	 
+            msg.Replace( wxT( "\t"), wxT( "   " ) );
             m_SelLayerBox->Append( msg );
 
             //D(printf("appending layername=%s, ndx=%d, layer=%d\n", CONV_TO_UTF8(msg), listNdx, layer );)

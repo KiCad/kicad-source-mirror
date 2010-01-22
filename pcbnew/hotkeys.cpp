@@ -254,6 +254,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         else
             ll--;
         SwitchLayer( DC, ll );
+//        m_Layers->SelectLayer(GetScreen()->m_Active_Layer);   // Ensure Layer manager synchronization
         break;
 
     case HK_SWITCH_LAYER_TO_NEXT:
@@ -267,38 +268,50 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         else
             ll++;
         SwitchLayer( DC, ll );
+// m_Layers->SelectLayer() must be called, but due to a problem in SetFocus() function
+// that creates a lost of focus in main window (hotkeys not working after the first hotkey use)
+// this call is commented until this issue is fixed.
+//        m_Layers->SelectLayer(GetScreen()->m_Active_Layer);   // Ensure Layer manager synchronization
         break;
 
     case HK_SWITCH_LAYER_TO_COMPONENT:
         SwitchLayer( DC, LAYER_N_FRONT );
+//        m_Layers->SelectLayer(GetScreen()->m_Active_Layer);   // Ensure Layer manager synchronization
         break;
 
     case HK_SWITCH_LAYER_TO_COPPER:
         SwitchLayer( DC, LAYER_N_BACK );
+//        m_Layers->SelectLayer(GetScreen()->m_Active_Layer);   // Ensure Layer manager synchronization
         break;
 
     case HK_SWITCH_LAYER_TO_INNER1:
         SwitchLayer( DC, LAYER_N_2 );
+//        m_Layers->SelectLayer(GetScreen()->m_Active_Layer);   // Ensure Layer manager synchronization
         break;
 
     case HK_SWITCH_LAYER_TO_INNER2:
         SwitchLayer( DC, LAYER_N_3 );
+//        m_Layers->SelectLayer(GetScreen()->m_Active_Layer);   // Ensure Layer manager synchronization
         break;
 
     case HK_SWITCH_LAYER_TO_INNER3:
         SwitchLayer( DC, LAYER_N_4 );
+//        m_Layers->SelectLayer(GetScreen()->m_Active_Layer);   // Ensure Layer manager synchronization
         break;
 
     case HK_SWITCH_LAYER_TO_INNER4:
         SwitchLayer( DC, LAYER_N_5 );
+//        m_Layers->SelectLayer(GetScreen()->m_Active_Layer);   // Ensure Layer manager synchronization
         break;
 
     case HK_SWITCH_LAYER_TO_INNER5:
         SwitchLayer( DC, LAYER_N_6 );
+ //       m_Layers->SelectLayer(GetScreen()->m_Active_Layer);   // Ensure Layer manager synchronization
         break;
 
     case HK_SWITCH_LAYER_TO_INNER6:
         SwitchLayer( DC, LAYER_N_7 );
+//        m_Layers->SelectLayer(GetScreen()->m_Active_Layer);   // Ensure Layer manager synchronization
         break;
 
     case HK_HELP: // Display Current hotkey list
