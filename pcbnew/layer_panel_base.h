@@ -21,7 +21,8 @@
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/notebook.h>
+//#include <wx/notebook.h>
+#include <wx/aui/auibook.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -29,28 +30,30 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class LAYER_PANEL_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class LAYER_PANEL_BASE : public wxPanel 
+class LAYER_PANEL_BASE : public wxPanel
 {
-	private:
-	
-	protected:
-		wxNotebook* m_notebook;
-		wxPanel* m_LayerPanel;
-		wxScrolledWindow* m_LayerScrolledWindow;
-		wxFlexGridSizer* m_LayersFlexGridSizer;
-		wxPanel* m_RenderingPanel;
-		wxScrolledWindow* m_RenderScrolledWindow;
-		wxFlexGridSizer* m_RenderFlexGridSizer;
-		
-		// Virtual event handlers, overide them in your derived class
-		virtual void OnLeftDownLayers( wxMouseEvent& event ){ event.Skip(); }
-		virtual void OnRightDownLayers( wxMouseEvent& event ){ event.Skip(); }
-		
-	
-	public:
-		LAYER_PANEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 200,200 ), long style = wxTAB_TRAVERSAL );
-		~LAYER_PANEL_BASE();
-	
+    private:
+
+    protected:
+//		wxNotebook* m_notebook;
+        wxAuiNotebook* m_notebook;
+
+        wxPanel* m_LayerPanel;
+        wxScrolledWindow* m_LayerScrolledWindow;
+        wxFlexGridSizer* m_LayersFlexGridSizer;
+        wxPanel* m_RenderingPanel;
+        wxScrolledWindow* m_RenderScrolledWindow;
+        wxFlexGridSizer* m_RenderFlexGridSizer;
+
+        // Virtual event handlers, overide them in your derived class
+        virtual void OnLeftDownLayers( wxMouseEvent& event ){ event.Skip(); }
+        virtual void OnRightDownLayers( wxMouseEvent& event ){ event.Skip(); }
+
+
+    public:
+        LAYER_PANEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 200,200 ), long style = wxTAB_TRAVERSAL );
+        ~LAYER_PANEL_BASE();
+
 };
 
 #endif //__layer_panel_base__

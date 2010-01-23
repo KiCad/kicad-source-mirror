@@ -49,9 +49,9 @@
 #define LYR_COLUMN_COUNT        4           ///< Layer tab column count
 #define RND_COLUMN_COUNT        2           ///< Rendering tab column count
 
-#define BUTT_SIZE_X             32
-#define BUTT_SIZE_Y             22
-#define BUTT_VOID               6
+#define BUTT_SIZE_X             20
+#define BUTT_SIZE_Y             18
+#define BUTT_VOID               4
 
 
 #define ID_SHOW_ALL_COPPERS     wxID_HIGHEST
@@ -60,46 +60,45 @@
 
 /* XPM */
 static const char * clear_xpm[] = {
-"28 14 1 1",
+"10 14 1 1",
 " 	c None",
-"                            ",
-"                            ",
-"                            ",
-"                            ",
-"                            ",
-"                            ",
-"                            ",
-"                            ",
-"                            ",
-"                            ",
-"                            ",
-"                            ",
-"                            ",
-"                            "};
+"          ",
+"          ",
+"          ",
+"          ",
+"          ",
+"          ",
+"          ",
+"          ",
+"          ",
+"          ",
+"          ",
+"          ",
+"          ",
+"          "};
 
 /* XPM */
 static const char * rightarrow_xpm[] = {
-"28 14 5 1",
-" 	c None",
-".	c white",
-"X	c #8080ff",
-"o	c BLUE",
-"O	c gray56",
-"                   .X       ",
-"                   .XX      ",
-"                   .XXX     ",
-"                   .XXXX    ",
-"    ................XXXXX   ",
-"    XXXXXXXXXXXXXXXXXXXXXX  ",
-"    XXXXXXXXXXXXXXXXXXXXXXX ",
-"    oooooooooooooooooooooooO",
-"    ooooooooooooooooooooooO ",
-"     OOOOOOOOOOOOOOOoooooO  ",
-"                    ooooO   ",
-"                    oooO    ",
-"                    ooO     ",
-"                    oO      "};
-
+"10 14 5 1",
+"       c None",
+".      c white",
+"X      c #8080ff",
+"o      c BLUE",
+"O      c gray56",
+"  X       ",
+"  XX      ",
+"  XXX     ",
+"  XXXX    ",
+"  XXXXX   ",
+"  XXXXXX  ",
+"  XXXXXXX ",
+"  oooooooO",
+"  ooooooO ",
+"  oooooO  ",
+"  ooooO   ",
+"  oooO    ",
+"  ooO     ",
+"  oO      "};
 
 /**
  * Function encodeId
@@ -138,6 +137,17 @@ static wxString makeColorTxt( int aColor )
     return txt;
 }
 
+
+/**
+ * Function shrinkFont
+ * reduces the size of the wxFont associated with \a aControl
+ */
+static void shrinkFont( wxWindow* aControl )
+{
+    wxFont font = aControl->GetFont();
+    font.SetPointSize( (font.GetPointSize() * 8) / 10 );    // go to 80% of original.
+    aControl->SetFont( font );
+}
 
 wxBitmap LAYER_WIDGET::makeBitmap( int aColor )
 {
@@ -353,10 +363,10 @@ void LAYER_WIDGET::OnRenderCheckBox( wxCommandEvent& event )
 
 void LAYER_WIDGET::OnTabChange( wxNotebookEvent& event )
 {
-//    printf("OnTabChange\n");
-//    passOnFocus();        // this segfaults, cannot enable it.
-    // maybe we need to find a way to call the stock tab change event handler
-    // first, then call passOnFocus() before we consider this event done.
+//    wxFocusEvent    event( wxEVT_SET_FOCUS );
+//    m_FocusOwner->AddPendingEvent( event );
+
+    passOnFocus();      // does not work in this context, probably because we have receive control here too early.
 }
 
 
@@ -411,6 +421,7 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     // column 2
     col = 2;
     wxStaticText* st = new wxStaticText( m_LayerScrolledWindow, encodeId( col, aSpec.id ), aSpec.rowName );
+    shrinkFont( st );
     st->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
     st->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnRightDownLayers ), NULL, this );
     st->SetToolTip( aSpec.tooltip );
@@ -456,6 +467,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
     col = 1;
     wxCheckBox* cb = new wxCheckBox( m_RenderScrolledWindow, encodeId( col, aSpec.id ),
                         aSpec.rowName, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+    shrinkFont( cb );
     cb->SetValue( aSpec.state );
     cb->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED,
         wxCommandEventHandler( LAYER_WIDGET::OnRenderCheckBox ), NULL, this );
@@ -496,12 +508,22 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner ) :
 
     // trap the tab changes so that we can call passOnFocus().
     m_notebook->Connect( -1, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
-        wxNotebookEventHandler( LAYER_WIDGET::OnTabChange ) );
+        wxNotebookEventHandler( LAYER_WIDGET::OnTabChange ), NULL, this );
 }
 
 
 wxSize LAYER_WIDGET::GetBestSize() const
 {
+#if 0
+    wxSize layerz  = m_LayersFlexGridSizer->GetMinSize();
+    wxSize renderz = m_RenderFlexGridSizer->GetMinSize();
+
+    wxSize  clientz( max(renderz.x,layerz.x), max(renderz.y,layerz.y) );
+
+    return ClientToWindowSize( clientz );
+
+#else
+
     // size of m_LayerScrolledWindow --------------
     wxArrayInt widths = m_LayersFlexGridSizer->GetColWidths();
     int totWidth = 0;
@@ -527,13 +549,14 @@ wxSize LAYER_WIDGET::GetBestSize() const
             totHeight += heights[i] + m_LayersFlexGridSizer->GetVGap();
             // printf("heights[%d]:%d\n", i, heights[i] );
         }
-
         totHeight += 2 * heights[0]; // use 2 row heights to approximate tab height
     }
     else
         totHeight += 20;        // not used except before adding rows.
 
     wxSize layerz( totWidth, totHeight );
+
+    layerz += m_LayerPanel->GetWindowBorderSize();
 
 
     // size of m_RenderScrolledWindow --------------
@@ -568,7 +591,17 @@ wxSize LAYER_WIDGET::GetBestSize() const
 
     wxSize renderz( totWidth, totHeight );
 
-    return wxSize( max(renderz.x,layerz.x), max(renderz.y,layerz.y) );
+    renderz += m_RenderingPanel->GetWindowBorderSize();
+
+    wxSize clientz( max(renderz.x,layerz.x), max(renderz.y,layerz.y) );
+
+//    wxSize diffz( GetSize() - GetClientSize() );
+//    clientz += diffz;
+
+    return clientz;
+
+#endif
+
 }
 
 
@@ -617,7 +650,7 @@ void LAYER_WIDGET::ClearRenderRows()
 void LAYER_WIDGET::SelectLayerRow( int aRow )
 {
     // enable the layer tab at index 0
-    m_notebook->ChangeSelection( 0 );
+    m_notebook->SetSelection( 0 );
 
     int oldNdx = LYR_COLUMN_COUNT * m_CurrentRow;
     int newNdx = LYR_COLUMN_COUNT * aRow;
@@ -699,15 +732,12 @@ class MYFRAME : public wxFrame
     // abstract methods.
     class MYLAYERS : public LAYER_WIDGET
     {
-        MYFRAME*    frame;
-
     public:
         // your constructor could take a BOARD argument.  here I leave it
         // out because this source module wants to know nothing of BOARDs
         // to maximize re-use.
-        MYLAYERS( wxWindow* aParent, MYFRAME* aFrame ) :
-            LAYER_WIDGET( aParent ),
-            frame( aFrame )
+        MYLAYERS( wxWindow* aParent ) :
+            LAYER_WIDGET( aParent, aParent  )
         {
         }
 
@@ -755,7 +785,7 @@ public:
         // notify wxAUI which frame to use
         m_mgr.SetManagedWindow( this );
 
-        MYLAYERS* lw = new MYLAYERS( this, this );
+        MYLAYERS* lw = new MYLAYERS( this );
 
         // add some layer rows
         static const LAYER_WIDGET::ROW layerRows[] = {

@@ -117,14 +117,14 @@
                         <event name="OnUpdateUI"></event>
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap">layerbitmap; Load From File</property>
-                            <property name="label">Layers</property>
+                            <property name="label">Layer</property>
                             <property name="select">1</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
-                                <property name="font"></property>
+                                <property name="font">,90,90,10,70,0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
                                 <property name="maximum_size"></property>
@@ -167,8 +167,8 @@
                                     <property name="orient">wxVERTICAL</property>
                                     <property name="permission">none</property>
                                     <object class="sizeritem" expanded="1">
-                                        <property name="border">5</property>
-                                        <property name="flag">wxBOTTOM|wxEXPAND|wxTOP</property>
+                                        <property name="border">2</property>
+                                        <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxTOP</property>
                                         <property name="proportion">1</property>
                                         <object class="wxScrolledWindow" expanded="1">
                                             <property name="bg"></property>
@@ -219,13 +219,13 @@
                                                 <property name="flexible_direction">wxHORIZONTAL</property>
                                                 <property name="growablecols"></property>
                                                 <property name="growablerows"></property>
-                                                <property name="hgap">3</property>
+                                                <property name="hgap">1</property>
                                                 <property name="minimum_size"></property>
                                                 <property name="name">m_LayersFlexGridSizer</property>
                                                 <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                                 <property name="permission">protected</property>
                                                 <property name="rows">0</property>
-                                                <property name="vgap">1</property>
+                                                <property name="vgap">0</property>
                                             </object>
                                         </object>
                                     </object>
@@ -234,14 +234,14 @@
                         </object>
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap">; Load From File</property>
-                            <property name="label">Rendering</property>
+                            <property name="label">Render</property>
                             <property name="select">0</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
-                                <property name="font"></property>
+                                <property name="font">,90,90,10,70,0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
                                 <property name="maximum_size"></property>
@@ -336,13 +336,13 @@
                                                 <property name="flexible_direction">wxHORIZONTAL</property>
                                                 <property name="growablecols"></property>
                                                 <property name="growablerows"></property>
-                                                <property name="hgap">3</property>
+                                                <property name="hgap">1</property>
                                                 <property name="minimum_size"></property>
                                                 <property name="name">m_RenderFlexGridSizer</property>
                                                 <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_NONE</property>
                                                 <property name="permission">protected</property>
                                                 <property name="rows">0</property>
-                                                <property name="vgap">1</property>
+                                                <property name="vgap">0</property>
                                             </object>
                                         </object>
                                     </object>

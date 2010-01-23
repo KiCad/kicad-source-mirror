@@ -327,7 +327,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     lyrs.MinSize( m_Layers->GetBestSize() );    // updated in ReFillLayerWidget
     lyrs.BestSize( m_Layers->GetBestSize() );
     lyrs.CloseButton( false );
-    lyrs.Caption( wxT( "Layers" ) );
+    lyrs.Caption( _( "Visibles" ) );
     lyrs.IsFloatable();
 
 
@@ -520,6 +520,8 @@ void WinEDA_PcbFrame::ReFillLayerWidget()
         int         layerId;
         wxString    tooltip;
     } techLayerSeq[] = {
+
+    /* some layers are not visible nor editable, don't show them for now:
         { ADHESIVE_N_FRONT,     _("Adhesive on board's front")      },
         { ADHESIVE_N_BACK,      _("Adhesive on board's back")       },
         { SOLDERPASTE_N_FRONT,  _("Solder paste on board's front")  },
@@ -528,11 +530,12 @@ void WinEDA_PcbFrame::ReFillLayerWidget()
         { SILKSCREEN_N_BACK,    _("Silkscreen on board's back")     },
         { SOLDERMASK_N_FRONT,   _("Solder mask on board's front")   },
         { SOLDERMASK_N_BACK,    _("Solder mask on board's back")    },
-        { DRAW_N,               _("Explanatory drawings")           },
-        { COMMENT_N,            _("Explanatory comments")           },
-        { ECO1_N,               _("TDB")                            },
-        { ECO2_N,               _("TBD")                            },
-        { EDGE_N,               _("Board's perimeter definition")   },
+    */
+        { DRAW_N,               _( "Explanatory drawings" )         },
+        { COMMENT_N,            _( "Explanatory comments" )         },
+        { ECO1_N,               _( "TDB" )                          },
+        { ECO2_N,               _( "TBD" )                          },
+        { EDGE_N,               _( "Board's perimeter definition" ) },
     };
 
     for( unsigned i=0;  i<DIM(techLayerSeq);  ++i )
