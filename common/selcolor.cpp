@@ -29,6 +29,7 @@ public:
     ~WinEDA_SelColorFrame() {};
 
 private:
+    void Init_Dialog( int aOldColor );
     void OnCancel( wxCommandEvent& event );
     void SelColor( wxCommandEvent& event );
 
@@ -66,6 +67,42 @@ WinEDA_SelColorFrame::WinEDA_SelColorFrame( wxWindow*      parent,
                                             int            OldColor ) :
     wxDialog( parent, -1, _( "Colors" ), framepos, wxDefaultSize,
               wxDEFAULT_DIALOG_STYLE | MAYBE_RESIZE_BORDER )
+{
+
+    Init_Dialog( OldColor );
+    // Resize the dialog
+    GetSizer()->SetSizeHints( this );
+
+    // Ensure the whole frame is visible, whenever the asked position.
+    // Give also a small margin.
+    wxPoint endCornerPosition = GetPosition();
+    int margin = 10;
+    endCornerPosition.x += GetSize().x + margin;
+    endCornerPosition.y += GetSize().y + margin;
+
+    wxPoint windowPosition = GetPosition();
+    wxRect freeScreenArea( wxGetClientDisplayRect( ) );
+    if( freeScreenArea.GetRight() < endCornerPosition.x )
+    {
+        windowPosition.x += freeScreenArea.GetRight() - endCornerPosition.x;
+        if( windowPosition.x < freeScreenArea.x )
+            windowPosition.x = freeScreenArea.x;
+        // Sligly modify the vertical position to avoid the mouse to be
+        // exactly on the upper side of the window
+        windowPosition.y +=5;
+        endCornerPosition.y += 5;
+    }
+    if( freeScreenArea.GetBottom() < endCornerPosition.y )
+    {
+        windowPosition.y += freeScreenArea.GetBottom() - endCornerPosition.y;
+        if( windowPosition.y < freeScreenArea.y )
+            windowPosition.y = freeScreenArea.y;
+    }
+
+    SetPosition(windowPosition);
+}
+
+void WinEDA_SelColorFrame::Init_Dialog( int aOldColor )
 {
     wxBoxSizer*             OuterBoxSizer = NULL;
     wxBoxSizer*             MainBoxSizer  = NULL;
@@ -135,7 +172,7 @@ WinEDA_SelColorFrame::WinEDA_SelColorFrame( wxWindow*      parent,
         // Set focus to this button if its color matches the
         // color which had been selected previously (for
         // whichever layer's color is currently being edited).
-        if( OldColor == buttcolor )
+        if( aOldColor == buttcolor )
         {
             ColorFound = true;
             BitmapButton->SetFocus();
@@ -171,14 +208,7 @@ WinEDA_SelColorFrame::WinEDA_SelColorFrame( wxWindow*      parent,
     // (That shouldn't ever happen in practice though.)
     if( !ColorFound )
         Button->SetFocus();
-
-    // Resize the dialog
-    if( GetSizer() )
-    {
-        GetSizer()->SetSizeHints( this );
-    }
 }
-
 
 void WinEDA_SelColorFrame::OnCancel( wxCommandEvent& WXUNUSED( event ) )
 {

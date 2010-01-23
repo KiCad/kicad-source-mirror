@@ -20,13 +20,8 @@ option(wxUSE_UNICODE "enable/disable building unicode (default OFF)")
 option(KICAD_GOST "enable/disable building using GOST notation for multiple gates per package (default OFF)")
 
 
-if(APPLE)
-    option(KICAD_AUIMANAGER "Enable use of wxAuiManager (default ON)" ON)
-    option(KICAD_AUITOOLBAR "Enable use of wxAuiToolBar (default ON)" ON)
-else(APPLE)
-    option(KICAD_AUIMANAGER "Enable use of wxAuiManager (default OFF)" OFF)
-    option(KICAD_AUITOOLBAR "Enable use of wxAuiToolBar (default OFF)" OFF)
-endif(APPLE)
+option(KICAD_AUIMANAGER "Enable use of wxAuiManager (default ON)" ON)
+option(KICAD_AUITOOLBAR "Enable use of wxAuiToolBar (default ON)" ON)
 
 
 # Comment this out if you don't want to build with Python support.

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-22 11:29+0100\n"
-"PO-Revision-Date: 2010-01-22 11:34+0100\n"
+"POT-Creation-Date: 2010-01-22 14:07+0100\n"
+"PO-Revision-Date: 2010-01-22 14:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -747,12 +747,12 @@ msgstr "X Pos"
 msgid "Y pos"
 msgstr "Y pos"
 
-#: pcbnew/hotkeys.cpp:595
+#: pcbnew/hotkeys.cpp:608
 #, c-format
 msgid "Footprint %s found, but locked"
 msgstr "Module %s trouvé, mais verrouillé"
 
-#: pcbnew/hotkeys.cpp:789
+#: pcbnew/hotkeys.cpp:802
 msgid "Delete module?"
 msgstr "Effacer Module?"
 
@@ -925,12 +925,11 @@ msgid "Show/hide the layers manager toolbar"
 msgstr "Afficher/cacher le gestionnaire de couches"
 
 #: pcbnew/tool_pcb.cpp:398
-#, fuzzy
 msgid ""
 "Show/hide the toolbar for microwaves tools\n"
 " This is a experimental feature (under development)"
 msgstr ""
-"Affiche/supprime le toolbar vertical auxiliaire (outils pour applications micro-ondes)\n"
+"Affiche/cache le toolbar vertical auxiliaire pour applications micro-ondes)\n"
 "C'est un outil expérimental (en cours de développement)"
 
 #: pcbnew/tool_pcb.cpp:423

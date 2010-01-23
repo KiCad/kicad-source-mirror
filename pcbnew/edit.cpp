@@ -743,6 +743,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         if( itmp >= 0 )
             ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = itmp;
         DrawPanel->MouseToCursorSchema();
+        SynchronizeLayersManager( 1 );
         break;
 
     case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
@@ -757,7 +758,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         if( itmp >= 0 )
             ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = itmp;
         DrawPanel->MouseToCursorSchema();
-        break;
+        SynchronizeLayersManager( 1 );
+         break;
 
     case ID_POPUP_PCB_SELECT_CU_LAYER:
         itmp = SelectLayer(
@@ -765,7 +767,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             LAST_COPPER_LAYER );
         if( itmp >= 0 )
             ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = itmp;
-        break;
+        SynchronizeLayersManager( 1 );
+         break;
 
     case ID_POPUP_PCB_SELECT_LAYER_PAIR:
         SelectLayerPair();
@@ -776,6 +779,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         itmp = m_SelLayerBox->GetChoice();
         ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer =
             (int) ( (size_t) m_SelLayerBox->GetClientData( itmp ) );
+        SynchronizeLayersManager( 1 );   // Ensure Layer manager synchronization
         if( DisplayOpt.ContrastModeDisplay )
             DrawPanel->Refresh( true );
         break;
@@ -1134,7 +1138,6 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
                     if( DisplayOpt.ContrastModeDisplay )
                         GetScreen()->SetRefreshReq();
                 }
-
                 // if the via was allowed by DRC, then the layer swap has already
                 // been done by Other_Layer_Route(). if via not allowed, then
                 // return now so assignment to m_Active_Layer below doesn't happen.
@@ -1149,6 +1152,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
     // ...
 
     GetScreen()->m_Active_Layer = layer;
+    SynchronizeLayersManager( 1 );   // Ensure Layer manager synchronization
 
     if( DisplayOpt.ContrastModeDisplay )
         GetScreen()->SetRefreshReq();

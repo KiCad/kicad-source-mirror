@@ -522,6 +522,14 @@ void WinEDA_PcbFrame::ReFillLayerWidget()
     } techLayerSeq[] = {
 
     /* some layers are not visible nor editable, don't show them for now:
+     * >> In fact they are useful here because we must be able to change
+     * the color and visibility because they can be visible.
+     * slikscreen and adhesive layers are visible (adhesive layer is rarely used)
+     * Solder mask and solder paste (used for pads) are visible in *Hight Color*
+     * mode when they are selected
+     * they are now editable because Pcbnew handle parameters (global and local)
+     * to calculate pads shapes on these layers
+    */
         { ADHESIVE_N_FRONT,     _("Adhesive on board's front")      },
         { ADHESIVE_N_BACK,      _("Adhesive on board's back")       },
         { SOLDERPASTE_N_FRONT,  _("Solder paste on board's front")  },
@@ -530,7 +538,6 @@ void WinEDA_PcbFrame::ReFillLayerWidget()
         { SILKSCREEN_N_BACK,    _("Silkscreen on board's back")     },
         { SOLDERMASK_N_FRONT,   _("Solder mask on board's front")   },
         { SOLDERMASK_N_BACK,    _("Solder mask on board's back")    },
-    */
         { DRAW_N,               _( "Explanatory drawings" )         },
         { COMMENT_N,            _( "Explanatory comments" )         },
         { ECO1_N,               _( "TDB" )                          },
@@ -678,4 +685,18 @@ void WinEDA_PcbFrame::SaveSettings()
         ( m_AuxVToolBar && m_AuxVToolBar->IsShown() ) ? true : false );
     config->Write( SHOW_LAYER_MANAGER_TOOLS, (long)m_show_layer_manager_tools );
 
+}
+
+
+/** Function SynchronizeLayersManager( )
+ * Must be called when info displayed in the layer manager Toolbar
+ * as been changed in the main window ( by hotkey or a tool option.
+ * Mainly when the active layer as changed.
+ * @param aFlag = flag giving the type of data (layers, checkboxes...)
+ */
+void WinEDA_PcbFrame::SynchronizeLayersManager( int aFlag )
+{
+    // Ensure Layer manager synchronization for the active layer
+    if( (aFlag & 1) )
+        m_Layers->SelectLayer(GetScreen()->m_Active_Layer);
 }

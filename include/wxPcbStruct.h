@@ -206,6 +206,14 @@ public:
      */
     void             AuxiliaryToolBar_DesignRules_Update_UI();
 
+    /** Function SynchronizeLayersManager( )
+     * Must be called when info displayed in the layer manager Toolbar
+     * as been changed in the main window ( by hotkey or a tool option.
+     * Mainly when the active layer as changed.
+     * @param aFlag = flag giving the type of data (layers, checkboxes...)
+     */
+    void             SynchronizeLayersManager( int aFlag );
+
     /* mouse functions events: */
     void             OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void             OnLeftDClick( wxDC* DC, const wxPoint& MousePos );

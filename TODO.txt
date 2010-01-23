@@ -22,17 +22,9 @@ Common
   Need to do this using DialogBlocks.
 * Component and module search displays in which library the
   module or component lives.
-* Create a better and cleaner add component and footprint dialog.
 * List auto up and down scrolling.
-* Toolbars and menus should be equal.
-* (Main) dialog(s) title(s) should always be the same and not change over time
-  when not needed. For example KiCad - <file loaded> or PCBNew - <file loaded>.
-  We dont have to see which build in the titlebar. This makes documentation
-  screenshots also easier. We already have the build information in the about
-  dialog.
 * Integer/long/double input boxes should handle comma and dot separated values,
   not only comma.
-* Undo/Redo should have more steps (or could be setable).
 
 CvPCB
 -----
@@ -41,9 +33,6 @@ CvPCB
 
 EESchema
 --------
-
-*Improvements*
-* Component add list browser with optional component preview.
 * Use collector classes.
 * Drag and drop between two EESchema windows.
 
@@ -70,36 +59,23 @@ from folks with less than that minimum.
 
 PCBNew
 ------
-*BUGS*
-* Backspace hotkey for deleting track segment doesn't work.
-* Delete hotkey for deleting a track doesn't work.
 * Fix block copy/move preview to not view only a border, we should
   see the moved/copied parts.
 
 * Fix DIALOG_PAD_PROPERTIES_BASE class to use actual layer names in the BOARD.
 
 * Use BOARD_ITEM::MenuIcon() in the onrightclick.cpp
-* Add unroute option in rightclick menu for components
 * Document specctra round tripper, and fix the english translation of help.
 * Expose layer name editing. Should dove tail with net class editor from
   a UI perspective.
 * Add ARC support to gerber polygons.
 * Need to add polygon aperture type.
   Then example 2 in RS274xrevd_e.pdf will draw properly.
-* Look at mouse auto-scroll modes (bug?)
-* Add the footprint name in the automatic placement file
-* Footprint list should also have a footprint preview.
 
 
 LAYER_WIDGET for PCBNEW
 -----------------------
-L1) Keyboard focus is getting stuck in layer widget and then hotkeys do not work.
-    There is probably a solution to be found and it may involve asking on the
-    wxWidgets mailing list.
-
 L2) Hook in bool WinEDA_PcbFrame::LYRS::OnLayerSelect( int aLayer )
-
-L3) When a layer changes via a hotkey, then call WinEDA_PcbFrame->m_Layers->SelectLayer()
 
 L4) Move popup menu code from class LAYER_WIDGET into WinEDA_PcbFrame::LYRS so as
     to keep LAYER_WIDGET fully usage agnostic.  Remove #include "pcbstruct.h"      // IsValidCopperLayerIndex()

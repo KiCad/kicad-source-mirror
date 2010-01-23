@@ -138,6 +138,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
 
         UpdateStatusBar();
         SetToolbars();
+        SynchronizeLayersManager( 1 );
         return true;
     }
 
@@ -292,8 +293,8 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     via->DisplayInfo( this );
 
     UpdateStatusBar();
-
     SetToolbars();
+    SynchronizeLayersManager( 1 );
 
     return true;
 }
