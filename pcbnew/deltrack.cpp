@@ -36,7 +36,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* aTrack )
     {
         if( g_CurrentTrackList.GetCount() > 0 )
         {
-            int previous_layer = ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
+            int previous_layer = getActiveLayer();
 
             D( g_CurrentTrackList.VerifyListIntegrity(); )
 
@@ -71,7 +71,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* aTrack )
 
             // Correct active layer which could change if a via
             // has been erased
-            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = previous_layer;
+            setActiveLayer( previous_layer );
 
             UpdateStatusBar();
             if( g_TwoSegmentTrackBuild )   // We must have 2 segments or more,

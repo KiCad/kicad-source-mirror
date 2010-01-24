@@ -72,19 +72,24 @@ PCBNew
 * Need to add polygon aperture type.
   Then example 2 in RS274xrevd_e.pdf will draw properly.
 
+Dick:
+* Get the nested quote support for DSNLEXER fixed up and committed.
+
 
 LAYER_WIDGET for PCBNEW
 -----------------------
-L2) Hook in bool WinEDA_PcbFrame::LYRS::OnLayerSelect( int aLayer )
-
-L4) Move popup menu code from class LAYER_WIDGET into WinEDA_PcbFrame::LYRS so as
-    to keep LAYER_WIDGET fully usage agnostic.  Remove #include "pcbstruct.h"      // IsValidCopperLayerIndex()
-    from layer_widget.cpp.
-
 L5) Add to moved popu menu code the ability to save the current layer widget
     color and enable settings with an additional menu item.
 
 L6) Test, and fix up any remaining issues with the PCB_VISIBLE support, several
     items which are stored on globals could and should be stored in
-    EDA_Settings.m_VisibleElements using enum PCB_VISIBLE.
+    EDA_Settings.m_VisibleElements using enum PCB_VISIBLE.  Initial Render
+    checkbox settings are probably not correct, for example grid.
 
+L7) make the bitmapbutton a staticbitmap, and make its size dependent on
+    the point size.
+
+L8) LAYER_WIDGET::GetBestSize() needs platform independence.
+
+Dick:
+L9) still thinking about background colors, easier now without wxformbuilder.

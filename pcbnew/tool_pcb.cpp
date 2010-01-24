@@ -68,7 +68,7 @@ void WinEDA_PcbFrame::PrepareLayerIndicator()
                previous_Route_Layer_BOTTOM_color, previous_via_color;
 
     /* get colors, and redraw bitmap button only on changes */
-    active_layer_color = g_DesignSettings.m_LayerColor[((PCB_SCREEN*)GetScreen())->m_Active_Layer];
+    active_layer_color = g_DesignSettings.m_LayerColor[ getActiveLayer() ];
     if( previous_active_layer_color != active_layer_color )
     {
         previous_active_layer_color = active_layer_color;
@@ -386,13 +386,13 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
                                   g_DesignSettings.IsElementVisible( MOD_TEXT_INVISIBLE ));
 
     m_OptionsToolBar->AddSeparator();
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR, 	 
-	                                wxEmptyString, 	 
-	                                wxBitmap( layers_manager_xpm ), 	 
-	                                _( 	 
-                                    "Show/hide the layers manager toolbar" ), 	 
-	                                wxITEM_CHECK ); 	 
-	m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
+                                    wxEmptyString,
+                                    wxBitmap( layers_manager_xpm ),
+                                    _(
+                                    "Show/hide the layers manager toolbar" ),
+                                    wxITEM_CHECK );
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
                                wxEmptyString,
                                wxBitmap( mw_toolbar_xpm ),
  _( "Show/hide the toolbar for microwaves tools\n This is a experimental feature (under development)" ),
@@ -664,20 +664,22 @@ an existing track use its width\notherwise, use current width setting" ),
 }
 
 
-void WinEDA_PcbFrame::UpdateToolbarLayerInfo()
+void WinEDA_PcbFrame::syncLayerBox()
 {
     wxASSERT( m_SelLayerBox );
 
     // Enable the display on the correct layer
     // To avoid reentrancy ( Bug wxGTK Linux version? ), the selection is
-    // made where it is bad ( corrected on wxGTK 2.6.0 )
-    int     count = m_SelLayerBox->GetCount();
+    // made only if it needs changing ( corrected on wxGTK 2.6.0 )
+    int     count  = m_SelLayerBox->GetCount();
     int     choice = m_SelLayerBox->GetChoice();
-    int     layer = GetScreen()->m_Active_Layer;
+    int     layer  = getActiveLayer();
 
     for( int listNdx=0;  listNdx<count;  ++listNdx )
     {
-        if( (int) (size_t) m_SelLayerBox->GetClientData( listNdx ) == layer )
+        int clientData = (int) (size_t) m_SelLayerBox->GetClientData( listNdx );
+
+        if( clientData == layer )
         {
             if( listNdx != choice )
                 m_SelLayerBox->SetSelection( listNdx );
@@ -748,11 +750,11 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
             wxString msg = GetBoard()->GetLayerName( layer );
             msg = AddHotkeyName( msg, s_Board_Editor_Hokeys_Descr,
                                  HK_SwitchLayer[layer] );
-  	 
-            /* we are using tabs in AddHotkeyName message. 	 
-             *  this is not handled by m_SelLayerBox. 	 
-             *  so we replace them by 3 spaces 	 
-             */ 	 
+
+            /* we are using tabs in AddHotkeyName message.
+             *  this is not handled by m_SelLayerBox.
+             *  so we replace them by 3 spaces
+             */
             msg.Replace( wxT( "\t"), wxT( "   " ) );
             m_SelLayerBox->Append( msg );
 
@@ -766,7 +768,7 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
 
     m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
 
-    UpdateToolbarLayerInfo();
+    syncLayerBox();
 
     return m_SelLayerBox;
 }

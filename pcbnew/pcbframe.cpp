@@ -1,3 +1,29 @@
+/*
+ * This program source code file is part of KICAD, a free EDA CAD application.
+ *
+ * Copyright (C) 2004-2010 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
+ * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2010 Kicad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+
 /******************************************/
 /* pcbframe.cpp - PCB editor main window. */
 /******************************************/
@@ -17,8 +43,373 @@
 #include "drc_stuff.h"
 #include "3d_viewer.h"
 #include "kbool/include/kbool/booleng.h"
-
+#include "layer_widget.h"
 #include "dialog_design_rules.h"
+
+
+
+/**
+ * Class PCB_LAYER_WIDGET
+ * is here to implement the abtract functions of LAYER_WIDGET so they
+ * may be tied into the WinEDA_PcbFrame's data and so we can add a popup
+ * menu which is specific to PCBNEW's needs.
+ */
+class PCB_LAYER_WIDGET : public LAYER_WIDGET
+{
+    WinEDA_PcbFrame*    myframe;
+
+    // popup menu ids.
+#define ID_SHOW_ALL_COPPERS     wxID_HIGHEST
+#define ID_SHOW_NO_COPPERS      (wxID_HIGHEST+1)
+
+    /**
+     * Function OnRightDownLayers
+     * puts up a popup menu for the layer panel.
+     */
+    void onRightDownLayers( wxMouseEvent& event );
+
+    void onPopupSelection( wxCommandEvent& event );
+
+    /// this is for the popup menu, the right click handler has to be installed
+    /// on every child control within the layer panel.
+    void installRightLayerClickHandler();
+
+public:
+
+    /**
+     * Constructor
+     * @param aPointSize is the font point size to use within the widget.  This
+     *  effectively sets the overal size of the widget via the row height and bitmap
+     *  button sizes.
+     */
+    PCB_LAYER_WIDGET( WinEDA_PcbFrame* aParent, wxWindow* aFocusOwner, int aPointSize = 10 );
+
+    void ReFill();
+
+    //-----<implement LAYER_WIDGET abstract callback functions>-----------
+    void OnLayerColorChange( int aLayer, int aColor );
+    bool OnLayerSelect( int aLayer );
+    void OnLayerVisible( int aLayer, bool isVisible, bool isFinal );
+    void OnRenderColorChange( int aId, int aColor );
+    void OnRenderEnable( int aId, bool isEnabled );
+    //-----</implement LAYER_WIDGET abstract callback functions>----------
+};
+
+
+PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( WinEDA_PcbFrame* aParent, wxWindow* aFocusOwner, int aPointSize ) :
+    LAYER_WIDGET( aParent, aFocusOwner, aPointSize ),
+    myframe( aParent )
+{
+    BOARD*  board = myframe->GetBoard();
+
+    // Fixed "Rendering" tab rows within the LAYER_WIDGET, only the initial color
+    // is changed before appending to the LAYER_WIDGET.  This is an automatic variable
+    // not a static variable, change the color & state after copying from code to renderRows
+    // on the stack.
+    LAYER_WIDGET::ROW renderRows[14] = {
+
+#define RR  LAYER_WIDGET::ROW   // Render Row abreviation to reduce source width
+
+             // text                id                      color       tooltip                 checked
+        RR( _( "Through Via" ),     VIAS_VISIBLE,           WHITE,      _( "Show through vias" ) ),
+        RR( _( "Bl/Buried Via" ),   VIA_MICROVIA_VISIBLE,   WHITE,      _( "Show blind or buried vias" )  ),
+        RR( _( "Micro Via" ),       VIA_BBLIND_VISIBLE,     WHITE,      _( "Show micro vias") ),
+        RR( _( "Ratsnest" ),        RATSNEST_VISIBLE,       WHITE,      _( "Show unconnected nets as a ratsnest") ),
+
+        RR( _( "Pads Front" ),      PAD_FR_VISIBLE,         WHITE,      _( "Show footprint pads on board's front" ) ),
+        RR( _( "Pads Back" ),       PAD_BK_VISIBLE,         WHITE,      _( "Show footprint pads on board's back" ) ),
+
+        RR( _( "Text Front" ),      MOD_TEXT_FR_VISIBLE,    WHITE,      _( "Show footprint text on board's back" ) ),
+        RR( _( "Text Back" ),       MOD_TEXT_BK_VISIBLE,    WHITE,      _( "Show footprint text on board's back" ) ),
+        RR( _( "Hidden Text" ),     MOD_TEXT_INVISIBLE,     WHITE,      _( "Show footprint text marked as invisible" ) ),
+
+        RR( _( "Anchors" ),         ANCHOR_VISIBLE,         WHITE,      _( "Show footprint and text origins as a cross" ) ),
+        RR( _( "Grid" ),            GRID_VISIBLE,           WHITE,      _( "Show the (x,y) grid dots" ) ),
+        RR( _( "No-Connects" ),     NO_CONNECTS_VISIBLE,    -1,         _( "Show a marker on pads which have no net connected" ) ),
+        RR( _( "Modules Front" ),   MOD_FR_VISIBLE,         -1,         _( "Show footprints that are on board's front") ),
+        RR( _( "Modules Back" ),    MOD_BK_VISIBLE,         -1,         _( "Show footprints that are on board's back") ),
+    };
+
+    for( unsigned row=0;  row<DIM(renderRows);  ++row )
+    {
+        if( renderRows[row].color != -1 )       // does this row show a color?
+        {
+            // this window frame must have an established BOARD, i.e. after SetBoard()
+            renderRows[row].color = board->GetVisibleElementColor( renderRows[row].id );
+        }
+        // @todo
+        // renderRows[row].state = GetBoard()->IsElementVisible( renderRows[row].id );
+    }
+
+    AppendRenderRows( renderRows, DIM(renderRows) );
+
+    //-----<Popup menu>-------------------------------------------------
+    // handle the popup menu over the layer window.
+    m_LayerScrolledWindow->Connect( wxEVT_RIGHT_DOWN,
+        wxMouseEventHandler( PCB_LAYER_WIDGET::onRightDownLayers ), NULL, this );
+
+    // since Popupmenu() calls this->ProcessEvent() we must call this->Connect()
+    // and not m_LayerScrolledWindow->Connect()
+    Connect( ID_SHOW_ALL_COPPERS, ID_SHOW_NO_COPPERS, wxEVT_COMMAND_MENU_SELECTED,
+        wxCommandEventHandler( PCB_LAYER_WIDGET::onPopupSelection ), NULL, this );
+
+    // install the right click handler into each control at end of ReFill()
+    // using installRightLayerClickHandler
+}
+
+
+void PCB_LAYER_WIDGET::installRightLayerClickHandler()
+{
+    int rowCount = GetLayerRowCount();
+    for( int row=0;  row<rowCount;  ++row )
+    {
+        for( int col=0; col<LYR_COLUMN_COUNT;  ++col )
+        {
+            wxWindow* w = getLayerComp( row * LYR_COLUMN_COUNT + col );
+
+            w->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler(
+                PCB_LAYER_WIDGET::onRightDownLayers ), NULL, this );
+        }
+    }
+}
+
+
+void PCB_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
+{
+    wxMenu          menu;
+
+    // menu text is capitalized:
+    // http://library.gnome.org/devel/hig-book/2.20/design-text-labels.html.en#layout-capitalization
+    menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_COPPERS,
+        _("Show All Cu") ) );
+
+    menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_COPPERS,
+        _( "Hide All Cu" ) ) );
+
+    PopupMenu( &menu );
+
+    passOnFocus();
+}
+
+void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
+{
+    int     rowCount;
+    int     menuId = event.GetId();
+    bool    visible;
+
+    switch( menuId )
+    {
+    case ID_SHOW_ALL_COPPERS:
+        visible = true;
+        goto L_change_coppers;
+
+    case ID_SHOW_NO_COPPERS:
+        visible = false;
+    L_change_coppers:
+        int lastCu = -1;
+        rowCount = GetLayerRowCount();
+        for( int row=rowCount-1;  row>=0;  --row )
+        {
+            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row*LYR_COLUMN_COUNT + 3 );
+            int layer = getDecodedId( cb->GetId() );
+            if( IsValidCopperLayerIndex( layer ) )
+            {
+                lastCu = row;
+                break;
+            }
+        }
+
+        for( int row=0;  row<rowCount;  ++row )
+        {
+            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row*LYR_COLUMN_COUNT + 3 );
+            int layer = getDecodedId( cb->GetId() );
+
+            if( IsValidCopperLayerIndex( layer ) )
+            {
+                cb->SetValue( visible );
+
+                bool isLastCopperLayer = (row==lastCu);
+
+                OnLayerVisible( layer, visible, isLastCopperLayer );
+
+                if( isLastCopperLayer )
+                    break;
+            }
+        }
+        break;
+    }
+}
+
+
+void PCB_LAYER_WIDGET::ReFill()
+{
+    BOARD*  brd = myframe->GetBoard();
+    int     layer;
+
+    int enabledLayers = brd->GetEnabledLayers();
+
+//    m_Layers->Freeze();     // no screen updates until done modifying
+
+    ClearLayerRows();
+
+    // show all coppers first, with front on top, back on bottom, then technical layers
+
+    layer = LAYER_N_FRONT;
+    if( enabledLayers & (1 << layer) )
+    {
+        AppendLayerRow( LAYER_WIDGET::ROW(
+            brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ), _("Front copper layer"), true ) );
+    }
+
+    for( layer = LAYER_N_FRONT-1;  layer >= 1;  --layer )
+    {
+        if( enabledLayers & (1 << layer) )
+        {
+            AppendLayerRow( LAYER_WIDGET::ROW(
+                brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ), _("An innner copper layer"), true ) );
+        }
+    }
+
+    layer = LAYER_N_BACK;
+    if( enabledLayers & (1 << layer) )
+    {
+        AppendLayerRow( LAYER_WIDGET::ROW(
+            brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ), _("Back copper layer"), true ) );
+    }
+
+    // technical layers are shown in this order:
+    static const struct {
+        int         layerId;
+        wxString    tooltip;
+    } techLayerSeq[] = {
+        { ADHESIVE_N_FRONT,     _( "Adhesive on board's front" )    },
+        { ADHESIVE_N_BACK,      _( "Adhesive on board's back" )     },
+        { SOLDERPASTE_N_FRONT,  _( "Solder paste on board's front" )},
+        { SOLDERPASTE_N_BACK,   _( "Solder paste on board's back" ) },
+        { SILKSCREEN_N_FRONT,   _( "Silkscreen on board's front" )  },
+        { SILKSCREEN_N_BACK,    _( "Silkscreen on board's back" )   },
+        { SOLDERMASK_N_FRONT,   _( "Solder mask on board's front" ) },
+        { SOLDERMASK_N_BACK,    _( "Solder mask on board's back" )  },
+        { DRAW_N,               _( "Explanatory drawings" )         },
+        { COMMENT_N,            _( "Explanatory comments" )         },
+        { ECO1_N,               _( "TDB" )                          },
+        { ECO2_N,               _( "TBD" )                          },
+        { EDGE_N,               _( "Board's perimeter definition" ) },
+    };
+
+    for( unsigned i=0;  i<DIM(techLayerSeq);  ++i )
+    {
+        layer = techLayerSeq[i].layerId;
+
+        if( !(enabledLayers & (1 << layer)) )
+            continue;
+
+        AppendLayerRow( LAYER_WIDGET::ROW(
+            brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ),
+            techLayerSeq[i].tooltip, true ) );
+    }
+
+    installRightLayerClickHandler();
+
+//    m_Layers->Thaw();
+}
+
+
+//-----<LAYER_WIDGET callbacks>-------------------------------------------
+
+void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, int aColor )
+{
+    myframe->GetBoard()->SetLayerColor( aLayer, aColor );
+    myframe->DrawPanel->Refresh();
+}
+
+bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
+{
+    // the layer change from the PCB_LAYER_WIDGET can be denied by returning
+    // false from this function.
+    myframe->setActiveLayer( aLayer, false );
+    myframe->syncLayerBox();
+    return true;
+}
+
+void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal )
+{
+    BOARD* brd = myframe->GetBoard();
+
+    int visibleLayers = brd->GetVisibleLayers();
+
+    if( isVisible )
+        visibleLayers |= (1 << aLayer);
+    else
+        visibleLayers &= ~(1 << aLayer);
+
+    brd->SetVisibleLayers( visibleLayers );
+
+    if( isFinal )
+        myframe->DrawPanel->Refresh();
+}
+
+void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, int aColor )
+{
+    myframe->GetBoard()->SetVisibleElementColor( aId, aColor );
+    myframe->DrawPanel->Refresh();
+}
+
+void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
+{
+    BOARD*  brd = myframe->GetBoard();
+
+    /* @todo:
+
+        1) move:
+
+        RATSNEST_VISIBLE,
+        GRID_VISIBLE,   ? maybe not this one
+
+        NO_CONNECTS_VISIBLE,
+        MOD_FR_VISIBLE,
+        MOD_BK_VISIBLE,
+
+        into m_VisibleElements and get rid of globals.
+
+        2) Add IsElementVisible() & SetVisibleElement() to class BOARD
+    */
+
+    switch( aId )
+    {
+        // see todo above, don't really want anything except IsElementVisible() here.
+
+    case GRID_VISIBLE:
+        myframe->m_Draw_Grid = isEnabled;
+        break;
+
+    case MOD_FR_VISIBLE:
+        DisplayOpt.Show_Modules_Cmp = isEnabled;
+        break;
+
+    case MOD_BK_VISIBLE:
+        DisplayOpt.Show_Modules_Cu = isEnabled;
+        break;
+
+    default:
+
+        int visibleElements = brd->GetVisibleElements();
+
+        if( isEnabled )
+            visibleElements |= (1 << aId );
+        else
+            visibleElements &= ~(1 << aId);
+
+        brd->SetVisibleElements( visibleElements );
+    }
+
+    myframe->DrawPanel->Refresh();
+}
+
+//-----</LAYER_WIDGET callbacks>------------------------------------------
+
+
+
 
 // Keys used in read/write config
 #define PCB_MAGNETIC_PADS_OPT   wxT( "PcbMagPadOpt" )
@@ -228,9 +619,20 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     m_show_microwave_tools = false;
     m_show_layer_manager_tools = true;
 
-    m_Layers = new LYRS( this, DrawPanel );
-
     SetBoard( new BOARD( NULL, this ) );
+
+    // Create the PCB_LAYER_WIDGET *after* SetBoard():
+
+    wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    int pointSize = font.GetPointSize();
+    int screenHeight = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
+
+    // printf( "pointSize:%d  80%%:%d\n", pointSize, (pointSize*8)/10 );
+
+    if( screenHeight <= 900 )
+        pointSize = (pointSize * 8) / 10;
+
+    m_Layers = new PCB_LAYER_WIDGET( this, DrawPanel, pointSize );
 
     m_TrackAndViasSizesList_Changed = true;
 
@@ -264,47 +666,6 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     ReCreateOptToolbar();
 
     ReCreateAuxVToolbar();
-
-    // Fixed "Rendering" tab rows within the LAYER_WIDGET, only the initial color
-    // is changed before appending to the LAYER_WIDGET.  This is an automatic variable
-    // not a static variable, change the color & state after copying from code to renderRows
-    // on the stack.
-    LAYER_WIDGET::ROW renderRows[14] = {
-
-#define RR  LAYER_WIDGET::ROW   // Render Row abreviation to reduce source width
-
-             // text                id                      color       tooltip                 checked
-        RR( _( "Through Via" ),     VIAS_VISIBLE,           WHITE,      _( "Show through vias" ) ),
-        RR( _( "Bl/Buried Via" ),   VIA_MICROVIA_VISIBLE,   WHITE,      _( "Show blind or buried vias" )  ),
-        RR( _( "Micro Via" ),       VIA_BBLIND_VISIBLE,     WHITE,      _( "Show micro vias") ),
-        RR( _( "Ratsnest" ),        RATSNEST_VISIBLE,       WHITE,      _( "Show unconnected nets as a ratsnest") ),
-
-        RR( _( "Pads Front" ),      PAD_FR_VISIBLE,         WHITE,      _( "Show footprint pads on board's front" ) ),
-        RR( _( "Pads Back" ),       PAD_BK_VISIBLE,         WHITE,      _( "Show footprint pads on board's back" ) ),
-
-        RR( _( "Text Front" ),      MOD_TEXT_FR_VISIBLE,    WHITE,      _( "Show footprint text on board's back" ) ),
-        RR( _( "Text Back" ),       MOD_TEXT_BK_VISIBLE,    WHITE,      _( "Show footprint text on board's back" ) ),
-        RR( _( "Hidden Text" ),     MOD_TEXT_INVISIBLE,     WHITE,      _( "Show footprint text marked as invisible" ) ),
-
-        RR( _( "Anchors" ),         ANCHOR_VISIBLE,         WHITE,      _( "Show footprint and text origins as a cross" ) ),
-        RR( _( "Grid" ),            GRID_VISIBLE,           WHITE,      _( "Show the (x,y) grid dots" ) ),
-        RR( _( "No-Connects" ),     NO_CONNECTS_VISIBLE,    -1,         _( "Show a marker on pads which have no net connected" ) ),
-        RR( _( "Modules Front" ),   MOD_FR_VISIBLE,         -1,         _( "Show footprints that are on board's front") ),
-        RR( _( "Modules Back" ),    MOD_BK_VISIBLE,         -1,         _( "Show footprints that are on board's back") ),
-    };
-
-    for( unsigned row=0;  row<DIM(renderRows);  ++row )
-    {
-        if( renderRows[row].color != -1 )       // does this row show a color?
-        {
-            // this window frame must have an established BOARD, i.e. after SetBoard()
-            renderRows[row].color = GetBoard()->GetVisibleElementColor( renderRows[row].id );
-        }
-        // @todo
-        // renderRows[row].state = GetBoard()->IsElementVisible( renderRows[row].id );
-    }
-
-    m_Layers->AppendRenderRows( renderRows, DIM(renderRows) );
 
 #if defined(KICAD_AUIMANAGER)
     m_auimgr.SetManagedWindow( this );
@@ -373,7 +734,9 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
         m_AuxVToolBar->Show(m_show_microwave_tools);
 #endif
 
-    ReFillLayerWidget();    // this is near end because contents establishes size
+    ReFillLayerWidget();    // this is near end because contents establish size
+
+    syncLayerWidget();
 }
 
 
@@ -385,179 +748,9 @@ WinEDA_PcbFrame::~WinEDA_PcbFrame()
     delete m_drc;
 }
 
-
-//-----<LAYER_WIDGET callbacks>-------------------------------------------
-
-void WinEDA_PcbFrame::LYRS::OnLayerColorChange( int aLayer, int aColor )
-{
-    myframe->GetBoard()->SetLayerColor( aLayer, aColor );
-    myframe->DrawPanel->Refresh();
-}
-
-bool WinEDA_PcbFrame::LYRS::OnLayerSelect( int aLayer )
-{
-    // @todo
-    return true;
-}
-
-void WinEDA_PcbFrame::LYRS::OnLayerVisible( int aLayer, bool isVisible, bool isFinal )
-{
-    BOARD* brd = myframe->GetBoard();
-
-    int visibleLayers = brd->GetVisibleLayers();
-
-    if( isVisible )
-        visibleLayers |= (1 << aLayer);
-    else
-        visibleLayers &= ~(1 << aLayer);
-
-    brd->SetVisibleLayers( visibleLayers );
-
-    if( isFinal )
-        myframe->DrawPanel->Refresh();
-}
-
-void WinEDA_PcbFrame::LYRS::OnRenderColorChange( int aId, int aColor )
-{
-    myframe->GetBoard()->SetVisibleElementColor( aId, aColor );
-    myframe->DrawPanel->Refresh();
-}
-
-void WinEDA_PcbFrame::LYRS::OnRenderEnable( int aId, bool isEnabled )
-{
-    BOARD*  brd = myframe->GetBoard();
-
-    /* @todo:
-
-        1) move:
-
-        RATSNEST_VISIBLE,
-        GRID_VISIBLE,   ? maybe not this one
-
-        NO_CONNECTS_VISIBLE,
-        MOD_FR_VISIBLE,
-        MOD_BK_VISIBLE,
-
-        into m_VisibleElements and get rid of globals.
-
-        2) Add IsElementVisible() & SetVisibleElement() to class BOARD
-    */
-
-    switch( aId )
-    {
-        // see todo above, don't really want anything except IsElementVisible() here.
-
-    case GRID_VISIBLE:
-        myframe->m_Draw_Grid = isEnabled;
-        break;
-
-    case MOD_FR_VISIBLE:
-        DisplayOpt.Show_Modules_Cmp = isEnabled;
-        break;
-
-    case MOD_BK_VISIBLE:
-        DisplayOpt.Show_Modules_Cu = isEnabled;
-        break;
-
-    default:
-
-        int visibleElements = brd->GetVisibleElements();
-
-        if( isEnabled )
-            visibleElements |= (1 << aId );
-        else
-            visibleElements &= ~(1 << aId);
-
-        brd->SetVisibleElements( visibleElements );
-    }
-
-    myframe->DrawPanel->Refresh();
-}
-
-//-----</LAYER_WIDGET callbacks>------------------------------------------
-
-
 void WinEDA_PcbFrame::ReFillLayerWidget()
 {
-    BOARD*  brd = GetBoard();
-    int     layer;
-
-    int enabledLayers = brd->GetEnabledLayers();
-
-//    m_Layers->Freeze();     // no screen updates until done modifying
-
-    m_Layers->ClearLayerRows();
-
-    // show all coppers first, with front on top, back on bottom, then technical layers
-
-    layer = LAYER_N_FRONT;
-    if( enabledLayers & (1 << layer) )
-    {
-        m_Layers->AppendLayerRow( LAYER_WIDGET::ROW(
-            brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ), _("Front copper layer"), true ) );
-    }
-
-    for( layer = LAYER_N_FRONT-1;  layer >= 1;  --layer )
-    {
-        if( enabledLayers & (1 << layer) )
-        {
-            m_Layers->AppendLayerRow( LAYER_WIDGET::ROW(
-                brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ), _("An innner copper layer"), true ) );
-        }
-    }
-
-    layer = LAYER_N_BACK;
-    if( enabledLayers & (1 << layer) )
-    {
-        m_Layers->AppendLayerRow( LAYER_WIDGET::ROW(
-            brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ), _("Back copper layer"), true ) );
-    }
-
-    m_Layers->SelectLayer( LAYER_N_FRONT );
-
-    // technical layers are shown in this order:
-    static const struct {
-        int         layerId;
-        wxString    tooltip;
-    } techLayerSeq[] = {
-
-    /* some layers are not visible nor editable, don't show them for now:
-     * >> In fact they are useful here because we must be able to change
-     * the color and visibility because they can be visible.
-     * slikscreen and adhesive layers are visible (adhesive layer is rarely used)
-     * Solder mask and solder paste (used for pads) are visible in *Hight Color*
-     * mode when they are selected
-     * they are now editable because Pcbnew handle parameters (global and local)
-     * to calculate pads shapes on these layers
-    */
-        { ADHESIVE_N_FRONT,     _("Adhesive on board's front")      },
-        { ADHESIVE_N_BACK,      _("Adhesive on board's back")       },
-        { SOLDERPASTE_N_FRONT,  _("Solder paste on board's front")  },
-        { SOLDERPASTE_N_BACK,   _("Solder paste on board's back")   },
-        { SILKSCREEN_N_FRONT,   _("Silkscreen on board's front")    },
-        { SILKSCREEN_N_BACK,    _("Silkscreen on board's back")     },
-        { SOLDERMASK_N_FRONT,   _("Solder mask on board's front")   },
-        { SOLDERMASK_N_BACK,    _("Solder mask on board's back")    },
-        { DRAW_N,               _( "Explanatory drawings" )         },
-        { COMMENT_N,            _( "Explanatory comments" )         },
-        { ECO1_N,               _( "TDB" )                          },
-        { ECO2_N,               _( "TBD" )                          },
-        { EDGE_N,               _( "Board's perimeter definition" ) },
-    };
-
-    for( unsigned i=0;  i<DIM(techLayerSeq);  ++i )
-    {
-        layer = techLayerSeq[i].layerId;
-
-        if( !(enabledLayers & (1 << layer)) )
-            continue;
-
-        m_Layers->AppendLayerRow( LAYER_WIDGET::ROW(
-            brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ),
-            techLayerSeq[i].tooltip, true ) );
-    }
-
-//    m_Layers->Thaw();
+    m_Layers->ReFill();
 
     wxAuiPaneInfo& lyrs = m_auimgr.GetPane( m_Layers );
 
@@ -688,15 +881,8 @@ void WinEDA_PcbFrame::SaveSettings()
 }
 
 
-/** Function SynchronizeLayersManager( )
- * Must be called when info displayed in the layer manager Toolbar
- * as been changed in the main window ( by hotkey or a tool option.
- * Mainly when the active layer as changed.
- * @param aFlag = flag giving the type of data (layers, checkboxes...)
- */
-void WinEDA_PcbFrame::SynchronizeLayersManager( int aFlag )
+void WinEDA_PcbFrame::syncLayerWidget()
 {
-    // Ensure Layer manager synchronization for the active layer
-    if( (aFlag & 1) )
-        m_Layers->SelectLayer(GetScreen()->m_Active_Layer);
+    m_Layers->SelectLayer( getActiveLayer() );
 }
+

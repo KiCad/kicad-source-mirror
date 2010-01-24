@@ -26,6 +26,7 @@
 
 
 /*  This source module implements the layer visibility and selection widget
+    @todo make the bitmapbutton a staticbitmap, and make dependent on the point size.
 */
 
 
@@ -33,29 +34,17 @@
 // also enable KICAD_AUIMANAGER and KICAD_AUITOOLBAR in ccmake to
 // build this test program
 
-#include <wx/wx.h>
-#include <wx/statbmp.h>
-#include <wx/notebook.h>
+
+#include "layer_widget.h"
 
 #include "macros.h"
 #include "common.h"
 #include "colors.h"
 
-#include "layer_widget.h"
-
-#include "pcbstruct.h"      // IsValidCopperLayerIndex()
-
-
-#define LYR_COLUMN_COUNT        4           ///< Layer tab column count
-#define RND_COLUMN_COUNT        2           ///< Rendering tab column count
 
 #define BUTT_SIZE_X             20
 #define BUTT_SIZE_Y             18
 #define BUTT_VOID               4
-
-
-#define ID_SHOW_ALL_COPPERS     wxID_HIGHEST
-#define ID_SHOW_NO_COPPERS      (wxID_HIGHEST+1)
 
 
 /* XPM */
@@ -100,30 +89,6 @@ static const char * rightarrow_xpm[] = {
 "  ooO     ",
 "  oO      "};
 
-/**
- * Function encodeId
- * is here to allow saving a layer index within a control as its wxControl id,
- * but to do so in a way that all child wxControl ids within a wxWindow are unique,
- * since this is required by Windows.
- * @see getDecodedId()
- */
-static int encodeId( int aColumn, int aId )
-{
-    int id = aId * LYR_COLUMN_COUNT + aColumn;
-    return id;
-}
-
-
-/**
- * Function getDecodedId
- * decodes \a aControlId to original un-encoded value.
- */
-static int getDecodedId( int aControlId )
-{
-    int id = aControlId / LYR_COLUMN_COUNT;    // rounding is OK.
-    return id;
-}
-
 
 /**
  * Function makeColorTxt
@@ -142,12 +107,27 @@ static wxString makeColorTxt( int aColor )
  * Function shrinkFont
  * reduces the size of the wxFont associated with \a aControl
  */
-static void shrinkFont( wxWindow* aControl )
+static void shrinkFont( wxWindow* aControl, int aPointSize )
 {
     wxFont font = aControl->GetFont();
-    font.SetPointSize( (font.GetPointSize() * 8) / 10 );    // go to 80% of original.
-    aControl->SetFont( font );
+    font.SetPointSize( aPointSize );
+    aControl->SetFont( font );              // need this?
 }
+
+
+int LAYER_WIDGET::encodeId( int aColumn, int aId )
+{
+    int id = aId * LYR_COLUMN_COUNT + aColumn;
+    return id;
+}
+
+
+int LAYER_WIDGET::getDecodedId( int aControlId )
+{
+    int id = aControlId / LYR_COLUMN_COUNT;    // rounding is OK.
+    return id;
+}
+
 
 wxBitmap LAYER_WIDGET::makeBitmap( int aColor )
 {
@@ -185,6 +165,7 @@ wxBitmapButton* LAYER_WIDGET::makeColorButton( wxWindow* aParent, int aColor, in
 void LAYER_WIDGET::OnLeftDownLayers( wxMouseEvent& event )
 {
     int row;
+    int layer;
 
     wxWindow* eventSource = (wxWindow*) event.GetEventObject();
 
@@ -209,17 +190,20 @@ void LAYER_WIDGET::OnLeftDownLayers( wxMouseEvent& event )
 
         if( row >= rowCount )
             row = rowCount - 1;
+
+        layer = getDecodedId( getLayerComp( row * LYR_COLUMN_COUNT )->GetId() );
     }
 
     else
     {
         // all nested controls on a given row will have their ID encoded with
         // encodeId(), and the corresponding decoding is getDecodedId()
-        int layer = getDecodedId( eventSource ->GetId() );
-        row   = findLayerRow( layer );
+        int id = eventSource->GetId();
+        layer  = getDecodedId( id );
+        row    = findLayerRow( layer );
     }
 
-    if( OnLayerSelect( row ) )    // if client allows this change.
+    if( OnLayerSelect( layer ) )    // if client allows this change.
         SelectLayerRow( row );
 
     passOnFocus();
@@ -249,73 +233,6 @@ void LAYER_WIDGET::OnMiddleDownLayerColor( wxMouseEvent& event )
     }
 
     passOnFocus();
-}
-
-
-void LAYER_WIDGET::OnRightDownLayers( wxMouseEvent& event )
-{
-    wxMenu          menu;
-
-    // menu text is capitalized:
-    // http://library.gnome.org/devel/hig-book/2.20/design-text-labels.html.en#layout-capitalization
-    menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_COPPERS,
-        _("Show All Cu") ) );
-
-    menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_COPPERS,
-        _( "Hide All Cu" ) ) );
-
-    PopupMenu( &menu );
-
-    passOnFocus();
-}
-
-void LAYER_WIDGET::OnPopupSelection( wxCommandEvent& event )
-{
-    int     rowCount;
-    int     menuId = event.GetId();
-    bool    visible;
-
-    switch( menuId )
-    {
-    case ID_SHOW_ALL_COPPERS:
-        visible = true;
-        goto L_change_coppers;
-
-    case ID_SHOW_NO_COPPERS:
-        visible = false;
-    L_change_coppers:
-        int lastCu = -1;
-        rowCount = GetLayerRowCount();
-        for( int row=rowCount-1;  row>=0;  --row )
-        {
-            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row*LYR_COLUMN_COUNT + 3 );
-            int layer = getDecodedId( cb->GetId() );
-            if( IsValidCopperLayerIndex( layer ) )
-            {
-                lastCu = row;
-                break;
-            }
-        }
-
-        for( int row=0;  row<rowCount;  ++row )
-        {
-            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row*LYR_COLUMN_COUNT + 3 );
-            int layer = getDecodedId( cb->GetId() );
-
-            if( IsValidCopperLayerIndex( layer ) )
-            {
-                cb->SetValue( visible );
-
-                bool isLastCopperLayer = (row==lastCu);
-
-                OnLayerVisible( layer, visible, isLastCopperLayer );
-
-                if( isLastCopperLayer )
-                    break;
-            }
-        }
-        break;
-    }
 }
 
 
@@ -406,7 +323,6 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     wxStaticBitmap* sbm = new wxStaticBitmap( m_LayerScrolledWindow, encodeId( col, aSpec.id ),
                             *m_BlankBitmap, wxDefaultPosition, m_BitmapSize );
     sbm->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
-    sbm->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnRightDownLayers ), NULL, this );
     m_LayersFlexGridSizer->wxSizer::Insert( index+col, sbm, 0, flags );
 
     // column 1
@@ -414,16 +330,14 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     wxBitmapButton* bmb = makeColorButton( m_LayerScrolledWindow, aSpec.color, encodeId( col, aSpec.id ) );
     bmb->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
     bmb->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownLayerColor ), NULL, this );
-    bmb->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnRightDownLayers ), NULL, this );
     bmb->SetToolTip( _("Left click to select, middle click for color change, right click for menu" ) );
     m_LayersFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );
 
     // column 2
     col = 2;
     wxStaticText* st = new wxStaticText( m_LayerScrolledWindow, encodeId( col, aSpec.id ), aSpec.rowName );
-    shrinkFont( st );
+    shrinkFont( st, m_PointSize );
     st->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
-    st->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnRightDownLayers ), NULL, this );
     st->SetToolTip( aSpec.tooltip );
     m_LayersFlexGridSizer->wxSizer::Insert( index+col, st, 0, flags );
 
@@ -467,7 +381,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
     col = 1;
     wxCheckBox* cb = new wxCheckBox( m_RenderScrolledWindow, encodeId( col, aSpec.id ),
                         aSpec.rowName, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
-    shrinkFont( cb );
+    shrinkFont( cb, m_PointSize );
     cb->SetValue( aSpec.state );
     cb->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED,
         wxCommandEventHandler( LAYER_WIDGET::OnRenderCheckBox ), NULL, this );
@@ -484,31 +398,84 @@ void LAYER_WIDGET::passOnFocus()
 
 //-----<public>-------------------------------------------------------
 
-LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner ) :
-    LAYER_PANEL_BASE( aParent )
+LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPointSize,
+        wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) :
+    wxPanel( aParent, id, pos, size, style )
 {
+    m_PointSize = aPointSize;
+
+    wxBoxSizer* boxSizer;
+    boxSizer = new wxBoxSizer( wxVERTICAL );
+
+    m_notebook = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP );
+
+    // change the font size on the notebook's tabs to match aPointSize
+    wxFont font = m_notebook->GetFont();
+    font.SetPointSize( aPointSize );
+    m_notebook->SetFont( font );
+    m_notebook->SetNormalFont( font );
+    m_notebook->SetSelectedFont( font );
+    m_notebook->SetMeasuringFont( font );
+
+    m_LayerPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+
+    wxBoxSizer* bSizer3;
+    bSizer3 = new wxBoxSizer( wxVERTICAL );
+
+    m_LayerScrolledWindow = new wxScrolledWindow( m_LayerPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER );
+    m_LayerScrolledWindow->SetScrollRate( 5, 5 );
+    m_LayersFlexGridSizer = new wxFlexGridSizer( 0, 4, 0, 1 );
+    m_LayersFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
+    m_LayersFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+    m_LayerScrolledWindow->SetSizer( m_LayersFlexGridSizer );
+    m_LayerScrolledWindow->Layout();
+    m_LayersFlexGridSizer->Fit( m_LayerScrolledWindow );
+    bSizer3->Add( m_LayerScrolledWindow, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 2 );
+
+    m_LayerPanel->SetSizer( bSizer3 );
+    m_LayerPanel->Layout();
+    bSizer3->Fit( m_LayerPanel );
+    m_notebook->AddPage( m_LayerPanel, _("Layer"), true );
+    m_RenderingPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+
+    wxBoxSizer* bSizer4;
+    bSizer4 = new wxBoxSizer( wxVERTICAL );
+
+    m_RenderScrolledWindow = new wxScrolledWindow( m_RenderingPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER );
+    m_RenderScrolledWindow->SetScrollRate( 5, 5 );
+    m_RenderFlexGridSizer = new wxFlexGridSizer( 0, 2, 0, 1 );
+    m_RenderFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
+    m_RenderFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
+
+    m_RenderScrolledWindow->SetSizer( m_RenderFlexGridSizer );
+    m_RenderScrolledWindow->Layout();
+    m_RenderFlexGridSizer->Fit( m_RenderScrolledWindow );
+    bSizer4->Add( m_RenderScrolledWindow, 1, wxALL|wxEXPAND, 5 );
+
+    m_RenderingPanel->SetSizer( bSizer4 );
+    m_RenderingPanel->Layout();
+    bSizer4->Fit( m_RenderingPanel );
+    m_notebook->AddPage( m_RenderingPanel, _("Render"), false );
+
+    boxSizer->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
+
+    SetSizer( boxSizer );
+
     m_FocusOwner = aFocusOwner;
 
-    m_CurrentRow = -1;
+    m_CurrentRow = -1;  // hide the arrow initially
 
     m_RightArrowBitmap = new wxBitmap( rightarrow_xpm );
 
     m_BlankBitmap = new wxBitmap( clear_xpm );     // translucent
     m_BitmapSize = wxSize(m_BlankBitmap->GetWidth(), m_BlankBitmap->GetHeight());
 
-    // handle the popup menu over the layer window
-    m_LayerScrolledWindow->Connect( wxEVT_RIGHT_DOWN,
-        wxMouseEventHandler( LAYER_WIDGET::OnRightDownLayers ), NULL, this );
-
-    // since Popupmenu() calls this->ProcessEvent() we must call this->Connect()
-    // and not m_LayerScrolledWindow->Connect()
-    Connect( ID_SHOW_ALL_COPPERS, ID_SHOW_NO_COPPERS,
-            wxEVT_COMMAND_MENU_SELECTED,
-        wxCommandEventHandler( LAYER_WIDGET::OnPopupSelection ), NULL, this );
-
     // trap the tab changes so that we can call passOnFocus().
     m_notebook->Connect( -1, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
         wxNotebookEventHandler( LAYER_WIDGET::OnTabChange ), NULL, this );
+
+    Layout();
 }
 
 
@@ -518,7 +485,7 @@ wxSize LAYER_WIDGET::GetBestSize() const
     wxSize layerz  = m_LayersFlexGridSizer->GetMinSize();
     wxSize renderz = m_RenderFlexGridSizer->GetMinSize();
 
-    wxSize  clientz( max(renderz.x,layerz.x), max(renderz.y,layerz.y) );
+    wxSize  clientz( MAX(renderz.x,layerz.x), MAX(renderz.y,layerz.y) );
 
     return ClientToWindowSize( clientz );
 
@@ -593,7 +560,7 @@ wxSize LAYER_WIDGET::GetBestSize() const
 
     renderz += m_RenderingPanel->GetWindowBorderSize();
 
-    wxSize clientz( max(renderz.x,layerz.x), max(renderz.y,layerz.y) );
+    wxSize clientz( MAX(renderz.x,layerz.x), MAX(renderz.y,layerz.y) );
 
 //    wxSize diffz( GetSize() - GetClientSize() );
 //    clientz += diffz;

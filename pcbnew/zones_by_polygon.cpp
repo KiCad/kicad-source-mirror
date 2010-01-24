@@ -500,7 +500,7 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
         {
             int diag;
             // Init zone params to reasonnable values
-            zone->SetLayer( GetScreen()->m_Active_Layer );
+            zone->SetLayer( getActiveLayer() );
 
             // Prompt user for parameters:
             DrawPanel->m_IgnoreMouseEvents = TRUE;
@@ -535,12 +535,12 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
                 return 0;
 
             // Switch active layer to the selectec zonz layer
-            GetScreen()->m_Active_Layer = g_Zone_Default_Setting.m_CurrentZone_Layer;
+            setActiveLayer( g_Zone_Default_Setting.m_CurrentZone_Layer );
         }
         else  // Start a new contour: init zone params (net and layer) from an existing zone (add cutout or similar zone)
         {
-            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = g_Zone_Default_Setting.m_CurrentZone_Layer =
-                                                                s_CurrentZone->GetLayer();
+            g_Zone_Default_Setting.m_CurrentZone_Layer = s_CurrentZone->GetLayer();
+            setActiveLayer( s_CurrentZone->GetLayer() );
             g_Zone_Default_Setting.ImportSetting( * s_CurrentZone);
         }
 

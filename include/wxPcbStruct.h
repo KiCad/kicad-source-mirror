@@ -8,7 +8,6 @@
 
 #include "wxstruct.h"
 #include "base_struct.h"
-#include "layer_widget.h"
 
 #ifndef PCB_INTERNAL_UNIT
 #define PCB_INTERNAL_UNIT 10000
@@ -36,6 +35,7 @@ class ZONE_CONTAINER;
 class DRAWSEGMENT;
 class GENERAL_COLLECTOR;
 class GENERAL_COLLECTORS_GUIDE;
+class PCB_LAYER_WIDGET;
 
 
 /**
@@ -49,34 +49,64 @@ class GENERAL_COLLECTORS_GUIDE;
 /*****************************************************/
 class WinEDA_PcbFrame : public WinEDA_BasePcbFrame
 {
+    friend class PCB_LAYER_WIDGET;
+
 protected:
 
+    PCB_LAYER_WIDGET* m_Layers;
+
+    DRC* m_drc;                     ///< the DRC controller, see drc.cpp
+
+    // we'll use lower case function names for private member functions.
+    void createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu );
+    void createPopUpMenuForFootprints( MODULE* aModule, wxMenu* aPopMenu );
+    void createPopUpMenuForFpTexts( TEXTE_MODULE* aText, wxMenu* aPopMenu );
+    void createPopUpMenuForFpPads( D_PAD* aPad, wxMenu* aPopMenu );
+    void createPopupMenuForTracks( TRACK* aTrack, wxMenu* aPopMenu );
+    void createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu );
+    void createPopUpBlockMenu( wxMenu* menu );
+    void createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aPopMenu );
+
     /**
-     * Class LYRS
-     * is here to implement the abtract functions of LAYER_WIDGET so they
-     * may be tied into this frame's data.
+     * Function setActiveLayer
+     * will change the currently active layer to \a aLayer and also
+     * update the PCB_LAYER_WIDGET.
      */
-    class LYRS : public LAYER_WIDGET
+    void setActiveLayer( int aLayer, bool doLayerWidgetUpdate = true )
     {
-        WinEDA_PcbFrame*    myframe;
+        ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
 
-    public:
-        LYRS( WinEDA_PcbFrame* aParent, wxWindow* aFocusOwner ) :
-            LAYER_WIDGET( aParent, aFocusOwner ),
-            myframe( aParent )
-        {
-        }
+        if( doLayerWidgetUpdate )
+            syncLayerWidget();
+    }
 
-        //-----<implement LAYER_WIDGET abstract callback functions>-----------
-        void OnLayerColorChange( int aLayer, int aColor );
-        bool OnLayerSelect( int aLayer );
-        void OnLayerVisible( int aLayer, bool isVisible, bool isFinal );
-        void OnRenderColorChange( int aId, int aColor );
-        void OnRenderEnable( int aId, bool isEnabled );
-        //-----</implement LAYER_WIDGET abstract callback functions>----------
-    };
+    /**
+     * Function getActiveLayer
+     * returns the active layer
+     */
+    int getActiveLayer()
+    {
+        return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
+    }
 
-    LYRS*            m_Layers;              // established in constructor
+    /**
+     * Function syncLayerWidget
+     * updates the currently "selected" layer within the PCB_LAYER_WIDGET.
+     * The currently active layer is defined by the return value of getActiveLayer().
+     * <p>
+     * This function cannot be inline without including layer_widget.h in
+     * here and we do not want to do that.
+     */
+    void syncLayerWidget();
+
+    /**
+     * Function syncLayerBox
+     * updates the currently "selected" layer within m_SelLayerBox
+     * The currently active layer, as defined by the return value of
+     * getActiveLayer().  And updates the colored icon in the toolbar.
+     */
+    void syncLayerBox();
+
 
 public:
     WinEDAChoiceBox* m_SelLayerBox;         // a combo box to display and
@@ -95,19 +125,6 @@ public:
     bool             m_show_microwave_tools;
     bool             m_show_layer_manager_tools;
 
-private:
-
-    DRC* m_drc;                     ///< the DRC controller, see drc.cpp
-
-    // we'll use lower case function names for private member functions.
-    void createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu );
-    void createPopUpMenuForFootprints( MODULE* aModule, wxMenu* aPopMenu );
-    void createPopUpMenuForFpTexts( TEXTE_MODULE* aText, wxMenu* aPopMenu );
-    void createPopUpMenuForFpPads( D_PAD* aPad, wxMenu* aPopMenu );
-    void createPopupMenuForTracks( TRACK* aTrack, wxMenu* aPopMenu );
-    void createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu );
-    void createPopUpBlockMenu( wxMenu* menu );
-    void createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aPopMenu );
 
 public:
     WinEDA_PcbFrame( wxWindow* father, const wxString& title,
@@ -183,13 +200,6 @@ public:
 
     /* toolbars update UI functions: */
 
-    /**
-     * Function UpdateToolbarLayerInfo
-     * updates the currently selected layer in the layer listbox and
-     * the colored icon in the toolbar.
-     */
-    void             UpdateToolbarLayerInfo();
-
     void             PrepareLayerIndicator();
 
     /**
@@ -205,14 +215,6 @@ public:
      * used when a new netclass is selected
      */
     void             AuxiliaryToolBar_DesignRules_Update_UI();
-
-    /** Function SynchronizeLayersManager( )
-     * Must be called when info displayed in the layer manager Toolbar
-     * as been changed in the main window ( by hotkey or a tool option.
-     * Mainly when the active layer as changed.
-     * @param aFlag = flag giving the type of data (layers, checkboxes...)
-     */
-    void             SynchronizeLayersManager( int aFlag );
 
     /* mouse functions events: */
     void             OnLeftClick( wxDC* DC, const wxPoint& MousePos );

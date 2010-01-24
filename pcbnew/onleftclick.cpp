@@ -196,7 +196,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         if( m_ID_current_state == ID_PCB_ARC_BUTT )
             shape = S_ARC;
 
-        if( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer <= LAST_COPPER_LAYER )
+        if( getActiveLayer() <= LAST_COPPER_LAYER )
         {
             DisplayError( this, _( "Graphic not authorized on Copper layers" ) );
             break;
@@ -219,7 +219,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     }
 
     case ID_TRACK_BUTT:
-        if( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer > LAST_COPPER_LAYER )
+        if( getActiveLayer() > LAST_COPPER_LAYER )
         {
             DisplayError( this, _( "Tracks on Copper layers only " ) );
             break;
@@ -328,7 +328,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     case ID_PCB_COTATION_BUTT:
-        if( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer <= LAST_COPPER_LAYER )
+        if( getActiveLayer() <= LAST_COPPER_LAYER )
         {
             DisplayError( this, _( "Cotation not authorized on Copper layers" ) );
             break;

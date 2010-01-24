@@ -738,12 +738,10 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_LAYER:
-        itmp = SelectLayer(
-            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer, -1, -1 );
+        itmp = SelectLayer( getActiveLayer(), -1, -1 );
         if( itmp >= 0 )
-            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = itmp;
+            setActiveLayer( itmp );
         DrawPanel->MouseToCursorSchema();
-        SynchronizeLayersManager( 1 );
         break;
 
     case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
@@ -751,24 +749,17 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
-        itmp = SelectLayer(
-            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer,
-            FIRST_NO_COPPER_LAYER,
-            -1 );
+        itmp = SelectLayer( getActiveLayer(), FIRST_NO_COPPER_LAYER, -1 );
         if( itmp >= 0 )
-            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = itmp;
+            setActiveLayer( itmp );
         DrawPanel->MouseToCursorSchema();
-        SynchronizeLayersManager( 1 );
-         break;
+        break;
 
     case ID_POPUP_PCB_SELECT_CU_LAYER:
-        itmp = SelectLayer(
-            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer, -1,
-            LAST_COPPER_LAYER );
+        itmp = SelectLayer( getActiveLayer(), -1, LAST_COPPER_LAYER );
         if( itmp >= 0 )
-            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = itmp;
-        SynchronizeLayersManager( 1 );
-         break;
+            setActiveLayer( itmp );
+        break;
 
     case ID_POPUP_PCB_SELECT_LAYER_PAIR:
         SelectLayerPair();
@@ -777,9 +768,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_TOOLBARH_PCB_SELECT_LAYER:
         itmp = m_SelLayerBox->GetChoice();
-        ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer =
-            (int) ( (size_t) m_SelLayerBox->GetClientData( itmp ) );
-        SynchronizeLayersManager( 1 );   // Ensure Layer manager synchronization
+        setActiveLayer( (size_t) m_SelLayerBox->GetClientData( itmp ) );
         if( DisplayOpt.ContrastModeDisplay )
             DrawPanel->Refresh( true );
         break;
@@ -1076,10 +1065,10 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
 
 void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
 {
-    int preslayer = GetScreen()->m_Active_Layer;
+    int curLayer = getActiveLayer();
 
     // Check if the specified layer matches the present layer
-    if( layer == preslayer )
+    if( layer == curLayer )
         return;
 
     // Copper layers cannot be selected unconditionally; how many
@@ -1087,7 +1076,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
     if( IsValidCopperLayerIndex( layer ) )
     {
         // If only one copper layer is enabled, the only such layer
-        // that can be selected to is the "Copper" layer (so the
+        // that can be selected to is the "Back" layer (so the
         // selection of any other copper layer is disregarded).
         if( GetBoard()->m_BoardSettings->GetCopperLayerCount() < 2 )
         {
@@ -1129,9 +1118,10 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
                 // Want to set the routing layers so that it switches properly -
                 // see the implementation of Other_Layer_Route - the working
                 // layer is used to 'start' the via and set the layer masks appropriately.
-                GetScreen()->m_Route_Layer_TOP    = preslayer;
+                GetScreen()->m_Route_Layer_TOP    = curLayer;
                 GetScreen()->m_Route_Layer_BOTTOM = layer;
-                GetScreen()->m_Active_Layer = preslayer;
+
+                setActiveLayer( curLayer );
 
                 if( Other_Layer_Route( (TRACK*) GetScreen()->GetCurItem(), DC ) )
                 {
@@ -1140,7 +1130,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
                 }
                 // if the via was allowed by DRC, then the layer swap has already
                 // been done by Other_Layer_Route(). if via not allowed, then
-                // return now so assignment to m_Active_Layer below doesn't happen.
+                // return now so assignment to setActiveLayer() below doesn't happen.
                 return;
             }
         }
@@ -1151,8 +1141,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
     // and a non-copper layer, or vice-versa?
     // ...
 
-    GetScreen()->m_Active_Layer = layer;
-    SynchronizeLayersManager( 1 );   // Ensure Layer manager synchronization
+    setActiveLayer( layer );
 
     if( DisplayOpt.ContrastModeDisplay )
         GetScreen()->SetRefreshReq();

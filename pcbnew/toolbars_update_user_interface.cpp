@@ -285,7 +285,8 @@ void WinEDA_PcbFrame::SetToolbars()
     if( m_AuxiliaryToolBar )
         AuxiliaryToolBar_Update_UI();
 
-    UpdateToolbarLayerInfo();
+    syncLayerBox();
+
     PrepareLayerIndicator();
     DisplayUnitsMsg();
 #if defined(KICAD_AUIMANAGER)

@@ -25,7 +25,26 @@
 #ifndef LAYERWIDGET_H_
 #define LAYERWIDGET_H_
 
-#include "layer_panel_base.h"
+#include <wx/intl.h>
+#include <wx/wx.h>
+#include <wx/statbmp.h>
+#include <wx/string.h>
+#include <wx/aui/auibook.h>
+#include <wx/notebook.h>
+#include <wx/sizer.h>
+#include <wx/gdicmn.h>
+#include <wx/scrolwin.h>
+#include <wx/font.h>
+#include <wx/colour.h>
+#include <wx/settings.h>
+#include <wx/panel.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+
+
+#define LYR_COLUMN_COUNT        4           ///< Layer tab column count
+#define RND_COLUMN_COUNT        2           ///< Rendering tab column count
 
 
 /**
@@ -44,7 +63,7 @@
  * <p> void OnRenderColorChange( int id, int aColor );
  * <p> void OnRenderEnable( int id, bool isEnabled );
  */
-class LAYER_WIDGET : public LAYER_PANEL_BASE
+class LAYER_WIDGET : public wxPanel
 {
 public:
     /**
@@ -74,14 +93,37 @@ public:
 
 protected:
 
-    wxWindow*       m_FocusOwner;
-    wxBitmap*       m_BlankBitmap;
-    wxBitmap*       m_RightArrowBitmap;
-    wxSize          m_BitmapSize;
-    int             m_CurrentRow;           ///< selected row of layer list
+    wxAuiNotebook*      m_notebook;
+    wxPanel*            m_LayerPanel;
+    wxScrolledWindow*   m_LayerScrolledWindow;
+    wxFlexGridSizer*    m_LayersFlexGridSizer;
+    wxPanel*            m_RenderingPanel;
+    wxScrolledWindow*   m_RenderScrolledWindow;
+    wxFlexGridSizer*    m_RenderFlexGridSizer;
+
+    wxWindow*           m_FocusOwner;
+    wxBitmap*           m_BlankBitmap;
+    wxBitmap*           m_RightArrowBitmap;
+    wxSize              m_BitmapSize;
+    int                 m_CurrentRow;           ///< selected row of layer list
+    int                 m_PointSize;
 
     static wxBitmap makeBitmap( int aColor );
 
+    /**
+     * Function encodeId
+     * is here to allow saving a layer index within a control as its wxControl id,
+     * but to do so in a way that all child wxControl ids within a wxWindow are unique,
+     * since this is required by Windows.
+     * @see getDecodedId()
+     */
+    static int encodeId( int aColumn, int aId );
+
+    /**
+     * Function getDecodedId
+     * decodes \a aControlId to original un-encoded value.
+     */
+    static int getDecodedId( int aControlId );
 
     /**
      * Function makeColorButton
@@ -96,14 +138,6 @@ protected:
      * is called only from a color button when user right clicks.
      */
     void OnMiddleDownLayerColor( wxMouseEvent& event );
-
-    /**
-     * Function OnRightDownLayers
-     * puts up a popup menu for the layer panel.
-     */
-    void OnRightDownLayers( wxMouseEvent& event );
-
-    void OnPopupSelection( wxCommandEvent& event );
 
     /**
      * Function OnLayerCheckBox
@@ -155,7 +189,9 @@ public:
      * @param aFocusOwner is the window that should be sent the focus after
      * every operation.
      */
-    LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner );
+    LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPointSize,
+        wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL );
 
     /**
      * Function GetBestSize

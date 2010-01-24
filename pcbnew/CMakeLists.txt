@@ -111,7 +111,6 @@ set(PCBNEW_SRCS
     ioascii.cpp
     print_board_functions.cpp
     printout_controler.cpp
-    layer_panel_base.cpp
     layer_widget.cpp
     librairi.cpp
     loadcmp.cpp
@@ -243,7 +242,6 @@ endif(NOT MSVC)
 
 # This one gets made only when testing.
 add_executable(layer_widget_test WIN32 EXCLUDE_FROM_ALL
-    layer_panel_base.cpp
     layer_widget.cpp
     )
 target_link_libraries(layer_widget_test common ${wxWidgets_LIBRARIES})
