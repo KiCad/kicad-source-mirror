@@ -59,7 +59,7 @@ from folks with less than that minimum.
 
 PCBNew
 ------
-* Fox the color box which shows which layer is selected, or change tool tip.
+* Fix the color box which shows which layer is selected, or change tool tip.
   It is not tracking layer changes.  Look into WinEDA_PcbFrame::syncLayerBox(),
   which is probably where fix should go.
 
