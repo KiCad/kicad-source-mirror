@@ -60,7 +60,13 @@ public:
 
     bool OnPrintPage( int page );
 
-    bool HasPage( int page ) { return true; }       // do not test page num
+    bool HasPage( int page )       // do not test page num
+    {
+        if (page <= m_PrintParams.m_PageCount)
+            return true;
+        else return false;
+    }
+
     void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo );
 
     void DrawPage();

@@ -800,13 +800,13 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
     // so perhaps could be necessary to set this option at run time.
 
 #if defined( __WXMAC__ )
+    wxWindowUpdateLocker( this );   // under macOSX: drawings are faster with this
+#endif
 
+#if defined( __WXMAC__ )
     // Use a pixel based draw to display grid
     // There is a lot of calls, so the cost is hight
     // and grid is slowly drawn on some platforms
-#if defined( __WXMAC__ )
-    wxWindowUpdateLocker( this );   // under macOSX: drawings are faster with this
-#endif
     for( ii = 0; ; ii++ )
     {
         xg = wxRound( ii * screen_grid_size.x );
@@ -831,48 +831,38 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
      * a grid column is drawn; and then copied to others grid columns
      * this is possible because the grid is drawn only after clearing the screen.
      *
-     * A first grid column is drawn, and after duplicated using the Blit function
+     * A first grid column is drawn in a temporary bitmap,
+     * and after is duplicated using the Blit function
      * (copy from a screen area to an other screen area)
-     * the screen area source is the first column drawn.
      */
 
     wxSize screenSize = GetClientSize();
-    int    x0pos;
-    /* skip the grid columns outside the area to redraw
-     * (it is not always the first pixel column when redraw a sub area of the screen)
-     * this is mandatory because we cannot write outside this sub area
-     * and therefore cannot use a column ouside this area as the column to duplicate
-     * this ugly way to found the first suitable column is due to the fact
-     * the function that reverses the GRMapX function does dot exist.
-     */
-    for( ii = 1; ; ii++ )   // Do not draw the column 0 because it is not easily visible
-    {
-        xg = wxRound( ii * screen_grid_size.x );
-        if( xg > size.x )
-            return;         // out of screen (should not occur)
-        x0pos = GRMapX( org.x + xg );
-        if( x0pos > m_ClipBox.GetOrigin().x)    // First column in active screen area found.
-            break;
-    }
-    for( jj = 0; ; jj++ )
+    wxMemoryDC tmpDC;
+    wxBitmap tmpBM(1, screenSize.y);
+    tmpDC.SelectObject( tmpBM );
+    GRSetColorPen( &tmpDC, g_DrawBgColor );
+    tmpDC.DrawLine( 0, 0, 0, screenSize.y-1 );        // init background
+    GRSetColorPen( &tmpDC, g_GridColor );
+    for( jj = 0; ; jj++ )   // draw grid points
     {
         yg = wxRound( jj * screen_grid_size.y );
-        if( yg > size.y )
+        ypos = screen->Scale( yg );
+        if( ypos > screenSize.y )
             break;
-        ypos = org.y + yg;
-        DC->DrawPoint( x0pos, GRMapY( ypos ) );
+        tmpDC.DrawPoint( 0, ypos );
     }
 
     ypos = GRMapY( org.y );
-    for( ; ; ii++ )
+    for( ii = 0; ; ii++ )
     {
         xg = wxRound( ii * screen_grid_size.x );
         if( xg > size.x )
             break;
         xpos = GRMapX( org.x + xg );
+        if( xpos < m_ClipBox.GetOrigin().x) // column not in active screen area.
         if( xpos > m_ClipBox.GetEnd().x)    // end of active area reached.
             break;
-        DC->Blit( xpos, ypos, 1, screenSize.y, DC, x0pos, ypos  );
+        DC->Blit( xpos, ypos, 1, screenSize.y, &tmpDC, 0, 0  );
     }
 
 #endif

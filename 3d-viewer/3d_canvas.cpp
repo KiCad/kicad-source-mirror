@@ -608,21 +608,21 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
     unsigned char*       alphabuffer = (unsigned char*) malloc( viewport.x * viewport.y );
     wxImage image( viewport.x, viewport.y );
 
-    glPixelStorei( GL_PACK_ALIGNMEN T, 1 );
+    glPixelStorei( GL_PACK_ALIGNMENT, 1 );
     glReadBuffer( GL_BACK_LEFT );
     glReadPixels( viewport.originx,
                   viewport.originy,
                   viewport.x,
                   viewport.y,
                   GL_RGB,
-                  GL_UNSIGNED_ BYTE,
+                  GL_UNSIGNED_BYTE,
                   pixelbuffer );
     glReadPixels( viewport.originx,
                   viewport.originy,
                   viewport.x,
                   viewport.y,
                   GL_ALPHA,
-                  GL_UNSIGNED_ BYTE,
+                  GL_UNSIGNED_BYTE,
                   alphabuffer );
 
 
