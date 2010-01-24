@@ -4,6 +4,17 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-Jan-24 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++ Pcbnew:
+    in variable names, change non existent word Hight to High
+    Remove redundant tool in left toolbar (option toolbar)
+    (this option is now in layers manager)
+    Show layers in horizontal combo box in same order as in layer manager.
+
+++all:
+    minor code cleaning.
+
 2010-Jan-23 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++pcbnew's PCB_LAYER_WIDGET

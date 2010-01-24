@@ -16,6 +16,7 @@
 #include "pcbplot.h"
 #include "bitmaps.h"
 #include "protos.h"
+#include "gerbview_id.h"
 
 
 /****************************************/
@@ -87,7 +88,6 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
     EVT_TOOL( wxID_UNDO, WinEDA_GerberFrame::Process_Special_Functions )
     EVT_TOOL( ID_GEN_PRINT, WinEDA_GerberFrame::ToPrinter )
     EVT_TOOL( ID_FIND_ITEMS, WinEDA_GerberFrame::Process_Special_Functions )
-    EVT_TOOL( ID_DRC_CONTROL, WinEDA_GerberFrame::Process_Special_Functions )
     EVT_KICAD_CHOICEBOX( ID_TOOLBARH_PCB_SELECT_LAYER,
                          WinEDA_GerberFrame::Process_Special_Functions )
 
@@ -96,8 +96,6 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
 
 // Vertical toolbar:
     EVT_TOOL( ID_NO_SELECT_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
-    EVT_TOOL( ID_TRACK_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
-    EVT_TOOL( ID_PCB_ZONES_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
     EVT_TOOL( ID_PCB_DELETE_ITEM_BUTT,
           WinEDA_GerberFrame::Process_Special_Functions )
 

@@ -13,6 +13,7 @@
 #include "pcbplot.h"
 #include "protos.h"
 #include "kicad_device_context.h"
+#include "gerbview_id.h"
 
 
 /* Process the command triggered by the left button of the mouse when a tool

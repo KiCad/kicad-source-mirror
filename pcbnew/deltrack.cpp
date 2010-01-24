@@ -89,8 +89,8 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* aTrack )
                 DrawPanel->ManageCurseur = NULL;
                 DrawPanel->ForceCloseManageCurseur = NULL;
 
-                if( g_HightLigt_Status )
-                    Hight_Light( DC );
+                if( g_HighLight_Status )
+                    High_Light( DC );
 
                 SetCurItem( NULL );
                 return NULL;

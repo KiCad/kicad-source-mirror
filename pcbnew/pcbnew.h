@@ -102,9 +102,9 @@ extern bool        g_TwoSegmentTrackBuild;
 extern int         g_MagneticPadOption;
 extern int         g_MagneticTrackOption;
 
-/* Variables to handle hightlight nets */
-extern bool        g_HightLigt_Status;
-extern int         g_HightLigth_NetCode;
+/* Variables to handle highlight nets */
+extern bool        g_HighLight_Status;
+extern int         g_HighLight_NetCode;
 
 extern wxPoint     g_Offset_Module;     /* Offset de trace du modul en depl */
 

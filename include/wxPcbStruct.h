@@ -505,7 +505,7 @@ public:
 
     // Highlight functions:
     int    Select_High_Light( wxDC* DC );
-    void   Hight_Light( wxDC* DC );
+    void   High_Light( wxDC* DC );
 
     // Track and via edition:
     void   Via_Edit_Control( wxCommandEvent& event );

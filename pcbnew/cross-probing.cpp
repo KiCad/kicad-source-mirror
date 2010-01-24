@@ -93,13 +93,13 @@ void RemoteCommand(  const char* cmdline )
 
         if( netcode > 0 )               /* highlight the pad net*/
         {
-            g_HightLigt_Status   = 1;
-            g_HightLigth_NetCode = netcode;
+            g_HighLight_Status   = 1;
+            g_HighLight_NetCode = netcode;
         }
         else
         {
-            g_HightLigt_Status   = 0;
-            g_HightLigth_NetCode = 0;
+            g_HighLight_Status   = 0;
+            g_HighLight_NetCode = 0;
         }
 
         if( module == NULL )

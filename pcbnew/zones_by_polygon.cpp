@@ -170,14 +170,14 @@ void WinEDA_PcbFrame::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_con
 {
     if( zone_container->IsOnCopperLayer() ) /* Show the Net */
     {
-        if( g_HightLigt_Status && DC )
+        if( g_HighLight_Status && DC )
         {
-            Hight_Light( DC );  // Remove old hightlight selection
+            High_Light( DC );  // Remove old hightlight selection
         }
 
-        g_HightLigth_NetCode = g_Zone_Default_Setting.m_NetcodeSelection = zone_container->GetNet();
+        g_HighLight_NetCode = g_Zone_Default_Setting.m_NetcodeSelection = zone_container->GetNet();
         if( DC )
-            Hight_Light( DC );
+            High_Light( DC );
     }
 
 
@@ -244,13 +244,13 @@ void WinEDA_PcbFrame::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_c
     /* Show the Net */
     if( zone_container->IsOnCopperLayer() ) /* Show the Net */
     {
-        if( g_HightLigt_Status )
+        if( g_HighLight_Status )
         {
-            Hight_Light( DC );  // Remove old hightlight selection
+            High_Light( DC );  // Remove old hightlight selection
         }
 
-        g_HightLigth_NetCode = g_Zone_Default_Setting.m_NetcodeSelection = zone_container->GetNet();
-        Hight_Light( DC );
+        g_HighLight_NetCode = g_Zone_Default_Setting.m_NetcodeSelection = zone_container->GetNet();
+        High_Light( DC );
     }
 
     s_PickedList.ClearListAndDeleteItems();
@@ -506,9 +506,9 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
             DrawPanel->m_IgnoreMouseEvents = TRUE;
             if( zone->IsOnCopperLayer() )
             {   // Put a zone on a copper layer
-                if ( g_HightLigth_NetCode )
+                if ( g_HighLight_NetCode )
                 {
-                    g_Zone_Default_Setting.m_NetcodeSelection = g_HightLigth_NetCode;
+                    g_Zone_Default_Setting.m_NetcodeSelection = g_HighLight_NetCode;
                     zone->SetNet( g_Zone_Default_Setting.m_NetcodeSelection );
                     zone->SetNetNameFromNetCode( );
                 }
@@ -549,13 +549,13 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
         {
             if( s_CurrentZone )
                 g_Zone_Default_Setting.m_NetcodeSelection = s_CurrentZone->GetNet();
-            if( g_HightLigt_Status )
+            if( g_HighLight_Status )
             {
-                Hight_Light( DC ); // Remove old hightlight selection
+                High_Light( DC ); // Remove old hightlight selection
             }
 
-            g_HightLigth_NetCode = g_Zone_Default_Setting.m_NetcodeSelection;
-            Hight_Light( DC );
+            g_HighLight_NetCode = g_Zone_Default_Setting.m_NetcodeSelection;
+            High_Light( DC );
         }
         if( !s_AddCutoutToCurrentZone )
             s_CurrentZone = NULL; // the zone is used only once ("add similar zone" command)

@@ -249,12 +249,6 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         DrawPanel->Refresh();
         break;
 
-    case ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE:
-        g_DesignSettings.SetElementVisibility( MOD_TEXT_INVISIBLE,
-                                               m_OptionsToolBar->GetToolState( id ) );
-        DrawPanel->Refresh();
-        break;
-
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1:
         m_show_microwave_tools = m_OptionsToolBar->GetToolState( id );
 #if !defined(KICAD_AUIMANAGER)

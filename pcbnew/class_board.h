@@ -411,7 +411,7 @@ public:
      * Function DrawHighLight
      * redraws the objects in the board that are associated with the given aNetCode
      * and turns on or off the brilliance associated with that net according to the
-     * current value of global g_HightLigt_Status
+     * current value of global g_HighLight_Status
      * @param aDrawPanel is needed for the clipping support.
      * @param aNetCode is the net number to highlight or to dim.
      */

@@ -175,7 +175,7 @@ bool WinEDA_PcbFrame::Clear_Pcb( bool aQuery )
     GetScreen()->Init();
     GetScreen()->SetGrid( gridsize );
 
-    g_HightLigt_Status = 0;
+    g_HighLight_Status = 0;
 
     // Enable all layers (SetCopperLayerCount() will adjust the copper layers enabled)
     GetBoard()->SetEnabledLayers(ALL_LAYERS);

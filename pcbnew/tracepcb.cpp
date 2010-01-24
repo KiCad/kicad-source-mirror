@@ -172,8 +172,8 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
     }
 
     // @todo: this high-light functionality could be built into me.
-    if( g_HightLigt_Status )
-        DrawHighLight( aPanel, DC, g_HightLigth_NetCode );
+    if( g_HighLight_Status )
+        DrawHighLight( aPanel, DC, g_HighLight_NetCode );
 
     // draw the BOARD's markers last, otherwise the high light will erase
     // any marker on a pad
@@ -188,7 +188,7 @@ void BOARD::DrawHighLight( WinEDA_DrawPanel* aDrawPanel, wxDC* DC, int aNetCode 
 {
     int draw_mode;
 
-    if( g_HightLigt_Status )
+    if( g_HighLight_Status )
         draw_mode = GR_SURBRILL | GR_OR;
     else
         draw_mode = GR_AND | GR_SURBRILL;

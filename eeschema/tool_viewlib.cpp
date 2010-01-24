@@ -157,6 +157,8 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
 
     m_HToolBar->EnableTool( ID_LIBVIEW_VIEWDOC,
                             entry && ( entry->GetDocFileName() != wxEmptyString ) );
+
+    m_HToolBar->Refresh();
 }
 
 

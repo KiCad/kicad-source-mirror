@@ -247,7 +247,6 @@ set(BITMAP_SRCS
     mw_Add_Stub.xpm
     mw_toolbar.xpm
     Net_HighLight.xpm
-    net_hightlight.xpm
     netlist.xpm
     Net_Locked.xpm
     Net_UnLocked.xpm

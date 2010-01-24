@@ -68,7 +68,8 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
     l1 = Route_Layer_TOP; l2 = Route_Layer_BOTTOM;
 
     pt_track = Marque_Une_Piste( GetBoard(), pt_segm, &nb_segm, NULL, true );
-    Trace_Une_Piste( DrawPanel, DC, pt_track, nb_segm, GR_XOR );
+    if ( DC )
+        Trace_Une_Piste( DrawPanel, DC, pt_track, nb_segm, GR_XOR );
 
     /* Clear the BUSY flag and backup member. Param layer original. */
     ii = nb_segm; pt_segm = pt_track;
@@ -101,7 +102,8 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
                 pt_segm->SetLayer( pt_segm->m_Param );
             }
 
-            Trace_Une_Piste( DrawPanel, DC, pt_track, nb_segm, GR_OR );
+            if( DC )
+                Trace_Une_Piste( DrawPanel, DC, pt_track, nb_segm, GR_OR );
             DisplayError( this, _( "Drc error, canceled" ), 10 );
             return;
         }
@@ -180,7 +182,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     via->m_Flags   = IS_NEW;
     via->m_Shape   = g_DesignSettings.m_CurrentViaType;
     via->m_Width   = GetBoard()->GetCurrentViaSize();
-    via->SetNet( g_HightLigth_NetCode );
+    via->SetNet( g_HighLight_NetCode );
     via->m_Start   = via->m_End = g_CurrentTrackSegment->m_End;
     int old_layer = getActiveLayer();
 

@@ -38,7 +38,7 @@ bool g_Raccord_45_Auto = true;
 bool Track_45_Only;
 bool Segments_45_Only;
 bool g_TwoSegmentTrackBuild = true;
-bool g_HightLigt_Status;
+bool g_HighLight_Status;
 extern PARAM_CFG_BASE* ParamCfgList[];
 
 int Angle_Rot_Module;
@@ -49,7 +49,7 @@ int Route_Layer_BOTTOM;
 int g_MaxLinksShowed;
 int g_MagneticPadOption = capture_cursor_in_track_tool;
 int g_MagneticTrackOption = capture_cursor_in_track_tool;
-int g_HightLigth_NetCode = -1;
+int g_HighLight_NetCode = -1;
 
 wxSize ModuleTextSize;       /* Default footprint texts size */
 wxPoint g_Offset_Module;     /* Offset de trace du modul en depl */
@@ -68,7 +68,7 @@ wxString g_DocModulesFileName = wxT("footprints_doc/footprints.pdf");
 IMPLEMENT_APP( WinEDA_App )
 
 /* MacOSX: Needed for file association
- * http://wiki.wxwidgets.org/WxMac-specific_topics 
+ * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
 void WinEDA_App::MacOpenFile(const wxString &fileName) {
     WinEDA_PcbFrame * frame = ((WinEDA_PcbFrame*) GetTopWindow());;

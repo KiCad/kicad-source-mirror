@@ -266,13 +266,6 @@ void WinEDA_PcbFrame::SetToolbars()
                                             _( "Normal contrast display mode" ) :
                                             _( "High contrast display mode" ) );
 
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
-                            g_DesignSettings.IsElementVisible( MOD_TEXT_INVISIBLE ) );
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
-                                            g_DesignSettings.IsElementVisible( MOD_TEXT_INVISIBLE ) ?
-                                            _( "Hide invisible text" ) :
-                                            _( "Show invisible text" ) );
-
 #if !defined(KICAD_AUIMANAGER)
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
                                       (m_AuxVToolBar && m_AuxVToolBar->IsShown()) ? true : false );

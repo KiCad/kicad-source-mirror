@@ -29,8 +29,8 @@ static bool InitialiseDragParameters();
 static wxPoint PosInit, s_LastPos;
 static TRACK*  NewTrack;    /* New track or track being moved. */
 static int     NbPtNewTrack;
-static int     Old_HightLigth_NetCode;
-static bool    Old_HightLigt_Status;
+static int     Old_HighLigth_NetCode;
+static bool    Old_HighLigt_Status;
 static double  s_StartSegmentSlope, s_EndSegmentSlope,
                s_MovingSegmentSlope,
                s_StartSegment_Yorg, s_EndSegment_Yorg,
@@ -61,11 +61,11 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
         Panel->ManageCurseur( Panel, DC, true );
 
     Panel->GetScreen()->m_Curseur = oldpos;
-    g_HightLigt_Status = FALSE;
+    g_HighLight_Status = FALSE;
     ( (WinEDA_PcbFrame*) Panel->GetParent() )->GetBoard()->DrawHighLight(
         Panel,
         DC,
-        g_HightLigth_NetCode );
+        g_HighLight_NetCode );
 
     if( NewTrack )
     {
@@ -123,13 +123,13 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
     // Clear the undo picker list:
     s_ItemsListPicker.ClearListAndDeleteItems();
 
-    g_HightLigth_NetCode = Old_HightLigth_NetCode;
-    g_HightLigt_Status   = Old_HightLigt_Status;
-    if( g_HightLigt_Status )
+    g_HighLight_NetCode = Old_HighLigth_NetCode;
+    g_HighLight_Status   = Old_HighLigt_Status;
+    if( g_HighLight_Status )
         ( (WinEDA_PcbFrame*) Panel->GetParent() )->GetBoard()->DrawHighLight(
             Panel,
             DC,
-            g_HightLigth_NetCode );
+            g_HighLight_NetCode );
 
     EraseDragListe();
 }
@@ -647,10 +647,10 @@ void WinEDA_PcbFrame::Start_MoveOneNodeOrSegment( TRACK* track,
     EraseDragListe();
 
     /* Change highlighted net: the new one will be highlighted */
-    Old_HightLigt_Status   = g_HightLigt_Status;
-    Old_HightLigth_NetCode = g_HightLigth_NetCode;
-    if( g_HightLigt_Status )
-        Hight_Light( DC );
+    Old_HighLigt_Status   = g_HighLight_Status;
+    Old_HighLigth_NetCode = g_HighLight_NetCode;
+    if( g_HighLight_Status )
+        High_Light( DC );
     PosInit = GetScreen()->m_Curseur;
 
     if( track->Type() == TYPE_VIA )
@@ -722,10 +722,10 @@ void WinEDA_PcbFrame::Start_MoveOneNodeOrSegment( TRACK* track,
     DrawPanel->ManageCurseur = Show_MoveNode;
     DrawPanel->ForceCloseManageCurseur = Abort_MoveTrack;
 
-    g_HightLigth_NetCode = track->GetNet();
-    g_HightLigt_Status   = true;
+    g_HighLight_NetCode = track->GetNet();
+    g_HighLight_Status   = true;
 
-    GetBoard()->DrawHighLight( DrawPanel, DC, g_HightLigth_NetCode );
+    GetBoard()->DrawHighLight( DrawPanel, DC, g_HighLight_NetCode );
     DrawPanel->ManageCurseur( DrawPanel, DC, true );
 }
 
@@ -891,10 +891,10 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track,
         s_EndSegmentPresent = FALSE;
 
     /* Change high light net: the new one will be highlighted */
-    Old_HightLigt_Status   = g_HightLigt_Status;
-    Old_HightLigth_NetCode = g_HightLigth_NetCode;
-    if( g_HightLigt_Status )
-        Hight_Light( DC );
+    Old_HighLigt_Status   = g_HighLight_Status;
+    Old_HighLigth_NetCode = g_HighLight_NetCode;
+    if( g_HighLight_Status )
+        High_Light( DC );
 
     EraseDragListe();
 
@@ -928,9 +928,9 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track,
     DrawPanel->ManageCurseur = Show_Drag_Track_Segment_With_Cte_Slope;
     DrawPanel->ForceCloseManageCurseur = Abort_MoveTrack;
 
-    g_HightLigth_NetCode = track->GetNet();
-    g_HightLigt_Status   = true;
-    GetBoard()->DrawHighLight( DrawPanel, DC, g_HightLigth_NetCode );
+    g_HighLight_NetCode = track->GetNet();
+    g_HighLight_Status   = true;
+    GetBoard()->DrawHighLight( DrawPanel, DC, g_HighLight_NetCode );
 
     // Prepare the Undo command
     DRAG_SEGM*  pt_drag = g_DragSegmentList;

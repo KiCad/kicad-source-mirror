@@ -377,14 +377,8 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
                                wxITEM_CHECK );
     m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
                                   DisplayOpt.ContrastModeDisplay );
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
-                               wxEmptyString,
-                               wxBitmap( invisible_text_xpm ),
-                               _( "Show invisible text" ),
-                               wxITEM_CHECK );
-    m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_INVISIBLE_TEXT_MODE,
-                                  g_DesignSettings.IsElementVisible( MOD_TEXT_INVISIBLE ));
 
+    // Tools to show/hide toolbars:
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
                                     wxEmptyString,
@@ -420,7 +414,7 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
     m_VToolBar->AddSeparator();
 
     m_VToolBar->AddTool( ID_PCB_HIGHLIGHT_BUTT, wxEmptyString,
-                         wxBitmap( net_hightlight_xpm ), _( "Highlight net" ),
+                         wxBitmap( net_highlight_xpm ), _( "Highlight net" ),
                          wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_PCB_SHOW_1_RATSNEST_BUTT, wxEmptyString,
@@ -712,19 +706,29 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
 
         parent->AddControl( m_SelLayerBox );
     }
-
-/*
-    int     layer_mask = g_TabAllCopperLayerMask[g_DesignSettings.m_CopperLayerCount - 1];
-
-    layer_mask |= ALL_NO_CU_LAYERS;
-*/
     int      layer_mask = g_DesignSettings.GetEnabledLayers();
     unsigned length  = 0;
 
     m_SelLayerBox->Clear();
 
-    for( int layer=0, listNdx=0;  layer <= EDGE_N;  layer++ )
+    static int layerOrder_for_display[NB_LAYERS] =  {
+    LAYER_N_FRONT,
+    LAYER_N_15, LAYER_N_14, LAYER_N_13, LAYER_N_12,
+    LAYER_N_11, LAYER_N_10, LAYER_N_9, LAYER_N_8,
+    LAYER_N_7, LAYER_N_6, LAYER_N_5, LAYER_N_4,
+    LAYER_N_3, LAYER_N_2,
+    LAYER_N_BACK,
+    ADHESIVE_N_FRONT, ADHESIVE_N_BACK,
+    SOLDERPASTE_N_FRONT, SOLDERPASTE_N_BACK,
+    SILKSCREEN_N_FRONT, SILKSCREEN_N_BACK,
+    SOLDERMASK_N_FRONT, SOLDERMASK_N_BACK,
+    DRAW_N, COMMENT_N,
+    ECO1_N, ECO2_N,
+    EDGE_N
+    };
+    for( int idx=0, listNdx=0;  idx <= EDGE_N;  idx++ )
     {
+        int layer = layerOrder_for_display[idx];
         // List to append hotkeys in layer box selection
         static const int HK_SwitchLayer[EDGE_N + 1] = {
             HK_SWITCH_LAYER_TO_COPPER,

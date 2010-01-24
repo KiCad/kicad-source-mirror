@@ -10,6 +10,7 @@
 #include "pcbplot.h"
 #include "protos.h"
 #include "bitmaps.h"
+#include "gerbview_id.h"
 #include "hotkeys.h"
 
 

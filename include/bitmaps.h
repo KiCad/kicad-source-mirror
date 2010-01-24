@@ -238,7 +238,6 @@ extern const char* mw_Add_stub_arc_xpm[];
 extern const char* mw_Add_Stub_xpm[];
 extern const char* mw_toolbar_xpm[];
 extern const char* net_highlight_xpm[];
-extern const char* net_hightlight_xpm[];
 extern const char* netlist_xpm[];
 extern const char* net_locked_xpm[];
 extern const char* net_unlocked_xpm[];

@@ -42,12 +42,12 @@ static void Exit_Editrack( WinEDA_DrawPanel* Panel, wxDC* DC )
     {
         /* Erase the current drawing */
         ShowNewTrackWhenMovingCursor( Panel, DC, false );
-        if( g_HightLigt_Status )
-            frame->Hight_Light( DC );
+        if( g_HighLight_Status )
+            frame->High_Light( DC );
 
-        g_HightLigth_NetCode = OldNetCodeSurbrillance;
+        g_HighLight_NetCode = OldNetCodeSurbrillance;
         if( OldEtatSurbrillance )
-            frame->Hight_Light( DC );
+            frame->High_Light( DC );
 
         frame->MsgPanel->EraseMsgBox();
 
@@ -98,16 +98,16 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
                                                             // but...
 
         /* erase old highlight */
-        OldNetCodeSurbrillance = g_HightLigth_NetCode;
-        OldEtatSurbrillance    = g_HightLigt_Status;
+        OldNetCodeSurbrillance = g_HighLight_NetCode;
+        OldEtatSurbrillance    = g_HighLight_Status;
 
-        if( g_HightLigt_Status )
-            Hight_Light( DC );
+        if( g_HighLight_Status )
+            High_Light( DC );
 
         g_CurrentTrackList.PushBack( new TRACK( GetBoard() ) );
         g_CurrentTrackSegment->m_Flags = IS_NEW;
 
-        g_HightLigth_NetCode = 0;
+        g_HighLight_NetCode = 0;
 
         // Search for a starting point of the new track, a track or pad
         LockPoint = LocateLockPoint( GetBoard(), pos, masquelayer );
@@ -120,12 +120,12 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
 
                 /* A pad is found: put the starting point on pad centre */
                 pos = pt_pad->m_Pos;
-                g_HightLigth_NetCode = pt_pad->GetNet();
+                g_HighLight_NetCode = pt_pad->GetNet();
             }
             else /* A track segment is found */
             {
                 TrackOnStartPoint    = (TRACK*) LockPoint;
-                g_HightLigth_NetCode = TrackOnStartPoint->GetNet();
+                g_HighLight_NetCode = TrackOnStartPoint->GetNet();
                 CreateLockPoint( pos,
                                  TrackOnStartPoint,
                                  NULL,
@@ -140,7 +140,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
                                                      GetScreen()->
                                                      m_Active_Layer );
             if( zone )
-                g_HightLigth_NetCode = zone->GetNet();
+                g_HighLight_NetCode = zone->GetNet();
         }
 
         D( g_CurrentTrackList.VerifyListIntegrity(); );
@@ -149,10 +149,10 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
 
         D( g_CurrentTrackList.VerifyListIntegrity(); );
 
-        Hight_Light( DC );
+        High_Light( DC );
 
         // Display info about track Net class, and init track and vias sizes:
-        g_CurrentTrackSegment->SetNet( g_HightLigth_NetCode );
+        g_CurrentTrackSegment->SetNet( g_HighLight_NetCode );
         GetBoard()->SetCurrentNetClass( g_CurrentTrackSegment->GetNetClassName() );
         m_TrackAndViasSizesList_Changed = true;
         AuxiliaryToolBar_Update_UI();
@@ -474,7 +474,7 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
                  * possibly create an anchor. */
         {
             TRACK* adr_buf = (TRACK*) LockPoint;
-            g_HightLigth_NetCode = adr_buf->GetNet();
+            g_HighLight_NetCode = adr_buf->GetNet();
 
             /* Possible establishment of a hanging point. */
             LockPoint = CreateLockPoint( g_CurrentTrackSegment->m_End,
@@ -536,12 +536,12 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
     wxASSERT( g_CurrentTrackSegment==NULL );
     wxASSERT( g_CurrentTrackList.GetCount()==0 );
 
-    if( g_HightLigt_Status )
-        Hight_Light( DC );
+    if( g_HighLight_Status )
+        High_Light( DC );
 
-    g_HightLigth_NetCode = OldNetCodeSurbrillance;
+    g_HighLight_NetCode = OldNetCodeSurbrillance;
     if( OldEtatSurbrillance )
-        Hight_Light( DC );
+        High_Light( DC );
 
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;

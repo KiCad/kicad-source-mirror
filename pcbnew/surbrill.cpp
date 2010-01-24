@@ -76,11 +76,11 @@ void WinEDA_PcbFrame::ListNetsAndSelect( wxCommandEvent& event )
     {
         INSTALL_DC( dc, DrawPanel );
 
-        if( g_HightLigt_Status )
-            Hight_Light( &dc );
+        if( g_HighLight_Status )
+            High_Light( &dc );
 
-        g_HightLigth_NetCode = netcode;
-        Hight_Light( &dc );
+        g_HighLight_NetCode = netcode;
+        High_Light( &dc );
     }
 }
 
@@ -90,8 +90,8 @@ void WinEDA_PcbFrame::ListNetsAndSelect( wxCommandEvent& event )
  */
 int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
 {
-    if( g_HightLigt_Status )
-        Hight_Light( DC );
+    if( g_HighLight_Status )
+        High_Light( DC );
 
     // use this scheme because a pad is a higher priority than a track in the
     // search, and finding a pad, instead of a track on a pad,
@@ -111,10 +111,10 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
         switch( item->Type() )
         {
         case TYPE_PAD:
-            g_HightLigth_NetCode = ( (D_PAD*) item )->GetNet();
-            Hight_Light( DC );
+            g_HighLight_NetCode = ( (D_PAD*) item )->GetNet();
+            High_Light( DC );
             SendMessageToEESCHEMA( item );
-            return g_HightLigth_NetCode;
+            return g_HighLight_NetCode;
 
         case TYPE_TRACK:
         case TYPE_VIA:
@@ -122,14 +122,14 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
 
             // since these classes are all derived from TRACK, use a common
             // GetNet() function:
-            g_HightLigth_NetCode = ( (TRACK*) item )->GetNet();
-            Hight_Light( DC );
-            return g_HightLigth_NetCode;
+            g_HighLight_NetCode = ( (TRACK*) item )->GetNet();
+            High_Light( DC );
+            return g_HighLight_NetCode;
 
         case TYPE_ZONE_CONTAINER:
-            g_HightLigth_NetCode = ( (ZONE_CONTAINER*) item )->GetNet();
-            Hight_Light( DC );
-            return g_HightLigth_NetCode;
+            g_HighLight_NetCode = ( (ZONE_CONTAINER*) item )->GetNet();
+            High_Light( DC );
+            return g_HighLight_NetCode;
 
         default:
             ;   // until somebody changes GENERAL_COLLECTOR::PadsOrTracks,
@@ -146,9 +146,9 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
  *
  * Show or removes the net at the current cursor position.
  */
-void WinEDA_PcbFrame::Hight_Light( wxDC* DC )
+void WinEDA_PcbFrame::High_Light( wxDC* DC )
 {
-    g_HightLigt_Status = !g_HightLigt_Status;
+    g_HighLight_Status = !g_HighLight_Status;
 
-    GetBoard()->DrawHighLight( DrawPanel, DC, g_HightLigth_NetCode );
+    GetBoard()->DrawHighLight( DrawPanel, DC, g_HighLight_NetCode );
 }
