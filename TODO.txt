@@ -59,6 +59,10 @@ from folks with less than that minimum.
 
 PCBNew
 ------
+* Fox the color box which shows which layer is selected, or change tool tip.
+  It is not tracking layer changes.  Look into WinEDA_PcbFrame::syncLayerBox(),
+  which is probably where fix should go.
+
 * Fix block copy/move preview to not view only a border, we should
   see the moved/copied parts.
 
@@ -66,11 +70,11 @@ PCBNew
 
 * Use BOARD_ITEM::MenuIcon() in the onrightclick.cpp
 * Document specctra round tripper, and fix the english translation of help.
-* Expose layer name editing. Should dove tail with net class editor from
-  a UI perspective.
 * Add ARC support to gerber polygons.
 * Need to add polygon aperture type.
   Then example 2 in RS274xrevd_e.pdf will draw properly.
+
+
 
 Dick:
 * Get the nested quote support for DSNLEXER fixed up and committed.
