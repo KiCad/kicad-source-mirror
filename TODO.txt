@@ -75,7 +75,12 @@ P1) Fix the color box which shows which layer is selected, or change tool tip.
     Then example 2 in RS274xrevd_e.pdf will draw properly.
 
 *   Complete the migration to PCB_VISIBLEs and put them into the board,
-    including grid, so they are saved with a board.
+    including grid, so they are saved with a board.  All drawing code should
+    use BOARD::IsElementVisible() to test, not the EDA_BoardDesignSettings
+    functions for anything in the PCB_VISIBLES enum.  Then eventually we
+    can remove the elements that are contained in the set PCB_VISIBLES from
+    the EDA_BoardDesignSettings and simply leave them in the BOARD.
+
 
 *   Write accessors for grid control, so that the write accessor can fire
     change notifications to known listeners.  But again, grid boolean should
