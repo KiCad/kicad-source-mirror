@@ -711,21 +711,8 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
 
     m_SelLayerBox->Clear();
 
-    static int layerOrder_for_display[NB_LAYERS] =  {
-    LAYER_N_FRONT,
-    LAYER_N_15, LAYER_N_14, LAYER_N_13, LAYER_N_12,
-    LAYER_N_11, LAYER_N_10, LAYER_N_9, LAYER_N_8,
-    LAYER_N_7, LAYER_N_6, LAYER_N_5, LAYER_N_4,
-    LAYER_N_3, LAYER_N_2,
-    LAYER_N_BACK,
-    ADHESIVE_N_FRONT, ADHESIVE_N_BACK,
-    SOLDERPASTE_N_FRONT, SOLDERPASTE_N_BACK,
-    SILKSCREEN_N_FRONT, SILKSCREEN_N_BACK,
-    SOLDERMASK_N_FRONT, SOLDERMASK_N_BACK,
-    DRAW_N, COMMENT_N,
-    ECO1_N, ECO2_N,
-    EDGE_N
-    };
+    static DECLARE_LAYERS_ORDER_LIST(layerOrder_for_display);
+
     for( int idx=0, listNdx=0;  idx <= EDGE_N;  idx++ )
     {
         int layer = layerOrder_for_display[idx];

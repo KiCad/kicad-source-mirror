@@ -454,11 +454,10 @@ int BOARD::GetVisibleElementColor( int aPCB_VISIBLE )
     // @todo move these globals into the board.
     switch( aPCB_VISIBLE )
     {
-    case VIAS_VISIBLE:              color = m_BoardSettings->m_ViaColor[VIA_THROUGH];       break;
+    case VIA_THROUGH_VISIBLE:       color = m_BoardSettings->m_ViaColor[VIA_THROUGH];       break;
     case VIA_MICROVIA_VISIBLE:      color = m_BoardSettings->m_ViaColor[VIA_MICROVIA];      break;
     case VIA_BBLIND_VISIBLE:        color = m_BoardSettings->m_ViaColor[VIA_BLIND_BURIED];  break;
-    case VIA_THROUGH_VISIBLE:       color = g_ModuleTextCUColor;    break;
-    case MOD_TEXT_FR_VISIBLE:       color = g_ModuleTextCUColor;    break;
+    case MOD_TEXT_FR_VISIBLE:       color = g_ModuleTextCMPColor;   break;
     case MOD_TEXT_BK_VISIBLE:       color = g_ModuleTextCUColor;    break;
     case MOD_TEXT_INVISIBLE:        color = g_ModuleTextNOVColor;   break;
     case ANCHOR_VISIBLE:            color = g_AnchorColor;          break;
@@ -479,12 +478,11 @@ void BOARD::SetVisibleElementColor( int aPCB_VISIBLE, int aColor )
     // @todo move these globals into the board.
     switch( aPCB_VISIBLE )
     {
-    case VIAS_VISIBLE:              m_BoardSettings->m_ViaColor[VIA_THROUGH] = aColor;       break;
+    case VIA_THROUGH_VISIBLE:       m_BoardSettings->m_ViaColor[VIA_THROUGH] = aColor;       break;
     case VIA_MICROVIA_VISIBLE:      m_BoardSettings->m_ViaColor[VIA_MICROVIA] = aColor;      break;
     case VIA_BBLIND_VISIBLE:        m_BoardSettings->m_ViaColor[VIA_BLIND_BURIED] = aColor;  break;
-    case VIA_THROUGH_VISIBLE:       g_ModuleTextCUColor = aColor;       break;
-    case MOD_TEXT_FR_VISIBLE:       g_ModuleTextCUColor = aColor;       break;
-    case MOD_TEXT_BK_VISIBLE:       g_ModuleTextCUColor = aColor;            break;
+    case MOD_TEXT_FR_VISIBLE:       g_ModuleTextCMPColor = aColor;       break;
+    case MOD_TEXT_BK_VISIBLE:       g_ModuleTextCUColor = aColor;        break;
     case MOD_TEXT_INVISIBLE:        g_ModuleTextNOVColor = aColor;      break;
     case ANCHOR_VISIBLE:            g_AnchorColor = aColor;             break;
     case PAD_FR_VISIBLE:            g_PadCMPColor = aColor;             break;

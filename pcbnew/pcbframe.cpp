@@ -111,9 +111,9 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( WinEDA_PcbFrame* aParent, wxWindow* aFocusOw
 #define RR  LAYER_WIDGET::ROW   // Render Row abreviation to reduce source width
 
              // text                id                      color       tooltip                 checked
-        RR( _( "Through Via" ),     VIAS_VISIBLE,           WHITE,      _( "Show through vias" ) ),
-        RR( _( "Bl/Buried Via" ),   VIA_MICROVIA_VISIBLE,   WHITE,      _( "Show blind or buried vias" )  ),
-        RR( _( "Micro Via" ),       VIA_BBLIND_VISIBLE,     WHITE,      _( "Show micro vias") ),
+        RR( _( "Through Via" ),     VIA_THROUGH_VISIBLE,    WHITE,      _( "Show through vias" ) ),
+        RR( _( "Bl/Buried Via" ),   VIA_BBLIND_VISIBLE,     WHITE,      _( "Show blind or buried vias" )  ),
+        RR( _( "Micro Via" ),       VIA_MICROVIA_VISIBLE,   WHITE,      _( "Show micro vias") ),
         RR( _( "Ratsnest" ),        RATSNEST_VISIBLE,       WHITE,      _( "Show unconnected nets as a ratsnest") ),
 
         RR( _( "Pads Front" ),      PAD_FR_VISIBLE,         WHITE,      _( "Show footprint pads on board's front" ) ),

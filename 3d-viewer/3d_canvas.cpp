@@ -555,7 +555,7 @@ void Pcb3D_GLCanvas::SetLights()
 
 
 /* Create a Screenshot of the current 3D view.
- *  Output file format is png or jpeg, or image is copied on clipboard
+ *  Output file format is png or jpeg, or image is copied to the clipboard
  */
 void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
 {
@@ -568,8 +568,8 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
         fmt_is_jpeg = TRUE;
     if( event.GetId() != ID_TOOL_SCREENCOPY_TOCLIBBOARD )
     {
-        file_ext = fmt_is_jpeg ? wxT( "jpg" ) : wxT( "png"; )
-                   mask = wxT( "*." ) + file_ext;
+        file_ext = fmt_is_jpeg ? wxT( "jpg" ) : wxT( "png" );
+        mask = wxT( "*." ) + file_ext;
         FullFileName    = m_Parent->m_Parent->GetScreen()->m_FileName;
         fn.SetExt( file_ext );
 

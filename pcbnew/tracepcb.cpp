@@ -3,7 +3,7 @@
 /****************/
 
 /*
- * Routines to display grid box coordinates, cursors, markers ...
+ * Functions to redraw the current board ...
  */
 
 #include <vector>
