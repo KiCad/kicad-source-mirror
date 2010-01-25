@@ -184,53 +184,54 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     via->m_Width   = GetBoard()->GetCurrentViaSize();
     via->SetNet( g_HighLight_NetCode );
     via->m_Start   = via->m_End = g_CurrentTrackSegment->m_End;
-    int old_layer = getActiveLayer();
+    // Usual via is from copper to component.
+    // layer pair is LAYER_N_BACK and LAYER_N_FRONT.
+    via->SetLayerPair( LAYER_N_BACK, LAYER_N_FRONT );
+    via->SetDrillValue( GetBoard()->GetCurrentViaDrill() );
 
-    // swap the layers.
-    if( getActiveLayer() !=
-        ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP )
-        setActiveLayer(((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP );
+    int first_layer = getActiveLayer();
+    int last_layer;
+    // prepare switch to new active layer:
+    if( first_layer != GetScreen()->m_Route_Layer_TOP )
+        last_layer = GetScreen()->m_Route_Layer_TOP;
     else
-        setActiveLayer( ((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM );
+        last_layer = GetScreen()->m_Route_Layer_BOTTOM;
 
-    /* Adjust the via layer pair */
+    /* Adjust the actual via layer pair */
     switch ( via->Shape() )
     {
         case VIA_BLIND_BURIED:
-            via->SetLayerPair( old_layer, getActiveLayer() );
-            via->SetDrillValue( GetBoard()->GetCurrentViaDrill() );
+            via->SetLayerPair( first_layer, last_layer );
             break;
 
         case VIA_MICROVIA:  // from external to the near neighbor inner layer
-            if ( old_layer == LAYER_N_BACK )
-                setActiveLayer( LAYER_N_2 );
-            else if ( old_layer == LAYER_N_FRONT )
-                setActiveLayer( GetBoard()->m_BoardSettings->GetCopperLayerCount() - 2 );
-            else if ( old_layer == LAYER_N_2 )
-                setActiveLayer( LAYER_N_BACK );
-            else if ( old_layer == GetBoard()->m_BoardSettings->GetCopperLayerCount() - 2 );
-                setActiveLayer( LAYER_N_FRONT );
-            // else error
-            via->SetLayerPair( old_layer, getActiveLayer() );
+        {
+            int last_inner_layer = GetBoard()->m_BoardSettings->GetCopperLayerCount() - 2;
+            if ( first_layer == LAYER_N_BACK )
+                last_layer = LAYER_N_2;
+            else if ( first_layer == LAYER_N_FRONT )
+                last_layer = last_inner_layer;
+            else if ( first_layer == LAYER_N_2 )
+                last_layer = LAYER_N_BACK;
+            else if ( first_layer == last_inner_layer )
+                last_layer = LAYER_N_FRONT;
+            // else error: will be removed later
+            via->SetLayerPair( first_layer, last_layer );
             {
                 NETINFO_ITEM* net = GetBoard()->FindNet( via->GetNet() );
                 via->m_Width      = net->GetMicroViaSize();
             }
+        }
             break;
 
         default:
-            // Usual via is from copper to component; layer pair is 0 and 0x0F.
-            via->SetDrillValue( GetBoard()->GetCurrentViaDrill() );
-            via->SetLayerPair( LAYER_N_BACK, LAYER_N_FRONT );
             break;
     }
 
-    if( Drc_On && BAD_DRC==m_drc->Drc( via, GetBoard()->m_Track ) )
+    if( Drc_On && BAD_DRC == m_drc->Drc( via, GetBoard()->m_Track ) )
     {
         /* DRC fault: the Via cannot be placed here ... */
         delete via;
-
-        setActiveLayer( old_layer );
 
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
@@ -247,6 +248,8 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
 
         return false;
     }
+
+    setActiveLayer( last_layer );
 
     TRACK*  lastNonVia = g_CurrentTrackSegment;
 

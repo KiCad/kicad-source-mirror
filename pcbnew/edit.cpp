@@ -342,7 +342,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_PLACE_MICROVIA:
         if( !( (PCB_SCREEN*) GetScreen() )->IsMicroViaAcceptable() )
             break;
-
     case ID_POPUP_PCB_PLACE_VIA:
         DrawPanel->MouseToCursorSchema();
         if( GetCurItem()->m_Flags & IS_DRAGGED )
