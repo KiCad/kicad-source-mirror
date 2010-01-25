@@ -49,8 +49,13 @@
 #define strnicmp _strnicmp
 #endif
 
-
+#if 1
+// now mandatory, not configurable
+#define KICAD_AUIMANAGER        1
+#define KICAD_AUITOOLBAR        1
+#else
 #cmakedefine KICAD_AUIMANAGER 1
 #cmakedefine KICAD_AUITOOLBAR 1
+#endif
 
 #endif  /* __CONFIG_H__ */

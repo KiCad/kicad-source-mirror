@@ -137,8 +137,7 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( WinEDA_PcbFrame* aParent, wxWindow* aFocusOw
             // this window frame must have an established BOARD, i.e. after SetBoard()
             renderRows[row].color = board->GetVisibleElementColor( renderRows[row].id );
         }
-        // @todo
-        // renderRows[row].state = GetBoard()->IsElementVisible( renderRows[row].id );
+        renderRows[row].state = board->IsElementVisible( renderRows[row].id );
     }
 
     AppendRenderRows( renderRows, DIM(renderRows) );
@@ -380,27 +379,13 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
         // see todo above, don't really want anything except IsElementVisible() here.
 
     case GRID_VISIBLE:
+        // @todo, make read/write accessors for grid control so the write accessor can fire updates to
+        // grid state listeners.  I think the grid state should be kept in the BOARD.
         myframe->m_Draw_Grid = isEnabled;
         break;
 
-    case MOD_FR_VISIBLE:
-        DisplayOpt.Show_Modules_Cmp = isEnabled;
-        break;
-
-    case MOD_BK_VISIBLE:
-        DisplayOpt.Show_Modules_Cu = isEnabled;
-        break;
-
     default:
-
-        int visibleElements = brd->GetVisibleElements();
-
-        if( isEnabled )
-            visibleElements |= (1 << aId );
-        else
-            visibleElements &= ~(1 << aId);
-
-        brd->SetVisibleElements( visibleElements );
+        brd->SetElementVisibility( aId, isEnabled );
     }
 
     myframe->DrawPanel->Refresh();

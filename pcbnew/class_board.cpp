@@ -385,6 +385,8 @@ void BOARD::SetVisibleLayers( int aLayerMask )
 }
 
 
+// these are not tidy, since there are PCB_VISIBLEs that are not stored in the bitmap.
+
 void BOARD::SetVisibleElements( int aMask )
 {
     m_BoardSettings->SetVisibleElements( aMask );
@@ -394,6 +396,54 @@ void BOARD::SetVisibleElements( int aMask )
 int BOARD::GetVisibleElements() const
 {
     return m_BoardSettings->GetVisibleElements();
+}
+
+
+bool BOARD::IsElementVisible( int aPCB_VISIBLE ) const
+{
+    // @todo move these special cases into default, by moving globals into the board.
+    switch( aPCB_VISIBLE )
+    {
+/*
+    case GRID_VISIBLE:
+        myframe->m_Draw_Grid = isEnabled;
+        break;
+*/
+
+    case MOD_FR_VISIBLE:
+        return DisplayOpt.Show_Modules_Cmp;
+
+    case MOD_BK_VISIBLE:
+        return DisplayOpt.Show_Modules_Cu;
+
+    default:
+        return m_BoardSettings->IsElementVisible( aPCB_VISIBLE );
+    }
+}
+
+
+void BOARD::SetElementVisibility( int aPCB_VISIBLE, bool isEnabled )
+{
+    switch( aPCB_VISIBLE )
+    {
+/*
+    case GRID_VISIBLE:
+        myframe->m_Draw_Grid = isEnabled;
+        break;
+*/
+
+    // @todo move these special cases into default, by moving globals into the board.
+    case MOD_FR_VISIBLE:
+        DisplayOpt.Show_Modules_Cmp = isEnabled;
+        break;
+
+    case MOD_BK_VISIBLE:
+        DisplayOpt.Show_Modules_Cu = isEnabled;
+        break;
+
+    default:
+        m_BoardSettings->SetElementVisibility( aPCB_VISIBLE, isEnabled );
+    }
 }
 
 
@@ -410,7 +460,7 @@ int BOARD::GetVisibleElementColor( int aPCB_VISIBLE )
     case VIA_THROUGH_VISIBLE:       color = g_ModuleTextCUColor;    break;
     case MOD_TEXT_FR_VISIBLE:       color = g_ModuleTextCUColor;    break;
     case MOD_TEXT_BK_VISIBLE:       color = g_ModuleTextCUColor;    break;
-    case MOD_TEXT_INVISIBLE:   color = g_ModuleTextNOVColor;   break;
+    case MOD_TEXT_INVISIBLE:        color = g_ModuleTextNOVColor;   break;
     case ANCHOR_VISIBLE:            color = g_AnchorColor;          break;
     case PAD_FR_VISIBLE:            color = g_PadCMPColor;          break;
     case PAD_BK_VISIBLE:            color = g_PadCUColor;           break;
@@ -434,8 +484,8 @@ void BOARD::SetVisibleElementColor( int aPCB_VISIBLE, int aColor )
     case VIA_BBLIND_VISIBLE:        m_BoardSettings->m_ViaColor[VIA_BLIND_BURIED] = aColor;  break;
     case VIA_THROUGH_VISIBLE:       g_ModuleTextCUColor = aColor;       break;
     case MOD_TEXT_FR_VISIBLE:       g_ModuleTextCUColor = aColor;       break;
-    case MOD_TEXT_BK_VISIBLE:  g_ModuleTextCUColor = aColor;            break;
-    case MOD_TEXT_INVISIBLE:   g_ModuleTextNOVColor = aColor;      break;
+    case MOD_TEXT_BK_VISIBLE:       g_ModuleTextCUColor = aColor;            break;
+    case MOD_TEXT_INVISIBLE:        g_ModuleTextNOVColor = aColor;      break;
     case ANCHOR_VISIBLE:            g_AnchorColor = aColor;             break;
     case PAD_FR_VISIBLE:            g_PadCMPColor = aColor;             break;
     case PAD_BK_VISIBLE:            g_PadCUColor = aColor;                      break;

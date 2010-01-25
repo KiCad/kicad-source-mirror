@@ -283,6 +283,9 @@ public:
      */
     void SetVisibleLayers( int aLayerMask );
 
+    // these 2 functions are not tidy at this time, since there are PCB_VISIBLEs that
+    // are not stored in the bitmap.
+
     /**
      * Function GetVisibleElements
      * is a proxy function that calls the correspondent function in m_BoardSettings
@@ -300,6 +303,25 @@ public:
      * @see enum PCB_VISIBLE
      */
     void SetVisibleElements( int aMask );
+
+    /**
+     * Function IsElementVisible
+     * tests whether a given element category is visible. Keep this as an
+     * inline function.
+     * @param aPCB_VISIBLE is from the enum by the same name
+     * @return bool - true if the element is visible.
+     * @see enum PCB_VISIBLE
+     */
+    bool IsElementVisible( int aPCB_VISIBLE ) const;
+
+    /**
+     * Function SetElementVisibility
+     * changes the visibility of an element category
+     * @param aPCB_VISIBLE is from the enum by the same name
+     * @param aNewState = The new visibility state of the element category
+     * @see enum PCB_VISIBLE
+     */
+    void SetElementVisibility( int aPCB_VISIBLE, bool aNewState );
 
     /**
      * Function GetVisibleElementColor

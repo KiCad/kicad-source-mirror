@@ -19,9 +19,9 @@ option(KICAD_CYRILLIC "enable/disable building using cyrillic (needs unicode) (d
 option(wxUSE_UNICODE "enable/disable building unicode (default OFF)")
 option(KICAD_GOST "enable/disable building using GOST notation for multiple gates per package (default OFF)")
 
-
-option(KICAD_AUIMANAGER "Enable use of wxAuiManager (default ON)" ON)
-option(KICAD_AUITOOLBAR "Enable use of wxAuiToolBar (default ON)" ON)
+# these are now mandatorily set to ON, and now done so in CMakeModules/config.h.cmake
+#option(KICAD_AUIMANAGER "Enable use of wxAuiManager (default ON)" ON)
+#option(KICAD_AUITOOLBAR "Enable use of wxAuiToolBar (default ON)" ON)
 
 
 # Comment this out if you don't want to build with Python support.
@@ -138,8 +138,8 @@ if( KICAD_AUIMANAGER OR KICAD_AUITOOLBAR )
 
     # On Apple only wxwidgets 2.9 or higher doesn't need to find aui part of base
     if(APPLE)
-		find_package(wxWidgets COMPONENTS gl adv html core net base QUIET)
-	endif(APPLE)
+        find_package(wxWidgets COMPONENTS gl adv html core net base QUIET)
+    endif(APPLE)
 else( KICAD_AUIMANAGER OR KICAD_AUITOOLBAR )
     find_package(wxWidgets COMPONENTS gl adv html core net base QUIET)
 endif( KICAD_AUIMANAGER OR KICAD_AUITOOLBAR )
