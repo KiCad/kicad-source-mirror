@@ -16,6 +16,7 @@ endif(APPLE)
 
 # Many of the commented out ones are nested in *.cpp files for dialogs
 set(PCBNEW_SRCS
+    pcbframe.cpp
     attribut.cpp
     automove.cpp
     autoplac.cpp
@@ -67,7 +68,6 @@ set(PCBNEW_SRCS
     dialog_netlist.cpp
     dialog_netlist_fbp.cpp
     dialog_pcb_text_properties.cpp
-    zones_non_copper_type_functions.cpp
     dialog_non_copper_zones_properties_base.cpp
     dialog_pad_properties.cpp
     dialog_pad_properties_base.cpp
@@ -109,8 +109,6 @@ set(PCBNEW_SRCS
     hotkeys.cpp
     initpcb.cpp
     ioascii.cpp
-    print_board_functions.cpp
-    printout_controler.cpp
     layer_widget.cpp
     librairi.cpp
     loadcmp.cpp
@@ -132,7 +130,6 @@ set(PCBNEW_SRCS
     netlist.cpp
     onleftclick.cpp
     onrightclick.cpp
-    pcbframe.cpp
     pcbnew.cpp
     pcbnew_config.cpp
     pcbplot.cpp
@@ -141,6 +138,8 @@ set(PCBNEW_SRCS
     plotps.cpp
     plotdxf.cpp
     plot_rtn.cpp
+    print_board_functions.cpp
+    printout_controler.cpp
     queue.cpp
     ratsnest.cpp
     set_color.cpp
@@ -166,6 +165,7 @@ set(PCBNEW_SRCS
     zones_convert_brd_items_to_polygons.cpp
     zone_filling_algorithm.cpp
     zones_functions_for_undo_redo.cpp
+    zones_non_copper_type_functions.cpp
     zones_polygons_insulated_copper_islands.cpp
     zones_polygons_test_connections.cpp
     zones_test_and_combine_areas.cpp

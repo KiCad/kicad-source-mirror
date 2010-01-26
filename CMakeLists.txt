@@ -55,14 +55,6 @@ if(KICAD_GOST)
     add_definitions(-DKICAD_GOST)
 endif(KICAD_GOST)
 
-if(KICAD_AUIMANAGER)
-    add_definitions(-DKICAD_AUIMANAGER)
-endif(KICAD_AUIMANAGER)
-
-if(KICAD_AUITOOLBAR)
-    add_definitions(-DKICAD_AUITOOLBAR)
-endif(KICAD_AUITOOLBAR)
-
 # Locations for install targets.
 set(KICAD_BIN bin
     CACHE PATH "Location of KiCad binaries.")
@@ -133,16 +125,12 @@ check_find_package_result(OPENGL_FOUND "OpenGL")
 # application. You can figure out what libraries you need here;
 # http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
 
-if( KICAD_AUIMANAGER OR KICAD_AUITOOLBAR )
-    find_package(wxWidgets COMPONENTS gl aui adv html core net base QUIET)
-
-    # On Apple only wxwidgets 2.9 or higher doesn't need to find aui part of base
-    if(APPLE)
-        find_package(wxWidgets COMPONENTS gl adv html core net base QUIET)
-    endif(APPLE)
-else( KICAD_AUIMANAGER OR KICAD_AUITOOLBAR )
+# On Apple only wxwidgets 2.9 or higher doesn't need to find aui part of base
+if(APPLE)
     find_package(wxWidgets COMPONENTS gl adv html core net base QUIET)
-endif( KICAD_AUIMANAGER OR KICAD_AUITOOLBAR )
+else(APPLE)
+find_package(wxWidgets COMPONENTS gl aui adv html core net base QUIET)
+endif(APPLE)
 check_find_package_result(wxWidgets_FOUND "wxWidgets")
 
 
