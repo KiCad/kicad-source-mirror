@@ -63,6 +63,21 @@ P1) Fix the color box which shows which layer is selected, or change tool tip.
     It is not tracking layer changes.  Look into WinEDA_PcbFrame::syncLayerBox(),
     which is probably where fix should go.
 
+Dick:
+P2) Write accessors for all items in PCB_VISIBLE such as grid control, so that
+    the write accessor can fire change notifications to known listeners.
+    (Accessors should always be used in general for every class, but in the case
+    of PCB_VISIBLE I think we need them in WinEDA_PcbFrame, BOARD and
+    EDA_Settings.
+    <class>::IsElementVisible( aPCB_VISIBLE );
+    <class>::SetElementVisiblity( aPCB_VISIBLE, bool isVisible );
+    Two of the 3 classes already have these functions.  Once the functions are
+    in place, it is a simple matter to decide and move where the actual data
+    is stored without affecting client code.  The top most access point should
+    be WinEDA_PcbVisible, because some data is best retained there and this is
+    the "controller" part of MVC in PCBNEW.  Some data is best saved in the BOARD.
+    We should go through the list of PCB_VISIBLE and decide on this in a separate email.
+
 *   Fix block copy/move preview to not view only a border, we should
     see the moved/copied parts.
 
@@ -74,18 +89,6 @@ P1) Fix the color box which shows which layer is selected, or change tool tip.
 *   Need to add polygon aperture type.
     Then example 2 in RS274xrevd_e.pdf will draw properly.
 
-*   Complete the migration to PCB_VISIBLEs and put them into the board,
-    including grid, so they are saved with a board.  All drawing code should
-    use BOARD::IsElementVisible() to test, not the EDA_BoardDesignSettings
-    functions for anything in the PCB_VISIBLES enum.  Then eventually we
-    can remove the elements that are contained in the set PCB_VISIBLES from
-    the EDA_BoardDesignSettings and simply leave them in the BOARD.
-
-
-*   Write accessors for grid control, so that the write accessor can fire
-    change notifications to known listeners.  But again, grid boolean should
-    be in the board and accessed via BOARD::IsElementVisible( GRID_VISIBLE );
-
 *   Figure out why BOARD::IsElementVisible( PAD_{FR,BK}_VISIBLE ) is never tested,
     and why the pads cannot be turned off.  Did something get broke?
 
@@ -93,18 +96,15 @@ P1) Fix the color box which shows which layer is selected, or change tool tip.
 
 
 Dick:
-*   Get the nested quote support for DSNLEXER fixed up and committed.
+D1) Get the nested quote support for DSNLEXER fixed up and committed.
 
 
-LAYER_WIDGET for PCBNEW
+LAYER_WIDGET for PCBNEW (Dick)
 -----------------------
-L5) Add to moved popu menu code the ability to save the current layer widget
-    color and enable settings with an additional menu item.
-
-L6) Test, and fix up any remaining issues with the PCB_VISIBLE support, several
-    items which are stored on globals could and should be stored in
-    EDA_Settings.m_VisibleElements using enum PCB_VISIBLE.  Initial Render
-    checkbox settings are probably not correct, for example grid.
+L6) Test, and fix up any remaining issues with the PCB_VISIBLE support after P2)
+    is done.  This way we can fire change notifications to multiple GUI items
+    all interested in the same setting, such as the two grid buttons which
+    have to remain synchronized.  Using accessors makes this easy.
 
 L7) make the bitmapbutton a staticbitmap, and make its size dependent on
     the point size.
@@ -114,6 +114,4 @@ L8) LAYER_WIDGET::GetBestSize() needs platform independence.
 L9) On board load, ReFill() is called, this should also update the Render
     checkboxes and colors.  Will need to extend the widget API.
 
-
-Dick:
-L9) still thinking about background colors, easier now without wxformbuilder.
+L10)still thinking about background colors, easier now without wxformbuilder.
