@@ -89,11 +89,6 @@ P2) Write accessors for all items in PCB_VISIBLE such as grid control, so that
 *   Need to add polygon aperture type.
     Then example 2 in RS274xrevd_e.pdf will draw properly.
 
-*   Figure out why BOARD::IsElementVisible( PAD_{FR,BK}_VISIBLE ) is never tested,
-    and why the pads cannot be turned off.  Did something get broke?
-
-*   Via visibility does not respond to the LAYER_WIDGET.
-
 
 Dick:
 D1) Get the nested quote support for DSNLEXER fixed up and committed.

@@ -38,6 +38,45 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     if( m_Flags & DO_NOT_DRAW )
         return;
 
+    /* We can show/hide pads from the layer manager.
+    * options are show/hide pads on front and/or back side of the board
+    * For through pads, we hide them only if both sides are hidden.
+    * smd pads on back are hidden for all layers (copper and technical layers)
+    * on back side of the board
+    * smd pads on front are hidden for all layers (copper and technical layers)
+    * on front side of the board
+    * ECO, edge and Draw layers and not considered
+    */
+
+    // Mask layers for Back side of board
+    #define BACK_SIDE_LAYERS \
+    (LAYER_BACK | ADHESIVE_LAYER_BACK | SOLDERPASTE_LAYER_BACK\
+    | SILKSCREEN_LAYER_BACK | SOLDERMASK_LAYER_BACK)
+
+    // Mask layers for Front side of board
+    #define FRONT_SIDE_LAYERS \
+    (LAYER_FRONT | ADHESIVE_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT\
+    | SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_FRONT)
+
+    bool frontVisible = g_DesignSettings.IsElementVisible( PCB_VISIBLE(PAD_FR_VISIBLE) );
+    bool backVisible = g_DesignSettings.IsElementVisible( PCB_VISIBLE(PAD_BK_VISIBLE) );
+
+    if( !frontVisible && !backVisible )
+        return;
+
+    /* If pad are only on front side (no layer on back side)
+     * and if hide front side pads is enabled, do not draw
+    */
+    if( !frontVisible && ( (m_Masque_Layer & BACK_SIDE_LAYERS) == 0 ) )
+        return;
+
+    /* If pad are only on back side (no layer on front side)
+     * and if hide back side pads is enabled, do not draw
+    */
+    if( !backVisible && ( (m_Masque_Layer & FRONT_SIDE_LAYERS) == 0 ) )
+        return;
+
+
     WinEDA_BasePcbFrame* frame  = (WinEDA_BasePcbFrame*) panel->GetParent();
     PCB_SCREEN*          screen = frame->GetScreen();
     if( frame->m_DisplayPadFill == FILLED )
@@ -49,10 +88,14 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
 #endif
 
     if( m_Masque_Layer & LAYER_FRONT )
-        color = g_PadCMPColor;
+    {
+            color = g_PadCMPColor;
+    }
 
     if( m_Masque_Layer & LAYER_BACK )
+    {
         color |= g_PadCUColor;
+    }
 
     if( color == 0 ) /* Not on copper layer */
     {
