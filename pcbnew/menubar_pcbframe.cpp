@@ -391,10 +391,12 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( library_xpm );
     configmenu->Append( item );
 
-    /* Colors and Visibility */
-    item = new wxMenuItem( configmenu, ID_COLORS_SETUP,
-                           _( "&Colors and Visibility" ),
-                           _( "Select colors and visibility of layers and some items" ) );
+    /* Colors and Visibility are handled by the layers manager toolbar
+     * that can be shown or hidden
+    */
+    item = new wxMenuItem( configmenu, ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+                           _( "Hide &Layers Manager" ),
+                           _( "Show/hide the layers manager toolbar" ) );
     item->SetBitmap( palette_xpm );
     configmenu->Append( item );
 

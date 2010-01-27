@@ -60,6 +60,12 @@ public:
     int  GetVisibleLayers() const;
 
     /**
+     * Function SetVisibleAlls
+     * Set the bit-mask of all visible elements categories, including layers
+     */
+    void SetVisibleAlls( );
+
+    /**
      * Function SetVisibleLayers
      * changes the bit-mask of visible layers
      * @param aMask = The new bit-mask of visible layers

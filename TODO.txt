@@ -59,9 +59,18 @@ from folks with less than that minimum.
 
 PCBNew
 ------
+P0) JP Charras:
+    We should need to separate color handling from visibility handling:
+    Visibilty variables nus be owned by the current board.
+    (Modedit and Board editor must have separate visibility options:
+     Modedit should have always all items and layers visibles)
+    Colors options must be left global
+    (Modedit and Board editor must have common color options)
+
 P1) Fix the color box which shows which layer is selected, or change tool tip.
     It is not tracking layer changes.  Look into WinEDA_PcbFrame::syncLayerBox(),
     which is probably where fix should go.
+    >> JP Charras: For me this is now working.
 
 Dick:
 P2) Write accessors for all items in PCB_VISIBLE such as grid control, so that

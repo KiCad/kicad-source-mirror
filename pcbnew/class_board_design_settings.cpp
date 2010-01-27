@@ -37,8 +37,7 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
 
     m_EnabledLayers = ALL_LAYERS;                       // All layers enabled at first.
                                                         // SetCopperLayerCount() will adjust this.
-    m_VisibleLayers   = 0xffffffff;                     // All layers visible at first.
-    m_VisibleElements = 0x00000fff;                     // All elements visible at first. TODO: Use a macro for the initial value.
+    SetVisibleAlls( );                                  // All layers  and all elements visible at first.
 
     SetCopperLayerCount( 2 );                           // Default design is a double sided board
 
@@ -82,6 +81,17 @@ int EDA_BoardDesignSettings::GetVisibleLayers() const
     return m_VisibleLayers;
 }
 
+
+/**
+ * Function SetVisibleAlls
+ * Set the bit-mask of all visible elements categories,
+ * including enabled layers
+ */
+void EDA_BoardDesignSettings::SetVisibleAlls( )
+{
+    SetVisibleLayers( FULL_LAYERS );
+    m_VisibleElements = 0xFFFFFFFF;
+}
 
 void EDA_BoardDesignSettings::SetVisibleLayers( int aMask )
 {

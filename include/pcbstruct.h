@@ -300,9 +300,6 @@ public:
                                  * 3 show netnames on tracks and pads
                                  */
 
-    bool Show_Modules_Cmp;
-    bool Show_Modules_Cu;
-
     int  DisplayDrawItems;
     bool ContrastModeDisplay;
 

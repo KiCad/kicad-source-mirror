@@ -7,6 +7,7 @@
 #include "pcbstruct.h"
 #include "macros.h"
 #include "pcbcommon.h"
+#include "class_board_design_settings.h"
 
 #define U_PCB (PCB_INTERNAL_UNIT / EESCHEMA_INTERNAL_UNIT)
 
@@ -71,10 +72,10 @@ extern const wxString g_FootprintLibFileWildcard;   // Wildcard for footprint li
 bool inline IsModuleLayerVisible( int layer )
 {
     if( layer==LAYER_N_FRONT )
-        return DisplayOpt.Show_Modules_Cmp;
+        return g_DesignSettings.IsElementVisible( PCB_VISIBLE(MOD_FR_VISIBLE) );
 
     else if( layer==LAYER_N_BACK )
-        return DisplayOpt.Show_Modules_Cu;
+        return g_DesignSettings.IsElementVisible( PCB_VISIBLE(MOD_BK_VISIBLE) );
 
     else
         return true;

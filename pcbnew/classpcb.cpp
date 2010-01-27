@@ -164,9 +164,6 @@ DISPLAY_OPTIONS::DISPLAY_OPTIONS()
                                       * 1 show netnames on pads
                                       * 2 show netnames on tracks
                                       * 3 show netnames on tracks and pads */
-    Show_Modules_Cmp        = true;
-    Show_Modules_Cu         = true;
-
     DisplayDrawItems        = true;
     ContrastModeDisplay     = false;
 }

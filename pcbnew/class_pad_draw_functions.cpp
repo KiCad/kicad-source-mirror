@@ -469,7 +469,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     GRSetDrawMode( DC, draw_mode );
 
     /* Draw "No connect" ( / or \ or cross X ) if necessary. : */
-    if( m_Netname.IsEmpty() && DisplayOpt.DisplayPadNoConn )
+    if( m_Netname.IsEmpty() && g_DesignSettings.IsElementVisible( PCB_VISIBLE(NO_CONNECTS_VISIBLE) ) )
     {
         dx0 = MIN( dx0, dy0 );
         int nc_color = BLUE;

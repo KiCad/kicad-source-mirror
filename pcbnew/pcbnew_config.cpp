@@ -38,8 +38,16 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_COLORS_SETUP:
-        DisplayColorSetupFrame( this, pos );
+    case ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG:
+        if( m_OptionsToolBar )
+        {   //This command is same as the Options Vertical Toolbar
+            // tool Show/hide layers manager
+            bool state = m_OptionsToolBar->GetToolState(ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR);
+            m_OptionsToolBar->ToggleTool(ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR, !state);
+            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED,
+                                  ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR );
+            wxPostEvent( this, event );
+        }
         break;
 
     case ID_PCB_LAYERS_SETUP:
@@ -185,21 +193,7 @@ bool WinEDA_PcbFrame::Read_Config( const wxString& projectFileName )
      *  Because it could creates SERIOUS mistakes for the user,
      * if some items are not visible after loading a board...
      */
-    g_DesignSettings.SetVisibleLayers( FULL_LAYERS );
-
-    DisplayOpt.Show_Modules_Cmp = true;
-    DisplayOpt.Show_Modules_Cu = true;
-    g_DesignSettings.SetElementVisibility( MOD_TEXT_INVISIBLE, true );
-    g_DesignSettings.SetElementVisibility( MOD_TEXT_FR_VISIBLE, true );
-    g_DesignSettings.SetElementVisibility( MOD_TEXT_BK_VISIBLE, true );
-    g_DesignSettings.SetElementVisibility( PAD_BK_VISIBLE, true );
-    g_DesignSettings.SetElementVisibility( PAD_BK_VISIBLE, true );
-    g_DesignSettings.SetElementVisibility( VIA_THROUGH_VISIBLE, true );
-    g_DesignSettings.SetElementVisibility( VIA_BBLIND_VISIBLE, true );
-    g_DesignSettings.SetElementVisibility( VIA_MICROVIA_VISIBLE, true );
-
-    // Items that can remain not visible: comment them if you want.
-    g_DesignSettings.SetElementVisibility( ANCHOR_VISIBLE, true );
+    g_DesignSettings.SetVisibleAlls( );
 
     DisplayOpt.DisplayPadNoConn = true;
     return TRUE;

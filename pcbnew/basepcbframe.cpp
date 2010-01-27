@@ -59,8 +59,8 @@ WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow*       father,
     m_DisplayViaFill      = true;   // How to draw vias
     m_DisplayPadNum       = true;   // show pads number
 
-    m_DisplayModEdge      = FILLED; // How to show module drawings
-    m_DisplayModText      = FILLED; // How to show module texts
+    m_DisplayModEdge      = FILLED; // How to display module drawings (line/ filled / sketch)
+    m_DisplayModText      = FILLED; // How to display module texts (line/ filled / sketch)
     m_DisplayPcbTrackFill = true;   /* FALSE = sketch , true = filled */
     m_Draw3DFrame         = NULL;   // Display Window in 3D mode (OpenGL)
     m_ModuleEditFrame     = NULL;   // Frame for footprint edition
@@ -280,8 +280,8 @@ GENERAL_COLLECTORS_GUIDE WinEDA_BasePcbFrame::GetCollectorsGuide()
     guide.SetIgnoreMTextsMarkedNoShow( ! g_DesignSettings.IsElementVisible( MOD_TEXT_INVISIBLE ));
     guide.SetIgnoreMTextsOnCopper( ! g_DesignSettings.IsElementVisible( MOD_TEXT_BK_VISIBLE ));
     guide.SetIgnoreMTextsOnCmp( ! g_DesignSettings.IsElementVisible( MOD_TEXT_FR_VISIBLE ));
-    guide.SetIgnoreModulesOnCu( !DisplayOpt.Show_Modules_Cu );
-    guide.SetIgnoreModulesOnCmp( !DisplayOpt.Show_Modules_Cmp );
+    guide.SetIgnoreModulesOnCu( !g_DesignSettings.IsElementVisible( MOD_BK_VISIBLE ) );
+    guide.SetIgnoreModulesOnCmp( !g_DesignSettings.IsElementVisible( MOD_FR_VISIBLE ) );
 
     return guide;
 }

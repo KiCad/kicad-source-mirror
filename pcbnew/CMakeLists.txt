@@ -142,7 +142,7 @@ set(PCBNEW_SRCS
     printout_controler.cpp
     queue.cpp
     ratsnest.cpp
-    set_color.cpp
+#    set_color.cpp
     set_grid.cpp
     solve.cpp
     specctra.cpp

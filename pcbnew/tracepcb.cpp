@@ -151,14 +151,14 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
         if( module->m_Flags & IS_MOVED )
             continue;
 
-        if( !DisplayOpt.Show_Modules_Cmp )
+        if( !g_DesignSettings.IsElementVisible( PCB_VISIBLE(MOD_FR_VISIBLE) ) )
         {
             if( module->GetLayer() == LAYER_N_FRONT )
                 display = FALSE;
             layerMask &= ~LAYER_FRONT;
         }
 
-        if( !DisplayOpt.Show_Modules_Cu )
+        if( !g_DesignSettings.IsElementVisible( PCB_VISIBLE(MOD_BK_VISIBLE) ) )
         {
             if( module->GetLayer() == LAYER_N_BACK )
                 display = FALSE;

@@ -390,13 +390,6 @@ void DisplayBoard( WinEDA_DrawPanel* panel, wxDC* DC );    /* for Debugging */
 MODULE* ListAndSelectModuleName( COMMAND* Cmd );
 
 
-/*****************/
-/* SET_COLOR.CPP */
-/*****************/
-void DisplayColorSetupFrame( WinEDA_PcbFrame* parent,
-                             const wxPoint&   framepos );
-
-
 /***************************/
 /* DIALOG_LAYERS_SETUP.CPP */
 /***************************/

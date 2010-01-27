@@ -199,30 +199,6 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( FILE* File, int* LineNum )
             continue;
         }
 
-        if( stricmp( data, "VisibleLayers" ) == 0 )
-        {
-            int VisibleLayers = 0;
-            data = strtok( NULL, " =\n\r" );
-            sscanf( data, "%X", &VisibleLayers );
-
-            // Setup layer visibility
-            GetBoard()->SetVisibleLayers( VisibleLayers );
-
-            continue;
-        }
-
-        if( stricmp( data, "VisibleElements" ) == 0 )
-        {
-            int VisibleElements = 0;
-            data = strtok( NULL, " =\n\r" );
-            sscanf( data, "%X", &VisibleElements );
-
-            // Setup elements visibility
-            GetBoard()->SetVisibleElements( VisibleElements );
-
-            continue;
-        }
-
         if( strncmp( data, "Ly", 2 ) == 0 )    // Old format for Layer count
         {
             int Masque_Layer = 1, ii;
@@ -741,8 +717,6 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
              "Ly %8X\n",
              g_TabAllCopperLayerMask[NbLayers - 1] | ALL_NO_CU_LAYERS );
     fprintf( File, "EnabledLayers %08X\n", GetBoard()->GetEnabledLayers() );
-    fprintf( File, "VisibleLayers %08X\n", GetBoard()->GetVisibleLayers() );
-    fprintf( File, "VisibleElements %08X\n", GetBoard()->GetVisibleElements() );
     fprintf( File, "Links %d\n", GetBoard()->GetRatsnestsCount() );
     fprintf( File, "NoConn %d\n", GetBoard()->m_NbNoconnect );
 

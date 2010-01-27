@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-25 21:03+0100\n"
-"PO-Revision-Date: 2010-01-25 21:03+0100\n"
+"PO-Revision-Date: 2010-01-26 20:02+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -6234,9 +6234,8 @@ msgid "Delete tracks, modules, texts... on board"
 msgstr "Effacer pistes, modules, textes... sur le C.I."
 
 #: pcbnew/menubar_pcbframe.cpp:291
-#, fuzzy
 msgid "&Cleanup Tracks and Vias"
-msgstr "Changer Taille Pistes et Vias"
+msgstr "&Nettoyer Pistes et Vias"
 
 #: pcbnew/menubar_pcbframe.cpp:292
 msgid "Clean stubs, vias, delete break points, or connect dangling tracks to pads and vias"

@@ -409,13 +409,6 @@ bool BOARD::IsElementVisible( int aPCB_VISIBLE ) const
         myframe->m_Draw_Grid = isEnabled;
         break;
 */
-
-    case MOD_FR_VISIBLE:
-        return DisplayOpt.Show_Modules_Cmp;
-
-    case MOD_BK_VISIBLE:
-        return DisplayOpt.Show_Modules_Cu;
-
     default:
         return m_BoardSettings->IsElementVisible( aPCB_VISIBLE );
     }
@@ -431,15 +424,6 @@ void BOARD::SetElementVisibility( int aPCB_VISIBLE, bool isEnabled )
         myframe->m_Draw_Grid = isEnabled;
         break;
 */
-
-    // @todo move these special cases into default, by moving globals into the board.
-    case MOD_FR_VISIBLE:
-        DisplayOpt.Show_Modules_Cmp = isEnabled;
-        break;
-
-    case MOD_BK_VISIBLE:
-        DisplayOpt.Show_Modules_Cu = isEnabled;
-        break;
 
     default:
         m_BoardSettings->SetElementVisibility( aPCB_VISIBLE, isEnabled );

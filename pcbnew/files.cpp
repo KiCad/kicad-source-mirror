@@ -245,11 +245,11 @@ this file again."));
     /* Rebuild the new pad list (for drc and ratsnet control ...) */
     GetBoard()->m_Status_Pcb = 0;
 
-    /* Reset the layers visibility flag when loading a new config
+    /* Reset the layers and items visibility flag when loading a new config
      *  Because it could creates SERIOUS mistakes for the user,
-     * if some layers are not visible after loading a board...
+     * if some enabled layers or items are not visible after loading a board...
      */
-    GetBoard()->SetVisibleLayers( GetBoard()->GetEnabledLayers() );
+    GetBoard()->m_BoardSettings->SetVisibleAlls( );
 
     // Update info shown by the horizontal toolbars
     GetBoard()->SetCurrentNetClass( NETCLASS::Default );

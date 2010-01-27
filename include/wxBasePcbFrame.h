@@ -54,8 +54,8 @@ public:
     bool m_DisplayViaFill;          // How show vias
     bool m_DisplayPadNum;           // show pads numbers
 
-    int  m_DisplayModEdge;          // How show module drawings
-    int  m_DisplayModText;          // How show module texts
+    int  m_DisplayModEdge;          // How to display module drawings (line/ filled / sketch)
+    int  m_DisplayModText;          // How to display module texts (line/ filled / sketch)
     bool m_DisplayPcbTrackFill;     /* FALSE : tracks are show in sketch mode,
                                      * TRUE = filled */
     int  m_UserGridUnits;

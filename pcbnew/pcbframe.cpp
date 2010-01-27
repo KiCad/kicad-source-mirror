@@ -364,11 +364,6 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 
         RATSNEST_VISIBLE,
         GRID_VISIBLE,   ? maybe not this one
-
-        NO_CONNECTS_VISIBLE,
-        MOD_FR_VISIBLE,
-        MOD_BK_VISIBLE,
-
         into m_VisibleElements and get rid of globals.
 
         2) Add IsElementVisible() & SetVisibleElement() to class BOARD
@@ -456,7 +451,8 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
                     ID_CONFIG_AND_PREFERENCES_END,
                     WinEDA_PcbFrame::Process_Config )
 
-    EVT_MENU( ID_COLORS_SETUP, WinEDA_PcbFrame::Process_Config )
+    EVT_MENU( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+                WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_OPTIONS_SETUP, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_PCB_LAYERS_SETUP, WinEDA_PcbFrame::Process_Config )
     EVT_MENU( ID_PCB_MASK_CLEARANCE, WinEDA_PcbFrame::Process_Config )
