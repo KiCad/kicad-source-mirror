@@ -7,7 +7,7 @@ email address.
 2010-Jan-27 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++ Pcbnew:
-    Code cleaning about visibility variables (dulpicates) in draw functions.
+    Code cleaning about visibility variables (duplicates) in draw functions.
     Removed old color and visiblity dialog
     work in progress
 
