@@ -178,6 +178,8 @@ enum PCB_VISIBLE
     NO_CONNECTS_VISIBLE,        ///< show a marker on pads with no nets
     MOD_FR_VISIBLE,             ///< show modules on front
     MOD_BK_VISIBLE,             ///< show modules on back
+    MOD_VALUES_VISIBLE,         ///< show modules values (when texts are visibles)
+    MOD_REFERENCES_VISIBLE,     ///< show modules references (when texts are visibles)
 
     END_VISIBLE  // sentinel
 };

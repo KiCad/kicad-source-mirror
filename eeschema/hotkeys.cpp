@@ -468,6 +468,8 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                 break;
             if( DrawStruct->Type() == TYPE_SCH_COMPONENT )
                 DrawStruct = LocateSmallestComponent( GetScreen() );
+            if( DrawStruct == NULL )
+                break;
             if( DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE ){
             	// If it's a sheet, then check if a pinsheet is under the cursor
             	SCH_SHEET_PIN* slabel = LocateSheetLabel( (SCH_SHEET*) DrawStruct,
@@ -477,10 +479,8 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
             }
             if (DrawStruct->Type() == DRAW_JUNCTION_STRUCT_TYPE){
             	// If it's a junction, pick the underlying wire instead
-            	DrawStruct = PickStruct( GetScreen()->m_Curseur,
-            	                                     GetScreen(), WIREITEM);
+            	DrawStruct = PickStruct( GetScreen()->m_Curseur, GetScreen(), WIREITEM);
             }
-
             if( DrawStruct == NULL )
                 break;
         }

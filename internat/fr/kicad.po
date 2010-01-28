@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-27 21:22+0100\n"
-"PO-Revision-Date: 2010-01-27 21:23+0100\n"
+"PO-Revision-Date: 2010-01-28 11:33+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -7484,7 +7484,7 @@ msgstr "Pin"
 
 #: eeschema/class_pin.cpp:1609
 msgid "Number"
-msgstr "Nombre"
+msgstr "Numéro"
 
 #: eeschema/database.cpp:49
 msgid "No components found matching "

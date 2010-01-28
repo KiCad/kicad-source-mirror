@@ -70,7 +70,7 @@ void MODULE::DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset
 
     GRSetDrawMode( DC, draw_mode );
 
-    if( g_DesignSettings.IsElementVisible( ANCHOR_VISIBLE ) )
+    if( ((BOARD*)m_Parent)->IsElementVisible( ANCHOR_VISIBLE ) )
     {
         GRLine( &panel->m_ClipBox, DC,
                 m_Pos.x - offset.x - anchor_size, m_Pos.y - offset.y,
@@ -190,15 +190,22 @@ void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         pad->Draw( panel, DC, draw_mode, offset );
     }
 
+    
     // Draws footprint anchor
     DrawAncre( panel, DC, offset, DIM_ANCRE_MODULE, draw_mode );
 
     /* Draw graphic items */
-    if( !(m_Reference->m_Flags & IS_MOVED) )
-        m_Reference->Draw( panel, DC, draw_mode, offset );
+    if( ((BOARD*)m_Parent)->IsElementVisible( MOD_REFERENCES_VISIBLE ) )
+    {
+        if( !(m_Reference->m_Flags & IS_MOVED) )
+            m_Reference->Draw( panel, DC, draw_mode, offset );
+    }
 
-    if( !(m_Value->m_Flags & IS_MOVED) )
-        m_Value->Draw( panel, DC, draw_mode, offset );
+    if( ((BOARD*)m_Parent)->IsElementVisible( MOD_VALUES_VISIBLE ) )
+    {
+        if( !(m_Value->m_Flags & IS_MOVED) )
+            m_Value->Draw( panel, DC, draw_mode, offset );
+    }
 
     for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
     {

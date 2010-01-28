@@ -5,10 +5,6 @@
 #ifndef _EELAYER_H_
 #define _EELAYER_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "eelayer.cpp"
-#endif
-
 #include "wx/statline.h"
 
 class wxBoxSizer;

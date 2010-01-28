@@ -106,7 +106,7 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( WinEDA_PcbFrame* aParent, wxWindow* aFocusOw
     // is changed before appending to the LAYER_WIDGET.  This is an automatic variable
     // not a static variable, change the color & state after copying from code to renderRows
     // on the stack.
-    LAYER_WIDGET::ROW renderRows[14] = {
+    LAYER_WIDGET::ROW renderRows[16] = {
 
 #define RR  LAYER_WIDGET::ROW   // Render Row abreviation to reduce source width
 
@@ -128,6 +128,8 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( WinEDA_PcbFrame* aParent, wxWindow* aFocusOw
         RR( _( "No-Connects" ),     NO_CONNECTS_VISIBLE,    -1,         _( "Show a marker on pads which have no net connected" ) ),
         RR( _( "Modules Front" ),   MOD_FR_VISIBLE,         -1,         _( "Show footprints that are on board's front") ),
         RR( _( "Modules Back" ),    MOD_BK_VISIBLE,         -1,         _( "Show footprints that are on board's back") ),
+        RR( _( "Values" ),          MOD_VALUES_VISIBLE,     -1,         _( "Show footprints values") ),
+        RR( _( "References" ),      MOD_REFERENCES_VISIBLE, -1,         _( "Show footprints references") ),
     };
 
     for( unsigned row=0;  row<DIM(renderRows);  ++row )

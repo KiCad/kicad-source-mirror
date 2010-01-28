@@ -18,6 +18,15 @@
 #include "pcbplot.h"
 #include "protos.h"
 
+// Local functions:
+/* Trace the pads of a module in sketch mode.
+ * Used to display pads when when the module visibility is set to not visible 
+ * and we want to see pad through.
+ * The pads must appear on the layers selected in MasqueLayer
+ */
+static void Trace_Pads_Only( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module,
+                      int ox, int oy, int MasqueLayer, int draw_mode );
+
 
 /* Draw the footprint editor BOARD, and others elements : axis, grid ..
  */
@@ -235,3 +244,35 @@ void BOARD::DrawHighLight( WinEDA_DrawPanel* aDrawPanel, wxDC* DC, int aNetCode 
         }
     }
 }
+
+
+/* Trace the pads of a module in sketch mode.
+ * Used to display pads when when the module visibility is set to not visible 
+ * and we want to see pad through.
+ * The pads must appear on the layers selected in MasqueLayer
+ */
+void Trace_Pads_Only( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module,
+                      int ox, int oy, int MasqueLayer, int draw_mode )
+{
+    int                  tmp;
+    PCB_SCREEN*          screen;
+    WinEDA_BasePcbFrame* frame;
+
+    screen = (PCB_SCREEN*) panel->GetScreen();
+    frame  = (WinEDA_BasePcbFrame*) panel->GetParent();
+
+    tmp = frame->m_DisplayPadFill;
+    frame->m_DisplayPadFill = FALSE;
+
+    /* Draw pads. */
+    for( D_PAD* pad = Module->m_Pads;  pad;  pad = pad->Next() )
+    {
+        if( (pad->m_Masque_Layer & MasqueLayer) == 0 )
+            continue;
+
+        pad->Draw( panel, DC, draw_mode, wxPoint( ox, oy ) );
+    }
+
+    frame->m_DisplayPadFill = tmp;
+}
+

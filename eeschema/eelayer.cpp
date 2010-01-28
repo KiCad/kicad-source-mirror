@@ -5,10 +5,6 @@
 /* Set up color Layers for EESchema
  */
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma implementation "eelayer.h"
-#endif
-
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"

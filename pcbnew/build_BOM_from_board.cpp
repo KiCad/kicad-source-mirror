@@ -97,30 +97,29 @@ void WinEDA_PcbFrame::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     cmp*              comp = NULL;
     CmpList::iterator iter;
     int i = 1;
-    for( ; Module != NULL; Module = Module->Next() )
+    while (Module != NULL)
     {
         bool valExist = false;
 
-        if( comp != NULL )
+        // try to find component in existing list
+        for( iter = list.begin(); iter != list.end(); iter++ )
         {
-            for( iter = list.begin(); iter != list.end(); iter++ )
+            cmp* current = *iter;
+            if( (current->m_Val == Module->m_Value->m_Text) && (current->m_Pkg == Module->m_LibRef) )
             {
-                cmp* current = *iter;
-                if( (current->m_Val == Module->m_Value->m_Text) && (current->m_Pkg == Module->m_LibRef) )
-                {
-                    current->m_Ref.Append( wxT( ", " ), 1 );
-                    current->m_Ref.Append( Module->m_Reference->m_Text );
-                    comp->m_CmpCount++;
+                current->m_Ref.Append( wxT( ", " ), 1 );
+                current->m_Ref.Append( Module->m_Reference->m_Text );
+                current->m_CmpCount++;
 
-                    valExist = true;
-                    break;
-                }
+                valExist = true;
+                break;
             }
         }
 
-        if( !valExist || (comp == NULL) )
+        // If component does not exist yet, create new one and append it to the list.
+        if( valExist == false )
         {
-            comp        = new cmp();
+            comp          = new cmp();
             comp->m_Id    = i++;
             comp->m_Val   = Module->m_Value->m_Text;
             comp->m_Ref   = Module->m_Reference->m_Text;
@@ -128,6 +127,9 @@ void WinEDA_PcbFrame::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
             comp->m_CmpCount = 1;
             list.Append( comp );
         }
+        
+        // increment module
+        Module = Module->Next();
     }
 
     // Print list

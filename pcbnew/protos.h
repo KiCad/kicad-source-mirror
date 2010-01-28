@@ -77,23 +77,6 @@ void Trace_Une_Piste( WinEDA_DrawPanel* panel,
 
 
 /****************/
-/* TRACEMOD.C : */
-/****************/
-
-/* Trace the pads of a module in sketch mode.
- * Used to display a module pads when it is not displayed by the display
- * options Module.
- * The pads must appear on the data layers by MasqueLayer
- */
-void Trace_Pads_Only( WinEDA_DrawPanel* panel,
-                      wxDC*             DC,
-                      MODULE*           Module,
-                      int               ox,
-                      int               oy,
-                      int               MasqueLayer,
-                      int               mode_color );
-
-/****************/
 /* LOCATE.CPP : */
 /****************/
 
