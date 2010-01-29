@@ -61,6 +61,7 @@ WinEDA_SelectCmp::WinEDA_SelectCmp( WinEDA_DrawFrame* parent,
 
     m_TextCtrl = new wxTextCtrl( this, ID_ENTER_NAME, m_Text );
     m_TextCtrl->SetInsertionPoint( 1 );
+    m_TextCtrl->SetFocus();
     LeftBoxSizer->Add( m_TextCtrl,
                        0,
                        wxGROW | wxLEFT | wxRIGHT | wxBOTTOM | wxADJUST_MINSIZE,
