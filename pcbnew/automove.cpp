@@ -65,7 +65,7 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
     }
 
     /* Erase ratsnest if needed */
-    if( g_Show_Ratsnest )
+    if( GetBoard()->IsElementVisible(RATSNEST_VISIBLE) )
         DrawGeneralRatsnest( &dc );
     GetBoard()->m_Status_Pcb |= DO_NOT_SHOW_GENERAL_RASTNEST;
 

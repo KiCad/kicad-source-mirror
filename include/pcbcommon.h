@@ -36,12 +36,6 @@ extern const wxString PcbFileWildcard;
 extern wxString g_ViaType_Name[4];
 
 extern int g_CurrentVersionPCB;
-extern int g_AnchorColor;
-extern int g_ModuleTextCMPColor;
-extern int g_ModuleTextCUColor;
-extern int g_ModuleTextNOVColor;
-extern int g_PadCUColor;
-extern int g_PadCMPColor;
 
 
 extern int    g_TimeOut;            // Timer for automatic saving

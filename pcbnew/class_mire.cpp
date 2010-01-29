@@ -10,6 +10,7 @@
 
 #include "pcbnew.h"
 #include "class_board_design_settings.h"
+#include "colors_selection.h"
 #include "trigo.h"
 #include "protos.h"
 
@@ -109,7 +110,7 @@ void MIREPCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     if( g_DesignSettings.IsLayerVisible( m_Layer ) == false )
         return;
 
-    gcolor = g_DesignSettings.m_LayerColor[m_Layer];
+    gcolor = g_ColorsSettings.GetLayerColor(m_Layer);
 
     GRSetDrawMode( DC, mode_color );
     typeaff = DisplayOpt.DisplayDrawItems;

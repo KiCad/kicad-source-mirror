@@ -14,6 +14,7 @@
 #include "pcbnew.h"
 #include "zones.h"
 #include "class_board_design_settings.h"
+#include "colors_selection.h"
 
 #include "protos.h"
 
@@ -443,9 +444,10 @@ void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, con
 
     wxPoint seg_start, seg_end;
     int     curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-    int     color = g_DesignSettings.m_LayerColor[m_Layer];
+    int     color = g_ColorsSettings.GetLayerColor(m_Layer);
 
-    if( g_DesignSettings.IsLayerVisible( m_Layer ) == false && ( color & HIGHT_LIGHT_FLAG ) != HIGHT_LIGHT_FLAG )
+    if( g_DesignSettings.IsLayerVisible( m_Layer ) == false &&
+        ( color & HIGHT_LIGHT_FLAG ) != HIGHT_LIGHT_FLAG )
         return;
 
     GRSetDrawMode( DC, draw_mode );
@@ -531,7 +533,7 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
         return;
 
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-    int color = g_DesignSettings.m_LayerColor[m_Layer];
+    int color = g_ColorsSettings.GetLayerColor(m_Layer);
 
     if( g_DesignSettings.IsLayerVisible( m_Layer ) == false && ( color & HIGHT_LIGHT_FLAG ) != HIGHT_LIGHT_FLAG )
         return;
@@ -685,7 +687,7 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( WinEDA_DrawPanel* panel, wxDC* DC, 
     if( DC == NULL )
         return;
     int     curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-    int     color = g_DesignSettings.m_LayerColor[m_Layer & 31] & MASKCOLOR;
+    int     color = g_ColorsSettings.GetLayerColor(m_Layer) & MASKCOLOR;
 
     if( DisplayOpt.ContrastModeDisplay )
     {

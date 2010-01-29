@@ -11,6 +11,7 @@
 #include "drawtxt.h"
 #include "confirm.h"
 #include "class_board_design_settings.h"
+#include "colors_selection.h"
 
 #include "3d_viewer.h"
 #include "trackball.h"
@@ -362,7 +363,7 @@ void Pcb3D_GLCanvas::Draw3D_Track( TRACK* track )
     if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
         return;
 
-    int color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
+    int color = g_ColorsSettings.GetLayerColor(layer);
 
     if( layer == LAST_COPPER_LAYER )
         layer = g_Parm_3D_Visu.m_Layers - 1;
@@ -392,7 +393,7 @@ void Pcb3D_GLCanvas::Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* zone_c )
     if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
         return;
 
-    int color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
+    int color = g_ColorsSettings.GetLayerColor(layer);
 
     if( layer == LAST_COPPER_LAYER )
         layer = g_Parm_3D_Visu.m_Layers - 1;
@@ -467,14 +468,14 @@ void Pcb3D_GLCanvas::Draw3D_Via( SEGVIA* via )
             if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) ==
                 false )
                 continue;
-            color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
+            color = g_ColorsSettings.GetLayerColor(layer);
         }
         else
         {
             if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( LAYER_N_FRONT ) ==
                 false )
                 continue;
-            color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[LAYER_N_FRONT];
+            color = g_ColorsSettings.GetLayerColor(LAYER_N_FRONT);
         }
 
         SetGLColor( color );
@@ -491,7 +492,7 @@ void Pcb3D_GLCanvas::Draw3D_Via( SEGVIA* via )
     }
 
     // Drawing hole:
-    color = g_Parm_3D_Visu.m_BoardSettings->m_ViaColor[via->m_Shape];
+    color =  g_ColorsSettings.GetItemColor(VIAS_VISIBLE + via->m_Shape);
     SetGLColor( color );
     height = g_Parm_3D_Visu.m_LayerZcoord[top_layer] -
              g_Parm_3D_Visu.m_LayerZcoord[bottom_layer];
@@ -510,7 +511,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawSegment( DRAWSEGMENT* segment )
     if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
         return;
 
-    int color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
+    int color = g_ColorsSettings.GetLayerColor(layer);
 
     SetGLColor( color );
     w  = segment->m_Width * g_Parm_3D_Visu.m_BoardScale;
@@ -596,7 +597,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
     if( !Get3DLayerEnable( layer ) )
         return;
 
-    int color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
+    int color = g_ColorsSettings.GetLayerColor(layer);
 
 
     SetGLColor( color );
@@ -730,7 +731,7 @@ void EDGE_MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
     if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( m_Layer ) == false )
         return;
 
-    int color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[m_Layer];
+    int color = g_ColorsSettings.GetLayerColor(m_Layer);
 
 
     SetGLColor( color );
@@ -838,7 +839,7 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
             if( (layer > FIRST_COPPER_LAYER) && (layer < LAST_COPPER_LAYER)
                && !Both )
                 continue;
-            color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
+            color = g_ColorsSettings.GetLayerColor(layer);
             if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) ==
                 false )
                 continue;
@@ -890,7 +891,7 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
                 if( (layer > FIRST_COPPER_LAYER)
                    && (layer < LAST_COPPER_LAYER) && !Both )
                     continue;
-                color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
+                color = g_ColorsSettings.GetLayerColor(layer);
                 glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
                 if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) ==
                     false )
@@ -968,7 +969,7 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
             if( (layer > FIRST_COPPER_LAYER) && (layer < LAST_COPPER_LAYER)
                && !Both )
                 continue;
-            color = g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[layer];
+            color = g_ColorsSettings.GetLayerColor(layer);
             glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
             if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) ==
                 false )

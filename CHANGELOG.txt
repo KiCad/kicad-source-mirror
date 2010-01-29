@@ -4,6 +4,37 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-Jan-29 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+ ++ All:
+    added a test to solve a problem when cross compiling Kicad under Linux for Windows
+    Specific to countries that use a comma as separators in floating point numbers notation:
+    Depending on wxWideget version:
+        printed as 0,5 and read as 0.5
+        or
+        printed as 0.5 and read as 0,5
+    So float values are always broken in dialogs (many are seen as 0)
+    Now a test is made, and if there are problems relative to floats
+    (write/read conversion error),
+    use the C convention (always a point as separator)
+    
+ ++ eeschema:
+    Removed metrics grid values, that cannot be handled in schematic.
+    (because 2 items are seen as connected if they have the same coordinates
+    mixing mm and mils with internal units = 1 mil break netlist
+    and ERC calculations
+    So grid value *must* be an integer (in 1/1000 inch).
+    And metric grid is not very useful in schematic.
+    (Also 1 mil and 0.025 mm can be seen as the same value for a schematic that do not
+    needs precision in dimensions, so no need to have mils and mm in grid values)
+
+++ pcbnew:
+    Starting work on color selection and items visibility
+    * code cleaning and removing global values.
+    * Separe visibility options for board editor and module editor
+    (work in progress, just starting)
+
+
 2010-Jan-28 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
  *fixed eeschema crash when using the hotkey m (move) command.

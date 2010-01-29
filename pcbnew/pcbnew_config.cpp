@@ -12,7 +12,6 @@
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
 #include "pcbplot.h"
-#include "pcbnew_config.h"
 #include "worksheet.h"
 #include "pcbnew_id.h"
 #include "hotkeys.h"
@@ -21,6 +20,7 @@
 #include "dialog_mask_clearance.h"
 #include "dialog_general_options.h"
 
+#include "pcbnew_config.h"
 
 #define HOTKEY_FILENAME wxT( "pcbnew" )
 
@@ -193,7 +193,7 @@ bool WinEDA_PcbFrame::Read_Config( const wxString& projectFileName )
      *  Because it could creates SERIOUS mistakes for the user,
      * if some items are not visible after loading a board...
      */
-    g_DesignSettings.SetVisibleAlls( );
+    GetBoard()->m_BoardSettings->SetVisibleAlls( );
 
     DisplayOpt.DisplayPadNoConn = true;
     return TRUE;

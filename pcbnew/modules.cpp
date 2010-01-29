@@ -104,7 +104,7 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
     DrawPanel->MouseToCursorSchema();
 
     /* Show ratsnest. */
-    if( g_Show_Ratsnest )
+    if( GetBoard()->IsElementVisible(RATSNEST_VISIBLE) )
         DrawGeneralRatsnest( DC );
 
     if( g_DragSegmentList ) /* Should not occur ! */
@@ -224,7 +224,7 @@ void Abort_MoveOrCopyModule( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     // Display ratsnest is allowed
     pcbframe->GetBoard()->m_Status_Pcb &= ~DO_NOT_SHOW_GENERAL_RASTNEST;
-    if( g_Show_Ratsnest )
+    if( pcbframe->GetBoard()->IsElementVisible(RATSNEST_VISIBLE) )
         pcbframe->DrawGeneralRatsnest( DC );
 }
 
@@ -365,7 +365,7 @@ void WinEDA_PcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
         }
 
         /* Show ratsnest if necessary. */
-        if( DC && g_Show_Ratsnest )
+        if( DC && GetBoard()->IsElementVisible(RATSNEST_VISIBLE) )
             DrawGeneralRatsnest( DC );
 
         g_Offset_Module.x = 0;
@@ -518,7 +518,7 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
             DrawPanel->PostDirtyRect( module->GetBoundingBox() );
             module->m_Flags = tmp;
 
-            if( g_Show_Ratsnest )
+            if( GetBoard()->IsElementVisible(RATSNEST_VISIBLE) )
                 DrawGeneralRatsnest( DC );
         }
     }

@@ -15,6 +15,7 @@
 
 #include "pcbnew.h"
 #include "class_board_design_settings.h"
+#include "colors_selection.h"
 
 #include "autorout.h"
 #include "drag.h"
@@ -72,14 +73,15 @@ void MODULE::DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset
 
     if( ((BOARD*)m_Parent)->IsElementVisible( ANCHOR_VISIBLE ) )
     {
+        int color = g_ColorsSettings.GetItemColor(ANCHOR_VISIBLE);
         GRLine( &panel->m_ClipBox, DC,
                 m_Pos.x - offset.x - anchor_size, m_Pos.y - offset.y,
                 m_Pos.x - offset.x + anchor_size, m_Pos.y - offset.y,
-                0, g_AnchorColor );
+                0, color );
         GRLine( &panel->m_ClipBox, DC,
                 m_Pos.x - offset.x, m_Pos.y - offset.y - anchor_size,
                 m_Pos.x - offset.x, m_Pos.y - offset.y + anchor_size,
-                0, g_AnchorColor );
+                0, color );
     }
 }
 

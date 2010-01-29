@@ -214,9 +214,9 @@ void WinEDA_PcbFrame::SetToolbars()
                                       m_CursorShape );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_RATSNEST,
-                                      g_Show_Ratsnest );
+                                      GetBoard()->IsElementVisible(RATSNEST_VISIBLE) );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_RATSNEST,
-                                            g_Show_Ratsnest ?
+                                            GetBoard()->IsElementVisible(RATSNEST_VISIBLE) ?
                                             _( "Hide board ratsnest" ) :
                                             _( "Show board ratsnest" ) );
 

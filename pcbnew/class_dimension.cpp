@@ -10,6 +10,7 @@
 #include "wxstruct.h"
 #include "class_board_design_settings.h"
 #include "class_drawpanel.h"
+#include "colors_selection.h"
 #include "kicad_string.h"
 #include "protos.h"
 
@@ -423,7 +424,7 @@ void COTATION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     if( g_DesignSettings.IsLayerVisible( m_Layer ) == false )
         return;
 
-    gcolor = g_DesignSettings.m_LayerColor[m_Layer];
+    gcolor = g_ColorsSettings.GetLayerColor(m_Layer);
 
     GRSetDrawMode( DC, mode_color );
     typeaff = DisplayOpt.DisplayDrawItems;

@@ -9,6 +9,7 @@ class Dialog_GeneralOptions : public DialogGeneralOptionsBoardEditor_base
 {
 private:
     WinEDA_PcbFrame* m_Parent;
+    BOARD * m_Board;
 
     void init();
 

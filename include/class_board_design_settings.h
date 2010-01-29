@@ -38,18 +38,6 @@ protected:
     int    m_VisibleElements;                       // Bit-mask for element category visibility
 
 public:
-
-    // Color options for screen display of the Printed Board:
-    int m_LayerColor[LAYER_COUNT];                    ///< Layer colors (tracks and graphic items)
-
-    int m_ViaColor[4];                              // Via color (depending on is type)
-
-    // Pad color for the pads of both sides is m_PadCUColor OR m_PadCMPColor (in terms of colors)
-
-    int m_RatsnestColor;                            // Ratsnest color
-
-
-public:
     EDA_BoardDesignSettings();
 
     /**
@@ -184,34 +172,6 @@ public:
      * @param aNewLayerCount = The new number of enabled copper layers
      */
     void SetCopperLayerCount( int aNewLayerCount );
-
-    /**
-     * Function GetLayerColor
-     * returns the color for aLayer which is one of the layer indices given
-     * in pcbstruct.h
-     */
-    int GetLayerColor( int aLayer )
-    {
-        if( (unsigned) aLayer < (unsigned) NB_LAYERS )
-        {
-            return m_LayerColor[aLayer];
-        }
-        return -1;
-    }
-
-    /**
-     * Function SetLayerColor
-     * sets the color for aLayer which is one of the layer indices given
-     * in pcbstruct.h
-     */
-    void SetLayerColor( int aLayer, int aColor )
-    {
-        if( (unsigned) aLayer < (unsigned) NB_LAYERS )
-        {
-            m_LayerColor[aLayer] = aColor;
-        }
-    }
-
 };
 
 

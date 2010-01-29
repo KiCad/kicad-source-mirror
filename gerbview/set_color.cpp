@@ -5,10 +5,6 @@
 /*Set up the items and layer colors and show/no show options
  */
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma implementation "set_color.h"
-#endif
-
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
@@ -442,7 +438,7 @@ void WinEDA_SetColorsFrame::UpdateLayerSettings()
     g_GridColor                 = CurrentColor[32];
     s_showGrid                  = laytool_list[32]->m_CheckBox->GetValue();
 
-    g_DCodesColor               = CurrentColor[33];
+    g_ColorsSettings.SetItemColor(DCODES_VISIBLE, CurrentColor[33] );
     DisplayOpt.DisplayPadNum    = laytool_list[33]->m_CheckBox->GetValue();
 
     // Additional command required for updating visibility of grid.

@@ -11,6 +11,7 @@
 #include "class_board_design_settings.h"
 #include "pcbplot.h"
 #include "printout_controler.h"
+#include "colors_selection.h"
 #include "protos.h"
 
 
@@ -111,7 +112,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
         if( pt_piste->Type() == TYPE_VIA ) /* VIA encountered. */
         {
             int rayon = pt_piste->m_Width >> 1;
-            int color = g_DesignSettings.m_ViaColor[pt_piste->m_Shape];
+            int color = g_ColorsSettings.GetItemColor(VIAS_VISIBLE+pt_piste->m_Shape);
             GRSetDrawMode( aDC, drawmode );
             GRFilledCircle( &m_ClipBox, aDC,
                             pt_piste->m_Start.x,

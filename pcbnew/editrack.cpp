@@ -9,6 +9,7 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
+#include "colors_selection.h"
 
 #include "drc_stuff.h"
 #include "trigo.h"
@@ -705,7 +706,7 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel,
         if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )
         {
             int color =
-                g_DesignSettings.m_LayerColor[g_CurrentTrackSegment->GetLayer()];
+                g_ColorsSettings.GetLayerColor(g_CurrentTrackSegment->GetLayer());
 
             GRCircle( &panel->m_ClipBox, DC, g_CurrentTrackSegment->m_End.x,
                       g_CurrentTrackSegment->m_End.y,
@@ -775,7 +776,7 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel,
     if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )
     {
         int color =
-            g_DesignSettings.m_LayerColor[g_CurrentTrackSegment->GetLayer()];
+            g_ColorsSettings.GetLayerColor(g_CurrentTrackSegment->GetLayer());
 
         GRCircle( &panel->m_ClipBox, DC, g_CurrentTrackSegment->m_End.x,
                   g_CurrentTrackSegment->m_End.y,

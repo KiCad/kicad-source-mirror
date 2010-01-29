@@ -9,6 +9,7 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "kicad_string.h"
+#include "colors_selection.h"
 
 #include "pcbnew.h"
 #include "class_board_design_settings.h"
@@ -238,7 +239,7 @@ void DRAWSEGMENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     if( g_DesignSettings.IsLayerVisible( GetLayer() ) == false )
         return;
 
-    color = g_DesignSettings.m_LayerColor[GetLayer()];
+    color = g_ColorsSettings.GetLayerColor(GetLayer());
 
     GRSetDrawMode( DC, draw_mode );
     l_piste = m_Width >> 1;  /* half trace width */

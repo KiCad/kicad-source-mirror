@@ -49,13 +49,11 @@
 #define APPEND_PCB 1    /* used to append the new board to the existing board */
 #define NEWPCB     0    /* used for normal load file */
 
-
 /* variables */
 extern bool Drc_On;
 extern bool g_AutoDeleteOldTrack;
 extern bool g_No_Via_Route;
 extern bool g_Drag_Pistes_On;
-extern bool g_Show_Ratsnest;
 extern bool g_Show_Module_Ratsnest;
 extern bool g_Show_Pads_Module_in_Move;
 extern bool g_Raccord_45_Auto;

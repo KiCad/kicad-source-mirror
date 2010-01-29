@@ -117,6 +117,16 @@ StructColors ColorRefs[NBCOLOR] =
     {  128, 255, 255, LIGHTYELLOW,  wxT( "LIGHTYELLOW" ),  LIGHTYELLOW           }
 };
 
+/** Function to use local notation or C standard notation for floating point numbers
+ * some countries use 1,5 and others (and C) 1.5
+ * so we switch from local to C and C to local when reading or writing files
+ * And other problem is a bug when cross compiling under linux:
+ * a printf print 1,5 and the read functions expects 1.5
+ * (depending on version print = 1.5 and read = 1,5
+ * Very annoying and we detect this and use a stupid but necessary workarount
+*/
+bool g_DisableFloatingPointLocalNotation = false;
+
 
 /** function SetLocaleTo_C_standard
  * because kicad is internationalized, switch internalization to "C" standard
@@ -146,7 +156,8 @@ void SetLocaleTo_C_standard( void )
  */
 void SetLocaleTo_Default( void )
 {
-    setlocale( LC_NUMERIC, "" );      // revert to the current locale
+    if( ! g_DisableFloatingPointLocalNotation )
+        setlocale( LC_NUMERIC, "" );      // revert to the current locale
 }
 
 

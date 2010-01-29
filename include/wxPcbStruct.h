@@ -808,7 +808,6 @@ public:
     void         GlobalRoute( wxDC* DC );
 
     void         Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC );
-    void         Ratsnest_On_Off( wxDC* DC );
     void         Clean_Pcb( wxDC* DC );
 
     void         InstallFindFrame( const wxPoint& pos, wxDC* DC );

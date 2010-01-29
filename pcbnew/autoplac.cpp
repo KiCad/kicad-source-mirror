@@ -13,6 +13,7 @@
 #include "zones.h"
 #include "cell.h"
 #include "class_board_design_settings.h"
+#include "colors_selection.h"
 
 #include "protos.h"
 
@@ -856,6 +857,10 @@ float WinEDA_PcbFrame::Compute_Ratsnest_PlaceModule( wxDC* DC )
         return -1;
     cout = 0;
 
+    int color = g_ColorsSettings.GetItemColor(RATSNEST_VISIBLE);
+
+    if( AutoPlaceShowAll )
+        GRSetDrawMode( DC, GR_XOR );
     for( unsigned ii = 0; ii < GetBoard()->m_LocalRatsnest.size(); ii++ )
     {
         RATSNEST_ITEM* pt_local_chevelu = &GetBoard()->m_LocalRatsnest[ii];
@@ -871,7 +876,7 @@ float WinEDA_PcbFrame::Compute_Ratsnest_PlaceModule( wxDC* DC )
             if( AutoPlaceShowAll )
             {
                 GRLine( &DrawPanel->m_ClipBox, DC, ox, oy, fx, fy,
-                        0, g_DesignSettings.m_RatsnestColor | GR_XOR );
+                        0, color );
             }
 
             /* Cost of the ratsnest. */

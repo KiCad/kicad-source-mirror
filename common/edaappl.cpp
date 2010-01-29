@@ -684,6 +684,22 @@ bool WinEDA_App::SetLanguage( bool first_time )
         m_EDA_CommonConfig->Write( wxT( "Language" ), m_LanguageId );
     }
 
+    // Test if floating point notation is working (bug in cross compilation)
+    // Make a conversion double <=> string
+    double dtst = 0.5;
+    wxString msg;
+    extern bool g_DisableFloatingPointLocalNotation;    // See common.cpp
+    g_DisableFloatingPointLocalNotation = false;
+    msg << dtst;
+    double result;
+    msg.ToDouble(&result);
+    if( result != dtst )  // string to double encode/decode does not work! Bug detected
+    {
+        // Disable floating point localisation:
+        g_DisableFloatingPointLocalNotation = true;
+        SetLocaleTo_C_standard( );
+    }
+
     if( !m_Locale->IsLoaded( DictionaryName ) )
         m_Locale->AddCatalog( DictionaryName );
 

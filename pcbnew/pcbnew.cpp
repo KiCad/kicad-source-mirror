@@ -21,17 +21,21 @@
 #include "zones.h"
 #include "drag.h"
 #include "eda_dde.h"
+#include "colors_selection.h"
+
 #include "id.h"
 
 #include "build_version.h"
 
 #include "protos.h"
 
+// Colors for layers and items
+COLORS_DESIGN_SETTINGS g_ColorsSettings;
+
 bool Drc_On = true;
 bool g_AutoDeleteOldTrack = true;
 bool g_No_Via_Route;
 bool g_Drag_Pistes_On;
-bool g_Show_Ratsnest;
 bool g_Show_Module_Ratsnest;
 bool g_Show_Pads_Module_in_Move = true;
 bool g_Raccord_45_Auto = true;

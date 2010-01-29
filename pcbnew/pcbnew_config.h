@@ -3,6 +3,7 @@
 /*****************************************************/
 
 #include "param_config.h"
+#include "colors_selection.h"
 
 #define GROUP       wxT( "/pcbnew" )
 #define GROUPLIB    wxT( "/pcbnew/libraries" )
@@ -15,6 +16,9 @@
 //  project, in .pro file)
 #define INSETUP TRUE
 
+/* Useful macro : */
+#define LOC_COLOR(layer) &g_ColorsSettings.m_LayersColors[layer]
+#define ITEM_COLOR(item_visible) &g_ColorsSettings.m_ItemsColors[item_visible]
 
 /* Configuration parameters. */
 
@@ -226,7 +230,7 @@ static PARAM_CFG_SETCOLOR ColorLayer0Cfg   // CU Layer Color
 (
     INSETUP,
     wxT( "ColLay0" ),
-    &g_DesignSettings.m_LayerColor[0],
+    LOC_COLOR(0),
     GREEN
 );
 
@@ -234,7 +238,7 @@ static PARAM_CFG_SETCOLOR ColorLayer1Cfg
 (
     INSETUP,
     wxT( "ColLay1" ),
-    &g_DesignSettings.m_LayerColor[1],
+    LOC_COLOR(1),
     BLUE
 );
 
@@ -242,7 +246,7 @@ static PARAM_CFG_SETCOLOR ColorLayer2Cfg
 (
     INSETUP,
     wxT( "ColLay2" ),
-    &g_DesignSettings.m_LayerColor[2],
+    LOC_COLOR(2),
     LIGHTGRAY
 );
 
@@ -250,7 +254,7 @@ static PARAM_CFG_SETCOLOR ColorLayer3Cfg
 (
     INSETUP,
     wxT( "ColLay3" ),
-    &g_DesignSettings.m_LayerColor[3],
+    LOC_COLOR(3),
     5
 );
 
@@ -258,7 +262,7 @@ static PARAM_CFG_SETCOLOR ColorLayer4Cfg
 (
     INSETUP,
     wxT( "ColLay4" ),
-    &g_DesignSettings.m_LayerColor[4],
+    LOC_COLOR(4),
     4
 );
 
@@ -266,7 +270,7 @@ static PARAM_CFG_SETCOLOR ColorLayer5Cfg
 (
     INSETUP,
     wxT( "ColLay5" ),
-    &g_DesignSettings.m_LayerColor[5],
+    LOC_COLOR(5),
     5
 );
 
@@ -274,7 +278,7 @@ static PARAM_CFG_SETCOLOR ColorLayer6Cfg
 (
     INSETUP,
     wxT( "ColLay6" ),
-    &g_DesignSettings.m_LayerColor[6],
+    LOC_COLOR(6),
     6
 );
 
@@ -282,7 +286,7 @@ static PARAM_CFG_SETCOLOR ColorLayer7Cfg
 (
     INSETUP,
     wxT( "ColLay7" ),
-    &g_DesignSettings.m_LayerColor[7],
+    LOC_COLOR(7),
     5
 );
 
@@ -290,7 +294,7 @@ static PARAM_CFG_SETCOLOR ColorLayer8Cfg
 (
     INSETUP,
     wxT( "ColLay8" ),
-    &g_DesignSettings.m_LayerColor[8],
+    LOC_COLOR(8),
     7
 );
 
@@ -298,7 +302,7 @@ static PARAM_CFG_SETCOLOR ColorLayer9Cfg
 (
     INSETUP,
     wxT( "ColLay9" ),
-    &g_DesignSettings.m_LayerColor[9],
+    LOC_COLOR(9),
     1
 );
 
@@ -306,7 +310,7 @@ static PARAM_CFG_SETCOLOR ColorLayer10Cfg
 (
     INSETUP,
     wxT( "ColLayA" ),
-    &g_DesignSettings.m_LayerColor[10],
+    LOC_COLOR(10),
     2
 );
 
@@ -314,7 +318,7 @@ static PARAM_CFG_SETCOLOR ColorLayer11Cfg
 (
     INSETUP,
     wxT( "ColLayB" ),
-    &g_DesignSettings.m_LayerColor[11],
+    LOC_COLOR(11),
     3
 );
 
@@ -322,7 +326,7 @@ static PARAM_CFG_SETCOLOR ColorLayer12Cfg
 (
     INSETUP,
     wxT( "ColLayC" ),
-    &g_DesignSettings.m_LayerColor[12],
+    LOC_COLOR(12),
     12
 );
 
@@ -330,7 +334,7 @@ static PARAM_CFG_SETCOLOR ColorLayer13Cfg
 (
     INSETUP,
     wxT( "ColLayD" ),
-    &g_DesignSettings.m_LayerColor[13],
+    LOC_COLOR(13),
     13
 );
 
@@ -338,7 +342,7 @@ static PARAM_CFG_SETCOLOR ColorLayer14Cfg
 (
     INSETUP,
     wxT( "ColLayE" ),
-    &g_DesignSettings.m_LayerColor[14],
+    LOC_COLOR(14),
     14
 );
 
@@ -346,7 +350,7 @@ static PARAM_CFG_SETCOLOR ColorLayer15Cfg  // CMP Layer Color
 (
     INSETUP,
     wxT( "ColLayF" ),
-    &g_DesignSettings.m_LayerColor[15],
+    LOC_COLOR(15),
     RED
 );
 
@@ -354,7 +358,7 @@ static PARAM_CFG_SETCOLOR ColorLayer16Cfg  // Adhesive CU Layer Color
 (
     INSETUP,
     wxT( "ColLayG" ),
-    &g_DesignSettings.m_LayerColor[16],
+    LOC_COLOR(16),
     1
 );
 
@@ -362,7 +366,7 @@ static PARAM_CFG_SETCOLOR ColorLayer17Cfg  // Adhesive CMP Layer Color
 (
     INSETUP,
     wxT( "ColLayH" ),
-    &g_DesignSettings.m_LayerColor[17],
+    LOC_COLOR(17),
     5
 );
 
@@ -370,7 +374,7 @@ static PARAM_CFG_SETCOLOR ColorLayer18Cfg  // Solder Mask CU Layer Color
 (
     INSETUP,
     wxT( "ColLayI" ),
-    &g_DesignSettings.m_LayerColor[18],
+    LOC_COLOR(18),
     11
 );
 
@@ -378,7 +382,7 @@ static PARAM_CFG_SETCOLOR ColorLayer19Cfg  // Solder Mask CMP Layer Color
 (
     INSETUP,
     wxT( "ColLayJ" ),
-    &g_DesignSettings.m_LayerColor[19],
+    LOC_COLOR(19),
     4
 );
 
@@ -386,7 +390,7 @@ static PARAM_CFG_SETCOLOR ColorLayer20Cfg  // Silk Screen CU Layer Color
 (
     INSETUP,
     wxT( "ColLayK" ),
-    &g_DesignSettings.m_LayerColor[20],
+    LOC_COLOR(20),
     5
 );
 
@@ -394,7 +398,7 @@ static PARAM_CFG_SETCOLOR ColorLayer21Cfg  // Silk Screen CMP Layer Color
 (
     INSETUP,
     wxT( "ColLayL" ),
-    &g_DesignSettings.m_LayerColor[21],
+    LOC_COLOR(21),
     3
 );
 
@@ -402,7 +406,7 @@ static PARAM_CFG_SETCOLOR ColorLayer22Cfg  // Mask CU Layer Color
 (
     INSETUP,
     wxT( "ColLayM" ),
-    &g_DesignSettings.m_LayerColor[22],
+    LOC_COLOR(22),
     6
 );
 
@@ -410,7 +414,7 @@ static PARAM_CFG_SETCOLOR ColorLayer23Cfg  // Mask CMP Layer Color
 (
     INSETUP,
     wxT( "ColLayN" ),
-    &g_DesignSettings.m_LayerColor[23],
+    LOC_COLOR(23),
     5
 );
 
@@ -418,7 +422,7 @@ static PARAM_CFG_SETCOLOR ColorLayer24Cfg  // DRAW Layer Color
 (
     INSETUP,
     wxT( "ColLayO" ),
-    &g_DesignSettings.m_LayerColor[24],
+    LOC_COLOR(24),
     LIGHTGRAY
 );
 
@@ -426,7 +430,7 @@ static PARAM_CFG_SETCOLOR ColorLayer25Cfg  // Comment Layer Color
 (
     INSETUP,
     wxT( "ColLayP" ),
-    &g_DesignSettings.m_LayerColor[25],
+    LOC_COLOR(25),
     1
 );
 
@@ -434,7 +438,7 @@ static PARAM_CFG_SETCOLOR ColorLayer26Cfg  // ECO1 Layer Color
 (
     INSETUP,
     wxT( "ColLayQ" ),
-    &g_DesignSettings.m_LayerColor[26],
+    LOC_COLOR(26),
     2
 );
 
@@ -442,7 +446,7 @@ static PARAM_CFG_SETCOLOR ColorLayer27Cfg  //ECO2 Layer Color
 (
     INSETUP,
     wxT( "ColLayR" ),
-    &g_DesignSettings.m_LayerColor[27],
+    LOC_COLOR(27),
     14
 );
 
@@ -450,7 +454,7 @@ static PARAM_CFG_SETCOLOR ColorLayer28Cfg  // EDGES Layer Color
 (
     INSETUP,
     wxT( "ColLayS" ),
-    &g_DesignSettings.m_LayerColor[28],
+    LOC_COLOR(28),
     YELLOW
 );
 
@@ -458,7 +462,7 @@ static PARAM_CFG_SETCOLOR ColorLayer29Cfg
 (
     INSETUP,
     wxT( "ColLayT" ),
-    &g_DesignSettings.m_LayerColor[29],
+    LOC_COLOR(29),
     13
 );
 
@@ -466,7 +470,7 @@ static PARAM_CFG_SETCOLOR ColorLayer30Cfg
 (
     INSETUP,
     wxT( "ColLayU" ),
-    &g_DesignSettings.m_LayerColor[30],
+    LOC_COLOR(30),
     14
 );
 
@@ -474,7 +478,7 @@ static PARAM_CFG_SETCOLOR ColorLayer31Cfg
 (
     INSETUP,
     wxT( "ColLayV" ),
-    &g_DesignSettings.m_LayerColor[31],
+    LOC_COLOR(31),
     7
 );
 
@@ -482,7 +486,7 @@ static PARAM_CFG_SETCOLOR ColorTxtModCmpCfg
 (
     INSETUP,
     wxT( "CTxtMoC" ),
-    &g_ModuleTextCMPColor,
+    ITEM_COLOR(MOD_TEXT_FR_VISIBLE),
     LIGHTGRAY
 );
 
@@ -490,15 +494,15 @@ static PARAM_CFG_SETCOLOR ColorTxtModCuCfg
 (
     INSETUP,
     wxT( "CTxtMoS" ),
-    &g_ModuleTextCUColor,
-    1
+    ITEM_COLOR(MOD_TEXT_BK_VISIBLE),
+    BLUE
 );
 
 static PARAM_CFG_SETCOLOR VisibleTxtModCfg
 (
     INSETUP,
     wxT( "CTxtVis" ),
-    &g_ModuleTextNOVColor,
+    ITEM_COLOR(MOD_TEXT_INVISIBLE),
     DARKGRAY
 );
 
@@ -530,7 +534,7 @@ static PARAM_CFG_SETCOLOR ColorAncreModCfg
 (
     INSETUP,
     wxT( "CAncreM" ),
-    &g_AnchorColor,
+    ITEM_COLOR(ANCHOR_VISIBLE),
     BLUE
 );
 
@@ -538,7 +542,7 @@ static PARAM_CFG_SETCOLOR ColorPadCuCfg
 (
     INSETUP,
     wxT( "CoPadCu" ),
-    &g_PadCUColor,
+    ITEM_COLOR(PAD_BK_VISIBLE),
     GREEN
 );
 
@@ -546,7 +550,7 @@ static PARAM_CFG_SETCOLOR ColorPadCmpCfg
 (
     INSETUP,
     wxT( "CoPadCm" ),
-    &g_PadCMPColor,
+    ITEM_COLOR(PAD_FR_VISIBLE),
     RED
 );
 
@@ -554,7 +558,7 @@ static PARAM_CFG_SETCOLOR ColorViaThroughCfg
 (
     INSETUP,
     wxT( "CoViaTh" ),
-    &g_DesignSettings.m_ViaColor[VIA_THROUGH],
+    ITEM_COLOR(VIA_THROUGH_VISIBLE),
     LIGHTGRAY
 );
 
@@ -562,7 +566,7 @@ static PARAM_CFG_SETCOLOR ColorViaBlindBuriedCfg
 (
     INSETUP,
     wxT( "CoViaBu" ),
-    &g_DesignSettings.m_ViaColor[VIA_BLIND_BURIED],
+    ITEM_COLOR(VIA_BBLIND_VISIBLE),
     BROWN
 );
 
@@ -570,7 +574,7 @@ static PARAM_CFG_SETCOLOR ColorViaMicroViaCfg  // Buried Via Color
 (
     INSETUP,
     wxT( "CoViaMi" ),
-    &g_DesignSettings.m_ViaColor[VIA_MICROVIA],
+    ITEM_COLOR(VIA_MICROVIA_VISIBLE),
     CYAN
 );
 
@@ -586,7 +590,7 @@ static PARAM_CFG_SETCOLOR ColorCheveluCfg
 (
     INSETUP,
     wxT( "CoRatsN" ),
-    &g_DesignSettings.m_RatsnestColor,
+    ITEM_COLOR(RATSNEST_VISIBLE),
     WHITE
 );
 
@@ -700,14 +704,6 @@ static PARAM_CFG_INT PrmMaxLinksShowed
     0, 15
 );
 
-static PARAM_CFG_BOOL ShowRatsnestCfg
-(
-    INSETUP,
-    wxT( "ShowRat" ),
-    &g_Show_Ratsnest,
-    FALSE
-);
-
 static PARAM_CFG_BOOL ShowModuleRatsnestCfg
 (
     INSETUP,
@@ -813,7 +809,6 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &TimeOutCfg,
     &DisplPolairCfg,
     &PrmMaxLinksShowed,
-    &ShowRatsnestCfg,
     &ShowModuleRatsnestCfg,
     &TwoSegmentTrackBuildCfg,
 

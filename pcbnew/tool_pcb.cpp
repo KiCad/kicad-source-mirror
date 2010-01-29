@@ -8,6 +8,7 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
+#include "colors_selection.h"
 
 #include "bitmaps.h"
 
@@ -68,25 +69,25 @@ void WinEDA_PcbFrame::PrepareLayerIndicator()
                previous_Route_Layer_BOTTOM_color, previous_via_color;
 
     /* get colors, and redraw bitmap button only on changes */
-    active_layer_color = g_DesignSettings.m_LayerColor[ getActiveLayer() ];
+    active_layer_color = g_ColorsSettings.GetLayerColor(getActiveLayer());
     if( previous_active_layer_color != active_layer_color )
     {
         previous_active_layer_color = active_layer_color;
         change = true;
     }
-    Route_Layer_TOP_color = g_DesignSettings.m_LayerColor[((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP];
+    Route_Layer_TOP_color = g_ColorsSettings.GetLayerColor(((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP);
     if( previous_Route_Layer_TOP_color != Route_Layer_TOP_color )
     {
         previous_Route_Layer_TOP_color = Route_Layer_TOP_color;
         change = true;
     }
-    Route_Layer_BOTTOM_color = g_DesignSettings.m_LayerColor[((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM];
+    Route_Layer_BOTTOM_color = g_ColorsSettings.GetLayerColor(((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM);
     if( previous_Route_Layer_BOTTOM_color != Route_Layer_BOTTOM_color )
     {
         previous_Route_Layer_BOTTOM_color = Route_Layer_BOTTOM_color;
         change = true;
     }
-    via_color = g_DesignSettings.m_ViaColor[g_DesignSettings.m_CurrentViaType ];
+    via_color = g_ColorsSettings.GetItemColor(VIAS_VISIBLE+g_DesignSettings.m_CurrentViaType);
     if( previous_via_color != via_color )
     {
         previous_via_color = via_color;

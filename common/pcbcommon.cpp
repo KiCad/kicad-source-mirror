@@ -88,7 +88,6 @@ const wxString PcbFileWildcard(
 
 int g_CurrentVersionPCB = 1;
 
-
 int    g_TimeOut;            // Timer for automatic saving
 int    g_SaveTime;           // Time for next saving
 

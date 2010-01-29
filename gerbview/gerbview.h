@@ -25,12 +25,21 @@ typedef enum
     FORMAT_POST
 } PlotFormat;
 
+/**
+ * Enum ITEM_VISIBLE
+ * is a set of visible PCB elements.
+ */
+enum ITEM_VISIBLE
+{
+    DCODES_VISIBLE,
+
+    END_ITEM_VISIBLE_LIST  // sentinel
+};
 
 extern wxString g_PhotoFilenameExt;
 extern wxString g_DrillFilenameExt;
 extern wxString g_PenFilenameExt;
 
-extern int      g_DCodesColor;
 extern int      g_Default_GERBER_Format;
 
 extern int      g_Plot_Spot_Mini;    /* Diameter of the opening mini-track for

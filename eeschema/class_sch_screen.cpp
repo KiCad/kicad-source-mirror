@@ -48,10 +48,19 @@ static int SchematicZoomList[] =
 
 #define SCHEMATIC_ZOOM_LIST_CNT  ( sizeof( SchematicZoomList ) / \
                                    sizeof( int ) )
-#define MM_TO_SCH_UNITS 1000.0 / 25.4000508001016
+#define MM_TO_SCH_UNITS 1000.0 / 25.4       //schematic internal unites are mils
 
 
-/* Default grid sizes for the schematic editor. */
+/* Default grid sizes for the schematic editor.
+ * Do NOT add others values (mainly grid values in mm),
+ * because they can break the schematic:
+ * because wires and pins are considered as connected when the are to the same coordinate
+ * we cannot mix coordinates in mils (internal units) and mm
+ * (that cannot exactly converted in mils in many cases
+ * in fact schematic must only use 50 and 25 mils to place labnels, wires and components
+ * others values are useful only for graphic items (mainly in library editor)
+ * so use integer values in mils only.
+*/
 static GRID_TYPE SchematicGridList[] = {
     { ID_POPUP_GRID_LEVEL_50, wxRealPoint( 50, 50 ) },
     { ID_POPUP_GRID_LEVEL_25, wxRealPoint( 25, 25 ) },
@@ -59,18 +68,6 @@ static GRID_TYPE SchematicGridList[] = {
     { ID_POPUP_GRID_LEVEL_5, wxRealPoint( 5, 5 ) },
     { ID_POPUP_GRID_LEVEL_2, wxRealPoint( 2, 2 ) },
     { ID_POPUP_GRID_LEVEL_1, wxRealPoint( 1, 1 ) },
-
-    // predefined grid list in mm
-    { ID_POPUP_GRID_LEVEL_2_5MM, wxRealPoint( MM_TO_SCH_UNITS * 2.5,
-                                              MM_TO_SCH_UNITS * 2.5 ) },
-    { ID_POPUP_GRID_LEVEL_1MM, wxRealPoint( MM_TO_SCH_UNITS,
-                                            MM_TO_SCH_UNITS ) },
-    { ID_POPUP_GRID_LEVEL_0_5MM, wxRealPoint( MM_TO_SCH_UNITS * 0.5,
-                                              MM_TO_SCH_UNITS * 0.5 ) },
-    { ID_POPUP_GRID_LEVEL_0_25MM, wxRealPoint( MM_TO_SCH_UNITS * 0.25,
-                                               MM_TO_SCH_UNITS * 0.25 ) },
-    { ID_POPUP_GRID_LEVEL_0_1MM, wxRealPoint( MM_TO_SCH_UNITS * 0.1,
-                                              MM_TO_SCH_UNITS * 0.1 ) }
 };
 
 #define SCHEMATIC_GRID_LIST_CNT ( sizeof( SchematicGridList ) / \

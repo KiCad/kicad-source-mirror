@@ -12,6 +12,7 @@
 
 #include "pcbnew.h"
 #include "class_board_design_settings.h"
+#include "colors_selection.h"
 #include "trigo.h"
 #include "protos.h"
 
@@ -190,16 +191,18 @@ void TEXTE_PCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     if( g_DesignSettings.IsLayerVisible( m_Layer ) == false )
         return;
 
-    int color = g_DesignSettings.m_LayerColor[m_Layer];
+    int color = g_ColorsSettings.GetLayerColor(m_Layer);
 
     GRTraceMode fillmode = FILLED;
     if ( DisplayOpt.DisplayDrawItems == SKETCH)
         fillmode = SKETCH;
 
+    int anchor_color = UNSPECIFIED_COLOR;
+    if( g_DesignSettings.IsElementVisible( ANCHOR_VISIBLE ) )
+        anchor_color = g_ColorsSettings.GetItemColor(ANCHOR_VISIBLE);
+    
     EDA_TextStruct::Draw( panel, DC, offset, (EDA_Colors) color,
-                          DrawMode, fillmode,
-                          g_DesignSettings.IsElementVisible( ANCHOR_VISIBLE ) ?
-                          (EDA_Colors) g_AnchorColor : UNSPECIFIED_COLOR );
+                          DrawMode, fillmode, (EDA_Colors) anchor_color );
 }
 
 

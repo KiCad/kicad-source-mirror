@@ -16,6 +16,7 @@
 #include "protos.h"
 #include "zones.h"
 #include "class_board_design_settings.h"
+#include "colors_selection.h"
 
 #include "build_version.h"
 
@@ -27,7 +28,9 @@ wxString g_PhotoFilenameExt;
 wxString g_DrillFilenameExt;
 wxString g_PenFilenameExt;
 
-int      g_DCodesColor;
+// Colors for layers and items
+COLORS_DESIGN_SETTINGS g_ColorsSettings;
+
 int      g_Default_GERBER_Format;
 int      g_Plot_Spot_Mini;  /* Diameter of the opening mini-track for GERBER. */
 int      g_DisplayPolygonsModeSketch;

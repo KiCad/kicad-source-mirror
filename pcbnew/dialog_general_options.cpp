@@ -34,6 +34,8 @@ void Dialog_GeneralOptions::init()
 {
     SetFocus();
 
+    m_Board = m_Parent->GetBoard();
+
     /* Set display options */
     m_PolarDisplay->SetSelection( DisplayOpt.DisplayPolarCood ? 1 : 0 );
     m_UnitsSelection->SetSelection( g_UnitMetric ? 1 : 0 );
@@ -58,7 +60,7 @@ void Dialog_GeneralOptions::init()
 
     m_DrcOn->SetValue( Drc_On );
     m_ShowModuleRatsnest->SetValue( g_Show_Module_Ratsnest );
-    m_ShowGlobalRatsnest->SetValue( g_Show_Ratsnest );
+    m_ShowGlobalRatsnest->SetValue( m_Board->IsElementVisible(RATSNEST_VISIBLE) );
     m_TrackAutodel->SetValue( g_AutoDeleteOldTrack );
     m_Track_45_Only_Ctrl->SetValue( Track_45_Only );
     m_Segments_45_Only_Ctrl->SetValue( Segments_45_Only );
@@ -94,10 +96,9 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
     /* Updating the combobox to display the active layer. */
     g_MaxLinksShowed = m_MaxShowLinks->GetValue();
     Drc_On = m_DrcOn->GetValue();
-    if( g_Show_Ratsnest != m_ShowGlobalRatsnest->GetValue() )
+    if( m_Board->IsElementVisible(RATSNEST_VISIBLE) != m_ShowGlobalRatsnest->GetValue() )
     {
-        g_Show_Ratsnest = m_ShowGlobalRatsnest->GetValue();
-        m_Parent->Ratsnest_On_Off( NULL );
+        m_Board->SetElementVisibility(RATSNEST_VISIBLE, m_ShowGlobalRatsnest->GetValue() );
         m_Parent->DrawPanel->Refresh( );
     }
     g_Show_Module_Ratsnest = m_ShowModuleRatsnest->GetValue();
@@ -144,7 +145,7 @@ void WinEDA_ModuleEditFrame::InstallOptionsFrame( const wxPoint& pos )
 
 
 /* Must be called on a click on the left toolbar (options toolbar
- * Update variables according to the tools states
+ * Update variables according to tools states
  */
 void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 {
@@ -163,8 +164,7 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_RATSNEST:
-        g_Show_Ratsnest = m_OptionsToolBar->GetToolState( id );
-        Ratsnest_On_Off( NULL );
+        GetBoard()->SetElementVisibility(RATSNEST_VISIBLE, m_OptionsToolBar->GetToolState( id ));
         DrawPanel->Refresh( );
         break;
 

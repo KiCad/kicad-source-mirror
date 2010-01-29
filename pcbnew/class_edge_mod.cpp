@@ -10,6 +10,7 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "kicad_string.h"
+#include "colors_selection.h"
 
 #include "pcbnew.h"
 #include "class_board_design_settings.h"
@@ -167,7 +168,7 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     if( g_DesignSettings.IsLayerVisible( m_Layer ) == false )
         return;
 
-    color = g_DesignSettings.m_LayerColor[m_Layer];
+    color = g_ColorsSettings.GetLayerColor(m_Layer);
 
     frame = (WinEDA_BasePcbFrame*) panel->GetParent();
 

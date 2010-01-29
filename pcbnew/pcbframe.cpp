@@ -394,6 +394,7 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 
 
 // Keys used in read/write config
+#define PCB_SHOW_FULL_RATSNET_OPT   wxT( "PcbFulRatsnest" )
 #define PCB_MAGNETIC_PADS_OPT   wxT( "PcbMagPadOpt" )
 #define PCB_MAGNETIC_TRACKS_OPT wxT( "PcbMagTrackOpt" )
 #define SHOW_MICROWAVE_TOOLS    wxT( "ShowMicrowaveTools" )
@@ -837,6 +838,9 @@ void WinEDA_PcbFrame::LoadSettings()
 
     WinEDA_BasePcbFrame::LoadSettings();
 
+    long tmp;
+    config->Read( PCB_SHOW_FULL_RATSNET_OPT, &tmp );
+    GetBoard()->SetElementVisibility(RATSNEST_VISIBLE, tmp);
     config->Read( PCB_MAGNETIC_PADS_OPT, &g_MagneticPadOption );
     config->Read( PCB_MAGNETIC_TRACKS_OPT, &g_MagneticTrackOption );
     config->Read( SHOW_MICROWAVE_TOOLS, &m_show_microwave_tools );
@@ -855,6 +859,8 @@ void WinEDA_PcbFrame::SaveSettings()
 
     wxRealPoint GridSize = GetScreen()->GetGridSize();
 
+    long tmp = GetBoard()->IsElementVisible(RATSNEST_VISIBLE);
+    config->Write( PCB_SHOW_FULL_RATSNET_OPT, tmp );
     config->Write( PCB_MAGNETIC_PADS_OPT, (long) g_MagneticPadOption );
     config->Write( PCB_MAGNETIC_TRACKS_OPT, (long) g_MagneticTrackOption );
     config->Write( SHOW_MICROWAVE_TOOLS,

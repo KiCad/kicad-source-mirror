@@ -14,27 +14,6 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
 
 // Default values for designing boards
 {
-    int ii;
-
-    static const int default_layer_color[32] =
-    {
-        GREEN,     LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
-        LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
-        LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
-        LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, RED,
-        LIGHTGRAY, LIGHTGRAY,
-        LIGHTGRAY, LIGHTGRAY,
-        MAGENTA,   CYAN,
-        LIGHTGRAY, LIGHTGRAY,
-        LIGHTGRAY,
-        LIGHTGRAY,
-        LIGHTGRAY, LIGHTGRAY,
-        LIGHTGRAY,
-        LIGHTGRAY,
-        LIGHTGRAY,
-        LIGHTGRAY
-    };
-
     m_EnabledLayers = ALL_LAYERS;                       // All layers enabled at first.
                                                         // SetCopperLayerCount() will adjust this.
     SetVisibleAlls( );                                  // All layers  and all elements visible at first.
@@ -61,17 +40,6 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
                                                         // The final margin is the sum of these 2 values
                                                         // Usually < 0 because the mask is smaller than pad
 
-    /* Color options for screen display of the Printed Board: */
-    for( ii = 0; ii < 32; ii++ )
-        m_LayerColor[ii] = default_layer_color[ii];
-
-    // Layer colors (tracks and graphic items)
-    m_ViaColor[VIA_NOT_DEFINED]  = DARKGRAY;
-    m_ViaColor[VIA_MICROVIA]     = CYAN;
-    m_ViaColor[VIA_BLIND_BURIED] = BROWN;
-    m_ViaColor[VIA_THROUGH] = WHITE;
-
-    m_RatsnestColor = WHITE;                // Ratsnest color
 }
 
 
@@ -114,7 +82,7 @@ void EDA_BoardDesignSettings::SetLayerVisibility( int aLayerIndex, bool aNewStat
 
 void EDA_BoardDesignSettings::SetElementVisibility( int aElementCategory, bool aNewState )
 {
-    if( aElementCategory < 0 || aElementCategory >= END_VISIBLE )
+    if( aElementCategory < 0 || aElementCategory >= END_PCB_VISIBLE_LIST )
         return;
     if( aNewState )
         m_VisibleElements |= 1 << aElementCategory;

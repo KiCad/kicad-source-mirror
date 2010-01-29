@@ -11,6 +11,7 @@
 #include "pcbnew.h"
 #include "autorout.h"
 #include "class_board_design_settings.h"
+#include "colors_selection.h"
 
 #include "protos.h"
 
@@ -157,7 +158,7 @@ void WinEDA_BasePcbFrame::Compile_Ratsnest( wxDC* DC, bool display_status_pcb )
     Tst_Ratsnest( DC, 0 );
 
     // Redraw the active ratsnest ( if enabled )
-    if( g_Show_Ratsnest && DC )
+    if( GetBoard()->IsElementVisible(RATSNEST_VISIBLE) && DC )
         DrawGeneralRatsnest( DC, 0 );
 
     if( display_status_pcb )
@@ -505,7 +506,7 @@ void WinEDA_BasePcbFrame::Build_Board_Ratsnest( wxDC* DC )
     // erase the ratsnest displayed on screen if needed
     for( unsigned ii = 0; ii < m_Pcb->GetRatsnestsCount(); ii++ )
     {
-        if( !g_Show_Ratsnest )  // Clear VISIBLE flag
+        if( !GetBoard()->IsElementVisible(RATSNEST_VISIBLE) )  // Clear VISIBLE flag
             m_Pcb->m_FullRatsnest[ii].m_Status &= ~CH_VISIBLE;
 
         if( DC )
@@ -1002,18 +1003,18 @@ void WinEDA_BasePcbFrame::trace_ratsnest_module( wxDC* DC )
     if( ( m_Pcb->m_Status_Pcb & RATSNEST_ITEM_LOCAL_OK ) == 0 )
         return;
 
-    int tmpcolor = g_DesignSettings.m_RatsnestColor;
+    int tmpcolor = g_ColorsSettings.GetItemColor(RATSNEST_VISIBLE);
     for( unsigned ii = 0; ii < m_Pcb->m_LocalRatsnest.size(); ii++ )
     {
         RATSNEST_ITEM* rats = &m_Pcb->m_LocalRatsnest[ii];
         if( rats->m_Status & LOCAL_RATSNEST_ITEM )
         {
-            g_DesignSettings.m_RatsnestColor = YELLOW;
+            g_ColorsSettings.SetItemColor(RATSNEST_VISIBLE, YELLOW);
             rats->Draw( DrawPanel, DC, GR_XOR, g_Offset_Module );
         }
         else
         {
-            g_DesignSettings.m_RatsnestColor = tmpcolor;
+            g_ColorsSettings.SetItemColor(RATSNEST_VISIBLE, tmpcolor);
             wxPoint tmp = rats->m_PadStart->m_Pos;
             rats->m_PadStart->m_Pos -= g_Offset_Module;
             rats->Draw( DrawPanel, DC, GR_XOR, wxPoint( 0, 0 ) );
@@ -1021,7 +1022,7 @@ void WinEDA_BasePcbFrame::trace_ratsnest_module( wxDC* DC )
         }
     }
 
-    g_DesignSettings.m_RatsnestColor = tmpcolor;
+    g_ColorsSettings.SetItemColor(RATSNEST_VISIBLE, tmpcolor);
 }
 
 

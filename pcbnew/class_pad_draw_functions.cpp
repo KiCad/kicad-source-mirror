@@ -12,6 +12,7 @@
 
 #include "pcbnew.h"
 #include "class_board_design_settings.h"
+#include "colors_selection.h"
 
 
 /** Draw a pad:
@@ -89,12 +90,12 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
 
     if( m_Masque_Layer & LAYER_FRONT )
     {
-            color = g_PadCMPColor;
+            color = g_ColorsSettings.GetItemColor(PAD_FR_VISIBLE);
     }
 
     if( m_Masque_Layer & LAYER_BACK )
     {
-        color |= g_PadCUColor;
+        color |= g_ColorsSettings.GetItemColor(PAD_BK_VISIBLE);
     }
 
     if( color == 0 ) /* Not on copper layer */
@@ -104,55 +105,55 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         switch( m_Masque_Layer & ~ALL_CU_LAYERS )
         {
         case ADHESIVE_LAYER_BACK:
-            color = g_DesignSettings.m_LayerColor[ADHESIVE_N_BACK];
+            color = g_ColorsSettings.GetLayerColor(ADHESIVE_N_BACK);
             break;
 
         case ADHESIVE_LAYER_FRONT:
-            color = g_DesignSettings.m_LayerColor[ADHESIVE_N_FRONT];
+            color = g_ColorsSettings.GetLayerColor(ADHESIVE_N_FRONT);
             break;
 
         case SOLDERPASTE_LAYER_BACK:
-            color = g_DesignSettings.m_LayerColor[SOLDERPASTE_N_BACK];
+            color = g_ColorsSettings.GetLayerColor(SOLDERPASTE_N_BACK);
             break;
 
         case SOLDERPASTE_LAYER_FRONT:
-            color = g_DesignSettings.m_LayerColor[SOLDERPASTE_N_FRONT];
+            color = g_ColorsSettings.GetLayerColor(SOLDERPASTE_N_FRONT);
             break;
 
         case SILKSCREEN_LAYER_BACK:
-            color = g_DesignSettings.m_LayerColor[SILKSCREEN_N_BACK];
+            color = g_ColorsSettings.GetLayerColor(SILKSCREEN_N_BACK);
             break;
 
         case SILKSCREEN_LAYER_FRONT:
-            color = g_DesignSettings.m_LayerColor[SILKSCREEN_N_FRONT];
+            color = g_ColorsSettings.GetLayerColor(SILKSCREEN_N_FRONT);
             break;
 
         case SOLDERMASK_LAYER_BACK:
-            color = g_DesignSettings.m_LayerColor[SOLDERMASK_N_BACK];
+            color = g_ColorsSettings.GetLayerColor(SOLDERMASK_N_BACK);
             break;
 
         case SOLDERMASK_LAYER_FRONT:
-            color = g_DesignSettings.m_LayerColor[SOLDERMASK_N_FRONT];
+            color = g_ColorsSettings.GetLayerColor(SOLDERMASK_N_FRONT);
             break;
 
         case DRAW_LAYER:
-            color = g_DesignSettings.m_LayerColor[DRAW_N];
+            color = g_ColorsSettings.GetLayerColor(DRAW_N);
             break;
 
         case COMMENT_LAYER:
-            color = g_DesignSettings.m_LayerColor[COMMENT_N];
+            color = g_ColorsSettings.GetLayerColor(COMMENT_N);
             break;
 
         case ECO1_LAYER:
-            color = g_DesignSettings.m_LayerColor[ECO1_N];
+            color = g_ColorsSettings.GetLayerColor(ECO1_N);
             break;
 
         case ECO2_LAYER:
-            color = g_DesignSettings.m_LayerColor[ECO2_N];
+            color = g_ColorsSettings.GetLayerColor(ECO2_N);
             break;
 
         case EDGE_LAYER:
-            color = g_DesignSettings.m_LayerColor[EDGE_N];
+            color = g_ColorsSettings.GetLayerColor(EDGE_N);
             break;
 
         default:
@@ -217,7 +218,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     {
         if( IsOnLayer( screen->m_Active_Layer ) )
         {
-            color = g_DesignSettings.m_LayerColor[screen->m_Active_Layer];
+            color = g_ColorsSettings.GetLayerColor(screen->m_Active_Layer);
 
             // In hight contrast mode, and if the active layer is the mask
             // layer shows the pad size with the mask clearance

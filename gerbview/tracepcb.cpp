@@ -16,6 +16,7 @@
 #include "pcbplot.h"
 #include "protos.h"
 #include "class_board_design_settings.h"
+#include "colors_selection.h"
 
 static void Draw_Track_Buffer( WinEDA_DrawPanel* panel,
                         wxDC*             DC,
@@ -142,7 +143,7 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
                 }
                 else
                 {
-                    Color = g_DesignSettings.m_LayerColor[track->GetLayer()];
+                    Color = g_ColorsSettings.GetLayerColor( track->GetLayer() );
                     filled = (g_DisplayPolygonsModeSketch == 0);
                 }
 
@@ -170,7 +171,7 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
             }
             else
             {
-                Color = g_DesignSettings.m_LayerColor[track->GetLayer()];
+                Color = g_ColorsSettings.GetLayerColor( track->GetLayer() );
                 filled = (g_DisplayPolygonsModeSketch == 0);
             }
 
@@ -253,7 +254,7 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
         if( g_DesignSettings.IsLayerVisible( track->GetLayer() ) == false )
             return;
 
-        color = g_DesignSettings.m_LayerColor[track->GetLayer()];
+        color = g_ColorsSettings.GetLayerColor( track->GetLayer() );
 
         if( draw_mode & GR_SURBRILL )
         {
@@ -452,9 +453,11 @@ void Affiche_DCodes_Pistes( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int d
                 orient = TEXT_ORIENT_VERT;
             width /= 2;
         }
+        
+        int color = g_ColorsSettings.GetItemColor(DCODES_VISIBLE);
 
         DrawGraphicText( panel, DC,
-                         pos, (EDA_Colors) g_DCodesColor, Line,
+                         pos, (EDA_Colors) color, Line,
                          orient, wxSize( width, width ),
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
 			  0, false, false, false);

@@ -14,40 +14,6 @@
 #include "protos.h"
 
 
-/* Displays or hides the ratsnest. */
-void WinEDA_PcbFrame::Ratsnest_On_Off( wxDC* DC )
-{
-    unsigned      ii;
-
-    if( ( GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK ) == 0 )
-    {
-        if( g_Show_Ratsnest )
-            Compile_Ratsnest( DC, TRUE );
-        return;
-    }
-
-    DrawGeneralRatsnest( DC, 0 );
-
-    if( GetBoard()->GetRatsnestsCount() == 0 )
-        return;
-
-    if( g_Show_Ratsnest )
-    {
-        for( ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
-        {
-            GetBoard()->m_FullRatsnest[ii].m_Status |= CH_VISIBLE;
-        }
-    }
-    else
-    {
-        for( ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
-        {
-            GetBoard()->m_FullRatsnest[ii].m_Status &= ~CH_VISIBLE;
-        }
-    }
-}
-
-
 /*
  * Exchange layer the track pointed to by the mouse:
  * The track must be on one layer of work,
@@ -324,7 +290,7 @@ void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
     D_PAD*   pt_pad = NULL;
     MODULE*  Module = NULL;
 
-    if( g_Show_Ratsnest )
+    if( GetBoard()->IsElementVisible(RATSNEST_VISIBLE) )
         return;
 
     if( ( GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK ) == 0 )

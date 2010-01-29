@@ -14,11 +14,14 @@
 #include "bitmaps.h"
 #include "protos.h"
 #include "cvstruct.h"
+#include "colors_selection.h"
 
 #include "build_version.h"
 
 #include <wx/snglinst.h>
 
+// Colors for layers and items
+COLORS_DESIGN_SETTINGS g_ColorsSettings;
 
 /* Constant string definitions for CvPcb */
 const wxString ComponentFileExtension( wxT( "cmp" ) );

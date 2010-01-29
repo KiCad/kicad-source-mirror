@@ -8,6 +8,7 @@
 #include "kicad_string.h"
 #include "pcbnew.h"
 #include "class_board_design_settings.h"
+#include "colors_selection.h"
 
 
 /*********************************************************/
@@ -193,6 +194,7 @@ void RATSNEST_ITEM::Draw( WinEDA_DrawPanel* panel,
                           const wxPoint&    aOffset )
 {
     GRSetDrawMode( DC, aDrawMode );
+    int color = g_ColorsSettings.GetItemColor(RATSNEST_VISIBLE);
     GRLine( &panel->m_ClipBox, DC, m_PadStart->m_Pos - aOffset,
-            m_PadEnd->m_Pos - aOffset, 0, g_DesignSettings.m_RatsnestColor );
+            m_PadEnd->m_Pos - aOffset, 0, color );
 }

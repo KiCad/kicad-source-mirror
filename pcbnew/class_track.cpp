@@ -12,6 +12,7 @@
 
 #include "pcbnew.h"
 #include "class_board_design_settings.h"
+#include "colors_selection.h"
 #include "protos.h"
 
 
@@ -557,7 +558,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     }
     else
     {
-        color = g_DesignSettings.m_LayerColor[m_Layer];
+        color = g_ColorsSettings.GetLayerColor(m_Layer);
 
         if( g_DesignSettings.IsLayerVisible( m_Layer ) == false && ( color & HIGHT_LIGHT_FLAG ) !=
             HIGHT_LIGHT_FLAG )
@@ -723,7 +724,7 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
 
     GRSetDrawMode( DC, draw_mode );
 
-    color = g_DesignSettings.m_ViaColor[m_Shape];
+    color = g_ColorsSettings.GetItemColor(VIAS_VISIBLE + m_Shape);
 
     if( g_DesignSettings.IsElementVisible( PCB_VISIBLE(VIAS_VISIBLE + m_Shape) ) == false
         && ( color & HIGHT_LIGHT_FLAG ) != HIGHT_LIGHT_FLAG )
