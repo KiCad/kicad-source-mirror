@@ -51,7 +51,7 @@ static inline const wxChar* GetChars( wxString s )
 #define NEGATE( x ) (x = -x)
 
 /// # of elements in an arrray
-#define DIM( x ) ( sizeof(x) / sizeof( (x)[0] ) )
+#define DIM( x )    unsigned( sizeof(x) / sizeof( (x)[0] ) )    // not size_t
 
 
 #define DEG2RAD( Deg ) ( (Deg) * M_PI / 180.0 )
