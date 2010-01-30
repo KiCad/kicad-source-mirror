@@ -390,7 +390,27 @@ void BOARD::SetVisibleLayers( int aLayerMask )
 
 void BOARD::SetVisibleElements( int aMask )
 {
-    m_BoardSettings->SetVisibleElements( aMask );
+    /* Call SetElementVisibility for each item,
+     * to ensure specific calculations that can be needed by some items
+     */
+    for( int ii = 0; ii < PCB_VISIBLE(END_PCB_VISIBLE_LIST); ii++ )
+    {
+        int item_mask = 1 << ii;
+        SetElementVisibility( ii, aMask & item_mask );
+    }
+}
+
+// these are not tidy, since there are PCB_VISIBLEs that are not stored in the bitmap.
+void BOARD::SetVisibleAlls(  )
+{
+    SetVisibleLayers( FULL_LAYERS );
+    /* Call SetElementVisibility for each item,
+     * to ensure specific calculations that can be needed by some items
+     */
+    for( int ii = 0; ii < PCB_VISIBLE(END_PCB_VISIBLE_LIST); ii++ )
+    {
+        SetElementVisibility( ii, true );
+    }
 }
 
 
@@ -420,11 +440,29 @@ void BOARD::SetElementVisibility( int aPCB_VISIBLE, bool isEnabled )
 {
     switch( aPCB_VISIBLE )
     {
-/*
     case GRID_VISIBLE:
-        myframe->m_Draw_Grid = isEnabled;
+        m_PcbFrame->m_Draw_Grid = isEnabled;
+        m_BoardSettings->SetElementVisibility( aPCB_VISIBLE, isEnabled );
         break;
-*/
+
+
+    case RATSNEST_VISIBLE:
+        m_BoardSettings->SetElementVisibility( aPCB_VISIBLE, isEnabled );
+        // we must clear or set the CH_VISIBLE flags to hide/show ratsnet
+        // because we have a tool to show hide ratsnest relative to a pad or a module
+        // so the hide/show option is a per item selection
+        if( IsElementVisible(RATSNEST_VISIBLE) )
+        {
+        for( unsigned ii = 0; ii < GetRatsnestsCount(); ii++ )
+            m_FullRatsnest[ii].m_Status |= CH_VISIBLE;
+        }
+        else
+        {
+            for( unsigned ii = 0; ii < GetRatsnestsCount(); ii++ )
+                m_FullRatsnest[ii].m_Status &= ~CH_VISIBLE;
+        }
+        break;
+
 
     default:
         m_BoardSettings->SetElementVisibility( aPCB_VISIBLE, isEnabled );
@@ -478,20 +516,6 @@ void BOARD::SetVisibleElementColor( int aPCB_VISIBLE, int aColor )
         g_ColorsSettings.SetItemColor( aPCB_VISIBLE, aColor );
         break;
     case RATSNEST_VISIBLE:
-        // we must clear or set the CH_VISIBLE flags to hide/show ratsnet
-        // because we have atool to show hide ratsnest relative to a pad or a module
-        // so the hide/show option is a per item selection
-        if( IsElementVisible(RATSNEST_VISIBLE) )
-        {
-        for( unsigned ii = 0; ii < GetRatsnestsCount(); ii++ )
-            m_FullRatsnest[ii].m_Status |= CH_VISIBLE;
-        }
-        else
-        {
-            for( unsigned ii = 0; ii < GetRatsnestsCount(); ii++ )
-                m_FullRatsnest[ii].m_Status &= ~CH_VISIBLE;
-        }
-
         g_ColorsSettings.SetItemColor( aPCB_VISIBLE, aColor );
         break;
 

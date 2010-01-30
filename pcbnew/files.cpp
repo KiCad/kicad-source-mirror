@@ -259,6 +259,7 @@ this file again."));
 
     ReCreateLayerBox( NULL );
     AuxiliaryToolBar_Update_UI();
+    syncLayerWidget( );
 
     // Display the loaded board:
     Zoom_Automatique( false );

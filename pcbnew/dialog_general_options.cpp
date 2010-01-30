@@ -150,26 +150,29 @@ void WinEDA_ModuleEditFrame::InstallOptionsFrame( const wxPoint& pos )
 void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int id = event.GetId();
-
+    bool state = m_OptionsToolBar->GetToolState( id );
 
     switch( id )
     {
     case ID_TB_OPTIONS_DRC_OFF:
-        Drc_On = m_OptionsToolBar->GetToolState( id ) ? FALSE : true;
+        Drc_On = state ? FALSE : true;
         break;
 
     case ID_TB_OPTIONS_SHOW_GRID:
-        m_Draw_Grid = m_OptionsToolBar->GetToolState( id );
+        GetBoard()->SetElementVisibility(GRID_VISIBLE, state);
+        syncLayerWidget( true );
         DrawPanel->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_RATSNEST:
-        GetBoard()->SetElementVisibility(RATSNEST_VISIBLE, m_OptionsToolBar->GetToolState( id ));
+        GetBoard()->SetElementVisibility(RATSNEST_VISIBLE, state);
+        syncLayerWidget( true );
         DrawPanel->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_RATSNEST:
-        g_Show_Module_Ratsnest = m_OptionsToolBar->GetToolState( id );
+        g_Show_Module_Ratsnest = state; // TODO: use the visibility list
+        syncLayerWidget( true );
         break;
 
     case ID_TB_OPTIONS_SELECT_UNIT_MM:
@@ -186,16 +189,16 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_POLAR_COORD:
         Affiche_Message( wxEmptyString );
-        DisplayOpt.DisplayPolarCood = m_OptionsToolBar->GetToolState( id );
+        DisplayOpt.DisplayPolarCood = state;
         UpdateStatusBar();
         break;
 
     case ID_TB_OPTIONS_SELECT_CURSOR:
-        m_CursorShape = m_OptionsToolBar->GetToolState( id );
+        m_CursorShape = state;
         break;
 
     case ID_TB_OPTIONS_AUTO_DEL_TRACK:
-        g_AutoDeleteOldTrack = m_OptionsToolBar->GetToolState( id );
+        g_AutoDeleteOldTrack = state;
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES:
@@ -214,7 +217,7 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
-        if( m_OptionsToolBar->GetToolState( id ) )
+        if( state )
         {
             m_DisplayPadFill = DisplayOpt.DisplayPadFill = false;
         }
@@ -226,7 +229,7 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
-        if( m_OptionsToolBar->GetToolState( id ) )
+        if( state )
         {
             m_DisplayViaFill = DisplayOpt.DisplayViaFill = false;
         }
@@ -238,19 +241,17 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
-        m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill =
-                                    !m_OptionsToolBar->GetToolState( id );
+        m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = !state;
         DrawPanel->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
-        DisplayOpt.ContrastModeDisplay =
-            m_OptionsToolBar->GetToolState( id );
+        DisplayOpt.ContrastModeDisplay = state;
         DrawPanel->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1:
-        m_show_microwave_tools = m_OptionsToolBar->GetToolState( id );
+        m_show_microwave_tools = state;
 #if !defined(KICAD_AUIMANAGER)
         // show auxiliary Vertical toolbar (Microwave tool)
         m_AuxVToolBar->Show(m_show_microwave_tools);
@@ -267,7 +268,7 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
     case ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR:
 #if defined(KICAD_AUIMANAGER)
         // show auxiliary Vertical layers and visibility manager toolbar
-        m_show_layer_manager_tools = m_OptionsToolBar->GetToolState( id );
+        m_show_layer_manager_tools = state;
         m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
         m_auimgr.Update();
         if( m_show_layer_manager_tools )

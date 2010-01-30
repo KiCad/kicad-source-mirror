@@ -96,8 +96,11 @@ protected:
      * <p>
      * This function cannot be inline without including layer_widget.h in
      * here and we do not want to do that.
+     * @param aRenderOnly: true to update render only, false (default) for full update
+     * if aRenderOnly = true, the page displayed by the layer manager is not changed
+     * if aRenderOnly = false, the page displayed after update is the layers list
      */
-    void syncLayerWidget();
+    void syncLayerWidget(bool aRenderOnly = false);
 
     /**
      * Function syncLayerBox

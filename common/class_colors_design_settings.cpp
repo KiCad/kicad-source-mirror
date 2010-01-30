@@ -4,6 +4,7 @@
 /****************************************************/
 #include "fctsys.h"
 #include "colors.h"
+#include "macros.h"
 
 #include "class_colors_design_settings.h"
 
@@ -64,10 +65,10 @@ static const int default_items_color[LAYERSCOLORSBUFFERSIZE] =
 
 COLORS_DESIGN_SETTINGS:: COLORS_DESIGN_SETTINGS()
 {
-    for( unsigned ii = 0; ii < LAYERSCOLORSBUFFERSIZE; ii++ )
+    for( unsigned ii = 0; ii < DIM(m_LayersColors); ii++ )
         m_LayersColors[ii] = default_layer_color[ii];
 
-    for( unsigned ii = 0; ii < ITEMSCOLORSBUFFERSIZE; ii++ )
+    for( unsigned ii = 0; ii < DIM(m_ItemsColors); ii++ )
         m_ItemsColors[ii] = default_items_color[ii];
 }
 
@@ -79,7 +80,7 @@ COLORS_DESIGN_SETTINGS:: COLORS_DESIGN_SETTINGS()
  */
 int COLORS_DESIGN_SETTINGS::GetLayerColor( int aLayer )
 {
-    if( (unsigned) aLayer < LAYERSCOLORSBUFFERSIZE )
+    if( (unsigned) aLayer < DIM(m_LayersColors) )
     {
         return m_LayersColors[aLayer];
     }
@@ -94,7 +95,7 @@ int COLORS_DESIGN_SETTINGS::GetLayerColor( int aLayer )
  */
 void COLORS_DESIGN_SETTINGS:: SetLayerColor( int aLayer, int aColor )
 {
-    if( (unsigned) aLayer < LAYERSCOLORSBUFFERSIZE )
+    if( (unsigned) aLayer < DIM(m_LayersColors) )
     {
         m_LayersColors[aLayer] = aColor;
     }
@@ -108,7 +109,7 @@ void COLORS_DESIGN_SETTINGS:: SetLayerColor( int aLayer, int aColor )
  */
 int COLORS_DESIGN_SETTINGS:: GetItemColor( int aItemIdx )
 {
-    if( (unsigned) aItemIdx < ITEMSCOLORSBUFFERSIZE )
+    if( (unsigned) aItemIdx < DIM(m_ItemsColors) )
     {
         return m_ItemsColors[aItemIdx];
     }
@@ -123,7 +124,7 @@ int COLORS_DESIGN_SETTINGS:: GetItemColor( int aItemIdx )
  */
 void COLORS_DESIGN_SETTINGS:: SetItemColor( int aItemIdx, int aColor )
 {
-    if( (unsigned) aItemIdx < ITEMSCOLORSBUFFERSIZE )
+    if( (unsigned) aItemIdx < DIM(m_ItemsColors) )
     {
         m_ItemsColors[aItemIdx] = aColor;
     }

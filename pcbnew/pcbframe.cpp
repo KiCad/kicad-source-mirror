@@ -85,6 +85,9 @@ public:
     PCB_LAYER_WIDGET( WinEDA_PcbFrame* aParent, wxWindow* aFocusOwner, int aPointSize = 10 );
 
     void ReFill();
+    // Update Show/hide checkbox state in render page
+    // must be called when a Show/hide option is changed outside the layer manager
+    void RenderSynchronize( );
 
     //-----<implement LAYER_WIDGET abstract callback functions>-----------
     void OnLayerColorChange( int aLayer, int aColor );
@@ -315,6 +318,33 @@ void PCB_LAYER_WIDGET::ReFill()
 //    m_Layers->Thaw();
 }
 
+// Update the checkboxes state of each row of the render.
+void PCB_LAYER_WIDGET::RenderSynchronize( )
+{
+    BOARD*  brd = myframe->GetBoard();
+    wxSizerItemList& sizerslist = m_RenderFlexGridSizer->GetChildren();
+
+    for( unsigned ii=0; ii< PCB_VISIBLE(END_PCB_VISIBLE_LIST);  ++ii )
+    {
+        unsigned idx = ii * m_RenderFlexGridSizer->GetCols();
+        // idx points the first size of a m_RenderFlexGridSizer row
+        // the checkbox to update is managed by the second sizer
+        idx = idx + 1;
+        if( idx >= sizerslist.size() )
+            break;      // Should not occur
+
+        // Get the sizer that manages the check box to update
+        wxSizerItem * sizer = sizerslist[idx];
+        // Get the checkbox and update its state.
+        wxCheckBox* cb = (wxCheckBox*)sizer->GetWindow();
+        if( cb )
+        {
+            // Calculate the visible item id
+            int id = getDecodedId(cb->GetId());
+            cb->SetValue(brd->IsElementVisible(id));
+        }
+    }
+}
 
 //-----<LAYER_WIDGET callbacks>-------------------------------------------
 
@@ -330,6 +360,9 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
     // false from this function.
     myframe->setActiveLayer( aLayer, false );
     myframe->syncLayerBox();
+    if(DisplayOpt.ContrastModeDisplay)
+        myframe->DrawPanel->Refresh();
+
     return true;
 }
 
@@ -362,14 +395,11 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 
     /* @todo:
 
-        1) move:
+        move:
 
-        RATSNEST_VISIBLE,
         GRID_VISIBLE,   ? maybe not this one
         into m_VisibleElements and get rid of globals.
-
-        2) Add IsElementVisible() & SetVisibleElement() to class BOARD
-    */
+   */
 
     switch( aId )
     {
@@ -378,7 +408,7 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
     case GRID_VISIBLE:
         // @todo, make read/write accessors for grid control so the write accessor can fire updates to
         // grid state listeners.  I think the grid state should be kept in the BOARD.
-        myframe->m_Draw_Grid = isEnabled;
+        brd->SetElementVisibility( aId, isEnabled );    // set visibilty flag also in list, and myframe->m_Draw_Grid
         break;
 
     default:
@@ -643,6 +673,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
 
     if( DrawPanel )
         DrawPanel->m_Block_Enable = true;
+
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateAuxiliaryToolbar();
@@ -718,8 +749,8 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
         m_AuxVToolBar->Show(m_show_microwave_tools);
 #endif
 
+    SetToolbars();
     ReFillLayerWidget();    // this is near end because contents establish size
-
     syncLayerWidget();
 }
 
@@ -845,6 +876,10 @@ void WinEDA_PcbFrame::LoadSettings()
     config->Read( PCB_MAGNETIC_TRACKS_OPT, &g_MagneticTrackOption );
     config->Read( SHOW_MICROWAVE_TOOLS, &m_show_microwave_tools );
     config->Read( SHOW_LAYER_MANAGER_TOOLS, &m_show_layer_manager_tools );
+
+    // Copy grid visibility (set by LoadSetting() in visibility items list:
+    GetBoard()->SetElementVisibility(GRID_VISIBLE, m_Draw_Grid);
+
 }
 
 
@@ -870,8 +905,10 @@ void WinEDA_PcbFrame::SaveSettings()
 }
 
 
-void WinEDA_PcbFrame::syncLayerWidget()
+void WinEDA_PcbFrame::syncLayerWidget( bool aRenderOnly)
 {
-    m_Layers->SelectLayer( getActiveLayer() );
+    if( ! aRenderOnly )
+        m_Layers->SelectLayer( getActiveLayer() );
+    m_Layers->RenderSynchronize( );
 }
 

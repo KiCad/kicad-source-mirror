@@ -191,9 +191,14 @@ bool WinEDA_PcbFrame::Read_Config( const wxString& projectFileName )
 
     /* Reset the items visibility flag when loading a new config
      *  Because it could creates SERIOUS mistakes for the user,
-     * if some items are not visible after loading a board...
+     * if board items are not visible after loading a board...
+     * Grid and ratsnest can be left to their previous state
      */
-    GetBoard()->m_BoardSettings->SetVisibleAlls( );
+    bool showGrid = GetBoard()->IsElementVisible(GRID_VISIBLE);
+    bool showRats = GetBoard()->IsElementVisible(RATSNEST_VISIBLE);
+    GetBoard()->SetVisibleAlls( );
+    GetBoard()->SetElementVisibility(GRID_VISIBLE, showGrid);
+    GetBoard()->SetElementVisibility(RATSNEST_VISIBLE, showRats);
 
     DisplayOpt.DisplayPadNoConn = true;
     return TRUE;

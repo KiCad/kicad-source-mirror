@@ -305,6 +305,13 @@ public:
     void SetVisibleElements( int aMask );
 
     /**
+     * Function SetVisibleAlls
+     * changes the bit-mask of visible element categories and layers
+     * @see enum PCB_VISIBLE
+     */
+    void SetVisibleAlls( );
+
+    /**
      * Function IsElementVisible
      * tests whether a given element category is visible. Keep this as an
      * inline function.
