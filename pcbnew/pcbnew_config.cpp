@@ -194,13 +194,11 @@ bool WinEDA_PcbFrame::Read_Config( const wxString& projectFileName )
      * if board items are not visible after loading a board...
      * Grid and ratsnest can be left to their previous state
      */
-    bool showGrid = GetBoard()->IsElementVisible(GRID_VISIBLE);
-    bool showRats = GetBoard()->IsElementVisible(RATSNEST_VISIBLE);
-    GetBoard()->SetVisibleAlls( );
-    GetBoard()->SetElementVisibility(GRID_VISIBLE, showGrid);
-    GetBoard()->SetElementVisibility(RATSNEST_VISIBLE, showRats);
-
-    DisplayOpt.DisplayPadNoConn = true;
+    bool showGrid = IsElementVisible(GRID_VISIBLE);
+    bool showRats = IsElementVisible(RATSNEST_VISIBLE);
+    SetVisibleAlls( );
+    SetElementVisibility(GRID_VISIBLE, showGrid);
+    SetElementVisibility(RATSNEST_VISIBLE, showRats);
     return TRUE;
 }
 

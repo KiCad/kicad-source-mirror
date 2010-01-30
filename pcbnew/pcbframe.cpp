@@ -85,9 +85,6 @@ public:
     PCB_LAYER_WIDGET( WinEDA_PcbFrame* aParent, wxWindow* aFocusOwner, int aPointSize = 10 );
 
     void ReFill();
-    // Update Show/hide checkbox state in render page
-    // must be called when a Show/hide option is changed outside the layer manager
-    void RenderSynchronize( );
 
     //-----<implement LAYER_WIDGET abstract callback functions>-----------
     void OnLayerColorChange( int aLayer, int aColor );
@@ -316,34 +313,6 @@ void PCB_LAYER_WIDGET::ReFill()
     installRightLayerClickHandler();
 
 //    m_Layers->Thaw();
-}
-
-// Update the checkboxes state of each row of the render.
-void PCB_LAYER_WIDGET::RenderSynchronize( )
-{
-    BOARD*  brd = myframe->GetBoard();
-    wxSizerItemList& sizerslist = m_RenderFlexGridSizer->GetChildren();
-
-    for( unsigned ii=0; ii< PCB_VISIBLE(END_PCB_VISIBLE_LIST);  ++ii )
-    {
-        unsigned idx = ii * m_RenderFlexGridSizer->GetCols();
-        // idx points the first size of a m_RenderFlexGridSizer row
-        // the checkbox to update is managed by the second sizer
-        idx = idx + 1;
-        if( idx >= sizerslist.size() )
-            break;      // Should not occur
-
-        // Get the sizer that manages the check box to update
-        wxSizerItem * sizer = sizerslist[idx];
-        // Get the checkbox and update its state.
-        wxCheckBox* cb = (wxCheckBox*)sizer->GetWindow();
-        if( cb )
-        {
-            // Calculate the visible item id
-            int id = getDecodedId(cb->GetId());
-            cb->SetValue(brd->IsElementVisible(id));
-        }
-    }
 }
 
 //-----<LAYER_WIDGET callbacks>-------------------------------------------
@@ -854,7 +823,6 @@ void WinEDA_PcbFrame::ShowDesignRulesEditor( wxCommandEvent& event )
     if( returncode == wxID_OK )     // New rules, or others changes.
     {
         ReCreateLayerBox( NULL );
-        // ReFillLayerWidget(); why?
         GetScreen()->SetModify();
     }
 }
@@ -905,10 +873,33 @@ void WinEDA_PcbFrame::SaveSettings()
 }
 
 
-void WinEDA_PcbFrame::syncLayerWidget( bool aRenderOnly)
+void WinEDA_PcbFrame::syncLayerWidget( )
 {
-    if( ! aRenderOnly )
-        m_Layers->SelectLayer( getActiveLayer() );
-    m_Layers->RenderSynchronize( );
+    m_Layers->SelectLayer( getActiveLayer() );
 }
+
+/**
+ * Function SetElementVisibility
+ * changes the visibility of an element category
+ * @param aPCB_VISIBLE is from the enum by the same name
+ * @param aNewState = The new visibility state of the element category
+ * @see enum PCB_VISIBLE
+ */
+void WinEDA_PcbFrame::SetElementVisibility( int aPCB_VISIBLE, bool aNewState )
+{
+    GetBoard()->SetElementVisibility( aPCB_VISIBLE, aNewState );
+    m_Layers->SetRenderState( aPCB_VISIBLE, aNewState );
+}
+
+/**
+ * Function SetVisibleAlls
+ * Set the status of all visible element categories and layers to VISIBLE
+ */
+void WinEDA_PcbFrame::SetVisibleAlls( )
+{
+    GetBoard()->SetVisibleAlls(  );
+    for( int ii = 0; ii < PCB_VISIBLE(END_PCB_VISIBLE_LIST); ii++ )
+        m_Layers->SetRenderState( ii, true );
+}
+
 

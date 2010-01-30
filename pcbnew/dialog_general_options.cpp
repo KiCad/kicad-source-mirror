@@ -98,7 +98,7 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
     Drc_On = m_DrcOn->GetValue();
     if( m_Board->IsElementVisible(RATSNEST_VISIBLE) != m_ShowGlobalRatsnest->GetValue() )
     {
-        m_Board->SetElementVisibility(RATSNEST_VISIBLE, m_ShowGlobalRatsnest->GetValue() );
+        m_Parent->SetElementVisibility(RATSNEST_VISIBLE, m_ShowGlobalRatsnest->GetValue() );
         m_Parent->DrawPanel->Refresh( );
     }
     g_Show_Module_Ratsnest = m_ShowModuleRatsnest->GetValue();
@@ -159,20 +159,17 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_GRID:
-        GetBoard()->SetElementVisibility(GRID_VISIBLE, state);
-        syncLayerWidget( true );
+        SetElementVisibility(GRID_VISIBLE, state);
         DrawPanel->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_RATSNEST:
-        GetBoard()->SetElementVisibility(RATSNEST_VISIBLE, state);
-        syncLayerWidget( true );
+        SetElementVisibility(RATSNEST_VISIBLE, state);
         DrawPanel->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_RATSNEST:
         g_Show_Module_Ratsnest = state; // TODO: use the visibility list
-        syncLayerWidget( true );
         break;
 
     case ID_TB_OPTIONS_SELECT_UNIT_MM:

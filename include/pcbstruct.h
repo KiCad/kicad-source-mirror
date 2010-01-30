@@ -101,7 +101,6 @@ public:
     bool DisplayPadFill;
     bool DisplayViaFill;
     bool DisplayPadNum;
-    bool DisplayPadNoConn;
     bool DisplayPadIsol;
 
     int  DisplayModEdge;

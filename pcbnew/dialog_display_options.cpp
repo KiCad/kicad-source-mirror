@@ -29,7 +29,7 @@ void WinEDA_PcbFrame::InstallDisplayOptionsDialog( wxCommandEvent& aEvent )
 
 
 /*******************************************************************************/
-Dialog_Display_Options::Dialog_Display_Options( WinEDA_BasePcbFrame* parent ) :
+Dialog_Display_Options::Dialog_Display_Options( WinEDA_PcbFrame* parent ) :
     DialogDisplayOptions_base(parent)
 /*******************************************************************************/
 {
@@ -81,7 +81,7 @@ void Dialog_Display_Options::init()
     m_OptDisplayModEdges->SetSelection( DisplayOpt.DisplayModEdge );
     m_OptDisplayPadClearence->SetValue( DisplayOpt.DisplayPadIsol );
     m_OptDisplayPadNumber->SetValue( DisplayOpt.DisplayPadNum );
-    m_OptDisplayPadNoConn->SetValue( DisplayOpt.DisplayPadNoConn );
+    m_OptDisplayPadNoConn->SetValue( m_Parent->IsElementVisible( PCB_VISIBLE(NO_CONNECTS_VISIBLE) ) );
     m_OptDisplayDrawings->SetSelection( DisplayOpt.DisplayDrawItems );
     m_ShowNetNamesOption->SetSelection( DisplayOpt.DisplayNetNamesMode);
 
@@ -152,7 +152,8 @@ void Dialog_Display_Options::OnOkClick(wxCommandEvent& event)
 
     m_Parent->m_DisplayPadNum = DisplayOpt.DisplayPadNum = m_OptDisplayPadNumber->GetValue();
 
-    DisplayOpt.DisplayPadNoConn = m_OptDisplayPadNoConn->GetValue();
+    m_Parent->SetElementVisibility( PCB_VISIBLE(NO_CONNECTS_VISIBLE),
+                                    m_OptDisplayPadNoConn->GetValue());
 
     DisplayOpt.DisplayDrawItems = m_OptDisplayDrawings->GetSelection();
     DisplayOpt.DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();

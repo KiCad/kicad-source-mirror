@@ -62,7 +62,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
     frame->m_DisplayPadFill = DisplayOpt.DisplayPadFill;
     frame->m_DisplayViaFill = DisplayOpt.DisplayViaFill;
     frame->m_DisplayPadNum = DisplayOpt.DisplayPadNum = false;
-    DisplayOpt.DisplayPadNoConn  = false;
+    bool nctmp = frame->GetBoard()->IsElementVisible(NO_CONNECTS_VISIBLE);
     DisplayOpt.DisplayPadIsol    = false;
     DisplayOpt.DisplayModEdge    = FILLED;
     DisplayOpt.DisplayModText    = FILLED;
@@ -190,6 +190,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
     frame->m_DisplayPadFill = DisplayOpt.DisplayPadFill;
     frame->m_DisplayViaFill = DisplayOpt.DisplayViaFill;
     frame->m_DisplayPadNum  = DisplayOpt.DisplayPadNum;
+    frame->GetBoard()->SetElementVisibility(NO_CONNECTS_VISIBLE, nctmp);
 }
 
 

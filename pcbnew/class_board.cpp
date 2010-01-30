@@ -392,6 +392,7 @@ void BOARD::SetVisibleElements( int aMask )
 {
     /* Call SetElementVisibility for each item,
      * to ensure specific calculations that can be needed by some items
+     * just change the visibility flags could be not sufficient
      */
     for( int ii = 0; ii < PCB_VISIBLE(END_PCB_VISIBLE_LIST); ii++ )
     {
@@ -408,9 +409,7 @@ void BOARD::SetVisibleAlls(  )
      * to ensure specific calculations that can be needed by some items
      */
     for( int ii = 0; ii < PCB_VISIBLE(END_PCB_VISIBLE_LIST); ii++ )
-    {
         SetElementVisibility( ii, true );
-    }
 }
 
 

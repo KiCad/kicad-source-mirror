@@ -96,11 +96,8 @@ protected:
      * <p>
      * This function cannot be inline without including layer_widget.h in
      * here and we do not want to do that.
-     * @param aRenderOnly: true to update render only, false (default) for full update
-     * if aRenderOnly = true, the page displayed by the layer manager is not changed
-     * if aRenderOnly = false, the page displayed after update is the layers list
      */
-    void syncLayerWidget(bool aRenderOnly = false);
+    void syncLayerWidget( );
 
     /**
      * Function syncLayerBox
@@ -185,6 +182,34 @@ public:
     void             ReCreateOptToolbar();
     void             ReCreateMenuBar();
     WinEDAChoiceBox* ReCreateLayerBox( WinEDA_Toolbar* parent );
+
+    /**
+     * Function IsElementVisible
+     * tests whether a given element category is visible. Keep this as an
+     * inline function.
+     * @param aPCB_VISIBLE is from the enum by the same name
+     * @return bool - true if the element is visible.
+     * @see enum PCB_VISIBLE
+     */
+    bool IsElementVisible( int aPCB_VISIBLE )
+    {
+        return GetBoard()->IsElementVisible( aPCB_VISIBLE );
+    }
+
+    /**
+     * Function SetElementVisibility
+     * changes the visibility of an element category
+     * @param aPCB_VISIBLE is from the enum by the same name
+     * @param aNewState = The new visibility state of the element category
+     * @see enum PCB_VISIBLE
+     */
+    void SetElementVisibility( int aPCB_VISIBLE, bool aNewState );
+
+    /**
+     * Function SetVisibleAlls
+     * Set the status of all visible element categories and layers to VISIBLE
+     */
+    void SetVisibleAlls( );
 
     /**
      * Function ReFillLayerWidget

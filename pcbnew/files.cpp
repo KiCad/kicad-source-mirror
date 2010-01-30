@@ -245,11 +245,16 @@ this file again."));
     /* Rebuild the new pad list (for drc and ratsnet control ...) */
     GetBoard()->m_Status_Pcb = 0;
 
-    /* Reset the layers and items visibility flag when loading a new config
+    /* Reset the items visibility flag when loading a new config
      *  Because it could creates SERIOUS mistakes for the user,
-     * if some enabled layers or items are not visible after loading a board...
+     * if board items are not visible after loading a board...
+     * Grid and ratsnest can be left to their previous state
      */
-    GetBoard()->m_BoardSettings->SetVisibleAlls( );
+    bool showGrid = IsElementVisible(GRID_VISIBLE);
+    bool showRats = IsElementVisible(RATSNEST_VISIBLE);
+    SetVisibleAlls( );
+    SetElementVisibility(GRID_VISIBLE, showGrid);
+    SetElementVisibility(RATSNEST_VISIBLE, showRats);
 
     // Update info shown by the horizontal toolbars
     GetBoard()->SetCurrentNetClass( NETCLASS::Default );
