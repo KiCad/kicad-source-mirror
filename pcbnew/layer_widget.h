@@ -162,12 +162,14 @@ protected:
      *   been added to the m_LayersFlexGridSizer.
      */
     wxWindow* getLayerComp( int aSizerNdx );
+    wxWindow* getRenderComp( int aSizerNdx );
 
     /**
      * Function findLayerRow
      * returns the row index that \a aLayer resides in, or -1 if not found.
      */
     int findLayerRow( int aLayer );
+    int findRenderRow( int aId );
 
     /**
      * Function insertLayerRow
@@ -287,6 +289,42 @@ public:
      * sets \a aLayer visible or not.  This does not invoke OnLayerVisible().
      */
     void SetLayerVisible( int aLayer, bool isVisible );
+
+    /**
+     * Function IsLayerVisible
+     * returns the visible state of the layer ROW associated with \a aLayer id.
+     */
+    bool IsLayerVisible( int aLayer );
+
+    /**
+     * Function SetLayerColor
+     * changes the color of \a aLayer
+     */
+    void SetLayerColor( int aLayer, int aColor );
+
+    /**
+     * Function GetLayerColor
+     * returns the color of the layer ROW associated with \a aLayer id.
+     */
+    int GetLayerColor( int aLayer );
+
+    /**
+     * Function SetRenderState
+     * sets the state of the checkbox associated with \a aId within the
+     * Render tab group of the widget.  Does not fire an event, i.e. does
+     * not invoke OnRenderEnable().
+     * @param aId is the same unique id used when adding a ROW to the
+     *  Render tab.
+     */
+    void SetRenderState( int aId, bool isSet );
+
+    /**
+     * Function GetRenderState
+     * returns the state of the checkbox associated with \a aId.
+     * @return bool - true if checked, else false.
+     */
+    bool GetRenderState( int aId );
+
 
     void UpdateLayouts();
 

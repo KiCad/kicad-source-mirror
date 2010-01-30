@@ -301,9 +301,34 @@ int LAYER_WIDGET::findLayerRow( int aLayer )
     for( int row=0;  row<count;  ++row )
     {
         // column 0 in the layer scroll window has a wxStaticBitmap, get its ID.
-        wxStaticBitmap* bm = (wxStaticBitmap*) getLayerComp( row * LYR_COLUMN_COUNT );
+        wxWindow* w = getLayerComp( row * LYR_COLUMN_COUNT );
+        wxASSERT( w );
 
-        if( aLayer == getDecodedId( bm->GetId() ))
+        if( aLayer == getDecodedId( w->GetId() ))
+            return row;
+    }
+    return -1;
+}
+
+
+wxWindow* LAYER_WIDGET::getRenderComp( int aSizerNdx )
+{
+    if( (unsigned) aSizerNdx < m_RenderFlexGridSizer->GetChildren().GetCount() )
+        return m_RenderFlexGridSizer->GetChildren()[aSizerNdx]->GetWindow();
+    return NULL;
+}
+
+
+int LAYER_WIDGET::findRenderRow( int aId )
+{
+    int count = GetRenderRowCount();
+    for( int row=0;  row<count;  ++row )
+    {
+        // column 0 in the layer scroll window has a wxStaticBitmap, get its ID.
+        wxWindow* w = getRenderComp( row * RND_COLUMN_COUNT );
+        wxASSERT( w );
+
+        if( aId == getDecodedId( w->GetId() ))
             return row;
     }
     return -1;
@@ -674,6 +699,82 @@ void LAYER_WIDGET::SetLayerVisible( int aLayer, bool isVisible )
         cb->SetValue( isVisible );      // does not fire an event
     }
 }
+
+
+bool LAYER_WIDGET::IsLayerVisible( int aLayer )
+{
+    int row = findLayerRow( aLayer );
+    if( row >= 0 )
+    {
+        wxCheckBox* cb = (wxCheckBox*) getLayerComp( row * LYR_COLUMN_COUNT + 3 );
+        wxASSERT( cb );
+        return cb->GetValue();
+    }
+    return false;
+}
+
+
+void LAYER_WIDGET::SetLayerColor( int aLayer, int aColor )
+{
+    int row = findLayerRow( aLayer );
+    if( row >= 0 )
+    {
+        int col = 1;    // bitmap button is column 1
+        wxBitmapButton* bmb = (wxBitmapButton*) getLayerComp( row * LYR_COLUMN_COUNT + col );
+        wxASSERT( bmb );
+
+        wxBitmap bm = makeBitmap( aColor );
+
+        bmb->SetBitmapLabel( bm );
+        bmb->SetName( makeColorTxt( aColor ) ); // save color value in name as string
+    }
+}
+
+
+int LAYER_WIDGET::GetLayerColor( int aLayer )
+{
+    int row = findLayerRow( aLayer );
+    if( row >= 0 )
+    {
+        int col = 1;    // bitmap button is column 1
+        wxBitmapButton* bmb = (wxBitmapButton*) getLayerComp( row * LYR_COLUMN_COUNT + col );
+        wxASSERT( bmb );
+
+        wxString colorTxt = bmb->GetName();
+        int color = strtoul( CONV_TO_UTF8(colorTxt), NULL, 0 );
+        return color;
+    }
+
+    return 0;   // it's caller fault, gave me a bad layer
+}
+
+
+void LAYER_WIDGET::SetRenderState( int aId, bool isSet )
+{
+    int row = findRenderRow( aId );
+    if( row >= 0 )
+    {
+        int col = 1;    // checkbox is column 1
+        wxCheckBox* cb = (wxCheckBox*) getRenderComp( row * RND_COLUMN_COUNT + col );
+        wxASSERT( cb );
+        cb->SetValue( isSet );  // does not fire an event
+    }
+}
+
+
+bool LAYER_WIDGET::GetRenderState( int aId )
+{
+    int row = findRenderRow( aId );
+    if( row >= 0 )
+    {
+        int col = 1;    // checkbox is column 1
+        wxCheckBox* cb = (wxCheckBox*) getRenderComp( row * RND_COLUMN_COUNT + col );
+        wxASSERT( cb );
+        return cb->GetValue();
+    }
+    return false;   // the value of a non-existent row
+}
+
 
 void LAYER_WIDGET::UpdateLayouts()
 {
