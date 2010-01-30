@@ -191,7 +191,7 @@ void LAYER_WIDGET::OnLeftDownLayers( wxMouseEvent& event )
         if( row >= rowCount )
             row = rowCount - 1;
 
-        layer = getDecodedId( getLayerComp( row * LYR_COLUMN_COUNT )->GetId() );
+        layer = getDecodedId( getLayerComp( row, 0 )->GetId() );
     }
 
     else
@@ -287,10 +287,11 @@ void LAYER_WIDGET::OnTabChange( wxNotebookEvent& event )
 }
 
 
-wxWindow* LAYER_WIDGET::getLayerComp( int aSizerNdx )
+wxWindow* LAYER_WIDGET::getLayerComp( int aRow, int aColumn )
 {
-    if( (unsigned) aSizerNdx < m_LayersFlexGridSizer->GetChildren().GetCount() )
-        return m_LayersFlexGridSizer->GetChildren()[aSizerNdx]->GetWindow();
+    int ndx = aRow * LYR_COLUMN_COUNT + aColumn;
+    if( (unsigned) ndx < m_LayersFlexGridSizer->GetChildren().GetCount() )
+        return m_LayersFlexGridSizer->GetChildren()[ndx]->GetWindow();
     return NULL;
 }
 
@@ -301,7 +302,7 @@ int LAYER_WIDGET::findLayerRow( int aLayer )
     for( int row=0;  row<count;  ++row )
     {
         // column 0 in the layer scroll window has a wxStaticBitmap, get its ID.
-        wxWindow* w = getLayerComp( row * LYR_COLUMN_COUNT );
+        wxWindow* w = getLayerComp( row, 0 );
         wxASSERT( w );
 
         if( aLayer == getDecodedId( w->GetId() ))
@@ -311,10 +312,11 @@ int LAYER_WIDGET::findLayerRow( int aLayer )
 }
 
 
-wxWindow* LAYER_WIDGET::getRenderComp( int aSizerNdx )
+wxWindow* LAYER_WIDGET::getRenderComp( int aRow, int aColumn )
 {
-    if( (unsigned) aSizerNdx < m_RenderFlexGridSizer->GetChildren().GetCount() )
-        return m_RenderFlexGridSizer->GetChildren()[aSizerNdx]->GetWindow();
+    int ndx = aRow * RND_COLUMN_COUNT + aColumn;
+    if( (unsigned) ndx < m_RenderFlexGridSizer->GetChildren().GetCount() )
+        return m_RenderFlexGridSizer->GetChildren()[ndx]->GetWindow();
     return NULL;
 }
 
@@ -325,7 +327,7 @@ int LAYER_WIDGET::findRenderRow( int aId )
     for( int row=0;  row<count;  ++row )
     {
         // column 0 in the layer scroll window has a wxStaticBitmap, get its ID.
-        wxWindow* w = getRenderComp( row * RND_COLUMN_COUNT );
+        wxWindow* w = getRenderComp( row, 0 );
         wxASSERT( w );
 
         if( aId == getDecodedId( w->GetId() ))
@@ -644,16 +646,11 @@ void LAYER_WIDGET::SelectLayerRow( int aRow )
     // enable the layer tab at index 0
     m_notebook->SetSelection( 0 );
 
-    int oldNdx = LYR_COLUMN_COUNT * m_CurrentRow;
-    int newNdx = LYR_COLUMN_COUNT * aRow;
-
-    m_CurrentRow = aRow;
-
-    wxStaticBitmap* oldbm = (wxStaticBitmap*) getLayerComp( oldNdx );
+    wxStaticBitmap* oldbm = (wxStaticBitmap*) getLayerComp( m_CurrentRow, 0 );
     if( oldbm )
         oldbm->SetBitmap( *m_BlankBitmap );
 
-    wxStaticBitmap* newbm = (wxStaticBitmap*) getLayerComp( newNdx );
+    wxStaticBitmap* newbm = (wxStaticBitmap*) getLayerComp( aRow, 0 );
     if( newbm )
     {
         newbm->SetBitmap( *m_RightArrowBitmap );
@@ -663,8 +660,10 @@ void LAYER_WIDGET::SelectLayerRow( int aRow )
         // I don't expect the scrolling to be needed at all because
         // the minimum window size may end up being established so that the
         // scroll bars will not be visible.
-        getLayerComp( newNdx + 1 /* 1 is column */ )->SetFocus();
+        getLayerComp( aRow, 1 )->SetFocus();
     }
+
+    m_CurrentRow = aRow;
 
     // give the focus back to the app.
     passOnFocus();
@@ -680,10 +679,9 @@ void LAYER_WIDGET::SelectLayer( int aLayer )
 
 int LAYER_WIDGET::GetSelectedLayer()
 {
-    // column 0 in the layer scroll window has a wxStaticBitmap, get its ID.
-    wxStaticBitmap* bm = (wxStaticBitmap*) getLayerComp( m_CurrentRow * LYR_COLUMN_COUNT );
-    if( bm )
-        return getDecodedId( bm->GetId() );
+    wxWindow* w = getLayerComp( m_CurrentRow, 0 );
+    if( w )
+        return getDecodedId( w->GetId() );
 
     return -1;
 }
@@ -694,7 +692,7 @@ void LAYER_WIDGET::SetLayerVisible( int aLayer, bool isVisible )
     int row = findLayerRow( aLayer );
     if( row >= 0 )
     {
-        wxCheckBox* cb = (wxCheckBox*) getLayerComp( row * LYR_COLUMN_COUNT + 3 );
+        wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
         wxASSERT( cb );
         cb->SetValue( isVisible );      // does not fire an event
     }
@@ -706,7 +704,7 @@ bool LAYER_WIDGET::IsLayerVisible( int aLayer )
     int row = findLayerRow( aLayer );
     if( row >= 0 )
     {
-        wxCheckBox* cb = (wxCheckBox*) getLayerComp( row * LYR_COLUMN_COUNT + 3 );
+        wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
         wxASSERT( cb );
         return cb->GetValue();
     }
@@ -720,7 +718,7 @@ void LAYER_WIDGET::SetLayerColor( int aLayer, int aColor )
     if( row >= 0 )
     {
         int col = 1;    // bitmap button is column 1
-        wxBitmapButton* bmb = (wxBitmapButton*) getLayerComp( row * LYR_COLUMN_COUNT + col );
+        wxBitmapButton* bmb = (wxBitmapButton*) getLayerComp( row, col );
         wxASSERT( bmb );
 
         wxBitmap bm = makeBitmap( aColor );
@@ -737,7 +735,7 @@ int LAYER_WIDGET::GetLayerColor( int aLayer )
     if( row >= 0 )
     {
         int col = 1;    // bitmap button is column 1
-        wxBitmapButton* bmb = (wxBitmapButton*) getLayerComp( row * LYR_COLUMN_COUNT + col );
+        wxBitmapButton* bmb = (wxBitmapButton*) getLayerComp( row, col );
         wxASSERT( bmb );
 
         wxString colorTxt = bmb->GetName();
@@ -755,7 +753,7 @@ void LAYER_WIDGET::SetRenderState( int aId, bool isSet )
     if( row >= 0 )
     {
         int col = 1;    // checkbox is column 1
-        wxCheckBox* cb = (wxCheckBox*) getRenderComp( row * RND_COLUMN_COUNT + col );
+        wxCheckBox* cb = (wxCheckBox*) getRenderComp( row, col );
         wxASSERT( cb );
         cb->SetValue( isSet );  // does not fire an event
     }
@@ -768,7 +766,7 @@ bool LAYER_WIDGET::GetRenderState( int aId )
     if( row >= 0 )
     {
         int col = 1;    // checkbox is column 1
-        wxCheckBox* cb = (wxCheckBox*) getRenderComp( row * RND_COLUMN_COUNT + col );
+        wxCheckBox* cb = (wxCheckBox*) getRenderComp( row, col );
         wxASSERT( cb );
         return cb->GetValue();
     }

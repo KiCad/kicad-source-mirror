@@ -155,14 +155,14 @@ protected:
 
     /**
      * Function getLayerComp
-     * returns the component within the m_LayersFlexGridSizer at aSizerNdx or
-     * NULL if \a aSizerNdx is out of range.
+     * returns the component within the m_LayersFlexGridSizer at aRow and aCol
+     * or NULL if \a these parameters are out of range.
      *
-     * @param aSizerNdx is the 0 based index into all the wxWindows which have
-     *   been added to the m_LayersFlexGridSizer.
+     * @param aRow is the row index
+     * @param aColumn is the column
      */
-    wxWindow* getLayerComp( int aSizerNdx );
-    wxWindow* getRenderComp( int aSizerNdx );
+    wxWindow* getLayerComp( int aRow, int aColumn );
+    wxWindow* getRenderComp( int aRow, int aColumn );
 
     /**
      * Function findLayerRow

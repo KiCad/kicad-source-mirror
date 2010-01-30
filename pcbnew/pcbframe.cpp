@@ -169,7 +169,7 @@ void PCB_LAYER_WIDGET::installRightLayerClickHandler()
     {
         for( int col=0; col<LYR_COLUMN_COUNT;  ++col )
         {
-            wxWindow* w = getLayerComp( row * LYR_COLUMN_COUNT + col );
+            wxWindow* w = getLayerComp( row, col );
 
             w->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler(
                 PCB_LAYER_WIDGET::onRightDownLayers ), NULL, this );
@@ -214,7 +214,7 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         rowCount = GetLayerRowCount();
         for( int row=rowCount-1;  row>=0;  --row )
         {
-            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row*LYR_COLUMN_COUNT + 3 );
+            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
             int layer = getDecodedId( cb->GetId() );
             if( IsValidCopperLayerIndex( layer ) )
             {
@@ -225,7 +225,7 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
 
         for( int row=0;  row<rowCount;  ++row )
         {
-            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row*LYR_COLUMN_COUNT + 3 );
+            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
             int layer = getDecodedId( cb->GetId() );
 
             if( IsValidCopperLayerIndex( layer ) )
