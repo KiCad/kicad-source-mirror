@@ -1,0 +1,92 @@
+Compiling KiCad on Apple Mac OS X
+=================================
+ First written: 2010-01-31
+Last edited by: Jerry Jacobs <xor.gate.engineering[at]gmail[dot]com>
+
+
+Snow Leopard
+------------
+
+Requirements
+  * XCode Tools    (http://developer.apple.com/tools/xcode)
+  * CMake          (http://www.cmake.org)
+  * wxWidgets 2.9  (http://www.wxwidgets.org/downloads)
+  * Doxygen        (http://www.doxygen.nl)
+
+
+Building wxWidgets 2.9
+~~~~~~~~~~~~~~~~~~~~~~
+If you have problems that the 64bits library is not build you should add in
+the configure file:
+
+At time of writing (2009-01-16) this is on line 18381
+       changing this: OSX_UNIV_OPTS="-arch ppc -arch i386"
+           into this: OSX_UNIV_OPTS="-arch ppc -arch i386 -arch x86_64"
+
+Building a universal monolib wxWidgets 2.9 with the following parameters:
+./configure --enable-unicode=yes --enable-shared=no --enable-monolithic --with-opengl \
+  --enable-universal_binary --enable-aui --enable-debug --with-osx_cocoa --with-macosx \
+  --with-macosx-sdk=/Developer/SDKs/MacOSX10.5.sdk/ --prefix=/opt/wxwidgets-svn
+
+If you dont need the debugging symbols then you can remove the --enable-debug parameter.
+
+Compiling and installing:
+make
+sudo make install
+
+
+Building KiCad
+~~~~~~~~~~~~~~
+Extract the sources or get them from subversion.
+
+user@mac-osx$ cmake .
+
+Regarding Kicad the only things i've changed are the Variables
+in the generated CMakeCache.txt
+
+It depends on which CMake version you use:
+
+//Flags used by the compiler during all build types.
+//This fixes also BOOST macro errors
+CMAKE_CXX_FLAGS:STRING=-D__ASSERTMACROS__
+
+//Build architectures for OSX 
+CMAKE_OSX_ARCHITECTURES:STRING=x86_64 -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.5.sdk/ -mmacosx-version-min=10.5
+
+//The product will be built against the headers and libraries located
+// inside the indicated SDK.
+CMAKE_OSX_SYSROOT:PATH=/Developer/SDKs/MacOSX10.5.sdk
+
+//Minimum OS X version to target for deployment (at runtime); newer
+// APIs weak linked. Set to empty string for default value.
+CMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.5
+
+Or:
+
+CMAKE_OSX_ARCHITECTURE = x86_64 -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.5.sdk/ -mmacosx-version-min=10.5
+CMAKE_OSX_SYSROOT = /Developer/SDKs/MacOSX10.5.sdk
+CMAKE_CXX_FLAGS = -D__ASSERTMACROS__
+
+
+Then we invoke make:
+user@mac-osx$ make
+
+Known Problems
+~~~~~~~~~~~~~~
+In file included from
+/temp/kicad-sources/boost_1_38_0/boost/ptr_container/detail/reversible_ptr_container.hpp:22In
+file included from
+/temp/kicad-sources/boost_1_38_0/boost/ptr_container/detail/reversible_ptr_container.hpp:22,
+                     from
+/temp/kicad-sources/boost_1_38_0/boost/ptr_container/ptr_sequence_adapter.hpp:20,
+                     from
+/temp/kicad-sources/boost_1_38_0/boost/ptr_container/ptr_vector.hpp:20,
+                     from
+/temp/kicad-sources/kicad/include/board_item_struct.h:9,
+                     from /temp/kicad-sources/kicad/include/pcbstruct.h:10,
+                     from /temp/kicad-sources/kicad/3d-viewer/3d_viewer.h:29,
+                     from /temp/kicad-sources/kicad/3d-viewer/3d_aux.cpp:23:
+    /temp/kicad-sources/boost_1_38_0/boost/ptr_container/detail/static_move_ptr.hpp:154:50:
+error: macro "check" passed 2 arguments, but takes just 1
+
+CMAKE_CXX_FLAGS = -D__ASSERTMACROS__ fixes this :-)

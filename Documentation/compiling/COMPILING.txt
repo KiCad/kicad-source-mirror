@@ -1,59 +1,41 @@
---== How to build kicad ==--
-First Written: 19-Dec-2007
-Last Revised: 13-May-2009
+Compiling KiCad from Source
+===========================
+KiCad Documentation Team
+Last revised on 31-Jan-2010 by Jerry Jacobs
 
+Introduction
+------------
+This is a generic guide how to compile kicad from scratch. On windows and linux.
+If you need something more distribution specific or the experimental mac-osx port
+read the other documents in the Documentation/compiling folder.
 
-Kicad needs wxWidgets, the multi platform G.U.I.
+Installation of Tools
+---------------------
+On windows:
 
-Perform these steps in sequence. (Platform specific details are given in
-sections below.)
-
-
-1)  If windows, then install "msys" and "mingw".
-2)  If linux, then install "mesa".
-3)  Make sure g++ and "make" are in your path.
-4)  Install wxWidgets [and build it if on windows].
-5)  Install zlib [and build it if on windows].
-6)  Install CMAKE
-7)  Install Boost C++ Template Libraries (*.hpp files)
-8)  Install the kicad source tree.
-9)  Use cmake to build the kicad makefiles.
-10) Use make to build and install kicad.
-11) Making a "Debug" build.
-12) Variables for fine-tuning the build process.
-
-
-===== Step Details ====================================================
-
-1)  If windows, then install "msys" and "mingw".
-
-Skip this step if on a Unix box.  Get msys and mingw here:
+Get msys and mingw here:
 http://mingw.org/
 msys sets up a development environment that allows the bash shell to run.
 mingw are a set of tools that run on windows or under msys.  You will need
 at least the following mingw packages: make, gcc, g++, binutils, autoconf, and
 automake.
 
+On linux:
 
------------------------------------------------------------------------------
+Install "mesa".  Use your package manager to install the
+development libaries.
 
-2)  If linux, install "mesa".  Use your package manager to install the
-    development libaries.
-
-
------------------------------------------------------------------------------
-
-3)  Make sure g++ and "make" are in your path.
-
+Tools in PATH
+-------------
+Make sure g++, make and other tools are in your path.
 If windows, then try running g++ and make from within your msys bash shell.
 
 
------------------------------------------------------------------------------
-
-4)  Install wxWidgets [and build it if on windows].
-
+Install or Build wxWidgets
+--------------------------
 If on windows, download
-http://prdownloads.sourceforge.net/wxwindows/wxMSW-2.8.8.zip or a newer version.
+http://sourceforge.net/projects/wxwindows/files/wxAll/2.8.10/wxWidgets-2.8.10.zip/download
+or a newer version.
 Start msys so you have a bash shell.  Decide where your wxWidgets build directory
 will be.  It must be where you can access it from within the msys environment,
 such as home/<user>.   Edit your msys/1.0/etc/fstab file if needed to provide
@@ -66,17 +48,21 @@ there, and then:
     mkdir build-release
     mkdir build-debug
 
--- release
+.Release
+----
     cd build-release
     ../configure --enable-unicode --enable-monolithic --disable-shared --with-msw --with-opengl
     make
     make install
+----
 
--- debug
+.Debug
+----
     cd build-debug
     ../configure --enable-unicode --enable-monolithic --enable-debug --enable-debug_gdb --disable-shared --with-msw --with-opengl
     make
     make install
+----
 
 I think the default is to install into /usr/local/wxMSW-2.8.8.  You can probably
 pass --prefix=<wxInstallDir> to configure above to change where "make install"
@@ -94,10 +80,8 @@ alternative is to build static libaries from source. Verify that wx-config is in
 your path by running it from a command prompt. Linux users then go to next step.
 
 
------------------------------------------------------------------------------
-
-5)  Install zlib [and build it if on windows].
-
+Install or Build zlib
+---------------------
 If on windows, download http://www.zlib.net/zlib123.zip or a newer version.
 Start msys so you have a bash shell. Decide where your zlib build directory
 will be. It must be where you can access it from within the msys environment,
@@ -113,20 +97,17 @@ build directory. Change directories into there, and then:
 If linux, use your package manager to install zlib pre-built binaries.
 
 Note (JP Charras):
-	Under Linux, zlib is usually installed.
-	If it is not found by the wxWidget installation, wxWidgets creates an alternate zlib library.
-	Under Windows, if zlib is not installed, my cmake build will try to use the
-    wxWidgets zlib build.  So, under windows kicad build should work without
-    zlib install.
+Under Linux, zlib is usually installed.
+If it is not found by the wxWidget installation, wxWidgets creates an alternate zlib library.
+Under Windows, if zlib is not installed, my cmake build will try to use the
+wxWidgets zlib build.  So, under windows kicad build should work without
+zlib install.
 
-	If you are using the wxWidget zlib, make sure that the wxWidgets/src/zlib directory is copied 
-	to ${wxWidgets_ROOT_DIR}/src/zlib
+If you are using the wxWidget zlib, make sure that the wxWidgets/src/zlib directory is copied 
+to ${wxWidgets_ROOT_DIR}/src/zlib
 
-
------------------------------------------------------------------------------
-
-6)  Install CMAKE.
-
+Install CMake
+-------------
 If windows, download the installation binary for windows from cmake.org.
 Install that and choose to add cmake to your path during installation.  You
 will have to restart and command shells for the new path to take effect.
@@ -139,43 +120,13 @@ or later. If only an older one is available in your package repository, build
 command prompt.
 
 
------------------------------------------------------------------------------
-
-7)  Install Boost C++ Libraries
-
-Under linux, boost is already installed, but can be too old.
-If this is the case, you *must* update boost.
-Go to http://www.boost.org/ dowlload the latest version of boost.
-unzip (or untar) boots file.
-under Windows, files can be installed (unzipped) everywhere, but when create
-makefiles using cmake, you will have a message saying boost is not found,
-something like:
-
--- Check for installed Boost -- not found
-CMake Error at CMakeModules/CheckFindPackageResult.cmake:6 (message):
-  Boost was not found - it is required to build Kicad
-
-Edit the CMakeCache.txt file to replace the Boost_INCLUDE_DIR "notfound" value by the right value:
-You must find a line like
-//Path to a file.
-Boost_INCLUDE_DIR:PATH=Boost_INCLUDE_DIR-NOTFOUND
-
-and edit it to set the right path, something like:
-Boost_INCLUDE_DIR:PATH=f:/boost/boost
-(on my computer boost is unzipper in f:\boost, and boost installed files are
-in f:\boost\boost)
-
-
------------------------------------------------------------------------------
-
-8)  Install the kicad source tree.
-
+Obtain Sources
+--------------
 You can use the subversion repository or a tar file for this.  See the wiki.
 
 
------------------------------------------------------------------------------
-
-9)  Use cmake to create the kicad makefiles.
+Create Makefiles with CMake
+---------------------------
 If windows, go into your msys shell.  Linux and windows users both then make
 two "out of source" build directories:
     cd <kicadSource>
@@ -197,21 +148,8 @@ gives the final install directory. If not what you want, edit it with a text
 editor and re-run the same cmake command again, but with no
 -DCMAKE_INSTALL_PREFIX given on the command line.
 
-CMake will try and find the boost header files and will often fail.  If it
-fails, you will have to edit your CMakeCache.txt file manually and set your
-Boost_INCLUDE_DIR:PATH=/svn/boost-trunk
-setting to point to the base of the boost installation directory.  Account
-for the fact that the boost #include references use a <boost/..> type prefix.
-Example C++ code:  #include <boost/ptr_container/ptr_vector.hpp> and please
-notice the leading <boost/ in the path.
-So point your Boost_INCLUDE_DIR:PATH= variable to a directory above the
-"boost" directory.
-
-
------------------------------------------------------------------------------
-
-10)  Use make to build and install kicad.
-
+Compiling with Make
+------------------~
 You compile Kicad here.  You will only need to do step 8) again when one of the
 CMakeLists.txt files change.  If windows, you must be in your msys shell.
 On either platform then:
@@ -223,10 +161,8 @@ On either platform then:
 You are now done unless you want to make a Debug build.
 
 
------------------------------------------------------------------------------
-
-11) Making a "Debug" build.
-
+Compiling a Debug version
+-------------------------
     cd <kicadSource>/build/debug
 
 On either cmake command line shown below, you can optionally include
@@ -244,10 +180,8 @@ Make the Debug binaries:
     make
 
 
------------------------------------------------------------------------------
-
-12) Variables for fine-tuning the build process.
-
+Fine-tune Build Process
+-----------------------
 These should be set from command line:
 
  CMAKE_BUILD_TYPE Release/Debug (REQUIRED)
@@ -257,7 +191,6 @@ These should be set from command line:
    Should be set to ON only when CMAKE_BUILD_TYPE=Debug.
 
  wxWidgets_USE_STATIC ON/OFF (OPTIONAL)
-
 
  CMAKE_VERBOSE_MAKEFILE ON/OFF (OPTIONAL)
    Turns ON/OFF verbose build messages.
@@ -269,10 +202,5 @@ These should be set from command line:
 
  KICAD_PYTHON ON/OFF
 
-
------------------------------------------------------------------------------
-
 Note: that it is easy to build only a specific binary such as pcbnew alone:
     make pcbnew
-
------------------------------------------------------------------------------
