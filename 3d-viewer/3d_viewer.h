@@ -115,7 +115,7 @@ public:
     wxPoint   m_BoardPos;
     wxSize    m_BoardSize;
     int       m_Layers;
-    EDA_BoardDesignSettings* m_BoardSettings;   // Link to current board design
+    BOARD_DESIGN_SETTINGS* m_BoardSettings;   // Link to current board design
                                                 // settings
     double    m_Epoxy_Width;                    /* Epoxy thickness (normalized)
                                                  **/

@@ -356,7 +356,7 @@ public:
      * Constructor GENERAL_COLLECTORS_GUIDE
      * grabs stuff from global preferences and uses reasonable defaults.
      * Add more constructors as needed.
-     * @param settings The EDA_BoardDesignSettings to reference.
+     * @param settings The BOARD_DESIGN_SETTINGS to reference.
      */
     GENERAL_COLLECTORS_GUIDE( int aVisibleLayerMask, int aPreferredLayer )
     {

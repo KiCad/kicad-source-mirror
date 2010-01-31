@@ -237,21 +237,6 @@ public:
         return m_NetClass->GetTrackWidth();
     }
 
-
-#if 0
-
-    /**
-     * Function GetTrackMinWidth
-     * returns the Minimum value for tracks thickness (used in DRC)
-     */
-    int GetTrackMinWidth()
-    {
-        return g_DesignSettings.m_TrackMinWidth;
-    }
-
-
-#endif
-
     /**
      * Function GetViaSize
      * returns the size of vias used to route this net

@@ -11,7 +11,6 @@ class DPAD;
 class BOARD_ITEM;
 class PCB_SCREEN;
 class DISPLAY_OPTIONS;
-class EDA_BoardDesignSettings;
 
 /* Look up Table for conversion one layer number -> one bit layer mask: */
 extern int g_TabOneLayerMask[LAYER_COUNT];
@@ -40,9 +39,6 @@ extern int g_CurrentVersionPCB;
 
 extern int    g_TimeOut;            // Timer for automatic saving
 extern int    g_SaveTime;           // Time for next saving
-
-// Current design settings:
-extern class EDA_BoardDesignSettings g_DesignSettings;
 
 extern DLIST<TRACK> g_CurrentTrackList;
 

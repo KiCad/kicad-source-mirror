@@ -20,7 +20,7 @@
 
 // Local functions:
 /* Trace the pads of a module in sketch mode.
- * Used to display pads when when the module visibility is set to not visible 
+ * Used to display pads when when the module visibility is set to not visible
  * and we want to see pad through.
  * The pads must appear on the layers selected in MasqueLayer
  */
@@ -160,14 +160,14 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
         if( module->m_Flags & IS_MOVED )
             continue;
 
-        if( !g_DesignSettings.IsElementVisible( PCB_VISIBLE(MOD_FR_VISIBLE) ) )
+        if( !IsElementVisible( PCB_VISIBLE(MOD_FR_VISIBLE) ) )
         {
             if( module->GetLayer() == LAYER_N_FRONT )
                 display = FALSE;
             layerMask &= ~LAYER_FRONT;
         }
 
-        if( !g_DesignSettings.IsElementVisible( PCB_VISIBLE(MOD_BK_VISIBLE) ) )
+        if( !IsElementVisible( PCB_VISIBLE(MOD_BK_VISIBLE) ) )
         {
             if( module->GetLayer() == LAYER_N_BACK )
                 display = FALSE;
@@ -247,7 +247,7 @@ void BOARD::DrawHighLight( WinEDA_DrawPanel* aDrawPanel, wxDC* DC, int aNetCode 
 
 
 /* Trace the pads of a module in sketch mode.
- * Used to display pads when when the module visibility is set to not visible 
+ * Used to display pads when when the module visibility is set to not visible
  * and we want to see pad through.
  * The pads must appear on the layers selected in MasqueLayer
  */

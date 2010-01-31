@@ -146,7 +146,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     /* create the via */
     SEGVIA* via    = new SEGVIA( GetBoard() );
     via->m_Flags   = IS_NEW;
-    via->m_Shape   = g_DesignSettings.m_CurrentViaType;
+    via->m_Shape   = GetBoard()->GetBoardDesignSettings()->m_CurrentViaType;
     via->m_Width   = GetBoard()->GetCurrentViaSize();
     via->SetNet( g_HighLight_NetCode );
     via->m_Start   = via->m_End = g_CurrentTrackSegment->m_End;
@@ -172,7 +172,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
 
         case VIA_MICROVIA:  // from external to the near neighbor inner layer
         {
-            int last_inner_layer = GetBoard()->m_BoardSettings->GetCopperLayerCount() - 2;
+            int last_inner_layer = GetBoard()->GetCopperLayerCount() - 2;
             if ( first_layer == LAYER_N_BACK )
                 last_layer = LAYER_N_2;
             else if ( first_layer == LAYER_N_FRONT )
@@ -271,7 +271,7 @@ void WinEDA_PcbFrame::Affiche_Status_Net( wxDC* DC )
     TRACK* pt_segm;
     int    masquelayer = (1 << getActiveLayer());
 
-    pt_segm = Locate_Pistes( GetBoard()->m_Track, masquelayer,
+    pt_segm = Locate_Pistes( GetBoard(), GetBoard()->m_Track, masquelayer,
                              CURSEUR_OFF_GRILLE );
     if( pt_segm == NULL )
         GetBoard()->DisplayInfo( this );

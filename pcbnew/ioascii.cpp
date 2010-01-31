@@ -214,14 +214,14 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( FILE* File, int* LineNum )
                 Masque_Layer >>= 1;
             }
 
-            GetBoard()->m_BoardSettings->SetCopperLayerCount( layer_count );
+            GetBoard()->SetCopperLayerCount( layer_count );
 
             continue;
         }
-        if( stricmp( data, "LayerThickness" ) == 0 )
+        if( stricmp( data, "BoardThickness" ) == 0 )
         {
             data = strtok( NULL, " =\n\r" );
-            GetBoard()->m_BoardSettings->m_LayerThickness = atoi( data );;
+            GetBoard()->GetBoardDesignSettings()->m_BoardThickness = atoi( data );;
             continue;
         }
 
@@ -345,7 +345,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
         {
             int tmp;
             sscanf( data, "%d", &tmp );
-            GetBoard()->m_BoardSettings->SetCopperLayerCount( tmp );
+            GetBoard()->SetCopperLayerCount( tmp );
             continue;
         }
 
@@ -394,7 +394,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
 
         if( stricmp( Line, "TrackMinWidth" ) == 0 )
         {
-            g_DesignSettings.m_TrackMinWidth = atoi( data );
+            GetBoard()->GetBoardDesignSettings()->m_TrackMinWidth = atoi( data );
             continue;
         }
 
@@ -406,13 +406,13 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
 
         if( stricmp( Line, "DrawSegmWidth" ) == 0 )
         {
-            g_DesignSettings.m_DrawSegmentWidth = atoi( data );
+            GetBoard()->GetBoardDesignSettings()->m_DrawSegmentWidth = atoi( data );
             continue;
         }
 
         if( stricmp( Line, "EdgeSegmWidth" ) == 0 )
         {
-            g_DesignSettings.m_EdgeSegmentWidth = atoi( data );
+            GetBoard()->GetBoardDesignSettings()->m_EdgeSegmentWidth = atoi( data );
             continue;
         }
 
@@ -423,7 +423,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
 
         if( stricmp( Line, "ViaMinSize" ) == 0 )
         {
-            g_DesignSettings.m_ViasMinSize = atoi( data );
+            GetBoard()->GetBoardDesignSettings()->m_ViasMinSize = atoi( data );
             continue;
         }
 
@@ -434,7 +434,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
 
         if( stricmp( Line, "MicroViaMinSize" ) == 0 )
         {
-            g_DesignSettings.m_MicroViasMinSize = atoi( data );
+            GetBoard()->GetBoardDesignSettings()->m_MicroViasMinSize = atoi( data );
             continue;
         }
 
@@ -462,7 +462,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
 
         if( stricmp( Line, "ViaMinDrill" ) == 0 )
         {
-            g_DesignSettings.m_ViasMinDrill = atoi( data );
+            GetBoard()->GetBoardDesignSettings()->m_ViasMinDrill = atoi( data );
             continue;
         }
 
@@ -476,27 +476,27 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
         if( stricmp( Line, "MicroViaMinDrill" ) == 0 )
         {
             int diameter = atoi( data );
-            g_DesignSettings.m_MicroViasMinDrill = diameter;
+            GetBoard()->GetBoardDesignSettings()->m_MicroViasMinDrill = diameter;
             continue;
         }
 
         if( stricmp( Line, "MicroViasAllowed" ) == 0 )
         {
-            g_DesignSettings.m_MicroViasAllowed = atoi( data );
+            GetBoard()->GetBoardDesignSettings()->m_MicroViasAllowed = atoi( data );
             continue;
         }
 
         if( stricmp( Line, "TextPcbWidth" ) == 0 )
         {
-            g_DesignSettings.m_PcbTextWidth = atoi( data );
+            GetBoard()->GetBoardDesignSettings()->m_PcbTextWidth = atoi( data );
             continue;
         }
 
         if( stricmp( Line, "TextPcbSize" ) == 0 )
         {
-            g_DesignSettings.m_PcbTextSize.x = atoi( data );
+            GetBoard()->GetBoardDesignSettings()->m_PcbTextSize.x = atoi( data );
             data = strtok( NULL, " =\n\r" );
-            g_DesignSettings.m_PcbTextSize.y = atoi( data );
+            GetBoard()->GetBoardDesignSettings()->m_PcbTextSize.y = atoi( data );
             continue;
         }
 
@@ -536,17 +536,17 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
         }
         if( stricmp( Line, "Pad2MaskClearance" ) == 0 )
         {
-            g_DesignSettings.m_SolderMaskMargin = atoi( data );
+            GetBoard()->GetBoardDesignSettings()->m_SolderMaskMargin = atoi( data );
             continue;
         }
         if( stricmp( Line, "Pad2PasteClearance" ) == 0 )
         {
-            g_DesignSettings.m_SolderPasteMargin = atoi( data );
+            GetBoard()->GetBoardDesignSettings()->m_SolderPasteMargin = atoi( data );
             continue;
         }
         if( stricmp( Line, "Pad2PasteClearanceRatio" ) == 0 )
         {
-            g_DesignSettings.m_SolderPasteMarginRatio = atof( data );
+            GetBoard()->GetBoardDesignSettings()->m_SolderPasteMarginRatio = atof( data );
             continue;
         }
 
@@ -592,7 +592,7 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
 #ifdef PCBNEW
 static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
 {
-    NETCLASS* netclass_default = aFrame->GetBoard()->m_NetClasses.GetDefault();
+    NETCLASS* netclass_default = aBoard->m_NetClasses.GetDefault();
     char      text[1024];
 
     fprintf( aFile, "$SETUP\n" );
@@ -630,17 +630,17 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
     fprintf( aFile,
              "ZoneClearence %d\n",
              g_Zone_Default_Setting.m_ZoneClearance );
-    fprintf( aFile, "TrackMinWidth %d\n", g_DesignSettings.m_TrackMinWidth );
+    fprintf( aFile, "TrackMinWidth %d\n", aBoard->GetBoardDesignSettings()->m_TrackMinWidth );
 
-    fprintf( aFile, "DrawSegmWidth %d\n", g_DesignSettings.m_DrawSegmentWidth );
-    fprintf( aFile, "EdgeSegmWidth %d\n", g_DesignSettings.m_EdgeSegmentWidth );
+    fprintf( aFile, "DrawSegmWidth %d\n", aBoard->GetBoardDesignSettings()->m_DrawSegmentWidth );
+    fprintf( aFile, "EdgeSegmWidth %d\n", aBoard->GetBoardDesignSettings()->m_EdgeSegmentWidth );
 
     // Save current default via size, for compatibility with older pcbnew
     // version;
     fprintf( aFile, "ViaSize %d\n", netclass_default->GetViaDiameter() );
     fprintf( aFile, "ViaDrill %d\n", netclass_default->GetViaDrill() );
-    fprintf( aFile, "ViaMinSize %d\n", g_DesignSettings.m_ViasMinSize );
-    fprintf( aFile, "ViaMinDrill %d\n", g_DesignSettings.m_ViasMinDrill );
+    fprintf( aFile, "ViaMinSize %d\n", aBoard->GetBoardDesignSettings()->m_ViasMinSize );
+    fprintf( aFile, "ViaMinDrill %d\n", aBoard->GetBoardDesignSettings()->m_ViasMinDrill );
 
     // Save custom vias diameters list (the first is not saved here: this is
     // the netclass value
@@ -654,19 +654,19 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
     fprintf( aFile, "MicroViaDrill %d\n", netclass_default->GetuViaDrill() );
     fprintf( aFile,
              "MicroViasAllowed %d\n",
-             g_DesignSettings.m_MicroViasAllowed );
+             aBoard->GetBoardDesignSettings()->m_MicroViasAllowed );
     fprintf( aFile,
              "MicroViaMinSize %d\n",
-             g_DesignSettings.m_MicroViasMinSize );
+             aBoard->GetBoardDesignSettings()->m_MicroViasMinSize );
     fprintf( aFile,
              "MicroViaMinDrill %d\n",
-             g_DesignSettings.m_MicroViasMinDrill );
+             aBoard->GetBoardDesignSettings()->m_MicroViasMinDrill );
 
-    fprintf( aFile, "TextPcbWidth %d\n", g_DesignSettings.m_PcbTextWidth );
+    fprintf( aFile, "TextPcbWidth %d\n", aBoard->GetBoardDesignSettings()->m_PcbTextWidth );
     fprintf( aFile,
              "TextPcbSize %d %d\n",
-             g_DesignSettings.m_PcbTextSize.x,
-             g_DesignSettings.m_PcbTextSize.y );
+             aBoard->GetBoardDesignSettings()->m_PcbTextSize.x,
+             aBoard->GetBoardDesignSettings()->m_PcbTextSize.y );
 
     fprintf( aFile, "EdgeModWidth %d\n", ModuleSegmentWidth );
     fprintf( aFile, "TextModSize %d %d\n", ModuleTextSize.x, ModuleTextSize.y );
@@ -678,15 +678,15 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
     fprintf( aFile, "PadDrill %d\n", g_Pad_Master.m_Drill.x );
     fprintf( aFile,
              "Pad2MaskClearance %d\n",
-             g_DesignSettings.m_SolderMaskMargin );
-    if( g_DesignSettings.m_SolderPasteMargin != 0 )
+             aBoard->GetBoardDesignSettings()->m_SolderMaskMargin );
+    if( aBoard->GetBoardDesignSettings()->m_SolderPasteMargin != 0 )
         fprintf( aFile,
                  "Pad2PasteClearance %d\n",
-                 g_DesignSettings.m_SolderPasteMargin );
-    if( g_DesignSettings.m_SolderPasteMarginRatio != 0 )
+                 aBoard->GetBoardDesignSettings()->m_SolderPasteMargin );
+    if( aBoard->GetBoardDesignSettings()->m_SolderPasteMarginRatio != 0 )
         fprintf( aFile,
                  "Pad2PasteClearanceRatio %g\n",
-                 g_DesignSettings.m_SolderPasteMarginRatio );
+                 aBoard->GetBoardDesignSettings()->m_SolderPasteMarginRatio );
 
     fprintf( aFile,
              "AuxiliaryAxisOrg %d %d\n",
@@ -707,7 +707,7 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
     int             NbModules, NbDrawItem, NbLayers;
 
     /* Write copper layer count */
-    NbLayers = GetBoard()->m_BoardSettings->GetCopperLayerCount();
+    NbLayers = GetBoard()->GetCopperLayerCount();
     fprintf( File, "$GENERAL\n" );
     fprintf( File, "LayerCount %d\n", NbLayers );
 
@@ -740,8 +740,8 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
     fprintf( File, "Ndraw %d\n", NbDrawItem );
     fprintf( File, "Ntrack %d\n", GetBoard()->GetNumSegmTrack() );
     fprintf( File, "Nzone %d\n", GetBoard()->GetNumSegmZone() );
-    fprintf( File, "LayerThickness %d\n",
-             GetBoard()->m_BoardSettings->m_LayerThickness );
+    fprintf( File, "BoardThickness %d\n",
+             GetBoard()->GetBoardDesignSettings()->m_BoardThickness );
 
     fprintf( File, "Nmodule %d\n", NbModules );
     fprintf( File, "Nnets %d\n", GetBoard()->m_NetInfo->GetCount() );

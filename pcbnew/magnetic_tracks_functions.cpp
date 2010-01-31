@@ -184,7 +184,7 @@ bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
         {
             int layer_mask = g_TabOneLayerMask[layer];
 
-            TRACK* track = Locate_Pistes( m_Pcb->m_Track, layer_mask, CURSEUR_OFF_GRILLE );
+            TRACK* track = Locate_Pistes( m_Pcb, m_Pcb->m_Track, layer_mask, CURSEUR_OFF_GRILLE );
             if( !track || track->Type() != TYPE_TRACK )
             {
                 // D(printf("!currTrack and track=%p not found, layer_mask=0x%X\n", track, layer_mask );)
@@ -217,7 +217,7 @@ bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
             if( doCheckNet && currTrack && currTrack->GetNet() != track->GetNet() )
                 continue;
 
-            if( g_DesignSettings.IsLayerVisible( track->GetLayer() ) == false )
+            if( m_Pcb->IsLayerVisible( track->GetLayer() ) == false )
                 continue;
 
             // omit the layer check if moving a via

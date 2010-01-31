@@ -194,7 +194,7 @@ void DIALOG_PLOT::Init_Dialog()
     wxString layerKey;
     for( layer = 0; layer < NB_LAYERS; ++layer )
     {
-        if( !board->m_BoardSettings->IsLayerEnabled( layer ) )
+        if( !board->IsLayerEnabled( layer ) )
             m_BoxSelectLayer[layer] = NULL;
         else
         m_BoxSelectLayer[layer] =
@@ -420,7 +420,7 @@ void DIALOG_PLOT::SaveOptPlot( wxCommandEvent& event )
         g_pcb_plot_options.Plot_Frame_Ref = m_Plot_Sheet_Ref->GetValue();
 
     g_pcb_plot_options.PlotPadsOnSilkLayer  = m_Plot_Pads_on_Silkscreen->GetValue();
- 
+
     s_PlotOriginIsAuxAxis =
         (m_Choice_Plot_Offset->GetSelection() == 0) ? FALSE : TRUE;
 

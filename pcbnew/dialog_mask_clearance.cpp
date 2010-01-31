@@ -26,6 +26,8 @@ DIALOG_PADS_MASK_CLEARANCE::DIALOG_PADS_MASK_CLEARANCE( WinEDA_PcbFrame* parent 
     DIALOG_PADS_MASK_CLEARANCE_BASE( parent )
 {
     m_Parent = parent;
+    m_BrdSettings = m_Parent->GetBoard()->GetBoardDesignSettings();
+
     MyInit();
     GetSizer()->SetSizeHints( this );
     Centre();
@@ -41,23 +43,24 @@ void DIALOG_PADS_MASK_CLEARANCE::MyInit()
 
     int Internal_Unit = m_Parent->m_InternalUnits;
     PutValueInLocalUnits( *m_SolderMaskMarginCtrl,
-                          g_DesignSettings.m_SolderMaskMargin,
+                           m_BrdSettings->m_SolderMaskMargin,
                           Internal_Unit );
 
     // These 2 parameters are usually < 0, so prepare entering a negative
     // value, if current is 0
     PutValueInLocalUnits( *m_SolderPasteMarginCtrl,
-                          g_DesignSettings.m_SolderPasteMargin,
+                           m_BrdSettings->m_SolderPasteMargin,
                           Internal_Unit );
-    if( g_DesignSettings.m_SolderPasteMargin == 0 )
+    if(  m_BrdSettings->m_SolderPasteMargin == 0 )
         m_SolderPasteMarginCtrl->SetValue( wxT( "-" ) +
                                            m_SolderPasteMarginCtrl->GetValue() );
     wxString msg;
-    if( g_DesignSettings.m_SolderPasteMarginRatio == 0 )
-        msg.Printf( wxT( "-%f" ), g_DesignSettings.m_SolderPasteMarginRatio * 100.0 );
+    msg.Printf( wxT( "%f" ), m_BrdSettings->m_SolderPasteMarginRatio * 100.0 );
+    if(  m_BrdSettings->m_SolderPasteMarginRatio == 0.0 &&
+        msg[0] == '0')  // Sometimes Printf add a sign if the value is small
+        m_SolderPasteMarginRatioCtrl->SetValue( wxT( "-" ) + msg );
     else
-        msg.Printf( wxT( "%f" ), g_DesignSettings.m_SolderPasteMarginRatio * 100.0 );
-    m_SolderPasteMarginRatioCtrl->SetValue( msg );
+        m_SolderPasteMarginRatioCtrl->SetValue( msg );
 }
 
 
@@ -65,18 +68,20 @@ void DIALOG_PADS_MASK_CLEARANCE::MyInit()
 void DIALOG_PADS_MASK_CLEARANCE::OnButtonOkClick( wxCommandEvent& event )
 /*******************************************************************/
 {
-    g_DesignSettings.m_SolderMaskMargin =
+     m_BrdSettings->m_SolderMaskMargin =
         ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, m_Parent->m_InternalUnits );
-    g_DesignSettings.m_SolderPasteMargin =
+     m_BrdSettings->m_SolderPasteMargin =
         ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl, m_Parent->m_InternalUnits );
-    double   dtmp;
+    double   dtmp = 0;
     wxString msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );
 
     // A margin ratio de -50% means no paste on a pad, the ratio must be >= 50 %
     if( dtmp < -50 )
         dtmp = -50;
-    g_DesignSettings.m_SolderPasteMarginRatio = dtmp / 100;
+    if( dtmp > +100 )
+        dtmp = +100;
+     m_BrdSettings->m_SolderPasteMarginRatio = dtmp / 100;
 
     EndModal( 1 );
 }

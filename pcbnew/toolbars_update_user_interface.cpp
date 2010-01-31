@@ -83,7 +83,7 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI()
     AuxiliaryToolBar_DesignRules_Update_UI();
 
     m_AuxiliaryToolBar->ToggleTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
-                                    g_DesignSettings.m_UseConnectedTrackWidth );
+                                    GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth );
 
     if( m_SelTrackWidthBox && m_TrackAndViasSizesList_Changed )
     {

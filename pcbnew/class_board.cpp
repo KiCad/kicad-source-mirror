@@ -14,6 +14,9 @@
  */
 wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 
+// Current design settings (used also to read configs):
+BOARD_DESIGN_SETTINGS boardDesignSettings;
+
 
 /*****************/
 /* Class BOARD: */
@@ -25,7 +28,8 @@ BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
 {
     m_PcbFrame = frame;
     m_Status_Pcb    = 0;                    // Status word: bit 1 = calculate.
-    m_BoardSettings = &g_DesignSettings;
+    SetBoardDesignSettings(&boardDesignSettings);
+    SetColorsSettings(&g_ColorsSettings);
     m_NbNodes     = 0;                      // Number of connected pads.
     m_NbNoconnect = 0;                      // Number of unconnected nets.
 
@@ -181,15 +185,13 @@ int BOARD::GetCurrentMicroViaDrill()
 }
 
 
-
 wxString BOARD::GetLayerName( int aLayerIndex ) const
 {
     if( !IsValidLayerIndex( aLayerIndex ) )
         return wxEmptyString;
 
     // copper layer names are stored in the BOARD.
-    if( IsValidCopperLayerIndex( aLayerIndex )
-       && m_BoardSettings->IsLayerEnabled( aLayerIndex ) )
+    if( IsValidCopperLayerIndex( aLayerIndex ) && IsLayerEnabled( aLayerIndex ) )
     {
         // default names were set in BOARD::BOARD() but they may be
         // over-ridden by BOARD::SetLayerName()
@@ -263,11 +265,11 @@ bool BOARD::SetLayerName( int aLayerIndex, const wxString& aLayerName )
     // replace any spaces with underscores before we do any comparing
     NameTemp.Replace( wxT( " " ), wxT( "_" ) );
 
-    if( m_BoardSettings->IsLayerEnabled( aLayerIndex ) )
+    if( IsLayerEnabled( aLayerIndex ) )
     {
         for( int i = 0; i < NB_COPPER_LAYERS; i++ )
         {
-            if( i != aLayerIndex && m_BoardSettings->IsLayerEnabled( i )
+            if( i != aLayerIndex && IsLayerEnabled( i )
                 && NameTemp == m_Layer[i].m_Name )
                 return false;
         }
@@ -288,7 +290,7 @@ LAYER_T BOARD::GetLayerType( int aLayerIndex ) const
 
     //@@IMB: The original test was broken due to the discontinuity
     // in the layer sequence.
-    if( m_BoardSettings->IsLayerEnabled( aLayerIndex ) )
+    if( IsLayerEnabled( aLayerIndex ) )
         return m_Layer[aLayerIndex].m_Type;
     return LT_SIGNAL;
 }
@@ -301,7 +303,7 @@ bool BOARD::SetLayerType( int aLayerIndex, LAYER_T aLayerType )
 
     //@@IMB: The original test was broken due to the discontinuity
     // in the layer sequence.
-    if( m_BoardSettings->IsLayerEnabled( aLayerIndex ) )
+    if( IsLayerEnabled( aLayerIndex ) )
     {
         m_Layer[aLayerIndex].m_Type = aLayerType;
         return true;
@@ -354,35 +356,36 @@ LAYER_T LAYER::ParseType( const char* aType )
 
 int BOARD::GetCopperLayerCount() const
 {
-    return m_BoardSettings->GetCopperLayerCount();
+    return GetBoardDesignSettings()->GetCopperLayerCount();
 }
+
 void BOARD::SetCopperLayerCount( int aCount )
 {
-    m_BoardSettings->SetCopperLayerCount( aCount );
+    GetBoardDesignSettings()->SetCopperLayerCount( aCount );
 }
 
 
 int BOARD::GetEnabledLayers() const
 {
-    return m_BoardSettings->GetEnabledLayers();
+    return GetBoardDesignSettings()->GetEnabledLayers();
 }
 
 
 int BOARD::GetVisibleLayers() const
 {
-    return m_BoardSettings->GetVisibleLayers();
+    return GetBoardDesignSettings()->GetVisibleLayers();
 }
 
 
 void BOARD::SetEnabledLayers( int aLayerMask )
 {
-    m_BoardSettings->SetEnabledLayers( aLayerMask );
+    GetBoardDesignSettings()->SetEnabledLayers( aLayerMask );
 }
 
 
 void BOARD::SetVisibleLayers( int aLayerMask )
 {
-    m_BoardSettings->SetVisibleLayers( aLayerMask );
+    GetBoardDesignSettings()->SetVisibleLayers( aLayerMask );
 }
 
 
@@ -415,23 +418,13 @@ void BOARD::SetVisibleAlls(  )
 
 int BOARD::GetVisibleElements() const
 {
-    return m_BoardSettings->GetVisibleElements();
+    return GetBoardDesignSettings()->GetVisibleElements();
 }
 
 
 bool BOARD::IsElementVisible( int aPCB_VISIBLE ) const
 {
-    // @todo move these special cases into default, by moving globals into the board.
-    switch( aPCB_VISIBLE )
-    {
-/*
-    case GRID_VISIBLE:
-        myframe->m_Draw_Grid = isEnabled;
-        break;
-*/
-    default:
-        return m_BoardSettings->IsElementVisible( aPCB_VISIBLE );
-    }
+    return GetBoardDesignSettings()->IsElementVisible( aPCB_VISIBLE );
 }
 
 
@@ -441,12 +434,12 @@ void BOARD::SetElementVisibility( int aPCB_VISIBLE, bool isEnabled )
     {
     case GRID_VISIBLE:
         m_PcbFrame->m_Draw_Grid = isEnabled;
-        m_BoardSettings->SetElementVisibility( aPCB_VISIBLE, isEnabled );
+        GetBoardDesignSettings()->SetElementVisibility( aPCB_VISIBLE, isEnabled );
         break;
 
 
     case RATSNEST_VISIBLE:
-        m_BoardSettings->SetElementVisibility( aPCB_VISIBLE, isEnabled );
+        GetBoardDesignSettings()->SetElementVisibility( aPCB_VISIBLE, isEnabled );
         // we must clear or set the CH_VISIBLE flags to hide/show ratsnet
         // because we have a tool to show hide ratsnest relative to a pad or a module
         // so the hide/show option is a per item selection
@@ -464,7 +457,7 @@ void BOARD::SetElementVisibility( int aPCB_VISIBLE, bool isEnabled )
 
 
     default:
-        m_BoardSettings->SetElementVisibility( aPCB_VISIBLE, isEnabled );
+        GetBoardDesignSettings()->SetElementVisibility( aPCB_VISIBLE, isEnabled );
     }
 }
 
@@ -485,7 +478,7 @@ int BOARD::GetVisibleElementColor( int aPCB_VISIBLE )
     case PAD_FR_VISIBLE:
     case PAD_BK_VISIBLE:
     case RATSNEST_VISIBLE:
-        color = g_ColorsSettings.GetItemColor( aPCB_VISIBLE );
+        color = GetColorsSettings()->GetItemColor( aPCB_VISIBLE );
         break;
     case GRID_VISIBLE:
         color = g_GridColor;
@@ -512,10 +505,10 @@ void BOARD::SetVisibleElementColor( int aPCB_VISIBLE, int aColor )
     case ANCHOR_VISIBLE:
     case PAD_FR_VISIBLE:
     case PAD_BK_VISIBLE:
-        g_ColorsSettings.SetItemColor( aPCB_VISIBLE, aColor );
+        GetColorsSettings()->SetItemColor( aPCB_VISIBLE, aColor );
         break;
     case RATSNEST_VISIBLE:
-        g_ColorsSettings.SetItemColor( aPCB_VISIBLE, aColor );
+        GetColorsSettings()->SetItemColor( aPCB_VISIBLE, aColor );
         break;
 
     case GRID_VISIBLE:
@@ -530,14 +523,34 @@ void BOARD::SetVisibleElementColor( int aPCB_VISIBLE, int aColor )
 
 void BOARD::SetLayerColor( int aLayer, int aColor )
 {
-    g_ColorsSettings.SetLayerColor( aLayer, aColor );
+    GetColorsSettings()->SetLayerColor( aLayer, aColor );
 }
 
 
 int BOARD::GetLayerColor( int aLayer )
 {
-    return g_ColorsSettings.GetLayerColor( aLayer );
+    return GetColorsSettings()->GetLayerColor( aLayer );
 }
+
+/**
+ * Function IsModuleLayerVisible
+ * expects either of the two layers on which a module can reside, and returns
+ * whether that layer is visible.
+ * @param layer One of the two allowed layers for modules: LAYER_N_FRONT or LAYER_N_BACK
+ * @return bool - true if the layer is visible, else false.
+ */
+bool BOARD::IsModuleLayerVisible( int layer )
+{
+    if( layer==LAYER_N_FRONT )
+        return IsElementVisible( PCB_VISIBLE(MOD_FR_VISIBLE) );
+
+    else if( layer==LAYER_N_BACK )
+        return IsElementVisible( PCB_VISIBLE(MOD_BK_VISIBLE) );
+
+    else
+        return true;
+}
+
 
 
 wxPoint& BOARD::GetPosition()

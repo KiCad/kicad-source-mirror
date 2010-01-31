@@ -247,14 +247,20 @@ int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 int D_PAD::GetSolderMaskMargin()
 {
     int margin = m_LocalSolderMaskMargin;
-
-    if( margin == 0 )
+    MODULE * module = (MODULE*) GetParent();
+    if( module )
     {
-        if( GetParent() && ( (MODULE*) GetParent() )->m_LocalSolderMaskMargin )
-            margin = ( (MODULE*) GetParent() )->m_LocalSolderMaskMargin;
+        if( margin == 0 )
+        {
+            if( module->m_LocalSolderMaskMargin )
+                margin = module->m_LocalSolderMaskMargin;
+        }
+        if( margin == 0 )
+        {
+            BOARD * brd = GetBoard();
+            margin = brd->GetBoardDesignSettings()->m_SolderMaskMargin;
+        }
     }
-    if( margin == 0 )
-        margin = g_DesignSettings.m_SolderMaskMargin;
 
     // ensure mask have a size always >= 0
     if( margin < 0 )
@@ -278,17 +284,25 @@ int D_PAD::GetSolderMaskMargin()
 wxSize D_PAD::GetSolderPasteMargin()
 {
     int margin = m_LocalSolderPasteMargin;
-
-    if( margin == 0  && GetParent() )
-        margin = ( (MODULE*) GetParent() )->m_LocalSolderPasteMargin;
-    if( margin == 0  && GetParent() )
-        margin = g_DesignSettings.m_SolderPasteMargin;
-
     double mratio = m_LocalSolderPasteMarginRatio;
-    if( mratio == 0.0 && GetParent() )
-        mratio = ( (MODULE*) GetParent() )->m_LocalSolderPasteMarginRatio;
-    if( mratio == 0.0 )
-        mratio = g_DesignSettings.m_SolderPasteMarginRatio;
+    MODULE * module = (MODULE*) GetParent();
+
+    if( module )
+    {
+        if( margin == 0  )
+            margin = module->m_LocalSolderPasteMargin;
+
+        BOARD * brd = GetBoard();
+        if( margin == 0  )
+            margin = brd->GetBoardDesignSettings()->m_SolderPasteMargin;
+
+        if( mratio == 0.0 )
+            mratio = module->m_LocalSolderPasteMarginRatio;
+        if( mratio == 0.0 )
+        {
+           mratio = brd->GetBoardDesignSettings()->m_SolderPasteMarginRatio;
+        }
+    }
 
     wxSize pad_margin;
     pad_margin.x = margin + wxRound( m_Size.x * mratio );

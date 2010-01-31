@@ -226,8 +226,8 @@ COTATION* WinEDA_PcbFrame::Begin_Cotation( COTATION* Cotation, wxDC* DC )
         Cotation = new COTATION( GetBoard() );
         Cotation->m_Flags = IS_NEW;
 
-        Cotation->SetLayer( ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
-        Cotation->m_Width = g_DesignSettings.m_DrawSegmentWidth;
+        Cotation->SetLayer( getActiveLayer() );
+        Cotation->m_Width = GetBoard()->GetBoardDesignSettings()->m_DrawSegmentWidth;
         Cotation->m_Text->m_Width = Cotation->m_Width;
 
         Cotation->Barre_ox = Cotation->Barre_fx = pos.x;
@@ -251,8 +251,8 @@ COTATION* WinEDA_PcbFrame::Begin_Cotation( COTATION* Cotation, wxDC* DC )
         Cotation->FlecheD2_ox = Cotation->FlecheD2_fx = pos.x;
         Cotation->FlecheD2_oy = Cotation->FlecheD2_fy = pos.y;
 
-        Cotation->m_Text->m_Size   = g_DesignSettings.m_PcbTextSize;
-        Cotation->m_Text->m_Width  = g_DesignSettings.m_PcbTextWidth;
+        Cotation->m_Text->m_Size   = GetBoard()->GetBoardDesignSettings()->m_PcbTextSize;
+        Cotation->m_Text->m_Width  = GetBoard()->GetBoardDesignSettings()->m_PcbTextWidth;
 
         Ajuste_Details_Cotation( Cotation );
 

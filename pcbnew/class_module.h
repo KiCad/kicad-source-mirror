@@ -140,7 +140,6 @@ public:
         return m_Pos;
     }
 
-
     // Moves
     void         SetPosition( const wxPoint& newpos );
     void         SetOrientation( int newangle );

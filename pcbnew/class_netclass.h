@@ -75,7 +75,8 @@ public:
      * Name of identifier within BOARD file.
      * 08-Sept-2009: changed the name from "NETCLASS" to this so we can
      * toss any previous NETCLASSes in migratory BOARD files which will not have
-     * the proper parameters in the default netclass (from g_DesignSettings) in them.
+     * the proper parameters in the default netclass
+     * (from m_Parent->m_designSettings) in them.
      * Spare the user from having to enter those defaults manually.
      */
 #define BRD_NETCLASS  "NCLASS"

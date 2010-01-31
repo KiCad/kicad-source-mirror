@@ -18,6 +18,10 @@
 #include "class_board_design_settings.h"
 #include "colors_selection.h"
 
+/***************/
+/* tracepcb.cpp */
+/***************/
+
 static void Draw_Track_Buffer( WinEDA_DrawPanel* panel,
                         wxDC*             DC,
                         BOARD*            Pcb,
@@ -127,7 +131,7 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
     {
         if( !(track->ReturnMaskLayer() & printmasklayer) )
             continue;
-        if( g_DesignSettings.IsLayerVisible( track->GetLayer() ) == false )
+        if( GetBoard()->IsLayerVisible( track->GetLayer() ) == false )
             continue;
 
 //        D(printf("D:%p\n", track );)
@@ -219,9 +223,9 @@ void Draw_Track_Buffer( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int draw_
 //        D(printf("D:%p\n", track );)
 
         if( dcode_hightlight == track->GetNet() && track->GetLayer()==layer )
-            Trace_Segment( panel, DC, track, draw_mode | GR_SURBRILL );
+            Trace_Segment( Pcb, panel, DC, track, draw_mode | GR_SURBRILL );
         else
-            Trace_Segment( panel, DC, track, draw_mode );
+            Trace_Segment( Pcb, panel, DC, track, draw_mode );
     }
 }
 
@@ -229,7 +233,7 @@ void Draw_Track_Buffer( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int draw_
 #if 1
 
 /***********************************************************************************/
-void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mode )
+void Trace_Segment( BOARD* aBrd, WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mode )
 /***********************************************************************************/
 
 /* Trace 1 segment of track (segment, spot...).
@@ -251,10 +255,10 @@ void Trace_Segment( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track, int draw_mo
     }
     else
     {
-        if( g_DesignSettings.IsLayerVisible( track->GetLayer() ) == false )
+        if( aBrd->IsLayerVisible( track->GetLayer() ) == false )
             return;
 
-        color = g_ColorsSettings.GetLayerColor( track->GetLayer() );
+        color = aBrd->GetLayerColor( track->GetLayer() );
 
         if( draw_mode & GR_SURBRILL )
         {
@@ -420,7 +424,7 @@ void Affiche_DCodes_Pistes( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int d
     track = Pcb->m_Track;
     for( ; track != NULL; track = track->Next() )
     {
-        if( g_DesignSettings.IsLayerVisible( track->GetLayer() ) == false )
+        if( Pcb->IsLayerVisible( track->GetLayer() ) == false )
             continue;
 
         if( (track->m_Shape == S_ARC)
@@ -453,7 +457,7 @@ void Affiche_DCodes_Pistes( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int d
                 orient = TEXT_ORIENT_VERT;
             width /= 2;
         }
-        
+
         int color = g_ColorsSettings.GetItemColor(DCODES_VISIBLE);
 
         DrawGraphicText( panel, DC,

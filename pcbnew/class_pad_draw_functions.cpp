@@ -59,8 +59,9 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     (LAYER_FRONT | ADHESIVE_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT\
     | SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_FRONT)
 
-    bool frontVisible = g_DesignSettings.IsElementVisible( PCB_VISIBLE(PAD_FR_VISIBLE) );
-    bool backVisible = g_DesignSettings.IsElementVisible( PCB_VISIBLE(PAD_BK_VISIBLE) );
+    BOARD * brd =  GetBoard( );
+    bool frontVisible = brd->IsElementVisible( PCB_VISIBLE(PAD_FR_VISIBLE) );
+    bool backVisible = brd->IsElementVisible( PCB_VISIBLE(PAD_BK_VISIBLE) );
 
     if( !frontVisible && !backVisible )
         return;
@@ -90,12 +91,12 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
 
     if( m_Masque_Layer & LAYER_FRONT )
     {
-            color = g_ColorsSettings.GetItemColor(PAD_FR_VISIBLE);
+            color = brd->GetVisibleElementColor(PAD_FR_VISIBLE);
     }
 
     if( m_Masque_Layer & LAYER_BACK )
     {
-        color |= g_ColorsSettings.GetItemColor(PAD_BK_VISIBLE);
+        color |= brd->GetVisibleElementColor(PAD_BK_VISIBLE);
     }
 
     if( color == 0 ) /* Not on copper layer */
@@ -105,55 +106,55 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         switch( m_Masque_Layer & ~ALL_CU_LAYERS )
         {
         case ADHESIVE_LAYER_BACK:
-            color = g_ColorsSettings.GetLayerColor(ADHESIVE_N_BACK);
+            color = brd->GetLayerColor(ADHESIVE_N_BACK);
             break;
 
         case ADHESIVE_LAYER_FRONT:
-            color = g_ColorsSettings.GetLayerColor(ADHESIVE_N_FRONT);
+            color = brd->GetLayerColor(ADHESIVE_N_FRONT);
             break;
 
         case SOLDERPASTE_LAYER_BACK:
-            color = g_ColorsSettings.GetLayerColor(SOLDERPASTE_N_BACK);
+            color = brd->GetLayerColor(SOLDERPASTE_N_BACK);
             break;
 
         case SOLDERPASTE_LAYER_FRONT:
-            color = g_ColorsSettings.GetLayerColor(SOLDERPASTE_N_FRONT);
+            color = brd->GetLayerColor(SOLDERPASTE_N_FRONT);
             break;
 
         case SILKSCREEN_LAYER_BACK:
-            color = g_ColorsSettings.GetLayerColor(SILKSCREEN_N_BACK);
+            color = brd->GetLayerColor(SILKSCREEN_N_BACK);
             break;
 
         case SILKSCREEN_LAYER_FRONT:
-            color = g_ColorsSettings.GetLayerColor(SILKSCREEN_N_FRONT);
+            color = brd->GetLayerColor(SILKSCREEN_N_FRONT);
             break;
 
         case SOLDERMASK_LAYER_BACK:
-            color = g_ColorsSettings.GetLayerColor(SOLDERMASK_N_BACK);
+            color = brd->GetLayerColor(SOLDERMASK_N_BACK);
             break;
 
         case SOLDERMASK_LAYER_FRONT:
-            color = g_ColorsSettings.GetLayerColor(SOLDERMASK_N_FRONT);
+            color = brd->GetLayerColor(SOLDERMASK_N_FRONT);
             break;
 
         case DRAW_LAYER:
-            color = g_ColorsSettings.GetLayerColor(DRAW_N);
+            color = brd->GetLayerColor(DRAW_N);
             break;
 
         case COMMENT_LAYER:
-            color = g_ColorsSettings.GetLayerColor(COMMENT_N);
+            color = brd->GetLayerColor(COMMENT_N);
             break;
 
         case ECO1_LAYER:
-            color = g_ColorsSettings.GetLayerColor(ECO1_N);
+            color = brd->GetLayerColor(ECO1_N);
             break;
 
         case ECO2_LAYER:
-            color = g_ColorsSettings.GetLayerColor(ECO2_N);
+            color = brd->GetLayerColor(ECO2_N);
             break;
 
         case EDGE_LAYER:
-            color = g_ColorsSettings.GetLayerColor(EDGE_N);
+            color = brd->GetLayerColor(EDGE_N);
             break;
 
         default:
@@ -218,7 +219,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     {
         if( IsOnLayer( screen->m_Active_Layer ) )
         {
-            color = g_ColorsSettings.GetLayerColor(screen->m_Active_Layer);
+            color = brd->GetLayerColor(screen->m_Active_Layer);
 
             // In hight contrast mode, and if the active layer is the mask
             // layer shows the pad size with the mask clearance
@@ -470,7 +471,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     GRSetDrawMode( DC, draw_mode );
 
     /* Draw "No connect" ( / or \ or cross X ) if necessary. : */
-    if( m_Netname.IsEmpty() && g_DesignSettings.IsElementVisible( PCB_VISIBLE(NO_CONNECTS_VISIBLE) ) )
+    if( m_Netname.IsEmpty() && brd->IsElementVisible( PCB_VISIBLE(NO_CONNECTS_VISIBLE) ) )
     {
         dx0 = MIN( dx0, dy0 );
         int nc_color = BLUE;

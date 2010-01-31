@@ -363,9 +363,10 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
 
     GRSetDrawMode( DC, draw_mode );
 
-    if( g_DesignSettings.IsElementVisible( ANCHOR_VISIBLE ) )
+    BOARD * brd =  GetBoard( );
+    if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
     {
-        color = g_ColorsSettings.GetItemColor(ANCHOR_VISIBLE);
+        color = brd->GetVisibleElementColor(ANCHOR_VISIBLE);
         int anchor_size = screen->Unscale( 2 );
         GRLine( &panel->m_ClipBox, DC,
                 pos.x - anchor_size, pos.y,
@@ -375,27 +376,27 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
                 pos.x, pos.y + anchor_size, 0, color );
     }
 
-    color = g_ColorsSettings.GetLayerColor(Module->GetLayer());
+    color = brd->GetLayerColor(Module->GetLayer());
 
 
     if( Module->GetLayer() == LAYER_N_BACK )
     {
-        if( g_DesignSettings.IsElementVisible( MOD_TEXT_BK_VISIBLE ) == false )
+        if( brd->IsElementVisible( MOD_TEXT_BK_VISIBLE ) == false )
             return;
-        color = g_ColorsSettings.GetItemColor(MOD_TEXT_BK_VISIBLE);
+        color = brd->GetVisibleElementColor(MOD_TEXT_BK_VISIBLE);
     }
     else if( Module->GetLayer() == LAYER_N_FRONT )
     {
-        if( g_DesignSettings.IsElementVisible( MOD_TEXT_FR_VISIBLE ) == false )
+        if( brd->IsElementVisible( MOD_TEXT_FR_VISIBLE ) == false )
             return;
-        color = g_ColorsSettings.GetItemColor(MOD_TEXT_FR_VISIBLE);
+        color = brd->GetVisibleElementColor(MOD_TEXT_FR_VISIBLE);
     }
 
     if( m_NoShow )
     {
-        if( g_DesignSettings.IsElementVisible( MOD_TEXT_INVISIBLE ) == false )
+        if( brd->IsElementVisible( MOD_TEXT_INVISIBLE ) == false )
             return;
-        color = g_ColorsSettings.GetItemColor(MOD_TEXT_INVISIBLE);
+        color = brd->GetVisibleElementColor(MOD_TEXT_INVISIBLE);
     }
 
     /* If the text is mirrored : negate size.x (mirror / Y axis) */

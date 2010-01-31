@@ -28,13 +28,14 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, WinEDA_PcbFrame* parent ) 
 {
     m_tester = aTester;
     m_Parent = parent;
+    m_BrdSettings = m_Parent->GetBoard()->GetBoardDesignSettings();
 
     InitValues();
     if( GetSizer() )
     {
         GetSizer()->SetSizeHints( this );
     }
-    
+
     Centre();
 }
 
@@ -118,11 +119,11 @@ void DIALOG_DRC_CONTROL::InitValues()
 */
 void DIALOG_DRC_CONTROL::SetDrcParmeters( )
 {
-    g_DesignSettings.m_TrackMinWidth =
+     m_BrdSettings->m_TrackMinWidth =
         ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl, m_Parent->m_InternalUnits );
-    g_DesignSettings.m_ViasMinSize =
+     m_BrdSettings->m_ViasMinSize =
         ReturnValueFromTextCtrl( *m_SetViaMinSizeCtrl, m_Parent->m_InternalUnits );
-    g_DesignSettings.m_MicroViasMinSize =
+     m_BrdSettings->m_MicroViasMinSize =
         ReturnValueFromTextCtrl( *m_SetMicroViakMinSizeCtrl, m_Parent->m_InternalUnits );
 }
 

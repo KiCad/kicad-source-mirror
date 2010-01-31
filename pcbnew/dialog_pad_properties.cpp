@@ -159,11 +159,12 @@ void DIALOG_PAD_PROPERTIES::InitDialog( )
     PutValueInLocalUnits( *m_SolderPasteMarginCtrl, pad->m_LocalSolderPasteMargin, internalUnits );
     if( pad->m_LocalSolderPasteMargin == 0 )
         m_SolderPasteMarginCtrl->SetValue( wxT("-") + m_SolderPasteMarginCtrl->GetValue() );
-    if( pad->m_LocalSolderPasteMarginRatio == 0.0 )
-        msg.Printf( wxT( "-%.1f" ), pad->m_LocalSolderPasteMarginRatio * 100.0 );
+    msg.Printf( wxT( "%.1f" ), pad->m_LocalSolderPasteMarginRatio * 100.0 );
+    if( pad->m_LocalSolderPasteMarginRatio == 0.0 &&
+        msg[0] == '0')  // Sometimes Printf add a sign if the value is small
+        m_SolderPasteMarginRatioCtrl->SetValue( wxT("-") + msg );
     else
-        msg.Printf( wxT( "%.1f" ), pad->m_LocalSolderPasteMarginRatio * 100.0 );
-    m_SolderPasteMarginRatioCtrl->SetValue( msg );
+        m_SolderPasteMarginRatioCtrl->SetValue( msg );
 
     if( m_CurrentPad )
     {
@@ -425,13 +426,15 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
     g_Pad_Master.m_LocalClearance = ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl, internalUnits );
     g_Pad_Master.m_LocalSolderMaskMargin = ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, internalUnits );
     g_Pad_Master.m_LocalSolderPasteMargin = ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl, internalUnits );
-    double   dtmp;
+    double   dtmp = 0.0;
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );
     // A margin ratio de -50% means no paste on a pad, the ratio must be >= 50 %
     if( dtmp < -50 )
         dtmp = -50;
-    g_Pad_Master.m_LocalSolderPasteMarginRatio = dtmp / 100;
+    if( dtmp > +100 )
+        dtmp = +100;
+   g_Pad_Master.m_LocalSolderPasteMarginRatio = dtmp / 100;
 
     // Read pad position:
     g_Pad_Master.m_Pos.x = ReturnValueFromTextCtrl( *m_PadPosition_X_Ctrl, internalUnits );

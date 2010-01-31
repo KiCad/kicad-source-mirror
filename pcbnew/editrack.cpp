@@ -161,7 +161,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
         g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
         g_CurrentTrackSegment->m_Width = GetBoard()->GetCurrentTrackWidth();
 
-        if( g_DesignSettings.m_UseConnectedTrackWidth )
+        if( GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth )
         {
             if( TrackOnStartPoint && TrackOnStartPoint->Type() == TYPE_TRACK )
                 g_CurrentTrackSegment->m_Width = TrackOnStartPoint->m_Width;
@@ -274,7 +274,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
             newTrack->m_Start = newTrack->m_End;
 
             newTrack->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
-            if( !g_DesignSettings.m_UseConnectedTrackWidth )
+            if( !GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth )
             {
                 newTrack->m_Width = GetBoard()->GetCurrentTrackWidth();
             }
@@ -730,7 +730,7 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel,
         {
             previous_track->SetLayer( screen->m_Active_Layer );
 
-            if( !g_DesignSettings.m_UseConnectedTrackWidth )
+            if( !frame->GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth )
                 previous_track->m_Width =
                     frame->GetBoard()->GetCurrentTrackWidth();
         }

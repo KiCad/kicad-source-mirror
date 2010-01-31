@@ -390,7 +390,7 @@ private:
     DECLARE_DYNAMIC_CLASS( WinEDA_SetColorsFrame )
     DECLARE_EVENT_TABLE()
 
-    WinEDA_DrawFrame*       m_Parent;
+    WinEDA_GerberFrame*       m_Parent;
     wxBoxSizer*             OuterBoxSizer;
     wxBoxSizer*             MainBoxSizer;
     wxFlexGridSizer*        FlexColumnBoxSizer;
@@ -430,7 +430,7 @@ private:
 public:
     // Constructors and destructor
     WinEDA_SetColorsFrame();
-    WinEDA_SetColorsFrame( WinEDA_DrawFrame* parent, const wxPoint& framepos );
+    WinEDA_SetColorsFrame( WinEDA_GerberFrame* parent, const wxPoint& framepos );
     ~WinEDA_SetColorsFrame();
 };
 

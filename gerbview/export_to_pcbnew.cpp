@@ -90,9 +90,7 @@ static int WriteSetup( FILE* File, BOARD* Pcb )
     sprintf( text, "InternalUnit %f INCH\n", 1.0 / PCB_INTERNAL_UNIT );
     fprintf( File, "%s", text );
 
-    Pcb->m_BoardSettings->SetCopperLayerCount(
-         g_DesignSettings.GetCopperLayerCount() );
-    fprintf( File, "Layers %d\n", g_DesignSettings.GetCopperLayerCount() );
+    fprintf( File, "Layers %d\n", Pcb->GetCopperLayerCount() );
 
     fprintf( File, "$EndSETUP\n\n" );
     return 1;
@@ -104,7 +102,7 @@ static bool WriteGeneralDescrPcb( BOARD* Pcb, FILE* File )
     int NbLayers;
 
     /* Print the copper layer count */
-    NbLayers = Pcb->m_BoardSettings->GetCopperLayerCount();
+    NbLayers = Pcb->GetCopperLayerCount();
     fprintf( File, "$GENERAL\n" );
     fprintf( File, "LayerCount %d\n", NbLayers );
 

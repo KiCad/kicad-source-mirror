@@ -8,7 +8,7 @@
 #include "pcbstruct.h"      // NB_COLORS
 
 // Class for handle current printed board design settings
-class EDA_BoardDesignSettings
+class BOARD_DESIGN_SETTINGS
 {
 protected:
     int    m_CopperLayerCount;                          // Number of copper layers for this design
@@ -30,7 +30,7 @@ public:
     int    m_SolderPasteMargin;                         // Solder paste margin absolute value
     double m_SolderPasteMarginRatio;                    // Solder pask margin ratio value of pad size
                                                         // The final margin is the sum of these 2 values
-    int    m_LayerThickness;                            // Layer Thickness for 3D viewer
+    int    m_BoardThickness;                            // Board Thickness for 3D viewer
 
 protected:
     int    m_EnabledLayers;                         // Bit-mask for layer enabling
@@ -38,7 +38,7 @@ protected:
     int    m_VisibleElements;                       // Bit-mask for element category visibility
 
 public:
-    EDA_BoardDesignSettings();
+    BOARD_DESIGN_SETTINGS();
 
     /**
      * Function GetVisibleLayers
@@ -150,7 +150,7 @@ public:
      * @param aLayerIndex = The index of the layer to be tested
      * @return bool - true if the layer is enabled
      */
-    bool IsLayerEnabled( int aLayerIndex )
+    bool IsLayerEnabled( int aLayerIndex ) const
     {
         return bool( m_EnabledLayers & (1 << aLayerIndex) );
     }

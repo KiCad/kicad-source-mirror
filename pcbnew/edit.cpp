@@ -340,7 +340,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_PLACE_MICROVIA:
-        if( !( (PCB_SCREEN*) GetScreen() )->IsMicroViaAcceptable() )
+        if( !IsMicroViaAcceptable() )
             break;
     case ID_POPUP_PCB_PLACE_VIA:
         DrawPanel->MouseToCursorSchema();
@@ -350,11 +350,11 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         }
         else
         {
-            int v_type = g_DesignSettings.m_CurrentViaType;
+            int v_type = GetBoard()->GetBoardDesignSettings()->m_CurrentViaType;
             if( id == ID_POPUP_PCB_PLACE_MICROVIA )
-                g_DesignSettings.m_CurrentViaType = VIA_MICROVIA; // place micro via and switch layer
+                GetBoard()->GetBoardDesignSettings()->m_CurrentViaType = VIA_MICROVIA; // place micro via and switch layer
             Other_Layer_Route( (TRACK*) GetCurItem(), &dc );
-            g_DesignSettings.m_CurrentViaType = v_type;
+            GetBoard()->GetBoardDesignSettings()->m_CurrentViaType = v_type;
             if( DisplayOpt.ContrastModeDisplay )
                 ( (PCB_SCREEN*) GetScreen() )->SetRefreshReq();
         }
@@ -1077,7 +1077,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
         // If only one copper layer is enabled, the only such layer
         // that can be selected to is the "Back" layer (so the
         // selection of any other copper layer is disregarded).
-        if( GetBoard()->m_BoardSettings->GetCopperLayerCount() < 2 )
+        if( GetBoard()->GetCopperLayerCount() < 2 )
         {
             if( layer != LAYER_N_BACK )
             {
@@ -1096,7 +1096,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
         else
         {
             if( ( layer != LAYER_N_BACK ) && ( layer != LAYER_N_FRONT )
-               && ( layer >= GetBoard()->m_BoardSettings->GetCopperLayerCount() - 1 ) )
+               && ( layer >= GetBoard()->GetCopperLayerCount() - 1 ) )
             {
                 // Uncomment following command (and line 17) to beep
                 // the speaker. (Doing that would provide feedback to

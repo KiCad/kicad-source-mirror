@@ -236,10 +236,11 @@ void DRAWSEGMENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     int color, mode;
     int rayon;
 
-    if( g_DesignSettings.IsLayerVisible( GetLayer() ) == false )
+    BOARD * brd =  GetBoard( );
+    if( brd->IsLayerVisible( GetLayer() ) == false )
         return;
 
-    color = g_ColorsSettings.GetLayerColor(GetLayer());
+    color = brd->GetLayerColor(GetLayer());
 
     GRSetDrawMode( DC, draw_mode );
     l_piste = m_Width >> 1;  /* half trace width */

@@ -20,6 +20,7 @@ class DIALOG_PADS_MASK_CLEARANCE : public DIALOG_PADS_MASK_CLEARANCE_BASE
 {
 private:
     WinEDA_PcbFrame*  m_Parent;
+    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
 
 public:
     DIALOG_PADS_MASK_CLEARANCE( WinEDA_PcbFrame* parent );

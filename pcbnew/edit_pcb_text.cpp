@@ -163,9 +163,9 @@ TEXTE_PCB* WinEDA_PcbFrame::Create_Texte_Pcb( wxDC* DC )
     if( TextePcb->GetLayer() == LAYER_N_BACK )
         TextePcb->m_Mirror = true;
 
-    TextePcb->m_Size  = g_DesignSettings.m_PcbTextSize;
+    TextePcb->m_Size  = GetBoard()->GetBoardDesignSettings()->m_PcbTextSize;
     TextePcb->m_Pos   = GetScreen()->m_Curseur;
-    TextePcb->m_Width = g_DesignSettings.m_PcbTextWidth;
+    TextePcb->m_Width = GetBoard()->GetBoardDesignSettings()->m_PcbTextWidth;
 
     InstallTextPCBOptionsFrame( TextePcb, DC );
     if( TextePcb->m_Text.IsEmpty() )

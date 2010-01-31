@@ -44,14 +44,6 @@ public:
     void SetCurItem( BOARD_ITEM* aItem ) { BASE_SCREEN::SetCurItem( aItem ); }
 
 
-    /* Return true if a microvia can be put on board
-     * A microvia is a small via restricted to 2 near neighbor layers
-     * because its is hole is made by laser which can penetrate only one layer
-     * It is mainly used to connect BGA to the first inner layer
-     * And it is allowed from an external layer to the first inner layer
-     */
-    bool IsMicroViaAcceptable( void );
-
     /* full undo redo management : */
 
     // use BASE_SCREEN::ClearUndoRedoList()

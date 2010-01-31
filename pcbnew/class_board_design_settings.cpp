@@ -1,5 +1,5 @@
 /***************************************************************************/
-/* class_board_design_settings.cpp - EDA_BoardDesignSettings class functions */
+/* class_board_design_settings.cpp - BOARD_DESIGN_SETTINGS class functions */
 /***************************************************************************/
 #include "fctsys.h"
 #include "common.h"
@@ -9,7 +9,7 @@
 
 
 /*****************************************************/
-EDA_BoardDesignSettings::EDA_BoardDesignSettings()
+BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS()
 /*****************************************************/
 
 // Default values for designing boards
@@ -40,11 +40,13 @@ EDA_BoardDesignSettings::EDA_BoardDesignSettings()
                                                         // The final margin is the sum of these 2 values
                                                         // Usually < 0 because the mask is smaller than pad
 
+    m_BoardThickness = 1.6 * PCB_INTERNAL_UNIT / 25.4;  // Epoxy thickness for 3D view (and microwave calculations)                               // Layer Thickness for 3D viewer
+
 }
 
 
 // see pcbstruct.h
-int EDA_BoardDesignSettings::GetVisibleLayers() const
+int BOARD_DESIGN_SETTINGS::GetVisibleLayers() const
 {
     return m_VisibleLayers;
 }
@@ -55,20 +57,20 @@ int EDA_BoardDesignSettings::GetVisibleLayers() const
  * Set the bit-mask of all visible elements categories,
  * including enabled layers
  */
-void EDA_BoardDesignSettings::SetVisibleAlls( )
+void BOARD_DESIGN_SETTINGS::SetVisibleAlls( )
 {
     SetVisibleLayers( FULL_LAYERS );
     m_VisibleElements = 0xFFFFFFFF;
 }
 
-void EDA_BoardDesignSettings::SetVisibleLayers( int aMask )
+void BOARD_DESIGN_SETTINGS::SetVisibleLayers( int aMask )
 {
     // Although Pcbnew uses only 29, Gerbview uses all 32 layers
     m_VisibleLayers = aMask & m_EnabledLayers & FULL_LAYERS;
 }
 
 
-void EDA_BoardDesignSettings::SetLayerVisibility( int aLayerIndex, bool aNewState )
+void BOARD_DESIGN_SETTINGS::SetLayerVisibility( int aLayerIndex, bool aNewState )
 {
     // Altough Pcbnew uses only 29, Gerbview uses all 32 layers
     if( aLayerIndex < 0 || aLayerIndex >= 32 )
@@ -80,7 +82,7 @@ void EDA_BoardDesignSettings::SetLayerVisibility( int aLayerIndex, bool aNewStat
 }
 
 
-void EDA_BoardDesignSettings::SetElementVisibility( int aElementCategory, bool aNewState )
+void BOARD_DESIGN_SETTINGS::SetElementVisibility( int aElementCategory, bool aNewState )
 {
     if( aElementCategory < 0 || aElementCategory >= END_PCB_VISIBLE_LIST )
         return;
@@ -91,7 +93,7 @@ void EDA_BoardDesignSettings::SetElementVisibility( int aElementCategory, bool a
 }
 
 
-void EDA_BoardDesignSettings::SetCopperLayerCount( int aNewLayerCount )
+void BOARD_DESIGN_SETTINGS::SetCopperLayerCount( int aNewLayerCount )
 {
     // if( aNewLayerCount < 2 ) aNewLayerCount = 2;
 
@@ -113,7 +115,7 @@ void EDA_BoardDesignSettings::SetCopperLayerCount( int aNewLayerCount )
  * changes the bit-mask of enabled layers
  * @param aMask = The new bit-mask of enabled layers
  */
-void EDA_BoardDesignSettings::SetEnabledLayers( int aMask )
+void BOARD_DESIGN_SETTINGS::SetEnabledLayers( int aMask )
 {
     // Back and front layers are always enabled.
     aMask |= LAYER_BACK | LAYER_FRONT;

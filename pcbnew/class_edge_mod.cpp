@@ -160,15 +160,16 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     int                  typeaff;
     PCB_SCREEN*          screen;
     WinEDA_BasePcbFrame* frame;
-    MODULE*              Module = NULL;
+    MODULE* module = (MODULE*) m_Parent;
 
-    if( m_Parent && ( m_Parent->Type() == TYPE_MODULE ) )
-        Module = (MODULE*) m_Parent;
-
-    if( g_DesignSettings.IsLayerVisible( m_Layer ) == false )
+    if( module == NULL )
         return;
 
-    color = g_ColorsSettings.GetLayerColor(m_Layer);
+    BOARD * brd = GetBoard( );
+    if( brd->IsLayerVisible( m_Layer ) == false )
+        return;
+
+    color = brd->GetLayerColor(m_Layer);
 
     frame = (WinEDA_BasePcbFrame*) panel->GetParent();
 
@@ -264,15 +265,9 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         {
             wxPoint& pt = points[ii];
 
-            if( Module )
-            {
-                RotatePoint( &pt.x, &pt.y, Module->m_Orient );
-                pt.x += Module->m_Pos.x;
-                pt.y += Module->m_Pos.y;
-            }
-
-            pt.x += m_Start0.x - offset.x;
-            pt.y += m_Start0.y - offset.y;
+            RotatePoint( &pt.x, &pt.y, module->m_Orient );
+            pt += module->m_Pos;
+            pt += m_Start0 - offset;
         }
 
         GRPoly( &panel->m_ClipBox, DC, points.size(), &points[0],

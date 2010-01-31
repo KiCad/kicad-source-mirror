@@ -246,11 +246,11 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         if( (ll <= LAYER_N_BACK) || (ll > LAYER_N_FRONT) )
             break;
 
-        if( GetBoard()->m_BoardSettings->GetCopperLayerCount() < 2 ) // Single layer
+        if( GetBoard()->GetCopperLayerCount() < 2 ) // Single layer
             ll = LAYER_N_BACK;
         else if( ll == LAYER_N_FRONT )
             ll = MAX( LAYER_N_BACK,
-                      GetBoard()->m_BoardSettings->GetCopperLayerCount() - 2 );
+                      GetBoard()->GetCopperLayerCount() - 2 );
         else
             ll--;
         SwitchLayer( DC, ll );
@@ -260,9 +260,9 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         ll = GetScreen()->m_Active_Layer;
         if( (ll < LAYER_N_BACK) || (ll >= LAYER_N_FRONT) )
             break;
-        if( GetBoard()->m_BoardSettings->GetCopperLayerCount() < 2 ) // Single layer
+        if( GetBoard()->GetCopperLayerCount() < 2 ) // Single layer
             ll = LAYER_N_BACK;
-        else if( ll >= GetBoard()->m_BoardSettings->GetCopperLayerCount() - 2 )
+        else if( ll >= GetBoard()->GetCopperLayerCount() - 2 )
             ll = LAYER_N_FRONT;
         else
             ll++;
@@ -456,12 +456,12 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
             return;
 
         // place micro via and switch layer
-        if( GetScreen()->IsMicroViaAcceptable() )
+        if( IsMicroViaAcceptable() )
         {
-            int v_type = g_DesignSettings.m_CurrentViaType;
-            g_DesignSettings.m_CurrentViaType = VIA_MICROVIA;
+            int v_type = GetBoard()->GetBoardDesignSettings()->m_CurrentViaType;
+            GetBoard()->GetBoardDesignSettings()->m_CurrentViaType = VIA_MICROVIA;
             Other_Layer_Route( (TRACK*) GetCurItem(), DC );
-            g_DesignSettings.m_CurrentViaType = v_type;
+            GetBoard()->GetBoardDesignSettings()->m_CurrentViaType = v_type;
             if( DisplayOpt.ContrastModeDisplay )
                 GetScreen()->SetRefreshReq();
         }

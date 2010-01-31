@@ -29,6 +29,7 @@ private:
     WinEDA_PcbFrame* m_Parent;
     wxDC* m_DC;
     DRAWSEGMENT* m_Item;
+    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
 
 public:
     DialogGraphicItemProperties( WinEDA_PcbFrame* aParent, DRAWSEGMENT * aItem, wxDC * aDC);
@@ -47,6 +48,7 @@ DialogGraphicItemProperties::DialogGraphicItemProperties( WinEDA_PcbFrame* aPare
     m_Parent = aParent;
     m_DC = aDC;
     m_Item = aItem;
+    m_BrdSettings = m_Parent->GetBoard()->GetBoardDesignSettings();
     Init();
     Layout();
     GetSizer()->SetSizeHints( this );
@@ -130,9 +132,9 @@ void DialogGraphicItemProperties::Init( )
     AddUnitSymbol( *m_DefaultThicknessText );
     int thickness;
     if( m_Item->GetLayer() == EDGE_N )
-        thickness = g_DesignSettings.m_EdgeSegmentWidth;
+        thickness =  m_BrdSettings->m_EdgeSegmentWidth;
     else
-        thickness = g_DesignSettings.m_DrawSegmentWidth;
+        thickness =  m_BrdSettings->m_DrawSegmentWidth;
     PutValueInLocalUnits( *m_DefaultThicknessCtrl, thickness,
         m_Parent->m_InternalUnits );
 
@@ -159,9 +161,9 @@ void DialogGraphicItemProperties::OnLayerChoice( wxCommandEvent& event )
 {
     int thickness;
     if( (m_LayerSelection->GetCurrentSelection() + FIRST_NO_COPPER_LAYER) == EDGE_N )
-        thickness = g_DesignSettings.m_EdgeSegmentWidth;
+        thickness =  m_BrdSettings->m_EdgeSegmentWidth;
     else
-        thickness = g_DesignSettings.m_DrawSegmentWidth;
+        thickness =  m_BrdSettings->m_DrawSegmentWidth;
     PutValueInLocalUnits( *m_DefaultThicknessCtrl, thickness,
         m_Parent->m_InternalUnits );
 }
@@ -205,9 +207,9 @@ void DialogGraphicItemProperties::OnOkClick( wxCommandEvent& event )
     m_Item->SetLayer( m_LayerSelection->GetCurrentSelection() + FIRST_NO_COPPER_LAYER);
 
     if( m_Item->GetLayer() == EDGE_N )
-        g_DesignSettings.m_EdgeSegmentWidth = thickness;
+         m_BrdSettings->m_EdgeSegmentWidth = thickness;
     else
-        g_DesignSettings.m_DrawSegmentWidth = thickness;
+         m_BrdSettings->m_DrawSegmentWidth = thickness;
 
     if ( m_Item->m_Shape == S_ARC )
     {

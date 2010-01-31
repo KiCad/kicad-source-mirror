@@ -53,6 +53,13 @@ public:
      * in pcbstruct.h, enum PCB_VISIBLE or in schematic
      */
     void SetItemColor(  int aItemIdx, int aColor );
+
+    /**
+     * Function SetAllColorsAs
+     * sets alls colors to aColor
+     * Usefull to create a monochrome color selection for printing purpose
+     */
+    void SetAllColorsAs( int aColor);
 };
 
 #endif  //  _COLORS_DESIGN_SETTING_H

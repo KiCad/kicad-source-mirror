@@ -388,7 +388,7 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
         sprintf( line, "\ntotal holes count %d\n\n\n", TotalHoleCount );
         fputs( line, aFile );
 
-        if( g_DesignSettings.GetCopperLayerCount() <= 2 )
+        if( aPcb->GetCopperLayerCount() <= 2 )
             break;
 
         if(  gen_through_holes )
@@ -399,7 +399,7 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
                 break;
             layer1++; layer2++;           // use next layer pair
 
-            if( layer2 == g_DesignSettings.GetCopperLayerCount() - 1 )
+            if( layer2 == aPcb->GetCopperLayerCount() - 1 )
                 layer2 = LAYER_N_FRONT;  // the last layer is always the
                                        // component layer
         }

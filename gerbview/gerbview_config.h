@@ -13,7 +13,7 @@
 /* Useful macro : */
 #define LOC_COLOR(numlayer) &g_ColorsSettings.m_LayersColors[numlayer]
 
-/* Liste des parametres */
+/* Config parameters list */
 
 static PARAM_CFG_WXSTRING PhotoExtBufCfg
 (
@@ -342,8 +342,7 @@ static PARAM_CFG_SETCOLOR ColorpcbGrilleCfg
 (
     INSETUP,
     wxT("CoPcbGr"),
-//@@IMB: Wrong object    &g_DesignSettings.m_PcbGridColor, /* Adresse du parametre */
-    &g_GridColor,       //@@IMB: This is the real variable.
+    &g_GridColor,
     DARKGRAY
 );
 
@@ -361,22 +360,6 @@ static PARAM_CFG_INT GERBERSpotMiniCfg
     &g_Plot_Spot_Mini,
     15,
     2,0xFFFF
-);
-
-static PARAM_CFG_INT DrawSegmLargeurCfg
-(
-    wxT("DrawLar"),
-    &g_DesignSettings.m_DrawSegmentWidth,
-    120,
-    0,10000
-);
-
-static PARAM_CFG_INT EdgeSegmLargeurCfg
-(
-    wxT("EdgeLar"),
-    &g_DesignSettings.m_EdgeSegmentWidth,
-    120,
-    0,10000
 );
 
 static PARAM_CFG_INT TimeOutCfg
@@ -441,8 +424,6 @@ PARAM_CFG_BASE * ParamCfgList[] =
     & ColorpcbGrilleCfg,
     & ColorDCodesCfg,
     & GERBERSpotMiniCfg,
-    & DrawSegmLargeurCfg,
-    & EdgeSegmLargeurCfg,
     & TimeOutCfg,
     & DisplPolairCfg,
     NULL

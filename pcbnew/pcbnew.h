@@ -60,25 +60,6 @@ extern bool g_Raccord_45_Auto;
 
 extern const wxString g_FootprintLibFileWildcard;   // Wildcard for footprint libraries filesnames
 
-/**
- * Function IsModuleLayerVisible
- * expects either of the two layers on which a module can reside, and returns
- * whether that layer is visible.
- * @param layer One of the two allowed layers for modules: LAYER_N_FRONT or LAYER_N_BACK
- * @return bool - true if the layer is visible, else false.
- */
-bool inline IsModuleLayerVisible( int layer )
-{
-    if( layer==LAYER_N_FRONT )
-        return g_DesignSettings.IsElementVisible( PCB_VISIBLE(MOD_FR_VISIBLE) );
-
-    else if( layer==LAYER_N_BACK )
-        return g_DesignSettings.IsElementVisible( PCB_VISIBLE(MOD_BK_VISIBLE) );
-
-    else
-        return true;
-}
-
 
 extern bool        Track_45_Only;
 extern bool        Segments_45_Only;

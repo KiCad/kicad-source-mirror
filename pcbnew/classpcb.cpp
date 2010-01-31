@@ -109,30 +109,6 @@ int PCB_SCREEN::GetInternalUnits( void )
 }
 
 
-/* Return true if a microvia can be put on board
- * A microvia ia a small via restricted to 2 near neighbour layers
- * because its is hole is made by laser which can penetrate only one layer
- * It is mainly used to connect BGA to the first inner layer
- * And it is allowed from an external layer to the first inner layer
- */
-bool PCB_SCREEN::IsMicroViaAcceptable( void )
-{
-    int copperlayercnt = g_DesignSettings.GetCopperLayerCount( );
-
-    if( !g_DesignSettings.m_MicroViasAllowed )
-        return false;   // Obvious..
-    if( copperlayercnt < 4 )
-        return false;   // Only on multilayer boards..
-    if( ( m_Active_Layer == LAYER_N_BACK )
-       || ( m_Active_Layer == LAYER_N_FRONT )
-       || ( m_Active_Layer == g_DesignSettings.GetCopperLayerCount( ) - 2 )
-       || ( m_Active_Layer == LAYER_N_2 ) )
-        return true;
-
-    return false;
-}
-
-
 /*************************/
 /* class DISPLAY_OPTIONS */
 /*************************/

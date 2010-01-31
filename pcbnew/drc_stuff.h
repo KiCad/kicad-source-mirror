@@ -64,10 +64,10 @@
 #define DRCE_TOO_SMALL_TRACK_WIDTH          27  ///< Too small track width
 #define DRCE_TOO_SMALL_VIA                  28  ///< Too small via size
 #define DRCE_TOO_SMALL_MICROVIA             29  ///< Too small micro via size
-#define DRCE_NETCLASS_TRACKWIDTH            30  ///< netclass has TrackWidth < g_DesignSettings.m_TrackMinWidth
-#define DRCE_NETCLASS_CLEARANCE             31  ///< netclass has Clearance < g_DesignSettings.m_TrackClearance
-#define DRCE_NETCLASS_VIASIZE               32  ///< netclass has ViaSize < g_DesignSettings.m_ViasMinSize
-#define DRCE_NETCLASS_VIADRILLSIZE          33  ///< netclass has ViaDrillSize < g_DesignSettings.m_ViaDrill
+#define DRCE_NETCLASS_TRACKWIDTH            30  ///< netclass has TrackWidth < board.m_designSettings->m_TrackMinWidth
+#define DRCE_NETCLASS_CLEARANCE             31  ///< netclass has Clearance < board.m_designSettings->m_TrackClearance
+#define DRCE_NETCLASS_VIASIZE               32  ///< netclass has ViaSize < board.m_designSettings->m_ViasMinSize
+#define DRCE_NETCLASS_VIADRILLSIZE          33  ///< netclass has ViaDrillSize < board.m_designSettings->m_ViaDrill
 #define DRCE_NETCLASS_uVIASIZE              34
 #define DRCE_NETCLASS_uVIADRILLSIZE         35
 
@@ -229,7 +229,7 @@ private:
     /**
      * Function testNetClasses
      * goes through each NETCLASS and verifies that its clearance, via size,
-     * track width, and track clearance are larger than those in g_DesignSettings.
+     * track width, and track clearance are larger than those in board.m_designSettings.
      * This is necessary because the actual DRC checks are run against the NETCLASS
      * limits, so in order enforce global limits, we first check the NETCLASSes against
      * the global limits.

@@ -93,7 +93,7 @@ int COLORS_DESIGN_SETTINGS::GetLayerColor( int aLayer )
  * sets the color for aLayer which is one of the layer indices given
  * in pcbstruct.h or in schematic
  */
-void COLORS_DESIGN_SETTINGS:: SetLayerColor( int aLayer, int aColor )
+void COLORS_DESIGN_SETTINGS::SetLayerColor( int aLayer, int aColor )
 {
     if( (unsigned) aLayer < DIM(m_LayersColors) )
     {
@@ -107,7 +107,7 @@ void COLORS_DESIGN_SETTINGS:: SetLayerColor( int aLayer, int aColor )
  * @return the color for an item which is one of the item indices given
  * in pcbstruct.h, enum PCB_VISIBLE or in schematic
  */
-int COLORS_DESIGN_SETTINGS:: GetItemColor( int aItemIdx )
+int COLORS_DESIGN_SETTINGS::GetItemColor( int aItemIdx )
 {
     if( (unsigned) aItemIdx < DIM(m_ItemsColors) )
     {
@@ -122,10 +122,25 @@ int COLORS_DESIGN_SETTINGS:: GetItemColor( int aItemIdx )
  * sets the color for an item which is one of the item indices given
  * in pcbstruct.h, enum PCB_VISIBLE or in schematic
  */
-void COLORS_DESIGN_SETTINGS:: SetItemColor( int aItemIdx, int aColor )
+void COLORS_DESIGN_SETTINGS::SetItemColor( int aItemIdx, int aColor )
 {
     if( (unsigned) aItemIdx < DIM(m_ItemsColors) )
     {
         m_ItemsColors[aItemIdx] = aColor;
     }
+}
+
+
+/**
+ * Function SetAllColorsAs
+ * sets alls colors to aColor
+ * Usefull to create a monochrome color selection for printing purpose
+ */
+void COLORS_DESIGN_SETTINGS::SetAllColorsAs( int aColor)
+{
+    for( unsigned ii = 0; ii < DIM(m_LayersColors); ii++ )
+        m_LayersColors[ii] = aColor;
+
+    for( unsigned ii = 0; ii < DIM(m_ItemsColors); ii++ )
+        m_ItemsColors[ii] = aColor;
 }

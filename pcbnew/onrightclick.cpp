@@ -449,7 +449,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         PopMenu->Append( ID_POPUP_PCB_PLACE_VIA, msg );
 
         // See if we can place a Micro Via (4 or more layers, and start from an external layer):
-        if( ( (PCB_SCREEN*) GetScreen() )->IsMicroViaAcceptable() )
+        if( IsMicroViaAcceptable() )
         {
             msg = AddHotkeyName( _(
                                      "Place Micro Via" ), s_Board_Editor_Hokeys_Descr,
@@ -813,12 +813,12 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
                                  "Use the track width when starting on a track, otherwise the current track width" ),
                              true );
 
-    if( g_DesignSettings.m_UseConnectedTrackWidth )
+    if( aBoard->GetBoardDesignSettings()->m_UseConnectedTrackWidth )
         trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, true );
 
     if( aBoard->m_ViaSizeSelector != 0
         || aBoard->m_TrackWidthSelector != 0
-        || g_DesignSettings.m_UseConnectedTrackWidth )
+        || aBoard->GetBoardDesignSettings()->m_UseConnectedTrackWidth )
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES,
                                  _( "Use Netclass Values" ),
                                  _( "Use track and via sizes from their Netclass values" ),
@@ -834,7 +834,7 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_WIDTH1 + ii, msg, wxEmptyString, true );
     }
 
-    if( g_DesignSettings.m_UseConnectedTrackWidth )
+    if( aBoard->GetBoardDesignSettings()->m_UseConnectedTrackWidth )
         trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, true );
     else
     {

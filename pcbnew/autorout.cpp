@@ -39,7 +39,7 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
     int      autoroute_net_code = -1;
     wxString msg;
 
-    if( g_DesignSettings.GetCopperLayerCount() > 1 )
+    if( GetBoard()->GetCopperLayerCount() > 1 )
     {
         Route_Layer_TOP    = ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP;
         Route_Layer_BOTTOM = ((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM;

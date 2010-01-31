@@ -188,19 +188,21 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
 void TEXTE_PCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                       int DrawMode, const wxPoint& offset )
 {
-    if( g_DesignSettings.IsLayerVisible( m_Layer ) == false )
+    BOARD * brd =  GetBoard( );
+
+    if( brd->IsLayerVisible( m_Layer ) == false )
         return;
 
-    int color = g_ColorsSettings.GetLayerColor(m_Layer);
+    int color = brd->GetLayerColor(m_Layer);
 
     GRTraceMode fillmode = FILLED;
     if ( DisplayOpt.DisplayDrawItems == SKETCH)
         fillmode = SKETCH;
 
     int anchor_color = UNSPECIFIED_COLOR;
-    if( g_DesignSettings.IsElementVisible( ANCHOR_VISIBLE ) )
-        anchor_color = g_ColorsSettings.GetItemColor(ANCHOR_VISIBLE);
-    
+    if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
+        anchor_color = brd->GetVisibleElementColor(ANCHOR_VISIBLE);
+
     EDA_TextStruct::Draw( panel, DC, offset, (EDA_Colors) color,
                           DrawMode, fillmode, (EDA_Colors) anchor_color );
 }

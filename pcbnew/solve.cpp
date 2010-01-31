@@ -468,7 +468,7 @@ static int Autoroute_One_Track( WinEDA_PcbFrame* pcbframe,
     /* Test the trivial case: direct connection overlay pads. */
     if( ( row_source == row_target ) && ( col_source == col_target )
        && ( pad_masque_layer_e & pad_masque_layer_s &
-            g_TabAllCopperLayerMask[g_DesignSettings.GetCopperLayerCount() - 1] ) )
+            g_TabAllCopperLayerMask[pcbframe->GetBoard()->GetCopperLayerCount() - 1] ) )
     {
         result = TRIVIAL_SUCCESS;
         goto end_of_route;
@@ -1127,7 +1127,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
                                              ( g_GridRoutingSize * col );
 
         g_CurrentTrackSegment->m_Width = pcb->GetCurrentViaSize();
-        g_CurrentTrackSegment->m_Shape = g_DesignSettings.m_CurrentViaType;
+        g_CurrentTrackSegment->m_Shape = pcb->GetBoardDesignSettings()->m_CurrentViaType;
 
         g_CurrentTrackSegment->SetNet( current_net_code );
     }

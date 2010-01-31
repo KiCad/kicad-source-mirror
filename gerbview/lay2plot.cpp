@@ -30,7 +30,7 @@ void Print_PcbItems(BOARD * Pcb, wxDC *DC, int drawmode, int printmasklayer)
     for( ; pt_piste != NULL ; pt_piste = pt_piste->Next() )
     {
 //      if( (printmasklayer & ReturnMaskLayer(pt_piste) ) == 0 ) continue;
-        Trace_Segment(NULL, DC, pt_piste, drawmode);
+        Trace_Segment(Pcb, NULL, DC, pt_piste, drawmode);
     }
 
     DisplayOpt = save_opt;

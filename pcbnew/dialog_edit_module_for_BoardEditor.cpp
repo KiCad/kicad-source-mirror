@@ -119,13 +119,13 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
     if( m_CurrentModule->m_LocalSolderPasteMargin == 0 )
         m_SolderPasteMarginCtrl->SetValue( wxT( "-" ) +
                                            m_SolderPasteMarginCtrl->GetValue() );
-    if( m_CurrentModule->m_LocalSolderPasteMarginRatio == 0.0 )
-        msg.Printf( wxT( "-%.1f" ),
+    msg.Printf( wxT( "%.1f" ),
                     m_CurrentModule->m_LocalSolderPasteMarginRatio * 100.0 );
+    if( m_CurrentModule->m_LocalSolderPasteMarginRatio == 0.0 &&
+        msg[0] == '0')  // Sometimes Printf add a sign if the value is small
+        m_SolderPasteMarginRatioCtrl->SetValue( wxT("-") + msg );
     else
-        msg.Printf( wxT( "%.1f" ),
-                    m_CurrentModule->m_LocalSolderPasteMarginRatio * 100.0 );
-    m_SolderPasteMarginRatioCtrl->SetValue( msg );
+        m_SolderPasteMarginRatioCtrl->SetValue( msg );
 }
 
 
@@ -460,14 +460,15 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     m_CurrentModule->m_LocalSolderPasteMargin =
         ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl,
                                  m_Parent->m_InternalUnits );
-    double dtmp;
+    double dtmp = 0.0;
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );
 
-    // A margin ratio de -50% means no paste on a pad, the ratio must be >= 50
-    // %
+    // A margin ratio de -50% means no paste on a pad, the ratio must be >= 50%
     if( dtmp < -50 )
         dtmp = -50;
+    if( dtmp > +100 )
+        dtmp = +100;
     m_CurrentModule->m_LocalSolderPasteMarginRatio = dtmp / 100;
 
     // Set Module Position

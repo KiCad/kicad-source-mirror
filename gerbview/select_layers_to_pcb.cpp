@@ -129,7 +129,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_GerberFrame* parent ) :
         ButtonTable[ii] = -1;
         LayerLookUpTable[ii] = LAYER_UNSELECTED;
     }
-    g_DesignSettings.SetCopperLayerCount(pcb_layer_number);
+    m_Parent->GetBoard()->SetCopperLayerCount(pcb_layer_number);
 
     pcb_layer_number = 0;
     for( nb_items = 0, ii = 0; ii < 32; ii++ )
@@ -137,8 +137,8 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_GerberFrame* parent ) :
         if( g_GERBER_List[ii] == NULL )
             continue;
 
-        if( (pcb_layer_number == g_DesignSettings.GetCopperLayerCount() - 1)
-           && (g_DesignSettings.GetCopperLayerCount() > 1) )
+        if( (pcb_layer_number == m_Parent->GetBoard()->GetCopperLayerCount() - 1)
+           && (m_Parent->GetBoard()->GetCopperLayerCount() > 1) )
             pcb_layer_number = LAYER_N_FRONT;
 
         ButtonTable[nb_items] = ii;
@@ -399,7 +399,7 @@ void WinEDA_SwapLayerFrame::OnOkClick( wxCommandEvent& event )
     if( layers_count > NB_COPPER_LAYERS ) // should not occur.
         layers_count = NB_COPPER_LAYERS;
 
-    g_DesignSettings.SetCopperLayerCount( layers_count );
+    m_Parent->GetBoard()->SetCopperLayerCount( layers_count );
 
     EndModal( 1 );
 }

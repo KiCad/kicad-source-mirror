@@ -550,6 +550,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     if( Type() == TYPE_ZONE && DisplayOpt.DisplayZonesMode != 0 )
         return;
 
+    BOARD * brd =  GetBoard( );
     if( m_Flags & DRAW_ERASED )   // draw in background color, used by classs TRACK in gerbview
     {
         color = g_DrawBgColor;
@@ -558,9 +559,9 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     }
     else
     {
-        color = g_ColorsSettings.GetLayerColor(m_Layer);
+        color = brd->GetLayerColor(m_Layer);
 
-        if( g_DesignSettings.IsLayerVisible( m_Layer ) == false && ( color & HIGHT_LIGHT_FLAG ) !=
+        if( brd->IsLayerVisible( m_Layer ) == false && ( color & HIGHT_LIGHT_FLAG ) !=
             HIGHT_LIGHT_FLAG )
             return;
 
@@ -724,9 +725,10 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
 
     GRSetDrawMode( DC, draw_mode );
 
-    color = g_ColorsSettings.GetItemColor(VIAS_VISIBLE + m_Shape);
+    BOARD * brd =  GetBoard( );
+    color = brd->GetVisibleElementColor(VIAS_VISIBLE + m_Shape);
 
-    if( g_DesignSettings.IsElementVisible( PCB_VISIBLE(VIAS_VISIBLE + m_Shape) ) == false
+    if( brd->IsElementVisible( PCB_VISIBLE(VIAS_VISIBLE + m_Shape) ) == false
         && ( color & HIGHT_LIGHT_FLAG ) != HIGHT_LIGHT_FLAG )
         return;
 
@@ -864,15 +866,15 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
         ( (SEGVIA*) this )->ReturnLayerPair( &layer_top, &layer_bottom );
 
         /* lines for the top layer */
-        RotatePoint( &ax, &ay, layer_top * 3600 / g_DesignSettings.GetCopperLayerCount( ) );
-        RotatePoint( &bx, &by, layer_top * 3600 / g_DesignSettings.GetCopperLayerCount( ) );
+        RotatePoint( &ax, &ay, layer_top * 3600 / brd->GetCopperLayerCount( ) );
+        RotatePoint( &bx, &by, layer_top * 3600 / brd->GetCopperLayerCount( ) );
         GRLine( &panel->m_ClipBox, DC, m_Start.x - ax, m_Start.y - ay,
                 m_Start.x - bx, m_Start.y - by, 0, color );
 
         /* lines for the bottom layer */
         ax = 0; ay = rayon; bx = 0; by = drill_rayon;
-        RotatePoint( &ax, &ay, layer_bottom * 3600 / g_DesignSettings.GetCopperLayerCount( ) );
-        RotatePoint( &bx, &by, layer_bottom * 3600 / g_DesignSettings.GetCopperLayerCount( ) );
+        RotatePoint( &ax, &ay, layer_bottom * 3600 / brd->GetCopperLayerCount( ) );
+        RotatePoint( &bx, &by, layer_bottom * 3600 / brd->GetCopperLayerCount( ) );
         GRLine( &panel->m_ClipBox, DC, m_Start.x - ax, m_Start.y - ay,
                 m_Start.x - bx, m_Start.y - by, 0, color );
     }

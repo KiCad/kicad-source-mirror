@@ -178,7 +178,7 @@ void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
         // If only one copper layer is enabled, the only such layer
         // that can be selected to is the "Copper" layer (so the
         // selection of any other copper layer is disregarded).
-        if( m_Pcb->m_BoardSettings->GetCopperLayerCount() < 2 )
+        if( m_Pcb->GetCopperLayerCount() < 2 )
         {
             if( layer != LAYER_N_BACK )
             {
@@ -193,7 +193,7 @@ void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
         else
         {
             if( ( layer != LAYER_N_BACK ) && ( layer != LAYER_N_FRONT )
-                && ( layer >= m_Pcb->m_BoardSettings->GetCopperLayerCount() - 1 ) )
+                && ( layer >= m_Pcb->GetCopperLayerCount() - 1 ) )
             {
                 return;
             }
@@ -273,15 +273,15 @@ BOARD_ITEM* WinEDA_BasePcbFrame::GetCurItem()
 
 GENERAL_COLLECTORS_GUIDE WinEDA_BasePcbFrame::GetCollectorsGuide()
 {
-    GENERAL_COLLECTORS_GUIDE guide( m_Pcb->m_BoardSettings->GetVisibleLayers(),
+    GENERAL_COLLECTORS_GUIDE guide( m_Pcb->GetVisibleLayers(),
                                     ( (PCB_SCREEN*)GetScreen())->m_Active_Layer );
 
     // account for the globals
-    guide.SetIgnoreMTextsMarkedNoShow( ! g_DesignSettings.IsElementVisible( MOD_TEXT_INVISIBLE ));
-    guide.SetIgnoreMTextsOnCopper( ! g_DesignSettings.IsElementVisible( MOD_TEXT_BK_VISIBLE ));
-    guide.SetIgnoreMTextsOnCmp( ! g_DesignSettings.IsElementVisible( MOD_TEXT_FR_VISIBLE ));
-    guide.SetIgnoreModulesOnCu( !g_DesignSettings.IsElementVisible( MOD_BK_VISIBLE ) );
-    guide.SetIgnoreModulesOnCmp( !g_DesignSettings.IsElementVisible( MOD_FR_VISIBLE ) );
+    guide.SetIgnoreMTextsMarkedNoShow( ! m_Pcb->IsElementVisible( MOD_TEXT_INVISIBLE ));
+    guide.SetIgnoreMTextsOnCopper( ! m_Pcb->IsElementVisible( MOD_TEXT_BK_VISIBLE ));
+    guide.SetIgnoreMTextsOnCmp( ! m_Pcb->IsElementVisible( MOD_TEXT_FR_VISIBLE ));
+    guide.SetIgnoreModulesOnCu( ! m_Pcb->IsElementVisible( MOD_BK_VISIBLE ) );
+    guide.SetIgnoreModulesOnCmp( ! m_Pcb->IsElementVisible( MOD_FR_VISIBLE ) );
 
     return guide;
 }

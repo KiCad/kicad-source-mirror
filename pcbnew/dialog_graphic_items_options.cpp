@@ -25,26 +25,26 @@ void WinEDA_GraphicItemsOptionsDialog::SetDisplayValue()
     /* Drawings width */
     AddUnitSymbol( *m_GraphicSegmWidthTitle );
     PutValueInLocalUnits( *m_OptPcbSegmWidth,
-                          g_DesignSettings.m_DrawSegmentWidth,
+                           m_BrdSettings->m_DrawSegmentWidth,
                           PCB_INTERNAL_UNIT );
     /* Edges width */
     AddUnitSymbol( *m_BoardEdgesWidthTitle );
     PutValueInLocalUnits( *m_OptPcbEdgesWidth,
-                          g_DesignSettings.m_EdgeSegmentWidth,
+                           m_BrdSettings->m_EdgeSegmentWidth,
                           PCB_INTERNAL_UNIT );
 
     /* Pcb Textes (Size & Width) */
     AddUnitSymbol( *m_CopperTextWidthTitle );
     PutValueInLocalUnits( *m_OptPcbTextWidth,
-                          g_DesignSettings.m_PcbTextWidth, PCB_INTERNAL_UNIT );
+                           m_BrdSettings->m_PcbTextWidth, PCB_INTERNAL_UNIT );
 
     AddUnitSymbol( *m_TextSizeVTitle );
     PutValueInLocalUnits( *m_OptPcbTextVSize,
-                          g_DesignSettings.m_PcbTextSize.y, PCB_INTERNAL_UNIT );
+                           m_BrdSettings->m_PcbTextSize.y, PCB_INTERNAL_UNIT );
 
     AddUnitSymbol( *m_TextSizeHTitle );
     PutValueInLocalUnits( *m_OptPcbTextHSize,
-                          g_DesignSettings.m_PcbTextSize.x, PCB_INTERNAL_UNIT );
+                           m_BrdSettings->m_PcbTextSize.x, PCB_INTERNAL_UNIT );
 
 
     /* Modules: Edges width */
@@ -69,15 +69,15 @@ void WinEDA_GraphicItemsOptionsDialog::SetDisplayValue()
 
 void WinEDA_GraphicItemsOptionsDialog::AcceptOptions( wxCommandEvent& event )
 {
-    g_DesignSettings.m_DrawSegmentWidth =
+     m_BrdSettings->m_DrawSegmentWidth =
         ReturnValueFromTextCtrl( *m_OptPcbSegmWidth, PCB_INTERNAL_UNIT );
-    g_DesignSettings.m_EdgeSegmentWidth =
+     m_BrdSettings->m_EdgeSegmentWidth =
         ReturnValueFromTextCtrl( *m_OptPcbEdgesWidth, PCB_INTERNAL_UNIT );
-    g_DesignSettings.m_PcbTextWidth =
+     m_BrdSettings->m_PcbTextWidth =
         ReturnValueFromTextCtrl( *m_OptPcbTextWidth, PCB_INTERNAL_UNIT );
-    g_DesignSettings.m_PcbTextSize.y =
+     m_BrdSettings->m_PcbTextSize.y =
         ReturnValueFromTextCtrl( *m_OptPcbTextVSize, PCB_INTERNAL_UNIT );
-    g_DesignSettings.m_PcbTextSize.x =
+     m_BrdSettings->m_PcbTextSize.x =
         ReturnValueFromTextCtrl( *m_OptPcbTextHSize, PCB_INTERNAL_UNIT );
 
     ModuleSegmentWidth =
@@ -119,6 +119,7 @@ END_EVENT_TABLE()
 
 WinEDA_GraphicItemsOptionsDialog::WinEDA_GraphicItemsOptionsDialog()
 {
+    m_BrdSettings = m_Parent->GetBoard()->GetBoardDesignSettings();
 }
 
 

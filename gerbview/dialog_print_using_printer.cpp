@@ -191,7 +191,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     BOARD* board = ((WinEDA_BasePcbFrame*)m_Parent)->GetBoard();
     for( int layer = 0; layer<NB_LAYERS; layer++, mask <<= 1 )
     {
-       if( ! board->m_BoardSettings->IsLayerEnabled( layer ) )
+       if( ! board->IsLayerEnabled( layer ) )
         {
             m_BoxSelectLayer[layer]->Enable( false );
             m_BoxSelectLayer[layer]->SetValue( false );

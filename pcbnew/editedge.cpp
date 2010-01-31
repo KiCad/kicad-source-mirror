@@ -205,10 +205,10 @@ DRAWSEGMENT* WinEDA_PcbFrame::Begin_DrawSegment( DRAWSEGMENT* Segment,
     int          angle = 0;
     DRAWSEGMENT* DrawItem;
 
-    s_large = g_DesignSettings.m_DrawSegmentWidth;
-    if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer == EDGE_N )
+    s_large = GetBoard()->GetBoardDesignSettings()->m_DrawSegmentWidth;
+    if( getActiveLayer() == EDGE_N )
     {
-        s_large = g_DesignSettings.m_EdgeSegmentWidth;
+        s_large = GetBoard()->GetBoardDesignSettings()->m_EdgeSegmentWidth;
     }
 
     if( shape == S_ARC )
@@ -218,7 +218,7 @@ DRAWSEGMENT* WinEDA_PcbFrame::Begin_DrawSegment( DRAWSEGMENT* Segment,
     {
         SetCurItem( Segment = new DRAWSEGMENT( GetBoard() ) );
         Segment->m_Flags = IS_NEW;
-        Segment->SetLayer( ((PCB_SCREEN*)GetScreen())->m_Active_Layer );
+        Segment->SetLayer( getActiveLayer() );
         Segment->m_Width = s_large;
         Segment->m_Shape = shape;
         Segment->m_Angle = 900;

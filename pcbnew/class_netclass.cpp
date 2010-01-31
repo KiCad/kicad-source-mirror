@@ -31,6 +31,8 @@
 #include "pcbnew.h"
 #include "class_board_design_settings.h"
 
+// Current design settings (used also to read configs):
+extern BOARD_DESIGN_SETTINGS boardDesignSettings;
 
 // This will get mapped to "kicad_default" in the specctra_export.
 const wxString NETCLASS::Default = wxT("Default");
@@ -45,7 +47,7 @@ NETCLASS::NETCLASS( BOARD* aParent, const wxString& aName, const NETCLASS* initi
     m_Name( aName )
 {
     // use initialParameters if not NULL, else set the initial
-    // parameters from g_DesignSettings
+    // parameters from boardDesignSettings (try to change this)
     SetParams( initialParameters );
 }
 
@@ -62,8 +64,12 @@ void NETCLASS::SetParams( const NETCLASS* defaults )
         SetuViaDrill( defaults->GetuViaDrill() );
     }
     else
-    {
-        const EDA_BoardDesignSettings& g = g_DesignSettings;
+    {   // We should use m_Parent->GetBoardDesignSettings()
+        // But when the NETCLASSES constructor is called
+        // (it call NETCLASS constructor), the m_Parent constructor (see BOARD::BOARD)
+        // is not run, and GetBoardDesignSettings() return a bad value
+        // TODO: see how change that.
+        const BOARD_DESIGN_SETTINGS& g = boardDesignSettings;
 
         SetTrackWidth(  g.m_TrackMinWidth );
         SetViaDiameter( g.m_ViasMinSize );
@@ -401,27 +407,27 @@ bool NETCLASS::ReadDescr( FILE* aFile, int* aLineNum )
 
 int NETCLASS::GetTrackMinWidth() const
 {
-    return m_Parent->m_BoardSettings->m_TrackMinWidth;
+    return m_Parent->GetBoardDesignSettings()->m_TrackMinWidth;
 }
 
 int NETCLASS::GetViaMinDiameter() const
 {
-    return m_Parent->m_BoardSettings->m_ViasMinSize;
+    return m_Parent->GetBoardDesignSettings()->m_ViasMinSize;
 }
 
 int NETCLASS::GetViaMinDrill() const
 {
-    return m_Parent->m_BoardSettings->m_ViasMinDrill;
+    return m_Parent->GetBoardDesignSettings()->m_ViasMinDrill;
 }
 
 int NETCLASS::GetuViaMinDiameter() const
 {
-    return m_Parent->m_BoardSettings->m_MicroViasMinSize;
+    return m_Parent->GetBoardDesignSettings()->m_MicroViasMinSize;
 }
 
 int NETCLASS::GetuViaMinDrill() const
 {
-    return m_Parent->m_BoardSettings->m_MicroViasMinDrill;
+    return m_Parent->GetBoardDesignSettings()->m_MicroViasMinDrill;
 }
 
 

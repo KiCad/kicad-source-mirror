@@ -57,7 +57,7 @@ Ki_PageDescr* g_GerberPageSizeList[] =
 
 IMPLEMENT_APP( WinEDA_App )
 
-/* MacOSX: Needed for file association 
+/* MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
 void WinEDA_App::MacOpenFile(const wxString &fileName) {
@@ -75,8 +75,6 @@ bool WinEDA_App::OnInit()
 
     ScreenPcb = new PCB_SCREEN();
     ScreenPcb->m_CurrentSheetDesc = &g_Sheet_GERBER;
-
-    g_DesignSettings.SetEnabledLayers( FULL_LAYERS );     // All 32 layers enabled at first.
 
     ActiveScreen = ScreenPcb;
 
@@ -108,6 +106,8 @@ bool WinEDA_App::OnInit()
     /* Gerbview mainframe title */
     frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() );
     frame->SetBoard( new BOARD( NULL, frame ) );
+    frame->GetBoard()->SetEnabledLayers( FULL_LAYERS );     // All 32 layers enabled at first.
+
 
     // Initialize some display options
     DisplayOpt.DisplayPadIsol = false;      // Pad clearance has no meaning

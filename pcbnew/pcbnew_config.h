@@ -21,6 +21,7 @@
 #define ITEM_COLOR(item_visible) &g_ColorsSettings.m_ItemsColors[item_visible]
 
 /* Configuration parameters. */
+extern BOARD_DESIGN_SETTINGS boardDesignSettings;
 
 static PARAM_CFG_WXSTRING UserLibDirBufCfg
 (
@@ -61,10 +62,10 @@ static PARAM_CFG_INT PadDimVCfg
 );
 
 
-static PARAM_CFG_INT LayerThicknessCfg
+static PARAM_CFG_INT BoardThicknessCfg
 (
-    wxT( "LayerThickness" ),
-    &g_DesignSettings.m_LayerThickness,
+    wxT( "BoardThickness" ),
+    &boardDesignSettings.m_BoardThickness,
     630,
     0, 0xFFFF
 );
@@ -213,7 +214,7 @@ static PARAM_CFG_BOOL SegmPcb45Cfg  // Force 45 degrees for segments
 static PARAM_CFG_INT PcbTextDimVCfg
 (
     wxT( "TxtPcbV" ),
-    &g_DesignSettings.m_PcbTextSize.y,
+    &boardDesignSettings.m_PcbTextSize.y,
     600,
     TEXTS_MIN_SIZE, TEXTS_MAX_SIZE
 );
@@ -221,7 +222,7 @@ static PARAM_CFG_INT PcbTextDimVCfg
 static PARAM_CFG_INT PcbTextDimHCfg
 (
     wxT( "TxtPcbH" ),
-    &g_DesignSettings.m_PcbTextSize.x,
+    &boardDesignSettings.m_PcbTextSize.x,
     600,
     TEXTS_MIN_SIZE, TEXTS_MAX_SIZE
 );
@@ -633,7 +634,7 @@ static PARAM_CFG_INT HPGLrecouvrementCfg
 static PARAM_CFG_INT VernisEpargneGardeCfg
 (
     wxT( "VEgarde" ),
-    &g_DesignSettings.m_SolderMaskMargin,
+    &boardDesignSettings.m_SolderMaskMargin,
     100,
     0, 10000
 );
@@ -641,7 +642,7 @@ static PARAM_CFG_INT VernisEpargneGardeCfg
 static PARAM_CFG_INT DrawSegmLargeurCfg
 (
     wxT( "DrawLar" ),
-    &g_DesignSettings.m_DrawSegmentWidth,
+    &boardDesignSettings.m_DrawSegmentWidth,
     120,
     0, 0xFFFF
 );
@@ -649,7 +650,7 @@ static PARAM_CFG_INT DrawSegmLargeurCfg
 static PARAM_CFG_INT EdgeSegmLargeurCfg
 (
     wxT( "EdgeLar" ),
-    &g_DesignSettings.m_EdgeSegmentWidth,
+    &boardDesignSettings.m_EdgeSegmentWidth,
     120,
     0, 0xFFFF
 );
@@ -657,7 +658,7 @@ static PARAM_CFG_INT EdgeSegmLargeurCfg
 static PARAM_CFG_INT TexteSegmLargeurCfg
 (
     wxT( "TxtLar" ),
-    &g_DesignSettings.m_PcbTextWidth,
+    &boardDesignSettings.m_PcbTextWidth,
     120,
     0, 0xFFFF
 );
@@ -732,7 +733,7 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &PadDimVCfg,
     &ViaShowHoleCfg,
     &ShowNetNamesModeCfg,
-    &LayerThicknessCfg,
+    &BoardThicknessCfg,
     &RouteLayTopCfg,
     &RouteLayBotCfg,
     &Segm45Cfg,

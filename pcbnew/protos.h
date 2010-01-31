@@ -128,8 +128,8 @@ TRACK*       Locate_Piste_Connectee( TRACK* ptr_piste, TRACK* pt_base,
  *
  * The search begins to address start_adresse
  */
-TRACK*       Locate_Pistes( TRACK* start_adresse, int layer, int typeloc );
-TRACK*       Locate_Pistes( TRACK* start_adresse,
+TRACK*       Locate_Pistes( BOARD* aPcb, TRACK* start_adresse, int layer, int typeloc );
+TRACK*       Locate_Pistes( BOARD* aPcb, TRACK* start_adresse,
                             const wxPoint& ref_pos, int layer );
 
 /* Locate pad connected to the beginning or end of a segment
@@ -138,7 +138,7 @@ TRACK*       Locate_Pistes( TRACK* start_adresse,
  * A pointer to the description of the patch if pad was found.
  * NULL pointer if pad was not found.
  */
-D_PAD*       Locate_Pad_Connecte( BOARD* Pcb, TRACK* ptr_segment, int extr );
+D_PAD*       Locate_Pad_Connecte( BOARD* aPcb, TRACK* ptr_segment, int extr );
 
 
 /*
@@ -151,10 +151,10 @@ D_PAD*       Locate_Pad_Connecte( BOARD* Pcb, TRACK* ptr_segment, int extr );
  * Pointer to the pad if found
  * NULL pointer if pad not found
  */
-D_PAD*       Locate_Any_Pad( BOARD* Pcb,
+D_PAD*       Locate_Any_Pad( BOARD* aPcb,
                              int    typeloc,
                              bool   OnlyCurrentLayer = FALSE );
-D_PAD*       Locate_Any_Pad( BOARD*         Pcb,
+D_PAD*       Locate_Any_Pad( BOARD*         aPcb,
                              const wxPoint& ref_pos,
                              bool           OnlyCurrentLayer = FALSE );
 

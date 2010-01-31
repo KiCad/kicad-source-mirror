@@ -272,7 +272,7 @@ MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
         }
         else if( !( typeloc & MATCH_LAYER )
             && ( !( typeloc & VISIBLE_ONLY )
-                 || IsModuleLayerVisible( layer ) ) )
+                 || Pcb->IsModuleLayerVisible( layer ) ) )
         {
             if( dist <= alt_min_dim )
             {
@@ -466,15 +466,15 @@ suite1:
  *
  * The search begins to address start_adresse
  */
-TRACK* Locate_Pistes( TRACK* start_adresse, int MasqueLayer, int typeloc )
+TRACK* Locate_Pistes(BOARD* aPcb, TRACK* start_adresse, int MasqueLayer, int typeloc )
 {
     wxPoint ref_pos = RefPos( typeloc );
 
-    return Locate_Pistes( start_adresse, ref_pos, MasqueLayer );
+    return Locate_Pistes( aPcb, start_adresse, ref_pos, MasqueLayer );
 }
 
 
-TRACK* Locate_Pistes( TRACK* start_adresse, const wxPoint& ref_pos,
+TRACK* Locate_Pistes(BOARD* aPcb, TRACK* start_adresse, const wxPoint& ref_pos,
                       int MasqueLayer )
 {
     for( TRACK* track = start_adresse;   track;  track =  track->Next() )
@@ -489,7 +489,7 @@ TRACK* Locate_Pistes( TRACK* start_adresse, const wxPoint& ref_pos,
             continue;
         }
 
-        if( g_DesignSettings.IsLayerVisible( layer ) == false )
+        if( aPcb->GetBoardDesignSettings()->IsLayerVisible( layer ) == false )
             continue;
 
         if( track->Type() == TYPE_VIA ) /* VIA encountered. */

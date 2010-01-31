@@ -923,7 +923,7 @@ void WinEDA_BasePcbFrame::Plot_Standard_Layer( PLOTTER*    aPlotter,
             // If the current layer is a solder mask, use the global mask
             // clearance for vias
             if( ( aLayerMask & ( SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT ) ) )
-                via_margin = g_DesignSettings.m_SolderMaskMargin;
+                via_margin = GetBoard()->GetBoardDesignSettings()->m_SolderMaskMargin;
             pos    = Via->m_Start;
             size.x = size.y = Via->m_Width + 2 * via_margin;
 

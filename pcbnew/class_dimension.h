@@ -28,14 +28,10 @@ public:
     COTATION( BOARD_ITEM* aParent );
     ~COTATION();
 
-    COTATION* Next() const { return (COTATION*) Pnext; }
-    COTATION* Back() const { return (COTATION*) Pback; }
-
     wxPoint& GetPosition()
     {
         return m_Pos;
     }
-
 
     /**
      * Function SetLayer

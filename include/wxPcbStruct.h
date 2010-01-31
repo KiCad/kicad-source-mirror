@@ -538,6 +538,14 @@ public:
     // Track and via edition:
     void   Via_Edit_Control( wxCommandEvent& event );
 
+    /* Return true if a microvia can be put on board
+     * A microvia is a small via restricted to 2 near neighbor layers
+     * because its is hole is made by laser which can penetrate only one layer
+     * It is mainly used to connect BGA to the first inner layer
+     * And it is allowed from an external layer to the first inner layer
+     */
+    bool IsMicroViaAcceptable( void );
+
     /**
      * Function Other_Layer_Route
      * operates in one of two ways.  If argument track is NULL, then swap the
@@ -630,7 +638,7 @@ public:
      * @param aItemsListPicker = the list picker to use for an undo command
      *                           (can be NULL)
      * @param aUseNetclassValue = true to use NetClass value, false to use
-     *                            g_DesignSettings value
+     *                            current designSettings value
      * @return  true if done, false if no not change (because DRC error)
      */
     bool SetTrackSegmentWidth( TRACK*             aTrackItem,

@@ -41,7 +41,7 @@ END_EVENT_TABLE()
 
 
 /*****************************************************/
-void DisplayColorSetupFrame( WinEDA_DrawFrame* parent,
+void DisplayColorSetupFrame( WinEDA_GerberFrame* parent,
                              const wxPoint&    framepos )
 /*****************************************************/
 {
@@ -62,7 +62,7 @@ WinEDA_SetColorsFrame::WinEDA_SetColorsFrame()
 
 
 // Standard Constructor
-WinEDA_SetColorsFrame::WinEDA_SetColorsFrame( WinEDA_DrawFrame* parent,
+WinEDA_SetColorsFrame::WinEDA_SetColorsFrame( WinEDA_GerberFrame* parent,
                                               const wxPoint& framepos )
 {
     m_Parent = parent;
@@ -210,7 +210,7 @@ void WinEDA_SetColorsFrame::CreateControls()
 
         if( laytool_list[lyr]->m_NoDisplayIsColor )
         {
-            if( g_DesignSettings.IsLayerVisible( lyr ))
+            if( m_Parent->GetBoard()->IsLayerVisible( lyr ))
                 CheckBox->SetValue( TRUE );
             else
                 CheckBox->SetValue( FALSE );
@@ -426,7 +426,7 @@ void WinEDA_SetColorsFrame::UpdateLayerSettings()
 {
     for( int lyr = 0; lyr < NB_BUTT - 2; lyr++ )
     {
-        g_DesignSettings.SetLayerVisibility( lyr, laytool_list[lyr]->m_CheckBox->GetValue() );
+        m_Parent->GetBoard()->GetBoardDesignSettings()->SetLayerVisibility( lyr, laytool_list[lyr]->m_CheckBox->GetValue() );
         *laytool_list[lyr]->m_Color = CurrentColor[lyr];
     }
 

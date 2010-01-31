@@ -7,10 +7,11 @@
 
 #include "dlist.h"
 #include "class_netinfo.h"
+#include "class_colors_design_settings.h"
+#include "class_board_design_settings.h"
 
 
 class ZONE_CONTAINER;
-class EDA_BoardDesignSettings;
 
 
 /**
@@ -62,7 +63,7 @@ struct LAYER
 
 /** a small helper class to handle a stock of specific vias diameter and drill pair
  * in the BOARD class
-*/
+ */
 class VIA_DIMENSION
 {
 public:
@@ -74,15 +75,18 @@ public:
         m_Diameter = 0; m_Drill = 0;
     }
 
-    bool operator == (const VIA_DIMENSION& other) const
+
+    bool operator ==( const VIA_DIMENSION& other ) const
     {
-        return (m_Diameter == other.m_Diameter) &&
-                (m_Drill == other.m_Drill);
+        return (m_Diameter == other.m_Diameter)
+               && (m_Drill == other.m_Drill);
     }
-    bool operator < (const VIA_DIMENSION& other) const
+
+
+    bool operator <( const VIA_DIMENSION& other ) const
     {
-        if (m_Diameter != other.m_Diameter)
-            return (m_Diameter < other.m_Diameter);
+        if( m_Diameter != other.m_Diameter )
+            return m_Diameter < other.m_Diameter;
         return m_Drill < other.m_Drill;
     }
 };
@@ -99,18 +103,17 @@ class BOARD : public BOARD_ITEM
 
 private:
     typedef std::vector<MARKER_PCB*> MARKERS;               // @todo: switch to boost:ptr_vector, and change ~BOARD()
-    MARKERS                  m_markers;                     ///< MARKER_PCBs for clearance problems, owned by pointer
+    MARKERS              m_markers;                         ///< MARKER_PCBs for clearance problems, owned by pointer
 
     typedef std::vector<ZONE_CONTAINER*> ZONE_CONTAINERS;   // @todo: switch to boost::ptr_vector, and change ~BOARD()
-    ZONE_CONTAINERS          m_ZoneDescriptorList;          ///< edge zone descriptors, owned by pointer
+    ZONE_CONTAINERS      m_ZoneDescriptorList;              ///< edge zone descriptors, owned by pointer
 
-    LAYER                    m_Layer[NB_COPPER_LAYERS];
+    LAYER                m_Layer[NB_COPPER_LAYERS];
 
 public:
-    WinEDA_BasePcbFrame*     m_PcbFrame;                    // Window of visualization
-    EDA_Rect                 m_BoundaryBox;                 // Board size and position
+    WinEDA_BasePcbFrame* m_PcbFrame;                        // Window of visualization
+    EDA_Rect             m_BoundaryBox;                     // Board size and position
     int m_Status_Pcb;                                       // Flags used in ratsnet calculation and update
-    EDA_BoardDesignSettings* m_BoardSettings;               // Link to current design settings
     int m_NbNodes;                                          // Active pads (pads attached to a net ) count
     int m_NbNoconnect;                                      // Active ratsnet count (rastnests not already connected by tracks)
 
@@ -137,12 +140,16 @@ public:
     // the first value is always the value of the current NetClass
     // The others values are extra values
     std::vector <VIA_DIMENSION> m_ViasDimensionsList;   // vias size and drill list(max count = HISTORY_MAX_COUNT)
-                                                    // The first value is the current netclass via size
-    std::vector <int> m_TrackWidthList;             // tracks widths (max count = HISTORY_MAX_COUNT)
-                                                    // The first value is the current netclass track width
-    unsigned          m_ViaSizeSelector;            // index for m_ViaSizeList to select the value
-                                                    // 0 is the index selection of the default value Netclass
-    unsigned          m_TrackWidthSelector;         // index for m_TrackWidthList to select the value
+    // The first value is the current netclass via size
+    std::vector <int>           m_TrackWidthList;       // tracks widths (max count = HISTORY_MAX_COUNT)
+                                                        // The first value is the current netclass track width
+    unsigned m_ViaSizeSelector;                         // index for m_ViaSizeList to select the value
+                                                        // 0 is the index selection of the default value Netclass
+    unsigned m_TrackWidthSelector;                      // index for m_TrackWidthList to select the value
+
+private:
+    BOARD_DESIGN_SETTINGS*  m_boardDesignSettings;  // Link to current design settings
+    COLORS_DESIGN_SETTINGS* m_colorsSettings;       // Link to current colors settings
 
     /**********************************/
 public:
@@ -246,7 +253,7 @@ public:
      * Function GetCopperLayerCount
      * @return int - The number of copper layers in the BOARD.
      */
-    int GetCopperLayerCount() const;
+    int  GetCopperLayerCount() const;
 
     void SetCopperLayerCount( int aCount );
 
@@ -257,7 +264,7 @@ public:
      * Returns a bit-mask of all the layers that are enabled
      * @return int - the enabled layers in bit-mapped form.
      */
-    int GetEnabledLayers() const;
+    int  GetEnabledLayers() const;
 
     /**
      * Function SetEnabledLayers
@@ -268,12 +275,36 @@ public:
     void SetEnabledLayers( int aLayerMask );
 
     /**
+     * Function IsLayerEnabled
+     * is a proxy function that calls the correspondent function in m_BoardSettings
+     * tests whether a given layer is enabled
+     * @param aLayerIndex = The index of the layer to be tested
+     * @return bool - true if the layer is visible.
+     */
+    bool IsLayerEnabled( int aLayer ) const
+    {
+        return GetBoardDesignSettings()->IsLayerEnabled( aLayer );
+    }
+
+    /**
+     * Function IsLayerVisible
+     * is a proxy function that calls the correspondent function in m_BoardSettings
+     * tests whether a given layer is visible
+     * @param aLayerIndex = The index of the layer to be tested
+     * @return bool - true if the layer is visible.
+     */
+    bool IsLayerVisible( int aLayerIndex ) const
+    {
+        return GetBoardDesignSettings()->IsLayerVisible( aLayerIndex );
+    }
+
+    /**
      * Function GetVisibleLayers
      * is a proxy function that calls the correspondent function in m_BoardSettings
      * Returns a bit-mask of all the layers that are visible
      * @return int - the visible layers in bit-mapped form.
      */
-    int GetVisibleLayers() const;
+    int  GetVisibleLayers() const;
 
     /**
      * Function SetVisibleLayers
@@ -309,7 +340,7 @@ public:
      * changes the bit-mask of visible element categories and layers
      * @see enum PCB_VISIBLE
      */
-    void SetVisibleAlls( );
+    void SetVisibleAlls();
 
     /**
      * Function IsElementVisible
@@ -331,12 +362,55 @@ public:
     void SetElementVisibility( int aPCB_VISIBLE, bool aNewState );
 
     /**
+     * Function IsModuleLayerVisible
+     * expects either of the two layers on which a module can reside, and returns
+     * whether that layer is visible.
+     * @param layer One of the two allowed layers for modules: LAYER_N_FRONT or LAYER_N_BACK
+     * @return bool - true if the layer is visible, else false.
+     */
+    bool IsModuleLayerVisible( int layer );
+
+    /**
      * Function GetVisibleElementColor
      * returns the color of a pcb visible element.
      * @see enum PCB_VISIBLE
      */
     int  GetVisibleElementColor( int aPCB_VISIBLE );
     void SetVisibleElementColor( int aPCB_VISIBLE, int aColor );
+
+
+    /** Function GetBoardDesignSettings
+     * @return the current BOARD_DESIGN_SETTINGS in use
+     */
+    BOARD_DESIGN_SETTINGS* GetBoardDesignSettings() const
+    {
+        return m_boardDesignSettings;
+    }
+
+
+    /** Function SetBoardDesignSettings
+     * @param aDesignSettings = the new BOARD_DESIGN_SETTINGS to use
+     */
+    void SetBoardDesignSettings( BOARD_DESIGN_SETTINGS* aDesignSettings)
+    {
+        m_boardDesignSettings = aDesignSettings;
+    }
+
+    /** Function SetBoardSettings
+     * @return the current COLORS_DESIGN_SETTINGS in use
+     */
+    COLORS_DESIGN_SETTINGS* GetColorsSettings() const
+    {
+        return m_colorsSettings;
+    }
+
+    /** Function SetColorsSettings
+     * @param aColorsSettings = the new COLORS_DESIGN_SETTINGS to use
+     */
+    void SetColorsSettings(COLORS_DESIGN_SETTINGS* aColorsSettings)
+    {
+        m_colorsSettings = aColorsSettings;
+    }
 
 
     /**
@@ -390,7 +464,6 @@ public:
      * gets a layer color for any valid layer, including non-copper ones.
      */
     int      GetLayerColor( int aLayer );
-
 
     /* Functions to get some items count */
     int      GetNumSegmTrack();
@@ -501,6 +574,7 @@ public:
     /**************************************/
     /** function relative to NetClasses: **/
     /**************************************/
+
     /**
      * Function SynchronizeNetsAndNetClasses
      * copies NETCLASS info to each NET, based on NET membership in a NETCLASS.
@@ -510,7 +584,7 @@ public:
      * @param none
      * @return none
      */
-    void          SynchronizeNetsAndNetClasses();
+    void SynchronizeNetsAndNetClasses();
 
     /**
      * Function SetCurrentNetClass
@@ -520,12 +594,12 @@ public:
      * @param aNetClassName = the new netclass name
      * @return true if lists of tracks and vias sizes are modified
      */
-    bool          SetCurrentNetClass( const wxString& aNetClassName );
+    bool SetCurrentNetClass( const wxString& aNetClassName );
 
     /** function GetBiggestClearanceValue
      * @return the biggest clearance value found in NetClasses list
      */
-    int           GetBiggestClearanceValue();
+    int  GetBiggestClearanceValue();
 
     /** function GetCurrentTrackWidth
      * @return the current track width, according to the selected options
@@ -537,6 +611,7 @@ public:
         return m_TrackWidthList[m_TrackWidthSelector];
     }
 
+
     /** function GetCurrentViaSize
      * @return the current via size, according to the selected options
      * ( using the default netclass value or a preset value )
@@ -547,6 +622,7 @@ public:
         return m_ViasDimensionsList[m_ViaSizeSelector].m_Diameter;
     }
 
+
     /** function GetCurrentViaDrill
      * @return the current via size, according to the selected options
      * ( using the default netclass value or a preset value )
@@ -555,29 +631,31 @@ public:
     int           GetCurrentViaDrill()
     {
         return m_ViasDimensionsList[m_ViaSizeSelector].m_Drill > 0 ?
-                m_ViasDimensionsList[m_ViaSizeSelector].m_Drill : -1;
+               m_ViasDimensionsList[m_ViaSizeSelector].m_Drill : -1;
     }
+
 
     /** function GetCurrentMicroViaSize
      * @return the current micro via size,
      * that is the current netclass value
      */
-    int           GetCurrentMicroViaSize();
+    int  GetCurrentMicroViaSize();
 
     /** function GetCurrentMicroViaDrill
      * @return the current micro via drill,
      * that is the current netclass value
      */
-    int           GetCurrentMicroViaDrill();
+    int  GetCurrentMicroViaDrill();
 
     /***************************************************************************/
+
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool          Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
 
     /**
@@ -860,7 +938,6 @@ public:
      * @param aNetcode = netcode to analyze. if -1, analyze all nets
      */
     void Test_Connections_To_Copper_Areas( int aNetcode = -1 );
-
 };
 
 #endif      // #ifndef CLASS_BOARD_H

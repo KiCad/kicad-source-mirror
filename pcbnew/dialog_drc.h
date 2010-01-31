@@ -38,6 +38,8 @@ class DRCLISTBOX;
 class DIALOG_DRC_CONTROL: public DIALOG_DRC_CONTROL_BASE
 {
 public:
+    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
+
     /// Constructors
     DIALOG_DRC_CONTROL( DRC* aTester, WinEDA_PcbFrame* parent );
     ~DIALOG_DRC_CONTROL(){};

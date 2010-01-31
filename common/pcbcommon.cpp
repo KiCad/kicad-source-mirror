@@ -100,7 +100,7 @@ int    g_PadCMPColor        = RED;
 
 
 // Current design settings:
-class EDA_BoardDesignSettings g_DesignSettings;
+class BOARD_DESIGN_SETTINGS g_DesignSettings;
 
 /**
  * Used in track creation, a list of track segments currently being created,

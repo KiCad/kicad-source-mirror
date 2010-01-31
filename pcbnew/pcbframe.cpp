@@ -872,6 +872,32 @@ void WinEDA_PcbFrame::SaveSettings()
 
 }
 
+/* Return true if a microvia can be put on board
+ * A microvia ia a small via restricted to 2 near neighbour layers
+ * because its is hole is made by laser which can penetrate only one layer
+ * It is mainly used to connect BGA to the first inner layer
+ * And it is allowed from an external layer to the first inner layer
+ */
+bool WinEDA_PcbFrame::IsMicroViaAcceptable( void )
+{
+    int copperlayercnt = GetBoard()->GetCopperLayerCount( );
+    int currLayer = getActiveLayer();
+
+    if( !GetBoard()->GetBoardDesignSettings()->m_MicroViasAllowed )
+        return false;   // Obvious..
+
+    if( copperlayercnt < 4 )
+        return false;   // Only on multilayer boards..
+
+    if( ( currLayer == LAYER_N_BACK )
+       || ( currLayer == LAYER_N_FRONT )
+       || ( currLayer == copperlayercnt - 2 )
+       || ( currLayer == LAYER_N_2 ) )
+        return true;
+
+    return false;
+}
+
 
 void WinEDA_PcbFrame::syncLayerWidget( )
 {

@@ -63,11 +63,11 @@ void DRC::ShowDialog()
 
         // copy data retained in this DRC object into the m_ui DrcPanel:
 
-        PutValueInLocalUnits( *m_ui->m_SetTrackMinWidthCtrl, g_DesignSettings.m_TrackMinWidth,
+        PutValueInLocalUnits( *m_ui->m_SetTrackMinWidthCtrl, m_pcb->GetBoardDesignSettings()->m_TrackMinWidth,
                               m_mainWindow->m_InternalUnits );;
-        PutValueInLocalUnits( *m_ui->m_SetViaMinSizeCtrl, g_DesignSettings.m_ViasMinSize,
+        PutValueInLocalUnits( *m_ui->m_SetViaMinSizeCtrl, m_pcb->GetBoardDesignSettings()->m_ViasMinSize,
                               m_mainWindow->m_InternalUnits );;
-        PutValueInLocalUnits( *m_ui->m_SetMicroViakMinSizeCtrl, g_DesignSettings.m_MicroViasMinSize,
+        PutValueInLocalUnits( *m_ui->m_SetMicroViakMinSizeCtrl, m_pcb->GetBoardDesignSettings()->m_MicroViasMinSize,
                               m_mainWindow->m_InternalUnits );;
 
         m_ui->m_CreateRptCtrl->SetValue( m_doCreateRptFile );
@@ -315,11 +315,11 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
 {
     bool ret = true;
 
-    const EDA_BoardDesignSettings& g = g_DesignSettings;
+    const BOARD_DESIGN_SETTINGS& g = *m_pcb->GetBoardDesignSettings();
 
 #define FmtVal( x )   GetChars( ReturnStringFromValue( g_UnitMetric, x, PCB_INTERNAL_UNIT ) )
 
-#if 0   // set to 1 when (if...) EDA_BoardDesignSettings has a m_MinClearance value
+#if 0   // set to 1 when (if...) BOARD_DESIGN_SETTINGS has a m_MinClearance value
     if( nc->GetClearance() < g.m_MinClearance )
     {
         msg.Printf( _("NETCLASS: '%s' has Clearance:%s which is less than global:%s"),
@@ -772,7 +772,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             // test:
             if( layer1 == LAYER_N_BACK && layer2 == LAYER_N_2 )
                 err = false;
-            if( layer1 == (g_DesignSettings.GetCopperLayerCount() - 2 ) && layer2 == LAYER_N_FRONT )
+            if( layer1 == (m_pcb->GetBoardDesignSettings()->GetCopperLayerCount() - 2 ) && layer2 == LAYER_N_FRONT )
                 err = false;
             if( err )
             {

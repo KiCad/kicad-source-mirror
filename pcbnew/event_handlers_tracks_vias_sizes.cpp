@@ -33,12 +33,12 @@ void WinEDA_PcbFrame::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     switch( id )
     {
     case ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH:
-        g_DesignSettings.m_UseConnectedTrackWidth = not g_DesignSettings.m_UseConnectedTrackWidth;
+        GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth = not GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth;
         AuxiliaryToolBar_Update_UI( );
         break;
 
     case ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES:
-        g_DesignSettings.m_UseConnectedTrackWidth = false;
+        GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth = false;
         GetBoard()->m_TrackWidthSelector = 0;
         GetBoard()->m_ViaSizeSelector = 0;
         AuxiliaryToolBar_Update_UI( );
@@ -46,7 +46,7 @@ void WinEDA_PcbFrame::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
 
     case ID_POPUP_PCB_SELECT_AUTO_WIDTH:
         DrawPanel->MouseToCursorSchema();
-        g_DesignSettings.m_UseConnectedTrackWidth = true;
+        GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth = true;
         AuxiliaryToolBar_Update_UI( );
         break;
 
@@ -59,7 +59,7 @@ void WinEDA_PcbFrame::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_WIDTH7:
     case ID_POPUP_PCB_SELECT_WIDTH8:
         DrawPanel->MouseToCursorSchema();
-        g_DesignSettings.m_UseConnectedTrackWidth = false;
+        GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth = false;
         ii = id - ID_POPUP_PCB_SELECT_WIDTH1;
         GetBoard()->m_TrackWidthSelector = ii;
         AuxiliaryToolBar_Update_UI( );

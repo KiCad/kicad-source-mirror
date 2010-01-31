@@ -79,7 +79,7 @@ TRACK* WinEDA_GerberFrame::Delete_Segment( wxDC* DC, TRACK* Track )
         return NULL;
     }
 
-    Trace_Segment( DrawPanel, DC, Track, GR_XOR );
+    Trace_Segment( GetBoard(), DrawPanel, DC, Track, GR_XOR );
 
     DLIST<TRACK>* container = (DLIST<TRACK>*)Track->GetList();
     wxASSERT( container );

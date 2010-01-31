@@ -23,6 +23,8 @@
 static PCB_SCREEN* s_screenModule = NULL;   // the PCB_SCREEN used by the
                                             // footprint editor
 
+// Design setting for the module editor:
+static BOARD_DESIGN_SETTINGS s_ModuleEditorDesignSetting;
 
 /********************************/
 /* class WinEDA_ModuleEditFrame */
@@ -170,6 +172,7 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
         s_screenModule = new PCB_SCREEN();
     SetBaseScreen( s_screenModule );
     ActiveScreen = GetScreen();
+    GetBoard()->SetBoardDesignSettings( &s_ModuleEditorDesignSetting );
     GetScreen()->SetCurItem( NULL );
     LoadSettings();
 

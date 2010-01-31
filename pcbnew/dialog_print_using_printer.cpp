@@ -122,7 +122,7 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( WinEDA_PcbFrame* parent 
     {
         GetSizer()->SetSizeHints( this );
     }
-    
+
     Center();
 }
 
@@ -141,7 +141,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     wxString layerKey;
     for( layer = 0; layer < NB_LAYERS; ++layer )
     {
-        if( !board->m_BoardSettings->IsLayerEnabled( layer ) )
+        if( !board->IsLayerEnabled( layer ) )
             m_BoxSelectLayer[layer] = NULL;
         else
         m_BoxSelectLayer[layer] =

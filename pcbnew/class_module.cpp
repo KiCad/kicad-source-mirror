@@ -59,7 +59,6 @@ MODULE::~MODULE()
     delete m_Value;
 }
 
-
 /* Draw the anchor cross (vertical)
  * Must be done after the pads, because drawing the hole will erase overwrite
  * every thing already drawn.
@@ -71,7 +70,7 @@ void MODULE::DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset
 
     GRSetDrawMode( DC, draw_mode );
 
-    if( ((BOARD*)m_Parent)->IsElementVisible( ANCHOR_VISIBLE ) )
+    if( GetBoard()->IsElementVisible( ANCHOR_VISIBLE ) )
     {
         int color = g_ColorsSettings.GetItemColor(ANCHOR_VISIBLE);
         GRLine( &panel->m_ClipBox, DC,
@@ -192,18 +191,19 @@ void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         pad->Draw( panel, DC, draw_mode, offset );
     }
 
-    
+    BOARD * brd = GetBoard();
+
     // Draws footprint anchor
     DrawAncre( panel, DC, offset, DIM_ANCRE_MODULE, draw_mode );
 
     /* Draw graphic items */
-    if( ((BOARD*)m_Parent)->IsElementVisible( MOD_REFERENCES_VISIBLE ) )
+    if( brd->IsElementVisible( MOD_REFERENCES_VISIBLE ) )
     {
         if( !(m_Reference->m_Flags & IS_MOVED) )
             m_Reference->Draw( panel, DC, draw_mode, offset );
     }
 
-    if( ((BOARD*)m_Parent)->IsElementVisible( MOD_VALUES_VISIBLE ) )
+    if( brd->IsElementVisible( MOD_VALUES_VISIBLE ) )
     {
         if( !(m_Value->m_Flags & IS_MOVED) )
             m_Value->Draw( panel, DC, draw_mode, offset );
@@ -826,7 +826,7 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
     char     bufcar[512], Line[512];
     bool     flag = FALSE;
     wxString msg;
-    BOARD*   board = (BOARD*) m_Parent;
+    BOARD*   board = GetBoard();
 
     frame->EraseMsgBox();
     if( frame->m_Ident != PCB_FRAME )
@@ -1043,7 +1043,7 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
  */
 void MODULE::Show( int nestLevel, std::ostream& os )
 {
-    BOARD* board = (BOARD*) m_Parent;
+    BOARD* board = GetBoard();
 
     // for now, make it look like XML, expand on this later.
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
