@@ -148,8 +148,7 @@ void WinEDA_SchematicFrame::TestDanglingEnds( SCH_ITEM* DrawList, wxDC* DC )
  * Test if point pos is on a pin end.
  *
  * @param DrawList = List of SCH_ITEMs to check.
- *
- * @return LIB_PIN - Pointer to the located pin or NULL if no pin was found.
+ * @return a LIB_PIN pointer to the located pin or NULL if no pin was found.
  */
 LIB_PIN* WinEDA_SchematicFrame::LocatePinEnd( SCH_ITEM*      DrawList,
                                               const wxPoint& pos )
@@ -165,10 +164,12 @@ LIB_PIN* WinEDA_SchematicFrame::LocatePinEnd( SCH_ITEM*      DrawList,
     pinpos = Pin->m_Pos;
 
     if( DrawLibItem == NULL )
-        NEGATE( pinpos.y );
+        NEGATE( pinpos.y );     // In libraries Y axis is bottom to top
+                                // and in schematic Y axis is top to bottom
 
-    else
-        pinpos = TransformCoordinate( DrawLibItem->m_Transform, pinpos );
+    else    // calculate the pin position in schematic
+        pinpos = TransformCoordinate( DrawLibItem->m_Transform, pinpos )
+                + DrawLibItem->m_Pos;
 
     if( pos == pinpos )
         return Pin;
