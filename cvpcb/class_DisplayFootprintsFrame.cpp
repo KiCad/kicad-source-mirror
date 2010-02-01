@@ -13,6 +13,7 @@
 #include "bitmaps.h"
 #include "protos.h"
 #include "cvstruct.h"
+#include "class_DisplayFootprintsFrame.h"
 
 /*
  * NOTE: There is something in 3d_viewer.h that causes a compiler error in
@@ -23,20 +24,20 @@
 
 
 
-BEGIN_EVENT_TABLE( WinEDA_DisplayFrame, WinEDA_BasePcbFrame )
-    EVT_CLOSE( WinEDA_DisplayFrame::OnCloseWindow )
-    EVT_SIZE( WinEDA_DisplayFrame::OnSize )
-    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_DisplayFrame::OnZoom )
-    EVT_TOOL( ID_OPTIONS_SETUP, WinEDA_DisplayFrame::InstallOptionsDisplay )
-    EVT_TOOL( ID_CVPCB_SHOW3D_FRAME, WinEDA_DisplayFrame::Show3D_Frame )
+BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, WinEDA_BasePcbFrame )
+    EVT_CLOSE( DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow )
+    EVT_SIZE( DISPLAY_FOOTPRINTS_FRAME::OnSize )
+    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, DISPLAY_FOOTPRINTS_FRAME::OnZoom )
+    EVT_TOOL( ID_OPTIONS_SETUP, DISPLAY_FOOTPRINTS_FRAME::InstallOptionsDisplay )
+    EVT_TOOL( ID_CVPCB_SHOW3D_FRAME, DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame )
 END_EVENT_TABLE()
 
 
 /***************************************************************************/
-/* WinEDA_DisplayFrame: the frame to display the current focused footprint */
+/* DISPLAY_FOOTPRINTS_FRAME: the frame to display the current focused footprint */
 /***************************************************************************/
 
-WinEDA_DisplayFrame::WinEDA_DisplayFrame( WinEDA_CvpcbFrame* father,
+DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( WinEDA_CvpcbFrame* father,
                                           const wxString& title,
                                           const wxPoint& pos,
                                           const wxSize& size, long style ) :
@@ -109,7 +110,7 @@ WinEDA_DisplayFrame::WinEDA_DisplayFrame( WinEDA_CvpcbFrame* father,
 }
 
 
-WinEDA_DisplayFrame::~WinEDA_DisplayFrame()
+DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 {
     delete GetBoard();
 
@@ -122,7 +123,7 @@ WinEDA_DisplayFrame::~WinEDA_DisplayFrame()
 /* Called when the frame is closed
  *  Save current settings (frame position and size
  */
-void WinEDA_DisplayFrame::OnCloseWindow( wxCloseEvent& event )
+void DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow( wxCloseEvent& event )
 {
     wxPoint pos;
     wxSize  size;
@@ -135,14 +136,14 @@ void WinEDA_DisplayFrame::OnCloseWindow( wxCloseEvent& event )
 }
 
 
-void WinEDA_DisplayFrame::ReCreateVToolbar()
+void DISPLAY_FOOTPRINTS_FRAME::ReCreateVToolbar()
 {
     // Currently, no vertical right toolbar.
     // So do nothing
 }
 
 
-void WinEDA_DisplayFrame::ReCreateHToolbar()
+void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
 {
     if( m_HToolBar != NULL )
         return;
@@ -184,29 +185,29 @@ void WinEDA_DisplayFrame::ReCreateHToolbar()
 }
 
 
-void WinEDA_DisplayFrame::SetToolbars()
+void DISPLAY_FOOTPRINTS_FRAME::SetToolbars()
 {
 }
 
 
-void WinEDA_DisplayFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
+void DISPLAY_FOOTPRINTS_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 {
 }
 
 
-void WinEDA_DisplayFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
+void DISPLAY_FOOTPRINTS_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 {
 }
 
 
-bool WinEDA_DisplayFrame::OnRightClick( const wxPoint& MousePos,
+bool DISPLAY_FOOTPRINTS_FRAME::OnRightClick( const wxPoint& MousePos,
                                         wxMenu* PopMenu )
 {
     return true;
 }
 
 
-void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
+void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* DC, wxPoint Mouse )
 {
     wxRealPoint  delta;
     int     flagcurseur = 0;
@@ -325,7 +326,7 @@ void WinEDA_DisplayFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 /**
  * Display 3D frame of current footprint selection.
  */
-void WinEDA_DisplayFrame::Show3D_Frame( wxCommandEvent& event )
+void DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
     if( m_Draw3DFrame )
     {
@@ -347,3 +348,30 @@ void WinEDA_DisplayFrame::Show3D_Frame( wxCommandEvent& event )
 void PCB_SCREEN::ClearUndoORRedoList(UNDO_REDO_CONTAINER&, int )
 {
 }
+
+/** Function IsGridVisible() , virtual
+ * @return true if the grid must be shown
+ */
+bool DISPLAY_FOOTPRINTS_FRAME::IsGridVisible()
+{
+    return true;
+}
+
+/** Function SetGridVisibility() , virtual
+ * It may be overloaded by derived classes
+ * if you want to store/retrieve the grid visiblity in configuration.
+ * @param aVisible = true if the grid must be shown
+ */
+void DISPLAY_FOOTPRINTS_FRAME::SetGridVisibility(bool aVisible)
+{
+    // Currently do nothing because there is no option to hide/show grid
+}
+
+/** Function GetGridColor() , virtual
+ * @return the color of the grid
+ */
+int DISPLAY_FOOTPRINTS_FRAME::GetGridColor()
+{
+    return DARKGRAY;
+}
+

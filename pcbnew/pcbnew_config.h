@@ -579,14 +579,6 @@ static PARAM_CFG_SETCOLOR ColorViaMicroViaCfg  // Buried Via Color
     CYAN
 );
 
-static PARAM_CFG_SETCOLOR ColorpcbGrilleCfg
-(
-    INSETUP,
-    wxT( "CoPcbGr" ),
-    &g_GridColor,
-    DARKGRAY
-);
-
 static PARAM_CFG_SETCOLOR ColorCheveluCfg
 (
     INSETUP,
@@ -795,7 +787,6 @@ PARAM_CFG_BASE* ParamCfgList[] =
     &ColorViaThroughCfg,
     &ColorViaBlindBuriedCfg,
     &ColorViaMicroViaCfg,
-    &ColorpcbGrilleCfg,
     &ColorCheveluCfg,
     &HPGLpenNumCfg,
     &HPGLdiamCfg,

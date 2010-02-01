@@ -163,7 +163,6 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow* father,
 {
     m_FrameName  = wxT( "LibeditFrame" );
     m_Draw_Axis  = true;            // true to draw axis
-    m_Draw_Grid  = true;            // true to draw grid
     m_ConfigPath = wxT( "LibraryEditor" );
     SetShowDeMorgan( false );
     m_drawSpecificConvert = true;

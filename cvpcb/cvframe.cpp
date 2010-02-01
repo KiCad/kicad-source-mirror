@@ -15,6 +15,7 @@
 #include "protos.h"
 #include "cvstruct.h"
 #include "dialog_cvpcb_config.h"
+#include "class_DisplayFootprintsFrame.h"
 
 #include "build_version.h"
 

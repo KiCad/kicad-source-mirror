@@ -14,6 +14,7 @@
 #include "cvpcb.h"
 #include "protos.h"
 #include "cvstruct.h"
+#include "class_DisplayFootprintsFrame.h"
 
 
 /**
@@ -24,7 +25,7 @@
  * @param CmpName - Module name
  * @return - Module if found otherwise NULL.
  */
-MODULE* WinEDA_DisplayFrame::Get_Module( const wxString& CmpName )
+MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& CmpName )
 {
     int        LineNum, Found = 0;
     unsigned   ii;

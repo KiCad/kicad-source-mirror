@@ -182,9 +182,6 @@ extern int          g_UnitMetric; // display units mm = 1, inches = 0, cm = 2
 /* Draw color for moving objects: */
 extern int          g_GhostColor;
 
-/* Draw color for grid: */
-extern int          g_GridColor;
-
 /* Current used screen: (not used in eeshema)*/
 extern BASE_SCREEN* ActiveScreen;
 

@@ -22,7 +22,7 @@ void WinEDA_ModuleEditFrame::OnSelectOptionToolbar( wxCommandEvent& event )
     switch( id )
     {
     case ID_TB_OPTIONS_SHOW_GRID:
-        m_Draw_Grid = m_OptionsToolBar->GetToolState( id );
+        SetGridVisibility( m_OptionsToolBar->GetToolState( id ) );
         DrawPanel->Refresh( );
         break;
 

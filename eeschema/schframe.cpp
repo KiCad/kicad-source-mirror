@@ -519,9 +519,9 @@ void WinEDA_SchematicFrame::OnUpdateUnits( wxUpdateUIEvent& event )
 
 void WinEDA_SchematicFrame::OnUpdateGrid( wxUpdateUIEvent& event )
 {
-    wxString tool_tip = m_Draw_Grid ? _( "Hide grid" ) : _( "Show grid" );
+    wxString tool_tip = IsGridVisible() ? _( "Hide grid" ) : _( "Show grid" );
 
-    m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID, m_Draw_Grid );
+    m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID, IsGridVisible() );
     m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_GRID, tool_tip );
 }
 

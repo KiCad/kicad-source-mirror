@@ -18,8 +18,7 @@
 #include "eelayer.h" // Header file associated with this file
 
 // Local variables:
-int CurrentColor[NB_BUTT]; // Holds color for each layer while dialog box open
-
+static int CurrentColor[NB_BUTT]; // Holds color for each layer while dialog box open
 
 IMPLEMENT_DYNAMIC_CLASS( WinEDA_SetColorsFrame, wxDialog )
 
@@ -35,7 +34,7 @@ END_EVENT_TABLE()
 
 
 /**************************************************************/
-void DisplayColorSetupFrame( WinEDA_DrawFrame* parent,
+void DisplayColorSetupFrame( WinEDA_SchematicFrame* parent,
                              const wxPoint&    framepos )
 {
 /**************************************************************/
@@ -56,7 +55,7 @@ WinEDA_SetColorsFrame::WinEDA_SetColorsFrame()
 
 
 // Standard Constructor
-WinEDA_SetColorsFrame::WinEDA_SetColorsFrame( WinEDA_DrawFrame* parent,
+WinEDA_SetColorsFrame::WinEDA_SetColorsFrame( WinEDA_SchematicFrame* parent,
                                               const wxPoint&    framepos )
 {
     m_Parent = parent;
@@ -224,7 +223,7 @@ void WinEDA_SetColorsFrame::CreateControls()
             m_ShowGrid =
                 new wxCheckBox( this, ID_CHECKBOX_SHOW_GRID, _( "Grid" ),
                                 wxDefaultPosition, wxDefaultSize, 0 );
-            m_ShowGrid->SetValue( m_Parent->m_Draw_Grid );
+            m_ShowGrid->SetValue( m_Parent->IsGridVisible() );
             RowBoxSizer->Add( m_ShowGrid,
                               1,
                               wxALIGN_CENTER_VERTICAL | wxBOTTOM,
@@ -280,32 +279,6 @@ void WinEDA_SetColorsFrame::CreateControls()
 
     // (Dialog now needs to be resized, but the associated command is found
     // elsewhere.)
-}
-
-
-/**********************************************************/
-bool WinEDA_SetColorsFrame::ShowToolTips()
-{
-/**********************************************************/
-    return true;
-}
-
-
-/**********************************************************/
-wxBitmap WinEDA_SetColorsFrame::GetBitmapResource( const wxString& name )
-{
-/**********************************************************/
-    wxUnusedVar( name );
-    return wxNullBitmap;
-}
-
-
-/**********************************************************/
-wxIcon WinEDA_SetColorsFrame::GetIconResource( const wxString& name )
-{
-/**********************************************************/
-    wxUnusedVar( name );
-    return wxNullIcon;
 }
 
 
@@ -367,7 +340,7 @@ void WinEDA_SetColorsFrame::UpdateLayerSettings()
     // The previous command compiles OK, but to prevent a warning
     // from being generated when the Linux version is being compiled,
     // the next two commands are provided instead.
-    m_Parent->m_Draw_Grid = m_ShowGrid->GetValue();
+    m_Parent->SetGridVisibility( m_ShowGrid->GetValue() );
 
     // Update color of background
     if( m_SelBgColor->GetSelection() == 0 )

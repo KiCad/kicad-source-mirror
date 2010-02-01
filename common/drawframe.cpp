@@ -22,8 +22,9 @@
 
 
 /* Configuration entry names. */
-static const wxString CursorShapeEntry( wxT( "CuShape" ) );
-static const wxString ShowGridEntry( wxT( "ShGrid" ) );
+static const wxString CursorShapeEntryKeyword( wxT( "CursorShape" ) );
+static const wxString ShowGridEntryKeyword( wxT( "ShowGrid" ) );
+static const wxString GridColorEntryKeyword( wxT( "GridColor" ) );
 static const wxString LastGridSizeId( wxT( "_LastGridSize" ) );
 
 
@@ -60,13 +61,14 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     m_ID_last_state       = 0;
     m_HTOOL_current_state = 0;
     m_Draw_Axis           = FALSE;  // TRUE to draw axis.
-    m_Draw_Grid           = FALSE;  // TRUE to show grid.
     m_Draw_Sheet_Ref      = FALSE;  // TRUE to display reference sheet.
     m_Print_Sheet_Ref     = TRUE;   // TRUE to print reference sheet.
     m_Draw_Auxiliary_Axis = FALSE;  // TRUE draw auxilary axis.
     m_UnitType            = INTERNAL_UNIT_TYPE;    // Internal unit = inch
     m_CursorShape         = 0;
     m_LastGridSizeId      = 0;
+    m_DrawGrid            = true;   // hide/Show grid. default = show
+    m_GridColor           = DARKGRAY;   // Grid color
 
     // Internal units per inch: = 1000 for schema, = 10000 for PCB
     m_InternalUnits       = EESCHEMA_INTERNAL_UNIT;
@@ -720,8 +722,13 @@ void WinEDA_DrawFrame::LoadSettings()
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
     WinEDA_BasicFrame::LoadSettings();
-    cfg->Read( m_FrameName + CursorShapeEntry, &m_CursorShape, ( long )0 );
-    cfg->Read( m_FrameName + ShowGridEntry, &m_Draw_Grid, true );
+    cfg->Read( m_FrameName + CursorShapeEntryKeyword, &m_CursorShape, ( long )0 );
+    bool btmp;
+    if ( cfg->Read( m_FrameName + ShowGridEntryKeyword, &btmp ) )
+        SetGridVisibility( btmp);
+    int itmp;
+    if( cfg->Read( m_FrameName + GridColorEntryKeyword, &itmp ) )
+        SetGridColor(itmp);
     cfg->Read( m_FrameName + LastGridSizeId, &m_LastGridSizeId, 0L );
 }
 
@@ -739,8 +746,9 @@ void WinEDA_DrawFrame::SaveSettings()
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
     WinEDA_BasicFrame::SaveSettings();
-    cfg->Write( m_FrameName + CursorShapeEntry, m_CursorShape );
-    cfg->Write( m_FrameName + ShowGridEntry, m_Draw_Grid );
+    cfg->Write( m_FrameName + CursorShapeEntryKeyword, m_CursorShape );
+    cfg->Write( m_FrameName + ShowGridEntryKeyword, IsGridVisible() );
+    cfg->Write( m_FrameName + GridColorEntryKeyword, GetGridColor() );
     cfg->Write( m_FrameName + LastGridSizeId, ( long ) m_LastGridSizeId );
 }
 

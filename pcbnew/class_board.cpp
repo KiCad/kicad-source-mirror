@@ -432,12 +432,6 @@ void BOARD::SetElementVisibility( int aPCB_VISIBLE, bool isEnabled )
 {
     switch( aPCB_VISIBLE )
     {
-    case GRID_VISIBLE:
-        m_PcbFrame->m_Draw_Grid = isEnabled;
-        GetBoardDesignSettings()->SetElementVisibility( aPCB_VISIBLE, isEnabled );
-        break;
-
-
     case RATSNEST_VISIBLE:
         GetBoardDesignSettings()->SetElementVisibility( aPCB_VISIBLE, isEnabled );
         // we must clear or set the CH_VISIBLE flags to hide/show ratsnet
@@ -478,10 +472,8 @@ int BOARD::GetVisibleElementColor( int aPCB_VISIBLE )
     case PAD_FR_VISIBLE:
     case PAD_BK_VISIBLE:
     case RATSNEST_VISIBLE:
-        color = GetColorsSettings()->GetItemColor( aPCB_VISIBLE );
-        break;
     case GRID_VISIBLE:
-        color = g_GridColor;
+        color = GetColorsSettings()->GetItemColor( aPCB_VISIBLE );
         break;
 
     default:
@@ -505,15 +497,9 @@ void BOARD::SetVisibleElementColor( int aPCB_VISIBLE, int aColor )
     case ANCHOR_VISIBLE:
     case PAD_FR_VISIBLE:
     case PAD_BK_VISIBLE:
-        GetColorsSettings()->SetItemColor( aPCB_VISIBLE, aColor );
-        break;
-    case RATSNEST_VISIBLE:
-        GetColorsSettings()->SetItemColor( aPCB_VISIBLE, aColor );
-        break;
-
     case GRID_VISIBLE:
-        g_GridColor = aColor;
-    break;
+        GetColorsSettings()->SetItemColor( aPCB_VISIBLE, aColor );
+        break;
 
     default:
         wxLogDebug( wxT( "BOARD::SetVisibleElementColor(): bad arg %d" ), aPCB_VISIBLE );

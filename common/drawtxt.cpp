@@ -18,7 +18,7 @@
 #endif
 
 #define EDA_DRAWBASE
-#include "hershey_fonts.h"
+#include "newstroke_font.h"
 #include "plot_common.h"
 
 /* factor used to calculate actual size of shapes from hershey fonts (could be adjusted depending on the font name)
@@ -122,13 +122,15 @@ static const char* GetHersheyShapeDescription( int AsciiCode )
     }
 #endif
 
-    if ( AsciiCode > 0x7F )
+    /* calculate font length */
+    int font_length_max = sizeof(newstroke_font)/sizeof(*newstroke_font);
+    if ( AsciiCode >= (32 + font_length_max) )
         AsciiCode = '?';
     if( AsciiCode < 32 )
         AsciiCode = 32;                 /* Clamp control chars */
     AsciiCode -= 32;
 
-    return hershey_simplex[AsciiCode];
+    return newstroke_font[AsciiCode];
 }
 
 

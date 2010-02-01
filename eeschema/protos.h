@@ -158,7 +158,7 @@ void RedrawOneStruct( WinEDA_DrawPanel* panel,
 /**************/
 void       SeedLayers();
 EDA_Colors ReturnLayerColor( int Layer );
-void       DisplayColorSetupFrame( WinEDA_DrawFrame* parent,
+void       DisplayColorSetupFrame( WinEDA_SchematicFrame* parent,
                                    const wxPoint&    pos );
 
 /*************/

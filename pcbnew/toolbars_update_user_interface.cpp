@@ -203,9 +203,9 @@ void WinEDA_PcbFrame::SetToolbars()
                                             _( "Display rectangular coordinates" ) :
                                             _( "Display polar coordinates" ) );
 
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID, GetBoard()->IsElementVisible(GRID_VISIBLE) );
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID, IsGridVisible( ) );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_GRID,
-                                            GetBoard()->IsElementVisible(GRID_VISIBLE) ?
+                                            IsGridVisible( ) ?
                                             _( "Hide grid" ) :
                                             _( "Show grid" ) );
 

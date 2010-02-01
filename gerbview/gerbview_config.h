@@ -337,15 +337,6 @@ static PARAM_CFG_SETCOLOR ColorLayer31Cfg
     7
 );
 
-
-static PARAM_CFG_SETCOLOR ColorpcbGrilleCfg
-(
-    INSETUP,
-    wxT("CoPcbGr"),
-    &g_GridColor,
-    DARKGRAY
-);
-
 static PARAM_CFG_SETCOLOR ColorDCodesCfg
 (
     INSETUP,
@@ -421,7 +412,6 @@ PARAM_CFG_BASE * ParamCfgList[] =
     & ColorLayer29Cfg,
     & ColorLayer30Cfg,
     & ColorLayer31Cfg,
-    & ColorpcbGrilleCfg,
     & ColorDCodesCfg,
     & GERBERSpotMiniCfg,
     & TimeOutCfg,

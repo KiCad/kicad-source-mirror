@@ -205,13 +205,6 @@ static ColorButton Layer_Erc_Error_Item =
 };
 
 
-static ColorButton Layer_Grid_Item =
-{
-    _( "Grid" ),                    // Title
-    &g_GridColor                    // Adr of optional parameter
-};
-
-
 static ColorButton* laytool_list[NB_BUTT] = {
     &Layer_Wire_Item,
     &Layer_Bus_Item,
@@ -239,8 +232,6 @@ static ColorButton* laytool_list[NB_BUTT] = {
 
     &Layer_Erc_Warning_Item,
     &Layer_Erc_Error_Item,
-
-    &Layer_Grid_Item
 };
 
 
@@ -294,7 +285,7 @@ private:
     DECLARE_DYNAMIC_CLASS( WinEDA_SetColorsFrame )
     DECLARE_EVENT_TABLE()
 
-    WinEDA_DrawFrame*       m_Parent;
+    WinEDA_SchematicFrame*  m_Parent;
     wxBoxSizer*             OuterBoxSizer;
     wxBoxSizer*             MainBoxSizer;
     wxBoxSizer*             ColumnBoxSizer;
@@ -334,7 +325,7 @@ private:
 public:
     // Constructors and destructor
     WinEDA_SetColorsFrame();
-    WinEDA_SetColorsFrame( WinEDA_DrawFrame* parent, const wxPoint& framepos );
+    WinEDA_SetColorsFrame( WinEDA_SchematicFrame* parent, const wxPoint& framepos );
     ~WinEDA_SetColorsFrame();
 };
 

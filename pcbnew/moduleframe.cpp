@@ -363,9 +363,9 @@ void WinEDA_ModuleEditFrame::SetToolbars()
                                             _( "Display polar coordinates" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID,
-                                      m_Draw_Grid );
+                                      IsGridVisible( ) );
         m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_GRID,
-                                            m_Draw_Grid ?
+                                            IsGridVisible( ) ?
                                             _( "Hide grid" ) :
                                             _( "Show grid" ) );
 

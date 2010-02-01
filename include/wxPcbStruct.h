@@ -148,6 +148,28 @@ public:
 
     void             GetKicadAbout( wxCommandEvent& event );
 
+    /** Function IsGridVisible() , virtual
+     * @return true if the grid must be shown
+     */
+    virtual bool     IsGridVisible();
+
+    /** Function SetGridVisibility() , virtual
+     * It may be overloaded by derived classes
+     * if you want to store/retrieve the grid visiblity in configuration.
+     * @param aVisible = true if the grid must be shown
+     */
+    virtual void     SetGridVisibility(bool aVisible);
+
+    /** Function GetGridColor() , virtual
+     * @return the color of the grid
+     */
+    virtual int     GetGridColor();
+
+    /** Function SetGridColor() , virtual
+     * @param aColor = the new color of the grid
+     */
+    virtual void     SetGridColor(int aColor);
+
     // Configurations:
     void             InstallConfigFrame( const wxPoint& pos );
     void             Process_Config( wxCommandEvent& event );

@@ -68,7 +68,6 @@ const wxString AllFilesWildcard( _( "All files (*)|*" ) );
 
 wxString       g_ProductName    = wxT( "KiCad E.D.A.  " );
 bool           g_ShowPageLimits = true;
-int            g_GridColor = DARKGRAY;
 wxString       g_UserLibDirBuffer;
 int            g_DebugLevel;
 int            g_MouseOldButtons;

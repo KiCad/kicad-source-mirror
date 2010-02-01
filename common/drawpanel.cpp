@@ -703,7 +703,7 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
 
     GRSetDrawMode( DC, GR_COPY );
 
-    if( m_Parent->m_Draw_Grid )
+    if( m_Parent->IsGridVisible() )
         DrawGrid( DC );
 
     /* Draw axis */
@@ -789,7 +789,7 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
 #endif
 
     m_Parent->PutOnGrid( &org );
-    GRSetColorPen( DC, g_GridColor );
+    GRSetColorPen( DC, m_Parent->GetGridColor() );
     int xpos, ypos;
 
 
@@ -842,7 +842,7 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
     tmpDC.SelectObject( tmpBM );
     GRSetColorPen( &tmpDC, g_DrawBgColor );
     tmpDC.DrawLine( 0, 0, 0, screenSize.y-1 );        // init background
-    GRSetColorPen( &tmpDC, g_GridColor );
+    GRSetColorPen( &tmpDC, m_Parent->GetGridColor() );
     for( jj = 0; ; jj++ )   // draw grid points
     {
         yg = wxRound( jj * screen_grid_size.y );

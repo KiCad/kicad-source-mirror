@@ -73,7 +73,6 @@ private:
     PARAM_CFG_ARRAY      m_projectFileParams;
     PARAM_CFG_ARRAY      m_configSettings;
 
-
 public:
     WinEDA_SchematicFrame( wxWindow* father,
                            const wxString& title,

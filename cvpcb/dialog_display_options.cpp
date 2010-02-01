@@ -26,6 +26,7 @@
 #include "protos.h"
 #include "class_drawpanel.h"
 #include "cvstruct.h"
+#include "class_DisplayFootprintsFrame.h"
 
 #include "dialog_display_options.h"
 
@@ -33,7 +34,7 @@
 ////@end XPM images
 
 
-void WinEDA_DisplayFrame::InstallOptionsDisplay( wxCommandEvent& event )
+void DISPLAY_FOOTPRINTS_FRAME::InstallOptionsDisplay( wxCommandEvent& event )
 {
     WinEDA_FootprintDisplayOptionsFrame* OptionWindow =
         new WinEDA_FootprintDisplayOptionsFrame( this );

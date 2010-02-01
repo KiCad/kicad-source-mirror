@@ -319,7 +319,7 @@ static ButtonIndex Msg_Others_Items =
 static ColorButton Grid_Butt=
 {
     _("Grid"),                  // Title
-    &g_GridColor,               // Address of optional parameter
+    &s_gridColor,               // Address of optional parameter
     FALSE,
     &s_showGrid                 // Address of boolean display control parameter to toggle
 };

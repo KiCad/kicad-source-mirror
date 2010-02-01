@@ -120,7 +120,7 @@ void WinEDA_SchematicFrame::OnSetOptions( wxCommandEvent& event )
     dlg.SetRepeatHorizontal( g_RepeatStep.x );
     dlg.SetRepeatVertical( g_RepeatStep.y );
     dlg.SetRepeatLabel( g_RepeatDeltaLabel );
-    dlg.SetShowGrid( m_Draw_Grid );
+    dlg.SetShowGrid( IsGridVisible() );
     dlg.SetShowHiddenPins( m_ShowAllPins );
     dlg.SetEnableAutoPan( DrawPanel->m_AutoPAN_Enable );
     dlg.SetEnableAnyBusOrientation( g_HVLines );
@@ -140,7 +140,7 @@ void WinEDA_SchematicFrame::OnSetOptions( wxCommandEvent& event )
     g_RepeatStep.x = dlg.GetRepeatHorizontal();
     g_RepeatStep.y = dlg.GetRepeatVertical();
     g_RepeatDeltaLabel = dlg.GetRepeatLabel();
-    m_Draw_Grid = dlg.GetShowGrid();
+    SetGridVisibility( dlg.GetShowGrid() );
     m_ShowAllPins = dlg.GetShowHiddenPins();
     DrawPanel->m_AutoPAN_Enable = dlg.GetEnableAutoPan();
     g_HVLines = dlg.GetEnableAnyBusOrientation();
@@ -437,9 +437,6 @@ PARAM_CFG_ARRAY& WinEDA_SchematicFrame::GetConfigurationSettings( void )
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorErcE" ),
                                                         &g_LayerDescr.LayerColor[LAYER_ERC_ERR],
                                                         RED ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorGrid" ),
-                                                        &g_GridColor,
-                                                        DARKDARKGRAY ) );
     return m_configSettings;
 }
 

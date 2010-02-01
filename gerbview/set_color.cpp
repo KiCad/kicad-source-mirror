@@ -18,6 +18,7 @@
 
 // variable used to handle grid visibility:
 bool s_showGrid;
+int s_gridColor;
 
 #include "set_color.h" // Header file associated with this file
 
@@ -132,7 +133,8 @@ void WinEDA_SetColorsFrame::CreateControls()
 
     // Add various items to the dialog box, as determined by the
     // details of each element contained within laytool_list[]
-    s_showGrid = m_Parent->m_Draw_Grid;
+    s_showGrid = m_Parent->IsGridVisible();
+    s_gridColor = m_Parent->GetGridColor();
     for( lyr = 0, cln = 0; lyr < NB_BUTT; lyr++ )
     {
         // Look for the first set of controls within each column.
@@ -435,14 +437,15 @@ void WinEDA_SetColorsFrame::UpdateLayerSettings()
     // actually has been provided for each of those layers.)
 
 
-    g_GridColor                 = CurrentColor[32];
-    s_showGrid                  = laytool_list[32]->m_CheckBox->GetValue();
+    s_gridColor = CurrentColor[32];
+    s_showGrid  = laytool_list[32]->m_CheckBox->GetValue();
 
     g_ColorsSettings.SetItemColor(DCODES_VISIBLE, CurrentColor[33] );
     DisplayOpt.DisplayPadNum    = laytool_list[33]->m_CheckBox->GetValue();
 
     // Additional command required for updating visibility of grid.
-    m_Parent->m_Draw_Grid = s_showGrid;
+    m_Parent->SetGridVisibility( s_showGrid );
+    m_Parent->SetGridColor( s_gridColor );
 }
 
 

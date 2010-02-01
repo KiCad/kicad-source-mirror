@@ -844,10 +844,6 @@ void WinEDA_PcbFrame::LoadSettings()
     config->Read( PCB_MAGNETIC_TRACKS_OPT, &g_MagneticTrackOption );
     config->Read( SHOW_MICROWAVE_TOOLS, &m_show_microwave_tools );
     config->Read( SHOW_LAYER_MANAGER_TOOLS, &m_show_layer_manager_tools );
-
-    // Copy grid visibility (set by LoadSetting() in visibility items list:
-    GetBoard()->SetElementVisibility(GRID_VISIBLE, m_Draw_Grid);
-
 }
 
 
@@ -870,6 +866,40 @@ void WinEDA_PcbFrame::SaveSettings()
         ( m_AuxVToolBar && m_AuxVToolBar->IsShown() ) ? true : false );
     config->Write( SHOW_LAYER_MANAGER_TOOLS, (long)m_show_layer_manager_tools );
 
+}
+
+/** Function IsGridVisible() , virtual
+ * @return true if the grid must be shown
+ */
+bool WinEDA_PcbFrame::IsGridVisible()
+{
+    return IsElementVisible(GRID_VISIBLE);
+}
+
+/** Function SetGridVisibility() , virtual
+ * It may be overloaded by derived classes
+ * if you want to store/retrieve the grid visiblity in configuration.
+ * @param aVisible = true if the grid must be shown
+ */
+void WinEDA_PcbFrame::SetGridVisibility(bool aVisible)
+{
+    SetElementVisibility(GRID_VISIBLE, aVisible);
+}
+
+/** Function GetGridColor() , virtual
+ * @return the color of the grid
+ */
+int WinEDA_PcbFrame::GetGridColor()
+{
+    return GetBoard()->GetVisibleElementColor( GRID_VISIBLE );
+}
+
+/** Function SetGridColor() , virtual
+ * @param aColor = the new color of the grid
+ */
+void WinEDA_PcbFrame::SetGridColor(int aColor)
+{
+    GetBoard()->SetVisibleElementColor( GRID_VISIBLE, aColor );
 }
 
 /* Return true if a microvia can be put on board

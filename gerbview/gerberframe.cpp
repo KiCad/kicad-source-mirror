@@ -292,7 +292,7 @@ void WinEDA_GerberFrame::SetToolbars()
                                       DisplayOpt.DisplayPolarCood );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID,
-                                      m_Draw_Grid );
+                                      IsGridVisible() );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR,
                                       m_CursorShape );

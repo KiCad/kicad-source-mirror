@@ -18,6 +18,7 @@
 #include <wx/aui/aui.h>
 #endif
 
+#include "colors.h"
 
 //C++ guarantees that operator delete checks its argument for null-ness
 #ifndef SAFE_DELETE
@@ -175,7 +176,6 @@ public:
 
     int          m_UnitType;                // Internal Unit type (0 = inch)
     bool         m_Draw_Axis;               // TRUE to show X and Y axis
-    bool         m_Draw_Grid;               // TRUE to show the grid
     bool         m_Draw_Sheet_Ref;          // TRUE to show frame references
 
     bool         m_Print_Sheet_Ref;         // TRUE to print frame references
@@ -189,6 +189,8 @@ public:
 
 protected:
     int          m_LastGridSizeId;
+    bool         m_DrawGrid;                // hide/Show grid
+    int          m_GridColor;               // Grid color
 
 private:
     BASE_SCREEN* m_CurrentScreen;           ///< current used SCREEN
@@ -232,6 +234,44 @@ public:
     virtual void     ReCreateAuxiliaryToolbar();
     virtual void     SetToolID( int id, int new_cursor_id,
                                 const wxString& title );
+
+    /* Thes 4 functions provide a basic way to sho/hide grid
+     * and /get/set grid color.
+     * thes parameters are saved in kicad config for each main frame
+     */
+    /** Function IsGridVisible() , virtual
+     * @return true if the grid must be shown
+     */
+    virtual bool     IsGridVisible()
+    {
+        return m_DrawGrid;
+    }
+
+    /** Function SetGridVisibility() , virtual
+     * It may be overloaded by derived classes
+     * @param aVisible = true if the grid must be shown
+     */
+    virtual void     SetGridVisibility(bool aVisible)
+    {
+        m_DrawGrid = aVisible;
+    }
+
+    /** Function GetGridColor() , virtual
+     * @return the color of the grid
+     */
+    virtual int     GetGridColor()
+    {
+        return m_GridColor;
+    }
+
+    /** Function SetGridColor() , virtual
+     * @param aColor = the new color of the grid
+     */
+    virtual void     SetGridColor(int aColor)
+    {
+        m_GridColor = aColor;
+    }
+
 
     /**
      * Command event handler for selecting grid sizes.
@@ -682,7 +722,7 @@ public:
     void SetToolNormalBitmap( int id, const wxBitmap& bitmap ) {};
     void SetRows( int nRows ) {};
 #endif
-    
+
     /** Function GetDimension
      * @return the dimension of this toolbar (Height if horizontal, Width if vertical.
      */

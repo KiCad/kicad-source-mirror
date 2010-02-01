@@ -10,6 +10,7 @@
 #include "cvpcb.h"
 #include "protos.h"
 #include "cvstruct.h"
+#include "class_DisplayFootprintsFrame.h"
 
 /*
  * NOTE: There is something in 3d_viewer.h that causes a compiler error in
@@ -33,7 +34,7 @@ void WinEDA_CvpcbFrame::CreateScreenCmp()
 
     if( DrawFrame == NULL )
     {
-        DrawFrame = new WinEDA_DisplayFrame( this, _( "Module" ),
+        DrawFrame = new DISPLAY_FOOTPRINTS_FRAME( this, _( "Module" ),
                                              wxPoint( 0, 0 ),
                                              wxSize( 600, 400 ),
                                              KICAD_DEFAULT_DRAWFRAME_STYLE |
@@ -85,7 +86,7 @@ void WinEDA_CvpcbFrame::CreateScreenCmp()
 /*
  * Draws the current highlighted footprint.
  */
-void WinEDA_DisplayFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
+void DISPLAY_FOOTPRINTS_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     if( !GetBoard() )
         return;

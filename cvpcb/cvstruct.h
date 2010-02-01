@@ -13,7 +13,7 @@
 /*  Forward declarations of all top-level window classes. */
 class FOOTPRINTS_LISTBOX;
 class COMPONENTS_LISTBOX;
-class WinEDA_DisplayFrame;
+class DISPLAY_FOOTPRINTS_FRAME;
 
 
 #include "id.h"
@@ -57,7 +57,7 @@ public:
     bool m_KeepCvpcbOpen;
     FOOTPRINTS_LISTBOX*  m_FootprintList;
     COMPONENTS_LISTBOX*  m_ListCmp;
-    WinEDA_DisplayFrame* DrawFrame;
+    DISPLAY_FOOTPRINTS_FRAME* DrawFrame;
     WinEDA_Toolbar*      m_HToolBar;
     wxFileName           m_NetlistFileName;
     wxArrayString        m_ModuleLibNames;
@@ -214,69 +214,6 @@ public:
 
     // Events functions:
     void     OnChar( wxKeyEvent& event );
-
-    DECLARE_EVENT_TABLE()
-};
-
-
-/*******************************************************/
-/* class WinEDA_DisplayFrame: used to display footprints */
-/*******************************************************/
-
-class WinEDA_DisplayFrame : public WinEDA_BasePcbFrame
-{
-public:
-
-public:
-    WinEDA_DisplayFrame( WinEDA_CvpcbFrame* father,
-                         const wxString& title,
-                         const wxPoint& pos, const wxSize& size,
-                         long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
-
-    ~WinEDA_DisplayFrame();
-
-    void    OnCloseWindow( wxCloseEvent& Event );
-    void    RedrawActiveWindow( wxDC* DC, bool EraseBg );
-    void    ReCreateHToolbar();
-    void    ReCreateVToolbar();
-    void    RecreateMenuBar();
-    void    OnLeftClick( wxDC* DC, const wxPoint& MousePos );
-    void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
-    bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
-    void    SetToolbars();
-    void    GeneralControle( wxDC* DC, wxPoint Mouse );
-    void    InstallOptionsDisplay( wxCommandEvent& event );
-    MODULE* Get_Module( const wxString& CmpName );
-
-    void    Process_Settings( wxCommandEvent& event );
-    void    Show3D_Frame( wxCommandEvent& event );
-
-    /* SaveCopyInUndoList() virtual
-     * currently: do nothing in cvpcb.
-     * but but be defined because it is a pure virtual in WinEDA_BasePcbFrame
-     */
-    virtual void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy,
-                                     UndoRedoOpType aTypeCommand = UR_UNSPECIFIED,
-                                     const wxPoint& aTransformPoint = wxPoint( 0, 0 ) )
-    {
-    }
-
-
-    /** Function SaveCopyInUndoList (overloaded).
-     * Creates a new entry in undo list of commands.
-     * add a list of pickers to handle a list of items
-     * @param aItemsList = the list of items modified by the command to undo
-     * @param aTypeCommand = command type (see enum UndoRedoOpType)
-     * @param aTransformPoint = the reference point of the transformation,
-     *                          for commands like move
-     */
-    virtual void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
-                                     UndoRedoOpType aTypeCommand,
-                                     const wxPoint& aTransformPoint = wxPoint( 0, 0 ) )
-    {
-        // currently: do nothing in cvpcb.
-    }
-
 
     DECLARE_EVENT_TABLE()
 };
