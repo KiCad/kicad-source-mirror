@@ -106,22 +106,6 @@ int NegableTextLength( const wxString& aText )
  */
 static const char* GetHersheyShapeDescription( int AsciiCode )
 {
-#if defined(KICAD_CYRILLIC)
-    AsciiCode &= 0x7FF;
-    if( AsciiCode > 0x40F && AsciiCode < 0x450 ) // big small Cyr
-    {
-        return hershey_cyrillic[AsciiCode - 0x410];
-    }
-    else if( AsciiCode == 0x401 )
-    {
-        return hershey_cyrillic[0x5];
-    }
-    else if( AsciiCode == 0x451 )
-    {
-        return hershey_cyrillic[0x25];
-    }
-#endif
-
     /* calculate font length */
     int font_length_max = sizeof(newstroke_font)/sizeof(*newstroke_font);
     if ( AsciiCode >= (32 + font_length_max) )

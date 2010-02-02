@@ -37,6 +37,3 @@
 
 #include "HersheySimplexRoman_sans_normal.h"
 
-#if defined(KICAD_CYRILLIC)
-#include "HersheyCyrillic.h"
-#endif

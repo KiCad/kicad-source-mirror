@@ -14,8 +14,7 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 # building minizip.
 option(KICAD_MINIZIP "enable/disable building minizip (default ON)" ON)
 
-# Russian GOST and CYRILLIC patch
-option(KICAD_CYRILLIC "enable/disable building using cyrillic (needs unicode) (default OFF)")
+# Russian GOST patch
 option(wxUSE_UNICODE "enable/disable building unicode (default OFF)")
 option(KICAD_GOST "enable/disable building using GOST notation for multiple gates per package (default OFF)")
 
@@ -42,10 +41,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
     set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
 endif(CMAKE_COMPILER_IS_GNUCXX)
-
-if(KICAD_CYRILLIC)
-    add_definitions(-DKICAD_CYRILLIC)
-endif(KICAD_CYRILLIC)
 
 if(wxUSE_UNICODE)
     add_definitions(-DwxUSE_UNICODE)
