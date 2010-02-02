@@ -57,21 +57,22 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     wxMenu* openRecentMenu = new wxMenu();
     wxGetApp().m_fileHistory.AddFilesToMenu( openRecentMenu );
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentMenu,
-                                          -1, _( "Open &Recent" ),
-                     _("Open a recent opened schematic project" ),
-                                               open_project_xpm );
+                                        -1, _( "Open &Recent" ),
+                                        _("Open a recent opened schematic project" ),
+                                        open_project_xpm );
 
     /* Separator */
     filesMenu->AppendSeparator();
 
     /* Save */
     /* Save Project */
-    item = new wxMenuItem( filesMenu, ID_SAVE_PROJECT, _( "&Save Whole Schematic Project\tCtrl+S" ),
+    item = new wxMenuItem( filesMenu, ID_SAVE_PROJECT,
+                           _( "&Save Whole Schematic Project\tCtrl+S" ),
                            _( "Save all sheets in the schematic project" ) );
     item->SetBitmap( save_project_xpm );
     filesMenu->Append( item );
 
-    item = new wxMenuItem( filesMenu, ID_SAVE_ONE_SHEET, _( "&Save Current Sheet Only" ),
+    item = new wxMenuItem( filesMenu, ID_SAVE_ONE_SHEET, _( "Save &Current Sheet Only" ),
                            _( "Save only current schematic sheet" ) );
     item->SetBitmap( save_xpm );
     filesMenu->Append( item );
@@ -87,8 +88,8 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     filesMenu->AppendSeparator();
 
     /* Print */
-    item = new wxMenuItem( filesMenu, ID_GEN_PRINT, _( "P&rint\tCtrl+P" ),
-                           _( "Print schematic sheet" ) );
+    item = new wxMenuItem( filesMenu, wxID_PRINT, _( "P&rint\tCtrl+P" ),
+                           _( "Print schematic" ) );
     item->SetBitmap( print_button );
     filesMenu->Append( item );
 
@@ -131,7 +132,8 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, choice_plot_fmt,
                                         ID_GEN_PLOT, _( "&Plot" ),
-                                        _( "Plot schematic sheet in HPGL, PostScript or SVG format" ), plot_xpm );
+                                        _( "Plot schematic sheet in HPGL, PostScript or SVG format" ),
+                                        plot_xpm );
 
     /* Quit on all platforms except WXMAC */
 #if !defined(__WXMAC__)
@@ -216,7 +218,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     /* Zoom out */
 #if !defined( __WXMAC__)
     text = AddHotkeyName( _( "Zoom Out" ), s_Schematic_Hokeys_Descr,
-                         HK_ZOOM_OUT );
+                          HK_ZOOM_OUT );
 #else
     text = _( "Zoom Out\tCtrl+-" );
 #endif /* !defined( __WXMAC__) */
@@ -229,7 +231,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     /* Fit on screen */
 #if !defined( __WXMAC__)
     text = AddHotkeyName( _( "Fit on Screen" ), s_Schematic_Hokeys_Descr,
-                         HK_ZOOM_AUTO );
+                          HK_ZOOM_AUTO );
 #else
     text = _( "Fit on Screen\tCtrl+0" );
 #endif
@@ -245,7 +247,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     /* Redraw view */
 #if !defined( __WXMAC__)
     text = AddHotkeyName( _( "Redraw" ), s_Schematic_Hokeys_Descr,
-                         HK_ZOOM_REDRAW );
+                          HK_ZOOM_REDRAW );
 #else
     text = _( "Redraw\tCtrl+R" );
 #endif
@@ -323,7 +325,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     /* Junction */
     item = new wxMenuItem( placeMenu, ID_JUNCTION_BUTT, _( "Junction" ),
-            _( "Place junction" ), wxITEM_NORMAL );
+                           _( "Place junction" ), wxITEM_NORMAL );
     item->SetBitmap( add_junction_xpm );
     placeMenu->Append( item );
 
@@ -461,4 +463,3 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     /* Associate the menu bar with the frame */
     SetMenuBar( menuBar );
 }
-

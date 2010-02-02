@@ -80,7 +80,7 @@ void WinEDA_SchematicFrame::ReCreateHToolbar()
                          wxBitmap( redo_xpm ), msg );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_GEN_PRINT, wxEmptyString, wxBitmap( print_button ),
+    m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, wxBitmap( print_button ),
                          _( "Print schematic" ) );
 
     m_HToolBar->AddSeparator();

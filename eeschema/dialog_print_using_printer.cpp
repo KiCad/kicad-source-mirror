@@ -2,8 +2,6 @@
 /* File: dialog_print_using_printer.cpp */
 /****************************************/
 
-// Set this to 1 if you want to test PostScript printing under MSW.
-#define wxTEST_POSTSCRIPT_IN_MSW 1
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "gr_basic.h"
@@ -13,231 +11,185 @@
 
 #include "program.h"
 #include "general.h"
-
-#include <wx/dcps.h>
+#include "eeschema_config.h"
 
 #include "dialog_print_using_printer_base.h"
 
 
-#define DEFAULT_ORIENTATION_PAPER wxLANDSCAPE   // other option is wxPORTRAIT
-#define WIDTH_MAX_VALUE           100
-#define WIDTH_MIN_VALUE           1
-
-#define PRINTMODECOLOR_KEY  wxT("PrintModeColor")
-
-// static print data and page setup data, to remember settings during the
-// session
-static wxPrintData* g_PrintData;
-
-// Variables locales
-static int          s_OptionPrintPage = 0;
-static int          s_Print_Black_and_White = true;
-static bool         s_Print_Frame_Ref = true;
-
-
-/* Dialog to print schematic. Class derived from DIALOG_PRINT_USING_PRINTER_base
- * created by wxFormBuilder
+/**
+ * Print schematic dialog.
+ *
+ * Class derived from DIALOG_PRINT_USING_PRINTER_base created by wxFormBuilder
  */
-class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_base
+class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_BASE
 {
-private:
-    WinEDA_SchematicFrame* m_Parent;
-    wxConfig*         m_Config;
-    static wxPoint      s_LastPos;
-    static wxSize       s_LastSize;
-
 public:
-    DIALOG_PRINT_USING_PRINTER( WinEDA_SchematicFrame* parent );
+    DIALOG_PRINT_USING_PRINTER( WinEDA_SchematicFrame* aParent );
     ~DIALOG_PRINT_USING_PRINTER() {};
+
+    WinEDA_SchematicFrame* GetParent() const;
 
 private:
     void OnCloseWindow( wxCloseEvent& event );
     void OnInitDialog( wxInitDialogEvent& event );
-    void OnPrintSetup( wxCommandEvent& event );
+    void OnPageSetup( wxCommandEvent& event );
     void OnPrintPreview( wxCommandEvent& event );
     void OnPrintButtonClick( wxCommandEvent& event );
     void OnButtonCancelClick( wxCommandEvent& event ){ Close(); }
-    void SetPenWidth();
-
-    bool Show( bool show );     // overload stock function
 };
 
 
-class EDA_Printout : public wxPrintout
+/**
+ * Custom print out for printing schematics.
+ */
+class SCH_PRINTOUT : public wxPrintout
 {
-public:
-    bool m_Print_Sheet_Ref;
+private:
+    DIALOG_PRINT_USING_PRINTER* m_Parent;
 
 public:
-    WinEDA_DrawFrame*           m_Parent;
-    DIALOG_PRINT_USING_PRINTER* m_PrintFrame;
-
-    EDA_Printout( DIALOG_PRINT_USING_PRINTER* aPrint_frame,
-                  WinEDA_DrawFrame*           aParent,
-                  const wxString&             aTitle,
-                  bool                        aPrint_ref ) :
+    SCH_PRINTOUT( DIALOG_PRINT_USING_PRINTER* aParent, const wxString& aTitle ) :
         wxPrintout( aTitle )
     {
-        m_PrintFrame      = aPrint_frame;
-        m_Parent          = aParent;
-        m_Print_Sheet_Ref = aPrint_ref;
-    }
+        wxASSERT( aParent != NULL );
 
+        m_Parent = aParent;
+    }
 
     bool OnPrintPage( int page );
     bool HasPage( int page );
     bool OnBeginDocument( int startPage, int endPage );
-    void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom,
-                      int* selPageTo );
-
+    void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo );
     void DrawPage();
 };
 
-// We want our dialog to remember its previous screen position
-wxPoint DIALOG_PRINT_USING_PRINTER::s_LastPos( -1, -1 );
-wxSize  DIALOG_PRINT_USING_PRINTER::s_LastSize;
 
-
-/* Virtual function
- * Calls the print dialog for Eeschema
+/**
+ * Custom schematic print preview frame.
  */
-void WinEDA_SchematicFrame::ToPrinter( wxCommandEvent& event )
+class SCH_PREVIEW_FRAME : public wxPreviewFrame
 {
-    if( g_PrintData == NULL )   // First call. creates print handlers
+public:
+    SCH_PREVIEW_FRAME( wxPrintPreview* aPreview, DIALOG_PRINT_USING_PRINTER* aParent,
+                       const wxString& aTitle, const wxPoint& aPos = wxDefaultPosition,
+                       const wxSize& aSize = wxDefaultSize ) :
+        wxPreviewFrame( aPreview, aParent, aTitle, aPos, aSize )
     {
-        g_PrintData = new wxPrintData();
-
-        if( !g_PrintData->Ok() )
-        {
-            DisplayError( this,
-                          _( "Error initializing printer information." ) );
-        }
-        g_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );
-        g_PrintData->SetOrientation( DEFAULT_ORIENTATION_PAPER );
     }
 
-    DIALOG_PRINT_USING_PRINTER* frame = new DIALOG_PRINT_USING_PRINTER( this );
+    DIALOG_PRINT_USING_PRINTER* GetParent()
+    {
+        return ( DIALOG_PRINT_USING_PRINTER* )wxWindow::GetParent();
+    }
 
-    frame->ShowModal();
-    frame->Destroy();
+    void OnCloseWindow( wxCloseEvent& event )
+    {
+        if( !IsIconized() )
+        {
+            GetParent()->GetParent()->SetPreviewPosition( GetPosition() );
+            GetParent()->GetParent()->SetPreviewSize( GetSize() );
+        }
+
+        wxPreviewFrame::OnCloseWindow( event );
+    }
+
+private:
+    DECLARE_CLASS( SCH_PREVIEW_FRAME )
+    DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS( SCH_PREVIEW_FRAME )
+};
+
+
+IMPLEMENT_CLASS( SCH_PREVIEW_FRAME, wxPreviewFrame )
+
+BEGIN_EVENT_TABLE( SCH_PREVIEW_FRAME, wxPreviewFrame )
+    EVT_CLOSE( SCH_PREVIEW_FRAME::OnCloseWindow )
+END_EVENT_TABLE()
+
+
+void WinEDA_SchematicFrame::OnPrint( wxCommandEvent& event )
+{
+    wxFileName fn;
+    DIALOG_PRINT_USING_PRINTER dlg( this );
+
+    dlg.ShowModal();
+
+    fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+
+    if( fn.GetFullName() != wxT( "noname.sch" ) )
+    {
+        fn.SetExt( ProjectFileExtension );
+        wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
+    }
 }
 
 
-DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( WinEDA_SchematicFrame* parent ) :
-    DIALOG_PRINT_USING_PRINTER_base( parent )
+DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( WinEDA_SchematicFrame* aParent ) :
+    DIALOG_PRINT_USING_PRINTER_BASE( aParent )
 {
-    m_Parent = parent;
-    m_Config = wxGetApp().m_EDA_Config;
+    wxASSERT( aParent != NULL );
+
+    m_checkReference->SetValue( aParent->GetShowSheetReference() );
+    m_checkMonochrome->SetValue( aParent->GetPrintMonochrome() );
+}
+
+
+WinEDA_SchematicFrame* DIALOG_PRINT_USING_PRINTER::GetParent() const
+{
+    return ( WinEDA_SchematicFrame* ) wxWindow::GetParent();
 }
 
 
 void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
 {
-    SetFocus();
-
-    if( m_Config )
-    {
-        m_Config->Read( PRINTMODECOLOR_KEY, &s_Print_Black_and_White );
-    }
-
-    AddUnitSymbol( *m_TextPenWidth, g_DrawDefaultLineThickness );
-    m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UnitMetric, g_DrawDefaultLineThickness,
-                               m_Parent->m_InternalUnits ) );
-    m_Print_Sheet_Ref->SetValue( s_Print_Frame_Ref );
-
-    m_ModeColorOption->SetSelection( s_Print_Black_and_White ? 1 : 0 );
-    m_Print_Sheet_Ref->SetValue( s_Print_Frame_Ref );
+    WinEDA_SchematicFrame* parent = GetParent();
 
     if ( GetSizer() )
-    {
-        GetSizer()->SetSizeHints(this);
-    }
-}
+        GetSizer()->SetSizeHints( this );
 
-/*************************************************/
-bool DIALOG_PRINT_USING_PRINTER::Show( bool show )
-/*************************************************/
-{
-    bool ret;
-
-    if( show )
+    if( parent->GetPrintDialogPosition() == wxDefaultPosition &&
+        parent->GetPrintDialogSize() == wxDefaultSize )
     {
-        if( s_LastPos.x != -1 )
-        {
-            SetSize( s_LastPos.x, s_LastPos.y, s_LastSize.x, s_LastSize.y, 0 );
-        }
-        ret = DIALOG_PRINT_USING_PRINTER_base::Show( show );
+        Center();
     }
     else
     {
-        // Save the dialog's position before hiding
-        s_LastPos  = GetPosition();
-        s_LastSize = GetSize();
-
-        ret = DIALOG_PRINT_USING_PRINTER_base::Show( show );
+        SetPosition( parent->GetPrintDialogPosition() );
+        SetSize( parent->GetPrintDialogSize() );
     }
 
-    return ret;
+    SetFocus();
 }
+
 
 void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
 {
-    s_Print_Black_and_White = m_ModeColorOption->GetSelection();
-    s_Print_Frame_Ref = m_Print_Sheet_Ref->GetValue();
-    SetPenWidth();
+    WinEDA_SchematicFrame* parent = GetParent();
 
-    if( m_Config )
+    if( !IsIconized() )
     {
-        m_Config->Write( PRINTMODECOLOR_KEY, s_Print_Black_and_White );
+        parent->SetPrintDialogPosition( GetPosition() );
+        parent->SetPrintDialogSize( GetSize() );
     }
 
-    EndModal( 0 );
-}
+    parent->SetPrintMonochrome( m_checkMonochrome->IsChecked() );
+    parent->SetShowSheetReference( m_checkReference->IsChecked() );
 
-
-/* Get the new pen width value, and verify min et max value
- * NOTE: g_PlotLine_Width is in internal units
- */
-void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
-{
-    g_DrawDefaultLineThickness =
-        ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
-
-    if( g_DrawDefaultLineThickness > WIDTH_MAX_VALUE )
-    {
-        g_DrawDefaultLineThickness = WIDTH_MAX_VALUE;
-    }
-
-    if( g_DrawDefaultLineThickness < WIDTH_MIN_VALUE )
-    {
-        g_DrawDefaultLineThickness = WIDTH_MIN_VALUE;
-    }
-
-    m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UnitMetric, g_DrawDefaultLineThickness,
-                               m_Parent->m_InternalUnits ) );
+    EndDialog( wxID_CANCEL );
 }
 
 
 /* Open a dialog box for printer setup (printer options, page size ...)
  */
-void DIALOG_PRINT_USING_PRINTER::OnPrintSetup( wxCommandEvent& event )
+void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
 {
-    wxPrintDialogData printDialogData( *g_PrintData );
+    WinEDA_SchematicFrame* parent = GetParent();
 
-    if( printDialogData.Ok() )
-    {
-        wxPrintDialog printerDialog( this, &printDialogData );
+    wxPageSetupDialog pageSetupDialog( this, &parent->GetPageSetupData() );
 
-        printerDialog.ShowModal();
+    pageSetupDialog.ShowModal();
 
-        *g_PrintData = printerDialog.GetPrintDialogData().GetPrintData();
-    }
-    else
-    {
-        DisplayError( this, _( "Printer error!" ) );
-    }
+    parent->GetPageSetupData() = pageSetupDialog.GetPageSetupDialogData();
 }
 
 
@@ -245,21 +197,16 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintSetup( wxCommandEvent& event )
  */
 void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 {
-    wxSize  WSize;
-    wxPoint WPos;
-    bool    print_ref = m_Print_Sheet_Ref->GetValue();
+    WinEDA_SchematicFrame* parent = GetParent();
 
-    s_Print_Black_and_White = m_ModeColorOption->GetSelection();
-    SetPenWidth();
-
-    s_OptionPrintPage = m_PagesOption->GetSelection();
+    parent->SetPrintMonochrome( m_checkMonochrome->IsChecked() );
+    parent->SetShowSheetReference( m_checkReference->IsChecked() );
 
     // Pass two printout objects: for preview, and possible printing.
-    wxString        title   = _("Preview");
-    wxPrintPreview* preview =
-        new wxPrintPreview( new EDA_Printout( this, m_Parent, title, print_ref ),
-                            new EDA_Printout( this, m_Parent, title, print_ref ),
-                            g_PrintData );
+    wxString        title   = _( "Preview" );
+    wxPrintPreview* preview = new wxPrintPreview( new SCH_PRINTOUT( this, title ),
+                                                  new SCH_PRINTOUT( this, title ),
+                                                  &parent->GetPageSetupData().GetPrintData() );
 
     if( preview == NULL )
     {
@@ -267,12 +214,11 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
         return;
     }
 
-    WPos = m_Parent->GetPosition( );
-    WSize    = m_Parent->GetSize();
+    preview->SetZoom( 100 );
 
-    wxPreviewFrame* frame = new wxPreviewFrame( preview, this,
-                                                title, WPos, WSize );
-
+    SCH_PREVIEW_FRAME* frame = new SCH_PREVIEW_FRAME( preview, this, title,
+                                                      parent->GetPreviewPosition(),
+                                                      parent->GetPreviewSize() );
     frame->Initialize();
     frame->Show( true );
 }
@@ -280,107 +226,83 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 
 void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
 {
-    bool print_ref = m_Print_Sheet_Ref->GetValue();
+    WinEDA_SchematicFrame* parent = GetParent();
 
-    s_Print_Black_and_White = m_ModeColorOption->GetSelection();
+    parent->SetPrintMonochrome( m_checkMonochrome->IsChecked() );
+    parent->SetShowSheetReference( m_checkReference->IsChecked() );
 
-    s_OptionPrintPage = 0;
-    if( m_PagesOption )
-        s_OptionPrintPage = m_PagesOption->GetSelection();
+    wxPrintDialogData printDialogData( parent->GetPageSetupData().GetPrintData() );
+    printDialogData.SetMaxPage( g_RootSheet->CountSheets() );
 
-    SetPenWidth();
+    if( g_RootSheet->CountSheets() > 1 )
+        printDialogData.EnablePageNumbers( true );
 
-    wxPrintDialogData printDialogData( *g_PrintData );
-
-    wxPrinter         printer( &printDialogData );
-
-    wxString          title = _("Preview");
-    EDA_Printout      printout( this, m_Parent, title, print_ref );
-
-#if !defined(__WINDOWS__) && !wxCHECK_VERSION(2,9,0)
-    wxDC*             dc = printout.GetDC();
-    ( (wxPostScriptDC*) dc )->SetResolution( 600 );
-#endif
+    wxPrinter printer( &printDialogData );
+    SCH_PRINTOUT printout( this, _( "Print Schematic" ) );
 
     if( !printer.Print( this, &printout, true ) )
     {
         if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
-            DisplayError( this, _( "There was a problem printing." ) );
-        return;
+            wxMessageBox( _( "An error occurred attempting to print the schematic." ),
+                          _( "Printing" ), wxOK );
     }
     else
     {
-        *g_PrintData = printer.GetPrintDialogData().GetPrintData();
+        parent->GetPageSetupData() = printer.GetPrintDialogData().GetPrintData();
     }
 }
 
 
-bool EDA_Printout::OnPrintPage( int page )
+bool SCH_PRINTOUT::OnPrintPage( int page )
 {
     wxString msg;
-
+    WinEDA_SchematicFrame* parent = m_Parent->GetParent();
     msg.Printf( _( "Print page %d" ), page );
-    m_Parent->AppendMsgPanel( msg, wxEmptyString, CYAN );
+    parent->ClearMsgPanel();
+    parent->AppendMsgPanel( msg, wxEmptyString, CYAN );
 
-    WinEDA_SchematicFrame* schframe     = (WinEDA_SchematicFrame*) m_Parent;
-    SCH_SCREEN*            screen       = schframe->GetScreen();
-    SCH_SCREEN*            oldscreen    = screen;
-    SCH_SHEET_PATH*        oldsheetpath = schframe->GetSheet();
+    SCH_SCREEN*     screen       = parent->GetScreen();
+    SCH_SCREEN*     oldscreen    = screen;
+    SCH_SHEET_PATH* oldsheetpath = parent->GetSheet();
+    SCH_SHEET_PATH  list;
+    SCH_SHEET_LIST  SheetList( NULL );
+    SCH_SHEET_PATH* sheetpath = SheetList.GetSheet( page - 1 );
 
-
-    SCH_SHEET_PATH         list;
-    if( s_OptionPrintPage == 1 )
+    if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
     {
-        /* Print all pages, so when called, the page is not the current page.
-         *  We must select it and setup references and others parameters
-         *  because in complex hierarchies a SCH_SCREEN (a schematic drawings)
-         *  is shared between many sheets
-         */
-        SCH_SHEET_LIST  SheetList( NULL );
-        SCH_SHEET_PATH* sheetpath = SheetList.GetSheet( page - 1 );
-        if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
-        {
-            schframe->m_CurrentSheet = &list;
-            schframe->m_CurrentSheet->UpdateAllScreenReferences();
-            schframe->SetSheetNumberAndCount();
-            screen = schframe->m_CurrentSheet->LastScreen();
-        }
-        else
-            screen = NULL;
+        parent->m_CurrentSheet = &list;
+        parent->m_CurrentSheet->UpdateAllScreenReferences();
+        parent->SetSheetNumberAndCount();
+        screen = parent->m_CurrentSheet->LastScreen();
+    }
+    else
+    {
+        screen = NULL;
     }
 
     if( screen == NULL )
         return false;
+
     ActiveScreen = screen;
     DrawPage();
     ActiveScreen = oldscreen;
-    schframe->m_CurrentSheet = oldsheetpath;
-    schframe->m_CurrentSheet->UpdateAllScreenReferences();
-    schframe->SetSheetNumberAndCount();
+    parent->m_CurrentSheet = oldsheetpath;
+    parent->m_CurrentSheet->UpdateAllScreenReferences();
+    parent->SetSheetNumberAndCount();
 
     return true;
 }
 
 
-void EDA_Printout::GetPageInfo( int* minPage, int* maxPage,
+void SCH_PRINTOUT::GetPageInfo( int* minPage, int* maxPage,
                                 int* selPageFrom, int* selPageTo )
 {
-    int ii = 1;
-
-    *minPage     = 1;
-    *selPageFrom = 1;
-
-    if( s_OptionPrintPage == 1 )
-    {
-        ii = g_RootSheet->CountSheets();
-    }
-
-    *maxPage   = ii;
-    *selPageTo = ii;
+    *minPage = *selPageFrom = 1;
+    *maxPage = *selPageTo   = g_RootSheet->CountSheets();
 }
 
 
-bool EDA_Printout::HasPage( int pageNum )
+bool SCH_PRINTOUT::HasPage( int pageNum )
 {
     int pageCount;
 
@@ -392,10 +314,23 @@ bool EDA_Printout::HasPage( int pageNum )
 }
 
 
-bool EDA_Printout::OnBeginDocument( int startPage, int endPage )
+bool SCH_PRINTOUT::OnBeginDocument( int startPage, int endPage )
 {
     if( !wxPrintout::OnBeginDocument( startPage, endPage ) )
         return false;
+
+    WinEDA_SchematicFrame* parent = m_Parent->GetParent();
+    wxLogDebug( wxT( "Printer name: " ) +
+                parent->GetPageSetupData().GetPrintData().GetPrinterName() );
+    wxLogDebug( wxT( "Paper ID: %d" ),
+                parent->GetPageSetupData().GetPrintData().GetPaperId() );
+    wxLogDebug( wxT( "Color: %d" ),
+                (int) parent->GetPageSetupData().GetPrintData().GetColour() );
+    wxLogDebug( wxT( "Monochrome: %d" ), parent->GetPrintMonochrome() );
+    wxLogDebug( wxT( "Orientation: %d:" ),
+                parent->GetPageSetupData().GetPrintData().GetOrientation() );
+    wxLogDebug( wxT( "Quality: %d"),
+                parent->GetPageSetupData().GetPrintData().GetQuality() );
 
     return true;
 }
@@ -404,77 +339,80 @@ bool EDA_Printout::OnBeginDocument( int startPage, int endPage )
 /*
  * This is the real print function: print the active screen
  */
-void EDA_Printout::DrawPage()
+void SCH_PRINTOUT::DrawPage()
 {
-    int     tmpzoom;
-    wxPoint tmp_startvisu;
-    wxSize  PageSize_in_mm;
-    wxSize  SheetSize;      // Page size in internal units
-    wxSize  PlotAreaSize;   // plot area size in pixels
-    double  scaleX, scaleY, scale;
-    wxPoint old_org;
-    wxPoint DrawOffset;
-    double  DrawZoom = 1;
-    wxDC*   dc = GetDC();
+    int      oldZoom;
+    wxPoint  tmp_startvisu;
+    wxSize   SheetSize;      // Page size in internal units
+    wxPoint  old_org;
+    EDA_Rect oldClipBox;
+    wxRect   fitRect;
+    wxDC*    dc = GetDC();
+    WinEDA_SchematicFrame* parent = m_Parent->GetParent();
+    WinEDA_DrawPanel* panel = parent->DrawPanel;
 
     wxBusyCursor dummy;
 
-    GetPageSizeMM( &PageSize_in_mm.x, &PageSize_in_mm.y );
-
-    /* Save old draw scale and draw offset */
+    /* Save current scale factor, offsets, and clip box. */
     tmp_startvisu = ActiveScreen->m_StartVisu;
-    tmpzoom = ActiveScreen->GetZoom();
+    oldZoom = ActiveScreen->GetZoom();
     old_org = ActiveScreen->m_DrawOrg;
-    /* Change draw scale and offset to draw the whole page */
-    ActiveScreen->SetScalingFactor( DrawZoom );
+    oldClipBox = panel->m_ClipBox;
+
+    /* Change scale factor, offsets, and clip box to print the whole page. */
+    ActiveScreen->SetScalingFactor( 1.0 );
     ActiveScreen->m_DrawOrg.x   = ActiveScreen->m_DrawOrg.y = 0;
     ActiveScreen->m_StartVisu.x = ActiveScreen->m_StartVisu.y = 0;
-
-    SheetSize    = ActiveScreen->m_CurrentSheetDesc->m_Size;  // size in 1/1000 inch
-    SheetSize.x *= m_Parent->m_InternalUnits / 1000;
-    SheetSize.y *= m_Parent->m_InternalUnits / 1000;          // size in pixels
-
-    // Get the size of the DC in pixels
-    dc->GetSize( &PlotAreaSize.x, &PlotAreaSize.y );
-
-    // Calculate a suitable scaling factor
-    scaleX = (double) SheetSize.x / PlotAreaSize.x;
-    scaleY = (double) SheetSize.y / PlotAreaSize.y;
-    scale  = wxMax( scaleX, scaleY ); // Use x or y scaling factor, whichever
-                                      // fits on the DC
-
-    // adjust the real draw scale
-    dc->SetUserScale( DrawZoom / scale, DrawZoom / scale );
-
-    ActiveScreen->m_DrawOrg = DrawOffset;
-
-    GRResetPenAndBrush( dc );
-    if( s_Print_Black_and_White )
-        GRForceBlackPen( true );
-
-    /* set Pen min width (not used now) */
-    SetPenMinWidth( 1 );
-
-    WinEDA_DrawPanel* panel = m_Parent->DrawPanel;
-    BASE_SCREEN*      screen = panel->GetScreen();
-    EDA_Rect          tmp   = panel->m_ClipBox;
-
     panel->m_ClipBox.SetOrigin( wxPoint( 0, 0 ) );
     panel->m_ClipBox.SetSize( wxSize( 0x7FFFFF0, 0x7FFFFF0 ) );
 
-    screen->m_IsPrinting = true;
+    bool printReference = parent->GetShowSheetReference();
+
+    if( printReference )
+    {
+        /* Draw the page to a memory and let the dc calculate the drawing
+         * limits.
+         */
+        wxBitmap psuedoBitmap( 1, 1 );
+        wxMemoryDC memDC;
+        memDC.SelectObject( psuedoBitmap );
+        panel->PrintPage( &memDC, true, 0xFFFFFFFF, false, NULL );
+        wxLogDebug( wxT( "MinX = %d, MaxX = %d, MinY = %d, MaxY = %d" ),
+                    memDC.MinX(), memDC.MaxX(), memDC.MinY(), memDC.MaxY() );
+
+        SheetSize.x = memDC.MaxX() - memDC.MinX();
+        SheetSize.y = memDC.MaxY() - memDC.MinY();
+
+        FitThisSizeToPageMargins( SheetSize, parent->GetPageSetupData() );
+        fitRect = GetLogicalPageMarginsRect( parent->GetPageSetupData() );
+    }
+    else
+    {
+        SheetSize = ActiveScreen->m_CurrentSheetDesc->m_Size;
+        FitThisSizeToPaper( SheetSize );
+        fitRect = GetLogicalPaperRect();
+    }
+
+    wxLogDebug( wxT( "Fit rectangle: %d, %d, %d, %d" ),
+                fitRect.x, fitRect.y, fitRect.width, fitRect.height );
+
+    GRResetPenAndBrush( dc );
+
+    if( parent->GetPrintMonochrome() )
+        GRForceBlackPen( true );
+
+    ActiveScreen->m_IsPrinting = true;
     int bg_color = g_DrawBgColor;
 
-    panel->PrintPage( dc, m_Print_Sheet_Ref, 0xFFFFFFFF, false, NULL );
+    panel->PrintPage( dc, printReference, 0xFFFFFFFF, false, NULL );
 
-    g_DrawBgColor    = bg_color;
-    screen->m_IsPrinting = false;
-    panel->m_ClipBox = tmp;
+    g_DrawBgColor = bg_color;
+    ActiveScreen->m_IsPrinting = false;
+    panel->m_ClipBox = oldClipBox;
 
-    SetPenMinWidth( 1 );
     GRForceBlackPen( false );
 
     ActiveScreen->m_StartVisu = tmp_startvisu;
     ActiveScreen->m_DrawOrg   = old_org;
-    ActiveScreen->SetZoom( tmpzoom );
+    ActiveScreen->SetZoom( oldZoom );
 }

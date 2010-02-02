@@ -49,7 +49,7 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
     EVT_MENU( ID_SAVE_ONE_SHEET, WinEDA_SchematicFrame::Save_File )
     EVT_MENU( ID_SAVE_ONE_SHEET_AS, WinEDA_SchematicFrame::Save_File )
     EVT_TOOL( ID_SAVE_PROJECT, WinEDA_SchematicFrame::Save_File )
-    EVT_MENU( ID_GEN_PRINT, WinEDA_SchematicFrame::ToPrinter )
+    EVT_MENU( wxID_PRINT, WinEDA_SchematicFrame::OnPrint )
     EVT_MENU( ID_GEN_PLOT_PS, WinEDA_SchematicFrame::ToPlot_PS )
     EVT_MENU( ID_GEN_PLOT_HPGL, WinEDA_SchematicFrame::ToPlot_HPGL )
     EVT_MENU( ID_GEN_PLOT_SVG, WinEDA_DrawFrame::SVG_Print )
@@ -87,7 +87,7 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
     EVT_TOOL( wxID_REDO,
               WinEDA_SchematicFrame::GetSchematicFromRedoList )
     EVT_TOOL( ID_GET_ANNOTATE, WinEDA_SchematicFrame::OnAnnotate )
-    EVT_TOOL( ID_GEN_PRINT, WinEDA_SchematicFrame::ToPrinter )
+    EVT_TOOL( wxID_PRINT, WinEDA_SchematicFrame::OnPrint )
     EVT_TOOL( ID_GET_ERC, WinEDA_SchematicFrame::OnErc )
     EVT_TOOL( ID_GET_NETLIST, WinEDA_SchematicFrame::OnCreateNetlist )
     EVT_TOOL( ID_GET_TOOLS, WinEDA_SchematicFrame::OnCreateBillOfMaterials )
@@ -156,6 +156,10 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow*       father,
     m_ViewlibFrame  = NULL;         // Frame for browsing component libraries
     m_DefaultSchematicFileName = wxT( "noname.sch" );
     m_ShowAllPins = false;
+    m_previewPosition = wxDefaultPosition;
+    m_previewSize = wxDefaultSize;
+    m_printMonochrome = true;
+    m_showSheetReference = true;
 
     CreateScreens();
 
@@ -185,6 +189,10 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow*       father,
     ReCreateHToolbar();
     ReCreateVToolbar();
     ReCreateOptToolbar();
+
+    /* Initialize print and page setup dialog settings. */
+    m_pageSetupData.GetPrintData().SetQuality( wxPRINT_QUALITY_HIGH );
+    m_pageSetupData.GetPrintData().SetOrientation( wxLANDSCAPE );
 
 #if defined(KICAD_AUIMANAGER)
     m_auimgr.SetManagedWindow( this );

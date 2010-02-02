@@ -53,25 +53,32 @@ enum fl_rot_cmp
 class WinEDA_SchematicFrame : public WinEDA_DrawFrame
 {
 public:
-    WinEDAChoiceBox*     m_SelPartBox;
-    SCH_SHEET_PATH*      m_CurrentSheet;    ///< which sheet we are presently working on.
-    int                  m_Multiflag;
-    int                  m_NetlistFormat;
-    bool                 m_ShowAllPins;
-    wxPoint              m_OldPos;
-    WinEDA_LibeditFrame* m_LibeditFrame;
-    WinEDA_ViewlibFrame* m_ViewlibFrame;
-    wxString             m_UserLibraryPath;
-    wxArrayString        m_ComponentLibFiles;
+    WinEDAChoiceBox*      m_SelPartBox;
+    SCH_SHEET_PATH*       m_CurrentSheet;    ///< which sheet we are presently working on.
+    int                   m_Multiflag;
+    int                   m_NetlistFormat;
+    bool                  m_ShowAllPins;
+    wxPoint               m_OldPos;
+    WinEDA_LibeditFrame*  m_LibeditFrame;
+    WinEDA_ViewlibFrame*  m_ViewlibFrame;
+    wxString              m_UserLibraryPath;
+    wxArrayString         m_ComponentLibFiles;
 
 
 private:
-    wxString             m_DefaultSchematicFileName;
-    SCH_FIELD*       m_CurrentField;
-    int                  m_TextFieldSize;
-    bool                 m_ShowGrid;
-    PARAM_CFG_ARRAY      m_projectFileParams;
-    PARAM_CFG_ARRAY      m_configSettings;
+    wxString              m_DefaultSchematicFileName;
+    SCH_FIELD*            m_CurrentField;
+    int                   m_TextFieldSize;
+    bool                  m_ShowGrid;
+    PARAM_CFG_ARRAY       m_projectFileParams;
+    PARAM_CFG_ARRAY       m_configSettings;
+    wxPageSetupDialogData m_pageSetupData;
+    wxPoint               m_previewPosition;
+    wxSize                m_previewSize;
+    wxPoint               m_printDialogPosition;
+    wxSize                m_printDialogSize;
+    bool                  m_printMonochrome;     ///< Print monochrome instead of grey scale.
+    bool                  m_showSheetReference;
 
 public:
     WinEDA_SchematicFrame( wxWindow* father,
@@ -201,10 +208,30 @@ public:
      */
     void             SetSheetNumberAndCount();
 
-    /** function ToPrinter
-     * Install the print dialog
+    /**
+     * Show the print dialog
      */
-    void             ToPrinter( wxCommandEvent& event );
+    void             OnPrint( wxCommandEvent& event );
+
+    wxPageSetupDialogData& GetPageSetupData() { return m_pageSetupData; }
+
+    void             SetPreviewPosition( const wxPoint& aPoint ) { m_previewPosition = aPoint; }
+    void             SetPreviewSize( const wxSize& aSize ) { m_previewSize = aSize; }
+    const wxPoint&   GetPreviewPosition() { return m_previewPosition; }
+    const wxSize&    GetPreviewSize() { return m_previewSize; }
+
+    void             SetPrintDialogPosition( const wxPoint& aPoint )
+    {
+        m_printDialogPosition = aPoint;
+    }
+    void             SetPrintDialogSize( const wxSize& aSize ) { m_printDialogSize = aSize; }
+    const wxPoint&   GetPrintDialogPosition() { return m_printDialogPosition; }
+    const wxSize&    GetPrintDialogSize() { return m_printDialogSize; }
+
+    bool             GetPrintMonochrome() { return m_printMonochrome; }
+    void             SetPrintMonochrome( bool aMonochrome ) { m_printMonochrome = aMonochrome; }
+    bool             GetShowSheetReference() { return m_showSheetReference; }
+    void             SetShowSheetReference( bool aShow ) { m_showSheetReference = aShow; }
 
     // Plot functions:
     void             ToPlot_PS( wxCommandEvent& event );

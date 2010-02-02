@@ -261,6 +261,10 @@ PARAM_CFG_ARRAY& WinEDA_SchematicFrame::GetProjectFileParameters( void )
                                                       &g_DefaultTextLabelSize,
                                                       DEFAULT_SIZE_TEXT, 0,
                                                       1000 ) );
+    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "PrintMonochrome" ),
+                                                       &m_printMonochrome, true ) );
+    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "ShowSheetReferenceAndTitleBlock" ),
+                                                       &m_showSheetReference, true ) );
 
     return m_projectFileParams;
 }
@@ -280,6 +284,7 @@ bool WinEDA_SchematicFrame::LoadProjectFile( const wxString& CfgFileName,
         fn = g_RootSheet->m_AssociatedScreen->m_FileName;
     else
         fn = CfgFileName;
+
     m_ComponentLibFiles.Clear();
 
     /* Change the schematic file extension (.sch) to the project file
@@ -339,6 +344,14 @@ void WinEDA_SchematicFrame::SaveProjectFile( wxWindow* displayframe, bool askove
 static const wxString DefaultDrawLineWidthEntry( wxT( "DefaultDrawLineWidth" ) );
 static const wxString ShowHiddenPinsEntry( wxT( "ShowHiddenPins" ) );
 static const wxString HorzVertLinesOnlyEntry( wxT( "HorizVertLinesOnly" ) );
+static const wxString PreviewFramePositionXEntry( wxT( "PreviewFramePositionX" ) );
+static const wxString PreviewFramePositionYEntry( wxT( "PreviewFramePositionY" ) );
+static const wxString PreviewFrameWidthEntry( wxT( "PreviewFrameWidth" ) );
+static const wxString PreviewFrameHeightEntry( wxT( "PreviewFrameHeight" ) );
+static const wxString PrintDialogPositionXEntry( wxT( "PrintDialogPositionX" ) );
+static const wxString PrintDialogPositionYEntry( wxT( "PrintDialogPositionY" ) );
+static const wxString PrintDialogWidthEntry( wxT( "PrintDialogWidth" ) );
+static const wxString PrintDialogHeightEntry( wxT( "PrintDialogHeight" ) );
 
 
 /*
@@ -437,6 +450,7 @@ PARAM_CFG_ARRAY& WinEDA_SchematicFrame::GetConfigurationSettings( void )
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorErcE" ),
                                                         &g_LayerDescr.LayerColor[LAYER_ERC_ERR],
                                                         RED ) );
+
     return m_configSettings;
 }
 
@@ -448,6 +462,8 @@ void WinEDA_SchematicFrame::LoadSettings()
 {
     wxASSERT( wxGetApp().m_EDA_Config != NULL );
 
+    long tmp;
+
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
     WinEDA_DrawFrame::LoadSettings();
@@ -458,6 +474,23 @@ void WinEDA_SchematicFrame::LoadSettings()
                                             (long) 6 );
     cfg->Read( ShowHiddenPinsEntry, &m_ShowAllPins, false );
     cfg->Read( HorzVertLinesOnlyEntry, &g_HVLines, true );
+    cfg->Read( PreviewFramePositionXEntry, &tmp, -1 );
+    m_previewPosition.x = (int) tmp;
+    cfg->Read( PreviewFramePositionYEntry, &tmp, -1 );
+    m_previewPosition.y = (int) tmp;
+    cfg->Read( PreviewFrameWidthEntry, &tmp, -1 );
+    m_previewSize.SetWidth( (int) tmp );
+    cfg->Read( PreviewFrameHeightEntry, &tmp, -1 );
+    m_previewSize.SetHeight( (int) tmp );
+
+    cfg->Read( PrintDialogPositionXEntry, &tmp, -1 );
+    m_printDialogPosition.x = (int) tmp;
+    cfg->Read( PrintDialogPositionYEntry, &tmp, -1 );
+    m_printDialogPosition.y = (int) tmp;
+    cfg->Read( PrintDialogWidthEntry, &tmp, -1 );
+    m_printDialogSize.SetWidth( (int) tmp );
+    cfg->Read( PrintDialogHeightEntry, &tmp, -1 );
+    m_printDialogSize.SetHeight( (int) tmp );
 }
 
 
@@ -477,4 +510,14 @@ void WinEDA_SchematicFrame::SaveSettings()
     cfg->Write( DefaultDrawLineWidthEntry, (long) g_DrawDefaultLineThickness );
     cfg->Write( ShowHiddenPinsEntry, m_ShowAllPins );
     cfg->Write( HorzVertLinesOnlyEntry, g_HVLines );
+
+    cfg->Write( PreviewFramePositionXEntry, m_previewPosition.x );
+    cfg->Write( PreviewFramePositionYEntry, m_previewPosition.y );
+    cfg->Write( PreviewFrameWidthEntry, m_previewSize.GetWidth() );
+    cfg->Write( PreviewFrameHeightEntry, m_previewSize.GetHeight() );
+
+    cfg->Write( PrintDialogPositionXEntry, m_printDialogPosition.x );
+    cfg->Write( PrintDialogPositionYEntry, m_printDialogPosition.y );
+    cfg->Write( PrintDialogWidthEntry, m_printDialogSize.GetWidth() );
+    cfg->Write( PrintDialogHeightEntry, m_printDialogSize.GetHeight() );
 }
