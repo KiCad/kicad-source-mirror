@@ -45,7 +45,6 @@ set(GERBVIEW_SRCS
     rs274d.cpp
     rs274x.cpp
     select_layers_to_pcb.cpp
-    set_color.cpp
     tool_gerber.cpp
     tracepcb.cpp )
 
