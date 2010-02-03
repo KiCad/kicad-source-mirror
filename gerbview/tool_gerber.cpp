@@ -324,7 +324,7 @@ void WinEDA_GerberFrame::ReCreateOptToolbar( void )
                                     _(
                                     "Show/hide the layers manager toolbar" ),
                                     wxITEM_CHECK );
-                                    
+
 
     m_OptionsToolBar->Realize();
     SetToolbars();

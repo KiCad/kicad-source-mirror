@@ -10,7 +10,6 @@
 ///////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE( dialog_copper_zone_base, wxDialog )
-	EVT_INIT_DIALOG( dialog_copper_zone_base::_wxFB_OnInitDialog )
 	EVT_RADIOBOX( wxID_PADS_IN_ZONE_OPTIONS, dialog_copper_zone_base::_wxFB_OnPadsInZoneClick )
 	EVT_BUTTON( wxID_BUTTON_EXPORT, dialog_copper_zone_base::_wxFB_ExportSetupToOtherCopperZones )
 	EVT_BUTTON( wxID_OK, dialog_copper_zone_base::_wxFB_OnButtonOkClick )

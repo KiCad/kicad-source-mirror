@@ -6,10 +6,6 @@
 /// Licence:     GNU License
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "zones.h"
-#endif
-
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
@@ -41,17 +37,16 @@ dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* z
     }
 
     SetReturnCode( ZONE_ABORT ); // Will be changed on buttons click
+    
+    initDialog();
 
-    if( GetSizer() )
-    {
-        GetSizer()->SetSizeHints( this );
-    }
+    GetSizer()->SetSizeHints( this );
     Center();
 }
 
 
 /*****************************************************************/
-void dialog_copper_zone::OnInitDialog( wxInitDialogEvent& event )
+void dialog_copper_zone::initDialog( )
 /*****************************************************************/
 
 // Initialise all dialog options and values in wxTextCtrl

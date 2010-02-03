@@ -111,6 +111,8 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
                     WinEDA_GerberFrame::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
                     WinEDA_GerberFrame::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_DCODES,
+                    WinEDA_GerberFrame::OnSelectOptionToolbar )
 
 END_EVENT_TABLE()
 

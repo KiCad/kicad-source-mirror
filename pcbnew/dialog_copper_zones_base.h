@@ -35,7 +35,6 @@ class dialog_copper_zone_base : public wxDialog
 	private:
 		
 		// Private event handlers
-		void _wxFB_OnInitDialog( wxInitDialogEvent& event ){ OnInitDialog( event ); }
 		void _wxFB_OnPadsInZoneClick( wxCommandEvent& event ){ OnPadsInZoneClick( event ); }
 		void _wxFB_ExportSetupToOtherCopperZones( wxCommandEvent& event ){ ExportSetupToOtherCopperZones( event ); }
 		void _wxFB_OnButtonOkClick( wxCommandEvent& event ){ OnButtonOkClick( event ); }
@@ -87,7 +86,6 @@ class dialog_copper_zone_base : public wxDialog
 		wxListBox* m_LayerSelectionCtrl;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnInitDialog( wxInitDialogEvent& event ){ event.Skip(); }
 		virtual void OnPadsInZoneClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void ExportSetupToOtherCopperZones( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnButtonOkClick( wxCommandEvent& event ){ event.Skip(); }

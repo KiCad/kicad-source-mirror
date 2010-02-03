@@ -9,7 +9,7 @@
  */
 class dialog_copper_zone : public dialog_copper_zone_base
 {
-public:
+private:
     WinEDA_PcbFrame* m_Parent;
     wxConfig*        m_Config;      // Current config
     int m_OnExitCode;               /* exit code: ZONE_ABORT if no change,
@@ -23,7 +23,8 @@ public:
 
 public:
     dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* zone_setting );
-    void OnInitDialog( wxInitDialogEvent& event );
+private:
+    void initDialog( );
     void OnButtonOkClick( wxCommandEvent& event );
     void OnButtonCancelClick( wxCommandEvent& event );
     bool AcceptOptions( bool aPromptForErrors, bool aUseExportableSetupOnly = false );
