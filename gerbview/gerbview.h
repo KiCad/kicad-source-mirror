@@ -29,11 +29,11 @@ typedef enum
  * Enum ITEM_VISIBLE
  * is a set of visible PCB elements.
  */
-enum ITEM_VISIBLE
+enum GERBER_VISIBLE
 {
-    DCODES_VISIBLE,
-
-    END_ITEM_VISIBLE_LIST  // sentinel
+    DCODES_VISIBLE = 1,    // visible item id cannot be 0 because this id is used as wxWidget id
+    GERBER_GRID_VISIBLE,
+    END_GERBER_VISIBLE_LIST  // sentinel
 };
 
 extern wxString g_PhotoFilenameExt;
@@ -52,6 +52,7 @@ extern Ki_PageDescr* g_GerberPageSizeList[];
 
 // Config keywords
 extern const wxString GerbviewShowPageSizeOption;
+extern const wxString GerbviewShowDCodes;
 
 /**
  * Enum APERTURE_T

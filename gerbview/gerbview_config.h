@@ -73,14 +73,6 @@ static PARAM_CFG_INT ViaFillCfg
     TRUE
 );
 
-static PARAM_CFG_BOOL PadShowNumCfg  // Show DCodes
-(
-    INSETUP,
-    wxT("PadSNum"),
-    &DisplayOpt.DisplayPadNum,
-    TRUE
-);
-
 static PARAM_CFG_SETCOLOR ColorLayer0Cfg
 (
     INSETUP,
@@ -379,7 +371,6 @@ PARAM_CFG_BASE * ParamCfgList[] =
     & SegmFillCfg,
     & PadFillCfg,
     & ViaFillCfg,  //TODO: Will adding this line break tha pcbnew file compatibility?
-    & PadShowNumCfg,
     & ColorLayer0Cfg,
     & ColorLayer1Cfg,
     & ColorLayer2Cfg,

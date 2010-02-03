@@ -73,17 +73,18 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
 
     wxGetApp().m_fileHistory.AddFilesToMenu( filesMenu );
 
-    // Configuration:
+    // Configuration and preferences:
     wxMenu* configmenu = new wxMenu;
     ADD_MENUITEM_WITH_HELP( configmenu, ID_CONFIG_REQ, _( "&File Ext" ),
                             _( "Set files extensions" ), config_xpm );
-    ADD_MENUITEM_WITH_HELP( configmenu, ID_COLORS_SETUP, _( "&Colors" ),
-                            _( "Select colors and display for layers" ),
-                            palette_xpm );
+    ADD_MENUITEM_WITH_HELP( configmenu, ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+                            _( "Hide &Layers Manager" ),
+                            _( "Show/hide the layers manager toolbar" ),
+                            layers_manager_xpm );
     ADD_MENUITEM_WITH_HELP( configmenu, ID_OPTIONS_SETUP, _( "&Options" ),
                             _( "Select general options" ), preference_xpm );
 
-    ADD_MENUITEM_WITH_HELP( configmenu, ID_PCB_DISPLAY_OPTIONS_SETUP,
+    ADD_MENUITEM_WITH_HELP( configmenu, ID_GERBVIEW_DISPLAY_OPTIONS_SETUP,
                             _( "Display" ),
                             _( "Select how items are displayed" ),
                             display_options_xpm );
@@ -98,11 +99,6 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
     configmenu->AppendSeparator();
     AddHotkeyConfigMenu( configmenu );
 
-/*  wxMenu *drill_menu = new wxMenu;
- *  postprocess_menu->Append(ID_PCB_GEN_DRILL_FILE, "Create &Drill file",
- *                  "Gen Drill (EXCELLON] file and/or Drill sheet");
- */
-
     wxMenu* miscellaneous_menu = new wxMenu;
     ADD_MENUITEM_WITH_HELP( miscellaneous_menu, ID_GERBVIEW_SHOW_LIST_DCODES,
                             _( "&List DCodes" ),
@@ -112,7 +108,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
                             _( "Show source file for the current layer" ),
                             tools_xpm );
     miscellaneous_menu->AppendSeparator();
-    ADD_MENUITEM_WITH_HELP( miscellaneous_menu, ID_PCB_GLOBAL_DELETE,
+    ADD_MENUITEM_WITH_HELP( miscellaneous_menu, ID_GERBVIEW_GLOBAL_DELETE,
                             _( "&Delete Layer" ),
                             _( "Delete current layer" ), general_deletions_xpm );
 
@@ -155,10 +151,6 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
 
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
 
-#if !defined(KICAD_AUIMANAGER)
-    SetToolBar( (wxToolBar*)m_HToolBar );
-#endif
-
     // Set up toolbar
     m_HToolBar->AddTool( ID_NEW_BOARD, wxEmptyString,
                           wxBitmap( new_xpm ),
@@ -168,33 +160,9 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
                          wxBitmap( open_xpm ),
                          _( "Open existing Layer" ) );
 
-#if 0
-    m_HToolBar->AddTool( ID_SAVE_PROJECT, wxEmptyString,
-                         wxBitmap( save_button ),
-                         _( "Save" ) );
-
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_SHEET_SET, wxEmptyString,
-                         wxBitmap( sheetset_xpm ),
-                         _( "page settings (size, texts)" ) );
-
-#endif
 
     m_HToolBar->AddSeparator();
 
-#if 0
-    m_HToolBar->AddTool( wxID_CUT, wxEmptyString,
-                         wxBitmap( cut_button ),
-                         _( "Cut selected item" ) );
-
-    m_HToolBar->AddTool( wxID_COPY, wxEmptyString,
-                         wxBitmap( copy_button ),
-                         _( "Copy selected item" ) );
-
-    m_HToolBar->AddTool( wxID_PASTE, wxEmptyString,
-                         wxBitmap( paste_xpm ),
-                         _( "Paste" ) );
-#endif
 
     m_HToolBar->AddTool( wxID_UNDO, wxEmptyString,
                          wxBitmap( undelete_xpm ),
@@ -243,7 +211,7 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
     }
 
     m_SelLayerBox = new WinEDAChoiceBox( m_HToolBar,
-                                         ID_TOOLBARH_PCB_SELECT_LAYER,
+                                         ID_TOOLBARH_GERBVIEW_SELECT_LAYER,
                                          wxDefaultPosition, wxSize( 150, -1 ),
                                          choices );
     m_SelLayerBox->SetSelection( GetScreen()->m_Active_Layer );
@@ -288,29 +256,8 @@ void WinEDA_GerberFrame::ReCreateVToolbar( void )
     m_VToolBar->AddTool( ID_NO_SELECT_BUTT, wxEmptyString,
                          wxBitmap( cursor_xpm ) );
     m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, TRUE );
-
-#if 0
     m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_COMPONENT_BUTT, wxEmptyString,
-                         wxBitmap( component_button ),
-                         _( "Add flashes" ) );
-
-    m_VToolBar->AddTool( ID_BUS_BUTT, wxEmptyString,
-                         wxBitmap( bus_button ),
-                         _( "Add lines" ) );
-
-    m_VToolBar->AddTool( ID_JUNCTION_BUTT, wxEmptyString,
-                         wxBitmap( junction_xpm ),
-                         _( "Add layer alignment target" ) );
-
-    m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_PCB_ADD_TEXT_BUTT, wxEmptyString,
-                         wxBitmap( tool_text_xpm ),
-                         _( "Add text" ) );
-
-#endif
-    m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_PCB_DELETE_ITEM_BUTT, wxEmptyString,
+    m_VToolBar->AddTool( ID_GERBVIEW_DELETE_ITEM_BUTT, wxEmptyString,
                          wxBitmap( delete_body_xpm ),
                          _( "Delete items" ) );
 
@@ -369,7 +316,16 @@ void WinEDA_GerberFrame::ReCreateOptToolbar( void )
                                wxBitmap( show_dcodenumber_xpm ),
                                _( "Show dcode number" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->Realize();
+    // Tools to show/hide toolbars:
+    m_OptionsToolBar->AddSeparator();
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
+                                    wxEmptyString,
+                                    wxBitmap( layers_manager_xpm ),
+                                    _(
+                                    "Show/hide the layers manager toolbar" ),
+                                    wxITEM_CHECK );
+                                    
 
+    m_OptionsToolBar->Realize();
     SetToolbars();
 }

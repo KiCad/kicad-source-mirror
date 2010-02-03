@@ -397,7 +397,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item = new wxMenuItem( configmenu, ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
                            _( "Hide &Layers Manager" ),
                            _( "Show/hide the layers manager toolbar" ) );
-    item->SetBitmap( palette_xpm );
+    item->SetBitmap( layers_manager_xpm );
     configmenu->Append( item );
 
     /* General */

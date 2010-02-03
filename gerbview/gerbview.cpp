@@ -41,6 +41,7 @@ const wxString GerbviewProjectFileWildcard( _( "GerbView project files (.cnf)|*.
 
 // Config keywords
 const wxString GerbviewShowPageSizeOption( wxT( "ShowPageSizeOpt" ) );
+extern const wxString GerbviewShowDCodes( wxT( "ShowDCodesOpt" ) );
 
 GERBER*  g_GERBER_List[32];
 
@@ -105,9 +106,6 @@ bool WinEDA_App::OnInit()
 
     /* Gerbview mainframe title */
     frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() );
-    frame->SetBoard( new BOARD( NULL, frame ) );
-    frame->GetBoard()->SetEnabledLayers( FULL_LAYERS );     // All 32 layers enabled at first.
-
 
     // Initialize some display options
     DisplayOpt.DisplayPadIsol = false;      // Pad clearance has no meaning

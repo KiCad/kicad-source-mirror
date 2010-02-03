@@ -16,7 +16,7 @@
 #include "gerbview.h"
 #include "protos.h"
 
-#include <wx/spinctrl.h>
+#include "gerbview_id.h"
 
 
 /** Function OnSelectOptionToolbar
@@ -25,11 +25,24 @@
 void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int id = event.GetId();
+    bool state;
+
+    switch( id )
+    {
+        case ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG:
+            state = ! m_show_layer_manager_tools;
+            id = ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR;
+            break;
+
+        default:
+            state = m_OptionsToolBar->GetToolState( id );
+            break;
+    }
 
     switch( id )
     {
     case ID_TB_OPTIONS_SHOW_GRID:
-        SetGridVisibility( m_OptionsToolBar->GetToolState( id ) );
+        SetGridVisibility( state );
         DrawPanel->Refresh( TRUE );
         break;
 
@@ -45,17 +58,17 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_POLAR_COORD:
         Affiche_Message( wxEmptyString );
-        DisplayOpt.DisplayPolarCood = m_OptionsToolBar->GetToolState( id );
+        DisplayOpt.DisplayPolarCood = state;
         UpdateStatusBar();
         break;
 
     case ID_TB_OPTIONS_SELECT_CURSOR:
-        m_CursorShape = m_OptionsToolBar->GetToolState( id );
+        m_CursorShape = state;
         DrawPanel->Refresh( TRUE );
         break;
 
     case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
-        if( m_OptionsToolBar->GetToolState( id ) )
+        if( state )
         {
             DisplayOpt.DisplayPadFill = m_DisplayPadFill = false;
         }
@@ -67,7 +80,7 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
-        if( m_OptionsToolBar->GetToolState( id ) )
+        if( state )
         {
             DisplayOpt.DisplayViaFill = m_DisplayViaFill = false;
         }
@@ -79,7 +92,7 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
-        if( m_OptionsToolBar->GetToolState( id ) )
+        if(state )
         {
             m_DisplayPcbTrackFill = FALSE;
             DisplayOpt.DisplayPcbTrackFill = FALSE;
@@ -93,7 +106,7 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH:
-        if( m_OptionsToolBar->GetToolState( id ) )      // Polygons filled asked
+        if( state )      // Polygons filled asked
             g_DisplayPolygonsModeSketch = 1;
         else
             g_DisplayPolygonsModeSketch = 0;
@@ -101,8 +114,15 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_DCODES:
-        DisplayOpt.DisplayPadNum = m_OptionsToolBar->GetToolState( id );
+        SetElementVisibility( DCODES_VISIBLE, state );
         DrawPanel->Refresh( TRUE );
+        break;
+
+    case ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR:
+        // show/hide auxiliary Vertical layers and visibility manager toolbar
+        m_show_layer_manager_tools = state;
+        m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
+        m_auimgr.Update();
         break;
 
     default:

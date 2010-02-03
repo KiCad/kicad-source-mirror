@@ -49,7 +49,7 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
 
-    case ID_PCB_DELETE_ITEM_BUTT:
+    case ID_GERBVIEW_DELETE_ITEM_BUTT:
         DrawStruct = GerberGeneralLocateAndDisplay();
         if( DrawStruct == NULL )
             break;
@@ -126,7 +126,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         Files_io( event );
         break;
 
-    case ID_PCB_GLOBAL_DELETE:
+    case ID_GERBVIEW_GLOBAL_DELETE:
         Erase_Current_Layer( TRUE );
         break;
 
@@ -152,20 +152,11 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
         break;
 
-    case ID_POPUP_PCB_DELETE_TRACKSEG:
-        DrawPanel->MouseToCursorSchema();
-        if( GetScreen()->GetCurItem() == NULL )
-            break;
-        Delete_Segment( &dc, (TRACK*) GetScreen()->GetCurItem() );
-        GetScreen()->SetCurItem( NULL );
-        GetScreen()->SetModify();
-        break;
-
-    case ID_PCB_DELETE_ITEM_BUTT:
+    case ID_GERBVIEW_DELETE_ITEM_BUTT:
         SetToolID( id, wxCURSOR_BULLSEYE, wxT( "Delete item" ) );
         break;
 
-    case ID_TOOLBARH_PCB_SELECT_LAYER:
+    case ID_TOOLBARH_GERBVIEW_SELECT_LAYER:
         GetScreen()->m_Active_Layer = m_SelLayerBox->GetChoice();
         DrawPanel->Refresh( TRUE );
         break;

@@ -33,10 +33,6 @@ void WinEDA_GerberFrame::Process_Config( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_COLORS_SETUP:
-        DisplayColorSetupFrame( this, pos );
-        break;
-
     case ID_CONFIG_REQ:
     {
         InstallConfigFrame( pos );

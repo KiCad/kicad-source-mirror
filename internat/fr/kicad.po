@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-01 11:23+0100\n"
-"PO-Revision-Date: 2010-02-01 11:24+0100\n"
+"POT-Creation-Date: 2010-02-03 08:57+0100\n"
+"PO-Revision-Date: 2010-02-03 09:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -1931,216 +1931,23 @@ msgstr "Nb Segms"
 msgid "Error: Unexpected end of file !"
 msgstr "Erreur: Fin de fichier inattendue !"
 
-#: pcbnew/pcbframe.cpp:114
-msgid "Through Via"
-msgstr "Via Traversante"
-
-#: pcbnew/pcbframe.cpp:114
-msgid "Show through vias"
-msgstr "Afficher vias traversantes"
-
-#: pcbnew/pcbframe.cpp:115
-msgid "Bl/Buried Via"
-msgstr "Via Av/Enterrée"
-
-#: pcbnew/pcbframe.cpp:115
-msgid "Show blind or buried vias"
-msgstr "Afficher vias enterrées/aveugles"
-
-#: pcbnew/pcbframe.cpp:116
-msgid "Micro Via"
-msgstr "Micro Via"
-
-#: pcbnew/pcbframe.cpp:116
-msgid "Show micro vias"
-msgstr "Afficher micro vias"
-
-#: pcbnew/pcbframe.cpp:117
-msgid "Ratsnest"
-msgstr "Chevelu"
-
-#: pcbnew/pcbframe.cpp:117
-msgid "Show unconnected nets as a ratsnest"
-msgstr "Afficher les connexions maquantes comme chevelul"
-
-#: pcbnew/pcbframe.cpp:119
-msgid "Pads Front"
-msgstr "Pad Dessus"
-
-#: pcbnew/pcbframe.cpp:119
-msgid "Show footprint pads on board's front"
-msgstr "Afficher les pads placés sur le dessus du ciruit imprimé"
-
-#: pcbnew/pcbframe.cpp:120
-msgid "Pads Back"
-msgstr "Pads Dessous"
-
-#: pcbnew/pcbframe.cpp:120
-msgid "Show footprint pads on board's back"
-msgstr "Afficher les pads placés sur le dessous du ciruit imprimé"
-
-#: pcbnew/pcbframe.cpp:122
-msgid "Text Front"
-msgstr "Texte Dessus"
-
-#: pcbnew/pcbframe.cpp:122
-#: pcbnew/pcbframe.cpp:123
-msgid "Show footprint text on board's back"
-msgstr "Afficher les textes sur modules situés sur le dessous du ciruit imprimé"
-
-#: pcbnew/pcbframe.cpp:123
-msgid "Text Back"
-msgstr "Texte Dessous"
-
-#: pcbnew/pcbframe.cpp:124
-msgid "Hidden Text"
-msgstr "Texte Invisible"
-
-#: pcbnew/pcbframe.cpp:124
-msgid "Show footprint text marked as invisible"
-msgstr "Afficher les textes sur modules marqués comme invisibles"
-
-#: pcbnew/pcbframe.cpp:126
-msgid "Anchors"
-msgstr "Ancres"
-
-#: pcbnew/pcbframe.cpp:126
-msgid "Show footprint and text origins as a cross"
-msgstr "Afficher origines des textes et modules par une croix"
-
-#: pcbnew/pcbframe.cpp:127
-msgid "Show the (x,y) grid dots"
-msgstr "Afficher les points de grille"
-
-#: pcbnew/pcbframe.cpp:128
-msgid "No-Connects"
-msgstr "Non Connectés"
-
-#: pcbnew/pcbframe.cpp:128
-msgid "Show a marker on pads which have no net connected"
-msgstr "Afficher un marqueur sur pads qui ne sont pad connectés"
-
-#: pcbnew/pcbframe.cpp:129
-msgid "Modules Front"
-msgstr "Modules Dessus"
-
-#: pcbnew/pcbframe.cpp:129
-msgid "Show footprints that are on board's front"
-msgstr "Afficher les modules situés sur le dessus du ciruit imprimé"
-
-#: pcbnew/pcbframe.cpp:130
-msgid "Modules Back"
-msgstr "Modules Dessous"
-
-#: pcbnew/pcbframe.cpp:130
-msgid "Show footprints that are on board's back"
-msgstr "Afficher les modules situés sur le dessous du ciruit imprimé"
-
-#: pcbnew/pcbframe.cpp:131
-msgid "Values"
-msgstr "Valeurs"
-
-#: pcbnew/pcbframe.cpp:131
-msgid "Show footprint's values"
-msgstr "Afficher les valeurs des modules"
-
-#: pcbnew/pcbframe.cpp:132
-msgid "References"
-msgstr "Références"
-
-#: pcbnew/pcbframe.cpp:132
-msgid "Show footprint's references"
-msgstr "Afficher les références des modules"
-
-#: pcbnew/pcbframe.cpp:185
-msgid "Show All Cu"
-msgstr "Afficher toutes couches cuivre"
-
-#: pcbnew/pcbframe.cpp:188
-msgid "Hide All Cu"
-msgstr "Cacher Cu"
-
-#: pcbnew/pcbframe.cpp:262
-msgid "Front copper layer"
-msgstr "Couche cuivre dessus"
-
-#: pcbnew/pcbframe.cpp:270
-msgid "An innner copper layer"
-msgstr "Couche interne"
-
-#: pcbnew/pcbframe.cpp:278
-msgid "Back copper layer"
-msgstr "Couche cuivre dessous"
-
-#: pcbnew/pcbframe.cpp:286
-msgid "Adhesive on board's front"
-msgstr "Afficher couche adhésive situés sur le dessus du ciruit imprimé"
-
-#: pcbnew/pcbframe.cpp:287
-msgid "Adhesive on board's back"
-msgstr "Couche adhésive sur le dessous du circuit imprimé"
-
-#: pcbnew/pcbframe.cpp:288
-msgid "Solder paste on board's front"
-msgstr "Couche de pâte à souder sur dessus du circuit imprimé"
-
-#: pcbnew/pcbframe.cpp:289
-msgid "Solder paste on board's back"
-msgstr "Couche de pate à souder sur dessous du circuit imprimé"
-
-#: pcbnew/pcbframe.cpp:290
-msgid "Silkscreen on board's front"
-msgstr "Sérigraphie sur le dessus du ciruit imprimé"
-
-#: pcbnew/pcbframe.cpp:291
-msgid "Silkscreen on board's back"
-msgstr "Sérigraphie sur le dessous du ciruit imprimé "
-
-#: pcbnew/pcbframe.cpp:292
-msgid "Solder mask on board's front"
-msgstr "Couche masque soudure sur le dessus du ciruit imprimée"
-
-#: pcbnew/pcbframe.cpp:293
-msgid "Solder mask on board's back"
-msgstr "Couche masque soudure sur le dessous du ciruit imprimée"
-
-#: pcbnew/pcbframe.cpp:294
-msgid "Explanatory drawings"
-msgstr "Couche dessins explicatifs"
-
-#: pcbnew/pcbframe.cpp:295
-msgid "Explanatory comments"
-msgstr "Couche commentaires"
-
-#: pcbnew/pcbframe.cpp:296
-msgid "TDB"
-msgstr ""
-
-#: pcbnew/pcbframe.cpp:297
-msgid "TBD"
-msgstr ""
-
-#: pcbnew/pcbframe.cpp:298
-msgid "Board's perimeter definition"
-msgstr "Couche de définition des contours du circuit imprimé"
-
-#: pcbnew/pcbframe.cpp:675
+#: pcbnew/pcbframe.cpp:335
 msgid "Visibles"
 msgstr "Visibles"
 
-#: pcbnew/pcbframe.cpp:766
+#: pcbnew/pcbframe.cpp:426
 msgid "Board modified, Save before exit ?"
 msgstr "Circuit Imprimé modifié,  Sauver avant de quitter ?"
 
-#: pcbnew/pcbframe.cpp:767
+#: pcbnew/pcbframe.cpp:427
 msgid "Confirmation"
 msgstr "Confirmation"
 
-#: pcbnew/pcbframe.cpp:806
+#: pcbnew/pcbframe.cpp:466
 msgid "3D Frame already opened"
 msgstr "Fenêtre 3D déjà ouverte"
 
-#: pcbnew/pcbframe.cpp:810
+#: pcbnew/pcbframe.cpp:470
 msgid "3D Viewer"
 msgstr "Visu 3D"
 
@@ -2300,6 +2107,199 @@ msgstr "Pour une liste de pads non connecté, clic droit pour ouvrir un menu"
 #: pcbnew/dialog_drc_base.cpp:171
 msgid "Unconnected"
 msgstr "Non connecté"
+
+#: pcbnew/class_pcb_layer_widget.cpp:69
+msgid "Through Via"
+msgstr "Via Traversante"
+
+#: pcbnew/class_pcb_layer_widget.cpp:69
+msgid "Show through vias"
+msgstr "Afficher vias traversantes"
+
+#: pcbnew/class_pcb_layer_widget.cpp:70
+msgid "Bl/Buried Via"
+msgstr "Via Av/Enterrée"
+
+#: pcbnew/class_pcb_layer_widget.cpp:70
+msgid "Show blind or buried vias"
+msgstr "Afficher vias enterrées/aveugles"
+
+#: pcbnew/class_pcb_layer_widget.cpp:71
+msgid "Micro Via"
+msgstr "Micro Via"
+
+#: pcbnew/class_pcb_layer_widget.cpp:71
+msgid "Show micro vias"
+msgstr "Afficher micro vias"
+
+#: pcbnew/class_pcb_layer_widget.cpp:72
+msgid "Ratsnest"
+msgstr "Chevelu"
+
+#: pcbnew/class_pcb_layer_widget.cpp:72
+msgid "Show unconnected nets as a ratsnest"
+msgstr "Afficher les connexions maquantes comme chevelul"
+
+#: pcbnew/class_pcb_layer_widget.cpp:74
+msgid "Pads Front"
+msgstr "Pad Dessus"
+
+#: pcbnew/class_pcb_layer_widget.cpp:74
+msgid "Show footprint pads on board's front"
+msgstr "Afficher les pads placés sur le dessus du ciruit imprimé"
+
+#: pcbnew/class_pcb_layer_widget.cpp:75
+msgid "Pads Back"
+msgstr "Pads Dessous"
+
+#: pcbnew/class_pcb_layer_widget.cpp:75
+msgid "Show footprint pads on board's back"
+msgstr "Afficher les pads placés sur le dessous du ciruit imprimé"
+
+#: pcbnew/class_pcb_layer_widget.cpp:77
+msgid "Text Front"
+msgstr "Texte Dessus"
+
+#: pcbnew/class_pcb_layer_widget.cpp:77
+#: pcbnew/class_pcb_layer_widget.cpp:78
+msgid "Show footprint text on board's back"
+msgstr "Afficher les textes sur modules situés sur le dessous du ciruit imprimé"
+
+#: pcbnew/class_pcb_layer_widget.cpp:78
+msgid "Text Back"
+msgstr "Texte Dessous"
+
+#: pcbnew/class_pcb_layer_widget.cpp:79
+msgid "Hidden Text"
+msgstr "Texte Invisible"
+
+#: pcbnew/class_pcb_layer_widget.cpp:79
+msgid "Show footprint text marked as invisible"
+msgstr "Afficher les textes sur modules marqués comme invisibles"
+
+#: pcbnew/class_pcb_layer_widget.cpp:81
+msgid "Anchors"
+msgstr "Ancres"
+
+#: pcbnew/class_pcb_layer_widget.cpp:81
+msgid "Show footprint and text origins as a cross"
+msgstr "Afficher origines des textes et modules par une croix"
+
+#: pcbnew/class_pcb_layer_widget.cpp:82
+msgid "Show the (x,y) grid dots"
+msgstr "Afficher les points de grille"
+
+#: pcbnew/class_pcb_layer_widget.cpp:83
+msgid "No-Connects"
+msgstr "Non Connectés"
+
+#: pcbnew/class_pcb_layer_widget.cpp:83
+msgid "Show a marker on pads which have no net connected"
+msgstr "Afficher un marqueur sur pads qui ne sont pad connectés"
+
+#: pcbnew/class_pcb_layer_widget.cpp:84
+msgid "Modules Front"
+msgstr "Modules Dessus"
+
+#: pcbnew/class_pcb_layer_widget.cpp:84
+msgid "Show footprints that are on board's front"
+msgstr "Afficher les modules situés sur le dessus du ciruit imprimé"
+
+#: pcbnew/class_pcb_layer_widget.cpp:85
+msgid "Modules Back"
+msgstr "Modules Dessous"
+
+#: pcbnew/class_pcb_layer_widget.cpp:85
+msgid "Show footprints that are on board's back"
+msgstr "Afficher les modules situés sur le dessous du ciruit imprimé"
+
+#: pcbnew/class_pcb_layer_widget.cpp:86
+msgid "Values"
+msgstr "Valeurs"
+
+#: pcbnew/class_pcb_layer_widget.cpp:86
+msgid "Show footprint's values"
+msgstr "Afficher les valeurs des modules"
+
+#: pcbnew/class_pcb_layer_widget.cpp:87
+msgid "References"
+msgstr "Références"
+
+#: pcbnew/class_pcb_layer_widget.cpp:87
+msgid "Show footprint's references"
+msgstr "Afficher les références des modules"
+
+#: pcbnew/class_pcb_layer_widget.cpp:140
+msgid "Show All Cu"
+msgstr "Afficher toutes couches cuivre"
+
+#: pcbnew/class_pcb_layer_widget.cpp:143
+msgid "Hide All Cu"
+msgstr "Cacher Cu"
+
+#: pcbnew/class_pcb_layer_widget.cpp:217
+msgid "Front copper layer"
+msgstr "Couche cuivre dessus"
+
+#: pcbnew/class_pcb_layer_widget.cpp:225
+msgid "An innner copper layer"
+msgstr "Couche interne"
+
+#: pcbnew/class_pcb_layer_widget.cpp:233
+msgid "Back copper layer"
+msgstr "Couche cuivre dessous"
+
+#: pcbnew/class_pcb_layer_widget.cpp:241
+msgid "Adhesive on board's front"
+msgstr "Afficher couche adhésive situés sur le dessus du ciruit imprimé"
+
+#: pcbnew/class_pcb_layer_widget.cpp:242
+msgid "Adhesive on board's back"
+msgstr "Couche adhésive sur le dessous du circuit imprimé"
+
+#: pcbnew/class_pcb_layer_widget.cpp:243
+msgid "Solder paste on board's front"
+msgstr "Couche de pâte à souder sur dessus du circuit imprimé"
+
+#: pcbnew/class_pcb_layer_widget.cpp:244
+msgid "Solder paste on board's back"
+msgstr "Couche de pate à souder sur dessous du circuit imprimé"
+
+#: pcbnew/class_pcb_layer_widget.cpp:245
+msgid "Silkscreen on board's front"
+msgstr "Sérigraphie sur le dessus du ciruit imprimé"
+
+#: pcbnew/class_pcb_layer_widget.cpp:246
+msgid "Silkscreen on board's back"
+msgstr "Sérigraphie sur le dessous du ciruit imprimé "
+
+#: pcbnew/class_pcb_layer_widget.cpp:247
+msgid "Solder mask on board's front"
+msgstr "Couche masque soudure sur le dessus du ciruit imprimée"
+
+#: pcbnew/class_pcb_layer_widget.cpp:248
+msgid "Solder mask on board's back"
+msgstr "Couche masque soudure sur le dessous du ciruit imprimée"
+
+#: pcbnew/class_pcb_layer_widget.cpp:249
+msgid "Explanatory drawings"
+msgstr "Couche dessins explicatifs"
+
+#: pcbnew/class_pcb_layer_widget.cpp:250
+msgid "Explanatory comments"
+msgstr "Couche commentaires"
+
+#: pcbnew/class_pcb_layer_widget.cpp:251
+msgid "TDB"
+msgstr ""
+
+#: pcbnew/class_pcb_layer_widget.cpp:252
+msgid "TBD"
+msgstr ""
+
+#: pcbnew/class_pcb_layer_widget.cpp:253
+msgid "Board's perimeter definition"
+msgstr "Couche de définition des contours du circuit imprimé"
 
 #: pcbnew/moduleframe.cpp:254
 msgid "Module Editor: Module modified! Continue?"
@@ -3958,28 +3958,28 @@ msgstr "Contours_PCB"
 msgid "BAD INDEX"
 msgstr "BAD INDEX"
 
-#: pcbnew/class_board.cpp:907
+#: pcbnew/class_board.cpp:893
 #: pcbnew/class_module.cpp:867
 msgid "Pads"
 msgstr "Pads"
 
-#: pcbnew/class_board.cpp:910
+#: pcbnew/class_board.cpp:896
 msgid "Vias"
 msgstr "Vias"
 
-#: pcbnew/class_board.cpp:913
+#: pcbnew/class_board.cpp:899
 msgid "Nodes"
 msgstr "Nodes"
 
-#: pcbnew/class_board.cpp:916
+#: pcbnew/class_board.cpp:902
 msgid "Nets"
 msgstr "Nets"
 
-#: pcbnew/class_board.cpp:924
+#: pcbnew/class_board.cpp:910
 msgid "Links"
 msgstr "Liens"
 
-#: pcbnew/class_board.cpp:927
+#: pcbnew/class_board.cpp:913
 msgid "Connect"
 msgstr "Connect"
 
@@ -7022,7 +7022,7 @@ msgstr "Epaiss. ligne par défaut"
 msgid "Plot: %s\n"
 msgstr "Trace: %s\n"
 
-#: eeschema/libframe.cpp:292
+#: eeschema/libframe.cpp:291
 msgid ""
 "Component was modified!\n"
 "Discard changes?"
@@ -7030,7 +7030,7 @@ msgstr ""
 "Le composant a été modifié\n"
 "Perdre les  changements"
 
-#: eeschema/libframe.cpp:305
+#: eeschema/libframe.cpp:304
 #, c-format
 msgid ""
 "Library \"%s\" was modified!\n"
@@ -7039,40 +7039,40 @@ msgstr ""
 "Librairie \"%s\"  modifiée!\n"
 "Perdre les changements ?"
 
-#: eeschema/libframe.cpp:415
+#: eeschema/libframe.cpp:414
 #, c-format
 msgid "Part %c"
 msgstr "Composant %c"
 
-#: eeschema/libframe.cpp:677
+#: eeschema/libframe.cpp:676
 msgid "Add pin"
 msgstr "Addition de \"pins\""
 
-#: eeschema/libframe.cpp:681
+#: eeschema/libframe.cpp:680
 msgid "Set pin options"
 msgstr "Choix options de pin"
 
-#: eeschema/libframe.cpp:698
+#: eeschema/libframe.cpp:697
 msgid "Add rectangle"
 msgstr "Ajout de rectangle"
 
-#: eeschema/libframe.cpp:702
+#: eeschema/libframe.cpp:701
 msgid "Add circle"
 msgstr "Ajout de cercle"
 
-#: eeschema/libframe.cpp:706
+#: eeschema/libframe.cpp:705
 msgid "Add arc"
 msgstr "Ajout d'arc"
 
-#: eeschema/libframe.cpp:710
+#: eeschema/libframe.cpp:709
 msgid "Add line"
 msgstr "Addition de lignes"
 
-#: eeschema/libframe.cpp:714
+#: eeschema/libframe.cpp:713
 msgid "Set anchor position"
 msgstr "Ajuster Position Ancre"
 
-#: eeschema/libframe.cpp:724
+#: eeschema/libframe.cpp:723
 msgid "Export"
 msgstr "Exporter"
 
@@ -7111,19 +7111,19 @@ msgstr "Labels"
 msgid "Hierar."
 msgstr "Hiérar."
 
-#: eeschema/eelayer.cpp:239
+#: eeschema/eelayer.cpp:238
 msgid "White"
 msgstr "Blanc"
 
-#: eeschema/eelayer.cpp:240
+#: eeschema/eelayer.cpp:239
 msgid "Black"
 msgstr "Noir"
 
-#: eeschema/eelayer.cpp:243
+#: eeschema/eelayer.cpp:242
 msgid "Background Color:"
 msgstr "Couleur du Fond:"
 
-#: eeschema/eelayer.cpp:275
+#: eeschema/eelayer.cpp:274
 msgid "Apply"
 msgstr "Appliquer"
 
@@ -8361,27 +8361,6 @@ msgstr "> %-28.28s PinSheet %-7.7s (Feuille %s) pos: %3.3f, %3.3f\n"
 msgid "#End labels\n"
 msgstr "#End labels\n"
 
-#: eeschema/eeschema.cpp:131
-msgid "Eeschema is already running, Continue?"
-msgstr "Eeschema est en cours d'exécution. Continuer ?"
-
-#: eeschema/class_libentry.cpp:59
-msgid "none"
-msgstr "rien"
-
-#: eeschema/class_libentry.cpp:321
-msgid "value"
-msgstr "valeur"
-
-#: eeschema/class_libentry.cpp:321
-msgid "reference"
-msgstr "référence"
-
-#: eeschema/class_libentry.cpp:323
-#, c-format
-msgid "An attempt was made to remove the %s field from component %s in library %s."
-msgstr "Une tentative a été faite pour supprimer le champ %s du composant %s en librairie %s."
-
 #: eeschema/tool_sch.cpp:34
 #: eeschema/menubar.cpp:45
 msgid "New schematic project"
@@ -8412,6 +8391,7 @@ msgid "Navigate schematic hierarchy"
 msgstr "Navigateur de hiérarchie"
 
 #: eeschema/tool_sch.cpp:84
+#: eeschema/menubar.cpp:92
 msgid "Print schematic"
 msgstr "Impression des feuilles de schéma"
 
@@ -8464,12 +8444,12 @@ msgid "Place a bus"
 msgstr "Placer un bus"
 
 #: eeschema/tool_sch.cpp:179
-#: eeschema/menubar.cpp:294
+#: eeschema/menubar.cpp:296
 msgid "Place a wire to bus entry"
 msgstr "Placer une Entrée de Bus (type fil vers bus)"
 
 #: eeschema/tool_sch.cpp:183
-#: eeschema/menubar.cpp:301
+#: eeschema/menubar.cpp:303
 msgid "Place a bus to bus entry"
 msgstr "Placer une Entrée de Bus (type bus vers bus)"
 
@@ -8478,7 +8458,7 @@ msgid "Place no connect flag"
 msgstr "Placer symbole de non connexion"
 
 #: eeschema/tool_sch.cpp:192
-#: eeschema/menubar.cpp:313
+#: eeschema/menubar.cpp:315
 msgid "Place net name"
 msgstr "Place  nom de net"
 
@@ -8495,7 +8475,7 @@ msgid "Place a junction"
 msgstr "Placer une jonction"
 
 #: eeschema/tool_sch.cpp:206
-#: eeschema/menubar.cpp:336
+#: eeschema/menubar.cpp:338
 msgid "Place a hierarchical label. This label will be seen as a pin sheet in the sheet symbol"
 msgstr "Placer un label hiérachique. Ce label sera vu comme une pin dans la feuille mère symbole"
 
@@ -8524,13 +8504,58 @@ msgid "Turn grid off"
 msgstr "Ne pas afficher la grille"
 
 #: eeschema/tool_sch.cpp:270
-#: eeschema/schframe.cpp:497
+#: eeschema/schframe.cpp:505
 msgid "Show hidden pins"
 msgstr "Force affichage des pins invisibles"
 
 #: eeschema/tool_sch.cpp:275
 msgid "HV orientation for wires and bus"
 msgstr "Force direction H, V  pour les fils et bus"
+
+#: eeschema/eeschema_config.cpp:333
+msgid "Save Project Settings"
+msgstr "Sauver Optionsr Projet"
+
+#: eeschema/eeschema.cpp:131
+msgid "Eeschema is already running, Continue?"
+msgstr "Eeschema est en cours d'exécution. Continuer ?"
+
+#: eeschema/class_libentry.cpp:59
+msgid "none"
+msgstr "rien"
+
+#: eeschema/class_libentry.cpp:321
+msgid "value"
+msgstr "valeur"
+
+#: eeschema/class_libentry.cpp:321
+msgid "reference"
+msgstr "référence"
+
+#: eeschema/class_libentry.cpp:323
+#, c-format
+msgid "An attempt was made to remove the %s field from component %s in library %s."
+msgstr "Une tentative a été faite pour supprimer le champ %s du composant %s en librairie %s."
+
+#: eeschema/schframe.cpp:358
+msgid "Schematic modified, Save before exit ?"
+msgstr "Schématique modifiée,  Sauver avant de quitter ?"
+
+#: eeschema/schframe.cpp:493
+msgid "Draw wires and buses in any direction"
+msgstr "Tracer les fils et bus avec direction quelconque"
+
+#: eeschema/schframe.cpp:494
+msgid "Draw horizontal and vertical wires and buses only"
+msgstr "Autoriser fils et bus verticaux et horizontaux seulement"
+
+#: eeschema/schframe.cpp:504
+msgid "Do not show hidden pins"
+msgstr "Ne pas affichager les pins invisibles"
+
+#: eeschema/schframe.cpp:596
+msgid "Schematic"
+msgstr "Schématique"
 
 #: eeschema/find.cpp:210
 msgid "Pin "
@@ -8745,278 +8770,254 @@ msgstr "Ouvrir un projet schématique existant"
 msgid "Open a recent opened schematic project"
 msgstr "Ouvrir un projet schématique récemment ouvert"
 
-#: eeschema/menubar.cpp:69
+#: eeschema/menubar.cpp:70
 msgid "&Save Whole Schematic Project\tCtrl+S"
 msgstr "Sauver Tout  le Projet Schématique\tCtrl+S"
 
-#: eeschema/menubar.cpp:70
+#: eeschema/menubar.cpp:71
 msgid "Save all sheets in the schematic project"
 msgstr "Sauver toutes les feuilles du projet schématique"
 
-#: eeschema/menubar.cpp:74
-msgid "&Save Current Sheet Only"
-msgstr "Sauver la Feuille &Courante:"
-
 #: eeschema/menubar.cpp:75
+msgid "Save &Current Sheet Only"
+msgstr "Sauver la Feuille &Courante Seule"
+
+#: eeschema/menubar.cpp:76
 msgid "Save only current schematic sheet"
 msgstr "Sauver seulement la feuille active"
 
-#: eeschema/menubar.cpp:81
+#: eeschema/menubar.cpp:82
 msgid "Save Current Sheet &as\tShift+Ctrl+S"
 msgstr "Sauver Feuille Courante &sous\tShift+Ctrl+S"
 
-#: eeschema/menubar.cpp:82
+#: eeschema/menubar.cpp:83
 msgid "Save current schematic sheet as..."
 msgstr "Sauver la feuille active sous ..."
 
-#: eeschema/menubar.cpp:90
+#: eeschema/menubar.cpp:91
 #, fuzzy
 msgid "P&rint\tCtrl+P"
 msgstr "&Ouvrir\tCtrl+O"
 
-#: eeschema/menubar.cpp:91
-msgid "Print schematic sheet"
-msgstr "Impression des feuilles de schéma"
-
-#: eeschema/menubar.cpp:98
+#: eeschema/menubar.cpp:99
 msgid "Plot PostScript"
 msgstr "Tracé Postscript"
 
-#: eeschema/menubar.cpp:99
+#: eeschema/menubar.cpp:100
 msgid "Plot schematic sheet in PostScript format"
 msgstr "Tracer les feuilles schématiques en format Postscript"
 
-#: eeschema/menubar.cpp:104
+#: eeschema/menubar.cpp:105
 msgid "Plot HPGL"
 msgstr "Tracé HPGL"
 
-#: eeschema/menubar.cpp:105
+#: eeschema/menubar.cpp:106
 msgid "Plot schematic sheet in HPGL format"
 msgstr "Tracer les feuilles schématiques en format HPGL"
 
-#: eeschema/menubar.cpp:110
+#: eeschema/menubar.cpp:111
 msgid "Plot SVG"
 msgstr "Tracé  SVG"
 
-#: eeschema/menubar.cpp:111
+#: eeschema/menubar.cpp:112
 msgid "Plot schematic sheet in SVG format"
 msgstr "Tracer les feuilles schématiques en format SVG"
 
-#: eeschema/menubar.cpp:116
+#: eeschema/menubar.cpp:117
 msgid "Plot DXF"
 msgstr "Tracé DXF"
 
-#: eeschema/menubar.cpp:117
+#: eeschema/menubar.cpp:118
 msgid "Plot schematic sheet in DXF format"
 msgstr "Tracer les feuilles schématiques en format DXF"
 
-#: eeschema/menubar.cpp:125
+#: eeschema/menubar.cpp:126
 msgid "Plot to Clipboard"
 msgstr "Tracé dans Presse papier"
 
-#: eeschema/menubar.cpp:126
+#: eeschema/menubar.cpp:127
 msgid "Export drawings to clipboard"
 msgstr " Exporter le dessin dans le presse-papier"
 
-#: eeschema/menubar.cpp:134
+#: eeschema/menubar.cpp:135
 msgid "Plot schematic sheet in HPGL, PostScript or SVG format"
 msgstr "Tracer les feuilles schématiques en format HPGL,  POSTSCRIPT ou SVG"
 
-#: eeschema/menubar.cpp:141
+#: eeschema/menubar.cpp:143
 msgid "Quit EESchema"
 msgstr "Quitter EESchema"
 
-#: eeschema/menubar.cpp:182
+#: eeschema/menubar.cpp:184
 msgid "&Find\tCtrl+F"
 msgstr "&Chercher\tCtrl+F"
 
-#: eeschema/menubar.cpp:191
+#: eeschema/menubar.cpp:193
 msgid "Backannotate"
 msgstr "Rétro Annotation"
 
-#: eeschema/menubar.cpp:192
+#: eeschema/menubar.cpp:194
 msgid "Back annotated footprint fields"
 msgstr "Rétroannotation des champs modules"
 
-#: eeschema/menubar.cpp:238
+#: eeschema/menubar.cpp:240
 msgid "Fit the schematic sheet on the screen"
 msgstr "Ajuster la feuille de schéma à l'écran"
 
-#: eeschema/menubar.cpp:254
+#: eeschema/menubar.cpp:256
 msgid "Redraw the schematic view"
 msgstr "Redessin de l'écran"
 
-#: eeschema/menubar.cpp:268
+#: eeschema/menubar.cpp:270
 msgid "&Component"
 msgstr "&Composant"
 
-#: eeschema/menubar.cpp:269
+#: eeschema/menubar.cpp:271
 msgid "Place the component"
 msgstr "Placer le Composant"
 
-#: eeschema/menubar.cpp:274
+#: eeschema/menubar.cpp:276
 msgid "&Power port"
 msgstr "Power Symbole"
 
-#: eeschema/menubar.cpp:275
+#: eeschema/menubar.cpp:277
 msgid "Place the power port"
 msgstr "Placer le Symbole Power"
 
-#: eeschema/menubar.cpp:280
+#: eeschema/menubar.cpp:282
 msgid "&Wire"
 msgstr "&Fil"
 
-#: eeschema/menubar.cpp:281
+#: eeschema/menubar.cpp:283
 msgid "Place the wire"
 msgstr "Place fil"
 
-#: eeschema/menubar.cpp:286
+#: eeschema/menubar.cpp:288
 msgid "&Bus"
 msgstr "&Bus"
 
-#: eeschema/menubar.cpp:287
+#: eeschema/menubar.cpp:289
 msgid "Place bus"
 msgstr "Place bus"
 
-#: eeschema/menubar.cpp:293
+#: eeschema/menubar.cpp:295
 msgid "W&ire to bus entry"
 msgstr "Entrées de bus (type fil vers bus)"
 
-#: eeschema/menubar.cpp:300
+#: eeschema/menubar.cpp:302
 msgid "B&us to bus entry"
 msgstr "Entrées de bus (type bus vers bus)"
 
-#: eeschema/menubar.cpp:306
+#: eeschema/menubar.cpp:308
 msgid "No connect flag"
 msgstr "Symbole de Non Connexion"
 
-#: eeschema/menubar.cpp:307
+#: eeschema/menubar.cpp:309
 msgid "Place a no connect flag"
 msgstr "Placer un Symbole de Non Connexion"
 
-#: eeschema/menubar.cpp:312
+#: eeschema/menubar.cpp:314
 msgid "Net name"
 msgstr "Net Name"
 
-#: eeschema/menubar.cpp:318
+#: eeschema/menubar.cpp:320
 msgid "Global label"
 msgstr "Label Global"
 
-#: eeschema/menubar.cpp:319
+#: eeschema/menubar.cpp:321
 msgid "Place a global label. Warning: all global labels with the same name are connected in whole hierarchy"
 msgstr "Placer un label global. Attention: tous les labels globaux avec le même nom sont connectés dans toute la hiérarchie"
 
-#: eeschema/menubar.cpp:325
+#: eeschema/menubar.cpp:327
 msgid "Junction"
 msgstr "Jonction"
 
-#: eeschema/menubar.cpp:326
+#: eeschema/menubar.cpp:328
 msgid "Place junction"
 msgstr "Place jonction"
 
-#: eeschema/menubar.cpp:335
+#: eeschema/menubar.cpp:337
 msgid "Hierarchical label"
 msgstr "Label Hiérarchique"
 
-#: eeschema/menubar.cpp:343
+#: eeschema/menubar.cpp:345
 msgid "Hierarchical sheet"
 msgstr "Feuille Hiérrachique"
 
-#: eeschema/menubar.cpp:344
+#: eeschema/menubar.cpp:346
 msgid "Create a hierarchical sheet"
 msgstr "Créer une Feuille Hiérachique"
 
-#: eeschema/menubar.cpp:350
+#: eeschema/menubar.cpp:352
 msgid "Import Hierarchical Label"
 msgstr "Importer Label Hiérarchique"
 
-#: eeschema/menubar.cpp:351
+#: eeschema/menubar.cpp:353
 msgid "Place a pin sheet created by importing a hierarchical label from sheet"
 msgstr "Placer une pin hiérarchique créée par importation d'un label hiérarchique de la feuille"
 
-#: eeschema/menubar.cpp:358
+#: eeschema/menubar.cpp:360
 msgid "Add Hierarchical Pin to Sheet"
 msgstr "Ajouter Pins de Hiérarchie dans feuille"
 
-#: eeschema/menubar.cpp:359
+#: eeschema/menubar.cpp:361
 msgid "Place a hierarchical pin to sheet"
 msgstr "Addition de pins de hiérarchie dans les feuilles symboles de hiérarchie"
 
-#: eeschema/menubar.cpp:369
+#: eeschema/menubar.cpp:371
 msgid "Graphic line or polygon"
 msgstr "Ligne ou polygone graphique"
 
-#: eeschema/menubar.cpp:370
+#: eeschema/menubar.cpp:372
 msgid "Place graphic lines or polygons"
 msgstr "Placer lignes ou  polygones graphiques"
 
-#: eeschema/menubar.cpp:377
+#: eeschema/menubar.cpp:379
 msgid "Graphic text"
 msgstr "Texte graphique"
 
-#: eeschema/menubar.cpp:378
+#: eeschema/menubar.cpp:380
 msgid "Place graphic text for comment"
 msgstr "Placer textes graphiques en commentaire."
 
-#: eeschema/menubar.cpp:392
+#: eeschema/menubar.cpp:394
 msgid "Library preferences"
 msgstr "Préférences pour Librairie"
 
-#: eeschema/menubar.cpp:397
+#: eeschema/menubar.cpp:399
 msgid "&Colors"
 msgstr "&Couleurs"
 
-#: eeschema/menubar.cpp:398
+#: eeschema/menubar.cpp:400
 msgid "Color preferences"
 msgstr "Préférences de couleurs"
 
-#: eeschema/menubar.cpp:403
+#: eeschema/menubar.cpp:405
 msgid "&Options"
 msgstr "&Options"
 
-#: eeschema/menubar.cpp:404
+#: eeschema/menubar.cpp:406
 msgid "Eeschema general options and preferences"
 msgstr "Options et préférences générales de Eeschema"
 
-#: eeschema/menubar.cpp:418
+#: eeschema/menubar.cpp:420
 msgid "&Save preferences"
 msgstr "&Sauver Préférences"
 
-#: eeschema/menubar.cpp:424
+#: eeschema/menubar.cpp:426
 msgid "&Read preferences"
 msgstr "&Lire Préférences"
 
-#: eeschema/menubar.cpp:436
+#: eeschema/menubar.cpp:438
 msgid "Open the eeschema manual"
 msgstr "Ouvrir la documentation de eeschema"
 
-#: eeschema/menubar.cpp:444
+#: eeschema/menubar.cpp:446
 msgid "About eeschema schematic designer"
 msgstr "Au sujet de Eeschema (outil de conception schématique)"
 
-#: eeschema/menubar.cpp:457
+#: eeschema/menubar.cpp:459
 msgid "&Place"
 msgstr "&Placer"
-
-#: eeschema/schframe.cpp:350
-msgid "Schematic modified, Save before exit ?"
-msgstr "Schématique modifiée,  Sauver avant de quitter ?"
-
-#: eeschema/schframe.cpp:485
-msgid "Draw wires and buses in any direction"
-msgstr "Tracer les fils et bus avec direction quelconque"
-
-#: eeschema/schframe.cpp:486
-msgid "Draw horizontal and vertical wires and buses only"
-msgstr "Autoriser fils et bus verticaux et horizontaux seulement"
-
-#: eeschema/schframe.cpp:496
-msgid "Do not show hidden pins"
-msgstr "Ne pas affichager les pins invisibles"
-
-#: eeschema/schframe.cpp:588
-msgid "Schematic"
-msgstr "Schématique"
 
 #: eeschema/files-io.cpp:71
 msgid "Clear schematic hierarchy?"
@@ -9830,31 +9831,39 @@ msgid "Text Shape:"
 msgstr "Aspect Texte:"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:82
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:56
 msgid "Align left"
 msgstr "Alignement à gauche"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:82
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:88
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:56
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:69
 msgid "Align center"
 msgstr "Alignement au centre"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:82
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:56
 msgid "Align right"
 msgstr "Alignement à droite"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:84
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:58
 msgid "Horiz. Justify"
 msgstr "Justification Horiz."
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:88
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:69
 msgid "Align bottom"
 msgstr "Alignement en bas"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:88
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:69
 msgid "Align top"
 msgstr "Alignement au sommet"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:90
+#: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:71
 msgid "Vert. Justify"
 msgstr "Vert. Justifié"
 
@@ -9943,12 +9952,10 @@ msgid "Datasheet"
 msgstr "Documentation"
 
 #: eeschema/dialog_SVG_print_base.cpp:25
-#: eeschema/dialog_print_using_printer_base.cpp:25
 msgid "Default Pen Size"
 msgstr "Dimension Plume par Défaut"
 
 #: eeschema/dialog_SVG_print_base.cpp:30
-#: eeschema/dialog_print_using_printer_base.cpp:30
 msgid "Selection of the default pen thickness used to draw items, when their thickness is set to 0."
 msgstr "Valeur de la dimension de la plume utilisée par défaut pour tracer les éléments, lorsque leur épaisseur est à 0."
 
@@ -9960,17 +9967,34 @@ msgstr "Imprimer Page Courante"
 msgid "Print All"
 msgstr "Imprimer Tout"
 
-#: eeschema/dialog_print_using_printer_base.cpp:52
-msgid "Current"
-msgstr "Courant"
+#: eeschema/dialog_print_using_printer_base.cpp:22
+msgid "Print sheet &reference and title block"
+msgstr "Imprimer ca&rtouche"
 
-#: eeschema/dialog_print_using_printer_base.cpp:52
-msgid "All"
-msgstr "Tout"
+#: eeschema/dialog_print_using_printer_base.cpp:29
+msgid "Print in &black and white only"
+msgstr "Imprimer en &noir et blanc seulement"
 
-#: eeschema/eeschema_config.cpp:328
-msgid "Save Project Settings"
-msgstr "Sauver Optionsr Projet"
+#: eeschema/dialog_print_using_printer_base.cpp:38
+msgid "Page Setup"
+msgstr "Options Page"
+
+#: eeschema/dialog_print_using_printer.cpp:241
+msgid "Print Schematic"
+msgstr "Impression Schématique"
+
+#: eeschema/dialog_print_using_printer.cpp:246
+msgid "An error occurred attempting to print the schematic."
+msgstr "Une erreur s'est produite lors de l'impression."
+
+#: eeschema/dialog_print_using_printer.cpp:247
+msgid "Printing"
+msgstr "Impression"
+
+#: eeschema/dialog_print_using_printer.cpp:260
+#, c-format
+msgid "Print page %d"
+msgstr "Imprimer page %d"
 
 #: eeschema/eelibs_read_libraryfiles.cpp:61
 msgid "\n"
@@ -9983,23 +10007,6 @@ msgstr " erreur!"
 #: eeschema/eelibs_read_libraryfiles.cpp:98
 msgid "The following libraries could not be found:"
 msgstr "Les librairies suivantes n'ont pas pu être trouvées:"
-
-#: eeschema/dialog_print_using_printer.cpp:113
-msgid "Error initializing printer information."
-msgstr "Erreur init info imprimante"
-
-#: eeschema/dialog_print_using_printer.cpp:239
-msgid "Printer error!"
-msgstr "Problème d'imprimante!"
-
-#: eeschema/dialog_print_using_printer.cpp:308
-msgid "There was a problem printing."
-msgstr "Il y a un problème d'impression."
-
-#: eeschema/dialog_print_using_printer.cpp:322
-#, c-format
-msgid "Print page %d"
-msgstr "Imprimer page %d"
 
 #: eeschema/class_BodyItem_Text.cpp:85
 #, c-format
@@ -10202,6 +10209,11 @@ msgstr "Filtrage Modules"
 #: eeschema/classes_body_items.cpp:36
 msgid "Undefined"
 msgstr "Non Défini"
+
+#: eeschema/classes_body_items.cpp:68
+#: eeschema/classes_body_items.cpp:74
+msgid "All"
+msgstr "Tout"
 
 #: eeschema/classes_body_items.cpp:76
 msgid "no"
@@ -10435,9 +10447,6 @@ msgstr "Taille du te&xte:"
 
 #: eeschema/dialog_sch_sheet_props_base.cpp:42
 #: eeschema/dialog_sch_sheet_props_base.cpp:63
-#: eeschema/dialog_lib_edit_pin_base.cpp:41
-#: eeschema/dialog_lib_edit_pin_base.cpp:64
-#: eeschema/dialog_lib_edit_pin_base.cpp:87
 msgid "units"
 msgstr "unités"
 
@@ -10897,7 +10906,7 @@ msgstr "Clock Active Bas"
 msgid "Active Low Output"
 msgstr "Sortie Active Bas"
 
-#: cvpcb/cvframe.cpp:284
+#: cvpcb/cvframe.cpp:285
 msgid ""
 "Net and component list modified.\n"
 "Save before exit ?"
@@ -10905,26 +10914,26 @@ msgstr ""
 "Netlist et liste composants modifiés,\n"
 "Sauver avant de quitter ?"
 
-#: cvpcb/cvframe.cpp:308
+#: cvpcb/cvframe.cpp:309
 msgid "Problem when saving files, exit anyway ?"
 msgstr "Problème en sauvant les fichiers, quitter quand même"
 
-#: cvpcb/cvframe.cpp:434
+#: cvpcb/cvframe.cpp:435
 msgid "Delete selections"
 msgstr "Effacement des associations existantes"
 
-#: cvpcb/cvframe.cpp:448
+#: cvpcb/cvframe.cpp:449
 #: cvpcb/init.cpp:65
 #: cvpcb/init.cpp:115
 #, c-format
 msgid "Components: %d (free: %d)"
 msgstr "Composants: %d (libres: %d)"
 
-#: cvpcb/cvframe.cpp:470
+#: cvpcb/cvframe.cpp:471
 msgid "unnamed"
 msgstr "non nommé"
 
-#: cvpcb/cvframe.cpp:472
+#: cvpcb/cvframe.cpp:473
 msgid "Open Net List"
 msgstr "Ouvrir Fichier Netliste"
 
@@ -11028,11 +11037,11 @@ msgstr "Cvpcb est en cours d'exécution. Continuer ?"
 msgid " [no file]"
 msgstr " [pas de fichier]"
 
-#: cvpcb/setvisu.cpp:47
+#: cvpcb/setvisu.cpp:48
 msgid "Footprint: "
 msgstr "Module: "
 
-#: cvpcb/setvisu.cpp:50
+#: cvpcb/setvisu.cpp:51
 msgid "Lib: "
 msgstr "Lib: "
 
@@ -11124,22 +11133,22 @@ msgstr "Modules (Tous): %d"
 msgid "Footprints (filtered): %d"
 msgstr "Modules (filtrés): %d"
 
-#: cvpcb/loadcmp.cpp:46
+#: cvpcb/loadcmp.cpp:47
 #, c-format
 msgid "PCB foot print library file <%s> could not be found in the default search paths."
 msgstr "Le fichier librairie de modules PCB <%s> n'a pas pu être trouvé dans les chemins de recherche par défaut."
 
-#: cvpcb/loadcmp.cpp:57
+#: cvpcb/loadcmp.cpp:58
 #, c-format
 msgid "Could not open PCB foot print library file <%s>."
 msgstr "Ne peut ouvrir le fichier librairie de modules PCB <%s>."
 
-#: cvpcb/loadcmp.cpp:70
+#: cvpcb/loadcmp.cpp:71
 #, c-format
 msgid "<%s> is not a valid Kicad PCB foot print library."
 msgstr "<%s> in'est pas un fichier de module PCB  Kicad valide."
 
-#: cvpcb/loadcmp.cpp:131
+#: cvpcb/loadcmp.cpp:132
 #, c-format
 msgid "Module %s not found"
 msgstr "Module %s non trouvé"
@@ -11216,68 +11225,68 @@ msgstr "Montre la liste filtrée des modules pour le composant courant"
 msgid "Display the full footprint list (without filtering)"
 msgstr "Montre la liste complète des modules"
 
-#: cvpcb/displayframe.cpp:156
-msgid "Display Options"
-msgstr "Options d'Affichage"
-
-#: cvpcb/displayframe.cpp:162
-msgid "Zoom in (F1)"
-msgstr "Zoom + (F1)"
-
-#: cvpcb/displayframe.cpp:166
-msgid "Zoom out (F2)"
-msgstr "Zoom - (F2)"
-
-#: cvpcb/displayframe.cpp:170
-msgid "Redraw view (F3)"
-msgstr "Redessin de l'écran (F3)"
-
-#: cvpcb/displayframe.cpp:174
-msgid "Zoom auto (Home)"
-msgstr "Zoom Automatique (Home)"
-
-#: cvpcb/dialog_display_options.cpp:150
-#: cvpcb/dialog_display_options.cpp:162
+#: cvpcb/dialog_display_options.cpp:151
+#: cvpcb/dialog_display_options.cpp:163
 msgid "&Line"
 msgstr "&Ligne"
 
-#: cvpcb/dialog_display_options.cpp:151
-#: cvpcb/dialog_display_options.cpp:163
+#: cvpcb/dialog_display_options.cpp:152
+#: cvpcb/dialog_display_options.cpp:164
 msgid "&Filled"
 msgstr "&Plein"
 
-#: cvpcb/dialog_display_options.cpp:152
-#: cvpcb/dialog_display_options.cpp:164
+#: cvpcb/dialog_display_options.cpp:153
+#: cvpcb/dialog_display_options.cpp:165
 msgid "&Sketch"
 msgstr "&Contour"
 
-#: cvpcb/dialog_display_options.cpp:154
+#: cvpcb/dialog_display_options.cpp:155
 msgid "Edges:"
 msgstr "Contours:"
 
-#: cvpcb/dialog_display_options.cpp:177
+#: cvpcb/dialog_display_options.cpp:178
 msgid "Fill &pad"
 msgstr "&Pad Plein"
 
-#: cvpcb/dialog_display_options.cpp:183
+#: cvpcb/dialog_display_options.cpp:184
 msgid "Fill &via"
 msgstr "&Via Pleine"
 
-#: cvpcb/dialog_display_options.cpp:189
+#: cvpcb/dialog_display_options.cpp:190
 msgid "Show pad &number"
 msgstr "Afficher le n° de &pad"
 
-#: cvpcb/dialog_display_options.cpp:193
+#: cvpcb/dialog_display_options.cpp:194
 msgid "Display pad number"
 msgstr "Afficher numéro des pastilles"
 
-#: cvpcb/dialog_display_options.cpp:220
+#: cvpcb/dialog_display_options.cpp:221
 msgid "&Apply"
 msgstr "&Appliquer"
 
 #: cvpcb/dialog_cvpcb_config_fbp.cpp:51
 msgid "Footprint alias files"
 msgstr "Fichier Alias Modules"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:157
+msgid "Display Options"
+msgstr "Options d'Affichage"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:163
+msgid "Zoom in (F1)"
+msgstr "Zoom + (F1)"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:167
+msgid "Zoom out (F2)"
+msgstr "Zoom - (F2)"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:171
+msgid "Redraw view (F3)"
+msgstr "Redessin de l'écran (F3)"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:175
+msgid "Zoom auto (Home)"
+msgstr "Zoom Automatique (Home)"
 
 #: kicad/kicad.cpp:78
 #: kicad/prjconfig.cpp:108
@@ -11809,20 +11818,20 @@ msgstr "Ext. Fichiers Gerber"
 msgid "D code File Ext:"
 msgstr "Ext. Fichiers DCodes:"
 
-#: gerbview/set_color.cpp:247
-#: gerbview/set_color.cpp:273
+#: gerbview/set_color.cpp:249
+#: gerbview/set_color.cpp:275
 msgid "Show None"
 msgstr "Rien Afficher"
 
-#: gerbview/set_color.cpp:256
+#: gerbview/set_color.cpp:258
 msgid "Show All"
 msgstr "Tout Afficher"
 
-#: gerbview/set_color.cpp:268
+#: gerbview/set_color.cpp:270
 msgid "Switch on all of the Gerber layers"
 msgstr "Affiche toutes les couches Gerber"
 
-#: gerbview/set_color.cpp:276
+#: gerbview/set_color.cpp:278
 msgid "Switch off all of the Gerber layers"
 msgstr "N'affiche pas les couches Gerber"
 
@@ -11852,7 +11861,7 @@ msgstr "Effacer couche %d"
 msgid "GerbView project files (.cnf)|*.cnf"
 msgstr "Fichiers projet GerbView (.cnf)|*.cnf"
 
-#: gerbview/gerbview.cpp:91
+#: gerbview/gerbview.cpp:92
 msgid "GerbView is already running. Continue?"
 msgstr "Gerbview est en cours d'exécution. Continuer ?"
 
@@ -12178,9 +12187,21 @@ msgstr " Afficher Limites de Page"
 msgid "Show D codes"
 msgstr "Montrer DCodes"
 
-#: gerbview/gerberframe.cpp:212
-msgid "Layer modified,  Continue ?"
-msgstr "Couche modifiée,  Continuer ?"
+#: gerbview/class_gerbview_layer_widget.cpp:64
+msgid "DCodes"
+msgstr "DCodes"
+
+#: gerbview/class_gerbview_layer_widget.cpp:64
+msgid "Show DCodes identification"
+msgstr ""
+
+#: gerbview/class_gerbview_layer_widget.cpp:118
+msgid "Show All Layers"
+msgstr "Monter Toutes les Couches"
+
+#: gerbview/class_gerbview_layer_widget.cpp:121
+msgid "Hide All Layers"
+msgstr "Cacher Toutes les Couches"
 
 #: common/gestfich.cpp:446
 #, c-format
@@ -12364,27 +12385,27 @@ msgstr "Fichiers \"Portable document format\"  (*.pdf)|*.pdf"
 msgid "All files (*)|*"
 msgstr "Tous les fichiers (*)|*"
 
-#: common/common.cpp:228
+#: common/common.cpp:227
 msgid " (\"):"
 msgstr " (\"):"
 
-#: common/common.cpp:250
+#: common/common.cpp:249
 msgid "inches"
 msgstr "Pouces"
 
-#: common/common.cpp:258
+#: common/common.cpp:257
 msgid "centimeters"
 msgstr "centimètres"
 
-#: common/common.cpp:261
+#: common/common.cpp:260
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: common/common.cpp:339
+#: common/common.cpp:338
 msgid " \""
 msgstr " \""
 
-#: common/drawframe.cpp:330
+#: common/drawframe.cpp:332
 msgid "??"
 msgstr "??"
 
@@ -12945,19 +12966,19 @@ msgstr "ERC Warning"
 msgid "Erc Error"
 msgstr "ERC Erreur"
 
-#: eeschema/eelayer.h:255
+#: eeschema/eelayer.h:246
 msgid "Device"
 msgstr "Composant"
 
-#: eeschema/eelayer.h:261
+#: eeschema/eelayer.h:252
 msgid "Sheets"
 msgstr "Feuilles"
 
-#: eeschema/eelayer.h:267
+#: eeschema/eelayer.h:258
 msgid "Erc Mark"
 msgstr "Marqueur ERC"
 
-#: eeschema/eelayer.h:273
+#: eeschema/eelayer.h:264
 msgid "Other"
 msgstr "Autre"
 
@@ -13181,6 +13202,18 @@ msgstr "Options d'Affichage"
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "Print schematic sheet"
+#~ msgstr "Impression des feuilles de schéma"
+#~ msgid "Current"
+#~ msgstr "Courant"
+#~ msgid "Error initializing printer information."
+#~ msgstr "Erreur init info imprimante"
+#~ msgid "Printer error!"
+#~ msgstr "Problème d'imprimante!"
+#~ msgid "There was a problem printing."
+#~ msgstr "Il y a un problème d'impression."
+#~ msgid "Layer modified,  Continue ?"
+#~ msgstr "Couche modifiée,  Continuer ?"
 #~ msgid "Switch on all of the copper layers"
 #~ msgstr "Affiche toutes les couches cuivre"
 #~ msgid "Switch off all of the copper layers"
@@ -13249,8 +13282,6 @@ msgstr "Ajustage opt Page"
 #~ msgstr "Sauver sous..."
 #~ msgid "Show board in the 3D viewer"
 #~ msgstr "Visualisation du circuit en 3D"
-#~ msgid "Show All Copper Layers"
-#~ msgstr "Monter Toutes les Couches Cuivre."
 #~ msgid "Show No Copper Layers"
 #~ msgstr "Monter aucune Couche Cuivre."
 #~ msgid "Click here to select this layer"
@@ -13355,8 +13386,6 @@ msgstr "Ajustage opt Page"
 #~ msgstr "&Style:"
 #~ msgid "On-board, copper"
 #~ msgstr "PCB, cuivre"
-#~ msgid "All Layers On"
-#~ msgstr "Toutes Couches Actives"
 #~ msgid "Single Side"
 #~ msgstr "Simple Face"
 #~ msgid "Single Side, SMD on Back"

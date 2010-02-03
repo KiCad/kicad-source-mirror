@@ -189,7 +189,7 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
 
     SetPenMinWidth( tmp );
 
-    if( DisplayOpt.DisplayPadNum )
+    if( IsElementVisible( DCODES_VISIBLE) )
         Affiche_DCodes_Pistes( DrawPanel, DC, GetBoard(), GR_COPY );
 
     GetScreen()->ClrRefreshReq();

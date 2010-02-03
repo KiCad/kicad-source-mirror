@@ -18,6 +18,7 @@ endif(APPLE)
 
 set(GERBVIEW_SRCS
     block.cpp
+    class_gerbview_layer_widget.cpp
     controle.cpp
     dcode.cpp
     deltrack.cpp
@@ -50,6 +51,7 @@ set(GERBVIEW_SRCS
 
 set(GERBVIEW_EXTRA_SRCS
     ../share/setpage.cpp
+    ../pcbnew/layer_widget.cpp
     ../pcbnew/printout_controler.cpp
 )
 

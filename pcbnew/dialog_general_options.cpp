@@ -44,18 +44,6 @@ void Dialog_GeneralOptions::init()
     wxString timevalue;
     timevalue << g_TimeOut / 60;
     m_SaveTime->SetValue( timevalue );
-
-/*
- *   int layer_count[] = {1,2,4,6,8,10,12,14,16};
- *   m_LayerNumber->SetSelection(1);
- *   for ( unsigned ii = 0; ii < sizeof(layer_count); ii++ )
- *   {
- *       if ( g_DesignSettings.m_CopperLayerCount != layer_count[ii] )
- *           continue;
- *       m_LayerNumber->SetSelection(ii);
- *       break;
- *   }
- */
     m_MaxShowLinks->SetValue( g_MaxLinksShowed );
 
     m_DrcOn->SetValue( Drc_On );
@@ -249,21 +237,11 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1:
         m_show_microwave_tools = state;
-#if !defined(KICAD_AUIMANAGER)
-        // show auxiliary Vertical toolbar (Microwave tool)
-        m_AuxVToolBar->Show(m_show_microwave_tools);
-        {
-        wxSizeEvent SizeEv( GetSize() );
-        OnSize( SizeEv );
-        }
-#else
         m_auimgr.GetPane( wxT( "m_AuxVToolBar" ) ).Show( m_show_microwave_tools );
         m_auimgr.Update();
-#endif
         break;
 
-    case ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR:
-#if defined(KICAD_AUIMANAGER)
+    case ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR:
         // show auxiliary Vertical layers and visibility manager toolbar
         m_show_layer_manager_tools = state;
         m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
@@ -274,7 +252,6 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         else
             GetMenuBar()->SetLabel(ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
                                 _("Show &Layers Manager" ) );
-#endif
         break;
 
     default:

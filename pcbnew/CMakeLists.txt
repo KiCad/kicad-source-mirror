@@ -27,6 +27,7 @@ set(PCBNEW_SRCS
     block.cpp
     block_module_editor.cpp
     build_BOM_from_board.cpp
+    class_pcb_layer_widget.cpp
     clean.cpp
 #   cleaningoptions_dialog.cpp
     connect.cpp

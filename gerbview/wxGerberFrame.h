@@ -7,6 +7,7 @@
 
 
 #include "id.h"
+#include "class_gerbview_layer_widget.h"
 
 
 /**
@@ -37,9 +38,17 @@ class WinEDA_GerberFrame: this is the main window used in gerbview
 
 class WinEDA_GerberFrame : public WinEDA_BasePcbFrame
 {
+    friend class PCB_LAYER_WIDGET;
+
+protected:
+    GERBER_LAYER_WIDGET* m_LayersManager;
+
 public:
     WinEDAChoiceBox* m_SelLayerBox;
     WinEDAChoiceBox* m_SelLayerTool;
+
+private:
+    bool m_show_layer_manager_tools;
 
 public:
     WinEDA_GerberFrame( wxWindow* father, const wxString& title,
@@ -50,6 +59,64 @@ public:
 
     void         Update_config();
     void         OnCloseWindow( wxCloseEvent& Event );
+
+    /** Function IsGridVisible() , virtual
+     * @return true if the grid must be shown
+     */
+    virtual bool     IsGridVisible();
+
+    /** Function SetGridVisibility() , virtual
+     * It may be overloaded by derived classes
+     * if you want to store/retrieve the grid visiblity in configuration.
+     * @param aVisible = true if the grid must be shown
+     */
+    virtual void     SetGridVisibility(bool aVisible);
+
+    /** Function GetGridColor() , virtual
+     * @return the color of the grid
+     */
+    virtual int     GetGridColor();
+
+    /** Function SetGridColor() , virtual
+     * @param aColor = the new color of the grid
+     */
+    virtual void     SetGridColor(int aColor);
+
+    /**
+     * Function IsElementVisible
+     * tests whether a given element category is visible. Keep this as an
+     * inline function.
+     * @param aGERBER_VISIBLE is from the enum by the same name
+     * @return bool - true if the element is visible.
+     * @see enum PCB_VISIBLE
+     */
+    bool IsElementVisible( int aGERBER_VISIBLE )
+    {
+        return GetBoard()->IsElementVisible( aGERBER_VISIBLE );
+    }
+
+    /**
+     * Function SetElementVisibility
+     * changes the visibility of an element category
+     * @param aGERBER_VISIBLE is from the enum by the same name
+     * @param aNewState = The new visibility state of the element category
+     * @see enum PCB_VISIBLE
+     */
+    void SetElementVisibility( int aGERBER_VISIBLE, bool aNewState );
+
+    /**
+     * Function SetVisibleAlls
+     * Set the status of all visible element categories and layers to VISIBLE
+     */
+    void SetVisibleAlls( );
+
+    /**
+     * Function ReFillLayerWidget
+     * changes out all the layers in m_Layers and may be called upon
+     * loading a new BOARD.
+     */
+    void             ReFillLayerWidget();
+
     /**
      * Load applications settings specific to the PCBNew.
      *

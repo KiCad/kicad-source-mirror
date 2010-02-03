@@ -57,9 +57,9 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
                     ID_CONFIG_AND_PREFERENCES_END,
                     WinEDA_GerberFrame::Process_Config )
 
-    EVT_MENU( ID_COLORS_SETUP, WinEDA_GerberFrame::Process_Config )
+    EVT_MENU( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG, WinEDA_GerberFrame::OnSelectOptionToolbar )
     EVT_MENU( ID_OPTIONS_SETUP, WinEDA_GerberFrame::InstallGerberGeneralOptionsFrame )
-    EVT_MENU( ID_PCB_DISPLAY_OPTIONS_SETUP, WinEDA_GerberFrame::InstallGerberDisplayOptionsDialog )
+    EVT_MENU( ID_GERBVIEW_DISPLAY_OPTIONS_SETUP, WinEDA_GerberFrame::InstallGerberDisplayOptionsDialog )
 
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
                     WinEDA_DrawFrame::SetLanguage )
@@ -74,7 +74,7 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
 
 
 // menu Miscellaneous
-    EVT_MENU( ID_PCB_GLOBAL_DELETE,
+    EVT_MENU( ID_GERBVIEW_GLOBAL_DELETE,
               WinEDA_GerberFrame::Process_Special_Functions )
 
 // Menu Help
@@ -88,7 +88,7 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
     EVT_TOOL( wxID_UNDO, WinEDA_GerberFrame::Process_Special_Functions )
     EVT_TOOL( ID_GEN_PRINT, WinEDA_GerberFrame::ToPrinter )
     EVT_TOOL( ID_FIND_ITEMS, WinEDA_GerberFrame::Process_Special_Functions )
-    EVT_KICAD_CHOICEBOX( ID_TOOLBARH_PCB_SELECT_LAYER,
+    EVT_KICAD_CHOICEBOX( ID_TOOLBARH_GERBVIEW_SELECT_LAYER,
                          WinEDA_GerberFrame::Process_Special_Functions )
 
     EVT_KICAD_CHOICEBOX( ID_TOOLBARH_GERBER_SELECT_TOOL,
@@ -96,7 +96,7 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
 
 // Vertical toolbar:
     EVT_TOOL( ID_NO_SELECT_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
-    EVT_TOOL( ID_PCB_DELETE_ITEM_BUTT,
+    EVT_TOOL( ID_GERBVIEW_DELETE_ITEM_BUTT,
           WinEDA_GerberFrame::Process_Special_Functions )
 
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
@@ -109,6 +109,8 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
 // Option toolbar
     EVT_TOOL_RANGE( ID_TB_OPTIONS_START, ID_TB_OPTIONS_END,
                     WinEDA_GerberFrame::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
+                    WinEDA_GerberFrame::OnSelectOptionToolbar )
 
 END_EVENT_TABLE()
 
@@ -120,6 +122,7 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
     WinEDA_BasePcbFrame( father, GERBER_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "GerberFrame" );
+    m_show_layer_manager_tools = true;
 
     m_Draw_Axis = true;         // true to show X and Y axis on screen
     m_Draw_Sheet_Ref = FALSE;   // TRUE for reference drawings.
@@ -136,8 +139,20 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
     SetBaseScreen( ScreenPcb );
     ActiveScreen = ScreenPcb;
 
-    LoadSettings();
+    SetBoard( new BOARD( NULL, this ) );
+    GetBoard()->SetEnabledLayers( FULL_LAYERS );     // All 32 layers enabled at first.
 
+    // Create the PCB_LAYER_WIDGET *after* SetBoard():
+    wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    int pointSize = font.GetPointSize();
+    int screenHeight = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
+    if( screenHeight <= 900 )
+        pointSize = (pointSize * 8) / 10;
+    m_LayersManager = new GERBER_LAYER_WIDGET( this, DrawPanel, pointSize );
+
+    // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
+    // initialize parameters in m_LayersManager
+    LoadSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
@@ -146,7 +161,6 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
-#if defined(KICAD_AUIMANAGER)
     m_auimgr.SetManagedWindow( this );
 
     wxAuiPaneInfo horiz;
@@ -162,13 +176,23 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
     vert.TopDockable( false ).BottomDockable( false );
     horiz.LeftDockable( false ).RightDockable( false );
 
+    // LAYER_WIDGET is floatable, but initially docked at far right
+    wxAuiPaneInfo   lyrs;
+    lyrs.MinSize( m_LayersManager->GetBestSize() );    // updated in ReFillLayerWidget
+    lyrs.BestSize( m_LayersManager->GetBestSize() );
+    lyrs.CloseButton( false );
+    lyrs.Caption( _( "Visibles" ) );
+    lyrs.IsFloatable();
+
     if( m_HToolBar )
         m_auimgr.AddPane( m_HToolBar,
                           wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
 
     if( m_VToolBar )
         m_auimgr.AddPane( m_VToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right().Row( 1 ) );
+
+    m_auimgr.AddPane( m_LayersManager, lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Row( 0 ) );
 
     if( m_OptionsToolBar )
         m_auimgr.AddPane( m_OptionsToolBar,
@@ -183,7 +207,8 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
                           wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
 
     m_auimgr.Update();
-#endif
+
+    ReFillLayerWidget();    // this is near end because contents establish size
 }
 
 
@@ -197,34 +222,6 @@ WinEDA_GerberFrame::~WinEDA_GerberFrame()
 
 void WinEDA_GerberFrame::OnCloseWindow( wxCloseEvent& Event )
 {
-    PCB_SCREEN* screen = ScreenPcb;
-
-#if 0       // unused currently
-    while( screen )
-    {
-        if( screen->IsModify() )
-            break;
-        screen = screen->Next();
-    }
-
-    if( screen )
-    {
-        if( !IsOK( this, _( "Layer modified,  Continue ?" ) ) )
-        {
-            Event.Veto();
-            return;
-        }
-    }
-#endif
-
-    while( screen ) // Modify delete flag to prevent further message.
-    {
-        screen->ClrModify();
-        screen = screen->Next();
-    }
-
-    SetBaseScreen( ActiveScreen = ScreenPcb );
-
     SaveSettings();
     Destroy();
 }
@@ -307,15 +304,23 @@ void WinEDA_GerberFrame::SetToolbars()
                                       g_DisplayPolygonsModeSketch == 0 ? 0 : 1 );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_DCODES,
-                                      DisplayOpt.DisplayPadNum );
-    }
+                                      IsElementVisible( DCODES_VISIBLE) );
+
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
+                                      m_show_layer_manager_tools );
+        if( m_show_layer_manager_tools )
+            GetMenuBar()->SetLabel(ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+                                _("Hide &Layers Manager" ) );
+        else
+            GetMenuBar()->SetLabel(ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+                                _("Show &Layers Manager" ) );
+
+}
 
     DisplayUnitsMsg();
 
-#if defined(KICAD_AUIMANAGER)
     if( m_auimgr.GetManagedWindow() )
         m_auimgr.Update();
-#endif
 }
 
 
@@ -356,6 +361,10 @@ void WinEDA_GerberFrame::LoadSettings()
     {
         m_Draw_Sheet_Ref = true;
     }
+
+    long tmp;
+    config->Read( GerbviewShowDCodes, &tmp, 1);
+    SetElementVisibility( DCODES_VISIBLE, tmp);
 }
 
 /**************************************/
@@ -384,4 +393,71 @@ void WinEDA_GerberFrame::SaveSettings()
         }
     }
     config->Write( GerbviewShowPageSizeOption, pageSize_opt );
+    config->Write( GerbviewShowDCodes, IsElementVisible( DCODES_VISIBLE) );
+}
+
+
+void WinEDA_GerberFrame::ReFillLayerWidget()
+{
+    m_LayersManager->ReFill();
+
+    wxAuiPaneInfo& lyrs = m_auimgr.GetPane( m_LayersManager );
+
+    wxSize bestz = m_LayersManager->GetBestSize();
+
+    lyrs.MinSize( bestz );
+    lyrs.BestSize( bestz );
+    lyrs.FloatingSize( bestz );
+
+    if( lyrs.IsDocked() )
+        m_auimgr.Update();
+    else
+        m_LayersManager->SetSize( bestz );
+}
+
+/** Function IsGridVisible() , virtual
+ * @return true if the grid must be shown
+ */
+bool WinEDA_GerberFrame::IsGridVisible()
+{
+    return IsElementVisible(GERBER_GRID_VISIBLE);
+}
+
+/** Function SetGridVisibility() , virtual
+ * It may be overloaded by derived classes
+ * if you want to store/retrieve the grid visiblity in configuration.
+ * @param aVisible = true if the grid must be shown
+ */
+void WinEDA_GerberFrame::SetGridVisibility(bool aVisible)
+{
+    SetElementVisibility(GERBER_GRID_VISIBLE, aVisible);
+}
+
+/** Function GetGridColor() , virtual
+ * @return the color of the grid
+ */
+int WinEDA_GerberFrame::GetGridColor()
+{
+    return GetBoard()->GetVisibleElementColor( GERBER_GRID_VISIBLE );
+}
+
+/** Function SetGridColor() , virtual
+ * @param aColor = the new color of the grid
+ */
+void WinEDA_GerberFrame::SetGridColor(int aColor)
+{
+    GetBoard()->SetVisibleElementColor( GERBER_GRID_VISIBLE, aColor );
+}
+
+/**
+ * Function SetElementVisibility
+ * changes the visibility of an element category
+ * @param aGERBER_VISIBLE is from the enum by the same name
+ * @param aNewState = The new visibility state of the element category
+ * @see enum aGERBER_VISIBLE
+ */
+void WinEDA_GerberFrame::SetElementVisibility( int aGERBER_VISIBLE, bool aNewState )
+{
+    GetBoard()->SetElementVisibility( aGERBER_VISIBLE, aNewState );
+    m_LayersManager->SetRenderState( aGERBER_VISIBLE, aNewState );
 }

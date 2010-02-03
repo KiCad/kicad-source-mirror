@@ -19,11 +19,11 @@
 class DIALOG_DISPLAY_OPTIONS : public DIALOG_DISPLAY_OPTIONS_BASE
 {
 private:
-    WinEDA_BasePcbFrame* m_Parent;
+    WinEDA_GerberFrame* m_Parent;
 
 public:
 
-    DIALOG_DISPLAY_OPTIONS( WinEDA_BasePcbFrame* parent );
+    DIALOG_DISPLAY_OPTIONS( WinEDA_GerberFrame* parent );
     ~DIALOG_DISPLAY_OPTIONS() {};
 
 private:
@@ -40,7 +40,7 @@ void WinEDA_GerberFrame::InstallGerberDisplayOptionsDialog( wxCommandEvent& even
             DrawPanel->Refresh();
 }
 
-DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( WinEDA_BasePcbFrame *parent) :
+DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( WinEDA_GerberFrame *parent) :
     DIALOG_DISPLAY_OPTIONS_BASE( parent, wxID_ANY )
 {
     m_Parent = parent;
@@ -76,7 +76,7 @@ DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( WinEDA_BasePcbFrame *parent) :
         }
     }
 
-    m_OptDisplayDCodes->SetValue( DisplayOpt.DisplayPadNum );
+    m_OptDisplayDCodes->SetValue( m_Parent->IsElementVisible( DCODES_VISIBLE ) );
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
@@ -113,7 +113,7 @@ void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
     else
         g_DisplayPolygonsModeSketch = 0;
 
-    DisplayOpt.DisplayPadNum = m_OptDisplayDCodes->GetValue();
+    m_Parent->SetElementVisibility( DCODES_VISIBLE, m_OptDisplayDCodes->GetValue() );
 
     m_Parent->m_DisplayPadFill =  m_Parent->m_DisplayViaFill =
         DisplayOpt.DisplayViaFill;
