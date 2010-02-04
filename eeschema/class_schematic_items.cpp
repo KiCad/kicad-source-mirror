@@ -14,7 +14,11 @@
 /* used to calculate the pen size from default value
  * the actual pen size is default value * BUS_WIDTH_EXPAND
  */
- #define BUS_WIDTH_EXPAND 1.4
+#if defined(KICAD_GOST)
+#define BUS_WIDTH_EXPAND 2
+#else
+#define BUS_WIDTH_EXPAND 1.4
+#endif
 
 /***********************/
 /* class SCH_BUS_ENTRY */
