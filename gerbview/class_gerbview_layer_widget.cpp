@@ -202,8 +202,8 @@ bool GERBER_LAYER_WIDGET::OnLayerSelect( int aLayer )
 {
     // the layer change from the GERBER_LAYER_WIDGET can be denied by returning
     // false from this function.
-//    myframe->setActiveLayer( aLayer, false );
-//    myframe->syncLayerBox();
+    myframe->setActiveLayer( aLayer, false );
+    myframe->syncLayerBox();
     if(DisplayOpt.ContrastModeDisplay)
         myframe->DrawPanel->Refresh();
 

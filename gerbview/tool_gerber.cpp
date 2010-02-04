@@ -214,7 +214,7 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
                                          ID_TOOLBARH_GERBVIEW_SELECT_LAYER,
                                          wxDefaultPosition, wxSize( 150, -1 ),
                                          choices );
-    m_SelLayerBox->SetSelection( GetScreen()->m_Active_Layer );
+    m_SelLayerBox->SetSelection( getActiveLayer() );
     m_HToolBar->AddControl( m_SelLayerBox );
 
     m_HToolBar->AddSeparator();

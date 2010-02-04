@@ -47,14 +47,18 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
     case ID_MENU_INC_LAYER_AND_APPEND_FILE:
     case ID_INC_LAYER_AND_APPEND_FILE:
     {
-        int origLayer = GetScreen()->m_Active_Layer;
+        int origLayer = getActiveLayer();
+        if( origLayer < NB_LAYERS )
+        {
+            setActiveLayer(origLayer+1);
 
-        GetScreen()->m_Active_Layer++;
+            if( !LoadOneGerberFile( wxEmptyString, 0 ) )
+                setActiveLayer(origLayer);
 
-        if( !LoadOneGerberFile( wxEmptyString, 0 ) )
-            GetScreen()->m_Active_Layer = origLayer;
-
-        SetToolbars();
+            SetToolbars();
+        }
+        else
+            wxMessageBox(_("Cannot increment layer number: max count reached") );
     }
     break;
 

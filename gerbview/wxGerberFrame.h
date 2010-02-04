@@ -118,6 +118,46 @@ public:
     void             ReFillLayerWidget();
 
     /**
+     * Function setActiveLayer
+     * will change the currently active layer to \a aLayer and also
+     * update the PCB_LAYER_WIDGET.
+     */
+    void setActiveLayer( int aLayer, bool doLayerWidgetUpdate = true )
+    {
+        ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
+
+        if( doLayerWidgetUpdate )
+            syncLayerWidget();
+    }
+
+    /**
+     * Function getActiveLayer
+     * returns the active layer
+     */
+    int getActiveLayer()
+    {
+        return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
+    }
+
+    /**
+     * Function syncLayerWidget
+     * updates the currently "selected" layer within the PCB_LAYER_WIDGET.
+     * The currently active layer is defined by the return value of getActiveLayer().
+     * <p>
+     * This function cannot be inline without including layer_widget.h in
+     * here and we do not want to do that.
+     */
+    void syncLayerWidget( );
+
+    /**
+     * Function syncLayerBox
+     * updates the currently "selected" layer within m_SelLayerBox
+     * The currently active layer, as defined by the return value of
+     * getActiveLayer().  And updates the colored icon in the toolbar.
+     */
+    void syncLayerBox();
+
+    /**
      * Load applications settings specific to the PCBNew.
      *
      * This overrides the base class WinEDA_BasePcbFrame::LoadSettings() to

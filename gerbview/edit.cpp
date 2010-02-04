@@ -157,7 +157,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_TOOLBARH_GERBVIEW_SELECT_LAYER:
-        GetScreen()->m_Active_Layer = m_SelLayerBox->GetChoice();
+        setActiveLayer(m_SelLayerBox->GetChoice());
         DrawPanel->Refresh( TRUE );
         break;
 

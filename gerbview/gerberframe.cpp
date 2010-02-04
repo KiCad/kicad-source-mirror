@@ -415,6 +415,8 @@ void WinEDA_GerberFrame::ReFillLayerWidget()
         m_auimgr.Update();
     else
         m_LayersManager->SetSize( bestz );
+    
+    syncLayerWidget( );
 }
 
 /** Function IsGridVisible() , virtual
@@ -463,3 +465,21 @@ void WinEDA_GerberFrame::SetElementVisibility( int aGERBER_VISIBLE, bool aNewSta
     GetBoard()->SetElementVisibility( aGERBER_VISIBLE, aNewState );
     m_LayersManager->SetRenderState( aGERBER_VISIBLE, aNewState );
 }
+
+
+void WinEDA_GerberFrame::syncLayerWidget( )
+{
+    m_LayersManager->SelectLayer( getActiveLayer() );
+}
+
+/**
+ * Function syncLayerBox
+ * updates the currently "selected" layer within m_SelLayerBox
+ * The currently active layer, as defined by the return value of
+ * getActiveLayer().  And updates the colored icon in the toolbar.
+ */
+void WinEDA_GerberFrame::syncLayerBox()
+{
+    m_SelLayerBox->SetSelection( getActiveLayer() );
+}
+
