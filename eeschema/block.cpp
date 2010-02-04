@@ -514,6 +514,10 @@ void SaveStructListForPaste( PICKED_ITEMS_LIST& aItemsList )
 
     /* save the new list: */
     ITEM_PICKER item;
+    // In list the wrapper is owner of the shematic item, we can use the UR_DELETED
+    // status for the picker because pickers with this status are owner of the picked item
+    // (or TODO ?: create a new status like UR_DUPLICATE)
+    item.m_UndoRedoStatus = UR_DELETED;
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
         /* Make a copy of the original picked item. */

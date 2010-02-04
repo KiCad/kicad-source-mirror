@@ -17,7 +17,6 @@
 #include "protos.h"
 #include "classes_body_items.h"
 
-
 static int fill_tab[3] = { 'N', 'F', 'f' };
 
 //#define DRAW_ARC_WITH_ANGLE       // Used to draw arcs
@@ -231,12 +230,11 @@ bool LIB_ARC::HitTest( const wxPoint& aRefPoint )
     int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
 
     // Have a minimal tolerance for hit test
-    if( mindist < 3 )
-        mindist = 3;        // = 3 mils
+    if( mindist < MINIMUM_SELECTION_DISTANCE )
+        mindist = MINIMUM_SELECTION_DISTANCE;
 
     return HitTest( aRefPoint, mindist, DefaultTransformMatrix );
 }
-
 
 /** Function HitTest
  * @return true if the point aPosRef is near this object
@@ -245,38 +243,45 @@ bool LIB_ARC::HitTest( const wxPoint& aRefPoint )
  *                     of a line)
  * @param aTransMat = the transform matrix
  */
-bool LIB_ARC::HitTest( wxPoint aRefPoint, int aThreshold,
-                       const int aTransMat[2][2] )
+bool LIB_ARC::HitTest( wxPoint aReferencePoint, int aThreshold,
+                       const int aTransformationMatrix[2][2] )
 {
+
     // TODO: use aTransMat to calculmates parameters
-    wxPoint relpos = aRefPoint;
+    wxPoint relativePosition = aReferencePoint;
 
-    NEGATE( relpos.y );       // reverse Y axis
+    NEGATE( relativePosition.y );       // reverse Y axis
 
-    relpos -= m_Pos;
-    int dist = wxRound( sqrt( ( (double) relpos.x * (double) relpos.x ) +
-                              ( (double) relpos.y * (double) relpos.y ) ) );
+    int distance = wxRound( EuclideanNorm(TwoPointVector(m_Pos, relativePosition) ) );
 
-    if( abs( dist - m_Radius ) > aThreshold )
+    if( abs( distance - m_Radius ) > aThreshold )
         return false;
 
     // We are on the circle, ensure we are only on the arc, i.e. between
     //  m_ArcStart and m_ArcEnd
-    int astart = m_t1;    // arc starting point ( in 0.1 degree)
-    int aend   = m_t2;    // arc ending point ( in 0.1 degree)
-    int atest  = wxRound( atan2( (double) relpos.y,
-                                 (double) relpos.x ) * 1800.0 / M_PI );
-    NORMALIZE_ANGLE_180( atest );
-    NORMALIZE_ANGLE_180( astart );
-    NORMALIZE_ANGLE_180( aend );
 
-    if( astart > aend )
-        EXCHG( astart, aend );
+    wxPoint startEndVector = TwoPointVector( m_ArcStart, m_ArcEnd);
+    wxPoint startRelativePositionVector = TwoPointVector( m_ArcStart, relativePosition);
 
-    if( atest >= astart && atest <= aend )
-        return true;
+    wxPoint centerStartVector = TwoPointVector( m_Pos, m_ArcStart);
+    wxPoint centerEndVector = TwoPointVector( m_Pos, m_ArcEnd);
+    wxPoint centerRelativePositionVector = TwoPointVector( m_Pos, relativePosition);
 
-    return false;
+    // Compute the cross product to check if the point is in the sector
+    int crossProductStart = CrossProduct(centerStartVector, centerRelativePositionVector);
+    int crossProductEnd = CrossProduct(centerEndVector, centerRelativePositionVector);
+
+    // The cross products need to be exchanged, depending on which side the center point
+    // relative to the start point to end point vector lies
+    if (CrossProduct(startEndVector, startRelativePositionVector) < 0 ){
+    	EXCHG(crossProductStart, crossProductEnd);
+    }
+
+    // When the cross products have a different sign, the point lies in sector
+    // also check, if the reference is near start or end point
+    return 	HitTestPoints(m_ArcStart, relativePosition, MINIMUM_SELECTION_DISTANCE) ||
+    		HitTestPoints(m_ArcEnd, relativePosition, MINIMUM_SELECTION_DISTANCE) ||
+    		(crossProductStart <= 0 && crossProductEnd >= 0);
 }
 
 
@@ -603,8 +608,8 @@ bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef )
     int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
 
     // Have a minimal tolerance for hit test
-    if( mindist < 3 )
-        mindist = 3;        // = 3 mils
+    if( mindist < MINIMUM_SELECTION_DISTANCE )
+        mindist = MINIMUM_SELECTION_DISTANCE;
 
     return HitTest( aPosRef, mindist, DefaultTransformMatrix );
 }
@@ -811,6 +816,9 @@ LIB_RECTANGLE::LIB_RECTANGLE( LIB_COMPONENT* aParent ) :
     m_Fill       = NO_FILL;
     m_isFillable = true;
     m_typeName   = _( "Rectangle" );
+    m_isHeightLocked = false;
+    m_isWidthLocked = false;
+    m_isStartPointSelected = false;
 }
 
 
@@ -1037,8 +1045,8 @@ bool LIB_RECTANGLE::HitTest( const wxPoint& aRefPoint )
     int mindist = (m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2) + 1;
 
     // Have a minimal tolerance for hit test
-    if( mindist < 3 )
-        mindist = 3;        // = 3 mils
+    if( mindist < MINIMUM_SELECTION_DISTANCE )
+        mindist = MINIMUM_SELECTION_DISTANCE;
 
     return HitTest( aRefPoint, mindist, DefaultTransformMatrix );
 }
@@ -1079,8 +1087,9 @@ bool LIB_RECTANGLE::HitTest( wxPoint aRefPoint, int aThreshold,
         return true;
 
     // locate left segment
-    start.x = actualStart.x;
-    end.x   = actualStart.y;
+    start = actualStart;
+    end.x = actualStart.x;
+    end.y = actualEnd.y;
     if( TestSegmentHit( aRefPoint, start, end, aThreshold ) )
         return true;
 
@@ -1282,8 +1291,8 @@ bool LIB_SEGMENT::HitTest( const wxPoint& aPosRef )
     int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
 
     // Have a minimal tolerance for hit test
-    if( mindist < 3 )
-        mindist = 3;        // = 3 mils
+    if( mindist < MINIMUM_SELECTION_DISTANCE )
+        mindist = MINIMUM_SELECTION_DISTANCE;
 
     return HitTest( aPosRef, mindist, DefaultTransformMatrix );
 }
@@ -1613,8 +1622,8 @@ bool LIB_POLYLINE::HitTest( const wxPoint& aRefPos )
     int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
 
     // Have a minimal tolerance for hit test
-    if( mindist < 3 )
-        mindist = 3;        // = 3 mils
+    if( mindist < MINIMUM_SELECTION_DISTANCE )
+        mindist = MINIMUM_SELECTION_DISTANCE;
     return HitTest( aRefPos, mindist, DefaultTransformMatrix );
 }
 
@@ -1980,8 +1989,8 @@ bool LIB_BEZIER::HitTest( const wxPoint& aRefPos )
 {
     int mindist = m_Width ? m_Width /2 : g_DrawDefaultLineThickness / 2;
     // Have a minimal tolerance for hit test
-    if ( mindist < 3 )
-        mindist = 3;        // = 3 mils
+    if ( mindist < MINIMUM_SELECTION_DISTANCE )
+        mindist = MINIMUM_SELECTION_DISTANCE;
     return HitTest( aRefPos, mindist, DefaultTransformMatrix );
 }
 

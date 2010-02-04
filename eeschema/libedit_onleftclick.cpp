@@ -30,7 +30,9 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     {
         if( DrawEntry && DrawEntry->m_Flags )
         {
-            SaveCopyInUndoList( m_component );
+        	// Don't put copy in undo list while resizing (because it's already done)
+        	if (!(DrawEntry->m_Flags & IS_RESIZED))
+        		SaveCopyInUndoList( m_component );
 
             switch( DrawEntry->Type() )
             {

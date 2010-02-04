@@ -172,6 +172,7 @@ private:
     LIB_DRAW_ITEM* CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC );
     void           GraphicItemBeginDraw( wxDC* DC );
     void           StartMoveDrawSymbol( wxDC* DC );
+    void		   StartModifyDrawSymbol( wxDC* DC ); //<! Modify the item, adjust size etc.
     void           EndDrawGraphicItem( wxDC* DC );
     void           LoadOneSymbol();
     void           SaveOneSymbol();

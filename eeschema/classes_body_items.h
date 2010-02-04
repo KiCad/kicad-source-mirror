@@ -32,7 +32,7 @@ class LIB_PIN;
 #define CLOCK_PIN_DIM       40  /* Dim of clock pin symbol. */
 #define IEEE_SYMBOL_PIN_DIM 40  /* Dim of special pin symbol. */
 
-
+#define MINIMUM_SELECTION_DISTANCE 15 // Minimum selection distance in mils
 
 /**
  * The component library pin object electrical types used in ERC tests.
@@ -978,6 +978,9 @@ public:
     wxPoint m_End;     /* Rectangle end point. */
     wxPoint m_Pos;     /* Rectangle start point. */
     int     m_Width;   /* Line width */
+    bool	m_isWidthLocked; /* Flag: Keep width locked */
+    bool	m_isHeightLocked; /* Flag: Keep height locked */
+    bool	m_isStartPointSelected; /* Flag: is the upper left edge selected ? */
 
 public:
     LIB_RECTANGLE(LIB_COMPONENT * aParent);
@@ -1146,6 +1149,7 @@ class LIB_POLYLINE : public LIB_DRAW_ITEM
 public:
     int m_Width;                            /* Line width */
     std::vector<wxPoint> m_PolyPoints;      // list of points (>= 2)
+    int m_ModifyIndex;						// Index of the polyline point to modify
 
 public:
     LIB_POLYLINE(LIB_COMPONENT * aParent);

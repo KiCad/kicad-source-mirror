@@ -84,9 +84,17 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_arc_xpm );
+			msg = AddHotkeyName( _( "Drag Arc Size" ), s_Libedit_Hokeys_Descr,
+						HK_DRAG );
+			ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM,
+                                  msg, move_arc_xpm );
         }
+
+        msg = AddHotkeyName( _( "Edit Arc Options" ), s_Libedit_Hokeys_Descr,
+        						HK_EDIT );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM,
-                      _( "Arc Options" ), options_arc_xpm );
+                      msg, options_arc_xpm );
+
         if( DrawEntry->m_Flags == 0 )
         {
             msg = AddHotkeyName( _( "Delete Arc " ), s_Libedit_Hokeys_Descr,
@@ -104,8 +112,20 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_circle_xpm );
         }
+
+        if( DrawEntry->m_Flags == 0 )
+		{
+			msg = AddHotkeyName( _( "Drag Circle Outline" ), s_Libedit_Hokeys_Descr,
+						HK_DRAG );
+			ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM,
+                                  msg, move_rectangle_xpm );
+		}
+
+        msg = AddHotkeyName( _( "Edit Circle Options" ), s_Libedit_Hokeys_Descr,
+                						HK_EDIT );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM,
-                      _( "Circle Options" ), options_circle_xpm );
+                      msg, options_circle_xpm );
+
         if( DrawEntry->m_Flags == 0 )
         {
             msg = AddHotkeyName( _( "Delete Circle " ),
@@ -118,20 +138,33 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
     case COMPONENT_RECT_DRAW_TYPE:
         if( DrawEntry->m_Flags == 0 )
         {
-            msg = AddHotkeyName( _( "Move Rect " ), s_Libedit_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Move Rectangle " ), s_Libedit_Hokeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_rectangle_xpm );
         }
+
+        msg = AddHotkeyName( _( "Edit Rectangle Options" ), s_Libedit_Hokeys_Descr,
+                						HK_EDIT );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM,
-                      _( "Rect Options" ), options_rectangle_xpm );
+                      msg, options_rectangle_xpm );
+
+        if( DrawEntry->m_Flags == 0 )
+		{
+			msg = AddHotkeyName( _( "Drag Rectangle Edge" ), s_Libedit_Hokeys_Descr,
+						HK_DRAG );
+			ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM,
+                                  msg, move_rectangle_xpm );
+		}
+
         if( DrawEntry->m_Flags == 0 )
         {
-            msg = AddHotkeyName( _( "Delete Rect " ), s_Libedit_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Delete Rectangle " ), s_Libedit_Hokeys_Descr,
                                  HK_DELETE_PIN );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM,
                           msg, delete_rectangle_xpm );
         }
+
         break;
 
     case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
@@ -142,10 +175,17 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_text_xpm );
         }
+
+        msg = AddHotkeyName( _( "Edit Text " ), s_Libedit_Hokeys_Descr,
+								HK_EDIT );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM,
-                      _( "Text Editor" ), edit_text_xpm );
+                      msg, edit_text_xpm );
+
+        msg = AddHotkeyName( _( "Rotate Text " ), s_Libedit_Hokeys_Descr,
+								HK_ROTATE );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT,
-                      _( "Rotate Text" ), edit_text_xpm );
+                      msg, edit_text_xpm );
+
         if( DrawEntry->m_Flags == 0 )
         {
             msg = AddHotkeyName( _( "Delete Text " ), s_Libedit_Hokeys_Descr,
@@ -162,14 +202,23 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_line_xpm );
+			msg = AddHotkeyName( _( "Drag Edge Point" ), s_Libedit_Hokeys_Descr,
+						HK_DRAG );
+			ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM,
+                                  msg, move_line_xpm );
         }
+
         if( DrawEntry->m_Flags & IS_NEW )
         {
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_END_CREATE_ITEM,
                           _( "Line End" ), apply_xpm );
         }
+
+        msg = AddHotkeyName( _( "Edit Line Options" ), s_Libedit_Hokeys_Descr,
+                						HK_EDIT );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM,
-                      _( "Line Options" ), options_segment_xpm );
+                      msg, options_segment_xpm );
+
         if( DrawEntry->m_Flags == 0 )
         {
             msg = AddHotkeyName( _( "Delete Line " ), s_Libedit_Hokeys_Descr,
@@ -188,6 +237,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
                               msg, delete_segment_xpm );
             }
         }
+
         break;
 
     case COMPONENT_FIELD_DRAW_TYPE:
@@ -236,10 +286,10 @@ void AddMenusForPin( wxMenu*              PopMenu,
                       msg, move_xpm );
     }
 
-    msg = AddHotkeyName( _( "Edit Pin " ), s_Libedit_Hokeys_Descr, HK_EDIT_PIN );
+    msg = AddHotkeyName( _( "Edit Pin " ), s_Libedit_Hokeys_Descr, HK_EDIT);
     ADD_MENUITEM( PopMenu, ID_LIBEDIT_EDIT_PIN, msg, edit_xpm );
 
-    msg = AddHotkeyName( _( "Rotate Pin " ), s_Libedit_Hokeys_Descr, HK_LIBEDIT_ROTATE_PIN );
+    msg = AddHotkeyName( _( "Rotate Pin " ), s_Libedit_Hokeys_Descr, HK_ROTATE );
         ADD_MENUITEM( PopMenu, ID_LIBEDIT_ROTATE_PIN, msg, rotate_pin_xpm );
 
     if( not_in_move )
