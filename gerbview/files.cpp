@@ -23,8 +23,9 @@ void WinEDA_GerberFrame::OnFileHistory( wxCommandEvent& event )
 
     fn = GetFileFromHistory( event.GetId(), _( "Printed circuit board" ) );
 
-    if( fn != wxEmptyString && Clear_Pcb( true ) )
+    if( fn != wxEmptyString )
     {
+        Erase_Current_Layer( false );
         LoadOneGerberFile( fn, false );
     }
 }
@@ -37,11 +38,9 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_LOAD_FILE:
-        if( Clear_Pcb( true ) )
-        {
-            LoadOneGerberFile( wxEmptyString, 0 );
-        }
+    case wxID_FILE:
+        Erase_Current_Layer( false );
+        LoadOneGerberFile( wxEmptyString, 0 );
         break;
 
     case ID_MENU_INC_LAYER_AND_APPEND_FILE:
@@ -173,8 +172,9 @@ bool WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
 
 
 /*
- * Read a PCB file.
- *
+ * Read a DCode file (not used with RX274X files , just with RS274D old files).
+ * Note: there is no standard for DCode file.
+ * Just read a file format created by early versions of Pcbnew.
  * Returns:
  *   0 if file not read (cancellation of order ...)
  *   1 if OK

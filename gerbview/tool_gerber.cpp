@@ -26,8 +26,8 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
     menuBar = new wxMenuBar();
 
     wxMenu* filesMenu = new wxMenu;
-    filesMenu->Append( ID_LOAD_FILE, _( "Clear All and Load Gerber File" ),
-                       _( "Clear all layers and Load a new Gerber file on first layer" ),
+    filesMenu->Append( wxID_FILE, _( "Load Gerber File" ),
+                       _( "Load a new Gerber file on the current layer" ),
                        FALSE );
 
     filesMenu->Append( ID_APPEND_FILE, _( "Append Gerber File to Current Layer" ),
@@ -156,7 +156,7 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
                           wxBitmap( new_xpm ),
                          _( "New world" ) );
 
-    m_HToolBar->AddTool( ID_LOAD_FILE, wxEmptyString,
+    m_HToolBar->AddTool( wxID_FILE, wxEmptyString,
                          wxBitmap( open_xpm ),
                          _( "Open existing Layer" ) );
 

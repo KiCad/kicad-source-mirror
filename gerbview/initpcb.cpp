@@ -45,6 +45,7 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
 
     SetBaseScreen( ActiveScreen = ScreenPcb );
     GetScreen()->Init();
+    setActiveLayer(LAYER_N_BACK);
 
     return TRUE;
 }
@@ -52,7 +53,7 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
 
 void WinEDA_GerberFrame::Erase_Current_Layer( bool query )
 {
-    int      layer = GetScreen()->m_Active_Layer;
+    int      layer = getActiveLayer();
     wxString msg;
 
     msg.Printf( _( "Delete layer %d?" ), layer + 1 );
