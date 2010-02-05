@@ -137,16 +137,36 @@ public:
 
     /**
      * Function IgnoreModulesOnCu
-     * @return bool - true if should ignore MODULEs on copper layer.
+     * @return bool - true if should ignore MODULEs on Back Side.
      */
     virtual     bool IgnoreModulesOnCu() const = 0;
 
     /**
      * Function IgnoreModulesOnCmp
-     * @return bool - ture if should ignore MODULEs on component layer.
+     * @return bool - ture if should ignore MODULEs on Front Side.
      */
     virtual     bool IgnoreModulesOnCmp() const = 0;
 
+    /**
+     * Function IgnorePadsOnBack
+     * @return bool - true if should ignore Pads on Back Side.
+     */
+    virtual     bool IgnorePadsOnBack() const = 0;
+
+    /**
+     * Function IgnorePadsOnFront
+     * @return bool - ture if should ignore PADSs on Front Side.
+     */
+    virtual     bool IgnorePadsOnFront() const = 0;
+
+    /**
+     * Function IgnorePads
+     * @return bool - true if should ignore PADSs on Front side and Back side.
+     */
+    virtual     bool IgnorePads() const
+    {
+        return IgnorePadsOnFront() && IgnorePadsOnBack();
+    }
 
     /**
      * Function UseHitTesting
@@ -349,6 +369,8 @@ private:
     bool    m_IgnoreMTextsOnCmp;
     bool    m_IgnoreModulesOnCu;
     bool    m_IgnoreModulesOnCmp;
+    bool    m_IgnorePadsOnFront;
+    bool    m_IgnorePadsOnBack;
 
 public:
 
@@ -381,6 +403,9 @@ public:
         m_IgnoreMTextsOnCmp         = false;
         m_IgnoreModulesOnCu         = true; // !Show_Modules_Cmp;
         m_IgnoreModulesOnCmp        = false;
+        
+        m_IgnorePadsOnFront         = false;
+        m_IgnorePadsOnBack          = false;
     }
 
 
@@ -494,10 +519,24 @@ public:
 
     /**
      * Function IgnoreModulesOnCmp
-     * @return bool - ture if should ignore MODULEs on component layer.
+     * @return bool - true if should ignore MODULEs on component layer.
      */
     bool IgnoreModulesOnCmp() const { return m_IgnoreModulesOnCmp; }
     void SetIgnoreModulesOnCmp( bool ignore ) { m_IgnoreModulesOnCmp = ignore; }
+
+    /**
+     * Function IgnorePadsOnBack
+     * @return bool - true if should ignore Pads on Back Side.
+     */
+    bool IgnorePadsOnBack() const { return m_IgnorePadsOnBack; }
+    void SetIgnorePadsOnBack(bool ignore) { m_IgnorePadsOnBack = ignore; }
+
+    /**
+     * Function IgnorePadsOnFront
+     * @return bool - true if should ignore PADSs on Front Side.
+     */
+    bool IgnorePadsOnFront() const { return m_IgnorePadsOnFront; }
+    void SetIgnorePadsOnFront(bool ignore) { m_IgnorePadsOnFront = ignore; }
 };
 
 
