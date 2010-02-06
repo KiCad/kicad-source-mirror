@@ -571,6 +571,8 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
     wxRect   PaintClipBox;
     wxPoint  org;
 
+    SetBoundaryBox();
+
     tmp = m_ClipBox;
 
     org = m_ClipBox.GetOrigin();
