@@ -459,7 +459,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     }
 
     // track Width control :
-    if( !flags )    // track Width control :
+    if( !flags )
     {
         if( Track->Type() == TYPE_VIA )
         {
@@ -479,6 +479,14 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         PopMenu->AppendSeparator();
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE,
                       _( "Global Tracks and Vias Edition" ), width_track_via_xpm );
+        PopMenu->AppendSeparator();
+    }
+
+    else    // Allows switching to an other track/via size when routing
+    {
+        ADD_MENUITEM_WITH_SUBMENU( PopMenu, Append_Track_Width_List( GetBoard() ),
+                                   ID_POPUP_PCB_SELECT_WIDTH,
+                                   _( "Select Track Width" ), width_track_xpm );
         PopMenu->AppendSeparator();
     }
 
