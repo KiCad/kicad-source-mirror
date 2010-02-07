@@ -30,6 +30,7 @@ Igor Plyatov <plyatov@gmail.com>
 == Translators
 Czech (CZ) Martin Krato≈°ka <martin@ok1rr.com>
 Dutch (NL) Jerry Jacobs <xor.gate.engineering@gmail.com>
+Finnish (FI) Vesa Solonen <vesa.solonen@hut.fi>
 French (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
 Polish (PL) Mateusz Skowroøski <skowri@gmail.com>
 Portuguese (PT) Renie Marquet <reniemarquet@uol.com.br>"
