@@ -3,10 +3,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-07 12:53+0200\n"
-"PO-Revision-Date: 2010-02-07 12:53+0200\n"
+"POT-Creation-Date: 2010-02-07 19:54+0200\n"
+"PO-Revision-Date: 2010-02-07 19:54+0200\n"
 "Last-Translator: Vesa Solonen <vesa.solonen@hut.fi>\n"
-"Language-Team: Amerikanenglanti <kicad-devel@yahoogroups.com>\n"
+"Language-Team: Amerikanenglanti <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -544,7 +544,7 @@ msgstr " (mm):"
 
 #: pcbnew/muonde.cpp:690
 msgid " (inch):"
-msgstr "(tuumaa):"
+msgstr " (tuumaa):"
 
 #: pcbnew/muonde.cpp:692
 #: pcbnew/muonde.cpp:707
@@ -1139,11 +1139,11 @@ msgstr "Asetukset kirjastoille, poluille ja muulle..."
 
 #: pcbnew/menubar_pcbframe.cpp:398
 msgid "Hide &Layers Manager"
-msgstr "Piilota &kerrosten käsittelijä"
+msgstr "Piilota &kerrostyökalu"
 
 #: pcbnew/menubar_pcbframe.cpp:399
 msgid "Show/hide the layers manager toolbar"
-msgstr "Näytä tai piilota työkalupalkki \"kerrosten käsittelijä\""
+msgstr "Näytä tai piilota kerrostyökalu"
 
 #: pcbnew/menubar_pcbframe.cpp:404
 msgid "&General"
@@ -1338,7 +1338,7 @@ msgid ""
 " Drill map: Too many diameter values to draw to draw one symbol per drill value (max 13)\n"
 "Plot uses circle shape for some drill values"
 msgstr ""
-"Porauskaavio: Liian monta halkaisijaa, jotta jokaiselle riittäisi oma symboli (Enimmillään 13)\n"
+" Porauskaavio: Liian monta halkaisijaa, jotta jokaiselle riittäisi oma symboli (Enimmillään 13)\n"
 "Piirto käyttää ympyrää osalle arvoista."
 
 #: pcbnew/edgemod.cpp:180
@@ -2296,7 +2296,7 @@ msgstr "Luettelo liittämättömistä anturoista. Oikea painallus tuo ponnahdusv
 #: pcbnew/dialog_drc_base.cpp:171
 #: pcbnew/class_board.cpp:916
 msgid "Unconnected"
-msgstr "Liittämättömät"
+msgstr "Liittämättömiä"
 
 #: pcbnew/tool_modedit.cpp:41
 msgid "Select working library"
@@ -2458,7 +2458,7 @@ msgstr "Asento"
 
 #: pcbnew/class_module.cpp:879
 msgid "Module"
-msgstr "osa"
+msgstr "Osa"
 
 #: pcbnew/class_module.cpp:884
 msgid "No 3D shape"
@@ -2550,7 +2550,7 @@ msgstr "VIALLINEN INDEKSI"
 
 #: pcbnew/class_board.cpp:896
 msgid "Vias"
-msgstr "Läpiviennit"
+msgstr "Läpivientejä"
 
 #: pcbnew/class_board.cpp:899
 msgid "Nodes"
@@ -2566,7 +2566,7 @@ msgstr "Linkkejä"
 
 #: pcbnew/class_board.cpp:913
 msgid "Connect"
-msgstr "Liitä"
+msgstr "Liitoksia"
 
 #: pcbnew/dialog_edit_module_text.cpp:99
 msgid "Value:"
@@ -2696,7 +2696,7 @@ msgstr "Komponentti %s poistettu kirjastosta %s"
 
 #: pcbnew/librairi.cpp:409
 msgid " No modules to archive!"
-msgstr "Ei arkistoitavia moduleita!"
+msgstr " Ei arkistoitavia moduleita!"
 
 #: pcbnew/librairi.cpp:416
 msgid "Library"
@@ -2735,8 +2735,8 @@ msgid ""
 "Module exists\n"
 " Line: "
 msgstr ""
-"osa löytyy\n"
-"Rivi:"
+"Osa löytyy\n"
+" Rivi: "
 
 #: pcbnew/librairi.cpp:704
 msgid "Component "
@@ -2744,11 +2744,11 @@ msgstr "Komponentti"
 
 #: pcbnew/librairi.cpp:705
 msgid " added in "
-msgstr "lisätty"
+msgstr " lisätty "
 
 #: pcbnew/librairi.cpp:705
 msgid " replaced in "
-msgstr "vaihdettu"
+msgstr " vaihdettu "
 
 #: pcbnew/librairi.cpp:729
 msgid "Module Reference:"
@@ -2768,7 +2768,7 @@ msgstr "Käytössä oleva kirjasto:"
 
 #: pcbnew/librairi.cpp:789
 msgid "Module Editor (lib: "
-msgstr "osaeditori (kirj:"
+msgstr "Osaeditori (kirjasto: "
 
 #: pcbnew/librairi.cpp:802
 msgid "Library exists "
@@ -3001,7 +3001,7 @@ msgstr "Poista liittämättömät liuskat"
 
 #: pcbnew/cleaningoptions_dialog.cpp:165
 msgid "delete track segment having a dangling end"
-msgstr "Poista liuskasegmentti kytkemättömällä päällä"
+msgstr "Poista liuskasegmentti jolla on kytkemätön pää"
 
 #: pcbnew/cleaningoptions_dialog.cpp:168
 msgid "Connect to Pads"
@@ -3045,7 +3045,7 @@ msgstr "Muuta anturat samoissa osissa"
 
 #: pcbnew/dialog_general_options.cpp:254
 msgid "Show &Layers Manager"
-msgstr "Näytä &kerrosten käsittelijä"
+msgstr "Näytä &kerrostyökalu"
 
 #: pcbnew/class_netinfo_item.cpp:133
 msgid "Net Name"
@@ -4228,7 +4228,7 @@ msgstr "Näytä paikallinen kytkentärisukko"
 
 #: pcbnew/tool_pcb.cpp:431
 msgid "Add modules"
-msgstr "Lisää moduleja"
+msgstr "Lisää osia"
 
 #: pcbnew/tool_pcb.cpp:435
 msgid "Add tracks and vias"
@@ -4352,7 +4352,7 @@ msgstr "Vaihda samat osat"
 
 #: pcbnew/dialog_exchange_modules_base.cpp:51
 msgid "Ch. same module+value"
-msgstr ""
+msgstr "Samat osat ja arvot"
 
 #: pcbnew/dialog_exchange_modules_base.cpp:51
 msgid "Change all"
@@ -4696,6 +4696,7 @@ msgstr "Valitse työkerros"
 #: pcbnew/onrightclick.cpp:293
 #: pcbnew/onrightclick.cpp:357
 #: pcbnew/onrightclick.cpp:478
+#: pcbnew/onrightclick.cpp:489
 msgid "Select Track Width"
 msgstr "Valitse liuskan leveys"
 
@@ -4819,215 +4820,215 @@ msgstr "Muuta liuskan leveys"
 msgid "Global Tracks and Vias Edition"
 msgstr "Globaalit liuskojen ja läpivientien asetukset"
 
-#: pcbnew/onrightclick.cpp:488
-#: pcbnew/onrightclick.cpp:678
-#: pcbnew/onrightclick.cpp:740
-#: pcbnew/onrightclick.cpp:782
+#: pcbnew/onrightclick.cpp:496
+#: pcbnew/onrightclick.cpp:686
+#: pcbnew/onrightclick.cpp:748
+#: pcbnew/onrightclick.cpp:790
 #: pcbnew/dialog_netlist_fbp.cpp:46
 #: pcbnew/dialog_netlist_fbp.cpp:54
 msgid "Delete"
 msgstr "Poista"
 
-#: pcbnew/onrightclick.cpp:491
+#: pcbnew/onrightclick.cpp:499
 msgid "Delete Via"
 msgstr "Poista läpivienti"
 
-#: pcbnew/onrightclick.cpp:491
+#: pcbnew/onrightclick.cpp:499
 msgid "Delete Segment"
 msgstr "Poista segmentti"
 
-#: pcbnew/onrightclick.cpp:498
+#: pcbnew/onrightclick.cpp:506
 msgid "Delete Track"
 msgstr "Poista liuska"
 
-#: pcbnew/onrightclick.cpp:502
+#: pcbnew/onrightclick.cpp:510
 msgid "Delete Net"
 msgstr "Poista kytkentäverkko"
 
-#: pcbnew/onrightclick.cpp:507
+#: pcbnew/onrightclick.cpp:515
 msgid "Set Flags"
 msgstr "Aseta liput"
 
-#: pcbnew/onrightclick.cpp:508
+#: pcbnew/onrightclick.cpp:516
 msgid "Locked: Yes"
 msgstr "Lukittu: Kyllä"
 
-#: pcbnew/onrightclick.cpp:509
+#: pcbnew/onrightclick.cpp:517
 msgid "Locked: No"
 msgstr "Lukittu: Ei"
 
-#: pcbnew/onrightclick.cpp:519
+#: pcbnew/onrightclick.cpp:527
 msgid "Track Locked: Yes"
 msgstr "Liuska lukittu: Kyllä"
 
-#: pcbnew/onrightclick.cpp:520
+#: pcbnew/onrightclick.cpp:528
 msgid "Track Locked: No"
 msgstr "Liuska lukittu: Ei"
 
-#: pcbnew/onrightclick.cpp:522
+#: pcbnew/onrightclick.cpp:530
 msgid "Net Locked: Yes"
 msgstr "kytkentäverkko lukittu: Kyllä"
 
-#: pcbnew/onrightclick.cpp:523
+#: pcbnew/onrightclick.cpp:531
 msgid "Net Locked: No"
 msgstr "kytkentäverkko lukittu: Ei"
 
-#: pcbnew/onrightclick.cpp:538
+#: pcbnew/onrightclick.cpp:546
 msgid "Place Edge Outline"
 msgstr "Aseta reunaviiva"
 
-#: pcbnew/onrightclick.cpp:544
+#: pcbnew/onrightclick.cpp:552
 msgid "Place Corner"
 msgstr "Aseta kulma"
 
-#: pcbnew/onrightclick.cpp:547
+#: pcbnew/onrightclick.cpp:555
 msgid "Place Zone"
 msgstr "Lisää täyttö"
 
-#: pcbnew/onrightclick.cpp:554
+#: pcbnew/onrightclick.cpp:562
 msgid "Zones"
 msgstr "Täytöt"
 
-#: pcbnew/onrightclick.cpp:559
+#: pcbnew/onrightclick.cpp:567
 msgid "Move Corner"
 msgstr "Siirrä kulmaa"
 
-#: pcbnew/onrightclick.cpp:561
+#: pcbnew/onrightclick.cpp:569
 msgid "Delete Corner"
 msgstr "Poista kulma"
 
-#: pcbnew/onrightclick.cpp:566
+#: pcbnew/onrightclick.cpp:574
 msgid "Create Corner"
 msgstr "Luo kulma"
 
-#: pcbnew/onrightclick.cpp:568
+#: pcbnew/onrightclick.cpp:576
 msgid "Drag Outline Segment"
 msgstr "Raahaa reunaviivasegmenttiä"
 
-#: pcbnew/onrightclick.cpp:573
+#: pcbnew/onrightclick.cpp:581
 msgid "Add Similar Zone"
 msgstr "Lisää samanlainen täyttö"
 
-#: pcbnew/onrightclick.cpp:576
+#: pcbnew/onrightclick.cpp:584
 msgid "Add Cutout Area"
 msgstr "Lisää avanne"
 
-#: pcbnew/onrightclick.cpp:580
+#: pcbnew/onrightclick.cpp:588
 msgid "Fill Zone"
 msgstr "Täytä täyttö"
 
-#: pcbnew/onrightclick.cpp:585
+#: pcbnew/onrightclick.cpp:593
 msgid "Remove Filled Areas in Zone"
 msgstr "Tyhjennä täyttö"
 
-#: pcbnew/onrightclick.cpp:589
+#: pcbnew/onrightclick.cpp:597
 msgid "Move Zone"
 msgstr "Siirrä täyttöä"
 
-#: pcbnew/onrightclick.cpp:592
+#: pcbnew/onrightclick.cpp:600
 msgid "Edit Zone Params"
 msgstr "Muokkaa täytön parametreja"
 
-#: pcbnew/onrightclick.cpp:597
+#: pcbnew/onrightclick.cpp:605
 msgid "Delete Cutout"
 msgstr "Poista avanne"
 
-#: pcbnew/onrightclick.cpp:600
+#: pcbnew/onrightclick.cpp:608
 msgid "Delete Zone Outline"
 msgstr "Poista täytön reunaviiva"
 
-#: pcbnew/onrightclick.cpp:622
-#: pcbnew/onrightclick.cpp:667
-#: pcbnew/onrightclick.cpp:717
-#: pcbnew/onrightclick.cpp:773
+#: pcbnew/onrightclick.cpp:630
+#: pcbnew/onrightclick.cpp:675
+#: pcbnew/onrightclick.cpp:725
+#: pcbnew/onrightclick.cpp:781
 msgid "Move"
 msgstr "Siirrä"
 
-#: pcbnew/onrightclick.cpp:625
-#: pcbnew/onrightclick.cpp:719
+#: pcbnew/onrightclick.cpp:633
+#: pcbnew/onrightclick.cpp:727
 msgid "Drag"
 msgstr "Raahaa"
 
-#: pcbnew/onrightclick.cpp:629
+#: pcbnew/onrightclick.cpp:637
 msgid "Rotate +"
 msgstr "Kierrä +"
 
-#: pcbnew/onrightclick.cpp:633
+#: pcbnew/onrightclick.cpp:641
 msgid "Rotate -"
 msgstr "Kierrä -"
 
-#: pcbnew/onrightclick.cpp:634
+#: pcbnew/onrightclick.cpp:642
 msgid "Flip"
 msgstr "Käännä"
 
-#: pcbnew/onrightclick.cpp:644
+#: pcbnew/onrightclick.cpp:652
 msgid "Delete Module"
 msgstr "Poista osa"
 
-#: pcbnew/onrightclick.cpp:725
+#: pcbnew/onrightclick.cpp:733
 msgid "Copy Current Settings to this Pad"
 msgstr "Kopioi käyttöasetukset tähän anturaan"
 
-#: pcbnew/onrightclick.cpp:729
+#: pcbnew/onrightclick.cpp:737
 msgid "Copy this Pad Settings to Current Settings"
 msgstr "Kopio tämän anturan asetukset käyttöasetuksiin"
 
-#: pcbnew/onrightclick.cpp:734
+#: pcbnew/onrightclick.cpp:742
 msgid "Global Pads Edition"
 msgstr "Globaalit anturan asetukset"
 
-#: pcbnew/onrightclick.cpp:735
+#: pcbnew/onrightclick.cpp:743
 msgid "Copy this pad settings to all pads in this footprint (or similar footprints)"
 msgstr "Kopio anturan asetukset kaikkiin tässä liitoskuvassa (tai samanlaisissa)"
 
-#: pcbnew/onrightclick.cpp:744
+#: pcbnew/onrightclick.cpp:752
 msgid "Autoroute Pad"
 msgstr "Automaattireititä antura"
 
-#: pcbnew/onrightclick.cpp:745
+#: pcbnew/onrightclick.cpp:753
 msgid "Autoroute Net"
 msgstr "Automaattireititä solmu"
 
-#: pcbnew/onrightclick.cpp:790
+#: pcbnew/onrightclick.cpp:798
 msgid "Delete Marker"
 msgstr "Poista merkki"
 
-#: pcbnew/onrightclick.cpp:791
+#: pcbnew/onrightclick.cpp:799
 msgid "Marker Error Info"
 msgstr "Tuntomerkin virhetiedot"
 
-#: pcbnew/onrightclick.cpp:811
+#: pcbnew/onrightclick.cpp:819
 msgid "Auto Width"
 msgstr "Automaattinen leveys"
 
-#: pcbnew/onrightclick.cpp:813
+#: pcbnew/onrightclick.cpp:821
 msgid "Use the track width when starting on a track, otherwise the current track width"
 msgstr "Käytä liityttävän liuskan leveyttä, muutoin valittua leveyttä"
 
-#: pcbnew/onrightclick.cpp:823
+#: pcbnew/onrightclick.cpp:831
 msgid "Use Netclass Values"
 msgstr "Käytä kytkentäverkkoluokkan arvoja"
 
-#: pcbnew/onrightclick.cpp:824
+#: pcbnew/onrightclick.cpp:832
 msgid "Use track and via sizes from their Netclass values"
 msgstr "Käytä liuskoille ja läpivienneille kytkentäverkkoluokkansa arvoja"
 
-#: pcbnew/onrightclick.cpp:831
+#: pcbnew/onrightclick.cpp:839
 #, c-format
 msgid "Track %s"
 msgstr "Liuska %s"
 
-#: pcbnew/onrightclick.cpp:833
-#: pcbnew/onrightclick.cpp:861
+#: pcbnew/onrightclick.cpp:841
+#: pcbnew/onrightclick.cpp:869
 msgid " (use NetClass)"
 msgstr " (käytä verkkoluokkaa)"
 
-#: pcbnew/onrightclick.cpp:855
+#: pcbnew/onrightclick.cpp:863
 #, c-format
 msgid "Via %s"
 msgstr "Läpivienti %s"
 
-#: pcbnew/onrightclick.cpp:858
+#: pcbnew/onrightclick.cpp:866
 #, c-format
 msgid "Via %s; (drl %s)"
 msgstr "Läpiv  %s; (pora %s)"
@@ -6420,7 +6421,7 @@ msgstr "Ovaali"
 
 #: pcbnew/dialog_pad_properties_base.cpp:189
 msgid "Rect"
-msgstr "Suorakulm"
+msgstr "Suorakulmio"
 
 #: pcbnew/dialog_pad_properties_base.cpp:189
 msgid "Trapezoidal"
@@ -6736,11 +6737,11 @@ msgstr "Teksti"
 
 #: pcbnew/class_text_mod.cpp:476
 msgid " No"
-msgstr "Ei"
+msgstr " Ei"
 
 #: pcbnew/class_text_mod.cpp:478
 msgid " Yes"
-msgstr "Kyllä"
+msgstr " Kyllä"
 
 #: pcbnew/autorout.cpp:71
 msgid "Net not selected"
@@ -6792,7 +6793,7 @@ msgstr "Lisää polynomimuoto mikroaaltosovelluksiin"
 
 #: pcbnew/moduleframe.cpp:254
 msgid "Module Editor: Module modified! Continue?"
-msgstr "osaeditori: osaa muokattu! Jatketaanko?"
+msgstr "Osaeditori: Osaa muokattu! Jatketaanko?"
 
 #: pcbnew/moduleframe.cpp:382
 msgid "Show pads in sketch mode"
@@ -6910,7 +6911,7 @@ msgstr "Pituus:"
 #: pcbnew/class_board_item.cpp:209
 #: pcbnew/class_board_item.cpp:226
 msgid " on "
-msgstr "päällä"
+msgstr " päällä "
 
 #: pcbnew/class_board_item.cpp:84
 msgid "Pcb Text"
@@ -7163,7 +7164,7 @@ msgstr "Kenttä "
 #: eeschema/find.cpp:232
 #: eeschema/find.cpp:236
 msgid " found"
-msgstr "Löydetty"
+msgstr " löydetty"
 
 #: eeschema/find.cpp:367
 #, c-format
@@ -9017,7 +9018,7 @@ msgstr "&Ei täyttöä"
 
 #: eeschema/dialog_lib_edit_draw_item_base.cpp:96
 msgid "Fill &foreground"
-msgstr "Täytä &edustalla"
+msgstr "Täytä &edustavärillä"
 
 #: eeschema/dialog_lib_edit_draw_item_base.cpp:99
 msgid "Fill &background"
@@ -9755,7 +9756,7 @@ msgstr "Ladataan "
 #: eeschema/load_one_schematic_file.cpp:82
 #: eeschema/load_one_schematic_file.cpp:113
 msgid " is NOT an EESchema file!"
-msgstr " ei ole EESchema-tiedosto!"
+msgstr " EI ole EESchema-tiedosto!"
 
 #: eeschema/load_one_schematic_file.cpp:93
 msgid " was created by a more recent version of EESchema and may not load correctly. Please consider updating!"
@@ -11546,7 +11547,7 @@ msgstr " Hyväksy\n"
 
 #: kicad/files-io.cpp:98
 msgid " *ERROR*\n"
-msgstr "*VIRHE*\n"
+msgstr " *VIRHE*\n"
 
 #: kicad/files-io.cpp:119
 msgid "Archive Project Files"
@@ -12250,62 +12251,67 @@ msgid "French"
 msgstr "ranska"
 
 #: common/edaappl.cpp:120
+#, fuzzy
+msgid "Finnish"
+msgstr "Valmis"
+
+#: common/edaappl.cpp:128
 msgid "Spanish"
 msgstr "espanja"
 
-#: common/edaappl.cpp:128
+#: common/edaappl.cpp:136
 msgid "Portuguese"
 msgstr "portugali"
 
-#: common/edaappl.cpp:136
+#: common/edaappl.cpp:144
 msgid "Italian"
 msgstr "italia"
 
-#: common/edaappl.cpp:144
+#: common/edaappl.cpp:152
 msgid "German"
 msgstr "saksa"
 
-#: common/edaappl.cpp:152
+#: common/edaappl.cpp:160
 msgid "Slovenian"
 msgstr "sloveeni"
 
-#: common/edaappl.cpp:160
+#: common/edaappl.cpp:168
 msgid "Hungarian"
 msgstr "unkari"
 
-#: common/edaappl.cpp:168
+#: common/edaappl.cpp:176
 msgid "Polish"
 msgstr "puola"
 
-#: common/edaappl.cpp:176
+#: common/edaappl.cpp:184
 msgid "Czech"
 msgstr "tšekki"
 
-#: common/edaappl.cpp:184
+#: common/edaappl.cpp:192
 msgid "Russian"
 msgstr "venäjä"
 
-#: common/edaappl.cpp:192
+#: common/edaappl.cpp:200
 msgid "Korean"
 msgstr "korea"
 
-#: common/edaappl.cpp:200
+#: common/edaappl.cpp:208
 msgid "Chinese simplified"
 msgstr "yksinkertaistettu kiina"
 
-#: common/edaappl.cpp:208
+#: common/edaappl.cpp:216
 msgid "Catalan"
 msgstr "katalaani"
 
-#: common/edaappl.cpp:216
+#: common/edaappl.cpp:224
 msgid "Dutch"
 msgstr "hollanti"
 
-#: common/edaappl.cpp:816
+#: common/edaappl.cpp:824
 msgid "Language"
 msgstr "Kieli"
 
-#: common/edaappl.cpp:817
+#: common/edaappl.cpp:825
 msgid "Select application language (only for testing!)"
 msgstr "Valitse sovelluksessa käytettävä kieli (vain testaukseen!)"
 
@@ -12379,7 +12385,7 @@ msgstr "Päättämätön erotettu merkkijono"
 
 #: common/basicframe.cpp:207
 msgid " file <"
-msgstr "tiedosto <"
+msgstr " tiedosto <"
 
 #: common/basicframe.cpp:207
 msgid "> was not found."
@@ -12523,31 +12529,31 @@ msgstr "Valitse taustaväri"
 
 #: 3d-viewer/3d_toolbar.cpp:135
 msgid "3D Axis On/Off"
-msgstr "3D-akselit päällä/pois"
+msgstr "3D-akselit päälle/pois"
 
 #: 3d-viewer/3d_toolbar.cpp:140
 msgid "3D Footprints Shapes On/Off"
-msgstr "Osien 3D-muodot päällä/pois"
+msgstr "Osien 3D-muodot päälle/pois"
 
 #: 3d-viewer/3d_toolbar.cpp:143
 msgid "Zone Filling On/Off"
-msgstr "Alan täyttö päällä/pois"
+msgstr "Alan täyttö päälle/pois"
 
 #: 3d-viewer/3d_toolbar.cpp:146
 msgid "Comments Layer On/Off"
-msgstr "Kommenttikerros päällä/pois"
+msgstr "Kommenttikerros päälle/pois"
 
 #: 3d-viewer/3d_toolbar.cpp:149
 msgid "Drawings Layer On/Off"
-msgstr "Piirroskerros päällä/pois"
+msgstr "Piirroskerros päälle/pois"
 
 #: 3d-viewer/3d_toolbar.cpp:152
 msgid "Eco1 Layer On/Off"
-msgstr "Eco1-kerros päällä/pois"
+msgstr "Eco1-kerros päälle/pois"
 
 #: 3d-viewer/3d_toolbar.cpp:155
 msgid "Eco2 Layer On/Off"
-msgstr "Eco2-kerros päällä/pois"
+msgstr "Eco2-kerros päälle/pois"
 
 #: 3d-viewer/3d_canvas.cpp:311
 msgid "Zoom +"
