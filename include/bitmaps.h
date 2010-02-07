@@ -173,6 +173,7 @@ extern const char* lang_de_xpm[];
 extern const char* lang_en_xpm[];
 extern const char* lang_es_xpm[];
 extern const char* lang_fr_xpm[];
+extern const char* lang_fi_xpm[];
 extern const char* lang_hu_xpm[];
 extern const char* lang_it_xpm[];
 extern const char* lang_ko_xpm[];

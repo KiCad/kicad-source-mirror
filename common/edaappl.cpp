@@ -112,6 +112,14 @@ static struct LANGUAGE_DESCR s_Language_List[] =
         _( "French" )
     },
 
+    /* Finnish language */
+    {
+        wxLANGUAGE_FINNISH,
+        ID_LANGUAGE_FINNISH,
+        lang_fi_xpm,
+        _( "Finnish" )
+    },
+
     /* Spanish language */
     {
         wxLANGUAGE_SPANISH,
