@@ -191,7 +191,12 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         if( !typeaff )
             typeaff = SKETCH;
     }
+
+#ifdef USE_WX_ZOOM
+    if( DC->LogicalToDeviceXRel( m_Width ) < L_MIN_DESSIN )
+#else
     if( screen->Scale( m_Width ) < L_MIN_DESSIN )
+#endif
         typeaff = FILAIRE;
 
     switch( type_trace )

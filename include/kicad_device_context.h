@@ -21,6 +21,10 @@
     #include <wx/dcbuffer.h>
 #endif
 
+#if USE_WX_GRAPHICS_CONTEXT && USE_WX_ZOOM
+    #include <wx/dcgraph.h>
+#endif
+
 // Helper class to handle the client Device Context
 class KicadGraphicContext : public wxClientDC
 {
@@ -31,19 +35,39 @@ public:
 
 
 // Macro used to declare a device context in kicad:
-#ifdef KICAD_USE_BUFFERED_DC
-
-#define INSTALL_DC(name,parent) \
-    KicadGraphicContext _cDC( parent );\
-    wxBufferedDC name(&_cDC, _cDC.GetSize() );
+#if USE_WX_GRAPHICS_CONTEXT && USE_WX_ZOOM
+#define INSTALL_DC(name,parent)                          \
+    wxClientDC _cDC( parent );                           \
+    wxGCDC name(_cDC);                                   \
+    parent->DoPrepareDC( name );                         \
+    name.GetGraphicsContext()->Translate( 0.5, 0.5 );
 #else
-    #define INSTALL_DC(name,parent) KicadGraphicContext name( parent )
+#ifdef KICAD_USE_BUFFERED_DC
+#define INSTALL_DC(name,parent)                          \
+    wxClientDC _cDC( parent );                           \
+    wxBufferedDC name(&_cDC, _cDC.GetSize() );           \
+    parent->DoPrepareDC( name );
+#else
+#define INSTALL_DC(name,parent)                          \
+    wxClientDC name( parent );                           \
+    parent->DoPrepareDC( name );
+#endif
 #endif
 
-#ifdef KICAD_USE_BUFFERED_PAINTDC
-    #define INSTALL_PAINTDC(name,parent) wxAutoBufferedPaintDC name(parent )
+#if USE_WX_GRAPHICS_CONTEXT
+#define INSTALL_PAINTDC(name,parent)                     \
+    wxPaintDC _pDC(parent);                              \
+    wxGCDC    name(_pDC);                                \
+    parent->DoPrepareDC( name );                         \
+    name.GetGraphicsContext()->Translate( 0.5, 0.5);
+#elif !defined( USE_WX_ZOOM ) && defined( KICAD_USE_BUFFERED_PAINTDC )
+#define INSTALL_PAINTDC(name,parent)                     \
+    wxAutoBufferedPaintDC name(parent );                 \
+    parent->DoPrepareDC( name );
 #else
-    #define INSTALL_PAINTDC(name,parent) wxPaintDC name( parent )
+#define INSTALL_PAINTDC(name,parent)                     \
+    wxPaintDC name( parent );                            \
+    parent->DoPrepareDC( name );
 #endif
 
 #endif // __KICAD_DEVICE_CONTEXT_H__

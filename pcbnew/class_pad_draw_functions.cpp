@@ -432,8 +432,12 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         switch( m_DrillShape )
         {
         case PAD_CIRCLE:
-            if( screen->Scale( hole ) > 1 ) /* draw hole if its size is enought
-                                             */
+
+#ifdef USE_WX_ZOOM
+            if( DC->LogicalToDeviceXRel( hole ) > 1 )
+#else
+            if( screen->Scale( hole ) > 1 ) /* draw hole if its size is enough */
+#endif
                 GRFilledCircle( &panel->m_ClipBox, DC, cx0, cy0, hole, 0,
                                 color, color );
             break;
@@ -548,8 +552,12 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
 
         tsize = min( AreaSize.y, AreaSize.x / numpad_len );
         #define CHAR_SIZE_MIN 5
-        if( screen->Scale( tsize ) >= CHAR_SIZE_MIN )   // Not drawable when
-                                                        // size too small.
+
+#ifdef USE_WX_ZOOM
+        if( DC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN ) // Not drawable when size too small.
+#else
+        if( screen->Scale( tsize ) >= CHAR_SIZE_MIN )   // Not drawable when size too small.
+#endif
         {
             tsize = (int) ( tsize * 0.8 );              // reserve room for
                                                         // marges and segments
@@ -569,8 +577,11 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     shortname_len = MAX( shortname_len, MIN_CHAR_COUNT );
     tsize = min( AreaSize.y, AreaSize.x / shortname_len );
 
-    if( screen->Scale( tsize ) >= CHAR_SIZE_MIN )   // Not drawable in size too
-                                                    // small.
+#ifdef USE_WX_ZOOM
+    if( DC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN )  // Not drawable in size too small.
+#else
+    if( screen->Scale( tsize ) >= CHAR_SIZE_MIN )   // Not drawable in size too small.
+#endif
     {
         if( !( !IsOnLayer( screen->m_Active_Layer )
                && DisplayOpt.ContrastModeDisplay ) )

@@ -35,7 +35,7 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
      * TODO: see exactly how the mouse creates problems when moving during refresh
      * use Refresh() and update() do not change problems
      */
-    INSTALL_DC(dc,DrawPanel);
+    INSTALL_DC( dc, DrawPanel );
     DrawPanel->ReDraw( &dc );
 
     /* Move the mouse cursor to the on grid graphic cursor position */

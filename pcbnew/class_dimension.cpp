@@ -431,7 +431,11 @@ void COTATION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     typeaff = DisplayOpt.DisplayDrawItems;
     width   = m_Width;
 
+#ifdef USE_WX_ZOOM
+    if( DC->LogicalToDeviceXRel( width ) < 2 )
+#else
     if( panel->GetScreen()->Scale( width ) < 2 )
+#endif
         typeaff = FILAIRE;
 
     switch( typeaff )

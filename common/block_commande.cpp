@@ -101,6 +101,7 @@ void BLOCK_SELECTOR::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                            int aDrawMode,
                            int aColor )
 {
+
     int w = aPanel->GetScreen()->Scale( GetWidth() );
     int h = aPanel->GetScreen()->Scale( GetHeight() );
 

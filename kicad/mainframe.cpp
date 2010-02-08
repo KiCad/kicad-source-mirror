@@ -67,23 +67,6 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow*       parent,
     // Bottom Window: box to display messages
     m_RightWin = new RIGHT_KM_FRAME( this );
 
-    /* Setting the sash control interferes with wxAUIManager and prevents the
-     * right and left window panes from being resized.
-     */
-#ifndef KICAD_AUIMANAGER
-    m_LeftWin->SetDefaultSize( wxSize( m_LeftWin_Width, clientsize.y ) );
-    m_LeftWin->SetOrientation( wxLAYOUT_VERTICAL );
-    m_LeftWin->SetAlignment( wxLAYOUT_LEFT );
-    m_LeftWin->SetSashVisible( wxSASH_RIGHT, TRUE );
-    m_LeftWin->SetExtraBorderSize( 2 );
-
-    int rightWinWidth = clientsize.x - m_LeftWin_Width;
-    m_RightWin->SetDefaultSize( wxSize( rightWinWidth, clientsize.y ) );
-    m_RightWin->SetOrientation( wxLAYOUT_VERTICAL );
-    m_RightWin->SetAlignment( wxLAYOUT_RIGHT );
-    m_RightWin->SetExtraBorderSize( 2 );
-#endif
-
     msg = wxGetCwd();
     line.Printf( _( "Ready\nWorking dir: %s\n" ), msg.GetData() );
     PrintMsg( line );
@@ -92,7 +75,6 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow*       parent,
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::LoadProject" ) );
 #endif
 
-#if defined(KICAD_AUIMANAGER)
     RecreateBaseHToolbar();
 
     m_auimgr.SetManagedWindow( this );
@@ -121,15 +103,12 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow*       parent,
                           CloseButton( false ).Left().BestSize( m_LeftWin_Width, clientsize.y ).
                           Layer( 1 ).CaptionVisible( false ) );
     m_auimgr.Update();
-#endif
 }
 
 
 WinEDA_MainFrame::~WinEDA_MainFrame()
 {
-#if defined(KICAD_AUIMANAGER)
     m_auimgr.UnInit();
-#endif
 }
 
 
@@ -146,34 +125,15 @@ void WinEDA_MainFrame::PrintMsg( const wxString& text )
  */
 void WinEDA_MainFrame::OnSashDrag( wxSashEvent& event )
 {
-#if defined(KICAD_AUIMANAGER)
-
-#else
-    if( event.GetDragStatus() == wxSASH_STATUS_OUT_OF_RANGE )
-        return;
-
-    m_LeftWin_Width = event.GetDragRect().width;
-    m_LeftWin->SetDefaultSize( wxSize( m_LeftWin_Width, -1 ) );
-
-    wxLayoutAlgorithm layout;
-    layout.LayoutFrame( this );
-#endif
-
     event.Skip();
 }
 
 
 void WinEDA_MainFrame::OnSize( wxSizeEvent& event )
 {
-#if defined(KICAD_AUIMANAGER)
     if( m_auimgr.GetManagedWindow() )
         m_auimgr.Update();
 
-#else
-    wxLayoutAlgorithm layout;
-    layout.LayoutFrame( this );
-
-#endif
     event.Skip();
 }
 

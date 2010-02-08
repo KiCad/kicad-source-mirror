@@ -230,7 +230,14 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC*   DC,
     oldpos = screen->m_Curseur;
 
     delta = screen->GetGridSize();
+
+#ifdef USE_WX_ZOOM
+    delta.x = DC->LogicalToDeviceXRel( wxRound( delta.x ) );
+    delta.y = DC->LogicalToDeviceYRel( wxRound( delta.y ) );
+    MousePositionInPixels = DrawPanel->CalcUnscrolledPosition( MousePositionInPixels );
+#else
     screen->Scale( delta );
+#endif
 
     if( delta.x <= 0 )
         delta.x = 1;
@@ -324,7 +331,14 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC*   DC,
     oldpos = screen->m_Curseur;
 
     delta = screen->GetGridSize();
+
+#ifdef USE_WX_ZOOM
+    delta.x = DC->LogicalToDeviceXRel( wxRound( delta.x ) );
+    delta.y = DC->LogicalToDeviceYRel( wxRound( delta.y ) );
+    MousePositionInPixels = DrawPanel->CalcUnscrolledPosition( MousePositionInPixels );
+#else
     screen->Scale( delta );
+#endif
 
     if( delta.x <= 0 )
         delta.x = 1;
@@ -417,7 +431,14 @@ void WinEDA_ViewlibFrame::GeneralControle( wxDC*   DC,
     oldpos = screen->m_Curseur;
 
     delta = screen->GetGridSize();
+
+#ifdef USE_WX_ZOOM
+    delta.x = DC->LogicalToDeviceXRel( wxRound( delta.x ) );
+    delta.y = DC->LogicalToDeviceYRel( wxRound( delta.y ) );
+    MousePositionInPixels = DrawPanel->CalcUnscrolledPosition( MousePositionInPixels );
+#else
     screen->Scale( delta );
+#endif
 
     if( delta.x <= 0 )
         delta.x = 1;

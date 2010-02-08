@@ -157,27 +157,6 @@ WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title,
     BuildCmpListBox();
     BuildFOOTPRINTS_LISTBOX();
 
-#if !defined(KICAD_AUIMANAGER)
-    /* Create size constraints of the component list window display. */
-    wxLayoutConstraints* linkpos = new wxLayoutConstraints;
-    linkpos->top.SameAs( this, wxTop );
-    linkpos->bottom.SameAs( this, wxBottom );
-    linkpos->left.SameAs( this, wxLeft );
-    linkpos->width.PercentOf( this, wxWidth, 66 );
-    if( m_ListCmp )
-        m_ListCmp->SetConstraints( linkpos );
-
-    /* Create size constraints for the footprint display window. */
-    linkpos = new wxLayoutConstraints;
-    linkpos->top.SameAs( m_ListCmp, wxTop );
-    linkpos->bottom.SameAs( m_ListCmp, wxBottom );
-    linkpos->right.SameAs( this, wxRight );
-    linkpos->left.SameAs( m_ListCmp, wxRight );
-    if( m_FootprintList )
-        m_FootprintList->SetConstraints( linkpos );
-#endif
-
-#if defined(KICAD_AUIMANAGER)
     m_auimgr.SetManagedWindow( this );
 
     wxAuiPaneInfo horiz;
@@ -204,7 +183,6 @@ WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title,
                           Right().BestSize( (int) ( m_FrameSize.x * 0.36 ), m_FrameSize.y ) );
 
     m_auimgr.Update();
-#endif
 }
 
 
@@ -219,9 +197,7 @@ WinEDA_CvpcbFrame::~WinEDA_CvpcbFrame()
         config->Write( wxT( FILTERFOOTPRINTKEY ), state );
     }
 
-#if defined(KICAD_AUIMANAGER)
     m_auimgr.UnInit();
-#endif
 }
 
 

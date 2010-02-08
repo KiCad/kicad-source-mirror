@@ -192,10 +192,15 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
     DisplayCmpDoc();
     UpdateAliasSelectList();
     UpdatePartSelectList();
+
+#ifdef USE_WX_GRAPHICS_CONTEXT
+    GetScreen()->SetZoom( BestZoom() );
+#else
     Zoom_Automatique( false );
+#endif
+
     Show( true );
 
-#if defined(KICAD_AUIMANAGER)
     m_auimgr.SetManagedWindow( this );
 
     wxAuiPaneInfo horiz;
@@ -224,7 +229,6 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
     m_auimgr.AddPane( MsgPanel,
                      wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
     m_auimgr.Update();
-#endif
 }
 
 

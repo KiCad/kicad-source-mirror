@@ -170,10 +170,15 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
 
     if( DrawPanel )
         DrawPanel->SetAcceleratorTable( table );
+
+#ifdef USE_WX_GRAPHICS_CONTEXT
+    GetScreen()->SetZoom( BestZoom() );
+#else
     Zoom_Automatique( false );
+#endif
+
     Show( TRUE );
 
-#if defined(KICAD_AUIMANAGER)
     m_auimgr.SetManagedWindow( this );
 
     wxAuiPaneInfo horiz;
@@ -225,12 +230,6 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
     pane.MinSize(wxSize(m_CmpListSize.x, -1));
 
     m_auimgr.Update();
-
-#else
-    m_CmpListWindow->SetSize(m_CmpListSize);
-    if( m_LibListWindow )
-        m_LibListWindow->SetSize(m_LibListSize);
-#endif
 }
 
 
@@ -262,29 +261,6 @@ void WinEDA_ViewlibFrame::OnSashDrag( wxSashEvent& event )
     m_LibListSize.y = GetClientSize().y - m_MsgFrameHeight;
     m_CmpListSize.y = m_LibListSize.y;
 
-#ifndef KICAD_AUIMANAGER
-    switch( event.GetId() )
-    {
-    case ID_LIBVIEW_LIBWINDOW:
-        if( m_LibListWindow )
-        {
-            m_LibListSize.x = event.GetDragRect().width;
-            m_LibListWindow->SetSize( m_LibListSize );
-            m_CmpListWindow->SetPosition( wxPoint( m_LibListSize.x, 0 ) );
-            m_CmpListWindow->SetSize( m_CmpListSize );
-        }
-        break;
-
-    case ID_LIBVIEW_CMPWINDOW:
-            m_CmpListSize.x = event.GetDragRect().width;
-            m_CmpListWindow->SetSize( m_CmpListSize );
-        break;
-    }
-
-    // Now, we must recalculate the position and size of subwindows
-    wxSizeEvent SizeEv;
-    OnSize( SizeEv );
-#else
     switch( event.GetId() )
     {
     case ID_LIBVIEW_LIBWINDOW:
@@ -306,57 +282,15 @@ void WinEDA_ViewlibFrame::OnSashDrag( wxSashEvent& event )
     }
         break;
     }
-#endif
 }
 
 
 void WinEDA_ViewlibFrame::OnSize( wxSizeEvent& SizeEv )
 {
-#ifndef KICAD_AUIMANAGER
-    wxSize clientsize = GetClientSize();
-    m_FrameSize   = clientsize;
-    clientsize.y -= m_MsgFrameHeight;
-
-    if( MsgPanel )
-    {
-        MsgPanel->SetSize( 0, clientsize.y, clientsize.x, m_MsgFrameHeight );
-    }
-
-    if( DrawPanel )
-    {
-        int xpos = m_LibListSize.x + m_CmpListSize.x;
-        DrawPanel->SetSize( xpos, 0,
-                            clientsize.x - xpos, clientsize.y );
-    }
-
-    if( m_LibList && m_LibListWindow )
-    {
-        m_LibListSize.y = clientsize.y - 2;
-        m_LibListWindow->SetSize( m_LibListSize );
-        m_LibList->SetSize( m_LibListWindow->GetClientSize() -
-                            wxSize( EXTRA_BORDER_SIZE * 2, 0 ) );
-    }
-
-    if( m_CmpList && m_CmpListWindow )
-    {
-        m_CmpListSize.y = clientsize.y - 2;
-        m_CmpListWindow->SetSize( m_CmpListSize );
-        m_CmpListWindow->SetPosition( wxPoint( m_LibListSize.x, 0 ) );
-        m_CmpList->SetSize( m_CmpListWindow->GetClientSize() -
-                            wxSize( EXTRA_BORDER_SIZE * 2, 0 ) );
-    }
-
-    SizeEv.Skip();
-
-    // Ensure the panel is always redrawn (sometimes some garbage remains):
-    DrawPanel->Refresh();
-#else
     if( m_auimgr.GetManagedWindow() )
         m_auimgr.Update();
 
     SizeEv.Skip();
-#endif
-
 }
 
 

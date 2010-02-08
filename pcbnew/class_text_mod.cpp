@@ -356,7 +356,12 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     width  = m_Width;
 
     if( ( frame->m_DisplayModText == FILAIRE )
+
+#ifdef USE_WX_ZOOM
+       || ( DC->LogicalToDeviceXRel( width ) < L_MIN_DESSIN ) )
+#else
        || ( screen->Scale( width ) < L_MIN_DESSIN ) )
+#endif
         width = 0;
     else if( frame->m_DisplayModText == SKETCH )
         width = -width;
@@ -367,7 +372,12 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
     {
         color = brd->GetVisibleElementColor(ANCHOR_VISIBLE);
+
+#ifdef USE_WX_ZOOM
+        int anchor_size = DC->DeviceToLogicalXRel( 2 );
+#else
         int anchor_size = screen->Unscale( 2 );
+#endif
         GRLine( &panel->m_ClipBox, DC,
                 pos.x - anchor_size, pos.y,
                 pos.x + anchor_size, pos.y, 0, color );

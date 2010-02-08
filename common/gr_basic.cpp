@@ -89,7 +89,7 @@ static void GRSRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
 
 static inline int USCALE( us arg, us num, us den )
 {
-#ifndef WX_ZOOM
+#ifndef USE_WX_ZOOM
     int ii;
     ii = (int) ( ( (float) arg * num ) / den );
     return ii;
@@ -110,7 +110,7 @@ static int inline ZoomValue( int val )
 /****************************************/
 int GRMapX( int x )
 {
-#ifndef WX_ZOOM
+#ifndef USE_WX_ZOOM
     int coord = x - ActiveScreen->m_DrawOrg.x;
     coord  = ZoomValue( coord );
     coord -= ActiveScreen->m_StartVisu.x;
@@ -123,7 +123,7 @@ int GRMapX( int x )
 
 int GRMapY( int y )
 {
-#ifndef WX_ZOOM
+#ifndef USE_WX_ZOOM
     int coord = y - ActiveScreen->m_DrawOrg.y;
     coord  = ZoomValue( coord );
     coord -= ActiveScreen->m_StartVisu.y;
@@ -373,28 +373,24 @@ void GRSetDrawMode( wxDC* DC, int draw_mode )
 {
     if( draw_mode & GR_OR )
 #if defined(__WXMAC__) && (wxMAC_USE_CORE_GRAPHICS || wxCHECK_VERSION( 2, 9, 0 ) )
-
-
-
+        DC->SetLogicalFunction( wxCOPY );
+#elif defined( USE_WX_GRAPHICS_CONTEXT )
         DC->SetLogicalFunction( wxCOPY );
 #else
-
-
-
         DC->SetLogicalFunction( wxOR );
 #endif
     else if( draw_mode & GR_XOR )
+#if defined( USE_WX_GRAPHICS_CONTEXT )
+        DC->SetLogicalFunction( wxCOPY );
+#else
         DC->SetLogicalFunction( wxXOR );
+#endif
     else if( draw_mode & GR_NXOR )
 #if defined(__WXMAC__) && (wxMAC_USE_CORE_GRAPHICS || wxCHECK_VERSION( 2, 9, 0 ) )
-
-
-
         DC->SetLogicalFunction( wxXOR );
+#elif defined( USE_WX_GRAPHICS_CONTEXT )
+        DC->SetLogicalFunction( wxCOPY );
 #else
-
-
-
         DC->SetLogicalFunction( wxEQUIV );
 #endif
     else

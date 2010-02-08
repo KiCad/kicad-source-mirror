@@ -194,7 +194,6 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow*       father,
     m_pageSetupData.GetPrintData().SetQuality( wxPRINT_QUALITY_HIGH );
     m_pageSetupData.GetPrintData().SetOrientation( wxLANDSCAPE );
 
-#if defined(KICAD_AUIMANAGER)
     m_auimgr.SetManagedWindow( this );
 
     wxAuiPaneInfo horiz;
@@ -231,7 +230,6 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow*       father,
                           wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
 
     m_auimgr.Update();
-#endif
 }
 
 
@@ -409,7 +407,7 @@ int WinEDA_SchematicFrame::BestZoom()
 
     size = DrawPanel->GetClientSize();
     zoom = MAX( (double) dx / (double) size.x,
-               (double) dy / (double) size.y );
+                (double) dy / (double) size.y );
 
     GetScreen()->m_Curseur.x = dx / 2;
     GetScreen()->m_Curseur.y = dy / 2;

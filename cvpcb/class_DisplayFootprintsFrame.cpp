@@ -74,7 +74,6 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( WinEDA_CvpcbFrame* father,
     ReCreateHToolbar();
     ReCreateVToolbar();
 
-#if defined(KICAD_AUIMANAGER)
     m_auimgr.SetManagedWindow( this );
 
     wxAuiPaneInfo horiz;
@@ -105,7 +104,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( WinEDA_CvpcbFrame* father,
                       wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
 
     m_auimgr.Update();
-#endif
+
     Show( TRUE );
 }
 
@@ -219,7 +218,14 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* DC, wxPoint Mouse )
     oldpos = GetScreen()->m_Curseur;
 
     delta = GetScreen()->GetGridSize();
+
+#ifdef USE_WX_ZOOM
+    delta.x = DC->LogicalToDeviceXRel( wxRound( delta.x ) );
+    delta.y = DC->LogicalToDeviceYRel( wxRound( delta.y ) );
+    Mouse = DrawPanel->CalcUnscrolledPosition( Mouse );
+#else
     GetScreen()->Scale( delta );
+#endif
 
     if( delta.x <= 0 )
         delta.x = 1;

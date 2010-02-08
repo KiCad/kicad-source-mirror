@@ -13,10 +13,7 @@
 #include "wx/config.h"
 #include <wx/wxhtml.h>
 #include <wx/laywin.h>
-
-#if defined(KICAD_AUIMANAGER) || defined(KICAD_AUITOOLBAR)
 #include <wx/aui/aui.h>
-#endif
 
 #include "colors.h"
 
@@ -103,9 +100,7 @@ public:
                                     // It is "SchematicFrame", "PcbFrame" ....
     wxString        m_AboutTitle;   // Name of program displayed in About.
 
-#ifdef KICAD_AUIMANAGER
     wxAuiManager   m_auimgr;
-#endif
 
 public:
     WinEDA_BasicFrame( wxWindow* father, int idtype,
@@ -689,11 +684,7 @@ public:
 /* class WinEDA_Toolbar */
 /*************************/
 
-#if defined(KICAD_AUITOOLBAR)
 class WinEDA_Toolbar : public wxAuiToolBar
-#else
-class WinEDA_Toolbar : public wxToolBar
-#endif
 {
 public:
     wxWindow*       m_Parent;
@@ -704,7 +695,6 @@ public:
     WinEDA_Toolbar( id_toolbar type, wxWindow* parent,
                     wxWindowID id, bool horizontal );
 
-#if defined(KICAD_AUITOOLBAR)
     bool GetToolState( int toolId ) { return GetToolToggled(toolId); };
 
     void AddRadioTool( int             toolid,
@@ -721,7 +711,6 @@ public:
 
     void SetToolNormalBitmap( int id, const wxBitmap& bitmap ) {};
     void SetRows( int nRows ) {};
-#endif
 
     /** Function GetDimension
      * @return the dimension of this toolbar (Height if horizontal, Width if vertical.

@@ -72,7 +72,8 @@ if(APPLE)
     set_target_properties(${CVPCB_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
-target_link_libraries(${CVPCB_NAME} 3d-viewer common pcbcommon polygon bitmaps kbool ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES})
+target_link_libraries(${CVPCB_NAME} 3d-viewer common pcbcommon polygon bitmaps kbool
+                      ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} ${GDI_PLUS_LIBRARIES})
 
 install(TARGETS ${CVPCB_NAME}
         DESTINATION ${KICAD_BIN}

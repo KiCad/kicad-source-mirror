@@ -192,9 +192,7 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
 
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
     m_HToolBar->SetRows( 1 );
-#if !defined(KICAD_AUIMANAGER)
-    SetToolBar( (wxToolBar*)m_HToolBar );
-#endif
+
     // Set up toolbar
     m_HToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, wxBitmap( new_xpm ),
                          _( "New board" ) );

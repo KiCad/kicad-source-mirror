@@ -283,7 +283,12 @@ void Trace_Segment( BOARD* aBrd, WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track
                               (double) (track->m_End.y - track->m_Start.y) );
 
         halfPenWidth = track->m_Width >> 1;
+
+#ifdef USE_WX_ZOOM
+        if( DC->LogicalToDeviceXRel( halfPenWidth ) < L_MIN_DESSIN )
+#else
         if( panel->GetScreen()->Scale( halfPenWidth ) < L_MIN_DESSIN )
+#endif
         {
             GRCircle( &panel->m_ClipBox, DC, track->m_Start.x,
                       track->m_Start.y, radius, 0, color );
@@ -324,7 +329,12 @@ void Trace_Segment( BOARD* aBrd, WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track
         radius = track->m_Width >> 1;
 
         fillopt = DisplayOpt.DisplayPadFill ? FILLED : SKETCH;
+
+#ifdef USE_WX_ZOOM
+        if( DC->LogicalToDeviceXRel( radius ) < L_MIN_DESSIN )
+#else
         if( panel->GetScreen()->Scale( radius ) < L_MIN_DESSIN )
+#endif
         {
             GRCircle( &panel->m_ClipBox, DC, track->m_Start.x,
                       track->m_Start.y, radius, 0, color );
@@ -347,7 +357,12 @@ void Trace_Segment( BOARD* aBrd, WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track
         l_piste = track->m_Width >> 1;
 
         fillopt = DisplayOpt.DisplayPadFill ? FILLED : SKETCH;
+
+#ifdef USE_WX_ZOOM
+        if( DC->LogicalToDeviceXRel( l_piste ) < L_MIN_DESSIN )
+#else
         if( panel->GetScreen()->Scale( l_piste ) < L_MIN_DESSIN )
+#endif
         {
             GRLine( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
                     track->m_End.x, track->m_End.y, 0, color );
@@ -378,7 +393,11 @@ void Trace_Segment( BOARD* aBrd, WinEDA_DrawPanel* panel, wxDC* DC, TRACK* track
     case S_SEGMENT:
         l_piste = track->m_Width >> 1;
 
+#ifdef USE_WX_ZOOM
+        if( DC->LogicalToDeviceXRel( l_piste ) < L_MIN_DESSIN )
+#else
         if( panel->GetScreen()->Scale( l_piste ) < L_MIN_DESSIN )
+#endif
         {
             GRLine( &panel->m_ClipBox, DC, track->m_Start.x, track->m_Start.y,
                     track->m_End.x, track->m_End.y, 0, color );

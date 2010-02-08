@@ -17,6 +17,7 @@
 #include "class_base_screen.h"
 #include "wxstruct.h"
 #include "confirm.h"
+#include "kicad_device_context.h"
 
 #include <wx/fontdlg.h>
 
@@ -114,9 +115,7 @@ WinEDA_DrawFrame::~WinEDA_DrawFrame()
     if( m_CurrentScreen != NULL )
         delete m_CurrentScreen;
 
-#if defined(KICAD_AUIMANAGER)
     m_auimgr.UnInit();
-#endif
 }
 
 
@@ -299,10 +298,8 @@ void WinEDA_DrawFrame::SetToolbars()
 {
     DisplayUnitsMsg();
 
-#if defined(KICAD_AUIMANAGER)
     if( m_auimgr.GetManagedWindow() )
         m_auimgr.Update();
-#endif
 }
 
 
@@ -344,61 +341,6 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
 {
     m_FrameSize = GetClientSize( );
 
-#if !defined(KICAD_AUIMANAGER)
-    wxSize clientSize = m_FrameSize;
-    wxPoint clientPosition;
-    int default_value = -1;
-
-    // Ugly fix for a problem found in recent linux version
-    // where default value is broken
-#ifdef __WXGTK__
-    if( GetToolBar() )  // use main tool bar dimension as default value
-        default_value = GetToolBar()->GetSize().y;
-#endif
-
-    clientSize.y -= m_MsgFrameHeight;
-
-    if( MsgPanel ) // Resize the message panel.
-    {
-        MsgPanel->SetSize( 0, clientSize.y, clientSize.x, m_MsgFrameHeight );
-    }
-
-    if( m_AuxiliaryToolBar && m_AuxiliaryToolBar->IsShown() )        // Resize the auxilary horizontal tool bar.
-    {
-        m_AuxiliaryToolBar->SetSize( clientSize.x, default_value);
-        m_AuxiliaryToolBar->Move( 0, 0 );
-        clientSize.y -= m_AuxiliaryToolBar->GetDimension();
-        clientPosition.y = m_AuxiliaryToolBar->GetDimension();
-    }
-
-    if( m_VToolBar && m_VToolBar->IsShown() )                // Resize the main right vertical tool bar.
-    {
-        m_VToolBar->SetSize(default_value, clientSize.y );
-        clientSize.x -= m_VToolBar->GetDimension();
-        m_VToolBar->Move( clientSize.x, clientPosition.y );
-    }
-
-    if( m_AuxVToolBar && m_AuxVToolBar->IsShown() )             // Resize the auxiliary right vertical toolbar.
-    {
-        m_AuxVToolBar->SetSize( default_value, clientSize.y );
-        clientSize.x -= m_AuxVToolBar->GetDimension();
-        m_AuxVToolBar->Move( clientSize.x, clientPosition.y );
-    }
-
-    if( m_OptionsToolBar && m_OptionsToolBar->IsShown() )          // Resize the main left vertical tool bar.
-    {
-        m_OptionsToolBar->SetSize( default_value, clientSize.y );
-        clientSize.x -= m_OptionsToolBar->GetDimension( );
-        m_OptionsToolBar->Move( 0, clientPosition.y );
-        clientPosition.x += m_OptionsToolBar->GetDimension( );
-    }
-
-    if( DrawPanel )
-    {
-        DrawPanel->SetSize( clientPosition.x, clientPosition.y,
-                clientSize.x, clientSize.y );
-    }
-#endif
     SizeEv.Skip();
 }
 
@@ -500,101 +442,97 @@ int WinEDA_DrawFrame::HandleBlockEnd( wxDC* DC )
 
 void WinEDA_DrawFrame::AdjustScrollBars()
 {
-    int     xUnit, yUnit;
-    wxSize  draw_size, panel_size;
-    wxSize  scrollbar_number;
-    wxPoint scrollbar_pos;
+    int     pixelsPerUnitX, pixelsPerUnitY, unitsX, unitsY, posX, posY;
+    wxSize  drawingSize, clientSize;
     BASE_SCREEN* screen = GetBaseScreen();
 
     if( screen == NULL || DrawPanel == NULL )
         return;
 
     // The drawing size is twice the current page size.
-    draw_size = screen->ReturnPageSize() * 2;
+    drawingSize = screen->ReturnPageSize() * 2;
 
     // Calculate the portion of the drawing that can be displayed in the
     // client area at the current zoom level.
-    panel_size = DrawPanel->GetClientSize();
-    screen->Unscale( panel_size );
+    clientSize = DrawPanel->GetClientSize();
+
+#ifdef USE_WX_ZOOM
+    INSTALL_DC( dc, DrawPanel );
+    clientSize.x = dc.DeviceToLogicalXRel( clientSize.x );
+    clientSize.y = dc.DeviceToLogicalYRel( clientSize.y );
+#else
+    screen->Unscale( clientSize );
+#endif
 
     /* Adjust drawing size when zooming way out to prevent centering around
      * cursor problems. */
-    if( panel_size.x > draw_size.x || panel_size.y > draw_size.y )
-        draw_size = panel_size;
+    if( clientSize.x > drawingSize.x || clientSize.y > drawingSize.y )
+        drawingSize = clientSize;
 
-    draw_size += panel_size / 2;
+    drawingSize += clientSize / 2;
 
     if( screen->m_Center )
     {
-        screen->m_DrawOrg.x = -draw_size.x / 2;
-        screen->m_DrawOrg.y = -draw_size.y / 2;
+        screen->m_DrawOrg.x = -drawingSize.x / 2;
+        screen->m_DrawOrg.y = -drawingSize.y / 2;
     }
     else
     {
-        screen->m_DrawOrg.x = -panel_size.x / 2;
-        screen->m_DrawOrg.y = -panel_size.y / 2;
+        screen->m_DrawOrg.x = -clientSize.x / 2;
+        screen->m_DrawOrg.y = -clientSize.y / 2;
     }
 
-#ifndef WX_ZOOM
+    /* Always set scrollbar pixels per unit to 1 unless you want the zoom
+     * around cursor to jump around.  This reported problem occurs when the
+     * zoom point is not on a pixel per unit increment.  If you set the
+     * pixels per unit to 10, you have potential for the zoom point to
+     * jump around +/-5 pixels from the nearest grid point.
+     */
+    pixelsPerUnitX = pixelsPerUnitY = 1;
+
     // Calculate the number of scroll bar units for the given zoom level. */
-    scrollbar_number.x =
-        wxRound( (double) draw_size.x /
-                 (double) screen->Unscale( screen->m_ZoomScalar ) );
-    scrollbar_number.y =
-        wxRound( (double) draw_size.y /
-                 (double) screen->Unscale( screen->m_ZoomScalar ) );
-
-    xUnit = yUnit = screen->m_ZoomScalar;
-
-    if( xUnit <= 1 )
-        xUnit = 1;
-    if( yUnit <= 1 )
-        yUnit = 1;
-    xUnit = screen->Unscale( xUnit );
-    yUnit = screen->Unscale( yUnit );
+#ifdef USE_WX_ZOOM
+    unitsX = dc.LogicalToDeviceXRel( drawingSize.x );
+    unitsY = dc.LogicalToDeviceYRel( drawingSize.y );
+#else
+    unitsX = screen->Scale( drawingSize.x );
+    unitsY = screen->Scale( drawingSize.y );
+#endif
 
     // Calculate the position, place the cursor at the center of screen.
-    scrollbar_pos = screen->m_Curseur - screen->m_DrawOrg;
+    posX = screen->m_Curseur.x - screen->m_DrawOrg.x;
+    posY = screen->m_Curseur.y - screen->m_DrawOrg.y;
 
-    scrollbar_pos.x -= panel_size.x / 2;
-    scrollbar_pos.y -= panel_size.y / 2;
+    posX -= clientSize.x / 2;
+    posY -= clientSize.y / 2;
 
-    if( scrollbar_pos.x <= 0 )
-        scrollbar_pos.x = 0;
-    if( scrollbar_pos.y <= 0 )
-        scrollbar_pos.y = 0;
+    if( posX <= 0 )
+        posX = 0;
+    if( posY <= 0 )
+        posY = 0;
 
-    scrollbar_pos.x = wxRound( (double) scrollbar_pos.x / (double) xUnit );
-    scrollbar_pos.y = wxRound( (double) scrollbar_pos.y / (double) yUnit );
-    screen->m_ScrollbarPos    = scrollbar_pos;
-    screen->m_ScrollbarNumber = scrollbar_number;
+#ifdef USE_WX_ZOOM
+    posX = dc.LogicalToDeviceXRel( posX );
+    posY = dc.LogicalToDeviceYRel( posY );
+#else
+    posX = screen->Scale( posX );
+    posY = screen->Scale( posY );
+#endif
 
-    DrawPanel->SetScrollbars( screen->m_ZoomScalar,
-                              screen->m_ZoomScalar,
+    screen->m_ScrollbarPos = wxPoint( posX, posY );
+    screen->m_ScrollbarNumber = wxSize( unitsX, unitsY );
+
+#if 0
+    wxLogDebug( wxT( "SetScrollbars(%d, %d, %d, %d, %d, %d)" ),
+                pixelsPerUnitX, pixelsPerUnitY, unitsX, unitsY, posX, posY );
+#endif
+
+    DrawPanel->SetScrollbars( pixelsPerUnitX,
+                              pixelsPerUnitY,
                               screen->m_ScrollbarNumber.x,
                               screen->m_ScrollbarNumber.y,
                               screen->m_ScrollbarPos.x,
                               screen->m_ScrollbarPos.y, TRUE );
-#else
-    int x, y, scroll_x, scroll_y;
-    double scale_x, scale_y;
-
-    DrawPanel DC( this );
-
-    x = DC.LogicalToDeviceXRel( draw_size.GetWidth() );
-    y = DC.LogicalToDeviceYRel( draw_size.GetHeight() );
-
-    scrollbar_pos = screen->m_Curseur - screen->m_DrawOrg;
-    scrollbar_pos.x -= panel_size.x / 2;
-    scrollbar_pos.y -= panel_size.y / 2;
-    scroll_x = DC.LogicalToDeviceXRel( scrollbar_pos.x );
-    scroll_y = DC.LogicalToDeviceYRel( scrollbar_pos.y );
-
-    wxLogDebug( wxT( "SetScrollbars(1, 1, %d, %d, %d, %d)" ),
-                x, y, scroll_x, scroll_y );
-
-    DrawPanel->SetScrollbars( 1, 1, x, y, scroll_x, scroll_y );
-#endif
 }
 
 

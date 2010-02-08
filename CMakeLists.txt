@@ -18,10 +18,10 @@ option(KICAD_MINIZIP "enable/disable building minizip (default ON)" ON)
 option(wxUSE_UNICODE "enable/disable building unicode (default OFF)")
 option(KICAD_GOST "enable/disable building using GOST notation for multiple gates per package (default OFF)")
 
-# these are now mandatorily set to ON, and now done so in CMakeModules/config.h.cmake
-#option(KICAD_AUIMANAGER "Enable use of wxAuiManager (default ON)" ON)
-#option(KICAD_AUITOOLBAR "Enable use of wxAuiToolBar (default ON)" ON)
+option(USE_WX_ZOOM "Use wxDC to perform zooming (default OFF).  Warning, this is experimental" )
 
+option(USE_WX_GRAPHICS_CONTEXT
+       "Use wxGraphicsContext for rendering (default OFF).  Warning, this is experimental")
 
 # Comment this out if you don't want to build with Python support.
 # OPTION(KICAD_PYTHON "enable/disable building with Python support (default OFF)")
@@ -49,6 +49,16 @@ endif(wxUSE_UNICODE)
 if(KICAD_GOST)
     add_definitions(-DKICAD_GOST)
 endif(KICAD_GOST)
+
+if(USE_WX_ZOOM)
+    add_definitions(-DUSE_WX_ZOOM)
+endif(USE_WX_ZOOM)
+
+if(USE_WX_GRAPHICS_CONTEXT)
+    set( USE_WX_ZOOM ON )
+    add_definitions(-DUSE_WX_ZOOM)
+    add_definitions(-DUSE_WX_GRAPHICS_CONTEXT)
+endif(USE_WX_GRAPHICS_CONTEXT)
 
 # Locations for install targets.
 set(KICAD_BIN bin
@@ -124,7 +134,7 @@ check_find_package_result(OPENGL_FOUND "OpenGL")
 if(APPLE)
     find_package(wxWidgets COMPONENTS gl adv html core net base QUIET)
 else(APPLE)
-find_package(wxWidgets COMPONENTS gl aui adv html core net base QUIET)
+    find_package(wxWidgets COMPONENTS gl aui adv html core net base QUIET)
 endif(APPLE)
 check_find_package_result(wxWidgets_FOUND "wxWidgets")
 
@@ -135,10 +145,15 @@ include(${wxWidgets_USE_FILE})
 # Include MinGW resource compiler.
 include(MinGWResourceCompiler)
 
-
 # Generate build system specific header file.
 include(PerformFeatureChecks)
 perform_feature_checks()
+
+# Find GDI+ on windows if wxGraphicsContext is available.
+if(WIN32 AND USE_WX_GRAPHICS_CONTEXT)
+    find_package(GdiPlus)
+    check_find_package_result(GDI_PLUS_FOUND "GDI+")
+endif(WIN32 AND USE_WX_GRAPHICS_CONTEXT)
 
 # Automagically create version header file.
 include(CreateSVNVersionHeader)

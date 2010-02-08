@@ -311,7 +311,6 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
 
     ReCreateAuxVToolbar();
 
-#if defined(KICAD_AUIMANAGER)
     m_auimgr.SetManagedWindow( this );
 
     wxAuiPaneInfo horiz;
@@ -372,11 +371,6 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
                           wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
 
     m_auimgr.Update();
-#else
-
-    if( m_AuxVToolBar )
-        m_AuxVToolBar->Show(m_show_microwave_tools);
-#endif
 
     SetToolbars();
     ReFillLayerWidget();    // this is near end because contents establish size
@@ -617,5 +611,3 @@ void WinEDA_PcbFrame::SetVisibleAlls( )
     for( int ii = 0; ii < PCB_VISIBLE(END_PCB_VISIBLE_LIST); ii++ )
         m_Layers->SetRenderState( ii, true );
 }
-
-

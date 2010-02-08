@@ -188,7 +188,7 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
 
     if( DrawPanel )
         DrawPanel->m_Block_Enable = TRUE;
-#if defined(KICAD_AUIMANAGER)
+
     m_auimgr.SetManagedWindow( this );
 
     wxAuiPaneInfo horiz;
@@ -226,7 +226,6 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
                       wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
 
     m_auimgr.Update();
-#endif
 }
 
 
@@ -408,10 +407,9 @@ void WinEDA_ModuleEditFrame::SetToolbars()
     }
 
     DisplayUnitsMsg();
-#if defined(KICAD_AUIMANAGER)
+
     if( m_auimgr.GetManagedWindow() )
         m_auimgr.Update();
-#endif
 }
 
 
@@ -455,7 +453,14 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     oldpos = GetScreen()->m_Curseur;
 
     delta = GetScreen()->GetGridSize();
+
+#ifdef USE_WX_ZOOM
+    delta.x = DC->LogicalToDeviceXRel( wxRound( delta.x ) );
+    delta.y = DC->LogicalToDeviceYRel( wxRound( delta.y ) );
+    Mouse = DrawPanel->CalcUnscrolledPosition( Mouse );
+#else
     GetScreen()->Scale( delta );
+#endif
 
     if( delta.x == 0 )
         delta.x = 1;

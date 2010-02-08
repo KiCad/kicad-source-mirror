@@ -42,7 +42,14 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     oldpos = GetScreen()->m_Curseur;
 
     delta = GetScreen()->GetGridSize();
+
+#ifdef USE_WX_ZOOM
+    delta.x = DC->LogicalToDeviceXRel( delta.x );
+    delta.y = DC->LogicalToDeviceYRel( delta.y );
+    Mouse = DrawPanel->CalcUnscrolledPosition( Mouse );
+#else
     GetScreen()->Scale( delta );
+#endif
 
     if( delta.x == 0 )
         delta.x = 1;

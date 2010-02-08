@@ -104,9 +104,9 @@ wxPoint BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
     wxPoint curpos = ScreenPos;
     Unscale( curpos );
 
-//#ifndef WX_ZOOM
+#ifndef USE_WX_ZOOM
     curpos += m_DrawOrg;
-//#endif
+#endif
 
     return curpos;
 }
@@ -143,7 +143,7 @@ void BASE_SCREEN::SetScalingFactor(double aScale )
  */
 int BASE_SCREEN::Scale( int coord )
 {
-#ifdef WX_ZOOM
+#ifdef USE_WX_ZOOM
     return coord;
 #else
     if( !m_ZoomScalar || !m_Zoom )
@@ -156,7 +156,7 @@ int BASE_SCREEN::Scale( int coord )
 
 double BASE_SCREEN::Scale( double coord )
 {
-#ifdef WX_ZOOM
+#ifdef USE_WX_ZOOM
     return coord;
 #else
     if( !m_Zoom )
@@ -179,7 +179,7 @@ void BASE_SCREEN::Scale( wxPoint& pt )
 
 void BASE_SCREEN::Scale( wxRealPoint& pt )
 {
-#ifdef WX_ZOOM
+#ifdef USE_WX_ZOOM
     // No change
 #else
     if( !m_ZoomScalar || !m_Zoom )
@@ -206,7 +206,7 @@ void BASE_SCREEN::Scale( wxSize& sz )
  */
 int BASE_SCREEN::Unscale( int coord )
 {
-#ifdef WX_ZOOM
+#ifdef USE_WX_ZOOM
     return coord;
 #else
     if( !m_Zoom || !m_ZoomScalar )

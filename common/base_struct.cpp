@@ -427,7 +427,13 @@ void EDA_TextStruct::DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     /* Draw text anchor, if allowed */
     if( aAnchor_color != UNSPECIFIED_COLOR )
     {
+
+#if USE_WX_ZOOM
+        int anchor_size = aDC->DeviceToLogicalXRel( 2 );
+#else
         int anchor_size = aPanel->GetScreen()->Unscale( 2 );
+#endif
+
         aAnchor_color = (EDA_Colors) ( aAnchor_color & MASKCOLOR );
 
         int cX = aPos.x + aOffset.x;

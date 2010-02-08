@@ -192,10 +192,8 @@ public:
     wxPoint      m_FramePos;
     wxSize       m_FrameSize;
 
-#if defined(KICAD_AUIMANAGER)
     wxAuiManager m_auimgr;
     ~WinEDA3D_DrawFrame() { m_auimgr.UnInit(); };
-#endif
 
 private:
     wxString m_FrameName;       // name used for writing and reading setup

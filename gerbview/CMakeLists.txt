@@ -79,7 +79,8 @@ if(APPLE)
     set_target_properties(${GERBVIEW_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
-target_link_libraries(${GERBVIEW_NAME} common pcbcommon 3d-viewer polygon bitmaps kbool ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES})
+target_link_libraries(${GERBVIEW_NAME} common pcbcommon 3d-viewer polygon bitmaps kbool
+                      ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} ${GDI_PLUS_LIBRARIES})
 
 install(TARGETS ${GERBVIEW_NAME}
         DESTINATION ${KICAD_BIN}

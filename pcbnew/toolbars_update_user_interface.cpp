@@ -265,13 +265,8 @@ void WinEDA_PcbFrame::SetToolbars()
                                             _( "Normal contrast display mode" ) :
                                             _( "High contrast display mode" ) );
 
-#if !defined(KICAD_AUIMANAGER)
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
-                                      (m_AuxVToolBar && m_AuxVToolBar->IsShown()) ? true : false );
-#else
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
                                       m_auimgr.GetPane(wxT("m_AuxVToolBar")).IsShown() );
-#endif
     }
 
     if( m_AuxiliaryToolBar )
@@ -281,8 +276,7 @@ void WinEDA_PcbFrame::SetToolbars()
 
     PrepareLayerIndicator();
     DisplayUnitsMsg();
-#if defined(KICAD_AUIMANAGER)
+
     if(m_auimgr.GetManagedWindow())
         m_auimgr.Update();
-#endif
 }

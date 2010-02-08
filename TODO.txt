@@ -26,6 +26,11 @@ Common
 * Integer/long/double input boxes should handle comma and dot separated values,
   not only comma.
 
+Wayne:
+C1)  Fix mouse wheel scrolling (ctrl + Mouse wheel) and (Shift + mouse wheel)
+     to move more than a single scroll increment.
+
+
 CvPCB
 -----
 * Preview of the already assigned footprint.
@@ -35,6 +40,11 @@ EESchema
 --------
 * Use collector classes.
 * Drag and drop between two EESchema windows.
+
+Wayne:
+E1)  Relpace find dialog with wxFormBuilder version using a modeless dialog
+     and event driven design similar to wxFindReplaceDialog implementation.
+
 
 GerbView
 --------
@@ -119,3 +129,30 @@ L9) On board load, ReFill() is called, this should also update the Render
     checkboxes and colors.  Will need to extend the widget API.
 
 L10)still thinking about background colors, easier now without wxformbuilder.
+
+
+Use wxDC for coordinate scaling and offsetting fix. (Wayne)
+------------------------------------------------------------
+W1) Make wxAutoBufferedPaintDC function properly.
+
+W2) Make bitmap grid drawing method function properly.
+
+W3) Use one cursor position (preferrably logical (drawing) units) instead
+    of keeping track of both logical and device cursor positions at the same
+    time.
+
+W4) Figure out why none of the apps render correctly using wxGCDC on Windows.
+
+W5) Add instructions for building wxWidgets with GDI+ using MinGW/MSYS
+    on Windows so wxGraphicsContext is available without having to use
+    Visual Studio.
+
+** After (if?) new code accepted as project default: **
+
+W6) Remove all old coordinate scaling and offset code from Kicad.
+
+W7) Remove conditional compilation pragmas and dead code paths.
+
+W8) Remove redundant drawing helper functions from gr_basic.cpp.
+
+W9) Remove all global variables used by old drawing code.

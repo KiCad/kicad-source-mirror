@@ -26,7 +26,8 @@ public:
     wxPoint           m_CursorStartPos;     // useful in testing the cursor
                                             // movement
 
-    int  m_ScrollButt_unit;                 // scroll bar pixels per unit value
+    int  m_scrollIncrementX;                // X axis scroll increment in pixels per unit.
+    int  m_scrollIncrementY;                // Y axis scroll increment in pixels per unit.
 
 
     bool m_AbortRequest;                    // Flag to abort long commands
@@ -58,7 +59,6 @@ public:
                                             // for this window
     int  m_CursorLevel;                     // Index for cursor redraw in XOR
                                             // mode
-
 
     /* Cursor management (used in editing functions) */
 
@@ -124,6 +124,24 @@ public:
 
     void         OnActivate( wxActivateEvent& event );
 
+    /**
+     * Prepare the device context for drawing.
+     *
+     * This overrides wxScrolledWindow::DoPrepareDC() for drawing depending
+     * on the render mode selected a build time.  If the old kicad coordinate
+     * scaling code is used then this code doesn't do any thing other than
+     * update the boundary box.  If wxDC coordinate manipulation is used, then
+     * the scale factor and drawing logical offset is set.  Then the base
+     * method is called to set the DC device origin and user scale.  This
+     * connects everything together to acheive the appropiate coordinate
+     * manipulation using wxDC LogicalToDeviceXXX and DeviceToLogixalXXX
+     * methods.  This gets called automatically for a paint event.  If you do
+     * any drawing outside the paint event, you must call DoPrepareDC manually.
+     *
+     * @param dc - The device context to prepare.
+     */
+    virtual void DoPrepareDC(wxDC& dc);
+
     /* Mouse and keys events */
     void         OnMouseWheel( wxMouseEvent& event );
     void         OnMouseEvent( wxMouseEvent& event );
@@ -146,7 +164,7 @@ public:
     void         Process_Special_Functions( wxCommandEvent& event );
 
     bool         IsPointOnDisplay( wxPoint ref_pos );
-    void         SetBoundaryBox();
+    void         SetBoundaryBox( wxDC* dc );
     void         ReDraw( wxDC* DC, bool erasebg = TRUE );
 
     /** Function CursorRealPosition

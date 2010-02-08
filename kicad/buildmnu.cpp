@@ -259,9 +259,7 @@ void WinEDA_MainFrame::RecreateBaseHToolbar()
 
     // Allocate memory for m_HToolBar
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
-#if !defined(KICAD_AUIMANAGER)
-    SetToolBar( (wxToolBar*)m_HToolBar );
-#endif
+
     // Set up toolbar
     m_HToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString,
                          wxBitmap( new_project_xpm ),
