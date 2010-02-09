@@ -587,7 +587,11 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
         };
 
         // Print comment line:
+#if defined(KICAD_GOST)
+        fprintf( f, "ref%cvalue%cdatasheet", s_ExportSeparatorSymbol,s_ExportSeparatorSymbol );
+#else
         fprintf( f, "ref%cvalue", s_ExportSeparatorSymbol );
+#endif
 
         if( aIncludeSubComponents )
         {
@@ -655,11 +659,24 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
             sprintf( CmpName + strlen( CmpName ), "%c", Unit );
 
         if( CompactForm )
+#if defined(KICAD_GOST)
+            fprintf( f, "%s%c%s%c%s", CmpName, s_ExportSeparatorSymbol,
+                     CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ), s_ExportSeparatorSymbol,
+                     CONV_TO_UTF8( DrawLibItem->GetField( DATASHEET )->m_Text ) );
+#else
             fprintf( f, "%s%c%s", CmpName, s_ExportSeparatorSymbol,
                      CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
+#endif
+
         else
+#if defined(KICAD_GOST)
+            fprintf( f, "| %-10s %-12s %-20s", CmpName,
+                     CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ), CONV_TO_UTF8( DrawLibItem->GetField( DATASHEET )->m_Text ) );
+#else
             fprintf( f, "| %-10s %-12s", CmpName,
                      CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
+#endif
+
 
         if( aIncludeSubComponents )
         {
