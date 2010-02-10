@@ -308,13 +308,14 @@ static bool UpdateScreenFromSheet( WinEDA_SchematicFrame* frame )
     // Reset display settings of the new screen
     // Assumes m_CurrentSheet has already been updated.
     frame->ClearMsgPanel();
-    frame->DrawPanel->SetScrollbars( NewScreen->m_ZoomScalar,
-                                     NewScreen->m_ZoomScalar,
+    int pixelsPerUnitX = 1;
+    int pixelsPerUnitY = 1;
+    frame->DrawPanel->SetScrollbars( pixelsPerUnitX, pixelsPerUnitY,
                                      NewScreen->m_ScrollbarNumber.x,
                                      NewScreen->m_ScrollbarNumber.y,
                                      NewScreen->m_ScrollbarPos.x,
                                      NewScreen->m_ScrollbarPos.y, TRUE );
-
+    
     // update the References
     frame->m_CurrentSheet->UpdateAllScreenReferences();
     frame->SetSheetNumberAndCount();
