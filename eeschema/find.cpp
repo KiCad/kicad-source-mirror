@@ -23,7 +23,27 @@
 
 #include "kicad_device_context.h"
 
+#include <wx/fdrepdlg.h>          // Use the wxFindReplaceDialog events, data, and enums.
 #include <boost/foreach.hpp>
+
+
+/* Define schematic specific find and replace dialog flags based on the enum entries
+ * in wxFindReplaceFlags.   These flags are intended to be used as bit masks in the
+ * wxFindReplaceData::m_Flags member variable.  The varialble is defined as a wxUint32.
+ */
+enum SchematicFindReplaceFlags
+{
+    /* The last wxFindReplaceFlag enum is wxFR_MATCHCASE. */
+
+    /* Search the current sheet only. */
+    schFR_CURRENT_SHEET_ONLY        = wxFR_MATCHCASE << 1,
+
+    /* Search for design rule check markers. */
+    schFR_DRC_MARKERS               = wxFR_MATCHCASE << 2,
+
+    /* Search for component in all loaded libraries. */
+    schFR_SEARCH_LIBS_FOR_COMPONENT = wxFR_MATCHCASE << 3
+};
 
 
 /* Variables Locales */

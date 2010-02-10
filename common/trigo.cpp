@@ -402,9 +402,9 @@ wxPoint TwoPointVector( wxPoint startPoint, wxPoint endPoint )
 
 double DistanceLinePoint( wxPoint linePointA, wxPoint linePointB, wxPoint referencePoint )
 {
-    return fabs( (linePointB.x - linePointA.x) * (linePointA.y - referencePoint.y) -
-                (linePointA.x - referencePoint.x ) * (linePointB.y - linePointA.y) )
-           / EuclideanNorm( TwoPointVector( linePointA, linePointB ) );
+    return fabs( (double) ( (linePointB.x - linePointA.x) * (linePointA.y - referencePoint.y) -
+                 (linePointA.x - referencePoint.x ) * (linePointB.y - linePointA.y) )
+                  / EuclideanNorm( TwoPointVector( linePointA, linePointB ) ) );
 }
 
 

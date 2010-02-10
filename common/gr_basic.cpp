@@ -262,7 +262,11 @@ static void WinClipAndDrawLine( EDA_Rect* ClipBox, wxDC* DC,
         xcliphi += width;
         ycliphi += width;
 
+#ifdef USE_WX_ZOOM
+        if( !ClipBox->Inside( wxPoint( x1, y1 ) ) && !ClipBox->Inside( wxPoint( x2, y2 ) ) )
+#else
         if( clip_line( x1, y1, x2, y2 ) )
+#endif
             return;
     }
 

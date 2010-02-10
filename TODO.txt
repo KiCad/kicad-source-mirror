@@ -117,17 +117,14 @@ Use wxDC for coordinate scaling and offsetting fix. (Wayne)
 ------------------------------------------------------------
 W1) Make wxAutoBufferedPaintDC function properly.
 
-W2) Make bitmap grid drawing method function properly.
+W2) Make bitmap grid drawing method function properly or figure out a more
+    efficient method for drawing the grid.
 
 W3) Use one cursor position (preferrably logical (drawing) units) instead
     of keeping track of both logical and device cursor positions at the same
     time.
 
 W4) Figure out why none of the apps render correctly using wxGCDC on Windows.
-
-W5) Add instructions for building wxWidgets with GDI+ using MinGW/MSYS
-    on Windows so wxGraphicsContext is available without having to use
-    Visual Studio.
 
 ** After (if?) new code accepted as project default: **
 
