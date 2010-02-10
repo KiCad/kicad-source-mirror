@@ -93,11 +93,6 @@ void WinEDA_GraphicItemsOptionsDialog::AcceptOptions( wxCommandEvent& event )
 }
 
 
-/*!
- * WinEDA_GraphicItemsOptionsDialog type definition
- */
-
-IMPLEMENT_DYNAMIC_CLASS( WinEDA_GraphicItemsOptionsDialog, wxDialog )
 
 /*!
  * WinEDA_GraphicItemsOptionsDialog event table definition
@@ -114,14 +109,8 @@ EVT_BUTTON( wxID_CANCEL, WinEDA_GraphicItemsOptionsDialog::OnCancelClick )
 
 END_EVENT_TABLE()
 /*!
- * WinEDA_GraphicItemsOptionsDialog constructors
+ * WinEDA_GraphicItemsOptionsDialog constructor
  */
-
-WinEDA_GraphicItemsOptionsDialog::WinEDA_GraphicItemsOptionsDialog()
-{
-    m_BrdSettings = m_Parent->GetBoard()->GetBoardDesignSettings();
-}
-
 
 WinEDA_GraphicItemsOptionsDialog::WinEDA_GraphicItemsOptionsDialog(
     WinEDA_BasePcbFrame* parent,
@@ -131,6 +120,8 @@ WinEDA_GraphicItemsOptionsDialog::WinEDA_GraphicItemsOptionsDialog(
     const wxSize&        size,
     long                 style )
 {
+    m_Parent = parent;
+    m_BrdSettings = m_Parent->GetBoard()->GetBoardDesignSettings();
     Create( parent, id, caption, pos, size, style );
 }
 

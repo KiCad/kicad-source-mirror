@@ -64,14 +64,12 @@
 
 class WinEDA_GraphicItemsOptionsDialog: public wxDialog
 {
-    DECLARE_DYNAMIC_CLASS( WinEDA_GraphicItemsOptionsDialog )
     DECLARE_EVENT_TABLE()
 
 public:
     BOARD_DESIGN_SETTINGS*  m_BrdSettings;
 
     /// Constructors
-    WinEDA_GraphicItemsOptionsDialog( );
     WinEDA_GraphicItemsOptionsDialog( WinEDA_BasePcbFrame* parent, wxWindowID id = SYMBOL_WINEDA_GRAPHICITEMSOPTIONSDIALOG_IDNAME, const wxString& caption = SYMBOL_WINEDA_GRAPHICITEMSOPTIONSDIALOG_TITLE, const wxPoint& pos = SYMBOL_WINEDA_GRAPHICITEMSOPTIONSDIALOG_POSITION, const wxSize& size = SYMBOL_WINEDA_GRAPHICITEMSOPTIONSDIALOG_SIZE, long style = SYMBOL_WINEDA_GRAPHICITEMSOPTIONSDIALOG_STYLE );
 
     /// Creation
