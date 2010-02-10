@@ -31,8 +31,6 @@
 
 
 //#define STAND_ALONE     1   // define to enable test program for LAYER_WIDGET
-// also enable KICAD_AUIMANAGER and KICAD_AUITOOLBAR in ccmake to
-// build this test program
 
 
 #include "layer_widget.h"
@@ -40,7 +38,7 @@
 #include "macros.h"
 #include "common.h"
 #include "colors.h"
-
+#include <wx/colour.h>
 
 #define BUTT_SIZE_X             20
 #define BUTT_SIZE_Y             18
@@ -429,20 +427,27 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPoint
         wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) :
     wxPanel( aParent, id, pos, size, style )
 {
-    m_PointSize = aPointSize;
-
-    wxBoxSizer* boxSizer;
-    boxSizer = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer* boxSizer = new wxBoxSizer( wxVERTICAL );
 
     m_notebook = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP );
 
-    // change the font size on the notebook's tabs to match aPointSize
     wxFont font = m_notebook->GetFont();
-    font.SetPointSize( aPointSize );
-    m_notebook->SetFont( font );
-    m_notebook->SetNormalFont( font );
-    m_notebook->SetSelectedFont( font );
-    m_notebook->SetMeasuringFont( font );
+
+    if( aPointSize == -1 )
+    {
+        m_PointSize = font.GetPointSize();
+    }
+    else
+    {
+        m_PointSize = aPointSize;
+
+        // change the font size on the notebook's tabs to match aPointSize
+        font.SetPointSize( aPointSize );
+        m_notebook->SetFont( font );
+        m_notebook->SetNormalFont( font );
+        m_notebook->SetSelectedFont( font );
+        m_notebook->SetMeasuringFont( font );
+    }
 
     m_LayerPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 

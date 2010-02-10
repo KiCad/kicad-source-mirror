@@ -191,7 +191,7 @@ public:
      * @param aFocusOwner is the window that should be sent the focus after
      * every operation.
      */
-    LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPointSize,
+    LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPointSize = -1,
         wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL );
 

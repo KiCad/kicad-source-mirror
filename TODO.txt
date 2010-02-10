@@ -91,7 +91,6 @@ P2) Write accessors for all items in PCB_VISIBLE such as grid control, so that
 *   Fix DIALOG_PAD_PROPERTIES_BASE class to use actual layer names in the BOARD.
 
 *   Use BOARD_ITEM::MenuIcon() in the onrightclick.cpp
-*   Document specctra round tripper, and fix the english translation of help.
 *   Add ARC support to gerber polygons.
 *   Need to add polygon aperture type.
     Then example 2 in RS274xrevd_e.pdf will draw properly.
@@ -108,15 +107,10 @@ L6) Test, and fix up any remaining issues with the PCB_VISIBLE support after P2)
     all interested in the same setting, such as the two grid buttons which
     have to remain synchronized.  Using accessors makes this easy.
 
-L7) make the bitmapbutton a staticbitmap, and make its size dependent on
-    the point size.
-
 L8) LAYER_WIDGET::GetBestSize() needs platform independence.
 
 L9) On board load, ReFill() is called, this should also update the Render
-    checkboxes and colors.  Will need to extend the widget API.
-
-L10)still thinking about background colors, easier now without wxformbuilder.
+    checkboxes and colors.
 
 
 Use wxDC for coordinate scaling and offsetting fix. (Wayne)
