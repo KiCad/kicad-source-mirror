@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-10 12:11+0200\n"
-"PO-Revision-Date: 2010-02-10 12:11+0200\n"
+"POT-Creation-Date: 2010-02-10 14:52+0200\n"
+"PO-Revision-Date: 2010-02-10 14:52+0200\n"
 "Last-Translator: Vesa Solonen <vesa.solonen@hut.fi>\n"
 "Language-Team: Amerikanenglanti <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -1119,7 +1119,7 @@ msgstr "&Luetteloi kytkentäverkot"
 
 #: pcbnew/menubar_pcbframe.cpp:370
 msgid "View a list of nets with names and id's"
-msgstr "kytkentäverkkoluettelo"
+msgstr "Tarkastele kytkentäverkkoluetteloa"
 
 #: pcbnew/menubar_pcbframe.cpp:378
 msgid "3D Display"
@@ -3187,7 +3187,7 @@ msgstr "Kupari"
 #: pcbnew/dialog_print_using_printer_base.cpp:29
 #: pcbnew/dialog_plot_base.cpp:32
 msgid "Technical Layers:"
-msgstr "Tekniset kerrokset:"
+msgstr "Tekniset kerrokset"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:35
 msgid "Exclude Edges_Pcb Layer"
@@ -3544,7 +3544,7 @@ msgstr "Pakota osien näkymättömät tekstit silkkipainokerroksille"
 
 #: pcbnew/dialog_plot_base.cpp:91
 msgid "Auto scale"
-msgstr "Automaattisen skaala"
+msgstr "Automaattinen skaala"
 
 #: pcbnew/dialog_plot_base.cpp:91
 msgid "Scale 1.5"
@@ -3680,11 +3680,11 @@ msgstr "Suodatin kytkentäverkkonimille:"
 
 #: pcbnew/surbrill.cpp:33
 msgid "Net Filter"
-msgstr "kytkentäverkkosuodatin"
+msgstr "Kytkentäverkkosuodatin"
 
 #: pcbnew/surbrill.cpp:38
 msgid "List Nets"
-msgstr "kytkentäverkkoluettelo"
+msgstr "Kytkentäverkkoluettelo"
 
 #: pcbnew/specctra_export.cpp:78
 msgid "Specctra DSN file:"
@@ -4676,7 +4676,7 @@ msgstr "Poista kohtio"
 
 #: pcbnew/onrightclick.cpp:264
 msgid "Get and Move Footprint"
-msgstr "Hae ja siirrä liitoskuvaa"
+msgstr "Etsi ja siirrä liitoskuvaa"
 
 #: pcbnew/onrightclick.cpp:278
 msgid "Fill or Refill All Zones"
@@ -5131,7 +5131,7 @@ msgstr ""
 
 #: pcbnew/dialog_display_options_base.cpp:49
 msgid "Net Names:"
-msgstr "Kytkentäverkon nimet:"
+msgstr "Kytkentäverkkonimet:"
 
 #: pcbnew/dialog_display_options_base.cpp:51
 msgid "Do not show"
@@ -5994,7 +5994,7 @@ msgstr "Mukautetut läpiviennit:"
 
 #: pcbnew/dialog_design_rules_base.cpp:270
 msgid "Drill value: a blank or 0 => default Netclass value"
-msgstr "Poran"
+msgstr "Poran arvo: Tyhjä tai 0 => käytetään kytkentäverkkoluokan arvoa"
 
 #: pcbnew/dialog_design_rules_base.cpp:287
 msgid "Diameter"
@@ -6453,7 +6453,7 @@ msgstr "Asento:"
 
 #: pcbnew/dialog_pad_properties_base.cpp:212
 msgid "Pad Orient (0.1 deg)"
-msgstr "Anturan asento (0.1°)"
+msgstr "Anturan asento (0,1°)"
 
 #: pcbnew/dialog_pad_properties_base.cpp:224
 msgid "Clearances:"
