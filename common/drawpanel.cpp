@@ -138,19 +138,25 @@ void WinEDA_DrawPanel::DrawCursor( wxDC* aDC, int aColor )
     wxPoint Cursor = GetScreen()->m_Curseur;
 
     GRSetDrawMode( aDC, GR_XOR );
+
     if( m_Parent->m_CursorShape == 1 )    /* Draws a crosshair. */
     {
 #ifdef USE_WX_ZOOM
-        int dx = m_ClipBox.GetWidth();
-        int dy = m_ClipBox.GetHeight();
+        wxSize clientSize = GetClientSize();
+        wxPoint lineStart = wxPoint( Cursor.x, aDC->DeviceToLogicalY( 0 ) );
+        wxPoint lineEnd = wxPoint( Cursor.x, aDC->DeviceToLogicalY( clientSize.y ) );
+        GRLine( &m_ClipBox, aDC, lineStart, lineEnd, 0, aColor );  // Y azis
+        lineStart = wxPoint( aDC->DeviceToLogicalX( 0 ), Cursor.y );
+        lineEnd = wxPoint( aDC->DeviceToLogicalX( clientSize.x ), Cursor.y );
+        GRLine( &m_ClipBox, aDC, lineStart, lineEnd, 0, aColor );  // X azis
 #else
         int dx = GetScreen()->Unscale( m_ClipBox.GetWidth() );
         int dy = GetScreen()->Unscale( m_ClipBox.GetHeight() );
-#endif
         GRLine( &m_ClipBox, aDC, Cursor.x - dx, Cursor.y,
                 Cursor.x + dx, Cursor.y, 0, aColor );            // Y axis
         GRLine( &m_ClipBox, aDC, Cursor.x, Cursor.y - dx,
                 Cursor.x, Cursor.y + dy, 0, aColor );            // X axis
+#endif
     }
     else
     {
@@ -504,6 +510,7 @@ void WinEDA_DrawPanel::OnScroll( wxScrollWinEvent& event )
     {
         Scroll( -1, y + value );
     }
+
     event.Skip();
 }
 
@@ -554,6 +561,7 @@ void WinEDA_DrawPanel::SetBoundaryBox( wxDC* dc )
     m_ClipBox.m_Pos.y = dc->DeviceToLogicalY( 0 );
     m_ClipBox.m_Size.x = dc->DeviceToLogicalXRel( m_ClipBox.m_Size.x );
     m_ClipBox.m_Size.y = dc->DeviceToLogicalYRel( m_ClipBox.m_Size.y );
+    m_ClipBox.Inflate( dc->DeviceToLogicalXRel( 2 ) );
 #endif
 
     Screen->m_ScrollbarPos.x = GetScrollPos( wxHORIZONTAL );
@@ -610,15 +618,10 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
      * implemented.
      */
 
-    EDA_Rect tmp;
-    wxRect   PaintClipBox;
+    EDA_Rect tmp = m_ClipBox;
 
-    tmp = m_ClipBox;
-
-    wxRegion upd = GetUpdateRegion(); // get the update rect list
-
-    // get the union of all rectangles in the update region, 'upd'
-    PaintClipBox = upd.GetBox();
+    // Get the union of all rectangles in the update region.
+    wxRect PaintClipBox = GetUpdateRegion().GetBox();
 
 #if 0
     wxLogDebug( wxT( "1) PaintClipBox=(%d, %d, %d, %d), m_ClipBox=(%d, %d, %d, %d)" ),
@@ -634,6 +637,8 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
     m_ClipBox.m_Pos.y = paintDC.DeviceToLogicalY( PaintClipBox.y );
     m_ClipBox.m_Size.x = paintDC.DeviceToLogicalXRel( PaintClipBox.width );
     m_ClipBox.m_Size.y = paintDC.DeviceToLogicalYRel( PaintClipBox.height );
+    m_ClipBox.Inflate( paintDC.DeviceToLogicalXRel( 2 ) );
+    PaintClipBox = m_ClipBox;
 #else
     /* When using Kicads scaling the clipping region coordinates are in screen
      * (device) units.
@@ -642,10 +647,10 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
     m_ClipBox.SetY( PaintClipBox.GetY() );
     m_ClipBox.SetWidth( PaintClipBox.GetWidth() );
     m_ClipBox.SetHeight( PaintClipBox.GetHeight() );
-#endif
 
     // Be sure the drawpanel clipbox is bigger than the region to repair:
     m_ClipBox.Inflate( 1 ); // Give it one pixel more in each direction
+#endif
 
 #if 0
     wxLogDebug( wxT( "2) PaintClipBox=(%d, %d, %d, %d), m_ClipBox=(%d, %d, %d, %d)" ),
@@ -653,9 +658,6 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
                 m_ClipBox.m_Pos.x, m_ClipBox.m_Pos.y, m_ClipBox.m_Size.x, m_ClipBox.m_Size.y );
 #endif
 
-#if defined( USE_WX_ZOOM ) && defined( KICAD_USE_BUFFERED_PAINTDC )
-    PaintClipBox = m_ClipBox;
-#endif
     // call ~wxDCClipper() before ~wxPaintDC()
     {
         wxDCClipper dcclip( paintDC, PaintClipBox );

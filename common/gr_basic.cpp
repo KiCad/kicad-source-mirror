@@ -47,8 +47,7 @@ int g_DrawBgColor = WHITE;
 #define USE_CLIP_FILLED_POLYGONS
 
 #ifdef USE_CLIP_FILLED_POLYGONS
-void ClipAndDrawFilledPoly( EDA_Rect * ClipBox, wxDC * DC, wxPoint Points[],
-                            int n );
+void ClipAndDrawFilledPoly( EDA_Rect* ClipBox, wxDC * DC, wxPoint Points[], int n );
 #endif
 
 
@@ -262,11 +261,7 @@ static void WinClipAndDrawLine( EDA_Rect* ClipBox, wxDC* DC,
         xcliphi += width;
         ycliphi += width;
 
-#ifdef USE_WX_ZOOM
-        if( !ClipBox->Inside( wxPoint( x1, y1 ) ) && !ClipBox->Inside( wxPoint( x2, y2 ) ) )
-#else
         if( clip_line( x1, y1, x2, y2 ) )
-#endif
             return;
     }
 
@@ -1641,11 +1636,11 @@ void ClipAndDrawFilledPoly( EDA_Rect* aClipBox,
     clippedPolygon.clear();
     for( int ii = 0; ii < n; ii++ )
         inputPolygon.push_back( PointF( (REAL) aPoints[ii].x,
-                                       (REAL) aPoints[ii].y ) );
+                                        (REAL) aPoints[ii].y ) );
 
     RectF window( (REAL) aClipBox->GetX(), (REAL) aClipBox->GetY(),
-                 (REAL) aClipBox->GetWidth(),
-                 (REAL) aClipBox->GetHeight() );
+                  (REAL) aClipBox->GetWidth(),
+                  (REAL) aClipBox->GetHeight() );
 
     SutherlandHodgman sh( window );
     sh.Clip( inputPolygon, outputPolygon );
@@ -1655,7 +1650,7 @@ void ClipAndDrawFilledPoly( EDA_Rect* aClipBox,
          ++cit )
     {
         clippedPolygon.push_back( wxPoint( wxRound( cit->X ),
-                                          wxRound( cit->Y ) ) );
+                                           wxRound( cit->Y ) ) );
     }
 
     if( clippedPolygon.size() )
