@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-07 19:54+0200\n"
-"PO-Revision-Date: 2010-02-07 19:54+0200\n"
+"POT-Creation-Date: 2010-02-10 12:11+0200\n"
+"PO-Revision-Date: 2010-02-10 12:11+0200\n"
 "Last-Translator: Vesa Solonen <vesa.solonen@hut.fi>\n"
 "Language-Team: Amerikanenglanti <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -315,23 +315,23 @@ msgstr "Tavallisen kontrastin näyttöasetus"
 msgid "High contrast display mode"
 msgstr "Korkean kontrastin näyttöasetus"
 
-#: pcbnew/layer_widget.cpp:360
+#: pcbnew/layer_widget.cpp:358
 msgid "Left click to select, middle click for color change, right click for menu"
 msgstr "Vasen napsautus valitsee, keskimmäinen vaihtaa värin, oikea avaa valikon"
 
-#: pcbnew/layer_widget.cpp:376
+#: pcbnew/layer_widget.cpp:374
 msgid "Enable this for visibility"
 msgstr "Ota käyttöön näkyvyyttä varten"
 
-#: pcbnew/layer_widget.cpp:395
+#: pcbnew/layer_widget.cpp:393
 msgid "Middle click for color change"
 msgstr "Keskimmäinen napsautus vaihtaa värin"
 
-#: pcbnew/layer_widget.cpp:466
+#: pcbnew/layer_widget.cpp:471
 msgid "Layer"
 msgstr "Kerros"
 
-#: pcbnew/layer_widget.cpp:486
+#: pcbnew/layer_widget.cpp:491
 msgid "Render"
 msgstr "Näytä"
 
@@ -2298,181 +2298,181 @@ msgstr "Luettelo liittämättömistä anturoista. Oikea painallus tuo ponnahdusv
 msgid "Unconnected"
 msgstr "Liittämättömiä"
 
-#: pcbnew/tool_modedit.cpp:41
+#: pcbnew/tool_modedit.cpp:39
 msgid "Select working library"
 msgstr "Valitse työkirjasto"
 
-#: pcbnew/tool_modedit.cpp:45
+#: pcbnew/tool_modedit.cpp:43
 msgid "Save Module in working library"
 msgstr "Tallenna osa työkirjastoon"
 
-#: pcbnew/tool_modedit.cpp:50
+#: pcbnew/tool_modedit.cpp:48
 msgid "Create new library and save current module"
 msgstr "Luo uusi kirjasto ja tallenna nykyinen osa"
 
-#: pcbnew/tool_modedit.cpp:55
+#: pcbnew/tool_modedit.cpp:53
 msgid "Delete part in current library"
 msgstr "Poista osa työkirjastosta"
 
-#: pcbnew/tool_modedit.cpp:60
+#: pcbnew/tool_modedit.cpp:58
 msgid "New Module"
 msgstr "Uusi osa"
 
-#: pcbnew/tool_modedit.cpp:64
+#: pcbnew/tool_modedit.cpp:62
 msgid "Load module from lib"
 msgstr "Lataa osa kirjastosta"
 
-#: pcbnew/tool_modedit.cpp:69
+#: pcbnew/tool_modedit.cpp:67
 msgid "Load module from current board"
 msgstr "Lataa osa nykyiseltä levyltä"
 
-#: pcbnew/tool_modedit.cpp:73
+#: pcbnew/tool_modedit.cpp:71
 msgid "Update module in current board"
 msgstr "Päivitä osa nykyisellä levyllä"
 
-#: pcbnew/tool_modedit.cpp:77
+#: pcbnew/tool_modedit.cpp:75
 msgid "Insert module into current board"
 msgstr "Lisää osa nykyiseen levyyn"
 
-#: pcbnew/tool_modedit.cpp:82
+#: pcbnew/tool_modedit.cpp:80
 msgid "import module"
 msgstr "Tuo osa"
 
-#: pcbnew/tool_modedit.cpp:86
+#: pcbnew/tool_modedit.cpp:84
 msgid "export module"
 msgstr "Vie osa"
 
-#: pcbnew/tool_modedit.cpp:98
+#: pcbnew/tool_modedit.cpp:96
 msgid "Module Properties"
 msgstr "Osan ominaisuudet"
 
-#: pcbnew/tool_modedit.cpp:102
+#: pcbnew/tool_modedit.cpp:100
 msgid "Print Module"
 msgstr "Tulosta osa"
 
-#: pcbnew/tool_modedit.cpp:105
+#: pcbnew/tool_modedit.cpp:103
 msgid "Zoom in"
 msgstr "Lähennä"
 
-#: pcbnew/tool_modedit.cpp:115
+#: pcbnew/tool_modedit.cpp:113
 msgid "Redraw view"
 msgstr "Virkistä näyttö"
 
-#: pcbnew/tool_modedit.cpp:120
+#: pcbnew/tool_modedit.cpp:118
 msgid "Zoom auto"
 msgstr "Sovita koko näytölle"
 
-#: pcbnew/tool_modedit.cpp:133
+#: pcbnew/tool_modedit.cpp:131
 msgid "Module Check"
 msgstr "Osan tarkistus"
 
-#: pcbnew/tool_modedit.cpp:157
+#: pcbnew/tool_modedit.cpp:155
 msgid "Add Pads"
 msgstr "Lisää anturoita"
 
-#: pcbnew/tool_modedit.cpp:162
+#: pcbnew/tool_modedit.cpp:160
 msgid "Add graphic line or polygon"
 msgstr "Lisää grafiikkaa (viiva tai monikulmio)"
 
-#: pcbnew/tool_modedit.cpp:166
+#: pcbnew/tool_modedit.cpp:164
 msgid "Add graphic circle"
 msgstr "Lisää grafiikkaympyrä"
 
-#: pcbnew/tool_modedit.cpp:170
+#: pcbnew/tool_modedit.cpp:168
 msgid "Add graphic arc"
 msgstr "Lisää grafiikkakaari"
 
-#: pcbnew/tool_modedit.cpp:174
+#: pcbnew/tool_modedit.cpp:172
 msgid "Add Text"
 msgstr "Lisää tekstiä"
 
-#: pcbnew/tool_modedit.cpp:184
+#: pcbnew/tool_modedit.cpp:182
 msgid "Delete items"
 msgstr "Poista"
 
-#: pcbnew/tool_modedit.cpp:208
+#: pcbnew/tool_modedit.cpp:206
 msgid "Display Polar Coord ON"
 msgstr "Näytä napakoordinaatit"
 
-#: pcbnew/tool_modedit.cpp:212
+#: pcbnew/tool_modedit.cpp:210
 msgid "Units in inches"
 msgstr "Mittayksiköt tuumina"
 
-#: pcbnew/tool_modedit.cpp:216
+#: pcbnew/tool_modedit.cpp:214
 msgid "Units in millimeters"
 msgstr "Mittayksiköt millimetreinä"
 
-#: pcbnew/tool_modedit.cpp:220
+#: pcbnew/tool_modedit.cpp:218
 msgid "Change Cursor Shape"
 msgstr "Vaihda kursoria"
 
-#: pcbnew/tool_modedit.cpp:225
+#: pcbnew/tool_modedit.cpp:223
 msgid "Show Pads Sketch"
 msgstr "Näytä anturat luonnoksena"
 
-#: pcbnew/tool_modedit.cpp:230
+#: pcbnew/tool_modedit.cpp:228
 msgid "Show Texts Sketch"
 msgstr "Näytä tekstit luonnoksena"
 
-#: pcbnew/tool_modedit.cpp:235
+#: pcbnew/tool_modedit.cpp:233
 msgid "Show Edges Sketch"
 msgstr "Näytä reunat luonnoksena"
 
-#: pcbnew/tool_modedit.cpp:269
+#: pcbnew/tool_modedit.cpp:267
 msgid "Auto"
 msgstr "Automaattinen"
 
-#: pcbnew/tool_modedit.cpp:273
+#: pcbnew/tool_modedit.cpp:271
 msgid "Zoom "
 msgstr "Koko"
 
-#: pcbnew/tool_modedit.cpp:304
+#: pcbnew/tool_modedit.cpp:302
 #, c-format
 msgid "Grid %.1f"
 msgstr "Pisterasteri %.1f"
 
-#: pcbnew/tool_modedit.cpp:306
+#: pcbnew/tool_modedit.cpp:304
 #, c-format
 msgid "Grid %.3f"
 msgstr "Pisterasteri %.3f"
 
-#: pcbnew/tool_modedit.cpp:310
+#: pcbnew/tool_modedit.cpp:308
 msgid "User Grid"
 msgstr "Käyttäjän rasteri"
 
-#: pcbnew/class_module.cpp:848
+#: pcbnew/class_module.cpp:852
 msgid "Last Change"
 msgstr "Viimeinen muutos"
 
-#: pcbnew/class_module.cpp:853
+#: pcbnew/class_module.cpp:857
 msgid "Netlist path"
 msgstr "Liitostiedoston polku"
 
-#: pcbnew/class_module.cpp:874
+#: pcbnew/class_module.cpp:878
 msgid "Stat"
 msgstr "Tilanne"
 
-#: pcbnew/class_module.cpp:877
+#: pcbnew/class_module.cpp:881
 msgid "Orient"
 msgstr "Asento"
 
-#: pcbnew/class_module.cpp:879
+#: pcbnew/class_module.cpp:883
 msgid "Module"
 msgstr "Osa"
 
-#: pcbnew/class_module.cpp:884
+#: pcbnew/class_module.cpp:888
 msgid "No 3D shape"
 msgstr "Ei 3D-muotoa"
 
-#: pcbnew/class_module.cpp:885
+#: pcbnew/class_module.cpp:889
 msgid "3D-Shape"
 msgstr "3D-muoto"
 
-#: pcbnew/class_module.cpp:887
+#: pcbnew/class_module.cpp:891
 msgid "Doc:  "
 msgstr "Dokum:"
 
-#: pcbnew/class_module.cpp:888
+#: pcbnew/class_module.cpp:892
 msgid "KeyW: "
 msgstr "AvainS:"
 
@@ -3382,7 +3382,7 @@ msgstr "Virhe: täytyy valita kerros"
 
 #: pcbnew/dialog_copper_zones.cpp:336
 msgid "Error : you must choose a net name"
-msgstr "Virhe: Täytyy valita kytkentäverkko"
+msgstr "Virhe: Täytyy valita kytkentäverkkonimi"
 
 #: pcbnew/dialog_copper_zones.cpp:343
 msgid "You have chosen the \"not connected\" option. This will create insulated copper islands. Are you sure ?"
@@ -4007,23 +4007,23 @@ msgstr "Maks."
 msgid "Segm"
 msgstr "Segm"
 
-#: pcbnew/pcbframe.cpp:335
+#: pcbnew/pcbframe.cpp:334
 msgid "Visibles"
 msgstr "Näkyvät"
 
-#: pcbnew/pcbframe.cpp:426
+#: pcbnew/pcbframe.cpp:420
 msgid "Board modified, Save before exit ?"
 msgstr "Levyä muokattu. Tallennetaanko?"
 
-#: pcbnew/pcbframe.cpp:427
+#: pcbnew/pcbframe.cpp:421
 msgid "Confirmation"
 msgstr "Vahvistus"
 
-#: pcbnew/pcbframe.cpp:466
+#: pcbnew/pcbframe.cpp:460
 msgid "3D Frame already opened"
 msgstr "3D-kehys on jo auki"
 
-#: pcbnew/pcbframe.cpp:470
+#: pcbnew/pcbframe.cpp:464
 msgid "3D Viewer"
 msgstr "3D-katselin"
 
@@ -4118,99 +4118,99 @@ msgstr ""
 "Näytä ja valitse aktiivinen kerrospari\n"
 "reititykseen ja läpivienteihin."
 
-#: pcbnew/tool_pcb.cpp:200
+#: pcbnew/tool_pcb.cpp:198
 msgid "New board"
 msgstr "Uusi levy"
 
-#: pcbnew/tool_pcb.cpp:202
+#: pcbnew/tool_pcb.cpp:200
 msgid "Open existing board"
 msgstr "Avaa levytiedosto"
 
-#: pcbnew/tool_pcb.cpp:204
+#: pcbnew/tool_pcb.cpp:202
 msgid "Save board"
 msgstr "Tallenna levytiedosto"
 
-#: pcbnew/tool_pcb.cpp:208
+#: pcbnew/tool_pcb.cpp:206
 msgid "Page settings (size, texts)"
 msgstr "Sivun asetukset (koko, tekstit)"
 
-#: pcbnew/tool_pcb.cpp:213
+#: pcbnew/tool_pcb.cpp:211
 msgid "Open module editor"
 msgstr "Avaa osaeditori"
 
-#: pcbnew/tool_pcb.cpp:217
+#: pcbnew/tool_pcb.cpp:215
 msgid "Cut selected item"
 msgstr "Leikkaa valittu osa"
 
-#: pcbnew/tool_pcb.cpp:221
+#: pcbnew/tool_pcb.cpp:219
 msgid "Copy selected item"
 msgstr "Kopioi valittu osa"
 
-#: pcbnew/tool_pcb.cpp:224
+#: pcbnew/tool_pcb.cpp:222
 msgid "Paste"
 msgstr "Liitä"
 
-#: pcbnew/tool_pcb.cpp:235
+#: pcbnew/tool_pcb.cpp:233
 msgid "Print board"
 msgstr "Tulosta levy"
 
-#: pcbnew/tool_pcb.cpp:237
+#: pcbnew/tool_pcb.cpp:235
 msgid "Plot (HPGL, PostScript, or GERBER format)"
 msgstr "Piirturi (HPGL, PostScript, tai GERBER –muodossa)"
 
-#: pcbnew/tool_pcb.cpp:261
+#: pcbnew/tool_pcb.cpp:259
 msgid "Find components and texts"
 msgstr "Etsi komponentteja ja tekstiä"
 
-#: pcbnew/tool_pcb.cpp:269
+#: pcbnew/tool_pcb.cpp:267
 msgid "Read netlist"
 msgstr "Lue liitostiedosto"
 
-#: pcbnew/tool_pcb.cpp:271
+#: pcbnew/tool_pcb.cpp:269
 msgid "Perform design rules check"
 msgstr "Tee suunnittelusääntöjen tarkistus (DRC)"
 
-#: pcbnew/tool_pcb.cpp:284
+#: pcbnew/tool_pcb.cpp:282
 msgid "Manual and automatic move or place of modules"
 msgstr "Käyttöasetus: Manuaalinen ja automaattinen osien asemointi"
 
-#: pcbnew/tool_pcb.cpp:288
+#: pcbnew/tool_pcb.cpp:286
 msgid "Mode Track and Autorouting"
 msgstr "Käyttöasetus: Liuskat ja automaattireititys"
 
-#: pcbnew/tool_pcb.cpp:294
+#: pcbnew/tool_pcb.cpp:292
 msgid "Fast access to theWeb Based FreeROUTE advanced router"
 msgstr "Pikatyökalu Freerouting.net automaattireitittimeen ja Specctra DSN/SES–rajapintaan"
 
-#: pcbnew/tool_pcb.cpp:330
+#: pcbnew/tool_pcb.cpp:328
 msgid "Change cursor shape"
 msgstr "Vaihda kursoria"
 
-#: pcbnew/tool_pcb.cpp:338
+#: pcbnew/tool_pcb.cpp:336
 msgid "Show module ratsnest when moving"
 msgstr "Näytä osan kytkentärisukko sirrettäessä"
 
-#: pcbnew/tool_pcb.cpp:344
+#: pcbnew/tool_pcb.cpp:342
 msgid "Enable automatic track deletion"
 msgstr "Salli automaattinen liuskan poisto"
 
-#: pcbnew/tool_pcb.cpp:350
+#: pcbnew/tool_pcb.cpp:348
 msgid "Show filled areas in zones"
 msgstr "Näytä täytöt"
 
-#: pcbnew/tool_pcb.cpp:355
+#: pcbnew/tool_pcb.cpp:353
 msgid "Do not show filled areas in zones"
 msgstr "Piilota täytöt"
 
-#: pcbnew/tool_pcb.cpp:360
+#: pcbnew/tool_pcb.cpp:358
 msgid "Show outlines of filled areas only in zones"
 msgstr "Näytä täytöistä vain reunaviivat"
 
-#: pcbnew/tool_pcb.cpp:379
+#: pcbnew/tool_pcb.cpp:377
 msgid "Enable high contrast display mode"
 msgstr "Korkean kontrastin näyttöasetus käyttöön"
 
-#: pcbnew/tool_pcb.cpp:395
+#: pcbnew/tool_pcb.cpp:393
 msgid ""
 "Show/hide the toolbar for microwaves tools\n"
 " This is a experimental feature (under development)"
@@ -4218,71 +4218,71 @@ msgstr ""
 "Näytä ja piilota aputyökalupalkki mikroaaltokäyttöön.\n"
 "Kehitteillä oleva kokeellinen ominaisuus"
 
-#: pcbnew/tool_pcb.cpp:420
+#: pcbnew/tool_pcb.cpp:418
 msgid "Highlight net"
 msgstr "Liitosverkon korostus"
 
-#: pcbnew/tool_pcb.cpp:425
+#: pcbnew/tool_pcb.cpp:423
 msgid "Display local ratsnest"
 msgstr "Näytä paikallinen kytkentärisukko"
 
-#: pcbnew/tool_pcb.cpp:431
+#: pcbnew/tool_pcb.cpp:429
 msgid "Add modules"
 msgstr "Lisää osia"
 
-#: pcbnew/tool_pcb.cpp:435
+#: pcbnew/tool_pcb.cpp:433
 msgid "Add tracks and vias"
 msgstr "Lisää liuskoja ja läpivientejä"
 
-#: pcbnew/tool_pcb.cpp:439
+#: pcbnew/tool_pcb.cpp:437
 msgid "Add zones"
 msgstr "Lisää täyttöjä"
 
-#: pcbnew/tool_pcb.cpp:456
+#: pcbnew/tool_pcb.cpp:454
 msgid "Add text"
 msgstr "Lisää tekstiä"
 
-#: pcbnew/tool_pcb.cpp:461
+#: pcbnew/tool_pcb.cpp:459
 msgid "Add dimension"
 msgstr "Lisää mittamerkintöjä"
 
-#: pcbnew/tool_pcb.cpp:465
+#: pcbnew/tool_pcb.cpp:463
 msgid "Add layer alignment target"
 msgstr "Lisää kerroskohdistuskohtio"
 
-#: pcbnew/tool_pcb.cpp:475
+#: pcbnew/tool_pcb.cpp:473
 msgid "Offset adjust for drill and place files"
 msgstr "Siirtymän asettelu poraus– ja ladontatiedostoihin"
 
-#: pcbnew/tool_pcb.cpp:497
+#: pcbnew/tool_pcb.cpp:495
 msgid "Create line of specified length for microwave applications"
 msgstr "Luo tietyn mittainen mikroaaltolinja"
 
-#: pcbnew/tool_pcb.cpp:501
+#: pcbnew/tool_pcb.cpp:499
 msgid "Create gap of specified length for microwave applications"
 msgstr "Luo mikroaaltoväli (kapasitanssi)"
 
-#: pcbnew/tool_pcb.cpp:507
+#: pcbnew/tool_pcb.cpp:505
 msgid "Create stub of specified length for microwave applications"
 msgstr "Luo tietyn mittainen mikroaaltostubi"
 
-#: pcbnew/tool_pcb.cpp:511
+#: pcbnew/tool_pcb.cpp:509
 msgid "Create stub (arc) of specified length for microwave applications"
 msgstr "Luo tietyn mittainen mikroaaltokaaristubi"
 
-#: pcbnew/tool_pcb.cpp:516
+#: pcbnew/tool_pcb.cpp:514
 msgid "Create a polynomial shape for microwave applications"
 msgstr "Luo polynomimuoto mikroaaltosovelluksiin"
 
-#: pcbnew/tool_pcb.cpp:568
+#: pcbnew/tool_pcb.cpp:566
 msgid "Current NetClass clearance value"
 msgstr "Nykyisen kytkentäverkkoluokan eristeväli"
 
-#: pcbnew/tool_pcb.cpp:577
+#: pcbnew/tool_pcb.cpp:575
 msgid "Name of the current NetClass"
 msgstr "Nykyisen kytkentäverkkoluokan nimi"
 
-#: pcbnew/tool_pcb.cpp:586
+#: pcbnew/tool_pcb.cpp:584
 msgid ""
 "Auto track width: when starting on an existing track use its width\n"
 "otherwise, use current width setting"
@@ -4290,7 +4290,7 @@ msgstr ""
 "Automaattinen liuskan leveys: Aloitettaessa olemassa olevalta liuskalta\n"
 "käytetään samaa leveyttä. Muuten määriteltyä aktiivista leveyttä."
 
-#: pcbnew/tool_pcb.cpp:763
+#: pcbnew/tool_pcb.cpp:761
 msgid "+/- to switch"
 msgstr "+/- vaihtaaksesi"
 
@@ -4570,27 +4570,27 @@ msgstr "Merkintä"
 msgid "ErrType"
 msgstr "Virhetyyppi"
 
-#: pcbnew/class_drawsegment.cpp:375
+#: pcbnew/class_drawsegment.cpp:380
 msgid "Shape"
 msgstr "Muoto"
 
-#: pcbnew/class_drawsegment.cpp:379
+#: pcbnew/class_drawsegment.cpp:384
 msgid "Circle"
 msgstr "Ympyrä"
 
-#: pcbnew/class_drawsegment.cpp:383
+#: pcbnew/class_drawsegment.cpp:388
 msgid "Arc"
 msgstr "Kaari"
 
-#: pcbnew/class_drawsegment.cpp:386
+#: pcbnew/class_drawsegment.cpp:391
 msgid "Angle"
 msgstr "Kulma"
 
-#: pcbnew/class_drawsegment.cpp:389
+#: pcbnew/class_drawsegment.cpp:394
 msgid "Curve"
 msgstr "Mutka"
 
-#: pcbnew/class_drawsegment.cpp:393
+#: pcbnew/class_drawsegment.cpp:398
 msgid "Segment"
 msgstr "Segmentti"
 
@@ -4676,7 +4676,7 @@ msgstr "Poista kohtio"
 
 #: pcbnew/onrightclick.cpp:264
 msgid "Get and Move Footprint"
-msgstr "Poimi ja siirrä liitoskuvaa"
+msgstr "Hae ja siirrä liitoskuvaa"
 
 #: pcbnew/onrightclick.cpp:278
 msgid "Fill or Refill All Zones"
@@ -6210,19 +6210,19 @@ msgstr ""
 "Tämä arvo voidaan syrjäyttää paikallisilla arvoilla liitoskuvalle tai anturalle.\n"
 "Lopullinen välys on tämän arvon ja suhteellisen välyksen summa."
 
-#: pcbnew/class_edge_mod.cpp:296
+#: pcbnew/class_edge_mod.cpp:301
 msgid "Graphic Item"
 msgstr "Graafinen elementti"
 
-#: pcbnew/class_edge_mod.cpp:303
+#: pcbnew/class_edge_mod.cpp:308
 msgid "TimeStamp"
 msgstr "Aikaleima"
 
-#: pcbnew/class_edge_mod.cpp:305
+#: pcbnew/class_edge_mod.cpp:310
 msgid "Mod Layer"
 msgstr ""
 
-#: pcbnew/class_edge_mod.cpp:308
+#: pcbnew/class_edge_mod.cpp:313
 msgid "Seg Layer"
 msgstr "Segmentin kerros"
 
@@ -6690,62 +6690,62 @@ msgstr ""
 msgid "Plot file <%s> created"
 msgstr "Piirrostiedosto <%s> luotu"
 
-#: pcbnew/class_track.cpp:923
+#: pcbnew/class_track.cpp:967
 msgid "Track Length"
 msgstr "Liuskan pituus"
 
-#: pcbnew/class_track.cpp:953
+#: pcbnew/class_track.cpp:997
 msgid "Zone"
 msgstr "Täyttöala"
 
-#: pcbnew/class_track.cpp:982
+#: pcbnew/class_track.cpp:1026
 msgid "Flags"
 msgstr "Liput"
 
-#: pcbnew/class_track.cpp:994
+#: pcbnew/class_track.cpp:1038
 msgid "Status"
 msgstr "Tilanne"
 
-#: pcbnew/class_track.cpp:1017
+#: pcbnew/class_track.cpp:1061
 msgid "Diam"
 msgstr "Halk."
 
-#: pcbnew/class_track.cpp:1028
+#: pcbnew/class_track.cpp:1072
 msgid "(Specific)"
 msgstr "(Tietty)"
 
-#: pcbnew/class_track.cpp:1030
+#: pcbnew/class_track.cpp:1074
 msgid "(Default)"
 msgstr "(Oletusasetus)"
 
-#: pcbnew/class_track.cpp:1043
+#: pcbnew/class_track.cpp:1087
 msgid "Net Class"
 msgstr "Kytkentäverkkoluokka"
 
-#: pcbnew/class_track.cpp:1050
+#: pcbnew/class_track.cpp:1094
 msgid "Segment Length"
 msgstr "Segmentin pituus"
 
-#: pcbnew/class_text_mod.cpp:445
+#: pcbnew/class_text_mod.cpp:455
 msgid "Ref."
 msgstr "Viite"
 
-#: pcbnew/class_text_mod.cpp:445
-#: pcbnew/class_text_mod.cpp:454
+#: pcbnew/class_text_mod.cpp:455
+#: pcbnew/class_text_mod.cpp:464
 msgid "Text"
 msgstr "Teksti"
 
-#: pcbnew/class_text_mod.cpp:476
+#: pcbnew/class_text_mod.cpp:486
 msgid " No"
 msgstr " Ei"
 
-#: pcbnew/class_text_mod.cpp:478
+#: pcbnew/class_text_mod.cpp:488
 msgid " Yes"
 msgstr " Kyllä"
 
 #: pcbnew/autorout.cpp:71
 msgid "Net not selected"
-msgstr "kytkentäverkkoa ei valittu"
+msgstr "kytkentäverkkoa ei ole valittu"
 
 #: pcbnew/autorout.cpp:79
 msgid "Module not selected"
@@ -6791,15 +6791,15 @@ msgstr "Lisää kaaristubi"
 msgid "Add Polynomial Shape"
 msgstr "Lisää polynomimuoto mikroaaltosovelluksiin"
 
-#: pcbnew/moduleframe.cpp:254
+#: pcbnew/moduleframe.cpp:253
 msgid "Module Editor: Module modified! Continue?"
 msgstr "Osaeditori: Osaa muokattu! Jatketaanko?"
 
-#: pcbnew/moduleframe.cpp:382
+#: pcbnew/moduleframe.cpp:381
 msgid "Show pads in sketch mode"
 msgstr "Näytä anturat luonnoksena"
 
-#: pcbnew/moduleframe.cpp:383
+#: pcbnew/moduleframe.cpp:382
 msgid "Show pads in filled mode"
 msgstr "Näytä anturat täytettyinä"
 
@@ -7612,71 +7612,71 @@ msgstr "Tuo piirroksia"
 msgid "Export current drawing"
 msgstr "Vie nykyinen piirros"
 
-#: eeschema/tool_lib.cpp:103
+#: eeschema/tool_lib.cpp:101
 msgid "Save current library to disk"
 msgstr "Tallenna nykyinen kirjasto levylle"
 
-#: eeschema/tool_lib.cpp:111
+#: eeschema/tool_lib.cpp:109
 msgid "Delete component in current library"
 msgstr "Poista komponentti työkirjastosta"
 
-#: eeschema/tool_lib.cpp:116
+#: eeschema/tool_lib.cpp:114
 msgid "New component"
 msgstr "Uusi komponentti"
 
-#: eeschema/tool_lib.cpp:120
+#: eeschema/tool_lib.cpp:118
 msgid "Select component to edit"
 msgstr "Valitse muokattava komponentti"
 
-#: eeschema/tool_lib.cpp:124
+#: eeschema/tool_lib.cpp:122
 msgid "Update current component in current library"
 msgstr "Päivitä nykyinen komponentti työkirjastossa"
 
-#: eeschema/tool_lib.cpp:127
+#: eeschema/tool_lib.cpp:125
 msgid "Import component"
 msgstr "Tuo komponentti"
 
-#: eeschema/tool_lib.cpp:130
+#: eeschema/tool_lib.cpp:128
 msgid "Export component"
 msgstr "Vie komponentti"
 
-#: eeschema/tool_lib.cpp:134
+#: eeschema/tool_lib.cpp:132
 msgid "Save current component to new library"
 msgstr "Tallenna nykyinen komponentti uuteen kirjastoon"
 
-#: eeschema/tool_lib.cpp:137
+#: eeschema/tool_lib.cpp:135
 msgid "Undo last command"
 msgstr "Peru viimeinen toiminto"
 
-#: eeschema/tool_lib.cpp:141
+#: eeschema/tool_lib.cpp:139
 msgid "Redo the last command"
 msgstr "Tee viimeinen toiminto uudelleen"
 
-#: eeschema/tool_lib.cpp:149
+#: eeschema/tool_lib.cpp:147
 msgid "Edit component properties"
 msgstr "Muokkaa komponentin ominaisuuksia"
 
-#: eeschema/tool_lib.cpp:153
+#: eeschema/tool_lib.cpp:151
 msgid "Add and remove fields and edit field properties"
 msgstr "Lisää ja poista kenttiä ja muokkaa niiden ominaisuuksia"
 
-#: eeschema/tool_lib.cpp:158
+#: eeschema/tool_lib.cpp:156
 msgid "Test for duplicate pins and off grid pins"
 msgstr "Testaa nastojen kaksoiskappaleet ja asemointivirheet"
 
-#: eeschema/tool_lib.cpp:181
+#: eeschema/tool_lib.cpp:179
 msgid "Show as \"De Morgan\" normal part"
 msgstr ""
 
-#: eeschema/tool_lib.cpp:185
+#: eeschema/tool_lib.cpp:183
 msgid "Show as \"De Morgan\" convert part"
 msgstr ""
 
-#: eeschema/tool_lib.cpp:190
+#: eeschema/tool_lib.cpp:188
 msgid "Edit document file"
 msgstr "Muokkaa dokumentaatiotiedostoa"
 
-#: eeschema/tool_lib.cpp:207
+#: eeschema/tool_lib.cpp:205
 msgid "Edit pins part per part ( Use carefully!)"
 msgstr "Muokkaa nastoja osakohtaisesti (Käytä varoen!)"
 
@@ -7804,28 +7804,28 @@ msgstr "Salli johtimet ja väylät missä tahansa asennossa"
 msgid "Show p&age limits"
 msgstr "Näytä sivun &reunat"
 
-#: eeschema/schframe.cpp:358
+#: eeschema/schframe.cpp:356
 msgid "Schematic modified, Save before exit ?"
 msgstr "Kytkentäkaaviota muokattu. Tallennetaanko?"
 
-#: eeschema/schframe.cpp:493
+#: eeschema/schframe.cpp:491
 msgid "Draw wires and buses in any direction"
 msgstr "Piirrä johtimet ja väylät vapaalla kulmalla"
 
-#: eeschema/schframe.cpp:494
+#: eeschema/schframe.cpp:492
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Piirrä johtimet ja väylät vain vaaka- ja pystysuorassa"
 
-#: eeschema/schframe.cpp:504
+#: eeschema/schframe.cpp:502
 msgid "Do not show hidden pins"
 msgstr "Älä näytä piilotettuja nastoja"
 
-#: eeschema/schframe.cpp:505
-#: eeschema/tool_sch.cpp:270
+#: eeschema/schframe.cpp:503
+#: eeschema/tool_sch.cpp:266
 msgid "Show hidden pins"
 msgstr "Näytä piilotetut nastat"
 
-#: eeschema/schframe.cpp:596
+#: eeschema/schframe.cpp:594
 msgid "Schematic"
 msgstr "Kytkentäkaavio"
 
@@ -7862,7 +7862,7 @@ msgstr "Seuraava tuntomerkki (F5)"
 msgid "Find Cmp in &Lib"
 msgstr "Etsi komponentti &kirjastossa"
 
-#: eeschema/libframe.cpp:291
+#: eeschema/libframe.cpp:295
 msgid ""
 "Component was modified!\n"
 "Discard changes?"
@@ -7870,7 +7870,7 @@ msgstr ""
 "Komponenttia muokattiin!\n"
 "Hylätäänkö muutokset?"
 
-#: eeschema/libframe.cpp:304
+#: eeschema/libframe.cpp:308
 #, c-format
 msgid ""
 "Library \"%s\" was modified!\n"
@@ -7879,24 +7879,24 @@ msgstr ""
 "Kirjastoa \"%s\" muokattiin!\n"
 "Hylätäänkö muutokset?"
 
-#: eeschema/libframe.cpp:414
+#: eeschema/libframe.cpp:418
 #, c-format
 msgid "Part %c"
 msgstr "Osa %c"
 
-#: eeschema/libframe.cpp:681
+#: eeschema/libframe.cpp:685
 msgid "Set pin options"
 msgstr "Aseta nastojen valinnat"
 
-#: eeschema/libframe.cpp:710
+#: eeschema/libframe.cpp:714
 msgid "Add line"
 msgstr "Lisää viiva"
 
-#: eeschema/libframe.cpp:714
+#: eeschema/libframe.cpp:718
 msgid "Set anchor position"
 msgstr "Aseta kiinnepisteen sijainti"
 
-#: eeschema/libframe.cpp:724
+#: eeschema/libframe.cpp:728
 msgid "Export"
 msgstr "Vie"
 
@@ -7916,103 +7916,103 @@ msgstr "Taustaväri:"
 msgid "Apply"
 msgstr "Käytä"
 
-#: eeschema/tool_sch.cpp:34
+#: eeschema/tool_sch.cpp:30
 msgid "New schematic project"
 msgstr "Uusi kytkentäkaavioprojekti"
 
-#: eeschema/tool_sch.cpp:37
+#: eeschema/tool_sch.cpp:33
 msgid "Open schematic project"
 msgstr "Avaa kytkentäkaavioprojekti"
 
-#: eeschema/tool_sch.cpp:41
+#: eeschema/tool_sch.cpp:37
 msgid "Save schematic project"
 msgstr "Tallenna kytkentäkaavioprojekti"
 
-#: eeschema/tool_sch.cpp:45
+#: eeschema/tool_sch.cpp:41
 msgid "Page settings"
 msgstr "Sivun asetukset"
 
-#: eeschema/tool_sch.cpp:49
+#: eeschema/tool_sch.cpp:45
 msgid "Library editor"
 msgstr "Kirjastoeditori"
 
-#: eeschema/tool_sch.cpp:53
+#: eeschema/tool_sch.cpp:49
 msgid "Library browser"
 msgstr "Kirjastoselain"
 
-#: eeschema/tool_sch.cpp:58
+#: eeschema/tool_sch.cpp:54
 msgid "Navigate schematic hierarchy"
 msgstr "Navigoi kytkentäkaaviohierarkiaa"
 
-#: eeschema/tool_sch.cpp:84
+#: eeschema/tool_sch.cpp:80
 msgid "Print schematic"
 msgstr "Tulosta kytkentäkaavio"
 
-#: eeschema/tool_sch.cpp:88
+#: eeschema/tool_sch.cpp:84
 msgid "Run Cvpcb"
 msgstr "Suorita CvPCB"
 
-#: eeschema/tool_sch.cpp:91
+#: eeschema/tool_sch.cpp:87
 msgid "Run pcbnew"
 msgstr "Suorita piirilevyeditori PCBnew"
 
-#: eeschema/tool_sch.cpp:119
+#: eeschema/tool_sch.cpp:115
 msgid "Netlist generation"
 msgstr "Liitostiedoston luonti"
 
-#: eeschema/tool_sch.cpp:123
+#: eeschema/tool_sch.cpp:119
 msgid "Annotate schematic"
 msgstr "Lisää selitteet"
 
-#: eeschema/tool_sch.cpp:126
+#: eeschema/tool_sch.cpp:122
 msgid "Schematic Electric Rules Check"
 msgstr "Kytkentäkaavion sähköinen sääntötarkastus (ERC)"
 
-#: eeschema/tool_sch.cpp:129
+#: eeschema/tool_sch.cpp:125
 msgid "Bill of material and/or Cross references"
 msgstr "Materiaaliluettelo ja/tai ristiviitteet"
 
-#: eeschema/tool_sch.cpp:133
+#: eeschema/tool_sch.cpp:129
 msgid "Backannotate footprint"
 msgstr ""
 
-#: eeschema/tool_sch.cpp:157
+#: eeschema/tool_sch.cpp:153
 msgid "Hierarchy Push/Pop"
 msgstr "Hierarkiassa alas/ylös"
 
-#: eeschema/tool_sch.cpp:162
+#: eeschema/tool_sch.cpp:158
 msgid "Place a component"
 msgstr "Lisää komponentti"
 
-#: eeschema/tool_sch.cpp:166
+#: eeschema/tool_sch.cpp:162
 msgid "Place a power port"
 msgstr "Lisää teholähde"
 
-#: eeschema/tool_sch.cpp:171
+#: eeschema/tool_sch.cpp:167
 msgid "Place a wire"
 msgstr "Lisää johdin"
 
-#: eeschema/tool_sch.cpp:175
+#: eeschema/tool_sch.cpp:171
 msgid "Place a bus"
 msgstr "Lisää väylä"
 
-#: eeschema/tool_sch.cpp:179
+#: eeschema/tool_sch.cpp:175
 msgid "Place a wire to bus entry"
 msgstr "Lisää johdin väyläliityntään"
 
-#: eeschema/tool_sch.cpp:183
+#: eeschema/tool_sch.cpp:179
 msgid "Place a bus to bus entry"
 msgstr "Lisää väylä väyläliityntään"
 
-#: eeschema/tool_sch.cpp:188
+#: eeschema/tool_sch.cpp:184
 msgid "Place no connect flag"
 msgstr "Lisää \"Kytkemätön\"-lippu"
 
-#: eeschema/tool_sch.cpp:192
+#: eeschema/tool_sch.cpp:188
 msgid "Place net name"
 msgstr "Lisää kytkentäverkon nimi"
 
-#: eeschema/tool_sch.cpp:196
+#: eeschema/tool_sch.cpp:192
 msgid ""
 "Place a global label.\n"
 "Warning: all global labels with the same name are connected in whole hierarchy"
@@ -8020,39 +8020,39 @@ msgstr ""
 "Lisää Globaali nimiö.\n"
 " Varoitus: Kaikki globaalit nimiöt samalla nimellä ovat yhdistetyt koko hierarkiassa"
 
-#: eeschema/tool_sch.cpp:201
+#: eeschema/tool_sch.cpp:197
 msgid "Place a junction"
 msgstr "Lisää liitos"
 
-#: eeschema/tool_sch.cpp:206
+#: eeschema/tool_sch.cpp:202
 msgid "Place a hierarchical label. This label will be seen as a pin sheet in the sheet symbol"
 msgstr "Lisää hierarkinen nimiö. Tämä nimiö näkyy nastalehtenä lehti-symbolissa"
 
-#: eeschema/tool_sch.cpp:211
+#: eeschema/tool_sch.cpp:207
 msgid "Place hierarchical sheet"
 msgstr "Lisää hierarkinen lehti"
 
-#: eeschema/tool_sch.cpp:215
+#: eeschema/tool_sch.cpp:211
 msgid "Place a pin sheet, imported from the corresponding hierarchical label in sheet"
 msgstr "Lisää luotava nastalehti tuomalla hierarkinen nimiö lehdeltä"
 
-#: eeschema/tool_sch.cpp:220
+#: eeschema/tool_sch.cpp:216
 msgid "Place hierarchical pin to sheet"
 msgstr "Lisää hierarkinen nasta lehteen"
 
-#: eeschema/tool_sch.cpp:225
+#: eeschema/tool_sch.cpp:221
 msgid "Place graphic line or polygon"
 msgstr "Lisää grafiikkaviiva tai -monikulmio"
 
-#: eeschema/tool_sch.cpp:229
+#: eeschema/tool_sch.cpp:225
 msgid "Place graphic text (comment)"
 msgstr "Lisää grafiikkatekstiä kommentointiin"
 
-#: eeschema/tool_sch.cpp:253
+#: eeschema/tool_sch.cpp:249
 msgid "Turn grid off"
 msgstr "Pisterasteri pois"
 
-#: eeschema/tool_sch.cpp:275
+#: eeschema/tool_sch.cpp:271
 msgid "HV orientation for wires and bus"
 msgstr "Vaaka- tai pystysuunta johtimille ja väylille"
 
@@ -8060,15 +8060,15 @@ msgstr "Vaaka- tai pystysuunta johtimille ja väylille"
 msgid "none"
 msgstr "ei mitään"
 
-#: eeschema/class_libentry.cpp:321
+#: eeschema/class_libentry.cpp:325
 msgid "value"
 msgstr "arvo"
 
-#: eeschema/class_libentry.cpp:321
+#: eeschema/class_libentry.cpp:325
 msgid "reference"
 msgstr "viite"
 
-#: eeschema/class_libentry.cpp:323
+#: eeschema/class_libentry.cpp:327
 #, c-format
 msgid "An attempt was made to remove the %s field from component %s in library %s."
 msgstr "Yritettiin poistaa kenttä %s komponentista %s kirjastossa %s."
@@ -9894,7 +9894,7 @@ msgstr ""
 "\n"
 "#End List\n"
 
-#: eeschema/build_BOM.cpp:619
+#: eeschema/build_BOM.cpp:623
 msgid ""
 "\n"
 "#Cmp ( order = Reference )"
@@ -9902,17 +9902,17 @@ msgstr ""
 "\n"
 "#Cmp ( order = Reference )"
 
-#: eeschema/build_BOM.cpp:622
-#: eeschema/build_BOM.cpp:718
+#: eeschema/build_BOM.cpp:626
+#: eeschema/build_BOM.cpp:735
 msgid " (with SubCmp)"
 msgstr ""
 
-#: eeschema/build_BOM.cpp:694
-#: eeschema/build_BOM.cpp:774
+#: eeschema/build_BOM.cpp:711
+#: eeschema/build_BOM.cpp:791
 msgid "#End Cmp\n"
 msgstr "#End Cmp\n"
 
-#: eeschema/build_BOM.cpp:715
+#: eeschema/build_BOM.cpp:732
 msgid ""
 "\n"
 "#Cmp ( order = Value )"
@@ -9920,41 +9920,41 @@ msgstr ""
 "\n"
 "#Cmp ( order = Value )"
 
-#: eeschema/build_BOM.cpp:802
+#: eeschema/build_BOM.cpp:819
 #, c-format
 msgid "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr "> %-28.28s %s        (Lehti %s) sijainti: %3.3f, %3.3f\n"
 
-#: eeschema/build_BOM.cpp:822
+#: eeschema/build_BOM.cpp:839
 #, c-format
 msgid "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr "> %-28.28s Nastalehti %-7.7s (Lehti %s) sijainti: %3.3f, %3.3f\n"
 
-#: eeschema/build_BOM.cpp:837
+#: eeschema/build_BOM.cpp:854
 msgid "#End labels\n"
 msgstr "#End labels\n"
 
-#: eeschema/tool_viewlib.cpp:38
+#: eeschema/tool_viewlib.cpp:34
 msgid "Select library to browse"
 msgstr "Valitse selattava kirjasto"
 
-#: eeschema/tool_viewlib.cpp:42
+#: eeschema/tool_viewlib.cpp:38
 msgid "Select part to browse"
 msgstr "Valitse selattava osa"
 
-#: eeschema/tool_viewlib.cpp:47
+#: eeschema/tool_viewlib.cpp:43
 msgid "Display previous part"
 msgstr "Näytä edellinen osa"
 
-#: eeschema/tool_viewlib.cpp:51
+#: eeschema/tool_viewlib.cpp:47
 msgid "Display next part"
 msgstr "Näytä seuraava osa"
 
-#: eeschema/tool_viewlib.cpp:95
+#: eeschema/tool_viewlib.cpp:91
 msgid "View component documents"
 msgstr "Näytä komponenttien dokumentaatiota"
 
-#: eeschema/tool_viewlib.cpp:104
+#: eeschema/tool_viewlib.cpp:100
 msgid "Insert component in schematic"
 msgstr "Lisää komponentti kytkentäkaavioon"
 
@@ -10825,23 +10825,23 @@ msgstr "Kirj: "
 msgid "Component %s %s pin %s : Different Nets"
 msgstr "Komponentti  %s %s nasta %s : Eroavat kytkentäverkot"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:157
+#: cvpcb/class_DisplayFootprintsFrame.cpp:156
 msgid "Display Options"
 msgstr "Näyttöasetukset"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:163
+#: cvpcb/class_DisplayFootprintsFrame.cpp:162
 msgid "Zoom in (F1)"
 msgstr "Lähennä (F1)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:167
+#: cvpcb/class_DisplayFootprintsFrame.cpp:166
 msgid "Zoom out (F2)"
 msgstr "Loitonna (F2)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:171
+#: cvpcb/class_DisplayFootprintsFrame.cpp:170
 msgid "Redraw view (F3)"
 msgstr "Virkistä näyttö (F3)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:175
+#: cvpcb/class_DisplayFootprintsFrame.cpp:174
 msgid "Zoom auto (Home)"
 msgstr "Sovita koko näytölle (Home)"
 
@@ -10850,7 +10850,7 @@ msgid "&Open"
 msgstr "&Avaa"
 
 #: cvpcb/menucfg.cpp:27
-#: cvpcb/tool_cvpcb.cpp:31
+#: cvpcb/tool_cvpcb.cpp:27
 msgid "Open a net list file"
 msgstr "Avaa liitostiedosto"
 
@@ -10922,47 +10922,47 @@ msgstr "Tiedosto <%s> ei ole pätevä KiCad-liitoskuvakirjastotiedosto."
 msgid "Module %s not found"
 msgstr "Osaa [%s] ei löytynyt"
 
-#: cvpcb/tool_cvpcb.cpp:35
+#: cvpcb/tool_cvpcb.cpp:31
 msgid "Save net list and footprint files"
 msgstr "Tallenna liitos- ja liitoskuvatiedostot"
 
-#: cvpcb/tool_cvpcb.cpp:40
+#: cvpcb/tool_cvpcb.cpp:36
 msgid "Configuration"
 msgstr "Kokoonpano"
 
-#: cvpcb/tool_cvpcb.cpp:45
+#: cvpcb/tool_cvpcb.cpp:41
 msgid "View selected footprint"
 msgstr "Näytä valittu liitoskuva"
 
-#: cvpcb/tool_cvpcb.cpp:49
+#: cvpcb/tool_cvpcb.cpp:45
 msgid "Perform automatic footprint association"
 msgstr "Tee automaattinen liittymätiedon luonti"
 
-#: cvpcb/tool_cvpcb.cpp:54
+#: cvpcb/tool_cvpcb.cpp:50
 msgid "Select previous free component"
 msgstr "Valitse edellinen vapaa komponentti"
 
-#: cvpcb/tool_cvpcb.cpp:58
+#: cvpcb/tool_cvpcb.cpp:54
 msgid "Select next free component"
 msgstr "Valitse seuraava vapaa komponentti"
 
-#: cvpcb/tool_cvpcb.cpp:63
+#: cvpcb/tool_cvpcb.cpp:59
 msgid "Delete all associations"
 msgstr "Poista kaikki liittymätieto"
 
-#: cvpcb/tool_cvpcb.cpp:68
+#: cvpcb/tool_cvpcb.cpp:64
 msgid "Create export file (component/footprint list, used by eeschema to fill the footprint field of components)"
 msgstr ""
 
-#: cvpcb/tool_cvpcb.cpp:74
+#: cvpcb/tool_cvpcb.cpp:70
 msgid "Display footprints list documentation"
 msgstr "Näytä liitoskuvaluettelon dokumentaatio"
 
-#: cvpcb/tool_cvpcb.cpp:82
+#: cvpcb/tool_cvpcb.cpp:78
 msgid "Display the filtered footprint list for the current component"
 msgstr "Näytä suodatettu liitoskuvaluettelo nykyiselle komponentille"
 
-#: cvpcb/tool_cvpcb.cpp:86
+#: cvpcb/tool_cvpcb.cpp:82
 msgid "Display the full footprint list (without filtering)"
 msgstr "Näytä täysi liitoskuvaluettelo"
 
@@ -10988,7 +10988,7 @@ msgstr "Projektitiedosto: "
 
 #: cvpcb/init.cpp:65
 #: cvpcb/init.cpp:115
-#: cvpcb/cvframe.cpp:449
+#: cvpcb/cvframe.cpp:425
 #, c-format
 msgid "Components: %d (free: %d)"
 msgstr "Komponentteja: %d (vapaana: %d)"
@@ -11045,7 +11045,7 @@ msgstr "Liitostiedostovirhe: %s"
 msgid "Footprints: %d"
 msgstr "Liitoskuvat: %d"
 
-#: cvpcb/cvframe.cpp:285
+#: cvpcb/cvframe.cpp:261
 msgid ""
 "Net and component list modified.\n"
 "Save before exit ?"
@@ -11053,19 +11053,19 @@ msgstr ""
 "Liitos- ja komponenttitiedostoa muokattu.\n"
 "Tallennetaanko?"
 
-#: cvpcb/cvframe.cpp:309
+#: cvpcb/cvframe.cpp:285
 msgid "Problem when saving files, exit anyway ?"
 msgstr "Ongelmia tiedostojen tallennuksessa. Lopetetaanko kuitenkin?"
 
-#: cvpcb/cvframe.cpp:435
+#: cvpcb/cvframe.cpp:411
 msgid "Delete selections"
 msgstr "Poista valintoja"
 
-#: cvpcb/cvframe.cpp:471
+#: cvpcb/cvframe.cpp:447
 msgid "unnamed"
 msgstr "nimeämätön"
 
-#: cvpcb/cvframe.cpp:473
+#: cvpcb/cvframe.cpp:449
 msgid "Open Net List"
 msgstr "Avaa liitostiedosto"
 
@@ -11165,7 +11165,7 @@ msgstr "Joitain tiedostoja ei löytynyt!"
 msgid "Some files are invalid!"
 msgstr "Jotkut tiedostot eivät ole kelvollisia!"
 
-#: kicad/mainframe.cpp:88
+#: kicad/mainframe.cpp:71
 #, c-format
 msgid ""
 "Ready\n"
@@ -11174,19 +11174,19 @@ msgstr ""
 "Valmis\n"
 "Työhakemisto: %s\n"
 
-#: kicad/mainframe.cpp:270
+#: kicad/mainframe.cpp:230
 msgid "Execute Python Script"
 msgstr "Suorita Python-komentosarja"
 
-#: kicad/mainframe.cpp:271
+#: kicad/mainframe.cpp:231
 msgid "Python script (*.py)|*.py"
 msgstr "Python-komentosarja (*.py)|*.py"
 
-#: kicad/mainframe.cpp:292
+#: kicad/mainframe.cpp:252
 msgid "Text file ("
 msgstr "Tekstitiedosto ("
 
-#: kicad/mainframe.cpp:294
+#: kicad/mainframe.cpp:254
 msgid "Load File to Edit"
 msgstr "Lataa muokattava tiedosto"
 
@@ -11367,12 +11367,12 @@ msgid "Open an existing project"
 msgstr "Avaa olemassa oleva projekti"
 
 #: kicad/buildmnu.cpp:100
-#: kicad/buildmnu.cpp:268
+#: kicad/buildmnu.cpp:266
 msgid "Start a new project"
 msgstr "Aloita uusi projekti"
 
 #: kicad/buildmnu.cpp:107
-#: kicad/buildmnu.cpp:278
+#: kicad/buildmnu.cpp:276
 msgid "Save current project"
 msgstr "Tallenna nykyinen projekti"
 
@@ -11464,15 +11464,15 @@ msgstr "Tietoja KiCad-projektimanagerista"
 msgid "&Browse"
 msgstr "&Selaa"
 
-#: kicad/buildmnu.cpp:273
+#: kicad/buildmnu.cpp:271
 msgid "Load existing project"
 msgstr "Lataa projekti"
 
-#: kicad/buildmnu.cpp:286
+#: kicad/buildmnu.cpp:284
 msgid "Archive all project files"
 msgstr "Arkistoi kaikki projektitiedostot"
 
-#: kicad/buildmnu.cpp:294
+#: kicad/buildmnu.cpp:292
 msgid "Refresh project tree"
 msgstr "Virkistä projektipuu"
 
@@ -12401,7 +12401,7 @@ msgstr "Ohjetiedostoa %s ei löytynyt"
 msgid "Help file %s could not be found."
 msgstr "Ohjetiedostoa %s ei löytynyt"
 
-#: common/drawframe.cpp:332
+#: common/drawframe.cpp:329
 msgid "??"
 msgstr "??"
 
@@ -12461,97 +12461,97 @@ msgstr "Tapahtui virhe kirjoitettaessa STRINGFORMATTER:in"
 msgid "Vertex "
 msgstr "Verteksi "
 
-#: 3d-viewer/3d_toolbar.cpp:31
+#: 3d-viewer/3d_toolbar.cpp:27
 msgid "Reload board"
 msgstr "Lataa levy uudelleen"
 
-#: 3d-viewer/3d_toolbar.cpp:39
+#: 3d-viewer/3d_toolbar.cpp:35
 msgid "Copy 3D Image to Clipboard"
 msgstr "Kopioi 3D-kuva leikepöydälle"
 
-#: 3d-viewer/3d_toolbar.cpp:59
+#: 3d-viewer/3d_toolbar.cpp:55
 msgid "Rotate X <-"
 msgstr "Kierrä X <–"
 
-#: 3d-viewer/3d_toolbar.cpp:63
+#: 3d-viewer/3d_toolbar.cpp:59
 msgid "Rotate X ->"
 msgstr "Kierrä X –>"
 
-#: 3d-viewer/3d_toolbar.cpp:68
+#: 3d-viewer/3d_toolbar.cpp:64
 msgid "Rotate Y <-"
 msgstr "Kierrä Y <-"
 
-#: 3d-viewer/3d_toolbar.cpp:72
+#: 3d-viewer/3d_toolbar.cpp:68
 msgid "Rotate Y ->"
 msgstr "Kierrä Y ->"
 
-#: 3d-viewer/3d_toolbar.cpp:77
+#: 3d-viewer/3d_toolbar.cpp:73
 msgid "Rotate Z <-"
 msgstr "Kierrä Z <-"
 
-#: 3d-viewer/3d_toolbar.cpp:81
+#: 3d-viewer/3d_toolbar.cpp:77
 msgid "Rotate Z ->"
 msgstr "Kierrä Z ->"
 
-#: 3d-viewer/3d_toolbar.cpp:85
+#: 3d-viewer/3d_toolbar.cpp:81
 #: 3d-viewer/3d_canvas.cpp:356
 msgid "Move left <-"
 msgstr "Siirrä vasemmalle <–"
 
-#: 3d-viewer/3d_toolbar.cpp:88
+#: 3d-viewer/3d_toolbar.cpp:84
 #: 3d-viewer/3d_canvas.cpp:361
 msgid "Move right ->"
 msgstr "Siirrä oikealle –>"
 
-#: 3d-viewer/3d_toolbar.cpp:91
+#: 3d-viewer/3d_toolbar.cpp:87
 msgid "Move up ^"
 msgstr "Siirrä ylös ^"
 
-#: 3d-viewer/3d_toolbar.cpp:94
+#: 3d-viewer/3d_toolbar.cpp:90
 msgid "Move down"
 msgstr "Siirrä alas"
 
-#: 3d-viewer/3d_toolbar.cpp:122
+#: 3d-viewer/3d_toolbar.cpp:118
 msgid "Create Image (png format)"
 msgstr "Luo rasterikuva (png-muoto)"
 
-#: 3d-viewer/3d_toolbar.cpp:124
+#: 3d-viewer/3d_toolbar.cpp:120
 msgid "Create Image (jpeg format)"
 msgstr "Luo rasterikuva (jpg-muoto)"
 
-#: 3d-viewer/3d_toolbar.cpp:126
+#: 3d-viewer/3d_toolbar.cpp:122
 msgid "&Exit"
 msgstr "&Lopeta"
 
-#: 3d-viewer/3d_toolbar.cpp:132
+#: 3d-viewer/3d_toolbar.cpp:128
 msgid "Choose background color"
 msgstr "Valitse taustaväri"
 
-#: 3d-viewer/3d_toolbar.cpp:135
+#: 3d-viewer/3d_toolbar.cpp:131
 msgid "3D Axis On/Off"
 msgstr "3D-akselit päälle/pois"
 
-#: 3d-viewer/3d_toolbar.cpp:140
+#: 3d-viewer/3d_toolbar.cpp:136
 msgid "3D Footprints Shapes On/Off"
 msgstr "Osien 3D-muodot päälle/pois"
 
-#: 3d-viewer/3d_toolbar.cpp:143
+#: 3d-viewer/3d_toolbar.cpp:139
 msgid "Zone Filling On/Off"
 msgstr "Alan täyttö päälle/pois"
 
-#: 3d-viewer/3d_toolbar.cpp:146
+#: 3d-viewer/3d_toolbar.cpp:142
 msgid "Comments Layer On/Off"
 msgstr "Kommenttikerros päälle/pois"
 
-#: 3d-viewer/3d_toolbar.cpp:149
+#: 3d-viewer/3d_toolbar.cpp:145
 msgid "Drawings Layer On/Off"
 msgstr "Piirroskerros päälle/pois"
 
-#: 3d-viewer/3d_toolbar.cpp:152
+#: 3d-viewer/3d_toolbar.cpp:148
 msgid "Eco1 Layer On/Off"
 msgstr "Eco1-kerros päälle/pois"
 
-#: 3d-viewer/3d_toolbar.cpp:155
+#: 3d-viewer/3d_toolbar.cpp:151
 msgid "Eco2 Layer On/Off"
 msgstr "Eco2-kerros päälle/pois"
 
