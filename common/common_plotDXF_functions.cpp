@@ -92,10 +92,23 @@ void DXF_PLOTTER::circle( wxPoint centre, int diameter, FILL_T fill, int width )
     if( radius > 0 )
     {
         wxString cname = ColorRefs[current_color].m_Name;
-        fprintf( output_file, "0\nCIRCLE\n8\n%s\n10\n%d.0\n20\n%d.0\n40\n%g\n",
-                 CONV_TO_UTF8( cname ),
-                 centre.x, centre.y, radius );
-    }
+        if (!fill) {
+          fprintf( output_file, "0\nCIRCLE\n8\n%s\n10\n%d.0\n20\n%d.0\n40\n%g\n",
+                  CONV_TO_UTF8( cname ),
+                  centre.x, centre.y, radius );
+        }
+        if (fill == FILLED_SHAPE) {
+            int r = (int)(radius*0.5);
+            fprintf( output_file, "0\nPOLYLINE\n");
+            fprintf( output_file, "8\n%s\n66\n1\n70\n1\n", CONV_TO_UTF8( cname ));
+            fprintf( output_file, "40\n%g\n41\n%g\n", radius,radius);
+            fprintf( output_file, "0\nVERTEX\n8\n%s\n", CONV_TO_UTF8( cname ));
+            fprintf( output_file, "10\n%d.0\n 20\n%d.0\n42\n1.0\n", centre.x-r,centre.y);
+            fprintf( output_file, "0\nVERTEX\n8\n%s\n", CONV_TO_UTF8( cname ));
+            fprintf( output_file, "10\n%d.0\n 20\n%d.0\n42\n1.0\n", centre.x+r,centre.y);
+            fprintf( output_file, "0\nSEQEND\n");
+	}
+     }
 }
 
 
