@@ -11,6 +11,7 @@
 #include "base_struct.h"
 #include "class_base_screen.h"
 #include "bezier_curves.h"
+#include "math_for_graphics.h"
 
 
 #ifndef FILLED
@@ -137,6 +138,71 @@ int GRMapY( int y )
 #define WHEN_INSIDE
 
 
+#if defined( USE_WX_ZOOM )
+
+/**
+ * Test if any part of a line falls within the bounds of a rectangle.
+ *
+ * Please note that this is only accurate for lines that are one pixel wide.
+ *
+ * @param aRect - The rectangle to test.
+ * @param x1 - X coordinate of one end of a line.
+ * @param y1 - Y coordinate of one end of a line.
+ * @param x2 - X coordinate of the other end of a line.
+ * @param y2 - Y coordinate of the other  end of a line.
+ *
+ * @return - False if any part of the line lies within the rectangle.
+ */
+static bool clipLine( EDA_Rect* aClipBox, int x1, int y1, int x2, int y2 )
+{
+    if( aClipBox->Inside( x1, y1 ) || aClipBox->Inside( x2, y2 ) )
+        return false;
+
+    int ax1, ay1, ax2, ay2;
+    wxRect rect =*aClipBox;
+    ax1 = rect.GetBottomLeft().x;
+    ay1 = rect.GetBottomLeft().y;
+    ax2 = rect.GetTopLeft().x;
+    ay2 = rect.GetTopLeft().y;
+
+    /* Left clip rectangle line. */
+    if( TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, ax1, ay1, ax2, ay2 ) )
+        return false;
+
+    ax1 = rect.GetTopRight().x;
+    ay1 = rect.GetTopRight().y;
+
+
+    /* Top clip rectangle line. */
+    if( TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, ax1, ay1, ax2, ay2 ) )
+        return false;
+
+    ax2 = rect.GetBottomRight().x;
+    ay2 = rect.GetBottomRight().y;
+
+    /* Right clip rectangle line. */
+    if( TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, ax1, ay1, ax2, ay2 ) )
+        return false;
+
+    ax1 = rect.GetBottomLeft().x;
+    ay1 = rect.GetBottomLeft().y;
+
+    /* Bottom clip rectangle line. */
+    if( TestForIntersectionOfStraightLineSegments( x1, y1, x2, y2, ax1, ay1, ax2, ay2 ) )
+        return false;
+
+    /* Set this to one to verify that diagonal lines get clipped properly. */
+#if 0
+    if( !( x1 == x2 || y1 == y2 ) )
+        wxLogDebug( wxT( "Clipped line (%d,%d):(%d,%d) from rectangle (%d,%d,%d,%d)" ),
+                    x1, y1, x2, y2, rect.x, rect.y, rect.x + rect.width, rect.y + rect.height );
+#endif
+
+    return true;
+}
+
+#else
+
 /**
  * Function clip_line
  * @return bool - true when WHEN_OUTSIDE fires, else false.
@@ -240,6 +306,8 @@ static inline bool clip_line( int& x1, int& y1, int& x2, int& y2 )
     return false;
 }
 
+#endif
+
 
 static void WinClipAndDrawLine( EDA_Rect* ClipBox, wxDC* DC,
                                 int x1, int y1, int x2, int y2,
@@ -261,7 +329,11 @@ static void WinClipAndDrawLine( EDA_Rect* ClipBox, wxDC* DC,
         xcliphi += width;
         ycliphi += width;
 
+#if defined( USE_WX_ZOOM )
+        if ( clipLine( ClipBox, x1, y1, x2, y2 ) )
+#else
         if( clip_line( x1, y1, x2, y2 ) )
+#endif
             return;
     }
 
@@ -790,7 +862,11 @@ void GRSCSegm( EDA_Rect* ClipBox,
         xcliphi += width;
         ycliphi += width;
 
+#if defined( USE_WX_ZOOM )
+        if( clipLine( ClipBox, x1, y1, x2, y2 ) )
+#else
         if( clip_line( x1, y1, x2, y2 ) )
+#endif
             return;
     }
 

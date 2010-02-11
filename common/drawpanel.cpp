@@ -525,7 +525,15 @@ void WinEDA_DrawPanel::OnSize( wxSizeEvent& event )
 
 
 /** Function SetBoundaryBox()
- * set the m_ClipBox member to the current displayed rectangle dimensions
+ * Set the clip box to the current displayed rectangle dimensions.
+ *
+ * When using wxDC for scaling, the clip box coordinates are in drawing (logical)
+ * units.  In other words, the area of the drawing that will be displayed on the
+ * screen.  When using Kicad's scaling, the clip box coordinates are in screen
+ * (device) units according to the current scroll position.
+ *
+ * @param dc - The device context use for drawing with the correct scale and
+ *             offsets already configured.  See DoPrepareDC().
  */
 void WinEDA_DrawPanel::SetBoundaryBox( wxDC* dc )
 {
@@ -561,7 +569,22 @@ void WinEDA_DrawPanel::SetBoundaryBox( wxDC* dc )
     m_ClipBox.m_Pos.y = dc->DeviceToLogicalY( 0 );
     m_ClipBox.m_Size.x = dc->DeviceToLogicalXRel( m_ClipBox.m_Size.x );
     m_ClipBox.m_Size.y = dc->DeviceToLogicalYRel( m_ClipBox.m_Size.y );
-    m_ClipBox.Inflate( dc->DeviceToLogicalXRel( 2 ) );
+
+    /* Set to one (1) to draw bounding box validate bounding box calculation. */
+#if 0
+    EDA_Rect bBox = m_ClipBox;
+    m_ClipBox.Inflate( -dc->DeviceToLogicalXRel( 1 ) );
+    GRRect( NULL, dc, bBox.GetOrigin().x, bBox.GetOrigin().y,
+            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+#endif
+
+    m_ClipBox.Inflate( dc->DeviceToLogicalXRel( 1 ) );
+
+    /* Always set the clipping region to the screen size.  This prevents this bug:
+     * <http://trac.wxwidgets.org/ticket/10446> from occurring on WXMSW if you happen
+     * to be zoomed way in and your drawing coodinates get too large.
+     */
+    dc->SetClippingRegion( m_ClipBox );
 #endif
 
     Screen->m_ScrollbarPos.x = GetScrollPos( wxHORIZONTAL );
@@ -637,10 +660,18 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
     m_ClipBox.m_Pos.y = paintDC.DeviceToLogicalY( PaintClipBox.y );
     m_ClipBox.m_Size.x = paintDC.DeviceToLogicalXRel( PaintClipBox.width );
     m_ClipBox.m_Size.y = paintDC.DeviceToLogicalYRel( PaintClipBox.height );
-    m_ClipBox.Inflate( paintDC.DeviceToLogicalXRel( 2 ) );
+
+#if 0
+    EDA_Rect bBox = m_ClipBox;
+    m_ClipBox.Inflate( -paintDC.DeviceToLogicalXRel( 1 ) );
+    GRRect( NULL, &paintDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
+            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+#endif
+
+    m_ClipBox.Inflate( paintDC.DeviceToLogicalXRel( 1 ) );
     PaintClipBox = m_ClipBox;
 #else
-    /* When using Kicads scaling the clipping region coordinates are in screen
+    /* When using Kicad's scaling the clipping region coordinates are in screen
      * (device) units.
      */
     m_ClipBox.SetX( PaintClipBox.GetX() );
@@ -766,10 +797,8 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
         || DC->LogicalToDeviceXRel( wxRound( screen_grid_size.y ) ) < 5 )
         return;
 
-    org.x = DC->DeviceToLogicalX( 0 );
-    org.y = DC->DeviceToLogicalY( 0 );
-    size.SetWidth( DC->DeviceToLogicalXRel( size.GetWidth() ) );
-    size.SetHeight( DC->DeviceToLogicalYRel( size.GetHeight() ) );
+    org = m_ClipBox.m_Pos;
+    size = m_ClipBox.m_Size;
 #else
     wxRealPoint dgrid = screen_grid_size;
     screen->Scale( dgrid );     // dgrid = grid size in pixels

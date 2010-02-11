@@ -49,7 +49,7 @@ install(TARGETS KiCad
         DESTINATION ${KICAD_BIN}
         COMPONENT binary)
 else(APPLE)
-	target_link_libraries(kicad common bitmaps ${wxWidgets_LIBRARIES} ${GDI_PLUS_LIBRARIES})
+	target_link_libraries(kicad common bitmaps polygon ${wxWidgets_LIBRARIES} ${GDI_PLUS_LIBRARIES})
 	install(TARGETS kicad
         DESTINATION ${KICAD_BIN}
         COMPONENT binary)
