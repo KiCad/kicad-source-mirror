@@ -135,8 +135,8 @@ Section $(TITLE_SEC03) SEC03
   SetOverwrite try
   SetOutPath "$INSTDIR\share\demos"
   File /nonfatal /r "..\share\demos\*"
-  SetOutPath "$INSTDIR\doc\tutorial"
-  File /nonfatal /r "..\doc\tutorial\*"
+  SetOutPath "$INSTDIR\doc\tutorials"
+  File /nonfatal /r "..\doc\tutorials\*"
 SectionEnd
 
 Section $(TITLE_SEC04) SEC04
@@ -227,14 +227,14 @@ Section Uninstall
   RMDir /r "$INSTDIR\template"
   RMDir /r "$INSTDIR\internat"
   RMDir /r "$INSTDIR\demos"
-  RMDir /r "$INSTDIR\tutorial"
+  RMDir /r "$INSTDIR\tutorials"
   RMDir /r "$INSTDIR\help"
   RMDir /r "$INSTDIR\share\library"
   RMDir /r "$INSTDIR\share\modules"
   RMDir /r "$INSTDIR\share\template"
   RMDir /r "$INSTDIR\share\internat"
   RMDir /r "$INSTDIR\share\demos"
-  RMDir /r "$INSTDIR\doc\tutorial"
+  RMDir /r "$INSTDIR\doc\tutorials"
   RMDir /r "$INSTDIR\doc\help"
   RMDir /r "$INSTDIR\wings3d"
   ;don't remove $INSTDIR recursively just in case the user has installed it in c:\ or
