@@ -474,6 +474,46 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
     g_Current_PadName  = m_PadNumCtrl->GetValue().Left( 4 );
     Current_PadNetName = m_PadNetNameCtrl->GetValue();
 
+    // Clear some values, according to the pad type and shape
+    switch( g_Pad_Master.m_PadShape )
+    {
+    case PAD_CIRCLE:
+        g_Pad_Master.m_Offset = wxSize( 0, 0 );
+        g_Pad_Master.m_DeltaSize = wxSize( 0, 0 );
+        g_Pad_Master.m_Size.y    = m_CurrentPad->m_Size.x;
+        break;
+
+    case PAD_RECT:
+        g_Pad_Master.m_DeltaSize = wxSize( 0, 0 );
+        break;
+
+    case PAD_OVAL:
+        g_Pad_Master.m_DeltaSize = wxSize( 0, 0 );
+        break;
+
+    case PAD_TRAPEZOID:
+        break;
+    }
+
+    switch( g_Pad_Master.m_Attribut )
+    {
+    case PAD_STANDARD:
+        break;
+
+    case PAD_CONN:
+    case PAD_SMD:
+        g_Pad_Master.m_Offset = wxSize( 0, 0 );
+        g_Pad_Master.m_Drill  = wxSize( 0, 0 );
+        break;
+
+    case PAD_HOLE_NOT_PLATED:
+        break;
+
+    default:
+        DisplayError( this, wxT( "Error: unknown pad type" ) );
+        break;
+    }
+
     /* Test for incorrect values */
     if( (g_Pad_Master.m_Size.x < g_Pad_Master.m_Drill.x)
        || (g_Pad_Master.m_Size.y < g_Pad_Master.m_Drill.y) )
@@ -581,44 +621,6 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
                 else
                     DisplayError( this, _( "Unknown netname, no change" ) );
             }
-        }
-
-        switch( m_CurrentPad->m_PadShape )
-        {
-        case PAD_CIRCLE:
-            m_CurrentPad->m_DeltaSize = wxSize( 0, 0 );
-            m_CurrentPad->m_Size.y    = m_CurrentPad->m_Size.x;
-            break;
-
-        case PAD_RECT:
-            m_CurrentPad->m_DeltaSize = wxSize( 0, 0 );
-            break;
-
-        case PAD_OVAL:
-            m_CurrentPad->m_DeltaSize = wxSize( 0, 0 );
-            break;
-
-        case PAD_TRAPEZOID:
-            break;
-        }
-
-        switch( m_CurrentPad->m_Attribut )
-        {
-        case PAD_STANDARD:
-            break;
-
-        case PAD_CONN:
-        case PAD_SMD:
-            m_CurrentPad->m_Offset = wxSize( 0, 0 );
-            m_CurrentPad->m_Drill  = wxSize( 0, 0 );
-            break;
-
-        case PAD_HOLE_NOT_PLATED:
-            break;
-
-        default:
-            DisplayError( this, wxT( "Error: unknown pad type" ) );
-            break;
         }
 
         m_CurrentPad->m_LocalClearance = g_Pad_Master.m_LocalClearance;

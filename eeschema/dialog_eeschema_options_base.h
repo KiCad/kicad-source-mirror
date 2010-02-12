@@ -62,7 +62,7 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public wxDialog
 		wxCheckBox* m_checkShowGrid;
 		wxCheckBox* m_checkShowHiddenPins;
 		wxCheckBox* m_checkAutoPan;
-		wxCheckBox* m_checkAnyOrientation;
+		wxCheckBox* m_checkHVOrientation;
 		wxCheckBox* m_checkPageLimits;
 		
 		wxStdDialogButtonSizer* m_sdbSizer1;

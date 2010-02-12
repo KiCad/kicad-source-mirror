@@ -74,13 +74,13 @@ public:
     }
     bool GetEnableAutoPan( void ) { return m_checkAutoPan->GetValue(); }
 
-    void SetEnableAnyBusOrientation( bool enable )
+    void SetEnableHVBusOrientation( bool enable )
     {
-        m_checkAnyOrientation->SetValue( enable );
+        m_checkHVOrientation->SetValue( enable );
     }
-    bool GetEnableAnyBusOrientation( void )
+    bool GetEnableHVBusOrientation( void )
     {
-        return m_checkAnyOrientation->GetValue();
+        return m_checkHVOrientation->GetValue();
     }
 
     void SetShowPageLimits( bool show )

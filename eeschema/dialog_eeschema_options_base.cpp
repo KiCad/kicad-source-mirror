@@ -127,9 +127,9 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	bSizer2->Add( m_checkAutoPan, 0, wxALL|wxEXPAND, 3 );
 	
-	m_checkAnyOrientation = new wxCheckBox( this, wxID_ANY, _("Allow buses and wires to be placed in any &orientation"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkHVOrientation = new wxCheckBox( this, wxID_ANY, _("Allow buses and wires to be placed in H or V &orientation only"), wxDefaultPosition, wxDefaultSize, 0 );
 	
-	bSizer2->Add( m_checkAnyOrientation, 0, wxALL|wxEXPAND, 3 );
+	bSizer2->Add( m_checkHVOrientation, 0, wxALL|wxEXPAND, 3 );
 	
 	m_checkPageLimits = new wxCheckBox( this, wxID_ANY, _("Show p&age limits"), wxDefaultPosition, wxDefaultSize, 0 );
 	

@@ -1289,10 +1289,10 @@
                                         <property name="font"></property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Allow buses and wires to be placed in any &amp;orientation</property>
+                                        <property name="label">Allow buses and wires to be placed in H or V &amp;orientation only</property>
                                         <property name="maximum_size"></property>
                                         <property name="minimum_size"></property>
-                                        <property name="name">m_checkAnyOrientation</property>
+                                        <property name="name">m_checkHVOrientation</property>
                                         <property name="permission">protected</property>
                                         <property name="pos"></property>
                                         <property name="size"></property>

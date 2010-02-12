@@ -123,7 +123,7 @@ void WinEDA_SchematicFrame::OnSetOptions( wxCommandEvent& event )
     dlg.SetShowGrid( IsGridVisible() );
     dlg.SetShowHiddenPins( m_ShowAllPins );
     dlg.SetEnableAutoPan( DrawPanel->m_AutoPAN_Enable );
-    dlg.SetEnableAnyBusOrientation( g_HVLines );
+    dlg.SetEnableHVBusOrientation( g_HVLines );
     dlg.SetShowPageLimits( g_ShowPageLimits );
     dlg.Layout();
     dlg.Fit();
