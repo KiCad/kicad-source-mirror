@@ -254,3 +254,5 @@ if(UNIX)
             COMPONENT resources
             PATTERN ".svn" EXCLUDE)
 endif(UNIX)
+
+include(CTest)

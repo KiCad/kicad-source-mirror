@@ -196,7 +196,7 @@ void WinEDA_DrawFrame::OnSelectGrid( wxCommandEvent& event )
          */
         int index = m_SelGridBox->GetSelection();
         wxASSERT( index != wxNOT_FOUND );
-        clientData = (int*) m_SelGridBox->GetClientData( index );
+        clientData = (int*) m_SelGridBox->wxItemContainer::GetClientData( index );
 
         if( clientData != NULL )
             id = *clientData;
@@ -212,7 +212,7 @@ void WinEDA_DrawFrame::OnSelectGrid( wxCommandEvent& event )
         {
             for( size_t i = 0; i < m_SelGridBox->GetCount(); i++ )
             {
-                clientData = (int*) m_SelGridBox->GetClientData( i );
+                clientData = (int*) m_SelGridBox->wxItemContainer::GetClientData( i );
 
                 if( clientData && id == *clientData )
                 {

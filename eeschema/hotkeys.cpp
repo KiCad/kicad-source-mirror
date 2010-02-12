@@ -89,7 +89,7 @@ static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y',
 #else
 static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO,
                              GR_KB_SHIFT + GR_KB_CTRL + 'Z',
-                             (int) ID_SCHEMATIC_REDO );
+                             (int) wxID_REDO );
 #endif
 
 // Schematic editor

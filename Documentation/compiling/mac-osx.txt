@@ -14,8 +14,20 @@ Requirements
   * Doxygen        (http://www.doxygen.nl)
 
 
-Building wxWidgets 2.9
-~~~~~~~~~~~~~~~~~~~~~~
+Building wxWidgets 2.9 Universal
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+To check if your tools and libraries are installed check with file for architectures.
+
+user@macosx$ file /Developer/SDKs/MacOSX10.5.sdk/usr/lib/libSystem.dylib 
+
+/Developer/SDKs/MacOSX10.5.sdk/usr/lib/libSystem.dylib: Mach-O universal binary with 4 architectures
+/Developer/SDKs/MacOSX10.5.sdk/usr/lib/libSystem.dylib (for architecture ppc7400):	Mach-O dynamically linked shared library stub ppc
+/Developer/SDKs/MacOSX10.5.sdk/usr/lib/libSystem.dylib (for architecture ppc64)Mach-O 64-bit dynamically linked shared library stub ppc64
+/Developer/SDKs/MacOSX10.5.sdk/usr/lib/libSystem.dylib (for architecture i386):Mach-O dynamically linked shared library stub i386
+/Developer/SDKs/MacOSX10.5.sdk/usr/lib/libSystem.dylib (for architecture x86_64):	Mach-O 64-bit dynamically linked shared library stub x86_64
+
+You need the architectures what you are compiling for !
+
 If you have problems that the 64bits library is not build you should add in
 the configure file:
 
@@ -25,7 +37,7 @@ At time of writing (2009-01-16) this is on line 18381
 
 Building a universal monolib wxWidgets 2.9 with the following parameters:
 ./configure --enable-unicode=yes --enable-shared=no --enable-monolithic --with-opengl \
-  --enable-universal_binary --enable-aui --enable-debug --with-osx_cocoa --with-macosx \
+  --enable-universal_binary --enable-aui --enable-debug --with-osx_cocoa \
   --with-macosx-sdk=/Developer/SDKs/MacOSX10.5.sdk/ --prefix=/opt/wxwidgets-svn
 
 If you dont need the debugging symbols then you can remove the --enable-debug parameter.
@@ -90,3 +102,9 @@ file included from
 error: macro "check" passed 2 arguments, but takes just 1
 
 CMAKE_CXX_FLAGS = -D__ASSERTMACROS__ fixes this :-)
+
+
+configure:18585: gcc -isysroot /Developer/SDKs/MacOSX10.5.sdk/ -mmacosx-version-min=10.5 -o conftest -arch i386 -arch x86_64 -arch ppc   -arch i386 -arch x86_64 -arch ppc  conftest.c  >&5
+ld: warning: in /Developer/SDKs/MacOSX10.5.sdk//usr/lib/libSystem.dylib, missing required architecture ppc in file
+
+Installing rosetta and xcode with all architectures fixes this "problem"

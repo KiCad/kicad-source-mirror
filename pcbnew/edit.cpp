@@ -767,7 +767,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_TOOLBARH_PCB_SELECT_LAYER:
         itmp = m_SelLayerBox->GetChoice();
-        setActiveLayer( (size_t) m_SelLayerBox->GetClientData( itmp ) );
+        setActiveLayer( (size_t) m_SelLayerBox->wxItemContainer::GetClientData( itmp ) );
         if( DisplayOpt.ContrastModeDisplay )
             DrawPanel->Refresh( true );
         break;

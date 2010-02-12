@@ -672,7 +672,7 @@ void WinEDA_PcbFrame::syncLayerBox()
 
     for( int listNdx=0;  listNdx<count;  ++listNdx )
     {
-        int clientData = (int) (size_t) m_SelLayerBox->GetClientData( listNdx );
+        int clientData = (int) (size_t) m_SelLayerBox->wxItemContainer::GetClientData( listNdx );
 
         if( clientData == layer )
         {
@@ -752,7 +752,7 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
 
             //D(printf("appending layername=%s, ndx=%d, layer=%d\n", CONV_TO_UTF8(msg), listNdx, layer );)
 
-            m_SelLayerBox->SetClientData( listNdx, (void*) layer );
+            m_SelLayerBox->wxItemContainer::SetClientData( listNdx, (void*) layer );
             length = MAX( length, msg.Len() );
             listNdx++;
         }
