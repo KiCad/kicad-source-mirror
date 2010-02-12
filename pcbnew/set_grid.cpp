@@ -30,6 +30,11 @@ void WinEDA_BasePcbFrame::InstallGridFrame( const wxPoint& pos )
     m_UserGridUnits = dlg.GetGridUnits();
 
     GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnits, ID_POPUP_GRID_USER );
+    
+    // If the user grid is the current option, recall SetGrid()
+    // to force new values put in list as current grid value
+    if( GetScreen()->GetGridId() == ID_POPUP_GRID_USER )
+        GetScreen()->SetGrid( ID_POPUP_GRID_USER  );
     DrawPanel->Refresh();
 }
 
