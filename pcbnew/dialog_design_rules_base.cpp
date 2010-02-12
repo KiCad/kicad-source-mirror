@@ -85,7 +85,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	
 	buttonBoxSizer->Add( m_moveUpButton, 0, wxRIGHT|wxLEFT, 5 );
 	
-	sbSizer1->Add( buttonBoxSizer, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	sbSizer1->Add( buttonBoxSizer, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
 	
 	bpanelNetClassesSizer->Add( sbSizer1, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -101,11 +101,11 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	leftNetSelectBoxSizer->Add( m_leftClassChoice, 0, wxEXPAND, 5 );
 	
 	m_leftListCtrl = new wxListCtrl( m_panelNetClassesEditor, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_VRULES|wxSUNKEN_BORDER );
-	m_leftListCtrl->SetMinSize( wxSize( 220,300 ) );
+	m_leftListCtrl->SetMinSize( wxSize( 220,200 ) );
 	
 	leftNetSelectBoxSizer->Add( m_leftListCtrl, 1, wxEXPAND|wxTOP, 5 );
 	
-	sbSizer4->Add( leftNetSelectBoxSizer, 1, wxALL|wxEXPAND, 5 );
+	sbSizer4->Add( leftNetSelectBoxSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bmiddleSizerNetSelect;
 	bmiddleSizerNetSelect = new wxBoxSizer( wxVERTICAL );
@@ -145,9 +145,9 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	
 	rghtNetSelectBoxSizer->Add( m_rightListCtrl, 1, wxEXPAND|wxTOP, 5 );
 	
-	sbSizer4->Add( rghtNetSelectBoxSizer, 1, wxALL|wxEXPAND, 5 );
+	sbSizer4->Add( rghtNetSelectBoxSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
-	bpanelNetClassesSizer->Add( sbSizer4, 2, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bpanelNetClassesSizer->Add( sbSizer4, 2, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_panelNetClassesEditor->SetSizer( bpanelNetClassesSizer );
 	m_panelNetClassesEditor->Layout();
@@ -358,7 +358,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	bpanelGlobRulesSizer->Fit( m_panelGolbalDesignRules );
 	m_DRnotebook->AddPage( m_panelGolbalDesignRules, _("Global Design Rules"), false );
 	
-	bMainSizer->Add( m_DRnotebook, 1, wxEXPAND | wxALL, 5 );
+	bMainSizer->Add( m_DRnotebook, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	wxStaticBoxSizer* sbSizer2;
 	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Messages:") ), wxHORIZONTAL );
@@ -368,7 +368,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	
 	sbSizer2->Add( m_MessagesList, 1, wxEXPAND, 5 );
 	
-	bMainSizer->Add( sbSizer2, 0, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( sbSizer2, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_sdbButtonsSizer = new wxStdDialogButtonSizer();
 	m_sdbButtonsSizerOK = new wxButton( this, wxID_OK );
@@ -376,7 +376,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_sdbButtonsSizerCancel = new wxButton( this, wxID_CANCEL );
 	m_sdbButtonsSizer->AddButton( m_sdbButtonsSizerCancel );
 	m_sdbButtonsSizer->Realize();
-	bMainSizer->Add( m_sdbButtonsSizer, 0, wxALL|wxALIGN_RIGHT, 5 );
+	bMainSizer->Add( m_sdbButtonsSizer, 0, wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();

@@ -1,4 +1,4 @@
 release version:
 2010 feb 09 
 files (.zip,.tgz):
-kicad-2010-02-09-RC1
+kicad-2010-02-09-RC2
