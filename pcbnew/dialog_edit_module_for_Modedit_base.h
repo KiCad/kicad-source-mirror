@@ -102,7 +102,7 @@ class DIALOG_MODULE_MODULE_EDITOR_BASE : public wxDialog
 	
 	public:
 		wxStaticBoxSizer* m_Sizer3DValues;
-		DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Module properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 539,536 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Module properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 541,540 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_MODULE_MODULE_EDITOR_BASE();
 	
 };

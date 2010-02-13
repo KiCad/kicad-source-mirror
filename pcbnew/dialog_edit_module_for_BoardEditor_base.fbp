@@ -1130,7 +1130,7 @@
                                                             <property name="permission">none</property>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
+                                                                <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxStaticText" expanded="1">
                                                                     <property name="bg"></property>
@@ -1181,7 +1181,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
+                                                                <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxSlider" expanded="1">
                                                                     <property name="bg"></property>
@@ -1264,7 +1264,7 @@
                                                             <property name="permission">none</property>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
+                                                                <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxStaticText" expanded="1">
                                                                     <property name="bg"></property>
@@ -1315,7 +1315,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
+                                                                <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxSlider" expanded="1">
                                                                     <property name="bg"></property>
@@ -1403,7 +1403,7 @@
                                                     <event name="OnUpdateUI"></event>
                                                     <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
-                                                        <property name="flag">wxALL</property>
+                                                        <property name="flag">wxALL|wxALIGN_CENTER_HORIZONTAL</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxStaticText" expanded="1">
                                                             <property name="bg"></property>
@@ -1627,7 +1627,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND | wxALL</property>
+                                                                <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxStaticLine" expanded="1">
                                                                     <property name="bg"></property>
@@ -1676,7 +1676,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND | wxALL</property>
+                                                                <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxStaticLine" expanded="1">
                                                                     <property name="bg"></property>
@@ -1725,7 +1725,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND | wxALL</property>
+                                                                <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxStaticLine" expanded="1">
                                                                     <property name="bg"></property>

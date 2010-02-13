@@ -89,10 +89,10 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	
 	m_staticText11 = new wxStaticText( m_PanelProperties, wxID_ANY, _("Rotation 90 degree"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
-	bSizerRot90->Add( m_staticText11, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerRot90->Add( m_staticText11, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_CostRot90Ctrl = new wxSlider( m_PanelProperties, wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
-	bSizerRot90->Add( m_CostRot90Ctrl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_CostRot90Ctrl = new wxSlider( m_PanelProperties, wxID_ANY, 0, 0, 10, wxDefaultPosition, wxSize( -1,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	bSizerRot90->Add( m_CostRot90Ctrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	sbSizerAutoplace->Add( bSizerRot90, 1, 0, 5 );
 	
@@ -101,10 +101,10 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	
 	m_staticText12 = new wxStaticText( m_PanelProperties, wxID_ANY, _("Rotation 180 degree"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
-	bSizerRot180->Add( m_staticText12, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerRot180->Add( m_staticText12, 0, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_CostRot180Ctrl = new wxSlider( m_PanelProperties, wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
-	bSizerRot180->Add( m_CostRot180Ctrl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerRot180->Add( m_CostRot180Ctrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	sbSizerAutoplace->Add( bSizerRot180, 1, 0, 5 );
 	
@@ -117,7 +117,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	m_staticTextInfo->Wrap( -1 );
 	m_staticTextInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
-	sbSizer8->Add( m_staticTextInfo, 0, wxALL, 5 );
+	sbSizer8->Add( m_staticTextInfo, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer( 3, 3, 0, 0 );
@@ -136,13 +136,13 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	fgSizer1->Add( m_NetClearanceUnits, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_staticline1 = new wxStaticLine( m_PanelProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	fgSizer1->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	fgSizer1->Add( m_staticline1, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticline2 = new wxStaticLine( m_PanelProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	fgSizer1->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
+	fgSizer1->Add( m_staticline2, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticline3 = new wxStaticLine( m_PanelProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	fgSizer1->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
+	fgSizer1->Add( m_staticline3, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_MaskClearanceTitle = new wxStaticText( m_PanelProperties, wxID_ANY, _("Solder mask clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MaskClearanceTitle->Wrap( -1 );
