@@ -142,7 +142,15 @@ private:
     bool LoadHeader( FILE* aFile, int* aLineNum );
     void LoadAliases( LIB_COMPONENT* aComponent );
 
-    void RemoveEntry( const wxString& aName );
+    /** function RemoveEntryName
+     * Remove an /a aName entry from the library list names.
+     * Warning: this is a partiel remove, because if aname is an alias
+     * it is not removed from its root component.
+     * this is for internal use only
+     * Use RemoveEntry( CMP_LIB_ENTRY* aEntry ) to remove safely an entry.
+     * @param aName - Entry name to remove from library.
+     */
+    void RemoveEntryName( const wxString& aName );
 
 public:
     /**
@@ -271,14 +279,17 @@ public:
 
     /**
      * Add /a aComponent entry to library.
-     *
+     * Note a component can have an alias list,
+     * so these alias will be added in library.
+     * Conflicts can happen if aliases are already existing.
+     * User is asked to choose what alias is removed (existing, or new)
      * @param aComponent - Component to add.
      * @return Added component if successful.
      */
     LIB_COMPONENT* AddComponent( LIB_COMPONENT* aComponent );
 
     /**
-     * Remove an /a aEntry from the library.
+     * Remove safely an /a aEntry from the library.
      *
      * If the entry is an alias, the alias is removed from the library and from
      * the alias list of the root component.  If the entry is a root component
@@ -293,7 +304,8 @@ public:
 
     /**
      * Replace an existing component entry in the library.
-     *
+     * Note a component can have an alias list,
+     * so these alias will be added in library (and previously existing alias removed)
      * @param aOldComponent - The component to replace.
      * @param aNewComponent - The new component.
      */
