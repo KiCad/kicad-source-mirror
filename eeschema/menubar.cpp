@@ -203,26 +203,26 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
      */
     wxMenu* viewMenu = new wxMenu;
 
+    /* Important Note for ZOOM IN and ZOOM OUT commands from menubar:
+     * we cannot add hotkey info here, because the hotkey HK_ZOOM_IN and HK_ZOOM_OUT
+     * events(default = WXK_F1 and WXK_F2) are *NOT* equivalent to this menu command:
+     * zoom in and out from hotkeys are equivalent to the pop up menu zoom
+     * From here, zoomming is made around the screen center
+     * From hotkeys, zoomming is made around the mouse cursor position
+     * (obvioulsy not possible from the toolbat or menubar command)
+     *
+     * in others words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
+     * for Zoom in and Zoom out sub menus
+     */
     /* Zoom in */
-#if !defined( __WXMAC__)
-    text  = AddHotkeyName( _( "Zoom In" ), s_Schematic_Hokeys_Descr, HK_ZOOM_IN);
-#else
-    text = _( "Zoom In\tCtrl++" );
-#endif
-
+    text  =_( "Zoom In" );
     item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text, _( "Zoom In" ),
                            wxITEM_NORMAL );
     item->SetBitmap( zoom_in_xpm );
     viewMenu->Append( item );
 
     /* Zoom out */
-#if !defined( __WXMAC__)
-    text = AddHotkeyName( _( "Zoom Out" ), s_Schematic_Hokeys_Descr,
-                          HK_ZOOM_OUT );
-#else
-    text = _( "Zoom Out\tCtrl+-" );
-#endif /* !defined( __WXMAC__) */
-
+    text = _( "Zoom Out" );
     item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, _( "Zoom Out" ),
                            wxITEM_NORMAL );
     item->SetBitmap( zoom_out_xpm );

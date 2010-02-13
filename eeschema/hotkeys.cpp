@@ -771,7 +771,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
                 cmd.SetId( ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT );
                 GetEventHandler()->ProcessEvent( cmd );
                 break;
-            
+
             default:
                 break;
             }
