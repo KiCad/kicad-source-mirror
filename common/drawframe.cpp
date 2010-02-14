@@ -54,6 +54,7 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     m_AuxiliaryToolBar    = NULL;
     m_SelGridBox          = NULL;
     m_SelZoomBox          = NULL;
+    m_HotkeysZoomAndGridList = NULL;
 
     DrawPanel             = NULL;
     MsgPanel              = NULL;
@@ -442,7 +443,7 @@ int WinEDA_DrawFrame::HandleBlockEnd( wxDC* DC )
 
 void WinEDA_DrawFrame::AdjustScrollBars()
 {
-    int     pixelsPerUnitX, pixelsPerUnitY, unitsX, unitsY, posX, posY;
+    int     unitsX, unitsY, posX, posY;
     wxSize  drawingSize, clientSize;
     BASE_SCREEN* screen = GetBaseScreen();
 
@@ -488,7 +489,7 @@ void WinEDA_DrawFrame::AdjustScrollBars()
      * pixels per unit to 10, you have potential for the zoom point to
      * jump around +/-5 pixels from the nearest grid point.
      */
-    pixelsPerUnitX = pixelsPerUnitY = 1;
+    screen->m_ScrollPixelsPerUnitX = screen->m_ScrollPixelsPerUnitY = 1;
 
     // Calculate the number of scroll bar units for the given zoom level. */
 #ifdef USE_WX_ZOOM
@@ -524,11 +525,12 @@ void WinEDA_DrawFrame::AdjustScrollBars()
 
 #if 0
     wxLogDebug( wxT( "SetScrollbars(%d, %d, %d, %d, %d, %d)" ),
-                pixelsPerUnitX, pixelsPerUnitY, unitsX, unitsY, posX, posY );
+                m_ScrollPixelsPerUnitX, m_ScrollPixelsPerUnitY,
+                unitsX, unitsY, posX, posY );
 #endif
 
-    DrawPanel->SetScrollbars( pixelsPerUnitX,
-                              pixelsPerUnitY,
+    DrawPanel->SetScrollbars( screen->m_ScrollPixelsPerUnitX,
+                              screen->m_ScrollPixelsPerUnitY,
                               screen->m_ScrollbarNumber.x,
                               screen->m_ScrollbarNumber.y,
                               screen->m_ScrollbarPos.x,

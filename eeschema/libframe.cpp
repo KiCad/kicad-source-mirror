@@ -18,6 +18,7 @@
 #include "class_library.h"
 
 #include "kicad_device_context.h"
+#include "hotkeys.h"
 
 #include <boost/foreach.hpp>
 
@@ -167,6 +168,7 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
     SetShowDeMorgan( false );
     m_drawSpecificConvert = true;
     m_drawSpecificUnit    = false;
+    m_HotkeysZoomAndGridList = s_Libedit_Hokeys_Descr;
 
     // Give an icon
     SetIcon( wxIcon( libedit_xpm ) );

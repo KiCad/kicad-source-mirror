@@ -240,11 +240,13 @@ wxString ReturnKeyNameFromKeyCode( int keycode )
  * @param CommandId = Command Id value
  * @return text (key name) in a wxString if found or text without modification
  */
-wxString AddHotkeyName( const wxString& text, Ki_HotkeyInfo** List,
-                        int CommandId )
+wxString AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
+                        int aCommandId )
 {
-    wxString msg     = text;
-    wxString keyname = ReturnKeyNameFromCommandId( List, CommandId );
+    wxString msg     = aText;
+    wxString keyname;
+    if( aList )
+        keyname = ReturnKeyNameFromCommandId( aList, aCommandId );
 
     if( !keyname.IsEmpty() )
         msg << wxT( "\t" ) << keyname;
@@ -259,22 +261,25 @@ wxString AddHotkeyName( const wxString& text, Ki_HotkeyInfo** List,
  * @param CommandId = Command Id value
  * @return text (key name) in a wxString if found or text without modification
  */
-wxString AddHotkeyName( const wxString&                        text,
-                        struct Ki_HotkeyInfoSectionDescriptor* DescList,
-                        int                                    CommandId )
+wxString AddHotkeyName( const wxString&                        aText,
+                        struct Ki_HotkeyInfoSectionDescriptor* aDescList,
+                        int                                    aCommandId )
 {
-    wxString        msg = text;
+    wxString        msg = aText;
     wxString        keyname;
     Ki_HotkeyInfo** List;
 
-    for( ; DescList->m_HK_InfoList != NULL; DescList++ )
+    if( aDescList )
     {
-        List    = DescList->m_HK_InfoList;
-        keyname = ReturnKeyNameFromCommandId( List, CommandId );
-        if( !keyname.IsEmpty() )
+        for( ; aDescList->m_HK_InfoList != NULL; aDescList++ )
         {
-            msg << wxT( "\t" ) << keyname;
-            break;
+            List    = aDescList->m_HK_InfoList;
+            keyname = ReturnKeyNameFromCommandId( List, aCommandId );
+            if( !keyname.IsEmpty() )
+            {
+                msg << wxT( "\t" ) << keyname;
+                break;
+            }
         }
     }
 

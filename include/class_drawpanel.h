@@ -159,7 +159,6 @@ public:
     void         SetGrid( const wxRealPoint& size );
     wxRealPoint  GetGrid();
 
-    void         AddMenuZoom( wxMenu* MasterMenu );
     bool         OnRightClick( wxMouseEvent& event );
     void         Process_Special_Functions( wxCommandEvent& event );
 

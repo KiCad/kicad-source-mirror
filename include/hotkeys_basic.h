@@ -75,4 +75,19 @@ void            DisplayHotkeyList( WinEDA_DrawFrame*                      frame,
 Ki_HotkeyInfo*  GetDescriptorFromHotkey( int key, Ki_HotkeyInfo** List );
 
 
+// common hotkeys event id
+enum common_hotkey_id_commnand {
+    HK_NOT_FOUND = 0,
+    HK_RESET_LOCAL_COORD,
+    HK_HELP,
+    HK_ZOOM_IN,
+    HK_ZOOM_OUT,
+    HK_ZOOM_REDRAW,
+    HK_ZOOM_CENTER,
+    HK_ZOOM_AUTO,
+	HK_UNDO,
+	HK_REDO,
+    HK_COMMON_END
+};
+
 #endif // HOTKEYS_BASIC_H

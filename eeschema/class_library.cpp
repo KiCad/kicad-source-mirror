@@ -221,6 +221,9 @@ bool CMP_LIBRARY::AddAlias( LIB_ALIAS* aAlias )
  * so these alias will be added in library.
  * Conflicts can happen if aliases are already existing.
  * User is asked to choose what alias is removed (existing, or new)
+ * a special case is the library cache:
+ *   user is not asked, and old aliases removed.
+ *   this is not perfect, but sufficient to create a library cache project
  * @param aComponent - Component to add.
  * @return Added component if successful.
  */
@@ -235,41 +238,47 @@ LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
 
     // Conflict detection: See if already existing aliases exist,
     // and if yes, ask user for continue or abort
-    wxString msg;
-    int conflict_count = 0;
-    for( size_t i = 0; i < newCmp->m_AliasList.GetCount(); i++ )
+    // Special case: if the library is the library cache of the project,
+    // old aliases are always removed to avoid conflict,
+    //      and user is not prompted )
+    if( !IsCache() )
     {
-        LIB_ALIAS* alias = FindAlias( newCmp->m_AliasList[ i ] );
-        
-        if( alias == NULL )
-    	    break;
-
-        if( alias->GetComponent()->GetName().CmpNoCase( newCmp->GetName() ) != 0 )
+        wxString msg;
+        int conflict_count = 0;
+        for( size_t i = 0; i < newCmp->m_AliasList.GetCount(); i++ )
         {
-            wxString msg1;
-            msg1.Printf( _("alias <%s> already exists and has root name<%s>"),
-                        GetChars( alias->GetName() ),
-                        GetChars( alias->GetComponent()->GetName() ) );
-            msg << msg1 << wxT("\n");
-            conflict_count++;
+            LIB_ALIAS* alias = FindAlias( newCmp->m_AliasList[ i ] );
+
+            if( alias == NULL )
+                continue;
+
+            if( alias->GetComponent()->GetName().CmpNoCase( newCmp->GetName() ) != 0 )
+            {
+                wxString msg1;
+                msg1.Printf( _("alias <%s> already exists and has root name<%s>"),
+                            GetChars( alias->GetName() ),
+                            GetChars( alias->GetComponent()->GetName() ) );
+                msg << msg1 << wxT("\n");
+                conflict_count++;
+            }
+
+            if( conflict_count > 20 )
+                break;
         }
 
-        if( conflict_count > 20 )
-            break;
-    }
-
-    if( conflict_count ) // Conflict: ask user what he wants remove all aliases or abort:
-    {
-        wxString title;
-        wxString msg1;
-        title.Printf( _( "Conflict in library <%s>"), GetChars( fileName.GetName()));
-        msg1.Printf( _("and appears in alias list of current component <%s>." ),
-                    GetChars( newCmp->GetName() ) );
-        msg << wxT("\n\n") << msg1;
-        msg << wxT("\n\n") << _("All old aliases will be removed. Continue ?");
-        int diag = wxMessageBox(msg, title, wxYES | wxICON_QUESTION);
-        if( diag != wxYES )
-            return NULL;
+        if( conflict_count ) // Conflict: ask user what he wants: remove all aliases or abort:
+        {
+            wxString title;
+            wxString msg1;
+            title.Printf( _( "Conflict in library <%s>"), GetChars( fileName.GetName()));
+            msg1.Printf( _("and appears in alias list of current component <%s>." ),
+                        GetChars( newCmp->GetName() ) );
+            msg << wxT("\n\n") << msg1;
+            msg << wxT("\n\n") << _("All old aliases will be removed. Continue ?");
+            int diag = wxMessageBox(msg, title, wxYES | wxICON_QUESTION);
+            if( diag != wxYES )
+                return NULL;
+        }
     }
 
     for( size_t i = 0; i < newCmp->m_AliasList.GetCount(); i++ )
@@ -301,7 +310,7 @@ LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
 
 /** function RemoveEntryName
  * Remove an /a aName entry from the library list names.
- * Warning: this is a partiel remove, because if aname is an alias
+ * Warning: this is a partiel remove, because if aName is an alias
  * it is not removed from its root component.
  * this is for internal use only
  * Use RemoveEntry( CMP_LIB_ENTRY* aEntry ) to remove safely an entry in library.
@@ -349,9 +358,9 @@ void CMP_LIBRARY::RemoveEntryName( const wxString& aName )
         root = alias->GetComponent();
 
         /* Remove alias name from the root component alias list */
-        if( root == NULL )
+        if( root == NULL )  // Should not occur, but is not a fatal error
         {
-            wxLogWarning( wxT( "No root component found for alias <%s> in library <%s>." ),
+            wxLogDebug( wxT( "No root component found for alias <%s> in library <%s>." ),
                           GetChars( aEntry->GetName() ),
                           GetChars( fileName.GetName() ) );
         }
@@ -359,12 +368,14 @@ void CMP_LIBRARY::RemoveEntryName( const wxString& aName )
         {
             int index = root->m_AliasList.Index( aEntry->GetName(), false );
 
-            if( index == wxNOT_FOUND )
-                wxLogWarning( wxT( "Alias <%s> not found in component <%s> alias list in \
+            if( index == wxNOT_FOUND )  // Should not occur, but is not a fatal error
+            {
+                wxLogDebug( wxT( "Alias <%s> not found in component <%s> alias list in \
 library <%s>" ),
                               GetChars( aEntry->GetName() ),
                               GetChars( root->GetName() ),
                               GetChars( fileName.GetName() ) );
+            }
             else
                 root->m_AliasList.RemoveAt( index );
         }
@@ -458,7 +469,7 @@ LIB_COMPONENT* CMP_LIBRARY::ReplaceComponent( LIB_COMPONENT* aOldComponent,
     }
 
     RemoveEntryName( aOldComponent->GetName() );
-    entries.push_back( (CMP_LIB_ENTRY*) newCmp );
+    entries.push_back( newCmp );
     entries.sort();
 
     SetModifyFlags( );

@@ -66,9 +66,16 @@ public:
     wxPoint m_O_Curseur;       /* Relative Screen cursor coordinate (on grid)
                                 * in user units.
                                 * (coordinates from last reset position)*/
-    wxPoint m_ScrollbarPos;     // Position effective des Curseurs de scroll
-    wxSize  m_ScrollbarNumber;  /* Current scroll bar posiition in scroll
-                                 * units. */
+    // Scrollbars management:
+    int     m_ScrollPixelsPerUnitX; /* Pixels per scroll unit in the horizontal direction. */
+    int     m_ScrollPixelsPerUnitY; /* Pixels per scroll unit in the vertical direction. */
+    wxSize  m_ScrollbarNumber;      /* Current virtual draw area size in scroll
+                                     * units.
+                                     * m_ScrollbarNumber * m_ScrollPixelsPerUnit = virtual draw area size in pixels
+                                     */
+    wxPoint m_ScrollbarPos;         /* Current scroll bar position in scroll
+                                     * units. */
+
     wxPoint m_StartVisu;       /* Coordinates in drawing units of the current
                                 * view position (upper left corner of device)
                                 */

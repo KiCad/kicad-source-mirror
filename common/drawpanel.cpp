@@ -958,7 +958,7 @@ bool WinEDA_DrawPanel::OnRightClick( wxMouseEvent& event )
     if( !m_Parent->OnRightClick( pos, &MasterMenu ) )
         return false;
 
-    AddMenuZoom( &MasterMenu );
+    m_Parent->AddMenuZoomAndGrid( &MasterMenu );
 
     m_IgnoreMouseEvents = TRUE;
     PopupMenu( &MasterMenu, pos );

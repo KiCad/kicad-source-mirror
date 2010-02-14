@@ -38,6 +38,8 @@ BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_BaseStruct( aType )
     m_Center           = true;
     m_CurrentSheetDesc = &g_Sheet_A4;
     m_IsPrinting       = false;
+    m_ScrollPixelsPerUnitX = 1;
+    m_ScrollPixelsPerUnitY = 1;
 
     InitDatas();
 }

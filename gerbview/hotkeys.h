@@ -6,17 +6,12 @@
 
 #include "hotkeys_basic.h"
 
+// List of hot keys id.
+// see also enum common_hotkey_id_commnand in hotkeys_basic.h
+// for shared hotkeys id
 enum hotkey_id_commnand {
-    HK_NOT_FOUND = 0,
-    HK_RESET_LOCAL_COORD,
-    HK_HELP,
-	HK_SWITCH_UNITS,
+	HK_SWITCH_UNITS = HK_COMMON_END,
 	HK_SWITCH_TRACK_DISPLAY_MODE,
-    HK_ZOOM_IN,
-    HK_ZOOM_OUT,
-    HK_ZOOM_REDRAW,
-    HK_ZOOM_CENTER,
-    HK_ZOOM_AUTO,
     HK_SWITCH_LAYER_TO_NEXT,
     HK_SWITCH_LAYER_TO_PREVIOUS
 };

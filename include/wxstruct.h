@@ -183,6 +183,7 @@ public:
     wxPoint      m_Auxiliary_Axis_Position; /* position of the auxiliary axis */
 
 protected:
+    Ki_HotkeyInfoSectionDescriptor * m_HotkeysZoomAndGridList;
     int          m_LastGridSizeId;
     bool         m_DrawGrid;                // hide/Show grid
     int          m_GridColor;               // Grid color
@@ -217,6 +218,13 @@ public:
     void             OnMouseEvent( wxMouseEvent& event );
     virtual void     OnHotKey( wxDC* DC, int hotkey,
                                EDA_BaseStruct* DrawStruct );
+
+    /** Function AddMenuZoomAndGrid (virtual)
+     * Add standard zoom commands and submenu zoom and grid selection to a popup menu
+     * uses zoom hotkeys info base to add hotkeys info to menu commands
+     * @param aMasterMenu = the menu to populate.
+     */
+    virtual void     AddMenuZoomAndGrid( wxMenu* aMasterMenu );
 
     void             Affiche_Message( const wxString& message );
     void             EraseMsgBox();

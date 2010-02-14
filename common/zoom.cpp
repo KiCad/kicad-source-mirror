@@ -15,6 +15,7 @@
 #include "class_base_screen.h"
 #include "wxstruct.h"
 #include "kicad_device_context.h"
+#include "hotkeys_basic.h"
 
 /** Compute draw offset (scroll bars and draw parameters)
  *  in order to have the current graphic cursor position at the screen center
@@ -174,7 +175,7 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
 /* add the zoom list menu the the MasterMenu.
  *  used in OnRightClick(wxMouseEvent& event)
  */
-void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
+void WinEDA_DrawFrame::AddMenuZoomAndGrid( wxMenu* MasterMenu )
 {
     size_t      i;
     int         maxZoomIds;
@@ -184,58 +185,62 @@ void WinEDA_DrawPanel::AddMenuZoom( wxMenu* MasterMenu )
     GRID_TYPE   tmp;
     wxMenu*     gridMenu;
     double      gridValue;
+    BASE_SCREEN * screen = DrawPanel->GetScreen();
 
-    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_CENTER, _( "Center" ),
-                  zoom_center_xpm );
-    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_IN, _( "Zoom in" ), zoom_in_xpm );
-    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_OUT, _( "Zoom out" ), zoom_out_xpm );
-    ADD_MENUITEM( MasterMenu, ID_ZOOM_PAGE, _( "Zoom auto" ), zoom_auto_xpm );
+    msg = AddHotkeyName( _( "Center" ), m_HotkeysZoomAndGridList, HK_ZOOM_CENTER );
+    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_CENTER, msg, zoom_center_xpm );
+    msg = AddHotkeyName( _( "Zoom in" ), m_HotkeysZoomAndGridList, HK_ZOOM_IN );
+    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_IN, msg, zoom_in_xpm );
+    msg = AddHotkeyName( _( "Zoom out" ), m_HotkeysZoomAndGridList, HK_ZOOM_OUT );
+    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_OUT, msg, zoom_out_xpm );
+    msg = AddHotkeyName( _( "Redraw view" ), m_HotkeysZoomAndGridList, HK_ZOOM_REDRAW );
+    ADD_MENUITEM( MasterMenu, ID_ZOOM_REDRAW, msg, zoom_redraw_xpm );
+    msg = AddHotkeyName( _( "Zoom auto" ), m_HotkeysZoomAndGridList, HK_ZOOM_AUTO );
+    ADD_MENUITEM( MasterMenu, ID_ZOOM_PAGE, msg, zoom_auto_xpm );
+
 
     wxMenu* zoom_choice = new wxMenu;
     ADD_MENUITEM_WITH_SUBMENU( MasterMenu, zoom_choice,
                                ID_POPUP_ZOOM_SELECT, _( "Zoom select" ),
                                zoom_select_xpm );
 
-    ADD_MENUITEM( MasterMenu, ID_ZOOM_REDRAW, _( "Redraw view" ),
-                  zoom_redraw_xpm );
-
-    zoom = GetScreen()->GetZoom();
+    zoom = screen->GetZoom();
     maxZoomIds = ID_POPUP_ZOOM_LEVEL_END - ID_POPUP_ZOOM_LEVEL_START;
-    maxZoomIds = ( (size_t) maxZoomIds < GetScreen()->m_ZoomList.GetCount() ) ?
-                 maxZoomIds : GetScreen()->m_ZoomList.GetCount();
+    maxZoomIds = ( (size_t) maxZoomIds < screen->m_ZoomList.GetCount() ) ?
+                 maxZoomIds : screen->m_ZoomList.GetCount();
 
     /* Populate zoom submenu. */
     for( i = 0; i < (size_t) maxZoomIds; i++ )
     {
-        if( ( GetScreen()->m_ZoomList[i] % GetScreen()->m_ZoomScalar ) == 0 )
+        if( ( screen->m_ZoomList[i] % screen->m_ZoomScalar ) == 0 )
             msg.Printf( wxT( "%u" ),
-                        GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar );
+                        screen->m_ZoomList[i] / screen->m_ZoomScalar );
         else
             msg.Printf( wxT( "%.1f" ),
-                        (float) GetScreen()->m_ZoomList[i] /
-                        GetScreen()->m_ZoomScalar );
+                        (float) screen->m_ZoomList[i] /
+                        screen->m_ZoomScalar );
 
         zoom_choice->Append( ID_POPUP_ZOOM_LEVEL_START + i, _( "Zoom: " ) + msg,
                              wxEmptyString, wxITEM_CHECK );
-        if( zoom == GetScreen()->m_ZoomList[i] )
+        if( zoom == screen->m_ZoomList[i] )
             zoom_choice->Check( ID_POPUP_ZOOM_LEVEL_START + i, true );
     }
 
     /* Create grid submenu as required. */
-    if( !GetScreen()->m_GridList.IsEmpty() )
+    if( !screen->m_GridList.IsEmpty() )
     {
         gridMenu = new wxMenu;
         ADD_MENUITEM_WITH_SUBMENU( MasterMenu, gridMenu,
                                    ID_POPUP_GRID_SELECT, _( "Grid Select" ),
                                    grid_select_xpm );
 
-        grid = GetScreen()->GetGridSize();
+        grid = screen->GetGridSize();
 
-        for( i = 0; i < GetScreen()->m_GridList.GetCount(); i++ )
+        for( i = 0; i < screen->m_GridList.GetCount(); i++ )
         {
-            tmp = GetScreen()->m_GridList[i];
+            tmp = screen->m_GridList[i];
             gridValue = To_User_Unit( g_UnitMetric, tmp.m_Size.x,
-                                      m_Parent->m_InternalUnits );
+                                      m_InternalUnits );
 
             if( tmp.m_Id == ID_POPUP_GRID_USER )
             {

@@ -19,9 +19,17 @@
 #include <boost/foreach.hpp>
 
 
-/*********************/
-/* class CMP_LIB_ENTRY */
-/*********************/
+/** class CMP_LIB_ENTRY
+ * Base class to describe library components and aliases.
+ * This class is not to be used directly.
+ * There are 2 derived classes
+ * class LIB_COMPONENT that describes a component in library
+ * class LIB_ALIAS that describes an alias of an existing component
+ * a LIB_COMPONENT object handle all info to draw a component
+ *  (pins, graphic body items, fields, name, keywords and documentation)
+ * a LIB_ALIAS object use info of its LIB_COMPONENT parent
+ *   and has just a name, keywords and documentation
+ */
 
 CMP_LIB_ENTRY::CMP_LIB_ENTRY( LibrEntryType aType, const wxString& aName,
                               CMP_LIBRARY* aLibrary ) :
@@ -160,7 +168,12 @@ void LIB_ALIAS::SetComponent( LIB_COMPONENT* aComponent )
 /* class LIB_COMPONENT */
 /********************************/
 
-/* This is a standard component  (in library)
+/**
+ * Library component object definition.
+ *
+ * A library component object is typically saved and loaded
+ * in a component library file (.lib).
+ * Library components are different from schematic components.
  */
 LIB_COMPONENT::LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary ) :
     CMP_LIB_ENTRY( ROOT, aName, aLibrary )

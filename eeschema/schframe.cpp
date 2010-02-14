@@ -27,6 +27,7 @@
 #include "dialog_erc.h"
 #include "libeditfrm.h"
 #include "libviewfrm.h"
+#include "hotkeys.h"
 
 
 BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
@@ -160,6 +161,7 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow*       father,
     m_previewSize = wxDefaultSize;
     m_printMonochrome = true;
     m_showSheetReference = true;
+    m_HotkeysZoomAndGridList = s_Schematic_Hokeys_Descr;
 
     CreateScreens();
 

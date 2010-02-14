@@ -17,6 +17,7 @@
 #include "bitmaps.h"
 #include "protos.h"
 #include "gerbview_id.h"
+#include "hotkeys.h"
 
 
 /****************************************/
@@ -128,6 +129,7 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
 
     m_Draw_Axis = true;         // true to show X and Y axis on screen
     m_Draw_Sheet_Ref = FALSE;   // TRUE for reference drawings.
+    m_HotkeysZoomAndGridList = s_Gerbview_Hokeys_Descr;
     if( DrawPanel )
         DrawPanel->m_Block_Enable = TRUE;
 
@@ -415,7 +417,7 @@ void WinEDA_GerberFrame::ReFillLayerWidget()
         m_auimgr.Update();
     else
         m_LayersManager->SetSize( bestz );
-    
+
     syncLayerWidget( );
 }
 

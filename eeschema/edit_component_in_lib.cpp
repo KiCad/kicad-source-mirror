@@ -159,10 +159,9 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
 
     if( m_PartAliasList->GetStrings() != component->m_AliasList )
     {
-        LIB_ALIAS* alias;
         wxArrayString aliases = m_PartAliasList->GetStrings();
 
-        /* Add names not existing in the old alias list. */
+        /* Add names not existing in the current component alias list. */
         for( i = 0; i < aliases.GetCount(); i++ )
         {
             index = component->m_AliasList.Index( aliases[ i ], false );
@@ -170,16 +169,10 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
             if( index != wxNOT_FOUND )
                 continue;
 
-            alias = new LIB_ALIAS( aliases[ i ], component );
-
-            if( !library->AddAlias( alias ) )
-            {
-                delete alias;
-                alias = NULL;
+            component->m_AliasList.Add( aliases[ i ] );
             }
-        }
 
-        /* Remove names and library alias entries not in the new alias list. */
+        /* Remove names in the current component that are not in the new alias list. */
         for( i = 0; i < component->m_AliasList.GetCount(); i++ )
         {
             index = aliases.Index( component->m_AliasList[ i ], false );
@@ -187,10 +180,8 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
             if( index == wxNOT_FOUND )
                 continue;
 
-            CMP_LIB_ENTRY* alias =
-                library->FindAlias( component->m_AliasList[ i ] );
-            if( alias != NULL )
-                library->RemoveEntry( alias );
+            component->m_AliasList.RemoveAt( i );
+            i--;
         }
 
         component->m_AliasList = aliases;

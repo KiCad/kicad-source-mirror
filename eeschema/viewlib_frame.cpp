@@ -14,6 +14,7 @@
 #include "protos.h"
 #include "libviewfrm.h"
 #include "class_library.h"
+#include "hotkeys.h"
 
 
 /**
@@ -92,6 +93,7 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
     // Give an icon
     SetIcon( wxIcon( library_browse_xpm ) );
 
+    m_HotkeysZoomAndGridList = s_Viewlib_Hokeys_Descr;
     m_CmpList = NULL;
     m_LibList = NULL;
     m_LibListWindow = NULL;

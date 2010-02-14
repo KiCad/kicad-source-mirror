@@ -134,9 +134,11 @@ extern int LibraryEntryCompare( const CMP_LIB_ENTRY* aItem1, const CMP_LIB_ENTRY
 /**
  * Library component object definition.
  *
- * A library component object is typically save and loaded in a component
- * library file (.lib).  Library components are different from schematic
- * components.
+ * Library component object definition.
+ *
+ * A library component object is typically saved and loaded
+ * in a component library file (.lib).
+ * Library components are different from schematic components.
  */
 class LIB_COMPONENT : public CMP_LIB_ENTRY
 {

@@ -16,6 +16,7 @@
 #include "bitmaps.h"
 #include "protos.h"
 #include "pcbnew_id.h"
+#include "hotkeys.h"
 
 #include "3d_viewer.h"
 
@@ -156,6 +157,7 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
     m_FrameName = wxT( "ModEditFrame" );
     m_Draw_Sheet_Ref = false;   // true to show the frame references
     m_Draw_Axis = true;         // true to show X and Y axis on screen
+    m_HotkeysZoomAndGridList = s_Module_Editor_Hokeys_Descr;
 
     // Give an icon
     SetIcon( wxICON( icon_modedit ) );
