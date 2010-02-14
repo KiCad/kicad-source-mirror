@@ -1,33 +1,30 @@
-/*****************************************************************************/
-
 /**
- * @file buildmnu.cpp
- * @brief TODO
+ * @file menubar.cpp
+ * @brief Project manager menubars and toolbars
  */
-/*****************************************************************************/
-
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
 #include "kicad.h"
 #include "macros.h"
-#include "bitmaps.h"        // Common bitmaps
+#include "bitmaps.h"
 
-
-/*****************************************************************************/
+/* Menubar and toolbar event table */
 BEGIN_EVENT_TABLE( WinEDA_MainFrame, WinEDA_BasicFrame )
-/* Window events */
+    /* Window events */
     EVT_SIZE( WinEDA_MainFrame::OnSize )
     EVT_CLOSE( WinEDA_MainFrame::OnCloseWindow )
-/* Sash drag events */
+
+    /* Sash drag events */
     EVT_SASH_DRAGGED( ID_LEFT_FRAME, WinEDA_MainFrame::OnSashDrag )
-/* Toolbar events */
+
+    /* Toolbar events */
     EVT_TOOL( ID_NEW_PROJECT, WinEDA_MainFrame::OnLoadProject )
     EVT_TOOL( ID_LOAD_PROJECT, WinEDA_MainFrame::OnLoadProject )
     EVT_TOOL( ID_SAVE_PROJECT, WinEDA_MainFrame::OnSaveProject )
     EVT_TOOL( ID_SAVE_AND_ZIP_FILES, WinEDA_MainFrame::OnArchiveFiles )
 
-/* Menu events */
+    /* Menu events */
     EVT_MENU( ID_SAVE_PROJECT, WinEDA_MainFrame::OnSaveProject )
     EVT_MENU( wxID_EXIT, WinEDA_MainFrame::OnExit )
     EVT_MENU( ID_TO_EDITOR, WinEDA_MainFrame::OnOpenTextEditor )
@@ -47,13 +44,13 @@ BEGIN_EVENT_TABLE( WinEDA_MainFrame, WinEDA_BasicFrame )
     EVT_MENU( ID_GENERAL_HELP, WinEDA_MainFrame::GetKicadHelp )
     EVT_MENU( ID_KICAD_ABOUT, WinEDA_MainFrame::GetKicadAbout )
 
-/* Range menu events */
+    /* Range menu events */
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
                     WinEDA_MainFrame::SetLanguage )
 
     EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, WinEDA_MainFrame::OnFileHistory )
 
-/* Button events */
+    /* Button events */
     EVT_BUTTON( ID_TO_PCB, WinEDA_MainFrame::OnRunPcbNew )
     EVT_BUTTON( ID_TO_CVPCB, WinEDA_MainFrame::OnRunCvpcb )
     EVT_BUTTON( ID_TO_EESCHEMA, WinEDA_MainFrame::OnRunEeschema )
@@ -72,60 +69,66 @@ END_EVENT_TABLE()
 
 
 /**
- * @brief TODO
+ * @brief (Re)Create the menubar
  */
 void WinEDA_MainFrame::ReCreateMenuBar()
 {
     wxMenuItem *item;
     wxMenuBar  *menuBar = GetMenuBar();
 
-    /* Destroy the existing menu bar so it can be rebuilt.  This allows
-     * language changes of the menu text on the fly. */
+    /**
+     * Destroy the existing menu bar so it can be rebuilt.  This allows
+     * language changes of the menu text on the fly.
+     */
     if( menuBar )
         SetMenuBar( NULL );
-
     menuBar = new wxMenuBar();
 
-    // Check if menubar is empty
+    /**
+     * Files menu
+     */
     wxMenu* filesMenu = new wxMenu;
 
-    // Open project
+    /* Open */
     item = new wxMenuItem( filesMenu, ID_LOAD_PROJECT, _( "&Open\tCtrl+O" ),
                            _( "Open an existing project" ) );
     item->SetBitmap( open_project_xpm );
     filesMenu->Append( item );
 
-    // New project
+    /* Open Recent submenu */
+    wxMenu* openRecentMenu = new wxMenu();
+    wxGetApp().m_fileHistory.AddFilesToMenu( openRecentMenu );
+    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentMenu,
+                                        -1, _( "Open &Recent" ),
+                                        _("Open a recent opened schematic project" ),
+                                        open_project_xpm );
+
+    /* New */
     item = new wxMenuItem( filesMenu, ID_NEW_PROJECT, _( "&New\tCtrl+N" ),
                            _( "Start a new project" ) );
     item->SetBitmap( new_project_xpm );
     filesMenu->Append( item );
 
-
-    // Save project
+    /* Save */
     item = new wxMenuItem( filesMenu, ID_SAVE_PROJECT, _( "&Save\tCtrl+S" ),
                            _( "Save current project" ) );
     item->SetBitmap( save_project_xpm );
     filesMenu->Append( item );
 
-    // Separator
+    /* Separator */
     filesMenu->AppendSeparator();
 
-
-    // Archive project
+    /* Archive */
     item = new wxMenuItem( filesMenu, ID_SAVE_AND_ZIP_FILES, _( "&Archive" ),
                            _( "Archive project files in zip archive" ) );
     item->SetBitmap( zip_xpm );
     filesMenu->Append( item );
 
-    // Unarchive project
+    /* Unarchive */
     item = new wxMenuItem( filesMenu, ID_READ_ZIP_ARCHIVE, _( "&Unarchive" ),
                            _( "Unarchive project files from zip file" ) );
     item->SetBitmap( unzip_xpm );
     filesMenu->Append( item );
-
-    // Separator
-    filesMenu->AppendSeparator();
 
     /* Quit on all platforms except WXMAC */
 #if !defined( __WXMAC__ )
@@ -138,59 +141,61 @@ void WinEDA_MainFrame::ReCreateMenuBar()
 
 #endif /* !defined( __WXMAC__ ) */
 
-    /* Add the file history */
-    wxGetApp().m_fileHistory.AddFilesToMenu( filesMenu );
 
-    /**********************************************************************/
+
+    /**
+     * Browse menu
+     */
     wxMenu* browseMenu = new wxMenu();
-    /**********************************************************************/
 
-    // Editor
+    /* Text editor */
     item = new wxMenuItem( browseMenu, ID_TO_EDITOR, _( "Text E&ditor" ),
                            _( "Open prefered text editor" ) );
     item->SetBitmap( editor_xpm );
     browseMenu->Append( item );
 
-    // Browse files
+    /* Browse files */
     item = new wxMenuItem( browseMenu, ID_BROWSE_AN_SELECT_FILE,
-                           _( "&Browse Files" ),
-                           _( "Read or edit files with text editor" ) );
+                           _( "&View File" ),
+                           _( "View, read or edit file with a text editor" ) );
     item->SetBitmap( browse_files_xpm );
     browseMenu->Append( item );
 
-    /**********************************************************************/
-    wxMenu* PreferencesMenu = new wxMenu;
-    /**********************************************************************/
 
-    // Prefered text editor
+
+    /**
+     * Preferences menu
+     */
+    wxMenu* PreferencesMenu = new wxMenu;
+
+    /* Text editor */
     item = new wxMenuItem( PreferencesMenu, ID_SELECT_PREFERED_EDITOR,
                            _( "&Text Editor" ),
                            _( "Select your prefered text editor" ) );
     item->SetBitmap( editor_xpm );
     PreferencesMenu->Append( item );
 
-    // Submenu Pdf Browser selection: system browser or user
-    // selected browser (and its name)
-    /**********************************************************************/
+    /**
+     * PDF Viewer submenu
+     * System browser or user defined checkbox
+     */
     wxMenu* SubMenuPdfBrowserChoice = new wxMenu;
-    /**********************************************************************/
 
-    // Default PDF viewer
+    /* Default */
     item = new wxMenuItem( SubMenuPdfBrowserChoice,
                            ID_SELECT_DEFAULT_PDF_BROWSER,
-                           _( "Default PDF Viewer" ),
-                           _( "Use the default (system) PDF viewer used to browse datasheets" ),
+                           _( "Default" ),
+                           _( "Use system default PDF viewer used to browse datasheets" ),
                            wxITEM_CHECK );
     SETBITMAPS( datasheet_xpm );
     SubMenuPdfBrowserChoice->Append( item );
     SubMenuPdfBrowserChoice->Check( ID_SELECT_DEFAULT_PDF_BROWSER,
                                     wxGetApp().m_PdfBrowserIsDefault );
 
-
-    // Favourite PDF viewer
+    /* Favourite */
     item = new wxMenuItem( SubMenuPdfBrowserChoice,
                            ID_SELECT_PREFERED_PDF_BROWSER,
-                           _( "Favourite PDF Viewer" ),
+                           _( "Favourite" ),
                            _( "Use your favourite PDF viewer used to browse datasheets" ),
                            wxITEM_CHECK );
     SETBITMAPS( preference_xpm );
@@ -199,35 +204,37 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     SubMenuPdfBrowserChoice->Check( ID_SELECT_PREFERED_PDF_BROWSER,
                                     !wxGetApp().m_PdfBrowserIsDefault );
 
-
+    /* Append PDF Viewer submenu to preferences */
     item = new wxMenuItem( SubMenuPdfBrowserChoice,
                            ID_SELECT_PREFERED_PDF_BROWSER_NAME,
-                           _( "Select Pdf Viewer" ),
+                           _( "PDF Viewer" ),
                            _( "Select your favourite PDF viewer used to browse datasheets" ) );
     item->SetBitmap( datasheet_xpm );
     SubMenuPdfBrowserChoice->Append( item );
 
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( PreferencesMenu,
                                         SubMenuPdfBrowserChoice,
-                                        -1, _( "Pdf Viewer" ),
-                                        _( "Pdf viewer preferences" ),
+                                        -1, _( "PDF Viewer" ),
+                                        _( "PDF viewer preferences" ),
                                         datasheet_xpm );
 
     PreferencesMenu->AppendSeparator();
     wxGetApp().AddMenuLanguageList( PreferencesMenu );
 
 
-    /**********************************************************************/
-    wxMenu* helpMenu = new wxMenu;
-    /**********************************************************************/
 
-    // Contents
+    /**
+     * Help menu
+     */
+    wxMenu* helpMenu = new wxMenu;
+
+    /* Contents */
     item = new wxMenuItem( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
                            _( "Open the kicad manual" ) );
     item->SetBitmap( help_xpm );
     helpMenu->Append( item );
 
-    // About on all platforms except WXMAC */
+    /* About on all platforms except WXMAC */
 #if !defined( __WXMAC__ )
 
     helpMenu->AppendSeparator();
@@ -238,58 +245,63 @@ void WinEDA_MainFrame::ReCreateMenuBar()
 
 #endif /* !defined( __WXMAC__ ) */
 
-    // Append menus to menuBar
+    /**
+     * Create the menubar and append all submenus
+     */
     menuBar->Append( filesMenu, _( "&File" ) );
     menuBar->Append( browseMenu, _( "&Browse" ) );
     menuBar->Append( PreferencesMenu, _( "&Preferences" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
+    /* Associate the menu bar with the frame */
     SetMenuBar( menuBar );
 }
 
 
 /**
- * @brief TODO
+ * @brief (Re)Create the horizontal toolbar
  */
 void WinEDA_MainFrame::RecreateBaseHToolbar()
 {
-    // Check if toolbar is not already set
+    /* Check if toolbar is not already created */
     if( m_HToolBar != NULL )
         return;
 
-    // Allocate memory for m_HToolBar
+    /* Allocate memory for m_HToolBar */
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
 
-    // Set up toolbar
+    /* New */
     m_HToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString,
                          wxBitmap( new_project_xpm ),
                          _( "Start a new project" ) );
 
-    // Load project
+    /* Load */
     m_HToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString,
                          wxBitmap( open_project_xpm ),
                          _( "Load existing project" ) );
 
-    // Save project
+    /* Save */
     m_HToolBar->AddTool( ID_SAVE_PROJECT, wxEmptyString,
                          wxBitmap( save_project_xpm ),
                          _( "Save current project" ) );
 
-    // Separator
+    /* Separator */
     m_HToolBar->AddSeparator();
 
-    // Save and archive files
+    /* Archive */
     m_HToolBar->AddTool( ID_SAVE_AND_ZIP_FILES, wxEmptyString,
                          wxBitmap( zip_xpm ),
-                         _( "Archive all project files" ) ); // Tooltip
+                         _( "Archive all project files" ) );
 
-    // Separator
+    /* Separator */
     m_HToolBar->AddSeparator();
 
-    // Refresh project tree
+    /* Refresh project tree */
     m_HToolBar->AddTool( ID_PROJECT_TREE_REFRESH, wxEmptyString,
                          wxBitmap( reload_xpm ),
                          _( "Refresh project tree" ) );
 
-    m_HToolBar->Realize(); // Create m_HToolBar
+    /* Create m_HToolBar */
+    m_HToolBar->Realize();
 }
+

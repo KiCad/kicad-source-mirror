@@ -108,3 +108,8 @@ configure:18585: gcc -isysroot /Developer/SDKs/MacOSX10.5.sdk/ -mmacosx-version-
 ld: warning: in /Developer/SDKs/MacOSX10.5.sdk//usr/lib/libSystem.dylib, missing required architecture ppc in file
 
 Installing rosetta and xcode with all architectures fixes this "problem"
+
+
+ld: warning: in /Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks//QuickTime.framework/QuickTime, missing required architecture x86_64 in file
+
+You get this error because the QuickTime 10.6 framework is not build with 64bit support. This not a real issue for KiCad because we don't use it anyway.

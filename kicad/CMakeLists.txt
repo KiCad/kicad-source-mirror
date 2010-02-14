@@ -5,12 +5,12 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     )
 
 set(KICAD_SRCS
-    buildmnu.cpp
     commandframe.cpp
     files-io.cpp
     kicad.cpp
     kicad-python.cpp
     mainframe.cpp
+    menubar.cpp
     preferences.cpp
     prjconfig.cpp
     treeprj_datas.cpp

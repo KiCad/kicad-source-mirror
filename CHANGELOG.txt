@@ -4,6 +4,21 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2010-Feb-14 UPDATE Jerry Jacobs <xor.gate.engineering[at]gmail[dot]com>
+================================================================================
+++ KiCad
+   Check if project is noname.pro so we don't get a error if kicad is first run.
+   Removed double separator in file menu.
+   Moved recent project to submenu in Open recent.
+
+++ Common
+   Added CTest/CDash support file
+   Moved helper tool to helper subdirectory
+
+++ OSX
+   Update compiling doc
+
 2010-Feb-07 UPDATE Vesa Solonen <vesa.solonen@hut.fi>
 ================================================================================
 ++ all:

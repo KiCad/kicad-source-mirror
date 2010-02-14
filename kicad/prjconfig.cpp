@@ -1,8 +1,7 @@
-/*************************************************************/
-/** prjconfig.cpp : load and save configuration (file *.pro) */
-/*************************************************************/
-
-
+/**
+ * @file prjconfig.cpp
+ * Load and save project configuration files (*.pro)
+ */
 #ifdef KICAD_PYTHON
 #include <pyhandler.h>
 #endif
@@ -26,33 +25,41 @@ static const wxString BoardFileNameEntry( wxT( "BoardNm" ) );
 
 void WinEDA_MainFrame::CreateNewProject( const wxString PrjFullFileName )
 {
-    wxString   tmp;
+    wxString   filename;
     wxFileName newProjectName = PrjFullFileName;
 
-    // Init default config filename
-    tmp = wxGetApp().FindLibraryPath( wxT( "kicad.pro" ) );
+    /* Init default config filename */
+    filename = wxGetApp().FindLibraryPath( wxT( "kicad.pro" ) );
 
-    if( !wxFileName::FileExists( tmp ) )
+    /* Check if file kicad.pro exist in template directory */
+    if( wxFileName::FileExists( filename ) )
     {
-        DisplayInfoMessage( NULL, _( "Project template file <kicad.pro> not found " ) );
-        return;
+      wxCopyFile( filename, PrjFullFileName );
     }
     else
     {
-        wxCopyFile( tmp, PrjFullFileName );
+      DisplayInfoMessage( NULL, _( "Project template file <kicad.pro> not found " ) );
+      return;
     }
 
+    /* Init schematic filename */
     m_SchematicRootFileName = wxFileName( newProjectName.GetName(),
                                           SchematicFileExtension ).GetFullName();
 
+    /* Init pcb board filename */
     m_BoardFileName = wxFileName( newProjectName.GetName(),
                                   BoardFileExtension ).GetFullName();
 
+    /* Init project filename */
     m_ProjectFileName = newProjectName;
+
+    /* Write settings to project file */
     wxGetApp().WriteProjectConfig( PrjFullFileName, GeneralGroupName, NULL );
 }
 
-
+/**
+ * Loading a new project
+ */
 void WinEDA_MainFrame::OnLoadProject( wxCommandEvent& event )
 {
     int style;
@@ -89,7 +96,10 @@ void WinEDA_MainFrame::OnLoadProject( wxCommandEvent& event )
     wxLogDebug( wxT( "Loading Kicad project file: " ) +
                 m_ProjectFileName.GetFullPath() );
 
-    if( !m_ProjectFileName.FileExists() )
+    /* Check if project file exists and if it is not noname.pro */
+    wxString filename = m_ProjectFileName.GetFullName();
+
+    if( !m_ProjectFileName.FileExists() && !filename.IsSameAs(wxT("noname.pro")))
     {
         DisplayError( this, _( "Kicad project file <" ) +
                       m_ProjectFileName.GetFullPath() + _( "> not found" ) );
@@ -135,3 +145,4 @@ void WinEDA_MainFrame::OnSaveProject( wxCommandEvent& event )
     wxGetApp().WriteProjectConfig( m_ProjectFileName.GetFullPath(),
                                    GeneralGroupName, NULL );
 }
+
