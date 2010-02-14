@@ -240,6 +240,9 @@ LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
     for( size_t i = 0; i < newCmp->m_AliasList.GetCount(); i++ )
     {
         LIB_ALIAS* alias = FindAlias( newCmp->m_AliasList[ i ] );
+        
+        if( alias == NULL )
+    	    break;
 
         if( alias->GetComponent()->GetName().CmpNoCase( newCmp->GetName() ) != 0 )
         {
@@ -267,7 +270,7 @@ LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
         int diag = wxMessageBox(msg, title, wxYES | wxICON_QUESTION);
         if( diag != wxYES )
             return NULL;
-   }
+    }
 
     for( size_t i = 0; i < newCmp->m_AliasList.GetCount(); i++ )
     {
