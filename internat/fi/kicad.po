@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-10 14:52+0200\n"
-"PO-Revision-Date: 2010-02-10 14:52+0200\n"
+"POT-Creation-Date: 2010-02-15 17:56+0200\n"
+"PO-Revision-Date: 2010-02-15 17:56+0200\n"
 "Last-Translator: Vesa Solonen <vesa.solonen@hut.fi>\n"
 "Language-Team: Amerikanenglanti <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -636,31 +636,31 @@ msgstr "Tulosta liitoskuva"
 msgid "There was a problem printing"
 msgstr "Tulostinongelma"
 
-#: pcbnew/set_grid.cpp:124
+#: pcbnew/set_grid.cpp:129
 msgid "Inches"
 msgstr "tuumaa"
 
-#: pcbnew/set_grid.cpp:125
+#: pcbnew/set_grid.cpp:130
 msgid "mm"
 msgstr "mm"
 
-#: pcbnew/set_grid.cpp:127
+#: pcbnew/set_grid.cpp:132
 msgid "Grid Size Units"
 msgstr "Pisterasterin yksiköt"
 
-#: pcbnew/set_grid.cpp:137
+#: pcbnew/set_grid.cpp:142
 msgid "User Grid Size X"
 msgstr "Käyttäjän määrittämä X-rasteri"
 
-#: pcbnew/set_grid.cpp:155
+#: pcbnew/set_grid.cpp:160
 msgid "User Grid Size Y"
 msgstr "Käyttäjän määrittämä Y-rasteri"
 
-#: pcbnew/set_grid.cpp:174
+#: pcbnew/set_grid.cpp:179
 msgid "&OK"
 msgstr "&Hyväksy"
 
-#: pcbnew/set_grid.cpp:181
+#: pcbnew/set_grid.cpp:186
 msgid "&Cancel"
 msgstr "&Peruuta"
 
@@ -1068,220 +1068,212 @@ msgstr "&Vaihda kerrokset"
 msgid "Swap tracks on copper layers or drawings on others layers"
 msgstr "Vaihda liuskat aktiivisella kuparikerrosparilla tai piirrokset muilla"
 
-#: pcbnew/menubar_pcbframe.cpp:311
-#: pcbnew/menubar_pcbframe.cpp:317
+#: pcbnew/menubar_pcbframe.cpp:321
+#: pcbnew/menubar_pcbframe.cpp:322
 msgid "Zoom In"
 msgstr "Lähennä"
 
-#: pcbnew/menubar_pcbframe.cpp:314
-msgid "Zoom In\tCtrl++"
-msgstr "Lähennä\tCtrl++"
-
-#: pcbnew/menubar_pcbframe.cpp:324
+#: pcbnew/menubar_pcbframe.cpp:328
 msgid "Zoom out"
 msgstr "Loitonna"
 
-#: pcbnew/menubar_pcbframe.cpp:327
-msgid "Zoom Out\tCtrl+-"
-msgstr "Loitonna\tCtrl+-"
-
-#: pcbnew/menubar_pcbframe.cpp:330
+#: pcbnew/menubar_pcbframe.cpp:329
 msgid "Zoom Out"
 msgstr "Loitonna"
 
-#: pcbnew/menubar_pcbframe.cpp:337
+#: pcbnew/menubar_pcbframe.cpp:336
 msgid "Fit on Screen"
 msgstr "Sovita näytölle"
 
-#: pcbnew/menubar_pcbframe.cpp:340
+#: pcbnew/menubar_pcbframe.cpp:339
 msgid "Fit on Screen\tCtrl+0"
 msgstr "Sovita näytölle\tCtrl+0"
 
-#: pcbnew/menubar_pcbframe.cpp:344
+#: pcbnew/menubar_pcbframe.cpp:343
 msgid "Zoom to fit the board on the screen"
 msgstr "Sovita levy näytölle"
 
-#: pcbnew/menubar_pcbframe.cpp:353
+#: pcbnew/menubar_pcbframe.cpp:352
 msgid "Redraw"
 msgstr "Virkistä näyttö"
 
-#: pcbnew/menubar_pcbframe.cpp:356
+#: pcbnew/menubar_pcbframe.cpp:355
 msgid "Redraw\tCtrl+R"
 msgstr "Virkistä näyttö\tCtrl+R"
 
-#: pcbnew/menubar_pcbframe.cpp:360
+#: pcbnew/menubar_pcbframe.cpp:359
 msgid "Redraw the screen of the board"
 msgstr "Virkistä näyttö"
 
-#: pcbnew/menubar_pcbframe.cpp:369
+#: pcbnew/menubar_pcbframe.cpp:368
 msgid "&List Nets"
 msgstr "&Luetteloi kytkentäverkot"
 
-#: pcbnew/menubar_pcbframe.cpp:370
+#: pcbnew/menubar_pcbframe.cpp:369
 msgid "View a list of nets with names and id's"
 msgstr "Tarkastele kytkentäverkkoluetteloa"
 
-#: pcbnew/menubar_pcbframe.cpp:378
+#: pcbnew/menubar_pcbframe.cpp:377
 msgid "3D Display"
 msgstr "3D-esitys"
 
-#: pcbnew/menubar_pcbframe.cpp:378
+#: pcbnew/menubar_pcbframe.cpp:377
 msgid "Show board in 3D viewer"
 msgstr "Näytä levystä 3D-esitys"
 
-#: pcbnew/menubar_pcbframe.cpp:389
+#: pcbnew/menubar_pcbframe.cpp:388
 msgid "&Library"
 msgstr "&Kirjasto"
 
-#: pcbnew/menubar_pcbframe.cpp:390
+#: pcbnew/menubar_pcbframe.cpp:389
 msgid "Setting libraries, directories and others..."
 msgstr "Asetukset kirjastoille, poluille ja muulle..."
 
-#: pcbnew/menubar_pcbframe.cpp:398
+#: pcbnew/menubar_pcbframe.cpp:397
 msgid "Hide &Layers Manager"
 msgstr "Piilota &kerrostyökalu"
 
-#: pcbnew/menubar_pcbframe.cpp:399
+#: pcbnew/menubar_pcbframe.cpp:398
 msgid "Show/hide the layers manager toolbar"
 msgstr "Näytä tai piilota kerrostyökalu"
 
-#: pcbnew/menubar_pcbframe.cpp:404
+#: pcbnew/menubar_pcbframe.cpp:403
 msgid "&General"
 msgstr "&Yleiset"
 
-#: pcbnew/menubar_pcbframe.cpp:405
+#: pcbnew/menubar_pcbframe.cpp:404
 msgid "Select general options for PCBnew"
 msgstr "PCBnew yleiset asetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:411
+#: pcbnew/menubar_pcbframe.cpp:410
 msgid "&Display"
 msgstr "&Näytä"
 
-#: pcbnew/menubar_pcbframe.cpp:412
+#: pcbnew/menubar_pcbframe.cpp:411
 msgid "Select how items (pads, tracks texts ... ) are displayed"
 msgstr "Valitse elementtien näyttöominaisuuksia"
 
-#: pcbnew/menubar_pcbframe.cpp:420
+#: pcbnew/menubar_pcbframe.cpp:419
 msgid "Grid"
 msgstr "Pisterasteri"
 
-#: pcbnew/menubar_pcbframe.cpp:421
+#: pcbnew/menubar_pcbframe.cpp:420
 msgid "Adjust user grid dimensions"
 msgstr "Aseta käyttäjän rasteri"
 
-#: pcbnew/menubar_pcbframe.cpp:427
+#: pcbnew/menubar_pcbframe.cpp:426
 msgid "Texts and Drawings"
 msgstr "Teksti ja piirrokset"
 
-#: pcbnew/menubar_pcbframe.cpp:428
+#: pcbnew/menubar_pcbframe.cpp:427
 msgid "Adjust dimensions for texts and drawings"
 msgstr "Aseta mittoja tekstille ja piirroksille"
 
-#: pcbnew/menubar_pcbframe.cpp:433
+#: pcbnew/menubar_pcbframe.cpp:432
 msgid "Pads"
 msgstr "Anturat"
 
-#: pcbnew/menubar_pcbframe.cpp:434
+#: pcbnew/menubar_pcbframe.cpp:433
 msgid "Adjust default pad characteristics"
 msgstr "Aseta anturoiden oletusasetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:440
+#: pcbnew/menubar_pcbframe.cpp:439
 msgid "Pads Mask Clearance"
 msgstr "Anturan JEP-välys"
 
-#: pcbnew/menubar_pcbframe.cpp:441
+#: pcbnew/menubar_pcbframe.cpp:440
 msgid "Adjust the global clearance between pads and the solder resist mask"
 msgstr "Aseta globaali eristysväli anturoiden ja JEP:n välillä"
 
-#: pcbnew/menubar_pcbframe.cpp:448
+#: pcbnew/menubar_pcbframe.cpp:447
 msgid "&Save"
 msgstr "&Tallenna"
 
-#: pcbnew/menubar_pcbframe.cpp:449
+#: pcbnew/menubar_pcbframe.cpp:448
 msgid "Save dimension preferences"
 msgstr "Tallenna mitta-asetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:455
+#: pcbnew/menubar_pcbframe.cpp:454
 msgid "Di&mensions"
 msgstr "&Mitat"
 
-#: pcbnew/menubar_pcbframe.cpp:456
+#: pcbnew/menubar_pcbframe.cpp:455
 msgid "Global dimensions preferences"
 msgstr "Globaalit mitta-asetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:469
+#: pcbnew/menubar_pcbframe.cpp:468
 msgid "&Save Preferences"
 msgstr "Tallenna &asetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:470
+#: pcbnew/menubar_pcbframe.cpp:469
 msgid "Save application preferences"
 msgstr "Tallenna asetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:475
+#: pcbnew/menubar_pcbframe.cpp:474
 msgid "&Read Preferences"
 msgstr "&Lue asetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:476
+#: pcbnew/menubar_pcbframe.cpp:475
 msgid "Read application preferences"
 msgstr "Lue asetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:488
+#: pcbnew/menubar_pcbframe.cpp:487
 msgid "Design Rules"
 msgstr "Suunnittelusäännöt"
 
-#: pcbnew/menubar_pcbframe.cpp:489
+#: pcbnew/menubar_pcbframe.cpp:488
 msgid "Open the design rules editor"
 msgstr "Avaa suunnittelusääntöeditori"
 
-#: pcbnew/menubar_pcbframe.cpp:494
+#: pcbnew/menubar_pcbframe.cpp:493
 msgid "&Layers Setup"
 msgstr "&Kerrosten asetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:495
+#: pcbnew/menubar_pcbframe.cpp:494
 msgid "Enable and set layer properties"
 msgstr "Käytettävät kerrokset ja niiden ominaisuudet"
 
-#: pcbnew/menubar_pcbframe.cpp:504
+#: pcbnew/menubar_pcbframe.cpp:503
 msgid "&Contents"
 msgstr "&Sisältö"
 
-#: pcbnew/menubar_pcbframe.cpp:505
+#: pcbnew/menubar_pcbframe.cpp:504
 msgid "Open the PCBnew manual"
 msgstr "Avaa PCBnew–ohjekirja"
 
-#: pcbnew/menubar_pcbframe.cpp:513
+#: pcbnew/menubar_pcbframe.cpp:512
 msgid "&About"
 msgstr "&Tietoja"
 
-#: pcbnew/menubar_pcbframe.cpp:514
+#: pcbnew/menubar_pcbframe.cpp:513
 msgid "About PCBnew printed circuit board designer"
 msgstr "Tietoja PCBnew –piirilevysuunnitteluohjelmasta"
 
-#: pcbnew/menubar_pcbframe.cpp:523
+#: pcbnew/menubar_pcbframe.cpp:522
 msgid "&File"
 msgstr "&Tiedosto"
 
-#: pcbnew/menubar_pcbframe.cpp:524
+#: pcbnew/menubar_pcbframe.cpp:523
 msgid "&Edit"
 msgstr "&Muokkaa"
 
-#: pcbnew/menubar_pcbframe.cpp:525
+#: pcbnew/menubar_pcbframe.cpp:524
 msgid "&View"
 msgstr "&Näytä"
 
-#: pcbnew/menubar_pcbframe.cpp:526
+#: pcbnew/menubar_pcbframe.cpp:525
 msgid "&Preferences"
 msgstr "&Asetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:527
+#: pcbnew/menubar_pcbframe.cpp:526
 msgid "&Design Rules"
 msgstr "&Suunnittelusäännöt"
 
-#: pcbnew/menubar_pcbframe.cpp:528
+#: pcbnew/menubar_pcbframe.cpp:527
 msgid "&3D Display"
 msgstr "&3D-esitys"
 
-#: pcbnew/menubar_pcbframe.cpp:529
+#: pcbnew/menubar_pcbframe.cpp:528
 msgid "&Help"
 msgstr "&Apua"
 
@@ -3580,7 +3572,7 @@ msgstr "Piirron lähtöpiste"
 
 #: pcbnew/dialog_plot_base.cpp:114
 msgid "HPGL"
-msgstr ""
+msgstr "HPGL"
 
 #: pcbnew/dialog_plot_base.cpp:114
 msgid "Gerber"
@@ -3726,14 +3718,14 @@ msgstr "Monilla komponenteilla on identtinen viitemerkki \"%s\"."
 msgid ""
 "Your BOARD has a bad layer number of %u for module\n"
 " %s's \"reference\" text."
-msgstr ""
+msgstr "Levyllä on huono kerrosnumero %u osan %s \"viite\"-tekstille."
 
 #: pcbnew/plot_rtn.cpp:171
 #, c-format
 msgid ""
 "Your BOARD has a bad layer number of %u for module\n"
 " %s's \"value\" text."
-msgstr ""
+msgstr "Levyllä on huono kerrosnumero %u osan %s \"arvo\"-tekstille."
 
 #: pcbnew/plot_rtn.cpp:209
 #, c-format
@@ -3741,6 +3733,8 @@ msgid ""
 "Your BOARD has a bad layer number of %u for module\n"
 " %s's \"module text\" text of %s."
 msgstr ""
+"Levyllä on huono kerrosnumero %u osan\n"
+" %s \"osan tekstit\"-tekstille %s."
 
 #: pcbnew/editmod.cpp:128
 msgid "Text is REFERENCE!"
@@ -4007,23 +4001,23 @@ msgstr "Maks."
 msgid "Segm"
 msgstr "Segm"
 
-#: pcbnew/pcbframe.cpp:334
+#: pcbnew/pcbframe.cpp:336
 msgid "Visibles"
 msgstr "Näkyvät"
 
-#: pcbnew/pcbframe.cpp:420
+#: pcbnew/pcbframe.cpp:422
 msgid "Board modified, Save before exit ?"
 msgstr "Levyä muokattu. Tallennetaanko?"
 
-#: pcbnew/pcbframe.cpp:421
+#: pcbnew/pcbframe.cpp:423
 msgid "Confirmation"
 msgstr "Vahvistus"
 
-#: pcbnew/pcbframe.cpp:460
+#: pcbnew/pcbframe.cpp:462
 msgid "3D Frame already opened"
 msgstr "3D-kehys on jo auki"
 
-#: pcbnew/pcbframe.cpp:464
+#: pcbnew/pcbframe.cpp:466
 msgid "3D Viewer"
 msgstr "3D-katselin"
 
@@ -4098,15 +4092,15 @@ msgstr "Kirjoitettiin piirilevytiedosto:"
 msgid "Failed to create "
 msgstr "Luominen epäonnistui"
 
-#: pcbnew/dialog_pad_properties.cpp:482
+#: pcbnew/dialog_pad_properties.cpp:522
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
 msgstr "Epäkelpo arvo läpiviennin poraukselle: Poraus suurempi kuin anturan koko"
 
-#: pcbnew/dialog_pad_properties.cpp:488
+#: pcbnew/dialog_pad_properties.cpp:528
 msgid "Incorrect value for pad offset"
 msgstr "Epäkelpo arvo anturan siirtymälle"
 
-#: pcbnew/dialog_pad_properties.cpp:582
+#: pcbnew/dialog_pad_properties.cpp:622
 msgid "Unknown netname, no change"
 msgstr "Tuntematon kytkentäverkkonimi: Ei muutosta"
 
@@ -5213,47 +5207,47 @@ msgstr "Ei"
 msgid "Show page limits"
 msgstr "Näytä sivun reunat"
 
-#: pcbnew/dialog_graphic_items_options.cpp:203
+#: pcbnew/dialog_graphic_items_options.cpp:194
 msgid "Graphics:"
 msgstr "Grafiikka:"
 
-#: pcbnew/dialog_graphic_items_options.cpp:209
+#: pcbnew/dialog_graphic_items_options.cpp:200
 msgid "Graphic segm Width"
 msgstr "Grafiikkasegmentin leveys"
 
-#: pcbnew/dialog_graphic_items_options.cpp:226
+#: pcbnew/dialog_graphic_items_options.cpp:217
 msgid "Board Edges Width"
 msgstr "Levyn reunaviivan leveys"
 
-#: pcbnew/dialog_graphic_items_options.cpp:243
+#: pcbnew/dialog_graphic_items_options.cpp:234
 msgid "Copper Text Width"
 msgstr "Kuparitekstin leveys"
 
-#: pcbnew/dialog_graphic_items_options.cpp:260
+#: pcbnew/dialog_graphic_items_options.cpp:251
 msgid "Text Size V"
 msgstr "Tekstin korkeus"
 
-#: pcbnew/dialog_graphic_items_options.cpp:277
+#: pcbnew/dialog_graphic_items_options.cpp:268
 msgid "Text Size H"
 msgstr "Tekstin leveys"
 
-#: pcbnew/dialog_graphic_items_options.cpp:296
+#: pcbnew/dialog_graphic_items_options.cpp:287
 msgid "Modules:"
 msgstr "Osat:"
 
-#: pcbnew/dialog_graphic_items_options.cpp:302
+#: pcbnew/dialog_graphic_items_options.cpp:293
 msgid "Edges Module Width"
 msgstr "Osan reunaviivan leveys"
 
-#: pcbnew/dialog_graphic_items_options.cpp:322
+#: pcbnew/dialog_graphic_items_options.cpp:313
 msgid "Text Module Width"
 msgstr "Tekstin viivanleveys"
 
-#: pcbnew/dialog_graphic_items_options.cpp:343
+#: pcbnew/dialog_graphic_items_options.cpp:334
 msgid "Text Module Size V"
 msgstr "Kirjainkorkeus"
 
-#: pcbnew/dialog_graphic_items_options.cpp:364
+#: pcbnew/dialog_graphic_items_options.cpp:355
 msgid "Text Module Size H"
 msgstr "Kirjainleveys"
 
@@ -6791,15 +6785,15 @@ msgstr "Lisää kaaristubi"
 msgid "Add Polynomial Shape"
 msgstr "Lisää polynomimuoto mikroaaltosovelluksiin"
 
-#: pcbnew/moduleframe.cpp:253
+#: pcbnew/moduleframe.cpp:255
 msgid "Module Editor: Module modified! Continue?"
 msgstr "Osaeditori: Osaa muokattu! Jatketaanko?"
 
-#: pcbnew/moduleframe.cpp:381
+#: pcbnew/moduleframe.cpp:383
 msgid "Show pads in sketch mode"
 msgstr "Näytä anturat luonnoksena"
 
-#: pcbnew/moduleframe.cpp:382
+#: pcbnew/moduleframe.cpp:384
 msgid "Show pads in filled mode"
 msgstr "Näytä anturat täytettyinä"
 
@@ -6860,11 +6854,11 @@ msgstr "Tallenna porausraportti"
 msgid "Ok to delete selected items ?"
 msgstr "Poistetaanko valitut?"
 
-#: pcbnew/initpcb.cpp:156
+#: pcbnew/initpcb.cpp:157
 msgid "Current Board will be lost and this operation cannot be undone. Continue ?"
 msgstr "Nykyinen levy hukataan, eikä sitä voi perua. Jatketaanko?"
 
-#: pcbnew/initpcb.cpp:213
+#: pcbnew/initpcb.cpp:214
 msgid "Current Footprint will be lost and this operation cannot be undone. Continue ?"
 msgstr "Nykyinen liitoskuva hukataan, eikä sitä voi perua. Jatketaanko?"
 
@@ -7145,63 +7139,63 @@ msgstr "Lisää komponentti"
 msgid "Add Power"
 msgstr "Lisää teholähde"
 
-#: eeschema/find.cpp:210
+#: eeschema/find.cpp:230
 msgid "Pin "
 msgstr "Nasta"
 
-#: eeschema/find.cpp:214
+#: eeschema/find.cpp:234
 msgid "Ref "
 msgstr "Viite"
 
-#: eeschema/find.cpp:218
+#: eeschema/find.cpp:238
 msgid "Value "
 msgstr "Arvo "
 
-#: eeschema/find.cpp:222
+#: eeschema/find.cpp:242
 msgid "Field "
 msgstr "Kenttä "
 
-#: eeschema/find.cpp:232
-#: eeschema/find.cpp:236
+#: eeschema/find.cpp:252
+#: eeschema/find.cpp:256
 msgid " found"
 msgstr " löydetty"
 
-#: eeschema/find.cpp:367
+#: eeschema/find.cpp:387
 #, c-format
 msgid "Marker %d found in %s"
 msgstr "Tuntomerkki %d löydetty %s:ssa"
 
-#: eeschema/find.cpp:374
+#: eeschema/find.cpp:394
 msgid "Marker Not Found"
 msgstr "Tuntomerkkiä ei löydetty"
 
-#: eeschema/find.cpp:595
+#: eeschema/find.cpp:615
 msgid " Found in "
 msgstr " Löydetty "
 
-#: eeschema/find.cpp:607
+#: eeschema/find.cpp:627
 msgid " Not Found"
 msgstr " Ei löytynyt"
 
-#: eeschema/find.cpp:639
+#: eeschema/find.cpp:659
 msgid "No component libraries are loaded."
 msgstr "Ei ladattuja komponenttikirjastoja."
 
-#: eeschema/find.cpp:663
-#: eeschema/find.cpp:729
-#: eeschema/find.cpp:746
+#: eeschema/find.cpp:683
+#: eeschema/find.cpp:749
+#: eeschema/find.cpp:766
 msgid "Found "
 msgstr "Löydetty "
 
-#: eeschema/find.cpp:663
+#: eeschema/find.cpp:683
 msgid " in library "
 msgstr " kirjastossa "
 
-#: eeschema/find.cpp:671
+#: eeschema/find.cpp:691
 msgid " found only in cache"
 msgstr " löydetty vain välimuistissa"
 
-#: eeschema/find.cpp:674
+#: eeschema/find.cpp:694
 msgid ""
 "\n"
 "Explore All Libraries?"
@@ -7209,12 +7203,12 @@ msgstr ""
 "\n"
 "Tutkitaanko kaikki kirjastot?"
 
-#: eeschema/find.cpp:680
+#: eeschema/find.cpp:700
 msgid "Nothing found"
 msgstr "Mitään ei löytynyt"
 
-#: eeschema/find.cpp:730
-#: eeschema/find.cpp:747
+#: eeschema/find.cpp:750
+#: eeschema/find.cpp:767
 msgid " in lib "
 msgstr " kirjastossa "
 
@@ -7797,35 +7791,35 @@ msgid "Enable automatic &panning"
 msgstr "Salli automaattinen näkymän &vieritys"
 
 #: eeschema/dialog_eeschema_options_base.cpp:130
-msgid "Allow buses and wires to be placed in any &orientation"
-msgstr "Salli johtimet ja väylät missä tahansa asennossa"
+msgid "Allow buses and wires to be placed in H or V &orientation only"
+msgstr "Salli johtimet ja väylät vain vaaka- tai pystyasennossa"
 
 #: eeschema/dialog_eeschema_options_base.cpp:134
 msgid "Show p&age limits"
 msgstr "Näytä sivun &reunat"
 
-#: eeschema/schframe.cpp:356
+#: eeschema/schframe.cpp:358
 msgid "Schematic modified, Save before exit ?"
 msgstr "Kytkentäkaaviota muokattu. Tallennetaanko?"
 
-#: eeschema/schframe.cpp:491
+#: eeschema/schframe.cpp:493
 msgid "Draw wires and buses in any direction"
 msgstr "Piirrä johtimet ja väylät vapaalla kulmalla"
 
-#: eeschema/schframe.cpp:492
+#: eeschema/schframe.cpp:494
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Piirrä johtimet ja väylät vain vaaka- ja pystysuorassa"
 
-#: eeschema/schframe.cpp:502
+#: eeschema/schframe.cpp:504
 msgid "Do not show hidden pins"
 msgstr "Älä näytä piilotettuja nastoja"
 
-#: eeschema/schframe.cpp:503
+#: eeschema/schframe.cpp:505
 #: eeschema/tool_sch.cpp:266
 msgid "Show hidden pins"
 msgstr "Näytä piilotetut nastat"
 
-#: eeschema/schframe.cpp:594
+#: eeschema/schframe.cpp:596
 msgid "Schematic"
 msgstr "Kytkentäkaavio"
 
@@ -7862,7 +7856,7 @@ msgstr "Seuraava tuntomerkki (F5)"
 msgid "Find Cmp in &Lib"
 msgstr "Etsi komponentti &kirjastossa"
 
-#: eeschema/libframe.cpp:295
+#: eeschema/libframe.cpp:297
 msgid ""
 "Component was modified!\n"
 "Discard changes?"
@@ -7870,7 +7864,7 @@ msgstr ""
 "Komponenttia muokattiin!\n"
 "Hylätäänkö muutokset?"
 
-#: eeschema/libframe.cpp:308
+#: eeschema/libframe.cpp:310
 #, c-format
 msgid ""
 "Library \"%s\" was modified!\n"
@@ -7879,24 +7873,24 @@ msgstr ""
 "Kirjastoa \"%s\" muokattiin!\n"
 "Hylätäänkö muutokset?"
 
-#: eeschema/libframe.cpp:418
+#: eeschema/libframe.cpp:420
 #, c-format
 msgid "Part %c"
 msgstr "Osa %c"
 
-#: eeschema/libframe.cpp:685
+#: eeschema/libframe.cpp:687
 msgid "Set pin options"
 msgstr "Aseta nastojen valinnat"
 
-#: eeschema/libframe.cpp:714
+#: eeschema/libframe.cpp:716
 msgid "Add line"
 msgstr "Lisää viiva"
 
-#: eeschema/libframe.cpp:718
+#: eeschema/libframe.cpp:720
 msgid "Set anchor position"
 msgstr "Aseta kiinnepisteen sijainti"
 
-#: eeschema/libframe.cpp:728
+#: eeschema/libframe.cpp:730
 msgid "Export"
 msgstr "Vie"
 
@@ -7974,7 +7968,7 @@ msgstr "Materiaaliluettelo ja/tai ristiviitteet"
 
 #: eeschema/tool_sch.cpp:129
 msgid "Backannotate footprint"
-msgstr ""
+msgstr "Marginaali:"
 
 #: eeschema/tool_sch.cpp:153
 msgid "Hierarchy Push/Pop"
@@ -8056,19 +8050,19 @@ msgstr "Pisterasteri pois"
 msgid "HV orientation for wires and bus"
 msgstr "Vaaka- tai pystysuunta johtimille ja väylille"
 
-#: eeschema/class_libentry.cpp:59
+#: eeschema/class_libentry.cpp:67
 msgid "none"
 msgstr "ei mitään"
 
-#: eeschema/class_libentry.cpp:325
+#: eeschema/class_libentry.cpp:338
 msgid "value"
 msgstr "arvo"
 
-#: eeschema/class_libentry.cpp:325
+#: eeschema/class_libentry.cpp:338
 msgid "reference"
 msgstr "viite"
 
-#: eeschema/class_libentry.cpp:327
+#: eeschema/class_libentry.cpp:340
 #, c-format
 msgid "An attempt was made to remove the %s field from component %s in library %s."
 msgstr "Yritettiin poistaa kenttä %s komponentista %s kirjastossa %s."
@@ -8191,51 +8185,65 @@ msgstr ""
 msgid "Cannot add duplicate alias <%s> to library <%s>."
 msgstr "Duplikaattialiasta  <%s> ei voitu lisätä kirjastoon <%s>."
 
-#: eeschema/class_library.cpp:245
+#: eeschema/class_library.cpp:258
 #, c-format
-msgid "Conflict in library <%s>: alias <%s> already has root name <%s> and will not be assigned to root name <%s>."
-msgstr "Ristiriita kirjastossa <%s>: Aliaksella <%s> on jo juurinimi <%s> eikä sitä voida nimitetä juurinimelle <%s>."
+msgid "alias <%s> already exists and has root name<%s>"
+msgstr "Alias <%s> on jo olemassa juurinimellä <%s>."
 
-#: eeschema/class_library.cpp:452
+#: eeschema/class_library.cpp:273
+#, c-format
+msgid "Conflict in library <%s>"
+msgstr "Ristiriita kirjastossa <%s>."
+
+#: eeschema/class_library.cpp:274
+#, c-format
+msgid "and appears in alias list of current component <%s>."
+msgstr ""
+
+#: eeschema/class_library.cpp:277
+msgid "All old aliases will be removed. Continue ?"
+msgstr "Kaikki vanhat aliakset poistetaan. Jatketaanko?"
+
+#: eeschema/class_library.cpp:531
 msgid "The component library file name is not set."
 msgstr "Komponenttikirjaston tiedostonimeä ei ole määritelty."
 
-#: eeschema/class_library.cpp:460
+#: eeschema/class_library.cpp:539
 msgid "The file could not be opened."
 msgstr "Tiedostoa ei voitu avata."
 
-#: eeschema/class_library.cpp:466
+#: eeschema/class_library.cpp:545
 msgid "The file is empty!"
 msgstr "Tiedosto on tyhjä!"
 
-#: eeschema/class_library.cpp:489
+#: eeschema/class_library.cpp:568
 msgid "The file is NOT an EESCHEMA library!"
 msgstr "Tiedosto ei ole pätevä EESchema-tiedosto!"
 
-#: eeschema/class_library.cpp:495
+#: eeschema/class_library.cpp:574
 msgid "The file header is missing version and time stamp information."
 msgstr "Tiedoston otsikosta puuttuvat versio- ja aikaleimatiedot."
 
-#: eeschema/class_library.cpp:540
+#: eeschema/class_library.cpp:619
 msgid "An error occurred attempting to read the header."
 msgstr "Virhe yritettäessä lukea kirjaston otsikkoa."
 
-#: eeschema/class_library.cpp:571
+#: eeschema/class_library.cpp:650
 #, c-format
 msgid "Library <%s> component load error %s."
 msgstr "Kirjaston <%s> komponentin latausvirhe %s."
 
-#: eeschema/class_library.cpp:642
+#: eeschema/class_library.cpp:721
 #, c-format
 msgid "Could not open component document library file <%s>."
 msgstr "Komponentin dokumentaatiokirjastotiedostoa <%s> ei voitu avata."
 
-#: eeschema/class_library.cpp:649
+#: eeschema/class_library.cpp:728
 #, c-format
 msgid "Component document library file <%s> is empty."
 msgstr "Komponentin dokumentaatiotiedosto %s on tyhjä."
 
-#: eeschema/class_library.cpp:657
+#: eeschema/class_library.cpp:736
 #, c-format
 msgid "File <%s> is not a valid component library document file."
 msgstr "Tiedosto <%s> ei ole pätevä komponenttikirjaston dokumentaatiotiedosto."
@@ -8653,7 +8661,7 @@ msgstr "Nastan nimi sisällä"
 
 #: eeschema/dialog_create_component.cpp:249
 msgid "Skew:"
-msgstr ""
+msgstr "Marginaali:"
 
 #: eeschema/dialog_create_component.cpp:303
 msgid "You must provide a name for this component"
@@ -8713,58 +8721,58 @@ msgstr "Aliasta <%s> ei löytynyt komponentille <%s> kirjastossa <%s>."
 msgid "Component Library Error"
 msgstr "Komponenttikirjastovirhe"
 
-#: eeschema/edit_component_in_lib.cpp:275
-#: eeschema/edit_component_in_lib.cpp:345
+#: eeschema/edit_component_in_lib.cpp:266
+#: eeschema/edit_component_in_lib.cpp:336
 #, c-format
 msgid "Alias <%s> cannot be removed while it is being edited!"
 msgstr "Aliasta <%s> ei voi poistaa kesken editoinnin!"
 
-#: eeschema/edit_component_in_lib.cpp:284
+#: eeschema/edit_component_in_lib.cpp:275
 msgid "Remove all aliases from list?"
 msgstr "Poistetaanko kaikki aliakset luettelosta?"
 
-#: eeschema/edit_component_in_lib.cpp:309
+#: eeschema/edit_component_in_lib.cpp:300
 msgid "New alias:"
 msgstr "Uusi alias:"
 
-#: eeschema/edit_component_in_lib.cpp:310
+#: eeschema/edit_component_in_lib.cpp:301
 msgid "Component Alias"
 msgstr "Komponenttialias"
 
-#: eeschema/edit_component_in_lib.cpp:320
+#: eeschema/edit_component_in_lib.cpp:311
 #, c-format
 msgid "Alias or component name <%s> already exists in library <%s>."
 msgstr "Alias tai komponenttinimi <%s> on jo kirjastossa <%s>."
 
-#: eeschema/edit_component_in_lib.cpp:374
+#: eeschema/edit_component_in_lib.cpp:365
 msgid "Delete extra parts from component?"
 msgstr "Poistetaanko ylimääräiset osat komponentista?"
 
-#: eeschema/edit_component_in_lib.cpp:395
+#: eeschema/edit_component_in_lib.cpp:386
 msgid "Add new pins for alternate body style ( DeMorgan ) to component?"
 msgstr ""
 
-#: eeschema/edit_component_in_lib.cpp:402
+#: eeschema/edit_component_in_lib.cpp:393
 msgid "Delete alternate body style (DeMorgan) draw items from component?"
 msgstr ""
 
-#: eeschema/edit_component_in_lib.cpp:426
+#: eeschema/edit_component_in_lib.cpp:417
 msgid "Doc Files"
 msgstr "Dokumentaatiotiedostot"
 
-#: eeschema/edit_component_in_lib.cpp:462
+#: eeschema/edit_component_in_lib.cpp:453
 msgid "Ok to Delete FootprintFilter LIST"
 msgstr "Poistetaanko liitoskuvasuodatuksen parametrit?"
 
-#: eeschema/edit_component_in_lib.cpp:485
+#: eeschema/edit_component_in_lib.cpp:476
 msgid "Add Footprint Filter"
 msgstr "Lisää liitoskuvasuodatin"
 
-#: eeschema/edit_component_in_lib.cpp:485
+#: eeschema/edit_component_in_lib.cpp:476
 msgid "Footprint Filter"
 msgstr "Liitoskuvasuodatin"
 
-#: eeschema/edit_component_in_lib.cpp:498
+#: eeschema/edit_component_in_lib.cpp:489
 #, c-format
 msgid "Foot print filter <%s> is already defined."
 msgstr "Liitoskuvasuodatin <%s> on jo määritelty."
@@ -9024,15 +9032,15 @@ msgstr "Täytä &edustavärillä"
 msgid "Fill &background"
 msgstr "Täytä &taustavärillä"
 
-#: eeschema/dialog_edit_component_in_lib.cpp:52
+#: eeschema/dialog_edit_component_in_lib.cpp:51
 msgid "Library Component Properties"
 msgstr "Kirjastokomponentin ominaisuudet"
 
-#: eeschema/dialog_edit_component_in_lib.cpp:56
+#: eeschema/dialog_edit_component_in_lib.cpp:55
 msgid "Properties for "
 msgstr "Ominaisuudet "
 
-#: eeschema/dialog_edit_component_in_lib.cpp:60
+#: eeschema/dialog_edit_component_in_lib.cpp:59
 msgid " (alias of "
 msgstr " "
 
@@ -9998,6 +10006,8 @@ msgid "Schematic Files"
 msgstr "Kytkentäkaaviotiedostot"
 
 #: eeschema/save_schemas.cpp:82
+#: eeschema/netform.cpp:68
+#: eeschema/netform.cpp:273
 msgid "Failed to create file "
 msgstr "Tiedoston luominen ei onnistunut "
 
@@ -10788,9 +10798,9 @@ msgid "Footprint alias files"
 msgstr "Liitoskuva-alias tiedostot"
 
 #: cvpcb/class_footprints_listbox.cpp:229
-#, fuzzy, c-format
+#, c-format
 msgid "Footprints (All): %d"
-msgstr "Liitoskuvia (kaikki): d%"
+msgstr "Liitoskuvia (kaikki): %d"
 
 #: cvpcb/class_footprints_listbox.cpp:232
 #, c-format
@@ -11230,28 +11240,28 @@ msgstr "Suoritettava tiedosto ("
 msgid "Select Prefered Editor"
 msgstr "Valitse tekstieditori"
 
-#: kicad/prjconfig.cpp:37
+#: kicad/prjconfig.cpp:41
 msgid "Project template file <kicad.pro> not found "
 msgstr "Projektimallitiedostoa <kicad.pro> ei löytynyt "
 
-#: kicad/prjconfig.cpp:65
+#: kicad/prjconfig.cpp:72
 msgid "Create New Project"
 msgstr "Luo uusi projekti"
 
-#: kicad/prjconfig.cpp:70
+#: kicad/prjconfig.cpp:77
 msgid "Open Existing Project"
 msgstr "Avaa olemassa oleva projekti"
 
-#: kicad/prjconfig.cpp:94
+#: kicad/prjconfig.cpp:104
 msgid "Kicad project file <"
 msgstr "KiCad-projektitiedosto <"
 
-#: kicad/prjconfig.cpp:108
+#: kicad/prjconfig.cpp:118
 #: kicad/kicad.cpp:78
 msgid "Working dir: "
 msgstr "Työhakemisto: "
 
-#: kicad/prjconfig.cpp:109
+#: kicad/prjconfig.cpp:119
 #: kicad/kicad.cpp:79
 msgid ""
 "\n"
@@ -11362,120 +11372,6 @@ msgstr "Vaihda tiedostonimeä: "
 msgid "Change filename"
 msgstr "Vaihda tiedostonimeä"
 
-#: kicad/buildmnu.cpp:94
-msgid "Open an existing project"
-msgstr "Avaa olemassa oleva projekti"
-
-#: kicad/buildmnu.cpp:100
-#: kicad/buildmnu.cpp:266
-msgid "Start a new project"
-msgstr "Aloita uusi projekti"
-
-#: kicad/buildmnu.cpp:107
-#: kicad/buildmnu.cpp:276
-msgid "Save current project"
-msgstr "Tallenna nykyinen projekti"
-
-#: kicad/buildmnu.cpp:116
-msgid "&Archive"
-msgstr "&Arkistoi"
-
-#: kicad/buildmnu.cpp:117
-msgid "Archive project files in zip archive"
-msgstr "Arkistoi projektitiedostot Zip-arkistoon"
-
-#: kicad/buildmnu.cpp:122
-msgid "&Unarchive"
-msgstr "&Pura arkisto"
-
-#: kicad/buildmnu.cpp:123
-msgid "Unarchive project files from zip file"
-msgstr "Pura projektitiedostot Zip-arkistosta"
-
-#: kicad/buildmnu.cpp:135
-msgid "Quit KiCad"
-msgstr "Lopeta KiCad"
-
-#: kicad/buildmnu.cpp:149
-msgid "Text E&ditor"
-msgstr "Teksiti&editori"
-
-#: kicad/buildmnu.cpp:150
-msgid "Open prefered text editor"
-msgstr "Avaa käytettävä tekstieditori"
-
-#: kicad/buildmnu.cpp:156
-msgid "&Browse Files"
-msgstr "&Selaa tiedostoja"
-
-#: kicad/buildmnu.cpp:157
-msgid "Read or edit files with text editor"
-msgstr "Lue tai muokkaa tiedostoja tekstieditorilla"
-
-#: kicad/buildmnu.cpp:167
-msgid "&Text Editor"
-msgstr "&Teksitieditori"
-
-#: kicad/buildmnu.cpp:168
-msgid "Select your prefered text editor"
-msgstr "Valitse käytettävä tekstieditori"
-
-#: kicad/buildmnu.cpp:181
-msgid "Default PDF Viewer"
-msgstr "Oletus PDF-näytin"
-
-#: kicad/buildmnu.cpp:182
-msgid "Use the default (system) PDF viewer used to browse datasheets"
-msgstr "Käytä oletus(järjestelmän) PDF-näytintä datalehtie esittämiseen"
-
-#: kicad/buildmnu.cpp:193
-msgid "Favourite PDF Viewer"
-msgstr "Valittu PDF-näytin"
-
-#: kicad/buildmnu.cpp:194
-msgid "Use your favourite PDF viewer used to browse datasheets"
-msgstr "Käytä valitsemaasi PDF-näytintä datalehtien esittämiseen"
-
-#: kicad/buildmnu.cpp:205
-msgid "Select Pdf Viewer"
-msgstr "Valitse PDF-näytin"
-
-#: kicad/buildmnu.cpp:206
-msgid "Select your favourite PDF viewer used to browse datasheets"
-msgstr "Valitse PDF-näytin"
-
-#: kicad/buildmnu.cpp:212
-msgid "Pdf Viewer"
-msgstr "PDF-näytin"
-
-#: kicad/buildmnu.cpp:213
-msgid "Pdf viewer preferences"
-msgstr "PDF-näyttimen asetukset"
-
-#: kicad/buildmnu.cpp:226
-msgid "Open the kicad manual"
-msgstr "Avaa KiCad–ohjekirja"
-
-#: kicad/buildmnu.cpp:235
-msgid "About kicad project manager"
-msgstr "Tietoja KiCad-projektimanagerista"
-
-#: kicad/buildmnu.cpp:243
-msgid "&Browse"
-msgstr "&Selaa"
-
-#: kicad/buildmnu.cpp:271
-msgid "Load existing project"
-msgstr "Lataa projekti"
-
-#: kicad/buildmnu.cpp:284
-msgid "Archive all project files"
-msgstr "Arkistoi kaikki projektitiedostot"
-
-#: kicad/buildmnu.cpp:292
-msgid "Refresh project tree"
-msgstr "Virkistä projektipuu"
-
 #: kicad/kicad.cpp:106
 msgid "noname"
 msgstr "Ei nimeä"
@@ -11566,8 +11462,114 @@ msgstr ""
 "\n"
 "Luo Zip-arkisto <%s>"
 
+#: kicad/menubar.cpp:94
+msgid "Open an existing project"
+msgstr "Avaa olemassa oleva projekti"
+
+#: kicad/menubar.cpp:108
+#: kicad/menubar.cpp:276
+msgid "Start a new project"
+msgstr "Aloita uusi projekti"
+
+#: kicad/menubar.cpp:114
+#: kicad/menubar.cpp:286
+msgid "Save current project"
+msgstr "Tallenna nykyinen projekti"
+
+#: kicad/menubar.cpp:122
+msgid "&Archive"
+msgstr "&Arkistoi"
+
+#: kicad/menubar.cpp:123
+msgid "Archive project files in zip archive"
+msgstr "Arkistoi projektitiedostot Zip-arkistoon"
+
+#: kicad/menubar.cpp:128
+msgid "&Unarchive"
+msgstr "&Pura arkisto"
+
+#: kicad/menubar.cpp:129
+msgid "Unarchive project files from zip file"
+msgstr "Pura projektitiedostot Zip-arkistosta"
+
+#: kicad/menubar.cpp:138
+msgid "Quit KiCad"
+msgstr "Lopeta KiCad"
+
+#: kicad/menubar.cpp:152
+msgid "Text E&ditor"
+msgstr "Teksiti&editori"
+
+#: kicad/menubar.cpp:153
+msgid "Open prefered text editor"
+msgstr "Avaa käytettävä tekstieditori"
+
+#: kicad/menubar.cpp:159
+msgid "&View File"
+msgstr "&Näytä tiedosto"
+
+#: kicad/menubar.cpp:160
+msgid "View, read or edit file with a text editor"
+msgstr "Taerkastele tai muokkaa tiedostoja tekstieditorilla"
+
+#: kicad/menubar.cpp:173
+msgid "&Text Editor"
+msgstr "&Teksitieditori"
+
+#: kicad/menubar.cpp:174
+msgid "Select your prefered text editor"
+msgstr "Valitse käytettävä tekstieditori"
+
+#: kicad/menubar.cpp:188
+msgid "Use system default PDF viewer used to browse datasheets"
+msgstr "Käytä oletus- (järjestelmän) PDF-näytintä datalehtien esittämiseen"
+
+#: kicad/menubar.cpp:198
+msgid "Favourite"
+msgstr "Valittu"
+
+#: kicad/menubar.cpp:199
+msgid "Use your favourite PDF viewer used to browse datasheets"
+msgstr "Käytä valitsemaasi PDF-näytintä datalehtien esittämiseen"
+
+#: kicad/menubar.cpp:210
+#: kicad/menubar.cpp:217
+msgid "PDF Viewer"
+msgstr "PDF-näytin"
+
+#: kicad/menubar.cpp:211
+msgid "Select your favourite PDF viewer used to browse datasheets"
+msgstr "Valitse PDF-näytin"
+
+#: kicad/menubar.cpp:218
+msgid "PDF viewer preferences"
+msgstr "PDF-näyttimen asetukset"
+
+#: kicad/menubar.cpp:233
+msgid "Open the kicad manual"
+msgstr "Avaa KiCad–ohjekirja"
+
+#: kicad/menubar.cpp:242
+msgid "About kicad project manager"
+msgstr "Tietoja KiCad-projektimanagerista"
+
+#: kicad/menubar.cpp:252
+msgid "&Browse"
+msgstr "&Selaa"
+
+#: kicad/menubar.cpp:281
+msgid "Load existing project"
+msgstr "Lataa projekti"
+
+#: kicad/menubar.cpp:294
+msgid "Archive all project files"
+msgstr "Arkistoi kaikki projektitiedostot"
+
+#: kicad/menubar.cpp:302
+msgid "Refresh project tree"
+msgstr "Virkistä projektipuu"
+
 #: gerbview/select_layers_to_pcb.cpp:213
-#: gerbview/tool_gerber.cpp:209
 msgid "Layer "
 msgstr "Kerros "
 
@@ -12098,11 +12100,11 @@ msgstr "Dokumenttitiedosto"
 msgid "Unknown MIME type for doc file <%s>"
 msgstr "Tuntematon MIME-tyyppi dokumentaatiotiedostolle <%s>"
 
-#: common/zoom.cpp:188
+#: common/zoom.cpp:185
 msgid "Center"
 msgstr "Keskiö"
 
-#: common/zoom.cpp:196
+#: common/zoom.cpp:199
 msgid "Zoom select"
 msgstr "Suurennoksen valinta"
 
@@ -12113,10 +12115,6 @@ msgstr "Koko: "
 #: common/zoom.cpp:229
 msgid "Grid Select"
 msgstr "Pisterasterin valinta"
-
-#: common/zoom.cpp:250
-msgid "Grid: "
-msgstr "Pisterasteri: "
 
 #: common/pcbcommon.cpp:61
 msgid "??? Via"
@@ -12154,7 +12152,7 @@ msgstr "Luetteloi kaikki"
 msgid "Select by Browser"
 msgstr "Valitse selaimella"
 
-#: common/hotkeys_basic.cpp:349
+#: common/hotkeys_basic.cpp:354
 msgid ""
 "Current hotkey list:\n"
 "\n"
@@ -12162,87 +12160,87 @@ msgstr ""
 "Nykyinen pikanäppäinluettelo:\n"
 "\n"
 
-#: common/hotkeys_basic.cpp:357
+#: common/hotkeys_basic.cpp:362
 msgid "key "
 msgstr "näppäin "
 
-#: common/hotkeys_basic.cpp:410
+#: common/hotkeys_basic.cpp:415
 msgid "Save Hotkey Configuration File:"
 msgstr "Tallenna pikanäppäinasettelun asetustiedosto:"
 
-#: common/hotkeys_basic.cpp:442
+#: common/hotkeys_basic.cpp:447
 msgid "Allowed keys:\n"
 msgstr "Sallitut näppäimet:\n"
 
-#: common/hotkeys_basic.cpp:527
+#: common/hotkeys_basic.cpp:532
 msgid "Open Hotkey Configuration File:"
 msgstr "Avaa pikanäppäinasettelun asetustiedosto:"
 
-#: common/hotkeys_basic.cpp:545
+#: common/hotkeys_basic.cpp:550
 msgid "Unable to read "
 msgstr "Ei voitu lukea "
 
-#: common/hotkeys_basic.cpp:663
+#: common/hotkeys_basic.cpp:668
 msgid "List Current Keys"
 msgstr "Luetteloi nykyiset näppäimet"
 
-#: common/hotkeys_basic.cpp:664
+#: common/hotkeys_basic.cpp:669
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Näyttää nykyisen pikanäppäinluettelon ja liittyvät komennot"
 
-#: common/hotkeys_basic.cpp:670
+#: common/hotkeys_basic.cpp:675
 msgid "(Re)create Hotkeys File"
 msgstr "Luo pikanäppäintiedosto"
 
-#: common/hotkeys_basic.cpp:672
+#: common/hotkeys_basic.cpp:677
 msgid "Create or recreate the hotkey configuration file from current hotkey list"
 msgstr "Luo pikanäppäinasettelun asetustiedosto nykyisestä pikanäppäinlistasta"
 
-#: common/hotkeys_basic.cpp:679
+#: common/hotkeys_basic.cpp:684
 msgid "Reload Hotkeys File"
 msgstr "Lataa pikanäppäinasettelun asetustiedosto uudelleen"
 
-#: common/hotkeys_basic.cpp:680
+#: common/hotkeys_basic.cpp:685
 msgid "Reload the hotkey configuration file"
 msgstr "Lataa pikanäppäinasettelun asetustiedosto uudelleen"
 
-#: common/hotkeys_basic.cpp:686
+#: common/hotkeys_basic.cpp:691
 msgid "Edit Hotkeys File"
 msgstr "Muokkaa pikanäppäintiedostoa"
 
-#: common/hotkeys_basic.cpp:687
+#: common/hotkeys_basic.cpp:692
 msgid "Edit the hotkey configuration file in a text editor"
 msgstr "Muokkaa pikanäppäinasettelun asetustiedostoa tekstieditorissa"
 
-#: common/hotkeys_basic.cpp:693
+#: common/hotkeys_basic.cpp:698
 msgid "Hotkeys"
 msgstr "Pikanäppäimet"
 
-#: common/hotkeys_basic.cpp:694
+#: common/hotkeys_basic.cpp:699
 msgid "Hotkeys configuration and preferences"
 msgstr "Pikanäppäinten asetukset"
 
-#: common/hotkeys_basic.cpp:702
+#: common/hotkeys_basic.cpp:707
 msgid "Home directory"
 msgstr "Kotihakemisto"
 
-#: common/hotkeys_basic.cpp:703
+#: common/hotkeys_basic.cpp:708
 msgid "Use home directory to load or store Hotkey config files"
 msgstr "Käytä kotihakemistoa pikanäppäinasetusten tallennukseen"
 
-#: common/hotkeys_basic.cpp:710
+#: common/hotkeys_basic.cpp:715
 msgid "KiCad template directory"
 msgstr "KiCad-mallihakemisto"
 
-#: common/hotkeys_basic.cpp:711
+#: common/hotkeys_basic.cpp:716
 msgid "Use kicad/template directory to load or store Hotkey config files"
 msgstr "Käytä KiCad-mallihakemistoa pikanäppäinasetusten tallennukseen"
 
-#: common/hotkeys_basic.cpp:717
+#: common/hotkeys_basic.cpp:722
 msgid "Location"
 msgstr "Sijainti"
 
-#: common/hotkeys_basic.cpp:718
+#: common/hotkeys_basic.cpp:723
 msgid "Select hotkey configuration file location"
 msgstr "Valitse pikanäppäinten asetustiedoston sijainti"
 
@@ -12251,9 +12249,8 @@ msgid "French"
 msgstr "ranska"
 
 #: common/edaappl.cpp:120
-#, fuzzy
 msgid "Finnish"
-msgstr "Valmis"
+msgstr "suomi"
 
 #: common/edaappl.cpp:128
 msgid "Spanish"
@@ -12401,7 +12398,7 @@ msgstr "Ohjetiedostoa %s ei löytynyt"
 msgid "Help file %s could not be found."
 msgstr "Ohjetiedostoa %s ei löytynyt"
 
-#: common/drawframe.cpp:329
+#: common/drawframe.cpp:330
 msgid "??"
 msgstr "??"
 
@@ -12907,6 +12904,26 @@ msgstr "GerbView:n piirtotyyliasetukset"
 msgid "Page Settings"
 msgstr "Sivun asetukset"
 
+#~ msgid "Zoom In\tCtrl++"
+#~ msgstr "Lähennä\tCtrl++"
+#~ msgid "Zoom Out\tCtrl+-"
+#~ msgstr "Loitonna\tCtrl+-"
+#~ msgid ""
+#~ "Conflict in library <%s>: alias <%s> already has root name <%s> and will "
+#~ "not be assigned to root name <%s>."
+#~ msgstr ""
+#~ "Ristiriita kirjastossa <%s>: Aliaksella <%s> on jo juurinimi <%s> eikä "
+#~ "sitä voida nimitetä juurinimelle <%s>."
+#~ msgid "&Browse Files"
+#~ msgstr "&Selaa tiedostoja"
+#~ msgid "Default PDF Viewer"
+#~ msgstr "Oletus PDF-näytin"
+#~ msgid "Select Pdf Viewer"
+#~ msgstr "Valitse PDF-näytin"
+#~ msgid "Pdf Viewer"
+#~ msgstr "PDF-näytin"
+#~ msgid "Grid: "
+#~ msgstr "Pisterasteri: "
 #~ msgid "Clear All and Load Gerber File"
 #~ msgstr "Tyhjennä kaikki ja lataa Gerber-tiedosto"
 #~ msgid "Clear all layers and Load a new Gerber file on first layer"
