@@ -5,6 +5,12 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2010-Feb-14 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+Eeschema, libedit: fixed add/remove alias functions, broken
+All: added in popup menus hotkeys info for zoom commands
+
+
 2010-Feb-14 UPDATE Jerry Jacobs <xor.gate.engineering[at]gmail[dot]com>
 ================================================================================
 ++ KiCad

@@ -177,14 +177,9 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
  */
 void WinEDA_DrawFrame::AddMenuZoomAndGrid( wxMenu* MasterMenu )
 {
-    size_t      i;
     int         maxZoomIds;
     int         zoom;
-    wxRealPoint grid;
     wxString    msg;
-    GRID_TYPE   tmp;
-    wxMenu*     gridMenu;
-    double      gridValue;
     BASE_SCREEN * screen = DrawPanel->GetScreen();
 
     msg = AddHotkeyName( _( "Center" ), m_HotkeysZoomAndGridList, HK_ZOOM_CENTER );
@@ -210,7 +205,7 @@ void WinEDA_DrawFrame::AddMenuZoomAndGrid( wxMenu* MasterMenu )
                  maxZoomIds : screen->m_ZoomList.GetCount();
 
     /* Populate zoom submenu. */
-    for( i = 0; i < (size_t) maxZoomIds; i++ )
+    for( int i = 0; i < maxZoomIds; i++ )
     {
         if( ( screen->m_ZoomList[i] % screen->m_ZoomScalar ) == 0 )
             msg.Printf( wxT( "%u" ),
@@ -229,17 +224,20 @@ void WinEDA_DrawFrame::AddMenuZoomAndGrid( wxMenu* MasterMenu )
     /* Create grid submenu as required. */
     if( !screen->m_GridList.IsEmpty() )
     {
-        gridMenu = new wxMenu;
+        wxMenu* gridMenu = new wxMenu;
         ADD_MENUITEM_WITH_SUBMENU( MasterMenu, gridMenu,
                                    ID_POPUP_GRID_SELECT, _( "Grid Select" ),
                                    grid_select_xpm );
 
-        grid = screen->GetGridSize();
+        GRID_TYPE   tmp;
+        wxRealPoint grid = screen->GetGridSize();
 
-        for( i = 0; i < screen->m_GridList.GetCount(); i++ )
+        for( unsigned i = 0; i < screen->m_GridList.GetCount(); i++ )
         {
             tmp = screen->m_GridList[i];
-            gridValue = To_User_Unit( g_UnitMetric, tmp.m_Size.x,
+            double gridValueInch = To_User_Unit( 0, tmp.m_Size.x,
+                                      m_InternalUnits );
+            double gridValue_mm = To_User_Unit( 1, tmp.m_Size.x,
                                       m_InternalUnits );
 
             if( tmp.m_Id == ID_POPUP_GRID_USER )
@@ -249,10 +247,11 @@ void WinEDA_DrawFrame::AddMenuZoomAndGrid( wxMenu* MasterMenu )
             else
             {
                 if( g_UnitMetric == 0 )     // inches
-                    msg.Printf( wxT( "%.1f mils" ), gridValue * 1000 );
+                    msg.Printf( wxT( "%.1f mils\t(%.3f mm)" ),
+                                gridValueInch * 1000, gridValue_mm );
                 else
-                    msg.Printf( wxT( "%.3f mm" ), gridValue );
-                msg = _( "Grid: " ) + msg;
+                    msg.Printf( wxT( "%.3f mm\t(%.1f mils)" ),
+                                gridValue_mm, gridValueInch * 1000 );
             }
             gridMenu->Append( tmp.m_Id, msg, wxEmptyString, true );
             if( grid == tmp.m_Size )
