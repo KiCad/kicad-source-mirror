@@ -23,7 +23,6 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( WinEDA_Libed
 {
 	m_Parent = aParent;
 	m_RecreateToolbar = false;
-	m_AliasLocation = -1;
 
 	Init();
 

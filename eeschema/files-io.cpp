@@ -165,7 +165,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
     {
         wxString errMsg;
 
-        wxLogDebug( wxT( "Load schematic cache library file <%s>" ),
+        wxLogDebug( wxT( "LoadOneEEProject() load schematic cache library file <%s>" ),
                     GetChars( fn.GetFullPath() ) );
         msg = wxT( "Load " ) + fn.GetFullPath();
 

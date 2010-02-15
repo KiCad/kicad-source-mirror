@@ -106,15 +106,16 @@ Error: %s" ),
     CMP_LIBRARY::GetLibraryList().sort();
 
 #ifdef __WXDEBUG__
-    wxLogDebug( wxT( "Requested component library sort order." ) );
+    wxLogDebug( wxT( "LoadLibraries () requested component library sort order:" ) );
 
     for( size_t i = 0; i < sortOrder.GetCount(); i++ )
         wxLogDebug( wxT( "    " ) + sortOrder[i] );
 
-    wxLogDebug( wxT( "Component library sort order:" ) );
+    wxLogDebug( wxT( "Real component library sort order:" ) );
 
     for ( i = CMP_LIBRARY::GetLibraryList().begin();
           i < CMP_LIBRARY::GetLibraryList().end(); i++ )
         wxLogDebug( wxT( "    " ) + i->GetName() );
+    wxLogDebug( wxT( "end LoadLibraries ()" ) );
 #endif
 }

@@ -48,9 +48,9 @@ bool operator!=( const CMP_LIBRARY& aLibrary, const wxChar* aName )
 bool operator<( const CMP_LIBRARY& aItem1, const CMP_LIBRARY& aItem2 )
 {
     /* The cache library always is sorted to the end of the library list. */
-    if( aItem1.IsCache() )
-        return true;
     if( aItem2.IsCache() )
+        return true;
+    if( aItem1.IsCache() )
         return false;
 
     /* If the sort order array isn't set, then sort alphabetically except. */
