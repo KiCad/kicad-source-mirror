@@ -353,22 +353,22 @@ static int ReturnKeyCodeFromKeyName( const wxString& keyname )
 
 /** function DisplayHotkeyList
  * Displays the current hotkey list
- * @param frame = current active frame
- * @param List = pointer to a Ki_HotkeyInfoSectionDescriptor list
+ * @param aFrame = current active frame
+ * @param aList = pointer to a Ki_HotkeyInfoSectionDescriptor list
  *(Null terminated)
  * @return none
  */
-void DisplayHotkeyList( WinEDA_DrawFrame*                      frame,
-                        struct Ki_HotkeyInfoSectionDescriptor* DescList )
+void DisplayHotkeyList( WinEDA_DrawFrame*                      aFrame,
+                        struct Ki_HotkeyInfoSectionDescriptor* aDescList )
 {
     wxString        keyname;
     Ki_HotkeyInfo** List;
 
     wxString        msg = _( "Current hotkey list:\n\n" );
 
-    for( ; DescList->m_HK_InfoList != NULL; DescList++ )
+    for( ; aDescList->m_HK_InfoList != NULL; aDescList++ )
     {
-        List = DescList->m_HK_InfoList;
+        List = aDescList->m_HK_InfoList;
         for( ; *List != NULL; List++ )
         {
             Ki_HotkeyInfo* hk_decr = *List;
@@ -378,22 +378,22 @@ void DisplayHotkeyList( WinEDA_DrawFrame*                      frame,
         }
     }
 
-    DisplayInfoMessage( frame, msg );
+    DisplayInfoMessage( aFrame, msg );
 }
 
 
 /** function GetDescriptorFromHotkey
  * Return a Ki_HotkeyInfo * pointer fron a key code for OnHotKey() function
- * @param key = key code (ascii value, or wxWidgets value for function keys
- * @param List = pointer to a Ki_HotkeyInfo list of commands
+ * @param aKey = key code (ascii value, or wxWidgets value for function keys
+ * @param aList = pointer to a Ki_HotkeyInfo list of commands
  * @return the corresponding Ki_HotkeyInfo pointer from the Ki_HotkeyInfo List
  */
-Ki_HotkeyInfo* GetDescriptorFromHotkey( int key, Ki_HotkeyInfo** List )
+Ki_HotkeyInfo* GetDescriptorFromHotkey( int aKey, Ki_HotkeyInfo** aList )
 {
-    for( ; *List != NULL; List++ )
+    for( ; *aList != NULL; aList++ )
     {
-        Ki_HotkeyInfo* hk_decr = *List;
-        if( hk_decr->m_KeyCode == key )
+        Ki_HotkeyInfo* hk_decr = *aList;
+        if( hk_decr->m_KeyCode == aKey )
             return hk_decr;
     }
 

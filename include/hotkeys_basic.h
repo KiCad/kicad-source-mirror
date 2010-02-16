@@ -109,12 +109,27 @@ wxString        AddHotkeyName( const wxString&                        aText,
                                int                                    aCommandId,
                                bool                                   aIsShortCut = true);
 
-void            DisplayHotkeyList( WinEDA_DrawFrame*                      frame,
-                                   struct Ki_HotkeyInfoSectionDescriptor* List );
-Ki_HotkeyInfo*  GetDescriptorFromHotkey( int key, Ki_HotkeyInfo** List );
+/** function DisplayHotkeyList
+ * Displays the current hotkey list
+ * @param aFrame = current active frame
+ * @param aList = pointer to a Ki_HotkeyInfoSectionDescriptor list
+ *(Null terminated)
+ * @return none
+ */
+void            DisplayHotkeyList( WinEDA_DrawFrame*                      aFrame,
+                                   struct Ki_HotkeyInfoSectionDescriptor* aList );
+
+/** function GetDescriptorFromHotkey
+ * Return a Ki_HotkeyInfo * pointer fron a key code for OnHotKey() function
+ * @param aKey = key code (ascii value, or wxWidgets value for function keys
+ * @param aList = pointer to a Ki_HotkeyInfo list of commands
+ * @return the corresponding Ki_HotkeyInfo pointer from the Ki_HotkeyInfo List
+ */
+Ki_HotkeyInfo*  GetDescriptorFromHotkey( int aKey, Ki_HotkeyInfo** aList );
 
 
 // common hotkeys event id
+// these hotkey ID are used in many files, so they are define here only once.
 enum common_hotkey_id_commnand {
     HK_NOT_FOUND = 0,
     HK_RESET_LOCAL_COORD,
