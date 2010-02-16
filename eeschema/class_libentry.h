@@ -52,7 +52,6 @@ protected:
     wxString         keyWords;     /* keyword list (used for search for
                                     * components by keyword) */
     wxString         docFileName;  /* Associate doc file name */
-    LibrEntryOptions options;      // special features (i.e. Entry is a POWER)
 
 public:
     CMP_LIB_ENTRY( LibrEntryType aType, const wxString& aName,
@@ -77,12 +76,6 @@ public:
     bool isAlias() { return type == ALIAS; }
 
     int GetType() { return type; }
-
-    bool isPower() { return options == ENTRY_POWER; }
-    bool isNormal() { return options == ENTRY_NORMAL; }
-
-    void SetPower() { options = ENTRY_POWER; }
-    void SetNormal() { options = ENTRY_NORMAL; }
 
     void SetDescription( const wxString& aDescription )
     {
@@ -161,6 +154,7 @@ public:
     long               m_LastDate;       // Last change Date
 
 protected:
+    LibrEntryOptions   m_options;      // special features (i.e. Entry is a POWER)
     int                unitCount;      /* Units (parts) per package */
     LIB_DRAW_ITEM_LIST drawings;       /* How to draw this part */
 
@@ -211,6 +205,12 @@ public:
     bool LoadAliases( char* aLine, wxString& aErrorMsg );
     bool LoadFootprints( FILE* aFile, char* aLine,
                          int* aLineNum, wxString& aErrorMsg );
+
+    bool isPower() { return m_options == ENTRY_POWER; }
+    bool isNormal() { return m_options == ENTRY_NORMAL; }
+
+    void SetPower() { m_options = ENTRY_POWER; }
+    void SetNormal() { m_options = ENTRY_NORMAL; }
 
     /**
      * Initialize fields from a vector of fields.

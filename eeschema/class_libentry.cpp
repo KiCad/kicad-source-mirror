@@ -49,7 +49,6 @@ CMP_LIB_ENTRY::CMP_LIB_ENTRY( CMP_LIB_ENTRY& aEntry, CMP_LIBRARY* aLibrary ) :
     description = aEntry.description;
     keyWords = aEntry.keyWords;
     docFileName = aEntry.docFileName;
-    options = aEntry.options;
     library = aLibrary;
 }
 
@@ -181,7 +180,7 @@ LIB_COMPONENT::LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary ) :
     m_LastDate            = 0;
     unitCount             = 1;
     m_TextInside          = 40;
-    options             = ENTRY_NORMAL;
+    m_options             = ENTRY_NORMAL;
     m_UnitSelectionLocked = FALSE;
     m_DrawPinNum          = 1;
     m_DrawPinName         = 1;
@@ -209,6 +208,7 @@ LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary )
     m_DrawPinNum          = aComponent.m_DrawPinNum;
     m_DrawPinName         = aComponent.m_DrawPinName;
     m_LastDate            = aComponent.m_LastDate;
+    m_options             = aComponent.m_options;
 
     BOOST_FOREACH( LIB_DRAW_ITEM& oldItem, aComponent.GetDrawItemList() )
     {
@@ -497,7 +497,7 @@ bool LIB_COMPONENT::Save( FILE* aFile )
                  m_DrawPinNum ? 'Y' : 'N',
                  m_DrawPinName ? 'Y' : 'N',
                  unitCount, m_UnitSelectionLocked ? 'L' : 'F',
-                 options == ENTRY_POWER ? 'P' : 'N' ) < 0 )
+                 m_options == ENTRY_POWER ? 'P' : 'N' ) < 0 )
         return false;
 
     if( !SaveDateAndTime( aFile ) )
@@ -662,7 +662,7 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum,
     if( ( p = strtok( NULL, " \t\n" ) ) != NULL && *p == 'L' )
         m_UnitSelectionLocked = true;
     if( ( p = strtok( NULL, " \t\n" ) ) != NULL  && *p == 'P' )
-        options = ENTRY_POWER;
+        m_options = ENTRY_POWER;
 
     /* Read next lines */
     while( GetLine( aFile, aLine, aLineNum, 1024 ) )

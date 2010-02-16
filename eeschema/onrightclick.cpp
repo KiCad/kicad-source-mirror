@@ -316,7 +316,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
     ADD_MENUITEM( editmenu, ID_POPUP_SCH_EDIT_CMP, msg,
                   edit_component_xpm );
 
-    if( libEntry && libEntry->isNormal() )
+    if( libComponent && libComponent->isNormal() )
     {
         msg = AddHotkeyName( _( "Value " ), s_Schematic_Hokeys_Descr,
                              HK_EDIT_COMPONENT_VALUE );

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-16 11:02+0100\n"
-"PO-Revision-Date: 2010-02-16 11:04+0100\n"
+"POT-Creation-Date: 2010-02-16 17:20+0100\n"
+"PO-Revision-Date: 2010-02-16 17:20+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -1936,7 +1936,7 @@ msgstr "Grille"
 msgid "User Grid"
 msgstr "Grille perso"
 
-#: pcbnew/tool_pcb.cpp:761
+#: pcbnew/tool_pcb.cpp:757
 msgid "+/- to switch"
 msgstr "+/- pour commuter"
 
@@ -8348,66 +8348,66 @@ msgstr "Appel de CvPcb (Gestion des associations composants/modules)"
 msgid "Run pcbnew"
 msgstr "Appel de Pcbnew"
 
-#: eeschema/tool_sch.cpp:115
+#: eeschema/tool_sch.cpp:117
 msgid "Netlist generation"
 msgstr "Génération de la netliste"
 
-#: eeschema/tool_sch.cpp:119
+#: eeschema/tool_sch.cpp:121
 msgid "Annotate schematic"
 msgstr "Annotation de la schématique"
 
-#: eeschema/tool_sch.cpp:122
+#: eeschema/tool_sch.cpp:124
 msgid "Schematic Electric Rules Check"
 msgstr "Contrôle des règles électriques"
 
-#: eeschema/tool_sch.cpp:125
+#: eeschema/tool_sch.cpp:127
 msgid "Bill of material and/or Cross references"
 msgstr "Liste des composants ou/et références croisées"
 
-#: eeschema/tool_sch.cpp:129
+#: eeschema/tool_sch.cpp:131
 msgid "Backannotate footprint"
 msgstr "Rétroannotation module"
 
-#: eeschema/tool_sch.cpp:153
+#: eeschema/tool_sch.cpp:155
 msgid "Hierarchy Push/Pop"
 msgstr "Navigation dans la hiérarchie"
 
-#: eeschema/tool_sch.cpp:158
+#: eeschema/tool_sch.cpp:160
 msgid "Place a component"
 msgstr "Placer un Composant"
 
-#: eeschema/tool_sch.cpp:162
+#: eeschema/tool_sch.cpp:164
 msgid "Place a power port"
 msgstr "Placer un Symbole Power"
 
-#: eeschema/tool_sch.cpp:167
+#: eeschema/tool_sch.cpp:169
 msgid "Place a wire"
 msgstr "Placer un fil"
 
-#: eeschema/tool_sch.cpp:171
+#: eeschema/tool_sch.cpp:173
 msgid "Place a bus"
 msgstr "Placer un bus"
 
-#: eeschema/tool_sch.cpp:175
+#: eeschema/tool_sch.cpp:177
 #: eeschema/menubar.cpp:289
 msgid "Place a wire to bus entry"
 msgstr "Placer une Entrée de Bus (type fil vers bus)"
 
-#: eeschema/tool_sch.cpp:179
+#: eeschema/tool_sch.cpp:181
 #: eeschema/menubar.cpp:296
 msgid "Place a bus to bus entry"
 msgstr "Placer une Entrée de Bus (type bus vers bus)"
 
-#: eeschema/tool_sch.cpp:184
+#: eeschema/tool_sch.cpp:186
 msgid "Place no connect flag"
 msgstr "Placer symbole de non connexion"
 
-#: eeschema/tool_sch.cpp:188
+#: eeschema/tool_sch.cpp:190
 #: eeschema/menubar.cpp:308
 msgid "Place net name"
 msgstr "Place  nom de net"
 
-#: eeschema/tool_sch.cpp:192
+#: eeschema/tool_sch.cpp:194
 msgid ""
 "Place a global label.\n"
 "Warning: all global labels with the same name are connected in whole hierarchy"
@@ -8415,40 +8415,40 @@ msgstr ""
 "Placer un label global.\n"
 "Attention: tous les labels globaux avec le même nom sont connectés dans toute la hiérarchie"
 
-#: eeschema/tool_sch.cpp:197
+#: eeschema/tool_sch.cpp:199
 msgid "Place a junction"
 msgstr "Placer une jonction"
 
-#: eeschema/tool_sch.cpp:202
+#: eeschema/tool_sch.cpp:204
 #: eeschema/menubar.cpp:331
 msgid "Place a hierarchical label. This label will be seen as a pin sheet in the sheet symbol"
 msgstr "Placer un label hiérachique. Ce label sera vu comme une pin dans la feuille mère symbole"
 
-#: eeschema/tool_sch.cpp:207
+#: eeschema/tool_sch.cpp:209
 msgid "Place hierarchical sheet"
 msgstr "Placer feuille hiérarchique"
 
-#: eeschema/tool_sch.cpp:211
+#: eeschema/tool_sch.cpp:213
 msgid "Place a pin sheet, imported from the corresponding hierarchical label in sheet"
 msgstr "Placer une pin hiérarchique, importée du label hiérarchique correspondant dans la feuille."
 
-#: eeschema/tool_sch.cpp:216
+#: eeschema/tool_sch.cpp:218
 msgid "Place hierarchical pin to sheet"
 msgstr "Addition de pins de hiérarchie dans les feuilles symboles de hiérarchie"
 
-#: eeschema/tool_sch.cpp:221
+#: eeschema/tool_sch.cpp:223
 msgid "Place graphic line or polygon"
 msgstr "Placer ligne ou  polygone graphique"
 
-#: eeschema/tool_sch.cpp:225
+#: eeschema/tool_sch.cpp:227
 msgid "Place graphic text (comment)"
 msgstr "Placer textes graphiques (commentaires)"
 
-#: eeschema/tool_sch.cpp:249
+#: eeschema/tool_sch.cpp:251
 msgid "Turn grid off"
 msgstr "Ne pas afficher la grille"
 
-#: eeschema/tool_sch.cpp:271
+#: eeschema/tool_sch.cpp:273
 msgid "HV orientation for wires and bus"
 msgstr "Force direction H, V  pour les fils et bus"
 
@@ -8485,43 +8485,9 @@ msgid "Insert component in schematic"
 msgstr "Placer composant en schématique"
 
 #: eeschema/tool_viewlib.cpp:147
-#: eeschema/libframe.cpp:420
 #, c-format
 msgid "Part %c"
 msgstr "Composant %c"
-
-#: eeschema/libframe.cpp:297
-msgid ""
-"Component was modified!\n"
-"Discard changes?"
-msgstr ""
-"Le composant a été modifié\n"
-"Perdre les  changements"
-
-#: eeschema/libframe.cpp:310
-#, c-format
-msgid ""
-"Library \"%s\" was modified!\n"
-"Discard changes?"
-msgstr ""
-"Librairie \"%s\"  modifiée!\n"
-"Perdre les changements ?"
-
-#: eeschema/libframe.cpp:687
-msgid "Set pin options"
-msgstr "Choix options de pin"
-
-#: eeschema/libframe.cpp:716
-msgid "Add line"
-msgstr "Addition de lignes"
-
-#: eeschema/libframe.cpp:720
-msgid "Set anchor position"
-msgstr "Ajuster Position Ancre"
-
-#: eeschema/libframe.cpp:730
-msgid "Export"
-msgstr "Exporter"
 
 #: eeschema/onrightclick.cpp:108
 msgid "Leave Sheet"
@@ -9672,6 +9638,39 @@ msgstr ""
 #: eeschema/dialog_eeschema_config_fbp.cpp:51
 msgid "User defined search path"
 msgstr "Chemin de recherche défini par l'utilisateur"
+
+#: eeschema/libeditframe.cpp:299
+msgid ""
+"Component was modified!\n"
+"Discard changes?"
+msgstr ""
+"Le composant a été modifié\n"
+"Perdre les  changements"
+
+#: eeschema/libeditframe.cpp:312
+#, c-format
+msgid ""
+"Library \"%s\" was modified!\n"
+"Discard changes?"
+msgstr ""
+"Librairie \"%s\"  modifiée!\n"
+"Perdre les changements ?"
+
+#: eeschema/libeditframe.cpp:689
+msgid "Set pin options"
+msgstr "Choix options de pin"
+
+#: eeschema/libeditframe.cpp:718
+msgid "Add line"
+msgstr "Addition de lignes"
+
+#: eeschema/libeditframe.cpp:722
+msgid "Set anchor position"
+msgstr "Ajuster Position Ancre"
+
+#: eeschema/libeditframe.cpp:732
+msgid "Export"
+msgstr "Exporter"
 
 #: eeschema/netlist_control.cpp:130
 #: eeschema/netlist_control.cpp:254
@@ -12477,7 +12476,7 @@ msgstr "Sélection par Viewer"
 msgid "Load Error!"
 msgstr "Erreur de Chargement!"
 
-#: common/hotkeys_basic.cpp:354
+#: common/hotkeys_basic.cpp:367
 msgid ""
 "Current hotkey list:\n"
 "\n"
@@ -12485,87 +12484,87 @@ msgstr ""
 "Liste des Hotkeys courantes:\n"
 "\n"
 
-#: common/hotkeys_basic.cpp:362
+#: common/hotkeys_basic.cpp:375
 msgid "key "
 msgstr "touche: "
 
-#: common/hotkeys_basic.cpp:415
+#: common/hotkeys_basic.cpp:428
 msgid "Save Hotkey Configuration File:"
 msgstr "Sauver Fichier Configuration des Hotkeys:"
 
-#: common/hotkeys_basic.cpp:447
+#: common/hotkeys_basic.cpp:460
 msgid "Allowed keys:\n"
 msgstr "Touches autorisées:\n"
 
-#: common/hotkeys_basic.cpp:532
+#: common/hotkeys_basic.cpp:545
 msgid "Open Hotkey Configuration File:"
 msgstr "Ouvrir Fichier Configuration des Hotkeys:"
 
-#: common/hotkeys_basic.cpp:550
+#: common/hotkeys_basic.cpp:563
 msgid "Unable to read "
 msgstr "Impossible de lire "
 
-#: common/hotkeys_basic.cpp:668
+#: common/hotkeys_basic.cpp:681
 msgid "List Current Keys"
 msgstr "Lister Touches Courantes"
 
-#: common/hotkeys_basic.cpp:669
+#: common/hotkeys_basic.cpp:682
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Afficher la liste des hotkeyc courante et les commandes correspondantes"
 
-#: common/hotkeys_basic.cpp:675
+#: common/hotkeys_basic.cpp:688
 msgid "(Re)create Hotkeys File"
 msgstr "(Re)créer Fichier Hotkeys"
 
-#: common/hotkeys_basic.cpp:677
+#: common/hotkeys_basic.cpp:690
 msgid "Create or recreate the hotkey configuration file from current hotkey list"
 msgstr "Créer ou recréer le fichier configuration des Hotkeys à partir de la liste courante"
 
-#: common/hotkeys_basic.cpp:684
+#: common/hotkeys_basic.cpp:697
 msgid "Reload Hotkeys File"
 msgstr "Relire  Fichiers Hotkeys"
 
-#: common/hotkeys_basic.cpp:685
+#: common/hotkeys_basic.cpp:698
 msgid "Reload the hotkey configuration file"
 msgstr "Relire  les fichiers configuration des hotkeys"
 
-#: common/hotkeys_basic.cpp:691
+#: common/hotkeys_basic.cpp:704
 msgid "Edit Hotkeys File"
 msgstr "Editer Fichier Hotkeys"
 
-#: common/hotkeys_basic.cpp:692
+#: common/hotkeys_basic.cpp:705
 msgid "Edit the hotkey configuration file in a text editor"
 msgstr "Editer  les fichiers configuration des hotkeys"
 
-#: common/hotkeys_basic.cpp:698
+#: common/hotkeys_basic.cpp:711
 msgid "Hotkeys"
 msgstr "Hotkeys"
 
-#: common/hotkeys_basic.cpp:699
+#: common/hotkeys_basic.cpp:712
 msgid "Hotkeys configuration and preferences"
 msgstr "Options et préférences générales des hotkeys"
 
-#: common/hotkeys_basic.cpp:707
+#: common/hotkeys_basic.cpp:720
 msgid "Home directory"
 msgstr "Répertoire d'accueil (home)"
 
-#: common/hotkeys_basic.cpp:708
+#: common/hotkeys_basic.cpp:721
 msgid "Use home directory to load or store Hotkey config files"
 msgstr "Utiliser le répertoire d'accueil pour charger ou sauver les fichiers de config  des Hotkeys"
 
-#: common/hotkeys_basic.cpp:715
+#: common/hotkeys_basic.cpp:728
 msgid "KiCad template directory"
 msgstr "kicad/template répertoire"
 
-#: common/hotkeys_basic.cpp:716
+#: common/hotkeys_basic.cpp:729
 msgid "Use kicad/template directory to load or store Hotkey config files"
 msgstr "Utiliser répertoire kicad/template pour charger ou sauver les fichiers de config  des Hotkeys"
 
-#: common/hotkeys_basic.cpp:722
+#: common/hotkeys_basic.cpp:735
 msgid "Location"
 msgstr "Emplacement"
 
-#: common/hotkeys_basic.cpp:723
+#: common/hotkeys_basic.cpp:736
 msgid "Select hotkey configuration file location"
 msgstr "Sélectionner l'emplacement du fichier fonfiguration des hotkeys:"
 
