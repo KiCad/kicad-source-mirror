@@ -11,6 +11,7 @@
 // for shared hotkeys id
 enum hotkey_id_commnand {
     HK_NEXT_SEARCH = HK_COMMON_END,
+    HK_FIND_ITEM,
     HK_DELETE,
     HK_REPEAT_LAST,
 	HK_EDIT_PIN,

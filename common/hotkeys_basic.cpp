@@ -199,22 +199,22 @@ static struct hotkey_name_descr s_Hotkey_Name_List[] =
  * return the key name from the key code
  * Only some wxWidgets key values are handled for function key ( see
  * s_Hotkey_Name_List[] )
- * @param key = key code (ascii value, or wxWidgets value for function keys)
+ * @param aKeycode = key code (ascii value, or wxWidgets value for function keys)
  * @return the key name in a wxString
  */
-wxString ReturnKeyNameFromKeyCode( int keycode )
+wxString ReturnKeyNameFromKeyCode( int aKeycode )
 {
     wxString keyname, modifier, fullkeyname;
     int      ii;
 
-    if( (keycode & GR_KB_CTRL) != 0 )
+    if( (aKeycode & GR_KB_CTRL) != 0 )
         modifier << wxT( "Ctrl+" );
-    if( (keycode & GR_KB_ALT) != 0 )
+    if( (aKeycode & GR_KB_ALT) != 0 )
         modifier << wxT( "Alt+" );
-    if( (keycode & GR_KB_SHIFT) != 0 )
+    if( (aKeycode & GR_KB_SHIFT) != 0 )
         modifier << wxT( "Shift+" );
 
-    keycode &= ~( GR_KB_CTRL | GR_KB_ALT | GR_KB_SHIFT );
+    aKeycode &= ~( GR_KB_CTRL | GR_KB_ALT | GR_KB_SHIFT );
     for( ii = 0; ; ii++ )
     {
         if( s_Hotkey_Name_List[ii].m_KeyCode == 0 )
@@ -222,7 +222,7 @@ wxString ReturnKeyNameFromKeyCode( int keycode )
             keyname = wxT( "<unknown>" );
             break;
         }
-        if( s_Hotkey_Name_List[ii].m_KeyCode == keycode )
+        if( s_Hotkey_Name_List[ii].m_KeyCode == aKeycode )
         {
             keyname = s_Hotkey_Name_List[ii].m_Name;
             break;
@@ -236,12 +236,15 @@ wxString ReturnKeyNameFromKeyCode( int keycode )
 
 /** function AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
- * @param List = pointer to a Ki_HotkeyInfo list of commands
- * @param CommandId = Command Id value
- * @return text (key name) in a wxString if found or text without modification
+ * @param aText = a wxString. returns aText + key name
+ * @param aList = pointer to a Ki_HotkeyInfo list of commands
+ * @param aCommandId = Command Id value
+ * @param aIsShortCut = true to add <tab><keyname> (active shortcuts in menus)
+ *                    = false to add <spaces><(keyname)>
+ * @return a wxString (aTest + key name) if key found or aText without modification
  */
 wxString AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
-                        int aCommandId )
+                        int aCommandId , bool  aIsShortCut )
 {
     wxString msg     = aText;
     wxString keyname;
@@ -249,21 +252,28 @@ wxString AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
         keyname = ReturnKeyNameFromCommandId( aList, aCommandId );
 
     if( !keyname.IsEmpty() )
-        msg << wxT( "\t" ) << keyname;
+    {
+        if ( aIsShortCut )
+            msg << wxT( "\t" ) << keyname;
+        else
+            msg << wxT( " <" ) << keyname << wxT(">");
+    }
     return msg;
 }
 
-
 /** function AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
- * @param List = pointer to a Ki_HotkeyInfoSectionDescriptor* DescrList of
- * commands
- * @param CommandId = Command Id value
- * @return text (key name) in a wxString if found or text without modification
+ * @param aText = a wxString. returns aText + key name
+ * @param aList = pointer to a Ki_HotkeyInfoSectionDescriptor DescrList of commands
+ * @param aCommandId = Command Id value
+ * @param aIsShortCut = true to add <tab><keyname> (active shortcuts in menus)
+ *                    = false to add <spaces><(keyname)>
+ * @return a wxString (aTest + key name) if key found or aText without modification
  */
 wxString AddHotkeyName( const wxString&                        aText,
                         struct Ki_HotkeyInfoSectionDescriptor* aDescList,
-                        int                                    aCommandId )
+                        int                                    aCommandId,
+                        bool                                   aIsShortCut )
 {
     wxString        msg = aText;
     wxString        keyname;
@@ -277,7 +287,10 @@ wxString AddHotkeyName( const wxString&                        aText,
             keyname = ReturnKeyNameFromCommandId( List, aCommandId );
             if( !keyname.IsEmpty() )
             {
-                msg << wxT( "\t" ) << keyname;
+                if ( aIsShortCut )
+                    msg << wxT( "\t" ) << keyname;
+                else
+                    msg << wxT( " <" ) << keyname << wxT(">");
                 break;
             }
         }
@@ -289,18 +302,18 @@ wxString AddHotkeyName( const wxString&                        aText,
 
 /** function ReturnKeyNameFromCommandId
  * return the key name from the Command id value ( m_Idcommand member value)
- * @param List = pointer to a Ki_HotkeyInfo list of commands
- * @param CommandId = Command Id value
+ * @param aList = pointer to a Ki_HotkeyInfo list of commands
+ * @param aCommandId = Command Id value
  * @return the key name in a wxString
  */
-wxString ReturnKeyNameFromCommandId( Ki_HotkeyInfo** List, int CommandId )
+wxString ReturnKeyNameFromCommandId( Ki_HotkeyInfo** aList, int aCommandId )
 {
     wxString keyname;
 
-    for( ; *List != NULL; List++ )
+    for( ; *aList != NULL; aList++ )
     {
-        Ki_HotkeyInfo* hk_decr = *List;
-        if( hk_decr->m_Idcommand == CommandId )
+        Ki_HotkeyInfo* hk_decr = *aList;
+        if( hk_decr->m_Idcommand == aCommandId )
         {
             keyname = ReturnKeyNameFromKeyCode( hk_decr->m_KeyCode );
             break;

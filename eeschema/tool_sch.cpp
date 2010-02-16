@@ -66,12 +66,12 @@ void WinEDA_SchematicFrame::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Undo last edition" ), s_Schematic_Hokeys_Descr,
-                         HK_UNDO );
+                         HK_UNDO, false );
     m_HToolBar->AddTool( wxID_UNDO, wxEmptyString,
                          wxBitmap( undo_xpm ), msg );
 
     msg = AddHotkeyName( _( "Redo the last undo command" ),
-                         s_Schematic_Hokeys_Descr, HK_REDO );
+                         s_Schematic_Hokeys_Descr, HK_REDO, false );
     m_HToolBar->AddTool( wxID_REDO, wxEmptyString,
                          wxBitmap( redo_xpm ), msg );
 
@@ -87,28 +87,30 @@ void WinEDA_SchematicFrame::ReCreateHToolbar()
                          _( "Run pcbnew" ) );
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "Zoom in" ), s_Schematic_Hokeys_Descr, HK_ZOOM_IN );
+    msg = AddHotkeyName( _( "Zoom in" ), s_Schematic_Hokeys_Descr, HK_ZOOM_IN, false );
     m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, wxBitmap( zoom_in_xpm ),
                          msg );
 
     msg = AddHotkeyName( _( "Zoom out" ), s_Schematic_Hokeys_Descr,
-                         HK_ZOOM_OUT );
+                         HK_ZOOM_OUT, false );
     m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, wxBitmap( zoom_out_xpm ),
                          msg );
 
     msg = AddHotkeyName( _( "Redraw view" ), s_Schematic_Hokeys_Descr,
-                         HK_ZOOM_REDRAW );
+                         HK_ZOOM_REDRAW, false );
     m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                          wxBitmap( zoom_redraw_xpm ), msg );
 
     msg = AddHotkeyName( _( "Zoom auto" ), s_Schematic_Hokeys_Descr,
-                         HK_ZOOM_AUTO );
+                         HK_ZOOM_AUTO, false );
     m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, wxBitmap( zoom_auto_xpm ),
                          msg );
 
     m_HToolBar->AddSeparator();
+    msg = AddHotkeyName( _( "Find components and texts" ), s_Schematic_Hokeys_Descr,
+                         HK_FIND_ITEM, false );
     m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, wxBitmap( find_xpm ),
-                         _( "Find components and texts" ) );
+                         msg );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, wxBitmap( netlist_xpm ),

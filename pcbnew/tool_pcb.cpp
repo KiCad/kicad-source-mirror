@@ -236,29 +236,29 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Zoom in" ), s_Board_Editor_Hokeys_Descr,
-                         HK_ZOOM_IN );
+                         HK_ZOOM_IN, false );
     m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, wxBitmap( zoom_in_xpm ),
                          msg );
 
     msg = AddHotkeyName( _( "Zoom out" ), s_Board_Editor_Hokeys_Descr,
-                         HK_ZOOM_OUT );
+                         HK_ZOOM_OUT, false );
     m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
                          wxBitmap( zoom_out_xpm ), msg );
 
     msg = AddHotkeyName( _( "Redraw view" ), s_Board_Editor_Hokeys_Descr,
-                         HK_ZOOM_REDRAW );
+                         HK_ZOOM_REDRAW, false );
     m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                          wxBitmap( zoom_redraw_xpm ), msg );
 
     msg = AddHotkeyName( _( "Zoom auto" ), s_Board_Editor_Hokeys_Descr,
-                         HK_ZOOM_AUTO );
+                         HK_ZOOM_AUTO, false );
     m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                          wxBitmap( zoom_auto_xpm ), msg );
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Find components and texts" ),
                          s_Board_Editor_Hokeys_Descr,
-                         HK_FIND_ITEM );
+                         HK_FIND_ITEM, false );
     m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, wxBitmap( find_xpm ),
                          msg );
 
@@ -740,14 +740,10 @@ WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
         if( g_TabOneLayerMask[layer] & layer_mask )
         {
             wxString msg = GetBoard()->GetLayerName( layer );
+            msg << wxT("  ");
             msg = AddHotkeyName( msg, s_Board_Editor_Hokeys_Descr,
-                                 HK_SwitchLayer[layer] );
+                                 HK_SwitchLayer[layer], false );
 
-            /* we are using tabs in AddHotkeyName message.
-             *  this is not handled by m_SelLayerBox.
-             *  so we replace them by 3 spaces
-             */
-            msg.Replace( wxT( "\t"), wxT( "   " ) );
             m_SelLayerBox->Append( msg );
 
             //D(printf("appending layername=%s, ndx=%d, layer=%d\n", CONV_TO_UTF8(msg), listNdx, layer );)

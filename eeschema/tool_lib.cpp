@@ -133,11 +133,11 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Undo last command" ), s_Schematic_Hokeys_Descr,
-                         HK_UNDO );
+                         HK_UNDO, false );
     m_HToolBar->AddTool( wxID_UNDO, wxEmptyString, wxBitmap( undo_xpm ),
                          msg );
     msg = AddHotkeyName( _( "Redo the last command" ), s_Schematic_Hokeys_Descr,
-                         HK_REDO );
+                         HK_REDO, false );
     m_HToolBar->AddTool( wxID_REDO, wxEmptyString, wxBitmap( redo_xpm ),
                          msg );
 
@@ -156,20 +156,20 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
                          _( "Test for duplicate pins and off grid pins" ) );
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "Zoom in" ), s_Libedit_Hokeys_Descr, HK_ZOOM_IN );
+    msg = AddHotkeyName( _( "Zoom in" ), s_Libedit_Hokeys_Descr, HK_ZOOM_IN, false );
     m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, wxBitmap( zoom_in_xpm ),
                          msg );
 
-    msg = AddHotkeyName( _( "Zoom out" ), s_Libedit_Hokeys_Descr, HK_ZOOM_OUT );
+    msg = AddHotkeyName( _( "Zoom out" ), s_Libedit_Hokeys_Descr, HK_ZOOM_OUT, false );
     m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, wxBitmap( zoom_out_xpm ),
                          msg );
 
     msg = AddHotkeyName( _( "Redraw view" ), s_Libedit_Hokeys_Descr,
-                         HK_ZOOM_REDRAW );
+                         HK_ZOOM_REDRAW, false );
     m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                          wxBitmap( zoom_redraw_xpm ), msg );
 
-    msg = AddHotkeyName( _( "Zoom auto" ), s_Libedit_Hokeys_Descr, HK_ZOOM_AUTO );
+    msg = AddHotkeyName( _( "Zoom auto" ), s_Libedit_Hokeys_Descr, HK_ZOOM_AUTO, false );
     m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                          wxBitmap( zoom_auto_xpm ), msg );
 

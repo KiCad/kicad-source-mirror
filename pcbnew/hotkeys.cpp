@@ -87,9 +87,21 @@ static Ki_HotkeyInfo HkDelete( wxT( "Delete Track or Footprint" ), HK_DELETE,
 static Ki_HotkeyInfo HkResetLocalCoord( wxT( "Reset local coord." ),
                                         HK_RESET_LOCAL_COORD, ' ' );
 
+/* Fit on Screen */
+#if !defined( __WXMAC__ )
 static Ki_HotkeyInfo HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
+#else
+static Ki_HotkeyInfo HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, GR_KB_CTRL + '0' );
+#endif
+
 static Ki_HotkeyInfo HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
+
+/* Refresh Screen */
+#if !defined( __WXMAC__ )
 static Ki_HotkeyInfo HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
+#else
+static Ki_HotkeyInfo HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, GR_KB_CTRL + 'R' );
+#endif
 
 /* Zoom In */
 #if !defined( __WXMAC__ )

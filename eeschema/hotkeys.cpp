@@ -52,13 +52,20 @@
  */
 
 /* Fit on Screen */
-static Ki_HotkeyInfo HkZoomAuto( wxT( "Fit on Screen" ), HK_ZOOM_AUTO,
-                                 WXK_HOME );
+#if !defined( __WXMAC__ )
+static Ki_HotkeyInfo HkZoomAuto( wxT( "Fit on Screen" ), HK_ZOOM_AUTO, WXK_HOME );
+#else
+static Ki_HotkeyInfo HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, GR_KB_CTRL + '0' );
+#endif
 
-static Ki_HotkeyInfo HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER,
-                                   WXK_F4 );
-static Ki_HotkeyInfo HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW,
-                                   WXK_F3 );
+static Ki_HotkeyInfo HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
+
+/* Refresh Screen */
+#if !defined( __WXMAC__ )
+static Ki_HotkeyInfo HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
+#else
+static Ki_HotkeyInfo HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, GR_KB_CTRL + 'R' );
+#endif
 
 /* Zoom In */
 #if !defined( __WXMAC__ )
@@ -127,6 +134,9 @@ static Ki_HotkeyInfo HkMove2Drag( wxT( "Switch move block to drag block" ),
 static Ki_HotkeyInfo HkInsert( wxT( "Repeat Last Item" ), HK_REPEAT_LAST,
                                WXK_INSERT );
 static Ki_HotkeyInfo HkDelete( wxT( "Delete Item" ), HK_DELETE, WXK_DELETE );
+
+static Ki_HotkeyInfo HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F'
+                                 + GR_KB_CTRL );
 static Ki_HotkeyInfo HkNextSearch( wxT( "Next Search" ), HK_NEXT_SEARCH,
                                    WXK_F5 );
 
@@ -156,6 +166,7 @@ Ki_HotkeyInfo* s_Common_Hotkey_List[] =
 // List of hotkey descriptors for schematic
 Ki_HotkeyInfo* s_Schematic_Hotkey_List[] =
 {
+    &HkFindItem,
     &HkNextSearch,
     &HkDelete,
     &HkInsert,
@@ -323,6 +334,15 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_REPEAT_LAST:
         if( !ItemInEdit && g_ItemToRepeat && ( g_ItemToRepeat->m_Flags == 0 ) )
             RepeatDrawItem( DC );
+        break;
+
+    case HK_FIND_ITEM:
+        if( !ItemInEdit )
+        {
+            wxCommandEvent evt;
+            evt.SetId( ID_FIND_ITEMS );
+            Process_Special_Functions( evt );
+        }
         break;
 
     case HK_NEXT_SEARCH:

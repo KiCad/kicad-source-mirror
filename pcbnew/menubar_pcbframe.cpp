@@ -36,7 +36,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     wxMenu* filesMenu = new wxMenu;
 
     /* New Board */
-    item = new wxMenuItem( filesMenu, ID_NEW_BOARD, _( "&New\tCtrl+N" ),
+    item = new wxMenuItem( filesMenu, ID_NEW_BOARD, _( "&New" ),
                           _( "Clear current board and initialize a new one" ) );
     item->SetBitmap( new_xpm );
     filesMenu->Append( item );
@@ -73,7 +73,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 
     /* Save As */
     item = new wxMenuItem( filesMenu, ID_SAVE_BOARD_AS,
-                          _( "Save as...\tShift+Ctrl+S" ),
+                          _( "Save as..." ),
                           _( "Save the current board as.." ) );
     item->SetBitmap( save_as_xpm );
     filesMenu->Append( item );
@@ -186,7 +186,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     filesMenu->AppendSeparator();
 
     /* Print */
-    item = new wxMenuItem( filesMenu, ID_GEN_PRINT, _( "&Print\tCtrl+P" ),
+    item = new wxMenuItem( filesMenu, ID_GEN_PRINT, _( "&Print" ),
                            _( "Print pcb board" ) );
     item->SetBitmap( print_button );
     filesMenu->Append( item );
@@ -240,22 +240,14 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     wxMenu* editMenu = new wxMenu;
 
     /* Undo */
-#if !defined( __WXMAC__)
     text  = AddHotkeyName( _( "Undo" ), s_Pcbnew_Editor_Hokeys_Descr, HK_UNDO );
-#else
-    text = _( "Undo\tCtrl+Z" );
-#endif
     item = new wxMenuItem( editMenu, wxID_UNDO, text,
                            _( "Undo last edition" ), wxITEM_NORMAL );
     item->SetBitmap( undo_xpm );
     editMenu->Append( item );
 
     /* Redo */
-#if !defined( __WXMAC__)
     text  = AddHotkeyName( _( "Redo" ), s_Pcbnew_Editor_Hokeys_Descr, HK_REDO );
-#else
-    text = _( "Redo\tShift+Ctrl+Z" );
-#endif
     item = new wxMenuItem( editMenu, wxID_REDO, text,
                            _( "Redo the last undo command" ), wxITEM_NORMAL );
     item->SetBitmap( redo_xpm );
@@ -265,12 +257,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     editMenu->AppendSeparator();
 
     /* Find */
-#if !defined( __WXMAC__)
     text = AddHotkeyName( _( "&Find" ), s_Pcbnew_Editor_Hokeys_Descr, HK_FIND_ITEM );
-#else
-    text = _( "Find\tCtrl+F" );
-#endif
-
     item = new wxMenuItem( editMenu, ID_FIND_ITEMS, text,
                            _( "Find components and text in current loaded board" ) );
     item->SetBitmap( find_xpm );
@@ -332,12 +319,8 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     viewMenu->Append( item );
 
     /* Fit on Screen */
-#if !defined( __WXMAC__)
     text = AddHotkeyName( _( "Fit on Screen" ), s_Pcbnew_Editor_Hokeys_Descr,
                           HK_ZOOM_AUTO );
-#else
-    text = _( "Fit on Screen\tCtrl+0" );
-#endif
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, text,
                            _( "Zoom to fit the board on the screen" ),
@@ -348,12 +331,8 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     viewMenu->AppendSeparator();
 
     /* Redraw view */
-#if !defined( __WXMAC__)
     text = AddHotkeyName( _( "Redraw" ), s_Pcbnew_Editor_Hokeys_Descr,
                           HK_ZOOM_REDRAW );
-#else
-    text = _( "Redraw\tCtrl+R" );
-#endif
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
                            _( "Redraw the screen of the board" ),

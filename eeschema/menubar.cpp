@@ -79,7 +79,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     /* Save as... */
     item = new wxMenuItem( filesMenu, ID_SAVE_ONE_SHEET_AS,
-                           _( "Save Current Sheet &as\tShift+Ctrl+S" ),
+                           _( "Save Current Sheet &as" ),
                            _( "Save current schematic sheet as..." ) );
     item->SetBitmap( save_as_xpm );
     filesMenu->Append( item );
@@ -88,7 +88,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     filesMenu->AppendSeparator();
 
     /* Print */
-    item = new wxMenuItem( filesMenu, wxID_PRINT, _( "P&rint\tCtrl+P" ),
+    item = new wxMenuItem( filesMenu, wxID_PRINT, _( "P&rint" ),
                            _( "Print schematic" ) );
     item->SetBitmap( print_button );
     filesMenu->Append( item );
@@ -181,7 +181,8 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     editMenu->AppendSeparator();
 
     /* Find */
-    item = new wxMenuItem( editMenu, ID_FIND_ITEMS, _( "&Find\tCtrl+F" ),
+    text = AddHotkeyName( _( "&Find" ), s_Schematic_Hokeys_Descr, HK_FIND_ITEM );
+    item = new wxMenuItem( editMenu, ID_FIND_ITEMS, text,
                            _( "Find components and texts" ), wxITEM_NORMAL );
     item->SetBitmap( find_xpm );
     editMenu->Append( item );
@@ -229,12 +230,8 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     viewMenu->Append( item );
 
     /* Fit on screen */
-#if !defined( __WXMAC__)
     text = AddHotkeyName( _( "Fit on Screen" ), s_Schematic_Hokeys_Descr,
                           HK_ZOOM_AUTO );
-#else
-    text = _( "Fit on Screen\tCtrl+0" );
-#endif
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, text,
                            _( "Fit the schematic sheet on the screen" ),
@@ -245,12 +242,8 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     viewMenu->AppendSeparator();
 
     /* Redraw view */
-#if !defined( __WXMAC__)
     text = AddHotkeyName( _( "Redraw" ), s_Schematic_Hokeys_Descr,
                           HK_ZOOM_REDRAW );
-#else
-    text = _( "Redraw\tCtrl+R" );
-#endif
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
                            _( "Redraw the schematic view" ),

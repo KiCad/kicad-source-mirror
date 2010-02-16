@@ -64,12 +64,51 @@ extern int g_ConfigFileLocationChoice;
 wxString        ReturnHotkeyConfigFilePath( int choice );
 void            AddHotkeyConfigMenu( wxMenu* menu );
 void            HandleHotkeyConfigMenuSelection( WinEDA_DrawFrame* frame, int id );
-wxString        ReturnKeyNameFromKeyCode( int keycode );
-wxString        ReturnKeyNameFromCommandId( Ki_HotkeyInfo** List, int CommandId );
-wxString        AddHotkeyName( const wxString& text, Ki_HotkeyInfo** List, int CommandId );
-wxString        AddHotkeyName( const wxString&                        text,
-                               struct Ki_HotkeyInfoSectionDescriptor* DescrList,
-                               int                                    CommandId );
+
+/** function ReturnKeyNameFromKeyCode
+ * return the key name from the key code
+ * Only some wxWidgets key values are handled for function key ( see
+ * s_Hotkey_Name_List[] )
+ * @param aKeycode = key code (ascii value, or wxWidgets value for function keys)
+ * @return the key name in a wxString
+ */
+wxString        ReturnKeyNameFromKeyCode( int aKeycode );
+
+/** function ReturnKeyNameFromCommandId
+ * return the key name from the Command id value ( m_Idcommand member value)
+ * @param aList = pointer to a Ki_HotkeyInfo list of commands
+ * @param aCommandId = Command Id value
+ * @return the key name in a wxString
+ */
+wxString        ReturnKeyNameFromCommandId( Ki_HotkeyInfo** aList, int aCommandId );
+
+/** function AddHotkeyName
+ * Add the key name from the Command id value ( m_Idcommand member value)
+ * @param aText = a wxString. returns aText + key name
+ * @param aList = pointer to a Ki_HotkeyInfo list of commands
+ * @param aCommandId = Command Id value
+ * @param aIsShortCut = true to add <tab><keyname> (active shortcuts in menus)
+ *                    = false to add <spaces><(keyname)>
+ * @return a wxString (aTest + key name) if key found or aText without modification
+ */
+wxString        AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
+                               int  aCommandId,
+                               bool aIsShortCut = true);
+
+/** function AddHotkeyName
+ * Add the key name from the Command id value ( m_Idcommand member value)
+ * @param aText = a wxString. returns aText + key name
+ * @param aList = pointer to a Ki_HotkeyInfoSectionDescriptor DescrList of commands
+ * @param aCommandId = Command Id value
+ * @param aIsShortCut = true to add <tab><keyname> (active shortcuts in menus)
+ *                    = false to add <spaces><(keyname)>
+ * @return a wxString (aTest + key name) if key found or aText without modification
+ */
+wxString        AddHotkeyName( const wxString&                        aText,
+                               struct Ki_HotkeyInfoSectionDescriptor* aDescrList,
+                               int                                    aCommandId,
+                               bool                                   aIsShortCut = true);
+
 void            DisplayHotkeyList( WinEDA_DrawFrame*                      frame,
                                    struct Ki_HotkeyInfoSectionDescriptor* List );
 Ki_HotkeyInfo*  GetDescriptorFromHotkey( int key, Ki_HotkeyInfo** List );

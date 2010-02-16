@@ -48,22 +48,22 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
 
         m_HToolBar->AddSeparator();
         msg = AddHotkeyName( _( "Zoom in" ), s_Viewlib_Hokeys_Descr,
-                             HK_ZOOM_IN );
+                             HK_ZOOM_IN, false );
         m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,
                              wxBitmap( zoom_in_xpm ), msg );
 
         msg = AddHotkeyName( _( "Zoom out" ), s_Viewlib_Hokeys_Descr,
-                             HK_ZOOM_OUT );
+                             HK_ZOOM_OUT, false );
         m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
                              wxBitmap( zoom_out_xpm ), msg );
 
         msg = AddHotkeyName( _( "Redraw view" ), s_Viewlib_Hokeys_Descr,
-                             HK_ZOOM_REDRAW );
+                             HK_ZOOM_REDRAW, false );
         m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                              wxBitmap( zoom_redraw_xpm ), msg );
 
         msg = AddHotkeyName( _( "Zoom auto" ), s_Viewlib_Hokeys_Descr,
-                             HK_ZOOM_AUTO );
+                             HK_ZOOM_AUTO, false );
         m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                              wxBitmap( zoom_auto_xpm ), msg );
 
