@@ -965,7 +965,7 @@
                                             <property name="maximum_size"></property>
                                             <property name="maxlength">0</property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Doc</property>
+                                            <property name="name">m_DocCtrl</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
@@ -1071,7 +1071,7 @@
                                             <property name="maximum_size"></property>
                                             <property name="maxlength">0</property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Keywords</property>
+                                            <property name="name">m_KeywordsCtrl</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
@@ -1177,7 +1177,7 @@
                                             <property name="maximum_size"></property>
                                             <property name="maxlength">0</property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Docfile</property>
+                                            <property name="name">m_DocfileCtrl</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size">400,-1</property>
@@ -1461,7 +1461,7 @@
                                                     <property name="id">wxID_ANY</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
-                                                    <property name="name">m_PartAliasList</property>
+                                                    <property name="name">m_PartAliasListCtrl</property>
                                                     <property name="permission">protected</property>
                                                     <property name="pos"></property>
                                                     <property name="size"></property>

@@ -13,7 +13,8 @@
 #include "general.h"
 #include "protos.h"
 #include "libeditfrm.h"
-#include "class_libentry.h"
+#include "class_library.h"
+//#include "class_libentry.h"
 
 #include "dialog_edit_component_in_lib.h"
 
@@ -73,7 +74,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::Init( )
         m_ButtonDeleteAllAlias->Enable( false );
 
     /* Place list of alias names in listbox */
-    m_PartAliasList->Append( component->m_AliasList );
+    m_PartAliasListCtrl->Append( component->m_AliasList );
 
     if( component->m_AliasList.GetCount() == 0 )
     {
@@ -97,3 +98,64 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnCancelClick( wxCommandEvent& event )
 	EndModal( wxID_CANCEL );
 }
 
+
+
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitPanelDoc()
+{
+    CMP_LIB_ENTRY* entry;
+    LIB_COMPONENT* component = m_Parent->GetComponent();
+    CMP_LIBRARY* library = m_Parent->GetLibrary();
+
+    if( component == NULL )
+        return;
+
+    if( m_Parent->GetAliasName().IsEmpty() )
+    {
+        entry = component;
+    }
+    else
+    {
+        entry =
+            ( CMP_LIB_ENTRY* ) library->FindAlias( m_Parent->GetAliasName() );
+
+        if( entry == NULL )
+            return;
+    }
+
+    m_DocCtrl->SetValue( entry->GetDescription() );
+    m_KeywordsCtrl->SetValue( entry->GetKeyWords() );
+    m_DocfileCtrl->SetValue( entry->GetDocFileName() );
+}
+
+
+/*
+ * create the basic panel for component properties editing
+ */
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitBasicPanel()
+{
+    LIB_COMPONENT* component = m_Parent->GetComponent();
+
+    if( m_Parent->GetShowDeMorgan() )
+        m_AsConvertButt->SetValue( true );
+
+    /* Default values for a new component. */
+    if( component == NULL )
+    {
+        m_ShowPinNumButt->SetValue( true );
+        m_ShowPinNameButt->SetValue( true );
+        m_PinsNameInsideButt->SetValue( true );
+        m_SelNumberOfUnits->SetValue( 1 );
+        m_SetSkew->SetValue( 40 );
+        m_OptionPower->SetValue( false );
+        m_OptionPartsLocked->SetValue( false );
+        return;
+    }
+
+    m_ShowPinNumButt->SetValue( component->m_DrawPinNum );
+    m_ShowPinNameButt->SetValue( component->m_DrawPinName );
+    m_PinsNameInsideButt->SetValue( component->m_TextInside != 0 );
+    m_SelNumberOfUnits->SetValue( component->GetPartCount() );
+    m_SetSkew->SetValue( component->m_TextInside );
+    m_OptionPower->SetValue( component->isPower() );
+    m_OptionPartsLocked->SetValue( component->m_UnitSelectionLocked );
+}

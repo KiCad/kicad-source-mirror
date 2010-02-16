@@ -48,70 +48,8 @@ void WinEDA_LibeditFrame::EditComponentProperties()
     DisplayLibInfos();
     DisplayCmpDoc();
     GetScreen()->SetModify();
-    SaveCopyInUndoList( m_component );
 }
 
-
-
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitPanelDoc()
-{
-    CMP_LIB_ENTRY* entry;
-    LIB_COMPONENT* component = m_Parent->GetComponent();
-    CMP_LIBRARY* library = m_Parent->GetLibrary();
-
-    if( component == NULL )
-        return;
-
-    if( m_Parent->GetAliasName().IsEmpty() )
-    {
-        entry = component;
-    }
-    else
-    {
-        entry =
-            ( CMP_LIB_ENTRY* ) library->FindAlias( m_Parent->GetAliasName() );
-
-        if( entry == NULL )
-            return;
-    }
-
-    m_Doc->SetValue( entry->GetDescription() );
-    m_Keywords->SetValue( entry->GetKeyWords() );
-    m_Docfile->SetValue( entry->GetDocFileName() );
-}
-
-
-/*
- * create the basic panel for component properties editing
- */
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitBasicPanel()
-{
-    LIB_COMPONENT* component = m_Parent->GetComponent();
-
-    if( m_Parent->GetShowDeMorgan() )
-        m_AsConvertButt->SetValue( true );
-
-    /* Default values for a new component. */
-    if( component == NULL )
-    {
-        m_ShowPinNumButt->SetValue( true );
-        m_ShowPinNameButt->SetValue( true );
-        m_PinsNameInsideButt->SetValue( true );
-        m_SelNumberOfUnits->SetValue( 1 );
-        m_SetSkew->SetValue( 40 );
-        m_OptionPower->SetValue( false );
-        m_OptionPartsLocked->SetValue( false );
-        return;
-    }
-
-    m_ShowPinNumButt->SetValue( component->m_DrawPinNum );
-    m_ShowPinNameButt->SetValue( component->m_DrawPinName );
-    m_PinsNameInsideButt->SetValue( component->m_TextInside != 0 );
-    m_SelNumberOfUnits->SetValue( component->GetPartCount() );
-    m_SetSkew->SetValue( component->m_TextInside );
-    m_OptionPower->SetValue( component->isPower() );
-    m_OptionPartsLocked->SetValue( component->m_UnitSelectionLocked );
-}
 
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
@@ -127,6 +65,8 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
         EndModal( wxID_CANCEL );
         return;
     }
+
+    m_Parent->SaveCopyInUndoList( component );
 
     CMP_LIBRARY* library = m_Parent->GetLibrary();
 
@@ -152,14 +92,14 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
     }
     else
     {
-        entry->SetDescription( m_Doc->GetValue() );
-        entry->SetKeyWords( m_Keywords->GetValue() );
-        entry->SetDocFileName( m_Docfile->GetValue() );
+        entry->SetDescription( m_DocCtrl->GetValue() );
+        entry->SetKeyWords( m_KeywordsCtrl->GetValue() );
+        entry->SetDocFileName( m_DocfileCtrl->GetValue() );
     }
 
-    if( m_PartAliasList->GetStrings() != component->m_AliasList )
+    if( m_PartAliasListCtrl->GetStrings() != component->m_AliasList )
     {
-        wxArrayString aliases = m_PartAliasList->GetStrings();
+        wxArrayString aliases = m_PartAliasListCtrl->GetStrings();
 
         /* Add names not existing in the current component alias list. */
         for( i = 0; i < aliases.GetCount(); i++ )
@@ -248,9 +188,9 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::CopyDocToAlias( wxCommandEvent& WXUNUSED 
     if( component == NULL || m_Parent->GetAliasName().IsEmpty() )
         return;
 
-    m_Doc->SetValue( component->GetDescription() );
-    m_Docfile->SetValue( component->GetDocFileName() );
-    m_Keywords->SetValue( component->GetKeyWords() );
+    m_DocCtrl->SetValue( component->GetDescription() );
+    m_DocfileCtrl->SetValue( component->GetDocFileName() );
+    m_KeywordsCtrl->SetValue( component->GetKeyWords() );
 }
 
 
@@ -259,7 +199,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllAliasOfPart(
     wxCommandEvent& WXUNUSED (event) )
 /**********************************************************/
 {
-    if( m_PartAliasList->FindString( m_Parent->GetAliasName() )
+    if( m_PartAliasListCtrl->FindString( m_Parent->GetAliasName() )
         != wxNOT_FOUND )
     {
         wxString msg;
@@ -274,7 +214,7 @@ edited!" ),
 
     if( IsOK( this, _( "Remove all aliases from list?" ) ) )
     {
-        m_PartAliasList->Clear();
+        m_PartAliasListCtrl->Clear();
         m_ButtonDeleteAllAlias->Enable( false );
         m_ButtonDeleteOneAlias->Enable( false );
     }
@@ -304,7 +244,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& WXUNUSED 
     Line.Replace( wxT( " " ), wxT( "_" ) );
     aliasname = Line;
 
-    if( m_PartAliasList->FindString( aliasname ) != wxNOT_FOUND
+    if( m_PartAliasListCtrl->FindString( aliasname ) != wxNOT_FOUND
         || library->FindEntry( aliasname ) != NULL )
     {
         wxString msg;
@@ -316,7 +256,7 @@ library <%s>." ),
         return;
     }
 
-    m_PartAliasList->Append( aliasname );
+    m_PartAliasListCtrl->Append( aliasname );
     if( m_Parent->GetAliasName().IsEmpty() )
         m_ButtonDeleteAllAlias->Enable( true );
     m_ButtonDeleteOneAlias->Enable( true );
@@ -326,7 +266,7 @@ library <%s>." ),
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAliasOfPart(
     wxCommandEvent& WXUNUSED (event) )
 {
-    wxString aliasname = m_PartAliasList->GetStringSelection();
+    wxString aliasname = m_PartAliasListCtrl->GetStringSelection();
 
     if( aliasname.IsEmpty() )
         return;
@@ -340,9 +280,9 @@ edited!" ),
         return;
     }
 
-    m_PartAliasList->Delete( m_PartAliasList->GetSelection() );
+    m_PartAliasListCtrl->Delete( m_PartAliasListCtrl->GetSelection() );
 
-    if( m_PartAliasList->IsEmpty() )
+    if( m_PartAliasListCtrl->IsEmpty() )
     {
         m_ButtonDeleteAllAlias->Enable( false );
         m_ButtonDeleteOneAlias->Enable( false );
@@ -441,7 +381,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::BrowseAndSelectDocFile( wxCommandEvent& e
 #ifdef __WINDOWS__
     filename.Replace(wxT("\\"), wxT("/") );
 #endif
-    m_Docfile->SetValue( filename );
+    m_DocfileCtrl->SetValue( filename );
 }
 
 

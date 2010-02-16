@@ -39,14 +39,13 @@ void WinEDA_LibeditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
 }
 
 
-/******************************************************/
+/*************************************************************************/
 void WinEDA_LibeditFrame::GetComponentFromRedoList(wxCommandEvent& event)
-/******************************************************/
+/*************************************************************************/
 
 /* Redo the last edition:
   * - Place the current edited library component in undo list
   * - Get old version of the current edited library component
- *  @return FALSE if nothing done, else true
  */
 {
     if ( GetScreen()->GetRedoCommandCount() <= 0 )
@@ -64,19 +63,24 @@ void WinEDA_LibeditFrame::GetComponentFromRedoList(wxCommandEvent& event)
     if( m_component )
         m_component->SetNext( NULL );
     m_drawItem = NULL;
+    UpdateAliasSelectList();
+    UpdatePartSelectList();
+    if( m_component )
+        SetShowDeMorgan( m_component->HasConversion() );
+    DisplayLibInfos();
+    DisplayCmpDoc();
     GetScreen()->SetModify();
     DrawPanel->Refresh();
 }
 
 
-/******************************************************/
+/************************************************************************/
 void WinEDA_LibeditFrame::GetComponentFromUndoList(wxCommandEvent& event)
-/******************************************************/
+/************************************************************************/
 
-/* Undo the last edition:
+/** Undo the last edition:
   * - Place the current edited library component in Redo list
   * - Get old version of the current edited library component
- *  @return FALSE if nothing done, else true
  */
 {
     if ( GetScreen()->GetUndoCommandCount() <= 0 )
@@ -95,6 +99,12 @@ void WinEDA_LibeditFrame::GetComponentFromUndoList(wxCommandEvent& event)
     if( m_component )
         m_component->SetNext( NULL );
     m_drawItem = NULL;
+    UpdateAliasSelectList();
+    UpdatePartSelectList();
+    if( m_component )
+        SetShowDeMorgan( m_component->HasConversion() );
+    DisplayLibInfos();
+    DisplayCmpDoc();
     GetScreen()->SetModify();
     DrawPanel->Refresh();
 }
