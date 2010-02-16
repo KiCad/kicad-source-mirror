@@ -11,7 +11,7 @@
 #include "program.h"
 #include "general.h"
 #include "protos.h"
-#include "libeditfrm.h"
+#include "libeditframe.h"
 
 #ifdef __UNIX__
 #define LISTBOX_WIDTH 140

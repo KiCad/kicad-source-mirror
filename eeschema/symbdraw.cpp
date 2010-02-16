@@ -16,7 +16,7 @@
 #include "general.h"
 #include "trigo.h"
 #include "protos.h"
-#include "libeditfrm.h"
+#include "libeditframe.h"
 #include "class_libentry.h"
 #include "dialog_lib_edit_draw_item.h"
 
@@ -569,7 +569,7 @@ void WinEDA_LibeditFrame::StartModifyDrawSymbol( wxDC* DC )
         }
     }
     break;
-    
+
     default:
         break;
     }

@@ -87,12 +87,12 @@ set(EESCHEMA_SRCS
     hotkeys.cpp
     libarch.cpp
     libedit.cpp
+    libeditframe.cpp
     libedit_onleftclick.cpp
     libedit_onrightclick.cpp
     libedit_undo_redo.cpp
     lib_export.cpp
     libfield.cpp
-    libframe.cpp
     load_one_schematic_file.cpp
     locate.cpp
     menubar.cpp

@@ -12,7 +12,7 @@
 #include "program.h"
 #include "general.h"
 #include "protos.h"
-#include "libviewfrm.h"
+#include "viewlib_frame.h"
 #include "class_library.h"
 #include "hotkeys.h"
 

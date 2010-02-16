@@ -12,8 +12,8 @@
 #include "program.h"
 #include "general.h"
 #include "protos.h"
-#include "libeditfrm.h"
-#include "libviewfrm.h"
+#include "libeditframe.h"
+#include "viewlib_frame.h"
 #include "classes_body_items.h"
 #include "class_marker_sch.h"
 

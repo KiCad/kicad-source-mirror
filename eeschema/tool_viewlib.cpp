@@ -12,7 +12,7 @@
 #include "protos.h"
 #include "hotkeys.h"
 #include "class_library.h"
-#include "libviewfrm.h"
+#include "viewlib_frame.h"
 
 
 void WinEDA_ViewlibFrame::ReCreateHToolbar()

@@ -13,7 +13,7 @@
 #include "program.h"
 #include "general.h"
 #include "protos.h"
-#include "libeditfrm.h"
+#include "libeditframe.h"
 #include "class_library.h"
 
 #include "dialog_lib_new_component.h"

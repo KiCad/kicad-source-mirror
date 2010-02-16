@@ -1,6 +1,8 @@
-/****************************/
-/*  EESchema - libframe.cpp */
-/****************************/
+/**
+*  EESchema - libeditframe.cpp
+* class WinEDA_LibeditFrame: the component editor frame
+*
+*/
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -14,7 +16,7 @@
 #include "general.h"
 #include "protos.h"
 #include "eeschema_id.h"
-#include "libeditfrm.h"
+#include "libeditframe.h"
 #include "class_library.h"
 
 #include "kicad_device_context.h"

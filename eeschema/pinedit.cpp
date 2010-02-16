@@ -9,7 +9,7 @@
 #include "confirm.h"
 
 #include "program.h"
-#include "libeditfrm.h"
+#include "libeditframe.h"
 #include "eeschema_id.h"
 #include "class_libentry.h"
 #include "general.h"
@@ -604,7 +604,7 @@ void WinEDA_LibeditFrame::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
     DrawPanel->CursorOff( DC );
     GetScreen()->m_Curseur.x = Pin->m_Pos.x;
     GetScreen()->m_Curseur.y = -Pin->m_Pos.y;
-    
+
     // Add this new pin in list, and creates pins for others parts if needed
     m_drawItem = Pin;
     PlacePin( DC );

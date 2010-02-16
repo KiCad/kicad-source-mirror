@@ -13,7 +13,7 @@
 #include "protos.h"
 #include "eeschema_id.h"
 #include "class_library.h"
-#include "libeditfrm.h"
+#include "libeditframe.h"
 
 
 

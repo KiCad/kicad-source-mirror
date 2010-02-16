@@ -12,7 +12,7 @@
 #include "program.h"
 #include "general.h"
 #include "protos.h"
-#include "libeditfrm.h"
+#include "libeditframe.h"
 #include "class_libentry.h"
 
 #include "dialog_bodygraphictext_properties_base.h"

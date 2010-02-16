@@ -13,7 +13,7 @@
 #include "general.h"
 #include "class_library.h"
 #include "protos.h"
-#include "libeditfrm.h"
+#include "libeditframe.h"
 
 
 static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,

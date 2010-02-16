@@ -25,8 +25,8 @@
 #include "dialog_find.h"
 #include "netlist_control.h"
 #include "dialog_erc.h"
-#include "libeditfrm.h"
-#include "libviewfrm.h"
+#include "libeditframe.h"
+#include "viewlib_frame.h"
 #include "hotkeys.h"
 
 

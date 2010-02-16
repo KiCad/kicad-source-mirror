@@ -17,8 +17,8 @@
 #include "general.h"
 #include "protos.h"
 #include "netlist.h"
-#include "libeditfrm.h"
-#include "libviewfrm.h"
+#include "libeditframe.h"
+#include "viewlib_frame.h"
 
 #include <wx/tokenzr.h>
 

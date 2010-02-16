@@ -13,7 +13,7 @@
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
-#include "libviewfrm.h"
+#include "viewlib_frame.h"
 
 #include "get_component_dialog.h"
 
