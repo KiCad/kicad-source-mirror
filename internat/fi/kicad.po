@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-15 17:56+0200\n"
-"PO-Revision-Date: 2010-02-15 17:56+0200\n"
+"POT-Creation-Date: 2010-02-16 13:41+0200\n"
+"PO-Revision-Date: 2010-02-16 13:41+0200\n"
 "Last-Translator: Vesa Solonen <vesa.solonen@hut.fi>\n"
 "Language-Team: Amerikanenglanti <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -775,12 +775,12 @@ msgstr "Tiedostoa <%s> ei löytynyt. Käyttäkää liitostiedostoa kirjasto-osan
 msgid "Component [%s]: footprint <%s> not found"
 msgstr "Komponentin [%s]: liitoskuvaa <%s> ei löytynyt"
 
-#: pcbnew/hotkeys.cpp:595
+#: pcbnew/hotkeys.cpp:607
 #, c-format
 msgid "Footprint %s found, but locked"
 msgstr "Liitoskuva %s löydetty, mutta lukittu"
 
-#: pcbnew/hotkeys.cpp:789
+#: pcbnew/hotkeys.cpp:801
 msgid "Delete module?"
 msgstr "Poistetaanko osa?"
 
@@ -801,8 +801,8 @@ msgid "Layer:"
 msgstr "Kerros:"
 
 #: pcbnew/menubar_pcbframe.cpp:39
-msgid "&New\tCtrl+N"
-msgstr "&Uusi\tCtrl+N"
+msgid "&New"
+msgstr "&Uusi"
 
 #: pcbnew/menubar_pcbframe.cpp:40
 msgid "Clear current board and initialize a new one"
@@ -841,8 +841,8 @@ msgid "Save current board"
 msgstr "Tallenna nykyinen levytiedosto"
 
 #: pcbnew/menubar_pcbframe.cpp:76
-msgid "Save as...\tShift+Ctrl+S"
-msgstr "Tallenna nimellä...\tShift+Ctrl+S"
+msgid "Save as..."
+msgstr "Tallenna &nimellä..."
 
 #: pcbnew/menubar_pcbframe.cpp:77
 msgid "Save the current board as.."
@@ -953,8 +953,8 @@ msgid "Export board"
 msgstr "Vie levytiedosto"
 
 #: pcbnew/menubar_pcbframe.cpp:189
-msgid "&Print\tCtrl+P"
-msgstr "&Tulosta\tCtrl+P"
+msgid "&Print"
+msgstr "&Tulosta"
 
 #: pcbnew/menubar_pcbframe.cpp:190
 msgid "Print pcb board"
@@ -1008,272 +1008,252 @@ msgstr "&Poistu"
 msgid "Quit PCBNew"
 msgstr "Lopeta PCBnew"
 
-#: pcbnew/menubar_pcbframe.cpp:244
+#: pcbnew/menubar_pcbframe.cpp:243
 msgid "Undo"
 msgstr "Peru"
 
-#: pcbnew/menubar_pcbframe.cpp:246
-msgid "Undo\tCtrl+Z"
-msgstr "Peru\tCtrl+Z"
-
-#: pcbnew/menubar_pcbframe.cpp:249
+#: pcbnew/menubar_pcbframe.cpp:245
 msgid "Undo last edition"
 msgstr "Peru viimeinen toiminto"
 
-#: pcbnew/menubar_pcbframe.cpp:255
+#: pcbnew/menubar_pcbframe.cpp:250
 msgid "Redo"
 msgstr "Tee uudelleen"
 
-#: pcbnew/menubar_pcbframe.cpp:257
-msgid "Redo\tShift+Ctrl+Z"
-msgstr "Tee uudelleen\tShift+Ctrl+Z"
-
-#: pcbnew/menubar_pcbframe.cpp:260
+#: pcbnew/menubar_pcbframe.cpp:252
 msgid "Redo the last undo command"
 msgstr "Tee viimeinen peruttu toiminto uudelleen"
 
-#: pcbnew/menubar_pcbframe.cpp:269
+#: pcbnew/menubar_pcbframe.cpp:260
 msgid "&Find"
 msgstr "&Etsi"
 
-#: pcbnew/menubar_pcbframe.cpp:271
-msgid "Find\tCtrl+F"
-msgstr "Etsi\tCtrl+F"
-
-#: pcbnew/menubar_pcbframe.cpp:275
+#: pcbnew/menubar_pcbframe.cpp:262
 msgid "Find components and text in current loaded board"
 msgstr "Etsi komponentteja ja tekstiä käytössä olevalta levyltä"
 
-#: pcbnew/menubar_pcbframe.cpp:284
+#: pcbnew/menubar_pcbframe.cpp:271
 msgid "Global &Deletions"
 msgstr "Globaalit &poistot"
 
-#: pcbnew/menubar_pcbframe.cpp:285
+#: pcbnew/menubar_pcbframe.cpp:272
 msgid "Delete tracks, modules, texts... on board"
 msgstr "Poista liuskoja, osia, tekstiä, jne. levyltä"
 
-#: pcbnew/menubar_pcbframe.cpp:291
+#: pcbnew/menubar_pcbframe.cpp:278
 msgid "&Cleanup Tracks and Vias"
 msgstr "&Siisti liuskat ja läpiviennit"
 
-#: pcbnew/menubar_pcbframe.cpp:292
+#: pcbnew/menubar_pcbframe.cpp:279
 msgid "Clean stubs, vias, delete break points, or connect dangling tracks to pads and vias"
 msgstr "Siisti tyngät, läpiviennit, poista katkaisukohdat tai liitä roikkuvat liuskat anturoihin ja läpivienteihin"
 
-#: pcbnew/menubar_pcbframe.cpp:298
+#: pcbnew/menubar_pcbframe.cpp:285
 msgid "&Swap Layers"
 msgstr "&Vaihda kerrokset"
 
-#: pcbnew/menubar_pcbframe.cpp:299
+#: pcbnew/menubar_pcbframe.cpp:286
 msgid "Swap tracks on copper layers or drawings on others layers"
 msgstr "Vaihda liuskat aktiivisella kuparikerrosparilla tai piirrokset muilla"
 
-#: pcbnew/menubar_pcbframe.cpp:321
-#: pcbnew/menubar_pcbframe.cpp:322
+#: pcbnew/menubar_pcbframe.cpp:308
+#: pcbnew/menubar_pcbframe.cpp:309
 msgid "Zoom In"
 msgstr "Lähennä"
 
-#: pcbnew/menubar_pcbframe.cpp:328
+#: pcbnew/menubar_pcbframe.cpp:315
 msgid "Zoom out"
 msgstr "Loitonna"
 
-#: pcbnew/menubar_pcbframe.cpp:329
+#: pcbnew/menubar_pcbframe.cpp:316
 msgid "Zoom Out"
 msgstr "Loitonna"
 
-#: pcbnew/menubar_pcbframe.cpp:336
+#: pcbnew/menubar_pcbframe.cpp:322
 msgid "Fit on Screen"
 msgstr "Sovita näytölle"
 
-#: pcbnew/menubar_pcbframe.cpp:339
-msgid "Fit on Screen\tCtrl+0"
-msgstr "Sovita näytölle\tCtrl+0"
-
-#: pcbnew/menubar_pcbframe.cpp:343
+#: pcbnew/menubar_pcbframe.cpp:326
 msgid "Zoom to fit the board on the screen"
 msgstr "Sovita levy näytölle"
 
-#: pcbnew/menubar_pcbframe.cpp:352
+#: pcbnew/menubar_pcbframe.cpp:334
 msgid "Redraw"
 msgstr "Virkistä näyttö"
 
-#: pcbnew/menubar_pcbframe.cpp:355
-msgid "Redraw\tCtrl+R"
-msgstr "Virkistä näyttö\tCtrl+R"
-
-#: pcbnew/menubar_pcbframe.cpp:359
+#: pcbnew/menubar_pcbframe.cpp:338
 msgid "Redraw the screen of the board"
 msgstr "Virkistä näyttö"
 
-#: pcbnew/menubar_pcbframe.cpp:368
+#: pcbnew/menubar_pcbframe.cpp:347
 msgid "&List Nets"
 msgstr "&Luetteloi kytkentäverkot"
 
-#: pcbnew/menubar_pcbframe.cpp:369
+#: pcbnew/menubar_pcbframe.cpp:348
 msgid "View a list of nets with names and id's"
 msgstr "Tarkastele kytkentäverkkoluetteloa"
 
-#: pcbnew/menubar_pcbframe.cpp:377
+#: pcbnew/menubar_pcbframe.cpp:356
 msgid "3D Display"
 msgstr "3D-esitys"
 
-#: pcbnew/menubar_pcbframe.cpp:377
+#: pcbnew/menubar_pcbframe.cpp:356
 msgid "Show board in 3D viewer"
 msgstr "Näytä levystä 3D-esitys"
 
-#: pcbnew/menubar_pcbframe.cpp:388
+#: pcbnew/menubar_pcbframe.cpp:367
 msgid "&Library"
 msgstr "&Kirjasto"
 
-#: pcbnew/menubar_pcbframe.cpp:389
+#: pcbnew/menubar_pcbframe.cpp:368
 msgid "Setting libraries, directories and others..."
 msgstr "Asetukset kirjastoille, poluille ja muulle..."
 
-#: pcbnew/menubar_pcbframe.cpp:397
+#: pcbnew/menubar_pcbframe.cpp:376
 msgid "Hide &Layers Manager"
 msgstr "Piilota &kerrostyökalu"
 
-#: pcbnew/menubar_pcbframe.cpp:398
+#: pcbnew/menubar_pcbframe.cpp:377
 msgid "Show/hide the layers manager toolbar"
 msgstr "Näytä tai piilota kerrostyökalu"
 
-#: pcbnew/menubar_pcbframe.cpp:403
+#: pcbnew/menubar_pcbframe.cpp:382
 msgid "&General"
 msgstr "&Yleiset"
 
-#: pcbnew/menubar_pcbframe.cpp:404
+#: pcbnew/menubar_pcbframe.cpp:383
 msgid "Select general options for PCBnew"
 msgstr "PCBnew yleiset asetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:410
+#: pcbnew/menubar_pcbframe.cpp:389
 msgid "&Display"
 msgstr "&Näytä"
 
-#: pcbnew/menubar_pcbframe.cpp:411
+#: pcbnew/menubar_pcbframe.cpp:390
 msgid "Select how items (pads, tracks texts ... ) are displayed"
 msgstr "Valitse elementtien näyttöominaisuuksia"
 
-#: pcbnew/menubar_pcbframe.cpp:419
+#: pcbnew/menubar_pcbframe.cpp:398
 msgid "Grid"
 msgstr "Pisterasteri"
 
-#: pcbnew/menubar_pcbframe.cpp:420
+#: pcbnew/menubar_pcbframe.cpp:399
 msgid "Adjust user grid dimensions"
 msgstr "Aseta käyttäjän rasteri"
 
-#: pcbnew/menubar_pcbframe.cpp:426
+#: pcbnew/menubar_pcbframe.cpp:405
 msgid "Texts and Drawings"
 msgstr "Teksti ja piirrokset"
 
-#: pcbnew/menubar_pcbframe.cpp:427
+#: pcbnew/menubar_pcbframe.cpp:406
 msgid "Adjust dimensions for texts and drawings"
 msgstr "Aseta mittoja tekstille ja piirroksille"
 
-#: pcbnew/menubar_pcbframe.cpp:432
+#: pcbnew/menubar_pcbframe.cpp:411
 msgid "Pads"
 msgstr "Anturat"
 
-#: pcbnew/menubar_pcbframe.cpp:433
+#: pcbnew/menubar_pcbframe.cpp:412
 msgid "Adjust default pad characteristics"
 msgstr "Aseta anturoiden oletusasetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:439
+#: pcbnew/menubar_pcbframe.cpp:418
 msgid "Pads Mask Clearance"
 msgstr "Anturan JEP-välys"
 
-#: pcbnew/menubar_pcbframe.cpp:440
+#: pcbnew/menubar_pcbframe.cpp:419
 msgid "Adjust the global clearance between pads and the solder resist mask"
 msgstr "Aseta globaali eristysväli anturoiden ja JEP:n välillä"
 
-#: pcbnew/menubar_pcbframe.cpp:447
+#: pcbnew/menubar_pcbframe.cpp:426
 msgid "&Save"
 msgstr "&Tallenna"
 
-#: pcbnew/menubar_pcbframe.cpp:448
+#: pcbnew/menubar_pcbframe.cpp:427
 msgid "Save dimension preferences"
 msgstr "Tallenna mitta-asetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:454
+#: pcbnew/menubar_pcbframe.cpp:433
 msgid "Di&mensions"
 msgstr "&Mitat"
 
-#: pcbnew/menubar_pcbframe.cpp:455
+#: pcbnew/menubar_pcbframe.cpp:434
 msgid "Global dimensions preferences"
 msgstr "Globaalit mitta-asetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:468
+#: pcbnew/menubar_pcbframe.cpp:447
 msgid "&Save Preferences"
 msgstr "Tallenna &asetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:469
+#: pcbnew/menubar_pcbframe.cpp:448
 msgid "Save application preferences"
 msgstr "Tallenna asetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:474
+#: pcbnew/menubar_pcbframe.cpp:453
 msgid "&Read Preferences"
 msgstr "&Lue asetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:475
+#: pcbnew/menubar_pcbframe.cpp:454
 msgid "Read application preferences"
 msgstr "Lue asetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:487
+#: pcbnew/menubar_pcbframe.cpp:466
 msgid "Design Rules"
 msgstr "Suunnittelusäännöt"
 
-#: pcbnew/menubar_pcbframe.cpp:488
+#: pcbnew/menubar_pcbframe.cpp:467
 msgid "Open the design rules editor"
 msgstr "Avaa suunnittelusääntöeditori"
 
-#: pcbnew/menubar_pcbframe.cpp:493
+#: pcbnew/menubar_pcbframe.cpp:472
 msgid "&Layers Setup"
 msgstr "&Kerrosten asetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:494
+#: pcbnew/menubar_pcbframe.cpp:473
 msgid "Enable and set layer properties"
 msgstr "Käytettävät kerrokset ja niiden ominaisuudet"
 
-#: pcbnew/menubar_pcbframe.cpp:503
+#: pcbnew/menubar_pcbframe.cpp:482
 msgid "&Contents"
 msgstr "&Sisältö"
 
-#: pcbnew/menubar_pcbframe.cpp:504
+#: pcbnew/menubar_pcbframe.cpp:483
 msgid "Open the PCBnew manual"
 msgstr "Avaa PCBnew–ohjekirja"
 
-#: pcbnew/menubar_pcbframe.cpp:512
+#: pcbnew/menubar_pcbframe.cpp:491
 msgid "&About"
 msgstr "&Tietoja"
 
-#: pcbnew/menubar_pcbframe.cpp:513
+#: pcbnew/menubar_pcbframe.cpp:492
 msgid "About PCBnew printed circuit board designer"
 msgstr "Tietoja PCBnew –piirilevysuunnitteluohjelmasta"
 
-#: pcbnew/menubar_pcbframe.cpp:522
+#: pcbnew/menubar_pcbframe.cpp:501
 msgid "&File"
 msgstr "&Tiedosto"
 
-#: pcbnew/menubar_pcbframe.cpp:523
+#: pcbnew/menubar_pcbframe.cpp:502
 msgid "&Edit"
 msgstr "&Muokkaa"
 
-#: pcbnew/menubar_pcbframe.cpp:524
+#: pcbnew/menubar_pcbframe.cpp:503
 msgid "&View"
 msgstr "&Näytä"
 
-#: pcbnew/menubar_pcbframe.cpp:525
+#: pcbnew/menubar_pcbframe.cpp:504
 msgid "&Preferences"
 msgstr "&Asetukset"
 
-#: pcbnew/menubar_pcbframe.cpp:526
+#: pcbnew/menubar_pcbframe.cpp:505
 msgid "&Design Rules"
 msgstr "&Suunnittelusäännöt"
 
-#: pcbnew/menubar_pcbframe.cpp:527
+#: pcbnew/menubar_pcbframe.cpp:506
 msgid "&3D Display"
 msgstr "&3D-esitys"
 
-#: pcbnew/menubar_pcbframe.cpp:528
+#: pcbnew/menubar_pcbframe.cpp:507
 msgid "&Help"
 msgstr "&Apua"
 
@@ -4284,7 +4264,7 @@ msgstr ""
 "Automaattinen liuskan leveys: Aloitettaessa olemassa olevalta liuskalta\n"
 "käytetään samaa leveyttä. Muuten määriteltyä aktiivista leveyttä."
 
-#: pcbnew/tool_pcb.cpp:761
+#: pcbnew/tool_pcb.cpp:757
 msgid "+/- to switch"
 msgstr "+/- vaihtaaksesi"
 
@@ -7815,7 +7795,7 @@ msgid "Do not show hidden pins"
 msgstr "Älä näytä piilotettuja nastoja"
 
 #: eeschema/schframe.cpp:505
-#: eeschema/tool_sch.cpp:266
+#: eeschema/tool_sch.cpp:268
 msgid "Show hidden pins"
 msgstr "Näytä piilotetut nastat"
 
@@ -7950,63 +7930,63 @@ msgstr "Suorita CvPCB"
 msgid "Run pcbnew"
 msgstr "Suorita piirilevyeditori PCBnew"
 
-#: eeschema/tool_sch.cpp:115
+#: eeschema/tool_sch.cpp:117
 msgid "Netlist generation"
 msgstr "Liitostiedoston luonti"
 
-#: eeschema/tool_sch.cpp:119
+#: eeschema/tool_sch.cpp:121
 msgid "Annotate schematic"
 msgstr "Lisää selitteet"
 
-#: eeschema/tool_sch.cpp:122
+#: eeschema/tool_sch.cpp:124
 msgid "Schematic Electric Rules Check"
 msgstr "Kytkentäkaavion sähköinen sääntötarkastus (ERC)"
 
-#: eeschema/tool_sch.cpp:125
+#: eeschema/tool_sch.cpp:127
 msgid "Bill of material and/or Cross references"
 msgstr "Materiaaliluettelo ja/tai ristiviitteet"
 
-#: eeschema/tool_sch.cpp:129
+#: eeschema/tool_sch.cpp:131
 msgid "Backannotate footprint"
 msgstr "Marginaali:"
 
-#: eeschema/tool_sch.cpp:153
+#: eeschema/tool_sch.cpp:155
 msgid "Hierarchy Push/Pop"
 msgstr "Hierarkiassa alas/ylös"
 
-#: eeschema/tool_sch.cpp:158
+#: eeschema/tool_sch.cpp:160
 msgid "Place a component"
 msgstr "Lisää komponentti"
 
-#: eeschema/tool_sch.cpp:162
+#: eeschema/tool_sch.cpp:164
 msgid "Place a power port"
 msgstr "Lisää teholähde"
 
-#: eeschema/tool_sch.cpp:167
+#: eeschema/tool_sch.cpp:169
 msgid "Place a wire"
 msgstr "Lisää johdin"
 
-#: eeschema/tool_sch.cpp:171
+#: eeschema/tool_sch.cpp:173
 msgid "Place a bus"
 msgstr "Lisää väylä"
 
-#: eeschema/tool_sch.cpp:175
+#: eeschema/tool_sch.cpp:177
 msgid "Place a wire to bus entry"
 msgstr "Lisää johdin väyläliityntään"
 
-#: eeschema/tool_sch.cpp:179
+#: eeschema/tool_sch.cpp:181
 msgid "Place a bus to bus entry"
 msgstr "Lisää väylä väyläliityntään"
 
-#: eeschema/tool_sch.cpp:184
+#: eeschema/tool_sch.cpp:186
 msgid "Place no connect flag"
 msgstr "Lisää \"Kytkemätön\"-lippu"
 
-#: eeschema/tool_sch.cpp:188
+#: eeschema/tool_sch.cpp:190
 msgid "Place net name"
 msgstr "Lisää kytkentäverkon nimi"
 
-#: eeschema/tool_sch.cpp:192
+#: eeschema/tool_sch.cpp:194
 msgid ""
 "Place a global label.\n"
 "Warning: all global labels with the same name are connected in whole hierarchy"
@@ -8014,39 +7994,39 @@ msgstr ""
 "Lisää Globaali nimiö.\n"
 " Varoitus: Kaikki globaalit nimiöt samalla nimellä ovat yhdistetyt koko hierarkiassa"
 
-#: eeschema/tool_sch.cpp:197
+#: eeschema/tool_sch.cpp:199
 msgid "Place a junction"
 msgstr "Lisää liitos"
 
-#: eeschema/tool_sch.cpp:202
+#: eeschema/tool_sch.cpp:204
 msgid "Place a hierarchical label. This label will be seen as a pin sheet in the sheet symbol"
 msgstr "Lisää hierarkinen nimiö. Tämä nimiö näkyy nastalehtenä lehti-symbolissa"
 
-#: eeschema/tool_sch.cpp:207
+#: eeschema/tool_sch.cpp:209
 msgid "Place hierarchical sheet"
 msgstr "Lisää hierarkinen lehti"
 
-#: eeschema/tool_sch.cpp:211
+#: eeschema/tool_sch.cpp:213
 msgid "Place a pin sheet, imported from the corresponding hierarchical label in sheet"
 msgstr "Lisää luotava nastalehti tuomalla hierarkinen nimiö lehdeltä"
 
-#: eeschema/tool_sch.cpp:216
+#: eeschema/tool_sch.cpp:218
 msgid "Place hierarchical pin to sheet"
 msgstr "Lisää hierarkinen nasta lehteen"
 
-#: eeschema/tool_sch.cpp:221
+#: eeschema/tool_sch.cpp:223
 msgid "Place graphic line or polygon"
 msgstr "Lisää grafiikkaviiva tai -monikulmio"
 
-#: eeschema/tool_sch.cpp:225
+#: eeschema/tool_sch.cpp:227
 msgid "Place graphic text (comment)"
 msgstr "Lisää grafiikkatekstiä kommentointiin"
 
-#: eeschema/tool_sch.cpp:249
+#: eeschema/tool_sch.cpp:251
 msgid "Turn grid off"
 msgstr "Pisterasteri pois"
 
-#: eeschema/tool_sch.cpp:271
+#: eeschema/tool_sch.cpp:273
 msgid "HV orientation for wires and bus"
 msgstr "Vaaka- tai pystysuunta johtimille ja väylille"
 
@@ -8712,67 +8692,67 @@ msgstr "Osaa ei löytynyt: "
 msgid " in library"
 msgstr " kirjastossa"
 
-#: eeschema/edit_component_in_lib.cpp:145
+#: eeschema/edit_component_in_lib.cpp:85
 #, c-format
 msgid "Alias <%s> not found for component <%s> in library <%s>."
 msgstr "Aliasta <%s> ei löytynyt komponentille <%s> kirjastossa <%s>."
 
-#: eeschema/edit_component_in_lib.cpp:150
+#: eeschema/edit_component_in_lib.cpp:90
 msgid "Component Library Error"
 msgstr "Komponenttikirjastovirhe"
 
-#: eeschema/edit_component_in_lib.cpp:266
-#: eeschema/edit_component_in_lib.cpp:336
+#: eeschema/edit_component_in_lib.cpp:206
+#: eeschema/edit_component_in_lib.cpp:276
 #, c-format
 msgid "Alias <%s> cannot be removed while it is being edited!"
 msgstr "Aliasta <%s> ei voi poistaa kesken editoinnin!"
 
-#: eeschema/edit_component_in_lib.cpp:275
+#: eeschema/edit_component_in_lib.cpp:215
 msgid "Remove all aliases from list?"
 msgstr "Poistetaanko kaikki aliakset luettelosta?"
 
-#: eeschema/edit_component_in_lib.cpp:300
+#: eeschema/edit_component_in_lib.cpp:240
 msgid "New alias:"
 msgstr "Uusi alias:"
 
-#: eeschema/edit_component_in_lib.cpp:301
+#: eeschema/edit_component_in_lib.cpp:241
 msgid "Component Alias"
 msgstr "Komponenttialias"
 
-#: eeschema/edit_component_in_lib.cpp:311
+#: eeschema/edit_component_in_lib.cpp:251
 #, c-format
 msgid "Alias or component name <%s> already exists in library <%s>."
 msgstr "Alias tai komponenttinimi <%s> on jo kirjastossa <%s>."
 
-#: eeschema/edit_component_in_lib.cpp:365
+#: eeschema/edit_component_in_lib.cpp:305
 msgid "Delete extra parts from component?"
 msgstr "Poistetaanko ylimääräiset osat komponentista?"
 
-#: eeschema/edit_component_in_lib.cpp:386
+#: eeschema/edit_component_in_lib.cpp:326
 msgid "Add new pins for alternate body style ( DeMorgan ) to component?"
 msgstr ""
 
-#: eeschema/edit_component_in_lib.cpp:393
+#: eeschema/edit_component_in_lib.cpp:333
 msgid "Delete alternate body style (DeMorgan) draw items from component?"
 msgstr ""
 
-#: eeschema/edit_component_in_lib.cpp:417
+#: eeschema/edit_component_in_lib.cpp:357
 msgid "Doc Files"
 msgstr "Dokumentaatiotiedostot"
 
-#: eeschema/edit_component_in_lib.cpp:453
+#: eeschema/edit_component_in_lib.cpp:393
 msgid "Ok to Delete FootprintFilter LIST"
 msgstr "Poistetaanko liitoskuvasuodatuksen parametrit?"
 
-#: eeschema/edit_component_in_lib.cpp:476
+#: eeschema/edit_component_in_lib.cpp:416
 msgid "Add Footprint Filter"
 msgstr "Lisää liitoskuvasuodatin"
 
-#: eeschema/edit_component_in_lib.cpp:476
+#: eeschema/edit_component_in_lib.cpp:416
 msgid "Footprint Filter"
 msgstr "Liitoskuvasuodatin"
 
-#: eeschema/edit_component_in_lib.cpp:489
+#: eeschema/edit_component_in_lib.cpp:429
 #, c-format
 msgid "Foot print filter <%s> is already defined."
 msgstr "Liitoskuvasuodatin <%s> on jo määritelty."
@@ -9032,15 +9012,15 @@ msgstr "Täytä &edustavärillä"
 msgid "Fill &background"
 msgstr "Täytä &taustavärillä"
 
-#: eeschema/dialog_edit_component_in_lib.cpp:51
+#: eeschema/dialog_edit_component_in_lib.cpp:52
 msgid "Library Component Properties"
 msgstr "Kirjastokomponentin ominaisuudet"
 
-#: eeschema/dialog_edit_component_in_lib.cpp:55
+#: eeschema/dialog_edit_component_in_lib.cpp:56
 msgid "Properties for "
 msgstr "Ominaisuudet "
 
-#: eeschema/dialog_edit_component_in_lib.cpp:59
+#: eeschema/dialog_edit_component_in_lib.cpp:60
 msgid " (alias of "
 msgstr " "
 
@@ -10537,6 +10517,10 @@ msgstr "Kenttä 8"
 msgid "All existing users fields"
 msgstr "Kaikki olevat käyttäjän kentät"
 
+#: eeschema/menubar.cpp:44
+msgid "&New\tCtrl+N"
+msgstr "&Uusi\tCtrl+N"
+
 #: eeschema/menubar.cpp:52
 msgid "Open an existing schematic project"
 msgstr "Avaa olemassa oleva kytkentäkaavioprojekti"
@@ -10562,16 +10546,16 @@ msgid "Save only current schematic sheet"
 msgstr "Tallenna vain nykyinen kaaviolehti"
 
 #: eeschema/menubar.cpp:82
-msgid "Save Current Sheet &as\tShift+Ctrl+S"
-msgstr "Tallenna nykyinen kaaviolehti nimellä\tShift+Ctrl+S"
+msgid "Save Current Sheet &as"
+msgstr "Tallenna nykyinen kaaviolehti &nimellä"
 
 #: eeschema/menubar.cpp:83
 msgid "Save current schematic sheet as..."
 msgstr "Tallenna nykyinen kaaviolehti nimellä..."
 
 #: eeschema/menubar.cpp:91
-msgid "P&rint\tCtrl+P"
-msgstr "Tulosta\tCtrl+P"
+msgid "P&rint"
+msgstr "&Tulosta"
 
 #: eeschema/menubar.cpp:99
 msgid "Plot PostScript"
@@ -10621,175 +10605,171 @@ msgstr "Piirrä kytkentäkaaviolehti HPGL, PostScript tai SVG-muodossa"
 msgid "Quit EESchema"
 msgstr "Lopeta EESchema"
 
-#: eeschema/menubar.cpp:184
-msgid "&Find\tCtrl+F"
-msgstr "&Etsi\tCtrl+F"
-
-#: eeschema/menubar.cpp:193
+#: eeschema/menubar.cpp:194
 msgid "Backannotate"
 msgstr ""
 
-#: eeschema/menubar.cpp:194
+#: eeschema/menubar.cpp:195
 msgid "Back annotated footprint fields"
 msgstr ""
 
-#: eeschema/menubar.cpp:240
+#: eeschema/menubar.cpp:237
 msgid "Fit the schematic sheet on the screen"
 msgstr "Sovita kaaviolehti näytölle"
 
-#: eeschema/menubar.cpp:256
+#: eeschema/menubar.cpp:249
 msgid "Redraw the schematic view"
 msgstr "Virkistä näyttö"
 
-#: eeschema/menubar.cpp:270
+#: eeschema/menubar.cpp:263
 msgid "&Component"
 msgstr "&Komponentti"
 
-#: eeschema/menubar.cpp:271
+#: eeschema/menubar.cpp:264
 msgid "Place the component"
 msgstr "Lisää komponentti"
 
-#: eeschema/menubar.cpp:276
+#: eeschema/menubar.cpp:269
 msgid "&Power port"
 msgstr "&Teholähde"
 
-#: eeschema/menubar.cpp:277
+#: eeschema/menubar.cpp:270
 msgid "Place the power port"
 msgstr "Lisää teholähde"
 
-#: eeschema/menubar.cpp:282
+#: eeschema/menubar.cpp:275
 msgid "&Wire"
 msgstr "&Johdin"
 
-#: eeschema/menubar.cpp:283
+#: eeschema/menubar.cpp:276
 msgid "Place the wire"
 msgstr "Lisää johdin"
 
-#: eeschema/menubar.cpp:288
+#: eeschema/menubar.cpp:281
 msgid "&Bus"
 msgstr "&Väylä"
 
-#: eeschema/menubar.cpp:289
+#: eeschema/menubar.cpp:282
 msgid "Place bus"
 msgstr "Lisää väylä"
 
-#: eeschema/menubar.cpp:295
+#: eeschema/menubar.cpp:288
 msgid "W&ire to bus entry"
 msgstr "&Johdin väyläliityntään"
 
-#: eeschema/menubar.cpp:302
+#: eeschema/menubar.cpp:295
 msgid "B&us to bus entry"
 msgstr "&Väylä väyläliityntään"
 
-#: eeschema/menubar.cpp:308
+#: eeschema/menubar.cpp:301
 msgid "No connect flag"
 msgstr "\"Kytkemätön\"-lippu"
 
-#: eeschema/menubar.cpp:309
+#: eeschema/menubar.cpp:302
 msgid "Place a no connect flag"
 msgstr "Lisää \"Kytkemätön\"-lippu"
 
-#: eeschema/menubar.cpp:314
+#: eeschema/menubar.cpp:307
 msgid "Net name"
 msgstr "Kytkentäverkon nimi"
 
-#: eeschema/menubar.cpp:320
+#: eeschema/menubar.cpp:313
 msgid "Global label"
 msgstr "Globaali nimiö"
 
-#: eeschema/menubar.cpp:321
+#: eeschema/menubar.cpp:314
 msgid "Place a global label. Warning: all global labels with the same name are connected in whole hierarchy"
 msgstr "Lisää Globaali nimiö. Varoitus: Kaikki globaalit nimiöt samalla nimellä ovat yhdistetyt koko hierarkiassa"
 
-#: eeschema/menubar.cpp:327
+#: eeschema/menubar.cpp:320
 msgid "Junction"
 msgstr "Liitos"
 
-#: eeschema/menubar.cpp:328
+#: eeschema/menubar.cpp:321
 msgid "Place junction"
 msgstr "Lisää liitos"
 
-#: eeschema/menubar.cpp:337
+#: eeschema/menubar.cpp:330
 msgid "Hierarchical label"
 msgstr "Hierarkinen nimiö"
 
-#: eeschema/menubar.cpp:345
+#: eeschema/menubar.cpp:338
 msgid "Hierarchical sheet"
 msgstr "Hierarkinen lehti"
 
-#: eeschema/menubar.cpp:346
+#: eeschema/menubar.cpp:339
 msgid "Create a hierarchical sheet"
 msgstr "Luo hierarkinen lehti"
 
-#: eeschema/menubar.cpp:352
+#: eeschema/menubar.cpp:345
 msgid "Import Hierarchical Label"
 msgstr "Tuo hierarkinen nimiö"
 
-#: eeschema/menubar.cpp:353
+#: eeschema/menubar.cpp:346
 msgid "Place a pin sheet created by importing a hierarchical label from sheet"
 msgstr "Lisää luotava nastalehti tuomalla hierarkinen nimiö lehdeltä"
 
-#: eeschema/menubar.cpp:360
+#: eeschema/menubar.cpp:353
 msgid "Add Hierarchical Pin to Sheet"
 msgstr "Lisää hierarkinen nasta lehteen"
 
-#: eeschema/menubar.cpp:361
+#: eeschema/menubar.cpp:354
 msgid "Place a hierarchical pin to sheet"
 msgstr "Lisää hierarkinen nasta lehteen"
 
-#: eeschema/menubar.cpp:371
+#: eeschema/menubar.cpp:364
 msgid "Graphic line or polygon"
 msgstr "Grafiikkaviiva tai -monikulmio"
 
-#: eeschema/menubar.cpp:372
+#: eeschema/menubar.cpp:365
 msgid "Place graphic lines or polygons"
 msgstr "Lisää grafiikkaviivoja tai -monikulmioita"
 
-#: eeschema/menubar.cpp:379
+#: eeschema/menubar.cpp:372
 msgid "Graphic text"
 msgstr "Grafiikkateksti"
 
-#: eeschema/menubar.cpp:380
+#: eeschema/menubar.cpp:373
 msgid "Place graphic text for comment"
 msgstr "Lisää grafiikkatekstiä kommentointiin"
 
-#: eeschema/menubar.cpp:394
+#: eeschema/menubar.cpp:387
 msgid "Library preferences"
 msgstr "Kirjaston asetukset"
 
-#: eeschema/menubar.cpp:399
+#: eeschema/menubar.cpp:392
 msgid "&Colors"
 msgstr "&Värit"
 
-#: eeschema/menubar.cpp:400
+#: eeschema/menubar.cpp:393
 msgid "Color preferences"
 msgstr "Väriasetukset"
 
-#: eeschema/menubar.cpp:405
+#: eeschema/menubar.cpp:398
 msgid "&Options"
 msgstr "&Yleiset"
 
-#: eeschema/menubar.cpp:406
+#: eeschema/menubar.cpp:399
 msgid "Eeschema general options and preferences"
 msgstr "EESchema yleiset asetukset"
 
-#: eeschema/menubar.cpp:420
+#: eeschema/menubar.cpp:413
 msgid "&Save preferences"
 msgstr "Tallenna &asetukset"
 
-#: eeschema/menubar.cpp:426
+#: eeschema/menubar.cpp:419
 msgid "&Read preferences"
 msgstr "&Lue asetukset"
 
-#: eeschema/menubar.cpp:438
+#: eeschema/menubar.cpp:431
 msgid "Open the eeschema manual"
 msgstr "Avaa EESchema–ohjekirja"
 
-#: eeschema/menubar.cpp:446
+#: eeschema/menubar.cpp:439
 msgid "About eeschema schematic designer"
 msgstr "Tietoja EESchema-kytkentäkaaviosuunnitteluohjelmasta"
 
-#: eeschema/menubar.cpp:459
+#: eeschema/menubar.cpp:452
 msgid "&Place"
 msgstr "&Lisää"
 
@@ -11724,10 +11704,6 @@ msgid "Save current layers as.."
 msgstr "Tallenna nykyinen kerros nimellä..."
 
 #: gerbview/tool_gerber.cpp:67
-msgid "P&rint"
-msgstr "&Tulosta"
-
-#: gerbview/tool_gerber.cpp:67
 msgid "Print gerber"
 msgstr "Tulosta Gerber"
 
@@ -12152,7 +12128,7 @@ msgstr "Luetteloi kaikki"
 msgid "Select by Browser"
 msgstr "Valitse selaimella"
 
-#: common/hotkeys_basic.cpp:354
+#: common/hotkeys_basic.cpp:367
 msgid ""
 "Current hotkey list:\n"
 "\n"
@@ -12160,87 +12136,87 @@ msgstr ""
 "Nykyinen pikanäppäinluettelo:\n"
 "\n"
 
-#: common/hotkeys_basic.cpp:362
+#: common/hotkeys_basic.cpp:375
 msgid "key "
 msgstr "näppäin "
 
-#: common/hotkeys_basic.cpp:415
+#: common/hotkeys_basic.cpp:428
 msgid "Save Hotkey Configuration File:"
 msgstr "Tallenna pikanäppäinasettelun asetustiedosto:"
 
-#: common/hotkeys_basic.cpp:447
+#: common/hotkeys_basic.cpp:460
 msgid "Allowed keys:\n"
 msgstr "Sallitut näppäimet:\n"
 
-#: common/hotkeys_basic.cpp:532
+#: common/hotkeys_basic.cpp:545
 msgid "Open Hotkey Configuration File:"
 msgstr "Avaa pikanäppäinasettelun asetustiedosto:"
 
-#: common/hotkeys_basic.cpp:550
+#: common/hotkeys_basic.cpp:563
 msgid "Unable to read "
 msgstr "Ei voitu lukea "
 
-#: common/hotkeys_basic.cpp:668
+#: common/hotkeys_basic.cpp:681
 msgid "List Current Keys"
 msgstr "Luetteloi nykyiset näppäimet"
 
-#: common/hotkeys_basic.cpp:669
+#: common/hotkeys_basic.cpp:682
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Näyttää nykyisen pikanäppäinluettelon ja liittyvät komennot"
 
-#: common/hotkeys_basic.cpp:675
+#: common/hotkeys_basic.cpp:688
 msgid "(Re)create Hotkeys File"
 msgstr "Luo pikanäppäintiedosto"
 
-#: common/hotkeys_basic.cpp:677
+#: common/hotkeys_basic.cpp:690
 msgid "Create or recreate the hotkey configuration file from current hotkey list"
 msgstr "Luo pikanäppäinasettelun asetustiedosto nykyisestä pikanäppäinlistasta"
 
-#: common/hotkeys_basic.cpp:684
+#: common/hotkeys_basic.cpp:697
 msgid "Reload Hotkeys File"
 msgstr "Lataa pikanäppäinasettelun asetustiedosto uudelleen"
 
-#: common/hotkeys_basic.cpp:685
+#: common/hotkeys_basic.cpp:698
 msgid "Reload the hotkey configuration file"
 msgstr "Lataa pikanäppäinasettelun asetustiedosto uudelleen"
 
-#: common/hotkeys_basic.cpp:691
+#: common/hotkeys_basic.cpp:704
 msgid "Edit Hotkeys File"
 msgstr "Muokkaa pikanäppäintiedostoa"
 
-#: common/hotkeys_basic.cpp:692
+#: common/hotkeys_basic.cpp:705
 msgid "Edit the hotkey configuration file in a text editor"
 msgstr "Muokkaa pikanäppäinasettelun asetustiedostoa tekstieditorissa"
 
-#: common/hotkeys_basic.cpp:698
+#: common/hotkeys_basic.cpp:711
 msgid "Hotkeys"
 msgstr "Pikanäppäimet"
 
-#: common/hotkeys_basic.cpp:699
+#: common/hotkeys_basic.cpp:712
 msgid "Hotkeys configuration and preferences"
 msgstr "Pikanäppäinten asetukset"
 
-#: common/hotkeys_basic.cpp:707
+#: common/hotkeys_basic.cpp:720
 msgid "Home directory"
 msgstr "Kotihakemisto"
 
-#: common/hotkeys_basic.cpp:708
+#: common/hotkeys_basic.cpp:721
 msgid "Use home directory to load or store Hotkey config files"
 msgstr "Käytä kotihakemistoa pikanäppäinasetusten tallennukseen"
 
-#: common/hotkeys_basic.cpp:715
+#: common/hotkeys_basic.cpp:728
 msgid "KiCad template directory"
 msgstr "KiCad-mallihakemisto"
 
-#: common/hotkeys_basic.cpp:716
+#: common/hotkeys_basic.cpp:729
 msgid "Use kicad/template directory to load or store Hotkey config files"
 msgstr "Käytä KiCad-mallihakemistoa pikanäppäinasetusten tallennukseen"
 
-#: common/hotkeys_basic.cpp:722
+#: common/hotkeys_basic.cpp:735
 msgid "Location"
 msgstr "Sijainti"
 
-#: common/hotkeys_basic.cpp:723
+#: common/hotkeys_basic.cpp:736
 msgid "Select hotkey configuration file location"
 msgstr "Valitse pikanäppäinten asetustiedoston sijainti"
 
@@ -12904,6 +12880,26 @@ msgstr "GerbView:n piirtotyyliasetukset"
 msgid "Page Settings"
 msgstr "Sivun asetukset"
 
+#~ msgid "Save as...\tShift+Ctrl+S"
+#~ msgstr "Tallenna nimellä...\tShift+Ctrl+S"
+#~ msgid "&Print\tCtrl+P"
+#~ msgstr "&Tulosta\tCtrl+P"
+#~ msgid "Undo\tCtrl+Z"
+#~ msgstr "Peru\tCtrl+Z"
+#~ msgid "Redo\tShift+Ctrl+Z"
+#~ msgstr "Tee uudelleen\tShift+Ctrl+Z"
+#~ msgid "Find\tCtrl+F"
+#~ msgstr "Etsi\tCtrl+F"
+#~ msgid "Fit on Screen\tCtrl+0"
+#~ msgstr "Sovita näytölle\tCtrl+0"
+#~ msgid "Redraw\tCtrl+R"
+#~ msgstr "Virkistä näyttö\tCtrl+R"
+#~ msgid "Save Current Sheet &as\tShift+Ctrl+S"
+#~ msgstr "Tallenna nykyinen kaaviolehti nimellä\tShift+Ctrl+S"
+#~ msgid "P&rint\tCtrl+P"
+#~ msgstr "Tulosta\tCtrl+P"
+#~ msgid "&Find\tCtrl+F"
+#~ msgstr "&Etsi\tCtrl+F"
 #~ msgid "Zoom In\tCtrl++"
 #~ msgstr "Lähennä\tCtrl++"
 #~ msgid "Zoom Out\tCtrl+-"
@@ -13434,14 +13430,6 @@ msgstr "Sivun asetukset"
 #, fuzzy
 #~ msgid "Delta Label:"
 #~ msgstr "Löytyi nimiö: \"%s\"\n"
-
-#, fuzzy
-#~ msgid "&New"
-#~ msgstr "<< Uusi"
-
-#, fuzzy
-#~ msgid "Save &as.."
-#~ msgstr "Tallenna &nimellä..."
 
 #, fuzzy
 #~ msgid "Place Junction"
