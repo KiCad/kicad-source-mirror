@@ -13,8 +13,8 @@ kicad:
     * Unfornately, this happens easily if the project file *.pro
     * is in the home directory
     * when subdirs are not loaded, double click on a directory to load its files and subdirs
-    * #define ADD_FILES_IN_SUBDIRS was used ubtil now.
-    * is now commented, so one must double click on a subdir name to load its files
+    * #define ADD_FILES_IN_SUBDIRS was used until now.
+    * It is now commented, so one must double click on a subdir name to load its files
     * See treeprj_frme.cpp for more info
 
 2010-Feb-17 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
