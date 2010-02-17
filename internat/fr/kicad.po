@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-16 17:20+0100\n"
-"PO-Revision-Date: 2010-02-16 17:20+0100\n"
+"POT-Creation-Date: 2010-02-17 16:59+0100\n"
+"PO-Revision-Date: 2010-02-17 17:00+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -7534,74 +7534,78 @@ msgstr "Composant ou alias \"%s\" non trouvé en librairie \"%s\"."
 msgid "Could not create copy of part <%s> in library <%s>."
 msgstr "Ne peut créer une copie de l'élément <%s> en librairie <%s>."
 
-#: eeschema/libedit.cpp:235
+#: eeschema/libedit.cpp:238
 msgid "Include last component changes?"
 msgstr "Inclure les dernières modifications du composant"
 
-#: eeschema/libedit.cpp:247
+#: eeschema/libedit.cpp:250
 msgid "Modify library file \""
 msgstr "Modifier le fichier Librairie \""
 
-#: eeschema/libedit.cpp:247
+#: eeschema/libedit.cpp:250
 msgid "\"?"
 msgstr "\"?"
 
-#: eeschema/libedit.cpp:258
+#: eeschema/libedit.cpp:261
 msgid "Error while saving library file \""
 msgstr "Erreur en sauvant le fichier librairie \""
 
-#: eeschema/libedit.cpp:259
+#: eeschema/libedit.cpp:262
 msgid "\"."
 msgstr "\"."
 
-#: eeschema/libedit.cpp:260
+#: eeschema/libedit.cpp:263
 msgid "*** ERROR: ***"
 msgstr "***ERREUR:****"
 
-#: eeschema/libedit.cpp:265
+#: eeschema/libedit.cpp:268
 msgid "Library file \""
 msgstr "Fichier librairie \""
 
-#: eeschema/libedit.cpp:267
+#: eeschema/libedit.cpp:270
 msgid "Document file \""
 msgstr "Fichier de doc \""
 
-#: eeschema/libedit.cpp:308
+#: eeschema/libedit.cpp:305
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:26
 msgid "Unit"
 msgstr "Unité"
 
-#: eeschema/libedit.cpp:311
+#: eeschema/libedit.cpp:308
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:73
 msgid "Convert"
 msgstr "Convert"
 
-#: eeschema/libedit.cpp:315
+#: eeschema/libedit.cpp:312
 msgid "Body"
 msgstr "Body"
 
-#: eeschema/libedit.cpp:318
+#: eeschema/libedit.cpp:315
 msgid "Power Symbol"
 msgstr "Symbole d'Alimentation"
 
-#: eeschema/libedit.cpp:320
+#: eeschema/libedit.cpp:317
 msgid "Component"
 msgstr "Composant"
 
-#: eeschema/libedit.cpp:372
+#: eeschema/libedit.cpp:341
+msgid "Datasheet"
+msgstr "Documentation"
+
+#: eeschema/libedit.cpp:377
 msgid "Please select a component library."
 msgstr "SVP sélectionner une librairie de composants."
 
-#: eeschema/libedit.cpp:381
+#: eeschema/libedit.cpp:386
 #, c-format
 msgid "Component library <%s> is empty."
 msgstr "Fichier librairie de composants <%s> vide"
 
-#: eeschema/libedit.cpp:383
+#: eeschema/libedit.cpp:388
 msgid "Delete Entry Error"
 msgstr "Erreur en suppression d'élément"
 
-#: eeschema/libedit.cpp:388
+#: eeschema/libedit.cpp:393
 #, c-format
 msgid ""
 "Select 1 of %d components to delete\n"
@@ -7610,25 +7614,25 @@ msgstr ""
 "Selection 1 de %d composants à supprimer\n"
 "de la librairie <%s>."
 
-#: eeschema/libedit.cpp:392
+#: eeschema/libedit.cpp:397
 msgid "Delete Component"
 msgstr "Suppression Composant"
 
-#: eeschema/libedit.cpp:401
+#: eeschema/libedit.cpp:406
 #, c-format
 msgid "Entry <%s> not found in library <%s>."
 msgstr "Element <%s> non trouvé en librairie <%s>."
 
-#: eeschema/libedit.cpp:408
+#: eeschema/libedit.cpp:413
 #, c-format
 msgid "Delete component \"%s\" from library \"%s\"?"
 msgstr "Supprimer composant \"%s\" de la librairie  \"%s\"?"
 
-#: eeschema/libedit.cpp:428
+#: eeschema/libedit.cpp:433
 msgid "The component being deleted has been modified. All changes will be lost. Discard changes?"
 msgstr "Le composant à supprimer a été modifié. Tous les changements seront perdus. Ignorer les changements?"
 
-#: eeschema/libedit.cpp:483
+#: eeschema/libedit.cpp:488
 msgid ""
 "All changes to the current component will be lost!\n"
 "\n"
@@ -7638,29 +7642,29 @@ msgstr ""
 "\n"
 "Supprimer le composant courant de l'écran?"
 
-#: eeschema/libedit.cpp:499
+#: eeschema/libedit.cpp:504
 msgid "This new component has no name and cannot be created. Aborted"
 msgstr "Ce nouveau composant n'a pas de nom et ne peut être créé, Abandon"
 
-#: eeschema/libedit.cpp:511
+#: eeschema/libedit.cpp:516
 #, c-format
 msgid "Component \"%s\" already exists in library \"%s\"."
 msgstr "Composant \"%s\" déjà  existant en librairie \"%s\"."
 
-#: eeschema/libedit.cpp:579
+#: eeschema/libedit.cpp:584
 msgid "No component to save."
 msgstr "Pas de composant à sauver."
 
-#: eeschema/libedit.cpp:588
+#: eeschema/libedit.cpp:593
 msgid "No library specified."
 msgstr "Pas de librairie spécifiée."
 
-#: eeschema/libedit.cpp:598
+#: eeschema/libedit.cpp:603
 #, c-format
 msgid "Component \"%s\" exists. Change it?"
 msgstr "Le composant \" %s\" existe, Le changer ?"
 
-#: eeschema/libedit.cpp:616
+#: eeschema/libedit.cpp:621
 #, c-format
 msgid "Component %s saved in library %s"
 msgstr "Composant %s sauvé en librairie %s"
@@ -9166,19 +9170,19 @@ msgstr "Nom feuille"
 msgid "File name"
 msgstr "Nom fichier"
 
-#: eeschema/class_libentry.cpp:67
+#: eeschema/class_libentry.cpp:66
 msgid "none"
 msgstr "rien"
 
-#: eeschema/class_libentry.cpp:338
+#: eeschema/class_libentry.cpp:341
 msgid "value"
 msgstr "valeur"
 
-#: eeschema/class_libentry.cpp:338
+#: eeschema/class_libentry.cpp:341
 msgid "reference"
 msgstr "référence"
 
-#: eeschema/class_libentry.cpp:340
+#: eeschema/class_libentry.cpp:343
 #, c-format
 msgid "An attempt was made to remove the %s field from component %s in library %s."
 msgstr "Une tentative a été faite pour supprimer le champ %s du composant %s en librairie %s."
@@ -9639,7 +9643,7 @@ msgstr ""
 msgid "User defined search path"
 msgstr "Chemin de recherche défini par l'utilisateur"
 
-#: eeschema/libeditframe.cpp:299
+#: eeschema/libeditframe.cpp:301
 msgid ""
 "Component was modified!\n"
 "Discard changes?"
@@ -9647,7 +9651,7 @@ msgstr ""
 "Le composant a été modifié\n"
 "Perdre les  changements"
 
-#: eeschema/libeditframe.cpp:312
+#: eeschema/libeditframe.cpp:314
 #, c-format
 msgid ""
 "Library \"%s\" was modified!\n"
@@ -9656,19 +9660,19 @@ msgstr ""
 "Librairie \"%s\"  modifiée!\n"
 "Perdre les changements ?"
 
-#: eeschema/libeditframe.cpp:689
+#: eeschema/libeditframe.cpp:680
 msgid "Set pin options"
 msgstr "Choix options de pin"
 
-#: eeschema/libeditframe.cpp:718
+#: eeschema/libeditframe.cpp:709
 msgid "Add line"
 msgstr "Addition de lignes"
 
-#: eeschema/libeditframe.cpp:722
+#: eeschema/libeditframe.cpp:713
 msgid "Set anchor position"
 msgstr "Ajuster Position Ancre"
 
-#: eeschema/libeditframe.cpp:732
+#: eeschema/libeditframe.cpp:723
 msgid "Export"
 msgstr "Exporter"
 
@@ -9833,65 +9837,65 @@ msgstr ""
 msgid "Cannot add duplicate alias <%s> to library <%s>."
 msgstr "Ne peut ajouter un double de l'alias <%s> en librairie <%s>."
 
-#: eeschema/class_library.cpp:258
+#: eeschema/class_library.cpp:259
 #, c-format
 msgid "alias <%s> already exists and has root name<%s>"
 msgstr "Alias <%s> déjà existant et a une racine <%s>."
 
-#: eeschema/class_library.cpp:273
+#: eeschema/class_library.cpp:274
 #, c-format
 msgid "Conflict in library <%s>"
 msgstr "Conflit en librairie <%s>"
 
-#: eeschema/class_library.cpp:274
+#: eeschema/class_library.cpp:275
 #, c-format
 msgid "and appears in alias list of current component <%s>."
 msgstr "et apparait sur la liste d'alias du composant courant <%s>."
 
-#: eeschema/class_library.cpp:277
+#: eeschema/class_library.cpp:278
 msgid "All old aliases will be removed. Continue ?"
 msgstr "Tous les anciens alias vont être supprimés. Continuer ?"
 
-#: eeschema/class_library.cpp:531
+#: eeschema/class_library.cpp:534
 msgid "The component library file name is not set."
 msgstr "Le nom du fichier librairie  est non sélectionné."
 
-#: eeschema/class_library.cpp:539
+#: eeschema/class_library.cpp:542
 msgid "The file could not be opened."
 msgstr "Le fichier n'a pas pu être ouvert."
 
-#: eeschema/class_library.cpp:545
+#: eeschema/class_library.cpp:548
 msgid "The file is empty!"
 msgstr "Fichier vide!"
 
-#: eeschema/class_library.cpp:568
+#: eeschema/class_library.cpp:571
 msgid "The file is NOT an EESCHEMA library!"
 msgstr "Le fichier n'est PAS une librairie EESCHEMA !"
 
-#: eeschema/class_library.cpp:574
+#: eeschema/class_library.cpp:577
 msgid "The file header is missing version and time stamp information."
 msgstr "L'entête de fichier ne comporte pas de numéro de version et de signature temporelle."
 
-#: eeschema/class_library.cpp:619
+#: eeschema/class_library.cpp:622
 msgid "An error occurred attempting to read the header."
 msgstr "Une erreur s'est produite lors de la lecture de l'entête."
 
-#: eeschema/class_library.cpp:650
+#: eeschema/class_library.cpp:653
 #, c-format
 msgid "Library <%s> component load error %s."
 msgstr "Librairie <%s> erreur de chargement du composant %s."
 
-#: eeschema/class_library.cpp:721
+#: eeschema/class_library.cpp:724
 #, c-format
 msgid "Could not open component document library file <%s>."
 msgstr "Ne peut ouvrir le fichier document librairie <%s>."
 
-#: eeschema/class_library.cpp:728
+#: eeschema/class_library.cpp:731
 #, c-format
 msgid "Component document library file <%s> is empty."
 msgstr "Fichier document de composants <%s> vide."
 
-#: eeschema/class_library.cpp:736
+#: eeschema/class_library.cpp:739
 #, c-format
 msgid "File <%s> is not a valid component library document file."
 msgstr "<%s> n'est pas un fichier documentation de composant valide."
@@ -9975,10 +9979,6 @@ msgstr ""
 #: eeschema/class_libentry_fields.cpp:143
 msgid "invalid field number defined"
 msgstr "numéro de champ défini invalide"
-
-#: eeschema/class_libentry_fields.cpp:559
-msgid "Datasheet"
-msgstr "Documentation"
 
 #: eeschema/dialog_SVG_print_base.cpp:25
 msgid "Default Pen Size"
@@ -10327,67 +10327,58 @@ msgstr ""
 "(Comme sm* pour autoriser tous les noms d'empreintes commençant par sm)."
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:228
-#: eeschema/edit_component_in_lib.cpp:416
+#: eeschema/edit_component_in_lib.cpp:408
 msgid "Footprint Filter"
 msgstr "Filtrage Modules"
 
-#: eeschema/edit_component_in_lib.cpp:85
-#, c-format
-msgid "Alias <%s> not found for component <%s> in library <%s>."
-msgstr "Alias <%s> non trouvé pour le component <%s> en librairie <%s>."
-
-#: eeschema/edit_component_in_lib.cpp:90
-msgid "Component Library Error"
-msgstr "Erreur en Librairie de Composanr"
-
-#: eeschema/edit_component_in_lib.cpp:206
-#: eeschema/edit_component_in_lib.cpp:276
+#: eeschema/edit_component_in_lib.cpp:192
+#: eeschema/edit_component_in_lib.cpp:265
 #, c-format
 msgid "Alias <%s> cannot be removed while it is being edited!"
 msgstr "L'alias <%s> ne peut être supprimé tant qu'il est en cours d'édition!"
 
-#: eeschema/edit_component_in_lib.cpp:215
+#: eeschema/edit_component_in_lib.cpp:202
 msgid "Remove all aliases from list?"
 msgstr "Supprimer tous les alias de la liste?"
 
-#: eeschema/edit_component_in_lib.cpp:240
+#: eeschema/edit_component_in_lib.cpp:229
 msgid "New alias:"
 msgstr "Nouvel alias"
 
-#: eeschema/edit_component_in_lib.cpp:241
+#: eeschema/edit_component_in_lib.cpp:230
 msgid "Component Alias"
 msgstr "Alias de Composant"
 
-#: eeschema/edit_component_in_lib.cpp:251
+#: eeschema/edit_component_in_lib.cpp:240
 #, c-format
 msgid "Alias or component name <%s> already exists in library <%s>."
 msgstr "Alias ou nom de composant <%s> déjà existant en librairie <%s>."
 
-#: eeschema/edit_component_in_lib.cpp:305
+#: eeschema/edit_component_in_lib.cpp:297
 msgid "Delete extra parts from component?"
 msgstr "Supprimer les parts supplémentaires du composant?"
 
-#: eeschema/edit_component_in_lib.cpp:326
+#: eeschema/edit_component_in_lib.cpp:318
 msgid "Add new pins for alternate body style ( DeMorgan ) to component?"
 msgstr "Ajouter les nouvelles pins pour la forme alternative (DeMorgan) au composant?"
 
-#: eeschema/edit_component_in_lib.cpp:333
+#: eeschema/edit_component_in_lib.cpp:325
 msgid "Delete alternate body style (DeMorgan) draw items from component?"
 msgstr "Supprimer les éléments de la représentation alternative (DeMorgan) du composant?"
 
-#: eeschema/edit_component_in_lib.cpp:357
+#: eeschema/edit_component_in_lib.cpp:349
 msgid "Doc Files"
 msgstr "Fichiers de Doc"
 
-#: eeschema/edit_component_in_lib.cpp:393
+#: eeschema/edit_component_in_lib.cpp:385
 msgid "Ok to Delete FootprintFilter LIST"
 msgstr "Ok pour effacer la LISTE des filtres de modules"
 
-#: eeschema/edit_component_in_lib.cpp:416
+#: eeschema/edit_component_in_lib.cpp:408
 msgid "Add Footprint Filter"
 msgstr "Ajouter Filtre Modules"
 
-#: eeschema/edit_component_in_lib.cpp:429
+#: eeschema/edit_component_in_lib.cpp:421
 #, c-format
 msgid "Foot print filter <%s> is already defined."
 msgstr "Filtre de module <%s> déjà défini."
@@ -10438,9 +10429,13 @@ msgstr "ERC"
 msgid "Reset"
 msgstr "Défaut"
 
-#: eeschema/class_sch_component.cpp:1114
+#: eeschema/class_sch_component.cpp:1117
 msgid "Power symbol"
 msgstr "Symbole d'alimentation"
+
+#: eeschema/class_sch_component.cpp:1125
+msgid "Alias of"
+msgstr "Alias de"
 
 #: eeschema/dialog_sch_sheet_props_base.cpp:25
 msgid "&File name:"
@@ -11057,6 +11052,10 @@ msgstr "Lib: "
 #, c-format
 msgid "%s %s pin %s : Different Nets"
 msgstr "%s %s pin %s :  Nets Differents"
+
+#: cvpcb/savecmp.cpp:24
+msgid "Component Library Error"
+msgstr "Erreur en Librairie de Composanr"
 
 #: cvpcb/savecmp.cpp:86
 #, c-format
@@ -13027,6 +13026,8 @@ msgstr "Options d'Affichage"
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "Alias <%s> not found for component <%s> in library <%s>."
+#~ msgstr "Alias <%s> non trouvé pour le component <%s> en librairie <%s>."
 #~ msgid "Save as...\tShift+Ctrl+S"
 #~ msgstr "Sauver sous...\tCtrl S"
 #~ msgid "&Print\tCtrl+P"

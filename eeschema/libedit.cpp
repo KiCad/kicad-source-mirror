@@ -338,7 +338,7 @@ void WinEDA_LibeditFrame::DisplayCmpDoc()
     else
         msg = m_component->GetAliasDataDocFileName( m_aliasName );
 
-    AppendMsgPanel( _( "datasheet" ), msg, DARKDARKGRAY );
+    AppendMsgPanel( _( "Datasheet" ), msg, DARKDARKGRAY );
 }
 
 

@@ -137,6 +137,8 @@ EVT_UPDATE_UI( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS,
                WinEDA_LibeditFrame::OnUpdateEditingPart )
 EVT_UPDATE_UI( ID_LIBEDIT_CHECK_PART,
                WinEDA_LibeditFrame::OnUpdateEditingPart )
+EVT_UPDATE_UI( ID_LIBEDIT_GET_FRAME_EDIT_PART,
+               WinEDA_LibeditFrame::OnUpdateEditingPart )
 EVT_UPDATE_UI( wxID_UNDO, WinEDA_LibeditFrame::OnUpdateUndo )
 EVT_UPDATE_UI( wxID_REDO, WinEDA_LibeditFrame::OnUpdateRedo )
 EVT_UPDATE_UI( ID_LIBEDIT_SAVE_CURRENT_LIB,
