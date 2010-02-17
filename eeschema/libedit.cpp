@@ -180,6 +180,9 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPartAux( CMP_LIB_ENTRY* LibEntry,
     if( m_component->HasConversion() )
         m_showDeMorgan = true;
 
+    // Collect aliases data and store it in the root component, for edition:
+    m_component->CollectAliasesData( Library );
+
     GetBaseScreen()->ClrModify();
     DisplayLibInfos();
     UpdateAliasSelectList();
@@ -279,7 +282,6 @@ void WinEDA_LibeditFrame::SaveActiveLibrary( wxCommandEvent& event )
 void WinEDA_LibeditFrame::DisplayCmpDoc()
 {
     wxString msg;
-    LIB_ALIAS* alias = NULL;
 
     ClearMsgPanel();
 
@@ -291,14 +293,9 @@ void WinEDA_LibeditFrame::DisplayCmpDoc()
     AppendMsgPanel( _( "Part" ), msg, BLUE, 8 );
 
     if( m_aliasName.IsEmpty() )
-    {
         msg = _( "None" );
-    }
     else
-    {
         msg = m_aliasName;
-        alias = m_library->FindAlias( m_aliasName );
-    }
 
     AppendMsgPanel( _( "Alias" ), msg, RED, 8 );
 
@@ -321,19 +318,27 @@ void WinEDA_LibeditFrame::DisplayCmpDoc()
 
     AppendMsgPanel( _( "Type" ), msg, MAGENTA, 8 );
 
-    if( alias != NULL )
-        msg = alias->GetDescription();
-    else
+    if( m_aliasName.IsEmpty() )
+
         msg = m_component->GetDescription();
+    else
+        msg = m_component->GetAliasDataDoc( m_aliasName );
 
     AppendMsgPanel( _( "Description" ), msg, CYAN, 8 );
 
-    if( alias != NULL )
-        msg = alias->GetKeyWords();
-    else
+    if( m_aliasName.IsEmpty() )
         msg = m_component->GetKeyWords();
+    else
+        msg = m_component->GetAliasDataKeyWords( m_aliasName );
 
     AppendMsgPanel( _( "Key words" ), msg, DARKDARKGRAY );
+
+    if( m_aliasName.IsEmpty() )
+        msg = m_component->GetDocFileName();
+    else
+        msg = m_component->GetAliasDataDocFileName( m_aliasName );
+
+    AppendMsgPanel( _( "datasheet" ), msg, DARKDARKGRAY );
 }
 
 

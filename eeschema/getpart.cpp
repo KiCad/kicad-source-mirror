@@ -197,9 +197,12 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
 
     Component = new SCH_COMPONENT( *Entry, GetSheet(), unit, convert,
                                    GetScreen()->m_Curseur, true );
+    // Set the m_ChipName value, from component name in lib, for aliases
+    // Note if Entry is found, and if Name is an alias of a component,
+    // alias exists because its root component was found
+    Component->m_ChipName = Name;
 
-    // Set the component value (that can differ from component name in lib,
-    // for aliases)
+    // Set the component value that can differ from component name in lib, for aliases
     Component->GetField( VALUE )->m_Text = Name;
     Component->DisplayInfo( this );
 

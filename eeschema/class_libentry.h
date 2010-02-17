@@ -23,7 +23,7 @@ enum LibrEntryType
     ALIAS       /* This is an alias of a true component */
 };
 
-/* values for member .m_Options */
+/* values for member .m_options */
 enum  LibrEntryOptions
 {
     ENTRY_NORMAL,   // Libentry is a standard component (real or alias)
@@ -66,6 +66,8 @@ public:
     }
 
     wxString GetLibraryName();
+
+    CMP_LIBRARY* GetLibrary() {return library;}
 
     virtual const wxString& GetName() const { return name; }
 
@@ -159,6 +161,34 @@ protected:
     LIB_DRAW_ITEM_LIST drawings;       /* How to draw this part */
 
 public:
+    /* Offsets used in editing library component,
+     * for handle aliases data in m_AliasListData array string
+     * when editing a library component, aliases data is stored
+     * in m_AliasListData.
+     * 4 strings by alias are stored:
+     * name, doc, keywords and doc filename
+     * these constants are indexes in m_AliasListData
+     * to read/write strings for a given alias
+     */
+    enum alias_idx
+    {
+        ALIAS_NAME_IDX         = 0,
+        ALIAS_DOC_IDX          = 1,
+        ALIAS_KEYWORD_IDX      = 2,
+        ALIAS_DOC_FILENAME_IDX = 3,
+        ALIAS_NEXT_IDX         = 4
+    };
+private:
+    wxArrayString      m_aliasListData;  /* ALIAS data (name, doc, keywords and doc filename).
+                                          * Used only by the component editor LibEdit
+                                          * to store aliases info during edition
+                                          * usually void outside the component editor */
+public:
+    LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary = NULL );
+    LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary = NULL );
+
+    ~LIB_COMPONENT();
+
     virtual wxString GetClass() const
     {
         return wxT( "LIB_COMPONENT" );
@@ -171,10 +201,68 @@ public:
         GetValueField().m_Text = aName;
     }
 
-    LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary = NULL );
-    LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary = NULL );
+    /* accessors to aliases data, used by the component editor, during edition
+    */
+    /** Function CollectAliasesData
+     * store in m_aliasListData alias data (doc, keywords, docfile)
+     * for each alias found in m_AliasList
+    */
+    void CollectAliasesData( CMP_LIBRARY* aLibrary );
 
-    ~LIB_COMPONENT();
+    /** Function LocateAliasData
+     * @return an index in array string to the alias data (doc, keywords, docfile)
+     *         or -1 if not found
+     * @param aAliasName = the alias name
+     * @param aCreateIfNotExist = true if the alias data must be created, when not exists
+     */
+    int LocateAliasData( const wxString & aAliasName, bool aCreateIfNotExist = false);
+
+    /** Function GetAliasDataDoc
+     * @param aAliasName = the alias name
+     * @return the Doc string
+     */
+    wxString GetAliasDataDoc( const wxString & aAliasName );
+
+    /** Function GetAliasDataKeyWords
+     * @param aAliasName = the alias name
+     * @return aAliasData = the keywords string
+     */
+    wxString GetAliasDataKeyWords( const wxString & aAliasName );
+
+    /** Function GetAliasDataDocFileName
+     * @param aAliasName = the alias name
+     * @return the Doc filename string
+     */
+    wxString GetAliasDataDocFileName( const wxString & aAliasName );
+
+    /** Function SetAliasDataDoc
+     * @param aAliasName = the alias name
+     * @return aAliasData = the Doc string
+     */
+    void SetAliasDataDoc( const wxString & aAliasName, const wxString & aAliasData );
+
+    /** Function SetAliasDataKeywords
+     * @param aAliasName = the alias name
+     * @param aAliasData = the keywords string
+     */
+    void SetAliasDataKeywords( const wxString & aAliasName, const wxString & aAliasData );
+
+    /** Function SetAliasDataDocFileName
+     * @param aAliasName = the alias name
+     * @param aAliasData = the Doc filename string
+     */
+    void SetAliasDataDocFileName( const wxString & aAliasName, const wxString & aAliasData );
+
+    /** Function ClearAliasDataDoc
+     * clear aliases data list
+     */
+    void ClearAliasDataDoc( ) { m_aliasListData.Clear(); }
+
+    /** Function RemoveAliasData
+     * remove an alias data from list
+     * @param aAliasName = the alias name
+     */
+    void RemoveAliasData(const wxString & aAliasName );
 
     EDA_Rect GetBoundaryBox( int aUnit, int aConvert );
 

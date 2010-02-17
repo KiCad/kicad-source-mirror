@@ -58,7 +58,6 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
     /* Update the doc, keyword and doc filename strings */
     size_t i;
     int index;
-    CMP_LIB_ENTRY* entry = NULL;
     LIB_COMPONENT* component = m_Parent->GetComponent();
     if( component == NULL )
     {
@@ -68,33 +67,20 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
 
     m_Parent->SaveCopyInUndoList( component );
 
-    CMP_LIBRARY* library = m_Parent->GetLibrary();
+    wxString aliasname = m_Parent->GetAliasName();
 
-    if( m_Parent->GetAliasName().IsEmpty() )
+    if( aliasname.IsEmpty() )   // The root component is selected
     {
-        entry = (CMP_LIB_ENTRY*) component;
-    }
-    else if ( library )
-    {
-        entry = library->FindEntry( m_Parent->GetAliasName() );
+        component->SetDescription( m_DocCtrl->GetValue() );
+        component->SetKeyWords( m_KeywordsCtrl->GetValue() );
+        component->SetDocFileName( m_DocfileCtrl->GetValue() );
     }
 
-    if( entry == NULL )
+    else    // An alias is selected: update keyworks (if thias alias is new, it will be added in aliacd data list)
     {
-        wxString msg;
-        msg.Printf( _( "Alias <%s> not found for component <%s> in library \
-<%s>." ),
-                    GetChars( m_Parent->GetAliasName() ),
-                    GetChars( component->GetName() ),
-                    GetChars( library->GetName() ) );
-        wxMessageBox( msg, _( "Component Library Error" ),
-                      wxID_OK | wxICON_ERROR, this );
-    }
-    else
-    {
-        entry->SetDescription( m_DocCtrl->GetValue() );
-        entry->SetKeyWords( m_KeywordsCtrl->GetValue() );
-        entry->SetDocFileName( m_DocfileCtrl->GetValue() );
+        component->SetAliasDataDoc(aliasname, m_DocCtrl->GetValue() );
+        component->SetAliasDataKeywords(aliasname, m_KeywordsCtrl->GetValue() );
+        component->SetAliasDataDocFileName(aliasname, m_DocfileCtrl->GetValue() );
     }
 
     if( m_PartAliasListCtrl->GetStrings() != component->m_AliasList )
@@ -110,7 +96,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
                 continue;
 
             component->m_AliasList.Add( aliases[ i ] );
-            }
+        }
 
         /* Remove names in the current component that are not in the new alias list. */
         for( i = 0; i < component->m_AliasList.GetCount(); i++ )
@@ -210,6 +196,7 @@ edited!" ),
         return;
     }
 
+    LIB_COMPONENT* component = m_Parent->GetComponent();
     m_Parent->GetAliasName().Empty();
 
     if( IsOK( this, _( "Remove all aliases from list?" ) ) )
@@ -217,6 +204,8 @@ edited!" ),
         m_PartAliasListCtrl->Clear();
         m_ButtonDeleteAllAlias->Enable( false );
         m_ButtonDeleteOneAlias->Enable( false );
+        if( component )
+            component->ClearAliasDataDoc();
     }
 }
 
@@ -281,6 +270,9 @@ edited!" ),
     }
 
     m_PartAliasListCtrl->Delete( m_PartAliasListCtrl->GetSelection() );
+    LIB_COMPONENT* component = m_Parent->GetComponent();
+    if( component )
+        component->RemoveAliasData(aliasname);
 
     if( m_PartAliasListCtrl->IsEmpty() )
     {

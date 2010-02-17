@@ -102,29 +102,24 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnCancelClick( wxCommandEvent& event )
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitPanelDoc()
 {
-    CMP_LIB_ENTRY* entry;
     LIB_COMPONENT* component = m_Parent->GetComponent();
-    CMP_LIBRARY* library = m_Parent->GetLibrary();
 
     if( component == NULL )
         return;
 
-    if( m_Parent->GetAliasName().IsEmpty() )
+    wxString aliasname = m_Parent->GetAliasName();
+    if( aliasname.IsEmpty() )       // The root component is selected
     {
-        entry = component;
+        m_DocCtrl->SetValue( component->GetDescription() );
+        m_KeywordsCtrl->SetValue( component->GetKeyWords() );
+        m_DocfileCtrl->SetValue( component->GetDocFileName() );
     }
-    else
+    else    // An alias is currently selected
     {
-        entry =
-            ( CMP_LIB_ENTRY* ) library->FindAlias( m_Parent->GetAliasName() );
-
-        if( entry == NULL )
-            return;
+        m_DocCtrl->SetValue( component->GetAliasDataDoc( aliasname ) );
+        m_KeywordsCtrl->SetValue( component->GetAliasDataKeyWords( aliasname ) );
+        m_DocfileCtrl->SetValue( component->GetAliasDataDocFileName( aliasname ) );
     }
-
-    m_DocCtrl->SetValue( entry->GetDescription() );
-    m_KeywordsCtrl->SetValue( entry->GetKeyWords() );
-    m_DocfileCtrl->SetValue( entry->GetDocFileName() );
 }
 
 

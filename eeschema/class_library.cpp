@@ -232,6 +232,7 @@ LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
     wxASSERT( aComponent != NULL );
 
     LIB_COMPONENT* newCmp = new LIB_COMPONENT( *aComponent, this );
+    newCmp->ClearAliasDataDoc();    // Remove data used only in edition
 
     if( newCmp == NULL )
         return NULL;
@@ -283,20 +284,25 @@ LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
 
     for( size_t i = 0; i < newCmp->m_AliasList.GetCount(); i++ )
     {
-        LIB_ALIAS* alias = FindAlias( newCmp->m_AliasList[ i ] );
+        wxString aliasname = newCmp->m_AliasList[ i ];
+        LIB_ALIAS* alias = FindAlias( aliasname );
 
         if( alias == NULL )
         {
-            alias = new LIB_ALIAS( newCmp->m_AliasList[ i ], newCmp );
+            alias = new LIB_ALIAS( aliasname, newCmp );
             entries.push_back( alias );
         }
         else if( alias->GetComponent()->GetName().CmpNoCase( newCmp->GetName() ) != 0 )
         {
             // Remove alias from library and alias list of its root component
             RemoveEntry( alias );
-            alias = new LIB_ALIAS( newCmp->m_AliasList[ i ], newCmp );
+            alias = new LIB_ALIAS( aliasname, newCmp );
             entries.push_back( alias );
         }
+        // Update alias data:
+        alias->SetDescription( aComponent->GetAliasDataDoc( aliasname ) );
+        alias->SetKeyWords( aComponent->GetAliasDataKeyWords( aliasname ) );
+        alias->SetDocFileName( aComponent->GetAliasDataDocFileName( aliasname ) );
     }
 
     entries.push_back( (CMP_LIB_ENTRY*) newCmp );
@@ -442,29 +448,26 @@ LIB_COMPONENT* CMP_LIBRARY::ReplaceComponent( LIB_COMPONENT* aOldComponent,
     size_t i;
 
     LIB_COMPONENT* newCmp = new LIB_COMPONENT( *aNewComponent, this );
+    newCmp->ClearAliasDataDoc( );   // this data is currently used only when editing the component
 
     /* We want to remove the old root component, so we must remove old aliases.
      * even if they are not modified, because their root component will be removed
     */
     for( i = 0; i < aOldComponent->m_AliasList.GetCount(); i++ )
     {
-/*        wxLogDebug( wxT( "Removing alias <%s> from component <%s> in library <%s>." ),
-                    GetChars( aOldComponent->m_AliasList[ i ] ),
-                    GetChars( aOldComponent->GetName() ),
-                    GetChars( fileName.GetName() ) );
-*/
         RemoveEntryName( aOldComponent->m_AliasList[ i ] );
     }
 
     /* Now, add current aliases. */
     for( i = 0; i < aNewComponent->m_AliasList.GetCount(); i++ )
     {
-/*        wxLogDebug( wxT( "Adding alias <%s> from component <%s> in library <%s>." ),
-                    GetChars( aNewComponent->m_AliasList[ i ] ),
-                    GetChars( aNewComponent->GetName() ),
-                    GetChars( fileName.GetName() ) );
-*/
-        LIB_ALIAS* alias = new LIB_ALIAS( aNewComponent->m_AliasList[ i ], newCmp );
+        wxString aliasname = aNewComponent->m_AliasList[ i ];
+        LIB_ALIAS* alias = new LIB_ALIAS( aliasname, newCmp );
+        // Update alias data:
+        alias->SetDescription( aNewComponent->GetAliasDataDoc( aliasname ) );
+        alias->SetKeyWords( aNewComponent->GetAliasDataKeyWords( aliasname ) );
+        alias->SetDocFileName( aNewComponent->GetAliasDataDocFileName( aliasname ) );
+        // Add it in library
         entries.push_back( alias );
     }
 
@@ -589,7 +592,7 @@ bool CMP_LIBRARY::Load( wxString& aErrorMsg )
             || !vers.GetNextToken().ToLong( & minor ) || minor < 0L
             || minor > 99 )
         {
-#if 0   // Note for defeloppers:
+#if 0   // Note for developers:
         // Not sure this warning is very useful: old designs *must* be always loadable
             wxLogWarning( wxT( "The component library <%s> header version \
 number is invalid.\n\nIn future versions of EESchema this library may not \

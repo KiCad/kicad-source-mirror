@@ -469,10 +469,7 @@ void WinEDA_LibeditFrame::OnUpdateViewDoc( wxUpdateUIEvent& event )
     {
         if( !m_aliasName.IsEmpty() )
         {
-            CMP_LIB_ENTRY* entry = m_library->FindEntry( m_aliasName );
-
-            if( entry != NULL )
-                enable = !entry->GetDocFileName().IsEmpty();
+            enable = !m_component->GetAliasDataDocFileName(m_aliasName).IsEmpty();
         }
         else if( !m_component->GetDocFileName().IsEmpty() )
         {
@@ -582,17 +579,9 @@ void WinEDA_LibeditFrame::OnViewEntryDoc( wxCommandEvent& event )
     wxString fileName;
 
     if( !m_aliasName.IsEmpty() )
-    {
-        CMP_LIB_ENTRY* entry =
-            m_library->FindEntry( m_aliasName );
-
-        if( entry != NULL )
-            fileName = entry->GetDocFileName();
-    }
+        fileName = m_component->GetAliasDataDocFileName(m_aliasName);
     else
-    {
         fileName = m_component->GetDocFileName();
-    }
 
     if( !fileName.IsEmpty() )
         GetAssociatedDocument( this, fileName,

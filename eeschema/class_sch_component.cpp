@@ -1097,9 +1097,12 @@ EDA_Rect SCH_COMPONENT::GetBoundingBox()
 
 void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
 {
-    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
+    // search for the component in lib
+    // Entry and root_component can differ if Entry is an alias
+    CMP_LIB_ENTRY* Entry = CMP_LIBRARY::FindLibraryEntry( m_ChipName );
+    LIB_COMPONENT* root_component = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
 
-    if( Entry == NULL )
+    if( (Entry == NULL) || (root_component == NULL) )
         return;
 
     wxString msg;
@@ -1110,17 +1113,19 @@ void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
                            GetRef(((WinEDA_SchematicFrame*)frame)->GetSheet()),
                            DARKCYAN );
 
-    if( Entry->isPower() )
+    if( root_component->isPower() )
         msg = _( "Power symbol" );
     else
         msg = _( "Name" );
-
     frame->AppendMsgPanel( msg, GetField( VALUE )->m_Text, DARKCYAN );
+
+    // Display component reference in library and library
     frame->AppendMsgPanel( _( "Component" ), m_ChipName, BROWN );
+    if( Entry->isAlias( ) )
+        frame->AppendMsgPanel( _( "Alias of" ), root_component->GetName(), BROWN );
+    frame->AppendMsgPanel( _( "Library" ), Entry->GetLibraryName(), BROWN );
 
-    msg = Entry->GetLibraryName();
-
-    frame->AppendMsgPanel( _( "Library" ), msg, DARKRED );
+    // Display description of the component, and keywords found in lib
     frame->AppendMsgPanel( _( "Description" ), Entry->GetDescription(), DARKCYAN );
     frame->AppendMsgPanel( _( "Key words" ), Entry->GetKeyWords(), DARKCYAN );
 }

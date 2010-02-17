@@ -126,7 +126,7 @@ int LibraryEntryCompare( const CMP_LIB_ENTRY* aItem1, const CMP_LIB_ENTRY* aItem
 
 /* Class to define an alias of a component
  *  An alias uses the component definition (graphic, pins...)
- *  but has its own name and documentation.
+ *  but has its own name, keywords and documentation.
  *  Therefore, when the component is modified, alias of this component are
  *   modified.
  *  This is a simple method to create components with differs very few
@@ -140,6 +140,8 @@ LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aRootComponent,
     wxASSERT( aRootComponent != NULL && aRootComponent->isComponent() );
 
     root = aRootComponent;
+    if( aLibrary == NULL )
+        library = aRootComponent->GetLibrary();
 }
 
 
@@ -201,6 +203,7 @@ LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary )
     LIB_DRAW_ITEM* newItem;
 
     m_AliasList           = aComponent.m_AliasList;
+    m_aliasListData       = aComponent.m_aliasListData;
     m_FootprintList       = aComponent.m_FootprintList;
     unitCount             = aComponent.unitCount;
     m_UnitSelectionLocked = aComponent.m_UnitSelectionLocked;
@@ -1302,5 +1305,145 @@ void LIB_COMPONENT::SetConversion( bool aSetConvert )
             else
                 i++;
         }
+    }
+}
+
+
+/* accessors to aliases data, used by the component editor, during edition
+*/
+/** Function LocateAliasData
+ * @return an index in array string to the alias data (doc, keywords, docfile)
+ *         or -1 if not found
+ * @param aAliasName = the alias name
+ * @param aCreateIfNotExist = true if the alias data must be created, when not exists
+ */
+int LIB_COMPONENT::LocateAliasData( const wxString & aAliasName, bool aCreateIfNotExist)
+{
+    int idx = -1;
+    for( unsigned ii = 0; ii < m_aliasListData.size(); ii += ALIAS_NEXT_IDX )
+    {
+        if( aAliasName.CmpNoCase( m_aliasListData[ii] ) != 0 )
+            continue;
+        // Found!
+        idx = (int) ii;
+        break;
+    }
+
+    // Alias not found, create on demand
+    if( aCreateIfNotExist && (idx < 0) )
+    {
+        idx = (int) m_aliasListData.size();
+        m_aliasListData.Add(aAliasName);
+        // Add void strinds for data:
+        m_aliasListData.Add(wxEmptyString);     //Doc string
+        m_aliasListData.Add(wxEmptyString);     //keywords string
+        m_aliasListData.Add(wxEmptyString);     //Doc fliname string
+    }
+
+    return idx;
+}
+
+
+/** Function GetAliasDataDoc
+ * @param aAliasName = the alias name
+ * @return the Doc string
+ */
+wxString LIB_COMPONENT::GetAliasDataDoc( const wxString & aAliasName )
+{
+    wxString data;
+    int idx = LocateAliasData( aAliasName);
+    if ( idx >= 0 )
+        data = m_aliasListData[idx + ALIAS_DOC_IDX];
+
+    return data;
+}
+
+
+/** Function GetAliasDataKeyWords
+ * @param aAliasName = the alias name
+ * @return aAliasData = the keywords string
+ */
+wxString LIB_COMPONENT::GetAliasDataKeyWords( const wxString & aAliasName )
+{
+    wxString data;
+    int idx = LocateAliasData( aAliasName);
+    if ( idx >= 0 )
+        data = m_aliasListData[idx + ALIAS_KEYWORD_IDX];
+
+    return data;
+}
+
+
+/** Function GetAliasDataDocFileName
+ * @param aAliasName = the alias name
+ * @return the Doc filename string
+ */
+wxString LIB_COMPONENT::GetAliasDataDocFileName( const wxString & aAliasName )
+{
+    wxString data;
+    int idx = LocateAliasData( aAliasName);
+    if ( idx >= 0 )
+        data = m_aliasListData[idx + ALIAS_DOC_FILENAME_IDX];
+
+    return data;
+}
+
+
+
+/** Function SetAliasDataDoc
+ * @param aAliasName = the alias name
+ * @param aAliasData = the Doc string
+ */
+void LIB_COMPONENT::SetAliasDataDoc( const wxString & aAliasName, const wxString & aAliasData )
+{
+    int idx = LocateAliasData( aAliasName, true);
+    m_aliasListData[idx + ALIAS_DOC_IDX] = aAliasData;
+}
+
+/** Function SetAliasDataKeywords
+ * @param aAliasName = the alias name
+ * @param aAliasData = the keywords string
+ */
+void LIB_COMPONENT::SetAliasDataKeywords( const wxString & aAliasName, const wxString & aAliasData )
+{
+    int idx = LocateAliasData( aAliasName, true);
+    m_aliasListData[idx + ALIAS_KEYWORD_IDX] = aAliasData;
+}
+
+/** Function SetAliasDataDocFileName
+ * @param aAliasName = the alias name
+ * @param aAliasData = the Doc filename string
+ */
+void LIB_COMPONENT::SetAliasDataDocFileName( const wxString & aAliasName, const wxString & aAliasData )
+{
+    int idx = LocateAliasData( aAliasName, true);
+    m_aliasListData[idx + ALIAS_DOC_FILENAME_IDX] = aAliasData;
+}
+
+
+/** Function RemoveAliasData
+ * remove an alias data from list
+ * @param aAliasName = the alias name
+ */
+void LIB_COMPONENT::RemoveAliasData(const wxString & aAliasName )
+{
+    int idx = LocateAliasData( aAliasName);
+    if ( idx >= 0 )
+        m_aliasListData.RemoveAt(idx + ALIAS_NAME_IDX, ALIAS_NEXT_IDX);
+}
+
+/** Function CollectAliasesData
+ * store in m_aliasListData alias data (doc, keywords, docfile)
+ * for each alias found in m_AliasList
+*/
+void LIB_COMPONENT::CollectAliasesData( CMP_LIBRARY* aLibrary )
+{
+    for( unsigned ii = 0; ii < m_AliasList.GetCount(); ii++ )
+    {
+        CMP_LIB_ENTRY* entry = aLibrary->FindEntry( m_AliasList[ii] );
+        if ( ! entry ) continue;
+        SetAliasDataDoc( m_AliasList[ii], entry->GetDescription() );
+        SetAliasDataKeywords( m_AliasList[ii], entry->GetKeyWords() );
+        SetAliasDataDocFileName( m_AliasList[ii], entry->GetDocFileName() );
     }
 }
