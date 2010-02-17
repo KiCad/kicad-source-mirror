@@ -8,6 +8,7 @@
   #include <pyhandler.h>
 #endif
 
+#include <wx/wupdlock.h>
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
@@ -26,9 +27,18 @@
 #include "wx/dir.h"
 
 
-// Comment this if you do no want to load subdirs files in the tree project
-// UnComment this to load subdirs files in the tree project
-#define ADD_FILES_IN_SUBDIRS
+/* Comment this if you do no want to load subdirs files in the tree project
+ * UnComment this to load subdirs files in the tree project
+ * Building the tree project can be *very* long if there are a lot of subdirectories
+ * in the working directory.
+ * Unfornately, this happens easily if the project file *.pro is in the home directory
+ * when subdirs are not built, double click on a directory to load its files and subdirs
+ */
+
+// #define ADD_FILES_IN_SUBDIRS
+
+// TODO: a better way could be to load current dir and first subdirs, and load
+// load subdir filenames on opening a subdir
 
 // list of files extensions listed in the tree project window
 // *.sch files are always allowed, do not add here
@@ -724,6 +734,13 @@ bool WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
     // Check the file type
     TreeFileType type = TREE_UNKNOWN;
 
+    // Skip not visible files and dirs
+    wxFileName fn(name);
+    // Files/dirs names starting by "." are not visible files under unices.
+    // Skip them also under Windows
+    if( fn.GetName().StartsWith(wxT(".") )  )
+        return false;
+
     if( wxDirExists( name ) )
     {
         type = TREE_DIRECTORY;
@@ -845,7 +862,7 @@ bool WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
 #ifdef KICAD_PYTHON
     PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::TreeAddFile" ),
                                             PyHandler::Convert( name ) );
-#endif /* KICAD_YTHON */
+#endif /* KICAD_PYTHON */
 
 
     // When enabled This section adds dirs and files found in the subdirs
@@ -891,6 +908,10 @@ void WinEDA_PrjFrame::ReCreateTreePrj()
         m_TreeProject = new WinEDA_TreePrj( this );
     else
         m_TreeProject->DeleteAllItems();
+
+    // Do not update the frame while building the project tree
+    // This can take a while if there is a lot of files and directories in CWD
+    wxWindowUpdateLocker noUpdateTree( this );
 
     if( !m_Parent->m_ProjectFileName.IsOk() )
     {
