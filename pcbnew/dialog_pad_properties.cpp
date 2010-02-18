@@ -480,7 +480,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
     case PAD_CIRCLE:
         g_Pad_Master.m_Offset = wxSize( 0, 0 );
         g_Pad_Master.m_DeltaSize = wxSize( 0, 0 );
-        g_Pad_Master.m_Size.y    = m_CurrentPad->m_Size.x;
+        g_Pad_Master.m_Size.y    = g_Pad_Master.m_Size.x;
         break;
 
     case PAD_RECT:
