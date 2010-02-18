@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2010-02-16 10:40-0300\n"
+"PO-Revision-Date: 2010-02-16 12:43-0300\n"
 "Last-Translator: Renie S. Marquet <reniemarquet@uol.com.br>\n"
 "Language-Team: kicad team\n"
 "MIME-Version: 1.0\n"
@@ -243,7 +243,7 @@ msgstr "Esta é a classe de net default."
 
 #: pcbnew/class_board.cpp:215
 msgid "Front"
-msgstr "Vista frontal"
+msgstr "Frente"
 
 #: pcbnew/class_board.cpp:216
 #: pcbnew/dialog_layers_setup_base.cpp:199
@@ -318,7 +318,7 @@ msgstr "Interno 5"
 #: pcbnew/class_board.cpp:230
 #: pcbnew/dialog_layers_setup_base.cpp:577
 msgid "Back"
-msgstr "fundo"
+msgstr "Verso"
 
 #: pcbnew/class_board.cpp:231
 msgid "Adhes_Back"
@@ -452,7 +452,7 @@ msgstr "Footprint"
 
 #: pcbnew/class_board_item.cpp:64
 msgid "Pad"
-msgstr "Ilhas"
+msgstr "Ilha"
 
 #: pcbnew/class_board_item.cpp:67
 msgid "all copper layers"
@@ -483,7 +483,7 @@ msgstr "Comprimento:"
 #: pcbnew/class_board_item.cpp:209
 #: pcbnew/class_board_item.cpp:226
 msgid " on "
-msgstr "Ligar Drc"
+msgstr " em "
 
 #: pcbnew/class_board_item.cpp:84
 msgid "Pcb Text"
@@ -576,7 +576,7 @@ msgstr "Via"
 
 #: pcbnew/class_board_item.cpp:191
 msgid "Blind/Buried"
-msgstr "Via encoberta"
+msgstr "Via encoberta (interna)"
 
 #: pcbnew/class_board_item.cpp:193
 #: pcbnew/class_pcb_layer_widget.cpp:71
@@ -875,7 +875,7 @@ msgstr "Tamanho V."
 #: pcbnew/class_track.cpp:1068
 #: pcbnew/dialog_design_rules_base.cpp:288
 msgid "Drill"
-msgstr "Broca"
+msgstr "Furo"
 
 #: pcbnew/class_pad.cpp:719
 msgid "Drill X / Y"
@@ -892,15 +892,15 @@ msgstr "Pos Y"
 #: pcbnew/class_pcb_layer_widget.cpp:69
 #: common/pcbcommon.cpp:66
 msgid "Through Via"
-msgstr "Via Direta"
+msgstr "Via passante"
 
 #: pcbnew/class_pcb_layer_widget.cpp:69
 msgid "Show through vias"
-msgstr "Mostrar Via Direta"
+msgstr "Mostrar Via passante"
 
 #: pcbnew/class_pcb_layer_widget.cpp:70
 msgid "Bl/Buried Via"
-msgstr "Via encoberta"
+msgstr "Via encoberta (interna)"
 
 #: pcbnew/class_pcb_layer_widget.cpp:70
 msgid "Show blind or buried vias"
@@ -928,11 +928,11 @@ msgstr "Mostar ilhas de footprints da frente das placas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:75
 msgid "Pads Back"
-msgstr "Ilhas fundo"
+msgstr "Ilhas verso"
 
 #: pcbnew/class_pcb_layer_widget.cpp:75
 msgid "Show footprint pads on board's back"
-msgstr "Mostrar ilhas de footprint no fundo das placas"
+msgstr "Mostrar ilhas de footprint no verso das placas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:77
 msgid "Text Front"
@@ -1304,7 +1304,7 @@ msgstr "deletar segmentos de trilha com ponta livre"
 
 #: pcbnew/cleaningoptions_dialog.cpp:168
 msgid "Connect to Pads"
-msgstr "Conectados à ilhas"
+msgstr "Conectar as ilhas"
 
 #: pcbnew/cleaningoptions_dialog.cpp:171
 msgid "Extend dangling tracks which partially cover a pad or via, all the way to pad or via center"
@@ -1448,7 +1448,7 @@ msgstr "Excluir Ilhas"
 
 #: pcbnew/dialog_copper_zones_base.cpp:57
 msgid "Pad in Zone:"
-msgstr "Ilhas em Zonas:"
+msgstr "Ilha em Zona:"
 
 #: pcbnew/dialog_copper_zones_base.cpp:62
 msgid "Thermal Reliefs:"
@@ -1460,7 +1460,7 @@ msgstr "Tamanho isolamento de ilha"
 
 #: pcbnew/dialog_copper_zones_base.cpp:69
 msgid "Define the gap around the pad"
-msgstr "Definir o vão ao redor de ilhas"
+msgstr "Definir o vão ao redor da ilha"
 
 #: pcbnew/dialog_copper_zones_base.cpp:73
 msgid "Copper Width"
@@ -1587,7 +1587,7 @@ msgstr "Camada:"
 
 #: pcbnew/dialog_design_rules.cpp:57
 msgid "* (Any)"
-msgstr "* (algum)"
+msgstr "* (qualquer)"
 
 #: pcbnew/dialog_design_rules.cpp:115
 msgid "Class"
@@ -1651,7 +1651,7 @@ msgstr "%s: <b>Furo da Via</b> &lt; <b>Mín. Furo de Via</b><br>"
 #: pcbnew/dialog_design_rules.cpp:968
 #, c-format
 msgid "%s: <b>MicroVia Diameter</b> &lt; <b>MicroVia Min Diameter</b><br>"
-msgstr "%s: <b>Diâmetro MicroVia</b> &lt; <b>Mínimo Diâmetro de MicroVia</b><br>"
+msgstr "%s: <b>Diâmetro MicroVia</b> &lt; <b>Diâmetro mínimo de MicroVia</b><br>"
 
 #: pcbnew/dialog_design_rules.cpp:980
 #, c-format
@@ -1821,11 +1821,11 @@ msgstr "Opções de Vias:"
 
 #: pcbnew/dialog_design_rules_base.cpp:166
 msgid "Through via"
-msgstr "Via Direta"
+msgstr "Via passante"
 
 #: pcbnew/dialog_design_rules_base.cpp:166
 msgid "Blind or buried via"
-msgstr "Via encoberta"
+msgstr "Via encoberta (interna)"
 
 #: pcbnew/dialog_design_rules_base.cpp:168
 msgid "Default Via Type"
@@ -1845,7 +1845,7 @@ msgstr "Diâmetro mínimo de Via"
 
 #: pcbnew/dialog_design_rules_base.cpp:187
 msgid "Min via drill dia"
-msgstr "Valor da furação de Via"
+msgstr "Diâmetro mínimo da furação de Via"
 
 #: pcbnew/dialog_design_rules_base.cpp:199
 msgid "Micro Via Options:"
@@ -1878,7 +1878,7 @@ msgstr "Diâmetro mínimo de Micro Via"
 
 #: pcbnew/dialog_design_rules_base.cpp:223
 msgid "Min uvia drill dia"
-msgstr "Mínimo diâmetro  da furação de Micro Via"
+msgstr "Diâmetro mínimo da furação de Micro Via"
 
 #: pcbnew/dialog_design_rules_base.cpp:236
 msgid "Minimum Allowed Values:"
@@ -1896,7 +1896,7 @@ msgid ""
 "on demand, for arbitrary via or track segments."
 msgstr ""
 "Especificar diâmetros de via e tamanhos de trilhas, os quais\n"
-"podem ser usados para substituir valores default Netclass \n"
+"podem ser usados para substituir valores default de Classe Net \n"
 "em demanda, para via ou segmentos de trlhas arbitrários."
 
 #: pcbnew/dialog_design_rules_base.cpp:268
@@ -1905,7 +1905,7 @@ msgstr "Tamanhos de vias customizados:"
 
 #: pcbnew/dialog_design_rules_base.cpp:270
 msgid "Drill value: a blank or 0 => default Netclass value"
-msgstr "Valor de furo: branco ou 0 => valor default da Netclass"
+msgstr "Valor de furo: branco ou 0 => valor default da Classe Net"
 
 #: pcbnew/dialog_design_rules_base.cpp:287
 msgid "Diameter"
@@ -1941,7 +1941,7 @@ msgstr "Via 7"
 
 #: pcbnew/dialog_design_rules_base.cpp:312
 msgid "Custom Track Widths:"
-msgstr "Largura de Trilhas customizados:"
+msgstr "Larguras de Trilha customizadas:"
 
 #: pcbnew/dialog_design_rules_base.cpp:337
 msgid "Track 1"
@@ -2114,27 +2114,27 @@ msgstr "Textos:"
 
 #: pcbnew/dialog_display_options_base.cpp:82
 msgid "Pad Options:"
-msgstr "Opções de Ilhas:"
+msgstr "Opções de Ilha:"
 
 #: pcbnew/dialog_display_options_base.cpp:86
 msgid "Pad Shapes:"
-msgstr "Formatos de Ilhas:"
+msgstr "Formatos de Ilha:"
 
 #: pcbnew/dialog_display_options_base.cpp:90
 msgid "Via Shapes:"
-msgstr "Formatos de Ilhas:"
+msgstr "Formatos de Via:"
 
 #: pcbnew/dialog_display_options_base.cpp:94
 msgid "Show pad clearance"
-msgstr "Mostrar isolamento das Ilhas"
+msgstr "Mostrar isolamento de Ilha"
 
 #: pcbnew/dialog_display_options_base.cpp:98
 msgid "Show pad number"
-msgstr "Mostrar Numeração de Ilhas"
+msgstr "Mostrar Numeração de Ilha"
 
 #: pcbnew/dialog_display_options_base.cpp:103
 msgid "Show pad NoConnect"
-msgstr "Mostrar Ilhas não conectadas"
+msgstr "Mostrar Ilha não conectada"
 
 #: pcbnew/dialog_display_options_base.cpp:116
 msgid "Others:"
@@ -2498,7 +2498,7 @@ msgid ""
 "This value can be superseded by a pad local value."
 msgstr ""
 "Este é o isolamento local para todas as ilhas deste footprint\n"
-"Se 0, os valores da Netclass são usados\n"
+"Se 0, os valores da classe de Net são usados\n"
 "Este valor pode ser sobreposto por um valor da ilha local."
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:165
@@ -2842,7 +2842,7 @@ msgstr "Eixo auxiliar"
 
 #: pcbnew/dialog_gendrill.cpp:194
 msgid "Drill Origin:"
-msgstr "Origem da broca:"
+msgstr "Origem do Furo:"
 
 #: pcbnew/dialog_gendrill.cpp:197
 msgid "Choose the coordinate origin: absolute or relative to the auxiliray axis"
@@ -2935,7 +2935,7 @@ msgstr "Diâmetro do furo de Micro Via:"
 
 #: pcbnew/dialog_gendrill.cpp:272
 msgid "Micro Via Drill Value"
-msgstr "Valor da furação de Micro Via"
+msgstr "Diâmetro da furação de Micro Via"
 
 #: pcbnew/dialog_gendrill.cpp:275
 msgid "Holes Count:"
@@ -3091,7 +3091,7 @@ msgstr "Permitir auto deslizamento da tela quando criando uma trilha ou movendo 
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:126
 msgid "Double Segm Track"
-msgstr "Isolamento das trilhas"
+msgstr "Trilha em linha dupla ***"
 
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:128
 msgid "If enabled, uses two track segments, with 45 degrees angle between them when creating a new track "
@@ -3124,7 +3124,7 @@ msgstr "Definir tamanhos de trilhas, vias e furações da net corrente para os val
 
 #: pcbnew/dialog_global_edit_tracks_and_vias.cpp:165
 msgid "Set current Net tracks and vias sizes and drill to the Netclass default value?"
-msgstr "Definir tamanhos de trilhas, vias e furações da Net corrente para os valores default da Netclass?"
+msgstr "Definir tamanhos de trilhas, vias e furações da Net corrente para os valores default da Classe de Net?"
 
 #: pcbnew/dialog_global_edit_tracks_and_vias.cpp:174
 msgid "Set All Tracks and Vias to Netclass value"
@@ -3136,7 +3136,7 @@ msgstr "Definir Todas as Vias para o valor da Classe Net"
 
 #: pcbnew/dialog_global_edit_tracks_and_vias.cpp:192
 msgid "Set All Track to Netclass value"
-msgstr "Define Todas a Trilhas para o valor da classe Net"
+msgstr "Define Todas as Trilhas para o valor da classe Net"
 
 #: pcbnew/dialog_global_edit_tracks_and_vias_base.cpp:22
 msgid "Current Settings:"
@@ -3148,7 +3148,7 @@ msgstr "Net Corrente:"
 
 #: pcbnew/dialog_global_edit_tracks_and_vias_base.cpp:52
 msgid "Current NetClass:"
-msgstr "NetClass corrente:"
+msgstr "Clansse Net corrente:"
 
 #: pcbnew/dialog_global_edit_tracks_and_vias_base.cpp:56
 msgid "NetClassName"
@@ -3184,27 +3184,27 @@ msgstr "Opções de Edições Globais:"
 
 #: pcbnew/dialog_global_edit_tracks_and_vias_base.cpp:131
 msgid "Set tracks and vias of the current Net to the current value"
-msgstr "Define trilhas e vias da Net atual para os valore correntes"
+msgstr "Define trilhas e vias da Net atual para o valor corrente"
 
 #: pcbnew/dialog_global_edit_tracks_and_vias_base.cpp:135
 msgid "Set tracks and vias of the current Net to the Netclass value"
-msgstr "Define trilhas e vias da Net atual para os valore de Netclass"
+msgstr "Define trilhas e vias da Net atual para os valores da Classe Net"
 
 #: pcbnew/dialog_global_edit_tracks_and_vias_base.cpp:138
 msgid "Set all tracks and vias to their Netclass value"
-msgstr "Definir todas as trilhas e Vias para seus valores NetClass"
+msgstr "Definir todas as trilhas e Vias para seus valores da Classe Net"
 
 #: pcbnew/dialog_global_edit_tracks_and_vias_base.cpp:141
 msgid "Set all vias (no track) to their Netclass value"
-msgstr "Define todas as vias (trilhas não) para seus valores Netclass"
+msgstr "Define todas as vias (trilhas não) para seus valores da Classe Net"
 
 #: pcbnew/dialog_global_edit_tracks_and_vias_base.cpp:144
 msgid "Set all tracks (no via) to their Netclass value"
-msgstr "Defini todas as trilhas (via não) para seus valores Netclass"
+msgstr "Defini todas as trilhas (via não) para seus valores da Classe Net"
 
 #: pcbnew/dialog_global_pads_edition_base.cpp:23
 msgid "Pad Filter :"
-msgstr "Filtrar Ilhas:"
+msgstr "Filtrar Ilha:"
 
 #: pcbnew/dialog_global_pads_edition_base.cpp:25
 msgid "Do not modify pads having a different shape"
@@ -3220,7 +3220,7 @@ msgstr "Não modificar ilhas que tem orientação diferente"
 
 #: pcbnew/dialog_global_pads_edition_base.cpp:44
 msgid "Pad Editor"
-msgstr "Editor de Ilhas"
+msgstr "Editor de Ilha"
 
 #: pcbnew/dialog_global_pads_edition_base.cpp:50
 msgid "Change Pads on Module"
@@ -3494,7 +3494,7 @@ msgstr "Se você quiser um adesivo de exemplo para o lado da frente da placa"
 #: pcbnew/dialog_layers_setup_base.cpp:679
 #: pcbnew/dialog_layers_setup_base.cpp:704
 msgid "Off-board, manufacturing"
-msgstr "fora da placas, fabricando"
+msgstr "fora da placa, fabricação"
 
 #: pcbnew/dialog_layers_setup_base.cpp:93
 msgid "SoldP_Front_later"
@@ -3636,7 +3636,7 @@ msgstr "Tipo de camada de cobre para Freerouter. Camadas Power (alimentação) são
 
 #: pcbnew/dialog_layers_setup_base.cpp:579
 msgid "Layer name of back (bottom) copper layer"
-msgstr "Nome da camada de cobre de fundo (bottom)"
+msgstr "Nome da camada de cobre do verso (bottom)"
 
 #: pcbnew/dialog_layers_setup_base.cpp:591
 msgid "If you want a back copper layer"
@@ -3684,7 +3684,7 @@ msgstr "Se você quiser uma camada de contorno da placa"
 
 #: pcbnew/dialog_layers_setup_base.cpp:729
 msgid "Board contour"
-msgstr "Controno da placa"
+msgstr "Contorno da placa"
 
 #: pcbnew/dialog_layers_setup_base.cpp:733
 msgid "Eco2_later"
@@ -3758,8 +3758,8 @@ msgid ""
 msgstr ""
 "Esta é a taxa em percentual do isolamento global entre ilhas e pasta de solda\n"
 "A value of 10 means the clearance value is 10 per cent of the pad size\n"
-"This value can be superseded by local values for a footprint or a pad.\n"
-"The final clearance value is the sum of this value and the clearance value"
+"Este valor pode ser sobreposto por valores locais para o footprint ou ilha.\n"
+"O valor de isolamento final é a soma deste valor e o valor de isolamento"
 
 #: pcbnew/dialog_netlist.cpp:68
 msgid "Netlist Selection:"
@@ -4058,7 +4058,7 @@ msgstr ""
 
 #: pcbnew/dialog_pad_properties_base.cpp:237
 msgid "Net pad clearance"
-msgstr "Isolamento de ilhas da Net"
+msgstr "Isolamento de ilha da Net"
 
 #: pcbnew/dialog_pad_properties_base.cpp:239
 msgid ""
@@ -4066,14 +4066,14 @@ msgid ""
 "If 0, the footprint local value or the Netclass value is used"
 msgstr ""
 "Este é o isolamento local de net para ilha.\n"
-"Se 0, o valor local do footprint ou da Netclass é usado"
+"Se 0, o valor local do footprint ou da Classe Net é usado"
 
 #: pcbnew/dialog_pad_properties_base.cpp:261
 msgid ""
 "This is the local clearance between this  pad and the solder mask\n"
 "If 0, the footprint local value or the global value is used"
 msgstr ""
-"Este é o isolamento local entre ilhas e máscara de solda\n"
+"Este é o isolamento local entre esta ilha e a máscara de solda\n"
 "Se 0, o valor global ou  local do fooprint é usado"
 
 #: pcbnew/dialog_pad_properties_base.cpp:274
@@ -4373,7 +4373,7 @@ msgstr "Imprimir outros textos de módulos"
 
 #: pcbnew/dialog_plot_base.cpp:70
 msgid "Enable/disable print/plot module field texts on silkscreen layers"
-msgstr "Habilitar/Desabilitar imprimir/plotar campos de texto do módulo em camadas de Silkscreen"
+msgstr "Ativarr/Desativar imprimir/plotar campos de texto do módulo em camadas de Silkscreen"
 
 #: pcbnew/dialog_plot_base.cpp:74
 msgid "Force print invisible texts"
@@ -4861,11 +4861,11 @@ msgstr "Abortando\n"
 
 #: pcbnew/drc.cpp:230
 msgid "Pad clearances...\n"
-msgstr "Isolamento de ilhas...\n"
+msgstr "Isolamentos de ilha...\n"
 
 #: pcbnew/drc.cpp:240
 msgid "Track clearances...\n"
-msgstr "Isolamento de trilhas... \n"
+msgstr "Isolamentos de trilha... \n"
 
 #: pcbnew/drc.cpp:250
 msgid "Fill zones...\n"
@@ -5309,7 +5309,7 @@ msgstr "Não é um arquivo de biblioteca"
 #: pcbnew/librairi.cpp:288
 #, c-format
 msgid "Module [%s] not found"
-msgstr "Módulo %s não encontrado "
+msgstr "Módulo [%s] não encontrado "
 
 #: pcbnew/librairi.cpp:386
 #, c-format
@@ -5348,12 +5348,12 @@ msgstr "Salvar módulo"
 #: pcbnew/librairi.cpp:535
 #, c-format
 msgid "Unable to open %s"
-msgstr "Incapaz de abrir \"%s\""
+msgstr "Incapaz de abrir %s"
 
 #: pcbnew/librairi.cpp:545
 #, c-format
 msgid "File %s is not a eeschema library"
-msgstr "Arquivo %s não é uma biblioteca do eeschema"
+msgstr "Arquivo %s não é uma biblioteca  eeschema"
 
 #: pcbnew/librairi.cpp:576
 msgid ""
@@ -5452,7 +5452,7 @@ msgstr "carrgado"
 #: pcbnew/loadcmp.cpp:620
 #, c-format
 msgid "Modules [%d items]"
-msgstr "Módulos (%d itens)"
+msgstr "Módulos [%d itens]"
 
 #: pcbnew/menubar_modedit.cpp:28
 msgid "Sizes and Widths"
@@ -5466,7 +5466,7 @@ msgstr "Ajustar largura para textos e desenhos"
 #: pcbnew/modedit.cpp:431
 #: pcbnew/tool_modedit.cpp:126
 msgid "Pad Settings"
-msgstr "Configurações de Ilhas"
+msgstr "Configurações da Ilha"
 
 #: pcbnew/menubar_modedit.cpp:34
 msgid "Adjust size, shape, layers... for pads"
@@ -5543,7 +5543,7 @@ msgstr "Limpar placa atual e iniciar uma nova"
 #: eeschema/menubar.cpp:51
 #: kicad/menubar.cpp:93
 msgid "&Open\tCtrl+O"
-msgstr "&Abir\tCtrl+A"
+msgstr "&Abrir\tCtrl+A"
 
 #: pcbnew/menubar_pcbframe.cpp:46
 msgid "Delete current board and load new board"
@@ -5907,7 +5907,7 @@ msgstr "Ajustar dimensões para textos e desenhos"
 
 #: pcbnew/menubar_pcbframe.cpp:412
 msgid "Adjust default pad characteristics"
-msgstr "Ajustar as características de ilhas default"
+msgstr "Ajustar as características default da ilha"
 
 #: pcbnew/menubar_pcbframe.cpp:418
 #: pcbnew/dialog_mask_clearance_base.h:64
@@ -6155,7 +6155,7 @@ msgstr "Deletar Ilha"
 
 #: pcbnew/modedit_onclick.cpp:285
 msgid "Global Pad Settings"
-msgstr "Configurações Globais de Ilhas"
+msgstr "Configurações Globais de Ilha"
 
 #: pcbnew/modedit_onclick.cpp:293
 msgid "Move Text Mod."
@@ -6381,7 +6381,7 @@ msgstr "Formato não tem pontos!"
 
 #: pcbnew/muonde.cpp:1150
 msgid "No pad for this module"
-msgstr "Sem ilhas para este módulo"
+msgstr "Sem ilha para este módulo"
 
 #: pcbnew/muonde.cpp:1156
 msgid "Only one pad for this module"
@@ -6442,7 +6442,7 @@ msgstr "Componente \"%s\": Não confere! módulo é [%s] e netlist diz [%s]\n"
 #: pcbnew/netlist.cpp:544
 #, c-format
 msgid "Component [%s] not found"
-msgstr "Módulo %s não encontrado "
+msgstr "Módulo [%s] não encontrado "
 
 #: pcbnew/netlist.cpp:610
 #, c-format
@@ -6868,11 +6868,11 @@ msgstr "Copiar as definições desta ilha para as definições corrente"
 #: pcbnew/onrightclick.cpp:742
 #: pcbnew/dialog_global_pads_edition_base.h:52
 msgid "Global Pads Edition"
-msgstr "edição Global  de Ilhas"
+msgstr "Edição Global  de Ilhas"
 
 #: pcbnew/onrightclick.cpp:743
 msgid "Copy this pad settings to all pads in this footprint (or similar footprints)"
-msgstr "Copiar das definições desta ilha para todas as ilhas deste footprint (ou footprints similares) "
+msgstr "Copiar as definições desta ilha para todas as ilhas deste footprint (ou footprints similares) "
 
 #: pcbnew/onrightclick.cpp:752
 msgid "Autoroute Pad"
@@ -6906,7 +6906,7 @@ msgstr "Usar Valores da Classe Net"
 
 #: pcbnew/onrightclick.cpp:832
 msgid "Use track and via sizes from their Netclass values"
-msgstr "Usar tamanhos de vias e trilhas a partir dos valores da classe Net"
+msgstr "Usar tamanhos de via e trilha a partir dos valores da classe Net"
 
 #: pcbnew/onrightclick.cpp:839
 #, c-format
@@ -6916,7 +6916,7 @@ msgstr "Trilha %s"
 #: pcbnew/onrightclick.cpp:841
 #: pcbnew/onrightclick.cpp:869
 msgid " (use NetClass)"
-msgstr "(a partir da NetClass)"
+msgstr "(usar Classe Net)"
 
 #: pcbnew/onrightclick.cpp:863
 #, c-format
@@ -7132,14 +7132,14 @@ msgstr "Arquivo Session usa identificador de camada inválido:  \"%s\""
 
 #: pcbnew/specctra_import.cpp:253
 msgid "Session via padstack has no shapes"
-msgstr "Pilha de ilhas do Session não tem formas"
+msgstr "Pilha de ilhas do Session não tem formas***"
 
 #: pcbnew/specctra_import.cpp:260
 #: pcbnew/specctra_import.cpp:278
 #: pcbnew/specctra_import.cpp:302
 #, c-format
 msgid "Unsupported via shape: %s"
-msgstr "Forma de via não suportada: %s"
+msgstr "Formato de via não suportada: %s"
 
 #: pcbnew/specctra_import.cpp:359
 msgid "Session file is missing the \"session\" section"
@@ -7204,7 +7204,7 @@ msgstr "mm"
 
 #: pcbnew/toolbars_update_user_interface.cpp:54
 msgid "NetClass: "
-msgstr "Classes Nets:"
+msgstr "Classe Net:"
 
 #: pcbnew/toolbars_update_user_interface.cpp:95
 #: pcbnew/toolbars_update_user_interface.cpp:115
@@ -7222,16 +7222,16 @@ msgstr "Ativarr Regras de Desenho (DRC)"
 
 #: pcbnew/toolbars_update_user_interface.cpp:219
 msgid "Hide board ratsnest"
-msgstr "Ocultar interligações do módulo"
+msgstr "Ocultar interligações da placa"
 
 #: pcbnew/toolbars_update_user_interface.cpp:220
 #: pcbnew/tool_pcb.cpp:333
 msgid "Show board ratsnest"
-msgstr "Mostrar Interligações do Módulo"
+msgstr "Mostrar Interligações da placa"
 
 #: pcbnew/toolbars_update_user_interface.cpp:226
 msgid "Hide module ratsnest"
-msgstr "Esconder interligações do módulo"
+msgstr "Ocultar interligações do módulo"
 
 #: pcbnew/toolbars_update_user_interface.cpp:227
 msgid "Show module ratsnest"
@@ -7239,11 +7239,11 @@ msgstr "Mostrar interligações do módulo"
 
 #: pcbnew/toolbars_update_user_interface.cpp:234
 msgid "Disable auto delete old track"
-msgstr "Desabilitar auto-deletar trilhas antigas"
+msgstr "Desativar auto-deletar trilhas antigas"
 
 #: pcbnew/toolbars_update_user_interface.cpp:235
 msgid "Enable auto delete old track"
-msgstr "Habilitar auto-deletar trilhas antigas"
+msgstr "Ativar auto-deletar trilhas antigas"
 
 #: pcbnew/toolbars_update_user_interface.cpp:242
 #: pcbnew/tool_pcb.cpp:363
@@ -7550,7 +7550,7 @@ msgstr "Mostrar linhas cheias em zonas"
 
 #: pcbnew/tool_pcb.cpp:353
 msgid "Do not show filled areas in zones"
-msgstr "Não mostar linhas cheias em zonas"
+msgstr "Não mostar preenchimento  em zonas"
 
 #: pcbnew/tool_pcb.cpp:358
 msgid "Show outlines of filled areas only in zones"
@@ -7798,7 +7798,7 @@ msgstr "Arquivos de reanotação Kicad (*.stf)|*.stf"
 
 #: cvpcb/cvpcb.cpp:33
 msgid "Kicad footprint alias files (*.equ)|*.equ"
-msgstr "Arquivos de alias de footprints Kicad (*.equ)|*.equ"
+msgstr "Arquivos de correspondência de footprints Kicad (*.equ)|*.equ"
 
 #: cvpcb/cvpcb.cpp:97
 msgid "Cvpcb is already running, Continue?"
@@ -7814,7 +7814,7 @@ msgstr "Arquivo de Projeto:"
 
 #: cvpcb/dialog_cvpcb_config_fbp.cpp:51
 msgid "Footprint alias files"
-msgstr "Arquivos de alias de footprints"
+msgstr "Arquivos de correspondência de footprints"
 
 #: cvpcb/dialog_display_options.cpp:151
 #: cvpcb/dialog_display_options.cpp:163
@@ -7837,7 +7837,7 @@ msgstr "Bordas:"
 
 #: cvpcb/dialog_display_options.cpp:178
 msgid "Fill &pad"
-msgstr "Preencher ilhas"
+msgstr "Preencher ilha"
 
 #: cvpcb/dialog_display_options.cpp:184
 msgid "Fill &via"
@@ -7845,11 +7845,11 @@ msgstr "Preencher via"
 
 #: cvpcb/dialog_display_options.cpp:190
 msgid "Show pad &number"
-msgstr "Mostrar &numeração de Ilhas"
+msgstr "Mostrar &numeração da Ilha"
 
 #: cvpcb/dialog_display_options.cpp:194
 msgid "Display pad number"
-msgstr "Mostrar Numeração de Ilhas"
+msgstr "Mostrar Número da Ilha"
 
 #: cvpcb/dialog_display_options.cpp:221
 msgid "&Apply"
@@ -8293,7 +8293,7 @@ msgstr "> %-28.28s %s      (Folha %s) pos: %3.3f, %3.3f\n"
 #: eeschema/build_BOM.cpp:839
 #, c-format
 msgid "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
-msgstr "> %-28.28s Planilha %-7.7s (Folha %.2s) pos: %3.3f, %3.3f\n"
+msgstr "> %-28.28s Planilha %-7.7s (Folha %s) pos: %3.3f, %3.3f\n"
 
 #: eeschema/build_BOM.cpp:854
 msgid "#End labels\n"
@@ -8517,17 +8517,17 @@ msgid ""
 "This may cause some unexpected behavior when loading components into a schematic."
 msgstr ""
 "Biblioteca <%s> tem entradas de nomes duplicados <%s>.\n"
-"  Isto pode causar resultado inexperado quano carregar os componente no esquemático."
+"  Isto pode causar resultado inexperado quano carregar os componentes no esquemático."
 
 #: eeschema/class_library.cpp:206
 #, c-format
 msgid "Cannot add duplicate alias <%s> to library <%s>."
-msgstr "Não é possível acicior alias duplicado <%s> a biblioteca <%s>."
+msgstr "Não é possível adicionar alias duplicado <%s> a biblioteca <%s>."
 
 #: eeschema/class_library.cpp:258
 #, c-format
 msgid "alias <%s> already exists and has root name<%s>"
-msgstr "Alias <%s> já existe na biblioteca <%s>."
+msgstr "alias ou nome de componente <%s> já existe na biblioteca <%s>"
 
 #: eeschema/class_library.cpp:273
 #, c-format
@@ -8537,11 +8537,11 @@ msgstr "Conflito na biblioteca <%s>"
 #: eeschema/class_library.cpp:274
 #, c-format
 msgid "and appears in alias list of current component <%s>."
-msgstr "e aparece na lista de alias do componete <%s>."
+msgstr "e aparece na lista de alias do componente corrente <%s>."
 
 #: eeschema/class_library.cpp:277
 msgid "All old aliases will be removed. Continue ?"
-msgstr "Todos os alias antigos serão removidos. Continuar?"
+msgstr "Todos alias antigos seráo removidos. Continuar ?  "
 
 #: eeschema/class_library.cpp:531
 msgid "The component library file name is not set."
@@ -8580,12 +8580,12 @@ msgstr "Não foi possível abrir o arquivo de documento da biblioteca <%s>."
 #: eeschema/class_library.cpp:728
 #, c-format
 msgid "Component document library file <%s> is empty."
-msgstr "Arquivo de documento da bibliotecas <%s> está vazio."
+msgstr "Arquivo de documento da biblioteca <%s> está vazio."
 
 #: eeschema/class_library.cpp:736
 #, c-format
 msgid "File <%s> is not a valid component library document file."
-msgstr "<%s> não é um arquivo de biblioteca válido.***"
+msgstr "<%s> não é um documento de biblioteca válido.***"
 
 #: eeschema/class_pin.cpp:28
 #: eeschema/dialog_edit_label_base.cpp:37
@@ -9315,7 +9315,7 @@ msgstr "Componente sem nome!"
 #: eeschema/dialog_edit_component_in_schematic.cpp:177
 #, c-format
 msgid "Component [%s] not found!"
-msgstr "Componente [%s] não encontrado "
+msgstr "Componente [%s] não encontrado!"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:28
 msgid "1"
@@ -9689,11 +9689,11 @@ msgstr "Mostrar pinos ocultos"
 
 #: eeschema/dialog_eeschema_options_base.cpp:126
 msgid "Enable automatic &panning"
-msgstr "Ativar delocamento automático"
+msgstr "Ativar delizamento automático"
 
 #: eeschema/dialog_eeschema_options_base.cpp:130
 msgid "Allow buses and wires to be placed in H or V &orientation only"
-msgstr "Permitir cabos e barramentos serem colocados em &orientação H ou V somente"
+msgstr "Permitir cabos e barramentos serem colocados na orientação H ou V somente"
 
 #: eeschema/dialog_eeschema_options_base.cpp:134
 msgid "Show p&age limits"
@@ -9793,7 +9793,7 @@ msgstr "Aplicar alterações a todos &estilos de corpo (DeMorgan)"
 
 #: eeschema/dialog_lib_edit_draw_item_base.cpp:77
 msgid "Fill Style"
-msgstr "Estilo"
+msgstr "Estilo de preechimento"
 
 #: eeschema/dialog_lib_edit_draw_item_base.cpp:92
 msgid "Do &not fill"
@@ -9801,7 +9801,7 @@ msgstr "Não preencher"
 
 #: eeschema/dialog_lib_edit_draw_item_base.cpp:96
 msgid "Fill &foreground"
-msgstr "Preencher &fundo"
+msgstr "Preencher &frente"
 
 #: eeschema/dialog_lib_edit_draw_item_base.cpp:99
 msgid "Fill &background"
@@ -10092,7 +10092,7 @@ msgstr "Footprint do componente"
 
 #: eeschema/eelayer.cpp:238
 msgid "White"
-msgstr "Fundo branco"
+msgstr "Branco"
 
 #: eeschema/eelayer.cpp:239
 msgid "Black"
@@ -10162,12 +10162,12 @@ msgstr "Arquivos de checagem de regas eletônicas (.erc)|*.erc"
 #: eeschema/erc.cpp:429
 #, c-format
 msgid "HLabel %s not connected to SheetLabel"
-msgstr "Atenção: Etiqueta hierárquica %s não está conectada a Etiqueta da Página"
+msgstr "Etiqueta hierárquica %s não está conectada a Etiqueta da Página"
 
 #: eeschema/erc.cpp:433
 #, c-format
 msgid "SheetLabel %s not connected to HLabel"
-msgstr "Atenção: Etiqueta da Página %s não conectada a etiqueta global"
+msgstr "Etiqueta da Página %s não conectada a etiqueta global"
 
 #: eeschema/erc.cpp:459
 #, c-format
@@ -10242,7 +10242,7 @@ msgstr ""
 #: eeschema/files-io.cpp:207
 #, c-format
 msgid "File <%s> not found."
-msgstr "Arquivo %s não encontrado."
+msgstr "Arquivo <%s> não encontrado."
 
 #: eeschema/find.cpp:230
 msgid "Pin "
@@ -10809,7 +10809,7 @@ msgstr "Carregado"
 #: eeschema/menubar.cpp:44
 #: kicad/menubar.cpp:107
 msgid "&New\tCtrl+N"
-msgstr "%Novo\tCtrl+N"
+msgstr "&Novo\tCtrl+N"
 
 #: eeschema/menubar.cpp:45
 #: eeschema/tool_sch.cpp:30
@@ -12544,7 +12544,7 @@ msgstr "Número de páginas: %d"
 #: share/setpage.cpp:320
 #, c-format
 msgid "Sheet number: %d"
-msgstr "Número da página: %d"
+msgstr "Página número: %d"
 
 #: share/setpage.cpp:323
 msgid "Revision:"
@@ -12721,7 +12721,7 @@ msgstr "deslocado"
 
 #: common/dsnlexer.cpp:231
 msgid "String delimiter must be a single character of ', \", or $"
-msgstr "Delimitador de String precisar ser um simples carecter de  ', \", ou $"
+msgstr "Delimitador de String precisa ser um simples carecter de  ', \", ou $"
 
 #: common/dsnlexer.cpp:315
 msgid "Un-terminated delimited string"
@@ -12879,7 +12879,7 @@ msgstr "Incapaz de carregar"
 
 #: common/hotkeys_basic.cpp:681
 msgid "List Current Keys"
-msgstr "Lista de chaves corrente"
+msgstr "Lista de teclas de atalho atual"
 
 #: common/hotkeys_basic.cpp:682
 msgid "Displays the current hotkeys list and corresponding commands"
@@ -12911,7 +12911,7 @@ msgstr "Editar o arquivo de configuração de teclas de atalho em um editor de tex
 
 #: common/hotkeys_basic.cpp:711
 msgid "Hotkeys"
-msgstr "Tecas de atalho"
+msgstr "Teclas de atalho"
 
 #: common/hotkeys_basic.cpp:712
 msgid "Hotkeys configuration and preferences"
@@ -12947,7 +12947,7 @@ msgstr "??? Via **"
 
 #: common/pcbcommon.cpp:64
 msgid "Blind/Buried Via"
-msgstr "Via encoberta"
+msgstr "Via encoberta (interna)"
 
 #: common/pcbcommon.cpp:84
 msgid "Kicad footprint library files (*.mod)|*.mod"
@@ -13362,7 +13362,7 @@ msgstr "Mostrar arquivo de código-fonte para camada atual"
 
 #: gerbview/tool_gerber.cpp:112
 msgid "&Delete Layer"
-msgstr "%Deletar Camada"
+msgstr "&Deletar Camada"
 
 #: gerbview/tool_gerber.cpp:113
 msgid "Delete current layer"
@@ -13552,7 +13552,7 @@ msgstr "&Sair"
 
 #: 3d-viewer/3d_toolbar.cpp:128
 msgid "Choose background color"
-msgstr "Cor de fundo "
+msgstr "Escolher cor de fundo"
 
 #: 3d-viewer/3d_toolbar.cpp:131
 msgid "3D Axis On/Off"
@@ -13649,7 +13649,7 @@ msgstr "Orientação de footprint"
 
 #: pcbnew/dialog_pad_properties_base.h:140
 msgid "Pad Properties"
-msgstr "Propriedades de Ilhas"
+msgstr "Propriedades da Ilha"
 
 #: pcbnew/dialog_SVG_print_base.h:68
 #: eeschema/dialog_SVG_print_base.h:65
