@@ -279,7 +279,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     m_Cmp->SetRef( m_Parent->GetSheet(), m_FieldsBuf[REFERENCE].m_Text );
 
 
-    m_Parent->GetScreen()->SetModify();
+    m_Parent->OnModify( );
 
     m_Parent->TestDanglingEnds( m_Parent->GetScreen()->EEDrawList, NULL );
 
@@ -744,7 +744,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 
     m_Cmp->SetOrientation( CMP_NORMAL );
 
-    m_Parent->GetScreen()->SetModify();
+    m_Parent->OnModify( );
 
     RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, GR_DEFAULT_DRAWMODE );
     EndModal( 1 );

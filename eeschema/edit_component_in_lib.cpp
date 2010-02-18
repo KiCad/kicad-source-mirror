@@ -47,7 +47,7 @@ void WinEDA_LibeditFrame::EditComponentProperties()
     UpdatePartSelectList();
     DisplayLibInfos();
     DisplayCmpDoc();
-    GetScreen()->SetModify();
+    OnModify( );
 }
 
 
@@ -330,7 +330,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
     }
 
     component->SetConversion( m_Parent->GetShowDeMorgan() );
-    m_Parent->GetScreen()->SetModify();
+    m_Parent->OnModify( );
 
     return true;
 }

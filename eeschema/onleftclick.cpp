@@ -149,7 +149,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     case ID_SCHEMATIC_DELETE_ITEM_BUTT:
         LocateAndDeleteItem( this, DC );
-        GetScreen()->SetModify();
+        OnModify( );
         GetScreen()->SetCurItem( NULL );
         TestDanglingEnds( GetScreen()->EEDrawList, NULL );
         DrawPanel->Refresh( TRUE );

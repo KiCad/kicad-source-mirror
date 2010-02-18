@@ -224,7 +224,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& event )
         m_CurrentText->m_Width = 0;
     }
 
-    m_Parent->GetScreen()->SetModify();
+    m_Parent->OnModify( );
 
     /* Make the text size as new default size if it is a new text */
     if( (m_CurrentText->m_Flags & IS_NEW) != 0 )

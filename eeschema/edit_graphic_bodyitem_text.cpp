@@ -241,7 +241,7 @@ void WinEDA_LibeditFrame::EditSymbolText(wxDC* DC, LIB_DRAW_ITEM* DrawItem)
                                                    (LIB_TEXT*) DrawItem );
     frame->ShowModal();
     frame->Destroy();
-    GetScreen()->SetModify();
+    OnModify( );
 
     /* Display new text. */
     if( DC )
@@ -279,7 +279,7 @@ void WinEDA_LibeditFrame::RotateSymbolText(wxDC * DC)
     else
         DrawItem->m_Orient = TEXT_ORIENT_HORIZ;
 
-    GetScreen()->SetModify();
+    OnModify( );
 
     /* Redraw item with new orient */
     if ( DrawPanel->ManageCurseur == NULL )

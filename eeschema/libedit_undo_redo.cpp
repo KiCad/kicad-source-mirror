@@ -69,7 +69,7 @@ void WinEDA_LibeditFrame::GetComponentFromRedoList(wxCommandEvent& event)
         SetShowDeMorgan( m_component->HasConversion() );
     DisplayLibInfos();
     DisplayCmpDoc();
-    GetScreen()->SetModify();
+    OnModify( );
     DrawPanel->Refresh();
 }
 
@@ -105,6 +105,6 @@ void WinEDA_LibeditFrame::GetComponentFromUndoList(wxCommandEvent& event)
         SetShowDeMorgan( m_component->HasConversion() );
     DisplayLibInfos();
     DisplayCmpDoc();
-    GetScreen()->SetModify();
+    OnModify( );
     DrawPanel->Refresh();
 }

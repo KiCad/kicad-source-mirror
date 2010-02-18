@@ -272,7 +272,7 @@ void WinEDA_SchematicFrame::CmpRotationMiroir( SCH_COMPONENT* DrawComponent,
     }
 
     TestDanglingEnds( GetScreen()->EEDrawList, DC );
-    GetScreen()->SetModify();
+    OnModify( );
 }
 
 
@@ -351,7 +351,7 @@ void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
                              GR_DEFAULT_DRAWMODE );
 
     TestDanglingEnds( GetScreen()->EEDrawList, DC );
-    GetScreen()->SetModify();
+    OnModify( );
 }
 
 
@@ -397,7 +397,7 @@ void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
                              GR_DEFAULT_DRAWMODE );
 
     TestDanglingEnds( GetScreen()->EEDrawList, DC );
-    GetScreen()->SetModify();
+    OnModify( );
 }
 
 

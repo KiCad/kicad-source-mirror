@@ -62,7 +62,7 @@ void WinEDA_LibeditFrame::OnRotatePin( wxCommandEvent& event ){
 	// Set the new orientation
 	pin->SetOrientation(pin->GetOrientationCode(orientationIndex));
 
-	GetScreen()->SetModify();
+	OnModify( );
 	pin->DisplayInfo( this );
 	DrawPanel->Refresh();
 
@@ -158,7 +158,7 @@ void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
         if( !pin->IsNew() )
             SaveCopyInUndoList( pin->GetParent() );
 
-        GetScreen()->SetModify();
+        OnModify( );
         pin->DisplayInfo( this );
         DrawPanel->Refresh();
     }
@@ -244,7 +244,7 @@ another pin. Continue?" ) );
 
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
-    GetScreen()->SetModify();
+    OnModify( );
     CurrentPin->m_Pos = newpos;
 
     if( CurrentPin->IsNew() )
@@ -394,7 +394,7 @@ void WinEDA_LibeditFrame::DeletePin( wxDC*          DC,
         }
     }
 
-    GetScreen()->SetModify();
+    OnModify( );
 }
 
 
@@ -539,7 +539,7 @@ void WinEDA_LibeditFrame::GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id )
     if( MasterPin->Type() != COMPONENT_PIN_DRAW_TYPE )
         return;
 
-    GetScreen()->SetModify();
+    OnModify( );
 
     Pin = m_component->GetNextPin();
     for( ; Pin != NULL; Pin = m_component->GetNextPin( Pin ) )
@@ -614,7 +614,7 @@ void WinEDA_LibeditFrame::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
     DrawPanel->CursorOn( DC );
 
     Pin->DisplayInfo( this );
-    GetScreen()->SetModify();
+    OnModify( );
 }
 
 

@@ -259,7 +259,7 @@ void WinEDA_LibeditFrame::HandleBlockPlace( wxDC* DC )
         break;
     }
 
-    GetScreen()->SetModify();
+    OnModify();
 
     DrawPanel->ManageCurseur             = NULL;
     DrawPanel->ForceCloseManageCurseur   = NULL;

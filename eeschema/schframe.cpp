@@ -449,6 +449,27 @@ wxString WinEDA_SchematicFrame::GetUniqueFilenameForCurrentSheet()
     return filename;
 }
 
+/** Function OnModify()
+ * Must be called after a schematic change
+ * in order to set the "modify" flag of the current screen
+ * and update the date in frame reference
+ */
+void WinEDA_SchematicFrame::OnModify( )
+{
+    GetScreen()->SetModify( );
+
+    wxString       date = GenDate();
+    EDA_ScreenList s_list;
+
+    // Set the date for each sheet
+    // There are 2 possibilities:
+    // >> change only the current sheet
+    // >> change all sheets.
+    // I believe all sheets in a project must have the same date
+    SCH_SCREEN* screen = s_list.GetFirst();
+    for( ; screen != NULL; screen = s_list.GetNext() )
+        screen->m_Date = date;
+}
 
 /*****************************************************************************
 * Enable or disable menu entry and toolbar buttons according to current

@@ -420,6 +420,6 @@ void SCH_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
     Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     m_Flags = 0;
     frame->GetScreen()->SetCurItem( NULL );
-    frame->GetScreen()->SetModify();
+    frame->OnModify( );
     frame->SetCurrentField( NULL );
 }

@@ -260,7 +260,7 @@ void WinEDA_SchematicFrame::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
         return;
     }
 
-    GetScreen()->SetModify();
+    OnModify( );
     aSheet->m_Flags |= IS_RESIZED;
 
     s_OldPos.x = aSheet->m_Size.x;

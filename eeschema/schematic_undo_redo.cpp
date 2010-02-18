@@ -438,7 +438,7 @@ void WinEDA_SchematicFrame::GetSchematicFromUndoList(wxCommandEvent& event)
     GetScreen()->PushCommandToRedoList( List );
 
 //    m_drawItem = NULL;
-    GetScreen()->SetModify();
+    OnModify( );
     SetSheetNumberAndCount();
     ReCreateHToolbar();
     SetToolbars();
@@ -471,7 +471,7 @@ void WinEDA_SchematicFrame::GetSchematicFromRedoList(wxCommandEvent& event)
     GetScreen()->PushCommandToUndoList( List );
 
 //    m_drawItem = NULL;
-    GetScreen()->SetModify();
+    OnModify( );
     SetSheetNumberAndCount();
     ReCreateHToolbar();
     SetToolbars();

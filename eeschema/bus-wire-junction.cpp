@@ -361,7 +361,7 @@ void WinEDA_SchematicFrame::EndSegment( wxDC* DC )
     SaveCopyInUndoList( s_OldWiresList, UR_WIRE_IMAGE );
     s_OldWiresList = NULL;
 
-    GetScreen()->SetModify();
+    OnModify( );
 }
 
 
@@ -537,7 +537,7 @@ SCH_JUNCTION* WinEDA_SchematicFrame::CreateNewJunctionStruct(
 
     NewJunction->SetNext( GetScreen()->EEDrawList );
     GetScreen()->EEDrawList = NewJunction;
-    GetScreen()->SetModify();
+    OnModify( );
     if( PutInUndoList )
         SaveCopyInUndoList( NewJunction, UR_NEW );
     return NewJunction;
@@ -558,7 +558,7 @@ SCH_NO_CONNECT* WinEDA_SchematicFrame::CreateNewNoConnectStruct( wxDC* DC )
 
     NewNoConnect->SetNext( GetScreen()->EEDrawList );
     GetScreen()->EEDrawList = NewNoConnect;
-    GetScreen()->SetModify();
+    OnModify( );
     SaveCopyInUndoList( NewNoConnect, UR_NEW );
     return NewNoConnect;
 }

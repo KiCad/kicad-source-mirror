@@ -62,7 +62,7 @@ void WinEDA_SchematicFrame::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
     GetScreen()->m_Curseur = ItemInitialPosition;
     DrawPanel->MouseToCursorSchema();
 
-    GetScreen()->SetModify();
+    OnModify( );
     DrawPanel->ManageCurseur = ShowWhileMoving;
     DrawPanel->ForceCloseManageCurseur = ExitMoveTexte;
     GetScreen()->SetCurItem( TextStruct );
@@ -107,7 +107,7 @@ void WinEDA_SchematicFrame::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
         break;
     }
 
-    GetScreen()->SetModify();
+    OnModify( );
     RedrawOneStruct( DrawPanel, DC, TextStruct, g_XorMode );
     DrawPanel->CursorOn( DC );
 }
@@ -321,7 +321,7 @@ void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text,
     {
         newtext->SetNext( GetScreen()->EEDrawList );
         GetScreen()->EEDrawList = newtext;
-        GetScreen()->SetModify();
+        OnModify( );
     }
 
     /* now delete the old text

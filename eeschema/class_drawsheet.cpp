@@ -252,7 +252,7 @@ void SCH_SHEET::CleanupSheet( WinEDA_SchematicFrame* aFrame,
         NextPinsheet = Pinsheet->Next();
         if( HLabel == NULL )   // Hlabel not found: delete pinsheet
         {
-            aFrame->GetScreen()->SetModify();
+            aFrame->OnModify( );
             aFrame->DeleteSheetLabel( false, Pinsheet );
         }
         Pinsheet = NextPinsheet;

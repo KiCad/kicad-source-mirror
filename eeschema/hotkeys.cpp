@@ -325,7 +325,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         if( !ItemInEdit && screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
         {
             RefreshToolBar = LocateAndDeleteItem( this, DC );
-            GetScreen()->SetModify();
+            OnModify( );
             GetScreen()->SetCurItem( NULL );
             TestDanglingEnds( GetScreen()->EEDrawList, DC );
         }

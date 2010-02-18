@@ -318,7 +318,7 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
     if( pickList.GetCount() )
     {
         DeleteItemsInList( DrawPanel, pickList );
-        GetScreen()->SetModify();
+        OnModify( );
     }
 }
 
@@ -367,7 +367,7 @@ bool LocateAndDeleteItem( WinEDA_SchematicFrame* frame, wxDC* DC )
         g_ItemToRepeat = NULL;
         DeleteStruct( frame->DrawPanel, DC, DelStruct );
         frame->TestDanglingEnds( frame->GetScreen()->EEDrawList, DC );
-        frame->GetScreen()->SetModify();
+        frame->OnModify( );
         item_deleted = TRUE;
     }
 

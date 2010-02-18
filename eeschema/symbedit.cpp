@@ -106,7 +106,7 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
     m_component->RemoveDuplicateDrawItems();
     m_component->ClearSelectedItems();
 
-    GetScreen()->SetModify();
+    OnModify( );
     DrawPanel->Refresh();
 
     delete Lib;
@@ -229,7 +229,7 @@ void WinEDA_LibeditFrame::PlaceAncre()
 
     wxPoint offset( -GetScreen()->m_Curseur.x, GetScreen()->m_Curseur.y );
 
-    GetScreen()->SetModify();
+    OnModify( );
 
     m_component->SetOffset( offset );
 

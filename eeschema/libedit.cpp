@@ -561,7 +561,7 @@ created. Aborted" ) );
     g_EditPinByPinIsOn = false;
     m_lastDrawItem = NULL;
     GetScreen()->ClearUndoRedoList();
-    GetScreen()->SetModify();
+    OnModify( );
     DrawPanel->Refresh();
 }
 

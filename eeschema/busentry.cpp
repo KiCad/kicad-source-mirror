@@ -79,7 +79,7 @@ SCH_BUS_ENTRY* WinEDA_SchematicFrame::CreateBusEntry( wxDC* DC,
     RedrawOneStruct( DrawPanel, DC, BusEntry, g_XorMode );
     DrawPanel->CursorOn( DC );      // Display schematic cursor
 
-    GetScreen()->SetModify();
+    OnModify( );
 
     StartMoveBusEntry( BusEntry, DC );
     return BusEntry;
@@ -151,7 +151,7 @@ void WinEDA_SchematicFrame::SetBusEntryShape( wxDC*          DC,
 
     TestDanglingEnds( GetScreen()->EEDrawList, NULL );
     RedrawOneStruct( DrawPanel, DC, BusEntry, g_XorMode );
-    GetScreen()->SetModify();
+    OnModify( );
 }
 
 

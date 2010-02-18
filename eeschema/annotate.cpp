@@ -228,7 +228,7 @@ void WinEDA_SchematicFrame::DeleteAnnotation( bool aCurrentSheetOnly,
             }
         }
 
-        screen->SetModify();
+        OnModify( );
         if( aCurrentSheetOnly )
             break;
         screen = ScreenList.GetNext();

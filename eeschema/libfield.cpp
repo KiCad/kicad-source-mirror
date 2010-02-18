@@ -120,7 +120,7 @@ void WinEDA_LibeditFrame::PlaceField( wxDC* DC, LIB_FIELD* Field )
                  &fieldText, DefaultTransformMatrix );
 
     DrawPanel->CursorOn( DC );
-    GetScreen()->SetModify();
+    OnModify( );
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
     m_drawItem = NULL;
@@ -217,7 +217,7 @@ not conflict with any library entries." ),
     Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, drawMode, &fieldText,
                  DefaultTransformMatrix );
 
-    GetScreen()->SetModify();
+    OnModify( );
     UpdateAliasSelectList();
 }
 
@@ -234,7 +234,7 @@ void WinEDA_LibeditFrame::RotateField( wxDC* DC, LIB_FIELD* Field )
     if( Field == NULL )
         return;
 
-    GetScreen()->SetModify();
+    OnModify( );
     DrawPanel->CursorOff( DC );
     GRSetDrawMode( DC, g_XorMode );
 

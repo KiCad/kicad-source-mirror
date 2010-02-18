@@ -136,7 +136,7 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             else
                 m_component->RemoveDrawItem( DrawEntry, DrawPanel, DC );
             DrawEntry = NULL;
-            GetScreen()->SetModify();
+            OnModify( );
             break;
 
         case ID_LIBEDIT_ANCHOR_ITEM_BUTT:

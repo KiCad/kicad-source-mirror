@@ -294,7 +294,7 @@ SCH_SHEET_PIN* WinEDA_SchematicFrame::Create_PinSheet( SCH_SHEET* Sheet,
     DrawPanel->ForceCloseManageCurseur = ExitPinSheet;
     DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
 
-    GetScreen()->SetModify();
+    OnModify( );
     return NewSheetLabel;
 }
 
@@ -340,7 +340,7 @@ SCH_SHEET_PIN* WinEDA_SchematicFrame::Import_PinSheet( SCH_SHEET* Sheet,
         return NULL;
     }
 
-    GetScreen()->SetModify();
+    OnModify( );
 
     NewSheetLabel = new SCH_SHEET_PIN( Sheet, wxPoint( 0, 0 ), HLabel->m_Text );
     NewSheetLabel->m_Flags = IS_NEW;

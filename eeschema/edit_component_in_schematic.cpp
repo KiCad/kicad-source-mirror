@@ -167,7 +167,7 @@ modified!\nYou must create a new power"  ) );
 
     Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
     Cmp->DisplayInfo( this );
-    GetScreen()->SetModify();
+    OnModify( );
 }
 
 
@@ -277,7 +277,7 @@ void WinEDA_SchematicFrame::RotateCmpField( SCH_FIELD* Field, wxDC* DC )
         Field->m_Orient = TEXT_ORIENT_HORIZ;
     Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
 
-    GetScreen()->SetModify();
+    OnModify( );
 }
 
 
@@ -320,7 +320,7 @@ void WinEDA_SchematicFrame::EditComponentReference( SCH_COMPONENT* Cmp,
                                                                   0 ),
                                           Cmp->m_Flags ? g_XorMode :
                                           GR_DEFAULT_DRAWMODE );
-        GetScreen()->SetModify();
+        OnModify( );
     }
     Cmp->DisplayInfo( this );
 }
@@ -358,7 +358,7 @@ void WinEDA_SchematicFrame::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
         TextField->m_Text = message;
         TextField->Draw( DrawPanel, DC, wxPoint( 0, 0 ),
                          Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );
-        GetScreen()->SetModify();
+        OnModify( );
     }
 
     Cmp->DisplayInfo( this );
@@ -422,7 +422,7 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp,
     Cmp->GetField( FOOTPRINT )->Draw( DrawPanel, DC, wxPoint( 0, 0 ),
                                       Cmp->m_Flags ? g_XorMode :
                                       GR_DEFAULT_DRAWMODE );
-    GetScreen()->SetModify();
+    OnModify( );
 
     Cmp->DisplayInfo( this );
 }

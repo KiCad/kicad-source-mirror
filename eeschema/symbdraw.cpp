@@ -116,7 +116,7 @@ void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
 
     if( component )
         component->GetDrawItemList().sort();
-    GetScreen()->SetModify();
+    OnModify( );
 
     DrawItem->DisplayInfo( this );
     DrawPanel->Refresh();
@@ -915,7 +915,7 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
     m_drawItem->m_Flags = 0;
     m_drawItem = NULL;
 
-    GetScreen()->SetModify();
+    OnModify( );
 
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;

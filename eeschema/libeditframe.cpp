@@ -799,7 +799,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         }
 
         m_drawItem = NULL;
-        GetScreen()->SetModify();
+        OnModify( );
         DrawPanel->CursorOn( &dc );
         break;
 

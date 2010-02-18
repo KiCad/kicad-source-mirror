@@ -171,7 +171,7 @@ void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
         break;
     }
 
-    GetScreen()->SetModify();
+    OnModify( );
 
     /* clear struct.m_Flags  */
     SCH_ITEM* Struct;
@@ -268,7 +268,7 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
             {
                 ii = -1;
                 DeleteItemsInList( DrawPanel, block->m_ItemsSelection );
-                GetScreen()->SetModify();
+                OnModify( );
             }
             block->ClearItemsList();
             TestDanglingEnds( GetScreen()->EEDrawList, DC );
@@ -395,7 +395,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
         {
             ii = -1;
             DeleteItemsInList( DrawPanel, block->m_ItemsSelection );
-            GetScreen()->SetModify();
+            OnModify( );
         }
         TestDanglingEnds( GetScreen()->EEDrawList, DC );
         DrawPanel->Refresh();
@@ -440,7 +440,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
                                 UR_MIRRORED_Y,
                                 mirrorPoint );
             MirrorListOfItems( block->m_ItemsSelection, mirrorPoint );
-            GetScreen()->SetModify();
+            OnModify( );
         }
         TestDanglingEnds( GetScreen()->EEDrawList, DC );
         DrawPanel->Refresh();
@@ -578,7 +578,7 @@ void WinEDA_SchematicFrame::PasteListOfItems( wxDC* DC )
         Struct = Struct->Next() )
         Struct->m_Flags = 0;
 
-    GetScreen()->SetModify();
+    OnModify( );
 
     return;
 }

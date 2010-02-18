@@ -249,7 +249,7 @@ alias %s already exists!\nCannot update this component" ),
     // copy all the fields back, and change the length of m_Fields.
     m_LibEntry->SetFields( m_FieldsBuf );
 
-    m_Parent->GetScreen()->SetModify();
+    m_Parent->OnModify( );
 
     EndModal( 0 );
 }

@@ -90,6 +90,15 @@ public:
     void LoadSettings();
     void SaveSettings();
 
+    /** Function OnModify()
+     * Must be called after a schematic change
+     * in order to set the "modify" flag of the current screen
+     */
+    void OnModify( )
+    {
+        GetScreen()->SetModify();
+    }
+
     LIB_COMPONENT* GetComponent( void ) { return m_component; }
 
     CMP_LIBRARY* GetLibrary( void ) { return m_library; }

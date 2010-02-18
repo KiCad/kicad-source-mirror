@@ -349,7 +349,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
             g_ItemToRepeat = NULL;
             TestDanglingEnds( screen->EEDrawList, &dc );
             SetSheetNumberAndCount();
-            screen->SetModify();
+            OnModify();
         }
         break;
 
@@ -370,7 +370,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_EDIT_SHEET:
         if( EditSheet( (SCH_SHEET*) screen->GetCurItem(), &dc ) )
-            screen->SetModify();
+            OnModify();
         break;
 
     case ID_POPUP_IMPORT_GLABEL:
