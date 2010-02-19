@@ -280,5 +280,5 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
             DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
     }
 
-    GetScreen()->SetModify();
+    OnModify();
 }

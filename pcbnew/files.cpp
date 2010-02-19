@@ -139,7 +139,7 @@ bool WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append 
     if( Append )
     {
         GetScreen()->m_FileName = wxEmptyString;
-        GetScreen()->SetModify();
+        OnModify();
         GetBoard()->m_Status_Pcb = 0;
     }
 
@@ -233,7 +233,7 @@ this file again."));
 
         new_filename += PcbExtBuffer;
 
-        GetScreen()->SetModify();
+        OnModify();
         GetScreen()->m_FileName = new_filename;
     }
 

@@ -253,7 +253,7 @@ void WinEDA_BasePcbFrame::DeletePad( D_PAD* Pad )
 
     Module->Set_Rectangle_Encadrement();
 
-    GetScreen()->SetModify();
+    OnModify();
 }
 
 
@@ -376,7 +376,7 @@ void WinEDA_BasePcbFrame::PlacePad( D_PAD* Pad, wxDC* DC )
 
     EraseDragListe();
 
-    GetScreen()->SetModify();
+    OnModify();
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
     m_Pcb->m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK );
@@ -395,7 +395,7 @@ void WinEDA_BasePcbFrame::RotatePad( D_PAD* Pad, wxDC* DC )
     Module = (MODULE*) Pad->GetParent();
     Module->m_LastEdit_Time = time( NULL );
 
-    GetScreen()->SetModify();
+    OnModify();
 
     if( DC )
         Module->Draw( DrawPanel, DC, GR_XOR );

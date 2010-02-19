@@ -141,7 +141,7 @@ void DIALOG_MODULE_BOARD_EDITOR::GotoModuleEditor( wxCommandEvent& event )
                                                // null timestamp
     {
         m_CurrentModule->m_TimeStamp = GetTimeStamp();
-        m_Parent->GetScreen()->SetModify();
+        m_Parent->OnModify();
     }
 
     EndModal( 2 );
@@ -561,7 +561,7 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
 
     m_CurrentModule->Set_Rectangle_Encadrement();
 
-    m_Parent->GetScreen()->SetModify();
+    m_Parent->OnModify();
 
     EndModal( 1 );
 

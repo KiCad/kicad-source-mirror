@@ -300,7 +300,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             break;
         Edit_Track_Width( &dc, (TRACK*) GetCurItem() );
         DrawPanel->MouseToCursorSchema();
-        GetScreen()->SetModify();
+        OnModify();
         break;
 
     case ID_POPUP_PCB_EDIT_TRACKSEG:
@@ -308,7 +308,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             break;
         Edit_TrackSegm_Width( &dc, (TRACK*) GetCurItem() );
         DrawPanel->MouseToCursorSchema();
-        GetScreen()->SetModify();
+        OnModify();
         break;
 
     case ID_POPUP_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE:
@@ -365,7 +365,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             break;
         DrawPanel->MouseToCursorSchema();
         SetCurItem( Delete_Segment( &dc, (TRACK*) GetCurItem() ) );
-        GetScreen()->SetModify();
+        OnModify();
         break;
 
     case ID_POPUP_PCB_DELETE_TRACK:
@@ -374,14 +374,14 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         Delete_Track( &dc, (TRACK*) GetCurItem() );
         SetCurItem( NULL );
-        GetScreen()->SetModify();
+        OnModify();
         break;
 
     case ID_POPUP_PCB_DELETE_TRACKNET:
         DrawPanel->MouseToCursorSchema();
         Delete_net( &dc, (TRACK*) GetCurItem() );
         SetCurItem( NULL );
-        GetScreen()->SetModify();
+        OnModify();
         break;
 
     case ID_POPUP_PCB_LOCK_ON_TRACKSEG:
@@ -421,7 +421,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             Delete_Zone_Fill( zsegm );
             SetCurItem( NULL );
             test_1_net_connexion( NULL, netcode );
-            GetScreen()->SetModify();
+            OnModify();
             GetBoard()->DisplayInfo( this );
         }
         break;
@@ -537,7 +537,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             ZONE_CONTAINER* zone_container = (ZONE_CONTAINER*) GetCurItem();
             Delete_Zone_Fill( NULL, zone_container->m_TimeStamp );
             test_1_net_connexion( NULL, zone_container->GetNet() );
-            GetScreen()->SetModify();
+            OnModify();
             GetBoard()->DisplayInfo( this );
             DrawPanel->Refresh();
         }
@@ -556,7 +556,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         SetCurItem( NULL );             // CurItem might be deleted by this command, clear the pointer
         test_connexions( NULL );
         Tst_Ratsnest( NULL, 0 );        // Recalculate the active ratsnest, i.e. the unconnected links */
-        GetScreen()->SetModify();
+        OnModify();
         GetBoard()->DisplayInfo( this );
         DrawPanel->Refresh();
         break;

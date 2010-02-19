@@ -216,6 +216,14 @@ public:
     MODULE* Select_1_Module_From_BOARD( BOARD* Pcb );
     MODULE* GetModuleByName();
 
+    /** Function OnModify()
+     * Virtual
+     * Must be called after a schematic change
+     * in order to set the "modify" flag of the current screen
+     * and update the date in frame reference
+     */
+    virtual void OnModify( );
+
     // Modules (footprints)
     MODULE* Create_1_Module( wxDC*           DC,
                              const wxString& module_name );

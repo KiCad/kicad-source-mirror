@@ -2,7 +2,9 @@
 /* Dialog frame to swap layers */
 /*******************************/
 
-/* Fichier swap_layers */
+/*
+ * swap_layers.cpp
+ */
 
 #include "fctsys.h"
 #include "common.h"
@@ -356,7 +358,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
     pt_segm = GetBoard()->m_Track;
     for( ; pt_segm != NULL; pt_segm = pt_segm->Next() )
     {
-        GetScreen()->SetModify();
+        OnModify();
         if( pt_segm->Type() == TYPE_VIA )
         {
             SEGVIA* Via = (SEGVIA*) pt_segm;
@@ -383,7 +385,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
     /* Change zones. */
     for( pt_segm = GetBoard()->m_Zone;  pt_segm;  pt_segm = pt_segm->Next() )
     {
-        GetScreen()->SetModify();
+        OnModify();
         jj = pt_segm->GetLayer();
         if( New_Layer[jj] >= 0 && New_Layer[jj] < LAYER_NO_CHANGE )
             pt_segm->SetLayer( New_Layer[jj] );
@@ -395,7 +397,7 @@ void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
     {
         if( PtStruct->Type() == TYPE_DRAWSEGMENT )
         {
-            GetScreen()->SetModify();
+            OnModify();
             pt_drawsegm = (DRAWSEGMENT*) PtStruct;
             jj = pt_drawsegm->GetLayer();
             if( New_Layer[jj] >= 0 && New_Layer[jj] < LAYER_NO_CHANGE )

@@ -64,7 +64,7 @@ void WinEDA_ModuleEditFrame::Place_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
     SetCurItem( NULL );
-    GetScreen()->SetModify();
+    OnModify();
     MODULE* Module = (MODULE*) Edge->GetParent();
     Module->Set_Rectangle_Encadrement();
 }
@@ -143,7 +143,7 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Width( EDGE_MODULE* Edge )
     else
         Edge->m_Width = ModuleSegmentWidth;
 
-    GetScreen()->SetModify();
+    OnModify();
     DrawPanel->Refresh( TRUE );
     Module->Set_Rectangle_Encadrement();
     Module->m_LastEdit_Time = time( NULL );
@@ -196,7 +196,7 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge )
     else
         Edge->SetLayer( new_layer );
 
-    GetScreen()->SetModify();
+    OnModify();
     Module->Set_Rectangle_Encadrement();
     Module->m_LastEdit_Time = time( NULL );
     DrawPanel->Refresh( TRUE );
@@ -234,7 +234,7 @@ void WinEDA_ModuleEditFrame::Enter_Edge_Width( EDGE_MODULE* Edge, wxDC* DC )
         Edge->m_Width = ModuleSegmentWidth;
         Module->DrawEdgesOnly( DrawPanel, DC, wxPoint( 0, 0 ), GR_XOR );
         Module->Set_Rectangle_Encadrement();
-        GetScreen()->SetModify();
+        OnModify();
     }
 }
 
@@ -260,7 +260,7 @@ void WinEDA_ModuleEditFrame::Delete_Edge_Module( EDGE_MODULE* Edge )
     Edge->DeleteStructure();
     Module->m_LastEdit_Time = time( NULL );
     Module->Set_Rectangle_Encadrement();
-    GetScreen()->SetModify();
+    OnModify();
 }
 
 
@@ -389,7 +389,7 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
 
                 module->Set_Rectangle_Encadrement();
                 module->m_LastEdit_Time = time( NULL );
-                GetScreen()->SetModify();
+                OnModify();
             }
         }
         else
@@ -414,7 +414,7 @@ void WinEDA_ModuleEditFrame::End_Edge_Module( EDGE_MODULE* Edge, wxDC* DC )
     }
     Module->Set_Rectangle_Encadrement();
     Module->m_LastEdit_Time = time( NULL );
-    GetScreen()->SetModify();
+    OnModify();
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
 }

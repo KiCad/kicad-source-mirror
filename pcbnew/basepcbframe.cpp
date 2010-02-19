@@ -416,3 +416,18 @@ void WinEDA_BasePcbFrame::SaveSettings()
     cfg->Write( m_FrameName + DisplayModuleEdgeEntry, ( long )m_DisplayModEdge );
     cfg->Write( m_FrameName + DisplayModuleTextEntry, ( long )m_DisplayModText );
 }
+
+
+
+/** Function OnModify()
+ * Must be called after a schematic change
+ * in order to set the "modify" flag of the current screen
+ * and update the date in frame reference
+ */
+void WinEDA_BasePcbFrame::OnModify( )
+{
+    GetScreen()->SetModify( );
+
+    wxString       date = GenDate();
+    GetScreen()->m_Date = date;
+}

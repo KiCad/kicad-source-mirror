@@ -68,7 +68,7 @@ void WinEDA_PcbFrame::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
         return;
 
     TextePcb->Draw( DrawPanel, DC, GR_OR );
-    GetScreen()->SetModify();
+    OnModify();
 
     if( (TextePcb->m_Flags & IS_NEW) )  // If new: prepare undo command
     {
@@ -202,5 +202,5 @@ void WinEDA_PcbFrame::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     else                 // set flag edit, to show it was a complex command
         TextePcb->m_Flags |= IN_EDIT;
 
-    GetScreen()->SetModify();
+    OnModify();
 }

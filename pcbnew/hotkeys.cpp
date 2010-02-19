@@ -254,7 +254,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         break;
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:
-        ll = GetScreen()->m_Active_Layer;
+        ll = getActiveLayer();
         if( (ll <= LAYER_N_BACK) || (ll > LAYER_N_FRONT) )
             break;
 
@@ -269,7 +269,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         break;
 
     case HK_SWITCH_LAYER_TO_NEXT:
-        ll = GetScreen()->m_Active_Layer;
+        ll = getActiveLayer();
         if( (ll < LAYER_N_BACK) || (ll >= LAYER_N_FRONT) )
             break;
         if( GetBoard()->GetCopperLayerCount() < 2 ) // Single layer
@@ -369,7 +369,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         DisplayOpt.DisplayPcbTrackFill ^= 1;
         DisplayOpt.DisplayPcbTrackFill &= 1;
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
-        GetScreen()->SetRefreshReq();
+        DrawPanel->Refresh();
         break;
 
     case HK_DELETE:
@@ -377,7 +377,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         break;
 
     case HK_BACK_SPACE:
-        if( m_ID_current_state == ID_TRACK_BUTT && GetScreen()->m_Active_Layer
+        if( m_ID_current_state == ID_TRACK_BUTT && getActiveLayer()
             <= LAYER_N_FRONT )
         {
             if( ItemFree )
@@ -395,7 +395,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
                     Delete_Segment( DC, (TRACK*) DrawStruct );
                     SetCurItem( NULL );
                 }
-                GetScreen()->SetModify();
+                OnModify();
             }
             else if( GetCurItem()->Type() == TYPE_TRACK )
             {
@@ -404,7 +404,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
                 TRACK* track = (TRACK*) GetCurItem();
                 track = Delete_Segment( DC, track );
                 SetCurItem( track );
-                GetScreen()->SetModify();
+                OnModify();
             }
         }
         break;
@@ -475,7 +475,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
             Other_Layer_Route( (TRACK*) GetCurItem(), DC );
             GetBoard()->GetBoardDesignSettings()->m_CurrentViaType = v_type;
             if( DisplayOpt.ContrastModeDisplay )
-                GetScreen()->SetRefreshReq();
+                DrawPanel->Refresh();
         }
         break;
 
@@ -493,11 +493,11 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
             return;
         Other_Layer_Route( (TRACK*) GetCurItem(), DC ); // place via and switch layer
         if( DisplayOpt.ContrastModeDisplay )
-            GetScreen()->SetRefreshReq();
+            DrawPanel->Refresh();
         break;
 
     case HK_ADD_NEW_TRACK: // Start new track
-        if( GetScreen()->m_Active_Layer > LAYER_N_FRONT )
+        if( getActiveLayer() > LAYER_N_FRONT )
             break;
 
         if( m_ID_current_state != ID_TRACK_BUTT && ItemFree )
@@ -771,7 +771,7 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
     switch( m_ID_current_state )
     {
     case ID_TRACK_BUTT:
-        if( GetScreen()->m_Active_Layer > LAYER_N_FRONT )
+        if( getActiveLayer() > LAYER_N_FRONT )
             return FALSE;
         if( ItemFree )
         {
@@ -786,7 +786,7 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
             TRACK* track = (TRACK*) GetCurItem();
             track = Delete_Segment( DC, track );
             SetCurItem( track );
-            GetScreen()->SetModify();
+            OnModify();
             return TRUE;
         }
         break;
@@ -810,7 +810,7 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
         return FALSE;
     }
 
-    GetScreen()->SetModify();
+    OnModify();
     SetCurItem( NULL );
     return TRUE;
 }

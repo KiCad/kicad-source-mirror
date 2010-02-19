@@ -113,7 +113,7 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
 
     m_TrackAndViasSizesList_Changed = true;
 
-    GetScreen()->SetModify();
+    OnModify();
     GetBoard()->m_Status_Pcb = 0;
 
     /* At this point we should call Compile_Ratsnest()

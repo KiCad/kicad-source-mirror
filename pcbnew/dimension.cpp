@@ -181,7 +181,7 @@ void WinEDA_CotationPropertiesFrame::OnOkClick( wxCommandEvent& event )
         CurrentCotation->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
     }
 
-    m_Parent->GetScreen()->SetModify();
+    m_Parent->OnModify();
     EndModal( 1 );
 }
 
@@ -276,7 +276,7 @@ COTATION* WinEDA_PcbFrame::Begin_Cotation( COTATION* Cotation, wxDC* DC )
     /* Insertion de la structure dans le Chainage .Drawings du PCB */
     GetBoard()->Add( Cotation );
 
-    GetScreen()->SetModify();
+    OnModify();
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
 
@@ -368,7 +368,7 @@ void WinEDA_PcbFrame::Delete_Cotation( COTATION* Cotation, wxDC* DC )
 
     SaveCopyInUndoList(Cotation, UR_DELETED);
     Cotation->UnLink();
-    GetScreen()->SetModify();
+    OnModify();
 }
 
 

@@ -253,7 +253,7 @@ void WinEDA_PcbFrame::ReOrientModules( const wxString& ModuleMask,
 
         if( WildCompareString( ModuleMask, module->m_Reference->m_Text, FALSE ) )
         {
-            GetScreen()->SetModify();
+            OnModify();
             redraw = true;
             Rotate_Module( NULL, module, Orient, FALSE );
         }

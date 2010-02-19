@@ -304,7 +304,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     placeMenu->Append( item );
 
     /* Net name */
-    item = new wxMenuItem( placeMenu, ID_LABEL_BUTT, _( "Net name" ),
+    item = new wxMenuItem( placeMenu, ID_LABEL_BUTT, _( "Label" ),
                            _( "Place net name" ), wxITEM_NORMAL  );
     item->SetBitmap( add_line_label_xpm );
     placeMenu->Append( item );

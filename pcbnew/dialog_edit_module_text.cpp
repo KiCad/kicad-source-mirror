@@ -199,7 +199,7 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
         m_CurrentTextMod->Draw( m_Parent->DrawPanel, m_DC, GR_XOR,
             (m_CurrentTextMod->m_Flags & IS_MOVED) ? MoveVector : wxPoint( 0, 0 ) );
     }
-    m_Parent->GetScreen()->SetModify();
+    m_Parent->OnModify();
     if( m_Module )
         m_Module->m_LastEdit_Time = time( NULL );
 

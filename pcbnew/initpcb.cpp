@@ -133,7 +133,7 @@ void WinEDA_PcbGlobalDeleteFrame::AcceptPcbDelete( wxCommandEvent& event )
     }
 
     m_Parent->DrawPanel->Refresh();
-    m_Parent->DrawPanel->GetScreen()->SetModify();
+    m_Parent->OnModify();
 
     EndModal( 1 );
 }

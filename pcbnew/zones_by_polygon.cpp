@@ -283,7 +283,7 @@ void WinEDA_PcbFrame::End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER
     DrawPanel->ForceCloseManageCurseur = NULL;
     if( DC )
         zone_container->Draw( DrawPanel, DC, GR_OR );
-    GetScreen()->SetModify();
+    OnModify();
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = NULL;
 
@@ -324,7 +324,7 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_contain
  *  the member .m_CornerSelection is used as selected corner
  */
 {
-    GetScreen()->SetModify();
+    OnModify();
 
     if( zone_container->m_Poly->GetNumCorners() <= 3 )
     {
@@ -715,7 +715,7 @@ bool WinEDA_PcbFrame::End_Zone( wxDC* DC )
     SaveCopyInUndoList(s_PickedList, UR_UNSPECIFIED);
     s_PickedList.ClearItemsList(); // s_ItemsListPicker is no more owner of picked items
 
-    GetScreen()->SetModify();
+    OnModify();
     return true;
 }
 
@@ -826,7 +826,7 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
     SaveCopyInUndoList(s_PickedList, UR_UNSPECIFIED);
     s_PickedList.ClearItemsList(); // s_ItemsListPicker is no more owner of picked items
 
-    GetScreen()->SetModify();
+    OnModify();
 }
 
 
@@ -863,6 +863,6 @@ void WinEDA_PcbFrame::Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_contai
 
     DrawPanel->PostDirtyRect( dirty );
 
-    GetScreen()->SetModify();
+    OnModify();
 }
 

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-17 16:59+0100\n"
-"PO-Revision-Date: 2010-02-17 17:00+0100\n"
+"POT-Creation-Date: 2010-02-19 08:35+0100\n"
+"PO-Revision-Date: 2010-02-19 08:43+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -41,11 +41,11 @@ msgstr "Format décimal"
 
 #: pcbnew/dialog_gendrill.cpp:173
 msgid "suppress leading zeros"
-msgstr "Suppression zeros de tête"
+msgstr "Suppression zéros de tête"
 
 #: pcbnew/dialog_gendrill.cpp:174
 msgid "suppress trailing zeros"
-msgstr "Suppression zeros de fin"
+msgstr "Suppression zéros de fin"
 
 #: pcbnew/dialog_gendrill.cpp:175
 msgid "keep zeros"
@@ -130,7 +130,7 @@ msgstr "Rapport de perçage:"
 
 #: pcbnew/dialog_gendrill.cpp:221
 msgid "Creates a plain text report"
-msgstr "Créer un fichier rapport ascii"
+msgstr "Créer un fichier rapport format texte"
 
 #: pcbnew/dialog_gendrill.cpp:224
 msgid "HPGL plotter Options:"
@@ -333,7 +333,7 @@ msgstr "Ok pour abandonner?"
 
 #: pcbnew/automove.cpp:194
 msgid "No modules found!"
-msgstr "Pas demodules"
+msgstr "Pas de modules"
 
 #: pcbnew/automove.cpp:199
 msgid "Move modules?"
@@ -365,7 +365,7 @@ msgstr "Net non sélectionné"
 
 #: pcbnew/autorout.cpp:79
 msgid "Module not selected"
-msgstr "Module non selectionné"
+msgstr "Module non sélectionné"
 
 #: pcbnew/autorout.cpp:88
 msgid "Pad not selected"
@@ -1113,12 +1113,12 @@ msgid ""
 "Use this attribute for smd components.\n"
 "Only components with this option are put in the footprint position list file"
 msgstr ""
-"Uiliser cet attribut pour les composants CMS.\n"
+"Utiliser cet attribut pour les composants CMS.\n"
 "Seuls les composants avec cette option sont mis dans le fichier de position des composants"
 
 #: pcbnew/dialog_edit_module_for_Modedit.cpp:89
 msgid "Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)"
-msgstr "Uiliser cet attribut pour les composants \"virtuels\" directement dessinés sur le PCB (tel que les vieux connecteurs ISA de PC)"
+msgstr "Utiliser cet attribut pour les composants \"virtuels\" directement dessinés sur le PCB (tel que les vieux connecteurs ISA de PC)"
 
 #: pcbnew/dialog_edit_module_for_Modedit.cpp:115
 msgid "Enable hotkey move commands and Auto Placement"
@@ -1342,7 +1342,7 @@ msgstr "N'est pas un fichier de Modules"
 
 #: pcbnew/librairi.cpp:174
 msgid "Create New Library"
-msgstr "Créer un Nouvelle Librairie"
+msgstr "Créer une Nouvelle Librairie"
 
 #: pcbnew/librairi.cpp:174
 msgid "Export Module"
@@ -1706,7 +1706,7 @@ msgstr "Défait dernière édition"
 
 #: pcbnew/tool_pcb.cpp:229
 msgid "Redo the last undo command"
-msgstr "Refait la dernière commande defaite"
+msgstr "Refait la dernière commande défaite"
 
 #: pcbnew/tool_pcb.cpp:233
 msgid "Print board"
@@ -2147,7 +2147,7 @@ msgstr "Pad Dessus"
 
 #: pcbnew/class_pcb_layer_widget.cpp:74
 msgid "Show footprint pads on board's front"
-msgstr "Afficher les pads placés sur le dessus du ciruit imprimé"
+msgstr "Afficher les pads placés sur le dessus du circuit imprimé"
 
 #: pcbnew/class_pcb_layer_widget.cpp:75
 msgid "Pads Back"
@@ -2155,7 +2155,7 @@ msgstr "Pads Dessous"
 
 #: pcbnew/class_pcb_layer_widget.cpp:75
 msgid "Show footprint pads on board's back"
-msgstr "Afficher les pads placés sur le dessous du ciruit imprimé"
+msgstr "Afficher les pads placés sur le dessous du circuit imprimé"
 
 #: pcbnew/class_pcb_layer_widget.cpp:77
 msgid "Text Front"
@@ -2164,7 +2164,7 @@ msgstr "Texte Dessus"
 #: pcbnew/class_pcb_layer_widget.cpp:77
 #: pcbnew/class_pcb_layer_widget.cpp:78
 msgid "Show footprint text on board's back"
-msgstr "Afficher les textes sur modules situés sur le dessous du ciruit imprimé"
+msgstr "Afficher les textes sur modules situés sur le dessous du circuit imprimé"
 
 #: pcbnew/class_pcb_layer_widget.cpp:78
 msgid "Text Back"
@@ -2204,7 +2204,7 @@ msgstr "Modules Dessus"
 
 #: pcbnew/class_pcb_layer_widget.cpp:84
 msgid "Show footprints that are on board's front"
-msgstr "Afficher les modules situés sur le dessus du ciruit imprimé"
+msgstr "Afficher les modules situés sur le dessus du circuit imprimé"
 
 #: pcbnew/class_pcb_layer_widget.cpp:85
 msgid "Modules Back"
@@ -2212,7 +2212,7 @@ msgstr "Modules Dessous"
 
 #: pcbnew/class_pcb_layer_widget.cpp:85
 msgid "Show footprints that are on board's back"
-msgstr "Afficher les modules situés sur le dessous du ciruit imprimé"
+msgstr "Afficher les modules situés sur le dessous du circuit imprimé"
 
 #: pcbnew/class_pcb_layer_widget.cpp:86
 msgid "Values"
@@ -2252,7 +2252,7 @@ msgstr "Couche cuivre dessous"
 
 #: pcbnew/class_pcb_layer_widget.cpp:241
 msgid "Adhesive on board's front"
-msgstr "Afficher couche adhésive situés sur le dessus du ciruit imprimé"
+msgstr "Afficher couche adhésive situés sur le dessus du circuit imprimé"
 
 #: pcbnew/class_pcb_layer_widget.cpp:242
 msgid "Adhesive on board's back"
@@ -2264,23 +2264,23 @@ msgstr "Couche de pâte à souder sur dessus du circuit imprimé"
 
 #: pcbnew/class_pcb_layer_widget.cpp:244
 msgid "Solder paste on board's back"
-msgstr "Couche de pate à souder sur dessous du circuit imprimé"
+msgstr "Couche de pâte à souder sur dessous du circuit imprimé"
 
 #: pcbnew/class_pcb_layer_widget.cpp:245
 msgid "Silkscreen on board's front"
-msgstr "Sérigraphie sur le dessus du ciruit imprimé"
+msgstr "Sérigraphie sur le dessus du circuit imprimé"
 
 #: pcbnew/class_pcb_layer_widget.cpp:246
 msgid "Silkscreen on board's back"
-msgstr "Sérigraphie sur le dessous du ciruit imprimé "
+msgstr "Sérigraphie sur le dessous du circuit imprimé "
 
 #: pcbnew/class_pcb_layer_widget.cpp:247
 msgid "Solder mask on board's front"
-msgstr "Couche masque soudure sur le dessus du ciruit imprimée"
+msgstr "Couche masque soudure sur le dessus du circuit imprimé"
 
 #: pcbnew/class_pcb_layer_widget.cpp:248
 msgid "Solder mask on board's back"
-msgstr "Couche masque soudure sur le dessous du ciruit imprimée"
+msgstr "Couche masque soudure sur le dessous du circuit imprimé"
 
 #: pcbnew/class_pcb_layer_widget.cpp:249
 msgid "Explanatory drawings"
@@ -2635,7 +2635,7 @@ msgstr "Style"
 
 #: pcbnew/dialog_pcb_text_properties.cpp:242
 msgid "The text thickness is too large for the text size. It will be clamped"
-msgstr "L'épaisseur du texte est trop grande pour ses dimensions, Elle sera limitée"
+msgstr "L'épaisseur du texte est trop grande pour ses dimensions. Elle sera limitée"
 
 #: pcbnew/dialog_pad_properties_base.cpp:25
 msgid "Pad Num :"
@@ -2793,7 +2793,7 @@ msgstr ""
 
 #: pcbnew/dialog_pad_properties_base.cpp:272
 msgid "Solder paste clearance:"
-msgstr "Marge masque pate des pads"
+msgstr "Marge masque pâte des pads"
 
 #: pcbnew/dialog_pad_properties_base.cpp:274
 msgid ""
@@ -2802,7 +2802,7 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value ratio\n"
 "A negative value means a smaller mask size than pad size"
 msgstr ""
-"Ceci est la marge locale entre ce pad et le masque de pate à souder\n"
+"Ceci est la marge locale entre ce pad et le masque de pâte à souder\n"
 "Si 0, la valeur locale du module ou la valeur en Netclasse sera utilisée"
 
 #: pcbnew/dialog_pad_properties_base.cpp:285
@@ -2817,7 +2817,7 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Ceci est la valeur locale de la marge entre ce  pad et le masque de pate à souder\n"
+"Ceci est la valeur locale de la marge entre ce  pad et le masque de pâte à souder\n"
 "Une valeur de 10 signifie que la marge est 10 pour cent  de la taille du pad\n"
 "Si 0 la valeur de l'empreinte ou la valeur globale est utilisée\n"
 "La marge finale est la somme de cette valeur et du rapport de marge\n"
@@ -3075,7 +3075,7 @@ msgstr "Valeur minimum pour le diamètre de microvia: <b>%s</b><br>\n"
 
 #: pcbnew/dialog_design_rules.cpp:630
 msgid "Errors detected, Abort"
-msgstr "Erreurs detectées, Abandon"
+msgstr "Erreurs détectées, Abandon"
 
 #: pcbnew/dialog_design_rules.cpp:656
 msgid "New Net Class Name:"
@@ -3097,7 +3097,7 @@ msgstr "%s: <b>Largeur Piste</b> &ge; <b>Largeur Piste Minimum</b><br>"
 #: pcbnew/dialog_design_rules.cpp:933
 #, c-format
 msgid "%s: <b>Via Diameter</b> &lt; <b>Minimun Via Diameter</b><br>"
-msgstr "%s: <b>Diamètre Via</b> &ge; <b>Min. Diamètre Via</b><br>"
+msgstr "%s: <b>Diamètre Via</b> &ge; <b>Min. Diamètre Via Min.</b><br>"
 
 #: pcbnew/dialog_design_rules.cpp:945
 #, c-format
@@ -3137,7 +3137,7 @@ msgstr "<b>Extra Piste %d Largeur</b> %s &gt; <b>25,4 mm!</b><br>"
 #: pcbnew/dialog_design_rules.cpp:1036
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &lt; <b>Min Via Size</b><br>"
-msgstr "<b>Extra Via %d Taille</b> %s &lt; <b>Min Taille Via</b><br>"
+msgstr "<b>Extra Via %d Taille</b> %s &lt; <b>Taille Via Min.</b><br>"
 
 #: pcbnew/dialog_design_rules.cpp:1044
 #, c-format
@@ -3328,7 +3328,7 @@ msgstr "NETCLASS: '%s' a une isolation:%s qui est moins que la valeur globale:%s
 #: pcbnew/drc.cpp:340
 #, c-format
 msgid "NETCLASS: '%s' has TrackWidth:%s which is less than global:%s"
-msgstr "NETCLASS: '%s' a une largeur de piste: %s plust petite que la valeur globale:%s"
+msgstr "NETCLASS: '%s' a une largeur de piste: %s plus petite que la valeur globale:%s"
 
 #: pcbnew/drc.cpp:354
 #, c-format
@@ -3708,7 +3708,7 @@ msgstr "Supp. Pistes Mauvaises:"
 
 #: pcbnew/dialog_netlist_fbp.cpp:50
 msgid "Keep or delete bad tracks after a netlist change"
-msgstr "Garder ou supprimer les mauvaises pistes après un chnagement de netliste"
+msgstr "Garder ou supprimer les mauvaises pistes après un changement de netliste"
 
 #: pcbnew/dialog_netlist_fbp.cpp:56
 msgid "Extra Footprints"
@@ -3977,7 +3977,7 @@ msgstr "Supprimer Tracé"
 
 #: pcbnew/onrightclick.cpp:179
 msgid "Delete All Drawing on Layer"
-msgstr "Supprimer tous Elements Grahiques sur Couche"
+msgstr "Supprimer tous Eléments Grahiques sur Couche"
 
 #: pcbnew/onrightclick.cpp:185
 msgid "Delete Zone Filling"
@@ -4479,7 +4479,7 @@ msgstr "Il y a un problème d'impression"
 
 #: pcbnew/class_edge_mod.cpp:301
 msgid "Graphic Item"
-msgstr "Element Graphique"
+msgstr "Elément Graphique"
 
 #: pcbnew/class_edge_mod.cpp:308
 msgid "TimeStamp"
@@ -4567,7 +4567,7 @@ msgstr "Déplacer les nets sélectionnés dans la liste de gauche vers la liste 
 
 #: pcbnew/dialog_design_rules_base.cpp:123
 msgid "<< Select All"
-msgstr "<< Selectionner Tout"
+msgstr "<< Sélectionner Tout"
 
 #: pcbnew/dialog_design_rules_base.cpp:124
 msgid "Select all nets in the left list"
@@ -4575,7 +4575,7 @@ msgstr "Sélectionner tous les nets de la liste de gauche"
 
 #: pcbnew/dialog_design_rules_base.cpp:128
 msgid "Select All >>"
-msgstr "Selectionner Tout >>"
+msgstr "Sélectionner Tout >>"
 
 #: pcbnew/dialog_design_rules_base.cpp:129
 msgid "Select all nets in the right list"
@@ -4937,7 +4937,7 @@ msgstr "Dessous"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:50
 msgid "Side Select"
-msgstr "Sélection Coté"
+msgstr "Sélection Côté"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:57
 msgid "+ 90.0"
@@ -5059,7 +5059,7 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value ratio\n"
 "A negative value means a smaller mask size than pad size"
 msgstr ""
-"Ceci est la valeur locale de la marge entre pads et le masque de pate à souder\n"
+"Ceci est la valeur locale de la marge entre pads et le masque de pâte à souder\n"
 "pour cette empreinte.\n"
 "Cette valeur peut être remplacée par une valeur locale du pad.\n"
 "La marge finale est la somme de cette valeur et du rapport de marge\n"
@@ -5075,7 +5075,7 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Ceci est la valeur locale de la marge entre pads et le masque de pate à souder\n"
+"Ceci est la valeur locale de la marge entre pads et le masque de pâte à souder\n"
 "pour cette empreinte\n"
 "Une valeur de 10 signifie que la marge est 10 pour cent  de la taille du pad\n"
 "Cette valeur peut être remplacée par une valeur locale du pad\n"
@@ -5355,7 +5355,7 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "The final clearance value is the sum of this value and the clearance value ratio"
 msgstr ""
-"Ceci est la marge globale entre pads et le  masque de pate à souder\n"
+"Ceci est la marge globale entre pads et le  masque de pâte à souder\n"
 "Cette valeur peut être remplacée par les valeurs locales de l'empreinte ou du pad\n"
 "La valeur finale est la somme de cette valeur et de la valeur liée au coefficient"
 
@@ -5366,7 +5366,7 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "The final clearance value is the sum of this value and the clearance value"
 msgstr ""
-"Ceci est la valeur locale de la marge entre pads et le masque de pate à souder\n"
+"Ceci est la valeur locale de la marge entre pads et le masque de pâte à souder\n"
 "pour cette empreinte\n"
 "Une valeur de 10 signifie que la marge est 10 pour cent  de la taille du pad\n"
 "Cette valeur peut être remplacée par une valeur locale du pad\n"
@@ -5466,7 +5466,7 @@ msgstr "SoldP_Dessus_réserve"
 
 #: pcbnew/dialog_layers_setup_base.cpp:105
 msgid "If you want a solder paster layer for front side of the board"
-msgstr "Si vous voulez une couche de pate à braser sur le dessus du PCB"
+msgstr "Si vous voulez une couche de pâte à braser sur le dessus du PCB"
 
 #: pcbnew/dialog_layers_setup_base.cpp:118
 msgid "SilkS_Front_later"
@@ -5497,7 +5497,7 @@ msgstr "Dessus_réserve"
 
 #: pcbnew/dialog_layers_setup_base.cpp:170
 msgid "Layer name of front (top) copper layer"
-msgstr "Nom de la couche sur le dessus du circuit (coté composant)"
+msgstr "Nom de la couche sur le dessus du circuit (côté composant)"
 
 #: pcbnew/dialog_layers_setup_base.cpp:182
 msgid "If you want a front copper layer"
@@ -5600,7 +5600,7 @@ msgstr "Type de couches cuivre pour Freerouter. Les couches type \"Power\" sont 
 
 #: pcbnew/dialog_layers_setup_base.cpp:579
 msgid "Layer name of back (bottom) copper layer"
-msgstr "Nom de la couche sur le dessous du circuit (coté cuivre)"
+msgstr "Nom de la couche sur le dessous du circuit (côté cuivre)"
 
 #: pcbnew/dialog_layers_setup_base.cpp:591
 msgid "If you want a back copper layer"
@@ -5628,7 +5628,7 @@ msgstr "SoldP_Dessous_réserve"
 
 #: pcbnew/dialog_layers_setup_base.cpp:670
 msgid "If you want a solder paste layer for the back side of the board"
-msgstr "Si vous voulez une couche de pate à braser sur le dessous du PCB"
+msgstr "Si vous voulez une couche de pâte à braser sur le dessous du PCB"
 
 #: pcbnew/dialog_layers_setup_base.cpp:683
 msgid "Adhes_Back_later"
@@ -5773,7 +5773,7 @@ msgid ""
 "If Defined Holes is selected, only the non default size holes are shown"
 msgstr ""
 "Montrer (ou non) le perçage des vias.\n"
-"Si Trours Définis est sélectionné, seuls les trous à la valeur non défaut sont montrés"
+"Si Trous Définis est sélectionné, seuls les trous à la valeur non défaut sont montrés"
 
 #: pcbnew/dialog_display_options_base.cpp:49
 msgid "Net Names:"
@@ -5935,7 +5935,7 @@ msgstr "Quantité"
 
 #: pcbnew/build_BOM_from_board.cpp:91
 msgid "Designation"
-msgstr "Designation"
+msgstr "Désignation"
 
 #: pcbnew/build_BOM_from_board.cpp:92
 msgid "Supplier and ref"
@@ -6570,7 +6570,7 @@ msgstr "Ajuster toutes Pistes (pas les Vias) à leurs Valeurs en NetClass"
 
 #: pcbnew/layer_widget.cpp:358
 msgid "Left click to select, middle click for color change, right click for menu"
-msgstr "Cliquer sur bouton gauche pour selectionner, du milieu pour changer la couleur, droit pour le menu"
+msgstr "Cliquer sur bouton gauche pour sélectionner, du milieu pour changer la couleur, droit pour le menu"
 
 #: pcbnew/layer_widget.cpp:374
 msgid "Enable this for visibility"
@@ -7072,7 +7072,7 @@ msgstr "Défaire dernière édition"
 
 #: eeschema/tool_lib.cpp:139
 msgid "Redo the last command"
-msgstr "Refaire la dernière commande defaite"
+msgstr "Refaire la dernière commande défaite"
 
 #: eeschema/tool_lib.cpp:147
 msgid "Edit component properties"
@@ -7239,23 +7239,23 @@ msgstr "Mots clé"
 msgid "Schematic modified, Save before exit ?"
 msgstr "Schématique modifiée,  Sauver avant de quitter ?"
 
-#: eeschema/schframe.cpp:493
+#: eeschema/schframe.cpp:514
 msgid "Draw wires and buses in any direction"
 msgstr "Tracer les fils et bus avec direction quelconque"
 
-#: eeschema/schframe.cpp:494
+#: eeschema/schframe.cpp:515
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Autoriser fils et bus verticaux et horizontaux seulement"
 
-#: eeschema/schframe.cpp:504
+#: eeschema/schframe.cpp:525
 msgid "Do not show hidden pins"
 msgstr "Ne pas affichager les pins invisibles"
 
-#: eeschema/schframe.cpp:505
+#: eeschema/schframe.cpp:526
 msgid "Show hidden pins"
 msgstr "Force affichage des pins invisibles"
 
-#: eeschema/schframe.cpp:596
+#: eeschema/schframe.cpp:617
 msgid "Schematic"
 msgstr "Schématique"
 
@@ -7279,7 +7279,7 @@ msgid ""
 "Please choose another name that does not conflict with any library entries."
 msgstr ""
 "Le nom du champ <%s> est en conflit avec un autre composant dans la libairie <%s>.\n"
-"SVP choisissez un autre nom qui me soit pas en conflit avec un composant en librairie."
+"SVP choisissez un autre nom qui ne soit pas en conflit avec un composant en librairie."
 
 #: eeschema/libfield.cpp:208
 msgid "No new text: no change"
@@ -7500,7 +7500,7 @@ msgstr "Pas de librairies de composants chargées."
 #: eeschema/selpart.cpp:32
 #, c-format
 msgid " Select 1 of %d libraries."
-msgstr "Selection 1 parmi %d librairies."
+msgstr "Sélection 1 parmi %d librairies."
 
 #: eeschema/selpart.cpp:34
 msgid "Select Library"
@@ -7611,7 +7611,7 @@ msgid ""
 "Select 1 of %d components to delete\n"
 "from library <%s>."
 msgstr ""
-"Selection 1 de %d composants à supprimer\n"
+"Sélection 1 de %d composants à supprimer\n"
 "de la librairie <%s>."
 
 #: eeschema/libedit.cpp:397
@@ -7621,7 +7621,7 @@ msgstr "Suppression Composant"
 #: eeschema/libedit.cpp:406
 #, c-format
 msgid "Entry <%s> not found in library <%s>."
-msgstr "Element <%s> non trouvé en librairie <%s>."
+msgstr "Elément <%s> non trouvé en librairie <%s>."
 
 #: eeschema/libedit.cpp:413
 #, c-format
@@ -8957,8 +8957,8 @@ msgid "Place a no connect flag"
 msgstr "Placer un Symbole de Non Connexion"
 
 #: eeschema/menubar.cpp:307
-msgid "Net name"
-msgstr "Net Name"
+msgid "Label"
+msgstr "Label"
 
 #: eeschema/menubar.cpp:313
 msgid "Global label"
@@ -9365,7 +9365,7 @@ msgstr "Editer Options pour le Rectangle"
 
 #: eeschema/libedit_onrightclick.cpp:154
 msgid "Drag Rectangle Edge"
-msgstr "Drag Coté Rectangle"
+msgstr "Drag Côté Rectangle"
 
 #: eeschema/libedit_onrightclick.cpp:162
 msgid "Delete Rectangle "
@@ -9473,11 +9473,11 @@ msgstr "Sélection des Eléments"
 
 #: eeschema/schedit.cpp:173
 msgid "Push/Pop Hierarchy"
-msgstr "Naviger dans Hiérarchie"
+msgstr "Naviguer dans Hiérarchie"
 
 #: eeschema/schedit.cpp:177
 msgid "Add NoConnect Flag"
-msgstr "Ajoutde symboles de non connexion"
+msgstr "Ajout de symboles de non connexion"
 
 #: eeschema/schedit.cpp:185
 msgid "Add Bus"
@@ -9821,7 +9821,7 @@ msgstr "Alignement au sommet"
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:90
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:71
 msgid "Vert. Justify"
-msgstr "Vert. Justifié"
+msgstr "Justification Vert."
 
 #: eeschema/class_library.cpp:25
 #, c-format
@@ -10053,7 +10053,7 @@ msgstr "l'arc a seulement %d paramètres sur les 8 requis"
 #: eeschema/classes_body_items.cpp:1696
 #: eeschema/classes_body_items.cpp:2066
 msgid "Bounding box"
-msgstr "Rectange dencadrement"
+msgstr "Rectange d'encadrement"
 
 #: eeschema/classes_body_items.cpp:586
 #, c-format
@@ -10407,7 +10407,7 @@ msgstr "Nombre d'erreurs:"
 
 #: eeschema/dialog_erc_base.cpp:88
 msgid "&Test Erc"
-msgstr "&Test Erc"
+msgstr "&Test ERC"
 
 #: eeschema/dialog_erc_base.cpp:91
 msgid "&Del Markers"
@@ -10797,7 +10797,7 @@ msgstr "Active le \"&panning\" automatique"
 
 #: eeschema/dialog_eeschema_options_base.cpp:130
 msgid "Allow buses and wires to be placed in H or V &orientation only"
-msgstr "Autorise les bus et fils a être placés en &orientation H ou V uniquement"
+msgstr "Autorise les bus et fils à être placés en &orientation H ou V uniquement"
 
 #: eeschema/dialog_eeschema_options_base.cpp:134
 msgid "Show p&age limits"
@@ -11051,11 +11051,11 @@ msgstr "Lib: "
 #: cvpcb/genorcad.cpp:127
 #, c-format
 msgid "%s %s pin %s : Different Nets"
-msgstr "%s %s pin %s :  Nets Differents"
+msgstr "%s %s pin %s :  Nets Différents"
 
 #: cvpcb/savecmp.cpp:24
 msgid "Component Library Error"
-msgstr "Erreur en Librairie de Composanr"
+msgstr "Erreur en Librairie de Composant"
 
 #: cvpcb/savecmp.cpp:86
 #, c-format
@@ -11186,7 +11186,7 @@ msgstr "Erreur Netliste: %s"
 #: cvpcb/writenetlistpcbnew.cpp:52
 #, c-format
 msgid "Component %s %s pin %s : Different Nets"
-msgstr "Composant %s %s pin %s :  Nets Differents"
+msgstr "Composant %s %s pin %s :  Nets Différents"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:156
 msgid "Display Options"
@@ -11587,105 +11587,105 @@ msgstr "Fichier exécutable ("
 msgid "Select Prefered Editor"
 msgstr "Sélection Editeur Préféré"
 
-#: kicad/treeprj_frame.cpp:126
+#: kicad/treeprj_frame.cpp:136
 msgid "&Run"
 msgstr "Exécute&r"
 
-#: kicad/treeprj_frame.cpp:127
+#: kicad/treeprj_frame.cpp:137
 msgid "Run the Python Script"
 msgstr "Exécuter le Script Python"
 
-#: kicad/treeprj_frame.cpp:136
-#: kicad/treeprj_frame.cpp:211
+#: kicad/treeprj_frame.cpp:146
+#: kicad/treeprj_frame.cpp:221
 msgid "&Edit in a text editor"
 msgstr "Editer avec un éditeur de Texte"
 
-#: kicad/treeprj_frame.cpp:137
+#: kicad/treeprj_frame.cpp:147
 msgid "&Open the file in a Text Editor"
 msgstr "&Ouvrir le fichier avec un  Editeur de texte"
 
-#: kicad/treeprj_frame.cpp:154
+#: kicad/treeprj_frame.cpp:164
 msgid "New D&irectory"
 msgstr "&Nouveau Répertoire"
 
-#: kicad/treeprj_frame.cpp:155
+#: kicad/treeprj_frame.cpp:165
 msgid "Create a New Directory"
 msgstr "Créer un nouveau Répertoire"
 
-#: kicad/treeprj_frame.cpp:164
+#: kicad/treeprj_frame.cpp:174
 msgid "New P&ython Script"
 msgstr "Nouveau Script P&ython"
 
-#: kicad/treeprj_frame.cpp:165
+#: kicad/treeprj_frame.cpp:175
 msgid "Create a New Python Script"
 msgstr "Créer un nouveau script Python"
 
-#: kicad/treeprj_frame.cpp:174
+#: kicad/treeprj_frame.cpp:184
 msgid "New &Text File"
 msgstr "Nouveau  Fichier &Texte"
 
-#: kicad/treeprj_frame.cpp:175
+#: kicad/treeprj_frame.cpp:185
 msgid "Create a New Txt File"
 msgstr "Créer un nouveau Fichier texte"
 
-#: kicad/treeprj_frame.cpp:183
+#: kicad/treeprj_frame.cpp:193
 msgid "New &File"
 msgstr "Nouveau &Fichier"
 
-#: kicad/treeprj_frame.cpp:184
+#: kicad/treeprj_frame.cpp:194
 msgid "Create a New File"
 msgstr "Créer un nouveau Fichier"
 
-#: kicad/treeprj_frame.cpp:198
+#: kicad/treeprj_frame.cpp:208
 msgid "&Rename file"
 msgstr "&Renommer fichier"
 
-#: kicad/treeprj_frame.cpp:199
-#: kicad/treeprj_frame.cpp:201
+#: kicad/treeprj_frame.cpp:209
+#: kicad/treeprj_frame.cpp:211
 msgid "&Rename directory"
 msgstr "&Renommer répertoire"
 
-#: kicad/treeprj_frame.cpp:200
+#: kicad/treeprj_frame.cpp:210
 msgid "Rename file"
 msgstr "Renommer fichier"
 
-#: kicad/treeprj_frame.cpp:212
+#: kicad/treeprj_frame.cpp:222
 msgid "Open the file in a Text Editor"
 msgstr "Ouvrir le fichier avec un  Editeur de texte"
 
-#: kicad/treeprj_frame.cpp:220
+#: kicad/treeprj_frame.cpp:230
 msgid "&Delete File"
 msgstr "&Supprimer Fichier"
 
-#: kicad/treeprj_frame.cpp:221
+#: kicad/treeprj_frame.cpp:231
 msgid "&Delete Directory"
 msgstr "&Supprimer le Répertoire"
 
-#: kicad/treeprj_frame.cpp:222
+#: kicad/treeprj_frame.cpp:232
 msgid "Delete the File"
 msgstr "Supprimer le fichier"
 
-#: kicad/treeprj_frame.cpp:223
+#: kicad/treeprj_frame.cpp:233
 msgid "&Delete the Directory and its content"
 msgstr "Effacer le Répertoire et son contenu"
 
-#: kicad/treeprj_frame.cpp:549
+#: kicad/treeprj_frame.cpp:559
 msgid "Create New File"
 msgstr "Créer  un Nouveau Fichier"
 
-#: kicad/treeprj_frame.cpp:550
+#: kicad/treeprj_frame.cpp:560
 msgid "Create New Directory"
 msgstr "Créer un nouveau Répertoire"
 
-#: kicad/treeprj_frame.cpp:559
+#: kicad/treeprj_frame.cpp:569
 msgid "noname."
 msgstr "noname."
 
-#: kicad/treeprj_frame.cpp:1088
+#: kicad/treeprj_frame.cpp:1109
 msgid "Change filename: "
 msgstr "Changer Nom Fichier: "
 
-#: kicad/treeprj_frame.cpp:1090
+#: kicad/treeprj_frame.cpp:1111
 msgid "Change filename"
 msgstr "Changer Nom Fichier"
 
@@ -11776,11 +11776,11 @@ msgstr "Top overlay (*.GTO)|*.GTO;*.gto|"
 
 #: gerbview/files.cpp:132
 msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
-msgstr "Masque pate à souder cuivre (*.GBP)|*.GBP;*.gbp|"
+msgstr "Masque pâte à souder cuivre (*.GBP)|*.GBP;*.gbp|"
 
 #: gerbview/files.cpp:133
 msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
-msgstr "Masque pate à souder composant (*.GTP)|*.GTP;*.gtp|"
+msgstr "Masque pâte à souder composant (*.GTP)|*.GTP;*.gtp|"
 
 #: gerbview/files.cpp:134
 msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
@@ -12631,7 +12631,7 @@ msgstr "Vertex "
 
 #: 3d-viewer/3d_toolbar.cpp:27
 msgid "Reload board"
-msgstr "Reharger Circuit Imprimé"
+msgstr "Recharger Circuit Imprimé"
 
 #: 3d-viewer/3d_toolbar.cpp:35
 msgid "Copy 3D Image to Clipboard"
@@ -12894,10 +12894,6 @@ msgstr "Fil"
 msgid "Bus"
 msgstr "Bus"
 
-#: eeschema/eelayer.h:87
-msgid "Label"
-msgstr "Label"
-
 #: eeschema/eelayer.h:93
 msgid "GlobLabel"
 msgstr "Lab Global"
@@ -13000,7 +12996,7 @@ msgstr "Propriétés de l'Elément Graphique"
 
 #: eeschema/dialog_erc_base.h:94
 msgid "EESchema Erc"
-msgstr "EESchema Erc"
+msgstr "EESchema ERC"
 
 #: eeschema/dialog_sch_sheet_props_base.h:52
 msgid "Schematic Sheet Properties"
@@ -13008,7 +13004,7 @@ msgstr "Propriétés de la Feuille de Hiérarchie"
 
 #: eeschema/dialog_eeschema_options_base.h:77
 msgid "Schematic Editor Options"
-msgstr "Options de l'Editeur de Schematique"
+msgstr "Options de l'Editeur de Schématique"
 
 #: eeschema/dialog_build_BOM_base.h:69
 msgid "List of Material"
@@ -13026,6 +13022,8 @@ msgstr "Options d'Affichage"
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "Net name"
+#~ msgstr "Net Name"
 #~ msgid "Alias <%s> not found for component <%s> in library <%s>."
 #~ msgstr "Alias <%s> non trouvé pour le component <%s> en librairie <%s>."
 #~ msgid "Save as...\tShift+Ctrl+S"

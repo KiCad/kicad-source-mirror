@@ -251,7 +251,7 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
         if( flgmodify ) // Set the flags m_Modify cleared by SavePcbFile()
         {
-            GetScreen()->SetModify();
+            OnModify();
             GetScreen()->SetSave(); // Set the flags m_FlagSave cleared by SetModify()
         }
         GetScreen()->m_FileName = tmpFileName;

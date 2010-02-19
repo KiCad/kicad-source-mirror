@@ -279,7 +279,7 @@ void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
         break;
     }
 
-    GetScreen()->SetModify();
+    OnModify();
 
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur   = NULL;
@@ -589,7 +589,7 @@ void WinEDA_PcbFrame::Block_Delete()
     if( GetScreen()->m_BlockLocate.GetCount() == 0 )
         return;
 
-    GetScreen()->SetModify();
+    OnModify();
     SetCurItem( NULL );
 
     PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
@@ -668,7 +668,7 @@ void WinEDA_PcbFrame::Block_Rotate()
     oldpos = GetScreen()->m_Curseur;
     centre = GetScreen()->m_BlockLocate.Centre();
 
-    GetScreen()->SetModify();
+    OnModify();
 
     PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
     itemsList->m_Status = UR_ROTATED;
@@ -734,7 +734,7 @@ void WinEDA_PcbFrame::Block_Flip()
     if( GetScreen()->m_BlockLocate.GetCount() == 0 )
         return;
 
-    GetScreen()->SetModify();
+    OnModify();
 
     PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
     itemsList->m_Status = UR_FLIPPED;
@@ -804,7 +804,7 @@ void WinEDA_PcbFrame::Block_Move()
     if( GetScreen()->m_BlockLocate.GetCount() == 0 )
         return;
 
-    GetScreen()->SetModify();
+    OnModify();
 
     wxPoint MoveVector = GetScreen()->m_BlockLocate.m_MoveVector;
 
@@ -874,7 +874,7 @@ void WinEDA_PcbFrame::Block_Duplicate()
     if( GetScreen()->m_BlockLocate.GetCount() == 0 )
         return;
 
-    GetScreen()->SetModify();
+    OnModify();
 
     PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
 

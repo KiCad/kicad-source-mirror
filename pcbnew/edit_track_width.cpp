@@ -78,7 +78,7 @@ bool WinEDA_PcbFrame::SetTrackSegmentWidth( TRACK*             aTrackItem,
 
     if( change_ok )
     {
-        GetScreen()->SetModify();
+        OnModify();
         if( aItemsListPicker )
         {
             aTrackItem->m_Width = initial_width;

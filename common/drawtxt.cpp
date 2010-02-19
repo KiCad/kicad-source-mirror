@@ -107,7 +107,7 @@ int NegableTextLength( const wxString& aText )
 static const char* GetHersheyShapeDescription( int AsciiCode )
 {
     /* calculate font length */
-    int font_length_max = sizeof(newstroke_font)/sizeof(*newstroke_font);
+    int font_length_max = newstroke_font_bufsize;
     if ( AsciiCode >= (32 + font_length_max) )
         AsciiCode = '?';
     if( AsciiCode < 32 )

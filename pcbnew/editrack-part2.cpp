@@ -86,7 +86,7 @@ void WinEDA_PcbFrame::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
 
     test_1_net_connexion( DC, pt_track->GetNet() );
     pt_track->DisplayInfo( this );
-    GetScreen()->SetModify();
+    OnModify();
 }
 
 

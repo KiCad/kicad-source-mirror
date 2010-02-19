@@ -81,7 +81,7 @@ void WinEDA_PcbFrame::Delete_Zone_Fill( SEGZONE* aZone, long aTimestamp )
 
     if( modify )
     {
-        GetScreen()->SetModify();
+        OnModify();
         GetScreen()->SetRefreshReq();
     }
 }
@@ -136,7 +136,7 @@ int WinEDA_PcbFrame::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
     Delete_Zone_Fill( NULL, zone_container->m_TimeStamp );
     zone_container->BuildFilledPolysListData( GetBoard() );
 
-    GetScreen()->SetModify();
+    OnModify();
 
     return 0;
 }

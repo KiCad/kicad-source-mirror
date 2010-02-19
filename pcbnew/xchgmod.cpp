@@ -1,5 +1,5 @@
 /*******************************/
-/* Pcbnew: exchange of modules */
+/* Pcbnew: exchange modules */
 /*******************************/
 
 #include "fctsys.h"
@@ -529,7 +529,7 @@ void WinEDA_PcbFrame::Exchange_Module( MODULE*            aOldModule,
 
     GetBoard()->m_Status_Pcb = 0;
     aNewModule->m_Flags = 0;
-    GetScreen()->SetModify();
+    OnModify();
 }
 
 

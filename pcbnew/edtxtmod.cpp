@@ -94,7 +94,7 @@ void WinEDA_BasePcbFrame::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
 
     if( module )
         module->m_LastEdit_Time = time( NULL );
-    GetScreen()->SetModify();
+    OnModify();
 }
 
 
@@ -114,7 +114,7 @@ void WinEDA_BasePcbFrame::DeleteTextModule( TEXTE_MODULE* Text )
     {
         DrawPanel->PostDirtyRect( Text->GetBoundingBox() );
         Text->DeleteStructure();
-        GetScreen()->SetModify();
+        OnModify();
         Module->m_LastEdit_Time = time( NULL );
     }
 }
@@ -216,7 +216,7 @@ void WinEDA_BasePcbFrame::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
             Text->m_Flags   = 0;
             Module->m_Flags = 0;
             Module->m_LastEdit_Time = time( NULL );
-            GetScreen()->SetModify();
+            OnModify();
 
             /* Redraw text. */
             DrawPanel->PostDirtyRect( Text->GetBoundingBox() );

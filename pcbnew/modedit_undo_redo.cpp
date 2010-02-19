@@ -91,7 +91,7 @@ void WinEDA_ModuleEditFrame::GetComponentFromRedoList( wxCommandEvent& event )
 
     SetCurItem( NULL );
 
-    GetScreen()->SetModify();
+    OnModify();
     ReCreateHToolbar();
     SetToolbars();
     DrawPanel->Refresh();
@@ -129,7 +129,7 @@ void WinEDA_ModuleEditFrame::GetComponentFromUndoList( wxCommandEvent& event )
 
     SetCurItem( NULL );;
 
-    GetScreen()->SetModify();
+    OnModify();
     ReCreateHToolbar();
     SetToolbars();
     DrawPanel->Refresh();

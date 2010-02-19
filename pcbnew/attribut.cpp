@@ -22,7 +22,7 @@ void WinEDA_PcbFrame::Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On )
     if( track == NULL )
         return;
 
-    GetScreen()->SetModify();
+    OnModify();
     DrawPanel->CursorOff( DC );   // Erase cursor shape
     track->SetState( SEGM_FIXE, Flag_On );
     track->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );
@@ -53,7 +53,7 @@ void WinEDA_PcbFrame::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
 
     DrawPanel->CursorOn( DC );    // Display cursor shape
 
-    GetScreen()->SetModify();
+    OnModify();
 }
 
 
@@ -81,12 +81,12 @@ void WinEDA_PcbFrame::Attribut_net( wxDC* DC, int net_code, bool Flag_On )
         if( (net_code >= 0 ) && (net_code != Track->GetNet()) )
             break;
 
-        GetScreen()->SetModify();
+        OnModify();
         Track->SetState( SEGM_FIXE, Flag_On );
         Track->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );
         Track = Track->Next();
     }
 
     DrawPanel->CursorOn( DC );    // Display cursor shape
-    GetScreen()->SetModify();
+    OnModify();
 }

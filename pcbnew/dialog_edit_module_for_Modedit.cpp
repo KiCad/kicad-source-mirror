@@ -408,7 +408,7 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
 
     m_CurrentModule->Set_Rectangle_Encadrement();
 
-    m_Parent->GetScreen()->SetModify();
+    m_Parent->OnModify();
 
     EndModal( 1 );
 }

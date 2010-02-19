@@ -52,7 +52,7 @@ void WinEDA_PcbFrame::Place_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
     SetCurItem( NULL );
-    GetScreen()->SetModify();
+    OnModify();
     drawitem->m_Flags = 0;
 }
 
@@ -110,7 +110,7 @@ void WinEDA_PcbFrame::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
         SaveCopyInUndoList(Segment, UR_DELETED);
         Segment->UnLink();
         SetCurItem( NULL );
-        GetScreen()->SetModify();
+        OnModify();
     }
 }
 
@@ -162,7 +162,7 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( int aLayer )
 
     if( pickList.GetCount() )
     {
-        GetScreen()->SetModify();
+        OnModify();
         SaveCopyInUndoList(pickList, UR_DELETED);
     }
 }
@@ -238,7 +238,7 @@ DRAWSEGMENT* WinEDA_PcbFrame::Begin_DrawSegment( DRAWSEGMENT* Segment,
                 SaveCopyInUndoList(Segment, UR_NEW );
                 GetBoard()->Add( Segment );
 
-                GetScreen()->SetModify();
+                OnModify();
                 Segment->m_Flags = 0;
 
                 Segment->Draw( DrawPanel, DC, GR_OR );
@@ -281,7 +281,7 @@ void WinEDA_PcbFrame::End_Edge( DRAWSEGMENT* Segment, wxDC* DC )
     {
         Segment->m_Flags = 0;
         GetBoard()->Add( Segment );
-        GetScreen()->SetModify();
+        OnModify();
         SaveCopyInUndoList( Segment, UR_NEW );
     }
 

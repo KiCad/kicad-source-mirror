@@ -634,7 +634,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         m_CurrentPad->DisplayInfo( m_Parent );
         // redraw the area where the pad was
         m_Parent->DrawPanel->PostDirtyRect( m_CurrentPad->GetBoundingBox() );
-        m_Parent->GetScreen()->SetModify();
+        m_Parent->OnModify();
     }
 
     EndModal(1);

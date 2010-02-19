@@ -252,6 +252,6 @@ void WinEDA_TextPCBPropertiesFrame::OnOkClick( wxCommandEvent& event )
     {
         CurrentTextPCB->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
     }
-    m_Parent->GetScreen()->SetModify();
+    m_Parent->OnModify();
     EndModal( 1 );
 }

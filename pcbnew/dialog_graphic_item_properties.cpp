@@ -219,7 +219,7 @@ void DialogGraphicItemProperties::OnOkClick( wxCommandEvent& event )
         m_Item->m_Angle = angle;
     }
 
-    m_Parent->GetScreen()->SetModify();
+    m_Parent->OnModify();
     if ( m_DC )
         m_Item->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
     m_Item->DisplayInfo( m_Parent );

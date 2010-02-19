@@ -1016,7 +1016,7 @@ bool WinEDA_PcbFrame::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
     s_ItemsListPicker.ClearItemsList(); // s_ItemsListPicker is no more owner
                                         // of picked items
 
-    GetScreen()->SetModify();
+    OnModify();
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
 

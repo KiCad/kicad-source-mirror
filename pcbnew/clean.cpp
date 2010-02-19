@@ -154,7 +154,7 @@ void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC )
 
     frame->Compile_Ratsnest( DC, AFFICHE );
 
-    frame->GetScreen()->SetModify();
+    frame->OnModify();
 }
 
 

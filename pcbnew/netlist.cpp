@@ -178,7 +178,7 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
     // Clear undo and redo lists to avoid inconsistencies between lists
     aFrame->GetScreen()->ClearUndoRedoList();
 
-    aFrame->GetScreen()->SetModify();
+    aFrame->OnModify();
     aFrame->GetBoard()->m_Status_Pcb = 0;
     State = 0; LineNum = 0; Comment = 0;
     s_NbNewModules = 0;

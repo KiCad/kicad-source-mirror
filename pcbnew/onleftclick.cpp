@@ -367,7 +367,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         DrawPanel->DrawAuxiliaryAxis( DC, GR_XOR );
         m_Auxiliary_Axis_Position = GetScreen()->m_Curseur;
         DrawPanel->DrawAuxiliaryAxis( DC, GR_COPY );
-        GetScreen()->SetModify();
+        OnModify();
         break;
 
     default:

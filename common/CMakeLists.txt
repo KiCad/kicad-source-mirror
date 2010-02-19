@@ -42,6 +42,7 @@ set(COMMON_SRCS
     gr_basic.cpp
     hotkeys_basic.cpp
     msgpanel.cpp
+	newstroke_font.cpp
     projet_config.cpp
 #   pyhandler.cpp
     richio.cpp

@@ -116,7 +116,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* aTrack )
     DrawPanel->PostDirtyRect( aTrack->GetBoundingBox() );
 
     SaveCopyInUndoList( aTrack, UR_DELETED );
-    GetScreen()->SetModify();
+    OnModify();
 
     test_1_net_connexion( DC, current_net_code );
     GetBoard()->DisplayInfo( this );
@@ -130,7 +130,7 @@ void WinEDA_PcbFrame::Delete_Track( wxDC* DC, TRACK* aTrack )
     {
         int current_net_code = aTrack->GetNet();
         Remove_One_Track( DC, aTrack );
-        GetScreen()->SetModify();
+        OnModify();
         test_1_net_connexion( DC, current_net_code );
     }
 }
@@ -170,7 +170,7 @@ void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* aTrack )
     }
 
     SaveCopyInUndoList( itemsList, UR_DELETED );
-    GetScreen()->SetModify();
+    OnModify();
     test_1_net_connexion( DC, net_code_delete );
     GetBoard()->DisplayInfo( this );
 }

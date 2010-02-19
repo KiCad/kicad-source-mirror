@@ -529,7 +529,7 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
                                             // owner of picked items
         /* compute the new rastnest */
         test_1_net_connexion( DC, netcode );
-        GetScreen()->SetModify();
+        OnModify();
         GetBoard()->DisplayInfo( this );
     }
 

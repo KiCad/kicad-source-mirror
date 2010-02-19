@@ -479,7 +479,7 @@ void WinEDA_PcbFrame::ShowDesignRulesEditor( wxCommandEvent& event )
     if( returncode == wxID_OK )     // New rules, or others changes.
     {
         ReCreateLayerBox( NULL );
-        GetScreen()->SetModify();
+        OnModify();
     }
 }
 
@@ -613,3 +613,4 @@ void WinEDA_PcbFrame::SetVisibleAlls( )
     for( int ii = 0; ii < PCB_VISIBLE(END_PCB_VISIBLE_LIST); ii++ )
         m_Layers->SetRenderState( ii, true );
 }
+

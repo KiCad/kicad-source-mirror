@@ -242,7 +242,7 @@ MODULE* WinEDA_BasePcbFrame::Copie_Module( MODULE* module )
     if( module == NULL )
         return NULL;
 
-    GetScreen()->SetModify();
+    OnModify();
 
     /* Duplicate module */
     GetBoard()->m_Status_Pcb = 0;
@@ -316,7 +316,7 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module,
         }
     }
 
-    GetScreen()->SetModify();
+    OnModify();
 
     /* Remove module from list, and put it in undo command list */
     m_Pcb->m_Modules.Remove( module );
@@ -350,7 +350,7 @@ void WinEDA_PcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
         && ( Module->GetLayer() != LAYER_N_BACK ) )
         return;
 
-    GetScreen()->SetModify();
+    OnModify();
 
     if( !( Module->m_Flags & IS_MOVED ) ) /* This is a simple flip, no other
                                          *edition in progress */
@@ -421,7 +421,7 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module,
     if( module == 0 )
         return;
 
-    GetScreen()->SetModify();
+    OnModify();
     GetBoard()->m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK);
 
     if( module->m_Flags & IS_NEW )
@@ -506,7 +506,7 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
     if( module == NULL )
         return;
 
-    GetScreen()->SetModify();
+    OnModify();
 
     if( !( module->m_Flags & IS_MOVED ) ) /* This is a simple rotation, no other
                                            * edition in progress */

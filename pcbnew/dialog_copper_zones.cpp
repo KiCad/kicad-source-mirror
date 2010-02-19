@@ -37,7 +37,7 @@ dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* z
     }
 
     SetReturnCode( ZONE_ABORT ); // Will be changed on buttons click
-    
+
     initDialog();
 
     GetSizer()->SetSizeHints( this );
@@ -434,7 +434,7 @@ void dialog_copper_zone::ExportSetupToOtherCopperZones( wxCommandEvent& event )
     {
         ZONE_CONTAINER* zone = pcb->GetArea( ii );
         m_Zone_Setting->ExportSetting( *zone, false );  // false = partiel export
-        m_Parent->GetScreen()->SetModify();
+        m_Parent->OnModify();
     }
 
     m_OnExitCode = ZONE_EXPORT_VALUES;     // values are exported to others zones

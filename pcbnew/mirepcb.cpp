@@ -158,7 +158,7 @@ void WinEDA_MirePropertiesFrame::OnOkClick( wxCommandEvent& event )
     m_MirePcb->Draw( m_Parent->DrawPanel, m_DC,
                      ( m_MirePcb->m_Flags & IS_MOVED ) ? GR_XOR : GR_OR );
 
-    m_Parent->GetScreen()->SetModify();
+    m_Parent->OnModify();
     EndModal( 1 );
 }
 
@@ -254,7 +254,7 @@ void WinEDA_PcbFrame::Place_Mire( MIREPCB* MirePcb, wxDC* DC )
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
     SetCurItem( NULL );
-    GetScreen()->SetModify();
+    OnModify();
 
     if( (MirePcb->m_Flags & IS_NEW) )
     {

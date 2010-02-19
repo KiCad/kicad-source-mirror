@@ -597,7 +597,7 @@ void WinEDA_PcbFrame::GetBoardFromUndoList( wxCommandEvent& event )
     List->ReversePickersListOrder();
     GetScreen()->PushCommandToRedoList( List );
 
-    GetScreen()->SetModify();
+    OnModify();
     ReCreateHToolbar();
     SetToolbars();
 
@@ -627,7 +627,7 @@ void WinEDA_PcbFrame::GetBoardFromRedoList( wxCommandEvent& event )
     List->ReversePickersListOrder();
     GetScreen()->PushCommandToUndoList( List );
 
-    GetScreen()->SetModify();
+    OnModify();
     ReCreateHToolbar();
     SetToolbars();
 
