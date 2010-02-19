@@ -11352,4 +11352,5 @@ const char* newstroke_font[] =
 /*  COMBINING  */
 /*  DIAMOND_SMALL  */
 
-int newstroke_font_bufsize = sizeof(newstroke_font)/sizeof(*newstroke_font);
+int newstroke_font_bufsize = sizeof(newstroke_font)/sizeof(newstroke_font[0]);
+
