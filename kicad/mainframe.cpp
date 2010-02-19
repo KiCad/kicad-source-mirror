@@ -19,6 +19,7 @@
 #include "macros.h"
 
 #include "kicad.h"
+#include "tree_project_frame.h"
 
 
 static const wxString TreeFrameWidthEntry( wxT( "LeftWinWidth" ) );
@@ -62,7 +63,7 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow*       parent,
     clientsize = GetClientSize();
 
     // Left window: is the box which display tree project
-    m_LeftWin = new WinEDA_PrjFrame( this );
+    m_LeftWin = new TREE_PROJECT_FRAME( this );
 
     // Bottom Window: box to display messages
     m_RightWin = new RIGHT_KM_FRAME( this );

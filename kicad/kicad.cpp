@@ -6,11 +6,6 @@
  */
 /*****************************************************************************/
 
-
-#ifdef __GNUG__
-#pragma implementation
-#endif
-
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
@@ -24,6 +19,7 @@
 #endif
 
 #include "kicad.h"
+#include "tree_project_frame.h"
 #include "macros.h"
 
 #include "build_version.h"
@@ -47,7 +43,7 @@ void  ShowLogo( char* FonteFileName );
 // Create a new application object
 IMPLEMENT_APP( WinEDA_App )
 
-/* MacOSX: Needed for file association 
+/* MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
 void WinEDA_App::MacOpenFile(const wxString &fileName) {

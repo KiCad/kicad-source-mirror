@@ -5,6 +5,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     )
 
 set(KICAD_SRCS
+    class_treeprojectfiles.cpp
     commandframe.cpp
     files-io.cpp
     kicad.cpp
@@ -13,8 +14,7 @@ set(KICAD_SRCS
     menubar.cpp
     preferences.cpp
     prjconfig.cpp
-    treeprj_datas.cpp
-    treeprj_frame.cpp)
+    tree_project_frame.cpp)
 
 if(WIN32)
     if(MINGW)

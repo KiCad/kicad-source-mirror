@@ -19,6 +19,8 @@
 #include "macros.h"
 
 #include "kicad.h"
+#include "tree_project_frame.h"
+#include "class_treeprojectfiles.h"
 
 #include "wx/image.h"
 #include "wx/imaglist.h"
@@ -82,7 +84,7 @@ const wxString TextFileWildcard( wxT( "Text files (*.txt)|*.txt" ) );
  * @brief TODO
  */
 /******************************************************************/
-WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent ) :
+TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( WinEDA_MainFrame* parent ) :
     wxSashLayoutWindow( parent,
                         ID_LEFT_FRAME,
                         wxDefaultPosition,
@@ -238,7 +240,7 @@ WinEDA_PrjFrame::WinEDA_PrjFrame( WinEDA_MainFrame* parent ) :
     ReCreateTreePrj();
 }
 
-WinEDA_PrjFrame::~WinEDA_PrjFrame()
+TREE_PROJECT_FRAME::~TREE_PROJECT_FRAME()
 {
     size_t  i;
     wxMenu* menu;
@@ -255,26 +257,26 @@ WinEDA_PrjFrame::~WinEDA_PrjFrame()
 
 
 /*****************************************************************************/
-BEGIN_EVENT_TABLE( WinEDA_PrjFrame, wxSashLayoutWindow )
+BEGIN_EVENT_TABLE( TREE_PROJECT_FRAME, wxSashLayoutWindow )
 /*****************************************************************************/
 
-    EVT_TREE_BEGIN_LABEL_EDIT( ID_PROJECT_TREE, WinEDA_PrjFrame::OnRenameAsk )
-    EVT_TREE_END_LABEL_EDIT( ID_PROJECT_TREE, WinEDA_PrjFrame::OnRename )
-    EVT_TREE_ITEM_ACTIVATED( ID_PROJECT_TREE, WinEDA_PrjFrame::OnSelect )
-    EVT_TREE_ITEM_RIGHT_CLICK( ID_PROJECT_TREE, WinEDA_PrjFrame::OnRight )
-    EVT_TREE_BEGIN_DRAG( ID_PROJECT_TREE, WinEDA_PrjFrame::OnDragStart )
-    EVT_TREE_END_DRAG( ID_PROJECT_TREE, WinEDA_PrjFrame::OnDragEnd )
-    EVT_MENU( ID_PROJECT_TXTEDIT, WinEDA_PrjFrame::OnTxtEdit )
-    EVT_MENU( ID_PROJECT_NEWFILE, WinEDA_PrjFrame::OnNewFile )
-    EVT_MENU( ID_PROJECT_NEWDIR, WinEDA_PrjFrame::OnNewDirectory )
-    EVT_MENU( ID_PROJECT_NEWPY, WinEDA_PrjFrame::OnNewPyFile )
-    EVT_MENU( ID_PROJECT_NEWTXT, WinEDA_PrjFrame::OnNewTxtFile )
-    EVT_MENU( ID_PROJECT_DELETE, WinEDA_PrjFrame::OnDeleteFile )
-    EVT_MENU( ID_PROJECT_RENAME, WinEDA_PrjFrame::OnRenameFile )
+    EVT_TREE_BEGIN_LABEL_EDIT( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnRenameAsk )
+    EVT_TREE_END_LABEL_EDIT( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnRename )
+    EVT_TREE_ITEM_ACTIVATED( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnSelect )
+    EVT_TREE_ITEM_RIGHT_CLICK( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnRight )
+    EVT_TREE_BEGIN_DRAG( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnDragStart )
+    EVT_TREE_END_DRAG( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnDragEnd )
+    EVT_MENU( ID_PROJECT_TXTEDIT, TREE_PROJECT_FRAME::OnTxtEdit )
+    EVT_MENU( ID_PROJECT_NEWFILE, TREE_PROJECT_FRAME::OnNewFile )
+    EVT_MENU( ID_PROJECT_NEWDIR, TREE_PROJECT_FRAME::OnNewDirectory )
+    EVT_MENU( ID_PROJECT_NEWPY, TREE_PROJECT_FRAME::OnNewPyFile )
+    EVT_MENU( ID_PROJECT_NEWTXT, TREE_PROJECT_FRAME::OnNewTxtFile )
+    EVT_MENU( ID_PROJECT_DELETE, TREE_PROJECT_FRAME::OnDeleteFile )
+    EVT_MENU( ID_PROJECT_RENAME, TREE_PROJECT_FRAME::OnRenameFile )
 
 
 #ifdef KICAD_PYTHON
-    EVT_MENU( ID_PROJECT_RUNPY, WinEDA_PrjFrame::OnRunPy )
+    EVT_MENU( ID_PROJECT_RUNPY, TREE_PROJECT_FRAME::OnRunPy )
 #endif /* KICAD_PYTHON */
 
 
@@ -287,7 +289,7 @@ END_EVENT_TABLE()
  * @brief Allowing drag & drop of file other than the currently opened project
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::OnDragStart( wxTreeEvent& event )
+void TREE_PROJECT_FRAME::OnDragStart( wxTreeEvent& event )
 /*****************************************************************************/
 {
     /* Ensure item is selected
@@ -310,7 +312,7 @@ void WinEDA_PrjFrame::OnDragStart( wxTreeEvent& event )
 
 
 /*****************************************************************************/
-void WinEDA_PrjFrame::OnDragEnd( wxTreeEvent& event )
+void TREE_PROJECT_FRAME::OnDragEnd( wxTreeEvent& event )
 /*****************************************************************************/
 {
     m_Parent->SetCursor( wxNullCursor );
@@ -355,7 +357,7 @@ void WinEDA_PrjFrame::OnDragEnd( wxTreeEvent& event )
 
 
 /*****************************************************************************/
-void WinEDA_PrjFrame::ClearFilters()
+void TREE_PROJECT_FRAME::ClearFilters()
 /*****************************************************************************/
 {
     m_Filters.clear();
@@ -363,7 +365,7 @@ void WinEDA_PrjFrame::ClearFilters()
 
 
 /*****************************************************************************/
-void WinEDA_PrjFrame::RemoveFilter( const wxString& filter )
+void TREE_PROJECT_FRAME::RemoveFilter( const wxString& filter )
 /*****************************************************************************/
 {
     for( unsigned int i = 0; i < m_Filters.size(); i++ )
@@ -384,7 +386,7 @@ void WinEDA_PrjFrame::RemoveFilter( const wxString& filter )
  * @brief Return the data corresponding to the file, or NULL
  */
 /*****************************************************************************/
-TreePrjItemData* WinEDA_PrjFrame::FindItemData( const boost::python::str& name )
+TreePrjItemData* TREE_PROJECT_FRAME::FindItemData( const boost::python::str& name )
 /*****************************************************************************/
 {
     // (Interative tree parsing)
@@ -448,7 +450,7 @@ TreePrjItemData* WinEDA_PrjFrame::FindItemData( const boost::python::str& name )
  * @brief TODO
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::RemoveFilterPy( const boost::python::str& filter )
+void TREE_PROJECT_FRAME::RemoveFilterPy( const boost::python::str& filter )
 /*****************************************************************************/
 {
     RemoveFilter( PyHandler::MakeStr( filter ) );
@@ -459,7 +461,7 @@ void WinEDA_PrjFrame::RemoveFilterPy( const boost::python::str& filter )
  * @brief TODO
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::AddFilter( const boost::python::str& filter )
+void TREE_PROJECT_FRAME::AddFilter( const boost::python::str& filter )
 /*****************************************************************************/
 {
     wxRegEx  reg;
@@ -478,7 +480,7 @@ void WinEDA_PrjFrame::AddFilter( const boost::python::str& filter )
  * @brief TODO
  */
 /*****************************************************************************/
-const std::vector<wxString>& WinEDA_PrjFrame::GetFilters()
+const std::vector<wxString>& TREE_PROJECT_FRAME::GetFilters()
 /*****************************************************************************/
 {
     return m_Filters;
@@ -489,7 +491,7 @@ const std::vector<wxString>& WinEDA_PrjFrame::GetFilters()
  * @brief TODO
  */
 /*****************************************************************************/
-wxMenu* WinEDA_PrjFrame::GetContextMenu( int type )
+wxMenu* TREE_PROJECT_FRAME::GetContextMenu( int type )
 /*****************************************************************************/
 {
     return m_ContextMenus[type];
@@ -500,7 +502,7 @@ wxMenu* WinEDA_PrjFrame::GetContextMenu( int type )
  * @brief TODO
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::OnNewDirectory( wxCommandEvent& event )
+void TREE_PROJECT_FRAME::OnNewDirectory( wxCommandEvent& event )
 /*****************************************************************************/
 {
     NewFile( TREE_DIRECTORY );
@@ -511,7 +513,7 @@ void WinEDA_PrjFrame::OnNewDirectory( wxCommandEvent& event )
  * @brief TODO
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::OnNewFile( wxCommandEvent& event )
+void TREE_PROJECT_FRAME::OnNewFile( wxCommandEvent& event )
 /*****************************************************************************/
 {
     NewFile( TREE_UNKNOWN );
@@ -522,7 +524,7 @@ void WinEDA_PrjFrame::OnNewFile( wxCommandEvent& event )
  * @brief TODO
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::OnNewPyFile( wxCommandEvent& event )
+void TREE_PROJECT_FRAME::OnNewPyFile( wxCommandEvent& event )
 /*****************************************************************************/
 {
     NewFile( TREE_PY );
@@ -533,7 +535,7 @@ void WinEDA_PrjFrame::OnNewPyFile( wxCommandEvent& event )
  * @brief TODO
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::OnNewTxtFile( wxCommandEvent& event )
+void TREE_PROJECT_FRAME::OnNewTxtFile( wxCommandEvent& event )
 /*****************************************************************************/
 {
     NewFile( TREE_TXT );
@@ -544,7 +546,7 @@ void WinEDA_PrjFrame::OnNewTxtFile( wxCommandEvent& event )
  * @brief TODO
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::NewFile( TreeFileType type )
+void TREE_PROJECT_FRAME::NewFile( TreeFileType type )
 /*****************************************************************************/
 {
     wxString         mask = GetFileExt( type );
@@ -595,7 +597,7 @@ void WinEDA_PrjFrame::NewFile( TreeFileType type )
  * @brief TODO
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::NewFile( const wxString& name,
+void TREE_PROJECT_FRAME::NewFile( const wxString& name,
                                TreeFileType    type,
                                wxTreeItemId&   root )
 /*****************************************************************************/
@@ -627,7 +629,7 @@ void WinEDA_PrjFrame::NewFile( const wxString& name,
  * @brief TODO
  */
 /*****************************************************************************/
-wxString WinEDA_PrjFrame::GetFileExt( TreeFileType type )
+wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
 /*****************************************************************************/
 {
     wxString ext;
@@ -675,7 +677,7 @@ wxString WinEDA_PrjFrame::GetFileExt( TreeFileType type )
 /*
  * Return the wxFileDialog wildcard string for the selected file type.
  */
-wxString WinEDA_PrjFrame::GetFileWildcard( TreeFileType type )
+wxString TREE_PROJECT_FRAME::GetFileWildcard( TreeFileType type )
 {
     wxString ext;
 
@@ -726,7 +728,7 @@ wxString WinEDA_PrjFrame::GetFileWildcard( TreeFileType type )
  * @return TODO
  */
 /*****************************************************************************/
-bool WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
+bool TREE_PROJECT_FRAME::AddFile( const wxString& name, wxTreeItemId& root )
 /*****************************************************************************/
 {
     wxTreeItemId cellule;
@@ -897,7 +899,7 @@ bool WinEDA_PrjFrame::AddFile( const wxString& name, wxTreeItemId& root )
  * @return TODO
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::ReCreateTreePrj()
+void TREE_PROJECT_FRAME::ReCreateTreePrj()
 /*****************************************************************************/
 {
     wxTreeItemId rootcellule;
@@ -905,7 +907,7 @@ void WinEDA_PrjFrame::ReCreateTreePrj()
     bool         prjOpened = false;
 
     if( !m_TreeProject )
-        m_TreeProject = new WinEDA_TreePrj( this );
+        m_TreeProject = new TREEPROJECTFILES( this );
     else
         m_TreeProject->DeleteAllItems();
 
@@ -980,7 +982,7 @@ void WinEDA_PrjFrame::ReCreateTreePrj()
  * @brief  Opens *popup* the context menu
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::OnRight( wxTreeEvent& Event )
+void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
 /*****************************************************************************/
 {
     int tree_id;
@@ -1053,7 +1055,7 @@ void WinEDA_PrjFrame::OnRight( wxTreeEvent& Event )
  * @brief TODO
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::OnTxtEdit( wxCommandEvent& event )
+void TREE_PROJECT_FRAME::OnTxtEdit( wxCommandEvent& event )
 /*****************************************************************************/
 {
     TreePrjItemData* tree_data = GetSelectedData();
@@ -1081,7 +1083,7 @@ void WinEDA_PrjFrame::OnTxtEdit( wxCommandEvent& event )
  * @brief TODO
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::OnDeleteFile( wxCommandEvent& )
+void TREE_PROJECT_FRAME::OnDeleteFile( wxCommandEvent& )
 /*****************************************************************************/
 {
     TreePrjItemData* tree_data = GetSelectedData();
@@ -1096,7 +1098,7 @@ void WinEDA_PrjFrame::OnDeleteFile( wxCommandEvent& )
  * @brief TODO
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::OnRenameFile( wxCommandEvent& )
+void TREE_PROJECT_FRAME::OnRenameFile( wxCommandEvent& )
 /*****************************************************************************/
 {
     wxTreeItemId     curr_item = m_TreeProject->GetSelection();
@@ -1122,7 +1124,7 @@ void WinEDA_PrjFrame::OnRenameFile( wxCommandEvent& )
  * @brief TODO
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::OnRunPy( wxCommandEvent& event )
+void TREE_PROJECT_FRAME::OnRunPy( wxCommandEvent& event )
 /*****************************************************************************/
 {
     TreePrjItemData* tree_data = GetSelectedData();
@@ -1141,7 +1143,7 @@ void WinEDA_PrjFrame::OnRunPy( wxCommandEvent& event )
  * @brief Add a state to the image list
  */
 /*****************************************************************************/
-int WinEDA_PrjFrame::AddStatePy( boost::python::object& bitmap )
+int TREE_PROJECT_FRAME::AddStatePy( boost::python::object& bitmap )
 /*****************************************************************************/
 {
     wxBitmap* image;
@@ -1175,7 +1177,7 @@ int WinEDA_PrjFrame::AddStatePy( boost::python::object& bitmap )
  * @brief Prevent the main project to be renamed
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::OnRenameAsk( wxTreeEvent& event )
+void TREE_PROJECT_FRAME::OnRenameAsk( wxTreeEvent& event )
 /*****************************************************************************/
 {
     TreePrjItemData* tree_data = GetSelectedData();
@@ -1191,7 +1193,7 @@ void WinEDA_PrjFrame::OnRenameAsk( wxTreeEvent& event )
  * @brief Rename a tree item on demand of the context menu
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::OnRename( wxTreeEvent& event )
+void TREE_PROJECT_FRAME::OnRename( wxTreeEvent& event )
 /*****************************************************************************/
 {
     TreePrjItemData* tree_data = GetSelectedData();
@@ -1207,7 +1209,7 @@ void WinEDA_PrjFrame::OnRename( wxTreeEvent& event )
  * @brief TODO
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::OnSelect( wxTreeEvent& Event )
+void TREE_PROJECT_FRAME::OnSelect( wxTreeEvent& Event )
 /*****************************************************************************/
 {
     wxString         FullFileName;

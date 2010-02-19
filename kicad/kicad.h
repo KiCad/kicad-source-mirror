@@ -20,8 +20,8 @@
 #include "appl_wxstruct.h"
 
 class RIGHT_KM_FRAME;
-class WinEDA_TreePrj;
-class WinEDA_PrjFrame;
+class TREEPROJECTFILES;
+class TREE_PROJECT_FRAME;
 
 
 /**
@@ -67,7 +67,7 @@ class WinEDA_MainFrame : public WinEDA_BasicFrame
 {
     /* This class is the main entry point of the py API */
 public:
-    WinEDA_PrjFrame* m_LeftWin;
+    TREE_PROJECT_FRAME* m_LeftWin;
     RIGHT_KM_FRAME*  m_RightWin;
     WinEDA_Toolbar*  m_VToolBar;     // Vertical toolbar (not used)
     wxString         m_BoardFileName;
@@ -140,7 +140,7 @@ public:
 
     boost::python::object ToWx();
     void                  AddFastLaunchPy( boost::python::object& button );
-    WinEDA_PrjFrame*      GetTree() const;
+    TREE_PROJECT_FRAME*      GetTree() const;
 
 #endif
 
@@ -247,7 +247,7 @@ public:
     bool     Rename( const wxString& name, bool check = true );
     bool     Delete( bool check = true );
     void     Move( TreePrjItemData* dest );
-    void     Activate( WinEDA_PrjFrame* prjframe );
+    void     Activate( TREE_PROJECT_FRAME* prjframe );
 
     const wxMenu* GetMenu()
     {
@@ -269,134 +269,6 @@ public:
     boost::python::object GetMenuPy();
 
 #endif
-};
-
-/** class WinEDA_PrjFrame
- * Window to display the tree files
- */
-class WinEDA_PrjFrame : public wxSashLayoutWindow
-{
-private:
-
-    std::vector<wxMenu*>  m_ContextMenus;
-    std::vector<wxString> m_Filters;
-
-    wxMenu*  m_PopupMenu;
-    wxCursor m_DragCursor;
-    wxCursor m_Default;
-
-protected:
-    wxMenu*          GetContextMenu( int type );
-    void             NewFile( TreeFileType type );
-    void             NewFile( const wxString& name, TreeFileType type,
-                              wxTreeItemId& root );
-    TreePrjItemData* GetSelectedData();
-
-public:
-    WinEDA_MainFrame* m_Parent;
-    WinEDA_TreePrj*   m_TreeProject;
-
-    wxTreeItemId      m_root;
-
-public:
-    static wxString              GetFileExt( TreeFileType type );
-    static wxString              GetFileWildcard( TreeFileType type );
-
-    WinEDA_PrjFrame( WinEDA_MainFrame* parent );
-    ~WinEDA_PrjFrame();
-    void                         OnSelect( wxTreeEvent& Event );
-    void                         OnRenameAsk( wxTreeEvent& Event );
-    void                         OnRename( wxTreeEvent& Event );
-    void                         OnDragStart( wxTreeEvent& event );
-    void                         OnDragEnd( wxTreeEvent& event );
-    void                         OnRight( wxTreeEvent& Event );
-    void                         ReCreateTreePrj();
-
-    void                         OnTxtEdit( wxCommandEvent& event );
-
-    void                         OnDeleteFile( wxCommandEvent& event );
-    void                         OnRenameFile( wxCommandEvent& event );
-
-    void                         OnNewFile( wxCommandEvent& event );
-    void                         OnNewDirectory( wxCommandEvent& event );
-    void                         OnNewSchFile( wxCommandEvent& event );
-    void                         OnNewBrdFile( wxCommandEvent& event );
-    void                         OnNewPyFile( wxCommandEvent& event );
-    void                         OnNewGerberFile( wxCommandEvent& event );
-    void                         OnNewTxtFile( wxCommandEvent& event );
-    void                         OnNewNetFile( wxCommandEvent& event );
-
-    void                         ClearFilters();
-
-    const std::vector<wxString>& GetFilters();
-    void                         RemoveFilter( const wxString& filter );
-
-#ifdef KICAD_PYTHON
-    boost::python::object        ToWx();
-
-    WinEDA_PrjFrame()
-    {
-    }
-
-
-    WinEDA_PrjFrame( const WinEDA_PrjFrame& )
-    {
-    }
-
-
-    void OnRunPy( wxCommandEvent& event );
-
-    boost::python::object GetMenuPy( TreeFileType );
-
-    boost::python::object GetFtExPy( TreeFileType ) const;
-
-    void                  RemoveFilterPy( const boost::python::str& filter );
-    void                  AddFilter( const boost::python::str& filter );
-
-    boost::python::object GetTreeCtrl();
-    TreePrjItemData*      GetItemData( const boost::python::object& item );
-    void                  AddFilePy( const boost::python::str& name,
-                                     boost::python::object&    root );
-    void                  NewFilePy( const boost::python::str& name,
-                                     TreeFileType              type,
-                                     boost::python::object&    root );
-
-    TreePrjItemData*      FindItemData( const boost::python::str& name );
-
-    boost::python::object GetCurrentMenu();
-    int                   AddStatePy( boost::python::object& bitmap );
-
-#endif
-
-    bool                  AddFile( const wxString& name, wxTreeItemId& root );
-
-    DECLARE_EVENT_TABLE()
-};
-
-
-/** Class TreeCtrl
- * This is the class to show (as a tree) the files in the project directory
- */
-class WinEDA_TreePrj : public wxTreeCtrl
-{
-    DECLARE_DYNAMIC_CLASS( WinEDA_TreePrj )
-private:
-    WinEDA_PrjFrame* m_Parent;
-    wxImageList*     m_ImageList;
-
-public:
-
-    WinEDA_PrjFrame* GetParent()
-    {
-        return m_Parent;
-    }
-
-
-    WinEDA_TreePrj( WinEDA_PrjFrame* parent );
-    ~WinEDA_TreePrj();
-private:
-    /* overridden sort function */
-    int OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 );
 };
 
 #endif

@@ -1,6 +1,6 @@
-/***************/
-/* treeprj.cpp */
-/***************/
+/*
+ * file class_treeprojectfiles.cpp
+ */
 
 #ifdef KICAD_PYTHON
 #include <pyhandler.h>
@@ -14,6 +14,8 @@
 #include "bitmaps.h"
 
 #include "kicad.h"
+#include "tree_project_frame.h"
+#include "class_treeprojectfiles.h"
 
 #include "wx/image.h"
 #include "wx/imaglist.h"
@@ -22,10 +24,10 @@
 #include "wx/dir.h"
 
 
-IMPLEMENT_ABSTRACT_CLASS( WinEDA_TreePrj, wxTreeCtrl )
+IMPLEMENT_ABSTRACT_CLASS( TREEPROJECTFILES, wxTreeCtrl )
 
 
-WinEDA_TreePrj::WinEDA_TreePrj( WinEDA_PrjFrame* parent ) :
+TREEPROJECTFILES::TREEPROJECTFILES( TREE_PROJECT_FRAME* parent ) :
     wxTreeCtrl( parent, ID_PROJECT_TREE,
                 wxDefaultPosition, wxDefaultSize,
                 wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS, wxDefaultValidator,
@@ -51,7 +53,7 @@ WinEDA_TreePrj::WinEDA_TreePrj( WinEDA_PrjFrame* parent ) :
 }
 
 
-WinEDA_TreePrj::~WinEDA_TreePrj()
+TREEPROJECTFILES::~TREEPROJECTFILES()
 {
     if( m_ImageList )
         delete m_ImageList;
@@ -64,7 +66,7 @@ WinEDA_TreePrj::~WinEDA_TreePrj()
  *  root file names after
  *  file names last by alphabetic order
  */
-int WinEDA_TreePrj::OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 )
+int TREEPROJECTFILES::OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 )
 {
     TreePrjItemData* myitem1 = (TreePrjItemData*) GetItemData( item1 );
     TreePrjItemData* myitem2 = (TreePrjItemData*) GetItemData( item2 );
@@ -235,7 +237,7 @@ void TreePrjItemData::Move( TreePrjItemData* dest )
         // We should move recursively all files, but that's quite boring
         // let's just refresh that's all ... TODO (change this to a better code ...)
         wxCommandEvent dummy;
-        dynamic_cast<WinEDA_TreePrj*>( m_Parent )->GetParent()->m_Parent->OnRefresh( dummy );
+        dynamic_cast<TREEPROJECTFILES*>( m_Parent )->GetParent()->m_Parent->OnRefresh( dummy );
     }
 }
 
@@ -262,7 +264,7 @@ bool TreePrjItemData::Rename( const wxString& name, bool check )
     if( newFile == m_FileName )
         return false;
 
-    wxString ext = WinEDA_PrjFrame::GetFileExt( GetType() );
+    wxString ext = TREE_PROJECT_FRAME::GetFileExt( GetType() );
 
     wxRegEx             reg( wxT ( "^.*\\" ) + ext + wxT( "$" ), wxRE_ICASE );
 
@@ -339,7 +341,7 @@ bool TreePrjItemData::Delete( bool check )
 
 
 /* Called under item activation */
-void TreePrjItemData::Activate( WinEDA_PrjFrame* prjframe )
+void TreePrjItemData::Activate( TREE_PROJECT_FRAME* prjframe )
 {
     wxString     sep = wxFileName().GetPathSeparator();
     wxString     FullFileName = GetFileName();
@@ -434,7 +436,7 @@ void TreePrjItemData::Activate( WinEDA_PrjFrame* prjframe )
 }
 
 
-TreePrjItemData* WinEDA_PrjFrame::GetSelectedData()
+TreePrjItemData* TREE_PROJECT_FRAME::GetSelectedData()
 {
     return dynamic_cast<TreePrjItemData*>( m_TreeProject->GetItemData( m_TreeProject->GetSelection() ) );
 }

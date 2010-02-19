@@ -13,6 +13,7 @@
 #include "gestfich.h"
 #include "prjconfig.h"
 #include "kicad.h"
+#include "tree_project_frame.h"
 
 #include "build_version.h"
 

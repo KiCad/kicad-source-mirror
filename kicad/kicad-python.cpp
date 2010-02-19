@@ -57,7 +57,7 @@ static void WinEDAClear()
 
 static object GetTypeExt( enum TreeFileType type )
 {
-    return PyHandler::Convert( WinEDA_PrjFrame::GetFileExt( type ) );
+    return PyHandler::Convert( TREE_PROJECT_FRAME::GetFileExt( type ) );
 }
 
 
@@ -78,7 +78,7 @@ object WinEDA_MainFrame::ToWx()
 }
 
 
-WinEDA_PrjFrame* WinEDA_MainFrame::GetTree() const
+TREE_PROJECT_FRAME* WinEDA_MainFrame::GetTree() const
 {
     return m_LeftWin;
 }
@@ -107,36 +107,36 @@ void WinEDA_MainFrame::AddFastLaunchPy( object& button )
 
 /*****************************************************************************/
 
-// WinEDA_PrjFrame Special binding functions:
+// TREE_PROJECT_FRAME Special binding functions:
 // (one line functions are simple wrappers)
 /*****************************************************************************/
 
 // TODO To WxWidgets ?
-object WinEDA_PrjFrame::ToWx()
+object TREE_PROJECT_FRAME::ToWx()
 {
     return object( handle<>( borrowed( wxPyMake_wxObject( this, false ) ) ) );
 }
 
 // TODO Get ?
-object WinEDA_PrjFrame::GetFtExPy( enum TreeFileType type ) const
+object TREE_PROJECT_FRAME::GetFtExPy( enum TreeFileType type ) const
 {
     return PyHandler::Convert( GetFileExt( type ) );
 }
 
 // Get python menu
-object WinEDA_PrjFrame::GetMenuPy( enum TreeFileType type )
+object TREE_PROJECT_FRAME::GetMenuPy( enum TreeFileType type )
 {
     return object( handle<>( borrowed( wxPyMake_wxObject( GetContextMenu( (int) type ), false ) ) ) );
 }
 
 // Get tree control
-object WinEDA_PrjFrame::GetTreeCtrl()
+object TREE_PROJECT_FRAME::GetTreeCtrl()
 {
     return object( handle<>( borrowed( wxPyMake_wxObject( m_TreeProject, false ) ) ) );
 }
 
 // Get current menu
-object WinEDA_PrjFrame::GetCurrentMenu()
+object TREE_PROJECT_FRAME::GetCurrentMenu()
 {
     return object( handle<>( borrowed( wxPyMake_wxObject( m_PopupMenu, false ) ) ) );
 }
@@ -146,7 +146,7 @@ object WinEDA_PrjFrame::GetCurrentMenu()
  * @brief TODO
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::NewFilePy( const str&        name,
+void TREE_PROJECT_FRAME::NewFilePy( const str&        name,
                                  enum TreeFileType type,
                                  object&           id )
 /*****************************************************************************/
@@ -163,7 +163,7 @@ void WinEDA_PrjFrame::NewFilePy( const str&        name,
  * @brief Add a file to the tree under root, or m_root if conversion is wrong
  */
 /*****************************************************************************/
-void WinEDA_PrjFrame::AddFilePy( const str& file, object& root )
+void TREE_PROJECT_FRAME::AddFilePy( const str& file, object& root )
 /*****************************************************************************/
 {
     wxTreeItemId* theroot = &m_root;
@@ -181,7 +181,7 @@ void WinEDA_PrjFrame::AddFilePy( const str& file, object& root )
  * @brief convert wxTreeItem into TreePrjItemData
  */
 /*****************************************************************************/
-TreePrjItemData* WinEDA_PrjFrame::GetItemData( const object& item )
+TreePrjItemData* TREE_PROJECT_FRAME::GetItemData( const object& item )
 /*****************************************************************************/
 {
     wxTreeItemId* id = NULL;
@@ -269,53 +269,53 @@ static void py_kicad_init()
     .value( "MAX", TREE_MAX );
 
 
-    class_<WinEDA_PrjFrame>( "TreeWindow" )
+    class_<TREE_PROJECT_FRAME>( "TreeWindow" )
 
     // wx Interface
-    .def( "ToWx", &WinEDA_PrjFrame::ToWx )
+    .def( "ToWx", &TREE_PROJECT_FRAME::ToWx )
 
     // common features
-    .def( "GetContextMenu", &WinEDA_PrjFrame::GetMenuPy )
-    .def( "GetFileExtension", &WinEDA_PrjFrame::GetFtExPy )
+    .def( "GetContextMenu", &TREE_PROJECT_FRAME::GetMenuPy )
+    .def( "GetFileExtension", &TREE_PROJECT_FRAME::GetFtExPy )
 
     // file filters control
-    .def( "AddFilter", &WinEDA_PrjFrame::AddFilter )
-    .def( "ClearFilters", &WinEDA_PrjFrame::ClearFilters )
-    .def( "RemoveFilter", &WinEDA_PrjFrame::RemoveFilterPy )
-    .def( "GetFilters", &WinEDA_PrjFrame::GetFilters,
+    .def( "AddFilter", &TREE_PROJECT_FRAME::AddFilter )
+    .def( "ClearFilters", &TREE_PROJECT_FRAME::ClearFilters )
+    .def( "RemoveFilter", &TREE_PROJECT_FRAME::RemoveFilterPy )
+    .def( "GetFilters", &TREE_PROJECT_FRAME::GetFilters,
           return_value_policy < copy_const_reference >() )
-    .def( "GetCurrentMenu", &WinEDA_PrjFrame::GetCurrentMenu )
+    .def( "GetCurrentMenu", &TREE_PROJECT_FRAME::GetCurrentMenu )
 
 
     /** Project tree control **/
 
     // AddState
     .def( "AddState",
-          &WinEDA_PrjFrame::AddStatePy )
+          &TREE_PROJECT_FRAME::AddStatePy )
 
     // GetTreeCtrl
     .def( "GetTreeCtrl",
-          &WinEDA_PrjFrame::GetTreeCtrl )
+          &TREE_PROJECT_FRAME::GetTreeCtrl )
 
     // GetItemData
     .def( "GetItemData",
-         &WinEDA_PrjFrame::GetItemData,
+         &TREE_PROJECT_FRAME::GetItemData,
          return_value_policy < reference_existing_object >() )
 
     // FindItemData
     .def( "FindItemData",
-          &WinEDA_PrjFrame::FindItemData,
+          &TREE_PROJECT_FRAME::FindItemData,
           return_value_policy < reference_existing_object >() )
 
     // NewFile
     .def( "NewFile",
-          &WinEDA_PrjFrame::NewFilePy )
+          &TREE_PROJECT_FRAME::NewFilePy )
 
     // AddFile
     .def( "AddFile",
-          &WinEDA_PrjFrame::AddFilePy )
+          &TREE_PROJECT_FRAME::AddFilePy )
 
-    ; /* ENDOF class_<WinEDA_PrjFrame>( "TreeWindow" ) */
+    ; /* ENDOF class_<TREE_PROJECT_FRAME>( "TreeWindow" ) */
 
 
     class_<WinEDA_MainFrame>( "MainFrame" )
