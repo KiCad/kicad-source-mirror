@@ -1122,8 +1122,15 @@ void LIB_COMPONENT::DeleteSelectedItems()
 
 void LIB_COMPONENT::CopySelectedItems( const wxPoint& aOffset )
 {
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
+    /* *do not* use iterators here, because new items
+     * are added to drawings that is a  boost::ptr_vector.
+     * When push_back elements in buffer,
+     * a memory reallocation can happen and will break pointers
+     */
+    unsigned icnt = drawings.size();
+    for( unsigned ii = 0; ii < icnt; ii++  )
     {
+        LIB_DRAW_ITEM& item = drawings[ii];
         if( item.m_Selected == 0 )
             continue;
 
