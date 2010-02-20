@@ -96,10 +96,6 @@ P2) Write accessors for all items in PCB_VISIBLE such as grid control, so that
     Then example 2 in RS274xrevd_e.pdf will draw properly.
 
 
-Dick:
-D1) Get the nested quote support for DSNLEXER fixed up and committed.
-
-
 LAYER_WIDGET for PCBNEW (Dick)
 -----------------------
 L6) Test, and fix up any remaining issues with the PCB_VISIBLE support after P2)

@@ -85,7 +85,7 @@ class DSNLEXER
     LINE_READER         reader;
     int                 stringDelimiter;
     bool                space_in_quoted_tokens; ///< blank spaces within quoted strings
-    bool                comments_are_tokens;    ///< true if should return comments as tokens
+    bool                commentsAreTokens;      ///< true if should return comments as tokens
 
     wxString            filename;
     int                 prevTok;        ///< curTok from previous NextTok() call.
@@ -194,8 +194,8 @@ public:
      */
     bool SetCommentsAreTokens( bool val )
     {
-        bool old = comments_are_tokens;
-        comments_are_tokens = val;
+        bool old = commentsAreTokens;
+        commentsAreTokens = val;
         return old;
     }
 

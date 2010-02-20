@@ -4,6 +4,21 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-Feb-20 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++common
+    DSNLEXER now supports:
+    1)  nested quotes.  This is in anticipation of broader usage of the
+        file type/syntax.  A string like this in the file:
+            "my ""favorate"" string"
+        can be returned as
+            my "favorite" string
+    2)  CommentsAsTokens is implemented, so you can ask the lexer to return
+        comments as tokens, so they can be preserved.  The default is to ignore
+        them.  A comment is defined as any line that has # as its first
+        non-blank character.  (This means comments cannot follow anything else
+        on a line.)
+
 
 2010-Feb-19 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================

@@ -51,7 +51,6 @@ static int compare( const void* a1, const void* a2 )
 DSNLEXER::DSNLEXER( FILE* aFile, const wxString& aFilename,
     const KEYWORD* aKeywordTable, unsigned aKeywordCount ) :
         reader( aFile, 4096 )
-
 {
     keywords = aKeywordTable;
     keywordCount = aKeywordCount;
@@ -61,6 +60,8 @@ DSNLEXER::DSNLEXER( FILE* aFile, const wxString& aFilename,
     filename = aFilename;
 
     space_in_quoted_tokens = true;
+
+    commentsAreTokens = false;
 
     // "start" should never change until we change the reader.  The DSN
     // format spec supports an include file mechanism but we can add that later
@@ -211,9 +212,23 @@ L_read:
             while( cur<limit && isSpace(*cur) )
                 ++cur;
 
-            // if the first non-blank character is #, this line is a comment.
+            // If the first non-blank character is #, this line is a comment.
+            // Comments cannot follow any other token on the same line.
             if( cur<limit && *cur=='#' )
-                goto L_read;
+            {
+                if( commentsAreTokens )
+                {
+                    // save the entire line, including new line as the current token.
+                    // the '#' character may not be at offset zero.
+                    curText = start;        // entire line is the token
+                    cur     = start;        // ensure a good curOffset below
+                    curTok  = DSN_COMMENT;
+                    head    = limit;        // do a readLine() on next call in here.
+                    goto exit;
+                }
+                else
+                    goto L_read;
+            }
         }
         else
         {
@@ -303,11 +318,55 @@ L_read:
         // a quoted string
         if( *cur == stringDelimiter )
         {
+            // New code, understands nested quotes, and deliberately restricts
+            // strings to a single line. Still strips off leading and trailing
+            // quotes, and now removes internal doubled up quotes
+#if 1
+            head = cur;
+
+            // copy the token, character by character so we can remove doubled up quotes.
+            curText.clear();
+
+            while( head < limit )
+            {
+                if( *head==stringDelimiter )
+                {
+                    if( head+1<limit && head[1]==stringDelimiter )
+                    {
+                        // include only one of the doubled-up stringDelimiters
+                        curText += *head;
+                        head    += 2;
+                        continue;
+                    }
+                    else if( head == cur )
+                    {
+                        ++head;     // skip the leading quote
+                        continue;
+                    }
+
+                    // fall thru
+                }
+
+                // check for a terminator
+                if( isStringTerminator( *head ) )
+                {
+                    curTok = DSN_STRING;
+                    ++head;
+                    goto exit;
+                }
+
+                curText += *head++;
+            }
+
+            wxString errtxt(_("Un-terminated delimited string") );
+            ThrowIOError( errtxt, CurOffset() );
+
+#else   // old code, did not understand nested quotes
             ++cur;  // skip over the leading delimiter: ",', or $
 
             head = cur;
 
-            while( head<limit &&  !isStringTerminator( *head ) )
+            while( head<limit  &&  !isStringTerminator( *head ) )
                 ++head;
 
             if( head >= limit )
@@ -323,6 +382,7 @@ L_read:
 
             curTok  = DSN_STRING;
             goto exit;
+#endif
         }
 
         // Maybe it is a token we will find in the token table.
