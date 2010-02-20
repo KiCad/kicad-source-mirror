@@ -8,7 +8,6 @@
   #include <pyhandler.h>
 #endif
 
-#include <wx/wupdlock.h>
 #include "fctsys.h"
 #include "common.h"
 #include "confirm.h"
@@ -859,10 +858,6 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
         m_TreeProject = new TREEPROJECTFILES( this );
     else
         m_TreeProject->DeleteAllItems();
-
-    // Do not update the frame while building the project tree
-    // This can take a while if there is a lot of files and directories in CWD
-    wxWindowUpdateLocker noUpdateTree( this );
 
     if( !m_Parent->m_ProjectFileName.IsOk() )
     {
