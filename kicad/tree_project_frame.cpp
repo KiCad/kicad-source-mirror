@@ -10,37 +10,31 @@
 
 #include <wx/wupdlock.h>
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "confirm.h"
 #include "gestfich.h"
 #include "appl_wxstruct.h"
 #include "bitmaps.h"
-#include "macros.h"
 
 #include "kicad.h"
 #include "tree_project_frame.h"
 #include "class_treeprojectfiles.h"
+#include "class_treeproject_item.h"
 
-#include "wx/image.h"
-#include "wx/imaglist.h"
-#include "wx/treectrl.h"
 #include "wx/regex.h"
 #include "wx/dir.h"
 
 
-/* Comment this if you do no want to load subdirs files in the tree project
- * UnComment this to load subdirs files in the tree project
+/* Note about the tree project build process:
  * Building the tree project can be *very* long if there are a lot of subdirectories
  * in the working directory.
  * Unfornately, this happens easily if the project file *.pro is in the home directory
- * when subdirs are not built, double click on a directory to load its files and subdirs
+ * So the tree project is built "on demand":
+ * First the tree is built from the current directory and shows files and subdirs.
+ *   > First level subdirs trees are built (i.e subdirs contents are not read)
+ *   > When expanding a subdir, each subdir contains is read,
+ *     and the corresponding sub tree is populated on the fly.
  */
-
-// #define ADD_FILES_IN_SUBDIRS
-
-// TODO: a better way could be to load current dir and first subdirs, and load
-// load subdir filenames on opening a subdir
 
 // list of files extensions listed in the tree project window
 // *.sch files are always allowed, do not add here
@@ -81,8 +75,34 @@ const wxString TextFileWildcard( wxT( "Text files (*.txt)|*.txt" ) );
 
 
 /**
- * @brief TODO
+ * @brief class TREE_PROJECT_FRAME is the frame that shows the tree list
+ * of files and subdirs inside the working directory
+ * Files are filtered (see s_AllowedExtensionsToList) so
+ * only useful files are shown.
  */
+
+
+/*****************************************************************************/
+BEGIN_EVENT_TABLE( TREE_PROJECT_FRAME, wxSashLayoutWindow )
+    EVT_TREE_BEGIN_LABEL_EDIT( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnRenameAsk )
+    EVT_TREE_END_LABEL_EDIT( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnRename )
+    EVT_TREE_ITEM_ACTIVATED( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnSelect )
+    EVT_TREE_ITEM_EXPANDED( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnExpand )
+    EVT_TREE_ITEM_RIGHT_CLICK( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnRight )
+    EVT_TREE_BEGIN_DRAG( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnDragStart )
+    EVT_TREE_END_DRAG( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnDragEnd )
+    EVT_MENU( ID_PROJECT_TXTEDIT, TREE_PROJECT_FRAME::OnTxtEdit )
+    EVT_MENU( ID_PROJECT_NEWDIR, TREE_PROJECT_FRAME::OnNewDirectory )
+    EVT_MENU( ID_PROJECT_NEWPY, TREE_PROJECT_FRAME::OnNewPyFile )
+    EVT_MENU( ID_PROJECT_DELETE, TREE_PROJECT_FRAME::OnDeleteFile )
+    EVT_MENU( ID_PROJECT_RENAME, TREE_PROJECT_FRAME::OnRenameFile )
+#ifdef KICAD_PYTHON
+    EVT_MENU( ID_PROJECT_RUNPY, TREE_PROJECT_FRAME::OnRunPy )
+#endif /* KICAD_PYTHON */
+END_EVENT_TABLE()
+/*****************************************************************************/
+
+
 /******************************************************************/
 TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( WinEDA_MainFrame* parent ) :
     wxSashLayoutWindow( parent,
@@ -119,7 +139,6 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( WinEDA_MainFrame* parent ) :
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::EditScript" ) );
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::TreeContextMenu" ) );
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::TreeAddFile" ) );
-    PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::NewFile" ) );
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::NewDirectory" ) );
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::DeleteFile" ) );
     PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::RenameFile" ) );
@@ -178,24 +197,6 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( WinEDA_MainFrame* parent ) :
         item->SetBitmap( new_python_xpm );
         menu->Append( item );
 #endif /* KICAD_PYTHON */
-
-
-        // ID_PROJECT_NEWTXT
-        item = new wxMenuItem( menu,
-                               ID_PROJECT_NEWTXT,
-                               _( "New &Text File" ),
-                               _( "Create a New Txt File" ) );
-        item->SetBitmap( new_txt_xpm );
-        menu->Append( item );
-
-
-        // ID_PROJECT_NEWFILE
-        item = new wxMenuItem( menu,
-                               ID_PROJECT_NEWFILE,
-                               _( "New &File" ),
-                               _( "Create a New File" ) );
-        item->SetBitmap( new_xpm );
-        menu->Append( item );
     }
 
 
@@ -256,35 +257,6 @@ TREE_PROJECT_FRAME::~TREE_PROJECT_FRAME()
 }
 
 
-/*****************************************************************************/
-BEGIN_EVENT_TABLE( TREE_PROJECT_FRAME, wxSashLayoutWindow )
-/*****************************************************************************/
-
-    EVT_TREE_BEGIN_LABEL_EDIT( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnRenameAsk )
-    EVT_TREE_END_LABEL_EDIT( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnRename )
-    EVT_TREE_ITEM_ACTIVATED( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnSelect )
-    EVT_TREE_ITEM_RIGHT_CLICK( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnRight )
-    EVT_TREE_BEGIN_DRAG( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnDragStart )
-    EVT_TREE_END_DRAG( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnDragEnd )
-    EVT_MENU( ID_PROJECT_TXTEDIT, TREE_PROJECT_FRAME::OnTxtEdit )
-    EVT_MENU( ID_PROJECT_NEWFILE, TREE_PROJECT_FRAME::OnNewFile )
-    EVT_MENU( ID_PROJECT_NEWDIR, TREE_PROJECT_FRAME::OnNewDirectory )
-    EVT_MENU( ID_PROJECT_NEWPY, TREE_PROJECT_FRAME::OnNewPyFile )
-    EVT_MENU( ID_PROJECT_NEWTXT, TREE_PROJECT_FRAME::OnNewTxtFile )
-    EVT_MENU( ID_PROJECT_DELETE, TREE_PROJECT_FRAME::OnDeleteFile )
-    EVT_MENU( ID_PROJECT_RENAME, TREE_PROJECT_FRAME::OnRenameFile )
-
-
-#ifdef KICAD_PYTHON
-    EVT_MENU( ID_PROJECT_RUNPY, TREE_PROJECT_FRAME::OnRunPy )
-#endif /* KICAD_PYTHON */
-
-
-/*****************************************************************************/
-END_EVENT_TABLE()
-/*****************************************************************************/
-
-
 /**
  * @brief Allowing drag & drop of file other than the currently opened project
  */
@@ -297,7 +269,7 @@ void TREE_PROJECT_FRAME::OnDragStart( wxTreeEvent& event )
     wxTreeItemId     curr_item = event.GetItem();
 
     m_TreeProject->SelectItem( curr_item );
-    TreePrjItemData* data = GetSelectedData();
+    TREEPROJECT_ITEM* data = GetSelectedData();
     if( data->GetFileName() == m_Parent->m_ProjectFileName.GetFullPath() )
         return;
 
@@ -318,14 +290,14 @@ void TREE_PROJECT_FRAME::OnDragEnd( wxTreeEvent& event )
     m_Parent->SetCursor( wxNullCursor );
 
     wxTreeItemId     moved = m_TreeProject->GetSelection();
-    TreePrjItemData* source_data = GetSelectedData();
+    TREEPROJECT_ITEM* source_data = GetSelectedData();
     wxTreeItemId     dest = event.GetItem();
 
     if( !dest.IsOk() )
         return;                // Cancelled ...
 
-    TreePrjItemData* destData =
-        dynamic_cast<TreePrjItemData*>( m_TreeProject->GetItemData( dest ) );
+    TREEPROJECT_ITEM* destData =
+        dynamic_cast<TREEPROJECT_ITEM*>( m_TreeProject->GetItemData( dest ) );
 
     if( !destData )
         return;
@@ -341,7 +313,7 @@ void TREE_PROJECT_FRAME::OnDragEnd( wxTreeEvent& event )
 
         // Select the right destData:
         destData =
-            dynamic_cast<TreePrjItemData*>( m_TreeProject->GetItemData( dest ) );
+            dynamic_cast<TREEPROJECT_ITEM*>( m_TreeProject->GetItemData( dest ) );
 
         if( !destData )
             return;
@@ -386,7 +358,7 @@ void TREE_PROJECT_FRAME::RemoveFilter( const wxString& filter )
  * @brief Return the data corresponding to the file, or NULL
  */
 /*****************************************************************************/
-TreePrjItemData* TREE_PROJECT_FRAME::FindItemData( const boost::python::str& name )
+TREEPROJECT_ITEM* TREE_PROJECT_FRAME::FindItemData( const boost::python::str& name )
 /*****************************************************************************/
 {
     // (Interative tree parsing)
@@ -400,7 +372,7 @@ TreePrjItemData* TREE_PROJECT_FRAME::FindItemData( const boost::python::str& nam
     root->push_back( m_TreeProject->GetRootItem() );
 
     // if we look for the root, return it ...
-    TreePrjItemData* data = dynamic_cast< TreePrjItemData*>(
+    TREEPROJECT_ITEM* data = dynamic_cast< TREEPROJECT_ITEM*>(
         m_TreeProject->GetItemData( root->at( 0 ) ) );
 
     if( data->GetFileName() == filename )
@@ -420,7 +392,7 @@ TreePrjItemData* TREE_PROJECT_FRAME::FindItemData( const boost::python::str& nam
 
             while( child.IsOk() )
             {
-                TreePrjItemData* data = dynamic_cast< TreePrjItemData*>(
+                TREEPROJECT_ITEM* data = dynamic_cast< TREEPROJECT_ITEM*>(
                     m_TreeProject->GetItemData( child ) );
 
                 if( data )
@@ -513,32 +485,10 @@ void TREE_PROJECT_FRAME::OnNewDirectory( wxCommandEvent& event )
  * @brief TODO
  */
 /*****************************************************************************/
-void TREE_PROJECT_FRAME::OnNewFile( wxCommandEvent& event )
-/*****************************************************************************/
-{
-    NewFile( TREE_UNKNOWN );
-}
-
-
-/**
- * @brief TODO
- */
-/*****************************************************************************/
 void TREE_PROJECT_FRAME::OnNewPyFile( wxCommandEvent& event )
 /*****************************************************************************/
 {
     NewFile( TREE_PY );
-}
-
-
-/**
- * @brief TODO
- */
-/*****************************************************************************/
-void TREE_PROJECT_FRAME::OnNewTxtFile( wxCommandEvent& event )
-/*****************************************************************************/
-{
-    NewFile( TREE_TXT );
 }
 
 
@@ -556,7 +506,7 @@ void TREE_PROJECT_FRAME::NewFile( TreeFileType type )
     wxString         dir;
     wxString         title;
 
-    TreePrjItemData* treeData;
+    TREEPROJECT_ITEM* treeData;
 
     title = ( TREE_DIRECTORY != type ) ? _( "Create New File" ) :
         _( "Create New Directory" );
@@ -722,14 +672,17 @@ wxString TREE_PROJECT_FRAME::GetFileWildcard( TreeFileType type )
 }
 
 
-/**
+/** function AddFile
  * @brief  Add filename "name" to the tree \n
  *         if name is a directory, add the sub directory file names
- * @return TODO
+ * @param aName = the filename or the dirctory name to add
+ * @param aRoot = the wxTreeItemId item where to add sub tree items
+ * @param aRecurse = true to filenames or sub dir names to the current tree item
+ *                   false to stop file add.
+ * @return true if the file (or directory) is added.
  */
-/*****************************************************************************/
-bool TREE_PROJECT_FRAME::AddFile( const wxString& name, wxTreeItemId& root )
-/*****************************************************************************/
+bool TREE_PROJECT_FRAME::AddFile( const wxString& aName,
+                                   wxTreeItemId& aRoot, bool aRecurse )
 {
     wxTreeItemId cellule;
 
@@ -737,13 +690,13 @@ bool TREE_PROJECT_FRAME::AddFile( const wxString& name, wxTreeItemId& root )
     TreeFileType type = TREE_UNKNOWN;
 
     // Skip not visible files and dirs
-    wxFileName fn(name);
+    wxFileName fn(aName);
     // Files/dirs names starting by "." are not visible files under unices.
     // Skip them also under Windows
     if( fn.GetName().StartsWith(wxT(".") )  )
         return false;
 
-    if( wxDirExists( name ) )
+    if( wxDirExists( aName ) )
     {
         type = TREE_DIRECTORY;
     }
@@ -757,7 +710,7 @@ bool TREE_PROJECT_FRAME::AddFile( const wxString& name, wxTreeItemId& root )
         for( unsigned i = 0; i < m_Filters.size(); i++ )
         {
             reg.Compile( m_Filters[i], wxRE_ICASE );
-            if( reg.Matches( name ) )
+            if( reg.Matches( aName ) )
             {
                 addFile = true;
                 if( i==0 )
@@ -779,7 +732,7 @@ bool TREE_PROJECT_FRAME::AddFile( const wxString& name, wxTreeItemId& root )
             char     line[128]; // small because we just need a few bytes from the start of a line
             FILE*    fp;
 
-            wxString FullFileName = name;
+            wxString FullFileName = aName;
 
             fp = wxFopen( FullFileName, wxT( "rt" ) );
             if( fp == NULL )
@@ -818,7 +771,7 @@ bool TREE_PROJECT_FRAME::AddFile( const wxString& name, wxTreeItemId& root )
             reg.Compile( wxString::FromAscii( "^.*\\" ) + ext +
                          wxString::FromAscii( "$" ), wxRE_ICASE );
 
-            if( reg.Matches( name ) )
+            if( reg.Matches( aName ) )
             {
                 type = (TreeFileType) i;
                 break;
@@ -828,30 +781,28 @@ bool TREE_PROJECT_FRAME::AddFile( const wxString& name, wxTreeItemId& root )
 
     //also check to see if it is already there.
     wxTreeItemIdValue cookie;
-    wxTreeItemId      kid = m_TreeProject->GetFirstChild( root, cookie );
+    wxTreeItemId      kid = m_TreeProject->GetFirstChild( aRoot, cookie );
     while( kid.IsOk() )
     {
-        TreePrjItemData* itemData = (TreePrjItemData*)
-                                    m_TreeProject->GetItemData( kid );
+        TREEPROJECT_ITEM* itemData = GetItemIdData( kid );
         if( itemData )
         {
-            if( itemData->m_FileName == name )
+            if( itemData->m_FileName == aName )
             {
                 return true; //well, we would have added it, but it is already here!
             }
         }
-        kid = m_TreeProject->GetNextChild( root, cookie );
+        kid = m_TreeProject->GetNextChild( aRoot, cookie );
     }
-
     // Append the item (only appending the filename not the full path):
-    wxString         file = wxFileNameFromPath( name );
-    cellule = m_TreeProject->AppendItem( root, file );
-    TreePrjItemData* data = new TreePrjItemData( type, name, m_TreeProject );
+    wxString         file = wxFileNameFromPath( aName );
+    cellule = m_TreeProject->AppendItem( aRoot, file );
+    TREEPROJECT_ITEM* data = new TREEPROJECT_ITEM( type, aName, m_TreeProject );
 
     m_TreeProject->SetItemData( cellule, data );
     data->SetState( 0 );
 
-    /* Mark root files (files which have the same name as the project) */
+    /* Mark root files (files which have the same aName as the project) */
     wxFileName project( m_Parent->m_ProjectFileName );
     wxFileName currfile( file );
 
@@ -863,32 +814,29 @@ bool TREE_PROJECT_FRAME::AddFile( const wxString& name, wxTreeItemId& root )
 
 #ifdef KICAD_PYTHON
     PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::TreeAddFile" ),
-                                            PyHandler::Convert( name ) );
+                                            PyHandler::Convert( aName ) );
 #endif /* KICAD_PYTHON */
 
 
-    // When enabled This section adds dirs and files found in the subdirs
-    // in this case AddFile is recursive.
-#ifdef ADD_FILES_IN_SUBDIRS
-    if( TREE_DIRECTORY == type )
+    // This section adds dirs and files found in the subdirs
+    // in this case AddFile is recursive, but for the first level only.
+    if( TREE_DIRECTORY == type && aRecurse )
     {
         const wxString sep = wxFileName().GetPathSeparator();
-        wxDir          dir( name );
+        wxDir          dir( aName );
         wxString       dir_filename;
-
+        data->m_WasPopulated = true;       // set state to populated
         if( dir.GetFirst( &dir_filename ) )
         {
-            do
+            do  // Add name in tree, but do not recurse
             {
-                AddFile( name + sep + dir_filename, cellule );
+                AddFile( aName + sep + dir_filename, cellule, false );
             } while( dir.GetNext( &dir_filename ) );
         }
 
         /* Sort filenames by alphabetic order */
         m_TreeProject->SortChildren( cellule );
     }
-#endif /* ADD_FILES_IN_SUBDIRS */
-
 
     return true;
 }
@@ -935,7 +883,7 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
     m_TreeProject->SetItemBold( rootcellule, TRUE );
 
     m_TreeProject->SetItemData( rootcellule,
-                                new TreePrjItemData( TREE_PROJECT,
+                                new TREEPROJECT_ITEM( TREE_PROJECT,
                                                      wxEmptyString,
                                                      m_TreeProject ) );
 
@@ -986,7 +934,7 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
 /*****************************************************************************/
 {
     int tree_id;
-    TreePrjItemData* tree_data;
+    TREEPROJECT_ITEM* tree_data;
     wxString         FullFileName;
     wxTreeItemId     curr_item = Event.GetItem();
 
@@ -1058,7 +1006,7 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
 void TREE_PROJECT_FRAME::OnTxtEdit( wxCommandEvent& event )
 /*****************************************************************************/
 {
-    TreePrjItemData* tree_data = GetSelectedData();
+    TREEPROJECT_ITEM* tree_data = GetSelectedData();
 
     if( !tree_data )
         return;
@@ -1086,7 +1034,7 @@ void TREE_PROJECT_FRAME::OnTxtEdit( wxCommandEvent& event )
 void TREE_PROJECT_FRAME::OnDeleteFile( wxCommandEvent& )
 /*****************************************************************************/
 {
-    TreePrjItemData* tree_data = GetSelectedData();
+    TREEPROJECT_ITEM* tree_data = GetSelectedData();
 
     if( !tree_data )
         return;
@@ -1102,7 +1050,7 @@ void TREE_PROJECT_FRAME::OnRenameFile( wxCommandEvent& )
 /*****************************************************************************/
 {
     wxTreeItemId     curr_item = m_TreeProject->GetSelection();
-    TreePrjItemData* tree_data = GetSelectedData();
+    TREEPROJECT_ITEM* tree_data = GetSelectedData();
 
     if( !tree_data )
         return;
@@ -1127,7 +1075,7 @@ void TREE_PROJECT_FRAME::OnRenameFile( wxCommandEvent& )
 void TREE_PROJECT_FRAME::OnRunPy( wxCommandEvent& event )
 /*****************************************************************************/
 {
-    TreePrjItemData* tree_data = GetSelectedData();
+    TREEPROJECT_ITEM* tree_data = GetSelectedData();
 
     if( !tree_data )
         return;
@@ -1180,7 +1128,7 @@ int TREE_PROJECT_FRAME::AddStatePy( boost::python::object& bitmap )
 void TREE_PROJECT_FRAME::OnRenameAsk( wxTreeEvent& event )
 /*****************************************************************************/
 {
-    TreePrjItemData* tree_data = GetSelectedData();
+    TREEPROJECT_ITEM* tree_data = GetSelectedData();
 
     if( !tree_data )
         return;
@@ -1196,7 +1144,7 @@ void TREE_PROJECT_FRAME::OnRenameAsk( wxTreeEvent& event )
 void TREE_PROJECT_FRAME::OnRename( wxTreeEvent& event )
 /*****************************************************************************/
 {
-    TreePrjItemData* tree_data = GetSelectedData();
+    TREEPROJECT_ITEM* tree_data = GetSelectedData();
 
     if( !tree_data )
         return;
@@ -1214,9 +1162,79 @@ void TREE_PROJECT_FRAME::OnSelect( wxTreeEvent& Event )
 {
     wxString         FullFileName;
 
-    TreePrjItemData* tree_data = GetSelectedData();
+    TREEPROJECT_ITEM* tree_data = GetSelectedData();
 
     if( !tree_data )
         return;
     tree_data->Activate( this );
 }
+
+/**
+ * @brief Called when expanding an item of the tree
+ * populate tree items corresponding to subdirectories not already populated
+ */
+/*****************************************************************************/
+void TREE_PROJECT_FRAME::OnExpand( wxTreeEvent& Event )
+/*****************************************************************************/
+{
+    wxString         FullFileName;
+
+    wxTreeItemId itemId = Event.GetItem();
+    TREEPROJECT_ITEM* tree_data = GetItemIdData( itemId );
+
+    if( !tree_data )
+        return;
+
+    if( tree_data->GetType() != TREE_DIRECTORY )
+        return;
+
+    //explore list of non populated subdirs, and populate them
+    wxTreeItemIdValue cookie;
+    wxTreeItemId      kid = m_TreeProject->GetFirstChild( itemId, cookie );
+    for( ; kid.IsOk(); kid = m_TreeProject->GetNextChild( itemId, cookie ) )
+    {
+        TREEPROJECT_ITEM* itemData = GetItemIdData( kid );
+        if( !itemData || itemData->GetType() != TREE_DIRECTORY )
+            continue;
+        if ( itemData->m_WasPopulated )
+            continue;
+
+        wxString fileName = itemData->GetFileName();
+        const wxString sep = wxFileName().GetPathSeparator();
+        wxDir          dir( fileName );
+        wxString       dir_filename;
+        if( dir.GetFirst( &dir_filename ) )
+        {
+            do  // Add name to tree item, but do not recurse in subdirs:
+            {
+                AddFile( fileName + sep + dir_filename, kid, false );
+            } while( dir.GetNext( &dir_filename ) );
+        }
+        itemData->m_WasPopulated = true;       // set state to populated
+
+        /* Sort filenames by alphabetic order */
+        m_TreeProject->SortChildren( kid );
+    }
+}
+
+/** function GetSelectedData
+ * return the item data from item currently selected (highlighted)
+ * Note this is not necessary the "clicked" item,
+ * because when expanding, collapsing an item this item is not selected
+ */
+TREEPROJECT_ITEM* TREE_PROJECT_FRAME::GetSelectedData()
+{
+    return dynamic_cast<TREEPROJECT_ITEM*>( m_TreeProject->GetItemData( m_TreeProject->GetSelection() ) );
+}
+
+/** function GetItemIdData
+ * return the item data corresponding to a wxTreeItemId identifier
+ * @param  aId = the wxTreeItemId identifier.
+ * @return a TREEPROJECT_ITEM pointer correspondinfg to item id aId
+ */
+TREEPROJECT_ITEM* TREE_PROJECT_FRAME::GetItemIdData(wxTreeItemId aId)
+{
+    return dynamic_cast<TREEPROJECT_ITEM*>( m_TreeProject->GetItemData( aId ) );
+}
+
+

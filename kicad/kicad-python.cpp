@@ -178,10 +178,10 @@ void TREE_PROJECT_FRAME::AddFilePy( const str& file, object& root )
 
 
 /**
- * @brief convert wxTreeItem into TreePrjItemData
+ * @brief convert wxTreeItem into TREEPROJECT_ITEM
  */
 /*****************************************************************************/
-TreePrjItemData* TREE_PROJECT_FRAME::GetItemData( const object& item )
+TREEPROJECT_ITEM* TREE_PROJECT_FRAME::GetItemData( const object& item )
 /*****************************************************************************/
 {
     wxTreeItemId* id = NULL;
@@ -191,36 +191,36 @@ TreePrjItemData* TREE_PROJECT_FRAME::GetItemData( const object& item )
         return NULL;
     }
 
-    return dynamic_cast<TreePrjItemData*>( m_TreeProject->GetItemData( *id ) );
+    return dynamic_cast<TREEPROJECT_ITEM*>( m_TreeProject->GetItemData( *id ) );
 }
 
 
 /*****************************************************************************/
 
-// TreePrjItemData Special binding functions
+// TREEPROJECT_ITEM Special binding functions
 // (one line functions are simple wrappers)
 /*****************************************************************************/
 
 // Python rename
-bool TreePrjItemData::RenamePy( const str& newname, bool check )
+bool TREEPROJECT_ITEM::RenamePy( const str& newname, bool check )
 {
     return Rename( PyHandler::MakeStr( newname ), check );
 }
 
 // Get python directory
-object TreePrjItemData::GetDirPy() const
+object TREEPROJECT_ITEM::GetDirPy() const
 {
     return PyHandler::Convert( GetDir() );
 }
 
 // Get python filename
-object TreePrjItemData::GetFileNamePy() const
+object TREEPROJECT_ITEM::GetFileNamePy() const
 {
     return PyHandler::Convert( GetFileName() );
 }
 
 // Get python menu
-object TreePrjItemData::GetMenuPy()
+object TREEPROJECT_ITEM::GetMenuPy()
 {
     return object( handle<>( borrowed( wxPyMake_wxObject( &m_fileMenu, false ) ) ) );
 }
@@ -238,21 +238,21 @@ static void py_kicad_init()
          return_value_policy< reference_existing_object >() );
     def( "GetTypeExtension", &GetTypeExt );
 
-    class_<TreePrjItemData>( "PrjItem" )
+    class_<TREEPROJECT_ITEM>( "PrjItem" )
 
     // Internal data:
-    .def( "GetFileName", &TreePrjItemData::GetFileNamePy )
-    .def( "GetDir", &TreePrjItemData::GetDirPy )
-    .def( "GetType", &TreePrjItemData::GetType )
-    .def( "GetId", &TreePrjItemData::GetIdPy )
-    .def( "GetMenu", &TreePrjItemData::GetMenuPy )
+    .def( "GetFileName", &TREEPROJECT_ITEM::GetFileNamePy )
+    .def( "GetDir", &TREEPROJECT_ITEM::GetDirPy )
+    .def( "GetType", &TREEPROJECT_ITEM::GetType )
+    .def( "GetId", &TREEPROJECT_ITEM::GetIdPy )
+    .def( "GetMenu", &TREEPROJECT_ITEM::GetMenuPy )
 
     // Item control
-    .def( "SetState", &TreePrjItemData::SetState )
-    .def( "Rename", &TreePrjItemData::RenamePy )
-    .def( "Move", &TreePrjItemData::Move )
-    .def( "Delete", &TreePrjItemData::Delete )
-    .def( "Activate", &TreePrjItemData::Activate )
+    .def( "SetState", &TREEPROJECT_ITEM::SetState )
+    .def( "Rename", &TREEPROJECT_ITEM::RenamePy )
+    .def( "Move", &TREEPROJECT_ITEM::Move )
+    .def( "Delete", &TREEPROJECT_ITEM::Delete )
+    .def( "Activate", &TREEPROJECT_ITEM::Activate )
     ;
 
     enum_<TreeFileType>( "FileType" )

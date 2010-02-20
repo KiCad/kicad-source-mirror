@@ -29,6 +29,8 @@
 #ifndef TREEPRJ_FRAME_H
 #define TREEPRJ_FRAME_H
 
+class TREEPROJECT_ITEM;
+
 /** class TREE_PROJECT_FRAME
  * Window to display the tree files
  */
@@ -48,7 +50,18 @@ protected:
     void             NewFile( TreeFileType type );
     void             NewFile( const wxString& name, TreeFileType type,
                               wxTreeItemId& root );
-    TreePrjItemData* GetSelectedData();
+    /** function GetSelectedData
+     * return the item data from item currently selected (highlighted)
+     * Note this is not necessary the "clicked" item,
+     * because when expanding, collapsing an item this item is not selected
+     */
+    TREEPROJECT_ITEM* GetSelectedData();
+    /** function GetItemIdData
+     * return the item data corresponding to a wxTreeItemId identifier
+     * @param  aId = the wxTreeItemId identifier.
+     * @return a TREEPROJECT_ITEM pointer correspondinfg to item id aId
+     */
+    TREEPROJECT_ITEM* GetItemIdData(wxTreeItemId aId);
 
 public:
     WinEDA_MainFrame* m_Parent;
@@ -63,6 +76,7 @@ public:
     TREE_PROJECT_FRAME( WinEDA_MainFrame* parent );
     ~TREE_PROJECT_FRAME();
     void                         OnSelect( wxTreeEvent& Event );
+    void                         OnExpand( wxTreeEvent& Event );
     void                         OnRenameAsk( wxTreeEvent& Event );
     void                         OnRename( wxTreeEvent& Event );
     void                         OnDragStart( wxTreeEvent& event );
@@ -75,14 +89,8 @@ public:
     void                         OnDeleteFile( wxCommandEvent& event );
     void                         OnRenameFile( wxCommandEvent& event );
 
-    void                         OnNewFile( wxCommandEvent& event );
     void                         OnNewDirectory( wxCommandEvent& event );
-    void                         OnNewSchFile( wxCommandEvent& event );
-    void                         OnNewBrdFile( wxCommandEvent& event );
     void                         OnNewPyFile( wxCommandEvent& event );
-    void                         OnNewGerberFile( wxCommandEvent& event );
-    void                         OnNewTxtFile( wxCommandEvent& event );
-    void                         OnNewNetFile( wxCommandEvent& event );
 
     void                         ClearFilters();
 
@@ -112,21 +120,32 @@ public:
     void                  AddFilter( const boost::python::str& filter );
 
     boost::python::object GetTreeCtrl();
-    TreePrjItemData*      GetItemData( const boost::python::object& item );
+    TREEPROJECT_ITEM*      GetItemData( const boost::python::object& item );
+
     void                  AddFilePy( const boost::python::str& name,
                                      boost::python::object&    root );
     void                  NewFilePy( const boost::python::str& name,
                                      TreeFileType              type,
                                      boost::python::object&    root );
 
-    TreePrjItemData*      FindItemData( const boost::python::str& name );
+    TREEPROJECT_ITEM*      FindItemData( const boost::python::str& name );
 
     boost::python::object GetCurrentMenu();
     int                   AddStatePy( boost::python::object& bitmap );
 
 #endif
 
-    bool                  AddFile( const wxString& name, wxTreeItemId& root );
+   /** function AddFile
+     * @brief  Add filename "name" to the tree \n
+     *         if name is a directory, add the sub directory file names
+     * @param aName = the filename or the dirctory name to add
+     * @param aRoot = the wxTreeItemId item where to add sub tree items
+     * @param aRecurse = true to filenames or sub dir names to the current tree item
+     *                   false to stop file add.
+     * @return true if the file (or directory) is added.
+     */
+     bool                  AddFile( const wxString& aName,
+                                   wxTreeItemId& aRoot, bool aRecurse = true);
 
     DECLARE_EVENT_TABLE()
 };

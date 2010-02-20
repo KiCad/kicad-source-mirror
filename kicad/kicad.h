@@ -38,9 +38,7 @@ enum id_kicad_frm {
     ID_PROJECT_TXTEDIT,
     ID_PROJECT_TREE_REFRESH,
     ID_PROJECT_RUNPY,
-    ID_PROJECT_NEWFILE,
     ID_PROJECT_NEWPY,
-    ID_PROJECT_NEWTXT,
     ID_PROJECT_NEWDIR,
     ID_PROJECT_DELETE,
     ID_PROJECT_RENAME,
@@ -186,89 +184,6 @@ private:
     void AddFastLaunch( wxBitmapButton* button );
 
     DECLARE_EVENT_TABLE()
-};
-
-
-/*********************************/
-/* Classes for the project tree. */
-/*********************************/
-
-/** class TreePrjItemData
- * Handle one item (a file or a directory name) for the tree file
- */
-class TreePrjItemData : public wxTreeItemData
-{
-public:
-    TreeFileType m_Type;
-    bool         m_IsRootFile;  // True if m_Filename is a root schematic (same name as project)
-    wxString     m_FileName;    // Filename for a file, or directory name
-
-private:
-    wxTreeCtrl*  m_Parent;
-    wxMenu       m_fileMenu;
-    int          m_State;
-
-public:
-
-    TreePrjItemData( TreeFileType type, const wxString& data,
-                     wxTreeCtrl* parent );
-    TreePrjItemData() : m_Parent( NULL ) { }
-
-    TreePrjItemData( const TreePrjItemData& src ) :
-        m_Type( src.m_Type ),
-        m_FileName( src.m_FileName ),
-        m_Parent( src.m_Parent )
-    {
-        SetState( src.m_State );
-    }
-
-
-    TreeFileType GetType() const
-    {
-        return m_Type;
-    }
-
-
-    wxString GetFileName() const
-    {
-        return m_FileName;
-    }
-
-
-    void SetFileName( const wxString& name )
-    {
-        m_FileName = name;
-    }
-
-
-    wxString GetDir() const;
-
-    void     OnRename( wxTreeEvent& event, bool check = true );
-    bool     Rename( const wxString& name, bool check = true );
-    bool     Delete( bool check = true );
-    void     Move( TreePrjItemData* dest );
-    void     Activate( TREE_PROJECT_FRAME* prjframe );
-
-    const wxMenu* GetMenu()
-    {
-        return &m_fileMenu;
-    }
-
-
-    void                  SetState( int state );
-
-#ifdef KICAD_PYTHON
-    boost::python::object GetFileNamePy() const;
-    bool                  RenamePy( const boost::python::str& newname,
-                                    bool                      check = true );
-
-    boost::python::object GetDirPy() const;
-
-    boost::python::object GetIdPy() const;
-
-    boost::python::object GetMenuPy();
-
-#endif
 };
 
 #endif
