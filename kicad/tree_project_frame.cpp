@@ -23,6 +23,7 @@
 
 #include "wx/regex.h"
 #include "wx/dir.h"
+#include "wx/imaglist.h"
 
 
 /* Note about the tree project build process:

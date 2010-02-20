@@ -17,6 +17,7 @@
 #include "tree_project_frame.h"
 #include "class_treeprojectfiles.h"
 #include "class_treeproject_item.h"
+#include "wx/imaglist.h"
 
 #include "wx/regex.h"
 #include "wx/dir.h"

@@ -17,6 +17,7 @@
 #include "class_treeproject_item.h"
 
 #include "wx/regex.h"
+#include "wx/imaglist.h"
 
 
 IMPLEMENT_ABSTRACT_CLASS( TREEPROJECTFILES, wxTreeCtrl )
