@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-16 13:41+0200\n"
-"PO-Revision-Date: 2010-02-16 13:41+0200\n"
+"POT-Creation-Date: 2010-02-21 22:13+0200\n"
+"PO-Revision-Date: 2010-02-21 22:13+0200\n"
 "Last-Translator: Vesa Solonen <vesa.solonen@hut.fi>\n"
 "Language-Team: Amerikanenglanti <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -2442,11 +2442,11 @@ msgstr "3D-muoto"
 
 #: pcbnew/class_module.cpp:891
 msgid "Doc:  "
-msgstr "Dokum:"
+msgstr "Dokum: "
 
 #: pcbnew/class_module.cpp:892
 msgid "KeyW: "
-msgstr "AvainS:"
+msgstr "AvainS: "
 
 #: pcbnew/solve.cpp:263
 msgid "Abort routing?"
@@ -3116,17 +3116,17 @@ msgstr "Tallenna komponenttitiedostot"
 msgid "Unable to create file "
 msgstr "tiedoston luominen ei onnistunut"
 
-#: pcbnew/swap_layers.cpp:68
+#: pcbnew/swap_layers.cpp:70
 msgid "Swap Layers:"
 msgstr "Vaihda kerrokset:"
 
-#: pcbnew/swap_layers.cpp:215
-#: pcbnew/swap_layers.cpp:220
-#: pcbnew/swap_layers.cpp:306
+#: pcbnew/swap_layers.cpp:217
+#: pcbnew/swap_layers.cpp:222
+#: pcbnew/swap_layers.cpp:308
 msgid "No Change"
 msgstr "Ei muutosta"
 
-#: pcbnew/swap_layers.cpp:296
+#: pcbnew/swap_layers.cpp:298
 msgid "Deselect this layer to select the No Change state"
 msgstr "Poista valinta kerrokselta estääksesi muutokset"
 
@@ -7670,6 +7670,44 @@ msgstr "&Lehden nimi:"
 msgid "&Text size:"
 msgstr "Tekstin &koko:"
 
+#: eeschema/libeditframe.cpp:301
+msgid ""
+"Component was modified!\n"
+"Discard changes?"
+msgstr ""
+"Komponenttia muokattiin!\n"
+"Hylätäänkö muutokset?"
+
+#: eeschema/libeditframe.cpp:314
+#, c-format
+msgid ""
+"Library \"%s\" was modified!\n"
+"Discard changes?"
+msgstr ""
+"Kirjastoa \"%s\" muokattiin!\n"
+"Hylätäänkö muutokset?"
+
+#: eeschema/libeditframe.cpp:424
+#, c-format
+msgid "Part %c"
+msgstr "Osa %c"
+
+#: eeschema/libeditframe.cpp:680
+msgid "Set pin options"
+msgstr "Aseta nastojen valinnat"
+
+#: eeschema/libeditframe.cpp:709
+msgid "Add line"
+msgstr "Lisää viiva"
+
+#: eeschema/libeditframe.cpp:713
+msgid "Set anchor position"
+msgstr "Aseta kiinnepisteen sijainti"
+
+#: eeschema/libeditframe.cpp:723
+msgid "Export"
+msgstr "Vie"
+
 #: eeschema/sheetlab.cpp:61
 msgid "PinSheet Properties:"
 msgstr "Nastalehden ominaisuudet:"
@@ -7782,24 +7820,24 @@ msgstr "Näytä sivun &reunat"
 msgid "Schematic modified, Save before exit ?"
 msgstr "Kytkentäkaaviota muokattu. Tallennetaanko?"
 
-#: eeschema/schframe.cpp:493
+#: eeschema/schframe.cpp:514
 msgid "Draw wires and buses in any direction"
 msgstr "Piirrä johtimet ja väylät vapaalla kulmalla"
 
-#: eeschema/schframe.cpp:494
+#: eeschema/schframe.cpp:515
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Piirrä johtimet ja väylät vain vaaka- ja pystysuorassa"
 
-#: eeschema/schframe.cpp:504
+#: eeschema/schframe.cpp:525
 msgid "Do not show hidden pins"
 msgstr "Älä näytä piilotettuja nastoja"
 
-#: eeschema/schframe.cpp:505
+#: eeschema/schframe.cpp:526
 #: eeschema/tool_sch.cpp:268
 msgid "Show hidden pins"
 msgstr "Näytä piilotetut nastat"
 
-#: eeschema/schframe.cpp:596
+#: eeschema/schframe.cpp:617
 msgid "Schematic"
 msgstr "Kytkentäkaavio"
 
@@ -7835,44 +7873,6 @@ msgstr "Seuraava tuntomerkki (F5)"
 #: eeschema/dialog_find.cpp:147
 msgid "Find Cmp in &Lib"
 msgstr "Etsi komponentti &kirjastossa"
-
-#: eeschema/libframe.cpp:297
-msgid ""
-"Component was modified!\n"
-"Discard changes?"
-msgstr ""
-"Komponenttia muokattiin!\n"
-"Hylätäänkö muutokset?"
-
-#: eeschema/libframe.cpp:310
-#, c-format
-msgid ""
-"Library \"%s\" was modified!\n"
-"Discard changes?"
-msgstr ""
-"Kirjastoa \"%s\" muokattiin!\n"
-"Hylätäänkö muutokset?"
-
-#: eeschema/libframe.cpp:420
-#, c-format
-msgid "Part %c"
-msgstr "Osa %c"
-
-#: eeschema/libframe.cpp:687
-msgid "Set pin options"
-msgstr "Aseta nastojen valinnat"
-
-#: eeschema/libframe.cpp:716
-msgid "Add line"
-msgstr "Lisää viiva"
-
-#: eeschema/libframe.cpp:720
-msgid "Set anchor position"
-msgstr "Aseta kiinnepisteen sijainti"
-
-#: eeschema/libframe.cpp:730
-msgid "Export"
-msgstr "Vie"
 
 #: eeschema/eelayer.cpp:238
 msgid "White"
@@ -8030,19 +8030,19 @@ msgstr "Pisterasteri pois"
 msgid "HV orientation for wires and bus"
 msgstr "Vaaka- tai pystysuunta johtimille ja väylille"
 
-#: eeschema/class_libentry.cpp:67
+#: eeschema/class_libentry.cpp:66
 msgid "none"
 msgstr "ei mitään"
 
-#: eeschema/class_libentry.cpp:338
+#: eeschema/class_libentry.cpp:341
 msgid "value"
 msgstr "arvo"
 
-#: eeschema/class_libentry.cpp:338
+#: eeschema/class_libentry.cpp:341
 msgid "reference"
 msgstr "viite"
 
-#: eeschema/class_libentry.cpp:340
+#: eeschema/class_libentry.cpp:343
 #, c-format
 msgid "An attempt was made to remove the %s field from component %s in library %s."
 msgstr "Yritettiin poistaa kenttä %s komponentista %s kirjastossa %s."
@@ -8165,65 +8165,65 @@ msgstr ""
 msgid "Cannot add duplicate alias <%s> to library <%s>."
 msgstr "Duplikaattialiasta  <%s> ei voitu lisätä kirjastoon <%s>."
 
-#: eeschema/class_library.cpp:258
+#: eeschema/class_library.cpp:259
 #, c-format
 msgid "alias <%s> already exists and has root name<%s>"
 msgstr "Alias <%s> on jo olemassa juurinimellä <%s>."
 
-#: eeschema/class_library.cpp:273
+#: eeschema/class_library.cpp:274
 #, c-format
 msgid "Conflict in library <%s>"
 msgstr "Ristiriita kirjastossa <%s>."
 
-#: eeschema/class_library.cpp:274
+#: eeschema/class_library.cpp:275
 #, c-format
 msgid "and appears in alias list of current component <%s>."
 msgstr ""
 
-#: eeschema/class_library.cpp:277
+#: eeschema/class_library.cpp:278
 msgid "All old aliases will be removed. Continue ?"
 msgstr "Kaikki vanhat aliakset poistetaan. Jatketaanko?"
 
-#: eeschema/class_library.cpp:531
+#: eeschema/class_library.cpp:534
 msgid "The component library file name is not set."
 msgstr "Komponenttikirjaston tiedostonimeä ei ole määritelty."
 
-#: eeschema/class_library.cpp:539
+#: eeschema/class_library.cpp:542
 msgid "The file could not be opened."
 msgstr "Tiedostoa ei voitu avata."
 
-#: eeschema/class_library.cpp:545
+#: eeschema/class_library.cpp:548
 msgid "The file is empty!"
 msgstr "Tiedosto on tyhjä!"
 
-#: eeschema/class_library.cpp:568
+#: eeschema/class_library.cpp:571
 msgid "The file is NOT an EESCHEMA library!"
 msgstr "Tiedosto ei ole pätevä EESchema-tiedosto!"
 
-#: eeschema/class_library.cpp:574
+#: eeschema/class_library.cpp:577
 msgid "The file header is missing version and time stamp information."
 msgstr "Tiedoston otsikosta puuttuvat versio- ja aikaleimatiedot."
 
-#: eeschema/class_library.cpp:619
+#: eeschema/class_library.cpp:622
 msgid "An error occurred attempting to read the header."
 msgstr "Virhe yritettäessä lukea kirjaston otsikkoa."
 
-#: eeschema/class_library.cpp:650
+#: eeschema/class_library.cpp:653
 #, c-format
 msgid "Library <%s> component load error %s."
 msgstr "Kirjaston <%s> komponentin latausvirhe %s."
 
-#: eeschema/class_library.cpp:721
+#: eeschema/class_library.cpp:724
 #, c-format
 msgid "Could not open component document library file <%s>."
 msgstr "Komponentin dokumentaatiokirjastotiedostoa <%s> ei voitu avata."
 
-#: eeschema/class_library.cpp:728
+#: eeschema/class_library.cpp:731
 #, c-format
 msgid "Component document library file <%s> is empty."
 msgstr "Komponentin dokumentaatiotiedosto %s on tyhjä."
 
-#: eeschema/class_library.cpp:736
+#: eeschema/class_library.cpp:739
 #, c-format
 msgid "File <%s> is not a valid component library document file."
 msgstr "Tiedosto <%s> ei ole pätevä komponenttikirjaston dokumentaatiotiedosto."
@@ -8405,20 +8405,25 @@ msgstr "Peilaa valinta ||"
 msgid "U"
 msgstr ""
 
-#: eeschema/class_sch_component.cpp:1114
+#: eeschema/class_sch_component.cpp:1117
 msgid "Power symbol"
 msgstr "Teholähde-symboli"
 
-#: eeschema/class_sch_component.cpp:1119
+#: eeschema/class_sch_component.cpp:1123
 msgid "Component"
 msgstr "Komponentti"
 
-#: eeschema/class_sch_component.cpp:1124
+#: eeschema/class_sch_component.cpp:1125
+#, fuzzy
+msgid "Alias of"
+msgstr "Alias"
+
+#: eeschema/class_sch_component.cpp:1129
 #: eeschema/viewlibs.cpp:316
 msgid "Description"
 msgstr "Selite"
 
-#: eeschema/class_sch_component.cpp:1125
+#: eeschema/class_sch_component.cpp:1130
 #: eeschema/viewlibs.cpp:317
 msgid "Key words"
 msgstr "Avainsanat"
@@ -8692,67 +8697,58 @@ msgstr "Osaa ei löytynyt: "
 msgid " in library"
 msgstr " kirjastossa"
 
-#: eeschema/edit_component_in_lib.cpp:85
-#, c-format
-msgid "Alias <%s> not found for component <%s> in library <%s>."
-msgstr "Aliasta <%s> ei löytynyt komponentille <%s> kirjastossa <%s>."
-
-#: eeschema/edit_component_in_lib.cpp:90
-msgid "Component Library Error"
-msgstr "Komponenttikirjastovirhe"
-
-#: eeschema/edit_component_in_lib.cpp:206
-#: eeschema/edit_component_in_lib.cpp:276
+#: eeschema/edit_component_in_lib.cpp:192
+#: eeschema/edit_component_in_lib.cpp:265
 #, c-format
 msgid "Alias <%s> cannot be removed while it is being edited!"
 msgstr "Aliasta <%s> ei voi poistaa kesken editoinnin!"
 
-#: eeschema/edit_component_in_lib.cpp:215
+#: eeschema/edit_component_in_lib.cpp:202
 msgid "Remove all aliases from list?"
 msgstr "Poistetaanko kaikki aliakset luettelosta?"
 
-#: eeschema/edit_component_in_lib.cpp:240
+#: eeschema/edit_component_in_lib.cpp:229
 msgid "New alias:"
 msgstr "Uusi alias:"
 
-#: eeschema/edit_component_in_lib.cpp:241
+#: eeschema/edit_component_in_lib.cpp:230
 msgid "Component Alias"
 msgstr "Komponenttialias"
 
-#: eeschema/edit_component_in_lib.cpp:251
+#: eeschema/edit_component_in_lib.cpp:240
 #, c-format
 msgid "Alias or component name <%s> already exists in library <%s>."
 msgstr "Alias tai komponenttinimi <%s> on jo kirjastossa <%s>."
 
-#: eeschema/edit_component_in_lib.cpp:305
+#: eeschema/edit_component_in_lib.cpp:297
 msgid "Delete extra parts from component?"
 msgstr "Poistetaanko ylimääräiset osat komponentista?"
 
-#: eeschema/edit_component_in_lib.cpp:326
+#: eeschema/edit_component_in_lib.cpp:318
 msgid "Add new pins for alternate body style ( DeMorgan ) to component?"
 msgstr ""
 
-#: eeschema/edit_component_in_lib.cpp:333
+#: eeschema/edit_component_in_lib.cpp:325
 msgid "Delete alternate body style (DeMorgan) draw items from component?"
 msgstr ""
 
-#: eeschema/edit_component_in_lib.cpp:357
+#: eeschema/edit_component_in_lib.cpp:349
 msgid "Doc Files"
 msgstr "Dokumentaatiotiedostot"
 
-#: eeschema/edit_component_in_lib.cpp:393
+#: eeschema/edit_component_in_lib.cpp:385
 msgid "Ok to Delete FootprintFilter LIST"
 msgstr "Poistetaanko liitoskuvasuodatuksen parametrit?"
 
-#: eeschema/edit_component_in_lib.cpp:416
+#: eeschema/edit_component_in_lib.cpp:408
 msgid "Add Footprint Filter"
 msgstr "Lisää liitoskuvasuodatin"
 
-#: eeschema/edit_component_in_lib.cpp:416
+#: eeschema/edit_component_in_lib.cpp:408
 msgid "Footprint Filter"
 msgstr "Liitoskuvasuodatin"
 
-#: eeschema/edit_component_in_lib.cpp:429
+#: eeschema/edit_component_in_lib.cpp:421
 #, c-format
 msgid "Foot print filter <%s> is already defined."
 msgstr "Liitoskuvasuodatin <%s> on jo määritelty."
@@ -8886,23 +8882,23 @@ msgstr "Tuo komponentti"
 msgid "Component library file <%s> is empty."
 msgstr "Komponenttikirjastotiedosto <%s> on tyhjä."
 
-#: eeschema/lib_export.cpp:99
+#: eeschema/lib_export.cpp:104
 msgid "There is no component selected to save."
 msgstr "Tallennettavia komponentteja ei ole valittuna."
 
-#: eeschema/lib_export.cpp:106
+#: eeschema/lib_export.cpp:111
 msgid "New Library"
 msgstr "Uusi kirjasto"
 
-#: eeschema/lib_export.cpp:106
+#: eeschema/lib_export.cpp:111
 msgid "Export Component"
 msgstr "Vie komponentti"
 
-#: eeschema/lib_export.cpp:132
+#: eeschema/lib_export.cpp:139
 msgid " - OK"
 msgstr " - Hyväksy"
 
-#: eeschema/lib_export.cpp:133
+#: eeschema/lib_export.cpp:140
 msgid ""
 "This library will not be available until it is loaded by EESchema.\n"
 "\n"
@@ -8912,7 +8908,11 @@ msgstr ""
 "\n"
 "EESchema:n kirjastoasetuksia on muokattava, mikäli se halutaan sisällyttää tähän projektiin."
 
-#: eeschema/lib_export.cpp:138
+#: eeschema/lib_export.cpp:145
+msgid " - Export OK"
+msgstr " - Vienti onnistui"
+
+#: eeschema/lib_export.cpp:148
 msgid "Error creating "
 msgstr "Virhe luotaessa "
 
@@ -9066,7 +9066,7 @@ msgstr ""
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:124
 msgid "Keywords:"
-msgstr "Avainsanat"
+msgstr "Avainsanat:"
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:126
 msgid ""
@@ -9191,56 +9191,56 @@ msgstr "Komponenttia tai aliasta nimellä \"%s\" ei löytynyt kirjastossa \"%s\"
 msgid "Could not create copy of part <%s> in library <%s>."
 msgstr "Kopiota osasta <%s> kirjastossa <%s> ei voitu luoda."
 
-#: eeschema/libedit.cpp:235
+#: eeschema/libedit.cpp:238
 msgid "Include last component changes?"
 msgstr "Sisällytetäänkö viimeiset komponenttimuutokset?"
 
-#: eeschema/libedit.cpp:247
+#: eeschema/libedit.cpp:250
 msgid "Modify library file \""
 msgstr "Muokkaa kirjastotiedostoa \""
 
-#: eeschema/libedit.cpp:247
+#: eeschema/libedit.cpp:250
 msgid "\"?"
 msgstr ""
 
-#: eeschema/libedit.cpp:258
+#: eeschema/libedit.cpp:261
 msgid "Error while saving library file \""
 msgstr "Virhe tallennettaessa kirjastotiedostoa \""
 
-#: eeschema/libedit.cpp:259
+#: eeschema/libedit.cpp:262
 msgid "\"."
 msgstr ""
 
-#: eeschema/libedit.cpp:260
+#: eeschema/libedit.cpp:263
 msgid "*** ERROR: ***"
 msgstr "*** VIRHE ***"
 
-#: eeschema/libedit.cpp:265
+#: eeschema/libedit.cpp:268
 msgid "Library file \""
 msgstr "Kirjastotiedosto \""
 
-#: eeschema/libedit.cpp:267
+#: eeschema/libedit.cpp:270
 msgid "Document file \""
 msgstr "Dokumentaatiotiedosto \""
 
-#: eeschema/libedit.cpp:315
+#: eeschema/libedit.cpp:312
 msgid "Body"
 msgstr "Runko"
 
-#: eeschema/libedit.cpp:372
+#: eeschema/libedit.cpp:377
 msgid "Please select a component library."
 msgstr "Valitkaa komponettikirjasto"
 
-#: eeschema/libedit.cpp:381
+#: eeschema/libedit.cpp:386
 #, c-format
 msgid "Component library <%s> is empty."
 msgstr "Komponenttikirjasto <%s> on tyhjä."
 
-#: eeschema/libedit.cpp:383
+#: eeschema/libedit.cpp:388
 msgid "Delete Entry Error"
 msgstr "Poistovirhe"
 
-#: eeschema/libedit.cpp:388
+#: eeschema/libedit.cpp:393
 #, c-format
 msgid ""
 "Select 1 of %d components to delete\n"
@@ -9249,26 +9249,26 @@ msgstr ""
 "Valitse poistettavaksi yksi %d:sta komponentista\n"
 "kirjastosta <%s>."
 
-#: eeschema/libedit.cpp:392
+#: eeschema/libedit.cpp:397
 #: eeschema/onrightclick.cpp:366
 msgid "Delete Component"
 msgstr "Poista komponentti"
 
-#: eeschema/libedit.cpp:401
+#: eeschema/libedit.cpp:406
 #, c-format
 msgid "Entry <%s> not found in library <%s>."
 msgstr "Kohtaa <%s> kirjastossa <%s> ei löytynyt."
 
-#: eeschema/libedit.cpp:408
+#: eeschema/libedit.cpp:413
 #, c-format
 msgid "Delete component \"%s\" from library \"%s\"?"
 msgstr "Poistetaanko osa %s kirjastosta %s?"
 
-#: eeschema/libedit.cpp:428
+#: eeschema/libedit.cpp:433
 msgid "The component being deleted has been modified. All changes will be lost. Discard changes?"
 msgstr "Poistettavaa komponenttia on muokattu. Kaikki muutokset hukataan. Hylätäänkö muutokset?"
 
-#: eeschema/libedit.cpp:483
+#: eeschema/libedit.cpp:488
 msgid ""
 "All changes to the current component will be lost!\n"
 "\n"
@@ -9278,29 +9278,29 @@ msgstr ""
 "\n"
 "Siivotaanko nykyinen komponentti?"
 
-#: eeschema/libedit.cpp:499
+#: eeschema/libedit.cpp:504
 msgid "This new component has no name and cannot be created. Aborted"
 msgstr "Uudella komponentilla ei ole nimeä eikä sitä voitu luoda. Keskeytetty."
 
-#: eeschema/libedit.cpp:511
+#: eeschema/libedit.cpp:516
 #, c-format
 msgid "Component \"%s\" already exists in library \"%s\"."
 msgstr "Komponentti \"%s\" on jo kirjastossa \"%s\"."
 
-#: eeschema/libedit.cpp:579
+#: eeschema/libedit.cpp:584
 msgid "No component to save."
 msgstr "Ei tallennettavaa komponenttia."
 
-#: eeschema/libedit.cpp:588
+#: eeschema/libedit.cpp:593
 msgid "No library specified."
 msgstr "Ei kirjastoa määriteltynä."
 
-#: eeschema/libedit.cpp:598
+#: eeschema/libedit.cpp:603
 #, c-format
 msgid "Component \"%s\" exists. Change it?"
 msgstr "Komponentti \"%s\" on jo kirjastossa. Vaihdetaanko?"
 
-#: eeschema/libedit.cpp:616
+#: eeschema/libedit.cpp:621
 #, c-format
 msgid "Component %s saved in library %s"
 msgstr "Komponentti %s tallennettu kirjastoon %s"
@@ -10198,7 +10198,7 @@ msgstr " Valitse yksi %d:sta kirjastosta."
 msgid "Select Library"
 msgstr "Valitse kirjasto"
 
-#: eeschema/eeschema.cpp:131
+#: eeschema/eeschema.cpp:130
 msgid "Eeschema is already running, Continue?"
 msgstr "EESchema on jo käynnissä, jatketaanko?"
 
@@ -10670,8 +10670,8 @@ msgid "Place a no connect flag"
 msgstr "Lisää \"Kytkemätön\"-lippu"
 
 #: eeschema/menubar.cpp:307
-msgid "Net name"
-msgstr "Kytkentäverkon nimi"
+msgid "Label"
+msgstr "Nimiö"
 
 #: eeschema/menubar.cpp:313
 msgid "Global label"
@@ -10786,6 +10786,10 @@ msgstr "Liitoskuvia (kaikki): %d"
 #, c-format
 msgid "Footprints (filtered): %d"
 msgstr "Liitoskuvat (suodatetut): %d"
+
+#: cvpcb/savecmp.cpp:24
+msgid "Component Library Error"
+msgstr "Komponenttikirjastovirhe"
 
 #: cvpcb/savecmp.cpp:86
 #, c-format
@@ -11155,7 +11159,7 @@ msgstr "Joitain tiedostoja ei löytynyt!"
 msgid "Some files are invalid!"
 msgstr "Jotkut tiedostot eivät ole kelvollisia!"
 
-#: kicad/mainframe.cpp:71
+#: kicad/mainframe.cpp:72
 #, c-format
 msgid ""
 "Ready\n"
@@ -11164,19 +11168,19 @@ msgstr ""
 "Valmis\n"
 "Työhakemisto: %s\n"
 
-#: kicad/mainframe.cpp:230
+#: kicad/mainframe.cpp:231
 msgid "Execute Python Script"
 msgstr "Suorita Python-komentosarja"
 
-#: kicad/mainframe.cpp:231
+#: kicad/mainframe.cpp:232
 msgid "Python script (*.py)|*.py"
 msgstr "Python-komentosarja (*.py)|*.py"
 
-#: kicad/mainframe.cpp:252
+#: kicad/mainframe.cpp:253
 msgid "Text file ("
 msgstr "Tekstitiedosto ("
 
-#: kicad/mainframe.cpp:254
+#: kicad/mainframe.cpp:255
 msgid "Load File to Edit"
 msgstr "Lataa muokattava tiedosto"
 
@@ -11200,6 +11204,92 @@ msgstr "GerbView (Gerber-tiedostojen näytin)"
 msgid "Run Python Script"
 msgstr "Suorita Python-komentosarja"
 
+#: kicad/tree_project_frame.cpp:157
+msgid "&Run"
+msgstr "&Käynnistä"
+
+#: kicad/tree_project_frame.cpp:158
+msgid "Run the Python Script"
+msgstr "Suorita Python-komentosarja"
+
+#: kicad/tree_project_frame.cpp:167
+#: kicad/tree_project_frame.cpp:224
+msgid "&Edit in a text editor"
+msgstr "&Muokkaa tekstieditorissa"
+
+#: kicad/tree_project_frame.cpp:168
+msgid "&Open the file in a Text Editor"
+msgstr "&Avaa tiedosto tekstieditorissa"
+
+#: kicad/tree_project_frame.cpp:185
+msgid "New D&irectory"
+msgstr "Uusi &hakemisto"
+
+#: kicad/tree_project_frame.cpp:186
+msgid "Create a New Directory"
+msgstr "Luo uusi hakemisto"
+
+#: kicad/tree_project_frame.cpp:195
+msgid "New P&ython Script"
+msgstr "Uusi &Python-komentosarja"
+
+#: kicad/tree_project_frame.cpp:196
+msgid "Create a New Python Script"
+msgstr "Luo uusi Python-komentosarja"
+
+#: kicad/tree_project_frame.cpp:211
+msgid "&Rename file"
+msgstr "&Nimeä tiedosto uudelleen"
+
+#: kicad/tree_project_frame.cpp:212
+#: kicad/tree_project_frame.cpp:214
+msgid "&Rename directory"
+msgstr "&Nimeä hakemisto uudelleen"
+
+#: kicad/tree_project_frame.cpp:213
+msgid "Rename file"
+msgstr "Nimeä tiedosto uudelleen"
+
+#: kicad/tree_project_frame.cpp:225
+msgid "Open the file in a Text Editor"
+msgstr "Avaa tiedosto tekstieditorissa"
+
+#: kicad/tree_project_frame.cpp:233
+msgid "&Delete File"
+msgstr "&Poista tiedosto"
+
+#: kicad/tree_project_frame.cpp:234
+msgid "&Delete Directory"
+msgstr "&Poista hakemisto"
+
+#: kicad/tree_project_frame.cpp:235
+msgid "Delete the File"
+msgstr "Poista tiedosto"
+
+#: kicad/tree_project_frame.cpp:236
+msgid "&Delete the Directory and its content"
+msgstr "&Poista hakemisto ja sen sisältö"
+
+#: kicad/tree_project_frame.cpp:511
+msgid "Create New File"
+msgstr "Luo uusi tiedosto"
+
+#: kicad/tree_project_frame.cpp:512
+msgid "Create New Directory"
+msgstr "Luo uusi hakemisto"
+
+#: kicad/tree_project_frame.cpp:521
+msgid "noname."
+msgstr "ei nimeä."
+
+#: kicad/tree_project_frame.cpp:1055
+msgid "Change filename: "
+msgstr "Vaihda tiedostonimeä: "
+
+#: kicad/tree_project_frame.cpp:1057
+msgid "Change filename"
+msgstr "Vaihda tiedostonimeä"
+
 #: kicad/preferences.cpp:47
 msgid "You must choose a PDF viewer before using this option."
 msgstr "PDF-näytin täytyy määrittää ennen tämän asetuksen käyttöä."
@@ -11220,29 +11310,29 @@ msgstr "Suoritettava tiedosto ("
 msgid "Select Prefered Editor"
 msgstr "Valitse tekstieditori"
 
-#: kicad/prjconfig.cpp:41
+#: kicad/prjconfig.cpp:42
 msgid "Project template file <kicad.pro> not found "
 msgstr "Projektimallitiedostoa <kicad.pro> ei löytynyt "
 
-#: kicad/prjconfig.cpp:72
+#: kicad/prjconfig.cpp:73
 msgid "Create New Project"
 msgstr "Luo uusi projekti"
 
-#: kicad/prjconfig.cpp:77
+#: kicad/prjconfig.cpp:78
 msgid "Open Existing Project"
 msgstr "Avaa olemassa oleva projekti"
 
-#: kicad/prjconfig.cpp:104
+#: kicad/prjconfig.cpp:105
 msgid "Kicad project file <"
 msgstr "KiCad-projektitiedosto <"
 
-#: kicad/prjconfig.cpp:118
-#: kicad/kicad.cpp:78
+#: kicad/prjconfig.cpp:119
+#: kicad/kicad.cpp:74
 msgid "Working dir: "
 msgstr "Työhakemisto: "
 
-#: kicad/prjconfig.cpp:119
-#: kicad/kicad.cpp:79
+#: kicad/prjconfig.cpp:120
+#: kicad/kicad.cpp:75
 msgid ""
 "\n"
 "Project: "
@@ -11250,122 +11340,16 @@ msgstr ""
 "\n"
 "Projekti: "
 
-#: kicad/treeprj_frame.cpp:126
-msgid "&Run"
-msgstr "&Käynnistä"
-
-#: kicad/treeprj_frame.cpp:127
-msgid "Run the Python Script"
-msgstr "Suorita Python-komentosarja"
-
-#: kicad/treeprj_frame.cpp:136
-#: kicad/treeprj_frame.cpp:211
-msgid "&Edit in a text editor"
-msgstr "&Muokkaa tekstieditorissa"
-
-#: kicad/treeprj_frame.cpp:137
-msgid "&Open the file in a Text Editor"
-msgstr "&Avaa tiedosto tekstieditorissa"
-
-#: kicad/treeprj_frame.cpp:154
-msgid "New D&irectory"
-msgstr "Uusi &hakemisto"
-
-#: kicad/treeprj_frame.cpp:155
-msgid "Create a New Directory"
-msgstr "Luo uusi hakemisto"
-
-#: kicad/treeprj_frame.cpp:164
-msgid "New P&ython Script"
-msgstr "Uusi &Python-komentosarja"
-
-#: kicad/treeprj_frame.cpp:165
-msgid "Create a New Python Script"
-msgstr "Luo uusi Python-komentosarja"
-
-#: kicad/treeprj_frame.cpp:174
-msgid "New &Text File"
-msgstr "Uusi te&kstitiedosto"
-
-#: kicad/treeprj_frame.cpp:175
-msgid "Create a New Txt File"
-msgstr "Luo uusi tekstitiedosto"
-
-#: kicad/treeprj_frame.cpp:183
-msgid "New &File"
-msgstr "Uusi &tiedosto"
-
-#: kicad/treeprj_frame.cpp:184
-msgid "Create a New File"
-msgstr "Luo uusi tiedosto"
-
-#: kicad/treeprj_frame.cpp:198
-msgid "&Rename file"
-msgstr "&Nimeä tiedosto uudelleen"
-
-#: kicad/treeprj_frame.cpp:199
-#: kicad/treeprj_frame.cpp:201
-msgid "&Rename directory"
-msgstr "&Nimeä hakemisto uudelleen"
-
-#: kicad/treeprj_frame.cpp:200
-msgid "Rename file"
-msgstr "Nimeä tiedosto uudelleen"
-
-#: kicad/treeprj_frame.cpp:212
-msgid "Open the file in a Text Editor"
-msgstr "Avaa tiedosto tekstieditorissa"
-
-#: kicad/treeprj_frame.cpp:220
-msgid "&Delete File"
-msgstr "&Poista tiedosto"
-
-#: kicad/treeprj_frame.cpp:221
-msgid "&Delete Directory"
-msgstr "&Poista hakemisto"
-
-#: kicad/treeprj_frame.cpp:222
-msgid "Delete the File"
-msgstr "Poista tiedosto"
-
-#: kicad/treeprj_frame.cpp:223
-msgid "&Delete the Directory and its content"
-msgstr "&Poista hakemisto ja sen sisältö"
-
-#: kicad/treeprj_frame.cpp:549
-msgid "Create New File"
-msgstr "Luo uusi tiedosto"
-
-#: kicad/treeprj_frame.cpp:550
-msgid "Create New Directory"
-msgstr "Luo uusi hakemisto"
-
-#: kicad/treeprj_frame.cpp:559
-msgid "noname."
-msgstr "ei nimeä."
-
-#: kicad/treeprj_frame.cpp:1088
-msgid "Change filename: "
-msgstr "Vaihda tiedostonimeä: "
-
-#: kicad/treeprj_frame.cpp:1090
-msgid "Change filename"
-msgstr "Vaihda tiedostonimeä"
-
-#: kicad/kicad.cpp:106
-msgid "noname"
-msgstr "Ei nimeä"
-
-#: kicad/treeprj_datas.cpp:207
+#: kicad/class_treeproject_item.cpp:148
 msgid "Unable to move file ... "
 msgstr "Tiedostoa ei voitu siirtää..."
 
-#: kicad/treeprj_datas.cpp:208
-#: kicad/treeprj_datas.cpp:289
+#: kicad/class_treeproject_item.cpp:149
+#: kicad/class_treeproject_item.cpp:230
 msgid "Permission error ?"
 msgstr "Käyttöoikeusvirhe?"
 
-#: kicad/treeprj_datas.cpp:272
+#: kicad/class_treeproject_item.cpp:213
 msgid ""
 "Changing file extension will change file type.\n"
 " Do you want to continue ?"
@@ -11373,25 +11357,25 @@ msgstr ""
 "Tiedostopäätteen vaihto muuttaa tiedosto tyyppiä.\n"
 "Jatketaanko?"
 
-#: kicad/treeprj_datas.cpp:274
+#: kicad/class_treeproject_item.cpp:215
 msgid "Rename File"
 msgstr "Nimeä tiedosto uudelleen"
 
-#: kicad/treeprj_datas.cpp:288
+#: kicad/class_treeproject_item.cpp:229
 msgid "Unable to rename file ... "
 msgstr "Uudelleen nimeäminen ei onnistu..."
 
-#: kicad/treeprj_datas.cpp:309
+#: kicad/class_treeproject_item.cpp:250
 msgid "Do you really want to delete "
 msgstr "Haluatko varmasti poistaa?"
 
-#: kicad/treeprj_datas.cpp:310
+#: kicad/class_treeproject_item.cpp:251
 msgid "Delete File"
 msgstr "Poista tiedosto"
 
-#: kicad/treeprj_datas.cpp:381
-msgid "no kicad files found in this directory"
-msgstr "KiCad-tiedostoja ei löytynyt tästä hakemistosta"
+#: kicad/kicad.cpp:102
+msgid "noname"
+msgstr "Ei nimeä"
 
 #: kicad/files-io.cpp:50
 msgid "Unzip Project"
@@ -11550,6 +11534,7 @@ msgid "Refresh project tree"
 msgstr "Virkistä projektipuu"
 
 #: gerbview/select_layers_to_pcb.cpp:213
+#: gerbview/tool_gerber.cpp:209
 msgid "Layer "
 msgstr "Kerros "
 
@@ -12336,23 +12321,24 @@ msgstr "Tuntematon"
 msgid " \""
 msgstr " \""
 
-#: common/dsnlexer.cpp:167
+#: common/dsnlexer.cpp:168
 msgid "in file"
 msgstr "tiedostossa"
 
-#: common/dsnlexer.cpp:168
+#: common/dsnlexer.cpp:169
 msgid "on line"
 msgstr "rivillä"
 
-#: common/dsnlexer.cpp:169
+#: common/dsnlexer.cpp:170
 msgid "at offset"
 msgstr "sirtymällä"
 
-#: common/dsnlexer.cpp:231
+#: common/dsnlexer.cpp:246
 msgid "String delimiter must be a single character of ', \", or $"
 msgstr "Merkkijonon erottimen täytyy olla joko ', \" tai $"
 
-#: common/dsnlexer.cpp:315
+#: common/dsnlexer.cpp:361
+#: common/dsnlexer.cpp:374
 msgid "Un-terminated delimited string"
 msgstr "Päättämätön erotettu merkkijono"
 
@@ -12752,10 +12738,6 @@ msgstr "Johdin"
 msgid "Bus"
 msgstr "Väylä"
 
-#: eeschema/eelayer.h:87
-msgid "Label"
-msgstr "Nimiö"
-
 #: eeschema/eelayer.h:93
 msgid "GlobLabel"
 msgstr "Globaali nimiö"
@@ -12880,6 +12862,20 @@ msgstr "GerbView:n piirtotyyliasetukset"
 msgid "Page Settings"
 msgstr "Sivun asetukset"
 
+#~ msgid "New &Text File"
+#~ msgstr "Uusi te&kstitiedosto"
+#~ msgid "Create a New Txt File"
+#~ msgstr "Luo uusi tekstitiedosto"
+#~ msgid "New &File"
+#~ msgstr "Uusi &tiedosto"
+#~ msgid "Create a New File"
+#~ msgstr "Luo uusi tiedosto"
+#~ msgid "no kicad files found in this directory"
+#~ msgstr "KiCad-tiedostoja ei löytynyt tästä hakemistosta"
+#~ msgid "Net name"
+#~ msgstr "Kytkentäverkon nimi"
+#~ msgid "Alias <%s> not found for component <%s> in library <%s>."
+#~ msgstr "Aliasta <%s> ei löytynyt komponentille <%s> kirjastossa <%s>."
 #~ msgid "Save as...\tShift+Ctrl+S"
 #~ msgstr "Tallenna nimellä...\tShift+Ctrl+S"
 #~ msgid "&Print\tCtrl+P"
