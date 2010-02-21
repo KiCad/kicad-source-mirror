@@ -100,7 +100,7 @@ int DefaultTransformMatrix[2][2] = { { 1, 0 }, { 0, -1 } };
 // not wxApp)
 IMPLEMENT_APP( WinEDA_App )
 
-/* MacOSX: Needed for file association 
+/* MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
 void WinEDA_App::MacOpenFile(const wxString &fileName) {
@@ -117,7 +117,6 @@ bool WinEDA_App::OnInit()
 //	wxApp::s_macAboutMenuItemId = ID_KICAD_ABOUT;
 	wxApp::s_macPreferencesMenuItemId = ID_OPTIONS_SETUP;
 #endif /* __WXMAC__ */
-
 
     wxFileName             filename;
     WinEDA_SchematicFrame* frame = NULL;

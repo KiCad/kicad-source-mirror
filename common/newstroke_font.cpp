@@ -23,7 +23,10 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-const char* newstroke_font[] =
+
+#include "newstroke_font.h"
+
+const char* const newstroke_font[] =
 {
     /* // BASIC LATIN (0020-007F) */
     "JZ", /* U+20 SPACE  */
@@ -11344,7 +11347,7 @@ const char* newstroke_font[] =
     "F^K[KFYFY[K[",
     "F^K[KFYFY[K[",
     "F^K[KFYFY[K[",
-    "F^K[KFYFY[K[",
+    "F^K[KFYFY[K["
 };
 /* --- unused glyphs --- */
 /*  RECTANGLE_V_BLACK_SMALL  */
@@ -11352,5 +11355,5 @@ const char* newstroke_font[] =
 /*  COMBINING  */
 /*  DIAMOND_SMALL  */
 
-int newstroke_font_bufsize = sizeof(newstroke_font)/sizeof(newstroke_font[0]);
+const int newstroke_font_bufsize = sizeof(newstroke_font)/sizeof(newstroke_font[0]);
 

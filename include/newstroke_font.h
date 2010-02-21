@@ -29,6 +29,6 @@
 /**
  * Array containing strokes for unicode glyphs
  */
-extern const char* newstroke_font[];        //The font
-extern int         newstroke_font_bufsize;  //font buffer size
+extern const char* const newstroke_font[];        //The font
+extern const int         newstroke_font_bufsize;  //font buffer size
 #endif /* __NEWSTROKE_FONT_H__ */
