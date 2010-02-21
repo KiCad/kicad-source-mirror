@@ -80,10 +80,15 @@ void WinEDA_LibeditFrame::OnImportPart( wxCommandEvent& event )
 }
 
 
-/* Routine to create a new library and backup the current component in
- * this library.
- * Create_lib == TRUE if the backup directory of library.
- * If not: backup as the request without modifications.
+/* Routine to create a new library and backup the current component in this
+ * library or export the component of the current library.
+ * createLib == TRUE if we are creating a new library.
+ * If not: export the library component.
+ * Basically these 2 options do the same thing, but for user's convenience
+ * > When creating a new lib, the user is prompted to add the new lib to
+ * current eeschema config library list
+ * > When exporting there is no message (it is expected the user does not want to add the
+ * new created lib
  *
  * The file format is created in all cases the same.
  */
@@ -92,7 +97,7 @@ void WinEDA_LibeditFrame::OnExportPart( wxCommandEvent& event )
     wxFileName   fn;
     wxString     msg, title;
     CMP_LIBRARY* CurLibTmp;
-    bool         createLib = ( event.GetId() != ExportPartId ) ? false : true;
+    bool         createLib = ( event.GetId() == ExportPartId ) ? false : true;
 
     if( m_component == NULL )
     {
@@ -127,13 +132,18 @@ void WinEDA_LibeditFrame::OnExportPart( wxCommandEvent& event )
     delete m_library;
     m_library = CurLibTmp;
 
-    if( createLib && success )
+    if( success )
     {
-        msg = fn.GetFullPath() + _( " - OK" );
-        DisplayInfoMessage( this, _( "This library will not be available \
+        if( createLib )
+        {
+            msg = fn.GetFullPath() + _( " - OK" );
+            DisplayInfoMessage( this, _( "This library will not be available \
 until it is loaded by EESchema.\n\nModify the EESchema library configuration \
 if you want to include it as part of this project." ) );
-    }
+        }
+        else
+            msg = fn.GetFullPath() + _( " - Export OK" );
+    }   // Error
     else
         msg = _( "Error creating " ) + fn.GetFullName();
     Affiche_Message( msg );
