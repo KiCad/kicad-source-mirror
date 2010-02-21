@@ -1,0 +1,38 @@
+KiCad 2010-xx-xx Release
+========================
+
+== Common
+  * Actions can now be undo and redo
+  * Menus and tooltips more clear
+  * File history now in Open Recent submenu
+  * Many new hotkeys added
+  * Plot and print dialog rewritten
+  * Remember last dialog position and tab
+  * Hershey fonts
+  * Generation of bill of materials 
+  * Plot SVG output
+
+== KiCad
+  * Bug fixed when added directory with alot of subdirectories, now you need to add yourself.
+  * If project is noname.pro no `error` will be displayed
+
+== EESchema
+  * New pin properties dialog 
+
+== PCBNew
+  * Advanced layer setup
+  * New panel for layer management
+  * Support for net classes
+  * Incorrect DRC error fixed, DRC min via and min track check
+  * Handle local mask clearance and local net clearance 
+
+== Core
+  * Many many bugfixes and cleanups
+  * All comments translated to English
+  * Moved to wxAUI and dialogs created with wxFormBuilder 
+  * Full support for Mac OS X with wxWidgets 2.9
+
+///////////////////////////////////////
+This is a asciidoc formatted file, it can be converted
+to PDF,(XHTML) and others. See asciidoc homepage.
+///////////////////////////////////////
