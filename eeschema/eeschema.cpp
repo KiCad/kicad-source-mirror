@@ -104,7 +104,12 @@ IMPLEMENT_APP( WinEDA_App )
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
 void WinEDA_App::MacOpenFile(const wxString &fileName) {
+    wxFileName    filename = fileName;
     WinEDA_SchematicFrame * frame = ((WinEDA_SchematicFrame*) GetTopWindow());
+
+    if(!filename.FileExists())
+        return;
+
     frame->LoadOneEEProject( fileName, false );
 }
 

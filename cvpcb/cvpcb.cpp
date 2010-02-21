@@ -42,6 +42,9 @@ void WinEDA_App::MacOpenFile(const wxString &fileName) {
     wxFileName    filename = fileName;
     wxString      oldPath;
     WinEDA_CvpcbFrame * frame = ((WinEDA_CvpcbFrame*)GetTopWindow());
+    
+    if(!filename.FileExists())
+	return;
 
     if( frame->m_NetlistFileName.DirExists() )
         oldPath = frame->m_NetlistFileName.GetPath();

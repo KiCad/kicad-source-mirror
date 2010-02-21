@@ -62,7 +62,12 @@ IMPLEMENT_APP( WinEDA_App )
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
 void WinEDA_App::MacOpenFile(const wxString &fileName) {
+    wxFileName    filename = fileName;
     WinEDA_GerberFrame * frame = ((WinEDA_GerberFrame*)GetTopWindow());
+
+    if(!filename.FileExists())
+        return;
+
     frame->LoadOneGerberFile( fileName, FALSE );
 }
 
