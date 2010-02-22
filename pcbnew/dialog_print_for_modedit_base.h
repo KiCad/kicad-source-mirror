@@ -17,9 +17,6 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
-#include <wx/stattext.h>
-#include <wx/textctrl.h>
-#include <wx/statbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -41,9 +38,6 @@ class DIALOG_PRINT_FOR_MODEDIT_BASE : public wxDialog
 		};
 		
 		wxRadioBox* m_ScaleOption;
-		wxStaticText* m_TextPenWidth;
-		wxTextCtrl* m_DialogPenWidth;
-		
 		wxRadioBox* m_ModeColorOption;
 		wxButton* m_buttonOption;
 		wxButton* m_buttonPreview;
@@ -52,7 +46,6 @@ class DIALOG_PRINT_FOR_MODEDIT_BASE : public wxDialog
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ){ event.Skip(); }
-		virtual void SetScale( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnPrintSetup( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnPrintPreview( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnPrintButtonClick( wxCommandEvent& event ){ event.Skip(); }
@@ -60,7 +53,7 @@ class DIALOG_PRINT_FOR_MODEDIT_BASE : public wxDialog
 		
 	
 	public:
-		DIALOG_PRINT_FOR_MODEDIT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 369,250 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_PRINT_FOR_MODEDIT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 375,254 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_PRINT_FOR_MODEDIT_BASE();
 	
 };

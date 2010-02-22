@@ -19,7 +19,7 @@
 // This class is an helper to pass print parameters to print functions
 PRINT_PARAMETERS::PRINT_PARAMETERS()
 {
-    m_PenMinSize      = 50;     // A reasonnable minimal value to draw items
+    m_PenDefaultSize  = 50;     // A reasonnable minimal value to draw items
                                 // mainly that do not have a specifed line width
     m_PrintScale      = 1.0;
     m_XScaleAdjust    = m_YScaleAdjust = 1.0;
@@ -238,15 +238,13 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     m_Parent->GetBaseScreen()->m_IsPrinting = true;
     int bg_color = g_DrawBgColor;
 
-    SetPenMinWidth( m_PrintParams.m_PenMinSize );
-
     if( userscale == 1.0 )
     {
         dc->SetUserScale( accurate_Xscale, accurate_Yscale );
     }
 
     if( m_PrintParams.m_Print_Sheet_Ref )
-        m_Parent->TraceWorkSheet( dc, ActiveScreen, 0 );
+        m_Parent->TraceWorkSheet( dc, ActiveScreen, m_PrintParams.m_PenDefaultSize );
 
     if( printMirror )
     {
@@ -300,7 +298,6 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     m_Parent->GetBaseScreen()->m_IsPrinting = false;
     panel->m_ClipBox = tmp;
 
-    SetPenMinWidth( 1 );
     GRForceBlackPen( false );
 
     ActiveScreen->m_StartVisu = tmp_startvisu;

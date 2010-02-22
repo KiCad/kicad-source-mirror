@@ -15,9 +15,6 @@
 #include "confirm.h"
 #include "wxstruct.h"
 
-
-extern BASE_SCREEN* ActiveScreen;
-
 static const bool   s_PlotBlackAndWhite = FALSE;
 static const bool   Print_Sheet_Ref = TRUE;
 
@@ -63,23 +60,23 @@ bool DrawPage( WinEDA_DrawPanel* panel )
     /* scale is the ratio resolution/internal units */
     float   scale = 82.0 / panel->GetParent()->m_InternalUnits;
 
-    if( ActiveScreen->m_BlockLocate.m_Command != BLOCK_IDLE )
+    if( screen->m_BlockLocate.m_Command != BLOCK_IDLE )
     {
         DrawBlock = TRUE;
-        DrawArea.SetX( ActiveScreen->m_BlockLocate.GetX() );
-        DrawArea.SetY( ActiveScreen->m_BlockLocate.GetY() );
-        DrawArea.SetWidth( ActiveScreen->m_BlockLocate.GetWidth() );
-        DrawArea.SetHeight( ActiveScreen->m_BlockLocate.GetHeight() );
+        DrawArea.SetX( screen->m_BlockLocate.GetX() );
+        DrawArea.SetY( screen->m_BlockLocate.GetY() );
+        DrawArea.SetWidth( screen->m_BlockLocate.GetWidth() );
+        DrawArea.SetHeight( screen->m_BlockLocate.GetHeight() );
     }
 
     /* Change frames and local settings. */
-    tmp_startvisu = ActiveScreen->m_StartVisu;
-    tmpzoom = ActiveScreen->GetZoom();
-    old_org = ActiveScreen->m_DrawOrg;
-    ActiveScreen->m_DrawOrg.x   = ActiveScreen->m_DrawOrg.y = 0;
-    ActiveScreen->m_StartVisu.x = ActiveScreen->m_StartVisu.y = 0;
+    tmp_startvisu = screen->m_StartVisu;
+    tmpzoom = screen->GetZoom();
+    old_org = screen->m_DrawOrg;
+    screen->m_DrawOrg.x   = screen->m_DrawOrg.y = 0;
+    screen->m_StartVisu.x = screen->m_StartVisu.y = 0;
 
-    ActiveScreen->SetZoom( 1 );
+    screen->SetZoom( 1 );
 
     wxMetafileDC dc /*(wxT(""), DrawArea.GetWidth(), DrawArea.GetHeight())*/;
 
@@ -112,11 +109,10 @@ bool DrawPage( WinEDA_DrawPanel* panel )
 
 
     GRForceBlackPen( FALSE );
-    SetPenMinWidth( 1 );
 
-    ActiveScreen->m_StartVisu = tmp_startvisu;
-    ActiveScreen->m_DrawOrg   = old_org;
-    ActiveScreen->SetZoom( tmpzoom );
+    screen->m_StartVisu = tmp_startvisu;
+    screen->m_DrawOrg   = old_org;
+    screen->SetZoom( tmpzoom );
 #endif
 
     return success;

@@ -49,7 +49,6 @@ private:
     void OnPrintButtonClick( wxCommandEvent& event );
 
     void OnButtonCancelClick( wxCommandEvent& event ) { Close(); }
-    void SetPenWidth();
     void InitValues( );
 };
 
@@ -103,7 +102,7 @@ void DIALOG_PRINT_FOR_MODEDIT::InitValues( )
     int scale_Select = 3; // default selected scale = ScaleList[3] = 1
     if( m_Config )
     {
-        m_Config->Read( OPTKEY_PLOT_LINEWIDTH_VALUE, &s_Parameters.m_PenMinSize );
+        m_Config->Read( OPTKEY_PLOT_LINEWIDTH_VALUE, &s_Parameters.m_PenDefaultSize );
         m_Config->Read( OPTKEY_PRINT_MODULE_SCALE, &scale_Select );
         m_Config->Read( OPTKEY_PRINT_MONOCHROME_MODE, &s_Parameters.m_Print_Black_and_White, 1);
     }
@@ -112,10 +111,6 @@ void DIALOG_PRINT_FOR_MODEDIT::InitValues( )
 
     if( s_Parameters.m_Print_Black_and_White )
         m_ModeColorOption->SetSelection( 1 );
-
-    AddUnitSymbol( *m_TextPenWidth, g_UnitMetric );
-    m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UnitMetric, s_Parameters.m_PenMinSize, m_Parent->m_InternalUnits ) );
 }
 
 
@@ -123,41 +118,12 @@ void DIALOG_PRINT_FOR_MODEDIT::InitValues( )
 void DIALOG_PRINT_FOR_MODEDIT::OnCloseWindow( wxCloseEvent& event )
 /********************************************************************/
 {
-    SetPenWidth();
-
     if( m_Config )
     {
-        m_Config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE, s_Parameters.m_PenMinSize );
         m_Config->Write( OPTKEY_PRINT_MODULE_SCALE, m_ScaleOption->GetSelection() );
         m_Config->Write( OPTKEY_PRINT_MONOCHROME_MODE, s_Parameters.m_Print_Black_and_White);
     }
     EndModal( 0 );
-}
-
-
-/**********************************************/
-
-void DIALOG_PRINT_FOR_MODEDIT::SetPenWidth()
-/***********************************************/
-
-/* Get the new pen width value, and verify min et max value
- * NOTE: s_Parameters.m_PenMinSize is in internal units
- */
-{
-    s_Parameters.m_PenMinSize = ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
-
-    if( s_Parameters.m_PenMinSize > WIDTH_MAX_VALUE )
-    {
-        s_Parameters.m_PenMinSize = WIDTH_MAX_VALUE;
-    }
-
-    if( s_Parameters.m_PenMinSize < WIDTH_MIN_VALUE )
-    {
-        s_Parameters.m_PenMinSize = WIDTH_MIN_VALUE;
-    }
-
-    m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UnitMetric, s_Parameters.m_PenMinSize, m_Parent->m_InternalUnits ) );
 }
 
 
@@ -188,8 +154,6 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintPreview( wxCommandEvent& event )
 /* Open and display a previewer frame for printing
  */
 {
-    SetPenWidth();
-
     s_Parameters.m_Print_Black_and_White = m_ModeColorOption->GetSelection();
     s_Parameters.m_PrintScale = s_ScaleList[m_ScaleOption->GetSelection()];
 
@@ -225,7 +189,6 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintButtonClick( wxCommandEvent& event )
 /* Called on activate Print button
  */
 {
-    SetPenWidth();
     s_Parameters.m_Print_Black_and_White = m_ModeColorOption->GetSelection();
     s_Parameters.m_PrintScale = s_ScaleList[m_ScaleOption->GetSelection()];
 

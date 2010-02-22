@@ -125,9 +125,7 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
     // minimize reallocations of the vector's internal array by starting with a good sized one.
     points.reserve(10000);
 
-    int tmp = GetPenMinWidth( );
-    SetPenMinWidth(0 );
-    for( TRACK* track = GetBoard()->m_Zone;  track;  track = track->Next() )
+     for( TRACK* track = GetBoard()->m_Zone;  track;  track = track->Next() )
     {
         if( !(track->ReturnMaskLayer() & printmasklayer) )
             continue;
@@ -186,8 +184,6 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
 
     // Draw tracks and flashes down here.  This will probably not be a final solution to drawing order issues
     Draw_Track_Buffer( DrawPanel, DC, GetBoard(), draw_mode, printmasklayer );
-
-    SetPenMinWidth( tmp );
 
     if( IsElementVisible( DCODES_VISIBLE) )
         Affiche_DCodes_Pistes( DrawPanel, DC, GetBoard(), GR_COPY );

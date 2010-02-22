@@ -76,6 +76,8 @@ public:
     int     m_Rayon;                // radius of pad circle
     int     m_Attribut;             // NORMAL, PAD_SMD, PAD_CONN
     int     m_Orient;               // in 1/10 degrees
+    static int m_PadSketchModePenSize;      // Pen size used to draw pads in sketch mode
+                                    // (mode used to print pads on silkscreen layer)
 
     // Local clearance. When null, the module default value is used.
     // when the module default value is null, the netclass value is used

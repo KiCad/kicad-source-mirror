@@ -30,23 +30,6 @@ DIALOG_PRINT_FOR_MODEDIT_BASE::DIALOG_PRINT_FOR_MODEDIT_BASE( wxWindow* parent, 
 	wxBoxSizer* bmiddleRightSizer;
 	bmiddleRightSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxStaticBoxSizer* sbOptionsSizer;
-	sbOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options:") ), wxVERTICAL );
-	
-	m_TextPenWidth = new wxStaticText( this, wxID_ANY, _("Pen Width Mini"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_TextPenWidth->Wrap( -1 );
-	sbOptionsSizer->Add( m_TextPenWidth, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_DialogPenWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_DialogPenWidth->SetToolTip( _("Selection of the minimum pen thickness used to draw items.") );
-	
-	sbOptionsSizer->Add( m_DialogPenWidth, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-	
-	bmiddleRightSizer->Add( sbOptionsSizer, 0, wxEXPAND|wxALL, 5 );
-	
-	
-	bmiddleRightSizer->Add( 10, 10, 0, 0, 5 );
-	
 	wxString m_ModeColorOptionChoices[] = { _("Color"), _("Black and white") };
 	int m_ModeColorOptionNChoices = sizeof( m_ModeColorOptionChoices ) / sizeof( wxString );
 	m_ModeColorOption = new wxRadioBox( this, wxID_PRINT_MODE, _("Print Mode"), wxDefaultPosition, wxDefaultSize, m_ModeColorOptionNChoices, m_ModeColorOptionChoices, 1, wxRA_SPECIFY_COLS );
@@ -55,7 +38,7 @@ DIALOG_PRINT_FOR_MODEDIT_BASE::DIALOG_PRINT_FOR_MODEDIT_BASE( wxWindow* parent, 
 	
 	bmiddleRightSizer->Add( m_ModeColorOption, 0, wxALL|wxEXPAND, 5 );
 	
-	bMainSizer->Add( bmiddleRightSizer, 0, wxEXPAND, 5 );
+	bMainSizer->Add( bmiddleRightSizer, 1, 0, 5 );
 	
 	wxBoxSizer* bbuttonsSizer;
 	bbuttonsSizer = new wxBoxSizer( wxVERTICAL );
@@ -72,14 +55,13 @@ DIALOG_PRINT_FOR_MODEDIT_BASE::DIALOG_PRINT_FOR_MODEDIT_BASE( wxWindow* parent, 
 	m_buttonQuit = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bbuttonsSizer->Add( m_buttonQuit, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
-	bMainSizer->Add( bbuttonsSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bMainSizer->Add( bbuttonsSizer, 0, 0, 5 );
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnCloseWindow ) );
-	m_ScaleOption->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::SetScale ), NULL, this );
 	m_buttonOption->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnPrintSetup ), NULL, this );
 	m_buttonPreview->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnPrintPreview ), NULL, this );
 	m_buttonPrint->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnPrintButtonClick ), NULL, this );
@@ -90,7 +72,6 @@ DIALOG_PRINT_FOR_MODEDIT_BASE::~DIALOG_PRINT_FOR_MODEDIT_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnCloseWindow ) );
-	m_ScaleOption->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::SetScale ), NULL, this );
 	m_buttonOption->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnPrintSetup ), NULL, this );
 	m_buttonPreview->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnPrintPreview ), NULL, this );
 	m_buttonPrint->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnPrintButtonClick ), NULL, this );

@@ -19,7 +19,8 @@
 class PRINT_PARAMETERS
 {
 public:
-    int    m_PenMinSize;                        // A minimal value pen size to plot/print items
+    int    m_PenDefaultSize;                    // The defAUlt value pen size to plot/print items
+                                                // that have no defined pen size
     double m_PrintScale;                        // general scale when printing
     double m_XScaleAdjust, m_YScaleAdjust;      // fine scale adjust for X and Y axis
     bool   m_Print_Sheet_Ref;                   // Option: pring page references

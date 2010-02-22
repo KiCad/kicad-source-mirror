@@ -190,7 +190,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
 
     if( m_Config )
     {
-        m_Config->Read( OPTKEY_PLOT_LINEWIDTH_VALUE, &s_Parameters.m_PenMinSize );
+        m_Config->Read( OPTKEY_PLOT_LINEWIDTH_VALUE, &s_Parameters.m_PenDefaultSize );
         m_Config->Read( OPTKEY_PRINT_X_FINESCALE_ADJ, &s_Parameters.m_XScaleAdjust );
         m_Config->Read( OPTKEY_PRINT_Y_FINESCALE_ADJ, &s_Parameters.m_YScaleAdjust );
         m_Config->Read( OPTKEY_PRINT_SCALE, &scale_idx );
@@ -243,7 +243,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
 
     AddUnitSymbol( *m_TextPenWidth, g_UnitMetric );
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UnitMetric, s_Parameters.m_PenMinSize, m_Parent->m_InternalUnits ) );
+        ReturnStringFromValue( g_UnitMetric, s_Parameters.m_PenDefaultSize, m_Parent->m_InternalUnits ) );
 
 
     // Create scale adjust option
@@ -321,7 +321,7 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
 
     if( m_Config )
     {
-        m_Config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE, s_Parameters.m_PenMinSize );
+        m_Config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE, s_Parameters.m_PenDefaultSize );
         m_Config->Write( OPTKEY_PRINT_X_FINESCALE_ADJ, s_Parameters.m_XScaleAdjust );
         m_Config->Write( OPTKEY_PRINT_Y_FINESCALE_ADJ, s_Parameters.m_YScaleAdjust );
         m_Config->Write( OPTKEY_PRINT_SCALE, m_ScaleOption->GetSelection() );
@@ -389,23 +389,23 @@ void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
 /***********************************************/
 
 /* Get the new pen width value, and verify min et max value
- * NOTE: s_Parameters.m_PenMinSize is in internal units
+ * NOTE: s_Parameters.m_PenDefaultSize is in internal units
  */
 {
-    s_Parameters.m_PenMinSize = ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
+    s_Parameters.m_PenDefaultSize = ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
 
-    if( s_Parameters.m_PenMinSize > WIDTH_MAX_VALUE )
+    if( s_Parameters.m_PenDefaultSize > WIDTH_MAX_VALUE )
     {
-        s_Parameters.m_PenMinSize = WIDTH_MAX_VALUE;
+        s_Parameters.m_PenDefaultSize = WIDTH_MAX_VALUE;
     }
 
-    if( s_Parameters.m_PenMinSize < WIDTH_MIN_VALUE )
+    if( s_Parameters.m_PenDefaultSize < WIDTH_MIN_VALUE )
     {
-        s_Parameters.m_PenMinSize = WIDTH_MIN_VALUE;
+        s_Parameters.m_PenDefaultSize = WIDTH_MIN_VALUE;
     }
 
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UnitMetric, s_Parameters.m_PenMinSize, m_Parent->m_InternalUnits ) );
+        ReturnStringFromValue( g_UnitMetric, s_Parameters.m_PenDefaultSize, m_Parent->m_InternalUnits ) );
 }
 
 

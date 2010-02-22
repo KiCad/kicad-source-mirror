@@ -63,8 +63,6 @@ extern BASE_SCREEN* ActiveScreen;
 
 
 static int          GRLastMoveToX, GRLastMoveToY;
-static int          PenMinWidth = 1; /* minimum pen width (must be> 0)
-                                      * (Useful for printing)  */
 static bool         ForceBlackPen;   /* if true: draws in black instead of
                                       * color for printing. */
 static int          xcliplo = 0,
@@ -524,27 +522,14 @@ void GRResetPenAndBrush( wxDC* DC )
 }
 
 
-void SetPenMinWidth( int minwidth )
-{
-    PenMinWidth = minwidth;
-    if( PenMinWidth < 0 )
-        PenMinWidth = 0;
-}
-
-int GetPenMinWidth( )
-{
-    return PenMinWidth;
-}
-
-
 /**
  * Function GRSetColorPen
  * sets a pen style, width, color, and alpha into the given device context.
  */
 void GRSetColorPen( wxDC* DC, int Color, int width, int style )
 {
-    if( width < PenMinWidth )
-        width = PenMinWidth;
+    if( width < 0 )
+        width = 0;
 
     if( ForceBlackPen )
     {
@@ -653,28 +638,6 @@ void GRSPutPixel( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int Color )
 
     GRSetColorPen( DC, Color );
     DC->DrawPoint( x, y );
-}
-
-
-int GRGetPixel( wxDC* DC, int x, int y )
-{
-    wxColour      colour;
-    unsigned char r, g, b;
-    int           ii;
-
-    DC->GetPixel( (long) x, (long) y, &colour );
-    r = colour.Red();
-    b = colour.Blue();
-    g = colour.Green();
-    for( ii = 0; ii < NBCOLOR; ii++ )
-    {
-        if( ( r == ColorRefs[ii].m_Red )
-           && ( g == ColorRefs[ii].m_Green )
-           && ( b == ColorRefs[ii].m_Blue ) )
-            break;
-    }
-
-    return ii;
 }
 
 
@@ -963,10 +926,17 @@ void GRSLineRel( EDA_Rect* ClipBox,
  * Draw segment with rounded ends in object space.
  */
 void GRCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
+              int width, int aPenSize, int Color )
+{
+    GRSCSegm( ClipBox, DC, GRMapX( x1 ), GRMapY( y1 ), GRMapX( x2 ),
+              GRMapY( y2 ), ZoomValue( width ), ZoomValue( aPenSize ), Color );
+}
+
+void GRCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
               int width, int Color )
 {
     GRSCSegm( ClipBox, DC, GRMapX( x1 ), GRMapY( y1 ), GRMapX( x2 ),
-              GRMapY( y2 ), ZoomValue( width ), Color );
+              GRMapY( y2 ), ZoomValue( width ), 0, Color );
 }
 
 
@@ -1007,6 +977,7 @@ void GRSCSegm( EDA_Rect* ClipBox,
                int       x2,
                int       y2,
                int       width,
+               int       aPenSize,
                int       Color )
 {
     long radius;
@@ -1049,7 +1020,7 @@ void GRSCSegm( EDA_Rect* ClipBox,
         return;
     }
 
-    GRSetColorPen( DC, Color );
+    GRSetColorPen( DC, Color, aPenSize );
     GRSetBrush( DC, Color, FALSE );
 
     radius = (width + 1) >> 1;

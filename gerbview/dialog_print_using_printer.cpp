@@ -207,7 +207,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     else
         m_ModeColorOption->SetSelection( 0 );
 
-    s_Parameters.m_PenMinSize = 0;
+    s_Parameters.m_PenDefaultSize = 0;
 
     // Create scale adjust option
     msg.Printf( wxT( "%f" ), s_Parameters.m_XScaleAdjust );

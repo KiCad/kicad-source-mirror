@@ -226,7 +226,6 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     GRResetPenAndBrush( &dc );
     g_DrawDefaultLineThickness =
         ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
-    SetPenMinWidth( g_DrawDefaultLineThickness );
     GRForceBlackPen( m_ModeColorOption->GetSelection() == 0 ? FALSE : true );
 
 
@@ -245,7 +244,6 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
 
 
     GRForceBlackPen( FALSE );
-    SetPenMinWidth( 1 );
 
     screen->m_StartVisu = tmp_startvisu;
     screen->m_DrawOrg   = old_org;

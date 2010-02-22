@@ -290,7 +290,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
                             dx + mask_margin.x, 0, color, color );
         else
             GRCircle( &panel->m_ClipBox, DC, xc, yc, dx + mask_margin.x,
-                      0, color );
+                      m_PadSketchModePenSize, color );
 
         if( DisplayIsol )
         {
@@ -331,7 +331,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
             GRCSegm( &panel->m_ClipBox, DC,
                      ux0 + delta_cx, uy0 + delta_cy,
                      ux0 - delta_cx, uy0 - delta_cy,
-                     rotdx, color );
+                     rotdx, m_PadSketchModePenSize, color );
         }
 
         /* Draw the isolation line. */
@@ -371,7 +371,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
             coord[ii].y = coord[ii].y + uy0;
         }
 
-        GRClosedPoly( &panel->m_ClipBox, DC, 4, coord, fillpad, color, color );
+        GRClosedPoly( &panel->m_ClipBox, DC, 4, coord, fillpad,
+            fillpad ? 0 : m_PadSketchModePenSize, color, color );
 
         if( DisplayIsol )
         {

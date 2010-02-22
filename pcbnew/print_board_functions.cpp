@@ -41,11 +41,15 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
     TRACK*               pt_piste;
     WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) m_Parent;
     BOARD*               Pcb   = frame->GetBoard();
+    int                  defaultPenSize = 50;
     PRINT_PARAMETERS * printParameters = (PRINT_PARAMETERS*) aData; // can be null
 
     PRINT_PARAMETERS::DrillShapeOptT drillShapeOpt = PRINT_PARAMETERS::FULL_DRILL_SHAPE;
     if( printParameters )
+    {
         drillShapeOpt = printParameters->m_DrillShapeOpt;
+        defaultPenSize = printParameters->m_PenDefaultSize;
+    }
 
     save_opt = DisplayOpt;
     if( aPrintMaskLayer & ALL_CU_LAYERS )
@@ -147,10 +151,13 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
     // Draw footprints, this is done at last in order to print the pad holes in
     // white (or g_DrawBgColor) after the tracks and zones
     Module = (MODULE*) Pcb->m_Modules;
+    int tmp = D_PAD::m_PadSketchModePenSize;
+    D_PAD::m_PadSketchModePenSize = defaultPenSize;
     for( ; Module != NULL; Module = Module->Next() )
     {
         Print_Module( this, aDC, Module, drawmode, aPrintMaskLayer, drillShapeOpt );
     }
+    D_PAD::m_PadSketchModePenSize = tmp;
 
     /* Print via holes in bg color: Not sure it is good for buried or blind
      * vias */
@@ -182,7 +189,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
     }
 
     if( aPrint_Sheet_Ref )
-        m_Parent->TraceWorkSheet( aDC, GetScreen(), 10 );
+        m_Parent->TraceWorkSheet( aDC, GetScreen(), defaultPenSize );
 
     m_PrintIsMirrored = false;
 
@@ -206,6 +213,7 @@ static void Print_Module( WinEDA_DrawPanel* aPanel, wxDC* aDC, MODULE* aModule,
 
     /* Print pads */
     pt_pad = aModule->m_Pads;
+
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
         if( (pt_pad->m_Masque_Layer & aMasklayer ) == 0 )

@@ -12,6 +12,8 @@
 #include "pcbnew_id.h"             // ID_TRACK_BUTT
 #include "class_board_design_settings.h"
 
+int D_PAD::m_PadSketchModePenSize = 0;   // Pen size used to draw pads in sketch mode
+
 
 D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, TYPE_PAD )
 {

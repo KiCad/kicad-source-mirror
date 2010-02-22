@@ -120,6 +120,7 @@ public:
     {
         m_FieldId = field.m_FieldId;
         m_Text = field.m_Text;
+        m_Name = field.m_Name;
         m_Pos = field.m_Pos;
         m_Size = field.m_Size;
         m_Width = field.m_Width;
