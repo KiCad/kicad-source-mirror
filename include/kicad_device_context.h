@@ -25,15 +25,6 @@
     #include <wx/dcgraph.h>
 #endif
 
-// Helper class to handle the client Device Context
-class KicadGraphicContext : public wxClientDC
-{
-public:
-    KicadGraphicContext( WinEDA_DrawPanel * aDrawPanel );
-    ~KicadGraphicContext();
-};
-
-
 // Macro used to declare a device context in kicad:
 #if USE_WX_GRAPHICS_CONTEXT && USE_WX_ZOOM
 #define INSTALL_DC(name,parent)                          \

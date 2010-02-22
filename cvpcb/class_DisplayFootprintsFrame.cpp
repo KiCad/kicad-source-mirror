@@ -211,6 +211,7 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* DC, wxPoint Mouse )
     wxRealPoint  delta;
     int     flagcurseur = 0;
     wxPoint curpos, oldpos;
+    double scalar = GetScreen()->GetScalingFactor();
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
@@ -219,13 +220,8 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     delta = GetScreen()->GetGridSize();
 
-#ifdef USE_WX_ZOOM
-    delta.x = DC->LogicalToDeviceXRel( wxRound( delta.x ) );
-    delta.y = DC->LogicalToDeviceYRel( wxRound( delta.y ) );
-    Mouse = DrawPanel->CalcUnscrolledPosition( Mouse );
-#else
-    GetScreen()->Scale( delta );
-#endif
+    delta.x *= scalar;
+    delta.y *= scalar;
 
     if( delta.x <= 0 )
         delta.x = 1;

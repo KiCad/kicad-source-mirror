@@ -22,6 +22,12 @@
 #include <wx/fontdlg.h>
 
 
+/* Definitions for enabling and disabling extra debugging output.  Please
+ * remember to set these to 0 before committing changes to SVN.
+ */
+#define DEBUG_DUMP_SCROLLBAR_SETTINGS 0   // Set to 1 to print scroll bar settings.
+
+
 /* Configuration entry names. */
 static const wxString CursorShapeEntryKeyword( wxT( "CursorShape" ) );
 static const wxString ShowGridEntryKeyword( wxT( "ShowGrid" ) );
@@ -446,6 +452,7 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     int     unitsX, unitsY, posX, posY;
     wxSize  drawingSize, clientSize;
     BASE_SCREEN* screen = GetBaseScreen();
+    bool noRefresh = true;
 
     if( screen == NULL || DrawPanel == NULL )
         return;
@@ -457,30 +464,27 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     // client area at the current zoom level.
     clientSize = DrawPanel->GetClientSize();
 
-#ifdef USE_WX_ZOOM
-    INSTALL_DC( dc, DrawPanel );
-    clientSize.x = dc.DeviceToLogicalXRel( clientSize.x );
-    clientSize.y = dc.DeviceToLogicalYRel( clientSize.y );
-#else
-    screen->Unscale( clientSize );
-#endif
+    double scalar = screen->GetScalingFactor();
+    clientSize.x = wxRound( (double) clientSize.x / scalar );
+    clientSize.y = wxRound( (double) clientSize.y / scalar );
 
     /* Adjust drawing size when zooming way out to prevent centering around
      * cursor problems. */
     if( clientSize.x > drawingSize.x || clientSize.y > drawingSize.y )
         drawingSize = clientSize;
 
-    drawingSize += clientSize / 2;
+    drawingSize.x += wxRound( (double) clientSize.x / 2.0 );
+    drawingSize.y += wxRound( (double) clientSize.y / 2.0 );
 
     if( screen->m_Center )
     {
-        screen->m_DrawOrg.x = -drawingSize.x / 2;
-        screen->m_DrawOrg.y = -drawingSize.y / 2;
+        screen->m_DrawOrg.x = -wxRound( (double) drawingSize.x / 2.0 );
+        screen->m_DrawOrg.y = -wxRound( (double) drawingSize.y / 2.0 );
     }
     else
     {
-        screen->m_DrawOrg.x = -clientSize.x / 2;
-        screen->m_DrawOrg.y = -clientSize.y / 2;
+        screen->m_DrawOrg.x = -wxRound( (double) clientSize.x / 2.0 );
+        screen->m_DrawOrg.y = -wxRound( (double) clientSize.y / 2.0 );
     }
 
     /* Always set scrollbar pixels per unit to 1 unless you want the zoom
@@ -492,41 +496,32 @@ void WinEDA_DrawFrame::AdjustScrollBars()
     screen->m_ScrollPixelsPerUnitX = screen->m_ScrollPixelsPerUnitY = 1;
 
     // Calculate the number of scroll bar units for the given zoom level. */
-#ifdef USE_WX_ZOOM
-    unitsX = dc.LogicalToDeviceXRel( drawingSize.x );
-    unitsY = dc.LogicalToDeviceYRel( drawingSize.y );
-#else
-    unitsX = screen->Scale( drawingSize.x );
-    unitsY = screen->Scale( drawingSize.y );
-#endif
+    unitsX = wxRound( (double) drawingSize.x * scalar );
+    unitsY = wxRound( (double) drawingSize.y * scalar );
 
     // Calculate the position, place the cursor at the center of screen.
     posX = screen->m_Curseur.x - screen->m_DrawOrg.x;
     posY = screen->m_Curseur.y - screen->m_DrawOrg.y;
 
-    posX -= clientSize.x / 2;
-    posY -= clientSize.y / 2;
+    posX -= wxRound( (double) clientSize.x / 2.0 );
+    posY -= wxRound( (double) clientSize.y / 2.0 );
 
-    if( posX <= 0 )
+    if( posX < 0 )
         posX = 0;
-    if( posY <= 0 )
+    if( posY < 0 )
         posY = 0;
 
-#ifdef USE_WX_ZOOM
-    posX = dc.LogicalToDeviceXRel( posX );
-    posY = dc.LogicalToDeviceYRel( posY );
-#else
-    posX = screen->Scale( posX );
-    posY = screen->Scale( posY );
-#endif
+    posX = wxRound( (double) posX * scalar );
+    posY = wxRound( (double) posY * scalar );
 
     screen->m_ScrollbarPos = wxPoint( posX, posY );
     screen->m_ScrollbarNumber = wxSize( unitsX, unitsY );
 
-#if 0
+#if DEBUG_DUMP_SCROLLBAR_SETTINGS
     wxLogDebug( wxT( "SetScrollbars(%d, %d, %d, %d, %d, %d)" ),
-                m_ScrollPixelsPerUnitX, m_ScrollPixelsPerUnitY,
-                unitsX, unitsY, posX, posY );
+                screen->m_ScrollPixelsPerUnitX, screen->m_ScrollPixelsPerUnitY,
+                screen->m_ScrollbarNumber.x, screen->m_ScrollbarNumber.y,
+                screen->m_ScrollbarPos.x, screen->m_ScrollbarPos.y );
 #endif
 
     DrawPanel->SetScrollbars( screen->m_ScrollPixelsPerUnitX,
@@ -534,7 +529,7 @@ void WinEDA_DrawFrame::AdjustScrollBars()
                               screen->m_ScrollbarNumber.x,
                               screen->m_ScrollbarNumber.y,
                               screen->m_ScrollbarPos.x,
-                              screen->m_ScrollbarPos.y, TRUE );
+                              screen->m_ScrollbarPos.y, noRefresh );
 }
 
 

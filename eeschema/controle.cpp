@@ -216,13 +216,13 @@ SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay(
 }
 
 
-void WinEDA_SchematicFrame::GeneralControle( wxDC*   DC,
-                                             wxPoint MousePositionInPixels )
+void WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
 {
     wxRealPoint delta;
     SCH_SCREEN* screen = GetScreen();
     wxPoint     curpos, oldpos;
     int         hotkey = 0;
+    double      scalar = screen->GetScalingFactor();
 
     ActiveScreen = screen;
 
@@ -231,13 +231,8 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC*   DC,
 
     delta = screen->GetGridSize();
 
-#ifdef USE_WX_ZOOM
-    delta.x = DC->LogicalToDeviceXRel( wxRound( delta.x ) );
-    delta.y = DC->LogicalToDeviceYRel( wxRound( delta.y ) );
-    MousePositionInPixels = DrawPanel->CalcUnscrolledPosition( MousePositionInPixels );
-#else
-    screen->Scale( delta );
-#endif
+    delta.x *= scalar;
+    delta.y *= scalar;
 
     if( delta.x <= 0 )
         delta.x = 1;
@@ -317,13 +312,13 @@ void WinEDA_SchematicFrame::GeneralControle( wxDC*   DC,
 }
 
 
-void WinEDA_LibeditFrame::GeneralControle( wxDC*   DC,
-                                           wxPoint MousePositionInPixels )
+void WinEDA_LibeditFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
 {
     wxRealPoint delta;
     SCH_SCREEN* screen = GetScreen();
     wxPoint     curpos, oldpos;
     int         hotkey = 0;
+    double      scalar = screen->GetScalingFactor();
 
     ActiveScreen = screen;
 
@@ -332,13 +327,8 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC*   DC,
 
     delta = screen->GetGridSize();
 
-#ifdef USE_WX_ZOOM
-    delta.x = DC->LogicalToDeviceXRel( wxRound( delta.x ) );
-    delta.y = DC->LogicalToDeviceYRel( wxRound( delta.y ) );
-    MousePositionInPixels = DrawPanel->CalcUnscrolledPosition( MousePositionInPixels );
-#else
-    screen->Scale( delta );
-#endif
+    delta.x *= scalar;
+    delta.y *= scalar;
 
     if( delta.x <= 0 )
         delta.x = 1;
@@ -417,13 +407,13 @@ void WinEDA_LibeditFrame::GeneralControle( wxDC*   DC,
 }
 
 
-void WinEDA_ViewlibFrame::GeneralControle( wxDC*   DC,
-                                           wxPoint MousePositionInPixels )
+void WinEDA_ViewlibFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
 {
     wxRealPoint delta;
     SCH_SCREEN* screen = GetScreen();
     wxPoint     curpos, oldpos;
     int         hotkey = 0;
+    double      scalar = screen->GetScalingFactor();
 
     ActiveScreen = screen;
 
@@ -432,13 +422,8 @@ void WinEDA_ViewlibFrame::GeneralControle( wxDC*   DC,
 
     delta = screen->GetGridSize();
 
-#ifdef USE_WX_ZOOM
-    delta.x = DC->LogicalToDeviceXRel( wxRound( delta.x ) );
-    delta.y = DC->LogicalToDeviceYRel( wxRound( delta.y ) );
-    MousePositionInPixels = DrawPanel->CalcUnscrolledPosition( MousePositionInPixels );
-#else
-    screen->Scale( delta );
-#endif
+    delta.x *= scalar;
+    delta.y *= scalar;
 
     if( delta.x <= 0 )
         delta.x = 1;

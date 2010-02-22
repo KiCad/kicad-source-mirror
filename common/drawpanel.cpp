@@ -17,33 +17,16 @@
 
 #define CURSOR_SIZE 12           // Cursor size in pixels
 
-
-// Helper class to handle the client Device Context
-KicadGraphicContext::KicadGraphicContext( WinEDA_DrawPanel* aDrawPanel ) :
-    wxClientDC( aDrawPanel )
-{
-    GRResetPenAndBrush( this );
-    SetBackgroundMode( wxTRANSPARENT );
-
-#ifdef USE_WX_ZOOM
-    if( aDrawPanel->GetScreen() != NULL )
-    {
-        double scale = aDrawPanel->GetScreen()->GetScalingFactor();
-
-        aDrawPanel->SetScale( scale, scale );
-        aDrawPanel->DoPrepareDC( *this );
-        wxPoint origin = aDrawPanel->GetScreen()->m_DrawOrg;
-        SetLogicalOrigin( origin.x, origin.y );
-    }
-#endif
-
-    aDrawPanel->SetBoundaryBox( this );
-}
+#define CLIP_BOX_PADDING  12
 
 
-KicadGraphicContext::~KicadGraphicContext()
-{
-}
+/* Definitions for enabling and disabling debugging features in drawpanel.cpp.
+ * Please don't forget to turn these off before making any SvN commits.
+ */
+
+#define DEBUG_SHOW_CLIP_RECT       0  // Set to 1 to draw clipping rectangle.
+#define DEBUG_DUMP_CLIP_COORDS     0  // Set to 1 to dump clipping rectangle coordinates.
+#define DEBUG_DUMP_SCROLL_SETTINGS 0  // Set to 1 to dump scroll settings.
 
 
 /* Used to inhibit a response to a mouse left button release, after a
@@ -82,7 +65,6 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
 
     m_scrollIncrementX = MIN( size.x / 8, 10 );
     m_scrollIncrementY = MIN( size.y / 8, 10 );
-
     SetBackgroundColour( wxColour( ColorRefs[g_DrawBgColor].m_Red,
                                    ColorRefs[g_DrawBgColor].m_Green,
                                    ColorRefs[g_DrawBgColor].m_Blue ) );
@@ -216,22 +198,20 @@ wxRealPoint WinEDA_DrawPanel::GetGrid()
 }
 
 
-/** Calculate the cursor position in internal units.
- * @return  position (in internal units)
- * @param  ScreenPos = absolute position in pixels
+/**
+ * Convert a coordinate position in device (screen) units to logical (drawing) units.
+ *
+ * @param  aPosition = position in device (screen) units.
+ * @return  position in logical (drawing) units.
  */
 wxPoint WinEDA_DrawPanel::CursorRealPosition( const wxPoint& aPosition )
 {
-#ifdef USE_WX_ZOOM
-    wxCoord x, y;
-    INSTALL_DC( DC, this );
-
-    x = DC.DeviceToLogicalX( aPosition.x );
-    y = DC.DeviceToLogicalY( aPosition.y );
-    return wxPoint( x, y );
-#else
-    return GetScreen()->CursorRealPosition( aPosition );
-#endif
+    double scalar = GetScreen()->GetScalingFactor();
+    wxPoint pos;
+    pos.x = wxRound( (double) aPosition.x / scalar );
+    pos.y = wxRound( (double) aPosition.y / scalar );
+    pos += GetScreen()->m_DrawOrg;
+    return pos;
 }
 
 
@@ -304,13 +284,9 @@ void WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( EDA_Rect* aRect )
     ConvertPcbUnitsToPixelsUnits( &pos );
     aRect->SetOrigin( pos );                // rect origin in pixel units
 
-#if USE_WX_ZOOM
     double scale = GetScreen()->GetScalingFactor();
     aRect->m_Size.x = wxRound( (double) aRect->m_Size.x * scale );
     aRect->m_Size.y = wxRound( (double) aRect->m_Size.y * scale );
-#else
-    GetScreen()->Scale( aRect->m_Size );
-#endif
 }
 
 
@@ -328,27 +304,14 @@ void WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( wxPoint* aPosition )
     drwOrig.x *= x_axis_scale;
     drwOrig.y *= y_axis_scale;
 
-#if USE_WX_ZOOM
-    INSTALL_DC( dc, this );
-
-    drwOrig.x = dc.DeviceToLogicalX( drwOrig.x );
-    drwOrig.y = dc.DeviceToLogicalY( drwOrig.y );
-    *aPosition -= drwOrig;
-    aPosition->x = dc.LogicalToDeviceX( aPosition->x );
-    aPosition->y = dc.LogicalToDeviceY( aPosition->y );
-#else
-    // Origin in internal units
-    GetScreen()->Unscale( drwOrig );
-
-    // Real origin, according to the "plot" origin
-    drwOrig += GetScreen()->m_DrawOrg;
-
-    // position in internal units, relative to the visible draw area origin
-    *aPosition -= drwOrig;
-
-    // position in pixels, relative to the visible draw area origin
-    GetScreen()->Scale( *aPosition );
-#endif
+    double x, y;
+    double scalar = GetScreen()->GetScalingFactor();
+    x = (double) aPosition->x - ( ( (double) drwOrig.x / scalar )
+                                  + (double) GetScreen()->m_DrawOrg.x );
+    y = (double) aPosition->y - ( ( (double) drwOrig.y / scalar )
+                                  + (double) GetScreen()->m_DrawOrg.y );
+    aPosition->x = wxRound( x * scalar );
+    aPosition->y = wxRound( y * scalar );
 }
 
 
@@ -358,15 +321,10 @@ void WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( wxPoint* aPosition )
 wxPoint WinEDA_DrawPanel::CursorScreenPosition()
 {
     wxPoint pos = GetScreen()->m_Curseur - GetScreen()->m_DrawOrg;
+    double scalar = GetScreen()->GetScalingFactor();
 
-#ifdef USE_WX_ZOOM
-    INSTALL_DC( DC, this );
-
-    pos.x = DC.LogicalToDeviceXRel( pos.x );
-    pos.y = DC.LogicalToDeviceYRel( pos.y );
-#else
-    GetScreen()->Scale( pos );
-#endif
+    pos.x = wxRound( (double) pos.x * scalar );
+    pos.y = wxRound( (double) pos.y * scalar );
 
     return pos;
 }
@@ -378,23 +336,19 @@ wxPoint WinEDA_DrawPanel::CursorScreenPosition()
  */
 wxPoint WinEDA_DrawPanel::GetScreenCenterRealPosition( void )
 {
-    wxSize  size;
-    wxPoint realpos;
+    int x, y, ppuX, ppuY;
+    wxPoint pos;
+    double  scalar = GetScreen()->GetScalingFactor();
 
-    size = GetClientSize() / 2;
+    GetViewStart( &x, &y );
+    GetScrollPixelsPerUnit( &ppuX, &ppuY );
+    x *= ppuX;
+    y *= ppuY;
+    pos.x = wxRound( ( (double) GetClientSize().x / 2.0 + (double) x ) / scalar );
+    pos.y = wxRound( ( (double) GetClientSize().y / 2.0 + (double) y ) / scalar );
+    pos += GetScreen()->m_DrawOrg;
 
-#ifdef USE_WX_ZOOM
-    INSTALL_DC( DC, this );
-
-    realpos.x = DC.DeviceToLogicalX( size.x );
-    realpos.y = DC.DeviceToLogicalY( size.y );
-#else
-    realpos = CalcUnscrolledPosition( wxPoint( size.x, size.y ) );
-    GetScreen()->Unscale( realpos );
-    realpos += GetScreen()->m_DrawOrg;
-#endif
-
-    return realpos;
+    return pos;
 }
 
 
@@ -417,11 +371,7 @@ void WinEDA_DrawPanel::MouseTo( const wxPoint& Mouse )
     wxPoint screenPos, drawingPos;
     wxRect  clientRect( wxPoint( 0, 0 ), GetClientSize() );
 
-#ifdef USE_WX_ZOOM
     CalcScrolledPosition( Mouse.x, Mouse.y, &screenPos.x, &screenPos.y );
-#else
-    screenPos = Mouse - GetScreen()->m_StartVisu;
-#endif
 
     /* Scroll if the requested mouse position cursor is outside the drawing
      * area. */
@@ -475,26 +425,59 @@ void WinEDA_DrawPanel::OnActivate( wxActivateEvent& event )
 void WinEDA_DrawPanel::OnScroll( wxScrollWinEvent& event )
 {
     int id = event.GetEventType();
-    int dir, value = 0;
+    int dir;
     int x, y;
+    int ppux, ppuy;
+    int unitsX, unitsY;
+    int maxX, maxY;
 
     GetViewStart( &x, &y );
+    GetScrollPixelsPerUnit( &ppux, &ppuy );
+    GetVirtualSize( &unitsX, &unitsY );
+    maxX = unitsX;
+    maxY = unitsY;
+
+    unitsX /= ppux;
+    unitsY /= ppuy;
+
     dir = event.GetOrientation();   // wxHORIZONTAL or wxVERTICAL
 
     if( id == wxEVT_SCROLLWIN_LINEUP )
-        value = -m_scrollIncrementY;
-
+    {
+        if( dir == wxHORIZONTAL )
+        {
+            x -= m_scrollIncrementX;
+            if( x < 0 )
+                x = 0;
+        }
+        else
+        {
+            y -= m_scrollIncrementY;
+            if( y < 0 )
+                y = 0;
+        }
+    }
     else if( id == wxEVT_SCROLLWIN_LINEDOWN )
-        value = m_scrollIncrementY;
-
+    {
+        if( dir == wxHORIZONTAL )
+        {
+            x += m_scrollIncrementX;
+            if( x > maxX )
+                x = maxX;
+        }
+        else
+        {
+            y += m_scrollIncrementY;
+            if( y > maxY )
+                y = maxY;
+        }
+    }
     else if( id == wxEVT_SCROLLWIN_THUMBTRACK )
     {
-        value = event.GetPosition();
         if( dir == wxHORIZONTAL )
-            Scroll( value, -1 );
+            x = event.GetPosition();
         else
-            Scroll( -1, value );
-        return;
+            y = event.GetPosition();
     }
     else
     {
@@ -502,24 +485,25 @@ void WinEDA_DrawPanel::OnScroll( wxScrollWinEvent& event )
         return;
     }
 
-    if( dir == wxHORIZONTAL )
-    {
-        Scroll( x + value, -1 );
-    }
-    else
-    {
-        Scroll( -1, y + value );
-    }
+#if DEBUG_DUMP_SCROLL_SETTINGS
+    wxLogDebug( wxT( "Setting scroll bars ppuX=%d, ppuY=%d, unitsX=%d, unitsY=%d," \
+                     "posX=%d, posY=%d" ), ppux, ppuy, unitsX, unitsY, x, y );
+#endif
 
+    SetScrollbars( ppux, ppuy, unitsX, unitsY, x, y, true );
+    INSTALL_DC( dc, this );
+    ReDraw( &dc, true );
     event.Skip();
 }
 
 
 void WinEDA_DrawPanel::OnSize( wxSizeEvent& event )
 {
-#if !defined( USE_WX_GRAPHICS_CONTEXT )   // Crashes Cairo on initial size event.
-    INSTALL_DC( dc, this );     // Update boundary box.
-#endif
+    if( IsShown() )
+    {
+        INSTALL_DC( dc, this );     // Update boundary box.
+    }
+
     event.Skip();
 }
 
@@ -551,8 +535,9 @@ void WinEDA_DrawPanel::SetBoundaryBox( wxDC* dc )
     int scrollX, scrollY;
 
 #ifdef USE_WX_ZOOM
-    scrollX = dc->LogicalToDeviceXRel( wxRound( Screen->GetGridSize().x ) );
-    scrollY = dc->LogicalToDeviceYRel( wxRound( Screen->GetGridSize().y ) );
+    double scalar = Screen->GetScalingFactor();
+    scrollX = wxRound( Screen->GetGridSize().x * scalar );
+    scrollY = wxRound( Screen->GetGridSize().y * scalar );
 #else
     scrollX = wxRound( Screen->Scale( Screen->GetGridSize().x ) );
     scrollY = wxRound( Screen->Scale( Screen->GetGridSize().y ) );
@@ -564,27 +549,13 @@ void WinEDA_DrawPanel::SetBoundaryBox( wxDC* dc )
 
 #ifdef USE_WX_ZOOM
     /* Using wxDC scaling requires clipping in drawing (logical) units. */
-
-    m_ClipBox.m_Pos.x = dc->DeviceToLogicalX( 0 );
-    m_ClipBox.m_Pos.y = dc->DeviceToLogicalY( 0 );
-    m_ClipBox.m_Size.x = dc->DeviceToLogicalXRel( m_ClipBox.m_Size.x );
-    m_ClipBox.m_Size.y = dc->DeviceToLogicalYRel( m_ClipBox.m_Size.y );
-
-    /* Set to one (1) to draw bounding box validate bounding box calculation. */
-#if 0
-    EDA_Rect bBox = m_ClipBox;
-    m_ClipBox.Inflate( -dc->DeviceToLogicalXRel( 1 ) );
-    GRRect( NULL, dc, bBox.GetOrigin().x, bBox.GetOrigin().y,
-            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
-#endif
-
-    m_ClipBox.Inflate( dc->DeviceToLogicalXRel( 1 ) );
-
-    /* Always set the clipping region to the screen size.  This prevents this bug:
-     * <http://trac.wxwidgets.org/ticket/10446> from occurring on WXMSW if you happen
-     * to be zoomed way in and your drawing coodinates get too large.
-     */
-    dc->SetClippingRegion( m_ClipBox );
+    m_ClipBox.SetOrigin( CalcUnscrolledPosition( wxPoint( 0, 0 ) ) );
+    m_ClipBox.Inflate( CLIP_BOX_PADDING );
+    m_ClipBox.m_Pos.x = wxRound( (double) m_ClipBox.m_Pos.x / scalar );
+    m_ClipBox.m_Pos.y = wxRound( (double) m_ClipBox.m_Pos.y / scalar );
+    m_ClipBox.m_Pos += Screen->m_DrawOrg;
+    m_ClipBox.m_Size.x = wxRound( (double) m_ClipBox.m_Size.x / scalar );
+    m_ClipBox.m_Size.y = wxRound( (double) m_ClipBox.m_Size.y / scalar );
 #endif
 
     Screen->m_ScrollbarPos.x = GetScrollPos( wxHORIZONTAL );
@@ -599,6 +570,14 @@ void WinEDA_DrawPanel::EraseScreen( wxDC* DC )
     GRSFilledRect( &m_ClipBox, DC, m_ClipBox.GetX(), m_ClipBox.GetY(),
                    m_ClipBox.GetRight(), m_ClipBox.GetBottom(),
                    0, g_DrawBgColor, g_DrawBgColor );
+
+    /* Set to one (1) to draw bounding box validate bounding box calculation. */
+#if DEBUG_SHOW_CLIP_RECT
+    EDA_Rect bBox = m_ClipBox;
+    bBox.Inflate( -DC->DeviceToLogicalXRel( 1 ) );
+    GRRect( NULL, DC, bBox.GetOrigin().x, bBox.GetOrigin().y,
+            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+#endif
 }
 
 
@@ -608,11 +587,12 @@ void WinEDA_DrawPanel::DoPrepareDC(wxDC& dc)
     if( GetScreen() != NULL )
     {
         double scale = GetScreen()->GetScalingFactor();
+        dc.SetUserScale( scale, scale );
 
-        SetScale( scale, scale );
-        wxScrolledWindow::DoPrepareDC( dc );
-        wxPoint origin = GetScreen()->m_DrawOrg;
-        dc.SetLogicalOrigin( origin.x, origin.y );
+        wxPoint pt = CalcUnscrolledPosition( wxPoint( 0, 0 ) );
+        dc.SetDeviceOrigin( -pt.x, -pt.y );
+        pt = GetScreen()->m_DrawOrg;
+        dc.SetLogicalOrigin( pt.x, pt.y );
     }
 #endif
 
@@ -646,7 +626,7 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
     // Get the union of all rectangles in the update region.
     wxRect PaintClipBox = GetUpdateRegion().GetBox();
 
-#if 0
+#if DEBUG_DUMP_CLIP_COORDS
     wxLogDebug( wxT( "1) PaintClipBox=(%d, %d, %d, %d), m_ClipBox=(%d, %d, %d, %d)" ),
                 PaintClipBox.x, PaintClipBox.y, PaintClipBox.width, PaintClipBox.height,
                 m_ClipBox.m_Pos.x, m_ClipBox.m_Pos.y, m_ClipBox.m_Size.x, m_ClipBox.m_Size.y );
@@ -656,19 +636,15 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
     /* When using wxDC scaling the clipping region coordinates are in drawing
      * (logical) units.
      */
-    m_ClipBox.m_Pos.x = paintDC.DeviceToLogicalX( PaintClipBox.x );
-    m_ClipBox.m_Pos.y = paintDC.DeviceToLogicalY( PaintClipBox.y );
-    m_ClipBox.m_Size.x = paintDC.DeviceToLogicalXRel( PaintClipBox.width );
-    m_ClipBox.m_Size.y = paintDC.DeviceToLogicalYRel( PaintClipBox.height );
-
-#if 0
-    EDA_Rect bBox = m_ClipBox;
-    m_ClipBox.Inflate( -paintDC.DeviceToLogicalXRel( 1 ) );
-    GRRect( NULL, &paintDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
-            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
-#endif
-
-    m_ClipBox.Inflate( paintDC.DeviceToLogicalXRel( 1 ) );
+    double scalar = GetScreen()->GetScalingFactor();
+    m_ClipBox.m_Pos = CalcUnscrolledPosition( PaintClipBox.GetPosition() );
+    m_ClipBox.m_Size = PaintClipBox.GetSize();
+    m_ClipBox.Inflate( CLIP_BOX_PADDING );
+    m_ClipBox.m_Pos.x = wxRound( (double) m_ClipBox.m_Pos.x / scalar );
+    m_ClipBox.m_Pos.y = wxRound( (double) m_ClipBox.m_Pos.y / scalar );
+    m_ClipBox.m_Pos += GetScreen()->m_DrawOrg;
+    m_ClipBox.m_Size.x = wxRound( (double) m_ClipBox.m_Size.x / scalar );
+    m_ClipBox.m_Size.y = wxRound( (double) m_ClipBox.m_Size.y / scalar );
     PaintClipBox = m_ClipBox;
 #else
     /* When using Kicad's scaling the clipping region coordinates are in screen
@@ -683,7 +659,7 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
     m_ClipBox.Inflate( 1 ); // Give it one pixel more in each direction
 #endif
 
-#if 0
+#if DEBUG_DUMP_CLIP_COORDS
     wxLogDebug( wxT( "2) PaintClipBox=(%d, %d, %d, %d), m_ClipBox=(%d, %d, %d, %d)" ),
                 PaintClipBox.x, PaintClipBox.y, PaintClipBox.width, PaintClipBox.height,
                 m_ClipBox.m_Pos.x, m_ClipBox.m_Pos.y, m_ClipBox.m_Size.x, m_ClipBox.m_Size.y );
@@ -1019,12 +995,8 @@ void WinEDA_DrawPanel::OnMouseWheel( wxMouseEvent& event )
         return;
     }
 
-#ifdef USE_WX_ZOOM
-    GetScreen()->m_Curseur = CursorRealPosition( event.GetPosition() );
-#else
     GetScreen()->m_Curseur =
         CursorRealPosition( CalcUnscrolledPosition( event.GetPosition() ) );
-#endif
 
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
@@ -1050,6 +1022,7 @@ void WinEDA_DrawPanel::OnMouseWheel( wxMouseEvent& event )
     }
 
     GetEventHandler()->ProcessEvent( cmd );
+    event.Skip();
 }
 
 
@@ -1123,20 +1096,12 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 
     localrealbutt |= localbutt;     /* compensation default wxGTK */
 
-#ifdef USE_WX_ZOOM
-    /* Compute the cursor position in screen (device) units. */
-    screen->m_MousePositionInPixels = event.GetPosition();
-
-    /* Compute the cursor position in drawing (logical) units. */
-    screen->m_MousePosition = CursorRealPosition( event.GetPosition() );
-#else
     /* Compute the cursor position in screen (device) units. */
     screen->m_MousePositionInPixels = CalcUnscrolledPosition( event.GetPosition() );
 
     /* Compute the cursor position in drawing (logical) units. */
     screen->m_MousePosition =
         CursorRealPosition( CalcUnscrolledPosition( event.GetPosition() ) );
-#endif
 
     INSTALL_DC( DC, this );
 
@@ -1417,11 +1382,7 @@ void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
     }
 
     /* Some key commands use the current mouse position: refresh it */
-#ifdef USE_WX_ZOOM
-    pos = wxGetMousePosition() - GetScreenPosition();
-#else
     pos = CalcUnscrolledPosition( wxGetMousePosition() - GetScreenPosition() );
-#endif
 
     /* Compute cursor position in screen units (pixel) including the
      * current scroll bar position.   Also known as device units to wxDC. */
@@ -1442,8 +1403,17 @@ void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
 void WinEDA_DrawPanel::OnPan( wxCommandEvent& event )
 {
     int x, y;
+    int ppux, ppuy;
+    int unitsX, unitsY;
+    int maxX, maxY;
 
-    GetViewStart( &x, &y );       // x and y are in scroll units, not in pixels
+    GetViewStart( &x, &y );
+    GetScrollPixelsPerUnit( &ppux, &ppuy );
+    GetVirtualSize( &unitsX, &unitsY );
+    maxX = unitsX;
+    maxY = unitsY;
+    unitsX /= ppux;
+    unitsY /= ppuy;
 
     switch( event.GetId() )
     {
@@ -1465,11 +1435,21 @@ void WinEDA_DrawPanel::OnPan( wxCommandEvent& event )
 
     default:
         wxLogDebug( wxT( "Unknown ID %d in WinEDA_DrawPanel::OnPan()." ),
-                   event.GetId() );
+                    event.GetId() );
     }
 
-    Scroll( x, y );
-    MouseToCursorSchema();
+    if( x < 0 )
+        x = 0;
+    if( y < 0 )
+        y = 0;
+    if( x > maxX )
+        x = maxX;
+    if( y > maxY )
+        y = maxY;
+
+    SetScrollbars( ppux, ppuy, unitsX, unitsY, x, y, true );
+    INSTALL_DC( dc, this );
+    ReDraw( &dc, true );
 }
 
 

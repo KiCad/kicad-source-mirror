@@ -451,18 +451,15 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         return;
     }
 
+    double scalar = GetScreen()->GetScalingFactor();
+
     curpos = DrawPanel->CursorRealPosition( Mouse );
     oldpos = GetScreen()->m_Curseur;
 
     delta = GetScreen()->GetGridSize();
 
-#ifdef USE_WX_ZOOM
-    delta.x = DC->LogicalToDeviceXRel( wxRound( delta.x ) );
-    delta.y = DC->LogicalToDeviceYRel( wxRound( delta.y ) );
-    Mouse = DrawPanel->CalcUnscrolledPosition( Mouse );
-#else
-    GetScreen()->Scale( delta );
-#endif
+    delta.x *= scalar;
+    delta.y *= scalar;
 
     if( delta.x == 0 )
         delta.x = 1;
