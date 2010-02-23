@@ -421,7 +421,6 @@ void WinEDA_DrawPanel::OnActivate( wxActivateEvent& event )
     event.Skip();
 }
 
-
 void WinEDA_DrawPanel::OnScroll( wxScrollWinEvent& event )
 {
     int id = event.GetEventType();
@@ -490,12 +489,9 @@ void WinEDA_DrawPanel::OnScroll( wxScrollWinEvent& event )
                      "posX=%d, posY=%d" ), ppux, ppuy, unitsX, unitsY, x, y );
 #endif
 
-    SetScrollbars( ppux, ppuy, unitsX, unitsY, x, y, true );
-    INSTALL_DC( dc, this );
-    ReDraw( &dc, true );
+    Scroll( x/ppux, y/ppux );
     event.Skip();
 }
-
 
 void WinEDA_DrawPanel::OnSize( wxSizeEvent& event )
 {
@@ -1447,9 +1443,7 @@ void WinEDA_DrawPanel::OnPan( wxCommandEvent& event )
     if( y > maxY )
         y = maxY;
 
-    SetScrollbars( ppux, ppuy, unitsX, unitsY, x, y, true );
-    INSTALL_DC( dc, this );
-    ReDraw( &dc, true );
+    Scroll( x/ppux, y/ppux );
 }
 
 

@@ -45,23 +45,24 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	
 	sbOptionsSizer->Add( m_Print_Sheet_Ref, 0, wxALL, 5 );
 	
-	bUpperSizer->Add( sbOptionsSizer, 1, wxEXPAND, 5 );
+	bUpperSizer->Add( sbOptionsSizer, 1, 0, 5 );
 	
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_buttonPlotCurrent = new wxButton( this, wxID_PRINT_CURRENT, _("Print Current"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_buttonPlotCurrent, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	bButtonsSizer->Add( m_buttonPlotCurrent, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_buttonPlotAll = new wxButton( this, wxID_PRINT_ALL, _("Print All"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_buttonPlotAll, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_buttonPlotAll->SetDefault(); 
+	bButtonsSizer->Add( m_buttonPlotAll, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_buttonQuit = new wxButton( this, wxID_CANCEL, _("Quit"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_buttonQuit, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	bButtonsSizer->Add( m_buttonQuit, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	bUpperSizer->Add( bButtonsSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	bMainSizer->Add( bUpperSizer, 1, wxEXPAND, 5 );
+	bMainSizer->Add( bUpperSizer, 0, wxEXPAND, 5 );
 	
 	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Filename:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
@@ -78,6 +79,8 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	bMainSizer->Add( m_staticText2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_MessagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+	m_MessagesBox->SetMinSize( wxSize( -1,80 ) );
+	
 	bMainSizer->Add( m_MessagesBox, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	this->SetSizer( bMainSizer );

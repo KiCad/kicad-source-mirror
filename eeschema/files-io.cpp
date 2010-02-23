@@ -92,18 +92,17 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
         SAFE_DELETE( g_RootSheet );
     }
     CreateScreens();
-    ActiveScreen = GetScreen();
     screen = (SCH_SCREEN*) GetScreen();
 
     wxSetWorkingDirectory( wxPathOnly( FullFileName ) );
-    GetScreen()->m_FileName = FullFileName;
+    screen->m_FileName = FullFileName;
     g_RootSheet->SetFileName( FullFileName );
     Affiche_Message( wxEmptyString );
     ClearMsgPanel();
 
     memset( &g_EESchemaVar, 0, sizeof(g_EESchemaVar) );
 
-    GetScreen()->ClrModify();
+    screen->ClrModify();
 
     if( IsNew )
     {
@@ -215,8 +214,7 @@ Error: %s" ),
     bool diag = g_RootSheet->Load( this );
 
     /* Redraw base screen (ROOT) if necessary. */
-    ActiveScreen = GetScreen();
-    ActiveScreen->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
+    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
     Zoom_Automatique( FALSE );
     SetSheetNumberAndCount();
     DrawPanel->Refresh( true );

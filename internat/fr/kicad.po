@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-19 08:35+0100\n"
-"PO-Revision-Date: 2010-02-19 08:43+0100\n"
+"POT-Creation-Date: 2010-02-22 20:56+0100\n"
+"PO-Revision-Date: 2010-02-22 20:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -680,67 +680,67 @@ msgstr "Diamètre uVia en NetClass &lt; limite globale"
 msgid "NetClass uVia Drill &lt; global limit"
 msgstr "Diamètre de perçage de uVia en NetClassl &lt; limite globale"
 
-#: pcbnew/class_pad.cpp:496
+#: pcbnew/class_pad.cpp:498
 msgid "Unknown pad shape"
 msgstr "Forme pad inconnue"
 
-#: pcbnew/class_pad.cpp:578
+#: pcbnew/class_pad.cpp:580
 msgid "Module"
 msgstr "Module"
 
-#: pcbnew/class_pad.cpp:580
+#: pcbnew/class_pad.cpp:582
 msgid "RefP"
 msgstr "RefP"
 
-#: pcbnew/class_pad.cpp:583
+#: pcbnew/class_pad.cpp:585
 msgid "Net"
 msgstr "Net"
 
-#: pcbnew/class_pad.cpp:654
+#: pcbnew/class_pad.cpp:656
 msgid "Non-copper"
 msgstr "Non-cuivre"
 
-#: pcbnew/class_pad.cpp:662
+#: pcbnew/class_pad.cpp:664
 msgid " & int"
 msgstr " & int"
 
-#: pcbnew/class_pad.cpp:690
+#: pcbnew/class_pad.cpp:692
 msgid "internal"
 msgstr "interne"
 
-#: pcbnew/class_pad.cpp:693
+#: pcbnew/class_pad.cpp:695
 #: pcbnew/class_pcb_text.cpp:234
 msgid "Layer"
 msgstr "Couche"
 
-#: pcbnew/class_pad.cpp:703
+#: pcbnew/class_pad.cpp:705
 #: pcbnew/class_pcb_text.cpp:249
 msgid "H Size"
 msgstr "Taille H"
 
-#: pcbnew/class_pad.cpp:706
+#: pcbnew/class_pad.cpp:708
 #: pcbnew/class_pcb_text.cpp:252
 msgid "V Size"
 msgstr "Taille V"
 
-#: pcbnew/class_pad.cpp:711
+#: pcbnew/class_pad.cpp:713
 msgid "Drill"
 msgstr "Perçage"
 
-#: pcbnew/class_pad.cpp:719
+#: pcbnew/class_pad.cpp:721
 msgid "Drill X / Y"
 msgstr "Perçage X/Y"
 
-#: pcbnew/class_pad.cpp:730
+#: pcbnew/class_pad.cpp:732
 #: pcbnew/class_pcb_text.cpp:243
 msgid "Orient"
 msgstr "Orient"
 
-#: pcbnew/class_pad.cpp:733
+#: pcbnew/class_pad.cpp:735
 msgid "X Pos"
 msgstr "X Pos"
 
-#: pcbnew/class_pad.cpp:736
+#: pcbnew/class_pad.cpp:738
 msgid "Y pos"
 msgstr "Y pos"
 
@@ -1606,10 +1606,6 @@ msgstr "Ajout d'éléments graphiques"
 msgid "Place anchor"
 msgstr "Place Ancre"
 
-#: pcbnew/pcbnew.cpp:102
-msgid "Pcbnew is already running, Continue?"
-msgstr "Pcbnew est en cours d'exécution. Continuer ?"
-
 #: pcbnew/initpcb.cpp:47
 msgid "Ok to delete selected items ?"
 msgstr "Ok pour effacer les éléments sélectionnés ?"
@@ -1952,6 +1948,10 @@ msgstr "Nb Segms"
 msgid "Error: Unexpected end of file !"
 msgstr "Erreur: Fin de fichier inattendue !"
 
+#: pcbnew/pcbnew.cpp:107
+msgid "Pcbnew is already running, Continue?"
+msgstr "Pcbnew est en cours d'exécution. Continuer ?"
+
 #: pcbnew/pcbplot.cpp:558
 msgid "Warning: Scale option set to a very small value"
 msgstr "Attention: option d'échelle ajustée à une valeur très petite"
@@ -1997,17 +1997,17 @@ msgstr "Chemin déjà en usage"
 msgid "Footprint document file:"
 msgstr "Documentation des Modules:"
 
-#: pcbnew/swap_layers.cpp:68
+#: pcbnew/swap_layers.cpp:70
 msgid "Swap Layers:"
 msgstr "Permutation Couches:"
 
-#: pcbnew/swap_layers.cpp:215
-#: pcbnew/swap_layers.cpp:220
-#: pcbnew/swap_layers.cpp:306
+#: pcbnew/swap_layers.cpp:217
+#: pcbnew/swap_layers.cpp:222
+#: pcbnew/swap_layers.cpp:308
 msgid "No Change"
 msgstr "Garder"
 
-#: pcbnew/swap_layers.cpp:296
+#: pcbnew/swap_layers.cpp:298
 msgid "Deselect this layer to select the No Change state"
 msgstr "Désélectionner cette couche pour restorer l'option Pas de Changement"
 
@@ -3362,26 +3362,6 @@ msgstr "Non"
 msgid " Yes"
 msgstr "Oui"
 
-#: pcbnew/moduleframe.cpp:255
-msgid "Module Editor: Module modified! Continue?"
-msgstr "Editeur de Module: Module modifié!  Continuer ?"
-
-#: pcbnew/moduleframe.cpp:363
-msgid "Display rectangular coordinates"
-msgstr "Affichage coord XY"
-
-#: pcbnew/moduleframe.cpp:371
-msgid "Show grid"
-msgstr "Afficher grille"
-
-#: pcbnew/moduleframe.cpp:383
-msgid "Show pads in sketch mode"
-msgstr "Afficher pads en mode contour"
-
-#: pcbnew/moduleframe.cpp:384
-msgid "Show pads in filled mode"
-msgstr "Afficher pads en mode plein"
-
 #: pcbnew/dialog_graphic_items_options.cpp:194
 msgid "Graphics:"
 msgstr "Eléments graphiques;"
@@ -3531,6 +3511,26 @@ msgstr "KeyW: "
 msgid "Netlist Selection:"
 msgstr "Sélection de la netliste"
 
+#: pcbnew/moduleframe.cpp:255
+msgid "Module Editor: Module modified! Continue?"
+msgstr "Editeur de Module: Module modifié!  Continuer ?"
+
+#: pcbnew/moduleframe.cpp:363
+msgid "Display rectangular coordinates"
+msgstr "Affichage coord XY"
+
+#: pcbnew/moduleframe.cpp:371
+msgid "Show grid"
+msgstr "Afficher grille"
+
+#: pcbnew/moduleframe.cpp:383
+msgid "Show pads in sketch mode"
+msgstr "Afficher pads en mode contour"
+
+#: pcbnew/moduleframe.cpp:384
+msgid "Show pads in filled mode"
+msgstr "Afficher pads en mode plein"
+
 #: pcbnew/dialog_print_using_printer_base.cpp:35
 msgid "Exclude Edges_Pcb Layer"
 msgstr "Exclure Couche Contours PCB"
@@ -3596,8 +3596,16 @@ msgid "Set Y scale adjust for exact scale plotting"
 msgstr "Ajuster échelle Y pour traçage à l'échelle exacte"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:78
-msgid "Pen Width Mini"
-msgstr "Epaiss Plume Mini"
+msgid "Default Pen Size:"
+msgstr "Dimension Plume par Défaut:"
+
+#: pcbnew/dialog_print_using_printer_base.cpp:80
+msgid ""
+"Pen size used to draw items that have no pen size specified.\n"
+"Used mainly to draw items in sketch mode."
+msgstr ""
+"Diamètre de plume utilisé pour tracer les éléments qui n'ont pas de taille de trait spécifié.\n"
+"Utilisé principalement pour tracer les éléments en mode contour."
 
 #: pcbnew/dialog_print_using_printer_base.cpp:87
 msgid "Print frame ref"
@@ -5185,11 +5193,11 @@ msgstr "Mots Clés"
 msgid "inch"
 msgstr "Pouce"
 
-#: pcbnew/dialog_SVG_print.cpp:207
+#: pcbnew/dialog_SVG_print.cpp:206
 msgid "Create file "
 msgstr "Créer Fichier "
 
-#: pcbnew/dialog_SVG_print.cpp:209
+#: pcbnew/dialog_SVG_print.cpp:208
 msgid " error"
 msgstr " erreur"
 
@@ -5876,7 +5884,7 @@ msgstr "Net Code"
 msgid "Net Length"
 msgstr "Long. Net"
 
-#: pcbnew/dialog_print_for_modedit.cpp:239
+#: pcbnew/dialog_print_for_modedit.cpp:202
 msgid "Print Footprint"
 msgstr "Imprimer Module"
 
@@ -8310,6 +8318,10 @@ msgstr " Rien trouvé"
 msgid " in lib "
 msgstr " en libr. "
 
+#: eeschema/eeschema.cpp:135
+msgid "Eeschema is already running, Continue?"
+msgstr "Eeschema est en cours d'exécution. Continuer ?"
+
 #: eeschema/tool_sch.cpp:30
 #: eeschema/menubar.cpp:45
 msgid "New schematic project"
@@ -8459,10 +8471,6 @@ msgstr "Force direction H, V  pour les fils et bus"
 #: eeschema/eeschema_config.cpp:333
 msgid "Save Project Settings"
 msgstr "Sauver Options Projet"
-
-#: eeschema/eeschema.cpp:131
-msgid "Eeschema is already running, Continue?"
-msgstr "Eeschema est en cours d'exécution. Continuer ?"
 
 #: eeschema/tool_viewlib.cpp:34
 msgid "Select library to browse"
@@ -10179,23 +10187,23 @@ msgstr "Importer Composant"
 msgid "Component library file <%s> is empty."
 msgstr "Le fichier de composants <%s> est vide."
 
-#: eeschema/lib_export.cpp:99
+#: eeschema/lib_export.cpp:104
 msgid "There is no component selected to save."
 msgstr "Pas de composant sélectionné à sauver."
 
-#: eeschema/lib_export.cpp:106
+#: eeschema/lib_export.cpp:111
 msgid "New Library"
 msgstr "Nouvelle Librairie"
 
-#: eeschema/lib_export.cpp:106
+#: eeschema/lib_export.cpp:111
 msgid "Export Component"
 msgstr "Exporter Composant"
 
-#: eeschema/lib_export.cpp:132
+#: eeschema/lib_export.cpp:139
 msgid " - OK"
 msgstr " - OK"
 
-#: eeschema/lib_export.cpp:133
+#: eeschema/lib_export.cpp:140
 msgid ""
 "This library will not be available until it is loaded by EESchema.\n"
 "\n"
@@ -10205,7 +10213,11 @@ msgstr ""
 "\n"
 "Modifier la config de eeschema si vous voulez l'utiliser dans votre projet."
 
-#: eeschema/lib_export.cpp:138
+#: eeschema/lib_export.cpp:145
+msgid " - Export OK"
+msgstr " - Export OK"
+
+#: eeschema/lib_export.cpp:148
 msgid "Error creating "
 msgstr "Erreur en création de "
 
@@ -10937,6 +10949,22 @@ msgstr "Certains fichiers n'ont pas pu être trouvés!"
 msgid "Some files are invalid!"
 msgstr "Certains fichiers sont invalides!"
 
+#: cvpcb/cvpcb.cpp:32
+msgid "Kicad retroannotation files (*.stf)|*.stf"
+msgstr "Fichiers de retroannotaion  Kicad  (*.stf)|*.stf"
+
+#: cvpcb/cvpcb.cpp:33
+msgid "Kicad footprint alias files (*.equ)|*.equ"
+msgstr "Fichiers alias modules Kicad  (*.equ)|*.equ"
+
+#: cvpcb/cvpcb.cpp:100
+msgid "Cvpcb is already running, Continue?"
+msgstr "Cvpcb est en cours d'exécution. Continuer ?"
+
+#: cvpcb/cvpcb.cpp:142
+msgid " [no file]"
+msgstr " [pas de fichier]"
+
 #: cvpcb/menucfg.cpp:26
 msgid "&Open"
 msgstr "&Ouvrir "
@@ -11023,22 +11051,6 @@ msgstr "non nommé"
 #: cvpcb/cvframe.cpp:449
 msgid "Open Net List"
 msgstr "Ouvrir Fichier Netliste"
-
-#: cvpcb/cvpcb.cpp:32
-msgid "Kicad retroannotation files (*.stf)|*.stf"
-msgstr "Fichiers de retroannotaion  Kicad  (*.stf)|*.stf"
-
-#: cvpcb/cvpcb.cpp:33
-msgid "Kicad footprint alias files (*.equ)|*.equ"
-msgstr "Fichiers alias modules Kicad  (*.equ)|*.equ"
-
-#: cvpcb/cvpcb.cpp:97
-msgid "Cvpcb is already running, Continue?"
-msgstr "Cvpcb est en cours d'exécution. Continuer ?"
-
-#: cvpcb/cvpcb.cpp:139
-msgid " [no file]"
-msgstr " [pas de fichier]"
 
 #: cvpcb/setvisu.cpp:48
 msgid "Footprint: "
@@ -11165,7 +11177,7 @@ msgid "File <"
 msgstr "Fichier <"
 
 #: cvpcb/readschematicnetlist.cpp:115
-#: kicad/prjconfig.cpp:105
+#: kicad/prjconfig.cpp:106
 msgid "> not found"
 msgstr ">  non trouvé"
 
@@ -11187,26 +11199,6 @@ msgstr "Erreur Netliste: %s"
 #, c-format
 msgid "Component %s %s pin %s : Different Nets"
 msgstr "Composant %s %s pin %s :  Nets Différents"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:156
-msgid "Display Options"
-msgstr "Options d'Affichage"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:162
-msgid "Zoom in (F1)"
-msgstr "Zoom + (F1)"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:166
-msgid "Zoom out (F2)"
-msgstr "Zoom - (F2)"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:170
-msgid "Redraw view (F3)"
-msgstr "Redessin de l'écran (F3)"
-
-#: cvpcb/class_DisplayFootprintsFrame.cpp:174
-msgid "Zoom auto (Home)"
-msgstr "Zoom Automatique (Home)"
 
 #: cvpcb/tool_cvpcb.cpp:31
 msgid "Save net list and footprint files"
@@ -11294,6 +11286,26 @@ msgstr "&Appliquer"
 #: cvpcb/dialog_cvpcb_config_fbp.cpp:51
 msgid "Footprint alias files"
 msgstr "Fichier Alias Modules"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:156
+msgid "Display Options"
+msgstr "Options d'Affichage"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:162
+msgid "Zoom in (F1)"
+msgstr "Zoom + (F1)"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:166
+msgid "Zoom out (F2)"
+msgstr "Zoom - (F2)"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:170
+msgid "Redraw view (F3)"
+msgstr "Redessin de l'écran (F3)"
+
+#: cvpcb/class_DisplayFootprintsFrame.cpp:174
+msgid "Zoom auto (Home)"
+msgstr "Zoom Automatique (Home)"
 
 #: kicad/menubar.cpp:94
 msgid "Open an existing project"
@@ -11402,29 +11414,29 @@ msgstr "Archiver les fichiers du projet"
 msgid "Refresh project tree"
 msgstr "Mettre à jour l'affichage du projet"
 
-#: kicad/prjconfig.cpp:41
+#: kicad/prjconfig.cpp:42
 msgid "Project template file <kicad.pro> not found "
 msgstr "Fichier modèle <kicad.pro> non trouvé"
 
-#: kicad/prjconfig.cpp:72
+#: kicad/prjconfig.cpp:73
 msgid "Create New Project"
 msgstr "Créer un Nouveau Projet"
 
-#: kicad/prjconfig.cpp:77
+#: kicad/prjconfig.cpp:78
 msgid "Open Existing Project"
 msgstr "Ouvrir un Projet  Existant"
 
-#: kicad/prjconfig.cpp:104
+#: kicad/prjconfig.cpp:105
 msgid "Kicad project file <"
 msgstr "Fichier projet Kicad <"
 
-#: kicad/prjconfig.cpp:118
-#: kicad/kicad.cpp:78
+#: kicad/prjconfig.cpp:119
+#: kicad/kicad.cpp:74
 msgid "Working dir: "
 msgstr "Répertoire de travail: "
 
-#: kicad/prjconfig.cpp:119
-#: kicad/kicad.cpp:79
+#: kicad/prjconfig.cpp:120
+#: kicad/kicad.cpp:75
 msgid ""
 "\n"
 "Project: "
@@ -11432,7 +11444,7 @@ msgstr ""
 "\n"
 "Projet: "
 
-#: kicad/kicad.cpp:106
+#: kicad/kicad.cpp:102
 msgid "noname"
 msgstr "noname"
 
@@ -11485,7 +11497,7 @@ msgstr ""
 "\n"
 "Créer Archive zippée <%s>"
 
-#: kicad/mainframe.cpp:71
+#: kicad/mainframe.cpp:72
 #, c-format
 msgid ""
 "Ready\n"
@@ -11494,19 +11506,19 @@ msgstr ""
 "Prêt\n"
 "Répertoire de travail: %s\n"
 
-#: kicad/mainframe.cpp:230
+#: kicad/mainframe.cpp:231
 msgid "Execute Python Script"
 msgstr "Executer un Script Python"
 
-#: kicad/mainframe.cpp:231
+#: kicad/mainframe.cpp:232
 msgid "Python script (*.py)|*.py"
 msgstr "Script Python (*.py)|*.py"
 
-#: kicad/mainframe.cpp:252
+#: kicad/mainframe.cpp:253
 msgid "Text file ("
 msgstr "Fichier Texte ("
 
-#: kicad/mainframe.cpp:254
+#: kicad/mainframe.cpp:255
 msgid "Load File to Edit"
 msgstr "Fichier à Editer"
 
@@ -11530,43 +11542,6 @@ msgstr "GerbView (Visualisateur  Gerber)"
 msgid "Run Python Script"
 msgstr "Exécuter le Script Python"
 
-#: kicad/treeprj_datas.cpp:207
-msgid "Unable to move file ... "
-msgstr "Impossible de déplacer le fichier "
-
-#: kicad/treeprj_datas.cpp:208
-#: kicad/treeprj_datas.cpp:289
-msgid "Permission error ?"
-msgstr "Erreur de permission ?"
-
-#: kicad/treeprj_datas.cpp:272
-msgid ""
-"Changing file extension will change file type.\n"
-" Do you want to continue ?"
-msgstr ""
-"Changer l'extension changera le type de fichier.\n"
-"Voulez vous continuer ?"
-
-#: kicad/treeprj_datas.cpp:274
-msgid "Rename File"
-msgstr "Renommer Fichier"
-
-#: kicad/treeprj_datas.cpp:288
-msgid "Unable to rename file ... "
-msgstr "Impossible de renommer le fichier... "
-
-#: kicad/treeprj_datas.cpp:309
-msgid "Do you really want to delete "
-msgstr "Voulez vous réellement effacer"
-
-#: kicad/treeprj_datas.cpp:310
-msgid "Delete File"
-msgstr "Supprimer Fichier"
-
-#: kicad/treeprj_datas.cpp:381
-msgid "no kicad files found in this directory"
-msgstr "Pas de fichier Kicad trouvé dans ce répertoire"
-
 #: kicad/preferences.cpp:47
 msgid "You must choose a PDF viewer before using this option."
 msgstr "Vous devez choisir un Visualisateur PDF avant d'utiliser cette option."
@@ -11587,107 +11562,124 @@ msgstr "Fichier exécutable ("
 msgid "Select Prefered Editor"
 msgstr "Sélection Editeur Préféré"
 
-#: kicad/treeprj_frame.cpp:136
+#: kicad/tree_project_frame.cpp:157
 msgid "&Run"
 msgstr "Exécute&r"
 
-#: kicad/treeprj_frame.cpp:137
+#: kicad/tree_project_frame.cpp:158
 msgid "Run the Python Script"
 msgstr "Exécuter le Script Python"
 
-#: kicad/treeprj_frame.cpp:146
-#: kicad/treeprj_frame.cpp:221
+#: kicad/tree_project_frame.cpp:167
+#: kicad/tree_project_frame.cpp:224
 msgid "&Edit in a text editor"
 msgstr "Editer avec un éditeur de Texte"
 
-#: kicad/treeprj_frame.cpp:147
+#: kicad/tree_project_frame.cpp:168
 msgid "&Open the file in a Text Editor"
 msgstr "&Ouvrir le fichier avec un  Editeur de texte"
 
-#: kicad/treeprj_frame.cpp:164
+#: kicad/tree_project_frame.cpp:185
 msgid "New D&irectory"
 msgstr "&Nouveau Répertoire"
 
-#: kicad/treeprj_frame.cpp:165
+#: kicad/tree_project_frame.cpp:186
 msgid "Create a New Directory"
 msgstr "Créer un nouveau Répertoire"
 
-#: kicad/treeprj_frame.cpp:174
+#: kicad/tree_project_frame.cpp:195
 msgid "New P&ython Script"
 msgstr "Nouveau Script P&ython"
 
-#: kicad/treeprj_frame.cpp:175
+#: kicad/tree_project_frame.cpp:196
 msgid "Create a New Python Script"
 msgstr "Créer un nouveau script Python"
 
-#: kicad/treeprj_frame.cpp:184
-msgid "New &Text File"
-msgstr "Nouveau  Fichier &Texte"
-
-#: kicad/treeprj_frame.cpp:185
-msgid "Create a New Txt File"
-msgstr "Créer un nouveau Fichier texte"
-
-#: kicad/treeprj_frame.cpp:193
-msgid "New &File"
-msgstr "Nouveau &Fichier"
-
-#: kicad/treeprj_frame.cpp:194
-msgid "Create a New File"
-msgstr "Créer un nouveau Fichier"
-
-#: kicad/treeprj_frame.cpp:208
+#: kicad/tree_project_frame.cpp:211
 msgid "&Rename file"
 msgstr "&Renommer fichier"
 
-#: kicad/treeprj_frame.cpp:209
-#: kicad/treeprj_frame.cpp:211
+#: kicad/tree_project_frame.cpp:212
+#: kicad/tree_project_frame.cpp:214
 msgid "&Rename directory"
 msgstr "&Renommer répertoire"
 
-#: kicad/treeprj_frame.cpp:210
+#: kicad/tree_project_frame.cpp:213
 msgid "Rename file"
 msgstr "Renommer fichier"
 
-#: kicad/treeprj_frame.cpp:222
+#: kicad/tree_project_frame.cpp:225
 msgid "Open the file in a Text Editor"
 msgstr "Ouvrir le fichier avec un  Editeur de texte"
 
-#: kicad/treeprj_frame.cpp:230
+#: kicad/tree_project_frame.cpp:233
 msgid "&Delete File"
 msgstr "&Supprimer Fichier"
 
-#: kicad/treeprj_frame.cpp:231
+#: kicad/tree_project_frame.cpp:234
 msgid "&Delete Directory"
 msgstr "&Supprimer le Répertoire"
 
-#: kicad/treeprj_frame.cpp:232
+#: kicad/tree_project_frame.cpp:235
 msgid "Delete the File"
 msgstr "Supprimer le fichier"
 
-#: kicad/treeprj_frame.cpp:233
+#: kicad/tree_project_frame.cpp:236
 msgid "&Delete the Directory and its content"
 msgstr "Effacer le Répertoire et son contenu"
 
-#: kicad/treeprj_frame.cpp:559
+#: kicad/tree_project_frame.cpp:511
 msgid "Create New File"
 msgstr "Créer  un Nouveau Fichier"
 
-#: kicad/treeprj_frame.cpp:560
+#: kicad/tree_project_frame.cpp:512
 msgid "Create New Directory"
 msgstr "Créer un nouveau Répertoire"
 
-#: kicad/treeprj_frame.cpp:569
+#: kicad/tree_project_frame.cpp:521
 msgid "noname."
 msgstr "noname."
 
-#: kicad/treeprj_frame.cpp:1109
+#: kicad/tree_project_frame.cpp:1055
 msgid "Change filename: "
 msgstr "Changer Nom Fichier: "
 
-#: kicad/treeprj_frame.cpp:1111
+#: kicad/tree_project_frame.cpp:1057
 msgid "Change filename"
 msgstr "Changer Nom Fichier"
+
+#: kicad/class_treeproject_item.cpp:148
+msgid "Unable to move file ... "
+msgstr "Impossible de déplacer le fichier "
+
+#: kicad/class_treeproject_item.cpp:149
+#: kicad/class_treeproject_item.cpp:230
+msgid "Permission error ?"
+msgstr "Erreur de permission ?"
+
+#: kicad/class_treeproject_item.cpp:213
+msgid ""
+"Changing file extension will change file type.\n"
+" Do you want to continue ?"
+msgstr ""
+"Changer l'extension changera le type de fichier.\n"
+"Voulez vous continuer ?"
+
+#: kicad/class_treeproject_item.cpp:215
+msgid "Rename File"
+msgstr "Renommer Fichier"
+
+#: kicad/class_treeproject_item.cpp:229
+msgid "Unable to rename file ... "
+msgstr "Impossible de renommer le fichier... "
+
+#: kicad/class_treeproject_item.cpp:250
+msgid "Do you really want to delete "
+msgstr "Voulez vous réellement effacer"
+
+#: kicad/class_treeproject_item.cpp:251
+msgid "Delete File"
+msgstr "Supprimer Fichier"
 
 #: gerbview/options.cpp:167
 msgid "Gerbview Options"
@@ -11831,6 +11823,14 @@ msgstr "Commande <%c%c> ignorée par Gerbview"
 msgid "Too many include files!!"
 msgstr "Trop de fichiers inclus!!"
 
+#: gerbview/gerbview.cpp:40
+msgid "GerbView project files (.cnf)|*.cnf"
+msgstr "Fichiers projet GerbView (.cnf)|*.cnf"
+
+#: gerbview/gerbview.cpp:97
+msgid "GerbView is already running. Continue?"
+msgstr "Gerbview est en cours d'exécution. Continuer ?"
+
 #: gerbview/dcode.cpp:476
 msgid "List D codes"
 msgstr "Liste D-Codes"
@@ -11843,14 +11843,6 @@ msgstr "Les données courante seront perdues ?"
 #, c-format
 msgid "Delete layer %d?"
 msgstr "Effacer couche %d"
-
-#: gerbview/gerbview.cpp:40
-msgid "GerbView project files (.cnf)|*.cnf"
-msgstr "Fichiers projet GerbView (.cnf)|*.cnf"
-
-#: gerbview/gerbview.cpp:92
-msgid "GerbView is already running. Continue?"
-msgstr "Gerbview est en cours d'exécution. Continuer ?"
 
 #: gerbview/select_layers_to_pcb.cpp:213
 #: gerbview/tool_gerber.cpp:209
@@ -12208,14 +12200,6 @@ msgstr "Couleurs"
 msgid "Error"
 msgstr "Erreur"
 
-#: common/richio.cpp:67
-msgid "Line length exceeded"
-msgstr "Longueur de ligne dépassée"
-
-#: common/richio.cpp:177
-msgid "Error writing to STRINGFORMATTER"
-msgstr "Erreur d'écriture à STRINGFORMATTER"
-
 #: common/zoom.cpp:185
 msgid "Center"
 msgstr "Centrer"
@@ -12231,6 +12215,14 @@ msgstr "Zoom:  "
 #: common/zoom.cpp:229
 msgid "Grid Select"
 msgstr "Sélection Grille"
+
+#: common/richio.cpp:67
+msgid "Line length exceeded"
+msgstr "Longueur de ligne dépassée"
+
+#: common/richio.cpp:177
+msgid "Error writing to STRINGFORMATTER"
+msgstr "Erreur d'écriture à STRINGFORMATTER"
 
 #: common/eda_doc.cpp:149
 msgid "Doc File "
@@ -12325,6 +12317,27 @@ msgstr "Langue"
 msgid "Select application language (only for testing!)"
 msgstr "Choisir la langue (seulement pour tests!)"
 
+#: common/dsnlexer.cpp:168
+msgid "in file"
+msgstr "dans le fichier"
+
+#: common/dsnlexer.cpp:169
+msgid "on line"
+msgstr "en ligne"
+
+#: common/dsnlexer.cpp:170
+msgid "at offset"
+msgstr "à l'offset"
+
+#: common/dsnlexer.cpp:246
+msgid "String delimiter must be a single character of ', \", or $"
+msgstr "Le caractère de délimitation de ligne doit être un seul caractère  ', \", or $"
+
+#: common/dsnlexer.cpp:361
+#: common/dsnlexer.cpp:374
+msgid "Un-terminated delimited string"
+msgstr "Ligne délimitée non terminée"
+
 #: common/common.cpp:60
 msgid "Kicad project files (*.pro)|*.pro"
 msgstr "Fichiers projet Kicad  (*.pro)|*.pro"
@@ -12373,26 +12386,6 @@ msgstr "Inconnu"
 msgid " \""
 msgstr " \""
 
-#: common/dsnlexer.cpp:167
-msgid "in file"
-msgstr "dans le fichier"
-
-#: common/dsnlexer.cpp:168
-msgid "on line"
-msgstr "en ligne"
-
-#: common/dsnlexer.cpp:169
-msgid "at offset"
-msgstr "à l'offset"
-
-#: common/dsnlexer.cpp:231
-msgid "String delimiter must be a single character of ', \", or $"
-msgstr "Le caractère de délimitation de ligne doit être un seul caractère  ', \", or $"
-
-#: common/dsnlexer.cpp:315
-msgid "Un-terminated delimited string"
-msgstr "Ligne délimitée non terminée"
-
 #: common/basicframe.cpp:207
 msgid " file <"
 msgstr " Fichier <"
@@ -12410,6 +12403,10 @@ msgstr "Fichier d'aide %s non trouvé"
 #, c-format
 msgid "Help file %s could not be found."
 msgstr "Fichier d'aide %s non trouvé."
+
+#: common/drawframe.cpp:336
+msgid "??"
+msgstr "??"
 
 #: common/block_commande.cpp:47
 msgid "Block Move"
@@ -12450,10 +12447,6 @@ msgstr "Retournement Bloc"
 #: common/block_commande.cpp:84
 msgid "Block Mirror"
 msgstr "Bloc Miroir"
-
-#: common/drawframe.cpp:330
-msgid "??"
-msgstr "??"
 
 #: common/get_component_dialog.cpp:70
 msgid "History list:"
@@ -13022,6 +13015,18 @@ msgstr "Options d'Affichage"
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "Pen Width Mini"
+#~ msgstr "Epaiss Plume Mini"
+#~ msgid "no kicad files found in this directory"
+#~ msgstr "Pas de fichier Kicad trouvé dans ce répertoire"
+#~ msgid "New &Text File"
+#~ msgstr "Nouveau  Fichier &Texte"
+#~ msgid "Create a New Txt File"
+#~ msgstr "Créer un nouveau Fichier texte"
+#~ msgid "New &File"
+#~ msgstr "Nouveau &Fichier"
+#~ msgid "Create a New File"
+#~ msgstr "Créer un nouveau Fichier"
 #~ msgid "Net name"
 #~ msgstr "Net Name"
 #~ msgid "Alias <%s> not found for component <%s> in library <%s>."
