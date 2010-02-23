@@ -489,7 +489,7 @@ void WinEDA_DrawPanel::OnScroll( wxScrollWinEvent& event )
                      "posX=%d, posY=%d" ), ppux, ppuy, unitsX, unitsY, x, y );
 #endif
 
-    Scroll( x/ppux, y/ppux );
+    Scroll( x/ppux, y/ppuy );
     event.Skip();
 }
 
@@ -1443,7 +1443,7 @@ void WinEDA_DrawPanel::OnPan( wxCommandEvent& event )
     if( y > maxY )
         y = maxY;
 
-    Scroll( x/ppux, y/ppux );
+    Scroll( x/ppux, y/ppuy );
 }
 
 
