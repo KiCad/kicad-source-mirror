@@ -695,7 +695,7 @@ static int Autoroute_One_Track( WinEDA_PcbFrame* pcbframe,
         }
 
         /** Test the other layer. **/
-        if( (two_sides) && !g_No_Via_Route )
+        if( two_sides )
         {
             olddir = GetDir( r, c, side );
             if( olddir == FROM_OTHERSIDE )

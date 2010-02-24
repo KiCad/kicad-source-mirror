@@ -103,35 +103,6 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
 }
 
 
-#include "dialog_graphic_items_options.cpp"
-
-
-void WinEDA_PcbFrame::InstallPcbOptionsFrame( int id )
-{
-    switch( id )
-    {
-    case ID_PCB_DRAWINGS_WIDTHS_SETUP:
-    {
-        WinEDA_GraphicItemsOptionsDialog dlg( this );
-        dlg.ShowModal();
-    }
-    break;
-
-    default:
-        wxMessageBox( wxT( "InstallPcbOptionsFrame() id error" ) );
-        break;
-    }
-}
-
-
-void WinEDA_ModuleEditFrame::InstallOptionsFrame( const wxPoint& pos )
-{
-    WinEDA_GraphicItemsOptionsDialog dlg( this );
-
-    dlg.ShowModal();
-}
-
-
 /* Must be called on a click on the left toolbar (options toolbar
  * Update variables according to tools states
  */

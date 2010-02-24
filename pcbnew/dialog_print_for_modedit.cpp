@@ -102,11 +102,12 @@ void DIALOG_PRINT_FOR_MODEDIT::InitValues( )
     int scale_Select = 3; // default selected scale = ScaleList[3] = 1
     if( m_Config )
     {
-        m_Config->Read( OPTKEY_PLOT_LINEWIDTH_VALUE, &s_Parameters.m_PenDefaultSize );
         m_Config->Read( OPTKEY_PRINT_MODULE_SCALE, &scale_Select );
         m_Config->Read( OPTKEY_PRINT_MONOCHROME_MODE, &s_Parameters.m_Print_Black_and_White, 1);
     }
 
+    extern int g_DrawDefaultLineThickness;
+    s_Parameters.m_PenDefaultSize = g_DrawDefaultLineThickness;
     m_ScaleOption->SetSelection( scale_Select );
 
     if( s_Parameters.m_Print_Black_and_White )

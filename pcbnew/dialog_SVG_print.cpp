@@ -27,6 +27,8 @@
 #define WIDTH_MAX_VALUE 500
 #define WIDTH_MIN_VALUE 1
 
+extern int g_DrawDefaultLineThickness;
+
 // Local variables:
 static PRINT_PARAMETERS  s_Parameters;
 static long s_SelectedLayers    = LAYER_BACK | LAYER_FRONT |
@@ -88,10 +90,10 @@ void DIALOG_SVG_PRINT::OnInitDialog( wxInitDialogEvent& event )
     m_ImageXSize_mm = 270;
     if( m_Config )
     {
-        m_Config->Read( OPTKEY_PLOT_LINEWIDTH_VALUE, &s_Parameters.m_PenDefaultSize );
         m_Config->Read( PLOTSVGMODECOLOR_KEY, &s_Parameters.m_Print_Black_and_White );
     }
 
+    s_Parameters.m_PenDefaultSize = g_DrawDefaultLineThickness;
     AddUnitSymbol( *m_TextPenWidth, g_UnitMetric );
     m_DialogPenWidth->SetValue(
         ReturnStringFromValue( g_UnitMetric, s_Parameters.m_PenDefaultSize,
@@ -159,6 +161,7 @@ void DIALOG_SVG_PRINT::SetPenWidth()
         s_Parameters.m_PenDefaultSize = WIDTH_MIN_VALUE;
     }
 
+    g_DrawDefaultLineThickness = s_Parameters.m_PenDefaultSize;
     m_DialogPenWidth->SetValue(
         ReturnStringFromValue( g_UnitMetric, s_Parameters.m_PenDefaultSize,
                                m_Parent->m_InternalUnits ) );
@@ -303,7 +306,6 @@ void DIALOG_SVG_PRINT::OnCloseWindow( wxCloseEvent& event )
     s_Parameters.m_Print_Black_and_White = m_ModeColorOption->GetSelection();
     if( m_Config )
     {
-        m_Config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE, s_Parameters.m_PenDefaultSize );
         m_Config->Write( PLOTSVGMODECOLOR_KEY, s_Parameters.m_Print_Black_and_White );
         wxString layerKey;
         for( int layer = 0;  layer<NB_LAYERS;  ++layer )

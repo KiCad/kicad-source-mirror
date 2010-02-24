@@ -116,7 +116,9 @@ void WinEDA_SchematicFrame::OnPrint( wxCommandEvent& event )
 
     fn = g_RootSheet->m_AssociatedScreen->m_FileName;
 
-    if( fn.GetFullName() != wxT( "noname.sch" ) )
+    wxString default_name = NAMELESS_PROJECT;
+    default_name += wxT( ".sch" );
+    if( fn.GetFullName() != default_name )
     {
         fn.SetExt( ProjectFileExtension );
         wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );

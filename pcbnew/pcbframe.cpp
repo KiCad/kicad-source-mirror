@@ -48,9 +48,10 @@
 #include "class_pcb_layer_widget.h"
 #include "hotkeys.h"
 
-
+extern int g_DrawDefaultLineThickness;
 
 // Keys used in read/write config
+#define OPTKEY_DEFAULT_LINEWIDTH_VALUE  wxT( "PlotLineWidth" )
 #define PCB_SHOW_FULL_RATSNET_OPT   wxT( "PcbFulRatsnest" )
 #define PCB_MAGNETIC_PADS_OPT   wxT( "PcbMagPadOpt" )
 #define PCB_MAGNETIC_TRACKS_OPT wxT( "PcbMagTrackOpt" )
@@ -494,6 +495,7 @@ void WinEDA_PcbFrame::LoadSettings()
     WinEDA_BasePcbFrame::LoadSettings();
 
     long tmp;
+    config->Read( OPTKEY_DEFAULT_LINEWIDTH_VALUE, &g_DrawDefaultLineThickness );
     config->Read( PCB_SHOW_FULL_RATSNET_OPT, &tmp );
     GetBoard()->SetElementVisibility(RATSNEST_VISIBLE, tmp);
     config->Read( PCB_MAGNETIC_PADS_OPT, &g_MagneticPadOption );
@@ -514,6 +516,7 @@ void WinEDA_PcbFrame::SaveSettings()
 
     wxRealPoint GridSize = GetScreen()->GetGridSize();
 
+    config->Write( OPTKEY_DEFAULT_LINEWIDTH_VALUE, g_DrawDefaultLineThickness );
     long tmp = GetBoard()->IsElementVisible(RATSNEST_VISIBLE);
     config->Write( PCB_SHOW_FULL_RATSNET_OPT, tmp );
     config->Write( PCB_MAGNETIC_PADS_OPT, (long) g_MagneticPadOption );

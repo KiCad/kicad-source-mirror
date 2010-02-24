@@ -518,7 +518,9 @@ void TREE_PROJECT_FRAME::NewFile( TreeFileType type )
     dir = wxGetCwd() + wxFileName().GetPathSeparator() + treeData->GetDir();
 
     // Ask for the new file name
-    wxFileDialog dlg( this, title, dir, _( "noname." ) + mask,
+    wxString nameless_prj = NAMELESS_PROJECT;
+    nameless_prj += wxT(".") + mask;
+    wxFileDialog dlg( this, title, dir, nameless_prj,
                       wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -863,7 +865,7 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
     {
         fn.Clear();
         fn.SetPath( ::wxGetCwd() );
-        fn.SetName( wxT( "noname" ) );
+        fn.SetName( NAMELESS_PROJECT );
         fn.SetExt( ProjectFileExtension );
     }
     else

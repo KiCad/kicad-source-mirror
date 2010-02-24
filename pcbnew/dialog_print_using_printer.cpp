@@ -22,6 +22,10 @@
 #define WIDTH_MAX_VALUE           1000
 #define WIDTH_MIN_VALUE           1
 
+
+extern int g_DrawDefaultLineThickness;
+
+// Local variables
 static long   s_SelectedLayers;
 static double s_ScaleList[] =
 { 0, 0.5, 0.7, 0.999, 1.0, 1.4, 2.0, 3.0, 4.0 };
@@ -33,7 +37,6 @@ static double s_ScaleList[] =
 // static print data and page setup data, to remember settings during the session
 static wxPrintData* g_PrintData;
 
-// Variables locales
 static PRINT_PARAMETERS  s_Parameters;
 
 
@@ -190,7 +193,6 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
 
     if( m_Config )
     {
-        m_Config->Read( OPTKEY_PLOT_LINEWIDTH_VALUE, &s_Parameters.m_PenDefaultSize );
         m_Config->Read( OPTKEY_PRINT_X_FINESCALE_ADJ, &s_Parameters.m_XScaleAdjust );
         m_Config->Read( OPTKEY_PRINT_Y_FINESCALE_ADJ, &s_Parameters.m_YScaleAdjust );
         m_Config->Read( OPTKEY_PRINT_SCALE, &scale_idx );
@@ -241,6 +243,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     else
         m_ModeColorOption->SetSelection( 0 );
 
+    s_Parameters.m_PenDefaultSize = g_DrawDefaultLineThickness;
     AddUnitSymbol( *m_TextPenWidth, g_UnitMetric );
     m_DialogPenWidth->SetValue(
         ReturnStringFromValue( g_UnitMetric, s_Parameters.m_PenDefaultSize, m_Parent->m_InternalUnits ) );
@@ -321,7 +324,6 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
 
     if( m_Config )
     {
-        m_Config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE, s_Parameters.m_PenDefaultSize );
         m_Config->Write( OPTKEY_PRINT_X_FINESCALE_ADJ, s_Parameters.m_XScaleAdjust );
         m_Config->Write( OPTKEY_PRINT_Y_FINESCALE_ADJ, s_Parameters.m_YScaleAdjust );
         m_Config->Write( OPTKEY_PRINT_SCALE, m_ScaleOption->GetSelection() );
@@ -403,6 +405,8 @@ void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
     {
         s_Parameters.m_PenDefaultSize = WIDTH_MIN_VALUE;
     }
+
+    g_DrawDefaultLineThickness = s_Parameters.m_PenDefaultSize;
 
     m_DialogPenWidth->SetValue(
         ReturnStringFromValue( g_UnitMetric, s_Parameters.m_PenDefaultSize, m_Parent->m_InternalUnits ) );

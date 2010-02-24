@@ -59,7 +59,8 @@ set(PCBNEW_SRCS
     dialog_global_edit_tracks_and_vias.cpp
     dialog_global_edit_tracks_and_vias_base.cpp
     dialog_global_pads_edition_base.cpp
-#   dialog_graphic_items_options.cpp
+    dialog_graphic_items_options.cpp
+    dialog_graphic_items_options_base.cpp
     dialog_graphic_item_properties.cpp
     dialog_graphic_item_properties_base.cpp
 #   dialog_initpcb.cpp

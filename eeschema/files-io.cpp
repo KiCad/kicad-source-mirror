@@ -109,7 +109,8 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
         screen->m_CurrentSheetDesc = &g_Sheet_A4;
         screen->SetZoom( 32 );
         screen->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
-        screen->m_Title = wxT( "noname.sch" );
+        screen->m_Title = NAMELESS_PROJECT;
+        screen->m_Title += wxT( ".sch" );
         GetScreen()->m_FileName = screen->m_Title;
         screen->m_Company.Empty();
         screen->m_Commentaire1.Empty();

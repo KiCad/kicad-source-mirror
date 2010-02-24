@@ -171,8 +171,10 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	bButtonsSizer->Add( m_PlotNoViaOnMaskOpt, 0, wxALL, 5 );
 	
-	m_staticText6 = new wxStaticText( this, wxID_ANY, _("Line width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6 = new wxStaticText( this, wxID_ANY, _("Default pen size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText6->Wrap( -1 );
+	m_staticText6->SetToolTip( _("Pen size used to draw items that have no pen size specified.\nUsed mainly to draw items in sketch mode.") );
+	
 	bButtonsSizer->Add( m_staticText6, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_LinesWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );

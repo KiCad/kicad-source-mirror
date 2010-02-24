@@ -52,7 +52,6 @@
 /* variables */
 extern bool Drc_On;
 extern bool g_AutoDeleteOldTrack;
-extern bool g_No_Via_Route;
 extern bool g_Drag_Pistes_On;
 extern bool g_Show_Module_Ratsnest;
 extern bool g_Show_Pads_Module_in_Move;
@@ -67,7 +66,6 @@ extern wxString    g_Shapes3DExtBuffer;
 extern wxString    g_DocModulesFileName;
 
 /* Variables used in footprint handling */
-extern int         Angle_Rot_Module;
 extern wxSize      ModuleTextSize; /* Default footprint texts size */
 extern int         ModuleTextWidth;
 extern int         ModuleSegmentWidth;

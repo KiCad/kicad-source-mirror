@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-22 20:56+0100\n"
-"PO-Revision-Date: 2010-02-22 20:58+0100\n"
+"POT-Creation-Date: 2010-02-24 17:18+0100\n"
+"PO-Revision-Date: 2010-02-24 17:18+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -1308,23 +1308,23 @@ msgstr "Ecriture fichier CI: "
 msgid "Failed to create "
 msgstr "Impossible de créer  fichier "
 
-#: pcbnew/pcbframe.cpp:336
+#: pcbnew/pcbframe.cpp:337
 msgid "Visibles"
 msgstr "Visibles"
 
-#: pcbnew/pcbframe.cpp:422
+#: pcbnew/pcbframe.cpp:423
 msgid "Board modified, Save before exit ?"
 msgstr "Circuit Imprimé modifié,  Sauver avant de quitter ?"
 
-#: pcbnew/pcbframe.cpp:423
+#: pcbnew/pcbframe.cpp:424
 msgid "Confirmation"
 msgstr "Confirmation"
 
-#: pcbnew/pcbframe.cpp:462
+#: pcbnew/pcbframe.cpp:463
 msgid "3D Frame already opened"
 msgstr "Fenêtre 3D déjà ouverte"
 
-#: pcbnew/pcbframe.cpp:466
+#: pcbnew/pcbframe.cpp:467
 msgid "3D Viewer"
 msgstr "Visu 3D"
 
@@ -1948,24 +1948,24 @@ msgstr "Nb Segms"
 msgid "Error: Unexpected end of file !"
 msgstr "Erreur: Fin de fichier inattendue !"
 
-#: pcbnew/pcbnew.cpp:107
+#: pcbnew/pcbnew.cpp:109
 msgid "Pcbnew is already running, Continue?"
 msgstr "Pcbnew est en cours d'exécution. Continuer ?"
 
-#: pcbnew/pcbplot.cpp:558
+#: pcbnew/pcbplot.cpp:560
 msgid "Warning: Scale option set to a very small value"
 msgstr "Attention: option d'échelle ajustée à une valeur très petite"
 
-#: pcbnew/pcbplot.cpp:561
+#: pcbnew/pcbplot.cpp:563
 msgid "Warning: Scale option set to a very large value"
 msgstr "Attention: option d'échelle ajustée à une valeur très grande"
 
-#: pcbnew/pcbplot.cpp:690
+#: pcbnew/pcbplot.cpp:692
 #, c-format
 msgid "Plot file <%s> created"
 msgstr "Fichier de tracé <%s> créé"
 
-#: pcbnew/pcbplot.cpp:702
+#: pcbnew/pcbplot.cpp:704
 msgid "No layer selected"
 msgstr "Pas de couche sélectionnée"
 
@@ -3362,50 +3362,6 @@ msgstr "Non"
 msgid " Yes"
 msgstr "Oui"
 
-#: pcbnew/dialog_graphic_items_options.cpp:194
-msgid "Graphics:"
-msgstr "Eléments graphiques;"
-
-#: pcbnew/dialog_graphic_items_options.cpp:200
-msgid "Graphic segm Width"
-msgstr "Epaisseur segm graphique"
-
-#: pcbnew/dialog_graphic_items_options.cpp:217
-msgid "Board Edges Width"
-msgstr "Epaiss. contour pcb"
-
-#: pcbnew/dialog_graphic_items_options.cpp:234
-msgid "Copper Text Width"
-msgstr "Epaisseur Texte sur cuivre"
-
-#: pcbnew/dialog_graphic_items_options.cpp:251
-msgid "Text Size V"
-msgstr "Hauteur texte"
-
-#: pcbnew/dialog_graphic_items_options.cpp:268
-msgid "Text Size H"
-msgstr "Largeur texte"
-
-#: pcbnew/dialog_graphic_items_options.cpp:287
-msgid "Modules:"
-msgstr "Modules: "
-
-#: pcbnew/dialog_graphic_items_options.cpp:293
-msgid "Edges Module Width"
-msgstr "Epaiss. contour module"
-
-#: pcbnew/dialog_graphic_items_options.cpp:313
-msgid "Text Module Width"
-msgstr "Epaisseur Texte Module"
-
-#: pcbnew/dialog_graphic_items_options.cpp:334
-msgid "Text Module Size V"
-msgstr "Hauteur Texte Module"
-
-#: pcbnew/dialog_graphic_items_options.cpp:355
-msgid "Text Module Size H"
-msgstr "Largeur Texte Module"
-
 #: pcbnew/dialog_edit_module_text_base.cpp:19
 #, c-format
 msgid "Module %s (%s) orient %.1f"
@@ -3596,8 +3552,8 @@ msgid "Set Y scale adjust for exact scale plotting"
 msgstr "Ajuster échelle Y pour traçage à l'échelle exacte"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:78
-msgid "Default Pen Size:"
-msgstr "Dimension Plume par Défaut:"
+msgid "Default pen size:"
+msgstr "Dimension plume par défaut:"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:80
 msgid ""
@@ -3656,7 +3612,7 @@ msgid "Preview"
 msgstr "Prévisualisation"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:134
-#: pcbnew/dialog_print_using_printer.cpp:500
+#: pcbnew/dialog_print_using_printer.cpp:504
 msgid "Print"
 msgstr "Imprimer"
 
@@ -4469,19 +4425,19 @@ msgstr ""
 "Chemins (chemins système et chemins utilisateurs) utilisés pour chercher et charger les fichiers libriries et documentation des composants.\n"
 "Triés par ordre de priorité décroissante."
 
-#: pcbnew/dialog_print_using_printer.cpp:99
+#: pcbnew/dialog_print_using_printer.cpp:102
 msgid "Error Init Printer info"
 msgstr "Erreur Init info imprimante"
 
-#: pcbnew/dialog_print_using_printer.cpp:430
+#: pcbnew/dialog_print_using_printer.cpp:434
 msgid "Printer Problem!"
 msgstr "Problème d'imprimante"
 
-#: pcbnew/dialog_print_using_printer.cpp:444
+#: pcbnew/dialog_print_using_printer.cpp:448
 msgid "Print Preview"
 msgstr "Prévisualisation"
 
-#: pcbnew/dialog_print_using_printer.cpp:511
+#: pcbnew/dialog_print_using_printer.cpp:515
 msgid "There was a problem printing"
 msgstr "Il y a un problème d'impression"
 
@@ -5193,11 +5149,11 @@ msgstr "Mots Clés"
 msgid "inch"
 msgstr "Pouce"
 
-#: pcbnew/dialog_SVG_print.cpp:206
+#: pcbnew/dialog_SVG_print.cpp:209
 msgid "Create file "
 msgstr "Créer Fichier "
 
-#: pcbnew/dialog_SVG_print.cpp:208
+#: pcbnew/dialog_SVG_print.cpp:211
 msgid " error"
 msgstr " erreur"
 
@@ -5884,7 +5840,7 @@ msgstr "Net Code"
 msgid "Net Length"
 msgstr "Long. Net"
 
-#: pcbnew/dialog_print_for_modedit.cpp:202
+#: pcbnew/dialog_print_for_modedit.cpp:203
 msgid "Print Footprint"
 msgstr "Imprimer Module"
 
@@ -6239,7 +6195,7 @@ msgid "Setting libraries, directories and others..."
 msgstr "Sélectionner les librairies, répertoires et autres"
 
 #: pcbnew/menubar_pcbframe.cpp:376
-#: pcbnew/dialog_general_options.cpp:251
+#: pcbnew/dialog_general_options.cpp:222
 msgid "Hide &Layers Manager"
 msgstr "Cacher le &Gestionnaire de Couches"
 
@@ -6403,27 +6359,27 @@ msgstr "Curseur"
 msgid "Main cursor shape selection (small cross or large cursor)"
 msgstr "Sélection de l'aspect du curseur principal (petite croix ou grand curseur)"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:60
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:51
 msgid "Max Links:"
 msgstr "Liens max:"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:65
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:56
 msgid "Adjust the number of ratsnets shown from cursor to closest pads"
 msgstr "Ajuster le nombre de ratsnets montré du curseur aux pads les plus prêts"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:69
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:60
 msgid "Auto Save (minutes):"
 msgstr "Sauveg. Auto (minutes)"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:74
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:65
 msgid "Delay after the first change to create a backup file of the board on disk."
 msgstr "Délai après le premier changement pour créer un fichier de sauvegarde du circuit imprimé sur disque"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:83
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:74
 msgid "Drc ON"
 msgstr "Drc ACTIVE"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:86
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:77
 msgid ""
 "Enable/disable the DRC control.\n"
 "When DRC is disable, all connections are allowed."
@@ -6431,19 +6387,19 @@ msgstr ""
 "Active/désactive le contrôle DRC (Design Rule Check).\n"
 "Lorsque de DRC est désactivé, toutes les connexions sont autorisées."
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:90
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:81
 msgid "Show Ratsnest"
 msgstr "Montrer le chevelu général"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:92
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:83
 msgid "Show (or not) the full rastnest."
 msgstr "Montrer(ou non) le chevelu complet"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:96
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:87
 msgid "Show Mod Ratsnest"
 msgstr "Montrer le chevelu du module"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:98
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:89
 msgid ""
 "Shows (or not) the local ratsnest relative to a footprint, when moving it.\n"
 "This ratsnest is useful to place a footprint."
@@ -6451,64 +6407,64 @@ msgstr ""
 "Montre (ou non) le chevelu local relatif à un module, lorsque on le déplace.\n"
 "Ce chevelu est utile pour placer un module."
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:102
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:93
 msgid "Tracks Auto Del"
 msgstr "Auto Supp. Pistes"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:104
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:95
 msgid "Enable/disable the automatic track deletion when recreating a track."
 msgstr "Active/désactive l'effacement de piste automatique lorsque l'on recrée une piste."
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:108
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:99
 msgid "Track only 45 degrees"
 msgstr "Piste à 45° seulement"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:110
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:101
 msgid "If enabled, force tracks directions to H, V or 45 degrees, when creating a track."
 msgstr "Si activé, force la direction des pistes à H, V ou 45° en création de piste"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:114
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:105
 msgid "Segments 45 Only"
 msgstr "Segments 45° seulement"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:116
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:107
 msgid "If enabled, force segments directions to H, V or 45 degrees, when creating a segment on technical layers."
 msgstr "Si activé, force la direction des segments à H, V ou 45° en création de segments sur couches techniques"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:120
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:111
 msgid "Auto PAN"
 msgstr "Auto PAN"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:122
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:113
 msgid "Allows auto pan when creating a track, or moving an item."
 msgstr "Autorise l'autopan en création de piste, ou lorsque on déplace un élément."
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:126
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:117
 msgid "Double Segm Track"
 msgstr "2 segments pour piste"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:128
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:119
 msgid "If enabled, uses two track segments, with 45 degrees angle between them when creating a new track "
 msgstr "Si activé, utiliser 2 segments de piste, avec un angle de 45 degrés entre eux, pour créer une nouvelle piste"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:137
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:145
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:128
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:136
 msgid "When creating tracks"
 msgstr "En création de pistes"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:139
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:130
 msgid "Magnetic Pads"
 msgstr " Pads magnétiques"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:141
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:132
 msgid "control the capture of the pcb cursor when the mouse cursor enters a pad area"
 msgstr "Contrôle la capture du curseur pcb quand le curseur souris est sur un pad"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:147
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:138
 msgid "Magnetic Tracks"
 msgstr "Pistes Magnétiques"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:149
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:140
 msgid "Control the capture of the pcb cursor when the mouse cursor enters a track"
 msgstr "Contrôle la capture du curseur pcb quand le curseur souris passe sur une piste"
 
@@ -6746,27 +6702,23 @@ msgstr "Vias sur masque"
 msgid "Print/plot vias on mask layers. They are in this case not protected"
 msgstr "Trace vias sur vernis épargne. Elles seront non protégées"
 
-#: pcbnew/dialog_plot_base.cpp:174
-msgid "Line width"
-msgstr "Epaisseur ligne"
-
-#: pcbnew/dialog_plot_base.cpp:184
+#: pcbnew/dialog_plot_base.cpp:186
 msgid "X scale adjust"
 msgstr "Ajustage Echelle X"
 
-#: pcbnew/dialog_plot_base.cpp:193
+#: pcbnew/dialog_plot_base.cpp:195
 msgid "Y scale adjust"
 msgstr "Ajustage Echelle Y"
 
-#: pcbnew/dialog_plot_base.cpp:203
+#: pcbnew/dialog_plot_base.cpp:205
 msgid "Plot"
 msgstr "Tracer"
 
-#: pcbnew/dialog_plot_base.cpp:207
+#: pcbnew/dialog_plot_base.cpp:209
 msgid "Save Options"
 msgstr "Sauver Options"
 
-#: pcbnew/dialog_plot_base.cpp:210
+#: pcbnew/dialog_plot_base.cpp:212
 msgid "Generate drill file"
 msgstr "Créer Fichier de perçage"
 
@@ -6863,7 +6815,7 @@ msgstr "Mode d'affichage contraste normal"
 msgid "High contrast display mode"
 msgstr "Mode d'affichage haut contraste"
 
-#: pcbnew/dialog_general_options.cpp:254
+#: pcbnew/dialog_general_options.cpp:225
 msgid "Show &Layers Manager"
 msgstr "Affiche le &Gestionnaire de Couches"
 
@@ -6944,6 +6896,54 @@ msgstr "Pistes sur Couches Cuivre seulement"
 #: pcbnew/onleftclick.cpp:333
 msgid "Cotation not authorized on Copper layers"
 msgstr "Cotation non autorisée sur Couches Cuivre"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:23
+msgid "Graphics:"
+msgstr "Eléments graphiques;"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:25
+msgid "Graphic segm Width"
+msgstr "Epaisseur segm graphique"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:32
+msgid "Board Edges Width"
+msgstr "Epaiss. contour pcb"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:39
+msgid "Copper Text Width"
+msgstr "Epaisseur Texte sur cuivre"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:46
+msgid "Text Size V"
+msgstr "Hauteur texte"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:53
+msgid "Text Size H"
+msgstr "Largeur texte"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:63
+msgid "Modules:"
+msgstr "Modules: "
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:65
+msgid "Edges Module Width"
+msgstr "Epaiss. contour module"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:72
+msgid "Text Module Width"
+msgstr "Epaisseur Texte Module"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:79
+msgid "Text Module Size V"
+msgstr "Hauteur Texte Module"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:86
+msgid "Text Module Size H"
+msgstr "Largeur Texte Module"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:96
+msgid "General:"
+msgstr "Général :"
 
 #: eeschema/plotps.cpp:165
 msgid "Page Size A4"
@@ -7243,27 +7243,27 @@ msgstr "Description"
 msgid "Key words"
 msgstr "Mots clé"
 
-#: eeschema/schframe.cpp:358
+#: eeschema/schframe.cpp:359
 msgid "Schematic modified, Save before exit ?"
 msgstr "Schématique modifiée,  Sauver avant de quitter ?"
 
-#: eeschema/schframe.cpp:514
+#: eeschema/schframe.cpp:515
 msgid "Draw wires and buses in any direction"
 msgstr "Tracer les fils et bus avec direction quelconque"
 
-#: eeschema/schframe.cpp:515
+#: eeschema/schframe.cpp:516
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Autoriser fils et bus verticaux et horizontaux seulement"
 
-#: eeschema/schframe.cpp:525
+#: eeschema/schframe.cpp:526
 msgid "Do not show hidden pins"
 msgstr "Ne pas affichager les pins invisibles"
 
-#: eeschema/schframe.cpp:526
+#: eeschema/schframe.cpp:527
 msgid "Show hidden pins"
 msgstr "Force affichage des pins invisibles"
 
-#: eeschema/schframe.cpp:617
+#: eeschema/schframe.cpp:618
 msgid "Schematic"
 msgstr "Schématique"
 
@@ -7479,7 +7479,6 @@ msgid "key search criteria <"
 msgstr "critère de recherche par clé <"
 
 #: eeschema/database.cpp:65
-#: eeschema/selpart.cpp:78
 msgid "Select Component"
 msgstr "Sélection Composant"
 
@@ -10016,19 +10015,19 @@ msgstr "Imprimer en &noir et blanc seulement"
 msgid "Page Setup"
 msgstr "Options Page"
 
-#: eeschema/dialog_print_using_printer.cpp:241
+#: eeschema/dialog_print_using_printer.cpp:243
 msgid "Print Schematic"
 msgstr "Impression Schématique"
 
-#: eeschema/dialog_print_using_printer.cpp:246
+#: eeschema/dialog_print_using_printer.cpp:248
 msgid "An error occurred attempting to print the schematic."
 msgstr "Une erreur s'est produite lors de l'impression."
 
-#: eeschema/dialog_print_using_printer.cpp:247
+#: eeschema/dialog_print_using_printer.cpp:249
 msgid "Printing"
 msgstr "Impression"
 
-#: eeschema/dialog_print_using_printer.cpp:260
+#: eeschema/dialog_print_using_printer.cpp:262
 #, c-format
 msgid "Print page %d"
 msgstr "Imprimer page %d"
@@ -10054,6 +10053,16 @@ msgstr "oui"
 #, c-format
 msgid "arc only had %d parameters of the required 8"
 msgstr "l'arc a seulement %d paramètres sur les 8 requis"
+
+#: eeschema/classes_body_items.cpp:535
+#: eeschema/classes_body_items.cpp:795
+#: eeschema/classes_body_items.cpp:1022
+#: eeschema/classes_body_items.cpp:1274
+#: eeschema/classes_body_items.cpp:1691
+#: eeschema/classes_body_items.cpp:2061
+#: eeschema/class_BodyItem_Text.cpp:330
+msgid "Line width"
+msgstr "Epaisseur ligne"
 
 #: eeschema/classes_body_items.cpp:540
 #: eeschema/classes_body_items.cpp:804
@@ -10459,9 +10468,6 @@ msgstr "Taille du te&xte:"
 
 #: eeschema/dialog_sch_sheet_props_base.cpp:42
 #: eeschema/dialog_sch_sheet_props_base.cpp:63
-#: eeschema/dialog_lib_edit_pin_base.cpp:41
-#: eeschema/dialog_lib_edit_pin_base.cpp:64
-#: eeschema/dialog_lib_edit_pin_base.cpp:87
 msgid "units"
 msgstr "unités"
 
@@ -11177,7 +11183,7 @@ msgid "File <"
 msgstr "Fichier <"
 
 #: cvpcb/readschematicnetlist.cpp:115
-#: kicad/prjconfig.cpp:106
+#: kicad/prjconfig.cpp:108
 msgid "> not found"
 msgstr ">  non trouvé"
 
@@ -11426,16 +11432,16 @@ msgstr "Créer un Nouveau Projet"
 msgid "Open Existing Project"
 msgstr "Ouvrir un Projet  Existant"
 
-#: kicad/prjconfig.cpp:105
+#: kicad/prjconfig.cpp:107
 msgid "Kicad project file <"
 msgstr "Fichier projet Kicad <"
 
-#: kicad/prjconfig.cpp:119
+#: kicad/prjconfig.cpp:121
 #: kicad/kicad.cpp:74
 msgid "Working dir: "
 msgstr "Répertoire de travail: "
 
-#: kicad/prjconfig.cpp:120
+#: kicad/prjconfig.cpp:122
 #: kicad/kicad.cpp:75
 msgid ""
 "\n"
@@ -11443,10 +11449,6 @@ msgid ""
 msgstr ""
 "\n"
 "Projet: "
-
-#: kicad/kicad.cpp:102
-msgid "noname"
-msgstr "noname"
 
 #: kicad/files-io.cpp:50
 msgid "Unzip Project"
@@ -11636,15 +11638,11 @@ msgstr "Créer  un Nouveau Fichier"
 msgid "Create New Directory"
 msgstr "Créer un nouveau Répertoire"
 
-#: kicad/tree_project_frame.cpp:521
-msgid "noname."
-msgstr "noname."
-
-#: kicad/tree_project_frame.cpp:1055
+#: kicad/tree_project_frame.cpp:1057
 msgid "Change filename: "
 msgstr "Changer Nom Fichier: "
 
-#: kicad/tree_project_frame.cpp:1057
+#: kicad/tree_project_frame.cpp:1059
 msgid "Change filename"
 msgstr "Changer Nom Fichier"
 
@@ -12838,7 +12836,7 @@ msgstr "Propriétés du Pad"
 msgid "Footprint text properties"
 msgstr "Propriétés du texte du module"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.h:80
+#: pcbnew/dialog_general_options_BoardEditor_base.h:78
 msgid "General settings"
 msgstr "Options Générales"
 
@@ -13015,6 +13013,10 @@ msgstr "Options d'Affichage"
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "noname"
+#~ msgstr "noname"
+#~ msgid "noname."
+#~ msgstr "noname."
 #~ msgid "Pen Width Mini"
 #~ msgstr "Epaiss Plume Mini"
 #~ msgid "no kicad files found in this directory"

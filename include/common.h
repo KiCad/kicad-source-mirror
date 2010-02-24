@@ -29,6 +29,9 @@ class WinEDA_DrawPanel;
                                                      * flag for block commands
                                                      */
 
+// default name for nameless projects
+#define NAMELESS_PROJECT wxT("noname")
+
 #define NB_ITEMS 11
 
 /* Pseudo key codes for command panning */

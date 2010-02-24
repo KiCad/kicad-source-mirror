@@ -100,7 +100,9 @@ void WinEDA_MainFrame::OnLoadProject( wxCommandEvent& event )
     /* Check if project file exists and if it is not noname.pro */
     wxString filename = m_ProjectFileName.GetFullName();
 
-    if( !m_ProjectFileName.FileExists() && !filename.IsSameAs(wxT("noname.pro")))
+    wxString nameless_prj = NAMELESS_PROJECT;
+    nameless_prj += wxT(".pro");
+    if( !m_ProjectFileName.FileExists() && !filename.IsSameAs(nameless_prj))
     {
         DisplayError( this, _( "Kicad project file <" ) +
                       m_ProjectFileName.GetFullPath() + _( "> not found" ) );

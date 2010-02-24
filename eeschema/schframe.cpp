@@ -155,7 +155,8 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow*       father,
     m_TextFieldSize = DEFAULT_SIZE_TEXT;
     m_LibeditFrame  = NULL;         // Component editor frame.
     m_ViewlibFrame  = NULL;         // Frame for browsing component libraries
-    m_DefaultSchematicFileName = wxT( "noname.sch" );
+    m_DefaultSchematicFileName = NAMELESS_PROJECT;
+    m_DefaultSchematicFileName += wxT( ".sch" );
     m_ShowAllPins = false;
     m_previewPosition = wxDefaultPosition;
     m_previewSize = wxDefaultSize;

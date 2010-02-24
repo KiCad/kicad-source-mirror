@@ -55,6 +55,8 @@ static bool s_PlotOriginIsAuxAxis = FALSE;
 
 /* The group of plot options - sadly global XXX */
 PCB_Plot_Options g_pcb_plot_options;
+extern int g_DrawDefaultLineThickness;
+
 
 /*******************************/
 /* Dialog box for plot control */
@@ -140,12 +142,12 @@ void DIALOG_PLOT::Init_Dialog()
     BOARD*   board = m_Parent->GetBoard();
 
     m_Config->Read( OPTKEY_OUTPUT_FORMAT, &g_pcb_plot_options.PlotFormat );
-    m_Config->Read( OPTKEY_PLOT_LINEWIDTH_VALUE, &g_pcb_plot_options.PlotLine_Width );
     m_Config->Read( OPTKEY_EDGELAYER_GERBER, &g_pcb_plot_options.Exclude_Edges_Pcb );
     m_Config->Read( OPTKEY_XFINESCALE_ADJ, &m_XScaleAdjust );
     m_Config->Read( OPTKEY_YFINESCALE_ADJ, &m_YScaleAdjust );
 
     m_PlotFormatOpt->SetSelection( g_pcb_plot_options.PlotFormat );
+    g_pcb_plot_options.PlotLine_Width = g_DrawDefaultLineThickness;
 
 
     // Set units and value for HPGL pen speed.
@@ -455,6 +457,8 @@ void DIALOG_PLOT::SaveOptPlot( wxCommandEvent& event )
     msg = m_LinesWidth->GetValue();
     tmp = ReturnValueFromString( g_UnitMetric, msg, PCB_INTERNAL_UNIT );
     g_pcb_plot_options.PlotLine_Width = tmp;
+    g_DrawDefaultLineThickness = g_pcb_plot_options.PlotLine_Width;
+
 
     msg = m_FineAdjustXscaleOpt->GetValue();
     msg.ToDouble( &m_XScaleAdjust );
@@ -472,8 +476,6 @@ void DIALOG_PLOT::SaveOptPlot( wxCommandEvent& event )
 
     int formatNdx = m_PlotFormatOpt->GetSelection();
     m_Config->Write( OPTKEY_OUTPUT_FORMAT, formatNdx );
-    m_Config->Write( OPTKEY_PLOT_LINEWIDTH_VALUE,
-                     g_pcb_plot_options.PlotLine_Width );
 
     wxString layerKey;
     for( int layer = 0;  layer<NB_LAYERS;  ++layer )

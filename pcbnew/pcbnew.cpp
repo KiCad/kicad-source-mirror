@@ -31,10 +31,13 @@
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
+int g_DrawDefaultLineThickness = 60; /* Default line thickness in PCBNEW units used to
+                                     * draw/plot items having a
+                                     * default thickness line value (Frame references)
+                                     * (i.e. = 0 ). 0 = single pixel line width */
 
 bool Drc_On = true;
 bool g_AutoDeleteOldTrack = true;
-bool g_No_Via_Route;
 bool g_Drag_Pistes_On;
 bool g_Show_Module_Ratsnest;
 bool g_Show_Pads_Module_in_Move = true;
@@ -45,7 +48,6 @@ bool g_TwoSegmentTrackBuild = true;
 bool g_HighLight_Status;
 extern PARAM_CFG_BASE* ParamCfgList[];
 
-int Angle_Rot_Module;
 int ModuleSegmentWidth;
 int ModuleTextWidth;
 int Route_Layer_TOP;
@@ -77,7 +79,7 @@ IMPLEMENT_APP( WinEDA_App )
 void WinEDA_App::MacOpenFile(const wxString &fileName) {
     wxFileName    filename = fileName;
     WinEDA_PcbFrame * frame = ((WinEDA_PcbFrame*) GetTopWindow());
-  
+
     if(!filename.FileExists())
         return;
 
