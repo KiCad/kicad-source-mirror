@@ -64,6 +64,8 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS::~DIALOG_GRAPHIC_ITEMS_OPTIONS(  )
 
 void DIALOG_GRAPHIC_ITEMS_OPTIONS::initValues()
 {
+    SetFocus();
+
     /* Drawings width */
     AddUnitSymbol( *m_GraphicSegmWidthTitle );
     PutValueInLocalUnits( *m_OptPcbSegmWidth,
@@ -134,10 +136,10 @@ void DIALOG_GRAPHIC_ITEMS_OPTIONS::OnOkClick( wxCommandEvent& event )
         ReturnValueFromTextCtrl( *m_OptModuleTextVSize, PCB_INTERNAL_UNIT );
     ModuleTextSize.x =
         ReturnValueFromTextCtrl( *m_OptModuleTextHSize, PCB_INTERNAL_UNIT );
-    
+
     g_DrawDefaultLineThickness =
         ReturnValueFromTextCtrl( *m_DefaultPenSizeCtrl, PCB_INTERNAL_UNIT );
-    
+
     if( g_DrawDefaultLineThickness < 0 )
         g_DrawDefaultLineThickness = 0;
 
