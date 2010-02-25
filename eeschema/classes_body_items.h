@@ -482,8 +482,8 @@ public:
     /**
      * Set the pin number.
      *
-     * This will also all of the pin numbers marked by EnableEditMode().
-     *
+     * Others pin numbers marked by EnableEditMode() are not modified
+     * because each pin has its own number
      * @param aNumber - New pin number.
      */
     void SetNumber( const wxString& aNumber );

@@ -80,7 +80,8 @@ void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
     dialog.EnableApplyToAllUnits( component && component->GetPartCount() > 1 );
     dialog.SetApplyToAllConversions( !m_drawSpecificConvert );
     dialog.EnableApplyToAllConversions( component && component->HasConversion() );
-    dialog.SetFillStyle( m_drawFillStyle );
+//    dialog.SetFillStyle( m_drawFillStyle );   // could better to show the current setting
+    dialog.SetFillStyle( DrawItem->m_Fill);
     dialog.EnableFillStyle( DrawItem->IsFillable() );
 
     if( dialog.ShowModal() == wxID_CANCEL )
@@ -92,8 +93,15 @@ void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
     m_drawSpecificConvert = !dialog.GetApplyToAllConversions();
     m_drawSpecificUnit    = !dialog.GetApplyToAllUnits();
 
+#if 0
+    /* TODO: see if m_drawFillStyle must retain the last fill option or not.
+     * if the last is Filled, having next new graphic items created
+     * with filled body is often bad.
+     * currently m_drawFillStyle is left with the defualt value (not filled)
+     */
     if( DrawItem->IsFillable() )
         m_drawFillStyle = (FILL_T) dialog.GetFillStyle();
+#endif
 
     // Save copy for undo is done before place.
     if( !( DrawItem->m_Flags & IS_NEW ) )
@@ -110,7 +118,7 @@ void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
         DrawItem->m_Convert = 0;
 
     if( DrawItem->IsFillable() )
-        DrawItem->m_Fill = m_drawFillStyle;
+        DrawItem->m_Fill = (FILL_T) dialog.GetFillStyle();
 
     DrawItem->SetWidth( m_drawLineWidth );
 

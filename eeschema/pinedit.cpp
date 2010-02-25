@@ -252,7 +252,8 @@ another pin. Continue?" ) );
         LastPinOrient = CurrentPin->m_Orient;
         LastPinType   = CurrentPin->m_PinType;
         LastPinShape  = CurrentPin->m_PinShape;
-        CreateImagePins( CurrentPin, m_unit, m_convert, m_showDeMorgan );
+        if( !g_EditPinByPinIsOn )
+            CreateImagePins( CurrentPin, m_unit, m_convert, m_showDeMorgan );
         m_lastDrawItem = CurrentPin;
         m_component->AddDrawItem( m_drawItem );
     }

@@ -63,7 +63,6 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	// Cell Defaults
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_grid->SetToolTip( _("Net Class parameters") );
-	m_grid->SetMinSize( wxSize( -1,150 ) );
 	
 	sbSizer1->Add( m_grid, 1, wxEXPAND, 5 );
 	
@@ -73,21 +72,21 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_addButton = new wxButton( m_panelNetClassesEditor, wxID_ADD_NETCLASS, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_addButton->SetToolTip( _("Add another Net Class") );
 	
-	buttonBoxSizer->Add( m_addButton, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
+	buttonBoxSizer->Add( m_addButton, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_removeButton = new wxButton( m_panelNetClassesEditor, wxID_REMOVE_NETCLASS, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_removeButton->SetToolTip( _("Remove the currently select Net Class\nThe default Net Class cannot be removed") );
 	
-	buttonBoxSizer->Add( m_removeButton, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
+	buttonBoxSizer->Add( m_removeButton, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_moveUpButton = new wxButton( m_panelNetClassesEditor, wxID_ANY, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_moveUpButton->SetToolTip( _("Move the currently selected Net Class up one row") );
 	
-	buttonBoxSizer->Add( m_moveUpButton, 0, wxRIGHT|wxLEFT, 5 );
+	buttonBoxSizer->Add( m_moveUpButton, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	sbSizer1->Add( buttonBoxSizer, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
 	
-	bpanelNetClassesSizer->Add( sbSizer1, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bpanelNetClassesSizer->Add( sbSizer1, 1, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer4;
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( m_panelNetClassesEditor, wxID_ANY, _("Membership:") ), wxHORIZONTAL );
@@ -368,15 +367,19 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	
 	sbSizer2->Add( m_MessagesList, 1, wxEXPAND, 5 );
 	
-	bMainSizer->Add( sbSizer2, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	wxBoxSizer* bSizerButtons;
+	bSizerButtons = new wxBoxSizer( wxVERTICAL );
 	
-	m_sdbButtonsSizer = new wxStdDialogButtonSizer();
-	m_sdbButtonsSizerOK = new wxButton( this, wxID_OK );
-	m_sdbButtonsSizer->AddButton( m_sdbButtonsSizerOK );
-	m_sdbButtonsSizerCancel = new wxButton( this, wxID_CANCEL );
-	m_sdbButtonsSizer->AddButton( m_sdbButtonsSizerCancel );
-	m_sdbButtonsSizer->Realize();
-	bMainSizer->Add( m_sdbButtonsSizer, 0, wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
+	m_buttonOk = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonOk->SetDefault(); 
+	bSizerButtons->Add( m_buttonOk, 0, wxALL|wxEXPAND, 5 );
+	
+	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerButtons->Add( m_buttonCancel, 0, wxALL|wxEXPAND, 5 );
+	
+	sbSizer2->Add( bSizerButtons, 0, 0, 5 );
+	
+	bMainSizer->Add( sbSizer2, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
@@ -393,8 +396,8 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_buttonLeftSelAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnLeftSelectAllButton ), NULL, this );
 	m_buttonRightSelAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnRightSelectAllButton ), NULL, this );
 	m_rightClassChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnRightCBSelection ), NULL, this );
-	m_sdbButtonsSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnCancelButtonClick ), NULL, this );
-	m_sdbButtonsSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnOkButtonClick ), NULL, this );
+	m_buttonOk->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnOkButtonClick ), NULL, this );
+	m_buttonCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnCancelButtonClick ), NULL, this );
 }
 
 DIALOG_DESIGN_RULES_BASE::~DIALOG_DESIGN_RULES_BASE()
@@ -411,6 +414,6 @@ DIALOG_DESIGN_RULES_BASE::~DIALOG_DESIGN_RULES_BASE()
 	m_buttonLeftSelAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnLeftSelectAllButton ), NULL, this );
 	m_buttonRightSelAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnRightSelectAllButton ), NULL, this );
 	m_rightClassChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnRightCBSelection ), NULL, this );
-	m_sdbButtonsSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnCancelButtonClick ), NULL, this );
-	m_sdbButtonsSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnOkButtonClick ), NULL, this );
+	m_buttonOk->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnOkButtonClick ), NULL, this );
+	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DESIGN_RULES_BASE::OnCancelButtonClick ), NULL, this );
 }

@@ -218,22 +218,10 @@ void LIB_PIN::SetNumber( const wxString& number )
     {
         m_Flags |= IS_CHANGED;
     }
-
-    if( GetParent() == NULL )
-        return;
-
-    LIB_PIN_LIST pinList;
-    GetParent()->GetPins( pinList );
-
-    for( size_t i = 0; i < pinList.size(); i++ )
-    {
-        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0
-            || pinList[i]->m_PinNum == m_PinNum )
-            continue;
-
-        pinList[i]->m_PinNum = m_PinNum;
-        pinList[i]->m_Flags |= IS_CHANGED;
-    }
+    
+    /* Others pin numbers marked by EnableEditMode() are not modified
+     * because each pin has its own number
+     */
 }
 
 
@@ -480,7 +468,7 @@ void LIB_PIN::EnableEditMode( bool enable, bool editPinByPin )
         if( ( pinList[i]->m_Pos == m_Pos )
             && ( pinList[i]->m_Orient == m_Orient )
             && ( !( m_Flags & IS_NEW ) )
-            && !editPinByPin == false
+            && editPinByPin == false
             && enable )
             pinList[i]->m_Flags |= IS_LINKED | IN_EDIT;
         else

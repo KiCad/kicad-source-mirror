@@ -87,9 +87,8 @@ class DIALOG_DESIGN_RULES_BASE : public wxDialog
 		wxStaticText* m_staticText8;
 		wxGrid* m_gridTrackWidthList;
 		wxHtmlWindow* m_MessagesList;
-		wxStdDialogButtonSizer* m_sdbButtonsSizer;
-		wxButton* m_sdbButtonsSizerOK;
-		wxButton* m_sdbButtonsSizerCancel;
+		wxButton* m_buttonOk;
+		wxButton* m_buttonCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnNetClassesNameLeftClick( wxGridEvent& event ){ event.Skip(); }
@@ -103,12 +102,12 @@ class DIALOG_DESIGN_RULES_BASE : public wxDialog
 		virtual void OnLeftSelectAllButton( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnRightSelectAllButton( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnRightCBSelection( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCancelButtonClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnOkButtonClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnCancelButtonClick( wxCommandEvent& event ){ event.Skip(); }
 		
 	
 	public:
-		DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Design Rules Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 900,640 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Design Rules Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 777,640 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_DESIGN_RULES_BASE();
 	
 };
