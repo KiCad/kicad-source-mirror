@@ -1,4 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
+
 // Name:     build_BOM.cpp
 // Purpose:
 // Author:   jean-pierre Charras
@@ -95,10 +96,10 @@ void DIALOG_BUILD_BOM::Create_BOM_Lists( int  aTypeFile,
 
     m_ListFileName = g_RootSheet->m_AssociatedScreen->m_FileName;
     fn = m_ListFileName;
-	if( aTypeFile == 2 )
-    	fn.SetExt( CsvFileExtension );
-	else
-    	fn.SetExt( BomFileExtension );
+    if( aTypeFile == 2 )
+        fn.SetExt( CsvFileExtension );
+    else
+        fn.SetExt( BomFileExtension );
 
     wxFileDialog dlg( this, _( "Bill of Materials" ), fn.GetPath(),
                       fn.GetFullName(), BomFileWildcard,
@@ -111,17 +112,20 @@ void DIALOG_BUILD_BOM::Create_BOM_Lists( int  aTypeFile,
 
     /* Close dialog, then show the list (if so requested) */
 
-    switch( aTypeFile ) {
-	case 0: // list
+    switch( aTypeFile )
+    {
+    case 0: // list
         GenereListeOfItems( m_ListFileName, aIncludeSubComponents );
-		break;
-	case 1:	// speadsheet
+        break;
+
+    case 1: // speadsheet
         CreateExportList( m_ListFileName, aIncludeSubComponents );
-		break;
-	case 2: // Single Part per line
+        break;
+
+    case 2: // Single Part per line
         CreatePartsList( m_ListFileName );
-		break;
-	}
+        break;
+    }
 
     EndModal( 1 );
 
@@ -134,6 +138,12 @@ void DIALOG_BUILD_BOM::Create_BOM_Lists( int  aTypeFile,
     }
 }
 
+
+/*
+ * Print a list of components, in a form which can be imported by a spreadsheet
+ * form is:
+ * cmp value; number of components; <footprint>; field1; field2; field3; list of references having the same value
+ */
 void DIALOG_BUILD_BOM::CreatePartsList( const wxString& aFullFileName )
 {
     FILE*    f;
@@ -152,10 +162,11 @@ void DIALOG_BUILD_BOM::CreatePartsList( const wxString& aFullFileName )
 
     /*  sort component list */
     sort( cmplist.begin(), cmplist.end(), SortComponentsByValue );
-    PrintComponentsListByPart( f, cmplist);
+    PrintComponentsListByPart( f, cmplist );
 
     fclose( f );
 }
+
 
 /*
  * Print a list of components, in a form which can be imported by a spreadsheet
@@ -250,8 +261,9 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
         if( m_GenListLabelsbySheet->GetValue() )
         {
             sort( listOfLabels.begin(), listOfLabels.end(), SortLabelsBySheet );
-            msg.Printf( _( "\n#Global, Hierarchical Labels and PinSheets \
-( order = Sheet Number ) count = %d\n" ),
+            msg.Printf( _(
+                            "\n#Global, Hierarchical Labels and PinSheets \
+( order = Sheet Number ) count = %d\n"                                                                              ),
                         itemCount );
             fprintf( f, "%s", CONV_TO_UTF8( msg ) );
             PrintListeGLabel( f, listOfLabels );
@@ -261,8 +273,9 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
         {
             sort( listOfLabels.begin(), listOfLabels.end(), SortLabelsByValue );
 
-            msg.Printf( _( "\n#Global, Hierarchical Labels and PinSheets ( \
-order = Alphab. ) count = %d\n\n" ),
+            msg.Printf( _(
+                            "\n#Global, Hierarchical Labels and PinSheets ( \
+order = Alphab. ) count = %d\n\n"                                                                                ),
                         itemCount );
             fprintf( f, "%s", CONV_TO_UTF8( msg ) );
             PrintListeGLabel( f, listOfLabels );
@@ -292,11 +305,11 @@ void BuildComponentsListFromSchematic( std::vector <OBJ_CMP_TO_LIST>& aList )
     SCH_SHEET_LIST  SheetList;
 
     for( sheet = SheetList.GetFirst();
-         sheet != NULL;
-         sheet = SheetList.GetNext() )
+        sheet != NULL;
+        sheet = SheetList.GetNext() )
     {
         for( SchItem = sheet->LastDrawList(); SchItem;
-             SchItem = SchItem->Next() )
+            SchItem = SchItem->Next() )
         {
             if( SchItem->Type() != TYPE_SCH_COMPONENT )
                 continue;
@@ -446,14 +459,14 @@ bool SortLabelsByValue( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 )
     wxString* Text1, * Text2;
 
     if( obj1.m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
-        Text1 = &( (SCH_SHEET_PIN*) (obj1.m_Label) )->m_Text;
+        Text1 = &( (SCH_SHEET_PIN*)(obj1.m_Label) )->m_Text;
     else
-        Text1 = &( (SCH_TEXT*) (obj1.m_Label) )->m_Text;
+        Text1 = &( (SCH_TEXT*)(obj1.m_Label) )->m_Text;
 
     if( obj2.m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
-        Text2 = &( (SCH_SHEET_PIN*) (obj2.m_Label) )->m_Text;
+        Text2 = &( (SCH_SHEET_PIN*)(obj2.m_Label) )->m_Text;
     else
-        Text2 = &( (SCH_TEXT*) (obj2.m_Label) )->m_Text;
+        Text2 = &( (SCH_TEXT*)(obj2.m_Label) )->m_Text;
 
     ii = Text1->CmpNoCase( *Text2 );
 
@@ -554,12 +567,12 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
         if( CompactForm )
         {
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
-                     CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
+                    CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
         }
         else
         {
             fprintf( f, "; %-12s",
-                     CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
+                    CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
         }
     }
 
@@ -581,12 +594,13 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
 
         if( CompactForm )
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
-                     CONV_TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
+                    CONV_TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
         else
             fprintf( f, "; %-12s",
-                     CONV_TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
+                    CONV_TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
     }
 }
+
 
 /* Print the B.O.M sorted by reference
  */
@@ -620,7 +634,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 
         // Print comment line:
 #if defined(KICAD_GOST)
-        fprintf( f, "ref%cvalue%cdatasheet", s_ExportSeparatorSymbol,s_ExportSeparatorSymbol );
+        fprintf( f, "ref%cvalue%cdatasheet", s_ExportSeparatorSymbol, s_ExportSeparatorSymbol );
 #else
         fprintf( f, "ref%cvalue", s_ExportSeparatorSymbol );
 #endif
@@ -681,8 +695,12 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 
         if( ( Multi > 1 ) && aIncludeSubComponents )
 #if defined(KICAD_GOST)
+
+
             Unit = aList[ii].m_Unit + '1' - 1;
 #else
+
+
             Unit = aList[ii].m_Unit + 'A' - 1;
 #endif
 
@@ -692,21 +710,31 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 
         if( CompactForm )
 #if defined(KICAD_GOST)
+
+
             fprintf( f, "%s%c%s%c%s", CmpName, s_ExportSeparatorSymbol,
-                     CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ), s_ExportSeparatorSymbol,
-                     CONV_TO_UTF8( DrawLibItem->GetField( DATASHEET )->m_Text ) );
+                    CONV_TO_UTF8( DrawLibItem->GetField(
+                                      VALUE )->m_Text ), s_ExportSeparatorSymbol,
+                    CONV_TO_UTF8( DrawLibItem->GetField( DATASHEET )->m_Text ) );
 #else
+
+
             fprintf( f, "%s%c%s", CmpName, s_ExportSeparatorSymbol,
-                     CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
+                    CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
 #endif
 
         else
 #if defined(KICAD_GOST)
+
+
             fprintf( f, "| %-10s %-12s %-20s", CmpName,
-                     CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ), CONV_TO_UTF8( DrawLibItem->GetField( DATASHEET )->m_Text ) );
+                    CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ),
+                    CONV_TO_UTF8( DrawLibItem->GetField( DATASHEET )->m_Text ) );
 #else
+
+
             fprintf( f, "| %-10s %-12s", CmpName,
-                     CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
+                    CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
 #endif
 
 
@@ -716,12 +744,12 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
             if( CompactForm )
             {
                 fprintf( f, "%c%s", s_ExportSeparatorSymbol,
-                         CONV_TO_UTF8( msg ) );
+                        CONV_TO_UTF8( msg ) );
                 msg = m_Parent->GetXYSheetReferences(
                     (BASE_SCREEN*) DrawLibItem->GetParent(),
                     DrawLibItem->m_Pos );
                 fprintf( f, "%c%s)", s_ExportSeparatorSymbol,
-                         CONV_TO_UTF8( msg ) );
+                        CONV_TO_UTF8( msg ) );
             }
             else
             {
@@ -748,26 +776,35 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 }
 
 
+/* Bom Output format option - single part per line
+ *  a common part being defined as have a common value.
+ *  This is true for most designs but will produce an
+ *  incorrect output if two or more parts with the same
+ *  value have different footprints, tolerances, voltage
+ *  rating, etc.  Also usefull if the following fields
+ *  are edited:
+ *   FIELD1 - manufacture
+ *   FIELD2 - manufacture part number
+ *   FIELD3 - distributor part number
+ */
 int DIALOG_BUILD_BOM::PrintComponentsListByPart(
     FILE*                          f,
     std::vector <OBJ_CMP_TO_LIST>& aList )
 {
-	int				qty = 1 ;
+    int             qty = 1;
     char            RefName[80];
     char            ValName[80];
     char            NxtName[80];
     char            RNames[1000];
-	const char 		*	Field[15];
+    wxArrayString   cmpFields;
     EDA_BaseStruct* DrawList;
     EDA_BaseStruct* NxtList;
     SCH_COMPONENT*  DrawLibItem;
     SCH_COMPONENT*  NxtLibItem;
-	int				jj;
+    int             jj;
 
-	strcpy(NxtName, "");
-	strcpy(RNames, "");
-	for( jj=0; jj<15; jj++ )
-		Field[jj] = NULL; 
+    strcpy( NxtName, "" );
+    strcpy( RNames, "" );
 
     for( unsigned ii = 0; ii < aList.size(); ii++ )
     {
@@ -780,53 +817,64 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
             continue;
         DrawLibItem = (SCH_COMPONENT*) DrawList;
 
-		for( unsigned ij = ii+1 ; ij < aList.size(); ij++ ){
-        	NxtList = aList[ij].m_RootCmp;
-        	if( NxtList == NULL )
-          		continue;
-        	if( NxtList->Type() != TYPE_SCH_COMPONENT )
-           	 	continue;
-        	if( aList[ij].m_Reference[0] == '#' )
-            	continue;
-        	NxtLibItem = (SCH_COMPONENT*) NxtList;
-			break;
-		}
+        NxtLibItem = NULL;
+        for( unsigned ij = ii + 1; ij < aList.size(); ij++ )
+        {
+            NxtList = aList[ij].m_RootCmp;
+            if( NxtList == NULL )
+                continue;
+            if( NxtList->Type() != TYPE_SCH_COMPONENT )
+                continue;
+            if( aList[ij].m_Reference[0] == '#' )
+                continue;
+            NxtLibItem = (SCH_COMPONENT*) NxtList;
+            break;
+        }
 
         sprintf( RefName, "%s", aList[ii].m_Reference );
         sprintf( ValName, "%s", CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
-        sprintf( NxtName, "%s", CONV_TO_UTF8( NxtLibItem->GetField( VALUE )->m_Text ) );
-   		for( jj = FIELD1; jj < DrawLibItem->GetFieldCount(); jj++ ) {
-			if( Field[jj] == NULL || *Field[jj] == 0 )
-				Field[jj] = CONV_TO_UTF8( DrawLibItem->GetField( jj )->m_Text );
-		}
+        if( NxtLibItem )
+            sprintf( NxtName, "%s", CONV_TO_UTF8( NxtLibItem->GetField( VALUE )->m_Text ) );
 
-		if( !strcmp( NxtName, ValName ) ) {
-			qty++;
-			strcat(RNames, ", ");
-			strcat(RNames, RefName);
-			continue;
-		}
+        // Store fields. try to store non empty fields.
+        if( cmpFields.GetCount() < DrawLibItem->GetFieldCount() )
+            cmpFields.Alloc(DrawLibItem->GetFieldCount());
+        for( jj = FIELD1; jj < DrawLibItem->GetFieldCount(); jj++ )
+        {
+            if( cmpFields[jj].IsEmpty() )
+                cmpFields[jj] = DrawLibItem->GetField( jj )->m_Text;
+        }
+
+        if( !strcmp( NxtName, ValName ) )
+        {
+            qty++;
+            strcat( RNames, ", " );
+            strcat( RNames, RefName );
+            continue;
+        }
 
         fprintf( f, "%-15s%c%-3d", ValName, s_ExportSeparatorSymbol, qty );
-		qty = 1;
+        qty = 1;
 
-    	if( m_AddFootprintField->IsChecked() )
-       		 fprintf( f, "%c%-16s", s_ExportSeparatorSymbol,
-                     CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
+        if( m_AddFootprintField->IsChecked() )
+            fprintf( f, "%c%-16s", s_ExportSeparatorSymbol,
+                    CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
 
-        fprintf( f, "%c%-20s", s_ExportSeparatorSymbol, Field[FIELD1] );
-        fprintf( f, "%c%-20s", s_ExportSeparatorSymbol, Field[FIELD2] );
-        fprintf( f, "%c%-20s", s_ExportSeparatorSymbol, Field[FIELD3] );
-   		for( jj = FIELD1; jj < DrawLibItem->GetFieldCount(); jj++ ) 
-			Field[jj] = NULL; 
+        fprintf( f, "%c%-20s", s_ExportSeparatorSymbol, CONV_TO_UTF8( cmpFields[FIELD1]) );
+        fprintf( f, "%c%-20s", s_ExportSeparatorSymbol, CONV_TO_UTF8( cmpFields[FIELD2]) );
+        fprintf( f, "%c%-20s", s_ExportSeparatorSymbol, CONV_TO_UTF8( cmpFields[FIELD3]) );
 
-        fprintf( f, "%c%s%s", s_ExportSeparatorSymbol, RefName, RNames ); 
-		strcpy(RNames, "");
+        cmpFields.Clear();
+
+        fprintf( f, "%c%s%s", s_ExportSeparatorSymbol, RefName, RNames );
+        strcpy( RNames, "" );
 
         fputs( "\n", f );
-	}
+    }
+
     return 0;
 }
+
 
 int DIALOG_BUILD_BOM::PrintComponentsListByVal(
     FILE*                          f,
@@ -919,7 +967,7 @@ static int PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList )
         {
         case TYPE_SCH_HIERLABEL:
         case TYPE_SCH_GLOBALLABEL:
-            DrawTextItem = (SCH_LABEL*) (aList[ii].m_Label);
+            DrawTextItem = (SCH_LABEL*)(aList[ii].m_Label);
 
             if( aList[ii].m_LabelType == TYPE_SCH_HIERLABEL )
                 labeltype = wxT( "Hierarchical" );
