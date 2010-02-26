@@ -179,6 +179,11 @@ public:
      */
     virtual void SaveSettings();
 
+    /** function SetLanguage
+     * called on a language menu selection
+     */
+    virtual void SetLanguage( wxCommandEvent& event );
+    
     void         Process_Special_Functions( wxCommandEvent& event );
     void         RedrawActiveWindow( wxDC* DC, bool EraseBg );
     void         ReCreateHToolbar();

@@ -99,6 +99,9 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( WinEDA_PcbFrame* aParent, wxWindow* aFocusOw
 
     AppendRenderRows( renderRows, DIM(renderRows) );
 
+    // Update default tabs labels for gerbview
+    SetLayersManagerTabsText( );
+
     //-----<Popup menu>-------------------------------------------------
     // handle the popup menu over the layer window.
     m_LayerScrolledWindow->Connect( wxEVT_RIGHT_DOWN,
@@ -194,6 +197,16 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         }
         break;
     }
+}
+
+/** Function SetLayersManagerTabsText
+ * Update the layer manager tabs labels
+ * Useful when changing Language or to set labels to a non default value
+ */
+void PCB_LAYER_WIDGET::SetLayersManagerTabsText( )
+{
+    m_notebook->SetPageText(0, _("Layer") );
+    m_notebook->SetPageText(1, _("Render") );
 }
 
 

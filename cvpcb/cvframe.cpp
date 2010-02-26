@@ -506,14 +506,12 @@ void WinEDA_CvpcbFrame::DisplayModule( wxCommandEvent& event )
 }
 
 
+/** Vitual function SetLanguage
+ * called on a language menu selection
+ */
 void WinEDA_CvpcbFrame::SetLanguage( wxCommandEvent& event )
 {
-    int id = event.GetId();
-
-    wxGetApp().SetLanguageIdentifier( id );
-    wxGetApp().SetLanguage();
-    ReCreateMenuBar();
-    Refresh();
+    WinEDA_BasicFrame::SetLanguage( event );
 }
 
 

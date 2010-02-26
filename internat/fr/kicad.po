@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-24 17:18+0100\n"
-"PO-Revision-Date: 2010-02-24 17:18+0100\n"
+"POT-Creation-Date: 2010-02-26 16:50+0100\n"
+"PO-Revision-Date: 2010-02-26 16:50+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -390,7 +390,7 @@ msgstr "Longueur"
 
 #: pcbnew/muonde.cpp:233
 msgid "Length(mm):"
-msgstr "Long. (mm):"
+msgstr "Longueur (mm):"
 
 #: pcbnew/muonde.cpp:241
 #: pcbnew/muonde.cpp:697
@@ -1309,6 +1309,7 @@ msgid "Failed to create "
 msgstr "Impossible de créer  fichier "
 
 #: pcbnew/pcbframe.cpp:337
+#: pcbnew/pcbframe.cpp:628
 msgid "Visibles"
 msgstr "Visibles"
 
@@ -1948,7 +1949,7 @@ msgstr "Nb Segms"
 msgid "Error: Unexpected end of file !"
 msgstr "Erreur: Fin de fichier inattendue !"
 
-#: pcbnew/pcbnew.cpp:109
+#: pcbnew/pcbnew.cpp:113
 msgid "Pcbnew is already running, Continue?"
 msgstr "Pcbnew est en cours d'exécution. Continuer ?"
 
@@ -2230,75 +2231,79 @@ msgstr "Références"
 msgid "Show footprint's references"
 msgstr "Afficher les références des modules"
 
-#: pcbnew/class_pcb_layer_widget.cpp:140
+#: pcbnew/class_pcb_layer_widget.cpp:143
 msgid "Show All Cu"
 msgstr "Afficher toutes couches cuivre"
 
-#: pcbnew/class_pcb_layer_widget.cpp:143
+#: pcbnew/class_pcb_layer_widget.cpp:146
 msgid "Hide All Cu"
 msgstr "Cacher Cu"
 
-#: pcbnew/class_pcb_layer_widget.cpp:217
+#: pcbnew/class_pcb_layer_widget.cpp:209
+msgid "Render"
+msgstr "Autre"
+
+#: pcbnew/class_pcb_layer_widget.cpp:230
 msgid "Front copper layer"
 msgstr "Couche cuivre dessus"
 
-#: pcbnew/class_pcb_layer_widget.cpp:225
+#: pcbnew/class_pcb_layer_widget.cpp:238
 msgid "An innner copper layer"
 msgstr "Couche interne"
 
-#: pcbnew/class_pcb_layer_widget.cpp:233
+#: pcbnew/class_pcb_layer_widget.cpp:246
 msgid "Back copper layer"
 msgstr "Couche cuivre dessous"
 
-#: pcbnew/class_pcb_layer_widget.cpp:241
+#: pcbnew/class_pcb_layer_widget.cpp:254
 msgid "Adhesive on board's front"
 msgstr "Afficher couche adhésive situés sur le dessus du circuit imprimé"
 
-#: pcbnew/class_pcb_layer_widget.cpp:242
+#: pcbnew/class_pcb_layer_widget.cpp:255
 msgid "Adhesive on board's back"
 msgstr "Couche adhésive sur le dessous du circuit imprimé"
 
-#: pcbnew/class_pcb_layer_widget.cpp:243
+#: pcbnew/class_pcb_layer_widget.cpp:256
 msgid "Solder paste on board's front"
 msgstr "Couche de pâte à souder sur dessus du circuit imprimé"
 
-#: pcbnew/class_pcb_layer_widget.cpp:244
+#: pcbnew/class_pcb_layer_widget.cpp:257
 msgid "Solder paste on board's back"
 msgstr "Couche de pâte à souder sur dessous du circuit imprimé"
 
-#: pcbnew/class_pcb_layer_widget.cpp:245
+#: pcbnew/class_pcb_layer_widget.cpp:258
 msgid "Silkscreen on board's front"
 msgstr "Sérigraphie sur le dessus du circuit imprimé"
 
-#: pcbnew/class_pcb_layer_widget.cpp:246
+#: pcbnew/class_pcb_layer_widget.cpp:259
 msgid "Silkscreen on board's back"
 msgstr "Sérigraphie sur le dessous du circuit imprimé "
 
-#: pcbnew/class_pcb_layer_widget.cpp:247
+#: pcbnew/class_pcb_layer_widget.cpp:260
 msgid "Solder mask on board's front"
 msgstr "Couche masque soudure sur le dessus du circuit imprimé"
 
-#: pcbnew/class_pcb_layer_widget.cpp:248
+#: pcbnew/class_pcb_layer_widget.cpp:261
 msgid "Solder mask on board's back"
 msgstr "Couche masque soudure sur le dessous du circuit imprimé"
 
-#: pcbnew/class_pcb_layer_widget.cpp:249
+#: pcbnew/class_pcb_layer_widget.cpp:262
 msgid "Explanatory drawings"
 msgstr "Couche dessins explicatifs"
 
-#: pcbnew/class_pcb_layer_widget.cpp:250
+#: pcbnew/class_pcb_layer_widget.cpp:263
 msgid "Explanatory comments"
 msgstr "Couche commentaires"
 
-#: pcbnew/class_pcb_layer_widget.cpp:251
+#: pcbnew/class_pcb_layer_widget.cpp:264
 msgid "TDB"
 msgstr ""
 
-#: pcbnew/class_pcb_layer_widget.cpp:252
+#: pcbnew/class_pcb_layer_widget.cpp:265
 msgid "TBD"
 msgstr ""
 
-#: pcbnew/class_pcb_layer_widget.cpp:253
+#: pcbnew/class_pcb_layer_widget.cpp:266
 msgid "Board's perimeter definition"
 msgstr "Couche de définition des contours du circuit imprimé"
 
@@ -3808,7 +3813,7 @@ msgstr "SoldP_Dessus"
 
 #: pcbnew/class_board.cpp:235
 msgid "SilkS_Back"
-msgstr "Sérig_Dessous"
+msgstr "Sérigr_Dessous"
 
 #: pcbnew/class_board.cpp:236
 msgid "SilkS_Front"
@@ -4370,7 +4375,7 @@ msgstr ""
 
 #: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:36
 #: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:83
-#: pcbnew/dialog_design_rules_base.cpp:73
+#: pcbnew/dialog_design_rules_base.cpp:72
 msgid "Add"
 msgstr "Ajouter"
 
@@ -4389,7 +4394,7 @@ msgstr "Ajouter une nouvelle librairie avant la librairie sélectionnée, et la 
 
 #: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:46
 #: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:89
-#: pcbnew/dialog_design_rules_base.cpp:78
+#: pcbnew/dialog_design_rules_base.cpp:77
 msgid "Remove"
 msgstr "Enlever"
 
@@ -4489,11 +4494,11 @@ msgstr "Défaut"
 msgid "Net Class parameters"
 msgstr "Paramètres de NeClass"
 
-#: pcbnew/dialog_design_rules_base.cpp:74
+#: pcbnew/dialog_design_rules_base.cpp:73
 msgid "Add another Net Class"
 msgstr "Ajouter une autre NetClass"
 
-#: pcbnew/dialog_design_rules_base.cpp:79
+#: pcbnew/dialog_design_rules_base.cpp:78
 msgid ""
 "Remove the currently select Net Class\n"
 "The default Net Class cannot be removed"
@@ -4501,71 +4506,71 @@ msgstr ""
 "Supprimer la NetClasse sélectionnée\n"
 "La Netclasse Défaut ne peut être supprimée"
 
-#: pcbnew/dialog_design_rules_base.cpp:83
+#: pcbnew/dialog_design_rules_base.cpp:82
 msgid "Move Up"
 msgstr "Vers le haut ^"
 
-#: pcbnew/dialog_design_rules_base.cpp:84
+#: pcbnew/dialog_design_rules_base.cpp:83
 msgid "Move the currently selected Net Class up one row"
 msgstr "Déplacer la NetClassl sélectionné de une ligne vers le haut"
 
-#: pcbnew/dialog_design_rules_base.cpp:93
+#: pcbnew/dialog_design_rules_base.cpp:92
 msgid "Membership:"
 msgstr "Membres:"
 
-#: pcbnew/dialog_design_rules_base.cpp:113
+#: pcbnew/dialog_design_rules_base.cpp:112
 msgid "<<<"
 msgstr "<<<"
 
-#: pcbnew/dialog_design_rules_base.cpp:114
+#: pcbnew/dialog_design_rules_base.cpp:113
 msgid "Move the selected nets in the right list to the left list"
 msgstr "Déplacer les nets sélectionnés de la liste droite vers la liste gauche"
 
-#: pcbnew/dialog_design_rules_base.cpp:118
+#: pcbnew/dialog_design_rules_base.cpp:117
 msgid ">>>"
 msgstr ">>>"
 
-#: pcbnew/dialog_design_rules_base.cpp:119
+#: pcbnew/dialog_design_rules_base.cpp:118
 msgid "Move the selected nets in the left list to the right list"
 msgstr "Déplacer les nets sélectionnés dans la liste de gauche vers la liste de droite"
 
-#: pcbnew/dialog_design_rules_base.cpp:123
+#: pcbnew/dialog_design_rules_base.cpp:122
 msgid "<< Select All"
 msgstr "<< Sélectionner Tout"
 
-#: pcbnew/dialog_design_rules_base.cpp:124
+#: pcbnew/dialog_design_rules_base.cpp:123
 msgid "Select all nets in the left list"
 msgstr "Sélectionner tous les nets de la liste de gauche"
 
-#: pcbnew/dialog_design_rules_base.cpp:128
+#: pcbnew/dialog_design_rules_base.cpp:127
 msgid "Select All >>"
 msgstr "Sélectionner Tout >>"
 
-#: pcbnew/dialog_design_rules_base.cpp:129
+#: pcbnew/dialog_design_rules_base.cpp:128
 msgid "Select all nets in the right list"
 msgstr "Sélectionner tous les nets de la liste de droite"
 
-#: pcbnew/dialog_design_rules_base.cpp:155
+#: pcbnew/dialog_design_rules_base.cpp:154
 msgid "Net Classes Editor"
 msgstr "Editeur de NetClasses"
 
-#: pcbnew/dialog_design_rules_base.cpp:164
+#: pcbnew/dialog_design_rules_base.cpp:163
 msgid "Via Options:"
 msgstr "Options Vias:"
 
-#: pcbnew/dialog_design_rules_base.cpp:166
+#: pcbnew/dialog_design_rules_base.cpp:165
 msgid "Through via"
 msgstr "Via traversante"
 
-#: pcbnew/dialog_design_rules_base.cpp:166
+#: pcbnew/dialog_design_rules_base.cpp:165
 msgid "Blind or buried via"
 msgstr "Via enterrée ou aveugle"
 
-#: pcbnew/dialog_design_rules_base.cpp:168
+#: pcbnew/dialog_design_rules_base.cpp:167
 msgid "Default Via Type"
 msgstr "Via par Défaut"
 
-#: pcbnew/dialog_design_rules_base.cpp:170
+#: pcbnew/dialog_design_rules_base.cpp:169
 msgid ""
 "Select the current via type.\n"
 "Trough via is the usual selection"
@@ -4573,27 +4578,27 @@ msgstr ""
 "Sélection du type de via courant.\n"
 "Via traversante est la sélection usuelle."
 
-#: pcbnew/dialog_design_rules_base.cpp:180
+#: pcbnew/dialog_design_rules_base.cpp:179
 msgid "Min via diameter"
 msgstr "Diamètre Min Via"
 
-#: pcbnew/dialog_design_rules_base.cpp:187
+#: pcbnew/dialog_design_rules_base.cpp:186
 msgid "Min via drill dia"
 msgstr "Perçage Min Via"
 
-#: pcbnew/dialog_design_rules_base.cpp:199
+#: pcbnew/dialog_design_rules_base.cpp:198
 msgid "Micro Via Options:"
 msgstr "Options Micro Vias:"
 
-#: pcbnew/dialog_design_rules_base.cpp:201
+#: pcbnew/dialog_design_rules_base.cpp:200
 msgid "Do not allow micro vias"
 msgstr "Ne pas autoriser les micro vias"
 
-#: pcbnew/dialog_design_rules_base.cpp:201
+#: pcbnew/dialog_design_rules_base.cpp:200
 msgid "Allow micro vias"
 msgstr "Autoriser les micro vias"
 
-#: pcbnew/dialog_design_rules_base.cpp:205
+#: pcbnew/dialog_design_rules_base.cpp:204
 msgid ""
 "Allows or do not allow use of micro vias\n"
 "They are very small vias only from an external copper layer to its near neightbour"
@@ -4601,19 +4606,19 @@ msgstr ""
 "Autorise ou non l'utilisation de micro vias\n"
 "Ce sont de petites vias allant d'une couche externe à la plus proche couche interne uniquement"
 
-#: pcbnew/dialog_design_rules_base.cpp:215
+#: pcbnew/dialog_design_rules_base.cpp:214
 msgid "Min uvia diameter"
 msgstr "Diamètre Min uVia"
 
-#: pcbnew/dialog_design_rules_base.cpp:223
+#: pcbnew/dialog_design_rules_base.cpp:222
 msgid "Min uvia drill dia"
 msgstr "Perçage min uVia"
 
-#: pcbnew/dialog_design_rules_base.cpp:236
+#: pcbnew/dialog_design_rules_base.cpp:235
 msgid "Minimum Allowed Values:"
 msgstr "Valeurs Minimales Autorisées:"
 
-#: pcbnew/dialog_design_rules_base.cpp:260
+#: pcbnew/dialog_design_rules_base.cpp:259
 msgid ""
 "Specific via diameters and track widths, which \n"
 "can be used to replace default Netclass values \n"
@@ -4623,79 +4628,79 @@ msgstr ""
 "peuvent être utilisées pour remplacer les valeurs par défault des Netclass\n"
 "quand c'est nécessaire, pour des vias ou segments de pistes arbitraires."
 
-#: pcbnew/dialog_design_rules_base.cpp:268
+#: pcbnew/dialog_design_rules_base.cpp:267
 msgid "Custom Via Sizes:"
 msgstr "Tailles de Vias Spécifiques"
 
-#: pcbnew/dialog_design_rules_base.cpp:270
+#: pcbnew/dialog_design_rules_base.cpp:269
 msgid "Drill value: a blank or 0 => default Netclass value"
 msgstr "Perçage: blanc ou 0 => valeur par défaut de la Netclass"
 
-#: pcbnew/dialog_design_rules_base.cpp:287
+#: pcbnew/dialog_design_rules_base.cpp:286
 msgid "Diameter"
 msgstr "Diamètre"
 
-#: pcbnew/dialog_design_rules_base.cpp:294
+#: pcbnew/dialog_design_rules_base.cpp:293
 msgid "Via 1"
 msgstr "Via 1"
 
-#: pcbnew/dialog_design_rules_base.cpp:295
+#: pcbnew/dialog_design_rules_base.cpp:294
 msgid "Via 2"
 msgstr "Via 2"
 
-#: pcbnew/dialog_design_rules_base.cpp:296
+#: pcbnew/dialog_design_rules_base.cpp:295
 msgid "Via 3"
 msgstr "Via 3"
 
-#: pcbnew/dialog_design_rules_base.cpp:297
+#: pcbnew/dialog_design_rules_base.cpp:296
 msgid "Via 4"
 msgstr "Via 4"
 
-#: pcbnew/dialog_design_rules_base.cpp:298
+#: pcbnew/dialog_design_rules_base.cpp:297
 msgid "Via 5"
 msgstr "Via 5"
 
-#: pcbnew/dialog_design_rules_base.cpp:299
+#: pcbnew/dialog_design_rules_base.cpp:298
 msgid "Via 6"
 msgstr "Via 6"
 
-#: pcbnew/dialog_design_rules_base.cpp:300
+#: pcbnew/dialog_design_rules_base.cpp:299
 msgid "Via 7"
 msgstr "Via 7"
 
-#: pcbnew/dialog_design_rules_base.cpp:312
+#: pcbnew/dialog_design_rules_base.cpp:311
 msgid "Custom Track Widths:"
 msgstr "Epais. Piste Spécifiques"
 
-#: pcbnew/dialog_design_rules_base.cpp:337
+#: pcbnew/dialog_design_rules_base.cpp:336
 msgid "Track 1"
 msgstr "Piste 1"
 
-#: pcbnew/dialog_design_rules_base.cpp:338
+#: pcbnew/dialog_design_rules_base.cpp:337
 msgid "Track 2"
 msgstr "Piste 2"
 
-#: pcbnew/dialog_design_rules_base.cpp:339
+#: pcbnew/dialog_design_rules_base.cpp:338
 msgid "Track 3"
 msgstr "Piste 3"
 
-#: pcbnew/dialog_design_rules_base.cpp:340
+#: pcbnew/dialog_design_rules_base.cpp:339
 msgid "Track 4"
 msgstr "Piste 4"
 
-#: pcbnew/dialog_design_rules_base.cpp:341
+#: pcbnew/dialog_design_rules_base.cpp:340
 msgid "Track 5"
 msgstr "Piste 5"
 
-#: pcbnew/dialog_design_rules_base.cpp:342
+#: pcbnew/dialog_design_rules_base.cpp:341
 msgid "Track 6"
 msgstr "Piste 6"
 
-#: pcbnew/dialog_design_rules_base.cpp:343
+#: pcbnew/dialog_design_rules_base.cpp:342
 msgid "Track 7"
 msgstr "Piste 7"
 
-#: pcbnew/dialog_design_rules_base.cpp:359
+#: pcbnew/dialog_design_rules_base.cpp:358
 msgid "Global Design Rules"
 msgstr "Règles Générales"
 
@@ -5434,7 +5439,7 @@ msgstr "Si vous voulez une couche de pâte à braser sur le dessus du PCB"
 
 #: pcbnew/dialog_layers_setup_base.cpp:118
 msgid "SilkS_Front_later"
-msgstr "Sérig_Dessus_réserve"
+msgstr "Sérigr_Dessus_réserve"
 
 #: pcbnew/dialog_layers_setup_base.cpp:130
 msgid "If you want a silk screen layer for the front side of the board"
@@ -5580,7 +5585,7 @@ msgstr "Si vous voulez un vernis épargne sur le dessous du PCB"
 
 #: pcbnew/dialog_layers_setup_base.cpp:633
 msgid "SilkS_Back_later"
-msgstr "Sérig_Dessous_réserver"
+msgstr "Sérigr_Dessous_réserve"
 
 #: pcbnew/dialog_layers_setup_base.cpp:645
 msgid "If you want a silk screen layer for the back side of the board"
@@ -6544,17 +6549,13 @@ msgstr "Activer ceci pour activer la visibilité"
 msgid "Middle click for color change"
 msgstr "Clicquer sur bouton du milieu pour changer la couleur"
 
-#: pcbnew/layer_widget.cpp:491
-msgid "Render"
-msgstr "Autres"
-
 #: pcbnew/dialog_plot_base.cpp:38
 msgid "Use Proper Gerber Extensions"
 msgstr "Utiliser Extensions Gerber Particulières"
 
 #: pcbnew/dialog_plot_base.cpp:40
 msgid "Use Proper Gerber Extensions - .GBL, .GTL, etc..."
-msgstr "Utiliser les extensions GERBER specifiques aux couches - .GBL, .GTL, etc..."
+msgstr "Utiliser les extensions GERBER spécifiques aux couches - .GBL, .GTL, etc..."
 
 #: pcbnew/dialog_plot_base.cpp:44
 msgid "Exclude pcb edge layer"
@@ -7110,8 +7111,8 @@ msgstr "Editer fichier documentation"
 msgid "Edit pins part per part ( Use carefully!)"
 msgstr "Editer pins unité par unité (Utiliser en connaissance de cause)"
 
-#: eeschema/symbdraw.cpp:954
-#: eeschema/symbdraw.cpp:1042
+#: eeschema/symbdraw.cpp:962
+#: eeschema/symbdraw.cpp:1050
 #, c-format
 msgid "Arc %.1f deg"
 msgstr "Arc %.1f deg"
@@ -7267,6 +7268,92 @@ msgstr "Force affichage des pins invisibles"
 msgid "Schematic"
 msgstr "Schématique"
 
+#: eeschema/build_BOM.cpp:59
+msgid "Bill of Materials file (*.lst)|*.lst"
+msgstr "Fichier Liste du Matériel (*.lst)|*.lst"
+
+#: eeschema/build_BOM.cpp:104
+msgid "Bill of Materials"
+msgstr "Liste du Matériel"
+
+#: eeschema/build_BOM.cpp:154
+#: eeschema/build_BOM.cpp:191
+#: eeschema/build_BOM.cpp:227
+msgid "Failed to open file "
+msgstr "Erreur ouverture "
+
+#: eeschema/build_BOM.cpp:272
+#, c-format
+msgid ""
+"\n"
+"#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n"
+msgstr ""
+"\n"
+"#Labels globaux, hiérarchiques et pins de feuille ( ordre = Numéro de feuille ) nombre = %d\n"
+
+#: eeschema/build_BOM.cpp:284
+#, c-format
+msgid ""
+"\n"
+"#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n"
+"\n"
+msgstr ""
+"\n"
+"#Labels globaux, hiérarchiques et pins de feuille ( ordre = Alphab. ) nombre = %d\n"
+"\n"
+
+#: eeschema/build_BOM.cpp:292
+msgid ""
+"\n"
+"#End List\n"
+msgstr ""
+"\n"
+"#End List\n"
+
+#: eeschema/build_BOM.cpp:667
+msgid "Field"
+msgstr "Champ"
+
+#: eeschema/build_BOM.cpp:676
+msgid ""
+"\n"
+"#Cmp ( order = Reference )"
+msgstr ""
+"\n"
+"#Cmp ( ordre = Référence )"
+
+#: eeschema/build_BOM.cpp:679
+#: eeschema/build_BOM.cpp:904
+msgid " (with SubCmp)"
+msgstr "avec sub-composants"
+
+#: eeschema/build_BOM.cpp:778
+#: eeschema/build_BOM.cpp:960
+msgid "#End Cmp\n"
+msgstr "#End Cmp\n"
+
+#: eeschema/build_BOM.cpp:901
+msgid ""
+"\n"
+"#Cmp ( order = Value )"
+msgstr ""
+"\n"
+"#Cmp ( ordre = Valeur )"
+
+#: eeschema/build_BOM.cpp:988
+#, c-format
+msgid "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"
+msgstr "> %-28.28s %s        (Feuille %s) pos: %3.3f, %3.3f\n"
+
+#: eeschema/build_BOM.cpp:1008
+#, c-format
+msgid "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
+msgstr "> %-28.28s PinSheet %-7.7s (Feuille %s) pos: %3.3f, %3.3f\n"
+
+#: eeschema/build_BOM.cpp:1023
+msgid "#End labels\n"
+msgstr "#End labels\n"
+
 #: eeschema/libfield.cpp:155
 msgid "Edit field"
 msgstr "Editer Champ"
@@ -7309,41 +7396,41 @@ msgstr ""
 msgid "This position is already occupied by another pin. Continue?"
 msgstr "Position occupée par une autre pin. Continuer ?"
 
-#: eeschema/pinedit.cpp:659
+#: eeschema/pinedit.cpp:660
 msgid "No pins!"
 msgstr "Pas de Pins!"
 
-#: eeschema/pinedit.cpp:670
+#: eeschema/pinedit.cpp:671
 msgid "Marker Information"
 msgstr "Info Marqueur"
 
-#: eeschema/pinedit.cpp:689
+#: eeschema/pinedit.cpp:690
 #, c-format
 msgid "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr "<b>Pin dupliquée %s</b> \"%s\" en position <b>(%.3f, %.3f)</b> en conflit avec pin %s \"%s\" en position <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:702
-#: eeschema/pinedit.cpp:741
+#: eeschema/pinedit.cpp:703
+#: eeschema/pinedit.cpp:742
 #, c-format
 msgid " in part %c"
 msgstr " en composant %c"
 
-#: eeschema/pinedit.cpp:709
-#: eeschema/pinedit.cpp:748
+#: eeschema/pinedit.cpp:710
+#: eeschema/pinedit.cpp:749
 msgid "  of converted"
 msgstr "  de converti"
 
-#: eeschema/pinedit.cpp:711
-#: eeschema/pinedit.cpp:750
+#: eeschema/pinedit.cpp:712
+#: eeschema/pinedit.cpp:751
 msgid "  of normal"
 msgstr "  de normal"
 
-#: eeschema/pinedit.cpp:732
+#: eeschema/pinedit.cpp:733
 #, c-format
 msgid "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr "<b>Pin %s hors grille </b> \"%s\" en position <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:759
+#: eeschema/pinedit.cpp:760
 msgid "No off grid or duplicate pins were found."
 msgstr "Pas de  pins doublées ou hors grille trouvées"
 
@@ -7458,7 +7545,7 @@ msgstr "Non connecté"
 msgid "Pin"
 msgstr "Pin"
 
-#: eeschema/class_pin.cpp:1609
+#: eeschema/class_pin.cpp:1597
 msgid "Number"
 msgstr "Numéro"
 
@@ -8070,106 +8157,6 @@ msgid ""
 msgstr ""
 "Ajuster la position et le style des champs et l'orientation du componsant aux valeurs par défaut en librairie.\n"
 "Les textes des champs ne sont pas modifiés."
-
-#: eeschema/dialog_build_BOM_base.cpp:23
-msgid "List items:"
-msgstr " Liste éléments: "
-
-#: eeschema/dialog_build_BOM_base.cpp:25
-msgid "Components by reference"
-msgstr "Composants par référence"
-
-#: eeschema/dialog_build_BOM_base.cpp:29
-msgid "Sub components (i.e. U2A, U2B ...)"
-msgstr "Sous composants (i.e U2A, U2B...)"
-
-#: eeschema/dialog_build_BOM_base.cpp:33
-msgid "Components by value"
-msgstr "Composants par valeur"
-
-#: eeschema/dialog_build_BOM_base.cpp:37
-msgid "Hierarchy pins by name"
-msgstr "Pins de hiérarchie par nom"
-
-#: eeschema/dialog_build_BOM_base.cpp:41
-msgid "Hierarchy pins by sheets"
-msgstr "Pins de hiérarchie par feuilles"
-
-#: eeschema/dialog_build_BOM_base.cpp:47
-msgid "Text for spreadsheet import"
-msgstr "Texte pour import dans tableur:"
-
-#: eeschema/dialog_build_BOM_base.cpp:49
-msgid "Output format:"
-msgstr "Format de sortie"
-
-#: eeschema/dialog_build_BOM_base.cpp:53
-msgid "Tab"
-msgstr "Tab"
-
-#: eeschema/dialog_build_BOM_base.cpp:53
-msgid ";"
-msgstr ";"
-
-#: eeschema/dialog_build_BOM_base.cpp:53
-msgid ","
-msgstr ","
-
-#: eeschema/dialog_build_BOM_base.cpp:55
-msgid "Field separator for spreadsheet import:"
-msgstr "Séparateur de champ pour import dans tableur:"
-
-#: eeschema/dialog_build_BOM_base.cpp:62
-msgid "Launch list browser"
-msgstr "Lancer le visualisateur de liste"
-
-#: eeschema/dialog_build_BOM_base.cpp:74
-msgid "Fields to add:"
-msgstr "Champs à ajouter:"
-
-#: eeschema/dialog_build_BOM_base.cpp:77
-msgid "System Fields:"
-msgstr "Champs Système:"
-
-#: eeschema/dialog_build_BOM_base.cpp:86
-msgid "Users Fields:"
-msgstr "Champs Utilisateurs:"
-
-#: eeschema/dialog_build_BOM_base.cpp:88
-msgid "Field 1"
-msgstr "Champ 1"
-
-#: eeschema/dialog_build_BOM_base.cpp:92
-msgid "Field 2"
-msgstr "Champ 2"
-
-#: eeschema/dialog_build_BOM_base.cpp:96
-msgid "Field 3"
-msgstr "Champ 3"
-
-#: eeschema/dialog_build_BOM_base.cpp:100
-msgid "Field 4"
-msgstr "Champ 4"
-
-#: eeschema/dialog_build_BOM_base.cpp:104
-msgid "Field 5"
-msgstr "Champ 5"
-
-#: eeschema/dialog_build_BOM_base.cpp:108
-msgid "Field 6"
-msgstr "Champ 6"
-
-#: eeschema/dialog_build_BOM_base.cpp:112
-msgid "Field 7"
-msgstr "Champ 7"
-
-#: eeschema/dialog_build_BOM_base.cpp:116
-msgid "Field 8"
-msgstr "Champ 8"
-
-#: eeschema/dialog_build_BOM_base.cpp:120
-msgid "All existing users fields"
-msgstr "Tous les champs existants"
 
 #: eeschema/plothpgl.cpp:203
 msgid "Sheet Size"
@@ -9522,90 +9509,109 @@ msgstr "Importer Connecteur de hiérarchie"
 msgid "Add Power"
 msgstr "Ajouter Alims"
 
-#: eeschema/build_BOM.cpp:57
-msgid "Bill of Materials file (*.lst)|*.lst"
-msgstr "Fichier Liste du Matériel (*.lst)|*.lst"
+#: eeschema/dialog_build_BOM_base.cpp:23
+msgid "List items:"
+msgstr " Liste éléments: "
 
-#: eeschema/build_BOM.cpp:99
-msgid "Bill of Materials"
-msgstr "Liste du Matériel"
+#: eeschema/dialog_build_BOM_base.cpp:25
+msgid "Components by reference"
+msgstr "Composants par référence"
 
-#: eeschema/build_BOM.cpp:140
-#: eeschema/build_BOM.cpp:176
-msgid "Failed to open file "
-msgstr "Erreur ouverture "
+#: eeschema/dialog_build_BOM_base.cpp:29
+msgid "Sub components (i.e. U2A, U2B ...)"
+msgstr "Sous composants (i.e U2A, U2B...)"
 
-#: eeschema/build_BOM.cpp:220
-#, c-format
-msgid ""
-"\n"
-"#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n"
-msgstr ""
-"\n"
-"#Labels globaux, hiérarchiques et pins de feuille ( ordre = Numéro de feuille ) nombre = %d\n"
+#: eeschema/dialog_build_BOM_base.cpp:33
+msgid "Components by value"
+msgstr "Composants par valeur"
 
-#: eeschema/build_BOM.cpp:231
-#, c-format
-msgid ""
-"\n"
-"#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n"
-"\n"
-msgstr ""
-"\n"
-"#Labels globaux, hiérarchiques et pins de feuille ( ordre = Alphab. ) nombre = %d\n"
-"\n"
+#: eeschema/dialog_build_BOM_base.cpp:37
+msgid "Hierarchy pins by name"
+msgstr "Pins de hiérarchie par nom"
 
-#: eeschema/build_BOM.cpp:239
-msgid ""
-"\n"
-"#End List\n"
-msgstr ""
-"\n"
-"#End List\n"
+#: eeschema/dialog_build_BOM_base.cpp:41
+msgid "Hierarchy pins by sheets"
+msgstr "Pins de hiérarchie par feuilles"
 
-#: eeschema/build_BOM.cpp:614
-msgid "Field"
-msgstr "Champ"
+#: eeschema/dialog_build_BOM_base.cpp:47
+msgid "Text for spreadsheet import"
+msgstr "Texte pour import dans tableur:"
 
-#: eeschema/build_BOM.cpp:623
-msgid ""
-"\n"
-"#Cmp ( order = Reference )"
-msgstr ""
-"\n"
-"#Cmp ( ordre = Référence )"
+#: eeschema/dialog_build_BOM_base.cpp:47
+msgid "Single Part per line"
+msgstr "Une ligne par valeur"
 
-#: eeschema/build_BOM.cpp:626
-#: eeschema/build_BOM.cpp:735
-msgid " (with SubCmp)"
-msgstr "avec sub-composants"
+#: eeschema/dialog_build_BOM_base.cpp:49
+msgid "Output format:"
+msgstr "Format de sortie"
 
-#: eeschema/build_BOM.cpp:711
-#: eeschema/build_BOM.cpp:791
-msgid "#End Cmp\n"
-msgstr "#End Cmp\n"
+#: eeschema/dialog_build_BOM_base.cpp:53
+msgid "Tab"
+msgstr "Tab"
 
-#: eeschema/build_BOM.cpp:732
-msgid ""
-"\n"
-"#Cmp ( order = Value )"
-msgstr ""
-"\n"
-"#Cmp ( ordre = Valeur )"
+#: eeschema/dialog_build_BOM_base.cpp:53
+msgid ";"
+msgstr ";"
 
-#: eeschema/build_BOM.cpp:819
-#, c-format
-msgid "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"
-msgstr "> %-28.28s %s        (Feuille %s) pos: %3.3f, %3.3f\n"
+#: eeschema/dialog_build_BOM_base.cpp:53
+msgid ","
+msgstr ","
 
-#: eeschema/build_BOM.cpp:839
-#, c-format
-msgid "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
-msgstr "> %-28.28s PinSheet %-7.7s (Feuille %s) pos: %3.3f, %3.3f\n"
+#: eeschema/dialog_build_BOM_base.cpp:55
+msgid "Field separator for spreadsheet import:"
+msgstr "Séparateur de champ pour import dans tableur:"
 
-#: eeschema/build_BOM.cpp:854
-msgid "#End labels\n"
-msgstr "#End labels\n"
+#: eeschema/dialog_build_BOM_base.cpp:62
+msgid "Launch list browser"
+msgstr "Lancer le visualisateur de liste"
+
+#: eeschema/dialog_build_BOM_base.cpp:74
+msgid "Fields to add:"
+msgstr "Champs à ajouter:"
+
+#: eeschema/dialog_build_BOM_base.cpp:77
+msgid "System Fields:"
+msgstr "Champs Système:"
+
+#: eeschema/dialog_build_BOM_base.cpp:86
+msgid "Users Fields:"
+msgstr "Champs Utilisateurs:"
+
+#: eeschema/dialog_build_BOM_base.cpp:88
+msgid "Field 1"
+msgstr "Champ 1"
+
+#: eeschema/dialog_build_BOM_base.cpp:92
+msgid "Field 2"
+msgstr "Champ 2"
+
+#: eeschema/dialog_build_BOM_base.cpp:96
+msgid "Field 3"
+msgstr "Champ 3"
+
+#: eeschema/dialog_build_BOM_base.cpp:100
+msgid "Field 4"
+msgstr "Champ 4"
+
+#: eeschema/dialog_build_BOM_base.cpp:104
+msgid "Field 5"
+msgstr "Champ 5"
+
+#: eeschema/dialog_build_BOM_base.cpp:108
+msgid "Field 6"
+msgstr "Champ 6"
+
+#: eeschema/dialog_build_BOM_base.cpp:112
+msgid "Field 7"
+msgstr "Champ 7"
+
+#: eeschema/dialog_build_BOM_base.cpp:116
+msgid "Field 8"
+msgstr "Champ 8"
+
+#: eeschema/dialog_build_BOM_base.cpp:120
+msgid "All existing users fields"
+msgstr "Tous les champs existants"
 
 #: eeschema/dialog_edit_libentry_fields_in_lib.cpp:160
 #: eeschema/dialog_edit_libentry_fields_in_lib.cpp:165
@@ -10468,6 +10474,9 @@ msgstr "Taille du te&xte:"
 
 #: eeschema/dialog_sch_sheet_props_base.cpp:42
 #: eeschema/dialog_sch_sheet_props_base.cpp:63
+#: eeschema/dialog_lib_edit_pin_base.cpp:41
+#: eeschema/dialog_lib_edit_pin_base.cpp:64
+#: eeschema/dialog_lib_edit_pin_base.cpp:87
 msgid "units"
 msgstr "unités"
 
@@ -12148,15 +12157,15 @@ msgstr "DCodes"
 msgid "Show DCodes identification"
 msgstr "Afficher numéros de D-Code"
 
-#: gerbview/class_gerbview_layer_widget.cpp:118
+#: gerbview/class_gerbview_layer_widget.cpp:131
 msgid "Show All Layers"
 msgstr "Monter Toutes les Couches"
 
-#: gerbview/class_gerbview_layer_widget.cpp:121
+#: gerbview/class_gerbview_layer_widget.cpp:134
 msgid "Hide All Layers"
 msgstr "Cacher Toutes les Couches"
 
-#: gerbview/class_gerbview_layer_widget.cpp:186
+#: gerbview/class_gerbview_layer_widget.cpp:200
 #, c-format
 msgid "Layer %d"
 msgstr "Couche %d"
@@ -12384,20 +12393,20 @@ msgstr "Inconnu"
 msgid " \""
 msgstr " \""
 
-#: common/basicframe.cpp:207
+#: common/basicframe.cpp:224
 msgid " file <"
 msgstr " Fichier <"
 
-#: common/basicframe.cpp:207
+#: common/basicframe.cpp:224
 msgid "> was not found."
 msgstr ">  non trouvé."
 
-#: common/basicframe.cpp:241
+#: common/basicframe.cpp:258
 #, c-format
 msgid "Help file %s not found"
 msgstr "Fichier d'aide %s non trouvé"
 
-#: common/basicframe.cpp:250
+#: common/basicframe.cpp:267
 #, c-format
 msgid "Help file %s could not be found."
 msgstr "Fichier d'aide %s non trouvé."
@@ -12466,7 +12475,7 @@ msgstr "Sélection par Viewer"
 msgid "Load Error!"
 msgstr "Erreur de Chargement!"
 
-#: common/hotkeys_basic.cpp:367
+#: common/hotkeys_basic.cpp:384
 msgid ""
 "Current hotkey list:\n"
 "\n"
@@ -12474,87 +12483,87 @@ msgstr ""
 "Liste des Hotkeys courantes:\n"
 "\n"
 
-#: common/hotkeys_basic.cpp:375
+#: common/hotkeys_basic.cpp:392
 msgid "key "
 msgstr "touche: "
 
-#: common/hotkeys_basic.cpp:428
+#: common/hotkeys_basic.cpp:445
 msgid "Save Hotkey Configuration File:"
 msgstr "Sauver Fichier Configuration des Hotkeys:"
 
-#: common/hotkeys_basic.cpp:460
+#: common/hotkeys_basic.cpp:477
 msgid "Allowed keys:\n"
 msgstr "Touches autorisées:\n"
 
-#: common/hotkeys_basic.cpp:545
+#: common/hotkeys_basic.cpp:562
 msgid "Open Hotkey Configuration File:"
 msgstr "Ouvrir Fichier Configuration des Hotkeys:"
 
-#: common/hotkeys_basic.cpp:563
+#: common/hotkeys_basic.cpp:580
 msgid "Unable to read "
 msgstr "Impossible de lire "
 
-#: common/hotkeys_basic.cpp:681
+#: common/hotkeys_basic.cpp:698
 msgid "List Current Keys"
 msgstr "Lister Touches Courantes"
 
-#: common/hotkeys_basic.cpp:682
+#: common/hotkeys_basic.cpp:699
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Afficher la liste des hotkeyc courante et les commandes correspondantes"
 
-#: common/hotkeys_basic.cpp:688
+#: common/hotkeys_basic.cpp:705
 msgid "(Re)create Hotkeys File"
 msgstr "(Re)créer Fichier Hotkeys"
 
-#: common/hotkeys_basic.cpp:690
+#: common/hotkeys_basic.cpp:707
 msgid "Create or recreate the hotkey configuration file from current hotkey list"
 msgstr "Créer ou recréer le fichier configuration des Hotkeys à partir de la liste courante"
 
-#: common/hotkeys_basic.cpp:697
+#: common/hotkeys_basic.cpp:714
 msgid "Reload Hotkeys File"
 msgstr "Relire  Fichiers Hotkeys"
 
-#: common/hotkeys_basic.cpp:698
+#: common/hotkeys_basic.cpp:715
 msgid "Reload the hotkey configuration file"
 msgstr "Relire  les fichiers configuration des hotkeys"
 
-#: common/hotkeys_basic.cpp:704
+#: common/hotkeys_basic.cpp:721
 msgid "Edit Hotkeys File"
 msgstr "Editer Fichier Hotkeys"
 
-#: common/hotkeys_basic.cpp:705
+#: common/hotkeys_basic.cpp:722
 msgid "Edit the hotkey configuration file in a text editor"
 msgstr "Editer  les fichiers configuration des hotkeys"
 
-#: common/hotkeys_basic.cpp:711
+#: common/hotkeys_basic.cpp:728
 msgid "Hotkeys"
 msgstr "Hotkeys"
 
-#: common/hotkeys_basic.cpp:712
+#: common/hotkeys_basic.cpp:729
 msgid "Hotkeys configuration and preferences"
 msgstr "Options et préférences générales des hotkeys"
 
-#: common/hotkeys_basic.cpp:720
+#: common/hotkeys_basic.cpp:737
 msgid "Home directory"
 msgstr "Répertoire d'accueil (home)"
 
-#: common/hotkeys_basic.cpp:721
+#: common/hotkeys_basic.cpp:738
 msgid "Use home directory to load or store Hotkey config files"
 msgstr "Utiliser le répertoire d'accueil pour charger ou sauver les fichiers de config  des Hotkeys"
 
-#: common/hotkeys_basic.cpp:728
+#: common/hotkeys_basic.cpp:745
 msgid "KiCad template directory"
 msgstr "kicad/template répertoire"
 
-#: common/hotkeys_basic.cpp:729
+#: common/hotkeys_basic.cpp:746
 msgid "Use kicad/template directory to load or store Hotkey config files"
 msgstr "Utiliser répertoire kicad/template pour charger ou sauver les fichiers de config  des Hotkeys"
 
-#: common/hotkeys_basic.cpp:735
+#: common/hotkeys_basic.cpp:752
 msgid "Location"
 msgstr "Emplacement"
 
-#: common/hotkeys_basic.cpp:736
+#: common/hotkeys_basic.cpp:753
 msgid "Select hotkey configuration file location"
 msgstr "Sélectionner l'emplacement du fichier fonfiguration des hotkeys:"
 
@@ -12849,7 +12858,7 @@ msgstr "Echange modules:"
 msgid "Module properties"
 msgstr "Propriétés du Module"
 
-#: pcbnew/dialog_design_rules_base.h:111
+#: pcbnew/dialog_design_rules_base.h:110
 msgid "Design Rules Editor"
 msgstr "Editeur de Règles de Conception"
 
@@ -12973,6 +12982,10 @@ msgstr "Propriétés des Champs"
 msgid "Pin Properties"
 msgstr "Propriétés des Pins"
 
+#: eeschema/dialog_build_BOM_base.h:69
+msgid "List of Material"
+msgstr "Liste du Matériel"
+
 #: eeschema/dialog_annotate_base.h:77
 msgid "Annotate Schematic"
 msgstr "Annotation de la Schématique"
@@ -12996,10 +13009,6 @@ msgstr "Propriétés de la Feuille de Hiérarchie"
 #: eeschema/dialog_eeschema_options_base.h:77
 msgid "Schematic Editor Options"
 msgstr "Options de l'Editeur de Schématique"
-
-#: eeschema/dialog_build_BOM_base.h:69
-msgid "List of Material"
-msgstr "Liste du Matériel"
 
 #: eeschema/component_wizard/dialog_component_setup.h:55
 msgid "Component Builder"

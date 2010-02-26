@@ -76,6 +76,9 @@ GERBER_LAYER_WIDGET::GERBER_LAYER_WIDGET( WinEDA_GerberFrame* aParent, wxWindow*
     }
 
     AppendRenderRows( renderRows, DIM(renderRows) );
+    
+    // Update default tabs labels for gerbview
+    SetLayersManagerTabsText( );
 
     //-----<Popup menu>-------------------------------------------------
     // handle the popup menu over the layer window.
@@ -89,6 +92,16 @@ GERBER_LAYER_WIDGET::GERBER_LAYER_WIDGET( WinEDA_GerberFrame* aParent, wxWindow*
 
     // install the right click handler into each control at end of ReFill()
     // using installRightLayerClickHandler
+}
+
+/** Function SetLayersManagerTabsText
+ * Update the layer manager tabs labels
+ * Useful when changing Language or to set labels to a non default value
+ */
+void GERBER_LAYER_WIDGET::SetLayersManagerTabsText( )
+{
+    m_notebook->SetPageText(0, _("Layer") );
+    m_notebook->SetPageText(1, _("Render") );
 }
 
 
@@ -173,6 +186,7 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         break;
     }
 }
+
 
 
 void GERBER_LAYER_WIDGET::ReFill()

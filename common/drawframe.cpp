@@ -533,17 +533,13 @@ void WinEDA_DrawFrame::AdjustScrollBars()
 }
 
 
+/** function SetLanguage
+ * called on a language menu selection
+ * when using a derived function, do not forget to call this one
+ */
 void WinEDA_DrawFrame::SetLanguage( wxCommandEvent& event )
 {
-    int id = event.GetId();
-
-    wxGetApp().SetLanguageIdentifier( id );
-    if ( wxGetApp().SetLanguage() )
-    {
-        wxLogDebug( wxT( "Recreating menu bar due to language change." ) );
-        ReCreateMenuBar();
-        Refresh();
-    }
+    WinEDA_BasicFrame::SetLanguage( event );
 }
 
 /**

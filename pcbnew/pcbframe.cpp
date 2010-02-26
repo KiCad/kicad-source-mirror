@@ -128,7 +128,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
               WinEDA_PcbFrame::Process_Special_Functions )
 
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
-                    WinEDA_DrawFrame::SetLanguage )
+                    WinEDA_PcbFrame::SetLanguage )
 
     // menu Postprocess
     EVT_MENU( ID_PCB_GEN_POS_MODULES_FILE, WinEDA_PcbFrame::GenModulesPosition )
@@ -617,3 +617,15 @@ void WinEDA_PcbFrame::SetVisibleAlls( )
         m_Layers->SetRenderState( ii, true );
 }
 
+/** function SetLanguage
+ * called on a language menu selection
+ */
+void WinEDA_PcbFrame::SetLanguage( wxCommandEvent& event )
+{
+    WinEDA_DrawFrame::SetLanguage( event );
+    m_Layers->SetLayersManagerTabsText( );
+    wxAuiPaneInfo& pane_info = m_auimgr.GetPane(m_Layers);
+    pane_info.Caption( _( "Visibles" ) ); 
+    m_auimgr.Update();
+    ReFillLayerWidget();
+}

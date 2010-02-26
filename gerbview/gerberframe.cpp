@@ -182,8 +182,6 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
 
     // LAYER_WIDGET is floatable, but initially docked at far right
     wxAuiPaneInfo   lyrs;
-    lyrs.MinSize( m_LayersManager->GetBestSize() );    // updated in ReFillLayerWidget
-    lyrs.BestSize( m_LayersManager->GetBestSize() );
     lyrs.CloseButton( false );
     lyrs.Caption( _( "Visibles" ) );
     lyrs.IsFloatable();
@@ -210,9 +208,10 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
         m_auimgr.AddPane( MsgPanel,
                           wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
 
+    ReFillLayerWidget();    // this is near end because contents establish size
+
     m_auimgr.Update();
 
-    ReFillLayerWidget();    // this is near end because contents establish size
 }
 
 
@@ -485,3 +484,17 @@ void WinEDA_GerberFrame::syncLayerBox()
     m_SelLayerBox->SetSelection( getActiveLayer() );
 }
 
+/** function SetLanguage
+ * called on a language menu selection
+ * Update Layer manager title and tabs texts
+ */
+void WinEDA_GerberFrame::SetLanguage( wxCommandEvent& event )
+{
+    WinEDA_DrawFrame::SetLanguage( event );
+    m_LayersManager->SetLayersManagerTabsText( );
+    wxAuiPaneInfo& pane_info = m_auimgr.GetPane(m_LayersManager);
+    pane_info.Caption( _( "Visibles" ) );
+    m_auimgr.Update();
+
+    ReFillLayerWidget();
+}

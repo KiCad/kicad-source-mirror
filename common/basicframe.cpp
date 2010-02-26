@@ -77,6 +77,23 @@ void WinEDA_BasicFrame::ReCreateMenuBar()
 
 }
 
+/** Vitual function SetLanguage
+ * called on a language menu selection
+ * when using a derived function, do not forget to call this one
+ */
+void WinEDA_BasicFrame::SetLanguage( wxCommandEvent& event )
+{
+    int id = event.GetId();
+
+    wxGetApp().SetLanguageIdentifier( id );
+    if ( wxGetApp().SetLanguage() )
+    {
+        wxLogDebug( wxT( "Recreating menu bar due to language change." ) );
+        ReCreateMenuBar();
+        Refresh();
+    }
+}
+
 
 /**
  * Load common frame parameters from configuration.

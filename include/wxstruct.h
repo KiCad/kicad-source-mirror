@@ -126,7 +126,11 @@ public:
     int          ReadHotkeyConfigFile( const wxString&                        Filename,
                                        struct Ki_HotkeyInfoSectionDescriptor* DescList,
                                        bool                                   verbose );
-    void         SetLanguage( wxCommandEvent& event );
+    /** function SetLanguage
+     * called on a language menu selection
+     * when using a derived function, do not forget to call this one
+     */
+    virtual void SetLanguage( wxCommandEvent& event );
 
     wxString     GetFileFromHistory( int cmdId, const wxString& type );
     void         SetLastProject( const wxString& FullFileName );
@@ -230,7 +234,12 @@ public:
     void             EraseMsgBox();
     void             Process_PageSettings( wxCommandEvent& event );
     virtual void     SetToolbars();
-    void             SetLanguage( wxCommandEvent& event );
+    /** function SetLanguage
+     * called on a language menu selection
+     * when using a derived function, do not forget to call this one
+     */
+    virtual void     SetLanguage( wxCommandEvent& event );
+
     virtual void     ReCreateHToolbar() = 0;
     virtual void     ReCreateVToolbar() = 0;
     virtual void     ReCreateMenuBar();

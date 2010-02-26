@@ -909,6 +909,12 @@ public:
      */
     virtual void SaveSettings();
 
+    /** function SetLanguage
+     * called on a language menu selection
+     */
+    virtual void SetLanguage( wxCommandEvent& event );
+    
+
     DECLARE_EVENT_TABLE()
 };
 
