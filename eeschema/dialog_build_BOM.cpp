@@ -149,19 +149,17 @@ void DIALOG_BUILD_BOM::Init()
 
 void DIALOG_BUILD_BOM::OnRadioboxSelectFormatSelected( wxCommandEvent& event )
 {
-    if( m_OutputFormCtrl->GetSelection() == 1 )
-    {
-        m_OutputSeparatorCtrl->Enable( true );
-        m_ListCmpbyValItems->Enable( false );
-        m_GenListLabelsbyVal->Enable( false );
-        m_GenListLabelsbySheet->Enable( false );
-    }
-    else
+    if( m_OutputFormCtrl->GetSelection() == 0 )
     {
         m_OutputSeparatorCtrl->Enable( false );
         m_ListCmpbyValItems->Enable( true );
         m_GenListLabelsbyVal->Enable( true );
         m_GenListLabelsbySheet->Enable( true );
+    } else {
+        m_OutputSeparatorCtrl->Enable( true );
+        m_ListCmpbyValItems->Enable( false );
+        m_GenListLabelsbyVal->Enable( false );
+        m_GenListLabelsbySheet->Enable( false );
     }
 }
 
@@ -176,7 +174,7 @@ void DIALOG_BUILD_BOM::OnOkClick( wxCommandEvent& event )
     if( m_OutputSeparatorCtrl->GetSelection() > 0 )
         ExportSeparatorSymbol = s_ExportSeparator[m_OutputSeparatorCtrl->GetSelection()];
 
-    bool ExportFileType = m_OutputFormCtrl->GetSelection() == 0 ? false : true;
+    int ExportFileType = m_OutputFormCtrl->GetSelection(); 
 
     SavePreferences();
 

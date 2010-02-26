@@ -54,6 +54,7 @@ public: LABEL_OBJECT()
 
 // Filename extension for BOM list
 static const wxString BomFileExtension( wxT( "lst" ) );
+static const wxString CsvFileExtension( wxT( "csv" ) );
 #define BomFileWildcard _( "Bill of Materials file (*.lst)|*.lst" )
 
 
@@ -83,7 +84,7 @@ int         SplitString( wxString  strToSplit,
 static char s_ExportSeparatorSymbol;
 
 
-void DIALOG_BUILD_BOM::Create_BOM_Lists( bool aTypeFileIsExport,
+void DIALOG_BUILD_BOM::Create_BOM_Lists( int  aTypeFile,
                                          bool aIncludeSubComponents,
                                          char aExportSeparatorSymbol,
                                          bool aRunBrowser )
@@ -94,7 +95,10 @@ void DIALOG_BUILD_BOM::Create_BOM_Lists( bool aTypeFileIsExport,
 
     m_ListFileName = g_RootSheet->m_AssociatedScreen->m_FileName;
     fn = m_ListFileName;
-    fn.SetExt( BomFileExtension );
+	if( aTypeFile == 2 )
+    	fn.SetExt( CsvFileExtension );
+	else
+    	fn.SetExt( BomFileExtension );
 
     wxFileDialog dlg( this, _( "Bill of Materials" ), fn.GetPath(),
                       fn.GetFullName(), BomFileWildcard,
@@ -107,10 +111,17 @@ void DIALOG_BUILD_BOM::Create_BOM_Lists( bool aTypeFileIsExport,
 
     /* Close dialog, then show the list (if so requested) */
 
-    if( aTypeFileIsExport )
-        CreateExportList( m_ListFileName, aIncludeSubComponents );
-    else
+    switch( aTypeFile ) {
+	case 0: // list
         GenereListeOfItems( m_ListFileName, aIncludeSubComponents );
+		break;
+	case 1:	// speadsheet
+        CreateExportList( m_ListFileName, aIncludeSubComponents );
+		break;
+	case 2: // Single Part per line
+        CreatePartsList( m_ListFileName );
+		break;
+	}
 
     EndModal( 1 );
 
@@ -123,6 +134,28 @@ void DIALOG_BUILD_BOM::Create_BOM_Lists( bool aTypeFileIsExport,
     }
 }
 
+void DIALOG_BUILD_BOM::CreatePartsList( const wxString& aFullFileName )
+{
+    FILE*    f;
+    wxString msg;
+
+    if( ( f = wxFopen( aFullFileName, wxT( "wt" ) ) ) == NULL )
+    {
+        msg = _( "Failed to open file " );
+        msg << aFullFileName;
+        DisplayError( this, msg );
+        return;
+    }
+
+    std::vector <OBJ_CMP_TO_LIST> cmplist;
+    BuildComponentsListFromSchematic( cmplist );
+
+    /*  sort component list */
+    sort( cmplist.begin(), cmplist.end(), SortComponentsByValue );
+    PrintComponentsListByPart( f, cmplist);
+
+    fclose( f );
+}
 
 /*
  * Print a list of components, in a form which can be imported by a spreadsheet
@@ -555,7 +588,6 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
     }
 }
 
-
 /* Print the B.O.M sorted by reference
  */
 int DIALOG_BUILD_BOM::PrintComponentsListByRef(
@@ -715,6 +747,86 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
     return 0;
 }
 
+
+int DIALOG_BUILD_BOM::PrintComponentsListByPart(
+    FILE*                          f,
+    std::vector <OBJ_CMP_TO_LIST>& aList )
+{
+	int				qty = 1 ;
+    char            RefName[80];
+    char            ValName[80];
+    char            NxtName[80];
+    char            RNames[1000];
+	const char 		*	Field[15];
+    EDA_BaseStruct* DrawList;
+    EDA_BaseStruct* NxtList;
+    SCH_COMPONENT*  DrawLibItem;
+    SCH_COMPONENT*  NxtLibItem;
+	int				jj;
+
+	strcpy(NxtName, "");
+	strcpy(RNames, "");
+	for( jj=0; jj<15; jj++ )
+		Field[jj] = NULL; 
+
+    for( unsigned ii = 0; ii < aList.size(); ii++ )
+    {
+        DrawList = aList[ii].m_RootCmp;
+        if( DrawList == NULL )
+            continue;
+        if( DrawList->Type() != TYPE_SCH_COMPONENT )
+            continue;
+        if( aList[ii].m_Reference[0] == '#' )
+            continue;
+        DrawLibItem = (SCH_COMPONENT*) DrawList;
+
+		for( unsigned ij = ii+1 ; ij < aList.size(); ij++ ){
+        	NxtList = aList[ij].m_RootCmp;
+        	if( NxtList == NULL )
+          		continue;
+        	if( NxtList->Type() != TYPE_SCH_COMPONENT )
+           	 	continue;
+        	if( aList[ij].m_Reference[0] == '#' )
+            	continue;
+        	NxtLibItem = (SCH_COMPONENT*) NxtList;
+			break;
+		}
+
+        sprintf( RefName, "%s", aList[ii].m_Reference );
+        sprintf( ValName, "%s", CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
+        sprintf( NxtName, "%s", CONV_TO_UTF8( NxtLibItem->GetField( VALUE )->m_Text ) );
+   		for( jj = FIELD1; jj < DrawLibItem->GetFieldCount(); jj++ ) {
+			if( Field[jj] == NULL || *Field[jj] == 0 )
+				Field[jj] = CONV_TO_UTF8( DrawLibItem->GetField( jj )->m_Text );
+		}
+
+		if( !strcmp( NxtName, ValName ) ) {
+			qty++;
+			strcat(RNames, ", ");
+			strcat(RNames, RefName);
+			continue;
+		}
+
+        fprintf( f, "%-15s%c%-3d", ValName, s_ExportSeparatorSymbol, qty );
+		qty = 1;
+
+    	if( m_AddFootprintField->IsChecked() )
+       		 fprintf( f, "%c%-16s", s_ExportSeparatorSymbol,
+                     CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
+
+        fprintf( f, "%c%-20s", s_ExportSeparatorSymbol, Field[FIELD1] );
+        fprintf( f, "%c%-20s", s_ExportSeparatorSymbol, Field[FIELD2] );
+        fprintf( f, "%c%-20s", s_ExportSeparatorSymbol, Field[FIELD3] );
+   		for( jj = FIELD1; jj < DrawLibItem->GetFieldCount(); jj++ ) 
+			Field[jj] = NULL; 
+
+        fprintf( f, "%c%s%s", s_ExportSeparatorSymbol, RefName, RNames ); 
+		strcpy(RNames, "");
+
+        fputs( "\n", f );
+	}
+    return 0;
+}
 
 int DIALOG_BUILD_BOM::PrintComponentsListByVal(
     FILE*                          f,

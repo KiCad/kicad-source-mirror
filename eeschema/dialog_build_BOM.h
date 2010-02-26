@@ -23,16 +23,18 @@ private:
 
     void SavePreferences();
     void Init( );
-    void Create_BOM_Lists(bool aTypeFileIsExport,
+    void Create_BOM_Lists(int  aTypeFile,
                           bool aIncludeSubComponents,
                           char aExportSeparatorSymbol,
                           bool aRunBrowser);
     void GenereListeOfItems(const wxString & FullFileName, bool aIncludeSubComponents );
     void CreateExportList(const wxString & FullFileName, bool aIncludeSubComponents);
+    void CreatePartsList(const wxString & FullFileName);
     int PrintComponentsListByRef( FILE * f, std::vector <OBJ_CMP_TO_LIST>& aList,
                             bool CompactForm, bool aIncludeSubComponents );
     int PrintComponentsListByVal( FILE *f, std::vector <OBJ_CMP_TO_LIST>& aList,
                             bool aIncludeSubComponents);
+    int PrintComponentsListByPart( FILE *f, std::vector <OBJ_CMP_TO_LIST>& aList);
     void PrintFieldData(FILE * f, SCH_COMPONENT * DrawLibItem, bool CompactForm = FALSE);
 
 
