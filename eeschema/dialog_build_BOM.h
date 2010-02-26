@@ -29,7 +29,7 @@ private:
                           bool aRunBrowser);
     void GenereListeOfItems(const wxString & FullFileName, bool aIncludeSubComponents );
     void CreateExportList(const wxString & FullFileName, bool aIncludeSubComponents);
-    void CreatePartsList(const wxString & FullFileName);
+    void CreatePartsList(const wxString & FullFileName, bool aIncludeSubComponents);
     int PrintComponentsListByRef( FILE * f, std::vector <OBJ_CMP_TO_LIST>& aList,
                             bool CompactForm, bool aIncludeSubComponents );
     int PrintComponentsListByVal( FILE *f, std::vector <OBJ_CMP_TO_LIST>& aList,

@@ -123,7 +123,7 @@ void DIALOG_BUILD_BOM::Create_BOM_Lists( int  aTypeFile,
         break;
 
     case 2: // Single Part per line
-        CreatePartsList( m_ListFileName );
+        CreatePartsList( m_ListFileName, aIncludeSubComponents );
         break;
     }
 
@@ -144,7 +144,7 @@ void DIALOG_BUILD_BOM::Create_BOM_Lists( int  aTypeFile,
  * form is:
  * cmp value; number of components; <footprint>; field1; field2; field3; list of references having the same value
  */
-void DIALOG_BUILD_BOM::CreatePartsList( const wxString& aFullFileName )
+void DIALOG_BUILD_BOM::CreatePartsList( const wxString& aFullFileName, bool aIncludeSubComponents )
 {
     FILE*    f;
     wxString msg;
@@ -160,7 +160,14 @@ void DIALOG_BUILD_BOM::CreatePartsList( const wxString& aFullFileName )
     std::vector <OBJ_CMP_TO_LIST> cmplist;
     BuildComponentsListFromSchematic( cmplist );
 
-    /*  sort component list */
+    /*  sort component list by ref and remove sub components*/
+    if( !aIncludeSubComponents )
+    {
+        sort( cmplist.begin(), cmplist.end(), SortComponentsByReference );
+        DeleteSubCmp( cmplist );
+    }
+
+    /*  sort component list by value*/
     sort( cmplist.begin(), cmplist.end(), SortComponentsByValue );
     PrintComponentsListByPart( f, cmplist );
 
@@ -792,16 +799,15 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
     std::vector <OBJ_CMP_TO_LIST>& aList )
 {
     int             qty = 1;
-    char            RefName[80];
-    char            ValName[80];
-    char            NxtName[80];
-    char            RNames[1000];
+    char            RefName[256];
+    char            ValName[256];
+    char            NxtName[256];
+    char            RNames[2000];
     wxArrayString   cmpFields;
     EDA_BaseStruct* DrawList;
     EDA_BaseStruct* NxtList;
     SCH_COMPONENT*  DrawLibItem;
     SCH_COMPONENT*  NxtLibItem;
-    int             jj;
 
     strcpy( NxtName, "" );
     strcpy( RNames, "" );
@@ -835,11 +841,14 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
         sprintf( ValName, "%s", CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
         if( NxtLibItem )
             sprintf( NxtName, "%s", CONV_TO_UTF8( NxtLibItem->GetField( VALUE )->m_Text ) );
+        else
+            NxtName[0] = 0;
+
 
         // Store fields. try to store non empty fields.
-        if( cmpFields.GetCount() < DrawLibItem->GetFieldCount() )
+        if( (int)cmpFields.GetCount() < DrawLibItem->GetFieldCount() )
             cmpFields.Alloc(DrawLibItem->GetFieldCount());
-        for( jj = FIELD1; jj < DrawLibItem->GetFieldCount(); jj++ )
+        for( int jj = FIELD1; jj < DrawLibItem->GetFieldCount(); jj++ )
         {
             if( cmpFields[jj].IsEmpty() )
                 cmpFields[jj] = DrawLibItem->GetField( jj )->m_Text;
