@@ -163,9 +163,6 @@ configured and builded with "--disable-monolithic --enable-shared" parameters.
 -DKICAD_MINIZIP=ON
 Build the "minizip" executable. Use OFF to disable it building.
 
--DKICAD_PYTHON=ON
-Build the KiCad with Python support.
-
 -DwxUSE_UNICODE=ON
 Require on locale utf8 for build the KiCad with cyrillic fonts support.
 

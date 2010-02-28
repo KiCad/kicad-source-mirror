@@ -6,10 +6,6 @@
 #pragma implementation
 #endif
 
-#ifdef KICAD_PYTHON
-#include <pyhandler.h>
-#endif
-
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
@@ -71,10 +67,6 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow*       parent,
     msg = wxGetCwd();
     line.Printf( _( "Ready\nWorking dir: %s\n" ), msg.GetData() );
     PrintMsg( line );
-
-#ifdef KICAD_PYTHON
-    PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::LoadProject" ) );
-#endif
 
     RecreateBaseHToolbar();
 
@@ -225,23 +217,6 @@ void WinEDA_MainFrame::OnOpenTextEditor( wxCommandEvent& event )
 }
 
 
-#ifdef KICAD_PYTHON
-void WinEDA_MainFrame::OnRunPythonScript( wxCommandEvent& event )
-{
-    wxFileDialog dlg( this, _( "Execute Python Script" ), wxEmptyString,
-                      wxEmptyString, _( "Python script (*.py)|*.py" ),
-                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    PyHandler::GetInstance()->RunScript( dlg.GetPath() );
-}
-
-
-#endif
-
-
 void WinEDA_MainFrame::OnOpenFileInTextEditor( wxCommandEvent& event )
 {
     wxString mask( wxT( "*" ) );
@@ -309,12 +284,3 @@ void WinEDA_MainFrame::SaveSettings()
     cfg->Write( TreeFrameWidthEntry, m_LeftWin->GetSize().x );
 }
 
-
-#ifdef KICAD_PYTHON
-
-void WinEDA_MainFrame::OnRefreshPy()
-{
-    m_LeftWin->ReCreateTreePrj();
-}
-
-#endif

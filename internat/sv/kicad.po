@@ -4893,10 +4893,6 @@ msgstr "Spara projektfil"
 msgid "&Run"
 msgstr "&Kör"
 
-#: kicad/treeprj_frame.cpp:77
-msgid "Run the Python Script"
-msgstr ""
-
 #: kicad/treeprj_frame.cpp:84
 #: kicad/treeprj_frame.cpp:138
 msgid "&Edit in a text editor"
@@ -4917,10 +4913,6 @@ msgstr "Skapa en ny mapp"
 #: kicad/treeprj_frame.cpp:106
 msgid "New P&ython Script"
 msgstr "Nyt P&ythons-skript"
-
-#: kicad/treeprj_frame.cpp:107
-msgid "Create a New Python Script"
-msgstr ""
 
 #: kicad/treeprj_frame.cpp:113
 msgid "New &Text File"
@@ -5036,10 +5028,6 @@ msgid ""
 "Working dir: %s\n"
 msgstr ""
 
-#: kicad/mainframe.cpp:330
-msgid "Execute Python Script:"
-msgstr ""
-
 #: kicad/mainframe.cpp:353
 msgid "Load file:"
 msgstr ""
@@ -5059,10 +5047,6 @@ msgstr "pcbnew (PCB-redigerare)"
 #: kicad/commandframe.cpp:70
 msgid "gerbview (Gerber viewer)"
 msgstr "gerbview (Gerber-visare)"
-
-#: kicad/commandframe.cpp:78
-msgid "Run Python Script"
-msgstr ""
 
 #: pcbnew/dialog_track_options.cpp:125
 msgid "Via Size"

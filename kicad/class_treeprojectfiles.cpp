@@ -37,7 +37,6 @@ TREEPROJECTFILES::TREEPROJECTFILES( TREE_PROJECT_FRAME* parent ) :
     m_ImageList->Add( wxBitmap( kicad_icon_small_xpm ) );       // TREE_PROJECT
     m_ImageList->Add( wxBitmap( eeschema_xpm ) );               // TREE_SCHEMA
     m_ImageList->Add( wxBitmap( pcbnew_xpm ) );                 // TREE_PCB
-    m_ImageList->Add( wxBitmap( icon_python_small_xpm ) );      // TREE_PY
     m_ImageList->Add( wxBitmap( icon_gerbview_small_xpm ) );    // TREE_GERBER
     m_ImageList->Add( wxBitmap( datasheet_xpm ) );              // TREE_PDF
     m_ImageList->Add( wxBitmap( icon_txt_xpm ) );               // TREE_TXT

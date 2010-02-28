@@ -9077,10 +9077,6 @@ msgstr "Pcbnew (Editor de circuitos impresos)"
 msgid "GerbView (Gerber viewer)"
 msgstr "GerbView (Visualizador Gerber)"
 
-#: kicad/commandframe.cpp:78
-msgid "Run Python Script"
-msgstr "Ejecutar Script Python:"
-
 #: kicad/files-io.cpp:70
 msgid "Create Project files:"
 msgstr "Crear proyecto"
@@ -9158,10 +9154,6 @@ msgid ""
 msgstr ""
 "Listo\n"
 "Directorio de trabajo: %s\n"
-
-#: kicad/mainframe.cpp:338
-msgid "Execute Python Script:"
-msgstr "Ejecutar Script Python:"
 
 #: kicad/mainframe.cpp:361
 msgid "Load file:"
@@ -9249,10 +9241,6 @@ msgstr "En este directorio no hay archivos kicad"
 msgid "&Run"
 msgstr "Ejecuta&r"
 
-#: kicad/treeprj_frame.cpp:95
-msgid "Run the Python Script"
-msgstr "Ejecutar el Script de Python"
-
 #: kicad/treeprj_frame.cpp:102
 #: kicad/treeprj_frame.cpp:156
 msgid "&Edit in a text editor"
@@ -9274,11 +9262,6 @@ msgstr "Crear Directorio"
 msgid "New P&ython Script"
 msgstr "Nuevo Script de P&ython"
 
-#: kicad/treeprj_frame.cpp:125
-msgid "Create a New Python Script"
-msgstr "Crear Script de Python"
-
-#: kicad/treeprj_frame.cpp:131
 msgid "New &Text File"
 msgstr "Nuevo Archivo de Texto: "
 

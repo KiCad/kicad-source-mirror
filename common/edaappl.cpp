@@ -9,10 +9,6 @@
  *         (locale handling)
  ***/
 
-#ifdef KICAD_PYTHON
-#   include <pyhandler.h>
-#endif
-
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "wx/html/htmlwin.h"
@@ -334,9 +330,6 @@ void WinEDA_App::InitEDA_Appl( const wxString& aName, id_app_type aId )
     /* Set locale option for separator used in float numbers */
     SetLocaleTo_Default();
 
-#ifdef KICAD_PYTHON
-    PyHandler::GetInstance()->SetAppName( name );
-#endif
 }
 
 
@@ -1129,17 +1122,3 @@ void WinEDA_App::InsertLibraryPath( const wxString& aPaths, size_t aIndex )
     }
 }
 
-
-/**
- * Run Python scripts
- *
- * @return  The default OnRun() value (exit codes not used in kicad, so value
- *          has no special meaning)
- */
-int WinEDA_App::OnRun()
-{
-#ifdef KICAD_PYTHON
-    PyHandler::GetInstance()->RunScripts();
-#endif
-    return wxApp::OnRun();
-}

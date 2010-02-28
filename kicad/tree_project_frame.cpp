@@ -4,10 +4,6 @@
  */
 
 
-#ifdef KICAD_PYTHON
-  #include <pyhandler.h>
-#endif
-
 #include "fctsys.h"
 #include "common.h"
 #include "confirm.h"
@@ -66,11 +62,9 @@ const wxChar* s_AllowedExtensionsToList[] =
  *       library as required. */
 
 /* File extension definitions. */
-const wxString PythonFileExtension( wxT( "py" ) );
 const wxString TextFileExtension( wxT( "txt" ) );
 
 /* File wildcard definitions. */
-const wxString PythonFileWildcard( wxT( "Python files (*.py)|*.py" ) );
 const wxString TextFileWildcard( wxT( "Text files (*.txt)|*.txt" ) );
 
 
@@ -93,12 +87,8 @@ BEGIN_EVENT_TABLE( TREE_PROJECT_FRAME, wxSashLayoutWindow )
     EVT_TREE_END_DRAG( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnDragEnd )
     EVT_MENU( ID_PROJECT_TXTEDIT, TREE_PROJECT_FRAME::OnTxtEdit )
     EVT_MENU( ID_PROJECT_NEWDIR, TREE_PROJECT_FRAME::OnNewDirectory )
-    EVT_MENU( ID_PROJECT_NEWPY, TREE_PROJECT_FRAME::OnNewPyFile )
     EVT_MENU( ID_PROJECT_DELETE, TREE_PROJECT_FRAME::OnDeleteFile )
     EVT_MENU( ID_PROJECT_RENAME, TREE_PROJECT_FRAME::OnRenameFile )
-#ifdef KICAD_PYTHON
-    EVT_MENU( ID_PROJECT_RUNPY, TREE_PROJECT_FRAME::OnRunPy )
-#endif /* KICAD_PYTHON */
 END_EVENT_TABLE()
 /*****************************************************************************/
 
@@ -131,44 +121,10 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( WinEDA_MainFrame* parent ) :
 
     m_Filters.push_back( wxT( "^no kicad files found" ) );
 
-
-#ifdef KICAD_PYTHON
-    m_Filters.push_back( wxT( "^.*\\.py$" ) );
-
-    PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::RunScript" ) );
-    PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::EditScript" ) );
-    PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::TreeContextMenu" ) );
-    PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::TreeAddFile" ) );
-    PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::NewDirectory" ) );
-    PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::DeleteFile" ) );
-    PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::RenameFile" ) );
-    PyHandler::GetInstance()->DeclareEvent( wxT( "kicad::MoveFile" ) );
-#endif /* KICAD_PYTHON */
-
-
     for( int i = 0; i < TREE_MAX; i++ )
         m_ContextMenus.push_back( new wxMenu() );
 
-    wxMenu* menu = m_ContextMenus[TREE_PY];
-
-    // Python script context menu
-#ifdef KICAD_PYTHON
-    item = new wxMenuItem( menu, ID_PROJECT_RUNPY,
-                           _( "&Run" ),
-                           _( "Run the Python Script" ) );
-    item->SetBitmap( icon_python_small_xpm );
-    menu->Append( item );
-#endif /* KICAD_PYTHON */
-
-
-    // ID_PROJECT_TXTEDIT
-    item = new wxMenuItem( menu,
-                           ID_PROJECT_TXTEDIT,
-                           _( "&Edit in a text editor" ),
-                           _( "&Open the file in a Text Editor" ) );
-    item->SetBitmap( icon_txt_xpm );
-    menu->Append( item );
-
+    wxMenu *menu;
 
     // New files context menu:
     wxMenu* menus[2];
@@ -187,16 +143,6 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( WinEDA_MainFrame* parent ) :
         item->SetBitmap( directory_xpm );
         menu->Append( item );
 
-
-        // ID_PROJECT_NEWPY
-#ifdef KICAD_PYTHON
-        item = new wxMenuItem( menu,
-                               ID_PROJECT_NEWPY,
-                               _( "New P&ython Script" ),
-                               _( "Create a New Python Script" ) );
-        item->SetBitmap( new_python_xpm );
-        menu->Append( item );
-#endif /* KICAD_PYTHON */
     }
 
 
@@ -351,103 +297,6 @@ void TREE_PROJECT_FRAME::RemoveFilter( const wxString& filter )
 }
 
 
-#ifdef KICAD_PYTHON
-
-
-/**
- * @brief Return the data corresponding to the file, or NULL
- */
-/*****************************************************************************/
-TREEPROJECT_ITEM* TREE_PROJECT_FRAME::FindItemData( const boost::python::str& name )
-/*****************************************************************************/
-{
-    // (Interative tree parsing)
-    std::vector< wxTreeItemId >  roots1, roots2;
-    std::vector< wxTreeItemId >* root, * reserve;
-    wxString filename = PyHandler::MakeStr( name );
-
-    root    = &roots1;
-    reserve = &roots2;
-
-    root->push_back( m_TreeProject->GetRootItem() );
-
-    // if we look for the root, return it ...
-    TREEPROJECT_ITEM* data = dynamic_cast< TREEPROJECT_ITEM*>(
-        m_TreeProject->GetItemData( root->at( 0 ) ) );
-
-    if( data->GetFileName() == filename )
-        return data;
-
-    // Then find in its child
-    while( root->size() )
-    {
-        // look in all roots
-        for( unsigned int i = 0; i < root->size(); i++ )
-        {
-            wxTreeItemId id = root->at( i );
-
-            // for each root check any child:
-            void*        cookie = NULL;
-            wxTreeItemId child  = m_TreeProject->GetFirstChild( id, cookie );
-
-            while( child.IsOk() )
-            {
-                TREEPROJECT_ITEM* data = dynamic_cast< TREEPROJECT_ITEM*>(
-                    m_TreeProject->GetItemData( child ) );
-
-                if( data )
-                {
-                    if( data->GetFileName() == filename )
-                        return data;
-                    if( m_TreeProject->ItemHasChildren( child ) )
-                        reserve->push_back( child );
-                }
-                child = m_TreeProject->GetNextSibling( child );
-            }
-        }
-
-        // Swap the roots
-        root->clear();
-        std::vector< wxTreeItemId >* tmp;
-        tmp     = root;
-        root    = reserve;
-        reserve = tmp;
-    }
-
-    return NULL;
-}
-
-
-/**
- * @brief TODO
- */
-/*****************************************************************************/
-void TREE_PROJECT_FRAME::RemoveFilterPy( const boost::python::str& filter )
-/*****************************************************************************/
-{
-    RemoveFilter( PyHandler::MakeStr( filter ) );
-}
-
-
-/**
- * @brief TODO
- */
-/*****************************************************************************/
-void TREE_PROJECT_FRAME::AddFilter( const boost::python::str& filter )
-/*****************************************************************************/
-{
-    wxRegEx  reg;
-    wxString text = PyHandler::MakeStr( filter );
-
-    if( !reg.Compile( text ) )
-        return;
-    m_Filters.push_back( text );
-}
-
-
-#endif /* KICAD_PYTHON */
-
-
 /**
  * @brief TODO
  */
@@ -478,17 +327,6 @@ void TREE_PROJECT_FRAME::OnNewDirectory( wxCommandEvent& event )
 /*****************************************************************************/
 {
     NewFile( TREE_DIRECTORY );
-}
-
-
-/**
- * @brief TODO
- */
-/*****************************************************************************/
-void TREE_PROJECT_FRAME::OnNewPyFile( wxCommandEvent& event )
-/*****************************************************************************/
-{
-    NewFile( TREE_PY );
 }
 
 
@@ -557,20 +395,10 @@ void TREE_PROJECT_FRAME::NewFile( const wxString& name,
     if( TREE_DIRECTORY != type )
     {
         wxFile( name, wxFile::write );
-
-#ifdef KICAD_PYTHON
-        PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::NewFile" ),
-                                                PyHandler::Convert( name ) );
-#endif /* KICAD_PYTHON */
     }
     else
     {
         wxMkdir( name );
-
-#ifdef KICAD_PYTHON
-        PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::NewDirectory" ),
-                                                PyHandler::Convert( name ) );
-#endif /* KICAD_PYTHON */
     }
 
     AddFile( name, root );
@@ -598,10 +426,6 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
 
     case TREE_PCB:
         ext = BoardFileExtension;
-        break;
-
-    case TREE_PY:
-        ext = PythonFileExtension;
         break;
 
     case TREE_GERBER:
@@ -645,10 +469,6 @@ wxString TREE_PROJECT_FRAME::GetFileWildcard( TreeFileType type )
 
     case TREE_PCB:
         ext = BoardFileWildcard;
-        break;
-
-    case TREE_PY:
-        ext = PythonFileWildcard;
         break;
 
     case TREE_GERBER:
@@ -813,13 +633,6 @@ bool TREE_PROJECT_FRAME::AddFile( const wxString& aName,
     else
         data->m_IsRootFile = false;
 
-
-#ifdef KICAD_PYTHON
-    PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::TreeAddFile" ),
-                                            PyHandler::Convert( aName ) );
-#endif /* KICAD_PYTHON */
-
-
     // This section adds dirs and files found in the subdirs
     // in this case AddFile is recursive, but for the first level only.
     if( TREE_DIRECTORY == type && aRecurse )
@@ -983,15 +796,6 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
         }
     }
 
-    // At last, call python to let python add menu items "on the fly"
-
-
-  #ifdef KICAD_PYTHON
-    PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::TreeContextMenu" ),
-                                            PyHandler::Convert( FullFileName ) );
-  #endif /* KICAD_PYTHON */
-
-
     if( m_PopupMenu )
         PopupMenu( m_PopupMenu );
 }
@@ -1014,14 +818,7 @@ void TREE_PROJECT_FRAME::OnTxtEdit( wxCommandEvent& event )
     wxString editorname = wxGetApp().GetEditorName();
 
     if( !editorname.IsEmpty() )
-    {
-  #ifdef KICAD_PYTHON
-        PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::EditScript" ),
-                                                PyHandler::Convert( FullFileName ) );
-  #endif
-
         ExecuteFile( this, editorname, FullFileName );
-    }
 }
 
 
@@ -1062,61 +859,6 @@ void TREE_PROJECT_FRAME::OnRenameFile( wxCommandEvent& )
     if( tree_data->Rename( buffer, true ) )
         m_TreeProject->SetItemText( curr_item, buffer );
 }
-
-
-#ifdef KICAD_PYTHON
-
-/**
- * @brief TODO
- */
-/*****************************************************************************/
-void TREE_PROJECT_FRAME::OnRunPy( wxCommandEvent& event )
-/*****************************************************************************/
-{
-    TREEPROJECT_ITEM* tree_data = GetSelectedData();
-
-    if( !tree_data )
-        return;
-
-    wxString FullFileName = tree_data->GetFileName();
-    PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::RunScript" ),
-                                            PyHandler::Convert( FullFileName ) );
-    PyHandler::GetInstance()->RunScript( FullFileName );
-}
-
-
-/**
- * @brief Add a state to the image list
- */
-/*****************************************************************************/
-int TREE_PROJECT_FRAME::AddStatePy( boost::python::object& bitmap )
-/*****************************************************************************/
-{
-    wxBitmap* image;
-    bool      success = wxPyConvertSwigPtr( bitmap.ptr(),
-                                            (void**) &image, _T( "wxBitmap" ) );
-
-    if( !success )
-        return -1;
-
-    wxImageList* list = m_TreeProject->GetImageList();
-    int          ret  = list->GetImageCount() / ( TREE_MAX - 2 );
-
-    for( int i = 0; i < TREE_MAX - 1; i++ )
-    {
-        wxBitmap   composed( list->GetBitmap( i ) );
-
-        wxMemoryDC dc;
-        dc.SelectObject( composed );
-        dc.DrawBitmap( *image, 0, 0, true );
-        list->Add( composed );
-    }
-
-    return ret;
-}
-
-
-#endif /* KICAD_PYTHON */
 
 
 /**

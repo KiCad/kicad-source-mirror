@@ -23,9 +23,6 @@ option(USE_WX_ZOOM "Use wxDC to perform zooming (default OFF).  Warning, this is
 option(USE_WX_GRAPHICS_CONTEXT
        "Use wxGraphicsContext for rendering (default OFF).  Warning, this is experimental")
 
-# Comment this out if you don't want to build with Python support.
-# OPTION(KICAD_PYTHON "enable/disable building with Python support (default OFF)")
-
 
 #================================================
 # Set flags for GCC.

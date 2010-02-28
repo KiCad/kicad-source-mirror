@@ -74,16 +74,4 @@ public:
 
     void                  SetState( int state );
 
-#ifdef KICAD_PYTHON
-    boost::python::object GetFileNamePy() const;
-    bool                  RenamePy( const boost::python::str& newname,
-                                    bool                      check = true );
-
-    boost::python::object GetDirPy() const;
-
-    boost::python::object GetIdPy() const;
-
-    boost::python::object GetMenuPy();
-
-#endif
 };

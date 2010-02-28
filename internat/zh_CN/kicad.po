@@ -8831,10 +8831,6 @@ msgstr "打开 cvpcb 手册"
 msgid "&Run"
 msgstr "运行 (&R)"
 
-#: kicad/treeprj_frame.cpp:79
-msgid "Run the Python Script"
-msgstr "运行 Python 脚本"
-
 #: kicad/treeprj_frame.cpp:86
 #: kicad/treeprj_frame.cpp:140
 msgid "&Edit in a text editor"
@@ -8855,10 +8851,6 @@ msgstr "建立一个新目录"
 #: kicad/treeprj_frame.cpp:108
 msgid "New P&ython Script"
 msgstr "新建 P&ython 脚本"
-
-#: kicad/treeprj_frame.cpp:109
-msgid "Create a New Python Script"
-msgstr "建立一个新的 Python 脚本文件"
 
 #: kicad/treeprj_frame.cpp:115
 msgid "New &Text File"
@@ -9180,10 +9172,6 @@ msgstr ""
 "就绪\n"
 "工作目录: %s\n"
 
-#: kicad/mainframe.cpp:334
-msgid "Execute Python Script:"
-msgstr "运行 Python 脚本: "
-
 #: kicad/mainframe.cpp:357
 msgid "Load file:"
 msgstr "加载文件: "
@@ -9211,10 +9199,6 @@ msgid "gerbview (Gerber viewer)"
 msgstr ""
 "gerbview\n"
 "(Gerber 文件查看程序)"
-
-#: kicad/commandframe.cpp:78
-msgid "Run Python Script"
-msgstr "运行 Python 脚本"
 
 #: kicad/prjconfig.cpp:26
 msgid "Project File <"

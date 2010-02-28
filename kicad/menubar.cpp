@@ -61,10 +61,6 @@ BEGIN_EVENT_TABLE( WinEDA_MainFrame, WinEDA_BasicFrame )
     EVT_UPDATE_UI( ID_SELECT_PREFERED_PDF_BROWSER,
                    WinEDA_MainFrame::OnUpdatePreferredPdfBrowser )
 
-#ifdef KICAD_PYTHON
-    EVT_BUTTON( ID_RUN_PYTHON, WinEDA_MainFrame::OnRunPythonScript )
-#endif
-
 END_EVENT_TABLE()
 
 

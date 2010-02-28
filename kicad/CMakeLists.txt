@@ -10,7 +10,6 @@ set(KICAD_SRCS
     commandframe.cpp
     files-io.cpp
     kicad.cpp
-    kicad-python.cpp
     mainframe.cpp
     menubar.cpp
     preferences.cpp

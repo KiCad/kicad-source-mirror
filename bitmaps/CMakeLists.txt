@@ -157,8 +157,6 @@ set(BITMAP_SRCS
     icon_kicad.xpm
     icon_modedit.xpm
     icon_pcbnew.xpm
-    icon_python_small.xpm
-    icon_python.xpm
     icon_txt.xpm
     import3d.xpm
     import_hierarchical_label.xpm
@@ -258,7 +256,6 @@ set(BITMAP_SRCS
     New_Module.xpm
     new_pcb.xpm
     New_Project.xpm
-    new_python.xpm
     new_sch.xpm
     new_txt.xpm
     new.xpm

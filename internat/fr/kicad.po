@@ -11517,14 +11517,6 @@ msgstr ""
 "Prêt\n"
 "Répertoire de travail: %s\n"
 
-#: kicad/mainframe.cpp:231
-msgid "Execute Python Script"
-msgstr "Executer un Script Python"
-
-#: kicad/mainframe.cpp:232
-msgid "Python script (*.py)|*.py"
-msgstr "Script Python (*.py)|*.py"
-
 #: kicad/mainframe.cpp:253
 msgid "Text file ("
 msgstr "Fichier Texte ("
@@ -11548,10 +11540,6 @@ msgstr "PCBnew (Editeur de circuits imprimés)"
 #: kicad/commandframe.cpp:84
 msgid "GerbView (Gerber viewer)"
 msgstr "GerbView (Visualisateur  Gerber)"
-
-#: kicad/commandframe.cpp:91
-msgid "Run Python Script"
-msgstr "Exécuter le Script Python"
 
 #: kicad/preferences.cpp:47
 msgid "You must choose a PDF viewer before using this option."
@@ -11577,10 +11565,6 @@ msgstr "Sélection Editeur Préféré"
 msgid "&Run"
 msgstr "Exécute&r"
 
-#: kicad/tree_project_frame.cpp:158
-msgid "Run the Python Script"
-msgstr "Exécuter le Script Python"
-
 #: kicad/tree_project_frame.cpp:167
 #: kicad/tree_project_frame.cpp:224
 msgid "&Edit in a text editor"
@@ -11601,10 +11585,6 @@ msgstr "Créer un nouveau Répertoire"
 #: kicad/tree_project_frame.cpp:195
 msgid "New P&ython Script"
 msgstr "Nouveau Script P&ython"
-
-#: kicad/tree_project_frame.cpp:196
-msgid "Create a New Python Script"
-msgstr "Créer un nouveau script Python"
 
 #: kicad/tree_project_frame.cpp:211
 msgid "&Rename file"

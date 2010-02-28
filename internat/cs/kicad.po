@@ -547,10 +547,6 @@ msgstr "Součástka %s %s vývod %s : Rozdílné sítě"
 msgid "&Run"
 msgstr "&Spustit"
 
-#: /home/martin/kicad/kicad/treeprj_frame.cpp:127
-msgid "Run the Python Script"
-msgstr "Spustit Python skript"
-
 #: /home/martin/kicad/kicad/treeprj_frame.cpp:136
 #: /home/martin/kicad/kicad/treeprj_frame.cpp:211
 msgid "&Edit in a text editor"
@@ -571,10 +567,6 @@ msgstr "Vytvořit nový adresář"
 #: /home/martin/kicad/kicad/treeprj_frame.cpp:164
 msgid "New P&ython Script"
 msgstr "Nový P&ython skript"
-
-#: /home/martin/kicad/kicad/treeprj_frame.cpp:165
-msgid "Create a New Python Script"
-msgstr "Vytvořit nový Python skript"
 
 #: /home/martin/kicad/kicad/treeprj_frame.cpp:174
 msgid "New &Text File"
@@ -876,14 +868,6 @@ msgstr ""
 "Připraven\n"
 "Pracovní adresář: %s\n"
 
-#: /home/martin/kicad/kicad/mainframe.cpp:307
-msgid "Execute Python Script"
-msgstr "Spustit Python skript:"
-
-#: /home/martin/kicad/kicad/mainframe.cpp:308
-msgid "Python script (*.py)|*.py"
-msgstr "Python skript (*.py)|*.py"
-
 #: /home/martin/kicad/kicad/mainframe.cpp:326
 msgid "Text file ("
 msgstr "Textový soubor ("
@@ -907,10 +891,6 @@ msgstr "Pcbnew (editor desek)"
 #: /home/martin/kicad/kicad/commandframe.cpp:67
 msgid "GerbView (Gerber viewer)"
 msgstr "GerbView (prohlížeč Gerber)"
-
-#: /home/martin/kicad/kicad/commandframe.cpp:74
-msgid "Run Python Script"
-msgstr "Spustit Python skript"
 
 #: /home/martin/kicad/kicad/preferences.cpp:48
 msgid "You must choose a PDF viewer before use this option"

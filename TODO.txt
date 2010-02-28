@@ -4,7 +4,6 @@ KiCad TODO List
 CMAKE
 -----
 * Add install targets for binaries and resources on Mac.
-* Add Python.
 
 WXMAC Platform
 --------------

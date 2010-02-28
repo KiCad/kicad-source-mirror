@@ -9304,17 +9304,9 @@ msgstr "사용자 크기"
 msgid "&Run"
 msgstr "실행 (&R)"
 
-#: kicad/treeprj_frame.cpp:64
-msgid "Run the Python Script"
-msgstr "Python 스크립트 실행"
-
 #: kicad/treeprj_frame.cpp:70
 msgid "&Edit in a text editor"
 msgstr "텍스트 에디터로 편집 (&E)"
-
-#: kicad/treeprj_frame.cpp:71
-msgid "Edit the Python Script in a Text Editor"
-msgstr "텍스트 에디터로 Python 스크립트 편집"
 
 #: kicad/treeprj_frame.cpp:84
 msgid "New D&irectory"
@@ -9355,14 +9347,6 @@ msgstr "새 네트리스트 (&N)"
 #: kicad/treeprj_frame.cpp:101
 msgid "Create a New Netlist"
 msgstr "새 네트리스트 만들기"
-
-#: kicad/treeprj_frame.cpp:107
-msgid "New P&ython Script"
-msgstr "새 Python 스크립트 (&Y)"
-
-#: kicad/treeprj_frame.cpp:107
-msgid "Create a New Python Script"
-msgstr "새 Python 스크립트 만들기"
 
 #: kicad/treeprj_frame.cpp:112
 msgid "New &Text File"

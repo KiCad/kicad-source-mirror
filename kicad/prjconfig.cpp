@@ -2,9 +2,6 @@
  * @file prjconfig.cpp
  * Load and save project configuration files (*.pro)
  */
-#ifdef KICAD_PYTHON
-#include <pyhandler.h>
-#endif
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -122,10 +119,6 @@ void WinEDA_MainFrame::OnLoadProject( wxCommandEvent& event )
               _( "\nProject: " ) + m_ProjectFileName.GetFullName() +
               wxT( "\n" ) );
 
-#ifdef KICAD_PYTHON
-    PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::LoadProject" ),
-                                            PyHandler::Convert( m_ProjectFileName.GetFullPath() ) );
-#endif
 }
 
 

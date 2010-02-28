@@ -107,10 +107,6 @@ public:
                        const wxString& title,
                        const wxPoint& pos, const wxSize& size,
                        long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
-#ifdef KICAD_PYTHON
-    WinEDA_BasicFrame( const WinEDA_BasicFrame& ) { }   // Should throw!!
-    WinEDA_BasicFrame() { }                             // Should throw!!
-#endif
     ~WinEDA_BasicFrame();
 
     void         GetKicadHelp( wxCommandEvent& event );

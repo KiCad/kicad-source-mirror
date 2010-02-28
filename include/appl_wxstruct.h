@@ -77,7 +77,6 @@ protected:
 public: WinEDA_App();
     ~WinEDA_App();
     bool      OnInit();
-    int       OnRun();
 
     bool      SetBinDir();
     void      SetDefaultSearchPaths( void );

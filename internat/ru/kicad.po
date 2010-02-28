@@ -4975,14 +4975,6 @@ msgstr ""
 "Готово\n"
 "Рабочая папка: %s\n"
 
-#: kicad/mainframe.cpp:231
-msgid "Execute Python Script"
-msgstr "Выполнить скрипт Python"
-
-#: kicad/mainframe.cpp:232
-msgid "Python script (*.py)|*.py"
-msgstr "Python script (*.py)|*.py"
-
 #: kicad/mainframe.cpp:253
 msgid "Text file ("
 msgstr "Текстовый файл ("
@@ -5230,17 +5222,9 @@ msgstr "pcbnew (редактор плат)"
 msgid "GerbView (Gerber viewer)"
 msgstr "gerbview (программа просмотра Gerber файлов)"
 
-#: kicad/commandframe.cpp:91
-msgid "Run Python Script"
-msgstr "Выполнить скрипт Python"
-
 #: kicad/tree_project_frame.cpp:157
 msgid "&Run"
 msgstr "Выполнить"
-
-#: kicad/tree_project_frame.cpp:158
-msgid "Run the Python Script"
-msgstr "Выполнить скрипт Python"
 
 #: kicad/tree_project_frame.cpp:167
 #: kicad/tree_project_frame.cpp:224
@@ -5258,14 +5242,6 @@ msgstr "Новая директория"
 #: kicad/tree_project_frame.cpp:186
 msgid "Create a New Directory"
 msgstr "Создать новую директорию"
-
-#: kicad/tree_project_frame.cpp:195
-msgid "New P&ython Script"
-msgstr "Новый скрипт Python"
-
-#: kicad/tree_project_frame.cpp:196
-msgid "Create a New Python Script"
-msgstr "Создать новый скрипт Python"
 
 #: kicad/tree_project_frame.cpp:211
 msgid "&Rename file"

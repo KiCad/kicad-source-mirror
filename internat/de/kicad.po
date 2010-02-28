@@ -5447,14 +5447,6 @@ msgstr ""
 "Bereit\n"
 "Arbeitsverzeichnis: %s\n"
 
-#: kicad/mainframe.cpp:307
-msgid "Execute Python Script"
-msgstr "Führe Python Skript aus"
-
-#: kicad/mainframe.cpp:308
-msgid "Python script (*.py)|*.py"
-msgstr "Python Skript (*.py)|*.py"
-
 #: kicad/mainframe.cpp:326
 msgid "Text file ("
 msgstr "Textdatei ("
@@ -5694,10 +5686,6 @@ msgstr ""
 msgid "&Run"
 msgstr "&Starte"
 
-#: kicad/treeprj_frame.cpp:125
-msgid "Run the Python Script"
-msgstr "Starte das Python Skript"
-
 #: kicad/treeprj_frame.cpp:134
 #: kicad/treeprj_frame.cpp:209
 msgid "&Edit in a text editor"
@@ -5718,10 +5706,6 @@ msgstr "Erstelle ein neues Verzeichnis"
 #: kicad/treeprj_frame.cpp:162
 msgid "New P&ython Script"
 msgstr "Neues P&ython Skript"
-
-#: kicad/treeprj_frame.cpp:163
-msgid "Create a New Python Script"
-msgstr "Erstelle ein neues Pythonskript"
 
 #: kicad/treeprj_frame.cpp:172
 msgid "New &Text File"
@@ -5844,10 +5828,6 @@ msgstr "PCBnew (Layouteditor)"
 #: kicad/commandframe.cpp:60
 msgid "GerbView (Gerber viewer)"
 msgstr "GerbView  (Gerber-Betrachter)"
-
-#: kicad/commandframe.cpp:67
-msgid "Run Python Script"
-msgstr "Starte Python Skript"
 
 #: pcbnew/edit.cpp:253
 msgid "Module Editor"

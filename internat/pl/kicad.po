@@ -10145,15 +10145,6 @@ msgstr ""
 "Gotowy\n"
 "Katalog roboczy: %s\n"
 
-#: kicad/kicad/mainframe.cpp:307
-#, fuzzy
-msgid "Execute Python Script"
-msgstr "Wykonaj skrypt Pythona:"
-
-#: kicad/kicad/mainframe.cpp:308
-msgid "Python script (*.py)|*.py"
-msgstr ""
-
 #: kicad/kicad/mainframe.cpp:326
 #, fuzzy
 msgid "Text file ("
@@ -10228,10 +10219,6 @@ msgstr ""
 msgid "&Run"
 msgstr "&Uruchom"
 
-#: kicad/kicad/treeprj_frame.cpp:127
-msgid "Run the Python Script"
-msgstr "Uruchom skrypt Pythona"
-
 #: kicad/kicad/treeprj_frame.cpp:136
 #: kicad/kicad/treeprj_frame.cpp:211
 msgid "&Edit in a text editor"
@@ -10252,10 +10239,6 @@ msgstr "Utwórz nowy katalog"
 #: kicad/kicad/treeprj_frame.cpp:164
 msgid "New P&ython Script"
 msgstr "Nowy skrypt P&ythona"
-
-#: kicad/kicad/treeprj_frame.cpp:165
-msgid "Create a New Python Script"
-msgstr "Utwórz nowy skrypt Pythona"
 
 #: kicad/kicad/treeprj_frame.cpp:174
 msgid "New &Text File"
@@ -10380,10 +10363,6 @@ msgstr "Pcbnew (edytor płytek drukowanych)"
 #: kicad/kicad/commandframe.cpp:67
 msgid "GerbView (Gerber viewer)"
 msgstr "Gerbview (przeglądarka plików Gerbera)"
-
-#: kicad/kicad/commandframe.cpp:74
-msgid "Run Python Script"
-msgstr "Uruchom skrypt Pythona"
 
 #: kicad/kicad/buildmnu.cpp:98
 msgid "&Open\tCtrl+O"

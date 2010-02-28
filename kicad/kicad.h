@@ -5,10 +5,6 @@
 #ifndef KICAD_H
 #define KICAD_H
 
-#ifdef KICAD_PYTHON
-#include <pyhandler.h>
-#endif
-
 #include <vector>
 
 #include <wx/treectrl.h>
@@ -37,8 +33,6 @@ enum id_kicad_frm {
     ID_PROJECT_TREE,
     ID_PROJECT_TXTEDIT,
     ID_PROJECT_TREE_REFRESH,
-    ID_PROJECT_RUNPY,
-    ID_PROJECT_NEWPY,
     ID_PROJECT_NEWDIR,
     ID_PROJECT_DELETE,
     ID_PROJECT_RENAME,
@@ -47,7 +41,6 @@ enum id_kicad_frm {
     ID_TO_EDITOR,
     ID_TO_EESCHEMA,
     ID_TO_GERBVIEW,
-    ID_RUN_PYTHON,
     ID_BROWSE_AN_SELECT_FILE,
     ID_SELECT_PREFERED_EDITOR,
     ID_SELECT_PREFERED_PDF_BROWSER_NAME,
@@ -63,7 +56,6 @@ enum id_kicad_frm {
  */
 class WinEDA_MainFrame : public WinEDA_BasicFrame
 {
-    /* This class is the main entry point of the py API */
 public:
     TREE_PROJECT_FRAME* m_LeftWin;
     RIGHT_KM_FRAME*  m_RightWin;
@@ -97,11 +89,6 @@ public:
     void                  OnRunEeschema( wxCommandEvent& event );
     void                  OnRunGerbview( wxCommandEvent& event );
 
-#ifdef KICAD_PYTHON
-    void                  OnRunPythonScript( wxCommandEvent& event );
-
-#endif
-
     void                  OnOpenTextEditor( wxCommandEvent& event );
     void                  OnOpenFileInTextEditor( wxCommandEvent& event );
     void                  OnOpenFileInEditor( wxCommandEvent& event );
@@ -127,21 +114,6 @@ public:
     void                  LoadSettings();
     void                  SaveSettings();
 
-#ifdef KICAD_PYTHON
-    void                  OnRefreshPy();
-
-    boost::python::object GetPrjName() const;
-
-    WinEDA_MainFrame( const WinEDA_MainFrame& ) { }
-
-    WinEDA_MainFrame() { }
-
-    boost::python::object ToWx();
-    void                  AddFastLaunchPy( boost::python::object& button );
-    TREE_PROJECT_FRAME*      GetTree() const;
-
-#endif
-
     DECLARE_EVENT_TABLE()
 };
 
@@ -151,7 +123,6 @@ enum TreeFileType {
     TREE_PROJECT = 1,
     TREE_SCHEMA,
     TREE_PCB,
-    TREE_PY,
     TREE_GERBER,
     TREE_PDF,
     TREE_TXT,

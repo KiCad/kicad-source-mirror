@@ -11168,14 +11168,6 @@ msgstr ""
 "Valmis\n"
 "Työhakemisto: %s\n"
 
-#: kicad/mainframe.cpp:231
-msgid "Execute Python Script"
-msgstr "Suorita Python-komentosarja"
-
-#: kicad/mainframe.cpp:232
-msgid "Python script (*.py)|*.py"
-msgstr "Python-komentosarja (*.py)|*.py"
-
 #: kicad/mainframe.cpp:253
 msgid "Text file ("
 msgstr "Tekstitiedosto ("
@@ -11200,17 +11192,9 @@ msgstr "PCBnew (Piirilevyeditori)"
 msgid "GerbView (Gerber viewer)"
 msgstr "GerbView (Gerber-tiedostojen näytin)"
 
-#: kicad/commandframe.cpp:91
-msgid "Run Python Script"
-msgstr "Suorita Python-komentosarja"
-
 #: kicad/tree_project_frame.cpp:157
 msgid "&Run"
 msgstr "&Käynnistä"
-
-#: kicad/tree_project_frame.cpp:158
-msgid "Run the Python Script"
-msgstr "Suorita Python-komentosarja"
 
 #: kicad/tree_project_frame.cpp:167
 #: kicad/tree_project_frame.cpp:224
@@ -11228,14 +11212,6 @@ msgstr "Uusi &hakemisto"
 #: kicad/tree_project_frame.cpp:186
 msgid "Create a New Directory"
 msgstr "Luo uusi hakemisto"
-
-#: kicad/tree_project_frame.cpp:195
-msgid "New P&ython Script"
-msgstr "Uusi &Python-komentosarja"
-
-#: kicad/tree_project_frame.cpp:196
-msgid "Create a New Python Script"
-msgstr "Luo uusi Python-komentosarja"
 
 #: kicad/tree_project_frame.cpp:211
 msgid "&Rename file"

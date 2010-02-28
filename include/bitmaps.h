@@ -147,8 +147,6 @@ extern const char* icon_eeschema_xpm[];
 extern const char* icon_gerbview_small_xpm[];
 extern const char* icon_gerbview_xpm[];
 extern const char* icon_modedit_xpm[];
-extern const char* icon_python_small_xpm[];
-extern const char* icon_python_xpm[];
 extern const char* icon_txt_xpm[];
 extern const char* icon_w3d_xpm[];
 extern const char* import_hierarchical_label_xpm[];

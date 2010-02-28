@@ -210,8 +210,6 @@ These should be set from command line:
 
  KICAD_MINIZIP ON/OFF
 
- KICAD_PYTHON ON/OFF
-
  USE_WX_ZOOM ON/OFF (OPTIONAL)
    Experimental coordinate translation code using wxDC instead of custom
    Kicad version.

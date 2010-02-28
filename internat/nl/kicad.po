@@ -10628,10 +10628,6 @@ msgstr "naamloos"
 msgid "&Run"
 msgstr "&Uitvoeren"
 
-#: kicad/treeprj_frame.cpp:124
-msgid "Run the Python Script"
-msgstr "Uitvoeren van Python Script"
-
 #: kicad/treeprj_frame.cpp:133
 #: kicad/treeprj_frame.cpp:208
 msgid "&Edit in a text editor"
@@ -10652,10 +10648,6 @@ msgstr "Creëer een Nieuwe Map"
 #: kicad/treeprj_frame.cpp:161
 msgid "New P&ython Script"
 msgstr "Nieuw P&ython Script"
-
-#: kicad/treeprj_frame.cpp:162
-msgid "Create a New Python Script"
-msgstr "Creëer een Nieuw Python Script"
 
 #: kicad/treeprj_frame.cpp:171
 msgid "New &Text File"
@@ -10770,10 +10762,6 @@ msgstr "PCBnew (Printplaat ontwerper)"
 msgid "GerbView (Gerber viewer)"
 msgstr "GerbView (Gerber viewer)"
 
-#: kicad/commandframe.cpp:91
-msgid "Run Python Script"
-msgstr "Start Python Script"
-
 #: kicad/mainframe.cpp:82
 #, c-format
 msgid ""
@@ -10782,14 +10770,6 @@ msgid ""
 msgstr ""
 "Klaar\n"
 "Huidige map: %s\n"
-
-#: kicad/mainframe.cpp:275
-msgid "Execute Python Script"
-msgstr "Python Script Uitvoeren"
-
-#: kicad/mainframe.cpp:276
-msgid "Python script (*.py)|*.py"
-msgstr "Python script (*.py)|*.py"
 
 #: kicad/mainframe.cpp:297
 msgid "Text file ("

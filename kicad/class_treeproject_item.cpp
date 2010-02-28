@@ -5,10 +5,6 @@
  * store info about a file or directory shown in the Kicad tree project files
  */
 
-#ifdef KICAD_PYTHON
-#include <pyhandler.h>
-#endif
-
 #include "fctsys.h"
 #include "common.h"
 #include "gestfich.h"
@@ -41,22 +37,6 @@ TREEPROJECT_ITEM::TREEPROJECT_ITEM( enum TreeFileType type, const wxString& data
     m_IsRootFile = false;       // true only for the root item of the tree (the project name)
     m_WasPopulated = false;
 }
-
-
-#ifdef KICAD_PYTHON
-using namespace boost::python;
-
-// Convert the data to an id
-object TREEPROJECT_ITEM::GetIdPy() const
-{
-    wxTreeItemId* id = new wxTreeItemId();
-
-    *id = GetId();
-    return object( handle<>( borrowed( wxPyConstructObject( id,
-                                                            wxT( "wxTreeItemId" ),
-                                                            true ) ) ) );
-}
-#endif
 
 // Set the state used in the icon list
 void TREEPROJECT_ITEM::SetState( int state )
@@ -150,12 +130,6 @@ void TREEPROJECT_ITEM::Move( TREEPROJECT_ITEM* dest )
         return;
     }
 
-#ifdef KICAD_PYTHON
-    object param = make_tuple( PyHandler::Convert( m_FileName ),
-                               PyHandler::Convert( destName ) );
-    PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::MoveFile" ), param );
-#endif
-
     SetFileName( destName );
 
     if( TREE_DIRECTORY != GetType() )
@@ -232,11 +206,6 @@ type.\n Do you want to continue ?" ),
     }
     SetFileName( newFile );
 
-#ifdef KICAD_PYTHON
-    object param = make_tuple( PyHandler::Convert( m_FileName ),
-                              PyHandler::Convert( newFile ) );
-    PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::RenameFile" ), param );
-#endif
     return true;
 }
 
@@ -269,10 +238,6 @@ bool TREEPROJECT_ITEM::Delete( bool check )
         }
         m_Parent->Delete( GetId() );
 
-#ifdef KICAD_PYTHON
-        PyHandler::GetInstance()->TriggerEvent( wxT( "kicad::DeleteFile" ),
-                                                PyHandler::Convert( m_FileName ) );
-#endif
         return true;
     }
     return false;
@@ -303,12 +268,6 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
     case TREE_PCB:
         ExecuteFile( m_Parent, PCBNEW_EXE, FullFileName );
         break;
-
-#ifdef KICAD_PYTHON
-    case TREE_PY:
-        PyHandler::GetInstance()->RunScript( FullFileName );
-        break;
-#endif
 
     case TREE_GERBER:
         ExecuteFile( m_Parent, GERBVIEW_EXE, FullFileName );

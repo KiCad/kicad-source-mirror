@@ -24,11 +24,6 @@
 
 #include "build_version.h"
 
-#ifdef KICAD_PYTHON
- #include <pyhandler.h>
- using namespace boost::python;
-#endif
-
 
 /* Import functions */
 char* GetFileName( char* FullPathName );
@@ -154,12 +149,6 @@ bool WinEDA_App::OnInit()
 
     frame->Show( TRUE );
     frame->Raise();
-
-
-#ifdef KICAD_PYTHON
-    PyHandler::GetInstance()->AddToModule( wxT( "kicad" ), &py_kicad_init );
-    PyHandler::GetInstance()->AddToModule( wxT( "common" ), &py_common_init );
-#endif
 
     return TRUE;
 }

@@ -84,13 +84,6 @@ void RIGHT_KM_FRAME::CreateCommandToolbar( void )
     btn->SetToolTip( _( "GerbView (Gerber viewer)" ) );
     AddFastLaunch( btn );
 
-
-    // Set up toolbar
-#ifdef KICAD_PYTHON
-    btn = new wxBitmapButton( parent, ID_RUN_PYTHON, wxBitmap( icon_python_xpm ) );
-    btn->SetToolTip( _( "Run Python Script" ) );
-    AddFastLaunch( btn );
-#endif
 }
 
 
