@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-26 16:50+0100\n"
-"PO-Revision-Date: 2010-02-26 16:50+0100\n"
+"POT-Creation-Date: 2010-02-28 15:06+0100\n"
+"PO-Revision-Date: 2010-02-28 15:06+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -11192,7 +11192,7 @@ msgid "File <"
 msgstr "Fichier <"
 
 #: cvpcb/readschematicnetlist.cpp:115
-#: kicad/prjconfig.cpp:108
+#: kicad/prjconfig.cpp:105
 msgid "> not found"
 msgstr ">  non trouvé"
 
@@ -11322,136 +11322,136 @@ msgstr "Redessin de l'écran (F3)"
 msgid "Zoom auto (Home)"
 msgstr "Zoom Automatique (Home)"
 
-#: kicad/menubar.cpp:94
+#: kicad/menubar.cpp:90
 msgid "Open an existing project"
 msgstr "Ouvrir un projet  existant"
 
-#: kicad/menubar.cpp:108
-#: kicad/menubar.cpp:276
+#: kicad/menubar.cpp:104
+#: kicad/menubar.cpp:272
 msgid "Start a new project"
 msgstr "Créer un nouveau projet"
 
-#: kicad/menubar.cpp:114
-#: kicad/menubar.cpp:286
+#: kicad/menubar.cpp:110
+#: kicad/menubar.cpp:282
 msgid "Save current project"
 msgstr "Sauver le projet courrant"
 
-#: kicad/menubar.cpp:122
+#: kicad/menubar.cpp:118
 msgid "&Archive"
 msgstr "Archiver"
 
-#: kicad/menubar.cpp:123
+#: kicad/menubar.cpp:119
 msgid "Archive project files in zip archive"
 msgstr "Archive fichiers projet dans un fichier zip"
 
-#: kicad/menubar.cpp:128
+#: kicad/menubar.cpp:124
 msgid "&Unarchive"
 msgstr "&Désarchiver"
 
-#: kicad/menubar.cpp:129
+#: kicad/menubar.cpp:125
 msgid "Unarchive project files from zip file"
 msgstr "Désarchiver les fichiers du projet"
 
-#: kicad/menubar.cpp:138
+#: kicad/menubar.cpp:134
 msgid "Quit KiCad"
 msgstr "Quitter KiCad"
 
-#: kicad/menubar.cpp:152
+#: kicad/menubar.cpp:148
 msgid "Text E&ditor"
 msgstr "&Editeur de Texte"
 
-#: kicad/menubar.cpp:153
+#: kicad/menubar.cpp:149
 msgid "Open prefered text editor"
 msgstr "Lancer l'éditeur de texte préféré"
 
-#: kicad/menubar.cpp:159
+#: kicad/menubar.cpp:155
 msgid "&View File"
 msgstr "&Voir Fichier"
 
-#: kicad/menubar.cpp:160
+#: kicad/menubar.cpp:156
 msgid "View, read or edit file with a text editor"
 msgstr "Examiner, lire ou éditer des fichiers avec l'éditeur de texte"
 
-#: kicad/menubar.cpp:173
+#: kicad/menubar.cpp:169
 msgid "&Text Editor"
 msgstr "&Editeur de Texte"
 
-#: kicad/menubar.cpp:174
+#: kicad/menubar.cpp:170
 msgid "Select your prefered text editor"
 msgstr "Choisir son  éditeur de texte préféré"
 
-#: kicad/menubar.cpp:188
+#: kicad/menubar.cpp:184
 msgid "Use system default PDF viewer used to browse datasheets"
 msgstr "Utiliser le visualisateur PDF par défaut pour afficher les documentations"
 
-#: kicad/menubar.cpp:198
+#: kicad/menubar.cpp:194
 msgid "Favourite"
 msgstr "Visualisateur PDF préféré"
 
-#: kicad/menubar.cpp:199
+#: kicad/menubar.cpp:195
 msgid "Use your favourite PDF viewer used to browse datasheets"
 msgstr "Utiliser le visualisateur PDF préféré pour afficher les documentations"
 
-#: kicad/menubar.cpp:210
-#: kicad/menubar.cpp:217
+#: kicad/menubar.cpp:206
+#: kicad/menubar.cpp:213
 msgid "PDF Viewer"
 msgstr "Visualisateur PDF"
 
-#: kicad/menubar.cpp:211
+#: kicad/menubar.cpp:207
 msgid "Select your favourite PDF viewer used to browse datasheets"
 msgstr "Sélectionner le visualisateur PDF favori pour afficher les documents"
 
-#: kicad/menubar.cpp:218
+#: kicad/menubar.cpp:214
 msgid "PDF viewer preferences"
 msgstr "Préférences pour le visualisateur PDF"
 
-#: kicad/menubar.cpp:233
+#: kicad/menubar.cpp:229
 msgid "Open the kicad manual"
 msgstr "Ouvrir la documentation de kicad"
 
-#: kicad/menubar.cpp:242
+#: kicad/menubar.cpp:238
 msgid "About kicad project manager"
 msgstr "Au sujet de Kicad, gestionnaire de projet"
 
-#: kicad/menubar.cpp:252
+#: kicad/menubar.cpp:248
 msgid "&Browse"
 msgstr "&Examiner"
 
-#: kicad/menubar.cpp:281
+#: kicad/menubar.cpp:277
 msgid "Load existing project"
 msgstr "Ouvrir un projet  existant"
 
-#: kicad/menubar.cpp:294
+#: kicad/menubar.cpp:290
 msgid "Archive all project files"
 msgstr "Archiver les fichiers du projet"
 
-#: kicad/menubar.cpp:302
+#: kicad/menubar.cpp:298
 msgid "Refresh project tree"
 msgstr "Mettre à jour l'affichage du projet"
 
-#: kicad/prjconfig.cpp:42
+#: kicad/prjconfig.cpp:39
 msgid "Project template file <kicad.pro> not found "
 msgstr "Fichier modèle <kicad.pro> non trouvé"
 
-#: kicad/prjconfig.cpp:73
+#: kicad/prjconfig.cpp:70
 msgid "Create New Project"
 msgstr "Créer un Nouveau Projet"
 
-#: kicad/prjconfig.cpp:78
+#: kicad/prjconfig.cpp:75
 msgid "Open Existing Project"
 msgstr "Ouvrir un Projet  Existant"
 
-#: kicad/prjconfig.cpp:107
+#: kicad/prjconfig.cpp:104
 msgid "Kicad project file <"
 msgstr "Fichier projet Kicad <"
 
-#: kicad/prjconfig.cpp:121
-#: kicad/kicad.cpp:74
+#: kicad/prjconfig.cpp:118
+#: kicad/kicad.cpp:69
 msgid "Working dir: "
 msgstr "Répertoire de travail: "
 
-#: kicad/prjconfig.cpp:122
-#: kicad/kicad.cpp:75
+#: kicad/prjconfig.cpp:119
+#: kicad/kicad.cpp:70
 msgid ""
 "\n"
 "Project: "
@@ -11508,7 +11508,7 @@ msgstr ""
 "\n"
 "Créer Archive zippée <%s>"
 
-#: kicad/mainframe.cpp:72
+#: kicad/mainframe.cpp:68
 #, c-format
 msgid ""
 "Ready\n"
@@ -11517,11 +11517,11 @@ msgstr ""
 "Prêt\n"
 "Répertoire de travail: %s\n"
 
-#: kicad/mainframe.cpp:253
+#: kicad/mainframe.cpp:228
 msgid "Text file ("
 msgstr "Fichier Texte ("
 
-#: kicad/mainframe.cpp:255
+#: kicad/mainframe.cpp:230
 msgid "Load File to Edit"
 msgstr "Fichier à Editer"
 
@@ -11561,90 +11561,16 @@ msgstr "Fichier exécutable ("
 msgid "Select Prefered Editor"
 msgstr "Sélection Editeur Préféré"
 
-#: kicad/tree_project_frame.cpp:157
-msgid "&Run"
-msgstr "Exécute&r"
-
-#: kicad/tree_project_frame.cpp:167
-#: kicad/tree_project_frame.cpp:224
-msgid "&Edit in a text editor"
-msgstr "Editer avec un éditeur de Texte"
-
-#: kicad/tree_project_frame.cpp:168
-msgid "&Open the file in a Text Editor"
-msgstr "&Ouvrir le fichier avec un  Editeur de texte"
-
-#: kicad/tree_project_frame.cpp:185
-msgid "New D&irectory"
-msgstr "&Nouveau Répertoire"
-
-#: kicad/tree_project_frame.cpp:186
-msgid "Create a New Directory"
-msgstr "Créer un nouveau Répertoire"
-
-#: kicad/tree_project_frame.cpp:195
-msgid "New P&ython Script"
-msgstr "Nouveau Script P&ython"
-
-#: kicad/tree_project_frame.cpp:211
-msgid "&Rename file"
-msgstr "&Renommer fichier"
-
-#: kicad/tree_project_frame.cpp:212
-#: kicad/tree_project_frame.cpp:214
-msgid "&Rename directory"
-msgstr "&Renommer répertoire"
-
-#: kicad/tree_project_frame.cpp:213
-msgid "Rename file"
-msgstr "Renommer fichier"
-
-#: kicad/tree_project_frame.cpp:225
-msgid "Open the file in a Text Editor"
-msgstr "Ouvrir le fichier avec un  Editeur de texte"
-
-#: kicad/tree_project_frame.cpp:233
-msgid "&Delete File"
-msgstr "&Supprimer Fichier"
-
-#: kicad/tree_project_frame.cpp:234
-msgid "&Delete Directory"
-msgstr "&Supprimer le Répertoire"
-
-#: kicad/tree_project_frame.cpp:235
-msgid "Delete the File"
-msgstr "Supprimer le fichier"
-
-#: kicad/tree_project_frame.cpp:236
-msgid "&Delete the Directory and its content"
-msgstr "Effacer le Répertoire et son contenu"
-
-#: kicad/tree_project_frame.cpp:511
-msgid "Create New File"
-msgstr "Créer  un Nouveau Fichier"
-
-#: kicad/tree_project_frame.cpp:512
-msgid "Create New Directory"
-msgstr "Créer un nouveau Répertoire"
-
-#: kicad/tree_project_frame.cpp:1057
-msgid "Change filename: "
-msgstr "Changer Nom Fichier: "
-
-#: kicad/tree_project_frame.cpp:1059
-msgid "Change filename"
-msgstr "Changer Nom Fichier"
-
-#: kicad/class_treeproject_item.cpp:148
+#: kicad/class_treeproject_item.cpp:128
 msgid "Unable to move file ... "
 msgstr "Impossible de déplacer le fichier "
 
-#: kicad/class_treeproject_item.cpp:149
-#: kicad/class_treeproject_item.cpp:230
+#: kicad/class_treeproject_item.cpp:129
+#: kicad/class_treeproject_item.cpp:204
 msgid "Permission error ?"
 msgstr "Erreur de permission ?"
 
-#: kicad/class_treeproject_item.cpp:213
+#: kicad/class_treeproject_item.cpp:187
 msgid ""
 "Changing file extension will change file type.\n"
 " Do you want to continue ?"
@@ -11652,21 +11578,82 @@ msgstr ""
 "Changer l'extension changera le type de fichier.\n"
 "Voulez vous continuer ?"
 
-#: kicad/class_treeproject_item.cpp:215
+#: kicad/class_treeproject_item.cpp:189
 msgid "Rename File"
 msgstr "Renommer Fichier"
 
-#: kicad/class_treeproject_item.cpp:229
+#: kicad/class_treeproject_item.cpp:203
 msgid "Unable to rename file ... "
 msgstr "Impossible de renommer le fichier... "
 
-#: kicad/class_treeproject_item.cpp:250
+#: kicad/class_treeproject_item.cpp:219
 msgid "Do you really want to delete "
 msgstr "Voulez vous réellement effacer"
 
-#: kicad/class_treeproject_item.cpp:251
+#: kicad/class_treeproject_item.cpp:220
 msgid "Delete File"
 msgstr "Supprimer Fichier"
+
+#: kicad/tree_project_frame.cpp:141
+msgid "New D&irectory"
+msgstr "&Nouveau Répertoire"
+
+#: kicad/tree_project_frame.cpp:142
+msgid "Create a New Directory"
+msgstr "Créer un nouveau Répertoire"
+
+#: kicad/tree_project_frame.cpp:157
+msgid "&Rename file"
+msgstr "&Renommer fichier"
+
+#: kicad/tree_project_frame.cpp:158
+#: kicad/tree_project_frame.cpp:160
+msgid "&Rename directory"
+msgstr "&Renommer répertoire"
+
+#: kicad/tree_project_frame.cpp:159
+msgid "Rename file"
+msgstr "Renommer fichier"
+
+#: kicad/tree_project_frame.cpp:170
+msgid "&Edit in a text editor"
+msgstr "Editer avec un éditeur de Texte"
+
+#: kicad/tree_project_frame.cpp:171
+msgid "Open the file in a Text Editor"
+msgstr "Ouvrir le fichier avec un  Editeur de texte"
+
+#: kicad/tree_project_frame.cpp:179
+msgid "&Delete File"
+msgstr "&Supprimer Fichier"
+
+#: kicad/tree_project_frame.cpp:180
+msgid "&Delete Directory"
+msgstr "&Supprimer le Répertoire"
+
+#: kicad/tree_project_frame.cpp:181
+msgid "Delete the File"
+msgstr "Supprimer le fichier"
+
+#: kicad/tree_project_frame.cpp:182
+msgid "&Delete the Directory and its content"
+msgstr "Effacer le Répertoire et son contenu"
+
+#: kicad/tree_project_frame.cpp:349
+msgid "Create New File"
+msgstr "Créer  un Nouveau Fichier"
+
+#: kicad/tree_project_frame.cpp:350
+msgid "Create New Directory"
+msgstr "Créer un nouveau Répertoire"
+
+#: kicad/tree_project_frame.cpp:854
+msgid "Change filename: "
+msgstr "Changer Nom Fichier: "
+
+#: kicad/tree_project_frame.cpp:856
+msgid "Change filename"
+msgstr "Changer Nom Fichier"
 
 #: gerbview/options.cpp:167
 msgid "Gerbview Options"
@@ -12187,6 +12174,74 @@ msgstr "Couleurs"
 msgid "Error"
 msgstr "Erreur"
 
+#: common/edaappl.cpp:108
+msgid "French"
+msgstr "Français"
+
+#: common/edaappl.cpp:116
+msgid "Finnish"
+msgstr "Finlandais"
+
+#: common/edaappl.cpp:124
+msgid "Spanish"
+msgstr "Espagnol"
+
+#: common/edaappl.cpp:132
+msgid "Portuguese"
+msgstr "Portugais"
+
+#: common/edaappl.cpp:140
+msgid "Italian"
+msgstr "Italien"
+
+#: common/edaappl.cpp:148
+msgid "German"
+msgstr "Allemand"
+
+#: common/edaappl.cpp:156
+msgid "Slovenian"
+msgstr "Slovène"
+
+#: common/edaappl.cpp:164
+msgid "Hungarian"
+msgstr "Hongrois"
+
+#: common/edaappl.cpp:172
+msgid "Polish"
+msgstr "Polonais"
+
+#: common/edaappl.cpp:180
+msgid "Czech"
+msgstr "Tchèque"
+
+#: common/edaappl.cpp:188
+msgid "Russian"
+msgstr "Russe"
+
+#: common/edaappl.cpp:196
+msgid "Korean"
+msgstr "Coréen"
+
+#: common/edaappl.cpp:204
+msgid "Chinese simplified"
+msgstr "Chinois Simplifié"
+
+#: common/edaappl.cpp:212
+msgid "Catalan"
+msgstr "Catalan"
+
+#: common/edaappl.cpp:220
+msgid "Dutch"
+msgstr "Hollandais"
+
+#: common/edaappl.cpp:817
+msgid "Language"
+msgstr "Langue"
+
+#: common/edaappl.cpp:818
+msgid "Select application language (only for testing!)"
+msgstr "Choisir la langue (seulement pour tests!)"
+
 #: common/zoom.cpp:185
 msgid "Center"
 msgstr "Centrer"
@@ -12235,74 +12290,6 @@ msgstr "Fichiers Modules Kicad (*.mod)|*.mod"
 #: common/pcbcommon.cpp:87
 msgid "Printed circuit board files (*.brd)|*.brd"
 msgstr "Fichiers circuits imprimés (*.brd)|*.brd"
-
-#: common/edaappl.cpp:112
-msgid "French"
-msgstr "Français"
-
-#: common/edaappl.cpp:120
-msgid "Finnish"
-msgstr "Finlandais"
-
-#: common/edaappl.cpp:128
-msgid "Spanish"
-msgstr "Espagnol"
-
-#: common/edaappl.cpp:136
-msgid "Portuguese"
-msgstr "Portugais"
-
-#: common/edaappl.cpp:144
-msgid "Italian"
-msgstr "Italien"
-
-#: common/edaappl.cpp:152
-msgid "German"
-msgstr "Allemand"
-
-#: common/edaappl.cpp:160
-msgid "Slovenian"
-msgstr "Slovène"
-
-#: common/edaappl.cpp:168
-msgid "Hungarian"
-msgstr "Hongrois"
-
-#: common/edaappl.cpp:176
-msgid "Polish"
-msgstr "Polonais"
-
-#: common/edaappl.cpp:184
-msgid "Czech"
-msgstr "Tchèque"
-
-#: common/edaappl.cpp:192
-msgid "Russian"
-msgstr "Russe"
-
-#: common/edaappl.cpp:200
-msgid "Korean"
-msgstr "Coréen"
-
-#: common/edaappl.cpp:208
-msgid "Chinese simplified"
-msgstr "Chinois Simplifié"
-
-#: common/edaappl.cpp:216
-msgid "Catalan"
-msgstr "Catalan"
-
-#: common/edaappl.cpp:224
-msgid "Dutch"
-msgstr "Hollandais"
-
-#: common/edaappl.cpp:824
-msgid "Language"
-msgstr "Langue"
-
-#: common/edaappl.cpp:825
-msgid "Select application language (only for testing!)"
-msgstr "Choisir la langue (seulement pour tests!)"
 
 #: common/dsnlexer.cpp:168
 msgid "in file"
@@ -13002,6 +12989,12 @@ msgstr "Options d'Affichage"
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "&Run"
+#~ msgstr "Exécute&r"
+#~ msgid "&Open the file in a Text Editor"
+#~ msgstr "&Ouvrir le fichier avec un  Editeur de texte"
+#~ msgid "New P&ython Script"
+#~ msgstr "Nouveau Script P&ython"
 #~ msgid "noname"
 #~ msgstr "noname"
 #~ msgid "noname."

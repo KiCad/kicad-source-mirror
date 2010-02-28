@@ -577,7 +577,7 @@ void WinEDA_PcbFrame::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
     wildcard = _( "Component files (." ) + NetCmpExtBuffer + wxT( ")|*." ) +
                NetCmpExtBuffer;
 
-    wxFileDialog dlg( this, _( "Save Component Files" ), wxEmptyString,
+    wxFileDialog dlg( this, _( "Save Component Files" ), wxGetCwd(),
                       fn.GetFullName(), wildcard,
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 

@@ -1,4 +1,4 @@
 release version:
-2010 feb 26
+2010 feb 28
 files (.zip,.tgz):
-kicad-2010-02-26-RC5
+kicad-2010-02-28-RC5
