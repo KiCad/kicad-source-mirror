@@ -96,13 +96,13 @@ bool SCH_BUS_ENTRY::Save( FILE* aFile ) const
 
 EDA_Rect SCH_BUS_ENTRY::GetBoundingBox()
 {
-    int      dx = m_Pos.x - m_End().x;
-    int      dy = m_Pos.y - m_End().y;
-    EDA_Rect box( wxPoint( m_Pos.x, m_Pos.y ), wxSize( dx, dy ) );
+    EDA_Rect box;
+    box.SetOrigin(m_Pos);
+    box.SetEnd(m_End());
 
     box.Normalize();
     int      width = ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
-    box.Inflate( width / 2, width / 2 );
+    box.Inflate( width / 2 );
 
     return box;
 }

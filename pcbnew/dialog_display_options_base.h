@@ -40,7 +40,7 @@ class DialogDisplayOptions_base : public wxDialog
 			ID_EDGES_MODULES,
 			ID_TEXT_MODULES,
 			ID_PADS_SHAPES,
-			ID_VIAS_SHAPES
+			ID_VIAS_SHAPES,
 		};
 		
 		wxRadioBox* m_OptDisplayTracks;
@@ -66,7 +66,7 @@ class DialogDisplayOptions_base : public wxDialog
 		
 	
 	public:
-		DialogDisplayOptions_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 731,331 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DialogDisplayOptions_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Display options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 731,331 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DialogDisplayOptions_base();
 	
 };

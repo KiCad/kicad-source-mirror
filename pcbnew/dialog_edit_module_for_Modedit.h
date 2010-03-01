@@ -41,8 +41,7 @@ private:
     void OnEditReference( wxCommandEvent& event );
     void On3DShapeSelection( wxCommandEvent& event );
 	void On3DShapeNameSelected( wxCommandEvent& event );
-    void Browse3DLib( wxCommandEvent& event );
-    void Add3DShape( wxCommandEvent& event );
+    void BrowseAndAdd3DLib( wxCommandEvent& event );
     void Remove3DShape( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
     void OnOkClick( wxCommandEvent& event );

@@ -211,12 +211,6 @@ void DIALOG_MODULE_MODULE_EDITOR::On3DShapeNameSelected(wxCommandEvent& event)
     Transfert3DValuesToDisplay( m_Shapes3D_list[m_LastSelected3DShapeIndex] );
 }
 
-/***********************************************************/
-void DIALOG_MODULE_MODULE_EDITOR::Add3DShape(wxCommandEvent& event)
-/***********************************************************/
-{
-    Browse3DLib( event );
-}
 
 /***********************************************************/
 void DIALOG_MODULE_MODULE_EDITOR::Remove3DShape(wxCommandEvent& event)
@@ -244,7 +238,7 @@ void DIALOG_MODULE_MODULE_EDITOR::Remove3DShape(wxCommandEvent& event)
 
 
 /*********************************************************************/
-void DIALOG_MODULE_MODULE_EDITOR::Browse3DLib( wxCommandEvent& event )
+void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
 /*********************************************************************/
 {
     wxString fullfilename, shortfilename;

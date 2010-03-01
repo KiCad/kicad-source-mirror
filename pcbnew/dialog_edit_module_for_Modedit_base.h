@@ -35,8 +35,7 @@
 
 #define ID_NOTEBOOK 1000
 #define ID_BROWSE_3D_LIB 1001
-#define ID_ADD_3D_SHAPE 1002
-#define ID_REMOVE_3D_SHAPE 1003
+#define ID_REMOVE_3D_SHAPE 1002
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_MODULE_MODULE_EDITOR_BASE
@@ -83,7 +82,6 @@ class DIALOG_MODULE_MODULE_EDITOR_BASE : public wxDialog
 		wxStaticText* m_staticText3Dname;
 		wxListBox* m_3D_ShapeNameListBox;
 		wxButton* m_buttonBrowse;
-		wxButton* m_buttonAdd;
 		wxButton* m_buttonRemove;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
 		wxButton* m_sdbSizerStdButtonsOK;
@@ -93,8 +91,7 @@ class DIALOG_MODULE_MODULE_EDITOR_BASE : public wxDialog
 		virtual void OnEditReference( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnEditValue( wxCommandEvent& event ){ event.Skip(); }
 		virtual void On3DShapeNameSelected( wxCommandEvent& event ){ event.Skip(); }
-		virtual void Browse3DLib( wxCommandEvent& event ){ event.Skip(); }
-		virtual void Add3DShape( wxCommandEvent& event ){ event.Skip(); }
+		virtual void BrowseAndAdd3DLib( wxCommandEvent& event ){ event.Skip(); }
 		virtual void Remove3DShape( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
