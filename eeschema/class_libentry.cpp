@@ -1145,6 +1145,7 @@ void LIB_COMPONENT::CopySelectedItems( const wxPoint& aOffset )
 }
 
 
+
 void LIB_COMPONENT::MirrorSelectedItemsH( const wxPoint& aCenter )
 {
     BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
@@ -1152,7 +1153,7 @@ void LIB_COMPONENT::MirrorSelectedItemsH( const wxPoint& aCenter )
         if( item.m_Selected == 0 )
             continue;
 
-        item.SetOffset( aCenter );
+        item.MirrorHorizontal( aCenter );
         item.m_Flags = item.m_Selected = 0;
     }
 
