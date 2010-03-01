@@ -148,7 +148,7 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     Module_Ref = Module;
     int pad_orient = aPad->m_Orient - Module_Ref->m_Orient;
 
-    // Prepare une undo list:
+    // Prepare an undo list:
     PICKED_ITEMS_LIST itemsList;
     Module = (MODULE*) m_Pcb->m_Modules;
     for( ; Module != NULL; Module = Module->Next() )
@@ -156,7 +156,7 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         if( !edit_Same_Modules && (Module != Module_Ref) )
             continue;
 
-        if( Module->m_LibRef != Module->m_LibRef )
+        if( Module->m_LibRef != Module_Ref->m_LibRef )
             continue;
 
         bool   saveMe = false;
@@ -196,7 +196,7 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         if( !edit_Same_Modules && (Module != Module_Ref) )
             continue;
 
-        if( Module->m_LibRef != Module->m_LibRef )
+        if( Module->m_LibRef != Module_Ref->m_LibRef )
             continue;
 
         /* Erase module on screen */

@@ -53,12 +53,14 @@ static long Std_Pad_Layers[NBTYPES] =
 /********************************************************************/
 class DIALOG_PAD_PROPERTIES : public DIALOG_PAD_PROPERTIES_BASE
 {
-public:
+private:
     WinEDA_BasePcbFrame* m_Parent;
     D_PAD*               m_CurrentPad;
+    BOARD *              m_Board;
 
 public:
     DIALOG_PAD_PROPERTIES( WinEDA_BasePcbFrame* parent, D_PAD* Pad );
+private:
     void InitDialog( );
     void OnPadShapeSelection( wxCommandEvent& event );
     void OnDrillShapeSelected( wxCommandEvent& event );
@@ -77,6 +79,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( WinEDA_BasePcbFrame* parent, D_PAD
 {
     m_Parent = parent;
     m_CurrentPad = Pad;
+    m_Board = m_Parent->GetBoard();
 
     if( m_CurrentPad )
     {
@@ -258,6 +261,22 @@ void DIALOG_PAD_PROPERTIES::InitDialog( )
         cmd_event.SetId( m_PadType->GetSelection() );
         PadTypeSelected( cmd_event );
     }
+
+    // Setup layers names from board
+	m_PadLayerCu->SetLabel(m_Board->GetLayerName(LAYER_N_BACK));
+	m_PadLayerCmp->SetLabel(m_Board->GetLayerName(LAYER_N_FRONT));
+
+	m_PadLayerAdhCmp->SetLabel(m_Board->GetLayerName( ADHESIVE_N_FRONT ));
+	m_PadLayerAdhCu->SetLabel(m_Board->GetLayerName( ADHESIVE_N_BACK ));
+	m_PadLayerPateCmp->SetLabel(m_Board->GetLayerName( SOLDERPASTE_N_FRONT ));
+	m_PadLayerPateCu->SetLabel(m_Board->GetLayerName(SOLDERPASTE_N_BACK ));
+	m_PadLayerSilkCmp->SetLabel(m_Board->GetLayerName( SILKSCREEN_N_FRONT ));
+	m_PadLayerSilkCu->SetLabel(m_Board->GetLayerName( SILKSCREEN_N_BACK ));
+	m_PadLayerMaskCmp->SetLabel(m_Board->GetLayerName( SOLDERMASK_N_FRONT ));
+	m_PadLayerMaskCu->SetLabel(m_Board->GetLayerName( SOLDERMASK_N_BACK ));
+	m_PadLayerECO1->SetLabel(m_Board->GetLayerName( ECO1_N ));
+	m_PadLayerECO2->SetLabel(m_Board->GetLayerName( ECO2_N));
+	m_PadLayerDraft->SetLabel(m_Board->GetLayerName( DRAW_N ));
 }
 
 

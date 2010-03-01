@@ -498,6 +498,7 @@ void BOARD::SetVisibleElementColor( int aPCB_VISIBLE, int aColor )
     case PAD_FR_VISIBLE:
     case PAD_BK_VISIBLE:
     case GRID_VISIBLE:
+    case RATSNEST_VISIBLE:
         GetColorsSettings()->SetItemColor( aPCB_VISIBLE, aColor );
         break;
 

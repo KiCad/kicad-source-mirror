@@ -845,9 +845,10 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
             NxtName[0] = 0;
 
 
-        // Store fields. try to store non empty fields.
-        if( (int)cmpFields.GetCount() < DrawLibItem->GetFieldCount() )
-            cmpFields.Alloc(DrawLibItem->GetFieldCount());
+        // Store fields. try to find and store non empty fields.
+        int needed_size = DrawLibItem->GetFieldCount() - cmpFields.GetCount();
+        if( needed_size > 0 )
+            cmpFields.Add(wxEmptyString, needed_size);
         for( int jj = FIELD1; jj < DrawLibItem->GetFieldCount(); jj++ )
         {
             if( cmpFields[jj].IsEmpty() )
