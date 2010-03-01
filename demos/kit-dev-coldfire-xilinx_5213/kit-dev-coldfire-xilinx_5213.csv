@@ -1,0 +1,50 @@
+              0;  1;         SM0805;            ;            ;            ;            ;R9
+          100nF; 43;         SM0805;         AVX;08055C104JAT2A;http://octopart.com/08055c104jat2a-avx-4795;            ;C61, C4, C5, C6, C7, C8, C9, C10, C11, C12, C14, C15, C18, C21, C22, C23, C24, C25, C26, C27, C28, C30, C31, C32, C33, C34, C35, C36, C41, C43, C44, C45, C46, C51, C52, C53, C54, C55, C56, C57, C58, C59, C60
+          100uF;  1;      SM1206POL;            ;            ;            ;            ;C17
+            10K; 12;         SM0805;            ;            ;            ;            ;R35, R4, R5, R6, R8, R10, R11, R13, R23, R26, R30, R34
+            10M;  1;         SM0805;            ;            ;            ;            ;R1
+           10pF;  2;         SM0805;            ;            ;            ;            ;C2, C1
+           10uF;  2;           C2V8;            ;            ;            ;            ;C38, C16
+           10uH;  2;         SM1206;            ;            ;            ;            ;L2, L1
+             1K;  4;         SM0805;            ;            ;            ;            ;R63, R7, R36, R62
+         1N4004;  1;             D5;            ;            ;            ;            ;D7
+            1nF;  2;         SM0805;            ;            ;            ;            ;C20, C3
+            20K;  1;         SM0805;            ;            ;            ;            ;R12
+             22;  1;         SM0805;            ;            ;            ;            ;R46
+          220uF;  1;           C2V8;            ;            ;            ;            ;C40
+            270;  7;         SM0805;            ;            ;            ;            ;R53, R14, R22, R28, R31, R32, R33
+            3,3;  1;             R4;            ;            ;            ;            ;R64
+           3906;  1;       SOT23EBC;            ;            ;            ;            ;Q1
+           4,7K; 14;         SM0805;            ;            ;            ;            ;R50, R2, R15, R16, R17, R18, R19, R20, R21, R25, R45, R47, R48, R49
+            4K7;  1;         SM0805;            ;            ;            ;            ;R57
+             62;  1;         SM0805;            ;            ;            ;            ;R38
+      74AHC1G14;  1;         SOT353;            ;            ;            ;            ;U2
+        74HC125;  1;          SO14E;            ;            ;            ;            ;U4
+           8MHz;  1;        HC-18UH;            ;            ;            ;            ;Y1
+          BAT54;  2;       ST23AK#1;            ;            ;            ;            ;D3, D1
+           BEAD;  1;         SM1206;            ;            ;            ;            ;FB1
+         CONN_1;  6;         PINTST;            ;            ;            ;            ;VREF1, ALLPST1, CLKOUT1, GND1, RS1, TA-1
+      CONN_13X2;  1; pin_array_13x2;            ;            ;            ;            ;BDM_PORT1
+         CONN_2;  1;       BORNIER2;            ;            ;            ;            ;TB1
+      CONN_20X2;  1; PIN_ARRAY_20X2;            ;            ;            ;            ;P4
+       CONN_2X2;  2;  PIN_ARRAY_2X2;            ;            ;            ;            ;P3, CAN_EN1
+         CONN_3;  3;  PIN_ARRAY_3X1;            ;            ;            ;            ;COM_SEL3, COM_SEL1, COM_SEL2
+      CONN_30X2;  1; PIN_ARRAY_30X2;            ;            ;            ;            ;MCU_PORT1
+       CONN_4X2;  4;  pin_array_4x2;            ;            ;            ;            ;UART_EN2, PULUPEN1, UART_EN0, UART_EN1
+         CONN_6;  1;  PIN_ARRAY-6X1;            ;            ;            ;            ;P1
+            DB9;  3;          DB9FC;            ;            ;            ;            ;UARTCAN2, UARTCAN0, UARTCAN1
+         DS1818;  1;    TO92-INVERT;            ;            ;            ;            ;LV1
+           FUSE;  1;        FSUPCMS;            ;            ;            ;            ;F1
+        JACK_2P;  1;      JACK_ALIM;            ;            ;            ;            ;J1
+         JUMPER;  8;  PIN_ARRAY_2X1;            ;            ;            ;            ;VX_EN1, BDM_EN1, CAN_TERM1, CLK0, CLK1, CT1, LED_EN1, VDDA1
+            LED;  7;      SM1206POL;            ;            ;            ;            ;LED5, D8, D9, LED1, LED2, LED3, LED4
+     LED_RESET1;  1;      SM1206POL;            ;            ;            ;            ;RED1
+   LT1129_QPACK;  1;          DPAK5;            ;            ;            ;            ;VR1
+         MAX202;  3;          SO16E;            ;            ;            ;            ;U8, U3, U5
+MCF5213-LQFP100;  1;        VQFP100;   Freescale;MC9S12UF32PUE;http://octopart.com/mc9s12uf32pue-freescale+semiconductor-481400;            ;U1
+      PCA82C251;  1;           SO8E;            ;            ;            ;            ;U7
+              R;  2;         SM0805;            ;            ;            ;            ;RCAN2, RCAN1
+            RED;  1;      SM1206POL;            ;            ;            ;            ;LEDABRT1
+        SW_PUSH;  4;  SW_PUSH_SMALL;            ;            ;            ;            ;SW2, ABRT_SW1, RST_SW1, SW1
+     SWITCH_INV;  1;        SW_SPDT;            ;            ;            ;            ;SW_ONOFF1
+  XCR3256-TQ144;  1;        TQFP144;            ;            ;            ;            ;U9
