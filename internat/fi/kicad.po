@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-21 22:13+0200\n"
-"PO-Revision-Date: 2010-02-21 22:13+0200\n"
+"POT-Creation-Date: 2010-03-01 19:32+0200\n"
+"PO-Revision-Date: 2010-03-01 19:32+0200\n"
 "Last-Translator: Vesa Solonen <vesa.solonen@hut.fi>\n"
 "Language-Team: Amerikanenglanti <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -148,12 +148,10 @@ msgstr ""
 "Lajiteltuna laskevaan tärkeysjärjestykseen."
 
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:224
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:83
 msgid "Use this attribute for most non smd components"
 msgstr "Käytä tätä määritettä useimmille ei-pintaliitososille"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:226
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:86
 msgid ""
 "Use this attribute for smd components.\n"
 "Only components with this option are put in the footprint position list file"
@@ -162,47 +160,38 @@ msgstr ""
 "Vain komponentit tällä määrittelyllä tulevat ladontaluettelotiedostoon"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:228
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:89
 msgid "Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)"
 msgstr "Käytä tätä määritettä \"virtuaalikomponenteille\" (kuten vanha ISA PC-väyläliitin)"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:255
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:115
 msgid "Enable hotkey move commands and Auto Placement"
 msgstr "Salli pikanäppäintoiminto siirroille ja automaattiasemointiin"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:257
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:116
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr "Estä pikanäppäintoiminto siirroille ja automaattiasemointiin"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:266
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:125
 msgid "Shape Scale:"
 msgstr "Muodon skaala:"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:271
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:129
 msgid "Shape Offset:"
 msgstr "Muodon siirtymä:"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:276
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:133
 msgid "Shape Rotation:"
 msgstr "Muodon kierto:"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:382
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:259
 msgid "3D Shape:"
 msgstr "3D-muoto:"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:412
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:287
 msgid "Use a relative path?"
 msgstr "Käytetäänkö suhteellista polkua?"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:413
-#: pcbnew/dialog_edit_module_for_Modedit.cpp:288
 msgid "Path type"
 msgstr "Polun tyyppi"
 
@@ -314,6 +303,66 @@ msgstr "Tavallisen kontrastin näyttöasetus"
 #: pcbnew/toolbars_update_user_interface.cpp:266
 msgid "High contrast display mode"
 msgstr "Korkean kontrastin näyttöasetus"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:23
+msgid "Graphics:"
+msgstr "Grafiikka:"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:25
+msgid "Graphic segm Width"
+msgstr "Grafiikkasegmentin leveys"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:32
+msgid "Board Edges Width"
+msgstr "Levyn reunaviivan leveys"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:39
+msgid "Copper Text Width"
+msgstr "Kuparitekstin leveys"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:46
+msgid "Text Size V"
+msgstr "Tekstin korkeus"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:53
+msgid "Text Size H"
+msgstr "Tekstin leveys"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:63
+msgid "Modules:"
+msgstr "Osat:"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:65
+msgid "Edges Module Width"
+msgstr "Osan reunaviivan leveys"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:72
+msgid "Text Module Width"
+msgstr "Tekstin viivanleveys"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:79
+msgid "Text Module Size V"
+msgstr "Kirjainkorkeus"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:86
+msgid "Text Module Size H"
+msgstr "Kirjainleveys"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:96
+msgid "General:"
+msgstr "Yleiset:"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:98
+msgid "Default pen size:"
+msgstr "Kynän oletuskoko:"
+
+#: pcbnew/dialog_graphic_items_options_base.cpp:100
+msgid ""
+"Pen size used to draw items that have no pen size specified.\n"
+"Used mainly to draw items in sketch mode."
+msgstr ""
+"Käytettävä kynän leveys elementeille, joista leveysmäärittely puuttuu.\n"
+"Käytetään pääasiassa piirrettäessä luonnos-asetuksilla."
 
 #: pcbnew/layer_widget.cpp:358
 msgid "Left click to select, middle click for color change, right click for menu"
@@ -616,23 +665,23 @@ msgstr "Luo mikroaltoväli (kapasitanssi)"
 msgid "Gap (inch):"
 msgstr "Väli (tuumaa):"
 
-#: pcbnew/dialog_print_for_modedit.cpp:70
+#: pcbnew/dialog_print_for_modedit.cpp:69
 msgid "Error Init Printer info"
 msgstr ""
 
-#: pcbnew/dialog_print_for_modedit.cpp:180
+#: pcbnew/dialog_print_for_modedit.cpp:147
 msgid "Printer Problem!"
 msgstr "Tulostinongelma!"
 
-#: pcbnew/dialog_print_for_modedit.cpp:197
+#: pcbnew/dialog_print_for_modedit.cpp:162
 msgid "Print Preview"
 msgstr "Tulostuksen esikatselu"
 
-#: pcbnew/dialog_print_for_modedit.cpp:239
+#: pcbnew/dialog_print_for_modedit.cpp:203
 msgid "Print Footprint"
 msgstr "Tulosta liitoskuva"
 
-#: pcbnew/dialog_print_for_modedit.cpp:249
+#: pcbnew/dialog_print_for_modedit.cpp:213
 msgid "There was a problem printing"
 msgstr "Tulostinongelma"
 
@@ -664,11 +713,11 @@ msgstr "&Hyväksy"
 msgid "&Cancel"
 msgstr "&Peruuta"
 
-#: pcbnew/dialog_SVG_print.cpp:207
+#: pcbnew/dialog_SVG_print.cpp:209
 msgid "Create file "
 msgstr "Luo tiedosto "
 
-#: pcbnew/dialog_SVG_print.cpp:209
+#: pcbnew/dialog_SVG_print.cpp:211
 msgid " error"
 msgstr " virhe"
 
@@ -1927,75 +1976,75 @@ msgstr "Viitteet"
 msgid "Show footprint's references"
 msgstr "Näytä liitoskuvan viitteet"
 
-#: pcbnew/class_pcb_layer_widget.cpp:140
+#: pcbnew/class_pcb_layer_widget.cpp:143
 msgid "Show All Cu"
 msgstr "Näytä kaikki kupari"
 
-#: pcbnew/class_pcb_layer_widget.cpp:143
+#: pcbnew/class_pcb_layer_widget.cpp:146
 msgid "Hide All Cu"
 msgstr "Piilota kaikki kupari"
 
-#: pcbnew/class_pcb_layer_widget.cpp:217
+#: pcbnew/class_pcb_layer_widget.cpp:230
 msgid "Front copper layer"
 msgstr "Kuparikerros, etu"
 
-#: pcbnew/class_pcb_layer_widget.cpp:225
+#: pcbnew/class_pcb_layer_widget.cpp:238
 msgid "An innner copper layer"
 msgstr "Sisempi kuparikerros"
 
-#: pcbnew/class_pcb_layer_widget.cpp:233
+#: pcbnew/class_pcb_layer_widget.cpp:246
 msgid "Back copper layer"
 msgstr "Kuparikerros, taka"
 
-#: pcbnew/class_pcb_layer_widget.cpp:241
+#: pcbnew/class_pcb_layer_widget.cpp:254
 msgid "Adhesive on board's front"
 msgstr "Liima levyn etupuolella"
 
-#: pcbnew/class_pcb_layer_widget.cpp:242
+#: pcbnew/class_pcb_layer_widget.cpp:255
 msgid "Adhesive on board's back"
 msgstr "Liima levyn takapuolella"
 
-#: pcbnew/class_pcb_layer_widget.cpp:243
+#: pcbnew/class_pcb_layer_widget.cpp:256
 msgid "Solder paste on board's front"
 msgstr "Juotospasta levyn etupuolella"
 
-#: pcbnew/class_pcb_layer_widget.cpp:244
+#: pcbnew/class_pcb_layer_widget.cpp:257
 msgid "Solder paste on board's back"
 msgstr "Juotospasta levyn takapuolella"
 
-#: pcbnew/class_pcb_layer_widget.cpp:245
+#: pcbnew/class_pcb_layer_widget.cpp:258
 msgid "Silkscreen on board's front"
 msgstr "Silkkipaino levyn etupuolella"
 
-#: pcbnew/class_pcb_layer_widget.cpp:246
+#: pcbnew/class_pcb_layer_widget.cpp:259
 msgid "Silkscreen on board's back"
 msgstr "Silkkipaino levyn takapuolella"
 
-#: pcbnew/class_pcb_layer_widget.cpp:247
+#: pcbnew/class_pcb_layer_widget.cpp:260
 msgid "Solder mask on board's front"
 msgstr "JEP levyn etupuolella"
 
-#: pcbnew/class_pcb_layer_widget.cpp:248
+#: pcbnew/class_pcb_layer_widget.cpp:261
 msgid "Solder mask on board's back"
 msgstr "JEP levyn takapuolella"
 
-#: pcbnew/class_pcb_layer_widget.cpp:249
+#: pcbnew/class_pcb_layer_widget.cpp:262
 msgid "Explanatory drawings"
 msgstr "Tarkentavat piirrokset"
 
-#: pcbnew/class_pcb_layer_widget.cpp:250
+#: pcbnew/class_pcb_layer_widget.cpp:263
 msgid "Explanatory comments"
 msgstr "Tarkentavat kommentit"
 
-#: pcbnew/class_pcb_layer_widget.cpp:251
+#: pcbnew/class_pcb_layer_widget.cpp:264
 msgid "TDB"
 msgstr ""
 
-#: pcbnew/class_pcb_layer_widget.cpp:252
+#: pcbnew/class_pcb_layer_widget.cpp:265
 msgid "TBD"
 msgstr ""
 
-#: pcbnew/class_pcb_layer_widget.cpp:253
+#: pcbnew/class_pcb_layer_widget.cpp:266
 msgid "Board's perimeter definition"
 msgstr "Levyn ulkoreunan määrittely"
 
@@ -2794,51 +2843,51 @@ msgstr "Segmentin raahaus ei onnistu: Liikaa kytkeytyneitä segmenttejä"
 msgid "Unable to drag this segment: two collinear segments"
 msgstr "Segmentin raahaus ei onnistu: Kaksi samansuuntaista segmenttiä"
 
-#: pcbnew/class_pad.cpp:496
+#: pcbnew/class_pad.cpp:498
 msgid "Unknown pad shape"
 msgstr "Tuntematon anturan muoto"
 
-#: pcbnew/class_pad.cpp:580
+#: pcbnew/class_pad.cpp:582
 msgid "RefP"
 msgstr ""
 
-#: pcbnew/class_pad.cpp:583
+#: pcbnew/class_pad.cpp:585
 msgid "Net"
 msgstr "Kytkentäverkko"
 
-#: pcbnew/class_pad.cpp:654
+#: pcbnew/class_pad.cpp:656
 msgid "Non-copper"
 msgstr "Ei kuparilla"
 
-#: pcbnew/class_pad.cpp:662
+#: pcbnew/class_pad.cpp:664
 msgid " & int"
 msgstr ""
 
-#: pcbnew/class_pad.cpp:690
+#: pcbnew/class_pad.cpp:692
 msgid "internal"
 msgstr "sisäinen"
 
-#: pcbnew/class_pad.cpp:703
+#: pcbnew/class_pad.cpp:705
 msgid "H Size"
 msgstr "Vaakakoko"
 
-#: pcbnew/class_pad.cpp:706
+#: pcbnew/class_pad.cpp:708
 msgid "V Size"
 msgstr "Pystykoko"
 
-#: pcbnew/class_pad.cpp:711
+#: pcbnew/class_pad.cpp:713
 msgid "Drill"
 msgstr "Pora"
 
-#: pcbnew/class_pad.cpp:719
+#: pcbnew/class_pad.cpp:721
 msgid "Drill X / Y"
 msgstr "Poraus X / Y"
 
-#: pcbnew/class_pad.cpp:733
+#: pcbnew/class_pad.cpp:735
 msgid "X Pos"
 msgstr "X-sij."
 
-#: pcbnew/class_pad.cpp:736
+#: pcbnew/class_pad.cpp:738
 msgid "Y pos"
 msgstr "Y-sij."
 
@@ -3015,7 +3064,7 @@ msgstr "Muuta osan anturoita"
 msgid "Change Pads on Same Modules"
 msgstr "Muuta anturat samoissa osissa"
 
-#: pcbnew/dialog_general_options.cpp:254
+#: pcbnew/dialog_general_options.cpp:225
 msgid "Show &Layers Manager"
 msgstr "Näytä &kerrostyökalu"
 
@@ -3147,17 +3196,14 @@ msgid "Module count"
 msgstr "Osien lukumäärä"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:20
-#: pcbnew/dialog_plot_base.cpp:26
 msgid "Layers:"
 msgstr "Kerrokset:"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:25
-#: pcbnew/dialog_plot_base.cpp:28
 msgid "Copper Layers:"
 msgstr "Kupari"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:29
-#: pcbnew/dialog_plot_base.cpp:32
 msgid "Technical Layers:"
 msgstr "Tekniset kerrokset"
 
@@ -3199,13 +3245,11 @@ msgstr "Skaala 1,4"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:46
 #: pcbnew/dialog_print_for_modedit_base.cpp:22
-#: pcbnew/dialog_plot_base.cpp:91
 msgid "Scale 2"
 msgstr "Skaala 2"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:46
 #: pcbnew/dialog_print_for_modedit_base.cpp:22
-#: pcbnew/dialog_plot_base.cpp:91
 msgid "Scale 3"
 msgstr "Skaala 3"
 
@@ -3224,7 +3268,6 @@ msgid "X Scale Adjust"
 msgstr "X-skaalan asettelu"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:57
-#: pcbnew/dialog_plot_base.cpp:189
 msgid "Set X scale adjust for exact scale plotting"
 msgstr "Aseta X-skaalan kerroin"
 
@@ -3236,16 +3279,6 @@ msgstr "Y-skaalan asettelu"
 msgid "Set Y scale adjust for exact scale plotting"
 msgstr "Aseta Y-skaalan kerroin"
 
-#: pcbnew/dialog_print_using_printer_base.cpp:78
-#: pcbnew/dialog_print_for_modedit_base.cpp:36
-msgid "Pen Width Mini"
-msgstr "Pienin piirron leveys"
-
-#: pcbnew/dialog_print_using_printer_base.cpp:83
-#: pcbnew/dialog_print_for_modedit_base.cpp:41
-msgid "Selection of the minimum pen thickness used to draw items."
-msgstr "Pienimmän kynänleveyden valinta."
-
 #: pcbnew/dialog_print_using_printer_base.cpp:87
 msgid "Print frame ref"
 msgstr "Tulosta kehyksen viitteet"
@@ -3255,42 +3288,38 @@ msgid "Print (or not) the Frame references."
 msgstr "Tulosta (tai älä) kehyksen viitteet."
 
 #: pcbnew/dialog_print_using_printer_base.cpp:100
-#: pcbnew/dialog_plot_base.cpp:85
 msgid "No drill mark"
 msgstr "Ei porausmerkkiä"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:100
-#: pcbnew/dialog_plot_base.cpp:85
 msgid "Small mark"
 msgstr "Pieni merkki"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:100
-#: pcbnew/dialog_plot_base.cpp:85
 msgid "Real drill"
 msgstr "Todellinen poraus"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:102
-#: pcbnew/dialog_plot_base.cpp:87
 msgid "Pads Drill Opt"
 msgstr "Anturoiden poraus"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:106
-#: pcbnew/dialog_print_for_modedit_base.cpp:50
+#: pcbnew/dialog_print_for_modedit_base.cpp:33
 msgid "Color"
 msgstr "Väri"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:106
-#: pcbnew/dialog_print_for_modedit_base.cpp:50
+#: pcbnew/dialog_print_for_modedit_base.cpp:33
 msgid "Black and white"
 msgstr "Mustavalkoinen"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:108
-#: pcbnew/dialog_print_for_modedit_base.cpp:52
+#: pcbnew/dialog_print_for_modedit_base.cpp:35
 msgid "Print Mode"
 msgstr "Tulostuslaatu"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:110
-#: pcbnew/dialog_print_for_modedit_base.cpp:54
+#: pcbnew/dialog_print_for_modedit_base.cpp:37
 msgid ""
 "Choose if you wand to draw the sheet like it appears on screen,\n"
 "or in black and white mode, better to print it when using  black and white printers"
@@ -3309,22 +3338,22 @@ msgid "Page Print"
 msgstr "Sivut"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:128
-#: pcbnew/dialog_print_for_modedit_base.cpp:63
+#: pcbnew/dialog_print_for_modedit_base.cpp:46
 msgid "Page Options"
 msgstr "Sivun asetukset"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:131
-#: pcbnew/dialog_print_for_modedit_base.cpp:66
+#: pcbnew/dialog_print_for_modedit_base.cpp:49
 msgid "Preview"
 msgstr "Esikatselu"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:134
-#: pcbnew/dialog_print_for_modedit_base.cpp:69
+#: pcbnew/dialog_print_for_modedit_base.cpp:52
 msgid "Print"
 msgstr "Tulosta"
 
 #: pcbnew/dialog_print_using_printer_base.cpp:137
-#: pcbnew/dialog_print_for_modedit_base.cpp:72
+#: pcbnew/dialog_print_for_modedit_base.cpp:55
 msgid "Close"
 msgstr "Sulje"
 
@@ -3361,7 +3390,6 @@ msgid "You have chosen the \"not connected\" option. This will create insulated 
 msgstr "\"Kytkemätön\"-asetus on valittuna. Tämä tuottaa eristetyn (kelluvan) kuparisaarekkeen. Jatketaanko?"
 
 #: pcbnew/dialog_print_for_modedit_base.cpp:22
-#: pcbnew/dialog_plot_base.cpp:91
 msgid "Scale 1"
 msgstr "Skaala 1"
 
@@ -3618,31 +3646,27 @@ msgstr "Läpiviennit JEP:lla"
 msgid "Print/plot vias on mask layers. They are in this case not protected"
 msgstr "Piirrä läpiviennit JEP-kerroksille, jolloin läpiviennit ovat suojaamattomia."
 
-#: pcbnew/dialog_plot_base.cpp:174
-msgid "Line width"
-msgstr "Viivan leveys"
-
-#: pcbnew/dialog_plot_base.cpp:184
+#: pcbnew/dialog_plot_base.cpp:186
 msgid "X scale adjust"
 msgstr "X-skaalan asettelu"
 
-#: pcbnew/dialog_plot_base.cpp:193
+#: pcbnew/dialog_plot_base.cpp:195
 msgid "Y scale adjust"
 msgstr "Y-skaalan asettelu"
 
-#: pcbnew/dialog_plot_base.cpp:203
+#: pcbnew/dialog_plot_base.cpp:205
 msgid "Plot"
 msgstr "Piirrä"
 
-#: pcbnew/dialog_plot_base.cpp:207
+#: pcbnew/dialog_plot_base.cpp:209
 msgid "Save Options"
 msgstr "Tallenna valinnat"
 
-#: pcbnew/dialog_plot_base.cpp:210
+#: pcbnew/dialog_plot_base.cpp:212
 msgid "Generate drill file"
 msgstr "Luo poraustiedosto"
 
-#: pcbnew/dialog_plot_base.cpp:213
+#: pcbnew/dialog_plot_base.cpp:215
 msgid "Quit"
 msgstr "Poistu"
 
@@ -3777,27 +3801,27 @@ msgstr "Kohdistin"
 msgid "Main cursor shape selection (small cross or large cursor)"
 msgstr "Pääkohdistimen muodon valinta (pieni risti tai koko ruudun akselit)"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:60
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:51
 msgid "Max Links:"
 msgstr "Maks. linkkejä:"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:65
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:56
 msgid "Adjust the number of ratsnets shown from cursor to closest pads"
 msgstr "Asettaa näytettävien kytkentärisukoiden määrän kursorista lähimpiin anturoihin"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:69
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:60
 msgid "Auto Save (minutes):"
 msgstr "Automaattitallennusväli (minuuttia):"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:74
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:65
 msgid "Delay after the first change to create a backup file of the board on disk."
 msgstr "Viive ensimmäisen muutoksen jälkeen varmuuskopiotiedostoon kirjoittamiselle."
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:83
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:74
 msgid "Drc ON"
 msgstr "DRC käytössä"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:86
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:77
 msgid ""
 "Enable/disable the DRC control.\n"
 "When DRC is disable, all connections are allowed."
@@ -3805,19 +3829,19 @@ msgstr ""
 "Salli/estä DRC-ohjaus.\n"
 "DRC-ohjauksen ollessa estetty, kaikki kytkennät sallitaan."
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:90
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:81
 msgid "Show Ratsnest"
 msgstr "Näytä kytkentärisukko"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:92
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:83
 msgid "Show (or not) the full rastnest."
 msgstr "Näytä tai piilota täysi kytkentärisukko."
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:96
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:87
 msgid "Show Mod Ratsnest"
 msgstr "Näytä osan kytkentärisukko"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:98
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:89
 msgid ""
 "Shows (or not) the local ratsnest relative to a footprint, when moving it.\n"
 "This ratsnest is useful to place a footprint."
@@ -3825,74 +3849,74 @@ msgstr ""
 "Näyttää tai piilottaa liitoskuvan paikallisen kytkentärisukon siirrettäessä.\n"
 "Avuksi asemoinnissa."
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:102
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:93
 msgid "Tracks Auto Del"
 msgstr "Automaattinen liuskojen poisto"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:104
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:95
 msgid "Enable/disable the automatic track deletion when recreating a track."
 msgstr "Salli tai estä automaattinen liuskan poisto uudelleenpiirrettäessä liuskaa."
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:108
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:99
 msgid "Track only 45 degrees"
 msgstr "Liuskat vain 45° välein"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:110
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:101
 msgid "If enabled, force tracks directions to H, V or 45 degrees, when creating a track."
 msgstr "Jos käytössä, sallitaan vain V, P tai 45° suunnat liuskasegmenteille."
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:114
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:105
 msgid "Segments 45 Only"
 msgstr "Suunnat 45° välein"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:116
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:107
 msgid "If enabled, force segments directions to H, V or 45 degrees, when creating a segment on technical layers."
 msgstr "Jos käytössä, sallitaan vain V, P tai 45° suunnat viivasegmenteille teknisillä kerroksilla."
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:120
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:111
 msgid "Auto PAN"
 msgstr "Automaattinen näkymän vieritys"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:122
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:113
 msgid "Allows auto pan when creating a track, or moving an item."
 msgstr "Sallii automaattisen näkymän vierityksen liuskaa piirrettäessä tai elementtiä siirrettäessä."
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:126
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:117
 msgid "Double Segm Track"
 msgstr "Liuskat kaksoissegmentillä"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:128
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:119
 msgid "If enabled, uses two track segments, with 45 degrees angle between them when creating a new track "
 msgstr "Sallittaessa käyttää kahta liuskasegmenttiä 45° kulmassa piirrettäessä uutta liuskaa"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:137
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:145
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:128
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:136
 msgid "Never"
 msgstr "Ei koskaan"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:137
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:145
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:128
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:136
 msgid "When creating tracks"
 msgstr "Liuskoja piirtäessä"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:137
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:145
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:128
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:136
 msgid "Always"
 msgstr "Aina"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:139
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:130
 msgid "Magnetic Pads"
 msgstr "Liittämättömät anturat"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:141
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:132
 msgid "control the capture of the pcb cursor when the mouse cursor enters a pad area"
 msgstr "määrittää osoittimen käytöksen lähestyttäessä anturan aluetta"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:147
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:138
 msgid "Magnetic Tracks"
 msgstr "Magneettiset liuskat"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.cpp:149
+#: pcbnew/dialog_general_options_BoardEditor_base.cpp:140
 msgid "Control the capture of the pcb cursor when the mouse cursor enters a track"
 msgstr "Määrittää osoittimen käytöksen lähestyttäessä liuskaa"
 
@@ -3981,23 +4005,24 @@ msgstr "Maks."
 msgid "Segm"
 msgstr "Segm"
 
-#: pcbnew/pcbframe.cpp:336
+#: pcbnew/pcbframe.cpp:337
+#: pcbnew/pcbframe.cpp:628
 msgid "Visibles"
 msgstr "Näkyvät"
 
-#: pcbnew/pcbframe.cpp:422
+#: pcbnew/pcbframe.cpp:423
 msgid "Board modified, Save before exit ?"
 msgstr "Levyä muokattu. Tallennetaanko?"
 
-#: pcbnew/pcbframe.cpp:423
+#: pcbnew/pcbframe.cpp:424
 msgid "Confirmation"
 msgstr "Vahvistus"
 
-#: pcbnew/pcbframe.cpp:462
+#: pcbnew/pcbframe.cpp:463
 msgid "3D Frame already opened"
 msgstr "3D-kehys on jo auki"
 
-#: pcbnew/pcbframe.cpp:466
+#: pcbnew/pcbframe.cpp:467
 msgid "3D Viewer"
 msgstr "3D-katselin"
 
@@ -5151,85 +5176,41 @@ msgstr "Anturat"
 msgid "Pad Shapes:"
 msgstr "Piirtotyyli"
 
-#: pcbnew/dialog_display_options_base.cpp:90
+#: pcbnew/dialog_display_options_base.cpp:92
 msgid "Via Shapes:"
 msgstr "Läpivientien tyyli:"
 
-#: pcbnew/dialog_display_options_base.cpp:94
+#: pcbnew/dialog_display_options_base.cpp:96
 msgid "Show pad clearance"
 msgstr "Näytä anturan eristysväli"
 
-#: pcbnew/dialog_display_options_base.cpp:98
+#: pcbnew/dialog_display_options_base.cpp:100
 msgid "Show pad number"
 msgstr "Näytä anturan numero"
 
-#: pcbnew/dialog_display_options_base.cpp:103
+#: pcbnew/dialog_display_options_base.cpp:105
 msgid "Show pad NoConnect"
 msgstr "Näytä kytkemättömät anturat"
 
-#: pcbnew/dialog_display_options_base.cpp:116
+#: pcbnew/dialog_display_options_base.cpp:118
 msgid "Others:"
 msgstr "Muut:"
 
-#: pcbnew/dialog_display_options_base.cpp:120
+#: pcbnew/dialog_display_options_base.cpp:122
 msgid "Display other items:"
 msgstr "Piirtotyyli"
 
-#: pcbnew/dialog_display_options_base.cpp:124
+#: pcbnew/dialog_display_options_base.cpp:126
 msgid "Yes"
 msgstr "Kyllä"
 
-#: pcbnew/dialog_display_options_base.cpp:124
+#: pcbnew/dialog_display_options_base.cpp:126
 msgid "No"
 msgstr "Ei"
 
-#: pcbnew/dialog_display_options_base.cpp:126
+#: pcbnew/dialog_display_options_base.cpp:128
 msgid "Show page limits"
 msgstr "Näytä sivun reunat"
-
-#: pcbnew/dialog_graphic_items_options.cpp:194
-msgid "Graphics:"
-msgstr "Grafiikka:"
-
-#: pcbnew/dialog_graphic_items_options.cpp:200
-msgid "Graphic segm Width"
-msgstr "Grafiikkasegmentin leveys"
-
-#: pcbnew/dialog_graphic_items_options.cpp:217
-msgid "Board Edges Width"
-msgstr "Levyn reunaviivan leveys"
-
-#: pcbnew/dialog_graphic_items_options.cpp:234
-msgid "Copper Text Width"
-msgstr "Kuparitekstin leveys"
-
-#: pcbnew/dialog_graphic_items_options.cpp:251
-msgid "Text Size V"
-msgstr "Tekstin korkeus"
-
-#: pcbnew/dialog_graphic_items_options.cpp:268
-msgid "Text Size H"
-msgstr "Tekstin leveys"
-
-#: pcbnew/dialog_graphic_items_options.cpp:287
-msgid "Modules:"
-msgstr "Osat:"
-
-#: pcbnew/dialog_graphic_items_options.cpp:293
-msgid "Edges Module Width"
-msgstr "Osan reunaviivan leveys"
-
-#: pcbnew/dialog_graphic_items_options.cpp:313
-msgid "Text Module Width"
-msgstr "Tekstin viivanleveys"
-
-#: pcbnew/dialog_graphic_items_options.cpp:334
-msgid "Text Module Size V"
-msgstr "Kirjainkorkeus"
-
-#: pcbnew/dialog_graphic_items_options.cpp:355
-msgid "Text Module Size H"
-msgstr "Kirjainleveys"
 
 #: pcbnew/dialog_edit_module_for_Modedit_base.cpp:24
 msgid "Fields:"
@@ -5377,18 +5358,14 @@ msgid "3D Scale and Pos"
 msgstr "3D-skaala ja -sijainti"
 
 #: pcbnew/dialog_edit_module_for_Modedit_base.cpp:217
-msgid "Browse Shapes"
-msgstr "Selaa 3D-muotoja"
-
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:220
 msgid "Add 3D Shape"
 msgstr "Lisää 3D-muoto"
 
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:223
+#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:220
 msgid "Remove 3D Shape"
 msgstr "Poista 3D-muoto"
 
-#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:233
+#: pcbnew/dialog_edit_module_for_Modedit_base.cpp:230
 msgid "3D settings"
 msgstr "3D–asetukset"
 
@@ -5783,16 +5760,16 @@ msgstr "Liuskat vain kuparikerroksilla "
 msgid "Cotation not authorized on Copper layers"
 msgstr "Merkintöjä ei sallittu kuparikerroksilla"
 
-#: pcbnew/dialog_print_using_printer.cpp:370
+#: pcbnew/dialog_print_using_printer.cpp:372
 msgid "Warning: Scale option set to a very large value"
 msgstr "Varoitus: Mittakaava valittu kovin suureksi"
 
-#: pcbnew/dialog_print_using_printer.cpp:378
+#: pcbnew/dialog_print_using_printer.cpp:380
 msgid "Warning: Scale option set to a very small value"
 msgstr "Varoitus: Mittakaava valittu kovin pieneksi"
 
-#: pcbnew/dialog_print_using_printer.cpp:462
-#: pcbnew/dialog_print_using_printer.cpp:492
+#: pcbnew/dialog_print_using_printer.cpp:466
+#: pcbnew/dialog_print_using_printer.cpp:496
 msgid "No layer selected"
 msgstr "Ei valittua kerrosta"
 
@@ -5828,11 +5805,11 @@ msgstr "Mikroläpiviennin halkaisija"
 msgid "Net Class parameters"
 msgstr "Verkkoluokan parametrit"
 
-#: pcbnew/dialog_design_rules_base.cpp:74
+#: pcbnew/dialog_design_rules_base.cpp:73
 msgid "Add another Net Class"
 msgstr "Lisää verkkoluokka"
 
-#: pcbnew/dialog_design_rules_base.cpp:79
+#: pcbnew/dialog_design_rules_base.cpp:78
 msgid ""
 "Remove the currently select Net Class\n"
 "The default Net Class cannot be removed"
@@ -5840,71 +5817,71 @@ msgstr ""
 "Poista valittu verkkoluokka\n"
 "Oletusverkkoluokkaa ei voi poistaa"
 
-#: pcbnew/dialog_design_rules_base.cpp:83
+#: pcbnew/dialog_design_rules_base.cpp:82
 msgid "Move Up"
 msgstr "Siirrä ylös"
 
-#: pcbnew/dialog_design_rules_base.cpp:84
+#: pcbnew/dialog_design_rules_base.cpp:83
 msgid "Move the currently selected Net Class up one row"
 msgstr "Siirrä valittua verkkoluokkaa rivillinen ylös"
 
-#: pcbnew/dialog_design_rules_base.cpp:93
+#: pcbnew/dialog_design_rules_base.cpp:92
 msgid "Membership:"
 msgstr "Jäsenyys:"
 
-#: pcbnew/dialog_design_rules_base.cpp:113
+#: pcbnew/dialog_design_rules_base.cpp:112
 msgid "<<<"
 msgstr ""
 
-#: pcbnew/dialog_design_rules_base.cpp:114
+#: pcbnew/dialog_design_rules_base.cpp:113
 msgid "Move the selected nets in the right list to the left list"
 msgstr "Siirrä valitut verkot oikeasta luettelosta vasempaan"
 
-#: pcbnew/dialog_design_rules_base.cpp:118
+#: pcbnew/dialog_design_rules_base.cpp:117
 msgid ">>>"
 msgstr ""
 
-#: pcbnew/dialog_design_rules_base.cpp:119
+#: pcbnew/dialog_design_rules_base.cpp:118
 msgid "Move the selected nets in the left list to the right list"
 msgstr "Siirrä valitut verkot vasemmasta luettelosta oikean"
 
-#: pcbnew/dialog_design_rules_base.cpp:123
+#: pcbnew/dialog_design_rules_base.cpp:122
 msgid "<< Select All"
 msgstr "<< Valitse kaikki"
 
-#: pcbnew/dialog_design_rules_base.cpp:124
+#: pcbnew/dialog_design_rules_base.cpp:123
 msgid "Select all nets in the left list"
 msgstr "Valitse kaikki kytkentäverkot vasemmanpuoleisessa luettelossa"
 
-#: pcbnew/dialog_design_rules_base.cpp:128
+#: pcbnew/dialog_design_rules_base.cpp:127
 msgid "Select All >>"
 msgstr "Valitse kaikki >>"
 
-#: pcbnew/dialog_design_rules_base.cpp:129
+#: pcbnew/dialog_design_rules_base.cpp:128
 msgid "Select all nets in the right list"
 msgstr "Valitse kaikki kytkentäverkot oikeanpuoleisessa luettelossa"
 
-#: pcbnew/dialog_design_rules_base.cpp:155
+#: pcbnew/dialog_design_rules_base.cpp:154
 msgid "Net Classes Editor"
 msgstr "Kytkentäverkkoluokkaeditori"
 
-#: pcbnew/dialog_design_rules_base.cpp:164
+#: pcbnew/dialog_design_rules_base.cpp:163
 msgid "Via Options:"
 msgstr "Läpivientien asetukset:"
 
-#: pcbnew/dialog_design_rules_base.cpp:166
+#: pcbnew/dialog_design_rules_base.cpp:165
 msgid "Through via"
 msgstr "Läpireikä"
 
-#: pcbnew/dialog_design_rules_base.cpp:166
+#: pcbnew/dialog_design_rules_base.cpp:165
 msgid "Blind or buried via"
 msgstr "Piiloläpivienti"
 
-#: pcbnew/dialog_design_rules_base.cpp:168
+#: pcbnew/dialog_design_rules_base.cpp:167
 msgid "Default Via Type"
 msgstr "Oletustyyppi läpivienneille"
 
-#: pcbnew/dialog_design_rules_base.cpp:170
+#: pcbnew/dialog_design_rules_base.cpp:169
 msgid ""
 "Select the current via type.\n"
 "Trough via is the usual selection"
@@ -5912,27 +5889,27 @@ msgstr ""
 "Valitse käytettävä läpivientityyppi.\n"
 "Läpireikä on tavallisimmin käytettävä"
 
-#: pcbnew/dialog_design_rules_base.cpp:180
+#: pcbnew/dialog_design_rules_base.cpp:179
 msgid "Min via diameter"
 msgstr "Läpiviennin minimihalkaisija"
 
-#: pcbnew/dialog_design_rules_base.cpp:187
+#: pcbnew/dialog_design_rules_base.cpp:186
 msgid "Min via drill dia"
 msgstr "Läpiviennin minimiporaus"
 
-#: pcbnew/dialog_design_rules_base.cpp:199
+#: pcbnew/dialog_design_rules_base.cpp:198
 msgid "Micro Via Options:"
 msgstr "Mikroläpivientien asetukset:"
 
-#: pcbnew/dialog_design_rules_base.cpp:201
+#: pcbnew/dialog_design_rules_base.cpp:200
 msgid "Do not allow micro vias"
 msgstr "Ei mikroläpivientejä"
 
-#: pcbnew/dialog_design_rules_base.cpp:201
+#: pcbnew/dialog_design_rules_base.cpp:200
 msgid "Allow micro vias"
 msgstr "Salli mikroläpiviennit"
 
-#: pcbnew/dialog_design_rules_base.cpp:205
+#: pcbnew/dialog_design_rules_base.cpp:204
 msgid ""
 "Allows or do not allow use of micro vias\n"
 "They are very small vias only from an external copper layer to its near neightbour"
@@ -5940,19 +5917,19 @@ msgstr ""
 "Salli tai estä mikroläpivientien käyttö\n"
 "Ne ovat erityisen pieniä läpivientejä vain pintakerroksien lähimmän sisäkerroksen välillä"
 
-#: pcbnew/dialog_design_rules_base.cpp:215
+#: pcbnew/dialog_design_rules_base.cpp:214
 msgid "Min uvia diameter"
 msgstr "Mikroläpiviennin minimihalkaisija"
 
-#: pcbnew/dialog_design_rules_base.cpp:223
+#: pcbnew/dialog_design_rules_base.cpp:222
 msgid "Min uvia drill dia"
 msgstr "Mikroläpiviennin minimiporaus"
 
-#: pcbnew/dialog_design_rules_base.cpp:236
+#: pcbnew/dialog_design_rules_base.cpp:235
 msgid "Minimum Allowed Values:"
 msgstr "Pienimmät sallitut arvot:"
 
-#: pcbnew/dialog_design_rules_base.cpp:260
+#: pcbnew/dialog_design_rules_base.cpp:259
 msgid ""
 "Specific via diameters and track widths, which \n"
 "can be used to replace default Netclass values \n"
@@ -5962,79 +5939,79 @@ msgstr ""
 "voidaan käyttää korvaamaan kytkentäverkkoluokan oletusarvoja\n"
 "tarpeen mukaan mielivaltaisille läpivienneille tai liuskasegmenteille."
 
-#: pcbnew/dialog_design_rules_base.cpp:268
+#: pcbnew/dialog_design_rules_base.cpp:267
 msgid "Custom Via Sizes:"
 msgstr "Mukautetut läpiviennit:"
 
-#: pcbnew/dialog_design_rules_base.cpp:270
+#: pcbnew/dialog_design_rules_base.cpp:269
 msgid "Drill value: a blank or 0 => default Netclass value"
 msgstr "Poran arvo: Tyhjä tai 0 => käytetään kytkentäverkkoluokan arvoa"
 
-#: pcbnew/dialog_design_rules_base.cpp:287
+#: pcbnew/dialog_design_rules_base.cpp:286
 msgid "Diameter"
 msgstr "Halkaisija"
 
-#: pcbnew/dialog_design_rules_base.cpp:294
+#: pcbnew/dialog_design_rules_base.cpp:293
 msgid "Via 1"
 msgstr "Läpivienti 1"
 
-#: pcbnew/dialog_design_rules_base.cpp:295
+#: pcbnew/dialog_design_rules_base.cpp:294
 msgid "Via 2"
 msgstr "Läpivienti 2"
 
-#: pcbnew/dialog_design_rules_base.cpp:296
+#: pcbnew/dialog_design_rules_base.cpp:295
 msgid "Via 3"
 msgstr "Läpivienti 3"
 
-#: pcbnew/dialog_design_rules_base.cpp:297
+#: pcbnew/dialog_design_rules_base.cpp:296
 msgid "Via 4"
 msgstr "Läpivienti 4"
 
-#: pcbnew/dialog_design_rules_base.cpp:298
+#: pcbnew/dialog_design_rules_base.cpp:297
 msgid "Via 5"
 msgstr "Läpivienti 5"
 
-#: pcbnew/dialog_design_rules_base.cpp:299
+#: pcbnew/dialog_design_rules_base.cpp:298
 msgid "Via 6"
 msgstr "Läpivienti 6"
 
-#: pcbnew/dialog_design_rules_base.cpp:300
+#: pcbnew/dialog_design_rules_base.cpp:299
 msgid "Via 7"
 msgstr "Läpivienti 7"
 
-#: pcbnew/dialog_design_rules_base.cpp:312
+#: pcbnew/dialog_design_rules_base.cpp:311
 msgid "Custom Track Widths:"
 msgstr "Mukautetut liuskan leveydet:"
 
-#: pcbnew/dialog_design_rules_base.cpp:337
+#: pcbnew/dialog_design_rules_base.cpp:336
 msgid "Track 1"
 msgstr "Liuska 1"
 
-#: pcbnew/dialog_design_rules_base.cpp:338
+#: pcbnew/dialog_design_rules_base.cpp:337
 msgid "Track 2"
 msgstr "Liuska 2"
 
-#: pcbnew/dialog_design_rules_base.cpp:339
+#: pcbnew/dialog_design_rules_base.cpp:338
 msgid "Track 3"
 msgstr "Liuska 3"
 
-#: pcbnew/dialog_design_rules_base.cpp:340
+#: pcbnew/dialog_design_rules_base.cpp:339
 msgid "Track 4"
 msgstr "Liuska 4"
 
-#: pcbnew/dialog_design_rules_base.cpp:341
+#: pcbnew/dialog_design_rules_base.cpp:340
 msgid "Track 5"
 msgstr "Liuska 5"
 
-#: pcbnew/dialog_design_rules_base.cpp:342
+#: pcbnew/dialog_design_rules_base.cpp:341
 msgid "Track 6"
 msgstr "Liuska 6"
 
-#: pcbnew/dialog_design_rules_base.cpp:343
+#: pcbnew/dialog_design_rules_base.cpp:342
 msgid "Track 7"
 msgstr "Liuska 7"
 
-#: pcbnew/dialog_design_rules_base.cpp:359
+#: pcbnew/dialog_design_rules_base.cpp:358
 msgid "Global Design Rules"
 msgstr "Globaalit suunnittelusäännöt"
 
@@ -6045,6 +6022,10 @@ msgstr "SVG tulostusasetukset:"
 #: pcbnew/dialog_SVG_print_base.cpp:38
 msgid "Pen width mini"
 msgstr "Pienin piirron leveys"
+
+#: pcbnew/dialog_SVG_print_base.cpp:43
+msgid "Selection of the minimum pen thickness used to draw items."
+msgstr "Pienimmän kynänleveyden valinta."
 
 #: pcbnew/dialog_SVG_print_base.cpp:47
 msgid "Black and White"
@@ -6140,6 +6121,10 @@ msgstr ""
 "Määriteltäessä nollaksi, käytetään kytkentäverkkoluokan arvoa.\n"
 "Tämä arvo voidaan syrjäyttää anturan paikallisella arvolla."
 
+#: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:248
+msgid "Browse Shapes"
+msgstr "Selaa 3D-muotoja"
+
 #: pcbnew/dialog_mask_clearance_base.cpp:28
 msgid "Dimensions:"
 msgstr "Mitat:"
@@ -6234,7 +6219,7 @@ msgstr "Aloituspiste X"
 msgid "Start Point Y"
 msgstr "Aloituspiste Y"
 
-#: pcbnew/pcbnew.cpp:102
+#: pcbnew/pcbnew.cpp:113
 msgid "Pcbnew is already running, Continue?"
 msgstr "PCBnew on jo käynnissä, jatketaanko?"
 
@@ -6659,7 +6644,7 @@ msgstr ""
 msgid "NetClass uVia Drill &lt; global limit"
 msgstr ""
 
-#: pcbnew/pcbplot.cpp:690
+#: pcbnew/pcbplot.cpp:692
 #, c-format
 msgid "Plot file <%s> created"
 msgstr "Piirrostiedosto <%s> luotu"
@@ -7816,28 +7801,28 @@ msgstr "Salli johtimet ja väylät vain vaaka- tai pystyasennossa"
 msgid "Show p&age limits"
 msgstr "Näytä sivun &reunat"
 
-#: eeschema/schframe.cpp:358
+#: eeschema/schframe.cpp:359
 msgid "Schematic modified, Save before exit ?"
 msgstr "Kytkentäkaaviota muokattu. Tallennetaanko?"
 
-#: eeschema/schframe.cpp:514
+#: eeschema/schframe.cpp:515
 msgid "Draw wires and buses in any direction"
 msgstr "Piirrä johtimet ja väylät vapaalla kulmalla"
 
-#: eeschema/schframe.cpp:515
+#: eeschema/schframe.cpp:516
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Piirrä johtimet ja väylät vain vaaka- ja pystysuorassa"
 
-#: eeschema/schframe.cpp:525
+#: eeschema/schframe.cpp:526
 msgid "Do not show hidden pins"
 msgstr "Älä näytä piilotettuja nastoja"
 
-#: eeschema/schframe.cpp:526
+#: eeschema/schframe.cpp:527
 #: eeschema/tool_sch.cpp:268
 msgid "Show hidden pins"
 msgstr "Näytä piilotetut nastat"
 
-#: eeschema/schframe.cpp:617
+#: eeschema/schframe.cpp:618
 msgid "Schematic"
 msgstr "Kytkentäkaavio"
 
@@ -8076,6 +8061,15 @@ msgstr "Muunna"
 #, c-format
 msgid "arc only had %d parameters of the required 8"
 msgstr "kaarella oli vain %d parametria vaadituista kahdeksasta"
+
+#: eeschema/classes_body_items.cpp:535
+#: eeschema/classes_body_items.cpp:795
+#: eeschema/classes_body_items.cpp:1022
+#: eeschema/classes_body_items.cpp:1274
+#: eeschema/classes_body_items.cpp:1691
+#: eeschema/classes_body_items.cpp:2061
+msgid "Line width"
+msgstr "Viivan leveys"
 
 #: eeschema/classes_body_items.cpp:540
 #: eeschema/classes_body_items.cpp:804
@@ -8414,7 +8408,6 @@ msgid "Component"
 msgstr "Komponentti"
 
 #: eeschema/class_sch_component.cpp:1125
-#, fuzzy
 msgid "Alias of"
 msgstr "Alias"
 
@@ -9129,41 +9122,41 @@ msgstr ""
 msgid "This position is already occupied by another pin. Continue?"
 msgstr "Tässä sijainnissa on jo toinen nasta. Jatketaanko?"
 
-#: eeschema/pinedit.cpp:659
+#: eeschema/pinedit.cpp:660
 msgid "No pins!"
 msgstr "Ei nastoja!"
 
-#: eeschema/pinedit.cpp:670
+#: eeschema/pinedit.cpp:671
 msgid "Marker Information"
 msgstr "Tuntomerkin tietoja"
 
-#: eeschema/pinedit.cpp:689
+#: eeschema/pinedit.cpp:690
 #, c-format
 msgid "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr "<b>Nastaduplikaatti %s</b> \"%s\" sijainnissa <b>(%.3f, %.3f)</b> ristiriidassa nastan %s \"%s\" kanssa sijainnissa <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:702
-#: eeschema/pinedit.cpp:741
+#: eeschema/pinedit.cpp:703
+#: eeschema/pinedit.cpp:742
 #, c-format
 msgid " in part %c"
 msgstr " osassa %c"
 
-#: eeschema/pinedit.cpp:709
-#: eeschema/pinedit.cpp:748
+#: eeschema/pinedit.cpp:710
+#: eeschema/pinedit.cpp:749
 msgid "  of converted"
 msgstr "  muunnetuista"
 
-#: eeschema/pinedit.cpp:711
-#: eeschema/pinedit.cpp:750
+#: eeschema/pinedit.cpp:712
+#: eeschema/pinedit.cpp:751
 msgid "  of normal"
 msgstr "  tavallisia"
 
-#: eeschema/pinedit.cpp:732
+#: eeschema/pinedit.cpp:733
 #, c-format
 msgid "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr "<b>Nasta %s ohi rasterin</b> \"%s\" sijainnissa <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:759
+#: eeschema/pinedit.cpp:760
 msgid "No off grid or duplicate pins were found."
 msgstr "Ei löytynyt nastoja ohi rasterin tai kaksoisnimillä."
 
@@ -9350,8 +9343,8 @@ msgstr "Lehden nimi"
 msgid "File name"
 msgstr "Tiedostonimi"
 
-#: eeschema/symbdraw.cpp:954
-#: eeschema/symbdraw.cpp:1042
+#: eeschema/symbdraw.cpp:962
+#: eeschema/symbdraw.cpp:1050
 #, c-format
 msgid "Arc %.1f deg"
 msgstr "Kaari %.1f astetta"
@@ -9839,31 +9832,32 @@ msgstr "Ei liitosta"
 msgid "Pin"
 msgstr "Nasta"
 
-#: eeschema/class_pin.cpp:1609
+#: eeschema/class_pin.cpp:1597
 msgid "Number"
 msgstr "Numero"
 
-#: eeschema/build_BOM.cpp:57
+#: eeschema/build_BOM.cpp:59
 msgid "Bill of Materials file (*.lst)|*.lst"
 msgstr "Materiaaliluettelotiedosto (*.lst)|*.lst"
 
-#: eeschema/build_BOM.cpp:99
+#: eeschema/build_BOM.cpp:104
 msgid "Bill of Materials"
 msgstr "Materiaaliluettelo"
 
-#: eeschema/build_BOM.cpp:140
-#: eeschema/build_BOM.cpp:176
+#: eeschema/build_BOM.cpp:154
+#: eeschema/build_BOM.cpp:191
+#: eeschema/build_BOM.cpp:227
 msgid "Failed to open file "
 msgstr "Ei voitu avata tiedostoa "
 
-#: eeschema/build_BOM.cpp:220
+#: eeschema/build_BOM.cpp:272
 #, c-format
 msgid ""
 "\n"
 "#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n"
 msgstr ""
 
-#: eeschema/build_BOM.cpp:231
+#: eeschema/build_BOM.cpp:284
 #, c-format
 msgid ""
 "\n"
@@ -9874,7 +9868,7 @@ msgstr ""
 "#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n"
 "\n"
 
-#: eeschema/build_BOM.cpp:239
+#: eeschema/build_BOM.cpp:292
 msgid ""
 "\n"
 "#End List\n"
@@ -9882,7 +9876,7 @@ msgstr ""
 "\n"
 "#End List\n"
 
-#: eeschema/build_BOM.cpp:623
+#: eeschema/build_BOM.cpp:676
 msgid ""
 "\n"
 "#Cmp ( order = Reference )"
@@ -9890,17 +9884,17 @@ msgstr ""
 "\n"
 "#Cmp ( order = Reference )"
 
-#: eeschema/build_BOM.cpp:626
-#: eeschema/build_BOM.cpp:735
+#: eeschema/build_BOM.cpp:679
+#: eeschema/build_BOM.cpp:904
 msgid " (with SubCmp)"
 msgstr ""
 
-#: eeschema/build_BOM.cpp:711
-#: eeschema/build_BOM.cpp:791
+#: eeschema/build_BOM.cpp:778
+#: eeschema/build_BOM.cpp:960
 msgid "#End Cmp\n"
 msgstr "#End Cmp\n"
 
-#: eeschema/build_BOM.cpp:732
+#: eeschema/build_BOM.cpp:901
 msgid ""
 "\n"
 "#Cmp ( order = Value )"
@@ -9908,17 +9902,17 @@ msgstr ""
 "\n"
 "#Cmp ( order = Value )"
 
-#: eeschema/build_BOM.cpp:819
+#: eeschema/build_BOM.cpp:988
 #, c-format
 msgid "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr "> %-28.28s %s        (Lehti %s) sijainti: %3.3f, %3.3f\n"
 
-#: eeschema/build_BOM.cpp:839
+#: eeschema/build_BOM.cpp:1008
 #, c-format
 msgid "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr "> %-28.28s Nastalehti %-7.7s (Lehti %s) sijainti: %3.3f, %3.3f\n"
 
-#: eeschema/build_BOM.cpp:854
+#: eeschema/build_BOM.cpp:1023
 msgid "#End labels\n"
 msgstr "#End labels\n"
 
@@ -9959,19 +9953,19 @@ msgstr "Suunta"
 msgid "Glabel Shape"
 msgstr "Globaalin nimiön muoto"
 
-#: eeschema/dialog_print_using_printer.cpp:241
+#: eeschema/dialog_print_using_printer.cpp:243
 msgid "Print Schematic"
 msgstr "Tulosta kytkentäkaavio"
 
-#: eeschema/dialog_print_using_printer.cpp:246
+#: eeschema/dialog_print_using_printer.cpp:248
 msgid "An error occurred attempting to print the schematic."
 msgstr "Virhe yritettäessä tulostaa kytkentäkaaviota."
 
-#: eeschema/dialog_print_using_printer.cpp:247
+#: eeschema/dialog_print_using_printer.cpp:249
 msgid "Printing"
 msgstr "Tulostus"
 
-#: eeschema/dialog_print_using_printer.cpp:260
+#: eeschema/dialog_print_using_printer.cpp:262
 #, c-format
 msgid "Print page %d"
 msgstr "Tulosta sivu %d"
@@ -9986,8 +9980,6 @@ msgid "Schematic Files"
 msgstr "Kytkentäkaaviotiedostot"
 
 #: eeschema/save_schemas.cpp:82
-#: eeschema/netform.cpp:68
-#: eeschema/netform.cpp:273
 msgid "Failed to create file "
 msgstr "Tiedoston luominen ei onnistunut "
 
@@ -10131,7 +10123,7 @@ msgstr "Kynän oletuskoko"
 
 #: eeschema/dialog_SVG_print_base.cpp:30
 msgid "Selection of the default pen thickness used to draw items, when their thickness is set to 0."
-msgstr "Pienimmän kynänleveyden valinta."
+msgstr "Pienimmän kynänleveyden valinta kohteille, joiden leveydeksi on määritelty nolla."
 
 #: eeschema/dialog_SVG_print_base.cpp:53
 msgid "Print Current"
@@ -10198,7 +10190,7 @@ msgstr " Valitse yksi %d:sta kirjastosta."
 msgid "Select Library"
 msgstr "Valitse kirjasto"
 
-#: eeschema/eeschema.cpp:130
+#: eeschema/eeschema.cpp:135
 msgid "Eeschema is already running, Continue?"
 msgstr "EESchema on jo käynnissä, jatketaanko?"
 
@@ -10444,6 +10436,10 @@ msgstr "Nastat lehdellä -hierarkia"
 #: eeschema/dialog_build_BOM_base.cpp:47
 msgid "Text for spreadsheet import"
 msgstr "Teksti taulukkolaskentaa varten"
+
+#: eeschema/dialog_build_BOM_base.cpp:47
+msgid "Single Part per line"
+msgstr ""
 
 #: eeschema/dialog_build_BOM_base.cpp:49
 msgid "Output format:"
@@ -10968,11 +10964,11 @@ msgstr ""
 msgid "Kicad footprint alias files (*.equ)|*.equ"
 msgstr "KiCad-liitoskuva-alias -tiedostot (*.equ)|*.equ"
 
-#: cvpcb/cvpcb.cpp:97
+#: cvpcb/cvpcb.cpp:100
 msgid "Cvpcb is already running, Continue?"
 msgstr "CvPCB on jo käynnissä, jatketaanko?"
 
-#: cvpcb/cvpcb.cpp:139
+#: cvpcb/cvpcb.cpp:142
 msgid " [no file]"
 msgstr " [ei tiedostoa]"
 
@@ -11159,7 +11155,7 @@ msgstr "Joitain tiedostoja ei löytynyt!"
 msgid "Some files are invalid!"
 msgstr "Jotkut tiedostot eivät ole kelvollisia!"
 
-#: kicad/mainframe.cpp:72
+#: kicad/mainframe.cpp:68
 #, c-format
 msgid ""
 "Ready\n"
@@ -11168,11 +11164,11 @@ msgstr ""
 "Valmis\n"
 "Työhakemisto: %s\n"
 
-#: kicad/mainframe.cpp:253
+#: kicad/mainframe.cpp:228
 msgid "Text file ("
 msgstr "Tekstitiedosto ("
 
-#: kicad/mainframe.cpp:255
+#: kicad/mainframe.cpp:230
 msgid "Load File to Edit"
 msgstr "Lataa muokattava tiedosto"
 
@@ -11192,77 +11188,64 @@ msgstr "PCBnew (Piirilevyeditori)"
 msgid "GerbView (Gerber viewer)"
 msgstr "GerbView (Gerber-tiedostojen näytin)"
 
-#: kicad/tree_project_frame.cpp:157
-msgid "&Run"
-msgstr "&Käynnistä"
-
-#: kicad/tree_project_frame.cpp:167
-#: kicad/tree_project_frame.cpp:224
-msgid "&Edit in a text editor"
-msgstr "&Muokkaa tekstieditorissa"
-
-#: kicad/tree_project_frame.cpp:168
-msgid "&Open the file in a Text Editor"
-msgstr "&Avaa tiedosto tekstieditorissa"
-
-#: kicad/tree_project_frame.cpp:185
+#: kicad/tree_project_frame.cpp:141
 msgid "New D&irectory"
 msgstr "Uusi &hakemisto"
 
-#: kicad/tree_project_frame.cpp:186
+#: kicad/tree_project_frame.cpp:142
 msgid "Create a New Directory"
 msgstr "Luo uusi hakemisto"
 
-#: kicad/tree_project_frame.cpp:211
+#: kicad/tree_project_frame.cpp:157
 msgid "&Rename file"
 msgstr "&Nimeä tiedosto uudelleen"
 
-#: kicad/tree_project_frame.cpp:212
-#: kicad/tree_project_frame.cpp:214
+#: kicad/tree_project_frame.cpp:158
+#: kicad/tree_project_frame.cpp:160
 msgid "&Rename directory"
 msgstr "&Nimeä hakemisto uudelleen"
 
-#: kicad/tree_project_frame.cpp:213
+#: kicad/tree_project_frame.cpp:159
 msgid "Rename file"
 msgstr "Nimeä tiedosto uudelleen"
 
-#: kicad/tree_project_frame.cpp:225
+#: kicad/tree_project_frame.cpp:170
+msgid "&Edit in a text editor"
+msgstr "&Muokkaa tekstieditorissa"
+
+#: kicad/tree_project_frame.cpp:171
 msgid "Open the file in a Text Editor"
 msgstr "Avaa tiedosto tekstieditorissa"
 
-#: kicad/tree_project_frame.cpp:233
+#: kicad/tree_project_frame.cpp:179
 msgid "&Delete File"
 msgstr "&Poista tiedosto"
 
-#: kicad/tree_project_frame.cpp:234
+#: kicad/tree_project_frame.cpp:180
 msgid "&Delete Directory"
 msgstr "&Poista hakemisto"
 
-#: kicad/tree_project_frame.cpp:235
+#: kicad/tree_project_frame.cpp:181
 msgid "Delete the File"
 msgstr "Poista tiedosto"
 
-#: kicad/tree_project_frame.cpp:236
+#: kicad/tree_project_frame.cpp:182
 msgid "&Delete the Directory and its content"
 msgstr "&Poista hakemisto ja sen sisältö"
 
-#: kicad/tree_project_frame.cpp:511
+#: kicad/tree_project_frame.cpp:349
 msgid "Create New File"
 msgstr "Luo uusi tiedosto"
 
-#: kicad/tree_project_frame.cpp:512
+#: kicad/tree_project_frame.cpp:350
 msgid "Create New Directory"
 msgstr "Luo uusi hakemisto"
 
-#: kicad/tree_project_frame.cpp:521
-msgid "noname."
-msgstr "ei nimeä."
-
-#: kicad/tree_project_frame.cpp:1055
+#: kicad/tree_project_frame.cpp:854
 msgid "Change filename: "
 msgstr "Vaihda tiedostonimeä: "
 
-#: kicad/tree_project_frame.cpp:1057
+#: kicad/tree_project_frame.cpp:856
 msgid "Change filename"
 msgstr "Vaihda tiedostonimeä"
 
@@ -11286,29 +11269,29 @@ msgstr "Suoritettava tiedosto ("
 msgid "Select Prefered Editor"
 msgstr "Valitse tekstieditori"
 
-#: kicad/prjconfig.cpp:42
+#: kicad/prjconfig.cpp:39
 msgid "Project template file <kicad.pro> not found "
 msgstr "Projektimallitiedostoa <kicad.pro> ei löytynyt "
 
-#: kicad/prjconfig.cpp:73
+#: kicad/prjconfig.cpp:70
 msgid "Create New Project"
 msgstr "Luo uusi projekti"
 
-#: kicad/prjconfig.cpp:78
+#: kicad/prjconfig.cpp:75
 msgid "Open Existing Project"
 msgstr "Avaa olemassa oleva projekti"
 
-#: kicad/prjconfig.cpp:105
+#: kicad/prjconfig.cpp:104
 msgid "Kicad project file <"
 msgstr "KiCad-projektitiedosto <"
 
-#: kicad/prjconfig.cpp:119
-#: kicad/kicad.cpp:74
+#: kicad/prjconfig.cpp:118
+#: kicad/kicad.cpp:69
 msgid "Working dir: "
 msgstr "Työhakemisto: "
 
-#: kicad/prjconfig.cpp:120
-#: kicad/kicad.cpp:75
+#: kicad/prjconfig.cpp:119
+#: kicad/kicad.cpp:70
 msgid ""
 "\n"
 "Project: "
@@ -11316,16 +11299,16 @@ msgstr ""
 "\n"
 "Projekti: "
 
-#: kicad/class_treeproject_item.cpp:148
+#: kicad/class_treeproject_item.cpp:128
 msgid "Unable to move file ... "
 msgstr "Tiedostoa ei voitu siirtää..."
 
-#: kicad/class_treeproject_item.cpp:149
-#: kicad/class_treeproject_item.cpp:230
+#: kicad/class_treeproject_item.cpp:129
+#: kicad/class_treeproject_item.cpp:204
 msgid "Permission error ?"
 msgstr "Käyttöoikeusvirhe?"
 
-#: kicad/class_treeproject_item.cpp:213
+#: kicad/class_treeproject_item.cpp:187
 msgid ""
 "Changing file extension will change file type.\n"
 " Do you want to continue ?"
@@ -11333,25 +11316,21 @@ msgstr ""
 "Tiedostopäätteen vaihto muuttaa tiedosto tyyppiä.\n"
 "Jatketaanko?"
 
-#: kicad/class_treeproject_item.cpp:215
+#: kicad/class_treeproject_item.cpp:189
 msgid "Rename File"
 msgstr "Nimeä tiedosto uudelleen"
 
-#: kicad/class_treeproject_item.cpp:229
+#: kicad/class_treeproject_item.cpp:203
 msgid "Unable to rename file ... "
 msgstr "Uudelleen nimeäminen ei onnistu..."
 
-#: kicad/class_treeproject_item.cpp:250
+#: kicad/class_treeproject_item.cpp:219
 msgid "Do you really want to delete "
 msgstr "Haluatko varmasti poistaa?"
 
-#: kicad/class_treeproject_item.cpp:251
+#: kicad/class_treeproject_item.cpp:220
 msgid "Delete File"
 msgstr "Poista tiedosto"
-
-#: kicad/kicad.cpp:102
-msgid "noname"
-msgstr "Ei nimeä"
 
 #: kicad/files-io.cpp:50
 msgid "Unzip Project"
@@ -11402,110 +11381,110 @@ msgstr ""
 "\n"
 "Luo Zip-arkisto <%s>"
 
-#: kicad/menubar.cpp:94
+#: kicad/menubar.cpp:90
 msgid "Open an existing project"
 msgstr "Avaa olemassa oleva projekti"
 
-#: kicad/menubar.cpp:108
-#: kicad/menubar.cpp:276
+#: kicad/menubar.cpp:104
+#: kicad/menubar.cpp:272
 msgid "Start a new project"
 msgstr "Aloita uusi projekti"
 
-#: kicad/menubar.cpp:114
-#: kicad/menubar.cpp:286
+#: kicad/menubar.cpp:110
+#: kicad/menubar.cpp:282
 msgid "Save current project"
 msgstr "Tallenna nykyinen projekti"
 
-#: kicad/menubar.cpp:122
+#: kicad/menubar.cpp:118
 msgid "&Archive"
 msgstr "&Arkistoi"
 
-#: kicad/menubar.cpp:123
+#: kicad/menubar.cpp:119
 msgid "Archive project files in zip archive"
 msgstr "Arkistoi projektitiedostot Zip-arkistoon"
 
-#: kicad/menubar.cpp:128
+#: kicad/menubar.cpp:124
 msgid "&Unarchive"
 msgstr "&Pura arkisto"
 
-#: kicad/menubar.cpp:129
+#: kicad/menubar.cpp:125
 msgid "Unarchive project files from zip file"
 msgstr "Pura projektitiedostot Zip-arkistosta"
 
-#: kicad/menubar.cpp:138
+#: kicad/menubar.cpp:134
 msgid "Quit KiCad"
 msgstr "Lopeta KiCad"
 
-#: kicad/menubar.cpp:152
+#: kicad/menubar.cpp:148
 msgid "Text E&ditor"
 msgstr "Teksiti&editori"
 
-#: kicad/menubar.cpp:153
+#: kicad/menubar.cpp:149
 msgid "Open prefered text editor"
 msgstr "Avaa käytettävä tekstieditori"
 
-#: kicad/menubar.cpp:159
+#: kicad/menubar.cpp:155
 msgid "&View File"
 msgstr "&Näytä tiedosto"
 
-#: kicad/menubar.cpp:160
+#: kicad/menubar.cpp:156
 msgid "View, read or edit file with a text editor"
 msgstr "Taerkastele tai muokkaa tiedostoja tekstieditorilla"
 
-#: kicad/menubar.cpp:173
+#: kicad/menubar.cpp:169
 msgid "&Text Editor"
 msgstr "&Teksitieditori"
 
-#: kicad/menubar.cpp:174
+#: kicad/menubar.cpp:170
 msgid "Select your prefered text editor"
 msgstr "Valitse käytettävä tekstieditori"
 
-#: kicad/menubar.cpp:188
+#: kicad/menubar.cpp:184
 msgid "Use system default PDF viewer used to browse datasheets"
 msgstr "Käytä oletus- (järjestelmän) PDF-näytintä datalehtien esittämiseen"
 
-#: kicad/menubar.cpp:198
+#: kicad/menubar.cpp:194
 msgid "Favourite"
 msgstr "Valittu"
 
-#: kicad/menubar.cpp:199
+#: kicad/menubar.cpp:195
 msgid "Use your favourite PDF viewer used to browse datasheets"
 msgstr "Käytä valitsemaasi PDF-näytintä datalehtien esittämiseen"
 
-#: kicad/menubar.cpp:210
-#: kicad/menubar.cpp:217
+#: kicad/menubar.cpp:206
+#: kicad/menubar.cpp:213
 msgid "PDF Viewer"
 msgstr "PDF-näytin"
 
-#: kicad/menubar.cpp:211
+#: kicad/menubar.cpp:207
 msgid "Select your favourite PDF viewer used to browse datasheets"
 msgstr "Valitse PDF-näytin"
 
-#: kicad/menubar.cpp:218
+#: kicad/menubar.cpp:214
 msgid "PDF viewer preferences"
 msgstr "PDF-näyttimen asetukset"
 
-#: kicad/menubar.cpp:233
+#: kicad/menubar.cpp:229
 msgid "Open the kicad manual"
 msgstr "Avaa KiCad–ohjekirja"
 
-#: kicad/menubar.cpp:242
+#: kicad/menubar.cpp:238
 msgid "About kicad project manager"
 msgstr "Tietoja KiCad-projektimanagerista"
 
-#: kicad/menubar.cpp:252
+#: kicad/menubar.cpp:248
 msgid "&Browse"
 msgstr "&Selaa"
 
-#: kicad/menubar.cpp:281
+#: kicad/menubar.cpp:277
 msgid "Load existing project"
 msgstr "Lataa projekti"
 
-#: kicad/menubar.cpp:294
+#: kicad/menubar.cpp:290
 msgid "Archive all project files"
 msgstr "Arkistoi kaikki projektitiedostot"
 
-#: kicad/menubar.cpp:302
+#: kicad/menubar.cpp:298
 msgid "Refresh project tree"
 msgstr "Virkistä projektipuu"
 
@@ -11804,7 +11783,7 @@ msgstr "Poistetaanko valinta?"
 msgid "GerbView project files (.cnf)|*.cnf"
 msgstr "GerbView-projektitiedostot (.cnf)|*.cnf"
 
-#: gerbview/gerbview.cpp:92
+#: gerbview/gerbview.cpp:97
 msgid "GerbView is already running. Continue?"
 msgstr "GerbView on jo käynnissä, jatketaanko?"
 
@@ -11937,15 +11916,15 @@ msgstr "D-koodit"
 msgid "Show DCodes identification"
 msgstr ""
 
-#: gerbview/class_gerbview_layer_widget.cpp:118
+#: gerbview/class_gerbview_layer_widget.cpp:131
 msgid "Show All Layers"
 msgstr "Näytä kaikki kerrokset"
 
-#: gerbview/class_gerbview_layer_widget.cpp:121
+#: gerbview/class_gerbview_layer_widget.cpp:134
 msgid "Hide All Layers"
 msgstr "Piilota kaikki kerrokset"
 
-#: gerbview/class_gerbview_layer_widget.cpp:186
+#: gerbview/class_gerbview_layer_widget.cpp:200
 #, c-format
 msgid "Layer %d"
 msgstr "Kerros %d"
@@ -12089,7 +12068,7 @@ msgstr "Luetteloi kaikki"
 msgid "Select by Browser"
 msgstr "Valitse selaimella"
 
-#: common/hotkeys_basic.cpp:367
+#: common/hotkeys_basic.cpp:384
 msgid ""
 "Current hotkey list:\n"
 "\n"
@@ -12097,155 +12076,155 @@ msgstr ""
 "Nykyinen pikanäppäinluettelo:\n"
 "\n"
 
-#: common/hotkeys_basic.cpp:375
+#: common/hotkeys_basic.cpp:392
 msgid "key "
 msgstr "näppäin "
 
-#: common/hotkeys_basic.cpp:428
+#: common/hotkeys_basic.cpp:445
 msgid "Save Hotkey Configuration File:"
 msgstr "Tallenna pikanäppäinasettelun asetustiedosto:"
 
-#: common/hotkeys_basic.cpp:460
+#: common/hotkeys_basic.cpp:477
 msgid "Allowed keys:\n"
 msgstr "Sallitut näppäimet:\n"
 
-#: common/hotkeys_basic.cpp:545
+#: common/hotkeys_basic.cpp:562
 msgid "Open Hotkey Configuration File:"
 msgstr "Avaa pikanäppäinasettelun asetustiedosto:"
 
-#: common/hotkeys_basic.cpp:563
+#: common/hotkeys_basic.cpp:580
 msgid "Unable to read "
 msgstr "Ei voitu lukea "
 
-#: common/hotkeys_basic.cpp:681
+#: common/hotkeys_basic.cpp:698
 msgid "List Current Keys"
 msgstr "Luetteloi nykyiset näppäimet"
 
-#: common/hotkeys_basic.cpp:682
+#: common/hotkeys_basic.cpp:699
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Näyttää nykyisen pikanäppäinluettelon ja liittyvät komennot"
 
-#: common/hotkeys_basic.cpp:688
+#: common/hotkeys_basic.cpp:705
 msgid "(Re)create Hotkeys File"
 msgstr "Luo pikanäppäintiedosto"
 
-#: common/hotkeys_basic.cpp:690
+#: common/hotkeys_basic.cpp:707
 msgid "Create or recreate the hotkey configuration file from current hotkey list"
 msgstr "Luo pikanäppäinasettelun asetustiedosto nykyisestä pikanäppäinlistasta"
 
-#: common/hotkeys_basic.cpp:697
+#: common/hotkeys_basic.cpp:714
 msgid "Reload Hotkeys File"
 msgstr "Lataa pikanäppäinasettelun asetustiedosto uudelleen"
 
-#: common/hotkeys_basic.cpp:698
+#: common/hotkeys_basic.cpp:715
 msgid "Reload the hotkey configuration file"
 msgstr "Lataa pikanäppäinasettelun asetustiedosto uudelleen"
 
-#: common/hotkeys_basic.cpp:704
+#: common/hotkeys_basic.cpp:721
 msgid "Edit Hotkeys File"
 msgstr "Muokkaa pikanäppäintiedostoa"
 
-#: common/hotkeys_basic.cpp:705
+#: common/hotkeys_basic.cpp:722
 msgid "Edit the hotkey configuration file in a text editor"
 msgstr "Muokkaa pikanäppäinasettelun asetustiedostoa tekstieditorissa"
 
-#: common/hotkeys_basic.cpp:711
+#: common/hotkeys_basic.cpp:728
 msgid "Hotkeys"
 msgstr "Pikanäppäimet"
 
-#: common/hotkeys_basic.cpp:712
+#: common/hotkeys_basic.cpp:729
 msgid "Hotkeys configuration and preferences"
 msgstr "Pikanäppäinten asetukset"
 
-#: common/hotkeys_basic.cpp:720
+#: common/hotkeys_basic.cpp:737
 msgid "Home directory"
 msgstr "Kotihakemisto"
 
-#: common/hotkeys_basic.cpp:721
+#: common/hotkeys_basic.cpp:738
 msgid "Use home directory to load or store Hotkey config files"
 msgstr "Käytä kotihakemistoa pikanäppäinasetusten tallennukseen"
 
-#: common/hotkeys_basic.cpp:728
+#: common/hotkeys_basic.cpp:745
 msgid "KiCad template directory"
 msgstr "KiCad-mallihakemisto"
 
-#: common/hotkeys_basic.cpp:729
+#: common/hotkeys_basic.cpp:746
 msgid "Use kicad/template directory to load or store Hotkey config files"
 msgstr "Käytä KiCad-mallihakemistoa pikanäppäinasetusten tallennukseen"
 
-#: common/hotkeys_basic.cpp:735
+#: common/hotkeys_basic.cpp:752
 msgid "Location"
 msgstr "Sijainti"
 
-#: common/hotkeys_basic.cpp:736
+#: common/hotkeys_basic.cpp:753
 msgid "Select hotkey configuration file location"
 msgstr "Valitse pikanäppäinten asetustiedoston sijainti"
 
-#: common/edaappl.cpp:112
+#: common/edaappl.cpp:108
 msgid "French"
 msgstr "ranska"
 
-#: common/edaappl.cpp:120
+#: common/edaappl.cpp:116
 msgid "Finnish"
 msgstr "suomi"
 
-#: common/edaappl.cpp:128
+#: common/edaappl.cpp:124
 msgid "Spanish"
 msgstr "espanja"
 
-#: common/edaappl.cpp:136
+#: common/edaappl.cpp:132
 msgid "Portuguese"
 msgstr "portugali"
 
-#: common/edaappl.cpp:144
+#: common/edaappl.cpp:140
 msgid "Italian"
 msgstr "italia"
 
-#: common/edaappl.cpp:152
+#: common/edaappl.cpp:148
 msgid "German"
 msgstr "saksa"
 
-#: common/edaappl.cpp:160
+#: common/edaappl.cpp:156
 msgid "Slovenian"
 msgstr "sloveeni"
 
-#: common/edaappl.cpp:168
+#: common/edaappl.cpp:164
 msgid "Hungarian"
 msgstr "unkari"
 
-#: common/edaappl.cpp:176
+#: common/edaappl.cpp:172
 msgid "Polish"
 msgstr "puola"
 
-#: common/edaappl.cpp:184
+#: common/edaappl.cpp:180
 msgid "Czech"
 msgstr "tšekki"
 
-#: common/edaappl.cpp:192
+#: common/edaappl.cpp:188
 msgid "Russian"
 msgstr "venäjä"
 
-#: common/edaappl.cpp:200
+#: common/edaappl.cpp:196
 msgid "Korean"
 msgstr "korea"
 
-#: common/edaappl.cpp:208
+#: common/edaappl.cpp:204
 msgid "Chinese simplified"
 msgstr "yksinkertaistettu kiina"
 
-#: common/edaappl.cpp:216
+#: common/edaappl.cpp:212
 msgid "Catalan"
 msgstr "katalaani"
 
-#: common/edaappl.cpp:224
+#: common/edaappl.cpp:220
 msgid "Dutch"
 msgstr "hollanti"
 
-#: common/edaappl.cpp:824
+#: common/edaappl.cpp:817
 msgid "Language"
 msgstr "Kieli"
 
-#: common/edaappl.cpp:825
+#: common/edaappl.cpp:818
 msgid "Select application language (only for testing!)"
 msgstr "Valitse sovelluksessa käytettävä kieli (vain testaukseen!)"
 
@@ -12318,25 +12297,25 @@ msgstr "Merkkijonon erottimen täytyy olla joko ', \" tai $"
 msgid "Un-terminated delimited string"
 msgstr "Päättämätön erotettu merkkijono"
 
-#: common/basicframe.cpp:207
+#: common/basicframe.cpp:224
 msgid " file <"
 msgstr " tiedosto <"
 
-#: common/basicframe.cpp:207
+#: common/basicframe.cpp:224
 msgid "> was not found."
 msgstr "> ei löytynyt"
 
-#: common/basicframe.cpp:241
+#: common/basicframe.cpp:258
 #, c-format
 msgid "Help file %s not found"
 msgstr "Ohjetiedostoa %s ei löytynyt"
 
-#: common/basicframe.cpp:250
+#: common/basicframe.cpp:267
 #, c-format
 msgid "Help file %s could not be found."
 msgstr "Ohjetiedostoa %s ei löytynyt"
 
-#: common/drawframe.cpp:330
+#: common/drawframe.cpp:336
 msgid "??"
 msgstr "??"
 
@@ -12618,7 +12597,7 @@ msgstr "Siistimisasetukset"
 msgid "Netlist Dialog"
 msgstr "Lue liitostiedosto "
 
-#: pcbnew/dialog_design_rules_base.h:111
+#: pcbnew/dialog_design_rules_base.h:110
 msgid "Design Rules Editor"
 msgstr "Suunnittelusääntöeditori"
 
@@ -12629,6 +12608,10 @@ msgstr "Kerrosten asetukset"
 #: pcbnew/dialog_pad_properties_base.h:140
 msgid "Pad Properties"
 msgstr "Anturan ominaisuudet"
+
+#: pcbnew/dialog_display_options_base.h:69
+msgid "Display options"
+msgstr "Näyttöasetukset"
 
 #: pcbnew/dialog_edit_module_text.h:43
 msgid "TextMod properties"
@@ -12646,7 +12629,7 @@ msgstr "Liitoskuvan tekstin ominaisuudet"
 msgid "Find"
 msgstr "Etsi"
 
-#: pcbnew/dialog_edit_module_for_Modedit_base.h:105
+#: pcbnew/dialog_edit_module_for_Modedit_base.h:102
 msgid "Module properties"
 msgstr "Osan ominaisuudet"
 
@@ -12658,7 +12641,7 @@ msgstr "DRC-asetukset"
 msgid "Non Copper Zones Properties"
 msgstr "Kuparittomien täyttöjen ominaisuudet"
 
-#: pcbnew/dialog_general_options_BoardEditor_base.h:80
+#: pcbnew/dialog_general_options_BoardEditor_base.h:78
 msgid "General settings"
 msgstr "Yleiset asetukset"
 
@@ -12838,6 +12821,16 @@ msgstr "GerbView:n piirtotyyliasetukset"
 msgid "Page Settings"
 msgstr "Sivun asetukset"
 
+#~ msgid "&Run"
+#~ msgstr "&Käynnistä"
+#~ msgid "&Open the file in a Text Editor"
+#~ msgstr "&Avaa tiedosto tekstieditorissa"
+#~ msgid "Pen Width Mini"
+#~ msgstr "Pienin piirron leveys"
+#~ msgid "noname."
+#~ msgstr "ei nimeä."
+#~ msgid "noname"
+#~ msgstr "Ei nimeä"
 #~ msgid "New &Text File"
 #~ msgstr "Uusi te&kstitiedosto"
 #~ msgid "Create a New Txt File"
