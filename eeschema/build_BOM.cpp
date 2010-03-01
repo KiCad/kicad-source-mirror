@@ -800,17 +800,18 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
 {
     int             qty = 1;
     char            RefName[256];
-    char            ValName[256];
-    char            NxtName[256];
+	wxString		ValName, NxtName;
     char            RNames[2000];
-    wxArrayString   cmpFields;
     EDA_BaseStruct* DrawList;
     EDA_BaseStruct* NxtList;
     SCH_COMPONENT*  DrawLibItem;
     SCH_COMPONENT*  NxtLibItem;
+	SCH_COMPONENT*  m_Cmp;
+	SCH_COMPONENT   Cmp;
 
-    strcpy( NxtName, "" );
+	NxtName = wxT ("");
     strcpy( RNames, "" );
+	m_Cmp = &Cmp;
 
     for( unsigned ii = 0; ii < aList.size(); ii++ )
     {
@@ -822,6 +823,16 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
         if( aList[ii].m_Reference[0] == '#' )
             continue;
         DrawLibItem = (SCH_COMPONENT*) DrawList;
+		if( (DrawLibItem->GetField( VALUE )->m_Text.IsEmpty()) )
+			continue;
+		// m_Cmp = DrawLibItem->GenCopy();
+
+        // Store fields. try to store non empty fields.
+        for( int jj = FOOTPRINT; jj < DrawLibItem->GetFieldCount(); jj++ )
+        {
+			if( ! DrawLibItem->GetField( jj )->m_Text.IsEmpty() )
+                m_Cmp->GetField( jj )->m_Text = DrawLibItem->GetField( jj )->m_Text;
+        }
 
         NxtLibItem = NULL;
         for( unsigned ij = ii + 1; ij < aList.size(); ij++ )
@@ -834,52 +845,45 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
             if( aList[ij].m_Reference[0] == '#' )
                 continue;
             NxtLibItem = (SCH_COMPONENT*) NxtList;
+			if( (NxtLibItem->GetField( VALUE )->m_Text.IsEmpty()) ) {
+				continue;
+			}
             break;
         }
 
-        sprintf( RefName, "%s", aList[ii].m_Reference );
-        sprintf( ValName, "%s", CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
-        if( NxtLibItem )
-            sprintf( NxtName, "%s", CONV_TO_UTF8( NxtLibItem->GetField( VALUE )->m_Text ) );
+        if( NxtLibItem != NULL )
+			NxtName =  NxtLibItem->GetField( VALUE )->m_Text;
         else
-            NxtName[0] = 0;
+			NxtName = wxT ("");
 
+        sprintf( RefName, "%s", aList[ii].m_Reference );
+        ValName = DrawLibItem->GetField( VALUE )->m_Text ;
 
-        // Store fields. try to find and store non empty fields.
-        int needed_size = DrawLibItem->GetFieldCount() - cmpFields.GetCount();
-        if( needed_size > 0 )
-            cmpFields.Add(wxEmptyString, needed_size);
-        for( int jj = FIELD1; jj < DrawLibItem->GetFieldCount(); jj++ )
-        {
-            if( cmpFields[jj].IsEmpty() )
-                cmpFields[jj] = DrawLibItem->GetField( jj )->m_Text;
-        }
-
-        if( !strcmp( NxtName, ValName ) )
-        {
+		if( !NxtName.CmpNoCase(ValName )) {
             qty++;
             strcat( RNames, ", " );
             strcat( RNames, RefName );
-            continue;
+			continue;
         }
 
-        fprintf( f, "%-15s%c%-3d", ValName, s_ExportSeparatorSymbol, qty );
+        fprintf( f, "%15s%c%3d", CONV_TO_UTF8(ValName), s_ExportSeparatorSymbol, qty );
         qty = 1;
 
         if( m_AddFootprintField->IsChecked() )
-            fprintf( f, "%c%-16s", s_ExportSeparatorSymbol,
+            fprintf( f, "%c%15s", s_ExportSeparatorSymbol,
                     CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
 
-        fprintf( f, "%c%-20s", s_ExportSeparatorSymbol, CONV_TO_UTF8( cmpFields[FIELD1]) );
-        fprintf( f, "%c%-20s", s_ExportSeparatorSymbol, CONV_TO_UTF8( cmpFields[FIELD2]) );
-        fprintf( f, "%c%-20s", s_ExportSeparatorSymbol, CONV_TO_UTF8( cmpFields[FIELD3]) );
-
-        cmpFields.Clear();
+        // for( int jj = FIELD1; jj < DrawLibItem->GetFieldCount(); jj++ )
+        for( int jj = FIELD1; jj < FIELD5 ; jj++ )
+        	fprintf( f, "%c%12s", s_ExportSeparatorSymbol, 
+                    CONV_TO_UTF8( m_Cmp->GetField( jj )->m_Text ) );
 
         fprintf( f, "%c%s%s", s_ExportSeparatorSymbol, RefName, RNames );
-        strcpy( RNames, "" );
-
         fputs( "\n", f );
+
+        strcpy( RNames, "" );
+        for( int jj = FOOTPRINT; jj < DrawLibItem->GetFieldCount(); jj++ )
+			m_Cmp->GetField( jj )->m_Text = wxT ("");
     }
 
     return 0;
