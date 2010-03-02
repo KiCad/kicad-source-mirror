@@ -3,10 +3,6 @@
  * this is the wxTreeCtrl that shows a Kicad tree project files
  */
 
-#ifdef KICAD_PYTHON
-#include <pyhandler.h>
-#endif
-
 #include "fctsys.h"
 #include "common.h"
 #include "bitmaps.h"

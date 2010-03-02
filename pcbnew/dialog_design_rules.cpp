@@ -108,8 +108,8 @@ DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( WinEDA_PcbFrame* parent ) :
     column0.Clear();
     column1.Clear();
 
-    column0.SetImage( -1 );
-    column1.SetImage( -1 );
+    column0.SetMask(wxLIST_MASK_TEXT);
+    column1.SetMask(wxLIST_MASK_TEXT);
 
     column0.SetText( _( "Net" ) );
     column1.SetText( _( "Class" ) );
