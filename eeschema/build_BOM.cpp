@@ -704,8 +704,10 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 #if defined(KICAD_GOST)
 
 
+
             Unit = aList[ii].m_Unit + '1' - 1;
 #else
+
 
 
             Unit = aList[ii].m_Unit + 'A' - 1;
@@ -719,11 +721,13 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 #if defined(KICAD_GOST)
 
 
+
             fprintf( f, "%s%c%s%c%s", CmpName, s_ExportSeparatorSymbol,
                     CONV_TO_UTF8( DrawLibItem->GetField(
                                       VALUE )->m_Text ), s_ExportSeparatorSymbol,
                     CONV_TO_UTF8( DrawLibItem->GetField( DATASHEET )->m_Text ) );
 #else
+
 
 
             fprintf( f, "%s%c%s", CmpName, s_ExportSeparatorSymbol,
@@ -734,10 +738,12 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 #if defined(KICAD_GOST)
 
 
+
             fprintf( f, "| %-10s %-12s %-20s", CmpName,
                     CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ),
                     CONV_TO_UTF8( DrawLibItem->GetField( DATASHEET )->m_Text ) );
 #else
+
 
 
             fprintf( f, "| %-10s %-12s", CmpName,
@@ -799,19 +805,15 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
     std::vector <OBJ_CMP_TO_LIST>& aList )
 {
     int             qty = 1;
-    char            RefName[256];
-	wxString		ValName, NxtName;
-    char            RNames[2000];
+    wxString        RefName;
+    wxString        ValName;
+    wxString        NxtName;
+    wxString        RNames;
     EDA_BaseStruct* DrawList;
     EDA_BaseStruct* NxtList;
     SCH_COMPONENT*  DrawLibItem;
     SCH_COMPONENT*  NxtLibItem;
-	SCH_COMPONENT*  m_Cmp;
-	SCH_COMPONENT   Cmp;
-
-	NxtName = wxT ("");
-    strcpy( RNames, "" );
-	m_Cmp = &Cmp;
+    SCH_COMPONENT   dummyCmp;        // A dummy component, to store fields
 
     for( unsigned ii = 0; ii < aList.size(); ii++ )
     {
@@ -823,15 +825,14 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
         if( aList[ii].m_Reference[0] == '#' )
             continue;
         DrawLibItem = (SCH_COMPONENT*) DrawList;
-		if( (DrawLibItem->GetField( VALUE )->m_Text.IsEmpty()) )
-			continue;
-		// m_Cmp = DrawLibItem->GenCopy();
+        if( ( DrawLibItem->GetField( VALUE )->m_Text.IsEmpty() ) )
+            continue;
 
-        // Store fields. try to store non empty fields.
+        // Store fields. Store non empty fields only.
         for( int jj = FOOTPRINT; jj < DrawLibItem->GetFieldCount(); jj++ )
         {
-			if( ! DrawLibItem->GetField( jj )->m_Text.IsEmpty() )
-                m_Cmp->GetField( jj )->m_Text = DrawLibItem->GetField( jj )->m_Text;
+            if( !DrawLibItem->GetField( jj )->m_Text.IsEmpty() )
+                dummyCmp.GetField( jj )->m_Text = DrawLibItem->GetField( jj )->m_Text;
         }
 
         NxtLibItem = NULL;
@@ -845,45 +846,49 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
             if( aList[ij].m_Reference[0] == '#' )
                 continue;
             NxtLibItem = (SCH_COMPONENT*) NxtList;
-			if( (NxtLibItem->GetField( VALUE )->m_Text.IsEmpty()) ) {
-				continue;
-			}
+            if( ( NxtLibItem->GetField( VALUE )->m_Text.IsEmpty() ) )
+            {
+                continue;
+            }
             break;
         }
 
         if( NxtLibItem != NULL )
-			NxtName =  NxtLibItem->GetField( VALUE )->m_Text;
+            NxtName = NxtLibItem->GetField( VALUE )->m_Text;
         else
-			NxtName = wxT ("");
+            NxtName = wxT( "" );
 
-        sprintf( RefName, "%s", aList[ii].m_Reference );
-        ValName = DrawLibItem->GetField( VALUE )->m_Text ;
+        RefName = CONV_FROM_UTF8( aList[ii].m_Reference );
+        ValName = DrawLibItem->GetField( VALUE )->m_Text;
 
-		if( !NxtName.CmpNoCase(ValName )) {
+        if( !NxtName.CmpNoCase( ValName ) )
+        {
             qty++;
-            strcat( RNames, ", " );
-            strcat( RNames, RefName );
-			continue;
+            RNames << wxT( ", " ) << RefName;
+            continue;
         }
 
-        fprintf( f, "%15s%c%3d", CONV_TO_UTF8(ValName), s_ExportSeparatorSymbol, qty );
+        fprintf( f, "%15s%c%3d", CONV_TO_UTF8( ValName ), s_ExportSeparatorSymbol, qty );
         qty = 1;
 
         if( m_AddFootprintField->IsChecked() )
             fprintf( f, "%c%15s", s_ExportSeparatorSymbol,
                     CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
 
-        // for( int jj = FIELD1; jj < DrawLibItem->GetFieldCount(); jj++ )
-        for( int jj = FIELD1; jj < FIELD5 ; jj++ )
-        	fprintf( f, "%c%12s", s_ExportSeparatorSymbol, 
-                    CONV_TO_UTF8( m_Cmp->GetField( jj )->m_Text ) );
+        // print fields
+        for( int jj = FIELD1; jj < FIELD5; jj++ )
+            fprintf( f, "%c%12s", s_ExportSeparatorSymbol,
+                    CONV_TO_UTF8( dummyCmp.GetField( jj )->m_Text ) );
 
-        fprintf( f, "%c%s%s", s_ExportSeparatorSymbol, RefName, RNames );
+        fprintf( f, "%c%s%s", s_ExportSeparatorSymbol,
+                CONV_TO_UTF8( RefName ),
+                CONV_TO_UTF8( RNames ) );
         fputs( "\n", f );
 
-        strcpy( RNames, "" );
+        // Clear strings, to prepare next component
+        RNames.Empty();
         for( int jj = FOOTPRINT; jj < DrawLibItem->GetFieldCount(); jj++ )
-			m_Cmp->GetField( jj )->m_Text = wxT ("");
+            dummyCmp.GetField( jj )->m_Text.Empty();
     }
 
     return 0;

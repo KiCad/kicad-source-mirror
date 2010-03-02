@@ -3,8 +3,7 @@
 * under GNU General Public License (see copyright.txt)
 
 == Main Author
-Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
-Maitre de Conferences
+Jean-Pierre Charras <jean-pierre.charras[at]gipsa-lab-dot-inpg-dot-fr>
 IUT1 GEII2
 Universite Joseph Fourier (U.J.F.)
 Saint Martin d'HËres (38402)
@@ -12,34 +11,38 @@ Laboratiore GIPSA-Lab
 Saint Martin d'HËres
 
 == Contributors
-Dick Hollenbeck <dick@softplc.com>
-Jerry Jacobs <xor.gate.engineering@gmail.com>
-Jonas Diemer <diemer@gmx.de>
+Dick Hollenbeck <dick[at]softplc-dot-com>
+Hauptmech <hauptmech[at]gmail-dot-com>
+Jerry Jacobs <xor.gate.engineering[at]gmail-dot-com>
+Jonas Diemer <diemer[at]gmx-dot-de>
 KBool Library http://boolean.klaasholwerda.nl/bool.html
-Rok Markovic <rok@kanardia.eu>
-Tim Hanson <sideskate@gmail.com>
-Vesa Solonen <vesa.solonen@hut.fi>
-Wayne Stambaugh <stambaughw@verizon.net>
+Lorenzo <lomarcan[at]tin-dot-it>
+Marco Serantoni <marco.serantoni[at]gmail-dot-com>  (OSX maintener)
+Rok Markovic <rok[at]kanardia.eu>
+Tim Hanson <sideskate[at]gmail-dot-com>
+Vesa Solonen <vesa.solonen[at]hut-dot-fi>
+Wayne Stambaugh <stambaughw[at]verizon-dot-net>
 
 See also CHANGELOG.txt for contributors.
 
 == Document Writers
-Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
-Igor Plyatov <plyatov@gmail.com>
+Jean-Pierre Charras <jean-pierre.charras[at]gipsa-lab.inpg.fr>
+Igor Plyatov <plyatov[at]gmail.com>
 
 == Translators
-Czech (CZ) Martin Krato≈°ka <martin@ok1rr.com>
-Dutch (NL) Jerry Jacobs <xor.gate.engineering@gmail.com>
-Finnish (FI) Vesa Solonen <vesa.solonen@hut.fi>
-French (FR) Jean-Pierre Charras <jean-pierre.charras@inpg.fr>
-Polish (PL) Mateusz Skowroøski <skowri@gmail.com>
-Portuguese (PT) Renie Marquet <reniemarquet@uol.com.br>"
-Russian (RU) Igor Plyatov <plyatov@gmail.com>
-Spanish (ES) Pedro Martin del Valle <pkicad@yahoo.es>
-Spanish (ES) IÒigo Zuluaga <inigo_zuluaga@yahoo.es>
+Czech (CZ) Martin Krato≈°ka <martin[at]ok1rr-dot-com>
+Dutch (NL) Jerry Jacobs <xor.gate.engineering[at]gmail-dot-com>
+Finnish (FI) Vesa Solonen <vesa.solonen[at]hut-dot-fi>
+French (FR) Jean-Pierre Charras <jean-pierre.charras[at]inpg-dot-fr>
+Polish (PL) Mateusz Skowroøski <skowri[at]gmail-dot-com>
+Portuguese (PT) Renie Marquet <reniemarquet[at]uol-dot-com-dot-br>"
+Russian (RU) Igor Plyatov <plyatov[at]gmail-dot-com>
+Spanish (ES) Pedro Martin del Valle <pkicad[at]yahoo-dot-es>
+Spanish (ES) IÒigo Zuluaga <inigo_zuluaga[at]yahoo-dot-es>
+German (DE) Rafael Sokolowski <Rafael.Sokolowski[at]web-dot-de
 Remy Halvick, David Briscoe, Dominique Laigle, Paul Burke
 
 == Programm credits for icons and others
-Icons by IÒigo Zuluagaz <inigo_zuluaga@yahoo.es>
-3D modules by Renie Marquet <reniemarquet@uol.com.br>
-3D modules by Christophe Boschat <nox454@hotmail.fr>
+Icons by IÒigo Zuluagaz <inigo_zuluaga[at]yahoo-dot-es>
+3D modules by Renie Marquet <reniemarquet[at]uol.com-dot-br>
+3D modules by Christophe Boschat <nox454[at]hotmail-dot-fr>

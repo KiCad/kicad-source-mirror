@@ -109,8 +109,8 @@ class DIALOG_PAD_PROPERTIES_BASE : public wxDialog
 		wxTextCtrl* m_SolderPasteMarginRatioCtrl;
 		wxStaticText* m_SolderPasteRatioMarginUnits;
 		wxRadioBox* m_PadType;
-		wxCheckBox* m_PadLayerCu;
 		wxCheckBox* m_PadLayerCmp;
+		wxCheckBox* m_PadLayerCu;
 		
 		wxCheckBox* m_PadLayerAdhCmp;
 		wxCheckBox* m_PadLayerAdhCu;
@@ -120,9 +120,9 @@ class DIALOG_PAD_PROPERTIES_BASE : public wxDialog
 		wxCheckBox* m_PadLayerSilkCu;
 		wxCheckBox* m_PadLayerMaskCmp;
 		wxCheckBox* m_PadLayerMaskCu;
+		wxCheckBox* m_PadLayerDraft;
 		wxCheckBox* m_PadLayerECO1;
 		wxCheckBox* m_PadLayerECO2;
-		wxCheckBox* m_PadLayerDraft;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;

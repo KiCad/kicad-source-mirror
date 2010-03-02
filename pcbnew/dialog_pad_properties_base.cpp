@@ -313,13 +313,13 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	wxStaticBoxSizer* m_LayersSizer;
 	m_LayersSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Layers:") ), wxVERTICAL );
 	
-	m_PadLayerCu = new wxCheckBox( this, wxID_ANY, _("Copper layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	
-	m_LayersSizer->Add( m_PadLayerCu, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
 	m_PadLayerCmp = new wxCheckBox( this, wxID_ANY, _("Component layer"), wxDefaultPosition, wxDefaultSize, 0 );
 	
-	m_LayersSizer->Add( m_PadLayerCmp, 0, wxALL, 5 );
+	m_LayersSizer->Add( m_PadLayerCmp, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_PadLayerCu = new wxCheckBox( this, wxID_ANY, _("Copper layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_LayersSizer->Add( m_PadLayerCu, 0, wxALL, 5 );
 	
 	
 	m_LayersSizer->Add( 0, 8, 1, wxEXPAND, 5 );
@@ -356,17 +356,17 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	m_LayersSizer->Add( m_PadLayerMaskCu, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
+	m_PadLayerDraft = new wxCheckBox( this, wxID_ANY, _("Draft layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_LayersSizer->Add( m_PadLayerDraft, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
 	m_PadLayerECO1 = new wxCheckBox( this, wxID_ANY, _("E.C.O.1 layer"), wxDefaultPosition, wxDefaultSize, 0 );
 	
 	m_LayersSizer->Add( m_PadLayerECO1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_PadLayerECO2 = new wxCheckBox( this, wxID_ANY, _("E.C.O.2 layer"), wxDefaultPosition, wxDefaultSize, 0 );
 	
-	m_LayersSizer->Add( m_PadLayerECO2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_PadLayerDraft = new wxCheckBox( this, wxID_ANY, _("Draft layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	
-	m_LayersSizer->Add( m_PadLayerDraft, 0, wxALL, 5 );
+	m_LayersSizer->Add( m_PadLayerECO2, 0, wxALL, 5 );
 	
 	m_RightBoxSizer->Add( m_LayersSizer, 0, 0, 5 );
 	
