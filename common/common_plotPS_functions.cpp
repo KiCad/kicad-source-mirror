@@ -323,12 +323,12 @@ void PS_PLOTTER::start_plot( FILE* fout )
     //
     // (NOTE: m_Size.y is *supposed* to be listed before m_Size.x;
     // the order in which they are specified is not wrong!)
-    // Also note sheet->m_Size is given in mils, not in decimals and must be
+    // Also note sheet->m_Size is given in mils, not in decimils and must be
     // sheet->m_Size * 10 in decimals
     if( sheet->m_Name.Cmp( wxT( "User" ) ) == 0 )
         fprintf( output_file, "%%%%DocumentMedia: Custom %d %d 0 () ()\n",
-                 wxRound( sheet->m_Size.y * CONV_SCALE ),
-                 wxRound( sheet->m_Size.x * CONV_SCALE ) );
+                 wxRound( sheet->m_Size.y * 10 * CONV_SCALE ),
+                 wxRound( sheet->m_Size.x * 10 * CONV_SCALE ) );
 
     else  // ( if sheet->m_Name does not equal "User" )
         fprintf( output_file, "%%%%DocumentMedia: %s %d %d 0 () ()\n",
