@@ -49,9 +49,10 @@ static int compare( const void* a1, const void* a2 )
 //-----<DSNLEXER>-------------------------------------------------------------
 
 DSNLEXER::DSNLEXER( FILE* aFile, const wxString& aFilename,
-    const KEYWORD* aKeywordTable, unsigned aKeywordCount ) :
-        reader( aFile, 4096 )
+    const KEYWORD* aKeywordTable, unsigned aKeywordCount )
 {
+    reader = new LINE_READER( aFile, 4096 );
+
     keywords = aKeywordTable;
     keywordCount = aKeywordCount;
 
@@ -66,7 +67,7 @@ DSNLEXER::DSNLEXER( FILE* aFile, const wxString& aFilename,
     // "start" should never change until we change the reader.  The DSN
     // format spec supports an include file mechanism but we can add that later
     // using a std::stack to hold a stack of LINE_READERs to track nesting.
-    start = (char*) reader;
+    start = (char*) (*reader);
 
     limit = start;
     next  = start;
@@ -166,7 +167,7 @@ void DSNLEXER::ThrowIOError( wxString aText, int charOffset ) throw (IOError)
 {
     // append to aText, do not overwrite
     aText << wxT(" ") << _("in file") << wxT(" \"") << filename
-          << wxT("\" ") << _("on line") << wxT(" ") << reader.LineNumber()
+          << wxT("\" ") << _("on line") << wxT(" ") << reader->LineNumber()
           << wxT(" ") << _("at offset") << wxT(" ") << charOffset;
 
     throw IOError( aText );

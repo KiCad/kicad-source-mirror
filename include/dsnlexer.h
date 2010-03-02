@@ -74,7 +74,7 @@ enum DSN_SYNTAX_T {
  * Class DLEXER
  * implements a lexical analyzer for the SPECCTRA DSN file format.  It
  * reads lexical tokens from the current LINE_READER through the NextTok()
- * function.  The NextTok() function returns one of the DSN_T values.
+ * function.
  */
 class DSNLEXER
 {
@@ -82,7 +82,7 @@ class DSNLEXER
     char*               start;
     char*               limit;
 
-    LINE_READER         reader;
+    LINE_READER*        reader;
     int                 stringDelimiter;
     bool                space_in_quoted_tokens; ///< blank spaces within quoted strings
     bool                commentsAreTokens;      ///< true if should return comments as tokens
@@ -101,7 +101,7 @@ class DSNLEXER
 
     int readLine() throw (IOError)
     {
-        int len = reader.ReadLine();
+        int len = reader->ReadLine();
 
         next  = start;
         limit = start + len;
@@ -159,6 +159,12 @@ public:
     DSNLEXER( FILE* aFile, const wxString& aFilename,
             const KEYWORD* aKeywordTable, unsigned aKeywordCount );
 
+    ~DSNLEXER()
+    {
+        delete reader;
+    }
+
+
     /**
      * Function SetStringDelimiter
      * changes the string delimiter from the default " to some other character
@@ -203,7 +209,10 @@ public:
     /**
      * Function NextTok
      * returns the next token found in the input file or T_EOF when reaching
-     * the end of file.
+     * the end of file.  Users should wrap this function to return an enum
+     * to aid in grammar debugging while running under a debugger, but leave
+     * this lower level function returning an int (so the enum does not collide
+     * with another usage).
      * @return int - the type of token found next.
      * @throw IOError - only if the LINE_READER throws it.
      */
@@ -250,7 +259,7 @@ public:
      */
     int CurLineNumber()
     {
-        return reader.LineNumber();
+        return reader->LineNumber();
     }
 
     /**
