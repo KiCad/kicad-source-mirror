@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-01 19:32+0200\n"
-"PO-Revision-Date: 2010-03-01 19:32+0200\n"
+"POT-Creation-Date: 2010-03-02 19:37+0200\n"
+"PO-Revision-Date: 2010-03-02 19:37+0200\n"
 "Last-Translator: Vesa Solonen <vesa.solonen@hut.fi>\n"
 "Language-Team: Amerikanenglanti <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -205,7 +205,7 @@ msgstr " mm"
 
 #: pcbnew/toolbars_update_user_interface.cpp:54
 msgid "NetClass: "
-msgstr "Kytkentäverkkoluokka:"
+msgstr "Kytkentäverkkoluokka: "
 
 #: pcbnew/toolbars_update_user_interface.cpp:63
 msgid "Clearance"
@@ -2315,7 +2315,7 @@ msgid "A list of unconnected pads, right click for popup menu"
 msgstr "Luettelo liittämättömistä anturoista. Oikea painallus tuo ponnahdusvalikon"
 
 #: pcbnew/dialog_drc_base.cpp:171
-#: pcbnew/class_board.cpp:916
+#: pcbnew/class_board.cpp:917
 msgid "Unconnected"
 msgstr "Liittämättömiä"
 
@@ -2569,23 +2569,23 @@ msgstr "Levyn_reuna"
 msgid "BAD INDEX"
 msgstr "VIALLINEN INDEKSI"
 
-#: pcbnew/class_board.cpp:896
+#: pcbnew/class_board.cpp:897
 msgid "Vias"
 msgstr "Läpivientejä"
 
-#: pcbnew/class_board.cpp:899
+#: pcbnew/class_board.cpp:900
 msgid "Nodes"
 msgstr "Solmuja"
 
-#: pcbnew/class_board.cpp:902
+#: pcbnew/class_board.cpp:903
 msgid "Nets"
 msgstr "Verkkoja"
 
-#: pcbnew/class_board.cpp:910
+#: pcbnew/class_board.cpp:911
 msgid "Links"
 msgstr "Linkkejä"
 
-#: pcbnew/class_board.cpp:913
+#: pcbnew/class_board.cpp:914
 msgid "Connect"
 msgstr "Liitoksia"
 
@@ -4097,15 +4097,15 @@ msgstr "Kirjoitettiin piirilevytiedosto:"
 msgid "Failed to create "
 msgstr "Luominen epäonnistui"
 
-#: pcbnew/dialog_pad_properties.cpp:522
+#: pcbnew/dialog_pad_properties.cpp:541
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
 msgstr "Epäkelpo arvo läpiviennin poraukselle: Poraus suurempi kuin anturan koko"
 
-#: pcbnew/dialog_pad_properties.cpp:528
+#: pcbnew/dialog_pad_properties.cpp:547
 msgid "Incorrect value for pad offset"
 msgstr "Epäkelpo arvo anturan siirtymälle"
 
-#: pcbnew/dialog_pad_properties.cpp:622
+#: pcbnew/dialog_pad_properties.cpp:641
 msgid "Unknown netname, no change"
 msgstr "Tuntematon kytkentäverkkonimi: Ei muutosta"
 
@@ -6489,12 +6489,12 @@ msgid "Pad Type:"
 msgstr "Anturatyyppi:"
 
 #: pcbnew/dialog_pad_properties_base.cpp:316
-msgid "Copper layer"
-msgstr "Kuparikerros"
-
-#: pcbnew/dialog_pad_properties_base.cpp:320
 msgid "Component layer"
 msgstr ""
+
+#: pcbnew/dialog_pad_properties_base.cpp:320
+msgid "Copper layer"
+msgstr "Kuparikerros"
 
 #: pcbnew/dialog_pad_properties_base.cpp:327
 msgid "Adhesive Cmp"
@@ -6529,15 +6529,15 @@ msgid "Solder mask Copper"
 msgstr ""
 
 #: pcbnew/dialog_pad_properties_base.cpp:359
-msgid "E.C.O.1 layer"
+msgid "Draft layer"
 msgstr ""
 
 #: pcbnew/dialog_pad_properties_base.cpp:363
-msgid "E.C.O.2 layer"
+msgid "E.C.O.1 layer"
 msgstr ""
 
 #: pcbnew/dialog_pad_properties_base.cpp:367
-msgid "Draft layer"
+msgid "E.C.O.2 layer"
 msgstr ""
 
 #: pcbnew/class_drc_item.cpp:39
@@ -6870,7 +6870,7 @@ msgstr "Pituus:"
 #: pcbnew/class_board_item.cpp:209
 #: pcbnew/class_board_item.cpp:226
 msgid " on "
-msgstr " päällä "
+msgstr " kerroksella "
 
 #: pcbnew/class_board_item.cpp:84
 msgid "Pcb Text"
@@ -9885,16 +9885,16 @@ msgstr ""
 "#Cmp ( order = Reference )"
 
 #: eeschema/build_BOM.cpp:679
-#: eeschema/build_BOM.cpp:904
+#: eeschema/build_BOM.cpp:914
 msgid " (with SubCmp)"
 msgstr ""
 
-#: eeschema/build_BOM.cpp:778
-#: eeschema/build_BOM.cpp:960
+#: eeschema/build_BOM.cpp:784
+#: eeschema/build_BOM.cpp:970
 msgid "#End Cmp\n"
 msgstr "#End Cmp\n"
 
-#: eeschema/build_BOM.cpp:901
+#: eeschema/build_BOM.cpp:911
 msgid ""
 "\n"
 "#Cmp ( order = Value )"
@@ -9902,17 +9902,17 @@ msgstr ""
 "\n"
 "#Cmp ( order = Value )"
 
-#: eeschema/build_BOM.cpp:988
+#: eeschema/build_BOM.cpp:998
 #, c-format
 msgid "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr "> %-28.28s %s        (Lehti %s) sijainti: %3.3f, %3.3f\n"
 
-#: eeschema/build_BOM.cpp:1008
+#: eeschema/build_BOM.cpp:1018
 #, c-format
 msgid "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr "> %-28.28s Nastalehti %-7.7s (Lehti %s) sijainti: %3.3f, %3.3f\n"
 
-#: eeschema/build_BOM.cpp:1023
+#: eeschema/build_BOM.cpp:1033
 msgid "#End labels\n"
 msgstr "#End labels\n"
 
