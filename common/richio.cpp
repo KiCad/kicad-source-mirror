@@ -97,13 +97,14 @@ int STRING_LINE_READER::ReadLine() throw (IOError)
         wxASSERT( ndx + advance <= source.length() );
 
         memcpy( line, &source[ndx], advance );
-        line[advance] = 0;
 
         length = advance;
 
         ++lineNum;
         ndx += advance;
     }
+
+    line[advance] = 0;
 
     return advance;
 }
