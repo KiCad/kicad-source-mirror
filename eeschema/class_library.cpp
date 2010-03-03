@@ -256,9 +256,14 @@ LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
                 ( cparent->GetName().CmpNoCase( newCmp->GetName() ) != 0 ) )
             {
                 wxString msg1;
+                wxString parentName;
+                if( cparent )
+                    parentName = cparent->GetName();
+                else
+                    parentName = _("not found");
                 msg1.Printf( _("alias <%s> already exists and has root name<%s>"),
                             GetChars( alias->GetName() ),
-                            GetChars( cparent ? cparent->GetName() : _("unknown") ) );
+                            GetChars( parentName ) );
                 msg << msg1 << wxT("\n");
                 conflict_count++;
             }
