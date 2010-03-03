@@ -875,6 +875,11 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
             fprintf( f, "%c%15s", s_ExportSeparatorSymbol,
                     CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
 
+#if defined(KICAD_GOST)
+            fprintf( f, "%c%20s", s_ExportSeparatorSymbol,
+                    CONV_TO_UTF8( DrawLibItem->GetField( DATASHEET) ->m_Text ) );
+#endif
+
         // print fields
         for( int jj = FIELD1; jj < FIELD5; jj++ )
             fprintf( f, "%c%12s", s_ExportSeparatorSymbol,
