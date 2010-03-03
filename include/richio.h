@@ -70,37 +70,21 @@ struct IOError
 class LINE_READER
 {
 protected:
-
-    FILE*               fp;
-    int                 lineNum;
-    unsigned            maxLineLength;
     unsigned            length;
+    int                 lineNum;
     char*               line;
+    unsigned            maxLineLength;
     unsigned            capacity;
 
+
 public:
+    LINE_READER( unsigned aMaxLineLength );
 
-    /**
-     * Constructor LINE_READER
-     * takes an open FILE and the size of the desired line buffer.
-     * @param aFile An open file in "ascii" mode, not binary mode.
-     * @param aMaxLineLength The number of bytes to use in the line buffer.
-     */
-    LINE_READER( FILE* aFile,  unsigned aMaxLineLength );
-
-    ~LINE_READER()
+    virtual ~LINE_READER()
     {
         delete[] line;
     }
 
-    /*
-    int  CharAt( int aNdx )
-    {
-        if( (unsigned) aNdx < capacity )
-            return (char) (unsigned char) line[aNdx];
-        return -1;
-    }
-    */
 
     /**
      * Function ReadLine
@@ -110,7 +94,7 @@ public:
      * @return int - The number of bytes read, 0 at end of file.
      * @throw IOError only when a line is too long.
      */
-    int ReadLine() throw (IOError);
+    virtual int ReadLine() throw (IOError) = 0;
 
     operator char* ()
     {
@@ -128,6 +112,72 @@ public:
     }
 };
 
+
+/**
+ * Class FILE_LINE_READER
+ * is a LINE_READER that reads from an open file. File must be already open
+ * so that this class can exist without and UI policy.
+ */
+class FILE_LINE_READER : public LINE_READER
+{
+protected:
+
+    FILE*               fp;     ///< no ownership, no close on destruction
+
+public:
+
+    /**
+     * Constructor LINE_READER
+     * takes an open FILE and the size of the desired line buffer.
+     * @param aFile An open file in "ascii" mode, not binary mode.
+     * @param aMaxLineLength The number of bytes to use in the line buffer.
+     */
+    FILE_LINE_READER( FILE* aFile,  unsigned aMaxLineLength );
+
+
+    /**
+     * Function ReadLine
+     * reads a line of text into the buffer and increments the line number
+     * counter.  If the line is larger than the buffer size, then an exception
+     * is thrown.
+     * @return int - The number of bytes read, 0 at end of file.
+     * @throw IOError only when a line is too long.
+     */
+    int ReadLine() throw (IOError);
+};
+
+
+/**
+ * Class STRING_LINE_READER
+ * is a LINE_READER that reads from a multiline 8 bit wide std::string
+ */
+class STRING_LINE_READER : public LINE_READER
+{
+protected:
+    std::string     source;
+    size_t          ndx;
+
+public:
+    STRING_LINE_READER( const std::string& aString ) :
+        LINE_READER( 4096 ),
+        source( aString ),
+        ndx( 0 )
+    {
+        // Clipboard text should be nice and _use multiple lines_ so that
+        // we can report _line number_ oriented error messages when parsing.
+        // Therefore a line of 4096 characters max seems more than adequate.
+    }
+
+    /**
+     * Function ReadLine
+     * reads a line of text into the buffer and increments the line number
+     * counter.  If the line is larger than the buffer size, then an exception
+     * is thrown.
+     * @return int - The number of bytes read, 0 at end of file.
+     * @throw IOError only when a line is too long.
+     */
+    int ReadLine() throw (IOError);
+};
 
 
 /**

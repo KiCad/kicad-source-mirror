@@ -51,7 +51,7 @@ static int compare( const void* a1, const void* a2 )
 DSNLEXER::DSNLEXER( FILE* aFile, const wxString& aFilename,
     const KEYWORD* aKeywordTable, unsigned aKeywordCount )
 {
-    reader = new LINE_READER( aFile, 4096 );
+    reader = new FILE_LINE_READER( aFile, 4096 );
 
     keywords = aKeywordTable;
     keywordCount = aKeywordCount;

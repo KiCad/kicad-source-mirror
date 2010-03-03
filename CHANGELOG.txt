@@ -4,6 +4,15 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-Mar-3 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++common
+  * DSNLEXER now owns an abstract LINE_READER by pointer so that polymorphism
+    can be used in alternative LINE_READERS.
+  * Write FILE_LINE_READER and STRING_LINE_READER.  The latter can be used
+    to parse text coming from the clipboard or other string source.
+
+
 2010-Feb-20 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++common

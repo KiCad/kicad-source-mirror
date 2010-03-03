@@ -34,9 +34,8 @@
 
 //-----<LINE_READER>------------------------------------------------------
 
-LINE_READER::LINE_READER( FILE* aFile,  unsigned aMaxLineLength )
+LINE_READER::LINE_READER( unsigned aMaxLineLength )
 {
-    fp = aFile;
     lineNum = 0;
     maxLineLength = aMaxLineLength;
 
@@ -50,7 +49,14 @@ LINE_READER::LINE_READER( FILE* aFile,  unsigned aMaxLineLength )
 }
 
 
-int LINE_READER::ReadLine() throw (IOError)
+FILE_LINE_READER::FILE_LINE_READER( FILE* aFile,  unsigned aMaxLineLength ) :
+    LINE_READER( aMaxLineLength )
+{
+    fp = aFile;
+}
+
+
+int FILE_LINE_READER::ReadLine() throw (IOError)
 {
     const char* p = fgets( line, capacity, fp );
 
@@ -72,6 +78,35 @@ int LINE_READER::ReadLine() throw (IOError)
     return length;
 }
 
+
+int STRING_LINE_READER::ReadLine() throw (IOError)
+{
+    size_t      nlOffset = source.find( '\n', ndx );
+    size_t      advance;
+
+    if( nlOffset == std::string::npos )
+        advance = source.length() - ndx;
+    else
+        advance = nlOffset - ndx + 1;     // include the newline, so +1
+
+    if( advance )
+    {
+        if( advance >= maxLineLength )
+            throw IOError( _("Line length exceeded") );
+
+        wxASSERT( ndx + advance <= source.length() );
+
+        memcpy( line, &source[ndx], advance );
+        line[advance] = 0;
+
+        length = advance;
+
+        ++lineNum;
+        ndx += advance;
+    }
+
+    return advance;
+}
 
 
 //-----<OUTPUTFORMATTER>----------------------------------------------------
