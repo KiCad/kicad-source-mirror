@@ -158,6 +158,13 @@ protected:
     size_t          ndx;
 
 public:
+
+    /**
+     * Constructor STRING_LINE_READER( const std::string& aString )
+     * @param aString is a source string consisting of one or more lines
+     * of text, where multiple lines are separated with a '\n' character.
+     * The last line does not necessarily need a trailing '\n'.
+     */
     STRING_LINE_READER( const std::string& aString ) :
         LINE_READER( 4096 ),
         source( aString ),
