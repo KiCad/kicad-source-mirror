@@ -43,10 +43,14 @@ bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName )
                 continue;
 
             SCH_COMPONENT* component = (SCH_COMPONENT*) SchItem;
-            Entry = CMP_LIBRARY::FindLibraryComponent( component->m_ChipName );
+            // If not already saved in the new cache, put it:
+            if( libCache->FindEntry( component->m_ChipName) == NULL )
+            {
+                Entry = CMP_LIBRARY::FindLibraryComponent( component->m_ChipName );
 
-            if( Entry )    // if NULL : component not found
-                libCache->AddComponent( Entry );
+                if( Entry )    // if NULL : component not found, cannot be stored
+                    libCache->AddComponent( Entry );
+            }
         }
     }
 

@@ -229,13 +229,11 @@ bool CMP_LIBRARY::AddAlias( LIB_ALIAS* aAlias )
  */
 LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
 {
-    wxASSERT( aComponent != NULL );
+    if( aComponent == NULL )
+        return NULL;
 
     LIB_COMPONENT* newCmp = new LIB_COMPONENT( *aComponent, this );
     newCmp->ClearAliasDataDoc();    // Remove data used only in edition
-
-    if( newCmp == NULL )
-        return NULL;
 
     // Conflict detection: See if already existing aliases exist,
     // and if yes, ask user for continue or abort
@@ -252,13 +250,15 @@ LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
 
             if( alias == NULL )
                 continue;
+            LIB_COMPONENT*  cparent = alias->GetComponent();
 
-            if( alias->GetComponent()->GetName().CmpNoCase( newCmp->GetName() ) != 0 )
+            if( cparent == NULL ||  // Lib error, should not occurs
+                ( cparent->GetName().CmpNoCase( newCmp->GetName() ) != 0 ) )
             {
                 wxString msg1;
                 msg1.Printf( _("alias <%s> already exists and has root name<%s>"),
                             GetChars( alias->GetName() ),
-                            GetChars( alias->GetComponent()->GetName() ) );
+                            GetChars( cparent ? cparent->GetName() : _("unknown") ) );
                 msg << msg1 << wxT("\n");
                 conflict_count++;
             }
@@ -292,12 +292,18 @@ LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
             alias = new LIB_ALIAS( aliasname, newCmp );
             entries.push_back( alias );
         }
-        else if( alias->GetComponent()->GetName().CmpNoCase( newCmp->GetName() ) != 0 )
+        else
         {
-            // Remove alias from library and alias list of its root component
-            RemoveEntry( alias );
-            alias = new LIB_ALIAS( aliasname, newCmp );
-            entries.push_back( alias );
+            LIB_COMPONENT*  cparent = alias->GetComponent();
+
+            if( cparent == NULL ||  // Lib error, should not occurs
+                ( cparent->GetName().CmpNoCase( newCmp->GetName() ) != 0) )
+            {
+                // Remove alias from library and alias list of its root component
+                RemoveEntry( alias );
+                alias = new LIB_ALIAS( aliasname, newCmp );
+                entries.push_back( alias );
+            }
         }
         // Update alias data:
         alias->SetDescription( aComponent->GetAliasDataDoc( aliasname ) );
