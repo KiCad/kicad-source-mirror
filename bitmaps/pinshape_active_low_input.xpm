@@ -1,0 +1,23 @@
+/* XPM */
+const char *pinshape_active_low_input_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"15 15 2 1",
+". c Black",
+"  c #FFFFFF",
+/* pixels */
+"               ",
+"               ",
+"    .          ",
+"    .     .    ",
+"    .   ...    ",
+"    . ..  .    ",
+"    ..    .    ",
+"    .......... ",
+"    .          ",
+"    .          ",
+"    .          ",
+"    .          ",
+"    .          ",
+"               ",
+"               "
+};

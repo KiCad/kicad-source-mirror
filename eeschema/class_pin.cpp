@@ -16,7 +16,9 @@
 #include "protos.h"
 #include "libeditframe.h"
 #include "class_libentry.h"
+#include "class_pin.h"
 
+#include "bitmaps.h"
 
 /**
  * Note: The following name lists are sentence capitalized per the GNOME UI
@@ -30,7 +32,15 @@ static const wxString pin_orientation_names[] =
     _( "Up" ),
     _( "Down" )
 };
-
+// bitmaps to show pins orientations in dialog editor
+// must have same order than pin_orientation_names
+static const char ** s_icons_Pins_Orientations[] =
+{
+    pinorient_right_xpm,
+    pinorient_left_xpm,
+    pinorient_up_xpm,
+    pinorient_down_xpm,
+};
 
 static const int pin_orientation_codes[] =
 {
@@ -54,6 +64,19 @@ static const wxString pin_style_names[] =
     _( "Input low" ),
     _( "Clock low" ),
     _( "Output low" )
+};
+
+// bitmaps to show pins shapes in dialog editor
+// must have same order than pin_style_names
+static const char ** s_icons_Pins_Shapes[] =
+{
+    pinshape_normal_xpm,
+    pinshape_invert_xpm,
+    pinshape_clock_normal_xpm,
+    pinshape_clock_invert_xpm,
+    pinshape_active_low_input_xpm,
+    pinshape_clock_active_low_xpm,
+    pinshape_active_low_output_xpm,
 };
 
 
@@ -87,6 +110,22 @@ static const wxString pin_electrical_type_names[] =
     _( "Not connected" )
 };
 
+// bitmaps to show pins electrical type in dialog editor
+// must have same order than pin_electrical_type_names
+static const char ** s_icons_Pins_Electrical_Type[] =
+{
+    pintype_input_xpm,
+    pintype_output_xpm,
+    pintype_bidi_xpm,
+    pintype_3states_xpm,
+    pintype_passive_xpm,
+    pintype_notspecif_xpm,
+    pintype_powerinput_xpm,
+    pintype_poweroutput_xpm,
+    pintype_opencoll_xpm,
+    pintype_openemit_xpm,
+    pintype_noconnect_xpm
+};
 
 #define PIN_ELECTRICAL_TYPE_CNT ( sizeof( pin_electrical_type_names ) / \
                                   sizeof( wxString ) )
@@ -218,7 +257,7 @@ void LIB_PIN::SetNumber( const wxString& number )
     {
         m_Flags |= IS_CHANGED;
     }
-    
+
     /* Others pin numbers marked by EnableEditMode() are not modified
      * because each pin has its own number
      */
@@ -1701,3 +1740,35 @@ wxArrayString LIB_PIN::GetElectricalTypeNames( void )
         tmp.Add(wxGetTranslation(pin_electrical_type_names[ii]));
     return tmp;
 }
+
+/**
+ * Get a list of pin electrical type names.
+ * @return  List of valid pin electrical type bitmaps symbols in .xpm format
+ * for menus and dialogs .
+ */
+const char*** LIB_PIN::GetElectricalTypeSymbols( void )
+{
+    return s_icons_Pins_Electrical_Type;
+}
+
+/**
+ * Get a list of pin electrical type names.
+ *
+ * @return  List of valid pin orientation bitmaps symbols in .xpm format
+ * for menus and dialogs .
+ */
+const char*** LIB_PIN::GetOrientationSymbols()
+{
+    return s_icons_Pins_Orientations;
+}
+
+/**
+ * Get a list of pin styles bitmaps for menus and dialogs.
+ *
+ * @return  List of valid pin electrical type bitmaps symbols in .xpm format.
+ */
+const char*** LIB_PIN::GetStyleSymbols()
+{
+    return s_icons_Pins_Shapes;
+}
+

@@ -5,6 +5,8 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "wx/bmpcbox.h"
+
 #include "dialog_lib_edit_pin_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -69,10 +71,8 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	m_staticText5->Wrap( -1 );
 	fgSizer1->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	wxArrayString m_choiceOrientationChoices;
-	m_choiceOrientation = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceOrientationChoices, 0 );
-	m_choiceOrientation->SetSelection( 0 );
-	fgSizer1->Add( m_choiceOrientation, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	m_choiceOrientation = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
+	fgSizer1->Add( m_choiceOrientation, 0, wxALL, 5 );
 	
 	
 	fgSizer1->Add( 15, 0, 1, wxEXPAND, 3 );
@@ -94,10 +94,8 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	
 	fgSizer1->Add( m_staticText6, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	wxArrayString m_choiceElectricalTypeChoices;
-	m_choiceElectricalType = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceElectricalTypeChoices, 0 );
-	m_choiceElectricalType->SetSelection( 0 );
-	fgSizer1->Add( m_choiceElectricalType, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	m_choiceElectricalType = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
+	fgSizer1->Add( m_choiceElectricalType, 0, wxALL, 5 );
 	
 	
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 3 );
@@ -115,10 +113,8 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	m_staticText7->Wrap( -1 );
 	fgSizer1->Add( m_staticText7, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	wxArrayString m_choiceStyleChoices;
-	m_choiceStyle = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceStyleChoices, 0 );
-	m_choiceStyle->SetSelection( 0 );
-	fgSizer1->Add( m_choiceStyle, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	m_choiceStyle = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
+	fgSizer1->Add( m_choiceStyle, 0, wxALL, 5 );
 	
 	
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 3 );

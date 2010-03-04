@@ -12,6 +12,7 @@
 #include "libeditframe.h"
 #include "eeschema_id.h"
 #include "class_libentry.h"
+#include "class_pin.h"
 #include "general.h"
 #include "protos.h"
 
@@ -81,11 +82,14 @@ void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
     DIALOG_LIB_EDIT_PIN dlg( this );
 
     wxString units = GetUnitsLabel( g_UnitMetric );
-    dlg.SetOrientationList( LIB_PIN::GetOrientationNames() );
+    dlg.SetOrientationList( LIB_PIN::GetOrientationNames(),
+                            LIB_PIN::GetOrientationSymbols() );
     dlg.SetOrientation( LIB_PIN::GetOrientationCodeIndex( pin->m_Orient ) );
-    dlg.SetStyleList( LIB_PIN::GetStyleNames() );
+    dlg.SetStyleList( LIB_PIN::GetStyleNames(),
+                      LIB_PIN::GetStyleSymbols());
     dlg.SetStyle( LIB_PIN::GetStyleCodeIndex( pin->m_PinShape ) );
-    dlg.SetElectricalTypeList( LIB_PIN::GetElectricalTypeNames() );
+    dlg.SetElectricalTypeList( LIB_PIN::GetElectricalTypeNames(),
+                               LIB_PIN::GetElectricalTypeSymbols());
     dlg.SetElectricalType( pin->m_PinType );
     dlg.SetName( pin->m_PinName );
     dlg.SetNameTextSize( ReturnStringFromValue( g_UnitMetric,

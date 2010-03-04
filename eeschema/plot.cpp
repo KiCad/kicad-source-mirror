@@ -14,6 +14,7 @@
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
+#include "class_pin.h"
 
 
 /* Local Variables : */

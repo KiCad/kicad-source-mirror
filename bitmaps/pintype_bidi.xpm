@@ -1,0 +1,24 @@
+/* XPM */
+const char *pintype_bidi_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"15 15 3 1",
+"  c none",
+"X c #040204",
+". c #C4C2C4",
+/* pixels */
+"               ",
+"               ",
+"               ",
+"               ",
+"   XX    XX    ",
+"  XX.    .XX   ",
+" XX..    ..XX  ",
+"XXXXXXXXXXXXXX ",
+" XX..    ..XX  ",
+"  XX.    .XX   ",
+"   XX    XX    ",
+"               ",
+"               ",
+"               ",
+"               "
+};

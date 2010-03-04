@@ -10,6 +10,8 @@
 
 #include <wx/intl.h>
 
+class wxBitmapComboBox;
+
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -17,7 +19,7 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/choice.h>
+#include <wx/combobox.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
 #include <wx/button.h>
@@ -46,19 +48,19 @@ class DIALOG_LIB_EDIT_PIN_BASE : public wxDialog
 		wxTextCtrl* m_textNumberTextSize;
 		wxStaticText* m_staticNumberTextSizeUnits;
 		wxStaticText* m_staticText5;
-		wxChoice* m_choiceOrientation;
+		wxBitmapComboBox* m_choiceOrientation;
 		
 		wxStaticText* m_staticText11;
 		wxTextCtrl* m_textLength;
 		wxStaticText* m_staticLengthUnits;
 		wxStaticText* m_staticText6;
-		wxChoice* m_choiceElectricalType;
+		wxBitmapComboBox* m_choiceElectricalType;
 		
 		
 		
 		
 		wxStaticText* m_staticText7;
-		wxChoice* m_choiceStyle;
+		wxBitmapComboBox* m_choiceStyle;
 		
 		
 		

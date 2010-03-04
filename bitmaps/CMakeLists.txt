@@ -294,6 +294,28 @@ set(BITMAP_SRCS
     Pin_Name_to.xpm
     Pin_Number_to.xpm
     Pin_Size_to.xpm
+    pinorient_right.xpm
+    pinorient_left.xpm
+    pinorient_up.xpm
+    pinorient_down.xpm
+    pinshape_normal.xpm
+    pinshape_invert.xpm
+    pinshape_clock_normal.xpm
+    pinshape_clock_invert.xpm
+    pinshape_active_low_input.xpm
+    pinshape_clock_active_low.xpm
+    pinshape_active_low_output.xpm
+    pintype_input.xpm
+    pintype_output.xpm
+    pintype_bidi.xpm
+    pintype_3states.xpm
+    pintype_passive.xpm
+    pintype_notspecif.xpm
+    pintype_powerinput.xpm
+    pintype_poweroutput.xpm
+    pintype_opencoll.xpm
+    pintype_openemit.xpm
+    pintype_noconnect.xpm
     Pin_to.xpm
     pin.xpm
     plot_HPG.xpm

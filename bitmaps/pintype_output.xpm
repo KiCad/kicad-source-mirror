@@ -1,0 +1,24 @@
+/* XPM */
+const char *pintype_output_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"15 15 3 1",
+"  c none",
+"X c #040204",
+". c #C4C2C4",
+/* pixels */
+"               ",
+"               ",
+"X              ",
+"X              ",
+"X        XX    ",
+"X        .XX   ",
+"X        ..XX  ",
+"XXXXXXXXXXXXXX ",
+"X        ..XX  ",
+"X        .XX   ",
+"X        XX    ",
+"X              ",
+"X              ",
+"               ",
+"               "
+};

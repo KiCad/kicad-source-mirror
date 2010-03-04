@@ -14,6 +14,7 @@
 #include "general.h"
 #include "class_marker_sch.h"
 #include "class_library.h"
+#include "class_pin.h"
 #include "protos.h"
 
 

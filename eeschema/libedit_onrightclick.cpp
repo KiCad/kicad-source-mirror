@@ -18,6 +18,7 @@
 #include "protos.h"
 #include "libeditframe.h"
 #include "class_libentry.h"
+#include "class_pin.h"
 
 
 /* functions to add commands and submenus depending on the item */

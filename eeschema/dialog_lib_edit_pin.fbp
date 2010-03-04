@@ -689,10 +689,10 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
-                            <property name="border">3</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</property>
+                            <property name="border">5</property>
+                            <property name="flag">wxALL</property>
                             <property name="proportion">0</property>
-                            <object class="wxChoice" expanded="1">
+                            <object class="wxComboBox" expanded="1">
                                 <property name="bg"></property>
                                 <property name="choices"></property>
                                 <property name="context_help"></property>
@@ -706,15 +706,16 @@
                                 <property name="name">m_choiceOrientation</property>
                                 <property name="permission">protected</property>
                                 <property name="pos"></property>
-                                <property name="selection">0</property>
                                 <property name="size"></property>
-                                <property name="subclass"></property>
+                                <property name="style"></property>
+                                <property name="subclass">wxBitmapComboBox; wx/bmpcbox.h</property>
                                 <property name="tooltip"></property>
+                                <property name="value"></property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
                                 <event name="OnChar"></event>
-                                <event name="OnChoice"></event>
+                                <event name="OnCombobox"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
                                 <event name="OnKeyDown"></event>
@@ -736,6 +737,8 @@
                                 <event name="OnRightUp"></event>
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize"></event>
+                                <event name="OnText"></event>
+                                <event name="OnTextEnter"></event>
                                 <event name="OnUpdateUI"></event>
                             </object>
                         </object>
@@ -958,10 +961,10 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
-                            <property name="border">3</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</property>
+                            <property name="border">5</property>
+                            <property name="flag">wxALL</property>
                             <property name="proportion">0</property>
-                            <object class="wxChoice" expanded="1">
+                            <object class="wxComboBox" expanded="1">
                                 <property name="bg"></property>
                                 <property name="choices"></property>
                                 <property name="context_help"></property>
@@ -975,15 +978,16 @@
                                 <property name="name">m_choiceElectricalType</property>
                                 <property name="permission">protected</property>
                                 <property name="pos"></property>
-                                <property name="selection">0</property>
                                 <property name="size"></property>
-                                <property name="subclass"></property>
+                                <property name="style"></property>
+                                <property name="subclass">wxBitmapComboBox; wx/bmpcbox.h</property>
                                 <property name="tooltip"></property>
+                                <property name="value"></property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
                                 <event name="OnChar"></event>
-                                <event name="OnChoice"></event>
+                                <event name="OnCombobox"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
                                 <event name="OnKeyDown"></event>
@@ -1005,6 +1009,8 @@
                                 <event name="OnRightUp"></event>
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize"></event>
+                                <event name="OnText"></event>
+                                <event name="OnTextEnter"></event>
                                 <event name="OnUpdateUI"></event>
                             </object>
                         </object>
@@ -1100,10 +1106,10 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
-                            <property name="border">3</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</property>
+                            <property name="border">5</property>
+                            <property name="flag">wxALL</property>
                             <property name="proportion">0</property>
-                            <object class="wxChoice" expanded="1">
+                            <object class="wxComboBox" expanded="1">
                                 <property name="bg"></property>
                                 <property name="choices"></property>
                                 <property name="context_help"></property>
@@ -1117,15 +1123,16 @@
                                 <property name="name">m_choiceStyle</property>
                                 <property name="permission">protected</property>
                                 <property name="pos"></property>
-                                <property name="selection">0</property>
                                 <property name="size"></property>
-                                <property name="subclass"></property>
+                                <property name="style"></property>
+                                <property name="subclass">wxBitmapComboBox; wx/bmpcbox.h</property>
                                 <property name="tooltip"></property>
+                                <property name="value"></property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
                                 <event name="OnChar"></event>
-                                <event name="OnChoice"></event>
+                                <event name="OnCombobox"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
                                 <event name="OnKeyDown"></event>
@@ -1147,6 +1154,8 @@
                                 <event name="OnRightUp"></event>
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize"></event>
+                                <event name="OnText"></event>
+                                <event name="OnTextEnter"></event>
                                 <event name="OnUpdateUI"></event>
                             </object>
                         </object>

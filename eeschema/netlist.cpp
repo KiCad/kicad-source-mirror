@@ -10,6 +10,7 @@
 #include "netlist.h"
 #include "protos.h"
 #include "class_library.h"
+#include "class_pin.h"
 
 #include "algorithm"
 

@@ -12,6 +12,7 @@
 #include "eeschema_id.h"
 #include "protos.h"
 #include "classes_body_items.h"
+#include "class_pin.h"
 
 
 /***************************************************************/

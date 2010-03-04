@@ -10,6 +10,7 @@
 
 #include "program.h"
 #include "classes_body_items.h"
+#include "class_pin.h"
 #include "general.h"
 #include "protos.h"
 

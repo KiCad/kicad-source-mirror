@@ -15,6 +15,7 @@
 #include "protos.h"
 #include "class_library.h"
 #include "class_libentry.h"
+#include "class_pin.h"
 
 #include <boost/foreach.hpp>
 
