@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-03 20:19+0100\n"
-"PO-Revision-Date: 2010-03-03 20:19+0100\n"
+"POT-Creation-Date: 2010-03-04 11:58+0100\n"
+"PO-Revision-Date: 2010-03-04 11:59+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -7111,9 +7111,17 @@ msgstr "Afficher sous présentation \" De Morgan\""
 msgid "Edit document file"
 msgstr "Editer fichier documentation"
 
-#: eeschema/tool_lib.cpp:205
+#: eeschema/tool_lib.cpp:203
 msgid "Edit pins part per part ( Use carefully!)"
 msgstr "Editer pins unité par unité (Utiliser en connaissance de cause)"
+
+#: eeschema/tool_lib.cpp:205
+msgid "Usual option = OFF when parts are not locked"
+msgstr "Option usuelle = OFF quand les parts ne sont pas verrouillées"
+
+#: eeschema/tool_lib.cpp:207
+msgid "Usual option = ON when parts are locked"
+msgstr "Option usuelle = ON quand les parts sont verrouillées"
 
 #: eeschema/symbdraw.cpp:962
 #: eeschema/symbdraw.cpp:1050
@@ -7134,25 +7142,25 @@ msgstr "Impossible de trouver le composant  "
 msgid " in library"
 msgstr " en librairie"
 
-#: eeschema/netlist.cpp:88
+#: eeschema/netlist.cpp:89
 msgid "List"
 msgstr "Liste"
 
-#: eeschema/netlist.cpp:106
+#: eeschema/netlist.cpp:107
 msgid "NbItems"
 msgstr "NbItems"
 
-#: eeschema/netlist.cpp:216
-#: eeschema/netlist.cpp:261
-#: eeschema/netlist.cpp:282
+#: eeschema/netlist.cpp:217
+#: eeschema/netlist.cpp:262
+#: eeschema/netlist.cpp:283
 msgid "Done"
 msgstr "Fini"
 
-#: eeschema/netlist.cpp:222
+#: eeschema/netlist.cpp:223
 msgid "Labels"
 msgstr "Labels"
 
-#: eeschema/netlist.cpp:265
+#: eeschema/netlist.cpp:266
 msgid "Hierar."
 msgstr "Hiérar."
 
@@ -7172,54 +7180,54 @@ msgstr "Couleur du Fond:"
 msgid "Apply"
 msgstr "Appliquer"
 
-#: eeschema/annotate.cpp:285
+#: eeschema/annotate.cpp:286
 #, c-format
 msgid "%d duplicate time stamps replaced."
 msgstr "%d signatures temporelles dupliquées remplacées."
 
-#: eeschema/annotate.cpp:718
+#: eeschema/annotate.cpp:719
 #, c-format
 msgid "item not annotated: %s%s"
 msgstr "item non numéroté: %s%s"
 
-#: eeschema/annotate.cpp:724
+#: eeschema/annotate.cpp:725
 #, c-format
 msgid "( unit %d)"
 msgstr "( Unité %d)"
 
-#: eeschema/annotate.cpp:750
+#: eeschema/annotate.cpp:751
 #, c-format
 msgid "Error item %s%s"
 msgstr "Erreur item %s%s"
 
-#: eeschema/annotate.cpp:753
+#: eeschema/annotate.cpp:754
 #, c-format
 msgid " unit %d and no more than %d parts"
 msgstr " unité %d et plus que %d parts"
 
-#: eeschema/annotate.cpp:791
-#: eeschema/annotate.cpp:821
+#: eeschema/annotate.cpp:792
+#: eeschema/annotate.cpp:822
 #, c-format
 msgid "Multiple item %s%s"
 msgstr "Multipleélément %s%s"
 
-#: eeschema/annotate.cpp:797
-#: eeschema/annotate.cpp:827
+#: eeschema/annotate.cpp:798
+#: eeschema/annotate.cpp:828
 #, c-format
 msgid " (unit %d)"
 msgstr " ( Unité %d)"
 
-#: eeschema/annotate.cpp:851
+#: eeschema/annotate.cpp:852
 #, c-format
 msgid "Diff values for %s%d.%c (%s) and %s%d.%c (%s)"
 msgstr "Valeurs différentes pour %s%d%c (%s) et %s%d%c (%s)"
 
-#: eeschema/annotate.cpp:861
+#: eeschema/annotate.cpp:862
 #, c-format
 msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
 msgstr "Valeurs différentes pour %s%d%c (%s) et %s%d%c (%s)"
 
-#: eeschema/annotate.cpp:903
+#: eeschema/annotate.cpp:904
 #, c-format
 msgid "duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "signature temporelle dupliquée (%s) pour %s%d et %s%d"
@@ -7248,27 +7256,27 @@ msgstr "Description"
 msgid "Key words"
 msgstr "Mots clé"
 
-#: eeschema/schframe.cpp:359
+#: eeschema/schframe.cpp:360
 msgid "Schematic modified, Save before exit ?"
 msgstr "Schématique modifiée,  Sauver avant de quitter ?"
 
-#: eeschema/schframe.cpp:515
+#: eeschema/schframe.cpp:516
 msgid "Draw wires and buses in any direction"
 msgstr "Tracer les fils et bus avec direction quelconque"
 
-#: eeschema/schframe.cpp:516
+#: eeschema/schframe.cpp:517
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Autoriser fils et bus verticaux et horizontaux seulement"
 
-#: eeschema/schframe.cpp:526
+#: eeschema/schframe.cpp:527
 msgid "Do not show hidden pins"
 msgstr "Ne pas affichager les pins invisibles"
 
-#: eeschema/schframe.cpp:527
+#: eeschema/schframe.cpp:528
 msgid "Show hidden pins"
 msgstr "Force affichage des pins invisibles"
 
-#: eeschema/schframe.cpp:618
+#: eeschema/schframe.cpp:619
 msgid "Schematic"
 msgstr "Schématique"
 
@@ -7310,45 +7318,45 @@ msgstr ""
 "Changer le  nom de fichier peut changer toute la structure schématique et ne pourra être annulée.\n"
 "Ok pour renommer?"
 
-#: eeschema/pinedit.cpp:234
+#: eeschema/pinedit.cpp:238
 msgid "This position is already occupied by another pin. Continue?"
 msgstr "Position occupée par une autre pin. Continuer ?"
 
-#: eeschema/pinedit.cpp:660
+#: eeschema/pinedit.cpp:664
 msgid "No pins!"
 msgstr "Pas de Pins!"
 
-#: eeschema/pinedit.cpp:671
+#: eeschema/pinedit.cpp:675
 msgid "Marker Information"
 msgstr "Info Marqueur"
 
-#: eeschema/pinedit.cpp:690
+#: eeschema/pinedit.cpp:694
 #, c-format
 msgid "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr "<b>Pin dupliquée %s</b> \"%s\" en position <b>(%.3f, %.3f)</b> en conflit avec pin %s \"%s\" en position <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:703
-#: eeschema/pinedit.cpp:742
+#: eeschema/pinedit.cpp:707
+#: eeschema/pinedit.cpp:746
 #, c-format
 msgid " in part %c"
 msgstr " en composant %c"
 
-#: eeschema/pinedit.cpp:710
-#: eeschema/pinedit.cpp:749
+#: eeschema/pinedit.cpp:714
+#: eeschema/pinedit.cpp:753
 msgid "  of converted"
 msgstr "  de converti"
 
-#: eeschema/pinedit.cpp:712
-#: eeschema/pinedit.cpp:751
+#: eeschema/pinedit.cpp:716
+#: eeschema/pinedit.cpp:755
 msgid "  of normal"
 msgstr "  de normal"
 
-#: eeschema/pinedit.cpp:733
+#: eeschema/pinedit.cpp:737
 #, c-format
 msgid "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr "<b>Pin %s hors grille </b> \"%s\" en position <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:760
+#: eeschema/pinedit.cpp:764
 msgid "No off grid or duplicate pins were found."
 msgstr "Pas de  pins doublées ou hors grille trouvées"
 
@@ -7357,12 +7365,12 @@ msgid "PinSheet Properties:"
 msgstr "Propriétés des Pins de Hiérarchie"
 
 #: eeschema/sheetlab.cpp:95
-#: eeschema/class_pin.cpp:77
+#: eeschema/class_pin.cpp:100
 msgid "Input"
 msgstr "Entrée"
 
 #: eeschema/sheetlab.cpp:95
-#: eeschema/class_pin.cpp:78
+#: eeschema/class_pin.cpp:101
 msgid "Output"
 msgstr "Sortie"
 
@@ -7375,7 +7383,7 @@ msgid "TriState"
 msgstr "3 états"
 
 #: eeschema/sheetlab.cpp:96
-#: eeschema/class_pin.cpp:81
+#: eeschema/class_pin.cpp:104
 msgid "Passive"
 msgstr "Passive"
 
@@ -7387,83 +7395,83 @@ msgstr "Forme Pin de hiérarchie:"
 msgid "No new hierarchical labels found"
 msgstr "Pas de nouveau label hiérarchique trouvé"
 
-#: eeschema/class_pin.cpp:28
+#: eeschema/class_pin.cpp:30
 msgid "Right"
 msgstr "Droite"
 
-#: eeschema/class_pin.cpp:29
+#: eeschema/class_pin.cpp:31
 msgid "Left"
 msgstr "Gauche"
 
-#: eeschema/class_pin.cpp:30
+#: eeschema/class_pin.cpp:32
 msgid "Up"
 msgstr "Haut"
 
-#: eeschema/class_pin.cpp:31
+#: eeschema/class_pin.cpp:33
 msgid "Down"
 msgstr "Bas"
 
-#: eeschema/class_pin.cpp:51
+#: eeschema/class_pin.cpp:61
 msgid "Inverted"
 msgstr "Inversé"
 
-#: eeschema/class_pin.cpp:52
+#: eeschema/class_pin.cpp:62
 msgid "Clock"
 msgstr "Clock"
 
-#: eeschema/class_pin.cpp:53
+#: eeschema/class_pin.cpp:63
 msgid "Inverted clock"
 msgstr "Horloge inversée"
 
-#: eeschema/class_pin.cpp:54
+#: eeschema/class_pin.cpp:64
 msgid "Input low"
 msgstr "Entrée active bas"
 
-#: eeschema/class_pin.cpp:55
+#: eeschema/class_pin.cpp:65
 msgid "Clock low"
 msgstr "Clock active bas"
 
-#: eeschema/class_pin.cpp:56
+#: eeschema/class_pin.cpp:66
 msgid "Output low"
 msgstr "Sortie active bas"
 
-#: eeschema/class_pin.cpp:79
+#: eeschema/class_pin.cpp:102
 msgid "Bidirectional"
 msgstr "Bidirectionnel"
 
-#: eeschema/class_pin.cpp:80
+#: eeschema/class_pin.cpp:103
 msgid "Tri-state"
 msgstr "3 états"
 
-#: eeschema/class_pin.cpp:82
+#: eeschema/class_pin.cpp:105
 msgid "Unspecified"
 msgstr "Non specifié"
 
-#: eeschema/class_pin.cpp:83
+#: eeschema/class_pin.cpp:106
 msgid "Power input"
 msgstr "Power input"
 
-#: eeschema/class_pin.cpp:84
+#: eeschema/class_pin.cpp:107
 msgid "Power output"
 msgstr "Power output"
 
-#: eeschema/class_pin.cpp:85
+#: eeschema/class_pin.cpp:108
 msgid "Open collector"
 msgstr "Coll ouvert"
 
-#: eeschema/class_pin.cpp:86
+#: eeschema/class_pin.cpp:109
 msgid "Open emitter"
 msgstr "Emetteur ouv."
 
-#: eeschema/class_pin.cpp:87
+#: eeschema/class_pin.cpp:110
 msgid "Not connected"
 msgstr "Non connecté"
 
-#: eeschema/class_pin.cpp:127
+#: eeschema/class_pin.cpp:166
 msgid "Pin"
 msgstr "Pin"
 
-#: eeschema/class_pin.cpp:1597
+#: eeschema/class_pin.cpp:1636
 msgid "Number"
 msgstr "Numéro"
 
@@ -7492,8 +7500,8 @@ msgstr "Sélection Composant"
 msgid "An error occurred attempting to save component library <%s>."
 msgstr "Une erreur s'est produite lors de la sauvegarde de la librairie de composants <%s>."
 
-#: eeschema/netform.cpp:68
-#: eeschema/netform.cpp:273
+#: eeschema/netform.cpp:69
+#: eeschema/netform.cpp:274
 msgid "Failed to create file "
 msgstr "Impossible de créer le fichier "
 
@@ -7541,83 +7549,83 @@ msgstr ""
 msgid "Component or alias name \"%s\" not found in library \"%s\"."
 msgstr "Composant ou alias \"%s\" non trouvé en librairie \"%s\"."
 
-#: eeschema/libedit.cpp:168
+#: eeschema/libedit.cpp:171
 #, c-format
 msgid "Could not create copy of part <%s> in library <%s>."
 msgstr "Ne peut créer une copie de l'élément <%s> en librairie <%s>."
 
-#: eeschema/libedit.cpp:238
+#: eeschema/libedit.cpp:241
 msgid "Include last component changes?"
 msgstr "Inclure les dernières modifications du composant"
 
-#: eeschema/libedit.cpp:250
+#: eeschema/libedit.cpp:253
 msgid "Modify library file \""
 msgstr "Modifier le fichier Librairie \""
 
-#: eeschema/libedit.cpp:250
+#: eeschema/libedit.cpp:253
 msgid "\"?"
 msgstr "\"?"
 
-#: eeschema/libedit.cpp:261
+#: eeschema/libedit.cpp:264
 msgid "Error while saving library file \""
 msgstr "Erreur en sauvant le fichier librairie \""
 
-#: eeschema/libedit.cpp:262
+#: eeschema/libedit.cpp:265
 msgid "\"."
 msgstr "\"."
 
-#: eeschema/libedit.cpp:263
+#: eeschema/libedit.cpp:266
 msgid "*** ERROR: ***"
 msgstr "***ERREUR:****"
 
-#: eeschema/libedit.cpp:268
+#: eeschema/libedit.cpp:271
 msgid "Library file \""
 msgstr "Fichier librairie \""
 
-#: eeschema/libedit.cpp:270
+#: eeschema/libedit.cpp:273
 msgid "Document file \""
 msgstr "Fichier de doc \""
 
-#: eeschema/libedit.cpp:305
+#: eeschema/libedit.cpp:308
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:26
 msgid "Unit"
 msgstr "Unité"
 
-#: eeschema/libedit.cpp:308
+#: eeschema/libedit.cpp:311
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:73
 msgid "Convert"
 msgstr "Convert"
 
-#: eeschema/libedit.cpp:312
+#: eeschema/libedit.cpp:315
 msgid "Body"
 msgstr "Body"
 
-#: eeschema/libedit.cpp:315
+#: eeschema/libedit.cpp:318
 msgid "Power Symbol"
 msgstr "Symbole d'Alimentation"
 
-#: eeschema/libedit.cpp:317
+#: eeschema/libedit.cpp:320
 msgid "Component"
 msgstr "Composant"
 
-#: eeschema/libedit.cpp:341
+#: eeschema/libedit.cpp:344
 msgid "Datasheet"
 msgstr "Documentation"
 
-#: eeschema/libedit.cpp:377
+#: eeschema/libedit.cpp:380
 msgid "Please select a component library."
 msgstr "SVP sélectionner une librairie de composants."
 
-#: eeschema/libedit.cpp:386
+#: eeschema/libedit.cpp:389
 #, c-format
 msgid "Component library <%s> is empty."
 msgstr "Fichier librairie de composants <%s> vide"
 
-#: eeschema/libedit.cpp:388
+#: eeschema/libedit.cpp:391
 msgid "Delete Entry Error"
 msgstr "Erreur en suppression d'élément"
 
-#: eeschema/libedit.cpp:393
+#: eeschema/libedit.cpp:396
 #, c-format
 msgid ""
 "Select 1 of %d components to delete\n"
@@ -7626,25 +7634,25 @@ msgstr ""
 "Sélection 1 de %d composants à supprimer\n"
 "de la librairie <%s>."
 
-#: eeschema/libedit.cpp:397
+#: eeschema/libedit.cpp:400
 msgid "Delete Component"
 msgstr "Suppression Composant"
 
-#: eeschema/libedit.cpp:406
+#: eeschema/libedit.cpp:409
 #, c-format
 msgid "Entry <%s> not found in library <%s>."
 msgstr "Elément <%s> non trouvé en librairie <%s>."
 
-#: eeschema/libedit.cpp:413
+#: eeschema/libedit.cpp:416
 #, c-format
 msgid "Delete component \"%s\" from library \"%s\"?"
 msgstr "Supprimer composant \"%s\" de la librairie  \"%s\"?"
 
-#: eeschema/libedit.cpp:433
+#: eeschema/libedit.cpp:436
 msgid "The component being deleted has been modified. All changes will be lost. Discard changes?"
 msgstr "Le composant à supprimer a été modifié. Tous les changements seront perdus. Ignorer les changements?"
 
-#: eeschema/libedit.cpp:488
+#: eeschema/libedit.cpp:491
 msgid ""
 "All changes to the current component will be lost!\n"
 "\n"
@@ -7654,29 +7662,29 @@ msgstr ""
 "\n"
 "Supprimer le composant courant de l'écran?"
 
-#: eeschema/libedit.cpp:504
+#: eeschema/libedit.cpp:507
 msgid "This new component has no name and cannot be created. Aborted"
 msgstr "Ce nouveau composant n'a pas de nom et ne peut être créé, Abandon"
 
-#: eeschema/libedit.cpp:516
+#: eeschema/libedit.cpp:519
 #, c-format
 msgid "Component \"%s\" already exists in library \"%s\"."
 msgstr "Composant \"%s\" déjà  existant en librairie \"%s\"."
 
-#: eeschema/libedit.cpp:584
+#: eeschema/libedit.cpp:589
 msgid "No component to save."
 msgstr "Pas de composant à sauver."
 
-#: eeschema/libedit.cpp:593
+#: eeschema/libedit.cpp:598
 msgid "No library specified."
 msgstr "Pas de librairie spécifiée."
 
-#: eeschema/libedit.cpp:603
+#: eeschema/libedit.cpp:608
 #, c-format
 msgid "Component \"%s\" exists. Change it?"
 msgstr "Le composant \" %s\" existe, Le changer ?"
 
-#: eeschema/libedit.cpp:621
+#: eeschema/libedit.cpp:626
 #, c-format
 msgid "Component %s saved in library %s"
 msgstr "Composant %s sauvé en librairie %s"
@@ -7747,61 +7755,61 @@ msgstr "Marqueur Suivant (F5)"
 msgid "Find Cmp in &Lib"
 msgstr "Trouver Cmp. en &Libr."
 
-#: eeschema/erc.cpp:210
+#: eeschema/erc.cpp:211
 msgid "Duplicate Sheet name"
 msgstr "Nom de feuille en double"
 
-#: eeschema/erc.cpp:248
+#: eeschema/erc.cpp:249
 msgid "Annotation required!"
 msgstr "Numérotation requise!"
 
-#: eeschema/erc.cpp:378
+#: eeschema/erc.cpp:379
 msgid "ERC File"
 msgstr "Fichier ERC"
 
-#: eeschema/erc.cpp:379
+#: eeschema/erc.cpp:380
 msgid "Electronic rule check file (.erc)|*.erc"
 msgstr "Fichier Contrôle des règles électroniques (.erc)|*.erc"
 
-#: eeschema/erc.cpp:429
+#: eeschema/erc.cpp:430
 #, c-format
 msgid "HLabel %s not connected to SheetLabel"
 msgstr "HLabel %s non connecté à SheetLabel"
 
-#: eeschema/erc.cpp:433
+#: eeschema/erc.cpp:434
 #, c-format
 msgid "SheetLabel %s not connected to HLabel"
 msgstr "SheetLabel %s non connecté à HLabel"
 
-#: eeschema/erc.cpp:459
+#: eeschema/erc.cpp:460
 #, c-format
 msgid "Cmp %s, Pin %s (%s) Unconnected"
 msgstr "Cmp %s, Pin %s (%s) Non connectée"
 
-#: eeschema/erc.cpp:474
+#: eeschema/erc.cpp:475
 #, c-format
 msgid "Cmp %s, Pin %s (%s) not driven (Net %d)"
 msgstr "Cmp %s, Pin %s (%s) non pilotée (Net %d)"
 
-#: eeschema/erc.cpp:487
+#: eeschema/erc.cpp:488
 msgid "More than 1 Pin connected to UnConnect symbol"
 msgstr "Plus de 1 Pin connectée à un symbole de non connexion"
 
-#: eeschema/erc.cpp:514
+#: eeschema/erc.cpp:515
 #, c-format
 msgid "Cmp %s, Pin %s (%s) connected to "
 msgstr "Cmp %s, Pin %s (%s) connectée à "
 
-#: eeschema/erc.cpp:521
+#: eeschema/erc.cpp:522
 #, c-format
 msgid "Cmp %s, Pin %s (%s) (net %d)"
 msgstr "Cmp %s, Pin %s (%s) (net %d)"
 
-#: eeschema/erc.cpp:688
+#: eeschema/erc.cpp:689
 msgid "ERC report"
 msgstr "Rapport d'erreur"
 
-#: eeschema/erc.cpp:700
+#: eeschema/erc.cpp:701
 msgid ""
 "\n"
 "***** Sheet / (Root) \n"
@@ -7809,7 +7817,7 @@ msgstr ""
 "\n"
 "***** Feuille/ ( Racine)\n"
 
-#: eeschema/erc.cpp:705
+#: eeschema/erc.cpp:706
 #, c-format
 msgid ""
 "\n"
@@ -7818,7 +7826,7 @@ msgstr ""
 "\n"
 "***** Feuille %s\n"
 
-#: eeschema/erc.cpp:724
+#: eeschema/erc.cpp:725
 #, c-format
 msgid ""
 "\n"
@@ -8152,60 +8160,60 @@ msgstr "Ajout Composant"
 msgid "Add Wire"
 msgstr "Ajouter Fils"
 
-#: eeschema/find.cpp:230
+#: eeschema/find.cpp:231
 msgid "Pin "
 msgstr "Pin "
 
-#: eeschema/find.cpp:234
+#: eeschema/find.cpp:235
 msgid "Ref "
 msgstr "Ref "
 
-#: eeschema/find.cpp:238
+#: eeschema/find.cpp:239
 #: eeschema/onrightclick.cpp:321
 msgid "Value "
 msgstr "Valeur "
 
-#: eeschema/find.cpp:242
+#: eeschema/find.cpp:243
 msgid "Field "
 msgstr "Champ "
 
-#: eeschema/find.cpp:252
-#: eeschema/find.cpp:256
+#: eeschema/find.cpp:253
+#: eeschema/find.cpp:257
 msgid " found"
 msgstr " trouvé "
 
-#: eeschema/find.cpp:387
+#: eeschema/find.cpp:388
 #, c-format
 msgid "Marker %d found in %s"
 msgstr "Marqueur %d trouvé en %s "
 
-#: eeschema/find.cpp:394
+#: eeschema/find.cpp:395
 msgid "Marker Not Found"
 msgstr "Marqueur non trouvé"
 
-#: eeschema/find.cpp:615
+#: eeschema/find.cpp:616
 msgid " Found in "
 msgstr " Trouvé en "
 
-#: eeschema/find.cpp:627
+#: eeschema/find.cpp:628
 msgid " Not Found"
 msgstr " Non trouvé"
 
-#: eeschema/find.cpp:683
-#: eeschema/find.cpp:749
-#: eeschema/find.cpp:766
+#: eeschema/find.cpp:684
+#: eeschema/find.cpp:750
+#: eeschema/find.cpp:767
 msgid "Found "
 msgstr "Trouvé "
 
-#: eeschema/find.cpp:683
+#: eeschema/find.cpp:684
 msgid " in library "
 msgstr " en librairie "
 
-#: eeschema/find.cpp:691
+#: eeschema/find.cpp:692
 msgid " found only in cache"
 msgstr "trouvé seulement en cache"
 
-#: eeschema/find.cpp:694
+#: eeschema/find.cpp:695
 msgid ""
 "\n"
 "Explore All Libraries?"
@@ -8213,12 +8221,12 @@ msgstr ""
 "\n"
 "Explorer toutes les Librairies?"
 
-#: eeschema/find.cpp:700
+#: eeschema/find.cpp:701
 msgid "Nothing found"
 msgstr " Rien trouvé"
 
-#: eeschema/find.cpp:750
-#: eeschema/find.cpp:767
+#: eeschema/find.cpp:751
+#: eeschema/find.cpp:768
 msgid " in lib "
 msgstr " en libr. "
 
@@ -9168,19 +9176,19 @@ msgstr "Nom feuille"
 msgid "File name"
 msgstr "Nom fichier"
 
-#: eeschema/class_libentry.cpp:66
+#: eeschema/class_libentry.cpp:67
 msgid "none"
 msgstr "rien"
 
-#: eeschema/class_libentry.cpp:341
+#: eeschema/class_libentry.cpp:342
 msgid "value"
 msgstr "valeur"
 
-#: eeschema/class_libentry.cpp:341
+#: eeschema/class_libentry.cpp:342
 msgid "reference"
 msgstr "référence"
 
-#: eeschema/class_libentry.cpp:343
+#: eeschema/class_libentry.cpp:344
 #, c-format
 msgid "An attempt was made to remove the %s field from component %s in library %s."
 msgstr "Une tentative a été faite pour supprimer le champ %s du composant %s en librairie %s."
@@ -9402,151 +9410,151 @@ msgstr "Fichier document de composants <%s> vide."
 msgid "File <%s> is not a valid component library document file."
 msgstr "<%s> n'est pas un fichier documentation de composant valide."
 
-#: eeschema/libedit_onrightclick.cpp:83
+#: eeschema/libedit_onrightclick.cpp:84
 msgid "Move Arc "
 msgstr "Déplacer arc"
 
-#: eeschema/libedit_onrightclick.cpp:87
+#: eeschema/libedit_onrightclick.cpp:88
 msgid "Drag Arc Size"
 msgstr "Drag Taille Arc"
 
-#: eeschema/libedit_onrightclick.cpp:93
+#: eeschema/libedit_onrightclick.cpp:94
 msgid "Edit Arc Options"
 msgstr "Editer Options Arc"
 
-#: eeschema/libedit_onrightclick.cpp:100
+#: eeschema/libedit_onrightclick.cpp:101
 msgid "Delete Arc "
 msgstr "Effacer Arc"
 
-#: eeschema/libedit_onrightclick.cpp:110
+#: eeschema/libedit_onrightclick.cpp:111
 msgid "Move Circle "
 msgstr "Déplacer Cercle"
 
-#: eeschema/libedit_onrightclick.cpp:118
+#: eeschema/libedit_onrightclick.cpp:119
 msgid "Drag Circle Outline"
 msgstr "Drag Circonférence"
 
-#: eeschema/libedit_onrightclick.cpp:124
+#: eeschema/libedit_onrightclick.cpp:125
 msgid "Edit Circle Options"
 msgstr "Editer Options pour le Cercle"
 
-#: eeschema/libedit_onrightclick.cpp:131
+#: eeschema/libedit_onrightclick.cpp:132
 msgid "Delete Circle "
 msgstr "Supprimer Cercle"
 
-#: eeschema/libedit_onrightclick.cpp:141
+#: eeschema/libedit_onrightclick.cpp:142
 msgid "Move Rectangle "
 msgstr "Déplacer Rectangle"
 
-#: eeschema/libedit_onrightclick.cpp:147
+#: eeschema/libedit_onrightclick.cpp:148
 msgid "Edit Rectangle Options"
 msgstr "Editer Options pour le Rectangle"
 
-#: eeschema/libedit_onrightclick.cpp:154
+#: eeschema/libedit_onrightclick.cpp:155
 msgid "Drag Rectangle Edge"
 msgstr "Drag Côté Rectangle"
 
-#: eeschema/libedit_onrightclick.cpp:162
+#: eeschema/libedit_onrightclick.cpp:163
 msgid "Delete Rectangle "
 msgstr "Supprimer Rectangle"
 
-#: eeschema/libedit_onrightclick.cpp:173
+#: eeschema/libedit_onrightclick.cpp:174
 msgid "Move Text "
 msgstr "Déplacer Texte"
 
-#: eeschema/libedit_onrightclick.cpp:179
+#: eeschema/libedit_onrightclick.cpp:180
 msgid "Edit Text "
 msgstr "Editer Texte"
 
-#: eeschema/libedit_onrightclick.cpp:184
+#: eeschema/libedit_onrightclick.cpp:185
 msgid "Rotate Text "
 msgstr "Rot. Texte"
 
-#: eeschema/libedit_onrightclick.cpp:191
+#: eeschema/libedit_onrightclick.cpp:192
 msgid "Delete Text "
 msgstr "Supprimer Texte"
 
-#: eeschema/libedit_onrightclick.cpp:201
+#: eeschema/libedit_onrightclick.cpp:202
 msgid "Move Line "
 msgstr "Déplacer Ligne"
 
-#: eeschema/libedit_onrightclick.cpp:205
+#: eeschema/libedit_onrightclick.cpp:206
 msgid "Drag Edge Point"
 msgstr "Drag Point de Contour"
 
-#: eeschema/libedit_onrightclick.cpp:214
+#: eeschema/libedit_onrightclick.cpp:215
 msgid "Line End"
 msgstr "Fin ligne"
 
-#: eeschema/libedit_onrightclick.cpp:217
+#: eeschema/libedit_onrightclick.cpp:218
 msgid "Edit Line Options"
 msgstr "Editer Options pour Ligne"
 
-#: eeschema/libedit_onrightclick.cpp:224
+#: eeschema/libedit_onrightclick.cpp:225
 msgid "Delete Line "
 msgstr "Efface Ligne"
 
-#: eeschema/libedit_onrightclick.cpp:233
+#: eeschema/libedit_onrightclick.cpp:234
 msgid "Delete Segment "
 msgstr "Supprimer Segment"
 
-#: eeschema/libedit_onrightclick.cpp:246
+#: eeschema/libedit_onrightclick.cpp:247
 msgid "Move Field "
 msgstr "Déplace Champ"
 
-#: eeschema/libedit_onrightclick.cpp:252
+#: eeschema/libedit_onrightclick.cpp:253
 msgid "Field Rotate"
 msgstr "Rotation Champ"
 
-#: eeschema/libedit_onrightclick.cpp:254
+#: eeschema/libedit_onrightclick.cpp:255
 msgid "Field Edit"
 msgstr "Edition du champ"
 
-#: eeschema/libedit_onrightclick.cpp:283
+#: eeschema/libedit_onrightclick.cpp:284
 msgid "Move Pin "
 msgstr "Déplace Pin"
 
-#: eeschema/libedit_onrightclick.cpp:289
+#: eeschema/libedit_onrightclick.cpp:290
 msgid "Edit Pin "
 msgstr "Editer Pin"
 
-#: eeschema/libedit_onrightclick.cpp:292
+#: eeschema/libedit_onrightclick.cpp:293
 msgid "Rotate Pin "
 msgstr "Rotation Pin"
 
-#: eeschema/libedit_onrightclick.cpp:297
+#: eeschema/libedit_onrightclick.cpp:298
 msgid "Delete Pin "
 msgstr "Supprimer Pin"
 
-#: eeschema/libedit_onrightclick.cpp:305
+#: eeschema/libedit_onrightclick.cpp:306
 msgid "Global"
 msgstr "Global"
 
-#: eeschema/libedit_onrightclick.cpp:308
+#: eeschema/libedit_onrightclick.cpp:309
 msgid "Pin Size to selected pins"
 msgstr "Change taille pins sélectionnées"
 
-#: eeschema/libedit_onrightclick.cpp:309
+#: eeschema/libedit_onrightclick.cpp:310
 msgid "Pin Size to Others"
 msgstr "Change Taille autres Pins"
 
-#: eeschema/libedit_onrightclick.cpp:312
+#: eeschema/libedit_onrightclick.cpp:313
 msgid "Pin Name Size to selected pin"
 msgstr "Change taille Nom pin sélectionnées"
 
-#: eeschema/libedit_onrightclick.cpp:313
+#: eeschema/libedit_onrightclick.cpp:314
 msgid "Pin Name Size to Others"
 msgstr "Change taille Nom Pin autres Pins"
 
-#: eeschema/libedit_onrightclick.cpp:316
+#: eeschema/libedit_onrightclick.cpp:317
 msgid "Pin Num Size to selected pin"
 msgstr "Change taille Num pins sélectionnées"
 
-#: eeschema/libedit_onrightclick.cpp:317
+#: eeschema/libedit_onrightclick.cpp:318
 msgid "Pin Num Size to Others"
 msgstr "Change Taille Num Pin autres Pins"
 
-#: eeschema/libedit_onrightclick.cpp:341
+#: eeschema/libedit_onrightclick.cpp:342
 msgid "Select Items"
 msgstr "Sélection des Eléments"
 
@@ -10362,58 +10370,58 @@ msgstr ""
 "(Comme sm* pour autoriser tous les noms d'empreintes commençant par sm)."
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:228
-#: eeschema/edit_component_in_lib.cpp:408
+#: eeschema/edit_component_in_lib.cpp:418
 msgid "Footprint Filter"
 msgstr "Filtrage Modules"
 
-#: eeschema/edit_component_in_lib.cpp:192
-#: eeschema/edit_component_in_lib.cpp:265
+#: eeschema/edit_component_in_lib.cpp:202
+#: eeschema/edit_component_in_lib.cpp:275
 #, c-format
 msgid "Alias <%s> cannot be removed while it is being edited!"
 msgstr "L'alias <%s> ne peut être supprimé tant qu'il est en cours d'édition!"
 
-#: eeschema/edit_component_in_lib.cpp:202
+#: eeschema/edit_component_in_lib.cpp:212
 msgid "Remove all aliases from list?"
 msgstr "Supprimer tous les alias de la liste?"
 
-#: eeschema/edit_component_in_lib.cpp:229
+#: eeschema/edit_component_in_lib.cpp:239
 msgid "New alias:"
 msgstr "Nouvel alias"
 
-#: eeschema/edit_component_in_lib.cpp:230
+#: eeschema/edit_component_in_lib.cpp:240
 msgid "Component Alias"
 msgstr "Alias de Composant"
 
-#: eeschema/edit_component_in_lib.cpp:240
+#: eeschema/edit_component_in_lib.cpp:250
 #, c-format
 msgid "Alias or component name <%s> already exists in library <%s>."
 msgstr "Alias ou nom de composant <%s> déjà existant en librairie <%s>."
 
-#: eeschema/edit_component_in_lib.cpp:297
+#: eeschema/edit_component_in_lib.cpp:307
 msgid "Delete extra parts from component?"
 msgstr "Supprimer les parts supplémentaires du composant?"
 
-#: eeschema/edit_component_in_lib.cpp:318
+#: eeschema/edit_component_in_lib.cpp:328
 msgid "Add new pins for alternate body style ( DeMorgan ) to component?"
 msgstr "Ajouter les nouvelles pins pour la forme alternative (DeMorgan) au composant?"
 
-#: eeschema/edit_component_in_lib.cpp:325
+#: eeschema/edit_component_in_lib.cpp:335
 msgid "Delete alternate body style (DeMorgan) draw items from component?"
 msgstr "Supprimer les éléments de la représentation alternative (DeMorgan) du composant?"
 
-#: eeschema/edit_component_in_lib.cpp:349
+#: eeschema/edit_component_in_lib.cpp:359
 msgid "Doc Files"
 msgstr "Fichiers de Doc"
 
-#: eeschema/edit_component_in_lib.cpp:385
+#: eeschema/edit_component_in_lib.cpp:395
 msgid "Ok to Delete FootprintFilter LIST"
 msgstr "Ok pour effacer la LISTE des filtres de modules"
 
-#: eeschema/edit_component_in_lib.cpp:408
+#: eeschema/edit_component_in_lib.cpp:418
 msgid "Add Footprint Filter"
 msgstr "Ajouter Filtre Modules"
 
-#: eeschema/edit_component_in_lib.cpp:421
+#: eeschema/edit_component_in_lib.cpp:431
 #, c-format
 msgid "Foot print filter <%s> is already defined."
 msgstr "Filtre de module <%s> déjà défini."
@@ -10482,8 +10490,8 @@ msgstr "Taille du te&xte:"
 
 #: eeschema/dialog_sch_sheet_props_base.cpp:42
 #: eeschema/dialog_sch_sheet_props_base.cpp:63
-#: eeschema/dialog_lib_edit_pin_base.cpp:41
-#: eeschema/dialog_lib_edit_pin_base.cpp:64
+#: eeschema/dialog_lib_edit_pin_base.cpp:43
+#: eeschema/dialog_lib_edit_pin_base.cpp:66
 #: eeschema/dialog_lib_edit_pin_base.cpp:87
 msgid "units"
 msgstr "unités"
@@ -10533,27 +10541,27 @@ msgstr " a été créé par une version plus ancienne de Eeschema. Il sera enreg
 msgid "Done Loading "
 msgstr "Chargement terminé "
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:24
+#: eeschema/dialog_lib_edit_pin_base.cpp:26
 msgid "Pin &name:"
 msgstr "Nom pi&n:"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:34
+#: eeschema/dialog_lib_edit_pin_base.cpp:36
 msgid "N&ame text size:"
 msgstr "Taille du Texte &Nom de Pin"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:45
+#: eeschema/dialog_lib_edit_pin_base.cpp:47
 msgid "Pin n&umber:"
 msgstr "N&uméro de pin:"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:47
+#: eeschema/dialog_lib_edit_pin_base.cpp:49
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
 msgstr "Numéro de pin: 1 à 4 lettres ou/et chiffres ASCII"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:57
+#: eeschema/dialog_lib_edit_pin_base.cpp:59
 msgid "Number te&xt size:"
 msgstr "Taille Te&xte Numéro de Pin"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:68
+#: eeschema/dialog_lib_edit_pin_base.cpp:70
 msgid "&Orientation:"
 msgstr "&Orientation:"
 
@@ -10569,19 +10577,19 @@ msgstr "&Type électrique:"
 msgid "Used by the ERC."
 msgstr "Utilisé par le contrôle ERC"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:114
+#: eeschema/dialog_lib_edit_pin_base.cpp:112
 msgid "Graphic &Style:"
 msgstr "&Style graphique:"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:137
+#: eeschema/dialog_lib_edit_pin_base.cpp:133
 msgid "Add to all &parts in package"
 msgstr "Ajouter à toutes les &parts du boitier"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:141
+#: eeschema/dialog_lib_edit_pin_base.cpp:137
 msgid "Add to all alternate &body styles (DeMorgan)"
 msgstr "Ajouter à toutes les forme &alternatives (DeMorgan)"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:145
+#: eeschema/dialog_lib_edit_pin_base.cpp:141
 msgid "&Visible"
 msgstr "&Visible"
 
@@ -12958,7 +12966,7 @@ msgstr "Propriétés du texte graphique:"
 msgid "Fields Properties"
 msgstr "Propriétés des Champs"
 
-#: eeschema/dialog_lib_edit_pin_base.h:74
+#: eeschema/dialog_lib_edit_pin_base.h:76
 msgid "Pin Properties"
 msgstr "Propriétés des Pins"
 

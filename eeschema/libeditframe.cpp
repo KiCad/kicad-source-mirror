@@ -667,7 +667,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_LIBEDIT_EDIT_PIN_BY_PIN:
-        g_EditPinByPinIsOn = g_EditPinByPinIsOn ? false : true;
+        g_EditPinByPinIsOn = m_HToolBar->GetToolState(ID_LIBEDIT_EDIT_PIN_BY_PIN);
         break;
 
     case ID_LIBEDIT_PIN_BUTT:

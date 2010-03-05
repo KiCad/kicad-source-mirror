@@ -106,11 +106,14 @@ library \"%s\"." ),
     if( !LoadOneLibraryPartAux( LibEntry, m_library ) )
         return;
 
-    g_EditPinByPinIsOn = false;
+    g_EditPinByPinIsOn = m_component->m_UnitSelectionLocked ? true : false;
+    m_HToolBar->ToggleTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, g_EditPinByPinIsOn );
+        
     GetScreen()->ClearUndoRedoList();
     Zoom_Automatique( false );
     DrawPanel->Refresh();
     SetShowDeMorgan(m_component->HasConversion() );
+    m_HToolBar->Refresh();
 }
 
 
@@ -558,11 +561,13 @@ created. Aborted" ) );
     DisplayCmpDoc();
     UpdateAliasSelectList();
     UpdatePartSelectList();
-    g_EditPinByPinIsOn = false;
+    g_EditPinByPinIsOn = m_component->m_UnitSelectionLocked ? true : false;
+    m_HToolBar->ToggleTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, g_EditPinByPinIsOn );
     m_lastDrawItem = NULL;
     GetScreen()->ClearUndoRedoList();
     OnModify( );
     DrawPanel->Refresh();
+    m_HToolBar->Refresh();
 }
 
 

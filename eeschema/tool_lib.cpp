@@ -200,9 +200,14 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
     m_HToolBar->AddControl( m_SelAliasBox );
 
     m_HToolBar->AddSeparator();
+    msg = _( "Edit pins part per part ( Use carefully!)" );
+    msg << wxT("\n");
+    msg += _("Usual option = OFF when parts are not locked");
+    msg << wxT("\n");
+    msg += _("Usual option = ON when parts are locked");
     m_HToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, wxEmptyString,
                          wxBitmap( pin2pin_xpm ),
-                         _( "Edit pins part per part ( Use carefully!)" ),
+                         msg,
                          wxITEM_CHECK );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect

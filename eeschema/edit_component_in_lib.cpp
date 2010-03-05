@@ -14,6 +14,7 @@
 #include "protos.h"
 #include "libeditframe.h"
 #include "class_library.h"
+#include "eeschema_id.h"
 
 
 /* Dialog box to edit a libentry (a component in library) properties */
@@ -31,7 +32,16 @@
 
 void WinEDA_LibeditFrame::OnEditComponentProperties( wxCommandEvent& event )
 {
+    bool partLocked = GetComponent()->m_UnitSelectionLocked;
     EditComponentProperties();
+    if( partLocked != GetComponent()->m_UnitSelectionLocked )
+    {   // g_EditPinByPinIsOn is set to the better value,
+        // if m_UnitSelectionLocked has changed
+        g_EditPinByPinIsOn = GetComponent()->m_UnitSelectionLocked ? true : false;
+        m_HToolBar->ToggleTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, g_EditPinByPinIsOn );
+    }
+        
+    m_HToolBar->Refresh();
     DrawPanel->Refresh();
 }
 
