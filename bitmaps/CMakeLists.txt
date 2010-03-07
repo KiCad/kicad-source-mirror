@@ -59,6 +59,7 @@ set(BITMAP_SRCS
     Browse_Files.xpm
     cancel_tool.xpm
     Cancel.xpm
+    checked_ok.xpm
     component_select_unit.xpm
     component_select_alternate_shape.xpm
     config.xpm

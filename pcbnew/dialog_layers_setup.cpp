@@ -53,6 +53,7 @@ struct CTLs
     wxControl*      name;
     wxCheckBox*     checkbox;
     wxControl*      choice;
+    wxPanel *       panel;
 };
 
 
@@ -250,6 +251,7 @@ DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( WinEDA_PcbFrame* parent ) :
 
     m_CopperLayerCount = m_Pcb->GetCopperLayerCount();
     showCopperChoice( m_CopperLayerCount );
+    setCopperLayerCheckBoxes( m_CopperLayerCount );
 
     showBoardLayerNames();
 
@@ -310,8 +312,6 @@ bool DIALOG_LAYERS_SETUP::Show( bool show )
 void DIALOG_LAYERS_SETUP::showCopperChoice( int copperCount )
 {
     static const int copperCounts[] = { 2,4,6,8,10,12,14,16 };
-
-    //D(printf("boardsCopperCount=%d\n", copperCount );)
 
     for( unsigned i = 0;  i<sizeof(copperCounts);  ++i )
     {
@@ -432,14 +432,15 @@ void DIALOG_LAYERS_SETUP::setCopperLayerCheckBoxes( int copperCount )
     }
 
     int layer;
-    for( layer=LAYER_N_2;  copperCount > 0;  ++layer, --copperCount )
+    for( layer=LAYER_N_2; layer < NB_COPPER_LAYERS-1;  ++layer, --copperCount )
     {
-        setLayerCheckBox( layer, true );
-    }
+        CTLs ctl = getCTLs(layer);
+        bool state = copperCount > 0;
+        ctl.name->Enable( state );
+        ctl.checkbox->Enable( state );
+        ctl.choice->Enable( state );
 
-    for( ;  layer < NB_COPPER_LAYERS-1;  ++layer )
-    {
-        setLayerCheckBox( layer, false );
+        setLayerCheckBox( layer, state );
     }
 }
 

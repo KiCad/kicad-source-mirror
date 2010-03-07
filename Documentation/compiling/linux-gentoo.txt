@@ -5,7 +5,7 @@ Information
 -----------
 First written: 02-Mar-2010
 
-Written by: denis[dot]dupeyron[at]gmail[dot]com
+Written by: calchan at gentoo dot org
 
 
 For regular users

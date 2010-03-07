@@ -54,6 +54,7 @@ extern const char* break_line_xpm[];
 extern const char* browse_files_xpm[];
 extern const char* cancel_tool_xpm[];
 extern const char* cancel_xpm[];
+extern const char* checked_ok_xpm[];
 extern const char* component_select_alternate_shape_xpm[];
 extern const char* component_select_unit_xpm[];
 extern const char* config_xpm[];
