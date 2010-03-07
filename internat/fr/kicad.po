@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-04 11:58+0100\n"
-"PO-Revision-Date: 2010-03-04 11:59+0100\n"
+"POT-Creation-Date: 2010-03-07 10:52+0100\n"
+"PO-Revision-Date: 2010-03-07 10:57+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -2559,19 +2559,25 @@ msgstr "Par Netclass"
 msgid "Min track width"
 msgstr "Largeur Min Piste"
 
-#: pcbnew/dialog_drc_base.cpp:50
-#: pcbnew/dialog_drc_base.cpp:59
-#: pcbnew/dialog_drc_base.cpp:68
-msgid "In the clearance units, enter the clearance distance"
-msgstr "Entrée l'isolation"
+#: pcbnew/dialog_drc_base.cpp:47
+msgid "Enter the minimum acceptable value for a track width"
+msgstr "Entrer la largeur de piste minimale acceptable"
 
 #: pcbnew/dialog_drc_base.cpp:54
 msgid "Min via size"
 msgstr "Diamètre min via"
 
+#: pcbnew/dialog_drc_base.cpp:56
+msgid "Enter the minimum acceptable diameter for a standard via"
+msgstr "Entrer le diamètre minimal acceptable pour une via standard"
+
 #: pcbnew/dialog_drc_base.cpp:63
 msgid "Min uVia size"
 msgstr "Taille min uVia"
+
+#: pcbnew/dialog_drc_base.cpp:65
+msgid "Enter the minimum acceptable diameter for a micro via"
+msgstr "Entrer le diamètre minimal acceptable pour une micro via"
 
 #: pcbnew/dialog_drc_base.cpp:75
 msgid "Create Report File"
@@ -6852,15 +6858,19 @@ msgstr "Change Pads du Module"
 msgid "Change Pads on Same Modules"
 msgstr "Change Pads des Modules id."
 
-#: pcbnew/dialog_pad_properties.cpp:541
+#: pcbnew/dialog_pad_properties.cpp:571
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
 msgstr "Valeur incorrecte pour diamètre de perçage: perçage plus grand que la taille du pad"
 
-#: pcbnew/dialog_pad_properties.cpp:547
+#: pcbnew/dialog_pad_properties.cpp:579
+msgid "Error: pad is not a through pad and has a hole"
+msgstr "Erreur: ce pad n'est pas tranversant et a un trou"
+
+#: pcbnew/dialog_pad_properties.cpp:587
 msgid "Incorrect value for pad offset"
 msgstr "Valeur incorrecte pour offset du pad"
 
-#: pcbnew/dialog_pad_properties.cpp:641
+#: pcbnew/dialog_pad_properties.cpp:652
 msgid "Unknown netname, no change"
 msgstr "Net inconnu, pas de changement"
 
@@ -13010,6 +13020,8 @@ msgstr "Options d'Affichage"
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#~ msgid "In the clearance units, enter the clearance distance"
+#~ msgstr "Entrée l'isolation"
 #~ msgid "&Run"
 #~ msgstr "Exécute&r"
 #~ msgid "&Open the file in a Text Editor"
@@ -13862,8 +13874,6 @@ msgstr "Ajustage opt Page"
 #~ msgstr "Orientation"
 #~ msgid "Micro Via Size"
 #~ msgstr "Diamètre Micro Via"
-#~ msgid "Enter the current track width"
-#~ msgstr "Entrer la largeur de piste courante"
 #~ msgid "This is the clearance between tracks, vias and pads for DRC."
 #~ msgstr "Ceci est l'isolation entre pistes, vias et pads pour le calcul DRC."
 #~ msgid "Create pins for convert items."

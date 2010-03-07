@@ -44,29 +44,29 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	m_TrackMinWidthTitle = new wxStaticText( this, wxID_ANY, _("Min track width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackMinWidthTitle->Wrap( -1 );
+	m_TrackMinWidthTitle->SetToolTip( _("Enter the minimum acceptable value for a track width") );
+	
 	fgMinValuesSizer->Add( m_TrackMinWidthTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
 	m_SetTrackMinWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SetTrackMinWidthCtrl->SetToolTip( _("In the clearance units, enter the clearance distance") );
-	
 	fgMinValuesSizer->Add( m_SetTrackMinWidthCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_ViaMinTitle = new wxStaticText( this, wxID_ANY, _("Min via size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaMinTitle->Wrap( -1 );
+	m_ViaMinTitle->SetHelpText( _("Enter the minimum acceptable diameter for a standard via") );
+	
 	fgMinValuesSizer->Add( m_ViaMinTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
 	m_SetViaMinSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SetViaMinSizeCtrl->SetToolTip( _("In the clearance units, enter the clearance distance") );
-	
 	fgMinValuesSizer->Add( m_SetViaMinSizeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
 	m_MicroViaMinTitle = new wxStaticText( this, wxID_ANY, _("Min uVia size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MicroViaMinTitle->Wrap( -1 );
+	m_MicroViaMinTitle->SetToolTip( _("Enter the minimum acceptable diameter for a micro via") );
+	
 	fgMinValuesSizer->Add( m_MicroViaMinTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
 	m_SetMicroViakMinSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SetMicroViakMinSizeCtrl->SetToolTip( _("In the clearance units, enter the clearance distance") );
-	
 	fgMinValuesSizer->Add( m_SetMicroViakMinSizeCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	bSizer7->Add( fgMinValuesSizer, 1, wxEXPAND, 5 );

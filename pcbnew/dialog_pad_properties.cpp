@@ -433,7 +433,6 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
  */
 {
     long PadLayerMask;
-    bool error = false;
     bool RastnestIsChanged = false;
     int internalUnits = m_Parent->m_InternalUnits;
     wxString msg;
@@ -533,23 +532,6 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         break;
     }
 
-    /* Test for incorrect values */
-    if( (g_Pad_Master.m_Size.x < g_Pad_Master.m_Drill.x)
-       || (g_Pad_Master.m_Size.y < g_Pad_Master.m_Drill.y) )
-    {
-        error = true;
-        DisplayError( this, _( "Incorrect value for pad drill: pad drill bigger than pad size" ) );
-    }
-    if( ( g_Pad_Master.m_Size.x / 2 <= ABS( g_Pad_Master.m_Offset.x ) )
-       || ( g_Pad_Master.m_Size.y / 2 <= ABS( g_Pad_Master.m_Offset.y ) ) )
-    {
-        error = true;
-        DisplayError( this, _( "Incorrect value for pad offset" ) );
-    }
-
-    if( error )
-         return;
-
     PadLayerMask = 0;
     if( m_PadLayerCu->GetValue() )
         PadLayerMask |= LAYER_BACK;
@@ -579,6 +561,40 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         PadLayerMask |= ECO2_LAYER;
     if( m_PadLayerDraft->GetValue() )
         PadLayerMask |= DRAW_LAYER;
+
+    /* Test for incorrect values */
+    if( (g_Pad_Master.m_Size.x < g_Pad_Master.m_Drill.x)
+       || (g_Pad_Master.m_Size.y < g_Pad_Master.m_Drill.y) )
+    {
+        DisplayError( this, _( "Incorrect value for pad drill: pad drill bigger than pad size" ) );
+        return;
+    }
+
+    int padlayers_mask = PadLayerMask & (LAYER_BACK | LAYER_FRONT);
+    if( padlayers_mask == 0 )
+    {
+        if( g_Pad_Master.m_Size.x || g_Pad_Master.m_Drill.y )
+        {
+            DisplayError( this, _( "Error: pad is not on a copper layer and has a hole" ) );
+            return;
+        }
+    }
+    if( padlayers_mask != (LAYER_BACK | LAYER_FRONT) )
+    {
+        if( g_Pad_Master.m_Size.x || g_Pad_Master.m_Drill.y )
+        {
+            if( !IsOK(this, _( "Warning: pad is not a through pad and has a hole; Continue?" ) ) )
+                return;
+        }
+    }
+
+    if( ( g_Pad_Master.m_Size.x / 2 <= ABS( g_Pad_Master.m_Offset.x ) )
+       || ( g_Pad_Master.m_Size.y / 2 <= ABS( g_Pad_Master.m_Offset.y ) ) )
+    {
+        DisplayError( this, _( "Incorrect value for pad offset" ) );
+        return;
+    }
+
 
     g_Pad_Master.m_Masque_Layer = PadLayerMask;
 

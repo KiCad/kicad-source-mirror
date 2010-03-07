@@ -215,12 +215,27 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     int item_clearance;
     have_poly_to_substract = false;
 
+    D_PAD dummyPad((MODULE*)NULL);
+
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
         for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
         {
             if( !pad->IsOnLayer( GetLayer() ) )
-                continue;
+            {   /* Test fo pads that are on top or bottom only and have a hole.
+                 * There are curious pads but they can be used for some components that are inside the
+                 * board (in fact inside the hole. Some photo diodes and Leds are like this)
+                 */
+                if( (pad->m_Drill.x == 0) && (pad->m_Drill.y == 0) )
+                    continue;
+
+                // Use a dummy pad to calculate a hole shape that have the same dimension as the pad hole
+                dummyPad.m_Size = pad->m_Drill;
+                dummyPad.m_Orient = pad->m_Orient;
+                dummyPad.m_PadShape = pad->m_DrillShape;
+                dummyPad.m_Pos = pad->m_Pos;
+                pad = &dummyPad;
+            }
 
             if( pad->GetNet() != GetNet() )
             {
