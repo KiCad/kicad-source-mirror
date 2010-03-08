@@ -234,13 +234,8 @@ install(TARGETS ${PCBNEW_NAME}
 # The specctra test fails to build properly using MS Visual Studio.
 if(NOT MSVC)
     # This one gets made only when testing.
-    #add_executable(dsntest EXCLUDE_FROM_ALL dsn.cpp)
-    #target_link_libraries(dsntest common ${wxWidgets_LIBRARIES})
-
-    # This one gets made only when testing.
     add_executable(specctra_test EXCLUDE_FROM_ALL specctra.cpp)
     target_link_libraries(specctra_test common ${wxWidgets_LIBRARIES})
-
 endif(NOT MSVC)
 
 # This one gets made only when testing.

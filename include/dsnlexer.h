@@ -98,6 +98,7 @@ class DSNLEXER
     const KEYWORD*      keywords;
     unsigned            keywordCount;
 
+    void init();
 
     int readLine() throw (IOError)
     {
@@ -158,6 +159,9 @@ public:
      */
     DSNLEXER( FILE* aFile, const wxString& aFilename,
             const KEYWORD* aKeywordTable, unsigned aKeywordCount );
+
+    DSNLEXER( const std::string& aClipboardTxt,
+        const KEYWORD* aKeywordTable, unsigned aKeywordCount );
 
     ~DSNLEXER()
     {

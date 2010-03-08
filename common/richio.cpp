@@ -91,19 +91,18 @@ int STRING_LINE_READER::ReadLine() throw (IOError)
 
     if( advance )
     {
-        if( advance >= maxLineLength )
+        if( advance > maxLineLength )
             throw IOError( _("Line length exceeded") );
 
         wxASSERT( ndx + advance <= source.length() );
 
         memcpy( line, &source[ndx], advance );
 
-        length = advance;
-
         ++lineNum;
         ndx += advance;
     }
 
+    length = advance;
     line[advance] = 0;
 
     return advance;

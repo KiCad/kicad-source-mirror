@@ -71,6 +71,7 @@ enum DSN_T {
     // these first few are negative special ones for syntax, and are
     // inherited from DSNLEXER.
     T_NONE = DSN_NONE,
+    T_COMMENT = DSN_COMMENT,
     T_STRING_QUOTE = DSN_STRING_QUOTE,
     T_QUOTE_DEF = DSN_QUOTE_DEF,
     T_DASH = DSN_DASH,

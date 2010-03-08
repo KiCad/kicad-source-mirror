@@ -42,7 +42,7 @@ set(COMMON_SRCS
     gr_basic.cpp
     hotkeys_basic.cpp
     msgpanel.cpp
-	newstroke_font.cpp
+    newstroke_font.cpp
     projet_config.cpp
 #   pyhandler.cpp
     richio.cpp
@@ -88,3 +88,13 @@ set(PCB_COMMON_SRCS
 )
 
 add_library(pcbcommon ${PCB_COMMON_SRCS})
+
+# The dsntest may not build properly using MS Visual Studio.
+if(NOT MSVC)
+    # This one gets made only when testing.
+    # to build it, first enable #define STAND_ALONE at top of dsnlexer.cpp
+    add_executable( dsntest EXCLUDE_FROM_ALL dsnlexer.cpp )
+    target_link_libraries( dsntest common ${wxWidgets_LIBRARIES} )
+
+endif( NOT MSVC )
+
