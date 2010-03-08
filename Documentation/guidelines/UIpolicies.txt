@@ -45,3 +45,10 @@ Dialogs:
     the dialog is created but before it is shown or use class methods to
     re-size the dialog as required.  Reset the minimum size to the updated
     dialog size.
+
+    Dialog windows shall not exceed 1024 x 769 when displayed in a 13 point font.
+    Note that the font used by end users is not something that you control from
+    within the dialog, but for testing purposes please do not exceed this dialog
+    size should the user have selected a font size of 13 points.
+
+
