@@ -1259,9 +1259,43 @@ static const KEYWORD keywords[] = {
 };
 
 
+/*  To run this test code, simply copy some DSN text to the clipboard, then run
+    the program from the command line and it will beautify the input from the
+    clipboard to stdout.  stderr gets errors, if any.
+    The wxApp is involved because the clipboard is not available to a raw
+    int main() type program on all platforms.
+*/
+
+
 class DSNTEST : public wxApp
 {
+
+    DSNLEXER*   lexer;
+    int         nestLevel;
+
+    void        recursion() throw( IOError );
+
+    void        indent()
+    {
+        const int NESTWIDTH = 2;
+
+        printf("\n");
+        for( int i=0; i<nestLevel;  ++i )
+            printf( "%*c", NESTWIDTH, ' ' );
+    }
+
+
 public:
+    DSNTEST() :
+        lexer(0),
+        nestLevel(0)
+    {}
+
+    ~DSNTEST()
+    {
+        delete lexer;
+    }
+
     virtual bool OnInit();
 };
 
@@ -1290,7 +1324,7 @@ bool DSNTEST::OnInit()
     // this won't compile without a token table.
     DSNLEXER  lexer( fp, filename, keywords, DIM(keywords) );
 
-#else
+#else   // clipboard based line reader
 
     if( !wxTheClipboard->Open() )
     {
@@ -1298,36 +1332,86 @@ bool DSNTEST::OnInit()
         exit( 1 );
     }
 
-/*
-    if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
+    wxTextDataObject    dataObj;
+
+    if( !wxTheClipboard->GetData( dataObj ) )
     {
         fprintf( stderr, "nothing of interest on clipboard\n" );
         exit( 2 );
     }
-*/
-    wxTextDataObject    dataObj;
 
-    wxTheClipboard->GetData( dataObj );
+    int formatCount = dataObj.GetFormatCount();
 
-    DSNLEXER  lexer( std::string( CONV_TO_UTF8( dataObj.GetText() ) ),
+    fprintf( stderr, "formatCount:%d\n", formatCount );
+
+    wxDataFormat* formats = new wxDataFormat[formatCount];
+
+    dataObj.GetAllFormats( formats );
+
+    for( int fmt=0;  fmt<formatCount;  ++fmt )
+    {
+        fprintf( stderr, "format:%d\n", formats[fmt].GetType() );
+        // @todo: what are these formats in terms of enum strings, and how
+        // do they vary across platforms.  I am seeing
+        // on linux: 2 formats, 13 and 1
+    }
+
+
+    lexer = new DSNLEXER( std::string( CONV_TO_UTF8( dataObj.GetText() ) ),
         keywords, DIM(keywords) );
 
 #endif
 
+    // read the stream via the lexer, and use recursion to establish a nesting
+    // level and some output.
     try
     {
-        int tok;
-        while( (tok = lexer.NextTok()) != DSN_EOF )
+        int         tok;
+        while( (tok = lexer->NextTok()) != DSN_EOF )
         {
-            printf( "%-3d %s\n", tok, lexer.CurText() );
+            if( tok == DSN_LEFT )
+            {
+                recursion();
+            }
+            else
+                printf( " %s", lexer->CurText() );
         }
+        printf("\n");
     }
     catch( IOError ioe )
     {
-        printf( "%s\n", (const char*) ioe.errorText.mb_str() );
+        fprintf( stderr, "%s\n", CONV_TO_UTF8( ioe.errorText ) );
     }
 
     return 0;
+}
+
+
+void DSNTEST::recursion() throw(IOError)
+{
+    int         tok;
+    const char* space = "";
+
+    indent();
+    printf("(");
+
+    while( (tok = lexer->NextTok()) != DSN_EOF && tok != DSN_RIGHT )
+    {
+        if( tok == DSN_LEFT )
+        {
+            ++nestLevel;
+
+            recursion();
+
+            --nestLevel;
+        }
+        else
+            printf( "%s%s", space, lexer->CurText() );
+
+        space = " ";    // only the first tok gets no leading space.
+    }
+
+    printf(")");
 }
 
 #endif
