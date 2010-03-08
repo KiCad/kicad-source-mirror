@@ -25,6 +25,8 @@ Common
 * Integer/long/double input boxes should handle comma and dot separated values,
   not only comma.
 
+
+ANYONE:
 C2) Write a tool to generate DSNLEXER keyword tables (and enums) as *.cpp and
     *.h. Language of tool should probably be C++. As input, the tool should take
     a list of whitespace separated keywords from a text file that is manually
