@@ -1109,14 +1109,23 @@ void LIB_COMPONENT::ClearSelectedItems()
 
 void LIB_COMPONENT::DeleteSelectedItems()
 {
-    LIB_DRAW_ITEM_LIST::iterator i = drawings.begin();
+    LIB_DRAW_ITEM_LIST::iterator item = drawings.begin();
 
-    while( i != drawings.end() )
+    // We *do not* remove the 2 mandatory fields: reference and value
+    // so skip them (do not remove) if they are flagged selected.
+    while( item != drawings.end() )
     {
-        if( i->m_Selected == 0 )
-            i++;
+        if( item->Type() == COMPONENT_FIELD_DRAW_TYPE )
+        {
+            LIB_FIELD& field = ( LIB_FIELD& ) *item;
+            if( (field.m_FieldId == REFERENCE) || (field.m_FieldId == VALUE) )
+                item->m_Selected = 0;
+        }
+
+        if( item->m_Selected == 0 )
+            item++;
         else
-            i = drawings.erase( i );
+            item = drawings.erase( item );
     }
 }
 
@@ -1132,6 +1141,11 @@ void LIB_COMPONENT::CopySelectedItems( const wxPoint& aOffset )
     for( unsigned ii = 0; ii < icnt; ii++  )
     {
         LIB_DRAW_ITEM& item = drawings[ii];
+        // We *do not* copy fields because they are unique for the whole component
+        // so skip them (do not duplicate) if they are flagged selected.
+        if( item.Type() == COMPONENT_FIELD_DRAW_TYPE )
+            item.m_Selected = 0;
+
         if( item.m_Selected == 0 )
             continue;
 
