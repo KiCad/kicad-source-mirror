@@ -55,17 +55,6 @@ GerbView
 * Switch to use ZONE instead of SEGZONE for polygons.
 
 
-KiCad
------
-Add to the Wiki what the minimum screen size resolution requirement is to run
-Kicad, so that people do not try and use the program and then whine that they
-cannot see everything they need.  We cannot make everyone happy, and by trying
-to make those with crappy computers happy, we risk making those with high res
-computers unhappy.  Establish a minimum, then ignore support complaints coming
-from folks with less than that minimum.
-
-
-
 PCBNew
 ------
 
