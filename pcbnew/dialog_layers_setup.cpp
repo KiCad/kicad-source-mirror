@@ -436,12 +436,17 @@ void DIALOG_LAYERS_SETUP::setCopperLayerCheckBoxes( int copperCount )
     {
         CTLs ctl = getCTLs(layer);
         bool state = copperCount > 0;
-        ctl.name->Enable( state );
-        ctl.checkbox->Enable( state );
-        ctl.choice->Enable( state );
+        ctl.name->Show( state );
+        ctl.checkbox->Show( state );
+        ctl.choice->Show( state );
 
         setLayerCheckBox( layer, state );
     }
+
+    // Send an size event to force sizers to be updated,
+    // because the number of copper layers can have changed.
+    wxSizeEvent evt_size(m_LayersListPanel->GetSize() );
+    m_LayersListPanel->GetEventHandler()->ProcessEvent( evt_size );
 }
 
 

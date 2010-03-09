@@ -171,22 +171,11 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	
 	m_LayerListFlexGridSizer->Add( m_FrontName, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
-	m_FrontPanel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_FrontPanel->SetBackgroundColour( wxColour( 236, 253, 216 ) );
-	
-	wxBoxSizer* bSizer9;
-	bSizer9 = new wxBoxSizer( wxVERTICAL );
-	
-	m_FrontCheckBox = new wxCheckBox( m_FrontPanel, ID_FRONTCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_FrontCheckBox = new wxCheckBox( m_LayersListPanel, ID_FRONTCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	m_FrontCheckBox->SetToolTip( _("If you want a front copper layer") );
 	
-	bSizer9->Add( m_FrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_FrontPanel->SetSizer( bSizer9 );
-	m_FrontPanel->Layout();
-	bSizer9->Fit( m_FrontPanel );
-	m_LayerListFlexGridSizer->Add( m_FrontPanel, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_FrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	wxString m_FrontChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_FrontChoiceNChoices = sizeof( m_FrontChoiceChoices ) / sizeof( wxString );
@@ -196,383 +185,229 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	
 	m_LayerListFlexGridSizer->Add( m_FrontChoice, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	m_Inner2Name = new wxTextCtrl( m_LayersListPanel, ID_INNER2NAME, _("Inner2"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Inner2Name->SetMaxLength( 20 ); 
-	m_LayerListFlexGridSizer->Add( m_Inner2Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	m_Inner15Name = new wxTextCtrl( m_LayersListPanel, ID_INNER2NAME, _("Inner15"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Inner15Name->SetMaxLength( 20 ); 
+	m_LayerListFlexGridSizer->Add( m_Inner15Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
-	m_Inner2Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_Inner2Panel->SetBackgroundColour( wxColour( 236, 253, 216 ) );
+	m_Inner15CheckBox = new wxCheckBox( m_LayersListPanel, ID_INNER2CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	wxBoxSizer* bInner2Sizer;
-	bInner2Sizer = new wxBoxSizer( wxVERTICAL );
+	m_LayerListFlexGridSizer->Add( m_Inner15CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_Inner2CheckBox = new wxCheckBox( m_Inner2Panel, ID_INNER2CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	wxString m_Inner15ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	int m_Inner15ChoiceNChoices = sizeof( m_Inner15ChoiceChoices ) / sizeof( wxString );
+	m_Inner15Choice = new wxChoice( m_LayersListPanel, ID_INNER2CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner15ChoiceNChoices, m_Inner15ChoiceChoices, 0 );
+	m_Inner15Choice->SetSelection( 0 );
+	m_Inner15Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
 	
-	bInner2Sizer->Add( m_Inner2CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_LayerListFlexGridSizer->Add( m_Inner15Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
-	m_Inner2Panel->SetSizer( bInner2Sizer );
-	m_Inner2Panel->Layout();
-	bInner2Sizer->Fit( m_Inner2Panel );
-	m_LayerListFlexGridSizer->Add( m_Inner2Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
-	
-	wxString m_Inner2ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
-	int m_Inner2ChoiceNChoices = sizeof( m_Inner2ChoiceChoices ) / sizeof( wxString );
-	m_Inner2Choice = new wxChoice( m_LayersListPanel, ID_INNER2CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner2ChoiceNChoices, m_Inner2ChoiceChoices, 0 );
-	m_Inner2Choice->SetSelection( 0 );
-	m_Inner2Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
-	
-	m_LayerListFlexGridSizer->Add( m_Inner2Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner3Name = new wxTextCtrl( m_LayersListPanel, ID_INNER3NAME, _("Inner3"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Inner3Name->SetMaxLength( 20 ); 
-	m_LayerListFlexGridSizer->Add( m_Inner3Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner3Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_Inner3Panel->SetBackgroundColour( wxColour( 236, 253, 216 ) );
-	
-	wxBoxSizer* bInner3Sizer;
-	bInner3Sizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_Inner3CheckBox = new wxCheckBox( m_Inner3Panel, ID_INNER3CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
-	bInner3Sizer->Add( m_Inner3CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_Inner3Panel->SetSizer( bInner3Sizer );
-	m_Inner3Panel->Layout();
-	bInner3Sizer->Fit( m_Inner3Panel );
-	m_LayerListFlexGridSizer->Add( m_Inner3Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
-	wxString m_Inner3ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
-	int m_Inner3ChoiceNChoices = sizeof( m_Inner3ChoiceChoices ) / sizeof( wxString );
-	m_Inner3Choice = new wxChoice( m_LayersListPanel, ID_INNER3CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner3ChoiceNChoices, m_Inner3ChoiceChoices, 0 );
-	m_Inner3Choice->SetSelection( 0 );
-	m_Inner3Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
-	
-	m_LayerListFlexGridSizer->Add( m_Inner3Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner4Name = new wxTextCtrl( m_LayersListPanel, ID_INNER4NAME, _("Inner4"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Inner4Name->SetMaxLength( 20 ); 
-	m_LayerListFlexGridSizer->Add( m_Inner4Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner4Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_Inner4Panel->SetBackgroundColour( wxColour( 236, 253, 216 ) );
-	
-	wxBoxSizer* bInner4Sizer;
-	bInner4Sizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_Inner4CheckBox = new wxCheckBox( m_Inner4Panel, ID_INNER4CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
-	bInner4Sizer->Add( m_Inner4CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_Inner4Panel->SetSizer( bInner4Sizer );
-	m_Inner4Panel->Layout();
-	bInner4Sizer->Fit( m_Inner4Panel );
-	m_LayerListFlexGridSizer->Add( m_Inner4Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
-	wxString m_Inner4ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
-	int m_Inner4ChoiceNChoices = sizeof( m_Inner4ChoiceChoices ) / sizeof( wxString );
-	m_Inner4Choice = new wxChoice( m_LayersListPanel, ID_INNER4CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner4ChoiceNChoices, m_Inner4ChoiceChoices, 0 );
-	m_Inner4Choice->SetSelection( 0 );
-	m_Inner4Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
-	
-	m_LayerListFlexGridSizer->Add( m_Inner4Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner5Name = new wxTextCtrl( m_LayersListPanel, ID_INNER5NAME, _("Inner5"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Inner5Name->SetMaxLength( 20 ); 
-	m_LayerListFlexGridSizer->Add( m_Inner5Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner5Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_Inner5Panel->SetBackgroundColour( wxColour( 236, 253, 216 ) );
-	
-	wxBoxSizer* bInner5Sizer;
-	bInner5Sizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_Inner5CheckBox = new wxCheckBox( m_Inner5Panel, ID_INNER5CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
-	bInner5Sizer->Add( m_Inner5CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_Inner5Panel->SetSizer( bInner5Sizer );
-	m_Inner5Panel->Layout();
-	bInner5Sizer->Fit( m_Inner5Panel );
-	m_LayerListFlexGridSizer->Add( m_Inner5Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
-	wxString m_Inner5ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
-	int m_Inner5ChoiceNChoices = sizeof( m_Inner5ChoiceChoices ) / sizeof( wxString );
-	m_Inner5Choice = new wxChoice( m_LayersListPanel, ID_INNER5CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner5ChoiceNChoices, m_Inner5ChoiceChoices, 0 );
-	m_Inner5Choice->SetSelection( 0 );
-	m_Inner5Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
-	
-	m_LayerListFlexGridSizer->Add( m_Inner5Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner6Name = new wxTextCtrl( m_LayersListPanel, ID_INNER6NAME, _("Inner6"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Inner6Name->SetMaxLength( 20 ); 
-	m_LayerListFlexGridSizer->Add( m_Inner6Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner6Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_Inner6Panel->SetBackgroundColour( wxColour( 236, 253, 216 ) );
-	
-	wxBoxSizer* bInner6Sizer;
-	bInner6Sizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_Inner6CheckBox = new wxCheckBox( m_Inner6Panel, ID_INNER6CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
-	bInner6Sizer->Add( m_Inner6CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_Inner6Panel->SetSizer( bInner6Sizer );
-	m_Inner6Panel->Layout();
-	bInner6Sizer->Fit( m_Inner6Panel );
-	m_LayerListFlexGridSizer->Add( m_Inner6Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
-	wxString m_Inner6ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
-	int m_Inner6ChoiceNChoices = sizeof( m_Inner6ChoiceChoices ) / sizeof( wxString );
-	m_Inner6Choice = new wxChoice( m_LayersListPanel, ID_INNER6CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner6ChoiceNChoices, m_Inner6ChoiceChoices, 0 );
-	m_Inner6Choice->SetSelection( 0 );
-	m_Inner6Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
-	
-	m_LayerListFlexGridSizer->Add( m_Inner6Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner7Name = new wxTextCtrl( m_LayersListPanel, ID_INNER7NAME, _("Inner7"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Inner7Name->SetMaxLength( 20 ); 
-	m_LayerListFlexGridSizer->Add( m_Inner7Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner7Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_Inner7Panel->SetBackgroundColour( wxColour( 236, 253, 216 ) );
-	
-	wxBoxSizer* bInner7Sizer;
-	bInner7Sizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_Inner7CheckBox = new wxCheckBox( m_Inner7Panel, ID_INNER7CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
-	bInner7Sizer->Add( m_Inner7CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_Inner7Panel->SetSizer( bInner7Sizer );
-	m_Inner7Panel->Layout();
-	bInner7Sizer->Fit( m_Inner7Panel );
-	m_LayerListFlexGridSizer->Add( m_Inner7Panel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
-	
-	wxString m_Inner7ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
-	int m_Inner7ChoiceNChoices = sizeof( m_Inner7ChoiceChoices ) / sizeof( wxString );
-	m_Inner7Choice = new wxChoice( m_LayersListPanel, ID_INNER7CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner7ChoiceNChoices, m_Inner7ChoiceChoices, 0 );
-	m_Inner7Choice->SetSelection( 0 );
-	m_Inner7Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
-	
-	m_LayerListFlexGridSizer->Add( m_Inner7Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner8Name = new wxTextCtrl( m_LayersListPanel, ID_INNER8NAME, _("Inner8"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Inner8Name->SetMaxLength( 20 ); 
-	m_LayerListFlexGridSizer->Add( m_Inner8Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner8Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_Inner8Panel->SetBackgroundColour( wxColour( 236, 253, 216 ) );
-	
-	wxBoxSizer* bInner8Sizer;
-	bInner8Sizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_Inner8CheckBox = new wxCheckBox( m_Inner8Panel, ID_INNER8CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
-	bInner8Sizer->Add( m_Inner8CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_Inner8Panel->SetSizer( bInner8Sizer );
-	m_Inner8Panel->Layout();
-	bInner8Sizer->Fit( m_Inner8Panel );
-	m_LayerListFlexGridSizer->Add( m_Inner8Panel, 1, wxEXPAND, 5 );
-	
-	wxString m_Inner8ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
-	int m_Inner8ChoiceNChoices = sizeof( m_Inner8ChoiceChoices ) / sizeof( wxString );
-	m_Inner8Choice = new wxChoice( m_LayersListPanel, ID_INNER8CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner8ChoiceNChoices, m_Inner8ChoiceChoices, 0 );
-	m_Inner8Choice->SetSelection( 0 );
-	m_Inner8Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
-	
-	m_LayerListFlexGridSizer->Add( m_Inner8Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner9Name = new wxTextCtrl( m_LayersListPanel, ID_INNER9NAME, _("Inner9"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Inner9Name->SetMaxLength( 20 ); 
-	m_LayerListFlexGridSizer->Add( m_Inner9Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner9Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_Inner9Panel->SetBackgroundColour( wxColour( 236, 253, 216 ) );
-	
-	wxBoxSizer* bInner9Sizer;
-	bInner9Sizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_Inner9CheckBox = new wxCheckBox( m_Inner9Panel, ID_INNER9CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
-	bInner9Sizer->Add( m_Inner9CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_Inner9Panel->SetSizer( bInner9Sizer );
-	m_Inner9Panel->Layout();
-	bInner9Sizer->Fit( m_Inner9Panel );
-	m_LayerListFlexGridSizer->Add( m_Inner9Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
-	wxString m_Inner9ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
-	int m_Inner9ChoiceNChoices = sizeof( m_Inner9ChoiceChoices ) / sizeof( wxString );
-	m_Inner9Choice = new wxChoice( m_LayersListPanel, ID_INNER9CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner9ChoiceNChoices, m_Inner9ChoiceChoices, 0 );
-	m_Inner9Choice->SetSelection( 0 );
-	m_Inner9Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
-	
-	m_LayerListFlexGridSizer->Add( m_Inner9Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner10Name = new wxTextCtrl( m_LayersListPanel, ID_INNER10NAME, _("Inner10"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Inner10Name->SetMaxLength( 20 ); 
-	m_LayerListFlexGridSizer->Add( m_Inner10Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner10Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_Inner10Panel->SetBackgroundColour( wxColour( 236, 253, 216 ) );
-	
-	wxBoxSizer* bInner10Sizer;
-	bInner10Sizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_Inner10CheckBox = new wxCheckBox( m_Inner10Panel, ID_INNER10CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
-	bInner10Sizer->Add( m_Inner10CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_Inner10Panel->SetSizer( bInner10Sizer );
-	m_Inner10Panel->Layout();
-	bInner10Sizer->Fit( m_Inner10Panel );
-	m_LayerListFlexGridSizer->Add( m_Inner10Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
-	wxString m_Inner10ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
-	int m_Inner10ChoiceNChoices = sizeof( m_Inner10ChoiceChoices ) / sizeof( wxString );
-	m_Inner10Choice = new wxChoice( m_LayersListPanel, ID_INNER10CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner10ChoiceNChoices, m_Inner10ChoiceChoices, 0 );
-	m_Inner10Choice->SetSelection( 0 );
-	m_Inner10Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
-	
-	m_LayerListFlexGridSizer->Add( m_Inner10Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner11Name = new wxTextCtrl( m_LayersListPanel, ID_INNER11NAME, _("Inner11"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Inner11Name->SetMaxLength( 20 ); 
-	m_LayerListFlexGridSizer->Add( m_Inner11Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner11Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_Inner11Panel->SetBackgroundColour( wxColour( 236, 253, 216 ) );
-	
-	wxBoxSizer* bInner11Sizer;
-	bInner11Sizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_Inner11CheckBox = new wxCheckBox( m_Inner11Panel, ID_INNER11CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
-	bInner11Sizer->Add( m_Inner11CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_Inner11Panel->SetSizer( bInner11Sizer );
-	m_Inner11Panel->Layout();
-	bInner11Sizer->Fit( m_Inner11Panel );
-	m_LayerListFlexGridSizer->Add( m_Inner11Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
-	wxString m_Inner11ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
-	int m_Inner11ChoiceNChoices = sizeof( m_Inner11ChoiceChoices ) / sizeof( wxString );
-	m_Inner11Choice = new wxChoice( m_LayersListPanel, ID_INNER11CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner11ChoiceNChoices, m_Inner11ChoiceChoices, 0 );
-	m_Inner11Choice->SetSelection( 0 );
-	m_Inner11Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
-	
-	m_LayerListFlexGridSizer->Add( m_Inner11Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner12Name = new wxTextCtrl( m_LayersListPanel, ID_INNER12NAME, _("Inner12"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Inner12Name->SetMaxLength( 20 ); 
-	m_LayerListFlexGridSizer->Add( m_Inner12Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner12Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_Inner12Panel->SetBackgroundColour( wxColour( 236, 253, 216 ) );
-	
-	wxBoxSizer* bInner12Sizer;
-	bInner12Sizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_Inner12CheckBox = new wxCheckBox( m_Inner12Panel, ID_INNER12CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
-	bInner12Sizer->Add( m_Inner12CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_Inner12Panel->SetSizer( bInner12Sizer );
-	m_Inner12Panel->Layout();
-	bInner12Sizer->Fit( m_Inner12Panel );
-	m_LayerListFlexGridSizer->Add( m_Inner12Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
-	wxString m_Inner12ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
-	int m_Inner12ChoiceNChoices = sizeof( m_Inner12ChoiceChoices ) / sizeof( wxString );
-	m_Inner12Choice = new wxChoice( m_LayersListPanel, ID_INNER12CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner12ChoiceNChoices, m_Inner12ChoiceChoices, 0 );
-	m_Inner12Choice->SetSelection( 0 );
-	m_Inner12Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
-	
-	m_LayerListFlexGridSizer->Add( m_Inner12Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner13Name = new wxTextCtrl( m_LayersListPanel, ID_INNER13NAME, _("Inner13"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Inner13Name->SetMaxLength( 20 ); 
-	m_LayerListFlexGridSizer->Add( m_Inner13Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner13Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_Inner13Panel->SetBackgroundColour( wxColour( 236, 253, 216 ) );
-	
-	wxBoxSizer* bInner13Sizer;
-	bInner13Sizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_Inner13CheckBox = new wxCheckBox( m_Inner13Panel, ID_INNER13CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
-	bInner13Sizer->Add( m_Inner13CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_Inner13Panel->SetSizer( bInner13Sizer );
-	m_Inner13Panel->Layout();
-	bInner13Sizer->Fit( m_Inner13Panel );
-	m_LayerListFlexGridSizer->Add( m_Inner13Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
-	wxString m_Inner13ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
-	int m_Inner13ChoiceNChoices = sizeof( m_Inner13ChoiceChoices ) / sizeof( wxString );
-	m_Inner13Choice = new wxChoice( m_LayersListPanel, ID_INNER13CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner13ChoiceNChoices, m_Inner13ChoiceChoices, 0 );
-	m_Inner13Choice->SetSelection( 0 );
-	m_Inner13Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
-	
-	m_LayerListFlexGridSizer->Add( m_Inner13Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-	
-	m_Inner14Name = new wxTextCtrl( m_LayersListPanel, ID_INNER14NAME, _("Inner14"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Inner14Name = new wxTextCtrl( m_LayersListPanel, ID_INNER3NAME, _("Inner14"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Inner14Name->SetMaxLength( 20 ); 
 	m_LayerListFlexGridSizer->Add( m_Inner14Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
-	m_Inner14Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_Inner14Panel->SetBackgroundColour( wxColour( 236, 253, 216 ) );
+	m_Inner14CheckBox = new wxCheckBox( m_LayersListPanel, ID_INNER3CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	wxBoxSizer* bInner14Sizer;
-	bInner14Sizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_Inner14CheckBox = new wxCheckBox( m_Inner14Panel, ID_INNER14CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
-	bInner14Sizer->Add( m_Inner14CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_Inner14Panel->SetSizer( bInner14Sizer );
-	m_Inner14Panel->Layout();
-	bInner14Sizer->Fit( m_Inner14Panel );
-	m_LayerListFlexGridSizer->Add( m_Inner14Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_Inner14CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	wxString m_Inner14ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_Inner14ChoiceNChoices = sizeof( m_Inner14ChoiceChoices ) / sizeof( wxString );
-	m_Inner14Choice = new wxChoice( m_LayersListPanel, ID_INNER14CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner14ChoiceNChoices, m_Inner14ChoiceChoices, 0 );
+	m_Inner14Choice = new wxChoice( m_LayersListPanel, ID_INNER3CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner14ChoiceNChoices, m_Inner14ChoiceChoices, 0 );
 	m_Inner14Choice->SetSelection( 0 );
 	m_Inner14Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_Inner14Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
-	m_Inner15Name = new wxTextCtrl( m_LayersListPanel, ID_INNER15NAME, _("Inner15"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Inner15Name->SetMaxLength( 20 ); 
-	m_LayerListFlexGridSizer->Add( m_Inner15Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	m_Inner13Name = new wxTextCtrl( m_LayersListPanel, ID_INNER4NAME, _("Inner13"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Inner13Name->SetMaxLength( 20 ); 
+	m_LayerListFlexGridSizer->Add( m_Inner13Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
-	m_Inner15Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_Inner15Panel->SetBackgroundColour( wxColour( 236, 253, 216 ) );
+	m_Inner13CheckBox = new wxCheckBox( m_LayersListPanel, ID_INNER4CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	wxBoxSizer* bInner15Sizer;
-	bInner15Sizer = new wxBoxSizer( wxVERTICAL );
+	m_LayerListFlexGridSizer->Add( m_Inner13CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_Inner15CheckBox = new wxCheckBox( m_Inner15Panel, ID_INNER15CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	wxString m_Inner13ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	int m_Inner13ChoiceNChoices = sizeof( m_Inner13ChoiceChoices ) / sizeof( wxString );
+	m_Inner13Choice = new wxChoice( m_LayersListPanel, ID_INNER4CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner13ChoiceNChoices, m_Inner13ChoiceChoices, 0 );
+	m_Inner13Choice->SetSelection( 0 );
+	m_Inner13Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
 	
-	bInner15Sizer->Add( m_Inner15CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_LayerListFlexGridSizer->Add( m_Inner13Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
-	m_Inner15Panel->SetSizer( bInner15Sizer );
-	m_Inner15Panel->Layout();
-	bInner15Sizer->Fit( m_Inner15Panel );
-	m_LayerListFlexGridSizer->Add( m_Inner15Panel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_Inner12Name = new wxTextCtrl( m_LayersListPanel, ID_INNER5NAME, _("Inner12"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Inner12Name->SetMaxLength( 20 ); 
+	m_LayerListFlexGridSizer->Add( m_Inner12Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
-	wxString m_Inner15ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
-	int m_Inner15ChoiceNChoices = sizeof( m_Inner15ChoiceChoices ) / sizeof( wxString );
-	m_Inner15Choice = new wxChoice( m_LayersListPanel, ID_INNER15CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner15ChoiceNChoices, m_Inner15ChoiceChoices, 0 );
-	m_Inner15Choice->SetSelection( 0 );
-	m_Inner15Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_Inner12CheckBox = new wxCheckBox( m_LayersListPanel, ID_INNER5CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	m_LayerListFlexGridSizer->Add( m_Inner15Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	m_LayerListFlexGridSizer->Add( m_Inner12CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	wxString m_Inner12ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	int m_Inner12ChoiceNChoices = sizeof( m_Inner12ChoiceChoices ) / sizeof( wxString );
+	m_Inner12Choice = new wxChoice( m_LayersListPanel, ID_INNER5CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner12ChoiceNChoices, m_Inner12ChoiceChoices, 0 );
+	m_Inner12Choice->SetSelection( 0 );
+	m_Inner12Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner12Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner11Name = new wxTextCtrl( m_LayersListPanel, ID_INNER6NAME, _("Inner11"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Inner11Name->SetMaxLength( 20 ); 
+	m_LayerListFlexGridSizer->Add( m_Inner11Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner11CheckBox = new wxCheckBox( m_LayersListPanel, ID_INNER6CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner11CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	wxString m_Inner11ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	int m_Inner11ChoiceNChoices = sizeof( m_Inner11ChoiceChoices ) / sizeof( wxString );
+	m_Inner11Choice = new wxChoice( m_LayersListPanel, ID_INNER6CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner11ChoiceNChoices, m_Inner11ChoiceChoices, 0 );
+	m_Inner11Choice->SetSelection( 0 );
+	m_Inner11Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner11Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner10Name = new wxTextCtrl( m_LayersListPanel, ID_INNER7NAME, _("Inner10"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Inner10Name->SetMaxLength( 20 ); 
+	m_LayerListFlexGridSizer->Add( m_Inner10Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner10CheckBox = new wxCheckBox( m_LayersListPanel, ID_INNER7CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner10CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	wxString m_Inner10ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	int m_Inner10ChoiceNChoices = sizeof( m_Inner10ChoiceChoices ) / sizeof( wxString );
+	m_Inner10Choice = new wxChoice( m_LayersListPanel, ID_INNER7CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner10ChoiceNChoices, m_Inner10ChoiceChoices, 0 );
+	m_Inner10Choice->SetSelection( 0 );
+	m_Inner10Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner10Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner9Name = new wxTextCtrl( m_LayersListPanel, ID_INNER8NAME, _("Inner9"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Inner9Name->SetMaxLength( 20 ); 
+	m_LayerListFlexGridSizer->Add( m_Inner9Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner9CheckBox = new wxCheckBox( m_LayersListPanel, ID_INNER8CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner9CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	wxString m_Inner9ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	int m_Inner9ChoiceNChoices = sizeof( m_Inner9ChoiceChoices ) / sizeof( wxString );
+	m_Inner9Choice = new wxChoice( m_LayersListPanel, ID_INNER8CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner9ChoiceNChoices, m_Inner9ChoiceChoices, 0 );
+	m_Inner9Choice->SetSelection( 0 );
+	m_Inner9Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner9Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner8Name = new wxTextCtrl( m_LayersListPanel, ID_INNER9NAME, _("Inner8"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Inner8Name->SetMaxLength( 20 ); 
+	m_LayerListFlexGridSizer->Add( m_Inner8Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner8CheckBox = new wxCheckBox( m_LayersListPanel, ID_INNER9CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner8CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	wxString m_Inner8ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	int m_Inner8ChoiceNChoices = sizeof( m_Inner8ChoiceChoices ) / sizeof( wxString );
+	m_Inner8Choice = new wxChoice( m_LayersListPanel, ID_INNER9CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner8ChoiceNChoices, m_Inner8ChoiceChoices, 0 );
+	m_Inner8Choice->SetSelection( 0 );
+	m_Inner8Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner8Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner7Name = new wxTextCtrl( m_LayersListPanel, ID_INNER10NAME, _("Inner7"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Inner7Name->SetMaxLength( 20 ); 
+	m_LayerListFlexGridSizer->Add( m_Inner7Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner7CheckBox = new wxCheckBox( m_LayersListPanel, ID_INNER10CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner7CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	wxString m_Inner7ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	int m_Inner7ChoiceNChoices = sizeof( m_Inner7ChoiceChoices ) / sizeof( wxString );
+	m_Inner7Choice = new wxChoice( m_LayersListPanel, ID_INNER10CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner7ChoiceNChoices, m_Inner7ChoiceChoices, 0 );
+	m_Inner7Choice->SetSelection( 0 );
+	m_Inner7Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner7Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner6Name = new wxTextCtrl( m_LayersListPanel, ID_INNER11NAME, _("Inner6"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Inner6Name->SetMaxLength( 20 ); 
+	m_LayerListFlexGridSizer->Add( m_Inner6Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner6CheckBox = new wxCheckBox( m_LayersListPanel, ID_INNER11CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner6CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	wxString m_Inner6ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	int m_Inner6ChoiceNChoices = sizeof( m_Inner6ChoiceChoices ) / sizeof( wxString );
+	m_Inner6Choice = new wxChoice( m_LayersListPanel, ID_INNER11CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner6ChoiceNChoices, m_Inner6ChoiceChoices, 0 );
+	m_Inner6Choice->SetSelection( 0 );
+	m_Inner6Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner6Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner5Name = new wxTextCtrl( m_LayersListPanel, ID_INNER12NAME, _("Inner5"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Inner5Name->SetMaxLength( 20 ); 
+	m_LayerListFlexGridSizer->Add( m_Inner5Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner5CheckBox = new wxCheckBox( m_LayersListPanel, ID_INNER12CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner5CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	wxString m_Inner5ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	int m_Inner5ChoiceNChoices = sizeof( m_Inner5ChoiceChoices ) / sizeof( wxString );
+	m_Inner5Choice = new wxChoice( m_LayersListPanel, ID_INNER12CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner5ChoiceNChoices, m_Inner5ChoiceChoices, 0 );
+	m_Inner5Choice->SetSelection( 0 );
+	m_Inner5Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner5Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner4Name = new wxTextCtrl( m_LayersListPanel, ID_INNER13NAME, _("Inner4"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Inner4Name->SetMaxLength( 20 ); 
+	m_LayerListFlexGridSizer->Add( m_Inner4Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner4CheckBox = new wxCheckBox( m_LayersListPanel, ID_INNER13CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner4CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	wxString m_Inner4ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	int m_Inner4ChoiceNChoices = sizeof( m_Inner4ChoiceChoices ) / sizeof( wxString );
+	m_Inner4Choice = new wxChoice( m_LayersListPanel, ID_INNER13CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner4ChoiceNChoices, m_Inner4ChoiceChoices, 0 );
+	m_Inner4Choice->SetSelection( 0 );
+	m_Inner4Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner4Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner3Name = new wxTextCtrl( m_LayersListPanel, ID_INNER14NAME, _("Inner3"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Inner3Name->SetMaxLength( 20 ); 
+	m_LayerListFlexGridSizer->Add( m_Inner3Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner3CheckBox = new wxCheckBox( m_LayersListPanel, ID_INNER14CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner3CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	wxString m_Inner3ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	int m_Inner3ChoiceNChoices = sizeof( m_Inner3ChoiceChoices ) / sizeof( wxString );
+	m_Inner3Choice = new wxChoice( m_LayersListPanel, ID_INNER14CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner3ChoiceNChoices, m_Inner3ChoiceChoices, 0 );
+	m_Inner3Choice->SetSelection( 0 );
+	m_Inner3Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner3Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner2Name = new wxTextCtrl( m_LayersListPanel, ID_INNER15NAME, _("Inner2"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Inner2Name->SetMaxLength( 20 ); 
+	m_LayerListFlexGridSizer->Add( m_Inner2Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	
+	m_Inner2CheckBox = new wxCheckBox( m_LayersListPanel, ID_INNER15CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner2CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	wxString m_Inner2ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	int m_Inner2ChoiceNChoices = sizeof( m_Inner2ChoiceChoices ) / sizeof( wxString );
+	m_Inner2Choice = new wxChoice( m_LayersListPanel, ID_INNER15CHOICE, wxDefaultPosition, wxDefaultSize, m_Inner2ChoiceNChoices, m_Inner2ChoiceChoices, 0 );
+	m_Inner2Choice->SetSelection( 0 );
+	m_Inner2Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	
+	m_LayerListFlexGridSizer->Add( m_Inner2Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_BackName = new wxTextCtrl( m_LayersListPanel, ID_BACKNAME, _("Back"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_BackName->SetMaxLength( 20 ); 
@@ -580,22 +415,11 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	
 	m_LayerListFlexGridSizer->Add( m_BackName, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
-	m_BackPanel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_BackPanel->SetBackgroundColour( wxColour( 236, 253, 216 ) );
-	
-	wxBoxSizer* bBackSizer;
-	bBackSizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_BackCheckBox = new wxCheckBox( m_BackPanel, ID_BACKCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_BackCheckBox = new wxCheckBox( m_LayersListPanel, ID_BACKCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	m_BackCheckBox->SetToolTip( _("If you want a back copper layer") );
 	
-	bBackSizer->Add( m_BackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_BackPanel->SetSizer( bBackSizer );
-	m_BackPanel->Layout();
-	bBackSizer->Fit( m_BackPanel );
-	m_LayerListFlexGridSizer->Add( m_BackPanel, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_LayerListFlexGridSizer->Add( m_BackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	wxString m_BackChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_BackChoiceNChoices = sizeof( m_BackChoiceChoices ) / sizeof( wxString );
@@ -853,20 +677,20 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_SilkSFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_MaskFrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_FrontCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner2CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner3CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner4CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner5CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner6CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner7CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner8CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner9CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner10CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner11CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner12CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner13CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner14CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
 	m_Inner15CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner14CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner13CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner12CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner11CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner10CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner9CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner8CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner7CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner6CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner5CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner4CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner3CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner2CheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
 	m_BackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
 	m_MaskBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_SilkSBackCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
@@ -891,20 +715,20 @@ DIALOG_LAYERS_SETUP_BASE::~DIALOG_LAYERS_SETUP_BASE()
 	m_SilkSFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_MaskFrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_FrontCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner2CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner3CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner4CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner5CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner6CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner7CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner8CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner9CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner10CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner11CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner12CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner13CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
-	m_Inner14CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
 	m_Inner15CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner14CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner13CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner12CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner11CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner10CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner9CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner8CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner7CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner6CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner5CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner4CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner3CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
+	m_Inner2CheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
 	m_BackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::DenyChangeCheckBox ), NULL, this );
 	m_MaskBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_SilkSBackCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );

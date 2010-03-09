@@ -33,9 +33,9 @@ void Abort_Edit_Pcb_Text( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
-    ( (WinEDA_PcbFrame*) Panel->GetParent() )->SetCurItem( NULL );
 
     TEXTE_PCB* TextePcb = (TEXTE_PCB*) Panel->GetScreen()->GetCurItem();
+    ( (WinEDA_PcbFrame*) Panel->GetParent() )->SetCurItem( NULL );
 
     if( TextePcb == NULL )  // Should not occur
         return;
@@ -50,8 +50,8 @@ void Abort_Edit_Pcb_Text( WinEDA_DrawPanel* Panel, wxDC* DC )
 
 
     SwapData(TextePcb, &s_TextCopy);
-    TextePcb->Draw( Panel, DC, GR_OR );
     TextePcb->m_Flags = 0;
+    TextePcb->Draw( Panel, DC, GR_OR );
 }
 
 

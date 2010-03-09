@@ -1113,12 +1113,18 @@ void LIB_COMPONENT::DeleteSelectedItems()
 
     // We *do not* remove the 2 mandatory fields: reference and value
     // so skip them (do not remove) if they are flagged selected.
+    // Skip also not visible items.
+    // But I think fileds must not be deleted by a block delete command or other global command
+    // because they are not really graphic items
     while( item != drawings.end() )
     {
         if( item->Type() == COMPONENT_FIELD_DRAW_TYPE )
         {
+#if 0   // Set to 1 to allows fields deletion on block delete or other global command
             LIB_FIELD& field = ( LIB_FIELD& ) *item;
-            if( (field.m_FieldId == REFERENCE) || (field.m_FieldId == VALUE) )
+            if( (field.m_FieldId == REFERENCE) || (field.m_FieldId == VALUE) ||
+                (field.m_Attributs & TEXT_NO_VISIBLE) )
+#endif
                 item->m_Selected = 0;
         }
 
