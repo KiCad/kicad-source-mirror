@@ -36,6 +36,17 @@
 
 #include "class_board_design_settings.h"
 
+// some define to choose how copper layers widgets are shown
+
+// if defined, displays only active copper layers
+// if not displays always 1=the full set (16 layers)
+//#define HIDE_INACTIVE_LAYERS 
+
+//if defined, uses the layer manager copper layers order (from FRONT to BACK)
+//  to display inner layers.
+// if not, use the default order (from BACK to FRONT)
+//#define USE_LAYER_MANAGER_COPPER_LAYERS_ORDER
+
 
 /**
  * Struct CTLs
@@ -43,11 +54,12 @@
  */
 struct CTLs
 {
-    CTLs( wxControl* aName, wxCheckBox* aCheckBox, wxControl* aChoiceOrDesc )
+    CTLs( wxControl* aName, wxCheckBox* aCheckBox, wxControl* aChoiceOrDesc, wxPanel * aPanel = NULL)
     {
         name     = aName;
         checkbox = aCheckBox;
         choice   = aChoiceOrDesc;
+        panel = aPanel;
     }
 
     wxControl*      name;
@@ -197,8 +209,8 @@ static const int presets[] =
 
 CTLs DIALOG_LAYERS_SETUP::getCTLs( int aLayerNumber )
 {
-#define RETCOP(x)    return CTLs( x##Name, x##CheckBox, x##Choice );
-#define RETAUX(x)    return CTLs( x##Name, x##CheckBox, x##StaticText );
+#define RETCOP(x)    return CTLs( x##Name, x##CheckBox, x##Choice, x##Panel );
+#define RETAUX(x)    return CTLs( x##Name, x##CheckBox, x##StaticText, x##Panel );
 
     switch( aLayerNumber )
     {
@@ -207,6 +219,22 @@ CTLs DIALOG_LAYERS_SETUP::getCTLs( int aLayerNumber )
     case SILKSCREEN_N_FRONT:    RETAUX( m_SilkSFront );
     case SOLDERMASK_N_FRONT:    RETAUX( m_MaskFront );
     case LAYER_N_FRONT:         RETCOP( m_Front );
+#ifdef USE_LAYER_MANAGER_COPPER_LAYERS_ORDER
+    case LAYER_N_15:            RETCOP( m_Inner2 );
+    case LAYER_N_14:            RETCOP( m_Inner3 );
+    case LAYER_N_13:            RETCOP( m_Inner4 );
+    case LAYER_N_12:            RETCOP( m_Inner5 );
+    case LAYER_N_11:            RETCOP( m_Inner6 );
+    case LAYER_N_10:            RETCOP( m_Inner7 );
+    case LAYER_N_9:             RETCOP( m_Inner8 );
+    case LAYER_N_8:             RETCOP( m_Inner9 );
+    case LAYER_N_7:             RETCOP( m_Inner10 );
+    case LAYER_N_6:             RETCOP( m_Inner11 );
+    case LAYER_N_5:             RETCOP( m_Inner12 );
+    case LAYER_N_4:             RETCOP( m_Inner13 );
+    case LAYER_N_3:             RETCOP( m_Inner14 );
+    case LAYER_N_2:             RETCOP( m_Inner15 );
+#else
     case LAYER_N_2:             RETCOP( m_Inner2 );
     case LAYER_N_3:             RETCOP( m_Inner3 );
     case LAYER_N_4:             RETCOP( m_Inner4 );
@@ -221,6 +249,7 @@ CTLs DIALOG_LAYERS_SETUP::getCTLs( int aLayerNumber )
     case LAYER_N_13:            RETCOP( m_Inner13 );
     case LAYER_N_14:            RETCOP( m_Inner14 );
     case LAYER_N_15:            RETCOP( m_Inner15 );
+#endif
     case LAYER_N_BACK:          RETCOP( m_Back );
     case SOLDERMASK_N_BACK:     RETAUX( m_MaskBack );
     case SILKSCREEN_N_BACK:     RETAUX( m_SilkSBack );
@@ -434,19 +463,27 @@ void DIALOG_LAYERS_SETUP::setCopperLayerCheckBoxes( int copperCount )
     int layer;
     for( layer=LAYER_N_2; layer < NB_COPPER_LAYERS-1;  ++layer, --copperCount )
     {
-        CTLs ctl = getCTLs(layer);
         bool state = copperCount > 0;
+#ifdef HIDE_INACTIVE_LAYERS
+    // This code hide non active copper layers
+        CTLs ctl = getCTLs(layer);
         ctl.name->Show( state );
         ctl.checkbox->Show( state );
         ctl.choice->Show( state );
+        if( ctl.panel )
+            ctl.panel->Show( state );
+#endif
 
         setLayerCheckBox( layer, state );
     }
 
+#ifdef HIDE_INACTIVE_LAYERS
     // Send an size event to force sizers to be updated,
     // because the number of copper layers can have changed.
     wxSizeEvent evt_size(m_LayersListPanel->GetSize() );
     m_LayersListPanel->GetEventHandler()->ProcessEvent( evt_size );
+#endif
+
 }
 
 

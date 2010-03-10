@@ -1236,32 +1236,28 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
-                                        <property name="proportion">0</property>
-                                        <object class="wxCheckBox" expanded="1">
-                                            <property name="bg"></property>
-                                            <property name="checked">0</property>
+                                        <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL</property>
+                                        <property name="proportion">1</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg">236,253,216</property>
                                             <property name="context_help"></property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">ID_FRONTCHECKBOX</property>
-                                            <property name="label"></property>
+                                            <property name="id">wxID_ANY</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_FrontCheckBox</property>
+                                            <property name="name">m_FrontPanel</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
-                                            <property name="style"></property>
                                             <property name="subclass"></property>
-                                            <property name="tooltip">If you want a front copper layer</property>
+                                            <property name="tooltip"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
-                                            <property name="window_style"></property>
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
                                             <event name="OnChar"></event>
-                                            <event name="OnCheckBox">DenyChangeCheckBox</event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnKeyDown"></event>
@@ -1284,6 +1280,64 @@
                                             <event name="OnSetFocus"></event>
                                             <event name="OnSize"></event>
                                             <event name="OnUpdateUI"></event>
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size"></property>
+                                                <property name="name">bSizer9</property>
+                                                <property name="orient">wxVERTICAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg"></property>
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help"></property>
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg"></property>
+                                                        <property name="font"></property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_FRONTCHECKBOX</property>
+                                                        <property name="label"></property>
+                                                        <property name="maximum_size"></property>
+                                                        <property name="minimum_size"></property>
+                                                        <property name="name">m_FrontCheckBox</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos"></property>
+                                                        <property name="size"></property>
+                                                        <property name="style"></property>
+                                                        <property name="subclass"></property>
+                                                        <property name="tooltip">If you want a front copper layer</property>
+                                                        <property name="window_extra_style"></property>
+                                                        <property name="window_name"></property>
+                                                        <property name="window_style"></property>
+                                                        <event name="OnChar"></event>
+                                                        <event name="OnCheckBox">DenyChangeCheckBox</event>
+                                                        <event name="OnEnterWindow"></event>
+                                                        <event name="OnEraseBackground"></event>
+                                                        <event name="OnKeyDown"></event>
+                                                        <event name="OnKeyUp"></event>
+                                                        <event name="OnKillFocus"></event>
+                                                        <event name="OnLeaveWindow"></event>
+                                                        <event name="OnLeftDClick"></event>
+                                                        <event name="OnLeftDown"></event>
+                                                        <event name="OnLeftUp"></event>
+                                                        <event name="OnMiddleDClick"></event>
+                                                        <event name="OnMiddleDown"></event>
+                                                        <event name="OnMiddleUp"></event>
+                                                        <event name="OnMotion"></event>
+                                                        <event name="OnMouseEvents"></event>
+                                                        <event name="OnMouseWheel"></event>
+                                                        <event name="OnPaint"></event>
+                                                        <event name="OnRightDClick"></event>
+                                                        <event name="OnRightDown"></event>
+                                                        <event name="OnRightUp"></event>
+                                                        <event name="OnSetFocus"></event>
+                                                        <event name="OnSize"></event>
+                                                        <event name="OnUpdateUI"></event>
+                                                    </object>
+                                                </object>
+                                            </object>
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="1">
@@ -1352,14 +1406,14 @@
                                             <property name="maximum_size"></property>
                                             <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner15Name</property>
+                                            <property name="name">m_Inner2Name</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
                                             <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
-                                            <property name="value">Inner15</property>
+                                            <property name="value">Inner2</property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
@@ -1394,32 +1448,28 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
-                                        <property name="proportion">0</property>
-                                        <object class="wxCheckBox" expanded="1">
-                                            <property name="bg"></property>
-                                            <property name="checked">0</property>
+                                        <property name="flag">wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</property>
+                                        <property name="proportion">1</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg">236,253,216</property>
                                             <property name="context_help"></property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">ID_INNER2CHECKBOX</property>
-                                            <property name="label"></property>
+                                            <property name="id">wxID_ANY</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner15CheckBox</property>
+                                            <property name="name">m_Inner2Panel</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
-                                            <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
-                                            <property name="window_style"></property>
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
                                             <event name="OnChar"></event>
-                                            <event name="OnCheckBox">DenyChangeCheckBox</event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnKeyDown"></event>
@@ -1442,6 +1492,64 @@
                                             <event name="OnSetFocus"></event>
                                             <event name="OnSize"></event>
                                             <event name="OnUpdateUI"></event>
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size"></property>
+                                                <property name="name">bInner2Sizer</property>
+                                                <property name="orient">wxVERTICAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg"></property>
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help"></property>
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg"></property>
+                                                        <property name="font"></property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_INNER2CHECKBOX</property>
+                                                        <property name="label"></property>
+                                                        <property name="maximum_size"></property>
+                                                        <property name="minimum_size"></property>
+                                                        <property name="name">m_Inner2CheckBox</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos"></property>
+                                                        <property name="size"></property>
+                                                        <property name="style"></property>
+                                                        <property name="subclass"></property>
+                                                        <property name="tooltip"></property>
+                                                        <property name="window_extra_style"></property>
+                                                        <property name="window_name"></property>
+                                                        <property name="window_style"></property>
+                                                        <event name="OnChar"></event>
+                                                        <event name="OnCheckBox">DenyChangeCheckBox</event>
+                                                        <event name="OnEnterWindow"></event>
+                                                        <event name="OnEraseBackground"></event>
+                                                        <event name="OnKeyDown"></event>
+                                                        <event name="OnKeyUp"></event>
+                                                        <event name="OnKillFocus"></event>
+                                                        <event name="OnLeaveWindow"></event>
+                                                        <event name="OnLeftDClick"></event>
+                                                        <event name="OnLeftDown"></event>
+                                                        <event name="OnLeftUp"></event>
+                                                        <event name="OnMiddleDClick"></event>
+                                                        <event name="OnMiddleDown"></event>
+                                                        <event name="OnMiddleUp"></event>
+                                                        <event name="OnMotion"></event>
+                                                        <event name="OnMouseEvents"></event>
+                                                        <event name="OnMouseWheel"></event>
+                                                        <event name="OnPaint"></event>
+                                                        <event name="OnRightDClick"></event>
+                                                        <event name="OnRightDown"></event>
+                                                        <event name="OnRightUp"></event>
+                                                        <event name="OnSetFocus"></event>
+                                                        <event name="OnSize"></event>
+                                                        <event name="OnUpdateUI"></event>
+                                                    </object>
+                                                </object>
+                                            </object>
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="1">
@@ -1459,7 +1567,7 @@
                                             <property name="id">ID_INNER2CHOICE</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner15Choice</property>
+                                            <property name="name">m_Inner2Choice</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="selection">0</property>
@@ -1510,14 +1618,14 @@
                                             <property name="maximum_size"></property>
                                             <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner14Name</property>
+                                            <property name="name">m_Inner3Name</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
                                             <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
-                                            <property name="value">Inner14</property>
+                                            <property name="value">Inner3</property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
@@ -1552,32 +1660,28 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
-                                        <property name="proportion">0</property>
-                                        <object class="wxCheckBox" expanded="1">
-                                            <property name="bg"></property>
-                                            <property name="checked">0</property>
+                                        <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL</property>
+                                        <property name="proportion">1</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg">236,253,216</property>
                                             <property name="context_help"></property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">ID_INNER3CHECKBOX</property>
-                                            <property name="label"></property>
+                                            <property name="id">wxID_ANY</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner14CheckBox</property>
+                                            <property name="name">m_Inner3Panel</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
-                                            <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
-                                            <property name="window_style"></property>
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
                                             <event name="OnChar"></event>
-                                            <event name="OnCheckBox">DenyChangeCheckBox</event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnKeyDown"></event>
@@ -1600,6 +1704,64 @@
                                             <event name="OnSetFocus"></event>
                                             <event name="OnSize"></event>
                                             <event name="OnUpdateUI"></event>
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size"></property>
+                                                <property name="name">bInner3Sizer</property>
+                                                <property name="orient">wxVERTICAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg"></property>
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help"></property>
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg"></property>
+                                                        <property name="font"></property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_INNER3CHECKBOX</property>
+                                                        <property name="label"></property>
+                                                        <property name="maximum_size"></property>
+                                                        <property name="minimum_size"></property>
+                                                        <property name="name">m_Inner3CheckBox</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos"></property>
+                                                        <property name="size"></property>
+                                                        <property name="style"></property>
+                                                        <property name="subclass"></property>
+                                                        <property name="tooltip"></property>
+                                                        <property name="window_extra_style"></property>
+                                                        <property name="window_name"></property>
+                                                        <property name="window_style"></property>
+                                                        <event name="OnChar"></event>
+                                                        <event name="OnCheckBox">DenyChangeCheckBox</event>
+                                                        <event name="OnEnterWindow"></event>
+                                                        <event name="OnEraseBackground"></event>
+                                                        <event name="OnKeyDown"></event>
+                                                        <event name="OnKeyUp"></event>
+                                                        <event name="OnKillFocus"></event>
+                                                        <event name="OnLeaveWindow"></event>
+                                                        <event name="OnLeftDClick"></event>
+                                                        <event name="OnLeftDown"></event>
+                                                        <event name="OnLeftUp"></event>
+                                                        <event name="OnMiddleDClick"></event>
+                                                        <event name="OnMiddleDown"></event>
+                                                        <event name="OnMiddleUp"></event>
+                                                        <event name="OnMotion"></event>
+                                                        <event name="OnMouseEvents"></event>
+                                                        <event name="OnMouseWheel"></event>
+                                                        <event name="OnPaint"></event>
+                                                        <event name="OnRightDClick"></event>
+                                                        <event name="OnRightDown"></event>
+                                                        <event name="OnRightUp"></event>
+                                                        <event name="OnSetFocus"></event>
+                                                        <event name="OnSize"></event>
+                                                        <event name="OnUpdateUI"></event>
+                                                    </object>
+                                                </object>
+                                            </object>
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="1">
@@ -1617,7 +1779,7 @@
                                             <property name="id">ID_INNER3CHOICE</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner14Choice</property>
+                                            <property name="name">m_Inner3Choice</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="selection">0</property>
@@ -1668,14 +1830,14 @@
                                             <property name="maximum_size"></property>
                                             <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner13Name</property>
+                                            <property name="name">m_Inner4Name</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
                                             <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
-                                            <property name="value">Inner13</property>
+                                            <property name="value">Inner4</property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
@@ -1710,32 +1872,28 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
-                                        <property name="proportion">0</property>
-                                        <object class="wxCheckBox" expanded="1">
-                                            <property name="bg"></property>
-                                            <property name="checked">0</property>
+                                        <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL</property>
+                                        <property name="proportion">1</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg">236,253,216</property>
                                             <property name="context_help"></property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">ID_INNER4CHECKBOX</property>
-                                            <property name="label"></property>
+                                            <property name="id">wxID_ANY</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner13CheckBox</property>
+                                            <property name="name">m_Inner4Panel</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
-                                            <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
-                                            <property name="window_style"></property>
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
                                             <event name="OnChar"></event>
-                                            <event name="OnCheckBox">DenyChangeCheckBox</event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnKeyDown"></event>
@@ -1758,6 +1916,64 @@
                                             <event name="OnSetFocus"></event>
                                             <event name="OnSize"></event>
                                             <event name="OnUpdateUI"></event>
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size"></property>
+                                                <property name="name">bInner4Sizer</property>
+                                                <property name="orient">wxVERTICAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg"></property>
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help"></property>
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg"></property>
+                                                        <property name="font"></property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_INNER4CHECKBOX</property>
+                                                        <property name="label"></property>
+                                                        <property name="maximum_size"></property>
+                                                        <property name="minimum_size"></property>
+                                                        <property name="name">m_Inner4CheckBox</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos"></property>
+                                                        <property name="size"></property>
+                                                        <property name="style"></property>
+                                                        <property name="subclass"></property>
+                                                        <property name="tooltip"></property>
+                                                        <property name="window_extra_style"></property>
+                                                        <property name="window_name"></property>
+                                                        <property name="window_style"></property>
+                                                        <event name="OnChar"></event>
+                                                        <event name="OnCheckBox">DenyChangeCheckBox</event>
+                                                        <event name="OnEnterWindow"></event>
+                                                        <event name="OnEraseBackground"></event>
+                                                        <event name="OnKeyDown"></event>
+                                                        <event name="OnKeyUp"></event>
+                                                        <event name="OnKillFocus"></event>
+                                                        <event name="OnLeaveWindow"></event>
+                                                        <event name="OnLeftDClick"></event>
+                                                        <event name="OnLeftDown"></event>
+                                                        <event name="OnLeftUp"></event>
+                                                        <event name="OnMiddleDClick"></event>
+                                                        <event name="OnMiddleDown"></event>
+                                                        <event name="OnMiddleUp"></event>
+                                                        <event name="OnMotion"></event>
+                                                        <event name="OnMouseEvents"></event>
+                                                        <event name="OnMouseWheel"></event>
+                                                        <event name="OnPaint"></event>
+                                                        <event name="OnRightDClick"></event>
+                                                        <event name="OnRightDown"></event>
+                                                        <event name="OnRightUp"></event>
+                                                        <event name="OnSetFocus"></event>
+                                                        <event name="OnSize"></event>
+                                                        <event name="OnUpdateUI"></event>
+                                                    </object>
+                                                </object>
+                                            </object>
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="1">
@@ -1775,7 +1991,7 @@
                                             <property name="id">ID_INNER4CHOICE</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner13Choice</property>
+                                            <property name="name">m_Inner4Choice</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="selection">0</property>
@@ -1826,14 +2042,14 @@
                                             <property name="maximum_size"></property>
                                             <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner12Name</property>
+                                            <property name="name">m_Inner5Name</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
                                             <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
-                                            <property name="value">Inner12</property>
+                                            <property name="value">Inner5</property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
@@ -1868,32 +2084,28 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
-                                        <property name="proportion">0</property>
-                                        <object class="wxCheckBox" expanded="1">
-                                            <property name="bg"></property>
-                                            <property name="checked">0</property>
+                                        <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL</property>
+                                        <property name="proportion">1</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg">236,253,216</property>
                                             <property name="context_help"></property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">ID_INNER5CHECKBOX</property>
-                                            <property name="label"></property>
+                                            <property name="id">wxID_ANY</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner12CheckBox</property>
+                                            <property name="name">m_Inner5Panel</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
-                                            <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
-                                            <property name="window_style"></property>
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
                                             <event name="OnChar"></event>
-                                            <event name="OnCheckBox">DenyChangeCheckBox</event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnKeyDown"></event>
@@ -1916,6 +2128,64 @@
                                             <event name="OnSetFocus"></event>
                                             <event name="OnSize"></event>
                                             <event name="OnUpdateUI"></event>
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size"></property>
+                                                <property name="name">bInner5Sizer</property>
+                                                <property name="orient">wxVERTICAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg"></property>
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help"></property>
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg"></property>
+                                                        <property name="font"></property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_INNER5CHECKBOX</property>
+                                                        <property name="label"></property>
+                                                        <property name="maximum_size"></property>
+                                                        <property name="minimum_size"></property>
+                                                        <property name="name">m_Inner5CheckBox</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos"></property>
+                                                        <property name="size"></property>
+                                                        <property name="style"></property>
+                                                        <property name="subclass"></property>
+                                                        <property name="tooltip"></property>
+                                                        <property name="window_extra_style"></property>
+                                                        <property name="window_name"></property>
+                                                        <property name="window_style"></property>
+                                                        <event name="OnChar"></event>
+                                                        <event name="OnCheckBox">DenyChangeCheckBox</event>
+                                                        <event name="OnEnterWindow"></event>
+                                                        <event name="OnEraseBackground"></event>
+                                                        <event name="OnKeyDown"></event>
+                                                        <event name="OnKeyUp"></event>
+                                                        <event name="OnKillFocus"></event>
+                                                        <event name="OnLeaveWindow"></event>
+                                                        <event name="OnLeftDClick"></event>
+                                                        <event name="OnLeftDown"></event>
+                                                        <event name="OnLeftUp"></event>
+                                                        <event name="OnMiddleDClick"></event>
+                                                        <event name="OnMiddleDown"></event>
+                                                        <event name="OnMiddleUp"></event>
+                                                        <event name="OnMotion"></event>
+                                                        <event name="OnMouseEvents"></event>
+                                                        <event name="OnMouseWheel"></event>
+                                                        <event name="OnPaint"></event>
+                                                        <event name="OnRightDClick"></event>
+                                                        <event name="OnRightDown"></event>
+                                                        <event name="OnRightUp"></event>
+                                                        <event name="OnSetFocus"></event>
+                                                        <event name="OnSize"></event>
+                                                        <event name="OnUpdateUI"></event>
+                                                    </object>
+                                                </object>
+                                            </object>
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="1">
@@ -1933,7 +2203,7 @@
                                             <property name="id">ID_INNER5CHOICE</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner12Choice</property>
+                                            <property name="name">m_Inner5Choice</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="selection">0</property>
@@ -1984,14 +2254,14 @@
                                             <property name="maximum_size"></property>
                                             <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner11Name</property>
+                                            <property name="name">m_Inner6Name</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
                                             <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
-                                            <property name="value">Inner11</property>
+                                            <property name="value">Inner6</property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
@@ -2026,32 +2296,28 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
-                                        <property name="proportion">0</property>
-                                        <object class="wxCheckBox" expanded="1">
-                                            <property name="bg"></property>
-                                            <property name="checked">0</property>
+                                        <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL</property>
+                                        <property name="proportion">1</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg">236,253,216</property>
                                             <property name="context_help"></property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">ID_INNER6CHECKBOX</property>
-                                            <property name="label"></property>
+                                            <property name="id">wxID_ANY</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner11CheckBox</property>
+                                            <property name="name">m_Inner6Panel</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
-                                            <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
-                                            <property name="window_style"></property>
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
                                             <event name="OnChar"></event>
-                                            <event name="OnCheckBox">DenyChangeCheckBox</event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnKeyDown"></event>
@@ -2074,6 +2340,64 @@
                                             <event name="OnSetFocus"></event>
                                             <event name="OnSize"></event>
                                             <event name="OnUpdateUI"></event>
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size"></property>
+                                                <property name="name">bInner6Sizer</property>
+                                                <property name="orient">wxVERTICAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg"></property>
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help"></property>
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg"></property>
+                                                        <property name="font"></property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_INNER6CHECKBOX</property>
+                                                        <property name="label"></property>
+                                                        <property name="maximum_size"></property>
+                                                        <property name="minimum_size"></property>
+                                                        <property name="name">m_Inner6CheckBox</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos"></property>
+                                                        <property name="size"></property>
+                                                        <property name="style"></property>
+                                                        <property name="subclass"></property>
+                                                        <property name="tooltip"></property>
+                                                        <property name="window_extra_style"></property>
+                                                        <property name="window_name"></property>
+                                                        <property name="window_style"></property>
+                                                        <event name="OnChar"></event>
+                                                        <event name="OnCheckBox">DenyChangeCheckBox</event>
+                                                        <event name="OnEnterWindow"></event>
+                                                        <event name="OnEraseBackground"></event>
+                                                        <event name="OnKeyDown"></event>
+                                                        <event name="OnKeyUp"></event>
+                                                        <event name="OnKillFocus"></event>
+                                                        <event name="OnLeaveWindow"></event>
+                                                        <event name="OnLeftDClick"></event>
+                                                        <event name="OnLeftDown"></event>
+                                                        <event name="OnLeftUp"></event>
+                                                        <event name="OnMiddleDClick"></event>
+                                                        <event name="OnMiddleDown"></event>
+                                                        <event name="OnMiddleUp"></event>
+                                                        <event name="OnMotion"></event>
+                                                        <event name="OnMouseEvents"></event>
+                                                        <event name="OnMouseWheel"></event>
+                                                        <event name="OnPaint"></event>
+                                                        <event name="OnRightDClick"></event>
+                                                        <event name="OnRightDown"></event>
+                                                        <event name="OnRightUp"></event>
+                                                        <event name="OnSetFocus"></event>
+                                                        <event name="OnSize"></event>
+                                                        <event name="OnUpdateUI"></event>
+                                                    </object>
+                                                </object>
+                                            </object>
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="1">
@@ -2091,7 +2415,7 @@
                                             <property name="id">ID_INNER6CHOICE</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner11Choice</property>
+                                            <property name="name">m_Inner6Choice</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="selection">0</property>
@@ -2142,14 +2466,14 @@
                                             <property name="maximum_size"></property>
                                             <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner10Name</property>
+                                            <property name="name">m_Inner7Name</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
                                             <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
-                                            <property name="value">Inner10</property>
+                                            <property name="value">Inner7</property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
@@ -2184,32 +2508,28 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
-                                        <property name="proportion">0</property>
-                                        <object class="wxCheckBox" expanded="1">
-                                            <property name="bg"></property>
-                                            <property name="checked">0</property>
+                                        <property name="flag">wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</property>
+                                        <property name="proportion">1</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg">236,253,216</property>
                                             <property name="context_help"></property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">ID_INNER7CHECKBOX</property>
-                                            <property name="label"></property>
+                                            <property name="id">wxID_ANY</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner10CheckBox</property>
+                                            <property name="name">m_Inner7Panel</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
-                                            <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
-                                            <property name="window_style"></property>
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
                                             <event name="OnChar"></event>
-                                            <event name="OnCheckBox">DenyChangeCheckBox</event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnKeyDown"></event>
@@ -2232,6 +2552,64 @@
                                             <event name="OnSetFocus"></event>
                                             <event name="OnSize"></event>
                                             <event name="OnUpdateUI"></event>
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size"></property>
+                                                <property name="name">bInner7Sizer</property>
+                                                <property name="orient">wxVERTICAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg"></property>
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help"></property>
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg"></property>
+                                                        <property name="font"></property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_INNER7CHECKBOX</property>
+                                                        <property name="label"></property>
+                                                        <property name="maximum_size"></property>
+                                                        <property name="minimum_size"></property>
+                                                        <property name="name">m_Inner7CheckBox</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos"></property>
+                                                        <property name="size"></property>
+                                                        <property name="style"></property>
+                                                        <property name="subclass"></property>
+                                                        <property name="tooltip"></property>
+                                                        <property name="window_extra_style"></property>
+                                                        <property name="window_name"></property>
+                                                        <property name="window_style"></property>
+                                                        <event name="OnChar"></event>
+                                                        <event name="OnCheckBox">DenyChangeCheckBox</event>
+                                                        <event name="OnEnterWindow"></event>
+                                                        <event name="OnEraseBackground"></event>
+                                                        <event name="OnKeyDown"></event>
+                                                        <event name="OnKeyUp"></event>
+                                                        <event name="OnKillFocus"></event>
+                                                        <event name="OnLeaveWindow"></event>
+                                                        <event name="OnLeftDClick"></event>
+                                                        <event name="OnLeftDown"></event>
+                                                        <event name="OnLeftUp"></event>
+                                                        <event name="OnMiddleDClick"></event>
+                                                        <event name="OnMiddleDown"></event>
+                                                        <event name="OnMiddleUp"></event>
+                                                        <event name="OnMotion"></event>
+                                                        <event name="OnMouseEvents"></event>
+                                                        <event name="OnMouseWheel"></event>
+                                                        <event name="OnPaint"></event>
+                                                        <event name="OnRightDClick"></event>
+                                                        <event name="OnRightDown"></event>
+                                                        <event name="OnRightUp"></event>
+                                                        <event name="OnSetFocus"></event>
+                                                        <event name="OnSize"></event>
+                                                        <event name="OnUpdateUI"></event>
+                                                    </object>
+                                                </object>
+                                            </object>
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="1">
@@ -2249,7 +2627,7 @@
                                             <property name="id">ID_INNER7CHOICE</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner10Choice</property>
+                                            <property name="name">m_Inner7Choice</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="selection">0</property>
@@ -2300,14 +2678,14 @@
                                             <property name="maximum_size"></property>
                                             <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner9Name</property>
+                                            <property name="name">m_Inner8Name</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
                                             <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
-                                            <property name="value">Inner9</property>
+                                            <property name="value">Inner8</property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
@@ -2342,32 +2720,28 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
-                                        <property name="proportion">0</property>
-                                        <object class="wxCheckBox" expanded="1">
-                                            <property name="bg"></property>
-                                            <property name="checked">0</property>
+                                        <property name="flag">wxEXPAND</property>
+                                        <property name="proportion">1</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg">236,253,216</property>
                                             <property name="context_help"></property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">ID_INNER8CHECKBOX</property>
-                                            <property name="label"></property>
+                                            <property name="id">wxID_ANY</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner9CheckBox</property>
+                                            <property name="name">m_Inner8Panel</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
-                                            <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
-                                            <property name="window_style"></property>
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
                                             <event name="OnChar"></event>
-                                            <event name="OnCheckBox">DenyChangeCheckBox</event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnKeyDown"></event>
@@ -2390,6 +2764,64 @@
                                             <event name="OnSetFocus"></event>
                                             <event name="OnSize"></event>
                                             <event name="OnUpdateUI"></event>
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size"></property>
+                                                <property name="name">bInner8Sizer</property>
+                                                <property name="orient">wxVERTICAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg"></property>
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help"></property>
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg"></property>
+                                                        <property name="font"></property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_INNER8CHECKBOX</property>
+                                                        <property name="label"></property>
+                                                        <property name="maximum_size"></property>
+                                                        <property name="minimum_size"></property>
+                                                        <property name="name">m_Inner8CheckBox</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos"></property>
+                                                        <property name="size"></property>
+                                                        <property name="style"></property>
+                                                        <property name="subclass"></property>
+                                                        <property name="tooltip"></property>
+                                                        <property name="window_extra_style"></property>
+                                                        <property name="window_name"></property>
+                                                        <property name="window_style"></property>
+                                                        <event name="OnChar"></event>
+                                                        <event name="OnCheckBox">DenyChangeCheckBox</event>
+                                                        <event name="OnEnterWindow"></event>
+                                                        <event name="OnEraseBackground"></event>
+                                                        <event name="OnKeyDown"></event>
+                                                        <event name="OnKeyUp"></event>
+                                                        <event name="OnKillFocus"></event>
+                                                        <event name="OnLeaveWindow"></event>
+                                                        <event name="OnLeftDClick"></event>
+                                                        <event name="OnLeftDown"></event>
+                                                        <event name="OnLeftUp"></event>
+                                                        <event name="OnMiddleDClick"></event>
+                                                        <event name="OnMiddleDown"></event>
+                                                        <event name="OnMiddleUp"></event>
+                                                        <event name="OnMotion"></event>
+                                                        <event name="OnMouseEvents"></event>
+                                                        <event name="OnMouseWheel"></event>
+                                                        <event name="OnPaint"></event>
+                                                        <event name="OnRightDClick"></event>
+                                                        <event name="OnRightDown"></event>
+                                                        <event name="OnRightUp"></event>
+                                                        <event name="OnSetFocus"></event>
+                                                        <event name="OnSize"></event>
+                                                        <event name="OnUpdateUI"></event>
+                                                    </object>
+                                                </object>
+                                            </object>
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="1">
@@ -2407,7 +2839,7 @@
                                             <property name="id">ID_INNER8CHOICE</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner9Choice</property>
+                                            <property name="name">m_Inner8Choice</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="selection">0</property>
@@ -2458,14 +2890,14 @@
                                             <property name="maximum_size"></property>
                                             <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner8Name</property>
+                                            <property name="name">m_Inner9Name</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
                                             <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
-                                            <property name="value">Inner8</property>
+                                            <property name="value">Inner9</property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
@@ -2500,32 +2932,28 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
-                                        <property name="proportion">0</property>
-                                        <object class="wxCheckBox" expanded="1">
-                                            <property name="bg"></property>
-                                            <property name="checked">0</property>
+                                        <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL</property>
+                                        <property name="proportion">1</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg">236,253,216</property>
                                             <property name="context_help"></property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">ID_INNER9CHECKBOX</property>
-                                            <property name="label"></property>
+                                            <property name="id">wxID_ANY</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner8CheckBox</property>
+                                            <property name="name">m_Inner9Panel</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
-                                            <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
-                                            <property name="window_style"></property>
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
                                             <event name="OnChar"></event>
-                                            <event name="OnCheckBox">DenyChangeCheckBox</event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnKeyDown"></event>
@@ -2548,6 +2976,64 @@
                                             <event name="OnSetFocus"></event>
                                             <event name="OnSize"></event>
                                             <event name="OnUpdateUI"></event>
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size"></property>
+                                                <property name="name">bInner9Sizer</property>
+                                                <property name="orient">wxVERTICAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg"></property>
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help"></property>
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg"></property>
+                                                        <property name="font"></property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_INNER9CHECKBOX</property>
+                                                        <property name="label"></property>
+                                                        <property name="maximum_size"></property>
+                                                        <property name="minimum_size"></property>
+                                                        <property name="name">m_Inner9CheckBox</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos"></property>
+                                                        <property name="size"></property>
+                                                        <property name="style"></property>
+                                                        <property name="subclass"></property>
+                                                        <property name="tooltip"></property>
+                                                        <property name="window_extra_style"></property>
+                                                        <property name="window_name"></property>
+                                                        <property name="window_style"></property>
+                                                        <event name="OnChar"></event>
+                                                        <event name="OnCheckBox">DenyChangeCheckBox</event>
+                                                        <event name="OnEnterWindow"></event>
+                                                        <event name="OnEraseBackground"></event>
+                                                        <event name="OnKeyDown"></event>
+                                                        <event name="OnKeyUp"></event>
+                                                        <event name="OnKillFocus"></event>
+                                                        <event name="OnLeaveWindow"></event>
+                                                        <event name="OnLeftDClick"></event>
+                                                        <event name="OnLeftDown"></event>
+                                                        <event name="OnLeftUp"></event>
+                                                        <event name="OnMiddleDClick"></event>
+                                                        <event name="OnMiddleDown"></event>
+                                                        <event name="OnMiddleUp"></event>
+                                                        <event name="OnMotion"></event>
+                                                        <event name="OnMouseEvents"></event>
+                                                        <event name="OnMouseWheel"></event>
+                                                        <event name="OnPaint"></event>
+                                                        <event name="OnRightDClick"></event>
+                                                        <event name="OnRightDown"></event>
+                                                        <event name="OnRightUp"></event>
+                                                        <event name="OnSetFocus"></event>
+                                                        <event name="OnSize"></event>
+                                                        <event name="OnUpdateUI"></event>
+                                                    </object>
+                                                </object>
+                                            </object>
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="1">
@@ -2565,7 +3051,7 @@
                                             <property name="id">ID_INNER9CHOICE</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner8Choice</property>
+                                            <property name="name">m_Inner9Choice</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="selection">0</property>
@@ -2616,14 +3102,14 @@
                                             <property name="maximum_size"></property>
                                             <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner7Name</property>
+                                            <property name="name">m_Inner10Name</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
                                             <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
-                                            <property name="value">Inner7</property>
+                                            <property name="value">Inner10</property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
@@ -2658,32 +3144,28 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
-                                        <property name="proportion">0</property>
-                                        <object class="wxCheckBox" expanded="1">
-                                            <property name="bg"></property>
-                                            <property name="checked">0</property>
+                                        <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL</property>
+                                        <property name="proportion">1</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg">236,253,216</property>
                                             <property name="context_help"></property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">ID_INNER10CHECKBOX</property>
-                                            <property name="label"></property>
+                                            <property name="id">wxID_ANY</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner7CheckBox</property>
+                                            <property name="name">m_Inner10Panel</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
-                                            <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
-                                            <property name="window_style"></property>
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
                                             <event name="OnChar"></event>
-                                            <event name="OnCheckBox">DenyChangeCheckBox</event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnKeyDown"></event>
@@ -2706,6 +3188,64 @@
                                             <event name="OnSetFocus"></event>
                                             <event name="OnSize"></event>
                                             <event name="OnUpdateUI"></event>
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size"></property>
+                                                <property name="name">bInner10Sizer</property>
+                                                <property name="orient">wxVERTICAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg"></property>
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help"></property>
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg"></property>
+                                                        <property name="font"></property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_INNER10CHECKBOX</property>
+                                                        <property name="label"></property>
+                                                        <property name="maximum_size"></property>
+                                                        <property name="minimum_size"></property>
+                                                        <property name="name">m_Inner10CheckBox</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos"></property>
+                                                        <property name="size"></property>
+                                                        <property name="style"></property>
+                                                        <property name="subclass"></property>
+                                                        <property name="tooltip"></property>
+                                                        <property name="window_extra_style"></property>
+                                                        <property name="window_name"></property>
+                                                        <property name="window_style"></property>
+                                                        <event name="OnChar"></event>
+                                                        <event name="OnCheckBox">DenyChangeCheckBox</event>
+                                                        <event name="OnEnterWindow"></event>
+                                                        <event name="OnEraseBackground"></event>
+                                                        <event name="OnKeyDown"></event>
+                                                        <event name="OnKeyUp"></event>
+                                                        <event name="OnKillFocus"></event>
+                                                        <event name="OnLeaveWindow"></event>
+                                                        <event name="OnLeftDClick"></event>
+                                                        <event name="OnLeftDown"></event>
+                                                        <event name="OnLeftUp"></event>
+                                                        <event name="OnMiddleDClick"></event>
+                                                        <event name="OnMiddleDown"></event>
+                                                        <event name="OnMiddleUp"></event>
+                                                        <event name="OnMotion"></event>
+                                                        <event name="OnMouseEvents"></event>
+                                                        <event name="OnMouseWheel"></event>
+                                                        <event name="OnPaint"></event>
+                                                        <event name="OnRightDClick"></event>
+                                                        <event name="OnRightDown"></event>
+                                                        <event name="OnRightUp"></event>
+                                                        <event name="OnSetFocus"></event>
+                                                        <event name="OnSize"></event>
+                                                        <event name="OnUpdateUI"></event>
+                                                    </object>
+                                                </object>
+                                            </object>
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="1">
@@ -2723,7 +3263,7 @@
                                             <property name="id">ID_INNER10CHOICE</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner7Choice</property>
+                                            <property name="name">m_Inner10Choice</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="selection">0</property>
@@ -2774,14 +3314,14 @@
                                             <property name="maximum_size"></property>
                                             <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner6Name</property>
+                                            <property name="name">m_Inner11Name</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
                                             <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
-                                            <property name="value">Inner6</property>
+                                            <property name="value">Inner11</property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
@@ -2816,32 +3356,28 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
-                                        <property name="proportion">0</property>
-                                        <object class="wxCheckBox" expanded="1">
-                                            <property name="bg"></property>
-                                            <property name="checked">0</property>
+                                        <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL</property>
+                                        <property name="proportion">1</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg">236,253,216</property>
                                             <property name="context_help"></property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">ID_INNER11CHECKBOX</property>
-                                            <property name="label"></property>
+                                            <property name="id">wxID_ANY</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner6CheckBox</property>
+                                            <property name="name">m_Inner11Panel</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
-                                            <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
-                                            <property name="window_style"></property>
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
                                             <event name="OnChar"></event>
-                                            <event name="OnCheckBox">DenyChangeCheckBox</event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnKeyDown"></event>
@@ -2864,6 +3400,64 @@
                                             <event name="OnSetFocus"></event>
                                             <event name="OnSize"></event>
                                             <event name="OnUpdateUI"></event>
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size"></property>
+                                                <property name="name">bInner11Sizer</property>
+                                                <property name="orient">wxVERTICAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg"></property>
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help"></property>
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg"></property>
+                                                        <property name="font"></property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_INNER11CHECKBOX</property>
+                                                        <property name="label"></property>
+                                                        <property name="maximum_size"></property>
+                                                        <property name="minimum_size"></property>
+                                                        <property name="name">m_Inner11CheckBox</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos"></property>
+                                                        <property name="size"></property>
+                                                        <property name="style"></property>
+                                                        <property name="subclass"></property>
+                                                        <property name="tooltip"></property>
+                                                        <property name="window_extra_style"></property>
+                                                        <property name="window_name"></property>
+                                                        <property name="window_style"></property>
+                                                        <event name="OnChar"></event>
+                                                        <event name="OnCheckBox">DenyChangeCheckBox</event>
+                                                        <event name="OnEnterWindow"></event>
+                                                        <event name="OnEraseBackground"></event>
+                                                        <event name="OnKeyDown"></event>
+                                                        <event name="OnKeyUp"></event>
+                                                        <event name="OnKillFocus"></event>
+                                                        <event name="OnLeaveWindow"></event>
+                                                        <event name="OnLeftDClick"></event>
+                                                        <event name="OnLeftDown"></event>
+                                                        <event name="OnLeftUp"></event>
+                                                        <event name="OnMiddleDClick"></event>
+                                                        <event name="OnMiddleDown"></event>
+                                                        <event name="OnMiddleUp"></event>
+                                                        <event name="OnMotion"></event>
+                                                        <event name="OnMouseEvents"></event>
+                                                        <event name="OnMouseWheel"></event>
+                                                        <event name="OnPaint"></event>
+                                                        <event name="OnRightDClick"></event>
+                                                        <event name="OnRightDown"></event>
+                                                        <event name="OnRightUp"></event>
+                                                        <event name="OnSetFocus"></event>
+                                                        <event name="OnSize"></event>
+                                                        <event name="OnUpdateUI"></event>
+                                                    </object>
+                                                </object>
+                                            </object>
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="1">
@@ -2881,7 +3475,7 @@
                                             <property name="id">ID_INNER11CHOICE</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner6Choice</property>
+                                            <property name="name">m_Inner11Choice</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="selection">0</property>
@@ -2932,14 +3526,14 @@
                                             <property name="maximum_size"></property>
                                             <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner5Name</property>
+                                            <property name="name">m_Inner12Name</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
                                             <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
-                                            <property name="value">Inner5</property>
+                                            <property name="value">Inner12</property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
@@ -2974,32 +3568,28 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
-                                        <property name="proportion">0</property>
-                                        <object class="wxCheckBox" expanded="1">
-                                            <property name="bg"></property>
-                                            <property name="checked">0</property>
+                                        <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL</property>
+                                        <property name="proportion">1</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg">236,253,216</property>
                                             <property name="context_help"></property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">ID_INNER12CHECKBOX</property>
-                                            <property name="label"></property>
+                                            <property name="id">wxID_ANY</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner5CheckBox</property>
+                                            <property name="name">m_Inner12Panel</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
-                                            <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
-                                            <property name="window_style"></property>
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
                                             <event name="OnChar"></event>
-                                            <event name="OnCheckBox">DenyChangeCheckBox</event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnKeyDown"></event>
@@ -3022,6 +3612,64 @@
                                             <event name="OnSetFocus"></event>
                                             <event name="OnSize"></event>
                                             <event name="OnUpdateUI"></event>
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size"></property>
+                                                <property name="name">bInner12Sizer</property>
+                                                <property name="orient">wxVERTICAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg"></property>
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help"></property>
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg"></property>
+                                                        <property name="font"></property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_INNER12CHECKBOX</property>
+                                                        <property name="label"></property>
+                                                        <property name="maximum_size"></property>
+                                                        <property name="minimum_size"></property>
+                                                        <property name="name">m_Inner12CheckBox</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos"></property>
+                                                        <property name="size"></property>
+                                                        <property name="style"></property>
+                                                        <property name="subclass"></property>
+                                                        <property name="tooltip"></property>
+                                                        <property name="window_extra_style"></property>
+                                                        <property name="window_name"></property>
+                                                        <property name="window_style"></property>
+                                                        <event name="OnChar"></event>
+                                                        <event name="OnCheckBox">DenyChangeCheckBox</event>
+                                                        <event name="OnEnterWindow"></event>
+                                                        <event name="OnEraseBackground"></event>
+                                                        <event name="OnKeyDown"></event>
+                                                        <event name="OnKeyUp"></event>
+                                                        <event name="OnKillFocus"></event>
+                                                        <event name="OnLeaveWindow"></event>
+                                                        <event name="OnLeftDClick"></event>
+                                                        <event name="OnLeftDown"></event>
+                                                        <event name="OnLeftUp"></event>
+                                                        <event name="OnMiddleDClick"></event>
+                                                        <event name="OnMiddleDown"></event>
+                                                        <event name="OnMiddleUp"></event>
+                                                        <event name="OnMotion"></event>
+                                                        <event name="OnMouseEvents"></event>
+                                                        <event name="OnMouseWheel"></event>
+                                                        <event name="OnPaint"></event>
+                                                        <event name="OnRightDClick"></event>
+                                                        <event name="OnRightDown"></event>
+                                                        <event name="OnRightUp"></event>
+                                                        <event name="OnSetFocus"></event>
+                                                        <event name="OnSize"></event>
+                                                        <event name="OnUpdateUI"></event>
+                                                    </object>
+                                                </object>
+                                            </object>
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="1">
@@ -3039,7 +3687,7 @@
                                             <property name="id">ID_INNER12CHOICE</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner5Choice</property>
+                                            <property name="name">m_Inner12Choice</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="selection">0</property>
@@ -3090,14 +3738,14 @@
                                             <property name="maximum_size"></property>
                                             <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner4Name</property>
+                                            <property name="name">m_Inner13Name</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
                                             <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
-                                            <property name="value">Inner4</property>
+                                            <property name="value">Inner13</property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
@@ -3132,32 +3780,28 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
-                                        <property name="proportion">0</property>
-                                        <object class="wxCheckBox" expanded="1">
-                                            <property name="bg"></property>
-                                            <property name="checked">0</property>
+                                        <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL</property>
+                                        <property name="proportion">1</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg">236,253,216</property>
                                             <property name="context_help"></property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">ID_INNER13CHECKBOX</property>
-                                            <property name="label"></property>
+                                            <property name="id">wxID_ANY</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner4CheckBox</property>
+                                            <property name="name">m_Inner13Panel</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
-                                            <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
-                                            <property name="window_style"></property>
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
                                             <event name="OnChar"></event>
-                                            <event name="OnCheckBox">DenyChangeCheckBox</event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnKeyDown"></event>
@@ -3180,6 +3824,64 @@
                                             <event name="OnSetFocus"></event>
                                             <event name="OnSize"></event>
                                             <event name="OnUpdateUI"></event>
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size"></property>
+                                                <property name="name">bInner13Sizer</property>
+                                                <property name="orient">wxVERTICAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg"></property>
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help"></property>
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg"></property>
+                                                        <property name="font"></property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_INNER13CHECKBOX</property>
+                                                        <property name="label"></property>
+                                                        <property name="maximum_size"></property>
+                                                        <property name="minimum_size"></property>
+                                                        <property name="name">m_Inner13CheckBox</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos"></property>
+                                                        <property name="size"></property>
+                                                        <property name="style"></property>
+                                                        <property name="subclass"></property>
+                                                        <property name="tooltip"></property>
+                                                        <property name="window_extra_style"></property>
+                                                        <property name="window_name"></property>
+                                                        <property name="window_style"></property>
+                                                        <event name="OnChar"></event>
+                                                        <event name="OnCheckBox">DenyChangeCheckBox</event>
+                                                        <event name="OnEnterWindow"></event>
+                                                        <event name="OnEraseBackground"></event>
+                                                        <event name="OnKeyDown"></event>
+                                                        <event name="OnKeyUp"></event>
+                                                        <event name="OnKillFocus"></event>
+                                                        <event name="OnLeaveWindow"></event>
+                                                        <event name="OnLeftDClick"></event>
+                                                        <event name="OnLeftDown"></event>
+                                                        <event name="OnLeftUp"></event>
+                                                        <event name="OnMiddleDClick"></event>
+                                                        <event name="OnMiddleDown"></event>
+                                                        <event name="OnMiddleUp"></event>
+                                                        <event name="OnMotion"></event>
+                                                        <event name="OnMouseEvents"></event>
+                                                        <event name="OnMouseWheel"></event>
+                                                        <event name="OnPaint"></event>
+                                                        <event name="OnRightDClick"></event>
+                                                        <event name="OnRightDown"></event>
+                                                        <event name="OnRightUp"></event>
+                                                        <event name="OnSetFocus"></event>
+                                                        <event name="OnSize"></event>
+                                                        <event name="OnUpdateUI"></event>
+                                                    </object>
+                                                </object>
+                                            </object>
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="1">
@@ -3197,7 +3899,7 @@
                                             <property name="id">ID_INNER13CHOICE</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner4Choice</property>
+                                            <property name="name">m_Inner13Choice</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="selection">0</property>
@@ -3248,14 +3950,14 @@
                                             <property name="maximum_size"></property>
                                             <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner3Name</property>
+                                            <property name="name">m_Inner14Name</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
                                             <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
-                                            <property name="value">Inner3</property>
+                                            <property name="value">Inner14</property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
@@ -3290,32 +3992,28 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
-                                        <property name="proportion">0</property>
-                                        <object class="wxCheckBox" expanded="1">
-                                            <property name="bg"></property>
-                                            <property name="checked">0</property>
+                                        <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL</property>
+                                        <property name="proportion">1</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg">236,253,216</property>
                                             <property name="context_help"></property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">ID_INNER14CHECKBOX</property>
-                                            <property name="label"></property>
+                                            <property name="id">wxID_ANY</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner3CheckBox</property>
+                                            <property name="name">m_Inner14Panel</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
-                                            <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
-                                            <property name="window_style"></property>
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
                                             <event name="OnChar"></event>
-                                            <event name="OnCheckBox">DenyChangeCheckBox</event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnKeyDown"></event>
@@ -3338,6 +4036,64 @@
                                             <event name="OnSetFocus"></event>
                                             <event name="OnSize"></event>
                                             <event name="OnUpdateUI"></event>
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size"></property>
+                                                <property name="name">bInner14Sizer</property>
+                                                <property name="orient">wxVERTICAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg"></property>
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help"></property>
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg"></property>
+                                                        <property name="font"></property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_INNER14CHECKBOX</property>
+                                                        <property name="label"></property>
+                                                        <property name="maximum_size"></property>
+                                                        <property name="minimum_size"></property>
+                                                        <property name="name">m_Inner14CheckBox</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos"></property>
+                                                        <property name="size"></property>
+                                                        <property name="style"></property>
+                                                        <property name="subclass"></property>
+                                                        <property name="tooltip"></property>
+                                                        <property name="window_extra_style"></property>
+                                                        <property name="window_name"></property>
+                                                        <property name="window_style"></property>
+                                                        <event name="OnChar"></event>
+                                                        <event name="OnCheckBox">DenyChangeCheckBox</event>
+                                                        <event name="OnEnterWindow"></event>
+                                                        <event name="OnEraseBackground"></event>
+                                                        <event name="OnKeyDown"></event>
+                                                        <event name="OnKeyUp"></event>
+                                                        <event name="OnKillFocus"></event>
+                                                        <event name="OnLeaveWindow"></event>
+                                                        <event name="OnLeftDClick"></event>
+                                                        <event name="OnLeftDown"></event>
+                                                        <event name="OnLeftUp"></event>
+                                                        <event name="OnMiddleDClick"></event>
+                                                        <event name="OnMiddleDown"></event>
+                                                        <event name="OnMiddleUp"></event>
+                                                        <event name="OnMotion"></event>
+                                                        <event name="OnMouseEvents"></event>
+                                                        <event name="OnMouseWheel"></event>
+                                                        <event name="OnPaint"></event>
+                                                        <event name="OnRightDClick"></event>
+                                                        <event name="OnRightDown"></event>
+                                                        <event name="OnRightUp"></event>
+                                                        <event name="OnSetFocus"></event>
+                                                        <event name="OnSize"></event>
+                                                        <event name="OnUpdateUI"></event>
+                                                    </object>
+                                                </object>
+                                            </object>
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="1">
@@ -3355,7 +4111,7 @@
                                             <property name="id">ID_INNER14CHOICE</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner3Choice</property>
+                                            <property name="name">m_Inner14Choice</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="selection">0</property>
@@ -3406,14 +4162,14 @@
                                             <property name="maximum_size"></property>
                                             <property name="maxlength">20</property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner2Name</property>
+                                            <property name="name">m_Inner15Name</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
                                             <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
-                                            <property name="value">Inner2</property>
+                                            <property name="value">Inner15</property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
@@ -3448,32 +4204,28 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
-                                        <property name="proportion">0</property>
-                                        <object class="wxCheckBox" expanded="1">
-                                            <property name="bg"></property>
-                                            <property name="checked">0</property>
+                                        <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL</property>
+                                        <property name="proportion">1</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg">236,253,216</property>
                                             <property name="context_help"></property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">ID_INNER15CHECKBOX</property>
-                                            <property name="label"></property>
+                                            <property name="id">wxID_ANY</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner2CheckBox</property>
+                                            <property name="name">m_Inner15Panel</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
-                                            <property name="style"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
-                                            <property name="window_style"></property>
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
                                             <event name="OnChar"></event>
-                                            <event name="OnCheckBox">DenyChangeCheckBox</event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnKeyDown"></event>
@@ -3496,6 +4248,64 @@
                                             <event name="OnSetFocus"></event>
                                             <event name="OnSize"></event>
                                             <event name="OnUpdateUI"></event>
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size"></property>
+                                                <property name="name">bInner15Sizer</property>
+                                                <property name="orient">wxVERTICAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg"></property>
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help"></property>
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg"></property>
+                                                        <property name="font"></property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_INNER15CHECKBOX</property>
+                                                        <property name="label"></property>
+                                                        <property name="maximum_size"></property>
+                                                        <property name="minimum_size"></property>
+                                                        <property name="name">m_Inner15CheckBox</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos"></property>
+                                                        <property name="size"></property>
+                                                        <property name="style"></property>
+                                                        <property name="subclass"></property>
+                                                        <property name="tooltip"></property>
+                                                        <property name="window_extra_style"></property>
+                                                        <property name="window_name"></property>
+                                                        <property name="window_style"></property>
+                                                        <event name="OnChar"></event>
+                                                        <event name="OnCheckBox">DenyChangeCheckBox</event>
+                                                        <event name="OnEnterWindow"></event>
+                                                        <event name="OnEraseBackground"></event>
+                                                        <event name="OnKeyDown"></event>
+                                                        <event name="OnKeyUp"></event>
+                                                        <event name="OnKillFocus"></event>
+                                                        <event name="OnLeaveWindow"></event>
+                                                        <event name="OnLeftDClick"></event>
+                                                        <event name="OnLeftDown"></event>
+                                                        <event name="OnLeftUp"></event>
+                                                        <event name="OnMiddleDClick"></event>
+                                                        <event name="OnMiddleDown"></event>
+                                                        <event name="OnMiddleUp"></event>
+                                                        <event name="OnMotion"></event>
+                                                        <event name="OnMouseEvents"></event>
+                                                        <event name="OnMouseWheel"></event>
+                                                        <event name="OnPaint"></event>
+                                                        <event name="OnRightDClick"></event>
+                                                        <event name="OnRightDown"></event>
+                                                        <event name="OnRightUp"></event>
+                                                        <event name="OnSetFocus"></event>
+                                                        <event name="OnSize"></event>
+                                                        <event name="OnUpdateUI"></event>
+                                                    </object>
+                                                </object>
+                                            </object>
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="1">
@@ -3513,7 +4323,7 @@
                                             <property name="id">ID_INNER15CHOICE</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_Inner2Choice</property>
+                                            <property name="name">m_Inner15Choice</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="selection">0</property>
@@ -3606,32 +4416,28 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
-                                        <property name="proportion">0</property>
-                                        <object class="wxCheckBox" expanded="1">
-                                            <property name="bg"></property>
-                                            <property name="checked">0</property>
+                                        <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL</property>
+                                        <property name="proportion">1</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg">236,253,216</property>
                                             <property name="context_help"></property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
-                                            <property name="id">ID_BACKCHECKBOX</property>
-                                            <property name="label"></property>
+                                            <property name="id">wxID_ANY</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_BackCheckBox</property>
+                                            <property name="name">m_BackPanel</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
-                                            <property name="style"></property>
                                             <property name="subclass"></property>
-                                            <property name="tooltip">If you want a back copper layer</property>
+                                            <property name="tooltip"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
-                                            <property name="window_style"></property>
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
                                             <event name="OnChar"></event>
-                                            <event name="OnCheckBox">DenyChangeCheckBox</event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnKeyDown"></event>
@@ -3654,6 +4460,64 @@
                                             <event name="OnSetFocus"></event>
                                             <event name="OnSize"></event>
                                             <event name="OnUpdateUI"></event>
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size"></property>
+                                                <property name="name">bBackSizer</property>
+                                                <property name="orient">wxVERTICAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg"></property>
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help"></property>
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg"></property>
+                                                        <property name="font"></property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_BACKCHECKBOX</property>
+                                                        <property name="label"></property>
+                                                        <property name="maximum_size"></property>
+                                                        <property name="minimum_size"></property>
+                                                        <property name="name">m_BackCheckBox</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos"></property>
+                                                        <property name="size"></property>
+                                                        <property name="style"></property>
+                                                        <property name="subclass"></property>
+                                                        <property name="tooltip">If you want a back copper layer</property>
+                                                        <property name="window_extra_style"></property>
+                                                        <property name="window_name"></property>
+                                                        <property name="window_style"></property>
+                                                        <event name="OnChar"></event>
+                                                        <event name="OnCheckBox">DenyChangeCheckBox</event>
+                                                        <event name="OnEnterWindow"></event>
+                                                        <event name="OnEraseBackground"></event>
+                                                        <event name="OnKeyDown"></event>
+                                                        <event name="OnKeyUp"></event>
+                                                        <event name="OnKillFocus"></event>
+                                                        <event name="OnLeaveWindow"></event>
+                                                        <event name="OnLeftDClick"></event>
+                                                        <event name="OnLeftDown"></event>
+                                                        <event name="OnLeftUp"></event>
+                                                        <event name="OnMiddleDClick"></event>
+                                                        <event name="OnMiddleDown"></event>
+                                                        <event name="OnMiddleUp"></event>
+                                                        <event name="OnMotion"></event>
+                                                        <event name="OnMouseEvents"></event>
+                                                        <event name="OnMouseWheel"></event>
+                                                        <event name="OnPaint"></event>
+                                                        <event name="OnRightDClick"></event>
+                                                        <event name="OnRightDown"></event>
+                                                        <event name="OnRightUp"></event>
+                                                        <event name="OnSetFocus"></event>
+                                                        <event name="OnSize"></event>
+                                                        <event name="OnUpdateUI"></event>
+                                                    </object>
+                                                </object>
+                                            </object>
                                         </object>
                                     </object>
                                     <object class="sizeritem" expanded="1">
