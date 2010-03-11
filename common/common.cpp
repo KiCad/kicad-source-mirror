@@ -22,7 +22,11 @@
  */
 
 /* Standard page sizes in 1/1000 inch */
+#if defined(KICAD_GOST)
+Ki_PageDescr  g_Sheet_A4( wxSize( 8283, 11700 ), wxPoint( 0, 0 ), wxT( "A4" ) );
+#else
 Ki_PageDescr  g_Sheet_A4( wxSize( 11700, 8267 ), wxPoint( 0, 0 ), wxT( "A4" ) );
+#endif
 Ki_PageDescr  g_Sheet_A3( wxSize( 16535, 11700 ), wxPoint( 0, 0 ), wxT( "A3" ) );
 Ki_PageDescr  g_Sheet_A2( wxSize( 23400, 16535 ), wxPoint( 0, 0 ), wxT( "A2" ) );
 Ki_PageDescr  g_Sheet_A1( wxSize( 33070, 23400 ), wxPoint( 0, 0 ), wxT( "A1" ) );
