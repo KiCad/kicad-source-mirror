@@ -457,8 +457,8 @@ MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
         {
             if( TstOnly != TESTONLY )
             {
-                NameLibCmp = TextNameLibMod;
-                if( *UseFichCmp )
+                NameLibCmp = TextNameLibMod;    // Use footprint name from netlist
+                if( *UseFichCmp )               // Try to get footprint name from .cmp file
                 {
                     if( aSelect_By_Timestamp )
                     {
@@ -515,7 +515,8 @@ is [%s] and netlist said [%s]\n" ),
 
     if( Module == NULL )    /* a new module must be loaded from libs */
     {
-        if( *UseFichCmp )
+        NameLibCmp = TextNameLibMod;    // Use footprint name from netlist
+        if( *UseFichCmp )               // Try to get footprint name from .cmp file
         {
             if( aSelect_By_Timestamp == 1 )
             {
