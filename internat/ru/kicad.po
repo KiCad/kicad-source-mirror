@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-01 23:07+0300\n"
-"PO-Revision-Date: 2010-03-11 11:00+0300\n"
+"PO-Revision-Date: 2010-03-11 15:43+0300\n"
 "Last-Translator: faa <faa@ntcsm.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "MIME-Version: 1.0\n"
@@ -1068,7 +1068,7 @@ msgstr ""
 
 #: eeschema/lib_export.cpp:145
 msgid " - Export OK"
-msgstr " - Export OK"
+msgstr " - Экспорт OK"
 
 #: eeschema/lib_export.cpp:148
 msgid "Error creating "
@@ -1588,7 +1588,7 @@ msgstr "Значение компонента"
 #: eeschema/dialog_build_BOM_base.cpp:79
 #: pcbnew/class_board_item.cpp:58
 msgid "Footprint"
-msgstr "Псадочное место"
+msgstr "Посадочное место"
 
 #: eeschema/edit_component_in_schematic.cpp:391
 msgid "Component footprint"
@@ -1608,11 +1608,11 @@ msgstr "Переместить вход в шину"
 
 #: eeschema/onrightclick.cpp:141
 msgid "Set Bus Entry /"
-msgstr "Установить вход в шину /"
+msgstr "Повернуть вход в шину /"
 
 #: eeschema/onrightclick.cpp:144
 msgid "Set Bus Entry \\"
-msgstr "Установить вход в шину \\"
+msgstr "Повернуть вход в шину \\"
 
 #: eeschema/onrightclick.cpp:146
 msgid "Delete Bus Entry"
@@ -2107,7 +2107,7 @@ msgstr "Импорт существующей графики"
 
 #: eeschema/tool_lib.cpp:77
 msgid "Export current drawing"
-msgstr "Импорт текущей графики"
+msgstr "Экспорт текущей графики"
 
 #: eeschema/tool_lib.cpp:101
 msgid "Save current library to disk"
@@ -3056,7 +3056,7 @@ msgstr "Eeschema основные параметры и предпочтения
 
 #: eeschema/menubar.cpp:413
 msgid "&Save preferences"
-msgstr "Сохранить настройки (&S)"
+msgstr "Сохранить настройки"
 
 #: eeschema/menubar.cpp:414
 #: gerbview/tool_gerber.cpp:96
@@ -3066,7 +3066,7 @@ msgstr "Сохранить настройки приложения"
 
 #: eeschema/menubar.cpp:419
 msgid "&Read preferences"
-msgstr "Загрузить настройки (&R)"
+msgstr "Загрузить настройки"
 
 #: eeschema/menubar.cpp:420
 #: pcbnew/menubar_pcbframe.cpp:454
@@ -5750,7 +5750,7 @@ msgstr "О менеджере проектов kicad"
 
 #: kicad/menubar.cpp:248
 msgid "&Browse"
-msgstr "Просмотр (&B)"
+msgstr "Просмотр"
 
 #: kicad/menubar.cpp:277
 msgid "Load existing project"
@@ -7149,7 +7149,7 @@ msgstr "Вращение блока"
 
 #: common/block_commande.cpp:79
 msgid "Block Flip"
-msgstr "Блок на другой слой"
+msgstr "Блок на другую сторону"
 
 #: common/block_commande.cpp:84
 msgid "Block Mirror"
@@ -9930,54 +9930,54 @@ msgstr "ОК для удаления посадочных мест, не вхо�
 msgid "Component \"%s\": Mismatch! module is [%s] and netlist said [%s]\n"
 msgstr "Компонент %s: Не совпадает! Модуль [%s], а в списке цепей [%s]\n"
 
-#: pcbnew/netlist.cpp:544
+#: pcbnew/netlist.cpp:545
 #, c-format
 msgid "Component [%s] not found"
 msgstr "Компонент [%s] не найден"
 
-#: pcbnew/netlist.cpp:610
+#: pcbnew/netlist.cpp:611
 #, c-format
 msgid "Module [%s]: Pad [%s] not found"
 msgstr "Модуль [%s]: Конт.пл. [%s] не найдена"
 
-#: pcbnew/netlist.cpp:633
+#: pcbnew/netlist.cpp:634
 msgid "No Modules"
 msgstr "Нет модулей"
 
-#: pcbnew/netlist.cpp:636
+#: pcbnew/netlist.cpp:637
 msgid "Components"
 msgstr "Компоненты"
 
-#: pcbnew/netlist.cpp:686
+#: pcbnew/netlist.cpp:687
 msgid "No modules"
 msgstr "Нет модулей"
 
-#: pcbnew/netlist.cpp:700
+#: pcbnew/netlist.cpp:701
 msgid "No modules in NetList"
 msgstr "Нет модулей в списке цепей"
 
-#: pcbnew/netlist.cpp:704
+#: pcbnew/netlist.cpp:705
 msgid "Check Modules"
 msgstr "Проверка модулей"
 
-#: pcbnew/netlist.cpp:707
+#: pcbnew/netlist.cpp:708
 msgid "Duplicates"
 msgstr "Дублирование"
 
-#: pcbnew/netlist.cpp:727
+#: pcbnew/netlist.cpp:728
 msgid "Lack:"
 msgstr "Отсутствуют:"
 
-#: pcbnew/netlist.cpp:749
+#: pcbnew/netlist.cpp:750
 msgid "Not in Netlist:"
 msgstr "Нет в списке цепей:"
 
-#: pcbnew/netlist.cpp:889
+#: pcbnew/netlist.cpp:890
 #, c-format
 msgid "File <%s> not found, use Netlist for lib module selection"
 msgstr "Файл <%s> не найден, используется список цепей для выбора модулей из библиотеки"
 
-#: pcbnew/netlist.cpp:1016
+#: pcbnew/netlist.cpp:1017
 #, c-format
 msgid "Component [%s]: footprint <%s> not found"
 msgstr "Компонент [%s]: посадочное место <%s> не найдено"
@@ -12321,31 +12321,31 @@ msgstr "Диаметр"
 
 #: pcbnew/dialog_design_rules_base.cpp:293
 msgid "Via 1"
-msgstr "Via 1"
+msgstr "Перех.отв. 1"
 
 #: pcbnew/dialog_design_rules_base.cpp:294
 msgid "Via 2"
-msgstr "Via 2"
+msgstr "Перех.отв. 2"
 
 #: pcbnew/dialog_design_rules_base.cpp:295
 msgid "Via 3"
-msgstr "Via 3"
+msgstr "Перех.отв. 3"
 
 #: pcbnew/dialog_design_rules_base.cpp:296
 msgid "Via 4"
-msgstr "Via 4"
+msgstr "Перех.отв. 4"
 
 #: pcbnew/dialog_design_rules_base.cpp:297
 msgid "Via 5"
-msgstr "Via 5"
+msgstr "Перех.отв. 5"
 
 #: pcbnew/dialog_design_rules_base.cpp:298
 msgid "Via 6"
-msgstr "Via 6"
+msgstr "Перех.отв. 6"
 
 #: pcbnew/dialog_design_rules_base.cpp:299
 msgid "Via 7"
-msgstr "Via 7"
+msgstr "Перех.отв. 7"
 
 #: pcbnew/dialog_design_rules_base.cpp:311
 msgid "Custom Track Widths:"
@@ -12353,31 +12353,31 @@ msgstr "Особые дорожки:"
 
 #: pcbnew/dialog_design_rules_base.cpp:336
 msgid "Track 1"
-msgstr "Track 1"
+msgstr "Дорожка 1"
 
 #: pcbnew/dialog_design_rules_base.cpp:337
 msgid "Track 2"
-msgstr "Track 2"
+msgstr "Дорожка 2"
 
 #: pcbnew/dialog_design_rules_base.cpp:338
 msgid "Track 3"
-msgstr "Track 3"
+msgstr "Дорожка 3"
 
 #: pcbnew/dialog_design_rules_base.cpp:339
 msgid "Track 4"
-msgstr "Track 4"
+msgstr "Дорожка 4"
 
 #: pcbnew/dialog_design_rules_base.cpp:340
 msgid "Track 5"
-msgstr "Track 5"
+msgstr "Дорожка 5"
 
 #: pcbnew/dialog_design_rules_base.cpp:341
 msgid "Track 6"
-msgstr "Track 6"
+msgstr "Дорожка 6"
 
 #: pcbnew/dialog_design_rules_base.cpp:342
 msgid "Track 7"
-msgstr "Track 7"
+msgstr "Дорожка 7"
 
 #: pcbnew/dialog_design_rules_base.cpp:358
 msgid "Global Design Rules"
@@ -13305,6 +13305,54 @@ msgstr "Сохранить параметры"
 #: pcbnew/dialog_plot_base.cpp:212
 msgid "Generate drill file"
 msgstr "Создать файла сверловки:"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:25
+msgid "Export/Import to/from FreeRoute:"
+msgstr "Экспорт/Импорт в/из FreeRoute:"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:40
+msgid "Export a Specctra Design (*.dsn) File"
+msgstr "Экспорт в файл Specctra Design (*.dsn)"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:41
+msgid "Export a Specctra DSN file (to FreeRouter)"
+msgstr "Экспорт файла Specctra DSN (для FreeRouter-а)"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:45
+msgid "Launch FreeRouter via Java Web Start"
+msgstr "Запустить FreeRouter через Java Web Start"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:46
+msgid "Use Java Web Start function to run FreeRouter via Internet (or your Browser if not found)"
+msgstr "Использовать Java Web Start для запуска FreeRouter через интернет"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:50
+msgid "Back Import the Specctra Session (*.ses) File"
+msgstr "Обратный импорт файла Specctra Session (*.ses)"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:51
+msgid "Merge a session file created by FreeRouter with the current board."
+msgstr "Объединить созданный FreeRouter файл сессии с текущей печатной платой."
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:67
+msgid "FreeRoute Info:"
+msgstr "Информация о Freeroute"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:82
+msgid "Visit the FreeRouting.net Website with your Browser"
+msgstr "Посетить сайт FreeRouting.net"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:85
+msgid "FreeRouting.net URL"
+msgstr "FreeRouting.net URL"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:90
+msgid "The URL of the FreeRouting.net website"
+msgstr "URL сайта FreeRouting.net"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:94
+msgid "Help"
+msgstr "Справка"
 
 #: pcbnew/dialog_global_pads_edition_base.cpp:23
 msgid "Pad Filter :"

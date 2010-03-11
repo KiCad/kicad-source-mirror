@@ -22,7 +22,7 @@ DIALOG_FREEROUTE_BASE::DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Export/Import to/from FreeRoute:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Export/Import to/from FreeRoute:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
 	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
@@ -37,18 +37,18 @@ DIALOG_FREEROUTE_BASE::DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bLeftButtonsSizer;
 	bLeftButtonsSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_ExportDSN = new wxButton( this, ID_BUTTON_EXPORT_DSN, wxT("Export a Specctra Design (*.dsn) File"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ExportDSN->SetToolTip( wxT("Export a Specctra DSN file (to FreeRouter)") );
+	m_ExportDSN = new wxButton( this, ID_BUTTON_EXPORT_DSN, _("Export a Specctra Design (*.dsn) File"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ExportDSN->SetToolTip( _("Export a Specctra DSN file (to FreeRouter)") );
 	
 	bLeftButtonsSizer->Add( m_ExportDSN, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonLaunchFreeroute = new wxButton( this, wxID_BUTTON_LAUNCH, wxT("Launch FreeRouter via Java Web Start"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonLaunchFreeroute->SetToolTip( wxT("Use Java Web Start function to run FreeRouter via Internet (or your Browser if not found)") );
+	m_buttonLaunchFreeroute = new wxButton( this, wxID_BUTTON_LAUNCH, _("Launch FreeRouter via Java Web Start"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonLaunchFreeroute->SetToolTip( _("Use Java Web Start function to run FreeRouter via Internet (or your Browser if not found)") );
 	
 	bLeftButtonsSizer->Add( m_buttonLaunchFreeroute, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonImport = new wxButton( this, wxID_BUTTON_IMPORT, wxT("Back Import the Specctra Session (*.ses) File"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonImport->SetToolTip( wxT("Merge a session file created by FreeRouter with the current board.") );
+	m_buttonImport = new wxButton( this, wxID_BUTTON_IMPORT, _("Back Import the Specctra Session (*.ses) File"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonImport->SetToolTip( _("Merge a session file created by FreeRouter with the current board.") );
 	
 	bLeftButtonsSizer->Add( m_buttonImport, 0, wxALL|wxEXPAND, 5 );
 	
@@ -64,7 +64,7 @@ DIALOG_FREEROUTE_BASE::DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("FreeRoute Info:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText3 = new wxStaticText( this, wxID_ANY, _("FreeRoute Info:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
 	m_staticText3->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
@@ -79,19 +79,19 @@ DIALOG_FREEROUTE_BASE::DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bRightButtonsSizer;
 	bRightButtonsSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_buttonVisit = new wxButton( this, wxID_BUTTON_VISIT, wxT("Visit the FreeRouting.net Website with your Browser"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonVisit = new wxButton( this, wxID_BUTTON_VISIT, _("Visit the FreeRouting.net Website with your Browser"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightButtonsSizer->Add( m_buttonVisit, 0, wxALL|wxEXPAND, 5 );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, wxT("FreeRouting.net URL"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1 = new wxStaticText( this, wxID_ANY, _("FreeRouting.net URL"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
 	bRightButtonsSizer->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_FreerouteURLName = new wxTextCtrl( this, wxID_TEXT_URL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_FreerouteURLName->SetToolTip( wxT("The URL of the FreeRouting.net website") );
+	m_FreerouteURLName->SetToolTip( _("The URL of the FreeRouting.net website") );
 	
 	bRightButtonsSizer->Add( m_FreerouteURLName, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_buttonHelp = new wxButton( this, wxID_BUTTON_HELP, wxT("Help"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonHelp = new wxButton( this, wxID_BUTTON_HELP, _("Help"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightButtonsSizer->Add( m_buttonHelp, 0, wxALL|wxEXPAND, 5 );
 	
 	bRightSubSizer->Add( bRightButtonsSizer, 1, wxEXPAND, 5 );
