@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-02 19:37+0200\n"
-"PO-Revision-Date: 2010-03-02 19:37+0200\n"
+"POT-Creation-Date: 2010-03-12 22:45+0200\n"
+"PO-Revision-Date: 2010-03-12 22:45+0200\n"
 "Last-Translator: Vesa Solonen <vesa.solonen@hut.fi>\n"
 "Language-Team: Amerikanenglanti <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -515,31 +515,79 @@ msgstr "Liuskan pituus"
 msgid "Segs Count"
 msgstr "Segmenttien lukumäärä:"
 
-#: pcbnew/dialog_layers_setup.cpp:267
+#: pcbnew/dialog_freeroute_exchange_base.cpp:25
+msgid "Export/Import to/from FreeRoute:"
+msgstr "Freerouting.net -vienti ja -tuonti:"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:40
+msgid "Export a Specctra Design (*.dsn) File"
+msgstr "Vie \"Specctra Design (*.dsn)\" –tiedostoon"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:41
+msgid "Export a Specctra DSN file (to FreeRouter)"
+msgstr "Vie \"Specctra Design (*dsn)\" –tiedostoon (Freerouting.net -automaattireitittimeen)"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:45
+msgid "Launch FreeRouter via Java Web Start"
+msgstr "Käynnistä FreeRouter (Java Web Start)"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:46
+msgid "Use Java Web Start function to run FreeRouter via Internet (or your Browser if not found)"
+msgstr "Käytä Java Web Start -toimintoa Freerouting.net:n automaattireitittimen ajoon."
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:50
+msgid "Back Import the Specctra Session (*.ses) File"
+msgstr "Tuo reititetty \"Specctra Session\" –tiedosto (.ses) "
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:51
+msgid "Merge a session file created by FreeRouter with the current board."
+msgstr "Liitä FreeRouter istuntotiedosto (reititystieto) nykyiseen levyyn."
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:67
+msgid "FreeRoute Info:"
+msgstr "Freerouting.net -tietoja:"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:82
+msgid "Visit the FreeRouting.net Website with your Browser"
+msgstr "Avaa FreeRouting.net selaimella"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:85
+msgid "FreeRouting.net URL"
+msgstr "FreeRouting.net URL"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:90
+msgid "The URL of the FreeRouting.net website"
+msgstr "FreeRouting.net URL"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:94
+msgid "Help"
+msgstr "&Apua"
+
+#: pcbnew/dialog_layers_setup.cpp:298
 msgid "Name"
 msgstr "Nimi"
 
-#: pcbnew/dialog_layers_setup.cpp:269
+#: pcbnew/dialog_layers_setup.cpp:300
 msgid "Enabled"
 msgstr "Käytössä"
 
-#: pcbnew/dialog_layers_setup.cpp:271
+#: pcbnew/dialog_layers_setup.cpp:302
 msgid "Type"
 msgstr "Tyyppi"
 
-#: pcbnew/dialog_layers_setup.cpp:615
+#: pcbnew/dialog_layers_setup.cpp:658
 msgid "Layer name may not be empty"
 msgstr "Kerroksen nimi ei voi olla tyhjä"
 
-#: pcbnew/dialog_layers_setup.cpp:622
+#: pcbnew/dialog_layers_setup.cpp:665
 msgid "Layer name has an illegal character, one of: '"
 msgstr "Kerroksen nimessä on kielletty merkki, yksi '"
 
-#: pcbnew/dialog_layers_setup.cpp:629
+#: pcbnew/dialog_layers_setup.cpp:672
 msgid "'signal' is a reserved layer name"
 msgstr "'signal' on varattu kerrosnimi"
 
-#: pcbnew/dialog_layers_setup.cpp:638
+#: pcbnew/dialog_layers_setup.cpp:681
 msgid "Layer name is a duplicate of another"
 msgstr "Kerroksen nimi on jo käytössä"
 
@@ -772,54 +820,54 @@ msgstr "Poistetaanko liitostiedostosta puuttuvat liitoskuvat?"
 msgid "Component \"%s\": Mismatch! module is [%s] and netlist said [%s]\n"
 msgstr "Komponentti \"%s\": Eroavaisuus! Osa on [%s] ja liitostiedoston mukaan [%s]\n"
 
-#: pcbnew/netlist.cpp:544
+#: pcbnew/netlist.cpp:545
 #, c-format
 msgid "Component [%s] not found"
 msgstr "Komponenttia [%s] ei löytynyt"
 
-#: pcbnew/netlist.cpp:610
+#: pcbnew/netlist.cpp:611
 #, c-format
 msgid "Module [%s]: Pad [%s] not found"
 msgstr "Osan [%s]: Anturaa [%s] ei löytynyt"
 
-#: pcbnew/netlist.cpp:633
+#: pcbnew/netlist.cpp:634
 msgid "No Modules"
 msgstr "Ei osia"
 
-#: pcbnew/netlist.cpp:636
+#: pcbnew/netlist.cpp:637
 msgid "Components"
 msgstr "Komponentit"
 
-#: pcbnew/netlist.cpp:686
+#: pcbnew/netlist.cpp:687
 msgid "No modules"
 msgstr "Ei osia"
 
-#: pcbnew/netlist.cpp:700
+#: pcbnew/netlist.cpp:701
 msgid "No modules in NetList"
 msgstr "Ei osia liitostiedostossa"
 
-#: pcbnew/netlist.cpp:704
+#: pcbnew/netlist.cpp:705
 msgid "Check Modules"
 msgstr "Tarkista osat"
 
-#: pcbnew/netlist.cpp:707
+#: pcbnew/netlist.cpp:708
 msgid "Duplicates"
 msgstr "Kaksoiskappaleet"
 
-#: pcbnew/netlist.cpp:727
+#: pcbnew/netlist.cpp:728
 msgid "Lack:"
 msgstr "Puuttuu:"
 
-#: pcbnew/netlist.cpp:749
+#: pcbnew/netlist.cpp:750
 msgid "Not in Netlist:"
 msgstr "Ei liitostiedostossa:"
 
-#: pcbnew/netlist.cpp:889
+#: pcbnew/netlist.cpp:890
 #, c-format
 msgid "File <%s> not found, use Netlist for lib module selection"
 msgstr "Tiedostoa <%s> ei löytynyt. Käyttäkää liitostiedostoa kirjasto-osan vaintaan"
 
-#: pcbnew/netlist.cpp:1016
+#: pcbnew/netlist.cpp:1017
 #, c-format
 msgid "Component [%s]: footprint <%s> not found"
 msgstr "Komponentin [%s]: liitoskuvaa <%s> ei löytynyt"
@@ -1264,7 +1312,7 @@ msgstr "Käytettävät kerrokset ja niiden ominaisuudet"
 
 #: pcbnew/menubar_pcbframe.cpp:482
 msgid "&Contents"
-msgstr "&Sisältö"
+msgstr "&Sisällys"
 
 #: pcbnew/menubar_pcbframe.cpp:483
 msgid "Open the PCBnew manual"
@@ -1825,7 +1873,7 @@ msgid "Board contour"
 msgstr "Levyn reunaviiva"
 
 #: pcbnew/dialog_layers_setup_base.cpp:733
-msgid "Eco2_later"
+msgid "Eco1_later"
 msgstr ""
 
 #: pcbnew/dialog_layers_setup_base.cpp:752
@@ -1836,7 +1884,7 @@ msgid "Auxiliary"
 msgstr "Apu-"
 
 #: pcbnew/dialog_layers_setup_base.cpp:756
-msgid "Eco1_later"
+msgid "Eco2_later"
 msgstr ""
 
 #: pcbnew/dialog_layers_setup_base.cpp:779
@@ -2230,19 +2278,25 @@ msgstr "Kytkentäverkkoluokasta"
 msgid "Min track width"
 msgstr "Liuskan minimileveys"
 
-#: pcbnew/dialog_drc_base.cpp:50
-#: pcbnew/dialog_drc_base.cpp:59
-#: pcbnew/dialog_drc_base.cpp:68
-msgid "In the clearance units, enter the clearance distance"
-msgstr "Syötä eristysvälin mitta"
+#: pcbnew/dialog_drc_base.cpp:47
+msgid "Enter the minimum acceptable value for a track width"
+msgstr ""
 
 #: pcbnew/dialog_drc_base.cpp:54
 msgid "Min via size"
 msgstr "Läpiviennin minimikoko"
 
+#: pcbnew/dialog_drc_base.cpp:56
+msgid "Enter the minimum acceptable diameter for a standard via"
+msgstr ""
+
 #: pcbnew/dialog_drc_base.cpp:63
 msgid "Min uVia size"
 msgstr "Mikroläpiviennin minimikoko"
+
+#: pcbnew/dialog_drc_base.cpp:65
+msgid "Enter the minimum acceptable diameter for a micro via"
+msgstr ""
 
 #: pcbnew/dialog_drc_base.cpp:75
 msgid "Create Report File"
@@ -4097,15 +4151,19 @@ msgstr "Kirjoitettiin piirilevytiedosto:"
 msgid "Failed to create "
 msgstr "Luominen epäonnistui"
 
-#: pcbnew/dialog_pad_properties.cpp:541
+#: pcbnew/dialog_pad_properties.cpp:569
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
 msgstr "Epäkelpo arvo läpiviennin poraukselle: Poraus suurempi kuin anturan koko"
 
-#: pcbnew/dialog_pad_properties.cpp:547
+#: pcbnew/dialog_pad_properties.cpp:578
+msgid "Error: pad is not on a copper layer and has a hole"
+msgstr ""
+
+#: pcbnew/dialog_pad_properties.cpp:586
 msgid "Incorrect value for pad offset"
 msgstr "Epäkelpo arvo anturan siirtymälle"
 
-#: pcbnew/dialog_pad_properties.cpp:641
+#: pcbnew/dialog_pad_properties.cpp:649
 msgid "Unknown netname, no change"
 msgstr "Tuntematon kytkentäverkkonimi: Ei muutosta"
 
@@ -6959,54 +7017,54 @@ msgstr "Komponentin arvo"
 msgid "Component footprint"
 msgstr "Komponentin liitoskuva"
 
-#: eeschema/annotate.cpp:285
+#: eeschema/annotate.cpp:286
 #, c-format
 msgid "%d duplicate time stamps replaced."
 msgstr "%d aikaleimaduplikaattia korvattu."
 
-#: eeschema/annotate.cpp:718
+#: eeschema/annotate.cpp:719
 #, c-format
 msgid "item not annotated: %s%s"
 msgstr "nimeämätön elementti: %s%s"
 
-#: eeschema/annotate.cpp:724
+#: eeschema/annotate.cpp:725
 #, c-format
 msgid "( unit %d)"
 msgstr "( yksikkö %d)"
 
-#: eeschema/annotate.cpp:750
+#: eeschema/annotate.cpp:751
 #, c-format
 msgid "Error item %s%s"
 msgstr "Virheellinen elementti %s%s"
 
-#: eeschema/annotate.cpp:753
+#: eeschema/annotate.cpp:754
 #, c-format
 msgid " unit %d and no more than %d parts"
 msgstr " unit %d and no more than %d parts"
 
-#: eeschema/annotate.cpp:791
-#: eeschema/annotate.cpp:821
+#: eeschema/annotate.cpp:792
+#: eeschema/annotate.cpp:822
 #, c-format
 msgid "Multiple item %s%s"
 msgstr "Elementin monikertoja %s%s"
 
-#: eeschema/annotate.cpp:797
-#: eeschema/annotate.cpp:827
+#: eeschema/annotate.cpp:798
+#: eeschema/annotate.cpp:828
 #, c-format
 msgid " (unit %d)"
 msgstr " (yksikkö %d)"
 
-#: eeschema/annotate.cpp:851
+#: eeschema/annotate.cpp:852
 #, c-format
 msgid "Diff values for %s%d.%c (%s) and %s%d.%c (%s)"
 msgstr "Eroavat arvot %s%d.%c (%s) ja %s%d.%c (%s)"
 
-#: eeschema/annotate.cpp:861
+#: eeschema/annotate.cpp:862
 #, c-format
 msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
 msgstr "Eroavat arvot %s%d%c (%s) ja %s%d%c (%s)"
 
-#: eeschema/annotate.cpp:903
+#: eeschema/annotate.cpp:904
 #, c-format
 msgid "duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "kaksinkertainen aikaleima (%s) osille %s%d ja %s%d"
@@ -7104,63 +7162,63 @@ msgstr "Lisää komponentti"
 msgid "Add Power"
 msgstr "Lisää teholähde"
 
-#: eeschema/find.cpp:230
+#: eeschema/find.cpp:231
 msgid "Pin "
 msgstr "Nasta"
 
-#: eeschema/find.cpp:234
+#: eeschema/find.cpp:235
 msgid "Ref "
 msgstr "Viite"
 
-#: eeschema/find.cpp:238
+#: eeschema/find.cpp:239
 msgid "Value "
 msgstr "Arvo "
 
-#: eeschema/find.cpp:242
+#: eeschema/find.cpp:243
 msgid "Field "
 msgstr "Kenttä "
 
-#: eeschema/find.cpp:252
-#: eeschema/find.cpp:256
+#: eeschema/find.cpp:253
+#: eeschema/find.cpp:257
 msgid " found"
 msgstr " löydetty"
 
-#: eeschema/find.cpp:387
+#: eeschema/find.cpp:388
 #, c-format
 msgid "Marker %d found in %s"
 msgstr "Tuntomerkki %d löydetty %s:ssa"
 
-#: eeschema/find.cpp:394
+#: eeschema/find.cpp:395
 msgid "Marker Not Found"
 msgstr "Tuntomerkkiä ei löydetty"
 
-#: eeschema/find.cpp:615
+#: eeschema/find.cpp:616
 msgid " Found in "
 msgstr " Löydetty "
 
-#: eeschema/find.cpp:627
+#: eeschema/find.cpp:628
 msgid " Not Found"
 msgstr " Ei löytynyt"
 
-#: eeschema/find.cpp:659
+#: eeschema/find.cpp:660
 msgid "No component libraries are loaded."
 msgstr "Ei ladattuja komponenttikirjastoja."
 
-#: eeschema/find.cpp:683
-#: eeschema/find.cpp:749
-#: eeschema/find.cpp:766
+#: eeschema/find.cpp:684
+#: eeschema/find.cpp:750
+#: eeschema/find.cpp:767
 msgid "Found "
 msgstr "Löydetty "
 
-#: eeschema/find.cpp:683
+#: eeschema/find.cpp:684
 msgid " in library "
 msgstr " kirjastossa "
 
-#: eeschema/find.cpp:691
+#: eeschema/find.cpp:692
 msgid " found only in cache"
 msgstr " löydetty vain välimuistissa"
 
-#: eeschema/find.cpp:694
+#: eeschema/find.cpp:695
 msgid ""
 "\n"
 "Explore All Libraries?"
@@ -7168,12 +7226,12 @@ msgstr ""
 "\n"
 "Tutkitaanko kaikki kirjastot?"
 
-#: eeschema/find.cpp:700
+#: eeschema/find.cpp:701
 msgid "Nothing found"
 msgstr "Mitään ei löytynyt"
 
-#: eeschema/find.cpp:750
-#: eeschema/find.cpp:767
+#: eeschema/find.cpp:751
+#: eeschema/find.cpp:768
 msgid " in lib "
 msgstr " kirjastossa "
 
@@ -7320,35 +7378,35 @@ msgstr "Y-sij.(\")"
 msgid "The Y coordinate of the text relative to the component"
 msgstr "Tekstin Y-koordinaatti komponenttiin nähden"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:24
+#: eeschema/dialog_lib_edit_pin_base.cpp:26
 msgid "Pin &name:"
 msgstr "Nastan &nimi:"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:34
+#: eeschema/dialog_lib_edit_pin_base.cpp:36
 msgid "N&ame text size:"
 msgstr "Nimitekstin korkeus:"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:41
-#: eeschema/dialog_lib_edit_pin_base.cpp:64
+#: eeschema/dialog_lib_edit_pin_base.cpp:43
+#: eeschema/dialog_lib_edit_pin_base.cpp:66
 #: eeschema/dialog_lib_edit_pin_base.cpp:87
 #: eeschema/dialog_sch_sheet_props_base.cpp:42
 #: eeschema/dialog_sch_sheet_props_base.cpp:63
 msgid "units"
 msgstr "yksiköt"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:45
+#: eeschema/dialog_lib_edit_pin_base.cpp:47
 msgid "Pin n&umber:"
 msgstr "Nastan n&umero:"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:47
+#: eeschema/dialog_lib_edit_pin_base.cpp:49
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
 msgstr "Nastan numero: Yhdestä neljään ASCII-kirjaimia ja/tai numeroita"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:57
+#: eeschema/dialog_lib_edit_pin_base.cpp:59
 msgid "Number te&xt size:"
 msgstr "Numerotekstin korkeus:"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:68
+#: eeschema/dialog_lib_edit_pin_base.cpp:70
 msgid "&Orientation:"
 msgstr "&Asento:"
 
@@ -7364,19 +7422,19 @@ msgstr "&Tyyppi:"
 msgid "Used by the ERC."
 msgstr "Mukana ERC:ssa"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:114
+#: eeschema/dialog_lib_edit_pin_base.cpp:112
 msgid "Graphic &Style:"
 msgstr "Tyyli:"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:137
+#: eeschema/dialog_lib_edit_pin_base.cpp:133
 msgid "Add to all &parts in package"
 msgstr "Lisää &kaikkiin osiin kotelossa"
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:141
+#: eeschema/dialog_lib_edit_pin_base.cpp:137
 msgid "Add to all alternate &body styles (DeMorgan)"
 msgstr ""
 
-#: eeschema/dialog_lib_edit_pin_base.cpp:145
+#: eeschema/dialog_lib_edit_pin_base.cpp:141
 msgid "&Visible"
 msgstr "&Näkyvä"
 
@@ -7497,25 +7555,25 @@ msgstr ""
 msgid "Chip Name"
 msgstr "Komponentin nimi"
 
-#: eeschema/netlist.cpp:88
+#: eeschema/netlist.cpp:89
 msgid "List"
 msgstr "Luetteloi"
 
-#: eeschema/netlist.cpp:106
+#: eeschema/netlist.cpp:107
 msgid "NbItems"
 msgstr ""
 
-#: eeschema/netlist.cpp:216
-#: eeschema/netlist.cpp:261
-#: eeschema/netlist.cpp:282
+#: eeschema/netlist.cpp:217
+#: eeschema/netlist.cpp:262
+#: eeschema/netlist.cpp:283
 msgid "Done"
 msgstr "Valmis"
 
-#: eeschema/netlist.cpp:222
+#: eeschema/netlist.cpp:223
 msgid "Labels"
 msgstr "Nimiöt"
 
-#: eeschema/netlist.cpp:265
+#: eeschema/netlist.cpp:266
 msgid "Hierar."
 msgstr "Hierark."
 
@@ -7635,9 +7693,17 @@ msgstr ""
 msgid "Edit document file"
 msgstr "Muokkaa dokumentaatiotiedostoa"
 
-#: eeschema/tool_lib.cpp:205
+#: eeschema/tool_lib.cpp:203
 msgid "Edit pins part per part ( Use carefully!)"
 msgstr "Muokkaa nastoja osakohtaisesti (Käytä varoen!)"
+
+#: eeschema/tool_lib.cpp:205
+msgid "Usual option = OFF when parts are not locked"
+msgstr ""
+
+#: eeschema/tool_lib.cpp:207
+msgid "Usual option = ON when parts are locked"
+msgstr ""
 
 #: eeschema/dialog_sch_sheet_props_base.cpp:25
 msgid "&File name:"
@@ -7801,28 +7867,28 @@ msgstr "Salli johtimet ja väylät vain vaaka- tai pystyasennossa"
 msgid "Show p&age limits"
 msgstr "Näytä sivun &reunat"
 
-#: eeschema/schframe.cpp:359
+#: eeschema/schframe.cpp:360
 msgid "Schematic modified, Save before exit ?"
 msgstr "Kytkentäkaaviota muokattu. Tallennetaanko?"
 
-#: eeschema/schframe.cpp:515
+#: eeschema/schframe.cpp:516
 msgid "Draw wires and buses in any direction"
 msgstr "Piirrä johtimet ja väylät vapaalla kulmalla"
 
-#: eeschema/schframe.cpp:516
+#: eeschema/schframe.cpp:517
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Piirrä johtimet ja väylät vain vaaka- ja pystysuorassa"
 
-#: eeschema/schframe.cpp:526
+#: eeschema/schframe.cpp:527
 msgid "Do not show hidden pins"
 msgstr "Älä näytä piilotettuja nastoja"
 
-#: eeschema/schframe.cpp:527
+#: eeschema/schframe.cpp:528
 #: eeschema/tool_sch.cpp:268
 msgid "Show hidden pins"
 msgstr "Näytä piilotetut nastat"
 
-#: eeschema/schframe.cpp:618
+#: eeschema/schframe.cpp:619
 msgid "Schematic"
 msgstr "Kytkentäkaavio"
 
@@ -8015,19 +8081,19 @@ msgstr "Pisterasteri pois"
 msgid "HV orientation for wires and bus"
 msgstr "Vaaka- tai pystysuunta johtimille ja väylille"
 
-#: eeschema/class_libentry.cpp:66
+#: eeschema/class_libentry.cpp:67
 msgid "none"
 msgstr "ei mitään"
 
-#: eeschema/class_libentry.cpp:341
+#: eeschema/class_libentry.cpp:342
 msgid "value"
 msgstr "arvo"
 
-#: eeschema/class_libentry.cpp:341
+#: eeschema/class_libentry.cpp:342
 msgid "reference"
 msgstr "viite"
 
-#: eeschema/class_libentry.cpp:343
+#: eeschema/class_libentry.cpp:344
 #, c-format
 msgid "An attempt was made to remove the %s field from component %s in library %s."
 msgstr "Yritettiin poistaa kenttä %s komponentista %s kirjastossa %s."
@@ -8159,65 +8225,69 @@ msgstr ""
 msgid "Cannot add duplicate alias <%s> to library <%s>."
 msgstr "Duplikaattialiasta  <%s> ei voitu lisätä kirjastoon <%s>."
 
-#: eeschema/class_library.cpp:259
+#: eeschema/class_library.cpp:263
+msgid "not found"
+msgstr "ei löytynyt"
+
+#: eeschema/class_library.cpp:264
 #, c-format
 msgid "alias <%s> already exists and has root name<%s>"
 msgstr "Alias <%s> on jo olemassa juurinimellä <%s>."
 
-#: eeschema/class_library.cpp:274
+#: eeschema/class_library.cpp:279
 #, c-format
 msgid "Conflict in library <%s>"
 msgstr "Ristiriita kirjastossa <%s>."
 
-#: eeschema/class_library.cpp:275
+#: eeschema/class_library.cpp:280
 #, c-format
 msgid "and appears in alias list of current component <%s>."
 msgstr ""
 
-#: eeschema/class_library.cpp:278
+#: eeschema/class_library.cpp:283
 msgid "All old aliases will be removed. Continue ?"
 msgstr "Kaikki vanhat aliakset poistetaan. Jatketaanko?"
 
-#: eeschema/class_library.cpp:534
+#: eeschema/class_library.cpp:545
 msgid "The component library file name is not set."
 msgstr "Komponenttikirjaston tiedostonimeä ei ole määritelty."
 
-#: eeschema/class_library.cpp:542
+#: eeschema/class_library.cpp:553
 msgid "The file could not be opened."
 msgstr "Tiedostoa ei voitu avata."
 
-#: eeschema/class_library.cpp:548
+#: eeschema/class_library.cpp:559
 msgid "The file is empty!"
 msgstr "Tiedosto on tyhjä!"
 
-#: eeschema/class_library.cpp:571
+#: eeschema/class_library.cpp:582
 msgid "The file is NOT an EESCHEMA library!"
 msgstr "Tiedosto ei ole pätevä EESchema-tiedosto!"
 
-#: eeschema/class_library.cpp:577
+#: eeschema/class_library.cpp:588
 msgid "The file header is missing version and time stamp information."
 msgstr "Tiedoston otsikosta puuttuvat versio- ja aikaleimatiedot."
 
-#: eeschema/class_library.cpp:622
+#: eeschema/class_library.cpp:633
 msgid "An error occurred attempting to read the header."
 msgstr "Virhe yritettäessä lukea kirjaston otsikkoa."
 
-#: eeschema/class_library.cpp:653
+#: eeschema/class_library.cpp:664
 #, c-format
 msgid "Library <%s> component load error %s."
 msgstr "Kirjaston <%s> komponentin latausvirhe %s."
 
-#: eeschema/class_library.cpp:724
+#: eeschema/class_library.cpp:735
 #, c-format
 msgid "Could not open component document library file <%s>."
 msgstr "Komponentin dokumentaatiokirjastotiedostoa <%s> ei voitu avata."
 
-#: eeschema/class_library.cpp:731
+#: eeschema/class_library.cpp:742
 #, c-format
 msgid "Component document library file <%s> is empty."
 msgstr "Komponentin dokumentaatiotiedosto %s on tyhjä."
 
-#: eeschema/class_library.cpp:739
+#: eeschema/class_library.cpp:750
 #, c-format
 msgid "File <%s> is not a valid component library document file."
 msgstr "Tiedosto <%s> ei ole pätevä komponenttikirjaston dokumentaatiotiedosto."
@@ -8242,155 +8312,155 @@ msgstr ""
 msgid "User defined search path"
 msgstr "Käyttäjän määrittämät hakupolku"
 
-#: eeschema/libedit_onrightclick.cpp:83
+#: eeschema/libedit_onrightclick.cpp:84
 msgid "Move Arc "
 msgstr "Siirrä kaarta "
 
-#: eeschema/libedit_onrightclick.cpp:87
+#: eeschema/libedit_onrightclick.cpp:88
 msgid "Drag Arc Size"
 msgstr "Raahaa kaaren kokoa"
 
-#: eeschema/libedit_onrightclick.cpp:93
+#: eeschema/libedit_onrightclick.cpp:94
 msgid "Edit Arc Options"
 msgstr "Kaarien asetukset"
 
-#: eeschema/libedit_onrightclick.cpp:100
+#: eeschema/libedit_onrightclick.cpp:101
 msgid "Delete Arc "
 msgstr "Poista kaari"
 
-#: eeschema/libedit_onrightclick.cpp:110
+#: eeschema/libedit_onrightclick.cpp:111
 msgid "Move Circle "
 msgstr "Siirrä ympyrää "
 
-#: eeschema/libedit_onrightclick.cpp:118
+#: eeschema/libedit_onrightclick.cpp:119
 msgid "Drag Circle Outline"
 msgstr "Raahaa ympyrän reunaviivaa"
 
-#: eeschema/libedit_onrightclick.cpp:124
+#: eeschema/libedit_onrightclick.cpp:125
 msgid "Edit Circle Options"
 msgstr "Ympyrän asetukset"
 
-#: eeschema/libedit_onrightclick.cpp:131
+#: eeschema/libedit_onrightclick.cpp:132
 msgid "Delete Circle "
 msgstr "Poista ympyrä "
 
-#: eeschema/libedit_onrightclick.cpp:141
+#: eeschema/libedit_onrightclick.cpp:142
 msgid "Move Rectangle "
 msgstr "Siirrä suorakulmiota "
 
-#: eeschema/libedit_onrightclick.cpp:147
+#: eeschema/libedit_onrightclick.cpp:148
 msgid "Edit Rectangle Options"
 msgstr "Suorakulmion asetukset"
 
-#: eeschema/libedit_onrightclick.cpp:154
+#: eeschema/libedit_onrightclick.cpp:155
 msgid "Drag Rectangle Edge"
 msgstr "Raahaa suorakulmion reunaa"
 
-#: eeschema/libedit_onrightclick.cpp:162
+#: eeschema/libedit_onrightclick.cpp:163
 msgid "Delete Rectangle "
 msgstr "Poista suorakulmio"
 
-#: eeschema/libedit_onrightclick.cpp:173
+#: eeschema/libedit_onrightclick.cpp:174
 msgid "Move Text "
 msgstr "Siirrä tekstiä "
 
-#: eeschema/libedit_onrightclick.cpp:179
+#: eeschema/libedit_onrightclick.cpp:180
 msgid "Edit Text "
 msgstr "Muokkaa tekstiä"
 
-#: eeschema/libedit_onrightclick.cpp:184
+#: eeschema/libedit_onrightclick.cpp:185
 msgid "Rotate Text "
 msgstr "Kierrä tekstiä"
 
-#: eeschema/libedit_onrightclick.cpp:191
+#: eeschema/libedit_onrightclick.cpp:192
 msgid "Delete Text "
 msgstr "Poista teksti "
 
-#: eeschema/libedit_onrightclick.cpp:201
+#: eeschema/libedit_onrightclick.cpp:202
 msgid "Move Line "
 msgstr "Siirrä viivaa "
 
-#: eeschema/libedit_onrightclick.cpp:205
+#: eeschema/libedit_onrightclick.cpp:206
 msgid "Drag Edge Point"
 msgstr "Raahaa segmenttiä"
 
-#: eeschema/libedit_onrightclick.cpp:214
+#: eeschema/libedit_onrightclick.cpp:215
 msgid "Line End"
 msgstr "Lopeta viiva"
 
-#: eeschema/libedit_onrightclick.cpp:217
+#: eeschema/libedit_onrightclick.cpp:218
 msgid "Edit Line Options"
 msgstr "Viivan valinnat"
 
-#: eeschema/libedit_onrightclick.cpp:224
+#: eeschema/libedit_onrightclick.cpp:225
 msgid "Delete Line "
 msgstr "Poista viiva"
 
-#: eeschema/libedit_onrightclick.cpp:233
+#: eeschema/libedit_onrightclick.cpp:234
 msgid "Delete Segment "
 msgstr "Poista segmentti "
 
-#: eeschema/libedit_onrightclick.cpp:246
+#: eeschema/libedit_onrightclick.cpp:247
 msgid "Move Field "
 msgstr "Siirrä kenttää "
 
-#: eeschema/libedit_onrightclick.cpp:252
+#: eeschema/libedit_onrightclick.cpp:253
 msgid "Field Rotate"
 msgstr "Kierrä kenttää"
 
-#: eeschema/libedit_onrightclick.cpp:254
+#: eeschema/libedit_onrightclick.cpp:255
 msgid "Field Edit"
 msgstr "Muokkaa kenttää"
 
-#: eeschema/libedit_onrightclick.cpp:283
+#: eeschema/libedit_onrightclick.cpp:284
 msgid "Move Pin "
 msgstr "Siirrä nastaa "
 
-#: eeschema/libedit_onrightclick.cpp:289
+#: eeschema/libedit_onrightclick.cpp:290
 msgid "Edit Pin "
 msgstr "Muokkaa nastaa "
 
-#: eeschema/libedit_onrightclick.cpp:292
+#: eeschema/libedit_onrightclick.cpp:293
 msgid "Rotate Pin "
 msgstr "Kierrä nastaa "
 
-#: eeschema/libedit_onrightclick.cpp:297
+#: eeschema/libedit_onrightclick.cpp:298
 msgid "Delete Pin "
 msgstr "Poista nasta "
 
-#: eeschema/libedit_onrightclick.cpp:305
+#: eeschema/libedit_onrightclick.cpp:306
 msgid "Global"
 msgstr "Globaali"
 
-#: eeschema/libedit_onrightclick.cpp:308
+#: eeschema/libedit_onrightclick.cpp:309
 msgid "Pin Size to selected pins"
 msgstr "Nastan koko valittuihin nastoihin"
 
-#: eeschema/libedit_onrightclick.cpp:309
+#: eeschema/libedit_onrightclick.cpp:310
 msgid "Pin Size to Others"
 msgstr "Nastan koko muihin nastoihin"
 
-#: eeschema/libedit_onrightclick.cpp:312
+#: eeschema/libedit_onrightclick.cpp:313
 msgid "Pin Name Size to selected pin"
 msgstr "Nastan nimen koko valittuun nastaan"
 
-#: eeschema/libedit_onrightclick.cpp:313
+#: eeschema/libedit_onrightclick.cpp:314
 msgid "Pin Name Size to Others"
 msgstr "Nastan nimen koko muihin nastoihin"
 
-#: eeschema/libedit_onrightclick.cpp:316
+#: eeschema/libedit_onrightclick.cpp:317
 msgid "Pin Num Size to selected pin"
 msgstr "Nastan numeron koko valittuun nastaan"
 
-#: eeschema/libedit_onrightclick.cpp:317
+#: eeschema/libedit_onrightclick.cpp:318
 msgid "Pin Num Size to Others"
 msgstr "Nastan numeron koko muihin nastoihin"
 
-#: eeschema/libedit_onrightclick.cpp:341
+#: eeschema/libedit_onrightclick.cpp:342
 msgid "Select Items"
 msgstr "Valitse elementtejä"
 
-#: eeschema/libedit_onrightclick.cpp:345
+#: eeschema/libedit_onrightclick.cpp:346
 msgid "Mirror Block ||"
 msgstr "Peilaa valinta ||"
 
@@ -8690,58 +8760,58 @@ msgstr "Osaa ei löytynyt: "
 msgid " in library"
 msgstr " kirjastossa"
 
-#: eeschema/edit_component_in_lib.cpp:192
-#: eeschema/edit_component_in_lib.cpp:265
+#: eeschema/edit_component_in_lib.cpp:202
+#: eeschema/edit_component_in_lib.cpp:275
 #, c-format
 msgid "Alias <%s> cannot be removed while it is being edited!"
 msgstr "Aliasta <%s> ei voi poistaa kesken editoinnin!"
 
-#: eeschema/edit_component_in_lib.cpp:202
+#: eeschema/edit_component_in_lib.cpp:212
 msgid "Remove all aliases from list?"
 msgstr "Poistetaanko kaikki aliakset luettelosta?"
 
-#: eeschema/edit_component_in_lib.cpp:229
+#: eeschema/edit_component_in_lib.cpp:239
 msgid "New alias:"
 msgstr "Uusi alias:"
 
-#: eeschema/edit_component_in_lib.cpp:230
+#: eeschema/edit_component_in_lib.cpp:240
 msgid "Component Alias"
 msgstr "Komponenttialias"
 
-#: eeschema/edit_component_in_lib.cpp:240
+#: eeschema/edit_component_in_lib.cpp:250
 #, c-format
 msgid "Alias or component name <%s> already exists in library <%s>."
 msgstr "Alias tai komponenttinimi <%s> on jo kirjastossa <%s>."
 
-#: eeschema/edit_component_in_lib.cpp:297
+#: eeschema/edit_component_in_lib.cpp:307
 msgid "Delete extra parts from component?"
 msgstr "Poistetaanko ylimääräiset osat komponentista?"
 
-#: eeschema/edit_component_in_lib.cpp:318
+#: eeschema/edit_component_in_lib.cpp:328
 msgid "Add new pins for alternate body style ( DeMorgan ) to component?"
 msgstr ""
 
-#: eeschema/edit_component_in_lib.cpp:325
+#: eeschema/edit_component_in_lib.cpp:335
 msgid "Delete alternate body style (DeMorgan) draw items from component?"
 msgstr ""
 
-#: eeschema/edit_component_in_lib.cpp:349
+#: eeschema/edit_component_in_lib.cpp:359
 msgid "Doc Files"
 msgstr "Dokumentaatiotiedostot"
 
-#: eeschema/edit_component_in_lib.cpp:385
+#: eeschema/edit_component_in_lib.cpp:395
 msgid "Ok to Delete FootprintFilter LIST"
 msgstr "Poistetaanko liitoskuvasuodatuksen parametrit?"
 
-#: eeschema/edit_component_in_lib.cpp:408
+#: eeschema/edit_component_in_lib.cpp:418
 msgid "Add Footprint Filter"
 msgstr "Lisää liitoskuvasuodatin"
 
-#: eeschema/edit_component_in_lib.cpp:408
+#: eeschema/edit_component_in_lib.cpp:418
 msgid "Footprint Filter"
 msgstr "Liitoskuvasuodatin"
 
-#: eeschema/edit_component_in_lib.cpp:421
+#: eeschema/edit_component_in_lib.cpp:431
 #, c-format
 msgid "Foot print filter <%s> is already defined."
 msgstr "Liitoskuvasuodatin <%s> on jo määritelty."
@@ -9118,45 +9188,45 @@ msgstr ""
 "Liitoskuvanimissä voidaan käyttää jokerimerkkejä,\n"
 "kuten sm* sallittaessa kaikki \"sm\"-alkuiset liitoskuvanimet."
 
-#: eeschema/pinedit.cpp:234
+#: eeschema/pinedit.cpp:238
 msgid "This position is already occupied by another pin. Continue?"
 msgstr "Tässä sijainnissa on jo toinen nasta. Jatketaanko?"
 
-#: eeschema/pinedit.cpp:660
+#: eeschema/pinedit.cpp:664
 msgid "No pins!"
 msgstr "Ei nastoja!"
 
-#: eeschema/pinedit.cpp:671
+#: eeschema/pinedit.cpp:675
 msgid "Marker Information"
 msgstr "Tuntomerkin tietoja"
 
-#: eeschema/pinedit.cpp:690
+#: eeschema/pinedit.cpp:694
 #, c-format
 msgid "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr "<b>Nastaduplikaatti %s</b> \"%s\" sijainnissa <b>(%.3f, %.3f)</b> ristiriidassa nastan %s \"%s\" kanssa sijainnissa <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:703
-#: eeschema/pinedit.cpp:742
+#: eeschema/pinedit.cpp:707
+#: eeschema/pinedit.cpp:746
 #, c-format
 msgid " in part %c"
 msgstr " osassa %c"
 
-#: eeschema/pinedit.cpp:710
-#: eeschema/pinedit.cpp:749
+#: eeschema/pinedit.cpp:714
+#: eeschema/pinedit.cpp:753
 msgid "  of converted"
 msgstr "  muunnetuista"
 
-#: eeschema/pinedit.cpp:712
-#: eeschema/pinedit.cpp:751
+#: eeschema/pinedit.cpp:716
+#: eeschema/pinedit.cpp:755
 msgid "  of normal"
 msgstr "  tavallisia"
 
-#: eeschema/pinedit.cpp:733
+#: eeschema/pinedit.cpp:737
 #, c-format
 msgid "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr "<b>Nasta %s ohi rasterin</b> \"%s\" sijainnissa <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:760
+#: eeschema/pinedit.cpp:764
 msgid "No off grid or duplicate pins were found."
 msgstr "Ei löytynyt nastoja ohi rasterin tai kaksoisnimillä."
 
@@ -9179,61 +9249,61 @@ msgstr ""
 msgid "Component or alias name \"%s\" not found in library \"%s\"."
 msgstr "Komponenttia tai aliasta nimellä \"%s\" ei löytynyt kirjastossa \"%s\"."
 
-#: eeschema/libedit.cpp:168
+#: eeschema/libedit.cpp:171
 #, c-format
 msgid "Could not create copy of part <%s> in library <%s>."
 msgstr "Kopiota osasta <%s> kirjastossa <%s> ei voitu luoda."
 
-#: eeschema/libedit.cpp:238
+#: eeschema/libedit.cpp:241
 msgid "Include last component changes?"
 msgstr "Sisällytetäänkö viimeiset komponenttimuutokset?"
 
-#: eeschema/libedit.cpp:250
+#: eeschema/libedit.cpp:253
 msgid "Modify library file \""
 msgstr "Muokkaa kirjastotiedostoa \""
 
-#: eeschema/libedit.cpp:250
+#: eeschema/libedit.cpp:253
 msgid "\"?"
 msgstr ""
 
-#: eeschema/libedit.cpp:261
+#: eeschema/libedit.cpp:264
 msgid "Error while saving library file \""
 msgstr "Virhe tallennettaessa kirjastotiedostoa \""
 
-#: eeschema/libedit.cpp:262
+#: eeschema/libedit.cpp:265
 msgid "\"."
 msgstr ""
 
-#: eeschema/libedit.cpp:263
+#: eeschema/libedit.cpp:266
 msgid "*** ERROR: ***"
 msgstr "*** VIRHE ***"
 
-#: eeschema/libedit.cpp:268
+#: eeschema/libedit.cpp:271
 msgid "Library file \""
 msgstr "Kirjastotiedosto \""
 
-#: eeschema/libedit.cpp:270
+#: eeschema/libedit.cpp:273
 msgid "Document file \""
 msgstr "Dokumentaatiotiedosto \""
 
-#: eeschema/libedit.cpp:312
+#: eeschema/libedit.cpp:315
 msgid "Body"
 msgstr "Runko"
 
-#: eeschema/libedit.cpp:377
+#: eeschema/libedit.cpp:380
 msgid "Please select a component library."
 msgstr "Valitkaa komponettikirjasto"
 
-#: eeschema/libedit.cpp:386
+#: eeschema/libedit.cpp:389
 #, c-format
 msgid "Component library <%s> is empty."
 msgstr "Komponenttikirjasto <%s> on tyhjä."
 
-#: eeschema/libedit.cpp:388
+#: eeschema/libedit.cpp:391
 msgid "Delete Entry Error"
 msgstr "Poistovirhe"
 
-#: eeschema/libedit.cpp:393
+#: eeschema/libedit.cpp:396
 #, c-format
 msgid ""
 "Select 1 of %d components to delete\n"
@@ -9242,26 +9312,26 @@ msgstr ""
 "Valitse poistettavaksi yksi %d:sta komponentista\n"
 "kirjastosta <%s>."
 
-#: eeschema/libedit.cpp:397
+#: eeschema/libedit.cpp:400
 #: eeschema/onrightclick.cpp:366
 msgid "Delete Component"
 msgstr "Poista komponentti"
 
-#: eeschema/libedit.cpp:406
+#: eeschema/libedit.cpp:409
 #, c-format
 msgid "Entry <%s> not found in library <%s>."
 msgstr "Kohtaa <%s> kirjastossa <%s> ei löytynyt."
 
-#: eeschema/libedit.cpp:413
+#: eeschema/libedit.cpp:416
 #, c-format
 msgid "Delete component \"%s\" from library \"%s\"?"
 msgstr "Poistetaanko osa %s kirjastosta %s?"
 
-#: eeschema/libedit.cpp:433
+#: eeschema/libedit.cpp:436
 msgid "The component being deleted has been modified. All changes will be lost. Discard changes?"
 msgstr "Poistettavaa komponenttia on muokattu. Kaikki muutokset hukataan. Hylätäänkö muutokset?"
 
-#: eeschema/libedit.cpp:488
+#: eeschema/libedit.cpp:491
 msgid ""
 "All changes to the current component will be lost!\n"
 "\n"
@@ -9271,29 +9341,29 @@ msgstr ""
 "\n"
 "Siivotaanko nykyinen komponentti?"
 
-#: eeschema/libedit.cpp:504
+#: eeschema/libedit.cpp:507
 msgid "This new component has no name and cannot be created. Aborted"
 msgstr "Uudella komponentilla ei ole nimeä eikä sitä voitu luoda. Keskeytetty."
 
-#: eeschema/libedit.cpp:516
+#: eeschema/libedit.cpp:519
 #, c-format
 msgid "Component \"%s\" already exists in library \"%s\"."
 msgstr "Komponentti \"%s\" on jo kirjastossa \"%s\"."
 
-#: eeschema/libedit.cpp:584
+#: eeschema/libedit.cpp:589
 msgid "No component to save."
 msgstr "Ei tallennettavaa komponenttia."
 
-#: eeschema/libedit.cpp:593
+#: eeschema/libedit.cpp:598
 msgid "No library specified."
 msgstr "Ei kirjastoa määriteltynä."
 
-#: eeschema/libedit.cpp:603
+#: eeschema/libedit.cpp:608
 #, c-format
 msgid "Component \"%s\" exists. Change it?"
 msgstr "Komponentti \"%s\" on jo kirjastossa. Vaihdetaanko?"
 
-#: eeschema/libedit.cpp:621
+#: eeschema/libedit.cpp:626
 #, c-format
 msgid "Component %s saved in library %s"
 msgstr "Komponentti %s tallennettu kirjastoon %s"
@@ -9349,61 +9419,61 @@ msgstr "Tiedostonimi"
 msgid "Arc %.1f deg"
 msgstr "Kaari %.1f astetta"
 
-#: eeschema/erc.cpp:210
+#: eeschema/erc.cpp:211
 msgid "Duplicate Sheet name"
 msgstr "Lehden nimi toiseen kertaan"
 
-#: eeschema/erc.cpp:248
+#: eeschema/erc.cpp:249
 msgid "Annotation required!"
 msgstr "Nimeäminen vaaditaan!"
 
-#: eeschema/erc.cpp:378
+#: eeschema/erc.cpp:379
 msgid "ERC File"
 msgstr "ERC-tiedosto"
 
-#: eeschema/erc.cpp:379
+#: eeschema/erc.cpp:380
 msgid "Electronic rule check file (.erc)|*.erc"
 msgstr "Sähköisen sääntötarkastuksen tiedostot (.erc)|*.erc"
 
-#: eeschema/erc.cpp:429
+#: eeschema/erc.cpp:430
 #, c-format
 msgid "HLabel %s not connected to SheetLabel"
 msgstr "Hierarkinen nimiö %s ei liitettynä lehden nimiöön"
 
-#: eeschema/erc.cpp:433
+#: eeschema/erc.cpp:434
 #, c-format
 msgid "SheetLabel %s not connected to HLabel"
 msgstr "Lehden nimiö %s ei liitettynä hierarkiseen nimiöön"
 
-#: eeschema/erc.cpp:459
+#: eeschema/erc.cpp:460
 #, c-format
 msgid "Cmp %s, Pin %s (%s) Unconnected"
 msgstr "Komp. %s, nasta %s (%s) liittämättä"
 
-#: eeschema/erc.cpp:474
+#: eeschema/erc.cpp:475
 #, c-format
 msgid "Cmp %s, Pin %s (%s) not driven (Net %d)"
 msgstr "komp %s, nasta %s (%s) ei ohjattu (verkko %d)"
 
-#: eeschema/erc.cpp:487
+#: eeschema/erc.cpp:488
 msgid "More than 1 Pin connected to UnConnect symbol"
 msgstr "Enemmän kuin yksi nasta liitettynä \"liittämätön\"-symboliin"
 
-#: eeschema/erc.cpp:514
+#: eeschema/erc.cpp:515
 #, c-format
 msgid "Cmp %s, Pin %s (%s) connected to "
 msgstr "komp %s, nasta %s (%s) liitettynä "
 
-#: eeschema/erc.cpp:521
+#: eeschema/erc.cpp:522
 #, c-format
 msgid "Cmp %s, Pin %s (%s) (net %d)"
 msgstr "komp %s, nasta %s (%s) (verkko %d)"
 
-#: eeschema/erc.cpp:688
+#: eeschema/erc.cpp:689
 msgid "ERC report"
 msgstr "ERC-raportti"
 
-#: eeschema/erc.cpp:700
+#: eeschema/erc.cpp:701
 msgid ""
 "\n"
 "***** Sheet / (Root) \n"
@@ -9411,7 +9481,7 @@ msgstr ""
 "\n"
 "***** Lehti / (Juuri) \n"
 
-#: eeschema/erc.cpp:705
+#: eeschema/erc.cpp:706
 #, c-format
 msgid ""
 "\n"
@@ -9420,7 +9490,7 @@ msgstr ""
 "\n"
 "***** Lehti %s\n"
 
-#: eeschema/erc.cpp:724
+#: eeschema/erc.cpp:725
 #, c-format
 msgid ""
 "\n"
@@ -9756,83 +9826,83 @@ msgstr "Lataus valmis "
 msgid "text only had %d parameters of the required 8"
 msgstr "tekstissä oli vain %d parametria vaadituista kahdeksasta"
 
-#: eeschema/class_pin.cpp:28
+#: eeschema/class_pin.cpp:30
 msgid "Right"
 msgstr "Oikealle"
 
-#: eeschema/class_pin.cpp:29
+#: eeschema/class_pin.cpp:31
 msgid "Left"
 msgstr "Vasemmalle"
 
-#: eeschema/class_pin.cpp:30
+#: eeschema/class_pin.cpp:32
 msgid "Up"
 msgstr "Ylös"
 
-#: eeschema/class_pin.cpp:31
+#: eeschema/class_pin.cpp:33
 msgid "Down"
 msgstr "Alas"
 
-#: eeschema/class_pin.cpp:51
+#: eeschema/class_pin.cpp:61
 msgid "Inverted"
 msgstr "Käänteinen"
 
-#: eeschema/class_pin.cpp:52
+#: eeschema/class_pin.cpp:62
 msgid "Clock"
 msgstr "Kello"
 
-#: eeschema/class_pin.cpp:53
+#: eeschema/class_pin.cpp:63
 msgid "Inverted clock"
 msgstr "Käänteinen kello"
 
-#: eeschema/class_pin.cpp:54
+#: eeschema/class_pin.cpp:64
 msgid "Input low"
 msgstr "Tulo alhaalla"
 
-#: eeschema/class_pin.cpp:55
+#: eeschema/class_pin.cpp:65
 msgid "Clock low"
 msgstr "Kello alhaalla"
 
-#: eeschema/class_pin.cpp:56
+#: eeschema/class_pin.cpp:66
 msgid "Output low"
 msgstr "Lähtö alhaalla"
 
-#: eeschema/class_pin.cpp:79
+#: eeschema/class_pin.cpp:102
 msgid "Bidirectional"
 msgstr "Kaksisuuntainen"
 
-#: eeschema/class_pin.cpp:80
+#: eeschema/class_pin.cpp:103
 msgid "Tri-state"
 msgstr "Kolmitila"
 
-#: eeschema/class_pin.cpp:82
+#: eeschema/class_pin.cpp:105
 msgid "Unspecified"
 msgstr "Määrittelemätön"
 
-#: eeschema/class_pin.cpp:83
+#: eeschema/class_pin.cpp:106
 msgid "Power input"
 msgstr "Teho sisään"
 
-#: eeschema/class_pin.cpp:84
+#: eeschema/class_pin.cpp:107
 msgid "Power output"
 msgstr "Teho ulos"
 
-#: eeschema/class_pin.cpp:85
+#: eeschema/class_pin.cpp:108
 msgid "Open collector"
 msgstr "Avokollektori"
 
-#: eeschema/class_pin.cpp:86
+#: eeschema/class_pin.cpp:109
 msgid "Open emitter"
 msgstr "Avoemitteri"
 
-#: eeschema/class_pin.cpp:87
+#: eeschema/class_pin.cpp:110
 msgid "Not connected"
 msgstr "Ei liitosta"
 
-#: eeschema/class_pin.cpp:127
+#: eeschema/class_pin.cpp:166
 msgid "Pin"
 msgstr "Nasta"
 
-#: eeschema/class_pin.cpp:1597
+#: eeschema/class_pin.cpp:1636
 msgid "Number"
 msgstr "Numero"
 
@@ -9885,16 +9955,16 @@ msgstr ""
 "#Cmp ( order = Reference )"
 
 #: eeschema/build_BOM.cpp:679
-#: eeschema/build_BOM.cpp:914
+#: eeschema/build_BOM.cpp:919
 msgid " (with SubCmp)"
 msgstr ""
 
 #: eeschema/build_BOM.cpp:784
-#: eeschema/build_BOM.cpp:970
+#: eeschema/build_BOM.cpp:975
 msgid "#End Cmp\n"
 msgstr "#End Cmp\n"
 
-#: eeschema/build_BOM.cpp:911
+#: eeschema/build_BOM.cpp:916
 msgid ""
 "\n"
 "#Cmp ( order = Value )"
@@ -9902,17 +9972,17 @@ msgstr ""
 "\n"
 "#Cmp ( order = Value )"
 
-#: eeschema/build_BOM.cpp:998
+#: eeschema/build_BOM.cpp:1003
 #, c-format
 msgid "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr "> %-28.28s %s        (Lehti %s) sijainti: %3.3f, %3.3f\n"
 
-#: eeschema/build_BOM.cpp:1018
+#: eeschema/build_BOM.cpp:1023
 #, c-format
 msgid "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
 msgstr "> %-28.28s Nastalehti %-7.7s (Lehti %s) sijainti: %3.3f, %3.3f\n"
 
-#: eeschema/build_BOM.cpp:1033
+#: eeschema/build_BOM.cpp:1038
 msgid "#End labels\n"
 msgstr "#End labels\n"
 
@@ -9970,7 +10040,7 @@ msgstr "Tulostus"
 msgid "Print page %d"
 msgstr "Tulosta sivu %d"
 
-#: eeschema/libarch.cpp:55
+#: eeschema/libarch.cpp:59
 #, c-format
 msgid "An error occurred attempting to save component library <%s>."
 msgstr "Virhe yritettäessä tallentaa komponenttikirjastoa <%s>."
@@ -12228,72 +12298,76 @@ msgstr "Kieli"
 msgid "Select application language (only for testing!)"
 msgstr "Valitse sovelluksessa käytettävä kieli (vain testaukseen!)"
 
-#: common/common.cpp:60
+#: common/common.cpp:64
 msgid "Kicad project files (*.pro)|*.pro"
 msgstr "KiCad-projektitiedostot (.pro)"
 
-#: common/common.cpp:61
+#: common/common.cpp:65
 msgid "Kicad PCB files (*.brd)|*.brd"
 msgstr "KiCad-piirilevytiedostot (*.brd)|*.brd"
 
-#: common/common.cpp:62
+#: common/common.cpp:66
 msgid "Kicad schematic files (*.sch)|*.sch"
 msgstr "KiCad-kytkentäkaaviotiedostot (*.sch)|*.sch"
 
-#: common/common.cpp:63
+#: common/common.cpp:67
 msgid "Kicad netlist files (*.net)|*.net"
 msgstr "KiCad-liitostiedostot (*.net)|*.net"
 
-#: common/common.cpp:64
+#: common/common.cpp:68
 msgid "Gerber files (*.pho)|*.pho"
 msgstr "Gerber-tiedostot (*.pho)|*.pho"
 
-#: common/common.cpp:65
+#: common/common.cpp:69
 msgid "Portable document format files (*.pdf)|*.pdf"
 msgstr "Portable document format (PDF) -tiedostot (*.pdf)|*.pdf"
 
-#: common/common.cpp:66
+#: common/common.cpp:70
 msgid "All files (*)|*"
 msgstr "Kaikki tiedostot (*)|*"
 
-#: common/common.cpp:227
+#: common/common.cpp:231
 msgid " (\"):"
 msgstr " (tuumaa):"
 
-#: common/common.cpp:249
+#: common/common.cpp:253
 msgid "inches"
 msgstr "tuumaa"
 
-#: common/common.cpp:257
+#: common/common.cpp:261
 msgid "centimeters"
 msgstr "senttimetrit"
 
-#: common/common.cpp:260
+#: common/common.cpp:264
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: common/common.cpp:338
+#: common/common.cpp:342
 msgid " \""
 msgstr " \""
 
-#: common/dsnlexer.cpp:168
-msgid "in file"
-msgstr "tiedostossa"
+#: common/dsnlexer.cpp:88
+msgid "clipboard"
+msgstr "leikepöytä"
 
-#: common/dsnlexer.cpp:169
+#: common/dsnlexer.cpp:188
+msgid "in"
+msgstr "in"
+
+#: common/dsnlexer.cpp:189
 msgid "on line"
 msgstr "rivillä"
 
-#: common/dsnlexer.cpp:170
+#: common/dsnlexer.cpp:190
 msgid "at offset"
 msgstr "sirtymällä"
 
-#: common/dsnlexer.cpp:246
+#: common/dsnlexer.cpp:266
 msgid "String delimiter must be a single character of ', \", or $"
 msgstr "Merkkijonon erottimen täytyy olla joko ', \" tai $"
 
-#: common/dsnlexer.cpp:361
-#: common/dsnlexer.cpp:374
+#: common/dsnlexer.cpp:381
+#: common/dsnlexer.cpp:394
 msgid "Un-terminated delimited string"
 msgstr "Päättämätön erotettu merkkijono"
 
@@ -12363,11 +12437,12 @@ msgstr "Käännä valinta"
 msgid "Block Mirror"
 msgstr "Peilaa valinta"
 
-#: common/richio.cpp:67
+#: common/richio.cpp:73
+#: common/richio.cpp:95
 msgid "Line length exceeded"
 msgstr "Viivan pituus ylitetty"
 
-#: common/richio.cpp:177
+#: common/richio.cpp:212
 msgid "Error writing to STRINGFORMATTER"
 msgstr "Tapahtui virhe kirjoitettaessa STRINGFORMATTER:in"
 
@@ -12789,7 +12864,7 @@ msgstr "Komponentin ominaisuudet"
 msgid "Lib Component Properties"
 msgstr "Kirjastokomponentin ominaisuudet"
 
-#: eeschema/dialog_lib_edit_pin_base.h:74
+#: eeschema/dialog_lib_edit_pin_base.h:76
 msgid "Pin Properties"
 msgstr "Nastan ominaisuudet"
 
@@ -12821,6 +12896,10 @@ msgstr "GerbView:n piirtotyyliasetukset"
 msgid "Page Settings"
 msgstr "Sivun asetukset"
 
+#~ msgid "In the clearance units, enter the clearance distance"
+#~ msgstr "Syötä eristysvälin mitta"
+#~ msgid "in file"
+#~ msgstr "tiedostossa"
 #~ msgid "&Run"
 #~ msgstr "&Käynnistä"
 #~ msgid "&Open the file in a Text Editor"
@@ -13087,8 +13166,6 @@ msgstr "Sivun asetukset"
 #~ msgstr "Poistetaanko modulit?"
 #~ msgid "Delete Pcb Texts"
 #~ msgstr "Poista piirilevyn tekstit"
-#~ msgid "FreeRouting.net URL"
-#~ msgstr "FreeRouting.net URL"
 #~ msgid "Unable to create temporary file "
 #~ msgstr "Väliaikaistiedostoa ei saatu luotua"
 #~ msgid "Create temporary file "
@@ -13225,10 +13302,6 @@ msgstr "Sivun asetukset"
 #, fuzzy
 #~ msgid "Fill:"
 #~ msgstr "Suodatin"
-
-#, fuzzy
-#~ msgid "not found"
-#~ msgstr "(ei löydy)"
 
 #, fuzzy
 #~ msgid "Failed to create archive lib file "
