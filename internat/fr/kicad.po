@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-07 10:52+0100\n"
-"PO-Revision-Date: 2010-03-07 10:57+0100\n"
+"POT-Creation-Date: 2010-03-12 08:32+0100\n"
+"PO-Revision-Date: 2010-03-12 08:34+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -772,54 +772,54 @@ msgstr "Ok pour effacer les empreintes non en netliste?"
 msgid "Component \"%s\": Mismatch! module is [%s] and netlist said [%s]\n"
 msgstr "Composant [%s] différence: le module est <%s> et la netliste dit <%s>\n"
 
-#: pcbnew/netlist.cpp:544
+#: pcbnew/netlist.cpp:545
 #, c-format
 msgid "Component [%s] not found"
 msgstr "Composant [%s] non trouvé"
 
-#: pcbnew/netlist.cpp:610
+#: pcbnew/netlist.cpp:611
 #, c-format
 msgid "Module [%s]: Pad [%s] not found"
 msgstr "Module [%s]: Pad [%s] non trouvé"
 
-#: pcbnew/netlist.cpp:633
+#: pcbnew/netlist.cpp:634
 msgid "No Modules"
 msgstr "Pas de Modules"
 
-#: pcbnew/netlist.cpp:636
+#: pcbnew/netlist.cpp:637
 msgid "Components"
 msgstr "Composants"
 
-#: pcbnew/netlist.cpp:686
+#: pcbnew/netlist.cpp:687
 msgid "No modules"
 msgstr "Pas de Modules"
 
-#: pcbnew/netlist.cpp:700
+#: pcbnew/netlist.cpp:701
 msgid "No modules in NetList"
 msgstr "Pas de modules en Netliste"
 
-#: pcbnew/netlist.cpp:704
+#: pcbnew/netlist.cpp:705
 msgid "Check Modules"
 msgstr "Contrôle Modules"
 
-#: pcbnew/netlist.cpp:707
+#: pcbnew/netlist.cpp:708
 msgid "Duplicates"
 msgstr "Doubles"
 
-#: pcbnew/netlist.cpp:727
+#: pcbnew/netlist.cpp:728
 msgid "Lack:"
 msgstr "Manque:"
 
-#: pcbnew/netlist.cpp:749
+#: pcbnew/netlist.cpp:750
 msgid "Not in Netlist:"
 msgstr "Pas en Netliste:"
 
-#: pcbnew/netlist.cpp:889
+#: pcbnew/netlist.cpp:890
 #, c-format
 msgid "File <%s> not found, use Netlist for lib module selection"
 msgstr "Fichier <%s> non trouvé, Netliste utilisée pour sélection des  modules en lib."
 
-#: pcbnew/netlist.cpp:1016
+#: pcbnew/netlist.cpp:1017
 #, c-format
 msgid "Component [%s]: footprint <%s> not found"
 msgstr "Composant [%s]: Module <%s> non trouvé en librairie"
@@ -3811,6 +3811,30 @@ msgstr "Non"
 msgid " Yes"
 msgstr "Oui"
 
+#: pcbnew/dialog_layers_setup.cpp:298
+msgid "Name"
+msgstr "Nom"
+
+#: pcbnew/dialog_layers_setup.cpp:300
+msgid "Enabled"
+msgstr "Activé"
+
+#: pcbnew/dialog_layers_setup.cpp:658
+msgid "Layer name may not be empty"
+msgstr "Le nom d'une couche ne peut pas être vide"
+
+#: pcbnew/dialog_layers_setup.cpp:665
+msgid "Layer name has an illegal character, one of: '"
+msgstr "Le nom d'une couche contient un des caracteres interdit: '"
+
+#: pcbnew/dialog_layers_setup.cpp:672
+msgid "'signal' is a reserved layer name"
+msgstr "'signal' is a nom de couche réservé"
+
+#: pcbnew/dialog_layers_setup.cpp:681
+msgid "Layer name is a duplicate of another"
+msgstr "Le nom de la couche est un double d'une autre couche"
+
 #: pcbnew/dialog_edit_module_text_base.cpp:19
 #, c-format
 msgid "Module %s (%s) orient %.1f"
@@ -3855,30 +3879,6 @@ msgstr "Visible"
 #: pcbnew/dialog_edit_module_text_base.cpp:85
 msgid "Invisible"
 msgstr "Invisible"
-
-#: pcbnew/dialog_layers_setup.cpp:267
-msgid "Name"
-msgstr "Nom"
-
-#: pcbnew/dialog_layers_setup.cpp:269
-msgid "Enabled"
-msgstr "Activé"
-
-#: pcbnew/dialog_layers_setup.cpp:615
-msgid "Layer name may not be empty"
-msgstr "Le nom d'une couche ne peut pas être vide"
-
-#: pcbnew/dialog_layers_setup.cpp:622
-msgid "Layer name has an illegal character, one of: '"
-msgstr "Le nom d'une couche contient un des caracteres interdit: '"
-
-#: pcbnew/dialog_layers_setup.cpp:629
-msgid "'signal' is a reserved layer name"
-msgstr "'signal' is a nom de couche réservé"
-
-#: pcbnew/dialog_layers_setup.cpp:638
-msgid "Layer name is a duplicate of another"
-msgstr "Le nom de la couche est un double d'une autre couche"
 
 #: pcbnew/class_module.cpp:852
 msgid "Last Change"
@@ -5505,170 +5505,6 @@ msgstr "Courbe"
 msgid "Segment"
 msgstr "Segment"
 
-#: pcbnew/tool_modedit.cpp:39
-msgid "Select working library"
-msgstr "Sélection de la librairie de travail"
-
-#: pcbnew/tool_modedit.cpp:43
-msgid "Save Module in working library"
-msgstr "Sauver Module en librairie de travail"
-
-#: pcbnew/tool_modedit.cpp:48
-msgid "Create new library and save current module"
-msgstr "Créer une nouvelle librairie et y sauver le composant"
-
-#: pcbnew/tool_modedit.cpp:53
-msgid "Delete part in current library"
-msgstr "Supprimer composant en librairie de travail"
-
-#: pcbnew/tool_modedit.cpp:62
-msgid "Load module from lib"
-msgstr "Charger un module à partir d'une librairie"
-
-#: pcbnew/tool_modedit.cpp:67
-msgid "Load module from current board"
-msgstr "Charger module à partir du C.I."
-
-#: pcbnew/tool_modedit.cpp:71
-msgid "Update module in current board"
-msgstr "Remplacer module dans le C.I."
-
-#: pcbnew/tool_modedit.cpp:75
-msgid "Insert module into current board"
-msgstr "Placer module dans le C.I."
-
-#: pcbnew/tool_modedit.cpp:80
-msgid "import module"
-msgstr "Importer Module"
-
-#: pcbnew/tool_modedit.cpp:84
-msgid "export module"
-msgstr "Exporter Module"
-
-#: pcbnew/tool_modedit.cpp:96
-msgid "Module Properties"
-msgstr "Propriétés du Module"
-
-#: pcbnew/tool_modedit.cpp:100
-msgid "Print Module"
-msgstr "Imprimer Module"
-
-#: pcbnew/tool_modedit.cpp:131
-msgid "Module Check"
-msgstr "Test module"
-
-#: pcbnew/tool_modedit.cpp:155
-msgid "Add Pads"
-msgstr "Addition de \"pins\""
-
-#: pcbnew/tool_modedit.cpp:206
-msgid "Display Polar Coord ON"
-msgstr "Activer affichage coord Polaires"
-
-#: pcbnew/tool_modedit.cpp:218
-msgid "Change Cursor Shape"
-msgstr "Sélection de la forme du curseur"
-
-#: pcbnew/tool_modedit.cpp:223
-msgid "Show Pads Sketch"
-msgstr "Afficher Pads en Contour"
-
-#: pcbnew/tool_modedit.cpp:228
-msgid "Show Texts Sketch"
-msgstr "Afficher textes en contour"
-
-#: pcbnew/tool_modedit.cpp:233
-msgid "Show Edges Sketch"
-msgstr "Afficher Modules en contour"
-
-#: pcbnew/tool_modedit.cpp:302
-#, c-format
-msgid "Grid %.1f"
-msgstr "Grille %.1f"
-
-#: pcbnew/tool_modedit.cpp:304
-#, c-format
-msgid "Grid %.3f"
-msgstr "Grille %.3f"
-
-#: pcbnew/muwave_command.cpp:43
-msgid "Add Line"
-msgstr "Addition de lignes"
-
-#: pcbnew/muwave_command.cpp:47
-msgid "Add Gap"
-msgstr "Ajouter gap"
-
-#: pcbnew/muwave_command.cpp:51
-msgid "Add Stub"
-msgstr "Ajout de stub"
-
-#: pcbnew/muwave_command.cpp:55
-msgid "Add Arc Stub"
-msgstr "Ajout de stub (arc)"
-
-#: pcbnew/muwave_command.cpp:59
-msgid "Add Polynomial Shape"
-msgstr "Ajout Forme polynomiale"
-
-#: pcbnew/move_or_drag_track.cpp:883
-msgid "Unable to drag this segment: too many segments connected"
-msgstr "Impossible de dragger ce segment: trop de segments connectés"
-
-#: pcbnew/move_or_drag_track.cpp:952
-msgid "Unable to drag this segment: two collinear segments"
-msgstr "Impossible de dragger ce segment: 2 segments alignés"
-
-#: pcbnew/zones_by_polygon_fill_functions.cpp:130
-msgid "No Net"
-msgstr "No Net"
-
-#: pcbnew/dialog_mask_clearance_base.cpp:28
-msgid "Dimensions:"
-msgstr "Dimensions:"
-
-#: pcbnew/dialog_mask_clearance_base.cpp:30
-msgid ""
-"Note:\n"
-"- a positive value means a mask bigger than a pad\n"
-"- a negative value means a mask smaller than a pad\n"
-msgstr ""
-"Note:\n"
-"- une valeur positive signifie un masque plus grand que le pad\n"
-"- une valeur négative signifie un masque plus petite que le pad\n"
-
-#: pcbnew/dialog_mask_clearance_base.cpp:44
-msgid ""
-"This is the global clearance between pads and the solder mask\n"
-"This value can be superseded by local values for a footprint or a pad."
-msgstr ""
-"Ceci est la marge globale entre pads et le vernis épargne masque de soudure\n"
-"Cette valeur peut être remplacée par les valeurs locales de l'empreinte ou du pad"
-
-#: pcbnew/dialog_mask_clearance_base.cpp:57
-msgid ""
-"This is the global clearance between pads and the solder paste\n"
-"This value can be superseded by local values for a footprint or a pad.\n"
-"The final clearance value is the sum of this value and the clearance value ratio"
-msgstr ""
-"Ceci est la marge globale entre pads et le  masque de pâte à souder\n"
-"Cette valeur peut être remplacée par les valeurs locales de l'empreinte ou du pad\n"
-"La valeur finale est la somme de cette valeur et de la valeur liée au coefficient"
-
-#: pcbnew/dialog_mask_clearance_base.cpp:70
-msgid ""
-"This is the global clearance ratio in per cent between pads and the solder paste\n"
-"A value of 10 means the clearance value is 10 per cent of the pad size\n"
-"This value can be superseded by local values for a footprint or a pad.\n"
-"The final clearance value is the sum of this value and the clearance value"
-msgstr ""
-"Ceci est la valeur locale de la marge entre pads et le masque de pâte à souder\n"
-"pour cette empreinte\n"
-"Une valeur de 10 signifie que la marge est 10 pour cent  de la taille du pad\n"
-"Cette valeur peut être remplacée par une valeur locale du pad\n"
-"La marge finale est la somme de cette valeur et du rapport de marge\n"
-"Une valeur négative signifie que le masque est plus petit que le pad."
-
 #: pcbnew/dialog_layers_setup_base.cpp:23
 msgid "Preset Layer Groupings"
 msgstr "Groupes Prédéterminés de Couches"
@@ -5947,8 +5783,8 @@ msgid "Board contour"
 msgstr "Contour pcb"
 
 #: pcbnew/dialog_layers_setup_base.cpp:733
-msgid "Eco2_later"
-msgstr "Eco2_réserve"
+msgid "Eco1_later"
+msgstr "Eco1_réserve"
 
 #: pcbnew/dialog_layers_setup_base.cpp:752
 #: pcbnew/dialog_layers_setup_base.cpp:775
@@ -5958,8 +5794,8 @@ msgid "Auxiliary"
 msgstr "Auxiliaire"
 
 #: pcbnew/dialog_layers_setup_base.cpp:756
-msgid "Eco1_later"
-msgstr "Eco1_réserve"
+msgid "Eco2_later"
+msgstr "Eco2_réserve"
 
 #: pcbnew/dialog_layers_setup_base.cpp:779
 msgid "Comments_later"
@@ -5976,6 +5812,170 @@ msgstr "Drawings_réserve"
 #: pcbnew/dialog_layers_setup_base.cpp:816
 msgid "If you want a layer for documentation drawings"
 msgstr "Si vous voulez une couche de dessins pour documentation."
+
+#: pcbnew/tool_modedit.cpp:39
+msgid "Select working library"
+msgstr "Sélection de la librairie de travail"
+
+#: pcbnew/tool_modedit.cpp:43
+msgid "Save Module in working library"
+msgstr "Sauver Module en librairie de travail"
+
+#: pcbnew/tool_modedit.cpp:48
+msgid "Create new library and save current module"
+msgstr "Créer une nouvelle librairie et y sauver le composant"
+
+#: pcbnew/tool_modedit.cpp:53
+msgid "Delete part in current library"
+msgstr "Supprimer composant en librairie de travail"
+
+#: pcbnew/tool_modedit.cpp:62
+msgid "Load module from lib"
+msgstr "Charger un module à partir d'une librairie"
+
+#: pcbnew/tool_modedit.cpp:67
+msgid "Load module from current board"
+msgstr "Charger module à partir du C.I."
+
+#: pcbnew/tool_modedit.cpp:71
+msgid "Update module in current board"
+msgstr "Remplacer module dans le C.I."
+
+#: pcbnew/tool_modedit.cpp:75
+msgid "Insert module into current board"
+msgstr "Placer module dans le C.I."
+
+#: pcbnew/tool_modedit.cpp:80
+msgid "import module"
+msgstr "Importer Module"
+
+#: pcbnew/tool_modedit.cpp:84
+msgid "export module"
+msgstr "Exporter Module"
+
+#: pcbnew/tool_modedit.cpp:96
+msgid "Module Properties"
+msgstr "Propriétés du Module"
+
+#: pcbnew/tool_modedit.cpp:100
+msgid "Print Module"
+msgstr "Imprimer Module"
+
+#: pcbnew/tool_modedit.cpp:131
+msgid "Module Check"
+msgstr "Test module"
+
+#: pcbnew/tool_modedit.cpp:155
+msgid "Add Pads"
+msgstr "Addition de \"pins\""
+
+#: pcbnew/tool_modedit.cpp:206
+msgid "Display Polar Coord ON"
+msgstr "Activer affichage coord Polaires"
+
+#: pcbnew/tool_modedit.cpp:218
+msgid "Change Cursor Shape"
+msgstr "Sélection de la forme du curseur"
+
+#: pcbnew/tool_modedit.cpp:223
+msgid "Show Pads Sketch"
+msgstr "Afficher Pads en Contour"
+
+#: pcbnew/tool_modedit.cpp:228
+msgid "Show Texts Sketch"
+msgstr "Afficher textes en contour"
+
+#: pcbnew/tool_modedit.cpp:233
+msgid "Show Edges Sketch"
+msgstr "Afficher Modules en contour"
+
+#: pcbnew/tool_modedit.cpp:302
+#, c-format
+msgid "Grid %.1f"
+msgstr "Grille %.1f"
+
+#: pcbnew/tool_modedit.cpp:304
+#, c-format
+msgid "Grid %.3f"
+msgstr "Grille %.3f"
+
+#: pcbnew/muwave_command.cpp:43
+msgid "Add Line"
+msgstr "Addition de lignes"
+
+#: pcbnew/muwave_command.cpp:47
+msgid "Add Gap"
+msgstr "Ajouter gap"
+
+#: pcbnew/muwave_command.cpp:51
+msgid "Add Stub"
+msgstr "Ajout de stub"
+
+#: pcbnew/muwave_command.cpp:55
+msgid "Add Arc Stub"
+msgstr "Ajout de stub (arc)"
+
+#: pcbnew/muwave_command.cpp:59
+msgid "Add Polynomial Shape"
+msgstr "Ajout Forme polynomiale"
+
+#: pcbnew/move_or_drag_track.cpp:883
+msgid "Unable to drag this segment: too many segments connected"
+msgstr "Impossible de dragger ce segment: trop de segments connectés"
+
+#: pcbnew/move_or_drag_track.cpp:952
+msgid "Unable to drag this segment: two collinear segments"
+msgstr "Impossible de dragger ce segment: 2 segments alignés"
+
+#: pcbnew/zones_by_polygon_fill_functions.cpp:130
+msgid "No Net"
+msgstr "No Net"
+
+#: pcbnew/dialog_mask_clearance_base.cpp:28
+msgid "Dimensions:"
+msgstr "Dimensions:"
+
+#: pcbnew/dialog_mask_clearance_base.cpp:30
+msgid ""
+"Note:\n"
+"- a positive value means a mask bigger than a pad\n"
+"- a negative value means a mask smaller than a pad\n"
+msgstr ""
+"Note:\n"
+"- une valeur positive signifie un masque plus grand que le pad\n"
+"- une valeur négative signifie un masque plus petite que le pad\n"
+
+#: pcbnew/dialog_mask_clearance_base.cpp:44
+msgid ""
+"This is the global clearance between pads and the solder mask\n"
+"This value can be superseded by local values for a footprint or a pad."
+msgstr ""
+"Ceci est la marge globale entre pads et le vernis épargne masque de soudure\n"
+"Cette valeur peut être remplacée par les valeurs locales de l'empreinte ou du pad"
+
+#: pcbnew/dialog_mask_clearance_base.cpp:57
+msgid ""
+"This is the global clearance between pads and the solder paste\n"
+"This value can be superseded by local values for a footprint or a pad.\n"
+"The final clearance value is the sum of this value and the clearance value ratio"
+msgstr ""
+"Ceci est la marge globale entre pads et le  masque de pâte à souder\n"
+"Cette valeur peut être remplacée par les valeurs locales de l'empreinte ou du pad\n"
+"La valeur finale est la somme de cette valeur et de la valeur liée au coefficient"
+
+#: pcbnew/dialog_mask_clearance_base.cpp:70
+msgid ""
+"This is the global clearance ratio in per cent between pads and the solder paste\n"
+"A value of 10 means the clearance value is 10 per cent of the pad size\n"
+"This value can be superseded by local values for a footprint or a pad.\n"
+"The final clearance value is the sum of this value and the clearance value"
+msgstr ""
+"Ceci est la valeur locale de la marge entre pads et le masque de pâte à souder\n"
+"pour cette empreinte\n"
+"Une valeur de 10 signifie que la marge est 10 pour cent  de la taille du pad\n"
+"Cette valeur peut être remplacée par une valeur locale du pad\n"
+"La marge finale est la somme de cette valeur et du rapport de marge\n"
+"Une valeur négative signifie que le masque est plus petit que le pad."
 
 #: pcbnew/dialog_global_edit_tracks_and_vias.cpp:83
 #: pcbnew/dialog_global_edit_tracks_and_vias.cpp:95
@@ -6858,19 +6858,19 @@ msgstr "Change Pads du Module"
 msgid "Change Pads on Same Modules"
 msgstr "Change Pads des Modules id."
 
-#: pcbnew/dialog_pad_properties.cpp:571
+#: pcbnew/dialog_pad_properties.cpp:569
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
 msgstr "Valeur incorrecte pour diamètre de perçage: perçage plus grand que la taille du pad"
 
-#: pcbnew/dialog_pad_properties.cpp:579
-msgid "Error: pad is not a through pad and has a hole"
-msgstr "Erreur: ce pad n'est pas tranversant et a un trou"
+#: pcbnew/dialog_pad_properties.cpp:578
+msgid "Error: pad is not on a copper layer and has a hole"
+msgstr "Erreur: ce pad n'est pas traversant et a un trou."
 
-#: pcbnew/dialog_pad_properties.cpp:587
+#: pcbnew/dialog_pad_properties.cpp:586
 msgid "Incorrect value for pad offset"
 msgstr "Valeur incorrecte pour offset du pad"
 
-#: pcbnew/dialog_pad_properties.cpp:652
+#: pcbnew/dialog_pad_properties.cpp:649
 msgid "Unknown netname, no change"
 msgstr "Net inconnu, pas de changement"
 
@@ -6959,6 +6959,54 @@ msgstr "Largeur Texte Module"
 #: pcbnew/dialog_graphic_items_options_base.cpp:96
 msgid "General:"
 msgstr "Général :"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:25
+msgid "Export/Import to/from FreeRoute:"
+msgstr ""
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:40
+msgid "Export a Specctra Design (*.dsn) File"
+msgstr "Exporter un fichier de conception Specctra (*.dsn)"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:41
+msgid "Export a Specctra DSN file (to FreeRouter)"
+msgstr "Exporter un fichier Specctra DSN (pour FreeRoute)"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:45
+msgid "Launch FreeRouter via Java Web Start"
+msgstr "Lancer FreeRouter via Java Web Start"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:46
+msgid "Use Java Web Start function to run FreeRouter via Internet (or your Browser if not found)"
+msgstr "Utiliser Java Web Start function pour lancer FreeRouter via Internet (ou votre Navigateur si non trouvé)"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:50
+msgid "Back Import the Specctra Session (*.ses) File"
+msgstr "Importer un Fichier Specctra Session (*.ses)"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:51
+msgid "Merge a session file created by FreeRouter with the current board."
+msgstr "Importer un fichier session créé par FreeRouter dans le C.I. courant."
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:67
+msgid "FreeRoute Info:"
+msgstr "Info Freeroute:"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:82
+msgid "Visit the FreeRouting.net Website with your Browser"
+msgstr "Visiter le site FreeRouting.net"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:85
+msgid "FreeRouting.net URL"
+msgstr "URL FreeRouting.net"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:90
+msgid "The URL of the FreeRouting.net website"
+msgstr "L' URL du site FreeRouting.net"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:94
+msgid "Help"
+msgstr "Aide"
 
 #: eeschema/plotps.cpp:165
 msgid "Page Size A4"
@@ -8240,6 +8288,92 @@ msgstr " Rien trouvé"
 msgid " in lib "
 msgstr " en libr. "
 
+#: eeschema/build_BOM.cpp:59
+msgid "Bill of Materials file (*.lst)|*.lst"
+msgstr "Fichier Liste du Matériel (*.lst)|*.lst"
+
+#: eeschema/build_BOM.cpp:104
+msgid "Bill of Materials"
+msgstr "Liste du Matériel"
+
+#: eeschema/build_BOM.cpp:154
+#: eeschema/build_BOM.cpp:191
+#: eeschema/build_BOM.cpp:227
+msgid "Failed to open file "
+msgstr "Erreur ouverture "
+
+#: eeschema/build_BOM.cpp:272
+#, c-format
+msgid ""
+"\n"
+"#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n"
+msgstr ""
+"\n"
+"#Labels globaux, hiérarchiques et pins de feuille ( ordre = Numéro de feuille ) nombre = %d\n"
+
+#: eeschema/build_BOM.cpp:284
+#, c-format
+msgid ""
+"\n"
+"#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n"
+"\n"
+msgstr ""
+"\n"
+"#Labels globaux, hiérarchiques et pins de feuille ( ordre = Alphab. ) nombre = %d\n"
+"\n"
+
+#: eeschema/build_BOM.cpp:292
+msgid ""
+"\n"
+"#End List\n"
+msgstr ""
+"\n"
+"#End List\n"
+
+#: eeschema/build_BOM.cpp:667
+msgid "Field"
+msgstr "Champ"
+
+#: eeschema/build_BOM.cpp:676
+msgid ""
+"\n"
+"#Cmp ( order = Reference )"
+msgstr ""
+"\n"
+"#Cmp ( ordre = Référence )"
+
+#: eeschema/build_BOM.cpp:679
+#: eeschema/build_BOM.cpp:919
+msgid " (with SubCmp)"
+msgstr "avec sub-composants"
+
+#: eeschema/build_BOM.cpp:784
+#: eeschema/build_BOM.cpp:975
+msgid "#End Cmp\n"
+msgstr "#End Cmp\n"
+
+#: eeschema/build_BOM.cpp:916
+msgid ""
+"\n"
+"#Cmp ( order = Value )"
+msgstr ""
+"\n"
+"#Cmp ( ordre = Valeur )"
+
+#: eeschema/build_BOM.cpp:1003
+#, c-format
+msgid "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"
+msgstr "> %-28.28s %s        (Feuille %s) pos: %3.3f, %3.3f\n"
+
+#: eeschema/build_BOM.cpp:1023
+#, c-format
+msgid "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
+msgstr "> %-28.28s PinSheet %-7.7s (Feuille %s) pos: %3.3f, %3.3f\n"
+
+#: eeschema/build_BOM.cpp:1038
+msgid "#End labels\n"
+msgstr "#End labels\n"
+
 #: eeschema/eeschema.cpp:135
 msgid "Eeschema is already running, Continue?"
 msgstr "Eeschema est en cours d'exécution. Continuer ?"
@@ -8422,92 +8556,6 @@ msgstr "Placer composant en schématique"
 #, c-format
 msgid "Part %c"
 msgstr "Composant %c"
-
-#: eeschema/build_BOM.cpp:59
-msgid "Bill of Materials file (*.lst)|*.lst"
-msgstr "Fichier Liste du Matériel (*.lst)|*.lst"
-
-#: eeschema/build_BOM.cpp:104
-msgid "Bill of Materials"
-msgstr "Liste du Matériel"
-
-#: eeschema/build_BOM.cpp:154
-#: eeschema/build_BOM.cpp:191
-#: eeschema/build_BOM.cpp:227
-msgid "Failed to open file "
-msgstr "Erreur ouverture "
-
-#: eeschema/build_BOM.cpp:272
-#, c-format
-msgid ""
-"\n"
-"#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n"
-msgstr ""
-"\n"
-"#Labels globaux, hiérarchiques et pins de feuille ( ordre = Numéro de feuille ) nombre = %d\n"
-
-#: eeschema/build_BOM.cpp:284
-#, c-format
-msgid ""
-"\n"
-"#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n"
-"\n"
-msgstr ""
-"\n"
-"#Labels globaux, hiérarchiques et pins de feuille ( ordre = Alphab. ) nombre = %d\n"
-"\n"
-
-#: eeschema/build_BOM.cpp:292
-msgid ""
-"\n"
-"#End List\n"
-msgstr ""
-"\n"
-"#End List\n"
-
-#: eeschema/build_BOM.cpp:667
-msgid "Field"
-msgstr "Champ"
-
-#: eeschema/build_BOM.cpp:676
-msgid ""
-"\n"
-"#Cmp ( order = Reference )"
-msgstr ""
-"\n"
-"#Cmp ( ordre = Référence )"
-
-#: eeschema/build_BOM.cpp:679
-#: eeschema/build_BOM.cpp:914
-msgid " (with SubCmp)"
-msgstr "avec sub-composants"
-
-#: eeschema/build_BOM.cpp:784
-#: eeschema/build_BOM.cpp:970
-msgid "#End Cmp\n"
-msgstr "#End Cmp\n"
-
-#: eeschema/build_BOM.cpp:911
-msgid ""
-"\n"
-"#Cmp ( order = Value )"
-msgstr ""
-"\n"
-"#Cmp ( ordre = Valeur )"
-
-#: eeschema/build_BOM.cpp:998
-#, c-format
-msgid "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"
-msgstr "> %-28.28s %s        (Feuille %s) pos: %3.3f, %3.3f\n"
-
-#: eeschema/build_BOM.cpp:1018
-#, c-format
-msgid "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
-msgstr "> %-28.28s PinSheet %-7.7s (Feuille %s) pos: %3.3f, %3.3f\n"
-
-#: eeschema/build_BOM.cpp:1033
-msgid "#End labels\n"
-msgstr "#End labels\n"
 
 #: eeschema/onrightclick.cpp:108
 msgid "Leave Sheet"
@@ -12200,14 +12248,30 @@ msgstr "Couleurs"
 msgid "Error"
 msgstr "Erreur"
 
-#: common/richio.cpp:73
-#: common/richio.cpp:95
-msgid "Line length exceeded"
-msgstr "Longueur de ligne dépassée"
+#: common/dsnlexer.cpp:88
+msgid "clipboard"
+msgstr "Presse papier"
 
-#: common/richio.cpp:213
-msgid "Error writing to STRINGFORMATTER"
-msgstr "Erreur d'écriture à STRINGFORMATTER"
+#: common/dsnlexer.cpp:188
+msgid "in"
+msgstr "dans"
+
+#: common/dsnlexer.cpp:189
+msgid "on line"
+msgstr "en ligne"
+
+#: common/dsnlexer.cpp:190
+msgid "at offset"
+msgstr "à l'offset"
+
+#: common/dsnlexer.cpp:266
+msgid "String delimiter must be a single character of ', \", or $"
+msgstr "Le caractère de délimitation de ligne doit être un seul caractère  ', \", or $"
+
+#: common/dsnlexer.cpp:381
+#: common/dsnlexer.cpp:394
+msgid "Un-terminated delimited string"
+msgstr "Ligne délimitée non terminée"
 
 #: common/edaappl.cpp:108
 msgid "French"
@@ -12293,26 +12357,14 @@ msgstr "Zoom:  "
 msgid "Grid Select"
 msgstr "Sélection Grille"
 
-#: common/dsnlexer.cpp:169
-msgid "in file"
-msgstr "dans le fichier"
+#: common/richio.cpp:73
+#: common/richio.cpp:95
+msgid "Line length exceeded"
+msgstr "Longueur de ligne dépassée"
 
-#: common/dsnlexer.cpp:170
-msgid "on line"
-msgstr "en ligne"
-
-#: common/dsnlexer.cpp:171
-msgid "at offset"
-msgstr "à l'offset"
-
-#: common/dsnlexer.cpp:247
-msgid "String delimiter must be a single character of ', \", or $"
-msgstr "Le caractère de délimitation de ligne doit être un seul caractère  ', \", or $"
-
-#: common/dsnlexer.cpp:362
-#: common/dsnlexer.cpp:375
-msgid "Un-terminated delimited string"
-msgstr "Ligne délimitée non terminée"
+#: common/richio.cpp:212
+msgid "Error writing to STRINGFORMATTER"
+msgstr "Erreur d'écriture à STRINGFORMATTER"
 
 #: common/eda_doc.cpp:149
 msgid "Doc File "
@@ -13020,6 +13072,11 @@ msgstr "Options d'Affichage"
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
 
+#, fuzzy
+#~ msgid "Warning: pad is not a through pad and has a hole; Continue?"
+#~ msgstr "Erreur: ce pad n'est pas tranversant et a un trou"
+#~ msgid "in file"
+#~ msgstr "dans le fichier"
 #~ msgid "In the clearance units, enter the clearance distance"
 #~ msgstr "Entrée l'isolation"
 #~ msgid "&Run"
@@ -13527,31 +13584,8 @@ msgstr "Ajustage opt Page"
 #, fuzzy
 #~ msgid "Do Not Show"
 #~ msgstr "Ne pas montrer"
-#~ msgid "Export a Specctra Design (*.dsn) File"
-#~ msgstr "Exporter un fichier de conception Specctra (*.dsn)"
-#~ msgid "Export a Specctra DSN file (to FreeRouter)"
-#~ msgstr "Exporter un fichier Specctra DSN (pour FreeRoute)"
-#~ msgid "Launch FreeRouter via Java Web Start"
-#~ msgstr "Lancer FreeRouter via Java Web Start"
-#~ msgid ""
-#~ "Use Java Web Start function to run FreeRouter via Internet (or your "
-#~ "Browser if not found)"
-#~ msgstr ""
-#~ "Utiliser Java Web Start function pour lancer FreeRouter via Internet (ou "
-#~ "votre Navigateur si non trouvé)"
-#~ msgid "Back Import the Specctra Session (*.ses) File"
-#~ msgstr "Importer un Fichier Specctra Session (*.ses)"
-#~ msgid "Merge a session file created by FreeRouter with the current board."
-#~ msgstr ""
-#~ "Importer un fichier session créé par FreeRouter dans le C.I. courant."
-#~ msgid "Visit FreeRouting.net website"
-#~ msgstr "Visiter le site FreeRouting.net"
 #~ msgid "Launch your browser and go to the FreeRouting.net website"
 #~ msgstr "Lancer votre navigateur pour aller sur  FreeRouting.net"
-#~ msgid "FreeRouting.net URL"
-#~ msgstr "URL FreeRouting.net"
-#~ msgid "The URL of the FreeRouting.net website"
-#~ msgstr "L' URL du site FreeRouting.net"
 #~ msgid "Display Grid OFF"
 #~ msgstr "Suppression de l'affichage de la grille"
 #~ msgid "dialog_freeroute_exchange"

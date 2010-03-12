@@ -573,18 +573,10 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
     int padlayers_mask = PadLayerMask & (LAYER_BACK | LAYER_FRONT);
     if( padlayers_mask == 0 )
     {
-        if( g_Pad_Master.m_Size.x || g_Pad_Master.m_Drill.y )
+        if( g_Pad_Master.m_Drill.x || g_Pad_Master.m_Drill.y )
         {
             DisplayError( this, _( "Error: pad is not on a copper layer and has a hole" ) );
             return;
-        }
-    }
-    if( padlayers_mask != (LAYER_BACK | LAYER_FRONT) )
-    {
-        if( g_Pad_Master.m_Size.x || g_Pad_Master.m_Drill.y )
-        {
-            if( !IsOK(this, _( "Warning: pad is not a through pad and has a hole; Continue?" ) ) )
-                return;
         }
     }
 
