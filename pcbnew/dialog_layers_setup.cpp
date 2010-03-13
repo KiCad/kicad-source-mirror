@@ -38,14 +38,14 @@
 
 // some define to choose how copper layers widgets are shown
 
-// if defined, displays only active copper layers
+// if defined, display only active copper layers
 // if not displays always 1=the full set (16 layers)
-//#define HIDE_INACTIVE_LAYERS 
+#define HIDE_INACTIVE_LAYERS
 
-//if defined, uses the layer manager copper layers order (from FRONT to BACK)
-//  to display inner layers.
+// if defined, use the layer manager copper layers order (from FRONT to BACK)
+// to display inner layers.
 // if not, use the default order (from BACK to FRONT)
-//#define USE_LAYER_MANAGER_COPPER_LAYERS_ORDER
+#define USE_LAYER_MANAGER_COPPER_LAYERS_ORDER
 
 
 /**
@@ -59,7 +59,7 @@ struct CTLs
         name     = aName;
         checkbox = aCheckBox;
         choice   = aChoiceOrDesc;
-        panel = aPanel;
+        panel    = aPanel;
     }
 
     wxControl*      name;
@@ -464,12 +464,16 @@ void DIALOG_LAYERS_SETUP::setCopperLayerCheckBoxes( int copperCount )
     for( layer=LAYER_N_2; layer < NB_COPPER_LAYERS-1;  ++layer, --copperCount )
     {
         bool state = copperCount > 0;
+
 #ifdef HIDE_INACTIVE_LAYERS
-    // This code hide non active copper layers
-        CTLs ctl = getCTLs(layer);
+        // This code hides non-active copper layers, or redisplays hidden
+        // layers which are now needed.
+        CTLs ctl = getCTLs( layer );
+
         ctl.name->Show( state );
         ctl.checkbox->Show( state );
         ctl.choice->Show( state );
+
         if( ctl.panel )
             ctl.panel->Show( state );
 #endif
@@ -500,7 +504,7 @@ void DIALOG_LAYERS_SETUP::DenyChangeCheckBox( wxCommandEvent& event )
     // user may not change copper layer checkboxes from anything other than
     // either presets choice or the copper layer choice controls.
 
-    // I tried to simply diable the copper CheckBoxes but they look like crap,
+    // I tried to simply disable the copper CheckBoxes but they look like crap,
     // so leave them enabled and reverse the user's attempt to toggle them.
 
     setCopperLayerCheckBoxes( m_CopperLayerCount );
@@ -530,9 +534,12 @@ void DIALOG_LAYERS_SETUP::OnPresetsChoice( wxCommandEvent& event )
         }
 
         m_CopperLayerCount = copperCount;
+
         showCopperChoice( m_CopperLayerCount );
 
         showSelectedLayerCheckBoxes( m_EnabledLayers );
+
+        setCopperLayerCheckBoxes( m_CopperLayerCount );
     }
 }
 
