@@ -421,6 +421,15 @@ void WinEDA_SetPageFrame::CreateControls()
     m_TextComment3->SetValidator( wxTextValidator(wxFILTER_NONE, & m_Screen->m_Commentaire3) );
     m_TextComment4->SetValidator( wxTextValidator(wxFILTER_NONE, & m_Screen->m_Commentaire4) );
 ////@end WinEDA_SetPageFrame content construction
+#ifndef EESCHEMA
+        m_RevisionExport->Show(false);
+        m_TitleExport->Show(false);
+        m_CompanyExport->Show(false);
+        m_Comment1Export->Show(false);
+        m_Comment2Export->Show(false);
+        m_Comment3Export->Show(false);
+        m_Comment4Export->Show(false);
+#endif
 }
 
 
