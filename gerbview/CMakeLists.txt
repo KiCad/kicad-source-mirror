@@ -49,7 +49,6 @@ set(GERBVIEW_SRCS
     tracepcb.cpp )
 
 set(GERBVIEW_EXTRA_SRCS
-    ../share/setpage.cpp
     ../pcbnew/layer_widget.cpp
     ../pcbnew/printout_controler.cpp
 )

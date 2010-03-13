@@ -82,7 +82,6 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
     EVT_MENU( ID_GENERAL_HELP, WinEDA_DrawFrame::GetKicadHelp )
     EVT_MENU( ID_KICAD_ABOUT, WinEDA_DrawFrame::GetKicadAbout )
 
-    EVT_TOOL( ID_SHEET_SET, WinEDA_DrawFrame::Process_PageSettings )
     EVT_TOOL( wxID_CUT, WinEDA_GerberFrame::Process_Special_Functions )
     EVT_TOOL( wxID_COPY, WinEDA_GerberFrame::Process_Special_Functions )
     EVT_TOOL( wxID_PASTE, WinEDA_GerberFrame::Process_Special_Functions )
