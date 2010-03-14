@@ -8,7 +8,7 @@ KiCad 2010-xx-xx Release
   * Many new hotkeys added
   * Plot and print dialog rewritten
   * Remember last dialog position and tab
-  * Hershey fonts
+  * Better font shapes
   * Generation of bill of materials
   * Plot SVG output
 
@@ -20,11 +20,13 @@ KiCad 2010-xx-xx Release
   * New pin properties dialog
 
 == PCBNew
+  * Plot DXF output
   * Advanced layer setup
   * New panel for layer management
   * Support for net classes
   * Incorrect DRC error fixed, DRC min via and min track check
   * Handle local mask clearance and local net clearance
+  * Handle zones in connectivity calculations
 
 == Core
   * Many many bugfixes and cleanups
