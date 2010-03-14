@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2010-03-14 11:35-0300\n"
+"PO-Revision-Date: 2010-03-14 11:57-0300\n"
 "Last-Translator: Renie S. Marquet <reniemarquet@uol.com.br>\n"
 "Language-Team: kicad team\n"
 "MIME-Version: 1.0\n"
@@ -244,7 +244,7 @@ msgstr "Esta é a classe de net default."
 
 #: pcbnew/class_board.cpp:215
 msgid "Front"
-msgstr "Frente"
+msgstr "Superior"
 
 #: pcbnew/class_board.cpp:216
 #: pcbnew/dialog_layers_setup_base.cpp:199
@@ -319,39 +319,39 @@ msgstr "Interno 5"
 #: pcbnew/class_board.cpp:230
 #: pcbnew/dialog_layers_setup_base.cpp:577
 msgid "Back"
-msgstr "Verso"
+msgstr "Inferior"
 
 #: pcbnew/class_board.cpp:231
 msgid "Adhes_Back"
-msgstr "Adesivo_verso"
+msgstr "Adesivo_inferior"
 
 #: pcbnew/class_board.cpp:232
 msgid "Adhes_Front"
-msgstr "Adesivo_frente"
+msgstr "Adesivo_Superior"
 
 #: pcbnew/class_board.cpp:233
 msgid "SoldP_Back"
-msgstr "P.Solda_verso"
+msgstr "P.Solda_inferior"
 
 #: pcbnew/class_board.cpp:234
 msgid "SoldP_Front"
-msgstr "P.Solda_frente"
+msgstr "P.Solda_Superior"
 
 #: pcbnew/class_board.cpp:235
 msgid "SilkS_Back"
-msgstr "Silk_verso"
+msgstr "Silk_inferior"
 
 #: pcbnew/class_board.cpp:236
 msgid "SilkS_Front"
-msgstr "Silk_frente"
+msgstr "Silk_Superior"
 
 #: pcbnew/class_board.cpp:237
 msgid "Mask_Back"
-msgstr "Máscara_verso"
+msgstr "Máscara_inferior"
 
 #: pcbnew/class_board.cpp:238
 msgid "Mask_Front"
-msgstr "Máscara_frente"
+msgstr "Máscara_Superior"
 
 #: pcbnew/class_board.cpp:239
 msgid "Drawings"
@@ -923,32 +923,32 @@ msgstr "Mostrar nets não conectadas como uma interligação"
 
 #: pcbnew/class_pcb_layer_widget.cpp:74
 msgid "Pads Front"
-msgstr "Ilhas da frente"
+msgstr "Ilhas da camada superior"
 
 #: pcbnew/class_pcb_layer_widget.cpp:74
 msgid "Show footprint pads on board's front"
-msgstr "Mostar ilhas de footprints da frente das placas"
+msgstr "Mostar ilhas de footprints da camada superior das placas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:75
 msgid "Pads Back"
-msgstr "Ilhas verso"
+msgstr "Ilhas camada inferior"
 
 #: pcbnew/class_pcb_layer_widget.cpp:75
 msgid "Show footprint pads on board's back"
-msgstr "Mostrar ilhas de footprint no verso das placas"
+msgstr "Mostrar ilhas de footprint na camada inferior das placas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:77
 msgid "Text Front"
-msgstr "Texto frente"
+msgstr "Texto camada Superior"
 
 #: pcbnew/class_pcb_layer_widget.cpp:77
 #: pcbnew/class_pcb_layer_widget.cpp:78
 msgid "Show footprint text on board's back"
-msgstr "Mostar texto de footprint no verso das placas"
+msgstr "Mostar texto de footprint na camada inferior das placas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:78
 msgid "Text Back"
-msgstr "Texto verso"
+msgstr "Texto camada inferior"
 
 #: pcbnew/class_pcb_layer_widget.cpp:79
 msgid "Hidden Text"
@@ -989,19 +989,19 @@ msgstr "Mostar uma marca em ilhas que não tem net conectada"
 
 #: pcbnew/class_pcb_layer_widget.cpp:84
 msgid "Modules Front"
-msgstr "Módulos frente"
+msgstr "Módulos camada superior"
 
 #: pcbnew/class_pcb_layer_widget.cpp:84
 msgid "Show footprints that are on board's front"
-msgstr "Mostrar footprints que estão na frente das placas"
+msgstr "Mostrar footprints que estão na camada superior das placas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:85
 msgid "Modules Back"
-msgstr "Módulos verso"
+msgstr "Módulos camada inferior"
 
 #: pcbnew/class_pcb_layer_widget.cpp:85
 msgid "Show footprints that are on board's back"
-msgstr "Mostar footprints que estão no verso das placas"
+msgstr "Mostar footprints que estão na camada inferior das placas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:86
 msgid "Values"
@@ -1035,7 +1035,7 @@ msgstr "Desenhar"
 
 #: pcbnew/class_pcb_layer_widget.cpp:230
 msgid "Front copper layer"
-msgstr "Camada de cobre da frente"
+msgstr "Camada de cobre superior"
 
 #: pcbnew/class_pcb_layer_widget.cpp:238
 msgid "An innner copper layer"
@@ -1043,39 +1043,39 @@ msgstr "Uma camada de cobre interna"
 
 #: pcbnew/class_pcb_layer_widget.cpp:246
 msgid "Back copper layer"
-msgstr "Camada de cobre do verso"
+msgstr "Camada de cobre inferior"
 
 #: pcbnew/class_pcb_layer_widget.cpp:254
 msgid "Adhesive on board's front"
-msgstr "Adesivo na frente das placas"
+msgstr "Adesivo na camada superior das placas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:255
 msgid "Adhesive on board's back"
-msgstr "Adesivo no verso das placas"
+msgstr "Adesivo na camada inferior das placas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:256
 msgid "Solder paste on board's front"
-msgstr "Pasta de solda na frente das placas"
+msgstr "Pasta de solda na camada superior das placas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:257
 msgid "Solder paste on board's back"
-msgstr "Pasta de solda  no verso das placas"
+msgstr "Pasta de solda  na camada inferior das placas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:258
 msgid "Silkscreen on board's front"
-msgstr "Silkscreen na frente das placas"
+msgstr "Silkscreen na camada superior das placas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:259
 msgid "Silkscreen on board's back"
-msgstr "Silkscreen no verso das placas"
+msgstr "Silkscreen na camada inferior das placas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:260
 msgid "Solder mask on board's front"
-msgstr "Másc.solda na frente das placas"
+msgstr "Másc.solda na camada superior das placas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:261
 msgid "Solder mask on board's back"
-msgstr "Másc.solda no verso das placas"
+msgstr "Másc.solda na camada inferior das placas"
 
 #: pcbnew/class_pcb_layer_widget.cpp:262
 msgid "Explanatory drawings"
@@ -3490,23 +3490,23 @@ msgstr "Customizado"
 
 #: pcbnew/dialog_layers_setup_base.cpp:25
 msgid "Two layers, parts on Front only"
-msgstr "Duas camadas, componentes na frente somente"
+msgstr "Duas camadas, componentes na camada superior somente"
 
 #: pcbnew/dialog_layers_setup_base.cpp:25
 msgid "Two layers, parts on Back only"
-msgstr "Duas camadas, componentes no verso somente"
+msgstr "Duas camadas, componentes na camada inferior somente"
 
 #: pcbnew/dialog_layers_setup_base.cpp:25
 msgid "Two layers, parts on Front and Back"
-msgstr "Duas camadas, componentes na frente e no verso"
+msgstr "Duas camadas, componentes na camada superior e na inferior"
 
 #: pcbnew/dialog_layers_setup_base.cpp:25
 msgid "Four layers, parts on Front only"
-msgstr "Quatro Camadas, Componentes na frente somente"
+msgstr "Quatro Camadas, Componentes na camada superior somente"
 
 #: pcbnew/dialog_layers_setup_base.cpp:25
 msgid "Four layers, parts on Front and Back"
-msgstr "Quatro Camadas, Componentes na frente e no verso"
+msgstr "Quatro Camadas, Componentes na camada superior e inferior"
 
 #: pcbnew/dialog_layers_setup_base.cpp:25
 msgid "All layers on"
@@ -3566,7 +3566,7 @@ msgstr "teste só para atualizar catalogo"
 
 #: pcbnew/dialog_layers_setup_base.cpp:80
 msgid "If you want an adhesive template for the front side of the board"
-msgstr "Se você quiser um adesivo de exemplo para o lado da frente da placa"
+msgstr "Se você quiser um adesivo de exemplo para a camada superior da placa"
 
 #: pcbnew/dialog_layers_setup_base.cpp:89
 #: pcbnew/dialog_layers_setup_base.cpp:114
@@ -3589,7 +3589,7 @@ msgstr ""
 
 #: pcbnew/dialog_layers_setup_base.cpp:130
 msgid "If you want a silk screen layer for the front side of the board"
-msgstr "Se você quiser uma camada de silk screen para o lado da frente da placa"
+msgstr "Se você quiser uma camada de silk screen para o lado superior da placa"
 
 #: pcbnew/dialog_layers_setup_base.cpp:139
 #: pcbnew/dialog_layers_setup_base.cpp:164
@@ -3604,7 +3604,7 @@ msgstr ""
 
 #: pcbnew/dialog_layers_setup_base.cpp:155
 msgid "If you want a solder mask layer for the front of the board"
-msgstr "Se você quiser uma camada de máscara de solta para a frente da placa"
+msgstr "Se você quiser uma camada de máscara de solta para a camada superior da placa"
 
 #: pcbnew/dialog_layers_setup_base.cpp:168
 msgid "Front_later"
@@ -3612,11 +3612,11 @@ msgstr ""
 
 #: pcbnew/dialog_layers_setup_base.cpp:170
 msgid "Layer name of front (top) copper layer"
-msgstr "Nome da camada da frente (top) de cobre"
+msgstr "Nome da camada superior (top) de cobre"
 
 #: pcbnew/dialog_layers_setup_base.cpp:182
 msgid "If you want a front copper layer"
-msgstr "Se quiser uma camada de cobre na frente"
+msgstr "Se quiser uma camada de cobre superior"
 
 #: pcbnew/dialog_layers_setup_base.cpp:191
 #: pcbnew/dialog_layers_setup_base.cpp:218
@@ -3715,11 +3715,11 @@ msgstr "Tipo de camada de cobre para Freerouter. Camadas Power (alimentação) são
 
 #: pcbnew/dialog_layers_setup_base.cpp:579
 msgid "Layer name of back (bottom) copper layer"
-msgstr "Nome da camada de cobre do verso (bottom)"
+msgstr "Nome da camada de cobre inferior (bottom)"
 
 #: pcbnew/dialog_layers_setup_base.cpp:591
 msgid "If you want a back copper layer"
-msgstr "Se quiser uma camada de cobre no verso"
+msgstr "Se quiser uma camada de cobre inferior"
 
 #: pcbnew/dialog_layers_setup_base.cpp:608
 msgid "Mask_Back_later"
@@ -9887,7 +9887,7 @@ msgstr "Não preencher"
 
 #: eeschema/dialog_lib_edit_draw_item_base.cpp:96
 msgid "Fill &foreground"
-msgstr "Preencher &frente"
+msgstr "Preencher camada superior"
 
 #: eeschema/dialog_lib_edit_draw_item_base.cpp:99
 msgid "Fill &background"
