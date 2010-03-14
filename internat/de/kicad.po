@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-04 22:54+0100\n"
-"PO-Revision-Date: 2010-03-05 00:25+0100\n"
+"POT-Creation-Date: 2010-03-13 19:14+0100\n"
+"PO-Revision-Date: 2010-03-13 22:13+0100\n"
 "Last-Translator: Rafael Sokolowski <Rafael.Sokolowski@web.de>\n"
 "Language-Team: Benno Achermann <bennoachermann@bluewin.ch>\n"
 "MIME-Version: 1.0\n"
@@ -90,15 +90,15 @@ msgstr "Kopiere 3D Grafik in die Zwischenablage"
 
 #: 3d-viewer/3d_toolbar.cpp:40
 msgid "Zoom in"
-msgstr "hineinzoomen "
+msgstr "Hineinzoomen "
 
 #: 3d-viewer/3d_toolbar.cpp:43
 msgid "Zoom out"
-msgstr "herauszoomen "
+msgstr "Herauszoomen "
 
 #: 3d-viewer/3d_toolbar.cpp:47
 msgid "Redraw view"
-msgstr "Grafik neuzeichnen"
+msgstr "Aktualisieren"
 
 #: 3d-viewer/3d_toolbar.cpp:50
 msgid "Zoom auto"
@@ -142,11 +142,11 @@ msgstr "&Datei"
 
 #: 3d-viewer/3d_toolbar.cpp:118
 msgid "Create Image (png format)"
-msgstr "Erstelle Grafik (png Format)"
+msgstr "Bild speichern (PNG Format)"
 
 #: 3d-viewer/3d_toolbar.cpp:120
 msgid "Create Image (jpeg format)"
-msgstr "Erstelle Grafik (jpeg Format)"
+msgstr "Bild speichern (JPEG Format)"
 
 #: 3d-viewer/3d_toolbar.cpp:122
 msgid "&Exit"
@@ -314,11 +314,11 @@ msgstr "Mittels Bibliotheksbrowser"
 
 #: common/zoom.cpp:185
 msgid "Center"
-msgstr "zentrieren"
+msgstr "Zentrieren"
 
 #: common/zoom.cpp:199
 msgid "Zoom select"
-msgstr "Zoom Wahl"
+msgstr "Zoomauswahl"
 
 #: common/zoom.cpp:218
 msgid "Zoom: "
@@ -326,7 +326,7 @@ msgstr "Zoom:  "
 
 #: common/zoom.cpp:229
 msgid "Grid Select"
-msgstr "Raster Wahl"
+msgstr "Rasterauswahl"
 
 #: common/zoom.cpp:245
 msgid "User Grid"
@@ -427,66 +427,6 @@ msgstr "Verzeichnis"
 #: common/hotkeys_basic.cpp:753
 msgid "Select hotkey configuration file location"
 msgstr "Wähle Hotkey Konfigurationsdatei speichern:"
-
-#: common/common.cpp:60
-msgid "Kicad project files (*.pro)|*.pro"
-msgstr "KiCad Projekt Dateien (*.pro)|*.pro"
-
-#: common/common.cpp:61
-msgid "Kicad PCB files (*.brd)|*.brd"
-msgstr "Kicad PCB Dateien (*.brd)|*.brd"
-
-#: common/common.cpp:62
-msgid "Kicad schematic files (*.sch)|*.sch"
-msgstr "Kicad Schaltplan Dateien (*.sch)|*.sch"
-
-#: common/common.cpp:63
-msgid "Kicad netlist files (*.net)|*.net"
-msgstr "KiCad Netzliste Dateien (*.net)|*.net"
-
-#: common/common.cpp:64
-msgid "Gerber files (*.pho)|*.pho"
-msgstr "Gerber Dateien (*.pho)|*.pho"
-
-#: common/common.cpp:65
-msgid "Portable document format files (*.pdf)|*.pdf"
-msgstr "Portable document format Dateien (*.pdf)|*.pdf"
-
-#: common/common.cpp:66
-msgid "All files (*)|*"
-msgstr "Alle Dateien (*)|*"
-
-#: common/common.cpp:227
-msgid " (\"):"
-msgstr " (\"):"
-
-#: common/common.cpp:231
-msgid " (mm):"
-msgstr " (mm):"
-
-#: common/common.cpp:249
-msgid "inches"
-msgstr "Zoll"
-
-#: common/common.cpp:253
-msgid "millimeters"
-msgstr "Millimeter"
-
-#: common/common.cpp:257
-msgid "centimeters"
-msgstr "Zentimeter"
-
-#: common/common.cpp:260
-msgid "Unknown"
-msgstr "Unbekannt"
-
-#: common/common.cpp:338
-msgid " \""
-msgstr " \""
-
-#: common/common.cpp:342
-msgid " mm"
-msgstr " mm"
 
 #: common/basicframe.cpp:224
 msgid " file <"
@@ -654,33 +594,97 @@ msgstr "Gruppe wenden"
 msgid "Block Mirror"
 msgstr "Gruppe spiegeln"
 
-#: common/dsnlexer.cpp:169
-msgid "in file"
-msgstr "in Datei"
+#: common/dsnlexer.cpp:88
+msgid "clipboard"
+msgstr "Zwischenablage"
 
-#: common/dsnlexer.cpp:170
+#: common/dsnlexer.cpp:188
+msgid "in"
+msgstr "in"
+
+#: common/dsnlexer.cpp:189
 msgid "on line"
 msgstr "auf Linie"
 
-#: common/dsnlexer.cpp:171
+#: common/dsnlexer.cpp:190
 msgid "at offset"
 msgstr "bei Offset"
 
-#: common/dsnlexer.cpp:247
+#: common/dsnlexer.cpp:266
 msgid "String delimiter must be a single character of ', \", or $"
 msgstr "Zeichenketten-Trennsymbol muss ein einzelnes Zeichen sein, wie  ', \", or $"
 
-#: common/dsnlexer.cpp:362
-#: common/dsnlexer.cpp:375
+#: common/dsnlexer.cpp:381
+#: common/dsnlexer.cpp:394
 msgid "Un-terminated delimited string"
 msgstr "Getrennte Zeichenkette nicht abgeschlossen"
+
+#: common/common.cpp:64
+msgid "Kicad project files (*.pro)|*.pro"
+msgstr "KiCad Projekt Dateien (*.pro)|*.pro"
+
+#: common/common.cpp:65
+msgid "Kicad PCB files (*.brd)|*.brd"
+msgstr "Kicad PCB Dateien (*.brd)|*.brd"
+
+#: common/common.cpp:66
+msgid "Kicad schematic files (*.sch)|*.sch"
+msgstr "Kicad Schaltplan Dateien (*.sch)|*.sch"
+
+#: common/common.cpp:67
+msgid "Kicad netlist files (*.net)|*.net"
+msgstr "KiCad Netzliste Dateien (*.net)|*.net"
+
+#: common/common.cpp:68
+msgid "Gerber files (*.pho)|*.pho"
+msgstr "Gerber Dateien (*.pho)|*.pho"
+
+#: common/common.cpp:69
+msgid "Portable document format files (*.pdf)|*.pdf"
+msgstr "Portable document format Dateien (*.pdf)|*.pdf"
+
+#: common/common.cpp:70
+msgid "All files (*)|*"
+msgstr "Alle Dateien (*)|*"
+
+#: common/common.cpp:231
+msgid " (\"):"
+msgstr " (\"):"
+
+#: common/common.cpp:235
+msgid " (mm):"
+msgstr " (mm):"
+
+#: common/common.cpp:253
+msgid "inches"
+msgstr "Zoll"
+
+#: common/common.cpp:257
+msgid "millimeters"
+msgstr "Millimeter"
+
+#: common/common.cpp:261
+msgid "centimeters"
+msgstr "Zentimeter"
+
+#: common/common.cpp:264
+msgid "Unknown"
+msgstr "Unbekannt"
+
+#: common/common.cpp:342
+msgid " \""
+msgstr " \""
+
+#: common/common.cpp:346
+msgid " mm"
+msgstr " mm"
 
 #: common/richio.cpp:73
 #: common/richio.cpp:95
 msgid "Line length exceeded"
 msgstr "Linienlänge überschritten"
 
-#: common/richio.cpp:213
+#: common/richio.cpp:212
 msgid "Error writing to STRINGFORMATTER"
 msgstr "Fehler beim Schreiben nach STRINGFORMATTER"
 
@@ -1137,15 +1141,15 @@ msgstr "Anzeigeoptionen"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:162
 msgid "Zoom in (F1)"
-msgstr "hineinzoomen (F1)"
+msgstr "Hineinzoomen (F1)"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:166
 msgid "Zoom out (F2)"
-msgstr "herauszoomen (F2)"
+msgstr "Herauszoomen (F2)"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:170
 msgid "Redraw view (F3)"
-msgstr "Ansicht neuzeichnen (F3)"
+msgstr "Aktualisieren (F3)"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:174
 msgid "Zoom auto (Home)"
@@ -1542,18 +1546,6 @@ msgstr "<b>Pin %s ausserhalb des Rasters</b> \"%s\" an Position <b>(%.3f, %.3f)<
 msgid "No off grid or duplicate pins were found."
 msgstr "Es wurden keine Pins ausserhalb des Rasters und keine Pin-Duplikate gefunden."
 
-#: eeschema/sheet.cpp:77
-msgid "File name is not valid! Aborted"
-msgstr "Kein gültiger Dateiname ! Abbruch"
-
-#: eeschema/sheet.cpp:94
-msgid ""
-"Changing the sheet file name can change all the schematic structures and cannot be undone.\n"
-"Ok to continue renaming?"
-msgstr ""
-"Ändern des Dateinamens vom Schaltplan kann die gesamte logische Struktur verändern und nicht mehr rückgängig gemacht werden.\n"
-"Möchten Sie mit der Umbennenung fortfahren ?"
-
 #: eeschema/libedit.cpp:25
 msgid "Component Library Editor: "
 msgstr "Bauteilebibliothekseditor: "
@@ -1577,109 +1569,109 @@ msgstr ""
 msgid "Component or alias name \"%s\" not found in library \"%s\"."
 msgstr "Bauteil oder Alias <%s> nicht in Bibliothek <%s> gefunden."
 
-#: eeschema/libedit.cpp:168
+#: eeschema/libedit.cpp:171
 #, c-format
 msgid "Could not create copy of part <%s> in library <%s>."
 msgstr "Konnte keine Kopie von Bauteil <%s> in Bibliothek <%s> erstellen."
 
-#: eeschema/libedit.cpp:238
+#: eeschema/libedit.cpp:241
 msgid "Include last component changes?"
 msgstr "Möchten Sie die Bauteiländerungen übernehmen ?"
 
-#: eeschema/libedit.cpp:250
+#: eeschema/libedit.cpp:253
 msgid "Modify library file \""
 msgstr "Bibliotheksdatei wirklich modifizieren \""
 
-#: eeschema/libedit.cpp:250
+#: eeschema/libedit.cpp:253
 msgid "\"?"
 msgstr "\"?"
 
-#: eeschema/libedit.cpp:261
+#: eeschema/libedit.cpp:264
 msgid "Error while saving library file \""
 msgstr "Fehler beim Speichern der Bibliotheksdatei \""
 
-#: eeschema/libedit.cpp:262
+#: eeschema/libedit.cpp:265
 msgid "\"."
 msgstr "\"."
 
-#: eeschema/libedit.cpp:263
+#: eeschema/libedit.cpp:266
 msgid "*** ERROR: ***"
 msgstr "*** FEHLER: ***"
 
-#: eeschema/libedit.cpp:268
+#: eeschema/libedit.cpp:271
 msgid "Library file \""
 msgstr "Bibliotheksdatei \""
 
-#: eeschema/libedit.cpp:270
+#: eeschema/libedit.cpp:273
 msgid "Document file \""
 msgstr "Dokumentdatei \""
 
-#: eeschema/libedit.cpp:293
+#: eeschema/libedit.cpp:296
 msgid "Part"
 msgstr "Bauteil"
 
-#: eeschema/libedit.cpp:296
+#: eeschema/libedit.cpp:299
 msgid "None"
 msgstr "Keinen"
 
-#: eeschema/libedit.cpp:300
+#: eeschema/libedit.cpp:303
 msgid "Alias"
 msgstr "Alias"
 
-#: eeschema/libedit.cpp:305
+#: eeschema/libedit.cpp:308
 msgid "Unit"
 msgstr "Einheit"
 
-#: eeschema/libedit.cpp:308
+#: eeschema/libedit.cpp:311
 msgid "Convert"
 msgstr "Umgewandelt"
 
-#: eeschema/libedit.cpp:310
+#: eeschema/libedit.cpp:313
 msgid "Normal"
 msgstr "Normal"
 
-#: eeschema/libedit.cpp:312
+#: eeschema/libedit.cpp:315
 msgid "Body"
 msgstr "Gehäuse"
 
-#: eeschema/libedit.cpp:315
+#: eeschema/libedit.cpp:318
 msgid "Power Symbol"
 msgstr "Spannungsquelle Symbol"
 
-#: eeschema/libedit.cpp:317
+#: eeschema/libedit.cpp:320
 msgid "Component"
 msgstr "Bestückungsseite"
 
-#: eeschema/libedit.cpp:319
+#: eeschema/libedit.cpp:322
 msgid "Type"
 msgstr "Typ"
 
-#: eeschema/libedit.cpp:327
+#: eeschema/libedit.cpp:330
 msgid "Description"
 msgstr "Bezeichnung"
 
-#: eeschema/libedit.cpp:334
+#: eeschema/libedit.cpp:337
 msgid "Key words"
 msgstr "Schlüsselwörter"
 
-#: eeschema/libedit.cpp:341
+#: eeschema/libedit.cpp:344
 msgid "Datasheet"
 msgstr "Datenblatt"
 
-#: eeschema/libedit.cpp:377
+#: eeschema/libedit.cpp:380
 msgid "Please select a component library."
 msgstr "Wähle bitte eine Bauteilebibliothek."
 
-#: eeschema/libedit.cpp:386
+#: eeschema/libedit.cpp:389
 #, c-format
 msgid "Component library <%s> is empty."
 msgstr "Bauteilebibliothek <%s> ist leer."
 
-#: eeschema/libedit.cpp:388
+#: eeschema/libedit.cpp:391
 msgid "Delete Entry Error"
 msgstr "Entferne fehlerhaften Eintrag"
 
-#: eeschema/libedit.cpp:393
+#: eeschema/libedit.cpp:396
 #, c-format
 msgid ""
 "Select 1 of %d components to delete\n"
@@ -1688,27 +1680,27 @@ msgstr ""
 "Wähle 1 von %d Bauteilen zum Entfernen\n"
 "aus Bibliothek <%s>."
 
-#: eeschema/libedit.cpp:397
+#: eeschema/libedit.cpp:400
 msgid "Delete Component"
 msgstr "Bauteil entfernen"
 
-#: eeschema/libedit.cpp:406
+#: eeschema/libedit.cpp:409
 #, c-format
 msgid "Entry <%s> not found in library <%s>."
 msgstr "Eintrag <%s> konnte nicht in Bauteilebibliothek <%s> gefunden werden."
 
-#: eeschema/libedit.cpp:413
+#: eeschema/libedit.cpp:416
 #, c-format
 msgid "Delete component \"%s\" from library \"%s\"?"
 msgstr "Möchten Sie das Bauteil <%s> aus Bibliothek <%s> entfernen ?"
 
-#: eeschema/libedit.cpp:433
+#: eeschema/libedit.cpp:436
 msgid "The component being deleted has been modified. All changes will be lost. Discard changes?"
 msgstr ""
 "Das zu löschende Bauteil wurde modifiziert. Alle Änderungen werden somit verloren gehen.\n"
 "Möchten Sie die Änderungen verwerfen ?"
 
-#: eeschema/libedit.cpp:488
+#: eeschema/libedit.cpp:491
 msgid ""
 "All changes to the current component will be lost!\n"
 "\n"
@@ -1718,55 +1710,32 @@ msgstr ""
 "\n"
 "Soll das Bauteil wirklich entfernt werden ?"
 
-#: eeschema/libedit.cpp:504
+#: eeschema/libedit.cpp:507
 msgid "This new component has no name and cannot be created. Aborted"
 msgstr "Dieses Bauteil besitzt keinen Namen und kann somit nicht erstellt werden. Abbruch"
 
-#: eeschema/libedit.cpp:516
+#: eeschema/libedit.cpp:519
 #, c-format
 msgid "Component \"%s\" already exists in library \"%s\"."
 msgstr "Bauteil <%s> existiert bereits in Bibliothek <%s>."
 
-#: eeschema/libedit.cpp:584
+#: eeschema/libedit.cpp:589
 msgid "No component to save."
 msgstr "Kein Bauteil zum Speichern."
 
-#: eeschema/libedit.cpp:593
+#: eeschema/libedit.cpp:598
 msgid "No library specified."
 msgstr "Keine Bibliothek angegeben."
 
-#: eeschema/libedit.cpp:603
+#: eeschema/libedit.cpp:608
 #, c-format
 msgid "Component \"%s\" exists. Change it?"
 msgstr "Soll das existierende Bauteil \"%s\" geändert werden ?"
 
-#: eeschema/libedit.cpp:621
+#: eeschema/libedit.cpp:626
 #, c-format
 msgid "Component %s saved in library %s"
 msgstr "Bauteil %s in Bibliothek %s gespeichert"
-
-#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:151
-msgid "Name"
-msgstr "Name"
-
-#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:154
-msgid "Value"
-msgstr "Wert"
-
-#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:226
-#, c-format
-msgid ""
-"A new name is entered for this component\n"
-"An alias %s already exists!\n"
-"Cannot update this component"
-msgstr ""
-"Ein neuer Name wurde für das Bauteil vergeben\n"
-"Ein Alias namens %s existiert bereits!\n"
-"Kann das Bauteil nicht aktualieseren"
-
-#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:445
-msgid "Chip Name"
-msgstr "Bauteilname"
 
 #: eeschema/tool_lib.cpp:38
 msgid "Deselect current tool"
@@ -1876,9 +1845,52 @@ msgstr "Darstellung als \"De Morgan\" Bauteil"
 msgid "Edit document file"
 msgstr "Editiere Dokumentation \""
 
-#: eeschema/tool_lib.cpp:205
+#: eeschema/tool_lib.cpp:203
 msgid "Edit pins part per part ( Use carefully!)"
 msgstr "Editiere Pins, Bauteil für Bauteil (bitte vorsichtig anwenden !)"
+
+#: eeschema/tool_lib.cpp:205
+msgid "Usual option = OFF when parts are not locked"
+msgstr "Üblicherweise AUS, wenn Teile nicht gesperrt sind"
+
+#: eeschema/tool_lib.cpp:207
+msgid "Usual option = ON when parts are locked"
+msgstr "Üblicherweise AN, wenn Teile gesperrt sind"
+
+#: eeschema/sheet.cpp:77
+msgid "File name is not valid! Aborted"
+msgstr "Kein gültiger Dateiname ! Abbruch"
+
+#: eeschema/sheet.cpp:94
+msgid ""
+"Changing the sheet file name can change all the schematic structures and cannot be undone.\n"
+"Ok to continue renaming?"
+msgstr ""
+"Ändern des Dateinamens vom Schaltplan kann die gesamte logische Struktur verändern und nicht mehr rückgängig gemacht werden.\n"
+"Möchten Sie mit der Umbennenung fortfahren ?"
+
+#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:151
+msgid "Name"
+msgstr "Name"
+
+#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:154
+msgid "Value"
+msgstr "Wert"
+
+#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:226
+#, c-format
+msgid ""
+"A new name is entered for this component\n"
+"An alias %s already exists!\n"
+"Cannot update this component"
+msgstr ""
+"Ein neuer Name wurde für das Bauteil vergeben\n"
+"Ein Alias namens %s existiert bereits!\n"
+"Kann das Bauteil nicht aktualieseren"
+
+#: eeschema/dialog_edit_libentry_fields_in_lib.cpp:445
+msgid "Chip Name"
+msgstr "Bauteilname"
 
 #: eeschema/netlist.cpp:89
 msgid "List"
@@ -2401,7 +2413,7 @@ msgstr "D&rucken"
 
 #: eeschema/menubar.cpp:99
 msgid "Plot PostScript"
-msgstr "Postscript Plot"
+msgstr "Postscript Format"
 
 #: eeschema/menubar.cpp:100
 msgid "Plot schematic sheet in PostScript format"
@@ -2474,12 +2486,12 @@ msgstr "Annotation der Footprints aus Datei einlesen und durchführen"
 #: eeschema/menubar.cpp:219
 #: eeschema/menubar.cpp:220
 msgid "Zoom In"
-msgstr "hineinzoomen"
+msgstr "Hineinzoomen"
 
 #: eeschema/menubar.cpp:226
 #: eeschema/menubar.cpp:227
 msgid "Zoom Out"
-msgstr "herauszoomen"
+msgstr "Herauszoomen"
 
 #: eeschema/menubar.cpp:233
 msgid "Fit on Screen"
@@ -2491,11 +2503,11 @@ msgstr "Schaltplan an Bildschirmgöße anpassen"
 
 #: eeschema/menubar.cpp:245
 msgid "Redraw"
-msgstr "Grafik neuzeichnen"
+msgstr "Aktualisieren"
 
 #: eeschema/menubar.cpp:249
 msgid "Redraw the schematic view"
-msgstr "Schaltplandarstellung neuzeichnen"
+msgstr "Schaltplandarstellung neu zeichnen"
 
 #: eeschema/menubar.cpp:263
 msgid "&Component"
@@ -2672,7 +2684,7 @@ msgstr "&Einfügen"
 #: eeschema/getpart.cpp:96
 #, c-format
 msgid "component selection (%d items loaded):"
-msgstr "Bauteilwahl (%d Elemente geladen):"
+msgstr "Bauteilauswahl (%d Elemente geladen):"
 
 #: eeschema/getpart.cpp:187
 msgid "Failed to find part "
@@ -4252,119 +4264,6 @@ msgstr "Keine Übereinstimmung zwischen hierarchischen Labeln und Pins"
 msgid "A no connect symbol is connected to more than 1 pin"
 msgstr "Ein 'Keine-Verbindung' Symbol ist mit mehr als einem Pin verbunden"
 
-#: eeschema/edit_component_in_lib.cpp:192
-#: eeschema/edit_component_in_lib.cpp:265
-#, c-format
-msgid "Alias <%s> cannot be removed while it is being edited!"
-msgstr "Alias <%s> kann nicht während der Bearbeitung entfernt werden !"
-
-#: eeschema/edit_component_in_lib.cpp:202
-msgid "Remove all aliases from list?"
-msgstr "Alle Alias aus der Liste entfernen ?"
-
-#: eeschema/edit_component_in_lib.cpp:229
-msgid "New alias:"
-msgstr "Neuen Alias:"
-
-#: eeschema/edit_component_in_lib.cpp:230
-msgid "Component Alias"
-msgstr "Bauteilalias"
-
-#: eeschema/edit_component_in_lib.cpp:240
-#, c-format
-msgid "Alias or component name <%s> already exists in library <%s>."
-msgstr "Alias oder Bauteilname <%s> existiert bereits in Bibliothek <%s>."
-
-#: eeschema/edit_component_in_lib.cpp:297
-msgid "Delete extra parts from component?"
-msgstr "Zusätzliche Komponenten des Bauteils ebenfalls entfernen ?"
-
-#: eeschema/edit_component_in_lib.cpp:318
-msgid "Add new pins for alternate body style ( DeMorgan ) to component?"
-msgstr "Dem Bauteil neue Pins für alternative Darstellungsform (De Morgan) hinzufügen ?"
-
-#: eeschema/edit_component_in_lib.cpp:325
-msgid "Delete alternate body style (DeMorgan) draw items from component?"
-msgstr "Elemente des Bauteils aus alternativer Darstellungsform (De Morgan) löschen ?"
-
-#: eeschema/edit_component_in_lib.cpp:385
-msgid "Ok to Delete FootprintFilter LIST"
-msgstr "FootprintFilter-Liste entfernen ?"
-
-#: eeschema/edit_component_in_lib.cpp:408
-msgid "Add Footprint Filter"
-msgstr "Footprint Filter hinzufügen"
-
-#: eeschema/edit_component_in_lib.cpp:421
-#, c-format
-msgid "Foot print filter <%s> is already defined."
-msgstr "Footprintfilter <%s> ist bereits definiert."
-
-#: eeschema/dialog_SVG_print_base.cpp:23
-msgid "Print SVG options:"
-msgstr "SVG-Einstellungen für Ausdruck:"
-
-#: eeschema/dialog_SVG_print_base.cpp:25
-msgid "Default Pen Size"
-msgstr "Voreinstellung für Stiftgrösse"
-
-#: eeschema/dialog_SVG_print_base.cpp:30
-msgid "Selection of the default pen thickness used to draw items, when their thickness is set to 0."
-msgstr "Auswahl der voreingestellten Stiftbreite zum zeichnen von Elementen, wenn ihre Breite auf 0 gesetzt ist."
-
-#: eeschema/dialog_SVG_print_base.cpp:34
-msgid "Color"
-msgstr "Farbe"
-
-#: eeschema/dialog_SVG_print_base.cpp:34
-msgid "Black and White"
-msgstr "Schwarz Weiss"
-
-#: eeschema/dialog_SVG_print_base.cpp:36
-msgid "Print mode"
-msgstr "Druckmodus"
-
-#: eeschema/dialog_SVG_print_base.cpp:38
-msgid ""
-"Choose if you wand to draw the sheet like it appears on screen,\n"
-"or in black and white mode, better to print it when using  black and white printers"
-msgstr ""
-"Auswählen, wenn das Schaltblatt gezeichnet werden soll, wie auf dem Bildschirm zu sehen,\n"
-"oder im Schwarz-Weiß-Modus, was für Schwarz-Weiß-Drucker vorteilhaft ist."
-
-#: eeschema/dialog_SVG_print_base.cpp:42
-msgid "Print Frame Ref"
-msgstr "Drucke Seitenreferenz"
-
-#: eeschema/dialog_SVG_print_base.cpp:44
-#: eeschema/dialog_print_using_printer_base.cpp:25
-msgid "Print (or not) the Frame references."
-msgstr "Drucke die Seitenreferenzen oder drucke diese nicht."
-
-#: eeschema/dialog_SVG_print_base.cpp:53
-msgid "Print Current"
-msgstr "Drucke aktuelle Seite"
-
-#: eeschema/dialog_SVG_print_base.cpp:56
-msgid "Print All"
-msgstr "Drucke Alles"
-
-#: eeschema/dialog_SVG_print_base.cpp:60
-msgid "Quit"
-msgstr "Abbrechen"
-
-#: eeschema/dialog_SVG_print_base.cpp:67
-msgid "Filename:"
-msgstr "Dateiname:"
-
-#: eeschema/dialog_SVG_print_base.cpp:72
-msgid ""
-"Enter a filename if you do not want to use default file names\n"
-"Can be used only when printing the current sheet"
-msgstr ""
-"Vergebe einen Dateinamen, wenn nicht der voreingestellte Dateiname verwendet werden soll.\n"
-"Kann nur angewandt werden, wenn der aktuelle Schaltplan gedruckt wird."
-
 #: eeschema/libeditframe.cpp:301
 msgid ""
 "Component was modified!\n"
@@ -4405,6 +4304,71 @@ msgstr "Importieren"
 #: eeschema/libeditframe.cpp:723
 msgid "Export"
 msgstr "Exportieren"
+
+#: eeschema/dialog_SVG_print_base.cpp:23
+msgid "Print SVG options:"
+msgstr "SVG-Einstellungen für Ausdruck:"
+
+#: eeschema/dialog_SVG_print_base.cpp:25
+msgid "Default Pen Size"
+msgstr "Voreinstellung für Stiftgrösse"
+
+#: eeschema/dialog_SVG_print_base.cpp:30
+msgid "Selection of the default pen thickness used to draw items, when their thickness is set to 0."
+msgstr "Auswahl der voreingestellten Stiftbreite zum zeichnen von Elementen, wenn ihre Breite auf 0 gesetzt ist."
+
+#: eeschema/dialog_SVG_print_base.cpp:34
+msgid "Color"
+msgstr "Farbe"
+
+#: eeschema/dialog_SVG_print_base.cpp:34
+msgid "Black and White"
+msgstr "Schwarz Weiss"
+
+#: eeschema/dialog_SVG_print_base.cpp:36
+msgid "Print mode"
+msgstr "Druckmodus"
+
+#: eeschema/dialog_SVG_print_base.cpp:38
+msgid ""
+"Choose if you wand to draw the sheet like it appears on screen,\n"
+"or in black and white mode, better to print it when using  black and white printers"
+msgstr ""
+"Auswählen, ob das Schaltplanblatt, wie auf dem Bildschirm zu sehen, gezeichnet werden soll,\n"
+"oder im Schwarz-Weiß-Modus, was bei Schwarz-Weiß-Druckern vorteilhaft ist."
+
+#: eeschema/dialog_SVG_print_base.cpp:42
+msgid "Print Frame Ref"
+msgstr "Drucke Seitenreferenz"
+
+#: eeschema/dialog_SVG_print_base.cpp:44
+#: eeschema/dialog_print_using_printer_base.cpp:25
+msgid "Print (or not) the Frame references."
+msgstr "Drucke die Seitenreferenzen oder drucke diese nicht."
+
+#: eeschema/dialog_SVG_print_base.cpp:53
+msgid "Print Current"
+msgstr "Drucke aktuelle Seite"
+
+#: eeschema/dialog_SVG_print_base.cpp:56
+msgid "Print All"
+msgstr "Drucke Alles"
+
+#: eeschema/dialog_SVG_print_base.cpp:60
+msgid "Quit"
+msgstr "Abbrechen"
+
+#: eeschema/dialog_SVG_print_base.cpp:67
+msgid "Filename:"
+msgstr "Dateiname:"
+
+#: eeschema/dialog_SVG_print_base.cpp:72
+msgid ""
+"Enter a filename if you do not want to use default file names\n"
+"Can be used only when printing the current sheet"
+msgstr ""
+"Vergebe einen Dateinamen, wenn nicht der voreingestellte Dateiname verwendet werden soll.\n"
+"Kann nur angewandt werden, wenn der aktuelle Schaltplan gedruckt wird."
 
 #: eeschema/dialog_edit_component_in_schematic.cpp:170
 msgid "No Component Name!"
@@ -4784,22 +4748,53 @@ msgstr "Gruppe heranzoomen (Shift + Ziehen der Maus)"
 msgid "Select Items"
 msgstr "Selektiere Elemente"
 
-#: eeschema/class_libentry.cpp:67
-msgid "none"
-msgstr "keine"
-
-#: eeschema/class_libentry.cpp:342
-msgid "value"
-msgstr "Wert"
-
-#: eeschema/class_libentry.cpp:342
-msgid "reference"
-msgstr "Referenz"
-
-#: eeschema/class_libentry.cpp:344
+#: eeschema/edit_component_in_lib.cpp:202
+#: eeschema/edit_component_in_lib.cpp:275
 #, c-format
-msgid "An attempt was made to remove the %s field from component %s in library %s."
-msgstr "Es wurde versucht das %s Feld von Bauteil %s in Bibliothek %s zu entfernen."
+msgid "Alias <%s> cannot be removed while it is being edited!"
+msgstr "Alias <%s> kann nicht während der Bearbeitung entfernt werden !"
+
+#: eeschema/edit_component_in_lib.cpp:212
+msgid "Remove all aliases from list?"
+msgstr "Alle Alias aus der Liste entfernen ?"
+
+#: eeschema/edit_component_in_lib.cpp:239
+msgid "New alias:"
+msgstr "Neuen Alias:"
+
+#: eeschema/edit_component_in_lib.cpp:240
+msgid "Component Alias"
+msgstr "Bauteilalias"
+
+#: eeschema/edit_component_in_lib.cpp:250
+#, c-format
+msgid "Alias or component name <%s> already exists in library <%s>."
+msgstr "Alias oder Bauteilname <%s> existiert bereits in Bibliothek <%s>."
+
+#: eeschema/edit_component_in_lib.cpp:307
+msgid "Delete extra parts from component?"
+msgstr "Zusätzliche Komponenten des Bauteils ebenfalls entfernen ?"
+
+#: eeschema/edit_component_in_lib.cpp:328
+msgid "Add new pins for alternate body style ( DeMorgan ) to component?"
+msgstr "Dem Bauteil neue Pins für alternative Darstellungsform (De Morgan) hinzufügen ?"
+
+#: eeschema/edit_component_in_lib.cpp:335
+msgid "Delete alternate body style (DeMorgan) draw items from component?"
+msgstr "Elemente des Bauteils aus alternativer Darstellungsform (De Morgan) löschen ?"
+
+#: eeschema/edit_component_in_lib.cpp:395
+msgid "Ok to Delete FootprintFilter LIST"
+msgstr "FootprintFilter-Liste entfernen ?"
+
+#: eeschema/edit_component_in_lib.cpp:418
+msgid "Add Footprint Filter"
+msgstr "Footprint Filter hinzufügen"
+
+#: eeschema/edit_component_in_lib.cpp:431
+#, c-format
+msgid "Foot print filter <%s> is already defined."
+msgstr "Footprintfilter <%s> ist bereits definiert."
 
 #: eeschema/class_library.cpp:25
 #, c-format
@@ -4942,6 +4937,23 @@ msgstr "Allen &alternativen Darstellungsformen (De Morgan) zuweisen"
 msgid "&Visible"
 msgstr "&Sichtbar"
 
+#: eeschema/class_libentry.cpp:67
+msgid "none"
+msgstr "keine"
+
+#: eeschema/class_libentry.cpp:342
+msgid "value"
+msgstr "Wert"
+
+#: eeschema/class_libentry.cpp:342
+msgid "reference"
+msgstr "Referenz"
+
+#: eeschema/class_libentry.cpp:344
+#, c-format
+msgid "An attempt was made to remove the %s field from component %s in library %s."
+msgstr "Es wurde versucht das %s Feld von Bauteil %s in Bibliothek %s zu entfernen."
+
 #: eeschema/dialog_eeschema_config_fbp.cpp:20
 msgid "Component library files"
 msgstr "Bauteilebibliotheksdateien"
@@ -5081,7 +5093,7 @@ msgstr "Seitenformat E"
 
 #: eeschema/plothpgl.cpp:215
 msgid "Plot page size:"
-msgstr "Blattformat für Plot:"
+msgstr "Seitenformat für Plot:"
 
 #: eeschema/plothpgl.cpp:225
 msgid "Pen control:"
@@ -5338,7 +5350,7 @@ msgstr "Konnte die Symboldatei <%s> nicht öffnen."
 
 #: eeschema/plotps.cpp:164
 msgid "Auto"
-msgstr "Auto Zoom"
+msgstr "Autom. Anpassung"
 
 #: eeschema/plotps.cpp:256
 msgid "Default Line Width"
@@ -5808,7 +5820,7 @@ msgstr "&Entpacke Archiv"
 
 #: kicad/menubar.cpp:125
 msgid "Unarchive project files from zip file"
-msgstr "Projektdateien aus Zip-Archiv auspacken"
+msgstr "Projektdateien aus Zip-Archiv entpacken"
 
 #: kicad/menubar.cpp:134
 msgid "Quit KiCad"
@@ -5816,7 +5828,7 @@ msgstr "Beende KiCad"
 
 #: kicad/menubar.cpp:148
 msgid "Text E&ditor"
-msgstr "Texte&ditor"
+msgstr "&Texteditor aufrufen"
 
 #: kicad/menubar.cpp:149
 msgid "Open prefered text editor"
@@ -5828,11 +5840,11 @@ msgstr "Datei &editieren"
 
 #: kicad/menubar.cpp:156
 msgid "View, read or edit file with a text editor"
-msgstr "Lese oder editiere Dateien mit Texteditor"
+msgstr "Datei mit Texteditor betrachten oder editieren"
 
 #: kicad/menubar.cpp:169
 msgid "&Text Editor"
-msgstr "&Texteditor"
+msgstr "&Texteditor auswählen"
 
 #: kicad/menubar.cpp:170
 msgid "Select your prefered text editor"
@@ -5873,7 +5885,7 @@ msgstr "Über den KiCad-Projektmanager"
 
 #: kicad/menubar.cpp:248
 msgid "&Browse"
-msgstr "&Browsen"
+msgstr "&Bearbeiten"
 
 #: kicad/menubar.cpp:277
 msgid "Load existing project"
@@ -6034,6 +6046,77 @@ msgstr "Leiterbahnlänge"
 #: pcbnew/editrack.cpp:810
 msgid "Segs Count"
 msgstr "Segm.anzahl"
+
+#: pcbnew/netlist.cpp:118
+#, c-format
+msgid "Netlist file %s not found"
+msgstr "Netzliste <%s> nicht gefunden"
+
+#: pcbnew/netlist.cpp:173
+#, c-format
+msgid "Reading Netlist \"%s\""
+msgstr "Lese Netzliste <%s>"
+
+#: pcbnew/netlist.cpp:349
+msgid "Ok to delete footprints not in netlist?"
+msgstr "Sollen die Footprints entfernt werden, welche sich nicht in der Netzliste befinden ?"
+
+#: pcbnew/netlist.cpp:500
+#, c-format
+msgid "Component \"%s\": Mismatch! module is [%s] and netlist said [%s]\n"
+msgstr "Bauteil <%s>: Keine Übereinstimmung! Bauteil ist <%s>, jedoch laut Netzliste <%s>\n"
+
+#: pcbnew/netlist.cpp:545
+#, c-format
+msgid "Component [%s] not found"
+msgstr "Bauteil <%s> nicht gefunden"
+
+#: pcbnew/netlist.cpp:611
+#, c-format
+msgid "Module [%s]: Pad [%s] not found"
+msgstr "Bauteil <%s>: Pad <%s> nicht gefunden"
+
+#: pcbnew/netlist.cpp:634
+msgid "No Modules"
+msgstr "Keine Bauteile vorhanden"
+
+#: pcbnew/netlist.cpp:637
+msgid "Components"
+msgstr "Bauteile"
+
+#: pcbnew/netlist.cpp:687
+msgid "No modules"
+msgstr "Keine Bauteile"
+
+#: pcbnew/netlist.cpp:701
+msgid "No modules in NetList"
+msgstr "Keine Bauteile in der Netzliste vorhanden"
+
+#: pcbnew/netlist.cpp:705
+msgid "Check Modules"
+msgstr "Footprinttest"
+
+#: pcbnew/netlist.cpp:708
+msgid "Duplicates"
+msgstr "Duplikate"
+
+#: pcbnew/netlist.cpp:728
+msgid "Lack:"
+msgstr "Mängel:"
+
+#: pcbnew/netlist.cpp:750
+msgid "Not in Netlist:"
+msgstr "Nicht in Netzliste vorhanden:"
+
+#: pcbnew/netlist.cpp:890
+#, c-format
+msgid "File <%s> not found, use Netlist for lib module selection"
+msgstr "Datei <%s> nicht gefunden. Verwende Netzliste zum Wählen von Bauteilen aus der Bibliothek."
+
+#: pcbnew/netlist.cpp:1017
+#, c-format
+msgid "Component [%s]: footprint <%s> not found"
+msgstr "Bauteil <%s>: Footprint <%s> nicht gefunden"
 
 #: pcbnew/controle.cpp:175
 #: pcbnew/modedit.cpp:81
@@ -6216,8 +6299,8 @@ msgid ""
 "Show/hide the toolbar for microwaves tools\n"
 " This is a experimental feature (under development)"
 msgstr ""
-"Anzeigen/Ausblenden der Werkzeugleiste für Mikrowellen-Applikationen\n"
-" Dies sind experimentielle Funktionen, die sich in Entwicklung befinden."
+"Anzeigen/Ausblenden der Werkzeugleiste für Mikrowellen-Applikationen.\n"
+"Dies sind experimentielle Funktionen, die sich noch in Entwicklung befinden."
 
 #: pcbnew/tool_pcb.cpp:418
 msgid "Highlight net"
@@ -6782,77 +6865,6 @@ msgstr "Suche nächsten Marker"
 #: pcbnew/ioascii.cpp:175
 msgid "Error: Unexpected end of file !"
 msgstr "Fehler: Unerwartetes Dateiende !"
-
-#: pcbnew/netlist.cpp:118
-#, c-format
-msgid "Netlist file %s not found"
-msgstr "Netzliste <%s> nicht gefunden"
-
-#: pcbnew/netlist.cpp:173
-#, c-format
-msgid "Reading Netlist \"%s\""
-msgstr "Lese Netzliste <%s>"
-
-#: pcbnew/netlist.cpp:349
-msgid "Ok to delete footprints not in netlist?"
-msgstr "Sollen die Footprints entfernt werden, welche sich nicht in der Netzliste befinden ?"
-
-#: pcbnew/netlist.cpp:500
-#, c-format
-msgid "Component \"%s\": Mismatch! module is [%s] and netlist said [%s]\n"
-msgstr "Bauteil <%s>: Keine Übereinstimmung! Bauteil ist <%s>, jedoch laut Netzliste <%s>\n"
-
-#: pcbnew/netlist.cpp:544
-#, c-format
-msgid "Component [%s] not found"
-msgstr "Bauteil <%s> nicht gefunden"
-
-#: pcbnew/netlist.cpp:610
-#, c-format
-msgid "Module [%s]: Pad [%s] not found"
-msgstr "Bauteil <%s>: Pad <%s> nicht gefunden"
-
-#: pcbnew/netlist.cpp:633
-msgid "No Modules"
-msgstr "Keine Bauteile vorhanden"
-
-#: pcbnew/netlist.cpp:636
-msgid "Components"
-msgstr "Bauteile"
-
-#: pcbnew/netlist.cpp:686
-msgid "No modules"
-msgstr "Keine Bauteile"
-
-#: pcbnew/netlist.cpp:700
-msgid "No modules in NetList"
-msgstr "Keine Bauteile in der Netzliste vorhanden"
-
-#: pcbnew/netlist.cpp:704
-msgid "Check Modules"
-msgstr "Footprinttest"
-
-#: pcbnew/netlist.cpp:707
-msgid "Duplicates"
-msgstr "Duplikate"
-
-#: pcbnew/netlist.cpp:727
-msgid "Lack:"
-msgstr "Mängel:"
-
-#: pcbnew/netlist.cpp:749
-msgid "Not in Netlist:"
-msgstr "Nicht in Netzliste vorhanden:"
-
-#: pcbnew/netlist.cpp:889
-#, c-format
-msgid "File <%s> not found, use Netlist for lib module selection"
-msgstr "Datei <%s> nicht gefunden. Verwende Netzliste zum Wählen von Bauteilen aus der Bibliothek."
-
-#: pcbnew/netlist.cpp:1016
-#, c-format
-msgid "Component [%s]: footprint <%s> not found"
-msgstr "Bauteil <%s>: Footprint <%s> nicht gefunden"
 
 #: pcbnew/initpcb.cpp:47
 msgid "Ok to delete selected items ?"
@@ -8012,25 +8024,101 @@ msgstr "Wert:"
 msgid "The text thickness is too large for the text size. It will be clamped"
 msgstr "Die Textstärke ist für diese Textgröße zu groß. Text wird eingeklemmt."
 
-#: pcbnew/dialog_layers_setup.cpp:269
-msgid "Enabled"
-msgstr "Aktiviert"
+#: pcbnew/dialog_drc_base.cpp:40
+msgid "By Netclass"
+msgstr "Nach Netzklasse"
 
-#: pcbnew/dialog_layers_setup.cpp:615
-msgid "Layer name may not be empty"
-msgstr "Lagenname sollte gesetzt sein"
+#: pcbnew/dialog_drc_base.cpp:45
+msgid "Min track width"
+msgstr "Mindestleiterbahnbreite"
 
-#: pcbnew/dialog_layers_setup.cpp:622
-msgid "Layer name has an illegal character, one of: '"
-msgstr "Lagenname besitzt ein unzulässiges Zeichen und zwar: "
+#: pcbnew/dialog_drc_base.cpp:47
+msgid "Enter the minimum acceptable value for a track width"
+msgstr "Gebe zulässigen Mindestwert für Leiterbahnbreite an"
 
-#: pcbnew/dialog_layers_setup.cpp:629
-msgid "'signal' is a reserved layer name"
-msgstr "'signal' ist ein reservierter Lagenname"
+#: pcbnew/dialog_drc_base.cpp:54
+msgid "Min via size"
+msgstr "Mindest-DuKo-Größe"
 
-#: pcbnew/dialog_layers_setup.cpp:638
-msgid "Layer name is a duplicate of another"
-msgstr "Lagenname existiert bereits"
+#: pcbnew/dialog_drc_base.cpp:56
+msgid "Enter the minimum acceptable diameter for a standard via"
+msgstr "Gebe den zulässigen Mindestdurchmesser für eine Standard-Durchkontaktierung an"
+
+#: pcbnew/dialog_drc_base.cpp:63
+msgid "Min uVia size"
+msgstr "Mindest-MicroDuKo-Größe"
+
+#: pcbnew/dialog_drc_base.cpp:65
+msgid "Enter the minimum acceptable diameter for a micro via"
+msgstr "Gebe den zulässigen Mindestdurchmesser für eine Micro-Durchkontaktierung an"
+
+#: pcbnew/dialog_drc_base.cpp:75
+msgid "Create Report File"
+msgstr "Erstelle Protokoll"
+
+#: pcbnew/dialog_drc_base.cpp:79
+msgid "Enable writing report to this file"
+msgstr "Ermögliche das Schreiben des Protokolls in diese Datei"
+
+#: pcbnew/dialog_drc_base.cpp:84
+msgid "Enter the report filename"
+msgstr "Gebe den Dateinamen für das zu erstellende Protokoll an"
+
+#: pcbnew/dialog_drc_base.cpp:89
+msgid "..."
+msgstr "..."
+
+#: pcbnew/dialog_drc_base.cpp:115
+msgid "Start DRC"
+msgstr "Starte DRC"
+
+#: pcbnew/dialog_drc_base.cpp:117
+msgid "Start the Design Rule Checker"
+msgstr "Starte Design Rule Checker (DRC)"
+
+#: pcbnew/dialog_drc_base.cpp:121
+msgid "List Unconnected"
+msgstr "Liste nicht verbunden"
+
+#: pcbnew/dialog_drc_base.cpp:122
+msgid "List unconnected pads or tracks"
+msgstr "Liste nicht verbundene Pads oder Leiterbahnen"
+
+#: pcbnew/dialog_drc_base.cpp:126
+msgid "Delete All Markers"
+msgstr "Entferne alle Marker"
+
+#: pcbnew/dialog_drc_base.cpp:127
+msgid "Delete every marker"
+msgstr "Entferne jeden Marker"
+
+#: pcbnew/dialog_drc_base.cpp:131
+msgid "Delete Current Marker"
+msgstr "Entferne aktuellen Marker"
+
+#: pcbnew/dialog_drc_base.cpp:132
+msgid "Delete the marker selected in the listBox below"
+msgstr "Entferne den gewählten Marker in der unteren Auswahlbox"
+
+#: pcbnew/dialog_drc_base.cpp:140
+msgid "Error Messages:"
+msgstr "Fehlermeldungen:"
+
+#: pcbnew/dialog_drc_base.cpp:150
+msgid "MARKERs, double click any to go there in PCB, right click for popup menu"
+msgstr "MARKER, doppelklicken um zum PCB zu springen, rechtsklicken für Pop-up-Menü"
+
+#: pcbnew/dialog_drc_base.cpp:158
+msgid "Problems / Markers"
+msgstr "Probleme / Marker"
+
+#: pcbnew/dialog_drc_base.cpp:164
+msgid "A list of unconnected pads, right click for popup menu"
+msgstr "Eine List mit nicht verbundenen Pads, Rechtsklick für Pop-up-Menü"
+
+#: pcbnew/dialog_drc_base.cpp:171
+msgid "Unconnected"
+msgstr "Nicht verbunden"
 
 #: pcbnew/dialog_netlist_fbp.cpp:25
 msgid "Timestamp"
@@ -8404,96 +8492,6 @@ msgstr "3D Einstellungen"
 msgid "ErrType"
 msgstr "Fehlertyp"
 
-#: pcbnew/dialog_drc_base.cpp:40
-msgid "By Netclass"
-msgstr "Nach Netzklasse"
-
-#: pcbnew/dialog_drc_base.cpp:45
-msgid "Min track width"
-msgstr "Mindestleiterbahnbreite"
-
-#: pcbnew/dialog_drc_base.cpp:50
-#: pcbnew/dialog_drc_base.cpp:59
-#: pcbnew/dialog_drc_base.cpp:68
-msgid "In the clearance units, enter the clearance distance"
-msgstr "Gebe die Distanz für die einzuhaltenden Abstandsflächen in der vorgegebenen Einheit an"
-
-#: pcbnew/dialog_drc_base.cpp:54
-msgid "Min via size"
-msgstr "Mindest-DuKo-Größe"
-
-#: pcbnew/dialog_drc_base.cpp:63
-msgid "Min uVia size"
-msgstr "Mindest-MicroDuKo-Größe"
-
-#: pcbnew/dialog_drc_base.cpp:75
-msgid "Create Report File"
-msgstr "Erstelle Protokoll"
-
-#: pcbnew/dialog_drc_base.cpp:79
-msgid "Enable writing report to this file"
-msgstr "Ermögliche das Schreiben des Protokolls in diese Datei"
-
-#: pcbnew/dialog_drc_base.cpp:84
-msgid "Enter the report filename"
-msgstr "Gebe den Dateinamen für das zu erstellende Protokoll an"
-
-#: pcbnew/dialog_drc_base.cpp:89
-msgid "..."
-msgstr "..."
-
-#: pcbnew/dialog_drc_base.cpp:115
-msgid "Start DRC"
-msgstr "Starte DRC"
-
-#: pcbnew/dialog_drc_base.cpp:117
-msgid "Start the Design Rule Checker"
-msgstr "Starte Design Rule Checker (DRC)"
-
-#: pcbnew/dialog_drc_base.cpp:121
-msgid "List Unconnected"
-msgstr "Liste nicht verbunden"
-
-#: pcbnew/dialog_drc_base.cpp:122
-msgid "List unconnected pads or tracks"
-msgstr "Liste nicht verbundene Pads oder Leiterbahnen"
-
-#: pcbnew/dialog_drc_base.cpp:126
-msgid "Delete All Markers"
-msgstr "Entferne alle Marker"
-
-#: pcbnew/dialog_drc_base.cpp:127
-msgid "Delete every marker"
-msgstr "Entferne jeden Marker"
-
-#: pcbnew/dialog_drc_base.cpp:131
-msgid "Delete Current Marker"
-msgstr "Entferne aktuellen Marker"
-
-#: pcbnew/dialog_drc_base.cpp:132
-msgid "Delete the marker selected in the listBox below"
-msgstr "Entferne den gewählten Marker in der unteren Auswahlbox"
-
-#: pcbnew/dialog_drc_base.cpp:140
-msgid "Error Messages:"
-msgstr "Fehlermeldungen:"
-
-#: pcbnew/dialog_drc_base.cpp:150
-msgid "MARKERs, double click any to go there in PCB, right click for popup menu"
-msgstr "MARKER, doppelklicken um zum PCB zu springen, rechtsklicken für Pop-up-Menü"
-
-#: pcbnew/dialog_drc_base.cpp:158
-msgid "Problems / Markers"
-msgstr "Probleme / Marker"
-
-#: pcbnew/dialog_drc_base.cpp:164
-msgid "A list of unconnected pads, right click for popup menu"
-msgstr "Eine List mit nicht verbundenen Pads, Rechtsklick für Pop-up-Menü"
-
-#: pcbnew/dialog_drc_base.cpp:171
-msgid "Unconnected"
-msgstr "Nicht verbunden"
-
 #: pcbnew/class_drc_item.cpp:39
 msgid "Unconnected pads"
 msgstr "Nicht verbundene Pads"
@@ -8630,6 +8628,26 @@ msgstr "Lötseite"
 msgid "Warning: The Top Layer and Bottom Layer are same."
 msgstr "Achtung: Bestückungsseite und Lötseite sind die selben."
 
+#: pcbnew/dialog_layers_setup.cpp:300
+msgid "Enabled"
+msgstr "Aktiviert"
+
+#: pcbnew/dialog_layers_setup.cpp:658
+msgid "Layer name may not be empty"
+msgstr "Lagenname sollte gesetzt sein"
+
+#: pcbnew/dialog_layers_setup.cpp:665
+msgid "Layer name has an illegal character, one of: '"
+msgstr "Lagenname besitzt ein unzulässiges Zeichen und zwar: "
+
+#: pcbnew/dialog_layers_setup.cpp:672
+msgid "'signal' is a reserved layer name"
+msgstr "'signal' ist ein reservierter Lagenname"
+
+#: pcbnew/dialog_layers_setup.cpp:681
+msgid "Layer name is a duplicate of another"
+msgstr "Lagenname existiert bereits"
+
 #: pcbnew/dialog_copper_zones.cpp:276
 msgid "Error : Zone clearance is set to an unreasonnable value"
 msgstr "Fehler: Unangemessener Wert für Flächenabstandsmaß"
@@ -8662,17 +8680,343 @@ msgstr "Fehler: Sie müssen einen Netznamen wählen"
 msgid "You have chosen the \"not connected\" option. This will create insulated copper islands. Are you sure ?"
 msgstr "Die \"nicht verbunden\" Option wurde ausgewählt. Dies erzeugt isolierte Kupferinseln. Sind Sie sich sicher ?"
 
-#: pcbnew/dialog_pad_properties.cpp:541
-msgid "Incorrect value for pad drill: pad drill bigger than pad size"
-msgstr "Inkorrekter Wert für Pad Bohrdurchmesser. Bohrdurchmesser ist größer als Pad."
+#: pcbnew/dialog_layers_setup_base.cpp:23
+msgid "Preset Layer Groupings"
+msgstr "Voreinstellung für Lagengruppierungen"
 
-#: pcbnew/dialog_pad_properties.cpp:547
-msgid "Incorrect value for pad offset"
-msgstr "Inkorrekter Wert für Padoffset"
+#: pcbnew/dialog_layers_setup_base.cpp:25
+msgid "Custom"
+msgstr "Benutzerdefiniert"
 
-#: pcbnew/dialog_pad_properties.cpp:641
-msgid "Unknown netname, no change"
-msgstr "Unbekannter Netzname. Keine Änderung durchgeführt"
+#: pcbnew/dialog_layers_setup_base.cpp:25
+msgid "Two layers, parts on Front only"
+msgstr "Zwei Lagen, Bauteile nur auf Vorderseite"
+
+#: pcbnew/dialog_layers_setup_base.cpp:25
+msgid "Two layers, parts on Back only"
+msgstr "Zwei Lagen, Bauteile nur auf Rückseite"
+
+#: pcbnew/dialog_layers_setup_base.cpp:25
+msgid "Two layers, parts on Front and Back"
+msgstr "Zwei Lagen, Bauteile auf Vorder- und Rückseite"
+
+#: pcbnew/dialog_layers_setup_base.cpp:25
+msgid "Four layers, parts on Front only"
+msgstr "Vier Lagen, Bauteile nur auf Vorderseite"
+
+#: pcbnew/dialog_layers_setup_base.cpp:25
+msgid "Four layers, parts on Front and Back"
+msgstr "Vier Lagen, Bauteile nur auf Rückseite"
+
+#: pcbnew/dialog_layers_setup_base.cpp:25
+msgid "All layers on"
+msgstr "Alle Lagen ein"
+
+#: pcbnew/dialog_layers_setup_base.cpp:34
+msgid "Copper Layers"
+msgstr "Kupferlagen"
+
+#: pcbnew/dialog_layers_setup_base.cpp:47
+msgid "Layers"
+msgstr "Lagen "
+
+#: pcbnew/dialog_layers_setup_base.cpp:68
+msgid "Adhes_Front_later"
+msgstr ""
+
+#: pcbnew/dialog_layers_setup_base.cpp:80
+msgid "If you want an adhesive template for the front side of the board"
+msgstr "Wenn eine Klebervorlage für die Platinenvorderseite benötigt wird"
+
+#: pcbnew/dialog_layers_setup_base.cpp:89
+#: pcbnew/dialog_layers_setup_base.cpp:114
+#: pcbnew/dialog_layers_setup_base.cpp:679
+#: pcbnew/dialog_layers_setup_base.cpp:704
+msgid "Off-board, manufacturing"
+msgstr "Off-board, Fertigung"
+
+#: pcbnew/dialog_layers_setup_base.cpp:93
+msgid "SoldP_Front_later"
+msgstr ""
+
+#: pcbnew/dialog_layers_setup_base.cpp:105
+msgid "If you want a solder paster layer for front side of the board"
+msgstr "Wenn ein Lage für Lötpaste auf der Platinenvorderseite benötigt wird"
+
+#: pcbnew/dialog_layers_setup_base.cpp:118
+msgid "SilkS_Front_later"
+msgstr ""
+
+#: pcbnew/dialog_layers_setup_base.cpp:130
+msgid "If you want a silk screen layer for the front side of the board"
+msgstr "Wenn eine Lage für Siebdruck auf der Platinenvorderseite benötigt wird"
+
+#: pcbnew/dialog_layers_setup_base.cpp:139
+#: pcbnew/dialog_layers_setup_base.cpp:164
+#: pcbnew/dialog_layers_setup_base.cpp:629
+#: pcbnew/dialog_layers_setup_base.cpp:654
+msgid "On-board, non-copper"
+msgstr "On-board, kupferfrei"
+
+#: pcbnew/dialog_layers_setup_base.cpp:143
+msgid "Mask_Front_later"
+msgstr ""
+
+#: pcbnew/dialog_layers_setup_base.cpp:155
+msgid "If you want a solder mask layer for the front of the board"
+msgstr "Wenn eine Lage für Lötstoppmaske auf der Platinenvorderseite benötigt wird"
+
+#: pcbnew/dialog_layers_setup_base.cpp:168
+msgid "Front_later"
+msgstr ""
+
+#: pcbnew/dialog_layers_setup_base.cpp:170
+msgid "Layer name of front (top) copper layer"
+msgstr "Name der vorderseitigen (oberen) Kupferlage"
+
+#: pcbnew/dialog_layers_setup_base.cpp:182
+msgid "If you want a front copper layer"
+msgstr "Wenn eine vorderseitige Kupferlage benötigt wird"
+
+#: pcbnew/dialog_layers_setup_base.cpp:191
+#: pcbnew/dialog_layers_setup_base.cpp:218
+#: pcbnew/dialog_layers_setup_base.cpp:245
+#: pcbnew/dialog_layers_setup_base.cpp:272
+#: pcbnew/dialog_layers_setup_base.cpp:299
+#: pcbnew/dialog_layers_setup_base.cpp:326
+#: pcbnew/dialog_layers_setup_base.cpp:353
+#: pcbnew/dialog_layers_setup_base.cpp:380
+#: pcbnew/dialog_layers_setup_base.cpp:407
+#: pcbnew/dialog_layers_setup_base.cpp:434
+#: pcbnew/dialog_layers_setup_base.cpp:461
+#: pcbnew/dialog_layers_setup_base.cpp:488
+#: pcbnew/dialog_layers_setup_base.cpp:515
+#: pcbnew/dialog_layers_setup_base.cpp:542
+#: pcbnew/dialog_layers_setup_base.cpp:569
+#: pcbnew/dialog_layers_setup_base.cpp:600
+msgid "signal"
+msgstr "Signal"
+
+#: pcbnew/dialog_layers_setup_base.cpp:191
+#: pcbnew/dialog_layers_setup_base.cpp:218
+#: pcbnew/dialog_layers_setup_base.cpp:245
+#: pcbnew/dialog_layers_setup_base.cpp:272
+#: pcbnew/dialog_layers_setup_base.cpp:299
+#: pcbnew/dialog_layers_setup_base.cpp:326
+#: pcbnew/dialog_layers_setup_base.cpp:353
+#: pcbnew/dialog_layers_setup_base.cpp:380
+#: pcbnew/dialog_layers_setup_base.cpp:407
+#: pcbnew/dialog_layers_setup_base.cpp:434
+#: pcbnew/dialog_layers_setup_base.cpp:461
+#: pcbnew/dialog_layers_setup_base.cpp:488
+#: pcbnew/dialog_layers_setup_base.cpp:515
+#: pcbnew/dialog_layers_setup_base.cpp:542
+#: pcbnew/dialog_layers_setup_base.cpp:569
+#: pcbnew/dialog_layers_setup_base.cpp:600
+msgid "power"
+msgstr "Spannung/Strom"
+
+#: pcbnew/dialog_layers_setup_base.cpp:191
+#: pcbnew/dialog_layers_setup_base.cpp:218
+#: pcbnew/dialog_layers_setup_base.cpp:245
+#: pcbnew/dialog_layers_setup_base.cpp:272
+#: pcbnew/dialog_layers_setup_base.cpp:299
+#: pcbnew/dialog_layers_setup_base.cpp:326
+#: pcbnew/dialog_layers_setup_base.cpp:353
+#: pcbnew/dialog_layers_setup_base.cpp:380
+#: pcbnew/dialog_layers_setup_base.cpp:407
+#: pcbnew/dialog_layers_setup_base.cpp:434
+#: pcbnew/dialog_layers_setup_base.cpp:461
+#: pcbnew/dialog_layers_setup_base.cpp:488
+#: pcbnew/dialog_layers_setup_base.cpp:515
+#: pcbnew/dialog_layers_setup_base.cpp:542
+#: pcbnew/dialog_layers_setup_base.cpp:569
+#: pcbnew/dialog_layers_setup_base.cpp:600
+msgid "mixed"
+msgstr "Mix"
+
+#: pcbnew/dialog_layers_setup_base.cpp:191
+#: pcbnew/dialog_layers_setup_base.cpp:218
+#: pcbnew/dialog_layers_setup_base.cpp:245
+#: pcbnew/dialog_layers_setup_base.cpp:272
+#: pcbnew/dialog_layers_setup_base.cpp:299
+#: pcbnew/dialog_layers_setup_base.cpp:326
+#: pcbnew/dialog_layers_setup_base.cpp:353
+#: pcbnew/dialog_layers_setup_base.cpp:380
+#: pcbnew/dialog_layers_setup_base.cpp:407
+#: pcbnew/dialog_layers_setup_base.cpp:434
+#: pcbnew/dialog_layers_setup_base.cpp:461
+#: pcbnew/dialog_layers_setup_base.cpp:488
+#: pcbnew/dialog_layers_setup_base.cpp:515
+#: pcbnew/dialog_layers_setup_base.cpp:542
+#: pcbnew/dialog_layers_setup_base.cpp:569
+#: pcbnew/dialog_layers_setup_base.cpp:600
+msgid "jumper"
+msgstr "Jumper"
+
+#: pcbnew/dialog_layers_setup_base.cpp:195
+#: pcbnew/dialog_layers_setup_base.cpp:222
+#: pcbnew/dialog_layers_setup_base.cpp:249
+#: pcbnew/dialog_layers_setup_base.cpp:276
+#: pcbnew/dialog_layers_setup_base.cpp:303
+#: pcbnew/dialog_layers_setup_base.cpp:330
+#: pcbnew/dialog_layers_setup_base.cpp:357
+#: pcbnew/dialog_layers_setup_base.cpp:384
+#: pcbnew/dialog_layers_setup_base.cpp:411
+#: pcbnew/dialog_layers_setup_base.cpp:438
+#: pcbnew/dialog_layers_setup_base.cpp:465
+#: pcbnew/dialog_layers_setup_base.cpp:492
+#: pcbnew/dialog_layers_setup_base.cpp:519
+#: pcbnew/dialog_layers_setup_base.cpp:546
+#: pcbnew/dialog_layers_setup_base.cpp:573
+#: pcbnew/dialog_layers_setup_base.cpp:604
+msgid "Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus."
+msgstr ""
+"Kupferlagentyp für Freerouter.\n"
+"Spannungs-/Stromlagen werden aus Freerouter's Lagenmenüs entfernt."
+
+#: pcbnew/dialog_layers_setup_base.cpp:199
+msgid "Inner2"
+msgstr "Innen 2"
+
+#: pcbnew/dialog_layers_setup_base.cpp:226
+msgid "Inner3"
+msgstr "Innen 3"
+
+#: pcbnew/dialog_layers_setup_base.cpp:253
+msgid "Inner4"
+msgstr "Innen 4"
+
+#: pcbnew/dialog_layers_setup_base.cpp:280
+msgid "Inner5"
+msgstr "Innen 5"
+
+#: pcbnew/dialog_layers_setup_base.cpp:307
+msgid "Inner6"
+msgstr "Innen 6"
+
+#: pcbnew/dialog_layers_setup_base.cpp:334
+msgid "Inner7"
+msgstr "Innen 7"
+
+#: pcbnew/dialog_layers_setup_base.cpp:361
+msgid "Inner8"
+msgstr "Innen 8"
+
+#: pcbnew/dialog_layers_setup_base.cpp:388
+msgid "Inner9"
+msgstr "Innen 9"
+
+#: pcbnew/dialog_layers_setup_base.cpp:415
+msgid "Inner10"
+msgstr "Innen 10"
+
+#: pcbnew/dialog_layers_setup_base.cpp:442
+msgid "Inner11"
+msgstr "Innen 11"
+
+#: pcbnew/dialog_layers_setup_base.cpp:469
+msgid "Inner12"
+msgstr "Innen 12"
+
+#: pcbnew/dialog_layers_setup_base.cpp:496
+msgid "Inner13"
+msgstr "Innen 13"
+
+#: pcbnew/dialog_layers_setup_base.cpp:523
+msgid "Inner14"
+msgstr "Innen 14"
+
+#: pcbnew/dialog_layers_setup_base.cpp:550
+msgid "Inner15"
+msgstr "Innen 5"
+
+#: pcbnew/dialog_layers_setup_base.cpp:577
+msgid "Back"
+msgstr "Rückseite"
+
+#: pcbnew/dialog_layers_setup_base.cpp:579
+msgid "Layer name of back (bottom) copper layer"
+msgstr "Name der rückseitigen (unteren) Kupferlage"
+
+#: pcbnew/dialog_layers_setup_base.cpp:591
+msgid "If you want a back copper layer"
+msgstr "Wenn eine rückseitige Kupferlage benötigt wird"
+
+#: pcbnew/dialog_layers_setup_base.cpp:608
+msgid "Mask_Back_later"
+msgstr ""
+
+#: pcbnew/dialog_layers_setup_base.cpp:620
+msgid "If you want a solder mask layer for the back side of the board"
+msgstr "Wenn eine Lage für Lötstoppmaske auf der Platinenrückseite benötigt wird"
+
+#: pcbnew/dialog_layers_setup_base.cpp:633
+msgid "SilkS_Back_later"
+msgstr ""
+
+#: pcbnew/dialog_layers_setup_base.cpp:645
+msgid "If you want a silk screen layer for the back side of the board"
+msgstr "Wenn eine Lage für Siebdruck auf der Platinenrückseite benötigt wird"
+
+#: pcbnew/dialog_layers_setup_base.cpp:658
+msgid "SoldP_Back_later"
+msgstr ""
+
+#: pcbnew/dialog_layers_setup_base.cpp:670
+msgid "If you want a solder paste layer for the back side of the board"
+msgstr "Wenn eine Lage für Lötpaste auf der Platinenrückseite benötigt wird"
+
+#: pcbnew/dialog_layers_setup_base.cpp:683
+msgid "Adhes_Back_later"
+msgstr ""
+
+#: pcbnew/dialog_layers_setup_base.cpp:695
+msgid "If you want an adhesive layer for the back side of the board"
+msgstr "Wenn eine Lage für Kleber auf der Platinenrückseite benötigt wird"
+
+#: pcbnew/dialog_layers_setup_base.cpp:708
+msgid "PCB_Edges_later"
+msgstr ""
+
+#: pcbnew/dialog_layers_setup_base.cpp:720
+msgid "If you want a board perimeter layer"
+msgstr "Wenn eine Lage für den Platinenumfang benötigt wird"
+
+#: pcbnew/dialog_layers_setup_base.cpp:729
+msgid "Board contour"
+msgstr "Platinenumriss"
+
+#: pcbnew/dialog_layers_setup_base.cpp:733
+msgid "Eco1_later"
+msgstr ""
+
+#: pcbnew/dialog_layers_setup_base.cpp:752
+#: pcbnew/dialog_layers_setup_base.cpp:775
+#: pcbnew/dialog_layers_setup_base.cpp:800
+#: pcbnew/dialog_layers_setup_base.cpp:825
+msgid "Auxiliary"
+msgstr "Behelfstyp"
+
+#: pcbnew/dialog_layers_setup_base.cpp:756
+msgid "Eco2_later"
+msgstr ""
+
+#: pcbnew/dialog_layers_setup_base.cpp:779
+msgid "Comments_later"
+msgstr ""
+
+#: pcbnew/dialog_layers_setup_base.cpp:791
+msgid "If you want a separate layer for comments or notes"
+msgstr "Wenn eine separate Lage für Kommentare oder Bemerkungen benötigt wird"
+
+#: pcbnew/dialog_layers_setup_base.cpp:804
+msgid "Drawings_later"
+msgstr ""
+
+#: pcbnew/dialog_layers_setup_base.cpp:816
+msgid "If you want a layer for documentation drawings"
+msgstr "Wenn eine Lage für dokumentative Zeichnungen benötigt wird"
 
 #: pcbnew/dialog_general_options.cpp:222
 msgid "Hide &Layers Manager"
@@ -9316,6 +9660,22 @@ msgstr "Typenbeschreibung: "
 msgid "KeyW: "
 msgstr "Schlüsselwort: "
 
+#: pcbnew/dialog_pad_properties.cpp:569
+msgid "Incorrect value for pad drill: pad drill bigger than pad size"
+msgstr "Inkorrekter Wert für Pad Bohrdurchmesser. Bohrdurchmesser ist größer als Pad."
+
+#: pcbnew/dialog_pad_properties.cpp:578
+msgid "Error: pad is not on a copper layer and has a hole"
+msgstr "Fehler: Pad befindet sich nicht auf einer Kupferlage und besitzt ein Bohrung"
+
+#: pcbnew/dialog_pad_properties.cpp:586
+msgid "Incorrect value for pad offset"
+msgstr "Inkorrekter Wert für Padoffset"
+
+#: pcbnew/dialog_pad_properties.cpp:649
+msgid "Unknown netname, no change"
+msgstr "Unbekannter Netzname. Keine Änderung durchgeführt"
+
 #: pcbnew/layer_widget.cpp:358
 msgid "Left click to select, middle click for color change, right click for menu"
 msgstr "Linksklick zum Selektieren, Mittelklick für Farbwechsel, Rechtsklick für Menü"
@@ -9370,67 +9730,7 @@ msgstr "Dies ist die voreingestellte Netzklasse."
 
 #: pcbnew/class_board.cpp:215
 msgid "Front"
-msgstr "Bestückungsseite - BS"
-
-#: pcbnew/class_board.cpp:216
-msgid "Inner2"
-msgstr "Innen 2"
-
-#: pcbnew/class_board.cpp:217
-msgid "Inner3"
-msgstr "Innen 3"
-
-#: pcbnew/class_board.cpp:218
-msgid "Inner4"
-msgstr "Innen 4"
-
-#: pcbnew/class_board.cpp:219
-msgid "Inner5"
-msgstr "Innen 5"
-
-#: pcbnew/class_board.cpp:220
-msgid "Inner6"
-msgstr "Innen 6"
-
-#: pcbnew/class_board.cpp:221
-msgid "Inner7"
-msgstr "Innen 7"
-
-#: pcbnew/class_board.cpp:222
-msgid "Inner8"
-msgstr "Innen 8"
-
-#: pcbnew/class_board.cpp:223
-msgid "Inner9"
-msgstr "Innen 9"
-
-#: pcbnew/class_board.cpp:224
-msgid "Inner10"
-msgstr "Innen 10"
-
-#: pcbnew/class_board.cpp:225
-msgid "Inner11"
-msgstr "Innen 11"
-
-#: pcbnew/class_board.cpp:226
-msgid "Inner12"
-msgstr "Innen 12"
-
-#: pcbnew/class_board.cpp:227
-msgid "Inner13"
-msgstr "Innen 13"
-
-#: pcbnew/class_board.cpp:228
-msgid "Inner14"
-msgstr "Innen 14"
-
-#: pcbnew/class_board.cpp:229
-msgid "Inner15"
-msgstr "Innen 5"
-
-#: pcbnew/class_board.cpp:230
-msgid "Back"
-msgstr "Rückseite"
+msgstr "Vorderseite"
 
 #: pcbnew/class_board.cpp:231
 msgid "Adhes_Back"
@@ -10016,7 +10316,7 @@ msgstr "Position"
 
 #: pcbnew/swap_layers.cpp:70
 msgid "Swap Layers:"
-msgstr "Wechsle Lagen:"
+msgstr "Tausche Lagen:"
 
 #: pcbnew/swap_layers.cpp:217
 #: pcbnew/swap_layers.cpp:222
@@ -10034,7 +10334,7 @@ msgstr "Bauteileditor: Bauteil wurde modifiziert ! Fortfahren ?"
 
 #: pcbnew/moduleframe.cpp:383
 msgid "Show pads in sketch mode"
-msgstr "Pads als Umrisse darstellen"
+msgstr "Pads als Umriss darstellen"
 
 #: pcbnew/moduleframe.cpp:384
 msgid "Show pads in filled mode"
@@ -11056,7 +11356,7 @@ msgstr "Darstellung der Platine an den Bildschirm anpassen"
 
 #: pcbnew/menubar_pcbframe.cpp:338
 msgid "Redraw the screen of the board"
-msgstr "Platine neuzeichnen"
+msgstr "Platine neu zeichnen"
 
 #: pcbnew/menubar_pcbframe.cpp:347
 msgid "&List Nets"
@@ -11641,284 +11941,6 @@ msgstr "Bezeichnung"
 msgid "Supplier and ref"
 msgstr "Anbieter und Ref"
 
-#: pcbnew/dialog_layers_setup_base.cpp:23
-msgid "Preset Layer Groupings"
-msgstr "Voreinstellung für Lagengruppierungen"
-
-#: pcbnew/dialog_layers_setup_base.cpp:25
-msgid "Custom"
-msgstr "Benutzerdefiniert"
-
-#: pcbnew/dialog_layers_setup_base.cpp:25
-msgid "Two layers, parts on Front only"
-msgstr "Zwei Lagen, Bauteile nur auf Vorderseite"
-
-#: pcbnew/dialog_layers_setup_base.cpp:25
-msgid "Two layers, parts on Back only"
-msgstr "Zwei Lagen, Bauteile nur auf Rückseite"
-
-#: pcbnew/dialog_layers_setup_base.cpp:25
-msgid "Two layers, parts on Front and Back"
-msgstr "Zwei Lagen, Bauteile auf Vorder- und Rückseite"
-
-#: pcbnew/dialog_layers_setup_base.cpp:25
-msgid "Four layers, parts on Front only"
-msgstr "Vier Lagen, Bauteile nur auf Vorderseite"
-
-#: pcbnew/dialog_layers_setup_base.cpp:25
-msgid "Four layers, parts on Front and Back"
-msgstr "Vier Lagen, Bauteile nur auf Rückseite"
-
-#: pcbnew/dialog_layers_setup_base.cpp:25
-msgid "All layers on"
-msgstr "Alle Lagen ein"
-
-#: pcbnew/dialog_layers_setup_base.cpp:34
-msgid "Copper Layers"
-msgstr "Kupferlagen"
-
-#: pcbnew/dialog_layers_setup_base.cpp:47
-msgid "Layers"
-msgstr "Lagen "
-
-#: pcbnew/dialog_layers_setup_base.cpp:68
-msgid "Adhes_Front_later"
-msgstr ""
-
-#: pcbnew/dialog_layers_setup_base.cpp:80
-msgid "If you want an adhesive template for the front side of the board"
-msgstr "Wenn eine Klebervorlage für die Platinenvorderseite benötigt wird"
-
-#: pcbnew/dialog_layers_setup_base.cpp:89
-#: pcbnew/dialog_layers_setup_base.cpp:114
-#: pcbnew/dialog_layers_setup_base.cpp:679
-#: pcbnew/dialog_layers_setup_base.cpp:704
-msgid "Off-board, manufacturing"
-msgstr "Off-board, Fertigung"
-
-#: pcbnew/dialog_layers_setup_base.cpp:93
-msgid "SoldP_Front_later"
-msgstr ""
-
-#: pcbnew/dialog_layers_setup_base.cpp:105
-msgid "If you want a solder paster layer for front side of the board"
-msgstr "Wenn ein Lage für Lötpaste auf der Platinenvorderseite benötigt wird"
-
-#: pcbnew/dialog_layers_setup_base.cpp:118
-msgid "SilkS_Front_later"
-msgstr ""
-
-#: pcbnew/dialog_layers_setup_base.cpp:130
-msgid "If you want a silk screen layer for the front side of the board"
-msgstr "Wenn eine Lage für Siebdruck auf der Platinenvorderseite benötigt wird"
-
-#: pcbnew/dialog_layers_setup_base.cpp:139
-#: pcbnew/dialog_layers_setup_base.cpp:164
-#: pcbnew/dialog_layers_setup_base.cpp:629
-#: pcbnew/dialog_layers_setup_base.cpp:654
-msgid "On-board, non-copper"
-msgstr "On-board, kupferfrei"
-
-#: pcbnew/dialog_layers_setup_base.cpp:143
-msgid "Mask_Front_later"
-msgstr ""
-
-#: pcbnew/dialog_layers_setup_base.cpp:155
-msgid "If you want a solder mask layer for the front of the board"
-msgstr "Wenn eine Lage für Lötstoppmaske auf der Platinenvorderseite benötigt wird"
-
-#: pcbnew/dialog_layers_setup_base.cpp:168
-msgid "Front_later"
-msgstr ""
-
-#: pcbnew/dialog_layers_setup_base.cpp:170
-msgid "Layer name of front (top) copper layer"
-msgstr "Name der vorderseitigen (oberen) Kupferlage"
-
-#: pcbnew/dialog_layers_setup_base.cpp:182
-msgid "If you want a front copper layer"
-msgstr "Wenn eine vorderseitige Kupferlage benötigt wird"
-
-#: pcbnew/dialog_layers_setup_base.cpp:191
-#: pcbnew/dialog_layers_setup_base.cpp:218
-#: pcbnew/dialog_layers_setup_base.cpp:245
-#: pcbnew/dialog_layers_setup_base.cpp:272
-#: pcbnew/dialog_layers_setup_base.cpp:299
-#: pcbnew/dialog_layers_setup_base.cpp:326
-#: pcbnew/dialog_layers_setup_base.cpp:353
-#: pcbnew/dialog_layers_setup_base.cpp:380
-#: pcbnew/dialog_layers_setup_base.cpp:407
-#: pcbnew/dialog_layers_setup_base.cpp:434
-#: pcbnew/dialog_layers_setup_base.cpp:461
-#: pcbnew/dialog_layers_setup_base.cpp:488
-#: pcbnew/dialog_layers_setup_base.cpp:515
-#: pcbnew/dialog_layers_setup_base.cpp:542
-#: pcbnew/dialog_layers_setup_base.cpp:569
-#: pcbnew/dialog_layers_setup_base.cpp:600
-msgid "signal"
-msgstr "Signal"
-
-#: pcbnew/dialog_layers_setup_base.cpp:191
-#: pcbnew/dialog_layers_setup_base.cpp:218
-#: pcbnew/dialog_layers_setup_base.cpp:245
-#: pcbnew/dialog_layers_setup_base.cpp:272
-#: pcbnew/dialog_layers_setup_base.cpp:299
-#: pcbnew/dialog_layers_setup_base.cpp:326
-#: pcbnew/dialog_layers_setup_base.cpp:353
-#: pcbnew/dialog_layers_setup_base.cpp:380
-#: pcbnew/dialog_layers_setup_base.cpp:407
-#: pcbnew/dialog_layers_setup_base.cpp:434
-#: pcbnew/dialog_layers_setup_base.cpp:461
-#: pcbnew/dialog_layers_setup_base.cpp:488
-#: pcbnew/dialog_layers_setup_base.cpp:515
-#: pcbnew/dialog_layers_setup_base.cpp:542
-#: pcbnew/dialog_layers_setup_base.cpp:569
-#: pcbnew/dialog_layers_setup_base.cpp:600
-msgid "power"
-msgstr "Spannung/Strom"
-
-#: pcbnew/dialog_layers_setup_base.cpp:191
-#: pcbnew/dialog_layers_setup_base.cpp:218
-#: pcbnew/dialog_layers_setup_base.cpp:245
-#: pcbnew/dialog_layers_setup_base.cpp:272
-#: pcbnew/dialog_layers_setup_base.cpp:299
-#: pcbnew/dialog_layers_setup_base.cpp:326
-#: pcbnew/dialog_layers_setup_base.cpp:353
-#: pcbnew/dialog_layers_setup_base.cpp:380
-#: pcbnew/dialog_layers_setup_base.cpp:407
-#: pcbnew/dialog_layers_setup_base.cpp:434
-#: pcbnew/dialog_layers_setup_base.cpp:461
-#: pcbnew/dialog_layers_setup_base.cpp:488
-#: pcbnew/dialog_layers_setup_base.cpp:515
-#: pcbnew/dialog_layers_setup_base.cpp:542
-#: pcbnew/dialog_layers_setup_base.cpp:569
-#: pcbnew/dialog_layers_setup_base.cpp:600
-msgid "mixed"
-msgstr "Mix"
-
-#: pcbnew/dialog_layers_setup_base.cpp:191
-#: pcbnew/dialog_layers_setup_base.cpp:218
-#: pcbnew/dialog_layers_setup_base.cpp:245
-#: pcbnew/dialog_layers_setup_base.cpp:272
-#: pcbnew/dialog_layers_setup_base.cpp:299
-#: pcbnew/dialog_layers_setup_base.cpp:326
-#: pcbnew/dialog_layers_setup_base.cpp:353
-#: pcbnew/dialog_layers_setup_base.cpp:380
-#: pcbnew/dialog_layers_setup_base.cpp:407
-#: pcbnew/dialog_layers_setup_base.cpp:434
-#: pcbnew/dialog_layers_setup_base.cpp:461
-#: pcbnew/dialog_layers_setup_base.cpp:488
-#: pcbnew/dialog_layers_setup_base.cpp:515
-#: pcbnew/dialog_layers_setup_base.cpp:542
-#: pcbnew/dialog_layers_setup_base.cpp:569
-#: pcbnew/dialog_layers_setup_base.cpp:600
-msgid "jumper"
-msgstr "Jumper"
-
-#: pcbnew/dialog_layers_setup_base.cpp:195
-#: pcbnew/dialog_layers_setup_base.cpp:222
-#: pcbnew/dialog_layers_setup_base.cpp:249
-#: pcbnew/dialog_layers_setup_base.cpp:276
-#: pcbnew/dialog_layers_setup_base.cpp:303
-#: pcbnew/dialog_layers_setup_base.cpp:330
-#: pcbnew/dialog_layers_setup_base.cpp:357
-#: pcbnew/dialog_layers_setup_base.cpp:384
-#: pcbnew/dialog_layers_setup_base.cpp:411
-#: pcbnew/dialog_layers_setup_base.cpp:438
-#: pcbnew/dialog_layers_setup_base.cpp:465
-#: pcbnew/dialog_layers_setup_base.cpp:492
-#: pcbnew/dialog_layers_setup_base.cpp:519
-#: pcbnew/dialog_layers_setup_base.cpp:546
-#: pcbnew/dialog_layers_setup_base.cpp:573
-#: pcbnew/dialog_layers_setup_base.cpp:604
-msgid "Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus."
-msgstr ""
-"Kupferlagentyp für Freerouter.\n"
-"Spannungs-/Stromlagen werden aus Freerouter's Lagenmenüs entfernt."
-
-#: pcbnew/dialog_layers_setup_base.cpp:579
-msgid "Layer name of back (bottom) copper layer"
-msgstr "Name der rückseitigen (unteren) Kupferlage"
-
-#: pcbnew/dialog_layers_setup_base.cpp:591
-msgid "If you want a back copper layer"
-msgstr "Wenn eine rückseitige Kupferlage benötigt wird"
-
-#: pcbnew/dialog_layers_setup_base.cpp:608
-msgid "Mask_Back_later"
-msgstr ""
-
-#: pcbnew/dialog_layers_setup_base.cpp:620
-msgid "If you want a solder mask layer for the back side of the board"
-msgstr "Wenn eine Lage für Lötstoppmaske auf der Platinenrückseite benötigt wird"
-
-#: pcbnew/dialog_layers_setup_base.cpp:633
-msgid "SilkS_Back_later"
-msgstr ""
-
-#: pcbnew/dialog_layers_setup_base.cpp:645
-msgid "If you want a silk screen layer for the back side of the board"
-msgstr "Wenn eine Lage für Siebdruck auf der Platinenrückseite benötigt wird"
-
-#: pcbnew/dialog_layers_setup_base.cpp:658
-msgid "SoldP_Back_later"
-msgstr ""
-
-#: pcbnew/dialog_layers_setup_base.cpp:670
-msgid "If you want a solder paste layer for the back side of the board"
-msgstr "Wenn eine Lage für Lötpaste auf der Platinenrückseite benötigt wird"
-
-#: pcbnew/dialog_layers_setup_base.cpp:683
-msgid "Adhes_Back_later"
-msgstr ""
-
-#: pcbnew/dialog_layers_setup_base.cpp:695
-msgid "If you want an adhesive layer for the back side of the board"
-msgstr "Wenn eine Lage für Kleber auf der Platinenrückseite benötigt wird"
-
-#: pcbnew/dialog_layers_setup_base.cpp:708
-msgid "PCB_Edges_later"
-msgstr ""
-
-#: pcbnew/dialog_layers_setup_base.cpp:720
-msgid "If you want a board perimeter layer"
-msgstr "Wenn eine Lage für den Platinenumfang benötigt wird"
-
-#: pcbnew/dialog_layers_setup_base.cpp:729
-msgid "Board contour"
-msgstr "Platinenumriss"
-
-#: pcbnew/dialog_layers_setup_base.cpp:733
-msgid "Eco2_later"
-msgstr ""
-
-#: pcbnew/dialog_layers_setup_base.cpp:752
-#: pcbnew/dialog_layers_setup_base.cpp:775
-#: pcbnew/dialog_layers_setup_base.cpp:800
-#: pcbnew/dialog_layers_setup_base.cpp:825
-msgid "Auxiliary"
-msgstr "Behelfstyp"
-
-#: pcbnew/dialog_layers_setup_base.cpp:756
-msgid "Eco1_later"
-msgstr ""
-
-#: pcbnew/dialog_layers_setup_base.cpp:779
-msgid "Comments_later"
-msgstr ""
-
-#: pcbnew/dialog_layers_setup_base.cpp:791
-msgid "If you want a separate layer for comments or notes"
-msgstr "Wenn eine separate Lage für Kommentare oder Bemerkungen benötigt wird"
-
-#: pcbnew/dialog_layers_setup_base.cpp:804
-msgid "Drawings_later"
-msgstr ""
-
-#: pcbnew/dialog_layers_setup_base.cpp:816
-msgid "If you want a layer for documentation drawings"
-msgstr "Wenn eine Lage für dokumentative Zeichnungen benötigt wird"
-
 #: pcbnew/librairi.cpp:32
 msgid "Kicad foot print export files (*.emp)|*.emp"
 msgstr "KiCad Footprint Export Dateien (*.emp)|*.emp"
@@ -12074,6 +12096,54 @@ msgstr "Platzierungsdatei der Lötseite:"
 #: pcbnew/gen_modules_placefile.cpp:182
 msgid "Module count"
 msgstr "Bauteileanzahl"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:25
+msgid "Export/Import to/from FreeRoute:"
+msgstr "Export/Import von/nach FreeRoute:"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:40
+msgid "Export a Specctra Design (*.dsn) File"
+msgstr "Exportiere eine Specctra Design Datei (*.dsn)"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:41
+msgid "Export a Specctra DSN file (to FreeRouter)"
+msgstr "Exportiere eine Specctra DSN Datei (nach FreeRouter)"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:45
+msgid "Launch FreeRouter via Java Web Start"
+msgstr "Starte FreeRouter via Java Web Start"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:46
+msgid "Use Java Web Start function to run FreeRouter via Internet (or your Browser if not found)"
+msgstr "Verwende die Java Web Start Funktion um FreeRouter via Internet zu starten (oder den Browser falls nicht auffindbar)"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:50
+msgid "Back Import the Specctra Session (*.ses) File"
+msgstr "Die Specctra Session Datei (*.ses) rückimportieren"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:51
+msgid "Merge a session file created by FreeRouter with the current board."
+msgstr "Eine Session Datei, erzeugt durch FreeRouter, mit der aktuellen Platine zusammenführen"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:67
+msgid "FreeRoute Info:"
+msgstr "Freeroute Hinweise:"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:82
+msgid "Visit the FreeRouting.net Website with your Browser"
+msgstr "Aufrufen der FreeRouting.net Webseite"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:85
+msgid "FreeRouting.net URL"
+msgstr "FreeRouting.net URL"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:90
+msgid "The URL of the FreeRouting.net website"
+msgstr "Die URL der FreeRouting.net Webseite"
+
+#: pcbnew/dialog_freeroute_exchange_base.cpp:94
+msgid "Help"
+msgstr "Hilfe"
 
 #: gerbview/reglage.cpp:92
 msgid "Save Cfg..."
@@ -12813,10 +12883,6 @@ msgstr "Tausche Bauteil(e) Footprint(s):"
 msgid "Design Rules Editor"
 msgstr "Design Regeln Editor"
 
-#: pcbnew/dialog_layers_setup_base.h:262
-msgid "Layer Setup"
-msgstr "Lagen Einstellungen"
-
 #: pcbnew/dialog_drc_base.h:96
 msgid "DRC Control"
 msgstr "ERC Steuerung"
@@ -12857,6 +12923,10 @@ msgstr "Pad Eigenschaften"
 msgid "Footprints Orientation"
 msgstr "Footprint Ausrichtung"
 
+#: pcbnew/dialog_layers_setup_base.h:262
+msgid "Layer Setup"
+msgstr "Lagen Einstellungen"
+
 #: gerbview/gerbview_dialog_display_options_frame_base.h:54
 msgid "Gerbview Draw Options"
 msgstr "Gerbview Darstellungsoptionen"
@@ -12865,6 +12935,12 @@ msgstr "Gerbview Darstellungsoptionen"
 msgid "Page Settings"
 msgstr "Seite einrichten..."
 
+#~ msgid "in file"
+#~ msgstr "in Datei"
+#~ msgid "In the clearance units, enter the clearance distance"
+#~ msgstr ""
+#~ "Gebe die Distanz für die einzuhaltenden Abstandsflächen in der "
+#~ "vorgegebenen Einheit an"
 #~ msgid "Grid: "
 #~ msgstr "Raster:"
 #~ msgid "Current"
@@ -13447,32 +13523,8 @@ msgstr "Seite einrichten..."
 #~ msgstr "Pad Bohrung"
 #~ msgid "<small>This layer name <b>%s</b> is already existing<br>"
 #~ msgstr "<small>Der Lagenname <b>%s</b> existiert bereits<br>"
-#~ msgid "Export a Specctra Design (*.dsn) File"
-#~ msgstr "Exportiere eine Specctra Design Datei (*.dsn)"
-#~ msgid "Export a Specctra DSN file (to FreeRouter)"
-#~ msgstr "Exportiere eine Specctra DSN Datei (nach FreeRouter)"
-#~ msgid "Launch FreeRouter via Java Web Start"
-#~ msgstr "Starte FreeRouter via Java Web Start"
-#~ msgid ""
-#~ "Use Java Web Start function to run FreeRouter via Internet (or your "
-#~ "Browser if not found)"
-#~ msgstr ""
-#~ "Verwende die Java Web Start Funktion um FreeRouter via Internet zu "
-#~ "starten (oder den Browser falls nicht auffindbar)"
-#~ msgid "Back Import the Specctra Session (*.ses) File"
-#~ msgstr "Die Specctra Session Datei (*.ses) zurück importieren"
-#~ msgid "Merge a session file created by FreeRouter with the current board."
-#~ msgstr ""
-#~ "Eine Session Datei, erzeugt durch FreeRouter, mit der aktuellen Platine "
-#~ "zusammenführen"
-#~ msgid "Visit FreeRouting.net website"
-#~ msgstr "Besuche die FreeRouting.net Webseite"
 #~ msgid "Launch your browser and go to the FreeRouting.net website"
 #~ msgstr "Starte den Browser und gehe zur FreeRouting.net Webseite"
-#~ msgid "FreeRouting.net URL"
-#~ msgstr "FreeRouting.net URL"
-#~ msgid "The URL of the FreeRouting.net website"
-#~ msgstr "Die URL der FreeRouting.net Webseite"
 #~ msgid "Via Min Drill"
 #~ msgstr "DuKo Mindestbohrdurchmesser"
 #~ msgid "MicroVia Min Diameter"
@@ -13633,8 +13685,6 @@ msgstr "Seite einrichten..."
 #~ "nicht anders vorgegeben."
 #~ msgid "Micro Via Size"
 #~ msgstr "Micro DuKo-Durchmesser"
-#~ msgid "Enter the current track width"
-#~ msgstr "Zu verwendende Breite für Leiterbahnen"
 #~ msgid "This is the clearance between tracks, vias and pads for DRC."
 #~ msgstr ""
 #~ "Dies ist der Abstand zwischen Leiterbahnen, Durchkontaktierungen und Pads "

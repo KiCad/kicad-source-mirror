@@ -1,4 +1,4 @@
 release version:
-2010 mar 13
+2010 mar 14
 files (.zip,.tgz):
-kicad-2010-03-13-final
+kicad-2010-03-14-final

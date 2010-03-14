@@ -125,8 +125,8 @@ set(EESCHEMA_SRCS
     viewlibs.cpp)
 
 set(EESCHEMA_EXTRA_SRCS
+    ../common/dialog_page_settings.cpp
     ../common/sch_item_struct.cpp
-    ../share/setpage.cpp
 )
 
 if(WIN32)

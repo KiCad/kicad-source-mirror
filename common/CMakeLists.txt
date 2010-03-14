@@ -28,6 +28,7 @@ set(COMMON_SRCS
     dialog_display_info_HTML_base.cpp
     dialog_load_error.cpp
     dcsvg.cpp
+    dialog_page_settings_base.cpp
     displlst.cpp
     dlist.cpp
     drawframe.cpp

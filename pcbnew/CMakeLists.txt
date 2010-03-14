@@ -174,7 +174,7 @@ set(PCBNEW_SRCS
     )
 
 set(PCBNEW_EXTRA_SRCS
-    ../share/setpage.cpp
+    ../common/dialog_page_settings.cpp
 )
 
 if(WIN32)
