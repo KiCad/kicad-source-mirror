@@ -1219,5 +1219,6 @@ EDA_Rect SCH_TEXT::GetBoundingBox()
         rect.SetEnd(end);
     }
 
+    rect.Normalize();
     return rect;
 }

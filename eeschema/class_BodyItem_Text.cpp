@@ -305,15 +305,54 @@ void LIB_TEXT::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     GRSetDrawMode( aDC, aDrawMode );
 
+    /* Calculate the text orientation, according to the component
+     * orientation/mirror (needed when draw text in schematic)
+     */
+    int orient = m_Orient;
+    if( aTransformMatrix[0][1] )  // Rotate component 90 degrees.
+    {
+        if( orient == TEXT_ORIENT_HORIZ )
+            orient = TEXT_ORIENT_VERT;
+        else
+            orient = TEXT_ORIENT_HORIZ;
+    }
+
+    /* Calculate the text justification, according to the component
+     * orientation/mirror this is a bit complicated due to cumulative
+     * calculations:
+     * - numerous cases (mirrored or not, rotation)
+     * - the DrawGraphicText function recalculate also H and H justifications
+     *      according to the text orientation.
+     * - When a component is mirrored, the text is not mirrored and
+     *   justifications are complicated to calculate
+     * so the more easily way is to use no justifications ( Centered text )
+     * and use GetBoundaryBox to know the text coordinate considered as centered
+    */
+    EDA_Rect bBox = GetBoundingBox();
+    pos1 = bBox.Centre();   // this is the coordinates of the graphic text relative to the component position
+                            // in schematic Y axis orientation
+    /* convert y coordinate from schematic to library Y axis orientation
+     * because we want to call TransformCoordinate to calculate real coordinates
+     */
+    NEGATE( pos1.y );
+    pos1 = TransformCoordinate( aTransformMatrix, pos1 ) + aOffset;
     DrawGraphicText( aPanel, aDC, pos1, (EDA_Colors) color, m_Text,
-                     m_Orient, m_Size, m_HJustify, m_VJustify,
+                     orient, m_Size, GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                      GetPenSize( ), m_Italic, m_Bold );
 
+    
+    /* Enable this to draw the bounding box around the text field to validate
+     * the bounding box calculations.
+    */
 #if 0
-    EDA_Rect bBox = GetBoundingBox();
-    bBox.Inflate( 1, 1 );
-    GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
-            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+    EDA_Rect grBox;
+    bBox.SetY( -bBox.GetY() );
+    bBox.SetHeight( -bBox.GetHeight());
+    grBox.SetOrigin( TransformCoordinate( aTransformMatrix, bBox.GetOrigin() ) );
+    grBox.SetEnd( TransformCoordinate( aTransformMatrix, bBox.GetEnd() ) );
+    grBox.Move( aOffset );
+    GRRect( &aPanel->m_ClipBox, aDC, grBox.GetOrigin().x, grBox.GetOrigin().y,
+            grBox.GetEnd().x, grBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
 }
 
@@ -331,11 +370,18 @@ void LIB_TEXT::DisplayInfo( WinEDA_DrawFrame* frame )
 }
 
 
+/**
+ * @return the boundary box for this, in schematic coordinates
+ */
 EDA_Rect LIB_TEXT::GetBoundingBox()
 {
+    /* remenber Y coordinates in lib are bottom to top, so we must
+     * negate the Y position befire calling GetTextBox() that works using top to bottom
+     * Y axis orientation
+     */
+    NEGATE(m_Pos.y );
     EDA_Rect rect = GetTextBox();
-    rect.m_Pos.y *= -1;
-    rect.m_Pos.y -= rect.GetHeight();
+    NEGATE(m_Pos.y );   // restore Y cooordinate for the graphic text
 
     wxPoint orig = rect.GetOrigin();
     wxPoint end = rect.GetEnd();
@@ -345,6 +391,6 @@ EDA_Rect LIB_TEXT::GetBoundingBox()
     RotatePoint( &end, center, m_Orient );
     rect.SetOrigin( orig );
     rect.SetEnd( end );
-
+    rect.Normalize();
     return rect;
 }
