@@ -694,6 +694,15 @@ void SCH_SHEET::Mirror_Y( int aYaxis_position )
 }
 
 
+bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData )
+{
+    if( !SCH_ITEM::Matches( m_SheetName, aSearchData ) )
+        return SCH_ITEM::Matches( m_FileName, aSearchData );
+
+    return true;
+}
+
+
 #if defined(DEBUG)
 void SCH_SHEET::Show( int nestLevel, std::ostream& os )
 {

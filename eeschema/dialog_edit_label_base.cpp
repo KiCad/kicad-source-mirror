@@ -16,78 +16,82 @@ DialogLabelEditor_Base::DialogLabelEditor_Base( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Text"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textControlSizer = new wxFlexGridSizer( 2, 2, 3, 3 );
+	m_textControlSizer->SetFlexibleDirection( wxBOTH );
+	m_textControlSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticText1 = new wxStaticText( this, wxID_ANY, _("&Text:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
-	bMainSizer->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_textControlSizer->Add( m_staticText1, 0, wxRIGHT, 3 );
 	
-	m_TextLabelSingleline = new wxTextCtrl( this, wxID_VALUE, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	m_TextLabelSingleline->SetToolTip( _("Enter the text to be used within the schematic") );
+	m_textLabel = new wxTextCtrl( this, wxID_VALUE, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	m_textLabel->SetToolTip( _("Enter the text to be used within the schematic") );
 	
-	bMainSizer->Add( m_TextLabelSingleline, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_textControlSizer->Add( m_textLabel, 0, wxEXPAND|wxLEFT, 3 );
 	
-	m_textCtrlMultiline = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_PROCESS_ENTER );
-	m_textCtrlMultiline->SetToolTip( _("Enter the text to be used within the schematic") );
-	m_textCtrlMultiline->SetMinSize( wxSize( -1,60 ) );
+	m_SizeTitle = new wxStaticText( this, wxID_ANY, _("&Size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeTitle->Wrap( -1 );
+	m_textControlSizer->Add( m_SizeTitle, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
 	
-	bMainSizer->Add( m_textCtrlMultiline, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	wxBoxSizer* bSizeCtrlSizer;
+	bSizeCtrlSizer = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_TextSize = new wxTextCtrl( this, wxID_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizeCtrlSizer->Add( m_TextSize, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 3 );
+	
+	m_staticSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticSizeUnits->Wrap( -1 );
+	bSizeCtrlSizer->Add( m_staticSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
+	
+	m_textControlSizer->Add( bSizeCtrlSizer, 1, wxEXPAND, 3 );
+	
+	bMainSizer->Add( m_textControlSizer, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 12 );
 	
 	wxBoxSizer* m_OptionsSizer;
 	m_OptionsSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxString m_TextOrientChoices[] = { _("Right"), _("Up"), _("Left"), _("Down") };
 	int m_TextOrientNChoices = sizeof( m_TextOrientChoices ) / sizeof( wxString );
-	m_TextOrient = new wxRadioBox( this, wxID_ANY, _("Direction"), wxDefaultPosition, wxDefaultSize, m_TextOrientNChoices, m_TextOrientChoices, 1, wxRA_SPECIFY_COLS );
+	m_TextOrient = new wxRadioBox( this, wxID_ANY, _("O&rietation"), wxDefaultPosition, wxDefaultSize, m_TextOrientNChoices, m_TextOrientChoices, 1, wxRA_SPECIFY_COLS );
 	m_TextOrient->SetSelection( 0 );
-	m_OptionsSizer->Add( m_TextOrient, 1, wxALL, 5 );
+	m_OptionsSizer->Add( m_TextOrient, 1, wxRIGHT|wxTOP, 3 );
 	
 	wxString m_TextStyleChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold Italic") };
 	int m_TextStyleNChoices = sizeof( m_TextStyleChoices ) / sizeof( wxString );
-	m_TextStyle = new wxRadioBox( this, wxID_ANY, _("Style"), wxDefaultPosition, wxDefaultSize, m_TextStyleNChoices, m_TextStyleChoices, 1, wxRA_SPECIFY_COLS );
+	m_TextStyle = new wxRadioBox( this, wxID_ANY, _("St&yle"), wxDefaultPosition, wxDefaultSize, m_TextStyleNChoices, m_TextStyleChoices, 1, wxRA_SPECIFY_COLS );
 	m_TextStyle->SetSelection( 0 );
-	m_OptionsSizer->Add( m_TextStyle, 1, wxALL, 5 );
+	m_OptionsSizer->Add( m_TextStyle, 1, wxLEFT|wxRIGHT|wxTOP, 3 );
 	
-	wxString m_TextShapeChoices[] = { _("Input"), _("Output"), _("Bidi"), _("TriState"), _("Passive") };
+	wxString m_TextShapeChoices[] = { _("Input"), _("Output"), _("Bidirectional"), _("Tri-State"), _("Passive") };
 	int m_TextShapeNChoices = sizeof( m_TextShapeChoices ) / sizeof( wxString );
-	m_TextShape = new wxRadioBox( this, wxID_ANY, _("Glabel Shape"), wxDefaultPosition, wxDefaultSize, m_TextShapeNChoices, m_TextShapeChoices, 1, wxRA_SPECIFY_COLS );
-	m_TextShape->SetSelection( 0 );
-	m_OptionsSizer->Add( m_TextShape, 1, wxALL, 5 );
+	m_TextShape = new wxRadioBox( this, wxID_ANY, _("S&hape"), wxDefaultPosition, wxDefaultSize, m_TextShapeNChoices, m_TextShapeChoices, 1, wxRA_SPECIFY_COLS );
+	m_TextShape->SetSelection( 2 );
+	m_OptionsSizer->Add( m_TextShape, 1, wxALL|wxLEFT|wxTOP, 3 );
 	
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxVERTICAL );
+	bMainSizer->Add( m_OptionsSizer, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 12 );
 	
-	m_SizeTitle = new wxStaticText( this, wxID_ANY, _("Size"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_SizeTitle->Wrap( -1 );
-	bSizer4->Add( m_SizeTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_TextSize = new wxTextCtrl( this, wxID_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer4->Add( m_TextSize, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-	
-	
-	bSizer4->Add( 8, 8, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
-	
-	m_buttonOK = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer4->Add( m_buttonOK, 1, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
-	m_buttonCANCEL = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer4->Add( m_buttonCANCEL, 1, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
-	m_OptionsSizer->Add( bSizer4, 1, 0, 5 );
-	
-	bMainSizer->Add( m_OptionsSizer, 0, wxEXPAND, 5 );
+	m_sdbSizer1 = new wxStdDialogButtonSizer();
+	m_sdbSizer1OK = new wxButton( this, wxID_OK );
+	m_sdbSizer1->AddButton( m_sdbSizer1OK );
+	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
+	m_sdbSizer1->Realize();
+	bMainSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 12 );
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	// Connect Events
-	m_TextLabelSingleline->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogLabelEditor_Base::onEnterKey ), NULL, this );
-	m_buttonOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogLabelEditor_Base::OnButtonOKClick ), NULL, this );
-	m_buttonCANCEL->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogLabelEditor_Base::OnButtonCANCEL_Click ), NULL, this );
+	m_textLabel->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogLabelEditor_Base::OnEnterKey ), NULL, this );
+	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogLabelEditor_Base::OnCancelClick ), NULL, this );
+	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogLabelEditor_Base::OnOkClick ), NULL, this );
 }
 
 DialogLabelEditor_Base::~DialogLabelEditor_Base()
 {
 	// Disconnect Events
-	m_TextLabelSingleline->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogLabelEditor_Base::onEnterKey ), NULL, this );
-	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogLabelEditor_Base::OnButtonOKClick ), NULL, this );
-	m_buttonCANCEL->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogLabelEditor_Base::OnButtonCANCEL_Click ), NULL, this );
+	m_textLabel->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogLabelEditor_Base::OnEnterKey ), NULL, this );
+	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogLabelEditor_Base::OnCancelClick ), NULL, this );
+	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogLabelEditor_Base::OnOkClick ), NULL, this );
 }

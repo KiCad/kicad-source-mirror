@@ -97,7 +97,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
     wxSetWorkingDirectory( wxPathOnly( FullFileName ) );
     screen->m_FileName = FullFileName;
     g_RootSheet->SetFileName( FullFileName );
-    Affiche_Message( wxEmptyString );
+    SetStatusText( wxEmptyString );
     ClearMsgPanel();
 
     memset( &g_EESchemaVar, 0, sizeof(g_EESchemaVar) );

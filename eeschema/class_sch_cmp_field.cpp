@@ -418,3 +418,9 @@ void SCH_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
     frame->OnModify( );
     frame->SetCurrentField( NULL );
 }
+
+
+bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData )
+{
+    return SCH_ITEM::Matches( m_Text, aSearchData );
+}

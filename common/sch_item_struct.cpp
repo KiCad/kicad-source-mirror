@@ -15,6 +15,9 @@
 #include "general.h"
 #include "protos.h"
 
+#include "../eeschema/dialog_schematic_find.h"
+
+
 /* Constructor and destructor for SCH_ITEM */
 /* They are not inline because this creates problems with gcc at linking time
  * in debug mode
@@ -59,4 +62,27 @@ void SCH_ITEM::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
         RedrawOneStruct( frame->DrawPanel, DC, this, GR_DEFAULT_DRAWMODE );
         frame->DrawPanel->CursorOn( DC );       // Display schematic cursor
     }
+}
+
+
+bool SCH_ITEM::Matches( const wxString& aText, wxFindReplaceData& aSearchData )
+{
+    wxString text = aText;
+    wxString searchText = aSearchData.GetFindString();
+
+    if( aSearchData.GetFlags() & wxFR_WHOLEWORD )
+        return aText.IsSameAs( searchText, aSearchData.GetFlags() & wxFR_MATCHCASE );
+
+    if( aSearchData.GetFlags() & FR_MATCH_WILDCARD )
+    {
+        if( aSearchData.GetFlags() & wxFR_MATCHCASE )
+            return text.Matches( searchText );
+
+        return text.MakeUpper().Matches( searchText.MakeUpper() );
+    }
+
+    if( aSearchData.GetFlags() & wxFR_MATCHCASE )
+        return aText.Find( searchText ) != wxNOT_FOUND;
+
+    return text.MakeUpper().Find( searchText.MakeUpper() ) != wxNOT_FOUND;
 }

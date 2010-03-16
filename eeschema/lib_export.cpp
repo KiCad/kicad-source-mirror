@@ -146,5 +146,5 @@ if you want to include it as part of this project." ) );
     }   // Error
     else
         msg = _( "Error creating " ) + fn.GetFullName();
-    Affiche_Message( msg );
+    SetStatusText( msg );
 }

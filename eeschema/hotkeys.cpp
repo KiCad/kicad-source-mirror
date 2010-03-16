@@ -13,6 +13,8 @@
 #include "libeditframe.h"
 #include "class_libentry.h"
 
+#include "dialog_schematic_find.h"
+
 
 /* How to add a new hotkey:
  * add a new id in the enum hotkey_id_command like MY_NEW_ID_FUNCTION (see
@@ -137,8 +139,10 @@ static Ki_HotkeyInfo HkDelete( wxT( "Delete Item" ), HK_DELETE, WXK_DELETE );
 
 static Ki_HotkeyInfo HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F'
                                  + GR_KB_CTRL );
-static Ki_HotkeyInfo HkNextSearch( wxT( "Next Search" ), HK_NEXT_SEARCH,
-                                   WXK_F5 );
+static Ki_HotkeyInfo HkFindNextItem( wxT( "Find Next Item" ), HK_FIND_NEXT_ITEM,
+                                     WXK_F5 );
+static Ki_HotkeyInfo HkFindNextDrcMarker( wxT( "Find next DRC marker" ), HK_FIND_NEXT_DRC_MARKER,
+                                          WXK_F5 + GR_KB_SHIFT );
 
 // Special keys for library editor:
 static Ki_HotkeyInfo HkInsertPin( wxT( "Repeat Pin" ), HK_REPEAT_LAST,
@@ -167,7 +171,8 @@ Ki_HotkeyInfo* s_Common_Hotkey_List[] =
 Ki_HotkeyInfo* s_Schematic_Hotkey_List[] =
 {
     &HkFindItem,
-    &HkNextSearch,
+    &HkFindNextItem,
+    &HkFindNextDrcMarker,
     &HkDelete,
     &HkInsert,
     &HkMove2Drag,
@@ -345,13 +350,25 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         }
         break;
 
-    case HK_NEXT_SEARCH:
+    case HK_FIND_NEXT_ITEM:
         if( !ItemInEdit )
         {
-            if( g_LastSearchIsMarker )
-                WinEDA_SchematicFrame::FindMarker( 1 );
-            else
-                FindSchematicItem( wxEmptyString, 2 );
+            wxFindDialogEvent event( wxEVT_COMMAND_FIND, GetId() );
+            event.SetEventObject( this );
+            event.SetFlags( m_findReplaceData->GetFlags() );
+            event.SetFindString( m_findReplaceData->GetFindString() );
+            GetEventHandler()->ProcessEvent( event );
+        }
+        break;
+
+    case HK_FIND_NEXT_DRC_MARKER:
+        if( !ItemInEdit )
+        {
+            wxFindDialogEvent event( EVT_COMMAND_FIND_DRC_MARKER, GetId() );
+            event.SetEventObject( this );
+            event.SetFlags( m_findReplaceData->GetFlags() );
+            event.SetFindString( m_findReplaceData->GetFindString() );
+            GetEventHandler()->ProcessEvent( event );
         }
         break;
 

@@ -114,6 +114,15 @@ void SCH_MARKER::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 }
 
 
+bool SCH_MARKER::Matches( wxFindReplaceData& aSearchData )
+{
+    if( !SCH_ITEM::Matches( m_drc.GetMainText(), aSearchData ) )
+        return SCH_ITEM::Matches( m_drc.GetAuxiliaryText(), aSearchData );
+
+    return true;
+}
+
+
 /**
  * Function GetBoundingBox
  * returns the orthogonal, bounding box of this object for display purposes.

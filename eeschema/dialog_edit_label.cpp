@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        dialog_edit_label.cpp
 // Author:      jean-pierre Charras
 // Modified by:
@@ -19,31 +18,32 @@
 #include "dialog_edit_label.h"
 
 
-/*************************************************************************/
-void WinEDA_SchematicFrame::EditSchematicText( SCH_TEXT* TextStruct )
-{
-/*************************************************************************/
 /* Edit the properties of the text (Label, Global label, graphic text).. )
- *  pointed by "TextStruct"
+ *  pointed by "aTextStruct"
  */
-    if( TextStruct == NULL )
+void WinEDA_SchematicFrame::EditSchematicText( SCH_TEXT* aTextItem )
+{
+    if( aTextItem == NULL )
         return;
 
-    DialogLabelEditor dialog( this, TextStruct );
-    dialog.ShowModal();
+    DialogLabelEditor dialog( this, aTextItem );
 
+    dialog.ShowModal();
 }
 
 
-
-DialogLabelEditor::DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT* CurrentText ) :
-    DialogLabelEditor_Base( parent )
+DialogLabelEditor::DialogLabelEditor( WinEDA_SchematicFrame* aParent, SCH_TEXT* aTextItem ) :
+    DialogLabelEditor_Base( aParent )
 {
-    m_Parent = parent;
-    m_CurrentText = CurrentText;
+    m_Parent = aParent;
+    m_CurrentText = aTextItem;
     InitDialog();
 
-    GetSizer()->SetSizeHints(this);
+    GetSizer()->SetSizeHints( this );
+    Layout();
+    Fit();
+    SetMinSize( GetBestSize() );
+
     Centre();
 }
 
@@ -51,22 +51,26 @@ DialogLabelEditor::DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT* C
 void DialogLabelEditor::InitDialog()
 {
     wxString msg;
-    bool multine = false;
+    bool multiLine = false;
 
     if( m_CurrentText->m_MultilineAllowed )
     {
-        m_TextLabel = m_textCtrlMultiline;
-        m_TextLabelSingleline->Show(false);
-        multine = true;
-    }
-    else
-    {
-        m_TextLabel = m_TextLabelSingleline;
-       m_textCtrlMultiline->Show(false);
+        /* Multiline text edit control must be created because changing the text
+         * control style to multiline must be done when the control is created.
+         */
+        m_textControlSizer->Detach( m_textLabel );
+        m_textLabel->Destroy();
+        m_textLabel = NULL;
+        m_textLabel = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                      wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER );
+        m_textLabel->SetToolTip( _("Enter the text to be used within the schematic") );
+        m_textLabel->SetMinSize( wxSize( -1, 60 ) );
+        m_textControlSizer->Insert( 1, m_textLabel, 0, wxLEFT | wxEXPAND, 3 );
+        multiLine = true;
     }
 
-    m_TextLabel->SetValue( m_CurrentText->m_Text );
-    m_TextLabel->SetFocus();
+    m_textLabel->SetValue( m_CurrentText->m_Text );
+    m_textLabel->SetFocus();
 
     switch( m_CurrentText->Type() )
     {
@@ -76,7 +80,6 @@ void DialogLabelEditor::InitDialog()
 
     case TYPE_SCH_HIERLABEL:
         SetTitle( _( "Hierarchal Label Properties" ) );
-        m_TextShape->SetLabel( _("Hlabel Shape") );
         break;
 
     case TYPE_SCH_LABEL:
@@ -85,34 +88,38 @@ void DialogLabelEditor::InitDialog()
 
     default:
         SetTitle( _( "Text Properties" ) );
-      	m_TextLabel->Disconnect(wxEVT_COMMAND_TEXT_ENTER , wxCommandEventHandler ( DialogLabelEditor::onEnterKey ), NULL, this);
+        m_textLabel->Disconnect( wxEVT_COMMAND_TEXT_ENTER,
+                                 wxCommandEventHandler ( DialogLabelEditor::OnEnterKey ),
+                                 NULL, this );
         break;
     }
 
-    unsigned MINTEXTWIDTH  = 30;    // M's are big characters, a few establish a lot of width
+    unsigned MINTEXTWIDTH = 40;    // M's are big characters, a few establish a lot of width
 
     if( m_CurrentText->m_Text.Length() < MINTEXTWIDTH )
     {
         wxString textWidth;
         textWidth.Append( 'M', MINTEXTWIDTH );
-        EnsureTextCtrlWidth( m_TextLabel, &textWidth );
+        EnsureTextCtrlWidth( m_textLabel, &textWidth );
     }
-    else if ( ! multine )
-        EnsureTextCtrlWidth( m_TextLabel );
+    else if ( !multiLine )
+    {
+        EnsureTextCtrlWidth( m_textLabel );
+    }
     else
     {
-        // calculate the lenght of the biggest line
-        // we cannot use the lenght of the entire text that has no meaning
+        // calculate the length of the biggest line
+        // we cannot use the length of the entire text that has no meaning
         int max_len = 0;
         int curr_len = 0;
         int imax = m_CurrentText->m_Text.Len();
         for( int count = 0; count < imax; count++ )
         {
             if( m_CurrentText->m_Text[count] == '\n' ||
-                 m_CurrentText->m_Text[count] == '\r' ) // new line
-                {
-                    curr_len = 0;
-                }
+                m_CurrentText->m_Text[count] == '\r' ) // new line
+            {
+                curr_len = 0;
+            }
             else
             {
                 curr_len++;
@@ -122,7 +129,7 @@ void DialogLabelEditor::InitDialog()
         }
         wxString textWidth;
         textWidth.Append( 'M', max_len );
-        EnsureTextCtrlWidth( m_TextLabel, &textWidth );
+        EnsureTextCtrlWidth( m_textLabel, &textWidth );
     }
 
     // Set validators
@@ -137,10 +144,12 @@ void DialogLabelEditor::InitDialog()
 
     m_TextStyle->SetSelection( style );
 
-    msg = m_SizeTitle->GetLabel() + ReturnUnitSymbol();
-    m_SizeTitle->SetLabel( msg );
+    wxString units = ReturnUnitSymbol( g_UnitMetric, wxT( "(%s)" ) );
+    msg = _( "H" ) + units + _( " x W" ) + units;
+    m_staticSizeUnits->SetLabel( msg );
 
-    msg = ReturnStringFromValue( g_UnitMetric, m_CurrentText->m_Size.x, m_Parent->m_InternalUnits );
+    msg = ReturnStringFromValue( g_UnitMetric, m_CurrentText->m_Size.x,
+                                 m_Parent->m_InternalUnits );
     m_TextSize->SetValue( msg );
 
     if( m_CurrentText->Type() != TYPE_SCH_GLOBALLABEL
@@ -150,23 +159,24 @@ void DialogLabelEditor::InitDialog()
     }
 }
 
+
 /*!
- * wxTE_PROCESS_ENTER  event handler for m_TextLabel
+ * wxTE_PROCESS_ENTER  event handler for m_textLabel
  */
 
-void DialogLabelEditor::onEnterKey( wxCommandEvent& event )
+void DialogLabelEditor::OnEnterKey( wxCommandEvent& aEvent )
 {
-    TextPropertiesAccept( event );
+    TextPropertiesAccept( aEvent );
 }
+
 
 /*!
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
  */
 
-void DialogLabelEditor::OnButtonOKClick( wxCommandEvent& event )
+void DialogLabelEditor::OnOkClick( wxCommandEvent& aEvent )
 {
-    TextPropertiesAccept( event );
-    EndModal( wxID_OK );
+    TextPropertiesAccept( aEvent );
 }
 
 
@@ -174,16 +184,15 @@ void DialogLabelEditor::OnButtonOKClick( wxCommandEvent& event )
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
  */
 
-void DialogLabelEditor::OnButtonCANCEL_Click( wxCommandEvent& event )
+void DialogLabelEditor::OnCancelClick( wxCommandEvent& aEvent )
 {
     m_Parent->DrawPanel->MouseToCursorSchema();
     EndModal( wxID_CANCEL );
 }
 
-/****************************************************************************/
-void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& event )
+
+void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& aEvent )
 {
-/****************************************************************************/
     wxString text;
     int      value;
 
@@ -193,7 +202,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& event )
 
     m_Parent->DrawPanel->PostDirtyRect( m_CurrentText->GetBoundingBox() );
 
-    text = m_TextLabel->GetValue();
+    text = m_textLabel->GetValue();
     if( !text.IsEmpty() )
         m_CurrentText->m_Text = text;
     else if( (m_CurrentText->m_Flags & IS_NEW) == 0 )
@@ -201,8 +210,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& event )
 
     m_CurrentText->SetSchematicTextOrientation( m_TextOrient->GetSelection() );
     text  = m_TextSize->GetValue();
-    value = ReturnValueFromString( g_UnitMetric, text,
-                                   m_Parent->m_InternalUnits );
+    value = ReturnValueFromString( g_UnitMetric, text, m_Parent->m_InternalUnits );
     m_CurrentText->m_Size.x = m_CurrentText->m_Size.y = value;
     if( m_TextShape )
         m_CurrentText->m_Shape = m_TextShape->GetSelection();
@@ -224,7 +232,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& event )
         m_CurrentText->m_Width = 0;
     }
 
-    m_Parent->OnModify( );
+    m_Parent->OnModify();
 
     /* Make the text size as new default size if it is a new text */
     if( (m_CurrentText->m_Flags & IS_NEW) != 0 )
@@ -232,7 +240,5 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& event )
 
     m_Parent->DrawPanel->PostDirtyRect( m_CurrentText->GetBoundingBox() );
     m_Parent->DrawPanel->MouseToCursorSchema();
-    EndModal( 0 );
+    EndModal( wxID_OK );
 }
-
-

@@ -938,7 +938,7 @@ static void ComputeArcRadiusAngles( LIB_ARC* arc )
     wxPoint centerStartVector = TwoPointVector( arc->m_Pos, arc->m_ArcStart );
     wxPoint centerEndVector   = TwoPointVector( arc->m_Pos, arc->m_ArcEnd );
 
-    arc->m_Radius = EuclideanNorm( centerStartVector );
+    arc->m_Radius = wxRound( EuclideanNorm( centerStartVector ) );
 
     arc->m_t1 = (int) ( atan2( (double) centerStartVector.y,
                               (double) centerStartVector.x ) * 1800 / M_PI );

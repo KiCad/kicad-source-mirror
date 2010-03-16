@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        class_drawsheet.cpp
 // Purpose:     member functions for SCH_SHEET
 //              header = class_drawsheet.h
@@ -13,6 +12,9 @@
 #include "common.h"
 #include "program.h"
 #include "general.h"
+#include "dlist.h"
+
+#include "dialog_schematic_find.h"
 
 
 /**********************************************/
@@ -34,9 +36,7 @@ SCH_SHEET_PATH::SCH_SHEET_PATH()
  * @param aPath = path of the sheet to reach (in non human readable format)
  * @return true if success else false
  */
-bool SCH_SHEET_PATH::BuildSheetPathInfoFromSheetPathValue(
-    const wxString& aPath,
-    bool            aFound )
+bool SCH_SHEET_PATH::BuildSheetPathInfoFromSheetPathValue( const wxString& aPath, bool aFound )
 {
     if( aFound )
         return true;
@@ -129,6 +129,29 @@ SCH_ITEM* SCH_SHEET_PATH::LastDrawList()
 }
 
 
+SCH_ITEM* SCH_SHEET_PATH::FirstDrawList()
+{
+    SCH_ITEM* item = NULL;
+
+    if( m_numSheets && m_sheets[0]->m_AssociatedScreen )
+        item = m_sheets[0]->m_AssociatedScreen->EEDrawList;
+
+    /* @fixme - These lists really should be one of the boost pointer containers.  This
+     *          is a brain dead hack to allow reverse iteration of EDA_BaseStruct linked
+     *          list.
+     */
+    SCH_ITEM* lastItem = NULL;
+
+    while( item != NULL )
+    {
+        lastItem = item;
+        item = item->Next();
+    }
+
+    return lastItem;
+}
+
+
 /** Function Push
  * store (push) aSheet in list
  * @param aSheet = pointer to the SCH_SHEET to store in list
@@ -136,8 +159,11 @@ SCH_ITEM* SCH_SHEET_PATH::LastDrawList()
 void SCH_SHEET_PATH::Push( SCH_SHEET* aSheet )
 {
     if( m_numSheets > DSLSZ )
-        wxMessageBox( wxT( "SCH_SHEET_PATH::Push() error: no room in buffer \
-to store sheet" ) );
+    {
+        wxString msg;
+        msg.Printf( _( "Schematic sheets can only be nested %d levels deep." ), DSLSZ );
+        wxMessageBox( msg );
+    }
 
     if( m_numSheets < DSLSZ )
     {
@@ -222,6 +248,105 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
         }
         t = t->Next();
     }
+}
+
+
+SCH_ITEM* SCH_SHEET_PATH::FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem, bool aWrap )
+{
+    bool hasWrapped = false;
+    bool firstItemFound = false;
+    SCH_ITEM* drawItem = LastDrawList();
+
+    while( drawItem != NULL )
+    {
+        if( drawItem->Type() == aType )
+        {
+            if( aLastItem == NULL || firstItemFound )
+            {
+                return drawItem;
+            }
+            else if( !firstItemFound && drawItem == aLastItem )
+            {
+                firstItemFound = true;
+            }
+        }
+
+        drawItem = drawItem->Next();
+
+        if( drawItem == NULL && aLastItem && aWrap && !hasWrapped )
+        {
+            hasWrapped = true;
+            drawItem = LastDrawList();
+        }
+    }
+
+    return NULL;
+}
+
+
+SCH_ITEM* SCH_SHEET_PATH::FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem, bool aWrap )
+{
+    bool hasWrapped = false;
+    bool firstItemFound = false;
+    SCH_ITEM* drawItem = FirstDrawList();
+
+    while( drawItem != NULL )
+    {
+        if( drawItem->Type() == aType )
+        {
+            if( aLastItem == NULL || firstItemFound )
+            {
+                return drawItem;
+            }
+            else if( !firstItemFound && drawItem == aLastItem )
+            {
+                firstItemFound = true;
+            }
+        }
+
+        drawItem = drawItem->Back();
+
+        if( drawItem == NULL && aLastItem && aWrap && !hasWrapped )
+        {
+            hasWrapped = true;
+            drawItem = FirstDrawList();
+        }
+    }
+
+    return NULL;
+}
+
+
+SCH_ITEM* SCH_SHEET_PATH::MatchNextItem( wxFindReplaceData& aSearchData,
+                                         SCH_ITEM*          aLastItem )
+{
+    bool hasWrapped = false;
+    bool firstItemFound = false;
+    bool wrap = ( aSearchData.GetFlags() & FR_SEARCH_WRAP ) != 0;
+    SCH_ITEM* drawItem = LastDrawList();
+
+    while( drawItem != NULL )
+    {
+        if( aLastItem && !firstItemFound )
+        {
+            firstItemFound = ( drawItem == aLastItem );
+        }
+        else
+        {
+            if( drawItem->Matches( aSearchData ) )
+                return drawItem;
+        }
+
+        drawItem = drawItem->Next();
+
+        if( drawItem == NULL && aLastItem && firstItemFound && wrap && !hasWrapped )
+        {
+            hasWrapped = true;
+            drawItem = LastDrawList();
+        }
+    }
+
+    return NULL;
 }
 
 
@@ -315,6 +440,28 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::GetNext()
 }
 
 
+SCH_SHEET_PATH* SCH_SHEET_LIST::GetLast()
+{
+    if( GetCount() == 0 )
+        return NULL;
+
+    m_index = GetCount() - 1;
+
+    return GetSheet( m_index );
+}
+
+
+SCH_SHEET_PATH* SCH_SHEET_LIST::GetPrevious()
+{
+    if( m_index == 0 )
+        return NULL;
+
+    m_index -= 1;
+
+    return GetSheet( m_index );
+}
+
+
 /** Function GetSheet
  *  @return the item (sheet) in aIndex position in m_List or NULL if less than
  * index items
@@ -371,4 +518,138 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
     }
 
     m_currList.Pop();
+}
+
+
+SCH_ITEM* SCH_SHEET_LIST::FindNextItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFoundIn,
+                                        SCH_ITEM* aLastItem, bool aWrap )
+{
+    bool hasWrapped = false;
+    bool firstItemFound = false;
+    SCH_ITEM* drawItem = NULL;
+    SCH_SHEET_PATH* sheet = GetFirst();
+
+    while( sheet != NULL )
+    {
+        drawItem = sheet->LastDrawList();
+
+        while( drawItem != NULL )
+        {
+            if( drawItem->Type() == aType )
+            {
+                if( aLastItem == NULL || firstItemFound )
+                {
+                    if( aSheetFoundIn )
+                        *aSheetFoundIn = sheet;
+                    return drawItem;
+                }
+                else if( !firstItemFound && drawItem == aLastItem )
+                {
+                    firstItemFound = true;
+                }
+            }
+
+            drawItem = drawItem->Next();
+        }
+
+        sheet = GetNext();
+
+        if( sheet == NULL && aLastItem && aWrap && !hasWrapped )
+        {
+            hasWrapped = true;
+            sheet = GetFirst();
+        }
+    }
+
+    return NULL;
+}
+
+
+SCH_ITEM* SCH_SHEET_LIST::FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFoundIn,
+                                            SCH_ITEM* aLastItem, bool aWrap )
+{
+    bool hasWrapped = false;
+    bool firstItemFound = false;
+    SCH_ITEM* drawItem = NULL;
+    SCH_SHEET_PATH* sheet = GetLast();
+
+    while( sheet != NULL )
+    {
+        drawItem = sheet->FirstDrawList();
+
+        while( drawItem != NULL )
+        {
+            if( drawItem->Type() == aType )
+            {
+                if( aLastItem == NULL || firstItemFound )
+                {
+                    if( aSheetFoundIn )
+                        *aSheetFoundIn = sheet;
+                    return drawItem;
+                }
+                else if( !firstItemFound && drawItem == aLastItem )
+                {
+                    firstItemFound = true;
+                }
+            }
+
+            drawItem = drawItem->Back();
+        }
+
+        sheet = GetPrevious();
+
+        if( sheet == NULL && aLastItem && aWrap && !hasWrapped )
+        {
+            hasWrapped = true;
+            sheet = GetLast();
+        }
+    }
+
+    return NULL;
+}
+
+
+SCH_ITEM* SCH_SHEET_LIST::MatchNextItem( wxFindReplaceData& aSearchData,
+                                         SCH_SHEET_PATH**   aSheetFoundIn,
+                                         SCH_ITEM*          aLastItem )
+{
+    bool hasWrapped = false;
+    bool firstItemFound = false;
+    bool wrap = ( aSearchData.GetFlags() & FR_SEARCH_WRAP ) != 0;
+    SCH_ITEM* drawItem = NULL;
+    SCH_SHEET_PATH* sheet = GetFirst();
+
+    while( sheet != NULL )
+    {
+        drawItem = sheet->LastDrawList();
+
+        while( drawItem != NULL )
+        {
+            if( aLastItem && !firstItemFound )
+            {
+                firstItemFound = ( drawItem == aLastItem );
+            }
+            else
+            {
+                if( drawItem->Matches( aSearchData ) )
+                {
+                    if( aSheetFoundIn )
+                        *aSheetFoundIn = sheet;
+                    return drawItem;
+                }
+            }
+
+            drawItem = drawItem->Next();
+        }
+
+        sheet = GetNext();
+
+        if( sheet == NULL && aLastItem && firstItemFound && wrap && !hasWrapped )
+        {
+            hasWrapped = true;
+            sheet = GetFirst();
+        }
+    }
+
+    return NULL;
 }

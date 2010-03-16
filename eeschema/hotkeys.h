@@ -10,7 +10,8 @@
 // see also enum common_hotkey_id_commnand in hotkeys_basic.h
 // for shared hotkeys id
 enum hotkey_id_commnand {
-    HK_NEXT_SEARCH = HK_COMMON_END,
+    HK_FIND_NEXT_ITEM = HK_COMMON_END,
+    HK_FIND_NEXT_DRC_MARKER,
     HK_FIND_ITEM,
     HK_DELETE,
     HK_REPEAT_LAST,

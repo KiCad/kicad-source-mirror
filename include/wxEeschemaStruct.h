@@ -32,6 +32,10 @@ class SCH_COMPONENT;
 class SCH_FIELD;
 class LIB_PIN;
 class SCH_JUNCTION;
+class DIALOG_SCH_FIND;
+class wxFindDialogEvent;
+class wxFindReplaceData;
+
 
 /* enum used in RotationMiroir() */
 enum fl_rot_cmp
@@ -73,12 +77,18 @@ private:
     PARAM_CFG_ARRAY       m_projectFileParams;
     PARAM_CFG_ARRAY       m_configSettings;
     wxPageSetupDialogData m_pageSetupData;
+    wxFindReplaceData*    m_findReplaceData;
     wxPoint               m_previewPosition;
     wxSize                m_previewSize;
     wxPoint               m_printDialogPosition;
     wxSize                m_printDialogSize;
     bool                  m_printMonochrome;     ///< Print monochrome instead of grey scale.
     bool                  m_showSheetReference;
+    DIALOG_SCH_FIND*      m_dlgFindReplace;
+    wxPoint               m_findDialogPosition;
+    wxSize                m_findDialogSize;
+    wxArrayString         m_findStringHistoryList;
+    wxArrayString         m_replaceStringHistoryList;
 
 public:
     WinEDA_SchematicFrame( wxWindow* father,
@@ -268,22 +278,6 @@ public:
 
     // General search:
 
-    /**
-     * Function FindSchematicItem
-     * finds a string in the schematic.
-     * @param pattern The text to search for, either in value, reference or
-     *         elsewhere.
-     * @param SearchType:  0 => Search is made in current sheet
-     *                     1 => the whole hierarchy
-     *                     2 => or for the next item
-     * @param mouseWarp If true, then move the mouse cursor to the item.
-     */
-    SCH_ITEM*        FindSchematicItem( const wxString& pattern,
-                                        int             SearchType,
-                                        bool            mouseWarp = true );
-
-    SCH_ITEM*        FindMarker( int SearchType );
-
 private:
     void             Process_Move_Item( SCH_ITEM* DrawStruct, wxDC* DC );
     void             OnExit( wxCommandEvent& event );
@@ -292,6 +286,10 @@ private:
     void             OnCreateNetlist( wxCommandEvent& event );
     void             OnCreateBillOfMaterials( wxCommandEvent& event );
     void             OnFindItems( wxCommandEvent& event );
+    void             OnFindDialogClose( wxFindDialogEvent& event );
+    void             OnFindDrcMarker( wxFindDialogEvent& event );
+    void             OnFindCompnentInLib( wxFindDialogEvent& event );
+    void             OnFindSchematicItem( wxFindDialogEvent& event );
     void             OnLoadFile( wxCommandEvent& event );
     void             OnLoadStuffFile( wxCommandEvent& event );
     void             OnNewProject( wxCommandEvent& event );

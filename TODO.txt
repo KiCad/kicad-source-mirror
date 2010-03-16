@@ -45,11 +45,6 @@ C2) Write a tool to generate DSNLEXER keyword tables (and enums) as *.cpp and
     CMake.
 
 
-Wayne:
-C1)  Fix mouse wheel scrolling (ctrl + Mouse wheel) and (Shift + mouse wheel)
-     to move more than a single scroll increment.
-
-
 CvPCB
 -----
 * Preview of the already assigned footprint.
@@ -61,8 +56,18 @@ EESchema
 * Drag and drop between two EESchema windows.
 
 Wayne:
-E1)  Relpace find dialog with wxFormBuilder version using a modeless dialog
-     and event driven design similar to wxFindReplaceDialog implementation.
+E2)  Finish adding replace capability to new Find dialog.
+E3)  Hook up perform last library search hot key to replace search libraries for
+     component support removed from find dialog.
+E4)  Change add component dialog search text control to combobox and add component
+     search history save and restore capability.  Also add session save and restore
+     to component history list control.  Add advanced search capability similar to
+     new find dialog.
+E5)  Make escape key work correctly in add component dialog.
+E6)  Start initial work for changing component library file format to use Dick's
+     dsnlexer.  See note C2 above.  Come up with a workable library file format to
+     handle the wishes of the library implementation group.  Add initial clipboard
+     support to the library editor.
 
 
 GerbView
@@ -118,27 +123,3 @@ L8) LAYER_WIDGET::GetBestSize() needs platform independence.
 
 L9) On board load, ReFill() is called, this should also update the Render
     checkboxes and colors.
-
-
-Use wxDC for coordinate scaling and offsetting fix. (Wayne)
-------------------------------------------------------------
-W1) Make wxAutoBufferedPaintDC function properly.
-
-W2) Make bitmap grid drawing method function properly or figure out a more
-    efficient method for drawing the grid.
-
-W3) Use one cursor position (preferrably logical (drawing) units) instead
-    of keeping track of both logical and device cursor positions at the same
-    time.
-
-W4) Figure out why none of the apps render correctly using wxGCDC on Windows.
-
-** After (if?) new code accepted as project default: **
-
-W6) Remove all old coordinate scaling and offset code from Kicad.
-
-W7) Remove conditional compilation pragmas and dead code paths.
-
-W8) Remove redundant drawing helper functions from gr_basic.cpp.
-
-W9) Remove all global variables used by old drawing code.

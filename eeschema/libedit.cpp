@@ -626,5 +626,5 @@ void WinEDA_LibeditFrame::SaveOnePartInMemory()
     msg.Printf( _( "Component %s saved in library %s" ),
                 GetChars( Component->GetName() ),
                 GetChars( m_library->GetName() ) );
-    Affiche_Message( msg );
+    SetStatusText( msg );
 }

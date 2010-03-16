@@ -221,33 +221,40 @@ Ki_PageDescr::Ki_PageDescr( const wxSize&   size,
 }
 
 
-wxString ReturnUnitSymbol( int Units )
+wxString ReturnUnitSymbol( int aUnits, const wxString& formatString )
 {
+    wxString tmp;
     wxString label;
 
-    switch( Units )
+    switch( aUnits )
     {
     case INCHES:
-        label = _( " (\"):" );
+        tmp = _( "\"" );
         break;
 
     case MILLIMETRE:
-        label = _( " (mm):" );
+        tmp = _( "mm" );
         break;
 
     default:
+        tmp = _( "??" );
         break;
     }
+
+    if( formatString.IsEmpty() )
+        return tmp;
+
+    label.Printf( formatString, GetChars( tmp ) );
 
     return label;
 }
 
 
-wxString GetUnitsLabel( int units )
+wxString GetUnitsLabel( int aUnits )
 {
     wxString label;
 
-    switch( units )
+    switch( aUnits )
     {
     case INCHES:
         label = _( "inches" );
@@ -260,6 +267,7 @@ wxString GetUnitsLabel( int units )
     case CENTIMETRE:
         label = _( "centimeters" );
         break;
+
     default:
         label = _( "Unknown" );
         break;
@@ -267,6 +275,34 @@ wxString GetUnitsLabel( int units )
 
     return label;
 }
+
+
+wxString GetAbbreviatedUnitsLabel( int aUnits )
+{
+    wxString label;
+
+    switch( aUnits )
+    {
+    case INCHES:
+        label = _( "in" );
+        break;
+
+    case MILLIMETRE:
+        label = _( "mm" );
+        break;
+
+    case CENTIMETRE:
+        label = _( "cm" );
+        break;
+
+    default:
+        label = _( "??" );
+        break;
+    }
+
+    return label;
+}
+
 
 /*
  * Add string "  (mm):" or " ("):" to the static text Stext.

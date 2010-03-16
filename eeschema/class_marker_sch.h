@@ -99,6 +99,14 @@ public:
         m_Pos.x += aYaxis_position;
     }
 
+    /**
+     * Compare DRC marker main and auxilary text against search string.
+     *
+     * @param aSearchData - Criteria to search against.
+     * @return True if the DRC main or auxiliary text matches the search criteria.
+     */
+    virtual bool Matches( wxFindReplaceData& aSearchData );
+
 #if defined(DEBUG)
     void              Show( int nestLevel, std::ostream& os );
 #endif

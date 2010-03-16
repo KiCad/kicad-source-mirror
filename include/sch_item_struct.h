@@ -7,6 +7,7 @@
 
 
 class WinEDA_SchematicFrame;
+class wxFindReplaceData;
 
 
 /**
@@ -33,6 +34,7 @@ public:
     }
 
     SCH_ITEM* Next() { return (SCH_ITEM*) Pnext; }
+    SCH_ITEM* Back() { return (SCH_ITEM*) Pback; }
 
     /**
      * Function GetLayer
@@ -86,6 +88,30 @@ public:
      * @return bool - true if success writing else false.
      */
     virtual bool    Save( FILE* aFile ) const = 0;
+
+    /**
+     * Compare schematic item against search string.
+     *
+     * The base class returns false since many of the objects derived from
+     * SCH_ITEM do not have any text to search.
+     *
+     * @todo - This should probably be pushed down to EDA_BaseStruct so that
+     *         searches can be done on all of the Kicad applications that use
+     *         objects derived from EDA_BaseStruct.
+     *
+     * @param aSearchData - The search criteria.
+     * @return True if this schematic text item matches the search criteria.
+     */
+    virtual bool Matches( wxFindReplaceData& aSearchData ) { return false; }
+
+    /**
+     * Compare schematic item against search string.
+     *
+     * @param aText - String test.
+     * @param aSearchData - The criteria to search against.
+     * @return True if this item matches the search criteria.
+     */
+    bool Matches( const wxString& aText, wxFindReplaceData& aSearchData );
 };
 
 #endif /* SCH_ITEM_STRUCT_H */

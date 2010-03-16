@@ -181,6 +181,12 @@ wxPoint SCH_TEXT::GetSchematicTextOffset()
 }
 
 
+bool SCH_TEXT::Matches( wxFindReplaceData& aSearchData )
+{
+    return SCH_ITEM::Matches( m_Text, aSearchData );
+}
+
+
 /** function GetSchematicTextOffset (virtual)
  * @return the offset between the SCH_TEXT position and the text itself
  * position

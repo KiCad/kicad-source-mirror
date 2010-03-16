@@ -56,7 +56,6 @@ set(EESCHEMA_SRCS
     dialog_eeschema_options.cpp
     dialog_erc.cpp
     dialog_erc_base.cpp
-#   dialog_find.cpp
     dialog_lib_edit_draw_item.cpp
     dialog_lib_edit_draw_item_base.cpp
     dialog_lib_edit_pin.cpp
@@ -67,6 +66,8 @@ set(EESCHEMA_SRCS
     dialog_print_using_printer.cpp
     dialog_sch_sheet_props.cpp
     dialog_sch_sheet_props_base.cpp
+    dialog_schematic_find.cpp
+    dialog_schematic_find_base.cpp
     dialog_SVG_print.cpp
     dialog_SVG_print_base.cpp
     edit_component_in_lib.cpp

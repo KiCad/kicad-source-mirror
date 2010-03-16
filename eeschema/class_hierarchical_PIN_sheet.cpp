@@ -219,6 +219,12 @@ bool SCH_SHEET_PIN::Save( FILE* aFile ) const
 }
 
 
+bool SCH_SHEET_PIN::Matches( wxFindReplaceData& aSearchData )
+{
+    return SCH_ITEM::Matches( m_Text, aSearchData );
+}
+
+
 #if defined(DEBUG)
 void SCH_SHEET_PIN::Show( int nestLevel, std::ostream& os )
 {

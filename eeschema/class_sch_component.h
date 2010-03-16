@@ -349,6 +349,14 @@ public:
      */
     virtual void Mirror_Y(int aYaxis_position);
 
+    /**
+     * Compare schematic component reference and value fields against search string.
+     *
+     * @param aSearchData - Criteria to search against.
+     * @return True if this component reference or value field matches the search criteria.
+     */
+    virtual bool Matches( wxFindReplaceData& aSearchData );
+
     #if defined (DEBUG)
 
     /**

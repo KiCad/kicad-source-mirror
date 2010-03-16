@@ -114,6 +114,14 @@ public:
          * this function is only needed by the virtual pure function of the
          * master class */
     }
+
+    /**
+     * Compare schematic field text against search string.
+     *
+     * @param aSearchData - Criteria to search against.
+     * @return True if this field text matches the search criteria.
+     */
+    virtual bool Matches( wxFindReplaceData& aSearchData );
 };
 
 

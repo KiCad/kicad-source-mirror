@@ -12,6 +12,7 @@
 #include "macros.h"
 #include "protos.h"
 #include "class_library.h"
+#include "dialog_schematic_find.h"
 
 #include <wx/tokenzr.h>
 
@@ -1149,4 +1150,24 @@ void SCH_COMPONENT::Mirror_Y(int aYaxis_position)
          * has moved */
         GetField( ii )->m_Pos.x -= dx;
     }
+}
+
+
+bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData )
+{
+    if( !( aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS ) )
+    {
+        if( !GetField( REFERENCE )->Matches( aSearchData ) )
+            return GetField( VALUE )->Matches( aSearchData );
+
+        return true;
+    }
+
+    for( size_t i = 0; i < NUMBER_OF_FIELDS; i++ )
+    {
+        if( GetField( i )->Matches( aSearchData ) )
+            return true;
+    }
+
+    return false;
 }

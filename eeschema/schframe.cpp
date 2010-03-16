@@ -23,12 +23,13 @@
 #include "annotate_dialog.h"
 #include "dialog_build_BOM.h"
 #include "dialog_erc.h"
-#include "dialog_find.h"
 #include "netlist_control.h"
 #include "dialog_erc.h"
 #include "libeditframe.h"
 #include "viewlib_frame.h"
 #include "hotkeys.h"
+
+#include "dialog_schematic_find.h"
 
 
 BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
@@ -137,6 +138,12 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
     EVT_UPDATE_UI_RANGE( ID_TB_OPTIONS_SELECT_UNIT_MM,
                          ID_TB_OPTIONS_SELECT_UNIT_INCH,
                          WinEDA_SchematicFrame::OnUpdateUnits )
+
+    /* Search dialog events. */
+    EVT_FIND_CLOSE( wxID_ANY, WinEDA_SchematicFrame::OnFindDialogClose )
+    EVT_FIND_DRC_MARKER( wxID_ANY, WinEDA_SchematicFrame::OnFindDrcMarker )
+    EVT_FIND( wxID_ANY, WinEDA_SchematicFrame::OnFindSchematicItem )
+
 END_EVENT_TABLE()
 
 
@@ -164,6 +171,8 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow*       father,
     m_printMonochrome = true;
     m_showSheetReference = true;
     m_HotkeysZoomAndGridList = s_Schematic_Hokeys_Descr;
+    m_dlgFindReplace = NULL;
+    m_findReplaceData = new wxFindReplaceData( wxFR_DOWN );
 
     CreateScreens();
 
@@ -240,8 +249,8 @@ WinEDA_SchematicFrame::WinEDA_SchematicFrame( wxWindow*       father,
 WinEDA_SchematicFrame::~WinEDA_SchematicFrame()
 {
     SAFE_DELETE( g_RootSheet );
-    SAFE_DELETE( m_CurrentSheet ); //a SCH_SHEET_PATH, on the heap.
-    m_CurrentSheet = NULL;
+    SAFE_DELETE( m_CurrentSheet );     // a SCH_SHEET_PATH, on the heap.
+    SAFE_DELETE( m_findReplaceData );
 }
 
 
@@ -604,10 +613,38 @@ void WinEDA_SchematicFrame::OnCreateBillOfMaterials( wxCommandEvent& )
 
 void WinEDA_SchematicFrame::OnFindItems( wxCommandEvent& event )
 {
+    wxASSERT_MSG( m_findReplaceData != NULL,
+                  wxT( "Forgot to create find/replace data.  Bad Programmer!" ) );
+
     this->DrawPanel->m_IgnoreMouseEvents = TRUE;
-    WinEDA_FindFrame* dlg = new WinEDA_FindFrame( this );
-    dlg->ShowModal();
-    dlg->Destroy();
+
+    if( m_dlgFindReplace )
+    {
+        delete m_dlgFindReplace;
+        m_dlgFindReplace = NULL;
+    }
+
+    m_dlgFindReplace = new DIALOG_SCH_FIND( this, m_findReplaceData, m_findDialogPosition,
+                                            m_findDialogSize );
+    m_dlgFindReplace->SetFindEntries( m_findStringHistoryList );
+    m_dlgFindReplace->SetReplaceEntries( m_replaceStringHistoryList );
+    m_dlgFindReplace->SetMinSize( m_dlgFindReplace->GetBestSize() );
+    m_dlgFindReplace->Show( true );
+}
+
+
+void WinEDA_SchematicFrame::OnFindDialogClose( wxFindDialogEvent& event )
+{
+    if( m_dlgFindReplace )
+    {
+        m_findDialogPosition = m_dlgFindReplace->GetPosition();
+        m_findDialogSize = m_dlgFindReplace->GetSize();
+        m_findStringHistoryList = m_dlgFindReplace->GetFindEntries();
+        m_replaceStringHistoryList = m_dlgFindReplace->GetReplaceEntries();
+        m_dlgFindReplace->Destroy();
+        m_dlgFindReplace = NULL;
+    }
+
     this->DrawPanel->m_IgnoreMouseEvents = FALSE;
 }
 

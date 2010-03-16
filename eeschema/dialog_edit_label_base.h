@@ -17,9 +17,9 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
+#include <wx/sizer.h>
 #include <wx/radiobox.h>
 #include <wx/button.h>
-#include <wx/sizer.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -38,26 +38,27 @@ class DialogLabelEditor_Base : public wxDialog
 			wxID_SIZE,
 		};
 		
+		wxFlexGridSizer* m_textControlSizer;
 		wxStaticText* m_staticText1;
-		wxTextCtrl* m_TextLabelSingleline;
-		wxTextCtrl* m_textCtrlMultiline;
+		wxTextCtrl* m_textLabel;
+		wxStaticText* m_SizeTitle;
+		wxTextCtrl* m_TextSize;
+		wxStaticText* m_staticSizeUnits;
 		wxRadioBox* m_TextOrient;
 		wxRadioBox* m_TextStyle;
 		wxRadioBox* m_TextShape;
-		wxStaticText* m_SizeTitle;
-		wxTextCtrl* m_TextSize;
-		
-		wxButton* m_buttonOK;
-		wxButton* m_buttonCANCEL;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void onEnterKey( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnButtonOKClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnButtonCANCEL_Click( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnEnterKey( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
 		
 	
 	public:
-		DialogLabelEditor_Base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 526,290 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DialogLabelEditor_Base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DialogLabelEditor_Base();
 	
 };

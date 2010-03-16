@@ -300,18 +300,28 @@ int GetCommandOptions( const int argc, const char** argv,
  */
 const wxString& valeur_param( int valeur, wxString& buf_texte );
 
-wxString        ReturnUnitSymbol( int Units = g_UnitMetric );
+/**
+ * Returns the units symbol.
+ *
+ * @param aUnits - Units type, default is current units setting.
+ * @param aFormatString - A formatting string to embed the units symbol into.  Note:
+ *                        the format string must contain the %s format specifier.
+ * @return The formatted units symbol.
+ */
+wxString        ReturnUnitSymbol( int aUnits                    = g_UnitMetric,
+                                  const wxString& aFormatString = _( " (%s):" ) );
 
 /**
  * Get a human readable units string.
  *
  * The strings returned are full text name and not abbreviations or symbolic
- * representations of units.  Set ReturnUnitSymbol() for that.
+ * representations of the units.  Use ReturnUnitSymbol() for that.
  *
- * @param units - The units text to return.
+ * @param aUnits - The units text to return.
  * @return The human readable units string.
  */
-wxString        GetUnitsLabel( int units );
+wxString        GetUnitsLabel( int aUnits );
+wxString        GetAbbreviatedUnitsLabel( int aUnits = g_UnitMetric );
 
 int             ReturnValueFromString( int Units, const wxString& TextValue,
                                        int Internal_Unit );

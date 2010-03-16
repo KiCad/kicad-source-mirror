@@ -252,19 +252,23 @@ LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
                 continue;
             LIB_COMPONENT*  cparent = alias->GetComponent();
 
-            if( cparent == NULL ||  // Lib error, should not occurs
+            if( cparent == NULL ||  // Lib error, should not occur.
                 ( cparent->GetName().CmpNoCase( newCmp->GetName() ) != 0 ) )
             {
+                if( cparent )
+                    msg = cparent->GetName();
+                else
+                    msg = _( "unknown" );
                 wxString msg1;
                 wxString parentName;
                 if( cparent )
                     parentName = cparent->GetName();
                 else
                     parentName = _("not found");
-                msg1.Printf( _("alias <%s> already exists and has root name<%s>"),
-                            GetChars( alias->GetName() ),
-                            GetChars( parentName ) );
-                msg << msg1 << wxT("\n");
+                msg1.Printf( _( "alias <%s> already exists and has root name<%s>" ),
+                             GetChars( alias->GetName() ),
+                             GetChars( parentName ) );
+                msg << msg1 << wxT( "\n" );
                 conflict_count++;
             }
 
@@ -278,10 +282,10 @@ LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
             wxString msg1;
             title.Printf( _( "Conflict in library <%s>"), GetChars( fileName.GetName()));
             msg1.Printf( _("and appears in alias list of current component <%s>." ),
-                        GetChars( newCmp->GetName() ) );
-            msg << wxT("\n\n") << msg1;
-            msg << wxT("\n\n") << _("All old aliases will be removed. Continue ?");
-            int diag = wxMessageBox(msg, title, wxYES | wxICON_QUESTION);
+                         GetChars( newCmp->GetName() ) );
+            msg << wxT( "\n\n" ) << msg1;
+            msg << wxT( "\n\n" ) << _( "All old aliases will be removed. Continue ?" );
+            int diag = wxMessageBox( msg, title, wxYES | wxICON_QUESTION );
             if( diag != wxYES )
                 return NULL;
         }
@@ -299,7 +303,7 @@ LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
         }
         else
         {
-            LIB_COMPONENT*  cparent = alias->GetComponent();
+            LIB_COMPONENT* cparent = alias->GetComponent();
 
             if( cparent == NULL ||  // Lib error, should not occurs
                 ( cparent->GetName().CmpNoCase( newCmp->GetName() ) != 0) )

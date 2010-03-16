@@ -157,7 +157,7 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
     }
 
     msg.Printf( _( "Saving symbol in [%s]" ), GetChars( fn.GetPath() ) );
-    Affiche_Message( msg );
+    SetStatusText( msg );
 
     wxString line;
 

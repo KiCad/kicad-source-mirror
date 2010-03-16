@@ -22,14 +22,14 @@ static void ExitMoveTexte( WinEDA_DrawPanel* panel, wxDC* DC );
 static wxPoint ItemInitialPosition;
 static int     OldOrient;
 static wxSize  OldSize;
-static int     s_DefaultShapeGLabel  = (int) NET_INPUT;
-static int     s_DefaultOrientGLabel = 0;
+static int     lastGlobalLabelShape = (int) NET_INPUT;
+static int     lastTextOrientation = 0;
+static bool    lastTextBold = false;
+static bool    lastTextItalic = false;
 
 
-/*****************************************************************************/
 void WinEDA_SchematicFrame::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
 {
-/*****************************************************************************/
     if( TextStruct == NULL )
         return;
 
@@ -72,10 +72,8 @@ void WinEDA_SchematicFrame::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
 }
 
 
-/*****************************************************************************/
 void WinEDA_SchematicFrame::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 {
-/*****************************************************************************/
     if( TextStruct == NULL )
         TextStruct = (SCH_TEXT*) PickStruct( GetScreen()->m_Curseur,
                                              GetScreen(), TEXTITEM | LABELITEM );
@@ -113,11 +111,9 @@ void WinEDA_SchematicFrame::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 }
 
 
-/*************************************************************************/
-SCH_TEXT* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
-/*************************************************************************/
 /* Routine to create new text struct (GraphicText, label or Glabel).
  */
+SCH_TEXT* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
 {
     SCH_TEXT* NewText = NULL;
 
@@ -135,14 +131,12 @@ SCH_TEXT* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
 
     case LAYER_HIERLABEL:
         NewText = new SCH_HIERLABEL( GetScreen()->m_Curseur );
-        NewText->m_Shape = s_DefaultShapeGLabel;
-        NewText->SetSchematicTextOrientation( s_DefaultOrientGLabel );
+        NewText->m_Shape = lastGlobalLabelShape;
         break;
 
     case LAYER_GLOBLABEL:
         NewText = new SCH_GLOBALLABEL( GetScreen()->m_Curseur );
-        NewText->m_Shape = s_DefaultShapeGLabel;
-        NewText->SetSchematicTextOrientation( s_DefaultOrientGLabel );
+        NewText->m_Shape = lastGlobalLabelShape;
         break;
 
     default:
@@ -151,6 +145,9 @@ SCH_TEXT* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
         return NULL;
     }
 
+    NewText->m_Bold = lastTextBold;
+    NewText->m_Italic = lastTextItalic;
+    NewText->SetSchematicTextOrientation( lastTextOrientation );
     NewText->m_Size.x = NewText->m_Size.y = g_DefaultTextLabelSize;
     NewText->m_Flags  = IS_NEW | IS_MOVED;
 
@@ -163,10 +160,13 @@ SCH_TEXT* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
         return NULL;
     }
 
+    lastTextBold = NewText->m_Bold;
+    lastTextItalic = NewText->m_Italic;
+    lastTextOrientation = NewText->GetSchematicTextOrientation();
+
     if( type == LAYER_GLOBLABEL  || type == LAYER_HIERLABEL )
     {
-        s_DefaultShapeGLabel  = NewText->m_Shape;
-        s_DefaultOrientGLabel = NewText->GetSchematicTextOrientation();
+        lastGlobalLabelShape = NewText->m_Shape;
     }
 
     RedrawOneStruct( DrawPanel, DC, NewText, GR_DEFAULT_DRAWMODE );
@@ -208,11 +208,9 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 }
 
 
-/*************************************************************/
+/* Abort function for the command move text */
 static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
-/*************************************************************/
-/* Abort function for the command move text */
     BASE_SCREEN* screen = Panel->GetScreen();
     SCH_ITEM*    Struct = (SCH_ITEM*) screen->GetCurItem();
 
@@ -260,17 +258,14 @@ static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
 }
 
 
-/*****************************************************************************/
-void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text,
-                                             wxDC* DC, int newtype )
-{
-/*****************************************************************************/
 /* Routine to change a text type to an other one (GraphicText, label or
  * Glabel).
  * A new test, label or hierarchical or global label is created from the old
  * text.
  * the old text is deleted
  */
+void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newtype )
+{
     if( Text == NULL )
         return;
 

@@ -33,10 +33,6 @@ SCH_ITEM* g_ItemToUndoCopy;     /* copy of last modified schematic item
                                  * before it is modified (used for undo
                                  * managing to restore old values ) */
 
-bool g_LastSearchIsMarker;      /* True if last seach is a marker serach
-                                 * False for a schematic item search
-                                 * Used for hotkey next search */
-
 /* Block operation (copy, paste) */
 BLOCK_SELECTOR           g_BlockSaveDataList;   // List of items to paste
                                                 // (Created by Block Save)

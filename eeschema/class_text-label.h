@@ -145,6 +145,14 @@ public:
      */
     virtual void Mirror_Y( int aYaxis_position );
 
+    /**
+     * Compare schematic text entry against search string.
+     *
+     * @param aSearchData - Criterial to search against.
+     * @return True if this schematic text item matches the search criteria.
+     */
+    virtual bool Matches( wxFindReplaceData& aSearchData );
+
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );
 
