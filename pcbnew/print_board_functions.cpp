@@ -6,8 +6,8 @@
 #include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
-
 #include "pcbnew.h"
+#include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
 #include "pcbplot.h"
 #include "printout_controler.h"
@@ -29,7 +29,7 @@ static void Print_Module( WinEDA_DrawPanel* aPanel, wxDC* aDC, MODULE* aModule,
  * @param aPrintMirrorMode = true to plot mirrored
  * @param aData = a pointer to an optional data (NULL if not used)
  */
-void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
+void WinEDA_PcbFrame::PrintPage( wxDC* aDC,
                                   bool  aPrint_Sheet_Ref,
                                   int   aPrintMaskLayer,
                                   bool  aPrintMirrorMode,
@@ -39,8 +39,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
     int drawmode = GR_COPY;
     DISPLAY_OPTIONS      save_opt;
     TRACK*               pt_piste;
-    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) m_Parent;
-    BOARD*               Pcb   = frame->GetBoard();
+    BOARD*               Pcb   = GetBoard();
     int                  defaultPenSize = 50;
     PRINT_PARAMETERS * printParameters = (PRINT_PARAMETERS*) aData; // can be null
 
@@ -63,21 +62,21 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
         DisplayOpt.DisplayViaFill = false;
     }
 
-    frame->m_DisplayPadFill = DisplayOpt.DisplayPadFill;
-    frame->m_DisplayViaFill = DisplayOpt.DisplayViaFill;
-    frame->m_DisplayPadNum = DisplayOpt.DisplayPadNum = false;
-    bool nctmp = frame->GetBoard()->IsElementVisible(NO_CONNECTS_VISIBLE);
-    frame->GetBoard()->SetElementVisibility(NO_CONNECTS_VISIBLE, false);
+    m_DisplayPadFill = DisplayOpt.DisplayPadFill;
+    m_DisplayViaFill = DisplayOpt.DisplayViaFill;
+    m_DisplayPadNum = DisplayOpt.DisplayPadNum = false;
+    bool nctmp = GetBoard()->IsElementVisible(NO_CONNECTS_VISIBLE);
+    GetBoard()->SetElementVisibility(NO_CONNECTS_VISIBLE, false);
     DisplayOpt.DisplayPadIsol    = false;
     DisplayOpt.DisplayModEdge    = FILLED;
     DisplayOpt.DisplayModText    = FILLED;
-    frame->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = FILLED;
+    m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = FILLED;
     DisplayOpt.ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
     DisplayOpt.DisplayDrawItems    = FILLED;
     DisplayOpt.DisplayZonesMode    = 0;
     DisplayOpt.DisplayNetNamesMode = 0;
 
-    m_PrintIsMirrored = aPrintMirrorMode;
+    DrawPanel->m_PrintIsMirrored = aPrintMirrorMode;
 
     // The OR mode is used in color mode, but be aware the backgroud *must be
     // BLACK.  In the print page dialog, we first plrint in BLACK, and after
@@ -99,7 +98,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
             if( ( ( 1 << item->GetLayer() ) & aPrintMaskLayer ) == 0 )
                 break;
 
-            item->Draw( this, aDC, drawmode );
+            item->Draw( DrawPanel, aDC, drawmode );
             break;
 
         case TYPE_MARKER_PCB:
@@ -119,14 +118,14 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
             int rayon = pt_piste->m_Width >> 1;
             int color = g_ColorsSettings.GetItemColor(VIAS_VISIBLE+pt_piste->m_Shape);
             GRSetDrawMode( aDC, drawmode );
-            GRFilledCircle( &m_ClipBox, aDC,
+            GRFilledCircle( &DrawPanel->m_ClipBox, aDC,
                             pt_piste->m_Start.x,
                             pt_piste->m_Start.y,
                             rayon,
                             0, color, color );
         }
         else
-            pt_piste->Draw( this, aDC, drawmode );
+            pt_piste->Draw( DrawPanel, aDC, drawmode );
     }
 
     pt_piste = Pcb->m_Zone;
@@ -134,7 +133,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
     {
         if( ( aPrintMaskLayer & pt_piste->ReturnMaskLayer() ) == 0 )
             continue;
-        pt_piste->Draw( this, aDC, drawmode );
+        pt_piste->Draw( DrawPanel, aDC, drawmode );
     }
 
 
@@ -145,7 +144,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
         if( ( aPrintMaskLayer & ( 1 << zone->GetLayer() ) ) == 0 )
             continue;
 
-        zone->DrawFilledArea( this, aDC, drawmode );
+        zone->DrawFilledArea( DrawPanel, aDC, drawmode );
     }
 
     // Draw footprints, this is done at last in order to print the pad holes in
@@ -155,7 +154,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
     D_PAD::m_PadSketchModePenSize = defaultPenSize;
     for( ; Module != NULL; Module = Module->Next() )
     {
-        Print_Module( this, aDC, Module, drawmode, aPrintMaskLayer, drillShapeOpt );
+        Print_Module( DrawPanel, aDC, Module, drawmode, aPrintMaskLayer, drillShapeOpt );
     }
     D_PAD::m_PadSketchModePenSize = tmp;
 
@@ -179,7 +178,7 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
                     diameter = min( SMALL_DRILL, pt_piste->GetDrillValue());
                 else
                     diameter = pt_piste->GetDrillValue();
-                GRFilledCircle( &m_ClipBox, aDC,
+                GRFilledCircle( &DrawPanel->m_ClipBox, aDC,
                                 pt_piste->m_Start.x, pt_piste->m_Start.y,
                                 diameter/2,
                                 0, color, color );
@@ -189,16 +188,16 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC,
     }
 
     if( aPrint_Sheet_Ref )
-        m_Parent->TraceWorkSheet( aDC, GetScreen(), defaultPenSize );
+        TraceWorkSheet( aDC, GetScreen(), defaultPenSize );
 
-    m_PrintIsMirrored = false;
+    DrawPanel->m_PrintIsMirrored = false;
 
     DisplayOpt = save_opt;
-    frame->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
-    frame->m_DisplayPadFill = DisplayOpt.DisplayPadFill;
-    frame->m_DisplayViaFill = DisplayOpt.DisplayViaFill;
-    frame->m_DisplayPadNum  = DisplayOpt.DisplayPadNum;
-    frame->GetBoard()->SetElementVisibility(NO_CONNECTS_VISIBLE, nctmp);
+    m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
+    m_DisplayPadFill = DisplayOpt.DisplayPadFill;
+    m_DisplayViaFill = DisplayOpt.DisplayViaFill;
+    m_DisplayPadNum  = DisplayOpt.DisplayPadNum;
+    GetBoard()->SetElementVisibility(NO_CONNECTS_VISIBLE, nctmp);
 }
 
 

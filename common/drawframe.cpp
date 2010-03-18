@@ -184,6 +184,18 @@ void WinEDA_DrawFrame::ToolOnRightClick( wxCommandEvent& event )
 {
 }
 
+/** Virtual function PrintPage
+ * used to print a page
+ * this basic function must be derived to be used for printing
+ * because WinEDA_DrawFrame does not know how to print a page
+ * This is the reason it is a virtual function
+ */
+void WinEDA_DrawFrame::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
+                int aPrintMask, bool aPrintMirrorMode,
+                void * aData)
+{
+    wxMessageBox( wxT("WinEDA_DrawFrame::PrintPage() error"));
+}
 
 // Virtual function
 void WinEDA_DrawFrame::OnSelectGrid( wxCommandEvent& event )

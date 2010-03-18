@@ -5,6 +5,7 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
+#include "appl_wxstruct.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
@@ -248,12 +249,34 @@ void WinEDA_LibeditFrame::SaveActiveLibrary( wxCommandEvent& event )
         return;
     }
 
-    fn = wxFileName( m_library->GetFullFileName() );
+    if( event.GetId() == ID_LIBEDIT_SAVE_CURRENT_LIB_AS )
+    {   // Get a new name for the library
+        wxString default_path = wxGetApp().ReturnLastVisitedLibraryPath();
+        wxFileDialog dlg( this, _( "Component Library Name:" ), default_path,
+                          wxEmptyString, CompLibFileWildcard,
+                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-    msg = _( "Modify library file \"" ) + fn.GetFullPath() + _( "\"?" );
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return;
 
-    if( !IsOK( this, msg ) )
-        return;
+        fn = dlg.GetPath();
+
+        /* The GTK file chooser doesn't return the file extension added to
+         * file name so add it here. */
+        if( fn.GetExt().IsEmpty() )
+            fn.SetExt( SymbolFileExtension );
+
+        wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
+    }
+    else
+    {
+        fn = wxFileName( m_library->GetFullFileName() );
+
+        msg = _( "Modify library file \"" ) + fn.GetFullPath() + _( "\"?" );
+
+        if( !IsOK( this, msg ) )
+            return;
+    }
 
     bool success = m_library->Save( fn.GetFullPath(), true );
 

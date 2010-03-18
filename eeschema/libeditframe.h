@@ -34,12 +34,15 @@ public:
 
     ~WinEDA_LibeditFrame();
 
+    void ReCreateMenuBar();
+
     /** Function EnsureActiveLibExists
      * Must be called after the libraries are reloaded
      * (for instance after loading a schematic project)
      */
     static void EnsureActiveLibExists();
 
+    void OnPlotCurrentComponent( wxCommandEvent& event );
     void Process_Special_Functions( wxCommandEvent& event );
     void OnImportPart( wxCommandEvent& event );
     void OnExportPart( wxCommandEvent& event );
@@ -262,6 +265,28 @@ protected:
     static wxSize         m_clientSize;
 
     friend class Dialog_BodyGraphicText_Properties;
+
+    /** function CreatePNGorJPEGFile
+     * Create an image (screenshot) of the current component.
+     *  Output file format is png or jpeg
+     * @param aFileName = the full filename
+     * @param aFmt_jpeg = true to use JPEG ffile format, false to use PNG file format
+     */
+    void CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_jpeg );
+
+
+    /** Virtual function PrintPage
+     * used to print a page
+     * Print the page pointed by ActiveScreen, set by the calling print function
+     * @param aDC = wxDC given by the calling print function
+     * @param aPrint_Sheet_Ref = true to print page references
+     * @param aPrintMask = not used here
+     * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
+     * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
+     */
+    virtual void PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
+                    int aPrintMask, bool aPrintMirrorMode,
+                    void * aData = NULL);
 
     DECLARE_EVENT_TABLE()
 };

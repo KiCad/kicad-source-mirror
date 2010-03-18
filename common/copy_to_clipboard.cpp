@@ -18,7 +18,7 @@
 static const bool   s_PlotBlackAndWhite = FALSE;
 static const bool   Print_Sheet_Ref = TRUE;
 
-static bool DrawPage( WinEDA_DrawPanel* panel );
+static bool DrawPage( WinEDA_DrawFrame* aFrame );
 
 
 /* calls the function to copy the current page or the current bock to
@@ -26,7 +26,7 @@ static bool DrawPage( WinEDA_DrawPanel* panel );
  */
 void WinEDA_DrawFrame::CopyToClipboard( wxCommandEvent& event )
 {
-    DrawPage( DrawPanel );
+    DrawPage( this );
 
     if(  event.GetId() == ID_GEN_COPY_BLOCK_TO_CLIPBOARD )
     {
@@ -43,7 +43,7 @@ void WinEDA_DrawFrame::CopyToClipboard( wxCommandEvent& event )
  * to export drawings to other applications (word processing ...)
  * This is not suitable for copy command within eeschema or pcbnew
  */
-bool DrawPage( WinEDA_DrawPanel* panel )
+bool DrawPage( WinEDA_DrawFrame* aFrame )
 {
     bool    success = TRUE;
 
@@ -55,10 +55,10 @@ bool DrawPage( WinEDA_DrawPanel* panel )
     int     ClipboardSizeX, ClipboardSizeY;
     bool    DrawBlock = FALSE;
     wxRect  DrawArea;
-    BASE_SCREEN* screen = panel->GetScreen();
+    BASE_SCREEN* screen = aFrame->DrawPanel->GetScreen();
 
     /* scale is the ratio resolution/internal units */
-    float   scale = 82.0 / panel->GetParent()->m_InternalUnits;
+    float   scale = 82.0 / aFrame->m_InternalUnits;
 
     if( screen->m_BlockLocate.m_Command != BLOCK_IDLE )
     {
@@ -80,25 +80,26 @@ bool DrawPage( WinEDA_DrawPanel* panel )
 
     wxMetafileDC dc /*(wxT(""), DrawArea.GetWidth(), DrawArea.GetHeight())*/;
 
-    EDA_Rect tmp = panel->m_ClipBox;
+    EDA_Rect tmp = aFrame->DrawPanel->m_ClipBox;
     GRResetPenAndBrush( &dc );
     GRForceBlackPen( s_PlotBlackAndWhite );
     screen->m_IsPrinting = true;
     dc.SetUserScale( scale, scale );
     ClipboardSizeX = dc.MaxX() + 10;
     ClipboardSizeY = dc.MaxY() + 10;
-    panel->m_ClipBox.SetX( 0 ); panel->m_ClipBox.SetY( 0 );
-    panel->m_ClipBox.SetWidth( 0x7FFFFF0 );
-    panel->m_ClipBox.SetHeight( 0x7FFFFF0 );
+    aFrame->DrawPanel->m_ClipBox.SetX( 0 );
+    aFrame->DrawPanel->m_ClipBox.SetY( 0 );
+    aFrame->DrawPanel->m_ClipBox.SetWidth( 0x7FFFFF0 );
+    aFrame->DrawPanel->m_ClipBox.SetHeight( 0x7FFFFF0 );
 
     if( DrawBlock )
     {
         dc.SetClippingRegion( DrawArea );
     }
 
-    panel->PrintPage( &dc, Print_Sheet_Ref, -1, false, NULL );
+    aFrame->PrintPage( &dc, Print_Sheet_Ref, -1, false );
     screen->m_IsPrinting = false;
-    panel->m_ClipBox = tmp;
+    aFrame->DrawPanel->m_ClipBox = tmp;
     wxMetafile* mf = dc.Close();
 
     if( mf )

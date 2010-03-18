@@ -65,7 +65,7 @@ void DialogLabelEditor::InitDialog()
                                       wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER );
         m_textLabel->SetToolTip( _("Enter the text to be used within the schematic") );
         m_textLabel->SetMinSize( wxSize( -1, 60 ) );
-        m_textControlSizer->Insert( 1, m_textLabel, 0, wxLEFT | wxEXPAND, 3 );
+        m_textControlSizer->wxSizer::Insert( 1, m_textLabel, 0, wxLEFT | wxEXPAND, 3 );
         multiLine = true;
     }
 

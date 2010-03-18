@@ -62,7 +62,7 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
         if( dlg.ShowModal() == wxID_CANCEL )
             break;
 
-        LoadProjectFile( fn.GetFullPath(), TRUE );
+        LoadProjectFile( dlg.GetPath(), TRUE );
     }
     break;
 

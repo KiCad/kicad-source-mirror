@@ -174,6 +174,11 @@ enum id_eeschema_frm
 	ID_POPUP_LIBEDIT_FIELD_ROTATE_ITEM,
 	ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT,
 	ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT,
+    
+    /* Library editor menubar IDs */
+    ID_LIBEDIT_SAVE_CURRENT_LIB_AS,
+    ID_LIBEDIT_GEN_PNG_FILE,
+    ID_LIBEDIT_GEN_SVG_FILE,
 
     /* Library viewer horizontal toolbar IDs */
     ID_LIBVIEW_NEXT,

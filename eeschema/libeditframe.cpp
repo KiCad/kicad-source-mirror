@@ -115,6 +115,16 @@ EVT_TOOL( ID_NO_SELECT_BUTT, WinEDA_LibeditFrame::Process_Special_Functions )
 EVT_TOOL_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_EXPORT_BODY_BUTT,
                 WinEDA_LibeditFrame::Process_Special_Functions )
 
+/* menubar commands */
+EVT_MENU( ID_LIBEDIT_SAVE_CURRENT_LIB_AS,
+          WinEDA_LibeditFrame::SaveActiveLibrary )
+EVT_MENU( ID_LIBEDIT_GEN_PNG_FILE,
+          WinEDA_LibeditFrame::OnPlotCurrentComponent )
+EVT_MENU( ID_LIBEDIT_GEN_SVG_FILE,
+          WinEDA_LibeditFrame::OnPlotCurrentComponent )
+EVT_MENU( ID_GENERAL_HELP,
+           WinEDA_DrawFrame::GetKicadHelp )
+
 /* Context menu events and commands. */
 EVT_MENU( ID_LIBEDIT_EDIT_PIN, WinEDA_LibeditFrame::OnEditPin )
 
@@ -192,6 +202,7 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
         DrawPanel->m_Block_Enable = true;
 
     EnsureActiveLibExists();
+    ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
     DisplayLibInfos();

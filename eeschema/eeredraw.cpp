@@ -94,16 +94,16 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
  * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
  * @param aData = a pointer on an auxiliary data (not used here)
  */
-void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
+void WinEDA_SchematicFrame::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
                                   int aPrintMask, bool aPrintMirrorMode,
                                     void * aData)
 {
     wxBeginBusyCursor();
 
-    RedrawStructList( this, aDC, ActiveScreen->EEDrawList, GR_COPY );
+    RedrawStructList( DrawPanel, aDC, ActiveScreen->EEDrawList, GR_COPY );
 
     if( aPrint_Sheet_Ref )
-        m_Parent->TraceWorkSheet( aDC, ActiveScreen, g_DrawDefaultLineThickness );
+        TraceWorkSheet( aDC, ActiveScreen, g_DrawDefaultLineThickness );
 
     wxEndBusyCursor();
 }

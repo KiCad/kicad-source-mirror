@@ -94,7 +94,15 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
     CreateScreens();
     screen = (SCH_SCREEN*) GetScreen();
 
-    wxSetWorkingDirectory( wxPathOnly( FullFileName ) );
+    wxFileName fn = FullFileName;
+    if( fn.IsRelative() )
+    {
+        fn.MakeAbsolute();
+        FullFileName = fn.GetFullPath();
+    }
+    wxLogDebug( wxT( "Loading schematic " ) + FullFileName );
+    wxSetWorkingDirectory( fn.GetPath() );
+
     screen->m_FileName = FullFileName;
     g_RootSheet->SetFileName( FullFileName );
     SetStatusText( wxEmptyString );
@@ -150,7 +158,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
      * so if the <name>-cache.lib is not found, the old way will be tried
     */
     bool use_oldcachename = false;
-    wxFileName fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+    fn = g_RootSheet->m_AssociatedScreen->m_FileName;
     wxString cachename =  fn.GetName() + wxT("-cache");
     fn.SetName( cachename );
     fn.SetExt( CompLibFileExtension );

@@ -380,7 +380,7 @@ void SCH_PRINTOUT::DrawPage()
         wxBitmap psuedoBitmap( 1, 1 );
         wxMemoryDC memDC;
         memDC.SelectObject( psuedoBitmap );
-        panel->PrintPage( &memDC, true, 0xFFFFFFFF, false, NULL );
+        parent->PrintPage( &memDC, true, 0xFFFFFFFF, false );
         wxLogDebug( wxT( "MinX = %d, MaxX = %d, MinY = %d, MaxY = %d" ),
                     memDC.MinX(), memDC.MaxX(), memDC.MinY(), memDC.MaxY() );
 
@@ -408,7 +408,7 @@ void SCH_PRINTOUT::DrawPage()
     ActiveScreen->m_IsPrinting = true;
     int bg_color = g_DrawBgColor;
 
-    panel->PrintPage( dc, printReference, 0xFFFFFFFF, false, NULL );
+    parent->PrintPage( dc, printReference, 0xFFFFFFFF, false );
 
     g_DrawBgColor = bg_color;
     ActiveScreen->m_IsPrinting = false;

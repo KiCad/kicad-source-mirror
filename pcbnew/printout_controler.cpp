@@ -280,7 +280,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     g_DrawBgColor = WHITE;
 
     /* when printing in color mode, we use the graphic OR mode that gives the same look as the screen
-     * But because the backgroud is white when printing, we must use a trick:
+     * But because the background is white when printing, we must use a trick:
      * In order to plot on a white background in OR mode we must:
      * 1 - Plot all items in black, this creates a local black backgroud
      * 2 - Plot in OR mode on black "local" background
@@ -288,11 +288,11 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     if( !m_PrintParams.m_Print_Black_and_White )
     {   // Creates a "local" black background
         GRForceBlackPen( true );
-        panel->PrintPage( dc, 0, m_PrintParams.m_PrintMaskLayer, printMirror, &m_PrintParams );
+        m_Parent->PrintPage( dc, 0, m_PrintParams.m_PrintMaskLayer, printMirror, &m_PrintParams );
         GRForceBlackPen( false );
     }
 
-    panel->PrintPage( dc, 0, m_PrintParams.m_PrintMaskLayer, printMirror, &m_PrintParams );
+    m_Parent->PrintPage( dc, 0, m_PrintParams.m_PrintMaskLayer, printMirror, &m_PrintParams );
 
     g_DrawBgColor = bg_color;
     m_Parent->GetBaseScreen()->m_IsPrinting = false;

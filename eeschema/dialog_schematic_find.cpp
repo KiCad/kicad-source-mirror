@@ -157,7 +157,7 @@ void DIALOG_SCH_FIND::SetFindEntries( const wxArrayString& aEntries )
 {
     m_comboFind->Append( aEntries );
 
-    if( !m_comboFind->IsEmpty() )
+    if( m_comboFind->GetCount() )
         m_comboFind->SetSelection( 0 );
 }
 
@@ -166,6 +166,6 @@ void DIALOG_SCH_FIND::SetReplaceEntries( const wxArrayString& aEntries )
 {
     m_comboReplace->Append( aEntries );
 
-    if( !m_comboReplace->IsEmpty() )
+    if( m_comboReplace->GetCount() )
         m_comboReplace->SetSelection( 0 );
 }

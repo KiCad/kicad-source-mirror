@@ -229,15 +229,15 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     GRForceBlackPen( m_ModeColorOption->GetSelection() == 0 ? FALSE : true );
 
 
-    panel->m_ClipBox.SetX( 0 );
-    panel->m_ClipBox.SetY( 0 );
+    panel->m_ClipBox.SetX( -0x3FFFFF0 );
+    panel->m_ClipBox.SetY( -0x3FFFFF0 );
     panel->m_ClipBox.SetWidth( 0x7FFFFF0 );
     panel->m_ClipBox.SetHeight( 0x7FFFFF0 );
 
     screen->m_IsPrinting = true;
     SetLocaleTo_C_standard( );   // Switch the locale to standard C (needed
                                  // to print floating point numbers like 1.3)
-    panel->PrintPage( &dc, aPrint_Sheet_Ref, 1, false, NULL );
+    m_Parent->PrintPage( &dc, aPrint_Sheet_Ref, 1, false );
     SetLocaleTo_Default( );      // revert to the current  locale
     screen->m_IsPrinting = false;
     panel->m_ClipBox = tmp;

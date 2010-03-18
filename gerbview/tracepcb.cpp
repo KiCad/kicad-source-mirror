@@ -30,7 +30,7 @@ static void Draw_Track_Buffer( WinEDA_DrawPanel* panel,
 static void Affiche_DCodes_Pistes( WinEDA_DrawPanel* panel, wxDC* DC,
                             BOARD* Pcb, int drawmode );
 
-/** Function PrintPage
+/** virtual Function PrintPage
  * Used to print the board (on printer, or when creating SVF files).
  * Print the board, but only layers allowed by aPrintMaskLayer
  * @param aDC = the print device context
@@ -39,7 +39,7 @@ static void Affiche_DCodes_Pistes( WinEDA_DrawPanel* panel, wxDC* DC,
  * @param aPrintMirrorMode = true to plot mirrored
  * @param aData = a pointer to an optional data (not used here: can be NULL)
  */
-void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintmasklayer,
+void WinEDA_GerberFrame::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintmasklayer,
                                 bool aPrintMirrorMode, void * aData )
 {
     DISPLAY_OPTIONS save_opt;
@@ -55,14 +55,14 @@ void WinEDA_DrawPanel::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintma
     DisplayPolygonsModeImg = g_DisplayPolygonsModeSketch;
     g_DisplayPolygonsModeSketch = 0;
 
-    m_PrintIsMirrored = aPrintMirrorMode;
+    DrawPanel->m_PrintIsMirrored = aPrintMirrorMode;
 
-    ( (WinEDA_GerberFrame*) m_Parent )->Trace_Gerber( aDC, GR_COPY, aPrintmasklayer );
+    Trace_Gerber( aDC, GR_COPY, aPrintmasklayer );
 
     if( aPrint_Sheet_Ref )
-        m_Parent->TraceWorkSheet( aDC, GetScreen(), 0 );
+        TraceWorkSheet( aDC, GetScreen(), 0 );
 
-    m_PrintIsMirrored = false;
+    DrawPanel->m_PrintIsMirrored = false;
 
     DisplayOpt = save_opt;
     g_DisplayPolygonsModeSketch = DisplayPolygonsModeImg;

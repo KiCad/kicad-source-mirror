@@ -30,7 +30,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	wxString m_PageSizeBoxChoices[] = { _("Size A4"), _("Size A3"), _("Size A2"), _("Size A1"), _("Size A0"), _("Size A"), _("Size B"), _("Size C"), _("Size D"), _("Size E"), _("User size") };
 	int m_PageSizeBoxNChoices = sizeof( m_PageSizeBoxChoices ) / sizeof( wxString );
-	m_PageSizeBox = new wxRadioBox( this, wxID_ANY, _("wxRadioBox"), wxDefaultPosition, wxDefaultSize, m_PageSizeBoxNChoices, m_PageSizeBoxChoices, 1, wxRA_SPECIFY_COLS );
+	m_PageSizeBox = new wxRadioBox( this, wxID_ANY, _("Page Size:"), wxDefaultPosition, wxDefaultSize, m_PageSizeBoxNChoices, m_PageSizeBoxChoices, 1, wxRA_SPECIFY_COLS );
 	m_PageSizeBox->SetSelection( 1 );
 	LeftColumnSizer->Add( m_PageSizeBox, 0, wxALL|wxEXPAND, 5 );
 	

@@ -83,20 +83,6 @@ public:
 
     void         OnPaint( wxPaintEvent& event );
     void         OnSize( wxSizeEvent& event );
-    /** Function PrintPage
-     * Used to print the board (on printer, or when creating SVF files).
-     * Print the board, but only layers allowed by aPrintMaskLayer
-     * @param aDC = the print device context
-     * @param aPrint_Sheet_Ref = true to print frame references
-     * @param aPrint_Sheet_Ref = a 32 bits mask: bit n = 1 -> layer n is printed
-     * @param aPrintMirrorMode = true to plot mirrored
-     * @param aData = a pointer to an optional data (NULL if not used)
-     */
-    void         PrintPage( wxDC* aDC,
-                            bool  aPrint_Sheet_Ref,
-                            int   aPrintMask,
-                            bool  aPrintMirrorMode,
-                            void* aData );
 
     /**  Function DrawBackGround
      * @param DC = current Device Context
