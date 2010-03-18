@@ -1,333 +1,333 @@
-eeschema (20100228 SVN-R2406)-RC5  >> Creation date: Mon 01 Mar 2010 12:06:06 MST
+eeschema (20100316 SVN-R2464)-final  >> Creation date: Wed 17 Mar 2010 09:34:42 PM MDT
 
 #Cmp ( order = Reference )
-| ABRT_SW1   SW_PUSH     ; SW_PUSH_SMALL;             ;             ;             ;             ;             ;             ;             ;             
-| ALLPST1    CONN_1      ; PINTST      ;             ;             ;             ;             ;             ;             ;             ;             
-| BDM_EN1    JUMPER      ; PIN_ARRAY_2X1;             ;             ;             ;             ;             ;             ;             ;             
-| BDM_PORT1  CONN_13X2   ; pin_array_13x2;             ;             ;             ;             ;             ;             ;             ;             
-| C1         10pF        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C2         10pF        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C3         1nF         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C4         100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C5         100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C6         100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C7         100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C8         100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C9         100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C10        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C11        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C12        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C14        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C15        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C16        10uF        ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| C17        100uF       ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| C18        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C20        1nF         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C21        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C22        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C23        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C24        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C25        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C26        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C27        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C28        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C30        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C31        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C32        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C33        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C34        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C35        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C36        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C38        10uF        ; C2V8        ;             ;             ;             ;             ;             ;             ;             ;             
-| C40        220uF       ; C2V8        ;             ;             ;             ;             ;             ;             ;             ;             
-| C41        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C43        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C44        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C45        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C46        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C51        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C52        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C53        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C54        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C55        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C56        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C57        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C58        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C59        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| C60        100nF       ; SM0805      ; AVX         ; 08055C104JAT2A; http://octopart.com/08055c104jat2a-avx-4795;             ;             ;             ;             ;             
-| C61        100nF       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| CAN_EN1    CONN_2X2    ; PIN_ARRAY_2X2;             ;             ;             ;             ;             ;             ;             ;             
-| CAN_TERM1  JUMPER      ; PIN_ARRAY_2X1;             ;             ;             ;             ;             ;             ;             ;             
-| CLK0       JUMPER      ; PIN_ARRAY_2X1;             ;             ;             ;             ;             ;             ;             ;             
-| CLK1       JUMPER      ; PIN_ARRAY_2X1;             ;             ;             ;             ;             ;             ;             ;             
-| CLKOUT1    CONN_1      ; PINTST      ;             ;             ;             ;             ;             ;             ;             ;             
-| COM_SEL1   CONN_3      ; PIN_ARRAY_3X1;             ;             ;             ;             ;             ;             ;             ;             
-| COM_SEL2   CONN_3      ; PIN_ARRAY_3X1;             ;             ;             ;             ;             ;             ;             ;             
-| COM_SEL3   CONN_3      ; PIN_ARRAY_3X1;             ;             ;             ;             ;             ;             ;             ;             
-| CT1        JUMPER      ; PIN_ARRAY_2X1;             ;             ;             ;             ;             ;             ;             ;             
-| D1         BAT54       ; ST23AK#1    ;             ;             ;             ;             ;             ;             ;             ;             
-| D3         BAT54       ; ST23AK#1    ;             ;             ;             ;             ;             ;             ;             ;             
-| D7         1N4004      ; D5          ;             ;             ;             ;             ;             ;             ;             ;             
-| D8         LED         ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| D9         LED         ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| F1         FUSE        ; FSUPCMS     ;             ;             ;             ;             ;             ;             ;             ;             
-| FB1        BEAD        ; SM1206      ;             ;             ;             ;             ;             ;             ;             ;             
-| GND1       CONN_1      ; PINTST      ;             ;             ;             ;             ;             ;             ;             ;             
-| J1         JACK_2P     ; JACK_ALIM   ;             ;             ;             ;             ;             ;             ;             ;             
-| L1         10uH        ; SM1206      ;             ;             ;             ;             ;             ;             ;             ;             
-| L2         10uH        ; SM1206      ;             ;             ;             ;             ;             ;             ;             ;             
-| LED1       LED         ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| LED2       LED         ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| LED3       LED         ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| LED4       LED         ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| LED5       LED         ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| LED_EN1    JUMPER      ; PIN_ARRAY_2X1;             ;             ;             ;             ;             ;             ;             ;             
-| LEDABRT1   RED         ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| LV1        DS1818      ; TO92-INVERT ;             ;             ;             ;             ;             ;             ;             ;             
-| MCU_PORT1  CONN_30X2   ; PIN_ARRAY_30X2;             ;             ;             ;             ;             ;             ;             ;             
-| P1         CONN_6      ; PIN_ARRAY-6X1;             ;             ;             ;             ;             ;             ;             ;             
-| P3         CONN_2X2    ; PIN_ARRAY_2X2;             ;             ;             ;             ;             ;             ;             ;             
-| P4         CONN_20X2   ; PIN_ARRAY_20X2;             ;             ;             ;             ;             ;             ;             ;             
-| PULUPEN1   CONN_4X2    ; pin_array_4x2;             ;             ;             ;             ;             ;             ;             ;             
-| Q1         3906        ; SOT23EBC    ;             ;             ;             ;             ;             ;             ;             ;             
-| R1         10M         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R2         4,7K        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R4         10K         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R5         10K         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R6         10K         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R7         1K          ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R8         10K         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R9         0           ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R10        10K         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R11        10K         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R12        20K         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R13        10K         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R14        270         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R15        4,7K        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R16        4,7K        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R17        4,7K        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R18        4,7K        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R19        4,7K        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R20        4,7K        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R21        4,7K        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R22        270         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R23        10K         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R25        4,7K        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R26        10K         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R28        270         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R30        10K         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R31        270         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R32        270         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R33        270         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R34        10K         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R35        10K         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R36        1K          ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R38        62          ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R45        4,7K        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R46        22          ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R47        4,7K        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R48        4,7K        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R49        4,7K        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R50        4,7K        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R53        270         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R57        4K7         ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R62        1K          ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R63        1K          ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R64        3,3         ; R4          ;             ;             ;             ;             ;             ;             ;             ;             
-| RCAN1      R           ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| RCAN2      R           ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| RED1       LED_RESET1  ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| RS1        CONN_1      ; PINTST      ;             ;             ;             ;             ;             ;             ;             ;             
-| RST_SW1    SW_PUSH     ; SW_PUSH_SMALL;             ;             ;             ;             ;             ;             ;             ;             
-| SW1        SW_PUSH     ; SW_PUSH_SMALL;             ;             ;             ;             ;             ;             ;             ;             
-| SW2        SW_PUSH     ; SW_PUSH_SMALL;             ;             ;             ;             ;             ;             ;             ;             
-| SW_ONOFF1  SWITCH_INV  ; SW_SPDT     ;             ;             ;             ;             ;             ;             ;             ;             
-| TA-1       CONN_1      ; PINTST      ;             ;             ;             ;             ;             ;             ;             ;             
-| TB1        CONN_2      ; BORNIER2    ;             ;             ;             ;             ;             ;             ;             ;             
-| U1         MCF5213-LQFP100; VQFP100     ; Freescale   ; MC9S12UF32PUE; http://octopart.com/mc9s12uf32pue-freescale+semiconductor-481400;             ;             ;             ;             ;             
-| U2         74AHC1G14   ; SOT353      ;             ;             ;             ;             ;             ;             ;             ;             
-| U3         MAX202      ; SO16E       ;             ;             ;             ;             ;             ;             ;             ;             
-| U4         74HC125     ; SO14E       ;             ;             ;             ;             ;             ;             ;             ;             
-| U5         MAX202      ; SO16E       ;             ;             ;             ;             ;             ;             ;             ;             
-| U7         PCA82C251   ; SO8E        ;             ;             ;             ;             ;             ;             ;             ;             
-| U8         MAX202      ; SO16E       ;             ;             ;             ;             ;             ;             ;             ;             
-| U9         XCR3256-TQ144; TQFP144     ;             ;             ;             ;             ;             ;             ;             ;             
-| UART_EN0   CONN_4X2    ; pin_array_4x2;             ;             ;             ;             ;             ;             ;             ;             
-| UART_EN1   CONN_4X2    ; pin_array_4x2;             ;             ;             ;             ;             ;             ;             ;             
-| UART_EN2   CONN_4X2    ; pin_array_4x2;             ;             ;             ;             ;             ;             ;             ;             
-| UARTCAN0   DB9         ; DB9FC       ;             ;             ;             ;             ;             ;             ;             ;             
-| UARTCAN1   DB9         ; DB9FC       ;             ;             ;             ;             ;             ;             ;             ;             
-| UARTCAN2   DB9         ; DB9FC       ;             ;             ;             ;             ;             ;             ;             ;             
-| VDDA1      JUMPER      ; PIN_ARRAY_2X1;             ;             ;             ;             ;             ;             ;             ;             
-| VR1        LT1129_QPACK; DPAK5       ;             ;             ;             ;             ;             ;             ;             ;             
-| VREF1      CONN_1      ; PINTST      ;             ;             ;             ;             ;             ;             ;             ;             
-| VX_EN1     JUMPER      ; PIN_ARRAY_2X1;             ;             ;             ;             ;             ;             ;             ;             
-| Y1         8MHz        ; HC-18UH     ;             ;             ;             ;             ;             ;             ;             ;             
+| ABRT_SW1   SW_PUSH     ; SW_PUSH_SMALL
+| ALLPST1    CONN_1      ; PINTST      
+| BDM_EN1    JUMPER      ; PIN_ARRAY_2X1
+| BDM_PORT1  CONN_13X2   ; pin_array_13x2
+| C1         10pF        ; SM0805      
+| C2         10pF        ; SM0805      
+| C3         1nF         ; SM0805      
+| C4         100nF       ; SM0805      
+| C5         100nF       ; SM0805      
+| C6         100nF       ; SM0805      
+| C7         100nF       ; SM0805      
+| C8         100nF       ; SM0805      
+| C9         100nF       ; SM0805      
+| C10        100nF       ; SM0805      
+| C11        100nF       ; SM0805      
+| C12        100nF       ; SM0805      
+| C14        100nF       ; SM0805      
+| C15        100nF       ; SM0805      
+| C16        10uF        ; SM1206POL   
+| C17        100uF       ; SM1206POL   
+| C18        100nF       ; SM0805      
+| C20        1nF         ; SM0805      
+| C21        100nF       ; SM0805      
+| C22        100nF       ; SM0805      
+| C23        100nF       ; SM0805      
+| C24        100nF       ; SM0805      
+| C25        100nF       ; SM0805      
+| C26        100nF       ; SM0805      
+| C27        100nF       ; SM0805      
+| C28        100nF       ; SM0805      
+| C30        100nF       ; SM0805      
+| C31        100nF       ; SM0805      
+| C32        100nF       ; SM0805      
+| C33        100nF       ; SM0805      
+| C34        100nF       ; SM0805      
+| C35        100nF       ; SM0805      
+| C36        100nF       ; SM0805      
+| C38        10uF        ; C2V8        
+| C40        220uF       ; C2V8        
+| C41        100nF       ; SM0805      
+| C43        100nF       ; SM0805      
+| C44        100nF       ; SM0805      
+| C45        100nF       ; SM0805      
+| C46        100nF       ; SM0805      
+| C51        100nF       ; SM0805      
+| C52        100nF       ; SM0805      
+| C53        100nF       ; SM0805      
+| C54        100nF       ; SM0805      
+| C55        100nF       ; SM0805      
+| C56        100nF       ; SM0805      
+| C57        100nF       ; SM0805      
+| C58        100nF       ; SM0805      
+| C59        100nF       ; SM0805      
+| C60        100nF       ; SM0805      
+| C61        100nF       ; SM0805      
+| CAN_EN1    CONN_2X2    ; PIN_ARRAY_2X2
+| CAN_TERM1  JUMPER      ; PIN_ARRAY_2X1
+| CLK0       JUMPER      ; PIN_ARRAY_2X1
+| CLK1       JUMPER      ; PIN_ARRAY_2X1
+| CLKOUT1    CONN_1      ; PINTST      
+| COM_SEL1   CONN_3      ; PIN_ARRAY_3X1
+| COM_SEL2   CONN_3      ; PIN_ARRAY_3X1
+| COM_SEL3   CONN_3      ; PIN_ARRAY_3X1
+| CT1        JUMPER      ; PIN_ARRAY_2X1
+| D1         BAT54       ; ST23AK#1    
+| D3         BAT54       ; ST23AK#1    
+| D7         1N4004      ; D5          
+| D8         LED         ; SM1206POL   
+| D9         LED         ; SM1206POL   
+| F1         FUSE        ; FSUPCMS     
+| FB1        BEAD        ; SM1206      
+| GND1       CONN_1      ; PINTST      
+| J1         JACK_2P     ; JACK_ALIM   
+| L1         10uH        ; SM1206      
+| L2         10uH        ; SM1206      
+| LED1       LED         ; SM1206POL   
+| LED2       LED         ; SM1206POL   
+| LED3       LED         ; SM1206POL   
+| LED4       LED         ; SM1206POL   
+| LED5       LED         ; SM1206POL   
+| LED_EN1    JUMPER      ; PIN_ARRAY_2X1
+| LEDABRT1   RED         ; SM1206POL   
+| LV1        DS1818      ; TO92-INVERT 
+| MCU_PORT1  CONN_30X2   ; PIN_ARRAY_30X2
+| P1         CONN_6      ; PIN_ARRAY-6X1
+| P3         CONN_2X2    ; PIN_ARRAY_2X2
+| P4         CONN_20X2   ; PIN_ARRAY_20X2
+| PULUPEN1   CONN_4X2    ; pin_array_4x2
+| Q1         3906        ; SOT23EBC    
+| R1         10M         ; SM0805      
+| R2         4,7K        ; SM0805      
+| R4         10K         ; SM0805      
+| R5         10K         ; SM0805      
+| R6         10K         ; SM0805      
+| R7         1K          ; SM0805      
+| R8         10K         ; SM0805      
+| R9         0           ; SM0805      
+| R10        10K         ; SM0805      
+| R11        10K         ; SM0805      
+| R12        20K         ; SM0805      
+| R13        10K         ; SM0805      
+| R14        270         ; SM0805      
+| R15        4,7K        ; SM0805      
+| R16        4,7K        ; SM0805      
+| R17        4,7K        ; SM0805      
+| R18        4,7K        ; SM0805      
+| R19        4,7K        ; SM0805      
+| R20        4,7K        ; SM0805      
+| R21        4,7K        ; SM0805      
+| R22        270         ; SM0805      
+| R23        10K         ; SM0805      
+| R25        4,7K        ; SM0805      
+| R26        10K         ; SM0805      
+| R28        270         ; SM0805      
+| R30        10K         ; SM0805      
+| R31        270         ; SM0805      
+| R32        270         ; SM0805      
+| R33        270         ; SM0805      
+| R34        10K         ; SM0805      
+| R35        10K         ; SM0805      
+| R36        1K          ; SM0805      
+| R38        62          ; SM0805      
+| R45        4,7K        ; SM0805      
+| R46        22          ; SM0805      
+| R47        4,7K        ; SM0805      
+| R48        4,7K        ; SM0805      
+| R49        4,7K        ; SM0805      
+| R50        4,7K        ; SM0805      
+| R53        270         ; SM0805      
+| R57        4K7         ; SM0805      
+| R62        1K          ; SM0805      
+| R63        1K          ; SM0805      
+| R64        3,3         ; R4          
+| RCAN1      R           ; SM0805      
+| RCAN2      R           ; SM0805      
+| RED1       LED_RESET1  ; SM1206POL   
+| RS1        CONN_1      ; PINTST      
+| RST_SW1    SW_PUSH     ; SW_PUSH_SMALL
+| SW1        SW_PUSH     ; SW_PUSH_SMALL
+| SW2        SW_PUSH     ; SW_PUSH_SMALL
+| SW_ONOFF1  SWITCH_INV  ; SW_SPDT     
+| TA-1       CONN_1      ; PINTST      
+| TB1        CONN_2      ; BORNIER2    
+| U1         MCF5213-LQFP100; VQFP100     
+| U2         74AHC1G14   ; SOT353      
+| U3         MAX202      ; SO16E       
+| U4         74HC125     ; SO14E       
+| U5         MAX202      ; SO16E       
+| U7         PCA82C251   ; SO8E        
+| U8         MAX202      ; SO16E       
+| U9         XCR3256-TQ144; TQFP144     
+| UART_EN0   CONN_4X2    ; pin_array_4x2
+| UART_EN1   CONN_4X2    ; pin_array_4x2
+| UART_EN2   CONN_4X2    ; pin_array_4x2
+| UARTCAN0   DB9         ; DB9FC       
+| UARTCAN1   DB9         ; DB9FC       
+| UARTCAN2   DB9         ; DB9FC       
+| VDDA1      JUMPER      ; PIN_ARRAY_2X1
+| VR1        LT1129_QPACK; DPAK5       
+| VREF1      CONN_1      ; PINTST      
+| VX_EN1     JUMPER      ; PIN_ARRAY_2X1
+| Y1         8MHz        ; HC-18UH     
 #End Cmp
 
 #Cmp ( order = Value )
-| 0            R9        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C4        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C5        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C6        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C7        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C8        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C9        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C10       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C11       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C12       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C14       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C15       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C18       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C21       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C22       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C23       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C24       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C25       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C26       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C27       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C28       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C30       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C31       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C32       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C33       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C34       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C35       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C36       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C41       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C43       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C44       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C45       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C46       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C51       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C52       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C53       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C54       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C55       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C56       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C57       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C58       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C59       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100nF        C60       ; SM0805      ; AVX         ; 08055C104JAT2A; http://octopart.com/08055c104jat2a-avx-4795;             ;             ;             ;             ;             
-| 100nF        C61       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 100uF        C17       ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| 10K          R4        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 10K          R5        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 10K          R6        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 10K          R8        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 10K          R10       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 10K          R11       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 10K          R13       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 10K          R23       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 10K          R26       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 10K          R30       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 10K          R34       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 10K          R35       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 10M          R1        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 10pF         C1        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 10pF         C2        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 10uF         C16       ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| 10uF         C38       ; C2V8        ;             ;             ;             ;             ;             ;             ;             ;             
-| 10uH         L1        ; SM1206      ;             ;             ;             ;             ;             ;             ;             ;             
-| 10uH         L2        ; SM1206      ;             ;             ;             ;             ;             ;             ;             ;             
-| 1K           R7        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 1K           R36       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 1K           R62       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 1K           R63       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 1N4004       D7        ; D5          ;             ;             ;             ;             ;             ;             ;             ;             
-| 1nF          C3        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 1nF          C20       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 20K          R12       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 22           R46       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 220uF        C40       ; C2V8        ;             ;             ;             ;             ;             ;             ;             ;             
-| 270          R14       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 270          R22       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 270          R28       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 270          R31       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 270          R32       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 270          R33       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 270          R53       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 3,3          R64       ; R4          ;             ;             ;             ;             ;             ;             ;             ;             
-| 3906         Q1        ; SOT23EBC    ;             ;             ;             ;             ;             ;             ;             ;             
-| 4,7K         R2        ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 4,7K         R15       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 4,7K         R16       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 4,7K         R17       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 4,7K         R18       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 4,7K         R19       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 4,7K         R20       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 4,7K         R21       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 4,7K         R25       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 4,7K         R45       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 4,7K         R47       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 4,7K         R48       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 4,7K         R49       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 4,7K         R50       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 4K7          R57       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 62           R38       ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| 74AHC1G14    U2        ; SOT353      ;             ;             ;             ;             ;             ;             ;             ;             
-| 74HC125      U4        ; SO14E       ;             ;             ;             ;             ;             ;             ;             ;             
-| 8MHz         Y1        ; HC-18UH     ;             ;             ;             ;             ;             ;             ;             ;             
-| BAT54        D1        ; ST23AK#1    ;             ;             ;             ;             ;             ;             ;             ;             
-| BAT54        D3        ; ST23AK#1    ;             ;             ;             ;             ;             ;             ;             ;             
-| BEAD         FB1       ; SM1206      ;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_1       ALLPST1   ; PINTST      ;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_1       CLKOUT1   ; PINTST      ;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_1       GND1      ; PINTST      ;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_1       RS1       ; PINTST      ;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_1       TA-1      ; PINTST      ;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_1       VREF1     ; PINTST      ;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_13X2    BDM_PORT1 ; pin_array_13x2;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_2       TB1       ; BORNIER2    ;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_20X2    P4        ; PIN_ARRAY_20X2;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_2X2     CAN_EN1   ; PIN_ARRAY_2X2;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_2X2     P3        ; PIN_ARRAY_2X2;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_3       COM_SEL1  ; PIN_ARRAY_3X1;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_3       COM_SEL2  ; PIN_ARRAY_3X1;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_3       COM_SEL3  ; PIN_ARRAY_3X1;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_30X2    MCU_PORT1 ; PIN_ARRAY_30X2;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_4X2     PULUPEN1  ; pin_array_4x2;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_4X2     UART_EN0  ; pin_array_4x2;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_4X2     UART_EN1  ; pin_array_4x2;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_4X2     UART_EN2  ; pin_array_4x2;             ;             ;             ;             ;             ;             ;             ;             
-| CONN_6       P1        ; PIN_ARRAY-6X1;             ;             ;             ;             ;             ;             ;             ;             
-| DB9          UARTCAN0  ; DB9FC       ;             ;             ;             ;             ;             ;             ;             ;             
-| DB9          UARTCAN1  ; DB9FC       ;             ;             ;             ;             ;             ;             ;             ;             
-| DB9          UARTCAN2  ; DB9FC       ;             ;             ;             ;             ;             ;             ;             ;             
-| DS1818       LV1       ; TO92-INVERT ;             ;             ;             ;             ;             ;             ;             ;             
-| FUSE         F1        ; FSUPCMS     ;             ;             ;             ;             ;             ;             ;             ;             
-| JACK_2P      J1        ; JACK_ALIM   ;             ;             ;             ;             ;             ;             ;             ;             
-| JUMPER       BDM_EN1   ; PIN_ARRAY_2X1;             ;             ;             ;             ;             ;             ;             ;             
-| JUMPER       CAN_TERM1 ; PIN_ARRAY_2X1;             ;             ;             ;             ;             ;             ;             ;             
-| JUMPER       CLK0      ; PIN_ARRAY_2X1;             ;             ;             ;             ;             ;             ;             ;             
-| JUMPER       CLK1      ; PIN_ARRAY_2X1;             ;             ;             ;             ;             ;             ;             ;             
-| JUMPER       CT1       ; PIN_ARRAY_2X1;             ;             ;             ;             ;             ;             ;             ;             
-| JUMPER       LED_EN1   ; PIN_ARRAY_2X1;             ;             ;             ;             ;             ;             ;             ;             
-| JUMPER       VDDA1     ; PIN_ARRAY_2X1;             ;             ;             ;             ;             ;             ;             ;             
-| JUMPER       VX_EN1    ; PIN_ARRAY_2X1;             ;             ;             ;             ;             ;             ;             ;             
-| LED          D8        ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| LED          D9        ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| LED          LED1      ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| LED          LED2      ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| LED          LED3      ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| LED          LED4      ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| LED          LED5      ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| LED_RESET1   RED1      ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| LT1129_QPACK VR1       ; DPAK5       ;             ;             ;             ;             ;             ;             ;             ;             
-| MAX202       U3        ; SO16E       ;             ;             ;             ;             ;             ;             ;             ;             
-| MAX202       U5        ; SO16E       ;             ;             ;             ;             ;             ;             ;             ;             
-| MAX202       U8        ; SO16E       ;             ;             ;             ;             ;             ;             ;             ;             
-| MCF5213-LQFP100 U1        ; VQFP100     ; Freescale   ; MC9S12UF32PUE; http://octopart.com/mc9s12uf32pue-freescale+semiconductor-481400;             ;             ;             ;             ;             
-| PCA82C251    U7        ; SO8E        ;             ;             ;             ;             ;             ;             ;             ;             
-| R            RCAN1     ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| R            RCAN2     ; SM0805      ;             ;             ;             ;             ;             ;             ;             ;             
-| RED          LEDABRT1  ; SM1206POL   ;             ;             ;             ;             ;             ;             ;             ;             
-| SW_PUSH      ABRT_SW1  ; SW_PUSH_SMALL;             ;             ;             ;             ;             ;             ;             ;             
-| SW_PUSH      RST_SW1   ; SW_PUSH_SMALL;             ;             ;             ;             ;             ;             ;             ;             
-| SW_PUSH      SW1       ; SW_PUSH_SMALL;             ;             ;             ;             ;             ;             ;             ;             
-| SW_PUSH      SW2       ; SW_PUSH_SMALL;             ;             ;             ;             ;             ;             ;             ;             
-| SWITCH_INV   SW_ONOFF1 ; SW_SPDT     ;             ;             ;             ;             ;             ;             ;             ;             
-| XCR3256-TQ144 U9        ; TQFP144     ;             ;             ;             ;             ;             ;             ;             ;             
+| 0            R9        ; SM0805      
+| 100nF        C4        ; SM0805      
+| 100nF        C5        ; SM0805      
+| 100nF        C6        ; SM0805      
+| 100nF        C7        ; SM0805      
+| 100nF        C8        ; SM0805      
+| 100nF        C9        ; SM0805      
+| 100nF        C10       ; SM0805      
+| 100nF        C11       ; SM0805      
+| 100nF        C12       ; SM0805      
+| 100nF        C14       ; SM0805      
+| 100nF        C15       ; SM0805      
+| 100nF        C18       ; SM0805      
+| 100nF        C21       ; SM0805      
+| 100nF        C22       ; SM0805      
+| 100nF        C23       ; SM0805      
+| 100nF        C24       ; SM0805      
+| 100nF        C25       ; SM0805      
+| 100nF        C26       ; SM0805      
+| 100nF        C27       ; SM0805      
+| 100nF        C28       ; SM0805      
+| 100nF        C30       ; SM0805      
+| 100nF        C31       ; SM0805      
+| 100nF        C32       ; SM0805      
+| 100nF        C33       ; SM0805      
+| 100nF        C34       ; SM0805      
+| 100nF        C35       ; SM0805      
+| 100nF        C36       ; SM0805      
+| 100nF        C41       ; SM0805      
+| 100nF        C43       ; SM0805      
+| 100nF        C44       ; SM0805      
+| 100nF        C45       ; SM0805      
+| 100nF        C46       ; SM0805      
+| 100nF        C51       ; SM0805      
+| 100nF        C52       ; SM0805      
+| 100nF        C53       ; SM0805      
+| 100nF        C54       ; SM0805      
+| 100nF        C55       ; SM0805      
+| 100nF        C56       ; SM0805      
+| 100nF        C57       ; SM0805      
+| 100nF        C58       ; SM0805      
+| 100nF        C59       ; SM0805      
+| 100nF        C60       ; SM0805      
+| 100nF        C61       ; SM0805      
+| 100uF        C17       ; SM1206POL   
+| 10K          R4        ; SM0805      
+| 10K          R5        ; SM0805      
+| 10K          R6        ; SM0805      
+| 10K          R8        ; SM0805      
+| 10K          R10       ; SM0805      
+| 10K          R11       ; SM0805      
+| 10K          R13       ; SM0805      
+| 10K          R23       ; SM0805      
+| 10K          R26       ; SM0805      
+| 10K          R30       ; SM0805      
+| 10K          R34       ; SM0805      
+| 10K          R35       ; SM0805      
+| 10M          R1        ; SM0805      
+| 10pF         C1        ; SM0805      
+| 10pF         C2        ; SM0805      
+| 10uF         C16       ; SM1206POL   
+| 10uF         C38       ; C2V8        
+| 10uH         L1        ; SM1206      
+| 10uH         L2        ; SM1206      
+| 1K           R7        ; SM0805      
+| 1K           R36       ; SM0805      
+| 1K           R62       ; SM0805      
+| 1K           R63       ; SM0805      
+| 1N4004       D7        ; D5          
+| 1nF          C3        ; SM0805      
+| 1nF          C20       ; SM0805      
+| 20K          R12       ; SM0805      
+| 22           R46       ; SM0805      
+| 220uF        C40       ; C2V8        
+| 270          R14       ; SM0805      
+| 270          R22       ; SM0805      
+| 270          R28       ; SM0805      
+| 270          R31       ; SM0805      
+| 270          R32       ; SM0805      
+| 270          R33       ; SM0805      
+| 270          R53       ; SM0805      
+| 3,3          R64       ; R4          
+| 3906         Q1        ; SOT23EBC    
+| 4,7K         R2        ; SM0805      
+| 4,7K         R15       ; SM0805      
+| 4,7K         R16       ; SM0805      
+| 4,7K         R17       ; SM0805      
+| 4,7K         R18       ; SM0805      
+| 4,7K         R19       ; SM0805      
+| 4,7K         R20       ; SM0805      
+| 4,7K         R21       ; SM0805      
+| 4,7K         R25       ; SM0805      
+| 4,7K         R45       ; SM0805      
+| 4,7K         R47       ; SM0805      
+| 4,7K         R48       ; SM0805      
+| 4,7K         R49       ; SM0805      
+| 4,7K         R50       ; SM0805      
+| 4K7          R57       ; SM0805      
+| 62           R38       ; SM0805      
+| 74AHC1G14    U2        ; SOT353      
+| 74HC125      U4        ; SO14E       
+| 8MHz         Y1        ; HC-18UH     
+| BAT54        D1        ; ST23AK#1    
+| BAT54        D3        ; ST23AK#1    
+| BEAD         FB1       ; SM1206      
+| CONN_1       ALLPST1   ; PINTST      
+| CONN_1       CLKOUT1   ; PINTST      
+| CONN_1       GND1      ; PINTST      
+| CONN_1       RS1       ; PINTST      
+| CONN_1       TA-1      ; PINTST      
+| CONN_1       VREF1     ; PINTST      
+| CONN_13X2    BDM_PORT1 ; pin_array_13x2
+| CONN_2       TB1       ; BORNIER2    
+| CONN_20X2    P4        ; PIN_ARRAY_20X2
+| CONN_2X2     CAN_EN1   ; PIN_ARRAY_2X2
+| CONN_2X2     P3        ; PIN_ARRAY_2X2
+| CONN_3       COM_SEL1  ; PIN_ARRAY_3X1
+| CONN_3       COM_SEL2  ; PIN_ARRAY_3X1
+| CONN_3       COM_SEL3  ; PIN_ARRAY_3X1
+| CONN_30X2    MCU_PORT1 ; PIN_ARRAY_30X2
+| CONN_4X2     PULUPEN1  ; pin_array_4x2
+| CONN_4X2     UART_EN0  ; pin_array_4x2
+| CONN_4X2     UART_EN1  ; pin_array_4x2
+| CONN_4X2     UART_EN2  ; pin_array_4x2
+| CONN_6       P1        ; PIN_ARRAY-6X1
+| DB9          UARTCAN0  ; DB9FC       
+| DB9          UARTCAN1  ; DB9FC       
+| DB9          UARTCAN2  ; DB9FC       
+| DS1818       LV1       ; TO92-INVERT 
+| FUSE         F1        ; FSUPCMS     
+| JACK_2P      J1        ; JACK_ALIM   
+| JUMPER       BDM_EN1   ; PIN_ARRAY_2X1
+| JUMPER       CAN_TERM1 ; PIN_ARRAY_2X1
+| JUMPER       CLK0      ; PIN_ARRAY_2X1
+| JUMPER       CLK1      ; PIN_ARRAY_2X1
+| JUMPER       CT1       ; PIN_ARRAY_2X1
+| JUMPER       LED_EN1   ; PIN_ARRAY_2X1
+| JUMPER       VDDA1     ; PIN_ARRAY_2X1
+| JUMPER       VX_EN1    ; PIN_ARRAY_2X1
+| LED          D8        ; SM1206POL   
+| LED          D9        ; SM1206POL   
+| LED          LED1      ; SM1206POL   
+| LED          LED2      ; SM1206POL   
+| LED          LED3      ; SM1206POL   
+| LED          LED4      ; SM1206POL   
+| LED          LED5      ; SM1206POL   
+| LED_RESET1   RED1      ; SM1206POL   
+| LT1129_QPACK VR1       ; DPAK5       
+| MAX202       U3        ; SO16E       
+| MAX202       U5        ; SO16E       
+| MAX202       U8        ; SO16E       
+| MCF5213-LQFP100 U1        ; VQFP100     
+| PCA82C251    U7        ; SO8E        
+| R            RCAN1     ; SM0805      
+| R            RCAN2     ; SM0805      
+| RED          LEDABRT1  ; SM1206POL   
+| SW_PUSH      ABRT_SW1  ; SW_PUSH_SMALL
+| SW_PUSH      RST_SW1   ; SW_PUSH_SMALL
+| SW_PUSH      SW1       ; SW_PUSH_SMALL
+| SW_PUSH      SW2       ; SW_PUSH_SMALL
+| SWITCH_INV   SW_ONOFF1 ; SW_SPDT     
+| XCR3256-TQ144 U9        ; TQFP144     
 #End Cmp
 
 #End List

@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date Mon 01 Mar 2010 12:03:39 MST
+EESchema Schematic File Version 2  date Tue 02 Mar 2010 12:56:26 MST
 LIBS:kit-dev-coldfire-xilinx_5213-cache
 EELAYER 23  0
 EELAYER END

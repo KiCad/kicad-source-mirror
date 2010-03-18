@@ -881,8 +881,8 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
 #endif
 
         // print fields
-        for( int jj = FIELD1; jj < FIELD5; jj++ )
-            fprintf( f, "%c%12s", s_ExportSeparatorSymbol,
+        for( int jj = FIELD1; jj <= FIELD8 ; jj++ )
+            fprintf( f, "%c%4s", s_ExportSeparatorSymbol,
                     CONV_TO_UTF8( dummyCmp.GetField( jj )->m_Text ) );
 
         fprintf( f, "%c%s%s", s_ExportSeparatorSymbol,
