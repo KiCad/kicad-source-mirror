@@ -1,0 +1,224 @@
+/**
+ * @file menubar_libedit.cpp
+ * @brief Create the main menubar for the component editor frame (LibEdit)
+ */
+#include "fctsys.h"
+#include "common.h"
+#include "appl_wxstruct.h"
+#include "bitmaps.h"
+
+#include "program.h"
+#include "general.h"
+//#include "protos.h"
+#include "libeditframe.h"
+#include "eeschema_id.h"
+#include "hotkeys.h"
+
+/**
+ * @brief Create or update the menubar for the Component Editor frame
+ */
+void WinEDA_LibeditFrame::ReCreateMenuBar()
+{
+    wxString   text;
+    wxMenuItem *item;
+    wxMenuBar  *menuBar = GetMenuBar();
+
+    /**
+     * Destroy the existing menu bar so it can be rebuilt.  This allows
+     * language changes of the menu text on the fly.
+     */
+    if( menuBar )
+        SetMenuBar( NULL );
+
+    menuBar = new wxMenuBar();
+
+    /**
+     * File menu
+     */
+    wxMenu* filesMenu = new wxMenu;
+
+    /* Save current lib */
+    item = new wxMenuItem( filesMenu, ID_LIBEDIT_SAVE_CURRENT_LIB,
+                           _( "&Save Current Library\tCtrl+S" ),
+                           _( "Save the current active library" ) );
+    item->SetBitmap( save_xpm );
+    filesMenu->Append( item );
+
+    /* Save as... */
+    item = new wxMenuItem( filesMenu, ID_LIBEDIT_SAVE_CURRENT_LIB_AS,
+                           _( "Save Current Library &as" ),
+                           _( "Save current active library as..." ) );
+    item->SetBitmap( save_as_xpm );
+    filesMenu->Append( item );
+
+    /* Separator */
+    filesMenu->AppendSeparator();
+
+    /* Export as png file */
+    item = new wxMenuItem( filesMenu, ID_LIBEDIT_GEN_PNG_FILE, _( "&Create PNG File from Screen" ),
+                           _( "Create a PNG file from the component displayed on screen" ) );
+    item->SetBitmap( plot_xpm );
+    filesMenu->Append( item );
+
+    /* Export as SVG file */
+    item = new wxMenuItem( filesMenu, ID_LIBEDIT_GEN_SVG_FILE, _( "&Create SVG File" ),
+                           _( "Create a SVG file from the current loaded component" ) );
+    item->SetBitmap( plot_xpm );
+    filesMenu->Append( item );
+
+    /**
+     * Edit menu
+     */
+    wxMenu* editMenu = new wxMenu;
+
+    /* Undo */
+    text  = AddHotkeyName( _( "Undo" ), s_Libedit_Hokeys_Descr, HK_UNDO);
+
+    item = new wxMenuItem( editMenu, wxID_UNDO, text,
+                           _( "Undo last edition" ), wxITEM_NORMAL );
+    item->SetBitmap( undo_xpm );
+    editMenu->Append( item );
+
+    /* Redo */
+    text  = AddHotkeyName( _( "Redo" ), s_Libedit_Hokeys_Descr, HK_REDO);
+
+    item = new wxMenuItem( editMenu, wxID_REDO, text,
+                           _( "Redo the last undo command" ), wxITEM_NORMAL );
+    item->SetBitmap( redo_xpm );
+    editMenu->Append( item );
+
+    /* Separator */
+    editMenu->AppendSeparator();
+
+    /* Delete */
+    item = new wxMenuItem( editMenu, ID_LIBEDIT_DELETE_ITEM_BUTT,
+                           _( "Delete" ), _( "Delete items" ), wxITEM_NORMAL );
+    item->SetBitmap( delete_body_xpm );
+    editMenu->Append( item );
+
+    /**
+     * View menu
+     */
+    wxMenu* viewMenu = new wxMenu;
+
+    /* Important Note for ZOOM IN and ZOOM OUT commands from menubar:
+     * we cannot add hotkey info here, because the hotkey HK_ZOOM_IN and HK_ZOOM_OUT
+     * events(default = WXK_F1 and WXK_F2) are *NOT* equivalent to this menu command:
+     * zoom in and out from hotkeys are equivalent to the pop up menu zoom
+     * From here, zoomming is made around the screen center
+     * From hotkeys, zoomming is made around the mouse cursor position
+     * (obvioulsy not possible from the toolbat or menubar command)
+     *
+     * in others words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
+     * for Zoom in and Zoom out sub menus
+     */
+    /* Zoom in */
+    text  =_( "Zoom In" );
+    item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text, _( "Zoom In" ),
+                           wxITEM_NORMAL );
+    item->SetBitmap( zoom_in_xpm );
+    viewMenu->Append( item );
+
+    /* Zoom out */
+    text = _( "Zoom Out" );
+    item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, _( "Zoom Out" ),
+                           wxITEM_NORMAL );
+    item->SetBitmap( zoom_out_xpm );
+    viewMenu->Append( item );
+
+    /* Fit on screen */
+    text = AddHotkeyName( _( "Fit on Screen" ), s_Schematic_Hokeys_Descr,
+                          HK_ZOOM_AUTO );
+
+    item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, text,
+                           _( "Fit the schematic sheet on the screen" ),
+                           wxITEM_NORMAL );
+    item->SetBitmap( zoom_auto_xpm );
+    viewMenu->Append( item );
+
+    viewMenu->AppendSeparator();
+
+    /* Redraw view */
+    text = AddHotkeyName( _( "Redraw" ), s_Schematic_Hokeys_Descr,
+                          HK_ZOOM_REDRAW );
+
+    item = new wxMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
+                           _( "Redraw the schematic view" ),
+                           wxITEM_NORMAL );
+    item->SetBitmap( zoom_redraw_xpm );
+    viewMenu->Append( item );
+
+    /**
+     * Place menu
+     * TODO: Unify the ID names!
+     */
+    wxMenu* placeMenu = new wxMenu;
+
+    /* Pin */
+    item = new wxMenuItem( placeMenu, ID_LIBEDIT_PIN_BUTT, _( "&Pin" ),
+                           _( "Add pins to the component" ), wxITEM_NORMAL );
+    item->SetBitmap( pin_xpm );
+    placeMenu->Append( item );
+
+    /* Graphic text */
+    item = new wxMenuItem( placeMenu, ID_LIBEDIT_BODY_TEXT_BUTT,
+                           _( "Graphic text" ),
+                           _( "Add graphic texts to the component body" ),
+                           wxITEM_NORMAL );
+    item->SetBitmap( add_text_xpm );
+    placeMenu->Append( item );
+
+    /* Graphic rectangle */
+    item = new wxMenuItem( placeMenu, ID_LIBEDIT_BODY_RECT_BUTT,
+                           _( "Rectangle" ),
+                           _( "Add graphic rectangles to the component body" ),
+                           wxITEM_NORMAL );
+    item->SetBitmap( add_rectangle_xpm );
+    placeMenu->Append( item );
+
+    /* Graphic Circle */
+    item = new wxMenuItem( placeMenu, ID_LIBEDIT_BODY_CIRCLE_BUTT,
+                           _( "Circle" ),
+                           _( "Add circles to the component body" ),
+                           wxITEM_NORMAL );
+    item->SetBitmap( add_circle_xpm );
+    placeMenu->Append( item );
+
+    /* Graphic Arc */
+    item = new wxMenuItem( placeMenu, ID_LIBEDIT_BODY_ARC_BUTT,
+                           _( "Arc" ),
+                           _( "Add arcs to the component body" ),
+                           wxITEM_NORMAL );
+    item->SetBitmap( add_arc_xpm );
+    placeMenu->Append( item );
+
+    /* Graphic line or polygon */
+    item = new wxMenuItem( placeMenu, ID_LIBEDIT_BODY_LINE_BUTT,
+                           _( "Line or Polygon" ),
+                           _( "Add lines and polygons to the component body" ),
+                           wxITEM_NORMAL );
+    item->SetBitmap( add_polygon_xpm );
+    placeMenu->Append( item );
+
+
+    /**
+     * Help Menu
+     */
+    wxMenu* helpMenu = new wxMenu;
+    item = new wxMenuItem( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
+                           _( "Open the eeschema manual" ) );
+    item->SetBitmap( help_xpm );
+    helpMenu->Append( item );
+
+    /**
+     * Create the menubar and append all submenus
+     */
+    menuBar->Append( filesMenu, _( "&File" ) );
+    menuBar->Append( editMenu, _( "&Edit" ) );
+    menuBar->Append( viewMenu, _( "&View" ) );
+    menuBar->Append( placeMenu, _( "&Place" ) );
+    menuBar->Append( helpMenu, _( "&Help" ) );
+
+    /* Associate the menu bar with the frame */
+    SetMenuBar( menuBar );
+}
