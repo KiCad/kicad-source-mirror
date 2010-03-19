@@ -9,7 +9,7 @@
 
 #include "dialog_build_BOM_base.h"
 
-class DIALOG_BUILD_BOM : public DIALOG_BUILD_BOM_BASE 
+class DIALOG_BUILD_BOM : public DIALOG_BUILD_BOM_BASE
 {
 private:
     WinEDA_DrawFrame * m_Parent;
@@ -36,12 +36,13 @@ private:
                             bool aIncludeSubComponents);
     int PrintComponentsListByPart( FILE *f, std::vector <OBJ_CMP_TO_LIST>& aList);
     void PrintFieldData(FILE * f, SCH_COMPONENT * DrawLibItem, bool CompactForm = FALSE);
+    bool IsFieldChecked(int aFieldId);
 
 
 public:
     DIALOG_BUILD_BOM( WinEDA_DrawFrame* parent );
     ~DIALOG_BUILD_BOM() {};
-	
+
 };
 
 

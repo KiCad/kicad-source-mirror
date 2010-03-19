@@ -40,7 +40,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS()
                                                         // The final margin is the sum of these 2 values
                                                         // Usually < 0 because the mask is smaller than pad
 
-    m_BoardThickness = 1.6 * PCB_INTERNAL_UNIT / 25.4;  // Epoxy thickness for 3D view (and microwave calculations)                               // Layer Thickness for 3D viewer
+    m_BoardThickness = (int)(1.6 * PCB_INTERNAL_UNIT / 25.4);  // Epoxy thickness for 3D view (and microwave calculations)                               // Layer Thickness for 3D viewer
 
 }
 

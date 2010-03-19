@@ -138,11 +138,46 @@ void DIALOG_BUILD_BOM::Create_BOM_Lists( int  aTypeFile,
     }
 }
 
+/** Helper function IsFieldChecked
+ * return the state of the wxCheckbox corresponding to the
+ * field aFieldId (FOOTPRINT and FIELD1 to FIELD8
+ * if the option "All user fields" is checked, return always true
+ * for fileds ids >= FIELD1
+ * @param aFieldId = the field id : FOOTPRINT to FIELD8
+ */
+bool DIALOG_BUILD_BOM::IsFieldChecked(int aFieldId)
+{
+    if( m_AddAllFields->IsChecked() && (aFieldId>= FIELD1) )
+        return true;
+    switch ( aFieldId )
+    {
+        case FIELD1:
+            return m_AddField1->IsChecked();
+        case FIELD2:
+            return m_AddField2->IsChecked();
+        case FIELD3:
+            return m_AddField3->IsChecked();
+        case FIELD4:
+            return m_AddField4->IsChecked();
+        case FIELD5:
+            return m_AddField5->IsChecked();
+        case FIELD6:
+            return m_AddField6->IsChecked();
+        case FIELD7:
+            return m_AddField7->IsChecked();
+        case FIELD8:
+            return m_AddField8->IsChecked();
+        case FOOTPRINT:
+            return m_AddFootprintField->IsChecked();
+    }
+
+    return false;
+}
 
 /*
  * Print a list of components, in a form which can be imported by a spreadsheet
  * form is:
- * cmp value; number of components; <footprint>; field1; field2; field3; list of references having the same value
+ * cmp value; number of components; <footprint>; <field1>; ...; list of references having the same value
  */
 void DIALOG_BUILD_BOM::CreatePartsList( const wxString& aFullFileName, bool aIncludeSubComponents )
 {
@@ -553,23 +588,9 @@ static void DeleteSubCmp( std::vector <OBJ_CMP_TO_LIST>& aList )
 void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
                                        bool CompactForm )
 {
-    // @todo make this variable length
-    const wxCheckBox* FieldListCtrl[] =
-    {
-        m_AddField1,
-        m_AddField2,
-        m_AddField3,
-        m_AddField4,
-        m_AddField5,
-        m_AddField6,
-        m_AddField7,
-        m_AddField8
-    };
-
     int ii;
-    const wxCheckBox* FieldCtrl = FieldListCtrl[0];
 
-    if( m_AddFootprintField->IsChecked() )
+    if( IsFieldChecked( FOOTPRINT ) )
     {
         if( CompactForm )
         {
@@ -585,20 +606,8 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
 
     for( ii = FIELD1; ii < DrawLibItem->GetFieldCount(); ii++ )
     {
-        if( ii <= FIELD8 )    // see users fields 1 to 8
-        {
-            FieldCtrl = FieldListCtrl[ii - FIELD1];
-            if( FieldCtrl == NULL )
-                continue;
-
-            if( !FieldCtrl->IsChecked() && !m_AddAllFields->IsChecked() )
-                continue;
-        }
-
-        if( !m_AddAllFields->IsChecked() )
-            break;
-
-
+        if( ! IsFieldChecked( ii ) )
+            continue;
         if( CompactForm )
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
                     CONV_TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
@@ -626,19 +635,6 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 
     if( CompactForm )
     {
-        // @todo make this variable length
-        const wxCheckBox* FieldListCtrl[FIELD8 - FIELD1 + 1] =
-        {
-            m_AddField1,
-            m_AddField2,
-            m_AddField3,
-            m_AddField4,
-            m_AddField5,
-            m_AddField6,
-            m_AddField7,
-            m_AddField8
-        };
-
         // Print comment line:
 #if defined(KICAD_GOST)
         fprintf( f, "ref%cvalue%cdatasheet", s_ExportSeparatorSymbol, s_ExportSeparatorSymbol );
@@ -652,16 +648,12 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
             fprintf( f, "%clocation", s_ExportSeparatorSymbol );
         }
 
-        if( m_AddFootprintField->IsChecked() )
+        if( IsFieldChecked( FOOTPRINT ) )
             fprintf( f, "%cfootprint", s_ExportSeparatorSymbol );
 
         for( int ii = FIELD1; ii <= FIELD8; ii++ )
         {
-            const wxCheckBox* FieldCtrl = FieldListCtrl[ii - FIELD1];
-            if( FieldCtrl == NULL )
-                continue;
-
-            if( !FieldCtrl->IsChecked() )
+            if( !IsFieldChecked( ii ) )
                 continue;
 
             msg = _( "Field" );
@@ -871,7 +863,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
         fprintf( f, "%15s%c%3d", CONV_TO_UTF8( ValName ), s_ExportSeparatorSymbol, qty );
         qty = 1;
 
-        if( m_AddFootprintField->IsChecked() )
+        if( IsFieldChecked(FOOTPRINT ) )
             fprintf( f, "%c%15s", s_ExportSeparatorSymbol,
                     CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
 
@@ -880,10 +872,13 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
                     CONV_TO_UTF8( DrawLibItem->GetField( DATASHEET) ->m_Text ) );
 #endif
 
-        // print fields
+        // print fields, on demand
         for( int jj = FIELD1; jj <= FIELD8 ; jj++ )
-            fprintf( f, "%c%4s", s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( dummyCmp.GetField( jj )->m_Text ) );
+        {
+            if ( IsFieldChecked( jj ) )
+                fprintf( f, "%c%4s", s_ExportSeparatorSymbol,
+                        CONV_TO_UTF8( dummyCmp.GetField( jj )->m_Text ) );
+        }
 
         fprintf( f, "%c%s%s", s_ExportSeparatorSymbol,
                 CONV_TO_UTF8( RefName ),

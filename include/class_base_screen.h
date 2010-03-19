@@ -156,6 +156,7 @@ public:
 
     void         InitDatas();
 
+    void         SetPageSize( wxSize& aPageSize );
     wxSize       ReturnPageSize( void );
     virtual int  GetInternalUnits( void );
 

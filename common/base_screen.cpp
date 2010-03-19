@@ -90,9 +90,19 @@ int BASE_SCREEN::GetInternalUnits( void )
 wxSize BASE_SCREEN::ReturnPageSize( void )
 {
     int internal_units = GetInternalUnits();
+    wxSize size = m_CurrentSheetDesc->m_Size;
+    size.x =  (int)( (double)size.x * internal_units / 1000 );
+    size.y =  (int)( (double)size.y * internal_units / 1000 );
 
-    return wxSize( ( m_CurrentSheetDesc->m_Size.x * internal_units ) / 1000,
-                   ( m_CurrentSheetDesc->m_Size.y * internal_units ) / 1000 );
+    return size;
+}
+
+void BASE_SCREEN::SetPageSize( wxSize& aPageSize )
+{
+    int internal_units = GetInternalUnits();
+
+    m_CurrentSheetDesc->m_Size.x = (int) ((double)aPageSize.x * 1000 / internal_units);
+    m_CurrentSheetDesc->m_Size.y = (int) ((double)aPageSize.y * 1000 / internal_units);
 }
 
 

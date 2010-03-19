@@ -56,8 +56,22 @@ void WinEDA_LibeditFrame::OnPlotCurrentComponent( wxCommandEvent& event )
         break;
 
     case ID_LIBEDIT_GEN_SVG_FILE:
+    {
         GetScreen()->m_FileName = cmp->GetName();
+        /* Give a size to the SVG draw area = component size + margin
+         * the margin is 10% the size of the component size
+         */
+        wxSize pagesize = GetScreen()->ReturnPageSize( );
+        wxSize componentSize =
+            m_component->GetBoundaryBox(m_unit, m_convert).m_Size;
+        // Add a small margin to the plot bounding box
+        componentSize.x = (int)(componentSize.x * 1.2);
+        componentSize.y = (int)(componentSize.y * 1.2);
+
+        GetScreen()->SetPageSize( componentSize );
         WinEDA_DrawFrame::SVG_Print( event );
+        GetScreen()->SetPageSize( pagesize );
+    }
         break;
     }
 }
@@ -107,9 +121,20 @@ void WinEDA_LibeditFrame::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
                                   int aPrintMask, bool aPrintMirrorMode,
                                     void * aData)
 {
-    if( m_component )
-        m_component->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), m_unit,
-                           m_convert, GR_DEFAULT_DRAWMODE );
+    if( ! m_component )
+        return;
+
+    wxSize pagesize = GetScreen()->ReturnPageSize( );
+    /* Plot item centered to the page
+     * In libedit, the component is centered at 0,0 coordinates.
+     * So we must plot it with an offset = pagesize/2.
+     */
+    wxPoint plot_offset;
+    plot_offset.x = pagesize.x/2;
+    plot_offset.y = pagesize.y/2;
+
+    m_component->Draw( DrawPanel, aDC, plot_offset, m_unit,
+                       m_convert, GR_DEFAULT_DRAWMODE );
 }
 
 

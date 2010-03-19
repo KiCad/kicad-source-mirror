@@ -88,6 +88,8 @@ void DIALOG_SVG_PRINT::OnInitDialog( wxInitDialogEvent& event )
         m_Config->Read( PLOTSVGMODECOLOR_KEY, &s_PlotBlackAndWhite );
     }
 
+    m_ModeColorOption->SetSelection(s_PlotBlackAndWhite);
+
     AddUnitSymbol(* m_TextPenWidth, g_UnitMetric );
     m_DialogPenWidth->SetValue(
         ReturnStringFromValue(g_UnitMetric, g_DrawDefaultLineThickness,
@@ -203,7 +205,7 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     wxPoint tmp_startvisu;
     wxSize  SheetSize;  // Sheet size in internal units
     wxPoint old_org;
-    float   dpi;
+    double   dpi;
     bool    success = true;
 
     tmp_startvisu = screen->m_StartVisu;
@@ -211,12 +213,10 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     old_org = screen->m_DrawOrg;
     screen->m_DrawOrg.x   = screen->m_DrawOrg.y = 0;
     screen->m_StartVisu.x = screen->m_StartVisu.y = 0;
-    SheetSize    = screen->m_CurrentSheetDesc->m_Size;  // size in 1/1000 inch
-    SheetSize.x *= m_Parent->m_InternalUnits / 1000;
-    SheetSize.y *= m_Parent->m_InternalUnits / 1000;    // size in pixels
+    SheetSize    = screen->ReturnPageSize( );
 
     screen->SetScalingFactor( 1.0 );
-    dpi = (float) SheetSize.x * 25.4 / m_ImageXSize_mm;
+    dpi = (double) SheetSize.x * 25.4 / m_ImageXSize_mm;
 
     WinEDA_DrawPanel* panel = m_Parent->DrawPanel;
 
@@ -226,7 +226,7 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     GRResetPenAndBrush( &dc );
     g_DrawDefaultLineThickness =
         ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
-    GRForceBlackPen( m_ModeColorOption->GetSelection() == 0 ? FALSE : true );
+    GRForceBlackPen( m_ModeColorOption->GetSelection() == 0 ? false : true );
 
 
     panel->m_ClipBox.SetX( -0x3FFFFF0 );
