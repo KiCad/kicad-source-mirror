@@ -145,7 +145,7 @@ public:
 
     virtual wxString GetScreenDesc();
 
-    void             InstallConfigFrame( const wxPoint& pos );
+    void             InstallConfigFrame( wxCommandEvent& event );
 
     void             OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void             OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
@@ -325,6 +325,11 @@ private:
     void             OnUpdateSelectCursor( wxUpdateUIEvent& event );
     void             OnUpdateHiddenPins( wxUpdateUIEvent& event );
     void             OnUpdateBusOrientation( wxUpdateUIEvent& event );
+
+    /** function SetLanguage
+     * called on a language menu selection
+     */
+    void     SetLanguage( wxCommandEvent& event );
 
     // Bus Entry
     SCH_BUS_ENTRY*   CreateBusEntry( wxDC* DC, int entry_type );

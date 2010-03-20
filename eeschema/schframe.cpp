@@ -63,14 +63,21 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
 
     EVT_MENU( ID_POPUP_SCH_COPY_ITEM, WinEDA_SchematicFrame::OnCopySchematicItemRequest )
 
-    EVT_MENU_RANGE( ID_CONFIG_AND_PREFERENCES_START,
-                    ID_CONFIG_AND_PREFERENCES_END,
+    EVT_MENU( ID_CONFIG_REQ,
+                WinEDA_SchematicFrame::InstallConfigFrame )
+    EVT_MENU( ID_CONFIG_SAVE,
+                WinEDA_SchematicFrame::Process_Config )
+    EVT_MENU( ID_CONFIG_READ,
+                WinEDA_SchematicFrame::Process_Config )
+    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START,
+                    ID_PREFERENCES_HOTKEY_END,
                     WinEDA_SchematicFrame::Process_Config )
+
     EVT_TOOL( ID_COLORS_SETUP, WinEDA_SchematicFrame::Process_Config )
     EVT_TOOL( ID_OPTIONS_SETUP, WinEDA_SchematicFrame::OnSetOptions )
 
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
-                    WinEDA_DrawFrame::SetLanguage )
+                    WinEDA_SchematicFrame::SetLanguage )
 
     EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_SchematicFrame::OnZoom )
 
@@ -747,3 +754,14 @@ void WinEDA_SchematicFrame::OnExit( wxCommandEvent& event )
 {
     Close( true );
 }
+
+/** function SetLanguage
+ * called on a language menu selection
+ */
+void WinEDA_SchematicFrame::SetLanguage( wxCommandEvent& event )
+{
+    WinEDA_BasicFrame::SetLanguage( event );
+    if( m_LibeditFrame )
+        m_LibeditFrame->WinEDA_BasicFrame::SetLanguage( event );
+}
+

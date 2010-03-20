@@ -200,6 +200,50 @@ void WinEDA_LibeditFrame::ReCreateMenuBar()
     item->SetBitmap( add_polygon_xpm );
     placeMenu->Append( item );
 
+    /**
+     * Preferences Menu
+     */
+    wxMenu* configmenu = new wxMenu;
+
+    /* Library */
+    item = new wxMenuItem( configmenu, ID_CONFIG_REQ, _( "&Library" ),
+                           _( "Library preferences" ) );
+    item->SetBitmap( library_xpm );
+    configmenu->Append( item );
+
+    /* Colors */
+    item = new wxMenuItem( configmenu, ID_COLORS_SETUP, _( "&Colors" ),
+                           _( "Color preferences" ) );
+    item->SetBitmap( palette_xpm );
+    configmenu->Append( item );
+
+#if 0   // work in progress. activated when finished
+/* Dimension */
+    item = new wxMenuItem( configmenu, ID_LIBEDIT_DIMENSIONS, _( "&Dimensions" ),
+                           _( "Tickness of graphic lines, texts sizes and others" ) );
+    item->SetBitmap( add_dimension_xpm );
+    configmenu->Append( item );
+#endif
+    /* Language submenu */
+    wxGetApp().AddMenuLanguageList( configmenu );
+
+    /* Hotkey submenu */
+    AddHotkeyConfigMenu( configmenu );
+
+    /* Separator */
+    configmenu->AppendSeparator();
+
+    /* Save preferences */
+    item = new wxMenuItem( configmenu, ID_CONFIG_SAVE, _( "&Save preferences" ),
+                           _( "Save application preferences" ) );
+    item->SetBitmap( save_setup_xpm );
+    configmenu->Append( item );
+
+    /* Read preferences */
+    item = new wxMenuItem( configmenu, ID_CONFIG_READ, _( "&Read preferences" ),
+                           _( "Read application preferences" ) );
+    item->SetBitmap( read_setup_xpm );
+    configmenu->Append( item );
 
     /**
      * Help Menu
@@ -217,6 +261,7 @@ void WinEDA_LibeditFrame::ReCreateMenuBar()
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
+    menuBar->Append( configmenu, _( "&Preferences" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
     /* Associate the menu bar with the frame */

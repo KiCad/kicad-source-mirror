@@ -108,8 +108,14 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_MENU( wxID_EXIT, WinEDA_PcbFrame::OnQuit )
 
     // menu Config
-    EVT_MENU_RANGE( ID_CONFIG_AND_PREFERENCES_START,
-                    ID_CONFIG_AND_PREFERENCES_END,
+    EVT_MENU( ID_CONFIG_REQ,
+                    WinEDA_PcbFrame::Process_Config )
+    EVT_MENU( ID_CONFIG_SAVE,
+                    WinEDA_PcbFrame::Process_Config )
+    EVT_MENU( ID_CONFIG_READ,
+                    WinEDA_PcbFrame::Process_Config )
+    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START,
+                    ID_PREFERENCES_HOTKEY_END,
                     WinEDA_PcbFrame::Process_Config )
 
     EVT_MENU( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
@@ -625,7 +631,10 @@ void WinEDA_PcbFrame::SetLanguage( wxCommandEvent& event )
     WinEDA_DrawFrame::SetLanguage( event );
     m_Layers->SetLayersManagerTabsText( );
     wxAuiPaneInfo& pane_info = m_auimgr.GetPane(m_Layers);
-    pane_info.Caption( _( "Visibles" ) ); 
+    pane_info.Caption( _( "Visibles" ) );
     m_auimgr.Update();
     ReFillLayerWidget();
+
+    if( m_ModuleEditFrame )
+        m_ModuleEditFrame->WinEDA_DrawFrame::SetLanguage( event );
 }

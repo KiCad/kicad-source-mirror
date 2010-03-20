@@ -54,8 +54,12 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
     EVT_MENU( ID_EXIT, WinEDA_GerberFrame::Process_Special_Functions )
 
 // menu Preferences
-    EVT_MENU_RANGE( ID_CONFIG_AND_PREFERENCES_START,
-                    ID_CONFIG_AND_PREFERENCES_END,
+    EVT_MENU( ID_CONFIG_REQ,
+                    WinEDA_GerberFrame::Process_Config )
+    EVT_MENU( ID_CONFIG_SAVE,
+                    WinEDA_GerberFrame::Process_Config )
+    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START,
+                    ID_PREFERENCES_HOTKEY_END,
                     WinEDA_GerberFrame::Process_Config )
 
     EVT_MENU( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG, WinEDA_GerberFrame::OnSelectOptionToolbar )

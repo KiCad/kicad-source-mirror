@@ -65,7 +65,7 @@ void BASE_SCREEN::InitDatas()
         m_Curseur.y = ReturnPageSize().y / 2;
     }
 
-    m_O_Curseur = m_Curseur;
+    m_O_Curseur.x = m_O_Curseur.y = 0;
 
     SetCurItem( NULL );
 
@@ -451,13 +451,13 @@ void BASE_SCREEN::AddGrid( const wxRealPoint& size, int units, int id )
 
     if( units == MILLIMETRE )
     {
-        x = size.x / 25.4000508001016;
-        y = size.y / 25.4000508001016;
+        x = size.x / 25.4;
+        y = size.y / 25.4;
     }
     else if( units == CENTIMETRE )
     {
-        x = size.x / 2.54000508001016;
-        y = size.y / 2.54000508001016;
+        x = size.x / 2.54;
+        y = size.y / 2.54;
     }
     else
     {

@@ -34,7 +34,7 @@ END_EVENT_TABLE()
 
 
 /**************************************************************/
-void DisplayColorSetupFrame( WinEDA_SchematicFrame* parent,
+void DisplayColorSetupFrame( WinEDA_DrawFrame* parent,
                              const wxPoint&    framepos )
 {
 /**************************************************************/
@@ -55,7 +55,7 @@ WinEDA_SetColorsFrame::WinEDA_SetColorsFrame()
 
 
 // Standard Constructor
-WinEDA_SetColorsFrame::WinEDA_SetColorsFrame( WinEDA_SchematicFrame* parent,
+WinEDA_SetColorsFrame::WinEDA_SetColorsFrame( WinEDA_DrawFrame* parent,
                                               const wxPoint&    framepos )
 {
     m_Parent = parent;

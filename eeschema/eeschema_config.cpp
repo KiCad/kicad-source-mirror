@@ -13,6 +13,7 @@
 #include "program.h"
 #include "general.h"
 #include "protos.h"
+#include "libeditframe.h"
 #include "eeschema_config.h"
 #include "worksheet.h"
 #include "hotkeys.h"
@@ -24,6 +25,82 @@
 #define HOTKEY_FILENAME wxT( "eeschema" )
 
 #define FR_HISTORY_LIST_CNT 10   ///< Maximum number of find and replace strings.
+
+void WinEDA_LibeditFrame::Process_Config( wxCommandEvent& event )
+{
+    int        id = event.GetId();
+    wxPoint    pos;
+    wxFileName fn;
+    WinEDA_SchematicFrame * schFrame = (WinEDA_SchematicFrame *) GetParent();
+
+    wxGetMousePosition( &pos.x, &pos.y );
+
+    pos.y += 5;
+
+    switch( id )
+    {
+    case ID_COLORS_SETUP:
+        DisplayColorSetupFrame( this, pos );
+        break;
+
+    case ID_CONFIG_SAVE:
+        schFrame->SaveProjectFile( this, false );
+        break;
+
+    case ID_CONFIG_READ:
+    {
+        fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+        fn.SetExt( ProjectFileExtension );
+
+        wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
+                          fn.GetFullName(), ProjectFileWildcard,
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            break;
+
+        schFrame->LoadProjectFile( dlg.GetPath(), TRUE );
+    }
+    break;
+
+
+    /* Hotkey IDs */
+    case ID_PREFERENCES_HOTKEY_CREATE_CONFIG:
+        fn = wxFileName( ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice ),
+                         HOTKEY_FILENAME,
+                         DEFAULT_HOTKEY_FILENAME_EXT );
+        WriteHotkeyConfigFile( fn.GetFullPath(), s_Eeschema_Hokeys_Descr, true );
+        break;
+
+    case ID_PREFERENCES_HOTKEY_READ_CONFIG:
+        Read_Hotkey_Config( this, true );
+        break;
+
+    case ID_PREFERENCES_HOTKEY_EDIT_CONFIG:
+    {
+        fn = wxFileName( ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice ),
+                         HOTKEY_FILENAME, DEFAULT_HOTKEY_FILENAME_EXT );
+        wxString editorname = wxGetApp().GetEditorName();
+        if( !editorname.IsEmpty() )
+            ExecuteFile( this, editorname, QuoteFullPath( fn ) );
+    }
+    break;
+
+    case ID_PREFERENCES_HOTKEY_PATH_IS_HOME:
+    case ID_PREFERENCES_HOTKEY_PATH_IS_KICAD:
+        HandleHotkeyConfigMenuSelection( this, id );
+        break;
+
+    case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
+        // Display current hotkey list for LibEdit.
+        DisplayHotkeyList( this, s_Libedit_Hokeys_Descr );
+        break;
+
+    default:
+        DisplayError( this, wxT( "WinEDA_LibeditFrame::Process_Config error" ) );
+    }
+}
+
 
 
 void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
@@ -40,10 +117,6 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
     {
     case ID_COLORS_SETUP:
         DisplayColorSetupFrame( this, pos );
-        break;
-
-    case ID_CONFIG_REQ:             // Display the configuration window.
-        InstallConfigFrame( pos );
         break;
 
     case ID_CONFIG_SAVE:
@@ -100,7 +173,7 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this, wxT( "WinEDA_SchematicFrame::Process_Config internal error" ) );
+        DisplayError( this, wxT( "WinEDA_SchematicFrame::Process_Config error" ) );
     }
 }
 
@@ -334,7 +407,7 @@ void WinEDA_SchematicFrame::SaveProjectFile( wxWindow* displayframe, bool askove
     int options = wxFD_SAVE;
     if( askoverwrite )
         options |= wxFD_OVERWRITE_PROMPT;
-    wxFileDialog dlg( this, _( "Save Project Settings" ), wxGetCwd(),
+    wxFileDialog dlg( displayframe, _( "Save Project Settings" ), wxGetCwd(),
                       fn.GetFullName(), ProjectFileWildcard, options );
 
     if( dlg.ShowModal() == wxID_CANCEL )

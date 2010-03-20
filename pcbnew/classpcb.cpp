@@ -29,7 +29,7 @@ static const int PcbZoomList[] =
 };
 
 #define PCB_ZOOM_LIST_CNT ( sizeof( PcbZoomList ) / sizeof( int ) )
-#define MM_TO_PCB_UNITS 10000.0 / 25.4000508001016
+#define MM_TO_PCB_UNITS 10000.0 / 25.4
 
 
 /* Default grid sizes for PCB editor screens. */

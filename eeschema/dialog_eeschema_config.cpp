@@ -46,24 +46,34 @@ private:
 
 
 public:
-    DIALOG_EESCHEMA_CONFIG( WinEDA_SchematicFrame * parent );
+    DIALOG_EESCHEMA_CONFIG( WinEDA_SchematicFrame * parent, WinEDA_DrawFrame * activeWindow );
     ~DIALOG_EESCHEMA_CONFIG() {};
 };
 
 
 /******************************************************************/
-void WinEDA_SchematicFrame::InstallConfigFrame( const wxPoint& pos )
+void WinEDA_SchematicFrame::InstallConfigFrame( wxCommandEvent& event )
 /******************************************************************/
 {
-    DIALOG_EESCHEMA_CONFIG CfgFrame( this );
+    DIALOG_EESCHEMA_CONFIG CfgFrame( this, this );
 
     CfgFrame.ShowModal();
 }
 
 
+/******************************************************************/
+void WinEDA_LibeditFrame::InstallConfigFrame( wxCommandEvent& event )
+/******************************************************************/
+{
+    DIALOG_EESCHEMA_CONFIG CfgFrame( (WinEDA_SchematicFrame *)GetParent(), this );
+
+    CfgFrame.ShowModal();
+}
+
 /*******************************************************************************/
-DIALOG_EESCHEMA_CONFIG::DIALOG_EESCHEMA_CONFIG( WinEDA_SchematicFrame* parent )
-    : DIALOG_EESCHEMA_CONFIG_FBP( parent )
+DIALOG_EESCHEMA_CONFIG::DIALOG_EESCHEMA_CONFIG( WinEDA_SchematicFrame* parent,
+                WinEDA_DrawFrame * activeWindow )
+    : DIALOG_EESCHEMA_CONFIG_FBP( activeWindow )
 /*******************************************************************************/
 {
     wxString msg;

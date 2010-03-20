@@ -27,7 +27,7 @@ public:
     WinEDAChoiceBox* m_SelAliasBox;     // a box to select the alias to edit (if any)
 
 public:
-    WinEDA_LibeditFrame( wxWindow* father,
+    WinEDA_LibeditFrame( WinEDA_SchematicFrame* aParent,
                          const wxString& title,
                          const wxPoint& pos, const wxSize& size,
                          long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
@@ -42,6 +42,14 @@ public:
      */
     static void EnsureActiveLibExists();
 
+    /** function SetLanguage
+     * called on a language menu selection
+     */
+    void SetLanguage( wxCommandEvent& event );
+
+    void InstallConfigFrame( wxCommandEvent& event );
+    void InstallDimensionsDialog( wxCommandEvent& event );
+    void Process_Config( wxCommandEvent& event );
     void OnPlotCurrentComponent( wxCommandEvent& event );
     void Process_Special_Functions( wxCommandEvent& event );
     void OnImportPart( wxCommandEvent& event );

@@ -125,6 +125,25 @@ EVT_MENU( ID_LIBEDIT_GEN_SVG_FILE,
 EVT_MENU( ID_GENERAL_HELP,
            WinEDA_DrawFrame::GetKicadHelp )
 
+EVT_MENU( ID_CONFIG_REQ,
+            WinEDA_LibeditFrame::InstallConfigFrame )
+EVT_MENU( ID_CONFIG_SAVE,
+            WinEDA_LibeditFrame::Process_Config )
+EVT_MENU( ID_CONFIG_READ,
+            WinEDA_LibeditFrame::Process_Config )
+EVT_MENU( ID_COLORS_SETUP,
+            WinEDA_LibeditFrame::Process_Config )
+EVT_MENU( ID_LIBEDIT_DIMENSIONS,
+            WinEDA_LibeditFrame::InstallDimensionsDialog )
+
+EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START,
+                ID_PREFERENCES_HOTKEY_END,
+                WinEDA_LibeditFrame::Process_Config )
+
+EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
+                WinEDA_LibeditFrame::SetLanguage )
+
+
 /* Context menu events and commands. */
 EVT_MENU( ID_LIBEDIT_EDIT_PIN, WinEDA_LibeditFrame::OnEditPin )
 
@@ -169,13 +188,15 @@ EVT_UPDATE_UI_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_EXPORT_BODY_BUTT,
 
 END_EVENT_TABLE()
 
-WinEDA_LibeditFrame::WinEDA_LibeditFrame( wxWindow*       father,
+WinEDA_LibeditFrame::WinEDA_LibeditFrame( WinEDA_SchematicFrame* aParent,
                                           const wxString& title,
                                           const wxPoint&  pos,
                                           const wxSize&   size,
                                           long            style ) :
-    WinEDA_DrawFrame( father, LIBEDITOR_FRAME, title, pos, size, style )
+    WinEDA_DrawFrame( aParent, LIBEDITOR_FRAME, title, pos, size, style )
 {
+    wxASSERT( aParent );
+
     m_FrameName  = wxT( "LibeditFrame" );
     m_Draw_Axis  = true;            // true to draw axis
     m_ConfigPath = wxT( "LibraryEditor" );
@@ -969,4 +990,14 @@ void WinEDA_LibeditFrame::EnsureActiveLibExists()
         return;
     else
         m_library = NULL;
+}
+
+/** function SetLanguage
+ * called on a language menu selection
+ */
+void WinEDA_LibeditFrame::SetLanguage( wxCommandEvent& event )
+{
+    WinEDA_BasicFrame::SetLanguage( event );
+    WinEDA_SchematicFrame *parent = (WinEDA_SchematicFrame *)GetParent();
+    parent->WinEDA_BasicFrame::SetLanguage( event );
 }
