@@ -451,9 +451,16 @@ int WinEDA_SchematicFrame::BestZoom()
 wxString WinEDA_SchematicFrame::GetUniqueFilenameForCurrentSheet()
 {
     wxFileName fn = g_RootSheet->GetFileName();
-    wxString   filename = fn.GetName();
 
+#ifndef KICAD_GOST
+    wxString filename = fn.GetName();
     if( ( filename.Len() + m_CurrentSheet->PathHumanReadable().Len() ) < 50 )
+#else
+    fn.ClearExt();
+    wxString filename = fn.GetFullPath();
+    if( ( filename.Len() + m_CurrentSheet->PathHumanReadable().Len() ) < 80 )    
+#endif
+
     {
         filename += m_CurrentSheet->PathHumanReadable();
         filename.Replace( wxT( "/" ), wxT( "-" ) );
