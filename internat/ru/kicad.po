@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-01 23:07+0300\n"
-"PO-Revision-Date: 2010-03-11 15:55+0300\n"
-"Last-Translator: faa <faa@ntcsm.ru>\n"
+"PO-Revision-Date: 2010-03-22 21:11+0100\n"
+"Last-Translator: Vladimir Uryvaev <vovanium@gmail.com>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14,6 +14,7 @@ msgstr ""
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/faa/Project/kicad-dev\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Bookmarks: -1,-1,-1,-1,-1,-1,-1,-1,-1,2732\n"
 "X-Poedit-SearchPath-0: eeschema\n"
 "X-Poedit-SearchPath-1: cvpcb\n"
 "X-Poedit-SearchPath-2: kicad\n"
@@ -1017,7 +1018,7 @@ msgstr "Загрузка "
 #: eeschema/load_one_schematic_file.cpp:82
 #: eeschema/load_one_schematic_file.cpp:113
 msgid " is NOT an EESchema file!"
-msgstr "это файл НЕ eeschema !"
+msgstr "это файл НЕ Eeschema!"
 
 #: eeschema/load_one_schematic_file.cpp:93
 msgid " was created by a more recent version of EESchema and may not load correctly. Please consider updating!"
@@ -1994,12 +1995,12 @@ msgstr "Выход"
 #: eeschema/sheetlab.cpp:95
 #: eeschema/dialog_edit_label_base.cpp:49
 msgid "Bidi"
-msgstr "Двунапр."
+msgstr "Двунаправленный"
 
 #: eeschema/sheetlab.cpp:95
 #: eeschema/dialog_edit_label_base.cpp:49
 msgid "TriState"
-msgstr "Три состояния"
+msgstr "Трёхстабильный"
 
 #: eeschema/sheetlab.cpp:96
 #: eeschema/class_pin.cpp:104
@@ -2034,12 +2035,12 @@ msgstr "Показать следующий элемент"
 #: eeschema/tool_viewlib.cpp:73
 #: eeschema/tool_lib.cpp:179
 msgid "Show as \"De Morgan\" normal part"
-msgstr "Показать как нормальный элемент \"De Morgan\""
+msgstr "Показать нормальное обозначение (по де Моргану)"
 
 #: eeschema/tool_viewlib.cpp:78
 #: eeschema/tool_lib.cpp:183
 msgid "Show as \"De Morgan\" convert part"
-msgstr "Показать как конвертированный элемент \"De Morgan\""
+msgstr "Показать дополнительное обозначение (по де Моргану)"
 
 #: eeschema/tool_viewlib.cpp:91
 msgid "View component documents"
@@ -2164,7 +2165,7 @@ msgstr "Добавить и удалить поля, править свойст
 
 #: eeschema/tool_lib.cpp:156
 msgid "Test for duplicate pins and off grid pins"
-msgstr " Тест дублирования выводов и выводов, расположенных не по сетке"
+msgstr "Тест дублирования выводов и выводов, расположенных не по сетке"
 
 #: eeschema/tool_lib.cpp:188
 msgid "Edit document file"
@@ -2172,15 +2173,15 @@ msgstr "Править  файл документации"
 
 #: eeschema/tool_lib.cpp:203
 msgid "Edit pins part per part ( Use carefully!)"
-msgstr "Править выводы элементов компонента ( использовать осторожно ! )"
+msgstr "Править выводы элементов компонента (использовать осторожно!)"
 
 #: eeschema/tool_lib.cpp:205
 msgid "Usual option = OFF when parts are not locked"
-msgstr "ВЫКЛ, когда элементы не заблокированы"
+msgstr "ВЫКЛ, когда элементы не взаимозаменяемы"
 
 #: eeschema/tool_lib.cpp:207
 msgid "Usual option = ON when parts are locked"
-msgstr "ВКЛ, когда элементы заблокированы"
+msgstr "ВКЛ, когда элементы взаимозаменяемы"
 
 #: eeschema/libarch.cpp:59
 #, c-format
@@ -2200,7 +2201,7 @@ msgstr "Имя"
 #: eeschema/class_sch_component.cpp:175
 #: eeschema/dialog_lib_new_component_base.cpp:66
 msgid "U"
-msgstr "U"
+msgstr "D"
 
 #: eeschema/dialog_create_component.cpp:168
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:23
@@ -2213,13 +2214,13 @@ msgstr "Параметры"
 #: eeschema/dialog_create_component.cpp:172
 #: eeschema/dialog_edit_component_in_lib_base.cpp:27
 msgid "As Convert"
-msgstr "Конвертир."
+msgstr "С дополнительным обозначением (по де Моргану)"
 
 #: eeschema/dialog_create_component.cpp:180
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:79
 #: eeschema/dialog_edit_component_in_lib_base.cpp:101
 msgid "Parts are locked"
-msgstr "Элемент заблокирован"
+msgstr "Элементы не взаимозаменяемы"
 
 #: eeschema/dialog_create_component.cpp:187
 #: cvpcb/dialog_display_options.cpp:211
@@ -2229,7 +2230,7 @@ msgstr "Элемент заблокирован"
 #: pcbnew/swap_layers.cpp:255
 #: pcbnew/set_grid.cpp:179
 msgid "&OK"
-msgstr "ОК"
+msgstr "Ок"
 
 #: eeschema/dialog_create_component.cpp:191
 #: eeschema/netlist_control.cpp:147
@@ -2391,7 +2392,7 @@ msgstr "элемент не обозначен: %s%s"
 #: eeschema/annotate.cpp:725
 #, c-format
 msgid "( unit %d)"
-msgstr "( элемент %d)"
+msgstr "(элемент %d)"
 
 #: eeschema/annotate.cpp:751
 #, c-format
@@ -2583,11 +2584,11 @@ msgstr "Не забудьте выбрать заголовок для этой 
 
 #: eeschema/netlist_control.cpp:463
 msgid "SPICE netlist file (.cir)|*.cir"
-msgstr "SPICE netlist file (.cir)|*.cir"
+msgstr "Файл цепей SPICE (.cir)|*.cir"
 
 #: eeschema/netlist_control.cpp:468
 msgid "CadStar netlist file (.frp)|*.frp"
-msgstr "CadStar netlist file (.frp)|*.frp"
+msgstr "Файл цепей CadStar (.frp)|*.frp"
 
 #: eeschema/netlist_control.cpp:479
 msgid "Save Netlist Files"
@@ -2662,11 +2663,11 @@ msgstr "Удалить элемент из компонента?"
 
 #: eeschema/edit_component_in_lib.cpp:328
 msgid "Add new pins for alternate body style ( DeMorgan ) to component?"
-msgstr "Добавить новый вывод для альтернативного стиля ( DeMorgan ) компонента?"
+msgstr "Добавить новые выводы для дополнительного обозначения (по де Мограну)?"
 
 #: eeschema/edit_component_in_lib.cpp:335
 msgid "Delete alternate body style (DeMorgan) draw items from component?"
-msgstr "Удалить альтернативный стиль ( DeMorgan ) отображения компонента?"
+msgstr "Удалить дополнительное обозначение (по де Моргану)?"
 
 #: eeschema/edit_component_in_lib.cpp:359
 #: common/eda_doc.cpp:134
@@ -3109,7 +3110,7 @@ msgstr "Файл"
 #: eeschema/menubar.cpp:450
 #: pcbnew/menubar_pcbframe.cpp:502
 msgid "&Edit"
-msgstr "Править"
+msgstr "Правка"
 
 #: eeschema/menubar.cpp:451
 #: pcbnew/menubar_pcbframe.cpp:503
@@ -3206,7 +3207,7 @@ msgstr "Выбрать компонент"
 #: eeschema/getpart.cpp:96
 #, c-format
 msgid "component selection (%d items loaded):"
-msgstr "выбор компонента (загружено %d позиции(й)):"
+msgstr "Выбор компонента (загружено %d шт.):"
 
 #: eeschema/getpart.cpp:187
 msgid "Failed to find part "
@@ -3237,7 +3238,7 @@ msgstr "Применить изменения ко всем частям ком�
 
 #: eeschema/dialog_lib_edit_draw_item_base.cpp:68
 msgid "Apply changes to all body &styles (DeMorgan)"
-msgstr "Применить изменения ко всем стилям отображения компонента ( DeMorgan )"
+msgstr "Применить изменения ко всем дополнительным обозначениям (по де Моргану)"
 
 #: eeschema/dialog_lib_edit_draw_item_base.cpp:77
 msgid "Fill Style"
@@ -3786,23 +3787,23 @@ msgstr "Инверсный"
 
 #: eeschema/class_pin.cpp:62
 msgid "Clock"
-msgstr "Тактовый"
+msgstr "Динамический вход"
 
 #: eeschema/class_pin.cpp:63
 msgid "Inverted clock"
-msgstr "Инверсный тактовый"
+msgstr "Инверсный динамический вход"
 
 #: eeschema/class_pin.cpp:64
 msgid "Input low"
-msgstr "Низкий уровень"
+msgstr "Негативный вход"
 
 #: eeschema/class_pin.cpp:65
 msgid "Clock low"
-msgstr "Инверсный тактовый"
+msgstr "Негативный динамический вход"
 
 #: eeschema/class_pin.cpp:66
 msgid "Output low"
-msgstr "Выход (низкий уровень)"
+msgstr "Негативный выход"
 
 #: eeschema/class_pin.cpp:102
 msgid "Bidirectional"
@@ -3810,7 +3811,7 @@ msgstr "Двунаправленный"
 
 #: eeschema/class_pin.cpp:103
 msgid "Tri-state"
-msgstr "Три состояния"
+msgstr "Трёхстабильный"
 
 #: eeschema/class_pin.cpp:105
 msgid "Unspecified"
@@ -3834,7 +3835,7 @@ msgstr "Открытый эмиттер"
 
 #: eeschema/class_pin.cpp:110
 msgid "Not connected"
-msgstr "Не подсоединен"
+msgstr "Не подсоединён"
 
 #: eeschema/class_pin.cpp:166
 #: eeschema/eelayer.h:130
@@ -4065,8 +4066,8 @@ msgid ""
 "Use the alternate shape of this component.\n"
 "For gates, this is the \"De Morgan\" conversion"
 msgstr ""
-"Использовать альтернативное начертание компонента.\n"
-"Для вентилей (И, ИЛИ, И-НЕ и т.п.) преобразование \"De Morgan\""
+"Использовать дополнительное обозначение компонента.\n"
+"Для логических элементов это преобразование по законам де Моргана"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:86
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:20
@@ -4140,21 +4141,21 @@ msgstr "Установить для поворота текста выбранн
 #: pcbnew/dialog_edit_module_text_base.cpp:96
 #: pcbnew/dialog_pcb_text_properties.cpp:180
 msgid "Italic"
-msgstr "Italic"
+msgstr "Курсив"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:136
 #: eeschema/dialog_edit_label_base.cpp:43
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:76
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:101
 msgid "Bold"
-msgstr "Bold"
+msgstr "Полужирный"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:136
 #: eeschema/dialog_edit_label_base.cpp:43
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:76
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:101
 msgid "Bold Italic"
-msgstr "Bold Italic"
+msgstr "Полужирный курсив"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:138
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:103
@@ -4779,8 +4780,8 @@ msgid ""
 "Check this option for components that have a De Morgan representation.\n"
 "This is usual for gates."
 msgstr ""
-"Установите, если компонент имеет два De Morgan представления.\n"
-"Обычно используется для вентилей."
+"Установите, если компонент имеет дополнительное обозначение по де Моргану.\n"
+"Обычно используется для логических элементов"
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:33
 msgid "Show Pin Num"
@@ -4821,7 +4822,7 @@ msgid ""
 "Margin (in 0.001 inches) between a pin name position and the component body.\n"
 "A value from 10 to 40 is usually good."
 msgstr ""
-"Отступ (в 0.001 дюйма) между позицией имени вывода и контуром компонента.\n"
+"Отступ (в 0,001 дюйма) между позицией имени вывода и контуром компонента.\n"
 "Обычно в пределах от 10 до 40."
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:97
@@ -4955,7 +4956,7 @@ msgstr "Количество элементов в корпусе:"
 
 #: eeschema/dialog_lib_new_component_base.cpp:103
 msgid "Create component with &alternate body style (DeMorgan)"
-msgstr "Создать компонент с альтернативным начертанием (DeMorgan)"
+msgstr "Создать дополнительное обозначение (по де Моргану)"
 
 #: eeschema/dialog_lib_new_component_base.cpp:117
 msgid "Create component as power &symbol"
@@ -4963,7 +4964,7 @@ msgstr "Создать компонент как символ питания"
 
 #: eeschema/dialog_lib_new_component_base.cpp:131
 msgid "Parts in package locked (cannot be swapped)"
-msgstr "Элементы компонента не взаимозоменяемы"
+msgstr "Элементы компонента не взаимозаменяемы"
 
 #: eeschema/dialog_lib_new_component_base.cpp:142
 msgid "Global Pin Settings"
@@ -5084,15 +5085,15 @@ msgstr "Используется при проверке электрическ�
 
 #: eeschema/dialog_lib_edit_pin_base.cpp:112
 msgid "Graphic &Style:"
-msgstr "Граф.стиль:"
+msgstr "Обозначение:"
 
 #: eeschema/dialog_lib_edit_pin_base.cpp:133
 msgid "Add to all &parts in package"
-msgstr "Добавить во все элементы (части) в корпусе"
+msgstr "Общий для всех элементов (частей) в корпусе"
 
 #: eeschema/dialog_lib_edit_pin_base.cpp:137
 msgid "Add to all alternate &body styles (DeMorgan)"
-msgstr "Добавить во все альтернативные начертания (DeMorgan)"
+msgstr "Общий для дополнительных обозначений (по де Моргану)"
 
 #: eeschema/dialog_lib_edit_pin_base.cpp:141
 msgid "&Visible"
@@ -5386,11 +5387,11 @@ msgstr "Компонент %s %s вывод %s : Разные цепи"
 
 #: cvpcb/cvpcb.cpp:32
 msgid "Kicad retroannotation files (*.stf)|*.stf"
-msgstr "Kicad retroannotation files (*.stf)|*.stf"
+msgstr "Файлы назначения корпусов KiCad (*.stf)|*.stf"
 
 #: cvpcb/cvpcb.cpp:33
 msgid "Kicad footprint alias files (*.equ)|*.equ"
-msgstr "Kicad footprint alias files (*.equ)|*.equ"
+msgstr "Соответствия корпусов KiCad (*.equ)|*.equ"
 
 #: cvpcb/cvpcb.cpp:35
 #: pcbnew/loadcmp.cpp:234
@@ -5429,7 +5430,7 @@ msgstr " (не удалось открыть файл)"
 
 #: cvpcb/listlib.cpp:94
 msgid " (Not a Kicad file)"
-msgstr "(Не является файлом Kicad)"
+msgstr " (Не является файлом Kicad)"
 
 #: cvpcb/listlib.cpp:123
 msgid " (Unexpected end of file)"
@@ -5483,7 +5484,7 @@ msgstr "Посад. мест: %d"
 #: cvpcb/genorcad.cpp:127
 #, c-format
 msgid "%s %s pin %s : Different Nets"
-msgstr "%s %s вывод %s : Разные цепи"
+msgstr "%s %s вывод %s: Разные цепи"
 
 #: cvpcb/cvframe.cpp:261
 msgid ""
@@ -5495,7 +5496,7 @@ msgstr ""
 
 #: cvpcb/cvframe.cpp:285
 msgid "Problem when saving files, exit anyway ?"
-msgstr "Проблема при сохранении файлов, выйти ?"
+msgstr "Проблема при сохранении файлов, выйти?"
 
 #: cvpcb/cvframe.cpp:411
 msgid "Delete selections"
@@ -5662,7 +5663,7 @@ msgstr "Сохранить текущий проект"
 
 #: kicad/menubar.cpp:118
 msgid "&Archive"
-msgstr "Архив"
+msgstr "Архивировать"
 
 #: kicad/menubar.cpp:119
 msgid "Archive project files in zip archive"
@@ -5670,11 +5671,11 @@ msgstr "Архивировать файлы проекта в zip-архив"
 
 #: kicad/menubar.cpp:124
 msgid "&Unarchive"
-msgstr "Из архива"
+msgstr "Разархивировать"
 
 #: kicad/menubar.cpp:125
 msgid "Unarchive project files from zip file"
-msgstr "Разархивировать файлы проекта из zip файла"
+msgstr "Разархивировать файлы проекта из zip-архива"
 
 #: kicad/menubar.cpp:134
 msgid "Quit KiCad"
@@ -6010,7 +6011,7 @@ msgstr "Недоступно..."
 
 #: gerbview/files.cpp:120
 msgid "Gerber files (.gb* .gt* .lgr .ger .pho)"
-msgstr "Gerber files (.gb* .gt* .lgr .ger .pho)"
+msgstr "Файлы Gerber (.gb* .gt* .lgr .ger .pho)"
 
 #: gerbview/files.cpp:126
 msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
@@ -6069,7 +6070,7 @@ msgstr "Открыть файл Gerber"
 #: gerbview/readgerb.cpp:266
 #, c-format
 msgid "Gerber DCODE files (%s)|*.%s"
-msgstr "Gerber DCODE files (%s)|*.%s"
+msgstr "Файлы Gerber DCODE (%s)|*.%s"
 
 #: gerbview/files.cpp:198
 #: gerbview/readgerb.cpp:271
@@ -6098,7 +6099,7 @@ msgstr "Расширение файла D-кодов:"
 
 #: gerbview/gerbview.cpp:40
 msgid "GerbView project files (.cnf)|*.cnf"
-msgstr "GerbView project files (.cnf)|*.cnf"
+msgstr "Проекты GerbView (.cnf)|*.cnf"
 
 #: gerbview/gerbview.cpp:97
 msgid "GerbView is already running. Continue?"
@@ -6140,11 +6141,11 @@ msgstr "Слой не выбран"
 
 #: gerbview/block.cpp:269
 msgid "Ok to delete block ?"
-msgstr "Ok для удаления блока?"
+msgstr "Удалить блок?"
 
 #: gerbview/options.cpp:167
 msgid "Gerbview Options"
-msgstr "Gerbview параметры"
+msgstr "Параметры Gerbview"
 
 #: gerbview/options.cpp:191
 #: pcbnew/dialog_general_options_BoardEditor_base.cpp:22
@@ -6222,11 +6223,11 @@ msgstr "Добавить новый Gerber файл в текущий слой"
 
 #: gerbview/tool_gerber.cpp:38
 msgid "Inc Layer and load Gerber file"
-msgstr "Увеличить номер слоя и загрузить Gerber файл"
+msgstr "Увеличить номер слоя и загрузить файл Gerber"
 
 #: gerbview/tool_gerber.cpp:39
 msgid "Increment layer number, and Load Gerber file"
-msgstr "Увеличить номер слоя и загрузить Gerber файл"
+msgstr "Увеличить номер слоя и загрузить файл Gerber"
 
 #: gerbview/tool_gerber.cpp:42
 msgid "Load DCodes"
@@ -6238,11 +6239,11 @@ msgstr "Загрузить файл D-кодов"
 
 #: gerbview/tool_gerber.cpp:45
 msgid "Load EXCELLON Drill File"
-msgstr "Загрузить EXCELLON файл сверловки"
+msgstr "Загрузить файл сверловки EXCELLON"
 
 #: gerbview/tool_gerber.cpp:46
 msgid "Load excellon drill file"
-msgstr "Загрузить EXCELLON файл сверловки"
+msgstr "Загрузить файл сверловки EXCELLON"
 
 #: gerbview/tool_gerber.cpp:49
 msgid "&Clear All"
@@ -6791,11 +6792,11 @@ msgstr "в"
 
 #: common/dsnlexer.cpp:189
 msgid "on line"
-msgstr "on line"
+msgstr "в строке"
 
 #: common/dsnlexer.cpp:190
 msgid "at offset"
-msgstr "at offset"
+msgstr "в позиции"
 
 #: common/dsnlexer.cpp:266
 msgid "String delimiter must be a single character of ', \", or $"
@@ -6835,7 +6836,7 @@ msgstr "Превышена длина строки"
 
 #: common/richio.cpp:212
 msgid "Error writing to STRINGFORMATTER"
-msgstr "Error writing to STRINGFORMATTER"
+msgstr "Ошибка записи в STRINGFORMATTER"
 
 #: common/hotkeys_basic.cpp:384
 msgid ""
@@ -6935,27 +6936,27 @@ msgstr "Файлы проекта Kicad (*.pro)|*.pro"
 
 #: common/common.cpp:61
 msgid "Kicad PCB files (*.brd)|*.brd"
-msgstr "Kicad PCB files (*.brd)|*.brd"
+msgstr "Печатные платы KiCad (*.brd)|*.brd"
 
 #: common/common.cpp:62
 msgid "Kicad schematic files (*.sch)|*.sch"
-msgstr "Kicad schematic files (*.sch)|*.sch"
+msgstr "Схемы KiCad (*.sch)|*.sch"
 
 #: common/common.cpp:63
 msgid "Kicad netlist files (*.net)|*.net"
-msgstr "Kicad netlist files (*.net)|*.net"
+msgstr "Списки цепей Kicad (*.net)|*.net"
 
 #: common/common.cpp:64
 msgid "Gerber files (*.pho)|*.pho"
-msgstr "Gerber files (*.pho)|*.pho"
+msgstr "Файлы Gerber (*.pho)|*.pho"
 
 #: common/common.cpp:65
 msgid "Portable document format files (*.pdf)|*.pdf"
-msgstr "Portable document format files (*.pdf)|*.pdf"
+msgstr "Файлы PDF (*.pdf)|*.pdf"
 
 #: common/common.cpp:66
 msgid "All files (*)|*"
-msgstr "All files (*)|*"
+msgstr "Все файлы (*)|*"
 
 #: common/common.cpp:227
 msgid " (\"):"
@@ -6985,7 +6986,7 @@ msgstr " \""
 #: common/common.cpp:342
 #: pcbnew/toolbars_update_user_interface.cpp:41
 msgid " mm"
-msgstr "мм"
+msgstr " мм"
 
 #: common/gestfich.cpp:446
 #, c-format
@@ -7036,43 +7037,43 @@ msgstr "Файл помощи %s невозможно найти."
 
 #: common/edaappl.cpp:108
 msgid "French"
-msgstr "French"
+msgstr "Французский"
 
 #: common/edaappl.cpp:116
 msgid "Finnish"
-msgstr "Finnish"
+msgstr "Финский"
 
 #: common/edaappl.cpp:124
 msgid "Spanish"
-msgstr "Spanish"
+msgstr "Испанский"
 
 #: common/edaappl.cpp:132
 msgid "Portuguese"
-msgstr "Portuguese"
+msgstr "Португальский"
 
 #: common/edaappl.cpp:140
 msgid "Italian"
-msgstr "Italian"
+msgstr "Итальянский"
 
 #: common/edaappl.cpp:148
 msgid "German"
-msgstr "German"
+msgstr "Немецкий"
 
 #: common/edaappl.cpp:156
 msgid "Slovenian"
-msgstr "Slovenian"
+msgstr "Словенский"
 
 #: common/edaappl.cpp:164
 msgid "Hungarian"
-msgstr "Hungarian"
+msgstr "Венгерский"
 
 #: common/edaappl.cpp:172
 msgid "Polish"
-msgstr "Polish"
+msgstr "Польский"
 
 #: common/edaappl.cpp:180
 msgid "Czech"
-msgstr "Czech"
+msgstr "Чешский"
 
 #: common/edaappl.cpp:188
 msgid "Russian"
@@ -7080,7 +7081,7 @@ msgstr "Русский"
 
 #: common/edaappl.cpp:196
 msgid "Korean"
-msgstr "Korean"
+msgstr "Корейский"
 
 #: common/edaappl.cpp:204
 msgid "Chinese simplified"
@@ -7435,7 +7436,7 @@ msgstr "Номер страницы: %d"
 
 #: share/setpage.cpp:323
 msgid "Revision:"
-msgstr "Изменение №:"
+msgstr "Изменение №"
 
 #: share/setpage.cpp:330
 #: share/setpage.cpp:341
@@ -7477,7 +7478,7 @@ msgstr "ОК для загрузки файла восстановления"
 
 #: pcbnew/files.cpp:133
 msgid "Board Modified: Continue ?"
-msgstr "Плата изменена: Продолжить?"
+msgstr "Плата изменена — продолжить?"
 
 #: pcbnew/files.cpp:152
 msgid "Open Board File"
@@ -7527,7 +7528,7 @@ msgstr "Неразмещенные посадочные места будут п
 
 #: pcbnew/autoplac.cpp:391
 msgid "No PCB edge found, unknown board size!"
-msgstr "Не указан контур платы - не известен ее размер!"
+msgstr "Не указан контур платы — неизвестен ее размер!"
 
 #: pcbnew/autoplac.cpp:414
 msgid "Cols"
@@ -7551,7 +7552,7 @@ msgstr "Ok для прерывания?"
 
 #: pcbnew/class_board.cpp:57
 msgid "This is the default net class."
-msgstr "Класс цепей по умолчанию."
+msgstr "Это класс цепей по умолчанию."
 
 #: pcbnew/class_board.cpp:215
 msgid "Front"
@@ -7686,7 +7687,7 @@ msgstr "Контур платы"
 
 #: pcbnew/class_board.cpp:244
 msgid "BAD INDEX"
-msgstr "Плохой индех"
+msgstr "Плохой индекс"
 
 #: pcbnew/class_board.cpp:894
 #: pcbnew/menubar_pcbframe.cpp:411
@@ -7756,7 +7757,7 @@ msgstr "Модуль <%s> не найден"
 #: pcbnew/loadcmp.cpp:620
 #, c-format
 msgid "Modules [%d items]"
-msgstr "Модули [%d единиц]"
+msgstr "Модули [%d шт.]"
 
 #: pcbnew/edit.cpp:160
 #: pcbnew/editmod.cpp:42
@@ -7806,7 +7807,7 @@ msgstr "Локальные связи"
 
 #: pcbnew/librairi.cpp:32
 msgid "Kicad foot print export files (*.emp)|*.emp"
-msgstr "Kicad foot print export files (*.emp)|*.emp"
+msgstr "Файлы экспорта посадочных мест Kicad (*.emp)|*.emp"
 
 #: pcbnew/librairi.cpp:62
 msgid "Import Footprint Module"
@@ -7856,12 +7857,12 @@ msgstr "Компонент %s удален из библитеки %s"
 
 #: pcbnew/librairi.cpp:409
 msgid " No modules to archive!"
-msgstr "Нет модулей для архивирования!"
+msgstr " Нет модулей для архивирования!"
 
 #: pcbnew/librairi.cpp:433
 #, c-format
 msgid "File %s exists, OK to replace ?"
-msgstr "Файл %s существует, OK для замещения ?"
+msgstr "Файл %s существует, перезаписать?"
 
 #: pcbnew/librairi.cpp:515
 #, c-format
@@ -7987,7 +7988,7 @@ msgstr "Кол-во модулей"
 
 #: pcbnew/specctra_export.cpp:78
 msgid "Specctra DSN file:"
-msgstr "Specctra DSN file:"
+msgstr "Файл Specctra DSN:"
 
 #: pcbnew/specctra_export.cpp:137
 msgid "BOARD exported OK."
@@ -8000,7 +8001,7 @@ msgstr "Не удалось экспортировать, пожалуйста �
 #: pcbnew/specctra_export.cpp:806
 #, c-format
 msgid "Unsupported DRAWSEGMENT type %s"
-msgstr "Неподдерживаемый DRAWSEGMENT тип %s"
+msgstr "Неподдерживаемый тип DRAWSEGMENT %s"
 
 #: pcbnew/specctra_export.cpp:841
 msgid "Unable to find the next segment with an endpoint of "
@@ -8164,7 +8165,7 @@ msgstr "Дуговая неоднородность"
 
 #: pcbnew/muonde.cpp:690
 msgid " (inch):"
-msgstr "(дюйм):"
+msgstr " (дюйм):"
 
 #: pcbnew/muonde.cpp:692
 #: pcbnew/muonde.cpp:707
@@ -8173,7 +8174,7 @@ msgstr "Создать СВЧ-модуль"
 
 #: pcbnew/muonde.cpp:706
 msgid "Angle (0.1deg):"
-msgstr "Угол (0.1 град.):"
+msgstr "Угол (0,1°):"
 
 #: pcbnew/muonde.cpp:828
 msgid "Complex shape"
@@ -8293,7 +8294,7 @@ msgstr "Ориентация:"
 
 #: pcbnew/dialog_orient_footprints.cpp:143
 msgid "New orientation (0.1 degree resolution)"
-msgstr "Новая ориентация (с разрешением 0.1 градус)"
+msgstr "Новая ориентация (с разрешением 0,1°)"
 
 #: pcbnew/dialog_orient_footprints.cpp:146
 msgid "Filter:"
@@ -8509,7 +8510,7 @@ msgstr "Текст платы"
 
 #: pcbnew/gendrill.cpp:29
 msgid "Drill files (*.drl)|*.drl"
-msgstr "Drill files (*.drl)|*.drl"
+msgstr "Файлы сверловки (*.drl)|*.drl"
 
 #: pcbnew/gendrill.cpp:96
 #: pcbnew/gendrill.cpp:98
@@ -8547,19 +8548,19 @@ msgstr "3:3"
 
 #: pcbnew/gendrill.cpp:750
 msgid "HPGL plot files (.plt)|*.plt"
-msgstr "HPGL plot files (.plt)|*.plt"
+msgstr "Плоттерные файлы HPGL (.plt)|*.plt"
 
 #: pcbnew/gendrill.cpp:755
 msgid "PostScript files (.ps)|*.ps"
-msgstr "PostScript files (.ps)|*.ps"
+msgstr "Файлы PostScript (.ps)|*.ps"
 
 #: pcbnew/gendrill.cpp:760
 msgid "Gerber files (.pho)|*.pho"
-msgstr "Gerber files (.pho)|*.pho"
+msgstr "Файлы Gerber (.pho)|*.pho"
 
 #: pcbnew/gendrill.cpp:765
 msgid "DXF files (.dxf)|*.dxf"
-msgstr "DXF файлы (.dxf)|*.dxf"
+msgstr "Файлы чертежей DXF (.dxf)|*.dxf"
 
 #: pcbnew/gendrill.cpp:778
 msgid "Save Drill Plot File"
@@ -8571,7 +8572,7 @@ msgstr "Не удалось создать файл"
 
 #: pcbnew/gendrill.cpp:813
 msgid "Drill report files (.rpt)|*.rpt"
-msgstr "Drill report files (.rpt)|*.rpt"
+msgstr "Файлы отчётов сверловки (.rpt)|*.rpt"
 
 #: pcbnew/gendrill.cpp:819
 msgid "Save Drill Report File"
@@ -9019,7 +9020,7 @@ msgstr "Формирование файлов для изготовления и
 
 #: pcbnew/menubar_pcbframe.cpp:140
 msgid "&Specctra Session"
-msgstr "&Specctra Session"
+msgstr "Сеанс &Specctra"
 
 #: pcbnew/menubar_pcbframe.cpp:141
 msgid "Import a routed \"Specctra Session\" (*.ses) file"
@@ -9530,11 +9531,11 @@ msgstr "Установить флаг"
 
 #: pcbnew/onrightclick.cpp:516
 msgid "Locked: Yes"
-msgstr "Блокировано:Да"
+msgstr "Блокировано: Да"
 
 #: pcbnew/onrightclick.cpp:517
 msgid "Locked: No"
-msgstr "Блокировано:Нет"
+msgstr "Блокировано: Нет"
 
 #: pcbnew/onrightclick.cpp:527
 msgid "Track Locked: Yes"
@@ -9842,11 +9843,11 @@ msgstr "Перемещение блока"
 
 #: pcbnew/specctra_import.cpp:77
 msgid "Merge Specctra Session file:"
-msgstr "Merge Specctra Session file:"
+msgstr "Добавить файл сеанса Specctra:"
 
 #: pcbnew/specctra_import.cpp:104
 msgid "BOARD may be corrupted, do not save it."
-msgstr "BOARD may be corrupted, do not save it."
+msgstr "Плата может быть испорчена, не сохраняйте её."
 
 #: pcbnew/specctra_import.cpp:106
 msgid "Fix problem and try again."
@@ -10285,7 +10286,7 @@ msgstr "Искать след. маркер"
 
 #: pcbnew/dialog_freeroute_exchange.cpp:68
 msgid "Freeroute Help"
-msgstr "Freeroute Help"
+msgstr "Помощь к Freeroute"
 
 #: pcbnew/dialog_SVG_print_base.cpp:25
 #: pcbnew/dialog_print_using_printer_base.cpp:25
@@ -10380,11 +10381,11 @@ msgstr "Нет изменений"
 
 #: pcbnew/swap_layers.cpp:298
 msgid "Deselect this layer to select the No Change state"
-msgstr "Deselect this layer to select the No Change state"
+msgstr "Снимите выделение с этого слоя чтобы выбрать «Нет изменений»"
 
 #: pcbnew/build_BOM_from_board.cpp:33
 msgid "Comma separated value files (*.csv)|*.csv"
-msgstr "Comma separated value files (*.csv)|*.csv"
+msgstr "Файлы разделённых запятыми значений (*.csv)|*.csv"
 
 #: pcbnew/build_BOM_from_board.cpp:59
 #: pcbnew/xchgmod.cpp:570
@@ -11222,7 +11223,7 @@ msgid ""
 "Error :\n"
 "you must choose a copper min thickness value bigger than 0.001 inch (or 0.0254 mm)"
 msgstr ""
-"Ошибка :\n"
+"Ошибка:\n"
 "минимальная толщина меди должна быть больше, чем 0.001\" (или 0.0254мм)"
 
 #: pcbnew/zones_non_copper_type_functions.cpp:178
@@ -11253,7 +11254,7 @@ msgstr "Режим заливки:"
 #: pcbnew/dialog_non_copper_zones_properties_base.cpp:36
 #: pcbnew/dialog_copper_zones_base.cpp:124
 msgid "Zone min thickness value"
-msgstr "Мин.ширина зоны"
+msgstr "Мин. ширина зоны"
 
 #: pcbnew/dialog_non_copper_zones_properties_base.cpp:46
 #: pcbnew/dialog_copper_zones_base.cpp:98
@@ -11359,7 +11360,7 @@ msgstr "Задает ширину меди терморазгрузки"
 
 #: pcbnew/dialog_copper_zones_base.cpp:100
 msgid "H , V and 45 deg"
-msgstr "Гориз ., верт. и 45 град."
+msgstr "Гориз ., верт. и диаг."
 
 #: pcbnew/dialog_copper_zones_base.cpp:102
 msgid "Zone edges orient:"
@@ -11456,12 +11457,12 @@ msgid ""
 "Error :\n"
 "you must choose a copper bridge value for thermal reliefs bigger than the min zone thickness"
 msgstr ""
-"Ошибка :\n"
+"Ошибка:\n"
 "ширина медного моста терморазгруки должна быть больше минимальной ширины зоны"
 
 #: pcbnew/dialog_copper_zones.cpp:336
 msgid "Error : you must choose a net name"
-msgstr "Ошибка : не выбрано имя цепи"
+msgstr "Ошибка: не выбрано имя цепи"
 
 #: pcbnew/dialog_copper_zones.cpp:343
 msgid "You have chosen the \"not connected\" option. This will create insulated copper islands. Are you sure ?"
@@ -11571,7 +11572,7 @@ msgstr "Ориент. конт.пл.:"
 
 #: pcbnew/dialog_pad_properties_base.cpp:212
 msgid "Pad Orient (0.1 deg)"
-msgstr "Ориент. конт.пл. (0.1 град)"
+msgstr "Ориент. конт.пл. (шаг 0,1°)"
 
 #: pcbnew/dialog_pad_properties_base.cpp:224
 msgid "Clearances:"
@@ -11718,11 +11719,11 @@ msgstr "Draft layer"
 
 #: pcbnew/dialog_pad_properties_base.cpp:363
 msgid "E.C.O.1 layer"
-msgstr "E.C.O.1 layer"
+msgstr "Слой E.C.O.1"
 
 #: pcbnew/dialog_pad_properties_base.cpp:367
 msgid "E.C.O.2 layer"
-msgstr "E.C.O.2 layer"
+msgstr "Слой E.C.O.2"
 
 #: pcbnew/dialog_edit_module_text_base.cpp:19
 #, c-format
@@ -12386,7 +12387,7 @@ msgstr "Общие правила проектирования"
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:224
 #: pcbnew/dialog_edit_module_for_Modedit.cpp:83
 msgid "Use this attribute for most non smd components"
-msgstr "Использовать этот атрибут для большинства не SMD компонентов"
+msgstr "Использовать этот атрибут для большинства не-SMD компонентов"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:226
 #: pcbnew/dialog_edit_module_for_Modedit.cpp:86
@@ -12394,7 +12395,7 @@ msgid ""
 "Use this attribute for smd components.\n"
 "Only components with this option are put in the footprint position list file"
 msgstr ""
-"Использовать этот атрибут для SMD компонентов.\n"
+"Использовать этот атрибут для компонентов поверхностного монтажа.\n"
 "В файл расположений посадочных мест попадут компонеты только с таким параметром"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:228
@@ -12430,7 +12431,7 @@ msgstr "Вращение образа:"
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:382
 #: pcbnew/dialog_edit_module_for_Modedit.cpp:253
 msgid "3D Shape:"
-msgstr "3D образ:"
+msgstr "3D вид:"
 
 #: pcbnew/dialog_edit_module_for_Modedit_base.cpp:24
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:24
@@ -12479,12 +12480,12 @@ msgstr "Авто перемещение и размещение"
 #: pcbnew/dialog_edit_module_for_Modedit_base.cpp:90
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:119
 msgid "Rotation 90 degree"
-msgstr "Поворот 90 град."
+msgstr "Поворот на 90°"
 
 #: pcbnew/dialog_edit_module_for_Modedit_base.cpp:102
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:131
 msgid "Rotation 180 degree"
-msgstr "Поворот 180 град."
+msgstr "Поворот на 180°"
 
 #: pcbnew/dialog_edit_module_for_Modedit_base.cpp:114
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:143
@@ -12593,19 +12594,19 @@ msgstr "Выбор стороны"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:57
 msgid "+ 90.0"
-msgstr "+ 90.0"
+msgstr "+90°"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:57
 msgid "- 90.0"
-msgstr "- 90.0"
+msgstr "−90°"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:57
 msgid "180.0"
-msgstr "180.0"
+msgstr "180°"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:63
 msgid "Orientation (in 0.1 degrees)"
-msgstr "Ориентация (в 0.1 град.)"
+msgstr "Ориентация (шаг 0.1°)"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:95
 msgid "Change Module(s)"
@@ -12784,7 +12785,7 @@ msgstr "Имя слоя содержит недопустимые символы
 
 #: pcbnew/dialog_layers_setup.cpp:672
 msgid "'signal' is a reserved layer name"
-msgstr "'сигнал' зарезервированное имя слоя"
+msgstr "signal — зарезервированное имя слоя"
 
 #: pcbnew/dialog_layers_setup.cpp:681
 msgid "Layer name is a duplicate of another"
@@ -12797,7 +12798,7 @@ msgstr "Печать посадочных мест"
 #: pcbnew/dialog_print_for_modedit_base.cpp:22
 #: pcbnew/dialog_plot_base.cpp:91
 msgid "Scale 1"
-msgstr "Масштаб 1.0"
+msgstr "Масштаб 1"
 
 #: pcbnew/dialog_print_for_modedit_base.cpp:22
 msgid "Scale 8"
@@ -13200,7 +13201,7 @@ msgstr "Авто масштаб"
 
 #: pcbnew/dialog_plot_base.cpp:91
 msgid "Scale 1.5"
-msgstr "Масштаб 1.5"
+msgstr "Масштаб 1,5"
 
 #: pcbnew/dialog_plot_base.cpp:93
 msgid "Scale Opt"
@@ -13256,11 +13257,11 @@ msgstr "Размер пера"
 
 #: pcbnew/dialog_plot_base.cpp:130
 msgid "Pen Speed (cm/s)"
-msgstr "Скорость пера (см/сек)"
+msgstr "Скорость пера (см/с)"
 
 #: pcbnew/dialog_plot_base.cpp:135
 msgid "Set pen speed in cm/s"
-msgstr "Установить скорость пера в см/сек"
+msgstr "Установить скорость пера в см/с"
 
 #: pcbnew/dialog_plot_base.cpp:139
 msgid "Pen ovr"
@@ -13296,7 +13297,7 @@ msgstr "Подстройка масштаба X"
 
 #: pcbnew/dialog_plot_base.cpp:195
 msgid "Y scale adjust"
-msgstr "Подстройка масштаба X"
+msgstr "Подстройка масштаба Y"
 
 #: pcbnew/dialog_plot_base.cpp:209
 msgid "Save Options"
@@ -13308,7 +13309,7 @@ msgstr "Создать файла сверловки:"
 
 #: pcbnew/dialog_freeroute_exchange_base.cpp:25
 msgid "Export/Import to/from FreeRoute:"
-msgstr "Экспорт/Импорт в/из FreeRoute:"
+msgstr "Экспорт / импорт FreeRoute:"
 
 #: pcbnew/dialog_freeroute_exchange_base.cpp:40
 msgid "Export a Specctra Design (*.dsn) File"
@@ -13638,11 +13639,11 @@ msgstr "Ширина текста модуля"
 
 #: pcbnew/dialog_graphic_items_options_base.cpp:79
 msgid "Text Module Size V"
-msgstr "Гориз.размер текста модуля"
+msgstr "Гориз. размер текста модуля"
 
 #: pcbnew/dialog_graphic_items_options_base.cpp:86
 msgid "Text Module Size H"
-msgstr "Верт.размер текста модуля"
+msgstr "Верт. размер текста модуля"
 
 #: pcbnew/dialog_graphic_items_options_base.cpp:96
 msgid "General:"
