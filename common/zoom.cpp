@@ -247,10 +247,10 @@ void WinEDA_DrawFrame::AddMenuZoomAndGrid( wxMenu* MasterMenu )
             else
             {
                 if( g_UnitMetric == 0 )     // inches
-                    msg.Printf( wxT( "%.1f mils\t(%.3f mm)" ),
+                    msg.Printf( wxT( "%.1f mils, (%.3f mm)" ),
                                 gridValueInch * 1000, gridValue_mm );
                 else
-                    msg.Printf( wxT( "%.3f mm\t(%.1f mils)" ),
+                    msg.Printf( wxT( "%.3f mm, (%.1f mils)" ),
                                 gridValue_mm, gridValueInch * 1000 );
             }
             gridMenu->Append( tmp.m_Id, msg, wxEmptyString, true );
