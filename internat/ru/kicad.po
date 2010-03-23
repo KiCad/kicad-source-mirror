@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-01 23:07+0300\n"
-"PO-Revision-Date: 2010-03-22 21:11+0100\n"
+"PO-Revision-Date: 2010-03-23 14:12+0100\n"
 "Last-Translator: Vladimir Uryvaev <vovanium@gmail.com>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "MIME-Version: 1.0\n"
@@ -41,7 +41,7 @@ msgstr "Операция записи файла не удалась."
 
 #: eeschema/files-io.cpp:71
 msgid "Clear schematic hierarchy?"
-msgstr "Очистить  иерархию схемы?"
+msgstr "Очистить иерархию схемы?"
 
 #: eeschema/files-io.cpp:80
 msgid "Open Schematic"
@@ -403,70 +403,70 @@ msgstr "текст имеет только %d параметров из треб
 #: eeschema/classes_body_items.cpp:1691
 #: eeschema/classes_body_items.cpp:2061
 msgid "Line width"
-msgstr "Ширина линии"
+msgstr "Толщина линии"
 
 #: eeschema/plothpgl.cpp:203
 msgid "Sheet Size"
-msgstr "Размер листа"
+msgstr "формат листа"
 
 #: eeschema/plothpgl.cpp:204
 #: eeschema/plotps.cpp:165
 msgid "Page Size A4"
-msgstr "Размер страницы A4"
+msgstr "A4"
 
 #: eeschema/plothpgl.cpp:205
 msgid "Page Size A3"
-msgstr "Размер страницы A3"
+msgstr "A3"
 
 #: eeschema/plothpgl.cpp:206
 msgid "Page Size A2"
-msgstr "Размер страницы A2"
+msgstr "A2"
 
 #: eeschema/plothpgl.cpp:207
 msgid "Page Size A1"
-msgstr "Размер страницы A1"
+msgstr "A1"
 
 #: eeschema/plothpgl.cpp:208
 msgid "Page Size A0"
-msgstr "Размер страницы A0"
+msgstr "A0"
 
 #: eeschema/plothpgl.cpp:209
 #: eeschema/plotps.cpp:166
 msgid "Page Size A"
-msgstr "Размер страницы A"
+msgstr "A"
 
 #: eeschema/plothpgl.cpp:210
 msgid "Page Size B"
-msgstr "Размер страницы B"
+msgstr "B"
 
 #: eeschema/plothpgl.cpp:211
 msgid "Page Size C"
-msgstr "Размер страницы C"
+msgstr "C"
 
 #: eeschema/plothpgl.cpp:212
 msgid "Page Size D"
-msgstr "Размер страницы D"
+msgstr "D"
 
 #: eeschema/plothpgl.cpp:213
 msgid "Page Size E"
-msgstr "Размер страницы E"
+msgstr "E"
 
 #: eeschema/plothpgl.cpp:215
 #: eeschema/plotps.cpp:168
 msgid "Plot page size:"
-msgstr "Размер страницы черчения:"
+msgstr "Формат страницы:"
 
 #: eeschema/plothpgl.cpp:225
 msgid "Pen control:"
-msgstr "Контроль пера:"
+msgstr "Настройка пера:"
 
 #: eeschema/plothpgl.cpp:235
 msgid "Pen Width ( mils )"
-msgstr "Толщина пера ( mils )"
+msgstr "Толщина пера (мил)"
 
 #: eeschema/plothpgl.cpp:257
 msgid "Pen Speed ( cm/s )"
-msgstr "Скорость пера ( см/сек )"
+msgstr "Скорость пера (см/с)"
 
 #: eeschema/plothpgl.cpp:279
 #: pcbnew/dialog_gendrill.cpp:234
@@ -479,11 +479,11 @@ msgstr "Смещение страницы:"
 
 #: eeschema/plothpgl.cpp:306
 msgid "Plot Offset X"
-msgstr "Смещение чертежа по оси X"
+msgstr "по горизонтали"
 
 #: eeschema/plothpgl.cpp:326
 msgid "Plot Offset Y"
-msgstr "Смещение чертежа по оси Y"
+msgstr "по вертикали"
 
 #: eeschema/plothpgl.cpp:353
 #: eeschema/plotdxf.cpp:185
@@ -543,7 +543,7 @@ msgstr ""
 #: eeschema/class_library.cpp:206
 #, c-format
 msgid "Cannot add duplicate alias <%s> to library <%s>."
-msgstr "Нельзя добавлять дубликат псевдонима <%s> в библиотеку <%s>."
+msgstr "Нельзя добавлять повторяющийся псевдоним <%s> в библиотеку <%s>."
 
 #: eeschema/class_library.cpp:263
 msgid "not found"
@@ -582,7 +582,7 @@ msgstr "Файл пуст!"
 
 #: eeschema/class_library.cpp:582
 msgid "The file is NOT an EESCHEMA library!"
-msgstr "Файл не является библиотекой eeschema!"
+msgstr "Файл не является библиотекой Eeschema!"
 
 #: eeschema/class_library.cpp:588
 msgid "The file header is missing version and time stamp information."
@@ -622,11 +622,11 @@ msgstr "Необходимо обозначить компоненты!"
 
 #: eeschema/erc.cpp:379
 msgid "ERC File"
-msgstr "Файл ERC"
+msgstr "Файл проверки электрических правил (ERC)"
 
 #: eeschema/erc.cpp:380
 msgid "Electronic rule check file (.erc)|*.erc"
-msgstr "Electronic rule check file (.erc)|*.erc"
+msgstr "Файлы проверки электрических правил (.erc)|*.erc"
 
 #: eeschema/erc.cpp:430
 #, c-format
@@ -1018,11 +1018,11 @@ msgstr "Загрузка "
 #: eeschema/load_one_schematic_file.cpp:82
 #: eeschema/load_one_schematic_file.cpp:113
 msgid " is NOT an EESchema file!"
-msgstr "это файл НЕ Eeschema!"
+msgstr " это файл НЕ Eeschema!"
 
 #: eeschema/load_one_schematic_file.cpp:93
 msgid " was created by a more recent version of EESchema and may not load correctly. Please consider updating!"
-msgstr "создан новой версией EESchema и будет загружен некорректно. Пожалуйста подумайте об обновлении KiCAD!"
+msgstr " создан новой версией EESchema и будет загружен некорректно. Пожалуйста подумайте об обновлении KiCAD!"
 
 #: eeschema/load_one_schematic_file.cpp:102
 msgid " was created by an older version of EESchema. It will be stored in the new file format when you save this file again."
@@ -1502,12 +1502,12 @@ msgstr " в элементе %c"
 #: eeschema/pinedit.cpp:714
 #: eeschema/pinedit.cpp:753
 msgid "  of converted"
-msgstr "  конверт."
+msgstr " (дополнительный вид)"
 
 #: eeschema/pinedit.cpp:716
 #: eeschema/pinedit.cpp:755
 msgid "  of normal"
-msgstr "  норм."
+msgstr " (нормальный вид)"
 
 #: eeschema/pinedit.cpp:737
 #, c-format
@@ -1520,7 +1520,7 @@ msgstr "Дубликатов выводов и выводов, располож�
 
 #: eeschema/eeschema.cpp:135
 msgid "Eeschema is already running, Continue?"
-msgstr "Eeschema уже запущена. Продолжить ?"
+msgstr "Eeschema уже запущена. Продолжить?"
 
 #: eeschema/edit_component_in_schematic.cpp:35
 msgid "No Field to move"
@@ -1657,19 +1657,19 @@ msgstr "Вращать +"
 #: eeschema/onrightclick.cpp:299
 #: pcbnew/onrightclick.cpp:641
 msgid "Rotate -"
-msgstr "Повернуть -"
+msgstr "Вращать −"
 
 #: eeschema/onrightclick.cpp:300
 msgid "Mirror --"
-msgstr "Зеркалирование --"
+msgstr "Отражение —"
 
 #: eeschema/onrightclick.cpp:303
 msgid "Mirror ||"
-msgstr "Зеркалирование ||"
+msgstr "Отражение |"
 
 #: eeschema/onrightclick.cpp:311
 msgid "Orient Component"
-msgstr "Ориент. компонента"
+msgstr "Ориентация компонента"
 
 #: eeschema/onrightclick.cpp:314
 #: pcbnew/modedit_onclick.cpp:321
@@ -1724,7 +1724,7 @@ msgstr "Вращать глобальную метку"
 
 #: eeschema/onrightclick.cpp:399
 msgid "Edit Global Label"
-msgstr "Правка глоб.метки"
+msgstr "Правка глобальной метки"
 
 #: eeschema/onrightclick.cpp:403
 msgid "Delete Global Label"
@@ -1734,7 +1734,7 @@ msgstr "Удалить глобальную метку"
 #: eeschema/onrightclick.cpp:497
 #: eeschema/onrightclick.cpp:548
 msgid "Change to Hierarchical Label"
-msgstr "Изменить на иерарх.метку"
+msgstr "Изменить на иерархическую метку"
 
 #: eeschema/onrightclick.cpp:412
 #: eeschema/onrightclick.cpp:454
@@ -1757,25 +1757,25 @@ msgstr "Изменить тип"
 
 #: eeschema/onrightclick.cpp:428
 msgid "Move Hierarchical Label"
-msgstr "Переместить иерарх.метку"
+msgstr "Переместить иерархическую метку"
 
 #: eeschema/onrightclick.cpp:433
 msgid "Copy Hierarchical Label"
-msgstr "Копировать иерарх.метку"
+msgstr "Копировать иерархическую метку"
 
 #: eeschema/onrightclick.cpp:439
 #: eeschema/onrightclick.cpp:442
 msgid "Rotate Hierarchical Label"
-msgstr "Вращать иерарх.метку"
+msgstr "Вращать иерархическую метку"
 
 #: eeschema/onrightclick.cpp:443
 #: eeschema/onrightclick.cpp:446
 msgid "Edit Hierarchical Label"
-msgstr "Правка иерарх.метки"
+msgstr "Правка иерархической метки"
 
 #: eeschema/onrightclick.cpp:447
 msgid "Delete Hierarchical Label"
-msgstr "Удалить иерарх.метку"
+msgstr "Удалить иерархическую метку"
 
 #: eeschema/onrightclick.cpp:458
 #: eeschema/onrightclick.cpp:501
@@ -1824,7 +1824,7 @@ msgstr "Удалить текст"
 
 #: eeschema/onrightclick.cpp:552
 msgid "Change to Glabel"
-msgstr "Изменить на глоб.метку"
+msgstr "Изменить на глобальную метку"
 
 #: eeschema/onrightclick.cpp:571
 #: eeschema/onrightclick.cpp:618
@@ -1971,7 +1971,7 @@ msgstr "Свойства выводов листа:"
 #: pcbnew/dialog_exchange_modules_base.cpp:62
 #: pcbnew/dialog_design_rules_base.cpp:373
 msgid "OK"
-msgstr "OK"
+msgstr "Oк"
 
 #: eeschema/sheetlab.cpp:86
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:28
@@ -2060,7 +2060,7 @@ msgstr "Свойства для"
 
 #: eeschema/dialog_edit_component_in_lib.cpp:60
 msgid " (alias of "
-msgstr "(псевдоним "
+msgstr " (псевдоним "
 
 #: eeschema/dialog_edit_label.cpp:74
 msgid "Global Label Properties"
@@ -2084,7 +2084,7 @@ msgstr "Свойства текста"
 
 #: eeschema/dialog_edit_label.cpp:200
 msgid "Empty Text!"
-msgstr "Текст пустой!"
+msgstr "Текст пуст!"
 
 #: eeschema/tool_lib.cpp:38
 msgid "Deselect current tool"
@@ -2500,7 +2500,7 @@ msgstr "Авто"
 
 #: eeschema/plotps.cpp:256
 msgid "Default Line Width"
-msgstr "Исходная ширина линии"
+msgstr "Толщина линии по умолчанию"
 
 #: eeschema/netlist_control.cpp:126
 #: eeschema/dialog_build_BOM_base.cpp:20
@@ -2529,7 +2529,7 @@ msgstr "Список цепей"
 
 #: eeschema/netlist_control.cpp:156
 msgid "&Ok"
-msgstr "OK"
+msgstr "Oк"
 
 #: eeschema/netlist_control.cpp:161
 msgid "&Delete"
@@ -3007,19 +3007,19 @@ msgstr "Разместить вывод листа, созданный при и
 
 #: eeschema/menubar.cpp:353
 msgid "Add Hierarchical Pin to Sheet"
-msgstr "Добавить иерарх.вывод на лист"
+msgstr "Добавить иерархический вывод на лист"
 
 #: eeschema/menubar.cpp:354
 msgid "Place a hierarchical pin to sheet"
-msgstr "Разместить иерарх.вывод на листе"
+msgstr "Разместить иерархический вывод на листе"
 
 #: eeschema/menubar.cpp:364
 msgid "Graphic line or polygon"
-msgstr "Граф.линия или полигон"
+msgstr "Графичская линия или многоугольник"
 
 #: eeschema/menubar.cpp:365
 msgid "Place graphic lines or polygons"
-msgstr "Разместить графические линии или полигоны"
+msgstr "Разместить графические линии или многоугольники"
 
 #: eeschema/menubar.cpp:372
 msgid "Graphic text"
@@ -3027,7 +3027,7 @@ msgstr "Графический текст"
 
 #: eeschema/menubar.cpp:373
 msgid "Place graphic text for comment"
-msgstr "Разместить граф.текст (для комментария)"
+msgstr "Разместить графический текст (для комментария)"
 
 #: eeschema/menubar.cpp:386
 #: pcbnew/menubar_pcbframe.cpp:367
@@ -3224,7 +3224,7 @@ msgstr "Общие"
 
 #: eeschema/dialog_lib_edit_draw_item_base.cpp:34
 msgid "&Width:"
-msgstr "Ширина:"
+msgstr "Толщина:"
 
 #: eeschema/dialog_lib_edit_draw_item_base.cpp:44
 #: common/drawframe.cpp:332
@@ -3633,7 +3633,7 @@ msgstr "Применить"
 #: eeschema/symbdraw.cpp:1050
 #, c-format
 msgid "Arc %.1f deg"
-msgstr "Arc %.1f deg"
+msgstr "Дуга %.1f°"
 
 #: eeschema/classes_body_items.cpp:35
 msgid "Undefined"
@@ -3695,21 +3695,21 @@ msgstr "Прямоугольник"
 #: eeschema/classes_body_items.cpp:856
 #, c-format
 msgid "rectangle only had %d parameters of the required 7"
-msgstr "прямоугольник имеет только %d параметра из требуемых 7"
+msgstr "прямоугольник имеет только %d из 7 требуемых параметров"
 
 #: eeschema/classes_body_items.cpp:1107
 #: pcbnew/class_drawsegment.cpp:398
 msgid "Segment"
-msgstr "Сегмент"
+msgstr "Отрезок"
 
 #: eeschema/classes_body_items.cpp:1327
 msgid "PolyLine"
-msgstr "Полилиния"
+msgstr "Ломаная"
 
 #: eeschema/classes_body_items.cpp:1371
 #, c-format
 msgid "polyline only had %d parameters of the required 4"
-msgstr "полилиния имеет только %d параметров из требуемых 4"
+msgstr "полилиния имеет только %d из 4 требуемых параметров"
 
 #: eeschema/classes_body_items.cpp:1376
 #, c-format
@@ -3733,7 +3733,7 @@ msgstr "Кривая Безье"
 #: eeschema/classes_body_items.cpp:1754
 #, c-format
 msgid "Bezier only had %d parameters of the required 4"
-msgstr "кривая Безье имеет только %d параметра из требуемых 4"
+msgstr "кривая Безье имеет только %d из 4 требуемых параметров"
 
 #: eeschema/classes_body_items.cpp:1759
 #, c-format
@@ -3743,12 +3743,12 @@ msgstr "количество параметров кривой Безье (%d) �
 #: eeschema/classes_body_items.cpp:1774
 #, c-format
 msgid "Bezier point %d X position not defined"
-msgstr "точка %d кривой Безье - позиция X не задана"
+msgstr "Точка %d кривой Безье — координата X не задана"
 
 #: eeschema/classes_body_items.cpp:1780
 #, c-format
 msgid "Bezier point %d Y position not defined"
-msgstr "точка %d кривой Безье - позиция Y не задана"
+msgstr "Точка %d кривой Безье — координата Y не задана"
 
 #: eeschema/class_pin.cpp:30
 #: eeschema/dialog_edit_label_base.cpp:37
@@ -4006,21 +4006,21 @@ msgstr "0"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:39
 msgid "+90"
-msgstr "+90"
+msgstr "+90°"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:39
 #: pcbnew/dialog_pad_properties_base.cpp:206
 msgid "180"
-msgstr "180"
+msgstr "180°"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:39
 #: pcbnew/dialog_pad_properties_base.cpp:206
 msgid "-90"
-msgstr "-90"
+msgstr "−90°"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:41
 msgid "Orientation (Degrees)"
-msgstr "Ориентация (град.)"
+msgstr "Ориентация"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:43
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:60
@@ -4029,11 +4029,11 @@ msgstr "Выбрать, если компонент нужно повернут�
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:52
 msgid "Mirror ---"
-msgstr "Зеркалирование ---"
+msgstr "Отражение —"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:52
 msgid "Mirror |"
-msgstr "Зеркалирование |"
+msgstr "Отражение |"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:54
 #: gerbview/dialog_print_using_printer_base.cpp:72
@@ -4045,7 +4045,7 @@ msgstr "Зеркалирование |"
 #: pcbnew/dialog_pcb_text_properties.cpp:169
 #: pcbnew/dialog_print_using_printer_base.cpp:94
 msgid "Mirror"
-msgstr "Зеркально"
+msgstr "Отражение"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:56
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:73
@@ -4202,21 +4202,21 @@ msgstr "Размер текста выбранных полей на схеме"
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:194
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:157
 msgid "PosX(\")"
-msgstr "PosX(\")"
+msgstr "Поз.X(\")"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:199
 msgid "The X coordinate of the text relative to the component"
-msgstr "X координата текста относительно компонента"
+msgstr "Координата X текста относительно компонента"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:208
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:169
 msgid "PosY(\")"
-msgstr "PosY(\")"
+msgstr "Поз.Y(\")"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:213
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:174
 msgid "The Y coordinate of the text relative to the component"
-msgstr "Y координата текста относительно компонента"
+msgstr "Координата X текста относительно компонента"
 
 #: eeschema/dialog_edit_component_in_schematic_fbp.cpp:224
 msgid "Reset to Library Defaults"
@@ -4249,7 +4249,7 @@ msgstr "неверный номер поля"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:57
 msgid " Text Options : "
-msgstr "Параметры текста :"
+msgstr " Параметры текста:"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:59
 msgid "Vertical"
@@ -4257,11 +4257,11 @@ msgstr "Верт."
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:66
 msgid "Common to Units"
-msgstr "Общий для элементов"
+msgstr "Для всех элементов"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:70
 msgid "Common to convert"
-msgstr "Общий для конвертир."
+msgstr "Для всех обозначений"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:78
 msgid "Text Shape:"
@@ -4270,39 +4270,43 @@ msgstr "Вид текста:"
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:82
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:56
 msgid "Align left"
-msgstr "Выровнять влево"
+msgstr "влево"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:82
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:88
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:56
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:69
 msgid "Align center"
-msgstr "Выровнять по центру"
+msgstr "по центру"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:82
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:56
 msgid "Align right"
-msgstr "Выровнять вправо"
+msgstr "вправо"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:84
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:58
 msgid "Horiz. Justify"
-msgstr "Гориз. выравнивание"
+msgstr ""
+"Горизонтальное\n"
+"выравнивание"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:88
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:69
 msgid "Align bottom"
-msgstr "Выровнять вниз"
+msgstr "вниз"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:88
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:69
 msgid "Align top"
-msgstr "Выровнять вверх"
+msgstr "вверх"
 
 #: eeschema/dialog_bodygraphictext_properties_base.cpp:90
 #: eeschema/dialog_edit_libentry_fields_in_lib_base.cpp:71
 msgid "Vert. Justify"
-msgstr "Выровнять по вертикали"
+msgstr ""
+"Вертертикальное\n"
+"выравнивание"
 
 #: eeschema/dialog_edit_libentry_fields_in_lib.cpp:226
 #, c-format
@@ -4327,7 +4331,7 @@ msgstr "%8.8lX/"
 #: eeschema/dialog_SVG_print_base.cpp:23
 #: pcbnew/dialog_SVG_print_base.cpp:36
 msgid "Print SVG options:"
-msgstr "Печать параметров SVG:"
+msgstr "Параметры вывода SVG:"
 
 #: eeschema/dialog_SVG_print_base.cpp:25
 msgid "Default Pen Size"
@@ -4373,7 +4377,7 @@ msgstr "Печатать (или нет) рамку листа"
 
 #: eeschema/dialog_SVG_print_base.cpp:53
 msgid "Print Current"
-msgstr "Печать на текущем принтере"
+msgstr "Печатать текущий лист"
 
 #: eeschema/dialog_SVG_print_base.cpp:56
 msgid "Print All"
@@ -4482,7 +4486,7 @@ msgstr "Компоненты по обозначению"
 
 #: eeschema/dialog_build_BOM_base.cpp:29
 msgid "Sub components (i.e. U2A, U2B ...)"
-msgstr "Субкомпоненты (т.е. DD1.1, DD1.2 ...)"
+msgstr "Элементы (т.е. DD1.1, DD1.2 ...)"
 
 #: eeschema/dialog_build_BOM_base.cpp:33
 msgid "Components by value"
@@ -4579,7 +4583,7 @@ msgstr "Все поля, заданные пользователем"
 #: eeschema/dialog_build_BOM_base.cpp:131
 #: pcbnew/dialog_copper_zones_base.cpp:154
 msgid "Ok"
-msgstr "OK"
+msgstr "Oк"
 
 #: eeschema/dialog_eeschema_config_fbp.cpp:20
 msgid "Component library files"
@@ -4654,7 +4658,7 @@ msgstr "Выгрузить выбранную библиотеку"
 
 #: eeschema/dialog_eeschema_config_fbp.cpp:51
 msgid "User defined search path"
-msgstr "Заданный пользователем путь поиска"
+msgstr "Пользовательские пути поиска"
 
 #: eeschema/dialog_eeschema_config_fbp.cpp:54
 #: cvpcb/dialog_cvpcb_config_fbp.cpp:99
@@ -4763,7 +4767,7 @@ msgstr "Символ питания"
 
 #: eeschema/class_sch_component.cpp:1125
 msgid "Alias of"
-msgstr "Псевдоним"
+msgstr "Оригинал"
 
 #: eeschema/class_sch_component.cpp:1126
 #: pcbnew/librairi.cpp:416
@@ -4772,7 +4776,7 @@ msgstr "Библитека"
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:25
 msgid "General :"
-msgstr "Общие :"
+msgstr "Общие:"
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:29
 #: eeschema/dialog_lib_new_component_base.cpp:105
@@ -4883,7 +4887,7 @@ msgstr "Имя файла документации (pdf документ), св�
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:145
 msgid "Copy Doc"
-msgstr "Копировать Doc"
+msgstr "Копировать документ"
 
 #: eeschema/dialog_edit_component_in_lib_base.cpp:148
 msgid "Browse DocFiles"
@@ -4981,7 +4985,7 @@ msgstr "Смещение текста вывода:"
 #: eeschema/dialog_eeschema_options_base.cpp:88
 #: eeschema/dialog_eeschema_options_base.cpp:99
 msgid "mils"
-msgstr "mils"
+msgstr "мил"
 
 #: eeschema/dialog_lib_new_component_base.cpp:178
 msgid "Show pin n&umber text"
@@ -5021,11 +5025,11 @@ msgstr "Порядок обозначения"
 
 #: eeschema/dialog_annotate_base.cpp:63
 msgid "Sort Components by &X Position"
-msgstr "Сортировка компонентов по X-координате"
+msgstr "Сортировка компонентов по координате X"
 
 #: eeschema/dialog_annotate_base.cpp:77
 msgid "Sort Components by &Y Position"
-msgstr "Сортировка компонентов по Y-координате"
+msgstr "Сортировка компонентов по координате Y"
 
 #: eeschema/dialog_annotate_base.cpp:91
 msgid "Sort Components by &Value"
@@ -5109,11 +5113,11 @@ msgstr "Шаг сетки:"
 
 #: eeschema/dialog_eeschema_options_base.cpp:59
 msgid "Default &line width:"
-msgstr "Исходная ширина линии:"
+msgstr "Толщина линии по умолчанию:"
 
 #: eeschema/dialog_eeschema_options_base.cpp:70
 msgid "Default text &size:"
-msgstr "Исходный размер текста:"
+msgstr "Размер шрифта по умолчанию:"
 
 #: eeschema/dialog_eeschema_options_base.cpp:81
 msgid "Repeat draw item &horizontal displacement:"
@@ -5383,7 +5387,7 @@ msgstr "О программе cvpcd - переход от схемы к печа
 #: cvpcb/writenetlistpcbnew.cpp:52
 #, c-format
 msgid "Component %s %s pin %s : Different Nets"
-msgstr "Компонент %s %s вывод %s : Разные цепи"
+msgstr "Компонент %s %s вывод %s: разные цепи"
 
 #: cvpcb/cvpcb.cpp:32
 msgid "Kicad retroannotation files (*.stf)|*.stf"
@@ -5822,11 +5826,11 @@ msgstr ""
 
 #: kicad/files-io.cpp:59
 msgid "Target Directory"
-msgstr "Папка назначения"
+msgstr "Директория назначения"
 
 #: kicad/files-io.cpp:66
 msgid "Unzipping project in "
-msgstr "Распаковать проект в "
+msgstr "Распаковка проекта в "
 
 #: kicad/files-io.cpp:86
 msgid "Extract file "
@@ -5834,11 +5838,11 @@ msgstr "Извлечь файл "
 
 #: kicad/files-io.cpp:95
 msgid " OK\n"
-msgstr "ОК\n"
+msgstr " ОК\n"
 
 #: kicad/files-io.cpp:98
 msgid " *ERROR*\n"
-msgstr "*ОШИБКА*\n"
+msgstr " *ОШИБКА*\n"
 
 #: kicad/files-io.cpp:119
 msgid "Archive Project Files"
@@ -5999,7 +6003,7 @@ msgstr "Удалить файл"
 
 #: gerbview/gerbview_config.cpp:114
 msgid "Save GerbView Project File"
-msgstr "Сохранить файл проекта GrbView"
+msgstr "Сохранить файл проекта GerbView"
 
 #: gerbview/files.cpp:60
 msgid "Cannot increment layer number: max count reached"
@@ -6015,11 +6019,11 @@ msgstr "Файлы Gerber (.gb* .gt* .lgr .ger .pho)"
 
 #: gerbview/files.cpp:126
 msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
-msgstr "Top layer (*.GTL)|*.GTL;*.gtl|"
+msgstr "Верхний слой (*.GTL)|*.GTL;*.gtl|"
 
 #: gerbview/files.cpp:127
 msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
-msgstr "Bottom layer (*.GBL)|*.GBL;*.gbl|"
+msgstr "Нижний слой (*.GBL)|*.GBL;*.gbl|"
 
 #: gerbview/files.cpp:128
 msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
@@ -6039,19 +6043,19 @@ msgstr "Top overlay (*.GTO)|*.GTO;*.gto|"
 
 #: gerbview/files.cpp:132
 msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
-msgstr "Bottom paste (*.GBP)|*.GBP;*.gbp|"
+msgstr "Паяльная паста нижнего слоя (*.GBP)|*.GBP;*.gbp|"
 
 #: gerbview/files.cpp:133
 msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
-msgstr "Top paste (*.GTP)|*.GTP;*.gtp|"
+msgstr "Паяльная паста верхнего слоя (*.GTP)|*.GTP;*.gtp|"
 
 #: gerbview/files.cpp:134
 msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
-msgstr "Keep-out layer (*.GKO)|*.GKO;*.gko|"
+msgstr "Слой запретных зон (*.GKO)|*.GKO;*.gko|"
 
 #: gerbview/files.cpp:135
 msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
-msgstr "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
+msgstr "Механические слои (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 
 #: gerbview/files.cpp:136
 msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
@@ -6412,11 +6416,11 @@ msgstr "Показать полярные координаты"
 
 #: gerbview/tool_gerber.cpp:291
 msgid "Set units to inches"
-msgstr "Дюймы"
+msgstr "Измерять в дюймах"
 
 #: gerbview/tool_gerber.cpp:295
 msgid "Set units to millimeters"
-msgstr "Миллиметры"
+msgstr "Измерять в миллиметрах"
 
 #: gerbview/tool_gerber.cpp:304
 msgid "Show spots in sketch mode"
@@ -6458,7 +6462,7 @@ msgstr "Имя файла платы:"
 
 #: gerbview/export_to_pcbnew.cpp:68
 msgid "Ok to change the existing file ?"
-msgstr "ОК - Изменить существующий файл?"
+msgstr "Изменить существующий файл?"
 
 #: gerbview/gerberframe.cpp:186
 #: gerbview/gerberframe.cpp:496
@@ -6681,7 +6685,7 @@ msgstr "Режим печати"
 #: gerbview/dialog_print_using_printer_base.cpp:86
 #: pcbnew/dialog_print_using_printer_base.cpp:119
 msgid "1 Page per Layer"
-msgstr "1 стр. на слой"
+msgstr "По странице на слой"
 
 #: gerbview/dialog_print_using_printer_base.cpp:86
 #: pcbnew/dialog_print_using_printer_base.cpp:119
@@ -6724,13 +6728,13 @@ msgstr "Слой"
 #: pcbnew/pcbplot.cpp:563
 #: pcbnew/dialog_print_using_printer.cpp:372
 msgid "Warning: Scale option set to a very large value"
-msgstr "Предупреждение: Установлен очень большой масштаб"
+msgstr "Осторожно! Установлен очень большой масштаб"
 
 #: gerbview/dialog_print_using_printer.cpp:321
 #: pcbnew/pcbplot.cpp:560
 #: pcbnew/dialog_print_using_printer.cpp:380
 msgid "Warning: Scale option set to a very small value"
-msgstr "Предупреждение: Установлен очень маленький масштаб"
+msgstr "Осторожно! Установлен очень маленький масштаб"
 
 #: gerbview/dialog_print_using_printer.cpp:346
 #: pcbnew/dialog_print_using_printer.cpp:434
@@ -6843,7 +6847,7 @@ msgid ""
 "Current hotkey list:\n"
 "\n"
 msgstr ""
-"Текущий список \"горячих\" клавиш:\n"
+"Текущий список горячих клавиш:\n"
 "\n"
 
 #: common/hotkeys_basic.cpp:392
@@ -6872,55 +6876,55 @@ msgstr "Список текущих клавиш"
 
 #: common/hotkeys_basic.cpp:699
 msgid "Displays the current hotkeys list and corresponding commands"
-msgstr "Показать текущий список \"горячих\" клавиш и соответствующих команд"
+msgstr "Показать текущий список горячих клавиш и соответствующих команд"
 
 #: common/hotkeys_basic.cpp:705
 msgid "(Re)create Hotkeys File"
-msgstr "(Пере)создать файл \"горячих\" клавиш"
+msgstr "(Пере)создать файл горячих клавиш"
 
 #: common/hotkeys_basic.cpp:707
 msgid "Create or recreate the hotkey configuration file from current hotkey list"
-msgstr "Создать или пересоздать файл \"горячих\" клавиш из текущего списка"
+msgstr "Создать или пересоздать файл горячих клавиш из текущего списка"
 
 #: common/hotkeys_basic.cpp:714
 msgid "Reload Hotkeys File"
-msgstr "Перечитать файл \"горячих\" клавиш"
+msgstr "Перезагрузить горячие клавиши"
 
 #: common/hotkeys_basic.cpp:715
 msgid "Reload the hotkey configuration file"
-msgstr "Открыть заново файл конфигурации \"горячих\" клавиш"
+msgstr "Перезагрузить файл конфигурации горячих клавиш"
 
 #: common/hotkeys_basic.cpp:721
 msgid "Edit Hotkeys File"
-msgstr "Редактировать файл \"горячих\" клавиш"
+msgstr "Редактировать горячие клавиши"
 
 #: common/hotkeys_basic.cpp:722
 msgid "Edit the hotkey configuration file in a text editor"
-msgstr "Править файл \"горячих\" клавиш в текстовом редакторе"
+msgstr "Править файл горячих клавиш в текстовом редакторе"
 
 #: common/hotkeys_basic.cpp:728
 msgid "Hotkeys"
-msgstr "\"Горячие\" клавиши"
+msgstr "Горячие клавиши"
 
 #: common/hotkeys_basic.cpp:729
 msgid "Hotkeys configuration and preferences"
-msgstr "Конфигурация \"горячих\" клавиш"
+msgstr "Настройка горячих клавиш"
 
 #: common/hotkeys_basic.cpp:737
 msgid "Home directory"
-msgstr "Домашняя папка"
+msgstr "Домашняя директория"
 
 #: common/hotkeys_basic.cpp:738
 msgid "Use home directory to load or store Hotkey config files"
-msgstr "Использовать \"домашнюю\" директорию для загрузки и сохранения файла \"горячих\" клавиш"
+msgstr "Использовать домашнюю (личную) директорию для загрузки и сохранения файла горячих клавиш"
 
 #: common/hotkeys_basic.cpp:745
 msgid "KiCad template directory"
-msgstr "KiCad template директория"
+msgstr "Директория шаблонов KiCad"
 
 #: common/hotkeys_basic.cpp:746
 msgid "Use kicad/template directory to load or store Hotkey config files"
-msgstr "Использовать kicad/template директорию для загрузки и сохранения файла \"горячих\" клавиш"
+msgstr "Использовать директорию kicad/template для загрузки и сохранения файла горячих клавиш"
 
 #: common/hotkeys_basic.cpp:752
 msgid "Location"
@@ -6928,7 +6932,7 @@ msgstr "Расположение"
 
 #: common/hotkeys_basic.cpp:753
 msgid "Select hotkey configuration file location"
-msgstr "Выбор размещения файла конфигурации \"горячих\" клавиш"
+msgstr "Выбор размещения файла конфигурации горячих клавиш"
 
 #: common/common.cpp:60
 msgid "Kicad project files (*.pro)|*.pro"
@@ -8670,7 +8674,7 @@ msgstr "NETCLASS: '%s' имеет зазор:%s меньше, чем глоба�
 #: pcbnew/drc.cpp:340
 #, c-format
 msgid "NETCLASS: '%s' has TrackWidth:%s which is less than global:%s"
-msgstr "NETCLASS: '%s' - ширина дорожки:%s меньше глобальной:%s"
+msgstr "NETCLASS: '%s' - толщина дорожки:%s меньше глобальной:%s"
 
 #: pcbnew/drc.cpp:354
 #, c-format
@@ -9270,11 +9274,11 @@ msgstr "Графический элемент на медном слое. Это
 
 #: pcbnew/edgemod.cpp:219
 msgid "New Width (1/10000\"):"
-msgstr "Новая ширина (1/10000\"):"
+msgstr "Новая толщина (1/10000\"):"
 
 #: pcbnew/edgemod.cpp:219
 msgid "Edge Width"
-msgstr "Ширина контура"
+msgstr "Толщина контура"
 
 #: pcbnew/edgemod.cpp:227
 msgid "Incorrect number, no change"
@@ -9499,7 +9503,7 @@ msgstr "Изменение диаметра и сверла переходног
 
 #: pcbnew/onrightclick.cpp:472
 msgid "Change Segment Width"
-msgstr "Изменить ширину сегмента"
+msgstr "Изменить ширину отрезка"
 
 #: pcbnew/onrightclick.cpp:474
 msgid "Change Track Width"
@@ -10302,7 +10306,7 @@ msgstr "Технические слои:"
 
 #: pcbnew/dialog_SVG_print_base.cpp:38
 msgid "Pen width mini"
-msgstr "Миним. толщина пера"
+msgstr "Мин. толщина пера"
 
 #: pcbnew/dialog_SVG_print_base.cpp:43
 msgid "Selection of the minimum pen thickness used to draw items."
@@ -12406,12 +12410,12 @@ msgstr "Используйте этот атрибут для \"виртуаль
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:255
 #: pcbnew/dialog_edit_module_for_Modedit.cpp:115
 msgid "Enable hotkey move commands and Auto Placement"
-msgstr "Включить \"горячие\" клавиши команд перемещения и авторазмещения"
+msgstr "Включить горячие клавиши команд перемещения и авторазмещения"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:257
 #: pcbnew/dialog_edit_module_for_Modedit.cpp:116
 msgid "Disable hotkey move commands and Auto Placement"
-msgstr "Отключить \"горячие\" клавиши команд перемещения и авторазмещения"
+msgstr "Отключить горячие клавиши команд перемещения и авторазмещения"
 
 #: pcbnew/dialog_edit_module_for_BoardEditor.cpp:266
 #: pcbnew/dialog_edit_module_for_Modedit.cpp:125
@@ -12716,7 +12720,7 @@ msgstr "Установить все дорожки в значения из кл
 
 #: pcbnew/toolbars_update_user_interface.cpp:39
 msgid " mils"
-msgstr " mils"
+msgstr " мил"
 
 #: pcbnew/toolbars_update_user_interface.cpp:54
 msgid "NetClass: "
@@ -13607,23 +13611,23 @@ msgstr "Графика:"
 
 #: pcbnew/dialog_graphic_items_options_base.cpp:25
 msgid "Graphic segm Width"
-msgstr "Ширина граф.сегмента"
+msgstr "Толщина граф. отрезка"
 
 #: pcbnew/dialog_graphic_items_options_base.cpp:32
 msgid "Board Edges Width"
-msgstr "Ширина контура платы"
+msgstr "Толщина контура платы"
 
 #: pcbnew/dialog_graphic_items_options_base.cpp:39
 msgid "Copper Text Width"
-msgstr "Ширина текста на меди"
+msgstr "Толщина текста на меди"
 
 #: pcbnew/dialog_graphic_items_options_base.cpp:46
 msgid "Text Size V"
-msgstr "Верт.размер текста"
+msgstr "Высота шрифта"
 
 #: pcbnew/dialog_graphic_items_options_base.cpp:53
 msgid "Text Size H"
-msgstr "Гориз.размер текста"
+msgstr "Ширина шрифта"
 
 #: pcbnew/dialog_graphic_items_options_base.cpp:63
 msgid "Modules:"
@@ -13631,11 +13635,11 @@ msgstr "Модули:"
 
 #: pcbnew/dialog_graphic_items_options_base.cpp:65
 msgid "Edges Module Width"
-msgstr "Ширина контура модуля"
+msgstr "Толщина контура модуля"
 
 #: pcbnew/dialog_graphic_items_options_base.cpp:72
 msgid "Text Module Width"
-msgstr "Ширина текста модуля"
+msgstr "Толщина текста модуля"
 
 #: pcbnew/dialog_graphic_items_options_base.cpp:79
 msgid "Text Module Size V"
