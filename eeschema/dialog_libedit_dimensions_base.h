@@ -31,7 +31,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 class DIALOG_LIBEDIT_DIMENSIONS_BASE : public wxDialog 
 {
+	DECLARE_EVENT_TABLE()
 	private:
+		
+		// Private event handlers
+		void _wxFB_OnSaveSetupClick( wxCommandEvent& event ){ OnSaveSetupClick( event ); }
+		void _wxFB_OnCancelClick( wxCommandEvent& event ){ OnCancelClick( event ); }
+		void _wxFB_OnOkClick( wxCommandEvent& event ){ OnOkClick( event ); }
+		
 	
 	protected:
 		wxStaticText* m_staticText3;
@@ -62,12 +69,19 @@ class DIALOG_LIBEDIT_DIMENSIONS_BASE : public wxDialog
 		wxSpinCtrl* m_spinRepeatLabel;
 		
 		wxStaticLine* m_staticline1;
+		wxButton* m_buttonSave;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnSaveSetupClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
+		
 	
 	public:
-		DIALOG_LIBEDIT_DIMENSIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Library Editor Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 412,358 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_LIBEDIT_DIMENSIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Library Editor Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 412,349 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_LIBEDIT_DIMENSIONS_BASE();
 	
 };

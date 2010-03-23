@@ -19,6 +19,8 @@ static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
 static int    s_CurrentTypeLabel = NET_INPUT;
 static wxSize NetSheetTextSize( DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT );
+static wxPoint s_InitialPosition;       // remember here the initial value of the pin label when moving it
+
 
 /****************************************/
 /* class WinEDA_PinSheetPropertiesFrame */
@@ -126,7 +128,9 @@ void WinEDA_PinSheetPropertiesFrame::OnOkClick( wxCommandEvent& event )
     EndModal( wxID_OK );
 }
 
-
+/* Called when aborting a move pinsheet label
+ * delete a new pin sheet label, or restire its old position
+ */
 static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
     SCH_SHEET_PIN* SheetLabel =
@@ -142,6 +146,15 @@ static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
     }
     else
     {
+        RedrawOneStruct( Panel, DC, SheetLabel, g_XorMode );
+        SheetLabel->m_Pos = s_InitialPosition;
+        // Restore edge position:
+        SCH_SHEET* sheet = (SCH_SHEET*) SheetLabel->GetParent();
+        if( s_InitialPosition.x > ( sheet->m_Pos.x + (sheet->m_Size.x / 2) ) )
+            SheetLabel->m_Edge  = 1;
+        else
+            SheetLabel->m_Edge  = 0;
+
         RedrawOneStruct( Panel, DC, SheetLabel, GR_DEFAULT_DRAWMODE );
         SheetLabel->m_Flags = 0;
     }
@@ -204,6 +217,7 @@ void WinEDA_SchematicFrame::StartMove_PinSheet( SCH_SHEET_PIN* SheetLabel,
     NetSheetTextSize     = SheetLabel->m_Size;
     s_CurrentTypeLabel   = SheetLabel->m_Shape;
     SheetLabel->m_Flags |= IS_MOVED;
+    s_InitialPosition = SheetLabel->m_Pos;
 
     DrawPanel->ManageCurseur = Move_PinSheet;
     DrawPanel->ForceCloseManageCurseur = ExitPinSheet;

@@ -21,6 +21,8 @@ class DIALOG_LIBEDIT_DIMENSIONS : public DIALOG_LIBEDIT_DIMENSIONS_BASE
 	public:
 		DIALOG_LIBEDIT_DIMENSIONS( WinEDA_LibeditFrame* parent);
         ~DIALOG_LIBEDIT_DIMENSIONS();
+    private:
+        void initDialog( );
 
 };
 
@@ -33,10 +35,16 @@ void WinEDA_LibeditFrame::InstallDimensionsDialog( wxCommandEvent& event )
 DIALOG_LIBEDIT_DIMENSIONS::DIALOG_LIBEDIT_DIMENSIONS( WinEDA_LibeditFrame* parent )
     : DIALOG_LIBEDIT_DIMENSIONS_BASE( parent )
 {
-	this->Centre( wxBOTH );
+    GetSizer()->SetSizeHints(this);
+	Centre( wxBOTH );
 }
 
 DIALOG_LIBEDIT_DIMENSIONS::~DIALOG_LIBEDIT_DIMENSIONS()
 {
+}
+
+void DIALOG_LIBEDIT_DIMENSIONS::initDialog()
+{
+    SetFocus( );
 }
 

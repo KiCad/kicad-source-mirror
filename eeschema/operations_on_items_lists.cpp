@@ -70,13 +70,6 @@ void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList )
             /* this item is depending on a sheet, and is not in global list */
             wxMessageBox( wxT( "DeleteItemsInList() err: unexpected \
 DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE" ) );
-#if 0
-            SCH_SHEET_PIN* pinlabel = (SCH_SHEET_PIN*) item;
-            frame->DeleteSheetLabel( false, pinlabel->m_Parent );
-            itemWrapper.m_PickedItem     = pinlabel->m_Parent;
-            itemWrapper.m_UndoRedoStatus = UR_CHANGED;
-            itemsList.PushItem( itemWrapper );
-#endif
         }
         else
         {
