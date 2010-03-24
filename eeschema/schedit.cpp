@@ -397,20 +397,20 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_DRAG_CMP_REQUEST:
     case ID_POPUP_SCH_MOVE_CMP_REQUEST:
-
         // Ensure the struct is a component (could be a struct of a
-        // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        // component, like Field, text..) or a hierachical sheet
+        if( (screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT)
+            && (screen->GetCurItem()->Type() != DRAW_SHEET_STRUCT_TYPE) )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
         if( screen->GetCurItem() == NULL )
             break;
-
+        // fall through
     case ID_POPUP_SCH_MOVE_ITEM_REQUEST:
         DrawPanel->MouseToCursorSchema();
         if( id == ID_POPUP_SCH_DRAG_CMP_REQUEST )
         {
-            // The easiest way to handle a drag component is to simulate a
-            // block drag command
+            // The easiest way to handle a drag component or sheet command
+            // is to simulate a block drag command
             if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
             {
                 if( !HandleBlockBegin( &dc, BLOCK_DRAG,

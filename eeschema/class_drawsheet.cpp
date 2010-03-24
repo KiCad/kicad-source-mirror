@@ -208,6 +208,22 @@ void SCH_SHEET::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
             return;
         }
     }
+    else    /* save old text in undo list */
+    {
+        if( g_ItemToUndoCopy && ( g_ItemToUndoCopy->Type() == Type() ) )
+        {
+            /* restore old values and save new ones */
+            SwapData( (SCH_SHEET*) g_ItemToUndoCopy );
+
+            /* save in undo list */
+            frame->SaveCopyInUndoList( this, UR_CHANGED );
+
+            /* restore new values */
+            SwapData( (SCH_SHEET*) g_ItemToUndoCopy );
+
+            SAFE_DELETE( g_ItemToUndoCopy );
+        }
+    }
 
     SCH_ITEM::Place( frame, DC ); //puts it on the EEDrawList.
     if( isnew )

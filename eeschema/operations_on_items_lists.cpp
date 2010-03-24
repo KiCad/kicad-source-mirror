@@ -181,79 +181,92 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
 }
 
 
-/* Routine to create a new copy of given struct.
+/** function DuplicateStruct
+ *  Routine to create a new copy of given struct.
  *  The new object is not put in draw list (not linked)
+ * @param aDrawStruct = the SCH_ITEM to duplicate
+ * @param aClone (default = false)
+ *     if true duplicate also some parameters that must be unique
+ *     (timestamp and sheet name)
+ *      aClone must be false. use true only is undo/redo duplications
  */
-SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct )
+SCH_ITEM* DuplicateStruct( SCH_ITEM* aDrawStruct, bool aClone )
 {
     SCH_ITEM* NewDrawStruct = NULL;
 
-    if( DrawStruct == NULL )
+    if( aDrawStruct == NULL )
     {
         wxMessageBox( wxT( "DuplicateStruct error: NULL struct" ) );
         return NULL;
     }
-
-    switch( DrawStruct->Type() )
+    
+    switch( aDrawStruct->Type() )
     {
     case DRAW_POLYLINE_STRUCT_TYPE:
-        NewDrawStruct = ( (SCH_POLYLINE*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (SCH_POLYLINE*) aDrawStruct )->GenCopy();
         break;
 
     case DRAW_SEGMENT_STRUCT_TYPE:
-        NewDrawStruct = ( (SCH_LINE*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (SCH_LINE*) aDrawStruct )->GenCopy();
         break;
 
     case DRAW_BUSENTRY_STRUCT_TYPE:
-        NewDrawStruct = ( (SCH_BUS_ENTRY*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (SCH_BUS_ENTRY*) aDrawStruct )->GenCopy();
         break;
 
     case DRAW_JUNCTION_STRUCT_TYPE:
-        NewDrawStruct = ( (SCH_JUNCTION*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (SCH_JUNCTION*) aDrawStruct )->GenCopy();
         break;
 
     case TYPE_SCH_MARKER:
-        NewDrawStruct = ( (SCH_MARKER*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (SCH_MARKER*) aDrawStruct )->GenCopy();
         break;
 
     case DRAW_NOCONNECT_STRUCT_TYPE:
-        NewDrawStruct = ( (SCH_NO_CONNECT*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (SCH_NO_CONNECT*) aDrawStruct )->GenCopy();
         break;
 
     case TYPE_SCH_TEXT:
-        NewDrawStruct = ( (SCH_TEXT*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (SCH_TEXT*) aDrawStruct )->GenCopy();
         break;
 
     case TYPE_SCH_LABEL:
-        NewDrawStruct = ( (SCH_LABEL*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (SCH_LABEL*) aDrawStruct )->GenCopy();
         break;
 
     case TYPE_SCH_HIERLABEL:
-        NewDrawStruct = ( (SCH_HIERLABEL*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (SCH_HIERLABEL*) aDrawStruct )->GenCopy();
         break;
 
     case TYPE_SCH_GLOBALLABEL:
-        NewDrawStruct = ( (SCH_GLOBALLABEL*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (SCH_GLOBALLABEL*) aDrawStruct )->GenCopy();
         break;
 
     case TYPE_SCH_COMPONENT:
-        NewDrawStruct = ( (SCH_COMPONENT*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (SCH_COMPONENT*) aDrawStruct )->GenCopy();
         break;
 
     case DRAW_SHEET_STRUCT_TYPE:
-        NewDrawStruct = ( (SCH_SHEET*) DrawStruct )->GenCopy();
+        NewDrawStruct = ( (SCH_SHEET*) aDrawStruct )->GenCopy();
+        if ( aClone )
+        {
+            ((SCH_SHEET*)NewDrawStruct)->m_SheetName = ((SCH_SHEET*)aDrawStruct)->m_SheetName;
+        }
         break;
 
     default:
     {
         wxString msg;
         msg << wxT( "DuplicateStruct error: unexpected StructType " )
-            << DrawStruct->Type() << wxT( " " ) << DrawStruct->GetClass();
+            << aDrawStruct->Type() << wxT( " " ) << aDrawStruct->GetClass();
         wxMessageBox( msg );
     }
     break;
     }
 
-    NewDrawStruct->m_Image = DrawStruct;
+    if ( aClone )
+        NewDrawStruct->m_TimeStamp = aDrawStruct->m_TimeStamp;
+
+    NewDrawStruct->m_Image = aDrawStruct;
     return NewDrawStruct;
 }

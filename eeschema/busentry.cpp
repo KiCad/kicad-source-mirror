@@ -92,8 +92,7 @@ void WinEDA_SchematicFrame::StartMoveBusEntry( SCH_BUS_ENTRY* BusEntry,
     if( BusEntry == NULL )
         return;
 
-    if( (BusEntry->m_Flags & IS_NEW) == 0 )    // => not already in edit, save
-                                               // shape */
+    if( (BusEntry->m_Flags & IS_NEW) == 0 )    // not already in edit, save shape
     {
         delete g_ItemToUndoCopy;
         g_ItemToUndoCopy = BusEntry->GenCopy();

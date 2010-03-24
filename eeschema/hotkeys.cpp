@@ -551,7 +551,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
             GetScreen()->SetCurItem( (SCH_ITEM*) DrawStruct );
 
             // Create the events for moving a component or other schematic item
-            wxCommandEvent eventMoveComponent( wxEVT_COMMAND_TOOL_CLICKED,
+            wxCommandEvent eventMoveOrDragComponent( wxEVT_COMMAND_TOOL_CLICKED,
                                                HK_Descr->m_IdMenuEvent );
             wxCommandEvent eventMoveItem( wxEVT_COMMAND_TOOL_CLICKED,
                                           ID_POPUP_SCH_MOVE_ITEM_REQUEST );
@@ -564,22 +564,24 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
             {
             // select the correct event for moving an schematic object
             // and add it to the event queue
+            case DRAW_SHEET_STRUCT_TYPE:
             case TYPE_SCH_COMPONENT:
-                wxPostEvent( this, eventMoveComponent );
+                wxPostEvent( this, eventMoveOrDragComponent );
                 break;
 
             case TYPE_SCH_TEXT:
             case TYPE_SCH_LABEL:
             case TYPE_SCH_GLOBALLABEL:
             case TYPE_SCH_HIERLABEL:
-            case DRAW_SHEET_STRUCT_TYPE:
             case DRAW_PART_TEXT_STRUCT_TYPE:
             case DRAW_BUSENTRY_STRUCT_TYPE:
-                wxPostEvent( this, eventMoveItem );
+                if( HK_Descr->m_Idcommand != HK_DRAG )
+                    wxPostEvent( this, eventMoveItem );
                 break;
 
             case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-                wxPostEvent( this, eventMovePinsheet );
+                if( HK_Descr->m_Idcommand != HK_DRAG )
+                    wxPostEvent( this, eventMovePinsheet );
                 break;
 
             case DRAW_SEGMENT_STRUCT_TYPE:

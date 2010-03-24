@@ -105,6 +105,9 @@ structures and cannot be undone.\nOk to continue renaming?" );
                     aSheet->ChangeFileName( this, fileName.GetFullPath() );
                 }
             }
+            
+            else
+                SaveCopyInUndoList( aSheet, UR_CHANGED );
 
             aSheet->m_FileNameSize = ReturnValueFromString( g_UnitMetric,
                                                             dlg.GetFileNameTextSize(),
@@ -202,6 +205,7 @@ static void ExitSheet( WinEDA_DrawPanel* aPanel, wxDC* aDC )
     screen->SetCurItem( NULL );
     aPanel->ManageCurseur = NULL;
     aPanel->ForceCloseManageCurseur = NULL;
+    SAFE_DELETE( g_ItemToUndoCopy );
 }
 
 
@@ -213,6 +217,7 @@ static void ExitSheet( WinEDA_DrawPanel* aPanel, wxDC* aDC )
 SCH_SHEET* WinEDA_SchematicFrame::CreateSheet( wxDC* aDC )
 {
     g_ItemToRepeat = NULL;
+    SAFE_DELETE( g_ItemToUndoCopy );
 
     SCH_SHEET* sheet = new SCH_SHEET( GetScreen()->m_Curseur );
 
@@ -273,6 +278,12 @@ void WinEDA_SchematicFrame::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
     DrawPanel->ManageCurseur = MoveOrResizeSheet;
     DrawPanel->ForceCloseManageCurseur = ExitSheet;
     DrawPanel->ManageCurseur( DrawPanel, aDC, true );
+
+    if( (aSheet->m_Flags & IS_NEW) == 0 )    // not already in edit, save a copy for undo/redo
+    {
+        delete g_ItemToUndoCopy;
+        g_ItemToUndoCopy = DuplicateStruct( aSheet, true );
+    }
 }
 
 
@@ -291,4 +302,10 @@ void WinEDA_SchematicFrame::StartMoveSheet( SCH_SHEET* aSheet, wxDC* aDC )
     DrawPanel->ForceCloseManageCurseur = ExitSheet;
     DrawPanel->ManageCurseur( DrawPanel, aDC, true );
     DrawPanel->CursorOn( aDC );
+    
+    if( (aSheet->m_Flags & IS_NEW) == 0 )    // not already in edit, save a copy for undo/redo
+    {
+        delete g_ItemToUndoCopy;
+        g_ItemToUndoCopy = DuplicateStruct( aSheet, true );
+    }
 }

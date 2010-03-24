@@ -71,10 +71,20 @@ bool           LibItemInBox( int x1, int y1, int x2, int y2,
 /************/
 /* BLOCK.CPP */
 /************/
-SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct );
 void      DeleteStruct( WinEDA_DrawPanel* panel,
                         wxDC*             DC,
                         SCH_ITEM*         DrawStruct );
+
+// operations_on_item_lists.cpp
+/** function DuplicateStruct
+ *  Routine to create a new copy of given struct.
+ * @param aDrawStruct = the SCH_ITEM to duplicate
+ * @param aClone (defualt = true)
+ *     if true duplicate also some parameters that must be unique
+ *     (timestamp and sheet name)
+ *      aClone must be false. use true only is undo/redo duplications
+ */
+SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct, bool aClone = false );
 
 /*************/
 /* LOCATE.CPP */

@@ -439,11 +439,11 @@ void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
     msg = AddHotkeyName( _( "Rotate Hierarchical Label" ), s_Schematic_Hokeys_Descr,
                              HK_ROTATE );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT,
-                  _( "Rotate Hierarchical Label" ), rotate_glabel_xpm );
+                  msg, rotate_glabel_xpm );
     msg = AddHotkeyName( _( "Edit Hierarchical Label" ), s_Schematic_Hokeys_Descr,
                              HK_EDIT );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT,
-                  _( "Edit Hierarchical Label" ), edit_text_xpm );
+                  msg, edit_text_xpm );
     msg = AddHotkeyName( _( "Delete Hierarchical Label" ), s_Schematic_Hokeys_Descr,
                              HK_DELETE );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE,
@@ -677,6 +677,11 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
         msg = AddHotkeyName( _( "Move Sheet" ),
                                      s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT_OR_ITEM );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST,
+                      msg, move_sheet_xpm );
+
+        msg = AddHotkeyName( _( "Drag Sheet" ), s_Schematic_Hokeys_Descr,
+                             HK_DRAG );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DRAG_CMP_REQUEST,
                       msg, move_sheet_xpm );
     }
 

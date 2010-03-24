@@ -180,35 +180,6 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
 }
 
 
-/** function CloneStruct
- * must be used only in undo/redo functions
- *
- * Routine to create a new copy of given schùatic object.
- * It does the same job as DuplicateStruct, but
- * but clone time stamp and sheet name when cloning a SCH_SHEET objects
- * (because time stamp and sheets name must be unique
- * DuplicateStruct does not copy these members
- */
-static SCH_ITEM* CloneStruct( SCH_ITEM* aDrawStruct )
-{
-    SCH_ITEM* item = DuplicateStruct( aDrawStruct );
-    if( item == NULL )
-        return NULL;
-
-    item->m_TimeStamp = aDrawStruct->m_TimeStamp;
-    switch( item->Type() )
-    {
-        case DRAW_SHEET_STRUCT_TYPE:
-            ((SCH_SHEET*)item)->m_SheetName = ((SCH_SHEET*)aDrawStruct)->m_SheetName;
-            break;
-
-        default:
-            break;
-    }
-    
-    return item;
-}
-
 
 /** function SaveCopyInUndoList
  * Create a copy of the current schematic item, and put it in the undo list.
@@ -260,7 +231,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM*      aItem,
     switch( aCommandType )
     {
     case UR_CHANGED:            /* Create a copy of item */
-        CopyOfItem = CloneStruct( aItem );
+        CopyOfItem = DuplicateStruct( aItem, true );
         itemWrapper.m_Link = CopyOfItem;
         if ( CopyOfItem )
             commandToUndo->PushItem( itemWrapper );
@@ -330,7 +301,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
              * If this link is not null, the copy is already done
              */
             if( commandToUndo->GetPickedItemLink(ii) == NULL )
-                commandToUndo->SetPickedItemLink( CloneStruct( item ), ii );
+                commandToUndo->SetPickedItemLink( DuplicateStruct( item, true ), ii );
             wxASSERT( commandToUndo->GetPickedItemLink(ii) );
             break;
 
