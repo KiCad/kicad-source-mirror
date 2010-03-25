@@ -19,10 +19,10 @@ static void ShowMoveField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
 
 extern int     m_unit;
-static wxPoint StartCursor, LastTextPosition;
+static wxPoint s_InitialPosition, s_LastPosition;
 
 
-static void ExitMoveField( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void AbortMoveField( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
@@ -39,8 +39,8 @@ static void ExitMoveField( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     wxPoint curpos = Panel->GetScreen()->m_Curseur;
 
-    Panel->GetScreen()->m_Curseur = StartCursor;
-    ShowMoveField( Panel, DC, TRUE );
+    Panel->GetScreen()->m_Curseur = s_InitialPosition;
+    ShowMoveField( Panel, DC, true );
     Panel->GetScreen()->m_Curseur = curpos;
     item->m_Flags = 0;
     parent->SetDrawItem( NULL );
@@ -55,19 +55,19 @@ void WinEDA_LibeditFrame::StartMoveField( wxDC* DC, LIB_FIELD* field )
         return;
 
     m_drawItem  = field;
-    LastTextPosition = field->m_Pos;
+    s_InitialPosition = field->m_Pos;
+    NEGATE(s_InitialPosition.y);
     m_drawItem->m_Flags |= IS_MOVED;
 
-    startPos.x = LastTextPosition.x;
-    startPos.y = -LastTextPosition.y;
     DrawPanel->CursorOff( DC );
-    GetScreen()->m_Curseur = startPos;
+    s_LastPosition = s_InitialPosition;
+    GetScreen()->m_Curseur = s_InitialPosition;
     DrawPanel->MouseToCursorSchema();
 
     DrawPanel->ManageCurseur = ShowMoveField;
-    DrawPanel->ForceCloseManageCurseur = ExitMoveField;
-    DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
-    StartCursor = GetScreen()->m_Curseur;
+    DrawPanel->ForceCloseManageCurseur = AbortMoveField;
+    DrawPanel->ManageCurseur( DrawPanel, DC, true );
+    s_InitialPosition = GetScreen()->m_Curseur;
 
     DrawPanel->CursorOn( DC );
 }
@@ -90,16 +90,19 @@ static void ShowMoveField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
         return;
 
     wxString text = Field->GetFullText( parent->GetUnit() );
+    wxPoint offset ;
+    offset.x = s_LastPosition.x - Field->m_Pos.x;
+    offset.y = s_LastPosition.y + Field->m_Pos.y;
 
     if( erase )
-        Field->Draw( panel, DC, wxPoint( 0, 0 ), -1, g_XorMode, &text,
+        Field->Draw( panel, DC, offset, -1, g_XorMode, &text,
                      DefaultTransformMatrix );
 
-    LastTextPosition.x = panel->GetScreen()->m_Curseur.x;
-    LastTextPosition.y = -panel->GetScreen()->m_Curseur.y;
+    s_LastPosition = panel->GetScreen()->m_Curseur;
+    offset.x = s_LastPosition.x - Field->m_Pos.x;
+    offset.y = s_LastPosition.y + Field->m_Pos.y;
 
-    Field->m_Pos = LastTextPosition;
-    Field->Draw( panel, DC, wxPoint( 0, 0 ), -1, g_XorMode, &text,
+    Field->Draw( panel, DC, offset, -1, g_XorMode, &text,
                  DefaultTransformMatrix );
 }
 
@@ -240,20 +243,26 @@ void WinEDA_LibeditFrame::RotateField( wxDC* DC, LIB_FIELD* Field )
 
     wxString fieldText = Field->GetFullText( m_unit );
 
-    Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode, &fieldText,
+    if( (Field->m_Flags & IS_MOVED) )
+        ShowMoveField( DrawPanel, DC, false );
+    else
+        Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode, &fieldText,
                  DefaultTransformMatrix );
 
-    if( Field->m_Orient )
-        Field->m_Orient = 0;
+    if( Field->m_Orient ==  TEXT_ORIENT_VERT)
+        Field->m_Orient = TEXT_ORIENT_HORIZ;
     else
-        Field->m_Orient = 900;
+        Field->m_Orient = TEXT_ORIENT_VERT;
 
     int drawMode = g_XorMode;
 
     if( Field->m_Flags == 0 )
         drawMode = GR_DEFAULT_DRAWMODE;
 
-    Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, drawMode, &fieldText,
+    if( (Field->m_Flags & IS_MOVED) )
+        ShowMoveField( DrawPanel, DC, false );
+    else
+        Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, drawMode, &fieldText,
                  DefaultTransformMatrix );
 
     DrawPanel->CursorOn( DC );

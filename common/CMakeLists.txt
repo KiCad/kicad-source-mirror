@@ -45,7 +45,6 @@ set(COMMON_SRCS
     msgpanel.cpp
     newstroke_font.cpp
     projet_config.cpp
-#   pyhandler.cpp
     richio.cpp
     selcolor.cpp
     string.cpp
