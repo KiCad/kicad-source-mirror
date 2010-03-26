@@ -458,7 +458,7 @@ double To_User_Unit( bool is_metric, double val, int internal_unit_value )
     double value;
 
     if( is_metric )
-        value = val * 25.4000508001016 / internal_unit_value;
+        value = val * 25.4 / internal_unit_value;
     else
         value = val / internal_unit_value;
 
@@ -474,7 +474,7 @@ int From_User_Unit( bool is_metric, double val, int internal_unit_value )
     double value;
 
     if( is_metric )
-        value = val * internal_unit_value / 25.4000508001016;
+        value = val * internal_unit_value / 25.4;
     else
         value = val * internal_unit_value;
 
