@@ -49,7 +49,7 @@ public:
 
 private:
     void OnCloseWindow( wxCloseEvent& event );
-    void OnInitDialog( wxInitDialogEvent& event );
+    void initDialog( );
     void OnButtonPrintSelectedClick( wxCommandEvent& event );
     void OnButtonPrintBoardClick( wxCommandEvent& event );
     void OnButtonCancelClick( wxCommandEvent& event );
@@ -80,10 +80,13 @@ DIALOG_SVG_PRINT::DIALOG_SVG_PRINT( WinEDA_DrawFrame* parent ) :
 {
     m_Parent = (WinEDA_BasePcbFrame*) parent;
     m_Config = wxGetApp().m_EDA_Config;
+    initDialog( );
+    GetSizer()->SetSizeHints( this );
+    Centre();
 }
 
 
-void DIALOG_SVG_PRINT::OnInitDialog( wxInitDialogEvent& event )
+void DIALOG_SVG_PRINT::initDialog( )
 {
     SetFocus();     // Make ESC key working
 
@@ -103,12 +106,29 @@ void DIALOG_SVG_PRINT::OnInitDialog( wxInitDialogEvent& event )
 
     // Create layers list
     BOARD* board = m_Parent->GetBoard();
-    int    mask  = 1;
-    for( int layer = 0; layer<NB_LAYERS; layer++, mask <<= 1 )
+    int      layer;
+    for( layer = 0; layer < NB_LAYERS; ++layer )
     {
-        m_BoxSelectLayer[layer] =
-            new  wxCheckBox( this, -1, board->GetLayerName( layer ) );
+        if( !board->IsLayerEnabled( layer ) )
+            m_BoxSelectLayer[layer] = NULL;
+        else
+            m_BoxSelectLayer[layer] =
+                new wxCheckBox( this, -1, board->GetLayerName( layer ) );
+    }
+    // Add wxCheckBoxes in layers lists dialog
+    //  List layers in same order than in setup layers dialog
+    // (Front or Top to Back or Bottom)
+    DECLARE_LAYERS_ORDER_LIST(layersOrder);
+    for( int layer_idx = 0; layer_idx < NB_LAYERS; ++layer_idx )
+    {
+        layer = layersOrder[layer_idx];
 
+        wxASSERT(layer < NB_LAYERS);
+
+        if( m_BoxSelectLayer[layer] == NULL )
+            continue;
+
+        long mask = 1 << layer;
         if( mask & s_SelectedLayers )
             m_BoxSelectLayer[layer]->SetValue( true );
 
@@ -131,17 +151,13 @@ void DIALOG_SVG_PRINT::OnInitDialog( wxInitDialogEvent& event )
         for( int layer = 0;  layer<NB_LAYERS;  ++layer )
         {
             bool option;
-
+            if ( m_BoxSelectLayer[layer] == NULL )
+                continue;
             layerKey.Printf( OPTKEY_LAYERBASE, layer );
 
             if( m_Config->Read( layerKey, &option ) )
                 m_BoxSelectLayer[layer]->SetValue( option );
         }
-    }
-
-    if( GetSizer() )
-    {
-        GetSizer()->SetSizeHints( this );
     }
 }
 
@@ -179,9 +195,19 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Frame_Ref )
 
     if( aPrintAll )
         m_PrintMaskLayer = 0xFFFFFFFF;
+    else
+        m_PrintMaskLayer = 0;
+
+    if( m_PrintBoardEdgesCtrl->IsChecked() )
+            m_PrintMaskLayer |= EDGE_LAYER;
+    else
+            m_PrintMaskLayer &= ~EDGE_LAYER;
 
     for( int layer = 0; layer<NB_LAYERS; layer++ )
     {
+        if ( m_BoxSelectLayer[layer] == NULL )
+            continue;
+
         if( !aPrintAll && !m_BoxSelectLayer[layer]->GetValue() )
             continue;
 
@@ -253,7 +279,7 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     GRResetPenAndBrush( &dc );
     s_Parameters.m_PenDefaultSize = ReturnValueFromTextCtrl( *m_DialogPenWidth,
                                                   m_Parent->m_InternalUnits );
-    GRForceBlackPen( m_ModeColorOption->GetSelection() == 0 ? FALSE : true );
+    GRForceBlackPen( m_ModeColorOption->GetSelection() == 0 ? false : true );
     s_Parameters.m_DrillShapeOpt = PRINT_PARAMETERS::FULL_DRILL_SHAPE;
 
 
@@ -263,14 +289,13 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
 
     screen->m_IsPrinting = true;
     SetLocaleTo_C_standard();       // Switch the locale to standard C (needed
-                                    // to print floating point numbers like
-                                    // 1.3)
+                                    // to print floating point numbers like 1.3)
     m_Parent->PrintPage( &dc, aPrint_Frame_Ref, m_PrintMaskLayer, false, &s_Parameters);
     SetLocaleTo_Default();          // revert to the current  locale
     screen->m_IsPrinting = false;
     panel->m_ClipBox     = tmp;
 
-    GRForceBlackPen( FALSE );
+    GRForceBlackPen( false );
 
     screen->m_StartVisu = tmp_startvisu;
     screen->m_DrawOrg   = old_org;
@@ -308,8 +333,10 @@ void DIALOG_SVG_PRINT::OnCloseWindow( wxCloseEvent& event )
     {
         m_Config->Write( PLOTSVGMODECOLOR_KEY, s_Parameters.m_Print_Black_and_White );
         wxString layerKey;
-        for( int layer = 0;  layer<NB_LAYERS;  ++layer )
+        for( int layer = 0; layer<NB_LAYERS;  ++layer )
         {
+            if( m_BoxSelectLayer[layer] == NULL )
+                continue;
             layerKey.Printf( OPTKEY_LAYERBASE, layer );
             m_Config->Write( layerKey, m_BoxSelectLayer[layer]->IsChecked() );
         }

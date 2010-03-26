@@ -57,7 +57,6 @@ class DIALOG_SVG_PRINT_base : public wxDialog
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ){ event.Skip(); }
-		virtual void OnInitDialog( wxInitDialogEvent& event ){ event.Skip(); }
 		virtual void OnSetColorModeSelected( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnButtonPrintSelectedClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnButtonPrintBoardClick( wxCommandEvent& event ){ event.Skip(); }
