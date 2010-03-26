@@ -3,17 +3,17 @@
 <h1>Freerouter Guidelines:</h1>
 <ol>
 <li> in pcbnew, using the Layers Setup dialog:</li><br>
- <li>choose the number of layers, and enter the name of each layer.</li><br>
-    These should look something like this:
+ <li>choose the number of layers, and enter the name of each layer.</li><br><br>
+    These should look something like this (if a 6 layer board):
 <ul>
-    <li>Layer[0] Back signal</li>
-    <li>Layer[1] Power power</li>
-    <li>Layer[2] V2_Signal signal</li>
-    <li>Layer[3] H1_Signal signal</li>
-    <li>Layer[4] Ground power</li>
-    <li>Layer[15] Front signal</li>
+    <li>Front - signal</li>
+    <li>Ground - power</li>
+    <li>H1_Signal - signal</li>
+    <li>V2_Signal - signal</li>
+    <li>Power - power</li>
+    <li>Back - signal</li>
 </ul><br>
-    Notice that after the layer name there is a layer type field, either 'signal' or 'power'.<br>
+    Notice that after the layer name there is a layer type field, either 'signal' or 'power', typically.
     Any layer identified as 'power' will be removed from the layer menu in Freerouter,
     as this will be assumed to contain a power zone.
 </li><br><br>
