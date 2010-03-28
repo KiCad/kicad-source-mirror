@@ -147,15 +147,6 @@ static void AbortSymbolTraceOn( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     if( item->m_Flags & IS_NEW )
     {
-        if( DC )
-        {
-            if( item->Type() == COMPONENT_ARC_DRAW_TYPE )
-                Panel->GetParent()->DrawPanel->Refresh();
-            else
-                item->Draw( Panel, DC, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
-                            DefaultTransformMatrix );
-        }
-
         SAFE_DELETE( item );
         parent->SetDrawItem( NULL );
     }
@@ -207,11 +198,10 @@ static void AbortSymbolTraceOn( WinEDA_DrawPanel* Panel, wxDC* DC )
             RedrawWhileMovingCursor( Panel, DC, TRUE );
             Panel->GetScreen()->m_Curseur = curpos;
         }
-
-        item->Draw( Panel, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE, NULL,
-                    DefaultTransformMatrix );
         item->m_Flags = 0;
     }
+
+    Panel->Refresh( );
 }
 
 

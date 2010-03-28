@@ -242,6 +242,49 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDc,
 
     GRSetDrawMode( aDc, aDrawMode );
 
+    /* draw background for filled items using background option
+     * Solid lines will be drawn after the background
+     * Note also, background is not drawn when:
+     *   printing in black and white
+     *   If the color is not the default color (aColor != -1 )
+     */
+    if( ! (screen->m_IsPrinting && GetGRForceBlackPenState()) && (aColor == -1) )
+    {
+        BOOST_FOREACH( LIB_DRAW_ITEM& drawItem, drawings )
+        {
+            if( drawItem.m_Fill != FILLED_WITH_BG_BODYCOLOR )
+                continue;
+
+            if( aOnlySelected && drawItem.m_Selected == 0 )
+                continue;
+
+            // Do not draw an item while moving (the cursor handler does that)
+            if( drawItem.m_Flags & IS_MOVED )
+                continue;
+
+            /* Do not draw items not attached to the current part */
+            if( aMulti && drawItem.m_Unit && ( drawItem.m_Unit != aMulti ) )
+                continue;
+
+            if( aConvert && drawItem.m_Convert && ( drawItem.m_Convert != aConvert ) )
+                continue;
+
+            if( drawItem.Type() == COMPONENT_FIELD_DRAW_TYPE )
+                continue;
+
+            if( drawItem.Type() == COMPONENT_FIELD_DRAW_TYPE )
+            {
+                drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode,
+                               (void*) NULL, aTransformMatrix );
+            }
+
+            // Now, draw only the background for items with
+            // m_Fill == FILLED_WITH_BG_BODYCOLOR:
+            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode,
+                           (void*) false, aTransformMatrix );
+        }
+    }
+
     BOOST_FOREACH( LIB_DRAW_ITEM& drawItem, drawings )
     {
         if( aOnlySelected && drawItem.m_Selected == 0 )
@@ -273,9 +316,7 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDc,
         }
         else
         {
-            bool forceNoFill = ( screen->m_IsPrinting
-                                 && drawItem.m_Fill == FILLED_WITH_BG_BODYCOLOR
-                                 && GetGRForceBlackPenState() );
+            bool forceNoFill = drawItem.m_Fill == FILLED_WITH_BG_BODYCOLOR;
             drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode,
                            (void*) forceNoFill, aTransformMatrix );
         }

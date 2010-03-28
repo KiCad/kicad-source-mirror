@@ -296,6 +296,13 @@ protected:
                     int aPrintMask, bool aPrintMirrorMode,
                     void * aData = NULL);
 
+    /** function SVG_Print_component
+     * Creates the SVG print file for the current edited component.
+     * @param aFullFileName = the full filename of the file
+    */
+    void SVG_Print_Component( const wxString& aFullFileName );
+
+
     DECLARE_EVENT_TABLE()
 };
 

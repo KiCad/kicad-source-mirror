@@ -25,6 +25,9 @@
 void WinEDA_LibeditFrame::OnPlotCurrentComponent( wxCommandEvent& event )
 {
     LIB_COMPONENT* cmp = GetComponent();
+    wxString   FullFileName;
+    wxString   file_ext;
+    wxString   mask;
 
     if( cmp == NULL )
     {
@@ -38,13 +41,12 @@ void WinEDA_LibeditFrame::OnPlotCurrentComponent( wxCommandEvent& event )
     {
         bool       fmt_is_jpeg = false; // could be selectable later. so keep this option.
 
-        wxString   file_ext = fmt_is_jpeg ? wxT( "jpg" ) : wxT( "png" );
-        wxString   mask     = wxT( "*." ) + file_ext;
+        file_ext = fmt_is_jpeg ? wxT( "jpg" ) : wxT( "png" );
+        mask     = wxT( "*." ) + file_ext;
         wxFileName fn( cmp->GetName() );
         fn.SetExt( file_ext );
 
-        wxString   FullFileName =
-            EDA_FileSelector( _( "Filename:" ), wxGetCwd(),
+        FullFileName = EDA_FileSelector( _( "Filename:" ), wxGetCwd(),
                               fn.GetFullName(), file_ext, mask, this,
                               wxFD_SAVE, TRUE );
 
@@ -57,7 +59,17 @@ void WinEDA_LibeditFrame::OnPlotCurrentComponent( wxCommandEvent& event )
 
     case ID_LIBEDIT_GEN_SVG_FILE:
     {
-        GetScreen()->m_FileName = cmp->GetName();
+        file_ext = wxT( "svg" );
+        mask     = wxT( "*." ) + file_ext;
+        wxFileName fn( cmp->GetName() );
+        fn.SetExt( file_ext );
+        FullFileName = EDA_FileSelector( _( "Filename:" ), wxGetCwd(),
+                              fn.GetFullName(), file_ext, mask, this,
+                              wxFD_SAVE, TRUE );
+
+        if( FullFileName.IsEmpty() )
+            return;
+
         /* Give a size to the SVG draw area = component size + margin
          * the margin is 10% the size of the component size
          */
@@ -67,9 +79,8 @@ void WinEDA_LibeditFrame::OnPlotCurrentComponent( wxCommandEvent& event )
         // Add a small margin to the plot bounding box
         componentSize.x = (int)(componentSize.x * 1.2);
         componentSize.y = (int)(componentSize.y * 1.2);
-
         GetScreen()->SetPageSize( componentSize );
-        WinEDA_DrawFrame::SVG_Print( event );
+        SVG_Print_Component( FullFileName );
         GetScreen()->SetPageSize( pagesize );
     }
         break;

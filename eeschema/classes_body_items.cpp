@@ -433,7 +433,8 @@ void LIB_ARC::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRFilledArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
-                     m_Radius, GetPenSize( ), color,
+                     m_Radius, GetPenSize( ),
+                     (m_Flags & IS_MOVED) ? color : ReturnLayerColor( LAYER_DEVICE_BACKGROUND ),
                      ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE && !aData )
         GRFilledArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
@@ -751,7 +752,8 @@ void LIB_CIRCLE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
-                        m_Radius, GetPenSize( ), color,
+                        m_Radius, GetPenSize( ),
+                        (m_Flags & IS_MOVED) ? color : ReturnLayerColor( LAYER_DEVICE_BACKGROUND ),
                         ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE )
         GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
@@ -991,7 +993,8 @@ void LIB_RECTANGLE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR && !aData )
         GRFilledRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-                      GetPenSize( ), color,
+                      GetPenSize( ),
+                      (m_Flags & IS_MOVED) ? color : ReturnLayerColor( LAYER_DEVICE_BACKGROUND ),
                       ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( m_Fill == FILLED_SHAPE  && !aData )
         GRFilledRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
@@ -1591,7 +1594,8 @@ void LIB_POLYLINE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
-                Buf_Poly_Drawings, 1, GetPenSize( ), color,
+                Buf_Poly_Drawings, 1, GetPenSize( ),
+                (m_Flags & IS_MOVED) ? color : ReturnLayerColor( LAYER_DEVICE_BACKGROUND ),
                 ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE  )
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
@@ -1959,7 +1963,8 @@ void LIB_BEZIER::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
-                &PolyPointsTraslated[0], 1, GetPenSize(), color,
+                &PolyPointsTraslated[0], 1, GetPenSize(),
+                (m_Flags & IS_MOVED) ? color : ReturnLayerColor( LAYER_DEVICE_BACKGROUND ),
                 ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE  )
         GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
