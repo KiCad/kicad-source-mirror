@@ -41,7 +41,11 @@ void WinEDA_PcbFrame::PrintPage( wxDC* aDC,
     TRACK*               pt_piste;
     BOARD*               Pcb   = GetBoard();
     int                  defaultPenSize = 50;
+    bool                onePagePerLayer = false;
+
     PRINT_PARAMETERS * printParameters = (PRINT_PARAMETERS*) aData; // can be null
+    if( printParameters && printParameters->m_OptionPrintPage == 0 )
+        onePagePerLayer = true;
 
     PRINT_PARAMETERS::DrillShapeOptT drillShapeOpt = PRINT_PARAMETERS::FULL_DRILL_SHAPE;
     if( printParameters )
@@ -51,16 +55,44 @@ void WinEDA_PcbFrame::PrintPage( wxDC* aDC,
     }
 
     save_opt = DisplayOpt;
-    if( aPrintMaskLayer & ALL_CU_LAYERS )
+    int activeLayer = GetScreen()->m_Active_Layer;
+
+    DisplayOpt.ContrastModeDisplay = false;
+    DisplayOpt.DisplayPadFill = true;
+    DisplayOpt.DisplayViaFill = true;
+
+    if( (aPrintMaskLayer & ALL_CU_LAYERS) == 0 )
     {
-        DisplayOpt.DisplayPadFill = true;
-        DisplayOpt.DisplayViaFill = true;
+        if( onePagePerLayer )
+        {   // We can print mask layers (solder mask and solder paste) with the actual pad sizes
+            // To do that, we must set ContrastModeDisplay to true and set the GetScreen()->m_Active_Layer
+            // to the current printed layer
+            DisplayOpt.ContrastModeDisplay = true;
+            DisplayOpt.DisplayPadFill = true;
+            
+            // Calculate the active layer number to print from its mask layer:
+            GetScreen()->m_Active_Layer = 0;
+            for(int kk = 0; kk < 32; kk ++ )
+            {
+                if( ((1 << kk) & aPrintMaskLayer) != 0 )
+                {
+                    GetScreen()->m_Active_Layer = kk;
+                    break;
+                }
+            }
+            
+            // pads on Silkscreen layer are usually plot in sketch mode:
+            if( (GetScreen()->m_Active_Layer == SILKSCREEN_N_BACK) ||
+                (GetScreen()->m_Active_Layer == SILKSCREEN_N_FRONT) )
+                DisplayOpt.DisplayPadFill = false;
+            
+        }
+        else
+        {
+            DisplayOpt.DisplayPadFill = false;
+        }
     }
-    else
-    {
-        DisplayOpt.DisplayPadFill = false;
-        DisplayOpt.DisplayViaFill = false;
-    }
+    
 
     m_DisplayPadFill = DisplayOpt.DisplayPadFill;
     m_DisplayViaFill = DisplayOpt.DisplayViaFill;
@@ -79,7 +111,7 @@ void WinEDA_PcbFrame::PrintPage( wxDC* aDC,
     DrawPanel->m_PrintIsMirrored = aPrintMirrorMode;
 
     // The OR mode is used in color mode, but be aware the backgroud *must be
-    // BLACK.  In the print page dialog, we first plrint in BLACK, and after
+    // BLACK.  In the print page dialog, we first print in BLACK, and after
     // reprint in color, on the black "local" backgroud, in OR mode the black
     // print is not made before, only a white page is printed
     if( GetGRForceBlackPenState() == false )
@@ -193,6 +225,7 @@ void WinEDA_PcbFrame::PrintPage( wxDC* aDC,
     DrawPanel->m_PrintIsMirrored = false;
 
     DisplayOpt = save_opt;
+    GetScreen()->m_Active_Layer = activeLayer;
     m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
     m_DisplayPadFill = DisplayOpt.DisplayPadFill;
     m_DisplayViaFill = DisplayOpt.DisplayViaFill;
@@ -217,39 +250,23 @@ static void Print_Module( WinEDA_DrawPanel* aPanel, wxDC* aDC, MODULE* aModule,
     {
         if( (pt_pad->m_Masque_Layer & aMasklayer ) == 0 )
             continue;
-
-        // Usually we draw pads in sketch mode on non copper layers:
-        if( (aMasklayer & ALL_CU_LAYERS) == 0 )
+        // Manage hole according to the print drill option
+        wxSize drill_tmp = pt_pad->m_Drill;
+        switch ( aDrillShapeOpt )
         {
-            int tmp_fill =
-                ( (WinEDA_BasePcbFrame*) aPanel->GetParent() )->m_DisplayPadFill;
-
-            // Switch in sketch mode
-            ( (WinEDA_BasePcbFrame*) aPanel->GetParent() )->m_DisplayPadFill = 0;
-            pt_pad->Draw( aPanel, aDC, aDraw_mode );
-            ( (WinEDA_BasePcbFrame*) aPanel->GetParent() )->m_DisplayPadFill =
-                tmp_fill;
+            case PRINT_PARAMETERS::NO_DRILL_SHAPE:
+                pt_pad->m_Drill = wxSize(0,0);
+                break;
+            case PRINT_PARAMETERS::SMALL_DRILL_SHAPE:
+                pt_pad->m_Drill.x = MIN(SMALL_DRILL,pt_pad->m_Drill.x);
+                pt_pad->m_Drill.y = MIN(SMALL_DRILL,pt_pad->m_Drill.y);
+                break;
+            case PRINT_PARAMETERS::FULL_DRILL_SHAPE:
+                // Do nothing
+                break;
         }
-        else    // on copper layer, draw pads according to current options
-        {
-            // Manage hole according to the print drill option
-            wxSize drill_tmp = pt_pad->m_Drill;
-            switch ( aDrillShapeOpt )
-            {
-                case PRINT_PARAMETERS::NO_DRILL_SHAPE:
-                    pt_pad->m_Drill = wxSize(0,0);
-                    break;
-                case PRINT_PARAMETERS::SMALL_DRILL_SHAPE:
-                    pt_pad->m_Drill.x = MIN(SMALL_DRILL,pt_pad->m_Drill.x);
-                    pt_pad->m_Drill.y = MIN(SMALL_DRILL,pt_pad->m_Drill.y);
-                    break;
-                case PRINT_PARAMETERS::FULL_DRILL_SHAPE:
-                    // Do nothing
-                    break;
-            }
-            pt_pad->Draw( aPanel, aDC, aDraw_mode );
-            pt_pad->m_Drill = drill_tmp;
-        }
+        pt_pad->Draw( aPanel, aDC, aDraw_mode );
+        pt_pad->m_Drill = drill_tmp;
     }
 
     /* Print footprint graphic shapes */

@@ -27,8 +27,8 @@ public:
     long   m_PrintMaskLayer;                    // Layers to print
     bool   m_PrintMirror;                       // Option: Print mirroed
     bool   m_Print_Black_and_White;             // Option: Print in B&W ou Color
-    int    m_OptionPrintPage;                   // Option: 0 = a layer per page, all layers at once
-    int    m_PageCount;                         // Nmuber of page to print
+    int    m_OptionPrintPage;                   // Option: 0 = a layer per page, 1 = all layers at once
+    int    m_PageCount;                         // Number of page to print
     bool   m_ForceCentered;                     // Forge plot origin to page centre (used in modedit)
     int    m_Flags;                             // auxiliary variable: can be used to pass some other info
 

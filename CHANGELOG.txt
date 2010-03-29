@@ -4,6 +4,17 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2010-mar-29, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++Pcbnew
+    enhancements in printing or plot in SVG format:
+    When printing techncal layers, pads on solder mask or solder paste layers
+    where printed in sketch mode.
+    Now they are printed as solid shapes, with dimensions according to
+    solder past or solder mask clearances.
+
+
 2010-mar-18 UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++Eeschema

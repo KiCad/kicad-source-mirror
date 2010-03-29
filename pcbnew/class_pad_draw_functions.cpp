@@ -14,6 +14,13 @@
 #include "class_board_design_settings.h"
 #include "colors_selection.h"
 
+/* uncomment this line to show this pad with its specfic size and color
+ * when it is not on copper layers, and only one solder mask layer or solder paste layer
+ * is displayed for this pad
+ * After testing this feature,I am not sure this is a good idea
+ * but the code is left here.
+ */
+//#define SHOW_PADMASK_REAL_SIZE_AND_COLOR
 
 /** Draw a pad:
  *  @param  DC = device context
@@ -35,6 +42,10 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     int     fillpad = 0;
     wxPoint shape_pos;
     wxSize  mask_margin;  // margin (clearance) used for some non copper layers
+    int showActualMaskSize = 0;     /* == layer number if the actual pad size on mask layer can be displayed
+                                      * i.e. if only one layer is shown for this pad
+                                      * and this layer is a mask (solder mask or sloder paste
+                                      */
 
     if( m_Flags & DO_NOT_DRAW )
         return;
@@ -103,8 +114,15 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     {
         // If the pad in on only one tech layer, use the layer color
         // else use DARKGRAY
-        switch( m_Masque_Layer & ~ALL_CU_LAYERS )
+        int mask_non_copper_layers = m_Masque_Layer & ~ALL_CU_LAYERS;
+#ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
+        mask_non_copper_layers &= brd->GetVisibleLayers();
+#endif
+        switch( mask_non_copper_layers )
         {
+        case 0:
+            break;
+
         case ADHESIVE_LAYER_BACK:
             color = brd->GetLayerColor(ADHESIVE_N_BACK);
             break;
@@ -115,10 +133,12 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
 
         case SOLDERPASTE_LAYER_BACK:
             color = brd->GetLayerColor(SOLDERPASTE_N_BACK);
+            showActualMaskSize = SOLDERPASTE_N_BACK;
             break;
 
         case SOLDERPASTE_LAYER_FRONT:
             color = brd->GetLayerColor(SOLDERPASTE_N_FRONT);
+            showActualMaskSize = SOLDERPASTE_N_FRONT;
             break;
 
         case SILKSCREEN_LAYER_BACK:
@@ -131,10 +151,12 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
 
         case SOLDERMASK_LAYER_BACK:
             color = brd->GetLayerColor(SOLDERMASK_N_BACK);
+            showActualMaskSize = SOLDERMASK_N_BACK;
             break;
 
         case SOLDERMASK_LAYER_FRONT:
             color = brd->GetLayerColor(SOLDERMASK_N_FRONT);
+            showActualMaskSize = SOLDERMASK_N_FRONT;
             break;
 
         case DRAW_LAYER:
@@ -162,7 +184,6 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
             break;
         }
     }
-
 
     // if PAD_SMD pad and high contrast mode
     if( ( m_Attribut == PAD_SMD || m_Attribut == PAD_CONN )
@@ -211,11 +232,31 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         }
     }
 
+#ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
+    if( showActualMaskSize )
+    {
+        switch( showActualMaskSize )
+        {
+        case SOLDERMASK_N_BACK:
+        case SOLDERMASK_N_FRONT:
+            mask_margin.x = mask_margin.y = GetSolderMaskMargin();
+            break;
+
+        case SOLDERPASTE_N_BACK:
+        case SOLDERPASTE_N_FRONT:
+            mask_margin = GetSolderPasteMargin();
+            break;
+
+        default:
+            break;
+        }
+    }
+#endif
+
     // if Contrast mode is ON and a technical layer active, show pads on this
     // layer so we can see pads on paste or solder layer and the size of the
     // mask
-    if( DisplayOpt.ContrastModeDisplay
-        && screen->m_Active_Layer > LAST_COPPER_LAYER )
+    if( DisplayOpt.ContrastModeDisplay && screen->m_Active_Layer > LAST_COPPER_LAYER )
     {
         if( IsOnLayer( screen->m_Active_Layer ) )
         {

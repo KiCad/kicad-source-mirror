@@ -22,7 +22,7 @@ Subdirectories
 bitmaps        - Menu and program icons
 CMakeModules   - Modules for the CMAKE build tool
 common         - Sourcecode of the common library (common functions shared across whole suite)
-cvpcb          - Sourcecode of CvPCB, (eeschema) convert to pcb sourcecode
+cvpcb          - Sourcecode of CvPCB, tool to link components with footprints sourcecode
 demos          - Some demo examples
 Documentation  - Misc documentation. Translating the GUI, old changelogs etcetera.
 eeschema       - Sourcecode of the schematic editor
@@ -36,6 +36,5 @@ pcbnew         - Sourcecode of the printed circuit board editor
 polygon        - Sourcecode of the polygon library
 resources      - Resources for installation, freedesktop mime-types for linux
 scripts        - Helper scripts. For building, sourcecode packaging, font setting, pcb adjusting.
-share          - ?
 template       - Project template(s)
 
