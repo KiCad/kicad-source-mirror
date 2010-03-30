@@ -17,6 +17,8 @@ DialogLabelEditor_Base::DialogLabelEditor_Base( wxWindow* parent, wxWindowID id,
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_textControlSizer = new wxFlexGridSizer( 2, 2, 3, 3 );
+	m_textControlSizer->AddGrowableCol( 1 );
+	m_textControlSizer->AddGrowableRow( 0 );
 	m_textControlSizer->SetFlexibleDirection( wxBOTH );
 	m_textControlSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -24,10 +26,20 @@ DialogLabelEditor_Base::DialogLabelEditor_Base( wxWindow* parent, wxWindowID id,
 	m_staticText1->Wrap( -1 );
 	m_textControlSizer->Add( m_staticText1, 0, wxRIGHT, 3 );
 	
-	m_textLabel = new wxTextCtrl( this, wxID_VALUE, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	m_textLabel->SetToolTip( _("Enter the text to be used within the schematic") );
+	wxBoxSizer* bSizeText;
+	bSizeText = new wxBoxSizer( wxVERTICAL );
 	
-	m_textControlSizer->Add( m_textLabel, 0, wxEXPAND|wxLEFT, 3 );
+	m_textLabelSingleLine = new wxTextCtrl( this, wxID_VALUESINGLE, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	m_textLabelSingleLine->SetToolTip( _("Enter the text to be used within the schematic") );
+	
+	bSizeText->Add( m_textLabelSingleLine, 0, wxEXPAND|wxLEFT, 3 );
+	
+	m_textLabelMultiLine = new wxTextCtrl( this, wxID_VALUEMULTI, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_PROCESS_ENTER );
+	m_textLabelMultiLine->SetToolTip( _("Enter the text to be used within the schematic") );
+	
+	bSizeText->Add( m_textLabelMultiLine, 1, wxEXPAND|wxLEFT, 5 );
+	
+	m_textControlSizer->Add( bSizeText, 1, wxEXPAND, 5 );
 	
 	m_SizeTitle = new wxStaticText( this, wxID_ANY, _("&Size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeTitle->Wrap( -1 );
@@ -80,10 +92,10 @@ DialogLabelEditor_Base::DialogLabelEditor_Base( wxWindow* parent, wxWindowID id,
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 	
 	// Connect Events
-	m_textLabel->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogLabelEditor_Base::OnEnterKey ), NULL, this );
+	m_textLabelSingleLine->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogLabelEditor_Base::OnEnterKey ), NULL, this );
+	m_textLabelMultiLine->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogLabelEditor_Base::OnEnterKey ), NULL, this );
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogLabelEditor_Base::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogLabelEditor_Base::OnOkClick ), NULL, this );
 }
@@ -91,7 +103,8 @@ DialogLabelEditor_Base::DialogLabelEditor_Base( wxWindow* parent, wxWindowID id,
 DialogLabelEditor_Base::~DialogLabelEditor_Base()
 {
 	// Disconnect Events
-	m_textLabel->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogLabelEditor_Base::OnEnterKey ), NULL, this );
+	m_textLabelSingleLine->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogLabelEditor_Base::OnEnterKey ), NULL, this );
+	m_textLabelMultiLine->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogLabelEditor_Base::OnEnterKey ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogLabelEditor_Base::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogLabelEditor_Base::OnOkClick ), NULL, this );
 }

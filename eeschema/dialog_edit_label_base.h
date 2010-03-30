@@ -34,13 +34,15 @@ class DialogLabelEditor_Base : public wxDialog
 	protected:
 		enum
 		{
-			wxID_VALUE = 1000,
+			wxID_VALUESINGLE = 1000,
+			wxID_VALUEMULTI,
 			wxID_SIZE,
 		};
 		
 		wxFlexGridSizer* m_textControlSizer;
 		wxStaticText* m_staticText1;
-		wxTextCtrl* m_textLabel;
+		wxTextCtrl* m_textLabelSingleLine;
+		wxTextCtrl* m_textLabelMultiLine;
 		wxStaticText* m_SizeTitle;
 		wxTextCtrl* m_TextSize;
 		wxStaticText* m_staticSizeUnits;
@@ -58,7 +60,7 @@ class DialogLabelEditor_Base : public wxDialog
 		
 	
 	public:
-		DialogLabelEditor_Base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DialogLabelEditor_Base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 359,347 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DialogLabelEditor_Base();
 	
 };

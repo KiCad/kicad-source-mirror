@@ -55,19 +55,14 @@ void DialogLabelEditor::InitDialog()
 
     if( m_CurrentText->m_MultilineAllowed )
     {
-        /* Multiline text edit control must be created because changing the text
-         * control style to multiline must be done when the control is created.
-         */
-        m_textControlSizer->Detach( m_textLabel );
-        m_textLabel->Destroy();
-        m_textLabel = NULL;
-        m_textLabel = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                      wxDefaultSize, wxTE_MULTILINE | wxTE_PROCESS_ENTER );
-        m_textLabel->SetToolTip( _("Enter the text to be used within the schematic") );
-        m_textLabel->SetMinSize( wxSize( -1, 60 ) );
-        m_textControlSizer->Insert( 1, m_textLabel, 0, wxLEFT | wxEXPAND, 3 );
-        m_textControlSizer->RecalcSizes();
+        m_textLabel = m_textLabelMultiLine;
+        m_textLabelSingleLine->Show(false);
         multiLine = true;
+    }
+    else
+    {
+        m_textLabel = m_textLabelSingleLine;
+        m_textLabelMultiLine->Show(false);
     }
 
     m_textLabel->SetValue( m_CurrentText->m_Text );
