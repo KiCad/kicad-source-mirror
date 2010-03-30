@@ -36,10 +36,11 @@ DialogLabelEditor_Base::DialogLabelEditor_Base( wxWindow* parent, wxWindowID id,
 	
 	m_textLabelMultiLine = new wxTextCtrl( this, wxID_VALUEMULTI, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_PROCESS_ENTER );
 	m_textLabelMultiLine->SetToolTip( _("Enter the text to be used within the schematic") );
+	m_textLabelMultiLine->SetMinSize( wxSize( -1,60 ) );
 	
-	bSizeText->Add( m_textLabelMultiLine, 1, wxEXPAND|wxLEFT, 5 );
+	bSizeText->Add( m_textLabelMultiLine, 1, wxEXPAND|wxLEFT, 3 );
 	
-	m_textControlSizer->Add( bSizeText, 1, wxEXPAND, 5 );
+	m_textControlSizer->Add( bSizeText, 1, wxEXPAND, 3 );
 	
 	m_SizeTitle = new wxStaticText( this, wxID_ANY, _("&Size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeTitle->Wrap( -1 );

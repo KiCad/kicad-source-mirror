@@ -1,4 +1,4 @@
 release version:
-2010 mar 14 (SVN 2456)
+2010 mar 30 (SVN 2479)
 files (.zip,.tgz):
-kicad-2010-03-14-final
+kicad-2010-03-30-final
