@@ -39,14 +39,22 @@ void GERBER_PLOTTER::set_viewport( wxPoint offset,
  * initialize global variable g_Plot_PlotOutputFile
  * @param aFile: an opened file to write to
  */
-void GERBER_PLOTTER::start_plot( FILE* aFile )
+bool GERBER_PLOTTER::start_plot( FILE* aFile )
 {
     char Line[1024];
 
     wxASSERT( !output_file );
     final_file  = aFile;
-    work_file   = tmpfile();
+
+    // Create a temporary filename to store gerber file
+    // note tmpfile() does not work under Vista and W7 un user mode
+    m_workFilename = filename + wxT(".tmp");
+    work_file   = wxFopen( m_workFilename, wxT( "wt" ));
     output_file = work_file;
+    wxASSERT( output_file );
+    if( output_file == NULL )
+        return false;
+
     DateAndTime( Line );
     wxString Title = creator + wxT( " " ) + GetBuildVersion();
     fprintf( output_file, "G04 (created by %s) date %s*\n",
@@ -63,10 +71,12 @@ void GERBER_PLOTTER::start_plot( FILE* aFile )
     fputs( "G04 APERTURE LIST*\n", output_file );
     /* Select the default aperture */
     set_current_line_width( -1 );
+
+    return true;
 }
 
 
-void GERBER_PLOTTER::end_plot()
+bool GERBER_PLOTTER::end_plot()
 {
     char     line[1024];
     wxString msg;
@@ -75,7 +85,10 @@ void GERBER_PLOTTER::end_plot()
     /* Outfile is actually a temporary file! */
     fputs( "M02*\n", output_file );
     fflush( output_file );
-    rewind( work_file ); // work_file == output_file !!!
+//    rewind( work_file ); // work_file == output_file !!!
+    fclose( work_file );
+    work_file   = wxFopen( m_workFilename, wxT( "rt" ));
+    wxASSERT( work_file );
     output_file = final_file;
 
 
@@ -92,7 +105,10 @@ void GERBER_PLOTTER::end_plot()
 
     fclose( work_file );
     fclose( final_file );
+    ::wxRemoveFile( m_workFilename );
     output_file = 0;
+
+    return true;
 }
 
 

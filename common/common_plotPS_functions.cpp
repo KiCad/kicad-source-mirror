@@ -249,7 +249,7 @@ void PS_PLOTTER::pen_to( wxPoint pos, char plume )
  * BBox is the boundary box (position and size of the "client rectangle"
  * for drawings (page - margins) in mils (0.001 inch)
  */
-void PS_PLOTTER::start_plot( FILE* fout )
+bool PS_PLOTTER::start_plot( FILE* fout )
 {
     wxASSERT( !output_file );
     wxString           msg;
@@ -366,15 +366,19 @@ void PS_PLOTTER::start_plot( FILE* fout )
     // Set default line width ( g_Plot_DefaultPenWidth is in user units )
     fprintf( output_file, "%g setlinewidth\n",
              user_to_device_size( default_pen_width ) );
+
+    return true;
 }
 
 
-void PS_PLOTTER::end_plot()
+bool PS_PLOTTER::end_plot()
 {
     wxASSERT( output_file );
     fputs( "showpage\ngrestore\n%%EOF\n", output_file );
     fclose( output_file );
-    output_file = 0;
+    output_file = NULL;
+
+    return true;
 }
 
 

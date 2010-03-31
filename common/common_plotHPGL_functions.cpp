@@ -28,20 +28,22 @@ void HPGL_PLOTTER::set_viewport( wxPoint offset, double aScale, int orient )
 }
 
 
-void HPGL_PLOTTER::start_plot( FILE* fout )
+bool HPGL_PLOTTER::start_plot( FILE* fout )
 {
     wxASSERT( !output_file );
     output_file = fout;
     fprintf( output_file, "IN;VS%d;PU;PA;SP%d;\n", pen_speed, pen_number );
+    return true;
 }
 
 
-void HPGL_PLOTTER::end_plot()
+bool HPGL_PLOTTER::end_plot()
 {
     wxASSERT( output_file );
     fputs( "PU;PA;SP0;\n", output_file );
     fclose( output_file );
-    output_file = 0;
+    output_file = NULL;
+    return true;
 }
 
 

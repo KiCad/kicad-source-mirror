@@ -60,14 +60,20 @@ bool WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
     plotter->set_creator( wxT( "PCBNEW-RS274X" ) );
     plotter->set_filename( FullFileName );
 
-    plotter->start_plot( output_file );
+    if( plotter->start_plot( output_file ) )
+    {
+        // Sheet refs on gerber CAN be useful... and they're always 1:1
+        if( g_pcb_plot_options.Plot_Frame_Ref )
+            PlotWorkSheet( plotter, GetScreen() );
+        Plot_Layer( plotter, Layer, trace_mode );
 
-    // Sheet refs on gerber CAN be useful... and they're always 1:1
-    if( g_pcb_plot_options.Plot_Frame_Ref )
-        PlotWorkSheet( plotter, GetScreen() );
-    Plot_Layer( plotter, Layer, trace_mode );
+        plotter->end_plot();
+    }
 
-    plotter->end_plot();
+    else    // error in start_plot( ): failed opening a temporary file
+    {
+        wxMessageBox( _("Error when creating %s file: unable to create a temporary file"));
+    }
     delete plotter;
     SetLocaleTo_Default();
 

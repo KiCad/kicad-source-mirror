@@ -47,8 +47,8 @@ public:
     PlotFormat GetPlotterType()
     { return m_PlotType; }
 
-    virtual void start_plot( FILE* fout ) = 0;
-    virtual void end_plot() = 0;
+    virtual bool start_plot( FILE* fout ) = 0;
+    virtual bool end_plot() = 0;
 
     virtual void set_negative( bool _negative )
     {
@@ -200,8 +200,8 @@ public:
     {
     }
 
-    virtual void start_plot( FILE* fout );
-    virtual void end_plot();
+    virtual bool start_plot( FILE* fout );
+    virtual bool end_plot();
 
 /* HPGL doesn't handle line thickness or color */
     virtual void set_current_line_width( int width )
@@ -278,8 +278,8 @@ public:
         plot_scale_adjY = 1;
     }
 
-    virtual void start_plot( FILE* fout );
-    virtual void end_plot();
+    virtual bool start_plot( FILE* fout );
+    virtual bool end_plot();
     virtual void set_current_line_width( int width );
     virtual void set_default_line_width( int width );
     virtual void set_dash( bool dashed );
@@ -344,8 +344,8 @@ public:
     }
 
 
-    virtual void                    start_plot( FILE* fout );
-    virtual void                    end_plot();
+    virtual bool                    start_plot( FILE* fout );
+    virtual bool                    end_plot();
     virtual void                    set_current_line_width( int width );
     virtual void                    set_default_line_width( int width );
 
@@ -375,6 +375,8 @@ protected:
                                                   APERTURE::Aperture_Type type );
 
     FILE* work_file, * final_file;
+    wxString    m_workFilename;
+
     void                            write_aperture_list();
 
     std::vector<APERTURE>           apertures;
@@ -388,8 +390,8 @@ public:
     {
     }
 
-    virtual void start_plot( FILE* fout );
-    virtual void end_plot();
+    virtual bool start_plot( FILE* fout );
+    virtual bool end_plot();
 
 /* For now we don't use 'thick' primitives, so no line width */
     virtual void set_current_line_width( int width )

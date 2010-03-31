@@ -27,7 +27,7 @@ void DXF_PLOTTER::set_viewport( wxPoint offset,
 }
 
 
-void DXF_PLOTTER::start_plot( FILE* fout )
+bool DXF_PLOTTER::start_plot( FILE* fout )
 {
     wxASSERT( !output_file );
     output_file = fout;
@@ -45,16 +45,20 @@ void DXF_PLOTTER::start_plot( FILE* fout )
 
     /* End of layer table, begin entities */
     fputs( "0\nENDTAB\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n", output_file );
+
+    return true;
 }
 
 
-void DXF_PLOTTER::end_plot()
+bool DXF_PLOTTER::end_plot()
 {
     wxASSERT( output_file );
     /* DXF FOOTER */
     fputs( "0\nENDSEC\n0\nEOF\n", output_file );
     fclose( output_file );
-    output_file = 0;
+    output_file = NULL;
+
+    return true;
 }
 
 
