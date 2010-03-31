@@ -735,6 +735,7 @@ void AddMenusForPinSheet( wxMenu* PopMenu, SCH_SHEET_PIN* PinSheet )
 
 void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame )
 {
+    wxString msg;
     ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
                   _( "Cancel Block" ), cancel_xpm );
 
@@ -753,7 +754,9 @@ void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame )
         ADD_MENUITEM( PopMenu, wxID_COPY, _( "Save Block" ), copy_button );
         ADD_MENUITEM( PopMenu, ID_POPUP_COPY_BLOCK, _( "Copy Block" ),
                       copyblock_xpm );
-        ADD_MENUITEM( PopMenu, ID_POPUP_DRAG_BLOCK, _( "Drag Block" ),
+        msg = AddHotkeyName( _( "Drag Block" ), s_Schematic_Hokeys_Descr,
+                             HK_MOVEBLOCK_TO_DRAGBLOCK );
+        ADD_MENUITEM( PopMenu, ID_POPUP_DRAG_BLOCK, msg,
                       move_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_DELETE_BLOCK, _( "Delete Block" ),
                       delete_xpm );
