@@ -492,7 +492,7 @@ const char* GetTokenText( int aTok );
 
 
 /**
- * Class POINT
+ * Struct POINT
  * is a holder for a point in the SPECCTRA DSN coordinate system.  It can also
  * be used to hold a distance (vector really) from some origin.
  */

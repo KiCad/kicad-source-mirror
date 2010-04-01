@@ -336,7 +336,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
     if( aPad->m_Offset.x || aPad->m_Offset.y )
     {
-        char offsetTxt[32];
+        char offsetTxt[64];
 
         wxPoint offset( aPad->m_Offset.x, aPad->m_Offset.y );
 
@@ -720,7 +720,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IOErr
         {
             haveEdges = true;
             ++i;
-            //D( item->Show( 0, std::cout );)
+            D( item->Show( 0, std::cout );)
         }
     }
 
@@ -738,14 +738,34 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IOErr
         items.Remove( 0 );
 
         prevPt = graphic->GetEnd();
-        path->AppendPoint( mapPt( graphic->GetEnd() ) );
+        path->AppendPoint( mapPt( prevPt ) );
 
-        // do not append the other end point yet, this first edge item might be an arc
+        // do not append the other end point yet, this first 'graphic' might be an arc
 
         for(;;)
         {
             switch( graphic->m_Shape )
             {
+            case S_SEGMENT:
+                {
+                    wxPoint  nextPt;
+
+                    if( prevPt != graphic->GetStart() )
+                    {
+                        wxASSERT( prevPt == graphic->GetEnd() );
+                        nextPt = graphic->GetStart();
+                    }
+                    else
+                    {
+                        wxASSERT( prevPt == graphic->GetStart() );
+                        nextPt = graphic->GetEnd();
+                    }
+
+                    path->AppendPoint( mapPt(nextPt) );
+                    prevPt = nextPt;
+                 }
+                 break;
+
             case S_ARC:
                 // freerouter does not yet understand arcs, so approximate
                 // an arc with a series of short lines and put those
@@ -794,7 +814,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IOErr
                 // Do not output a circle, freerouter does not understand it.
                 // tell user his board has a problem, this is better than silently
                 // ignoring the error. "edges pcb" layer should not be used
-                // to hold islanded circles which could or should better be done
+                // to hold islanded circles which could or should be better done
                 // as simple holes. (Some of our demo boards have this problem.)
                 // fall thru here to report the error.
 #endif
@@ -809,25 +829,6 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IOErr
                     ThrowIOError( error );
                 }
                 break;
-
-            case S_SEGMENT:
-                {
-                    POINT  nextPt;
-
-                    if( prevPt != graphic->GetStart() )
-                    {
-                        wxASSERT( prevPt == graphic->GetEnd() );
-                        nextPt = mapPt( graphic->GetStart() );
-                        prevPt = graphic->GetStart();
-                    }
-                    else
-                    {
-                        nextPt = mapPt( graphic->GetStart() );
-                        prevPt = graphic->GetEnd();
-                    }
-
-                    path->AppendPoint( nextPt );
-                 }
             }
 
             if( items.GetCount() == 0 )
@@ -845,6 +846,13 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IOErr
                 ThrowIOError( error );
             }
         }
+
+#if 0 && defined(DEBUG)
+        STRINGFORMATTER sf;
+        path->Format( &sf, 0 );
+        printf( "%s\n", sf.GetString().c_str() );
+#endif
+
     }
     else
     {
