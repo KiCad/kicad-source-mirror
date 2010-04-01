@@ -1097,7 +1097,7 @@ const char* const newstroke_font[] =
     "HZVZT[P[NZMYLWLQMONNPMTMVN",
     "KYMMWM RRMR[",
     "JZMMR[ RWMR[P`OaMb",
-    "G]MMLNKPKVLXNZP[T[VZXXYVYPXNVMUMSNRPRb",
+    "G]RFRb RPMTMVNXPYRYVXXVZT[P[NZLXKVKRLPNNPM",
     "IZL[WM RLMW[",
     "I\\WMW[ RNMN[Y[Y`",
     "J\\VMV[ RNMNROTQUVU",
@@ -11347,13 +11347,13 @@ const char* const newstroke_font[] =
     "F^K[KFYFY[K[",
     "F^K[KFYFY[K[",
     "F^K[KFYFY[K[",
-    "F^K[KFYFY[K["
+    "F^K[KFYFY[K[",
 };
+
+const int newstroke_font_bufsize = sizeof(newstroke_font)/sizeof(newstroke_font[0]);
+
 /* --- unused glyphs --- */
 /*  RECTANGLE_V_BLACK_SMALL  */
 /*  TRIANGLE_TALL_BLACK  */
 /*  COMBINING  */
 /*  DIAMOND_SMALL  */
-
-const int newstroke_font_bufsize = sizeof(newstroke_font)/sizeof(newstroke_font[0]);
-
