@@ -1,0 +1,828 @@
+# EESchema Netlist Version 1.1 created  01/04/2010 13:22:20
+(
+ ( /4B4B15E7 $noname  C10 10uF {Lib=CP}
+  (    1 N-000010 )
+  (    2 N-000005 )
+ )
+ ( /4B4B15D9 $noname  C11 10uF {Lib=CP}
+  (    1 GND )
+  (    2 -VAA )
+ )
+ ( /4B4B1532 $noname  U2 78L05 {Lib=7805}
+  (   VI +12C )
+  (   VO VCC )
+  (  GND GND )
+ )
+ ( /4B4B1230 $noname  U1 ICL7660 {Lib=ICL7660}
+  (    2 N-000010 )
+  (    3 GND )
+  (    4 N-000005 )
+  (    5 -VAA )
+  (    6 ? )
+  (    7 ? )
+  (    8 VCC )
+ )
+ ( /4B3A1558 $noname  C9 47uF/63V {Lib=CP}
+  (    1 HT )
+  (    2 GND )
+ )
+ ( /4B3A12F4 $noname  P1 CONN_2 {Lib=CONN_2}
+  (    1 HT )
+  (    2 GND )
+ )
+ ( /4B03CEC2 $noname  C1 47uF {Lib=CP}
+  (    1 VCC )
+  (    2 GND )
+ )
+ ( /4AE173CF $noname  C2 47uF/20V {Lib=CP}
+  (    1 +12C )
+  (    2 GND )
+ )
+ ( /4AE172F4 $noname  D1 1N4007 {Lib=DIODE}
+  (    1 /12Vext )
+  (    2 +12C )
+ )
+ ( /4AD71B06 $noname  P2 CONN_2 {Lib=CONN_2}
+  (    1 /12Vext )
+  (    2 GND )
+ )
+ ( /4B3A13A4/4B617B88 $noname  R28 220K {Lib=R}
+  (    1 /ampli_ht_horizontal/S_OUT+ )
+  (    2 N-000039 )
+ )
+ ( /4B3A13A4/4B616B96 $noname  R27 47 {Lib=R}
+  (    1 /ampli_ht_horizontal/PIEZO_OUT )
+  (    2 N-000032 )
+ )
+ ( /4B3A13A4/4B616AFA $noname  D9 1N4148 {Lib=DIODE}
+  (    1 N-000047 )
+  (    2 N-000044 )
+ )
+ ( /4B3A13A4/4B61688C $noname  R20 5,6K {Lib=R}
+  (    1 N-000033 )
+  (    2 N-000038 )
+ )
+ ( /4B3A13A4/4B4F3641 $noname  C14 150nF {Lib=C}
+  (    1 N-000037 )
+  (    2 GND )
+ )
+ ( /4B3A13A4/4B4F363E $noname  R24 1K {Lib=R}
+  (    1 N-000037 )
+  (    2 /ampli_ht_horizontal/PIEZO_IN )
+ )
+ ( /4B3A13A4/4B3A137D $noname  Q6 MPAS42 {Lib=MPSA42}
+  (    B N-000047 )
+  (    C HT )
+  (    E N-000039 )
+ )
+ ( /4B3A13A4/4B3A137C $noname  Q7 MPAS92 {Lib=MPSA92}
+  (    B N-000033 )
+  (    C GND )
+  (    E N-000032 )
+ )
+ ( /4B3A13A4/4B3A137B $noname  D7 1N4148 {Lib=DIODE}
+  (    1 N-000044 )
+  (    2 N-000033 )
+ )
+ ( /4B3A13A4/4B3A1379 $noname  Q8 MPAS42 {Lib=MPSA42}
+  (    B N-000046 )
+  (    C N-000033 )
+  (    E N-000034 )
+ )
+ ( /4B3A13A4/4B3A1377 $noname  D6 1N4148 {Lib=DIODE}
+  (    1 N-000035 )
+  (    2 N-000041 )
+ )
+ ( /4B3A13A4/4B3A1376 $noname  R13 470 {Lib=R}
+  (    1 HT )
+  (    2 N-000048 )
+ )
+ ( /4B3A13A4/4B3A1375 $noname  D5 1N4148 {Lib=DIODE}
+  (    1 HT )
+  (    2 N-000035 )
+ )
+ ( /4B3A13A4/4B3A1374 $noname  R14 220K {Lib=R}
+  (    1 N-000041 )
+  (    2 GND )
+ )
+ ( /4B3A13A4/4B3A1371 $noname  R18 1K {Lib=R}
+  (    1 N-000046 )
+  (    2 GND )
+ )
+ ( /4B3A13A4/4B3A1370 $noname  R22 220K {Lib=R}
+  (    1 /ampli_ht_horizontal/S_OUT+ )
+  (    2 N-000032 )
+ )
+ ( /4B3A13A4/4B3A136D $noname  R19 1K {Lib=R}
+  (    1 N-000034 )
+  (    2 N-000042 )
+ )
+ ( /4B3A13A4/4B3A136C $noname  P5 CONN_2 {Lib=CONN_2}
+  (    1 /ampli_ht_horizontal/PIEZO_OUT )
+  (    2 GND )
+ )
+ ( /4B3A13A4/4B3A136B $noname  R16 22K {Lib=R}
+  (    1 N-000036 )
+  (    2 N-000037 )
+ )
+ ( /4B3A13A4/4B3A1368 $noname  U4 LM358N {Lib=LM358N}
+  (    1 N-000042 )
+  (    2 N-000043 )
+  (    3 /ampli_ht_horizontal/Vpil_0_3,3V )
+  (    4 -VAA )
+  (    5 N-000045 )
+  (    6 /ampli_ht_horizontal/Vpil_0_3,3V )
+  (    7 /ampli_ht_horizontal/Vpil_0_3,3V )
+  (    8 +12C )
+ )
+ ( /4B3A13A4/4B3A1367 $noname  P6 CONN_2 {Lib=CONN_2}
+  (    1 /ampli_ht_horizontal/PIEZO_IN )
+  (    2 GND )
+ )
+ ( /4B3A13A4/4B3A1366 $noname  C7 4,7nF {Lib=C}
+  (    1 N-000045 )
+  (    2 GND )
+ )
+ ( /4B3A13A4/4B3A1365 $noname  C8 820pF {Lib=C}
+  (    1 N-000038 )
+  (    2 GND )
+ )
+ ( /4B3A13A4/4B3A1364 $noname  R15 47 {Lib=R}
+  (    1 /ampli_ht_horizontal/PIEZO_OUT )
+  (    2 N-000039 )
+ )
+ ( /4B3A13A4/4B3A1362 $noname  R21 4,7K {Lib=R}
+  (    1 N-000040 )
+  (    2 GND )
+ )
+ ( /4B3A13A4/4B3A1360 $noname  Q5 MPAS92 {Lib=MPSA92}
+  (    B N-000041 )
+  (    C N-000047 )
+  (    E N-000048 )
+ )
+ ( /4B3A13A4/4B3A1359 $noname  R17 22K {Lib=R}
+  (    1 N-000045 )
+  (    2 N-000036 )
+ )
+ ( /4B3A13A4/4B3A1358 $noname  C6 15nF {Lib=C}
+  (    1 /ampli_ht_horizontal/Vpil_0_3,3V )
+  (    2 N-000036 )
+ )
+ ( /4B3A13A4/4B3A1357 $noname  RV2 4,7K {Lib=POT}
+  (    1 N-000040 )
+  (    2 N-000043 )
+  (    3 /ampli_ht_horizontal/S_OUT+ )
+ )
+ ( /4B3A1333/4B617B88 $noname  R26 220K {Lib=R}
+  (    1 /ampli_ht_vertical/S_OUT+ )
+  (    2 N-000018 )
+ )
+ ( /4B3A1333/4B616B96 $noname  R25 47 {Lib=R}
+  (    1 /ampli_ht_vertical/PIEZO_OUT )
+  (    2 N-000013 )
+ )
+ ( /4B3A1333/4B616AFA $noname  D8 1N4148 {Lib=DIODE}
+  (    1 N-000026 )
+  (    2 N-000023 )
+ )
+ ( /4B3A1333/4B61688C $noname  R10 5,6K {Lib=R}
+  (    1 N-000012 )
+  (    2 N-000017 )
+ )
+ ( /4B3A1333/4B4F3641 $noname  C12 150nF {Lib=C}
+  (    1 N-000016 )
+  (    2 GND )
+ )
+ ( /4B3A1333/4B4F363E $noname  R23 1K {Lib=R}
+  (    1 N-000016 )
+  (    2 /ampli_ht_vertical/PIEZO_IN )
+ )
+ ( /4B3A1333/4B3A137D $noname  Q2 MPAS42 {Lib=MPSA42}
+  (    B N-000026 )
+  (    C HT )
+  (    E N-000018 )
+ )
+ ( /4B3A1333/4B3A137C $noname  Q3 MPAS92 {Lib=MPSA92}
+  (    B N-000012 )
+  (    C GND )
+  (    E N-000013 )
+ )
+ ( /4B3A1333/4B3A137B $noname  D4 1N4148 {Lib=DIODE}
+  (    1 N-000023 )
+  (    2 N-000012 )
+ )
+ ( /4B3A1333/4B3A1379 $noname  Q4 MPAS42 {Lib=MPSA42}
+  (    B N-000025 )
+  (    C N-000012 )
+  (    E N-000011 )
+ )
+ ( /4B3A1333/4B3A1377 $noname  D3 1N4148 {Lib=DIODE}
+  (    1 N-000014 )
+  (    2 N-000020 )
+ )
+ ( /4B3A1333/4B3A1376 $noname  R3 470 {Lib=R}
+  (    1 HT )
+  (    2 N-000027 )
+ )
+ ( /4B3A1333/4B3A1375 $noname  D2 1N4148 {Lib=DIODE}
+  (    1 HT )
+  (    2 N-000014 )
+ )
+ ( /4B3A1333/4B3A1374 $noname  R4 220K {Lib=R}
+  (    1 N-000020 )
+  (    2 GND )
+ )
+ ( /4B3A1333/4B3A1371 $noname  R8 1K {Lib=R}
+  (    1 N-000025 )
+  (    2 GND )
+ )
+ ( /4B3A1333/4B3A1370 $noname  R12 220K {Lib=R}
+  (    1 /ampli_ht_vertical/S_OUT+ )
+  (    2 N-000013 )
+ )
+ ( /4B3A1333/4B3A136D $noname  R9 1K {Lib=R}
+  (    1 N-000011 )
+  (    2 N-000021 )
+ )
+ ( /4B3A1333/4B3A136C $noname  P3 CONN_2 {Lib=CONN_2}
+  (    1 /ampli_ht_vertical/PIEZO_OUT )
+  (    2 GND )
+ )
+ ( /4B3A1333/4B3A136B $noname  R6 22K {Lib=R}
+  (    1 N-000015 )
+  (    2 N-000016 )
+ )
+ ( /4B3A1333/4B3A1368 $noname  U3 LM358N {Lib=LM358N}
+  (    1 N-000021 )
+  (    2 N-000022 )
+  (    3 /ampli_ht_vertical/Vpil_0_3,3V )
+  (    4 -VAA )
+  (    5 N-000024 )
+  (    6 /ampli_ht_vertical/Vpil_0_3,3V )
+  (    7 /ampli_ht_vertical/Vpil_0_3,3V )
+  (    8 +12C )
+ )
+ ( /4B3A1333/4B3A1367 $noname  P4 CONN_2 {Lib=CONN_2}
+  (    1 /ampli_ht_vertical/PIEZO_IN )
+  (    2 GND )
+ )
+ ( /4B3A1333/4B3A1366 $noname  C4 4,7nF {Lib=C}
+  (    1 N-000024 )
+  (    2 GND )
+ )
+ ( /4B3A1333/4B3A1365 $noname  C5 820pF {Lib=C}
+  (    1 N-000017 )
+  (    2 GND )
+ )
+ ( /4B3A1333/4B3A1364 $noname  R5 47 {Lib=R}
+  (    1 /ampli_ht_vertical/PIEZO_OUT )
+  (    2 N-000018 )
+ )
+ ( /4B3A1333/4B3A1362 $noname  R11 4,7K {Lib=R}
+  (    1 N-000019 )
+  (    2 GND )
+ )
+ ( /4B3A1333/4B3A1360 $noname  Q1 MPAS92 {Lib=MPSA92}
+  (    B N-000020 )
+  (    C N-000026 )
+  (    E N-000027 )
+ )
+ ( /4B3A1333/4B3A1359 $noname  R7 22K {Lib=R}
+  (    1 N-000024 )
+  (    2 N-000015 )
+ )
+ ( /4B3A1333/4B3A1358 $noname  C3 15nF {Lib=C}
+  (    1 /ampli_ht_vertical/Vpil_0_3,3V )
+  (    2 N-000015 )
+ )
+ ( /4B3A1333/4B3A1357 $noname  RV1 4,7K {Lib=POT}
+  (    1 N-000019 )
+  (    2 N-000022 )
+  (    3 /ampli_ht_vertical/S_OUT+ )
+ )
+)
+*
+{ Allowed footprints by component:
+$component C10
+ CP*
+ SM*
+$endlist
+$component C11
+ CP*
+ SM*
+$endlist
+$component C9
+ CP*
+ SM*
+$endlist
+$component C1
+ CP*
+ SM*
+$endlist
+$component C2
+ CP*
+ SM*
+$endlist
+$component D1
+ D?
+ S*
+$endlist
+$component R28
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R27
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component D9
+ D?
+ S*
+$endlist
+$component R20
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component C14
+ SM*
+ C?
+ C1-1
+$endlist
+$component R24
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component Q6
+ TO92-CBE
+$endlist
+$component Q7
+ TO92-CBE
+$endlist
+$component D7
+ D?
+ S*
+$endlist
+$component Q8
+ TO92-CBE
+$endlist
+$component D6
+ D?
+ S*
+$endlist
+$component R13
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component D5
+ D?
+ S*
+$endlist
+$component R14
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R18
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R22
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R19
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R16
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component C7
+ SM*
+ C?
+ C1-1
+$endlist
+$component C8
+ SM*
+ C?
+ C1-1
+$endlist
+$component R15
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R21
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component Q5
+ TO92-CBE
+$endlist
+$component R17
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component C6
+ SM*
+ C?
+ C1-1
+$endlist
+$component R26
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R25
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component D8
+ D?
+ S*
+$endlist
+$component R10
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component C12
+ SM*
+ C?
+ C1-1
+$endlist
+$component R23
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component Q2
+ TO92-CBE
+$endlist
+$component Q3
+ TO92-CBE
+$endlist
+$component D4
+ D?
+ S*
+$endlist
+$component Q4
+ TO92-CBE
+$endlist
+$component D3
+ D?
+ S*
+$endlist
+$component R3
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component D2
+ D?
+ S*
+$endlist
+$component R4
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R8
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R12
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R9
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R6
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component C4
+ SM*
+ C?
+ C1-1
+$endlist
+$component C5
+ SM*
+ C?
+ C1-1
+$endlist
+$component R5
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R11
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component Q1
+ TO92-CBE
+$endlist
+$component R7
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component C3
+ SM*
+ C?
+ C1-1
+$endlist
+$endfootprintlist
+}
+{ Pin List by Nets
+Net 1 "HT" "HT"
+ Q6 C
+ R13 1
+ D2 1
+ Q2 C
+ R3 1
+ D5 1
+ C9 1
+ P1 1
+Net 2 "GND" "GND"
+ C12 2
+ C14 2
+ C9 2
+ R4 2
+ R14 2
+ P6 2
+ C7 2
+ C8 2
+ R21 2
+ P4 2
+ C4 2
+ C5 2
+ R11 2
+ R8 2
+ P3 2
+ Q3 C
+ P1 2
+ R18 2
+ C1 2
+ P5 2
+ C2 2
+ P2 2
+ U2 GND
+ U1 3
+ C11 1
+ Q7 C
+Net 5 "" ""
+ U1 4
+ C10 2
+Net 6 "/12Vext" "12Vext"
+ D1 1
+ P2 1
+Net 7 "+12C" "+12C"
+ U3 8
+ U4 8
+ D1 2
+ C2 1
+ U2 VI
+ U4 8
+ U3 8
+Net 8 "VCC" "VCC"
+ U2 VO
+ U1 8
+ C1 1
+Net 9 "-VAA" "-VAA"
+ C11 2
+ U3 4
+ U3 4
+ U4 4
+ U4 4
+ U1 5
+Net 10 "" ""
+ C10 1
+ U1 2
+Net 11 "" ""
+ R9 1
+ Q4 E
+Net 12 "" ""
+ R10 1
+ Q3 B
+ D4 2
+ Q4 C
+Net 13 "" ""
+ R25 2
+ R12 2
+ Q3 E
+Net 14 "" ""
+ D3 1
+ D2 2
+Net 15 "" ""
+ R6 1
+ C3 2
+ R7 2
+Net 16 "" ""
+ R6 2
+ C12 1
+ R23 1
+Net 17 "" ""
+ R10 2
+ C5 1
+Net 18 "" ""
+ R5 2
+ Q2 E
+ R26 2
+Net 19 "" ""
+ R11 1
+ RV1 1
+Net 20 "" ""
+ R4 1
+ Q1 B
+ D3 2
+Net 21 "" ""
+ R9 2
+ U3 1
+Net 22 "" ""
+ RV1 2
+ U3 2
+Net 23 "" ""
+ D8 2
+ D4 1
+Net 24 "" ""
+ C4 1
+ R7 1
+ U3 5
+Net 25 "" ""
+ Q4 B
+ R8 1
+Net 26 "" ""
+ Q1 C
+ D8 1
+ Q2 B
+Net 27 "" ""
+ R3 2
+ Q1 E
+Net 28 "/ampli_ht_vertical/Vpil_0_3,3V" "Vpil_0_3,3V"
+ U3 3
+ U3 7
+ U3 6
+ C3 1
+Net 29 "/ampli_ht_vertical/PIEZO_OUT" "PIEZO_OUT"
+ P3 1
+ R25 1
+ R5 1
+Net 30 "/ampli_ht_vertical/PIEZO_IN" "PIEZO_IN"
+ R23 2
+ P4 1
+Net 31 "/ampli_ht_vertical/S_OUT+" "S_OUT+"
+ R26 1
+ RV1 3
+ R12 1
+Net 32 "" ""
+ R27 2
+ R22 2
+ Q7 E
+Net 33 "" ""
+ Q7 B
+ D7 2
+ Q8 C
+ R20 1
+Net 34 "" ""
+ Q8 E
+ R19 1
+Net 35 "" ""
+ D5 2
+ D6 1
+Net 36 "" ""
+ R17 2
+ R16 1
+ C6 2
+Net 37 "" ""
+ R16 2
+ R24 1
+ C14 1
+Net 38 "" ""
+ C8 1
+ R20 2
+Net 39 "" ""
+ Q6 E
+ R28 2
+ R15 2
+Net 40 "" ""
+ R21 1
+ RV2 1
+Net 41 "" ""
+ R14 1
+ Q5 B
+ D6 2
+Net 42 "" ""
+ U4 1
+ R19 2
+Net 43 "" ""
+ RV2 2
+ U4 2
+Net 44 "" ""
+ D7 1
+ D9 2
+Net 45 "" ""
+ U4 5
+ R17 1
+ C7 1
+Net 46 "" ""
+ Q8 B
+ R18 1
+Net 47 "" ""
+ Q5 C
+ Q6 B
+ D9 1
+Net 48 "" ""
+ R13 2
+ Q5 E
+Net 49 "/ampli_ht_horizontal/Vpil_0_3,3V" "Vpil_0_3,3V"
+ U4 6
+ U4 7
+ C6 1
+ U4 3
+Net 50 "/ampli_ht_horizontal/PIEZO_OUT" "PIEZO_OUT"
+ P5 1
+ R27 1
+ R15 1
+Net 51 "/ampli_ht_horizontal/PIEZO_IN" "PIEZO_IN"
+ R24 2
+ P6 1
+Net 52 "/ampli_ht_horizontal/S_OUT+" "S_OUT+"
+ R22 1
+ R28 1
+ RV2 3
+}
+#End
