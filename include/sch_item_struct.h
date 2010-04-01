@@ -100,9 +100,13 @@ public:
      *         objects derived from EDA_BaseStruct.
      *
      * @param aSearchData - The search criteria.
+     * @param aAuxData - a pointer on auxiliary data, if needed (NULL if not used).
+     *        When searching string in REFERENCE field we must know the sheet path
+     *          This param is used in such cases
      * @return True if this schematic text item matches the search criteria.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData ) { return false; }
+    virtual bool Matches( wxFindReplaceData& aSearchData, void * aAuxData )
+        { return false; }
 
     /**
      * Compare schematic item against search string.

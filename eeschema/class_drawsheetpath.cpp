@@ -111,8 +111,9 @@ SCH_SHEET* SCH_SHEET_PATH::Last()
  */
 SCH_SCREEN* SCH_SHEET_PATH::LastScreen()
 {
-    if( m_numSheets )
-        return m_sheets[m_numSheets - 1]->m_AssociatedScreen;
+    SCH_SHEET* lastSheet = Last();
+    if( lastSheet )
+        return lastSheet->m_AssociatedScreen;
     return NULL;
 }
 
@@ -123,8 +124,9 @@ SCH_SCREEN* SCH_SHEET_PATH::LastScreen()
  */
 SCH_ITEM* SCH_SHEET_PATH::LastDrawList()
 {
-    if( m_numSheets && m_sheets[m_numSheets - 1]->m_AssociatedScreen )
-        return m_sheets[m_numSheets - 1]->m_AssociatedScreen->EEDrawList;
+    SCH_SHEET* lastSheet = Last();
+    if( lastSheet && lastSheet->m_AssociatedScreen )
+        return lastSheet->m_AssociatedScreen->EEDrawList;
     return NULL;
 }
 
@@ -333,7 +335,7 @@ SCH_ITEM* SCH_SHEET_PATH::MatchNextItem( wxFindReplaceData& aSearchData,
         }
         else
         {
-            if( drawItem->Matches( aSearchData ) )
+            if( drawItem->Matches( aSearchData, Last() ) )
                 return drawItem;
         }
 
@@ -631,7 +633,7 @@ SCH_ITEM* SCH_SHEET_LIST::MatchNextItem( wxFindReplaceData& aSearchData,
             }
             else
             {
-                if( drawItem->Matches( aSearchData ) )
+                if( drawItem->Matches( aSearchData, sheet ) )
                 {
                     if( aSheetFoundIn )
                         *aSheetFoundIn = sheet;

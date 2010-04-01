@@ -149,9 +149,10 @@ public:
      * Compare schematic text entry against search string.
      *
      * @param aSearchData - Criterial to search against.
+     * @param aAuxData - a pointer on auxiliary data, if needed. Can be null
      * @return True if this schematic text item matches the search criteria.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData );
+    virtual bool Matches( wxFindReplaceData& aSearchData, void * aAuxData );
 
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );

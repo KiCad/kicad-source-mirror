@@ -119,9 +119,13 @@ public:
      * Compare schematic field text against search string.
      *
      * @param aSearchData - Criteria to search against.
+     * @param aAuxData - a pointer on auxiliary data, if needed.
+     *              the sheet path is needed for REFERENCE field because m_Text
+     *              value is just the valeur displayed, and in complex hierarchies
+     *              this is only one of all references (one per sheet path)
      * @return True if this field text matches the search criteria.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData );
+    virtual bool Matches( wxFindReplaceData& aSearchData, void * aAuxData );
 };
 
 

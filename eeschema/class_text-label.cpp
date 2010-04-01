@@ -181,7 +181,7 @@ wxPoint SCH_TEXT::GetSchematicTextOffset()
 }
 
 
-bool SCH_TEXT::Matches( wxFindReplaceData& aSearchData )
+bool SCH_TEXT::Matches( wxFindReplaceData& aSearchData, void * aAuxData )
 {
     return SCH_ITEM::Matches( m_Text, aSearchData );
 }

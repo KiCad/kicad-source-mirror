@@ -420,7 +420,28 @@ void SCH_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 }
 
 
-bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData )
+bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void * aAuxData )
 {
+    if( aAuxData && m_FieldId == REFERENCE )
+    {
+        SCH_COMPONENT* pSch = (SCH_COMPONENT*) m_Parent;
+        SCH_SHEET_PATH* sheet = (SCH_SHEET_PATH*) aAuxData;
+        wxString fulltext = pSch->GetRef( sheet );
+        if( m_AddExtraText )
+        {
+            /* For more than one part per package, we must add the part selection
+             * A, B, ... or 1, 2, .. to the reference. */
+            int part_id = pSch->GetUnitSelection( sheet );
+    #if defined(KICAD_GOST)
+            fulltext.Append( '.' );
+            part_id = '1' - 1 + part_id;
+    #else
+            part_id = 'A' - 1 + part_id;
+    #endif
+            fulltext.Append( part_id );
+        }
+        return SCH_ITEM::Matches( fulltext, aSearchData );
+    }
+    
     return SCH_ITEM::Matches( m_Text, aSearchData );
 }

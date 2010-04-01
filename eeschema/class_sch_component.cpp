@@ -1153,19 +1153,30 @@ void SCH_COMPONENT::Mirror_Y(int aYaxis_position)
 }
 
 
-bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData )
+bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void * aAuxData )
 {
-    if( !( aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS ) )
-    {
-        if( !GetField( REFERENCE )->Matches( aSearchData ) )
-            return GetField( VALUE )->Matches( aSearchData );
+    // Search reference.
+    // reference is a special field because a part identifier is added
+    // in multi parts per package
+    // the .m_AddExtraText of the field msut be set to add this identifier:
+    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
+    if( Entry && Entry->GetPartCount() > 1 )
+            GetField( REFERENCE )->m_AddExtraText = true;
+    else
+        GetField( REFERENCE )->m_AddExtraText = false;
 
+    if( GetField( REFERENCE )->Matches( aSearchData, aAuxData ) )
         return true;
-    }
 
-    for( size_t i = 0; i < NUMBER_OF_FIELDS; i++ )
+    if( GetField( VALUE )->Matches( aSearchData, aAuxData ) )
+        return true;
+
+    if( !( aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS ) )
+        return false;
+
+    for( size_t i = VALUE+1; i < NUMBER_OF_FIELDS; i++ )
     {
-        if( GetField( i )->Matches( aSearchData ) )
+        if( GetField( i )->Matches( aSearchData, aAuxData ) )
             return true;
     }
 

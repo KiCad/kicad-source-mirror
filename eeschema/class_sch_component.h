@@ -353,9 +353,12 @@ public:
      * Compare schematic component reference and value fields against search string.
      *
      * @param aSearchData - Criteria to search against.
+     * @param aAuxData - a pointer on auxiliary data, if needed.
+     *        When searching string in REFERENCE field we must know the sheet path
+     *          This param is used in this case
      * @return True if this component reference or value field matches the search criteria.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData );
+    virtual bool Matches( wxFindReplaceData& aSearchData, void * aAuxData );
 
     #if defined (DEBUG)
 
