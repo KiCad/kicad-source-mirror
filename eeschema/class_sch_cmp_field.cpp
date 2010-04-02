@@ -434,14 +434,14 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void * aAuxData )
             int part_id = pSch->GetUnitSelection( sheet );
     #if defined(KICAD_GOST)
             fulltext.Append( '.' );
-            part_id = '1' - 1 + part_id;
+            part_id += '1' - 1;
     #else
-            part_id = 'A' - 1 + part_id;
+            part_id += 'A' - 1;
     #endif
-            fulltext.Append( part_id );
+            fulltext.Append( (char)part_id );
         }
         return SCH_ITEM::Matches( fulltext, aSearchData );
     }
-    
+
     return SCH_ITEM::Matches( m_Text, aSearchData );
 }
