@@ -141,6 +141,71 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnCloseWindow( wxCloseEvent& event )
 }
 
 
+/********************************************************************/
+void DIALOG_PCBNEW_CONFIG_LIBS::OnButtonUpClick( wxCommandEvent& event )
+/********************************************************************/
+{
+    wxArrayInt selections;
+
+    m_ListLibr->GetSelections(selections);
+    if ( selections.GetCount() <= 0 )   // No selection.
+        return;
+
+    if( selections[0] == 0 )            // The first lib is selected. cannot move up it
+        return;
+
+    wxArrayString libnames = m_ListLibr->GetStrings();
+
+    for( size_t ii = 0; ii < selections.GetCount(); ii++ )
+    {
+        int jj = selections[ii];
+        EXCHG( libnames[jj],  libnames[jj-1]);
+    }
+    m_ListLibr->Set(libnames);
+
+    // Reselect previously selected names
+    for( size_t ii = 0; ii < selections.GetCount(); ii++ )
+    {
+        int jj = selections[ii];
+        m_ListLibr->SetSelection(jj-1);
+    }
+
+    m_LibListChanged = TRUE;
+}
+
+
+/*********************************************************************/
+void DIALOG_PCBNEW_CONFIG_LIBS::OnButtonDownClick( wxCommandEvent& event )
+/*********************************************************************/
+{
+    wxArrayInt selections;
+
+    m_ListLibr->GetSelections(selections);
+    if ( selections.GetCount() <= 0 )   // No selection.
+        return;
+
+    // The last lib is selected. cannot move down it
+    if( selections.Last() == (int)(m_ListLibr->GetCount()-1) )
+        return;
+
+    wxArrayString libnames = m_ListLibr->GetStrings();
+
+    for( int ii = selections.GetCount()-1; ii >= 0; ii-- )
+    {
+        int jj = selections[ii];
+        EXCHG( libnames[jj],  libnames[jj+1]);
+    }
+    m_ListLibr->Set(libnames);
+
+    // Reselect previously selected names
+    for( size_t ii = 0; ii < selections.GetCount(); ii++ )
+    {
+        int jj = selections[ii];
+        m_ListLibr->SetSelection(jj+1);
+    }
+    m_LibListChanged = TRUE;
+}
+
 
 /*********************************************************************/
 void DIALOG_PCBNEW_CONFIG_LIBS::OnRemoveLibClick( wxCommandEvent& event )
@@ -149,14 +214,14 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnRemoveLibClick( wxCommandEvent& event )
  * The real list (g_LibName_List) is not changed, so the change can be canceled
  */
 {
-    int ii;
+    wxArrayInt selections;
 
-    ii = m_ListLibr->GetSelection();
-    if( ii < 0 )
-        return;
-
-    m_ListLibr->Delete(ii);
-    m_LibListChanged = TRUE;
+    m_ListLibr->GetSelections(selections);
+    for( int ii = selections.GetCount()-1; ii >= 0; ii-- )
+    {
+        m_ListLibr->Delete(selections[ii] );
+        m_LibListChanged = TRUE;
+    }
 }
 
 
@@ -170,12 +235,17 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnAddOrInsertLibClick( wxCommandEvent& event )
  * The real list (g_LibName_List) is not changed, so the change can be canceled
  */
 {
-    int        ii;
+    int        ii = 0;
     wxString   libfilename;
     wxFileName fn;
 
-    ii = m_ListLibr->GetSelection();
-    if( ii == wxNOT_FOUND )
+    wxArrayInt selections;
+    m_ListLibr->GetSelections(selections);
+
+    ii = selections.GetCount();
+    if( ii > 0 )
+        ii = selections[0];
+    else
         ii = 0;
 
     wxString libpath;

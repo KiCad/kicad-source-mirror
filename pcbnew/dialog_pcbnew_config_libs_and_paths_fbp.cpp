@@ -24,11 +24,11 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	
 	sbLibsChoiceSizer->Add( bLibsButtonsSizer, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_ListLibr = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_HSCROLL|wxLB_NEEDED_SB|wxLB_SINGLE ); 
+	m_ListLibr = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_HSCROLL|wxLB_NEEDED_SB|wxLB_SINGLE ); 
 	m_ListLibr->SetToolTip( _("List of active library files.\nOnly library files in this list are loaded by Pcbnew.\nThe order of this list is important:\nPcbnew searchs for a given footprint using this list order priority.") );
 	m_ListLibr->SetMinSize( wxSize( 400,90 ) );
 	
-	sbLibsChoiceSizer->Add( m_ListLibr, 1, wxALL|wxEXPAND, 5 );
+	sbLibsChoiceSizer->Add( m_ListLibr, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -36,7 +36,7 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	m_buttonAddLib = new wxButton( this, ID_ADD_LIB, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonAddLib->SetToolTip( _("Add a new library after the selected library, and load it") );
 	
-	bRightSizer->Add( m_buttonAddLib, 0, wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bRightSizer->Add( m_buttonAddLib, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonIns = new wxButton( this, wxID_ANY, _("Insert"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonIns->SetToolTip( _("Add a new library before the selected library, and load it") );
@@ -48,20 +48,26 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	
 	bRightSizer->Add( m_buttonRemoveLib, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	sbLibsChoiceSizer->Add( bRightSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_buttonUp = new wxButton( this, wxID_ANY, _("Up"), wxDefaultPosition, wxDefaultSize, 0 );
+	bRightSizer->Add( m_buttonUp, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	bMainSizer->Add( sbLibsChoiceSizer, 1, wxALL|wxEXPAND, 5 );
+	m_buttonDown = new wxButton( this, wxID_ANY, _("Down"), wxDefaultPosition, wxDefaultSize, 0 );
+	bRightSizer->Add( m_buttonDown, 0, wxALL, 5 );
+	
+	sbLibsChoiceSizer->Add( bRightSizer, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	
+	bMainSizer->Add( sbLibsChoiceSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxStaticBoxSizer* sbModulesDocSizer;
 	sbModulesDocSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Footprint documentation file") ), wxHORIZONTAL );
 	
 	m_TextHelpModulesFileName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	sbModulesDocSizer->Add( m_TextHelpModulesFileName, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	sbModulesDocSizer->Add( m_TextHelpModulesFileName, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonModDoc = new wxButton( this, wxID_BROWSE_MOD_DOC, _("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbModulesDocSizer->Add( m_buttonModDoc, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
 	
-	bMainSizer->Add( sbModulesDocSizer, 0, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( sbModulesDocSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxStaticBoxSizer* sbSizer4;
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User defined search paths") ), wxHORIZONTAL );
@@ -73,7 +79,7 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	m_listUserPaths = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
 	m_listUserPaths->SetToolTip( _("Additional paths used in this project. The priority is highter than default Kicad paths.") );
 	
-	bUserListSizer->Add( m_listUserPaths, 1, wxALL|wxEXPAND, 5 );
+	bUserListSizer->Add( m_listUserPaths, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	sbSizer4->Add( bUserListSizer, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
@@ -91,7 +97,7 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	
 	sbSizer4->Add( bUserPathsButtonsSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
-	bMainSizer->Add( sbSizer4, 0, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( sbSizer4, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxStaticBoxSizer* sbLibPathSizer;
 	sbLibPathSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Current search path list") ), wxVERTICAL );
@@ -107,10 +113,10 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	
 	sbLibPathSizer->Add( m_DefaultLibraryPathslistBox, 0, wxALL|wxEXPAND, 5 );
 	
-	bMainSizer->Add( sbLibPathSizer, 0, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( sbLibPathSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	bMainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -131,6 +137,8 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	m_buttonAddLib->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnAddOrInsertLibClick ), NULL, this );
 	m_buttonIns->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnAddOrInsertLibClick ), NULL, this );
 	m_buttonRemoveLib->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnRemoveLibClick ), NULL, this );
+	m_buttonUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnButtonUpClick ), NULL, this );
+	m_buttonDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnButtonDownClick ), NULL, this );
 	m_buttonModDoc->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnBrowseModDocFile ), NULL, this );
 	m_buttonAddPath->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnAddOrInsertPath ), NULL, this );
 	m_buttonInsPath->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnAddOrInsertPath ), NULL, this );
@@ -146,6 +154,8 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::~DIALOG_PCBNEW_CONFIG_LIBS_FBP()
 	m_buttonAddLib->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnAddOrInsertLibClick ), NULL, this );
 	m_buttonIns->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnAddOrInsertLibClick ), NULL, this );
 	m_buttonRemoveLib->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnRemoveLibClick ), NULL, this );
+	m_buttonUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnButtonUpClick ), NULL, this );
+	m_buttonDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnButtonDownClick ), NULL, this );
 	m_buttonModDoc->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnBrowseModDocFile ), NULL, this );
 	m_buttonAddPath->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnAddOrInsertPath ), NULL, this );
 	m_buttonInsPath->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnAddOrInsertPath ), NULL, this );

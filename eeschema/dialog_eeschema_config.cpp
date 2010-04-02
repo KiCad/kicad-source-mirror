@@ -138,19 +138,19 @@ void DIALOG_EESCHEMA_CONFIG::OnButtonUpClick( wxCommandEvent& event )
     m_ListLibr->GetSelections(selections);
     if ( selections.GetCount() <= 0 )   // No selection.
         return;
-    
+
     if( selections[0] == 0 )            // The first lib is selected. cannot move up it
         return;
 
     wxArrayString libnames = m_ListLibr->GetStrings();
-    
+
     for( size_t ii = 0; ii < selections.GetCount(); ii++ )
     {
         int jj = selections[ii];
         EXCHG( libnames[jj],  libnames[jj-1]);
     }
     m_ListLibr->Set(libnames);
-    
+
     // Reselect previously selected names
     for( size_t ii = 0; ii < selections.GetCount(); ii++ )
     {
@@ -177,7 +177,7 @@ void DIALOG_EESCHEMA_CONFIG::OnButtonDownClick( wxCommandEvent& event )
         return;
 
     wxArrayString libnames = m_ListLibr->GetStrings();
-    
+
     for( int ii = selections.GetCount()-1; ii >= 0; ii-- )
     {
         int jj = selections[ii];
@@ -294,10 +294,10 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
     m_ListLibr->GetSelections(selections);
 
     ii = selections.GetCount();
-    if( ii <= 0 && event.GetId() != ID_ADD_LIB )
-        ii = 0;
-    else
+    if( ii > 0 )
         ii = selections[0];
+    else
+        ii = 0;
 
     wxString libpath;
     libpath = m_DefaultLibraryPathslistBox->GetStringSelection();

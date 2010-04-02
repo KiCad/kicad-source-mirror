@@ -31,6 +31,8 @@ private:
 	void OnCancelClick( wxCommandEvent& event );
     void OnRemoveUserPath( wxCommandEvent& event );
 	void OnBrowseModDocFile( wxCommandEvent& event );
+	void OnButtonUpClick( wxCommandEvent& event );
+	void OnButtonDownClick( wxCommandEvent& event );
 
 
 public:
