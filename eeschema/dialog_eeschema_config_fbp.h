@@ -45,6 +45,8 @@ class DIALOG_EESCHEMA_CONFIG_FBP : public wxDialog
 		wxButton* m_buttonAddLib;
 		wxButton* m_buttonIns;
 		wxButton* m_buttonRemoveLib;
+		wxButton* m_buttonUp;
+		wxButton* m_buttonDown;
 		wxListBox* m_listUserPaths;
 		wxButton* m_buttonAddPath;
 		wxButton* m_buttonInsPath;
@@ -54,8 +56,11 @@ class DIALOG_EESCHEMA_CONFIG_FBP : public wxDialog
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ){ event.Skip(); }
+		virtual void OnFilesListClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnAddOrInsertLibClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnRemoveLibClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnButtonUpClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnButtonDownClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnAddOrInsertPath( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnRemoveUserPath( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
