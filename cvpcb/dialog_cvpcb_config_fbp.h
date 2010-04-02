@@ -38,9 +38,13 @@ class DIALOG_CVPCB_CONFIG_FBP : public wxDialog
 			ID_ADD_LIB = 1000,
 			ID_INSERT_LIB,
 			ID_REMOVE_LIB,
+			ID_LIB_UP,
+			ID_LIB_DOWN,
 			ID_ADD_EQU,
 			ID_INSERT_EQU,
 			ID_REMOVE_EQU,
+			ID_EQU_UP,
+			ID_EQU_DOWN,
 			ID_BROWSE_MOD_DOC,
 			ID_LIB_PATH_SEL,
 			ID_INSERT_PATH,
@@ -51,10 +55,14 @@ class DIALOG_CVPCB_CONFIG_FBP : public wxDialog
 		wxButton* m_buttonAddLib;
 		wxButton* m_buttonInsLib;
 		wxButton* m_buttonRemoveLib;
+		wxButton* m_buttonLibUp;
+		wxButton* m_buttonLibDown;
 		wxListBox* m_ListEquiv;
 		wxButton* m_buttonAddEqu;
 		wxButton* m_buttonInsEqu;
 		wxButton* m_buttonRemoveEqu;
+		wxButton* m_buttonEquUp;
+		wxButton* m_buttonEquDown;
 		wxTextCtrl* m_TextHelpModulesFileName;
 		wxButton* m_buttonModDoc;
 		wxListBox* m_listUserPaths;
@@ -71,6 +79,8 @@ class DIALOG_CVPCB_CONFIG_FBP : public wxDialog
 		virtual void OnCloseWindow( wxCloseEvent& event ){ event.Skip(); }
 		virtual void OnAddOrInsertLibClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnRemoveLibClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnButtonUpClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnButtonDownClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnBrowseModDocFile( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnAddOrInsertPath( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnRemoveUserPath( wxCommandEvent& event ){ event.Skip(); }
@@ -79,7 +89,7 @@ class DIALOG_CVPCB_CONFIG_FBP : public wxDialog
 		
 	
 	public:
-		DIALOG_CVPCB_CONFIG_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_CVPCB_CONFIG_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 570,625 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_CVPCB_CONFIG_FBP();
 	
 };

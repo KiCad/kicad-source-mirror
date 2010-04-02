@@ -137,24 +137,102 @@ void DIALOG_CVPCB_CONFIG::OnCloseWindow( wxCloseEvent& event )
 }
 
 
+/********************************************************************/
+void DIALOG_CVPCB_CONFIG::OnButtonUpClick( wxCommandEvent& event )
+/********************************************************************/
+{
+    wxListBox * list = m_ListLibr;
+    if( (event.GetId() == ID_EQU_UP) || (event.GetId() == ID_EQU_DOWN) )
+    {
+        list = m_ListEquiv;
+    }
+
+    wxArrayInt selections;
+
+    list->GetSelections(selections);
+    if ( selections.GetCount() <= 0 )   // No selection.
+        return;
+
+    if( selections[0] == 0 )            // The first lib is selected. cannot move up it
+        return;
+
+    wxArrayString libnames = list->GetStrings();
+
+    for( size_t ii = 0; ii < selections.GetCount(); ii++ )
+    {
+        int jj = selections[ii];
+        EXCHG( libnames[jj],  libnames[jj-1]);
+    }
+    list->Set(libnames);
+
+    // Reselect previously selected names
+    for( size_t ii = 0; ii < selections.GetCount(); ii++ )
+    {
+        int jj = selections[ii];
+        list->SetSelection(jj-1);
+    }
+
+    m_LibListChanged = TRUE;
+}
+
+
+/*********************************************************************/
+void DIALOG_CVPCB_CONFIG::OnButtonDownClick( wxCommandEvent& event )
+/*********************************************************************/
+{
+    wxListBox * list = m_ListLibr;
+    if( (event.GetId() == ID_EQU_UP) || (event.GetId() == ID_EQU_DOWN) )
+    {
+        list = m_ListEquiv;
+    }
+
+    wxArrayInt selections;
+
+    list->GetSelections(selections);
+    if ( selections.GetCount() <= 0 )   // No selection.
+        return;
+
+    // The last lib is selected. cannot move down it
+    if( selections.Last() == (int)(list->GetCount()-1) )
+        return;
+
+    wxArrayString libnames = list->GetStrings();
+
+    for( int ii = selections.GetCount()-1; ii >= 0; ii-- )
+    {
+        int jj = selections[ii];
+        EXCHG( libnames[jj],  libnames[jj+1]);
+    }
+    list->Set(libnames);
+
+    // Reselect previously selected names
+    for( size_t ii = 0; ii < selections.GetCount(); ii++ )
+    {
+        int jj = selections[ii];
+        list->SetSelection(jj+1);
+    }
+    m_LibListChanged = TRUE;
+}
+
+
 /* Remove a library to the library list.
  * The real list (g_LibName_List) is not changed, so the change can be canceled
  */
 void DIALOG_CVPCB_CONFIG::OnRemoveLibClick( wxCommandEvent& event )
 {
-    int        ii;
-
     wxListBox * list = m_ListEquiv;
 
     if( event.GetId() == ID_REMOVE_LIB )
         list = m_ListLibr;
 
-    ii = list->GetSelection();
-    if( ii < 0 )
-        return;
+    wxArrayInt selections;
 
-    list->Delete( ii );
-    m_LibListChanged = TRUE;
+    list->GetSelections(selections);
+    for( int ii = selections.GetCount()-1; ii >= 0; ii-- )
+    {
+        list->Delete(selections[ii] );
+        m_LibListChanged = TRUE;
+    }
 }
 
 
@@ -182,8 +260,13 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
         wildcard = ModuleFileWildcard;
     }
 
-    ii = list->GetSelection();
-    if( ii == wxNOT_FOUND )
+    wxArrayInt selections;
+    list->GetSelections(selections);
+
+    ii = selections.GetCount();
+    if( ii > 0 )
+        ii = selections[0];
+    else
         ii = 0;
 
     wxString libpath;

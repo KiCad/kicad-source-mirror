@@ -31,6 +31,8 @@ private:
     void OnBrowseModDocFile( wxCommandEvent& event );
     void OnAddOrInsertPath( wxCommandEvent& event );
     void OnRemoveUserPath( wxCommandEvent& event );
+	void OnButtonUpClick( wxCommandEvent& event );
+	void OnButtonDownClick( wxCommandEvent& event );
 
 
 public:
