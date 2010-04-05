@@ -646,7 +646,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
                     m_CurrentPad->SetNet( net->GetNet() );
                 }
                 else
-                    DisplayError( this, _( "Unknown netname, no change" ) );
+                    DisplayError( NULL, _( "Unknown netname, no change" ) );
             }
         }
 

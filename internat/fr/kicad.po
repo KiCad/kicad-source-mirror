@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-30 20:43+0100\n"
-"PO-Revision-Date: 2010-03-30 20:43+0100\n"
+"POT-Creation-Date: 2010-04-02 20:43+0100\n"
+"PO-Revision-Date: 2010-04-02 20:59+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -2075,25 +2075,30 @@ msgstr "Aide Freeroute"
 msgid "from "
 msgstr "De "
 
-#: pcbnew/dialog_pcbnew_config_libs_and_paths.cpp:186
+#: pcbnew/dialog_pcbnew_config_libs_and_paths.cpp:256
 msgid "Footprint library files:"
 msgstr "Fichiers Library Modules:"
 
-#: pcbnew/dialog_pcbnew_config_libs_and_paths.cpp:227
+#: pcbnew/dialog_pcbnew_config_libs_and_paths.cpp:297
 msgid "Library already in use"
 msgstr "Librairie déjà en usage"
 
-#: pcbnew/dialog_pcbnew_config_libs_and_paths.cpp:240
+#: pcbnew/dialog_pcbnew_config_libs_and_paths.cpp:310
 msgid "Default Path for Libraries"
 msgstr "Chemin par Défaut des Librairies"
 
-#: pcbnew/dialog_pcbnew_config_libs_and_paths.cpp:289
+#: pcbnew/dialog_pcbnew_config_libs_and_paths.cpp:359
 msgid "Path already in use"
 msgstr "Chemin déjà en usage"
 
-#: pcbnew/dialog_pcbnew_config_libs_and_paths.cpp:328
+#: pcbnew/dialog_pcbnew_config_libs_and_paths.cpp:398
 msgid "Footprint document file:"
 msgstr "Documentation des Modules:"
+
+#: pcbnew/plotgerb.cpp:75
+#, c-format
+msgid "Error when creating %s file: unable to create a temporary file"
+msgstr "Erreur en creation du fichier %s: impossible de créer un fichier temporaire"
 
 #: pcbnew/swap_layers.cpp:70
 msgid "Swap Layers:"
@@ -4965,7 +4970,7 @@ msgstr ""
 "Pcbnew cherche un module donné en utilisant cette liste par ordre de priorité."
 
 #: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:36
-#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:83
+#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:89
 msgid "Add"
 msgstr "Ajouter"
 
@@ -4974,7 +4979,7 @@ msgid "Add a new library after the selected library, and load it"
 msgstr "Ajouter une nouvelle librairie après la librairie sélectionnée, et la charger"
 
 #: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:41
-#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:86
+#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:92
 msgid "Insert"
 msgstr "Insérer"
 
@@ -4983,7 +4988,7 @@ msgid "Add a new library before the selected library, and load it"
 msgstr "Ajouter une nouvelle librairie avant la librairie sélectionnée, et la charger"
 
 #: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:46
-#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:89
+#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:95
 msgid "Remove"
 msgstr "Enlever"
 
@@ -4991,27 +4996,35 @@ msgstr "Enlever"
 msgid "Unload the selected library"
 msgstr "Décharger la librairie sélectionnée"
 
-#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:56
+#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:51
+msgid "Up"
+msgstr "Haut"
+
+#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:54
+msgid "Down"
+msgstr "Bas"
+
+#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:62
 msgid "Footprint documentation file"
 msgstr "Fichier documentation des modules"
 
-#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:61
+#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:67
 msgid "Browse"
 msgstr "Examiner"
 
-#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:67
+#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:73
 msgid "User defined search paths"
 msgstr "Chemins de recherche défini par l'utilisateur"
 
-#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:74
+#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:80
 msgid "Additional paths used in this project. The priority is highter than default Kicad paths."
 msgstr "Chemins additionnels utilisés dans ce projet. La priorité est plus haute que les chemins par défaut de Kicad."
 
-#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:97
+#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:103
 msgid "Current search path list"
 msgstr "Liste des chemins de recherche courrants"
 
-#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:105
+#: pcbnew/dialog_pcbnew_config_libs_and_paths_fbp.cpp:111
 msgid ""
 "Paths  (system paths and user paths) used to search and load libraries files and component doc files.\n"
 "Sorted by decreasing priority order."
@@ -5050,41 +5063,6 @@ msgstr "Couche Mod."
 #: pcbnew/class_edge_mod.cpp:313
 msgid "Seg Layer"
 msgstr "Couche Seg."
-
-#: pcbnew/specctra_export.cpp:78
-msgid "Specctra DSN file:"
-msgstr "Fichier Specctra DSN"
-
-#: pcbnew/specctra_export.cpp:137
-msgid "BOARD exported OK."
-msgstr "PCB exporté Ok."
-
-#: pcbnew/specctra_export.cpp:142
-msgid "Unable to export, please fix and try again."
-msgstr "Impossible d'exporter, fixer le problème et recommencer"
-
-#: pcbnew/specctra_export.cpp:806
-#, c-format
-msgid "Unsupported DRAWSEGMENT type %s"
-msgstr "DRAWSEGMENT type %s non supporté"
-
-#: pcbnew/specctra_export.cpp:841
-msgid "Unable to find the next segment with an endpoint of "
-msgstr "Impossible de trouver le segment suivant avec une extrémité à "
-
-#: pcbnew/specctra_export.cpp:844
-msgid "Edit Edges_Pcb segments, making them contiguous."
-msgstr "Modifier les segments du contour PCB pour les rendre contigus."
-
-#: pcbnew/specctra_export.cpp:896
-#, c-format
-msgid "Component with value of \"%s\" has empty reference id."
-msgstr "Le composant avec valeur \"%s\" a une référence vide."
-
-#: pcbnew/specctra_export.cpp:904
-#, c-format
-msgid "Multiple components have identical reference IDs of \"%s\"."
-msgstr "De multiple composants ont une référence identique  \"%s\"."
 
 #: pcbnew/modedit_onclick.cpp:218
 msgid "Zoom Block (drag middle mouse)"
@@ -5237,6 +5215,41 @@ msgstr "Fichier rapport DRC  (.rpt)|*.rpt"
 #: pcbnew/dialog_drc.cpp:285
 msgid "Save DRC Report File"
 msgstr "Sauver Fichier Rapport DRC:"
+
+#: pcbnew/specctra_export.cpp:78
+msgid "Specctra DSN file:"
+msgstr "Fichier Specctra DSN"
+
+#: pcbnew/specctra_export.cpp:137
+msgid "BOARD exported OK."
+msgstr "PCB exporté Ok."
+
+#: pcbnew/specctra_export.cpp:142
+msgid "Unable to export, please fix and try again."
+msgstr "Impossible d'exporter, fixer le problème et recommencer"
+
+#: pcbnew/specctra_export.cpp:826
+#, c-format
+msgid "Unsupported DRAWSEGMENT type %s"
+msgstr "DRAWSEGMENT type %s non supporté"
+
+#: pcbnew/specctra_export.cpp:842
+msgid "Unable to find the next segment with an endpoint of "
+msgstr "Impossible de trouver le segment suivant avec une extrémité à "
+
+#: pcbnew/specctra_export.cpp:845
+msgid "Edit Edges_Pcb segments, making them contiguous."
+msgstr "Modifier les segments du contour PCB pour les rendre contigus."
+
+#: pcbnew/specctra_export.cpp:904
+#, c-format
+msgid "Component with value of \"%s\" has empty reference id."
+msgstr "Le composant avec valeur \"%s\" a une référence vide."
+
+#: pcbnew/specctra_export.cpp:912
+#, c-format
+msgid "Multiple components have identical reference IDs of \"%s\"."
+msgstr "De multiple composants ont une référence identique  \"%s\"."
 
 #: pcbnew/dialog_edit_module_for_BoardEditor_base.cpp:24
 #: pcbnew/dialog_edit_module_for_Modedit_base.cpp:24
@@ -8064,14 +8077,6 @@ msgstr "Droite"
 msgid "Left"
 msgstr "Gauche"
 
-#: eeschema/class_pin.cpp:32
-msgid "Up"
-msgstr "Haut"
-
-#: eeschema/class_pin.cpp:33
-msgid "Down"
-msgstr "Bas"
-
 #: eeschema/class_pin.cpp:61
 msgid "Inverted"
 msgstr "Inversé"
@@ -8174,12 +8179,12 @@ msgstr "Navigateur"
 msgid "Root"
 msgstr "Racine"
 
-#: eeschema/class_drawsheetpath.cpp:164
+#: eeschema/class_drawsheetpath.cpp:166
 #, c-format
 msgid "Schematic sheets can only be nested %d levels deep."
-msgstr ""
+msgstr "Les feuilles de hierarchie ne peuvent avoir qu'une profondeur de %d niveaux"
 
-#: eeschema/class_drawsheetpath.cpp:207
+#: eeschema/class_drawsheetpath.cpp:209
 #, c-format
 msgid "%8.8lX/"
 msgstr "%8.8lX/"
@@ -8467,6 +8472,319 @@ msgstr "Sélection Librairie"
 #: eeschema/eeredraw.cpp:80
 msgid "Sheet"
 msgstr "Feuille"
+
+#: eeschema/onrightclick.cpp:108
+msgid "Leave Sheet"
+msgstr "Quitter sous-feuille"
+
+#: eeschema/onrightclick.cpp:123
+msgid "Delete Noconn"
+msgstr "Supprimer Non Connexion"
+
+#: eeschema/onrightclick.cpp:133
+msgid "Move Bus Entry"
+msgstr "Déplacer Entrée de Bus"
+
+#: eeschema/onrightclick.cpp:141
+msgid "Set Bus Entry /"
+msgstr "Entrée de Bus /"
+
+#: eeschema/onrightclick.cpp:144
+msgid "Set Bus Entry \\"
+msgstr "Entrée de Bus \\"
+
+#: eeschema/onrightclick.cpp:146
+msgid "Delete Bus Entry"
+msgstr "Supprimer Entrée de Bus"
+
+#: eeschema/onrightclick.cpp:243
+msgid "Move Field"
+msgstr "Déplace Champ"
+
+#: eeschema/onrightclick.cpp:249
+msgid "Rotate Field"
+msgstr "Rotation Champ"
+
+#: eeschema/onrightclick.cpp:254
+msgid "Edit Field"
+msgstr "Editer Champ"
+
+#: eeschema/onrightclick.cpp:282
+msgid "Move Component"
+msgstr "Déplace Composant"
+
+#: eeschema/onrightclick.cpp:287
+msgid "Drag Component"
+msgstr "Drag Composant"
+
+#: eeschema/onrightclick.cpp:300
+msgid "Mirror --"
+msgstr "Miroir--"
+
+#: eeschema/onrightclick.cpp:303
+msgid "Mirror ||"
+msgstr "Miroir ||"
+
+#: eeschema/onrightclick.cpp:311
+msgid "Orient Component"
+msgstr "Oriente Composant"
+
+#: eeschema/onrightclick.cpp:329
+msgid "Footprint "
+msgstr "Empreinte: "
+
+#: eeschema/onrightclick.cpp:345
+#, c-format
+msgid "Unit %d %c"
+msgstr "Unité %d %c"
+
+#: eeschema/onrightclick.cpp:357
+msgid "Edit Component"
+msgstr "Edite Composant"
+
+#: eeschema/onrightclick.cpp:361
+msgid "Copy Component"
+msgstr "Copie Composant"
+
+#: eeschema/onrightclick.cpp:385
+msgid "Move Global Label"
+msgstr "Déplacer Label Global"
+
+#: eeschema/onrightclick.cpp:389
+msgid "Copy Global Label"
+msgstr "Copier Label Global"
+
+#: eeschema/onrightclick.cpp:395
+msgid "Rotate Global Label"
+msgstr "Rot. Label Global"
+
+#: eeschema/onrightclick.cpp:399
+msgid "Edit Global Label"
+msgstr "Editer Label Global"
+
+#: eeschema/onrightclick.cpp:403
+msgid "Delete Global Label"
+msgstr "Supprimer Label Global"
+
+#: eeschema/onrightclick.cpp:410
+#: eeschema/onrightclick.cpp:497
+#: eeschema/onrightclick.cpp:548
+msgid "Change to Hierarchical Label"
+msgstr "Changer en Label Hiérarchique"
+
+#: eeschema/onrightclick.cpp:412
+#: eeschema/onrightclick.cpp:454
+#: eeschema/onrightclick.cpp:545
+msgid "Change to Label"
+msgstr "Change en Label"
+
+#: eeschema/onrightclick.cpp:414
+#: eeschema/onrightclick.cpp:456
+#: eeschema/onrightclick.cpp:499
+msgid "Change to Text"
+msgstr "Change en Texte"
+
+#: eeschema/onrightclick.cpp:417
+#: eeschema/onrightclick.cpp:461
+#: eeschema/onrightclick.cpp:504
+#: eeschema/onrightclick.cpp:555
+msgid "Change Type"
+msgstr "Change Type"
+
+#: eeschema/onrightclick.cpp:428
+msgid "Move Hierarchical Label"
+msgstr "Déplacer Label Hiérarchique"
+
+#: eeschema/onrightclick.cpp:433
+msgid "Copy Hierarchical Label"
+msgstr "Copier Label Hiérarchique"
+
+#: eeschema/onrightclick.cpp:439
+msgid "Rotate Hierarchical Label"
+msgstr "Rot. Label Hiérarchique"
+
+#: eeschema/onrightclick.cpp:443
+msgid "Edit Hierarchical Label"
+msgstr "Editer Label Hiérarchique"
+
+#: eeschema/onrightclick.cpp:447
+msgid "Delete Hierarchical Label"
+msgstr "Supprimer Label Hiérarchique"
+
+#: eeschema/onrightclick.cpp:458
+#: eeschema/onrightclick.cpp:501
+msgid "Change to Global Label"
+msgstr "Change en Label Global"
+
+#: eeschema/onrightclick.cpp:472
+msgid "Move Label"
+msgstr "Déplace Label"
+
+#: eeschema/onrightclick.cpp:476
+msgid "Copy Label"
+msgstr "Copier Label"
+
+#: eeschema/onrightclick.cpp:482
+msgid "Rotate Label"
+msgstr "Rot. Label"
+
+#: eeschema/onrightclick.cpp:486
+msgid "Edit Label"
+msgstr "Editer Label"
+
+#: eeschema/onrightclick.cpp:490
+msgid "Delete Label"
+msgstr "Supprimer Label"
+
+#: eeschema/onrightclick.cpp:515
+msgid "Move Text"
+msgstr "Déplacer Texte"
+
+#: eeschema/onrightclick.cpp:520
+msgid "Copy Text"
+msgstr "CopierTexte"
+
+#: eeschema/onrightclick.cpp:526
+msgid "Rotate Text"
+msgstr "Rot. Texte"
+
+#: eeschema/onrightclick.cpp:530
+msgid "Edit Text"
+msgstr "Editer Texte"
+
+#: eeschema/onrightclick.cpp:534
+msgid "Delete Text"
+msgstr "Effacer Texte"
+
+#: eeschema/onrightclick.cpp:552
+msgid "Change to Glabel"
+msgstr "Change en Label Global"
+
+#: eeschema/onrightclick.cpp:571
+#: eeschema/onrightclick.cpp:618
+msgid "Break Wire"
+msgstr "Briser Fil"
+
+#: eeschema/onrightclick.cpp:574
+msgid "Delete Junction"
+msgstr "Supprimer Jonction"
+
+#: eeschema/onrightclick.cpp:583
+#: eeschema/onrightclick.cpp:611
+msgid "Delete Node"
+msgstr "Supprimer Noeud"
+
+#: eeschema/onrightclick.cpp:585
+#: eeschema/onrightclick.cpp:614
+msgid "Delete Connection"
+msgstr "Supprimer Connexion"
+
+#: eeschema/onrightclick.cpp:599
+msgid "Wire End"
+msgstr "Terminer Fil"
+
+#: eeschema/onrightclick.cpp:603
+msgid "Drag Wire"
+msgstr "Drag Fil"
+
+#: eeschema/onrightclick.cpp:608
+msgid "Delete Wire"
+msgstr "Supprimer Fil"
+
+#: eeschema/onrightclick.cpp:623
+#: eeschema/onrightclick.cpp:655
+msgid "Add Junction"
+msgstr "Ajout jonctions"
+
+#: eeschema/onrightclick.cpp:625
+#: eeschema/onrightclick.cpp:657
+msgid "Add Label"
+msgstr "Ajout Label"
+
+#: eeschema/onrightclick.cpp:632
+#: eeschema/onrightclick.cpp:664
+msgid "Add Global Label"
+msgstr "Ajout Label Global"
+
+#: eeschema/onrightclick.cpp:644
+msgid "Bus End"
+msgstr "Terminer Bus"
+
+#: eeschema/onrightclick.cpp:648
+msgid "Delete Bus"
+msgstr "Supprimer Bus"
+
+#: eeschema/onrightclick.cpp:651
+msgid "Break Bus"
+msgstr "Briser Bus"
+
+#: eeschema/onrightclick.cpp:675
+msgid "Enter Sheet"
+msgstr "Entrer dans Feuille"
+
+#: eeschema/onrightclick.cpp:677
+msgid "Move Sheet"
+msgstr "Déplacer Feuille"
+
+#: eeschema/onrightclick.cpp:682
+msgid "Drag Sheet"
+msgstr "Drag Feuille"
+
+#: eeschema/onrightclick.cpp:690
+msgid "Place Sheet"
+msgstr "Placer Feuille"
+
+#: eeschema/onrightclick.cpp:695
+msgid "Edit Sheet"
+msgstr "Editer Feuille"
+
+#: eeschema/onrightclick.cpp:701
+msgid "Resize Sheet"
+msgstr "Redimensionner Feuille"
+
+#: eeschema/onrightclick.cpp:704
+msgid "Import PinSheets"
+msgstr "Importer Connecteur de Hiérarchie"
+
+#: eeschema/onrightclick.cpp:708
+msgid "Cleanup PinSheets"
+msgstr "Nettoyage des Pins Hiérarchiques"
+
+#: eeschema/onrightclick.cpp:710
+msgid "Delete Sheet"
+msgstr "Supprimer Feuille"
+
+#: eeschema/onrightclick.cpp:721
+msgid "Move PinSheet"
+msgstr "Déplace Connecteur de hiérarchie"
+
+#: eeschema/onrightclick.cpp:727
+msgid "Edit PinSheet"
+msgstr "Edit Connecteur de hiérarchie"
+
+#: eeschema/onrightclick.cpp:731
+msgid "Delete PinSheet"
+msgstr "Supprimer Connecteur de hiérarchie"
+
+#: eeschema/onrightclick.cpp:745
+msgid "Window Zoom"
+msgstr "Zoom sur Fenêtre"
+
+#: eeschema/onrightclick.cpp:754
+msgid "Save Block"
+msgstr "Sauver Bloc"
+
+#: eeschema/onrightclick.cpp:757
+msgid "Drag Block"
+msgstr "Drag Bloc"
+
+#: eeschema/onrightclick.cpp:764
+msgid "Mirror Block ||"
+msgstr "Miroir Bloc ||"
+
+#: eeschema/onrightclick.cpp:769
+msgid "Copy to Clipboard"
+msgstr "Copie dans Presse papier"
 
 #: eeschema/delsheet.cpp:43
 #, c-format
@@ -9024,319 +9342,6 @@ msgstr "Placer composant en schématique"
 #, c-format
 msgid "Part %c"
 msgstr "Composant %c"
-
-#: eeschema/onrightclick.cpp:108
-msgid "Leave Sheet"
-msgstr "Quitter sous-feuille"
-
-#: eeschema/onrightclick.cpp:123
-msgid "Delete Noconn"
-msgstr "Supprimer Non Connexion"
-
-#: eeschema/onrightclick.cpp:133
-msgid "Move Bus Entry"
-msgstr "Déplacer Entrée de Bus"
-
-#: eeschema/onrightclick.cpp:141
-msgid "Set Bus Entry /"
-msgstr "Entrée de Bus /"
-
-#: eeschema/onrightclick.cpp:144
-msgid "Set Bus Entry \\"
-msgstr "Entrée de Bus \\"
-
-#: eeschema/onrightclick.cpp:146
-msgid "Delete Bus Entry"
-msgstr "Supprimer Entrée de Bus"
-
-#: eeschema/onrightclick.cpp:243
-msgid "Move Field"
-msgstr "Déplace Champ"
-
-#: eeschema/onrightclick.cpp:249
-msgid "Rotate Field"
-msgstr "Rotation Champ"
-
-#: eeschema/onrightclick.cpp:254
-msgid "Edit Field"
-msgstr "Editer Champ"
-
-#: eeschema/onrightclick.cpp:282
-msgid "Move Component"
-msgstr "Déplace Composant"
-
-#: eeschema/onrightclick.cpp:287
-msgid "Drag Component"
-msgstr "Drag Composant"
-
-#: eeschema/onrightclick.cpp:300
-msgid "Mirror --"
-msgstr "Miroir--"
-
-#: eeschema/onrightclick.cpp:303
-msgid "Mirror ||"
-msgstr "Miroir ||"
-
-#: eeschema/onrightclick.cpp:311
-msgid "Orient Component"
-msgstr "Oriente Composant"
-
-#: eeschema/onrightclick.cpp:329
-msgid "Footprint "
-msgstr "Empreinte: "
-
-#: eeschema/onrightclick.cpp:345
-#, c-format
-msgid "Unit %d %c"
-msgstr "Unité %d %c"
-
-#: eeschema/onrightclick.cpp:357
-msgid "Edit Component"
-msgstr "Edite Composant"
-
-#: eeschema/onrightclick.cpp:361
-msgid "Copy Component"
-msgstr "Copie Composant"
-
-#: eeschema/onrightclick.cpp:385
-msgid "Move Global Label"
-msgstr "Déplacer Label Global"
-
-#: eeschema/onrightclick.cpp:389
-msgid "Copy Global Label"
-msgstr "Copier Label Global"
-
-#: eeschema/onrightclick.cpp:395
-msgid "Rotate Global Label"
-msgstr "Rot. Label Global"
-
-#: eeschema/onrightclick.cpp:399
-msgid "Edit Global Label"
-msgstr "Editer Label Global"
-
-#: eeschema/onrightclick.cpp:403
-msgid "Delete Global Label"
-msgstr "Supprimer Label Global"
-
-#: eeschema/onrightclick.cpp:410
-#: eeschema/onrightclick.cpp:497
-#: eeschema/onrightclick.cpp:548
-msgid "Change to Hierarchical Label"
-msgstr "Changer en Label Hiérarchique"
-
-#: eeschema/onrightclick.cpp:412
-#: eeschema/onrightclick.cpp:454
-#: eeschema/onrightclick.cpp:545
-msgid "Change to Label"
-msgstr "Change en Label"
-
-#: eeschema/onrightclick.cpp:414
-#: eeschema/onrightclick.cpp:456
-#: eeschema/onrightclick.cpp:499
-msgid "Change to Text"
-msgstr "Change en Texte"
-
-#: eeschema/onrightclick.cpp:417
-#: eeschema/onrightclick.cpp:461
-#: eeschema/onrightclick.cpp:504
-#: eeschema/onrightclick.cpp:555
-msgid "Change Type"
-msgstr "Change Type"
-
-#: eeschema/onrightclick.cpp:428
-msgid "Move Hierarchical Label"
-msgstr "Déplacer Label Hiérarchique"
-
-#: eeschema/onrightclick.cpp:433
-msgid "Copy Hierarchical Label"
-msgstr "Copier Label Hiérarchique"
-
-#: eeschema/onrightclick.cpp:439
-msgid "Rotate Hierarchical Label"
-msgstr "Rot. Label Hiérarchique"
-
-#: eeschema/onrightclick.cpp:443
-msgid "Edit Hierarchical Label"
-msgstr "Editer Label Hiérarchique"
-
-#: eeschema/onrightclick.cpp:447
-msgid "Delete Hierarchical Label"
-msgstr "Supprimer Label Hiérarchique"
-
-#: eeschema/onrightclick.cpp:458
-#: eeschema/onrightclick.cpp:501
-msgid "Change to Global Label"
-msgstr "Change en Label Global"
-
-#: eeschema/onrightclick.cpp:472
-msgid "Move Label"
-msgstr "Déplace Label"
-
-#: eeschema/onrightclick.cpp:476
-msgid "Copy Label"
-msgstr "Copier Label"
-
-#: eeschema/onrightclick.cpp:482
-msgid "Rotate Label"
-msgstr "Rot. Label"
-
-#: eeschema/onrightclick.cpp:486
-msgid "Edit Label"
-msgstr "Editer Label"
-
-#: eeschema/onrightclick.cpp:490
-msgid "Delete Label"
-msgstr "Supprimer Label"
-
-#: eeschema/onrightclick.cpp:515
-msgid "Move Text"
-msgstr "Déplacer Texte"
-
-#: eeschema/onrightclick.cpp:520
-msgid "Copy Text"
-msgstr "CopierTexte"
-
-#: eeschema/onrightclick.cpp:526
-msgid "Rotate Text"
-msgstr "Rot. Texte"
-
-#: eeschema/onrightclick.cpp:530
-msgid "Edit Text"
-msgstr "Editer Texte"
-
-#: eeschema/onrightclick.cpp:534
-msgid "Delete Text"
-msgstr "Effacer Texte"
-
-#: eeschema/onrightclick.cpp:552
-msgid "Change to Glabel"
-msgstr "Change en Label Global"
-
-#: eeschema/onrightclick.cpp:571
-#: eeschema/onrightclick.cpp:618
-msgid "Break Wire"
-msgstr "Briser Fil"
-
-#: eeschema/onrightclick.cpp:574
-msgid "Delete Junction"
-msgstr "Supprimer Jonction"
-
-#: eeschema/onrightclick.cpp:583
-#: eeschema/onrightclick.cpp:611
-msgid "Delete Node"
-msgstr "Supprimer Noeud"
-
-#: eeschema/onrightclick.cpp:585
-#: eeschema/onrightclick.cpp:614
-msgid "Delete Connection"
-msgstr "Supprimer Connexion"
-
-#: eeschema/onrightclick.cpp:599
-msgid "Wire End"
-msgstr "Terminer Fil"
-
-#: eeschema/onrightclick.cpp:603
-msgid "Drag Wire"
-msgstr "Drag Fil"
-
-#: eeschema/onrightclick.cpp:608
-msgid "Delete Wire"
-msgstr "Supprimer Fil"
-
-#: eeschema/onrightclick.cpp:623
-#: eeschema/onrightclick.cpp:655
-msgid "Add Junction"
-msgstr "Ajout jonctions"
-
-#: eeschema/onrightclick.cpp:625
-#: eeschema/onrightclick.cpp:657
-msgid "Add Label"
-msgstr "Ajout Label"
-
-#: eeschema/onrightclick.cpp:632
-#: eeschema/onrightclick.cpp:664
-msgid "Add Global Label"
-msgstr "Ajout Label Global"
-
-#: eeschema/onrightclick.cpp:644
-msgid "Bus End"
-msgstr "Terminer Bus"
-
-#: eeschema/onrightclick.cpp:648
-msgid "Delete Bus"
-msgstr "Supprimer Bus"
-
-#: eeschema/onrightclick.cpp:651
-msgid "Break Bus"
-msgstr "Briser Bus"
-
-#: eeschema/onrightclick.cpp:675
-msgid "Enter Sheet"
-msgstr "Entrer dans Feuille"
-
-#: eeschema/onrightclick.cpp:677
-msgid "Move Sheet"
-msgstr "Déplacer Feuille"
-
-#: eeschema/onrightclick.cpp:682
-msgid "Drag Sheet"
-msgstr "Drag Feuille"
-
-#: eeschema/onrightclick.cpp:690
-msgid "Place Sheet"
-msgstr "Placer Feuille"
-
-#: eeschema/onrightclick.cpp:695
-msgid "Edit Sheet"
-msgstr "Editer Feuille"
-
-#: eeschema/onrightclick.cpp:701
-msgid "Resize Sheet"
-msgstr "Redimensionner Feuille"
-
-#: eeschema/onrightclick.cpp:704
-msgid "Import PinSheets"
-msgstr "Importer Connecteur de Hiérarchie"
-
-#: eeschema/onrightclick.cpp:708
-msgid "Cleanup PinSheets"
-msgstr "Nettoyage des Pins Hiérarchiques"
-
-#: eeschema/onrightclick.cpp:710
-msgid "Delete Sheet"
-msgstr "Supprimer Feuille"
-
-#: eeschema/onrightclick.cpp:721
-msgid "Move PinSheet"
-msgstr "Déplace Connecteur de hiérarchie"
-
-#: eeschema/onrightclick.cpp:727
-msgid "Edit PinSheet"
-msgstr "Edit Connecteur de hiérarchie"
-
-#: eeschema/onrightclick.cpp:731
-msgid "Delete PinSheet"
-msgstr "Supprimer Connecteur de hiérarchie"
-
-#: eeschema/onrightclick.cpp:744
-msgid "Window Zoom"
-msgstr "Zoom sur Fenêtre"
-
-#: eeschema/onrightclick.cpp:753
-msgid "Save Block"
-msgstr "Sauver Bloc"
-
-#: eeschema/onrightclick.cpp:756
-msgid "Drag Block"
-msgstr "Drag Bloc"
-
-#: eeschema/onrightclick.cpp:761
-msgid "Mirror Block ||"
-msgstr "Miroir Bloc ||"
-
-#: eeschema/onrightclick.cpp:766
-msgid "Copy to Clipboard"
-msgstr "Copie dans Presse papier"
 
 #: eeschema/menubar.cpp:44
 msgid "&New\tCtrl+N"
@@ -10060,7 +10065,7 @@ msgstr ""
 "Seuls les fichiers librairie dans cette liste sont chargés par eeschema.\n"
 "L'ordre de cette liste est important:Eeschema cherche un composant donné en utilisant cette liste par ordre de priorité."
 
-#: eeschema/dialog_eeschema_config_fbp.cpp:51
+#: eeschema/dialog_eeschema_config_fbp.cpp:57
 msgid "User defined search path"
 msgstr "Chemin de recherche défini par l'utilisateur"
 
@@ -10838,7 +10843,7 @@ msgstr "Remplissage en &avant plan"
 msgid "Fill &background"
 msgstr "Remplissage en a&rriere plan"
 
-#: eeschema/dialog_eeschema_config.cpp:234
+#: eeschema/dialog_eeschema_config.cpp:307
 msgid "Library files:"
 msgstr "Fichiers Librairies:"
 
@@ -11502,7 +11507,7 @@ msgstr "Afficher numéro des pads"
 msgid "&Apply"
 msgstr "&Appliquer"
 
-#: cvpcb/dialog_cvpcb_config_fbp.cpp:51
+#: cvpcb/dialog_cvpcb_config_fbp.cpp:57
 msgid "Footprint alias files"
 msgstr "Fichier Alias Modules"
 
@@ -14384,9 +14389,6 @@ msgstr "Ajustage opt Page"
 
 #~ msgid "Graphic shape properties"
 #~ msgstr "Propriétés du dessin"
-
-#~ msgid "Unable to create temporary file "
-#~ msgstr "Impossible de créer le fichier temporaire "
 
 #~ msgid "Create temporary file "
 #~ msgstr "Création fichier temporaire "
