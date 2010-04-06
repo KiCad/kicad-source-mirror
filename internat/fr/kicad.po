@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-02 20:43+0100\n"
-"PO-Revision-Date: 2010-04-02 20:59+0100\n"
+"POT-Creation-Date: 2010-04-06 20:10+0100\n"
+"PO-Revision-Date: 2010-04-06 20:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -1338,54 +1338,54 @@ msgstr "Lignes de Hachure"
 msgid "Corners in DrawList"
 msgstr "Sommets en Liste de dessin"
 
-#: pcbnew/files.cpp:21
+#: pcbnew/files.cpp:22
 msgid "Printed circuit board"
 msgstr "Circuit imprimé"
 
-#: pcbnew/files.cpp:71
+#: pcbnew/files.cpp:72
 msgid "Recovery file "
 msgstr "Fichier de secours "
 
-#: pcbnew/files.cpp:71
+#: pcbnew/files.cpp:72
 #: pcbnew/librairi.cpp:248
 msgid " not found"
 msgstr "  non trouvé"
 
-#: pcbnew/files.cpp:77
+#: pcbnew/files.cpp:78
 msgid "Ok to load Recovery file "
 msgstr "Ok pour charger le fichier de secours"
 
-#: pcbnew/files.cpp:133
+#: pcbnew/files.cpp:134
 msgid "Board Modified: Continue ?"
 msgstr "Circuit imprimé modifié,  Continuer ?"
 
-#: pcbnew/files.cpp:152
+#: pcbnew/files.cpp:153
 msgid "Open Board File"
 msgstr "Ouvrir Fichier C.I."
 
-#: pcbnew/files.cpp:175
+#: pcbnew/files.cpp:176
 #: pcbnew/librairi.cpp:74
 #, c-format
 msgid "File <%s> not found"
 msgstr "Fichier %s non trouvé"
 
-#: pcbnew/files.cpp:195
+#: pcbnew/files.cpp:196
 msgid "This file was created by a more recent version of PCBnew and may not load correctly. Please consider updating!"
 msgstr "Ce fichier a été créé par une version plus récente de PCBnew et peut être incorrectement chargé. SVP penser à une mise à jour!"
 
-#: pcbnew/files.cpp:200
+#: pcbnew/files.cpp:201
 msgid "This file was created by an older version of PCBnew. It will be stored in the new file format when you save this file again."
 msgstr "Ce fichier a été créé par une version plus ancienne de Eeschema. Il sera enregistré au nouveau format après la prochaine sauvegarde."
 
-#: pcbnew/files.cpp:314
+#: pcbnew/files.cpp:315
 msgid "Save Board File"
 msgstr "Sauver Fichier C.I."
 
-#: pcbnew/files.cpp:348
+#: pcbnew/files.cpp:350
 msgid "Warning: unable to create backup file "
 msgstr "Attention: impossible de créer un fichier backup "
 
-#: pcbnew/files.cpp:365
+#: pcbnew/files.cpp:367
 #: pcbnew/librairi.cpp:301
 #: pcbnew/librairi.cpp:447
 #: pcbnew/librairi.cpp:606
@@ -1393,15 +1393,15 @@ msgstr "Attention: impossible de créer un fichier backup "
 msgid "Unable to create "
 msgstr "Impossible de créer "
 
-#: pcbnew/files.cpp:384
+#: pcbnew/files.cpp:386
 msgid "Backup file: "
 msgstr "Fichier backup: "
 
-#: pcbnew/files.cpp:388
+#: pcbnew/files.cpp:390
 msgid "Wrote board file: "
 msgstr "Ecriture fichier CI: "
 
-#: pcbnew/files.cpp:390
+#: pcbnew/files.cpp:392
 msgid "Failed to create "
 msgstr "Impossible de créer  fichier "
 
@@ -7020,38 +7020,6 @@ msgstr "L' URL du site FreeRouting.net"
 msgid "Help"
 msgstr "Aide"
 
-#: eeschema/files-io.cpp:71
-msgid "Clear schematic hierarchy?"
-msgstr "Effacer la hiérarchie schématique?"
-
-#: eeschema/files-io.cpp:80
-msgid "Open Schematic"
-msgstr "Ouvrir Schématique"
-
-#: eeschema/files-io.cpp:136
-msgid ""
-"Ready\n"
-"Working dir: \n"
-msgstr ""
-"Prêt\n"
-"Répertoire de travail: \n"
-
-#: eeschema/files-io.cpp:200
-#, c-format
-msgid ""
-"Component library <%s> failed to load.\n"
-"\n"
-"Error: %s"
-msgstr ""
-"Le composant <%s> n'a pu être chargé.\n"
-"\n"
-"Erreur: %s"
-
-#: eeschema/files-io.cpp:215
-#, c-format
-msgid "File <%s> not found."
-msgstr "Fichier <%s> non trouvé"
-
 #: eeschema/libedit.cpp:26
 msgid "Component Library Editor: "
 msgstr "Editeur de Composants: "
@@ -7415,9 +7383,31 @@ msgstr "le texte a seulement %d paramètres sur les 8 requis"
 msgid "Line width"
 msgstr "Epaisseur ligne"
 
-#: eeschema/eeschema.cpp:131
-msgid "Eeschema is already running, Continue?"
-msgstr "Eeschema est en cours d'exécution. Continuer ?"
+#: eeschema/netlist.cpp:84
+msgid "Building net list:"
+msgstr "Construction de la netliste:"
+
+#: eeschema/netlist.cpp:101
+msgid "net count ="
+msgstr "Nbnets ="
+
+#: eeschema/netlist.cpp:108
+msgid "connections"
+msgstr "Connexions"
+
+#: eeschema/netlist.cpp:210
+#: eeschema/netlist.cpp:255
+#: eeschema/netlist.cpp:276
+msgid "done"
+msgstr "fini"
+
+#: eeschema/netlist.cpp:216
+msgid "bus labels"
+msgstr "labels de bus"
+
+#: eeschema/netlist.cpp:259
+msgid "hierarchy..."
+msgstr "hiérarchie..."
 
 #: eeschema/getpart.cpp:96
 #, c-format
@@ -7436,27 +7426,11 @@ msgstr " en librairie"
 msgid "Save Project Settings"
 msgstr "Sauver Options Projet"
 
-#: eeschema/netlist.cpp:89
-msgid "List"
-msgstr "Liste"
-
-#: eeschema/netlist.cpp:107
-msgid "NbItems"
-msgstr "NbItems"
-
-#: eeschema/netlist.cpp:217
-#: eeschema/netlist.cpp:262
-#: eeschema/netlist.cpp:283
-msgid "Done"
-msgstr "Fini"
-
-#: eeschema/netlist.cpp:223
-msgid "Labels"
-msgstr "Labels"
-
-#: eeschema/netlist.cpp:266
-msgid "Hierar."
-msgstr "Hiérar."
+#: eeschema/symbdraw.cpp:945
+#: eeschema/symbdraw.cpp:1033
+#, c-format
+msgid "Arc %.1f deg"
+msgstr "Arc %.1f deg"
 
 #: eeschema/eelayer.cpp:238
 msgid "White"
@@ -7829,12 +7803,6 @@ msgstr "Ajout Composant"
 #: eeschema/hotkeys.cpp:406
 msgid "Add Wire"
 msgstr "Ajouter Fils"
-
-#: eeschema/symbdraw.cpp:952
-#: eeschema/symbdraw.cpp:1040
-#, c-format
-msgid "Arc %.1f deg"
-msgstr "Arc %.1f deg"
 
 #: eeschema/libfield.cpp:158
 msgid "Edit field"
@@ -8263,6 +8231,42 @@ msgstr "3 états"
 #: eeschema/dialog_edit_label_base.cpp:80
 msgid "S&hape"
 msgstr "&Forme"
+
+#: eeschema/files-io.cpp:69
+msgid "Clear schematic hierarchy?"
+msgstr "Effacer la hiérarchie schématique?"
+
+#: eeschema/files-io.cpp:78
+msgid "Open Schematic"
+msgstr "Ouvrir Schématique"
+
+#: eeschema/files-io.cpp:134
+msgid ""
+"Ready\n"
+"Working dir: \n"
+msgstr ""
+"Prêt\n"
+"Répertoire de travail: \n"
+
+#: eeschema/files-io.cpp:200
+#, c-format
+msgid ""
+"Component library <%s> failed to load.\n"
+"\n"
+"\\Error: %s"
+msgstr ""
+"La librairie de composant <%s> n'a pu être chargée.\n"
+"\n"
+"\\Erreur: %s"
+
+#: eeschema/files-io.cpp:214
+#, c-format
+msgid "File <%s> not found."
+msgstr "Fichier <%s> non trouvé"
+
+#: eeschema/eeschema.cpp:132
+msgid "Eeschema is already running, Continue?"
+msgstr "Eeschema est en cours d'exécution. Continuer ?"
 
 #: eeschema/menubar_libedit.cpp:42
 msgid "&Save Current Library\tCtrl+S"
@@ -9343,6 +9347,10 @@ msgstr "Placer composant en schématique"
 msgid "Part %c"
 msgstr "Composant %c"
 
+#: eeschema/class_marker_sch.cpp:147
+msgid "Electronics rule check error"
+msgstr "Erreur de contrôle des règles électroniques"
+
 #: eeschema/menubar.cpp:44
 msgid "&New\tCtrl+N"
 msgstr "&Nouveau\tCtrl+N"
@@ -9947,6 +9955,10 @@ msgid "Hierarchy pins by sheets"
 msgstr "Pins de hiérarchie par feuilles"
 
 #: eeschema/dialog_build_BOM_base.cpp:47
+msgid "List"
+msgstr "Liste"
+
+#: eeschema/dialog_build_BOM_base.cpp:47
 msgid "Text for spreadsheet import"
 msgstr "Texte pour import dans tableur:"
 
@@ -10441,18 +10453,6 @@ msgstr "la position X du point %d de la courbe de Bezier n'est pas définie"
 #, c-format
 msgid "Bezier point %d Y position not defined"
 msgstr "la position Y du point %d de la courbe de Bezier n'est pas définie"
-
-#: eeschema/eelibs_read_libraryfiles.cpp:61
-msgid "\n"
-msgstr "\n"
-
-#: eeschema/eelibs_read_libraryfiles.cpp:88
-msgid " error!"
-msgstr " erreur!"
-
-#: eeschema/eelibs_read_libraryfiles.cpp:98
-msgid "The following libraries could not be found:"
-msgstr "Les librairies suivantes n'ont pas pu être trouvées:"
 
 #: eeschema/class_drc_erc_item.cpp:39
 msgid "ERC err unspecified"
@@ -11051,6 +11051,18 @@ msgstr "Autorise les bus et fils à être placés en &orientation H ou V uniquem
 #: eeschema/dialog_eeschema_options_base.cpp:134
 msgid "Show p&age limits"
 msgstr " Afficher limites de p&age"
+
+#: eeschema/eelibs_read_libraryfiles.cpp:61
+msgid "\n"
+msgstr "\n"
+
+#: eeschema/eelibs_read_libraryfiles.cpp:87
+msgid " error!"
+msgstr " erreur!"
+
+#: eeschema/eelibs_read_libraryfiles.cpp:97
+msgid "The following libraries could not be found:"
+msgstr "Les librairies suivantes n'ont pas pu être trouvées:"
 
 #: eeschema/component_wizard/dialog_component_setup.cpp:137
 msgid "Quick KICAD Library Component Builder"
@@ -11902,14 +11914,11 @@ msgid "%d errors while reading Gerber file [%s]"
 msgstr "%d erreurs pendant lecture fichier gerber [%s]"
 
 #: gerbview/readgerb.cpp:266
-#: gerbview/files.cpp:192
-#: gerbview/files.cpp:225
 #, c-format
 msgid "Gerber DCODE files (%s)|*.%s"
 msgstr "Fichiers Gerber DCODE (%s)|*.%s"
 
 #: gerbview/readgerb.cpp:271
-#: gerbview/files.cpp:198
 msgid "Load GERBER DCODE File"
 msgstr "Charger Fichier de DCodes"
 
@@ -12028,7 +12037,6 @@ msgid "Delete layer %d?"
 msgstr "Effacer couche %d"
 
 #: gerbview/select_layers_to_pcb.cpp:213
-#: gerbview/tool_gerber.cpp:209
 msgid "Layer "
 msgstr "Couche "
 
@@ -12346,22 +12354,6 @@ msgstr "Cacher Toutes les Couches"
 msgid "Layer %d"
 msgstr "Couche %d"
 
-#: common/zoom.cpp:185
-msgid "Center"
-msgstr "Centrer"
-
-#: common/zoom.cpp:199
-msgid "Zoom select"
-msgstr "Sélection Zoom"
-
-#: common/zoom.cpp:218
-msgid "Zoom: "
-msgstr "Zoom:  "
-
-#: common/zoom.cpp:229
-msgid "Grid Select"
-msgstr "Sélection Grille"
-
 #: common/edaappl.cpp:108
 msgid "French"
 msgstr "Français"
@@ -12476,6 +12468,22 @@ msgstr ""
 #: common/gestfich.cpp:652
 msgid "Unable to find a PDF viewer for"
 msgstr "Impossible de trouver un visualisateur PDF pour"
+
+#: common/zoom.cpp:185
+msgid "Center"
+msgstr "Centrer"
+
+#: common/zoom.cpp:199
+msgid "Zoom select"
+msgstr "Sélection Zoom"
+
+#: common/zoom.cpp:218
+msgid "Zoom: "
+msgstr "Zoom:  "
+
+#: common/zoom.cpp:229
+msgid "Grid Select"
+msgstr "Sélection Grille"
 
 #: common/selcolor.cpp:68
 msgid "Colors"
@@ -13206,6 +13214,15 @@ msgstr "Options d'Affichage"
 #: common/dialog_page_settings_base.h:92
 msgid "Page Settings"
 msgstr "Ajustage opt Page"
+
+#~ msgid "NbItems"
+#~ msgstr "NbItems"
+
+#~ msgid "Done"
+#~ msgstr "Fini"
+
+#~ msgid "Labels"
+#~ msgstr "Labels"
 
 #~ msgid "Item in &Sheet"
 #~ msgstr "Item dans &feuille"
