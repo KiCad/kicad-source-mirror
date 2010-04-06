@@ -13,6 +13,7 @@
 #include "protos.h"
 #include "pcbnew_id.h"
 
+#define BACKUP_FILE_EXT wxT( "000" )
 
 void WinEDA_PcbFrame::OnFileHistory( wxCommandEvent& event )
 {
@@ -63,7 +64,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
         else
         {
             fn = GetScreen()->m_FileName;
-            fn.SetExt( wxT( "000" ) );
+            fn.SetExt( BACKUP_FILE_EXT );
         }
 
         if( !fn.FileExists() )
@@ -333,15 +334,16 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
 
     /* Get the backup file name */
     backupFileName = pcbFileName;
-    backupFileName.SetExt( wxT( "000" ) );
+    backupFileName.SetExt( BACKUP_FILE_EXT );
 
     /* If an old backup file exists, delete it.
     if an old board file existes, rename it to the backup file name
     */
-    if( backupFileName.FileExists() )
+    if( pcbFileName.FileExists() )
     {
         /* rename the "old" file" from xxx.brd to xxx.000 */
-        wxRemoveFile( backupFileName.GetFullPath() ); /* Remove the old file xxx.000 (if exists) */
+        if( backupFileName.FileExists() )    /* Remove the old file xxx.000 (if exists) */
+            wxRemoveFile( backupFileName.GetFullPath() );
         if( !wxRenameFile( pcbFileName.GetFullPath(),
                            backupFileName.GetFullPath() ) )
         {
