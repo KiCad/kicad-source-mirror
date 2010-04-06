@@ -32,6 +32,7 @@ set(EESCHEMA_SRCS
     class_text-label.cpp
     classes_body_items.cpp
     cleanup.cpp
+    cmp_library_lexer.cpp
     controle.cpp
     cross-probing.cpp
     dangling_ends.cpp
@@ -153,13 +154,33 @@ if(APPLE)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.eeschema)
 endif(APPLE)
 
-add_executable(eeschema WIN32 MACOSX_BUNDLE ${EESCHEMA_SRCS} ${EESCHEMA_EXTRA_SRCS} ${EESCHEMA_RESOURCES})
+# Generate DSN lexer header and source files for the component library file
+# format.
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_base.h
+    COMMAND ${CMAKE_COMMAND}
+        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.lst
+        -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.lst
+    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_base.h(.cpp)
+       from ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.lst"
+    )
+
+set_source_files_properties( cmp_library_lexer.cpp
+    PROPERTIES
+        OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_base.h
+    )
+
+add_executable(eeschema WIN32 MACOSX_BUNDLE ${EESCHEMA_SRCS} ${EESCHEMA_EXTRA_SRCS}
+    ${EESCHEMA_RESOURCES})
 
 if(APPLE)
-    set_target_properties(eeschema PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+    set_target_properties(eeschema PROPERTIES MACOSX_BUNDLE_INFO_PLIST
+        ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
-target_link_libraries(eeschema common bitmaps kbool polygon ${wxWidgets_LIBRARIES} ${GDI_PLUS_LIBRARIES})
+target_link_libraries(eeschema common bitmaps kbool polygon ${wxWidgets_LIBRARIES}
+    ${GDI_PLUS_LIBRARIES})
 
 install(TARGETS eeschema
         DESTINATION ${KICAD_BIN}

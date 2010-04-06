@@ -22,17 +22,14 @@
 
 #include <boost/foreach.hpp>
 
-#define EraseItem( item ) item->Draw( Panel, DC, wxPoint( 0,\
-                                                          0 ), -1, g_XorMode, NULL,\
+#define EraseItem( item ) item->Draw( Panel, DC, wxPoint( 0, 0 ), -1, g_XorMode, NULL,  \
                                       DefaultTransformMatrix )
 
 static void    SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static void    ComputeArc( LIB_ARC* DrawItem, wxPoint ArcCentre );
 static void    ComputeArcRadiusAngles( LIB_ARC* arc );
 static wxPoint ComputeCircumCenter( wxPoint A, wxPoint B, wxPoint C );
-static void    RedrawWhileMovingCursor( WinEDA_DrawPanel* panel,
-                                        wxDC*             DC,
-                                        bool              erase );
+static void    RedrawWhileMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
 static wxPoint InitPosition, StartCursor, ItemPreviousPos;
 
@@ -309,8 +306,7 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry,
     break;
 
     default:
-        DisplayError( this, wxT( "WinEDA_LibeditFrame::CreateGraphicItem() \
-error"                                                                              ) );
+        DisplayError( this, wxT( "WinEDA_LibeditFrame::CreateGraphicItem() error" ) );
         return NULL;
     }
 
@@ -380,9 +376,7 @@ void WinEDA_LibeditFrame::GraphicItemBeginDraw( wxDC* DC )
 /*
  * Redraw the graphic shape while moving
  */
-static void RedrawWhileMovingCursor( WinEDA_DrawPanel* panel,
-                                     wxDC*             DC,
-                                     bool              erase )
+static void RedrawWhileMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
     LIB_DRAW_ITEM* item;
 
@@ -398,8 +392,7 @@ static void RedrawWhileMovingCursor( WinEDA_DrawPanel* panel,
     if( erase )
     {
         pos = ItemPreviousPos - StartCursor;
-        item->Draw( panel, DC, pos, -1, g_XorMode, NULL,
-                    DefaultTransformMatrix );
+        item->Draw( panel, DC, pos, -1, g_XorMode, NULL, DefaultTransformMatrix );
     }
 
     /* Redraw moved shape */
@@ -451,7 +444,7 @@ void WinEDA_LibeditFrame::StartModifyDrawSymbol( wxDC* DC )
         wxPoint endPoint    = ( (LIB_ARC*) m_drawItem )->m_ArcEnd;
         wxPoint centerPoint = ( (LIB_ARC*) m_drawItem )->m_Pos;
         wxPoint middlePoint = wxPoint( (startPoint.x + endPoint.x) / 2,
-                                      (startPoint.y + endPoint.y) / 2 );
+                                       (startPoint.y + endPoint.y) / 2 );
         wxPoint centerVector   = centerPoint - middlePoint;
         wxPoint startEndVector = TwoPointVector( startPoint, endPoint );
         arcState.distanceCenter = EuclideanNorm( centerVector );
@@ -551,7 +544,8 @@ void WinEDA_LibeditFrame::StartModifyDrawSymbol( wxDC* DC )
                           + (cursor - startPoint).y * (cursor - startPoint).y;
 
         // Find the right index of the point to be dragged
-        BOOST_FOREACH( wxPoint point, ( ( (LIB_POLYLINE*) m_drawItem )->m_PolyPoints ) ) {
+        BOOST_FOREACH( wxPoint point, ( ( (LIB_POLYLINE*) m_drawItem )->m_PolyPoints ) )
+        {
             int distancePoint = (cursor - point).x * (cursor - point).x +
                                 (cursor - point).y * (cursor - point).y;
 
@@ -652,7 +646,7 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
                 arcState.endPoint   = ( (LIB_ARC*) item )->m_ArcEnd;
 
                 wxPoint middlePoint = wxPoint( (arcState.startPoint.x + arcState.endPoint.x) / 2,
-                                              (arcState.startPoint.y + arcState.endPoint.y) / 2 );
+                                               (arcState.startPoint.y + arcState.endPoint.y) / 2 );
 
 
                 // If the distance is too small, use the old center point
@@ -662,7 +656,8 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
                     > MINIMUM_SELECTION_DISTANCE )
                 {
                     newCenterPoint = ComputeCircumCenter( arcState.startPoint,
-                                                          currentCursorPosition, arcState.endPoint );
+                                                          currentCursorPosition,
+                                                          arcState.endPoint );
                 }
                 else
                 {
@@ -670,14 +665,18 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
                 }
 
                 // Determine if the arc angle is larger than 180 degrees -> this happens if both
-                // points (cursor position, center point) lie on the same side of the vector start-end
-                int  crossA = CrossProduct( TwoPointVector( arcState.startPoint, arcState.endPoint ),
-                                           TwoPointVector( arcState.endPoint,
-                                                           currentCursorPosition ) );
-                int  crossB = CrossProduct( TwoPointVector( arcState.startPoint, arcState.endPoint ),
-                                           TwoPointVector( arcState.endPoint, newCenterPoint ) );
+                // points (cursor position, center point) lie on the same side of the vector
+                // start-end
+                int  crossA = CrossProduct( TwoPointVector( arcState.startPoint,
+                                                            arcState.endPoint ),
+                                            TwoPointVector( arcState.endPoint,
+                                                            currentCursorPosition ) );
+                int  crossB = CrossProduct( TwoPointVector( arcState.startPoint,
+                                                            arcState.endPoint ),
+                                            TwoPointVector( arcState.endPoint, newCenterPoint ) );
 
-                bool isLarger180degrees = (crossA < 0 && crossB < 0) || (crossA >=0 && crossB >=0);
+                bool isLarger180degrees = ( crossA < 0 && crossB < 0 ) ||
+                    ( crossA >= 0 && crossB >= 0 );
 
                 if( isLarger180degrees )
                     newCenterPoint = ( (LIB_ARC*) item )->m_Pos;
@@ -687,7 +686,7 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
             {
                 // Compute the new center point when the start/end points are modified
                 wxPoint middlePoint = wxPoint( (arcState.startPoint.x + arcState.endPoint.x) / 2,
-                                              (arcState.startPoint.y + arcState.endPoint.y) / 2 );
+                                               (arcState.startPoint.y + arcState.endPoint.y) / 2 );
 
                 wxPoint startEndVector = TwoPointVector( arcState.startPoint, arcState.endPoint );
                 wxPoint perpendicularVector = wxPoint( -startEndVector.y, startEndVector.x );
@@ -699,11 +698,11 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
                     lengthPerpendicularVector = 1e-1;
 
                 perpendicularVector.x = (int) ( (double) perpendicularVector.x *
-                                               arcState.distanceCenter /
-                                               lengthPerpendicularVector ) * arcState.direction;
+                                                arcState.distanceCenter /
+                                                lengthPerpendicularVector ) * arcState.direction;
                 perpendicularVector.y = (int) ( (double) perpendicularVector.y *
-                                               arcState.distanceCenter /
-                                               lengthPerpendicularVector ) * arcState.direction;
+                                                arcState.distanceCenter /
+                                                lengthPerpendicularVector ) * arcState.direction;
 
                 newCenterPoint = middlePoint + perpendicularVector;
 
@@ -804,14 +803,8 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     if( arcState.stateDrawArc == 1 )
     {
         int Color = ReturnLayerColor( LAYER_DEVICE );
-        GRLine( &panel->m_ClipBox,
-                DC,
-                arcState.startPoint.x,
-                -arcState.startPoint.y,
-                arcState.endPoint.x,
-                -arcState.endPoint.y,
-                0,
-                Color );
+        GRLine( &panel->m_ClipBox, DC, arcState.startPoint.x, -arcState.startPoint.y,
+                arcState.endPoint.x, -arcState.endPoint.y, 0, Color );
     }
     else
     {
@@ -973,8 +966,8 @@ static void ComputeArcRadiusAngles( LIB_ARC* arc )
 /*
  * Routine for adjusting the parameters of the arc currently being drawn.
  * Calculates the center, radius, angles for the arc current
- * Passes through the points arcState.startPoint.x, arcState.endPoint.x Y and Y with the nearest center
- * of the mouse position.
+ * Passes through the points arcState.startPoint.x, arcState.endPoint.x Y and Y with the
+ * nearest center of the mouse position.
  * Note: The center is obviously not on the grid
  */
 static void ComputeArc( LIB_ARC* DrawItem, wxPoint ArcCentre )
@@ -1100,8 +1093,7 @@ static wxPoint ComputeCircumCenter( wxPoint A, wxPoint B, wxPoint C )
  */
 void WinEDA_LibeditFrame::DeleteDrawPoly( wxDC* DC )
 {
-    if( m_drawItem == NULL
-        || m_drawItem->Type() != COMPONENT_POLYLINE_DRAW_TYPE )
+    if( m_drawItem == NULL || m_drawItem->Type() != COMPONENT_POLYLINE_DRAW_TYPE )
         return;
 
     LIB_POLYLINE* Poly = (LIB_POLYLINE*) m_drawItem;

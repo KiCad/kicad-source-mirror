@@ -35,8 +35,7 @@
  *
  *  For some items, characteristics are displayed on the screen.
  */
-SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay(
-    bool IncludePin )
+SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool IncludePin )
 {
     SCH_ITEM*      DrawStruct;
     wxString       msg;
@@ -115,10 +114,8 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay(
  *
  *  For some items, characteristics are displayed on the screen.
  */
-SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay(
-    const wxPoint& refpoint,
-    bool
-    IncludePin )
+SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay( const wxPoint& refpoint,
+                                                                   bool           IncludePin )
 {
     SCH_ITEM*      DrawStruct;
     LIB_PIN*       Pin;
@@ -129,9 +126,10 @@ SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay(
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), MARKERITEM );
     if( DrawStruct )
     {
-        ClearMsgPanel();
+        DrawStruct->DisplayInfo( this );
         return DrawStruct;
     }
+
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), NOCONNECTITEM );
     if( DrawStruct )
     {

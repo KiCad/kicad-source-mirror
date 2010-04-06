@@ -24,21 +24,16 @@ static void PropageNetCode( int OldNetCode, int NewNetCode, int IsBus );
 static void SheetLabelConnect( NETLIST_OBJECT* SheetLabel );
 static void ListeObjetConnection( SCH_SHEET_PATH*      sheetlist,
                                   NETLIST_OBJECT_LIST& aNetItemBuffer );
-static int  ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer,
-                                 NETLIST_OBJECT&      ObjNet );
-static void PointToPointConnect( NETLIST_OBJECT* Ref, int IsBus,
-                                 int start );
-static void SegmentToPointConnect( NETLIST_OBJECT* Jonction, int IsBus,
-                                   int start );
+static int  ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer, NETLIST_OBJECT& ObjNet );
+static void PointToPointConnect( NETLIST_OBJECT* Ref, int IsBus, int start );
+static void SegmentToPointConnect( NETLIST_OBJECT* Jonction, int IsBus, int start );
 static void LabelConnect( NETLIST_OBJECT* Label );
 static void ConnectBusLabels( NETLIST_OBJECT_LIST& aNetItemBuffer );
 static void SetUnconnectedFlag( NETLIST_OBJECT_LIST& aNetItemBuffer );
 
 // Sort functions used here:
-static bool SortItemsbyNetcode( const NETLIST_OBJECT* Objet1,
-                                const NETLIST_OBJECT* Objet2 );
-static bool SortItemsBySheet( const NETLIST_OBJECT* Objet1,
-                              const NETLIST_OBJECT* Objet2 );
+static bool SortItemsbyNetcode( const NETLIST_OBJECT* Objet1, const NETLIST_OBJECT* Objet2 );
+static bool SortItemsBySheet( const NETLIST_OBJECT* Objet1, const NETLIST_OBJECT* Objet2 );
 
 static int FirstNumWireBus, LastNumWireBus, RootBusNameLength;
 static int LastNetCode, LastBusNetCode;
@@ -86,7 +81,7 @@ void WinEDA_SchematicFrame::BuildNetListBase()
 
     NetNumber = 1;
 
-    activity = _( "List" );
+    activity = _( "Building net list:" );
     SetStatusText( activity );
 
     FreeNetObjectsList( g_NetObjectslist );
@@ -103,16 +98,14 @@ void WinEDA_SchematicFrame::BuildNetListBase()
     if( g_NetObjectslist.size() == 0 )
         return;  // no objects
 
-    activity.Empty();
-    activity << wxT( " " ) << _( "NbItems" ) << wxT( " " ) <<
-    g_NetObjectslist.size();
+    activity << wxT( " " ) << _( "net count =" ) << wxT( " " ) << g_NetObjectslist.size();
     SetStatusText( activity );
 
     /* Sort objects by Sheet */
 
     sort( g_NetObjectslist.begin(), g_NetObjectslist.end(), SortItemsBySheet );
 
-    activity << wxT( ";  " ) << _( "Conn" );
+    activity << wxT( ",  " ) << _( "connections" ) << wxT( "..." );
     SetStatusText( activity );
 
     sheet = &(g_NetObjectslist[0]->m_SheetList);
@@ -214,13 +207,13 @@ void WinEDA_SchematicFrame::BuildNetListBase()
 #endif
 
 
-    activity << wxT( " " ) << _( "Done" );
+    activity << _( "done" );
     SetStatusText( activity );
 
     /* Updating the Bus Labels Netcode connected by Bus */
     ConnectBusLabels( g_NetObjectslist );
 
-    activity << wxT( ";  " ) << _( "Labels" );
+    activity << wxT( ",  " ) << _( "bus labels" ) << wxT( "..." );;
     SetStatusText( activity );
 
     /* Group objects by label. */
@@ -259,11 +252,11 @@ void WinEDA_SchematicFrame::BuildNetListBase()
     dumpNetTable();
 #endif
 
-    activity << wxT( " " ) << _( "Done" );
+    activity << _( "done" );
     SetStatusText( activity );
 
     /* Connection hierarchy. */
-    activity << wxT( ";  " ) << _( "Hierar." );
+    activity << wxT( ", " ) << _( "hierarchy..." );
     SetStatusText( activity );
     for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
     {
@@ -280,7 +273,7 @@ void WinEDA_SchematicFrame::BuildNetListBase()
     dumpNetTable();
 #endif
 
-    activity << wxT( " " ) << _( "Done" );
+    activity << _( "done" );
     SetStatusText( activity );
 
     /* Compress numbers of Netcode having consecutive values. */

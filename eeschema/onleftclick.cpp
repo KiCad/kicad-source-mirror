@@ -68,7 +68,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         }
         else
         {
-            DrawStruct = SchematicGeneralLocateAndDisplay(true);
+            DrawStruct = SchematicGeneralLocateAndDisplay( true );
         }
     }
 

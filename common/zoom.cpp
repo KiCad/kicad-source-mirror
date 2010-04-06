@@ -235,10 +235,8 @@ void WinEDA_DrawFrame::AddMenuZoomAndGrid( wxMenu* MasterMenu )
         for( unsigned i = 0; i < screen->m_GridList.GetCount(); i++ )
         {
             tmp = screen->m_GridList[i];
-            double gridValueInch = To_User_Unit( 0, tmp.m_Size.x,
-                                      m_InternalUnits );
-            double gridValue_mm = To_User_Unit( 1, tmp.m_Size.x,
-                                      m_InternalUnits );
+            double gridValueInch = To_User_Unit( 0, tmp.m_Size.x, m_InternalUnits );
+            double gridValue_mm = To_User_Unit( 1, tmp.m_Size.x, m_InternalUnits );
 
             if( tmp.m_Id == ID_POPUP_GRID_USER )
             {

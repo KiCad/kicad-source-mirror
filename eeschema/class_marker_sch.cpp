@@ -135,3 +135,15 @@ EDA_Rect SCH_MARKER::GetBoundingBox()
     return GetBoundingBoxMarker();
 }
 
+
+void SCH_MARKER::DisplayInfo( WinEDA_DrawFrame* aFrame )
+{
+    if( aFrame == NULL )
+        return;
+
+    wxString msg;
+
+    aFrame->ClearMsgPanel();
+    aFrame->AppendMsgPanel( _( "Electronics rule check error" ),
+                            GetReporter().GetErrorText(), DARKRED );
+}

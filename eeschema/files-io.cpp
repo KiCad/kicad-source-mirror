@@ -50,8 +50,7 @@ void WinEDA_SchematicFrame::Save_File( wxCommandEvent& event )
  *  Schematic root file and its subhierarchies, the configuration and the libs
  *  which are not already loaded)
  */
-int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
-                                             bool IsNew )
+int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNew )
 {
     SCH_SCREEN*    screen;
     wxString       FullFileName, msg;
@@ -59,8 +58,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
 
     EDA_ScreenList ScreenList;
 
-    for( screen = ScreenList.GetFirst(); screen != NULL;
-         screen = ScreenList.GetNext() )
+    for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
     {
         if( screen->IsModify() )
             break;
@@ -157,9 +155,11 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
      * and after (due to code change): <root_name>-cache.lib
      * so if the <name>-cache.lib is not found, the old way will be tried
     */
-    bool use_oldcachename = false;
     fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+
+    bool use_oldcachename = false;
     wxString cachename =  fn.GetName() + wxT("-cache");
+
     fn.SetName( cachename );
     fn.SetExt( CompLibFileExtension );
     if( ! fn.FileExists() )
@@ -197,8 +197,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName,
         {
             wxString prompt;
 
-            prompt.Printf( _( "Component library <%s> failed to load.\n\n\
-Error: %s" ),
+            prompt.Printf( _( "Component library <%s> failed to load.\n\n\Error: %s" ),
                            GetChars( fn.GetFullPath() ),
                            GetChars( errMsg ) );
             DisplayError( this, prompt );

@@ -29,7 +29,6 @@
 #include <string>
 
 #include "fctsys.h"
-#include "pcbnew.h"
 
 #include "richio.h"
 

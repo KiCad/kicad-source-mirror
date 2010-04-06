@@ -36,6 +36,8 @@
 
 #include "dsnlexer.h"
 
+#include "pcbnew.h"
+
 
 class TYPE_COLLECTOR;           // outside the DSN namespace
 
