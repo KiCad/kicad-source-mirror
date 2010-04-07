@@ -232,7 +232,7 @@ this file again."));
         if ( ! new_filename.EndsWith(wxT("-append")) )
             new_filename += wxT("-append");
 
-        new_filename += PcbExtBuffer;
+        new_filename += wxT(".") + PcbExtBuffer;
 
         OnModify();
         GetScreen()->m_FileName = new_filename;
