@@ -704,7 +704,6 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 {
     TRACK*      track;
     int         dx, dy;         // utilise pour calcul des dim x et dim y des segments
-    int         w_dist;
     int         layerMask;
     int         net_code_ref;
     wxPoint     shape_pos;
@@ -813,7 +812,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     D_PAD pseudo_pad( (MODULE*) NULL );     // construct this once outside following loop
 
     // Compute the min distance to pads
-    w_dist = aRefSeg->m_Width >> 1;
+    int refsegm_half_width = aRefSeg->m_Width >> 1;
 
     if( testPads )
     {
@@ -842,7 +841,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 m_spotcx = pseudo_pad.GetPosition().x - org_X;
                 m_spotcy = pseudo_pad.GetPosition().y - org_Y;
 
-                if( !checkClearanceSegmToPad( &pseudo_pad, w_dist, netclass->GetClearance() ))
+                if( !checkClearanceSegmToPad( &pseudo_pad, refsegm_half_width, netclass->GetClearance() ))
                 {
                     m_currentMarker = fillMarker( aRefSeg, pad,
                                                   DRCE_TRACK_NEAR_THROUGH_HOLE, m_currentMarker );
@@ -863,7 +862,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             m_spotcx  = shape_pos.x - org_X;
             m_spotcy  = shape_pos.y - org_Y;
 
-            if( !checkClearanceSegmToPad( pad, w_dist, aRefSeg->GetClearance( pad ) ) )
+            if( !checkClearanceSegmToPad( pad, refsegm_half_width, aRefSeg->GetClearance( pad ) ) )
             {
                 m_currentMarker = fillMarker( aRefSeg, pad,
                                               DRCE_TRACK_NEAR_PAD, m_currentMarker );
@@ -897,7 +896,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
         // the minimum distance = clearance plus half the reference track
         // width plus half the other track's width
-        w_dist = aRefSeg->GetClearance( track );
+        int w_dist = aRefSeg->GetClearance( track );
         w_dist += (aRefSeg->m_Width + track->m_Width)/2;
 
         // If the reference segment is a via, we test it here
@@ -1423,7 +1422,7 @@ exit:       // the only way out (hopefully) for simpler debugging
 }
 
 
-bool DRC::checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int dist_min )
+bool DRC::checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int aMinDist )
 {
     int p_dimx;
     int p_dimy;         // half the dimension of the pad
@@ -1432,7 +1431,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int dis
     int seuil;
     int deltay;
 
-    seuil  = w_segm + dist_min;
+    seuil  = w_segm + aMinDist;
     p_dimx = pad_to_test->m_Size.x >> 1;
     p_dimy = pad_to_test->m_Size.y >> 1;
 

@@ -76,7 +76,7 @@ GERBER_LAYER_WIDGET::GERBER_LAYER_WIDGET( WinEDA_GerberFrame* aParent, wxWindow*
     }
 
     AppendRenderRows( renderRows, DIM(renderRows) );
-    
+
     // Update default tabs labels for gerbview
     SetLayersManagerTabsText( );
 
@@ -143,6 +143,7 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
     int     rowCount;
     int     menuId = event.GetId();
     bool    visible;
+    int     visibleLayers = 0;
 
     switch( menuId )
     {
@@ -153,36 +154,19 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
     case ID_SHOW_NO_COPPERS:
         visible = false;
     L_change_coppers:
-        int lastCu = -1;
         rowCount = GetLayerRowCount();
-        for( int row=rowCount-1;  row>=0;  --row )
+        for( int row=0; row < rowCount; ++row )
         {
             wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
-            int layer = getDecodedId( cb->GetId() );
-            if( IsValidCopperLayerIndex( layer ) )
-            {
-                lastCu = row;
-                break;
-            }
+            cb->SetValue( visible );
+            if( visible )
+                visibleLayers |= (1 << row);
+            else
+                visibleLayers &= ~(1 << row);
         }
 
-        for( int row=0;  row<rowCount;  ++row )
-        {
-            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
-            int layer = getDecodedId( cb->GetId() );
-
-            if( IsValidCopperLayerIndex( layer ) )
-            {
-                cb->SetValue( visible );
-
-                bool isLastCopperLayer = (row==lastCu);
-
-                OnLayerVisible( layer, visible, isLastCopperLayer );
-
-                if( isLastCopperLayer )
-                    break;
-            }
-        }
+        myframe->GetBoard()->SetVisibleLayers( visibleLayers );
+        myframe->DrawPanel->Refresh();
         break;
     }
 }

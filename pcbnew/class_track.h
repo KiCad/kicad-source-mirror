@@ -275,6 +275,17 @@ public:
         return wxT( "TRACK" );
     }
 
+     /**
+     * Function GetClearance
+     * returns the clearance in internal units.  If \a aItem is not NULL then the
+     * returned clearance is the greater of this object's clearance and
+     * aItem's clearance.  If \a aItem is NULL, then this objects clearance
+     * is returned.
+     * @param aItem is another BOARD_CONNECTED_ITEM or NULL
+     * @return int - the clearance in internal units.
+     */
+    virtual int GetClearance( BOARD_CONNECTED_ITEM* aItem = NULL ) const;
+
 
 #if defined (DEBUG)
 

@@ -551,6 +551,7 @@ void DIALOG_DRC_CONTROL::RedrawDrawPanel()
 void DIALOG_DRC_CONTROL::DelDRCMarkers()
 /*********************************************************/
 {
+    m_Parent->SetCurItem( NULL );           // clear curr item, because it could be a DRC marker
     m_ClearanceListBox->DeleteAllItems();
     m_UnconnectedListBox->DeleteAllItems();
 }

@@ -6,10 +6,10 @@
 #endif
 
 #ifndef KICAD_BUILD_VERSION
-#define KICAD_BUILD_VERSION "(2010-03-30 SVN 2479)"
+#define KICAD_BUILD_VERSION "(2010-04-08 SVN 25xx)"
 #endif
 
-#define VERSION_STABILITY "final"
+#define VERSION_STABILITY "unstable"
 
 /** Function GetBuildVersion()
  * Return the build date and version

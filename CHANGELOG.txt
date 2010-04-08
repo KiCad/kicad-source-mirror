@@ -4,6 +4,15 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-apr-08, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++Pcbnew:
+    Drc: take in account the clearance "local parameters" for pads that have local parameters.
+         Until now, only NETCLASS clearance values were used.
+         (local parameters are used in zone filling)
+         But because a pad (or a footprint) can have a specific clearance value
+         Drc used now this value, and NETCLASS value only if no local value specified.
+
 2010-mar-31, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++Pcbnew
