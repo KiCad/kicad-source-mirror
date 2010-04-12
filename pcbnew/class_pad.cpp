@@ -201,37 +201,38 @@ void D_PAD::Copy( D_PAD* source )
 
 
 /** Virtual function GetClearance
- * returns the clearance in 1/10000 inches.  If \a aItem is not NULL then the
- * returned clearance is the greater of this object's NETCLASS clearance and
- * aItem's NETCLASS clearance.  If \a aItem is NULL, then this objects
+ * returns the clearance in internal units.  If \a aItem is not NULL then the
+ * returned clearance is the greater of this object's clearance and
+ * aItem's clearance.  If \a aItem is NULL, then this objects
  * clearance
  * is returned.
  * @param aItem is another BOARD_CONNECTED_ITEM or NULL
- * @return int - the clearance in 1/10000 inches.
+ * @return int - the clearance in internal units.
  */
 int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 {
+    // A pad can have specific clearance parameters that
+    // overrides its NETCLASS clearance value
     int clearance = m_LocalClearance;
 
     if( clearance == 0 )
-    {
+    {   // If local clearance is 0, use the parent footprint clearance value
         if( GetParent() && ( (MODULE*) GetParent() )->m_LocalClearance )
             clearance = ( (MODULE*) GetParent() )->m_LocalClearance;
     }
 
-    if( clearance == 0 )
+    if( clearance == 0 )   // If the parent footprint clearance value = 0, use NETCLASS value
         return BOARD_CONNECTED_ITEM::GetClearance( aItem );
 
+    // We have a specific clearance.
+    // if aItem, return the biggest clearance
     if( aItem )
     {
-        NETCLASS* hisclass = aItem->GetNetClass();
-        if( hisclass )
-        {
-            int hisClearance = hisclass->GetClearance();
-            return max( hisClearance, clearance );
-        }
+        int hisClearance = aItem->GetClearance();
+        return max( hisClearance, clearance );
     }
 
+    // Return the specific clearance.
     return clearance;
 }
 

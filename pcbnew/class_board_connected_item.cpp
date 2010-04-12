@@ -78,27 +78,17 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
     // and a call to wxASSERT can crash the application.
     if( myclass )
     {
+        int myClearance  = myclass->GetClearance();
         // @todo : after GetNetClass() is reliably not returning NULL, remove the
-        // tests for if( myclass ) and if( hisclass )
+        // tests for if( myclass )
 
         if( aItem )
         {
-            NETCLASS*   hisclass = aItem->GetNetClass();
-            if( hisclass )
-            {
-                int hisClearance = hisclass->GetClearance();
-                int myClearance  = myclass->GetClearance();
-                return max( hisClearance, myClearance );
-            }
-            else
-            {
-#ifdef __WXDEBUG__
-                wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetClearance(): NULL hisclass") );
-#endif
-            }
+            int hisClearance = aItem->GetClearance();
+            return max( hisClearance, myClearance );
         }
 
-        return myclass->GetClearance();
+        return myClearance;
     }
     else
     {
