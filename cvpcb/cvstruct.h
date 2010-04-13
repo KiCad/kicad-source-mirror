@@ -115,11 +115,7 @@ public:
     int              SaveNetList( const wxString& FullFileName );
     int              SaveComponentList( const wxString& FullFileName );
     bool             ReadNetList();
-    int              rdpcad();
     int              ReadSchematicNetlist();
-    int              ReadFootprintFilterList( FILE* f );
-    int              ReadViewlogicWirList();
-    int              ReadViewlogicNetList();
     void             LoadProjectFile( const wxString& FileName );
     void             SaveProjectFile( const wxString& fileName );
     virtual void     LoadSettings();

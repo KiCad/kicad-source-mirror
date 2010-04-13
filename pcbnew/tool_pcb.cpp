@@ -159,20 +159,9 @@ void WinEDA_PcbFrame::PrepareLayerIndicator()
 
     if( m_HToolBar )
     {
-#if wxCHECK_VERSION( 2, 8, 3 ) & !defined(__WXX11__)
-        m_HToolBar->SetToolNormalBitmap( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR,
+        m_HToolBar->SetToolBitmap( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR,
                                          *LayerPairBitmap );
-#else
-        int pos = m_HToolBar->GetToolPos( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR );
-        if( pos != wxNOT_FOUND )
-        {
-            m_HToolBar->DeleteTool( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR );
-            m_HToolBar->InsertTool( pos, ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR,
-                                    *LayerPairBitmap, wxNullBitmap, false,
-                                    NULL, SEL_LAYER_HELP );
-            m_HToolBar->Realize();
-        }
-#endif
+        m_HToolBar->Realize();
     }
 }
 
