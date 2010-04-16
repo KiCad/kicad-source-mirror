@@ -144,6 +144,18 @@ public:
      * @throw IOError only when a line is too long.
      */
     int ReadLine() throw (IOError);
+
+    /**
+     * Function Rewind
+     * a wrapper to the standard function rewind.
+     * also clear the current line number 
+     */
+    void Rewind()
+    {
+        rewind( fp );
+        lineNum = 0;
+    }
+    
 };
 
 
