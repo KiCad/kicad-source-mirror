@@ -86,8 +86,6 @@ endif(WIN32)
 
 set(KICAD_DEMOS ${KICAD_DATA}/demos
     CACHE PATH "Location of KiCad demo files.")
-set(KICAD_INTERNAT ${KICAD_DATA}/internat
-    CACHE PATH "Location of KiCad i18n files.")
 set(KICAD_TEMPLATE ${KICAD_DATA}/template
     CACHE PATH "Location of KiCad template files.")
 
@@ -96,7 +94,6 @@ mark_as_advanced(KICAD_BIN
                  KICAD_DATA
                  KICAD_DOCS
                  KICAD_DEMOS
-                 KICAD_INTERNAT
                  KICAD_TEMPLATE)
 
 
@@ -194,7 +191,6 @@ add_subdirectory(polygon/kbool/src)
 # Resources #
 #############
 add_subdirectory(demos)
-add_subdirectory(internat)
 add_subdirectory(template)
 
 
