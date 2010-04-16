@@ -1,0 +1,7696 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kicad\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2005-07-05 11:33+0100\n"
+"Last-Translator: Boštjan Jerko <bojerko@gmail.com>\n"
+"Language-Team: kicad team <bojerko@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Sloven¹èina\n"
+"X-Poedit-Country: SLOVENIJA\n"
+"X-Poedit-Keywords: _\n"
+"X-Poedit-Basepath: c:\\kicad\\kicad-dev\n"
+"X-Poedit-SearchPath-0: pcbnew\n"
+"X-Poedit-SearchPath-1: eeschema\n"
+"X-Poedit-SearchPath-2: cvpcb\n"
+"X-Poedit-SearchPath-3: kicad\n"
+"X-Poedit-SearchPath-4: gerbview\n"
+"X-Poedit-SearchPath-5: common\n"
+
+#: pcbnew/affiche.cpp:29
+#: gerbview/affiche.cpp:28
+msgid "COTATION"
+msgstr "ACOTACION"
+
+#: pcbnew/affiche.cpp:32
+#: gerbview/affiche.cpp:31
+msgid "PCB Text"
+msgstr "Pcb besedilo"
+
+#: pcbnew/affiche.cpp:34
+#: pcbnew/affiche.cpp:90
+#: pcbnew/affiche.cpp:94
+#: pcbnew/affiche.cpp:194
+#: pcbnew/affiche.cpp:230
+#: pcbnew/class_module.cpp:1036
+#: pcbnew/class_pad.cpp:627
+#: pcbnew/editmod.cpp:348
+#: pcbnew/sel_layer.cpp:107
+#: gerbview/affiche.cpp:101
+#: gerbview/affiche.cpp:138
+msgid "Layer"
+msgstr "Sloj"
+
+#: pcbnew/affiche.cpp:38
+#: pcbnew/affiche.cpp:99
+#: pcbnew/cotation.cpp:114
+#: pcbnew/modedit_onclick.cpp:198
+#: pcbnew/pcbtexte.cpp:173
+msgid "Mirror"
+msgstr "Zrcali"
+
+#: pcbnew/affiche.cpp:40
+#: pcbnew/affiche.cpp:85
+#: gerbview/affiche.cpp:38
+msgid "No"
+msgstr "Ne"
+
+#: pcbnew/affiche.cpp:41
+#: pcbnew/affiche.cpp:86
+#: gerbview/affiche.cpp:39
+msgid "Yes"
+msgstr "Da"
+
+#: pcbnew/affiche.cpp:45
+#: pcbnew/affiche.cpp:102
+#: pcbnew/class_module.cpp:1053
+#: pcbnew/class_pad.cpp:656
+#: pcbnew/editmod.cpp:357
+#: eeschema/affiche.cpp:110
+#: gerbview/affiche.cpp:43
+msgid "Orient"
+msgstr "Orientacija"
+
+#: pcbnew/affiche.cpp:48
+#: pcbnew/affiche.cpp:105
+#: pcbnew/affiche.cpp:199
+#: pcbnew/affiche.cpp:234
+#: pcbnew/affiche.cpp:265
+#: pcbnew/cotation.cpp:131
+#: pcbnew/edtxtmod.cpp:148
+#: pcbnew/mirepcb.cpp:114
+#: pcbnew/pcbtexte.cpp:127
+#: gerbview/affiche.cpp:46
+#: gerbview/affiche.cpp:105
+#: gerbview/affiche.cpp:142
+msgid "Width"
+msgstr "©irina"
+
+#: pcbnew/affiche.cpp:51
+#: pcbnew/affiche.cpp:108
+#: pcbnew/class_pad.cpp:639
+#: gerbview/affiche.cpp:49
+msgid "H Size"
+msgstr "velikost H"
+
+#: pcbnew/affiche.cpp:54
+#: pcbnew/affiche.cpp:111
+#: pcbnew/class_pad.cpp:643
+#: gerbview/affiche.cpp:52
+msgid "V Size"
+msgstr "velikost V"
+
+#: pcbnew/affiche.cpp:67
+msgid "Ref."
+msgstr "Ref."
+
+#: pcbnew/affiche.cpp:67
+#: pcbnew/affiche.cpp:254
+#: eeschema/editpart.cpp:746
+#: eeschema/eelayer.cpp:105
+#: eeschema/onrightclick.cpp:225
+msgid "Value"
+msgstr "Vrednost"
+
+#: pcbnew/affiche.cpp:67
+#: pcbnew/affiche.cpp:78
+msgid "Text"
+msgstr "Besedilo"
+
+#: pcbnew/affiche.cpp:81
+#: pcbnew/affiche.cpp:145
+#: pcbnew/affiche.cpp:217
+msgid "Type"
+msgstr "Tip"
+
+#: pcbnew/affiche.cpp:83
+#: pcbnew/cotation.cpp:115
+#: pcbnew/edtxtmod.cpp:170
+#: pcbnew/options.cpp:207
+#: pcbnew/pcbtexte.cpp:174
+#: eeschema/affiche.cpp:94
+#: gerbview/gerberframe.cpp:265
+#: gerbview/options.cpp:175
+msgid "Display"
+msgstr "Prikaz"
+
+#: pcbnew/affiche.cpp:135
+#: pcbnew/pcbframe.cpp:386
+msgid "Track"
+msgstr "Povezava"
+
+#: pcbnew/affiche.cpp:139
+msgid "Zone"
+msgstr "Obmoèje"
+
+#: pcbnew/affiche.cpp:159
+#: pcbnew/zones.cpp:688
+msgid "NetName"
+msgstr "Ime povezave"
+
+#: pcbnew/affiche.cpp:164
+msgid "NetCode"
+msgstr "Oznaka povezave"
+
+#: pcbnew/affiche.cpp:169
+msgid "Segment"
+msgstr "Segment"
+
+#: pcbnew/affiche.cpp:171
+#: pcbnew/affiche.cpp:221
+#: pcbnew/editpads.cpp:257
+#: gerbview/affiche.cpp:126
+msgid "Circle"
+msgstr "Krog"
+
+#: pcbnew/affiche.cpp:172
+msgid "Standard"
+msgstr "Standard"
+
+#: pcbnew/affiche.cpp:181
+#: pcbnew/class_module.cpp:1049
+msgid "Stat"
+msgstr "Stat"
+
+#: pcbnew/affiche.cpp:219
+#: gerbview/affiche.cpp:124
+msgid "Shape"
+msgstr "Oblika"
+
+#: pcbnew/affiche.cpp:251
+msgid "Seg"
+msgstr "Seg"
+
+#: pcbnew/affiche.cpp:252
+#: pcbnew/class_module.cpp:1056
+#: pcbnew/class_pad.cpp:607
+msgid "Module"
+msgstr "Modul"
+
+# TimeStamp
+#: pcbnew/affiche.cpp:257
+#: pcbnew/class_module.cpp:1032
+msgid "TimeStamp"
+msgstr "Èasovna oznaka"
+
+#: pcbnew/affiche.cpp:259
+msgid "Mod Layer"
+msgstr "Mod sloj"
+
+#: pcbnew/affiche.cpp:261
+msgid "Seg Layer"
+msgstr "Seg sloj"
+
+#: pcbnew/affiche.cpp:288
+#: pcbnew/affiche.cpp:348
+#: pcbnew/class_module.cpp:1043
+msgid "Pads"
+msgstr "Otoèki"
+
+#: pcbnew/affiche.cpp:297
+#: pcbnew/affiche.cpp:358
+#: pcbnew/plotps.cpp:310
+msgid "Vias"
+msgstr "Vie"
+
+#: pcbnew/affiche.cpp:300
+msgid "Nodes"
+msgstr "Nodi"
+
+#: pcbnew/affiche.cpp:303
+msgid "Links"
+msgstr "Povezave"
+
+#: pcbnew/affiche.cpp:306
+msgid "Nets"
+msgstr "Vezi"
+
+#: pcbnew/affiche.cpp:309
+msgid "Connect"
+msgstr "Pove¾i"
+
+#: pcbnew/affiche.cpp:312
+#: eeschema/eelayer.cpp:177
+msgid "NoConn"
+msgstr "Nepovezano"
+
+#: pcbnew/affiche.cpp:331
+msgid "Net Name"
+msgstr "Oznaka vezi"
+
+#: pcbnew/affiche.cpp:333
+msgid "No Net (not connected)"
+msgstr "Ni vezi(nepovezano)"
+
+#: pcbnew/affiche.cpp:336
+msgid "Net Code"
+msgstr "Oznaka vezi"
+
+#: pcbnew/automove.cpp:194
+msgid "No Modules!"
+msgstr "Ni modula!"
+
+#: pcbnew/automove.cpp:198
+msgid "Move Modules ?"
+msgstr "Prestavim modul ?"
+
+#: pcbnew/autoplac.cpp:104
+msgid "Footprints NOT LOCKED will be moved"
+msgstr "NEZAKLENJENI odtisi (Footprints) bodo premaknjeni"
+
+#: pcbnew/autoplac.cpp:376
+msgid "No edge PCB, Unknown board size!"
+msgstr "Neznana dimenzija plo¹èe, ker ni roba PCBja!"
+
+#: pcbnew/autoplac.cpp:393
+msgid "Cols"
+msgstr "Stolpci"
+
+#: pcbnew/autoplac.cpp:395
+msgid "Lines"
+msgstr "Èrte"
+
+#: pcbnew/autoplac.cpp:397
+#, fuzzy
+msgid "Cells."
+msgstr "Celice"
+
+#: pcbnew/autoplac.cpp:453
+msgid "Loop"
+msgstr "Zanka"
+
+#: pcbnew/autoplac.cpp:597
+msgid "Ok to abort ?"
+msgstr "Prekinem?"
+
+#: pcbnew/autorout.cpp:53
+msgid "Net not selected"
+msgstr "Povezava ni izbrana"
+
+#: pcbnew/autorout.cpp:61
+msgid "Module not selected"
+msgstr "Modul ni izbran"
+
+#: pcbnew/autorout.cpp:69
+msgid "Pad non selected"
+msgstr "Pad ni izbran"
+
+#: pcbnew/autorout.cpp:130
+msgid "No memory for autorouting"
+msgstr "Ni dovolj spomina za autorouting"
+
+#: pcbnew/autorout.cpp:135
+msgid "Place Cells"
+msgstr "Postavi celice"
+
+#: pcbnew/basepcbframe.cpp:101
+msgid "3D Frame already opened"
+msgstr "3D okvir je ¾e odprt"
+
+#: pcbnew/basepcbframe.cpp:104
+msgid "3D Viewer"
+msgstr "3D pogled"
+
+#: pcbnew/block.cpp:122
+#: pcbnew/cotation.cpp:105
+#: pcbnew/dialog_display_options.cpp:150
+#: pcbnew/dialog_graphic_items_options.cpp:134
+#: pcbnew/dialog_track_options.cpp:81
+#: pcbnew/editmod.cpp:238
+#: pcbnew/editpads.cpp:173
+#: pcbnew/edtxtmod.cpp:124
+#: pcbnew/mirepcb.cpp:98
+#: pcbnew/muonde.cpp:331
+#: pcbnew/options.cpp:199
+#: pcbnew/pcbtexte.cpp:108
+#: pcbnew/set_grid.cpp:112
+#: pcbnew/zones.cpp:751
+#: eeschema/editexte.cpp:111
+#: eeschema/editpart.cpp:199
+#: eeschema/fieldedi.cpp:208
+#: eeschema/libedpart.cpp:259
+#: eeschema/pinedit.cpp:162
+#: eeschema/sheetlab.cpp:92
+#: eeschema/symbdraw.cpp:91
+#: eeschema/symbtext.cpp:90
+#: common/displlst.cpp:92
+msgid "Ok"
+msgstr "Ok"
+
+#: pcbnew/block.cpp:127
+#: pcbnew/cotation.cpp:110
+#: pcbnew/dialog_display_options.cpp:155
+#: pcbnew/dialog_graphic_items_options.cpp:137
+#: pcbnew/dialog_track_options.cpp:84
+#: pcbnew/editmod.cpp:243
+#: pcbnew/editpads.cpp:178
+#: pcbnew/edtxtmod.cpp:129
+#: pcbnew/globaleditpad.cpp:106
+#: pcbnew/initpcb.cpp:89
+#: pcbnew/mirepcb.cpp:103
+#: pcbnew/modedit_onclick.cpp:174
+#: pcbnew/modedit_onclick.cpp:183
+#: pcbnew/muonde.cpp:334
+#: pcbnew/onrightclick.cpp:156
+#: pcbnew/onrightclick.cpp:182
+#: pcbnew/options.cpp:202
+#: pcbnew/pcbpiste.cpp:85
+#: pcbnew/pcbplot.cpp:173
+#: pcbnew/pcbtexte.cpp:113
+#: pcbnew/sel_layer.cpp:121
+#: pcbnew/sel_layer.cpp:246
+#: pcbnew/set_grid.cpp:115
+#: pcbnew/zones.cpp:92
+#: eeschema/getpart.cpp:102
+#: eeschema/libedpart.cpp:248
+#: eeschema/libframe.cpp:418
+#: eeschema/libframe.cpp:428
+#: eeschema/onrightclick.cpp:69
+#: eeschema/onrightclick.cpp:94
+#: eeschema/optiondialogbocks.cpp:97
+#: eeschema/options.cpp:112
+#: eeschema/optionsframe.cpp:155
+#: eeschema/pinedit.cpp:167
+#: eeschema/sheetlab.cpp:97
+#: eeschema/symbdraw.cpp:96
+#: eeschema/symbtext.cpp:95
+#: gerbview/onrightclick.cpp:39
+#: gerbview/onrightclick.cpp:57
+#: gerbview/options.cpp:170
+#: gerbview/options.cpp:287
+#: common/displlst.cpp:95
+#: common/setpage.cpp:181
+#: common/zoom.cpp:430
+msgid "Cancel"
+msgstr "Prekini"
+
+#: pcbnew/block.cpp:133
+msgid "Include Modules"
+msgstr "Vkljuèi modul"
+
+#: pcbnew/block.cpp:137
+msgid "Include tracks"
+msgstr "Vkljuèi povezave"
+
+#: pcbnew/block.cpp:141
+msgid "Include zones"
+msgstr "Vkljuèi obmoèja"
+
+#: pcbnew/block.cpp:146
+msgid "Include Text on copper layers"
+msgstr "Vkljuèi besedilo na bakrenih slojih"
+
+#: pcbnew/block.cpp:150
+msgid "Include drawings"
+msgstr "Vkljuèi slike"
+
+#: pcbnew/block.cpp:154
+msgid "Include egde layer"
+msgstr "Vkljuèi robni sloj"
+
+#: pcbnew/block.cpp:553
+msgid "Delete Block"
+msgstr "Zbri¹i blok"
+
+#: pcbnew/block.cpp:563
+msgid "Delete Footprints"
+msgstr "Zbri¹i odtis (Footprints)"
+
+#: pcbnew/block.cpp:582
+msgid "Delete tracks"
+msgstr "Zbri¹i povezave"
+
+#: pcbnew/block.cpp:599
+msgid "Delete draw layers"
+msgstr "Zbri¹i risalni sloj"
+
+#: pcbnew/block.cpp:654
+msgid "Delete zones"
+msgstr "Zbri¹i zone"
+
+#: pcbnew/block.cpp:685
+msgid "Rotate Block"
+msgstr "Rotiraj blok"
+
+#: pcbnew/block.cpp:699
+msgid "Footprint rotation"
+msgstr "Rotiraj odtis"
+
+#: pcbnew/block.cpp:730
+msgid "Track rotation"
+msgstr "Zavrti povezavo"
+
+#: pcbnew/block.cpp:751
+msgid "Zone rotation"
+msgstr "Zavrti obmoèje"
+
+#: pcbnew/block.cpp:770
+msgid "Draw layers rotation"
+msgstr "Zavrti risalni sloj"
+
+#: pcbnew/block.cpp:889
+msgid "Footprint mirroring"
+msgstr "Zrcali odtis (Footprint)"
+
+#: pcbnew/block.cpp:919
+msgid "Track mirroring"
+msgstr "Zrcali povezavo"
+
+#: pcbnew/block.cpp:945
+msgid "Zone mirroring"
+msgstr "Zrcali obmoèje"
+
+#: pcbnew/block.cpp:1080
+msgid "Move Block"
+msgstr "Premakni blok"
+
+#: pcbnew/block.cpp:1090
+msgid "Move footprints"
+msgstr "Premakni odtis (footprints)"
+
+#: pcbnew/block.cpp:1120
+msgid "Move tracks"
+msgstr "Premakni povezavo"
+
+#: pcbnew/block.cpp:1141
+msgid "Move zones"
+msgstr "Premakni obmoèje"
+
+#: pcbnew/block.cpp:1160
+msgid "Move draw layers"
+msgstr "Premakni risalni sloj"
+
+#: pcbnew/block.cpp:1252
+msgid "Copy Block"
+msgstr "Kopiraj blok"
+
+#: pcbnew/block.cpp:1262
+msgid "Module copy"
+msgstr "Kopiraj modul"
+
+#: pcbnew/block.cpp:1297
+msgid "Track copy"
+msgstr "Kopiraj povezavo"
+
+#: pcbnew/block.cpp:1320
+msgid "Zone copy"
+msgstr "Kopiranje obmoèja"
+
+#: pcbnew/block.cpp:1342
+msgid "Draw layers copy"
+msgstr "Kopiranje risalnega sloja"
+
+#: pcbnew/class_module.cpp:1026
+msgid "Last Change"
+msgstr "Zadnja sprememba"
+
+#: pcbnew/class_module.cpp:1059
+msgid "3D-Shape"
+msgstr "3D oblika"
+
+#: pcbnew/class_pad.cpp:610
+msgid "RefP"
+msgstr "RefP"
+
+#: pcbnew/class_pad.cpp:613
+msgid "Net"
+msgstr "Povezava"
+
+#: pcbnew/class_pad.cpp:647
+#: pcbnew/gendrill.cpp:260
+#: pcbnew/gendrill.cpp:667
+msgid "Drill"
+msgstr "Vrtanje"
+
+#: pcbnew/class_pad.cpp:660
+msgid "X Pos"
+msgstr "lega X"
+
+#: pcbnew/class_pad.cpp:664
+msgid "Y pos"
+msgstr "lega Y"
+
+#: pcbnew/clean.cpp:118
+msgid "ViaDef"
+msgstr "ViaDef"
+
+#: pcbnew/controle.cpp:41
+#, c-format
+msgid "Locate module %s %s"
+msgstr "Poi¹èi modul %s %s"
+
+#: pcbnew/controle.cpp:81
+#, c-format
+msgid "module %s not found"
+msgstr "Ne najdem modula %s "
+
+#: pcbnew/controle.cpp:83
+#, c-format
+msgid "Pin %s (module %s) not found"
+msgstr "Ne najdem pin %s (modul %s)"
+
+#: pcbnew/controle.cpp:85
+#, c-format
+msgid "Locate Pin %s (module %s)"
+msgstr "Poišči pin %s (modul %s)"
+
+#: pcbnew/cotation.cpp:88
+msgid "Cotation properties"
+msgstr "?Cotation? lastnosti"
+
+#: pcbnew/cotation.cpp:114
+#: pcbnew/editmod.cpp:356
+#: pcbnew/editmod.cpp:395
+#: pcbnew/muonde.cpp:344
+#: pcbnew/pcbtexte.cpp:173
+#: eeschema/editpart.cpp:317
+#: eeschema/optiondialogbocks.cpp:134
+#: eeschema/options.cpp:155
+msgid "Normal"
+msgstr "Normalno"
+
+#: pcbnew/cotation.cpp:126
+#: pcbnew/edtxtmod.cpp:143
+#: pcbnew/mirepcb.cpp:108
+#: pcbnew/muonde.cpp:338
+#: pcbnew/pcbtexte.cpp:122
+msgid "Size"
+msgstr "Velikost "
+
+#: pcbnew/cotation.cpp:136
+#: gerbview/affiche.cpp:34
+msgid "Layer:"
+msgstr "Sloj:"
+
+#: pcbnew/dialog_display_options.cpp:73
+#: cvpcb/displayframe.cpp:115
+msgid "Display Options"
+msgstr "Prikaži možnosti"
+
+#: pcbnew/dialog_display_options.cpp:85
+#: pcbnew/dialog_display_options.cpp:105
+#: pcbnew/pcbplot.cpp:285
+#: gerbview/options.cpp:292
+#: gerbview/options.cpp:311
+msgid "Sketch"
+msgstr "Skica"
+
+#: pcbnew/dialog_display_options.cpp:85
+#: pcbnew/dialog_display_options.cpp:105
+#: pcbnew/pcbplot.cpp:285
+#: eeschema/symbdraw.cpp:146
+#: gerbview/options.cpp:292
+#: gerbview/options.cpp:311
+msgid "Filled"
+msgstr "Polno"
+
+#: pcbnew/dialog_display_options.cpp:86
+msgid "Tracks:"
+msgstr "Povezave:"
+
+#: pcbnew/dialog_display_options.cpp:91
+msgid "Always"
+msgstr "Vedno"
+
+#: pcbnew/dialog_display_options.cpp:91
+msgid "New track"
+msgstr "Nova povezava"
+
+#: pcbnew/dialog_display_options.cpp:91
+msgid "Never"
+msgstr "Nikoli"
+
+#: pcbnew/dialog_display_options.cpp:94
+msgid "Show Track Clearance"
+msgstr "Prikaži prostor med povezavami"
+
+#: pcbnew/dialog_display_options.cpp:105
+#: pcbnew/pcbplot.cpp:285
+#: gerbview/options.cpp:311
+msgid "Line"
+msgstr "Črta"
+
+#: pcbnew/dialog_display_options.cpp:106
+msgid "Module Texts"
+msgstr "Besedilo modulov"
+
+#: pcbnew/dialog_display_options.cpp:112
+msgid "Module Edges:"
+msgstr "Robovi modula:"
+
+#: pcbnew/dialog_display_options.cpp:120
+msgid "Pads:"
+msgstr "Otočki:"
+
+#: pcbnew/dialog_display_options.cpp:127
+msgid "Show Pad Clearance"
+msgstr "Prikaži prostor okoli otočkov"
+
+#: pcbnew/dialog_display_options.cpp:132
+msgid "Show Pad Number"
+msgstr "Prikaži št. otočka"
+
+#: pcbnew/dialog_display_options.cpp:137
+msgid "Show Pad NoConnect"
+msgstr "Prikaži nepovezane otočke"
+
+#: pcbnew/dialog_display_options.cpp:141
+#: gerbview/options.cpp:312
+msgid "Display other items:"
+msgstr "Prikaži druge elemente:"
+
+#: pcbnew/dialog_graphic_items_options.cpp:74
+#: pcbnew/menubarpcb.cpp:206
+msgid "Texts and Drawings"
+msgstr "Besedila in slike"
+
+#: pcbnew/dialog_graphic_items_options.cpp:85
+msgid "Segm Width"
+msgstr "Širina segmenta"
+
+#: pcbnew/dialog_graphic_items_options.cpp:90
+msgid "Edges Width"
+msgstr "Širina roba"
+
+#: pcbnew/dialog_graphic_items_options.cpp:96
+msgid "Text Width"
+msgstr "Širina besedila"
+
+#: pcbnew/dialog_graphic_items_options.cpp:101
+msgid "Text Size V"
+msgstr "Velikost navpičnega besedila"
+
+#: pcbnew/dialog_graphic_items_options.cpp:106
+msgid "Text Size H"
+msgstr "Velikost vodoravnega besedila"
+
+#: pcbnew/dialog_graphic_items_options.cpp:113
+msgid "Edges Module Width"
+msgstr "Širina modula robov"
+
+#: pcbnew/dialog_graphic_items_options.cpp:119
+msgid "Text Module Width"
+msgstr "Širina modula besedila"
+
+#: pcbnew/dialog_graphic_items_options.cpp:124
+msgid "Text Module Size V"
+msgstr "Velikost modula navp. besedila"
+
+#: pcbnew/dialog_graphic_items_options.cpp:129
+msgid "Text Module Size H"
+msgstr "Velikost modula vodor. besedila"
+
+#: pcbnew/dialog_setup_libs.cpp:100
+#: pcbnew/reglage.cpp:101
+#: eeschema/eestatus.cpp:111
+#: cvpcb/menucfg.cpp:150
+#: gerbview/reglage.cpp:101
+msgid "from "
+msgstr "od "
+
+#: pcbnew/dialog_setup_libs.cpp:107
+#: pcbnew/reglage.cpp:108
+#: eeschema/eestatus.cpp:116
+#: cvpcb/menucfg.cpp:157
+#: cvpcb/options.cpp:148
+#: gerbview/reglage.cpp:109
+msgid "Save Cfg"
+msgstr "Shrani nastavitev"
+
+#: pcbnew/dialog_setup_libs.cpp:111
+#: pcbnew/reglage.cpp:112
+#: eeschema/eestatus.cpp:120
+#: cvpcb/menucfg.cpp:178
+#: cvpcb/menucfg.cpp:190
+msgid "Del"
+msgstr "Briši"
+
+#: pcbnew/dialog_setup_libs.cpp:115
+#: pcbnew/reglage.cpp:116
+#: eeschema/eestatus.cpp:124
+#: eeschema/fieldedi.cpp:308
+#: eeschema/libedpart.cpp:304
+#: cvpcb/menucfg.cpp:182
+#: cvpcb/menucfg.cpp:194
+msgid "Add"
+msgstr "Dodaj"
+
+#: pcbnew/dialog_setup_libs.cpp:119
+#: pcbnew/reglage.cpp:120
+#: eeschema/eestatus.cpp:128
+#: cvpcb/menucfg.cpp:186
+#: cvpcb/menucfg.cpp:198
+msgid "Ins"
+msgstr "Vrini"
+
+#: pcbnew/dialog_setup_libs.cpp:123
+#: pcbnew/reglage.cpp:124
+msgid "Lib Modules:"
+msgstr "Moduli knjižnic:"
+
+#: pcbnew/dialog_setup_libs.cpp:147
+#: pcbnew/reglage.cpp:148
+#: eeschema/eestatus.cpp:154
+#: cvpcb/menucfg.cpp:254
+msgid "Files ext:"
+msgstr "Končnice datotek:"
+
+#: pcbnew/dialog_setup_libs.cpp:150
+#: pcbnew/reglage.cpp:151
+msgid "Board ext: "
+msgstr "Board ext: "
+
+#: pcbnew/dialog_setup_libs.cpp:154
+#: pcbnew/reglage.cpp:155
+msgid "Cmp ext: "
+msgstr "Cmp ext: "
+
+#: pcbnew/dialog_setup_libs.cpp:158
+#: pcbnew/reglage.cpp:159
+msgid "Lib ext: "
+msgstr "Lib ext: "
+
+#: pcbnew/dialog_setup_libs.cpp:162
+#: pcbnew/reglage.cpp:163
+msgid "Net ext: "
+msgstr "Net ext: "
+
+#: pcbnew/dialog_setup_libs.cpp:168
+#: pcbnew/reglage.cpp:169
+msgid "Lib Modules Dir:"
+msgstr "Mapa knjižnic: "
+
+#: pcbnew/dialog_setup_libs.cpp:175
+#: pcbnew/reglage.cpp:176
+#: cvpcb/menucfg.cpp:248
+msgid "Module Doc File:"
+msgstr "Datoteka dokumentacije modulov: "
+
+#: pcbnew/dialog_setup_libs.cpp:257
+#: pcbnew/reglage.cpp:258
+msgid "library files:"
+msgstr "knjižnice: "
+
+#: pcbnew/dialog_setup_libs.cpp:278
+#: pcbnew/reglage.cpp:279
+msgid "Library exists! No Change"
+msgstr "Knjižnica obstaja! Ni spremembe"
+
+#: pcbnew/dialog_track_options.cpp:72
+#: pcbnew/menubarpcb.cpp:196
+msgid "Tracks and Vias"
+msgstr "&Povezave in luknje ..."
+
+#: pcbnew/dialog_track_options.cpp:90
+msgid "Via Size"
+msgstr "Premer luknje"
+
+#: pcbnew/dialog_track_options.cpp:94
+#: pcbnew/gendrill.cpp:158
+msgid "Via Drill"
+msgstr "Vrtanje luknje"
+
+#: pcbnew/dialog_track_options.cpp:98
+msgid " Blind Via"
+msgstr "Slepa luknja"
+
+#: pcbnew/dialog_track_options.cpp:98
+#: pcbnew/pcbnew.h:254
+msgid "Buried Via"
+msgstr "Buried Via"
+
+#: pcbnew/dialog_track_options.cpp:98
+#: pcbnew/pcbnew.h:255
+msgid "Standard Via"
+msgstr "Običajna luknja"
+
+#: pcbnew/dialog_track_options.cpp:99
+msgid "Via Type"
+msgstr "Tip luknje"
+
+#: pcbnew/dialog_track_options.cpp:107
+msgid "Track Width"
+msgstr "Širina povezave"
+
+#: pcbnew/dialog_track_options.cpp:113
+#: pcbnew/drc.cpp:103
+msgid "Clearance"
+msgstr "Prazen prostor"
+
+#: pcbnew/dialog_track_options.cpp:118
+msgid "Mask clearance"
+msgstr "Prazen prostor za masko"
+
+#: pcbnew/dialog_track_options.cpp:142
+msgid ""
+"You have selected VIA Blind or VIA Buried\n"
+"WARNING: this feature is EXPERIMENTAL!!! Accept ?"
+msgstr ""
+"Izbral si slepo LUKNJO ali Buried VIA \n"
+"POZOR: gre za PREIZKUSNE storitve!!! Potrdi ?"
+
+#: pcbnew/drc.cpp:85
+msgid "DRC Control"
+msgstr "DRC Control"
+
+#: pcbnew/drc.cpp:109
+msgid "Test Drc"
+msgstr "Test Drc"
+
+#: pcbnew/drc.cpp:114
+msgid "Stop Drc"
+msgstr "Stop Drc"
+
+#: pcbnew/drc.cpp:120
+msgid "Del Markers"
+msgstr "Zbriši oznake"
+
+#: pcbnew/drc.cpp:126
+msgid "List Unconn"
+msgstr "Spisek nepovezanih"
+
+#: pcbnew/drc.cpp:131
+#: pcbnew/netlist.cpp:173
+#: pcbnew/xchgmod.cpp:127
+#: eeschema/editexte.cpp:116
+#: eeschema/editpart.cpp:177
+#: eeschema/fieldedi.cpp:198
+msgid "Close"
+msgstr "Zapri"
+
+#: pcbnew/drc.cpp:167
+#, c-format
+msgid ""
+"Unconnected:\n"
+"Pad @ %.4f,%.4f and\n"
+"Pad @ %.4f,%.4f\n"
+msgstr ""
+"Nepovezani:\n"
+"Otoček @ %.4f,%.4f y\n"
+"Pad @ %.4f,%.4f\n"
+
+#: pcbnew/drc.cpp:173
+#, c-format
+msgid "Active routes: %d\n"
+msgstr "Aktivne povezave: %d\n"
+
+#: pcbnew/drc.cpp:174
+msgid "OK! (No unconnect)\n"
+msgstr "OK! (Ni nepovezanih)\n"
+
+#: pcbnew/drc.cpp:176
+msgid "End tst"
+msgstr "Končni tst"
+
+#: pcbnew/drc.cpp:213
+#, c-format
+msgid "** End Drc: %d errors **\n"
+msgstr "** End Drc: %d errors **\n"
+
+#: pcbnew/drc.cpp:214
+msgid "** End Drc: No Error **\n"
+msgstr "** End Drc: No Error **\n"
+
+#: pcbnew/drc.cpp:317
+msgid "SegmNb"
+msgstr "ŠtSegm"
+
+#: pcbnew/drc.cpp:318
+msgid "Track Err"
+msgstr "Napaka povezave"
+
+#: pcbnew/drc.cpp:321
+msgid "Tst Tracks\n"
+msgstr "Preizkus povezave\n"
+
+#: pcbnew/drc.cpp:340
+#: eeschema/eelayer.cpp:141
+msgid "Netname"
+msgstr "Netname"
+
+#: pcbnew/drc.cpp:1025
+#, c-format
+msgid "%d Err type %d sur PAD @ %d,%d\n"
+msgstr "%d  Tip napake %d na otočku @ %d,%d\n"
+
+#: pcbnew/drc.cpp:1034
+#, c-format
+msgid "%d Err type %d: sur VIA @ %d,%d\n"
+msgstr "%d Tip napake %d: na LUKNJI @ %d,%d\n"
+
+#: pcbnew/drc.cpp:1045
+#, c-format
+msgid "%d Err type %d: sur SEGMENT @ %d,%d\n"
+msgstr "%d Tip napake %d: na DELU @ %d,%d\n"
+
+#: pcbnew/drc.cpp:1077
+#, c-format
+msgid "%d Err pad to pad (PAD @ %d,%d and PAD @ %d,%d\n"
+msgstr "%d Napaka otoček do otočka (Otoček @ %d,%d in otoček @ %d,%d\n"
+
+#: pcbnew/edit.cpp:151
+msgid "Graphic not autorized on Copper layers"
+msgstr "Grafika ni dovoljena na bakrenem sloju"
+
+#: pcbnew/edit.cpp:174
+msgid "Tracks on Copper layers only "
+msgstr "Povezave le na sloju bakra"
+
+#: pcbnew/edit.cpp:247
+msgid "Cotation not autorized on Copper layers"
+msgstr "Cotation not autorized on Copper layers"
+
+#: pcbnew/edit.cpp:428
+#: pcbnew/editmod.cpp:144
+msgid "Module Editor"
+msgstr "Urejevalnik modulov"
+
+#: pcbnew/edit.cpp:504
+msgid "Add Tracks"
+msgstr "Dodaj povezavo"
+
+#: pcbnew/edit.cpp:513
+#: pcbnew/tool_pcb.cpp:237
+msgid "Add Zones"
+msgstr "Dodaj območje"
+
+#: pcbnew/edit.cpp:515
+msgid "Warning: Display Zone is OFF!!!"
+msgstr "Pozor: Prikazno območje je IZKLJUČENO !!!"
+
+#: pcbnew/edit.cpp:522
+msgid "Add Mire"
+msgstr "Dodaj pritrjevalno luknjo"
+
+#: pcbnew/edit.cpp:526
+msgid "Adjust Zero"
+msgstr "Adjust Zero"
+
+#: pcbnew/edit.cpp:532
+msgid "Add Graphic"
+msgstr "Dodaj grafiko"
+
+#: pcbnew/edit.cpp:536
+#: pcbnew/tool_modedit.cpp:212
+#: pcbnew/tool_pcb.cpp:262
+#: eeschema/libframe.cpp:704
+#: eeschema/schedit.cpp:562
+#: gerbview/tool_gerber.cpp:204
+msgid "Add Text"
+msgstr "Dodaj besedilo"
+
+#: pcbnew/edit.cpp:540
+msgid "Add Modules"
+msgstr "Dodaj modul"
+
+#: pcbnew/edit.cpp:544
+#: pcbnew/tool_pcb.cpp:269
+msgid "Add Cotation"
+msgstr "Add Cotation"
+
+#: pcbnew/edit.cpp:552
+msgid "Net Highlight"
+msgstr "Net Highlight"
+
+#: pcbnew/edit.cpp:556
+msgid "Local Ratsnest"
+msgstr "Local Ratsnest"
+
+#: pcbnew/edit.cpp:700
+#: eeschema/libframe.cpp:775
+#: eeschema/schedit.cpp:696
+msgid "Delete item"
+msgstr "Izbriši element"
+
+#: pcbnew/edit_track_width.cpp:116
+#: pcbnew/editrout.cpp:116
+msgid "Edit All Tracks and Vias Sizes"
+msgstr "Uredi vse velikosti povezav in lukenj"
+
+#: pcbnew/edit_track_width.cpp:121
+#: pcbnew/editrout.cpp:121
+msgid "Edit All Via Sizes"
+msgstr "Uredi vse velikosti lukenj"
+
+#: pcbnew/edit_track_width.cpp:126
+#: pcbnew/editrout.cpp:126
+msgid "Edit All Track Sizes"
+msgstr "Uredi vse velikosti povezav"
+
+#: pcbnew/editedge.cpp:158
+msgid "Copper layer global delete not allowed!"
+msgstr "Splošno brisanje bakrenega sloja ni dovoljeno!"
+
+#: pcbnew/editedge.cpp:164
+msgid "Segment is being edited"
+msgstr "Segment je v urejanju."
+
+#: pcbnew/editedge.cpp:168
+msgid "Delete Layer "
+msgstr "Briši sloj "
+
+#: pcbnew/editmod.cpp:165
+msgid "Module properties"
+msgstr "Module properties"
+
+#: pcbnew/editmod.cpp:213
+msgid "Properties"
+msgstr "Lastnosti"
+
+#: pcbnew/editmod.cpp:218
+#: pcbnew/editmod.cpp:228
+#: pcbnew/editmod.cpp:259
+msgid "3D settings"
+msgstr "3D nastavitve"
+
+#: pcbnew/editmod.cpp:293
+msgid "Change module(s)"
+msgstr "Menjava modul(a/ov)"
+
+#: pcbnew/editmod.cpp:297
+msgid "Goto Module Editor"
+msgstr "Urejevalnik modulov"
+
+#: pcbnew/editmod.cpp:303
+#: eeschema/fieldedi.cpp:283
+#: eeschema/libedpart.cpp:275
+#: eeschema/onrightclick.cpp:246
+msgid "Doc"
+msgstr "Doc"
+
+#: pcbnew/editmod.cpp:307
+msgid "Keywords"
+msgstr "Ključne besede"
+
+#: pcbnew/editmod.cpp:315
+msgid "Fields:"
+msgstr "Polja:"
+
+#: pcbnew/editmod.cpp:326
+msgid "Add Field"
+msgstr "Dodaj polje"
+
+#: pcbnew/editmod.cpp:331
+#: eeschema/onrightclick.cpp:202
+msgid "Edit Field"
+msgstr "Uredi polje"
+
+#: pcbnew/editmod.cpp:336
+msgid "Delete Field"
+msgstr "Zbriši polje"
+
+#: pcbnew/editmod.cpp:347
+msgid "Componant"
+msgstr "Komponenta"
+
+#: pcbnew/editmod.cpp:347
+msgid "Copper"
+msgstr "Baker"
+
+#: pcbnew/editmod.cpp:356
+msgid "User"
+msgstr "Uporabnik"
+
+#: pcbnew/editmod.cpp:389
+msgid "Orient (0.1 deg)"
+msgstr "Orientacija (0.1 stopinja)"
+
+#: pcbnew/editmod.cpp:395
+msgid "Normal+Insert"
+msgstr "Normalno+Vrini"
+
+#: pcbnew/editmod.cpp:395
+msgid "Virtual"
+msgstr "Navidezno"
+
+#: pcbnew/editmod.cpp:396
+msgid "Attributs"
+msgstr "Lastnosti"
+
+#: pcbnew/editmod.cpp:421
+msgid "Free"
+msgstr "Prosto"
+
+#: pcbnew/editmod.cpp:421
+msgid "Locked"
+msgstr "Zaklenjeno"
+
+#: pcbnew/editmod.cpp:422
+msgid "Auto Place"
+msgstr "Auto Place"
+
+#: pcbnew/editmod.cpp:428
+msgid "Rot 90"
+msgstr "Rotiraj 90"
+
+#: pcbnew/editmod.cpp:436
+msgid "Rot 180"
+msgstr "Rotiraj 180"
+
+#: pcbnew/editmod.cpp:460
+msgid "3D Shape Name"
+msgstr "3D oblika"
+
+#: pcbnew/editmod.cpp:466
+msgid "Browse"
+msgstr "Browse"
+
+#: pcbnew/editmod.cpp:471
+msgid "Add 3D Shape"
+msgstr "Dodaj 3D obliko"
+
+#: pcbnew/editmod.cpp:478
+msgid "Remove 3D Shape"
+msgstr "Odstrani 3D obliko"
+
+#: pcbnew/editmod.cpp:483
+msgid "Shape Scale:"
+msgstr "Shape Scale:"
+
+#: pcbnew/editmod.cpp:488
+msgid "Shape Offset:"
+msgstr "Shape Offset:"
+
+#: pcbnew/editmod.cpp:494
+msgid "Shape Rotation:"
+msgstr "Zavrti obliko:"
+
+#: pcbnew/editmod.cpp:531
+msgid "3D Shape:"
+msgstr "3D oblika:"
+
+#: pcbnew/editmod.cpp:793
+#, c-format
+msgid "Delete [%s]"
+msgstr "Zbriši [%s]"
+
+#: pcbnew/editmod.cpp:887
+msgid "Text is REFERENCE!"
+msgstr "Besedilo je REFERENCA !"
+
+#: pcbnew/editmod.cpp:892
+msgid "Text is VALUE!"
+msgstr "Besedilo je VREDNOST ! "
+
+#: pcbnew/editpads.cpp:146
+msgid "Pad properties"
+msgstr "Lastnosti otočka"
+
+#: pcbnew/editpads.cpp:182
+msgid "Pad Num :"
+msgstr "Št otočka:"
+
+#: pcbnew/editpads.cpp:186
+msgid "Pad Net Name :"
+msgstr "NetIme otočka:"
+
+#: pcbnew/editpads.cpp:190
+msgid "Pad Size"
+msgstr "Velikost otočka"
+
+#: pcbnew/editpads.cpp:195
+msgid "Delta"
+msgstr "Delta"
+
+#: pcbnew/editpads.cpp:200
+msgid "Pad Drill"
+msgstr "Vrtanje otočka"
+
+#: pcbnew/editpads.cpp:205
+#: pcbnew/edtxtmod.cpp:153
+msgid "Offset"
+msgstr "Offset"
+
+#: pcbnew/editpads.cpp:215
+msgid "Pad Orient (0.1 deg)"
+msgstr "Orientacija otočka (0.1 st)"
+
+#: pcbnew/editpads.cpp:221
+msgid "Pad Orient:"
+msgstr "Orientacija otočka:"
+
+#: pcbnew/editpads.cpp:257
+msgid "Oval"
+msgstr "Oval"
+
+#: pcbnew/editpads.cpp:257
+msgid "Rect"
+msgstr "Kvader"
+
+#: pcbnew/editpads.cpp:257
+msgid "Trapeze"
+msgstr "Trapezoid"
+
+#: pcbnew/editpads.cpp:259
+msgid "Pad Shape:"
+msgstr "Oblika otočka:"
+
+#: pcbnew/editpads.cpp:289
+msgid "Pad Type:"
+msgstr "Tip otočka:"
+
+#: pcbnew/editrack.cpp:38
+#, c-format
+msgid "Track Width: %s   Vias Size : %s"
+msgstr "Širina povezave: %s Velikost luknje : %s"
+
+#: pcbnew/edtxtmod.cpp:86
+msgid "TextMod properties"
+msgstr "Lastnosti modula besedila"
+
+#: pcbnew/edtxtmod.cpp:132
+msgid "Reference:"
+msgstr "Reference:"
+
+#: pcbnew/edtxtmod.cpp:133
+msgid "Value:"
+msgstr "Vrednost:"
+
+#: pcbnew/edtxtmod.cpp:134
+#: pcbnew/pcbtexte.cpp:117
+#: eeschema/sheetlab.cpp:102
+#: common/confirm.cpp:133
+msgid "Text:"
+msgstr "Besedilo:"
+
+#: pcbnew/edtxtmod.cpp:158
+msgid "horiz"
+msgstr "Vodoravno"
+
+#: pcbnew/edtxtmod.cpp:158
+msgid "vertical"
+msgstr "Navpično"
+
+#: pcbnew/edtxtmod.cpp:159
+#: pcbnew/pcbtexte.cpp:148
+msgid "Orientation"
+msgstr "Orientacija"
+
+#: pcbnew/edtxtmod.cpp:169
+msgid "show"
+msgstr "Prikaži"
+
+#: pcbnew/edtxtmod.cpp:169
+msgid "no show"
+msgstr "Nevidno"
+
+#: pcbnew/export_gencad.cpp:66
+msgid "GenCAD file:"
+msgstr "Arhiv GenCAD:"
+
+#: pcbnew/export_gencad.cpp:79
+#: pcbnew/files.cpp:300
+#: pcbnew/gen_modules_placefile.cpp:82
+#: pcbnew/gen_modules_placefile.cpp:93
+#: pcbnew/gen_modules_placefile.cpp:236
+#: pcbnew/librairi.cpp:236
+#: pcbnew/librairi.cpp:369
+#: pcbnew/librairi.cpp:506
+#: pcbnew/librairi.cpp:704
+#: pcbnew/plothpgl.cpp:65
+#: eeschema/plothpgl.cpp:429
+#: eeschema/plotps.cpp:281
+#: cvpcb/genequiv.cpp:42
+msgid "Unable to create "
+msgstr "Ne morem ustvariti "
+
+#: pcbnew/files.cpp:56
+msgid "Recovery file "
+msgstr "Varnostna kopija "
+
+#: pcbnew/files.cpp:56
+#: eeschema/find.cpp:464
+#: gerbview/dcode.cpp:262
+#: gerbview/readgerb.cpp:142
+#: common/eda_doc.cpp:95
+msgid " not found"
+msgstr " ne najdem"
+
+#: pcbnew/files.cpp:62
+msgid "Ok to load Recovery file "
+msgstr "Ok za naložitev varnostne kopije"
+
+#: pcbnew/files.cpp:141
+msgid "Board Modified: Continue ?"
+msgstr "Spremembe: Nadaljujem ?"
+
+#: pcbnew/files.cpp:159
+#: pcbnew/files.cpp:251
+msgid "Board files:"
+msgstr "Datoteke plošče:"
+
+#: pcbnew/files.cpp:181
+#: cvpcb/rdorcad.cpp:52
+#, c-format
+msgid "File <%s> not found"
+msgstr "Datoteke %s ne najdem"
+
+#: pcbnew/files.cpp:285
+msgid "Warning: unable to create bakfile "
+msgstr "Pozor: ne morem ustvariti varnostne kopije "
+
+#: pcbnew/files.cpp:318
+msgid "Backup file: "
+msgstr "Varnostna kopija : "
+
+#: pcbnew/files.cpp:322
+msgid "Write Board file: "
+msgstr "Zapiši datoteko plošče: "
+
+#: pcbnew/files.cpp:323
+msgid "Failed to create "
+msgstr "Ne morem ustvariti"
+
+#: pcbnew/find.cpp:88
+msgid "Find"
+msgstr "Najdi"
+
+#: pcbnew/find.cpp:99
+msgid "Find Item"
+msgstr "Najdi element"
+
+#: pcbnew/find.cpp:103
+msgid "Find Next Item"
+msgstr "Najdi naslednji element"
+
+#: pcbnew/find.cpp:107
+msgid "Find Marker"
+msgstr "Najdi oznako"
+
+#: pcbnew/find.cpp:111
+msgid "Find Next Marker"
+msgstr "Najdi naslednjo oznako"
+
+#: pcbnew/find.cpp:121
+#: eeschema/find.cpp:126
+msgid "Item to find:"
+msgstr "Najdi elemenet:"
+
+#: pcbnew/find.cpp:216
+msgid "Marker found"
+msgstr "Oznaka najdena"
+
+#: pcbnew/find.cpp:217
+#, c-format
+msgid "<%s> Found"
+msgstr "Našel <%s>"
+
+#: pcbnew/find.cpp:225
+msgid "Marker not found"
+msgstr "Ne najdem oznake"
+
+#: pcbnew/find.cpp:226
+#, c-format
+msgid "<%s> Not Found"
+msgstr "Ne najdem <%s>"
+
+#: pcbnew/gen_modules_placefile.cpp:71
+msgid "No Modules for Automated Placement"
+msgstr "Ni modula za samodejno razporeditev"
+
+#: pcbnew/gen_modules_placefile.cpp:102
+msgid "Component side place file:"
+msgstr "Datoteka komponentne strani:"
+
+#: pcbnew/gen_modules_placefile.cpp:105
+msgid "Copper side place file:"
+msgstr "Datoteka bakrene strani:"
+
+#: pcbnew/gen_modules_placefile.cpp:108
+msgid "Module count"
+msgstr "Št. modulov"
+
+#: pcbnew/gendrill.cpp:100
+msgid "Drill tools"
+msgstr "Vrtalna orodja"
+
+#: pcbnew/gendrill.cpp:117
+#: pcbnew/options.cpp:216
+#: eeschema/optiondialogbocks.cpp:142
+#: eeschema/options.cpp:163
+#: gerbview/options.cpp:184
+msgid "millimeters"
+msgstr "milimetrov"
+
+#: pcbnew/gendrill.cpp:117
+#: eeschema/optiondialogbocks.cpp:142
+#: eeschema/options.cpp:163
+msgid "inches"
+msgstr "inčev"
+
+#: pcbnew/gendrill.cpp:119
+msgid "drill units:"
+msgstr "enote vrtanja:"
+
+#: pcbnew/gendrill.cpp:128
+msgid "Absolute"
+msgstr "Absolutno"
+
+#: pcbnew/gendrill.cpp:128
+msgid "Auxiliary Axe"
+msgstr "Auxiliary Axe"
+
+#: pcbnew/gendrill.cpp:130
+msgid "Drill Origine:"
+msgstr "Drill Origine:"
+
+#: pcbnew/gendrill.cpp:139
+msgid "none"
+msgstr "Ni"
+
+#: pcbnew/gendrill.cpp:139
+msgid "drill sheet (HPGL)"
+msgstr "vrtalni list (HPGL)"
+
+#: pcbnew/gendrill.cpp:139
+msgid "drill sheet (Postscript)"
+msgstr "vrtalni list (Postscript)"
+
+#: pcbnew/gendrill.cpp:141
+msgid "Drill Sheet:"
+msgstr "Vrtalni list:"
+
+#: pcbnew/gendrill.cpp:149
+msgid "&Execute"
+msgstr "&Izvedi"
+
+#: pcbnew/gendrill.cpp:154
+#: eeschema/annotate.cpp:122
+#: eeschema/netlist_control.cpp:152
+#: eeschema/netlist_control.cpp:178
+#: eeschema/netlist_control.cpp:203
+#: eeschema/netlist_control.cpp:242
+#: eeschema/netlist_control.cpp:262
+#: common/svg_print.cpp:178
+#: common/wxprint.cpp:392
+msgid "&Close"
+msgstr "&Zapri"
+
+#: pcbnew/gendrill.cpp:164
+#: eeschema/plothpgl.cpp:208
+msgid "Pen Number"
+msgstr "Št. pisala"
+
+#: pcbnew/gendrill.cpp:169
+msgid "Speed(cm/s)"
+msgstr "Hitrost ( cm/s )"
+
+#: pcbnew/gendrill.cpp:229
+msgid "Drill file"
+msgstr "Vrtalna datoteka"
+
+#: pcbnew/gendrill.cpp:243
+#: pcbnew/gendrill.cpp:590
+#, c-format
+msgid "Unable to create file <%s>"
+msgstr "Ne morem ustvariti datoteko <%s>"
+
+#: pcbnew/gendrill.cpp:250
+#: pcbnew/gendrill.cpp:596
+#: pcbnew/plotgerb.cpp:132
+#: pcbnew/plothpgl.cpp:70
+#: pcbnew/plotps.cpp:50
+msgid "File"
+msgstr "Datoteka"
+
+#: pcbnew/gendrill.cpp:256
+#: pcbnew/gendrill.cpp:601
+msgid "Tools"
+msgstr "Orodja"
+
+#: pcbnew/gendrill.cpp:532
+msgid "Drill Map file"
+msgstr "Datoteka načrta vrtanja"
+
+#: pcbnew/globaleditpad.cpp:75
+msgid "Pads Global Edit"
+msgstr "Splošno urejanje otočkov"
+
+#: pcbnew/globaleditpad.cpp:91
+#: pcbnew/menubarmodedit.cpp:45
+#: pcbnew/menubarpcb.cpp:211
+#: pcbnew/tool_modedit.cpp:146
+msgid "Pad Settings"
+msgstr "&Otočki ..."
+
+#: pcbnew/globaleditpad.cpp:96
+msgid "Change Module"
+msgstr "Menjaj modul"
+
+#: pcbnew/globaleditpad.cpp:101
+msgid "Change Id Modules"
+msgstr "Menjaj oznako modula"
+
+#: pcbnew/globaleditpad.cpp:112
+msgid "Pad Filter :"
+msgstr "Filter otočkov :"
+
+#: pcbnew/globaleditpad.cpp:114
+msgid "Shape Filter"
+msgstr "Filter oblike"
+
+#: pcbnew/globaleditpad.cpp:118
+msgid "Layer Filter"
+msgstr "Filter slojev"
+
+#: pcbnew/globaleditpad.cpp:123
+msgid "Change Items :"
+msgstr "Zamenjaj element:"
+
+#: pcbnew/globaleditpad.cpp:125
+msgid "Change Size"
+msgstr "Menjaj velikost"
+
+#: pcbnew/globaleditpad.cpp:129
+msgid "Change Shape"
+msgstr "Menjaj obliko"
+
+#: pcbnew/globaleditpad.cpp:133
+msgid "Change Drill"
+msgstr "Zamenjaj vrtalnik"
+
+#: pcbnew/initpcb.cpp:76
+msgid "General Delete"
+msgstr "Splošno brisanje"
+
+#: pcbnew/initpcb.cpp:86
+#: gerbview/options.cpp:167
+#: gerbview/options.cpp:284
+msgid "Accept"
+msgstr "Sprejmi"
+
+#: pcbnew/initpcb.cpp:94
+msgid "Delete Zones"
+msgstr "Zbriši območja"
+
+#: pcbnew/initpcb.cpp:98
+msgid "Delete Texts"
+msgstr "Borrar Textos"
+
+#: pcbnew/initpcb.cpp:102
+msgid "Delete Edges"
+msgstr "Zbriši robove"
+
+#: pcbnew/initpcb.cpp:106
+msgid "Delete Drawings"
+msgstr "Zbriši risbe"
+
+#: pcbnew/initpcb.cpp:110
+msgid "Delete Modules"
+msgstr "Zbriši module"
+
+#: pcbnew/initpcb.cpp:114
+msgid "Delete Tracks"
+msgstr "Zbriši povezave"
+
+#: pcbnew/initpcb.cpp:118
+msgid "Delete Markers"
+msgstr "Zbriši oznake"
+
+#: pcbnew/initpcb.cpp:122
+msgid "Clear Board"
+msgstr "Clear Board"
+
+#: pcbnew/initpcb.cpp:125
+msgid "Track Filter"
+msgstr "Filter povezav"
+
+#: pcbnew/initpcb.cpp:127
+msgid "Include AutoRouted Tracks"
+msgstr "Vključi samodejno povezane povezave"
+
+#: pcbnew/initpcb.cpp:132
+msgid "Include Locked Tracks"
+msgstr "Vključi zaklenjene povezave"
+
+#: pcbnew/initpcb.cpp:239
+msgid "Current Board will be lost ?"
+msgstr "Trenutna plošča bo izgubljena ?"
+
+#: pcbnew/librairi.cpp:47
+msgid "Import Module:"
+msgstr "Uvozi modul:"
+
+#: pcbnew/librairi.cpp:70
+msgid "Not a module file"
+msgstr "Datoteka ni tipa modul"
+
+#: pcbnew/librairi.cpp:121
+msgid "Create lib"
+msgstr "Ustvari knjižinico"
+
+#: pcbnew/librairi.cpp:121
+msgid "Export Module:"
+msgstr "Izvozi modul:"
+
+#: pcbnew/librairi.cpp:135
+#: pcbnew/librairi.cpp:357
+#, c-format
+msgid "File %s exists, OK to replace ?"
+msgstr "Datoteka %s obstaja, OK za prepis ?"
+
+#: pcbnew/librairi.cpp:143
+#: eeschema/symbedit.cpp:144
+#, c-format
+msgid "Unable to create <%s>"
+msgstr "Ne morem ustvariti <%s>"
+
+#: pcbnew/librairi.cpp:187
+msgid "Library "
+msgstr "Knjižnica"
+
+#: pcbnew/librairi.cpp:198
+msgid "Not a Library file"
+msgstr "Datoteka ni tipa knjižnica"
+
+#: pcbnew/librairi.cpp:333
+msgid " No modules to archive!"
+msgstr " Ni modula za shranitev!"
+
+#: pcbnew/librairi.cpp:340
+msgid "Library"
+msgstr "Knjižnica"
+
+#: pcbnew/librairi.cpp:425
+#, c-format
+msgid "Library %s not found"
+msgstr "Ne najdem knjižnice %s"
+
+#: pcbnew/librairi.cpp:436
+#: eeschema/symbtext.cpp:102
+msgid "Name:"
+msgstr "Ime:"
+
+#: pcbnew/librairi.cpp:444
+#, c-format
+msgid "Unable to open %s"
+msgstr "Ne morem odpreti %s"
+
+#: pcbnew/librairi.cpp:454
+#, c-format
+msgid "File %s is not a eeschema library"
+msgstr "Datoteka %s ni knjižnica eeschema"
+
+#: pcbnew/librairi.cpp:480
+msgid "Module exists Line "
+msgstr "Module exists Line "
+
+#: pcbnew/librairi.cpp:588
+msgid "Component "
+msgstr "Komponenta "
+
+#: pcbnew/librairi.cpp:589
+msgid " added in "
+msgstr " dodano v "
+
+#: pcbnew/librairi.cpp:589
+msgid " replaced in "
+msgstr " zamenjano v "
+
+#: pcbnew/librairi.cpp:617
+msgid "Module Reference:"
+msgstr "Sklic na modul:"
+
+#: pcbnew/librairi.cpp:666
+msgid "Active Lib:"
+msgstr "Aktivna knjižnica:"
+
+#: pcbnew/librairi.cpp:681
+msgid "Module Editor (lib: "
+msgstr "Urejevalnik modulov (knjižnica: "
+
+#: pcbnew/librairi.cpp:697
+msgid "Library exists "
+msgstr "Knjižnica obstaja"
+
+#: pcbnew/librairi.cpp:712
+msgid "Create error "
+msgstr "Napaka pri ustvarjanju"
+
+#: pcbnew/loadcmp.cpp:99
+msgid "Select Module:"
+msgstr "Izberi modul:"
+
+#: pcbnew/loadcmp.cpp:189
+#: eeschema/eelibs1.cpp:66
+#, c-format
+msgid "Library <%s> not found"
+msgstr "Ne najdem knjižnice %s"
+
+#: pcbnew/loadcmp.cpp:194
+#, c-format
+msgid "Scan Lib: %s"
+msgstr "Išči knjižnico: %s"
+
+#: pcbnew/loadcmp.cpp:203
+msgid "File is Not a library"
+msgstr "Datoteka ni knjižnica"
+
+#: pcbnew/loadcmp.cpp:261
+#, c-format
+msgid "Module <%s> not found"
+msgstr "Ne najdem modula <%s>"
+
+#: pcbnew/menubarmodedit.cpp:40
+msgid "Sizes and Widths"
+msgstr "Dimenzije"
+
+#: pcbnew/menubarmodedit.cpp:41
+#: pcbnew/menubarpcb.cpp:207
+msgid "Adjust width for texts and drawings"
+msgstr "Nastavi širino za besedila in slike"
+
+#: pcbnew/menubarmodedit.cpp:46
+#: pcbnew/menubarpcb.cpp:212
+msgid "Adjust size,shape,layers... for Pads"
+msgstr "Nastavi velikost, obliko, nivoje ... za otočke"
+
+#: pcbnew/menubarmodedit.cpp:50
+#: pcbnew/menubarpcb.cpp:201
+#: pcbnew/set_grid.cpp:71
+msgid "User Grid Size"
+msgstr "&Velikost uporabniške mreže ..."
+
+#: pcbnew/menubarmodedit.cpp:51
+#: pcbnew/menubarpcb.cpp:202
+msgid "Adjust User Grid"
+msgstr "Nastavi uporabniško mrežo"
+
+#: pcbnew/menubarmodedit.cpp:60
+#: pcbnew/menubarpcb.cpp:270
+msgid "Pcbnew &Help"
+msgstr "&Pomoč Pcbnew"
+
+#: pcbnew/menubarmodedit.cpp:60
+#: pcbnew/menubarpcb.cpp:270
+#: eeschema/menubar.cpp:148
+#: cvpcb/tool_cvpcb.cpp:127
+#: kicad/buildmnu.cpp:158
+#: gerbview/gerberframe.cpp:291
+msgid "On line doc"
+msgstr "On line doc"
+
+#: pcbnew/menubarmodedit.cpp:64
+#: pcbnew/menubarpcb.cpp:274
+msgid "Pcbnew &About"
+msgstr "&Opis Pcbnew ..."
+
+#: pcbnew/menubarmodedit.cpp:64
+#: pcbnew/menubarpcb.cpp:274
+msgid "Pcbnew Infos"
+msgstr "Informacije o Pcbnew"
+
+#: pcbnew/menubarmodedit.cpp:72
+#: pcbnew/menubarpcb.cpp:282
+msgid "3D Display"
+msgstr "3D prikaz"
+
+#: pcbnew/menubarmodedit.cpp:72
+#: pcbnew/menubarpcb.cpp:282
+msgid "Show Board in 3D Mode"
+msgstr "Prikaži rob v  3D načinu"
+
+#: pcbnew/menubarmodedit.cpp:76
+#: pcbnew/menubarpcb.cpp:288
+msgid "&Dimensions"
+msgstr "&Dimenzije"
+
+#: pcbnew/menubarmodedit.cpp:77
+#: pcbnew/menubarpcb.cpp:291
+msgid "&3D Display"
+msgstr "&3D prikaz"
+
+#: pcbnew/menubarmodedit.cpp:78
+#: pcbnew/menubarpcb.cpp:292
+#: eeschema/menubar.cpp:160
+#: cvpcb/tool_cvpcb.cpp:126
+#: cvpcb/tool_cvpcb.cpp:133
+#: kicad/buildmnu.cpp:171
+#: gerbview/gerberframe.cpp:291
+#: gerbview/gerberframe.cpp:298
+msgid "&Help"
+msgstr "&Pomoč"
+
+#: pcbnew/menubarpcb.cpp:39
+msgid "Load Board"
+msgstr "&Naloži ploščo ..."
+
+#: pcbnew/menubarpcb.cpp:40
+msgid "Delete old Board and Load new Board"
+msgstr "Zbriši staro ploščo in naloži novo"
+
+#: pcbnew/menubarpcb.cpp:46
+msgid "Append Board"
+msgstr "&Dodaj ploščo ..."
+
+#: pcbnew/menubarpcb.cpp:47
+msgid "Add Board to old Board"
+msgstr "Dodaj ploščo k stari plošči"
+
+#: pcbnew/menubarpcb.cpp:53
+msgid "&New board"
+msgstr "&Nova plošča"
+
+#: pcbnew/menubarpcb.cpp:54
+msgid "Clear old PCB and init a new one"
+msgstr "Zbriši staro ploščo in začni novo"
+
+#: pcbnew/menubarpcb.cpp:60
+msgid "&Rescue"
+msgstr "&Reševanje"
+
+#: pcbnew/menubarpcb.cpp:61
+msgid "Clear old board and get last rescue file"
+msgstr "Zbriši staro ploščo in naloži zadnjo datoteko za reševanje"
+
+#: pcbnew/menubarpcb.cpp:67
+msgid "&Previous version"
+msgstr "&Prejšnja različica"
+
+#: pcbnew/menubarpcb.cpp:68
+msgid "Clear old board and get old version of board"
+msgstr "Zbriši staro ploščo in naloži staro različico plošče"
+
+#: pcbnew/menubarpcb.cpp:76
+msgid "&Save board"
+msgstr "&Shrani ploščo"
+
+#: pcbnew/menubarpcb.cpp:77
+msgid "Save current board"
+msgstr "Shrani trenutno ploščo"
+
+#: pcbnew/menubarpcb.cpp:83
+msgid "Save Board as.."
+msgstr "Shrani ploščo &kot.."
+
+#: pcbnew/menubarpcb.cpp:84
+msgid "Save current board as.."
+msgstr "Shrani trenutno ploščo kot.."
+
+#: pcbnew/menubarpcb.cpp:92
+#: eeschema/menubar.cpp:71
+#: gerbview/gerberframe.cpp:241
+msgid "P&rint"
+msgstr "&Tiskaj ..."
+
+#: pcbnew/menubarpcb.cpp:92
+#: eeschema/menubar.cpp:71
+#: gerbview/gerberframe.cpp:241
+msgid "Print on current printer"
+msgstr "Tiskaj na trenutni tiskalnik"
+
+#: pcbnew/menubarpcb.cpp:97
+#: eeschema/menubar.cpp:94
+msgid "&Plot"
+msgstr "&Plot ..."
+
+#: pcbnew/menubarpcb.cpp:98
+#: pcbnew/tool_pcb.cpp:94
+msgid "Plot (Hplg, Postscript, or Gerber format)"
+msgstr "Plot (Hplg, Postscript, or Gerber format)"
+
+#: pcbnew/menubarpcb.cpp:106
+msgid "&GenCAD"
+msgstr "&GenCAD ..."
+
+#: pcbnew/menubarpcb.cpp:106
+msgid "Export GenCAD Format"
+msgstr "Izvozi v GenCAD obliki"
+
+#: pcbnew/menubarpcb.cpp:110
+msgid "&Module report"
+msgstr "Uvozi &Modul"
+
+#: pcbnew/menubarpcb.cpp:110
+msgid "Create a pcb report (footprint report)"
+msgstr "Create a pcb report (footprint report)"
+
+#: pcbnew/menubarpcb.cpp:113
+msgid "E&xport"
+msgstr "I&zvozi"
+
+#: pcbnew/menubarpcb.cpp:113
+msgid "Export board"
+msgstr "Izvozi ploščo"
+
+#: pcbnew/menubarpcb.cpp:122
+msgid "Add new footprints"
+msgstr "Add new footprints"
+
+#: pcbnew/menubarpcb.cpp:123
+msgid "Archive new footprints only in a library (keep other footprints in this lib)"
+msgstr "Archive new footprints only in a library (keep other footprints in this lib)"
+
+#: pcbnew/menubarpcb.cpp:127
+msgid "Create footprint archive"
+msgstr "Create footprint archive"
+
+#: pcbnew/menubarpcb.cpp:128
+msgid "Archive all footprints  in a library(old lib will be deleted)"
+msgstr "Archive all footprints  in a library(old lib will be deleted)"
+
+#: pcbnew/menubarpcb.cpp:132
+msgid "Archive footprints"
+msgstr "Archive footprints"
+
+#: pcbnew/menubarpcb.cpp:133
+msgid "Archive or Add footprints in a library file"
+msgstr "Archive or Add footprints in a library file"
+
+#: pcbnew/menubarpcb.cpp:140
+#: eeschema/menubar.cpp:100
+#: cvpcb/tool_cvpcb.cpp:102
+#: kicad/buildmnu.cpp:121
+#: gerbview/gerberframe.cpp:246
+msgid "E&xit"
+msgstr "I&zhod"
+
+#: pcbnew/menubarpcb.cpp:140
+msgid "Quit pcbnew"
+msgstr "Zapri Pcbnew"
+
+#: pcbnew/menubarpcb.cpp:158
+#: eeschema/menubar.cpp:118
+msgid "&Libs and Dir"
+msgstr "&Knjižnice in imeniki ..."
+
+#: pcbnew/menubarpcb.cpp:159
+#: eeschema/menubar.cpp:119
+#: cvpcb/tool_cvpcb.cpp:115
+msgid "Setting Libraries, Directories and others..."
+msgstr "Izberi knjižnice, imenike in ostalo ..."
+
+#: pcbnew/menubarpcb.cpp:163
+#: eeschema/menubar.cpp:124
+#: gerbview/gerberframe.cpp:260
+msgid "&Colors"
+msgstr "&Barve"
+
+#: pcbnew/menubarpcb.cpp:164
+msgid "Select Colors and Display for PCB items"
+msgstr "Izberi barve in prikaz za elemente plošče"
+
+#: pcbnew/menubarpcb.cpp:168
+msgid "&General Options"
+msgstr "&Splošne možnosti"
+
+#: pcbnew/menubarpcb.cpp:169
+msgid "Select general options for pcbnew"
+msgstr "Izberi splošne možnosti za pcbnew"
+
+#: pcbnew/menubarpcb.cpp:173
+msgid "&Display Options"
+msgstr "&Prikaži možnosti"
+
+#: pcbnew/menubarpcb.cpp:174
+msgid "Select what items are displayed"
+msgstr "Izberi kateri elementi bodo prikazani"
+
+#: pcbnew/menubarpcb.cpp:181
+#: pcbnew/menubarpcb.cpp:217
+msgid "&Save Setup"
+msgstr "&Shrani nastavitve ..."
+
+#: pcbnew/menubarpcb.cpp:182
+#: pcbnew/menubarpcb.cpp:218
+#: gerbview/gerberframe.cpp:272
+msgid "Save options in current directory"
+msgstr "Shrani možnosti v trenutni imenik"
+
+#: pcbnew/menubarpcb.cpp:186
+#: eeschema/menubar.cpp:140
+msgid "&Read Setup"
+msgstr "&Beri nastavitve..."
+
+#: pcbnew/menubarpcb.cpp:187
+#: eeschema/menubar.cpp:141
+msgid "Read options from a selected config file"
+msgstr "Beri možnosti iz izbrane konfiguracijske datoteke"
+
+#: pcbnew/menubarpcb.cpp:197
+msgid "Adjust size and width for tracks, vias"
+msgstr "Prilagodi velikost in širino za povezave, luknje"
+
+#: pcbnew/menubarpcb.cpp:227
+msgid "Create &Modules Pos"
+msgstr "Ustvari lokacijo &Modulov"
+
+#: pcbnew/menubarpcb.cpp:228
+msgid "Gen Position modules file"
+msgstr "Gen Position modules file"
+
+#: pcbnew/menubarpcb.cpp:232
+msgid "Create &Drill file"
+msgstr "&Ustvari vrtalno datoteko ..."
+
+#: pcbnew/menubarpcb.cpp:233
+msgid "Gen Drill (EXCELLON] file and/or Drill sheet"
+msgstr "Določi vrtalno (EXCELLON) datoteko in/ali vrtalni list"
+
+#: pcbnew/menubarpcb.cpp:237
+msgid "Create &Cmp file"
+msgstr "Ustvari datoteko &Cmp"
+
+#: pcbnew/menubarpcb.cpp:238
+msgid "Recreate .cmp file for CvPcb"
+msgstr "Ponovno ustvari datoteko .cmp za CvPcb"
+
+#: pcbnew/menubarpcb.cpp:246
+msgid "Global &Deletions"
+msgstr "Globalno &Brisanje"
+
+#: pcbnew/menubarpcb.cpp:247
+msgid "Delete Tracks, Modules, Texts... on Board"
+msgstr "Briši povezave, module, besedila ... na plošči"
+
+#: pcbnew/menubarpcb.cpp:251
+msgid "&List nets"
+msgstr "Prikaži &spisek povezave ..."
+
+#: pcbnew/menubarpcb.cpp:252
+msgid "List nets (names and id)"
+msgstr "Spisek povezav (imena in oznake)"
+
+#: pcbnew/menubarpcb.cpp:256
+msgid "&Clean tracks"
+msgstr "&Briši povezave"
+
+#: pcbnew/menubarpcb.cpp:257
+msgid "Clean stubs, vias, delete break points"
+msgstr "Clean stubs, vias, delete break points"
+
+#: pcbnew/menubarpcb.cpp:261
+msgid "&Swap layers"
+msgstr "&Zamenjaj sloje"
+
+#: pcbnew/menubarpcb.cpp:262
+msgid "Swap tracks on copper layers or drawings on others layers"
+msgstr "Zamenjaj povezave na bakrenem sloju ali risbe na drugih slojih"
+
+#: pcbnew/menubarpcb.cpp:286
+#: eeschema/menubar.cpp:158
+#: cvpcb/tool_cvpcb.cpp:131
+#: gerbview/gerberframe.cpp:294
+msgid "&Files"
+msgstr "&Datoteke"
+
+#: pcbnew/menubarpcb.cpp:287
+#: eeschema/menubar.cpp:159
+#: cvpcb/tool_cvpcb.cpp:132
+#: kicad/buildmnu.cpp:170
+#: gerbview/gerberframe.cpp:295
+msgid "&Preferences"
+msgstr "&Lastnosti"
+
+#: pcbnew/menubarpcb.cpp:289
+#: gerbview/gerberframe.cpp:296
+msgid "&Miscellanous"
+msgstr "&Miscellanous"
+
+#: pcbnew/menubarpcb.cpp:290
+msgid "P&ostprocess"
+msgstr "P&ostprocess"
+
+#: pcbnew/mirepcb.cpp:81
+msgid "Mire properties"
+msgstr "Lastnosti pritrjevalne luknji"
+
+#: pcbnew/mirepcb.cpp:120
+msgid "shape +"
+msgstr "Oblika +"
+
+#: pcbnew/mirepcb.cpp:120
+msgid "shape X"
+msgstr "oblika X"
+
+#: pcbnew/mirepcb.cpp:122
+msgid "Mire Shape:"
+msgstr "Oblika pritr. luknje:"
+
+#: pcbnew/modedit_onclick.cpp:175
+#: pcbnew/onrightclick.cpp:161
+#: eeschema/libframe.cpp:420
+#: eeschema/onrightclick.cpp:71
+#: gerbview/onrightclick.cpp:40
+msgid "End Tool"
+msgstr "End Tool"
+
+#: pcbnew/modedit_onclick.cpp:197
+msgid "Rotate"
+msgstr "Zavrti"
+
+#: pcbnew/modedit_onclick.cpp:200
+msgid "Scale"
+msgstr "Scale"
+
+#: pcbnew/modedit_onclick.cpp:201
+msgid "Scale X"
+msgstr "Scale X"
+
+#: pcbnew/modedit_onclick.cpp:202
+msgid "Scale Y"
+msgstr "Scale Y"
+
+#: pcbnew/modedit_onclick.cpp:204
+#: pcbnew/onrightclick.cpp:75
+msgid "Edit Module"
+msgstr "Uredi modul"
+
+#: pcbnew/modedit_onclick.cpp:206
+msgid "Transform Module"
+msgstr "Pretvori modul"
+
+#: pcbnew/modedit_onclick.cpp:216
+#: pcbnew/onrightclick.cpp:240
+msgid "Edit Pad"
+msgstr "Uredi otoček"
+
+#: pcbnew/modedit_onclick.cpp:217
+#: pcbnew/onrightclick.cpp:241
+msgid "New Pad Settings"
+msgstr "Nove nastavitve otočka"
+
+#: pcbnew/modedit_onclick.cpp:218
+#: pcbnew/onrightclick.cpp:243
+msgid "Export Pad Settings"
+msgstr "Izvozi nastavitve otočka"
+
+#: pcbnew/modedit_onclick.cpp:219
+#: pcbnew/onrightclick.cpp:256
+msgid "delete Pad"
+msgstr "briši otoček"
+
+#: pcbnew/modedit_onclick.cpp:223
+#: pcbnew/onrightclick.cpp:258
+msgid "Global Pad Settings"
+msgstr "Splošne nastavitve otočka"
+
+#: pcbnew/modedit_onclick.cpp:231
+#: pcbnew/onrightclick.cpp:272
+msgid "Move Text Mod."
+msgstr "Premakni besedilo Mod."
+
+#: pcbnew/modedit_onclick.cpp:233
+#: pcbnew/onrightclick.cpp:275
+msgid "Rotate Text Mod."
+msgstr "Zavrti besedilo Mod."
+
+#: pcbnew/modedit_onclick.cpp:234
+#: pcbnew/onrightclick.cpp:277
+msgid "Edit Text Mod."
+msgstr "Uredi besedilo Mod."
+
+#: pcbnew/modedit_onclick.cpp:236
+#: pcbnew/onrightclick.cpp:280
+msgid "Delete Text Mod."
+msgstr "Briši besedilo Mod."
+
+#: pcbnew/modedit_onclick.cpp:241
+msgid "End edge"
+msgstr "End edge"
+
+#: pcbnew/modedit_onclick.cpp:242
+msgid "Move edge"
+msgstr "Premakni rob"
+
+#: pcbnew/modedit_onclick.cpp:244
+msgid "Place edge"
+msgstr "Postavi rob"
+
+#: pcbnew/modedit_onclick.cpp:246
+#: pcbnew/onrightclick.cpp:506
+#: eeschema/onrightclick.cpp:222
+msgid "Edit"
+msgstr "Uredi"
+
+#: pcbnew/modedit_onclick.cpp:247
+msgid "Edit Width (Current)"
+msgstr "Uredi širino (trenutno)"
+
+#: pcbnew/modedit_onclick.cpp:248
+msgid "Edit Width (All)"
+msgstr "Uredi širino (Vse)"
+
+#: pcbnew/modedit_onclick.cpp:249
+msgid "Edit Layer (Current)"
+msgstr "Uredi sloj (trenutni)"
+
+#: pcbnew/modedit_onclick.cpp:250
+msgid "Edit Layer (All)"
+msgstr "Uredi sloj (vse)"
+
+#: pcbnew/modedit_onclick.cpp:251
+msgid "Delete edge"
+msgstr "Briši rob"
+
+#: pcbnew/modedit_onclick.cpp:290
+msgid "Set Width"
+msgstr "Nastavi širino"
+
+#: pcbnew/moduleframe.cpp:155
+msgid "Module Editor: module modified!, Continue ?"
+msgstr "Urejevanik modula: modul spremenjen!, Nadaljujem ?"
+
+#: pcbnew/modules.cpp:240
+#: pcbnew/onrightclick.cpp:222
+msgid "Delete Module"
+msgstr "Briši modul"
+
+#: pcbnew/modules.cpp:241
+msgid "Value "
+msgstr "Vrednost "
+
+#: pcbnew/muonde.cpp:141
+msgid "Gap"
+msgstr "prazen prostor"
+
+#: pcbnew/muonde.cpp:146
+msgid "Stub"
+msgstr "Stub"
+
+#: pcbnew/muonde.cpp:152
+msgid "Arc Stub"
+msgstr "Arc Stub"
+
+#: pcbnew/muonde.cpp:175
+msgid " (inch):"
+msgstr " (inč):"
+
+#: pcbnew/muonde.cpp:185
+msgid "Angle (0.1deg):"
+msgstr "Kot (0.1st):"
+
+#: pcbnew/muonde.cpp:316
+msgid "Complex shape"
+msgstr "Kompleksna oblika"
+
+#: pcbnew/muonde.cpp:344
+msgid "Symmetrical"
+msgstr "Simetrično"
+
+#: pcbnew/muonde.cpp:344
+msgid "mirrored"
+msgstr "zrcalno"
+
+#: pcbnew/muonde.cpp:345
+msgid "ShapeOption"
+msgstr "ShapeOption"
+
+#: pcbnew/muonde.cpp:349
+msgid "Read Shape Descr File"
+msgstr "Beri opisno datoteko oblike"
+
+#: pcbnew/muonde.cpp:407
+msgid "Read descr shape file"
+msgstr "Beri opisno datoteko oblike"
+
+#: pcbnew/muonde.cpp:422
+msgid "File not found"
+msgstr " Ne najdem datoteke"
+
+#: pcbnew/muonde.cpp:523
+msgid "Shape has a null size!"
+msgstr "Oblika ima velikost nič!"
+
+#: pcbnew/muonde.cpp:528
+msgid "Shape has no points!"
+msgstr "Oblika nima točk!"
+
+#: pcbnew/muwave_command.cpp:52
+#: eeschema/libframe.cpp:720
+msgid "Add Line"
+msgstr "Dodaj črto"
+
+#: pcbnew/muwave_command.cpp:56
+msgid "Add Gap"
+msgstr "Dodaj prazen prostor"
+
+#: pcbnew/muwave_command.cpp:60
+msgid "Add Stub"
+msgstr "Add Stub"
+
+#: pcbnew/muwave_command.cpp:64
+msgid "Add Arc Stub"
+msgstr "Add Arc Stub"
+
+#: pcbnew/muwave_command.cpp:68
+msgid "Add Polynomial Shape"
+msgstr "Dodaj polinomsko obliko"
+
+#: pcbnew/netlist.cpp:147
+msgid "Netlist: "
+msgstr "Spisek povezav: "
+
+#: pcbnew/netlist.cpp:153
+#: pcbnew/pcbpiste.cpp:100
+msgid "Select"
+msgstr "Izberi"
+
+#: pcbnew/netlist.cpp:158
+msgid "Read"
+msgstr "Beri"
+
+#: pcbnew/netlist.cpp:163
+msgid "Module Test"
+msgstr "Module Test"
+
+#: pcbnew/netlist.cpp:168
+msgid "Compile"
+msgstr "Compile"
+
+#: pcbnew/netlist.cpp:177
+#: eeschema/editpart.cpp:709
+#: eeschema/eelayer.cpp:99
+#: eeschema/onrightclick.cpp:226
+msgid "Reference"
+msgstr "Referenca"
+
+#: pcbnew/netlist.cpp:177
+msgid "Timestamp"
+msgstr "Časovna oznaka"
+
+#: pcbnew/netlist.cpp:179
+msgid "Module Selection:"
+msgstr "Izberi modul:"
+
+#: pcbnew/netlist.cpp:182
+#: pcbnew/netlist.cpp:191
+msgid "Keep"
+msgstr "Obdrži"
+
+#: pcbnew/netlist.cpp:182
+#: pcbnew/onrightclick.cpp:522
+#: eeschema/fieldedi.cpp:311
+#: eeschema/libedpart.cpp:309
+msgid "Delete"
+msgstr "Briši"
+
+#: pcbnew/netlist.cpp:186
+msgid "Bad Tracks Deletion:"
+msgstr "Briši slabe povezave:"
+
+#: pcbnew/netlist.cpp:191
+msgid "Change"
+msgstr "Zamenjaj"
+
+#: pcbnew/netlist.cpp:192
+msgid "Exchange Module:"
+msgstr "Zamenjaj modul:"
+
+#: pcbnew/netlist.cpp:197
+msgid "Display Warnings"
+msgstr "Prikaži opozorila"
+
+#: pcbnew/netlist.cpp:247
+#, c-format
+msgid "Netlist file %s not found"
+msgstr "Ne najdem datoteke povezav <%s>"
+
+#: pcbnew/netlist.cpp:294
+msgid "Read Netlist "
+msgstr "Beri datoteko povezav"
+
+#: pcbnew/netlist.cpp:501
+#, c-format
+msgid "Cmp %s: Mismatch! module is [%s] and netlist said [%s]\n"
+msgstr "Element %s nepravilen! Modul je [%s] in datoteka povezav pravi [%s]\n"
+
+#: pcbnew/netlist.cpp:538
+#, c-format
+msgid "Componant [%s] not found"
+msgstr "Ne najdem komponente [%s]!"
+
+#: pcbnew/netlist.cpp:595
+#, c-format
+msgid "Module [%s]: Pad [%s] not found"
+msgstr "Modul [%s]: Ne najdem otočka [%s]"
+
+#: pcbnew/netlist.cpp:621
+msgid "No Modules"
+msgstr "Ni modulov"
+
+#: pcbnew/netlist.cpp:634
+msgid "Componants"
+msgstr "Komponente"
+
+#: pcbnew/netlist.cpp:682
+msgid "No modules"
+msgstr "Ni modulov"
+
+#: pcbnew/netlist.cpp:691
+msgid "No modules in NetList"
+msgstr "Ni modulov v spisku povezav"
+
+#: pcbnew/netlist.cpp:698
+msgid "Check Modules"
+msgstr "Preveri module"
+
+#: pcbnew/netlist.cpp:701
+msgid "Duplicates"
+msgstr "Podvojitve"
+
+#: pcbnew/netlist.cpp:720
+msgid "Lack:"
+msgstr "Lack:"
+
+#: pcbnew/netlist.cpp:742
+msgid "Not in Netlist:"
+msgstr "Ni v spisku povezav:"
+
+#: pcbnew/netlist.cpp:763
+#, c-format
+msgid "%d Errors"
+msgstr "%d napak"
+
+#: pcbnew/netlist.cpp:888
+#, c-format
+msgid "File <%s> not found, use Netlist for lib module selection"
+msgstr "Ne najdem datoteke <%s>, uporabi datoteko povezav za izbiro modula knjižnice"
+
+#: pcbnew/netlist.cpp:964
+msgid "Netlist Selection:"
+msgstr "Izberi datoteko povezav:"
+
+#: pcbnew/onrightclick.cpp:64
+msgid "Move Module  (M)"
+msgstr "Prestavi modul  (M)"
+
+#: pcbnew/onrightclick.cpp:66
+msgid "Drag Module  (G)"
+msgstr "Povleci modul  (G)"
+
+#: pcbnew/onrightclick.cpp:69
+msgid "Rotate Module +  (R)"
+msgstr "Zavrti modul +  (R)"
+
+#: pcbnew/onrightclick.cpp:71
+msgid "Rotate Module -"
+msgstr "Zavrti modul -"
+
+#: pcbnew/onrightclick.cpp:73
+msgid "Invert Module  (S)"
+msgstr "Zrcali modul  (S)"
+
+#: pcbnew/onrightclick.cpp:96
+#, c-format
+msgid "Track %.1f"
+msgstr "Povezava %.1f"
+
+#: pcbnew/onrightclick.cpp:98
+#, c-format
+msgid "Track %.3f"
+msgstr "Povezava %.3f"
+
+#: pcbnew/onrightclick.cpp:111
+#, c-format
+msgid "Via %.1f"
+msgstr "Luknja %.1f"
+
+#: pcbnew/onrightclick.cpp:113
+#, c-format
+msgid "Via %.3f"
+msgstr "Luknja %.3f"
+
+#: pcbnew/onrightclick.cpp:173
+#: eeschema/onrightclick.cpp:81
+#: gerbview/onrightclick.cpp:50
+msgid "Cancel Block"
+msgstr "Prekliči blok"
+
+#: pcbnew/onrightclick.cpp:174
+#: gerbview/onrightclick.cpp:51
+msgid "Zoom Block (Midd butt drag)"
+msgstr "Povečaj Blok (Midd butt drag)"
+
+#: pcbnew/onrightclick.cpp:176
+#: eeschema/onrightclick.cpp:85
+#: gerbview/onrightclick.cpp:53
+msgid "Place Block"
+msgstr "Postavi blok"
+
+#: pcbnew/onrightclick.cpp:177
+msgid "Copy Block (alt + drag mouse)"
+msgstr "Kopiraj blok (alt + vleci miško)"
+
+#: pcbnew/onrightclick.cpp:178
+msgid "Flip Block (shift + drag mouse)"
+msgstr "Zrcali blok (shift + vleci miško)"
+
+#: pcbnew/onrightclick.cpp:179
+msgid "Rotate Block (ctrl + drag mouse)"
+msgstr "Zavrti blok (ctrl + vleci miško)"
+
+#: pcbnew/onrightclick.cpp:180
+msgid "Delete Block (shift+ctrl + drag mouse)"
+msgstr "Briši blok (shift+ctrl + vleci miško)"
+
+#: pcbnew/onrightclick.cpp:203
+msgid "Fix Module"
+msgstr "Popravi modul"
+
+#: pcbnew/onrightclick.cpp:205
+msgid "Free Module"
+msgstr "Sprosti modul"
+
+#: pcbnew/onrightclick.cpp:209
+msgid "Auto place Module"
+msgstr "Samodejno postavi modul"
+
+#: pcbnew/onrightclick.cpp:215
+msgid "Autoroute"
+msgstr "Autorrutado"
+
+#: pcbnew/onrightclick.cpp:236
+msgid "Move Pad"
+msgstr "Premakni otoček"
+
+#: pcbnew/onrightclick.cpp:238
+msgid "Drag Pad"
+msgstr "Povleci otoček"
+
+#: pcbnew/onrightclick.cpp:248
+msgid "Autoroute Pad"
+msgstr "Samodejno poveži otoček"
+
+#: pcbnew/onrightclick.cpp:249
+msgid "Autoroute Net"
+msgstr "Autorrutado Net"
+
+#: pcbnew/onrightclick.cpp:285
+msgid "Move Drawing"
+msgstr "Premakni sliko"
+
+#: pcbnew/onrightclick.cpp:287
+msgid "End Drawing"
+msgstr "Zaključi sliko"
+
+#: pcbnew/onrightclick.cpp:288
+msgid "Edit Drawing"
+msgstr "Uredi sliko"
+
+#: pcbnew/onrightclick.cpp:289
+msgid "Delete Drawing"
+msgstr "Briši sliko"
+
+#: pcbnew/onrightclick.cpp:294
+msgid "End edge zone"
+msgstr "End edge zone"
+
+#: pcbnew/onrightclick.cpp:295
+msgid "Delete edge zone"
+msgstr "Delete edge zone"
+
+#: pcbnew/onrightclick.cpp:301
+#: eeschema/libframe.cpp:485
+#: eeschema/onrightclick.cpp:151
+msgid "Move Text"
+msgstr "Premakni besedilo"
+
+#: pcbnew/onrightclick.cpp:302
+msgid "Rotate Text"
+msgstr "Zavrti besedilo"
+
+#: pcbnew/onrightclick.cpp:303
+#: eeschema/onrightclick.cpp:153
+msgid "Edit Text"
+msgstr "Uredi besedilo"
+
+#: pcbnew/onrightclick.cpp:304
+#: eeschema/onrightclick.cpp:154
+msgid "Delete Text"
+msgstr "Briši besedilo"
+
+#: pcbnew/onrightclick.cpp:315
+msgid "Edit Zone"
+msgstr "Uredi območje"
+
+#: pcbnew/onrightclick.cpp:316
+msgid "Delete Zone"
+msgstr "Briši območje"
+
+#: pcbnew/onrightclick.cpp:320
+msgid "Delete Marker"
+msgstr "Briši oznako"
+
+#: pcbnew/onrightclick.cpp:326
+msgid "Edit Cotation"
+msgstr "Edit Cotation"
+
+#: pcbnew/onrightclick.cpp:328
+msgid "Delete Cotation"
+msgstr "Delete Cotation"
+
+#: pcbnew/onrightclick.cpp:334
+msgid "Move Mire"
+msgstr "Premakni pritrj. luknjo"
+
+#: pcbnew/onrightclick.cpp:335
+msgid "Edit Mire"
+msgstr "Uredi pritrj. luknjo"
+
+#: pcbnew/onrightclick.cpp:336
+msgid "Delete Mire"
+msgstr "Briši pritrj. luknjo"
+
+#: pcbnew/onrightclick.cpp:366
+msgid "Fill zone"
+msgstr "Zapolni območje"
+
+#: pcbnew/onrightclick.cpp:374
+msgid "Select Net"
+msgstr "Izberi povezavo"
+
+#: pcbnew/onrightclick.cpp:379
+msgid "Delete Zone Limit"
+msgstr "Delete Zone Limit"
+
+#: pcbnew/onrightclick.cpp:383
+#: pcbnew/onrightclick.cpp:393
+#: pcbnew/onrightclick.cpp:406
+#: pcbnew/onrightclick.cpp:458
+msgid "Select Working Layer"
+msgstr "Izberi delovni sloj"
+
+#: pcbnew/onrightclick.cpp:391
+#: pcbnew/onrightclick.cpp:456
+msgid "Select Track Width"
+msgstr "Izberi širino povezave"
+
+#: pcbnew/onrightclick.cpp:395
+msgid "Select layer pair for vias"
+msgstr "Izberi par slojev za luknjo"
+
+#: pcbnew/onrightclick.cpp:412
+msgid "Footprint documentation"
+msgstr "Footprint documentation"
+
+#: pcbnew/onrightclick.cpp:420
+msgid "Glob Move and Place"
+msgstr "Glob Move and Place"
+
+#: pcbnew/onrightclick.cpp:421
+msgid "Free All Modules"
+msgstr "Sprosti vse module"
+
+#: pcbnew/onrightclick.cpp:422
+msgid "Fixe All Modules"
+msgstr "Fixe All Modules"
+
+#: pcbnew/onrightclick.cpp:424
+msgid "Move All Modules"
+msgstr "Premakni vse module"
+
+#: pcbnew/onrightclick.cpp:425
+msgid "Move New Modules"
+msgstr "Premakni nove module"
+
+#: pcbnew/onrightclick.cpp:427
+msgid "Autoplace All Modules"
+msgstr "Samodejno postavi vse module"
+
+#: pcbnew/onrightclick.cpp:428
+msgid "Autoplace New Modules"
+msgstr "Samodejno postavi nove module"
+
+#: pcbnew/onrightclick.cpp:429
+msgid "Autoplace Next Module"
+msgstr "Samodejno postavi naslednji modul"
+
+#: pcbnew/onrightclick.cpp:431
+msgid "Orient All Modules"
+msgstr "Orient All Modules"
+
+#: pcbnew/onrightclick.cpp:437
+msgid "Global Autoroute"
+msgstr "Global Autoroute"
+
+#: pcbnew/onrightclick.cpp:438
+msgid "Select layer pair"
+msgstr "Izberi par slojev"
+
+#: pcbnew/onrightclick.cpp:440
+msgid "Autoroute All Modules"
+msgstr "Samodejno postavi vse module"
+
+#: pcbnew/onrightclick.cpp:442
+msgid "Reset Unrouted"
+msgstr "Reset Unrouted"
+
+#: pcbnew/onrightclick.cpp:447
+msgid "Global AutoRouter"
+msgstr "Global AutoRouter"
+
+#: pcbnew/onrightclick.cpp:449
+msgid "Read Global AutoRouter Data"
+msgstr "Read Global AutoRouter Data"
+
+#: pcbnew/onrightclick.cpp:478
+msgid "Drag Via"
+msgstr "Vleci luknje"
+
+#: pcbnew/onrightclick.cpp:482
+msgid "Move Node"
+msgstr "Move Node"
+
+#: pcbnew/onrightclick.cpp:486
+msgid "Break Track"
+msgstr "Prekini povezavo"
+
+#: pcbnew/onrightclick.cpp:493
+msgid "Place Node"
+msgstr "Place Node"
+
+#: pcbnew/onrightclick.cpp:500
+msgid "End Track"
+msgstr "Zaključi povezavo"
+
+#: pcbnew/onrightclick.cpp:501
+msgid "Place Via (V)"
+msgstr "Postavi luknjo (V)"
+
+#: pcbnew/onrightclick.cpp:507
+msgid "Edit Segment"
+msgstr "Uredi segment"
+
+#: pcbnew/onrightclick.cpp:510
+msgid "Edit Track"
+msgstr "Uredi povezavo"
+
+#: pcbnew/onrightclick.cpp:511
+msgid "Edit Net"
+msgstr "Edit Net"
+
+#: pcbnew/onrightclick.cpp:513
+msgid "Edit ALL Tracks and Vias"
+msgstr "Uredi VSE povezave in luknje"
+
+#: pcbnew/onrightclick.cpp:515
+msgid "Edit ALL Vias (no track)"
+msgstr "Uredi VSE luknje (ne pa povezave)"
+
+#: pcbnew/onrightclick.cpp:517
+msgid "Edit ALL Tracks (no via)"
+msgstr "Uredi VSE povezave (ne pa luknje)"
+
+#: pcbnew/onrightclick.cpp:524
+msgid "Delete Segment"
+msgstr "Briši segment"
+
+#: pcbnew/onrightclick.cpp:528
+msgid "Delete Track"
+msgstr "Briši povezavo"
+
+#: pcbnew/onrightclick.cpp:530
+msgid "Delete Net"
+msgstr "Delete Net"
+
+#: pcbnew/onrightclick.cpp:533
+msgid "Set Flags"
+msgstr "Set Flags"
+
+#: pcbnew/onrightclick.cpp:534
+msgid "Locked: Yes"
+msgstr "Zaklenjeno: Da"
+
+#: pcbnew/onrightclick.cpp:535
+msgid "Locked: No"
+msgstr "Zaklenjeno: Ne"
+
+#: pcbnew/onrightclick.cpp:543
+msgid "Track Locked: Yes"
+msgstr "Povezava zaklenjena: Da"
+
+#: pcbnew/onrightclick.cpp:544
+msgid "Track Locked: No"
+msgstr "Povezava zaklenjena: Ne"
+
+#: pcbnew/onrightclick.cpp:546
+msgid "Net Locked: Yes"
+msgstr "Net Locked: Yes"
+
+#: pcbnew/onrightclick.cpp:547
+msgid "Net Locked: No"
+msgstr "Net Locked: No"
+
+#: pcbnew/options.cpp:187
+msgid "General Options"
+msgstr "Splošne nastavitve"
+
+#: pcbnew/options.cpp:207
+#: gerbview/options.cpp:175
+msgid "No Display"
+msgstr "Ne prikaži"
+
+#: pcbnew/options.cpp:208
+#: gerbview/options.cpp:176
+msgid "Display Polar Coord"
+msgstr "Prikaži polarne koordinate"
+
+#: pcbnew/options.cpp:216
+#: pcbnew/set_grid.cpp:88
+#: gerbview/options.cpp:184
+msgid "Inches"
+msgstr "Inči"
+
+#: pcbnew/options.cpp:217
+#: pcbnew/set_grid.cpp:91
+#: eeschema/optionsframe.cpp:135
+#: gerbview/options.cpp:185
+msgid "Units"
+msgstr "Enote"
+
+#: pcbnew/options.cpp:224
+#: gerbview/options.cpp:191
+msgid "Small"
+msgstr "Majhen"
+
+#: pcbnew/options.cpp:224
+#: gerbview/options.cpp:191
+msgid "Big"
+msgstr "Velik"
+
+#: pcbnew/options.cpp:225
+#: gerbview/options.cpp:192
+msgid "Cursor"
+msgstr "Kazalnik"
+
+#: pcbnew/options.cpp:232
+msgid "Auto Save (minuts):"
+msgstr "Samodejno shranjevanje (min)"
+
+#: pcbnew/options.cpp:241
+msgid "Number of Layers:"
+msgstr "Število slojev:"
+
+#: pcbnew/options.cpp:252
+msgid "Max Links:"
+msgstr "Max Links:"
+
+#: pcbnew/options.cpp:258
+msgid "Drc ON"
+msgstr "DRC Vključen"
+
+#: pcbnew/options.cpp:263
+msgid "Show Ratsnest"
+msgstr "Show Ratsnest"
+
+#: pcbnew/options.cpp:267
+msgid "Show Mod Ratsnest"
+msgstr "Show Mod Ratsnest"
+
+#: pcbnew/options.cpp:271
+msgid "Tracks Auto Del"
+msgstr "Tracks Auto Del"
+
+#: pcbnew/options.cpp:275
+msgid "Tracks 45 Only"
+msgstr "Povezave samo 45"
+
+#: pcbnew/options.cpp:279
+msgid "Segments 45 Only"
+msgstr "Segmenti samo 45"
+
+#: pcbnew/options.cpp:283
+#: eeschema/options.cpp:122
+msgid "Auto PAN"
+msgstr "Auto PAN"
+
+#: pcbnew/pcbcfg.cpp:67
+#: eeschema/eeconfig.cpp:55
+#: cvpcb/menucfg.cpp:347
+msgid "Read config file"
+msgstr "Beri nastavitveno datoteko"
+
+#: pcbnew/pcbcfg.cpp:80
+#: cvpcb/menucfg.cpp:359
+#, c-format
+msgid "File %s not found"
+msgstr "Ne najdem datoteke %s"
+
+#: pcbnew/pcbcfg.cpp:153
+#: eeschema/eeconfig.cpp:143
+#: cvpcb/cfg.cpp:74
+#: kicad/prjconfig.cpp:53
+#: gerbview/cfg.cpp:99
+msgid "Save config file"
+msgstr "Shrani nastavitveno datoteko"
+
+#: pcbnew/pcbframe.cpp:236
+msgid "Board modified, Save before exit ?"
+msgstr "Plošča spremenjena, shrani pred izhodom ?"
+
+#: pcbnew/pcbframe.cpp:237
+#: eeschema/schframe.cpp:162
+#: common/confirm.cpp:112
+msgid "Confirmation"
+msgstr "Potrditev"
+
+#: pcbnew/pcbframe.cpp:322
+msgid "DCR Off (Disable !!!), Currently: DRC is active"
+msgstr "DCR izklop, Trenutno je DRC aktiven"
+
+#: pcbnew/pcbframe.cpp:322
+msgid "DRC On (Currently: DRC is DISABLE !!!)"
+msgstr "DRC vklop (trenutno je DRC neaktiven)"
+
+#: pcbnew/pcbframe.cpp:332
+msgid "Polar Coords not show"
+msgstr "Ne prikazuj polarnih koordinat"
+
+#: pcbnew/pcbframe.cpp:332
+msgid "Display Polar Coords"
+msgstr "Prikaži polarne koordinate"
+
+#: pcbnew/pcbframe.cpp:337
+#: eeschema/schframe.cpp:241
+msgid "Grid not show"
+msgstr "Ne prikaži mreže"
+
+#: pcbnew/pcbframe.cpp:337
+#: eeschema/schframe.cpp:241
+msgid "Show Grid"
+msgstr "Prikaži mrežo"
+
+# Chevelu général non affiché
+#: pcbnew/pcbframe.cpp:345
+msgid "General ratsnest not show"
+msgstr "General ratsnest not show"
+
+# Afficher le chevelu général
+#: pcbnew/pcbframe.cpp:345
+msgid "Show General ratsnest"
+msgstr "Show General ratsnest"
+
+# Ne pas montrer le chevelu du module pendant déplacement
+#: pcbnew/pcbframe.cpp:350
+msgid "Module ratsnest not show"
+msgstr "Module ratsnest not show"
+
+# Montrer le chevelu du module
+#: pcbnew/pcbframe.cpp:350
+msgid "Show Module ratsnest"
+msgstr "Show Module ratsnest"
+
+#: pcbnew/pcbframe.cpp:355
+msgid "Disable Auto Delete old Track"
+msgstr "Onemogoči samodejno brisanje starih povezav"
+
+#: pcbnew/pcbframe.cpp:355
+msgid "Enable Auto Delete old Track"
+msgstr "Omogoči samodejno brisanje starih povezav"
+
+#: pcbnew/pcbframe.cpp:360
+msgid "Do not Show Zones"
+msgstr "Ne prikazuj območji"
+
+#: pcbnew/pcbframe.cpp:360
+#: pcbnew/set_color.cpp:387
+#: pcbnew/tool_pcb.cpp:163
+msgid "Show Zones"
+msgstr "Prikaži območja"
+
+#: pcbnew/pcbframe.cpp:365
+msgid "Show Pads Sketch mode"
+msgstr "Prikaži otočke v skicirnem načinu"
+
+#: pcbnew/pcbframe.cpp:365
+msgid "Show pads filled mode"
+msgstr "Prikaži polne otočke"
+
+#: pcbnew/pcbframe.cpp:370
+msgid "Show Tracks Sketch mode"
+msgstr "Prikaži povezave v skicirnem načinu"
+
+#: pcbnew/pcbframe.cpp:370
+msgid "Show Tracks filled mode"
+msgstr "Prikaži polne povezave"
+
+#: pcbnew/pcbframe.cpp:375
+msgid "Normal Contrast Mode Display"
+msgstr "Normalen kontrast prikaza"
+
+#: pcbnew/pcbframe.cpp:375
+#: pcbnew/tool_pcb.cpp:173
+msgid "Hight Contrast Mode Display"
+msgstr "Visok kontrast prikaza"
+
+#: pcbnew/pcbframe.cpp:409
+msgid "Via"
+msgstr "Luknje"
+
+#: pcbnew/pcbnew.cpp:42
+msgid "Pcbnew is already running, Continue?"
+msgstr "Pcbnew že teče. Nadaljujem ?"
+
+#: pcbnew/pcbpiste.cpp:62
+msgid "Swap Layers:"
+msgstr "Zamenjaj sloje:"
+
+#: pcbnew/pcbpiste.cpp:76
+msgid "No Change"
+msgstr "No Change"
+
+#: pcbnew/pcbpiste.cpp:79
+msgid "Layers"
+msgstr "Sloji"
+
+#: pcbnew/pcbpiste.cpp:90
+#: pcbnew/sel_layer.cpp:116
+#: pcbnew/sel_layer.cpp:241
+#: eeschema/getpart.cpp:94
+#: eeschema/getpart.cpp:98
+#: eeschema/optiondialogbocks.cpp:93
+#: eeschema/options.cpp:108
+#: eeschema/optionsframe.cpp:151
+#: cvpcb/menucfg.cpp:169
+#: common/setpage.cpp:178
+msgid "OK"
+msgstr "Potrdi"
+
+#: pcbnew/pcbpiste.cpp:95
+msgid "Deselect"
+msgstr "Deselect"
+
+#: pcbnew/pcbpiste.cpp:231
+msgid "Filter for net names:"
+msgstr "Filter for net names:"
+
+#: pcbnew/pcbpiste.cpp:234
+msgid "List Nets"
+msgstr "List Nets"
+
+#: pcbnew/pcbplot.cpp:104
+#: pcbnew/pcbplot.cpp:168
+#: gerbview/gerberframe.cpp:243
+msgid "Plot"
+msgstr "Plot"
+
+#: pcbnew/pcbplot.cpp:122
+msgid "Plot Format"
+msgstr "Plot Format"
+
+#: pcbnew/pcbplot.cpp:139
+msgid "Spot min"
+msgstr "Spot min"
+
+#: pcbnew/pcbplot.cpp:144
+msgid "Pen Size"
+msgstr "Pen Size"
+
+#: pcbnew/pcbplot.cpp:149
+msgid "Pen Speed (cm/s)"
+msgstr "Pen Speed (cm/s)"
+
+#: pcbnew/pcbplot.cpp:151
+msgid "Set pen speed in cm/s"
+msgstr "Set pen speed in cm/s"
+
+#: pcbnew/pcbplot.cpp:154
+msgid "Pen Ovr"
+msgstr "Pen Ovr"
+
+#: pcbnew/pcbplot.cpp:156
+msgid "Set plot overlay for filling"
+msgstr "Set plot overlay for filling"
+
+#: pcbnew/pcbplot.cpp:159
+msgid "Lines Width"
+msgstr "Širina črt"
+
+#: pcbnew/pcbplot.cpp:161
+msgid "Set width for lines in Line plot mode"
+msgstr "Set width for lines in Line plot mode"
+
+#: pcbnew/pcbplot.cpp:178
+msgid "Save options"
+msgstr "Shrani nastavitve"
+
+#: pcbnew/pcbplot.cpp:190
+#: common/wxprint.cpp:301
+msgid "X Scale Adjust"
+msgstr "Nastavi skalo za os X"
+
+#: pcbnew/pcbplot.cpp:191
+#: common/wxprint.cpp:302
+msgid "Set X scale adjust for exact scale plotting"
+msgstr "Set X scale adjust for exact scale plotting"
+
+#: pcbnew/pcbplot.cpp:193
+#: common/wxprint.cpp:304
+msgid "Y Scale Adjust"
+msgstr "Nastavi skalo za os Y"
+
+#: pcbnew/pcbplot.cpp:194
+#: common/wxprint.cpp:305
+msgid "Set Y scale adjust for exact scale plotting"
+msgstr "Set Y scale adjust for exact scale plotting"
+
+#: pcbnew/pcbplot.cpp:213
+#: eeschema/plotps.cpp:160
+#: common/svg_print.cpp:151
+#: common/wxprint.cpp:324
+msgid "Print Sheet Ref"
+msgstr "Print Sheet Ref"
+
+#: pcbnew/pcbplot.cpp:222
+msgid "Print Pads on Silkscreen"
+msgstr "Print Pads on Silkscreen"
+
+#: pcbnew/pcbplot.cpp:226
+msgid "Enable/disable print/plot pads on Silkscreen layers"
+msgstr "Activar/Desactivar trazado de Isletas en las capas de serigrafía"
+
+#: pcbnew/pcbplot.cpp:229
+msgid "Always Print Pads"
+msgstr "Vedno natisni otočke"
+
+#: pcbnew/pcbplot.cpp:232
+msgid "Force print/plot pads on ALL layers"
+msgstr "Force print/plot pads on ALL layers"
+
+#: pcbnew/pcbplot.cpp:236
+msgid "Print Module Value"
+msgstr "Print Module Value"
+
+#: pcbnew/pcbplot.cpp:240
+msgid "Enable/disable print/plot module value on Silkscreen layers"
+msgstr "Enable/disable print/plot module value on Silkscreen layers"
+
+#: pcbnew/pcbplot.cpp:243
+msgid "Print Module Reference"
+msgstr "Print Module Reference"
+
+#: pcbnew/pcbplot.cpp:247
+msgid "Enable/disable print/plot module reference on Silkscreen layers"
+msgstr "Enable/disable print/plot module reference on Silkscreen layers"
+
+#: pcbnew/pcbplot.cpp:251
+msgid "Print other module texts"
+msgstr "Print other module texts"
+
+#: pcbnew/pcbplot.cpp:255
+msgid "Enable/disable print/plot module field texts on Silkscreen layers"
+msgstr "Enable/disable print/plot module field texts on Silkscreen layers"
+
+#: pcbnew/pcbplot.cpp:259
+msgid "Force Print Invisible Texts"
+msgstr "Force Print Invisible Texts"
+
+#: pcbnew/pcbplot.cpp:263
+msgid "Force print/plot module invisible texts on Silkscreen layers"
+msgstr "Force print/plot module invisible texts on Silkscreen layers"
+
+#: pcbnew/pcbplot.cpp:267
+msgid "No Drill mark"
+msgstr "Ni oznake za vrtanje"
+
+#: pcbnew/pcbplot.cpp:267
+msgid "Small mark"
+msgstr "Majhna oznaka"
+
+#: pcbnew/pcbplot.cpp:267
+msgid "Real Drill"
+msgstr "Pravo vrtanje"
+
+#: pcbnew/pcbplot.cpp:269
+msgid "Pads Drill Opt"
+msgstr "Možnosti vrtanja otočkov"
+
+#: pcbnew/pcbplot.cpp:276
+msgid "Auto scale"
+msgstr "Samodejno razmerje"
+
+#: pcbnew/pcbplot.cpp:276
+#: common/wxprint.cpp:282
+msgid "Scale 1"
+msgstr "Razmerje 1"
+
+#: pcbnew/pcbplot.cpp:276
+msgid "Scale 1.5"
+msgstr "Razmerje 1,5"
+
+#: pcbnew/pcbplot.cpp:276
+#: common/wxprint.cpp:283
+msgid "Scale 2"
+msgstr "Razmerje 2"
+
+#: pcbnew/pcbplot.cpp:276
+#: common/wxprint.cpp:283
+msgid "Scale 3"
+msgstr "Razmerje 3"
+
+#: pcbnew/pcbplot.cpp:278
+msgid "Scale Opt"
+msgstr "Scale Opt"
+
+#: pcbnew/pcbplot.cpp:286
+msgid "Plot mode"
+msgstr "Plot mode"
+
+#: pcbnew/pcbplot.cpp:294
+msgid "Plot Mirror"
+msgstr "Plot Mirror"
+
+#: pcbnew/pcbplot.cpp:299
+msgid "Vias on Mask"
+msgstr "Vias on Mark"
+
+#: pcbnew/pcbplot.cpp:302
+msgid "Print/plot vias on mask layers"
+msgstr "Print/plot vias on mask layers"
+
+#: pcbnew/pcbplot.cpp:307
+msgid "Org = Centre"
+msgstr "Org = Cenre"
+
+#: pcbnew/pcbplot.cpp:309
+msgid "Draw origin ( 0,0 )in on sheet center"
+msgstr "Draw origin ( 0,0 )in on sheet center"
+
+#: pcbnew/pcbtexte.cpp:89
+msgid "TextPCB properties"
+msgstr "TextPCB properties"
+
+#: pcbnew/pcbtexte.cpp:132
+msgid "Position"
+msgstr "Lega"
+
+#: pcbnew/plotgerb.cpp:128
+msgid "unable to create file "
+msgstr "ne morem ustvariti datoteke"
+
+#: pcbnew/plotgerb.cpp:832
+#, c-format
+msgid "unable to reopen file <%s>"
+msgstr "ne morem ponovno odpreti datoteke <%s>"
+
+#: pcbnew/plotps.cpp:46
+msgid "Unable to create file "
+msgstr "Ne morem ustvariti datoteke"
+
+#: pcbnew/plotps.cpp:326
+msgid "Tracks"
+msgstr "Povezave"
+
+#: pcbnew/router.cpp:69
+msgid "Unable to create temporary file "
+msgstr "Ne morem ustvariti začasne datoteke"
+
+#: pcbnew/router.cpp:74
+msgid "Create temporary file "
+msgstr "Create temporary file"
+
+#: pcbnew/router.cpp:543
+msgid "Lecture fichier de routage "
+msgstr "Povezovanje je končano"
+
+#: pcbnew/sel_layer.cpp:74
+msgid "Select Layer:"
+msgstr "Izberi sloj:"
+
+#: pcbnew/sel_layer.cpp:192
+msgid "Select Layer Pair:"
+msgstr "Izberi par slojev: "
+
+#: pcbnew/sel_layer.cpp:226
+msgid "Top Layer"
+msgstr "Vrhnji sloj"
+
+#: pcbnew/sel_layer.cpp:233
+msgid "Bottom Layer"
+msgstr "Spodnji sloj"
+
+#: pcbnew/set_color.cpp:50
+msgid "Copper Layers"
+msgstr "Sloj bakra"
+
+#: pcbnew/set_color.cpp:55
+msgid "Tech Layers"
+msgstr "Tech Layers"
+
+# Chevelu
+#: pcbnew/set_color.cpp:322
+msgid "Ratsnest"
+msgstr "Ratsnest"
+
+#: pcbnew/set_color.cpp:330
+msgid "Pad Cu"
+msgstr "Cu otoček"
+
+#: pcbnew/set_color.cpp:338
+msgid "Pad Cmp"
+msgstr "Otoček elemeneta"
+
+#: pcbnew/set_color.cpp:346
+msgid "Text Module Cu"
+msgstr "Cu modul besedila"
+
+#: pcbnew/set_color.cpp:354
+msgid "Text Module Cmp"
+msgstr "Modul besedila elemeneta"
+
+#: pcbnew/set_color.cpp:362
+msgid "Text Module invisible"
+msgstr "Modul nevidnega besedila"
+
+#: pcbnew/set_color.cpp:370
+msgid "Anchors"
+msgstr "Anchors"
+
+#: pcbnew/set_color.cpp:378
+#: pcbnew/tool_pcb.cpp:398
+#: gerbview/set_color.h:246
+msgid "Grid"
+msgstr "Mreža"
+
+#: pcbnew/set_color.cpp:396
+msgid "Show Noconnect"
+msgstr "Show Noconnect"
+
+#: pcbnew/set_color.cpp:405
+msgid "Show Modules Cmp"
+msgstr "Show Modules Cmp"
+
+#: pcbnew/set_color.cpp:414
+msgid "Show Modules Cu"
+msgstr "Show Modules Cu"
+
+#: pcbnew/set_color.cpp:569
+msgid "Colors:"
+msgstr "Barve:"
+
+#: pcbnew/set_color.cpp:678
+#: gerbview/set_color.cpp:235
+msgid "Show All"
+msgstr "Prikaži vse"
+
+#: pcbnew/set_color.cpp:683
+#: gerbview/set_color.cpp:240
+msgid "Show None"
+msgstr "Nič ne prikaži"
+
+#: pcbnew/set_color.cpp:688
+#: gerbview/reglage.cpp:114
+#: gerbview/set_color.cpp:245
+msgid "Exit"
+msgstr "Izhod"
+
+#: pcbnew/set_grid.cpp:88
+#: common/drawframe.cpp:262
+msgid "mm"
+msgstr "mm"
+
+#: pcbnew/set_grid.cpp:97
+msgid "User Grid Size X"
+msgstr "Velikost mreže X"
+
+#: pcbnew/set_grid.cpp:104
+msgid "User Grid Size Y"
+msgstr "Velikost mreže Y"
+
+#: pcbnew/tool_modedit.cpp:42
+#: eeschema/tool_lib.cpp:142
+msgid "Select working library"
+msgstr "Izberi delovno knjižnico"
+
+#: pcbnew/tool_modedit.cpp:47
+msgid "Save Module in working library"
+msgstr "Shrani modul v delovno knjižnico"
+
+#: pcbnew/tool_modedit.cpp:54
+msgid "Create new library and save current module"
+msgstr "Ustvari novo knjižnico in shrani trenutni modul"
+
+#: pcbnew/tool_modedit.cpp:61
+#: eeschema/tool_lib.cpp:148
+msgid "Delete part in current library"
+msgstr "Briši element v trenutni knjižnici"
+
+#: pcbnew/tool_modedit.cpp:67
+#: pcbnew/xchgmod.cpp:144
+msgid "New Module"
+msgstr "Nov modul"
+
+#: pcbnew/tool_modedit.cpp:72
+msgid "Load module from lib"
+msgstr "Naloži modul iz knjižnice"
+
+#: pcbnew/tool_modedit.cpp:79
+msgid "Load module from current BOARD"
+msgstr "Naloži modul iz trenutne PLOŠČE"
+
+#: pcbnew/tool_modedit.cpp:85
+msgid "Replace module in current BOARD"
+msgstr "Zamenjaj modul v trenutni PLOŠČI"
+
+#: pcbnew/tool_modedit.cpp:92
+msgid "import module"
+msgstr "uvozi modul"
+
+#: pcbnew/tool_modedit.cpp:98
+msgid "export module"
+msgstr "izvozi modul"
+
+#: pcbnew/tool_modedit.cpp:106
+msgid "Module Properties"
+msgstr "Lastnosti modula"
+
+#: pcbnew/tool_modedit.cpp:113
+msgid "Print Module"
+msgstr "Natisni modul"
+
+#: pcbnew/tool_modedit.cpp:120
+#: pcbnew/tool_pcb.cpp:97
+#: eeschema/tool_lib.cpp:205
+#: cvpcb/displayframe.cpp:123
+#: gerbview/tool_gerber.cpp:105
+msgid "zoom + (F1)"
+msgstr "Zoom + (F1)"
+
+#: pcbnew/tool_modedit.cpp:126
+#: pcbnew/tool_pcb.cpp:98
+#: eeschema/tool_lib.cpp:211
+#: cvpcb/displayframe.cpp:129
+#: gerbview/tool_gerber.cpp:111
+msgid "zoom - (F2)"
+msgstr "Zoom - (F2)"
+
+#: pcbnew/tool_modedit.cpp:132
+#: pcbnew/tool_pcb.cpp:99
+#: eeschema/tool_lib.cpp:217
+#: eeschema/tool_sch.cpp:93
+#: eeschema/tool_viewlib.cpp:92
+#: cvpcb/displayframe.cpp:135
+#: gerbview/tool_gerber.cpp:117
+msgid "redraw (F3)"
+msgstr "Ponovno nariši (F3)"
+
+#: pcbnew/tool_modedit.cpp:138
+#: pcbnew/tool_pcb.cpp:101
+#: eeschema/tool_sch.cpp:96
+#: gerbview/tool_gerber.cpp:123
+msgid "auto zoom"
+msgstr "samodejni zoom"
+
+#: pcbnew/tool_modedit.cpp:153
+msgid "Module Check"
+msgstr "Preveri modul"
+
+#: pcbnew/tool_modedit.cpp:183
+msgid "Add Pads"
+msgstr "Dodaj otočke"
+
+#: pcbnew/tool_modedit.cpp:191
+#: pcbnew/tool_pcb.cpp:244
+#: eeschema/tool_sch.cpp:202
+msgid "Add graphic line or polygon"
+msgstr "Add graphic line or polygon"
+
+#: pcbnew/tool_modedit.cpp:198
+#: pcbnew/tool_pcb.cpp:250
+msgid "Add graphic circle"
+msgstr "Add graphic circle"
+
+#: pcbnew/tool_modedit.cpp:205
+#: pcbnew/tool_pcb.cpp:256
+msgid "Add graphic arc"
+msgstr "Add graphic arc"
+
+#: pcbnew/tool_modedit.cpp:220
+msgid "Place anchor"
+msgstr "Place anchor"
+
+#: pcbnew/tool_modedit.cpp:228
+#: pcbnew/tool_pcb.cpp:282
+#: eeschema/tool_lib.cpp:110
+#: eeschema/tool_sch.cpp:211
+#: gerbview/tool_gerber.cpp:212
+msgid "Delete items"
+msgstr "Briši elemente"
+
+#: pcbnew/tool_modedit.cpp:251
+#: pcbnew/tool_pcb.cpp:141
+#: eeschema/tool_sch.cpp:232
+#: gerbview/tool_gerber.cpp:232
+msgid "Display Grid OFF"
+msgstr "Izključi prikaz mreže"
+
+#: pcbnew/tool_modedit.cpp:257
+#: pcbnew/tool_pcb.cpp:143
+#: gerbview/tool_gerber.cpp:238
+msgid "Display Polar Coord ON"
+msgstr "Vključi prikaz polarnih koordinat"
+
+#: pcbnew/tool_modedit.cpp:261
+#: pcbnew/tool_pcb.cpp:145
+#: eeschema/tool_sch.cpp:236
+#: gerbview/tool_gerber.cpp:242
+msgid "Units = Inch"
+msgstr "Enote = Inče"
+
+#: pcbnew/tool_modedit.cpp:265
+#: pcbnew/tool_pcb.cpp:147
+#: eeschema/tool_sch.cpp:240
+#: gerbview/tool_gerber.cpp:246
+msgid "Units = mm"
+msgstr "Enote = mm"
+
+#: pcbnew/tool_modedit.cpp:271
+#: pcbnew/tool_pcb.cpp:149
+#: eeschema/tool_sch.cpp:244
+#: gerbview/tool_gerber.cpp:252
+msgid "Change Cursor Shape"
+msgstr "Spremeni obliko kazalnika"
+
+#: pcbnew/tool_modedit.cpp:279
+#: pcbnew/tool_pcb.cpp:167
+msgid "Show Pads Sketch"
+msgstr "Prikaži skicirane otočke"
+
+#: pcbnew/tool_modedit.cpp:286
+msgid "Show Texts Sketch"
+msgstr "Prikaži skicirano besedilo"
+
+#: pcbnew/tool_modedit.cpp:293
+msgid "Show Edges Sketch"
+msgstr "Prikaži skicirane robove"
+
+#: pcbnew/tool_modedit.cpp:348
+#: pcbnew/tool_pcb.cpp:411
+msgid "User Grid"
+msgstr "Uporabniška mreža"
+
+#: pcbnew/tool_pcb.cpp:71
+msgid "New Board"
+msgstr "Nova plošča"
+
+#: pcbnew/tool_pcb.cpp:72
+msgid "Open existing Board"
+msgstr "Odpri obstoječo ploščo"
+
+#: pcbnew/tool_pcb.cpp:73
+msgid "Save Board"
+msgstr "Shrani ploščo"
+
+#: pcbnew/tool_pcb.cpp:76
+#: eeschema/tool_sch.cpp:47
+#: gerbview/tool_gerber.cpp:62
+msgid "page settings (size, texts)"
+msgstr "nastavitve strani (velikost, besedila)"
+
+#: pcbnew/tool_pcb.cpp:79
+msgid "Open Module Editor"
+msgstr "Odpri urejevalnik modulov"
+
+#: pcbnew/tool_pcb.cpp:82
+#: eeschema/tool_sch.cpp:63
+#: gerbview/tool_gerber.cpp:73
+msgid "Cut selected item"
+msgstr "Izreži izbrani element"
+
+#: pcbnew/tool_pcb.cpp:85
+#: eeschema/tool_sch.cpp:66
+#: gerbview/tool_gerber.cpp:78
+msgid "Copy selected item"
+msgstr "Kopiraj izbrane elemente"
+
+#: pcbnew/tool_pcb.cpp:87
+#: eeschema/tool_sch.cpp:69
+#: gerbview/tool_gerber.cpp:84
+msgid "Paste"
+msgstr "Prilepi"
+
+#: pcbnew/tool_pcb.cpp:90
+#: eeschema/tool_sch.cpp:72
+#: gerbview/tool_gerber.cpp:91
+msgid "Undelete"
+msgstr "Undelete"
+
+#: pcbnew/tool_pcb.cpp:93
+msgid "Print Board"
+msgstr "Natisni ploščo"
+
+#: pcbnew/tool_pcb.cpp:104
+#: eeschema/tool_sch.cpp:100
+msgid "Find components and texts"
+msgstr "Najdi komponente in besedila"
+
+#: pcbnew/tool_pcb.cpp:107
+msgid "Read Netlist"
+msgstr "Beri spisek povezav"
+
+#: pcbnew/tool_pcb.cpp:108
+msgid "Pcb Design Rules Check"
+msgstr "Preveri pravila risanja plošče"
+
+#: pcbnew/tool_pcb.cpp:115
+msgid "Mode Module: Manual and Automatic Move or Place for modules"
+msgstr "Modul načina: ročno ali samodejno prestavljanje ali postavitev za module"
+
+#: pcbnew/tool_pcb.cpp:117
+msgid "Mode Track and Autorouting"
+msgstr "Mode Track and Autorouting"
+
+#: pcbnew/tool_pcb.cpp:139
+msgid "Drc OFF"
+msgstr "Drc izključen"
+
+# Monter le chevelu général
+#: pcbnew/tool_pcb.cpp:153
+msgid "Show General Ratsnest"
+msgstr "Show General Ratsnest"
+
+# Monter le chevelu du module pendant déplacement
+#: pcbnew/tool_pcb.cpp:155
+msgid "Show Module Ratsnest when moving"
+msgstr "Show Module Ratsnest when moving"
+
+#: pcbnew/tool_pcb.cpp:159
+msgid "Enable Auto Del Track"
+msgstr "Omogoči samodejno brisanje povezav"
+
+#: pcbnew/tool_pcb.cpp:170
+msgid "Show Tracks Sketch"
+msgstr "Prikaži skico povezav"
+
+#: pcbnew/tool_pcb.cpp:181
+msgid ""
+"Display auxiliary vertical toolbar (tools for micro wave applications)\n"
+" This is a very experimental feature (under developement)"
+msgstr ""
+"Display auxiliary vertical toolbar (tools for micro wave applications)\n"
+" This is a very experimental feature (under developement)"
+""
+
+#: pcbnew/tool_pcb.cpp:212
+msgid "Net highlight"
+msgstr "Net highlight"
+
+# Afficher le chevelu local (pastilles ou modules)
+#: pcbnew/tool_pcb.cpp:218
+msgid "Display local ratsnest (pad or module)"
+msgstr "Display local ratsnest (pad or module)"
+
+#: pcbnew/tool_pcb.cpp:225
+msgid "Add modules"
+msgstr "Dodaj module"
+
+#: pcbnew/tool_pcb.cpp:231
+msgid "Add Tracks an vias"
+msgstr "Dodaj povezave in luknje"
+
+#: pcbnew/tool_pcb.cpp:275
+#: gerbview/tool_gerber.cpp:197
+msgid "Add Mires"
+msgstr "Dodaj pritrj. luknje"
+
+#: pcbnew/tool_pcb.cpp:289
+msgid "Offset adjust for drill and place files"
+msgstr "Datoteke za nastavitev zamika za vrtanje in lego"
+
+#: pcbnew/tool_pcb.cpp:312
+msgid "Create line of specified length for microwave applications"
+msgstr "Ustvari črto določene dolžine za mikrovalovne aplikacije"
+
+#: pcbnew/tool_pcb.cpp:318
+msgid "Create gap of specified length for microwave applications"
+msgstr "Ustvari prazen prostor določene dolžine za mikrovalovne aplikacije"
+
+#: pcbnew/tool_pcb.cpp:326
+msgid "Create stub of specified length for microwave applications"
+msgstr "Create stub of specified length for microwave applications"
+
+#: pcbnew/tool_pcb.cpp:332
+msgid "Create stub (arc) of specified length for microwave applications"
+msgstr "Create stub (arc) of specified length for microwave applications"
+
+#: pcbnew/tool_pcb.cpp:338
+msgid "Create a polynomial shape for microwave applications"
+msgstr "Ustvari polinomsko obliko za mikrovalovne aplikacije"
+
+#: pcbnew/tool_pcb.cpp:386
+msgid "Zoom "
+msgstr "Zoom "
+
+#: pcbnew/xchgmod.cpp:85
+msgid "Exchange Modules"
+msgstr "Zamenjaj module:"
+
+#: pcbnew/xchgmod.cpp:102
+msgid "Change module"
+msgstr "Zamenjaj modul"
+
+#: pcbnew/xchgmod.cpp:107
+msgid "Change same modules"
+msgstr "Zamenjaj iste module"
+
+#: pcbnew/xchgmod.cpp:112
+msgid "Ch. same module+value"
+msgstr "Zamenjaj isti modul+vrednost"
+
+#: pcbnew/xchgmod.cpp:117
+msgid "Change all"
+msgstr "Zamenjaj vse"
+
+#: pcbnew/xchgmod.cpp:122
+msgid "Browse Libs modules"
+msgstr "Brskaj po knjižnicah"
+
+#: pcbnew/xchgmod.cpp:132
+msgid "Current Module"
+msgstr "Trenutni modul"
+
+#: pcbnew/xchgmod.cpp:138
+msgid "Current Value"
+msgstr "Trenutna vrednost"
+
+#: pcbnew/xchgmod.cpp:206
+#, c-format
+msgid "file %s not found"
+msgstr "Ne najdem datoteke %s"
+
+#: pcbnew/xchgmod.cpp:220
+#, c-format
+msgid "Unable to create file %s"
+msgstr "Ne morem ustvariti datoteko %s"
+
+#: pcbnew/xchgmod.cpp:388
+msgid "Change ALL modules ?"
+msgstr "Zamenjam VSE module ?"
+
+#: pcbnew/zones.cpp:77
+msgid "Fill Zones Options"
+msgstr "Fill Zones Options"
+
+#: pcbnew/zones.cpp:97
+msgid "Fill"
+msgstr "Zapolni"
+
+#: pcbnew/zones.cpp:102
+msgid "Set Options"
+msgstr "Možnosti"
+
+#: pcbnew/zones.cpp:110
+msgid "Grid (mm):"
+msgstr "Mreža (mm):"
+
+#: pcbnew/zones.cpp:110
+msgid "Grid (inches):"
+msgstr "Mreža (inči):"
+
+#: pcbnew/zones.cpp:119
+msgid "Include Pads"
+msgstr "Dodaj otočke"
+
+#: pcbnew/zones.cpp:119
+msgid "Thermal"
+msgstr "Termično"
+
+#: pcbnew/zones.cpp:119
+msgid "Exclude Pads"
+msgstr "Izključi otočke"
+
+#: pcbnew/zones.cpp:121
+#: common/zoom.cpp:319
+msgid "Grid:"
+msgstr "Mreža:"
+
+#: pcbnew/zones.cpp:132
+msgid "Isolation"
+msgstr "Izolacija"
+
+#: pcbnew/zones.cpp:136
+#: eeschema/optiondialogbocks.cpp:151
+#: eeschema/options.cpp:172
+msgid "Any"
+msgstr "Katerikoli"
+
+#: pcbnew/zones.cpp:136
+msgid "H , V and 45 deg"
+msgstr "H, V in 45 stopinj"
+
+#: pcbnew/zones.cpp:138
+msgid "Zone edges orient:"
+msgstr "Zone enges orient:"
+
+#: pcbnew/zones.cpp:214
+msgid "New zone segment width: "
+msgstr "New zone segment width: "
+
+#: pcbnew/zones.cpp:686
+msgid "No Net"
+msgstr "No Net"
+
+#: eeschema/affiche.cpp:23
+msgid "Name"
+msgstr "Ime"
+
+#: eeschema/affiche.cpp:24
+msgid "FileName"
+msgstr "Ime datoteke"
+
+#: eeschema/affiche.cpp:37
+msgid "Ref"
+msgstr "Ref"
+
+#: eeschema/affiche.cpp:41
+msgid "Pwr Symb"
+msgstr "Pwr Symb"
+
+#: eeschema/affiche.cpp:42
+msgid "Val"
+msgstr "Vrednost"
+
+#: eeschema/affiche.cpp:45
+msgid "RefLib"
+msgstr "RefLib"
+
+#: eeschema/affiche.cpp:72
+msgid "PinName"
+msgstr "Ime nogice"
+
+#: eeschema/affiche.cpp:84
+#: eeschema/eelayer.cpp:87
+msgid "PinNum"
+msgstr "Št. nogice :"
+
+#: eeschema/affiche.cpp:88
+msgid "PinType"
+msgstr "Tip nogice"
+
+#: eeschema/affiche.cpp:92
+#: eeschema/affiche.cpp:149
+msgid "no"
+msgstr "ne"
+
+#: eeschema/affiche.cpp:93
+#: eeschema/affiche.cpp:150
+msgid "yes"
+msgstr "da"
+
+#: eeschema/affiche.cpp:98
+msgid "Lengh"
+msgstr "Dol."
+
+#: eeschema/affiche.cpp:103
+#: eeschema/editexte.cpp:129
+#: eeschema/pinedit.cpp:222
+msgid "Up"
+msgstr "Gor"
+
+#: eeschema/affiche.cpp:104
+#: eeschema/editexte.cpp:129
+#: eeschema/pinedit.cpp:222
+msgid "Down"
+msgstr "Dol"
+
+#: eeschema/affiche.cpp:105
+#: eeschema/editexte.cpp:129
+#: eeschema/pinedit.cpp:222
+msgid "Left"
+msgstr "Levo"
+
+#: eeschema/affiche.cpp:106
+#: eeschema/editexte.cpp:129
+#: eeschema/pinedit.cpp:222
+msgid "Right"
+msgstr "Desno"
+
+#: eeschema/affiche.cpp:144
+#: eeschema/affiche.cpp:148
+#: common/svg_print.cpp:156
+#: common/wxprint.cpp:344
+msgid "All"
+msgstr "Vse"
+
+#: eeschema/annotate.cpp:86
+msgid "EESchema Annotation"
+msgstr "EEschema Annotation"
+
+#: eeschema/annotate.cpp:100
+msgid "Hierarchy"
+msgstr "Hierarhija"
+
+#: eeschema/annotate.cpp:100
+msgid "Current sheet"
+msgstr "Current sheet"
+
+#: eeschema/annotate.cpp:102
+msgid "annotate:"
+msgstr "annotate:"
+
+#: eeschema/annotate.cpp:112
+msgid "&Annotate"
+msgstr "&Annotate"
+
+#: eeschema/annotate.cpp:117
+msgid "&Del Annotate"
+msgstr "&Del Annotate"
+
+#: eeschema/annotate.cpp:127
+msgid "all components"
+msgstr "vse komponennte"
+
+#: eeschema/annotate.cpp:127
+msgid "new components only"
+msgstr "Samo nove komponente"
+
+#: eeschema/annotate.cpp:129
+msgid "select items:"
+msgstr "izberi:"
+
+#: eeschema/annotate.cpp:275
+#: eeschema/annotate.cpp:654
+msgid "Previous Annotation will be deleted. Continue ?"
+msgstr "Previous Annotation will be deleted. Continue ?"
+
+#: eeschema/annotate.cpp:822
+#, c-format
+msgid "item not annotated: %s%s"
+msgstr "item not annotated: %s%s"
+
+#: eeschema/annotate.cpp:838
+#, c-format
+msgid "Error item %s%s"
+msgstr "Napaka element %s%s"
+
+#: eeschema/annotate.cpp:841
+#, c-format
+msgid " unit %d and no more than %d parts"
+msgstr " unit %d and no more than %d parts"
+
+#: eeschema/annotate.cpp:868
+#: eeschema/annotate.cpp:888
+#, c-format
+msgid "Multiple item %s%s"
+msgstr "Več elementov %s%s"
+
+#: eeschema/annotate.cpp:902
+#, c-format
+msgid "Diff values for %s%d%c (%s) et %s%d%c (%s)"
+msgstr "Diff values for %s%d%c (%s) and %s%d%c (%s)"
+
+#: eeschema/database.cpp:70
+msgid "No Component found"
+msgstr "Ne najdem komponent"
+
+#: eeschema/database.cpp:96
+msgid "Selection"
+msgstr "Izberi"
+
+#: eeschema/delete.cpp:268
+#: eeschema/schedit.cpp:686
+msgid "Delete SHEET!!"
+msgstr "Delete SHEET!!"
+
+#: eeschema/editexte.cpp:96
+msgid "Global Label properties"
+msgstr "Global Label properties"
+
+#: eeschema/editexte.cpp:100
+msgid "Label properties"
+msgstr "Label properties"
+
+#: eeschema/editexte.cpp:104
+msgid "Text properties"
+msgstr "Lastnosti besedila"
+
+#: eeschema/editexte.cpp:130
+msgid "Text Orient:"
+msgstr "Orientacija besedila:"
+
+#: eeschema/editexte.cpp:140
+msgid "Glabel Shape:"
+msgstr "Global Shape:"
+
+#: eeschema/editpart.cpp:142
+#: eeschema/fieldedi.cpp:143
+msgid "Componant properties"
+msgstr "Lastnosti komponent"
+
+#: eeschema/editpart.cpp:159
+msgid "Componant properties (Not found in lib)"
+msgstr "Lastnosti komponent (Ne nmajdem v knjižnici)"
+
+#: eeschema/editpart.cpp:188
+msgid "Defaults"
+msgstr "Privzeto"
+
+#: eeschema/editpart.cpp:210
+#: eeschema/erc.cpp:306
+#: eeschema/fieldedi.cpp:223
+#: eeschema/libedpart.cpp:270
+#: cvpcb/options.cpp:138
+msgid "Options"
+msgstr "Možnosti"
+
+#: eeschema/editpart.cpp:225
+#: eeschema/fieldedi.cpp:346
+#: eeschema/libedpart.cpp:518
+msgid "Show Text"
+msgstr "Prikaži besedilo"
+
+#: eeschema/editpart.cpp:231
+#: eeschema/fieldedi.cpp:352
+#: eeschema/libedpart.cpp:525
+#: eeschema/symbtext.cpp:135
+msgid "Vertical"
+msgstr "Navpično"
+
+#: eeschema/editpart.cpp:247
+#: eeschema/libedpart.cpp:562
+#: eeschema/libedpart.cpp:590
+#: eeschema/libedpart.cpp:631
+msgid "Pos"
+msgstr "Pos"
+
+#: eeschema/editpart.cpp:292
+#: eeschema/onrightclick.cpp:239
+msgid "Unit"
+msgstr "Enota"
+
+#: eeschema/editpart.cpp:293
+msgid "Unit:"
+msgstr "Enota:"
+
+#: eeschema/editpart.cpp:307
+msgid "Orient:"
+msgstr "Orientacija:"
+
+#: eeschema/editpart.cpp:317
+msgid "Mirror --"
+msgstr "Zrcali--"
+
+#: eeschema/editpart.cpp:317
+msgid "Mirror |"
+msgstr "Zrcali |"
+
+#: eeschema/editpart.cpp:318
+msgid "Mirror:"
+msgstr "Zrcali:"
+
+#: eeschema/editpart.cpp:328
+#: eeschema/onrightclick.cpp:229
+msgid "Convert"
+msgstr "Pretvori"
+
+#: eeschema/editpart.cpp:339
+msgid "Chip Name:"
+msgstr "Ime čipa (v knjižnici):"
+
+#: eeschema/editpart.cpp:363
+msgid "No Componant Name!"
+msgstr "Ni imena komponente!"
+
+#: eeschema/editpart.cpp:369
+#, c-format
+msgid "Componant [%s] not found!"
+msgstr "Ne najdem komponente [%s]!"
+
+#: eeschema/editpart.cpp:472
+msgid "No Field to move"
+msgstr "Ni polja za premikanje"
+
+#: eeschema/editpart.cpp:505
+msgid "No Field To Edit"
+msgstr "Ni polja za urejanje"
+
+#: eeschema/editpart.cpp:518
+msgid ""
+"Part is a POWER, value cannot be modified!\n"
+"You must create a new power"
+msgstr ""
+"Element je POWER, vrednost ne morem spremeniti!\n"
+"Ustvari nov element power"
+
+#: eeschema/editpart.cpp:557
+msgid "Reference needed !, No change"
+msgstr "Potrebna refereca!, ni spremembe"
+
+#: eeschema/editpart.cpp:561
+msgid "Value needed !, No change"
+msgstr "Potrebna vrednost !, ni spremembe"
+
+#: eeschema/eeconfig.cpp:67
+#: kicad/files-io.cpp:123
+#: gerbview/dcode.cpp:262
+#: gerbview/readgerb.cpp:142
+msgid "File "
+msgstr "Datoteka"
+
+#: eeschema/eeconfig.cpp:67
+msgid "not found"
+msgstr " ne najdem"
+
+#: eeschema/eelayer.cpp:45
+msgid "General"
+msgstr "Splošno"
+
+#: eeschema/eelayer.cpp:51
+msgid "Sheets"
+msgstr "Stran"
+
+#: eeschema/eelayer.cpp:57
+msgid "Wire"
+msgstr "Žica"
+
+#: eeschema/eelayer.cpp:63
+msgid "Bus"
+msgstr "Vodilo"
+
+#: eeschema/eelayer.cpp:69
+msgid "Junction"
+msgstr "Junction"
+
+#: eeschema/eelayer.cpp:75
+msgid "Label"
+msgstr "Oznaka"
+
+#: eeschema/eelayer.cpp:81
+msgid "GlobLabel"
+msgstr "Splošna oznaka"
+
+#: eeschema/eelayer.cpp:93
+msgid "PinNam"
+msgstr "Ime nogice"
+
+#: eeschema/eelayer.cpp:111
+msgid "Fields"
+msgstr "Polja"
+
+#: eeschema/eelayer.cpp:117
+msgid "Body"
+msgstr "Telo"
+
+#: eeschema/eelayer.cpp:123
+msgid "Body Bg"
+msgstr "Ozadje telesa"
+
+#: eeschema/eelayer.cpp:129
+#, fuzzy
+msgid "Device"
+msgstr "Naprava"
+
+#: eeschema/eelayer.cpp:135
+msgid "Notes"
+msgstr "Zapis"
+
+#: eeschema/eelayer.cpp:147
+msgid "Pin"
+msgstr "Nogica"
+
+#: eeschema/eelayer.cpp:153
+msgid "Sheet"
+msgstr "Stran"
+
+#: eeschema/eelayer.cpp:159
+msgid "SheetName"
+msgstr "Ime strani"
+
+#: eeschema/eelayer.cpp:165
+msgid "Sheetfile"
+msgstr "Datoteka strani"
+
+#: eeschema/eelayer.cpp:171
+msgid "SheetLabel"
+msgstr "Oznaka strani"
+
+#: eeschema/eelayer.cpp:184
+msgid "Erc Mark"
+msgstr "ERC znak"
+
+#: eeschema/eelayer.cpp:190
+msgid "Erc Warning"
+msgstr "ERC opozorilo"
+
+#: eeschema/eelayer.cpp:196
+msgid "Erc Error"
+msgstr "ERC napaka"
+
+#: eeschema/eelayer.cpp:305
+#: eeschema/optiondialogbocks.cpp:80
+#: eeschema/options.cpp:94
+msgid "EESchema Preferences"
+msgstr "Lastnosti EESchema"
+
+#: eeschema/eelayer.cpp:369
+msgid "White Background"
+msgstr "Belo ozadje"
+
+#: eeschema/eelayer.cpp:369
+msgid "Black Background"
+msgstr "Črno ozadje"
+
+#: eeschema/eelayer.cpp:371
+msgid "Background Colour"
+msgstr "Barva ozadja"
+
+#: eeschema/eelibs1.cpp:222
+#: eeschema/eelibs1.cpp:229
+msgid "File <"
+msgstr "Datoteka <"
+
+#: eeschema/eelibs1.cpp:247
+msgid "Library <"
+msgstr "Knjižnica <"
+
+#: eeschema/eelibs1.cpp:247
+msgid "> header read error"
+msgstr "> napaka pri branju glave"
+
+#: eeschema/eeload.cpp:91
+msgid "Clear Schematic Hierarchy (modified!)?"
+msgstr "Briši hierarhijo shem (spremenjeno!) ?"
+
+#: eeschema/eeload.cpp:105
+#: eeschema/files-io.cpp:62
+#: eeschema/save_schemas.cpp:70
+msgid "Schematic files:"
+msgstr "Datoteke shem"
+
+#: eeschema/eeload.cpp:125
+msgid ""
+"\n"
+"New schema\n"
+"\n"
+msgstr ""
+"\n"
+"Nova shema\n"
+"\n"
+
+#: eeschema/eeload.cpp:131
+msgid ""
+"Ready\n"
+"Working dir: \n"
+msgstr ""
+"Pripravljen\n"
+"Delovna mapa: \n"
+
+#: eeschema/eeload.cpp:184
+#, c-format
+msgid "File %s not found (new project ?)"
+msgstr "Datoteke  %s ne najdem (nov projekt?)"
+
+#: eeschema/eeload.cpp:230
+msgid "No FileName in SubSheet"
+msgstr "Ni imena datoteke v podstrani"
+
+#: eeschema/eeload.cpp:277
+msgid "Failed to open "
+msgstr "Ne morem odpreti"
+
+#: eeschema/eeload.cpp:282
+msgid "Loading "
+msgstr "Nalaganje "
+
+#: eeschema/eeload.cpp:289
+#: eeschema/eeload.cpp:298
+msgid " is NOT EESchema file"
+msgstr " ni datoteka tipa EESchema"
+
+#: eeschema/eeschema.cpp:56
+msgid "Eeschema is already running, Continue?"
+msgstr "Program eeschema teče, nadaljujem ?"
+
+#: eeschema/eestatus.cpp:139
+#: cvpcb/menucfg.cpp:205
+#: cvpcb/menucfg.cpp:410
+msgid "Libraries"
+msgstr "Knjižnice"
+
+#: eeschema/eestatus.cpp:156
+msgid "Cmp file Ext: "
+msgstr "Cmp file Ext: "
+
+#: eeschema/eestatus.cpp:160
+msgid "Net file Ext: "
+msgstr "Net file Ext: "
+
+#: eeschema/eestatus.cpp:164
+msgid "Library file Ext: "
+msgstr "Library file Ext: "
+
+#: eeschema/eestatus.cpp:168
+msgid "Symbol file Ext: "
+msgstr "Symbol file Ext: "
+
+#: eeschema/eestatus.cpp:172
+msgid "Schematic file Ext: "
+msgstr "Schematic file Ext: "
+
+#: eeschema/eestatus.cpp:179
+msgid "Library files path:"
+msgstr "pot do knjižnic:"
+
+#: eeschema/eestatus.cpp:259
+msgid "Library files:"
+msgstr "Knjižnice:"
+
+#: eeschema/eestatus.cpp:288
+msgid "Library already in use"
+msgstr "Knjižnica že v uporabi"
+
+#: eeschema/eestatus.cpp:320
+#: cvpcb/menucfg.cpp:526
+msgid "NetList Formats:"
+msgstr " Format spiska povezav:"
+
+#: eeschema/erc.cpp:208
+msgid "EESchema Erc"
+msgstr "EESchema Erc"
+
+#: eeschema/erc.cpp:235
+msgid "Erc"
+msgstr "Erc"
+
+#: eeschema/erc.cpp:239
+msgid "Erc Diags:"
+msgstr "Erc Diags:"
+
+#: eeschema/erc.cpp:241
+msgid "-> Total Errors:  "
+msgstr "-> Skupne napake:  "
+
+#: eeschema/erc.cpp:245
+msgid "-> Last Errors:   "
+msgstr "->Zadnje napake:  "
+
+#: eeschema/erc.cpp:250
+msgid "-> Last Warnings: "
+msgstr "->Zadnja opozorila:   "
+
+#: eeschema/erc.cpp:255
+msgid "Erc File Report:"
+msgstr "Erc File Report:"
+
+#: eeschema/erc.cpp:259
+msgid "Write erc report"
+msgstr "Write erc report"
+
+#: eeschema/erc.cpp:266
+msgid "&Test Erc"
+msgstr "&Test Erc"
+
+#: eeschema/erc.cpp:271
+msgid "&Del Markers"
+msgstr "&Del Markers "
+
+#: eeschema/erc.cpp:276
+#: eeschema/genliste.cpp:149
+msgid "&Exit"
+msgstr "&Izhod"
+
+#: eeschema/erc.cpp:311
+msgid "Reset"
+msgstr "Ponovno zaženi"
+
+#: eeschema/erc.cpp:365
+msgid "Annotation Required!"
+msgstr "Annotation Required!"
+
+#: eeschema/erc.cpp:433
+msgid "-> Total Errors: "
+msgstr "-> Skupne napake: "
+
+#: eeschema/erc.cpp:435
+msgid "-> Errors ERC:   "
+msgstr "-> ERC napake:   "
+
+#: eeschema/erc.cpp:437
+msgid "-> Warnings ERC: "
+msgstr "-> ERC opozorila: "
+
+#: eeschema/erc.cpp:445
+msgid "ERC file:"
+msgstr "ERC datoteke:"
+
+#: eeschema/erc.cpp:589
+#, c-format
+msgid "Warning GLabel %s not connected to SheetLabel"
+msgstr "Opozorila splošna oznaka %s ni povezana z oznako strani"
+
+#: eeschema/erc.cpp:592
+#, c-format
+msgid "Warning SheetLabel %s not connected to GLabel"
+msgstr "Opozorilo oznaka strani %s ni povezana s splošno oznako"
+
+#: eeschema/erc.cpp:606
+#, c-format
+msgid "Warning Pin %s Unconnected"
+msgstr "Opozorilo nogica %s ni pvoezana"
+
+#: eeschema/erc.cpp:615
+#, c-format
+msgid "Warning Pin %s not drived (Net %d)"
+msgstr "Warning Pin %s not drived (Net %d)"
+
+#: eeschema/erc.cpp:626
+#, c-format
+msgid "Warning More than 1 Pin connected to UnConnect symbol"
+msgstr "Warning More than 1 Pin connected to UnConnect symbol"
+
+#: eeschema/erc.cpp:638
+#: common/confirm.cpp:82
+msgid "Warning"
+msgstr "Opozorilo"
+
+#: eeschema/erc.cpp:641
+#: common/confirm.cpp:85
+msgid "Error"
+msgstr "Napaka"
+
+#: eeschema/erc.cpp:647
+#, c-format
+msgid "%s: Pin %s connected to Pin %s (net %d)"
+msgstr "%s: Nogica %s povezana z nogico %s (povezava %d)"
+
+#: eeschema/erc.cpp:754
+#, c-format
+msgid "ERC control (%s)\n"
+msgstr "ERC kontrola (%s)\n"
+
+#: eeschema/erc.cpp:760
+#, c-format
+msgid ""
+"\n"
+"***** Sheet %d (%s)\n"
+msgstr ""
+"\n"
+"***** Stran %d (%s)\n"
+
+#: eeschema/erc.cpp:762
+#: eeschema/genliste.cpp:613
+#: eeschema/hierarch.cpp:135
+msgid "Root"
+msgstr "Root"
+
+#: eeschema/erc.cpp:774
+#, c-format
+msgid "ERC: %s (X= %2.3f inches, Y= %2.3f inches\n"
+msgstr "ERC: %s (X= %2.3f inčev, Y= %2.3f inčev\n"
+
+#: eeschema/erc.cpp:780
+#, c-format
+msgid ""
+"\n"
+" >> Errors ERC: %d\n"
+msgstr ""
+"\n"
+" >> ERC napake: %d\n"
+
+#: eeschema/fieldedi.cpp:226
+#: eeschema/libedpart.cpp:434
+msgid " General : "
+msgstr " Splošno : "
+
+#: eeschema/fieldedi.cpp:229
+#: eeschema/libedpart.cpp:437
+msgid "As Convert"
+msgstr "As Convert"
+
+#: eeschema/fieldedi.cpp:233
+#: eeschema/libedpart.cpp:441
+msgid "Show Pin Num"
+msgstr "Prikaži številko nogice"
+
+#: eeschema/fieldedi.cpp:241
+#: eeschema/libedpart.cpp:449
+msgid "Show Pin Name"
+msgstr "Prikaži ime nogice"
+
+#: eeschema/fieldedi.cpp:249
+#: eeschema/libedpart.cpp:457
+msgid "Pin Name Inside"
+msgstr "Ime nogice znotraj"
+
+#: eeschema/fieldedi.cpp:257
+#: eeschema/libedpart.cpp:465
+msgid "Number of Units:"
+msgstr "Število enot:"
+
+#: eeschema/fieldedi.cpp:267
+#: eeschema/libedpart.cpp:475
+msgid "Skew:"
+msgstr "Skew:"
+
+#: eeschema/fieldedi.cpp:286
+#: eeschema/libedpart.cpp:381
+msgid "Doc:"
+msgstr "Doc:"
+
+#: eeschema/fieldedi.cpp:290
+#: eeschema/libedpart.cpp:392
+msgid "Keywords:"
+msgstr "Ključne besede:"
+
+#: eeschema/fieldedi.cpp:294
+#: eeschema/libedpart.cpp:402
+msgid "DocFileName:"
+msgstr "Ime dokumenta:"
+
+#: eeschema/fieldedi.cpp:304
+#: eeschema/fieldedi.cpp:322
+#: eeschema/libedpart.cpp:279
+#: eeschema/libedpart.cpp:324
+msgid "Alias"
+msgstr "Alias"
+
+#: eeschema/fieldedi.cpp:314
+#: eeschema/libedpart.cpp:314
+msgid "Delete All"
+msgstr "Briši vse"
+
+#: eeschema/fieldedi.cpp:577
+#: eeschema/libedpart.cpp:879
+msgid "Ok to Delete Alias LIST"
+msgstr "Ok to Delete Alias LIST"
+
+#: eeschema/fieldedi.cpp:600
+msgid "Alias:"
+msgstr "Alias:"
+
+#: eeschema/fieldedi.cpp:608
+#: eeschema/libedpart.cpp:915
+msgid "Already in use"
+msgstr "Že v uporabi"
+
+#: eeschema/fieldedi.cpp:820
+msgid "Text: "
+msgstr "Besedilo: "
+
+#: eeschema/fieldedi.cpp:1005
+#: eeschema/libedpart.cpp:1016
+msgid "Delete units"
+msgstr "Briši enote"
+
+#: eeschema/fieldedi.cpp:1071
+#: eeschema/libedpart.cpp:1081
+msgid "Create pins for Convert items"
+msgstr "Create pins for Convert items"
+
+#: eeschema/fieldedi.cpp:1075
+#: eeschema/libedpart.cpp:1085
+msgid "Part as \"De Morgan\" anymore"
+msgstr "Part as \"De Morgan\" anymore"
+
+#: eeschema/fieldedi.cpp:1100
+#: eeschema/libedpart.cpp:1110
+msgid "Delete Convert items"
+msgstr "Delete Convert items"
+
+#: eeschema/files-io.cpp:54
+msgid "Clear SubHierarchy ?"
+msgstr "Clear SubHierarchy ?"
+
+#: eeschema/find.cpp:72
+msgid "EESchema Locate"
+msgstr "Išči"
+
+#: eeschema/find.cpp:87
+msgid "Item in &Sheet"
+msgstr "Element na &Strani"
+
+#: eeschema/find.cpp:91
+msgid "Item in &Hierarchy"
+msgstr "Element na  &Hierarhiji"
+
+#: eeschema/find.cpp:95
+msgid "Find &Next Item"
+msgstr "Najdi %Naslednji element"
+
+#: eeschema/find.cpp:103
+msgid "Cmp in &Lib"
+msgstr "Element v &Knjižnici"
+
+#: eeschema/find.cpp:108
+msgid "Find Markers"
+msgstr "Find Markers"
+
+#: eeschema/find.cpp:113
+msgid "Next Marker"
+msgstr "Next Marker"
+
+#: eeschema/find.cpp:230
+msgid "Marker found in "
+msgstr "Marker found in "
+
+#: eeschema/find.cpp:238
+msgid "Marker Not Found"
+msgstr "Marker Not Found"
+
+#: eeschema/find.cpp:393
+msgid " Found in "
+msgstr "Našel v "
+
+#: eeschema/find.cpp:401
+msgid " Not Found"
+msgstr "Ne najdem"
+
+#: eeschema/find.cpp:429
+#: eeschema/selpart.cpp:39
+msgid "No libraries are loaded"
+msgstr "Ne najdem knjižnice"
+
+#: eeschema/find.cpp:451
+#: eeschema/find.cpp:507
+#: eeschema/find.cpp:520
+msgid "Found "
+msgstr "Našel"
+
+#: eeschema/find.cpp:453
+#: eeschema/find.cpp:508
+#: eeschema/find.cpp:521
+msgid " in lib "
+msgstr " v knjiž. "
+
+#: eeschema/find.cpp:463
+msgid " found only in cache"
+msgstr "našel le v medpomnilniku"
+
+#: eeschema/find.cpp:465
+msgid ""
+"\n"
+"Explore All Libraries?"
+msgstr ""
+"\n"
+"Pregledam vse knjižnice?"
+
+#: eeschema/find.cpp:470
+msgid "Nothing found"
+msgstr " Nič nisem našel"
+
+#: eeschema/genliste.cpp:101
+msgid "List of Material"
+msgstr "Spisek materiala"
+
+#: eeschema/genliste.cpp:123
+msgid " List items : "
+msgstr "Spisek elemenetov:"
+
+#: eeschema/genliste.cpp:126
+msgid "Componants by Reference"
+msgstr "Komponente po referenci"
+
+#: eeschema/genliste.cpp:129
+msgid "Componants by Value"
+msgstr "Komponennte po vrednosti"
+
+#: eeschema/genliste.cpp:132
+msgid "Sub Componants (i.e U2A, U2B..)"
+msgstr "Pod komponente (npr. U2A, U2B..)"
+
+#: eeschema/genliste.cpp:135
+msgid "Hierachy Pins by name"
+msgstr "Hierarhija nogic po imenih"
+
+#: eeschema/genliste.cpp:138
+msgid "Hierachy Pins by Sheets"
+msgstr "Hierarhija nogic po straneh"
+
+#: eeschema/genliste.cpp:144
+msgid "&Create List"
+msgstr "&Ustvari spisek"
+
+#: eeschema/genliste.cpp:172
+msgid "List of material:"
+msgstr "Spisek materiala:"
+
+#: eeschema/genliste.cpp:276
+#, c-format
+msgid ""
+"\n"
+"#Glob labels ( order = Sheet Number )\n"
+msgstr ""
+"\n"
+"#Glob labels ( order = Sheet Number )\n"
+
+#: eeschema/genliste.cpp:285
+#, c-format
+msgid ""
+"\n"
+"#Glob labels ( order = Alphab. )\n"
+msgstr ""
+"\n"
+"#Glob labels ( order = Alphab. )\n"
+
+#: eeschema/genliste.cpp:291
+#, c-format
+msgid ""
+"\n"
+"#End List\n"
+msgstr ""
+"\n"
+"#Konec spiska\n"
+
+#: eeschema/genliste.cpp:582
+#, c-format
+msgid ""
+"\n"
+"#Cmp ( order = Reference )"
+msgstr ""
+"\n"
+"#Cmp ( order = Reference )"
+
+#: eeschema/genliste.cpp:620
+#: eeschema/genliste.cpp:665
+#, c-format
+msgid "#End Cmp\n"
+msgstr "#Konec elementov\n"
+
+#: eeschema/genliste.cpp:634
+#, c-format
+msgid ""
+"\n"
+"#Cmp ( order = Value )"
+msgstr ""
+"\n"
+"#Cmp ( order = Value )"
+
+#: eeschema/genliste.cpp:688
+#, c-format
+msgid "> %-28.28s Global        (Sheet %.2d) pos: %3.3f, %3.3f\n"
+msgstr "> %-28.28s Globalno        (Stran %.2d) pos: %3.3f, %3.3f\n"
+
+#: eeschema/genliste.cpp:700
+#, c-format
+msgid "> %-28.28s Sheet %-7.7s (Sheet %.2d) pos: %3.3f, %3.3f\n"
+msgstr "> %-28.28s Stran %-7.7s (Stran %.2d) pos: %3.3f, %3.3f\n"
+
+#: eeschema/genliste.cpp:711
+#, c-format
+msgid "#End labels\n"
+msgstr "#Konec oznak\n"
+
+#: eeschema/getpart.cpp:71
+msgid "Componant selection:"
+msgstr "Izberi elemenet:"
+
+#: eeschema/getpart.cpp:106
+msgid "List All"
+msgstr "Pokaži vse"
+
+#: eeschema/getpart.cpp:253
+msgid "Failed to find part "
+msgstr "Ne najdem elementa"
+
+#: eeschema/getpart.cpp:253
+msgid " in library"
+msgstr " v knjižnici"
+
+#: eeschema/hierarch.cpp:124
+msgid "Navigator"
+msgstr "Navigator"
+
+#: eeschema/lib_export.cpp:39
+msgid "Import part:"
+msgstr "Uvozi elemente:"
+
+#: eeschema/lib_export.cpp:71
+msgid "File is empty"
+msgstr "Datoteka je prazna"
+
+#: eeschema/lib_export.cpp:93
+msgid "No Part to Save"
+msgstr "Ni elementov za shranjevanje"
+
+#: eeschema/lib_export.cpp:100
+msgid "New Library"
+msgstr "Nova knjižnica"
+
+#: eeschema/lib_export.cpp:100
+msgid "Export part:"
+msgstr "Izvozi element:"
+
+#: eeschema/lib_export.cpp:132
+msgid "0k"
+msgstr "Potrdi"
+
+#: eeschema/lib_export.cpp:133
+msgid "Error while create "
+msgstr "Napaka med ustvarjanjem"
+
+#: eeschema/libarch.cpp:78
+#: eeschema/libarch.cpp:85
+#: eeschema/netform.cpp:63
+msgid "Failed to open file "
+msgstr "Ne morem odpreti datoteke"
+
+#: eeschema/libedit.cpp:39
+msgid " Part:   "
+msgstr "Element:"
+
+#: eeschema/libedit.cpp:42
+msgid "None"
+msgstr "Ni"
+
+#: eeschema/libedit.cpp:53
+msgid "   Convert"
+msgstr "   Pretvori"
+
+#: eeschema/libedit.cpp:54
+msgid "   Normal"
+msgstr "  Normalen"
+
+#: eeschema/libedit.cpp:57
+msgid "  (Power Symbol)"
+msgstr "  (Power Symbol)"
+
+#: eeschema/libedit.cpp:92
+msgid "Current Part not saved, continue ?"
+msgstr "Trenutni element ni shranjen, nadaljujem ?"
+
+#: eeschema/libedit.cpp:321
+msgid "No Active Library"
+msgstr "Ni aktivne knjižnice"
+
+#: eeschema/libedit.cpp:654
+#, c-format
+msgid "Part %s exists, Change it ?"
+msgstr "Element %s obstaja, Zamenjam? "
+
+#: eeschema/libedit.cpp:695
+#, c-format
+msgid "Part %s saved in %s"
+msgstr "Element %s shranjen v %s"
+
+#: eeschema/libedpart.cpp:197
+#: eeschema/libedpart.cpp:359
+msgid "Properties for "
+msgstr "Properties for"
+
+#: eeschema/libedpart.cpp:201
+msgid "(alias of "
+msgstr "(alias of "
+
+#: eeschema/libedpart.cpp:232
+msgid "Lib part Properies"
+msgstr "Lastnosti elementa knjižnice"
+
+#: eeschema/libedpart.cpp:362
+msgid "alias "
+msgstr "alias"
+
+#: eeschema/libedpart.cpp:407
+msgid "Copy Doc"
+msgstr "Copy Doc"
+
+#: eeschema/libedpart.cpp:412
+msgid "Browse DocFiles"
+msgstr "Brskaj po dokumentih"
+
+#: eeschema/libedpart.cpp:485
+msgid "Power Symbol"
+msgstr "Napajalni simbol"
+
+#: eeschema/libedpart.cpp:502
+msgid "Left justify"
+msgstr "Levo poravnaj"
+
+#: eeschema/libedpart.cpp:502
+#: eeschema/libedpart.cpp:504
+#: common/zoom.cpp:352
+msgid "Center"
+msgstr "Center"
+
+#: eeschema/libedpart.cpp:502
+msgid "Right justify"
+msgstr "Desno poravnaj"
+
+#: eeschema/libedpart.cpp:504
+msgid "Bottom justify"
+msgstr "Poravnaj spodaj"
+
+#: eeschema/libedpart.cpp:504
+msgid "Top justify"
+msgstr "Poravnaj zgoraj"
+
+#: eeschema/libedpart.cpp:530
+msgid "Hor Justify"
+msgstr "Poravnaj vodoravno"
+
+#: eeschema/libedpart.cpp:537
+msgid "Vert Justify"
+msgstr "Poravnaj navpično"
+
+#: eeschema/libedpart.cpp:902
+msgid "New alias:"
+msgstr "New alias"
+
+#: eeschema/libedpart.cpp:909
+msgid "This is the Root Part"
+msgstr "to je korenski element"
+
+#: eeschema/libedpart.cpp:947
+msgid " is Current Selected Alias!"
+msgstr " is Current Selected Alias!"
+
+#: eeschema/libedpart.cpp:1138
+#: common/eda_doc.cpp:80
+msgid "Doc Files"
+msgstr "Dokumenti"
+
+#: eeschema/libframe.cpp:107
+msgid "LibEdit: Part modified!, Continue ?"
+msgstr "LibEdit: Element spremenjen! Nadaljujem?"
+
+#: eeschema/libframe.cpp:118
+#, c-format
+msgid "Library %s modified!, Continue ?"
+msgstr "Knjižnica %s spremenjena!, nadaljujem?"
+
+#: eeschema/libframe.cpp:443
+msgid "Move Pin"
+msgstr "Premakni nogico"
+
+#: eeschema/libframe.cpp:444
+msgid "Pin Edit"
+msgstr "Uredi nogico"
+
+#: eeschema/libframe.cpp:446
+msgid "Pin Delete"
+msgstr "Briši nogico"
+
+#: eeschema/libframe.cpp:449
+msgid "Global"
+msgstr "Globalno"
+
+#: eeschema/libframe.cpp:451
+msgid "Pin Size to others"
+msgstr "Velikost nogice do drugih"
+
+#: eeschema/libframe.cpp:453
+msgid "Pin Name Size to others"
+msgstr "Velikost imena nogice do drugih"
+
+#: eeschema/libframe.cpp:455
+msgid "Pin Num Size to others"
+msgstr "Velikost števil. nogice do drugih"
+
+#: eeschema/libframe.cpp:461
+msgid "Move Arc"
+msgstr "Prestavi Arc"
+
+#: eeschema/libframe.cpp:462
+msgid "Arc Options"
+msgstr "Možnosti za Arc"
+
+#: eeschema/libframe.cpp:464
+msgid "Arc Delete"
+msgstr "Briši Arc"
+
+#: eeschema/libframe.cpp:469
+msgid "Move Circle"
+msgstr "Premakni krog"
+
+#: eeschema/libframe.cpp:470
+msgid "Circle Options"
+msgstr "Možnosti kroga"
+
+#: eeschema/libframe.cpp:472
+msgid "Circle Delete"
+msgstr "Briši krog"
+
+#: eeschema/libframe.cpp:477
+msgid "Move Rect"
+msgstr "Premakni pravokotnik"
+
+#: eeschema/libframe.cpp:478
+msgid "Rect Options"
+msgstr "Možnosti pravokotnika"
+
+#: eeschema/libframe.cpp:480
+msgid "Rect Delete"
+msgstr "Briši pravokotnik"
+
+#: eeschema/libframe.cpp:486
+msgid "Text Edit"
+msgstr "Uredi besedilo"
+
+#: eeschema/libframe.cpp:488
+msgid "Text Delete"
+msgstr "Briši besedilo"
+
+#: eeschema/libframe.cpp:493
+msgid "Move Line"
+msgstr "Premakni črto"
+
+#: eeschema/libframe.cpp:495
+msgid "Line End"
+msgstr "Konec črte"
+
+#: eeschema/libframe.cpp:496
+msgid "Line Options"
+msgstr "Možnosti črte"
+
+#: eeschema/libframe.cpp:498
+msgid "Line Delete"
+msgstr "Briši črto"
+
+#: eeschema/libframe.cpp:503
+#: eeschema/onrightclick.cpp:200
+msgid "Move Field"
+msgstr "Premakni polje"
+
+#: eeschema/libframe.cpp:504
+msgid "Field Rotate"
+msgstr "Rotiraj polje"
+
+#: eeschema/libframe.cpp:505
+msgid "Field Edit"
+msgstr "Uredi polje"
+
+#: eeschema/libframe.cpp:616
+msgid " Tst Pins OK!"
+msgstr " Preizkus nogic OK!"
+
+#: eeschema/libframe.cpp:682
+msgid "Add Pin"
+msgstr "Dodaj nogico"
+
+#: eeschema/libframe.cpp:686
+msgid "Set Pin Opt"
+msgstr "Določi možnosti nogic"
+
+#: eeschema/libframe.cpp:708
+msgid "Add Rectangle"
+msgstr "Dodaj pravokotnik"
+
+#: eeschema/libframe.cpp:712
+msgid "Add Circle"
+msgstr "Dodaj krog"
+
+#: eeschema/libframe.cpp:716
+msgid "Add Arc"
+msgstr "Dodaj Arc"
+
+#: eeschema/libframe.cpp:724
+msgid "Anchor"
+msgstr "Anchor"
+
+#: eeschema/libframe.cpp:728
+msgid "Import"
+msgstr "Uvozi"
+
+#: eeschema/libframe.cpp:734
+msgid "Export"
+msgstr "Izvozi"
+
+#: eeschema/menubar.cpp:40
+msgid "&Load Schematic Project"
+msgstr "&Naloži projekt sheme ..."
+
+#: eeschema/menubar.cpp:41
+msgid "Load a schematic project (Schematic, libraries...)"
+msgstr "Naloži projekt sheme (shema, knjižnice, ...)"
+
+#: eeschema/menubar.cpp:48
+msgid "&Save Schematic Project"
+msgstr "&Shrani projekt sheme ..."
+
+#: eeschema/menubar.cpp:49
+msgid "Save all"
+msgstr "Shrani vse"
+
+#: eeschema/menubar.cpp:56
+msgid "Save &Current sheet"
+msgstr "Shrani &Trenutno stran"
+
+#: eeschema/menubar.cpp:57
+msgid "Save current sheet only"
+msgstr "Shrani le trenutno stran"
+
+#: eeschema/menubar.cpp:63
+msgid "Save Current sheet &as.."
+msgstr "shrani trenuto stran &kot..."
+
+#: eeschema/menubar.cpp:64
+msgid "Save current sheet as.."
+msgstr "Shrani trenutno stran kot"
+
+#: eeschema/menubar.cpp:77
+msgid "Plot Postscript"
+msgstr "Plot Postscript ..."
+
+#: eeschema/menubar.cpp:77
+msgid "Plotting in Postscript format"
+msgstr "Plotting in Postscript format"
+
+#: eeschema/menubar.cpp:82
+msgid "Plot HPGL"
+msgstr "Plot HPGL ..."
+
+#: eeschema/menubar.cpp:82
+msgid "Plotting in HPGL format"
+msgstr "Plotting in  HPGL format"
+
+#: eeschema/menubar.cpp:88
+msgid "Plot SVG"
+msgstr "Plot SVG"
+
+#: eeschema/menubar.cpp:88
+msgid "Plotting in SVG format"
+msgstr "Plotting in  SVG format"
+
+#: eeschema/menubar.cpp:94
+msgid "Plot Hplg, Postscript"
+msgstr "Plot Hplg, Postscript"
+
+#: eeschema/menubar.cpp:100
+msgid "Quit Eeschema"
+msgstr "Zapri Eeschema"
+
+#: eeschema/menubar.cpp:125
+msgid "Setting colors ..."
+msgstr "Nastavi barve ..."
+
+#: eeschema/menubar.cpp:136
+msgid "&Save Eeschema Setup"
+msgstr "&Shrani nastavitve EEschema ..."
+
+#: eeschema/menubar.cpp:137
+msgid "Save options in <project>.pro"
+msgstr "Shrani možnosti v  <projekt>.pro"
+
+#: eeschema/menubar.cpp:148
+#: kicad/buildmnu.cpp:158
+msgid "Kicad &Help"
+msgstr "Kicad &Pomoč"
+
+#: eeschema/menubar.cpp:153
+msgid "Eeschema &About"
+msgstr "Opis programa Eeschema ..."
+
+#: eeschema/menubar.cpp:153
+msgid "Eeschema Infos"
+msgstr "Informacije o Eeschema"
+
+#: eeschema/netform.cpp:90
+#: cvpcb/init.cpp:99
+msgid "Unknown Netlist Format"
+msgstr "Neznana oblika spiska povezav"
+
+#: eeschema/netlist.cpp:95
+#: eeschema/netlist.cpp:118
+msgid "List"
+msgstr "Spisek"
+
+#: eeschema/netlist.cpp:108
+msgid "No component"
+msgstr "Ni komponent"
+
+#: eeschema/netlist.cpp:125
+#: eeschema/netlist.cpp:219
+#: eeschema/netlist.cpp:251
+#: eeschema/netlist.cpp:268
+#: eeschema/netlist.cpp:282
+msgid "Done"
+msgstr "Urejeno"
+
+#: eeschema/netlist.cpp:128
+msgid "NbItems"
+msgstr "Št. elementov"
+
+#: eeschema/netlist.cpp:136
+msgid "Conn"
+msgstr "konektor"
+
+#: eeschema/netlist.cpp:224
+msgid "Labels"
+msgstr "Oznake"
+
+#: eeschema/netlist.cpp:255
+msgid "Hierar."
+msgstr "Hierar."
+
+#: eeschema/netlist.cpp:271
+msgid "Sorting"
+msgstr "Urejanje"
+
+#: eeschema/netlist_control.cpp:106
+#: eeschema/netlist_control.cpp:232
+#: eeschema/netlist_control.cpp:258
+msgid "Netlist"
+msgstr "Spisek povezav"
+
+#: eeschema/netlist_control.cpp:142
+#: eeschema/netlist_control.cpp:167
+#: eeschema/netlist_control.cpp:192
+#: eeschema/netlist_control.cpp:214
+#: eeschema/netlist_control.cpp:255
+#: gerbview/options.cpp:200
+msgid "Default format"
+msgstr "Privzeta oblika"
+
+#: eeschema/netlist_control.cpp:147
+#: eeschema/netlist_control.cpp:173
+#: eeschema/netlist_control.cpp:198
+msgid "&Netlist"
+msgstr "&Spisek povezav"
+
+#: eeschema/netlist_control.cpp:217
+msgid "Use Net Names"
+msgstr "Uporabi ime povezav"
+
+#: eeschema/netlist_control.cpp:217
+msgid "Use Net Numbers"
+msgstr "Uporabi številke povezav"
+
+#: eeschema/netlist_control.cpp:218
+msgid "Netlist Options:"
+msgstr "Možnosti spiska povezav:"
+
+#: eeschema/netlist_control.cpp:227
+msgid "Simulator command:"
+msgstr "Ukazi za simulacijo:"
+
+#: eeschema/netlist_control.cpp:237
+msgid "&Run Simulator"
+msgstr "&Poženi simulator"
+
+#: eeschema/netlist_control.cpp:385
+msgid "Netlist files:"
+msgstr "Datoteka spiska povezav:"
+
+#: eeschema/netlist_control.cpp:404
+msgid "Must be Annotated, Continue ?"
+msgstr "Numeriranje je potrebno, nadaljujem?"
+
+#: eeschema/onrightclick.cpp:83
+msgid "Win. Zoom (Midd butt drag mouse)"
+msgstr "Zoom okna (srednja tipka+vleci miško)"
+
+#: eeschema/onrightclick.cpp:88
+msgid "Save Block"
+msgstr "Shrani blok"
+
+#: eeschema/onrightclick.cpp:89
+msgid "Copy Block (shift + drag mouse)"
+msgstr "Kopiraj blok(shift + vleci miško)"
+
+#: eeschema/onrightclick.cpp:90
+msgid "Drag Block (ctrl + drag mouse)"
+msgstr "Vleci blok (ctrl + vleci miško)"
+
+#: eeschema/onrightclick.cpp:91
+msgid "Del. Block (shift+ctrl + drag mouse)"
+msgstr "Briši blok (shift + ctrl + vleci miško)"
+
+#: eeschema/onrightclick.cpp:104
+msgid "Leave Sheet"
+msgstr "Leave Sheet"
+
+#: eeschema/onrightclick.cpp:119
+msgid "delete noconn"
+msgstr "delete noconn"
+
+#: eeschema/onrightclick.cpp:127
+#: eeschema/onrightclick.cpp:263
+msgid "Break Wire"
+msgstr "Prekini žico"
+
+#: eeschema/onrightclick.cpp:129
+msgid "delete junction"
+msgstr "delete junction"
+
+#: eeschema/onrightclick.cpp:132
+#: eeschema/onrightclick.cpp:260
+msgid "Delete node"
+msgstr "Delete node"
+
+#: eeschema/onrightclick.cpp:133
+#: eeschema/onrightclick.cpp:261
+msgid "Delete connection"
+msgstr "Briši povezavo"
+
+#: eeschema/onrightclick.cpp:139
+msgid "Move bus entry"
+msgstr "Premakni vodilo"
+
+#: eeschema/onrightclick.cpp:141
+msgid "set bus entry /"
+msgstr "Nastavi vodilo /"
+
+#: eeschema/onrightclick.cpp:142
+msgid "set bus entry \\"
+msgstr "nastavi vodilo \\"
+
+#: eeschema/onrightclick.cpp:143
+msgid "delete bus entry"
+msgstr "briši vodilo"
+
+#: eeschema/onrightclick.cpp:147
+msgid "delete Marker"
+msgstr "briši oznako"
+
+#: eeschema/onrightclick.cpp:152
+msgid "Rotate Text (R)"
+msgstr "Rotiraj besedilo (R)"
+
+#: eeschema/onrightclick.cpp:158
+#: eeschema/onrightclick.cpp:190
+msgid "Change to Label"
+msgstr "Zamenjaj oznako"
+
+#: eeschema/onrightclick.cpp:160
+#: eeschema/onrightclick.cpp:174
+msgid "Change to Glabel"
+msgstr "Zamenjaj v globalno oznako"
+
+#: eeschema/onrightclick.cpp:162
+#: eeschema/onrightclick.cpp:178
+#: eeschema/onrightclick.cpp:194
+msgid "Change Type"
+msgstr "Spremeni tip"
+
+#: eeschema/onrightclick.cpp:167
+msgid "Move Label"
+msgstr "Premakni oznako"
+
+#: eeschema/onrightclick.cpp:168
+msgid "Rotate Label  (R)"
+msgstr "Rotiraj oznako  (R)"
+
+#: eeschema/onrightclick.cpp:169
+msgid "Edit Label"
+msgstr "Uredi oznako"
+
+#: eeschema/onrightclick.cpp:170
+msgid "Delete Label"
+msgstr "Briši oznako:"
+
+#: eeschema/onrightclick.cpp:176
+#: eeschema/onrightclick.cpp:192
+msgid "Change to Text"
+msgstr "Spremeni besedilo"
+
+#: eeschema/onrightclick.cpp:183
+msgid "Move Glabel"
+msgstr "Premakni splošno oznako"
+
+#: eeschema/onrightclick.cpp:184
+msgid "Rotate GLabel  (R)"
+msgstr "Rotiraj splošno oznako (R)"
+
+#: eeschema/onrightclick.cpp:185
+msgid "Edit GLabel"
+msgstr "Uredi splošno oznako"
+
+#: eeschema/onrightclick.cpp:186
+msgid "Delete Glabel"
+msgstr "Briši splošno oznako"
+
+#: eeschema/onrightclick.cpp:201
+msgid "Rotate Field"
+msgstr "Rotiraj polje"
+
+#: eeschema/onrightclick.cpp:211
+msgid "Move Component   (M)"
+msgstr "Premakni komponento (M)"
+
+#: eeschema/onrightclick.cpp:214
+msgid "Rotate +  (R)"
+msgstr "Rotiraj +  (R)"
+
+#: eeschema/onrightclick.cpp:215
+msgid "Rotate -"
+msgstr "Rotiraj -"
+
+#: eeschema/onrightclick.cpp:216
+msgid "Mirror --  (Y)"
+msgstr "Zrcali --  (Y)"
+
+#: eeschema/onrightclick.cpp:217
+msgid "Mirror ||  (X)"
+msgstr "Zrcali ||  (X)"
+
+#: eeschema/onrightclick.cpp:218
+msgid "Normal  (N)"
+msgstr "Normalno  (N)"
+
+#: eeschema/onrightclick.cpp:219
+msgid "Orient Component"
+msgstr "Orientacija komponent"
+
+#: eeschema/onrightclick.cpp:235
+#, c-format
+msgid "Unit %d"
+msgstr "Enota %d"
+
+#: eeschema/onrightclick.cpp:241
+msgid "Edit Component"
+msgstr "Uredi komponento"
+
+#: eeschema/onrightclick.cpp:242
+msgid "Delete Component"
+msgstr "Briši komponento"
+
+#: eeschema/onrightclick.cpp:256
+msgid "End Wire"
+msgstr "Konec žice"
+
+#: eeschema/onrightclick.cpp:257
+msgid "Delete Wire"
+msgstr "Briši žico"
+
+#: eeschema/onrightclick.cpp:269
+msgid "End Bus"
+msgstr "Končaj vodilo"
+
+#: eeschema/onrightclick.cpp:270
+msgid "Delete Bus"
+msgstr "Briši vodilo"
+
+#: eeschema/onrightclick.cpp:272
+msgid "Break Bus"
+msgstr "Prekini vodilo"
+
+#: eeschema/onrightclick.cpp:277
+msgid "End drawing"
+msgstr "Končaj risanje"
+
+#: eeschema/onrightclick.cpp:278
+msgid "Delete drawing"
+msgstr "Briši risbo"
+
+#: eeschema/onrightclick.cpp:286
+msgid "Enter Sheet"
+msgstr "Enter Sheet"
+
+#: eeschema/onrightclick.cpp:288
+msgid "Move Sheet"
+msgstr "Premakni stran"
+
+#: eeschema/onrightclick.cpp:291
+msgid "Place Sheet"
+msgstr "Postavi stran"
+
+#: eeschema/onrightclick.cpp:294
+msgid "Edit Sheet"
+msgstr "Uredi stran"
+
+#: eeschema/onrightclick.cpp:295
+msgid "Resize Sheet"
+msgstr "Spremeni velikost strani"
+
+#: eeschema/onrightclick.cpp:296
+msgid "Delete Sheet"
+msgstr "Briši stran"
+
+#: eeschema/onrightclick.cpp:301
+msgid "Move PinSheet"
+msgstr "Move PinSheet"
+
+#: eeschema/onrightclick.cpp:302
+msgid "Edit PinSheet"
+msgstr "Edit PinSheet"
+
+#: eeschema/onrightclick.cpp:303
+msgid "Delete PinSheet"
+msgstr "Delete PinSheet"
+
+#: eeschema/optiondialogbocks.cpp:102
+#: eeschema/options.cpp:117
+#: eeschema/optionsframe.cpp:106
+msgid "Show grid"
+msgstr "Prikaži mrežo"
+
+#: eeschema/optiondialogbocks.cpp:107
+#: eeschema/options.cpp:128
+msgid "Normal (50 mils)"
+msgstr "Normalno (50 mils)"
+
+#: eeschema/optiondialogbocks.cpp:108
+#: eeschema/options.cpp:129
+msgid "Small (20 mils)"
+msgstr "Drobno (20 mils)"
+
+#: eeschema/optiondialogbocks.cpp:109
+#: eeschema/options.cpp:130
+msgid "Very small (10 mils)"
+msgstr "Zelo drobno (10 mils)"
+
+#: eeschema/optiondialogbocks.cpp:134
+#: eeschema/options.cpp:155
+msgid "Show alls"
+msgstr "Prikaži vse"
+
+#: eeschema/optiondialogbocks.cpp:151
+#: eeschema/options.cpp:172
+msgid "Horiz/Vertical"
+msgstr "Vodoravno/Navpično"
+
+#: eeschema/optiondialogbocks.cpp:161
+#: eeschema/options.cpp:182
+msgid "Delta Step"
+msgstr "Korak"
+
+#: eeschema/optiondialogbocks.cpp:166
+#: eeschema/options.cpp:187
+msgid "Delta Label:"
+msgstr "Oznaka koraka:"
+
+#: eeschema/options.cpp:157
+#: eeschema/optionsframe.cpp:124
+msgid "Show pins"
+msgstr "Prikaži nogice"
+
+#: eeschema/optionsframe.cpp:112
+msgid "&Normal (50 mils)"
+msgstr "&Normalno (50 mils)"
+
+#: eeschema/optionsframe.cpp:113
+msgid "&Small (20 mils)"
+msgstr "&Drobno (20 mils)"
+
+#: eeschema/optionsframe.cpp:114
+msgid "&Very small (10 mils)"
+msgstr "&Zelo drobno (10 mils)"
+
+#: eeschema/optionsframe.cpp:116
+msgid "Grid Size"
+msgstr "Velikost mreže"
+
+#: eeschema/optionsframe.cpp:121
+msgid "&Normal"
+msgstr "&Normalno"
+
+#: eeschema/optionsframe.cpp:122
+#: eeschema/optionsframe.cpp:133
+msgid "&inches"
+msgstr "&inči"
+
+#: eeschema/optionsframe.cpp:132
+msgid "&millimeters"
+msgstr "&millimetri"
+
+#: eeschema/optionsframe.cpp:142
+msgid "&Horiz/Vertical"
+msgstr "&Vodoravno/Navpično"
+
+#: eeschema/optionsframe.cpp:143
+msgid "&Any"
+msgstr "&Katerikoli"
+
+#: eeschema/optionsframe.cpp:145
+msgid "Wire - Bus orient"
+msgstr "Orientacija žica - vodilo"
+
+#: eeschema/pinedit.cpp:29
+msgid "line"
+msgstr "Linija"
+
+#: eeschema/pinedit.cpp:29
+msgid "invert"
+msgstr "invertiraj"
+
+#: eeschema/pinedit.cpp:29
+msgid "clock"
+msgstr "ura"
+
+#: eeschema/pinedit.cpp:29
+msgid "clock inv"
+msgstr "ura inv"
+
+#: eeschema/pinedit.cpp:30
+msgid "low in"
+msgstr "nizek vhod"
+
+#: eeschema/pinedit.cpp:30
+msgid "low clock"
+msgstr "ura nizek nivo"
+
+#: eeschema/pinedit.cpp:30
+msgid "low out"
+msgstr "nizek ven"
+
+#: eeschema/pinedit.cpp:135
+msgid "Pin properties"
+msgstr "Lastnosti nogice"
+
+#: eeschema/pinedit.cpp:171
+msgid "Pin Name :"
+msgstr "Ime nogice :"
+
+#: eeschema/pinedit.cpp:178
+msgid "Pin Num :"
+msgstr "Št. nogice :"
+
+#: eeschema/pinedit.cpp:186
+msgid " Pin Options :"
+msgstr " Oznake nogic :"
+
+#: eeschema/pinedit.cpp:189
+msgid "Pin lenght :"
+msgstr "Dolžina nogice:"
+
+#: eeschema/pinedit.cpp:197
+#: eeschema/symbdraw.cpp:103
+#: eeschema/symbtext.cpp:118
+msgid "Common to Units"
+msgstr "Common to Units"
+
+#: eeschema/pinedit.cpp:205
+#: eeschema/symbdraw.cpp:111
+#: eeschema/symbtext.cpp:126
+msgid "Common to convert"
+msgstr "Common to convert"
+
+#: eeschema/pinedit.cpp:213
+msgid "No Draw"
+msgstr "Nevidno"
+
+#: eeschema/pinedit.cpp:223
+msgid "Pin Orient:"
+msgstr "Orientacija nogic:"
+
+#: eeschema/pinedit.cpp:248
+msgid "Pin Shape:"
+msgstr "Oblika nogic:"
+
+#: eeschema/pinedit.cpp:264
+msgid "Input"
+msgstr "Vhod"
+
+#: eeschema/pinedit.cpp:264
+msgid "Output"
+msgstr "Izhod"
+
+#: eeschema/pinedit.cpp:264
+msgid "Bidi"
+msgstr "Bidirektno"
+
+#: eeschema/pinedit.cpp:264
+msgid "3 States"
+msgstr "3 stanja"
+
+#: eeschema/pinedit.cpp:265
+msgid "Passive"
+msgstr "Pasivno"
+
+#: eeschema/pinedit.cpp:265
+msgid "Unspecified"
+msgstr "Nedoločeno"
+
+#: eeschema/pinedit.cpp:266
+msgid "Power In"
+msgstr "Napajanje-vhod"
+
+#: eeschema/pinedit.cpp:266
+msgid "Power Out"
+msgstr "Napajanje-izhod"
+
+#: eeschema/pinedit.cpp:266
+msgid "Open coll"
+msgstr "odprt kolektor"
+
+#: eeschema/pinedit.cpp:266
+msgid "Open emit"
+msgstr "odprt emiter"
+
+#: eeschema/pinedit.cpp:268
+msgid "Electrical Type:"
+msgstr "Električni tip:"
+
+#: eeschema/pinedit.cpp:423
+msgid "Occupied by other pin, Continue ?"
+msgstr "Zasedeno z drugo nogico, Nadaljujem ?"
+
+#: eeschema/pinedit.cpp:1083
+#, c-format
+msgid "Duplicate Pin %4.4s (loc %d, %d)"
+msgstr "Podvojena nogica %4.4s (lok %d, %d)"
+
+#: eeschema/pinedit.cpp:1087
+#, c-format
+msgid "  Unit %d"
+msgstr "  Enota %d"
+
+#: eeschema/pinedit.cpp:1092
+msgid "  Convert"
+msgstr "  Pretvorim"
+
+#: eeschema/pinedit.cpp:1093
+msgid "  Normal"
+msgstr "  Normalno"
+
+#: eeschema/plothpgl.cpp:153
+msgid "EESchema Plot HPGL"
+msgstr "EESchema Plot HPGL"
+
+#: eeschema/plothpgl.cpp:166
+msgid "Sheet Size"
+msgstr "Velikost strani"
+
+#: eeschema/plothpgl.cpp:167
+#: eeschema/plotps.cpp:122
+msgid "Page Size A4"
+msgstr "Velikost strani: A4"
+
+#: eeschema/plothpgl.cpp:167
+msgid "Velikost strani: A3"
+msgstr "Hoja tamaño A3"
+
+#: eeschema/plothpgl.cpp:168
+msgid "Page Size A2"
+msgstr "Velikost strani: A2"
+
+#: eeschema/plothpgl.cpp:168
+msgid "Page Size A1"
+msgstr "Velikost strani: A1"
+
+#: eeschema/plothpgl.cpp:168
+msgid "Page Size A0"
+msgstr "Velikost strani: A0"
+
+#: eeschema/plothpgl.cpp:169
+#: eeschema/plotps.cpp:122
+msgid "Page Size A"
+msgstr "Velikost strani: A"
+
+#: eeschema/plothpgl.cpp:169
+msgid "Page Size B"
+msgstr "Velikost strani: B"
+
+#: eeschema/plothpgl.cpp:170
+msgid "Page Size C"
+msgstr "Velikost strani: C"
+
+#: eeschema/plothpgl.cpp:170
+msgid "Page Size D"
+msgstr "Velikost strani: D"
+
+#: eeschema/plothpgl.cpp:170
+msgid "Page Size E"
+msgstr "Velikost strani: E"
+
+#: eeschema/plothpgl.cpp:172
+#: eeschema/plotps.cpp:125
+msgid "Plot page size:"
+msgstr "Plot page size:"
+
+#: eeschema/plothpgl.cpp:179
+#: eeschema/plothpgl.cpp:310
+msgid "Plot Offset"
+msgstr "Plot Offset"
+
+#: eeschema/plothpgl.cpp:189
+msgid "&Accept Offset"
+msgstr "&Accept Offset"
+
+#: eeschema/plothpgl.cpp:194
+msgid "Pen Width ( mils )"
+msgstr "Pen Width ( mils )"
+
+#: eeschema/plothpgl.cpp:201
+msgid "Pen Speed ( cm/s )"
+msgstr "Pen Speed ( cm/s )"
+
+#: eeschema/plothpgl.cpp:216
+#: eeschema/plotps.cpp:144
+msgid "&Plot CURRENT"
+msgstr "&Plot CURRENT"
+
+#: eeschema/plothpgl.cpp:221
+#: eeschema/plotps.cpp:149
+msgid "Plot A&LL"
+msgstr "Plot A&LL"
+
+#: eeschema/plothpgl.cpp:226
+#: eeschema/plotps.cpp:154
+#: eeschema/sheet.cpp:98
+msgid "&Cancel"
+msgstr "   &Prekliči   "
+
+#: eeschema/plothpgl.cpp:408
+msgid "** Plot End **\n"
+msgstr "** Plot End **\n"
+
+#: eeschema/plothpgl.cpp:433
+msgid "Plot  "
+msgstr "Plot  "
+
+#: eeschema/plotps.cpp:110
+msgid "EESchema Plot PS"
+msgstr "EESchema Plot PS"
+
+#: eeschema/plotps.cpp:122
+#: common/zoom.cpp:360
+msgid "Auto"
+msgstr "Samodejno"
+
+#: eeschema/plotps.cpp:134
+msgid "B/W"
+msgstr "Č/B"
+
+#: eeschema/plotps.cpp:134
+#: common/wxprint.cpp:329
+msgid "Color"
+msgstr "Barvno"
+
+#: eeschema/plotps.cpp:136
+msgid "Plot Color:"
+msgstr "Plot Color:"
+
+#: eeschema/plotps.cpp:165
+msgid "Messages :"
+msgstr "Sporočila :"
+
+#: eeschema/plotps.cpp:287
+#, c-format
+msgid "Plot: %s\n"
+msgstr "Plot: %s\n"
+
+#: eeschema/save_schemas.cpp:92
+#, c-format
+msgid "Failed to create file \"%s\""
+msgstr "Ne morem ustvariti datoteke <%s>"
+
+#: eeschema/save_schemas.cpp:97
+#, c-format
+msgid "Save file \"%s\""
+msgstr "Shrani datoteko \"%s\""
+
+#: eeschema/save_schemas.cpp:113
+#: eeschema/save_schemas.cpp:296
+msgid "File write operation failed."
+msgstr "Shranjevanje datoteke ni uspelo."
+
+#: eeschema/schedit.cpp:530
+msgid "Push/Pop Hierarchy"
+msgstr "Push/Pop Hierarchy"
+
+#: eeschema/schedit.cpp:534
+#, fuzzy
+msgid "Add NoConnect Flag"
+msgstr "Dodaj oznako NiPovezano"
+
+#: eeschema/schedit.cpp:538
+msgid "Add Wire"
+msgstr "Dodaj žico"
+
+#: eeschema/schedit.cpp:542
+msgid "Add Bus"
+msgstr "Dodaj vodilo"
+
+#: eeschema/schedit.cpp:546
+msgid "Add Drawing"
+msgstr "Dodaj risbo"
+
+#: eeschema/schedit.cpp:550
+msgid "Add Junction"
+msgstr "Add Junction"
+
+#: eeschema/schedit.cpp:554
+msgid "Add Label"
+msgstr "Dodaj oznako"
+
+#: eeschema/schedit.cpp:558
+msgid "Add Global label"
+msgstr "Dodaj splošno oznako"
+
+#: eeschema/schedit.cpp:566
+msgid "Add Wire to Bus Entry"
+msgstr "Dodaj žico v vodilo"
+
+#: eeschema/schedit.cpp:570
+msgid "Add Bus to Bus entry"
+msgstr "Dodaj vodilo v vodilo"
+
+#: eeschema/schedit.cpp:574
+msgid "Add Sheet"
+msgstr "Dodaj stran"
+
+#: eeschema/schedit.cpp:578
+msgid "Add PinSheet"
+msgstr "Add PinSheet"
+
+#: eeschema/schedit.cpp:582
+msgid "Import PinSheet"
+msgstr "Import PinSheet"
+
+#: eeschema/schedit.cpp:586
+msgid "Add Componant"
+msgstr "Dodaj komponento"
+
+#: eeschema/schedit.cpp:590
+msgid "Add Power"
+msgstr "Dodaj napajanje"
+
+#: eeschema/schframe.cpp:161
+msgid "Schematic modified, Save before exit ?"
+msgstr "Shema spremenjena, Shranim pred izhodom? "
+
+#: eeschema/schframe.cpp:251
+msgid "No show Hidden Pins"
+msgstr "Ne prikaži skritih nogic"
+
+#: eeschema/schframe.cpp:251
+#: eeschema/tool_sch.cpp:249
+msgid "Show Hidden Pins"
+msgstr "Prikaži skrite nogice"
+
+#: eeschema/schframe.cpp:254
+msgid "Draw lines at any direction"
+msgstr "Riši črte v katerokoli smer"
+
+#: eeschema/schframe.cpp:255
+msgid "Draw lines H, V or 45 deg only"
+msgstr "Riši črte le vodoravno, navpično ali 45 stopinj"
+
+#: eeschema/selpart.cpp:45
+msgid "Select Lib"
+msgstr "Izberi knjižnico"
+
+#: eeschema/selpart.cpp:94
+#, c-format
+msgid "Select Part (%d items)"
+msgstr "Izberi element (%d predmetov)"
+
+#: eeschema/sheet.cpp:70
+msgid "Sheet properties"
+msgstr "Lastnosti strani"
+
+#: eeschema/sheet.cpp:84
+#: common/svg_print.cpp:167
+msgid "Filename:"
+msgstr "Ime datoteke:"
+
+#: eeschema/sheet.cpp:90
+msgid "Sheetname:"
+msgstr "Ime strani"
+
+#: eeschema/sheet.cpp:103
+msgid "&OK"
+msgstr "&Potrdi"
+
+#: eeschema/sheet.cpp:126
+msgid "No Filename! Aborted"
+msgstr "Ni imena datoteke! Prekinjeno."
+
+#: eeschema/sheetlab.cpp:77
+msgid "PinSheet Properties:"
+msgstr "PinSheet Properties:"
+
+#: eeschema/sheetlab.cpp:110
+msgid "PinSheet Shape:"
+msgstr "PinSheet Shape:"
+
+#: eeschema/symbdraw.cpp:74
+msgid "Graphic shape properties"
+msgstr "Lastnosti grafične oblike"
+
+#: eeschema/symbdraw.cpp:100
+msgid "Options :"
+msgstr "Možnosti :"
+
+#: eeschema/symbdraw.cpp:146
+msgid "Void"
+msgstr "Prazno"
+
+#: eeschema/symbdraw.cpp:146
+msgid "BgFilled"
+msgstr "Zapolnjeno ozadje"
+
+#: eeschema/symbdraw.cpp:147
+msgid "Fill:"
+msgstr "Zapolni:"
+
+#: eeschema/symbdraw.cpp:830
+#, c-format
+msgid "Arc %.1f deg"
+msgstr "Arc %.1f st"
+
+#: eeschema/symbedit.cpp:48
+msgid "Import symbol drawings:"
+msgstr "Import symbol drawings:"
+
+#: eeschema/symbedit.cpp:63
+#, c-format
+msgid "Failed to open Symbol File <%s>"
+msgstr "Failed to open Symbol File <%s>"
+
+#: eeschema/symbedit.cpp:74
+msgid "Warning: more than 1 part in Symbol File"
+msgstr "Warning: more than 1 part in Symbol File"
+
+#: eeschema/symbedit.cpp:80
+msgid "Symbol File is void"
+msgstr "Symbol File is void"
+
+#: eeschema/symbedit.cpp:130
+msgid "Export symbol drawings:"
+msgstr "Export symbol drawings:"
+
+#: eeschema/symbedit.cpp:149
+#, c-format
+msgid "Save Symbol in [%s]"
+msgstr "Save Symbol in [%s]"
+
+#: eeschema/symbtext.cpp:72
+msgid "Graphic text properties"
+msgstr "Lastnosti grafičnega besedila"
+
+#: eeschema/symbtext.cpp:99
+msgid " Text : "
+msgstr " Besedilo : "
+
+#: eeschema/symbtext.cpp:115
+msgid " Text Options : "
+msgstr "Lastnosti besedila:"
+
+#: eeschema/tool_lib.cpp:53
+msgid "Add Pins"
+msgstr "Dodaj nogice"
+
+#: eeschema/tool_lib.cpp:59
+msgid "Add graphic text"
+msgstr "Dodaj grafično besedilo"
+
+#: eeschema/tool_lib.cpp:65
+msgid "Add rectangles"
+msgstr "Dodaj pravokotnike"
+
+#: eeschema/tool_lib.cpp:71
+msgid "Add circles"
+msgstr "Dodaj kroge"
+
+#: eeschema/tool_lib.cpp:77
+msgid "Add arcs"
+msgstr "Dodaj Arc"
+
+#: eeschema/tool_lib.cpp:83
+msgid "Add lines and polygons"
+msgstr "Dodaj črte in poligone"
+
+#: eeschema/tool_lib.cpp:90
+msgid "Move part anchor"
+msgstr "Move part anchor"
+
+#: eeschema/tool_lib.cpp:97
+msgid "Import existing drawings"
+msgstr "Uvozi obstoječe risbe"
+
+#: eeschema/tool_lib.cpp:103
+msgid "Export current drawing"
+msgstr "Izvozi trenutno risbo"
+
+#: eeschema/tool_lib.cpp:136
+msgid "Save current library"
+msgstr "Shrani trenutno knjižnico"
+
+#: eeschema/tool_lib.cpp:154
+msgid "New part"
+msgstr "Nov element"
+
+#: eeschema/tool_lib.cpp:160
+msgid "Select part to edit"
+msgstr "Izberi element za urejanje"
+
+#: eeschema/tool_lib.cpp:165
+msgid "Save current part into current library"
+msgstr "Shrani trenutni element v trenutno knjižnico"
+
+#: eeschema/tool_lib.cpp:171
+msgid "import part"
+msgstr "Uvozi element"
+
+#: eeschema/tool_lib.cpp:177
+msgid "export part"
+msgstr "Izvozi element"
+
+#: eeschema/tool_lib.cpp:184
+msgid "Create new library an save current part into"
+msgstr "Ustvari novo knjižnico in vanjo shrani trenutni element"
+
+#: eeschema/tool_lib.cpp:191
+msgid "Edit Part Properties"
+msgstr "Uredi lastnosti elementa"
+
+#: eeschema/tool_lib.cpp:198
+msgid "Test duplicate pins"
+msgstr "Preveri podvojenost nogic"
+
+#: eeschema/tool_lib.cpp:230
+msgid "show as \"De Morgan\" normal part"
+msgstr "show as \"De Morgan\" normal part"
+
+#: eeschema/tool_lib.cpp:238
+msgid "show as \"De Morgan\" convert part"
+msgstr "show as \"De Morgan\" convert part"
+
+#: eeschema/tool_lib.cpp:264
+msgid "Edit pins part per part (Carefully use!)"
+msgstr "Edit pins part per part (Carefully use!)"
+
+#: eeschema/tool_lib.cpp:283
+#: eeschema/tool_viewlib.cpp:146
+#, c-format
+msgid "Part %c"
+msgstr "Komponenta %c"
+
+#: eeschema/tool_sch.cpp:37
+msgid "New project"
+msgstr "Nov projekt"
+
+#: eeschema/tool_sch.cpp:40
+msgid "Open project"
+msgstr "Odpri projekt"
+
+#: eeschema/tool_sch.cpp:43
+msgid "Save project"
+msgstr "Shrani projekt"
+
+#: eeschema/tool_sch.cpp:51
+msgid "go to library editor"
+msgstr "Urejevalnik knjižnic"
+
+#: eeschema/tool_sch.cpp:54
+msgid "go to library browse"
+msgstr "Brskaj po knjižnicah"
+
+#: eeschema/tool_sch.cpp:58
+msgid "Schematic Hierarchy Navigator"
+msgstr "Navigator hierarhije shem"
+
+#: eeschema/tool_sch.cpp:76
+msgid "Print schematic"
+msgstr "Natisni shemo"
+
+#: eeschema/tool_sch.cpp:80
+msgid "Run Cvpcb"
+msgstr "Poženi CvPcb"
+
+#: eeschema/tool_sch.cpp:83
+msgid "Run Pcbnew"
+msgstr "Poženi Pcbnew"
+
+#: eeschema/tool_sch.cpp:104
+msgid "Netlist generation"
+msgstr "Ustvari spisek povezav"
+
+#: eeschema/tool_sch.cpp:107
+msgid "Schematic Annotation"
+msgstr "Oštevilči shemo"
+
+#: eeschema/tool_sch.cpp:110
+msgid "Schematic Electric Rules Check"
+msgstr "Na shemi preveri električna pravila"
+
+#  Lista de componentes y referencias cruzadas
+#: eeschema/tool_sch.cpp:113
+msgid "Bill of material and/or Crossreferences"
+msgstr "Spisek materiala in/ali križne reference"
+
+#: eeschema/tool_sch.cpp:141
+msgid "Hierarchy Push/Pop"
+msgstr "Hierarchy Push/Pop"
+
+#: eeschema/tool_sch.cpp:146
+msgid "Add components"
+msgstr "Dodaj komponente"
+
+#: eeschema/tool_sch.cpp:150
+msgid "Add powers"
+msgstr "Dodaj napajanja"
+
+#: eeschema/tool_sch.cpp:155
+msgid "Add wires"
+msgstr "Dodaj žice"
+
+#: eeschema/tool_sch.cpp:159
+msgid "Add bus"
+msgstr "Dodaj vodilo"
+
+#: eeschema/tool_sch.cpp:163
+msgid "Add wire to bus entry"
+msgstr "Dodaj žice v vodilo"
+
+#: eeschema/tool_sch.cpp:167
+msgid "Add bus to bus entry"
+msgstr "Dodaj vodilo v vodilo"
+
+#: eeschema/tool_sch.cpp:172
+msgid "Add no connect flag"
+msgstr "Dodaj oznako ni povezano"
+
+#: eeschema/tool_sch.cpp:176
+msgid "Add wire or bus label"
+msgstr "Dodaj žico ali oznako vodila"
+
+#: eeschema/tool_sch.cpp:180
+msgid "Add global label"
+msgstr "Dodaj splošno oznako"
+
+#: eeschema/tool_sch.cpp:184
+msgid "Add junction"
+msgstr "Dodaj križišče"
+
+#: eeschema/tool_sch.cpp:189
+msgid "Add hierarchical symbol (sheet)"
+msgstr "Dodaj hierarhični simbol (stran)"
+
+#: eeschema/tool_sch.cpp:193
+msgid "import glabel from sheet & create pinsheet"
+msgstr "uvozi splošno oznako iz lista & ustvari list nogic"
+
+#: eeschema/tool_sch.cpp:197
+msgid "Add hierachical pin to sheet"
+msgstr "Dodaj hierarhično oznako v list"
+
+#: eeschema/tool_sch.cpp:206
+msgid "Add graphic text (comment)"
+msgstr "Dodaj grafično besedilo (komentar)"
+
+#: eeschema/tool_sch.cpp:254
+msgid "HV orientation for Wires and Bus"
+msgstr "VN orientacija za žice in vodila"
+
+#: eeschema/tool_viewlib.cpp:55
+msgid "Select library to browse"
+msgstr "Izberi knjižnico za brskanje"
+
+#: eeschema/tool_viewlib.cpp:61
+msgid "Select part to browse"
+msgstr "Izberi element za brskanje"
+
+#: eeschema/tool_viewlib.cpp:67
+msgid "Display previous part"
+msgstr "Prikaži predhodni element"
+
+#: eeschema/tool_viewlib.cpp:73
+msgid "Display next part"
+msgstr "Prikaži naslednji element"
+
+#: eeschema/tool_viewlib.cpp:105
+msgid "Show as \"De Morgan\" normal part"
+msgstr "Show as \"De Morgan\" normal part"
+
+#: eeschema/tool_viewlib.cpp:111
+msgid "Show as \"De Morgan\" convert part"
+msgstr "Show as \"De Morgan\" convert part"
+
+#: eeschema/viewlib_frame.cpp:54
+msgid "Library browser"
+msgstr "Brskalnik knjižnice"
+
+#: eeschema/viewlibs.cpp:314
+#, c-format
+msgid "Current Part: <%s> (is Alias of <%s>)"
+msgstr "Trenutni element: <%s> (sinonim za <%s>)"
+
+#: eeschema/viewlibs.cpp:319
+#, c-format
+msgid "Error: Root Part <%s> not found"
+msgstr "Napaka: Ne najdem korenskega elementa <%s>"
+
+#: eeschema/viewlibs.cpp:338
+#, c-format
+msgid "Current Part: <%s>"
+msgstr "Trenutni element: <%s>"
+
+#: cvpcb/autosel.cpp:71
+#, c-format
+msgid "Library: <%s> not found"
+msgstr "Ne najdem knjižnice <%s >"
+
+#: cvpcb/autosel.cpp:110
+#, c-format
+msgid "%d equivalences"
+msgstr "%d ekvivalentov"
+
+#: cvpcb/autosel.cpp:168
+#, c-format
+msgid "Component %s: Footprint %s not found in libraries"
+msgstr "Component %s: Footprint %s not found in libraries"
+
+#: cvpcb/cvframe.cpp:245
+msgid "Save Net List & Cmp"
+msgstr "Save Net List & Cmp"
+
+#: cvpcb/cvframe.cpp:275
+msgid "Delete selections"
+msgstr "Briši izbrano"
+
+#: cvpcb/cvframe.cpp:289
+#: cvpcb/init.cpp:133
+#, c-format
+msgid "Componants: %d (free: %d)"
+msgstr "Komponent: %d (proste: %d)"
+
+#: cvpcb/cvpcb.cpp:41
+msgid "Cvpcb is already running, Continue?"
+msgstr "Cvpcb že teče, Nadaljujem ?"
+
+#: cvpcb/displayframe.cpp:141
+#: cvpcb/displayframe.cpp:148
+msgid "1:1 zoom"
+msgstr "1:1 Zoom"
+
+#: cvpcb/init.cpp:63
+#, c-format
+msgid "Components: %d (free: %d)"
+msgstr "Komponent: %d (proste: %d)"
+
+#: cvpcb/init.cpp:153
+msgid "Unable to create component file (.cmp)"
+msgstr "Ne morema ustvariti datoteke komponent (.cmp)"
+
+#: cvpcb/init.cpp:160
+msgid "Unable to create netlist file"
+msgstr "Ne morem ustvariti datoteko spiska povezav"
+
+#: cvpcb/init.cpp:189
+msgid "Load Net List"
+msgstr "Naloži spisek povezav"
+
+#: cvpcb/listboxes.cpp:231
+#, c-format
+msgid "Modules: %d"
+msgstr "%d modulov"
+
+#: cvpcb/loadcmp.cpp:51
+msgid "This file is NOT a library file"
+msgstr "Ta datoteka NI knjižnica"
+
+#: cvpcb/loadcmp.cpp:98
+#, c-format
+msgid "Module %s not found"
+msgstr "Ne najdem modula %s"
+
+#: cvpcb/menucfg.cpp:163
+msgid "Read Cfg"
+msgstr " Beri nastavitev "
+
+#: cvpcb/menucfg.cpp:216
+#: cvpcb/menucfg.cpp:471
+msgid "Equiv"
+msgstr "Ekvivalent"
+
+#: cvpcb/menucfg.cpp:228
+msgid "Lib Dir:"
+msgstr "Mapa knjižnice:"
+
+#: cvpcb/menucfg.cpp:234
+msgid "Net Input Ext:"
+msgstr "Net Input Ext:"
+
+#: cvpcb/menucfg.cpp:240
+msgid "Pkg Ext:"
+msgstr "Pkg Ext:"
+
+#: cvpcb/menucfg.cpp:257
+msgid "Cmp ext:"
+msgstr "Cmp ext:"
+
+#: cvpcb/menucfg.cpp:261
+msgid "Lib ext:"
+msgstr "Lib ext:"
+
+#: cvpcb/menucfg.cpp:265
+msgid "NetOut ext:"
+msgstr "NetOut ext:"
+
+#: cvpcb/menucfg.cpp:269
+msgid "Equiv ext:"
+msgstr "Equiv ext:"
+
+#: cvpcb/menucfg.cpp:273
+msgid "Retro ext:"
+msgstr "Retro ext:"
+
+#: cvpcb/options.cpp:153
+msgid "&Pad Fill"
+msgstr "&Pad Fill"
+
+#: cvpcb/options.cpp:159
+msgid "Pad &Num"
+msgstr "Pad &Num"
+
+#: cvpcb/options.cpp:163
+msgid "&Filaire"
+msgstr "&Filaire"
+
+#: cvpcb/options.cpp:163
+msgid "&Filled"
+msgstr "&Zapolnjeno"
+
+#: cvpcb/options.cpp:163
+msgid "&Sketch"
+msgstr "&Skica"
+
+#: cvpcb/options.cpp:165
+msgid "Edges:"
+msgstr "Robovi:"
+
+#: cvpcb/options.cpp:173
+msgid "Texts:"
+msgstr "Besedila:"
+
+#: cvpcb/rdorcad.cpp:74
+msgid "Netlist Format: EESchema"
+msgstr "Format spiska povezav: EEschema"
+
+#: cvpcb/rdorcad.cpp:117
+#, c-format
+msgid "Netlist error: %s"
+msgstr "Napaka spiska povezav: %s "
+
+#: cvpcb/tool_cvpcb.cpp:32
+msgid "Open Netlist"
+msgstr "Zapri spisek povezav"
+
+#: cvpcb/tool_cvpcb.cpp:35
+msgid "Save Nelist and Cmp list"
+msgstr "Shrani spisek povezav in elementov"
+
+#: cvpcb/tool_cvpcb.cpp:39
+msgid "Configuration"
+msgstr "Konfiguracija"
+
+#: cvpcb/tool_cvpcb.cpp:43
+msgid "View selected part"
+msgstr "Prikaži izbrane elemente"
+
+#: cvpcb/tool_cvpcb.cpp:46
+msgid "Automatic Association"
+msgstr "Samodejna asociacija"
+
+#: cvpcb/tool_cvpcb.cpp:50
+msgid "Select previous free component"
+msgstr "Izberi predhodno prosto komponento"
+
+#: cvpcb/tool_cvpcb.cpp:53
+msgid "Select next free component"
+msgstr "Izberi naslednjo prosto komponento"
+
+#: cvpcb/tool_cvpcb.cpp:57
+msgid "Delete all associations"
+msgstr "Briši vse asociacije"
+
+#: cvpcb/tool_cvpcb.cpp:61
+msgid "Create stuff file (component/module list)"
+msgstr "Create stuff file (component/module list)"
+
+#: cvpcb/tool_cvpcb.cpp:65
+msgid "Display/print component documentation (footprint.pdf)"
+msgstr "Prikaži/natisni dokumentacijo komponent (footprint.pdf)"
+
+#: cvpcb/tool_cvpcb.cpp:91
+msgid "&Load Netlist File"
+msgstr "&Naloži datoteko spisek povezav ..."
+
+#: cvpcb/tool_cvpcb.cpp:92
+msgid "Load a Netlist"
+msgstr "Naloži spisek povezav"
+
+#: cvpcb/tool_cvpcb.cpp:97
+msgid "&Save Netlist"
+msgstr "&Shrani spisek povezav ..."
+
+#: cvpcb/tool_cvpcb.cpp:98
+msgid "Save New Netlist and Cmp file"
+msgstr "Shrani nov spisek povezav in datoteko komponent"
+
+#: cvpcb/tool_cvpcb.cpp:102
+msgid "Quit Cvpcb"
+msgstr "Zapri"
+
+#: cvpcb/tool_cvpcb.cpp:114
+msgid "&Configuration"
+msgstr "&Konfiguracija ..."
+
+#: cvpcb/tool_cvpcb.cpp:121
+msgid "&Save config"
+msgstr "&Shrani konfiguracijo ..."
+
+#: cvpcb/tool_cvpcb.cpp:122
+msgid "Save configuration in current dir"
+msgstr "Shrani konfiguracijo v trenutno mapo"
+
+#: cvpcb/tool_cvpcb.cpp:128
+msgid "Cvpcb &About"
+msgstr "&Opis Cvpcb ..."
+
+#: cvpcb/tool_cvpcb.cpp:129
+#: kicad/buildmnu.cpp:163
+msgid "Kicad Infos"
+msgstr "Informacije o Kicad"
+
+#: cvpcb/viewlnet.cpp:66
+#: cvpcb/viewlnet.cpp:97
+#: cvpcb/viewlnet.cpp:112
+#: cvpcb/viewlogi.cpp:62
+msgid "File not found "
+msgstr " Ne najdem datoteke"
+
+#: cvpcb/viewlnet.cpp:87
+msgid "Format Netlist: ViewLogic net&pkg"
+msgstr "Format Netlist: ViewLogic net&pkg"
+
+#: cvpcb/viewlnet.cpp:203
+#, c-format
+msgid "Component [%s] not found in .pkg file"
+msgstr "Ne najdem komponente [%s] v .pkg datoteki"
+
+#: cvpcb/viewlogi.cpp:56
+msgid "Netlist file "
+msgstr "Datoteka spiska povezav"
+
+#: kicad/buildmnu.cpp:91
+msgid "&Open Project Descr"
+msgstr "&Odpri opis projekta ..."
+
+#: kicad/buildmnu.cpp:92
+#: kicad/buildmnu.cpp:216
+msgid "Select an existing project descriptor"
+msgstr "Izberi obstoječi opis projekta"
+
+#: kicad/buildmnu.cpp:97
+msgid "&New Project Descr"
+msgstr "&Nov opis projekta ..."
+
+#: kicad/buildmnu.cpp:98
+#: kicad/buildmnu.cpp:211
+msgid "Create new project descriptor"
+msgstr "Ustvari nov opis projekta"
+
+#: kicad/buildmnu.cpp:103
+msgid "&Save Project Descr"
+msgstr "&Shrani opis projekta ..."
+
+#: kicad/buildmnu.cpp:104
+#: kicad/buildmnu.cpp:221
+msgid "Save current project descriptor"
+msgstr "Shrani trenutni opis projekta"
+
+#: kicad/buildmnu.cpp:110
+msgid "Save &Project Files"
+msgstr "Shrani datoteke &projekta ..."
+
+#: kicad/buildmnu.cpp:111
+msgid "Save and Zip all project files"
+msgstr "Shrani in komprimiraj vse projektne datoteke"
+
+#: kicad/buildmnu.cpp:115
+msgid "&Unzip Archive"
+msgstr "&Razpakiraj arhiv ..."
+
+#: kicad/buildmnu.cpp:116
+msgid "UnZip archive file"
+msgstr "Razpakiraj arhivske datoteke"
+
+#: kicad/buildmnu.cpp:121
+msgid "Quit Kicad"
+msgstr "Zapri Kicad"
+
+#: kicad/buildmnu.cpp:136
+msgid "&Editor"
+msgstr "&Urejevalnik ..."
+
+#: kicad/buildmnu.cpp:136
+msgid "Text editor"
+msgstr "Urejevalnik besedila"
+
+#: kicad/buildmnu.cpp:140
+msgid "&Browse Files"
+msgstr "&Brskaj po datotekah ..."
+
+#: kicad/buildmnu.cpp:140
+msgid "Read or edit files"
+msgstr "Beri ali uredi datoteke"
+
+#: kicad/buildmnu.cpp:147
+msgid "Select Fonts"
+msgstr "Izberi oblike besedila ..."
+
+#: kicad/buildmnu.cpp:147
+msgid "Select Fonts and  Font sizes"
+msgstr "Izberi oblike in velikost besedila"
+
+#: kicad/buildmnu.cpp:163
+msgid "Kicad &About"
+msgstr "&Opis programa Kicad "
+
+#: kicad/buildmnu.cpp:168
+msgid "&Projects"
+msgstr "&Projekti"
+
+#: kicad/buildmnu.cpp:169
+msgid "&Browse"
+msgstr "&Brskaj"
+
+#: kicad/buildmnu.cpp:227
+msgid "Archive all project files"
+msgstr "Arhiv vseh projektnih datotek"
+
+#: kicad/buildmnu.cpp:256
+msgid "EeSchema (Schematic editor)"
+msgstr "EeSchema (Urejevalnik sheme)"
+
+#: kicad/buildmnu.cpp:261
+msgid "Cvpcb (Componants to modules)"
+msgstr "Cvpcb (Modul komponent)"
+
+#: kicad/buildmnu.cpp:266
+msgid "Pcbnew ( board editor )"
+msgstr "Pcbnew (urejevalnik plošče)"
+
+#: kicad/buildmnu.cpp:271
+msgid "GerbView ( Gerber viewer )"
+msgstr "GerbView (prikazovalnik Gerber)"
+
+#: kicad/files-io.cpp:65
+msgid "Load Project files:"
+msgstr "Naloži projektne datoteke:"
+
+#: kicad/files-io.cpp:115
+msgid "Template file non found "
+msgstr "Ne najdem datoteke predloge"
+
+#: kicad/files-io.cpp:124
+msgid " exists! OK to continue?"
+msgstr " obstaja!  OK za nadaljevanje ?"
+
+#: kicad/files-io.cpp:153
+msgid "Unzip Project:"
+msgstr "Razpakiraj projekt:"
+
+#: kicad/files-io.cpp:164
+msgid ""
+"\n"
+"Open "
+msgstr ""
+"\n"
+"Odpri"
+
+#: kicad/files-io.cpp:167
+msgid "Target Directory"
+msgstr "Ciljni imenik"
+
+#: kicad/files-io.cpp:172
+msgid "Unzip in "
+msgstr "Razpakiraj v "
+
+#: kicad/files-io.cpp:192
+msgid "Extract file "
+msgstr "Razpakiraj datoteko"
+
+#: kicad/files-io.cpp:199
+msgid " OK\n"
+msgstr "Potrdi\n"
+
+#: kicad/files-io.cpp:201
+msgid " *ERROR*\n"
+msgstr "*ERROR*\n"
+
+#: kicad/files-io.cpp:225
+msgid "Archive Project files:"
+msgstr "Arhiv projektnih datotek:"
+
+#: kicad/files-io.cpp:254
+msgid "Compress file "
+msgstr "Komprimiraj datoteko"
+
+#: kicad/files-io.cpp:273
+msgid ""
+"\n"
+"Create Zip Archive "
+msgstr ""
+"\n"
+"Ustvari zip arhiv"
+
+#: kicad/mdiframe.cpp:85
+#, c-format
+msgid ""
+"Ready\n"
+"Working dir: %s\n"
+msgstr ""
+"Pripravljen\n"
+"Delovna mapa: %s\n"
+
+#: kicad/mdiframe.cpp:290
+msgid "Load file:"
+msgstr "Naloži datoteko:"
+
+#: kicad/prjconfig.cpp:24
+msgid "Project File <"
+msgstr "Datoteka projekta <"
+
+#: kicad/prjconfig.cpp:24
+msgid "> not found"
+msgstr "> ne najdem"
+
+#: kicad/prjconfig.cpp:35
+msgid ""
+"\n"
+"Working dir: "
+msgstr ""
+"\n"
+"Delovna mapa: "
+
+#: kicad/prjconfig.cpp:36
+msgid ""
+"\n"
+"Project: "
+msgstr ""
+"\n"
+"Projekt: "
+
+#: gerbview/affiche.cpp:129
+msgid "  Arc  "
+msgstr "  Arc"
+
+#: gerbview/block.cpp:354
+msgid "Ok to delete block ?"
+msgstr "Ok za brisanje bloka ?"
+
+#: gerbview/edit.cpp:233
+msgid "No layer selected"
+msgstr "Noben sloj ni izbran"
+
+#: gerbview/files.cpp:73
+msgid "Not yet available..."
+msgstr "Ni na razpolago..."
+
+#: gerbview/files.cpp:115
+msgid "GERBER PLOT files:"
+msgstr "GERBER PLOT files:"
+
+#: gerbview/files.cpp:162
+#: gerbview/readgerb.cpp:244
+msgid "D CODES files:"
+msgstr "D CODES files:"
+
+#: gerbview/files.cpp:193
+msgid "Gerber files:"
+msgstr "Gerber datoteke:"
+
+#: gerbview/gerberframe.cpp:162
+msgid "Layer modified,  Continue ?"
+msgstr "Sloj spremenjen, Nadaljujem ?"
+
+#: gerbview/gerberframe.cpp:199
+msgid "Clear and Load gerber file"
+msgstr "Briši in naloži datoteko gerber"
+
+#: gerbview/gerberframe.cpp:200
+msgid "Clear all layers and Load new gerber file"
+msgstr "Briši vse sloje in naloži novo datoteko gerber"
+
+#: gerbview/gerberframe.cpp:204
+msgid "Load gerber file"
+msgstr "Naloži datoteko gerber"
+
+#: gerbview/gerberframe.cpp:205
+msgid "Load new gerber file on currrent layer"
+msgstr "Naloži novo datoteko gerber na trenutni sloj"
+
+#: gerbview/gerberframe.cpp:209
+msgid "Inc Layer and load gerber file"
+msgstr "Inc Layer and load gerber file"
+
+#: gerbview/gerberframe.cpp:210
+msgid "Increment layer number, and Load gerber file"
+msgstr "Increment layer number, and Load gerber file"
+
+#: gerbview/gerberframe.cpp:214
+msgid "Load DCodes"
+msgstr "Load DCodes"
+
+#: gerbview/gerberframe.cpp:215
+msgid "Load D-Codes File"
+msgstr "Load D-Codes File"
+
+#: gerbview/gerberframe.cpp:219
+msgid "Load Drill"
+msgstr "Naloži vrtalnik"
+
+#: gerbview/gerberframe.cpp:220
+msgid "Load Drill File (EXCELLON Format)"
+msgstr "Naloži vrtalno datoteko (oblika EXCELLON)"
+
+#: gerbview/gerberframe.cpp:224
+msgid "&New"
+msgstr "&Novo"
+
+#: gerbview/gerberframe.cpp:225
+msgid "Clear all layers"
+msgstr "Briši vse sloje"
+
+#: gerbview/gerberframe.cpp:230
+msgid "&Save layers"
+msgstr "&Shrani sloje"
+
+#: gerbview/gerberframe.cpp:231
+msgid "Save current layers (GERBER format)"
+msgstr "Shrani trenutne sloje (oblika GERBER)"
+
+#: gerbview/gerberframe.cpp:235
+msgid "Save layers as.."
+msgstr "Shrani sloje kot .."
+
+#: gerbview/gerberframe.cpp:236
+msgid "Save current layers as.."
+msgstr "Shrani trenutne sloje kot.."
+
+#: gerbview/gerberframe.cpp:243
+msgid "Plotting in various formats"
+msgstr "Plotting in various formats"
+
+#: gerbview/gerberframe.cpp:246
+msgid "Quit Gerbview"
+msgstr "Zapri Gerbview"
+
+#: gerbview/gerberframe.cpp:258
+msgid "&Files and Dir"
+msgstr "&Datoteke in mape..."
+
+#: gerbview/gerberframe.cpp:259
+msgid "Setting Files extension, Directories and others..."
+msgstr "Nastavi končnice datotek, imenike in drugo..."
+
+#: gerbview/gerberframe.cpp:261
+msgid "Select Colors and Display for layers"
+msgstr "Izberi barve in prikaz za sloje"
+
+#: gerbview/gerberframe.cpp:262
+msgid "&Options"
+msgstr "&Možnosti ..."
+
+#: gerbview/gerberframe.cpp:263
+msgid " Select general options"
+msgstr "Izberi splošne možnosti"
+
+#: gerbview/gerberframe.cpp:266
+msgid " Select how items are displayed"
+msgstr "Izberi kako so prikazani predmeti"
+
+#: gerbview/gerberframe.cpp:271
+msgid "&Save Gerbview Setup"
+msgstr "&Shrani nastavitev Gerbview"
+
+#: gerbview/gerberframe.cpp:281
+msgid "&List DCodes"
+msgstr "&List DCodes"
+
+#: gerbview/gerberframe.cpp:282
+msgid "List and Edit DCodes"
+msgstr "List and Edit DCodes"
+
+#: gerbview/gerberframe.cpp:283
+msgid "&Show source"
+msgstr "&Show source"
+
+#: gerbview/gerberframe.cpp:284
+msgid "Show source file for the current layer"
+msgstr "Show source file for the current layer"
+
+#: gerbview/gerberframe.cpp:286
+msgid "&Delete Layer"
+msgstr "&Briši sloj"
+
+#: gerbview/gerberframe.cpp:287
+msgid "Delete current layer"
+msgstr "Briši trenutni sloj"
+
+#: gerbview/gerberframe.cpp:292
+msgid "&About"
+msgstr "&O Gerbview"
+
+#: gerbview/gerberframe.cpp:292
+msgid "Gerbview Infos"
+msgstr "Informacije o Gerbview"
+
+#: gerbview/gerbview.cpp:39
+msgid "Gerbview is already running, Continue?"
+msgstr "Gerbview že teče, Nadaljujem ?"
+
+#: gerbview/initpcb.cpp:33
+msgid "Current Data will be lost ?"
+msgstr "Trenutni podatki bodo izgubljeni?"
+
+#: gerbview/initpcb.cpp:86
+msgid "Delete zones ?"
+msgstr "Brišem območja?"
+
+#: gerbview/initpcb.cpp:161
+msgid "Delete Tracks?"
+msgstr "Brišem povezave?"
+
+#: gerbview/initpcb.cpp:181
+msgid "Delete Pcb Texts"
+msgstr "Briši besedila na PCB"
+
+#: gerbview/initpcb.cpp:202
+#, c-format
+msgid "Delete Layer %d"
+msgstr "Briši sloj %d"
+
+#: gerbview/onrightclick.cpp:54
+msgid "Copy Block (shift mouse)"
+msgstr "Kopiraj blok (shit miška)"
+
+#: gerbview/onrightclick.cpp:55
+msgid "Delete Block (ctrl + drag mouse)"
+msgstr "Briši blok (ctrl + vleci miško)"
+
+#: gerbview/options.cpp:156
+msgid "Gerbview Options"
+msgstr "Nastavitve Gerbview"
+
+#: gerbview/options.cpp:199
+msgid "format: 2.3"
+msgstr "Format 2.3"
+
+#: gerbview/options.cpp:199
+msgid "format 3.4"
+msgstr "Format 3.4"
+
+#: gerbview/options.cpp:273
+msgid "Gerbview Draw Options"
+msgstr "Gerbview Draw Options"
+
+#: gerbview/options.cpp:293
+msgid "Lines:"
+msgstr "Črte:"
+
+#: gerbview/options.cpp:301
+msgid "Show D-Codes"
+msgstr "Show D-Codes"
+
+#: gerbview/options.cpp:305
+msgid "Spots:"
+msgstr "Spots:"
+
+#: gerbview/readgerb.cpp:228
+#, c-format
+msgid "%d errors while reading gerber file [%s]"
+msgstr "%d napaka med branjem datoteke gerber [%s]"
+
+#: gerbview/reglage.cpp:120
+msgid "Drill File Ext:"
+msgstr "Končnica vrtalne datoteke:"
+
+#: gerbview/reglage.cpp:127
+msgid "Gerber File Ext:"
+msgstr "Končnica datoteke Gerber:"
+
+#: gerbview/reglage.cpp:132
+msgid "DCode File Ext:"
+msgstr "DCode File Ext:"
+
+#: gerbview/rs274x.cpp:251
+#, c-format
+msgid "Command <%c%c> ignored by Gerbview"
+msgstr "Gerbview je ignoriral ukaz <%c%c> "
+
+#: gerbview/rs274x.cpp:274
+msgid "Too many include files!!"
+msgstr "Preveč vključenih datotek!!"
+
+#: gerbview/set_color.cpp:146
+msgid "Gerbview Layer Colors:"
+msgstr "Barve slojev v Gerbview:"
+
+#: gerbview/tool_gerber.cpp:44
+msgid "New World"
+msgstr "Novi svet"
+
+#: gerbview/tool_gerber.cpp:49
+msgid "Open existing Layer"
+msgstr "Odpri obstoječi sloj"
+
+#: gerbview/tool_gerber.cpp:55
+msgid "Save World"
+msgstr "Shrani svet"
+
+#: gerbview/tool_gerber.cpp:98
+msgid "Print World"
+msgstr "Natisni svet"
+
+#: gerbview/tool_gerber.cpp:130
+msgid "Find D Codes"
+msgstr "Find D Codes"
+
+#: gerbview/tool_gerber.cpp:138
+msgid "Layer "
+msgstr "Sloj"
+
+#: gerbview/tool_gerber.cpp:147
+msgid "No tool"
+msgstr "Ni orodja"
+
+#: gerbview/tool_gerber.cpp:151
+msgid "Tool "
+msgstr "Orodje"
+
+#: gerbview/tool_gerber.cpp:185
+msgid "Add Flashes"
+msgstr "Add Flashes"
+
+#: gerbview/tool_gerber.cpp:191
+msgid "Add Lines"
+msgstr "Dodaj črte"
+
+#: gerbview/tool_gerber.cpp:260
+msgid "Show Spots Sketch"
+msgstr "Show Spots Sketch"
+
+#: gerbview/tool_gerber.cpp:267
+msgid "Show Lines Sketch"
+msgstr "Prikaži skico črt"
+
+#: gerbview/tool_gerber.cpp:274
+msgid "Show dcode number"
+msgstr "Show dcode number"
+
+#: common/basicframe.cpp:216
+msgid "Help files not found"
+msgstr "Ne najdem datoteke pomoči"
+
+#: common/block_commande.cpp:62
+msgid "Block Move"
+msgstr "Premakni blok"
+
+#: common/block_commande.cpp:66
+msgid "Block Drag"
+msgstr "Povleci blok"
+
+#: common/block_commande.cpp:70
+msgid "Block Copy"
+msgstr "Kopiraj blok"
+
+#: common/block_commande.cpp:74
+msgid "Block Delete"
+msgstr "Briši blok"
+
+#: common/block_commande.cpp:78
+msgid "Block Save"
+msgstr "Shrani blok"
+
+#: common/block_commande.cpp:82
+msgid "Block Paste"
+msgstr "Prilepi blok"
+
+#: common/block_commande.cpp:86
+msgid "Win Zoom"
+msgstr "Zoom okna"
+
+#: common/block_commande.cpp:90
+msgid "Block Rotate"
+msgstr "Rotiraj blok"
+
+#: common/block_commande.cpp:94
+msgid "Block Invert"
+msgstr "Invertiraj blok"
+
+#: common/common.cpp:25
+msgid "Copper   "
+msgstr "Baker"
+
+#: common/common.cpp:25
+msgid "Inner L1 "
+msgstr "Notranji sloj 1"
+
+#: common/common.cpp:25
+msgid "Inner L2 "
+msgstr "Notranji sloj 2"
+
+#: common/common.cpp:25
+msgid "Inner L3 "
+msgstr "Notranji sloj 3"
+
+#: common/common.cpp:26
+msgid "Inner L4 "
+msgstr "Notranji sloj 4"
+
+#: common/common.cpp:26
+msgid "Inner L5 "
+msgstr "Notranji sloj 5"
+
+#: common/common.cpp:26
+msgid "Inner L6 "
+msgstr "Notranji sloj 6"
+
+#: common/common.cpp:26
+msgid "Inner L7 "
+msgstr "Notranji sloj 7"
+
+#: common/common.cpp:27
+msgid "Inner L8 "
+msgstr "Notranji sloj 8"
+
+#: common/common.cpp:27
+msgid "Inner L9 "
+msgstr "Nostranji sloj 9"
+
+#: common/common.cpp:27
+msgid "Inner L10"
+msgstr "Notranji sloj 10"
+
+#: common/common.cpp:27
+msgid "Inner L11"
+msgstr "Notranji sloj 11"
+
+#: common/common.cpp:28
+msgid "Inner L12"
+msgstr "Notranji sloj 12"
+
+#: common/common.cpp:28
+msgid "Inner L13"
+msgstr "Notranji sloj 13"
+
+#: common/common.cpp:28
+msgid "Inner L14"
+msgstr "Notranji sloj 14"
+
+#: common/common.cpp:28
+msgid "Component"
+msgstr "Komponenta"
+
+#: common/common.cpp:29
+msgid "Adhes Cop"
+msgstr "Adhes Cop"
+
+#: common/common.cpp:29
+msgid "Adhes Cmp"
+msgstr "Adhes  Cmp"
+
+#: common/common.cpp:29
+msgid "SoldP Cop"
+msgstr "SoldP Cu "
+
+#: common/common.cpp:29
+msgid "SoldP Cmp"
+msgstr "SoldP Cmp"
+
+#: common/common.cpp:30
+msgid "SilkS Cop"
+msgstr "SilkS Cu "
+
+#: common/common.cpp:30
+msgid "SilkS Cmp"
+msgstr "SilkS Cmp"
+
+#: common/common.cpp:30
+msgid "Mask Copp"
+msgstr "Mask Cu "
+
+#: common/common.cpp:30
+msgid "Mask Cmp "
+msgstr "Mask Cmp"
+
+#: common/common.cpp:31
+msgid "Drawings "
+msgstr "Risbe"
+
+#: common/common.cpp:31
+msgid "Comments "
+msgstr "Komentarji "
+
+#: common/common.cpp:31
+msgid "Eco1     "
+msgstr "Eco1     "
+
+#: common/common.cpp:31
+msgid "Eco2     "
+msgstr "Eco2     "
+
+#: common/common.cpp:32
+msgid "Edges Pcb"
+msgstr "Edges Pcb"
+
+#: common/common.cpp:32
+msgid "---      "
+msgstr "---      "
+
+#: common/confirm.cpp:100
+msgid "Infos:"
+msgstr "Info:"
+
+#: common/drawframe.cpp:259
+msgid "Inch"
+msgstr "Inče"
+
+#: common/drawframe.cpp:265
+msgid "??"
+msgstr "??"
+
+#: common/eda_doc.cpp:95
+msgid "Doc File "
+msgstr "Doc File"
+
+#: common/eda_doc.cpp:134
+#, c-format
+msgid "Unknown MIME type for Doc File [%s] (%s)"
+msgstr "Unknown MIME type for Doc File [%s] (%s)"
+
+#: common/edaappl.cpp:384
+msgid "Default"
+msgstr "Privzeto"
+
+#: common/edaappl.cpp:394
+msgid "French"
+msgstr "Francosko"
+
+#: common/edaappl.cpp:399
+msgid "Spanish"
+msgstr "Špansko"
+
+#: common/edaappl.cpp:404
+msgid "Portuguese"
+msgstr "Portugalsko"
+
+#: common/edaappl.cpp:408
+msgid "Dutch"
+msgstr "Nizozemsko"
+
+#: common/edaappl.cpp:414
+msgid "Russian"
+msgstr "Rusko"
+
+#: common/edaappl.cpp:454
+msgid "Language"
+msgstr "&Jezik"
+
+#: common/infospgm.cpp:43
+msgid "Build Version:"
+msgstr "Različica:"
+
+#: common/infospgm.cpp:45
+msgid "Author:"
+msgstr "Avtor: "
+
+#: common/infospgm.cpp:46
+msgid "Based on wxWidgets"
+msgstr "Uporablja wxWidgets"
+
+#: common/infospgm.cpp:47
+msgid ""
+"\n"
+"\n"
+"GPL License"
+msgstr ""
+"\n"
+"\n"
+"Licenca GPL"
+
+#: common/selcolor.cpp:93
+msgid "Colors"
+msgstr "Barve"
+
+#: common/setpage.cpp:122
+msgid "Page Settings"
+msgstr "Nastavitve strani"
+
+#: common/setpage.cpp:184
+#, c-format
+msgid "Number of sheets: %d"
+msgstr "Število strani: %d"
+
+#: common/setpage.cpp:187
+#, c-format
+msgid "Sheet number: %d"
+msgstr "Stran: %d"
+
+#: common/setpage.cpp:193
+msgid "Revision:"
+msgstr "Popravek:"
+
+#: common/setpage.cpp:198
+msgid "Company:"
+msgstr "Podjetje:"
+
+#: common/setpage.cpp:203
+msgid "Title:"
+msgstr "Naslov:"
+
+#: common/setpage.cpp:323
+msgid "Size "
+msgstr "Velikost"
+
+#: common/setpage.cpp:327
+msgid "Page Size:"
+msgstr "Velikost strani:"
+
+#: common/svg_print.cpp:124
+msgid "Print SVG file"
+msgstr "Natisni datoteko SVG"
+
+#: common/svg_print.cpp:141
+#: common/wxprint.cpp:314
+msgid "Pen width mini"
+msgstr "Pen width mini"
+
+#: common/svg_print.cpp:156
+#: common/wxprint.cpp:344
+msgid "Current"
+msgstr "Trenutni"
+
+#: common/svg_print.cpp:160
+#: common/wxprint.cpp:350
+msgid "Page Print:"
+msgstr "Natisni stran"
+
+#: common/svg_print.cpp:173
+#: common/wxprint.cpp:383
+msgid "&Print"
+msgstr "&Natisni"
+
+#: common/wxprint.cpp:204
+msgid "Error Init Printer info"
+msgstr "Error Init Printer info"
+
+#: common/wxprint.cpp:242
+msgid "Print"
+msgstr "Tiskaj"
+
+#: common/wxprint.cpp:282
+msgid "fit in page"
+msgstr "fit in page"
+
+#: common/wxprint.cpp:282
+msgid "Scale 0.5"
+msgstr "Razmerje 0.5"
+
+#: common/wxprint.cpp:282
+msgid "Scale 0.7"
+msgstr "Razmerje 0.7"
+
+#: common/wxprint.cpp:283
+msgid "Scale 1.4"
+msgstr "Razmerje 1.4"
+
+#: common/wxprint.cpp:283
+msgid "Scale 4"
+msgstr "Razmerje 4"
+
+#: common/wxprint.cpp:288
+msgid "Approx. Scale:"
+msgstr "pribl. razmerje:"
+
+#: common/wxprint.cpp:329
+msgid "Black"
+msgstr "Črno"
+
+#: common/wxprint.cpp:333
+msgid "Color Print:"
+msgstr "Barvno tiskanje:"
+
+#: common/wxprint.cpp:342
+msgid "1 page per layer"
+msgstr "1 stran na sloj"
+
+#: common/wxprint.cpp:342
+msgid "Single Page"
+msgstr "Ena stran"
+
+#: common/wxprint.cpp:362
+msgid "Print S&etup"
+msgstr "Nastavitve &tiskanja"
+
+#: common/wxprint.cpp:369
+msgid "P&age setup"
+msgstr "  Nastavitev &strani "
+
+#: common/wxprint.cpp:376
+msgid "Pre&view"
+msgstr "&Predogled ...    "
+
+#: common/wxprint.cpp:512
+msgid "Printer Problem!"
+msgstr "Težave s tiskalnikom!"
+
+#: common/wxprint.cpp:562
+msgid "There was a problem previewing"
+msgstr "Težave s predogledom"
+
+#: common/wxprint.cpp:625
+msgid "There was a problem printing"
+msgstr "Težave s tiskanje"
+
+#: common/wxprint.cpp:645
+#, c-format
+msgid "Print page %d"
+msgstr "Tiskanje strani %d"
+
+#: common/wxwineda.cpp:119
+msgid "Size (mm):"
+msgstr "Velikost (mm):"
+
+#: common/wxwineda.cpp:119
+msgid "Size (\"):"
+msgstr "Velikost (\"):"
+
+#: common/wxwineda.cpp:183
+#: common/wxwineda.cpp:193
+msgid "Pos "
+msgstr "Pos "
+
+#: common/wxwineda.cpp:184
+msgid "X (mm):"
+msgstr "X (mm):"
+
+#: common/wxwineda.cpp:184
+msgid "X (\"):"
+msgstr "X (\"):"
+
+#: common/wxwineda.cpp:194
+msgid "Y (mm):"
+msgstr "Y (mm):"
+
+#: common/wxwineda.cpp:194
+msgid "Y (\"):"
+msgstr "Y (\"):"
+
+#: common/wxwineda.cpp:323
+msgid " (\"):"
+msgstr " (\"):"
+
+#: common/wxwineda.cpp:327
+msgid " (mm):"
+msgstr " (mm):"
+
+#: common/zoom.cpp:318
+msgid "Zoom: "
+msgstr "Zoom: "
+
+#: common/zoom.cpp:337
+#: common/zoom.cpp:348
+msgid "grid user"
+msgstr "uporabnik mreže"
+
+#: common/zoom.cpp:353
+msgid "Zoom +"
+msgstr "Zoom +"
+
+#: common/zoom.cpp:354
+msgid "Zoom -"
+msgstr "Zoom -"
+
+#: common/zoom.cpp:358
+msgid "Zoom Select"
+msgstr "Zoom ..."
+
+#: common/zoom.cpp:361
+msgid "Redraw"
+msgstr "Ponovno nariši"
+
+#: common/zoom.cpp:392
+#: common/zoom.cpp:412
+msgid "Grid Select"
+msgstr "Mreža ..."
+
+#: pcbnew/gen_self.h:212
+msgid "Length(inch):"
+msgstr "Dolžina (inč):"
+
+#: pcbnew/gen_self.h:218
+msgid "Length(mm):"
+msgstr "Dol. (mm):"
+
+#: pcbnew/gen_self.h:227
+msgid "Requested length < minimum length"
+msgstr "Željena dolžina < najmanjše dolžine"
+
+#: pcbnew/gen_self.h:247
+msgid "Unable to create line: Requested length is too big"
+msgstr "Ne morem narisati črte: željena dolžina je prevelika"
+
+#: pcbnew/pcbnew.h:253
+msgid "Blind Via"
+msgstr "Blind Via"
+
+#: eeschema/optionsframe.h:60
+#: eeschema/optionsframe.h:63
+msgid "optionsframe"
+msgstr "optionsframe"
+
+#: gerbview/set_color.h:5
+msgid "Layers 1-16"
+msgstr "1-16 slojev"
+
+#: gerbview/set_color.h:10
+msgid "Layers 17-32"
+msgstr "17-32 slojev"
+
+#: gerbview/set_color.h:15
+msgid "Layer 1"
+msgstr "sloj 1"
+
+#: gerbview/set_color.h:22
+msgid "Layer 2"
+msgstr "sloj 2"
+
+#: gerbview/set_color.h:29
+msgid "Layer 3"
+msgstr "sloj 3"
+
+#: gerbview/set_color.h:36
+msgid "Layer 4"
+msgstr "sloj 4"
+
+#: gerbview/set_color.h:43
+msgid "Layer 5"
+msgstr "sloj 5"
+
+#: gerbview/set_color.h:50
+msgid "Layer 6"
+msgstr "sloj 6"
+
+#: gerbview/set_color.h:57
+msgid "Layer 7"
+msgstr "sloj 7"
+
+#: gerbview/set_color.h:64
+msgid "Layer 8"
+msgstr "sloj 8"
+
+#: gerbview/set_color.h:71
+msgid "Layer 9"
+msgstr "sloj 9"
+
+#: gerbview/set_color.h:78
+msgid "Layer 10"
+msgstr "sloj 10"
+
+#: gerbview/set_color.h:85
+msgid "Layer 11"
+msgstr "sloj 11"
+
+#: gerbview/set_color.h:92
+msgid "Layer 12"
+msgstr "sloj 12"
+
+#: gerbview/set_color.h:99
+msgid "Layer 13"
+msgstr "sloj 13"
+
+#: gerbview/set_color.h:106
+msgid "Layer 14"
+msgstr "sloj 14"
+
+#: gerbview/set_color.h:113
+msgid "Layer 15"
+msgstr "sloj 15"
+
+#: gerbview/set_color.h:120
+msgid "Layer 16"
+msgstr "sloj 16"
+
+#: gerbview/set_color.h:127
+msgid "Layer 17"
+msgstr "sloj 17"
+
+#: gerbview/set_color.h:134
+msgid "Layer 18"
+msgstr "sloj 18"
+
+#: gerbview/set_color.h:141
+msgid "Layer 19"
+msgstr "sloj 19"
+
+#: gerbview/set_color.h:148
+msgid "Layer 20"
+msgstr "sloj 20"
+
+#: gerbview/set_color.h:155
+msgid "Layer 21"
+msgstr "sloj 21"
+
+#: gerbview/set_color.h:162
+msgid "Layer 22"
+msgstr "sloj 22"
+
+#: gerbview/set_color.h:169
+msgid "Layer 23"
+msgstr "sloj 23"
+
+#: gerbview/set_color.h:176
+msgid "Layer 24"
+msgstr "sloj 24"
+
+#: gerbview/set_color.h:183
+msgid "Layer 25"
+msgstr "sloj 25"
+
+#: gerbview/set_color.h:190
+msgid "Layer 26"
+msgstr "sloj 26"
+
+#: gerbview/set_color.h:197
+msgid "Layer 27"
+msgstr "sloj 27"
+
+#: gerbview/set_color.h:204
+msgid "Layer 28"
+msgstr "sloj 28"
+
+#: gerbview/set_color.h:211
+msgid "Layer 29"
+msgstr "sloj 29"
+
+#: gerbview/set_color.h:218
+msgid "Layer 30"
+msgstr "sloj 30"
+
+#: gerbview/set_color.h:225
+msgid "Layer 31"
+msgstr "sloj 31"
+
+#: gerbview/set_color.h:232
+msgid "Layer 32"
+msgstr "sloj 32"
+
+#: gerbview/set_color.h:240
+msgid "Others"
+msgstr "Drugi"
+
+#: gerbview/set_color.h:254
+msgid "DCodes id."
+msgstr "DCodes id."
+
+
+###########test
+msgid "New schematic project"
+msgstr"Nov projekt sheme"
+
+msgid "Open schematic project"
+msgstr "Odpri projekt sheme"
+
+msgid "Save schematic project"
+msgstr "Shrani projekt sheme"
+
+msgid "Component selection:"
+msgstr "Izbor komponente:"
+
+msgid "Search KeyWord"
+msgstr "išči klj.besede"
+
+msgid "By Lib Browser"
+msgstr "brskaj po knj."
+
+msgid "History list:"
+msgstr "Predhodni elementi:"
