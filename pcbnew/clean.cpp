@@ -731,54 +731,57 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
 }
 
 
-/***************************************************************************/
-int Netliste_Controle_piste( WinEDA_PcbFrame* frame, wxDC* DC, int affiche )
-/***************************************************************************/
-
-/**
- * Function Netliste_Controle_piste
+/** Function RemoveMisConnectedTracks
  * finds all track segments which are mis-connected (to more than one net).
- * When such a bad segment is found, mark it as needing to be removed (supression).
+ * When such a bad segment is found, mark it as needing to be removed.
+ * and remove all tracks having at least one flagged segment.
+ * @param aDC = the current device context (can be NULL)
+ * @param aDisplayActivity = true to display activity on the frame status bar and message panel
+ * @return true if any change is made
  */
+bool WinEDA_PcbFrame::RemoveMisConnectedTracks( wxDC* aDC, bool aDisplayActivity )
 {
     TRACK*          segment;
     TRACK*          other;
     TRACK*          next;
     int             net_code_s, net_code_e;
     int             nbpoints_modifies = 0;
-    int             flag = 0;
+    bool            flag = false;
     wxString        msg;
     int             percent = 0;
     int             oldpercent = -1;
 
     a_color = RED;
 
-    frame->Affiche_Message( _( "DRC Control:" ) );
+    if( aDisplayActivity )
+        Affiche_Message( _( "DRC Control:" ) );
 
-    frame->DrawPanel->m_AbortRequest = FALSE;
+    DrawPanel->m_AbortRequest = FALSE;
 
-    if( affiche )
-        Affiche_1_Parametre( frame, POS_AFF_VAR, _( "NetCtr" ), wxT( "0 " ), a_color );
+    if( aDisplayActivity )
+        Affiche_1_Parametre( this, POS_AFF_VAR, _( "NetCtr" ), wxT( "0 " ), a_color );
 
     int ii = 0;
-    for( segment = frame->GetBoard()->m_Track;  segment;  segment = (TRACK*) segment->Next() )
+    for( segment = GetBoard()->m_Track;  segment;  segment = (TRACK*) segment->Next() )
     {
-        // display activity
         ii++;
-        percent = (100 * ii) / frame->GetBoard()->m_Track.GetCount();
-        if( percent != oldpercent )
+        if( aDisplayActivity )  // display activity
         {
-            frame->DisplayActivity( percent, wxT( "Drc: " ) );
-            oldpercent = percent;
+            percent = (100 * ii) / GetBoard()->m_Track.GetCount();
+            if( percent != oldpercent )
+            {
+                DisplayActivity( percent, wxT( "Drc: " ) );
+                oldpercent = percent;
 
-            msg.Printf( wxT( "%d" ), frame->GetBoard()->m_Track.GetCount() );
-            Affiche_1_Parametre( frame, POS_AFF_MAX, wxT( "Max" ), msg, GREEN );
+                msg.Printf( wxT( "%d" ), GetBoard()->m_Track.GetCount() );
+                Affiche_1_Parametre( this, POS_AFF_MAX, wxT( "Max" ), msg, GREEN );
 
-            msg.Printf( wxT( "%d" ), frame->GetBoard()->m_Track.GetCount() );
-            Affiche_1_Parametre( frame, POS_AFF_NUMSEGM, wxT( "Segm" ), msg, CYAN );
+                msg.Printf( wxT( "%d" ), GetBoard()->m_Track.GetCount() );
+                Affiche_1_Parametre( this, POS_AFF_NUMSEGM, wxT( "Segm" ), msg, CYAN );
 
-            if( frame->DrawPanel->m_AbortRequest )
-                return flag;
+                if( DrawPanel->m_AbortRequest )
+                    return flag;
+            }
         }
 
         segment->SetState( FLAG0, OFF );
@@ -792,7 +795,7 @@ int Netliste_Controle_piste( WinEDA_PcbFrame* frame, wxDC* DC, int affiche )
         }
         else
         {
-            other = Locate_Piste_Connectee( segment, frame->GetBoard()->m_Track,
+            other = Locate_Piste_Connectee( segment, GetBoard()->m_Track,
                                              NULL, START );
             if( other )
                 net_code_s = other->GetNet();
@@ -809,7 +812,7 @@ int Netliste_Controle_piste( WinEDA_PcbFrame* frame, wxDC* DC, int affiche )
         }
         else
         {
-            other = Locate_Piste_Connectee( segment, frame->GetBoard()->m_Track,
+            other = Locate_Piste_Connectee( segment, GetBoard()->m_Track,
                                              NULL, END );
             if( other )
                 net_code_e = other->GetNet();
@@ -826,7 +829,7 @@ int Netliste_Controle_piste( WinEDA_PcbFrame* frame, wxDC* DC, int affiche )
     }
 
     // Removal of flagged segments
-    for( segment = frame->GetBoard()->m_Track;  segment;  segment = next )
+    for( segment = GetBoard()->m_Track;  segment;  segment = next )
     {
         next = (TRACK*) segment->Next();
 
@@ -834,18 +837,18 @@ int Netliste_Controle_piste( WinEDA_PcbFrame* frame, wxDC* DC, int affiche )
         {
             segment->SetState( FLAG0, OFF );
 
-            flag = 1;
+            flag = true;
             oldpercent = -1;
-            frame->GetBoard()->m_Status_Pcb = 0;
+            GetBoard()->m_Status_Pcb = 0;
 
-            frame->Remove_One_Track( DC, segment );
+            Remove_One_Track( aDC, segment );
 
-            next = frame->GetBoard()->m_Track;  /* NextS a peut etre ete efface */
-            if( affiche )
+            next = GetBoard()->m_Track;  /* the current segment can be deleted, so restart to the beginning */
+            if( aDisplayActivity )
             {
                 nbpoints_modifies++;
                 msg.Printf( wxT( "%d " ), nbpoints_modifies );
-                Affiche_1_Parametre( frame, POS_AFF_VAR, wxEmptyString, msg, a_color );
+                Affiche_1_Parametre( this, POS_AFF_VAR, wxEmptyString, msg, a_color );
             }
         }
     }

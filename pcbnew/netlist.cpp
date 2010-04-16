@@ -35,6 +35,7 @@
 #include "gestfich.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "richio.h"
 
 #include "dialog_netlist.h"
 
@@ -75,7 +76,7 @@ static void    SortListModulesToLoadByLibname( int NbModules );
 static int     BuildFootprintsListFromNetlistFile(
     const wxString& aNetlistFullFilename,
     wxArrayString&  aBufName );
-static bool    OpenNetlistFile( const wxString& aFullFileName );
+static FILE *  OpenNetlistFile( const wxString& aFullFileName );
 static void    AddToList( const wxString& NameLibCmp,
                           const wxString& NameCmp,
                           const wxString& TimeStampPath );
@@ -100,28 +101,27 @@ static void LoadListeModules( WinEDA_PcbFrame* aPcbFrame );
 
 static int           s_NbNewModules;
 static MODULEtoLOAD* s_ModuleToLoad_List;
-FILE* source;
 
+#define BUFFER_CHAR_SIZE 2048
 
 /** function OpenNetlistFile
  *  used to open a netlist file
  */
-bool OpenNetlistFile( const wxString& aFullFileName )
+FILE * OpenNetlistFile( const wxString& aFullFileName )
 {
     if( aFullFileName.IsEmpty() )
         return FALSE;  /* No filename: exit */
 
-    source = wxFopen( aFullFileName, wxT( "rt" ) );
-    if( source == 0 )
+    FILE * netfile = wxFopen( aFullFileName, wxT( "rt" ) );
+    if( netfile == NULL )
     {
         wxString msg;
         msg.Printf( _( "Netlist file %s not found" ),
                     GetChars( aFullFileName ) );
         DisplayError( NULL, msg );
-        return FALSE;
     }
 
-    return true;
+    return netfile;
 }
 
 
@@ -132,6 +132,7 @@ bool OpenNetlistFile( const wxString& aFullFileName )
  * Update Reference, value and "TIME STAMP"
  * @param aNetlistFullFilename = netlist file name (*.net)
  * @param aCmpFullFileName = cmp/footprint list file name (*.cmp) if not found,
+ * @return true if Ok
  * only the netlist will be used
  *
  *  the format of the netlist is something like:
@@ -148,7 +149,7 @@ bool OpenNetlistFile( const wxString& aFullFileName )
  *  }
  * #End
  */
-void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
+bool WinEDA_PcbFrame::ReadPcbNetlist(
                      const wxString&  aNetlistFullFilename,
                      const wxString&  aCmpFullFileName,
                      wxTextCtrl*      aMessageWindow,
@@ -157,15 +158,15 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
                      bool             aDeleteExtraFootprints,
                      bool             aSelect_By_Timestamp )
 {
-    int     LineNum, State, Comment;
+    int     State, Comment;
     MODULE* Module = NULL;
     D_PAD*  PtPad;
-    char    Line[256];
     char*   Text;
     int     UseFichCmp = 1;
 
-    if( !OpenNetlistFile( aNetlistFullFilename ) )
-        return;
+    FILE * netfile = OpenNetlistFile( aNetlistFullFilename );
+    if( !netfile )
+        return false;
 
     if( aMessageWindow )
     {
@@ -176,19 +177,21 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
     }
 
     // Clear undo and redo lists to avoid inconsistencies between lists
-    aFrame->GetScreen()->ClearUndoRedoList();
+    GetScreen()->ClearUndoRedoList();
 
-    aFrame->OnModify();
-    aFrame->GetBoard()->m_Status_Pcb = 0;
-    State = 0; LineNum = 0; Comment = 0;
+    OnModify();
+    GetBoard()->m_Status_Pcb = 0;
+    State = 0; Comment = 0;
     s_NbNewModules = 0;
 
     wxBusyCursor dummy;        // Shows an hourglass while calculating
 
+    FILE_LINE_READER netlistReader( netfile,  BUFFER_CHAR_SIZE );
+    char* Line = netlistReader;
     /* First, read the netlist: Build the list of footprints to load (new
      * footprints)
      */
-    while( GetLine( source, Line, &LineNum ) )
+    while( netlistReader.ReadLine( ) )
     {
         Text = StrPurge( Line );
 
@@ -213,7 +216,7 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
 
         if( State == 2 )
         {
-            Module = ReadNetModule( aFrame,
+            Module = ReadNetModule( this,
                                     aMessageWindow,
                                     aCmpFullFileName,
                                     Text,
@@ -233,7 +236,7 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
     /* Load new footprints */
     if( s_NbNewModules )
     {
-        LoadListeModules( aFrame );
+        LoadListeModules( this );
 
         // Free module list:
         MODULEtoLOAD* item, * next_item;
@@ -248,8 +251,8 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
 
     /* Second read , All footprints are on board, one must update the schematic
      * info (pad netnames) */
-    fseek( source, 0, SEEK_SET ); LineNum = 0;
-    while( GetLine( source, Line, &LineNum ) )
+    netlistReader.Rewind( );
+    while( netlistReader.ReadLine( ) )
     {
         Text = StrPurge( Line );
 
@@ -275,7 +278,7 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
 
         if( State == 2 )
         {
-            Module = ReadNetModule( aFrame,
+            Module = ReadNetModule( this,
                                     aMessageWindow,
                                     aCmpFullFileName,
                                     Text,
@@ -309,7 +312,7 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
         }
     }
 
-    fclose( source );
+    fclose( netfile );
 
     // Delete footprints not found in netlist:
     if( aDeleteExtraFootprints )
@@ -322,7 +325,7 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
         if( NbModulesNetListe  )
         {
             MODULE* NextModule;
-            Module = aFrame->GetBoard()->m_Modules;
+            Module = GetBoard()->m_Modules;
             bool    ask_for_confirmation = true;
             for( ; Module != NULL; Module = NextModule )
             {
@@ -356,19 +359,21 @@ void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
     }
 
     /* Rebuild the connectivity */
-    aFrame->Compile_Ratsnest( NULL, true );
+    Compile_Ratsnest( NULL, true );
 
-    if( aFrame->GetBoard()->m_Track )
+    if( GetBoard()->m_Track )
     {
         if( aDeleteBadTracks )    // Remove erroneous tracks
         {
-            Netliste_Controle_piste( aFrame, NULL, true );
-            aFrame->Compile_Ratsnest( NULL, true );
+            RemoveMisConnectedTracks( NULL, true );
+            Compile_Ratsnest( NULL, true );
         }
     }
 
-    aFrame->DrawPanel->Refresh();
-    aFrame->GetBoard()->DisplayInfo( aFrame );
+    GetBoard()->DisplayInfo( this );
+    DrawPanel->Refresh();
+
+    return true;
 }
 
 
@@ -781,19 +786,21 @@ void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       aFrame,
 int BuildFootprintsListFromNetlistFile( const wxString& aNetlistFullFilename,
                                         wxArrayString&  aBufName )
 {
-    int  textlen;
     int  nb_modules_lus;
-    int  State, LineNum, Comment;
-    char Line[1024], * Text, * LibModName;
+    int  State, Comment;
+    char * Text, * LibModName;
 
-    if( !OpenNetlistFile( aNetlistFullFilename ) )
+    FILE * netfile = OpenNetlistFile( aNetlistFullFilename );
+    if( !netfile )
         return -1;
 
-    State = 0; LineNum = 0; Comment = 0;
-    nb_modules_lus = 0;
-    textlen = MAX_LEN_TXT;
+    FILE_LINE_READER netlistReader( netfile,  BUFFER_CHAR_SIZE );
+    char* Line = netlistReader;
 
-    while( GetLine( source, Line, &LineNum ) )
+    State = 0; Comment = 0;
+    nb_modules_lus = 0;
+
+    while( netlistReader.ReadLine( ) )
     {
         Text = StrPurge( Line );
         if( Comment )
@@ -835,7 +842,7 @@ int BuildFootprintsListFromNetlistFile( const wxString& aNetlistFullFilename,
         }
     }
 
-    fclose( source );
+    fclose( netfile );
 
     return nb_modules_lus;
 }
@@ -876,7 +883,6 @@ int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
                       const wxString* TimeStamp, wxString& NameModule )
 {
     wxString refcurrcmp, timestamp, idmod;
-    char     ia[1024];
     char*    ptcar;
     FILE*    FichCmp;
 
@@ -893,40 +899,43 @@ int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
         return 0;
     }
 
-    while( fgets( ia, sizeof(ia), FichCmp ) != NULL )
+    FILE_LINE_READER netlistReader( FichCmp,  BUFFER_CHAR_SIZE );
+    char* Line = netlistReader;
+
+    while( netlistReader.ReadLine() )
     {
-        if( strnicmp( ia, "BeginCmp", 8 ) != 0 )
+        if( strnicmp( Line, "BeginCmp", 8 ) != 0 )
             continue;
 
         /* Begin component description. */
         refcurrcmp.Empty();
         idmod.Empty();
         timestamp.Empty();
-        while( fgets( ia, sizeof(ia), FichCmp ) != NULL )
+        while( netlistReader.ReadLine() )
         {
-            if( strnicmp( ia, "EndCmp", 6 ) == 0 )
+            if( strnicmp( Line, "EndCmp", 6 ) == 0 )
                 break;
 
-            if( strnicmp( ia, "Reference =", 11 ) == 0 )
+            if( strnicmp( Line, "Reference =", 11 ) == 0 )
             {
-                ptcar = ia + 11;
+                ptcar = Line + 11;
                 ptcar = strtok( ptcar, " =;\t\n" );
                 if( ptcar )
                     refcurrcmp = CONV_FROM_UTF8( ptcar );
                 continue;
             }
 
-            if( strnicmp( ia, "IdModule  =", 11 ) == 0 )
+            if( strnicmp( Line, "IdModule  =", 11 ) == 0 )
             {
-                ptcar = ia + 11;
+                ptcar = Line + 11;
                 ptcar = strtok( ptcar, " =;\t\n" );
                 if( ptcar )
                     idmod = CONV_FROM_UTF8( ptcar );
                 continue;
             }
-            if( strnicmp( ia, "TimeStamp =", 11 ) == 0 )
+            if( strnicmp( Line, "TimeStamp =", 11 ) == 0 )
             {
-                ptcar = ia + 11;
+                ptcar = Line + 11;
                 ptcar = strtok( ptcar, " =;\t\n" );
                 if( ptcar )
                     timestamp = CONV_FROM_UTF8( ptcar );

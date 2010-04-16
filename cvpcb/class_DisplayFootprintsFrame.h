@@ -21,7 +21,10 @@ public:
     void    RedrawActiveWindow( wxDC* DC, bool EraseBg );
     void    ReCreateHToolbar();
     void    ReCreateVToolbar();
+    void    ReCreateOptToolbar();
     void    RecreateMenuBar();
+
+    void OnSelectOptionToolbar( wxCommandEvent& event );
 
     /** Function IsGridVisible() , virtual
      * @return true if the grid must be shown

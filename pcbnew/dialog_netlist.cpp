@@ -12,15 +12,6 @@
 
 #include "dialog_netlist.h"
 
-extern void ReadPcbNetlist( WinEDA_PcbFrame* aFrame,
-                            const wxString&  aNetlistFullFilename,
-                            const wxString&  aCmpFullFileName,
-                            wxTextCtrl*      aMessageWindow,
-                            bool             aChangeFootprint,
-                            bool             aDeleteBadTracks,
-                            bool             aDeleteExtraFootprints,
-                            bool             aSelect_By_Timestamp );
-
 extern void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       frame,
                                                             const wxString& NetlistFullFilename,
                                                             BOARD*          Pcb );
@@ -83,7 +74,7 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
     wxFileName fn = m_NetlistFilenameCtrl->GetValue();
     fn.SetExt( NetCmpExtBuffer );
 
-    ReadPcbNetlist( m_Parent, m_NetlistFilenameCtrl->GetValue(),
+    m_Parent->ReadPcbNetlist( m_NetlistFilenameCtrl->GetValue(),
                     fn.GetFullPath(), m_MessageWindow,
                     m_ChangeExistingFootprintCtrl->GetSelection() == 1 ? TRUE : FALSE,
                     m_DeleteBadTracks->GetSelection() == 1 ? TRUE : FALSE,

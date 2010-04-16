@@ -28,6 +28,7 @@ set(CVPCB_SRCS
     dialog_cvpcb_config.cpp
     dialog_cvpcb_config_fbp.cpp
     dialog_display_options.cpp
+    dialog_display_options_base.cpp
     dummy_functions.cpp
     genequiv.cpp
     init.cpp

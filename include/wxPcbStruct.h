@@ -845,6 +845,50 @@ public:
     // netlist  handling:
     void         InstallNetlistFrame( wxDC* DC, const wxPoint& pos );
 
+    /** Function ReadPcbNetlist
+     * Update footprints (load missing footprints and delete on request extra
+     * footprints)
+     * Update connectivity info ( Net Name list )
+     * Update Reference, value and "TIME STAMP"
+     * @param aNetlistFullFilename = netlist file name (*.net)
+     * @param aCmpFullFileName = cmp/footprint list file name (*.cmp) if not found,
+     * only the netlist will be used
+     * @return true if Ok
+     *
+     *  the format of the netlist is something like:
+     # EESchema Netlist Version 1.0 generee le  18/5/2005-12:30:22
+     *  (
+     *  ( 40C08647 $noname R20 4,7K {Lib=R}
+     *  (    1 VCC )
+     *  (    2 MODB_1 )
+     *  )
+     *  ( 40C0863F $noname R18 4,7_k {Lib=R}
+     *  (    1 VCC )
+     *  (    2 MODA_1 )
+     *  )
+     *  }
+     * #End
+     */
+    bool ReadPcbNetlist(
+                         const wxString&  aNetlistFullFilename,
+                         const wxString&  aCmpFullFileName,
+                         wxTextCtrl*      aMessageWindow,
+                         bool             aChangeFootprint,
+                         bool             aDeleteBadTracks,
+                         bool             aDeleteExtraFootprints,
+                         bool             aSelect_By_Timestamp );
+
+    /** Function RemoveMisConnectedTracks
+     * finds all track segments which are mis-connected (to more than one net).
+     * When such a bad segment is found, mark it as needing to be removed.
+     * and remove all tracks having at least one flagged segment.
+     * @param aDC = the current device context (can be NULL)
+     * @param aDisplayActivity = true to display activity on the frame status bar and message panel
+     * @return true if any change is made
+     */
+    bool RemoveMisConnectedTracks( wxDC* aDC, bool aDisplayActivity );
+
+
     // Autoplacement:
     void         AutoPlace( wxCommandEvent& event );
 
@@ -926,7 +970,7 @@ public:
      * called on a language menu selection
      */
     virtual void SetLanguage( wxCommandEvent& event );
-    
+
 
     DECLARE_EVENT_TABLE()
 };
