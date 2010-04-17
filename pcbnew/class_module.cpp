@@ -623,11 +623,10 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
 
 /* Update the bounding rectangle of the module
  *
- * The rectangle is the rectangle with the contours and
- * Pads.
- * The rectangle is calculated:
- * For East 0
- * Coord in on / anchor position
+ * The bounding box includes outlines and pads, but not the fields.
+ * The rectangle is:
+ *      for orientation 0
+ *      coordinates relative to the module anchor.
  */
 void MODULE::Set_Rectangle_Encadrement()
 {
@@ -702,10 +701,9 @@ void MODULE::Set_Rectangle_Encadrement()
 }
 
 
-/* Equivalent to Module:: Set_Rectangle_Encadrement() coord but real:
- * Updating the rectangle real module PCB cad in ord
- * Entree: pointer module
- * The rectangle is the rectangle with the contours and pads.
+/* Equivalent to Module::Set_Rectangle_Encadrement() but in board coordinates:
+ * Updates the module bounding box on the board
+ * The rectangle is the rectangle with outlines and pads, but not the fields
  * Also updates the surface (.M_Surface) module.
  */
 void MODULE::SetRectangleExinscrit()
@@ -785,7 +783,7 @@ void MODULE::SetRectangleExinscrit()
 
 /**
  * Function GetBoundingBox
- * returns the full bounding box of this Footprint, including texts
+ * returns the full bounding box of this Footprint, including fields
  * Mainly used to redraw the screen area occupied by the footprint
  */
 EDA_Rect MODULE::GetBoundingBox()

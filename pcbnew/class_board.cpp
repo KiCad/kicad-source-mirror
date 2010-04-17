@@ -791,34 +791,19 @@ bool BOARD::ComputeBoundaryBox()
         }
     }
 
-    /* Analise footprints  */
+    /* Analyze footprints  */
 
     for( MODULE* module = m_Modules; module; module = module->Next() )
     {
         hasItems = TRUE;
-        xmin     = MIN( xmin, ( module->m_Pos.x
-                                + module->m_BoundaryBox.GetX() ) );
-        ymin     = MIN( ymin, ( module->m_Pos.y
-                                + module->m_BoundaryBox.GetY() ) );
-        xmax     = MAX( xmax, module->m_Pos.x
-                        + module->m_BoundaryBox.GetRight() );
-        ymax     = MAX( ymax,
-                        module->m_Pos.y + module->m_BoundaryBox.GetBottom() );
-
-
-        for( D_PAD* pt_pad = module->m_Pads; pt_pad; pt_pad = pt_pad->Next() )
-        {
-            const wxPoint& pos = pt_pad->GetPosition();
-
-            d    = pt_pad->m_Rayon;
-            xmin = MIN( xmin, pos.x - d );
-            ymin = MIN( ymin, pos.y - d );
-            xmax = MAX( xmax, pos.x + d );
-            ymax = MAX( ymax, pos.y + d );
-        }
+        EDA_Rect box = module->GetBoundingBox();
+        xmin     = MIN( xmin, box.GetX() );
+        ymin     = MIN( ymin, box.GetY() );
+        xmax     = MAX( xmax, box.GetRight() );
+        ymax     = MAX( ymax, box.GetBottom() );
     }
 
-    /* Analise track and zones */
+    /* Analize track and zones */
     for( TRACK* track = m_Track; track; track = track->Next() )
     {
         d = ( track->m_Width / 2 ) + 1;
