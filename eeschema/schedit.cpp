@@ -383,7 +383,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_CLEANUP_SHEET:
         if ( screen->GetCurItem()
              && screen->GetCurItem()->Type() == DRAW_SHEET_STRUCT_TYPE )
-            ( (SCH_SHEET*) screen->GetCurItem() )->CleanupSheet( this, true );
+            ( (SCH_SHEET*) screen->GetCurItem() )->CleanupSheet( this, true, true );
         break;
 
     case ID_POPUP_SCH_EDIT_PINSHEET:

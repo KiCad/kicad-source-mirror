@@ -178,10 +178,12 @@ public:
 
     /** Function CleanupSheet
      * Delete pinsheets which are not corresponding to a hierarchical label
-     * @param aRedraw = true to redraw Sheet
      * @param aFrame = the schematic frame
+     * @param aRedraw = true to redraw Sheet
+     * @param aSaveForUndoRedo = true to put this sheet in UndoRedo list,
+     *          if it is modified.
      */
-    void         CleanupSheet( WinEDA_SchematicFrame* frame, bool aRedraw );
+    void         CleanupSheet( WinEDA_SchematicFrame* frame, bool aRedraw, bool aSaveForUndoRedo );
 
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item

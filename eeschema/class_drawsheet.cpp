@@ -239,9 +239,11 @@ void SCH_SHEET::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
  * @param aFrame = the schematic frame
  */
 void SCH_SHEET::CleanupSheet( WinEDA_SchematicFrame* aFrame,
-                              bool                   aRedraw )
+                              bool                   aRedraw,
+                              bool                   aSaveForUndoRedo)
 {
     SCH_SHEET_PIN* Pinsheet, * NextPinsheet;
+    bool isSaved = false;
 
     if( !IsOK( aFrame, _( "Ok to cleanup this sheet" ) ) )
         return;
@@ -268,6 +270,11 @@ void SCH_SHEET::CleanupSheet( WinEDA_SchematicFrame* aFrame,
         NextPinsheet = Pinsheet->Next();
         if( HLabel == NULL )   // Hlabel not found: delete pinsheet
         {
+            if( aSaveForUndoRedo && !isSaved )
+            {
+                isSaved = true;
+                aFrame->SaveCopyInUndoList( this, UR_CHANGED);
+            }
             aFrame->OnModify( );
             aFrame->DeleteSheetLabel( false, Pinsheet );
         }

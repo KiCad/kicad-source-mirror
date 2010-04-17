@@ -288,7 +288,6 @@ void WinEDA_ModuleEditFrame::SetToolbars()
     m_HToolBar->EnableTool( ID_MODEDIT_SAVE_LIBMODULE, active && islib );
     MODULE* module_in_edit = GetBoard()->m_Modules;
     if( module_in_edit && module_in_edit->m_Link ) // this is not a new module
-                                                   // ...
     {
         BOARD*  mainpcb = frame->GetBoard();
         MODULE* source_module = mainpcb->m_Modules;
@@ -334,7 +333,7 @@ void WinEDA_ModuleEditFrame::SetToolbars()
     {
         m_HToolBar->EnableTool( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, false );
     }
-
+    m_HToolBar->Refresh();
 
     if( m_VToolBar )
     {
@@ -345,6 +344,7 @@ void WinEDA_ModuleEditFrame::SetToolbars()
         m_VToolBar->EnableTool( ID_PCB_ADD_TEXT_BUTT, active );
         m_VToolBar->EnableTool( ID_MODEDIT_PLACE_ANCHOR, active );
         m_VToolBar->EnableTool( ID_PCB_DELETE_ITEM_BUTT, active );
+        m_VToolBar->Refresh();
     }
 
     if( m_OptionsToolBar )
@@ -382,7 +382,8 @@ void WinEDA_ModuleEditFrame::SetToolbars()
                                             m_DisplayPadFill ?
                                             _( "Show pads in sketch mode" ) :
                                             _( "Show pads in filled mode" ) );
-    }
+        m_OptionsToolBar->Refresh();
+   }
 
     if( m_AuxiliaryToolBar )
     {
@@ -406,6 +407,8 @@ void WinEDA_ModuleEditFrame::SetToolbars()
 
         if( m_SelGridBox )
             m_SelGridBox->SetSelection( m_LastGridSizeId );
+
+        m_AuxiliaryToolBar->Refresh();
     }
 
     DisplayUnitsMsg();

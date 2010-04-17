@@ -141,6 +141,9 @@ void WinEDA_PcbFrame::AuxiliaryToolBar_Update_UI()
         m_SelGridBox->SetSelection( m_LastGridSizeId );
 
     m_TrackAndViasSizesList_Changed = false;
+
+    m_AuxiliaryToolBar->Refresh();
+
 }
 
 
@@ -181,6 +184,7 @@ void WinEDA_PcbFrame::SetToolbars()
 
     state = GetScreen()->GetRedoCommandCount() > 0;
     m_HToolBar->EnableTool( wxID_REDO, state );
+    m_HToolBar->Refresh();
 
     if( m_OptionsToolBar )
     {
@@ -267,6 +271,7 @@ void WinEDA_PcbFrame::SetToolbars()
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
                                       m_auimgr.GetPane(wxT("m_AuxVToolBar")).IsShown() );
+        m_OptionsToolBar->Refresh();
     }
 
     if( m_AuxiliaryToolBar )
