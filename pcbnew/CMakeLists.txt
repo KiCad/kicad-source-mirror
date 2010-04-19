@@ -51,6 +51,7 @@ set(PCBNEW_SRCS
     dialog_edit_module_text.cpp
     dialog_edit_module_text_base.cpp
     dialog_exchange_modules_base.cpp
+    dialog_export_3Dfiles_base.cpp
     dialog_freeroute_exchange.cpp
     dialog_freeroute_exchange_base.cpp
 #   dialog_gendrill.cpp
@@ -99,6 +100,7 @@ set(PCBNEW_SRCS
     edtxtmod.cpp
     event_handlers_tracks_vias_sizes.cpp
     export_gencad.cpp
+    export_vrml.cpp
     files.cpp
     find.cpp
     gen_drill_report_files.cpp
