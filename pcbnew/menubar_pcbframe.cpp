@@ -178,6 +178,13 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
                            _( "Create a report of all modules on the current board" ) );
     item->SetBitmap( tools_xpm );
     submenuexport->Append( item );
+
+    item = new wxMenuItem( submenuexport, ID_GEN_EXPORT_FILE_VRML,
+                           _( "&VRML" ),
+                           _( "Export a VRML board representation" ) );
+    item->SetBitmap( show_3d_xpm );
+    submenuexport->Append( item );
+
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, submenuexport,
                                         ID_GEN_EXPORT_FILE, _( "&Export" ),
                                         _( "Export board" ), export_xpm );

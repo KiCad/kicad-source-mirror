@@ -480,6 +480,25 @@ public:
     void       ExportToGenCAD( wxCommandEvent& event );
 
     /**
+     * Function OnExportVRML
+     * will export the current BOARD to a VRML file.
+     */
+    void OnExportVRML( wxCommandEvent& event );
+
+    /**
+     * Function ExportVRML_File
+     * Creates the file(s) exporting current BOARD to a VRML file.
+     * @param aFullFileName = the full filename of the file to create
+     * @param aScale = the general scaling factor. 1.0 to export in inches
+     * @param aExport3DFiles = true to copy 3D shapes in the subir a3D_Subdir
+     * @param a3D_Subdir = sub directory where 3D sahpes files are copied
+     * used only when aExport3DFiles == true
+     * @return true if Ok.
+     */
+    bool ExportVRML_File( const wxString & aFullFileName, double aScale,
+                    bool aExport3DFiles, const wxString & a3D_Subdir );
+
+    /**
      * Function ExporttoSPECCTRA
      * will export the current BOARD to a specctra dsn file.  See
      * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the

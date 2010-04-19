@@ -113,7 +113,7 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
     info.AddDeveloper( SetMsg( wxT( "Jerry Jacobs <xor.gate.engineering@gmail.com>" ) ) );
     info.AddDeveloper( SetMsg( wxT( "Jonas Diemer <diemer@gmx.de>" ) ) );
     info.AddDeveloper( SetMsg( wxT( "KBool Library <http://boolean.klaasholwerda.nl/bool.html>" ) ) );
-    info.AddDeveloper( SetMsg( wxT( "Lorenzo <lomarcan@tin.it>" ) ) );
+    info.AddDeveloper( SetMsg( wxT( "Lorenzo Marcantonio <lomarcan@tin.it>" ) ) );
     info.AddDeveloper( SetMsg( wxT( "Marco Serantoni <marco.serantoni@gmail.com>" ) ) );
     info.AddDeveloper( SetMsg( wxT( "Rok Markovic <rok@kanardia.eu>" ) ) );
     info.AddDeveloper( SetMsg( wxT( "Tim Hanson <sideskate@gmail.com>" ) ) );
