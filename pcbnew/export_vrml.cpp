@@ -14,6 +14,73 @@
 #include <cmath>
 
 
+
+/* the dialog to create VRML files, derived from DIALOG_EXPORT_3DFILE_BASE,
+ * created by wxFormBuilder
+ */
+#include "dialog_export_3Dfiles_base.h" // the wxFormBuilder header file
+
+#define OPTKEY_OUTPUT_UNIT wxT("VrmlExportUnit" )
+#define OPTKEY_3DFILES_OPT wxT("VrmlExport3DShapeFilesOpt" )
+
+class DIALOG_EXPORT_3DFILE : public DIALOG_EXPORT_3DFILE_BASE
+{
+private:
+    WinEDA_PcbFrame* m_parent;
+    wxConfig* m_config;
+    int m_unitsOpt;          // to remember last option
+    int m_3DFilesOpt;        // to remember last option
+    virtual void OnCancelClick( wxCommandEvent& event ){ EndModal( wxID_CANCEL ); }
+    virtual void OnOkClick( wxCommandEvent& event ){ EndModal( wxID_OK ); }
+
+public:
+    DIALOG_EXPORT_3DFILE( WinEDA_PcbFrame* parent ) :
+        DIALOG_EXPORT_3DFILE_BASE( parent )
+    {
+        m_parent = parent;
+        m_config = wxGetApp().m_EDA_Config;
+        SetFocus();
+        m_config->Read( OPTKEY_OUTPUT_UNIT, &m_unitsOpt );
+        m_config->Read( OPTKEY_3DFILES_OPT, &m_3DFilesOpt );
+        m_rbSelectUnits->SetSelection(m_unitsOpt);
+        m_rb3DFilesOption->SetSelection(m_3DFilesOpt);
+        GetSizer()->SetSizeHints( this );
+        Centre();
+    }
+    ~DIALOG_EXPORT_3DFILE()
+    {
+        m_unitsOpt = GetUnits( );
+        m_3DFilesOpt = Get3DFilesOption( );
+        m_config->Write( OPTKEY_OUTPUT_UNIT, m_unitsOpt );
+        m_config->Write( OPTKEY_3DFILES_OPT, m_3DFilesOpt );
+    };
+
+    void SetSubdir( const wxString & aDir )
+    {
+        m_SubdirNameCtrl->SetValue( aDir);
+    }
+
+    wxString GetSubdir( )
+    {
+        return m_SubdirNameCtrl->GetValue( );
+    }
+
+    wxFilePickerCtrl* FilePicker()
+    {
+        return m_filePicker;
+    }
+
+    int GetUnits( )
+    {
+        return m_unitsOpt = m_rbSelectUnits->GetSelection();
+    }
+
+    int Get3DFilesOption( )
+    {
+        return m_3DFilesOpt = m_rb3DFilesOption->GetSelection();
+    }
+};
+
 /* I use this a lot... */
 static const double PI2 = M_PI / 2;
 
@@ -1037,63 +1104,6 @@ static void write_and_empty_triangle_bag( FILE* output_file,
 }
 
 
-/* the dialog to create VRML files, derived from DIALOG_EXPORT_3DFILE_BASE,
- * created by wxFormBuilder
- */
-#include "dialog_export_3Dfiles_base.h" // the wxFormBuilder header file
-
-class DIALOG_EXPORT_3DFILE : public DIALOG_EXPORT_3DFILE_BASE
-{
-	private:
-        static int m_UnitsOpt;          // to remember last option
-        static int m_3DFilesOpt;        // to remember last option
-		virtual void OnCancelClick( wxCommandEvent& event ){ EndModal( wxID_CANCEL ); }
-		virtual void OnOkClick( wxCommandEvent& event ){ EndModal( wxID_OK ); }
-
-	public:
-		DIALOG_EXPORT_3DFILE( wxWindow* parent ) :
-            DIALOG_EXPORT_3DFILE_BASE( parent )
-        {
-            SetFocus();
-            m_rbSelectUnits->SetSelection(m_UnitsOpt);
-            m_rb3DFilesOption->SetSelection(m_3DFilesOpt);
-            GetSizer()->SetSizeHints( this );
-            Centre();
-        }
-		~DIALOG_EXPORT_3DFILE()
-        {
-            m_UnitsOpt = GetUnits( );
-            m_3DFilesOpt = Get3DFilesOption( );
-        };
-
-        void SetSubdir( const wxString & aDir )
-        {
-            m_SubdirNameCtrl->SetValue( aDir);
-        }
-
-        wxString GetSubdir( )
-        {
-            return m_SubdirNameCtrl->GetValue( );
-        }
-
-        wxFilePickerCtrl* FilePicker()
-        {
-            return m_filePicker;
-        }
-
-        int GetUnits( )
-        {
-            return m_UnitsOpt = m_rbSelectUnits->GetSelection();
-        }
-
-        int Get3DFilesOption( )
-        {
-            return m_3DFilesOpt = m_rb3DFilesOption->GetSelection();
-        }
-};
-int DIALOG_EXPORT_3DFILE::m_UnitsOpt = 0;          // to remember last option
-int DIALOG_EXPORT_3DFILE::m_3DFilesOpt = 1;        // to remember last option
-
 /**
  * Function OnExportVRML
  * will export the current BOARD to a VRML file.
@@ -1186,8 +1196,8 @@ bool WinEDA_PcbFrame::ExportVRML_File( const wxString & aFullFileName,
      * more easy for rotations...
      */
     pcb->ComputeBoundaryBox();
-    double dx = board_scaling_factor * pcb->m_BoundaryBox.Centre().x;
-    double dy = board_scaling_factor * pcb->m_BoundaryBox.Centre().y;
+    double dx = board_scaling_factor * pcb->m_BoundaryBox.Centre().x * aScale;
+    double dy = board_scaling_factor * pcb->m_BoundaryBox.Centre().y * aScale;
     fprintf(output_file, "  translation %g %g 0.0\n", -dx, dy );
 
     fprintf(output_file, "  children [\n" );
