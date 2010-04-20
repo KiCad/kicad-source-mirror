@@ -118,7 +118,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
                             _( "Open the gerbview manual" ), help_xpm );
     ADD_MENUITEM_WITH_HELP( helpMenu, ID_KICAD_ABOUT, _( "&About Gerbview" ),
                             _( "About gerbview gerber and drill viewer" ),
-                            info_xpm );
+                            online_help_xpm );
 
     menuBar->Append( filesMenu, _( "&File" ) );
     menuBar->Append( configmenu, _( "&Preferences" ) );

@@ -262,6 +262,7 @@ set(BITMAP_SRCS
     new.xpm
     noconn.xpm
     Normal.xpm
+    online_help.xpm
     Open_Library.xpm
     Open_Project.xpm
     open.xpm

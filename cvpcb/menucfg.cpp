@@ -80,7 +80,7 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
     wxMenu* helpMenu = new wxMenu;
     item = new wxMenuItem( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
                            _( "Open the cvpcb manual" ) );
-    item->SetBitmap( help_xpm );
+    item->SetBitmap( online_help_xpm );
     helpMenu->Append( item );
 
     /* About on all platforms except WXMAC */
