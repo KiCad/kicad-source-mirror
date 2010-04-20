@@ -38,7 +38,6 @@ class DIALOG_SVG_PRINT : public DIALOG_SVG_PRINT_base
 {
 private:
     WinEDA_BasePcbFrame* m_Parent;
-    int m_ImageXSize_mm;
     wxConfig*            m_Config;
     long m_PrintMaskLayer;
     wxCheckBox*          m_BoxSelectLayer[32];
@@ -90,7 +89,6 @@ void DIALOG_SVG_PRINT::initDialog( )
 {
     SetFocus();     // Make ESC key working
 
-    m_ImageXSize_mm = 270;
     if( m_Config )
     {
         m_Config->Read( PLOTSVGMODECOLOR_KEY, &s_Parameters.m_Print_Black_and_White );
@@ -245,7 +243,7 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Frame_Ref )
 
 
 /*
- * Routine actual print
+ * Actual print function.
  */
 bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
                                  BASE_SCREEN*    screen,
@@ -255,7 +253,6 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     wxPoint tmp_startvisu;
     wxSize  SheetSize;  // Sheet size in internal units
     wxPoint old_org;
-    float   dpi;
     bool    success = true;
 
     /* Change frames and local settings */
@@ -269,16 +266,16 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     SheetSize.y *= m_Parent->m_InternalUnits / 1000;    // size in pixels
 
     screen->SetScalingFactor( 1.0 );
-    dpi = (float) SheetSize.x * 25.4 / m_ImageXSize_mm;
+    float dpi = (float)m_Parent->m_InternalUnits;
 
     WinEDA_DrawPanel* panel = m_Parent->DrawPanel;
 
+    SetLocaleTo_C_standard();       // Switch the locale to standard C (needed
+                                    // to print floating point numbers like 1.3)
     wxSVGFileDC       dc( FullFileName, SheetSize.x, SheetSize.y, dpi );
 
     EDA_Rect          tmp = panel->m_ClipBox;
     GRResetPenAndBrush( &dc );
-    s_Parameters.m_PenDefaultSize = ReturnValueFromTextCtrl( *m_DialogPenWidth,
-                                                  m_Parent->m_InternalUnits );
     GRForceBlackPen( m_ModeColorOption->GetSelection() == 0 ? false : true );
     s_Parameters.m_DrillShapeOpt = PRINT_PARAMETERS::FULL_DRILL_SHAPE;
 
@@ -288,9 +285,11 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
         0x7FFFFF0 );
 
     screen->m_IsPrinting = true;
-    SetLocaleTo_C_standard();       // Switch the locale to standard C (needed
-                                    // to print floating point numbers like 1.3)
+
+    int tmp_cb = g_DrawBgColor;
+    g_DrawBgColor = WHITE;
     m_Parent->PrintPage( &dc, aPrint_Frame_Ref, m_PrintMaskLayer, false, &s_Parameters);
+    g_DrawBgColor = tmp_cb;
     SetLocaleTo_Default();          // revert to the current  locale
     screen->m_IsPrinting = false;
     panel->m_ClipBox     = tmp;

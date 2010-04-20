@@ -255,6 +255,7 @@ extern const char* new_txt_xpm[];
 extern const char* new_xpm[];
 extern const char* noconn_button[];
 extern const char* normal_xpm[];
+extern const char* online_help_xpm[];
 extern const char* open_library_xpm[];
 extern const char* open_project_xpm[];
 extern const char* open_xpm[];

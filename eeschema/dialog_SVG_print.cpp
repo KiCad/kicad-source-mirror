@@ -230,12 +230,16 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( WinEDA_DrawFrame * frame,
     old_org = screen->m_DrawOrg;
     screen->m_DrawOrg.x   = screen->m_DrawOrg.y = 0;
     screen->m_StartVisu.x = screen->m_StartVisu.y = 0;
-    SheetSize    = screen->ReturnPageSize( );
+    SheetSize    = screen->ReturnPageSize( );           // page size in 1/1000 inch, ie in internal units
 
     screen->SetScalingFactor( 1.0 );
     WinEDA_DrawPanel* panel = frame->DrawPanel;
 
-    wxSVGFileDC dc( FullFileName, SheetSize.x, SheetSize.y );
+    SetLocaleTo_C_standard( );   // Switch the locale to standard C (needed
+                                 // to print floating point numbers like 1.3)
+
+    float dpi = (float)frame->m_InternalUnits;
+    wxSVGFileDC dc( FullFileName, SheetSize.x, SheetSize.y, dpi );
 
     EDA_Rect tmp = panel->m_ClipBox;
     GRResetPenAndBrush( &dc );
@@ -248,8 +252,6 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( WinEDA_DrawFrame * frame,
     panel->m_ClipBox.SetHeight( 0x7FFFFF0 );
 
     screen->m_IsPrinting = true;
-    SetLocaleTo_C_standard( );   // Switch the locale to standard C (needed
-                                 // to print floating point numbers like 1.3)
     frame->PrintPage( &dc, aPrint_Sheet_Ref, 1, false );
     SetLocaleTo_Default( );      // revert to the current  locale
     screen->m_IsPrinting = false;

@@ -53,7 +53,7 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
                                ID_GENERAL_HELP,
                                _( "&Contents" ),
                                _( "Open the pcbnew manual" ) );
-        item->SetBitmap( help_xpm );
+        item->SetBitmap( online_help_xpm );
         helpMenu->Append( item );
 
 
