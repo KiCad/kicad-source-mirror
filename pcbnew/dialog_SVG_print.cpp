@@ -280,16 +280,17 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     s_Parameters.m_DrillShapeOpt = PRINT_PARAMETERS::FULL_DRILL_SHAPE;
 
 
-    panel->m_ClipBox.SetX( 0 ); panel->m_ClipBox.SetY( 0 );
-    panel->m_ClipBox.SetWidth( 0x7FFFFF0 ); panel->m_ClipBox.SetHeight(
-        0x7FFFFF0 );
+    panel->m_ClipBox.SetX( 0 );
+    panel->m_ClipBox.SetY( 0 );
+    panel->m_ClipBox.SetWidth( 0x7FFFFF0 );
+    panel->m_ClipBox.SetHeight( 0x7FFFFF0 );
 
     screen->m_IsPrinting = true;
 
-    int tmp_cb = g_DrawBgColor;
+    int bg_color = g_DrawBgColor;
     g_DrawBgColor = WHITE;
     m_Parent->PrintPage( &dc, aPrint_Frame_Ref, m_PrintMaskLayer, false, &s_Parameters);
-    g_DrawBgColor = tmp_cb;
+    g_DrawBgColor = bg_color;
     SetLocaleTo_Default();          // revert to the current  locale
     screen->m_IsPrinting = false;
     panel->m_ClipBox     = tmp;
