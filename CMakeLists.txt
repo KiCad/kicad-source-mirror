@@ -150,8 +150,8 @@ if(WIN32 AND USE_WX_GRAPHICS_CONTEXT)
 endif(WIN32 AND USE_WX_GRAPHICS_CONTEXT)
 
 # Automagically create version header file.
-include(CreateSVNVersionHeader)
-create_svn_version_header()
+include(CreateBzrVersionHeader)
+create_bzr_version_header()
 
 if(EXISTS ${CMAKE_SOURCE_DIR}/include/config.h)
     # This file may exist (created by an alternate process to the svn test above),
