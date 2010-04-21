@@ -59,7 +59,7 @@ public:
 
 private:
     void OnCloseWindow( wxCloseEvent& event );
-    void OnPrintSetup( wxCommandEvent& event );
+    void OnPageSetup( wxCommandEvent& event );
     void OnPrintPreview( wxCommandEvent& event );
     void OnPrintButtonClick( wxCommandEvent& event );
 
@@ -414,7 +414,7 @@ void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
 
 
 /**********************************************************/
-void DIALOG_PRINT_USING_PRINTER::OnPrintSetup( wxCommandEvent& event )
+void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
 /**********************************************************/
 
 /* Open a dialog box for printer setup (printer options, page size ...)

@@ -240,6 +240,9 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
 
     if( userscale == 1.0 )
     {
+        // We want a 1:1 scale and margins for printing
+        MapScreenSizeToPaper( );
+        // Fine scale adjust
         dc->SetUserScale( accurate_Xscale, accurate_Yscale );
     }
 

@@ -19,8 +19,87 @@ static void Print_Module( WinEDA_DrawPanel* aPanel, wxDC* aDC, MODULE* aModule,
                           int aDraw_mode, int aMasklayer,
                           PRINT_PARAMETERS::DrillShapeOptT aDrillShapeOpt );
 
+/** Function WinEDA_ModuleEditFrame::PrintPage
+ * Used to print the board (on printer, or when creating SVF files).
+ * Print the board, but only layers allowed by aPrintMaskLayer
+ * @param aDC = the print device context
+ * @param aPrint_Sheet_Ref = true to print frame references
+ * @param aPrint_Sheet_Ref = a 32 bits mask: bit n = 1 -> layer n is printed
+ * @param aPrintMirrorMode = true to plot mirrored
+ * @param aData = a pointer to an optional data (NULL if not used)
+ */
+void WinEDA_ModuleEditFrame::PrintPage( wxDC* aDC,
+                                  bool  aPrint_Sheet_Ref,
+                                  int   aPrintMaskLayer,
+                                  bool  aPrintMirrorMode,
+                                  void * aData)
+{
+    MODULE* Module;
+    int drawmode = GR_COPY;
+    DISPLAY_OPTIONS      save_opt;
+    BOARD*               Pcb   = GetBoard();
+    int                  defaultPenSize = 50;
 
-/** Function PrintPage
+    PRINT_PARAMETERS * printParameters = (PRINT_PARAMETERS*) aData; // can be null
+    PRINT_PARAMETERS::DrillShapeOptT drillShapeOpt = PRINT_PARAMETERS::FULL_DRILL_SHAPE;
+    if( printParameters )
+         defaultPenSize = printParameters->m_PenDefaultSize;
+
+    save_opt = DisplayOpt;
+
+    DisplayOpt.ContrastModeDisplay = false;
+    DisplayOpt.DisplayPadFill = true;
+    DisplayOpt.DisplayViaFill = true;    
+
+    m_DisplayPadFill = DisplayOpt.DisplayPadFill;
+    m_DisplayViaFill = DisplayOpt.DisplayViaFill;
+    m_DisplayPadNum = DisplayOpt.DisplayPadNum = false;
+    bool nctmp = GetBoard()->IsElementVisible(NO_CONNECTS_VISIBLE);
+    GetBoard()->SetElementVisibility(NO_CONNECTS_VISIBLE, false);
+    DisplayOpt.DisplayPadIsol    = false;
+    DisplayOpt.DisplayModEdge    = FILLED;
+    DisplayOpt.DisplayModText    = FILLED;
+    m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = FILLED;
+    DisplayOpt.ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
+    DisplayOpt.DisplayDrawItems    = FILLED;
+    DisplayOpt.DisplayZonesMode    = 0;
+    DisplayOpt.DisplayNetNamesMode = 0;
+
+    DrawPanel->m_PrintIsMirrored = aPrintMirrorMode;
+
+    // The OR mode is used in color mode, but be aware the backgroud *must be
+    // BLACK.  In the print page dialog, we first print in BLACK, and after
+    // reprint in color, on the black "local" backgroud, in OR mode the black
+    // print is not made before, only a white page is printed
+    if( GetGRForceBlackPenState() == false )
+        drawmode = GR_OR;
+
+    // Draw footprints, this is done at last in order to print the pad holes in
+    // white (or g_DrawBgColor) after the tracks and zones
+    Module = (MODULE*) Pcb->m_Modules;
+    int tmp = D_PAD::m_PadSketchModePenSize;
+    D_PAD::m_PadSketchModePenSize = defaultPenSize;
+    for( ; Module != NULL; Module = Module->Next() )
+    {
+        Print_Module( DrawPanel, aDC, Module, drawmode, aPrintMaskLayer, drillShapeOpt );
+    }
+    D_PAD::m_PadSketchModePenSize = tmp;
+
+    if( aPrint_Sheet_Ref )
+        TraceWorkSheet( aDC, GetScreen(), defaultPenSize );
+
+    DrawPanel->m_PrintIsMirrored = false;
+
+    DisplayOpt = save_opt;
+    m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
+    m_DisplayPadFill = DisplayOpt.DisplayPadFill;
+    m_DisplayViaFill = DisplayOpt.DisplayViaFill;
+    m_DisplayPadNum  = DisplayOpt.DisplayPadNum;
+    GetBoard()->SetElementVisibility(NO_CONNECTS_VISIBLE, nctmp);
+}
+
+
+/** WinEDA_PcbFrame::Function PrintPage
  * Used to print the board (on printer, or when creating SVF files).
  * Print the board, but only layers allowed by aPrintMaskLayer
  * @param aDC = the print device context
