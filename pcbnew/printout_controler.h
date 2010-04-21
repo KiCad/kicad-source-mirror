@@ -31,6 +31,7 @@ public:
     int    m_PageCount;                         // Number of page to print
     bool   m_ForceCentered;                     // Forge plot origin to page centre (used in modedit)
     int    m_Flags;                             // auxiliary variable: can be used to pass some other info
+    wxPageSetupDialogData* m_PageSetupData;     // A wxPageSetupDialogData to know page options (margins)
 
     enum DrillShapeOptT {
         NO_DRILL_SHAPE    = 0,
