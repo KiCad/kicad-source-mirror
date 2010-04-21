@@ -36,6 +36,7 @@ static double s_ScaleList[] =
 
 // static print data and page setup data, to remember settings during the session
 static wxPrintData* g_PrintData;
+static wxPageSetupDialogData* g_pageSetupData = (wxPageSetupDialogData*) NULL;
 
 static PRINT_PARAMETERS  s_Parameters;
 
@@ -138,6 +139,16 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     int      layer_max = NB_LAYERS;
     wxString msg;
     BOARD*   board = m_Parent->GetBoard();
+    if( g_pageSetupData == NULL )
+    {
+        g_pageSetupData = new wxPageSetupDialogData;
+        // Set initial page margins.
+        // Margins are already set in Pcbnew, so we cans use 0
+        g_pageSetupData->SetMarginTopLeft(wxPoint(0, 0));
+        g_pageSetupData->SetMarginBottomRight(wxPoint(0, 0));
+    }
+
+    s_Parameters.m_PageSetupData = g_pageSetupData;
 
      // Create layer list.
     int      layer;
@@ -420,18 +431,13 @@ void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
 /* Open a dialog box for printer setup (printer options, page size ...)
  */
 {
-    wxPrintDialogData printDialogData( *g_PrintData );
+    *g_pageSetupData = *g_PrintData;
 
-    if( printDialogData.Ok() )
-    {
-        wxPrintDialog printerDialog( this, &printDialogData );
+    wxPageSetupDialog pageSetupDialog(this, g_pageSetupData);
+    pageSetupDialog.ShowModal();
 
-        printerDialog.ShowModal();
-
-        *g_PrintData = printerDialog.GetPrintDialogData().GetPrintData();
-    }
-    else
-        DisplayError( this, _( "Printer Problem!" ) );
+    (*g_PrintData) = pageSetupDialog.GetPageSetupDialogData().GetPrintData();
+    (*g_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
 }
 
 

@@ -34,6 +34,7 @@ static double s_ScaleList[] =
 
 // static print data and page setup data, to remember settings during the session
 static wxPrintData* g_PrintData;
+static wxPageSetupDialogData* g_pageSetupData = (wxPageSetupDialogData*) NULL;
 
 // Variables locales
 static PRINT_PARAMETERS  s_Parameters;
@@ -58,7 +59,7 @@ public:
 private:
     void OnCloseWindow( wxCloseEvent& event );
     void OnInitDialog( wxInitDialogEvent& event );
-    void OnPrintSetup( wxCommandEvent& event );
+    void OnPageSetup( wxCommandEvent& event );
     void OnPrintPreview( wxCommandEvent& event );
     void OnPrintButtonClick( wxCommandEvent& event );
 
@@ -130,8 +131,18 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     int      layer_max = NB_LAYERS;
     wxString msg;
 
-    layer_max = 32;
+    if( g_pageSetupData == NULL )
+    {
+        g_pageSetupData = new wxPageSetupDialogData;
+        // Set initial page margins.
+        // Margins are already set in Pcbnew, so we cans use 0
+        g_pageSetupData->SetMarginTopLeft(wxPoint(0, 0));
+        g_pageSetupData->SetMarginBottomRight(wxPoint(0, 0));
+    }
 
+    s_Parameters.m_PageSetupData = g_pageSetupData;
+
+    layer_max = 32;
     /* Create layer list */
     int mask = 1, ii;
     for( ii = 0; ii < layer_max; ii++, mask <<= 1 )
@@ -326,24 +337,19 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters( )
 }
 
 /**********************************************************/
-void DIALOG_PRINT_USING_PRINTER::OnPrintSetup( wxCommandEvent& event )
+void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
 /**********************************************************/
 
 /* Open a dialog box for printer setup (printer options, page size ...)
  */
 {
-    wxPrintDialogData printDialogData( *g_PrintData );
+    *g_pageSetupData = *g_PrintData;
 
-    if( printDialogData.Ok() )
-    {
-        wxPrintDialog printerDialog( this, &printDialogData );
+    wxPageSetupDialog pageSetupDialog(this, g_pageSetupData);
+    pageSetupDialog.ShowModal();
 
-        printerDialog.ShowModal();
-
-        *g_PrintData = printerDialog.GetPrintDialogData().GetPrintData();
-    }
-    else
-        DisplayError( this, _( "Printer Problem!" ) );
+    (*g_PrintData) = pageSetupDialog.GetPageSetupDialogData().GetPrintData();
+    (*g_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
 }
 
 
