@@ -40,7 +40,7 @@ macro( create_bzr_version_header )
         if( NOT ${_bzr_log_result} EQUAL 0 )
             message(STATUS "Using <build_version.h> for version string.")
         else( NOT ${_bzr_log_result} EQUAL 0 )
-            string( REGEX REPLACE "^(.*\n)?revno: ([^ ]+).*"
+            string( REGEX REPLACE "^(.*\n)?revno: ([^ \n]+).*"
                     "\\2" Kicad_REPO_REVISION "${_bazaar_LAST_CHANGE_LOG}" )
             string( REGEX REPLACE "^(.*\n)?committer: ([^\n]+).*"
                     "\\2" Kicad_REPO_LAST_CHANGED_AUTHOR "${_bazaar_LAST_CHANGE_LOG}" )
@@ -59,7 +59,7 @@ macro( create_bzr_version_header )
         set( KICAD_BUILD_VERSION "(${_kicad_bzr_date} BZR ${Kicad_REPO_REVISION})" )
 
         # Definition to conditionally use date and revision returned from the
-        # Bazaar info command instead of hand coded date and revision in
+        # Bazaar log command instead of hand coded date and revision in
         # "include/build_version.h".  If Bazaar is not found then the date
         # and version information must be manually edited.
         # Directive means bzr build, program version and build version will

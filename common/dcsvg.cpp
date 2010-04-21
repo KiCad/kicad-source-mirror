@@ -157,8 +157,8 @@ void wxSVGFileDC::Init( wxString f, int Width, int Height, float dpi )
         write( s );
         s.Printf( wxT( "  version=\"1.1\"\n" ) );
         write( s );
-        s.Printf( wxT( "  width=\"%.2gcm\" height=\"%.2gcm\" viewBox=\"0 0 %d %d \"\n" ),
-                  float (Width) / dpi * 2.54, float (Height) / dpi * 2.54, Width, Height );
+        s.Printf( wxT( "  width=\"%gin\" height=\"%gin\" viewBox=\"0 0 %d %d \"\n" ),
+                  double (Width) / dpi, double (Height) / dpi, Width, Height );
         write( s );
         s.Printf( wxT( ">\n" ) );
         write( s );
