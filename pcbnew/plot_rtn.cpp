@@ -262,11 +262,17 @@ static void PlotTextModule( PLOTTER* plotter, TEXTE_MODULE* pt_texte,
     if( pt_texte->m_Mirror )
         NEGATE( size.x );  // Text is mirrored
 
+    // Non bold texts thickness is clamped at 1/6 char size by the low level draw function.
+    // but in Pcbnew we do not manage bold texts and thickness up to 1/4 char size
+    // (like bold text) and we manage the thickness.
+    // So we set bold flag to true
+    bool allow_bold = pt_texte->m_Bold || thickness;
+
     plotter->text( pos, BLACK,
                    pt_texte->m_Text,
                    orient, size,
                    pt_texte->m_HJustify, pt_texte->m_VJustify,
-                   thickness, pt_texte->m_Italic, pt_texte->m_Bold );
+                   thickness, pt_texte->m_Italic, allow_bold );
 }
 
 
@@ -511,6 +517,12 @@ void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int masque_layer,
     if( pt_texte->m_Mirror )
         size.x = -size.x;
 
+    // Non bold texts thickness is clamped at 1/6 char size by the low level draw function.
+    // but in Pcbnew we do not manage bold texts and thickness up to 1/4 char size
+    // (like bold text) and we manage the thickness.
+    // So we set bold flag to true
+    bool allow_bold = pt_texte->m_Bold || thickness;
+
     if( pt_texte->m_MultilineAllowed )
     {
         wxArrayString* list = wxStringSplit( pt_texte->m_Text, '\n' );
@@ -526,7 +538,7 @@ void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int masque_layer,
                            txt,
                            orient, size,
                            pt_texte->m_HJustify, pt_texte->m_VJustify,
-                           thickness, pt_texte->m_Italic, pt_texte->m_Bold );
+                           thickness, pt_texte->m_Italic, allow_bold );
             pos += offset;
         }
 
@@ -537,7 +549,7 @@ void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int masque_layer,
                        pt_texte->m_Text,
                        orient, size,
                        pt_texte->m_HJustify, pt_texte->m_VJustify,
-                       thickness, pt_texte->m_Italic, pt_texte->m_Bold );
+                       thickness, pt_texte->m_Italic, allow_bold );
 }
 
 

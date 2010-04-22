@@ -63,6 +63,7 @@ private:
     void OnPageSetup( wxCommandEvent& event );
     void OnPrintPreview( wxCommandEvent& event );
     void OnPrintButtonClick( wxCommandEvent& event );
+	void OnScaleSelectionClick( wxCommandEvent& event );
 
     void OnButtonCancelClick( wxCommandEvent& event ) { Close(); }
     void SetPrintParameters( );
@@ -242,6 +243,8 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     }
 
     m_ScaleOption->SetSelection( scale_idx );
+    scale_idx = m_ScaleOption->GetSelection();
+    s_Parameters.m_PrintScale =  s_ScaleList[scale_idx];
     m_Print_Mirror->SetValue(s_Parameters.m_PrintMirror);
     m_Exclude_Edges_Pcb->SetValue(m_ExcludeEdgeLayer);
     m_Print_Sheet_Ref->SetValue( s_Parameters.m_Print_Sheet_Ref );
@@ -265,6 +268,12 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     m_FineAdjustXscaleOpt->SetValue( msg );
     msg.Printf( wxT( "%f" ), s_Parameters.m_YScaleAdjust );
     m_FineAdjustYscaleOpt->SetValue( msg );
+
+    bool enable = (s_Parameters.m_PrintScale == 1.0);
+    if( m_FineAdjustXscaleOpt )
+        m_FineAdjustXscaleOpt->Enable(enable);
+    if( m_FineAdjustYscaleOpt )
+        m_FineAdjustYscaleOpt->Enable(enable);
 }
 
 
@@ -421,6 +430,16 @@ void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
 
     m_DialogPenWidth->SetValue(
         ReturnStringFromValue( g_UnitMetric, s_Parameters.m_PenDefaultSize, m_Parent->m_InternalUnits ) );
+}
+
+void DIALOG_PRINT_USING_PRINTER::OnScaleSelectionClick( wxCommandEvent& event )
+{
+    double scale = s_ScaleList[m_ScaleOption->GetSelection()];
+    bool enable = (scale == 1.0);
+    if( m_FineAdjustXscaleOpt )
+        m_FineAdjustXscaleOpt->Enable(enable);
+    if( m_FineAdjustYscaleOpt )
+        m_FineAdjustYscaleOpt->Enable(enable);
 }
 
 

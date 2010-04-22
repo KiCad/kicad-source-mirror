@@ -88,6 +88,10 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 }
                 break;
 
+            case TYPE_COTATION:
+                // see above.
+                break;
+
             default:
                 if( m_ID_current_state == 0 )
                 {
@@ -348,7 +352,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             DrawPanel->m_AutoPAN_Request = true;
         }
         else
-            DisplayError( this, wxT( "Internal err: Struct not COTATION" ) );
+            DisplayError( this, wxT( "WinEDA_PcbFrame::OnLeftClick() error item is not a DIMENSION" ) );
         break;
 
     case ID_PCB_DELETE_ITEM_BUTT:

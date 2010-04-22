@@ -62,6 +62,7 @@ private:
     void OnPageSetup( wxCommandEvent& event );
     void OnPrintPreview( wxCommandEvent& event );
     void OnPrintButtonClick( wxCommandEvent& event );
+	void OnScaleSelectionClick( wxCommandEvent& event );
 
     void OnButtonCancelClick( wxCommandEvent& event ) { Close(); }
     void SetPrintParameters( );
@@ -210,6 +211,8 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     }
 
     m_ScaleOption->SetSelection( scale_idx );
+    scale_idx = m_ScaleOption->GetSelection();
+    s_Parameters.m_PrintScale =  s_ScaleList[scale_idx];
     m_Print_Mirror->SetValue(s_Parameters.m_PrintMirror);
 
 
@@ -225,6 +228,12 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     m_FineAdjustXscaleOpt->SetValue( msg );
     msg.Printf( wxT( "%f" ), s_Parameters.m_YScaleAdjust );
     m_FineAdjustYscaleOpt->SetValue( msg );
+
+    bool enable = (s_Parameters.m_PrintScale == 1.0);
+    if( m_FineAdjustXscaleOpt )
+        m_FineAdjustXscaleOpt->Enable(enable);
+    if( m_FineAdjustYscaleOpt )
+        m_FineAdjustYscaleOpt->Enable(enable);
 }
 
 /*************************************************/
@@ -334,6 +343,16 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters( )
     }
     g_pcb_plot_options.ScaleAdjX = s_Parameters.m_XScaleAdjust;
     g_pcb_plot_options.ScaleAdjX = s_Parameters.m_YScaleAdjust;
+}
+
+void DIALOG_PRINT_USING_PRINTER::OnScaleSelectionClick( wxCommandEvent& event )
+{
+    double scale = s_ScaleList[m_ScaleOption->GetSelection()];
+    bool enable = (scale == 1.0);
+    if( m_FineAdjustXscaleOpt )
+        m_FineAdjustXscaleOpt->Enable(enable);
+    if( m_FineAdjustYscaleOpt )
+        m_FineAdjustYscaleOpt->Enable(enable);
 }
 
 /**********************************************************/
