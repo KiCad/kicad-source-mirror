@@ -34,6 +34,7 @@ static double s_ScaleList[] =
 
 // static print data and page setup data, to remember settings during the session
 static wxPrintData* g_PrintData;
+static wxPageSetupDialogData* g_pageSetupData = (wxPageSetupDialogData*) NULL;
 
 // Variables locales
 static PRINT_PARAMETERS  s_Parameters;
@@ -58,9 +59,10 @@ public:
 private:
     void OnCloseWindow( wxCloseEvent& event );
     void OnInitDialog( wxInitDialogEvent& event );
-    void OnPrintSetup( wxCommandEvent& event );
+    void OnPageSetup( wxCommandEvent& event );
     void OnPrintPreview( wxCommandEvent& event );
     void OnPrintButtonClick( wxCommandEvent& event );
+	void OnScaleSelectionClick( wxCommandEvent& event );
 
     void OnButtonCancelClick( wxCommandEvent& event ) { Close(); }
     void SetPrintParameters( );
@@ -130,8 +132,18 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     int      layer_max = NB_LAYERS;
     wxString msg;
 
-    layer_max = 32;
+    if( g_pageSetupData == NULL )
+    {
+        g_pageSetupData = new wxPageSetupDialogData;
+        // Set initial page margins.
+        // Margins are already set in Pcbnew, so we cans use 0
+        g_pageSetupData->SetMarginTopLeft(wxPoint(0, 0));
+        g_pageSetupData->SetMarginBottomRight(wxPoint(0, 0));
+    }
 
+    s_Parameters.m_PageSetupData = g_pageSetupData;
+
+    layer_max = 32;
     /* Create layer list */
     int mask = 1, ii;
     for( ii = 0; ii < layer_max; ii++, mask <<= 1 )
@@ -199,6 +211,8 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     }
 
     m_ScaleOption->SetSelection( scale_idx );
+    scale_idx = m_ScaleOption->GetSelection();
+    s_Parameters.m_PrintScale =  s_ScaleList[scale_idx];
     m_Print_Mirror->SetValue(s_Parameters.m_PrintMirror);
 
 
@@ -214,6 +228,12 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     m_FineAdjustXscaleOpt->SetValue( msg );
     msg.Printf( wxT( "%f" ), s_Parameters.m_YScaleAdjust );
     m_FineAdjustYscaleOpt->SetValue( msg );
+
+    bool enable = (s_Parameters.m_PrintScale == 1.0);
+    if( m_FineAdjustXscaleOpt )
+        m_FineAdjustXscaleOpt->Enable(enable);
+    if( m_FineAdjustYscaleOpt )
+        m_FineAdjustYscaleOpt->Enable(enable);
 }
 
 /*************************************************/
@@ -325,25 +345,30 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters( )
     g_pcb_plot_options.ScaleAdjX = s_Parameters.m_YScaleAdjust;
 }
 
+void DIALOG_PRINT_USING_PRINTER::OnScaleSelectionClick( wxCommandEvent& event )
+{
+    double scale = s_ScaleList[m_ScaleOption->GetSelection()];
+    bool enable = (scale == 1.0);
+    if( m_FineAdjustXscaleOpt )
+        m_FineAdjustXscaleOpt->Enable(enable);
+    if( m_FineAdjustYscaleOpt )
+        m_FineAdjustYscaleOpt->Enable(enable);
+}
+
 /**********************************************************/
-void DIALOG_PRINT_USING_PRINTER::OnPrintSetup( wxCommandEvent& event )
+void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
 /**********************************************************/
 
 /* Open a dialog box for printer setup (printer options, page size ...)
  */
 {
-    wxPrintDialogData printDialogData( *g_PrintData );
+    *g_pageSetupData = *g_PrintData;
 
-    if( printDialogData.Ok() )
-    {
-        wxPrintDialog printerDialog( this, &printDialogData );
+    wxPageSetupDialog pageSetupDialog(this, g_pageSetupData);
+    pageSetupDialog.ShowModal();
 
-        printerDialog.ShowModal();
-
-        *g_PrintData = printerDialog.GetPrintDialogData().GetPrintData();
-    }
-    else
-        DisplayError( this, _( "Printer Problem!" ) );
+    (*g_PrintData) = pageSetupDialog.GetPageSetupDialogData().GetPrintData();
+    (*g_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
 }
 
 

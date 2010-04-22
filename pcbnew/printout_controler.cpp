@@ -32,6 +32,7 @@ PRINT_PARAMETERS::PRINT_PARAMETERS()
     m_ForceCentered = false;
     m_Flags = 0;
     m_DrillShapeOpt = PRINT_PARAMETERS::SMALL_DRILL_SHAPE;
+    m_PageSetupData = NULL;
 }
 
 
@@ -116,10 +117,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
 {
     int          tmpzoom;
     wxPoint      tmp_startvisu;
-    wxSize       PageSize_in_mm;
     wxSize       SheetSize;     // Page size in internal units
-    wxSize       PlotAreaSize;  // plot area size in pixels
-    double       scaleX, scaleY, scale;
     wxPoint      old_org;
     wxPoint      DrawOffset; // Offset de trace
     double       userscale;
@@ -129,8 +127,6 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     bool         printMirror = m_PrintParams.m_PrintMirror;
 
     wxBusyCursor dummy;
-
-    GetPageSizeMM( &PageSize_in_mm.x, &PageSize_in_mm.y );
 
     /* Save old draw scale and draw offset */
     tmp_startvisu = ActiveScreen->m_StartVisu;
@@ -151,20 +147,18 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     SheetSize.x *= m_Parent->m_InternalUnits / 1000;
     SheetSize.y *= m_Parent->m_InternalUnits / 1000;            // size in pixels
 
-    // Get the size of the DC in pixels
-    dc->GetSize( &PlotAreaSize.x, &PlotAreaSize.y );
-
     WinEDA_BasePcbFrame* pcbframe = (WinEDA_BasePcbFrame*) m_Parent;
     pcbframe->GetBoard()->ComputeBoundaryBox();
     /* Compute the PCB size in internal units*/
     userscale = m_PrintParams.m_PrintScale;
     if( userscale == 0 )            //  fit in page
     {
-        int extra_margin = 0;    // Margin = 8000/2 units pcb = 0,4 inch
+        int extra_margin = 4000*2;    // Margin = 4000 units pcb = 0.4 inch
         SheetSize.x = pcbframe->GetBoard()->m_BoundaryBox.GetWidth() + extra_margin;
         SheetSize.y = pcbframe->GetBoard()->m_BoundaryBox.GetHeight() + extra_margin;
         userscale   = 0.99;
     }
+
 
     if( (m_PrintParams.m_PrintScale > 1.0)          //  scale > 1 -> Recadrage
        || (m_PrintParams.m_PrintScale == 0) )       //  fit in page
@@ -173,26 +167,28 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
         DrawOffset.y += pcbframe->GetBoard()->m_BoundaryBox.Centre().y;
     }
 
-    // Calculate a suitable scaling factor
-    scaleX = (double) SheetSize.x / (double) PlotAreaSize.x;
-    scaleY = (double) SheetSize.y / (double) PlotAreaSize.y;
-    scale  = wxMax( scaleX, scaleY ) / userscale; // Use x or y scaling factor, whichever fits on the DC
-
-    // ajust the real draw scale
-    double accurate_Xscale, accurate_Yscale;
-    dc->SetUserScale( DrawZoom / scale * m_PrintParams.m_XScaleAdjust,
-                      DrawZoom / scale * m_PrintParams.m_YScaleAdjust );
+    if( m_PrintParams.m_PageSetupData )
+    {
+        wxSize pagesize;
+        pagesize.x = (int)  (SheetSize.x / userscale);
+        pagesize.y = (int)  (SheetSize.y / userscale);
+        FitThisSizeToPageMargins(pagesize, *m_PrintParams.m_PageSetupData );
+    }
 
     // Compute Accurate scale 1
+    if( userscale == 1.0 )
     {
+        // We want a 1:1 scale and margins for printing
+        MapScreenSizeToPaper( );
         int w, h;
         GetPPIPrinter( &w, &h );
-        accurate_Xscale = ( (double) ( DrawZoom * w ) ) / (double) PCB_INTERNAL_UNIT;
-        accurate_Yscale = ( (double) ( DrawZoom * h ) ) / (double) PCB_INTERNAL_UNIT;
+        double accurate_Xscale = ( (double) ( DrawZoom * w ) ) / (double) PCB_INTERNAL_UNIT;
+        double accurate_Yscale = ( (double) ( DrawZoom * h ) ) / (double) PCB_INTERNAL_UNIT;
 
         if( IsPreview() )  // Scale must take in account the DC size in Preview
         {
             // Get the size of the DC in pixels
+            wxSize       PlotAreaSize;
             dc->GetSize( &PlotAreaSize.x, &PlotAreaSize.y );
             GetPageSizePixels( &w, &h );
             accurate_Xscale *= PlotAreaSize.x;
@@ -202,7 +198,18 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
         }
         accurate_Xscale *= m_PrintParams.m_XScaleAdjust;
         accurate_Yscale *= m_PrintParams.m_YScaleAdjust;
+        // Fine scale adjust
+        dc->SetUserScale( accurate_Xscale, accurate_Yscale );
     }
+
+    // Get the final size of the DC in pixels
+    wxSize       PlotAreaSizeInPixels;
+    dc->GetSize( &PlotAreaSizeInPixels.x, &PlotAreaSizeInPixels.y );
+    double scalex, scaley;
+    dc->GetUserScale(&scalex, &scaley);
+    wxSize PlotAreaSizeInUserUnits;
+    PlotAreaSizeInUserUnits.x = (int) (PlotAreaSizeInPixels.x/scalex);
+    PlotAreaSizeInUserUnits.y = (int) (PlotAreaSizeInPixels.y/scaley);
 
     /* In some cases the plot origin is the centre of the page
      *  when:
@@ -214,13 +221,9 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
        || (m_PrintParams.m_PrintScale > 1.0)        //  scale > 1
        || (m_PrintParams.m_PrintScale == 0) )       //  fit in page
     {
-        DrawOffset.x -= wxRound( ( (double) PlotAreaSize.x / 2.0 ) * scale );
-        DrawOffset.y -= wxRound( ( (double) PlotAreaSize.y / 2.0 ) * scale );
+        DrawOffset.x -= PlotAreaSizeInUserUnits.x / 2;
+        DrawOffset.y -= PlotAreaSizeInUserUnits.y / 2;
     }
-    DrawOffset.x += wxRound( ( (double) SheetSize.x / 2.0 ) *
-                             ( m_PrintParams.m_XScaleAdjust - 1.0 ) );
-    DrawOffset.y += wxRound( ( (double) SheetSize.y / 2.0 ) *
-                             ( m_PrintParams.m_YScaleAdjust - 1.0 ) );
 
     ActiveScreen->m_DrawOrg = DrawOffset;
 
@@ -237,11 +240,6 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
 
     m_Parent->GetBaseScreen()->m_IsPrinting = true;
     int bg_color = g_DrawBgColor;
-
-    if( userscale == 1.0 )
-    {
-        dc->SetUserScale( accurate_Xscale, accurate_Yscale );
-    }
 
     if( m_PrintParams.m_Print_Sheet_Ref )
         m_Parent->TraceWorkSheet( dc, ActiveScreen, m_PrintParams.m_PenDefaultSize );
@@ -260,7 +258,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
          * the old draw area in the new draw area, because the draw origin has not moved
          * (this is the upper left corner) but the Y axis is reversed, therefore the plotting area
          * is the y coordinate values from  - PlotAreaSize.y to 0 */
-        int ysize = (int) ( PlotAreaSize.y / sy );
+        int ysize = (int) ( PlotAreaSizeInPixels.y / sy );
         DrawOffset.y += ysize;
 
         /* in order to keep the board position in the sheet

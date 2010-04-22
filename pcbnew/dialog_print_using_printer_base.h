@@ -67,7 +67,8 @@ class DIALOG_PRINT_USING_PRINTER_base : public wxDialog
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ){ event.Skip(); }
-		virtual void OnPrintSetup( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnScaleSelectionClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnPageSetup( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnPrintPreview( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnPrintButtonClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnButtonCancelClick( wxCommandEvent& event ){ event.Skip(); }

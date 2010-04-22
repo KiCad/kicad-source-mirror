@@ -234,7 +234,7 @@
                                 <event name="OnMouseEvents"></event>
                                 <event name="OnMouseWheel"></event>
                                 <event name="OnPaint"></event>
-                                <event name="OnRadioBox"></event>
+                                <event name="OnRadioBox">OnScaleSelectionClick</event>
                                 <event name="OnRightDClick"></event>
                                 <event name="OnRightDown"></event>
                                 <event name="OnRightUp"></event>
@@ -899,7 +899,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
-                                <event name="OnButtonClick">OnPrintSetup</event>
+                                <event name="OnButtonClick">OnPageSetup</event>
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>

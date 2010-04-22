@@ -4,10 +4,12 @@
 
 #include "fctsys.h"
 #include "common.h"
+#include "confirm.h"
 #include "class_drawpanel.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
+#include "drawtxt.h"
 
 /* Routines Locales */
 static void Exit_EditCotation( WinEDA_DrawPanel* Panel, wxDC* DC );
@@ -23,10 +25,10 @@ static int status_cotation; /*  = 0 : pas de cotation en cours
  *  Les routines generent une cotation de la forme
  *  - cote usuelle:
  *
- |			 |
- |	dist	 |
- |<---------->|
- |			 |
+ * |            |
+ * |    dist    |
+ * |<---------->|
+ * |            |
  *
  */
 
@@ -40,10 +42,10 @@ enum id_Cotation_properties {
 };
 
 /************************************/
-/* class WinEDA_CotationPropertiesFrame */
+/* class DIMENSION_EDITOR_DIALOG */
 /************************************/
 
-class WinEDA_CotationPropertiesFrame : public wxDialog
+class DIMENSION_EDITOR_DIALOG : public wxDialog
 {
 private:
 
@@ -59,9 +61,9 @@ private:
 public:
 
     // Constructor and destructor
-    WinEDA_CotationPropertiesFrame( WinEDA_PcbFrame* parent,
+    DIMENSION_EDITOR_DIALOG( WinEDA_PcbFrame* parent,
                                     COTATION* Cotation, wxDC* DC, const wxPoint& pos );
-    ~WinEDA_CotationPropertiesFrame()
+    ~DIMENSION_EDITOR_DIALOG()
     {
     }
 
@@ -73,13 +75,13 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-BEGIN_EVENT_TABLE( WinEDA_CotationPropertiesFrame, wxDialog )
-EVT_BUTTON( wxID_OK, WinEDA_CotationPropertiesFrame::OnOkClick )
-EVT_BUTTON( wxID_CANCEL, WinEDA_CotationPropertiesFrame::OnCancelClick )
+BEGIN_EVENT_TABLE( DIMENSION_EDITOR_DIALOG, wxDialog )
+EVT_BUTTON( wxID_OK, DIMENSION_EDITOR_DIALOG::OnOkClick )
+EVT_BUTTON( wxID_CANCEL, DIMENSION_EDITOR_DIALOG::OnCancelClick )
 END_EVENT_TABLE()
 
 
-WinEDA_CotationPropertiesFrame::WinEDA_CotationPropertiesFrame( WinEDA_PcbFrame* parent,
+DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( WinEDA_PcbFrame* parent,
                                                                 COTATION* Cotation, wxDC* DC,
                                                                 const wxPoint& framepos ) :
     wxDialog( parent, -1, _( "Dimension properties" ), framepos, wxSize( 340, 270 ),
@@ -146,7 +148,7 @@ WinEDA_CotationPropertiesFrame::WinEDA_CotationPropertiesFrame( WinEDA_PcbFrame*
 
 
 /**********************************************************************/
-void WinEDA_CotationPropertiesFrame::OnCancelClick( wxCommandEvent& WXUNUSED (event) )
+void DIMENSION_EDITOR_DIALOG::OnCancelClick( wxCommandEvent& WXUNUSED (event) )
 /**********************************************************************/
 {
     EndModal( -1 );
@@ -154,7 +156,7 @@ void WinEDA_CotationPropertiesFrame::OnCancelClick( wxCommandEvent& WXUNUSED (ev
 
 
 /***********************************************************************************/
-void WinEDA_CotationPropertiesFrame::OnOkClick( wxCommandEvent& event )
+void DIMENSION_EDITOR_DIALOG::OnOkClick( wxCommandEvent& event )
 /***********************************************************************************/
 {
     if( m_DC )     // Effacement ancien texte
@@ -169,8 +171,16 @@ void WinEDA_CotationPropertiesFrame::OnOkClick( wxCommandEvent& event )
     }
 
     CurrentCotation->m_Text->m_Size  = m_TxtSizeCtrl->GetValue();
-    CurrentCotation->m_Text->m_Width = CurrentCotation->m_Width =
-                                           m_TxtWidthCtrl->GetValue();
+    
+    int width = m_TxtWidthCtrl->GetValue();
+    int maxthickness = Clamp_Text_PenSize(width, CurrentCotation->m_Text->m_Size );
+    if( width > maxthickness )
+    {
+        DisplayError(NULL, _("The text thickness is too large for the text size. It will be clamped"));
+        width = maxthickness;
+    }
+    CurrentCotation->m_Text->m_Width = CurrentCotation->m_Width = width ;
+
     CurrentCotation->m_Text->m_Mirror = (m_Mirror->GetSelection() == 1) ? true : false;
 
     CurrentCotation->SetLayer( m_SelLayerBox->GetChoice() + FIRST_NO_COPPER_LAYER );
@@ -227,8 +237,6 @@ COTATION* WinEDA_PcbFrame::Begin_Cotation( COTATION* Cotation, wxDC* DC )
         Cotation->m_Flags = IS_NEW;
 
         Cotation->SetLayer( getActiveLayer() );
-        Cotation->m_Width = GetBoard()->GetBoardDesignSettings()->m_DrawSegmentWidth;
-        Cotation->m_Text->m_Width = Cotation->m_Width;
 
         Cotation->Barre_ox = Cotation->Barre_fx = pos.x;
         Cotation->Barre_oy = Cotation->Barre_fy = pos.y;
@@ -252,8 +260,14 @@ COTATION* WinEDA_PcbFrame::Begin_Cotation( COTATION* Cotation, wxDC* DC )
         Cotation->FlecheD2_oy = Cotation->FlecheD2_fy = pos.y;
 
         Cotation->m_Text->m_Size   = GetBoard()->GetBoardDesignSettings()->m_PcbTextSize;
-        Cotation->m_Text->m_Width  = GetBoard()->GetBoardDesignSettings()->m_PcbTextWidth;
-
+        int width = GetBoard()->GetBoardDesignSettings()->m_PcbTextWidth;
+        int maxthickness = Clamp_Text_PenSize(width, Cotation->m_Text->m_Size );
+        if( width > maxthickness )
+        {
+            width = maxthickness;
+        }
+        Cotation->m_Text->m_Width = Cotation->m_Width = width ;
+ 
         Ajuste_Details_Cotation( Cotation );
 
         Cotation->Draw( DrawPanel, DC, GR_XOR );
@@ -273,8 +287,11 @@ COTATION* WinEDA_PcbFrame::Begin_Cotation( COTATION* Cotation, wxDC* DC )
     Cotation->Draw( DrawPanel, DC, GR_OR );
     Cotation->m_Flags = 0;
 
-    /* Insertion de la structure dans le Chainage .Drawings du PCB */
+    /* ADD this new item in list */
     GetBoard()->Add( Cotation );
+    
+    // Add store it in undo/redo list
+    SaveCopyInUndoList( Cotation, UR_NEW );
 
     OnModify();
     DrawPanel->ManageCurseur = NULL;
@@ -347,8 +364,7 @@ void WinEDA_PcbFrame::Install_Edit_Cotation( COTATION* Cotation,
     if( Cotation == NULL )
         return;
 
-    WinEDA_CotationPropertiesFrame* frame = new WinEDA_CotationPropertiesFrame( this,
-                                                                                Cotation, DC, pos );
+    DIMENSION_EDITOR_DIALOG* frame = new DIMENSION_EDITOR_DIALOG( this, Cotation, DC, pos );
 
     Ajuste_Details_Cotation( Cotation, true );
     frame->ShowModal();
