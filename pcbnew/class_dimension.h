@@ -1,12 +1,12 @@
 /*****************************/
-/* COTATION class definition */
+/* DIMENSION class definition */
 /*****************************/
 #ifndef DIMENSION_H
 #define DIMENSION_H
 
 #include "base_struct.h"
 
-class COTATION : public BOARD_ITEM
+class DIMENSION : public BOARD_ITEM
 {
 public:
     int        m_Width;
@@ -25,8 +25,8 @@ public:
     int        FlecheG2_ox, FlecheG2_oy, FlecheG2_fx, FlecheG2_fy;
 
 public:
-    COTATION( BOARD_ITEM* aParent );
-    ~COTATION();
+    DIMENSION( BOARD_ITEM* aParent );
+    ~DIMENSION();
 
     wxPoint& GetPosition()
     {
@@ -40,7 +40,13 @@ public:
      */
     void  SetLayer( int aLayer );
 
-    bool    ReadCotationDescr( FILE* File, int* LineNum );
+    /** function AdjustDimensionDetails
+     * Calculate coordinates of segments used to draw the dimension.
+     * @param aDoNotChangeText (bool) if false, the dimension text is initialized
+     */
+    void AdjustDimensionDetails( bool aDoNotChangeText = false);
+
+    bool    ReadDimensionDescr( FILE* File, int* LineNum );
 
     /**
      * Function Save
@@ -53,7 +59,7 @@ public:
     void    SetText( const wxString& NewText );
     wxString GetText( void );
 
-    void    Copy( COTATION* source );
+    void    Copy( DIMENSION* source );
 
     void    Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                   int aColorMode, const wxPoint& offset = ZeroOffset );

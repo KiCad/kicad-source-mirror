@@ -211,12 +211,12 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             createPopUpMenuForMarkers( (MARKER_PCB*) item, aPopMenu );
             break;
 
-        case TYPE_COTATION:
+        case TYPE_DIMENSION:
             if( !flags )
             {
-                ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_COTATION,
+                ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_DIMENSION,
                               _( "Edit Dimension" ), edit_xpm );
-                ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_COTATION,
+                ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_DIMENSION,
                               _( "Delete Dimension" ), delete_xpm );
             }
             break;
@@ -302,7 +302,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     case ID_PCB_ARC_BUTT:
     case ID_PCB_ADD_TEXT_BUTT:
     case ID_PCB_ADD_LINE_BUTT:
-    case ID_PCB_COTATION_BUTT:
+    case ID_PCB_DIMENSION_BUTT:
         ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_SELECT_NO_CU_LAYER,
                       _( "Select Working Layer" ), select_w_layer_xpm );
         aPopMenu->AppendSeparator();

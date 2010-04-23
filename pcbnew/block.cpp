@@ -477,7 +477,7 @@ void WinEDA_PcbFrame::Block_SelectItems()
             select_me = true; // This item is in bloc: select it
             break;
 
-        case TYPE_COTATION:
+        case TYPE_DIMENSION:
             if( ( g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer ) == 0 )
                 break;
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
@@ -619,7 +619,7 @@ void WinEDA_PcbFrame::Block_Delete()
         case TYPE_TEXTE:        // a text on a layer
         case TYPE_TRACK:        // a track segment (segment on a copper layer)
         case TYPE_VIA:          // a via (like atrack segment on a copper layer)
-        case TYPE_COTATION:     // a dimension (graphic item)
+        case TYPE_DIMENSION:     // a dimension (graphic item)
         case TYPE_MIRE:         // a target (graphic item)
             item->UnLink();
             break;
@@ -696,7 +696,7 @@ void WinEDA_PcbFrame::Block_Rotate()
         case TYPE_DRAWSEGMENT:
         case TYPE_TEXTE:
         case TYPE_MIRE:
-        case TYPE_COTATION:
+        case TYPE_DIMENSION:
             break;
 
         // This item is not put in undo list
@@ -766,7 +766,7 @@ void WinEDA_PcbFrame::Block_Flip()
         case TYPE_DRAWSEGMENT:
         case TYPE_TEXTE:
         case TYPE_MIRE:
-        case TYPE_COTATION:
+        case TYPE_DIMENSION:
             break;
 
         // This item is not put in undo list
@@ -834,7 +834,7 @@ void WinEDA_PcbFrame::Block_Move()
         case TYPE_DRAWSEGMENT:
         case TYPE_TEXTE:
         case TYPE_MIRE:
-        case TYPE_COTATION:
+        case TYPE_DIMENSION:
             break;
 
         // This item is not put in undo list
@@ -955,10 +955,10 @@ void WinEDA_PcbFrame::Block_Duplicate()
         }
         break;
 
-        case TYPE_COTATION:
+        case TYPE_DIMENSION:
         {
-            COTATION* new_cotation = new COTATION( m_Pcb );
-            new_cotation->Copy( (COTATION*) item );
+            DIMENSION* new_cotation = new DIMENSION( m_Pcb );
+            new_cotation->Copy( (DIMENSION*) item );
             m_Pcb->Add( new_cotation );
             newitem = new_cotation;
         }

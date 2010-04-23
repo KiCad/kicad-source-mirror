@@ -1,5 +1,5 @@
 /*****************************************/
-/* Edition du pcb: Gestion des cotations */
+/* Edition du pcb: Gestion des dimensions */
 /*****************************************/
 
 #include "fctsys.h"
@@ -12,17 +12,16 @@
 #include "drawtxt.h"
 
 /* Routines Locales */
-static void Exit_EditCotation( WinEDA_DrawPanel* Panel, wxDC* DC );
-static void Montre_Position_New_Cotation( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
-static void Ajuste_Details_Cotation( COTATION* pts, bool aDoNotChangeText = false );
+static void Exit_EditDimension( WinEDA_DrawPanel* Panel, wxDC* DC );
+static void Montre_Position_New_Dimension( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
 /* Variables "locales" : */
-static int status_cotation; /*  = 0 : pas de cotation en cours
+static int status_dimension; /*  = 0 : pas de dimension en cours
                              *  = 1 : debut place, fin a placer
                              *  = 2 : fin placee, texte a ajuster */
 
 /*
- *  Les routines generent une cotation de la forme
+ *  Les routines generent une dimension de la forme
  *  - cote usuelle:
  *
  * |            |
@@ -32,14 +31,6 @@ static int status_cotation; /*  = 0 : pas de cotation en cours
  *
  */
 
-#define MAX_CHAR 40     /* longueur maxi de la cotation */
-/* Dimension des fleches */
-#define FLECHE_L 500
-
-
-enum id_Cotation_properties {
-    ID_TEXTPCB_SELECT_LAYER = 1900
-};
 
 /************************************/
 /* class DIMENSION_EDITOR_DIALOG */
@@ -51,7 +42,7 @@ private:
 
     WinEDA_PcbFrame*  m_Parent;
     wxDC*             m_DC;
-    COTATION*         CurrentCotation;
+    DIMENSION*         CurrentDimension;
     WinEDA_EnterText* m_Name;
     WinEDA_SizeCtrl*  m_TxtSizeCtrl;
     WinEDA_ValueCtrl* m_TxtWidthCtrl;
@@ -62,7 +53,7 @@ public:
 
     // Constructor and destructor
     DIMENSION_EDITOR_DIALOG( WinEDA_PcbFrame* parent,
-                                    COTATION* Cotation, wxDC* DC, const wxPoint& pos );
+                                    DIMENSION* Dimension, wxDC* DC, const wxPoint& pos );
     ~DIMENSION_EDITOR_DIALOG()
     {
     }
@@ -82,7 +73,7 @@ END_EVENT_TABLE()
 
 
 DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( WinEDA_PcbFrame* parent,
-                                                                COTATION* Cotation, wxDC* DC,
+                                                                DIMENSION* Dimension, wxDC* DC,
                                                                 const wxPoint& framepos ) :
     wxDialog( parent, -1, _( "Dimension properties" ), framepos, wxSize( 340, 270 ),
               DIALOG_STYLE )
@@ -93,7 +84,7 @@ DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( WinEDA_PcbFrame* parent,
     m_DC = DC;
     Centre();
 
-    CurrentCotation = Cotation;
+    CurrentDimension = Dimension;
 
     wxBoxSizer* MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( MainBoxSizer );
@@ -113,25 +104,25 @@ DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( WinEDA_PcbFrame* parent,
     m_Mirror = new wxRadioBox( this, -1, _( "Display" ),
                                wxDefaultPosition, wxSize( -1, -1 ), 2, display_msg,
                                1, wxRA_SPECIFY_COLS );
-    if( Cotation->m_Text->m_Mirror )
+    if( Dimension->m_Text->m_Mirror )
         m_Mirror->SetSelection( 1 );;
     RightBoxSizer->Add( m_Mirror, 0, wxGROW | wxALL, 5 );
 
     m_Name = new WinEDA_EnterText( this, wxT( "Text:" ),
-                                  Cotation->m_Text->m_Text,
+                                  Dimension->m_Text->m_Text,
                                   LeftBoxSizer, wxSize( 200, -1 ) );
 
     m_TxtSizeCtrl = new WinEDA_SizeCtrl( this, _( "Size" ),
-                                         Cotation->m_Text->m_Size,
+                                         Dimension->m_Text->m_Size,
                                          g_UnitMetric, LeftBoxSizer, m_Parent->m_InternalUnits );
 
     m_TxtWidthCtrl = new WinEDA_ValueCtrl( this, _( "Width" ),
-                                           Cotation->m_Width,
+                                           Dimension->m_Width,
                                            g_UnitMetric, LeftBoxSizer, m_Parent->m_InternalUnits );
 
     wxStaticText* text = new wxStaticText( this, -1, _( "Layer:" ) );
     LeftBoxSizer->Add( text, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
-    m_SelLayerBox = new WinEDAChoiceBox( this, ID_TEXTPCB_SELECT_LAYER,
+    m_SelLayerBox = new WinEDAChoiceBox( this, wxID_ANY,
                                          wxDefaultPosition, wxDefaultSize );
     LeftBoxSizer->Add( m_SelLayerBox, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
@@ -140,7 +131,7 @@ DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( WinEDA_PcbFrame* parent,
         m_SelLayerBox->Append( parent->GetBoard()->GetLayerName( layer ) );
     }
 
-    m_SelLayerBox->SetSelection( Cotation->GetLayer() - FIRST_NO_COPPER_LAYER );
+    m_SelLayerBox->SetSelection( Dimension->GetLayer() - FIRST_NO_COPPER_LAYER );
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
@@ -161,34 +152,36 @@ void DIMENSION_EDITOR_DIALOG::OnOkClick( wxCommandEvent& event )
 {
     if( m_DC )     // Effacement ancien texte
     {
-        CurrentCotation->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
+        CurrentDimension->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
     }
 
-    m_Parent->SaveCopyInUndoList(CurrentCotation, UR_CHANGED);
+    m_Parent->SaveCopyInUndoList(CurrentDimension, UR_CHANGED);
     if( m_Name->GetValue() != wxEmptyString )
     {
-        CurrentCotation->SetText( m_Name->GetValue() );
+        CurrentDimension->SetText( m_Name->GetValue() );
     }
 
-    CurrentCotation->m_Text->m_Size  = m_TxtSizeCtrl->GetValue();
-    
+    CurrentDimension->m_Text->m_Size  = m_TxtSizeCtrl->GetValue();
+
     int width = m_TxtWidthCtrl->GetValue();
-    int maxthickness = Clamp_Text_PenSize(width, CurrentCotation->m_Text->m_Size );
+    int maxthickness = Clamp_Text_PenSize(width, CurrentDimension->m_Text->m_Size );
     if( width > maxthickness )
     {
         DisplayError(NULL, _("The text thickness is too large for the text size. It will be clamped"));
         width = maxthickness;
     }
-    CurrentCotation->m_Text->m_Width = CurrentCotation->m_Width = width ;
+    CurrentDimension->m_Text->m_Width = CurrentDimension->m_Width = width ;
 
-    CurrentCotation->m_Text->m_Mirror = (m_Mirror->GetSelection() == 1) ? true : false;
+    CurrentDimension->m_Text->m_Mirror = (m_Mirror->GetSelection() == 1) ? true : false;
 
-    CurrentCotation->SetLayer( m_SelLayerBox->GetChoice() + FIRST_NO_COPPER_LAYER );
+    CurrentDimension->SetLayer( m_SelLayerBox->GetChoice() + FIRST_NO_COPPER_LAYER );
+
+    CurrentDimension->AdjustDimensionDetails( true );
 
     if( m_DC )     // Affichage nouveau texte
     {
         /* Redessin du Texte */
-        CurrentCotation->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
+        CurrentDimension->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
     }
 
     m_Parent->OnModify();
@@ -197,25 +190,25 @@ void DIMENSION_EDITOR_DIALOG::OnOkClick( wxCommandEvent& event )
 
 
 /**************************************************************/
-static void Exit_EditCotation( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void Exit_EditDimension( WinEDA_DrawPanel* Panel, wxDC* DC )
 /**************************************************************/
 {
-    COTATION* Cotation = (COTATION*) Panel->GetScreen()->GetCurItem();
+    DIMENSION* Dimension = (DIMENSION*) Panel->GetScreen()->GetCurItem();
 
-    if( Cotation )
+    if( Dimension )
     {
-        if( Cotation->m_Flags & IS_NEW )
+        if( Dimension->m_Flags & IS_NEW )
         {
-            Cotation->Draw( Panel, DC, GR_XOR );
-            Cotation->DeleteStructure();
+            Dimension->Draw( Panel, DC, GR_XOR );
+            Dimension->DeleteStructure();
         }
         else
         {
-            Cotation->Draw( Panel, DC, GR_OR );
+            Dimension->Draw( Panel, DC, GR_OR );
         }
     }
 
-    status_cotation      = 0;
+    status_dimension      = 0;
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
     ((WinEDA_PcbFrame*)Panel->GetParent())->SetCurItem(NULL);
@@ -223,75 +216,75 @@ static void Exit_EditCotation( WinEDA_DrawPanel* Panel, wxDC* DC )
 
 
 /*************************************************************************/
-COTATION* WinEDA_PcbFrame::Begin_Cotation( COTATION* Cotation, wxDC* DC )
+DIMENSION* WinEDA_PcbFrame::Begin_Dimension( DIMENSION* Dimension, wxDC* DC )
 /*************************************************************************/
 {
     wxPoint pos;
 
-    if( Cotation == NULL )       /* debut reel du trace */
+    if( Dimension == NULL )       /* debut reel du trace */
     {
-        status_cotation = 1;
+        status_dimension = 1;
         pos = GetScreen()->m_Curseur;
 
-        Cotation = new COTATION( GetBoard() );
-        Cotation->m_Flags = IS_NEW;
+        Dimension = new DIMENSION( GetBoard() );
+        Dimension->m_Flags = IS_NEW;
 
-        Cotation->SetLayer( getActiveLayer() );
+        Dimension->SetLayer( getActiveLayer() );
 
-        Cotation->Barre_ox = Cotation->Barre_fx = pos.x;
-        Cotation->Barre_oy = Cotation->Barre_fy = pos.y;
+        Dimension->Barre_ox = Dimension->Barre_fx = pos.x;
+        Dimension->Barre_oy = Dimension->Barre_fy = pos.y;
 
-        Cotation->TraitD_ox = Cotation->TraitD_fx = pos.x;
-        Cotation->TraitD_oy = Cotation->TraitD_fy = pos.y;
+        Dimension->TraitD_ox = Dimension->TraitD_fx = pos.x;
+        Dimension->TraitD_oy = Dimension->TraitD_fy = pos.y;
 
-        Cotation->TraitG_ox = Cotation->TraitG_fx = pos.x;
-        Cotation->TraitG_oy = Cotation->TraitG_fy = pos.y;
+        Dimension->TraitG_ox = Dimension->TraitG_fx = pos.x;
+        Dimension->TraitG_oy = Dimension->TraitG_fy = pos.y;
 
-        Cotation->FlecheG1_ox = Cotation->FlecheG1_fx = pos.x;
-        Cotation->FlecheG1_oy = Cotation->FlecheG1_fy = pos.y;
+        Dimension->FlecheG1_ox = Dimension->FlecheG1_fx = pos.x;
+        Dimension->FlecheG1_oy = Dimension->FlecheG1_fy = pos.y;
 
-        Cotation->FlecheG2_ox = Cotation->FlecheG2_fx = pos.x;
-        Cotation->FlecheG2_oy = Cotation->FlecheG2_fy = pos.y;
+        Dimension->FlecheG2_ox = Dimension->FlecheG2_fx = pos.x;
+        Dimension->FlecheG2_oy = Dimension->FlecheG2_fy = pos.y;
 
-        Cotation->FlecheD1_ox = Cotation->FlecheD1_fx = pos.x;
-        Cotation->FlecheD1_oy = Cotation->FlecheD1_fy = pos.y;
+        Dimension->FlecheD1_ox = Dimension->FlecheD1_fx = pos.x;
+        Dimension->FlecheD1_oy = Dimension->FlecheD1_fy = pos.y;
 
-        Cotation->FlecheD2_ox = Cotation->FlecheD2_fx = pos.x;
-        Cotation->FlecheD2_oy = Cotation->FlecheD2_fy = pos.y;
+        Dimension->FlecheD2_ox = Dimension->FlecheD2_fx = pos.x;
+        Dimension->FlecheD2_oy = Dimension->FlecheD2_fy = pos.y;
 
-        Cotation->m_Text->m_Size   = GetBoard()->GetBoardDesignSettings()->m_PcbTextSize;
+        Dimension->m_Text->m_Size   = GetBoard()->GetBoardDesignSettings()->m_PcbTextSize;
         int width = GetBoard()->GetBoardDesignSettings()->m_PcbTextWidth;
-        int maxthickness = Clamp_Text_PenSize(width, Cotation->m_Text->m_Size );
+        int maxthickness = Clamp_Text_PenSize(width, Dimension->m_Text->m_Size );
         if( width > maxthickness )
         {
             width = maxthickness;
         }
-        Cotation->m_Text->m_Width = Cotation->m_Width = width ;
- 
-        Ajuste_Details_Cotation( Cotation );
+        Dimension->m_Text->m_Width = Dimension->m_Width = width ;
 
-        Cotation->Draw( DrawPanel, DC, GR_XOR );
+        Dimension->AdjustDimensionDetails( );
 
-        DrawPanel->ManageCurseur = Montre_Position_New_Cotation;
-        DrawPanel->ForceCloseManageCurseur = Exit_EditCotation;
-        return Cotation;
+        Dimension->Draw( DrawPanel, DC, GR_XOR );
+
+        DrawPanel->ManageCurseur = Montre_Position_New_Dimension;
+        DrawPanel->ForceCloseManageCurseur = Exit_EditDimension;
+        return Dimension;
     }
 
-    // Cotation != NULL
-    if( status_cotation == 1 )
+    // Dimension != NULL
+    if( status_dimension == 1 )
     {
-        status_cotation = 2;
-        return Cotation;
+        status_dimension = 2;
+        return Dimension;
     }
 
-    Cotation->Draw( DrawPanel, DC, GR_OR );
-    Cotation->m_Flags = 0;
+    Dimension->Draw( DrawPanel, DC, GR_OR );
+    Dimension->m_Flags = 0;
 
     /* ADD this new item in list */
-    GetBoard()->Add( Cotation );
-    
+    GetBoard()->Add( Dimension );
+
     // Add store it in undo/redo list
-    SaveCopyInUndoList( Cotation, UR_NEW );
+    SaveCopyInUndoList( Dimension, UR_NEW );
 
     OnModify();
     DrawPanel->ManageCurseur = NULL;
@@ -302,201 +295,86 @@ COTATION* WinEDA_PcbFrame::Begin_Cotation( COTATION* Cotation, wxDC* DC )
 
 
 /************************************************************************************/
-static void Montre_Position_New_Cotation( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void Montre_Position_New_Dimension( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 /************************************************************************************/
 /* redessin du contour de la piste  lors des deplacements de la souris */
 {
     PCB_SCREEN* screen   = (PCB_SCREEN*) panel->GetScreen();
-    COTATION*   Cotation = (COTATION*) screen->GetCurItem();
+    DIMENSION*   Dimension = (DIMENSION*) screen->GetCurItem();
     wxPoint     pos = screen->m_Curseur;
 
-    if( Cotation == NULL )
+    if( Dimension == NULL )
         return;
 
     /* efface ancienne position */
     if( erase )
     {
-        Cotation->Draw( panel, DC, GR_XOR );
+        Dimension->Draw( panel, DC, GR_XOR );
     }
 
-    Cotation->SetLayer( screen->m_Active_Layer );
-    if( status_cotation == 1 )
+    Dimension->SetLayer( screen->m_Active_Layer );
+    if( status_dimension == 1 )
     {
-        Cotation->TraitD_ox = pos.x;
-        Cotation->TraitD_oy = pos.y;
-        Cotation->Barre_fx  = Cotation->TraitD_ox;
-        Cotation->Barre_fy  = Cotation->TraitD_oy;
-        Ajuste_Details_Cotation( Cotation );
+        Dimension->TraitD_ox = pos.x;
+        Dimension->TraitD_oy = pos.y;
+        Dimension->Barre_fx  = Dimension->TraitD_ox;
+        Dimension->Barre_fy  = Dimension->TraitD_oy;
+        Dimension->AdjustDimensionDetails( );
     }
     else
     {
         int   deltax, deltay, dx, dy;
         float angle, depl;
-        deltax = Cotation->TraitD_ox - Cotation->TraitG_ox;
-        deltay = Cotation->TraitD_oy - Cotation->TraitG_oy;
+        deltax = Dimension->TraitD_ox - Dimension->TraitG_ox;
+        deltay = Dimension->TraitD_oy - Dimension->TraitG_oy;
 
         /* Calcul de la direction de deplacement
          *  ( perpendiculaire a l'axe de la cote ) */
         angle = atan2( (double)deltay, (double)deltax ) + (M_PI / 2);
 
-        deltax = pos.x - Cotation->TraitD_ox;
-        deltay = pos.y - Cotation->TraitD_oy;
+        deltax = pos.x - Dimension->TraitD_ox;
+        deltay = pos.y - Dimension->TraitD_oy;
         depl   = ( deltax * cos( angle ) ) + ( deltay * sin( angle ) );
         dx = (int) ( depl * cos( angle ) );
         dy = (int) ( depl * sin( angle ) );
-        Cotation->Barre_ox = Cotation->TraitG_ox + dx;
-        Cotation->Barre_oy = Cotation->TraitG_oy + dy;
-        Cotation->Barre_fx = Cotation->TraitD_ox + dx;
-        Cotation->Barre_fy = Cotation->TraitD_oy + dy;
+        Dimension->Barre_ox = Dimension->TraitG_ox + dx;
+        Dimension->Barre_oy = Dimension->TraitG_oy + dy;
+        Dimension->Barre_fx = Dimension->TraitD_ox + dx;
+        Dimension->Barre_fy = Dimension->TraitD_oy + dy;
 
-        Ajuste_Details_Cotation( Cotation );
+        Dimension->AdjustDimensionDetails( );
     }
 
-    Cotation->Draw( panel, DC, GR_XOR );
+    Dimension->Draw( panel, DC, GR_XOR );
 }
 
 
 /***************************************************************/
-void WinEDA_PcbFrame::Install_Edit_Cotation( COTATION* Cotation,
+void WinEDA_PcbFrame::Install_Edit_Dimension( DIMENSION* Dimension,
                                              wxDC* DC, const wxPoint& pos )
 /***************************************************************/
 {
-    if( Cotation == NULL )
+    if( Dimension == NULL )
         return;
 
-    DIMENSION_EDITOR_DIALOG* frame = new DIMENSION_EDITOR_DIALOG( this, Cotation, DC, pos );
-
-    Ajuste_Details_Cotation( Cotation, true );
+    DIMENSION_EDITOR_DIALOG* frame = new DIMENSION_EDITOR_DIALOG( this, Dimension, DC, pos );
     frame->ShowModal();
     frame->Destroy();
 }
 
 
 /*******************************************************************/
-void WinEDA_PcbFrame::Delete_Cotation( COTATION* Cotation, wxDC* DC )
+void WinEDA_PcbFrame::Delete_Dimension( DIMENSION* Dimension, wxDC* DC )
 /*******************************************************************/
 {
-    if( Cotation == NULL )
+    if( Dimension == NULL )
         return;
 
     if( DC )
-        Cotation->Draw( DrawPanel, DC, GR_XOR );
+        Dimension->Draw( DrawPanel, DC, GR_XOR );
 
-    SaveCopyInUndoList(Cotation, UR_DELETED);
-    Cotation->UnLink();
+    SaveCopyInUndoList(Dimension, UR_DELETED);
+    Dimension->UnLink();
     OnModify();
 }
 
-
-/*****************************************************/
-static void Ajuste_Details_Cotation( COTATION* Cotation, bool aDoNotChangeText )
-/*****************************************************/
-
-/* Calcule les details des coordonnees des differents segments constitutifs
- *  de la cotation
- */
-{
-    int      ii;
-    int      mesure, deltax, deltay;            /* valeur de la mesure sur les axes X et Y */
-    int      fleche_up_X = 0, fleche_up_Y = 0;  /* coord des fleches : barre / */
-    int      fleche_dw_X = 0, fleche_dw_Y = 0;  /* coord des fleches : barre \ */
-    int      hx, hy;                            /* coord des traits de rappel de cote */
-    float    angle, angle_f;
-    wxString msg;
-
-    /* Init des couches : */
-    Cotation->m_Text->SetLayer( Cotation->GetLayer() );
-
-    /* calcul de la hauteur du texte + trait de cotation */
-    ii = Cotation->m_Text->m_Size.y +
-         Cotation->m_Text->m_Width + (Cotation->m_Width * 3);
-
-    deltax = Cotation->TraitD_ox - Cotation->TraitG_ox;
-    deltay = Cotation->TraitD_oy - Cotation->TraitG_oy;
-
-    /* Calcul de la cote */
-    mesure = (int) (hypot( (double) deltax, (double) deltay ) + 0.5 );
-
-    if( deltax || deltay )
-        angle = atan2( (double) deltay, (double) deltax );
-    else
-        angle = 0.0;
-
-    /* Calcul des parametre dimensions X et Y des fleches et traits de cotes */
-    hx = hy = ii;
-
-    /* On tient compte de l'inclinaison de la cote */
-    if( mesure )
-    {
-        hx = (abs) ( (int) ( ( (double) deltay * hx ) / mesure ) );
-        hy = (abs) ( (int) ( ( (double) deltax * hy ) / mesure ) );
-
-        if( Cotation->TraitG_ox > Cotation->Barre_ox )
-            hx = -hx;
-        if( Cotation->TraitG_ox == Cotation->Barre_ox )
-            hx = 0;
-        if( Cotation->TraitG_oy > Cotation->Barre_oy )
-            hy = -hy;
-        if( Cotation->TraitG_oy == Cotation->Barre_oy )
-            hy = 0;
-
-        angle_f     = angle + (M_PI * 27.5 / 180);
-        fleche_up_X = (int) ( FLECHE_L * cos( angle_f ) );
-        fleche_up_Y = (int) ( FLECHE_L * sin( angle_f ) );
-        angle_f     = angle - (M_PI * 27.5 / 180);
-        fleche_dw_X = (int) ( FLECHE_L * cos( angle_f ) );
-        fleche_dw_Y = (int) ( FLECHE_L * sin( angle_f ) );
-    }
-
-
-    Cotation->FlecheG1_ox = Cotation->Barre_ox;
-    Cotation->FlecheG1_oy = Cotation->Barre_oy;
-    Cotation->FlecheG1_fx = Cotation->Barre_ox + fleche_up_X;
-    Cotation->FlecheG1_fy = Cotation->Barre_oy + fleche_up_Y;
-
-    Cotation->FlecheG2_ox = Cotation->Barre_ox;
-    Cotation->FlecheG2_oy = Cotation->Barre_oy;
-    Cotation->FlecheG2_fx = Cotation->Barre_ox + fleche_dw_X;
-    Cotation->FlecheG2_fy = Cotation->Barre_oy + fleche_dw_Y;
-
-    /*la fleche de droite est symetrique a celle de gauche:
-     *  / = -\  et  \ = -/
-     */
-    Cotation->FlecheD1_ox = Cotation->Barre_fx;
-    Cotation->FlecheD1_oy = Cotation->Barre_fy;
-    Cotation->FlecheD1_fx = Cotation->Barre_fx - fleche_dw_X;
-    Cotation->FlecheD1_fy = Cotation->Barre_fy - fleche_dw_Y;
-
-    Cotation->FlecheD2_ox = Cotation->Barre_fx;
-    Cotation->FlecheD2_oy = Cotation->Barre_fy;
-    Cotation->FlecheD2_fx = Cotation->Barre_fx - fleche_up_X;
-    Cotation->FlecheD2_fy = Cotation->Barre_fy - fleche_up_Y;
-
-
-    Cotation->TraitG_fx = Cotation->Barre_ox + hx;
-    Cotation->TraitG_fy = Cotation->Barre_oy + hy;
-
-    Cotation->TraitD_fx = Cotation->Barre_fx + hx;
-    Cotation->TraitD_fy = Cotation->Barre_fy + hy;
-
-    /* Calcul de la position du centre du texte et son orientation: */
-    Cotation->m_Pos.x   = Cotation->m_Text->m_Pos.x
-                          = (Cotation->Barre_fx + Cotation->TraitG_fx) / 2;
-    Cotation->m_Pos.y   = Cotation->m_Text->m_Pos.y
-                          = (Cotation->Barre_fy + Cotation->TraitG_fy) / 2;
-
-    Cotation->m_Text->m_Orient = -(int) (angle * 1800 / M_PI);
-    if( Cotation->m_Text->m_Orient < 0 )
-        Cotation->m_Text->m_Orient += 3600;
-    if( Cotation->m_Text->m_Orient >= 3600 )
-        Cotation->m_Text->m_Orient -= 3600;
-    if( (Cotation->m_Text->m_Orient > 900) && (Cotation->m_Text->m_Orient <2700) )
-        Cotation->m_Text->m_Orient -= 1800;
-
-    if( !aDoNotChangeText )
-    {
-        Cotation->m_Value = mesure;
-        valeur_param( Cotation->m_Value, msg );
-        Cotation->SetText( msg );
-    }
-}

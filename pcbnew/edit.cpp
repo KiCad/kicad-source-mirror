@@ -264,7 +264,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         SetToolID( id, wxCURSOR_HAND, _( "Add Modules" ) );
         break;
 
-    case ID_PCB_COTATION_BUTT:
+    case ID_PCB_DIMENSION_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add Dimension" ) );
         break;
 
@@ -803,14 +803,14 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         SetCurItem( NULL );
         break;
 
-    case ID_POPUP_PCB_DELETE_COTATION:
+    case ID_POPUP_PCB_DELETE_DIMENSION:
         DrawPanel->MouseToCursorSchema();
-        Delete_Cotation( (COTATION*) GetCurItem(), &dc );
+        Delete_Dimension( (DIMENSION*) GetCurItem(), &dc );
         SetCurItem( NULL );
         break;
 
-    case ID_POPUP_PCB_EDIT_COTATION:
-        Install_Edit_Cotation( (COTATION*) GetCurItem(), &dc, pos );
+    case ID_POPUP_PCB_EDIT_DIMENSION:
+        Install_Edit_Dimension( (DIMENSION*) GetCurItem(), &dc, pos );
         DrawPanel->MouseToCursorSchema();
         break;
 
@@ -991,8 +991,8 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         Delete_Module( (MODULE*) Item, DC, true );
         break;
 
-    case TYPE_COTATION:
-        Delete_Cotation( (COTATION*) Item, DC );
+    case TYPE_DIMENSION:
+        Delete_Dimension( (DIMENSION*) Item, DC );
         break;
 
     case TYPE_MIRE:

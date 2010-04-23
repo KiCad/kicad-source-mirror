@@ -139,7 +139,7 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( int aLayer )
         {
         case TYPE_DRAWSEGMENT:
         case TYPE_TEXTE:
-        case TYPE_COTATION:
+        case TYPE_DIMENSION:
         case TYPE_MIRE:
             if( item->GetLayer() == aLayer )
             {

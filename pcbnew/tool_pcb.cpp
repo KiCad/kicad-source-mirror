@@ -443,7 +443,7 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
                          _( "Add text" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_PCB_COTATION_BUTT, wxEmptyString,
+    m_VToolBar->AddTool( ID_PCB_DIMENSION_BUTT, wxEmptyString,
                          wxBitmap( add_dimension_xpm ),
                          _( "Add dimension" ), wxITEM_CHECK );
 

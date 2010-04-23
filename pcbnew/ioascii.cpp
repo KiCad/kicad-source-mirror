@@ -981,9 +981,9 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 
         if( TESTLINE( "COTATION" ) )
         {
-            COTATION* Cotation = new COTATION( board );
-            board->Add( Cotation, ADD_APPEND );
-            Cotation->ReadCotationDescr( File, &LineNum );
+            DIMENSION* Dimension = new DIMENSION( board );
+            board->Add( Dimension, ADD_APPEND );
+            Dimension->ReadDimensionDescr( File, &LineNum );
             continue;
         }
 

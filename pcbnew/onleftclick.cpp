@@ -88,7 +88,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 }
                 break;
 
-            case TYPE_COTATION:
+            case TYPE_DIMENSION:
                 // see above.
                 break;
 
@@ -331,23 +331,23 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             DisplayError( this, wxT( "Internal err: Struct not TYPE_MODULE" ) );
         break;
 
-    case ID_PCB_COTATION_BUTT:
+    case ID_PCB_DIMENSION_BUTT:
         if( getActiveLayer() <= LAST_COPPER_LAYER )
         {
-            DisplayError( this, _( "Cotation not authorized on Copper layers" ) );
+            DisplayError( this, _( "Dimension not authorized on Copper layers" ) );
             break;
         }
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            DrawStruct = Begin_Cotation( NULL, DC );
+            DrawStruct = Begin_Dimension( NULL, DC );
             SetCurItem( DrawStruct );
             DrawPanel->m_AutoPAN_Request = true;
         }
         else if( DrawStruct
-                && (DrawStruct->Type() == TYPE_COTATION)
+                && (DrawStruct->Type() == TYPE_DIMENSION)
                 && (DrawStruct->m_Flags & IS_NEW) )
         {
-            DrawStruct = Begin_Cotation( (COTATION*) DrawStruct, DC );
+            DrawStruct = Begin_Dimension( (DIMENSION*) DrawStruct, DC );
             SetCurItem( DrawStruct );
             DrawPanel->m_AutoPAN_Request = true;
         }
@@ -444,8 +444,8 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             DrawPanel->MouseToCursorSchema();
             break;
 
-        case TYPE_COTATION:
-            Install_Edit_Cotation( (COTATION*) DrawStruct, DC, pos );
+        case TYPE_DIMENSION:
+            Install_Edit_Dimension( (DIMENSION*) DrawStruct, DC, pos );
             DrawPanel->MouseToCursorSchema();
             break;
 

@@ -136,8 +136,8 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
             PlotTextePcb( plotter, (TEXTE_PCB*) PtStruct, EDGE_LAYER, FILLED );
             break;
 
-        case TYPE_COTATION:
-            PlotCotation( plotter, (COTATION*) PtStruct, EDGE_LAYER, FILLED );
+        case TYPE_DIMENSION:
+            PlotDimension( plotter, (DIMENSION*) PtStruct, EDGE_LAYER, FILLED );
             break;
 
         case TYPE_MIRE:
