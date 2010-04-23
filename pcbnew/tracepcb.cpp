@@ -129,7 +129,7 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
 
         switch( item->Type() )
         {
-        case TYPE_COTATION:
+        case TYPE_DIMENSION:
         case TYPE_TEXTE:
         case TYPE_MIRE:
         case TYPE_DRAWSEGMENT:

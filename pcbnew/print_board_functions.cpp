@@ -49,7 +49,7 @@ void WinEDA_ModuleEditFrame::PrintPage( wxDC* aDC,
 
     DisplayOpt.ContrastModeDisplay = false;
     DisplayOpt.DisplayPadFill = true;
-    DisplayOpt.DisplayViaFill = true;    
+    DisplayOpt.DisplayViaFill = true;
 
     m_DisplayPadFill = DisplayOpt.DisplayPadFill;
     m_DisplayViaFill = DisplayOpt.DisplayViaFill;
@@ -148,7 +148,7 @@ void WinEDA_PcbFrame::PrintPage( wxDC* aDC,
             // to the current printed layer
             DisplayOpt.ContrastModeDisplay = true;
             DisplayOpt.DisplayPadFill = true;
-            
+
             // Calculate the active layer number to print from its mask layer:
             GetScreen()->m_Active_Layer = 0;
             for(int kk = 0; kk < 32; kk ++ )
@@ -159,19 +159,19 @@ void WinEDA_PcbFrame::PrintPage( wxDC* aDC,
                     break;
                 }
             }
-            
+
             // pads on Silkscreen layer are usually plot in sketch mode:
             if( (GetScreen()->m_Active_Layer == SILKSCREEN_N_BACK) ||
                 (GetScreen()->m_Active_Layer == SILKSCREEN_N_FRONT) )
                 DisplayOpt.DisplayPadFill = false;
-            
+
         }
         else
         {
             DisplayOpt.DisplayPadFill = false;
         }
     }
-    
+
 
     m_DisplayPadFill = DisplayOpt.DisplayPadFill;
     m_DisplayViaFill = DisplayOpt.DisplayViaFill;
@@ -203,7 +203,7 @@ void WinEDA_PcbFrame::PrintPage( wxDC* aDC,
         switch( item->Type() )
         {
         case TYPE_DRAWSEGMENT:
-        case TYPE_COTATION:
+        case TYPE_DIMENSION:
         case TYPE_TEXTE:
         case TYPE_MIRE:
             if( ( ( 1 << item->GetLayer() ) & aPrintMaskLayer ) == 0 )

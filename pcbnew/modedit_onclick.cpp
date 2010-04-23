@@ -339,7 +339,7 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
     case TYPE_TRACK:
     case TYPE_ZONE:
     case TYPE_MARKER_PCB:
-    case TYPE_COTATION:
+    case TYPE_DIMENSION:
     case TYPE_MIRE:
         break;
 

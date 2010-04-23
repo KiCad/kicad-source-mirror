@@ -209,14 +209,15 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         EXCHG( ( (MIREPCB*) aItem )->m_Shape, ( (MIREPCB*) aImage )->m_Shape );
         break;
 
-    case TYPE_COTATION:
+    case TYPE_DIMENSION:
     {
-        wxString txt = ( (COTATION*) aItem )->GetText();
-        ( (COTATION*) aItem )->SetText( ( (COTATION*) aImage )->GetText() );
-        ( (COTATION*) aImage )->SetText( txt );
-        EXCHG( ( (COTATION*) aItem )->m_Text->m_Size, ( (COTATION*) aImage )->m_Text->m_Size );
-        EXCHG( ( (COTATION*) aItem )->m_Text->m_Width, ( (COTATION*) aImage )->m_Text->m_Width );
-        EXCHG( ( (COTATION*) aItem )->m_Text->m_Mirror, ( (COTATION*) aImage )->m_Text->m_Mirror );
+        wxString txt = ( (DIMENSION*) aItem )->GetText();
+        ( (DIMENSION*) aItem )->SetText( ( (DIMENSION*) aImage )->GetText() );
+        ( (DIMENSION*) aImage )->SetText( txt );
+        EXCHG( ( (DIMENSION*) aItem )->m_Width, ( (DIMENSION*) aImage )->m_Width );
+        EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Size, ( (DIMENSION*) aImage )->m_Text->m_Size );
+        EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Width, ( (DIMENSION*) aImage )->m_Text->m_Width );
+        EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Mirror, ( (DIMENSION*) aImage )->m_Text->m_Mirror );
     }
     break;
 
@@ -301,10 +302,10 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
     }
     break;
 
-    case TYPE_COTATION:
+    case TYPE_DIMENSION:
     {
-        COTATION* new_cotation = new COTATION( aItem->GetParent() );
-        new_cotation->Copy( (COTATION*) aItem );
+        DIMENSION* new_cotation = new DIMENSION( aItem->GetParent() );
+        new_cotation->Copy( (DIMENSION*) aItem );
         return new_cotation;
     }
     break;

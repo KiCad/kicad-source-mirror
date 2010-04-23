@@ -27,7 +27,7 @@ class SEGVIA;
 class D_PAD;
 class TEXTE_MODULE;
 class MIREPCB;
-class COTATION;
+class DIMENSION;
 class EDGE_MODULE;
 class WinEDA3D_DrawFrame;
 class DRC;
@@ -854,11 +854,11 @@ public:
     void         Delete_Drawings_All_Layer( int aLayer );
 
     // Dimension handling:
-    void         Install_Edit_Cotation( COTATION*      Cotation,
+    void         Install_Edit_Dimension( DIMENSION*      Dimension,
                                         wxDC*          DC,
                                         const wxPoint& pos );
-    COTATION*    Begin_Cotation( COTATION* Cotation, wxDC* DC );
-    void         Delete_Cotation( COTATION* Cotation, wxDC* DC );
+    DIMENSION*    Begin_Dimension( DIMENSION* Dimension, wxDC* DC );
+    void         Delete_Dimension( DIMENSION* Dimension, wxDC* DC );
 
 
     // netlist  handling:

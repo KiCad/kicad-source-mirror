@@ -209,7 +209,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_TOOL( ID_PCB_CIRCLE_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_PCB_ADD_TEXT_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_PCB_ADD_LINE_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
-    EVT_TOOL( ID_PCB_COTATION_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_TOOL( ID_PCB_DIMENSION_BUTT, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_PCB_DELETE_ITEM_BUTT,
               WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_PCB_SHOW_1_RATSNEST_BUTT,
@@ -225,7 +225,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_TOOL_RCLICKED( ID_PCB_ARC_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
     EVT_TOOL_RCLICKED( ID_PCB_ADD_TEXT_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
     EVT_TOOL_RCLICKED( ID_PCB_ADD_LINE_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
-    EVT_TOOL_RCLICKED( ID_PCB_COTATION_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
+    EVT_TOOL_RCLICKED( ID_PCB_DIMENSION_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
 
     EVT_MENU_RANGE( ID_POPUP_PCB_AUTOPLACE_START_RANGE,
                     ID_POPUP_PCB_AUTOPLACE_END_RANGE,

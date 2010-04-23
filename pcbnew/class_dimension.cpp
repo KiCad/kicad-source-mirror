@@ -1,5 +1,5 @@
 /*****************************/
-/* COTATION class definition */
+/* DIMENSION class definition */
 /*****************************/
 
 #include "fctsys.h"
@@ -14,8 +14,8 @@
 #include "kicad_string.h"
 #include "protos.h"
 
-COTATION::COTATION( BOARD_ITEM* aParent ) :
-    BOARD_ITEM( aParent, TYPE_COTATION )
+DIMENSION::DIMENSION( BOARD_ITEM* aParent ) :
+    BOARD_ITEM( aParent, TYPE_DIMENSION )
 {
     m_Layer = DRAW_LAYER;
     m_Width = 50;
@@ -26,14 +26,14 @@ COTATION::COTATION( BOARD_ITEM* aParent ) :
 }
 
 
-COTATION::~COTATION()
+DIMENSION::~DIMENSION()
 {
     delete m_Text;
 }
 
 
 /* Setup the dimension text */
-void COTATION::SetText( const wxString& NewText )
+void DIMENSION::SetText( const wxString& NewText )
 {
     m_Text->m_Text = NewText;
 }
@@ -41,7 +41,7 @@ void COTATION::SetText( const wxString& NewText )
 
 /* Return the dimension text
 */
-wxString COTATION::GetText( void )
+wxString DIMENSION::GetText( void )
 {
     return m_Text->m_Text;
 }
@@ -51,14 +51,14 @@ wxString COTATION::GetText( void )
  * sets the layer this item is on.
  * @param aLayer The layer number.
  */
-void  COTATION::SetLayer( int aLayer )
+void  DIMENSION::SetLayer( int aLayer )
 {
     m_Layer = aLayer;
     m_Text->SetLayer( aLayer);
 }
 
 
-void COTATION::Copy( COTATION* source )
+void DIMENSION::Copy( DIMENSION* source )
 {
     m_Value     = source->m_Value;
     SetLayer( source->GetLayer() );
@@ -100,13 +100,13 @@ void COTATION::Copy( COTATION* source )
 }
 
 
-bool COTATION::ReadCotationDescr( FILE* File, int* LineNum )
+bool DIMENSION::ReadDimensionDescr( FILE* File, int* LineNum )
 {
     char Line[2048], Text[2048];
 
     while(  GetLine( File, Line, LineNum ) != NULL )
     {
-        if( strnicmp( Line, "$EndCOTATION", 4 ) == 0 )
+        if( strnicmp( Line, "$EndDIMENSION", 4 ) == 0 )
             return TRUE;
 
         if( Line[0] == 'V' )
@@ -227,7 +227,7 @@ bool COTATION::ReadCotationDescr( FILE* File, int* LineNum )
  * Function Move
  * @param offset : moving vector
  */
-void COTATION::Move(const wxPoint& offset)
+void DIMENSION::Move(const wxPoint& offset)
 {
     m_Pos += offset;
     m_Text->m_Pos += offset;
@@ -267,7 +267,7 @@ void COTATION::Move(const wxPoint& offset)
  * @param center : Rotation point
  * @param angle : Rotation angle in 0.1 degrees
  */
-void COTATION::Rotate(const wxPoint& centre, int angle)
+void DIMENSION::Rotate(const wxPoint& centre, int angle)
 {
     RotatePoint( &m_Pos, centre, angle );
 
@@ -300,7 +300,7 @@ void COTATION::Rotate(const wxPoint& centre, int angle)
  * Flip this object, i.e. change the board side for this object
  * @param const wxPoint& aCentre - the rotation point.
  */
-void COTATION::Flip(const wxPoint& aCentre )
+void DIMENSION::Flip(const wxPoint& aCentre )
 {
     Mirror( aCentre );
     SetLayer( ChangeSideNumLayer( GetLayer() ) );
@@ -314,7 +314,7 @@ void COTATION::Flip(const wxPoint& aCentre )
  * the layer is not changed
  * @param axis_pos : vertical axis position
  */
-void COTATION::Mirror(const wxPoint& axis_pos)
+void DIMENSION::Mirror(const wxPoint& axis_pos)
 {
 #define INVERT( pos )       (pos) = axis_pos.y - ( (pos) - axis_pos.y )
 #define INVERT_ANGLE( phi ) (phi) = -(phi)
@@ -343,14 +343,18 @@ void COTATION::Mirror(const wxPoint& axis_pos)
 }
 
 
-bool COTATION::Save( FILE* aFile ) const
+bool DIMENSION::Save( FILE* aFile ) const
 {
     if( GetState( DELETED ) )
         return true;
 
     bool rc = false;
+    // note: COTATION was the previous name of DIMENSION
+    // this old keyword is used here for compatibility
+    const char keyWordLine[] = "$COTATION\n";
+    const char keyWordLineEnd[] = "$endCOTATION\n";
 
-    if( fprintf( aFile, "$COTATION\n" ) != sizeof("$COTATION\n")-1 )
+    if( fprintf( aFile, keyWordLine ) != sizeof(keyWordLine)-1 )
         goto out;
 
     fprintf( aFile, "Ge %d %d %lX\n", m_Shape, m_Layer, m_TimeStamp );
@@ -397,7 +401,7 @@ bool COTATION::Save( FILE* aFile ) const
              FlecheG2_ox, FlecheG2_oy,
              FlecheG2_fx, FlecheG2_fy, m_Width );
 
-    if( fprintf( aFile, "$EndCOTATION\n" ) != sizeof("$EndCOTATION\n")-1 )
+    if( fprintf( aFile, keyWordLineEnd ) != sizeof(keyWordLineEnd)-1 )
         goto out;
 
     rc = true;
@@ -407,11 +411,123 @@ out:
 }
 
 
-
-
-/* Print 1 dimension: series of n + 1 segments text
+/** function AdjustDimensionDetails
+ * Calculate coordinates of segments used to draw the dimension.
+ * @param aDoNotChangeText (bool) if false, the dimension text is initialized
  */
-void COTATION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
+{
+    #define ARROW_SIZE 500    //size of arrows
+    int      ii;
+    int      mesure, deltax, deltay;            /* valeur de la mesure sur les axes X et Y */
+    int      fleche_up_X = 0, fleche_up_Y = 0;  /* coord des fleches : barre / */
+    int      fleche_dw_X = 0, fleche_dw_Y = 0;  /* coord des fleches : barre \ */
+    int      hx, hy;                            /* coord des traits de rappel de cote */
+    float    angle, angle_f;
+    wxString msg;
+
+    /* Init layer : */
+    m_Text->SetLayer( GetLayer() );
+
+    /* calculate the size of the cdimension
+     * (text + line above the text) */
+    ii = m_Text->m_Size.y +
+         m_Text->m_Width + (m_Width * 3);
+
+    deltax = TraitD_ox - TraitG_ox;
+    deltay = TraitD_oy - TraitG_oy;
+
+    /* Calculate dimension value */
+    mesure = wxRound(hypot( (double) deltax, (double) deltay ) );
+
+    if( deltax || deltay )
+        angle = atan2( (double) deltay, (double) deltax );
+    else
+        angle = 0.0;
+
+    /* Calcul des parametre dimensions X et Y des fleches et traits de cotes */
+    hx = hy = ii;
+
+    /* On tient compte de l'inclinaison de la cote */
+    if( mesure )
+    {
+        hx = (abs) ( (int) ( ( (double) deltay * hx ) / mesure ) );
+        hy = (abs) ( (int) ( ( (double) deltax * hy ) / mesure ) );
+
+        if( TraitG_ox > Barre_ox )
+            hx = -hx;
+        if( TraitG_ox == Barre_ox )
+            hx = 0;
+        if( TraitG_oy > Barre_oy )
+            hy = -hy;
+        if( TraitG_oy == Barre_oy )
+            hy = 0;
+
+        angle_f     = angle + (M_PI * 27.5 / 180);
+        fleche_up_X = (int) ( ARROW_SIZE * cos( angle_f ) );
+        fleche_up_Y = (int) ( ARROW_SIZE * sin( angle_f ) );
+        angle_f     = angle - (M_PI * 27.5 / 180);
+        fleche_dw_X = (int) ( ARROW_SIZE * cos( angle_f ) );
+        fleche_dw_Y = (int) ( ARROW_SIZE * sin( angle_f ) );
+    }
+
+
+    FlecheG1_ox = Barre_ox;
+    FlecheG1_oy = Barre_oy;
+    FlecheG1_fx = Barre_ox + fleche_up_X;
+    FlecheG1_fy = Barre_oy + fleche_up_Y;
+
+    FlecheG2_ox = Barre_ox;
+    FlecheG2_oy = Barre_oy;
+    FlecheG2_fx = Barre_ox + fleche_dw_X;
+    FlecheG2_fy = Barre_oy + fleche_dw_Y;
+
+    /*la fleche de droite est symetrique a celle de gauche:
+     *  / = -\  et  \ = -/
+     */
+    FlecheD1_ox = Barre_fx;
+    FlecheD1_oy = Barre_fy;
+    FlecheD1_fx = Barre_fx - fleche_dw_X;
+    FlecheD1_fy = Barre_fy - fleche_dw_Y;
+
+    FlecheD2_ox = Barre_fx;
+    FlecheD2_oy = Barre_fy;
+    FlecheD2_fx = Barre_fx - fleche_up_X;
+    FlecheD2_fy = Barre_fy - fleche_up_Y;
+
+
+    TraitG_fx = Barre_ox + hx;
+    TraitG_fy = Barre_oy + hy;
+
+    TraitD_fx = Barre_fx + hx;
+    TraitD_fy = Barre_fy + hy;
+
+    /* Calculate the better text position and orientation: */
+    m_Pos.x   = m_Text->m_Pos.x
+                          = (Barre_fx + TraitG_fx) / 2;
+    m_Pos.y   = m_Text->m_Pos.y
+                          = (Barre_fy + TraitG_fy) / 2;
+
+    m_Text->m_Orient = -(int) (angle * 1800 / M_PI);
+    if( m_Text->m_Orient < 0 )
+        m_Text->m_Orient += 3600;
+    if( m_Text->m_Orient >= 3600 )
+        m_Text->m_Orient -= 3600;
+    if( (m_Text->m_Orient > 900) && (m_Text->m_Orient <2700) )
+        m_Text->m_Orient -= 1800;
+
+    if( !aDoNotChangeText )
+    {
+        m_Value = mesure;
+        valeur_param( m_Value, msg );
+        SetText( msg );
+    }
+}
+
+
+/* Print 1 dimension: segments and text
+ */
+void DIMENSION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                      int mode_color, const wxPoint& offset )
 {
     int ox, oy, typeaff, width, gcolor;
@@ -502,9 +618,9 @@ void COTATION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
 
 // see class_cotation.h
-void COTATION::DisplayInfo( WinEDA_DrawFrame* frame )
+void DIMENSION::DisplayInfo( WinEDA_DrawFrame* frame )
 {
-    // for now, display only the text within the COTATION using class TEXTE_PCB.
+    // for now, display only the text within the DIMENSION using class TEXTE_PCB.
     m_Text->DisplayInfo( frame );
 }
 
@@ -515,7 +631,7 @@ void COTATION::DisplayInfo( WinEDA_DrawFrame* frame )
  * @param ref_pos A wxPoint to test
  * @return bool - true if a hit, else false
  */
-bool COTATION::HitTest( const wxPoint& ref_pos )
+bool DIMENSION::HitTest( const wxPoint& ref_pos )
 {
     int             ux0, uy0;
     int             dx, dy, spot_cX, spot_cY;
@@ -619,7 +735,7 @@ bool COTATION::HitTest( const wxPoint& ref_pos )
  * @param EDA_Rect : the given EDA_Rect
  * @return bool - true if a hit, else false
  */
-bool COTATION::HitTest( EDA_Rect& refArea )
+bool DIMENSION::HitTest( EDA_Rect& refArea )
 {
     if( refArea.Inside( m_Pos ) )
         return true;

@@ -599,7 +599,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         m_Status_Pcb = 0;
         break;
 
-    case TYPE_COTATION:
+    case TYPE_DIMENSION:
     case TYPE_DRAWSEGMENT:
     case TYPE_TEXTE:
     case TYPE_EDGE_MODULE:
@@ -672,7 +672,7 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
         m_Zone.Remove( (SEGZONE*) aBoardItem );
         break;
 
-    case TYPE_COTATION:
+    case TYPE_DIMENSION:
     case TYPE_DRAWSEGMENT:
     case TYPE_TEXTE:
     case TYPE_EDGE_MODULE:
@@ -965,7 +965,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
 
         case TYPE_DRAWSEGMENT:
         case TYPE_TEXTE:
-        case TYPE_COTATION:
+        case TYPE_DIMENSION:
         case TYPE_MIRE:
             result = IterateForward( m_Drawings, inspector, testData, p );
 
@@ -976,7 +976,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
                 {
                 case TYPE_DRAWSEGMENT:
                 case TYPE_TEXTE:
-                case TYPE_COTATION:
+                case TYPE_DIMENSION:
                 case TYPE_MIRE:
                     continue;
 
@@ -1369,7 +1369,7 @@ bool BOARD::Save( FILE* aFile ) const
         case TYPE_TEXTE:
         case TYPE_DRAWSEGMENT:
         case TYPE_MIRE:
-        case TYPE_COTATION:
+        case TYPE_DIMENSION:
             if( !item->Save( aFile ) )
                 goto out;
             break;

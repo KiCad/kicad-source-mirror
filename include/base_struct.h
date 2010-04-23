@@ -38,7 +38,7 @@ enum KICAD_T {
     TYPE_ZONE,              // a segment used to fill a zone area (segment on a
                             // copper layer)
     TYPE_MARKER_PCB,        // a marker used to show something
-    TYPE_COTATION,          // a dimension (graphic item)
+    TYPE_DIMENSION,          // a dimension (graphic item)
     TYPE_MIRE,              // a target (graphic item)
     TYPE_ZONE_EDGE_CORNER,  // in zone outline: a point to define an outline
     TYPE_ZONE_CONTAINER,    // a zone area

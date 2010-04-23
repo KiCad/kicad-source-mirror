@@ -39,7 +39,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     TYPE_MARKER_PCB,                 // in m_markers
     TYPE_TEXTE,                  // in m_Drawings
     TYPE_DRAWSEGMENT,            // in m_Drawings
-    TYPE_COTATION,               // in m_Drawings
+    TYPE_DIMENSION,               // in m_Drawings
     TYPE_MIRE,                   // in m_Drawings
     TYPE_VIA,                    // in m_Tracks
     TYPE_TRACK,                  // in m_Tracks
@@ -56,7 +56,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
   * const KICAD_T GENERAL_COLLECTOR::PrimaryItems[] = {
   * TYPE_TEXTE,
   * TYPE_DRAWSEGMENT,
-  * TYPE_COTATION,
+  * TYPE_DIMENSION,
   * TYPE_VIA,
   * TYPE_TRACK,
   * TYPE_MODULE,
@@ -69,7 +69,7 @@ const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
     TYPE_MARKER_PCB,
     TYPE_TEXTE,
     TYPE_DRAWSEGMENT,
-    TYPE_COTATION,
+    TYPE_DIMENSION,
     TYPE_MIRE,
     TYPE_VIA,
     TYPE_TRACK,
@@ -174,7 +174,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
         breakhere++;
         break;
 
-    case TYPE_COTATION:
+    case TYPE_DIMENSION:
         breakhere++;
         break;
 
@@ -211,9 +211,9 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
     case TYPE_PAD:
         // there are pad specific visibility controls.
         // Criterias to select a pad is:
-        // for smd pads: the module parent must be seen, and pads on the corresponding board side must be seen 
+        // for smd pads: the module parent must be seen, and pads on the corresponding board side must be seen
         // if pad is a thru hole, then it can be visible when its parent module is not.
-        // for through pads: pads on Front or Back board sides must be seen 
+        // for through pads: pads on Front or Back board sides must be seen
         pad = (D_PAD*) item;
         if( (pad->m_Attribut != PAD_SMD) &&
             (pad->m_Attribut != PAD_CONN) )    // a hole is present, so multiple layers
@@ -244,7 +244,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
     case TYPE_DRAWSEGMENT:
         break;
 
-    case TYPE_COTATION:
+    case TYPE_DIMENSION:
         break;
 
     case TYPE_MIRE:
@@ -285,7 +285,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* 
             goto exit;
     }
 
-    // Pads are not sensitive to the layer visibility controls. 
+    // Pads are not sensitive to the layer visibility controls.
     // They all have their own separate visibility controls
     // skip them if not visible
     if ( pad )

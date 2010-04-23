@@ -87,7 +87,7 @@ public:
      * Function SetLayer
      * sets the layer this item is on.
      * @param aLayer The layer number.
-     * is virtual because some items (in fact: class COTATION)
+     * is virtual because some items (in fact: class DIMENSION)
      * have a slightly different initialisation
      */
     virtual void  SetLayer( int aLayer )  { m_Layer = aLayer; }

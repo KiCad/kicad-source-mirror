@@ -4,6 +4,12 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-apr-23, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++Pcbnew:
+    Fixed minor problems.
+    Changed French word COTATION to DIMENSION in class COTATION (now class DIMENSION)
+
 2010-apr-22, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++Pcbnew+Gerbview:

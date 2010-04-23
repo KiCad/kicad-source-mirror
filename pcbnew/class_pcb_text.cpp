@@ -218,7 +218,7 @@ void TEXTE_PCB::DisplayInfo( WinEDA_DrawFrame* frame )
 
     wxASSERT( parent );
 
-    if( parent->Type() == TYPE_COTATION )
+    if( parent->Type() == TYPE_DIMENSION )
         board = (BOARD*) parent->GetParent();
     else
         board = (BOARD*) parent;
@@ -226,8 +226,8 @@ void TEXTE_PCB::DisplayInfo( WinEDA_DrawFrame* frame )
 
     frame->ClearMsgPanel();
 
-    if( m_Parent && m_Parent->Type() == TYPE_COTATION )
-        frame->AppendMsgPanel( _( "COTATION" ), m_Text, DARKGREEN );
+    if( m_Parent && m_Parent->Type() == TYPE_DIMENSION )
+        frame->AppendMsgPanel( _( "DIMENSION" ), m_Text, DARKGREEN );
     else
         frame->AppendMsgPanel( _( "PCB Text" ), m_Text, DARKGREEN );
 

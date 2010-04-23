@@ -32,7 +32,7 @@ class SEGVIA;
 class D_PAD;
 class TEXTE_MODULE;
 class MIREPCB;
-class COTATION;
+class DIMENSION;
 class EDGE_MODULE;
 class WinEDA3D_DrawFrame;
 class DRC;

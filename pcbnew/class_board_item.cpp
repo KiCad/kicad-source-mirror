@@ -1,6 +1,6 @@
-/*****************************************/
-/* class BOARD_ITEM: som basic functions */
-/*****************************************/
+/******************************************/
+/* class BOARD_ITEM: some basic functions */
+/******************************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -217,8 +217,8 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
              << wxT(",") << ((MARKER_PCB*)item)->GetPos().y << wxT(")");
         break;
 
-    case TYPE_COTATION:
-        text << _( "Dimension" ) << wxT( " \"" ) << ( (COTATION*) item )->GetText() << wxT( "\"" );
+    case TYPE_DIMENSION:
+        text << _( "Dimension" ) << wxT( " \"" ) << ( (DIMENSION*) item )->GetText() << wxT( "\"" );
         break;
 
     case TYPE_MIRE:
@@ -291,7 +291,7 @@ const char** BOARD_ITEM::MenuIcon() const
         xpm = pad_xpm;              // @todo: create and use marker xpm
         break;
 
-    case TYPE_COTATION:
+    case TYPE_DIMENSION:
         xpm = add_dimension_xpm;
         break;
 

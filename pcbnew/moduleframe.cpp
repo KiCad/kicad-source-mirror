@@ -113,7 +113,7 @@ BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, WinEDA_BasePcbFrame )
                        WinEDA_ModuleEditFrame::ToolOnRightClick )
     EVT_TOOL_RCLICKED( ID_PCB_ADD_LINE_BUTT,
                        WinEDA_ModuleEditFrame::ToolOnRightClick )
-    EVT_TOOL_RCLICKED( ID_PCB_COTATION_BUTT,
+    EVT_TOOL_RCLICKED( ID_PCB_DIMENSION_BUTT,
                        WinEDA_ModuleEditFrame::ToolOnRightClick )
 
     // Options Toolbar

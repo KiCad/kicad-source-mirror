@@ -79,7 +79,7 @@ void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int masque_layer,
 void PlotDrawSegment( PLOTTER* plotter, DRAWSEGMENT* PtSegm, int masque_layer,
                       GRTraceMode trace_mode );
 
-void PlotCotation( PLOTTER* plotter, COTATION* Cotation, int masque_layer,
+void PlotDimension( PLOTTER* plotter, DIMENSION* Dimension, int masque_layer,
                    GRTraceMode trace_mode );
 
 void PlotMirePcb( PLOTTER* plotter, MIREPCB* PtMire, int masque_layer,
