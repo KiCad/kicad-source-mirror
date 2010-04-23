@@ -16,21 +16,11 @@
 extern int g_DrawDefaultLineThickness;
 
 
-void WinEDA_PcbFrame::InstallPcbOptionsFrame( int id )
+void WinEDA_PcbFrame::OnConfigurePcbOptions( wxCommandEvent& aEvent )
 {
-    switch( id )
-    {
-    case ID_PCB_DRAWINGS_WIDTHS_SETUP:
-    {
-        DIALOG_GRAPHIC_ITEMS_OPTIONS dlg( this );
-        dlg.ShowModal();
-    }
-    break;
+    DIALOG_GRAPHIC_ITEMS_OPTIONS dlg( this );
 
-    default:
-        wxMessageBox( wxT( "InstallPcbOptionsFrame() id error" ) );
-        break;
-    }
+    dlg.ShowModal();
 }
 
 
@@ -143,7 +133,7 @@ void DIALOG_GRAPHIC_ITEMS_OPTIONS::OnOkClick( wxCommandEvent& event )
     if( g_DrawDefaultLineThickness < 0 )
         g_DrawDefaultLineThickness = 0;
 
-    EndModal( 1 );
+    EndModal( wxID_OK );
 }
 
 

@@ -99,7 +99,7 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
     g_MagneticPadOption   = m_MagneticPadOptCtrl->GetSelection();
     g_MagneticTrackOption = m_MagneticTrackOptCtrl->GetSelection();
 
-    EndModal( 1 );
+    EndModal( wxID_OK );
 }
 
 

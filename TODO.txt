@@ -78,8 +78,9 @@ GerbView
 * Add excellon2 drill file support (small good library)
 * Fix the polygon bug.
 * Switch to use ZONE instead of SEGZONE for polygons.
-
-
+* Separate application settings and project configuration settings by converting
+  static list of parameters in gerbview_config.h to dynamically created lists of
+  settings.  See eeschema/eeschema_config.cpp for an example.
 
 
 

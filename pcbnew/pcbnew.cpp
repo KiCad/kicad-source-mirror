@@ -63,8 +63,7 @@ wxPoint                g_Offset_Module;     /* Offset de trace du modul en depl 
 wxString               g_Current_PadName;   // Last used pad name (pad num)
 
 // Wildcard for footprint libraries filesnames
-const wxString         g_FootprintLibFileWildcard( wxT(
-                                                      "Kicad footprint library file (*.mod)|*.mod" ) );
+const wxString         g_FootprintLibFileWildcard( wxT( "Kicad footprint library file (*.mod)|*.mod" ) );
 
 /* Name of the document footprint list
  * usually located in share/modules/footprints_doc
@@ -126,10 +125,8 @@ bool WinEDA_App::OnInit()
 
         if( fn.GetExt() != BoardFileExtension )
         {
-            wxLogDebug( wxT(
-                           "PcbNew file <%s> has the wrong extension.\
-Changing extension to .brd."                                                                         ),
-                       GetChars( fn.GetFullPath() ) );
+            wxLogDebug( wxT( "PcbNew file <%s> has the wrong extension.  \
+Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
             fn.SetExt( BoardFileExtension );
         }
 
@@ -137,7 +134,6 @@ Changing extension to .brd."                                                    
             wxSetWorkingDirectory( fn.GetPath() );
     }
 
-    wxGetApp().ReadCurrentSetupValues( ParamCfgList );
     g_DrawBgColor = BLACK;
     Read_Hotkey_Config( frame, false );  /* Must be called before creating the
                                           * main frame in order to display the
@@ -145,7 +141,7 @@ Changing extension to .brd."                                                    
 
 
     frame = new WinEDA_PcbFrame( NULL, wxT( "PcbNew" ),
-                                wxPoint( 0, 0 ), wxSize( 600, 400 ) );
+                                 wxPoint( 0, 0 ), wxSize( 600, 400 ) );
     frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() );
     ActiveScreen = ScreenPcb;
 
@@ -157,7 +153,7 @@ Changing extension to .brd."                                                    
         SetupServerFunction( RemoteCommand );
     }
 
-    frame->Read_Config( fn.GetFullPath() );
+    frame->LoadProjectSettings( fn.GetFullPath() );
 
     frame->Zoom_Automatique( true );
 

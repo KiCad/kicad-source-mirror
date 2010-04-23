@@ -31,16 +31,13 @@ void WinEDA_PcbFrame::OnFileHistory( wxCommandEvent& event )
     }
 }
 
-/****************************************************/
-void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
-/****************************************************/
 
 /* Handle the read/write file commands
  */
+void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxString   msg;
-
 
     // If an edition is in progress, stop it
     DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
@@ -69,13 +66,13 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
 
         if( !fn.FileExists() )
         {
-            msg = _( "Recovery file " ) + fn.GetFullPath() + _( " not found" );
+            msg = _( "Recovery file " ) + fn.GetFullPath() + _( " not found." );
             DisplayInfoMessage( this, msg );
             break;
         }
         else
         {
-            msg = _( "Ok to load Recovery file " ) + fn.GetFullPath();
+            msg = _( "OK to load recovery file " ) + fn.GetFullPath();
             if( !IsOK( this, msg ) )
                 break;
         }
@@ -209,7 +206,7 @@ this file again."));
         ReadPcbFile( source, true );
     else
     {
-        Read_Config( GetScreen()->m_FileName );
+        LoadProjectSettings( GetScreen()->m_FileName );
 
         // Update the option toolbar
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
@@ -228,11 +225,11 @@ this file again."));
     /* If append option: change the initial board name to <oldname>-append.brd */
     if( Append )
     {
-        wxString new_filename = GetScreen()->m_FileName.BeforeLast('.');
-        if ( ! new_filename.EndsWith(wxT("-append")) )
-            new_filename += wxT("-append");
+        wxString new_filename = GetScreen()->m_FileName.BeforeLast( '.' );
+        if ( ! new_filename.EndsWith( wxT( "-append" ) ) )
+            new_filename += wxT( "-append" );
 
-        new_filename += wxT(".") + PcbExtBuffer;
+        new_filename += wxT( "." ) + PcbExtBuffer;
 
         OnModify();
         GetScreen()->m_FileName = new_filename;
@@ -251,11 +248,11 @@ this file again."));
      * if board items are not visible after loading a board...
      * Grid and ratsnest can be left to their previous state
      */
-    bool showGrid = IsElementVisible(GRID_VISIBLE);
-    bool showRats = IsElementVisible(RATSNEST_VISIBLE);
-    SetVisibleAlls( );
-    SetElementVisibility(GRID_VISIBLE, showGrid);
-    SetElementVisibility(RATSNEST_VISIBLE, showRats);
+    bool showGrid = IsElementVisible( GRID_VISIBLE );
+    bool showRats = IsElementVisible( RATSNEST_VISIBLE );
+    SetVisibleAlls();
+    SetElementVisibility( GRID_VISIBLE, showGrid );
+    SetElementVisibility( RATSNEST_VISIBLE, showRats );
 
     // Update info shown by the horizontal toolbars
     GetBoard()->SetCurrentNetClass( NETCLASS::Default );
@@ -265,7 +262,7 @@ this file again."));
 
     ReCreateLayerBox( NULL );
     AuxiliaryToolBar_Update_UI();
-    syncLayerWidget( );
+    syncLayerWidget();
 
     // Display the loaded board:
     Zoom_Automatique( false );
@@ -294,12 +291,9 @@ this file again."));
 }
 
 
-/***********************************************************/
-bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
-/************************************************************/
-
 /* Write the board file
  */
+bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
 {
     wxFileName  backupFileName;
     wxFileName  pcbFileName;

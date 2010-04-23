@@ -116,8 +116,7 @@ FILE * OpenNetlistFile( const wxString& aFullFileName )
     if( netfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "Netlist file %s not found" ),
-                    GetChars( aFullFileName ) );
+        msg.Printf( _( "Netlist file %s not found" ), GetChars( aFullFileName ) );
         DisplayError( NULL, msg );
     }
 
@@ -149,14 +148,13 @@ FILE * OpenNetlistFile( const wxString& aFullFileName )
  *  }
  * #End
  */
-bool WinEDA_PcbFrame::ReadPcbNetlist(
-                     const wxString&  aNetlistFullFilename,
-                     const wxString&  aCmpFullFileName,
-                     wxTextCtrl*      aMessageWindow,
-                     bool             aChangeFootprint,
-                     bool             aDeleteBadTracks,
-                     bool             aDeleteExtraFootprints,
-                     bool             aSelect_By_Timestamp )
+bool WinEDA_PcbFrame::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
+                                      const wxString&  aCmpFullFileName,
+                                      wxTextCtrl*      aMessageWindow,
+                                      bool             aChangeFootprint,
+                                      bool             aDeleteBadTracks,
+                                      bool             aDeleteExtraFootprints,
+                                      bool             aSelect_By_Timestamp )
 {
     int     State, Comment;
     MODULE* Module = NULL;
@@ -168,11 +166,12 @@ bool WinEDA_PcbFrame::ReadPcbNetlist(
     if( !netfile )
         return false;
 
+    SetLastNetListRead( aNetlistFullFilename );
+
     if( aMessageWindow )
     {
         wxString msg;
-        msg.Printf( _( "Reading Netlist \"%s\"" ),
-                    GetChars( aNetlistFullFilename ) );
+        msg.Printf( _( "Reading Netlist \"%s\"" ), GetChars( aNetlistFullFilename ) );
         aMessageWindow->AppendText( msg + wxT( "\n" ) );
     }
 
@@ -181,7 +180,8 @@ bool WinEDA_PcbFrame::ReadPcbNetlist(
 
     OnModify();
     GetBoard()->m_Status_Pcb = 0;
-    State = 0; Comment = 0;
+    State = 0;
+    Comment = 0;
     s_NbNewModules = 0;
 
     wxBusyCursor dummy;        // Shows an hourglass while calculating

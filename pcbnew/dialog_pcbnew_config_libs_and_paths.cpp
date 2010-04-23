@@ -128,7 +128,7 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnOkClick( wxCommandEvent& event )
             g_LibName_List.Add(m_ListLibr->GetString(ii) );
     }
 
-    m_Parent->Update_config( this );
+    m_Parent->SaveProjectSettings();
     EndModal( wxID_OK );
 }
 

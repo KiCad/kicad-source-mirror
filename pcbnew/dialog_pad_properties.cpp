@@ -97,11 +97,10 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( WinEDA_BasePcbFrame* parent, D_PAD
 }
 
 
-/*************************************************************/
 void WinEDA_BasePcbFrame::InstallPadOptionsFrame( D_PAD* Pad )
-/*************************************************************/
 {
     DIALOG_PAD_PROPERTIES dlg( this, Pad );
+
     dlg.ShowModal();
 }
 
@@ -441,9 +440,12 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
     g_Pad_Master.m_PadShape = CodeShape[m_PadShape->GetSelection()];
 
     // Read pad clearances values:
-    g_Pad_Master.m_LocalClearance = ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl, internalUnits );
-    g_Pad_Master.m_LocalSolderMaskMargin = ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, internalUnits );
-    g_Pad_Master.m_LocalSolderPasteMargin = ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl, internalUnits );
+    g_Pad_Master.m_LocalClearance = ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl,
+                                                             internalUnits );
+    g_Pad_Master.m_LocalSolderMaskMargin = ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl,
+                                                                    internalUnits );
+    g_Pad_Master.m_LocalSolderPasteMargin = ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl,
+                                                                     internalUnits );
     double   dtmp = 0.0;
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );
@@ -664,7 +666,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         m_Parent->OnModify();
     }
 
-    EndModal(1);
+    EndModal( wxID_OK );
 
     if( RastnestIsChanged )  // The net ratsnest must be recalculated
         m_Parent->GetBoard()->m_Status_Pcb = 0;
@@ -674,6 +676,6 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 void DIALOG_PAD_PROPERTIES::OnCancelButtonClick( wxCommandEvent& event )
 /*********************************************************************/
 {
-    EndModal(0);
+    EndModal( wxID_CANCEL );
 }
 
