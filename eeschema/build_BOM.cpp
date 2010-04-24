@@ -71,7 +71,6 @@ static bool SortLabelsByValue( const LABEL_OBJECT& obj1,
 static bool SortLabelsBySheet( const LABEL_OBJECT& obj1,
                                const LABEL_OBJECT& obj2 );
 static void DeleteSubCmp( std::vector <OBJ_CMP_TO_LIST>& aList );
-
 static int  PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList );
 
 int         RefDesStringCompare( const char* obj1, const char* obj2 );
@@ -204,7 +203,7 @@ void DIALOG_BUILD_BOM::CreatePartsList( const wxString& aFullFileName, bool aInc
 
     /*  sort component list by value*/
     sort( cmplist.begin(), cmplist.end(), SortComponentsByValue );
-    PrintComponentsListByPart( f, cmplist );
+    PrintComponentsListByPart( f, cmplist,aIncludeSubComponents );
 
     fclose( f );
 }
@@ -369,6 +368,11 @@ void BuildComponentsListFromSchematic( std::vector <OBJ_CMP_TO_LIST>& aList )
 
             // Ensure always null terminate m_Ref.
             item.m_Reference[sizeof( item.m_Reference ) - 1 ] = 0;
+            // Skip pseudo components:
+            // pseudo components have a reference starting by #. Mainly power symbols
+            if( item.m_Reference[0] == '#' )
+                continue;
+            // Real component found, push it in list
             aList.push_back( item );
         }
     }
@@ -683,8 +687,6 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
             continue;
 
         DrawLibItem = (SCH_COMPONENT*) DrawList;
-        if( aList[ii].m_Reference[0] == '#' )
-            continue;
 
         Multi = 0;
         Unit  = ' ';
@@ -694,14 +696,8 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 
         if( ( Multi > 1 ) && aIncludeSubComponents )
 #if defined(KICAD_GOST)
-
-
-
             Unit = aList[ii].m_Unit + '1' - 1;
 #else
-
-
-
             Unit = aList[ii].m_Unit + 'A' - 1;
 #endif
 
@@ -711,38 +707,24 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 
         if( CompactForm )
 #if defined(KICAD_GOST)
-
-
-
             fprintf( f, "%s%c%s%c%s", CmpName, s_ExportSeparatorSymbol,
                     CONV_TO_UTF8( DrawLibItem->GetField(
                                       VALUE )->m_Text ), s_ExportSeparatorSymbol,
                     CONV_TO_UTF8( DrawLibItem->GetField( DATASHEET )->m_Text ) );
 #else
-
-
-
             fprintf( f, "%s%c%s", CmpName, s_ExportSeparatorSymbol,
                     CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
 #endif
 
         else
 #if defined(KICAD_GOST)
-
-
-
             fprintf( f, "| %-10s %-12s %-20s", CmpName,
                     CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ),
                     CONV_TO_UTF8( DrawLibItem->GetField( DATASHEET )->m_Text ) );
 #else
-
-
-
             fprintf( f, "| %-10s %-12s", CmpName,
                     CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
 #endif
-
-
         if( aIncludeSubComponents )
         {
             msg = aList[ii].m_SheetPath.PathHumanReadable();
@@ -794,82 +776,76 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
  */
 int DIALOG_BUILD_BOM::PrintComponentsListByPart(
     FILE*                          f,
-    std::vector <OBJ_CMP_TO_LIST>& aList )
+    std::vector <OBJ_CMP_TO_LIST>& aList,
+    bool aIncludeSubComponents)
 {
-    int             qty = 1;
+    int             qty = 0;
     wxString        RefName;
+    wxString        fullRefName;        // reference + part Id (for multiple parts per package
     wxString        ValName;
-    wxString        NxtName;
     wxString        RNames;
-    EDA_BaseStruct* DrawList;
-    EDA_BaseStruct* NxtList;
-    SCH_COMPONENT*  DrawLibItem;
-    SCH_COMPONENT*  NxtLibItem;
+    wxString        lastRef;
+    wxString        unitId;
+    SCH_COMPONENT*  currCmp, *nextCmp;
     SCH_COMPONENT   dummyCmp;        // A dummy component, to store fields
 
     for( unsigned ii = 0; ii < aList.size(); ii++ )
     {
-        DrawList = aList[ii].m_RootCmp;
-        if( DrawList == NULL )
-            continue;
-        if( DrawList->Type() != TYPE_SCH_COMPONENT )
-            continue;
-        if( aList[ii].m_Reference[0] == '#' )
-            continue;
-        DrawLibItem = (SCH_COMPONENT*) DrawList;
-        if( ( DrawLibItem->GetField( VALUE )->m_Text.IsEmpty() ) )
-            continue;
+        currCmp = (SCH_COMPONENT*) aList[ii].m_RootCmp;
+        if( ii < aList.size() -1 )
+            nextCmp = aList[ii+1].m_RootCmp;
+        else
+            nextCmp = NULL;
 
         // Store fields. Store non empty fields only.
-        for( int jj = FOOTPRINT; jj < DrawLibItem->GetFieldCount(); jj++ )
+        for( int jj = FOOTPRINT; jj < currCmp->GetFieldCount(); jj++ )
         {
-            if( !DrawLibItem->GetField( jj )->m_Text.IsEmpty() )
-                dummyCmp.GetField( jj )->m_Text = DrawLibItem->GetField( jj )->m_Text;
+            if( !currCmp->GetField( jj )->m_Text.IsEmpty() )
+                dummyCmp.GetField( jj )->m_Text = currCmp->GetField( jj )->m_Text;
         }
-
-        NxtLibItem = NULL;
-        for( unsigned ij = ii + 1; ij < aList.size(); ij++ )
-        {
-            NxtList = aList[ij].m_RootCmp;
-            if( NxtList == NULL )
-                continue;
-            if( NxtList->Type() != TYPE_SCH_COMPONENT )
-                continue;
-            if( aList[ij].m_Reference[0] == '#' )
-                continue;
-            NxtLibItem = (SCH_COMPONENT*) NxtList;
-            if( ( NxtLibItem->GetField( VALUE )->m_Text.IsEmpty() ) )
-            {
-                continue;
-            }
-            break;
-        }
-
-        if( NxtLibItem != NULL )
-            NxtName = NxtLibItem->GetField( VALUE )->m_Text;
-        else
-            NxtName = wxT( "" );
 
         RefName = CONV_FROM_UTF8( aList[ii].m_Reference );
-        ValName = DrawLibItem->GetField( VALUE )->m_Text;
+        ValName = currCmp->GetField( VALUE )->m_Text;
 
-        if( !NxtName.CmpNoCase( ValName ) )
+        int multi = 0;
+        if( aIncludeSubComponents )
         {
-            qty++;
-            RNames << wxT( ", " ) << RefName;
-            continue;
+            LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( currCmp->m_ChipName );
+            if( Entry )
+                multi = Entry->GetPartCount();
+            if ( multi <= 1 )
+                multi = 0;
         }
 
+        if ( multi && aList[ii].m_Unit > 0 )
+            unitId.Printf(wxT("%c"), 'A' -1 + aList[ii].m_Unit);
+        else unitId.Empty();
+        fullRefName = RefName + unitId;
+
+        if( RNames.IsEmpty() )
+            RNames = fullRefName;
+        else
+            RNames << wxT( ", " ) << fullRefName;
+        // In multi parts per package, we have the reference more than once
+        // but we must count only one package
+        if( lastRef != RefName )
+            qty++;
+        lastRef = RefName;
+
+        // if the next cmoponent has same value the line will be printed after.
+        if( nextCmp && nextCmp->GetField( VALUE )->m_Text.CmpNoCase( ValName ) == 0 )
+            continue;
+
+       // Print line for the current component value:
         fprintf( f, "%15s%c%3d", CONV_TO_UTF8( ValName ), s_ExportSeparatorSymbol, qty );
-        qty = 1;
 
         if( IsFieldChecked(FOOTPRINT ) )
             fprintf( f, "%c%15s", s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
+                    CONV_TO_UTF8( currCmp->GetField( FOOTPRINT )->m_Text ) );
 
 #if defined(KICAD_GOST)
             fprintf( f, "%c%20s", s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( DrawLibItem->GetField( DATASHEET) ->m_Text ) );
+                    CONV_TO_UTF8( currCmp->GetField( DATASHEET) ->m_Text ) );
 #endif
 
         // print fields, on demand
@@ -880,14 +856,13 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
                         CONV_TO_UTF8( dummyCmp.GetField( jj )->m_Text ) );
         }
 
-        fprintf( f, "%c%s%s", s_ExportSeparatorSymbol,
-                CONV_TO_UTF8( RefName ),
+        fprintf( f, "%c%s\n", s_ExportSeparatorSymbol,
                 CONV_TO_UTF8( RNames ) );
-        fputs( "\n", f );
 
-        // Clear strings, to prepare next component
+        // Clear strings and values, to prepare next component
+        qty = 0;
         RNames.Empty();
-        for( int jj = FOOTPRINT; jj < DrawLibItem->GetFieldCount(); jj++ )
+        for( int jj = FOOTPRINT; jj < currCmp->GetFieldCount(); jj++ )
             dummyCmp.GetField( jj )->m_Text.Empty();
     }
 
@@ -926,8 +901,6 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal(
             continue;
 
         DrawLibItem = (SCH_COMPONENT*) DrawList;
-        if( aList[ii].m_Reference[0] == '#' )
-            continue;
 
         Multi = 0;
         Unit  = ' ';

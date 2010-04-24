@@ -21,7 +21,7 @@
 static void Plot_Hierarchical_PIN_Sheet( PLOTTER* plotter,
                                          SCH_SHEET_PIN* Struct );
 static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
-                           int FieldNumber, int IsMulti, int DrawMode );
+                           int FieldNumber, bool IsMulti, int DrawMode );
 
 
 static void PlotNoConnectStruct( PLOTTER* plotter, SCH_NO_CONNECT* Struct )
@@ -53,10 +53,10 @@ static void PlotLibPart( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem )
 
     Entry->Plot( plotter, DrawLibItem->m_Multi, DrawLibItem->m_Convert,
                  DrawLibItem->m_Pos, TransMat );
-
-    for( int i = 0; i < NUMBER_OF_FIELDS; i++ )
+    bool isMulti = Entry->GetPartCount() > 1;
+    for( int fieldId = 0; fieldId < NUMBER_OF_FIELDS; fieldId++ )
     {
-        PlotTextField( plotter, DrawLibItem, i, 0, 0 );
+        PlotTextField( plotter, DrawLibItem, fieldId, isMulti, 0 );
     }
 }
 
@@ -65,13 +65,13 @@ static void PlotLibPart( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem )
  * Input:
  * DrawLibItem: pointer to the component
  * FieldNumber: Number Field
- * IsMulti: No Null flag if there are several sides by housing.
+ * IsMulti: true flag if there are several parts per package.
  * Only useful for the field to add a reference to this one
  * The identification from (A, B ...)
  * DrawMode: trace mode
  */
 static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
-                           int FieldNumber, int IsMulti, int DrawMode )
+                           int FieldNumber, bool IsMulti, int DrawMode )
 {
     SCH_FIELD* field = DrawLibItem->GetField( FieldNumber );
     EDA_Colors color = UNSPECIFIED_COLOR;

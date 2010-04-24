@@ -70,7 +70,7 @@ void DIALOG_NETLIST::OnOpenNelistClick( wxCommandEvent& event )
     {
         wxFileName fn = lastNetlistRead;
         lastPath = fn.GetPath();
-        lastNetlistRead = fn.GetName();
+        lastNetlistRead = fn.GetFullName();
     }
 
     wxLogDebug( wxT( "Last net list read path <%s>, file name <%s>." ),
