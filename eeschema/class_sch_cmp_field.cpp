@@ -140,14 +140,7 @@ void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         /* For more than one part per package, we must add the part selection
          * A, B, ... or 1, 2, .. to the reference. */
         wxString fulltext = m_Text;
-        char     part_id;
-#if defined(KICAD_GOST)
-        fulltext.Append( '.' );
-        part_id = '1' - 1 + parentComponent->m_Multi;
-#else
-        part_id = 'A' - 1 + parentComponent->m_Multi;
-#endif
-        fulltext.Append( part_id );
+        fulltext << LIB_COMPONENT::ReturnSubReference( parentComponent->m_Multi );
 
         DrawGraphicText( panel, DC, textpos, color, fulltext,
                          orient,
@@ -432,13 +425,7 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void * aAuxData )
             /* For more than one part per package, we must add the part selection
              * A, B, ... or 1, 2, .. to the reference. */
             int part_id = pSch->GetUnitSelection( sheet );
-    #if defined(KICAD_GOST)
-            fulltext.Append( '.' );
-            part_id += '1' - 1;
-    #else
-            part_id += 'A' - 1;
-    #endif
-            fulltext.Append( (char)part_id );
+            fulltext << LIB_COMPONENT::ReturnSubReference( part_id );
         }
         return SCH_ITEM::Matches( fulltext, aSearchData );
     }

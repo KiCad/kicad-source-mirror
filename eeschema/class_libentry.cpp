@@ -230,6 +230,22 @@ LIB_COMPONENT::~LIB_COMPONENT()
 {
 }
 
+/** function IsMulti
+ * @return the sub reference for component having multiple parts per package.
+ * The sub reference identify the part (or unit)
+ * @param aUnit = the part identifier ( 1 to 26)
+ */
+wxString LIB_COMPONENT::ReturnSubReference( int aUnit )
+{
+    wxString subRef;
+ #if defined(KICAD_GOST)
+    subRef.Printf( wxT(".%d" ), aUnit);
+#else
+    subRef.Append( aUnit + 'A' - 1 );
+#endif
+    return subRef;
+}
+
 
 void LIB_COMPONENT::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDc,
                           const wxPoint& aOffset, int aMulti,

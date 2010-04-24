@@ -575,6 +575,20 @@ public:
 
     int GetPartCount() { return unitCount; }
 
+    /** function IsMulti
+     * @return true if the component has multiple parts per package.
+     * When happens, the reference has a sub reference ti identify part
+     */
+    bool IsMulti() { return unitCount > 1; }
+
+    /** function IsMulti
+     * @return the sub reference for component having multiple parts per package.
+     * The sub reference identify the part (or unit)
+     * @param aUnit = the part identifier ( 1 to max count)
+     * Note: this is a static function.
+     */
+    static wxString ReturnSubReference( int aUnit );
+
     /**
      * Set or clear the alternate body style (DeMorgan) for the component.
      *

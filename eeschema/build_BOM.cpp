@@ -630,7 +630,6 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
     bool                           CompactForm,
     bool                           aIncludeSubComponents )
 {
-    int             Multi, Unit;
     EDA_BaseStruct* DrawList;
     SCH_COMPONENT*  DrawLibItem;
     LIB_COMPONENT*  Entry;
@@ -688,22 +687,20 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 
         DrawLibItem = (SCH_COMPONENT*) DrawList;
 
-        Multi = 0;
-        Unit  = ' ';
+        bool isMulti = false;
+        wxString subRef;
         Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
         if( Entry )
-            Multi = Entry->GetPartCount();
+            isMulti = Entry->IsMulti();
 
-        if( ( Multi > 1 ) && aIncludeSubComponents )
-#if defined(KICAD_GOST)
-            Unit = aList[ii].m_Unit + '1' - 1;
-#else
-            Unit = aList[ii].m_Unit + 'A' - 1;
-#endif
+        if( isMulti && aIncludeSubComponents )
+            subRef = LIB_COMPONENT::ReturnSubReference( aList[ii].m_Unit );
+        else
+            subRef.Empty();
 
         sprintf( CmpName, "%s", aList[ii].m_Reference );
-        if( !CompactForm || Unit != ' ' )
-            sprintf( CmpName + strlen( CmpName ), "%c", Unit );
+        if( !CompactForm )
+            sprintf( CmpName + strlen( CmpName ), "%s", CONV_TO_UTF8(subRef) );
 
         if( CompactForm )
 #if defined(KICAD_GOST)
@@ -875,8 +872,6 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal(
     std::vector <OBJ_CMP_TO_LIST>& aList,
     bool                           aIncludeSubComponents )
 {
-    int             Multi;
-    wxChar          Unit;
     EDA_BaseStruct* DrawList;
     SCH_COMPONENT*  DrawLibItem;
     LIB_COMPONENT*  Entry;
@@ -902,25 +897,19 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal(
 
         DrawLibItem = (SCH_COMPONENT*) DrawList;
 
-        Multi = 0;
-        Unit  = ' ';
+        bool isMulti = false;
         Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
         if( Entry )
-            Multi = Entry->GetPartCount();
+            isMulti = Entry->IsMulti();
 
-        if( ( Multi > 1 ) && aIncludeSubComponents )
-        {
-#if defined(KICAD_GOST)
-            Unit = aList[ii].m_Unit + '1' - 1;
-        }
+        wxString subRef;
+        if( isMulti && aIncludeSubComponents )
+            subRef = LIB_COMPONENT::ReturnSubReference( aList[ii].m_Unit );
+        else
+            subRef.Empty();
 
-        sprintf( CmpName, "%s.%c", aList[ii].m_Reference, Unit );
-#else
-            Unit = aList[ii].m_Unit + 'A' - 1;
-        }
+        sprintf( CmpName, "%s%s", aList[ii].m_Reference, CONV_TO_UTF8(subRef) );
 
-        sprintf( CmpName, "%s%c", aList[ii].m_Reference, Unit );
-#endif
         fprintf( f, "| %-12s %-10s",
                  CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ),
                  CmpName );

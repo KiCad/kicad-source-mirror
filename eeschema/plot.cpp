@@ -125,15 +125,7 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
     {
         /* Adding A, B ... to the reference */
         wxString Text;
-        Text = field->m_Text;
-        char     unit_id;
-#if defined(KICAD_GOST)
-        Text.Append( '.' );
-        unit_id = '1' - 1 + DrawLibItem->m_Multi;
-#else
-        unit_id = 'A' - 1 + DrawLibItem->m_Multi;
-#endif
-        Text.Append( unit_id );
+        Text = field->m_Text + LIB_COMPONENT::ReturnSubReference( DrawLibItem->m_Multi );
         plotter->text( textpos, color, Text,
                        orient,
                        field->m_Size, hjustify, vjustify,
