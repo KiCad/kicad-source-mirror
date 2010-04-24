@@ -34,7 +34,8 @@ private:
                             bool CompactForm, bool aIncludeSubComponents );
     int PrintComponentsListByVal( FILE *f, std::vector <OBJ_CMP_TO_LIST>& aList,
                             bool aIncludeSubComponents);
-    int PrintComponentsListByPart( FILE *f, std::vector <OBJ_CMP_TO_LIST>& aList);
+    int PrintComponentsListByPart( FILE *f, std::vector <OBJ_CMP_TO_LIST>& aList,
+                            bool aIncludeSubComponents);
     void PrintFieldData(FILE * f, SCH_COMPONENT * DrawLibItem, bool CompactForm = FALSE);
     bool IsFieldChecked(int aFieldId);
 

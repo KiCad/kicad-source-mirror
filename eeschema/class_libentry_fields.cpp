@@ -502,20 +502,10 @@ wxString LIB_FIELD::GetFullText( int unit )
         return m_Text;
 
     wxString text = m_Text;
+    text << wxT( "?" );
 
-    if( GetParent()->GetPartCount() > 1 )
-    {
-#if defined(KICAD_GOST)
-        text.Printf( wxT( "%s?.%c" ),
-                     m_Text.GetData(), unit + '1' - 1 );
-#else
-
-        text.Printf( wxT( "%s?%c" ),
-                     m_Text.GetData(), unit + 'A' - 1 );
-#endif
-    }
-    else
-        text << wxT( "?" );
+    if( GetParent()->IsMulti() )
+        text << LIB_COMPONENT::ReturnSubReference( unit );
 
     return text;
 }
