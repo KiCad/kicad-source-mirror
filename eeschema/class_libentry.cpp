@@ -241,7 +241,7 @@ wxString LIB_COMPONENT::ReturnSubReference( int aUnit )
  #if defined(KICAD_GOST)
     subRef.Printf( wxT(".%d" ), aUnit);
 #else
-    subRef.Append( aUnit + 'A' - 1 );
+    subRef.Append( wxChar(aUnit + 'A' - 1) );
 #endif
     return subRef;
 }
