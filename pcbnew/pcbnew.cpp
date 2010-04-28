@@ -37,37 +37,36 @@ int g_DrawDefaultLineThickness = 60; /* Default line thickness in PCBNEW units u
                                       * default thickness line value (Frame references)
                                       * (i.e. = 0 ). 0 = single pixel line width */
 
-bool Drc_On = true;
-bool g_AutoDeleteOldTrack = true;
-bool g_Drag_Pistes_On;
-bool g_Show_Module_Ratsnest;
-bool g_Show_Pads_Module_in_Move = true;
-bool g_Raccord_45_Auto = true;
-bool Track_45_Only;
-bool Segments_45_Only;
-bool g_TwoSegmentTrackBuild = true;
-bool g_HighLight_Status;
-extern PARAM_CFG_BASE* ParamCfgList[];
+bool           Drc_On = true;
+bool           g_AutoDeleteOldTrack = true;
+bool           g_Drag_Pistes_On;
+bool           g_Show_Module_Ratsnest;
+bool           g_Show_Pads_Module_in_Move = true;
+bool           g_Raccord_45_Auto = true;
+bool           Track_45_Only;
+bool           Segments_45_Only;
+bool           g_TwoSegmentTrackBuild = true;
+bool           g_HighLight_Status;
 
-int                    ModuleSegmentWidth;
-int                    ModuleTextWidth;
-int                    Route_Layer_TOP;
-int                    Route_Layer_BOTTOM;
-int                    g_MaxLinksShowed;
-int                    g_MagneticPadOption   = capture_cursor_in_track_tool;
-int                    g_MagneticTrackOption = capture_cursor_in_track_tool;
-int                    g_HighLight_NetCode   = -1;
+int            ModuleSegmentWidth;
+int            ModuleTextWidth;
+int            Route_Layer_TOP;
+int            Route_Layer_BOTTOM;
+int            g_MaxLinksShowed;
+int            g_MagneticPadOption   = capture_cursor_in_track_tool;
+int            g_MagneticTrackOption = capture_cursor_in_track_tool;
+int            g_HighLight_NetCode   = -1;
 
-wxSize                 ModuleTextSize;      /* Default footprint texts size */
-wxPoint                g_Offset_Module;     /* Offset de trace du modul en depl */
-wxString               g_Current_PadName;   // Last used pad name (pad num)
+wxSize         ModuleTextSize;      /* Default footprint texts size */
+wxPoint        g_Offset_Module;     /* Offset de trace du modul en depl */
+wxString       g_Current_PadName;   // Last used pad name (pad num)
 
 // Wildcard for footprint libraries filesnames
-const wxString         g_FootprintLibFileWildcard( wxT( "Kicad footprint library file (*.mod)|*.mod" ) );
+const wxString g_FootprintLibFileWildcard( wxT( "Kicad footprint library file (*.mod)|*.mod" ) );
 
 /* Name of the document footprint list
  * usually located in share/modules/footprints_doc
- * this is of the responsability to users to create this file
+ * this is of the responsibility to users to create this file
  * if they want to have a list of footprints
  */
 wxString g_DocModulesFileName = wxT( "footprints_doc/footprints.pdf" );
@@ -89,9 +88,7 @@ void WinEDA_App::MacOpenFile( const wxString& fileName )
 }
 
 
-/****************************/
 bool WinEDA_App::OnInit()
-/****************************/
 {
     /* WXMAC application specific */
 #ifdef __WXMAC__
@@ -140,8 +137,7 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
                                           * real hotkeys in menus or tool tips */
 
 
-    frame = new WinEDA_PcbFrame( NULL, wxT( "PcbNew" ),
-                                 wxPoint( 0, 0 ), wxSize( 600, 400 ) );
+    frame = new WinEDA_PcbFrame( NULL, wxT( "PcbNew" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
     frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() );
     ActiveScreen = ScreenPcb;
 
@@ -153,8 +149,6 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
         SetupServerFunction( RemoteCommand );
     }
 
-    frame->LoadProjectSettings( fn.GetFullPath() );
-
     frame->Zoom_Automatique( true );
 
     /* Load file specified in the command line. */
@@ -165,6 +159,8 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
         // update the layer names in the listbox
         frame->ReCreateLayerBox( NULL );
     }
+
+    frame->LoadProjectSettings( fn.GetFullPath() );
 
     /* For an obscure reason the focus is lost after loading a board file
      * when starting (i.e. only at this point)
