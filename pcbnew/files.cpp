@@ -15,6 +15,7 @@
 
 #define BACKUP_FILE_EXT wxT( "000" )
 
+
 void WinEDA_PcbFrame::OnFileHistory( wxCommandEvent& event )
 {
     wxString fn;
@@ -128,7 +129,8 @@ bool WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append 
 
     if( GetScreen()->IsModify() && !Append )
     {
-        if( !IsOK( this, _( "Board Modified: Continue ?" ) ) )
+        if( !IsOK( this, _( "The current board has been modified.  Do you wish to discard \
+the changes?" ) ) )
             return false;
     }
 
@@ -147,9 +149,8 @@ bool WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append 
     {
         wxFileName fn = GetScreen()->m_FileName;
 
-        wxFileDialog dlg( this, _( "Open Board File" ), wxEmptyString,
-                          fn.GetFullName(), PcbFileWildcard,
-                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+        wxFileDialog dlg( this, _( "Open Board File" ), wxEmptyString, fn.GetFullName(),
+                          PcbFileWildcard, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
@@ -170,8 +171,7 @@ bool WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append 
     source = wxFopen( GetScreen()->m_FileName, wxT( "rt" ) );
     if( source == NULL )
     {
-        msg.Printf( _( "File <%s> not found" ),
-                    GetChars( GetScreen()->m_FileName ) );
+        msg.Printf( _( "File <%s> not found" ), GetChars( GetScreen()->m_FileName ) );
         DisplayError( this, msg );
         return false;
     }
@@ -191,13 +191,13 @@ bool WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append 
     if ( ver > g_CurrentVersionPCB )
     {
         DisplayInfoMessage( this, _( "This file was created by a more recent \
-version of PCBnew and may not load correctly. Please consider updating!"));
+version of PCBnew and may not load correctly. Please consider updating!" ) );
     }
     else if ( ver < g_CurrentVersionPCB )
     {
         DisplayInfoMessage( this, _( "This file was created by an older \
 version of PCBnew. It will be stored in the new file format when you save \
-this file again."));
+this file again." ) );
     }
 
     // Reload the corresponding configuration file:
@@ -206,8 +206,6 @@ this file again."));
         ReadPcbFile( source, true );
     else
     {
-        LoadProjectSettings( GetScreen()->m_FileName );
-
         // Update the option toolbar
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
         m_DisplayModText = DisplayOpt.DisplayModText;
@@ -216,6 +214,7 @@ this file again."));
         m_DisplayViaFill = DisplayOpt.DisplayViaFill;
 
         ReadPcbFile( source, false );
+        LoadProjectSettings( GetScreen()->m_FileName );
     }
 
     fclose( source );
@@ -268,7 +267,7 @@ this file again."));
     Zoom_Automatique( false );
     wxSafeYield();      // Needed if we want to see the board now.
 
-    // Compile rastnest and displays net info
+    // Compile ratsnest and displays net info
     Compile_Ratsnest( NULL, true );
     GetBoard()->DisplayInfo( this );
 
@@ -331,18 +330,16 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
     backupFileName.SetExt( BACKUP_FILE_EXT );
 
     /* If an old backup file exists, delete it.
-    if an old board file existes, rename it to the backup file name
+    if an old board file exists, rename it to the backup file name
     */
     if( pcbFileName.FileExists() )
     {
         /* rename the "old" file" from xxx.brd to xxx.000 */
         if( backupFileName.FileExists() )    /* Remove the old file xxx.000 (if exists) */
             wxRemoveFile( backupFileName.GetFullPath() );
-        if( !wxRenameFile( pcbFileName.GetFullPath(),
-                           backupFileName.GetFullPath() ) )
+        if( !wxRenameFile( pcbFileName.GetFullPath(), backupFileName.GetFullPath() ) )
         {
-            msg = _( "Warning: unable to create backup file " ) +
-                backupFileName.GetFullPath();
+            msg = _( "Warning: unable to create backup file " ) + backupFileName.GetFullPath();
             DisplayError( this, msg, 15 );
             saveok = false;
         }
@@ -386,7 +383,8 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
         lowerTxt = _( "Failed to create " );
     lowerTxt += pcbFileName.GetFullPath();
 
-    Affiche_1_Parametre( this, 1, upperTxt, lowerTxt, CYAN );
+    ClearMsgPanel();
+    AppendMsgPanel( upperTxt, lowerTxt, CYAN );
 
     g_SaveTime = time( NULL );    /* Reset timer for the automatic saving */
 
