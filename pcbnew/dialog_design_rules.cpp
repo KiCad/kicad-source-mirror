@@ -290,12 +290,15 @@ void DIALOG_DESIGN_RULES::InitDimensionsLists()
 static bool sortByClassThenName( NETCUP* a, NETCUP* b )
 {
     // return a < b
-
     if( a->clazz < b->clazz )
         return true;
 
-    if( a->net < b->net )
-        return true;
+    // inside the same class, sort by net name:
+    if( a->clazz == b->clazz )
+    {
+        if( a->net < b->net )
+            return true;
+    }
 
     return false;
 }
