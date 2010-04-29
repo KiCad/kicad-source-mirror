@@ -123,7 +123,7 @@ public:
     double    m_BoardScale;     /* Normalization scale for coordinates:
                                  * when scaled between -1.0 and +1.0 */
     double    m_LayerZcoord[32];
-	double	  m_ActZpos;	
+	double	  m_ActZpos;
 public: Info_3D_Visu();
     ~Info_3D_Visu();
 };
@@ -219,6 +219,7 @@ public:
     void RedrawActiveWindow( wxDC* DC, bool EraseBg );
     void Process_Special_Functions( wxCommandEvent& event );
     void Process_Zoom( wxCommandEvent& event );
+    void OnActivate( wxActivateEvent& event );
 
     void NewDisplay();
     void Set3DBgColor();
