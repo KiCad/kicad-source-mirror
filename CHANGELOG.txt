@@ -4,6 +4,14 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-may-01, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++Pcbnew:
+    Board and footprint editors:
+    Auto update 3D display after footprint or board edition.
+    (board or footprint is reloaded only when the 3D frame is reactivated, so
+    no extra time is needed during edition)
+
 2010-apr-29, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++Pcbnew:

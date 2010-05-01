@@ -57,6 +57,7 @@ WinEDA3D_DrawFrame::WinEDA3D_DrawFrame( WinEDA_BasePcbFrame* parent,
     m_HToolBar      = NULL;
     m_VToolBar      = NULL;
     m_InternalUnits = 10000;    // Internal units = 1/10000 inch
+    m_reloadRequest = false;
 
     // Give it an icon
     SetIcon( wxICON( icon_w3d ) );
@@ -343,6 +344,8 @@ error: unknown command" ) );
 
 void WinEDA3D_DrawFrame::NewDisplay()
 {
+    m_reloadRequest = false;
+
     m_Canvas->ClearLists();
     m_Canvas->CreateDrawGL_List();
 
@@ -356,10 +359,9 @@ void WinEDA3D_DrawFrame::OnActivate( wxActivateEvent& event )
 {
     // Reload data if 3D frame shows a footprint,
     // because it can be changed since last frame activation
-    if( m_Parent->m_Ident == MODULE_EDITOR_FRAME )
-    {
-//        NewDisplay();
-    }
+    if( m_reloadRequest )
+        NewDisplay();
+
     event.Skip();   // required under wxMAC
 }
 
