@@ -274,6 +274,14 @@ public:
     void             ReCreateMenuBar();
     WinEDAChoiceBox* ReCreateLayerBox( WinEDA_Toolbar* parent );
 
+    /** Virtual Function OnModify()
+     * Must be called after a board change
+     * in order to set the "modify" flag of the current screen
+     * and prepare, if needed the refresh of the 3D frame showing the footprint
+     * do not forget to call the basic OnModify function to update auxiliary info
+     */
+    virtual void OnModify( );
+
     /**
      * Function IsElementVisible
      * tests whether a given element category is visible. Keep this as an
@@ -1068,6 +1076,14 @@ public:
     void         Show3D_Frame( wxCommandEvent& event );
     void         GeneralControle( wxDC* DC, wxPoint Mouse );
     void         LoadModuleFromBoard( wxCommandEvent& event );
+
+    /** Virtual Function OnModify()
+     * Must be called after a footprint change
+     * in order to set the "modify" flag of the current screen
+     * and prepare, if needed the refresh of the 3D frame showing the footprint
+     * do not forget to call the basic OnModify function to update auxiliary info
+     */
+    virtual void OnModify( );
 
     /** function ToPrinter
      * Install the print dialog
