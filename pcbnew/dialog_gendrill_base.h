@@ -67,7 +67,7 @@ class DIALOG_GENDRILL_BASE : public wxDialog
 		
 	
 	public:
-		DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Drill Files Generation"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 447,439 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Drill Files Generation"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 447,412 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_GENDRILL_BASE();
 	
 };

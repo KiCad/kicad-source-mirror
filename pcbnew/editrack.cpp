@@ -736,7 +736,7 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel,
         }
     }
 
-    if( Track_45_Only )
+    if( g_Track_45_Only_Allowed )
     {
         if( g_TwoSegmentTrackBuild )
         {

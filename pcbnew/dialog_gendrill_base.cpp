@@ -25,7 +25,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	m_Choice_Unit->SetSelection( 1 );
 	m_LeftBoxSizer->Add( m_Choice_Unit, 0, wxALL|wxEXPAND, 5 );
 	
-	wxString m_Choice_Zeros_FormatChoices[] = { _("decimal format"), _("suppress leading zeros"), _("suppress trailing zeros"), _("keep zeros") };
+	wxString m_Choice_Zeros_FormatChoices[] = { _("Decimal format"), _("Suppress leading zeros"), _("Suppress trailing zeros"), _("Keep zeros") };
 	int m_Choice_Zeros_FormatNChoices = sizeof( m_Choice_Zeros_FormatChoices ) / sizeof( wxString );
 	m_Choice_Zeros_Format = new wxRadioBox( this, wxID_ANY, _("Zeros Format"), wxDefaultPosition, wxDefaultSize, m_Choice_Zeros_FormatNChoices, m_Choice_Zeros_FormatChoices, 1, wxRA_SPECIFY_COLS );
 	m_Choice_Zeros_Format->SetSelection( 0 );
@@ -41,7 +41,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	
 	m_LeftBoxSizer->Add( m_Choice_Precision, 0, wxALL|wxEXPAND, 5 );
 	
-	wxString m_Choice_Drill_OffsetChoices[] = { _("absolute"), _("auxiliary axis") };
+	wxString m_Choice_Drill_OffsetChoices[] = { _("Absolute"), _("Auxiliary axis") };
 	int m_Choice_Drill_OffsetNChoices = sizeof( m_Choice_Drill_OffsetChoices ) / sizeof( wxString );
 	m_Choice_Drill_Offset = new wxRadioBox( this, wxID_ANY, _("Drill Origin:"), wxDefaultPosition, wxDefaultSize, m_Choice_Drill_OffsetNChoices, m_Choice_Drill_OffsetChoices, 1, wxRA_SPECIFY_COLS );
 	m_Choice_Drill_Offset->SetSelection( 0 );
@@ -54,7 +54,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bMiddleBoxSizer;
 	bMiddleBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_Choice_Drill_MapChoices[] = { _("None"), _("drill sheet (HPGL)"), _("drill sheet (PostScript)"), _("Drill sheet (Gerber)"), _("Drill sheet (DXF)") };
+	wxString m_Choice_Drill_MapChoices[] = { _("None"), _("Drill map (HPGL)"), _("Drill map (PostScript)"), _("Drill map (Gerber)"), _("Drill map (DXF)") };
 	int m_Choice_Drill_MapNChoices = sizeof( m_Choice_Drill_MapChoices ) / sizeof( wxString );
 	m_Choice_Drill_Map = new wxRadioBox( this, wxID_ANY, _("Drill Sheet:"), wxDefaultPosition, wxDefaultSize, m_Choice_Drill_MapNChoices, m_Choice_Drill_MapChoices, 1, wxRA_SPECIFY_COLS );
 	m_Choice_Drill_Map->SetSelection( 0 );
@@ -87,20 +87,20 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	m_PenNum = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	sbHPGOptionsSizer->Add( m_PenNum, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	bMiddleBoxSizer->Add( sbHPGOptionsSizer, 1, wxEXPAND, 5 );
+	bMiddleBoxSizer->Add( sbHPGOptionsSizer, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbOptSizer;
 	sbOptSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options:") ), wxVERTICAL );
 	
-	m_Check_Mirror = new wxCheckBox( this, wxID_ANY, _("mirror y axis"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Check_Mirror = new wxCheckBox( this, wxID_ANY, _("Mirror y axis"), wxDefaultPosition, wxDefaultSize, 0 );
 	
 	sbOptSizer->Add( m_Check_Mirror, 0, wxALL, 5 );
 	
-	m_Check_Minimal = new wxCheckBox( this, wxID_ANY, _("minimal header"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Check_Minimal = new wxCheckBox( this, wxID_ANY, _("Minimal header"), wxDefaultPosition, wxDefaultSize, 0 );
 	
 	sbOptSizer->Add( m_Check_Minimal, 0, wxALL, 5 );
 	
-	bMiddleBoxSizer->Add( sbOptSizer, 1, wxEXPAND, 5 );
+	bMiddleBoxSizer->Add( sbOptSizer, 0, wxEXPAND, 5 );
 	
 	bMainSizer->Add( bMiddleBoxSizer, 1, wxEXPAND, 5 );
 	
@@ -145,19 +145,19 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	m_BuriedViasInfoMsg->Wrap( -1 );
 	sbSizerHoles->Add( m_BuriedViasInfoMsg, 0, wxALL, 5 );
 	
+	sbSizerInfo->Add( sbSizerHoles, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
-	sbSizerHoles->Add( 10, 10, 1, wxEXPAND, 5 );
+	bRightBoxSizer->Add( sbSizerInfo, 0, wxEXPAND|wxTOP, 5 );
+	
+	
+	bRightBoxSizer->Add( 10, 10, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_OkButton = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OkButton->SetDefault(); 
-	sbSizerHoles->Add( m_OkButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bRightBoxSizer->Add( m_OkButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_CancelButton = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerHoles->Add( m_CancelButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
-	
-	sbSizerInfo->Add( sbSizerHoles, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
-	
-	bRightBoxSizer->Add( sbSizerInfo, 1, wxEXPAND|wxTOP, 5 );
+	bRightBoxSizer->Add( m_CancelButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	bMainSizer->Add( bRightBoxSizer, 1, wxEXPAND, 5 );
 	

@@ -60,7 +60,7 @@ extern bool g_Raccord_45_Auto;
 extern const wxString g_FootprintLibFileWildcard;   // Wildcard for footprint libraries filesnames
 
 
-extern bool        Track_45_Only;
+extern bool        g_Track_45_Only_Allowed;
 extern bool        Segments_45_Only;
 extern wxString    g_Shapes3DExtBuffer;
 extern wxString    g_DocModulesFileName;

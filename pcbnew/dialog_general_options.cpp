@@ -50,7 +50,7 @@ void Dialog_GeneralOptions::init()
     m_ShowModuleRatsnest->SetValue( g_Show_Module_Ratsnest );
     m_ShowGlobalRatsnest->SetValue( m_Board->IsElementVisible(RATSNEST_VISIBLE) );
     m_TrackAutodel->SetValue( g_AutoDeleteOldTrack );
-    m_Track_45_Only_Ctrl->SetValue( Track_45_Only );
+    m_Track_45_Only_Ctrl->SetValue( g_Track_45_Only_Allowed );
     m_Segments_45_Only_Ctrl->SetValue( Segments_45_Only );
     m_AutoPANOpt->SetValue( m_Parent->DrawPanel->m_AutoPAN_Enable );
     m_Segments_45_Only_Ctrl->SetValue( Segments_45_Only );
@@ -92,7 +92,7 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
     g_Show_Module_Ratsnest = m_ShowModuleRatsnest->GetValue();
     g_AutoDeleteOldTrack   = m_TrackAutodel->GetValue();
     Segments_45_Only = m_Segments_45_Only_Ctrl->GetValue();
-    Track_45_Only    = m_Track_45_Only_Ctrl->GetValue();
+    g_Track_45_Only_Allowed    = m_Track_45_Only_Ctrl->GetValue();
     m_Parent->DrawPanel->m_AutoPAN_Enable = m_AutoPANOpt->GetValue();
     g_TwoSegmentTrackBuild = m_Track_DoubleSegm_Ctrl->GetValue();
 

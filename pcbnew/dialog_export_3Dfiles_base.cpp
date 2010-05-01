@@ -45,10 +45,10 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 	m_rbSelectUnits->SetSelection( 0 );
 	bLowerSizer->Add( m_rbSelectUnits, 1, wxALL|wxEXPAND, 5 );
 	
-	wxString m_rb3DFilesOptionChoices[] = { _("Copy 3D Shapes Files in Subdir"), _("Use Absolute Path in Wrml File ") };
+	wxString m_rb3DFilesOptionChoices[] = { _("Copy 3D Shapes Files in Subdir"), _("Use Absolute Path in Vrml File ") };
 	int m_rb3DFilesOptionNChoices = sizeof( m_rb3DFilesOptionChoices ) / sizeof( wxString );
 	m_rb3DFilesOption = new wxRadioBox( this, wxID_ANY, _("3D Shapes Files Option:"), wxDefaultPosition, wxDefaultSize, m_rb3DFilesOptionNChoices, m_rb3DFilesOptionChoices, 1, wxRA_SPECIFY_COLS );
-	m_rb3DFilesOption->SetSelection( 0 );
+	m_rb3DFilesOption->SetSelection( 1 );
 	bLowerSizer->Add( m_rb3DFilesOption, 1, wxALL|wxEXPAND, 5 );
 	
 	bSizer1->Add( bLowerSizer, 1, wxEXPAND, 5 );

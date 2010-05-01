@@ -365,7 +365,7 @@
                             <property name="proportion">1</property>
                             <object class="wxRadioBox" expanded="1">
                                 <property name="bg"></property>
-                                <property name="choices">&quot;Copy 3D Shapes Files in Subdir&quot; &quot;Use Absolute Path in Wrml File &quot;</property>
+                                <property name="choices">&quot;Copy 3D Shapes Files in Subdir&quot; &quot;Use Absolute Path in Vrml File &quot;</property>
                                 <property name="context_help"></property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
@@ -379,7 +379,7 @@
                                 <property name="name">m_rb3DFilesOption</property>
                                 <property name="permission">protected</property>
                                 <property name="pos"></property>
-                                <property name="selection">0</property>
+                                <property name="selection">1</property>
                                 <property name="size"></property>
                                 <property name="style">wxRA_SPECIFY_COLS</property>
                                 <property name="subclass"></property>
