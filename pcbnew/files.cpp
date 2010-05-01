@@ -12,6 +12,7 @@
 #include "wxPcbStruct.h"
 #include "protos.h"
 #include "pcbnew_id.h"
+#include "3d_viewer.h"
 
 #define BACKUP_FILE_EXT wxT( "000" )
 
@@ -274,6 +275,9 @@ this file again." ) );
     /* reset the auto save timer */
     g_SaveTime = time( NULL );
 
+    // Refresh the 3D view, if any
+    if( m_Draw3DFrame )
+        m_Draw3DFrame->NewDisplay();
 
 #if 0 && defined(DEBUG)
     // note this freezes up pcbnew when run under the kicad project

@@ -802,4 +802,5 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, int transform )
     }
 
     module->Set_Rectangle_Encadrement();
+    OnModify();
 }

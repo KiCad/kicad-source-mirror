@@ -54,7 +54,8 @@ set(PCBNEW_SRCS
     dialog_export_3Dfiles_base.cpp
     dialog_freeroute_exchange.cpp
     dialog_freeroute_exchange_base.cpp
-#   dialog_gendrill.cpp
+    dialog_gendrill.cpp
+    dialog_gendrill_base.cpp
     dialog_general_options.cpp
     dialog_general_options_BoardEditor_base.cpp
     dialog_global_edit_tracks_and_vias.cpp

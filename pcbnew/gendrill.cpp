@@ -22,6 +22,8 @@
 
 #include "gendrill.h"
 
+#include "dialog_gendrill.h"   //  Dialog box for drill file generation
+
 #include "build_version.h"
 
 const wxString DrillFileExtension( wxT( "drl" ) );
@@ -40,7 +42,7 @@ const wxString DrillFileWildcard( _( "Drill files (*.drl)|*.drl" ) );
  *
  *  The drill maps can be created in HPGL or PS format
  *
- * dialog_gendrill.cpp  is the file (included in this file) which handles
+ * dialog_gendrill.cpp  is the filewhich handles
  * the Dialog box for drill file generation
  */
 
@@ -74,12 +76,10 @@ static std::vector<HOLE_INFO>  s_HoleListBuffer;
 #define UnitDrillInchKey        wxT( "DrillUnit" )
 #define DrillOriginIsAuxAxisKey wxT( "DrillAuxAxis" )
 
-#include "dialog_gendrill.cpp"   //  Dialog box for drill file generation
-
 
 /* some param values initialization before display dialog window
  */
-void WinEDA_DrillFrame::InitDisplayParams( void )
+void DIALOG_GENDRILL::InitDisplayParams( void )
 {
     wxString msg;
 
@@ -123,7 +123,6 @@ void WinEDA_DrillFrame::InitDisplayParams( void )
             m_BlindOrBuriedViasCount++;
     }
 
-    m_MicroViasDrillSizer->Enable( m_MicroViasCount );
     m_MicroViaDrillValue->Enable( m_MicroViasCount );
 
     // Pads holes round:
@@ -162,7 +161,7 @@ void WinEDA_DrillFrame::InitDisplayParams( void )
 }
 
 
-void WinEDA_DrillFrame::SetParams( void )
+void DIALOG_GENDRILL::SetParams( void )
 {
     wxString msg;
     long     ltmp;
@@ -221,14 +220,14 @@ void WinEDA_PcbFrame::InstallDrillFrame( wxCommandEvent& event )
         Config->Read( DrillOriginIsAuxAxisKey, &DrillOriginIsAuxAxis );
     }
 
-    WinEDA_DrillFrame* frame = new WinEDA_DrillFrame( this );
+    DIALOG_GENDRILL* frame = new DIALOG_GENDRILL( this );
     frame->ShowModal();
     frame->Destroy();
 }
 
 
 /* Save drill options: */
-void WinEDA_DrillFrame::UpdateConfig()
+void DIALOG_GENDRILL::UpdateConfig()
 {
     SetParams();
 
@@ -256,7 +255,7 @@ void WinEDA_DrillFrame::UpdateConfig()
  * And one file per layer pair, which have one or more holes, excluding
  * through holes, already in the first file.
  */
-void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
+void DIALOG_GENDRILL::GenDrillFiles( wxCommandEvent& event )
 {
     wxFileName fn;
     wxString   layer_extend;              /* added to the  Board FileName to
@@ -383,7 +382,7 @@ void WinEDA_DrillFrame::GenDrillFiles( wxCommandEvent& event )
 }
 
 
-void WinEDA_DrillFrame::UpdatePrecisionOptions( wxCommandEvent& event )
+void DIALOG_GENDRILL::UpdatePrecisionOptions( wxCommandEvent& event )
 {
     if( m_Choice_Unit->GetSelection()==1 )
     {
@@ -410,7 +409,7 @@ void WinEDA_DrillFrame::UpdatePrecisionOptions( wxCommandEvent& event )
  * @param aHoleListBuffer = hole descriptor list
  * @param aToolListBuffer = Drill tools list
  */
-int WinEDA_DrillFrame::Create_Drill_File_EXCELLON( FILE*                    excellon_dest,
+int DIALOG_GENDRILL::Create_Drill_File_EXCELLON( FILE*                    excellon_dest,
                                                    std::vector<HOLE_INFO>&  aHoleListBuffer,
                                                    std::vector<DRILL_TOOL>& aToolListBuffer )
 {
@@ -652,7 +651,7 @@ void Gen_Line_EXCELLON( char* line, float x, float y )
  * ICI,OFF
  * ATC,ON
  */
-void WinEDA_DrillFrame::Write_Excellon_Header( FILE* aFile )
+void DIALOG_GENDRILL::Write_Excellon_Header( FILE* aFile )
 {
     char Line[256];
 
@@ -733,7 +732,7 @@ void Write_End_Of_File_Drill( FILE* aFile )
 
 /* Generate the drill plan (Drill map) format HPGL or POSTSCRIPT
  */
-void WinEDA_DrillFrame::GenDrillMap( const wxString aFileName,
+void DIALOG_GENDRILL::GenDrillMap( const wxString aFileName,
                                      std::vector<HOLE_INFO>& aHoleListBuffer,
                                      std::vector<DRILL_TOOL>& buffer,
                                      int format )
@@ -766,7 +765,7 @@ void WinEDA_DrillFrame::GenDrillMap( const wxString aFileName,
         break;
 
     default:
-        DisplayError( this, wxT( "WinEDA_DrillFrame::GenDrillMap() error" ) );
+        DisplayError( this, wxT( "DIALOG_GENDRILL::GenDrillMap() error" ) );
         return;
     }
 
@@ -806,7 +805,7 @@ void WinEDA_DrillFrame::GenDrillMap( const wxString aFileName,
 /*
  *  Create a list of drill values and drill count
  */
-void WinEDA_DrillFrame::GenDrillReport( const wxString aFileName )
+void DIALOG_GENDRILL::GenDrillReport( const wxString aFileName )
 {
     wxFileName fn;
     wxString   msg;

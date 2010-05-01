@@ -423,6 +423,8 @@ void WinEDA_BasePcbFrame::SaveSettings()
  * Must be called after a schematic change
  * in order to set the "modify" flag of the current screen
  * and update the date in frame reference
+ * do not forget to call this basic OnModify function to update info
+ * in derived OnModify functions
  */
 void WinEDA_BasePcbFrame::OnModify( )
 {
