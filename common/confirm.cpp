@@ -119,9 +119,9 @@ bool IsOK( wxWindow* parent, const wxString& text )
  * Title = title to display
  * Buffer: enter text by user
  * Leading and trailing spaces are removed
- * If buffer != "Buffer is displayed
+ * Buffer is the initial text displayed, anr the returned text
  * Return:
- * 0 if OK
+ * 1 if OK
  * 0 if ESCAPE
  */
 int Get_Message( const wxString& title,           // The question
