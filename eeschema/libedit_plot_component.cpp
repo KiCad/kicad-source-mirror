@@ -53,6 +53,9 @@ void WinEDA_LibeditFrame::OnPlotCurrentComponent( wxCommandEvent& event )
         if( FullFileName.IsEmpty() )
             return;
 
+        // calling wxYield is mandatory under Linux, after closing the file selector dialog
+        // to refresh the screen before creating the PNG or JPEG image from screen
+        wxYield();
         CreatePNGorJPEGFile( FullFileName, fmt_is_jpeg );
     }
         break;

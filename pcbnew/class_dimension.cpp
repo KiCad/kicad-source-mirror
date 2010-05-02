@@ -354,7 +354,7 @@ bool DIMENSION::Save( FILE* aFile ) const
     const char keyWordLine[] = "$COTATION\n";
     const char keyWordLineEnd[] = "$endCOTATION\n";
 
-    if( fprintf( aFile, keyWordLine ) != sizeof(keyWordLine)-1 )
+    if( fputs( keyWordLine, aFile ) == EOF )
         goto out;
 
     fprintf( aFile, "Ge %d %d %lX\n", m_Shape, m_Layer, m_TimeStamp );
@@ -401,7 +401,7 @@ bool DIMENSION::Save( FILE* aFile ) const
              FlecheG2_ox, FlecheG2_oy,
              FlecheG2_fx, FlecheG2_fy, m_Width );
 
-    if( fprintf( aFile, keyWordLineEnd ) != sizeof(keyWordLineEnd)-1 )
+    if( fputs( keyWordLineEnd, aFile ) == EOF )
         goto out;
 
     rc = true;
