@@ -90,7 +90,6 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
 {
     char       alim[1024];
     int        idx, jj, k, l;
-    char*      LibName;
     char       cbuffer[BUFFER_CHAR_SIZE];      /* temporary storage */
     char* ptchar;
     COMPONENT* Cmp;
@@ -193,10 +192,8 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
         while( Line[idx] == ' ' )
             idx++;
 
-        /* idx points the component value */
-        LibName = Line + idx;
-
-        /* Read value */
+        /* idx points the component value.
+         * Read value */
         ptchar = strstr( &Line[idx], " " );  // Search end of value field (space)
         if( ptchar == 0 )
         {
@@ -215,7 +212,9 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
             cbuffer[jj++] = Line[idx];
         }
         cbuffer[jj] = 0;
-        Cmp->m_Module = CONV_FROM_UTF8(cbuffer);
+        // Copy footprint name:
+        if( m_isEESchemaNetlist && (strnicmp( cbuffer, "$noname", 7 ) != 0) )
+            Cmp->m_Module = CONV_FROM_UTF8(cbuffer);
 
         if( (Line[++idx] == '(') && (Line[k - 1] == ')' ) )
         {
@@ -260,18 +259,6 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
         Cmp->m_Value = CONV_FROM_UTF8(cbuffer);
 
         m_components.push_back( Cmp );
-
-        if(  m_isEESchemaNetlist )   /* copy footprint name: */
-        {
-            if( strnicmp( LibName, "$noname", 7 ) != 0 )
-            {
-                while( *LibName > ' ' )
-                {
-                    Cmp->m_Module.Append( *LibName );
-                    LibName++;
-                }
-            }
-        }
 
         ReadPinConnection( netlistReader, Cmp );
     }
