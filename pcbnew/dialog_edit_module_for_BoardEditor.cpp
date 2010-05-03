@@ -183,7 +183,6 @@ void DIALOG_MODULE_BOARD_EDITOR::ModuleOrientEvent( wxCommandEvent& event )
         break;
 
     default:
-        m_OrientValue->Enable( FALSE );
         m_OrientValue->Enable( TRUE );
         break;
     }
@@ -436,7 +435,6 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
 
 void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
 {
-    bool     change_layer = FALSE;
     wxPoint  modpos;
     wxString msg;
 
@@ -476,25 +474,6 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     modpos.y = ReturnValueFromTextCtrl( *m_ModPositionY, PCB_INTERNAL_UNIT );
     m_CurrentModule->SetPosition( modpos );
 
-    // Set orientation
-    long orient = 0;
-    msg = m_OrientValue->GetValue();
-    msg.ToLong( &orient );
-    if( m_CurrentModule->m_Orient != orient )
-        m_CurrentModule->Rotate( m_CurrentModule->m_Pos,
-                                 orient - m_CurrentModule->m_Orient );
-
-    if( m_LayerCtrl->GetSelection() == 0 )     // layer req = COMPONENT
-    {
-        if( m_CurrentModule->GetLayer() == LAYER_N_BACK )
-            change_layer = TRUE;
-    }
-    else if( m_CurrentModule->GetLayer() == LAYER_N_FRONT )
-        change_layer = TRUE;
-
-    if( change_layer )
-        m_CurrentModule->Flip( m_CurrentModule->m_Pos );
-
     if( m_AutoPlaceCtrl->GetSelection() == 1 )
         m_CurrentModule->m_ModuleStatus |= MODULE_is_LOCKED;
     else
@@ -521,6 +500,30 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     // Init Fields:
     m_CurrentModule->m_Reference->Copy( m_ReferenceCopy );
     m_CurrentModule->m_Value->Copy( m_ValueCopy );
+
+    /* Now, set orientation. must be made after others changes,
+     * because rotation changes fields positions on board according to the new orientation
+     * (relative positions are not modified)
+     */
+    long orient = 0;
+    msg = m_OrientValue->GetValue();
+    msg.ToLong( &orient );
+    if( m_CurrentModule->m_Orient != orient )
+        m_CurrentModule->Rotate( m_CurrentModule->m_Pos,
+                                 orient - m_CurrentModule->m_Orient );
+
+    // Set component side, that also have effect on the fields positions on board
+    bool change_layer = FALSE;
+    if( m_LayerCtrl->GetSelection() == 0 )     // layer req = COMPONENT
+    {
+        if( m_CurrentModule->GetLayer() == LAYER_N_BACK )
+            change_layer = TRUE;
+    }
+    else if( m_CurrentModule->GetLayer() == LAYER_N_FRONT )
+        change_layer = TRUE;
+
+    if( change_layer )
+        m_CurrentModule->Flip( m_CurrentModule->m_Pos );
 
     /* Update 3D shape list */
     int         ii = m_3D_ShapeNameListBox->GetSelection();
