@@ -387,7 +387,7 @@ void DRAWSEGMENT::DisplayInfo( WinEDA_DrawFrame* frame )
         case S_ARC:
             frame->AppendMsgPanel( shape, _( "Arc" ), RED );
 
-            msg.Printf( wxT( "%1." ), (float)m_Angle/10 );
+            msg.Printf( wxT( "%.1f" ), (double)m_Angle/10 );
             frame->AppendMsgPanel( _("Angle"), msg, RED );
             break;
         case S_CURVE:
