@@ -1,4 +1,4 @@
 release version:
-2010 apr 06 (SVN R2508)
+2010 may 05 (BZR R2365)
 files (.zip,.tgz):
-kicad-2010-04-06-final
+kicad-2010-05-05-testing
