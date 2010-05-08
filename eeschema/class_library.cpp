@@ -175,6 +175,17 @@ CMP_LIB_ENTRY* CMP_LIBRARY::FindEntry( const wxChar* aName, LibrEntryType aType 
     return NULL;
 }
 
+/**
+ * Return the first entry in the library.
+ * @return The first entry or NULL if the library has no entries.
+ */
+CMP_LIB_ENTRY* CMP_LIBRARY::GetFirstEntry()
+{
+    if( entries.size() )
+        return &entries.front();
+    else
+        return NULL;
+}
 
 LIB_COMPONENT* CMP_LIBRARY::FindComponent( const wxChar* aName )
 {
