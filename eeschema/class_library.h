@@ -317,10 +317,7 @@ public:
      *
      * @return The first entry or NULL if the library has no entries.
      */
-    CMP_LIB_ENTRY* GetFirstEntry()
-    {
-        return &entries.front();
-    }
+    CMP_LIB_ENTRY* GetFirstEntry();
 
     /**
      * Find next library entry by /a aName.

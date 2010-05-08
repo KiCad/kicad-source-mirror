@@ -706,7 +706,7 @@ static int ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer,
     else
         BusLabel.m_Type = NET_BUSLABELMEMBER;
 
-    /* Conversion of BusLabel in the root of the Label + the number of wire. */
+    /* Conversion of BusLabel to the root Label name + the member id like mybus0, mybus1 ... */
     BufLine = BusLabel.m_Label->Left( RootBusNameLength );
 
     BusMember = FirstNumWireBus;
@@ -721,8 +721,7 @@ static int ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer,
         NETLIST_OBJECT* new_label = new NETLIST_OBJECT( BusLabel );
         NumItem++;
 
-        /* Conversion of BusLabel in the root of the Label + the number
-         * of wire */
+        /* Conversion of BusLabel to the root name + the current member id.*/
         BufLine = BusLabel.m_Label->Left( RootBusNameLength );
         BufLine << BusMember;
         new_label->m_Label = new wxString( BufLine );
@@ -739,7 +738,7 @@ static int ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer,
  * PropageNetCode propagates Netcode NewNetCode on all elements
  * belonging to the former Netcode OldNetCode
  * If IsBus == 0; Netcode is the member who is spreading
- * If IsBus! = 0; is the member who is spreading BusNetCode
+ * If IsBus != 0; is the member who is spreading BusNetCode
  */
 static void PropageNetCode( int OldNetCode, int NewNetCode, int IsBus )
 {
