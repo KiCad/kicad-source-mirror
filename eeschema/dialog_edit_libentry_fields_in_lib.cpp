@@ -421,7 +421,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers( void )
     m_LibEntry->GetFields( fields );
 
     // copy all the fields to a work area
-    m_FieldsBuf.reserve(NUMBER_OF_FIELDS);
+    m_FieldsBuf.reserve(DEFAULT_NUMBER_OF_FIELDS);
 
     // Creates a working copy of fields
     for( size_t i = 0; i < fields.size(); i++ )
@@ -430,7 +430,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers( void )
     // Display 12 fields (or more), and add missing fields
     LIB_FIELD blank( 2 );
     unsigned fcount = m_FieldsBuf.size();
-    for( unsigned ii = 2; ii < NUMBER_OF_FIELDS; ii++ )
+    for( unsigned ii = 2; ii < DEFAULT_NUMBER_OF_FIELDS; ii++ )
     {
         unsigned jj;
         for ( jj = 2; jj < fcount; jj ++ )
@@ -449,7 +449,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers( void )
 
     // Now, all fields with Id  0 to NUMBER_OF_FIELDS-1 exist
     // init default fields names
-    for( int ii = 0; ii < NUMBER_OF_FIELDS; ii++ )
+    for( unsigned ii = 0; ii < m_FieldsBuf.size(); ii++ )
     {
         if( m_FieldsBuf[ii].m_Name.IsEmpty() || ii < FIELD1 )
             m_FieldsBuf[ii].m_Name = ReturnDefaultFieldName( ii );

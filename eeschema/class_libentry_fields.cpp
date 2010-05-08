@@ -137,10 +137,9 @@ bool LIB_FIELD::Load( char* line, wxString& errorMsg )
     char  fieldUserName[1024];
     char* text;
 
-    if( sscanf( line + 1, "%d", &m_FieldId ) != 1
-        || m_FieldId < REFERENCE || m_FieldId >= NUMBER_OF_FIELDS )
+    if( sscanf( line + 1, "%d", &m_FieldId ) != 1 || m_FieldId < 0 )
     {
-        errorMsg = _( "invalid field number defined" );
+        errorMsg = wxT( "invalid field header" );
         return false;
     }
 

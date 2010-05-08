@@ -35,6 +35,8 @@ struct Error
 /**
  * Enum NumFieldType
  * is the numbered set of all fields a SCH_COMPONENT can hold
+ * Note more than 8 user fields are allowed, but for efficiency reasons
+ * the defualt number of users fields is 8
  */
 enum  NumFieldType {
     REFERENCE = 0,          ///< Field Reference of part, i.e. "IC21"
@@ -51,7 +53,7 @@ enum  NumFieldType {
     FIELD7,
     FIELD8,
 
-    NUMBER_OF_FIELDS
+    DEFAULT_NUMBER_OF_FIELDS
 };
 
 

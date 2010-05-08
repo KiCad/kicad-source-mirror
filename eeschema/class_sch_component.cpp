@@ -63,8 +63,6 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent,
                               const wxPoint& pos, bool setNewItemFlag ) :
     SCH_ITEM( NULL, TYPE_SCH_COMPONENT )
 {
-    size_t         i;
-    LIB_FIELD_LIST libFields;
 
     Init( pos );
 
@@ -76,32 +74,34 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent,
     if( setNewItemFlag )
         m_Flags = IS_NEW | IS_MOVED;
 
+    // Import predefined fields from the library component:
+    LIB_FIELD_LIST libFields;
     libComponent.GetFields( libFields );
 
-    for( i = 0; i < libFields.size(); i++ )
+    for(  size_t i = 0; i < libFields.size(); i++ )
     {
         if( libFields[i].m_Text.IsEmpty() && libFields[i].m_Name.IsEmpty() )
             continue;
 
+        int field_idx = libFields[i].m_FieldId;
         /* Add extra fields if library component has more than the default
          * number of fields.
          */
-        if( (int) i >= GetFieldCount() )
+        if( field_idx >= GetFieldCount() )
         {
-            while( (int) i >= GetFieldCount() )
+            while( field_idx >= GetFieldCount() )
             {
                 SCH_FIELD field( wxPoint( 0, 0 ), GetFieldCount(), this,
-                                 ReturnDefaultFieldName( i ) );
+                                 ReturnDefaultFieldName( field_idx ) );
                 AddField( field );
             }
         }
-
-        SCH_FIELD* schField = GetField( i );
+        SCH_FIELD* schField = GetField( field_idx );
 
         schField->m_Pos = m_Pos + libFields[i].m_Pos;
         schField->ImportValues( libFields[i] );
         schField->m_Text = libFields[i].m_Text;
-        schField->m_Name = ( i < FIELD1 ) ? ReturnDefaultFieldName( i ) :
+        schField->m_Name = ( field_idx < FIELD1 ) ? ReturnDefaultFieldName( field_idx ) :
             libFields[i].m_Name;
     }
 
@@ -156,9 +156,9 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
     m_Transform[1][0] = 0;
     m_Transform[1][1] = -1;
 
-    m_Fields.reserve( NUMBER_OF_FIELDS );
+    m_Fields.reserve( DEFAULT_NUMBER_OF_FIELDS );
 
-    for( int i = 0; i < NUMBER_OF_FIELDS; ++i )
+    for( int i = 0; i < DEFAULT_NUMBER_OF_FIELDS; ++i )
     {
         SCH_FIELD field( pos, i, this, ReturnDefaultFieldName( i ) );
 
@@ -1174,7 +1174,7 @@ bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void * aAuxData )
     if( !( aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS ) )
         return false;
 
-    for( size_t i = VALUE+1; i < NUMBER_OF_FIELDS; i++ )
+    for( size_t i = VALUE+1; i < m_Fields.size(); i++ )
     {
         if( GetField( i )->Matches( aSearchData, aAuxData ) )
             return true;
