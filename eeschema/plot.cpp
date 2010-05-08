@@ -54,7 +54,7 @@ static void PlotLibPart( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem )
     Entry->Plot( plotter, DrawLibItem->m_Multi, DrawLibItem->m_Convert,
                  DrawLibItem->m_Pos, TransMat );
     bool isMulti = Entry->GetPartCount() > 1;
-    for( int fieldId = 0; fieldId < NUMBER_OF_FIELDS; fieldId++ )
+    for( int fieldId = 0; fieldId < DrawLibItem->GetFieldCount(); fieldId++ )
     {
         PlotTextField( plotter, DrawLibItem, fieldId, isMulti, 0 );
     }
