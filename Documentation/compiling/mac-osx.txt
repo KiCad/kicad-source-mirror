@@ -47,6 +47,11 @@ make
 sudo make install
 
 
+Move the old Mac OS X wxconfig and symlink it to the new compiled 2.9
+
+sudo mv /usr/bin/wx-config /usr/bin/wx-config.osx
+sudo ln -s /opt/wxwidgets-svn/bin/wx-config /usr
+
 Building KiCad
 ~~~~~~~~~~~~~~
 Extract the sources or get them from subversion.
@@ -113,3 +118,14 @@ Installing rosetta and xcode with all architectures fixes this "problem"
 ld: warning: in /Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks//QuickTime.framework/QuickTime, missing required architecture x86_64 in file
 
 You get this error because the QuickTime 10.6 framework is not build with 64bit support. This not a real issue for KiCad because we don't use it anyway.
+
+
+Undefined symbols:
+  "TestForIntersectionOfStraightLineSegments(int, int, int, int, int, int, int, int, int*, int*, double*)", referenced from:
+      clipLine(EDA_Rect*, int&, int&, int&, int&)in libcommon.a(gr_basic.cpp.o)
+
+Make sure you marked the build type Release:
+
+//Choose the type of build, options are: None(CMAKE_CXX_FLAGS or
+// CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel.
+CMAKE_BUILD_TYPE:STRING=Release
