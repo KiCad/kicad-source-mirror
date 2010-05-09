@@ -88,7 +88,11 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     /* Open */
     item = new wxMenuItem( filesMenu, ID_LOAD_PROJECT, _( "&Open\tCtrl+O" ),
                            _( "Open an existing project" ) );
+
+#if !defined( __WXMAC__ )
     item->SetBitmap( open_project_xpm );
+#endif /* !defined( __WXMAC__ ) */
+
     filesMenu->Append( item );
 
     /* Open Recent submenu */
@@ -102,13 +106,21 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     /* New */
     item = new wxMenuItem( filesMenu, ID_NEW_PROJECT, _( "&New\tCtrl+N" ),
                            _( "Start a new project" ) );
+
+#if !defined( __WXMAC__ )
     item->SetBitmap( new_project_xpm );
+#endif /* !defined( __WXMAC__ ) */
+
     filesMenu->Append( item );
 
     /* Save */
     item = new wxMenuItem( filesMenu, ID_SAVE_PROJECT, _( "&Save\tCtrl+S" ),
                            _( "Save current project" ) );
+
+#if !defined( __WXMAC__ )
     item->SetBitmap( save_project_xpm );
+#endif /* !defined( __WXMAC__ ) */
+
     filesMenu->Append( item );
 
     /* Separator */
@@ -117,13 +129,21 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     /* Archive */
     item = new wxMenuItem( filesMenu, ID_SAVE_AND_ZIP_FILES, _( "&Archive" ),
                            _( "Archive project files in zip archive" ) );
+
+#if !defined( __WXMAC__ )
     item->SetBitmap( zip_xpm );
+#endif /* !defined( __WXMAC__ ) */
+
     filesMenu->Append( item );
 
     /* Unarchive */
     item = new wxMenuItem( filesMenu, ID_READ_ZIP_ARCHIVE, _( "&Unarchive" ),
                            _( "Unarchive project files from zip file" ) );
+
+#if !defined( __WXMAC__ )
     item->SetBitmap( unzip_xpm );
+#endif /* !defined( __WXMAC__ ) */
+
     filesMenu->Append( item );
 
     /* Quit on all platforms except WXMAC */
@@ -147,14 +167,20 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     /* Text editor */
     item = new wxMenuItem( browseMenu, ID_TO_EDITOR, _( "Text E&ditor" ),
                            _( "Open prefered text editor" ) );
+#if !defined( __WXMAC__ )
     item->SetBitmap( editor_xpm );
+#endif /* !defined( __WXMAC__ ) */
+
     browseMenu->Append( item );
 
     /* Browse files */
     item = new wxMenuItem( browseMenu, ID_BROWSE_AN_SELECT_FILE,
                            _( "&View File" ),
                            _( "View, read or edit file with a text editor" ) );
+#if !defined( __WXMAC__ )
     item->SetBitmap( browse_files_xpm );
+#endif /* !defined( __WXMAC__ ) */
+
     browseMenu->Append( item );
 
 
@@ -168,7 +194,10 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     item = new wxMenuItem( PreferencesMenu, ID_SELECT_PREFERED_EDITOR,
                            _( "&Text Editor" ),
                            _( "Select your prefered text editor" ) );
+#if !defined( __WXMAC__ )
     item->SetBitmap( editor_xpm );
+#endif /* !defined( __WXMAC__ ) */
+
     PreferencesMenu->Append( item );
 
     /**
@@ -183,7 +212,11 @@ void WinEDA_MainFrame::ReCreateMenuBar()
                            _( "Default" ),
                            _( "Use system default PDF viewer used to browse datasheets" ),
                            wxITEM_CHECK );
+
+#if !defined( __WXMAC__ )
     SETBITMAPS( datasheet_xpm );
+#endif /* !defined( __WXMAC__ ) */
+
     SubMenuPdfBrowserChoice->Append( item );
     SubMenuPdfBrowserChoice->Check( ID_SELECT_DEFAULT_PDF_BROWSER,
                                     wxGetApp().m_PdfBrowserIsDefault );
@@ -194,7 +227,10 @@ void WinEDA_MainFrame::ReCreateMenuBar()
                            _( "Favourite" ),
                            _( "Use your favourite PDF viewer used to browse datasheets" ),
                            wxITEM_CHECK );
+#if !defined( __WXMAC__ )
     SETBITMAPS( preference_xpm );
+#endif /* !defined( __WXMAC__ ) */
+
     SubMenuPdfBrowserChoice->Append( item );
     SubMenuPdfBrowserChoice->AppendSeparator();
     SubMenuPdfBrowserChoice->Check( ID_SELECT_PREFERED_PDF_BROWSER,
@@ -205,7 +241,10 @@ void WinEDA_MainFrame::ReCreateMenuBar()
                            ID_SELECT_PREFERED_PDF_BROWSER_NAME,
                            _( "PDF Viewer" ),
                            _( "Select your favourite PDF viewer used to browse datasheets" ) );
+#if !defined( __WXMAC__ )
     item->SetBitmap( datasheet_xpm );
+#endif /* !defined( __WXMAC__ ) */
+
     SubMenuPdfBrowserChoice->Append( item );
 
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( PreferencesMenu,
@@ -227,7 +266,10 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     /* Contents */
     item = new wxMenuItem( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
                            _( "Open the kicad manual" ) );
+#if !defined( __WXMAC__ )
     item->SetBitmap( online_help_xpm );
+#endif /* !defined( __WXMAC__ ) */
+
     helpMenu->Append( item );
 
     /* About on all platforms except WXMAC */

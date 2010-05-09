@@ -10,7 +10,7 @@
 				<string>sch</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>eeschema_doc.icns</string>
+			<string>eeschema.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>eeschema document</string>
 			<key>LSHandlerRank</key>

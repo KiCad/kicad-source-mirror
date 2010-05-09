@@ -128,7 +128,11 @@ static inline void ADD_MENUITEM( wxMenu* menu, int id,
     wxMenuItem* l_item;
 
     l_item = new wxMenuItem( menu, id, text );
+
+#if !defined( __WXMAC__ )
     l_item->SetBitmap( icon );
+#endif /* !defined( __WXMAC__ ) */
+
     menu->Append( l_item );
 };
 
@@ -140,7 +144,11 @@ static inline void ADD_MENUITEM_WITH_HELP( wxMenu* menu, int id,
     wxMenuItem* l_item;
 
     l_item = new wxMenuItem( menu, id, text, help );
+
+#if !defined( __WXMAC__ )
     l_item->SetBitmap( icon );
+#endif /* !defined( __WXMAC__ ) */
+
     menu->Append( l_item );
 };
 
@@ -182,7 +190,11 @@ static inline void ADD_MENUITEM_WITH_SUBMENU( wxMenu* menu, wxMenu* submenu,
 
     l_item = new wxMenuItem( menu, id, text );
     l_item->SetSubMenu( submenu );
+
+#if !defined( __WXMAC__ )
     l_item->SetBitmap( icon );
+#endif /* !defined( __WXMAC__ ) */
+
     menu->Append( l_item );
 };
 
@@ -197,16 +209,20 @@ static inline void ADD_MENUITEM_WITH_HELP_AND_SUBMENU( wxMenu*         menu,
 
     l_item = new wxMenuItem( menu, id, text, help );
     l_item->SetSubMenu( submenu );
+
+#if !defined( __WXMAC__ )
     l_item->SetBitmap( icon );
+#endif /* !defined( __WXMAC__ ) */
+
     menu->Append( l_item );
 };
 
 #endif
 
 #ifdef __WINDOWS__
-#define SETBITMAPS( icon ) item->SetBitmaps( apply_xpm, (icon) )
+#  define SETBITMAPS( icon ) item->SetBitmaps( apply_xpm, (icon) )
 #else
-#define SETBITMAPS( icon )
+#  define SETBITMAPS( icon )
 #endif
 
 #endif /* ifdef MACRO_H */

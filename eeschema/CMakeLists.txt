@@ -148,8 +148,6 @@ if(APPLE)
     set(EESCHEMA_RESOURCES eeschema.icns eeschema_doc.icns)
     set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/eeschema.icns"
                                 PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/eeschema_doc.icns"
-                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     set(MACOSX_BUNDLE_ICON_FILE eeschema.icns)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.eeschema)
 endif(APPLE)
