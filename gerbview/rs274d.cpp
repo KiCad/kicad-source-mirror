@@ -1180,225 +1180,246 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame,
                 break;
 
             case APT_MACRO:
-            {
-                APERTURE_MACRO* macro = tool->GetMacro();
-                wxASSERT( macro );
-
-                // split the macro primitives up into multiple normal TRACK
-                // elements
-                for( AM_PRIMITIVES::iterator p = macro->primitives.begin();
-                     p!=macro->primitives.end();
-                     ++p )
                 {
-                    bool    exposure;
-                    wxPoint curPos = m_CurrentPos;
+                    APERTURE_MACRO* macro = tool->GetMacro();
+                    wxASSERT( macro );
 
-                    switch( p->primitive_id )
+                    // split the macro primitives up into multiple normal TRACK
+                    // elements
+                    for( AM_PRIMITIVES::iterator p = macro->primitives.begin();
+                         p!=macro->primitives.end();
+                         ++p )
                     {
-                    case AMP_CIRCLE:
-                    {
-                        exposure = mapExposure( p->GetExposure(), m_Exposure,
-                                                m_ImageNegative );
-                        curPos += mapPt( p->params[2].GetValue( tool ),
-                                         p->params[3].GetValue( tool ),
-                                         m_GerbMetric );
-                        int diameter = scale( p->params[1].GetValue( tool ),
-                                              m_GerbMetric );
+                        bool    exposure;
+                        wxPoint curPos = m_CurrentPos;
 
-                        track = new TRACK( pcb );
-                        pcb->m_Track.Append( track );
-                        D( printf( "R:%p\n", track ); )
-                        fillRoundFlashTRACK( track, dcode, activeLayer,
-                                             m_CurrentPos, diameter, exposure );
-                    }
-                    break;
-
-                    case AMP_LINE2:
-                    case AMP_LINE20:
-                    {
-                        exposure = mapExposure(
-                            p->GetExposure(), m_Exposure, m_ImageNegative );
-                        int     width = scale( p->params[1].GetValue( tool ),
-                                               m_GerbMetric );
-                        wxPoint start = mapPt( p->params[2].GetValue( tool ),
-                                               p->params[3].GetValue( tool ),
-                                               m_GerbMetric );
-                        wxPoint end = mapPt( p->params[4].GetValue( tool ),
-                                             p->params[5].GetValue( tool ),
-                                             m_GerbMetric );
-
-                        if( start.x == end.x )
+                        switch( p->primitive_id )
                         {
-                            size.x = width;
-                            size.y = ABS( end.y - start.y ) + 1;
+                        case AMP_CIRCLE:
+                            {
+                                exposure = mapExposure( p->GetExposure(), m_Exposure,
+                                                        m_ImageNegative );
+                                curPos += mapPt( p->params[2].GetValue( tool ),
+                                                 p->params[3].GetValue( tool ),
+                                                 m_GerbMetric );
+                                int diameter = scale( p->params[1].GetValue( tool ),
+                                                      m_GerbMetric );
+
+                                track = new TRACK( pcb );
+                                pcb->m_Track.Append( track );
+                                D( printf( "R:%p\n", track ); )
+                                fillRoundFlashTRACK( track, dcode, activeLayer,
+                                                     m_CurrentPos, diameter, exposure );
+                            }
+                            break;
+
+                        case AMP_LINE2:
+                        case AMP_LINE20:
+                            {
+                                exposure = mapExposure(
+                                    p->GetExposure(), m_Exposure, m_ImageNegative );
+                                int     width = scale( p->params[1].GetValue( tool ),
+                                                       m_GerbMetric );
+                                wxPoint start = mapPt( p->params[2].GetValue( tool ),
+                                                       p->params[3].GetValue( tool ),
+                                                       m_GerbMetric );
+                                wxPoint end = mapPt( p->params[4].GetValue( tool ),
+                                                     p->params[5].GetValue( tool ),
+                                                     m_GerbMetric );
+
+                                if( start.x == end.x )
+                                {
+                                    size.x = width;
+                                    size.y = ABS( end.y - start.y ) + 1;
+                                }
+                                else
+                                {
+                                    size.x = ABS( end.x - start.x ) + 1;
+                                    size.y = width;
+                                }
+
+                                wxPoint midPoint( ( start.x + end.x ) / 2,
+                                                  ( start.y + end.y ) / 2 );
+                                curPos += midPoint;
+                                track   = new TRACK( pcb );
+                                pcb->m_Track.Append( track );
+                                D( printf( "R:%p\n", track ); )
+                                fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
+                                                          curPos, size, S_SPOT_RECT,
+                                                          exposure );
+                            }
+                            break;
+
+                        case AMP_LINE_CENTER:
+                            {
+                                exposure = mapExposure( p->GetExposure(), m_Exposure,
+                                                        m_ImageNegative );
+                                wxPoint msize = mapPt( p->params[1].GetValue( tool ),
+                                                       p->params[2].GetValue( tool ),
+                                                       m_GerbMetric );
+                                size.x  = msize.x;
+                                size.y  = msize.y;
+                                curPos += mapPt( p->params[3].GetValue( tool ),
+                                                 p->params[4].GetValue( tool ),
+                                                 m_GerbMetric );
+                                track = new TRACK( pcb );
+                                pcb->m_Track.Append( track );
+                                D( printf( "R:%p\n", track ); )
+                                fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
+                                                          curPos, size, S_SPOT_RECT,
+                                                          exposure );
+                            }
+                            break;
+
+                        case AMP_LINE_LOWER_LEFT:
+                            {
+                                exposure = mapExposure(
+                                    p->GetExposure(), m_Exposure, m_ImageNegative );
+                                wxPoint msize = mapPt( p->params[1].GetValue( tool ),
+                                                       p->params[2].GetValue( tool ),
+                                                       m_GerbMetric );
+                                size.x = msize.x;
+                                size.y = msize.y;
+                                wxPoint lowerLeft = mapPt( p->params[3].GetValue( tool ),
+                                                           p->params[4].GetValue( tool ),
+                                                           m_GerbMetric );
+                                curPos += lowerLeft;
+
+                                // need the middle, so adjust from the lower left
+                                curPos.y += size.y / 2;
+                                curPos.x += size.x / 2;
+                                track     = new TRACK( pcb );
+                                pcb->m_Track.Append( track );
+                                D( printf( "R:%p\n", track ); )
+                                fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
+                                                          curPos, size, S_SPOT_RECT,
+                                                          exposure );
+                            }
+                            break;
+
+                        case AMP_THERMAL:
+                            {
+                                int outerDiam = scale( p->params[2].GetValue( tool ),
+                                                       m_GerbMetric );
+                                int innerDiam = scale( p->params[3].GetValue( tool ),
+                                                       m_GerbMetric );
+
+                                curPos += mapPt( p->params[0].GetValue( tool ),
+                                                 p->params[1].GetValue( tool ),
+                                                 m_GerbMetric );
+
+                                track = new TRACK( pcb );
+                                pcb->m_Track.Append( track );
+                                D( printf( "R:%p\n", track ); )
+                                fillRoundFlashTRACK( track, dcode, activeLayer,
+                                                     curPos, outerDiam,
+                                                     !( m_LayerNegative ^ m_ImageNegative ) );
+
+                                track = new TRACK( pcb );
+                                pcb->m_Track.Append( track );
+                                D( printf( "R:%p\n", track ); )
+                                fillRoundFlashTRACK( track, dcode, activeLayer, curPos,
+                                                     innerDiam,
+                                                     ( m_LayerNegative ^ m_ImageNegative ) );
+
+                                // @todo: draw the cross hairs, see page 23 of rs274
+                                // spec. this might be done with two lines, thickness
+                                // from params[4], and drawing
+                                // darkness "(m_LayerNegative ^ m_ImageNegative)"
+                            }
+                            break;
+
+                        case AMP_MOIRE:
+                            {
+                                curPos += mapPt( p->params[0].GetValue( tool ),
+                                                 p->params[1].GetValue( tool ),
+                                                 m_GerbMetric );
+
+                                // e.g.: "6,0,0,0.125,.01,0.01,3,0.003,0.150,0"
+                                int outerDiam = scale( p->params[2].GetValue( tool ),
+                                                       m_GerbMetric );
+                                int penThickness = scale( p->params[3].GetValue( tool ),
+                                                          m_GerbMetric );
+                                int gap = scale( p->params[4].GetValue( tool ),
+                                                 m_GerbMetric );
+                                int numCircles = (int) p->params[5].GetValue( tool );
+                                int crossHairThickness =
+                                    scale( p->params[6].GetValue( tool ), m_GerbMetric );
+                                int crossHairLength =
+                                    scale( p->params[7].GetValue( tool ), m_GerbMetric );
+
+                                // ignore rotation, not supported
+                                // adjust outerDiam by this on each nested circle
+                                int diamAdjust = 2 * (gap + penThickness);
+                                for( int i = 0;
+                                     i < numCircles;
+                                     ++i, outerDiam -= diamAdjust )
+                                {
+                                    track = new TRACK( pcb );
+                                    pcb->m_Track.Append( track );
+                                    D( printf( "R:%p\n", track ); )
+                                    fillCircularTRACK( track, dcode, activeLayer,
+                                                       curPos, outerDiam,
+                                                       penThickness,
+                                                       !( m_LayerNegative ^ m_ImageNegative ) );
+                                }
+
+                                track = new TRACK( pcb );
+                                pcb->m_Track.Append( track );
+                                D( printf( "R:%p\n", track ); )
+                                fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
+                                                          curPos,
+                                                          wxSize( crossHairThickness,
+                                                                  crossHairLength ),
+                                                          S_SPOT_RECT,
+                                                          !( m_LayerNegative ^ m_ImageNegative ) );
+
+                                track = new TRACK( pcb );
+                                pcb->m_Track.Append( track );
+                                D( printf( "R:%p\n", track ); )
+
+                                // swap x and y in wxSize() for this one
+                                fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
+                                                          curPos,
+                                                          wxSize( crossHairLength,
+                                                                  crossHairThickness ),
+                                                          S_SPOT_RECT,
+                                                          !( m_LayerNegative ^ m_ImageNegative ) );
+                            }
+                            break;
+
+                        case AMP_OUTLINE:
+#if defined(DEBUG)
+                            {
+                                int numPoints = (int) p->params[1].GetValue( tool );
+
+                                printf( "AMP_OUTLINE:\n" );
+                                printf( " exposure: %g\n", p->params[0].GetValue( tool ) );
+                                printf( " # points: %d\n", numPoints );
+
+                                // numPoints does not include the starting point, so add 1.
+                                for( int i=0;  i<numPoints+1;  ++i )
+                                {
+                                    printf( " [%d]: X=%g  Y=%g\n", i,
+                                        p->params[i*2+2+0].GetValue( tool ),
+                                        p->params[i*2+2+1].GetValue( tool )
+                                        );
+                                }
+                                printf( " rotation: %g\n", p->params[numPoints*2+4].GetValue( tool ) );
+                            }
+#endif
+                            break;
+
+                        case AMP_POLYGON:
+                        case AMP_EOF:
+                        default:
+
+                            // not yet supported, waiting for you.
+                            break;
                         }
-                        else
-                        {
-                            size.x = ABS( end.x - start.x ) + 1;
-                            size.y = width;
-                        }
-
-                        wxPoint midPoint( ( start.x + end.x ) / 2,
-                                          ( start.y + end.y ) / 2 );
-                        curPos += midPoint;
-                        track   = new TRACK( pcb );
-                        pcb->m_Track.Append( track );
-                        D( printf( "R:%p\n", track ); )
-                        fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
-                                                  curPos, size, S_SPOT_RECT,
-                                                  exposure );
-                    }
-                    break;
-
-                    case AMP_LINE_CENTER:
-                    {
-                        exposure = mapExposure( p->GetExposure(), m_Exposure,
-                                                m_ImageNegative );
-                        wxPoint msize = mapPt( p->params[1].GetValue( tool ),
-                                               p->params[2].GetValue( tool ),
-                                               m_GerbMetric );
-                        size.x  = msize.x;
-                        size.y  = msize.y;
-                        curPos += mapPt( p->params[3].GetValue( tool ),
-                                         p->params[4].GetValue( tool ),
-                                         m_GerbMetric );
-                        track = new TRACK( pcb );
-                        pcb->m_Track.Append( track );
-                        D( printf( "R:%p\n", track ); )
-                        fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
-                                                  curPos, size, S_SPOT_RECT,
-                                                  exposure );
-                    }
-                    break;
-
-                    case AMP_LINE_LOWER_LEFT:
-                    {
-                        exposure = mapExposure(
-                            p->GetExposure(), m_Exposure, m_ImageNegative );
-                        wxPoint msize = mapPt( p->params[1].GetValue( tool ),
-                                               p->params[2].GetValue( tool ),
-                                               m_GerbMetric );
-                        size.x = msize.x;
-                        size.y = msize.y;
-                        wxPoint lowerLeft = mapPt( p->params[3].GetValue( tool ),
-                                                   p->params[4].GetValue( tool ),
-                                                   m_GerbMetric );
-                        curPos += lowerLeft;
-
-                        // need the middle, so adjust from the lower left
-                        curPos.y += size.y / 2;
-                        curPos.x += size.x / 2;
-                        track     = new TRACK( pcb );
-                        pcb->m_Track.Append( track );
-                        D( printf( "R:%p\n", track ); )
-                        fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
-                                                  curPos, size, S_SPOT_RECT,
-                                                  exposure );
-                    }
-                    break;
-
-                    case AMP_THERMAL:
-                    {
-                        int outerDiam = scale( p->params[2].GetValue( tool ),
-                                               m_GerbMetric );
-                        int innerDiam = scale( p->params[3].GetValue( tool ),
-                                               m_GerbMetric );
-
-                        curPos += mapPt( p->params[0].GetValue( tool ),
-                                         p->params[1].GetValue( tool ),
-                                         m_GerbMetric );
-
-                        track = new TRACK( pcb );
-                        pcb->m_Track.Append( track );
-                        D( printf( "R:%p\n", track ); )
-                        fillRoundFlashTRACK( track, dcode, activeLayer,
-                                             curPos, outerDiam,
-                                             !( m_LayerNegative ^ m_ImageNegative ) );
-
-                        track = new TRACK( pcb );
-                        pcb->m_Track.Append( track );
-                        D( printf( "R:%p\n", track ); )
-                        fillRoundFlashTRACK( track, dcode, activeLayer, curPos,
-                                             innerDiam,
-                                             ( m_LayerNegative ^ m_ImageNegative ) );
-
-                        // @todo: draw the cross hairs, see page 23 of rs274
-                        // spec. this might be done with two lines, thickness
-                        // from params[4], and drawing
-                        // darkness "(m_LayerNegative ^ m_ImageNegative)"
-                    }
-                    break;
-
-                    case AMP_MOIRE:
-                    {
-                        curPos += mapPt( p->params[0].GetValue( tool ),
-                                         p->params[1].GetValue( tool ),
-                                         m_GerbMetric );
-
-                        // e.g.: "6,0,0,0.125,.01,0.01,3,0.003,0.150,0"
-                        int outerDiam = scale( p->params[2].GetValue( tool ),
-                                               m_GerbMetric );
-                        int penThickness = scale( p->params[3].GetValue( tool ),
-                                                  m_GerbMetric );
-                        int gap = scale( p->params[4].GetValue( tool ),
-                                         m_GerbMetric );
-                        int numCircles = (int) p->params[5].GetValue( tool );
-                        int crossHairThickness =
-                            scale( p->params[6].GetValue( tool ), m_GerbMetric );
-                        int crossHairLength =
-                            scale( p->params[7].GetValue( tool ), m_GerbMetric );
-
-                        // ignore rotation, not supported
-                        // adjust outerDiam by this on each nested circle
-                        int diamAdjust = 2 * (gap + penThickness);
-                        for( int i = 0;
-                             i < numCircles;
-                             ++i, outerDiam -= diamAdjust )
-                        {
-                            track = new TRACK( pcb );
-                            pcb->m_Track.Append( track );
-                            D( printf( "R:%p\n", track ); )
-                            fillCircularTRACK( track, dcode, activeLayer,
-                                               curPos, outerDiam,
-                                               penThickness,
-                                               !( m_LayerNegative ^ m_ImageNegative ) );
-                        }
-
-                        track = new TRACK( pcb );
-                        pcb->m_Track.Append( track );
-                        D( printf( "R:%p\n", track ); )
-                        fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
-                                                  curPos,
-                                                  wxSize( crossHairThickness,
-                                                          crossHairLength ),
-                                                  S_SPOT_RECT,
-                                                  !( m_LayerNegative ^ m_ImageNegative ) );
-
-                        track = new TRACK( pcb );
-                        pcb->m_Track.Append( track );
-                        D( printf( "R:%p\n", track ); )
-
-                        // swap x and y in wxSize() for this one
-                        fillOvalOrRectFlashTRACK( track, dcode, activeLayer,
-                                                  curPos,
-                                                  wxSize( crossHairLength,
-                                                          crossHairThickness ),
-                                                  S_SPOT_RECT,
-                                                  !( m_LayerNegative ^ m_ImageNegative ) );
-                    }
-                    break;
-
-                    case AMP_EOF:
-                    case AMP_OUTLINE:
-                    case AMP_POLYGON:
-                    default:
-
-                        // not yet supported, waiting for you.
-                        break;
                     }
                 }
-            }
-            break;
+                break;
 
             default:
                 break;

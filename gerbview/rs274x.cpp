@@ -535,6 +535,26 @@ bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
 }
 
 
+static bool CheckForLineEnd(  char buff[GERBER_BUFZ], char*& text, FILE* fp  )
+{
+    while( *text == '\n' || !*text )
+    {
+        if( *text == '\n' )
+            ++text;
+
+        if( !*text )
+        {
+            if( fgets( buff, GERBER_BUFZ, fp ) == NULL )
+                return false;
+
+            text = buff;
+        }
+    }
+
+    return true;
+}
+
+
 bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
                                 char*& text,
                                 FILE*  gerber_file )
@@ -563,15 +583,8 @@ bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
         if( *text == '*' )
             ++text;
 
-        if( *text == '\n' )
-            ++text;
-
-        if( !*text )
-        {
-            text = buff;
-            if( fgets( buff, GERBER_BUFZ, gerber_file ) == NULL )
-                return false;
-        }
+        if( !CheckForLineEnd(  buff, text, gerber_file ) )
+            return false;
 
         if( *text == '%' )
             break;      // exit with text still pointing at %
@@ -625,11 +638,14 @@ bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
         }
 
         int i;
-        for( i = 0; i < paramCount && *text && *text != '*'; ++i )
+        for( i = 0; i < paramCount && *text != '*'; ++i )
         {
             prim.params.push_back( DCODE_PARAM() );
 
             DCODE_PARAM& param = prim.params.back();
+
+            if( !CheckForLineEnd(  buff, text, gerber_file ) )
+                return false;
 
             if( *text == '$' )
             {
@@ -647,17 +663,23 @@ bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
         // there are more parameters to read if this is an AMP_OUTLINE
         if( prim.primitive_id == AMP_OUTLINE )
         {
+            // so far we have read [0]:exposure, [1]:#points, [2]:X start, [3]: Y start
+            // Now read all the points, plus trailing rotation in degrees.
+
             // params[1] is a count of polygon points, so it must be given
             // in advance, i.e. be immediate.
             wxASSERT( prim.params[1].IsImmediate() );
 
             paramCount = (int) prim.params[1].GetValue( 0 ) * 2 + 1;
 
-            for( int i = 0; i < paramCount && *text && *text != '*'; ++i )
+            for( int i = 0; i < paramCount && *text != '*'; ++i )
             {
                 prim.params.push_back( DCODE_PARAM() );
 
                 DCODE_PARAM& param = prim.params.back();
+
+                if( !CheckForLineEnd(  buff, text, gerber_file ) )
+                    return false;
 
                 if( *text == '$' )
                 {
