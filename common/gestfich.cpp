@@ -685,5 +685,5 @@ void OpenFile( const wxString& file )
 
 wxString QuoteFullPath( wxFileName& fn, wxPathFormat format )
 {
-    return wxT( "\"" ) + fn.GetFullPath() + wxT( "\"" );
+    return wxT( "\"" ) + fn.GetFullPath( format ) + wxT( "\"" );
 }

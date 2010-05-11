@@ -77,8 +77,10 @@ wxString       FindKicadFile( const wxString& shortname );
  * Quote return value of wxFileName::GetFullPath().
  *
  * This allows file name paths with spaces to be used as parameters to
- * ProcessExecute function calls.  This is a cheap and dirty hack and
- * should probably should be done in a class derived from wxFileName.
+ * ProcessExecute function calls.
+ * @param fn is the filename to wrap
+ * @param format if provided, can be used to transform the nature of the
+ *    wrapped filename to another platform.
  */
 extern wxString QuoteFullPath( wxFileName& fn,
                                wxPathFormat format = wxPATH_NATIVE );

@@ -458,7 +458,7 @@ wxString WinEDA_SchematicFrame::GetUniqueFilenameForCurrentSheet()
 #else
     fn.ClearExt();
     wxString filename = fn.GetFullPath();
-    if( ( filename.Len() + m_CurrentSheet->PathHumanReadable().Len() ) < 80 )    
+    if( ( filename.Len() + m_CurrentSheet->PathHumanReadable().Len() ) < 80 )
 #endif
 
     {
@@ -702,8 +702,11 @@ void WinEDA_SchematicFrame::OnOpenPcbnew( wxCommandEvent& event )
 
     if( fn.IsOk() )
     {
-        fn.ClearExt();
-        ExecuteFile( this, PCBNEW_EXE, QuoteFullPath( fn ) );
+        fn.SetExt( BoardFileExtension );
+
+        wxString filename = QuoteFullPath( fn );
+
+        ExecuteFile( this, PCBNEW_EXE, filename );
     }
     else
         ExecuteFile( this, PCBNEW_EXE );
