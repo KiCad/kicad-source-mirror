@@ -1,8 +1,10 @@
 [Desktop Entry]
 Categories=Development;Electronics
-Comment=Design a printed circuit board.
+Comment=Design an electronic schematic
+Comment[fr]=Dessiner des schémas électroniques
 Exec=eeschema
-GenericName=EDA Suite
+GenericName=Electronic schematic design
+GenericName[fr]=Saisie de schéma électronique
 Icon=eeschema
 MimeType=application/x-kicad-schematic;
 Name=Eeschema
