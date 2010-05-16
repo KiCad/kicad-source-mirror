@@ -65,6 +65,20 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	
 	PropLeftSizer->Add( sbSizerValue, 0, wxEXPAND, 5 );
 	
+	
+	PropLeftSizer->Add( 0, 20, 0, 0, 5 );
+	
+	wxStaticBoxSizer* sbSizerFootprintName;
+	sbSizerFootprintName = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Footprint Name in Lib") ), wxHORIZONTAL );
+	
+	m_FootprintNameCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerFootprintName->Add( m_FootprintNameCtrl, 1, 0, 5 );
+	
+	
+	sbSizerFootprintName->Add( 0, 0, 0, 0, 5 );
+	
+	PropLeftSizer->Add( sbSizerFootprintName, 0, wxEXPAND, 5 );
+	
 	m_PanelPropertiesBoxSizer->Add( PropLeftSizer, 1, wxEXPAND, 5 );
 	
 	m_PropRightSizer = new wxBoxSizer( wxVERTICAL );
