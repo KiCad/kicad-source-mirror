@@ -1158,8 +1158,7 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen,
             case WS_SHEETS:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                if( screen->m_NumberOfScreen > 1 )
-                    msg << screen->m_NumberOfScreen;
+                msg << screen->m_NumberOfScreen;
                 DrawGraphicText( DrawPanel, DC, pos, Color, msg,
                                  TEXT_ORIENT_HORIZ, size, GR_TEXT_HJUSTIFY_LEFT,
                                  GR_TEXT_VJUSTIFY_CENTER, width, false, false,

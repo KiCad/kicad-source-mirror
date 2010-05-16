@@ -295,8 +295,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             case WS_SHEETS:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                if( screen->m_NumberOfScreen > 1 )
-            	    msg << screen->m_NumberOfScreen;
+        	msg << screen->m_NumberOfScreen;
                 plotter->text( pos, color,
                                msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
