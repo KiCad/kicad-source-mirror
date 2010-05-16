@@ -7,7 +7,7 @@
 # Original credits by Adium developers !
 # http://www.adium.im
 ###########
-VERSION=20100118
+VERSION=`date +%Y%m%d`
 
 ###########
 # Variables
@@ -21,7 +21,10 @@ RELEASE_NAME=kicad-$(VERSION)
 # Targets
 ###########
 all:
-
+	echo "Copying application bundles"
+	mkdir release
+	cp -R ../../../*/*.app release
+	echo "Building kicad-${VERSION}.dmg"
 	rm -rfv build
 	mkdir build	
 
@@ -32,6 +35,6 @@ all:
 
 	mkdir -p $(BUILD_DIR)/.background
 
-	./make-diskimage.sh $(BUILD_DIR)/$(RELEASE_NAME).dmg $(KICAD_DIR) "KiCad $(VERSION)" dmg_kicad.scpt $(ART_DIR)
+	./make-diskimage.sh $(BUILD_DIR)/$(RELEASE_NAME).dmg $(KICAD_DIR) "KiCad" dmg_kicad.scpt $(ART_DIR)
 	
-	@echo Build finished. `md5 $(BUILD_DIR)/$(RELEASE_NAME).dmg`
+	@echo "Build finished. `md5 $(BUILD_DIR)/$(RELEASE_NAME).dmg`"

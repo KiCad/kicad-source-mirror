@@ -49,7 +49,7 @@ set(COMMON_SRCS
     richio.cpp
     selcolor.cpp
     string.cpp
-    toolbars.cpp
+    wineda_toolbar.cpp
     trigo.cpp
     worksheet.cpp
     wxwineda.cpp

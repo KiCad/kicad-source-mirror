@@ -7,7 +7,11 @@
 		<dict>
 			<key>CFBundleTypeIconFile</key>
 			<string>kicad_doc.icns</string>
-			<key>CFBundleTypeName</key>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>pro</string>
+			</array>
+		<key>CFBundleTypeName</key>
 			<string>kicad project files</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
