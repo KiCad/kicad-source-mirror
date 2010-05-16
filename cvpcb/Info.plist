@@ -10,6 +10,7 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>net</string>
+				<string>cmp</string>
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>cvpcb document</string>

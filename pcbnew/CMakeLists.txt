@@ -1,20 +1,18 @@
 add_definitions(-DPCBNEW)
 
+###
+# Includes
+###
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${Boost_INCLUDE_DIR}
                     ../3d-viewer
                     ../polygon)
-##
-# Name of target on OSX is also the title of the application
-# on other targets this should be as normal
-##
-if(APPLE)
-    set(PCBNEW_NAME PCBNew)
-else(APPLE)
-    set(PCBNEW_NAME pcbnew)
-endif(APPLE)
 
-# Many of the commented out ones are nested in *.cpp files for dialogs
+###
+# Sources
+#
+# NOTE: Many of the commented out ones are nested in *.cpp files for dialogs
+###
 set(PCBNEW_SRCS
     pcbframe.cpp
     attribut.cpp
@@ -176,10 +174,16 @@ set(PCBNEW_SRCS
     zones_test_and_combine_areas.cpp
     )
 
+###
+# We need some extra sources from common
+###
 set(PCBNEW_EXTRA_SRCS
     ../common/dialog_page_settings.cpp
 )
 
+###
+# Windows resource file
+###
 if(WIN32)
     if(MINGW)
         # PCBNEW_RESOURCES variable is set by the macro.
@@ -189,6 +193,9 @@ if(WIN32)
     endif(MINGW)
 endif(WIN32)
 
+###
+# Set properties for APPLE on pcbnew target
+###
 if(APPLE)
     set(PCBNEW_RESOURCES pcbnew.icns pcbnew_doc.icns)
     set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/pcbnew.icns"
@@ -217,19 +224,34 @@ set_source_files_properties( dialog_freeroute_exchange.cpp
         OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help_html.h
     )
 
-add_executable(${PCBNEW_NAME} WIN32 MACOSX_BUNDLE ${PCBNEW_SRCS}
-    ${PCBNEW_EXTRA_SRCS}
-    ${PCBNEW_RESOURCES}
-    )
+###
+# Create the pcbnew executable
+###
+add_executable(pcbnew WIN32 MACOSX_BUNDLE
+               ${PCBNEW_SRCS}
+               ${PCBNEW_EXTRA_SRCS}
+               ${PCBNEW_RESOURCES}
+              )
 
+###
+# Set properties for APPLE on pcbnew target
+###
 if(APPLE)
-    set_target_properties(${PCBNEW_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+    set_target_properties(pcbnew PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
-target_link_libraries(${PCBNEW_NAME} 3d-viewer common pcbcommon polygon bitmaps kbool
-                      ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} ${GDI_PLUS_LIBRARIES})
+###
+# Link executable target pcbnew with correct libraries
+###
+target_link_libraries(pcbnew 3d-viewer common pcbcommon polygon bitmaps kbool
+                      ${OPENGL_LIBRARIES}
+                      ${wxWidgets_LIBRARIES}
+                      ${GDI_PLUS_LIBRARIES})
 
-install(TARGETS ${PCBNEW_NAME}
+###
+# Add pcbnew as install target
+###
+install(TARGETS pcbnew
         DESTINATION ${KICAD_BIN}
         COMPONENT binary)
 

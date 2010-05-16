@@ -1,28 +1,25 @@
 add_definitions(-DCVPCB)
 
+###
+# Includes
+###
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${Boost_INCLUDE_DIR}
                     ../3d-viewer
                     ../pcbnew
                     ../polygon
                     ${CMAKE_SOURCE_DIR}/common)
-##
-# Name of target on OSX is also the title of the application
-# on other targets this should be as normal
-##
-if(APPLE)
-	set(CVPCB_NAME CvPCB)
-else(APPLE)
-	set(CVPCB_NAME cvpcb)
-endif(APPLE)
 
+###
+# Sources
+###
 set(CVPCB_SRCS
     autosel.cpp
     cfg.cpp
     class_cvpcb.cpp
-	class_components_listbox.cpp
+    class_components_listbox.cpp
     class_DisplayFootprintsFrame.cpp
-	class_footprints_listbox.cpp
+    class_footprints_listbox.cpp
     cvframe.cpp
     cvpcb.cpp
     dialog_cvpcb_config.cpp
@@ -42,6 +39,9 @@ set(CVPCB_SRCS
     tool_cvpcb.cpp
     writenetlistpcbnew.cpp)
 
+###
+# Windows resource file
+###
 if(WIN32)
     if(MINGW)
         # CVPCB_RESOURCES variable is set by the macro.
@@ -52,7 +52,7 @@ if(WIN32)
 endif(WIN32)
 
 ###
-# CvPCB.app resources
+# Apple resource files
 ###
 if(APPLE)
     set(CVPCB_RESOURCES cvpcb.icns cvpcb_doc.icns)
@@ -64,18 +64,31 @@ if(APPLE)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.cvpcb)
 endif(APPLE)
 
-add_executable(${CVPCB_NAME} WIN32 MACOSX_BUNDLE ${CVPCB_SRCS} ${CVPCB_RESOURCES})
+###
+# Create the cvpcb executable
+###
+add_executable(cvpcb WIN32 MACOSX_BUNDLE
+               ${CVPCB_SRCS}
+               ${CVPCB_RESOURCES})
 
 ###
-# CvPCB.app creation
+# Set properties for APPLE on cvpcb target
 ###
 if(APPLE)
-    set_target_properties(${CVPCB_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+    set_target_properties(cvpcb PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
-target_link_libraries(${CVPCB_NAME} 3d-viewer common pcbcommon polygon bitmaps kbool
-                      ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} ${GDI_PLUS_LIBRARIES})
-
-install(TARGETS ${CVPCB_NAME}
+###
+# Link executable target cvpcb with correct libraries
+###
+target_link_libraries(cvpcb 3d-viewer common pcbcommon polygon bitmaps kbool
+                      ${OPENGL_LIBRARIES}
+                      ${wxWidgets_LIBRARIES}
+                      ${GDI_PLUS_LIBRARIES}
+                     )
+###
+# Add cvpcb as install target
+###
+install(TARGETS cvpcb
         DESTINATION ${KICAD_BIN}
         COMPONENT binary)
