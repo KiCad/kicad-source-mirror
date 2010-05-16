@@ -4,6 +4,17 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-may-18, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++All:
+    Set minimum cmake version requirement to 2.6.4
+    (does not works with 2.6.1)
+++Pcbnew, Module Editor:
+    Added footprint name edition in the module properties dialog.
+    Until now, the footprint name used to retrieve a footprint in lib was
+    set only when saving the footprint in lib, and could not be edited without saving
+    the footprint in lib.
+
 2010-may-01, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++Pcbnew:

@@ -259,7 +259,7 @@ install(TARGETS pcbnew
 # The specctra test fails to build properly using MS Visual Studio.
 if(NOT MSVC)
     # This one gets made only when testing.
-    add_executable(specctra_test EXCLUDE_FROM_ALL specctra.cpp)
+    add_executable(specctra_test EXCLUDE_FROM_ALL specctra_test.cpp specctra.cpp)
     target_link_libraries(specctra_test common ${wxWidgets_LIBRARIES})
 endif(NOT MSVC)
 

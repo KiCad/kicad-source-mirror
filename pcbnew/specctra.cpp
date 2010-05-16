@@ -47,25 +47,13 @@
 */
 
 
-
 #include <cstdarg>
 #include <cstdio>
 
 #include "specctra.h"
-#include "common.h"             // IsOK() & EDA_FileSelector()
 
 #include <wx/ffile.h>
 
-// To build the DSN beautifier and unit tester, simply uncomment this and then
-// use CMake's makefile to build target "specctra_test".
-//#define SPECCTRA_TEST  // define for "stand alone, i.e. unit testing"
-
-
-#if defined(SPECCTRA_TEST)
- #define EDA_BASE           // build_version.h behavior
- #undef  COMMON_GLOBL
- #define COMMON_GLOBL       // build_version.h behavior
-#endif
 #include "build_version.h"
 
 
@@ -510,9 +498,6 @@ wxString SPECCTRA_DB::GetTokenString( int aTok )
     return ret;
 }
 
-
-#if !defined(SPECCTRA_TEST)
-
 void SPECCTRA_DB::buildLayerMaps( BOARD* aBoard )
 {
     // specctra wants top physical layer first, then going down to the
@@ -536,7 +521,6 @@ void SPECCTRA_DB::buildLayerMaps( BOARD* aBoard )
         layerIds.push_back( CONV_TO_UTF8( aBoard->GetLayerName( kilayer ) ) );
     }
 }
-#endif
 
 
 int SPECCTRA_DB::findLayerName( const std::string& aLayerName ) const
@@ -4321,71 +4305,4 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 } // namespace DSN
 
 
-// unit test this source file.  You can use the beautifiers below to output
-// exactly what you read in but beautified and without #comments.  This can
-// then be used along with program 'diff' to test the parsing and formatting
-// of every element.  You may have to run the first output back through to
-// get two files that should match, the 2nd and 3rd outputs.
-
-
-#if defined(SPECCTRA_TEST)
-
-using namespace DSN;
-
-
-int main( int argc, char** argv )
-{
-//    wxString    filename( wxT("/tmp/fpcroute/Sample_1sided/demo_1sided.dsn") );
-//    wxString    filename( wxT("/tmp/testdesigns/test.dsn") );
-//    wxString    filename( wxT("/tmp/testdesigns/test.ses") );
-    wxString    filename( wxT("/tmp/specctra_big.dsn") );
-
-    SPECCTRA_DB     db;
-    bool            failed = false;
-
-    SetLocaleTo_C_standard( );    // Switch the locale to standard C
-
-    if( argc == 2 )
-    {
-        filename = CONV_FROM_UTF8( argv[1] );
-    }
-
-    try
-    {
-//        db.LoadPCB( filename );
-        db.LoadSESSION( filename );
-    }
-    catch( IOError ioe )
-    {
-        fprintf( stderr, "%s\n", CONV_TO_UTF8(ioe.errorText) );
-        failed = true;
-    }
-
-    if( !failed )
-        fprintf( stderr, "loaded OK\n" );
-
-    // export what we read in, making this test program basically a beautifier
-    // hose the beautified DSN file to stdout.  If an exception occurred,
-    // we will be outputting only a portion of what we wanted to read in.
-    db.SetFILE( stdout );
-
-#if 0
-    // export a PCB
-    DSN::PCB* pcb = db.GetPCB();
-    pcb->Format( &db, 0 );
-
-#else
-    // export a SESSION file.
-    DSN::SESSION* ses = db.GetSESSION();
-    ses->Format( &db, 0 );
-#endif
-
-    SetLocaleTo_Default( );      // revert to the current locale
-}
-
-
-#endif
-
-
 //EOF
-

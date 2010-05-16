@@ -549,7 +549,7 @@ Ki_WorkSheetData WS_Art =
     &WS_Mass,
     STAMP_X_50 - 30, STAMP_Y_35 + 90,
     0,               0,
-    wxT( "Арт." ),NULL
+    wxT( "Лит." ),NULL
 };
 
 Ki_WorkSheetData WS_Mass =
@@ -1147,7 +1147,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen,
             case WS_IDENTSHEET:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                msg << screen->m_ScreenNumber;
+                if( screen->m_NumberOfScreen > 1 )
+                    msg << screen->m_ScreenNumber;
                 DrawGraphicText( DrawPanel, DC, pos, Color, msg,
                                  TEXT_ORIENT_HORIZ, size, GR_TEXT_HJUSTIFY_LEFT,
                                  GR_TEXT_VJUSTIFY_CENTER, width, false, false,

@@ -391,9 +391,9 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library(
 }
 
 
-/*
- * Save library:
- * All new modules (ie modules not already exist (if NewModulesOnly == true)
+/** function Archive_Modules
+ * Save in the library:
+ * All new modules (ie modules not found in this lib) (if NewModulesOnly == true)
  * all modules (if NewModulesOnly == FALSE)
  */
 void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
@@ -522,8 +522,8 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
 
     if( aDisplayDialog )
     {
-        Get_Message( _( "Name:" ), _( "Save module" ), Name_Cmp, this );
-        if( Name_Cmp.IsEmpty() )
+        int cancel = Get_Message( _( "Name:" ), _( "Save module" ), Name_Cmp, this );
+        if( Name_Cmp.IsEmpty() || cancel )
             return 0;
         Name_Cmp.Trim( true );
         Name_Cmp.Trim( FALSE );

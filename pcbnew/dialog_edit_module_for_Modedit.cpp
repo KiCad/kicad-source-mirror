@@ -77,7 +77,8 @@ void DIALOG_MODULE_MODULE_EDITOR::InitModeditProperties()
     m_ValueCopy->Copy(m_CurrentModule->m_Value);
     m_ReferenceCtrl->SetValue( m_ReferenceCopy->m_Text );
     m_ValueCtrl->SetValue( m_ValueCopy->m_Text );
-
+    m_ValueCtrl->SetValue( m_ValueCopy->m_Text );
+    m_FootprintNameCtrl->SetValue( m_CurrentModule->m_LibRef );
 
 #if wxCHECK_VERSION( 2, 8, 0 )
     m_AttributsCtrl->SetItemToolTip( 0, _( "Use this attribute for most non smd components" ) );
@@ -343,6 +344,10 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
     m_CurrentModule->m_Doc = m_DocCtrl->GetValue();
     m_CurrentModule->m_KeyWord = m_KeywordCtrl->GetValue();
 
+    // Init footprint name in library
+    if( ! m_FootprintNameCtrl->GetValue( ).IsEmpty() )
+        m_CurrentModule->m_LibRef = m_FootprintNameCtrl->GetValue( );
+
     // Init Fields:
     m_CurrentModule->m_Reference->Copy(m_ReferenceCopy );
     m_CurrentModule->m_Value->Copy(m_ValueCopy );
@@ -429,3 +434,4 @@ void DIALOG_MODULE_MODULE_EDITOR::OnEditValue(wxCommandEvent& event)
     m_Parent->GetScreen()->m_Curseur = tmp;
     m_ValueCtrl->SetValue(m_ValueCopy->m_Text);
 }
+
