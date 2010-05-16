@@ -56,6 +56,9 @@ class DIALOG_MODULE_MODULE_EDITOR_BASE : public wxDialog
 		wxButton* m_button4;
 		wxTextCtrl* m_ValueCtrl;
 		wxButton* m_button5;
+		
+		wxTextCtrl* m_FootprintNameCtrl;
+		
 		wxRadioBox* m_AttributsCtrl;
 		wxRadioBox* m_AutoPlaceCtrl;
 		wxStaticText* m_staticText11;

@@ -121,8 +121,8 @@ bool IsOK( wxWindow* parent, const wxString& text )
  * Leading and trailing spaces are removed
  * Buffer is the initial text displayed, anr the returned text
  * Return:
- * 1 if OK
- * 0 if ESCAPE
+ * 0 if OK
+ * 1 if CANCEL
  */
 int Get_Message( const wxString& title,           // The question
                  const wxString& frame_caption,   // The frame caption
