@@ -50,7 +50,7 @@ void WinEDA_SchematicFrame::Save_File( wxCommandEvent& event )
  *  Schematic root file and its subhierarchies, the configuration and the libs
  *  which are not already loaded)
  */
-int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNew )
+bool WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNew )
 {
     SCH_SCREEN*    screen;
     wxString       FullFileName, msg;
@@ -67,7 +67,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
     if( screen )
     {
         if( !IsOK( this, _( "Clear schematic hierarchy?" ) ) )
-            return FALSE;
+            return false;
         if( g_RootSheet->m_AssociatedScreen->m_FileName != m_DefaultSchematicFileName )
             SetLastProject( g_RootSheet->m_AssociatedScreen->m_FileName );
     }
@@ -80,7 +80,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
         if( dlg.ShowModal() == wxID_CANCEL )
-            return 0;
+            return false;
 
         FullFileName = dlg.GetPath();
     }
@@ -127,7 +127,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
         Zoom_Automatique( TRUE );
         SetSheetNumberAndCount();
         DrawPanel->Refresh();
-        return 1;
+        return true;
     }
 
     // Reloading configuration.
@@ -143,13 +143,6 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
     // Delete old caches.
     CMP_LIBRARY::RemoveCacheLibrary();
 
-    if( IsNew )
-    {
-        if( DrawPanel )
-            DrawPanel->Refresh( true );
-        return 1;
-    }
-
     /* Loading the project library cache
      * until apr 2009 the lib is named <root_name>.cache.lib
      * and after (due to code change): <root_name>-cache.lib
@@ -158,7 +151,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
     fn = g_RootSheet->m_AssociatedScreen->m_FileName;
 
     bool use_oldcachename = false;
-    wxString cachename =  fn.GetName() + wxT("-cache");
+    wxString cachename =  fn.GetName() + wxT( "-cache" );
 
     fn.SetName( cachename );
     fn.SetExt( CompLibFileExtension );
@@ -185,7 +178,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
             msg += wxT( " OK" );
             if ( use_oldcachename )     // set the new name
             {
-                fn.SetName(cachename);
+                fn.SetName( cachename );
                 fn.SetExt( CompLibFileExtension );
                 LibCache->SetFileName( fn );
             }
@@ -212,9 +205,9 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
     {
         Zoom_Automatique( FALSE );
         msg.Printf( _( "File <%s> not found." ),
-                    g_RootSheet->m_AssociatedScreen->m_FileName.GetData() );
+                    GetChars( g_RootSheet->m_AssociatedScreen->m_FileName ) );
         DisplayInfoMessage( this, msg, 0 );
-        return -1;
+        return false;
     }
 
     // load the project.
@@ -222,7 +215,7 @@ int WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNe
     bool diag = g_RootSheet->Load( this );
 
     /* Redraw base screen (ROOT) if necessary. */
-    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
+    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
     Zoom_Automatique( FALSE );
     SetSheetNumberAndCount();
     DrawPanel->Refresh( true );
@@ -250,7 +243,7 @@ void WinEDA_SchematicFrame::SaveProject()
 
     /* Archive components in current directory. */
     fn = g_RootSheet->GetFileName();
-    wxString cachename =  fn.GetName() + wxT("-cache");
+    wxString cachename =  fn.GetName() + wxT( "-cache" );
     fn.SetName( cachename );
     fn.SetExt( CompLibFileExtension );
     LibArchive( this, fn.GetFullPath() );

@@ -270,7 +270,7 @@ public:
     // read and save files
     void             Save_File( wxCommandEvent& event );
     void             SaveProject();
-    int              LoadOneEEProject( const wxString& FileName, bool IsNew );
+    bool             LoadOneEEProject( const wxString& FileName, bool IsNew );
     bool             LoadOneEEFile( SCH_SCREEN* screen,
                                     const wxString& FullFileName );
     bool             ReadInputStuffFile();

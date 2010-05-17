@@ -46,7 +46,7 @@ void WinEDA_MainFrame::CreateNewProject( const wxString PrjFullFileName )
 
     /* Init pcb board filename */
     m_BoardFileName = wxFileName( newProjectName.GetName(),
-                                  BoardFileExtension ).GetFullName();
+                                  PcbFileExtension ).GetFullName();
 
     /* Init project filename */
     m_ProjectFileName = newProjectName;

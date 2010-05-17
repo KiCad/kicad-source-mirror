@@ -47,7 +47,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
     switch( id )
     {
     case ID_LOAD_FILE:
-        LoadOnePcbFile( wxEmptyString, false );
+        LoadOnePcbFile( GetScreen()->m_FileName, false, true );
         ReCreateAuxiliaryToolbar();
         break;
 
@@ -58,7 +58,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
 
         if( id == ID_MENU_RECOVER_BOARD )
         {
-            fn = wxFileName( wxEmptyString, g_SaveFileName, PcbExtBuffer );
+            fn = wxFileName( wxEmptyString, g_SaveFileName, PcbFileExtension );
         }
         else
         {
@@ -80,7 +80,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
         }
 
         LoadOnePcbFile( fn.GetFullPath(), false );
-        fn.SetExt( PcbExtBuffer );
+        fn.SetExt( PcbFileExtension );
         GetScreen()->m_FileName = fn.GetFullPath();
         SetTitle( GetScreen()->m_FileName );
         ReCreateAuxiliaryToolbar();
@@ -95,7 +95,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
         Clear_Pcb( true );
         GetScreen()->m_FileName.Printf( wxT( "%s%cnoname%s" ),
                                         GetChars( wxGetCwd() ), DIR_SEP,
-                                        GetChars( PcbExtBuffer ) );
+                                        GetChars( PcbFileExtension ) );
         SetTitle( GetScreen()->m_FileName );
         ReCreateLayerBox( NULL );
         break;
@@ -114,12 +114,8 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
 }
 
 
-/**
- *  Read a board file
- *  @param FullFileName = file name. If empty, a file name will be asked
- *  @return 0 if fails or abort, 1 if OK
- */
-bool WinEDA_PcbFrame::LoadOnePcbFile( const wxString& FullFileName, bool Append )
+bool WinEDA_PcbFrame::LoadOnePcbFile( const wxString& aFileName, bool Append,
+                                      bool aForceFileDialog )
 {
     int      ii;
     FILE*    source;
@@ -144,27 +140,35 @@ the changes?" ) ) )
         GetBoard()->m_Status_Pcb = 0;
     }
 
-    wxString fileName;
+    wxFileName fileName = aFileName;
 
-    if( FullFileName == wxEmptyString )
+    if( !fileName.IsOk() || !fileName.FileExists() || aForceFileDialog )
     {
-        wxFileName fn = GetScreen()->m_FileName;
+        wxString name;
+        wxString path = wxGetCwd();
 
-        wxFileDialog dlg( this, _( "Open Board File" ), wxEmptyString, fn.GetFullName(),
-                          PcbFileWildcard, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+        if( aForceFileDialog && fileName.FileExists() )
+        {
+            path = fileName.GetPath();
+            name = fileName.GetFullName();
+        }
+
+        wxFileDialog dlg( this, _( "Open Board File" ), path, name, PcbFileWildcard,
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
 
         fileName = dlg.GetPath();
+
+        if( !fileName.HasExt() )
+            fileName.SetExt( PcbFileExtension );
     }
-    else
-        fileName = FullFileName;
 
     if( !Append )
         Clear_Pcb( false );     // pass false since we prompted above for a modified board
 
-    GetScreen()->m_FileName = fileName;
+    GetScreen()->m_FileName = fileName.GetFullPath();
 
     /* Start read PCB file
     */
@@ -229,7 +233,7 @@ this file again." ) );
         if ( ! new_filename.EndsWith( wxT( "-append" ) ) )
             new_filename += wxT( "-append" );
 
-        new_filename += wxT( "." ) + PcbExtBuffer;
+        new_filename += wxT( "." ) + PcbFileExtension;
 
         OnModify();
         GetScreen()->m_FileName = new_filename;
@@ -310,7 +314,7 @@ bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
     if( FileName == wxEmptyString )
     {
         wxFileDialog dlg( this, _( "Save Board File" ), wxEmptyString,
-                          GetScreen()->m_FileName, BoardFileWildcard,
+                          GetScreen()->m_FileName, PcbFileWildcard,
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( dlg.ShowModal() == wxID_CANCEL )

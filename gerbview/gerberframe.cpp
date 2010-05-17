@@ -310,18 +310,18 @@ void WinEDA_GerberFrame::SetToolbars()
                                       g_DisplayPolygonsModeSketch == 0 ? 0 : 1 );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_DCODES,
-                                      IsElementVisible( DCODES_VISIBLE) );
+                                      IsElementVisible( DCODES_VISIBLE ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
                                       m_show_layer_manager_tools );
         if( m_show_layer_manager_tools )
-            GetMenuBar()->SetLabel(ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
-                                _("Hide &Layers Manager" ) );
+            GetMenuBar()->SetLabel( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+                                    _("Hide &Layers Manager" ) );
         else
-            GetMenuBar()->SetLabel(ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
-                                _("Show &Layers Manager" ) );
+            GetMenuBar()->SetLabel( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+                                    _("Show &Layers Manager" ) );
 
-}
+    }
 
     DisplayUnitsMsg();
 
@@ -369,8 +369,8 @@ void WinEDA_GerberFrame::LoadSettings()
     }
 
     long tmp;
-    config->Read( GerbviewShowDCodes, &tmp, 1);
-    SetElementVisibility( DCODES_VISIBLE, tmp);
+    config->Read( GerbviewShowDCodes, &tmp, 1 );
+    SetElementVisibility( DCODES_VISIBLE, tmp );
 }
 
 /**************************************/
@@ -399,7 +399,7 @@ void WinEDA_GerberFrame::SaveSettings()
         }
     }
     config->Write( GerbviewShowPageSizeOption, pageSize_opt );
-    config->Write( GerbviewShowDCodes, IsElementVisible( DCODES_VISIBLE) );
+    config->Write( GerbviewShowDCodes, IsElementVisible( DCODES_VISIBLE ) );
 }
 
 
@@ -420,7 +420,7 @@ void WinEDA_GerberFrame::ReFillLayerWidget()
     else
         m_LayersManager->SetSize( bestz );
 
-    syncLayerWidget( );
+    syncLayerWidget();
 }
 
 /** Function IsGridVisible() , virtual
@@ -428,7 +428,7 @@ void WinEDA_GerberFrame::ReFillLayerWidget()
  */
 bool WinEDA_GerberFrame::IsGridVisible()
 {
-    return IsElementVisible(GERBER_GRID_VISIBLE);
+    return IsElementVisible( GERBER_GRID_VISIBLE );
 }
 
 /** Function SetGridVisibility() , virtual
@@ -494,8 +494,8 @@ void WinEDA_GerberFrame::syncLayerBox()
 void WinEDA_GerberFrame::SetLanguage( wxCommandEvent& event )
 {
     WinEDA_DrawFrame::SetLanguage( event );
-    m_LayersManager->SetLayersManagerTabsText( );
-    wxAuiPaneInfo& pane_info = m_auimgr.GetPane(m_LayersManager);
+    m_LayersManager->SetLayersManagerTabsText();
+    wxAuiPaneInfo& pane_info = m_auimgr.GetPane( m_LayersManager );
     pane_info.Caption( _( "Visibles" ) );
     m_auimgr.Update();
 

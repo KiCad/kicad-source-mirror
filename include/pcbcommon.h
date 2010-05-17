@@ -23,14 +23,12 @@ extern int g_TabAllCopperLayerMask[NB_COPPER_LAYERS];
 extern wxArrayString   g_LibName_List;    // library list to load
 extern DISPLAY_OPTIONS DisplayOpt;
 
-extern wxString PcbExtBuffer;
 extern wxString g_SaveFileName;
 extern wxString NetExtBuffer;
 extern wxString NetCmpExtBuffer;
 extern const wxString ModuleFileExtension;
 
 extern const wxString ModuleFileWildcard;
-extern const wxString PcbFileWildcard;
 
 extern wxString g_ViaType_Name[4];
 

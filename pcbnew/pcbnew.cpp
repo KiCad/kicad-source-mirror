@@ -120,11 +120,11 @@ bool WinEDA_App::OnInit()
     {
         fn = argv[1];
 
-        if( fn.GetExt() != BoardFileExtension )
+        if( fn.GetExt() != PcbFileExtension )
         {
             wxLogDebug( wxT( "PcbNew file <%s> has the wrong extension.  \
 Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
-            fn.SetExt( BoardFileExtension );
+            fn.SetExt( PcbFileExtension );
         }
 
         if( fn.IsOk() && fn.DirExists() )

@@ -281,8 +281,7 @@ void WinEDA_CvpcbFrame::OnCloseWindow( wxCloseEvent& Event )
                 m_modified = false;
             else if( diag == 0 )
             {
-                if( !IsOK( this,
-                           _( "Problem when saving files, exit anyway ?" ) ) )
+                if( !IsOK( this, _( "Problem when saving files, exit anyway ?" ) ) )
                 {
                     Event.Veto();
                     return;
@@ -346,7 +345,8 @@ void WinEDA_CvpcbFrame::ToFirstNA( wxCommandEvent& event )
     if( selection < 0 )
         selection = 0;
 
-    BOOST_FOREACH( COMPONENT & component, m_components ) {
+    BOOST_FOREACH( COMPONENT & component, m_components )
+    {
         if( component.m_Module.IsEmpty() && ii > selection )
         {
             m_ListCmp->SetSelection( ii );
@@ -444,10 +444,8 @@ void WinEDA_CvpcbFrame::LoadNetList( wxCommandEvent& event )
     }
     else
     {
-        newFileName = wxFileName( wxGetCwd(), _( "unnamed" ), wxT( "net" ) );
-
-        wxFileDialog dlg( this, _( "Open Net List" ), newFileName.GetPath(),
-                          newFileName.GetFullName(), NetlistFileWildcard,
+        wxFileDialog dlg( this, _( "Open Net List" ), wxGetCwd(),
+                          wxEmptyString, NetlistFileWildcard,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
 
         if( dlg.ShowModal() == wxID_CANCEL )

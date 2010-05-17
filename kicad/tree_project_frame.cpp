@@ -425,7 +425,7 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
         break;
 
     case TREE_PCB:
-        ext = BoardFileExtension;
+        ext = PcbFileExtension;
         break;
 
     case TREE_GERBER:
@@ -468,7 +468,7 @@ wxString TREE_PROJECT_FRAME::GetFileWildcard( TreeFileType type )
         break;
 
     case TREE_PCB:
-        ext = BoardFileWildcard;
+        ext = PcbFileWildcard;
         break;
 
     case TREE_GERBER:
@@ -704,7 +704,7 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
     if( !fn.FileExists() )
         AddFile( fn.GetFullName(), m_root );
 
-    fn.SetExt( BoardFileExtension );
+    fn.SetExt( PcbFileExtension );
 
     if( !fn.FileExists( ) )
         AddFile( fn.GetFullName(), m_root );

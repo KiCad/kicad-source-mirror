@@ -39,9 +39,12 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
     switch( id )
     {
     case wxID_FILE:
+    {
+        wxString fileName = GetScreen()->m_FileName;
         Erase_Current_Layer( false );
-        LoadOneGerberFile( wxEmptyString, 0 );
+        LoadOneGerberFile( fileName, true );
         break;
+    }
 
     case ID_MENU_INC_LAYER_AND_APPEND_FILE:
     case ID_INC_LAYER_AND_APPEND_FILE:
@@ -51,18 +54,23 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
         {
             setActiveLayer(origLayer+1);
 
-            if( !LoadOneGerberFile( wxEmptyString, 0 ) )
+            if( !LoadOneGerberFile( wxEmptyString ) )
                 setActiveLayer(origLayer);
 
             SetToolbars();
         }
         else
-            wxMessageBox(_("Cannot increment layer number: max count reached") );
+        {
+            wxString msg;
+            msg.Printf( _( "GerbView only supports a maximum of %d layers.  You must first \
+delete an existing layer to load any new layers." ), NB_LAYERS );
+            wxMessageBox( msg );
+        }
     }
     break;
 
     case ID_APPEND_FILE:
-        LoadOneGerberFile( wxEmptyString, 0 );
+        LoadOneGerberFile( wxEmptyString );
         break;
 
     case ID_NEW_BOARD:
@@ -94,25 +102,15 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
 }
 
 
-/*
- * Load a PCB file.
- *
- * Returns:
- *   0 if file not read (cancellation of order ...)
- *   1 if OK
- */
-bool WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
-                                           int             mode )
+bool WinEDA_GerberFrame::LoadOneGerberFile( const wxString& aFullFileName, bool aOpenFileDialog )
 {
     wxString   filetypes;
-    wxFileName filename = FullFileName;
+    wxFileName filename = aFullFileName;
 
     ActiveScreen = GetScreen();
 
-    if( !filename.IsOk() )
+    if( !filename.IsOk() || aOpenFileDialog )
     {
-        wxString current_path = filename.GetPath();
-
         /* Standard gerber filetypes
          * (See http://en.wikipedia.org/wiki/Gerber_File)
          * the .pho extension is the default used in Pcbnew
@@ -139,9 +137,11 @@ bool WinEDA_GerberFrame::LoadOneGerberFile( const wxString& FullFileName,
         /* All filetypes */
         filetypes += AllFilesWildcard;
 
-        /* Get current path if emtpy */
-        if( current_path.IsEmpty() )
-            current_path = wxGetCwd();
+        /* Use the current working directory if the file name path does not exist. */
+        wxString current_path = wxGetCwd();
+
+        if( filename.DirExists() )
+            current_path = filename.GetPath();
 
         wxFileDialog dlg( this,
                           _( "Open Gerber File" ),

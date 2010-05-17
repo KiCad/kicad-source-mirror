@@ -72,7 +72,6 @@ wxArrayString g_LibName_List;    // library list to load
 DISPLAY_OPTIONS DisplayOpt;      /* Display options for board items */
 
 /* PCB file name extension definitions. */
-wxString PcbExtBuffer( wxT( "brd" ) );
 wxString g_SaveFileName( wxT( "$savepcb" ) );
 wxString NetExtBuffer( wxT( "net" ) );
 wxString NetCmpExtBuffer( wxT( "cmp" ) );
@@ -80,11 +79,7 @@ wxString g_Shapes3DExtBuffer( wxT( "wrl" ) );
 const wxString ModuleFileExtension( wxT( "mod" ) );
 
 /* PCB file name wild card definitions. */
-const wxString ModuleFileWildcard(
-    _( "Kicad footprint library files (*.mod)|*.mod" )
-);
-const wxString PcbFileWildcard(
-    _( "Printed circuit board files (*.brd)|*.brd" ) );
+const wxString ModuleFileWildcard( _( "Kicad footprint library files (*.mod)|*.mod" ) );
 
 int g_CurrentVersionPCB = 1;
 

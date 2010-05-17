@@ -55,17 +55,17 @@ Ki_PageDescr* g_SheetSizeList[NB_ITEMS + 1] =
  * that they cannot be changed. */
 const wxString ProjectFileExtension( wxT( "pro" ) );
 const wxString SchematicFileExtension( wxT( "sch" ) );
-const wxString BoardFileExtension( wxT( "brd" ) );
 const wxString NetlistFileExtension( wxT( "net" ) );
 const wxString GerberFileExtension( wxT( "pho" ) );
+const wxString PcbFileExtension( wxT( "brd" ) );
 const wxString PdfFileExtension( wxT( "pdf" ) );
 
 /* Proper wxFileDialog wild card definitions. */
 const wxString ProjectFileWildcard( _( "Kicad project files (*.pro)|*.pro" ) );
-const wxString BoardFileWildcard( _( "Kicad PCB files (*.brd)|*.brd" ) );
 const wxString SchematicFileWildcard( _( "Kicad schematic files (*.sch)|*.sch" ) );
 const wxString NetlistFileWildcard( _( "Kicad netlist files (*.net)|*.net" ) );
 const wxString GerberFileWildcard( _( "Gerber files (*.pho)|*.pho" ) );
+const wxString PcbFileWildcard( _( "Kicad printed circuit board files (*.brd)|*.brd" ) );
 const wxString PdfFileWildcard( _( "Portable document format files (*.pdf)|*.pdf" ) );
 const wxString AllFilesWildcard( _( "All files (*)|*" ) );
 

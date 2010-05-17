@@ -61,14 +61,15 @@ IMPLEMENT_APP( WinEDA_App )
 /* MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
-void WinEDA_App::MacOpenFile(const wxString &fileName) {
-    wxFileName    filename = fileName;
+void WinEDA_App::MacOpenFile(const wxString &fileName)
+{
+    wxFileName           filename = fileName;
     WinEDA_GerberFrame * frame = ((WinEDA_GerberFrame*)GetTopWindow());
 
-    if(!filename.FileExists())
+    if( !filename.FileExists() )
         return;
 
-    frame->LoadOneGerberFile( fileName, FALSE );
+    frame->LoadOneGerberFile( fileName );
 }
 
 
@@ -106,8 +107,8 @@ bool WinEDA_App::OnInit()
                                           */
 
     frame = new  WinEDA_GerberFrame( NULL, wxT( "GerbView" ),
-                                    wxPoint( 0, 0 ),
-                                    wxSize( 600, 400 ) );
+                                     wxPoint( 0, 0 ),
+                                     wxSize( 600, 400 ) );
 
     /* Gerbview mainframe title */
     frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() );
@@ -142,7 +143,7 @@ bool WinEDA_App::OnInit()
             if( fn.FileExists() )
             {
                 ( (PCB_SCREEN*) frame->GetScreen() )->m_Active_Layer = ii - 1;
-                frame->LoadOneGerberFile( fn.GetFullPath(), FALSE );
+                frame->LoadOneGerberFile( fn.GetFullPath() );
             }
         }
     }

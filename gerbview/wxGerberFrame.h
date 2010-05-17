@@ -286,7 +286,18 @@ public:
 
     void         Files_io( wxCommandEvent& event );
     void         OnFileHistory( wxCommandEvent& event );
-    bool         LoadOneGerberFile( const wxString& FileName, int mode );
+
+    /**
+     * Load a photoplot (Gerber) file.
+     *
+     * @param aFileName - File name with full path to open or empty string to open a new
+     *                    file.
+     * @param aOpenFileDialog - Set to true to display the open file dialog even if
+     *                          aFileName is valid.
+     *
+     * @return - True if file was opened successfully.
+     */
+    bool         LoadOneGerberFile( const wxString& aFileName, bool aOpenFileDialog = false );
     int          ReadGerberFile( FILE* File, bool Append );
     bool         Read_GERBER_File( const wxString& GERBER_FullFileName,
                                    const wxString& D_Code_FullFileName );

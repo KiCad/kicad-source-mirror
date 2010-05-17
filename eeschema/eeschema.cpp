@@ -176,7 +176,7 @@ bool WinEDA_App::OnInit()
         wxSetWorkingDirectory( filename.GetPath() );
 
         if( frame->DrawPanel
-            && frame->LoadOneEEProject( filename.GetFullPath(), false ) <= 0 )
+            && frame->LoadOneEEProject( filename.GetFullPath(), false ) )
             frame->DrawPanel->Refresh( true );
     }
     else

@@ -176,7 +176,7 @@ void WinEDA_MainFrame::OnRunPcbNew( wxCommandEvent& event )
 {
     wxFileName fn( m_ProjectFileName );
 
-    fn.SetExt( BoardFileExtension );
+    fn.SetExt( PcbFileExtension );
     ExecuteFile( this, PCBNEW_EXE, QuoteFullPath( fn ) );
 }
 

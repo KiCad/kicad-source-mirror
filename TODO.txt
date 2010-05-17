@@ -24,7 +24,8 @@ Common
 * List auto up and down scrolling.
 * Integer/long/double input boxes should handle comma and dot separated values,
   not only comma.
-
+* Push file open semantics down to one of the base frame classes ( likely candidate is
+  WinEDA_BasicFrame ) so that file open behavior is consistent across all applications.
 
 ANYONE:
 C2) Write a tool to generate DSNLEXER keyword tables (and enums) as *.cpp and

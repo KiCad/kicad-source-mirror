@@ -702,7 +702,7 @@ void WinEDA_SchematicFrame::OnOpenPcbnew( wxCommandEvent& event )
 
     if( fn.IsOk() )
     {
-        fn.SetExt( BoardFileExtension );
+        fn.SetExt( PcbFileExtension );
 
         wxString filename = QuoteFullPath( fn );
 

@@ -244,7 +244,7 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     if( (CurrentTime - g_SaveTime) > g_TimeOut )
     {
         wxString tmpFileName = GetScreen()->m_FileName;
-        wxFileName fn = wxFileName( wxEmptyString, g_SaveFileName, PcbExtBuffer );
+        wxFileName fn = wxFileName( wxEmptyString, g_SaveFileName, PcbFileExtension );
         bool     flgmodify   = GetScreen()->IsModify();
 
         SavePcbFile( fn.GetFullPath() );
