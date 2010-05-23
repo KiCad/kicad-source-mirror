@@ -1,11 +1,25 @@
-EESchema Schematic File Version 1
-LIBS:power,device,conn,brooktre,linear,regul,74xx,cmos4000,adc-dac,memory,xilinx,special,analog_switches,philips,.\video.cache
+EESchema Schematic File Version 2  date 16/05/2010 20:17:13
+LIBS:power
+LIBS:device
+LIBS:conn
+LIBS:brooktre
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:special
+LIBS:analog_switches
+LIBS:philips
+LIBS:video-cache
 EELAYER 20  0
 EELAYER END
 $Descr A3 16535 11700
 Sheet 6 8
 Title "Kicad EDA"
-Date "31 dec 2006"
+Date "16 may 2010"
 Rev "2.0B"
 Comp "Kicad EDA"
 Comment1 "Rams Video"
@@ -141,133 +155,133 @@ Wire Wire Line
 	2800 1350 3400 1350
 Wire Wire Line
 	2800 1250 3400 1250
-Text Label 2800 9100 0    60   ~
+Text Label 2800 9100 0    60   ~ 0
 TVRAM31
-Text Label 2800 9000 0    60   ~
+Text Label 2800 9000 0    60   ~ 0
 TVRAM30
-Text Label 2800 8900 0    60   ~
+Text Label 2800 8900 0    60   ~ 0
 TVRAM29
-Text Label 2800 8800 0    60   ~
+Text Label 2800 8800 0    60   ~ 0
 TVRAM28
-Text Label 2800 8700 0    60   ~
+Text Label 2800 8700 0    60   ~ 0
 TVRAM27
-Text Label 2800 8600 0    60   ~
+Text Label 2800 8600 0    60   ~ 0
 TVRAM26
-Text Label 2800 8500 0    60   ~
+Text Label 2800 8500 0    60   ~ 0
 TVRAM25
-Text Label 2800 8400 0    60   ~
+Text Label 2800 8400 0    60   ~ 0
 TVRAM24
-Text Label 2800 8200 0    60   ~
+Text Label 2800 8200 0    60   ~ 0
 TVRAM23
-Text Label 2800 8100 0    60   ~
+Text Label 2800 8100 0    60   ~ 0
 TVRAM22
-Text Label 2800 8000 0    60   ~
+Text Label 2800 8000 0    60   ~ 0
 TVRAM21
-Text Label 2800 7900 0    60   ~
+Text Label 2800 7900 0    60   ~ 0
 TVRAM20
-Text Label 2800 7800 0    60   ~
+Text Label 2800 7800 0    60   ~ 0
 TVRAM19
-Text Label 2800 7700 0    60   ~
+Text Label 2800 7700 0    60   ~ 0
 TVRAM18
-Text Label 2800 7600 0    60   ~
+Text Label 2800 7600 0    60   ~ 0
 TVRAM17
-Text Label 2800 7500 0    60   ~
+Text Label 2800 7500 0    60   ~ 0
 TVRAM16
-Text Label 2800 7300 0    60   ~
+Text Label 2800 7300 0    60   ~ 0
 TVRAM15
-Text Label 2800 7200 0    60   ~
+Text Label 2800 7200 0    60   ~ 0
 TVRAM14
-Text Label 2800 7100 0    60   ~
+Text Label 2800 7100 0    60   ~ 0
 TVRAM13
-Text Label 2800 7000 0    60   ~
+Text Label 2800 7000 0    60   ~ 0
 TVRAM12
-Text Label 2800 6900 0    60   ~
+Text Label 2800 6900 0    60   ~ 0
 TVRAM11
-Text Label 2800 6800 0    60   ~
+Text Label 2800 6800 0    60   ~ 0
 TVRAM10
-Text Label 2800 6700 0    60   ~
+Text Label 2800 6700 0    60   ~ 0
 TVRAM9
-Text Label 2800 6600 0    60   ~
+Text Label 2800 6600 0    60   ~ 0
 TVRAM8
-Text Label 2800 6400 0    60   ~
+Text Label 2800 6400 0    60   ~ 0
 TVRAM7
-Text Label 2800 6300 0    60   ~
+Text Label 2800 6300 0    60   ~ 0
 TVRAM6
-Text Label 2800 6200 0    60   ~
+Text Label 2800 6200 0    60   ~ 0
 TVRAM5
-Text Label 2800 6100 0    60   ~
+Text Label 2800 6100 0    60   ~ 0
 TVRAM4
-Text Label 2800 6000 0    60   ~
+Text Label 2800 6000 0    60   ~ 0
 TVRAM3
-Text Label 2800 5900 0    60   ~
+Text Label 2800 5900 0    60   ~ 0
 TVRAM2
-Text Label 2800 5800 0    60   ~
+Text Label 2800 5800 0    60   ~ 0
 TVRAM1
-Text Label 2800 5700 0    60   ~
+Text Label 2800 5700 0    60   ~ 0
 TVRAM0
-Text Label 2800 4650 0    60   ~
+Text Label 2800 4650 0    60   ~ 0
 TVRAM31
-Text Label 2800 4550 0    60   ~
+Text Label 2800 4550 0    60   ~ 0
 TVRAM30
-Text Label 2800 4450 0    60   ~
+Text Label 2800 4450 0    60   ~ 0
 TVRAM29
-Text Label 2800 4350 0    60   ~
+Text Label 2800 4350 0    60   ~ 0
 TVRAM28
-Text Label 2800 4250 0    60   ~
+Text Label 2800 4250 0    60   ~ 0
 TVRAM27
-Text Label 2800 4150 0    60   ~
+Text Label 2800 4150 0    60   ~ 0
 TVRAM26
-Text Label 2800 4050 0    60   ~
+Text Label 2800 4050 0    60   ~ 0
 TVRAM25
-Text Label 2800 3950 0    60   ~
+Text Label 2800 3950 0    60   ~ 0
 TVRAM24
-Text Label 2800 3750 0    60   ~
+Text Label 2800 3750 0    60   ~ 0
 TVRAM23
-Text Label 2800 3650 0    60   ~
+Text Label 2800 3650 0    60   ~ 0
 TVRAM22
-Text Label 2800 3550 0    60   ~
+Text Label 2800 3550 0    60   ~ 0
 TVRAM21
-Text Label 2800 3450 0    60   ~
+Text Label 2800 3450 0    60   ~ 0
 TVRAM20
-Text Label 2800 3350 0    60   ~
+Text Label 2800 3350 0    60   ~ 0
 TVRAM19
-Text Label 2800 3250 0    60   ~
+Text Label 2800 3250 0    60   ~ 0
 TVRAM18
-Text Label 2800 3150 0    60   ~
+Text Label 2800 3150 0    60   ~ 0
 TVRAM17
-Text Label 2800 3050 0    60   ~
+Text Label 2800 3050 0    60   ~ 0
 TVRAM16
-Text Label 2800 2850 0    60   ~
+Text Label 2800 2850 0    60   ~ 0
 TVRAM15
-Text Label 2800 2750 0    60   ~
+Text Label 2800 2750 0    60   ~ 0
 TVRAM14
-Text Label 2800 2650 0    60   ~
+Text Label 2800 2650 0    60   ~ 0
 TVRAM13
-Text Label 2800 2550 0    60   ~
+Text Label 2800 2550 0    60   ~ 0
 TVRAM12
-Text Label 2800 2450 0    60   ~
+Text Label 2800 2450 0    60   ~ 0
 TVRAM11
-Text Label 2800 2350 0    60   ~
+Text Label 2800 2350 0    60   ~ 0
 TVRAM10
-Text Label 2800 2250 0    60   ~
+Text Label 2800 2250 0    60   ~ 0
 TVRAM9
-Text Label 2800 2150 0    60   ~
+Text Label 2800 2150 0    60   ~ 0
 TVRAM8
-Text Label 2800 1950 0    60   ~
+Text Label 2800 1950 0    60   ~ 0
 TVRAM7
-Text Label 2800 1850 0    60   ~
+Text Label 2800 1850 0    60   ~ 0
 TVRAM6
-Text Label 2800 1750 0    60   ~
+Text Label 2800 1750 0    60   ~ 0
 TVRAM5
-Text Label 2800 1650 0    60   ~
+Text Label 2800 1650 0    60   ~ 0
 TVRAM4
-Text Label 2800 1550 0    60   ~
+Text Label 2800 1550 0    60   ~ 0
 TVRAM3
-Text Label 2800 1450 0    60   ~
+Text Label 2800 1450 0    60   ~ 0
 TVRAM2
-Text Label 2800 1350 0    60   ~
+Text Label 2800 1350 0    60   ~ 0
 TVRAM1
-Text Label 2800 1250 0    60   ~
+Text Label 2800 1250 0    60   ~ 0
 TVRAM0
 Wire Wire Line
 	5650 9100 6250 9100
@@ -333,69 +347,69 @@ Wire Wire Line
 	5650 5800 6250 5800
 Wire Wire Line
 	5650 5700 6250 5700
-Text Label 5700 9100 0    60   ~
+Text Label 5700 9100 0    60   ~ 0
 TVRAM31
-Text Label 5700 9000 0    60   ~
+Text Label 5700 9000 0    60   ~ 0
 TVRAM30
-Text Label 5700 8900 0    60   ~
+Text Label 5700 8900 0    60   ~ 0
 TVRAM29
-Text Label 5700 8800 0    60   ~
+Text Label 5700 8800 0    60   ~ 0
 TVRAM28
-Text Label 5700 8700 0    60   ~
+Text Label 5700 8700 0    60   ~ 0
 TVRAM27
-Text Label 5700 8600 0    60   ~
+Text Label 5700 8600 0    60   ~ 0
 TVRAM26
-Text Label 5700 8500 0    60   ~
+Text Label 5700 8500 0    60   ~ 0
 TVRAM25
-Text Label 5700 8400 0    60   ~
+Text Label 5700 8400 0    60   ~ 0
 TVRAM24
-Text Label 5700 8200 0    60   ~
+Text Label 5700 8200 0    60   ~ 0
 TVRAM23
-Text Label 5700 8100 0    60   ~
+Text Label 5700 8100 0    60   ~ 0
 TVRAM22
-Text Label 5700 8000 0    60   ~
+Text Label 5700 8000 0    60   ~ 0
 TVRAM21
-Text Label 5700 7900 0    60   ~
+Text Label 5700 7900 0    60   ~ 0
 TVRAM20
-Text Label 5700 7800 0    60   ~
+Text Label 5700 7800 0    60   ~ 0
 TVRAM19
-Text Label 5700 7700 0    60   ~
+Text Label 5700 7700 0    60   ~ 0
 TVRAM18
-Text Label 5700 7600 0    60   ~
+Text Label 5700 7600 0    60   ~ 0
 TVRAM17
-Text Label 5700 7500 0    60   ~
+Text Label 5700 7500 0    60   ~ 0
 TVRAM16
-Text Label 5700 7300 0    60   ~
+Text Label 5700 7300 0    60   ~ 0
 TVRAM15
-Text Label 5700 7200 0    60   ~
+Text Label 5700 7200 0    60   ~ 0
 TVRAM14
-Text Label 5700 7100 0    60   ~
+Text Label 5700 7100 0    60   ~ 0
 TVRAM13
-Text Label 5700 7000 0    60   ~
+Text Label 5700 7000 0    60   ~ 0
 TVRAM12
-Text Label 5700 6900 0    60   ~
+Text Label 5700 6900 0    60   ~ 0
 TVRAM11
-Text Label 5700 6800 0    60   ~
+Text Label 5700 6800 0    60   ~ 0
 TVRAM10
-Text Label 5700 6700 0    60   ~
+Text Label 5700 6700 0    60   ~ 0
 TVRAM9
-Text Label 5700 6600 0    60   ~
+Text Label 5700 6600 0    60   ~ 0
 TVRAM8
-Text Label 5700 6400 0    60   ~
+Text Label 5700 6400 0    60   ~ 0
 TVRAM7
-Text Label 5700 6300 0    60   ~
+Text Label 5700 6300 0    60   ~ 0
 TVRAM6
-Text Label 5700 6200 0    60   ~
+Text Label 5700 6200 0    60   ~ 0
 TVRAM5
-Text Label 5700 6100 0    60   ~
+Text Label 5700 6100 0    60   ~ 0
 TVRAM4
-Text Label 5700 6000 0    60   ~
+Text Label 5700 6000 0    60   ~ 0
 TVRAM3
-Text Label 5700 5900 0    60   ~
+Text Label 5700 5900 0    60   ~ 0
 TVRAM2
-Text Label 5700 5800 0    60   ~
+Text Label 5700 5800 0    60   ~ 0
 TVRAM1
-Text Label 5700 5700 0    60   ~
+Text Label 5700 5700 0    60   ~ 0
 TVRAM0
 Wire Wire Line
 	5650 4650 6250 4650
@@ -461,69 +475,69 @@ Wire Wire Line
 	5650 1350 6250 1350
 Wire Wire Line
 	5650 1250 6250 1250
-Text Label 5700 4650 0    60   ~
+Text Label 5700 4650 0    60   ~ 0
 TVRAM31
-Text Label 5700 4550 0    60   ~
+Text Label 5700 4550 0    60   ~ 0
 TVRAM30
-Text Label 5700 4450 0    60   ~
+Text Label 5700 4450 0    60   ~ 0
 TVRAM29
-Text Label 5700 4350 0    60   ~
+Text Label 5700 4350 0    60   ~ 0
 TVRAM28
-Text Label 5700 4250 0    60   ~
+Text Label 5700 4250 0    60   ~ 0
 TVRAM27
-Text Label 5700 4150 0    60   ~
+Text Label 5700 4150 0    60   ~ 0
 TVRAM26
-Text Label 5700 4050 0    60   ~
+Text Label 5700 4050 0    60   ~ 0
 TVRAM25
-Text Label 5700 3950 0    60   ~
+Text Label 5700 3950 0    60   ~ 0
 TVRAM24
-Text Label 5700 3750 0    60   ~
+Text Label 5700 3750 0    60   ~ 0
 TVRAM23
-Text Label 5700 3650 0    60   ~
+Text Label 5700 3650 0    60   ~ 0
 TVRAM22
-Text Label 5700 3550 0    60   ~
+Text Label 5700 3550 0    60   ~ 0
 TVRAM21
-Text Label 5700 3450 0    60   ~
+Text Label 5700 3450 0    60   ~ 0
 TVRAM20
-Text Label 5700 3350 0    60   ~
+Text Label 5700 3350 0    60   ~ 0
 TVRAM19
-Text Label 5700 3250 0    60   ~
+Text Label 5700 3250 0    60   ~ 0
 TVRAM18
-Text Label 5700 3150 0    60   ~
+Text Label 5700 3150 0    60   ~ 0
 TVRAM17
-Text Label 5700 3050 0    60   ~
+Text Label 5700 3050 0    60   ~ 0
 TVRAM16
-Text Label 5700 2850 0    60   ~
+Text Label 5700 2850 0    60   ~ 0
 TVRAM15
-Text Label 5700 2750 0    60   ~
+Text Label 5700 2750 0    60   ~ 0
 TVRAM14
-Text Label 5700 2650 0    60   ~
+Text Label 5700 2650 0    60   ~ 0
 TVRAM13
-Text Label 5700 2550 0    60   ~
+Text Label 5700 2550 0    60   ~ 0
 TVRAM12
-Text Label 5700 2450 0    60   ~
+Text Label 5700 2450 0    60   ~ 0
 TVRAM11
-Text Label 5700 2350 0    60   ~
+Text Label 5700 2350 0    60   ~ 0
 TVRAM10
-Text Label 5700 2250 0    60   ~
+Text Label 5700 2250 0    60   ~ 0
 TVRAM9
-Text Label 5700 2150 0    60   ~
+Text Label 5700 2150 0    60   ~ 0
 TVRAM8
-Text Label 5700 1950 0    60   ~
+Text Label 5700 1950 0    60   ~ 0
 TVRAM7
-Text Label 5700 1850 0    60   ~
+Text Label 5700 1850 0    60   ~ 0
 TVRAM6
-Text Label 5700 1750 0    60   ~
+Text Label 5700 1750 0    60   ~ 0
 TVRAM5
-Text Label 5700 1650 0    60   ~
+Text Label 5700 1650 0    60   ~ 0
 TVRAM4
-Text Label 5700 1550 0    60   ~
+Text Label 5700 1550 0    60   ~ 0
 TVRAM3
-Text Label 5700 1450 0    60   ~
+Text Label 5700 1450 0    60   ~ 0
 TVRAM2
-Text Label 5700 1350 0    60   ~
+Text Label 5700 1350 0    60   ~ 0
 TVRAM1
-Text Label 5700 1250 0    60   ~
+Text Label 5700 1250 0    60   ~ 0
 TVRAM0
 Wire Wire Line
 	8500 9100 9100 9100
@@ -589,69 +603,69 @@ Wire Wire Line
 	8500 5800 9100 5800
 Wire Wire Line
 	8500 5700 9100 5700
-Text Label 8550 9100 0    60   ~
+Text Label 8550 9100 0    60   ~ 0
 TVRAM31
-Text Label 8550 9000 0    60   ~
+Text Label 8550 9000 0    60   ~ 0
 TVRAM30
-Text Label 8550 8900 0    60   ~
+Text Label 8550 8900 0    60   ~ 0
 TVRAM29
-Text Label 8550 8800 0    60   ~
+Text Label 8550 8800 0    60   ~ 0
 TVRAM28
-Text Label 8550 8700 0    60   ~
+Text Label 8550 8700 0    60   ~ 0
 TVRAM27
-Text Label 8550 8600 0    60   ~
+Text Label 8550 8600 0    60   ~ 0
 TVRAM26
-Text Label 8550 8500 0    60   ~
+Text Label 8550 8500 0    60   ~ 0
 TVRAM25
-Text Label 8550 8400 0    60   ~
+Text Label 8550 8400 0    60   ~ 0
 TVRAM24
-Text Label 8550 8200 0    60   ~
+Text Label 8550 8200 0    60   ~ 0
 TVRAM23
-Text Label 8550 8100 0    60   ~
+Text Label 8550 8100 0    60   ~ 0
 TVRAM22
-Text Label 8550 8000 0    60   ~
+Text Label 8550 8000 0    60   ~ 0
 TVRAM21
-Text Label 8550 7900 0    60   ~
+Text Label 8550 7900 0    60   ~ 0
 TVRAM20
-Text Label 8550 7800 0    60   ~
+Text Label 8550 7800 0    60   ~ 0
 TVRAM19
-Text Label 8550 7700 0    60   ~
+Text Label 8550 7700 0    60   ~ 0
 TVRAM18
-Text Label 8550 7600 0    60   ~
+Text Label 8550 7600 0    60   ~ 0
 TVRAM17
-Text Label 8550 7500 0    60   ~
+Text Label 8550 7500 0    60   ~ 0
 TVRAM16
-Text Label 8550 7300 0    60   ~
+Text Label 8550 7300 0    60   ~ 0
 TVRAM15
-Text Label 8550 7200 0    60   ~
+Text Label 8550 7200 0    60   ~ 0
 TVRAM14
-Text Label 8550 7100 0    60   ~
+Text Label 8550 7100 0    60   ~ 0
 TVRAM13
-Text Label 8550 7000 0    60   ~
+Text Label 8550 7000 0    60   ~ 0
 TVRAM12
-Text Label 8550 6900 0    60   ~
+Text Label 8550 6900 0    60   ~ 0
 TVRAM11
-Text Label 8550 6800 0    60   ~
+Text Label 8550 6800 0    60   ~ 0
 TVRAM10
-Text Label 8550 6700 0    60   ~
+Text Label 8550 6700 0    60   ~ 0
 TVRAM9
-Text Label 8550 6600 0    60   ~
+Text Label 8550 6600 0    60   ~ 0
 TVRAM8
-Text Label 8550 6400 0    60   ~
+Text Label 8550 6400 0    60   ~ 0
 TVRAM7
-Text Label 8550 6300 0    60   ~
+Text Label 8550 6300 0    60   ~ 0
 TVRAM6
-Text Label 8550 6200 0    60   ~
+Text Label 8550 6200 0    60   ~ 0
 TVRAM5
-Text Label 8550 6100 0    60   ~
+Text Label 8550 6100 0    60   ~ 0
 TVRAM4
-Text Label 8550 6000 0    60   ~
+Text Label 8550 6000 0    60   ~ 0
 TVRAM3
-Text Label 8550 5900 0    60   ~
+Text Label 8550 5900 0    60   ~ 0
 TVRAM2
-Text Label 8550 5800 0    60   ~
+Text Label 8550 5800 0    60   ~ 0
 TVRAM1
-Text Label 8550 5700 0    60   ~
+Text Label 8550 5700 0    60   ~ 0
 TVRAM0
 Wire Wire Line
 	11300 9100 11900 9100
@@ -717,69 +731,69 @@ Wire Wire Line
 	11300 5800 11900 5800
 Wire Wire Line
 	11300 5700 11900 5700
-Text Label 11350 9100 0    60   ~
+Text Label 11350 9100 0    60   ~ 0
 TVRAM31
-Text Label 11350 9000 0    60   ~
+Text Label 11350 9000 0    60   ~ 0
 TVRAM30
-Text Label 11350 8900 0    60   ~
+Text Label 11350 8900 0    60   ~ 0
 TVRAM29
-Text Label 11350 8800 0    60   ~
+Text Label 11350 8800 0    60   ~ 0
 TVRAM28
-Text Label 11350 8700 0    60   ~
+Text Label 11350 8700 0    60   ~ 0
 TVRAM27
-Text Label 11350 8600 0    60   ~
+Text Label 11350 8600 0    60   ~ 0
 TVRAM26
-Text Label 11350 8500 0    60   ~
+Text Label 11350 8500 0    60   ~ 0
 TVRAM25
-Text Label 11350 8400 0    60   ~
+Text Label 11350 8400 0    60   ~ 0
 TVRAM24
-Text Label 11350 8200 0    60   ~
+Text Label 11350 8200 0    60   ~ 0
 TVRAM23
-Text Label 11350 8100 0    60   ~
+Text Label 11350 8100 0    60   ~ 0
 TVRAM22
-Text Label 11350 8000 0    60   ~
+Text Label 11350 8000 0    60   ~ 0
 TVRAM21
-Text Label 11350 7900 0    60   ~
+Text Label 11350 7900 0    60   ~ 0
 TVRAM20
-Text Label 11350 7800 0    60   ~
+Text Label 11350 7800 0    60   ~ 0
 TVRAM19
-Text Label 11350 7700 0    60   ~
+Text Label 11350 7700 0    60   ~ 0
 TVRAM18
-Text Label 11350 7600 0    60   ~
+Text Label 11350 7600 0    60   ~ 0
 TVRAM17
-Text Label 11350 7500 0    60   ~
+Text Label 11350 7500 0    60   ~ 0
 TVRAM16
-Text Label 11350 7300 0    60   ~
+Text Label 11350 7300 0    60   ~ 0
 TVRAM15
-Text Label 11350 7200 0    60   ~
+Text Label 11350 7200 0    60   ~ 0
 TVRAM14
-Text Label 11350 7100 0    60   ~
+Text Label 11350 7100 0    60   ~ 0
 TVRAM13
-Text Label 11350 7000 0    60   ~
+Text Label 11350 7000 0    60   ~ 0
 TVRAM12
-Text Label 11350 6900 0    60   ~
+Text Label 11350 6900 0    60   ~ 0
 TVRAM11
-Text Label 11350 6800 0    60   ~
+Text Label 11350 6800 0    60   ~ 0
 TVRAM10
-Text Label 11350 6700 0    60   ~
+Text Label 11350 6700 0    60   ~ 0
 TVRAM9
-Text Label 11350 6600 0    60   ~
+Text Label 11350 6600 0    60   ~ 0
 TVRAM8
-Text Label 11350 6400 0    60   ~
+Text Label 11350 6400 0    60   ~ 0
 TVRAM7
-Text Label 11350 6300 0    60   ~
+Text Label 11350 6300 0    60   ~ 0
 TVRAM6
-Text Label 11350 6200 0    60   ~
+Text Label 11350 6200 0    60   ~ 0
 TVRAM5
-Text Label 11350 6100 0    60   ~
+Text Label 11350 6100 0    60   ~ 0
 TVRAM4
-Text Label 11350 6000 0    60   ~
+Text Label 11350 6000 0    60   ~ 0
 TVRAM3
-Text Label 11350 5900 0    60   ~
+Text Label 11350 5900 0    60   ~ 0
 TVRAM2
-Text Label 11350 5800 0    60   ~
+Text Label 11350 5800 0    60   ~ 0
 TVRAM1
-Text Label 11350 5700 0    60   ~
+Text Label 11350 5700 0    60   ~ 0
 TVRAM0
 Wire Wire Line
 	8500 4650 9100 4650
@@ -845,69 +859,69 @@ Wire Wire Line
 	8500 1350 9100 1350
 Wire Wire Line
 	8500 1250 9100 1250
-Text Label 8550 4650 0    60   ~
+Text Label 8550 4650 0    60   ~ 0
 TVRAM31
-Text Label 8550 4550 0    60   ~
+Text Label 8550 4550 0    60   ~ 0
 TVRAM30
-Text Label 8550 4450 0    60   ~
+Text Label 8550 4450 0    60   ~ 0
 TVRAM29
-Text Label 8550 4350 0    60   ~
+Text Label 8550 4350 0    60   ~ 0
 TVRAM28
-Text Label 8550 4250 0    60   ~
+Text Label 8550 4250 0    60   ~ 0
 TVRAM27
-Text Label 8550 4150 0    60   ~
+Text Label 8550 4150 0    60   ~ 0
 TVRAM26
-Text Label 8550 4050 0    60   ~
+Text Label 8550 4050 0    60   ~ 0
 TVRAM25
-Text Label 8550 3950 0    60   ~
+Text Label 8550 3950 0    60   ~ 0
 TVRAM24
-Text Label 8550 3750 0    60   ~
+Text Label 8550 3750 0    60   ~ 0
 TVRAM23
-Text Label 8550 3650 0    60   ~
+Text Label 8550 3650 0    60   ~ 0
 TVRAM22
-Text Label 8550 3550 0    60   ~
+Text Label 8550 3550 0    60   ~ 0
 TVRAM21
-Text Label 8550 3450 0    60   ~
+Text Label 8550 3450 0    60   ~ 0
 TVRAM20
-Text Label 8550 3350 0    60   ~
+Text Label 8550 3350 0    60   ~ 0
 TVRAM19
-Text Label 8550 3250 0    60   ~
+Text Label 8550 3250 0    60   ~ 0
 TVRAM18
-Text Label 8550 3150 0    60   ~
+Text Label 8550 3150 0    60   ~ 0
 TVRAM17
-Text Label 8550 3050 0    60   ~
+Text Label 8550 3050 0    60   ~ 0
 TVRAM16
-Text Label 8550 2850 0    60   ~
+Text Label 8550 2850 0    60   ~ 0
 TVRAM15
-Text Label 8550 2750 0    60   ~
+Text Label 8550 2750 0    60   ~ 0
 TVRAM14
-Text Label 8550 2650 0    60   ~
+Text Label 8550 2650 0    60   ~ 0
 TVRAM13
-Text Label 8550 2550 0    60   ~
+Text Label 8550 2550 0    60   ~ 0
 TVRAM12
-Text Label 8550 2450 0    60   ~
+Text Label 8550 2450 0    60   ~ 0
 TVRAM11
-Text Label 8550 2350 0    60   ~
+Text Label 8550 2350 0    60   ~ 0
 TVRAM10
-Text Label 8550 2250 0    60   ~
+Text Label 8550 2250 0    60   ~ 0
 TVRAM9
-Text Label 8550 2150 0    60   ~
+Text Label 8550 2150 0    60   ~ 0
 TVRAM8
-Text Label 8550 1950 0    60   ~
+Text Label 8550 1950 0    60   ~ 0
 TVRAM7
-Text Label 8550 1850 0    60   ~
+Text Label 8550 1850 0    60   ~ 0
 TVRAM6
-Text Label 8550 1750 0    60   ~
+Text Label 8550 1750 0    60   ~ 0
 TVRAM5
-Text Label 8550 1650 0    60   ~
+Text Label 8550 1650 0    60   ~ 0
 TVRAM4
-Text Label 8550 1550 0    60   ~
+Text Label 8550 1550 0    60   ~ 0
 TVRAM3
-Text Label 8550 1450 0    60   ~
+Text Label 8550 1450 0    60   ~ 0
 TVRAM2
-Text Label 8550 1350 0    60   ~
+Text Label 8550 1350 0    60   ~ 0
 TVRAM1
-Text Label 8550 1250 0    60   ~
+Text Label 8550 1250 0    60   ~ 0
 TVRAM0
 Wire Wire Line
 	11300 4650 11900 4650
@@ -973,99 +987,99 @@ Wire Wire Line
 	11300 1350 11900 1350
 Wire Wire Line
 	11300 1250 11900 1250
-Text Label 11350 4650 0    60   ~
+Text Label 11350 4650 0    60   ~ 0
 TVRAM31
-Text Label 11350 4550 0    60   ~
+Text Label 11350 4550 0    60   ~ 0
 TVRAM30
-Text Label 11350 4450 0    60   ~
+Text Label 11350 4450 0    60   ~ 0
 TVRAM29
-Text Label 11350 4350 0    60   ~
+Text Label 11350 4350 0    60   ~ 0
 TVRAM28
-Text Label 11350 4250 0    60   ~
+Text Label 11350 4250 0    60   ~ 0
 TVRAM27
-Text Label 11350 4150 0    60   ~
+Text Label 11350 4150 0    60   ~ 0
 TVRAM26
-Text Label 11350 4050 0    60   ~
+Text Label 11350 4050 0    60   ~ 0
 TVRAM25
-Text Label 11350 3950 0    60   ~
+Text Label 11350 3950 0    60   ~ 0
 TVRAM24
-Text Label 11350 3750 0    60   ~
+Text Label 11350 3750 0    60   ~ 0
 TVRAM23
-Text Label 11350 3650 0    60   ~
+Text Label 11350 3650 0    60   ~ 0
 TVRAM22
-Text Label 11350 3550 0    60   ~
+Text Label 11350 3550 0    60   ~ 0
 TVRAM21
-Text Label 11350 3450 0    60   ~
+Text Label 11350 3450 0    60   ~ 0
 TVRAM20
-Text Label 11350 3350 0    60   ~
+Text Label 11350 3350 0    60   ~ 0
 TVRAM19
-Text Label 11350 3250 0    60   ~
+Text Label 11350 3250 0    60   ~ 0
 TVRAM18
-Text Label 11350 3150 0    60   ~
+Text Label 11350 3150 0    60   ~ 0
 TVRAM17
-Text Label 11350 3050 0    60   ~
+Text Label 11350 3050 0    60   ~ 0
 TVRAM16
-Text Label 11350 2850 0    60   ~
+Text Label 11350 2850 0    60   ~ 0
 TVRAM15
-Text Label 11350 2750 0    60   ~
+Text Label 11350 2750 0    60   ~ 0
 TVRAM14
-Text Label 11350 2650 0    60   ~
+Text Label 11350 2650 0    60   ~ 0
 TVRAM13
-Text Label 11350 2550 0    60   ~
+Text Label 11350 2550 0    60   ~ 0
 TVRAM12
-Text Label 11350 2450 0    60   ~
+Text Label 11350 2450 0    60   ~ 0
 TVRAM11
-Text Label 11350 2350 0    60   ~
+Text Label 11350 2350 0    60   ~ 0
 TVRAM10
-Text Label 11350 2250 0    60   ~
+Text Label 11350 2250 0    60   ~ 0
 TVRAM9
-Text Label 11350 2150 0    60   ~
+Text Label 11350 2150 0    60   ~ 0
 TVRAM8
-Text Label 11350 1950 0    60   ~
+Text Label 11350 1950 0    60   ~ 0
 TVRAM7
-Text Label 11350 1850 0    60   ~
+Text Label 11350 1850 0    60   ~ 0
 TVRAM6
-Text Label 11350 1750 0    60   ~
+Text Label 11350 1750 0    60   ~ 0
 TVRAM5
-Text Label 11350 1650 0    60   ~
+Text Label 11350 1650 0    60   ~ 0
 TVRAM4
-Text Label 11350 1550 0    60   ~
+Text Label 11350 1550 0    60   ~ 0
 TVRAM3
-Text Label 11350 1450 0    60   ~
+Text Label 11350 1450 0    60   ~ 0
 TVRAM2
-Text Label 11350 1350 0    60   ~
+Text Label 11350 1350 0    60   ~ 0
 TVRAM1
-Text Label 11350 1250 0    60   ~
+Text Label 11350 1250 0    60   ~ 0
 TVRAM0
-Text GLabel 2200 10450 0    60   Input
+Text HLabel 2200 10450 0    60   Input ~ 0
 WRAM-
-Text GLabel 2200 10250 0    60   Input
+Text HLabel 2200 10250 0    60   Input ~ 0
 CAS3-
-Text GLabel 1450 10650 0    60   Input
+Text HLabel 1450 10650 0    60   Input ~ 0
 RAS7-
-Text GLabel 1450 10550 0    60   Input
+Text HLabel 1450 10550 0    60   Input ~ 0
 RAS6-
-Text GLabel 1450 10450 0    60   Input
+Text HLabel 1450 10450 0    60   Input ~ 0
 RAS5-
-Text GLabel 1450 10350 0    60   Input
+Text HLabel 1450 10350 0    60   Input ~ 0
 RAS4-
-Text GLabel 1450 10250 0    60   Input
+Text HLabel 1450 10250 0    60   Input ~ 0
 RAS3-
-Text GLabel 1450 10150 0    60   Input
+Text HLabel 1450 10150 0    60   Input ~ 0
 RAS2-
-Text GLabel 1450 10050 0    60   Input
+Text HLabel 1450 10050 0    60   Input ~ 0
 RAS1-
-Text GLabel 1450 9950 0    60   Input
+Text HLabel 1450 9950 0    60   Input ~ 0
 RAS0-
-Text GLabel 2200 10150 0    60   Input
+Text HLabel 2200 10150 0    60   Input ~ 0
 CAS2-
-Text GLabel 2200 10050 0    60   Input
+Text HLabel 2200 10050 0    60   Input ~ 0
 CAS1-
-Text GLabel 2200 9950 0    60   Input
+Text HLabel 2200 9950 0    60   Input ~ 0
 CAS0-
-Text GLabel 1300 650  0    60   Input
+Text HLabel 1300 650  0    60   Input ~ 0
 MXA[0..10]
-Text GLabel 13300 1050 0    60   3State
+Text HLabel 13300 1050 0    60   3State ~ 0
 TVRAM[0..31]
 Wire Wire Line
 	9700 6700 9300 6700
@@ -1107,46 +1121,46 @@ NoConn ~ 9700 8700
 NoConn ~ 9700 8600
 NoConn ~ 9700 8500
 NoConn ~ 9700 8400
-Text Label 9350 8200 0    60   ~
+Text Label 9350 8200 0    60   ~ 0
 WRAM-
-Text Label 9350 8000 0    60   ~
+Text Label 9350 8000 0    60   ~ 0
 CAS3-
-Text Label 9350 7900 0    60   ~
+Text Label 9350 7900 0    60   ~ 0
 CAS2-
-Text Label 9350 7800 0    60   ~
+Text Label 9350 7800 0    60   ~ 0
 CAS1-
-Text Label 9350 7700 0    60   ~
+Text Label 9350 7700 0    60   ~ 0
 CAS0-
-Text Label 9300 7200 0    60   ~
+Text Label 9300 7200 0    60   ~ 0
 RAS7-
-Text Label 9350 6700 0    60   ~
+Text Label 9350 6700 0    60   ~ 0
 MXA10
-Text Label 9350 6600 0    60   ~
+Text Label 9350 6600 0    60   ~ 0
 MXA9
-Text Label 9350 6500 0    60   ~
+Text Label 9350 6500 0    60   ~ 0
 MXA8
-Text Label 9350 6400 0    60   ~
+Text Label 9350 6400 0    60   ~ 0
 MXA7
-Text Label 9350 6300 0    60   ~
+Text Label 9350 6300 0    60   ~ 0
 MXA6
-Text Label 9350 6200 0    60   ~
+Text Label 9350 6200 0    60   ~ 0
 MXA5
-Text Label 9350 6100 0    60   ~
+Text Label 9350 6100 0    60   ~ 0
 MXA4
-Text Label 9350 6000 0    60   ~
+Text Label 9350 6000 0    60   ~ 0
 MXA3
-Text Label 9350 5900 0    60   ~
+Text Label 9350 5900 0    60   ~ 0
 MXA2
-Text Label 9350 5800 0    60   ~
+Text Label 9350 5800 0    60   ~ 0
 MXA1
-Text Label 9350 5700 0    60   ~
+Text Label 9350 5700 0    60   ~ 0
 MXA0
 $Comp
 L SIM4X32 U13
 U 1 1 32FA1E5B
 P 10500 7500
-F 0 "U13" H 10500 8050 70  0000 C C
-F 1 "SIM4X32" H 10950 5500 70  0000 C C
+F 0 "U13" H 10500 8050 70  0000 C CNN
+F 1 "SIM4X32" H 10950 5500 70  0000 C CNN
 	1    10500 7500
 	1    0    0    -1  
 $EndComp
@@ -1190,46 +1204,46 @@ NoConn ~ 6900 8700
 NoConn ~ 6900 8600
 NoConn ~ 6900 8500
 NoConn ~ 6900 8400
-Text Label 6550 8200 0    60   ~
+Text Label 6550 8200 0    60   ~ 0
 WRAM-
-Text Label 6550 8000 0    60   ~
+Text Label 6550 8000 0    60   ~ 0
 CAS3-
-Text Label 6550 7900 0    60   ~
+Text Label 6550 7900 0    60   ~ 0
 CAS2-
-Text Label 6550 7800 0    60   ~
+Text Label 6550 7800 0    60   ~ 0
 CAS1-
-Text Label 6550 7700 0    60   ~
+Text Label 6550 7700 0    60   ~ 0
 CAS0-
-Text Label 6500 7200 0    60   ~
+Text Label 6500 7200 0    60   ~ 0
 RAS6-
-Text Label 6550 6700 0    60   ~
+Text Label 6550 6700 0    60   ~ 0
 MXA10
-Text Label 6550 6600 0    60   ~
+Text Label 6550 6600 0    60   ~ 0
 MXA9
-Text Label 6550 6500 0    60   ~
+Text Label 6550 6500 0    60   ~ 0
 MXA8
-Text Label 6550 6400 0    60   ~
+Text Label 6550 6400 0    60   ~ 0
 MXA7
-Text Label 6550 6300 0    60   ~
+Text Label 6550 6300 0    60   ~ 0
 MXA6
-Text Label 6550 6200 0    60   ~
+Text Label 6550 6200 0    60   ~ 0
 MXA5
-Text Label 6550 6100 0    60   ~
+Text Label 6550 6100 0    60   ~ 0
 MXA4
-Text Label 6550 6000 0    60   ~
+Text Label 6550 6000 0    60   ~ 0
 MXA3
-Text Label 6550 5900 0    60   ~
+Text Label 6550 5900 0    60   ~ 0
 MXA2
-Text Label 6550 5800 0    60   ~
+Text Label 6550 5800 0    60   ~ 0
 MXA1
-Text Label 6550 5700 0    60   ~
+Text Label 6550 5700 0    60   ~ 0
 MXA0
 $Comp
 L SIM4X32 U14
-U 1 1 32FA1E5B
+U 1 1 4BF036CF
 P 7700 7500
-F 0 "U14" H 7700 8050 70  0000 C C
-F 1 "SIM4X32" H 8150 5500 70  0000 C C
+F 0 "U14" H 7700 8050 70  0000 C CNN
+F 1 "SIM4X32" H 8150 5500 70  0000 C CNN
 	1    7700 7500
 	1    0    0    -1  
 $EndComp
@@ -1273,46 +1287,46 @@ NoConn ~ 4050 8700
 NoConn ~ 4050 8600
 NoConn ~ 4050 8500
 NoConn ~ 4050 8400
-Text Label 3700 8200 0    60   ~
+Text Label 3700 8200 0    60   ~ 0
 WRAM-
-Text Label 3700 8000 0    60   ~
+Text Label 3700 8000 0    60   ~ 0
 CAS3-
-Text Label 3700 7900 0    60   ~
+Text Label 3700 7900 0    60   ~ 0
 CAS2-
-Text Label 3700 7800 0    60   ~
+Text Label 3700 7800 0    60   ~ 0
 CAS1-
-Text Label 3700 7700 0    60   ~
+Text Label 3700 7700 0    60   ~ 0
 CAS0-
-Text Label 3650 7200 0    60   ~
+Text Label 3650 7200 0    60   ~ 0
 RAS5-
-Text Label 3700 6700 0    60   ~
+Text Label 3700 6700 0    60   ~ 0
 MXA10
-Text Label 3700 6600 0    60   ~
+Text Label 3700 6600 0    60   ~ 0
 MXA9
-Text Label 3700 6500 0    60   ~
+Text Label 3700 6500 0    60   ~ 0
 MXA8
-Text Label 3700 6400 0    60   ~
+Text Label 3700 6400 0    60   ~ 0
 MXA7
-Text Label 3700 6300 0    60   ~
+Text Label 3700 6300 0    60   ~ 0
 MXA6
-Text Label 3700 6200 0    60   ~
+Text Label 3700 6200 0    60   ~ 0
 MXA5
-Text Label 3700 6100 0    60   ~
+Text Label 3700 6100 0    60   ~ 0
 MXA4
-Text Label 3700 6000 0    60   ~
+Text Label 3700 6000 0    60   ~ 0
 MXA3
-Text Label 3700 5900 0    60   ~
+Text Label 3700 5900 0    60   ~ 0
 MXA2
-Text Label 3700 5800 0    60   ~
+Text Label 3700 5800 0    60   ~ 0
 MXA1
-Text Label 3700 5700 0    60   ~
+Text Label 3700 5700 0    60   ~ 0
 MXA0
 $Comp
 L SIM4X32 U12
-U 1 1 32FA1E5B
+U 1 1 4BF036CE
 P 4850 7500
-F 0 "U12" H 4850 8050 70  0000 C C
-F 1 "SIM4X32" H 5300 5500 70  0000 C C
+F 0 "U12" H 4850 8050 70  0000 C CNN
+F 1 "SIM4X32" H 5300 5500 70  0000 C CNN
 	1    4850 7500
 	1    0    0    -1  
 $EndComp
@@ -1356,46 +1370,46 @@ NoConn ~ 1200 8700
 NoConn ~ 1200 8600
 NoConn ~ 1200 8500
 NoConn ~ 1200 8400
-Text Label 850  8200 0    60   ~
+Text Label 850  8200 0    60   ~ 0
 WRAM-
-Text Label 850  8000 0    60   ~
+Text Label 850  8000 0    60   ~ 0
 CAS3-
-Text Label 850  7900 0    60   ~
+Text Label 850  7900 0    60   ~ 0
 CAS2-
-Text Label 850  7800 0    60   ~
+Text Label 850  7800 0    60   ~ 0
 CAS1-
-Text Label 850  7700 0    60   ~
+Text Label 850  7700 0    60   ~ 0
 CAS0-
-Text Label 800  7200 0    60   ~
+Text Label 800  7200 0    60   ~ 0
 RAS4-
-Text Label 850  6700 0    60   ~
+Text Label 850  6700 0    60   ~ 0
 MXA10
-Text Label 850  6600 0    60   ~
+Text Label 850  6600 0    60   ~ 0
 MXA9
-Text Label 850  6500 0    60   ~
+Text Label 850  6500 0    60   ~ 0
 MXA8
-Text Label 850  6400 0    60   ~
+Text Label 850  6400 0    60   ~ 0
 MXA7
-Text Label 850  6300 0    60   ~
+Text Label 850  6300 0    60   ~ 0
 MXA6
-Text Label 850  6200 0    60   ~
+Text Label 850  6200 0    60   ~ 0
 MXA5
-Text Label 850  6100 0    60   ~
+Text Label 850  6100 0    60   ~ 0
 MXA4
-Text Label 850  6000 0    60   ~
+Text Label 850  6000 0    60   ~ 0
 MXA3
-Text Label 850  5900 0    60   ~
+Text Label 850  5900 0    60   ~ 0
 MXA2
-Text Label 850  5800 0    60   ~
+Text Label 850  5800 0    60   ~ 0
 MXA1
-Text Label 850  5700 0    60   ~
+Text Label 850  5700 0    60   ~ 0
 MXA0
 $Comp
 L SIM4X32 U16
-U 1 1 32FA1E5B
+U 1 1 4BF036D0
 P 2000 7500
-F 0 "U16" H 2000 8050 70  0000 C C
-F 1 "SIM4X32" H 2450 5500 70  0000 C C
+F 0 "U16" H 2000 8050 70  0000 C CNN
+F 1 "SIM4X32" H 2450 5500 70  0000 C CNN
 	1    2000 7500
 	1    0    0    -1  
 $EndComp
@@ -1439,46 +1453,46 @@ NoConn ~ 9700 4250
 NoConn ~ 9700 4150
 NoConn ~ 9700 4050
 NoConn ~ 9700 3950
-Text Label 9350 3750 0    60   ~
+Text Label 9350 3750 0    60   ~ 0
 WRAM-
-Text Label 9350 3550 0    60   ~
+Text Label 9350 3550 0    60   ~ 0
 CAS3-
-Text Label 9350 3450 0    60   ~
+Text Label 9350 3450 0    60   ~ 0
 CAS2-
-Text Label 9350 3350 0    60   ~
+Text Label 9350 3350 0    60   ~ 0
 CAS1-
-Text Label 9350 3250 0    60   ~
+Text Label 9350 3250 0    60   ~ 0
 CAS0-
-Text Label 9300 2750 0    60   ~
+Text Label 9300 2750 0    60   ~ 0
 RAS3-
-Text Label 9350 2250 0    60   ~
+Text Label 9350 2250 0    60   ~ 0
 MXA10
-Text Label 9350 2150 0    60   ~
+Text Label 9350 2150 0    60   ~ 0
 MXA9
-Text Label 9350 2050 0    60   ~
+Text Label 9350 2050 0    60   ~ 0
 MXA8
-Text Label 9350 1950 0    60   ~
+Text Label 9350 1950 0    60   ~ 0
 MXA7
-Text Label 9350 1850 0    60   ~
+Text Label 9350 1850 0    60   ~ 0
 MXA6
-Text Label 9350 1750 0    60   ~
+Text Label 9350 1750 0    60   ~ 0
 MXA5
-Text Label 9350 1650 0    60   ~
+Text Label 9350 1650 0    60   ~ 0
 MXA4
-Text Label 9350 1550 0    60   ~
+Text Label 9350 1550 0    60   ~ 0
 MXA3
-Text Label 9350 1450 0    60   ~
+Text Label 9350 1450 0    60   ~ 0
 MXA2
-Text Label 9350 1350 0    60   ~
+Text Label 9350 1350 0    60   ~ 0
 MXA1
-Text Label 9350 1250 0    60   ~
+Text Label 9350 1250 0    60   ~ 0
 MXA0
 $Comp
 L SIM4X32 U15
-U 1 1 32FA1E5B
+U 1 1 4BF036D1
 P 10500 3050
-F 0 "U15" H 10500 3600 70  0000 C C
-F 1 "SIM4X32" H 10950 1050 70  0000 C C
+F 0 "U15" H 10500 3600 70  0000 C CNN
+F 1 "SIM4X32" H 10950 1050 70  0000 C CNN
 	1    10500 3050
 	1    0    0    -1  
 $EndComp
@@ -1522,46 +1536,46 @@ NoConn ~ 6900 4250
 NoConn ~ 6900 4150
 NoConn ~ 6900 4050
 NoConn ~ 6900 3950
-Text Label 6550 3750 0    60   ~
+Text Label 6550 3750 0    60   ~ 0
 WRAM-
-Text Label 6550 3550 0    60   ~
+Text Label 6550 3550 0    60   ~ 0
 CAS3-
-Text Label 6550 3450 0    60   ~
+Text Label 6550 3450 0    60   ~ 0
 CAS2-
-Text Label 6550 3350 0    60   ~
+Text Label 6550 3350 0    60   ~ 0
 CAS1-
-Text Label 6550 3250 0    60   ~
+Text Label 6550 3250 0    60   ~ 0
 CAS0-
-Text Label 6500 2750 0    60   ~
+Text Label 6500 2750 0    60   ~ 0
 RAS2-
-Text Label 6550 2250 0    60   ~
+Text Label 6550 2250 0    60   ~ 0
 MXA10
-Text Label 6550 2150 0    60   ~
+Text Label 6550 2150 0    60   ~ 0
 MXA9
-Text Label 6550 2050 0    60   ~
+Text Label 6550 2050 0    60   ~ 0
 MXA8
-Text Label 6550 1950 0    60   ~
+Text Label 6550 1950 0    60   ~ 0
 MXA7
-Text Label 6550 1850 0    60   ~
+Text Label 6550 1850 0    60   ~ 0
 MXA6
-Text Label 6550 1750 0    60   ~
+Text Label 6550 1750 0    60   ~ 0
 MXA5
-Text Label 6550 1650 0    60   ~
+Text Label 6550 1650 0    60   ~ 0
 MXA4
-Text Label 6550 1550 0    60   ~
+Text Label 6550 1550 0    60   ~ 0
 MXA3
-Text Label 6550 1450 0    60   ~
+Text Label 6550 1450 0    60   ~ 0
 MXA2
-Text Label 6550 1350 0    60   ~
+Text Label 6550 1350 0    60   ~ 0
 MXA1
-Text Label 6550 1250 0    60   ~
+Text Label 6550 1250 0    60   ~ 0
 MXA0
 $Comp
 L SIM4X32 U17
-U 1 1 32FA1E5B
+U 1 1 4BF036D2
 P 7700 3050
-F 0 "U17" H 7700 3600 70  0000 C C
-F 1 "SIM4X32" H 8150 1050 70  0000 C C
+F 0 "U17" H 7700 3600 70  0000 C CNN
+F 1 "SIM4X32" H 8150 1050 70  0000 C CNN
 	1    7700 3050
 	1    0    0    -1  
 $EndComp
@@ -1605,46 +1619,46 @@ NoConn ~ 4050 4250
 NoConn ~ 4050 4150
 NoConn ~ 4050 4050
 NoConn ~ 4050 3950
-Text Label 3700 3750 0    60   ~
+Text Label 3700 3750 0    60   ~ 0
 WRAM-
-Text Label 3700 3550 0    60   ~
+Text Label 3700 3550 0    60   ~ 0
 CAS3-
-Text Label 3700 3450 0    60   ~
+Text Label 3700 3450 0    60   ~ 0
 CAS2-
-Text Label 3700 3350 0    60   ~
+Text Label 3700 3350 0    60   ~ 0
 CAS1-
-Text Label 3700 3250 0    60   ~
+Text Label 3700 3250 0    60   ~ 0
 CAS0-
-Text Label 3650 2750 0    60   ~
+Text Label 3650 2750 0    60   ~ 0
 RAS1-
-Text Label 3700 2250 0    60   ~
+Text Label 3700 2250 0    60   ~ 0
 MXA10
-Text Label 3700 2150 0    60   ~
+Text Label 3700 2150 0    60   ~ 0
 MXA9
-Text Label 3700 2050 0    60   ~
+Text Label 3700 2050 0    60   ~ 0
 MXA8
-Text Label 3700 1950 0    60   ~
+Text Label 3700 1950 0    60   ~ 0
 MXA7
-Text Label 3700 1850 0    60   ~
+Text Label 3700 1850 0    60   ~ 0
 MXA6
-Text Label 3700 1750 0    60   ~
+Text Label 3700 1750 0    60   ~ 0
 MXA5
-Text Label 3700 1650 0    60   ~
+Text Label 3700 1650 0    60   ~ 0
 MXA4
-Text Label 3700 1550 0    60   ~
+Text Label 3700 1550 0    60   ~ 0
 MXA3
-Text Label 3700 1450 0    60   ~
+Text Label 3700 1450 0    60   ~ 0
 MXA2
-Text Label 3700 1350 0    60   ~
+Text Label 3700 1350 0    60   ~ 0
 MXA1
-Text Label 3700 1250 0    60   ~
+Text Label 3700 1250 0    60   ~ 0
 MXA0
 $Comp
 L SIM4X32 U18
-U 1 1 32FA1E5B
+U 1 1 4BF036D3
 P 4850 3050
-F 0 "U18" H 4850 3600 70  0000 C C
-F 1 "SIM4X32" H 5300 1050 70  0000 C C
+F 0 "U18" H 4850 3600 70  0000 C CNN
+F 1 "SIM4X32" H 5300 1050 70  0000 C CNN
 	1    4850 3050
 	1    0    0    -1  
 $EndComp
@@ -1688,46 +1702,46 @@ NoConn ~ 1200 4250
 NoConn ~ 1200 4150
 NoConn ~ 1200 4050
 NoConn ~ 1200 3950
-Text Label 850  3750 0    60   ~
+Text Label 850  3750 0    60   ~ 0
 WRAM-
-Text Label 850  3550 0    60   ~
+Text Label 850  3550 0    60   ~ 0
 CAS3-
-Text Label 850  3450 0    60   ~
+Text Label 850  3450 0    60   ~ 0
 CAS2-
-Text Label 850  3350 0    60   ~
+Text Label 850  3350 0    60   ~ 0
 CAS1-
-Text Label 850  3250 0    60   ~
+Text Label 850  3250 0    60   ~ 0
 CAS0-
-Text Label 800  2750 0    60   ~
+Text Label 800  2750 0    60   ~ 0
 RAS0-
-Text Label 850  2250 0    60   ~
+Text Label 850  2250 0    60   ~ 0
 MXA10
-Text Label 850  2150 0    60   ~
+Text Label 850  2150 0    60   ~ 0
 MXA9
-Text Label 850  2050 0    60   ~
+Text Label 850  2050 0    60   ~ 0
 MXA8
-Text Label 850  1950 0    60   ~
+Text Label 850  1950 0    60   ~ 0
 MXA7
-Text Label 850  1850 0    60   ~
+Text Label 850  1850 0    60   ~ 0
 MXA6
-Text Label 850  1750 0    60   ~
+Text Label 850  1750 0    60   ~ 0
 MXA5
-Text Label 850  1650 0    60   ~
+Text Label 850  1650 0    60   ~ 0
 MXA4
-Text Label 850  1550 0    60   ~
+Text Label 850  1550 0    60   ~ 0
 MXA3
-Text Label 850  1450 0    60   ~
+Text Label 850  1450 0    60   ~ 0
 MXA2
-Text Label 850  1350 0    60   ~
+Text Label 850  1350 0    60   ~ 0
 MXA1
-Text Label 850  1250 0    60   ~
+Text Label 850  1250 0    60   ~ 0
 MXA0
 $Comp
 L SIM4X32 U19
-U 1 1 32FA1E5B
+U 1 1 4BF036D4
 P 2000 3050
-F 0 "U19" H 2000 3600 70  0000 C C
-F 1 "SIM4X32" H 2450 1050 70  0000 C C
+F 0 "U19" H 2000 3600 70  0000 C CNN
+F 1 "SIM4X32" H 2450 1050 70  0000 C CNN
 	1    2000 3050
 	1    0    0    -1  
 $EndComp
