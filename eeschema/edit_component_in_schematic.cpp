@@ -359,7 +359,6 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC
 {
     wxString       message;
     LIB_COMPONENT* Entry;
-    bool           wasEmpty = false;
 
     if( Cmp == NULL )
         return;
@@ -371,19 +370,20 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC
 
     SCH_FIELD* TextField = Cmp->GetField( FOOTPRINT );
 
-    message = TextField->m_Text;
-    if( message.IsEmpty() )
-        wasEmpty = true;
-
     if( Get_Message( _( "Footprint" ), _( "Component footprint" ), message, this ) )
-        message.Empty();    // allow the user to remove the value.
+        return;    // edition cancelled by user.
+
+    bool wasEmpty = false;
+    if( TextField->m_Text.IsEmpty() )
+        wasEmpty = true;
 
     // save old cmp in undo list if not already in edit, or moving ...
     if( Cmp->m_Flags == 0 )
         SaveCopyInUndoList( Cmp, UR_CHANGED );
     Cmp->GetField( FOOTPRINT )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
 
-    // move the field if it was new.
+    // Give a suitable position to the field if it was new,
+    // and therefore has no position already given.
     if( wasEmpty && !message.IsEmpty() )
     {
         Cmp->GetField( FOOTPRINT )->m_Pos = Cmp->GetField( REFERENCE )->m_Pos;
@@ -400,13 +400,12 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC
             ( -1 * Cmp->GetField( REFERENCE )->m_Size.y );
 
         Cmp->GetField( FOOTPRINT )->m_Orient = Cmp->GetField( REFERENCE )->m_Orient;
-
-        TextField->m_Text = message;
-
-        Cmp->GetField( FOOTPRINT )->Draw( DrawPanel, DC, wxPoint( 0, 0 ),
-                                          Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );
-        OnModify();
     }
+
+    TextField->m_Text = message;
+    Cmp->GetField( FOOTPRINT )->Draw( DrawPanel, DC, wxPoint( 0, 0 ),
+                                      Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );
+    OnModify();
 
     Cmp->DisplayInfo( this );
 }

@@ -1,4 +1,4 @@
-EESchema-LIBRARY Version 2.3  Date: 09/02/2010 21:37:25
+EESchema-LIBRARY Version 2.3  Date: 16/05/2010 20:17:13
 #
 # +12V
 #
@@ -909,6 +909,7 @@ $FPLIST
  SM0603
  SM0805
  R?-*
+ SM1206
 $ENDFPLIST
 DRAW
 S -40 150 40 -150 0 1 12 N
