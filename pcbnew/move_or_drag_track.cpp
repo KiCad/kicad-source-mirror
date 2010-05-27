@@ -1056,26 +1056,24 @@ BOARD_ITEM* LocateLockPoint( BOARD* Pcb, wxPoint pos, int LayerMask )
 
 
 /* Create an intermediate point on a segment
- * ASegm segment is broken into 2 segments connecting point pX, pY
+ * aSegm segment is broken into 2 segments connecting point pX, pY
+ * After insertion:
+ *   The new segment starts from  to new point, and ends to initial aSegm ending point
+ *   the old segment aSegm ends to new point
  * Returns:
- *   NULL if no new point (ie if aRefPoint already corresponded
- * At one end where:
- * Pointer to the segment created
- * Created and the point is the intersection of 2 lines segments aSegm and
- * refsegm
- * Returns the exact value of aRefPoint
+ *   NULL if no new point (ie if aRefPoint already corresponded at one end of aSegm
+ * or
+ *   Pointer to the segment created
+ *   Returns the exact value of aRefPoint
  * If aSegm points to a via:
- * Returns the exact value of aRefPoint and ptsegm,
- * But does not create extra point
+ *   Returns the exact value of aRefPoint and a pointer to the via,
+ *   But does not create extra point
  */
-TRACK* CreateLockPoint( wxPoint&           aRefPoint,
+TRACK* CreateLockPoint( BOARD* aPcb,
+                        wxPoint&           aRefPoint,
                         TRACK*             aSegm,
-                        TRACK*             aRefSegm,
                         PICKED_ITEMS_LIST* aItemsListPicker )
 {
-    int cX, cY;
-    int dx, dy;
-
     if( aSegm->m_Start == aRefPoint || aSegm->m_End == aRefPoint )
         return NULL;
 
@@ -1086,15 +1084,12 @@ TRACK* CreateLockPoint( wxPoint&           aRefPoint,
         return aSegm;
     }
 
-    /* Calculation coordinate of intermediate point in the coordinate origin
-     * = Original ptsegm
+    /* Calculation coordinate of intermediate point relative to
+     * the start point of aSegm
      */
-    cX = aRefPoint.x - aSegm->m_Start.x;
-    cY = aRefPoint.y - aSegm->m_Start.y;
-    dx = aSegm->m_End.x - aSegm->m_Start.x;
-    dy = aSegm->m_End.y - aSegm->m_Start.y;
+     wxPoint delta = aSegm->m_End - aSegm->m_Start;
 
-    // Not yet used:
+    // Not yet in use:
 #if 0
     int ox, oy, fx, fy;
 
@@ -1107,17 +1102,20 @@ TRACK* CreateLockPoint( wxPoint&           aRefPoint,
     }
 #endif
 
-    /* that the item be on the segment ptsegm: cY/cX = dy/dx */
-    if( dx == 0 )
-        cX = 0;         /* segm horizontal */
+    // calculate coordinates of aRefPoint relative to aSegm->m_Start
+    wxPoint newPoint = aRefPoint - aSegm->m_Start;
+    // newPoint must be on aSegm:
+    // Ensure newPoint.y/newPoint.y = delta.y/delta.x
+    if( delta.x == 0 )
+        newPoint.x = 0;         /* horizontal segment*/
     else
-        cY = ( cX * dy ) / dx;
+        newPoint.y = wxRound(( (double)newPoint.x * delta.y ) / delta.x);
 
     /* Create the intermediate point (that is to say creation of a new
      * segment, beginning at the intermediate point.
      */
-    cX += aSegm->m_Start.x;
-    cY += aSegm->m_Start.y;
+    newPoint.x += aSegm->m_Start.x;
+    newPoint.y += aSegm->m_Start.y;
 
     TRACK* newTrack = aSegm->Copy();
     if( aItemsListPicker )
@@ -1131,29 +1129,39 @@ TRACK* CreateLockPoint( wxPoint&           aRefPoint,
     wxASSERT( list );
     list->Insert( newTrack, aSegm->Next() );
 
-    /* Correct pointer at the end of the new segment. */
-    newTrack->end = aSegm->end;
-
-    /* Segment ends at new point. */
     if( aItemsListPicker )
     {
         ITEM_PICKER picker( aSegm, UR_CHANGED );
         picker.m_Link = aSegm->Copy();
         aItemsListPicker->PushItem( picker );
     }
-    aSegm->m_End.x = cX;
-    aSegm->m_End.y = cY;
 
+    /* Correct pointer at the end of the new segment. */
+    newTrack->end = aSegm->end;
+    newTrack->SetState( END_ONPAD, aSegm->GetState( END_ONPAD ) );
+
+    /* Set connections info relative to the new point
+    */
+
+    /* Old segment now ends at new point. */
+    aSegm->m_End = newPoint;
+    aSegm->end = newTrack;
     aSegm->SetState( END_ONPAD, OFF );
 
-    /* The next segment begins at the new point. */
-    aSegm = newTrack;;
-    aSegm->m_Start.x = cX;
-    aSegm->m_Start.y = cY;
-    aSegm->SetState( BEGIN_ONPAD, OFF );
+    /* The new segment begins at the new point. */
+    newTrack->m_Start = newPoint;
+    newTrack->start = aSegm;
+    newTrack->SetState( BEGIN_ONPAD, OFF );
 
-    aRefPoint.x = cX;
-    aRefPoint.y = cY;
+    D_PAD * pad = Locate_Pad_Connecte( aPcb, newTrack, START );
+    if ( pad )
+    {
+        newTrack->start = pad;
+        newTrack->SetState( BEGIN_ONPAD, ON );
+        aSegm->end = pad;
+        aSegm->SetState( END_ONPAD, ON );
+    }
 
-    return aSegm;
+    aRefPoint = newPoint;
+    return newTrack;
 }

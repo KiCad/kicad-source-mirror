@@ -127,9 +127,8 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
             {
                 TrackOnStartPoint    = (TRACK*) LockPoint;
                 g_HighLight_NetCode = TrackOnStartPoint->GetNet();
-                CreateLockPoint( pos,
+                CreateLockPoint( GetBoard(), pos,
                                  TrackOnStartPoint,
-                                 NULL,
                                  &s_ItemsListPicker );
             }
         }
@@ -478,9 +477,9 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
             g_HighLight_NetCode = adr_buf->GetNet();
 
             /* Possible establishment of a hanging point. */
-            LockPoint = CreateLockPoint( g_CurrentTrackSegment->m_End,
+            LockPoint = CreateLockPoint( GetBoard(), 
+                                         g_CurrentTrackSegment->m_End,
                                          adr_buf,
-                                         g_CurrentTrackSegment,
                                          &s_ItemsListPicker );
         }
     }

@@ -82,7 +82,7 @@ TRACK* Locate_Via_Area( TRACK* aStart, const wxPoint& pos, int layer )
 }
 
 
-/* Location of the pellet CONNECTED developed a test track
+/* Locate the pad CONNECTED to a track
  * input: ptr_piste: pointer to the segment of track
  * Extr = flag = START -> beginning of the test segment
  * END -> end of the segment to be tested
