@@ -904,10 +904,12 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             wxPoint pos   = GetScreen()->m_Curseur;
             track->Draw( DrawPanel, &dc, GR_XOR );
             PICKED_ITEMS_LIST itemsListPicker;
-            TRACK*  newtrack = CreateLockPoint( pos, track, NULL, &itemsListPicker);
+            TRACK*  newtrack = CreateLockPoint( GetBoard(), pos, track, &itemsListPicker);
             SaveCopyInUndoList(itemsListPicker,UR_UNSPECIFIED);
             track->Draw( DrawPanel, &dc, GR_XOR );
             newtrack->Draw( DrawPanel, &dc, GR_XOR );
+            /* compute the new rastnest, because connectivity could change */
+            test_1_net_connexion( &dc, track->GetNet() );
         }
         break;
 

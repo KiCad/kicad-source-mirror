@@ -331,22 +331,22 @@ void MasqueAttributs( int* masque_set, int* masque_clr );
 BOARD_ITEM* LocateLockPoint( BOARD* aPcb, wxPoint aPos, int aLayerMask );
 
 /* Create an intermediate point on a segment
- * ASegm segment is broken into 2 segments connecting point pX, pY
+ * aSegm segment is broken into 2 segments connecting point pX, pY
+ * After insertion:
+ *   The new segment starts from  to new point, and ends to initial aSegm ending point
+ *   the old segment aSegm ends to new point
  * Returns:
- * NULL if no new point (ie if aRefPoint already corresponded
- * At one end where:
- * Pointer to the segment created
- * If aRefSegm! Refsegm = NULL pointer is on the segment
- * Created and the point is the intersection of 2 lines segments ptsegm
- * and aRefSegm
- * Returns the exact value of aRefPoint
+ *   NULL if no new point (ie if aRefPoint already corresponded at one end of aSegm
+ * or
+ *   Pointer to the segment created
+ *   Returns the exact value of aRefPoint
  * If aSegm points to a via:
- * Returns the exact value of aRefPoint and aSegm, but does not create
- * extra point
+ *   Returns the exact value of aRefPoint and a pointer to the via,
+ *   But does not create extra point
  */
-TRACK*      CreateLockPoint( wxPoint&           aRefPoint,
+TRACK*      CreateLockPoint( BOARD* aPcb,
+                             wxPoint&           aRefPoint,
                              TRACK*             aSegm,
-                             TRACK*             aRefSegm,
                              PICKED_ITEMS_LIST* aItemsListPicker );
 
 
