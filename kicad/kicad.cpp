@@ -24,6 +24,7 @@
 
 #include "build_version.h"
 
+const wxString g_KicadPrjFilenameExtension(wxT(".pro") );
 
 /* Import functions */
 char* GetFileName( char* FullPathName );

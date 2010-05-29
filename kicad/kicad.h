@@ -15,6 +15,8 @@
 #include "wxstruct.h"
 #include "appl_wxstruct.h"
 
+extern const wxString g_KicadPrjFilenameExtension;
+
 class RIGHT_KM_FRAME;
 class TREEPROJECTFILES;
 class TREE_PROJECT_FRAME;

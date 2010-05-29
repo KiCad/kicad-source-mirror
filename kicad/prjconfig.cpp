@@ -27,7 +27,7 @@ void WinEDA_MainFrame::CreateNewProject( const wxString PrjFullFileName )
     wxFileName newProjectName = PrjFullFileName;
 
     /* Init default config filename */
-    filename = wxGetApp().FindLibraryPath( wxT( "kicad.pro" ) );
+    filename = wxGetApp().FindLibraryPath( wxT( "kicad" ) + g_KicadPrjFilenameExtension);
 
     /* Check if file kicad.pro exist in template directory */
     if( wxFileName::FileExists( filename ) )
@@ -86,7 +86,16 @@ void WinEDA_MainFrame::OnLoadProject( wxCommandEvent& event )
         m_ProjectFileName = dlg.GetPath();
 
         if( event.GetId() == ID_NEW_PROJECT )
+        {
+            // Ensure project filename extension is .pro
+            wxString fullname = m_ProjectFileName.GetFullPath();
+            if ( !fullname.EndsWith( g_KicadPrjFilenameExtension ) )
+            {
+                fullname += g_KicadPrjFilenameExtension;
+                m_ProjectFileName.SetFullName( fullname );
+            }
             CreateNewProject( m_ProjectFileName.GetFullPath() );
+        }
 
         SetLastProject( m_ProjectFileName.GetFullPath() );
     }
@@ -98,7 +107,7 @@ void WinEDA_MainFrame::OnLoadProject( wxCommandEvent& event )
     wxString filename = m_ProjectFileName.GetFullName();
 
     wxString nameless_prj = NAMELESS_PROJECT;
-    nameless_prj += wxT(".pro");
+    nameless_prj += g_KicadPrjFilenameExtension;
     if( !m_ProjectFileName.FileExists() && !filename.IsSameAs(nameless_prj))
     {
         DisplayError( this, _( "Kicad project file <" ) +
