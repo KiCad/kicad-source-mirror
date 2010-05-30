@@ -369,6 +369,7 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC
         return;
 
     SCH_FIELD* TextField = Cmp->GetField( FOOTPRINT );
+    message = TextField->m_Text;
 
     if( Get_Message( _( "Footprint" ), _( "Component footprint" ), message, this ) )
         return;    // edition cancelled by user.

@@ -27,7 +27,7 @@ void WinEDA_PcbFrame::OnFileHistory( wxCommandEvent& event )
     {
         DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
         ::wxSetWorkingDirectory( ::wxPathOnly( fn ) );
-        LoadOnePcbFile( fn, false );
+        LoadOnePcbFile( fn );
         ReCreateAuxiliaryToolbar();
         DrawPanel->MouseToCursorSchema();
     }
@@ -114,6 +114,18 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
 }
 
 
+/** Function WinEDA_PcbFrame::LoadOnePcbFile
+ *  Load a Kicad board (.brd) file.
+ *
+ *  @param aFileName - File name including path. If empty, a file dialog will
+ *                     be displayed.
+ *  @param aAppend - Append board file aFileName to the currently loaded file if true.
+ *                   Default = false.
+ *  @param aForceFileDialog - Display the file open dialog even if aFullFileName is
+ *                            valid if true; Default = false.
+ *
+ *  @return False if file load fails or is cancelled by the user, otherwise true.
+ */
 bool WinEDA_PcbFrame::LoadOnePcbFile( const wxString& aFileName, bool Append,
                                       bool aForceFileDialog )
 {

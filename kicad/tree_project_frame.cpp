@@ -24,7 +24,7 @@
 /* Note about the tree project build process:
  * Building the tree project can be *very* long if there are a lot of subdirectories
  * in the working directory.
- * Unfornately, this happens easily if the project file *.pro is in the home directory
+ * Unfortunately, this happens easily if the project file *.pro is in the home directory
  * So the tree project is built "on demand":
  * First the tree is built from the current directory and shows files and subdirs.
  *   > First level subdirs trees are built (i.e subdirs contents are not read)

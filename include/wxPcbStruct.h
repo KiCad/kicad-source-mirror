@@ -496,18 +496,19 @@ public:
     void OnFileHistory( wxCommandEvent& event );
     void Files_io( wxCommandEvent& event );
 
-    /**
+    /** Function LoadOnePcbFile
      *  Load a Kicad board (.brd) file.
      *
      *  @param aFileName - File name including path. If empty, a file dialog will
      *                     be displayed.
      *  @param aAppend - Append board file aFileName to the currently loaded file if true.
+     *                   Default = false.
      *  @param aForceFileDialog - Display the file open dialog even if aFullFileName is
-     *                            valid if true.
+     *                            valid if true; Default = false.
      *
      *  @return False if file load fails or is cancelled by the user, otherwise true.
      */
-    bool LoadOnePcbFile( const wxString& aFileName, bool aAppend,
+    bool LoadOnePcbFile( const wxString& aFileName, bool aAppend = false,
                          bool aForceFileDialog = false );
 
 

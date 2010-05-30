@@ -154,13 +154,31 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
     /* Load file specified in the command line. */
     if( fn.IsOk() )
     {
-        frame->LoadOnePcbFile( fn.GetFullPath(), FALSE );
+        /* Note the first time Pcbnew is called after creating a new project
+         * the board file may not exists
+         * So we load settings only
+        */
+        if( fn.FileExists() )
+            frame->LoadOnePcbFile( fn.GetFullPath() );
+        else
+        {   // File does not exists: prepare an empty board
+            wxSetWorkingDirectory( fn.GetPath() );
+            frame->GetScreen()->m_FileName = fn.GetFullPath();
+            frame->GetScreen()->m_FileName.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
+            frame->SetTitle( frame->GetScreen()->m_FileName );
+            frame->SetLastProject( frame->GetScreen()->m_FileName );
+            frame->OnModify();  // Ready to save the new empty board
 
-        // update the layer names in the listbox
-        frame->ReCreateLayerBox( NULL );
+            wxString msg;
+            msg.Printf( _( "File <%s> not existing\nThis is normal for a new project" ),
+                GetChars( frame->GetScreen()->m_FileName ) );
+            wxMessageBox( msg );
+        }
     }
 
     frame->LoadProjectSettings( fn.GetFullPath() );
+    // update the layer names in the listbox
+    frame->ReCreateLayerBox( NULL );
 
     /* For an obscure reason the focus is lost after loading a board file
      * when starting (i.e. only at this point)
