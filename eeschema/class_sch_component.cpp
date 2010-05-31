@@ -607,7 +607,8 @@ void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
     {
        GetField(ii)->SetParent( this );
     }
-
+    
+    EXCHG( m_PathsAndReferences, copyitem->m_PathsAndReferences);
 }
 
 
