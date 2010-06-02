@@ -21,7 +21,7 @@ static unsigned s_HistoryMaxCount = 8;  // Max number of items displayed in hist
 BEGIN_EVENT_TABLE( WinEDA_SelectCmp, wxDialog )
     EVT_BUTTON( ID_ACCEPT_NAME, WinEDA_SelectCmp::Accept )
     EVT_BUTTON( ID_ACCEPT_KEYWORD, WinEDA_SelectCmp::Accept )
-    EVT_BUTTON( ID_CANCEL, WinEDA_SelectCmp::Accept )
+    EVT_BUTTON( wxID_CANCEL, WinEDA_SelectCmp::Accept )
     EVT_BUTTON( ID_LIST_ALL, WinEDA_SelectCmp::Accept )
     EVT_BUTTON( ID_EXTRA_TOOL, WinEDA_SelectCmp::GetExtraSelection )
     EVT_LISTBOX( ID_SEL_BY_LISTBOX, WinEDA_SelectCmp::Accept )
@@ -39,10 +39,19 @@ WinEDA_SelectCmp::WinEDA_SelectCmp( WinEDA_DrawFrame* parent,
                                     bool              show_extra_tool ) :
     wxDialog( parent, -1, Title, framepos, wxDefaultSize, DIALOG_STYLE )
 {
+    m_AuxTool = show_extra_tool;
+    InitDialog( HistoryList );
+
+    GetSizer()->Fit( this );
+    GetSizer()->SetSizeHints( this );
+}
+
+void WinEDA_SelectCmp::InitDialog( wxArrayString& aHistoryList )
+{
+    
     wxButton*     Button;
     wxStaticText* Text;
 
-    m_AuxTool = show_extra_tool;
     m_GetExtraFunction = false;
 
     wxBoxSizer* MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -58,20 +67,19 @@ WinEDA_SelectCmp::WinEDA_SelectCmp( WinEDA_DrawFrame* parent,
 
     Text = new wxStaticText( this, -1, _( "Name:" ) );
     LeftBoxSizer->Add( Text, 0, wxALIGN_LEFT | wxLEFT | wxRIGHT | wxTOP, 5 );
-
-    m_TextCtrl = new wxTextCtrl( this, ID_ENTER_NAME, m_Text );
-    m_TextCtrl->SetInsertionPoint( 1 );
-    m_TextCtrl->SetFocus();
+    m_TextCtrl = new wxTextCtrl( this, wxID_ANY );
+    m_TextCtrl->SetFocus();         // text value will be initialized later by calling GetComponentName()
     LeftBoxSizer->Add( m_TextCtrl,
                        0,
                        wxGROW | wxLEFT | wxRIGHT | wxBOTTOM | wxADJUST_MINSIZE,
                        5 );
 
+
     Text = new wxStaticText( this, -1, _( "History list:" ) );
     LeftBoxSizer->Add( Text, 0, wxALIGN_LEFT | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     m_List = new wxListBox( this, ID_SEL_BY_LISTBOX, wxDefaultPosition,
-                            wxSize( 220, -1 ), HistoryList, wxLB_SINGLE );
+                            wxSize( 220, -1 ), aHistoryList, wxLB_SINGLE );
     LeftBoxSizer->Add( m_List,
                        0,
                        wxGROW | wxLEFT | wxRIGHT | wxBOTTOM | wxADJUST_MINSIZE,
@@ -87,7 +95,7 @@ WinEDA_SelectCmp::WinEDA_SelectCmp( WinEDA_DrawFrame* parent,
     Button = new wxButton( this, ID_ACCEPT_KEYWORD, _( "Search by Keyword" ) );
     RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
-    Button = new wxButton( this, ID_CANCEL, _( "Cancel" ) );
+    Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
     RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
     Button = new wxButton( this, ID_LIST_ALL, _( "List All" ) );
@@ -100,9 +108,6 @@ WinEDA_SelectCmp::WinEDA_SelectCmp( WinEDA_DrawFrame* parent,
         RightBoxSizer->Add( Button, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
     }
 #endif
-
-    GetSizer()->Fit( this );
-    GetSizer()->SetSizeHints( this );
 }
 
 
@@ -124,7 +129,7 @@ void WinEDA_SelectCmp::Accept( wxCommandEvent& event )
         m_Text = wxT( "= " ) + m_TextCtrl->GetValue();
         break;
 
-    case ID_CANCEL:
+    case wxID_CANCEL:
         m_Text = wxEmptyString;
         id = wxID_CANCEL;
         break;
@@ -156,16 +161,22 @@ void WinEDA_SelectCmp::GetExtraSelection( wxCommandEvent& event )
 }
 
 
+// Return the component name selected by the dialog
 wxString WinEDA_SelectCmp::GetComponentName( void )
 {
     return m_Text;
 }
 
 
+/* Initialize the default component name default choice
+*/
 void WinEDA_SelectCmp::SetComponentName( const wxString& name )
 {
     if( m_TextCtrl )
+    {
         m_TextCtrl->SetValue( name );
+        m_TextCtrl->SetSelection(-1, -1);
+    }
 }
 
 
