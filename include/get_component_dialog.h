@@ -18,8 +18,6 @@ void     AddHistoryComponentName( wxArrayString& HistoryList,
 enum selcmp_id {
     ID_ACCEPT_NAME = 3900,
     ID_ACCEPT_KEYWORD,
-    ID_ENTER_NAME,
-    ID_CANCEL,
     ID_LIST_ALL,
     ID_EXTRA_TOOL,
     ID_SEL_BY_LISTBOX
@@ -48,6 +46,7 @@ public:
     void     SetComponentName( const wxString& name );
 
 private:
+    void     InitDialog( wxArrayString& aHistoryList );
     void     Accept( wxCommandEvent& event );
     void     GetExtraSelection( wxCommandEvent& event );
 
