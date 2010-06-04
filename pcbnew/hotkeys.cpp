@@ -423,7 +423,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         if( ItemFree )
         {
             wxCommandEvent evt;
-            evt.SetId( ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST );
+            evt.SetId( ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST  );
             Process_Special_Functions( evt );
         }
         break;
@@ -657,6 +657,8 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
 
             // fall through
             case HK_MOVE_FOOTPRINT: // Start move module
+                GetScreen()->m_Curseur = module->m_Pos;
+                DrawPanel->MouseToCursorSchema();
                 StartMove_Module( module, DC );
                 break;
             }

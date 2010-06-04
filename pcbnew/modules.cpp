@@ -100,9 +100,6 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
     GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
     module->m_Flags |= IS_MOVED;
 
-    GetScreen()->m_Curseur = module->m_Pos;
-    DrawPanel->MouseToCursorSchema();
-
     /* Show ratsnest. */
     if( GetBoard()->IsElementVisible(RATSNEST_VISIBLE) )
         DrawGeneralRatsnest( DC );
