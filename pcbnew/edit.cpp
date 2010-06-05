@@ -582,7 +582,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         g_Drag_Pistes_On = true;
 
     case ID_POPUP_PCB_MOVE_MODULE_REQUEST:
-
         // If the current Item is a pad, text module ...: Get its parent
         if( GetCurItem()->Type() != TYPE_MODULE )
             SetCurItem( GetCurItem()->GetParent() );
@@ -591,6 +590,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             g_Drag_Pistes_On = false;
             break;
         }
+        GetScreen()->m_Curseur = ((MODULE*) GetCurItem())->m_Pos;
         DrawPanel->MouseToCursorSchema();
         StartMove_Module( (MODULE*) GetCurItem(), &dc );
         break;
