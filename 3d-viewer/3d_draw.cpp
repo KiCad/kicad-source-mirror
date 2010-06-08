@@ -32,8 +32,8 @@ static void    Draw3D_FilledSegmentWithHole( double startx, double starty,
                                              double width, double holex,
                                              double holey, double holeradius,
                                              double zpos );
-static void    Draw3D_ArcSegment( double startx, double starty, double endx,
-                                  double endy, double width, double zpos );
+static void    Draw3D_ArcSegment( double startx, double starty, double centrex,
+                                  double centrey, double arc_angle, double width, double zpos );
 static void    Draw3D_CircleSegment( double startx, double starty, double endx,
                                      double endy, double width, double zpos );
 static int     Get3DLayerEnable( int act_layer );
@@ -530,7 +530,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawSegment( DRAWSEGMENT* segment )
             switch( segment->m_Shape )
             {
             case S_ARC:
-                Draw3D_ArcSegment( x, -y, xf, -yf, w, zpos );
+                Draw3D_ArcSegment( x, -y, xf, -yf, (double) segment->m_Angle, w, zpos );
                 break;
 
             case S_CIRCLE:
@@ -552,7 +552,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawSegment( DRAWSEGMENT* segment )
             switch( segment->m_Shape )
             {
             case S_ARC:
-                Draw3D_ArcSegment( x, -y, xf, -yf, w, zpos );
+                Draw3D_ArcSegment( x, -y, xf, -yf, (double) segment->m_Angle, w, zpos );
                 break;
 
             case S_CIRCLE:
@@ -759,7 +759,7 @@ void EDGE_MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
         break;
 
     case S_ARC:
-        Draw3D_ArcSegment( x, -y, fx, -fy, w, zpos );
+        Draw3D_ArcSegment( x, -y, fx, -fy, (double) m_Angle, w, zpos );
         break;
 
     default:
@@ -1196,27 +1196,42 @@ static void Draw3D_FilledSegmentWithHole( double startx, double starty,
 }
 
 
-static void Draw3D_ArcSegment( double startx, double starty, double endx,
-                               double endy, double width, double zpos )
+static void Draw3D_ArcSegment( double startx, double starty, double centrex,
+                               double centrey, double arc_angle, double width, double zpos )
 {
-    int    ii, slice = 36;
-    double x, y, hole, rayon;
-    int    angle;
+    int    ii;
+    int    slice = 36;             // Number of segments to approximate a circle by segments
+    double hole, rayon;
+    double    arcStart_Angle;
 
-    angle = static_cast<int>( atan2( startx - endx, starty - endy ) *
-                              1800 / M_PI ) + 900;
-    rayon = hypot( startx - endx, starty - endy ) + ( width / 2);
+    arcStart_Angle = (atan2( startx - centrex, starty - centrey ) * 1800 / M_PI );
+    rayon = hypot( startx - centrex, starty - centrey ) + ( width / 2);
     hole  = rayon - width;
 
+    // Calculate the number of segments to approximate this arc
+    int imax = (int) ( (double) arc_angle * slice / 3600.0 );
+    if( imax < 0 )
+        imax = -imax;
+    if (imax == 0 )
+        imax = 1;
+
+    // Adjust delta_angle to have exactly imax segments in arc_angle
+    // i.e. arc_angle = imax delta_agnle.
+    double delta_angle = (double) arc_angle / imax;
+
     glBegin( GL_QUAD_STRIP );
-    for( ii = 0; ii <= slice / 4; ii++ )
+    for( ii = 0; ii <= imax; ii++ )
     {
-        x = hole; y = 0.0;
-        RotatePoint( &x, &y, angle + ( ii * 3600 / slice ) );
-        glVertex3f( x + startx, y + starty, zpos );
-        x = rayon; y = 0.0;
-        RotatePoint( &x, &y, angle + ( ii * 3600 / slice ) );
-        glVertex3f( x + startx, y + starty, zpos );
+        double angle = (double) ii * delta_angle;
+        angle += arcStart_Angle + 900;
+        double dx = hole;
+        double dy = 0.0;
+        RotatePoint( &dx, &dy, (int)angle );
+        glVertex3f( dx + startx, dy + starty, zpos );
+        dx = rayon;
+        dy = 0.0;
+        RotatePoint( &dx, &dy, (int)angle );
+        glVertex3f( dx + startx, dy + starty, zpos );
     }
 
     glEnd();
