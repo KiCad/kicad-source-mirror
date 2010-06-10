@@ -487,7 +487,7 @@ void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge,
             *ptr++ = y;
         }
 
-        plotter->poly( PtEdge->m_PolyPoints.size(), ptr_base, NO_FILL,
+        plotter->poly( PtEdge->m_PolyPoints.size(), ptr_base, FILLED_SHAPE,
                        thickness );
         free( ptr_base );
     }
