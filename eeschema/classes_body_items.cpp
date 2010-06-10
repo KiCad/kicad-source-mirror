@@ -1369,6 +1369,8 @@ bool LIB_POLYLINE::Load( char* aLine, wxString& aErrorMsg )
     i = sscanf( &aLine[2], "%d %d %d %d", &ccount, &m_Unit, &m_Convert,
                 &m_Width );
 
+    m_Fill = NO_FILL;
+
     if( i < 4 )
     {
         aErrorMsg.Printf( _( "polyline only had %d parameters of the required 4" ), i );
@@ -1389,21 +1391,19 @@ bool LIB_POLYLINE::Load( char* aLine, wxString& aErrorMsg )
     {
         wxPoint point;
         p = strtok( NULL, " \t\n" );
-        if( sscanf( p, "%d", &pt.x ) != 1 )
+        if( p == NULL || sscanf( p, "%d", &pt.x ) != 1 )
         {
             aErrorMsg.Printf( _( "polyline point %d X position not defined" ), i );
             return false;
         }
         p = strtok( NULL, " \t\n" );
-        if( sscanf( p, "%d", &pt.y ) != 1 )
+        if( p == NULL || sscanf( p, "%d", &pt.y ) != 1 )
         {
             aErrorMsg.Printf( _( "polyline point %d Y position not defined" ), i );
             return false;
         }
         AddPoint( pt );
     }
-
-    m_Fill = NO_FILL;
 
     if( ( p = strtok( NULL, " \t\n" ) ) != NULL )
     {

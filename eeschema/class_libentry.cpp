@@ -676,7 +676,7 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum,
     {
         aErrorMsg.Printf( wxT( "Wrong DEF format in line %d, skipped." ),
                           *aLineNum );
-        while( GetLine( aFile, aLine, aLineNum, 1024 ) )
+        while( GetLine( aFile, aLine, aLineNum, LINE_BUFFER_LEN_LARGE ) )
         {
             p = strtok( aLine, " \t\n" );
             if( stricmp( p, "ENDDEF" ) == 0 )
@@ -726,7 +726,7 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum,
         m_options = ENTRY_POWER;
 
     /* Read next lines */
-    while( GetLine( aFile, aLine, aLineNum, 1024 ) )
+    while( GetLine( aFile, aLine, aLineNum, LINE_BUFFER_LEN_LARGE ) )
     {
         p = strtok( aLine, " \t\n" );
 
@@ -775,7 +775,7 @@ bool LIB_COMPONENT::LoadDrawEntries( FILE* aFile, char* aLine,
 
     while( true )
     {
-        if( GetLine( aFile, aLine, aLineNum, 1024 ) == NULL )
+        if( GetLine( aFile, aLine, aLineNum, LINE_BUFFER_LEN_LARGE ) == NULL )
         {
             aErrorMsg = wxT( "file ended prematurely loading component draw element" );
             return false;
@@ -830,7 +830,7 @@ bool LIB_COMPONENT::LoadDrawEntries( FILE* aFile, char* aLine,
             /* Flush till end of draw section */
             do
             {
-                if( GetLine( aFile, aLine, aLineNum, 1024 ) == NULL )
+                if( GetLine( aFile, aLine, aLineNum, LINE_BUFFER_LEN_LARGE ) == NULL )
                 {
                     aErrorMsg = wxT( "file ended prematurely while attempting \
 to flush to end of drawing section." );
@@ -899,7 +899,7 @@ bool LIB_COMPONENT::LoadFootprints( FILE* aFile, char* aLine,
 {
     while( true )
     {
-        if( GetLine( aFile, aLine, aLineNum, 1024 ) == NULL )
+        if( GetLine( aFile, aLine, aLineNum, LINE_BUFFER_LEN_LARGE ) == NULL )
         {
             aErrorMsg = wxT( "file ended prematurely while loading footprints" );
             return false;

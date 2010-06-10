@@ -12,6 +12,10 @@
 #define EESCHEMA_FILE_STAMP   "EESchema"
 #define NULL_STRING           "_NONAME_"
 
+// Define the char buffer size used to read library files
+#define LINE_BUFFER_LEN_LARGE   8000
+#define LINE_BUFFER_LEN   1024
+
 #define MAX_PIN_INFO 10
 
 #define TXTMARGE 10                 /* Offset in mils for placement of labels

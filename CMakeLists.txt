@@ -187,6 +187,8 @@ add_subdirectory(kicad)
 add_subdirectory(pcbnew)
 add_subdirectory(polygon)
 add_subdirectory(polygon/kbool/src)
+add_subdirectory(potrace)
+add_subdirectory(bitmap2component)
 
 #############
 # Resources #

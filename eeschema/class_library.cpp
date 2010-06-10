@@ -551,7 +551,7 @@ bool CMP_LIBRARY::Load( wxString& aErrorMsg )
 {
     FILE*          file;
     int            lineNumber = 0;
-    char           line[1024];
+    char           line[LINE_BUFFER_LEN_LARGE];  // Use a very large buffer to load data
     LIB_COMPONENT* libEntry;
     wxString       msg;
 
@@ -716,7 +716,7 @@ void CMP_LIBRARY::LoadAliases( LIB_COMPONENT* component )
 
 bool CMP_LIBRARY::LoadHeader( FILE* libfile, int* LineNum )
 {
-    char Line[1024], * text, * data;
+    char Line[LINE_BUFFER_LEN], * text, * data;
 
     while( GetLine( libfile, Line, LineNum, sizeof(Line) ) )
     {
@@ -735,7 +735,7 @@ bool CMP_LIBRARY::LoadHeader( FILE* libfile, int* LineNum )
 bool CMP_LIBRARY::LoadDocs( wxString& aErrorMsg )
 {
     int            lineNumber = 0;
-    char           line[1024], * name, * text;
+    char           line[LINE_BUFFER_LEN_LARGE], * name, * text;
     CMP_LIB_ENTRY* entry;
     FILE*          file;
     wxString       msg;
