@@ -335,7 +335,7 @@ SCH_ITEM* SCH_SHEET_PATH::MatchNextItem( wxFindReplaceData& aSearchData,
         }
         else
         {
-            if( drawItem->Matches( aSearchData, Last() ) )
+            if( drawItem->Matches( aSearchData, this ) )
                 return drawItem;
         }
 

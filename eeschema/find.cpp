@@ -290,7 +290,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem( const wxString& component
  */
 void WinEDA_SchematicFrame::OnFindSchematicItem( wxFindDialogEvent& event )
 {
-    static SCH_ITEM* lastItem = NULL;
+    static SCH_ITEM*  lastItem = NULL;
 
     SCH_SHEET_LIST    schematic;
     wxString          msg;
@@ -301,7 +301,7 @@ void WinEDA_SchematicFrame::OnFindSchematicItem( wxFindDialogEvent& event )
     searchCriteria.SetFindString( event.GetFindString() );
     searchCriteria.SetReplaceString( event.GetReplaceString() );
 
-    if( event.GetFlags() & FR_CURRENT_SHEET_ONLY )
+    if( event.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
     {
         sheetFoundIn = m_CurrentSheet;
         lastItem = m_CurrentSheet->MatchNextItem( searchCriteria, lastItem );
