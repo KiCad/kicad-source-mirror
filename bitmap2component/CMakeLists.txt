@@ -12,11 +12,7 @@ add_executable(bitmap2component WIN32 MACOSX_BUNDLE ${BITMAP2COMPONENT_SRCS} ${B
 
 target_link_libraries( bitmap2component potrace kbool )
 
-if(APPLE)
-    set_target_properties(bitmap2component PROPERTIES )
-endif(APPLE)
-
 install(TARGETS bitmap2component
-        DESTINATION ${KICAD_BIN}
+        DESTINATION ${KICAD_PLUGINS}
         COMPONENT binary)
 
