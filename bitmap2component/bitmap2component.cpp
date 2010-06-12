@@ -395,7 +395,7 @@ static void OuputOnePolygon( BITMAPCONV_INFO&                aInfo,
         int width = 1;
         fprintf( aInfo.m_Outfile, "DP %d %d %d %d %d %d %d\n",
                        0, 0, 0, 0,
-                       aPolygonBuffer.size()+1,
+                       int(aPolygonBuffer.size()+1),
                        width, layer );
 
         for( ii = 0; ii < aPolygonBuffer.size();  ii++ )
@@ -410,7 +410,7 @@ static void OuputOnePolygon( BITMAPCONV_INFO&                aInfo,
         break;
 
     case EESCHEMA_FMT:
-        fprintf( aInfo.m_Outfile, "P %d 0 0 1", aPolygonBuffer.size()+1 );
+        fprintf( aInfo.m_Outfile, "P %d 0 0 1", int(aPolygonBuffer.size()+1) );
         for( ii = 0; ii < aPolygonBuffer.size(); ii++ )
             fprintf( aInfo.m_Outfile, " %d %d",
                     (int) ( aPolygonBuffer[ii].x * aInfo.m_ScaleX - offsetX ),
