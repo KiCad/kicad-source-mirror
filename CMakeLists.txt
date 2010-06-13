@@ -196,6 +196,18 @@ add_subdirectory(bitmap2component)
 add_subdirectory(demos)
 add_subdirectory(template)
 
+#================================================
+# Doxygen Output
+#================================================
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+    add_custom_target( doxygen-docs ${DOXYGEN_EXECUTABLE}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        DEPENDS Doxyfile )
+else(DOXYGEN_FOUND)
+    message( STATUS "WARNING: Doxygen not found - doxygen-docs (Source Docs) target not created" )
+endif()
+
 
 #================================================
 # Installation parameters
