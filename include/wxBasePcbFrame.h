@@ -213,7 +213,6 @@ public:
 
     void    Archive_Modules( const wxString& LibName,
                              bool            NewModulesOnly );
-    MODULE* Select_1_Module_From_BOARD( BOARD* Pcb );
     MODULE* GetModuleByName();
 
     /** Function OnModify()

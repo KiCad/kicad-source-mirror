@@ -1089,6 +1089,11 @@ public:
     void         OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
     void         Show3D_Frame( wxCommandEvent& event );
     void         GeneralControle( wxDC* DC, wxPoint Mouse );
+
+    /** function LoadModuleFromBoard
+     * called from the main toolbar
+     * to load a footprint from board mainly to edit it
+     */
     void         LoadModuleFromBoard( wxCommandEvent& event );
 
     /** Virtual Function OnModify()
@@ -1173,10 +1178,23 @@ public:
     void         RemoveStruct( EDA_BaseStruct* Item );
     void         Transform( MODULE* module, int transform );
 
-    // loading Footprint
+    // loading/exporting Footprint
     MODULE*      Import_Module( wxDC* DC );
     void         Export_Module( MODULE* ptmod, bool createlib );
-    void         Load_Module_From_BOARD( MODULE* Module );
+
+    /** function Load_Module_From_BOARD
+     * load in Modedit a footfrint from the main board
+     * @param Module = the module to load. If NULL, a module reference will we asked to user
+     * @return true if a module isloaded, false otherwise.
+     */
+    bool         Load_Module_From_BOARD( MODULE* Module );
+
+    /** Function Select_1_Module_From_BOARD
+     * Display the list of modules currently existing on the BOARD
+     * @return a pointer to a module if this module is selected or NULL otherwise
+     * @param aPcb = the board from modules can be loaded
+     */
+    MODULE*      Select_1_Module_From_BOARD( BOARD* aPcb );
 
     // functions to edit footprint edges
 

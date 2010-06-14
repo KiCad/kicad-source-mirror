@@ -101,6 +101,7 @@ void MODULE::Copy( MODULE* aModule )
     m_CntRot90      = aModule->m_CntRot90;
     m_CntRot180     = aModule->m_CntRot180;
     m_LastEdit_Time = aModule->m_LastEdit_Time;
+    m_Link          = aModule->m_Link;
     m_Path          = aModule->m_Path; //is this correct behavior?
     m_TimeStamp     = GetTimeStamp();
     m_LocalSolderMaskMargin  = aModule->m_LocalSolderMaskMargin;
