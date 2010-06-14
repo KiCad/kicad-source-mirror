@@ -41,27 +41,30 @@ static void ReadDocLib( const wxString& ModLibName );
 
 static ModList* MList;
 
-
-void WinEDA_ModuleEditFrame::Load_Module_From_BOARD( MODULE* Module )
+/** function Load_Module_From_BOARD
+ * load in Modedit a footfrint from the main board
+ * @param Module = the module to load. If NULL, a module reference will we asked to user
+ * @return true if a module isloaded, false otherwise.
+ */
+bool WinEDA_ModuleEditFrame::Load_Module_From_BOARD( MODULE* Module )
 {
     MODULE* NewModule;
     WinEDA_BasePcbFrame* parent = (WinEDA_BasePcbFrame*) GetParent();
 
     if( Module == NULL )
     {
-        if( parent->GetBoard() == NULL
-            || parent->GetBoard()->m_Modules == NULL )
-            return;
+        if( ! parent->GetBoard() || ! parent->GetBoard()->m_Modules )
+            return false;
 
         Module = Select_1_Module_From_BOARD( parent->GetBoard() );
     }
 
     if( Module == NULL )
-        return;
+        return false;
 
     SetCurItem( NULL );
 
-    Clear_Pcb( TRUE );
+    Clear_Pcb( false );
 
     GetBoard()->m_Status_Pcb = 0;
     NewModule = new MODULE( GetBoard() );
@@ -80,9 +83,11 @@ void WinEDA_ModuleEditFrame::Load_Module_From_BOARD( MODULE* Module )
     Place_Module( Module, NULL );
     if( Module->GetLayer() != LAYER_N_FRONT )
         Module->Flip( Module->m_Pos );
-    Rotate_Module( NULL, Module, 0, FALSE );
+    Rotate_Module( NULL, Module, 0, false );
     GetScreen()->ClrModify();
     Zoom_Automatique( TRUE );
+
+    return true;
 }
 
 
@@ -117,7 +122,7 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
 
     if( ModuleName[0] == '=' )   // Selection by keywords
     {
-        AllowWildSeach = FALSE;
+        AllowWildSeach = false;
         keys = ModuleName.AfterFirst( '=' );
         ModuleName = Select_1_Module_From_List( this, library, wxEmptyString,
                                                 keys );
@@ -130,7 +135,7 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
     else if( ( ModuleName.Contains( wxT( "?" ) ) )
             || ( ModuleName.Contains( wxT( "*" ) ) ) )  // Selection wild card
     {
-        AllowWildSeach = FALSE;
+        AllowWildSeach = false;
         ModuleName     = Select_1_Module_From_List( this, library, ModuleName,
                                                     wxEmptyString );
         if( ModuleName.IsEmpty() )
@@ -140,11 +145,11 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
         }
     }
 
-    module = Get_Librairie_Module( library, ModuleName, FALSE );
+    module = Get_Librairie_Module( library, ModuleName, false );
 
     if( ( module == NULL ) && AllowWildSeach )    /* Search with wildcard */
     {
-        AllowWildSeach = FALSE;
+        AllowWildSeach = false;
         wxString wildname = wxChar( '*' ) + ModuleName + wxChar( '*' );
         ModuleName = wildname;
         ModuleName = Select_1_Module_From_List( this, library, ModuleName,
@@ -445,7 +450,7 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
                         ListBox->Append( msg );
                         NbModules++;
                     }
-                    else if( WildCompareString( aMask, msg, FALSE ) )
+                    else if( WildCompareString( aMask, msg, false ) )
                     {
                         ListBox->Append( msg );
                         NbModules++;
@@ -594,11 +599,12 @@ static void ReadDocLib( const wxString& ModLibName )
 }
 
 
-/* Display the list of modules currently PCB
- * Returns a pointer if module selected
- * Returns NULL otherwise
+/** Function Select_1_Module_From_BOARD
+ * Display the list of modules currently existing on the BOARD
+ * @return a pointer to a module if this module is selected or NULL otherwise
+ * @param aPcb = the board from modules can be loaded
  */
-MODULE* WinEDA_BasePcbFrame::Select_1_Module_From_BOARD( BOARD* Pcb )
+MODULE* WinEDA_ModuleEditFrame::Select_1_Module_From_BOARD( BOARD* aPcb )
 {
     int             ii;
     MODULE*         Module;
@@ -610,7 +616,7 @@ MODULE* WinEDA_BasePcbFrame::Select_1_Module_From_BOARD( BOARD* Pcb )
                                                  wxColour( 200, 200, 255 ) );
 
     ii     = 0;
-    Module = Pcb->m_Modules;
+    Module = aPcb->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Next() )
     {
         ii++;
@@ -635,7 +641,7 @@ MODULE* WinEDA_BasePcbFrame::Select_1_Module_From_BOARD( BOARD* Pcb )
 
     OldName = CmpName;
 
-    Module = Pcb->m_Modules;
+    Module = aPcb->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Next() )
     {
         if( CmpName.CmpNoCase( Module->m_Reference->m_Text ) == 0 )

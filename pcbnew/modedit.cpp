@@ -131,11 +131,23 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
     return item;
 }
 
-
+/** function LoadModuleFromBoard
+ * called from the main toolbar
+ * to load a footprint from board mainly to edit it
+ */
 void WinEDA_ModuleEditFrame::LoadModuleFromBoard( wxCommandEvent& event )
 {
+    if(  GetScreen()->IsModify() )
+    {
+        if( !IsOK( this,
+            _( "Current footprint changes will be lost and this operation cannot be undone. Continue ?" ) ) )
+            return;
+    }
+
+    if( ! Load_Module_From_BOARD( NULL ) )
+        return;
+
     GetScreen()->ClearUndoRedoList();
-    Load_Module_From_BOARD( NULL );
     GetScreen()->ClrModify();
 
     if( m_Draw3DFrame )
@@ -333,9 +345,10 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     break;
 
     case ID_MODEDIT_IMPORT_PART:
+        if( ! Clear_Pcb( true ) )
+            break;                  // //this command is aborted
         GetScreen()->ClearUndoRedoList();
         SetCurItem( NULL );
-        Clear_Pcb( true );
         GetScreen()->m_Curseur = wxPoint( 0, 0 );
         Import_Module( NULL );
         redraw = true;
