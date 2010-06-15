@@ -296,7 +296,7 @@ void BM2CMP_FRAME::ExportFile( FILE* aOutfile, int aFormat )
     if( !potrace_bitmap )
     {
         wxString msg;
-        msg.Printf( _( "Error allocating bitmap: %s" ), strerror( errno ) );
+        msg.Printf( wxT( "Error allocating memory for potrace bitmap" ) );
         wxMessageBox( msg );
         return;
     }
