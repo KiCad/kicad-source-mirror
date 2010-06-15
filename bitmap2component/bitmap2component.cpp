@@ -32,7 +32,7 @@
 #include <vector>
 
 #include "potracelib.h"
-#include "bitmap_io.h"
+//#include "bitmap_io.h"
 #include "auxiliary.h"
 
 
@@ -49,6 +49,13 @@ enum output_format {
     PCBNEW_FMT,
     EESCHEMA_FMT
 };
+/* free a potrace bitmap */
+static void bm_free(potrace_bitmap_t *bm) {
+  if (bm != NULL) {
+    free(bm->map);
+  }
+  free(bm);
+}
 
 
 /* Helper class th handle useful info to convert a bitmpa to
@@ -185,53 +192,11 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
 }
 
 
-int main( int argc, char* argv[] )
+int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE * aOutfile, int aFormat )
 {
-    potrace_bitmap_t* potrace_bitmap = NULL;
     potrace_param_t*  param;
     potrace_state_t*  st;
-    int   error;
-    int fmt_option = '0';
 
-
-    FILE* infile, * outfile = NULL;
-
-    if( argc < 4 )
-    {
-        printf( "Usage:\nbitmap2component <infile_bitmap.ext> <outfile.ext> <0,1,2>\n" );
-        printf( "  Allowed bitmap files formats are .bmp or .pgm\n" );
-        printf( "output format:\n   0 = pcbnew.emp, 1 = eeschema.lib, 2 = ps\n" );
-        return -1;
-    }
-
-    infile = fopen( argv[1], "r" );
-    if( infile == NULL )
-    {
-        printf( "File %s could not be opened\n", argv[1] );
-        return -2;
-    }
-
-    outfile = fopen( argv[2], "w" );
-    if( outfile == NULL )
-    {
-        printf( "File %s could not be opened\n", argv[2] );
-        return -2;
-    }
-
-    double threshold = 0.5;     // = 0 to 1.0
-
-    error = bm_read( infile, threshold, &potrace_bitmap );
-    if( error != 0 )
-    {
-        printf( "Bitmap %s could not be read\n", argv[1] );
-        return -2;
-    }
-
-    if( !potrace_bitmap )
-    {
-        fprintf( stderr, "Error allocating bitmap: %s\n", strerror( errno ) );
-        return 1;
-    }
 
     /* set tracing parameters, starting from defaults */
     param = potrace_param_default();
@@ -243,7 +208,7 @@ int main( int argc, char* argv[] )
     param->turdsize = 0;
 
     /* convert the bitmap to curves */
-    st = potrace_trace( param, potrace_bitmap );
+    st = potrace_trace( param, aPotrace_bitmap );
     if( !st || st->status != POTRACE_STATUS_OK )
     {
         fprintf( stderr, "Error tracing bitmap: %s\n", strerror( errno ) );
@@ -251,41 +216,40 @@ int main( int argc, char* argv[] )
     }
 
     BITMAPCONV_INFO info;
-    info.m_PixmapWidth  = potrace_bitmap->w;
-    info.m_PixmapHeight = potrace_bitmap->h;     // the bitmap size in pixels
+    info.m_PixmapWidth  = aPotrace_bitmap->w;
+    info.m_PixmapHeight = aPotrace_bitmap->h;     // the bitmap size in pixels
     info.m_Paths   = st->plist;
-    info.m_Outfile = outfile;
+    info.m_Outfile = aOutfile;
 
-    if( argc >= 4 )
-        fmt_option = argv[3][0];
-    switch( fmt_option )
+    switch( aFormat )
     {
-    case '2':
+    case 2:
         info.m_Format = POSTSCRIPT_FMT;
         info.m_ScaleX = info.m_ScaleY = 1.0;        // the conversion scale
         /* output vector data, e.g. as a rudimentary EPS file */
+        CreateOutputFile( info );
         break;
 
-    case '1':
+    case 1:
         info.m_Format = EESCHEMA_FMT;
-        info.m_ScaleX = info.m_ScaleY = 1000.0 / 300;        // the conversion scale
+        info.m_ScaleX = 1000.0 / 300;       // the conversion scale
+        info.m_ScaleY = -  info.m_ScaleX;   // Y axis is bottom to Top for components in libs
+        CreateOutputFile( info );
         break;
 
-    case '0':
+    case 0:
         info.m_Format = PCBNEW_FMT;
-        info.m_ScaleX = 10000.0 / 300;        // the conversion scale
-        info.m_ScaleY = -info.m_ScaleX;       // Y axis is top to bottom in modedit
+        info.m_ScaleX = 10000.0 / 300;       // the conversion scale
+        info.m_ScaleY = info.m_ScaleX;       // Y axis is top to bottom in modedit
+        CreateOutputFile( info );
         break;
 
     default:
-        printf( "Unknown output format\n" );
-        break;
+       break;
     }
 
-    CreateOutputFile( info );
 
-    bm_free( potrace_bitmap );
-
+    bm_free( aPotrace_bitmap );
     potrace_state_free( st );
     potrace_param_free( param );
 
