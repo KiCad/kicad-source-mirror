@@ -61,6 +61,7 @@ extern const wxString g_FootprintLibFileWildcard;   // Wildcard for footprint li
 
 
 extern bool        g_Track_45_Only_Allowed;
+extern bool        g_Alternate_Track_Posture;
 extern bool        Segments_45_Only;
 extern wxString    g_Shapes3DExtBuffer;
 extern wxString    g_DocModulesFileName;

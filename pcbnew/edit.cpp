@@ -65,6 +65,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_STOP_CURRENT_DRAWING:
     case ID_POPUP_PCB_END_TRACK:
     case ID_POPUP_PCB_PLACE_VIA:
+    case ID_POPUP_PCB_SWITCH_TRACK_POSTURE:
     case ID_POPUP_PCB_PLACE_MICROVIA:
     case ID_POPUP_PCB_IMPORT_PAD_SETTINGS:
     case ID_POPUP_PCB_EXPORT_PAD_SETTINGS:
@@ -338,6 +339,13 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             PlaceDraggedOrMovedTrackSegment( (TRACK*) GetCurItem(), &dc );
         }
         break;
+
+    case ID_POPUP_PCB_SWITCH_TRACK_POSTURE:
+	/* XXX POSTURE XXX */
+	ShowNewTrackWhenMovingCursor( DrawPanel, &dc, true );
+	g_Alternate_Track_Posture = !g_Alternate_Track_Posture;
+	ShowNewTrackWhenMovingCursor( DrawPanel, &dc, false );
+	break;
 
     case ID_POPUP_PCB_PLACE_MICROVIA:
         if( !IsMicroViaAcceptable() )

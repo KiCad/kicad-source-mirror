@@ -22,6 +22,7 @@ enum hotkey_id_commnand {
     HK_ADD_NEW_TRACK,
     HK_ADD_VIA,
     HK_ADD_MICROVIA,
+    HK_SWITCH_TRACK_POSTURE,
     HK_END_TRACK,
     HK_SAVE_BOARD, HK_LOAD_BOARD,
     HK_SWITCH_UNITS,
