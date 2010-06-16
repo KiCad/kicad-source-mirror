@@ -67,6 +67,8 @@ static Ki_HotkeyInfo HkBackspace( wxT( "Delete track segment" ), HK_BACK_SPACE,
                                   WXK_BACK );
 static Ki_HotkeyInfo HkAddNewTrack( wxT( "Add new track" ), HK_ADD_NEW_TRACK, 'X' );
 static Ki_HotkeyInfo HkAddVia( wxT( "Add Via" ), HK_ADD_VIA, 'V' );
+static Ki_HotkeyInfo HkSwitchTrackPosture( wxT( "Switch Track Posture" ),
+                                        HK_SWITCH_TRACK_POSTURE, '/' );
 static Ki_HotkeyInfo HkAddMicroVia( wxT( "Add MicroVia" ), HK_ADD_MICROVIA, 'V'
                                     + GR_KB_CTRL );
 static Ki_HotkeyInfo HkEndTrack( wxT( "End Track" ), HK_END_TRACK, WXK_END );
@@ -157,6 +159,7 @@ Ki_HotkeyInfo* s_board_edit_Hotkey_List[] =
     &HkTrackDisplayMode,       &HkDelete,
     &HkBackspace,
     &HkAddNewTrack,            &HkAddVia,                    &HkAddMicroVia,
+    &HkSwitchTrackPosture,
     &HkEndTrack,               &HkMoveFootprint,
     &HkFlipFootprint,          &HkRotateFootprint,           &HkDragFootprint,
     &HkGetAndMoveFootprint,    &HkLock_Unlock_Footprint,     &HkSavefile,
@@ -494,6 +497,12 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         Other_Layer_Route( (TRACK*) GetCurItem(), DC ); // place via and switch layer
         if( DisplayOpt.ContrastModeDisplay )
             DrawPanel->Refresh();
+        break;
+
+    case HK_SWITCH_TRACK_POSTURE:   // change the position of initial segment when creating new tracks
+        ShowNewTrackWhenMovingCursor( DrawPanel, DC, false );
+        g_Alternate_Track_Posture = !g_Alternate_Track_Posture;
+        ShowNewTrackWhenMovingCursor( DrawPanel, DC, false );
         break;
 
     case HK_ADD_NEW_TRACK: // Start new track

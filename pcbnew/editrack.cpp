@@ -906,11 +906,16 @@ void ComputeBreakPoint( TRACK* track, int SegmentCount, wxPoint end )
     TRACK* lastTrack = track ? track->Back() : NULL;
     if( lastTrack )
     {
-        if( (lastTrack->m_End.x == lastTrack->m_Start.x)
+        if(( (lastTrack->m_End.x == lastTrack->m_Start.x)
            || (lastTrack->m_End.y == lastTrack->m_Start.y) )
+		&& !g_Alternate_Track_Posture)
         {
             iAngle = 45;
         }
+    } else {
+	if (g_Alternate_Track_Posture) {
+	    iAngle = 45;
+	}
     }
 
     if( iAngle == 0 )

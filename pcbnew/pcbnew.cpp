@@ -43,6 +43,7 @@ bool           g_Drag_Pistes_On;
 bool           g_Show_Module_Ratsnest;
 bool           g_Show_Pads_Module_in_Move = true;
 bool           g_Raccord_45_Auto = true;
+bool 	       g_Alternate_Track_Posture = false;
 bool           g_Track_45_Only_Allowed = true;  // True to allow horiz, vert. and 45deg only tracks
 bool           Segments_45_Only;                // True to allow horiz, vert. and 45deg only graphic segments
 bool           g_TwoSegmentTrackBuild = true;
