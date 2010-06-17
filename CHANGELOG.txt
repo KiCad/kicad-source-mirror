@@ -7,7 +7,11 @@ email address.
 2010-Jun-17 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++eeschema:
-    Added "template fieldnames" to eeschema. This is a list of template elements
+    Added "template fieldnames" to eeschema.  Thanks to
+    Brian Sidebotham <brian.sidebotham@gmail.com> for the origins of this patch.
+    https://lists.launchpad.net/kicad-developers/msg04828.html
+
+    A template fieldnames are a list of template elements
     consisting of {name, value, visibility} which you want shown in the eeschema
     component fieldname (property) editors (both schematic and library versions
     of the editors). Template fieldnames are forced into the editors'
