@@ -230,13 +230,53 @@ public:
     void ThrowIOError( wxString aText, int charOffset ) throw (IOError);
 
     /**
-     * Function GetTokenString
+     * Function Expecting
+     * throws an IOError exception with an input file specific error message.
+     * @param aTok is the token/keyword type which was expected at the current input location.
+     * @throw IOError with the location within the input file of the problem.
+     */
+    void Expecting( int aTok ) throw( IOError );
+
+    /**
+     * Function Expecting
+     * throws an IOError exception with an input file specific error message.
+     * @param aErrorMsg is the token/keyword type which was expected at the
+     *         current input location.
+     * @throw IOError with the location within the input file of the problem.
+     */
+    void Expecting( const wxString& aErrorMsg ) throw( IOError );
+
+    /**
+     * Function Unexpected
+     * throws an IOError exception with an input file specific error message.
+     * @param aTok is the token/keyword type which was not expected at the
+     *         current input location.
+     * @throw IOError with the location within the input file of the problem.
+     */
+    void Unexpected( int aTok ) throw( IOError );
+
+    /**
+     * Function Unexpected
+     * throws an IOError exception with an input file specific error message.
+     * @param aErrorMsg is the token/keyword type which was not expected at the
+     *         current input location.
+     * @throw IOError with the location within the input file of the problem.
+     */
+    void Unexpected( const wxString& aErrorMsg ) throw( IOError );
+
+    /**
+     * Function GetTokenText
      * returns the C string representation of a DSN_T value.
      */
     const char* GetTokenText( int aTok );
 
-    static const char* Syntax( int aTok );
+    /**
+     * Function GetTokenString
+     * returns a quote wrapped wxString representation of a token value.
+     */
+    wxString GetTokenString( int aTok );
 
+    static const char* Syntax( int aTok );
 
     /**
      * Function CurText

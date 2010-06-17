@@ -3,6 +3,7 @@
 /**********************************************************/
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "gr_basic.h"
 #include "common.h"
 #include "base_struct.h"
@@ -35,8 +36,8 @@
  *
  *  0 = REFERENCE
  *  1 = VALUE
- *  3 = FOOTPRINT (default Footprint)
- *  4 = DOCUMENTATION (user doc link)
+ *  2 = FOOTPRINT (default Footprint)
+ *  3 = DOCUMENTATION (user doc link)
  *
  *  others = free fields
  */
@@ -81,6 +82,11 @@ void LIB_FIELD::Init( int id )
     m_FieldId = id;
     m_Size.x = m_Size.y = DEFAULT_SIZE_TEXT;
     m_typeName = _( "Field" );
+
+    // fields in RAM must always have names, because we are trying to get
+    // less dependent on field ids and more dependent on names.
+    // Plus assumptions are made in the field editors.
+    m_Name = TEMPLATE_FIELDNAME::GetDefaultFieldName( id );
 }
 
 
@@ -94,13 +100,16 @@ bool LIB_FIELD::Save( FILE* ExportFile )
         hjustify = 'L';
     else if( m_HJustify == GR_TEXT_HJUSTIFY_RIGHT )
         hjustify = 'R';
+
     vjustify = 'C';
     if( m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
         vjustify = 'B';
     else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
         vjustify = 'T';
+
     if( text.IsEmpty() )
         text = wxT( "~" );
+
     if( fprintf( ExportFile, "F%d \"%s\" %d %d %d %c %c %c %c%c%c",
                  m_FieldId, CONV_TO_UTF8( text ), m_Pos.x, m_Pos.y, m_Size.x,
                  m_Orient == 0 ? 'H' : 'V',
@@ -115,8 +124,10 @@ bool LIB_FIELD::Save( FILE* ExportFile )
      * Just because default name depends on the language and can change from
      * a country to an other
      */
+    wxString defName = TEMPLATE_FIELDNAME::GetDefaultFieldName( m_FieldId );
+
     if( m_FieldId >= FIELD1 && !m_Name.IsEmpty()
-        && m_Name != ReturnDefaultFieldName( m_FieldId )
+        && m_Name != defName
         && fprintf( ExportFile, " \"%s\"", CONV_TO_UTF8( m_Name ) ) < 0 )
         return false;
 
@@ -177,8 +188,7 @@ bool LIB_FIELD::Load( char* line, wxString& errorMsg )
 
     if( cnt < 5 )
     {
-        errorMsg.Printf( wxT( "field %d does not have the correct number of \
-parameters" ),
+        errorMsg.Printf( wxT( "field %d does not have the correct number of parameters" ),
                          m_FieldId );
         return false;
     }
@@ -192,8 +202,7 @@ parameters" ),
         m_Orient = TEXT_ORIENT_VERT;
     else
     {
-        errorMsg.Printf( wxT( "field %d text orientation parameter <%c> is \
-not valid" ),
+        errorMsg.Printf( wxT( "field %d text orientation parameter <%c> is not valid" ),
                          textOrient );
         return false;
     }
@@ -204,8 +213,7 @@ not valid" ),
         m_Attributs |= TEXT_NO_VISIBLE;
     else
     {
-        errorMsg.Printf( wxT( "field %d text visible parameter <%c> is not \
-valid" ),
+        errorMsg.Printf( wxT( "field %d text visible parameter <%c> is not valid" ),
                          textVisible );
         return false;
     }
@@ -223,9 +231,9 @@ valid" ),
             m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
         else
         {
-            errorMsg.Printf( wxT( "field %d text horizontal justification \
-parameter <%c> is not valid" ),
-                             textHJustify );
+            errorMsg.Printf(
+                wxT( "field %d text horizontal justification parameter <%c> is not valid" ),
+                textHJustify );
             return false;
         }
 
@@ -237,9 +245,9 @@ parameter <%c> is not valid" ),
             m_VJustify = GR_TEXT_VJUSTIFY_TOP;
         else
         {
-            errorMsg.Printf( wxT( "field %d text vertical justification \
-parameter <%c> is not valid" ),
-                             textVJustify[0] );
+            errorMsg.Printf(
+                wxT( "field %d text vertical justification parameter <%c> is not valid" ),
+                textVJustify[0] );
             return false;
         }
 
@@ -249,7 +257,15 @@ parameter <%c> is not valid" ),
             m_Bold = true;
     }
 
-    if( m_FieldId >= FIELD1 )
+    // fields in RAM must always have names.
+    if( m_FieldId < MANDATORY_FIELDS )
+    {
+        // Fields in RAM must always have names, because we are trying to get
+        // less dependent on field ids and more dependent on names.
+        // Plus assumptions are made in the field editors.
+        m_Name = TEMPLATE_FIELDNAME::GetDefaultFieldName( m_FieldId );
+    }
+    else
     {
         ReadDelimitedText( fieldUserName, line, sizeof( fieldUserName ) );
         m_Name = CONV_FROM_UTF8( fieldUserName );
@@ -257,7 +273,6 @@ parameter <%c> is not valid" ),
 
     return true;
 }
-
 
 
 /** Function GetPenSize
@@ -346,7 +361,9 @@ bool LIB_FIELD::HitTest( const wxPoint& refPos )
     return HitTest( refPos, 0, DefaultTransformMatrix );
 }
 
- /** Function HitTest
+
+/**
+ * Function HitTest
  * @return true if the point aPosRef is near this object
  * @param aPosRef = a wxPoint to test
  * @param aThreshold =  unused here (TextHitTest calculates its threshold )
@@ -526,35 +543,4 @@ EDA_Rect LIB_FIELD::GetBoundingBox()
     rect.SetEnd( end );
 
     return rect;
-}
-
-
-/**
- * Function ReturnDefaultFieldName
- * Return the default field name from its index (REFERENCE, VALUE ..)
- * FieldDefaultNameList is not static, because we want the text translation
- * for I18n
- * @param aFieldNdx = Filed number (>= 0)
- */
-wxString ReturnDefaultFieldName( int aFieldNdx )
-{
-    // avoid unnecessarily copying wxStrings at runtime.
-    static const wxString defaults[] = {
-        _( "Reference" ),   // Reference of part, i.e. "IC21"
-        _( "Value" ),       // Value of part, i.e. "3.3K" and name in lib
-                            // for lib entries
-        _( "Footprint" ),   // Footprint, used by cvpcb or pcbnew, i.e.
-                            // "16DIP300"
-        _( "Datasheet" ),   // A link to an user document, if wanted
-    };
-
-    if( (unsigned) aFieldNdx <= DATASHEET )
-        return defaults[ aFieldNdx ];
-
-    else
-    {
-        wxString ret = _( "Field" );
-        ret << ( aFieldNdx - FIELD1 + 1);
-        return ret;
-    }
 }

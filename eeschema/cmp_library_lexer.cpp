@@ -3,4 +3,4 @@
  * library file DSN lexer which will replace the current library and library
  * document file formats.
  */
-#include "cmp_library_base.cpp"
+#include "cmp_library_keywords.cpp"

@@ -28,19 +28,18 @@ class LIB_FIELD;
 class SCH_FIELD : public SCH_ITEM, public EDA_TextStruct
 {
 public:
-    int      m_FieldId;         /* Field indicator type (REFERENCE, VALUE or
-                                 * other id) */
+    int      m_FieldId;         ///< Field index, @see enum NumFieldType
 
-    wxString m_Name;            /* Field name (ref, value,pcb, sheet, filed 1..
-                                 *  and for fields 1 to 8 the name is editable
-                                 */
 
-    bool     m_AddExtraText;    /* Mainly for REFERENCE, add extra info
+    wxString m_Name;
+
+    bool     m_AddExtraText;    /**< for REFERENCE, add extra info
                                  * (for REFERENCE: add part selection text */
 
 public:
     SCH_FIELD( const wxPoint& aPos,  int aFieldId, SCH_COMPONENT* aParent,
                wxString aName = wxEmptyString );
+
     ~SCH_FIELD();
 
     virtual wxString GetClass() const

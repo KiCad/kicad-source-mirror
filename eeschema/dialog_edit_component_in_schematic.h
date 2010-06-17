@@ -67,6 +67,8 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEM
     void deleteFieldButtonHandler( wxCommandEvent& event );
     void moveUpButtonHandler( wxCommandEvent& event );
 
+    SCH_FIELD* findField( const wxString& aFieldName );
+
 
 protected:
 
@@ -92,12 +94,6 @@ private:
         for( unsigned ii = FIELD1;  ii<m_FieldsBuf.size(); ii++ )
             setRowItem( ii, m_FieldsBuf[ii] );
     }
-
-    /** Function reinitializeFieldsIdAndDefaultNames
-     * Calculates  the field id and default name, after deleting a field
-     * or moving a field
-    */
-    void reinitializeFieldsIdAndDefaultNames();
 };
 
 #endif // __dialog_edit_component_in_schematic__

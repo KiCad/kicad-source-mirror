@@ -5,6 +5,7 @@
 #include <algorithm>
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "common.h"
 #include "confirm.h"
 #include "class_drawpanel.h"
@@ -20,8 +21,8 @@
 // Local variables:
 static int s_SelectedRow;
 
-#define COLUMN_FIELD_NAME 0
-#define COLUMN_TEXT 1
+#define COLUMN_FIELD_NAME   0
+#define COLUMN_TEXT         1
 
 /*****************************************************************************************/
 class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB : public DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
@@ -29,8 +30,8 @@ class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB : public DIALOG_EDIT_LIBENTRY_FIELDS_IN
 {
 private:
     WinEDA_LibeditFrame*    m_Parent;
-    LIB_COMPONENT* m_LibEntry;
-    bool m_skipCopyFromPanel;
+    LIB_COMPONENT*          m_LibEntry;
+    bool                    m_skipCopyFromPanel;
 
     /// a copy of the edited component's LIB_FIELDs
     std::vector <LIB_FIELD> m_FieldsBuf;
@@ -63,7 +64,14 @@ private:
      * sets up to edit the given component.
      * @param aComponent The component to edit.
      */
-    void InitBuffers( void );
+    void InitBuffers();
+
+    /**
+     * Function findField
+     * searches m_FieldsBuf and returns a LIB_FIELD with \a aFieldName or NULL if
+     * not found.
+     */
+    LIB_FIELD* findField( const wxString& aFieldName );
 
     /**
      * Function copySelectedFieldToPanel
@@ -81,21 +89,16 @@ private:
     bool copyPanelToSelectedField();
     void setRowItem( int aFieldNdx, const LIB_FIELD& aField );
 
-    /** Function updateDisplay
+    /**
+     * Function updateDisplay
      * update the listbox showing fields, according to the fields texts
      * must be called after a text change in fields, if this change is not an edition
      */
     void updateDisplay( )
     {
-        for( unsigned ii = FIELD1;  ii<m_FieldsBuf.size(); ii++ )
+        for( unsigned ii = MANDATORY_FIELDS;  ii<m_FieldsBuf.size(); ii++ )
             setRowItem( ii, m_FieldsBuf[ii] );
     }
-
-    /** Function reinitializeFieldsIdAndDefaultNames
-     * Calculates  the field id and default name, after deleting a field
-     * or moving a field
-    */
-    void reinitializeFieldsIdAndDefaultNames();
 };
 
 
@@ -223,8 +226,8 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
         if( newvalue->CmpNoCase( m_LibEntry->m_AliasList[i] ) == 0 )
         {
             wxString msg;
-            msg.Printf( _( "A new name is entered for this component\nAn \
-alias %s already exists!\nCannot update this component" ),
+            msg.Printf( _( "A new name is entered for this component\n"
+                           "An alias %s already exists!\nCannot update this component" ),
                         newvalue->GetData() );
             DisplayError( this, msg );
             return;
@@ -234,10 +237,11 @@ alias %s already exists!\nCannot update this component" ),
     /* save old cmp in undo list */
     m_Parent->SaveCopyInUndoList( m_LibEntry, IS_CHANGED );
 
-    // delete any fields with no name
-    for( unsigned i = FIELD1; i < m_FieldsBuf.size(); )
+    // delete any fields with no name or no value before we copy all of m_FieldsBuf
+    // back into the component
+    for( unsigned i = MANDATORY_FIELDS; i < m_FieldsBuf.size(); )
     {
-        if( m_FieldsBuf[i].m_Name.IsEmpty() )
+        if( m_FieldsBuf[i].m_Name.IsEmpty() || m_FieldsBuf[i].m_Text.IsEmpty() )
         {
             m_FieldsBuf.erase( m_FieldsBuf.begin() + i );
             continue;
@@ -246,7 +250,17 @@ alias %s already exists!\nCannot update this component" ),
         ++i;
     }
 
-    // copy all the fields back, and change the length of m_Fields.
+#if defined(DEBUG)
+    for( unsigned i=0; i<m_FieldsBuf.size();  ++i )
+    {
+        printf( "save[%d].name:'%s' value:'%s'\n", i,
+            CONV_TO_UTF8( m_FieldsBuf[i].m_Name ),
+            CONV_TO_UTF8( m_FieldsBuf[i].m_Text )
+            );
+    }
+#endif
+
+    // copy all the fields back, fully replacing any previous fields
     m_LibEntry->SetFields( m_FieldsBuf );
 
     m_Parent->OnModify( );
@@ -255,27 +269,13 @@ alias %s already exists!\nCannot update this component" ),
 }
 
 
-/******************************************************************************/
-void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::reinitializeFieldsIdAndDefaultNames( )
-/*****************************************************************************/
-{
-    for( unsigned new_id = FIELD1; new_id < m_FieldsBuf.size(); new_id++ )
-    {
-        unsigned old_id = m_FieldsBuf[new_id].m_FieldId;
-        if ( old_id != new_id )
-        {
-            if ( m_FieldsBuf[new_id].m_Name == ReturnDefaultFieldName( old_id ) )
-                 m_FieldsBuf[new_id].m_Name = ReturnDefaultFieldName( new_id );
-            m_FieldsBuf[new_id].m_FieldId = new_id;
-        }
-    }
-}
-
-
 /**************************************************************************************/
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::addFieldButtonHandler( wxCommandEvent& event )
 /**************************************************************************************/
 {
+    WinEDA_SchematicFrame* frame;
+    frame = (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
+
     // in case m_FieldsBuf[REFERENCE].m_Orient has changed on screen only, grab
     // screen contents.
     if( !copyPanelToSelectedField() )
@@ -286,7 +286,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::addFieldButtonHandler( wxCommandEvent& 
     LIB_FIELD blank( fieldNdx );
 
     m_FieldsBuf.push_back( blank );
-    m_FieldsBuf[fieldNdx].m_Name = ReturnDefaultFieldName(fieldNdx);
+    m_FieldsBuf[fieldNdx].m_Name = TEMPLATE_FIELDNAME::GetDefaultFieldName(fieldNdx);
 
     setRowItem( fieldNdx, m_FieldsBuf[fieldNdx] );
 
@@ -300,7 +300,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::addFieldButtonHandler( wxCommandEvent& 
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::deleteFieldButtonHandler( wxCommandEvent& event )
 /*****************************************************************************************/
 /* Delete a field.
- * Fields REFERENCE and VALUE are mandatory, and cannot be deleted.
+ * MANDATORY_FIELDS cannot be deleted.
  * If a field is empty, it is removed.
  * if not empty, the text is removed.
  */
@@ -317,6 +317,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::deleteFieldButtonHandler( wxCommandEven
     }
 
     m_skipCopyFromPanel = true;
+
     if( m_FieldsBuf[fieldNdx].m_Text.IsEmpty() )
     {
         m_FieldsBuf.erase( m_FieldsBuf.begin() + fieldNdx );
@@ -324,9 +325,6 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::deleteFieldButtonHandler( wxCommandEven
 
         if( fieldNdx >= m_FieldsBuf.size() )
             --fieldNdx;
-
-        // Reinitialize fields IDs and default names:
-        reinitializeFieldsIdAndDefaultNames();
     }
     else
     {
@@ -351,7 +349,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB:: moveUpButtonHandler( wxCommandEvent& e
     if( fieldNdx >= m_FieldsBuf.size() )    // traps the -1 case too
         return;
 
-    if( fieldNdx <= FIELD1 )
+    if( fieldNdx <= MANDATORY_FIELDS )
     {
         wxBell();
         return;
@@ -370,8 +368,6 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB:: moveUpButtonHandler( wxCommandEvent& e
     m_FieldsBuf[fieldNdx] = tmp;
     setRowItem( fieldNdx, tmp );
 
-    // Reinitialize fields IDs and default names:
-    reinitializeFieldsIdAndDefaultNames();
     updateDisplay( );
 
     m_skipCopyFromPanel = true;
@@ -407,53 +403,138 @@ int DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::getSelectedFieldNdx()
 }
 
 
-static bool SortFieldsById(const LIB_FIELD& item1, const LIB_FIELD& item2)
+/**
+ * Function findfield
+ * searches a LIB_FIELD_LIST for aFieldName.
+ */
+static LIB_FIELD* findfield( const LIB_FIELD_LIST& aList, const wxString& aFieldName )
 {
-    return item1.m_FieldId < item2.m_FieldId;
+    const LIB_FIELD*  field = NULL;
+
+    for( unsigned i=0;  i<aList.size();  ++i )
+    {
+        if( aFieldName == aList[i].m_Name )
+        {
+            field = &aList[i];  // best to avoid casting here.
+            break;
+        }
+    }
+    return (LIB_FIELD*) field;  // remove const-ness last
 }
 
+
+LIB_FIELD* DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::findField( const wxString& aFieldName )
+{
+    for( unsigned i=0;  i<m_FieldsBuf.size();  ++i )
+    {
+        if( aFieldName == m_FieldsBuf[i].m_Name )
+            return &m_FieldsBuf[i];
+    }
+    return NULL;
+}
+
+
 /***********************************************************/
-void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers( void )
+void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers()
 /***********************************************************/
 {
-    LIB_FIELD_LIST fields;
+    LIB_FIELD_LIST cmpFields;
 
-    m_LibEntry->GetFields( fields );
+    m_LibEntry->GetFields( cmpFields );
 
-    // copy all the fields to a work area
-    m_FieldsBuf.reserve(DEFAULT_NUMBER_OF_FIELDS);
-
-    // Creates a working copy of fields
-    for( size_t i = 0; i < fields.size(); i++ )
-        m_FieldsBuf.push_back( fields[i] );
-
-    // Display 12 fields (or more), and add missing fields
-    LIB_FIELD blank( 2 );
-    unsigned fcount = m_FieldsBuf.size();
-    for( unsigned ii = 2; ii < DEFAULT_NUMBER_OF_FIELDS; ii++ )
+#if defined(DEBUG)
+    for( unsigned i=0; i<cmpFields.size();  ++i )
     {
-        unsigned jj;
-        for ( jj = 2; jj < fcount; jj ++ )
-            if ( m_FieldsBuf[jj].m_FieldId == (int)ii )     // Field id already exists, ok.
-                break;
-        if ( jj < fcount ) continue;
-        // Field id not found: add this field
-        blank.m_FieldId = ii;
-        m_FieldsBuf.push_back( blank );
+        printf( "cmpFields[%d].name:%s\n", i, CONV_TO_UTF8( cmpFields[i].m_Name ) );
+    }
+#endif
+
+    /*  We have 3 component related field lists to be aware of: 1) UI
+        presentation (m_FieldsBuf), 2) fields in component ram copy, and 3)
+        fields recorded with component on disk. m_FieldsBuf is the list of UI
+        fields, and this list is not the same as the list which is in the
+        component, which is also not the same as the list on disk. All 3 lists
+        are potentially different. In the UI we choose to preserve the order of
+        the first MANDATORY_FIELDS which are sometimes called fixed fields. Then
+        we append the template fieldnames in the exact same order as the
+        template fieldname editor shows them. Then we append any user defined
+        fieldnames which came from the component, and user can modify it during
+        editing, but cannot delete or move a fixed field.
+    */
+
+    m_FieldsBuf.clear();
+
+    /*  When this code was written, all field constructors ensured that the
+        MANDATORY_FIELDS are all present within a component (in ram only). So we can
+        knowingly copy them over in the normal order. Copy only the fixed fields
+        at first. Please do not break the field constructors.
+    */
+
+    // fixed fields:
+    for( int i=0; i<MANDATORY_FIELDS; ++i )
+    {
+        D( printf( "add fixed:%s\n", CONV_TO_UTF8( cmpFields[i].m_Name ) ); )
+        m_FieldsBuf.push_back( cmpFields[i] );
     }
 
+    // Add template fieldnames:
+    // Now copy in the template fields, in the order that they are present in the
+    // template field editor UI.
+    const TEMPLATE_FIELDNAMES& tfnames =
+        ((WinEDA_SchematicFrame*)m_Parent->GetParent())->GetTemplateFieldNames();
+
+    for( TEMPLATE_FIELDNAMES::const_iterator it = tfnames.begin();  it!=tfnames.end();  ++it )
+    {
+        // add a new field unconditionally to the UI only for this template fieldname
+
+        // field id must not be in range 0 - MANDATORY_FIELDS, set before saving to disk
+        LIB_FIELD   fld(-1);
+
+        // See if field by same name already exists in component.
+        LIB_FIELD* libField = findfield( cmpFields, it->m_Name );
+
+        // If the field does not already exist in the component, then we
+        // use defaults from the template fieldname, otherwise the original
+        // values from the component will be set.
+        if( !libField )
+        {
+            D( printf( "add template:%s\n", CONV_TO_UTF8( it->m_Name ) ); )
+
+            fld.m_Name = it->m_Name;
+            fld.m_Text = it->m_Value;   // empty? ok too.
+
+            if( !it->m_Visible )
+                fld.m_Attributs |= TEXT_NO_VISIBLE;
+            else
+                fld.m_Attributs &= ~TEXT_NO_VISIBLE;
+        }
+        else
+        {
+            D( printf( "match template:%s\n", CONV_TO_UTF8( libField->m_Name )); )
+            fld = *libField;    // copy values from component, m_Name too
+        }
+
+        m_FieldsBuf.push_back( fld );
+    }
+
+    // Lastly, append any original fields from the component which were not added
+    // from the set of fixed fields nor from the set of template fields.
+    for( unsigned i=MANDATORY_FIELDS;  i<cmpFields.size();  ++i )
+    {
+        LIB_FIELD*  cmp = &cmpFields[i];
+        LIB_FIELD*  buf = findField( cmp->m_Name );
+
+        if( !buf )
+        {
+            D( printf( "add cmp:%s\n", CONV_TO_UTF8( cmp->m_Name )); )
+            m_FieldsBuf.push_back( *cmp );
+        }
+    }
+
+    /*  field names have become more important than field ids, so we cannot
+        mangle the names in the buffer, but can do so in the panel, see elsewhere.
     m_FieldsBuf[VALUE].m_Name << wxT( "/" ) << _( "Chip Name" );
-
-    // Sort files by field id, because they are not entered by id
-    sort(m_FieldsBuf.begin(), m_FieldsBuf.end(), SortFieldsById);
-
-    // Now, all fields with Id  0 to NUMBER_OF_FIELDS-1 exist
-    // init default fields names
-    for( unsigned ii = 0; ii < m_FieldsBuf.size(); ii++ )
-    {
-        if( m_FieldsBuf[ii].m_Name.IsEmpty() || ii < FIELD1 )
-            m_FieldsBuf[ii].m_Name = ReturnDefaultFieldName( ii );
-    }
+    */
 
     for( unsigned ii = 0; ii < m_FieldsBuf.size();  ++ii )
     {
@@ -466,6 +547,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers( void )
     // resume editing at the last row edited, last time dialog was up.
     if ( s_SelectedRow < (int) m_FieldsBuf.size() )
         s_SelectedRow = 0;
+
     setSelectedFieldNdx( s_SelectedRow );
 }
 
@@ -513,8 +595,10 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
     int style = 0;
     if( field.m_Italic )
         style = 1;
+
     if( field.m_Bold )
         style |= 2;
+
     m_StyleRadioBox->SetSelection( style );
 
     // Copy the text justification
@@ -532,12 +616,22 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
     else
         m_FieldVJustifyCtrl->SetSelection(1);
 
-    fieldNameTextCtrl->SetValue( field.m_Name );
+
+    // Field names have become more important than field ids, so we cannot
+    // mangle the names in the buffer but we can do so in the panel.
+    if( field.m_FieldId == VALUE )
+        fieldNameTextCtrl->SetValue( field.m_Name + wxT( " / " ) + _( "Chip Name" ) );
+    else
+        fieldNameTextCtrl->SetValue( field.m_Name );
 
     // if fieldNdx == REFERENCE, VALUE, FOOTPRINT, or DATASHEET, then disable field name editing
-    fieldNameTextCtrl->Enable(  fieldNdx >= FIELD1 );
-    fieldNameTextCtrl->SetEditable( fieldNdx >= FIELD1 );
-    moveUpButton->Enable( fieldNdx >= FIELD1 );   // disable move up button for non moveable fields
+    fieldNameTextCtrl->Enable(  fieldNdx >= MANDATORY_FIELDS );
+    fieldNameTextCtrl->SetEditable( fieldNdx >= MANDATORY_FIELDS );
+
+    // only user defined fields may be moved, and not the top most user defined
+    // field since it would be moving up into the fixed fields, > not >=
+    moveUpButton->Enable( fieldNdx > MANDATORY_FIELDS );
+
     // if fieldNdx == REFERENCE, VALUE, then disable delete button
     deleteFieldButton->Enable( fieldNdx > VALUE );
 
@@ -557,10 +651,10 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
     {
         rotateCheckBox->SetValue( m_FieldsBuf[REFERENCE].m_Orient == TEXT_ORIENT_VERT );
 
-        coord.x = m_FieldsBuf[REFERENCE].m_Pos.x + (fieldNdx - FIELD1 + 1) * 100;
-        coord.y = m_FieldsBuf[REFERENCE].m_Pos.y + (fieldNdx - FIELD1 + 1) * 100;
+        coord.x = m_FieldsBuf[REFERENCE].m_Pos.x + (fieldNdx - MANDATORY_FIELDS + 1) * 100;
+        coord.y = m_FieldsBuf[REFERENCE].m_Pos.y + (fieldNdx - MANDATORY_FIELDS + 1) * 100;
 
-        // coord can compute negative if field is < FIELD1, e.g. FOOTPRINT.
+        // coord can compute negative if field is < MANDATORY_FIELDS, e.g. FOOTPRINT.
         // That is ok, we basically don't want all the new empty fields on
         // top of each other.
     }
@@ -602,25 +696,31 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
         GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_HJUSTIFY_CENTER,
         GR_TEXT_HJUSTIFY_RIGHT
     };
+
     GRTextVertJustifyType vjustify[3] = {
         GR_TEXT_VJUSTIFY_BOTTOM, GR_TEXT_VJUSTIFY_CENTER,
         GR_TEXT_VJUSTIFY_TOP
     };
+
     field.m_HJustify = hjustify[m_FieldHJustifyCtrl->GetSelection()];
     field.m_VJustify = vjustify[m_FieldVJustifyCtrl->GetSelection()];
 
-    /* Void fields texts for REFERENCE and VALUE (value is the name of the component in lib ! ) are not allowed
-     * change them only for a new non void value
-     */
+    // Blank/empty field texts for REFERENCE and VALUE are not allowed.
+    // (Value is the name of the component in lib!)
+    // Change them only if user provided a non blank value
     if( !fieldValueTextCtrl->GetValue().IsEmpty() || fieldNdx > VALUE )
         field.m_Text = fieldValueTextCtrl->GetValue();
 
-    field.m_Name = fieldNameTextCtrl->GetValue();
+    // FieldNameTextCtrl has a tricked value in it for VALUE index, do not copy it back.
+    // It has the "Chip Name" appended.
+    if( field.m_FieldId >= MANDATORY_FIELDS )
+        field.m_Name = fieldNameTextCtrl->GetValue();
 
     setRowItem( fieldNdx, field );  // update fieldListCtrl
 
     field.m_Size.x = WinEDA_GraphicTextCtrl::ParseSize(
         textSizeTextCtrl->GetValue(), EESCHEMA_INTERNAL_UNIT, g_UnitMetric );
+
     field.m_Size.y = field.m_Size.x;
 
     int style = m_StyleRadioBox->GetSelection();
@@ -632,7 +732,7 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
     if( (style & 2 ) != 0 )
         field.m_Bold = true;
     else
-	field.m_Bold = false;
+        field.m_Bold = false;
 
     double value;
 

@@ -118,8 +118,8 @@ public:
     }
 };
 
-
 typedef boost::ptr_vector< CMP_LIB_ENTRY > LIB_ENTRY_LIST;
+
 
 extern bool operator<( const CMP_LIB_ENTRY& aItem1, const CMP_LIB_ENTRY& aItem2 );
 
@@ -183,6 +183,9 @@ private:
                                           * Used only by the component editor LibEdit
                                           * to store aliases info during edition
                                           * usually void outside the component editor */
+
+    void deleteAllFields();
+
 public:
     LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary = NULL );
     LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary = NULL );
@@ -301,18 +304,31 @@ public:
     void SetNormal() { m_options = ENTRY_NORMAL; }
 
     /**
-     * Initialize fields from a vector of fields.
+     * Function SetFields
+     * overwrites all the existing in this component with fields supplied
+     * in \a aFieldsList.  The only known caller of this function is the
+     * library component field editor, and it establishes needed behavior.
      *
-     * @param aFields - a std::vector <LIB_FIELD> to import.
+     * @param aFieldsList is a set of fields to import, removing all previous fields.
      */
-    void SetFields( const std::vector <LIB_FIELD> aFields );
+    void SetFields( const std::vector <LIB_FIELD>& aFieldsList );
 
     /**
-     * Return list of field references of component.
+     * Function GetFields
+     * returns a list of fields withing this component. The only known caller of
+     * this function is the library component field editor, and it establishes
+     * needed behavior.
      *
-     * @param aList - List to add field references to.
+     * @param aList - List to add fields to
      */
     void GetFields( LIB_FIELD_LIST& aList );
+
+    /**
+     * Function FindField
+     * finds a field within this component matching \a aFieldName and returns
+     * it or NULL if not found.
+     */
+    LIB_FIELD*  FindField( const wxString& aFieldName );
 
     /**
      * Return pointer to the requested field.

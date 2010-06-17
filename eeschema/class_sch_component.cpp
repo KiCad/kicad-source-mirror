@@ -3,6 +3,7 @@
 /**************************************************************/
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "class_drawpanel.h"
 #include "gr_basic.h"
 #include "common.h"
@@ -63,7 +64,6 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent,
                               const wxPoint& pos, bool setNewItemFlag ) :
     SCH_ITEM( NULL, TYPE_SCH_COMPONENT )
 {
-
     Init( pos );
 
     m_Multi     = unit;
@@ -74,42 +74,39 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent,
     if( setNewItemFlag )
         m_Flags = IS_NEW | IS_MOVED;
 
-    // Import predefined fields from the library component:
+    // Import user defined fields from the library component:
     LIB_FIELD_LIST libFields;
+
     libComponent.GetFields( libFields );
 
-    for(  size_t i = 0; i < libFields.size(); i++ )
+    for( LIB_FIELD_LIST::iterator it = libFields.begin();  it!=libFields.end();  ++it )
     {
-        if( libFields[i].m_Text.IsEmpty() && libFields[i].m_Name.IsEmpty() )
+        // Can no longer insert an empty name, since names are now keys.  The
+        // field index is not used beyond the first MANDATORY_FIELDS
+        if( it->m_Name.IsEmpty() )
             continue;
 
-        int field_idx = libFields[i].m_FieldId;
-        /* Add extra fields if library component has more than the default
-         * number of fields.
-         */
-        if( field_idx >= GetFieldCount() )
+        // See if field by same name already exists.
+        SCH_FIELD* schField = FindField( it->m_Name );
+
+        if( !schField )
         {
-            while( field_idx >= GetFieldCount() )
-            {
-                SCH_FIELD field( wxPoint( 0, 0 ), GetFieldCount(), this,
-                                 ReturnDefaultFieldName( field_idx ) );
-                AddField( field );
-            }
+            SCH_FIELD fld( wxPoint( 0, 0 ), GetFieldCount(), this, it->m_Name );
+            schField = AddField( fld );
         }
-        SCH_FIELD* schField = GetField( field_idx );
 
-        schField->m_Pos = m_Pos + libFields[i].m_Pos;
-        schField->ImportValues( libFields[i] );
-        schField->m_Text = libFields[i].m_Text;
-        schField->m_Name = ( field_idx < FIELD1 ) ? ReturnDefaultFieldName( field_idx ) :
-            libFields[i].m_Name;
+        schField->m_Pos = m_Pos + it->m_Pos;
+
+        schField->ImportValues( *it );
+
+        schField->m_Text = it->m_Text;
     }
-
 
     wxString msg = libComponent.GetReferenceField().m_Text;
 
     if( msg.IsEmpty() )
         msg = wxT( "U" );
+
     m_PrefixString = msg;
 
     // update the reference -- just the prefix for now.
@@ -147,20 +144,19 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aTemplate ) :
 void SCH_COMPONENT::Init( const wxPoint& pos )
 {
     m_Pos = pos;
-    m_Multi = 0;    /* In multi unit chip - which unit to draw. */
-    m_Convert = 0;  /* De Morgan Handling  */
+    m_Multi = 0;    // In multi unit chip - which unit to draw.
+    m_Convert = 0;  // De Morgan Handling
 
-    /* The rotation/mirror transformation matrix. pos normal */
+    // The rotation/mirror transformation matrix. pos normal
     m_Transform[0][0] = 1;
     m_Transform[0][1] = 0;
     m_Transform[1][0] = 0;
     m_Transform[1][1] = -1;
 
-    m_Fields.reserve( DEFAULT_NUMBER_OF_FIELDS );
-
-    for( int i = 0; i < DEFAULT_NUMBER_OF_FIELDS; ++i )
+    // construct only the mandatory fields, which are the first 4 only.
+    for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {
-        SCH_FIELD field( pos, i, this, ReturnDefaultFieldName( i ) );
+        SCH_FIELD field( pos, i, this, TEMPLATE_FIELDNAME::GetDefaultFieldName( i ) );
 
         if( i==REFERENCE )
             field.SetLayer( LAYER_REFERENCEPART );
@@ -300,7 +296,7 @@ wxString SCH_COMPONENT::ReturnFieldName( int aFieldNdx ) const
         if( !field->m_Name.IsEmpty() )
             return field->m_Name;
         else
-            return ReturnDefaultFieldName( aFieldNdx );
+            return TEMPLATE_FIELDNAME::GetDefaultFieldName( aFieldNdx );
     }
 
     return wxEmptyString;
@@ -504,14 +500,27 @@ SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
 
     wxASSERT( field );
 
-    // use case to remove const-ness
+    // use cast to remove const-ness
     return (SCH_FIELD*) field;
 }
 
 
-void SCH_COMPONENT::AddField( const SCH_FIELD& aField )
+SCH_FIELD* SCH_COMPONENT::AddField( const SCH_FIELD& aField )
 {
+    int newNdx = m_Fields.size();
     m_Fields.push_back( aField );
+    return &m_Fields[newNdx];
+}
+
+
+SCH_FIELD* SCH_COMPONENT::FindField( const wxString& aFieldName )
+{
+    for( unsigned i=0;  i<m_Fields.size();  ++i )
+    {
+        if( aFieldName == m_Fields[i].m_Name )
+            return &m_Fields[i];
+    }
+    return NULL;
 }
 
 
@@ -607,7 +616,7 @@ void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
     {
        GetField(ii)->SetParent( this );
     }
-    
+
     EXCHG( m_PathsAndReferences, copyitem->m_PathsAndReferences);
 }
 
@@ -1038,17 +1047,34 @@ bool SCH_COMPONENT::Save( FILE* f ) const
         }
     }
 
-    for( int fieldNdx = 0; fieldNdx < GetFieldCount(); ++fieldNdx )
+    // update the ugly field index, which I would like to see go away someday soon.
+    for( unsigned i=0;  i<m_Fields.size();  ++i )
     {
-        SCH_FIELD* field = GetField( fieldNdx );
-        wxString   defaultName = ReturnDefaultFieldName( fieldNdx );
+        SCH_FIELD* fld = GetField( i );
+        fld->m_FieldId = i;  // we don't need field Ids, please be gone.
+    }
 
-        // only save the field if there is a value in the field or if field name
-        // is different than the default field name
-        if( field->m_Text.IsEmpty() && defaultName == field->m_Name )
-            continue;
+    // Fixed fields:
+    // Save fixed fields which are non blank.
+    for( unsigned i=0;  i<MANDATORY_FIELDS;  ++i )
+    {
+        SCH_FIELD* fld = GetField( i );
+        if( !fld->m_Text.IsEmpty() )
+        {
+            if( !fld->Save( f ) )
+                return false;
+        }
+    }
 
-        if( !field->Save( f ) )
+    // User defined fields:
+    // The *policy* about which user defined fields are part of a symbol is now
+    // only in the dialog editors.  No policy should be enforced here, simply
+    // save all the user defined fields, they are present because a dialog editor
+    // thought they should be.  If you disagree, go fix the dialog editors.
+    for( unsigned i=MANDATORY_FIELDS;  i<m_Fields.size();  ++i )
+    {
+        SCH_FIELD* fld = GetField( i );
+        if( !fld->Save( f ) )
             return false;
     }
 

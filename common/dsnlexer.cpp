@@ -182,6 +182,16 @@ const char* DSNLEXER::GetTokenText( int aTok )
 }
 
 
+wxString DSNLEXER::GetTokenString( int aTok )
+{
+    wxString    ret;
+
+    ret << wxT("'") << CONV_FROM_UTF8( GetTokenText(aTok) ) << wxT("'");
+
+    return ret;
+}
+
+
 void DSNLEXER::ThrowIOError( wxString aText, int charOffset ) throw (IOError)
 {
     // append to aText, do not overwrite
@@ -190,6 +200,38 @@ void DSNLEXER::ThrowIOError( wxString aText, int charOffset ) throw (IOError)
           << wxT(" ") << _("at offset") << wxT(" ") << charOffset;
 
     throw IOError( aText );
+}
+
+
+void DSNLEXER::Expecting( int aTok ) throw( IOError )
+{
+    wxString    errText( _("Expecting") );
+    errText << wxT(" ") << GetTokenString( aTok );
+    ThrowIOError( errText, CurOffset() );
+}
+
+
+void DSNLEXER::Expecting( const wxString& text ) throw( IOError )
+{
+    wxString    errText( _("Expecting") );
+    errText << wxT(" '") << text << wxT("'");
+    ThrowIOError( errText, CurOffset() );
+}
+
+
+void DSNLEXER::Unexpected( int aTok ) throw( IOError )
+{
+    wxString    errText( _("Unexpected") );
+    errText << wxT(" ") << GetTokenString( aTok );
+    ThrowIOError( errText, CurOffset() );
+}
+
+
+void DSNLEXER::Unexpected( const wxString& text ) throw( IOError )
+{
+    wxString    errText( _("Unexpected") );
+    errText << wxT(" '") << text << wxT("'");
+    ThrowIOError( errText, CurOffset() );
 }
 
 

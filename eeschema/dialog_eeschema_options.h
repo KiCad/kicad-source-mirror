@@ -11,7 +11,7 @@
 class DIALOG_EESCHEMA_OPTIONS : public DIALOG_EESCHEMA_OPTIONS_BASE
 {
 public:
-	DIALOG_EESCHEMA_OPTIONS( wxWindow* parent );
+    DIALOG_EESCHEMA_OPTIONS( wxWindow* parent );
 
     void SetUnits( const wxArrayString& units, int select = 0 );
     int GetUnitsSelection( void ) { return m_choiceUnits->GetSelection(); }
@@ -91,6 +91,13 @@ public:
     {
         return m_checkPageLimits->GetValue();
     }
+
+
+    /** Set the field \a aNdx textctrl to \a aName */
+    void SetFieldName( int aNdx, wxString aName);
+
+    /** Get the field \a aNdx name from the fields textctrl */
+    wxString GetFieldName( int aNdx );
 };
 
 #endif // __dialog_eeschema_options__

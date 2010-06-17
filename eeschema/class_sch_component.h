@@ -31,32 +31,6 @@ struct Error
     }
 };
 
-
-/**
- * Enum NumFieldType
- * is the numbered set of all fields a SCH_COMPONENT can hold
- * Note more than 8 user fields are allowed, but for efficiency reasons
- * the defualt number of users fields is 8
- */
-enum  NumFieldType {
-    REFERENCE = 0,          ///< Field Reference of part, i.e. "IC21"
-    VALUE,                  ///< Field Value of part, i.e. "3.3K"
-    FOOTPRINT,              ///< Field Name Module PCB, i.e. "16DIP300"
-    DATASHEET,              ///< name of datasheet
-
-    FIELD1,
-    FIELD2,
-    FIELD3,
-    FIELD4,
-    FIELD5,
-    FIELD6,
-    FIELD7,
-    FIELD8,
-
-    DEFAULT_NUMBER_OF_FIELDS
-};
-
-
 /// A container for several SCH_FIELD items
 typedef std::vector<SCH_FIELD>  SCH_FIELDS;
 
@@ -230,6 +204,8 @@ public:
      */
     EDA_Rect        GetBoundingBox();
 
+    //-----<Fields>-----------------------------------------------------------
+
     /**
      * Function ReturnFieldName
      * returns the Field name given a field index like (REFERENCE, VALUE ..)
@@ -241,7 +217,7 @@ public:
     /**
      * Function GetField
      * returns a field.
-     * @param aFieldNdx An index into the array of fields
+     * @param aFieldNdx An index into the array of fields, not a field id.
      * @return SCH_FIELD* - the field value or NULL if does not exist
      */
     SCH_FIELD* GetField( int aFieldNdx ) const;
@@ -251,14 +227,22 @@ public:
      * adds a field to the component.  The field is copied as it is put into
      * the component.
      * @param aField A const reference to the SCH_FIELD to add.
+     * @return SCH_FIELD* - the newly inserted field.
      */
-    void AddField( const SCH_FIELD& aField );
+    SCH_FIELD* AddField( const SCH_FIELD& aField );
+
+    /**
+     * Function FindField
+     * searches for SCH_FIELD with \a aFieldName and returns it if found, else NULL.
+     */
+    SCH_FIELD* FindField( const wxString& aFieldName );
 
     void SetFields( const SCH_FIELDS& aFields )
     {
         m_Fields = aFields;     // vector copying, length is changed possibly
     }
 
+    //-----</Fields>----------------------------------------------------------
 
     /**
      * Function GetFieldCount

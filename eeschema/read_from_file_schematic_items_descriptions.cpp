@@ -506,7 +506,6 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
     char*          ptcar;
     wxString       fieldName;
 
-
     component = new SCH_COMPONENT();
 
     component->m_Convert = 1;
@@ -703,7 +702,7 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
             ReadDelimitedText( FieldUserName, ptcar, sizeof(FieldUserName) );
 
             if( !FieldUserName[0] )
-                fieldName = ReturnDefaultFieldName( fieldNdx );
+                fieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldNdx );
             else
                 fieldName = CONV_FROM_UTF8( FieldUserName );
 

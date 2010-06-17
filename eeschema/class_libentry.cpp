@@ -188,13 +188,15 @@ LIB_COMPONENT::LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary ) :
     m_DrawPinNum          = 1;
     m_DrawPinName         = 1;
 
-    /* The minimum requirements for a component are a value and a reference
-     * designator field.
-     */
+    // Add the MANDATORY_FIELDS in RAM only.  These are assumed to be present
+    // when the field editors are invoked.
     LIB_FIELD* value = new LIB_FIELD( this, VALUE );
     value->m_Text = aName;
     drawings.push_back( value );
+
     drawings.push_back( new LIB_FIELD( this, REFERENCE ) );
+    drawings.push_back( new LIB_FIELD( this, FOOTPRINT ) );
+    drawings.push_back( new LIB_FIELD( this, DATASHEET ) );
 }
 
 
@@ -388,19 +390,17 @@ void LIB_COMPONENT::RemoveDrawItem( LIB_DRAW_ITEM* aItem,
 {
     wxASSERT( aItem != NULL );
 
-    /* Value and reference fields cannot be removed. */
+    // none of the MANDATOR_FIELDS may be removed in RAM, but they may be
+    // omitted when saving to disk.
     if( aItem->Type() == COMPONENT_FIELD_DRAW_TYPE )
     {
-        LIB_FIELD* field = (LIB_FIELD*)aItem;
+        LIB_FIELD* field = (LIB_FIELD*) aItem;
 
-        if( field->m_FieldId == VALUE || field->m_FieldId == REFERENCE )
+        if( field->m_FieldId < MANDATORY_FIELDS )
         {
-            wxString fieldType = ( field->m_FieldId == VALUE ) ?
-                _( "value" ) : _( "reference" );
-
-            wxLogWarning( _( "An attempt was made to remove the %s field \
-from component %s in library %s." ),
-                          GetChars( fieldType ), GetChars( GetName() ),
+            wxLogWarning( _( "An attempt was made to remove the %s field "
+                             "from component %s in library %s." ),
+                          GetChars( field->m_Name ), GetChars( GetName() ),
                           GetChars( GetLibraryName() ) );
             return;
         }
@@ -518,8 +518,8 @@ LIB_PIN* LIB_COMPONENT::GetPin( const wxString& aNumber, int aUnit, int aConvert
 
 bool LIB_COMPONENT::Save( FILE* aFile )
 {
-    size_t     i;
-    LIB_FIELD& value = GetValueField();
+    size_t      i;
+    LIB_FIELD&  value = GetValueField();
 
     /* First line: it s a comment (component name for readers) */
     if( fprintf( aFile, "#\n# %s\n#\n", CONV_TO_UTF8( value.m_Text ) ) < 0 )
@@ -567,13 +567,33 @@ bool LIB_COMPONENT::Save( FILE* aFile )
     LIB_FIELD_LIST fields;
     GetFields( fields );
 
-    for( i = 0; i < fields.size(); i++ )
+    // Fixed fields:
+    // may have their own save policy so there is a separate loop for them.
+    for( i = 0;  i < MANDATORY_FIELDS;  ++i )
     {
-        if( fields[i].m_Text.IsEmpty() && fields[i].m_Name.IsEmpty() )
-            continue;
+        if( !fields[i].m_Text.IsEmpty() )
+        {
+            if( !fields[i].Save( aFile ) )
+                return false;
+        }
+    }
 
-        if( !fields[i].Save( aFile ) )
-            return false;
+    // User defined fields:
+    // may have their own save policy so there is a separate loop for them.
+
+    int fieldId = MANDATORY_FIELDS;     // really wish this would go away.
+
+    for( i = MANDATORY_FIELDS; i < fields.size(); ++i )
+    {
+        // There is no need to save empty fields, i.e. no reason to preserve field
+        // names now that fields names come in dynamically through the template
+        // fieldnames.
+        if( !fields[i].m_Text.IsEmpty() )
+        {
+            fields[i].m_FieldId = fieldId++;
+            if( !fields[i].Save( aFile ) )
+                return false;
+        }
     }
 
     /* Save the alias list: a line starting by "ALIAS" */
@@ -623,6 +643,7 @@ bool LIB_COMPONENT::Save( FILE* aFile )
         {
             if( item.Type() == COMPONENT_FIELD_DRAW_TYPE )
                 continue;
+
             if( !item.Save( aFile ) )
                 return false;
         }
@@ -636,6 +657,7 @@ bool LIB_COMPONENT::Save( FILE* aFile )
 
     return true;
 }
+
 
 bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum,
                           wxString& aErrorMsg )
@@ -832,8 +854,8 @@ bool LIB_COMPONENT::LoadDrawEntries( FILE* aFile, char* aLine,
             {
                 if( GetLine( aFile, aLine, aLineNum, LINE_BUFFER_LEN_LARGE ) == NULL )
                 {
-                    aErrorMsg = wxT( "file ended prematurely while attempting \
-to flush to end of drawing section." );
+                    aErrorMsg = wxT( "file ended prematurely while attempting "
+                                    "to flush to end of drawing section." );
                     return false;
                 }
             } while( strncmp( aLine, "ENDDRAW", 7 ) != 0 );
@@ -868,21 +890,26 @@ bool LIB_COMPONENT::LoadField( char* aLine, wxString& aErrorMsg )
 {
     LIB_FIELD* field = new LIB_FIELD( this );
 
-    if ( !field->Load( aLine, aErrorMsg ) )
+    if( !field->Load( aLine, aErrorMsg ) )
     {
         SAFE_DELETE( field );
         return false;
     }
 
-    if( field->m_FieldId == REFERENCE )
+    if( field->m_FieldId < MANDATORY_FIELDS )
     {
-        GetReferenceField() = *field;
-        SAFE_DELETE( field );
-    }
-    else if ( field->m_FieldId == VALUE )
-    {
-        GetValueField() = *field;
-        name = field->m_Text;
+        LIB_FIELD* fixedField = GetField( field->m_FieldId );
+
+        // this will fire only if somebody broke a constructor or editor.
+        // MANDATORY_FIELDS are alway present in ram resident components, no
+        // exceptions, and they always have their names set, even fixed fields.
+        wxASSERT( fixedField );
+
+        *fixedField = *field;
+
+        if( field->m_FieldId == VALUE )
+            name = field->m_Text;
+
         SAFE_DELETE( field );
     }
     else
@@ -932,6 +959,7 @@ EDA_Rect LIB_COMPONENT::GetBoundaryBox( int aUnit, int aConvert )
         if( ( item.m_Unit > 0 ) && ( ( unitCount > 1 ) && ( aUnit > 0 )
                                      && ( aUnit != item.m_Unit ) ) )
             continue;
+
         if( item.m_Convert > 0
             && ( ( aConvert > 0 ) && ( aConvert != item.m_Convert ) ) )
             continue;
@@ -947,48 +975,69 @@ EDA_Rect LIB_COMPONENT::GetBoundaryBox( int aUnit, int aConvert )
 }
 
 
-/** Function SetFields
- * initialize fields from a vector of fields
- * @param aFields a std::vector <LIB_FIELD> to import.
- */
-void LIB_COMPONENT::SetFields( const std::vector <LIB_FIELD> aFields )
+void LIB_COMPONENT::deleteAllFields()
 {
-    LIB_FIELD* field;
+    LIB_DRAW_ITEM_LIST::iterator it;
 
-    for( size_t i = 0; i < aFields.size(); i++ )
+    for( it = drawings.begin();  it!=drawings.end();  /* deleting */  )
     {
-        field = GetField( aFields[i].m_FieldId );
-
-        if( field )
+        if( it->Type() != COMPONENT_FIELD_DRAW_TYPE  )
         {
-            *field = aFields[i];
-
-            if( (int) i == VALUE )
-                name = field->m_Text;
-
+            ++it;
             continue;
         }
 
-        /* If the field isn't set, don't add it to the component. */
-        if( aFields[i].m_Text.IsEmpty() )
-            continue;
+        // 'it' is not advanced, but should point to next in list after erase()
+        drawings.erase( it );
+    }
+}
 
-        field = new LIB_FIELD( aFields[i] );
+
+void LIB_COMPONENT::SetFields( const std::vector <LIB_FIELD>& aFields )
+{
+    deleteAllFields();
+
+    for( unsigned i=0;  i<aFields.size();  ++i )
+    {
+        // drawings is a ptr_vector, new and copy an object on the heap.
+        LIB_FIELD* field = new LIB_FIELD( aFields[i] );
+
         drawings.push_back( field );
     }
 
-    drawings.sort();
+    drawings.sort();    // would be nice to know why...
 }
 
 
 void LIB_COMPONENT::GetFields( LIB_FIELD_LIST& aList )
 {
+    LIB_FIELD*  field;
+
+    // The only caller of this function is the library field editor, so it
+    // establishes policy here.
+
+    // Grab the MANDATORY_FIELDS first, in expected order given by
+    // enum NumFieldType
+    for( int id=0;  id<MANDATORY_FIELDS;  ++id )
+    {
+        field = GetField( id );
+
+        // the MANDATORY_FIELDS are exactly that in RAM.
+        wxASSERT( field );
+
+        aList.push_back( *field );
+    }
+
+    // Now grab all the rest of fields.
     BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
     {
         if( item.Type() != COMPONENT_FIELD_DRAW_TYPE )
             continue;
 
-        LIB_FIELD* field = ( LIB_FIELD* ) &item;
+        field = ( LIB_FIELD* ) &item;
+        if( (unsigned) field->m_FieldId < MANDATORY_FIELDS )
+            continue;  // was added above
+
         aList.push_back( *field );
     }
 }
@@ -1004,6 +1053,23 @@ LIB_FIELD* LIB_COMPONENT::GetField( int aId )
         LIB_FIELD* field = ( LIB_FIELD* ) &item;
 
         if( field->m_FieldId == aId )
+            return field;
+    }
+
+    return NULL;
+}
+
+
+LIB_FIELD* LIB_COMPONENT::FindField( const wxString& aFieldName )
+{
+    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
+    {
+        if( item.Type() != COMPONENT_FIELD_DRAW_TYPE )
+            continue;
+
+        LIB_FIELD* field = ( LIB_FIELD* ) &item;
+
+        if( field->m_Name == aFieldName )
             return field;
     }
 

@@ -39,23 +39,29 @@
 # Usage:
 #
 #     add_custom_command(
-#         OUTPUT ${CMAKE_BINARY_DIR}/cmp_library_base.h
+#         OUTPUT  ${CMAKE_BINARY_DIR}/cmp_library_keywords.h
+#                 ${CMAKE_BINARY_DIR}/cmp_library_keywords.cpp
 #         COMMAND ${CMAKE_COMMAND}
-#                 -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/token_list_file
+#                 -Denum=YOURTOK_T
+#                 -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.lst
 #                 -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
 #         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.lst
 #    )
 #
 # Input parameters:
 #
-#     inputFile - The name of the token list file.
+#     enum       - The name of the enum to generate, defaults to DSN_T, but
+#                  you'll get collisions if you don't override it.
+#     inputFile  - The name of the token list file.
 #     outputPath - Optional output path to save the generated files.  If not defined,
 #                  the output path is the same path as the token list file path.
-#
+
 
 set( tokens "" )
 set( lineCount 0 )
 set( dsnErrorMsg "DSN token file generator failure:" )
+
+
 if( NOT EXISTS ${inputFile} )
     message( FATAL_ERROR "${dsnErrorMsg} file ${inputFile} cannot be found." )
 endif( NOT EXISTS ${inputFile} )
@@ -64,14 +70,20 @@ if( NOT EXISTS ${outputPath} )
     get_filename_component( outputPath "${inputFile}" PATH )
 endif( NOT EXISTS ${outputPath} )
 
+if( NOT DEFINED enum )
+    set( enum DSN_T )
+endif()
+#message( STATUS "enum: ${enum}" )
+
+
 # Separate the file name without extension from the full file path.
 get_filename_component( result "${inputFile}" NAME_WE )
 
 message( STATUS "Extracted file name ${result} from path ${inputFile}" )
 
 # Create include and source file name from the list file name.
-set( includeFileName "${outputPath}/${result}_base.h" )
-set( sourceFileName "${outputPath}/${result}_base.cpp" )
+set( includeFileName "${outputPath}/${result}_keywords.h" )
+set( sourceFileName "${outputPath}/${result}_keywords.cpp" )
 
 # Create tag for generating header file.
 string( TOUPPER "${result}" fileNameTag )
@@ -91,7 +103,7 @@ set( includeFileHeader
 
 namespace DSN {
 
-enum DSN_T {
+enum ${enum} {
 
     // these first few are negative special ones for syntax, and are
     // inherited from DSNLEXER.
@@ -122,7 +134,7 @@ set( sourceFileHeader
 #include \"fctsys.h\"
 #include \"macros.h\"
 
-#include \"${result}_base.h\"
+#include \"${result}_keywords.h\"
 
 
 namespace DSN {
@@ -130,7 +142,6 @@ namespace DSN {
 #define TOKDEF(x)    { #x, T_##x }
 
 const KEYWORD ${result}_keywords[] = {
-
 "
 )
 
@@ -193,8 +204,10 @@ endforeach( token ${tokens} )
 file( APPEND "${includeFileName}"
 "};
 
+extern const KEYWORD  ${result}_keywords[];
+extern const unsigned ${result}_keyword_count;
 
-}        // End namespace DSN
+}   // End namespace DSN
 
 
 #endif   // End ${headerTag}
@@ -208,6 +221,6 @@ file( APPEND "${sourceFileName}"
 const unsigned ${result}_keyword_count = DIM( ${result}_keywords );
 
 
-}        // End namespace DSN
+}   // End namespace DSN
 "
 )

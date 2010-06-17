@@ -11,8 +11,8 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 
-/* definifition des types de parametre des files de configuration */
-enum paramcfg_id    /* type du parametre dans la structure ParamConfig */
+/** Type of parameter in the configuration file */
+enum paramcfg_id
 {
     PARAM_INT,
     PARAM_SETCOLOR,
@@ -20,7 +20,8 @@ enum paramcfg_id    /* type du parametre dans la structure ParamConfig */
     PARAM_BOOL,
     PARAM_LIBNAME_LIST,
     PARAM_WXSTRING,
-    PARAM_COMMAND_ERASE
+    PARAM_COMMAND_ERASE,
+    PARAM_FIELDNAME_LIST,
 };
 
 #define MAX_COLOR  0x8001F
@@ -29,36 +30,50 @@ enum paramcfg_id    /* type du parametre dans la structure ParamConfig */
 #define INT_MINVAL 0x80000000
 #define INT_MAXVAL 0x7FFFFFFF
 
+
+/**
+ * Class PARAM_CFG_BASE
+ * is a base class which establishes the virtual functions ReadParam and SaveParam,
+ * which are re-implemented by a number of base classes, and these function's
+ * doxygen comments are inherited also.
+ */
 class PARAM_CFG_BASE
 {
 public:
-    const wxChar* m_Ident;          /* Keyword in config data */
-    paramcfg_id   m_Type;           /* Type of parameter */
-    const wxChar* m_Group;          /* Group name (tjis is like a path in the config data) */
-    bool          m_Setup;          /* TRUE -> setup parameter (used for all projects), FALSE = parameter relative to a project */
+    const wxChar* m_Ident;  ///<  Keyword in config data
+    paramcfg_id   m_Type;   ///<  Type of parameter
+    const wxChar* m_Group;  ///<  Group name (this is like a path in the config data)
+    bool          m_Setup;  ///<  Install or Project based parameter, true == install
 
 public:
     PARAM_CFG_BASE( const wxChar* ident, const paramcfg_id type, const wxChar* group = NULL );
 
-    /** ReadParam
-     * read the value of parameter thi stored in aConfig
-     * @param aConfig = the wxConfigBase that store the parameter
+    /**
+     * Function ReadParam
+     * reads the value of the parameter stored in aConfig
+     * @param aConfig = the wxConfigBase that holds the parameter
      */
     virtual void ReadParam( wxConfigBase* aConfig ) {};
 
-    /** SaveParam
-     * the the value of parameter thi stored in aConfig
+    /**
+     * Function SaveParam
+     * saves the value of the parameter stored in aConfig
      * @param aConfig = the wxConfigBase that can store the parameter
      */
     virtual void SaveParam( wxConfigBase* aConfig ) {};
 };
 
+
+/**
+ * Configuration parameter - Integer Class
+ *
+ */
 class PARAM_CFG_INT      : public PARAM_CFG_BASE
 {
 public:
-    int* m_Pt_param;                /* pointeur sur le parametre a configurer */
-    int  m_Min, m_Max;              /* valeurs extremes du parametre */
-    int  m_Default;                 /* valeur par defaut */
+    int* m_Pt_param;    ///<  Pointer to the parameter value
+    int  m_Min, m_Max;  ///<  Minimum and maximum values of the param type
+    int  m_Default;     ///<  The default value of the parameter
 
 public:
     PARAM_CFG_INT( const wxChar* ident, int* ptparam,
@@ -68,24 +83,20 @@ public:
                    int default_val = 0, int min = INT_MINVAL, int max = INT_MAXVAL,
                    const wxChar* group = NULL );
 
-    /** ReadParam
-     * read the value of parameter thi stored in aConfig
-     * @param aConfig = the wxConfigBase that store the parameter
-     */
     virtual void ReadParam( wxConfigBase* aConfig );
-
-    /** SaveParam
-     * the the value of parameter thi stored in aConfig
-     * @param aConfig = the wxConfigBase that can store the parameter
-     */
     virtual void SaveParam( wxConfigBase* aConfig );
 };
 
+
+/**
+ * Configuration parameter - SetColor Class
+ *
+ */
 class PARAM_CFG_SETCOLOR : public PARAM_CFG_BASE
 {
 public:
-    int* m_Pt_param;                /* pointeur sur le parametre a configurer */
-    int  m_Default;                 /* valeur par defaut */
+    int* m_Pt_param;    ///<  Pointer to the parameter value
+    int  m_Default;     ///<  The default value of the parameter
 
 public:
     PARAM_CFG_SETCOLOR( const wxChar* ident, int* ptparam,
@@ -93,25 +104,21 @@ public:
     PARAM_CFG_SETCOLOR( bool Insetup, const wxChar* ident, int* ptparam,
                         int default_val, const wxChar* group = NULL );
 
-    /** ReadParam
-     * read the value of parameter thi stored in aConfig
-     * @param aConfig = the wxConfigBase that store the parameter
-     */
     virtual void ReadParam( wxConfigBase* aConfig );
-
-    /** SaveParam
-     * the the value of parameter thi stored in aConfig
-     * @param aConfig = the wxConfigBase that can store the parameter
-     */
     virtual void SaveParam( wxConfigBase* aConfig );
 };
 
+
+/**
+ * Configuration parameter - Double Precision Class
+ *
+ */
 class PARAM_CFG_DOUBLE   : public PARAM_CFG_BASE
 {
 public:
-    double* m_Pt_param;                 /* pointeur sur le parametre a configurer */
-    double  m_Default;                  /* valeur par defaut */
-    double  m_Min, m_Max;               /* valeurs extremes du parametre */
+    double* m_Pt_param;    ///<  Pointer to the parameter value
+    double  m_Default;     ///<  The default value of the parameter
+    double  m_Min, m_Max;  ///<  Minimum and maximum values of the param type
 
 public:
     PARAM_CFG_DOUBLE( const wxChar* ident, double* ptparam,
@@ -121,24 +128,20 @@ public:
                       double default_val = 0.0, double min = 0.0, double max = 10000.0,
                       const wxChar* group = NULL );
 
-    /** ReadParam
-     * read the value of parameter thi stored in aConfig
-     * @param aConfig = the wxConfigBase that store the parameter
-     */
     virtual void ReadParam( wxConfigBase* aConfig );
-
-    /** SaveParam
-     * the the value of parameter thi stored in aConfig
-     * @param aConfig = the wxConfigBase that can store the parameter
-     */
     virtual void SaveParam( wxConfigBase* aConfig );
 };
 
+
+/**
+ * Configuration parameter - Boolean Class
+ *
+ */
 class PARAM_CFG_BOOL     : public PARAM_CFG_BASE
 {
 public:
-    bool* m_Pt_param;               /* pointeur sur le parametre a configurer */
-    int   m_Default;                /* valeur par defaut */
+    bool* m_Pt_param;    ///<  Pointer to the parameter value
+    int   m_Default;     ///<  The default value of the parameter
 
 public:
     PARAM_CFG_BOOL( const wxChar* ident, bool* ptparam,
@@ -146,24 +149,19 @@ public:
     PARAM_CFG_BOOL( bool Insetup, const wxChar* ident, bool* ptparam,
                     int default_val = FALSE, const wxChar* group = NULL );
 
-    /** ReadParam
-     * read the value of parameter thi stored in aConfig
-     * @param aConfig = the wxConfigBase that store the parameter
-     */
     virtual void ReadParam( wxConfigBase* aConfig );
-
-    /** SaveParam
-     * the the value of parameter thi stored in aConfig
-     * @param aConfig = the wxConfigBase that can store the parameter
-     */
     virtual void SaveParam( wxConfigBase* aConfig );
 };
 
 
+/**
+ * Configuration parameter - wxString Class
+ *
+ */
 class PARAM_CFG_WXSTRING     : public PARAM_CFG_BASE
 {
 public:
-    wxString* m_Pt_param;              /* pointeur sur le parametre a configurer */
+    wxString* m_Pt_param;    ///<  Pointer to the parameter value
 
 public:
     PARAM_CFG_WXSTRING( const wxChar* ident, wxString* ptparam, const wxChar* group = NULL );
@@ -171,42 +169,28 @@ public:
                         const wxChar* ident,
                         wxString*     ptparam,
                         const wxChar* group = NULL );
-    /** ReadParam
-     * read the value of parameter thi stored in aConfig
-     * @param aConfig = the wxConfigBase that store the parameter
-     */
-    virtual void ReadParam( wxConfigBase* aConfig );
 
-    /** SaveParam
-     * the the value of parameter thi stored in aConfig
-     * @param aConfig = the wxConfigBase that can store the parameter
-     */
+    virtual void ReadParam( wxConfigBase* aConfig );
     virtual void SaveParam( wxConfigBase* aConfig );
 };
+
 
 class PARAM_CFG_LIBNAME_LIST : public PARAM_CFG_BASE
 {
 public:
-    wxArrayString* m_Pt_param;     /* pointeur sur le parametre a configurer */
+    wxArrayString* m_Pt_param;     ///<  Pointer to the parameter value
 
 public:
     PARAM_CFG_LIBNAME_LIST( const wxChar*  ident,
                             wxArrayString* ptparam,
                             const wxChar*  group = NULL );
 
-    /** ReadParam
-     * read the value of parameter thi stored in aConfig
-     * @param aConfig = the wxConfigBase that store the parameter
-     */
     virtual void ReadParam( wxConfigBase* aConfig );
-
-    /** SaveParam
-     * the the value of parameter thi stored in aConfig
-     * @param aConfig = the wxConfigBase that can store the parameter
-     */
     virtual void SaveParam( wxConfigBase* aConfig );
 };
 
+
+/** A list of parameters type */
 typedef boost::ptr_vector< PARAM_CFG_BASE > PARAM_CFG_ARRAY;
 
 #endif  /* __PARAM_CONFIG_H__ */

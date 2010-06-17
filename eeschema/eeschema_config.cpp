@@ -22,16 +22,16 @@
 #include <wx/fdrepdlg.h>
 
 
-#define HOTKEY_FILENAME wxT( "eeschema" )
+#define HOTKEY_FILENAME         wxT( "eeschema" )
 
-#define FR_HISTORY_LIST_CNT 10   ///< Maximum number of find and replace strings.
+#define FR_HISTORY_LIST_CNT     10   ///< Maximum number of find and replace strings.
 
 void WinEDA_LibeditFrame::Process_Config( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxPoint    pos;
     wxFileName fn;
-    WinEDA_SchematicFrame * schFrame = (WinEDA_SchematicFrame *) GetParent();
+    WinEDA_SchematicFrame * schFrame = ( WinEDA_SchematicFrame * ) GetParent();
 
     wxGetMousePosition( &pos.x, &pos.y );
 
@@ -187,6 +187,7 @@ void WinEDA_SchematicFrame::OnSetOptions( wxCommandEvent& event )
 
     wxLogDebug( wxT( "Current grid array index %d." ),
                 grid_list.Index( GetBaseScreen()->GetGrid() ) );
+
     units.Add( GetUnitsLabel( INCHES ) );
     units.Add( GetUnitsLabel( MILLIMETRE ) );
 
@@ -206,12 +207,24 @@ void WinEDA_SchematicFrame::OnSetOptions( wxCommandEvent& event )
     dlg.Fit();
     dlg.SetMinSize( dlg.GetSize() );
 
+    const TEMPLATE_FIELDNAMES&  tfnames = m_TemplateFieldNames.GetTemplateFieldNames();
+
+    for( unsigned i=0; i<tfnames.size(); ++i )
+    {
+        D(printf("dlg.SetFieldName(%d, '%s')\n",
+            i, CONV_TO_UTF8( tfnames[i].m_Name) );)
+
+        dlg.SetFieldName( i, tfnames[i].m_Name );
+    }
+
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     g_UnitMetric = dlg.GetUnitsSelection();
+
     GetBaseScreen()->SetGrid(
         grid_list[ (size_t) dlg.GetGridSelection() ].m_Size );
+
     g_DrawDefaultLineThickness = dlg.GetLineWidth();
     g_DefaultTextLabelSize = dlg.GetTextSize();
     g_RepeatStep.x = dlg.GetRepeatHorizontal();
@@ -222,6 +235,27 @@ void WinEDA_SchematicFrame::OnSetOptions( wxCommandEvent& event )
     DrawPanel->m_AutoPAN_Enable = dlg.GetEnableAutoPan();
     g_HVLines = dlg.GetEnableHVBusOrientation();
     g_ShowPageLimits = dlg.GetShowPageLimits();
+
+    wxString templateFieldName;
+
+    // @todo this will change when the template field editor is redone to
+    // look like the component field property editor, showing visibility and value also
+
+    DeleteAllTemplateFieldNames();
+    for( int i=0; i<8; ++i )    // no. fields in this dialog window
+    {
+        templateFieldName = dlg.GetFieldName( i );
+
+        if( !templateFieldName.IsEmpty() )
+        {
+            TEMPLATE_FIELDNAME  fld( dlg.GetFieldName( i ) );
+
+            // @todo set visibility and value also from a better editor
+
+            AddTemplateFieldName( fld );
+        }
+    }
+
     DrawPanel->Refresh( true );
 }
 
@@ -438,7 +472,7 @@ static const wxString FindStringEntry( wxT( "LastFindString" ) );
 static const wxString ReplaceStringEntry( wxT( "LastReplaceString" ) );
 static const wxString FindStringHistoryEntry( wxT( "FindStringHistoryList%d" ) );
 static const wxString ReplaceStringHistoryEntry( wxT( "ReplaceStringHistoryList%d" ) );
-
+static const wxString FieldNamesEntry( wxT( "FieldNames" ) );
 
 /*
  * Return the EESchema applications settings list.
@@ -614,6 +648,26 @@ void WinEDA_SchematicFrame::LoadSettings()
         if( !tmpHistory.IsEmpty() )
             m_replaceStringHistoryList.Add( tmpHistory );
     }
+
+    wxString templateFieldNames = cfg->Read( FieldNamesEntry, wxEmptyString );
+
+    if( !templateFieldNames.IsEmpty() )
+    {
+        std::string dsnTxt = CONV_TO_UTF8( templateFieldNames );
+
+        DSNLEXER  lexer( dsnTxt, DSN::template_fieldnames_keywords,
+                                 DSN::template_fieldnames_keyword_count );
+        try
+        {
+            m_TemplateFieldNames.Parse( &lexer );
+        }
+        catch( IOError e )
+        {
+            // @todo show error msg
+            D(printf("templatefieldnames parsing error: '%s'\n",
+                CONV_TO_UTF8(e.errorText) );)
+        }
+    }
 }
 
 
@@ -660,7 +714,7 @@ void WinEDA_SchematicFrame::SaveSettings()
     /* Save the find and replace string history list. */
     size_t i;
     wxString tmpHistory;
-    wxString entry;
+    wxString entry;     // invoke constructor outside of any loops
 
     for ( i = 0; i < m_findStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
     {
@@ -673,4 +727,17 @@ void WinEDA_SchematicFrame::SaveSettings()
         entry.Printf( ReplaceStringHistoryEntry, i );
         cfg->Write( entry, m_replaceStringHistoryList[ i ] );
     }
+
+    // Save template fieldnames
+    STRINGFORMATTER sf;
+
+    m_TemplateFieldNames.Format( &sf, 0 );
+
+    wxString record = CONV_FROM_UTF8( sf.GetString().c_str() );
+    record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
+    record.Replace( wxT("  "), wxT(" "), true );  // double space to single
+
+
+    cfg->Write( FieldNamesEntry, record );
 }
+

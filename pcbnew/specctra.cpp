@@ -549,30 +549,24 @@ void SPECCTRA_DB::ThrowIOError( const wxChar* fmt, ... ) throw( IOError )
 
 void SPECCTRA_DB::expecting( DSN_T aTok ) throw( IOError )
 {
-    wxString    errText( _("Expecting") );
-    errText << wxT(" ") << GetTokenString( aTok );
-    lexer->ThrowIOError( errText, lexer->CurOffset() );
+    lexer->Expecting( aTok );
 }
 
 void SPECCTRA_DB::expecting( const char* text ) throw( IOError )
 {
-    wxString    errText( _("Expecting") );
-    errText << wxT(" '") << CONV_FROM_UTF8(text) << wxT("'");
-    lexer->ThrowIOError( errText, lexer->CurOffset() );
+    wxString    errText = CONV_FROM_UTF8( text );
+    lexer->Expecting( errText );
 }
 
 void SPECCTRA_DB::unexpected( DSN_T aTok ) throw( IOError )
 {
-    wxString    errText( _("Unexpected") );
-    errText << wxT(" ") << GetTokenString( aTok );
-    lexer->ThrowIOError( errText, lexer->CurOffset() );
+    lexer->Expecting( aTok );
 }
 
 void SPECCTRA_DB::unexpected( const char* text ) throw( IOError )
 {
-    wxString    errText( _("Unexpected") );
-    errText << wxT(" '") << CONV_FROM_UTF8(text) << wxT("'");
-    lexer->ThrowIOError( errText, lexer->CurOffset() );
+    wxString    errText = CONV_FROM_UTF8( text );
+    lexer->Unexpected( errText );
 }
 
 

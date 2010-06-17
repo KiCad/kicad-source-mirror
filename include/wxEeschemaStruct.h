@@ -8,6 +8,7 @@
 #include "wxstruct.h"
 #include "param_config.h"
 #include "class_undoredo_container.h"
+#include "template_fieldnames.h"
 
 
 class WinEDA_LibeditFrame;
@@ -51,6 +52,7 @@ enum fl_rot_cmp
     CMP_MIRROR_Y = 0x200          // Mirror around Y axis
 };
 
+
 /**
  * Schematic editor (EESchema) main window.
  */
@@ -68,6 +70,8 @@ public:
     wxString              m_UserLibraryPath;
     wxArrayString         m_ComponentLibFiles;
 
+protected:
+    TEMPLATES             m_TemplateFieldNames;
 
 private:
     wxString              m_DefaultSchematicFileName;
@@ -107,6 +111,49 @@ public:
     PARAM_CFG_ARRAY& GetProjectFileParameters( void );
     void SaveProjectFile( wxWindow* displayframe, bool askoverwrite = true );
     bool LoadProjectFile( const wxString& CfgFileName, bool ForceRereadConfig );
+
+    /**
+     * Function GetDefaultFieldName
+     * returns a default symbol field name for field \a aFieldNdx for all components.
+     * These fieldnames are not modifiable, but template fieldnames are.
+     * @param aFieldNdx The field number index
+     */
+    static wxString GetDefaultFieldName( int aFieldNdx );
+
+
+    /**
+     * Function AddTemplateFieldName
+     * inserts or appends a wanted symbol field name into the fieldnames
+     * template.  Should be used for any symbol property editor.  If the name
+     * already exists, it overwrites the same name.
+     *
+     * @param aFieldName is a full description of the wanted field, and it must not match
+     *          any of the default fieldnames.
+     * @return int - the index within the config container at which aFieldName was
+     *          added, or -1 if the name is illegal because it matches a default fieldname.
+     */
+    int AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName )
+    {
+        return m_TemplateFieldNames.AddTemplateFieldName( aFieldName );
+    }
+
+    /**
+     * Function GetTemplateFieldName
+     * returns a template fieldnames list for read only access.
+     */
+    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames()
+    {
+        return m_TemplateFieldNames.GetTemplateFieldNames();
+    }
+
+    /**
+     * Function DeleteAllTemplateFieldNames
+     * removes all template fieldnames.
+     */
+    void DeleteAllTemplateFieldNames()
+    {
+        m_TemplateFieldNames.DeleteAllTemplateFieldNames();
+    }
 
     PARAM_CFG_ARRAY& GetConfigurationSettings( void );
     void LoadSettings();

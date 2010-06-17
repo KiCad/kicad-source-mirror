@@ -4,6 +4,32 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-Jun-17 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++eeschema:
+    Added "template fieldnames" to eeschema. This is a list of template elements
+    consisting of {name, value, visibility} which you want shown in the eeschema
+    component fieldname (property) editors (both schematic and library versions
+    of the editors). Template fieldnames are forced into the editors'
+    presentation of the fields even though those fields may not exist in the
+    component. Entering a non-blank value while in a field editor will cause the
+    field & value to be retained in the component. Therefore it is unusual to
+    provide a non-blank '.value' in a template, because a trip through the field
+    editor will invariably add that field to the component since the template
+    being applied has initially a non blank 'value'. The current template editor
+    is only going to last about a week and it does not support adding non-blank
+    template values yet, nor visibility control, only field '.name'. But the
+    template fieldnames configuration storage and component field editors do
+    know how to handle template.visible and template.value already, in addition
+    to template.name. See the file .eeschema in your home directory for the
+    configuration storage, keyword: FieldNames. e.g. only field Manufacturer has
+    a '.value':
+
+    FieldNames=(templatefields (field (name "Manufacturer")(value "IBM 12")) (field (name "Vendor")) (field (name "Installed")) (field (name "Ralphy") visible))
+
+    DSNLEXER is used to parse the FieldNames record, & OUTPUTFORMATTER to generate it.
+
+
 2010-jun-15, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 bitmap2component:

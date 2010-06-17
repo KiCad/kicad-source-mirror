@@ -124,6 +124,8 @@ set(EESCHEMA_SRCS
     symbdraw.cpp
     symbedit.cpp
     edit_graphic_bodyitem_text.cpp
+    template_fieldnames_keywords.cpp
+    template_fieldnames.cpp
     tool_lib.cpp
     tool_sch.cpp
     tool_viewlib.cpp
@@ -155,19 +157,33 @@ endif(APPLE)
 # Generate DSN lexer header and source files for the component library file
 # format.
 add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_base.h
+    OUTPUT  ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.cpp
     COMMAND ${CMAKE_COMMAND}
         -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.lst
         -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.lst
-    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_base.h(.cpp)
+    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.h(.cpp)
        from ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.lst"
     )
-
 set_source_files_properties( cmp_library_lexer.cpp
     PROPERTIES
-        OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_base.h
+        OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.h
     )
+
+
+add_custom_command(
+    OUTPUT  ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_keywords.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_keywords.cpp
+    COMMAND ${CMAKE_COMMAND}
+        -Denum=TFIELD_T
+        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.lst
+        -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.lst
+    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_keywords.h(.cpp)
+       from ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.lst"
+    )
+
 
 add_executable(eeschema WIN32 MACOSX_BUNDLE ${EESCHEMA_SRCS} ${EESCHEMA_EXTRA_SRCS}
     ${EESCHEMA_RESOURCES})

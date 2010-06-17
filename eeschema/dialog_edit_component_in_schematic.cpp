@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
@@ -110,22 +111,6 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
     if( GetSizer() )
     {
         GetSizer()->SetSizeHints( this );
-    }
-
-}
-
-
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::reinitializeFieldsIdAndDefaultNames( )
-{
-    for( unsigned new_id = FIELD1; new_id < m_FieldsBuf.size(); new_id++ )
-    {
-        unsigned old_id = m_FieldsBuf[new_id].m_FieldId;
-        if ( old_id != new_id )
-        {
-            if ( m_FieldsBuf[new_id].m_Name == ReturnDefaultFieldName( old_id ) )
-                 m_FieldsBuf[new_id].m_Name = ReturnDefaultFieldName( new_id );
-            m_FieldsBuf[new_id].m_FieldId = new_id;
-        }
     }
 }
 
@@ -242,7 +227,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
 
     copyPanelToOptions();
 
-    /* save old cmp in undo list if not already in edit, or moving ... */
+    // save old cmp in undo list if not already in edit, or moving ...
     if( m_Cmp->m_Flags == 0 )
         m_Parent->SaveCopyInUndoList( m_Cmp, UR_CHANGED );
 
@@ -252,10 +237,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
         m_FieldsBuf[i].m_Pos += m_Cmp->m_Pos;
     }
 
-    // delete any fields with no name
-    for( unsigned i = FIELD1;  i<m_FieldsBuf.size(); )
+    // delete any fields with no name or no value before we copy all of m_FieldsBuf
+    // back into the component
+    for( unsigned i = MANDATORY_FIELDS;  i<m_FieldsBuf.size(); )
     {
-        if( m_FieldsBuf[i].m_Name.IsEmpty() )
+        if( m_FieldsBuf[i].m_Name.IsEmpty() || m_FieldsBuf[i].m_Text.IsEmpty() )
         {
             m_FieldsBuf.erase( m_FieldsBuf.begin() + i );
             continue;
@@ -272,12 +258,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
 
     // copy all the fields back, and change the length of m_Fields.
     m_Cmp->SetFields( m_FieldsBuf );
-    
+
     // Reference has a specific initialisation, depending on the current active sheet
     // because for a given component, in a complexe hierarchy, there are more than one
     // reference.
     m_Cmp->SetRef( m_Parent->GetSheet(), m_FieldsBuf[REFERENCE].m_Text );
-
 
     m_Parent->OnModify( );
 
@@ -303,7 +288,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::addFieldButtonHandler( wxCommandEvent& 
     blank.m_Orient = m_FieldsBuf[REFERENCE].m_Orient;
 
     m_FieldsBuf.push_back( blank );
-    m_FieldsBuf[fieldNdx].m_Name = ReturnDefaultFieldName(fieldNdx);
+    m_FieldsBuf[fieldNdx].m_Name = TEMPLATE_FIELDNAME::GetDefaultFieldName(fieldNdx);
 
     m_skipCopyFromPanel = true;
     setRowItem( fieldNdx, m_FieldsBuf[fieldNdx] );
@@ -320,7 +305,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::deleteFieldButtonHandler( wxCommandEven
     if( fieldNdx >= m_FieldsBuf.size() )    // traps the -1 case too
         return;
 
-    if( fieldNdx < FIELD1 )
+    if( fieldNdx < MANDATORY_FIELDS )
     {
         wxBell();
         return;
@@ -333,8 +318,6 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::deleteFieldButtonHandler( wxCommandEven
     if( fieldNdx >= m_FieldsBuf.size() )
         --fieldNdx;
 
-    // Reinitialize fields IDs and default names:
-    reinitializeFieldsIdAndDefaultNames();
     updateDisplay( );
 
     setSelectedFieldNdx( fieldNdx );
@@ -342,14 +325,14 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::deleteFieldButtonHandler( wxCommandEven
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC:: moveUpButtonHandler( wxCommandEvent& event )
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::moveUpButtonHandler( wxCommandEvent& event )
 {
     unsigned fieldNdx = getSelectedFieldNdx();
 
     if( fieldNdx >= m_FieldsBuf.size() )    // traps the -1 case too
         return;
 
-    if( fieldNdx <= FIELD1 )
+    if( fieldNdx <= MANDATORY_FIELDS )
     {
         wxBell();
         return;
@@ -371,8 +354,6 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC:: moveUpButtonHandler( wxCommandEvent& e
     m_FieldsBuf[fieldNdx] = tmp;
     setRowItem( fieldNdx, tmp );
 
-    // Reinitialize fields IDs and default names:
-    reinitializeFieldsIdAndDefaultNames();
     updateDisplay( );
 
     m_skipCopyFromPanel = true;
@@ -408,16 +389,32 @@ int DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::getSelectedFieldNdx()
 }
 
 
-
-static bool SortFieldsById(const SCH_FIELD& item1, const SCH_FIELD& item2)
+SCH_FIELD* DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::findField( const wxString& aFieldName )
 {
-    return item1.m_FieldId < item2.m_FieldId;
+    for( unsigned i=0;  i<m_FieldsBuf.size();  ++i )
+    {
+        if( aFieldName == m_FieldsBuf[i].m_Name )
+            return &m_FieldsBuf[i];
+    }
+    return NULL;
 }
 
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent )
 {
     m_Cmp = aComponent;
+
+    /*  We have 3 component related field lists to be aware of: 1) UI
+        presentation, 2) fields in component ram copy, and 3) fields recorded
+        with component on disk. m_FieldsBuf is the list of UI fields, and this
+        list is not the same as the list which is in the component, which is
+        also not the same as the list on disk. All 3 lists are potentially
+        different. In the UI we choose to preserve the order of the first
+        MANDATORY_FIELDS which are sometimes called fixed fields. Then we append
+        the template fieldnames in the exact same order as the template
+        fieldname editor shows them. Then we append any user defined fieldnames
+        which came from the component.
+    */
 
     m_LibEntry = CMP_LIBRARY::FindLibraryComponent( m_Cmp->m_ChipName );
 
@@ -430,28 +427,85 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
 
 #endif
 
-    // copy all the fields to a work area
-    m_FieldsBuf = aComponent->m_Fields;
+    // When this code was written, all field constructors ensure that the fixed fields
+    // are all present within a component.  So we can knowingly copy them over
+    // in the normal order.  Copy only the fixed fields at first.
+    // Please do not break the field constructors.
 
-    // Sort files by field id,if they are not entered by id
-    sort(m_FieldsBuf.begin(), m_FieldsBuf.end(), SortFieldsById);
+    m_FieldsBuf.clear();
+    for( int i=0;  i<MANDATORY_FIELDS;  ++i )
+    {
+        m_FieldsBuf.push_back(  aComponent->m_Fields[i] );
+
+        // make the editable field position relative to the component
+        m_FieldsBuf[i].m_Pos -= m_Cmp->m_Pos;
+    }
+
+    // Add template fieldnames:
+    // Now copy in the template fields, in the order that they are present in the
+    // template field editor UI.
+    const TEMPLATE_FIELDNAMES& tfnames = m_Parent->GetTemplateFieldNames();
+    for( TEMPLATE_FIELDNAMES::const_iterator it = tfnames.begin();  it!=tfnames.end();  ++it )
+    {
+        // add a new field unconditionally to the UI only
+        SCH_FIELD   fld( wxPoint(0,0), -1 /* id is a relic */, NULL, it->m_Name );
+
+        // See if field by same name already exists in component.
+        SCH_FIELD* schField = aComponent->FindField( it->m_Name );
+
+        // If the field does not already exist in the component, then we
+        // use defaults from the template fieldname, otherwise the original
+        // values from the component will be set.
+        if( !schField )
+        {
+            if( !it->m_Visible )
+                fld.m_Attributs |= TEXT_NO_VISIBLE;
+            else
+                fld.m_Attributs &= ~TEXT_NO_VISIBLE;
+
+            fld.m_Text = it->m_Value;   // empty? ok too.
+        }
+        else
+        {
+            fld = *schField;
+
+            // make the editable field position relative to the component
+            fld.m_Pos -= m_Cmp->m_Pos;
+        }
+
+        m_FieldsBuf.push_back( fld );
+    }
+
+    // Lastly, append any original fields from the component which were not added
+    // from the set of fixed fields nor from the set of template fields.
+    for( unsigned i=MANDATORY_FIELDS;  i<aComponent->m_Fields.size();  ++i )
+    {
+        SCH_FIELD*  cmp = &aComponent->m_Fields[i];
+        SCH_FIELD*  buf = findField( cmp->m_Name );
+
+        if( !buf )
+        {
+            int newNdx = m_FieldsBuf.size();
+            m_FieldsBuf.push_back( *cmp );
+
+            // make the editable field position relative to the component
+            m_FieldsBuf[newNdx].m_Pos -= m_Cmp->m_Pos;
+        }
+    }
+
 
 #if 0 && defined(DEBUG)
     for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
     {
-        printf( "m_FieldsBuf[%d] (x=%d, y=%d)\n", i, m_FieldsBuf[i].m_Pos.x,
-                m_FieldsBuf[i].m_Pos.y );
+        printf( "m_FieldsBuf[%d] (x=%-3d, y=%-3d) name:%s\n", i, m_FieldsBuf[i].m_Pos.x,
+                m_FieldsBuf[i].m_Pos.y, CONV_TO_UTF8(m_FieldsBuf[i].m_Name) );
     }
-
 #endif
 
     m_FieldsBuf[REFERENCE].m_Text = m_Cmp->GetRef( m_Parent->GetSheet() );
 
     for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
     {
-        // make the editable field position relative to the component
-        m_FieldsBuf[i].m_Pos -= m_Cmp->m_Pos;
-
         setRowItem( i, m_FieldsBuf[i] );
     }
 
@@ -512,22 +566,27 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
     rotateCheckBox->SetValue( field.m_Orient == TEXT_ORIENT_VERT );
 
     int style = 0;
+
     if( field.m_Italic )
         style = 1;
+
     if( field.m_Bold )
         style |= 2;
+
     m_StyleRadioBox->SetSelection( style );
 
     fieldNameTextCtrl->SetValue( field.m_Name );
 
-    // if fieldNdx == REFERENCE, VALUE, FOOTPRINT, or DATASHEET, then
-    //disable editing
-    fieldNameTextCtrl->Enable(  fieldNdx >= FIELD1 );
-    fieldNameTextCtrl->SetEditable( fieldNdx >= FIELD1 );
-    moveUpButton->Enable( fieldNdx >= FIELD1 );   /* disable move up button
-                                                   * for non moveable fields */
-    // if fieldNdx == REFERENCE, VALUE, then disable delete button
-    deleteFieldButton->Enable( fieldNdx > VALUE );
+    // the names of the fixed fields are not editable, others are.
+    fieldNameTextCtrl->Enable(  fieldNdx >= MANDATORY_FIELDS );
+    fieldNameTextCtrl->SetEditable( fieldNdx >= MANDATORY_FIELDS );
+
+    // only user defined fields may be moved, and not the top most user defined
+    // field since it would be moving up into the fixed fields, > not >=
+    moveUpButton->Enable( fieldNdx > MANDATORY_FIELDS );
+
+    // may only delete user defined fields
+    deleteFieldButton->Enable( fieldNdx >= MANDATORY_FIELDS );
 
     fieldValueTextCtrl->SetValue( field.m_Text );
 
@@ -554,11 +613,12 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
         rotateCheckBox->SetValue( m_FieldsBuf[REFERENCE].m_Orient == TEXT_ORIENT_VERT );
 
         coord.x = m_FieldsBuf[REFERENCE].m_Pos.x
-            + ( fieldNdx - FIELD1 + 1 ) * 100;
-        coord.y = m_FieldsBuf[REFERENCE].m_Pos.y
-            + ( fieldNdx - FIELD1 + 1 ) * 100;
+            + ( fieldNdx - MANDATORY_FIELDS + 1 ) * 100;
 
-        // coord can compute negative if field is < FIELD1, e.g. FOOTPRINT.
+        coord.y = m_FieldsBuf[REFERENCE].m_Pos.y
+            + ( fieldNdx - MANDATORY_FIELDS + 1 ) * 100;
+
+        // coord can compute negative if field is < MANDATORY_FIELDS, e.g. FOOTPRINT.
         // That is ok, we basically don't want all the new empty fields on
         // top of each other.
     }

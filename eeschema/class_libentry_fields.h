@@ -9,32 +9,19 @@
 #include "classes_body_items.h"
 
 
-class LIB_FIELD;
-
-
-typedef std::vector< LIB_FIELD > LIB_FIELD_LIST;
-
-
-/* Fields , same as component fields.
- * can be defined in libraries (mandatory for ref and value, ca be useful for
- * footprints)
- * 2 Fields are always defined :
- *     Prefix (U, IC..) with gives the reference in schematic)
- *     Name (74LS00..) used to find the component in libraries, and give the
- * default value in schematic
+/**
+ * Class LIB_FIELD
+ * is used in symbol libraries.  At least MANDATORY_FIELDS are always present
+ * in a ram resident library symbol.  All constructors must ensure this because
+ * the component property editor assumes it.
+ * @see enum NumFieldType
  */
-
 class LIB_FIELD : public LIB_DRAW_ITEM, public EDA_TextStruct
 {
 public:
-    int m_FieldId;     /*  0 = REFERENCE
-                        *  1 = VALUE
-                        *  3 = FOOTPRINT (default Footprint)
-                        *  4 = DOCUMENTATION (user doc link)
-                        *  others = free fields
-                        */
-    wxString m_Name;   /* Field Name (not the field text itself, that is
-                        * .m_Text) */
+    int         m_FieldId;  ///< @see enum NumFieldType
+
+    wxString    m_Name;     ///< Name (not the field text value itself, that is .m_Text)
 
 public:
 
@@ -84,7 +71,8 @@ public:
                int aColor, int aDrawMode, void* aData,
                const int aTransformMatrix[2][2] );
 
-    /** Function IsVisible
+    /**
+     * Function IsVisible
      * @return true is this field is visible, false if flagged invisible
      */
     bool IsVisible()
@@ -173,5 +161,7 @@ protected:
     virtual int DoGetWidth( void ) { return m_Width; }
     virtual void DoSetWidth( int width ) { m_Width = width; }
 };
+
+typedef std::vector< LIB_FIELD > LIB_FIELD_LIST;
 
 #endif  //  CLASS_LIBENTRY_FIELDS_H
