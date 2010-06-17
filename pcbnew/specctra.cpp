@@ -560,7 +560,7 @@ void SPECCTRA_DB::expecting( const char* text ) throw( IOError )
 
 void SPECCTRA_DB::unexpected( DSN_T aTok ) throw( IOError )
 {
-    lexer->Expecting( aTok );
+    lexer->Unexpected( aTok );
 }
 
 void SPECCTRA_DB::unexpected( const char* text ) throw( IOError )
