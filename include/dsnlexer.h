@@ -208,10 +208,9 @@ public:
         return old;
     }
 
-
     /**
      * Function NextTok
-     * returns the next token found in the input file or T_EOF when reaching
+     * returns the next token found in the input file or DSN_EOF when reaching
      * the end of file.  Users should wrap this function to return an enum
      * to aid in grammar debugging while running under a debugger, but leave
      * this lower level function returning an int (so the enum does not collide
@@ -221,6 +220,13 @@ public:
      */
     int NextTok() throw (IOError);
 
+    /**
+     * Function IsSymbol
+     * tests a token to see if it is a symbol.  This means it cannot be a
+     * special delimiter character such as DSN_LEFT, DSN_RIGHT, DSN_QUOTE, etc.  It may
+     * however, coincidentally match a keyword and still be a symbol.
+     */
+    static bool IsSymbol( int aTok );
 
     /**
      * Function ThrowIOError
@@ -263,6 +269,42 @@ public:
      * @throw IOError with the location within the input file of the problem.
      */
     void Unexpected( const wxString& aErrorMsg ) throw( IOError );
+
+    /**
+     * Function NeedLEFT
+     * calls NextTok() and then verifies that the token read in is a DSN_LEFT.
+     * If it is not, an IOError is thrown.
+     * @throw IOError, if the next token is not a DSN_LEFT
+     */
+    void NeedLEFT() throw( IOError );
+
+    /**
+     * Function NeedRIGHT
+     * calls NextTok() and then verifies that the token read in is a DSN_RIGHT.
+     * If it is not, an IOError is thrown.
+     * @throw IOError, if the next token is not a DSN_RIGHT
+     */
+    void NeedRIGHT() throw( IOError );
+
+    /**
+     * Function NeedSYMBOL
+     * calls NextTok() and then verifies that the token read in
+     * satisfies bool IsSymbol().
+     * If not, an IOError is thrown.
+     * @return int - the actual token read in.
+     * @throw IOError, if the next token does not satisfy IsSymbol()
+     */
+    int NeedSYMBOL() throw( IOError );
+
+    /**
+     * Function NeedSYMBOLorNUMBER
+     * calls NextTok() and then verifies that the token read in
+     * satisfies bool IsSymbol() or tok==DSN_NUMBER.
+     * If not, an IOError is thrown.
+     * @return int - the actual token read in.
+     * @throw IOError, if the next token does not satisfy the above test
+     */
+    int NeedSYMBOLorNUMBER() throw( IOError );
 
     /**
      * Function GetTokenText

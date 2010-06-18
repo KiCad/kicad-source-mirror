@@ -547,21 +547,12 @@ void SPECCTRA_DB::ThrowIOError( const wxChar* fmt, ... ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::expecting( DSN_T aTok ) throw( IOError )
-{
-    lexer->Expecting( aTok );
-}
-
 void SPECCTRA_DB::expecting( const char* text ) throw( IOError )
 {
     wxString    errText = CONV_FROM_UTF8( text );
     lexer->Expecting( errText );
 }
 
-void SPECCTRA_DB::unexpected( DSN_T aTok ) throw( IOError )
-{
-    lexer->Unexpected( aTok );
-}
 
 void SPECCTRA_DB::unexpected( const char* text ) throw( IOError )
 {
@@ -574,47 +565,6 @@ DSN_T SPECCTRA_DB::nextTok()
 {
     DSN_T   ret = (DSN_T) lexer->NextTok();
     return ret;
-}
-
-
-bool SPECCTRA_DB::isSymbol( DSN_T aTok )
-{
-    // if aTok is >= 0, then it might be a coincidental match to a keyword.
-    return     aTok==T_SYMBOL
-            || aTok==T_STRING
-            || aTok>=0
-            ;
-}
-
-
-void SPECCTRA_DB::needLEFT() throw( IOError )
-{
-    DSN_T tok = nextTok();
-    if( tok != T_LEFT )
-        expecting( T_LEFT );
-}
-
-void SPECCTRA_DB::needRIGHT() throw( IOError )
-{
-    DSN_T tok = nextTok();
-    if( tok != T_RIGHT )
-        expecting( T_RIGHT );
-}
-
-DSN_T SPECCTRA_DB::needSYMBOL() throw( IOError )
-{
-    DSN_T tok = nextTok();
-    if( !isSymbol( tok ) )
-        expecting( T_SYMBOL );
-    return tok;
-}
-
-DSN_T SPECCTRA_DB::needSYMBOLorNUMBER() throw( IOError )
-{
-    DSN_T  tok = nextTok();
-    if( !isSymbol( tok ) && tok!=T_NUMBER )
-        expecting( "symbol|number" );
-    return tok;
 }
 
 void SPECCTRA_DB::readCOMPnPIN( std::string* component_id, std::string* pin_id ) throw( IOError )
