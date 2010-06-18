@@ -43,9 +43,9 @@
 #                 ${CMAKE_BINARY_DIR}/cmp_library_keywords.cpp
 #         COMMAND ${CMAKE_COMMAND}
 #                 -Denum=YOURTOK_T
-#                 -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.lst
+#                 -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
 #                 -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
-#         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.lst
+#         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
 #    )
 #
 # Input parameters:
