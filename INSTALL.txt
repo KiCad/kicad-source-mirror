@@ -106,9 +106,9 @@ Installation from source code
 
    Some dependencies must be satisfied for the correct installation of KiCad:
 
-wxWidgets           >= 2.6.3.3       http://www.wxwidgets.org/
-CMake               >= 2.4.6         http://www.cmake.org/
-Boost C++ Libraries                  http://www.boost.org/
+wxWidgets           >= 2.8.11        http://www.wxwidgets.org/
+CMake               >= 2.6.4         http://www.cmake.org/
+Boost C++ Libraries  (files used by kicad are provided in kicad sources) http://www.boost.org/
 OpenGL
   Linux:   Mesa 3D Graphics Library  http://www.mesa3d.org/
   Windows: built-in

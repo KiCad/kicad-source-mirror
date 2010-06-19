@@ -797,6 +797,10 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
         // Store fields. Store non empty fields only.
         for( int jj = FOOTPRINT; jj < currCmp->GetFieldCount(); jj++ )
         {
+            //Ensure fields exists in dummy component
+            if( dummyCmp.GetFieldCount() < currCmp->GetFieldCount() )
+                dummyCmp.AddField( *currCmp->GetField( jj ) );
+            // store useful data
             if( !currCmp->GetField( jj )->m_Text.IsEmpty() )
                 dummyCmp.GetField( jj )->m_Text = currCmp->GetField( jj )->m_Text;
         }
@@ -848,6 +852,8 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
         // print fields, on demand
         for( int jj = FIELD1; jj <= FIELD8 ; jj++ )
         {
+            if( dummyCmp.GetFieldCount() >= jj )
+                break;
             if ( IsFieldChecked( jj ) )
                 fprintf( f, "%c%4s", s_ExportSeparatorSymbol,
                         CONV_TO_UTF8( dummyCmp.GetField( jj )->m_Text ) );

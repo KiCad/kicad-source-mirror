@@ -335,7 +335,7 @@
                                 <property name="size"></property>
                                 <property name="style">wxRA_SPECIFY_COLS</property>
                                 <property name="subclass"></property>
-                                <property name="tooltip">Creates a drill map in PSr HPGL or others formats</property>
+                                <property name="tooltip">Creates a drill map in PS, HPGL or others formats</property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>

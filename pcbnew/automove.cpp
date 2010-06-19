@@ -204,8 +204,7 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
     if( PlaceModulesHorsPcb && !EdgeExists )
     {
         DisplayError( this,
-                      _( "Could not automatically place modules.   No board \
-edges detected." ) );
+                      _( "Could not automatically place modules. No board outlines detected." ) );
         return;
     }
 
