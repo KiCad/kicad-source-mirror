@@ -4039,15 +4039,16 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      */
     DSN_T   nextTok();
 
-
     /**
      * Function isSymbol
      * tests a token to see if it is a symbol.  This means it cannot be a
      * special delimiter character such as T_LEFT, T_RIGHT, T_QUOTE, etc.  It may
      * however, coincidentally match a keyword and still be a symbol.
      */
-    static bool isSymbol( DSN_T aTok );
-
+    static bool isSymbol( DSN_T aTok )
+    {
+        return DSNLEXER::IsSymbol( aTok );
+    }
 
     /**
      * Function needLEFT
@@ -4055,7 +4056,10 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      * If it is not, an IOError is thrown.
      * @throw IOError, if the next token is not a T_LEFT
      */
-    void needLEFT() throw( IOError );
+    void needLEFT() throw( IOError )
+    {
+        lexer->NeedLEFT();
+    }
 
     /**
      * Function needRIGHT
@@ -4063,7 +4067,10 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      * If it is not, an IOError is thrown.
      * @throw IOError, if the next token is not a T_RIGHT
      */
-    void needRIGHT() throw( IOError );
+    void needRIGHT() throw( IOError )
+    {
+        lexer->NeedRIGHT();
+    }
 
     /**
      * Function needSYMBOL
@@ -4073,7 +4080,10 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      * @return DSN_T - the actual token read in.
      * @throw IOError, if the next token does not satisfy isSymbol()
      */
-    DSN_T needSYMBOL() throw( IOError );
+    DSN_T needSYMBOL() throw( IOError )
+    {
+        return (DSN_T) lexer->NeedSYMBOL();
+    }
 
     /**
      * Function needSYMBOLorNUMBER
@@ -4083,7 +4093,10 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      * @return DSN_T - the actual token read in.
      * @throw IOError, if the next token does not satisfy the above test
      */
-    DSN_T needSYMBOLorNUMBER() throw( IOError );
+    DSN_T needSYMBOLorNUMBER() throw( IOError )
+    {
+        return (DSN_T) lexer->NeedSYMBOLorNUMBER();
+    }
 
     /**
      * Function readCOMPnPIN
@@ -4127,9 +4140,15 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
      * @param int is the token type which was expected at the current input location.
      * @throw IOError with the location within the input file of the problem.
      */
-    void expecting( DSN_T aTok ) throw( IOError );
+    void expecting( DSN_T aTok ) throw( IOError )
+    {
+        lexer->Expecting( aTok );
+    }
+    void unexpected( DSN_T aTok ) throw( IOError )
+    {
+        lexer->Unexpected( aTok );
+    }
     void expecting( const char* text ) throw( IOError );
-    void unexpected( DSN_T aTok ) throw( IOError );
     void unexpected( const char* text ) throw( IOError );
 
     void doPCB( PCB* growth ) throw(IOError);

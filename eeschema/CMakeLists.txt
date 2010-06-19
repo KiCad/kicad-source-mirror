@@ -160,11 +160,11 @@ add_custom_command(
     OUTPUT  ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.h
             ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.cpp
     COMMAND ${CMAKE_COMMAND}
-        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.lst
+        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
         -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.lst
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
     COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.h(.cpp)
-       from ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.lst"
+       from ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords"
     )
 set_source_files_properties( cmp_library_lexer.cpp
     PROPERTIES
@@ -177,11 +177,11 @@ add_custom_command(
             ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_keywords.cpp
     COMMAND ${CMAKE_COMMAND}
         -Denum=TFIELD_T
-        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.lst
+        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.keywords
         -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.lst
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.keywords
     COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_keywords.h(.cpp)
-       from ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.lst"
+       from ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.keywords"
     )
 
 

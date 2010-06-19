@@ -192,6 +192,18 @@ wxString DSNLEXER::GetTokenString( int aTok )
 }
 
 
+bool DSNLEXER::IsSymbol( int aTok )
+{
+    // This is static and not inline to reduce code space.
+
+    // if aTok is >= 0, then it is a coincidental match to a keyword.
+    return     aTok==DSN_SYMBOL
+            || aTok==DSN_STRING
+            || aTok>=0
+            ;
+}
+
+
 void DSNLEXER::ThrowIOError( wxString aText, int charOffset ) throw (IOError)
 {
     // append to aText, do not overwrite
@@ -234,6 +246,39 @@ void DSNLEXER::Unexpected( const wxString& text ) throw( IOError )
     ThrowIOError( errText, CurOffset() );
 }
 
+
+void DSNLEXER::NeedLEFT() throw( IOError )
+{
+    int tok = NextTok();
+    if( tok != DSN_LEFT )
+        Expecting( DSN_LEFT );
+}
+
+
+void DSNLEXER::NeedRIGHT() throw( IOError )
+{
+    int tok = NextTok();
+    if( tok != DSN_RIGHT )
+        Expecting( DSN_RIGHT );
+}
+
+
+int DSNLEXER::NeedSYMBOL() throw( IOError )
+{
+    int tok = NextTok();
+    if( !IsSymbol( tok ) )
+        Expecting( DSN_SYMBOL );
+    return tok;
+}
+
+
+int DSNLEXER::NeedSYMBOLorNUMBER() throw( IOError )
+{
+    int  tok = NextTok();
+    if( !IsSymbol( tok ) && tok!=DSN_NUMBER )
+        Expecting( _("symbol|number") );
+    return tok;
+}
 
 /**
  * Function isspace

@@ -50,35 +50,29 @@ void TEMPLATE_FIELDNAME::Parse( DSNLEXER* in ) throw( IOError )
 {
     TFIELD_T    tok;
 
-    if( (tok = (TFIELD_T) in->NextTok()) != T_LEFT )
-        in->Expecting( T_LEFT );
+    in->NeedLEFT();     // begin (name ...)
 
     if( (tok = (TFIELD_T) in->NextTok()) != T_name )
         in->Expecting( T_name );
 
-    if( (tok = (TFIELD_T) in->NextTok()) != T_SYMBOL && tok!=T_STRING )
-        in->Expecting( _("field's name") );
+    in->NeedSYMBOLorNUMBER();
 
     m_Name = CONV_FROM_UTF8( in->CurText() );
 
-    if( (tok = (TFIELD_T) in->NextTok()) != T_RIGHT )
-        in->Expecting( T_RIGHT );
+    in->NeedRIGHT();    // end (name ...)
 
     while( (tok = (TFIELD_T) in->NextTok() ) != T_RIGHT && tok != T_EOF )
     {
+        // "visible" has no '(' prefix, "value" does, so T_LEFT is optional.
         if( tok == T_LEFT )
             tok = (TFIELD_T) in->NextTok();
 
         switch( tok )
         {
         case T_value:
-            if( (tok = (TFIELD_T) in->NextTok()) != T_SYMBOL && tok!=T_STRING )
-                in->Expecting( _("field's value") );
-
+            in->NeedSYMBOLorNUMBER();
             m_Value = CONV_FROM_UTF8( in->CurText() );
-
-            if( (tok = (TFIELD_T) in->NextTok()) != T_RIGHT )
-                in->Expecting( T_RIGHT );
+            in->NeedRIGHT();
             break;
 
         case T_visible:
@@ -86,7 +80,7 @@ void TEMPLATE_FIELDNAME::Parse( DSNLEXER* in ) throw( IOError )
             break;
 
         default:
-            in->Unexpected( CONV_FROM_UTF8( in->CurText() ) );
+            in->Expecting( wxT( "value|visible" ) );
             break;
         }
     }
