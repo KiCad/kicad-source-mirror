@@ -1,5 +1,5 @@
 /* XPM */
-static const char *bitmap2component_xpm[] = {
+const char *bitmap2component_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "32 32 16 1",
 "@ c #592904",

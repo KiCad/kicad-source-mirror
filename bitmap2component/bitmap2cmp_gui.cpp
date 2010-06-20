@@ -29,7 +29,7 @@
 #include "potracelib.h"
 #include "bitmap_io.h"
 
-//#include "bitmap2component.xpm"
+#include "bitmap2component.xpm"
 
 
 #define KEYWORD_FRAME_POSX wxT( "bmconverter_Pos_x" )
@@ -82,9 +82,13 @@ BM2CMP_FRAME::BM2CMP_FRAME() : BM2CMP_FRAME_BASE( NULL )
     m_Config->Read( KEYWORD_FRAME_SIZEX, & m_FrameSize.x, -1 );
     m_Config->Read( KEYWORD_FRAME_SIZEY, & m_FrameSize.y, -1 );
 
+    #ifdef __WINDOWS__
     SetIcon( wxICON( bitmap2component_icon ) );
+    #else
+    SetIcon( wxICON( bitmap2component ) );
+    #endif
 
-    wxString msg( wxT( "  0000  " ) );
+    wxString msg( wxT( "000000" ) );
     m_gridInfo->SetCellValue( 1, 0, msg );
     m_gridInfo->SetCellValue( 2, 0, msg );
     if( GetSizer() )
