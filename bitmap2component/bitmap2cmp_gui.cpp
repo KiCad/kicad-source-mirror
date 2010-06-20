@@ -29,6 +29,8 @@
 #include "potracelib.h"
 #include "bitmap_io.h"
 
+//#include "bitmap2component.xpm"
+
 
 #define KEYWORD_FRAME_POSX wxT( "bmconverter_Pos_x" )
 #define KEYWORD_FRAME_POSY wxT( "bmconverter_Pos_y" )
@@ -72,7 +74,6 @@ private:
     void ExportFile( FILE* aOutfile, int aFormat );
 };
 
-
 BM2CMP_FRAME::BM2CMP_FRAME() : BM2CMP_FRAME_BASE( NULL )
 {
     m_Config = new wxConfig();
@@ -81,6 +82,7 @@ BM2CMP_FRAME::BM2CMP_FRAME() : BM2CMP_FRAME_BASE( NULL )
     m_Config->Read( KEYWORD_FRAME_SIZEX, & m_FrameSize.x, -1 );
     m_Config->Read( KEYWORD_FRAME_SIZEY, & m_FrameSize.y, -1 );
 
+    SetIcon( wxICON( bitmap2component_icon ) );
 
     wxString msg( wxT( "  0000  " ) );
     m_gridInfo->SetCellValue( 1, 0, msg );

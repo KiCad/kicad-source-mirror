@@ -798,7 +798,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
         for( int jj = FOOTPRINT; jj < currCmp->GetFieldCount(); jj++ )
         {
             //Ensure fields exists in dummy component
-            if( dummyCmp.GetFieldCount() < currCmp->GetFieldCount() )
+            if( dummyCmp.GetFieldCount() <= jj )
                 dummyCmp.AddField( *currCmp->GetField( jj ) );
             // store useful data
             if( !currCmp->GetField( jj )->m_Text.IsEmpty() )
@@ -849,23 +849,27 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
                     CONV_TO_UTF8( currCmp->GetField( DATASHEET) ->m_Text ) );
 #endif
 
+        fprintf( f, "%c%s", s_ExportSeparatorSymbol,
+                CONV_TO_UTF8( RNames ) );
+
         // print fields, on demand
-        for( int jj = FIELD1; jj <= FIELD8 ; jj++ )
+        int last_nonempty_field_idx = 0;
+        for( int jj = FOOTPRINT; jj < dummyCmp.GetFieldCount(); jj++ )
+            if ( !dummyCmp.GetField( jj )->m_Text.IsEmpty() )
+                last_nonempty_field_idx = jj;
+        for( int jj = FIELD1; jj <= last_nonempty_field_idx ; jj++ )
         {
-            if( dummyCmp.GetFieldCount() >= jj )
-                break;
             if ( IsFieldChecked( jj ) )
                 fprintf( f, "%c%4s", s_ExportSeparatorSymbol,
                         CONV_TO_UTF8( dummyCmp.GetField( jj )->m_Text ) );
         }
 
-        fprintf( f, "%c%s\n", s_ExportSeparatorSymbol,
-                CONV_TO_UTF8( RNames ) );
+        fprintf( f, "\n" );
 
         // Clear strings and values, to prepare next component
         qty = 0;
         RNames.Empty();
-        for( int jj = FOOTPRINT; jj < currCmp->GetFieldCount(); jj++ )
+        for( int jj = FOOTPRINT; jj < dummyCmp.GetFieldCount(); jj++ )
             dummyCmp.GetField( jj )->m_Text.Empty();
     }
 

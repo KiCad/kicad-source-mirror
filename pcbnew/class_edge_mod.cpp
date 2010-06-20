@@ -105,12 +105,10 @@ EDA_Rect EDGE_MODULE::GetBoundingBox()
             if( Module )
             {
                 RotatePoint( &pt.x, &pt.y, Module->m_Orient );
-                pt.x += Module->m_Pos.x;
-                pt.y += Module->m_Pos.y;
+                pt += Module->m_Pos;
             }
 
-            pt.x += m_Start0.x;
-            pt.y += m_Start0.y;
+            pt += m_Start0;
             bbox.m_Pos.x = MIN( bbox.m_Pos.x, pt.x );
             bbox.m_Pos.y = MIN( bbox.m_Pos.y, pt.y );
             p_end.x   = MAX( p_end.x, pt.x );
