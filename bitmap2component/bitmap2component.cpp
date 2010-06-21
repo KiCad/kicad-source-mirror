@@ -32,9 +32,7 @@
 #include <vector>
 
 #include "potracelib.h"
-//#include "bitmap_io.h"
 #include "auxiliary.h"
-
 
 #ifndef max
     #define max( a, b ) ( ( (a) > (b) ) ? (a) : (b) )

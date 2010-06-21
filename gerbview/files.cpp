@@ -62,7 +62,7 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
         else
         {
             wxString msg;
-            msg.Printf( _( "GerbView only supports a maximum of %d layers.  You must first \
+            msg.Printf( _( "GerbView only supports a maximum of %d layers. You must first \
 delete an existing layer to load any new layers." ), NB_LAYERS );
             wxMessageBox( msg );
         }

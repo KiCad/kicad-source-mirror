@@ -9,7 +9,17 @@ set(BITMAP2COMPONENT_SRCS
     bitmap2cmp_gui
     )
 
-add_executable(bitmap2component WIN32 MACOSX_BUNDLE ${BITMAP2COMPONENT_SRCS} ${BITMAP2COMPONENT_RESOURCES})
+if(WIN32)
+    if(MINGW)
+        # BITMAP2COMPONENT_RESOURCES variable is set by the macro.
+        mingw_resource_compiler(bitmap2component)
+    else(MINGW)
+        set(BITMAP2COMPONENT_RESOURCES bitmap2component.rc)
+    endif(MINGW)
+endif(WIN32)
+add_executable(bitmap2component WIN32 MACOSX_BUNDLE
+                            ${BITMAP2COMPONENT_SRCS}
+                            ${BITMAP2COMPONENT_RESOURCES})
 
 
 target_link_libraries( bitmap2component
