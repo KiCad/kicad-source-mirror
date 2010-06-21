@@ -23,6 +23,7 @@
  */
 #include "wx/wx.h"
 #include "wx/config.h"
+#include "wx/filename.h"
 
 #include "bitmap2cmp_gui_base.h"
 
@@ -32,10 +33,12 @@
 #include "bitmap2component.xpm"
 
 
-#define KEYWORD_FRAME_POSX wxT( "bmconverter_Pos_x" )
-#define KEYWORD_FRAME_POSY wxT( "bmconverter_Pos_y" )
-#define KEYWORD_FRAME_SIZEX wxT( "bmconverter_Size_x" )
-#define KEYWORD_FRAME_SIZEY wxT( "bmconverter_Size_y" )
+#define KEYWORD_FRAME_POSX wxT( "Bmconverter_Pos_x" )
+#define KEYWORD_FRAME_POSY wxT( "Bmconverter_Pos_y" )
+#define KEYWORD_FRAME_SIZEX wxT( "Bmconverter_Size_x" )
+#define KEYWORD_FRAME_SIZEY wxT( "Bmconverter_Size_y" )
+#define KEYWORD_LAST_INPUT_FILE wxT( "Last_input" )
+#define KEYWORD_LAST_OUTPUT_FILE wxT( "Last_output" )
 
 extern int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile, int aFormat );
 
@@ -51,7 +54,8 @@ private:
     wxBitmap  m_Greyscale_Bitmap;
     wxImage   m_NB_Image;
     wxBitmap  m_BN_Bitmap;
-    wxString  m_ImgFileName;
+    wxString  m_BitmapFileName;
+    wxString  m_ConvertedFileName;
     wxSize m_FrameSize;
     wxPoint m_FramePos;
     wxConfig * m_Config;
@@ -81,6 +85,8 @@ BM2CMP_FRAME::BM2CMP_FRAME() : BM2CMP_FRAME_BASE( NULL )
     m_Config->Read( KEYWORD_FRAME_POSY, & m_FramePos.y, -1 );
     m_Config->Read( KEYWORD_FRAME_SIZEX, & m_FrameSize.x, -1 );
     m_Config->Read( KEYWORD_FRAME_SIZEY, & m_FrameSize.y, -1 );
+    m_Config->Read( KEYWORD_LAST_INPUT_FILE, &m_BitmapFileName );
+    m_Config->Read( KEYWORD_LAST_OUTPUT_FILE, &m_ConvertedFileName );
 
     #ifdef __WINDOWS__
     SetIcon( wxICON( bitmap2component_icon ) );
@@ -89,8 +95,8 @@ BM2CMP_FRAME::BM2CMP_FRAME() : BM2CMP_FRAME_BASE( NULL )
     #endif
 
     wxString msg( wxT( "000000" ) );
+    m_gridInfo->SetCellValue( 0, 0, msg );
     m_gridInfo->SetCellValue( 1, 0, msg );
-    m_gridInfo->SetCellValue( 2, 0, msg );
     if( GetSizer() )
     {
         GetSizer()->SetSizeHints( this );
@@ -114,6 +120,8 @@ BM2CMP_FRAME::~BM2CMP_FRAME()
     m_Config->Write( KEYWORD_FRAME_POSY, (long) m_FramePos.y );
     m_Config->Write( KEYWORD_FRAME_SIZEX, (long) m_FrameSize.x );
     m_Config->Write( KEYWORD_FRAME_SIZEY, (long) m_FrameSize.y );
+    m_Config->Write( KEYWORD_LAST_INPUT_FILE, m_BitmapFileName );
+    m_Config->Write( KEYWORD_LAST_OUTPUT_FILE, m_ConvertedFileName );
 
     delete m_Config;
 
@@ -142,18 +150,24 @@ void BM2CMP_FRAME::OnPaint( wxPaintEvent& event )
  */
 void BM2CMP_FRAME::OnLoadFile( wxCommandEvent& event )
 {
-    wxFileDialog FileDlg( this, _( "Choose Image" ), ::wxGetCwd(), wxEmptyString,
+    wxFileName fn(m_BitmapFileName);
+    wxString path = fn.GetPath();
+    if( path.IsEmpty() || !wxDirExists(path) )
+        path = wxGetCwd();
+
+    wxFileDialog FileDlg( this, _( "Choose Image" ), path, wxEmptyString,
                           _( "Image Files " ) + wxImage::GetImageExtWildcard(),
                           wxFD_OPEN );
     int          diag = FileDlg.ShowModal();
 
     if( diag != wxID_OK )
         return;
-    m_ImgFileName = FileDlg.GetPath();
 
-    if( !m_Pict_Image.LoadFile( m_ImgFileName ) )
+    m_BitmapFileName = FileDlg.GetPath();
+
+    if( !m_Pict_Image.LoadFile( m_BitmapFileName ) )
     {
-        wxMessageBox( _( "Couldn't load image from '%s'." ), m_ImgFileName.c_str() );
+        wxMessageBox( _( "Couldn't load image from <%s>" ), m_BitmapFileName.c_str() );
         return;
     }
 
@@ -242,22 +256,26 @@ void BM2CMP_FRAME::OnThresholdChange( wxScrollEvent& event )
 
 void BM2CMP_FRAME::OnExportEeschema( wxCommandEvent& event )
 {
+    wxFileName fn(m_ConvertedFileName);
+    wxString path = fn.GetPath();
+    if( path.IsEmpty() || !wxDirExists(path) )
+        path = ::wxGetCwd();
     wxString     msg = _( "Schematic lib file (*.lib)|*.lib" );
-    wxFileDialog FileDlg( this, _( "Create lib file" ), ::wxGetCwd(), wxEmptyString,
+    wxFileDialog FileDlg( this, _( "Create lib file" ), path, wxEmptyString,
                           msg,
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
     int          diag = FileDlg.ShowModal();
 
     if( diag != wxID_OK )
         return;
-    wxString filename = FileDlg.GetPath();
+    m_ConvertedFileName = FileDlg.GetPath();
 
     FILE*    outfile;
-    outfile = wxFopen( filename, wxT( "w" ) );
+    outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File %s could not be created" ), filename.c_str() );
+        msg.Printf( _( "File %s could not be created" ), m_ConvertedFileName.c_str() );
         wxMessageBox( msg );
         return;
     }
@@ -269,22 +287,26 @@ void BM2CMP_FRAME::OnExportEeschema( wxCommandEvent& event )
 
 void BM2CMP_FRAME::OnExportPcbnew( wxCommandEvent& event )
 {
+    wxFileName fn(m_ConvertedFileName);
+    wxString path = fn.GetPath();
+    if( path.IsEmpty() || !wxDirExists(path) )
+        path = ::wxGetCwd();
     wxString     msg = _( "Footprint export file (*.emp)|*.emp" );
-    wxFileDialog FileDlg( this, _( "Create footprint export file" ), ::wxGetCwd(), wxEmptyString,
+    wxFileDialog FileDlg( this, _( "Create footprint export file" ), path, wxEmptyString,
                           msg,
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
     int          diag = FileDlg.ShowModal();
 
     if( diag != wxID_OK )
         return;
-    wxString filename = FileDlg.GetPath();
+    m_ConvertedFileName = FileDlg.GetPath();
 
     FILE*    outfile;
-    outfile = wxFopen( filename, wxT( "w" ) );
+    outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File %s could not be created" ), filename.c_str() );
+        msg.Printf( _( "File %s could not be created" ), m_ConvertedFileName.c_str() );
         wxMessageBox( msg );
         return;
     }
