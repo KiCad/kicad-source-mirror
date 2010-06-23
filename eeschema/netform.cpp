@@ -212,43 +212,29 @@ static wxString ReturnPinNetName( NETLIST_OBJECT* Pin,
     wxString NetName;
 
     if( (netcode == 0 ) || ( Pin->m_FlagOfConnection != PAD_CONNECT ) )
-    {
         return NetName;
+
+    NETLIST_OBJECT* netref = Pin->m_NetNameCandidate;
+    if( netref )
+        NetName = *netref->m_Label;
+
+    if( !NetName.IsEmpty() )
+    {
+        // prefix non global labels names by the sheet path, to avoid names collisions
+        if( netref->m_Type != NET_PINLABEL )
+        {
+            wxString lnet = NetName;
+            NetName = netref->m_SheetList.PathHumanReadable();
+
+            // If sheet path is too long, use the time stamp name instead
+            if( NetName.Length() > 32 )
+                NetName = netref->m_SheetList.Path();
+            NetName += lnet;
+        }
     }
     else
-    {
-        unsigned jj;
-        for( jj = 0; jj < g_NetObjectslist.size(); jj++ )
-        {
-            if( g_NetObjectslist[jj]->GetNet() != netcode )
-                continue;
-            if( ( g_NetObjectslist[jj]->m_Type != NET_HIERLABEL)
-               && ( g_NetObjectslist[jj]->m_Type != NET_LABEL)
-               && ( g_NetObjectslist[jj]->m_Type != NET_PINLABEL) )
-                continue;
+        NetName.Printf( DefaultFormatNetname.GetData(), netcode );
 
-            NetName = *g_NetObjectslist[jj]->m_Label;
-            break;
-        }
-
-        if( !NetName.IsEmpty() )
-        {
-            if( g_NetObjectslist[jj]->m_Type != NET_PINLABEL )
-            {
-                wxString lnet = NetName;
-                NetName = g_NetObjectslist[jj]->m_SheetList.PathHumanReadable();
-
-                // If sheet path is too long, use the time stamp name instead
-                if( NetName.Length() > 32 )
-                    NetName = g_NetObjectslist[jj]->m_SheetList.Path();
-                NetName += lnet;
-            }
-        }
-        else
-        {
-            NetName.Printf( DefaultFormatNetname.GetData(), netcode );
-        }
-    }
     return NetName;
 }
 
@@ -890,31 +876,22 @@ static void WriteGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
         {
             SameNetcodeCount = 0;              // Items count for this net
             NetName.Empty();
-            unsigned jj;
 
             // Find a label (if exists) for this net.
-            for( jj = 0; jj < aObjectsList.size(); jj++ )
-            {
-                if( aObjectsList[jj]->GetNet() != NetCode )
-                    continue;
-                if( ( aObjectsList[jj]->m_Type != NET_HIERLABEL)
-                   && ( aObjectsList[jj]->m_Type != NET_LABEL)
-                   && ( aObjectsList[jj]->m_Type != NET_PINLABEL) )
-                    continue;
-
-                NetName = *aObjectsList[jj]->m_Label;
-                break;
-            }
+            NETLIST_OBJECT* netref;
+            netref = aObjectsList[ii]->m_NetNameCandidate;
+            if( netref )
+                NetName = *netref->m_Label;
 
             NetcodeName.Printf( wxT( "Net %d " ), NetCode );
             NetcodeName += wxT( "\"" );
             if( !NetName.IsEmpty() )
             {
-                if( aObjectsList[jj]->m_Type != NET_PINLABEL )
+                if( netref->m_Type != NET_PINLABEL )
                 {
                     // usual net name, prefix it by the sheet path
                     NetcodeName +=
-                        aObjectsList[jj]->m_SheetList.PathHumanReadable();
+                        netref->m_SheetList.PathHumanReadable();
                 }
                 NetcodeName += NetName;
             }
@@ -957,6 +934,7 @@ static void WriteGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
         if( SameNetcodeCount >= 2 )
             fprintf( f, " %s %.4s\n", CONV_TO_UTF8( CmpRef ),
                      (const char*) &aObjectsList[ii]->m_PinNum );
+        
     }
 }
 
@@ -1069,7 +1047,7 @@ static void WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
     wxString InitNetDesc  = StartLine + wxT( "ADD_TER" );
     wxString StartNetDesc = StartLine + wxT( "TER" );
     wxString NetcodeName, InitNetDescLine;
-    unsigned ii, jj;
+    unsigned ii;
     int print_ter = 0;
     int NetCode, LastNetCode = -1;
     SCH_COMPONENT* Cmp;
@@ -1084,31 +1062,21 @@ static void WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
         if( ( NetCode = aObjectsList[ii]->GetNet() ) != LastNetCode )
         {
             NetName.Empty();
-            for( jj = 0; jj < aObjectsList.size(); jj++ )
-            {
-                if( aObjectsList[jj]->GetNet() != NetCode )
-                    continue;
-                if( ( aObjectsList[jj]->m_Type != NET_HIERLABEL)
-                   && ( aObjectsList[jj]->m_Type != NET_LABEL)
-                   && ( aObjectsList[jj]->m_Type != NET_PINLABEL) )
-                    continue;
-
-                NetName = *aObjectsList[jj]->m_Label; break;
-            }
+            NETLIST_OBJECT* netref;
+            netref = aObjectsList[ii]->m_NetNameCandidate;
+            if( netref )
+                NetName = *netref->m_Label;
 
             NetcodeName = wxT( "\"" );
             if( !NetName.IsEmpty() )
             {
-                NetcodeName += NetName;
-                if( aObjectsList[jj]->m_Type != NET_PINLABEL )
+                if( netref->m_Type != NET_PINLABEL )
                 {
-                    NetcodeName =
-                        aObjectsList[jj]->m_SheetList.PathHumanReadable()
-                        + NetcodeName;
-
-                    //NetcodeName << wxT("_") <<
-                    //    g_NetObjectslist[jj].m_SheetList.PathHumanReadable();
+                    // usual net name, prefix it by the sheet path
+                    NetcodeName +=
+                        netref->m_SheetList.PathHumanReadable();
                 }
+                NetcodeName += NetName;
             }
             else  // this net has no name: create a default name $<net number>
                 NetcodeName << wxT( "$" ) << NetCode;
@@ -1139,10 +1107,10 @@ static void WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
             buf[4]     = 0;
             str_pinnum = CONV_FROM_UTF8( buf );
             InitNetDescLine.Printf( wxT( "\n%s   %s   %.4s     %s" ),
-                                    InitNetDesc.GetData(),
-                                    refstr.GetData(),
-                                    str_pinnum.GetData(),
-                                    NetcodeName.GetData() );
+                                    GetChars(InitNetDesc),
+                                    GetChars(refstr),
+                                    GetChars(str_pinnum),
+                                    GetChars(NetcodeName) );
         }
             print_ter++;
             break;
@@ -1165,9 +1133,9 @@ static void WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
 
         aObjectsList[ii]->m_Flag = 1;
 
-        // Search for redundant pins to avoid generation the same connection
+        // Search for redundant pins to avoid generation of the same connection
         // more than once.
-        for( jj = ii + 1; jj < aObjectsList.size(); jj++ )
+        for( unsigned jj = ii + 1; jj < aObjectsList.size(); jj++ )
         {
             if( aObjectsList[jj]->GetNet() != NetCode )
                 break;
