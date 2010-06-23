@@ -100,10 +100,10 @@ NETLIST_OBJECT::NETLIST_OBJECT()
 {
     m_Type = NET_ITEM_UNSPECIFIED;              /* Type of this item (see NetObjetType enum) */
     m_Comp = NULL;                              /* Pointer on the library item that created this net object (the parent)*/
-    m_Link = NULL;       /* For SCH_SHEET_PIN:
-                          * Pointer to the hierarchy sheet that contains this SCH_SHEET_PIN
-                          *  For Pins: pointer to the component that contains this pin
-                          */
+    m_Link = NULL;                              /* For SCH_SHEET_PIN:
+                                                 * Pointer to the hierarchy sheet that contains this SCH_SHEET_PIN
+                                                 *  For Pins: pointer to the component that contains this pin
+                                                 */
     m_Flag = 0;                                 /* flag used in calculations */
     m_ElectricalType = 0;                       /* Has meaning only for Pins and hierachical pins: electrical type */
     m_NetCode    = 0;          /* net code for all items except BUS labels because a BUS label has
@@ -116,15 +116,20 @@ NETLIST_OBJECT::NETLIST_OBJECT()
     m_FlagOfConnection = UNCONNECTED;
     m_PinNum = 0;                   /* pin number ( 1 long = 4 bytes -> 4 ascii codes) */
     m_Label  = 0;                   /* For all labels:pointer on the text label */
+    m_NetNameCandidate = NULL;      /* a pointer to a NETLIST_OBJECT type label connected to this object
+                                     *  used to give a name to the net
+                                     */
 }
+
 
 // Copy constructor
 NETLIST_OBJECT::NETLIST_OBJECT( NETLIST_OBJECT& aSource )
 {
-    *this = aSource;
-    m_Label  = NULL;        // set to null because some items are owner, so the delete operator can create problems
+    *this   = aSource;
+    m_Label = NULL;         // set to null because some items are owner, so the delete operator can create problems
                             // if this member is copied here (if 2 different items are owner of the same object)
 }
+
 
 NETLIST_OBJECT::~NETLIST_OBJECT()
 {
