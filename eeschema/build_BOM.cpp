@@ -340,31 +340,28 @@ void BuildComponentsListFromSchematic( std::vector <OBJ_CMP_TO_LIST>& aList )
 {
     EDA_BaseStruct* SchItem;
     SCH_COMPONENT*  DrawLibItem;
-    SCH_SHEET_PATH* sheet;
+    SCH_SHEET_PATH* sheetPath;
 
     /* Build the sheet (not screen) list */
     SCH_SHEET_LIST  SheetList;
 
-    for( sheet = SheetList.GetFirst();
-        sheet != NULL;
-        sheet = SheetList.GetNext() )
+    for( sheetPath = SheetList.GetFirst();  sheetPath != NULL;  sheetPath = SheetList.GetNext() )
     {
-        for( SchItem = sheet->LastDrawList(); SchItem;
-            SchItem = SchItem->Next() )
+        for( SchItem = sheetPath->LastDrawList();  SchItem;  SchItem = SchItem->Next() )
         {
             if( SchItem->Type() != TYPE_SCH_COMPONENT )
                 continue;
 
             DrawLibItem = (SCH_COMPONENT*) SchItem;
-            DrawLibItem->SetParent( sheet->LastScreen() );
+            DrawLibItem->SetParent( sheetPath->LastScreen() );
             OBJ_CMP_TO_LIST item;
             item.m_RootCmp   = DrawLibItem;
-            item.m_SheetPath = *sheet;
-            item.m_Unit = DrawLibItem->GetUnitSelection( sheet );
+            item.m_SheetPath = *sheetPath;
+            item.m_Unit = DrawLibItem->GetUnitSelection( sheetPath );
 
             strncpy( item.m_Reference,
-                    CONV_TO_UTF8( DrawLibItem->GetRef( sheet ) ),
-                    sizeof( item.m_Reference ) );
+                     CONV_TO_UTF8( DrawLibItem->GetRef( sheetPath ) ),
+                     sizeof( item.m_Reference ) );
 
             // Ensure always null terminate m_Ref.
             item.m_Reference[sizeof( item.m_Reference ) - 1 ] = 0;
@@ -384,19 +381,17 @@ void BuildComponentsListFromSchematic( std::vector <OBJ_CMP_TO_LIST>& aList )
 static void GenListeGLabels( std::vector <LABEL_OBJECT>& aList )
 {
     SCH_ITEM*       DrawList;
-    SCH_SHEET_PIN*  PinLabel;
-    SCH_SHEET_PATH* sheet;
+    SCH_SHEET_PATH* sheetPath;
 
     /* Build the sheet list */
     SCH_SHEET_LIST  SheetList;
 
     LABEL_OBJECT    labet_object;
 
-    for( sheet = SheetList.GetFirst();
-        sheet != NULL;
-        sheet = SheetList.GetNext() )
+    for( sheetPath = SheetList.GetFirst();  sheetPath != NULL;  sheetPath = SheetList.GetNext() )
     {
-        DrawList = (SCH_ITEM*) sheet->LastDrawList();
+        DrawList = (SCH_ITEM*) sheetPath->LastDrawList();
+
         while( DrawList )
         {
             switch( DrawList->Type() )
@@ -404,22 +399,21 @@ static void GenListeGLabels( std::vector <LABEL_OBJECT>& aList )
             case TYPE_SCH_HIERLABEL:
             case TYPE_SCH_GLOBALLABEL:
                 labet_object.m_LabelType = DrawList->Type();
-                labet_object.m_SheetPath = *sheet;
+                labet_object.m_SheetPath = *sheetPath;
                 labet_object.m_Label     = DrawList;
                 aList.push_back( labet_object );
                 break;
 
             case DRAW_SHEET_STRUCT_TYPE:
             {
-                PinLabel = ( (SCH_SHEET*) DrawList )->m_Label;
-                while( PinLabel != NULL )
+                SCH_SHEET* sheet = (SCH_SHEET*) DrawList;
+
+                BOOST_FOREACH( SCH_SHEET_PIN sheetLabel, sheet->GetSheetPins() )
                 {
-                    labet_object.m_LabelType =
-                        DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE;
-                    labet_object.m_SheetPath = *sheet;
-                    labet_object.m_Label     = PinLabel;
+                    labet_object.m_LabelType = DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE;
+                    labet_object.m_SheetPath = *sheetPath;
+                    labet_object.m_Label     = &sheetLabel;
                     aList.push_back( labet_object );
-                    PinLabel = PinLabel->Next();
                 }
             }
             break;

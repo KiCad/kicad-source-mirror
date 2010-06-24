@@ -389,7 +389,6 @@ bool LocateAndDeleteItem( WinEDA_SchematicFrame* frame, wxDC* DC )
 void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Screen )
 {
     EDA_BaseStruct* DrawList;
-    SCH_SHEET_PIN* SheetLabel, * NextLabel;
 
     if( DrawStruct == NULL )
         return;
@@ -401,44 +400,12 @@ void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Screen )
 
     if( DrawStruct->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
     {
-        //this structure is attached to a sheet , which we must find.
-        DrawList = Screen->EEDrawList;
-        for( ; DrawList != NULL; DrawList = DrawList->Next() )
-        {
-            if( DrawList->Type() != DRAW_SHEET_STRUCT_TYPE )
-                continue;
-
-            /* See if our item is in this Sheet */
-            SheetLabel = ( (SCH_SHEET*) DrawList )->m_Label;
-            if( SheetLabel == NULL )
-                continue;
-
-            if( SheetLabel == (SCH_SHEET_PIN*) DrawStruct )
-            {
-                ( (SCH_SHEET*) DrawList )->m_Label =
-                    (SCH_SHEET_PIN*) SheetLabel->Next();
-
-                SAFE_DELETE( DrawStruct );
-                return;
-            }
-            else
-            {
-                while( SheetLabel->Next() )
-                {
-                    NextLabel = (SCH_SHEET_PIN*) SheetLabel->Next();
-
-                    if( NextLabel == (SCH_SHEET_PIN*) DrawStruct )
-                    {
-                        SheetLabel->SetNext( (EDA_BaseStruct*) NextLabel->Next() );
-                        SAFE_DELETE( DrawStruct );
-                        return;
-
-                    }
-                    SheetLabel = NextLabel;
-                }
-            }
-        }
-
+        // This structure is attached to a sheet, get the parent sheet object.
+        SCH_SHEET_PIN* sheetLabel = (SCH_SHEET_PIN*) DrawStruct;
+        SCH_SHEET* sheet = sheetLabel->GetParent();
+        wxASSERT_MSG( sheet != NULL,
+                      wxT( "Sheet label parent not properly set, bad programmer!" ) );
+        sheet->RemoveLabel( sheetLabel );
         return;
     }
     else

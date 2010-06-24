@@ -428,11 +428,14 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
            || (aNetItemRef->m_Type == NET_HIERBUSLABELMEMBER) )
         {
             msg.Printf( _( "HLabel %s not connected to SheetLabel" ),
-                        aNetItemRef->m_Label->GetData() );
+                        GetChars( aNetItemRef->m_Label ) );
         }
         else
+        {
             msg.Printf( _( "SheetLabel %s not connected to HLabel" ),
-                        aNetItemRef->m_Label->GetData() );
+                        GetChars( aNetItemRef->m_Label ) );
+        }
+
 
         Marker->SetData( ERCE_HIERACHICAL_LABEL,
                          aNetItemRef->m_Start,
@@ -458,7 +461,7 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
         if( aMinConn == NOC )    /* Only 1 element in the net. */
         {
             msg.Printf( _( "Cmp %s, Pin %s (%s) Unconnected" ),
-                        cmp_ref.GetData(), string_pinnum.GetData(),
+                        GetChars( cmp_ref ), GetChars( string_pinnum ),
                         MsgPinElectricType[ii] );
             Marker->SetData( ERCE_PIN_NOT_CONNECTED,
                              aNetItemRef->m_Start,
@@ -473,7 +476,7 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
                 cmp_ref = ( (SCH_COMPONENT*) aNetItemRef->m_Link )->GetRef(
                     &aNetItemRef->m_SheetList );
             msg.Printf( _( "Cmp %s, Pin %s (%s) not driven (Net %d)" ),
-                        cmp_ref.GetData(), string_pinnum.GetData(),
+                        GetChars( cmp_ref ), GetChars( string_pinnum ),
                         MsgPinElectricType[ii], aNetItemRef->GetNet() );
             Marker->SetData( ERCE_PIN_NOT_DRIVEN,
                              aNetItemRef->m_Start,
@@ -513,15 +516,13 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
             alt_cmp = ( (SCH_COMPONENT*) aNetItemTst->m_Link )->GetRef(
                 &aNetItemTst->m_SheetList );
         msg.Printf( _( "Cmp %s, Pin %s (%s) connected to " ),
-                    cmp_ref.GetData(),
-                    string_pinnum.GetData(), MsgPinElectricType[ii] );
+                    GetChars( cmp_ref ), GetChars( string_pinnum ), MsgPinElectricType[ii] );
         Marker->SetData( errortype,
                          aNetItemRef->m_Start,
                          msg,
                          aNetItemRef->m_Start );
         msg.Printf( _( "Cmp %s, Pin %s (%s) (net %d)" ),
-                    alt_cmp.GetData(),
-                    alt_string_pinnum.GetData(), MsgPinElectricType[jj],
+                    GetChars( alt_cmp ), GetChars( alt_string_pinnum ), MsgPinElectricType[jj],
                     aNetItemRef->GetNet() );
         Marker->SetAuxiliaryData( msg, aNetItemTst->m_Start );
     }
@@ -703,7 +704,7 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
         else
         {
             wxString str = Sheet->PathHumanReadable();
-            msg.Printf( _( "\n***** Sheet %s\n" ), str.GetData() );
+            msg.Printf( _( "\n***** Sheet %s\n" ), GetChars( str ) );
         }
 
         fprintf( OutErc, "%s", CONV_TO_UTF8( msg ) );

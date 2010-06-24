@@ -84,8 +84,7 @@ public:
                                          * connects to.*/
     long            m_PinNum;           /* pin number ( 1 long = 4 bytes ->
                                          * 4 ascii codes) */
-    const wxString* m_Label;            /* For all labels:pointer on the text
-                                         * label */
+    wxString        m_Label;            /* Label text. */
     wxPoint         m_Start;            // Position of object or for segments:
                                         // starting point
     wxPoint         m_End;              // For segments (wire and buses):

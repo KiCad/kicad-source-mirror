@@ -346,7 +346,6 @@ static void Plot_Hierarchical_PIN_Sheet( PLOTTER*       plotter,
 
 static void PlotSheetStruct( PLOTTER* plotter, SCH_SHEET* Struct )
 {
-    SCH_SHEET_PIN* SheetLabelStruct;
     EDA_Colors txtcolor = UNSPECIFIED_COLOR;
     wxSize     size;
     wxString   Text;
@@ -392,20 +391,17 @@ static void PlotSheetStruct( PLOTTER* plotter, SCH_SHEET* Struct )
 
     plotter->set_color( ReturnLayerColor( LAYER_SHEETFILENAME ) );
 
-    plotter->text( wxPoint( Struct->m_Pos.x,
-                            Struct->m_Pos.y + Struct->m_Size.y + 4 ),
+    plotter->text( wxPoint( Struct->m_Pos.x, Struct->m_Pos.y + Struct->m_Size.y + 4 ),
                    txtcolor, Text, TEXT_ORIENT_HORIZ, size,
                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP,
                    thickness, italic, false );
 
-    /* Draw texts : SheetLabel */
-    SheetLabelStruct = Struct->m_Label;
     plotter->set_color( ReturnLayerColor( Struct->m_Layer ) );
 
-    while( SheetLabelStruct != NULL )
+    /* Draw texts : SheetLabel */
+    BOOST_FOREACH( SCH_SHEET_PIN& label, Struct->GetSheetPins() )
     {
-        Plot_Hierarchical_PIN_Sheet( plotter, SheetLabelStruct );
-        SheetLabelStruct = SheetLabelStruct->Next();
+        label.Plot( plotter );
     }
 }
 

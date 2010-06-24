@@ -110,9 +110,9 @@ void WinEDA_CreateCmpDialog::SetComponentData( LIB_COMPONENT & component )
     component.SetPartCount( m_PartsCount->GetSelection() + 1 );
     component.GetReference().m_Text = m_Reference->GetValue();
 	if ( m_PinNameInside->GetValue() == FALSE)
-		component.m_TextInside = 0;
+		component.SetPinNameOffset( 0 );
 	else
-		component.m_TextInside = m_SetSkew->GetValue();
+		component.SetPinNameOffset( m_SetSkew->GetValue() );
 
 	if ( m_IsPowerSymbol->GetValue() == TRUE )
 		component.SetPower();
@@ -121,9 +121,9 @@ void WinEDA_CreateCmpDialog::SetComponentData( LIB_COMPONENT & component )
 
 	/* Set the option "Units locked".
 	Obviously, cannot be TRUE if there is only one part */
-	component.m_UnitSelectionLocked = m_PartsAreLocked->GetValue();
+	component.LockUnits( m_PartsAreLocked->GetValue() );
 	if ( component.GetPartCount() <= 1 )
-		component.m_UnitSelectionLocked = FALSE;
+		component.LockUnits( false );
 }
 
 /*!

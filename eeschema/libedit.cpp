@@ -107,9 +107,9 @@ library \"%s\"." ),
     if( !LoadOneLibraryPartAux( LibEntry, m_library ) )
         return;
 
-    g_EditPinByPinIsOn = m_component->m_UnitSelectionLocked ? true : false;
+    g_EditPinByPinIsOn = m_component->UnitsLocked() ? true : false;
     m_HToolBar->ToggleTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, g_EditPinByPinIsOn );
-        
+
     GetScreen()->ClearUndoRedoList();
     Zoom_Automatique( false );
     DrawPanel->Refresh();
@@ -556,21 +556,21 @@ created. Aborted" ) );
     SetShowDeMorgan( dlg.GetAlternateBodyStyle() );
     if( dlg.GetPinNameInside( ) )
     {
-        component->m_TextInside = dlg.GetPinTextPosition();
-        if( component->m_TextInside == 0 )
-            component->m_TextInside = 1;
+        component->SetPinNameOffset( dlg.GetPinTextPosition() );
+        if( component->GetPinNameOffset() == 0 )
+            component->SetPinNameOffset( 1 );
     }
     else
     {
-        component->m_TextInside = 0;
+        component->SetPinNameOffset( 0 );
     }
 
     ( dlg.GetPowerSymbol() ) ? component->SetPower() : component->SetNormal();
-    component->m_DrawPinNum = dlg.GetShowPinNumber();
-    component->m_DrawPinName = dlg.GetShowPinName();
-    component->m_UnitSelectionLocked = dlg.GetLockItems();
+    component->SetShowPinNumbers( dlg.GetShowPinNumber() );
+    component->SetShowPinNames( dlg.GetShowPinName() );
+    component->LockUnits( dlg.GetLockItems() );
     if( dlg.GetPartCount() < 2 )
-        component->m_UnitSelectionLocked = false;
+        component->LockUnits( false );
 
     if( m_component )
     {
@@ -584,7 +584,7 @@ created. Aborted" ) );
     DisplayCmpDoc();
     UpdateAliasSelectList();
     UpdatePartSelectList();
-    g_EditPinByPinIsOn = m_component->m_UnitSelectionLocked ? true : false;
+    g_EditPinByPinIsOn = m_component->UnitsLocked() ? true : false;
     m_HToolBar->ToggleTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, g_EditPinByPinIsOn );
     m_lastDrawItem = NULL;
     GetScreen()->ClearUndoRedoList();

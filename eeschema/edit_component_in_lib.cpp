@@ -32,15 +32,15 @@
 
 void WinEDA_LibeditFrame::OnEditComponentProperties( wxCommandEvent& event )
 {
-    bool partLocked = GetComponent()->m_UnitSelectionLocked;
+    bool partLocked = GetComponent()->UnitsLocked();
     EditComponentProperties();
-    if( partLocked != GetComponent()->m_UnitSelectionLocked )
+    if( partLocked != GetComponent()->UnitsLocked() )
     {   // g_EditPinByPinIsOn is set to the better value,
         // if m_UnitSelectionLocked has changed
-        g_EditPinByPinIsOn = GetComponent()->m_UnitSelectionLocked ? true : false;
+        g_EditPinByPinIsOn = GetComponent()->UnitsLocked() ? true : false;
         m_HToolBar->ToggleTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, g_EditPinByPinIsOn );
     }
-        
+
     m_HToolBar->Refresh();
     DrawPanel->Refresh();
 }
@@ -143,17 +143,17 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
         }
     }
 
-    component->m_DrawPinNum  = m_ShowPinNumButt->GetValue() ? 1 : 0;
-    component->m_DrawPinName = m_ShowPinNameButt->GetValue() ? 1 : 0;
+    component->SetShowPinNumbers( m_ShowPinNumButt->GetValue() );
+    component->SetShowPinNames( m_ShowPinNameButt->GetValue() );
 
     if( m_PinsNameInsideButt->GetValue() == false )
-        component->m_TextInside = 0;        // pin text outside the body (name is on the pin)
+        component->SetPinNameOffset( 0 );       // pin text outside the body (name is on the pin)
     else
     {
-        component->m_TextInside = m_SetSkew->GetValue();
+        component->SetPinNameOffset( m_SetSkew->GetValue() );
         // Ensure component->m_TextInside != 0, because the meaning is "text outside".
-        if( component->m_TextInside == 0 )
-            component->m_TextInside = 20;       // give a reasonnable value
+        if( component->GetPinNameOffset() == 0 )
+            component->SetPinNameOffset( 20 );  // give a reasonnable value
     }
 
     if( m_OptionPower->GetValue() == true )
@@ -163,9 +163,9 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
 
     /* Set the option "Units locked".
      *  Obviously, cannot be true if there is only one part */
-    component->m_UnitSelectionLocked = m_OptionPartsLocked->GetValue();
+    component->LockUnits( m_OptionPartsLocked->GetValue() );
     if( component->GetPartCount() <= 1 )
-        component->m_UnitSelectionLocked = false;
+        component->LockUnits( false );
 
     /* Update the footprint filter list */
     component->m_FootprintList.Clear();

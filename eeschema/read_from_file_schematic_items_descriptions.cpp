@@ -184,7 +184,7 @@ int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
     int              ii, fieldNdx, size;
     char             Name1[256], Char1[256], Char2[256];
     SCH_SHEET*       SheetStruct;
-    SCH_SHEET_PIN*   SheetLabelStruct, * OldSheetLabel = NULL;
+    SCH_SHEET_PIN*   SheetLabelStruct;
     int              Failed = FALSE;
     char*            ptcar;
 
@@ -305,27 +305,20 @@ error line %d, aborted\n" ),
 
         if( fieldNdx > 1 )
         {
-            SheetLabelStruct = new SCH_SHEET_PIN( SheetStruct, wxPoint( 0, 0 ),
-                                                  CONV_FROM_UTF8( Name1 ) );
-
-            if( SheetStruct->m_Label == NULL )
-                OldSheetLabel = SheetStruct->m_Label = SheetLabelStruct;
-            else
-                OldSheetLabel->SetNext( (EDA_BaseStruct*) SheetLabelStruct );
-            OldSheetLabel = SheetLabelStruct;
+            int x, y;
 
             /* Read coordinates. */
-            if( sscanf( ptcar, "%s %s %d %d %d", Char1, Char2,
-                        &SheetLabelStruct->m_Pos.x, &SheetLabelStruct->m_Pos.y,
-                        &size ) != 5 )
+            if( sscanf( ptcar, "%s %s %d %d %d", Char1, Char2, &x, &y, &size ) != 5 )
             {
-                aMsgDiag.Printf( wxT( "EESchema file Sheet Label Caract \
-error line %d, aborted\n" ),
+                aMsgDiag.Printf( wxT( "EESchema file sheet label error at line %d, ignoring.\n" ),
                                  *aLineNum );
                 aMsgDiag << CONV_FROM_UTF8( Line );
                 DisplayError( frame, aMsgDiag );
                 continue;
             }
+
+            SheetLabelStruct = new SCH_SHEET_PIN( SheetStruct, wxPoint( x, y ),
+                                                  CONV_FROM_UTF8( Name1 ) );
 
             if( size == 0 )
                 size = DEFAULT_SIZE_TEXT;
@@ -356,6 +349,8 @@ error line %d, aborted\n" ),
 
             if( Char2[0] == 'R' )
                 SheetLabelStruct->m_Edge = 1;
+
+            SheetStruct->AddLabel( SheetLabelStruct );
         }
     }
 

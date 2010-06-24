@@ -49,12 +49,12 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen,
     SCH_JUNCTION*   ConnectionStruct;
     SCH_POLYLINE*   PolylineStruct;
     SCH_LINE*       SegmentStruct;
-    SCH_BUS_ENTRY*  RaccordStruct;
+    SCH_BUS_ENTRY*  busEntry;
     SCH_NO_CONNECT* NoConnectStruct;
     int             LineCount;
     wxString        MsgDiag;   /* Error and log messages */
 
-    FILE*                f;
+    FILE*           f;
 
     if( screen == NULL )
         return FALSE;
@@ -138,29 +138,28 @@ again." );
         {
         case '$':           /* identification block */
             if( Line[1] == 'C' )
-                Failed = ReadPartDescr( this, Line, f, MsgDiag, &LineCount,
-                                        screen );
+                Failed = ReadPartDescr( this, Line, f, MsgDiag, &LineCount, screen );
 
             else if( Line[1] == 'S' )
-                Failed = ReadSheetDescr( this, Line, f, MsgDiag, &LineCount,
-                                         screen );
+                Failed = ReadSheetDescr( this, Line, f, MsgDiag, &LineCount, screen );
 
             else if( Line[1] == 'D' )
-                Failed = ReadSchemaDescr( this, Line, f, MsgDiag, &LineCount,
-                                          screen );
+                Failed = ReadSchemaDescr( this, Line, f, MsgDiag, &LineCount, screen );
         else if( Line[1] == 'T' ) //text part
         {
-          printf("**** TEXT PART\n");
-          SCH_ITEM* Struct;
-          Struct = ReadTextDescr( f, MsgDiag, Line, sizeof(Line),
-                      &LineCount, version);
-          if( Struct )
-          {
-          Struct->SetNext( screen->EEDrawList );
-          screen->EEDrawList = Struct;
-          }
-          else
-          Failed = true;
+            printf( "**** TEXT PART\n" );
+            SCH_ITEM* Struct;
+            Struct = ReadTextDescr( f, MsgDiag, Line, sizeof(Line), &LineCount, version );
+
+            if( Struct )
+            {
+                Struct->SetNext( screen->EEDrawList );
+                screen->EEDrawList = Struct;
+            }
+            else
+            {
+                Failed = true;
+            }
         }
 
             break;
@@ -222,28 +221,27 @@ again." );
             ii = WIRE_TO_BUS;
             if( Name1[0] == 'B' )
                 ii = BUS_TO_BUS;
-            RaccordStruct = new SCH_BUS_ENTRY( wxPoint( 0, 0 ), '\\', ii );
+            busEntry = new SCH_BUS_ENTRY( wxPoint( 0, 0 ), '\\', ii );
 
             LineCount++;
             if( fgets( Line, 256 - 1, f ) == NULL
-                || sscanf( Line, "%d %d %d %d ", &RaccordStruct->m_Pos.x,
-                           &RaccordStruct->m_Pos.y, &RaccordStruct->m_Size.x,
-                           &RaccordStruct->m_Size.y ) != 4 )
+                || sscanf( Line, "%d %d %d %d ", &busEntry->m_Pos.x, &busEntry->m_Pos.y,
+                           &busEntry->m_Size.x, &busEntry->m_Size.y ) != 4 )
             {
                 MsgDiag.Printf( wxT( "EESchema file Bus Entry struct error at line %d, aborted" ),
                                 LineCount );
                 MsgDiag << wxT( "\n" ) << CONV_FROM_UTF8( Line );
                 Failed = true;
-                SAFE_DELETE( RaccordStruct );
+                SAFE_DELETE( busEntry );
                 break;
             }
 
             if( !Failed )
             {
-                RaccordStruct->m_Size.x -= RaccordStruct->m_Pos.x;
-                RaccordStruct->m_Size.y -= RaccordStruct->m_Pos.y;
-                RaccordStruct->SetNext( screen->EEDrawList );
-                screen->EEDrawList = RaccordStruct;
+                busEntry->m_Size.x -= busEntry->m_Pos.x;
+                busEntry->m_Size.y -= busEntry->m_Pos.y;
+                busEntry->SetNext( screen->EEDrawList );
+                screen->EEDrawList = busEntry;
             }
             break;
 
@@ -333,8 +331,8 @@ at line %d, aborted" ),
         case 'T':                       /* It is a text item. */
         {
             SCH_ITEM* Struct;
-            Struct = ReadTextDescr( f, MsgDiag, Line, sizeof(Line),
-                                    &LineCount, version);
+            Struct = ReadTextDescr( f, MsgDiag, Line, sizeof(Line), &LineCount, version);
+
             if( Struct )
             {
                 Struct->SetNext( screen->EEDrawList );

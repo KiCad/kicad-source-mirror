@@ -144,7 +144,6 @@ structures and cannot be undone.\nOk to continue renaming?" );
 static void MoveOrResizeSheet( WinEDA_DrawPanel* aPanel, wxDC* aDC, bool aErase )
 {
     wxPoint        moveVector;
-    SCH_SHEET_PIN* sheetLabel;
     BASE_SCREEN*   screen = aPanel->GetScreen();
     SCH_SHEET*     sheet = (SCH_SHEET*) screen->GetCurItem();
 
@@ -153,16 +152,9 @@ static void MoveOrResizeSheet( WinEDA_DrawPanel* aPanel, wxDC* aDC, bool aErase 
 
     if( sheet->m_Flags & IS_RESIZED )
     {
-        sheet->m_Size.x = MAX( s_PreviousSheetWidth, screen->m_Curseur.x - sheet->m_Pos.x );
-        sheet->m_Size.y = MAX( s_PreviousSheetHeight, screen->m_Curseur.y - sheet->m_Pos.y );
-        sheetLabel = sheet->m_Label;
-
-        while( sheetLabel )
-        {
-            if( sheetLabel->m_Edge )
-                sheetLabel->m_Pos.x = sheet->m_Pos.x + sheet->m_Size.x;
-            sheetLabel = sheetLabel->Next();
-        }
+        wxSize newSize( MAX( s_PreviousSheetWidth, screen->m_Curseur.x - sheet->m_Pos.x ),
+                        MAX( s_PreviousSheetHeight, screen->m_Curseur.y - sheet->m_Pos.y ) );
+        sheet->Resize( newSize );
     }
     else             /* Move Sheet */
     {
@@ -244,8 +236,6 @@ SCH_SHEET* WinEDA_SchematicFrame::CreateSheet( wxDC* aDC )
 
 void WinEDA_SchematicFrame::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
 {
-    SCH_SHEET_PIN* sheetLabel;
-
     if( aSheet == NULL || aSheet->m_Flags & IS_NEW )
         return;
 
@@ -263,16 +253,13 @@ void WinEDA_SchematicFrame::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
 
     s_PreviousSheetWidth = SHEET_MIN_WIDTH;
     s_PreviousSheetHeight = SHEET_MIN_HEIGHT;
-    sheetLabel   = aSheet->m_Label;
 
-    while( sheetLabel )
+    BOOST_FOREACH( SCH_SHEET_PIN sheetLabel, aSheet->GetSheetPins() )
     {
         s_PreviousSheetWidth = MAX( s_PreviousSheetWidth,
-                                    (int) ( ( sheetLabel->GetLength() + 1 ) *
-                                            sheetLabel->m_Size.x ) );
+                                    ( sheetLabel.GetLength() + 1 ) * sheetLabel.m_Size.x );
         s_PreviousSheetHeight = MAX( s_PreviousSheetHeight,
-                                     sheetLabel->m_Pos.y - aSheet->m_Pos.y );
-        sheetLabel   = sheetLabel->Next();
+                                     sheetLabel.m_Pos.y - aSheet->m_Pos.y );
     }
 
     DrawPanel->ManageCurseur = MoveOrResizeSheet;

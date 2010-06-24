@@ -16,20 +16,16 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "drawtxt.h"
+#include "plot_common.h"
 
 #include "program.h"
 #include "general.h"
 #include "protos.h"
 
 
-/*******************************************************************/
-SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent,
-                              const wxPoint& pos,
-                              const wxString& text ) :
-    SCH_ITEM( parent, DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE ),
-    EDA_TextStruct( text )
+SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxString& text ) :
+    SCH_ITEM( parent, DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE ), EDA_TextStruct( text )
 {
-/*******************************************************************/
     wxASSERT( parent );
     wxASSERT( Pnext == NULL );
     m_Layer = LAYER_SHEETLABEL;
@@ -41,18 +37,21 @@ SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent,
 }
 
 
-/***********************************************************/
 SCH_SHEET_PIN* SCH_SHEET_PIN::GenCopy()
 {
-/***********************************************************/
-    SCH_SHEET_PIN* newitem =
-        new SCH_SHEET_PIN( (SCH_SHEET*) m_Parent, m_Pos, m_Text );
+    SCH_SHEET_PIN* newitem = new SCH_SHEET_PIN( (SCH_SHEET*) m_Parent, m_Pos, m_Text );
 
     newitem->m_Edge   = m_Edge;
     newitem->m_Shape  = m_Shape;
     newitem->m_Number = m_Number;
 
     return newitem;
+}
+
+
+bool SCH_SHEET_PIN::operator==(const SCH_SHEET_PIN* aPin ) const
+{
+    return aPin == this;
 }
 
 
@@ -65,6 +64,16 @@ int SCH_SHEET_PIN::GetPenSize()
 }
 
 
+void SCH_SHEET_PIN::SetNumber( int aNumber )
+{
+    wxASSERT( aNumber >= 2 );
+
+    m_Number = aNumber;
+}
+
+
+/*****************************************************************************/
+/* Routine to create hierarchical labels */
 /*****************************************************************************/
 void SCH_SHEET_PIN::Draw( WinEDA_DrawPanel* panel,
                           wxDC*             DC,
@@ -72,8 +81,6 @@ void SCH_SHEET_PIN::Draw( WinEDA_DrawPanel* panel,
                           int               DrawMode,
                           int               Color )
 {
-/*****************************************************************************/
-/* Routine to create hierarchical labels */
     GRTextHorizJustifyType       side;
     EDA_Colors                   txtcolor;
     int posx, tposx, posy;
@@ -114,6 +121,47 @@ void SCH_SHEET_PIN::Draw( WinEDA_DrawPanel* panel,
     int FillShape = false;
     GRPoly( &panel->m_ClipBox, DC, Poly.size(), &Poly[0],
             FillShape, LineWidth, txtcolor, txtcolor );
+}
+
+
+void SCH_SHEET_PIN::Plot( PLOTTER* aPlotter )
+{
+    wxASSERT( aPlotter != NULL );
+
+    EDA_Colors txtcolor = UNSPECIFIED_COLOR;
+    int        posx, tposx, posy, size;
+
+    static std::vector <wxPoint> Poly;
+
+    txtcolor = ReturnLayerColor( GetLayer() );
+
+    posx = m_Pos.x;
+    posy = m_Pos.y;
+    size = m_Size.x;
+    GRTextHorizJustifyType side;
+
+    if( m_Edge )
+    {
+        tposx = posx - size;
+        side  = GR_TEXT_HJUSTIFY_RIGHT;
+    }
+    else
+    {
+        tposx = posx + size + (size / 8);
+        side  = GR_TEXT_HJUSTIFY_LEFT;
+    }
+
+    int thickness = GetPenSize();
+    aPlotter->set_current_line_width( thickness );
+
+    aPlotter->text( wxPoint( tposx, posy ), txtcolor, m_Text, TEXT_ORIENT_HORIZ,
+                    wxSize( size, size ), side, GR_TEXT_VJUSTIFY_CENTER, thickness,
+                    m_Italic, m_Bold );
+
+    /* Draw the associated graphic symbol */
+    CreateGraphicShape( Poly, m_Pos );
+
+    aPlotter->poly( Poly.size(), &Poly[0].x, NO_FILL );
 }
 
 

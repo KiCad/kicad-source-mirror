@@ -49,13 +49,11 @@ protected:
     LibrEntryType    type;
 
     wxString         description;  /* documentation for info */
-    wxString         keyWords;     /* keyword list (used for search for
-                                    * components by keyword) */
+    wxString         keyWords;     /* keyword list (used for search for components by keyword) */
     wxString         docFileName;  /* Associate doc file name */
 
 public:
-    CMP_LIB_ENTRY( LibrEntryType aType, const wxString& aName,
-                   CMP_LIBRARY* aLibrary = NULL );
+    CMP_LIB_ENTRY( LibrEntryType aType, const wxString& aName, CMP_LIBRARY* aLibrary = NULL );
     CMP_LIB_ENTRY( CMP_LIB_ENTRY& aEntry, CMP_LIBRARY* aLibrary = NULL );
 
     virtual ~CMP_LIB_ENTRY();
@@ -129,10 +127,7 @@ extern int LibraryEntryCompare( const CMP_LIB_ENTRY* aItem1, const CMP_LIB_ENTRY
 /**
  * Library component object definition.
  *
- * Library component object definition.
- *
- * A library component object is typically saved and loaded
- * in a component library file (.lib).
+ * A library component object is typically saved and loaded in a component library file (.lib).
  * Library components are different from schematic components.
  */
 class LIB_COMPONENT : public CMP_LIB_ENTRY
@@ -142,25 +137,7 @@ public:
     wxArrayString      m_FootprintList;  /* list of suitable footprint names
                                           * for the component (wildcard names
                                           * accepted) */
-    bool               m_UnitSelectionLocked;  /* True if units are different
-                                                * and their selection is
-                                                * locked (i.e. if part A cannot
-                                                * be automatically changed in
-                                                * part B */
-    int                m_TextInside;     /* if 0: pin name drawn on the pin
-                                          * itself if > 0 pin name drawn inside
-                                          * the component, with a distance of
-                                          * m_TextInside in mils */
-    bool               m_DrawPinNum;
-    bool               m_DrawPinName;
-    long               m_LastDate;       // Last change Date
 
-protected:
-    LibrEntryOptions   m_options;      // special features (i.e. Entry is a POWER)
-    int                unitCount;      /* Units (parts) per package */
-    LIB_DRAW_ITEM_LIST drawings;       /* How to draw this part */
-
-public:
     /* Offsets used in editing library component,
      * for handle aliases data in m_AliasListData array string
      * when editing a library component, aliases data is stored
@@ -178,7 +155,18 @@ public:
         ALIAS_DOC_FILENAME_IDX = 3,
         ALIAS_NEXT_IDX         = 4
     };
+
 private:
+    int                m_pinNameOffset;  ///< The offset in mils to draw the pin name.  Set to 0
+                                         ///< to draw the pin name above the pin.
+    bool               m_unitsLocked;    ///< True if component has multple parts and changing
+                                         ///< one part does not automatically change another part.
+    bool               m_showPinNames;   ///< Determines if component pin names are visible.
+    bool               m_showPinNumbers; ///< Determines if component pin numbers are visible.
+    long               m_dateModified;   ///< Date the component was last modified.
+    LibrEntryOptions   m_options;        // special features (i.e. Entry is a POWER)
+    int                unitCount;        /* Units (parts) per package */
+    LIB_DRAW_ITEM_LIST drawings;         /* How to draw this part */
     wxArrayString      m_aliasListData;  /* ALIAS data (name, doc, keywords and doc filename).
                                           * Used only by the component editor LibEdit
                                           * to store aliases info during edition
@@ -281,7 +269,7 @@ public:
     bool Save( FILE* aFile );
 
     /**
-     * Load component definition from /a aFile.
+     * Load component definition from \a aFile.
      *
      * @param aFile - File descriptor of file to load form.
      * @param aLine - The first line of the component definition.
@@ -291,17 +279,18 @@ public:
      */
     bool Load( FILE* aFile, char* aLine, int* aLineNum, wxString& aErrorMsg );
     bool LoadField( char* aLine, wxString& aErrorMsg );
-    bool LoadDrawEntries( FILE* aFile, char* aLine,
-                          int* aLineNum, wxString& aErrorMsg );
+    bool LoadDrawEntries( FILE* aFile, char* aLine, int* aLineNum, wxString& aErrorMsg );
     bool LoadAliases( char* aLine, wxString& aErrorMsg );
-    bool LoadFootprints( FILE* aFile, char* aLine,
-                         int* aLineNum, wxString& aErrorMsg );
+    bool LoadFootprints( FILE* aFile, char* aLine, int* aLineNum, wxString& aErrorMsg );
 
     bool isPower() { return m_options == ENTRY_POWER; }
     bool isNormal() { return m_options == ENTRY_NORMAL; }
 
     void SetPower() { m_options = ENTRY_POWER; }
     void SetNormal() { m_options = ENTRY_NORMAL; }
+
+    void LockUnits( bool aLockUnits ) { m_unitsLocked = aLockUnits; }
+    bool UnitsLocked() { return m_unitsLocked; }
 
     /**
      * Function SetFields
@@ -381,22 +370,20 @@ public:
                const int aTransform[2][2] );
 
     /**
-     * Add a new draw /a aItem to the draw object list.
+     * Add a new draw \a aItem to the draw object list.
      *
      * @param item - New draw object to add to component.
      */
     void AddDrawItem( LIB_DRAW_ITEM* aItem );
 
     /**
-     * Remove draw /a aItem from list.
+     * Remove draw \a aItem from list.
      *
      * @param aItem - Draw item to remove from list.
      * @param aPanel - Panel to remove part from.
      * @param aDc - Device context to remove part from.
      */
-    void RemoveDrawItem( LIB_DRAW_ITEM* aItem,
-                         WinEDA_DrawPanel* aPanel = NULL,
-                         wxDC* aDc = NULL );
+    void RemoveDrawItem( LIB_DRAW_ITEM* aItem, WinEDA_DrawPanel* aPanel = NULL, wxDC* aDc = NULL );
 
     /**
      * Return the next draw object pointer.
@@ -407,9 +394,7 @@ public:
      *                if TYPE_NOT_INIT search for all items types
      * @return - The next drawing object in the list if found, otherwise NULL.
      */
-
-    LIB_DRAW_ITEM* GetNextDrawItem( LIB_DRAW_ITEM* aItem = NULL,
-                                    KICAD_T aType = TYPE_NOT_INIT );
+    LIB_DRAW_ITEM* GetNextDrawItem( LIB_DRAW_ITEM* aItem = NULL, KICAD_T aType = TYPE_NOT_INIT );
 
     /**
      * Return the next pin object from the draw list.
@@ -422,8 +407,7 @@ public:
      */
     LIB_PIN* GetNextPin( LIB_PIN* aItem = NULL )
     {
-        return (LIB_PIN*) GetNextDrawItem( (LIB_DRAW_ITEM*) aItem,
-                                           COMPONENT_PIN_DRAW_TYPE );
+        return (LIB_PIN*) GetNextDrawItem( (LIB_DRAW_ITEM*) aItem, COMPONENT_PIN_DRAW_TYPE );
     }
 
 
@@ -443,7 +427,7 @@ public:
     void GetPins( LIB_PIN_LIST& aList, int aUnit = 0, int aConvert = 0 );
 
     /**
-     * Return pin object with the requested pin /a aNumber.
+     * Return pin object with the requested pin \a aNumber.
      *
      * @param aNumber - Number of the pin to find.
      * @param aUnit - Unit of the component to find.  Set to 0 if a specific
@@ -455,7 +439,7 @@ public:
     LIB_PIN* GetPin( const wxString& aNumber, int aUnit = 0, int aConvert = 0 );
 
     /**
-     * Move the component /a aOffset.
+     * Move the component \a aOffset.
      *
      * @param aOffset - Offset displacement.
      */
@@ -474,7 +458,7 @@ public:
     bool HasConversion() const;
 
     /**
-     * Test if alias /a aName is in component alias list.
+     * Test if alias \a aName is in component alias list.
      *
      * Alias name comparisons are case insensitive.
      *
@@ -506,8 +490,7 @@ public:
      * @return The number of draw objects found inside the block select
      *         rectangle.
      */
-    int SelectItems( EDA_Rect& aRect, int aUnit, int aConvert,
-                     bool aEditPinByPin );
+    int SelectItems( EDA_Rect& aRect, int aUnit, int aConvert, bool aEditPinByPin );
 
     /**
      * Clears all the draw items marked by a block select.
@@ -553,8 +536,7 @@ public:
      * @param aPoint - Coordinate for hit testing.
      * @return The draw object if found.  Otherwise NULL.
      */
-    LIB_DRAW_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
-                                   const wxPoint& aPoint );
+    LIB_DRAW_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType, const wxPoint& aPoint );
 
     /**
      * Locate a draw object (overlaid)
@@ -567,8 +549,7 @@ public:
      * @return The draw object if found.  Otherwise NULL.
      */
     LIB_DRAW_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
-                                   const wxPoint& aPoint,
-                                   const int aTransfrom[2][2] );
+                                   const wxPoint& aPoint, const int aTransfrom[2][2] );
 
     /**
      * Return a reference to the draw item list.
@@ -617,6 +598,35 @@ public:
      * @param aSetConvert - Set or clear the component alternate body style.
      */
     void SetConversion( bool aSetConvert );
+
+    /**
+     * Set the offset in mils of the pin name text from the pin symbol.
+     *
+     * Set the offset to 0 to draw the pin name above the pin symbol.
+     *
+     * @param aOffset - The offset in mils.
+     */
+    void SetPinNameOffset( int aOffset ) { m_pinNameOffset = aOffset; }
+
+    int GetPinNameOffset() { return m_pinNameOffset; }
+
+    /**
+     * Set or clear the pin name visibility flag.
+     *
+     * @param aShow - True to make the component pin names visible.
+     */
+    void SetShowPinNames( bool aShow ) { m_showPinNames = aShow; }
+
+    bool ShowPinNames() { return m_showPinNames; }
+
+    /**
+     * Set or clear the pin number visibility flag.
+     *
+     * @param aShow - True to make the component pin numbers visible.
+     */
+    void SetShowPinNumbers( bool aShow ) { m_showPinNumbers = aShow; }
+
+    bool ShowPinNumbers() { return m_showPinNumbers; }
 };
 
 

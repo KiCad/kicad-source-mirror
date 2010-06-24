@@ -82,7 +82,7 @@ void NETLIST_OBJECT::Show( std::ostream& out, int ndx )
     out << " <start " << m_Start << "/> <end " << m_End << "/>\n";
 
     if( m_Label )
-        out << " <label>" << m_Label->mb_str() << "</label>\n";
+        out << " <label>" << m_Label.mb_str() << "</label>\n";
 
     if( m_Comp )
         m_Comp->Show( 1, out );
@@ -98,26 +98,28 @@ void NETLIST_OBJECT::Show( std::ostream& out, int ndx )
 
 NETLIST_OBJECT::NETLIST_OBJECT()
 {
-    m_Type = NET_ITEM_UNSPECIFIED;              /* Type of this item (see NetObjetType enum) */
-    m_Comp = NULL;                              /* Pointer on the library item that created this net object (the parent)*/
-    m_Link = NULL;                              /* For SCH_SHEET_PIN:
-                                                 * Pointer to the hierarchy sheet that contains this SCH_SHEET_PIN
-                                                 *  For Pins: pointer to the component that contains this pin
-                                                 */
-    m_Flag = 0;                                 /* flag used in calculations */
-    m_ElectricalType = 0;                       /* Has meaning only for Pins and hierachical pins: electrical type */
-    m_NetCode    = 0;          /* net code for all items except BUS labels because a BUS label has
-                                *  as many net codes as bus members
-                                */
-    m_BusNetCode = 0;                           /* Used for BUS connections */
-    m_Member     = 0;       /* for labels type NET_BUSLABELMEMBER ( bus member created from the BUS label )
-                             *  member number
-                             */
+    m_Type = NET_ITEM_UNSPECIFIED;  /* Type of this item (see NetObjetType enum) */
+    m_Comp = NULL;                  /* Pointer on the library item that created this net object
+                                     * (the parent)*/
+    m_Link = NULL;                  /* For SCH_SHEET_PIN:
+                                     * Pointer to the hierarchy sheet that contains this
+                                     * SCH_SHEET_PIN For Pins: pointer to the component that
+                                     * contains this pin
+                                     */
+    m_Flag = 0;                     /* flag used in calculations */
+    m_ElectricalType = 0;           /* Has meaning only for Pins and hierachical pins: electrical
+                                     * type */
+    m_NetCode    = 0;               /* net code for all items except BUS labels because a BUS
+                                     * label has as many net codes as bus members
+                                     */
+    m_BusNetCode = 0;               /* Used for BUS connections */
+    m_Member     = 0;               /* for labels type NET_BUSLABELMEMBER ( bus member created
+                                     * from the BUS label )  member number
+                                     */
     m_FlagOfConnection = UNCONNECTED;
     m_PinNum = 0;                   /* pin number ( 1 long = 4 bytes -> 4 ascii codes) */
-    m_Label  = 0;                   /* For all labels:pointer on the text label */
-    m_NetNameCandidate = NULL;      /* a pointer to a NETLIST_OBJECT type label connected to this object
-                                     *  used to give a name to the net
+    m_NetNameCandidate = NULL;      /* a pointer to a NETLIST_OBJECT type label connected to this
+                                     * object used to give a name to the net
                                      */
 }
 
@@ -125,30 +127,10 @@ NETLIST_OBJECT::NETLIST_OBJECT()
 // Copy constructor
 NETLIST_OBJECT::NETLIST_OBJECT( NETLIST_OBJECT& aSource )
 {
-    *this   = aSource;
-    m_Label = NULL;         // set to null because some items are owner, so the delete operator can create problems
-                            // if this member is copied here (if 2 different items are owner of the same object)
+    *this = aSource;
 }
 
 
 NETLIST_OBJECT::~NETLIST_OBJECT()
 {
-    /* NETLIST_OBJECT is owner of m_Label only if its type is
-     *  NET_HIERBUSLABELMEMBER, NET_GLOBBUSLABELMEMBER, NET_SHEETBUSLABELMEMBER or NET_BUSLABELMEMBER
-     *  So we must delete m_Label only for these cases
-     *  ( see the note in ConvertBustToMembers)
-     */
-
-    switch( m_Type )
-    {
-    default:
-        break;
-
-    case NET_HIERBUSLABELMEMBER:
-    case NET_GLOBBUSLABELMEMBER:
-    case NET_SHEETBUSLABELMEMBER:
-    case NET_BUSLABELMEMBER:
-        SAFE_DELETE( m_Label );
-        break;
-    }
 }

@@ -180,13 +180,13 @@ void LIB_ALIAS::SetComponent( LIB_COMPONENT* aComponent )
 LIB_COMPONENT::LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary ) :
     CMP_LIB_ENTRY( ROOT, aName, aLibrary )
 {
-    m_LastDate            = 0;
+    m_dateModified        = 0;
     unitCount             = 1;
-    m_TextInside          = 40;
+    m_pinNameOffset       = 40;
     m_options             = ENTRY_NORMAL;
-    m_UnitSelectionLocked = FALSE;
-    m_DrawPinNum          = 1;
-    m_DrawPinName         = 1;
+    m_unitsLocked         = FALSE;
+    m_showPinNumbers      = true;
+    m_showPinNames        = true;
 
     // Add the MANDATORY_FIELDS in RAM only.  These are assumed to be present
     // when the field editors are invoked.
@@ -209,11 +209,11 @@ LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary )
     m_aliasListData       = aComponent.m_aliasListData;
     m_FootprintList       = aComponent.m_FootprintList;
     unitCount             = aComponent.unitCount;
-    m_UnitSelectionLocked = aComponent.m_UnitSelectionLocked;
-    m_TextInside          = aComponent.m_TextInside;
-    m_DrawPinNum          = aComponent.m_DrawPinNum;
-    m_DrawPinName         = aComponent.m_DrawPinName;
-    m_LastDate            = aComponent.m_LastDate;
+    m_unitsLocked         = aComponent.m_unitsLocked;
+    m_pinNameOffset       = aComponent.m_pinNameOffset;
+    m_showPinNumbers      = aComponent.m_showPinNumbers;
+    m_showPinNames        = aComponent.m_showPinNames;
+    m_dateModified        = aComponent.m_dateModified;
     m_options             = aComponent.m_options;
 
     BOOST_FOREACH( LIB_DRAW_ITEM& oldItem, aComponent.GetDrawItemList() )
@@ -554,10 +554,10 @@ bool LIB_COMPONENT::Save( FILE* aFile )
     }
 
     if( fprintf( aFile, " %d %d %c %c %d %c %c\n",
-                 0, m_TextInside,
-                 m_DrawPinNum ? 'Y' : 'N',
-                 m_DrawPinName ? 'Y' : 'N',
-                 unitCount, m_UnitSelectionLocked ? 'L' : 'F',
+                 0, m_pinNameOffset,
+                 m_showPinNumbers ? 'Y' : 'N',
+                 m_showPinNames ? 'Y' : 'N',
+                 unitCount, m_unitsLocked ? 'L' : 'F',
                  m_options == ENTRY_POWER ? 'P' : 'N' ) < 0 )
         return false;
 
@@ -688,7 +688,7 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum,
         || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* NumOfPins: */
         || sscanf( p, "%d", &unused ) != 1
         || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* TextInside: */
-        || sscanf( p, "%d", &m_TextInside ) != 1
+        || sscanf( p, "%d", &m_pinNameOffset ) != 1
         || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* DrawNums: */
         || sscanf( p, "%c", &drawnum ) != 1
         || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* DrawNums: */
@@ -712,8 +712,8 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum,
     if( unitCount < 1 )
         unitCount = 1;
 
-    m_DrawPinNum  = ( drawnum == 'N' ) ? FALSE : true;
-    m_DrawPinName = ( drawname == 'N' ) ? FALSE : true;
+    m_showPinNumbers = ( drawnum == 'N' ) ? false : true;
+    m_showPinNames = ( drawname == 'N' ) ? false : true;
 
     /* Copy part name and prefix. */
     LIB_FIELD& value = GetValueField();
@@ -743,7 +743,7 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum,
 
     // Copy optional infos
     if( ( p = strtok( NULL, " \t\n" ) ) != NULL && *p == 'L' )
-        m_UnitSelectionLocked = true;
+        m_unitsLocked = true;
     if( ( p = strtok( NULL, " \t\n" ) ) != NULL  && *p == 'P' )
         m_options = ENTRY_POWER;
 
@@ -1101,15 +1101,15 @@ bool LIB_COMPONENT::SaveDateAndTime( FILE* aFile )
 {
     int year, mon, day, hour, min, sec;
 
-    if( m_LastDate == 0 )
+    if( m_dateModified == 0 )
         return true;
 
-    sec  = m_LastDate & 63;
-    min  = ( m_LastDate >> 6 ) & 63;
-    hour = ( m_LastDate >> 12 ) & 31;
-    day  = ( m_LastDate >> 17 ) & 31;
-    mon  = ( m_LastDate >> 22 ) & 15;
-    year = ( m_LastDate >> 26 ) + 1990;
+    sec  = m_dateModified & 63;
+    min  = ( m_dateModified >> 6 ) & 63;
+    hour = ( m_dateModified >> 12 ) & 31;
+    day  = ( m_dateModified >> 17 ) & 31;
+    mon  = ( m_dateModified >> 22 ) & 15;
+    year = ( m_dateModified >> 26 ) + 1990;
 
     if ( fprintf( aFile, "Ti %d/%d/%d %d:%d:%d\n",
                   year, mon, day, hour, min, sec ) < 0 )
@@ -1134,7 +1134,7 @@ bool LIB_COMPONENT::LoadDateAndTime( char* aLine )
                 &year, &mon, &day, &hour, &min, &sec ) != 6 )
         return false;
 
-    m_LastDate = ( sec & 63 ) + ( ( min & 63 ) << 6 ) +
+    m_dateModified = ( sec & 63 ) + ( ( min & 63 ) << 6 ) +
         ( ( hour & 31 ) << 12 ) + ( ( day & 31 ) << 17 ) +
         ( ( mon & 15 ) << 22 ) + ( ( year - 1990 ) << 26 );
 
@@ -1192,7 +1192,7 @@ int LIB_COMPONENT::SelectItems( EDA_Rect& aRect, int aUnit, int aConvert,
                 continue;
 
              // Specific rules for pins.
-            if( aEditPinByPin || m_UnitSelectionLocked
+            if( aEditPinByPin || m_unitsLocked
                 || ( item.m_Convert && item.m_Convert != aConvert ) )
                 continue;
         }

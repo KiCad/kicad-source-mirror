@@ -6,6 +6,9 @@
 #define CLASS_DRAWSHEET_H
 
 #include "base_struct.h"
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/foreach.hpp>
+
 
 extern SCH_SHEET* g_RootSheet;
 
@@ -21,12 +24,15 @@ extern SCH_SHEET* g_RootSheet;
  */
 class SCH_SHEET_PIN : public SCH_ITEM, public EDA_TextStruct
 {
+private:
+    int  m_Number;      ///< Label number use for saving sheet label to file.
+                        ///< Sheet label numbering begins at 2.
+                        ///< 0 is reserved for the sheet name.
+                        ///< 1 is reserve for the sheet file name.
+
 public:
     int  m_Edge, m_Shape;
     bool m_IsDangling;  // TRUE non connected
-    int  m_Number;      // used to numbered labels when writing data on file .
-                        // m_Number >= 2
-                        // value 0 is for sheet name and 1 for sheet filename
 
 public:
     SCH_SHEET_PIN( SCH_SHEET* parent,
@@ -40,6 +46,7 @@ public:
         return wxT( "SCH_SHEET_PIN" );
     }
 
+    bool operator==( const SCH_SHEET_PIN* aPin ) const;
 
     SCH_SHEET_PIN* GenCopy();
 
@@ -48,13 +55,42 @@ public:
         return ( SCH_SHEET_PIN*) Pnext;
     }
 
-    void Place( WinEDA_SchematicFrame* frame,
-                wxDC*                  DC );
+    /**
+     * Get the sheet label number.
+     *
+     * @return Number of the sheet label.
+     */
+    int GetNumber() { return m_Number; }
+
+    /**
+     * Set the sheet label number.
+     *
+     * @param aNumber - New sheet number label.
+     */
+    void SetNumber( int aNumber );
+
+    /**
+     * Get the parent sheet object of this sheet pin.
+     *
+     * @return The sheet that is the parent of this sheet pin or NULL if it does
+     *         not have a parent.
+     */
+    SCH_SHEET* GetParent() const { return (SCH_SHEET*) m_Parent; }
+
+    void Place( WinEDA_SchematicFrame* frame, wxDC* DC );
+
     void Draw( WinEDA_DrawPanel* panel,
                wxDC*             DC,
                const wxPoint&    offset,
                int               draw_mode,
                int               Color = -1 );
+
+    /**
+     * Plot this sheet pin object to aPlotter.
+     *
+     * @param aPlotter - The plotter object to plot to.
+     */
+    void Plot( PLOTTER* aPlotter );
 
     /**
      * Function Save
@@ -119,6 +155,9 @@ public:
 };
 
 
+typedef boost::ptr_vector< SCH_SHEET_PIN > SCH_SHEET_PIN_LIST;
+
+
 /* class SCH_SHEET
  * This class is the sheet symbol placed in a schematic, and is the entry point
  * for a sub schematic
@@ -131,10 +170,14 @@ public:
                                          * components: it is stored in F0 ...
                                          * of the file. */
 private:
-    wxString m_FileName;                /*also in SCH_SCREEN (redundant),
+    wxString m_FileName;                /* also in SCH_SCREEN (redundant),
                                          * but need it here for loading after
                                          * reading the sheet description from
                                          * file. */
+
+protected:
+    SCH_SHEET_PIN_LIST m_labels;        /* List of points to be connected.*/
+
 public:
     int         m_SheetNameSize;        /* Size (height) of the text, used to
                                          * draw the sheet name */
@@ -143,10 +186,6 @@ public:
     wxPoint     m_Pos;
     wxSize      m_Size;                 /* Position and Size of *sheet symbol */
     int         m_Layer;
-    SCH_SHEET_PIN* m_Label;             /* Points Be connection, linked
-                                         * list.*/
-    int         m_NbLabel;              /* Pins sheet (corresponding to
-                                         * hierarchical labels) count */
     SCH_SCREEN* m_AssociatedScreen;     /* Associated Screen which
                                          * handle the physical data
                                          * In complex hierarchies we
@@ -176,14 +215,60 @@ public:
     SCH_SHEET*   GenCopy();
     void         DisplayInfo( WinEDA_DrawFrame* frame );
 
-    /** Function CleanupSheet
-     * Delete pinsheets which are not corresponding to a hierarchical label
-     * @param aFrame = the schematic frame
-     * @param aRedraw = true to redraw Sheet
-     * @param aSaveForUndoRedo = true to put this sheet in UndoRedo list,
-     *          if it is modified.
+    /**
+     * Add aLabel to this sheet.
+     *
+     * Note: Once a label is added to the sheet, it is owned by the sheet.
+     *       Do not delete the label object or you will likely get a segfault
+     *       when this sheet is destroyed.
+     *
+     * @param aLabel - The label to add to the sheet.
      */
-    void         CleanupSheet( WinEDA_SchematicFrame* frame, bool aRedraw, bool aSaveForUndoRedo );
+    void AddLabel( SCH_SHEET_PIN* aLabel );
+
+    SCH_SHEET_PIN_LIST& GetSheetPins() { return m_labels; }
+
+    /**
+     * Remove a sheet label from this sheet.
+     *
+     * @param aSheetLabel - The sheet label to remove from the list.
+     */
+    void RemoveLabel( SCH_SHEET_PIN* aSheetLabel );
+
+    /**
+     * Delete sheet label which do not have a corresponding hierarchical label.
+     *
+     * Note: Make sure you save a copy of the sheet in the undo list before calling
+     *       CleanupSheet() otherwise any unrefernced sheet labels will be lost.
+     */
+    void CleanupSheet();
+
+    /**
+     * Return the label found at aPosition in this sheet.
+     *
+     * @param aPosition - The position to check for a label.
+     *
+     * @return The label found at aPosition or NULL if no label is found.
+     */
+    SCH_SHEET_PIN* GetLabel( const wxPoint& aPosition );
+
+    /**
+     * Checks if a label already exists with aName.
+     *
+     * @param aName - Name of label to search for.
+     *
+     * @return - True if label found, otherwise false.
+     */
+    bool HasLabel( const wxString& aName );
+
+    bool HasLabels() { return !m_labels.empty(); }
+
+    /**
+     * Check all sheet labels against schematic for undefined hierarchical labels.
+     *
+     * @return True if there are any undefined labels.
+     */
+    bool HasUndefinedLabels();
 
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
@@ -272,7 +357,7 @@ public:
     wxString GetFileName( void );
 
     // Set a new filename without changing anything else
-    void             SetFileName( const wxString& aFilename )
+    void SetFileName( const wxString& aFilename )
     {
         m_FileName = aFilename;
     }
@@ -304,11 +389,9 @@ public:
     virtual void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
-        SCH_SHEET_PIN* label = m_Label;
-        while( label != NULL )
+        BOOST_FOREACH( SCH_SHEET_PIN& label, m_labels )
         {
-            label->Move( aMoveVector );
-            label = label->Next();
+            label.Move( aMoveVector );
         }
     }
 
@@ -323,11 +406,17 @@ public:
      * Compare schematic sheet file and sheet name against search string.
      *
      * @param aSearchData - Criteria to search against.
-     * @param aCaseSensitive - True for case sensitive search.
-     * @param aWholeWord - True to match whole word.
+     *
      * @return True if this item matches the search criteria.
      */
     virtual bool Matches( wxFindReplaceData& aSearchData );
+
+    /**
+     * Resize this sheet to aSize and adjust all of the labels accordingly.
+     *
+     * @param aSize - The new size for this sheet.
+     */
+    void Resize( const wxSize& aSize );
 
 #if defined(DEBUG)
 
@@ -335,6 +424,17 @@ public:
     void         Show( int nestLevel, std::ostream& os );
 
 #endif
+
+protected:
+
+    /**
+     * Renumber labels in list.
+     *
+     * This method is used internally by SCH_SHEET to update the label numbering
+     * when the label list changes.  Make sure you call this method any time a
+     * label is added or removed.
+     */
+    void renumberLabels();
 };
 
 #endif /* CLASS_DRAWSHEET_H */

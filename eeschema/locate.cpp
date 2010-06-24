@@ -459,33 +459,11 @@ bool IsItemInBox( EDA_Rect& aBox, SCH_ITEM* DrawStruct )
 
 SCH_SHEET_PIN* LocateSheetLabel( SCH_SHEET* Sheet, const wxPoint& pos )
 {
-    int size, dy, minx, maxx;
-    SCH_SHEET_PIN* SheetLabel;
-
-    SheetLabel = Sheet->m_Label;
-    while( SheetLabel
-           && SheetLabel->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
-    {
-        size = ( SheetLabel->GetLength() + 1 ) * SheetLabel->m_Size.x;
-        if( SheetLabel->m_Edge )
-            size = -size;
-        minx = SheetLabel->m_Pos.x; maxx = SheetLabel->m_Pos.x + size;
-        if( maxx < minx )
-            EXCHG( maxx, minx );
-        dy = SheetLabel->m_Size.x / 2;
-        if( (ABS( pos.y - SheetLabel->m_Pos.y ) <= dy )
-           && (pos.x <= maxx)
-           && (pos.x >= minx) )
-            return SheetLabel;
-        SheetLabel = SheetLabel->Next();
-    }
-
-    return NULL;
+    return Sheet->GetLabel( pos );
 }
 
 
-LIB_PIN* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos,
-                       SCH_COMPONENT** libpart )
+LIB_PIN* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos, SCH_COMPONENT** libpart )
 {
     SCH_ITEM* DrawStruct;
     LIB_COMPONENT* Entry;

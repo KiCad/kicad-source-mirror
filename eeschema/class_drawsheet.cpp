@@ -25,8 +25,6 @@
 SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
     SCH_ITEM( NULL, DRAW_SHEET_STRUCT_TYPE )
 {
-    m_Label = NULL;
-    m_NbLabel = 0;
     m_Layer = LAYER_SHEET;
     m_Pos = pos;
     m_TimeStamp = GetTimeStamp();
@@ -39,20 +37,12 @@ SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
 
 SCH_SHEET::~SCH_SHEET()
 {
-    SCH_SHEET_PIN* label = m_Label, * next_label;
-
-    while( label )
-    {
-        next_label = label->Next();
-        delete label;
-        label = next_label;
-    }
-
     // also, look at the associated sheet & its reference count
     // perhaps it should be deleted also.
     if( m_AssociatedScreen )
     {
         m_AssociatedScreen->m_RefCount--;
+
         if( m_AssociatedScreen->m_RefCount == 0 )
             delete m_AssociatedScreen;
     }
@@ -66,8 +56,6 @@ SCH_SHEET::~SCH_SHEET()
  */
 bool SCH_SHEET::Save( FILE* aFile ) const
 {
-    SCH_SHEET_PIN* SheetLabel;
-
     if( fprintf( aFile, "$Sheet\n" ) == EOF
         || fprintf( aFile, "S %-4d %-4d %-4d %-4d\n",
                     m_Pos.x, m_Pos.y, m_Size.x, m_Size.y ) == EOF )
@@ -92,15 +80,12 @@ bool SCH_SHEET::Save( FILE* aFile ) const
             return false;
     }
 
-    /* Create the list of labels in the sheet. */
-    SheetLabel = m_Label;
-    int l_id = 2;
-    while( SheetLabel != NULL )
+    /* Save the list of labels in the sheet. */
+
+    BOOST_FOREACH( const SCH_SHEET_PIN& label, m_labels )
     {
-        SheetLabel->m_Number = l_id;
-        SheetLabel->Save( aFile );
-        l_id++;
-        SheetLabel = SheetLabel->Next();
+        if( !label.Save( aFile ) )
+            return false;
     }
 
     if( fprintf( aFile, "$EndSheet\n" ) == EOF )
@@ -132,24 +117,14 @@ SCH_SHEET* SCH_SHEET::GenCopy()
  */
     newitem->m_SheetNameSize = m_SheetNameSize;
 
-    newitem->m_Label = NULL;
-
-    SCH_SHEET_PIN* Slabel = NULL, * label = m_Label;
-
-    if( label )
+    BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_labels )
     {
-        Slabel = newitem->m_Label = label->GenCopy();
-        Slabel->SetParent( newitem );
-        label = label->Next();
+        SCH_SHEET_PIN* newSheetPin = sheetPin.GenCopy();
+        newSheetPin->SetParent( newitem );
+        newitem->GetSheetPins().push_back( newSheetPin );
     }
 
-    while( label )
-    {
-        Slabel->SetNext( label->GenCopy() );
-        Slabel = Slabel->Next();
-        Slabel->SetParent( newitem );
-        label = label->Next();
-    }
+    newitem->renumberLabels();
 
     /* don't copy screen data - just reference it. */
     newitem->m_AssociatedScreen = m_AssociatedScreen;
@@ -170,24 +145,92 @@ void SCH_SHEET::SwapData( SCH_SHEET* copyitem )
     EXCHG( m_SheetName, copyitem->m_SheetName );
     EXCHG( m_SheetNameSize, copyitem->m_SheetNameSize );
     EXCHG( m_FileNameSize, copyitem->m_FileNameSize );
-    EXCHG( m_Label, copyitem->m_Label );
-    EXCHG( m_NbLabel, copyitem->m_NbLabel );
+    m_labels.swap( copyitem->m_labels );
 
     // Ensure sheet labels have their .m_Parent member pointing really on their
     // parent, after swapping.
-    SCH_SHEET_PIN* label = m_Label;
-    while( label )
+    BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_labels )
     {
-        label->SetParent( this );
-        label = label->Next();
+        sheetPin.SetParent( this );
     }
 
-    label = copyitem->m_Label;
-    while( label )
+    BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, copyitem->m_labels )
     {
-        label->SetParent( copyitem );
-        label = label->Next();
+        sheetPin.SetParent( copyitem );
     }
+}
+
+
+void SCH_SHEET::AddLabel( SCH_SHEET_PIN* aLabel )
+{
+    wxASSERT( aLabel != NULL );
+    wxASSERT( aLabel->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE );
+
+    m_labels.push_back( aLabel );
+    renumberLabels();
+}
+
+
+void SCH_SHEET::RemoveLabel( SCH_SHEET_PIN* aLabel )
+{
+    wxASSERT( aLabel != NULL );
+    wxASSERT( aLabel->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE );
+
+    SCH_SHEET_PIN_LIST::iterator i;
+
+    for( i = m_labels.begin();  i < m_labels.end();  ++i )
+    {
+        if( *i == aLabel )
+        {
+            m_labels.erase( i );
+            renumberLabels();
+            return;
+        }
+    }
+
+    wxLogDebug( wxT( "Fix me: attempt to remove label %s which is not in sheet %s." ),
+                GetChars( aLabel->m_Text ), GetChars( m_SheetName ) );
+}
+
+
+bool SCH_SHEET::HasLabel( const wxString& aName )
+{
+    BOOST_FOREACH( SCH_SHEET_PIN label, m_labels )
+    {
+        if( label.m_Text.CmpNoCase( aName ) == 0 )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SCH_SHEET::HasUndefinedLabels()
+{
+    BOOST_FOREACH( SCH_SHEET_PIN label, m_labels )
+    {
+        /* Search the schematic for a hierarchical label corresponding to this sheet label. */
+        EDA_BaseStruct* DrawStruct = m_AssociatedScreen->EEDrawList;
+        SCH_HIERLABEL*  HLabel     = NULL;
+
+        for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
+        {
+            if( DrawStruct->Type() != TYPE_SCH_HIERLABEL )
+                continue;
+
+            HLabel = (SCH_HIERLABEL*) DrawStruct;
+
+            if( label.m_Text.CmpNoCase( HLabel->m_Text ) == 0 )
+                break;  // Found!
+
+            HLabel = NULL;
+        }
+
+        if( HLabel == NULL )   // Corresponding hierarchical label not found.
+            return true;
+    }
+
+    return false;
 }
 
 
@@ -233,56 +276,61 @@ void SCH_SHEET::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 }
 
 
-/** Function CleanupSheet
- * Delete pinsheets which are not corresponding to a hierarchical label
- * @param aRedraw = true to redraw Sheet
- * @param aFrame = the schematic frame
+/**
+ * Delete sheet labels which do not have corresponding hierarchical label.
  */
-void SCH_SHEET::CleanupSheet( WinEDA_SchematicFrame* aFrame,
-                              bool                   aRedraw,
-                              bool                   aSaveForUndoRedo)
+void SCH_SHEET::CleanupSheet()
 {
-    SCH_SHEET_PIN* Pinsheet, * NextPinsheet;
-    bool isSaved = false;
+    SCH_SHEET_PIN_LIST::iterator i = m_labels.begin();
 
-    if( !IsOK( aFrame, _( "Ok to cleanup this sheet" ) ) )
-        return;
-
-    Pinsheet = m_Label;
-    while( Pinsheet )
+    while( i != m_labels.end() )
     {
-        /* Search Hlabel corresponding to this Pinsheet */
-
+        /* Search the schematic for a hierarchical label corresponding to this sheet label. */
         EDA_BaseStruct* DrawStruct = m_AssociatedScreen->EEDrawList;
         SCH_HIERLABEL*  HLabel     = NULL;
+
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
             if( DrawStruct->Type() != TYPE_SCH_HIERLABEL )
                 continue;
 
             HLabel = (SCH_HIERLABEL*) DrawStruct;
-            if( Pinsheet->m_Text.CmpNoCase( HLabel->m_Text ) == 0 )
+
+            if( i->m_Text.CmpNoCase( HLabel->m_Text ) == 0 )
                 break;  // Found!
 
             HLabel = NULL;
         }
 
-        NextPinsheet = Pinsheet->Next();
-        if( HLabel == NULL )   // Hlabel not found: delete pinsheet
-        {
-            if( aSaveForUndoRedo && !isSaved )
-            {
-                isSaved = true;
-                aFrame->SaveCopyInUndoList( this, UR_CHANGED);
-            }
-            aFrame->OnModify( );
-            aFrame->DeleteSheetLabel( false, Pinsheet );
-        }
-        Pinsheet = NextPinsheet;
+        if( HLabel == NULL )   // Hlabel not found: delete sheet label.
+            m_labels.erase( i );
+        else
+            ++i;
+    }
+}
+
+
+SCH_SHEET_PIN* SCH_SHEET::GetLabel( const wxPoint& aPosition )
+{
+    int size, dy, minx, maxx;
+
+    BOOST_FOREACH( SCH_SHEET_PIN& label, m_labels )
+    {
+        size = ( label.GetLength() + 1 ) * label.m_Size.x;
+        if( label.m_Edge )
+            size = -size;
+        minx = label.m_Pos.x;
+        maxx = label.m_Pos.x + size;
+        if( maxx < minx )
+            EXCHG( maxx, minx );
+        dy = label.m_Size.x / 2;
+
+        if( ( ABS( aPosition.y - label.m_Pos.y ) <= dy )
+            && ( aPosition.x <= maxx ) && ( aPosition.x >= minx ) )
+            return &label;
     }
 
-    if( aRedraw )
-        aFrame->DrawPanel->PostDirtyRect( GetBoundingBox() );
+    return NULL;
 }
 
 
@@ -307,7 +355,6 @@ int SCH_SHEET::GetPenSize()
 void SCH_SHEET::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                       const wxPoint& aOffset, int aDrawMode, int aColor )
 {
-    SCH_SHEET_PIN* SheetLabelStruct;
     int      txtcolor;
     wxString Text;
     int      color;
@@ -350,12 +397,10 @@ void SCH_SHEET::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
 
     /* Draw text : SheetLabel */
-    SheetLabelStruct = m_Label;
-    while( SheetLabelStruct != NULL )
+    BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_labels )
     {
-        if( !( SheetLabelStruct->m_Flags & IS_MOVED ) )
-            SheetLabelStruct->Draw( aPanel, aDC, aOffset, aDrawMode, aColor );
-        SheetLabelStruct = SheetLabelStruct->Next();
+        if( !( sheetPin.m_Flags & IS_MOVED ) )
+            sheetPin.Draw( aPanel, aDC, aOffset, aDrawMode, aColor );
     }
 }
 
@@ -377,8 +422,8 @@ EDA_Rect SCH_SHEET::GetBoundingBox()
     dx = MAX( m_Size.x, textlen1 );
     dy = m_Size.y + m_SheetNameSize + m_FileNameSize + 16;
 
-    EDA_Rect box( wxPoint( m_Pos.x, m_Pos.y - m_SheetNameSize - 8 ),
-                  wxSize( dx, dy ) );
+    EDA_Rect box( wxPoint( m_Pos.x, m_Pos.y - m_SheetNameSize - 8 ), wxSize( dx, dy ) );
+
     return box;
 }
 
@@ -603,7 +648,7 @@ bool SCH_SHEET::ChangeFileName( WinEDA_SchematicFrame* aFrame,
         {
             msg.Printf( _( "A Sub Hierarchy named %s exists, Use it (The \
 data in this sheet will be replaced)?" ),
-                        aFileName.GetData() );
+                        GetChars( aFileName ) );
             if( !IsOK( NULL, msg ) )
             {
                 DisplayInfoMessage( (wxWindow*) NULL,
@@ -617,7 +662,7 @@ data in this sheet will be replaced)?" ),
     {
         msg.Printf( _( "A file named %s exists, load it (otherwise keep \
 current sheet data if possible)?" ),
-                   aFileName.GetData() );
+                    GetChars( aFileName ) );
         if( IsOK( NULL, msg ) )
         {
             LoadFromFile = true;
@@ -708,11 +753,25 @@ void SCH_SHEET::Mirror_Y( int aYaxis_position )
 
     m_Pos.x -= m_Size.x;
 
-    SCH_SHEET_PIN* label = m_Label;
-    while( label != NULL )
+    BOOST_FOREACH( SCH_SHEET_PIN& label, m_labels )
     {
-        label->Mirror_Y( aYaxis_position );
-        label = label->Next();
+        label.Mirror_Y( aYaxis_position );
+    }
+}
+
+
+void SCH_SHEET::Resize( const wxSize& aSize )
+{
+    if( aSize == m_Size )
+        return;
+
+    m_Size = aSize;
+
+    /* Move the sheet labels according to the new sheet size. */
+    BOOST_FOREACH( SCH_SHEET_PIN& label, m_labels )
+    {
+        if( label.m_Edge )
+            label.m_Pos.x = m_Pos.x + m_Size.x;
     }
 }
 
@@ -726,27 +785,35 @@ bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData )
 }
 
 
+void SCH_SHEET::renumberLabels()
+{
+    int labelId = 2;
+
+    BOOST_FOREACH( SCH_SHEET_PIN& label, m_labels )
+    {
+        label.SetNumber( labelId );
+        labelId++;
+    }
+}
+
+
 #if defined(DEBUG)
+
 void SCH_SHEET::Show( int nestLevel, std::ostream& os )
 {
     // XML output:
     wxString s = GetClass();
 
-    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">"
-                                 << " sheet_name=\""
-                                 << CONV_TO_UTF8( m_SheetName )
-                                 << '"' << ">\n";
+    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">" << " sheet_name=\""
+                                 << CONV_TO_UTF8( m_SheetName ) << '"' << ">\n";
 
     // show all the pins, and check the linked list integrity
-    SCH_SHEET_PIN* label;
-    for( label = m_Label; label; label = label->Next() )
+    BOOST_FOREACH( SCH_SHEET_PIN& label, m_labels )
     {
-        label->Show( nestLevel + 1, os );
+        label.Show( nestLevel + 1, os );
     }
 
-    NestedSpace( nestLevel, os ) << "</" << s.Lower().mb_str() << ">\n"
-                                 << std::flush;
+    NestedSpace( nestLevel, os ) << "</" << s.Lower().mb_str() << ">\n" << std::flush;
 }
-
 
 #endif

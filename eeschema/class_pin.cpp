@@ -809,8 +809,8 @@ void LIB_PIN::Draw( WinEDA_DrawPanel* aPanel,
 
     if( DrawPinText )
     {
-        DrawPinTexts( aPanel, aDC, pos1, orient, Entry->m_TextInside,
-                      Entry->m_DrawPinNum, Entry->m_DrawPinName,
+        DrawPinTexts( aPanel, aDC, pos1, orient, Entry->GetPinNameOffset(),
+                      Entry->ShowPinNumbers(), Entry->ShowPinNames(),
                       aColor, aDrawMode );
     }
 
@@ -1610,8 +1610,8 @@ void LIB_PIN::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 
     plotter->set_current_line_width( GetPenSize() );
     PlotPinSymbol( plotter, pos, m_PinLen, orient, m_PinShape );
-    PlotPinTexts( plotter, pos, orient, GetParent()->m_TextInside,
-                  GetParent()->m_DrawPinNum, GetParent()->m_DrawPinName,
+    PlotPinTexts( plotter, pos, orient, GetParent()->GetPinNameOffset(),
+                  GetParent()->ShowPinNumbers(), GetParent()->ShowPinNames(),
                   GetPenSize() );
 }
 

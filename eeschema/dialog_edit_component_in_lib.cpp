@@ -146,11 +146,11 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitBasicPanel()
         return;
     }
 
-    m_ShowPinNumButt->SetValue( component->m_DrawPinNum );
-    m_ShowPinNameButt->SetValue( component->m_DrawPinName );
-    m_PinsNameInsideButt->SetValue( component->m_TextInside != 0 );
+    m_ShowPinNumButt->SetValue( component->ShowPinNumbers() );
+    m_ShowPinNameButt->SetValue( component->ShowPinNames() );
+    m_PinsNameInsideButt->SetValue( component->GetPinNameOffset() != 0 );
     m_SelNumberOfUnits->SetValue( component->GetPartCount() );
-    m_SetSkew->SetValue( component->m_TextInside );
+    m_SetSkew->SetValue( component->GetPinNameOffset() );
     m_OptionPower->SetValue( component->isPower() );
-    m_OptionPartsLocked->SetValue( component->m_UnitSelectionLocked );
+    m_OptionPartsLocked->SetValue( component->UnitsLocked() );
 }
