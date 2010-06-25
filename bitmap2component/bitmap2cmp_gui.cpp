@@ -71,7 +71,7 @@ private:
     void OnLoadFile( wxCommandEvent& event );
     void OnExportEeschema( wxCommandEvent& event );
     void OnExportPcbnew( wxCommandEvent& event );
-    void Binarize( int aThreshold );
+    void Binarize( double aThreshold );     // aThreshold = 0.0 (black level) to 1.0 (white level)
 	void OnOptionsSelection( wxCommandEvent& event );
 	void OnThresholdChange( wxScrollEvent& event );
     void NegateGreyscaleImage( );
@@ -196,18 +196,18 @@ void BM2CMP_FRAME::OnLoadFile( wxCommandEvent& event )
     m_Greyscale_Bitmap = wxBitmap( m_Greyscale_Image );
 
     m_NB_Image  = m_Greyscale_Image;
-    Binarize( m_sliderThreshold->GetValue() );
+    Binarize( (double)m_sliderThreshold->GetValue()/m_sliderThreshold->GetMax() );
     Refresh();
 }
 
 
-void BM2CMP_FRAME::Binarize( int aThreshold )
+void BM2CMP_FRAME::Binarize( double aThreshold )
 {
     unsigned int  pixin;
     unsigned char pixout;
     int           h = m_Greyscale_Image.GetHeight();
     int           w = m_Greyscale_Image.GetWidth();
-    unsigned int  threshold = (aThreshold * 256) / 10;
+    unsigned int  threshold = (int)(aThreshold * 256);
 
     for( int y = 1; y < h; y++ )
         for( int x = 1; x < w; x++ )
@@ -243,13 +243,13 @@ void BM2CMP_FRAME::OnOptionsSelection( wxCommandEvent& event )
 {
     NegateGreyscaleImage( );
     m_Greyscale_Bitmap = wxBitmap( m_Greyscale_Image );
-    Binarize( m_sliderThreshold->GetValue() );
+    Binarize( (double)m_sliderThreshold->GetValue()/m_sliderThreshold->GetMax() );
     Refresh();
 }
 
 void BM2CMP_FRAME::OnThresholdChange( wxScrollEvent& event )
 {
-    Binarize( m_sliderThreshold->GetValue() );
+    Binarize( (double)m_sliderThreshold->GetValue()/m_sliderThreshold->GetMax() );
     Refresh();
 }
 
