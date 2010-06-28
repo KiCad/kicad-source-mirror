@@ -174,8 +174,11 @@ static int MinimalReq[PIN_NMAX][PIN_NMAX] =
 /** Function TestDuplicateSheetNames( )
  * inside a given sheet, one cannot have sheets with duplicate names (file
  * names can be duplicated).
+ * @return the error count
+ * @param aCreateMarker: true = create error markers in schematic,
+ *                       false = calculate error count only
  */
-int TestDuplicateSheetNames()
+int TestDuplicateSheetNames(bool aCreateMarker)
 {
     int            err_count = 0;
     EDA_ScreenList ScreenList;      // Created the list of screen
@@ -203,17 +206,20 @@ int TestDuplicateSheetNames()
                         ( ( SCH_SHEET* ) item_to_test )-> m_SheetName )
                     == 0 )
                 {
-                    /* Create a new marker type ERC error*/
-                    SCH_MARKER* Marker = new SCH_MARKER();
-                    Marker->m_TimeStamp = GetTimeStamp();
-                    Marker->SetData( ERCE_DUPLICATE_SHEET_NAME,
-                                     ( (SCH_SHEET*) item_to_test )->m_Pos,
-                                     _( "Duplicate Sheet name" ),
-                                     ( (SCH_SHEET*) item_to_test )->m_Pos );
-                    Marker->SetMarkerType( MARK_ERC );
-                    Marker->SetErrorLevel( ERR );
-                    Marker->SetNext( Screen->EEDrawList );
-                    Screen->EEDrawList = Marker;
+                    if( aCreateMarker )
+                    {
+                        /* Create a new marker type ERC error*/
+                        SCH_MARKER* Marker = new SCH_MARKER();
+                        Marker->m_TimeStamp = GetTimeStamp();
+                        Marker->SetData( ERCE_DUPLICATE_SHEET_NAME,
+                                         ( (SCH_SHEET*) item_to_test )->m_Pos,
+                                         _( "Duplicate Sheet name" ),
+                                         ( (SCH_SHEET*) item_to_test )->m_Pos );
+                        Marker->SetMarkerType( MARK_ERC );
+                        Marker->SetErrorLevel( ERR );
+                        Marker->SetNext( Screen->EEDrawList );
+                        Screen->EEDrawList = Marker;
+                    }
                     err_count++;
                 }
             }
@@ -279,9 +285,8 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
      * inside a given sheet, one cannot have sheets with duplicate names (file
      * names can be duplicated).
      */
-    int errcnt = TestDuplicateSheetNames();
+    int errcnt = TestDuplicateSheetNames( true );
     g_EESchemaVar.NbErrorErc   += errcnt;
-    g_EESchemaVar.NbWarningErc += errcnt;
 
     m_Parent->BuildNetListBase();
 
@@ -289,7 +294,6 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
      * calculations */
     for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
         g_NetObjectslist[ii]->m_FlagOfConnection = UNCONNECTED;
-
 
     StartNet   = OldItem = 0;
     NetNbItems = 0;
