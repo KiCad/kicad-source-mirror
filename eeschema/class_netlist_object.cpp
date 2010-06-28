@@ -81,7 +81,7 @@ void NETLIST_OBJECT::Show( std::ostream& out, int ndx )
 
     out << " <start " << m_Start << "/> <end " << m_End << "/>\n";
 
-    if( m_Label )
+    if( !m_Label.IsEmpty() )
         out << " <label>" << m_Label.mb_str() << "</label>\n";
 
     if( m_Comp )

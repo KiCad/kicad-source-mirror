@@ -216,11 +216,12 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     have_poly_to_substract = false;
 
     D_PAD dummyPad((MODULE*)NULL);
-
+    D_PAD * nextpad;
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
-        for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
+        for( D_PAD* pad = module->m_Pads; pad != NULL; pad = nextpad )
         {
+            nextpad = pad->Next();  // pad pointer can be modified by next code, so calculate the next pad here
             if( !pad->IsOnLayer( GetLayer() ) )
             {   /* Test fo pads that are on top or bottom only and have a hole.
                  * There are curious pads but they can be used for some components that are inside the

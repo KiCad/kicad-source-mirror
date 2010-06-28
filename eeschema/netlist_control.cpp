@@ -24,6 +24,8 @@
 #include "protos.h"
 #include "netlist_control.h"
 
+//Imported function:
+int TestDuplicateSheetNames(bool aCreateMarker);
 
 // ID for configuration:
 #define CUSTOM_NETLIST_TITLE   wxT( "CustomNetlistTitle" )
@@ -489,6 +491,13 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
     if( m_Parent->CheckAnnotate( NULL, 0 ) )
     {
         if( !IsOK( this, _( "Must be Annotated, Continue ?" ) ) )
+            return;
+    }
+
+    // Test duplicate sheet names:
+    if( TestDuplicateSheetNames(false ) > 0 )
+    {
+        if( !IsOK( this, _( "Error: duplicate sheet names. Continue?" ) ) )
             return;
     }
 
