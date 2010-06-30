@@ -17,6 +17,8 @@
 #include "eeschema_id.h"
 #include "hotkeys.h"
 
+#include "help_common_strings.h"
+
 /**
  * @brief Create or update the menubar for the schematic frame
  */
@@ -156,7 +158,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     text  = AddHotkeyName( _( "Undo" ), s_Schematic_Hokeys_Descr, HK_UNDO);
 
     item = new wxMenuItem( editMenu, wxID_UNDO, text,
-                           _( "Undo last edition" ), wxITEM_NORMAL );
+                           HELP_UNDO, wxITEM_NORMAL );
     item->SetBitmap( undo_xpm );
     editMenu->Append( item );
 
@@ -164,7 +166,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     text  = AddHotkeyName( _( "Redo" ), s_Schematic_Hokeys_Descr, HK_REDO);
 
     item = new wxMenuItem( editMenu, wxID_REDO, text,
-                           _( "Redo the last undo command" ), wxITEM_NORMAL );
+                           HELP_REDO, wxITEM_NORMAL );
     item->SetBitmap( redo_xpm );
     editMenu->Append( item );
 
@@ -173,7 +175,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     /* Delete */
     item = new wxMenuItem( editMenu, ID_SCHEMATIC_DELETE_ITEM_BUTT,
-                           _( "Delete" ), _( "Delete items" ), wxITEM_NORMAL );
+                           _( "Delete" ), HELP_DELETE_ITEMS, wxITEM_NORMAL );
     item->SetBitmap( delete_body_xpm );
     editMenu->Append( item );
 
@@ -183,7 +185,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     /* Find */
     text = AddHotkeyName( _( "&Find" ), s_Schematic_Hokeys_Descr, HK_FIND_ITEM );
     item = new wxMenuItem( editMenu, ID_FIND_ITEMS, text,
-                           _( "Find components and texts" ), wxITEM_NORMAL );
+                           HELP_FIND, wxITEM_NORMAL );
     item->SetBitmap( find_xpm );
     editMenu->Append( item );
 
@@ -217,14 +219,14 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
      */
     /* Zoom in */
     text  =_( "Zoom In" );
-    item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text, _( "Zoom In" ),
+    item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN,
                            wxITEM_NORMAL );
     item->SetBitmap( zoom_in_xpm );
     viewMenu->Append( item );
 
     /* Zoom out */
     text = _( "Zoom Out" );
-    item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, _( "Zoom Out" ),
+    item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT,
                            wxITEM_NORMAL );
     item->SetBitmap( zoom_out_xpm );
     viewMenu->Append( item );
@@ -234,8 +236,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
                           HK_ZOOM_AUTO );
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, text,
-                           _( "Fit the schematic sheet on the screen" ),
-                           wxITEM_NORMAL );
+                           HELP_ZOOM_FIT, wxITEM_NORMAL );
     item->SetBitmap( zoom_auto_xpm );
     viewMenu->Append( item );
 
@@ -246,8 +247,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
                           HK_ZOOM_REDRAW );
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
-                           _( "Redraw the schematic view" ),
-                           wxITEM_NORMAL );
+                           HELP_ZOOM_REDRAW, wxITEM_NORMAL );
     item->SetBitmap( zoom_redraw_xpm );
     viewMenu->Append( item );
 
@@ -261,51 +261,51 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     /* Component */
     item = new wxMenuItem( placeMenu, ID_COMPONENT_BUTT, _( "&Component" ),
-                           _( "Place the component" ), wxITEM_NORMAL );
+                           HELP_PLACE_COMPONENTS, wxITEM_NORMAL );
     item->SetBitmap( add_component_xpm );
     placeMenu->Append( item );
 
     /* Power port */
     item = new wxMenuItem( placeMenu, ID_PLACE_POWER_BUTT, _( "&Power port" ),
-                           _( "Place the power port" ), wxITEM_NORMAL );
+                           HELP_PLACE_POWERPORT, wxITEM_NORMAL );
     item->SetBitmap( add_power_xpm );
     placeMenu->Append( item );
 
     /* Wire */
     item = new wxMenuItem( placeMenu, ID_WIRE_BUTT, _( "&Wire" ),
-                           _( "Place the wire" ), wxITEM_NORMAL );
+                           HELP_PLACE_WIRE, wxITEM_NORMAL );
     item->SetBitmap( add_line_xpm );
     placeMenu->Append( item );
 
     /* Bus */
     item = new wxMenuItem( placeMenu, ID_BUS_BUTT,  _( "&Bus" ),
-                           _( "Place bus" ), wxITEM_NORMAL );
+                           HELP_PLACE_BUS, wxITEM_NORMAL );
     item->SetBitmap( add_bus_xpm );
     placeMenu->Append( item );
 
     /* Wire to Bus */
     item = new wxMenuItem( placeMenu, ID_WIRETOBUS_ENTRY_BUTT,
                            _( "W&ire to bus entry" ),
-                           _( "Place a wire to bus entry" ), wxITEM_NORMAL );
+                           HELP_PLACE_WIRE2BUS_ENTRY, wxITEM_NORMAL );
     item->SetBitmap( add_line2bus_xpm );
     placeMenu->Append( item );
 
     /* Bus to Bus */
     item = new wxMenuItem( placeMenu, ID_BUSTOBUS_ENTRY_BUTT,
                            _( "B&us to bus entry" ),
-                           _( "Place a bus to bus entry" ), wxITEM_NORMAL );
+                           HELP_PLACE_BUS2BUS_ENTRY, wxITEM_NORMAL );
     item->SetBitmap( add_bus2bus_xpm );
     placeMenu->Append( item );
 
     /* No connect flag */
     item = new wxMenuItem( placeMenu, ID_NOCONN_BUTT,  _( "No connect flag" ),
-                           _( "Place a no connect flag" ), wxITEM_NORMAL );
+                           HELP_PLACE_NC_FLAG, wxITEM_NORMAL );
     item->SetBitmap( noconn_button );
     placeMenu->Append( item );
 
     /* Net name */
     item = new wxMenuItem( placeMenu, ID_LABEL_BUTT, _( "Label" ),
-                           _( "Place net name" ), wxITEM_NORMAL  );
+                           HELP_PLACE_NETLABEL, wxITEM_NORMAL  );
     item->SetBitmap( add_line_label_xpm );
     placeMenu->Append( item );
 
@@ -318,7 +318,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     /* Junction */
     item = new wxMenuItem( placeMenu, ID_JUNCTION_BUTT, _( "Junction" ),
-                           _( "Place junction" ), wxITEM_NORMAL );
+                           HELP_PLACE_JUNCTION, wxITEM_NORMAL );
     item->SetBitmap( add_junction_xpm );
     placeMenu->Append( item );
 
@@ -328,31 +328,28 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     /* Hierarchical label */
     item = new wxMenuItem( placeMenu, ID_HIERLABEL_BUTT,
                            _( "Hierarchical label" ),
-                           _( "Place a hierarchical label. This label will be seen as a pin sheet in the sheet symbol" ),
-                           wxITEM_NORMAL );
+                           HELP_PLACE_HIER_LABEL, wxITEM_NORMAL );
     item->SetBitmap( add_hierarchical_label_xpm );
     placeMenu->Append( item );
 
     /* Hierarchical sheet */
     item = new wxMenuItem( placeMenu, ID_SHEET_SYMBOL_BUTT,
                            _( "Hierarchical sheet" ),
-                           _( "Create a hierarchical sheet" ), wxITEM_NORMAL );
+                           HELP_PLACE_SHEET, wxITEM_NORMAL );
     item->SetBitmap( add_hierarchical_subsheet_xpm );
     placeMenu->Append( item );
 
     /* Import hierarchical sheet */
     item = new wxMenuItem( placeMenu, ID_IMPORT_HLABEL_BUTT,
                            _( "Import Hierarchical Label" ),
-                           _( "Place a pin sheet created by importing a hierarchical label from sheet" ),
-                           wxITEM_NORMAL );
+                           HELP_IMPORT_PINSHEET, wxITEM_NORMAL );
     item->SetBitmap( import_hierarchical_label_xpm );
     placeMenu->Append( item );
 
     /* Add hierarchical Pin to Sheet */
     item = new wxMenuItem( placeMenu, ID_SHEET_LABEL_BUTT,
                            _( "Add Hierarchical Pin to Sheet" ),
-                           _( "Place a hierarchical pin to sheet" ),
-                           wxITEM_NORMAL );
+                           HELP_PLACE_PINSHEET, wxITEM_NORMAL );
     item->SetBitmap( add_hierar_pin_xpm );
     placeMenu->Append( item );
 
@@ -362,16 +359,14 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     /* Graphic line or polygon */
     item = new wxMenuItem( placeMenu, ID_LINE_COMMENT_BUTT,
                            _( "Graphic line or polygon" ),
-                           _( "Place graphic lines or polygons" ),
-                           wxITEM_NORMAL );
+                           HELP_PLACE_GRAPHICLINES, wxITEM_NORMAL );
     item->SetBitmap( add_dashed_line_xpm );
     placeMenu->Append( item );
 
     /* Graphic text */
     item = new wxMenuItem( placeMenu, ID_TEXT_COMMENT_BUTT,
                            _( "Graphic text" ),
-                           _( "Place graphic text for comment" ),
-                           wxITEM_NORMAL );
+                           HELP_PLACE_GRAPHICTEXTS, wxITEM_NORMAL );
     item->SetBitmap( add_text_xpm );
     placeMenu->Append( item );
 

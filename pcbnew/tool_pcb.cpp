@@ -25,6 +25,8 @@
 
 #include "hotkeys.h"
 
+#include "help_common_strings.h"
+
 #define SEL_LAYER_HELP _( \
         "Show active layer selections\nand select layer pair for route and place via" )
 
@@ -213,9 +215,9 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( wxID_UNDO, wxEmptyString, wxBitmap( undo_xpm ),
-                         _( "Undo last edition" ) );
+                         HELP_UNDO );
     m_HToolBar->AddTool( wxID_REDO, wxEmptyString, wxBitmap( redo_xpm ),
-                         _( "Redo the last undo command" ) );
+                         HELP_REDO );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_GEN_PRINT, wxEmptyString, wxBitmap( print_button ),
@@ -224,28 +226,28 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
                          _( "Plot (HPGL, PostScript, or GERBER format)" ) );
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "Zoom in" ), s_Board_Editor_Hokeys_Descr,
+    msg = AddHotkeyName( HELP_ZOOM_IN, s_Board_Editor_Hokeys_Descr,
                          HK_ZOOM_IN, false );
     m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, wxBitmap( zoom_in_xpm ),
                          msg );
 
-    msg = AddHotkeyName( _( "Zoom out" ), s_Board_Editor_Hokeys_Descr,
+    msg = AddHotkeyName( HELP_ZOOM_OUT, s_Board_Editor_Hokeys_Descr,
                          HK_ZOOM_OUT, false );
     m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
                          wxBitmap( zoom_out_xpm ), msg );
 
-    msg = AddHotkeyName( _( "Redraw view" ), s_Board_Editor_Hokeys_Descr,
+    msg = AddHotkeyName( HELP_ZOOM_REDRAW, s_Board_Editor_Hokeys_Descr,
                          HK_ZOOM_REDRAW, false );
     m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                          wxBitmap( zoom_redraw_xpm ), msg );
 
-    msg = AddHotkeyName( _( "Zoom auto" ), s_Board_Editor_Hokeys_Descr,
+    msg = AddHotkeyName( HELP_ZOOM_FIT, s_Board_Editor_Hokeys_Descr,
                          HK_ZOOM_AUTO, false );
     m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                          wxBitmap( zoom_auto_xpm ), msg );
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "Find components and texts" ),
+    msg = AddHotkeyName( HELP_FIND, // Find components and texts
                          s_Board_Editor_Hokeys_Descr,
                          HK_FIND_ITEM, false );
     m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, wxBitmap( find_xpm ),
@@ -278,7 +280,7 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, wxEmptyString,
                          wxBitmap( web_support_xpm ),
-                         _( "Fast access to theWeb Based FreeROUTE advanced router" ) );
+                         _( "Fast access to the Web Based FreeROUTE advanced router" ) );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
@@ -373,8 +375,7 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
                                     wxEmptyString,
                                     wxBitmap( layers_manager_xpm ),
-                                    _(
-                                    "Show/hide the layers manager toolbar" ),
+                                    HELP_SHOW_HIDE_LAYERMANAGER,
                                     wxITEM_CHECK );
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
                                wxEmptyString,

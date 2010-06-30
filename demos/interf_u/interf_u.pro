@@ -1,8 +1,20 @@
-update=16/05/2010 14:21:37
+update=30/06/2010 12:54:53
 version=1
 last_client=pcbnew
 [common]
 NetDir=
+[general]
+version=1
+RootSch=interf_u.sch
+BoardNm=interf_u.brd
+[cvpcb]
+version=1
+NetITyp=0
+NetIExt=.net
+PkgIExt=.pkg
+NetType=0
+[cvpcb/libraries]
+EquName1=devcms
 [eeschema]
 version=1
 LibDir=
@@ -33,9 +45,11 @@ offY_E=0
 RptD_X=0
 RptD_Y=100
 RptLab=1
-PenMin=20
 SimCmd=
 UseNetN=0
+LabSize=60
+PrintMonochrome=1
+ShowSheetReferenceAndTitleBlock=1
 [eeschema/libraries]
 LibName1=power
 LibName2=device
@@ -48,18 +62,7 @@ LibName8=adc-dac
 LibName9=memory
 LibName10=xilinx
 LibName11=special
-[general]
-version=1
-RootSch=interf_u.sch
-BoardNm=interf_u.brd
-[cvpcb]
-version=1
-NetITyp=0
-NetIExt=.net
-PkgIExt=.pkg
-NetType=0
-[cvpcb/libraries]
-EquName1=devcms
+LibName12=image
 [pcbnew]
 version=1
 PadDrlX=430
